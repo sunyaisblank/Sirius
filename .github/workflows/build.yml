@@ -1,0 +1,166 @@
+name: Sirius Build and Compliance
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  # =============================================================================
+  # Compliance Check - Naming Convention Verification
+  # =============================================================================
+  compliance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check Naming Convention Compliance
+        run: |
+          echo "Checking source file naming compliance..."
+          
+          # Define allowed patterns for each directory
+          ERRORS=0
+          
+          # Check Sirius.Core - must match CR prefix or CREP for entry point
+          for file in $(find Sirius.Core -name "*.cpp" -o -name "*.h" 2>/dev/null); do
+            basename=$(basename "$file")
+            if ! echo "$basename" | grep -qE "^(CR|CREP)[A-Z]{2}[0-9]{3}[A-Z]\.(cpp|h)$"; then
+              echo "Non-compliant Core file: $file"
+              ((ERRORS++)) || true
+            fi
+          done
+          
+          # Check Sirius.Render - must match RD prefix
+          for file in $(find Sirius.Render -name "*.cpp" -o -name "*.h" -o -name "*.cu" 2>/dev/null); do
+            basename=$(basename "$file")
+            if ! echo "$basename" | grep -qE "^RD[A-Z]{2}[0-9]{3}[A-Z]\.(cpp|h|cu)$"; then
+              echo "Non-compliant Render file: $file"
+              ((ERRORS++)) || true
+            fi
+          done
+          
+          # Check Sirius.Physics - must match PH prefix
+          for file in $(find Sirius.Physics -name "*.cpp" -o -name "*.h" 2>/dev/null); do
+            basename=$(basename "$file")
+            if ! echo "$basename" | grep -qE "^PH[A-Z]{2}[0-9]{3}[A-Z]\.(cpp|h)$"; then
+              echo "Non-compliant Physics file: $file"
+              ((ERRORS++)) || true
+            fi
+          done
+          
+          # Check Sirius.Math - must match MT prefix
+          for file in $(find Sirius.Math -name "*.cpp" -o -name "*.h" 2>/dev/null); do
+            basename=$(basename "$file")
+            if ! echo "$basename" | grep -qE "^MT[A-Z]{2}[0-9]{3}[A-Z]\.(cpp|h)$"; then
+              echo "Non-compliant Math file: $file"
+              ((ERRORS++)) || true
+            fi
+          done
+
+          # Check Sirius.UI - must match UI prefix
+          for file in $(find Sirius.UI -name "*.cpp" -o -name "*.h" 2>/dev/null); do
+            basename=$(basename "$file")
+            if ! echo "$basename" | grep -qE "^UI[A-Z]{2}[0-9]{3}[A-Z]\.(cpp|h)$"; then
+              echo "Non-compliant UI file: $file"
+              ((ERRORS++)) || true
+            fi
+          done
+          
+          echo ""
+          if [ $ERRORS -gt 0 ]; then
+            echo "Found $ERRORS naming violations"
+            exit 1
+          else
+            echo "All files comply with naming convention"
+          fi
+
+  # =============================================================================
+  # Windows Build with CUDA/OptiX
+  # =============================================================================
+  build-windows:
+    runs-on: windows-latest
+    needs: compliance
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: false
+      
+      - name: Setup CUDA Toolkit
+        uses: Jimver/cuda-toolkit@v0.2.29
+        id: cuda-toolkit
+        with:
+          cuda: '12.5.1'
+          method: 'network'
+          use-github-cache: false
+          use-local-cache: false
+      
+      - name: Setup Visual Studio
+        uses: microsoft/setup-msbuild@v2
+      
+      - name: Configure CMake
+        run: |
+          cmake -B Sirius.Build -S . -G "Visual Studio 17 2022" -A x64 -DBUILD_TESTS=OFF
+        env:
+          CUDA_PATH: ${{ steps.cuda-toolkit.outputs.CUDA_PATH }}
+      
+      - name: Build
+        run: cmake --build Sirius.Build --config ${{ env.BUILD_TYPE }}
+      
+      - name: Verify Build Outputs
+        shell: pwsh
+        run: |
+          $exe = "Sirius.Build/bin/Release/Sirius.exe"
+          $lib = "Sirius.Build/lib/Release/SiriusCore.lib"
+          
+          if (Test-Path $exe) {
+            Write-Host "Sirius.exe built successfully"
+            Get-Item $exe | Select-Object Length
+          } else {
+            Write-Host "Sirius.exe not found"
+            exit 1
+          }
+          
+          if (Test-Path $lib) {
+            Write-Host "SiriusCore.lib built successfully"
+          }
+
+  # =============================================================================
+  # Code Quality Checks
+  # =============================================================================
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check for Debug Artifacts
+        run: |
+          # Check for files that shouldn't be committed
+          FOUND=0
+          
+          for pattern in "debug_*.glsl" "*.log" "imgui.ini"; do
+            files=$(find . -name "$pattern" -not -path "./Sirius.Build/*" 2>/dev/null)
+            if [ -n "$files" ]; then
+              echo "Found debug artifact: $files"
+              FOUND=1
+            fi
+          done
+          
+          if [ $FOUND -eq 1 ]; then
+            echo "Debug artifacts found in repository"
+          else
+            echo "No debug artifacts found"
+          fi
+      
+      - name: Verify EditorConfig
+        run: |
+          if [ -f ".editorconfig" ]; then
+            echo ".editorconfig exists"
+          else
+            echo ".editorconfig missing"
+            exit 1
+          fi

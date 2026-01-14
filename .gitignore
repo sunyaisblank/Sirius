@@ -1,0 +1,145 @@
+# =============================================================================
+# Sirius .gitignore - Comprehensive Build and IDE Exclusions
+# =============================================================================
+
+# =============================================================================
+# Build Artifacts
+# =============================================================================
+bin/
+ren/
+build/
+out/
+cmake-build-*/
+
+
+# Compiled Objects
+*.o
+*.obj
+*.lo
+*.slo
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Libraries
+*.lib
+*.a
+*.la
+*.lo
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# =============================================================================
+# CUDA/OptiX Artifacts
+# =============================================================================
+*.ptx
+*.cubin
+*.fatbin
+*.gpu
+*.i
+*.ii
+
+# CUDA temporary files
+tmpxft_*
+
+# =============================================================================
+# Visual Studio
+# =============================================================================
+.vs/
+*.vcxproj.user
+*.suo
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.opendb
+Debug/
+Release/
+x64/
+x86/
+Win32/
+ARM/
+ARM64/
+*.ilk
+*.pdb
+*.idb
+*.tlog/
+*.lastbuildstate
+*.log
+*.recipe
+
+# =============================================================================
+# CMake
+# =============================================================================
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+*.cmake.in
+
+# =============================================================================
+# IDE and Editor Files
+# =============================================================================
+# JetBrains
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# =============================================================================
+# Operating System
+# =============================================================================
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.directory
+
+# =============================================================================
+# Project-Specific
+# =============================================================================
+# Debug artifacts
+debug_*.glsl
+*.log
+imgui.ini
+
+# Downloaded packages
+*.deb
+
+# Backup files
+*.backup
+*.bak
+*.orig
+
+# =============================================================================
+# Testing
+# =============================================================================
+Testing/
+CTestCostData.txt
