@@ -23,49 +23,51 @@ jobs:
           echo "Checking source file naming compliance..."
           
           # Define allowed patterns for each directory
+          # Component naming: [Domain][Category][Sequence][Variant]
+          # Domains: PH=Physics, MT=Math, RD=Render, CR=Core/Infrastructure, TS=Test
           ERRORS=0
-          
-          # Check Sirius.Core - must match CR prefix or CREP for entry point
-          for file in $(find Sirius.Core -name "*.cpp" -o -name "*.h" 2>/dev/null); do
+
+          # Check Sirius.Core - Physics/Math/Camera components (PH*, MT*, CM*, CR*, PP*)
+          for file in $(find src/Sirius.Core -name "*.cpp" -o -name "*.h" 2>/dev/null); do
             basename=$(basename "$file")
-            if ! echo "$basename" | grep -qE "^(CR|CREP)[A-Z]{2}[0-9]{3}[A-Z]\.(cpp|h)$"; then
+            # Allow PH*, MT*, CM*, CR*, PP* prefixes for physics/math/camera/postprocess components
+            if ! echo "$basename" | grep -qE "^(PH|MT|CM|CR|PP)[A-Z]{2}[0-9]{3}[A-Z]\.(cpp|h)$"; then
               echo "Non-compliant Core file: $file"
               ((ERRORS++)) || true
             fi
           done
-          
-          # Check Sirius.Render - must match RD prefix
-          for file in $(find Sirius.Render -name "*.cpp" -o -name "*.h" -o -name "*.cu" 2>/dev/null); do
+
+          # Check Sirius.Infrastructure - Core/Infrastructure components (CR*, IR*, SM*, SN*, UI*)
+          for file in $(find src/Sirius.Infrastructure -name "*.cpp" -o -name "*.h" 2>/dev/null); do
             basename=$(basename "$file")
-            if ! echo "$basename" | grep -qE "^RD[A-Z]{2}[0-9]{3}[A-Z]\.(cpp|h|cu)$"; then
-              echo "Non-compliant Render file: $file"
-              ((ERRORS++)) || true
-            fi
-          done
-          
-          # Check Sirius.Physics - must match PH prefix
-          for file in $(find Sirius.Physics -name "*.cpp" -o -name "*.h" 2>/dev/null); do
-            basename=$(basename "$file")
-            if ! echo "$basename" | grep -qE "^PH[A-Z]{2}[0-9]{3}[A-Z]\.(cpp|h)$"; then
-              echo "Non-compliant Physics file: $file"
-              ((ERRORS++)) || true
-            fi
-          done
-          
-          # Check Sirius.Math - must match MT prefix
-          for file in $(find Sirius.Math -name "*.cpp" -o -name "*.h" 2>/dev/null); do
-            basename=$(basename "$file")
-            if ! echo "$basename" | grep -qE "^MT[A-Z]{2}[0-9]{3}[A-Z]\.(cpp|h)$"; then
-              echo "Non-compliant Math file: $file"
+            # CR=Core, IR=Interop, SM=Scene, SN=Settings, UI=UserInterface
+            if ! echo "$basename" | grep -qE "^(CR|IR|SM|SN|UI)[A-Z]{2}[0-9]{3}[A-Z]\.(cpp|h)$"; then
+              echo "Non-compliant Infrastructure file: $file"
               ((ERRORS++)) || true
             fi
           done
 
-          # Check Sirius.UI - must match UI prefix
-          for file in $(find Sirius.UI -name "*.cpp" -o -name "*.h" 2>/dev/null); do
+          # Check Sirius.Render - Render components (RD*, IN*, AC*, BF*, SM*, SR*, TR*)
+          for file in $(find src/Sirius.Render -name "*.cpp" -o -name "*.h" -o -name "*.cu" -o -name "*.cuh" 2>/dev/null); do
             basename=$(basename "$file")
-            if ! echo "$basename" | grep -qE "^UI[A-Z]{2}[0-9]{3}[A-Z]\.(cpp|h)$"; then
-              echo "Non-compliant UI file: $file"
+            # Allow various render module prefixes:
+            # RD=Render, IN=Integration, AC=Acceleration, BF=Buffer, SM=Scene, SR=Session, TR=Transport
+            # Also allow RD-prefixed .cuh files without full naming (shader includes)
+            if echo "$basename" | grep -qE "^RD.*\.cuh$"; then
+              continue  # Allow RD*.cuh shader helper files
+            fi
+            if ! echo "$basename" | grep -qE "^(RD|IN|AC|BF|SM|SR|TR)[A-Z]{2}[0-9]{3}[A-Z]\.(cpp|h|cu|cuh)$"; then
+              echo "Non-compliant Render file: $file"
+              ((ERRORS++)) || true
+            fi
+          done
+
+          # Check Sirius.Test - Test components (TS*)
+          for file in $(find src/Sirius.Test -name "*.cpp" -o -name "*.h" 2>/dev/null); do
+            basename=$(basename "$file")
+            # Allow 2-4 letter category codes for tests (e.g., TSPH, TSDG, TSVAL)
+            if ! echo "$basename" | grep -qE "^TS[A-Z]{2,4}[0-9]{3}[A-Z]\.(cpp|h)$"; then
+              echo "Non-compliant Test file: $file"
               ((ERRORS++)) || true
             fi
           done
@@ -128,6 +130,66 @@ jobs:
           if (Test-Path $lib) {
             Write-Host "SiriusCore.lib built successfully"
           }
+
+  # =============================================================================
+  # Linux Build with CUDA/OptiX
+  # =============================================================================
+  build-linux:
+    runs-on: ubuntu-24.04
+    needs: compliance
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            cmake ninja-build \
+            libgl1-mesa-dev libglu1-mesa-dev \
+            libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev \
+            libwayland-dev libxkbcommon-dev wayland-protocols
+
+      - name: Setup CUDA Toolkit
+        uses: Jimver/cuda-toolkit@v0.2.29
+        id: cuda-toolkit
+        with:
+          cuda: '12.6.3'
+          method: 'network'
+          use-github-cache: false
+          use-local-cache: false
+
+      - name: Download OptiX Headers
+        run: |
+          # OptiX headers are not publicly available without login
+          # For CI, we build without OptiX RTX backend
+          echo "Building without OptiX RTX backend (headers not available in CI)"
+
+      - name: Configure CMake
+        run: |
+          cmake -B bin/Sirius.Build -S . -G Ninja \
+            -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+            -DBUILD_TESTS=ON
+        env:
+          CUDA_PATH: ${{ steps.cuda-toolkit.outputs.CUDA_PATH }}
+
+      - name: Build
+        run: cmake --build bin/Sirius.Build
+
+      - name: Run Tests
+        run: ctest --test-dir bin/Sirius.Build --output-on-failure
+
+      - name: Verify Build Outputs
+        run: |
+          if [ -f "bin/Sirius.Build/bin/Sirius" ]; then
+            echo "Sirius built successfully"
+            ls -lh bin/Sirius.Build/bin/Sirius
+          else
+            echo "Sirius not found"
+            exit 1
+          fi
 
   # =============================================================================
   # Code Quality Checks
