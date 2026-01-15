@@ -13,7 +13,7 @@
 
 #pragma once
 
-#include "../Sirius.Math/MTSB001A.h"
+#include "../Sirius.Core/Symplectic/MTSB001A.h"
 #include <vector>
 #include <random>
 #include <cmath>

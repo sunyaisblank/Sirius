@@ -15,8 +15,8 @@
 
 #include "KNBI001A.h"
 #include "KNAA001A.h"
-#include "../Sirius.Physics/Disk/PHAD001A.h"
-#include "../Sirius.Math/MTSB001A.h"
+#include "../Sirius.Core/Disk/PHAD001A.h"
+#include "../Sirius.Core/Symplectic/MTSB001A.h"
 #include <cmath>
 
 namespace sirius::kernel {

@@ -7,9 +7,9 @@
 
 #include <gtest/gtest.h>
 #include <cmath>
-#include "../../Sirius.Physics/Metric/PHMT100B.h"
-#include "../../Sirius.Physics/Disk/PHAD001A.h"
-#include "../../Sirius.Kernel/KNBI001A.h"
+#include "../../Sirius.Core/Metric/PHMT100B.h"
+#include "../../Sirius.Core/Disk/PHAD001A.h"
+#include "../../Sirius.Render/Integration/INBI001A.h"
 
 using namespace sirius::physics;
 using namespace sirius::kernel;

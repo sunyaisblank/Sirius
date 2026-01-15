@@ -3,9 +3,9 @@
 
 #include <gtest/gtest.h>
 #include <cmath>
-#include "../../Sirius.Math/MTSB001A.h"
-#include "../../Sirius.Kernel/KNST001A.h"
-#include "../../Sirius.Physics/Disk/PHAD001A.h"
+#include "../../Sirius.Core/Symplectic/MTSB001A.h"
+#include "../../Sirius.Render/Integration/KNST001A.h"
+#include "../../Sirius.Core/Disk/PHAD001A.h"
 
 using namespace sirius::spectral;
 using namespace sirius::kernel;

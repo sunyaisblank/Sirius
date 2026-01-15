@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 #include <cmath>
-#include "../../Sirius.Physics/Disk/PHAD001A.h"
+#include "../../Sirius.Core/Disk/PHAD001A.h"
 
 using namespace sirius::physics;
 

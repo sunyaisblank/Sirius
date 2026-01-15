@@ -3,9 +3,9 @@
 
 #include <gtest/gtest.h>
 #include <cmath>
-#include "../../Sirius.Kernel/KNAA001A.h"
-#include "../../Sirius.Kernel/KNSI001A.h"
-#include "../../Sirius.Physics/Disk/PHAD001A.h"
+#include "../../Sirius.Render/Integration/KNAA001A.h"
+#include "../../Sirius.Render/Integration/KNSI001A.h"
+#include "../../Sirius.Core/Disk/PHAD001A.h"
 
 using namespace sirius::kernel;
 using namespace sirius::physics;

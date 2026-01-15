@@ -20,7 +20,7 @@
 #include "KNBI001A.h"
 #include "KNSI001A.h"
 #include "KNAA001A.h"
-#include "../Sirius.Math/MTSB001A.h"
+#include "../Sirius.Core/Symplectic/MTSB001A.h"
 #include <vector>
 
 namespace sirius::kernel {

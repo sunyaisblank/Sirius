@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 // OptiX SBT record alignment constants (must be defined early)
 #ifndef OPTIX_SBT_RECORD_ALIGNMENT
 #define OPTIX_SBT_RECORD_ALIGNMENT 16

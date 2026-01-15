@@ -20,9 +20,9 @@
 
 #pragma once
 
-#include "../Core/PHMT000B.h"
+#include "../Geodesic/PHMT000B.h"
 #include "../Metric/PHMT100B.h"
-#include "../../Sirius.Math/MTSB001A.h"
+#include "../Symplectic/MTSB001A.h"
 #include <cmath>
 
 namespace sirius::physics {
@@ -62,24 +62,31 @@ public:
         double inclination = M_PI/4;        // Disk inclination to observer [rad]
     };
     
-    explicit AccretionDiskD(const Config& config = Config()) 
-        : m_config(config) {
+    AccretionDiskD() : m_config() { init(); }
+
+    explicit AccretionDiskD(const Config& config)
+        : m_config(config) { init(); }
+
+private:
+    void init() {
         // Compute derived quantities
-        m_M_kg = config.M * constants::M_sun;
+        m_M_kg = m_config.M * constants::M_sun;
         m_GM = constants::G * m_M_kg;
         m_rs = 2 * m_GM / (constants::c * constants::c);  // Schwarzschild radius
-        m_a = config.a_star;  // a/M in geometric units
-        
+        m_a = m_config.a_star;  // a/M in geometric units
+
         // Compute ISCO radius
         m_r_isco = computeISCO(m_a);
-        
+
         // Set inner edge
-        m_r_inner = (config.r_inner > 0) ? config.r_inner : m_r_isco;
-        m_r_outer = config.r_outer;
-        
+        m_r_inner = (m_config.r_inner > 0) ? m_config.r_inner : m_r_isco;
+        m_r_outer = m_config.r_outer;
+
         // Convert accretion rate to SI
-        m_Mdot_SI = config.Mdot * constants::M_sun / (365.25 * 24 * 3600);  // M_sun/yr → kg/s
+        m_Mdot_SI = m_config.Mdot * constants::M_sun / (365.25 * 24 * 3600);  // M_sun/yr → kg/s
     }
+
+public:
     
     //--------------------------------------------------------------------------
     // ISCO Radius Computation

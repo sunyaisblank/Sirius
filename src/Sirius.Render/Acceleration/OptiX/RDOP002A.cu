@@ -270,6 +270,16 @@ __device__ __forceinline__ Vec4Cart operator-(const Vec4Cart& a, const Vec4Cart&
 }
 
 //==============================================================================
+// Forward declarations for functions used before definition
+//==============================================================================
+__device__ float dot4D(const float g[4][4], const Vec4& a, const Vec4& b);
+
+template<Sirius::MetricType type>
+__device__ __forceinline__ void getMetricTensor(const Vec4& x,
+                                 const Sirius::MetricParams& mp,
+                                 float g[4][4], float g_inv[4][4]);
+
+//==============================================================================
 // TIME-TRANSFORMED EXPLICIT SYMPLECTIC INTEGRATOR (TTESI)
 // For Kerr and general stationary axisymmetric spacetimes
 //==============================================================================

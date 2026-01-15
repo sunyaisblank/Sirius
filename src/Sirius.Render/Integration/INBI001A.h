@@ -15,8 +15,8 @@
 
 #pragma once
 
-#include "../Sirius.Math/MTTP001A.h"
-#include "../Sirius.Physics/Core/PHMT000B.h"
+#include "../../Sirius.Core/Transport/MTTP001A.h"
+#include "../../Sirius.Core/Geodesic/PHMT000B.h"
 #include <cmath>
 
 // CPU/GPU compatibility macro
@@ -187,7 +187,10 @@ public:
         double causticThreshold = 1e-12;
     };
     
-    explicit BeamIntegratorD(const IMetricD* metric, const Config& config = Config())
+    explicit BeamIntegratorD(const IMetricD* metric)
+        : m_metric(metric), m_config() {}
+
+    BeamIntegratorD(const IMetricD* metric, const Config& config)
         : m_metric(metric), m_config(config) {}
     
     //--------------------------------------------------------------------------

@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "../Core/PHMT000B.h"
+#include "PHMT000B.h"
 #include <cmath>
 #include <algorithm>
 
@@ -104,6 +104,7 @@ public:
         int maxStepsPerCall = 10000;
         double horizonBuffer = 1.01;
         IntegratorOrder order = IntegratorOrder::YOSHIDA_6;  // Default: 6th-order
+        Config() = default;  // Explicit default constructor
     };
     
     struct StepResult {
@@ -114,7 +115,10 @@ public:
         int substeps;
     };
     
-    explicit SymplecticIntegratorD(const IMetricD* metric, const Config& config = Config())
+    explicit SymplecticIntegratorD(const IMetricD* metric)
+        : m_metric(metric), m_config() {}
+
+    SymplecticIntegratorD(const IMetricD* metric, const Config& config)
         : m_metric(metric), m_config(config) {}
     
     //--------------------------------------------------------------------------

@@ -35,9 +35,25 @@ endif()
 # Find OptiX SDK
 set(OptiX_INSTALL_DIR "" CACHE PATH "Path to OptiX SDK installation")
 
+# Detect WSL2 environment
+set(IS_WSL2 OFF)
+if(EXISTS "/proc/sys/fs/binfmt_misc/WSLInterop" OR EXISTS "/run/WSL")
+    set(IS_WSL2 ON)
+    message(STATUS "WSL2 environment detected")
+endif()
+
 if(NOT EXISTS "${OptiX_INSTALL_DIR}/include/optix.h")
     if(DEFINED ENV{OptiX_INSTALL_DIR} AND EXISTS "$ENV{OptiX_INSTALL_DIR}/include/optix.h")
         set(OptiX_INSTALL_DIR "$ENV{OptiX_INSTALL_DIR}" CACHE PATH "Path to OptiX SDK installation" FORCE)
+    # Local project path (WSL2 or portable builds)
+    elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/lib/optix/include/optix.h")
+        set(OptiX_INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib/optix" CACHE PATH "Path to OptiX SDK installation" FORCE)
+    # Common Linux installation paths
+    elseif(EXISTS "/opt/nvidia/optix/include/optix.h")
+        set(OptiX_INSTALL_DIR "/opt/nvidia/optix" CACHE PATH "Path to OptiX SDK installation" FORCE)
+    elseif(EXISTS "$ENV{HOME}/NVIDIA-OptiX-SDK/include/optix.h")
+        set(OptiX_INSTALL_DIR "$ENV{HOME}/NVIDIA-OptiX-SDK" CACHE PATH "Path to OptiX SDK installation" FORCE)
+    # Windows paths (for native Windows builds)
     elseif(EXISTS "C:/ProgramData/NVIDIA Corporation/OptiX SDK 9.1.0/include/optix.h")
         set(OptiX_INSTALL_DIR "C:/ProgramData/NVIDIA Corporation/OptiX SDK 9.1.0" CACHE PATH "Path to OptiX SDK installation" FORCE)
     elseif(EXISTS "C:/ProgramData/NVIDIA Corporation/OptiX SDK 8.1.0/include/optix.h")
@@ -161,6 +177,13 @@ if(SIRIUS_HAS_OPTIX)
     set(OPTIX_DEVICE_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/Acceleration/OptiX/RDOP002A.cu")
     set(OPTIX_PTX_OUTPUT "${OPTIX_PTX_DIR}/RDOP002A.ptx")
     
+    # Platform-specific PTX compile definitions
+    if(WIN32)
+        set(OPTIX_PTX_PLATFORM_DEFS -D_WIN32 -DNOMINMAX -D_USE_MATH_DEFINES)
+    else()
+        set(OPTIX_PTX_PLATFORM_DEFS -D_GNU_SOURCE)
+    endif()
+
     add_custom_command(
         OUTPUT ${OPTIX_PTX_OUTPUT}
         COMMAND ${CMAKE_CUDA_COMPILER}
@@ -176,7 +199,7 @@ if(SIRIUS_HAS_OPTIX)
             --machine=64
             -arch compute_75
             -DSIRIUS_HAS_OPTIX=1
-            -D_WIN32 -DNOMINMAX -D_USE_MATH_DEFINES
+            ${OPTIX_PTX_PLATFORM_DEFS}
             ${OPTIX_DEVICE_SOURCE}
             -o ${OPTIX_PTX_OUTPUT}
         DEPENDS ${OPTIX_DEVICE_SOURCE}
