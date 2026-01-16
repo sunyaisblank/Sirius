@@ -195,7 +195,6 @@ inline double KerrSchildFamily::computeH(double r, double z) const {
     double Q = m_params.Q;
     
     double r2 = r * r;
-    double r3 = r2 * r;
     double r4 = r2 * r2;
     double a2 = a * a;
     
@@ -207,9 +206,9 @@ inline double KerrSchildFamily::computeH(double r, double z) const {
     return numerator / std::max(denominator, 1e-20);
 }
 
-inline void KerrSchildFamily::evaluate(const Tensor<double, 4>& pos, Metric4D& g, 
+inline void KerrSchildFamily::evaluate(const Tensor<double, 4>& pos, Metric4D& g,
                                         Tensor<Dual<double>, 4, 4, 4>& dg) {
-    double t = pos(0);
+    [[maybe_unused]] double t = pos(0);  // Time coordinate (unused in static metric)
     double x = pos(1);
     double y = pos(2);
     double z = pos(3);

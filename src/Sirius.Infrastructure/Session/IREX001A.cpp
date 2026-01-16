@@ -249,8 +249,8 @@ void JobExecutor::previewThread() {
         auto job = getCurrentJob();
         
         if (job && job->isRunning()) {
-            float progress = job->getProgress();
-            // In a real implementation, update preview window here
+            [[maybe_unused]] float progress = job->getProgress();
+            // TODO: In a real implementation, update preview window here
         }
         
         std::this_thread::sleep_for(

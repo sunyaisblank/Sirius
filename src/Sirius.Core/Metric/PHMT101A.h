@@ -182,23 +182,23 @@ inline double MorrisThorneFamily::shapeFunctionDerivative(double r) const {
     }
 }
 
-inline double MorrisThorneFamily::redshiftFunction(double r) const {
-    // For zero-tidal wormhole, Φ = 0 everywhere
+inline double MorrisThorneFamily::redshiftFunction([[maybe_unused]] double r) const {
+    // For zero-tidal wormhole, Φ = 0 everywhere (r-independent)
     return m_params.Phi0;
 }
 
-inline double MorrisThorneFamily::redshiftFunctionDerivative(double r) const {
-    // For constant redshift, derivative is 0
+inline double MorrisThorneFamily::redshiftFunctionDerivative([[maybe_unused]] double r) const {
+    // For constant redshift, derivative is 0 (r-independent)
     return 0.0;
 }
 
-inline void MorrisThorneFamily::evaluate(const Tensor<double, 4>& pos, Metric4D& g, 
+inline void MorrisThorneFamily::evaluate(const Tensor<double, 4>& pos, Metric4D& g,
                                           Tensor<Dual<double>, 4, 4, 4>& dg) {
-    double t = pos(0);
+    [[maybe_unused]] double t = pos(0);  // Time coordinate (unused in static metric)
     double r = pos(1);
     double theta = pos(2);
-    double phi = pos(3);
-    
+    // phi coordinate not needed for spherically symmetric metric evaluation
+
     double b0 = m_params.b0;
     r = std::max(r, b0 * 1.001);  // Stay just outside throat
     

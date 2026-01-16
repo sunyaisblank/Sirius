@@ -110,9 +110,12 @@ int runInteractiveMode() {
     std::cout << "================================================================================\n";
     std::cout << "\nWARNING: Interactive mode is deprecated and will be removed.\n";
     std::cout << "         Please use batch rendering for production work.\n\n";
-    
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     Application app;
     app.run();
+#pragma GCC diagnostic pop
     return 0;
 }
 

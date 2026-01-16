@@ -358,12 +358,12 @@ void GeodesicCamera::normalizeVelocity() {
     float g_thth = r * r;
     float g_phph = r * r * sinf(theta) * sinf(theta);
     
-    // Current norm
-    float norm = g_tt * m_State.velocity.t * m_State.velocity.t
+    // Current norm (for diagnostic purposes - should be -1 for timelike)
+    [[maybe_unused]] float norm = g_tt * m_State.velocity.t * m_State.velocity.t
                + g_rr * m_State.velocity.r * m_State.velocity.r
                + g_thth * m_State.velocity.theta * m_State.velocity.theta
                + g_phph * m_State.velocity.phi * m_State.velocity.phi;
-    
+
     // We need norm = -1, so solve for u^t given spatial components
     // g_tt (u^t)² + spatial_terms = -1
     // (u^t)² = (-1 - spatial_terms) / g_tt
@@ -430,7 +430,8 @@ Vec4 GeodesicCamera::computeCircularVelocity(float r, bool prograde) const {
     
     // Compute u^t from circular orbit energy
     // For Schwarzschild: u^t = 1 / sqrt(1 - 3M/r) for r > 3M
-    float f = 1.0f - 2.0f * m_M / r_phys;
+    // Note: f = 1 - 2M/r is the lapse function (kept for reference)
+    [[maybe_unused]] float f = 1.0f - 2.0f * m_M / r_phys;
     float orbit_factor = 1.0f - 3.0f * m_M / r_phys;
     
     if (orbit_factor > 0.0f) {

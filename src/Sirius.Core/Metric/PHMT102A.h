@@ -163,9 +163,10 @@ inline void WarpDriveFamily::updateBubblePosition(double t) {
     m_params.xs = m_params.vs * t;
 }
 
-inline void WarpDriveFamily::evaluate(const Tensor<double, 4>& pos, Metric4D& g, 
+inline void WarpDriveFamily::evaluate(const Tensor<double, 4>& pos, Metric4D& g,
                                        Tensor<Dual<double>, 4, 4, 4>& dg) {
-    double t = pos(0);
+    // Note: t is unused directly; bubble position updated separately via updateBubblePosition()
+    [[maybe_unused]] double t = pos(0);
     double x = pos(1);
     double y = pos(2);
     double z = pos(3);
