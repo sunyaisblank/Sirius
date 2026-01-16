@@ -74,13 +74,11 @@ else()
     set(SIRIUS_HAS_OPTIX OFF)
 endif()
 
-# --- Platform-Specific Setup ---
+# --- Platform Detection (unified cross-platform) ---
 if(WIN32)
     set(IS_WINDOWS TRUE)
-    add_definitions(-D_WIN32 -DNOMINMAX -D_USE_MATH_DEFINES)
 else()
     set(IS_WINDOWS FALSE)
-    add_definitions(-D_GNU_SOURCE)
 endif()
 
 # === Find System Dependencies ===
@@ -91,6 +89,31 @@ find_package(Threads REQUIRED)
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw)
+
+# =============================================================================
+# CLI Dependencies (FTXUI, nlohmann_json)
+# =============================================================================
+include(FetchContent)
+
+# FTXUI for rich terminal output (progress bars, tables, colors)
+FetchContent_Declare(ftxui
+    GIT_REPOSITORY https://github.com/ArthurSonzogni/FTXUI.git
+    GIT_TAG v5.0.0
+)
+set(FTXUI_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(FTXUI_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(FTXUI_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(ftxui)
+
+# nlohmann_json for configuration files
+FetchContent_Declare(json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.11.3
+)
+set(JSON_BuildTests OFF CACHE INTERNAL "")
+FetchContent_MakeAvailable(json)
+
+message(STATUS "CLI dependencies: FTXUI v5.0.0, nlohmann_json v3.11.3")
 
 # =============================================================================
 # Core Library
@@ -117,6 +140,8 @@ target_include_directories(SiriusCore PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Core/Symplectic"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Core/Transport"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Core/Camera"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Core/Jet"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Core/Polarisation"
     "${CMAKE_CURRENT_SOURCE_DIR}/lib/glm"
 )
 
@@ -170,45 +195,81 @@ endmacro()
 # =============================================================================
 if(SIRIUS_HAS_OPTIX)
     message(STATUS "Building OptiX render backend...")
-    
+
     set(OPTIX_PTX_DIR "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Sirius.Render/ptx")
     file(MAKE_DIRECTORY ${OPTIX_PTX_DIR})
-    
+
     set(OPTIX_DEVICE_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/Acceleration/OptiX/RDOP002A.cu")
-    set(OPTIX_PTX_OUTPUT "${OPTIX_PTX_DIR}/RDOP002A.ptx")
-    
-    # Platform-specific PTX compile definitions
+
+    # Platform-specific PTX compile definitions (cross-platform)
     if(WIN32)
-        set(OPTIX_PTX_PLATFORM_DEFS -D_WIN32 -DNOMINMAX -D_USE_MATH_DEFINES)
+        set(OPTIX_PTX_PLATFORM_DEFS -DNOMINMAX -D_USE_MATH_DEFINES)
     else()
-        set(OPTIX_PTX_PLATFORM_DEFS -D_GNU_SOURCE)
+        set(OPTIX_PTX_PLATFORM_DEFS "")
     endif()
 
+    # ==========================================================================
+    # Multi-Architecture PTX Pre-Compilation
+    # Generates PTX for: Turing (sm_75), Ampere (sm_80, sm_86), Ada (sm_89)
+    # ==========================================================================
+
+    # Option to control which architectures to build
+    option(SIRIUS_PTX_ALL_ARCHS "Build PTX for all supported GPU architectures" ON)
+
+    if(SIRIUS_PTX_ALL_ARCHS)
+        set(SIRIUS_PTX_ARCHITECTURES 75 80 86 89)
+    else()
+        # Default to single architecture for faster builds
+        set(SIRIUS_PTX_ARCHITECTURES 75)
+    endif()
+
+    set(OPTIX_PTX_OUTPUTS "")
+
+    foreach(SM_ARCH ${SIRIUS_PTX_ARCHITECTURES})
+        set(PTX_OUTPUT "${OPTIX_PTX_DIR}/RDOP002A_sm${SM_ARCH}.ptx")
+        list(APPEND OPTIX_PTX_OUTPUTS ${PTX_OUTPUT})
+
+        add_custom_command(
+            OUTPUT ${PTX_OUTPUT}
+            COMMAND ${CMAKE_CUDA_COMPILER}
+                -ptx
+                -I "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/Acceleration/OptiX"
+                -I "${OptiX_INCLUDE_DIR}"
+                -I "${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES}"
+                --use_fast_math
+                -lineinfo
+                --expt-relaxed-constexpr
+                --maxrregcount=96
+                -std=c++17
+                --machine=64
+                -arch compute_${SM_ARCH}
+                -DSIRIUS_HAS_OPTIX=1
+                ${OPTIX_PTX_PLATFORM_DEFS}
+                ${OPTIX_DEVICE_SOURCE}
+                -o ${PTX_OUTPUT}
+            DEPENDS ${OPTIX_DEVICE_SOURCE}
+                "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/Acceleration/OptiX/RDOP003A.h"
+            COMMENT "Compiling OptiX PTX for SM ${SM_ARCH}"
+            VERBATIM
+        )
+    endforeach()
+
+    # Also generate a generic PTX (compute_75) as fallback
+    set(OPTIX_PTX_GENERIC "${OPTIX_PTX_DIR}/RDOP002A.ptx")
     add_custom_command(
-        OUTPUT ${OPTIX_PTX_OUTPUT}
-        COMMAND ${CMAKE_CUDA_COMPILER}
-            -ptx
-            -I "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/Acceleration/OptiX"
-            -I "${OptiX_INCLUDE_DIR}"
-            -I "${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES}"
-            --use_fast_math
-            -lineinfo
-            --expt-relaxed-constexpr
-            --maxrregcount=96
-            -std=c++17
-            --machine=64
-            -arch compute_75
-            -DSIRIUS_HAS_OPTIX=1
-            ${OPTIX_PTX_PLATFORM_DEFS}
-            ${OPTIX_DEVICE_SOURCE}
-            -o ${OPTIX_PTX_OUTPUT}
-        DEPENDS ${OPTIX_DEVICE_SOURCE}
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/Acceleration/OptiX/RDOP003A.h"
-        COMMENT "Compiling OptiX device kernels to PTX"
+        OUTPUT ${OPTIX_PTX_GENERIC}
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${OPTIX_PTX_DIR}/RDOP002A_sm75.ptx"
+            ${OPTIX_PTX_GENERIC}
+        DEPENDS "${OPTIX_PTX_DIR}/RDOP002A_sm75.ptx"
+        COMMENT "Creating generic PTX fallback"
         VERBATIM
     )
-    
-    add_custom_target(SiriusOptiXPTX ALL DEPENDS ${OPTIX_PTX_OUTPUT})
+    list(APPEND OPTIX_PTX_OUTPUTS ${OPTIX_PTX_GENERIC})
+
+    add_custom_target(SiriusOptiXPTX ALL DEPENDS ${OPTIX_PTX_OUTPUTS})
+
+    message(STATUS "PTX architectures: ${SIRIUS_PTX_ARCHITECTURES}")
     
     add_library(SiriusOptiX STATIC
         src/Sirius.Render/Acceleration/OptiX/RDOP001A.cu
@@ -270,27 +331,47 @@ add_executable(Sirius
     # Infrastructure - Application (entry point, orchestration)
     src/Sirius.Infrastructure/Application/CREP001A.cpp
     src/Sirius.Infrastructure/Application/CRAP001A.cpp
-    
+
+    # Infrastructure - CLI (command-line interface)
+    src/Sirius.Infrastructure/Cli/CRCL001A.cpp
+    src/Sirius.Infrastructure/Cli/CRCL002A.cpp
+    src/Sirius.Infrastructure/Cli/CRCL003A.cpp
+    src/Sirius.Infrastructure/Cli/CRCL004A.cpp
+    src/Sirius.Infrastructure/Cli/CRCL005A.cpp
+    src/Sirius.Infrastructure/Cli/CRCL006A.cpp
+
+    # Infrastructure - Configuration (JSON config loader)
+    src/Sirius.Infrastructure/Configuration/CRCF002A.cpp
+
+    # Infrastructure - Platform (cross-platform paths)
+    src/Sirius.Infrastructure/Platform/CRPF001A.cpp
+
     # Infrastructure - Session (FSM-based render pipeline)
     src/Sirius.Infrastructure/Session/SNRS001A.cpp
     src/Sirius.Infrastructure/Session/IRRJ001A.cpp
     src/Sirius.Infrastructure/Session/IREX001A.cpp
-    
+
     # Infrastructure - Interface (ImGui)
     src/Sirius.Infrastructure/Interface/UIMN001A.cpp
-    
+
     # Infrastructure - Window (GLFW)
     src/Sirius.Infrastructure/Window/CRWN001A.cpp
-    
+
     # Infrastructure - Plugin (metric management)
     src/Sirius.Infrastructure/Plugin/CRPM001A.cpp
-    
+
     # Core (camera)
     src/Sirius.Core/Camera/CRGC001A.cpp
-    
+
     # Render pipeline
     src/Sirius.Render/Pipeline/RDRT001A.cpp
-    
+
+    # Render integration (geodesic tracer)
+    src/Sirius.Render/Integration/GTRC001A.cpp
+
+    # Render acceleration backend (GPU)
+    src/Sirius.Render/Acceleration/Backend/ACBF001A.cpp
+
     # External dependencies
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/glad/src/glad.c
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/imgui.cpp
@@ -314,16 +395,24 @@ target_include_directories(Sirius PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Core/Symplectic"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Core/Transport"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Core/Camera"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Core/Jet"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Core/Polarisation"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Core/PostProcess"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/Pipeline"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/Integration"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/OptiX"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/Acceleration/Backend"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/Acceleration/OptiX"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Infrastructure"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Infrastructure/Application"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Infrastructure/Cli"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Infrastructure/Configuration"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Infrastructure/Platform"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Infrastructure/Session"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Infrastructure/Interface"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Infrastructure/Window"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Infrastructure/Plugin"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Infrastructure/Configuration"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Infrastructure/Viewer"
     "${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui"
     "${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/backends"
     "${CMAKE_CURRENT_SOURCE_DIR}/lib/glm"
@@ -343,9 +432,21 @@ target_link_libraries(Sirius PRIVATE
     glfw
     OpenGL::GL
     Threads::Threads
+    ftxui::screen
+    ftxui::dom
+    ftxui::component
+    nlohmann_json::nlohmann_json
+)
+
+# Cross-platform compile definitions (replaces global add_definitions)
+target_compile_definitions(Sirius PRIVATE
+    $<$<PLATFORM_ID:Windows>:NOMINMAX _USE_MATH_DEFINES>
 )
 
 if(SIRIUS_HAS_OPTIX)
+    target_sources(Sirius PRIVATE
+        src/Sirius.Render/Acceleration/OptiX/RDOX001A.cpp
+    )
     target_link_libraries(Sirius PRIVATE SiriusOptiX)
     target_include_directories(Sirius PRIVATE
         "${OptiX_INCLUDE_DIR}"

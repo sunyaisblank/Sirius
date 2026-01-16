@@ -148,11 +148,18 @@ public:
         double y = std::sqrt(r_M);
         double y_isco = std::sqrt(m_r_isco);
         
-        // Correction factor (simplified approximation)
+        // Relativistic correction factor (simplified Page & Thorne approximation)
+        // Full treatment requires numerical integration of E(r), L(r), Ω(r)
+        // This approximation captures the main r-dependence
         double correction = 1.0 / (y * y * y * (y - 3.0/y + 2*m_a/(y*y)));
-        if (!std::isfinite(correction) || correction <= 0) correction = 1;
-        
-        return F * std::min(correction, 10.0);  // Cap correction factor
+
+        // Validate correction factor
+        // Near ISCO the correction can become large but should remain physical
+        // Cap at 100× to prevent numerical instability while allowing realistic values
+        if (!std::isfinite(correction) || correction <= 0) correction = 1.0;
+        correction = std::min(correction, 100.0);  // Allow larger but bounded corrections
+
+        return F * correction;
     }
     
     //--------------------------------------------------------------------------
@@ -244,12 +251,16 @@ public:
     // Accessors
     //--------------------------------------------------------------------------
     
+    const Config& config() const { return m_config; }
     double iscoRadius() const { return m_r_isco; }
     double innerRadius() const { return m_r_inner; }
     double outerRadius() const { return m_r_outer; }
     double spinParameter() const { return m_a; }
     double massKg() const { return m_M_kg; }
     double schwarzschildRadius() const { return m_rs; }
+
+    // Alias for temperature() for API compatibility
+    double effectiveTemperature(double r) const { return temperature(r); }
     
 private:
     Config m_config;

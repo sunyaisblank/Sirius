@@ -3,11 +3,11 @@
 // Tests for: OFTM001A.h
 
 #include <gtest/gtest.h>
-#include "OFTM001A.h"
+#include "Sirius.Render/Scheduling/SCTM001A.h"
 #include <set>
 #include <algorithm>
 
-using namespace sirius::offline;
+using namespace sirius::render;
 
 //==============================================================================
 // Coverage Verification (All orders must include all tiles exactly once)

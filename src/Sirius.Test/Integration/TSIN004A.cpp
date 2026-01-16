@@ -3,19 +3,19 @@
 // Tests full integration of offline renderer components
 
 #include <gtest/gtest.h>
-#include "OFCT001A.h"  // Cancellation token
-#include "OFER001A.h"  // Error accumulator
-#include "OFPG001A.h"  // ETA calculator
-#include "OFTM001A.h"  // Tile scheduler
-#include "OFOD001A.h"  // Output driver interface
-#include "OFOD002A.h"  // Output driver implementations
-#include "OFCK001A.h"  // Checkpointing
-#include "OFDD001A.h"  // Display driver
+#include "Sirius.Render/Session/SRCT001A.h"   // Cancellation token
+#include "Sirius.Render/Session/SRER001A.h"   // Error accumulator
+#include "Sirius.Render/Session/SRPG001A.h"   // ETA calculator
+#include "Sirius.Render/Scheduling/SCTM001A.h" // Tile scheduler
+#include "Sirius.Render/Output/OUMD001A.h"    // Output driver interface
+#include "Sirius.Render/Output/OUDR001A.h"    // Output driver implementations
+#include "Sirius.Render/Session/SRCK001A.h"   // Checkpointing
+#include "Sirius.Render/Output/OUDD001A.h"    // Display driver
 #include <thread>
 #include <chrono>
 #include <filesystem>
 
-using namespace sirius::offline;
+using namespace sirius::render;
 
 //==============================================================================
 // Component Integration Tests

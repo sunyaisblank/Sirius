@@ -3,11 +3,11 @@
 // Tests for: OFDD001A.h
 
 #include <gtest/gtest.h>
-#include "OFDD001A.h"
+#include "Sirius.Render/Output/OUDD001A.h"
 #include <cmath>
 #include <cstring>
 
-using namespace sirius::offline;
+using namespace sirius::render;
 
 //==============================================================================
 // DisplayFormat Tests

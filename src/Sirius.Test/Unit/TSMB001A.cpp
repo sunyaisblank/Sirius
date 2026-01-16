@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 #include <cmath>
-#include "../../Sirius.Render/Integration/KNTA001A.h"
+#include <KNTA001A.h>
 
 using namespace sirius::kernel;
 using namespace sirius::spectral;

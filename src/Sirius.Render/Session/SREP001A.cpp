@@ -9,12 +9,22 @@
 #include <chrono>
 #include <thread>
 #include <vector>
+#include <cstring>
+#include <iomanip>
+#include <cmath>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 // Architecture Includes
 #include "../Acceleration/Backend/ACBM001A.h"
 #include "../Buffer/BFIO001A.h"
 #include "../../Sirius.Core/PostProcess/PPOP001A.h"
 #include "../Acceleration/OptiX/RDOP003A.h" // For LaunchParams struct definition if needed
+#include "../Output/OUIB001A.h"  // ImageBuffer
+#include "../Output/OUEW001A.h"  // EXR Writer
+#include "../Output/RDFL001A.h"  // Film Pipeline
 
 
 // Dependencies
@@ -49,10 +59,18 @@ void printUsage() {
               << "  --height <n>         Height (default: 1080)\n"
               << "  --spin <a>           Black hole spin (default: 0.999)\n"
               << "  --distance <r>       Observer distance (default: 200)\n"
+              << "  --inclination <deg>  Observer inclination angle (0-90, default: 90)\n"
+              << "  --azimuth <deg>      Camera azimuth offset (default: 0)\n"
               << "  --fov <deg>          Field of view (default: 60)\n"
               << "  --samples <n>        Samples per pixel (default: 64)\n"
               << "  --no-bloom           Disable bloom\n"
-              << "  --backend <name>     Force backend (optix/cuda)\n";
+              << "  --backend <name>     Force backend (optix/cuda)\n"
+              << "\nCinematic Features:\n"
+              << "  --turbulence <val>   Enable disk turbulence (amplitude 0-1)\n"
+              << "  --starfield          Enable enhanced procedural starfield\n"
+              << "  --film               Enable IMAX film simulation\n"
+              << "  --film-grain <val>   Film grain intensity (0-1, default: 0.025)\n"
+              << "  --film-halation <v>  Film halation strength (0-1, default: 0.15)\n";
 }
 
 RenderOptions parseArgs(int argc, char* argv[]) {
@@ -68,7 +86,31 @@ RenderOptions parseArgs(int argc, char* argv[]) {
         else if(arg == "--fov" && i+1<argc) opts.config.cameraFOV = std::atof(argv[++i]);
 
         else if(arg == "--samples" && i+1<argc) opts.config.samplesPerPixel = std::atoi(argv[++i]);
+        else if(arg == "--inclination" && i+1<argc) {
+            float deg = std::atof(argv[++i]);
+            opts.config.observerInclination = deg * M_PI / 180.0f;  // Convert degrees to radians
+        }
+        else if(arg == "--azimuth" && i+1<argc) {
+            float deg = std::atof(argv[++i]);
+            opts.config.observerAzimuth = deg * M_PI / 180.0f;  // Convert degrees to radians
+        }
         else if(arg == "--no-bloom") opts.ppSettings.enableBloom = false;
+
+        // Cinematic features
+        else if(arg == "--turbulence" && i+1<argc) {
+            opts.config.enableTurbulence = true;
+            opts.config.turbulenceAmplitude = std::atof(argv[++i]);
+        }
+        else if(arg == "--starfield") opts.config.enableStarfield = true;
+        else if(arg == "--film") opts.config.enableFilm = true;
+        else if(arg == "--film-grain" && i+1<argc) {
+            opts.config.enableFilm = true;
+            opts.config.filmGrainIntensity = std::atof(argv[++i]);
+        }
+        else if(arg == "--film-halation" && i+1<argc) {
+            opts.config.enableFilm = true;
+            opts.config.filmHalationStrength = std::atof(argv[++i]);
+        }
         else if(arg == "--metric" && i+1<argc) {
             std::string m = argv[++i];
             if (m == "Minkowski") opts.config.metricType = (int)Sirius::MetricType::Minkowski;
@@ -152,28 +194,20 @@ int main(int argc, char* argv[]) {
     // Render Loop
     std::cout << "Rendering..." << std::flush;
     auto start = std::chrono::high_resolution_clock::now();
-    
-    // Launch Render
-    // For progressive accumulation, we might want to loop here.
-    // The current backend interface 'launch' does one pass. 
-    // We can loop here for updated progress or just pass all samples to config.
-    // The config has 'samplesPerPixel'.
-    // If backend handles accumulation internally (likely for OptiX), we just call launch.
-    
-    // Actually, OptiX backend usually does one pass per launch.
-    // Let's loop for progress.
-    
+
+    // Reset accumulation before starting fresh render
+    accelerator->resetAccumulation();
+
+    // Progressive accumulation: each launch adds 1 sample, backend accumulates
     int totalSamples = opts.config.samplesPerPixel;
-    int batchSize = 1; 
-    
-    for (int s = 0; s < totalSamples; s += batchSize) {
-        // Update config for current frame/seed if needed?
-        // The accelerator interface might need refinement for progressive updates if it holds state.
-        // Assuming 'launch' adds samples.
+
+    for (int s = 0; s < totalSamples; ++s) {
         accelerator->launch(opts.config);
-        
-        if (opts.verbose && (s % 10 == 0)) {
-            std::cout << "\rSample " << s << "/" << totalSamples << std::flush;
+
+        if (opts.verbose && (s % 10 == 0 || s == totalSamples - 1)) {
+            float progress = 100.0f * (s + 1) / totalSamples;
+            std::cout << "\rRendering: " << (s + 1) << "/" << totalSamples
+                      << " samples (" << std::fixed << std::setprecision(1) << progress << "%)" << std::flush;
         }
     }
     
@@ -189,13 +223,53 @@ int main(int argc, char* argv[]) {
          std::cerr << "Error: Null framebuffer\n";
          return 1;
     }
-    
+
+    // =========================================================================
+    // Film Pipeline Post-Processing (Cinematic Features Phase 8)
+    // =========================================================================
+    if (opts.config.enableFilm) {
+        std::cout << "Applying film simulation..." << std::flush;
+
+        Sirius::FilmConfig filmConfig = Sirius::FilmConfig::Interstellar();
+        filmConfig.grain_intensity = opts.config.filmGrainIntensity;
+        filmConfig.halation_strength = opts.config.filmHalationStrength;
+        filmConfig.halation_radius = opts.config.filmHalationRadius;
+        filmConfig.vignette_strength = opts.config.filmVignetteStrength;
+
+        // Cinematic grading: darker, higher contrast for Interstellar look
+        filmConfig.exposure = -0.7f;       // Darken overall exposure
+        filmConfig.contrast = 1.4f;        // Increase contrast for deep blacks
+        filmConfig.saturation = 0.85f;     // Slightly desaturate for film look
+        filmConfig.toe_strength = 0.6f;    // Stronger shadow compression
+        filmConfig.shoulder_strength = 0.4f; // Softer highlight rolloff
+        filmConfig.enabled = true;
+
+        Sirius::FilmPipeline pipeline(filmConfig);
+        pipeline.apply(gpuBuffer, opts.config.width, opts.config.height, 0);
+
+        std::cout << " done.\n";
+    }
+
     // Buffer IO
     if (opts.outputEXR) {
-        // TODO: Implement writeEXR in BufferIO or use tinyexr directly
-        // BufferWriter::writeEXR(opts.outputPath, gpuBuffer, opts.config.width, opts.config.height);
-        std::cerr << "EXR output not yet fully implemented in BufferWriter, saving raw.\n";
-        BufferWriter::writeRaw(opts.outputPath + ".raw", gpuBuffer, opts.config.width, opts.config.height);
+        // Convert float buffer to ImageBufferRGBA and write EXR
+        sirius::render::ImageBufferRGBA buffer;
+        buffer.allocate(opts.config.width, opts.config.height);
+        std::memcpy(buffer.pixels.data(), gpuBuffer,
+                    static_cast<size_t>(opts.config.width) * opts.config.height * 4 * sizeof(float));
+
+        sirius::render::EXRMetadata meta;
+        meta.blackHoleSpin = opts.config.blackHoleSpin;
+        meta.observerDistance = opts.config.observerDistance;
+        meta.samplesPerPixel = opts.config.samplesPerPixel;
+        meta.renderTimeSeconds = diff.count();
+
+        if (sirius::render::EXRWriter::writeEXR(opts.outputPath, buffer, meta)) {
+            std::cout << "Wrote EXR: " << opts.outputPath << "\n";
+        } else {
+            std::cerr << "Failed to write EXR, falling back to PPM\n";
+            BufferWriter::writePPM(opts.outputPath + ".ppm", gpuBuffer, opts.config.width, opts.config.height);
+        }
     } else {
         BufferWriter::writePPM(opts.outputPath, gpuBuffer, opts.config.width, opts.config.height);
     }

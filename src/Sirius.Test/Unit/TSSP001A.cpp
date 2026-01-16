@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 #include <cmath>
-#include "../../Sirius.Core/Symplectic/MTSB001A.h"
+#include <MTSB001A.h>
 
 using namespace sirius::spectral;
 

@@ -109,12 +109,31 @@ Sirius/
 │   │   └── Camera/               # Geodesic camera motion
 │   │
 │   ├── Sirius.Render/            # Rendering layer
-│   │   ├── OptiX/                # RTX-accelerated raytracing
-│   │   ├── Shader/               # GLSL shaders
+│   │   ├── Acceleration/         # GPU backends
+│   │   │   ├── OptiX/            # RTX-accelerated raytracing
+│   │   │   └── Backend/          # Multi-GPU management
+│   │   ├── Session/              # Render session management
+│   │   │   ├── SRRS001A.h        # Render session
+│   │   │   ├── SRCT001A.h        # Cancellation token
+│   │   │   ├── SRER001A.h        # Error accumulator
+│   │   │   ├── SRPG001A.h        # ETA calculator
+│   │   │   └── SRCK001A.h        # Checkpointing
+│   │   ├── Scheduling/           # Tile scheduling
+│   │   │   └── SCTM001A.h        # Tile scheduler
+│   │   ├── Output/               # Output drivers
+│   │   │   ├── OUMD001A.h        # Driver interface
+│   │   │   ├── OUDR001A.h        # Implementations
+│   │   │   ├── OUDD001A.h        # Display driver
+│   │   │   ├── OUIB001A.h        # Image buffer
+│   │   │   ├── OUEW001A.h/cpp    # EXR writer
+│   │   │   └── OUPN001A.h/cpp    # PNG writer
+│   │   ├── Camera/               # Camera models
+│   │   │   ├── CMBL001A.h        # Boyer-Lindquist camera
+│   │   │   └── CMFM001A.h        # Film formats
 │   │   ├── Pipeline/             # Display pipeline
-│   │   ├── Texture/              # Starfield, resources
-│   │   ├── Session/              # Batch rendering (offline)
-│   │   └── Kernel/               # Compute kernels
+│   │   ├── Integration/          # Beam integration
+│   │   ├── Transport/            # Spectral transport
+│   │   └── Buffer/               # Frame buffers
 │   │
 │   ├── Sirius.Infrastructure/    # Application orchestration
 │   │   ├── CRAP001A.h/cpp        # Application class
@@ -171,8 +190,10 @@ Sirius/
 | `RD` | Render | Raytracer, shaders, display |
 | `UI` | Interface | User controls, ImGui |
 | `CR` | Core | Application, windowing, plugins (Infrastructure) |
-| `CM` | Camera | Camera models and motion |
-| `OF` | Offline | Batch rendering, sessions |
+| `CM` | Camera | Camera models, film formats, ray generation |
+| `SR` | Session | Render session management, checkpointing, error handling |
+| `SC` | Scheduling | Tile scheduling, work distribution |
+| `OU` | Output | Output drivers (PNG, EXR, display) |
 | `PP` | PostProcess | Tonemapping, bloom, effects |
 | `NR` | Numerics | Data loaders, converters |
 | `TS` | Test | Test cases |
@@ -255,12 +276,49 @@ Sirius/
 
 ### 5.3 Sirius.Render
 
+#### Core Rendering
+
 | Code | File | Description |
 |------|------|-------------|
-| `RDRT001A` | `RDRT001A.cpp` | Main renderer |
-| `RDOP001A` | `RDOP001A.cu` | OptiX host code |
-| `RDOP002A` | `RDOP002A.cu` | OptiX device kernels |
-| `RDOP003A` | `RDOP003A.h` | Launch parameters |
+| `RDRT001A` | `Pipeline/RDRT001A.cpp` | Main renderer |
+| `RDOP001A` | `Acceleration/OptiX/RDOP001A.cu` | OptiX host code |
+| `RDOP002A` | `Acceleration/OptiX/RDOP002A.cu` | OptiX device kernels |
+| `RDOP003A` | `Acceleration/OptiX/RDOP003A.h` | Launch parameters |
+
+#### Session Management (Sirius.Render/Session)
+
+| Code | File | Description |
+|------|------|-------------|
+| `SRRS001A` | `Session/SRRS001A.h` | Render session manager |
+| `SRCT001A` | `Session/SRCT001A.h` | Cancellation token |
+| `SRER001A` | `Session/SRER001A.h` | Error accumulator |
+| `SRPG001A` | `Session/SRPG001A.h` | ETA calculator |
+| `SRCK001A` | `Session/SRCK001A.h` | Checkpointing system |
+| `SRIO001A` | `Session/SRIO001A.h` | Session I/O utilities |
+
+#### Scheduling (Sirius.Render/Scheduling)
+
+| Code | File | Description |
+|------|------|-------------|
+| `SCTM001A` | `Scheduling/SCTM001A.h` | Tile scheduler (spiral, Hilbert, scanline) |
+
+#### Output Drivers (Sirius.Render/Output)
+
+| Code | File | Description |
+|------|------|-------------|
+| `OUMD001A` | `Output/OUMD001A.h` | Output driver interface |
+| `OUDR001A` | `Output/OUDR001A.h` | Output driver implementations (Null, Memory, EXR) |
+| `OUDD001A` | `Output/OUDD001A.h` | Display driver interface and implementations |
+| `OUIB001A` | `Output/OUIB001A.h` | Image buffer (HDR float) |
+| `OUEW001A` | `Output/OUEW001A.h/cpp` | EXR writer (tinyexr integration) |
+| `OUPN001A` | `Output/OUPN001A.h/cpp` | PNG writer (stb_image_write integration) |
+
+#### Camera (Sirius.Render/Camera)
+
+| Code | File | Description |
+|------|------|-------------|
+| `CMBL001A` | `Camera/CMBL001A.h` | Camera model (Boyer-Lindquist) |
+| `CMFM001A` | `Camera/CMFM001A.h` | Film formats (IMAX 70mm, VistaVision, etc.) |
 
 ### 5.4 Sirius.Core
 
@@ -271,17 +329,9 @@ Sirius/
 | `CRPM001A` | `CRPM001A.h/cpp` | Plugin manager |
 | `CRWN001A` | `CRWN001A.h/cpp` | Window management |
 
-### 5.5 Sirius.Offline
+### 5.5 Sirius.Test
 
-| Code | File | Description |
-|------|------|-------------|
-| `OFRS001A` | `OFRS001A.h` | Render session |
-| `OFCM001A` | `OFCM001A.h` | Camera model |
-| `OFIO001A` | `OFIO001A.h` | Image I/O |
-| `OFCT001A` | `OFCT001A.h` | Cancellation token |
-| `OFER001A` | `OFER001A.h` | Error accumulator |
-
-### 5.6 Sirius.Test
+#### Unit Tests
 
 | Code | File | Description |
 |------|------|-------------|
@@ -290,8 +340,46 @@ Sirius/
 | `TSPH001A` | `Unit/TSPH001A.cpp` | Schwarzschild metric tests |
 | `TSPH002A` | `Unit/TSPH002A.cpp` | Christoffel symbol tests |
 | `TSPH003A` | `Unit/TSPH003A.cpp` | Geodesic equation tests |
-| `TSDG001A` | `Diagnostic/TSDG001A.cpp` | Numerical stability tests |
-| `TSBM001A` | `Benchmark/TSBM001A.cpp` | Integration accuracy tests |
+
+#### Offline Rendering Tests
+
+| Code | File | Description |
+|------|------|-------------|
+| `TSOF001A` | `Unit/TSOF001A.cpp` | Render session tests |
+| `TSOF002A` | `Unit/TSOF002A.cpp` | Cancellation token tests |
+| `TSOF003A` | `Unit/TSOF003A.cpp` | Error accumulator tests |
+| `TSOF004A` | `Unit/TSOF004A.cpp` | Tile scheduler tests |
+| `TSOF005A` | `Unit/TSOF005A.cpp` | ETA calculator tests |
+| `TSOF006A` | `Unit/TSOF006A.cpp` | Output driver tests |
+| `TSOF007A` | `Unit/TSOF007A.cpp` | Checkpoint tests |
+| `TSOF008A` | `Unit/TSOF008A.cpp` | Display driver tests |
+| `TSOF009A` | `Unit/TSOF009A.cpp` | PNG output driver tests |
+
+#### Diagnostic Tests
+
+| Code | File | Description |
+|------|------|-------------|
+| `TSDG001A` | `Diagnostic/TSDG001A.cpp` | Edge cases and precision |
+| `TSDG002A` | `Diagnostic/TSDG002A.cpp` | NaN/Inf detection |
+| `TSDG003A` | `Diagnostic/TSDG003A.cpp` | Conservation law verification |
+| `TSDG004A` | `Diagnostic/TSDG004A.cpp` | Determinism verification |
+
+#### Integration Tests
+
+| Code | File | Description |
+|------|------|-------------|
+| `TSIN001A` | `Integration/TSIN001A.cpp` | Geodesic path validation |
+| `TSIN002A` | `Integration/TSIN002A.cpp` | Metric loader chain |
+| `TSIN003A` | `Integration/TSIN003A.cpp` | Render pipeline integration |
+| `TSIN004A` | `Integration/TSIN004A.cpp` | Offline renderer integration |
+
+#### Benchmark Tests
+
+| Code | File | Description |
+|------|------|-------------|
+| `TSBM001A` | `Benchmark/TSBM001A.cpp` | Integration accuracy (Killing vectors) |
+| `TSBM002A` | `Benchmark/TSBM002A.cpp` | FPS performance tracking |
+| `TSBM003A` | `Benchmark/TSBM003A.cpp` | Christoffel computation comparison |
 
 ---
 

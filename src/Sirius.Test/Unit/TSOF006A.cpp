@@ -3,11 +3,11 @@
 // Tests for: OFOD001A.h, OFOD002A.h
 
 #include <gtest/gtest.h>
-#include "OFOD001A.h"
-#include "OFOD002A.h"
+#include "Sirius.Render/Output/OUMD001A.h"
+#include "Sirius.Render/Output/OUDR001A.h"
 #include <cmath>
 
-using namespace sirius::offline;
+using namespace sirius::render;
 
 //==============================================================================
 // OutputPass Name Tests

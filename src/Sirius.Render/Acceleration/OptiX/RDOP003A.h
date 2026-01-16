@@ -509,6 +509,188 @@ struct GeodesicLUTParams {
 };
 
 //==============================================================================
+// SMBH Parameters (GPU-compatible)
+// Supermassive black hole astrophysical scaling
+//==============================================================================
+struct SMBHParamsGPU {
+    float mass_M;                  // Mass in geometric units (M = GM/c² = 1)
+    float spin;                    // Dimensionless spin a* = a/M
+    float inclination_rad;         // Observer inclination [radians]
+    float r_isco;                  // ISCO radius in M
+    float r_horizon;               // Outer horizon radius in M
+    float r_inner_horizon;         // Inner horizon radius in M
+    float angular_size_rg;         // Angular size of r_g [radians]
+    float padding;                 // Alignment padding
+};
+
+//==============================================================================
+// Turbulence Parameters (GPU-compatible)
+// Kolmogorov cascade density perturbations
+//==============================================================================
+struct TurbulenceParamsGPU {
+    float amplitude;
+    float outer_scale;
+    float inner_scale;
+    float lacunarity;
+    float persistence;
+    uint32_t octaves;
+    uint32_t seed;
+    uint32_t enabled;
+};
+
+//==============================================================================
+// Corona Parameters (GPU-compatible)
+// Inverse-Compton scattering corona model
+//==============================================================================
+struct CoronaParamsGPU {
+    float temperature_keV;
+    float optical_depth;
+    float scale_height;
+    float inner_radius;
+    float outer_radius;
+    float emissivity_index;
+    float intensity_scale;
+    uint32_t geometry;
+    float lamppost_height;
+    float comptonization_y;
+    float spectral_index;
+    uint32_t enabled;
+};
+
+//==============================================================================
+// Volumetric Disk Parameters (GPU-compatible)
+// Enhanced Shakura-Sunyaev + turbulence + corona
+//==============================================================================
+struct VolumetricDiskParamsGPU {
+    // Structure
+    float inner_radius;
+    float outer_radius;
+    float reference_radius;
+    float H_over_r;
+    float H_power;
+    float density_power;
+    float padding1[2];
+
+    // Temperature
+    float inner_temperature;
+    float temperature_power;
+    uint32_t use_novikov_thorne;
+    float padding2;
+
+    // Emission
+    float emission_coeff;
+    float absorption_coeff;
+    float scattering_albedo;
+    float beaming_exponent;
+
+    // Ray marching
+    int volumetric_samples;
+    float optical_depth_max;
+    uint32_t enabled;
+    float padding3;
+
+    // Sub-models
+    TurbulenceParamsGPU turbulence;
+    CoronaParamsGPU corona;
+};
+
+//==============================================================================
+// MHD Jet Parameters (GPU-compatible)
+// Relativistic jet with magnetic field structure
+//==============================================================================
+struct JetMHDParamsGPU {
+    // Magnetic field
+    float B_base;
+    float power_law_index;
+    float B_field_order;
+    float padding1;
+
+    // Geometry
+    float opening_angle;
+    float z_launch;
+    float z_max;
+    float collimation;
+
+    // Kinematics
+    float lorentz_factor;
+    float beta;
+    float velocity_profile;
+    float padding2;
+
+    // Electron distribution
+    float electron_index;
+    float spectral_index;
+    float gamma_min;
+    float gamma_max;
+    float n_e_0;
+    float n_e_decay;
+    float intensity_scale;
+    float max_polarisation;
+
+    // Flags
+    uint32_t enabled;
+    uint32_t enable_polarisation;
+    uint32_t padding3[2];
+};
+
+//==============================================================================
+// Starfield Parameters (GPU-compatible)
+// Depth-resolved stellar catalog with parallax
+//==============================================================================
+struct StarfieldParamsGPU {
+    uint64_t star_buffer;          // CUdeviceptr to StarEntry array
+    uint32_t star_count;
+    float magnitude_limit;
+    float brightness_scale;
+    float aperture_mm;
+    float focus_distance_pc;
+    uint32_t enabled;
+    uint32_t enable_parallax;
+    uint32_t enable_dof;
+};
+
+//==============================================================================
+// Film Simulation Parameters (GPU-compatible)
+// IMAX 70mm post-processing
+//==============================================================================
+struct FilmParamsGPU {
+    // Grain
+    float grain_intensity;
+    float grain_size;
+    float grain_uniformity;
+    uint32_t grain_seed;
+
+    // Halation
+    float halation_radius;
+    float halation_strength;
+    float halation_threshold;
+    float halation_color_r;
+    float halation_color_g;
+    float halation_color_b;
+    float padding1;
+    float padding2;
+
+    // Color
+    float saturation;
+    float contrast;
+    float exposure;
+    float toe_strength;
+    float shoulder_strength;
+    float midtone_point;
+    float padding3;
+    float padding4;
+
+    // Vignette
+    float vignette_strength;
+    float vignette_radius;
+    float vignette_softness;
+    float padding5;
+
+    // Feature flags (packed as bits)
+    uint32_t features;  // bit 0: grain, bit 1: halation, bit 2: vignette, bit 3: enabled
+};
+
+//==============================================================================
 // OptiX Launch Parameters
 // This structure is uploaded to GPU constant memory before each launch
 //==============================================================================
@@ -557,10 +739,26 @@ struct LaunchParams {
     
     // === Ray Bundles (Phase 6.3 - DNGR Anti-Aliasing) ===
     RayBundleParams rayBundle;
-    
+
+    // === Cinematic Expansion (2026) ===
+    // SMBH astrophysical parameters
+    SMBHParamsGPU smbh;
+
+    // Volumetric disk with turbulence and corona
+    VolumetricDiskParamsGPU volumetricDisk;
+
+    // MHD relativistic jet
+    JetMHDParamsGPU jetMHD;
+
+    // Depth-resolved starfield
+    StarfieldParamsGPU starfield;
+
+    // IMAX 70mm film simulation
+    FilmParamsGPU film;
+
     // === OptiX Handles (not typically used for geodesic raymarching) ===
     OptixTraversableHandle traversable;
-    
+
     // === Debug ===
     bool debugMode;
     int debugPixelX;
@@ -702,17 +900,17 @@ inline LaunchParams createDefaultLaunchParams() {
     params.accretionDisk.enabled = true;
     params.accretionDisk.diskMode = Sirius::DiskMode::Planar;  // Planar = fast, bright; Volumetric = slower
     params.accretionDisk.innerRadius = 0.0f;     // 0 = use ISCO (auto-calculated as 6M)
-    params.accretionDisk.outerRadius = 15.0f;    // In units of M, so 15M (typical ~10-30M)
+    params.accretionDisk.outerRadius = 30.0f;    // Extended for cinematic wide composition
     params.accretionDisk.heightScale = 0.005f;   // Razor thin
     params.accretionDisk.temperatureModel = Sirius::TemperatureModel::ShakuraSunyaev;  // Cinematic: bright inner edge
-    params.accretionDisk.innerTemperature = 15000.0f; // Hot inner edge → white/blue-white
+    params.accretionDisk.innerTemperature = 6500.0f; // Warm orange inner edge (Interstellar look)
     params.accretionDisk.temperatureExponent = 0.75f;  // Standard T ∝ r^(-3/4)
-    params.accretionDisk.emissionCoefficient = 10.0f;  // High vibrancy for outer glow
+    params.accretionDisk.emissionCoefficient = 2.5f;  // Balanced emission
     params.accretionDisk.absorptionCoefficient = 2.0f;  // Translucent glow
     params.accretionDisk.scatteringAlbedo = 0.0f;
     params.accretionDisk.volumetricSamples = 8;  // Reduced for performance; bloom compensates visually
     params.accretionDisk.opticalDepthMax = 2.0f;   // Lower to prevent pure black occlusion
-    params.accretionDisk.beamingExponent = 2.0f; // Softer Doppler transitions
+    params.accretionDisk.beamingExponent = 3.5f; // Strong Doppler beaming for asymmetry
     params.accretionDisk.limbDarkening = 0.6f;
     params.accretionDisk.useSpectralColors = true;
     
@@ -740,7 +938,127 @@ inline LaunchParams createDefaultLaunchParams() {
     params.rayBundle.filterSamples = 4;       // Samples for ellipse filtering
     params.rayBundle.minBundleSize = 1e-6f;   // Minimum size before termination
     params.rayBundle.maxEllipseRatio = 100.0f; // Max elongation
-    
+
+    // =========================================================================
+    // Cinematic Expansion Defaults (2026)
+    // =========================================================================
+
+    // SMBH defaults (normalized geometric units)
+    params.smbh.mass_M = 1.0f;
+    params.smbh.spin = 0.0f;
+    params.smbh.inclination_rad = 1.5708f;  // 90 degrees
+    params.smbh.r_isco = 6.0f;              // Schwarzschild ISCO
+    params.smbh.r_horizon = 2.0f;           // Schwarzschild horizon
+    params.smbh.r_inner_horizon = 0.0f;
+    params.smbh.angular_size_rg = 1e-6f;
+    params.smbh.padding = 0.0f;
+
+    // Volumetric disk defaults
+    params.volumetricDisk.inner_radius = 0.0f;  // Use ISCO
+    params.volumetricDisk.outer_radius = 500.0f;
+    params.volumetricDisk.reference_radius = 10.0f;
+    params.volumetricDisk.H_over_r = 0.1f;
+    params.volumetricDisk.H_power = 0.25f;
+    params.volumetricDisk.density_power = 1.5f;
+    params.volumetricDisk.padding1[0] = params.volumetricDisk.padding1[1] = 0.0f;
+    params.volumetricDisk.inner_temperature = 1e7f;
+    params.volumetricDisk.temperature_power = 0.75f;
+    params.volumetricDisk.use_novikov_thorne = 1;
+    params.volumetricDisk.padding2 = 0.0f;
+    params.volumetricDisk.emission_coeff = 1.0f;
+    params.volumetricDisk.absorption_coeff = 0.1f;
+    params.volumetricDisk.scattering_albedo = 0.3f;
+    params.volumetricDisk.beaming_exponent = 3.0f;
+    params.volumetricDisk.volumetric_samples = 64;
+    params.volumetricDisk.optical_depth_max = 10.0f;
+    params.volumetricDisk.enabled = 0;  // Disabled by default (use planar disk)
+    params.volumetricDisk.padding3 = 0.0f;
+
+    // Turbulence sub-model
+    params.volumetricDisk.turbulence.amplitude = 0.3f;
+    params.volumetricDisk.turbulence.outer_scale = 5.0f;
+    params.volumetricDisk.turbulence.inner_scale = 0.1f;
+    params.volumetricDisk.turbulence.lacunarity = 2.0f;
+    params.volumetricDisk.turbulence.persistence = 0.5f;
+    params.volumetricDisk.turbulence.octaves = 6;
+    params.volumetricDisk.turbulence.seed = 12345;
+    params.volumetricDisk.turbulence.enabled = 1;
+
+    // Corona sub-model
+    params.volumetricDisk.corona.temperature_keV = 100.0f;
+    params.volumetricDisk.corona.optical_depth = 0.5f;
+    params.volumetricDisk.corona.scale_height = 5.0f;
+    params.volumetricDisk.corona.inner_radius = 0.0f;
+    params.volumetricDisk.corona.outer_radius = 20.0f;
+    params.volumetricDisk.corona.emissivity_index = 3.0f;
+    params.volumetricDisk.corona.intensity_scale = 1.0f;
+    params.volumetricDisk.corona.geometry = 3;  // Extended
+    params.volumetricDisk.corona.lamppost_height = 10.0f;
+    params.volumetricDisk.corona.comptonization_y = 0.8f;
+    params.volumetricDisk.corona.spectral_index = 1.7f;
+    params.volumetricDisk.corona.enabled = 0;
+
+    // MHD Jet defaults
+    params.jetMHD.B_base = 1e4f;
+    params.jetMHD.power_law_index = 1.0f;
+    params.jetMHD.B_field_order = 0.5f;
+    params.jetMHD.padding1 = 0.0f;
+    params.jetMHD.opening_angle = 0.1f;
+    params.jetMHD.z_launch = 3.0f;
+    params.jetMHD.z_max = 200.0f;
+    params.jetMHD.collimation = 0.5f;
+    params.jetMHD.lorentz_factor = 5.0f;
+    params.jetMHD.beta = 0.98f;
+    params.jetMHD.velocity_profile = 0.0f;
+    params.jetMHD.padding2 = 0.0f;
+    params.jetMHD.electron_index = 2.2f;
+    params.jetMHD.spectral_index = 0.6f;
+    params.jetMHD.gamma_min = 10.0f;
+    params.jetMHD.gamma_max = 1e6f;
+    params.jetMHD.n_e_0 = 1e5f;
+    params.jetMHD.n_e_decay = 2.0f;
+    params.jetMHD.intensity_scale = 1.0f;
+    params.jetMHD.max_polarisation = 0.7f;
+    params.jetMHD.enabled = 0;  // Disabled by default
+    params.jetMHD.enable_polarisation = 1;
+    params.jetMHD.padding3[0] = params.jetMHD.padding3[1] = 0;
+
+    // Starfield defaults
+    params.starfield.star_buffer = 0;  // No buffer allocated
+    params.starfield.star_count = 0;
+    params.starfield.magnitude_limit = 12.0f;
+    params.starfield.brightness_scale = 1.0f;
+    params.starfield.aperture_mm = 50.0f;
+    params.starfield.focus_distance_pc = 100.0f;
+    params.starfield.enabled = 0;  // Disabled by default
+    params.starfield.enable_parallax = 1;
+    params.starfield.enable_dof = 1;
+
+    // Film simulation defaults (Interstellar-style IMAX)
+    params.film.grain_intensity = 0.025f;
+    params.film.grain_size = 1.5f;
+    params.film.grain_uniformity = 0.7f;
+    params.film.grain_seed = 0;
+    params.film.halation_radius = 8.0f;
+    params.film.halation_strength = 0.15f;
+    params.film.halation_threshold = 0.8f;
+    params.film.halation_color_r = 1.0f;
+    params.film.halation_color_g = 0.5f;
+    params.film.halation_color_b = 0.2f;
+    params.film.padding1 = params.film.padding2 = 0.0f;
+    params.film.saturation = 0.95f;
+    params.film.contrast = 1.05f;
+    params.film.exposure = 0.0f;
+    params.film.toe_strength = 0.5f;
+    params.film.shoulder_strength = 0.5f;
+    params.film.midtone_point = 0.18f;
+    params.film.padding3 = params.film.padding4 = 0.0f;
+    params.film.vignette_strength = 0.3f;
+    params.film.vignette_radius = 1.2f;
+    params.film.vignette_softness = 0.5f;
+    params.film.padding5 = 0.0f;
+    params.film.features = 0;  // All disabled by default for GPU rendering
+
     return params;
 }
 

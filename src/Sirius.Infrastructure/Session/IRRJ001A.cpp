@@ -29,6 +29,49 @@ RenderJob::RenderJob(const RenderConfig& config)
     : m_Config(config)
 {
     m_ImageBuffer.resize(config.width * config.height * 4, 0.0f);
+
+    // =================================================================
+    // Priority 1 Fix: Initialize physics components
+    // =================================================================
+
+    // Create metric from config (Kerr-Schild family)
+    KerrSchildParams params;
+    params.M = config.M;
+    params.a = config.a * config.M;  // spin as a/M
+    params.Q = 0.0;  // No charge for now
+    params.Lambda = 0.0;  // No cosmological constant
+    m_Metric = std::make_unique<KerrSchildFamily>(params);
+
+    // Create camera
+    CameraConfig camConfig;
+    camConfig.r = config.observerPosition[1];
+    camConfig.theta = config.observerPosition[2];
+    camConfig.phi = config.observerPosition[3];
+    camConfig.fov = config.fov;
+    camConfig.width = config.width;
+    camConfig.height = config.height;
+    m_Camera = std::make_unique<PinholeCamera>(camConfig);
+
+    // Create geodesic tracer
+    TracerConfig tracerConfig;
+    tracerConfig.escape_radius = 100.0f;
+    tracerConfig.horizon_factor = 1.05f;
+    tracerConfig.max_steps = config.maxIntegrationSteps;
+    tracerConfig.integrator.abs_tolerance = static_cast<float>(config.integrationTolerance);
+    tracerConfig.integrator.rel_tolerance = static_cast<float>(config.integrationTolerance);
+
+    // Compute ISCO for disk inner radius
+    double a_dim = config.a;
+    if (std::abs(a_dim) < 0.01) {
+        tracerConfig.disk_inner = static_cast<float>(6.0 * config.M);  // Schwarzschild ISCO
+    } else {
+        // Kerr ISCO (prograde, simplified)
+        tracerConfig.disk_inner = static_cast<float>(config.M * (3.0 + 3.0 * std::pow(1.0 - a_dim*a_dim, 1.0/3.0)));
+    }
+    tracerConfig.disk_outer = static_cast<float>(config.diskOuterRadius);
+    tracerConfig.enable_disk = config.enableDisk;
+
+    m_Tracer = std::make_unique<GeodesicTracer>(m_Metric.get(), tracerConfig);
 }
 
 RenderJob::~RenderJob() {
@@ -191,168 +234,87 @@ void RenderJob::execute() {
 }
 
 //==============================================================================
-// Black Hole Scanline Rendering (Geometric Approximation)
+// Black Hole Scanline Rendering (Geodesic Integration - Priority 1 Fix)
 //==============================================================================
 void RenderJob::renderScanlineBlackHole(int y) {
-    float aspectRatio = static_cast<float>(m_Config.width) / m_Config.height;
-    float fovRad = m_Config.fov * static_cast<float>(M_PI) / 180.0f;
-    float tanHalfFov = std::tan(fovRad / 2.0f);
-    
-    // Observer parameters
-    double r_obs = m_Config.observerPosition[1];  // Distance from black hole
-    double theta_obs = m_Config.observerPosition[2];  // Inclination
-    
-    // Black hole parameters
-    double M = m_Config.M;
-    double a = m_Config.a;
-    double r_s = 2.0 * M;  // Schwarzschild radius
-    
-    // Angular size of photon sphere as seen from observer
-    double r_photon = 1.5 * r_s;  // Photon sphere radius (Schwarzschild)
-    if (std::abs(a) > 0.01) {
-        // Kerr correction (approximate)
-        r_photon = 1.5 * r_s * (1.0 - a * a / (6.0 * M * M));
-    }
-    
-    // Angular size of shadow (impact parameter)
-    double b_crit = r_photon * std::sqrt(r_obs / (r_obs - r_s));
-    double angular_size = std::atan2(b_crit, r_obs);
-    
-    // Disk parameters
-    double r_isco = 6.0 * M;  // ISCO for Schwarzschild
-    if (std::abs(a) > 0.01) {
-        // Kerr ISCO (prograde approximation)
-        r_isco = 6.0 * M * (1.0 - 0.5 * a / M);
-    }
-    double r_disk_inner = std::max(m_Config.diskInnerRadius, r_isco);
-    double r_disk_outer = m_Config.diskOuterRadius;
-    
     for (int x = 0; x < m_Config.width; ++x) {
-        float r = 0.0f, g = 0.0f, b = 0.0f;
-        
-        for (int s = 0; s < m_Config.samplesPerPixel; ++s) {
-            float jitterX = (s % 4) * 0.25f + 0.125f;
-            float jitterY = (s / 4 % 4) * 0.25f + 0.125f;
-            
-            // Normalized screen coordinates
-            float u = (2.0f * (x + jitterX) / m_Config.width - 1.0f) * aspectRatio * tanHalfFov;
-            float v = (1.0f - 2.0f * (y + jitterY) / m_Config.height) * tanHalfFov;
-            
-            // Angular offset from centre
-            double theta_ray = std::sqrt(u * u + v * v);
-            double phi_ray = std::atan2(v, u);
-            
-            // Impact parameter
-            double b = r_obs * std::tan(theta_ray);
-            
-            float sampleR = 0.0f, sampleG = 0.0f, sampleB = 0.0f;
-            
-            if (b < b_crit * 0.95) {
-                // Inside shadow - black
-                sampleR = sampleG = sampleB = 0.0f;
-            } else if (b < b_crit * 1.05) {
-                // Photon ring - bright ring at shadow edge
-                float ring = 1.0f - std::abs(static_cast<float>(b / b_crit) - 1.0f) * 20.0f;
-                ring = std::max(0.0f, ring);
-                sampleR = ring * 1.5f;
-                sampleG = ring * 1.3f;
-                sampleB = ring * 1.0f;
-            } else {
-                // Outside shadow - check for disk and background
-                
-                // Disk intersection (thin disk at equatorial plane)
-                double y_disk = b * std::sin(phi_ray);  // y coordinate in screen plane
-                double disk_height = b * std::cos(theta_obs) * std::cos(phi_ray);
-                
-                // Check if ray passes through disk plane
-                bool hitDisk = false;
-                double disk_r = 0.0;
-                
-                if (std::abs(disk_height) < b * 0.1 + 1.0) {
-                    // Approximate disk radius at this position
-                    disk_r = std::sqrt(b * b + r_obs * r_obs - 2.0 * b * r_obs * std::cos(theta_ray));
-                    
-                    // Apply gravitational lensing (bends rays around black hole)
-                    double lens_factor = 1.0 + r_s / (2.0 * disk_r);
-                    disk_r *= lens_factor;
-                    
-                    if (disk_r >= r_disk_inner && disk_r <= r_disk_outer) {
-                        hitDisk = true;
+        float r_acc = 0.0f, g_acc = 0.0f, b_acc = 0.0f;
+
+        // Multi-sample anti-aliasing (stratified sampling)
+        int spp = std::max(1, m_Config.samplesPerPixel);
+        int grid_size = static_cast<int>(std::sqrt(static_cast<float>(spp)));
+        if (grid_size < 1) grid_size = 1;
+
+        for (int sy = 0; sy < grid_size; ++sy) {
+            for (int sx = 0; sx < grid_size; ++sx) {
+                // Sub-pixel offset
+                float u = (sx + 0.5f) / grid_size;
+                float v = (sy + 0.5f) / grid_size;
+
+                // Generate camera ray for this pixel sample
+                CameraRay camRay = m_Camera->generateRay(x, y, u, v);
+
+                // Trace ray through curved spacetime
+                TraceResult result = m_Tracer->trace(camRay);
+
+                float sr = 0.0f, sg = 0.0f, sb = 0.0f;
+
+                switch (result.outcome) {
+                    case TraceResult::Outcome::HORIZON:
+                        // Black hole shadow - pure black
+                        sr = sg = sb = 0.0f;
+                        break;
+
+                    case TraceResult::Outcome::DISK_HIT: {
+                        // Sample accretion disk emission
+                        // Blackbody color approximation based on temperature
+                        float T = result.disk_temperature;
+
+                        // Apply redshift/blueshift correction
+                        T *= result.redshift;
+
+                        // Simple blackbody color mapping (Planckian locus approximation)
+                        // Higher T = bluer, lower T = redder
+                        sr = std::min(2.0f, T * 2.0f);
+                        sg = std::min(1.5f, T * 1.5f);
+                        sb = std::min(1.0f, T * 0.8f);
+
+                        // Add slight phi-dependent variation (orbital motion)
+                        float phi_factor = 1.0f + 0.2f * std::cos(result.disk_phi);
+                        sr *= phi_factor;
+                        sg *= phi_factor;
+                        sb *= phi_factor;
+                        break;
                     }
+
+                    case TraceResult::Outcome::ESCAPED: {
+                        // Sample background starfield
+                        float brightness = sampleStarfield(result.final_direction);
+                        sr = sg = sb = brightness;
+                        break;
+                    }
+
+                    case TraceResult::Outcome::MAX_STEPS:
+                    default:
+                        // Integration limit reached - render as faint grey
+                        sr = sg = sb = 0.01f;
+                        break;
                 }
-                
-                if (hitDisk) {
-                    // Disk emission - temperature profile
-                    double T = std::pow(disk_r / r_isco, -0.75);
-                    T = std::max(0.0, T);
-                    
-                    // Doppler shift (approaching side brighter, receding dimmer)
-                    double doppler = 1.0 + 0.3 * std::sin(phi_ray);
-                    T *= doppler;
-                    
-                    // Colour based on temperature
-                    float intensity = static_cast<float>(T * m_Config.diskMdot * 1e4);
-                    if (T > 0.6) {
-                        sampleR = intensity * 0.95f;
-                        sampleG = intensity * 0.9f;
-                        sampleB = intensity * 0.85f;
-                    } else if (T > 0.3) {
-                        sampleR = intensity;
-                        sampleG = intensity * 0.6f;
-                        sampleB = intensity * 0.2f;
-                    } else {
-                        sampleR = intensity;
-                        sampleG = intensity * 0.3f;
-                        sampleB = intensity * 0.1f;
-                    }
-                } else {
-                    // Background starfield with gravitational lensing
-                    double lensed_theta = theta_ray + r_s / (2.0 * b);
-                    double lensed_phi = phi_ray;
-                    
-                    // Hash for star positions
-                    auto hash = [](double x, double y) {
-                        int xi = static_cast<int>(std::floor(x * 50));
-                        int yi = static_cast<int>(std::floor(y * 50));
-                        return (xi * 73856093 ^ yi * 19349663) & 0xFFFFFF;
-                    };
-                    
-                    int h = hash(lensed_theta, lensed_phi);
-                    float star = (h % 1000 < 3) ? 1.0f : 0.0f;
-                    float brightness = 0.5f + 0.5f * ((h >> 8) % 256) / 255.0f;
-                    
-                    // Star colour
-                    float temp = ((h >> 4) % 256) / 255.0f;
-                    if (temp < 0.3f) {
-                        sampleR = star * brightness * 0.7f;
-                        sampleG = star * brightness * 0.85f;
-                        sampleB = star * brightness;
-                    } else if (temp < 0.7f) {
-                        sampleR = star * brightness;
-                        sampleG = star * brightness * 0.95f;
-                        sampleB = star * brightness * 0.85f;
-                    } else {
-                        sampleR = star * brightness;
-                        sampleG = star * brightness * 0.5f;
-                        sampleB = star * brightness * 0.3f;
-                    }
-                    
-                    // Faint background
-                    sampleR += 0.003f;
-                    sampleG += 0.002f;
-                    sampleB += 0.005f;
-                }
+
+                r_acc += sr;
+                g_acc += sg;
+                b_acc += sb;
             }
-            
-            r += sampleR;
-            g += sampleG;
-            b += sampleB;
         }
-        
+
+        // Average samples
+        int total_samples = grid_size * grid_size;
+        float inv_samples = 1.0f / static_cast<float>(total_samples);
+
         int idx = (y * m_Config.width + x) * 4;
-        m_ImageBuffer[idx + 0] = r / m_Config.samplesPerPixel;
-        m_ImageBuffer[idx + 1] = g / m_Config.samplesPerPixel;
-        m_ImageBuffer[idx + 2] = b / m_Config.samplesPerPixel;
+        m_ImageBuffer[idx + 0] = r_acc * inv_samples;
+        m_ImageBuffer[idx + 1] = g_acc * inv_samples;
+        m_ImageBuffer[idx + 2] = b_acc * inv_samples;
         m_ImageBuffer[idx + 3] = 1.0f;
     }
 }
@@ -513,6 +475,56 @@ void RenderJob::writeEXR(const std::string& path) {
     std::string ppmPath = path.substr(0, path.rfind('.')) + ".ppm";
     std::cout << "[RenderJob] EXR deferred - writing PPM instead." << std::endl;
     writePPM(ppmPath);
+}
+
+//==============================================================================
+// Starfield Background Sampling
+//==============================================================================
+float RenderJob::sampleStarfield(const Vec4& direction) const {
+    // Convert direction to spherical angles for starfield lookup
+    // direction is in Cartesian (x, y, z)
+    double x = direction(1);
+    double y = direction(2);
+    double z = direction(3);
+
+    // Normalize
+    double len = std::sqrt(x*x + y*y + z*z);
+    if (len < 1e-10) return 0.0f;
+
+    x /= len;
+    y /= len;
+    z /= len;
+
+    // Convert to spherical (theta, phi)
+    double theta = std::acos(std::clamp(z, -1.0, 1.0));
+    double phi = std::atan2(y, x);
+    if (phi < 0) phi += 2.0 * M_PI;
+
+    // Procedural starfield based on direction hash
+    // This creates a deterministic star pattern
+    double hash_input = theta * 1000.0 + phi * 100.0;
+    double hash = std::sin(hash_input * 12.9898) * 43758.5453;
+    hash = hash - std::floor(hash);
+
+    // Sparse stars
+    if (hash > 0.997) {
+        // Star brightness varies
+        float brightness = static_cast<float>((hash - 0.997) / 0.003);
+
+        // Add some color variation based on secondary hash
+        double color_hash = std::sin(hash_input * 78.233 + 1.0) * 43758.5453;
+        color_hash = color_hash - std::floor(color_hash);
+
+        // Some stars are brighter
+        if (color_hash > 0.9) {
+            brightness *= 2.0f;
+        }
+
+        return std::min(brightness, 1.0f);
+    }
+
+    // Background glow (very faint)
+    return 0.001f;
 }
 
 } // namespace Sirius

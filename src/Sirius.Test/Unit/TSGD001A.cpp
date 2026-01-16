@@ -4,10 +4,10 @@
 
 #include <gtest/gtest.h>
 #include <cmath>
-#include "../../Sirius.Core/Transport/MTTP001A.h"
-#include "../../Sirius.Core/Geodesic/PHMT000B.h"
-#include "../../Sirius.Core/Metric/PHMT100B.h"
-#include "../../Sirius.Render/Integration/INBI001A.h"
+#include <MTTP001A.h>
+#include <PHMT000B.h>
+#include <PHMT100B.h>
+#include <INBI001A.h>
 
 using namespace sirius::math;
 using namespace sirius::physics;

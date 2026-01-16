@@ -16,6 +16,9 @@ endif()
 add_executable(SiriusRender
     SREP001A.cpp
     "${CMAKE_SOURCE_DIR}/src/Sirius.Render/Acceleration/Backend/ACBF001A.cpp"
+    # EXR output support
+    "${CMAKE_SOURCE_DIR}/src/Sirius.Render/Output/OUEW001A.cpp"
+    "${CMAKE_SOURCE_DIR}/lib/tinyexr/miniz.c"
 )
 
 target_include_directories(SiriusRender PRIVATE
@@ -26,6 +29,8 @@ target_include_directories(SiriusRender PRIVATE
     "${CMAKE_SOURCE_DIR}/src/Sirius.Render/Acceleration/Backend"
     "${CMAKE_SOURCE_DIR}/src/Sirius.Render/Acceleration/OptiX"
     "${CMAKE_SOURCE_DIR}/src/Sirius.Render/Buffer"
+    "${CMAKE_SOURCE_DIR}/src/Sirius.Render/Output"
+    "${CMAKE_SOURCE_DIR}/src/Sirius.Render/Session"
     "${CMAKE_SOURCE_DIR}/src/Sirius.Core/PostProcess"
 )
 

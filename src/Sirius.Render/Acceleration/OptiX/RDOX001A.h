@@ -17,6 +17,7 @@ extern "C" {
     bool sirius_optix_initialize(SiriusOptixHandle handle, int width, int height);
     bool sirius_optix_create_pipeline(SiriusOptixHandle handle, const char* ptxPath);
     void sirius_optix_launch(SiriusOptixHandle handle, const Sirius::LaunchParams* params);
+    void sirius_optix_set_metric_type(SiriusOptixHandle handle, int type);
     void sirius_optix_cleanup(SiriusOptixHandle handle);
     float* sirius_optix_get_frame_buffer(SiriusOptixHandle handle);
     bool sirius_optix_is_initialized(SiriusOptixHandle handle);
@@ -44,12 +45,16 @@ public:
     void cleanup() override;
     std::string getLastError() const override { return m_LastError; }
     
+    /// @brief Reset accumulation buffer (call when camera changes)
+    void resetAccumulation();
+
 private:
     SiriusOptixHandle m_Handle = nullptr;
     int m_Width = 0;
     int m_Height = 0;
     std::string m_LastError;
-    
+    unsigned int m_FrameCount = 0;  // Tracks accumulated frames
+
     // Internal conversion from generic LaunchConfig to OptiX LaunchParams
     Sirius::LaunchParams convertConfig(const LaunchConfig& config);
 };

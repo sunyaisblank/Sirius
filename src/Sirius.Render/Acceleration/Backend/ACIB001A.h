@@ -70,14 +70,16 @@ struct LaunchConfig {
     // Black hole parameters
     float blackHoleMass = 1.0f;
     float blackHoleSpin = 0.0f;
-    float observerDistance = 50.0f;
+    float observerDistance = 100.0f;  // Far enough for cinematic wide shot
     float observerInclination = 1.5708f;  // 90°
-    float cameraFOV = 60.0f;
-    
+    float observerAzimuth = 0.0f;         // Camera azimuth angle (radians)
+    float cameraFOV = 45.0f;              // Narrower FOV for cinematic look
+
     // Accretion disk
     float diskInnerRadius = 6.0f;   // ISCO
-    float diskOuterRadius = 20.0f;
-    float diskTemperature = 10000.0f;
+    float diskOuterRadius = 30.0f;  // Extended for wider composition
+    float diskTemperature = 6500.0f;  // Warm orange (Interstellar look)
+    float diskEmission = 2.5f;        // Emission coefficient
     
     // Integration
     float maxStepSize = 0.5f;
@@ -86,6 +88,26 @@ struct LaunchConfig {
     // Metric Selection
     int metricType = 2; // Default to Kerr (2) instead of Minkowski (0)
     int metricFamily = 0; // 0=KerrSchild, 2=WarpDrive
+
+    // Cinematic Features (Phase 8)
+    // Turbulence
+    bool enableTurbulence = false;
+    float turbulenceAmplitude = 0.3f;
+    float turbulenceOuterScale = 5.0f;
+    float turbulenceInnerScale = 0.1f;
+    uint32_t turbulenceOctaves = 6;
+    uint32_t turbulenceSeed = 12345;
+
+    // Starfield
+    bool enableStarfield = false;
+    float starfieldBrightness = 1.0f;
+
+    // Film simulation
+    bool enableFilm = false;
+    float filmGrainIntensity = 0.025f;
+    float filmHalationRadius = 8.0f;
+    float filmHalationStrength = 0.15f;
+    float filmVignetteStrength = 0.3f;
 };
 
 //==============================================================================
@@ -126,9 +148,12 @@ public:
     
     /// @brief Release all resources
     virtual void cleanup() = 0;
-    
+
     /// @brief Get last error message
     virtual std::string getLastError() const = 0;
+
+    /// @brief Reset accumulation buffer (call when camera changes or starting fresh render)
+    virtual void resetAccumulation() {}
 };
 
 //==============================================================================

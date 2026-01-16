@@ -3,12 +3,12 @@
 // Tests for: OFCT001A.h
 
 #include <gtest/gtest.h>
-#include "OFCT001A.h"
+#include "Sirius.Render/Session/SRCT001A.h"
 #include <thread>
 #include <chrono>
 #include <atomic>
 
-using namespace sirius::offline;
+using namespace sirius::render;
 
 //==============================================================================
 // Basic Functionality

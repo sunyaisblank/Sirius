@@ -263,15 +263,66 @@ inline double dopplerFactor(double velocity, double c = 1.0) {
 inline double totalRedshift(double g_tt_emit, double g_tt_obs, double velocity) {
     // Gravitational redshift: sqrt(-g_tt_obs / -g_tt_emit)
     double grav_factor = std::sqrt(std::abs(g_tt_obs / g_tt_emit));
-    
+
     // Doppler factor
     double dopp_factor = dopplerFactor(velocity);
-    
+
     // Combined
     double total_factor = grav_factor * dopp_factor;
-    
+
     // z = (λ_obs - λ_emit) / λ_emit = 1/factor - 1
     return (1.0 / total_factor) - 1.0;
+}
+
+// =============================================================================
+// Phase 2 P3: Wavelength-Dependent Limb Darkening
+// =============================================================================
+
+/// @brief Wavelength-dependent limb darkening coefficient
+/// @param lambda_nm Wavelength in nanometers
+/// @return Limb darkening coefficient u(λ)
+///
+/// The limb darkening law is: I(θ)/I(0) = (1 + u·cos(θ)) / (1 + u)
+/// where u varies with wavelength:
+/// - Blue (400 nm): u ≈ 0.9 (strong darkening, probes deep photosphere)
+/// - Green (550 nm): u ≈ 0.6 (moderate darkening)
+/// - Red (700 nm): u ≈ 0.4 (weak darkening, probes surface)
+///
+/// Reference: Wade & Rucinski (1985), Claret (2000)
+inline double limbDarkeningCoeff(double lambda_nm) {
+    // Linear interpolation between empirical values
+    // u(λ) ≈ 1.2 - 0.00114 × λ(nm)  [400-800 nm range]
+    constexpr double U_BLUE = 0.9;    // u at 400 nm
+    constexpr double U_RED = 0.4;     // u at 700 nm
+    constexpr double LAMBDA_BLUE = 400.0;
+    constexpr double LAMBDA_RED = 700.0;
+
+    if (lambda_nm <= LAMBDA_BLUE) return U_BLUE;
+    if (lambda_nm >= LAMBDA_RED) return U_RED;
+
+    double t = (lambda_nm - LAMBDA_BLUE) / (LAMBDA_RED - LAMBDA_BLUE);
+    return U_BLUE + t * (U_RED - U_BLUE);
+}
+
+/// @brief Apply wavelength-dependent limb darkening to RGB color
+/// @param color Input color (linear RGB)
+/// @param cos_theta Cosine of emission angle (0 = edge, 1 = face-on)
+/// @return Limb-darkened color
+inline RGB applyLimbDarkening(const RGB& color, double cos_theta) {
+    if (cos_theta <= 0) return RGB(0, 0, 0);
+
+    // Different limb darkening coefficients for R, G, B channels
+    // Approximate effective wavelengths: R=650nm, G=550nm, B=450nm
+    double u_r = limbDarkeningCoeff(650.0);  // ~0.45
+    double u_g = limbDarkeningCoeff(550.0);  // ~0.65
+    double u_b = limbDarkeningCoeff(450.0);  // ~0.82
+
+    // Apply limb darkening law: I(θ)/I(0) = (1 + u·cos(θ)) / (1 + u)
+    float limb_r = static_cast<float>((1.0 + u_r * cos_theta) / (1.0 + u_r));
+    float limb_g = static_cast<float>((1.0 + u_g * cos_theta) / (1.0 + u_g));
+    float limb_b = static_cast<float>((1.0 + u_b * cos_theta) / (1.0 + u_b));
+
+    return RGB(color.r * limb_r, color.g * limb_g, color.b * limb_b);
 }
 
 } // namespace Spectral

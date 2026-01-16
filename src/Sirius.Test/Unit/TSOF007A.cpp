@@ -3,11 +3,11 @@
 // Tests for: OFCK001A.h
 
 #include <gtest/gtest.h>
-#include "OFCK001A.h"
+#include "Sirius.Render/Session/SRCK001A.h"
 #include <filesystem>
 #include <cmath>
 
-using namespace sirius::offline;
+using namespace sirius::render;
 
 //==============================================================================
 // Checkpoint Structure Tests

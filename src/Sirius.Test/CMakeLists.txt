@@ -57,21 +57,30 @@ add_executable(SiriusTests
     Unit/TSGD001A.cpp    # Beam propagation tests (Phase 3: Offline Renderer)
     Unit/TSSP001A.cpp    # Spectral radiance tests (Phase 4: Offline Renderer)
     Unit/TSDK001A.cpp    # Accretion disk tests (Phase 5: Offline Renderer)
-    # Unit/TSSI002A.cpp    # Scene intersection/anti-aliasing tests (Phase 3-5) [DISABLED: KNAA001A not implemented]
+    Unit/TSDK002A.cpp    # Volumetric disk tests (Phase 6: Volumetric Disk)
+    # Unit/TSSI002A.cpp    # Scene intersection/anti-aliasing tests [DISABLED: needs Vec4d beam state updates]
     Unit/TSGD002A.cpp    # Einstein ring magnification tests (Gate G3)
-    # Unit/TSSP002A.cpp    # Redshift energy conservation and spectral transport tests [DISABLED: OFTM001A not implemented]
+    # Unit/TSSP002A.cpp    # Redshift energy conservation [DISABLED: needs SpectralTransport integration]
+
     # === OFFLINE RENDERING TESTS (Production Plan) ===
-    # [DISABLED: Sirius.Offline module not yet implemented]
-    # Unit/TSOF001A.cpp    # Render session and camera model tests (Phase 6)
-    # Unit/TSOF002A.cpp    # Cancellation token tests (Production Plan Phase 1)
-    # Unit/TSOF003A.cpp    # Error accumulator tests (Production Plan Phase 1)
-    # Unit/TSOF004A.cpp    # Tile scheduler tests (Production Plan Phase 2)
-    # Unit/TSOF005A.cpp    # ETA calculator tests (Production Plan Phase 2)
-    # Unit/TSOF006A.cpp    # Output driver tests (Production Plan Phase 3)
-    # Unit/TSOF007A.cpp    # Checkpoint tests (Production Plan Phase 4)
-    # Unit/TSOF008A.cpp    # Display driver tests (Production Plan Phase 5)
-    # Unit/TSMB001A.cpp    # Motion blur and temporal sampling tests (Phase 7) [DISABLED: KNST001A not implemented]
+    Unit/TSOF001A.cpp    # Render session tests (Production Plan Phase 6)
+    Unit/TSOF002A.cpp    # Cancellation token tests (Production Plan Phase 1)
+    Unit/TSOF003A.cpp    # Error accumulator tests (Production Plan Phase 1)
+    Unit/TSOF004A.cpp    # Tile scheduler tests (Production Plan Phase 2)
+    Unit/TSOF005A.cpp    # ETA calculator tests (Production Plan Phase 2)
+    Unit/TSOF006A.cpp    # Output driver tests (Production Plan Phase 3)
+    Unit/TSOF007A.cpp    # Checkpoint tests (Production Plan Phase 4)
+    Unit/TSOF008A.cpp    # Display driver tests (Production Plan Phase 5)
+    Unit/TSOF009A.cpp    # PNG output driver tests (Production Plan Phase 3)
+    Unit/TSOF010A.cpp    # Offline renderer integration tests
+    Unit/TSMB001A.cpp    # Motion blur and temporal sampling tests (Phase 7)
     Unit/TSVAL001A.cpp   # DNGR validation and analytic tests (Phase 8)
+
+    # === CINEMATIC EXPANSION TESTS (2026) ===
+    Unit/TSSM001A.cpp    # SMBH parameter scaling and invariants
+    Unit/TSTR001A.cpp    # Turbulence model power spectrum validation
+    Unit/TSJT002A.cpp    # MHD jet magnetic flux conservation
+    Unit/TSFL001A.cpp    # Film simulation unit tests
     
     # ==========================================================================
     # Unit Tests - Camera/DNGR Validation (TSCM###A)
@@ -95,7 +104,8 @@ add_executable(SiriusTests
     Integration/TSIN001A.cpp  # Geodesic path validation
     Integration/TSIN002A.cpp  # Metric loader chain (Unified Families)
     Integration/TSIN003A.cpp  # Render pipeline integration
-    # Integration/TSIN004A.cpp  # Offline renderer integration (Production Plan) [DISABLED: Sirius.Offline not implemented]
+    Integration/TSIN004A.cpp  # Offline renderer integration (Production Plan)
+    Integration/TSIN005A.cpp  # GeodesicTracer integration tests (Priority 1 fix)
     
     # ==========================================================================
     # Benchmark Tests (TSBM###A) - Performance validation
@@ -110,22 +120,47 @@ add_executable(SiriusTests
     # ==========================================================================
     Performance/TSPF001A.cpp  # FPS thresholds
     Performance/TSPF002A.cpp  # Memory usage
+
+    # ==========================================================================
+    # Output Driver Implementations (required for PNG/EXR tests)
+    # ==========================================================================
+    ../Sirius.Render/Output/OUPN001A.cpp   # PNG writer implementation
+    ../Sirius.Render/Output/OUEW001A.cpp   # EXR writer implementation
+    ../../lib/tinyexr/miniz.c              # miniz compression (required by tinyexr)
+
+    # ==========================================================================
+    # GeodesicTracer Implementation (required for TSIN005A tests)
+    # ==========================================================================
+    ../Sirius.Render/Integration/GTRC001A.cpp  # GeodesicTracer implementation
 )
 
 # === Include Directories ===
+# Note: SiriusCore PUBLIC includes are inherited via target_link_libraries
+# Additional directories for render modules:
 target_include_directories(SiriusTests PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core
-    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Tensor
-    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Autodiff
-    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Metric
-    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Geodesic
-    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Coordinate
-    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Spectral
-    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Disk
-    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Symplectic
-    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Transport
+    # Render module directories
+    ${CMAKE_CURRENT_SOURCE_DIR}/..
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Render
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Render/Integration
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Render/Acceleration
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Render/Acceleration/OptiX
     ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Render/Session
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../lib/glm
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Render/Scheduling
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Render/Output
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Render/Camera
+    # Infrastructure module directories
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Infrastructure
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Infrastructure/Configuration
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Infrastructure/Session
+    # Core module directories for cinematic expansion
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Disk
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Jet
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Metric
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Environment
+    # Third-party image I/O libraries
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../lib/stb
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../lib/tinyexr
 )
 
 # === Link Libraries ===

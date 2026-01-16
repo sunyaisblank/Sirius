@@ -3,10 +3,10 @@
 // Tests for: OFPG001A.h
 
 #include <gtest/gtest.h>
-#include "OFPG001A.h"
+#include "Sirius.Render/Session/SRPG001A.h"
 #include <cmath>
 
-using namespace sirius::offline;
+using namespace sirius::render;
 
 //==============================================================================
 // Basic Functionality

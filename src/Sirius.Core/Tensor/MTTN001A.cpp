@@ -69,7 +69,7 @@ ChristoffelSymbols TensorOps::christoffel(const Metric4D& g, const Tensor<Dual<d
 
 Vec4 TensorOps::geodesicAcceleration(const Vec4& velocity, const ChristoffelSymbols& gamma) {
     Vec4 acceleration;
-    
+
     // a^μ = -Γ^μ_νρ v^ν v^ρ (geodesic equation)
     for (int mu = 0; mu < 4; mu++) {
         double accel = 0.0;
@@ -80,7 +80,56 @@ Vec4 TensorOps::geodesicAcceleration(const Vec4& velocity, const ChristoffelSymb
         }
         acceleration(mu) = accel;
     }
-    
+
+    return acceleration;
+}
+
+Vec4 TensorOps::geodesicAccelerationDirect(const Vec4& velocity, const Metric4D& g,
+                                            const Tensor<Dual<double>, 4, 4, 4>& dg) {
+    // Compute acceleration directly without building Christoffel tensor
+    // a^μ = -Γ^μ_νρ v^ν v^ρ
+    //     = -(1/2) g^μσ (∂_ν g_σρ + ∂_ρ g_σν - ∂_σ g_νρ) v^ν v^ρ
+    //
+    // Optimization: pre-compute v^ν v^ρ products (symmetric, so 10 unique values)
+    // Then contract with metric derivatives
+
+    // Get inverse metric
+    Metric4D g_inv = inverse(g);
+
+    // Pre-compute velocity outer product vv[ν][ρ] = v^ν v^ρ
+    double vv[4][4];
+    for (int nu = 0; nu < 4; nu++) {
+        for (int rho = 0; rho < 4; rho++) {
+            vv[nu][rho] = velocity(nu) * velocity(rho);
+        }
+    }
+
+    Vec4 acceleration;
+
+    for (int mu = 0; mu < 4; mu++) {
+        double accel = 0.0;
+
+        for (int sigma = 0; sigma < 4; sigma++) {
+            double g_inv_mu_sigma = g_inv(mu, sigma).real;
+            if (std::abs(g_inv_mu_sigma) < 1e-15) continue;  // Skip zero entries
+
+            double sum = 0.0;
+            for (int nu = 0; nu < 4; nu++) {
+                for (int rho = 0; rho < 4; rho++) {
+                    // Γ^μ_νρ contribution via σ:
+                    // (1/2) g^μσ (dg(ν,σ,ρ) + dg(ρ,σ,ν) - dg(σ,ν,ρ))
+                    double term = dg(nu, sigma, rho).real
+                                + dg(rho, sigma, nu).real
+                                - dg(sigma, nu, rho).real;
+                    sum += term * vv[nu][rho];
+                }
+            }
+            accel += g_inv_mu_sigma * sum;
+        }
+
+        acceleration(mu) = -0.5 * accel;
+    }
+
     return acceleration;
 }
 

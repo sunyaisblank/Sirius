@@ -190,7 +190,17 @@ public:
     
     /// @brief Compute geodesic acceleration: a^μ = -Γ^μ_νρ v^ν v^ρ
     static Vec4 geodesicAcceleration(const Vec4& velocity, const ChristoffelSymbols& gamma);
-    
+
+    /// @brief Compute geodesic acceleration directly from metric derivatives
+    /// This bypasses explicit Christoffel symbol construction for better performance.
+    /// a^μ = -(1/2) g^μσ (∂_ν g_σρ + ∂_ρ g_σν - ∂_σ g_νρ) v^ν v^ρ
+    /// @param velocity 4-velocity v^μ
+    /// @param g Metric tensor
+    /// @param dg Metric derivatives: dg[σ,μ,ν] = ∂_σ g_μν
+    /// @return Geodesic acceleration a^μ
+    static Vec4 geodesicAccelerationDirect(const Vec4& velocity, const Metric4D& g,
+                                            const Tensor<Dual<double>, 4, 4, 4>& dg);
+
     /// @brief Lower index: v_μ = g_μν v^ν
     static Vec4 lowerIndex(const Vec4& vector, const Metric4D& g);
     

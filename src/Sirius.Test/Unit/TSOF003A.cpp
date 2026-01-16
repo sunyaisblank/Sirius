@@ -3,11 +3,11 @@
 // Tests for: OFER001A.h
 
 #include <gtest/gtest.h>
-#include "OFER001A.h"
+#include "Sirius.Render/Session/SRER001A.h"
 #include <thread>
 #include <vector>
 
-using namespace sirius::offline;
+using namespace sirius::render;
 
 //==============================================================================
 // Basic Functionality

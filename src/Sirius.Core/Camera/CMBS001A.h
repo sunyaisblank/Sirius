@@ -154,10 +154,31 @@ public:
         
         // Normalise
         float len = std::sqrt(rx2 * rx2 + ry2 * ry2 + rz2 * rz2);
-        ray.direction(0) = 0.0f;  // dt/dλ (set by geodesic normalisation)
-        ray.direction(1) = rz2 / len;  // dr/dλ (camera looks toward -r)
-        ray.direction(2) = ry2 / len * static_cast<float>(m_Config.r);  // dθ/dλ
-        ray.direction(3) = rx2 / len * static_cast<float>(m_Config.r * std::sin(m_Config.theta));  // dφ/dλ
+
+        // =======================================================================
+        // Map camera-local direction to spherical velocity components:
+        //
+        // Camera convention at (r, θ, φ):
+        //   -Z (forward) → radial inward (-r direction)
+        //   +X (right)   → +φ direction (increasing azimuth)
+        //   +Y (up)      → -θ direction (toward North pole, decreasing θ)
+        //
+        // At camera position, global Cartesian frame:
+        //   vx_global = dz (camera -Z maps to -x for observer at +x axis)
+        //   vy_global = dx (camera +X maps to +y)
+        //   vz_global = dy (camera +Y maps to +z toward North)
+        //
+        // Spherical velocity from Cartesian (at θ=π/2, φ=0):
+        //   vr = vx_global
+        //   vθ = -vz_global / r  →  r·vθ = -vz_global = -dy
+        //   vφ = vy_global / (r·sinθ)  →  r·sinθ·vφ = vy_global = dx
+        //
+        // The tracer expects: dir(1)=vr, dir(2)=r·vθ, dir(3)=r·sinθ·vφ
+        // =======================================================================
+        ray.direction(0) = 0.0f;   // dt/dλ (set by geodesic normalisation)
+        ray.direction(1) = rz2 / len;   // vr = vx_global (toward -r)
+        ray.direction(2) = -ry2 / len;  // r·vθ = -vz_global (minus sign: +Y → -θ)
+        ray.direction(3) = rx2 / len;   // r·sinθ·vφ = vy_global
         
         ray.weight = 1.0f;
         return ray;
@@ -224,16 +245,17 @@ public:
         float dz = focusZ;
         
         float len = std::sqrt(dx * dx + dy * dy + dz * dz);
-        
+
+        // Same coordinate mapping as PinholeCamera (see detailed comments there)
         ray.direction(0) = 0.0f;
-        ray.direction(1) = dz / len;
-        ray.direction(2) = dy / len * static_cast<float>(m_Config.r);
-        ray.direction(3) = dx / len * static_cast<float>(m_Config.r * std::sin(m_Config.theta));
-        
+        ray.direction(1) = dz / len;   // vr
+        ray.direction(2) = -dy / len;  // r·vθ (minus sign: +Y → -θ)
+        ray.direction(3) = dx / len;   // r·sinθ·vφ
+
         ray.weight = 1.0f;
         return ray;
     }
-    
+
     LensType getLensType() const override { return LensType::ThinLens; }
     const char* getName() const override { return "Thin Lens Camera"; }
     const CameraConfig& getConfig() const override { return m_Config; }
@@ -294,11 +316,12 @@ public:
         float dx = sinT * std::cos(phi_img);
         float dy = sinT * std::sin(phi_img);
         float dz = -cosT;
-        
+
+        // Same coordinate mapping as PinholeCamera (see detailed comments there)
         ray.direction(0) = 0.0f;
-        ray.direction(1) = dz;
-        ray.direction(2) = dy * static_cast<float>(m_Config.r);
-        ray.direction(3) = dx * static_cast<float>(m_Config.r * std::sin(m_Config.theta));
+        ray.direction(1) = dz;    // vr
+        ray.direction(2) = -dy;   // r·vθ (minus sign: +Y → -θ)
+        ray.direction(3) = dx;    // r·sinθ·vφ
         
         ray.weight = 1.0f;
         return ray;

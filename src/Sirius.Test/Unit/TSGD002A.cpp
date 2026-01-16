@@ -13,8 +13,8 @@
 
 #include <gtest/gtest.h>
 #include <cmath>
-#include "../../Sirius.Render/Integration/INBI001A.h"
-#include "../../Sirius.Core/Metric/PHMT100B.h"
+#include <INBI001A.h>
+#include <PHMT100B.h>
 
 using namespace sirius::kernel;
 using namespace sirius::physics;

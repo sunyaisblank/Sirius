@@ -228,6 +228,9 @@ private:
     CUdeviceptr m_AccumBuffer       = 0;
     CUdeviceptr m_LaunchParamsBuffer = 0;
 
+    // Host-side frame buffer for CPU access (avoids segfault when reading GPU memory)
+    std::vector<float> m_HostFrameBuffer;
+
     // OpenGL interop
     cudaGraphicsResource_t m_CudaGLResource = nullptr;
     bool m_GLInteropEnabled = false;
@@ -794,9 +797,12 @@ bool OptixRenderer::createPipeline(const std::string& ptxPath) {
         moduleCompileOptions.optLevel = OPTIX_COMPILE_OPTIMIZATION_LEVEL_0;
         moduleCompileOptions.debugLevel = OPTIX_COMPILE_DEBUG_LEVEL_FULL;
         #else
-        moduleCompileOptions.optLevel = OPTIX_COMPILE_OPTIMIZATION_LEVEL_3;
+        // Use O2 optimization - balances performance with compilation stability
+        // Note: O3 can trigger JIT bugs with very complex kernels (35k+ instructions)
+        moduleCompileOptions.optLevel = OPTIX_COMPILE_OPTIMIZATION_LEVEL_2;
         moduleCompileOptions.debugLevel = OPTIX_COMPILE_DEBUG_LEVEL_NONE;
         #endif
+        moduleCompileOptions.maxRegisterCount = OPTIX_COMPILE_DEFAULT_MAX_REGISTER_COUNT;
 
         //----------------------------------------------------------------------
         // Pipeline compile options
@@ -1109,7 +1115,20 @@ void OptixRenderer::unregisterGLTexture() {
 }
 
 float4* OptixRenderer::mapFrameBuffer() {
-    return reinterpret_cast<float4*>(m_FrameBuffer);
+    // Copy device buffer to host for CPU access
+    size_t bufferSize = static_cast<size_t>(m_Width) * m_Height * 4 * sizeof(float);
+    m_HostFrameBuffer.resize(m_Width * m_Height * 4);
+
+    cudaError_t err = cudaMemcpy(m_HostFrameBuffer.data(),
+                                  reinterpret_cast<void*>(m_FrameBuffer),
+                                  bufferSize,
+                                  cudaMemcpyDeviceToHost);
+    if (err != cudaSuccess) {
+        std::cerr << "[OptiX] Failed to copy frame buffer to host: " << cudaGetErrorString(err) << std::endl;
+        return nullptr;
+    }
+
+    return reinterpret_cast<float4*>(m_HostFrameBuffer.data());
 }
 
 void OptixRenderer::unmapFrameBuffer() {

@@ -9,6 +9,12 @@
 #include <atomic>
 #include <functional>
 #include <vector>
+#include <memory>
+
+// Physics integration (Priority 1 fix)
+#include "PHMT100A.h"  // Kerr-Schild metric family
+#include "CMBS001A.h"  // Camera interface
+#include "GTRC001A.h"  // Geodesic tracer
 
 namespace Sirius {
 
@@ -142,6 +148,14 @@ private:
     
     // Image buffer
     std::vector<float> m_ImageBuffer;  // RGBA float buffer
+
+    // Physics integration components (Priority 1 fix)
+    std::unique_ptr<KerrSchildFamily> m_Metric;
+    std::unique_ptr<GeodesicTracer> m_Tracer;
+    std::unique_ptr<PinholeCamera> m_Camera;
+
+    // Helper to sample starfield background
+    float sampleStarfield(const Vec4& direction) const;
 };
 
 } // namespace Sirius
