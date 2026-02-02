@@ -1,5 +1,14 @@
+// =============================================================================
 // TSPH008A.cpp - Numerical Metric (ADM 3+1) Validation Tests
-// Tests: ADM to 4-metric, signature, inverse identity, Schwarzschild limit.
+// Component ID: TSPH008A (Test/Unit/NumericalMetric)
+// =============================================================================
+//
+// PURPOSE:
+// Validates ADM 3+1 formalism metric reconstruction and properties.
+// Tests Minkowski ADM → 4-metric, symmetry, inverse identity.
+//
+// LABEL: Mandatory;Correctness
+// =============================================================================
 
 #define _USE_MATH_DEFINES
 #include <cmath>
@@ -7,11 +16,13 @@
 #include <array>
 #include <MTTN001A.h>
 #include <MTDL001A.h>
+#include <PHCN001A.h>  // Centralized constants
 
 namespace sirius::test {
 
-constexpr double kEpsilon = 1e-10;
-constexpr double kRelTol = 1e-8;
+// Specification-compliant tolerances from PHCN001A.h
+constexpr double kEpsilon = Sirius::Constants::Metric::INVERSE_TOL;  // 1e-14
+constexpr double kRelTol = 1e-8;  // Relative tolerance for convergence tests
 
 // =============================================================================
 // ADM State Structure (Mirror of NR components for testing)

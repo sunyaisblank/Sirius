@@ -15,6 +15,9 @@
 #include <chrono>
 #include <cstring>
 
+// Unified constants (replaces M_PI macro)
+#include <PHCN001A.h>
+
 // GPU acceleration factory
 namespace Sirius::Acceleration {
     extern std::unique_ptr<IAccelerator> createAccelerator(BackendType type);
@@ -25,9 +28,8 @@ namespace Sirius::Acceleration {
 // stb_image for texture loading (implementation defined in RDRT001A.cpp)
 #include <stb_image.h>
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
+// Alias for backward compatibility
+using namespace Sirius::Constants;
 
 namespace Sirius {
 
@@ -76,7 +78,7 @@ void RenderSession::initialise() {
         camConfig.height = m_Config.height;
         m_Camera = std::make_unique<PinholeCamera>(camConfig);
         std::cout << "  Observer:   r=" << camConfig.r << "M, θ="
-                  << (camConfig.theta * 180.0 / M_PI) << "°" << std::endl;
+                  << (camConfig.theta * 180.0 / Math::PI) << "°" << std::endl;
 
         // Create geodesic tracer
         TracerConfig tracerConfig;
@@ -129,7 +131,7 @@ void RenderSession::initialise() {
             jetConfig.spectral_index = m_Config.jetSpectralIndex;
             m_Jet = std::make_unique<RelativisticJet>(jetConfig);
             std::cout << "[Session] Relativistic jets enabled: Γ=" << jetConfig.lorentz_factor
-                      << ", θ_open=" << (jetConfig.opening_angle * 180.0 / M_PI) << "°" << std::endl;
+                      << ", θ_open=" << (jetConfig.opening_angle * 180.0 / Math::PI) << "°" << std::endl;
         }
 
         // =================================================================
@@ -425,7 +427,7 @@ void RenderSession::renderTile(Tile* tile) {
                                 // Higher-order demagnification factor
                                 // Each additional order is ~23x dimmer (exp(-π) ≈ 0.043)
                                 // This reflects the exponential approach to the photon sphere
-                                float order_demag = std::exp(-static_cast<float>(M_PI) * crossing_idx);
+                                float order_demag = std::exp(-static_cast<float>(Math::PI) * crossing_idx);
 
                                 // =======================================================
                                 // Accretion Disk Emission with Relativistic Effects
@@ -676,7 +678,7 @@ void RenderSession::renderTile(Tile* tile) {
 
                         // EVPA from disk geometry (toroidal field → radial EVPA)
                         float disk_phi = result.disk_phi;
-                        float evpa = disk_phi + static_cast<float>(M_PI / 2.0);  // Perpendicular to B
+                        float evpa = disk_phi + static_cast<float>(Math::HALF_PI);  // Perpendicular to B
 
                         // Create Stokes vector for this sample
                         float I_sample = std::sqrt(sr*sr + sg*sg + sb*sb);
@@ -808,13 +810,13 @@ void RenderSession::sampleStarfield(const Vec4& direction, float& r, float& g, f
     // phi: 0 at +X, increasing toward +Y
     double theta = std::acos(std::clamp(dz, -1.0, 1.0));
     double phi = std::atan2(dy, dx);
-    if (phi < 0) phi += 2.0 * M_PI;
+    if (phi < 0) phi += Math::TWO_PI;
 
     // Map to UV coordinates for equirectangular projection
     // u = phi / (2*PI), range [0, 1]
     // v = theta / PI, range [0, 1]
-    double u = phi / (2.0 * M_PI);
-    double v = theta / M_PI;
+    double u = phi / Math::TWO_PI;
+    double v = theta / Math::PI;
 
     // Convert to pixel coordinates with bilinear sampling
     double px = u * (m_StarfieldWidth - 1);
@@ -1212,7 +1214,7 @@ void RenderSession::renderTileThreaded(Tile* tile, int threadId) {
                                 float T_emit = crossing.temperature;
                                 float g = crossing.redshift;
 
-                                float order_demag = std::exp(-static_cast<float>(M_PI) * crossing_idx);
+                                float order_demag = std::exp(-static_cast<float>(Math::PI) * crossing_idx);
                                 float T_obs = T_emit * g;
                                 float intensity = std::pow(T_obs, 4.0f);
 

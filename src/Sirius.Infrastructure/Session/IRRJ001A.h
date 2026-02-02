@@ -1,7 +1,16 @@
-// IRRJ001A.h - Render Job
+// IRRJ001A.h - Render Job (DEPRECATED)
+// Component ID: IRRJ001A (Infrastructure/Render/RenderJob)
 //
-// Defines a single render task with configuration, execution, and progress tracking.
-// Part of the static rendering architecture (replaces real-time loop).
+// DEPRECATION NOTICE:
+// This module is deprecated in favor of RenderSession (SNRS001A.h).
+// RenderSession provides FSM-based orchestration, parallel tile rendering,
+// GPU acceleration (OptiX), and better progress tracking.
+//
+// Use RenderSession for all new code. This module is retained only for
+// backward compatibility with --legacy CLI flag.
+//
+// Migration: Replace RenderConfig with SessionConfig and
+//            RenderJob with RenderSession.
 
 #pragma once
 
@@ -83,9 +92,11 @@ enum class JobStatus {
 };
 
 //==============================================================================
-// Render Job
+// Render Job (DEPRECATED)
 //==============================================================================
-class RenderJob {
+/// @deprecated Use RenderSession instead. RenderJob is retained for
+///             backward compatibility with the --legacy CLI flag only.
+class [[deprecated("Use RenderSession (SNRS001A.h) instead")]] RenderJob {
 public:
     using ProgressCallback = std::function<void(float progress, int samplesComplete, int samplesTotal)>;
     using CompletionCallback = std::function<void(JobStatus status, const std::string& message)>;

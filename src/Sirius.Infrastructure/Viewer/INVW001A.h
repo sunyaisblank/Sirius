@@ -15,6 +15,7 @@
 #pragma once
 
 #include "SNRS001A.h"
+#include <PHCN001A.h>
 #include <atomic>
 #include <thread>
 #include <mutex>
@@ -286,7 +287,7 @@ inline void InteractiveViewer::updateCamera(float dt) {
     if (m_Camera.moveLeft) { m_Camera.phi -= m_Config.move_speed * dt / m_Camera.r; moved = true; }
     if (m_Camera.moveRight) { m_Camera.phi += m_Config.move_speed * dt / m_Camera.r; moved = true; }
     if (m_Camera.moveUp) { m_Camera.theta = std::max(0.1, m_Camera.theta - m_Config.move_speed * 0.02 * dt); moved = true; }
-    if (m_Camera.moveDown) { m_Camera.theta = std::min(M_PI - 0.1, m_Camera.theta + m_Config.move_speed * 0.02 * dt); moved = true; }
+    if (m_Camera.moveDown) { m_Camera.theta = std::min(Sirius::Constants::Math::PI - 0.1, m_Camera.theta + m_Config.move_speed * 0.02 * dt); moved = true; }
 
     // Clamp values
     m_Camera.r = std::max(5.0, m_Camera.r);
@@ -324,7 +325,7 @@ inline void InteractiveViewer::processMouseMove(double xpos, double ypos, bool d
         double dy = ypos - m_LastMouseY;
 
         m_Camera.phi += dx * m_Config.mouse_sensitivity;
-        m_Camera.theta = std::clamp(m_Camera.theta + dy * m_Config.mouse_sensitivity, 0.1, M_PI - 0.1);
+        m_Camera.theta = std::clamp(m_Camera.theta + dy * m_Config.mouse_sensitivity, 0.1, Sirius::Constants::Math::PI - 0.1);
 
         restart();
     }

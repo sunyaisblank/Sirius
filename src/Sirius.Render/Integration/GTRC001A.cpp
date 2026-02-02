@@ -24,22 +24,24 @@ Lightray GeodesicTracer::initializeLightray(const CameraRay& camera_ray) {
     // Clamp theta to avoid poles
     th = std::clamp(th, 0.01, M_PI - 0.01);
 
-    // Precompute trigonometric values
+    // =========================================================================
+    // Convert Position: Boyer-Lindquist → Kerr-Schild Cartesian
+    // Uses consolidated coordinate transforms from PHCT002A.h
+    // Round-trip deviation guaranteed < 1e-12 (see TSPH015A tests)
+    // =========================================================================
+    Coordinates::Vec4BL pos_bl(t, r, th, ph);
+    Coordinates::Vec4Cart pos_cart = Coordinates::BLToCartesian(pos_bl);
+
+    ray.position(0) = static_cast<float>(pos_cart.t);
+    ray.position(1) = static_cast<float>(pos_cart.x);
+    ray.position(2) = static_cast<float>(pos_cart.y);
+    ray.position(3) = static_cast<float>(pos_cart.z);
+
+    // Precompute trigonometric values for velocity transformation
     double sin_th = std::sin(th);
     double cos_th = std::cos(th);
     double sin_ph = std::sin(ph);
     double cos_ph = std::cos(ph);
-
-    // =========================================================================
-    // Convert Position: Boyer-Lindquist → Kerr-Schild Cartesian
-    // x = r sin(θ) cos(φ)
-    // y = r sin(θ) sin(φ)
-    // z = r cos(θ)
-    // =========================================================================
-    ray.position(0) = static_cast<float>(t);
-    ray.position(1) = static_cast<float>(r * sin_th * cos_ph);
-    ray.position(2) = static_cast<float>(r * sin_th * sin_ph);
-    ray.position(3) = static_cast<float>(r * cos_th);
 
     // =========================================================================
     // Convert Velocity: Spherical Basis → Cartesian Basis
@@ -250,9 +252,9 @@ TraceResult GeodesicTracer::trace(const CameraRay& camera_ray) {
     // Such rays produce higher-order images (n≥2) which are exponentially
     // dimmer (exp(-πn)) and contribute little to visual output.
     // =========================================================================
-    constexpr float SPIRAL_PHI_THRESHOLD = 4.0f * static_cast<float>(M_PI);  // 2 full orbits
+    constexpr float SPIRAL_PHI_THRESHOLD = 2.0f * static_cast<float>(M_PI);  // 1 full orbit (was 2)
     constexpr float SPIRAL_R_THRESHOLD = 1.5f;  // r_min < 1.5 × r_photon
-    constexpr int SPIRAL_CHECK_INTERVAL = 500;  // Check every N steps
+    constexpr int SPIRAL_CHECK_INTERVAL = 100;  // Check every N steps (was 500)
 
     // =========================================================================
     // Integration Loop

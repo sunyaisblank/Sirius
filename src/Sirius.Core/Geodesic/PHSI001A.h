@@ -344,19 +344,20 @@ private:
     mutable int m_stepsSinceRenorm = 0;  // Track steps since last renormalization
 
     //--------------------------------------------------------------------------
-    // Null Condition Renormalization
+    // Null Condition Renormalization (Energy-Preserving)
     //--------------------------------------------------------------------------
     //
-    // For null geodesics (photons), the constraint g_μν k^μ k^ν = 0 must hold.
-    // Numerical integration causes this to drift. We renormalize by solving
-    // for p_t from the null condition while preserving spatial momenta.
+    // For null geodesics (photons), the constraint g^μν p_μ p_ν = 0 must hold.
+    // Numerical integration causes this to drift.
     //
-    // Given: g^μν p_μ p_ν = 0
-    // Solve for p_t:
-    //   g^tt p_t² + 2g^ti p_t p_i + g^ij p_i p_j = 0
+    // IMPORTANT: We must preserve the Killing conserved quantities:
+    //   E  = -p_t  (from ∂/∂t Killing vector)
+    //   Lz = p_φ   (from ∂/∂φ Killing vector)
     //
-    // This is a quadratic in p_t. Choose the future-directed root (p_t < 0
-    // for mostly-minus signature where g^tt > 0).
+    // Therefore we renormalize by solving for p_r (NOT p_t) from null condition:
+    //   g^rr p_r² + (other terms with fixed p_t, p_θ, p_φ) = 0
+    //
+    // This preserves E and Lz while restoring the null condition.
     //
     // Reference: docs/specification.md "Null Constraint Preservation"
     //--------------------------------------------------------------------------
@@ -368,54 +369,50 @@ private:
         double g[4][4], g_inv[4][4];
         m_metric->evaluate(s.q, g, g_inv);
 
-        // Extract spatial momenta
-        double p_r = s.p.r;
+        // Extract momenta (p_t and p_φ are CONSERVED and must not change)
+        double p_t = s.p.t;      // Conserved: E = -p_t
         double p_th = s.p.theta;
-        double p_ph = s.p.phi;
+        double p_ph = s.p.phi;   // Conserved: Lz = p_φ
 
-        // Compute coefficients for quadratic: A*p_t² + B*p_t + C = 0
-        // A = g^tt
-        double A = g_inv[0][0];
+        // Null condition: g^μν p_μ p_ν = 0
+        // Solve for p_r:
+        //   g^rr p_r² + 2g^rθ p_r p_θ + (terms without p_r) = 0
+        //
+        // In Boyer-Lindquist/Kerr, g^rθ = 0, simplifying to:
+        //   g^rr p_r² = -[g^tt p_t² + 2g^tφ p_t p_φ + g^θθ p_θ² + g^φφ p_φ²]
 
-        // B = 2(g^tr p_r + g^tθ p_θ + g^tφ p_φ)
-        double B = 2.0 * (g_inv[0][1]*p_r + g_inv[0][2]*p_th + g_inv[0][3]*p_ph);
+        // Coefficient for p_r²
+        double A = g_inv[1][1];  // g^rr
 
-        // C = g^ij p_i p_j (spatial part)
-        double C = g_inv[1][1]*p_r*p_r + g_inv[2][2]*p_th*p_th + g_inv[3][3]*p_ph*p_ph
-                 + 2.0*g_inv[1][2]*p_r*p_th + 2.0*g_inv[1][3]*p_r*p_ph + 2.0*g_inv[2][3]*p_th*p_ph;
+        // Coefficient for p_r (from cross terms g^rθ, g^rt, g^rφ)
+        double B = 2.0 * (g_inv[0][1]*p_t + g_inv[1][2]*p_th + g_inv[1][3]*p_ph);
 
-        // Solve quadratic
+        // Constant term (all terms without p_r)
+        double C = g_inv[0][0]*p_t*p_t + g_inv[2][2]*p_th*p_th + g_inv[3][3]*p_ph*p_ph
+                 + 2.0*g_inv[0][2]*p_t*p_th + 2.0*g_inv[0][3]*p_t*p_ph + 2.0*g_inv[2][3]*p_th*p_ph;
+
+        // Solve quadratic: A*p_r² + B*p_r + C = 0
         double disc = B*B - 4*A*C;
 
-        if (disc < 0) {
-            // Should not happen for valid momenta; return unchanged
+        if (disc < 0 || std::abs(A) < 1e-15) {
+            // No real solution or degenerate - return unchanged
+            // This can happen near coordinate singularities
             return s;
         }
 
         double sqrtDisc = std::sqrt(disc);
+        double p_r_plus = (-B + sqrtDisc) / (2.0*A);
+        double p_r_minus = (-B - sqrtDisc) / (2.0*A);
 
-        // For future-directed null rays with mostly-minus signature:
-        // g^tt > 0, and we want p_t < 0 (negative energy)
-        // Choose root: p_t = (-B - sqrt(disc)) / (2A)  or (-B + sqrt(disc)) / (2A)
-        // The correct root depends on signature convention
-
-        double p_t_plus = (-B + sqrtDisc) / (2.0*A);
-        double p_t_minus = (-B - sqrtDisc) / (2.0*A);
-
-        // Select the root closest to current p_t that maintains sign
-        // (Preserve future-directed nature)
-        double p_t_new;
-        if (s.p.t < 0) {
-            // Energy is negative (future-directed in mostly-minus)
-            p_t_new = (p_t_minus < 0) ? p_t_minus :
-                      (p_t_plus < 0) ? p_t_plus : s.p.t;
+        // Choose the root closest to current p_r to preserve direction of motion
+        double p_r_new;
+        if (std::abs(p_r_plus - s.p.r) < std::abs(p_r_minus - s.p.r)) {
+            p_r_new = p_r_plus;
         } else {
-            // Energy positive - unusual, keep closest
-            p_t_new = (std::abs(p_t_plus - s.p.t) < std::abs(p_t_minus - s.p.t))
-                    ? p_t_plus : p_t_minus;
+            p_r_new = p_r_minus;
         }
 
-        s.p.t = p_t_new;
+        s.p.r = p_r_new;
         return s;
     }
 

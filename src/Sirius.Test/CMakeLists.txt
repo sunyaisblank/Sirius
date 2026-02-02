@@ -53,6 +53,7 @@ add_executable(SiriusTests
     Unit/TSPH011A.cpp    # Spectral rendering utilities
     Unit/TSPH012A.cpp    # Metric derivative validation
     Unit/TSPH014A.cpp    # Double-precision metric tests (Phase 1: Offline Renderer)
+    Unit/TSPH015A.cpp    # Coordinate transformation tests (PHCT002A round-trip)
     Unit/TSSI001A.cpp    # Symplectic integrator tests (Phase 2: Offline Renderer)
     Unit/TSGD001A.cpp    # Beam propagation tests (Phase 3: Offline Renderer)
     Unit/TSSP001A.cpp    # Spectral radiance tests (Phase 4: Offline Renderer)
@@ -60,7 +61,7 @@ add_executable(SiriusTests
     Unit/TSDK002A.cpp    # Volumetric disk tests (Phase 6: Volumetric Disk)
     # Unit/TSSI002A.cpp    # Scene intersection/anti-aliasing tests [DISABLED: needs Vec4d beam state updates]
     Unit/TSGD002A.cpp    # Einstein ring magnification tests (Gate G3)
-    # Unit/TSSP002A.cpp    # Redshift energy conservation [DISABLED: needs SpectralTransport integration]
+    Unit/TSSP002A.cpp      # Spectral reference validation (Planck, Wien, Stefan-Boltzmann)
 
     # === OFFLINE RENDERING TESTS (Production Plan) ===
     Unit/TSOF001A.cpp    # Render session tests (Production Plan Phase 6)
@@ -100,6 +101,7 @@ add_executable(SiriusTests
     Diagnostic/TSDG005A.cpp  # GPU conservation validation (Phase 2.1)
     Diagnostic/TSDG006A.cpp  # Mandatory Killing vector tests (Phase 5.1)
     Diagnostic/TSDG007A.cpp  # Comprehensive metric tensor validation
+    Diagnostic/TSDG008A.cpp  # Analytic solution validation (photon sphere, ISCO, deflection)
     
     # ==========================================================================
     # Integration Tests (TSIN###A) - End-to-end validation
@@ -142,6 +144,8 @@ add_executable(SiriusTests
 # Note: SiriusCore PUBLIC includes are inherited via target_link_libraries
 # Additional directories for render modules:
 target_include_directories(SiriusTests PRIVATE
+    # Test fixtures and infrastructure
+    ${CMAKE_CURRENT_SOURCE_DIR}/Fixtures
     # Render module directories
     ${CMAKE_CURRENT_SOURCE_DIR}/..
     ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Render

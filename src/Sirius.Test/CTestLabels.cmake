@@ -286,6 +286,83 @@ set_tests_properties(
     PROPERTIES LABELS "Correctness"
 )
 
+# =============================================================================
+# MANDATORY: Killing Vector Conservation Tests (TSDG006A)
+# =============================================================================
+# These tests verify that Killing vector conserved quantities (energy, angular
+# momentum) remain bounded during geodesic integration. Required for all
+# stationary and axisymmetric spacetimes.
+set_tests_properties(
+    MandatoryKillingTests.SchwarzschildEnergyConservation
+    MandatoryKillingTests.SchwarzschildAngularMomentumConservation
+    MandatoryKillingTests.KerrEnergyConservation
+    MandatoryKillingTests.KerrAngularMomentumConservation
+    MandatoryKillingTests.ReissnerNordstromEnergyConservation
+    PROPERTIES LABELS "Mandatory;Stability"
+)
+
+# =============================================================================
+# GPU Conservation Validation Tests (TSDG005A)
+# =============================================================================
+set_tests_properties(
+    GPUConservationTests.DebugBufferAnalysis
+    GPUConservationTests.SpecificationCompliance
+    PROPERTIES LABELS "Mandatory;Stability"
+)
+
+# =============================================================================
+# GPU/CPU Parity Tests (TSIN006A)
+# =============================================================================
+set_tests_properties(
+    CPUGPUParityTests.BaselineCPUIntegration
+    CPUGPUParityTests.ReferenceRayGridGeneration
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+# =============================================================================
+# Spectral Validation Tests (TSSP002A)
+# =============================================================================
+set_tests_properties(
+    SpectralValidationTests.PlanckFunctionBasic
+    SpectralValidationTests.PlanckFunctionMonotonicity
+    SpectralValidationTests.WienDisplacementLaw
+    SpectralValidationTests.SolarPeakWavelength
+    SpectralValidationTests.CandelaColor
+    SpectralValidationTests.WienKnownValues
+    SpectralValidationTests.RedshiftIntensityScaling
+    SpectralValidationTests.RedshiftWavelengthTransform
+    SpectralValidationTests.ColorTemperatureOrdering
+    SpectralValidationTests.LimbDarkeningCoefficient
+    SpectralValidationTests.BlackbodyColorProgression
+    SpectralValidationTests.StefanBoltzmannLaw
+    SpectralValidationTests.SolarLuminosity
+    PROPERTIES LABELS "Correctness"
+)
+
+# =============================================================================
+# Analytic Validation Tests (TSDG008A)
+# =============================================================================
+set_tests_properties(
+    AnalyticValidationTests.SchwarzschildHorizonRadius
+    AnalyticValidationTests.SchwarzschildPhotonSphere
+    AnalyticValidationTests.SchwarzschildISCO
+    AnalyticValidationTests.SchwarzschildOrbitalVelocity
+    AnalyticValidationTests.KerrHorizonRadius
+    AnalyticValidationTests.KerrISCOPrograde
+    AnalyticValidationTests.KerrISCODecreaseWithSpin
+    AnalyticValidationTests.KerrErgosphereAtEquator
+    AnalyticValidationTests.KerrErgosphereAtPole
+    AnalyticValidationTests.WeakFieldDeflectionFormula
+    AnalyticValidationTests.SolarDeflectionOrderOfMagnitude
+    AnalyticValidationTests.KerrReducesToSchwarzschildAtZeroSpin
+    AnalyticValidationTests.AsymptoticFlatness
+    AnalyticValidationTests.SchwarzschildKretschmannScalar
+    AnalyticValidationTests.KretschmannMonotonicDecrease
+    AnalyticValidationTests.HorizonMetricDegeneracy
+    AnalyticValidationTests.SchwarzschildISCOEnergy
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
 message(STATUS "CTest labels configured for Sirius test suite")
 
 

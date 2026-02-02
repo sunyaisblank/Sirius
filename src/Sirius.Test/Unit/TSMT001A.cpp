@@ -1,15 +1,30 @@
+// =============================================================================
 // TSMT001A.cpp - Dual Number Arithmetic Tests
-// Tests nilpotency (ε²=0), ring axioms, chain rule, sin/cos/sqrt derivatives.
+// Component ID: TSMT001A (Test/Unit/DualNumber)
+// =============================================================================
+//
+// PURPOSE:
+// Validates dual number arithmetic for automatic differentiation.
+// Tests ring axioms (nilpotency ε²=0), chain rule, elementary functions.
+//
+// MATHEMATICAL BASIS:
+// Dual numbers: D = {a + bε : ε² = 0}
+// Forward-mode autodiff: f(a + bε) = f(a) + b·f'(a)·ε
+//
+// LABEL: Mandatory;Correctness
+// =============================================================================
 
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <gtest/gtest.h>
 #include <MTDL001A.h>
+#include <PHCN001A.h>  // Centralized constants
 
 namespace sirius::test {
 
-// Numerical tolerance for floating-point comparisons
-constexpr double kEpsilon = 1e-12;
+// Numerical tolerance for dual number comparisons
+// Dual arithmetic is exact to machine epsilon when inputs are exact
+constexpr double kEpsilon = 1e-12;  // Reasonable for double precision operations
 
 // =============================================================================
 // Test Fixture

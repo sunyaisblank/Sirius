@@ -14,9 +14,9 @@
 #include <chrono>
 #include <cmath>
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
+// Unified constants (eliminates PI macro)
+#include <PHCN001A.h>
+using Sirius::Constants::Math::PI;
 
 namespace Sirius::Cli {
 
@@ -186,7 +186,7 @@ int RenderCommand::executeSession(
     sessionConfig.blackHoleMass = config.metric.mass;
     sessionConfig.blackHoleSpin = config.metric.spin;
     sessionConfig.observerDistance = config.observer.distance;
-    sessionConfig.observerInclination = config.observer.inclination * M_PI / 180.0;
+    sessionConfig.observerInclination = config.observer.inclination * PI / 180.0;
     sessionConfig.cameraFOV = static_cast<float>(config.observer.fov);
     sessionConfig.enableBloom = config.postprocess.enableBloom;
     sessionConfig.bloomIntensity = config.postprocess.bloomIntensity;
@@ -280,7 +280,7 @@ int RenderCommand::executeLegacy(
     renderConfig.metricName = config.metric.name;
     renderConfig.a = config.metric.spin;
     renderConfig.observerPosition[1] = config.observer.distance;
-    renderConfig.observerPosition[2] = config.observer.inclination * M_PI / 180.0;
+    renderConfig.observerPosition[2] = config.observer.inclination * PI / 180.0;
 
     // Create and execute job
     Sirius::RenderJob job(renderConfig);

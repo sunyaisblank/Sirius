@@ -87,6 +87,43 @@ __device__ __forceinline__ void fast_sincosf(float x, float* s, float* c) {
 }
 
 //==============================================================================
+// NUMERICAL SAFETY UTILITIES
+// Explicit NaN/Inf detection for ray state validation
+//==============================================================================
+
+/// @brief Check if ray state (position and 4-velocity) contains NaN or Inf
+/// @param x Position 4-vector (t, x, y, z) or (t, r, θ, φ)
+/// @param u 4-velocity (k^μ = dx^μ/dλ)
+/// @return true if all components are finite (valid), false if NaN/Inf detected
+///
+/// NaN POLICY (specification.md):
+/// NaN must not propagate silently; affected rays terminate with logged error.
+/// This function provides explicit checking in the render kernel integration loop.
+__device__ __forceinline__ bool isStateValid(float4 x, float4 u) {
+    return !isnan(x.x) && !isnan(x.y) && !isnan(x.z) && !isnan(x.w) &&
+           !isnan(u.x) && !isnan(u.y) && !isnan(u.z) && !isnan(u.w) &&
+           !isinf(x.x) && !isinf(x.y) && !isinf(x.z) && !isinf(x.w) &&
+           !isinf(u.x) && !isinf(u.y) && !isinf(u.z) && !isinf(u.w);
+}
+
+/// @brief Compute adaptive tolerance based on distance from horizon
+/// @param r Current radial coordinate
+/// @param r_horizon Event horizon radius
+/// @param baseTolerance Default tolerance for far-field
+/// @return Tightened tolerance (10× tighter) when within 2× horizon radius
+///
+/// RATIONALE: Near strong curvature regions, tighter tolerances are needed
+/// to maintain numerical stability and conservation law accuracy.
+__device__ __forceinline__ float adaptiveTolerance(float r, float r_horizon, float baseTolerance) {
+    // Tighten tolerance when within 2× horizon radius
+    float safety_ratio = r / r_horizon;
+    if (safety_ratio < 2.0f) {
+        return baseTolerance * 0.1f;  // 10× tighter near horizon
+    }
+    return baseTolerance;
+}
+
+//==============================================================================
 // COORDINATE SINGULARITY UTILITIES
 // Handle spherical coordinate poles (theta = 0, pi) where cot(theta) diverges
 //==============================================================================
@@ -4156,9 +4193,9 @@ __device__ float4 geodesicDeviationAccel(
 // Enforces coordinate bounds and null constraint (g_μν u^μ u^ν = 0)
 //==============================================================================
 
-// Pole exclusion zone: minimal threshold to avoid exact singularity
-// Using very small value to minimize visible artifacts while preventing NaN
-__device__ constexpr float POLE_EPSILON = 0.0005f;  // ~0.03 degrees from pole
+// Pole exclusion zone: very minimal threshold to avoid exact singularity
+// Must match SIN_MIN in Christoffel calculations for consistency
+__device__ constexpr float POLE_EPSILON = 0.0001f;  // ~0.006 degrees from pole
 
 template<Sirius::MetricType type>
 __device__ __forceinline__ void normalizeGeodesicState(
@@ -5029,7 +5066,33 @@ __device__ void raygen_renderFrame_impl() {
             state = integrateGeodesicRK4<type>(prevState, adaptiveStep, params.metricParams);
             // Apply normalization that RK4 already does internally
         }
-        
+
+        // =====================================================================
+        // NaN/INF DETECTION (specification.md: NaN Policy)
+        // =====================================================================
+        // NaN must not propagate silently; affected rays terminate immediately.
+        // This check catches numerical instabilities from:
+        //   - Coordinate singularities (poles, horizon)
+        //   - Extreme curvature regions
+        //   - Integrator failures
+        {
+            float4 x = make_float4(state.x.t, state.x.r, state.x.theta, state.x.phi);
+            float4 u = make_float4(state.u.t, state.u.r, state.u.theta, state.u.phi);
+            if (!isStateValid(x, u)) {
+                // Terminate ray with error color (dark red for visibility in debug)
+                if (params.debugMode) {
+                    params.frameBuffer[pixelIndex] = make_float4(0.5f, 0.0f, 0.0f, 1.0f);
+                } else {
+                    // Use background color for production
+                    params.frameBuffer[pixelIndex] = make_float4(
+                        params.backgroundColor.x,
+                        params.backgroundColor.y,
+                        params.backgroundColor.z, 1.0f);
+                }
+                return;  // Terminate ray
+            }
+        }
+
         // =====================================================================
         // RAY BUNDLE PROPAGATION (Phase 6.3 - DNGR Geodesic Deviation)
         // =====================================================================

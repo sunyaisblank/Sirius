@@ -1,8 +1,11 @@
 // CRCF002A.cpp - Configuration Loader
 // Component ID: CRCF002A (Configuration/Loader)
+//
+// Validation aligns with docs/specification.md tolerance requirements.
 
 #include "CRCF002A.h"
 #include "CRPF001A.h"
+#include <PHCN001A.h>
 
 #include <fstream>
 #include <iostream>
@@ -167,69 +170,120 @@ std::optional<fs::path> ConfigLoader::getLoadedConfigPath() {
 std::vector<std::string> ConfigLoader::validate(const SiriusConfig& config) {
     std::vector<std::string> errors;
 
-    // Render validation
-    if (config.render.width < 1 || config.render.width > 16384) {
-        errors.push_back("render.width must be between 1 and 16384");
+    // =========================================================================
+    // Render Validation (per docs/specification.md)
+    // =========================================================================
+    // Resolution constraints: [128, 8192] × [128, 8192]
+    constexpr int MIN_RESOLUTION = 128;
+    constexpr int MAX_RESOLUTION = 8192;
+
+    if (config.render.width < MIN_RESOLUTION || config.render.width > MAX_RESOLUTION) {
+        errors.push_back("render.width must be between " + std::to_string(MIN_RESOLUTION) +
+                         " and " + std::to_string(MAX_RESOLUTION) + " (spec requirement)");
     }
-    if (config.render.height < 1 || config.render.height > 16384) {
-        errors.push_back("render.height must be between 1 and 16384");
-    }
-    if (config.render.samplesPerPixel < 1 || config.render.samplesPerPixel > 65536) {
-        errors.push_back("render.samplesPerPixel must be between 1 and 65536");
-    }
-    if (config.render.tileSize < 8 || config.render.tileSize > 512) {
-        errors.push_back("render.tileSize must be between 8 and 512");
+    if (config.render.height < MIN_RESOLUTION || config.render.height > MAX_RESOLUTION) {
+        errors.push_back("render.height must be between " + std::to_string(MIN_RESOLUTION) +
+                         " and " + std::to_string(MAX_RESOLUTION) + " (spec requirement)");
     }
 
-    // Metric validation
+    // Samples per pixel: practical limits
+    if (config.render.samplesPerPixel < 1 || config.render.samplesPerPixel > 4096) {
+        errors.push_back("render.samplesPerPixel must be between 1 and 4096");
+    }
+
+    // Tile size: must be power of 2 for GPU efficiency
+    if (config.render.tileSize < 8 || config.render.tileSize > 256) {
+        errors.push_back("render.tileSize must be between 8 and 256");
+    }
+    if ((config.render.tileSize & (config.render.tileSize - 1)) != 0) {
+        errors.push_back("render.tileSize should be a power of 2 for GPU efficiency");
+    }
+
+    // =========================================================================
+    // Metric Validation (per docs/specification.md Parameter Ranges)
+    // =========================================================================
     static const std::vector<std::string> validMetrics = {
-        "Minkowski", "Schwarzschild", "Kerr", "Reissner-Nordstrom", "Kerr-Newman"
+        "Minkowski", "Schwarzschild", "Kerr", "Reissner-Nordstrom", "Kerr-Newman",
+        "Morris-Thorne", "Alcubierre"
     };
-    bool validMetric = false;
-    for (const auto& m : validMetrics) {
-        if (config.metric.name == m) {
-            validMetric = true;
-            break;
-        }
-    }
+    bool validMetric = std::find(validMetrics.begin(), validMetrics.end(),
+                                  config.metric.name) != validMetrics.end();
     if (!validMetric) {
-        errors.push_back("metric.name must be one of: Minkowski, Schwarzschild, Kerr, Reissner-Nordstrom, Kerr-Newman");
-    }
-    if (config.metric.mass <= 0) {
-        errors.push_back("metric.mass must be positive");
-    }
-    if (config.metric.spin < 0 || config.metric.spin > 1) {
-        errors.push_back("metric.spin must be between 0 and 1");
-    }
-    if (config.metric.charge < 0) {
-        errors.push_back("metric.charge must be non-negative");
+        errors.push_back("metric.name must be one of: Minkowski, Schwarzschild, Kerr, "
+                         "Reissner-Nordstrom, Kerr-Newman, Morris-Thorne, Alcubierre");
     }
 
-    // Observer validation
-    if (config.observer.distance <= 0) {
-        errors.push_back("observer.distance must be positive");
-    }
-    if (config.observer.inclination < 0 || config.observer.inclination > 180) {
-        errors.push_back("observer.inclination must be between 0 and 180 degrees");
-    }
-    if (config.observer.fov < 1 || config.observer.fov > 180) {
-        errors.push_back("observer.fov must be between 1 and 180 degrees");
+    // Mass M: [0.1, 100] in geometric units
+    constexpr double MIN_MASS = 0.1;
+    constexpr double MAX_MASS = 100.0;
+    if (config.metric.mass < MIN_MASS || config.metric.mass > MAX_MASS) {
+        errors.push_back("metric.mass must be between 0.1 and 100 (geometric units)");
     }
 
-    // Post-process validation
+    // Spin parameter a/M: [0, 0.998] (near-extremal limit)
+    // Extremal Kerr has coordinate singularity issues
+    constexpr double MAX_SPIN = 0.998;
+    if (config.metric.spin < 0 || config.metric.spin > MAX_SPIN) {
+        errors.push_back("metric.spin must be between 0 and 0.998 (near-extremal limit)");
+    }
+
+    // Charge Q/M: [0, 0.999] (near-extremal limit)
+    constexpr double MAX_CHARGE = 0.999;
+    if (config.metric.charge < 0 || config.metric.charge > MAX_CHARGE) {
+        errors.push_back("metric.charge must be between 0 and 0.999");
+    }
+
+    // Combined extremality: a² + Q² < M² for valid horizons
+    if (config.metric.spin * config.metric.spin +
+        config.metric.charge * config.metric.charge >= 0.999) {
+        errors.push_back("Combined spin² + charge² must be < 0.999 (sub-extremal condition)");
+    }
+
+    // =========================================================================
+    // Observer Validation (per docs/specification.md)
+    // =========================================================================
+    // Observer distance: [5M, 1000M] for valid rendering
+    constexpr double MIN_DISTANCE_FACTOR = 5.0;    // In units of M
+    constexpr double MAX_DISTANCE_FACTOR = 1000.0; // In units of M
+
+    double minDistance = MIN_DISTANCE_FACTOR * config.metric.mass;
+    double maxDistance = MAX_DISTANCE_FACTOR * config.metric.mass;
+
+    if (config.observer.distance < minDistance || config.observer.distance > maxDistance) {
+        errors.push_back("observer.distance must be between 5M and 1000M (currently " +
+                         std::to_string(config.observer.distance) + ", M=" +
+                         std::to_string(config.metric.mass) + ")");
+    }
+
+    // Inclination: (0, 180) degrees, avoiding poles
+    constexpr double POLE_BUFFER = 0.1; // Degrees from pole
+    if (config.observer.inclination <= POLE_BUFFER ||
+        config.observer.inclination >= 180.0 - POLE_BUFFER) {
+        errors.push_back("observer.inclination must be between 0.1 and 179.9 degrees "
+                         "(avoiding coordinate singularity at poles)");
+    }
+
+    // FOV: reasonable range for rendering
+    if (config.observer.fov < 1 || config.observer.fov > 170) {
+        errors.push_back("observer.fov must be between 1 and 170 degrees");
+    }
+
+    // =========================================================================
+    // Post-process Validation
+    // =========================================================================
     if (config.postprocess.exposure <= 0 || config.postprocess.exposure > 100) {
-        errors.push_back("postprocess.exposure must be between 0 and 100");
+        errors.push_back("postprocess.exposure must be between 0 and 100 stops");
+    }
+    if (config.postprocess.bloomIntensity < 0 || config.postprocess.bloomIntensity > 5) {
+        errors.push_back("postprocess.bloomIntensity must be between 0 and 5");
     }
 
-    // Backend validation
+    // =========================================================================
+    // Backend Validation
+    // =========================================================================
     static const std::vector<std::string> validBackends = {"auto", "optix", "cpu"};
-    bool validBackend = false;
-    for (const auto& b : validBackends) {
-        if (config.backend.preferred == b) {
-            validBackend = true;
-            break;
-        }
-    }
+    bool validBackend = std::find(validBackends.begin(), validBackends.end(),
+                                   config.backend.preferred) != validBackends.end();
     if (!validBackend) {
         errors.push_back("backend.preferred must be one of: auto, optix, cpu");
     }

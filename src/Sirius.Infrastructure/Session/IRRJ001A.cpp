@@ -16,9 +16,9 @@
 #include <algorithm>
 #include <memory>
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
+// Unified constants
+#include <PHCN001A.h>
+using Sirius::Constants::Math::PI;
 
 namespace Sirius {
 
@@ -166,7 +166,7 @@ void RenderJob::execute() {
     std::cout << "[RenderJob] Samples:    " << m_Config.samplesPerPixel << " spp" << std::endl;
     std::cout << "[RenderJob] Metric:     " << m_Config.metricName << " (M=" << m_Config.M << ", a=" << m_Config.a << ")" << std::endl;
     std::cout << "[RenderJob] Observer:   r=" << m_Config.observerPosition[1] << "M, "
-              << "θ=" << (m_Config.observerPosition[2] * 180.0 / M_PI) << "°" << std::endl;
+              << "θ=" << (m_Config.observerPosition[2] * 180.0 / PI) << "°" << std::endl;
     std::cout << "[RenderJob] Output:     " << m_Config.outputPath << std::endl;
     std::cout << "--------------------------------------------------------------------------------\n";
     
@@ -324,7 +324,7 @@ void RenderJob::renderScanlineBlackHole(int y) {
 //==============================================================================
 void RenderJob::renderScanline(int y) {
     float aspectRatio = static_cast<float>(m_Config.width) / m_Config.height;
-    float fovRad = m_Config.fov * static_cast<float>(M_PI) / 180.0f;
+    float fovRad = m_Config.fov * static_cast<float>(PI) / 180.0f;
     float tanHalfFov = std::tan(fovRad / 2.0f);
     
     for (int x = 0; x < m_Config.width; ++x) {
@@ -498,7 +498,7 @@ float RenderJob::sampleStarfield(const Vec4& direction) const {
     // Convert to spherical (theta, phi)
     double theta = std::acos(std::clamp(z, -1.0, 1.0));
     double phi = std::atan2(y, x);
-    if (phi < 0) phi += 2.0 * M_PI;
+    if (phi < 0) phi += 2.0 * PI;
 
     // Procedural starfield based on direction hash
     // This creates a deterministic star pattern

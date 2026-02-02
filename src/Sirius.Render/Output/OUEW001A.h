@@ -8,6 +8,17 @@
 #define SIRIUS_RENDER_OUEW001A_H
 
 #include "OUIB001A.h"
+
+// MIGRATION NOTE: SRRS001A.h is deprecated. The EXRWriter::sessionToBuffer()
+// method uses the deprecated sirius::render::RenderSession for backwards
+// compatibility. New code should use Sirius::RenderSession from SNRS001A.h.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4996)
+#endif
+
 #include "../Session/SRRS001A.h"
 #include <string>
 #include <vector>
@@ -154,5 +165,10 @@ public:
 };
 
 } // namespace sirius::render
+
+#pragma GCC diagnostic pop
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // SIRIUS_RENDER_OUEW001A_H

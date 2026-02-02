@@ -27,6 +27,7 @@
 
 #include "PHGD001A.h"
 #include "PHMT100A.h"
+#include "PHCT002A.h"  // Coordinate transformations (BL ↔ Cartesian)
 #include "CMBS001A.h"
 #include "MTTN001A.h"
 #include <cmath>

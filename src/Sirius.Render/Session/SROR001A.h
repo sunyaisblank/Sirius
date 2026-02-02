@@ -7,6 +7,16 @@
 #ifndef SIRIUS_RENDER_SROR001A_H
 #define SIRIUS_RENDER_SROR001A_H
 
+// MIGRATION NOTE: SRRS001A.h is deprecated. This file uses the deprecated
+// sirius::render::RenderSession for backwards compatibility.
+// New code should use Sirius::RenderSession from SNRS001A.h instead.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4996)
+#endif
+
 #include "SRRS001A.h"
 #include "SRCT001A.h"
 #include "SRER001A.h"
@@ -309,5 +319,10 @@ private:
 };
 
 } // namespace sirius::render
+
+#pragma GCC diagnostic pop
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // SIRIUS_RENDER_SROR001A_H

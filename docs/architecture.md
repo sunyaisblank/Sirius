@@ -113,7 +113,7 @@ Sirius/
 │   │   │   ├── OptiX/            # RTX-accelerated raytracing
 │   │   │   └── Backend/          # Multi-GPU management
 │   │   ├── Session/              # Render session management
-│   │   │   ├── SRRS001A.h        # Render session
+│   │   │   ├── SRRS001A.h        # Render session [DEPRECATED - use SNRS001A]
 │   │   │   ├── SRCT001A.h        # Cancellation token
 │   │   │   ├── SRER001A.h        # Error accumulator
 │   │   │   ├── SRPG001A.h        # ETA calculator
@@ -289,7 +289,7 @@ Sirius/
 
 | Code | File | Description |
 |------|------|-------------|
-| `SRRS001A` | `Session/SRRS001A.h` | Render session manager |
+| `SRRS001A` | `Session/SRRS001A.h` | Render session manager [DEPRECATED - use Sirius::RenderSession (SNRS001A)] |
 | `SRCT001A` | `Session/SRCT001A.h` | Cancellation token |
 | `SRER001A` | `Session/SRER001A.h` | Error accumulator |
 | `SRPG001A` | `Session/SRPG001A.h` | ETA calculator |

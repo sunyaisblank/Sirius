@@ -1,4 +1,14 @@
+// =============================================================================
 // TSIN002A.cpp - Metric Loader Chain Integration Tests
+// Component ID: TSIN002A (Test/Integration/MetricLoader)
+// =============================================================================
+//
+// PURPOSE:
+// Validates the unified metric family loader (PHMT100A/101A/102A).
+// Tests metric symmetry, signature, and limit behaviors.
+//
+// LABEL: Mandatory;Correctness
+// =============================================================================
 
 #include <gtest/gtest.h>
 #include <cmath>
@@ -10,14 +20,15 @@
 #include "PHMT100A.h"
 #include "PHMT101A.h"
 #include "PHMT102A.h"
+#include "PHCN001A.h"  // Centralized constants
 
 namespace sirius::test {
 
-// Constants
-// Constants
-constexpr double kEpsilon = 1e-8;
+// Test tolerances (from PHCN001A.h)
+constexpr double kEpsilon = Sirius::Constants::Metric::INVERSE_TOL;   // 1e-14 for metric comparisons
+constexpr double kSymmetryTol = Sirius::Constants::Metric::SYMMETRY_TOL;  // 1e-15 for symmetry
 constexpr double M = 1.0;
-constexpr double PI = 3.14159265358979323846;
+constexpr double PI = Sirius::Constants::Math::PI;
 
 // Helper: Transform Cartesian metric to Spherical basis for validation
 Metric4D transformToSpherical(const Metric4D& g_cart, const Vec4& pos_cart) {

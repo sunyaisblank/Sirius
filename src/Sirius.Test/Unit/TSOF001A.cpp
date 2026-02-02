@@ -4,6 +4,17 @@
 
 #include <gtest/gtest.h>
 #include <cmath>
+
+// MIGRATION NOTE: These tests use the deprecated sirius::render::RenderSession.
+// The deprecation warnings are suppressed for backwards compatibility testing.
+// New tests should use Sirius::RenderSession from SNRS001A.h.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4996)
+#endif
+
 #include "Sirius.Render/Session/SRRS001A.h"
 #include "Sirius.Render/Camera/CMFM001A.h"
 #include "Sirius.Render/Camera/CMBL001A.h"
@@ -228,3 +239,8 @@ TEST(EXRWriterTest, MetadataGeneration) {
 }
 
 } // namespace
+
+#pragma GCC diagnostic pop
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif

@@ -80,11 +80,19 @@ private:
     std::string formatMessage(LogLevel level, const std::string& message,
                                const char* file, int line) {
         std::ostringstream ss;
-        
-        // Timestamp
+
+        // Timestamp (thread-safe version)
         auto now = std::chrono::system_clock::now();
         auto time = std::chrono::system_clock::to_time_t(now);
-        ss << std::put_time(std::localtime(&time), "%H:%M:%S");
+
+        // Use localtime_r on POSIX systems for thread-safety
+        std::tm timeinfo{};
+#if defined(_WIN32) || defined(_WIN64)
+        localtime_s(&timeinfo, &time);  // Windows thread-safe version
+#else
+        localtime_r(&time, &timeinfo);  // POSIX thread-safe version
+#endif
+        ss << std::put_time(&timeinfo, "%H:%M:%S");
         
         // Level
         ss << " [" << levelString(level) << "] ";

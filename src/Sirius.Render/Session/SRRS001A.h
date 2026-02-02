@@ -1,6 +1,17 @@
-// SRRS001A.h - Render Session
+// SRRS001A.h - Render Session (DEPRECATED)
 // Component ID: SRRS001A
 // Manages tile-based rendering sessions
+//
+// DEPRECATION NOTICE:
+// This lightweight tile-only RenderSession is deprecated.
+// Use Sirius::RenderSession (SNRS001A) instead, which provides:
+// - Full FSM state machine
+// - Threading support
+// - Checkpointing capabilities
+// - Progress reporting
+//
+// Migration: Replace sirius::render::RenderSession with Sirius::RenderSession
+// from src/Sirius.Infrastructure/Session/SNRS001A.h
 //
 // Governance: docs/specification.md
 
@@ -86,9 +97,11 @@ struct RenderProgress {
 //==============================================================================
 // RenderSession
 // Manages tile-based rendering
+//
+// [[deprecated]] - Use Sirius::RenderSession (SNRS001A) instead
 //==============================================================================
 
-class RenderSession {
+class [[deprecated("Use Sirius::RenderSession (SNRS001A) instead - provides FSM, threading, and checkpointing")]] RenderSession {
 public:
     using ProgressCallback = std::function<void(const RenderProgress&)>;
 

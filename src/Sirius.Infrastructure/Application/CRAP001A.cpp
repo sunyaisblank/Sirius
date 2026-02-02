@@ -16,9 +16,9 @@
 #include <algorithm>
 #include <chrono>
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
+// Unified constants
+#include <PHCN001A.h>
+using Sirius::Constants::Math::PI;
 
 Application::Application() {
     std::cout << "WARNING: Interactive mode is deprecated. Use batch rendering instead." << std::endl;
@@ -66,7 +66,7 @@ void Application::initializeObserver() {
     m_ObserverPosition = Vec4(); 
     m_ObserverPosition(0) = 0.0;
     m_ObserverPosition(1) = 10.0;
-    m_ObserverPosition(2) = static_cast<double>(M_PI/2.0);
+    m_ObserverPosition(2) = static_cast<double>(PI/2.0);
     m_ObserverPosition(3) = 0.0;
     
     m_ObserverVelocity = Vec4(); 
@@ -75,7 +75,7 @@ void Application::initializeObserver() {
     m_ObserverVelocity(2) = 0.0;
     m_ObserverVelocity(3) = 0.0;
     
-    m_CameraFOV = 60.0f * static_cast<float>(M_PI) / 180.0f;
+    m_CameraFOV = 60.0f * static_cast<float>(PI) / 180.0f;
     m_MouseLook = false;
     m_LastMouseX = 640.0;
     m_LastMouseY = 360.0;
@@ -124,7 +124,7 @@ void Application::setObserverPosition(const Vec4& position) {
         }
     }
     
-    m_ObserverPosition(2) = std::clamp(m_ObserverPosition(2), 0.01, M_PI - 0.01);
+    m_ObserverPosition(2) = std::clamp(m_ObserverPosition(2), 0.01, PI - 0.01);
 }
 
 void Application::setObserverVelocity(const Vec4& velocity) {
@@ -259,10 +259,10 @@ void Application::handleMouse(double xpos, double ypos) {
     m_CameraYaw += xoffset;
     m_CameraPitch += yoffset;
     
-    m_CameraPitch = std::clamp(m_CameraPitch, static_cast<float>(-M_PI/2) + 0.01f, static_cast<float>(M_PI/2) - 0.01f);
+    m_CameraPitch = std::clamp(m_CameraPitch, static_cast<float>(-PI/2) + 0.01f, static_cast<float>(PI/2) - 0.01f);
     
-    if (m_CameraYaw > M_PI) m_CameraYaw -= 2.0f * static_cast<float>(M_PI);
-    if (m_CameraYaw < -M_PI) m_CameraYaw += 2.0f * static_cast<float>(M_PI);
+    if (m_CameraYaw > PI) m_CameraYaw -= 2.0f * static_cast<float>(PI);
+    if (m_CameraYaw < -PI) m_CameraYaw += 2.0f * static_cast<float>(PI);
 }
 
 void Application::updateObserver(float deltaTime) {

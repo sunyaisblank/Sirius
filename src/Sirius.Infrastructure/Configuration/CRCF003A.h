@@ -7,6 +7,7 @@
 #pragma once
 
 #include <nlohmann/json.hpp>
+#include <PHCN001A.h>
 #include <string>
 
 namespace Sirius::Configuration {
@@ -85,12 +86,12 @@ struct SiriusConfig {
 
     /// @brief Convert observer inclination from degrees to radians
     double inclinationRadians() const {
-        return observer.inclination * 3.14159265358979323846 / 180.0;
+        return observer.inclination * Sirius::Constants::Math::PI / 180.0;
     }
 
     /// @brief Convert FOV from degrees to radians
     double fovRadians() const {
-        return observer.fov * 3.14159265358979323846 / 180.0;
+        return observer.fov * Sirius::Constants::Math::PI / 180.0;
     }
 };
 

@@ -12,7 +12,7 @@
 #include "SNTL001A.h"
 #include "SNPR001A.h"
 #include "SNDP001A.h"
-#include "IRRJ001A.h"
+// Note: IRRJ001A.h (RenderJob) is deprecated - use RenderSession instead
 
 // Physics integration (new in Priority 1)
 #include "PHMT100A.h"  // Kerr-Schild metric family

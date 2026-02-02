@@ -304,6 +304,17 @@ struct NumericalMetricHostData {
 
 //==============================================================================
 // Integration Control
+//
+// PRECISION NOTE (specification.md §5.2-5.3):
+// GPU (single precision): Null constraint tolerance 10^-5
+//   - ~100 ops/step × 500 steps = 50,000 ops total
+//   - Error bound: ~10^-2 accumulated, 10^-5 per step acceptable
+//
+// CPU (double precision): Null constraint tolerance 10^-10
+//   - Same operations but ~10^-14 per step
+//   - Error bound: ~10^-11 accumulated
+//
+// The tolerance difference is intentional and acceptable for visualization.
 //==============================================================================
 struct IntegrationParams {
     IntegratorType type;
@@ -313,10 +324,29 @@ struct IntegrationParams {
     float minStepSize;     // Minimum step (adaptive)
     float maxStepSize;     // Maximum step (adaptive)
     float tolerance;       // Error tolerance (adaptive)
-    
+
     // Event horizon detection
     float horizonBuffer;   // Buffer distance from horizon
     bool detectHorizon;    // Enable horizon detection
+};
+
+//==============================================================================
+// Conservation Diagnostics (Optional Debug Mode)
+//
+// Tracks conservation law violations during geodesic integration.
+// Specification requirements (specification.md):
+//   - Null constraint: |g_μν k^μ k^ν| < 10^-5 (GPU) / 10^-10 (CPU)
+//   - Energy E drift: |ΔE/E| < 10^-4
+//   - Angular momentum L_z drift: |ΔL_z/L_z| < 10^-4
+//
+// Enable via LaunchParams for debugging; disabled by default for performance.
+//==============================================================================
+struct ConservationDiagnostics {
+    float max_null_violation;   // Maximum |g_μν k^μ k^ν| observed
+    float max_E_drift;          // Maximum |ΔE/E| relative energy drift
+    float max_L_drift;          // Maximum |ΔL_z/L_z| relative angular momentum drift
+    int rays_with_violations;   // Count of rays exceeding tolerance
+    bool enabled;               // Enable diagnostic tracking (false by default)
 };
 
 //==============================================================================
@@ -691,8 +721,82 @@ struct FilmParamsGPU {
 };
 
 //==============================================================================
-// OptiX Launch Parameters
-// This structure is uploaded to GPU constant memory before each launch
+// LaunchParamsCore - Essential parameters (~2KB)
+// This minimal structure fits comfortably in constant memory and contains
+// everything needed for basic geodesic ray tracing without advanced features.
+//==============================================================================
+struct LaunchParamsCore {
+    // === Output ===
+    float4* frameBuffer;          // RGBA framebuffer (linear)
+    int2 frameDimensions;         // (width, height)
+    unsigned int frameIndex;      // Current frame number
+
+    // === Camera ===
+    CameraState camera;
+
+    // === Metric Configuration ===
+    MetricType metricType;
+    MetricParams metricParams;
+
+    // === Integration ===
+    IntegrationParams integration;
+
+    // === Background ===
+    cudaTextureObject_t backgroundTexture;
+    bool useBackgroundTexture;
+    float3 backgroundColor;
+
+    // === Debug ===
+    bool debugMode;
+    int debugPixelX;
+    int debugPixelY;
+};
+
+//==============================================================================
+// LaunchParamsExtended - Optional/advanced features (global memory)
+// Access via global memory pointer from LaunchParams.extended
+// Contains cinematic features, volumetric rendering, and optimization caches.
+//==============================================================================
+struct LaunchParamsExtended {
+    // === Path Tracing ===
+    PathTracingParams pathTracing;
+
+    // === Prepass (Phase 2.3) ===
+    PrepassParams prepass;
+
+    // === Geodesic LUT (Phase 3.2) ===
+    GeodesicLUTParams geodesicLUT;
+
+    // === Accretion Disk (Phase 4.2) ===
+    AccretionDiskParams accretionDisk;
+
+    // === Lens Flare (Phase 6.5) ===
+    LensFlareParams lensFlare;
+
+    // === Bloom/Glow (Phase 7) ===
+    BloomParams bloom;
+
+    // === Ray Bundles (Phase 6.3) ===
+    RayBundleParams rayBundle;
+
+    // === Numerical Metric (if used) ===
+    NumericalMetricData numericalMetric;
+
+    // === Cinematic Expansion (2026) ===
+    SMBHParamsGPU smbh;
+    VolumetricDiskParamsGPU volumetricDisk;
+    JetMHDParamsGPU jetMHD;
+    StarfieldParamsGPU starfield;
+    FilmParamsGPU film;
+
+    // === Accumulation Buffer ===
+    float4* accumBuffer;
+};
+
+//==============================================================================
+// OptiX Launch Parameters (Full)
+// This structure is uploaded to GPU constant memory before each launch.
+// For performance-critical paths, use LaunchParamsCore only.
 //==============================================================================
 struct LaunchParams {
     // === Output ===
