@@ -95,7 +95,46 @@ public:
     
     // Compute the scalar function H = (2Mr - Q²)r² / (r⁴ + a²z²)
     double computeH(double r, double z) const;
-    
+
+    // =========================================================================
+    // Horizon and Characteristic Radii (Including Charged Black Holes)
+    // =========================================================================
+    //
+    // For Kerr-Newman (charged, rotating black hole):
+    //   r± = M ± √(M² - a² - Q²)
+    //
+    // Special cases:
+    // - Schwarzschild (a=0, Q=0): r+ = 2M, r- = 0
+    // - Kerr (Q=0): r± = M ± √(M² - a²)
+    // - Reissner-Nordström (a=0): r± = M ± √(M² - Q²)
+    //
+    // Existence condition: M² ≥ a² + Q² (otherwise naked singularity)
+
+    /// @brief Outer event horizon radius r+
+    /// @return r+ = M + √(M² - a² - Q²), or -1 if no horizon exists (naked singularity)
+    double outerHorizonRadius() const;
+
+    /// @brief Inner (Cauchy) horizon radius r-
+    /// @return r- = M - √(M² - a² - Q²), or -1 if no horizon exists
+    double innerHorizonRadius() const;
+
+    /// @brief Check if parameters describe a black hole (vs naked singularity)
+    /// @return true if M² ≥ a² + Q² (horizons exist)
+    bool hasHorizon() const;
+
+    /// @brief Ergosphere outer boundary radius at given polar angle theta
+    /// @param theta Polar angle from spin axis (Boyer-Lindquist)
+    /// @return r_ergo = M + √(M² - a²cos²θ - Q²cos²θ)
+    double ergosphereRadius(double theta) const;
+
+    /// @brief ISCO radius for prograde equatorial orbits
+    /// For Kerr-Newman, this is approximated via Kerr formula
+    double iscoRadius() const;
+
+    /// @brief Extremality parameter χ = √(a² + Q²) / M
+    /// @return χ ∈ [0, 1] for black holes, χ > 1 for naked singularity
+    double extremalityParameter() const;
+
 private:
     Config m_Config;
     KerrSchildParams m_params;
@@ -354,6 +393,131 @@ inline void KerrSchildFamily::evaluate(const Tensor<double, 4>& pos, Metric4D& g
         dg(2, 0, 0) = Dual<double>(dg(2, 0, 0).real - dLambdaFactor_dy);
         dg(3, 0, 0) = Dual<double>(dg(3, 0, 0).real - dLambdaFactor_dz);
     }
+}
+
+// =============================================================================
+// Horizon and Characteristic Radii Implementation
+// =============================================================================
+
+inline double KerrSchildFamily::outerHorizonRadius() const {
+    double M = m_params.M;
+    double a = m_params.a;
+    double Q = m_params.Q;
+
+    // r+ = M + √(M² - a² - Q²)
+    double discriminant = M*M - a*a - Q*Q;
+
+    if (discriminant < 0) {
+        return -1.0;  // No horizon (naked singularity)
+    }
+
+    return M + std::sqrt(discriminant);
+}
+
+inline double KerrSchildFamily::innerHorizonRadius() const {
+    double M = m_params.M;
+    double a = m_params.a;
+    double Q = m_params.Q;
+
+    // r- = M - √(M² - a² - Q²)
+    double discriminant = M*M - a*a - Q*Q;
+
+    if (discriminant < 0) {
+        return -1.0;  // No horizon (naked singularity)
+    }
+
+    return M - std::sqrt(discriminant);
+}
+
+inline bool KerrSchildFamily::hasHorizon() const {
+    double M = m_params.M;
+    double a = m_params.a;
+    double Q = m_params.Q;
+
+    // Black hole exists if M² ≥ a² + Q²
+    return (M*M >= a*a + Q*Q);
+}
+
+inline double KerrSchildFamily::ergosphereRadius(double theta) const {
+    double M = m_params.M;
+    double a = m_params.a;
+    double Q = m_params.Q;
+
+    // Ergosphere: g_tt = 0
+    // For Kerr-Newman: r_ergo = M + √(M² - a²cos²θ)
+    // The charge Q affects the ergosphere boundary as well
+    double cos2th = std::cos(theta) * std::cos(theta);
+    double discriminant = M*M - a*a*cos2th;
+
+    // For charged black holes, the charge contribution is subtle
+    // In Boyer-Lindquist, the static limit is where g_tt = 0:
+    // 1 - 2Mr/Σ + Q²/Σ = 0  (where Σ = r² + a²cos²θ)
+    // This leads to: r² - 2Mr + Q² + a²cos²θ = 0 (approximate)
+    // r = M ± √(M² - Q² - a²cos²θ)
+
+    double disc_charged = M*M - Q*Q - a*a*cos2th;
+    if (disc_charged < 0) {
+        // Inside ergosphere does not exist at this angle
+        return M;  // Return event horizon as fallback
+    }
+
+    return M + std::sqrt(disc_charged);
+}
+
+inline double KerrSchildFamily::iscoRadius() const {
+    double M = m_params.M;
+    double a = m_params.a;
+    double Q = m_params.Q;
+
+    // For Schwarzschild (a=0, Q=0): r_ISCO = 6M
+    if (std::abs(a) < 1e-12 && std::abs(Q) < 1e-12) {
+        return 6.0 * M;
+    }
+
+    // For Reissner-Nordström (a=0, Q≠0):
+    // r_ISCO = 3M + √(9M² - 8Q²) for Q² ≤ 9M²/8
+    // This reduces to 6M for Q=0 and 4M for Q²=M²/2
+    if (std::abs(a) < 1e-12) {
+        double disc = 9*M*M - 8*Q*Q;
+        if (disc < 0) {
+            // Very high charge: use minimum
+            return 4.0 * M;
+        }
+        return (3*M + std::sqrt(disc)) / 1.0;  // Prograde equivalent
+    }
+
+    // For Kerr (Q=0) or Kerr-Newman: use Kerr ISCO formula
+    // This is an approximation for Kerr-Newman
+    double a_star = std::abs(a / M);
+    if (a_star > 0.9999) a_star = 0.9999;
+
+    double Z1 = 1 + std::cbrt(1 - a_star*a_star) * (std::cbrt(1 + a_star) + std::cbrt(1 - a_star));
+    double Z2 = std::sqrt(3*a_star*a_star + Z1*Z1);
+
+    double r_isco;
+    if (a >= 0) {
+        // Prograde
+        r_isco = 3 + Z2 - std::sqrt((3 - Z1)*(3 + Z1 + 2*Z2));
+    } else {
+        // Retrograde
+        r_isco = 3 + Z2 + std::sqrt((3 - Z1)*(3 + Z1 + 2*Z2));
+    }
+
+    return M * r_isco;
+}
+
+inline double KerrSchildFamily::extremalityParameter() const {
+    double M = m_params.M;
+    double a = m_params.a;
+    double Q = m_params.Q;
+
+    if (M <= 0) return 0;
+
+    // χ = √(a² + Q²) / M
+    // χ = 0: Schwarzschild
+    // χ = 1: Extremal black hole (r+ = r-)
+    // χ > 1: Naked singularity
+    return std::sqrt(a*a + Q*Q) / M;
 }
 
 } // namespace Sirius

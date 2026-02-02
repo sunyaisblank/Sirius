@@ -142,6 +142,7 @@ target_include_directories(SiriusCore PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Core/Camera"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Core/Jet"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Core/Polarisation"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Core/Constants"
     "${CMAKE_CURRENT_SOURCE_DIR}/lib/glm"
 )
 

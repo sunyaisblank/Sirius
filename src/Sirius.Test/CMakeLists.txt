@@ -97,6 +97,9 @@ add_executable(SiriusTests
     Diagnostic/TSDG002A.cpp  # NaN/Inf detection
     Diagnostic/TSDG003A.cpp  # Conservation law verification
     Diagnostic/TSDG004A.cpp  # Determinism verification
+    Diagnostic/TSDG005A.cpp  # GPU conservation validation (Phase 2.1)
+    Diagnostic/TSDG006A.cpp  # Mandatory Killing vector tests (Phase 5.1)
+    Diagnostic/TSDG007A.cpp  # Comprehensive metric tensor validation
     
     # ==========================================================================
     # Integration Tests (TSIN###A) - End-to-end validation
@@ -106,6 +109,7 @@ add_executable(SiriusTests
     Integration/TSIN003A.cpp  # Render pipeline integration
     Integration/TSIN004A.cpp  # Offline renderer integration (Production Plan)
     Integration/TSIN005A.cpp  # GeodesicTracer integration tests (Priority 1 fix)
+    Integration/TSIN006A.cpp  # GPU/CPU parity tests (Phase 2.2)
     
     # ==========================================================================
     # Benchmark Tests (TSBM###A) - Performance validation

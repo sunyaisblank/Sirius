@@ -59,19 +59,49 @@ enum class WormholeShapeType {
 };
 
 // =============================================================================
+// Custom Shape Function Type
+// =============================================================================
+/// @brief Function signature for custom shape function b(r)
+/// @param r Radial coordinate
+/// @return Shape function value b(r)
+using ShapeFunction = std::function<double(double)>;
+
+/// @brief Function signature for shape function derivative db/dr
+using ShapeDerivative = std::function<double(double)>;
+
+// =============================================================================
 // Morris-Thorne Family Parameters
 // =============================================================================
 struct MorrisThorneParams {
     double b0 = 1.0;               // Throat radius
     double Phi0 = 0.0;             // Redshift at throat (0 = zero-tidal)
     WormholeShapeType shapeType = WormholeShapeType::Ellis;
-    
+
+    // Custom shape function callbacks (used when shapeType == Custom)
+    ShapeFunction customShapeFunc = nullptr;
+    ShapeDerivative customShapeDerivFunc = nullptr;
+
     // Convenience constructors
-    static MorrisThorneParams Ellis(double b0) { 
-        return {b0, 0.0, WormholeShapeType::Ellis}; 
+    static MorrisThorneParams Ellis(double b0) {
+        return {b0, 0.0, WormholeShapeType::Ellis, nullptr, nullptr};
     }
-    static MorrisThorneParams ZeroTidal(double b0) { 
-        return {b0, 0.0, WormholeShapeType::ZeroTidal}; 
+    static MorrisThorneParams ZeroTidal(double b0) {
+        return {b0, 0.0, WormholeShapeType::ZeroTidal, nullptr, nullptr};
+    }
+
+    /// @brief Create custom wormhole with user-defined shape function
+    /// @param b0 Throat radius
+    /// @param shapeFunc Shape function b(r), must satisfy b(b0) = b0
+    /// @param derivFunc Optional derivative db/dr, computed numerically if null
+    static MorrisThorneParams Custom(double b0, ShapeFunction shapeFunc,
+                                      ShapeDerivative derivFunc = nullptr) {
+        MorrisThorneParams p;
+        p.b0 = b0;
+        p.Phi0 = 0.0;
+        p.shapeType = WormholeShapeType::Custom;
+        p.customShapeFunc = std::move(shapeFunc);
+        p.customShapeDerivFunc = std::move(derivFunc);
+        return p;
     }
 };
 
@@ -98,11 +128,23 @@ public:
     // Shape function b(r)
     double shapeFunction(double r) const;
     double shapeFunctionDerivative(double r) const;
-    
+
     // Redshift function Φ(r)
     double redshiftFunction(double r) const;
     double redshiftFunctionDerivative(double r) const;
-    
+
+    /// @brief Validate flare-out condition at throat
+    /// The flare-out condition ensures the wormhole geometry is traversable:
+    ///   (b - r·db/dr) / (2b²) > 0 at r = b₀
+    /// Equivalently: b'(b₀) < 1
+    /// @return true if flare-out condition is satisfied
+    bool validateFlareOutCondition() const;
+
+    /// @brief Get flare-out parameter value at given radius
+    /// @param r Radial coordinate
+    /// @return (b - r·db/dr) / (2b²)
+    double flareOutParameter(double r) const;
+
 private:
     Config m_Config;
     MorrisThorneParams m_params;
@@ -153,7 +195,7 @@ inline const char* MorrisThorneFamily::getName() const {
 inline double MorrisThorneFamily::shapeFunction(double r) const {
     double b0 = m_params.b0;
     r = std::max(r, b0);  // Ensure r >= b0
-    
+
     switch (m_params.shapeType) {
         case WormholeShapeType::Ellis:
             return b0 * b0 / r;
@@ -161,6 +203,11 @@ inline double MorrisThorneFamily::shapeFunction(double r) const {
             return b0;
         case WormholeShapeType::AbsurdlyBenign:
             return b0 * (2.0 - b0 / r);
+        case WormholeShapeType::Custom:
+            if (m_params.customShapeFunc) {
+                return m_params.customShapeFunc(r);
+            }
+            return b0 * b0 / r;  // Fallback to Ellis
         default:
             return b0 * b0 / r;  // Default to Ellis
     }
@@ -169,7 +216,7 @@ inline double MorrisThorneFamily::shapeFunction(double r) const {
 inline double MorrisThorneFamily::shapeFunctionDerivative(double r) const {
     double b0 = m_params.b0;
     r = std::max(r, b0);
-    
+
     switch (m_params.shapeType) {
         case WormholeShapeType::Ellis:
             return -b0 * b0 / (r * r);
@@ -177,9 +224,52 @@ inline double MorrisThorneFamily::shapeFunctionDerivative(double r) const {
             return 0.0;
         case WormholeShapeType::AbsurdlyBenign:
             return b0 * b0 / (r * r);
+        case WormholeShapeType::Custom:
+            // Use user-provided derivative if available
+            if (m_params.customShapeDerivFunc) {
+                return m_params.customShapeDerivFunc(r);
+            }
+            // Otherwise compute numerically via central differences
+            if (m_params.customShapeFunc) {
+                const double h = 1e-6 * r;
+                double b_plus = m_params.customShapeFunc(r + h);
+                double b_minus = m_params.customShapeFunc(r - h);
+                return (b_plus - b_minus) / (2.0 * h);
+            }
+            return -b0 * b0 / (r * r);
         default:
             return -b0 * b0 / (r * r);
     }
+}
+
+inline double MorrisThorneFamily::flareOutParameter(double r) const {
+    double b = shapeFunction(r);
+    double db_dr = shapeFunctionDerivative(r);
+
+    // Flare-out parameter: (b - r·db/dr) / (2b²)
+    // This must be > 0 for traversable wormhole geometry
+    double b2 = b * b;
+    if (b2 < 1e-20) return 0;
+
+    return (b - r * db_dr) / (2.0 * b2);
+}
+
+inline bool MorrisThorneFamily::validateFlareOutCondition() const {
+    // Check flare-out condition at throat: b'(b0) < 1
+    // Equivalently: flareOutParameter(b0) > 0
+
+    double b0 = m_params.b0;
+    double db_dr_at_throat = shapeFunctionDerivative(b0);
+
+    // Condition: b'(b0) < 1
+    // For b(b0) = b0 (throat condition), this becomes db/dr < 1
+    if (db_dr_at_throat >= 1.0) {
+        return false;  // Violates flare-out
+    }
+
+    // Also check that flare-out parameter is positive at throat
+    double fop = flareOutParameter(b0);
+    return fop > 0;
 }
 
 inline double MorrisThorneFamily::redshiftFunction([[maybe_unused]] double r) const {
