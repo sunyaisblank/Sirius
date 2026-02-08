@@ -1,39 +1,36 @@
-# Sirius Type System
+# Type System
 
-> "The beginning of wisdom is the definition of terms."
-> — Socrates
+## Overview
 
-## Preface
+This document defines the types used in Sirius: numeric primitives, coordinate representations, tensor structures, ray state, and the metric interface. The type system serves two purposes. First, it encodes physical meaning; a `Vec4` in Boyer-Lindquist coordinates is not the same object as a `Vec4` in Cartesian coordinates, even though the storage is identical. Second, it enforces constraints; a metric tensor must be symmetric, a radial coordinate must be outside the horizon, the null condition must hold.
 
-Types are the vocabulary of Sirius. They express meaning, enforce constraints, and make code auditable. This document builds from fundamental ideas about values and identity, through numeric and coordinate primitives, and into the domain types used in relativistic ray tracing. It also carries the philosophical position that every type is a claim about reality; a careless type is a careless claim.
-
-The goal is clarity: a type should state what a value means, how it behaves, and what it forbids. The goal is integrity: a type should make invalid states hard to represent and easy to detect.
+The document proceeds from primitive types through coordinate and tensor types to the domain-specific types (rays, observers, metrics) that compose the rendering pipeline.
 
 ---
 
-## Part I: First Principles
+## Part I: Design Principles
 
 ### 1.1 Value, Identity, and State
 
-**Value** is a datum that stands on its own. Examples include a metric tensor component, a coordinate value, and a step size.
+Three concepts organise the type system:
 
-**Identity** refers to an entity that persists across time. A ray has an identity; its position and wavevector are values that change as the ray propagates.
-
-**State** is the collection of values that describe an identity at a given time. State must be explicit and traceable; hidden state erodes auditability.
+- **Value**: a datum that stands on its own. A metric tensor component, a coordinate, a step size. Values are compared by content.
+- **Identity**: an entity that persists across time. A ray has identity; its position and wavevector are values that change as the ray propagates.
+- **State**: the collection of values that describe an identity at a given time. State must be explicit; hidden state undermines debugging and reproducibility.
 
 ### 1.2 Invariants and Boundaries
 
-An invariant is a rule that must remain true for a type. The system enforces invariants at boundaries. Inside a validated boundary, code can assume validity and remain efficient.
-
-Example invariants:
+An **invariant** is a condition that must remain true for a type to be valid. Examples:
 
 - A radial coordinate $r > r_{horizon}$.
 - A polar angle $\theta \in (0, \pi)$.
 - The null condition $g_{\mu\nu} k^\mu k^\nu = 0$.
 
-### 1.3 Meaning and Commitment
+Sirius enforces invariants at **boundaries**, the entry points to a module or function. Inside a validated boundary, code assumes validity and operates without redundant checks. This keeps hot paths efficient while making the validation explicit and auditable.
 
-A type is a commitment to meaning. It is a promise about units, coordinate system, and allowed operations. This commitment has physical weight in a scientific system; untrue promises can become visualisation errors that mislead interpretation.
+### 1.3 Types Carry Physical Meaning
+
+In a scientific renderer, types encode more than storage layout. A `Vec4` implies a coordinate system, a unit convention, and a set of valid operations. Using a Boyer-Lindquist position where a Cartesian position is expected produces wrong results silently. The type system does not currently enforce coordinate system distinctions at compile time (the coordinate system is tracked by convention), but the invariant documentation makes the requirement explicit.
 
 ---
 
@@ -46,17 +43,19 @@ A type is a commitment to meaning. It is a promise about units, coordinate syste
 | `float` | GPU computation, real-time rendering | Performance; ~7 decimal digits |
 | `double` | CPU computation, high-precision integration | Accuracy; ~15 decimal digits |
 | `int` | Indices, loop counters, discrete quantities | Exact integer arithmetic |
-| `size_t` | Array sizes, memory allocation | Platform-sized unsigned |
+| `size_t` | Array sizes, memory allocation | Platform-sized unsigned integer |
 
 ### 2.2 Precision Trade-offs
 
-GPU shader code uses `float` for performance. CPU integration code uses `double` for precision. The boundary between GPU and CPU code must handle precision conversion explicitly.
+The GPU uses single precision (`float`) for throughput. The CPU integration pipeline uses double precision (`double`) for accuracy. The boundary between GPU and CPU code handles precision conversion explicitly, with no implicit narrowing.
 
 | Context | Precision | Tolerance |
 |---------|-----------|-----------|
 | GPU ray tracing | Single | $10^{-5}$ relative |
 | CPU geodesic integration | Double | $10^{-12}$ relative |
 | Conservation law monitoring | Double | $10^{-4}$ relative |
+
+The tolerance column indicates the maximum acceptable error for computations in each context. GPU tolerances are looser because single-precision arithmetic accumulates error faster across hundreds of integration steps.
 
 ### 2.3 Boolean
 
@@ -73,12 +72,12 @@ bool isNullPreserved = std::abs(nullNorm) < tolerance;
 
 ### 3.1 Coordinate Systems
 
-Sirius uses multiple coordinate systems with explicit type distinctions:
+Sirius uses multiple coordinate systems. The choice of coordinates affects numerical stability (Boyer-Lindquist has pole singularities; Cartesian Kerr-Schild does not) and the form of the metric (Boyer-Lindquist separates the Kerr geodesic equation; Cartesian coordinates do not).
 
 | Coordinate System | Notation | Domain |
 |-------------------|----------|--------|
 | Boyer-Lindquist | $(t, r, \theta, \phi)$ | $r > r_+$, $\theta \in (0, \pi)$ |
-| Cartesian (Kerr-Schild) | $(t, x, y, z)$ | All $\mathbb{R}^3$ except singularity |
+| Cartesian (Kerr-Schild) | $(t, x, y, z)$ | All $\mathbb{R}^3$ except the ring singularity |
 | Spherical (numerical) | $(t, r, \theta, \phi)$ | Grid bounds |
 
 ### 3.2 Vec4
@@ -87,19 +86,21 @@ The fundamental 4-vector type represents spacetime positions and wavevectors:
 
 ```cpp
 struct Vec4 {
-    double t, x, y, z;  // or t, r, theta, phi depending on context
+    double t, x, y, z;  // or t, r, theta, phi depending on coordinate system
 };
 ```
 
-**Invariant**: The coordinate system must be tracked externally or by a companion type.
+**Invariant**: The coordinate system is tracked externally (by the metric implementation that produced the vector). A `Vec4` does not self-identify its coordinate system.
 
 ### 3.3 Coordinate Transformations
 
-Transformations between coordinate systems are explicit functions:
+Transformations between coordinate systems are explicit function calls. The spin parameter $a$ is required because the Kerr-Schild to Boyer-Lindquist transformation depends on it.
 
-```cpp
-Vec4 boyerLindquistToCartesian(const Vec4& bl, double a);
-Vec4 cartesianToBoyerLindquist(const Vec4& cart, double a);
+```mermaid
+graph LR
+    BL["Boyer-Lindquist<br/>(t, r, θ, φ)"] -- "boyerLindquistToCartesian(bl, a)" --> KS["Cartesian Kerr-Schild<br/>(t, x, y, z)"]
+    KS -- "cartesianToBoyerLindquist(cart, a)" --> BL
+    SPH["Spherical Numerical<br/>(t, r, θ, φ)"] -- "grid interpolation" --> KS
 ```
 
 ---
@@ -108,7 +109,7 @@ Vec4 cartesianToBoyerLindquist(const Vec4& cart, double a);
 
 ### 4.1 Metric Tensor
 
-The metric tensor $g_{\mu\nu}$ is a symmetric $4 \times 4$ matrix:
+The metric tensor $g_{\mu\nu}$ is stored as a symmetric $4 \times 4$ matrix:
 
 ```cpp
 using Metric4D = std::array<std::array<double, 4>, 4>;
@@ -130,14 +131,14 @@ Metric4D invertMetric(const Metric4D& g);
 
 ### 4.3 Christoffel Symbols
 
-The Christoffel symbols form a 3-index array with symmetry in the lower indices:
+The Christoffel symbols $\Gamma^\lambda_{\mu\nu}$ form a 3-index array with symmetry in the lower indices:
 
 ```cpp
 using Christoffel4D = std::array<std::array<std::array<double, 4>, 4>, 4>;
-// christoffel[lambda][mu][nu] = Γ^λ_μν
+// christoffel[lambda][mu][nu] = Gamma^lambda_{mu nu}
 ```
 
-**Invariant**: $\Gamma^\lambda_{\mu\nu} = \Gamma^\lambda_{\nu\mu}$
+**Invariant**: $\Gamma^\lambda_{\mu\nu} = \Gamma^\lambda_{\nu\mu}$ (lower-index symmetry, a consequence of the torsion-free connection).
 
 ---
 
@@ -145,37 +146,54 @@ using Christoffel4D = std::array<std::array<std::array<double, 4>, 4>, 4>;
 
 ### 5.1 IMetric Interface
 
-All spacetime metrics implement a common interface:
+All spacetime metrics implement a common interface, allowing the renderer to work with any geometry without coupling to a specific implementation. The interface is deliberately minimal: three methods that take a position and return the metric components, inverse, and Christoffel symbols. Geodesic integration, radiative transfer, and rendering are all built on top of these three operations.
 
-```cpp
-class IMetric {
-public:
-    virtual Metric4D evaluate(const Vec4& position) const = 0;
-    virtual Metric4D evaluateInverse(const Vec4& position) const = 0;
-    virtual Christoffel4D christoffel(const Vec4& position) const = 0;
-};
+```mermaid
+classDiagram
+    class IMetric {
+        <<interface>>
+        +evaluate(position: Vec4) Metric4D
+        +evaluateInverse(position: Vec4) Metric4D
+        +christoffel(position: Vec4) Christoffel4D
+    }
+    class KerrSchild {
+        M, a, Q, Λ
+    }
+    class MorrisThorne {
+        b₀, Φ(r)
+    }
+    class Alcubierre {
+        vₛ, R, σ
+    }
+    IMetric <|-- KerrSchild
+    IMetric <|-- MorrisThorne
+    IMetric <|-- Alcubierre
+    KerrSchild -- Schwarzschild : a=Q=Λ=0
+    KerrSchild -- Kerr : Q=Λ=0
+    KerrSchild -- ReissnerNordstrom : a=Λ=0
+    KerrSchild -- KerrNewman : Λ=0
 ```
 
 ### 5.2 Metric Families
 
-Metrics are organised into parameterised families:
+Metrics are organised into parameterised families. Varying the parameters within a family interpolates between physically distinct spacetimes:
 
 | Family | Parameters | Members |
 |--------|------------|---------|
-| Kerr-Schild | $(M, a, Q, \Lambda)$ | Schwarzschild, Kerr, RN, Kerr-Newman, de Sitter |
-| Morris-Thorne | $(b_0, \Phi)$ | Ellis, general wormholes |
+| Kerr-Schild | $(M, a, Q, \Lambda)$ | Schwarzschild, Kerr, Reissner-Nordstrom, Kerr-Newman, de Sitter |
+| Morris-Thorne | $(b_0, \Phi)$ | Ellis drainhole, general wormholes |
 | Warp Drive | $(v_s, R, \sigma)$ | Alcubierre, variants |
 
 ### 5.3 Parameter Bounds
 
-Each metric family defines valid parameter ranges:
+Each metric family defines valid parameter ranges. These are physical constraints (a black hole with $|a| > M$ has no horizon) combined with practical limits (extreme parameters cause numerical difficulties):
 
 | Parameter | Range | Constraint |
 |-----------|-------|------------|
 | Mass $M$ | $[0.1, 100]$ | Practical rendering scale |
-| Spin $a/M$ | $[0, 0.998]$ | Sub-extremal |
+| Spin $a/M$ | $[0, 0.998]$ | Sub-extremal; numerical stability near extremality |
 | Charge $Q/M$ | $[0, 0.999]$ | Sub-extremal |
-| Throat $b_0$ | $> 0$ | Physical wormhole |
+| Throat $b_0$ | $> 0$ | Physical wormhole requires positive throat radius |
 
 ---
 
@@ -188,34 +206,31 @@ A ray is characterised by its position, wavevector, and integration state:
 ```cpp
 struct RayState {
     Vec4 position;      // Spacetime coordinates
-    Vec4 wavevector;    // Null tangent vector k^μ
-    double lambda;      // Affine parameter
-    RayStatus status;   // Propagating, Terminated, Escaped, etc.
+    Vec4 wavevector;    // Null tangent vector k^mu
+    double lambda;      // Affine parameter (integration progress)
+    RayStatus status;   // Current state of the ray
 };
 ```
 
-### 6.2 Ray Status
+### 6.2 Ray Status and Termination
 
-```cpp
-enum class RayStatus {
-    Propagating,    // Still integrating
-    Escaped,        // Reached far boundary
-    Captured,       // Fell into horizon
-    HitDisk,        // Intersected accretion disk
-    Terminated,     // Integration limit reached
-    Error           // Numerical failure
-};
+A ray begins in the `Propagating` state and transitions to a terminal state when one of the termination conditions is met. Every ray ends in exactly one terminal state.
+
+```mermaid
+stateDiagram-v2
+    [*] --> Propagating
+    Propagating --> Escaped : r > r_max
+    Propagating --> Captured : r < r_horizon + ε
+    Propagating --> HitDisk : θ crosses π/2 within disk radii
+    Propagating --> Terminated : steps > maxSteps
+    Propagating --> Error : NaN in position or wavevector
+
+    Escaped --> [*] : Map to background texture
+    Captured --> [*] : Return black
+    HitDisk --> [*] : Compute emission
+    Terminated --> [*] : Mark as terminated
+    Error --> [*] : Log and mark as error
 ```
-
-### 6.3 Termination Conditions
-
-| Condition | Detection | Action |
-|-----------|-----------|--------|
-| Escape | $r > r_{max}$ | Map to background texture |
-| Capture | $r < r_{horizon} + \epsilon$ | Return black |
-| Disk intersection | $\theta \approx \pi/2$ within disk radius | Compute emission |
-| Step limit | steps $>$ maxSteps | Mark as terminated |
-| NaN detection | `isnan(position)` or `isnan(wavevector)` | Mark as error |
 
 ---
 
@@ -228,61 +243,75 @@ template<typename T>
 struct Dual {
     T real;
     T dual;
-    
-    // Arithmetic operations preserving ε² = 0
+
+    // Arithmetic operations preserving epsilon^2 = 0
 };
 ```
 
 ### 7.2 Derivative Computation
 
-Dual numbers enable automatic differentiation:
+Seeding a dual number input with a unit dual part extracts the corresponding partial derivative:
 
 ```cpp
-Dual<double> x(r, 1.0);  // dx/dr = 1
+Dual<double> x(r, 1.0);  // dx/dr = 1 (seed the r-direction)
 auto result = f(x);       // result.dual = df/dr
 ```
 
 ### 7.3 Metric Derivatives
 
-The Christoffel symbols require metric derivatives:
-
-$$
-\partial_\mu g_{\nu\rho}
-$$
-
-Using dual numbers with seeded directions provides these derivatives exactly.
+The Christoffel formula requires the partial derivatives $\partial_\mu g_{\nu\rho}$. Sirius evaluates the metric with dual number coordinates seeded in each coordinate direction. Four evaluations (one per coordinate) yield all 40 independent derivatives needed for the Christoffel symbols.
 
 ---
 
 ## Part VIII: Observer Types
 
+The observer and ray types compose from the same primitives. The following diagram shows the composition relationships:
+
+```mermaid
+classDiagram
+    class Vec4 {
+        double t
+        double x
+        double y
+        double z
+    }
+    class Tetrad {
+        Vec4 e0 : timelike
+        Vec4 e1 : spacelike
+        Vec4 e2 : spacelike
+        Vec4 e3 : spacelike
+    }
+    class Observer {
+        Vec4 position
+        Vec4 velocity
+        Tetrad frame
+    }
+    class RayState {
+        Vec4 position
+        Vec4 wavevector
+        double lambda
+        RayStatus status
+    }
+    Observer *-- Vec4 : position, velocity
+    Observer *-- Tetrad : frame
+    Tetrad *-- Vec4 : e0..e3
+    RayState *-- Vec4 : position, wavevector
+```
+
 ### 8.1 Observer State
 
-```cpp
-struct Observer {
-    Vec4 position;      // Worldline position
-    Vec4 velocity;      // 4-velocity (timelike, normalised)
-    Tetrad frame;       // Local orthonormal frame
-};
-```
+An observer has a position on a worldline, a 4-velocity (timelike, unit-normalised), and a local orthonormal frame (tetrad).
 
 ### 8.2 Tetrad
 
-A tetrad is an orthonormal frame adapted to the observer:
-
-```cpp
-struct Tetrad {
-    Vec4 e0;  // Timelike, parallel to 4-velocity
-    Vec4 e1;  // Spacelike
-    Vec4 e2;  // Spacelike
-    Vec4 e3;  // Spacelike
-};
-```
+A **tetrad** is an orthonormal frame adapted to the observer, a local coordinate system in which special relativity holds. It consists of four basis vectors: one timelike (parallel to the observer's 4-velocity) and three spacelike.
 
 **Invariants**:
 
-- $g_{\mu\nu} e_a^\mu e_b^\nu = \eta_{ab}$ (Minkowski metric)
+- Orthonormality: $g_{\mu\nu} e_a^\mu e_b^\nu = \eta_{ab}$ (the Minkowski metric in the tetrad frame)
 - $e_0$ is future-directed timelike
+
+The tetrad defines how the observer perceives directions. Incoming photon wavevectors are projected onto the tetrad to determine which pixel they correspond to.
 
 ---
 
@@ -290,7 +319,7 @@ struct Tetrad {
 
 ### 9.1 Failure Representation
 
-Operations that can fail return explicit result types:
+Operations that can fail return explicit result types rather than signalling failure through out-of-band mechanisms (exceptions in hot paths, sentinel values):
 
 ```cpp
 std::optional<Metric4D> tryEvaluateMetric(const Vec4& position);
@@ -300,48 +329,42 @@ std::optional<Metric4D> tryEvaluateMetric(const Vec4& position);
 
 | Error | Cause | Detection |
 |-------|-------|-----------|
-| OutOfDomain | Position outside valid region | Coordinate bounds check |
-| SingularMetric | Determinant near zero | $|\det(g)| < \epsilon$ |
-| NaNProduced | Invalid operation | `isnan()` check |
-| ConvergenceFailed | Iteration limit exceeded | Iteration counter |
+| OutOfDomain | Position outside valid coordinate region | Coordinate bounds check |
+| SingularMetric | Metric determinant near zero | $\|\det(g)\| < \epsilon$ |
+| NaNProduced | Invalid arithmetic operation | `isnan()` check |
+| ConvergenceFailed | Iterative method did not converge | Iteration counter exceeds limit |
 
 ---
 
 ## Part X: Type Rules
 
-These rules align with the coding standard:
-
 | Rule | Level | Statement |
 |------|-------|-----------|
 | Precision selection | MUST | GPU uses `float`; CPU integration uses `double` |
-| Boundary validation | MUST | Coordinates validated at metric entry |
+| Boundary validation | MUST | Coordinates validated at metric entry points |
 | Invariant preservation | MUST | Null constraint enforced throughout integration |
-| Coordinate explicitness | SHOULD | Coordinate system tracked with values |
-| Failure expression | MUST | Failures return `optional` or set status; silence is forbidden |
-| Immutable values | SHOULD | Metric evaluations return new objects |
+| Coordinate explicitness | SHOULD | Coordinate system documented and tracked with values |
+| Failure expression | MUST | Failures return `optional` or set status; silent failure is forbidden |
+| Immutable values | SHOULD | Metric evaluations return new objects rather than mutating state |
 
 ---
 
 ## Appendix A: Type Naming Conventions
 
-- `Vec4`: 4-component vector (position or velocity)
-- `Metric4D`: $4 \times 4$ symmetric tensor
-- `Christoffel4D`: $4 \times 4 \times 4$ connection array
-- `Dual<T>`: Dual number with real type `T`
-- `IMetric`: Abstract metric interface
-
----
+| Name | Meaning |
+|------|---------|
+| `Vec4` | 4-component vector (spacetime position or wavevector) |
+| `Metric4D` | $4 \times 4$ symmetric tensor (metric components) |
+| `Christoffel4D` | $4 \times 4 \times 4$ connection coefficient array |
+| `Dual<T>` | Dual number with real type `T` |
+| `IMetric` | Abstract metric interface |
 
 ## Appendix B: Checklist
 
-Before adding or modifying a type, verify:
+Before adding or modifying a type:
 
-- [ ] The name expresses meaning and coordinates.
-- [ ] Invariants are enforced at the boundary.
-- [ ] Precision is appropriate for the context.
-- [ ] Coordinate system is explicit.
-- [ ] Failure modes are encoded in the return type.
-
----
-
-*End of Type System*
+- [ ] The name expresses what the type represents and in which coordinate system.
+- [ ] Invariants are enforced at the boundary (entry to the module or function).
+- [ ] Precision is appropriate for the context (GPU vs CPU).
+- [ ] The coordinate system is documented.
+- [ ] Failure modes are encoded in the return type or status field.

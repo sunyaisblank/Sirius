@@ -1,4 +1,4 @@
-# Code Documentation and Commentary Standard
+# Commentary Standard
 
 ---
 

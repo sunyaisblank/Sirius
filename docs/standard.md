@@ -1,18 +1,12 @@
-# Sirius Coding Standard
+# Coding Standard
 
-**Based on:** JPL Institutional Coding Standard, MISRA C++:2023, GPU Programming Best Practices  
-**Applicability:** High-Performance Relativistic Ray Tracing
-
-> "Programs must be written for people to read, and only incidentally for machines to execute."
-> — Harold Abelson
+**Based on:** JPL Institutional Coding Standard, MISRA C++:2023, GPU Programming Best Practices
 
 ---
 
-## Preface
+This standard governs the Sirius codebase. The constraints are shaped by the domain: numerical integration of geodesic equations, GPU compute shaders, and tensor calculus. These require predictable execution (no unbounded loops in a per-ray hot path), numerical stability (errors in Christoffel symbols compound across hundreds of integration steps), and hardware compatibility (GPU shaders cannot allocate memory or throw exceptions).
 
-This standard establishes coding conventions for the Sirius codebase. The system involves numerical integration of geodesic equations, GPU compute shaders, and tensor calculus; these domains demand predictable execution, numerical stability, and hardware compatibility.
-
-The standard uses three requirement levels:
+Three requirement levels:
 
 | Level | Meaning |
 |-------|---------|
@@ -71,11 +65,11 @@ while (true) { ... }  // Unbounded
 
 ### 2.2 No Recursion
 
-Direct and indirect recursion are prohibited. Stack overflow in numerical code corrupts results silently. Use explicit iteration with stack data structures when necessary.
+Direct and indirect recursion are prohibited. The geodesic integrator may execute millions of times per frame; a stack overflow in a numerical kernel corrupts results silently and is difficult to diagnose. Use explicit iteration with stack-allocated data structures when a recursive algorithm would otherwise be natural.
 
 ### 2.3 Stack Allocation in Hot Paths
 
-Numerical kernels MUST NOT allocate heap memory. Use:
+Heap allocation in a per-ray kernel means millions of `malloc`/`free` calls per frame, each one a potential cache miss and a synchronisation point. Numerical kernels MUST NOT allocate heap memory. Use:
 
 - Stack-allocated arrays (`std::array<T, N>`)
 - Pre-allocated buffers passed as parameters
@@ -141,7 +135,7 @@ void integrate(const Metric& g, double dt) {
 
 ### 3.4 Error Handling in Hot Paths
 
-Use return codes or `std::optional` instead of exceptions in numerical code:
+Exceptions unwind the stack and allocate memory, both unacceptable in a per-ray kernel. Use return codes or `std::optional` instead of exceptions in numerical code:
 
 ```cpp
 // Preferred for hot paths
@@ -171,7 +165,7 @@ Preprocessor macros MUST be limited to:
 
 ### 4.2 Function Size
 
-Functions SHOULD NOT exceed 60 lines. Extract helper functions for complex logic.
+Functions SHOULD NOT exceed 60 lines. A function that does not fit on a screen invites the reader to hold more context in their head than they should have to. Extract helper functions for distinct logical stages.
 
 ### 4.3 Naming Conventions
 
@@ -330,6 +324,3 @@ Performance-critical code MUST have benchmarks. Regressions exceeding 10% requir
 4. **The Power of 10**: Rules for Developing Safety-Critical Code, Gerard J. Holzmann
 5. **C++ Core Guidelines**: Bjarne Stroustrup and Herb Sutter
 
----
-
-*End of Coding Standard*

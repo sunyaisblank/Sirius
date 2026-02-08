@@ -1,35 +1,28 @@
-# Sirius Refactor Specification
+# Refactoring
 
-*Disciplined Change in High-Integrity Code*
+A repeatable method for changing code in Sirius while preserving correctness, performance, and auditability. The domain (numerical integration, tensor calculus, GPU kernels) makes careless refactoring expensive: a change that introduces a subtle numerical error may not produce a visible artefact until the ray passes close to a photon sphere, and by then the bug is far from the diff that introduced it.
 
-> "We are what we repeatedly do. Excellence, then, is not an act, but a habit."
-> — Aristotle
-
-## Preface
-
-Refactoring in Sirius is a disciplined act of stewardship. The system computes geodesics in curved spacetime, renders gravitational lensing, and produces scientific visualisations. This demands clarity of intent, precision of meaning, and respect for numerical stability.
-
-This document provides a repeatable method for changing code whilst preserving integrity, performance, and auditability. It complements the [Coding Standard](standard.md) and [Type System](types.md).
+This document complements the [Coding Standard](standard.md) and [Type System](type.md).
 
 ---
 
-## Part I: First Principles
+## Part I: Ground Rules
 
-### 1.1 Purpose and Consequence
+### 1.1 Justification
 
-A refactor is justified when it improves correctness, performance, maintainability, or auditability without altering intended behaviour. Each change must trace to a concrete purpose. Refactoring is not aesthetic decoration; it is a method of preserving long-term system integrity.
+A refactor is justified when it improves correctness, performance, maintainability, or auditability without altering intended behaviour. Each change traces to a concrete purpose. "The code looks nicer" is not a purpose; "the boundary validation is now explicit rather than implicit" is.
 
-### 1.2 Meaning and Accountability
+### 1.2 Preserving Contracts
 
-Every function is a statement about physics. Every type is a commitment to meaning. A refactor must preserve those commitments or replace them with stronger ones. The developer inherits accountability for any change that weakens meaning.
+A refactor must preserve the contracts of the code it touches, or replace them with strictly stronger ones. If a function guaranteed $r > 2M$ at exit before the refactor, it must guarantee at least that afterward. If a type encoded a coordinate system assumption, the refactored type must encode the same assumption or make it more explicit.
 
-### 1.3 Boundaries and Invariants
+### 1.3 Boundary Discipline
 
-Invariants are enforced at boundaries, not in every line of interior logic. A refactor must preserve this boundary discipline. Validation is explicit and local; internal logic assumes validated inputs and remains efficient.
+Sirius validates invariants at boundaries (module entry points, public function parameters) and assumes validity in internal logic. A refactor must preserve this pattern. Moving a validation check from a boundary into interior logic degrades performance; removing it from the boundary removes a guarantee that downstream code relies on.
 
-### 1.4 Determinism and Auditability
+### 1.4 Determinism
 
-Scientific software requires deterministic behaviour. Refactors must reduce ambiguity, remove hidden costs, and increase traceability. A refactor that obscures the path of data is a regression, even if it shortens a file.
+A refactor that changes the order of floating-point operations may change the output. In scientific software that requires bit-exact reproducibility, this is a behavioural change, not a mechanical one. Any refactor that reorders arithmetic in a hot path must be classified as behavioural and tested accordingly.
 
 ---
 
@@ -73,9 +66,20 @@ Each refactor SHOULD provide evidence proportional to risk:
 
 ## Part III: Workflow
 
+```mermaid
+flowchart LR
+    A["Orientation"] --> B["Boundary\nAudit"]
+    B --> C["Hot Path\nMapping"]
+    C --> D["Refactor\nDesign"]
+    D --> E["Implementation"]
+    E --> F["Verification"]
+    F --> G["Review"]
+    F -->|tests fail| E
+```
+
 ### 3.1 Orientation
 
-Identify the location of truth. Trace from data entry to output. Summarise the current flow in plain language. This step prevents refactoring the wrong surface.
+Trace the data flow from entry to output and summarise it in plain language before touching any code. This step prevents refactoring the wrong surface, changing the shape of code that was not the problem.
 
 **Questions to answer:**
 
@@ -148,11 +152,11 @@ Record:
 
 ### 4.1 Mechanical Sympathy
 
-Principles:
+Align data layout and access patterns with the hardware:
 
-- Prefer contiguous data structures and span-based access
-- Remove hidden allocations in hot paths
-- Reuse buffers and keep GC pressure predictable
+- Prefer contiguous data structures and span-based access (cache lines reward locality)
+- Remove hidden allocations in hot paths (heap allocation serialises threads)
+- Reuse buffers rather than allocating and freeing per iteration
 
 **Example:**
 
@@ -174,11 +178,10 @@ delete[] buffer;
 
 ### 4.2 Logic Proximity
 
-Principles:
+Keep computation close to its data:
 
-- Keep the calculation close to its data
-- Favour linear flow in complex mathematics and state transitions
-- Defer abstraction until a second concrete use exists
+- Favour linear control flow in mathematical code so the reader can follow the derivation top to bottom
+- Defer abstraction until a second concrete use exists (premature extraction scatters logic across files without reducing complexity)
 
 **Example:**
 
@@ -196,11 +199,11 @@ return b * factor;
 
 ### 4.3 Explicit Intent
 
-Principles:
+Make the code say what it means:
 
-- Use named locals for predicates and thresholds
-- Replace sentinel values with types or explicit results
-- Reserve comments for external references and exceptions
+- Use named locals for predicates and thresholds (a reader should not have to decode `if (r < 2.002)`; call it `isNearHorizon`)
+- Replace sentinel values with types or explicit results (`std::optional` over magic return values)
+- Reserve comments for external references and non-obvious constraints; do not narrate the code
 
 **Example:**
 
@@ -213,11 +216,11 @@ if (isConverged) {
 
 ### 4.4 Failure First
 
-Principles:
+Handle failure before the happy path:
 
-- Validate inputs at the boundary
-- Use deterministic fallbacks with explicit limits
-- Prefer explicit error types or exceptions to silent nulls
+- Validate inputs at the boundary and reject early
+- Use deterministic fallbacks with explicit limits (e.g., max iteration counts)
+- Prefer explicit error types over silent null returns
 
 **Example:**
 
@@ -229,10 +232,10 @@ if (steps >= maxSteps) {
 
 ### 4.5 Deterministic Resources
 
-Principles:
+Manage lifetimes explicitly:
 
-- Dispose created resources in the same scope
-- Avoid ambiguous ownership
+- Dispose created resources in the same scope that created them
+- Avoid ambiguous ownership (if two objects hold a pointer, document which one frees it)
 - Use clear lifetime boundaries for pooled or shared objects
 
 ---
@@ -289,14 +292,12 @@ For hot paths, add or update benchmarks and compare against the previous envelop
 Confirm that the refactor respects:
 
 - [Coding Standard](standard.md)
-- [Type System](types.md)
+- [Type System](type.md)
 - Component-specific requirements in this documentation
 
-### 7.2 Philosophical Integrity
+### 7.2 Consistency Check
 
-Before finalising, ask: does this change make the system more truthful?
-
-Truth here means correspondence between code, meaning, and physical execution. A refactor that improves this correspondence is valuable; one that obscures it is harmful regardless of other benefits.
+Before finalising, verify that the refactored code matches its documentation: variable names correspond to documented quantities, types match documented invariants, and the data flow described in the architecture document still holds. A refactor that makes the code better but makes the documentation wrong has traded one problem for another.
 
 ---
 
@@ -311,6 +312,3 @@ Truth here means correspondence between code, meaning, and physical execution. A
 - [ ] Evidence recorded
 - [ ] Documentation aligned
 
----
-
-*End of Refactor Specification*

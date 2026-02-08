@@ -1,12 +1,6 @@
-# Sirius Architecture
+# Architecture
 
-*Structural Design and Component Organisation*
-
----
-
-## Overview
-
-This document describes the structural organisation of Sirius, including architectural principles, layer relationships, component naming conventions, and the component registry. It provides the comprehensive reference for understanding where code lives and how it is identified.
+This document describes how Sirius is organised: the layer structure, dependency direction, component naming convention, and the complete component registry. It is the reference for finding where code lives and understanding why it lives there.
 
 ---
 
@@ -14,7 +8,7 @@ This document describes the structural organisation of Sirius, including archite
 
 ### 1.1 Separation of Concerns
 
-Each component has a single, well-defined responsibility:
+The system is layered so that physics code knows nothing about rendering, and rendering code knows nothing about windowing. This separation exists because the physics must be testable without a GPU, the renderer must work without a window (for offline batch rendering), and each layer should be replaceable without rewriting the others. Each component has a single responsibility:
 
 | Layer | Responsibility |
 |-------|----------------|
@@ -26,14 +20,14 @@ Each component has a single, well-defined responsibility:
 
 ### 1.2 Dependency Direction
 
-Dependencies flow in a controlled direction:
+Dependencies flow downward only:
 
 ```
 Application → Rendering → Physics → Mathematics
           ↘    UI    ↗
 ```
 
-Lower layers have no knowledge of higher layers. Physics does not know about rendering; mathematics does not know about physics.
+Lower layers have no knowledge of higher layers. A metric tensor implementation does not know it is being used for ray tracing; the geodesic integrator does not know it is being called from an OptiX kernel. This means the physics layer can be tested with a simple harness, without initialising a GPU context or opening a window.
 
 ### 1.3 Interface Boundaries
 
@@ -85,15 +79,16 @@ flowchart TB
 ```
 Sirius/
 ├── docs/                         # Documentation
-│   ├── README.md                 # Documentation index
-│   ├── philosophy.md             # Design philosophy
+│   ├── README.md                 # Documentation index and reading paths
+│   ├── philosophy.md             # Design rationale
 │   ├── foundations.md            # Mathematical theory
-│   ├── types.md                  # Type system
-│   ├── specification.md          # Formal requirements
+│   ├── type.md                   # Type system
+│   ├── specification.md          # Performance and precision requirements
 │   ├── guide.md                  # Practical operation
 │   ├── standard.md               # Coding conventions
 │   ├── architecture.md           # This document
-│   └── refactor.md               # Refactoring discipline
+│   ├── refactor.md               # Refactoring method
+│   └── comment.md                # Commentary standard
 │
 ├── src/                          # Source code
 │   ├── Sirius.Core/              # Domain primitives
@@ -158,7 +153,7 @@ Sirius/
 ├── bin/                          # Build output (gitignored)
 │   └── Sirius.Build/             # CMake build directory
 │
-├── ren/                          # Render output (gitignored)
+├── renders/                      # Render output (gitignored)
 │
 ├── CMakeLists.txt                # Build configuration
 └── README.md                     # Project overview
@@ -167,6 +162,8 @@ Sirius/
 ---
 
 ## Part IV: Component Naming Convention
+
+Source files use a structured naming scheme rather than descriptive names. The reason is density: `PHMT001A.h` encodes its domain, category, sequence number, and implementation variant in eight characters. In a codebase with many small, tightly-scoped files (metric implementations, integrators, coordinate transforms), descriptive names produce long, similar filenames that are hard to distinguish at a glance. The code names are terse but systematic; the registry (Part V) provides the mapping to human-readable descriptions.
 
 ### 4.1 Format
 
@@ -178,8 +175,8 @@ Sirius/
 
 - **Domain:** `PH` (Physics)
 - **Category:** `MT` (Metric Tensor)
-- **Sequence:** `001` (First component)
-- **Variant:** `A` (Primary implementation)
+- **Sequence:** `001` (First component in this category)
+- **Variant:** `A` (Primary/production implementation)
 
 ### 4.2 Domain Codes
 
@@ -438,8 +435,4 @@ flowchart TB
 
 ## Appendix A: Compliance
 
-All changes to the codebase MUST adhere to this standard. Non-compliant components will be flagged during code review. New components MUST be registered in the component registry before merging.
-
----
-
-*End of Architecture*
+All changes to the codebase MUST adhere to this naming convention and layer structure. New components MUST be registered in the component registry (Part V) before merging.

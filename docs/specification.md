@@ -1,44 +1,16 @@
-# Sirius Specification
+# Specification
 
-*Formal Definition of the Ray Tracing System*
-
----
-
-## 1. Introduction
-
-This document provides the formal specification of the Sirius relativistic ray tracer. It defines the performance targets, mathematical invariants, precision requirements, and operational constraints.
-
-The specification is intended to be:
-
-- **Complete:** Every behavioural aspect of the system is defined.
-- **Precise:** Definitions are unambiguous.
-- **Implementable:** The specification can be directly translated to code.
-- **Testable:** Each requirement admits verification.
+This document defines the performance targets, mathematical invariants, precision requirements, and operational constraints for Sirius. Every requirement here is testable; the test suite verifies compliance.
 
 ---
 
-## 2. System Overview
+---
 
-### 2.1 Purpose
+## 2. Scope
 
-Sirius is a general relativistic ray tracing engine for visualising curved spacetime. The system traces photon geodesics through analytically or numerically specified metric fields, rendering the observable effects of gravity on light propagation.
+Sirius covers four areas: metric evaluation (analytic and numerical spacetimes), geodesic integration (null geodesic propagation with adaptive stepping), radiative transfer (emission and absorption for accretion disk rendering), and visualisation (real-time and offline image generation).
 
-### 2.2 Scope
-
-The system encompasses:
-
-1. **Metric evaluation:** Analytic and numerical spacetime geometries
-2. **Geodesic integration:** Null geodesic propagation with adaptive stepping
-3. **Radiative transfer:** Emission and absorption for accretion disk rendering
-4. **Visualisation:** Real-time and offline image generation
-
-### 2.3 Excluded from Scope
-
-The following are explicitly outside scope:
-
-- Full numerical relativity simulation (spacetime evolution)
-- Gravitational wave generation
-- Quantum effects (Hawking radiation)
+Explicitly outside scope: numerical relativity (spacetime evolution), gravitational wave generation, and quantum effects (Hawking radiation).
 
 ---
 
@@ -75,7 +47,7 @@ The following are explicitly outside scope:
 
 ### 4.1 Fundamental Invariants
 
-The following MUST be preserved throughout integration:
+These are the mathematical properties that must hold for a computation to be considered correct. The following MUST be preserved throughout integration:
 
 | Invariant | Mathematical Form | Tolerance |
 |-----------|-------------------|-----------|
@@ -134,11 +106,11 @@ $$
 
 ## 6. Determinism Requirements
 
-### 6.1 Definition
+### 6.1 Requirement
 
-The system MUST exhibit deterministic behaviour: identical inputs produce identical outputs across runs, platforms, and builds.
+Identical inputs MUST produce identical outputs across runs, platforms, and builds. This is necessary for regression testing, debugging by bisection, and scientific reproducibility.
 
-### 6.2 Requirements
+### 6.2 Constraints
 
 | Requirement | Specification |
 |-------------|---------------|
@@ -281,13 +253,10 @@ All configuration MUST be validated at startup. Invalid configuration MUST preve
 
 | Term | Definition |
 |------|------------|
-| Affine parameter | Path parameter along geodesic |
-| Christoffel symbols | Connection coefficients $\Gamma^\lambda_{\mu\nu}$ |
-| Geodesic | Extremal path through spacetime |
-| ISCO | Innermost stable circular orbit |
-| Null | Zero spacetime interval (lightlike) |
-| Photon sphere | Surface of unstable circular photon orbits |
+| Affine parameter | Path parameter along a geodesic, preserving the linear relationship between tangent vector magnitude and proper time (or distance) |
+| Christoffel symbols | Connection coefficients $\Gamma^\lambda_{\mu\nu}$, derived from the metric tensor and encoding spacetime curvature |
+| Geodesic | Path through spacetime that extremises proper length (timelike) or satisfies parallel transport (null) |
+| ISCO | Innermost stable circular orbit; the smallest circular orbit stable against radial perturbations |
+| Null | Zero spacetime interval ($ds^2 = 0$), the condition satisfied by light rays |
+| Photon sphere | Surface of unstable circular photon orbits ($r = 3M$ for Schwarzschild) |
 
----
-
-*End of Specification*

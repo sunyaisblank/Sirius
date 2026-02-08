@@ -1,15 +1,8 @@
 # Practical Guide
 
-*From Configuration to Rendering*
+How to build, configure, and run the Sirius renderer. This covers building from source, configuring spacetime metrics and camera parameters, setting up accretion disk rendering, tuning performance, and troubleshooting common problems.
 
-> "In theory, there is no difference between theory and practice. In practice, there is."
-> — Attributed to Yogi Berra
-
-## Preface
-
-This document bridges the gap between theory and operation. It covers practical patterns for building, configuring, and running the Sirius renderer, troubleshooting common issues, and optimising performance.
-
-The reader is assumed to have read the [Philosophy](philosophy.md) and [Foundations](foundations.md) documents, to understand basic general relativity concepts, and to be comfortable with command-line interfaces.
+For the mathematical background behind the renderer, see [Foundations](foundations.md). For the engineering rationale, see [Design Rationale](philosophy.md).
 
 ---
 
@@ -129,6 +122,8 @@ Key properties:
 
 ### 3.3 Kerr Configuration
 
+The Kerr metric describes a rotating black hole. Spin produces frame dragging, ergosphere formation, and an asymmetric shadow, all absent from Schwarzschild.
+
 ```json
 {
   "metric": {
@@ -139,14 +134,14 @@ Key properties:
 }
 ```
 
-The spin parameter $a$ is specified as a fraction of maximum ($a_{max} = M$). Valid range: $[0, 0.998]$.
+The spin parameter $a$ is specified as a fraction of the maximum ($a_{max} = M$). Valid range: $[0, 0.998]$. Values above 0.998 approach the extremal limit where the inner and outer horizons merge, causing numerical difficulties.
 
 Effects of increasing spin:
 
 - Horizons move closer together
 - Ergosphere expands
-- Frame dragging intensifies
-- Shadow becomes asymmetric
+- Frame dragging intensifies (spacetime itself rotates)
+- Shadow becomes asymmetric (the approaching side is brighter due to Doppler beaming)
 
 ---
 
@@ -201,11 +196,13 @@ Effects of increasing spin:
 
 ### 5.2 Emission Models
 
+The emission model determines how disk temperature varies with radius, which controls the colour and brightness profile of the rendered disk.
+
 | Model | Description |
 |-------|-------------|
-| `uniform` | Constant emission |
-| `power_law` | $T \propto r^{-3/4}$ |
-| `novikov_thorne` | Relativistic thin disk |
+| `uniform` | Constant emission; useful for geometric tests, not physically motivated |
+| `power_law` | $T \propto r^{-3/4}$; Newtonian thin disk approximation |
+| `novikov_thorne` | Relativistic thin disk with full GR corrections (frame dragging, binding energy) |
 
 ### 5.3 Physical Parameters
 
@@ -222,12 +219,14 @@ Effects of increasing spin:
 
 ### 6.1 Quality vs Speed
 
+The dominant cost is the number of integration steps per ray multiplied by the number of rays (pixels). The following table summarises how each setting trades performance against quality:
+
 | Setting | Performance Impact | Quality Impact |
 |---------|-------------------|----------------|
-| Resolution | Linear | Direct |
-| Max steps | Linear | Accuracy near horizon |
-| Step size | Inverse | Integration accuracy |
-| Adaptive stepping | Slight overhead | Significant accuracy gain |
+| Resolution | Linear in pixel count | Direct (more pixels, more detail) |
+| Max steps | Linear in step count | Accuracy near horizon, where rays curve most |
+| Step size | Inverse (smaller steps mean more of them) | Integration accuracy per step |
+| Adaptive stepping | Slight overhead per step | Significant accuracy gain by concentrating steps where curvature is high |
 
 ### 6.2 Recommended Presets
 
@@ -414,6 +413,3 @@ done
 }
 ```
 
----
-
-*End of Guide*
