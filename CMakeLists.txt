@@ -329,9 +329,8 @@ endif()
 # Sirius Executable
 # =============================================================================
 add_executable(Sirius
-    # Infrastructure - Application (entry point, orchestration)
+    # Infrastructure - Application (entry point)
     src/Sirius.Infrastructure/Application/CREP001A.cpp
-    src/Sirius.Infrastructure/Application/CRAP001A.cpp
 
     # Infrastructure - CLI (command-line interface)
     src/Sirius.Infrastructure/Cli/CRCL001A.cpp
@@ -349,8 +348,6 @@ add_executable(Sirius
 
     # Infrastructure - Session (FSM-based render pipeline)
     src/Sirius.Infrastructure/Session/SNRS001A.cpp
-    src/Sirius.Infrastructure/Session/IRRJ001A.cpp
-    src/Sirius.Infrastructure/Session/IREX001A.cpp
 
     # Infrastructure - Interface (ImGui)
     src/Sirius.Infrastructure/Interface/UIMN001A.cpp

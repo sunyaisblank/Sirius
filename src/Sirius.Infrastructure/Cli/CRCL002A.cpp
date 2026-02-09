@@ -5,7 +5,6 @@
 #include "CRCL005A.h"
 #include "CRCF002A.h"
 #include "SNRS001A.h"
-#include "IRRJ001A.h"
 
 #include <nlohmann/json.hpp>
 
@@ -13,10 +12,6 @@
 #include <iomanip>
 #include <chrono>
 #include <cmath>
-
-// Unified constants (eliminates PI macro)
-#include <PHCN001A.h>
-using Sirius::Constants::Math::PI;
 
 namespace Sirius::Cli {
 
@@ -67,7 +62,6 @@ Presets:
 
 Backend:
   --cpu                     Force CPU rendering (disable GPU)
-  --legacy                  Use legacy RenderJob instead of FSM
 
 Examples:
   sirius render -o test.ppm -s 32
@@ -102,11 +96,7 @@ int RenderCommand::execute(
     }
 
     // Execute render
-    if (globals.legacyMode) {
-        return executeLegacy(config, globals);
-    } else {
-        return executeSession(config, globals);
-    }
+    return executeSession(config, globals);
 }
 
 bool RenderCommand::parseArgs(
@@ -231,9 +221,6 @@ bool RenderCommand::parseArgs(
             else if (arg == "--no-gpu" || arg == "--cpu") {
                 config.backend.preferred = "cpu";
             }
-            else if (arg == "--legacy") {
-                // Handled at global level, but also accept here
-            }
             else if (arg.substr(0, 1) == "-") {
                 Output::error("Unknown option: " + arg);
                 return false;
@@ -309,62 +296,7 @@ int RenderCommand::executeSession(
     const Configuration::SiriusConfig& config,
     const Configuration::GlobalOptions& globals)
 {
-    // Convert to SessionConfig
-    Sirius::SessionConfig sessionConfig;
-    sessionConfig.width = config.render.width;
-    sessionConfig.height = config.render.height;
-    sessionConfig.samplesPerPixel = config.render.samplesPerPixel;
-    sessionConfig.tileSize = config.render.tileSize;
-    sessionConfig.outputPath = config.render.outputPath;
-    sessionConfig.metricName = config.metric.name;
-    sessionConfig.blackHoleMass = config.metric.mass;
-    sessionConfig.blackHoleSpin = config.metric.spin;
-    sessionConfig.observerDistance = config.observer.distance;
-    sessionConfig.observerInclination = config.observer.inclination * PI / 180.0;
-    sessionConfig.cameraFOV = static_cast<float>(config.observer.fov);
-
-    // Post-processing settings
-    sessionConfig.enableBloom = config.postprocess.enableBloom;
-    sessionConfig.bloomIntensity = config.postprocess.bloomIntensity;
-    sessionConfig.bloomThreshold = config.postprocess.bloomThreshold;
-    sessionConfig.exposure = config.postprocess.exposure;
-    sessionConfig.contrast = config.postprocess.contrast;
-    sessionConfig.saturation = config.postprocess.saturation;
-
-    // Volumetric disk settings
-    sessionConfig.enableVolumetricDisk = config.volumetric.enabled;
-    sessionConfig.volumetricHOverR = config.volumetric.hOverR;
-    sessionConfig.volumetricHPower = config.volumetric.hPower;
-    sessionConfig.volumetricTauMidplane = config.volumetric.tauMidplane;
-    sessionConfig.volumetricSamples = config.volumetric.samples;
-
-    // Advanced volumetric (turbulence + corona)
-    if (config.volumetric.enableTurbulence || config.volumetric.enableCorona) {
-        sessionConfig.enableVolumetricDiskAdvanced = true;
-        sessionConfig.volumetricDiskConfig.turbulence.enabled = config.volumetric.enableTurbulence;
-        sessionConfig.volumetricDiskConfig.corona.enabled = config.volumetric.enableCorona;
-        sessionConfig.volumetricDiskConfig.H_over_r = config.volumetric.hOverR;
-        sessionConfig.volumetricDiskConfig.H_power = config.volumetric.hPower;
-        sessionConfig.volumetricDiskConfig.volumetric_samples = config.volumetric.samples;
-    }
-
-    // Film simulation settings
-    sessionConfig.enableFilmSimulation = config.film.enabled;
-    if (config.film.enabled) {
-        if (config.film.preset == "Interstellar") {
-            sessionConfig.filmConfig = FilmConfig::Interstellar();
-        } else if (config.film.preset == "SpaceOdyssey2001") {
-            sessionConfig.filmConfig = FilmConfig::SpaceOdyssey2001();
-        } else {
-            sessionConfig.filmConfig = FilmConfig::DigitalClean();
-        }
-        sessionConfig.filmConfig.grain_intensity = config.film.grainIntensity;
-        sessionConfig.filmConfig.halation_strength = config.film.halationStrength;
-        sessionConfig.filmConfig.vignette_strength = config.film.vignetteStrength;
-    }
-
-    // Backend selection: "cpu" disables GPU, "auto" or "optix" enables it
-    sessionConfig.useGPU = (config.backend.preferred != "cpu");
+    auto sessionConfig = Sirius::SessionConfig::fromSiriusConfig(config);
 
     // Create and configure session
     Sirius::RenderSession session;
@@ -432,64 +364,6 @@ int RenderCommand::executeSession(
     }
 
     return (result == Sirius::SessionState::Complete) ? 0 : 1;
-}
-
-int RenderCommand::executeLegacy(
-    const Configuration::SiriusConfig& config,
-    const Configuration::GlobalOptions& globals)
-{
-    if (!globals.jsonOutput) {
-        Output::warning("Using legacy RenderJob mode");
-    }
-
-    // Convert to RenderConfig
-    Sirius::RenderConfig renderConfig;
-    renderConfig.width = config.render.width;
-    renderConfig.height = config.render.height;
-    renderConfig.samplesPerPixel = config.render.samplesPerPixel;
-    renderConfig.outputPath = config.render.outputPath;
-    renderConfig.metricName = config.metric.name;
-    renderConfig.a = config.metric.spin;
-    renderConfig.observerPosition[1] = config.observer.distance;
-    renderConfig.observerPosition[2] = config.observer.inclination * PI / 180.0;
-
-    // Create and execute job
-    Sirius::RenderJob job(renderConfig);
-
-    bool success = false;
-    std::string errorMessage;
-
-    job.setCompletionCallback([&](Sirius::JobStatus status, const std::string& message) {
-        if (status == Sirius::JobStatus::Completed) {
-            success = true;
-        } else {
-            success = false;
-            errorMessage = message;
-        }
-    });
-
-    job.execute();
-
-    // Report results
-    if (globals.jsonOutput) {
-        nlohmann::json j;
-        j["success"] = success;
-        j["output"] = config.render.outputPath;
-        j["mode"] = "legacy";
-        if (!errorMessage.empty()) {
-            j["error"] = errorMessage;
-        }
-        Output::printJson(j.dump(2));
-    } else {
-        Output::rule();
-        if (success) {
-            Output::success("Render complete: " + config.render.outputPath);
-        } else {
-            Output::error("Render failed: " + errorMessage);
-        }
-    }
-
-    return success ? 0 : 1;
 }
 
 } // namespace Sirius::Cli

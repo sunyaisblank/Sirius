@@ -16,9 +16,7 @@
 
 namespace Sirius::Cli {
 
-//==============================================================================
-// Global state for GLFW callbacks (required by C callback API)
-//==============================================================================
+// Required by GLFW C callback API — closures cannot be used as function pointers
 static InteractiveViewer* g_Viewer = nullptr;
 static bool g_MouseDragging = false;
 static GLuint g_Texture = 0;

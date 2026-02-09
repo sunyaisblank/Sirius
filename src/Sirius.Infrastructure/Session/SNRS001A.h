@@ -12,14 +12,16 @@
 #include "SNTL001A.h"
 #include "SNPR001A.h"
 #include "SNDP001A.h"
-// Note: IRRJ001A.h (RenderJob) is deprecated - use RenderSession instead
 
-// Physics integration (new in Priority 1)
+
+// Physics integration
 #include "PHMT100A.h"  // Kerr-Schild metric family
 #include "CMBS001A.h"  // Camera interface
 #include "GTRC001A.h"  // Geodesic tracer
 #include "PHJT001A.h"  // Relativistic jet model
 #include "PHPL001A.h"  // Stokes polarisation
+#include "PHSC001A.h"  // Color modes
+#include "../Sirius.Core/Disk/PHAD001A.h" // ISCO computation
 
 // Cinematic Expansion (2026)
 #include "../Sirius.Core/Metric/PHSM001A.h"      // SMBH parameters
@@ -29,6 +31,9 @@
 #include "../Sirius.Core/Jet/PHJT002A.h"        // MHD jet
 #include "../Sirius.Core/Environment/PHSF001A.h" // Starfield
 #include "../Sirius.Infrastructure/Configuration/CRFM001A.h" // Film config
+
+// Configuration schema (for SessionConfig::fromSiriusConfig)
+#include "CRCF003A.h"
 
 // GPU acceleration (OptiX backend)
 #include "../Sirius.Render/Acceleration/Backend/ACIB001A.h"
@@ -142,21 +147,8 @@ struct SessionConfig {
     // ==========================================================================
     // Astronomical Coloring Modes (Phase 7)
     // ==========================================================================
-    // Inspired by Hubble imaging pipeline:
-    // - TrueColor: Physical blackbody → XYZ → sRGB (default)
-    // - TemperatureMap: False color showing temperature distribution
-    // - RedshiftMap: Visualize g-factor (Doppler + gravitational)
-    // - Narrowband: Hubble palette mapping emission lines to RGB
-    // - Polarisation: Show polarisation degree and EVPA
-    // ==========================================================================
-    enum class ColorMode {
-        TrueColor,       ///< Physical blackbody colors (what a camera would see)
-        TemperatureMap,  ///< False color temperature: cold→blue, hot→red
-        RedshiftMap,     ///< g-factor visualization: redshift→red, blueshift→blue
-        Narrowband,      ///< Hubble palette: map emission bands to RGB
-        Polarisation     ///< Polarisation degree and angle visualization
-    };
-    ColorMode colorMode = ColorMode::TrueColor;
+    using ColorMode = ColorModes::Mode;
+    ColorMode colorMode = ColorModes::Mode::TrueColor;
 
     // ==========================================================================
     // Polarisation Output (Phase 7)
@@ -186,6 +178,9 @@ struct SessionConfig {
     // IMAX 70mm Film Simulation
     bool enableFilmSimulation = false;  ///< Enable film post-processing
     FilmConfig filmConfig;              ///< Film simulation parameters
+
+    /// @brief Construct SessionConfig from unified SiriusConfig
+    static SessionConfig fromSiriusConfig(const Configuration::SiriusConfig& config);
 };
 
 //==============================================================================
@@ -302,6 +297,21 @@ private:
     void renderTile(Tile* tile);
     void writeOutput();
     void onSessionEnd(SessionState state);
+
+    /// @brief Pixel result from shading a single ray sample
+    struct PixelResult {
+        float r = 0.0f, g = 0.0f, b = 0.0f;
+        StokesVector stokes;
+    };
+
+    /// @brief Shade a single pixel with stratified sampling
+    PixelResult shadePixel(int px, int py, GeodesicTracer* tracer) const;
+
+    /// @brief Shade a disk-hit trace result
+    PixelResult shadeDiskHit(const TraceResult& result) const;
+
+    /// @brief Shade an escaped-ray trace result
+    PixelResult shadeEscaped(const TraceResult& result) const;
     
     FSM m_FSM;
     SessionConfig m_Config;

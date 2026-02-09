@@ -132,7 +132,6 @@ struct GlobalOptions {
     bool jsonOutput = false;
     bool noColor = false;
     std::string configPath;  ///< Override config file path
-    bool legacyMode = false; ///< Use legacy RenderJob
     bool showHelp = false;
     bool showVersion = false;
 };

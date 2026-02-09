@@ -174,8 +174,6 @@ std::vector<std::string> CommandRouter::parseGlobalOptions(
             globals.showHelp = true;
         } else if (arg == "--version") {
             globals.showVersion = true;
-        } else if (arg == "--legacy") {
-            globals.legacyMode = true;
         } else {
             remaining.push_back(arg);
         }

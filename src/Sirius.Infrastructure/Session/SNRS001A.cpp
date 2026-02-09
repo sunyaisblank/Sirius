@@ -31,6 +31,25 @@ namespace Sirius::Acceleration {
 // Alias for backward compatibility
 using namespace Sirius::Constants;
 
+namespace {
+    constexpr float DISK_INTENSITY_BOOST = 5.0f;
+    constexpr float PHOTON_RING_BOOST_DISK = 2.0f;
+    constexpr float PHOTON_RING_BOOST_VOLUMETRIC = 1.5f;
+    constexpr float PHOTON_RING_BOOST_ESCAPED = 1.2f;
+    constexpr float SYNCHROTRON_POL_DEGREE = 0.7f;
+    constexpr float SPIRALING_BRIGHTNESS = 0.02f;
+    constexpr float MAX_STEPS_BRIGHTNESS = 0.01f;
+    constexpr float BACKGROUND_FALLBACK = 0.001f;
+    constexpr float T_INNER_KELVIN = 30000.0f;
+    constexpr float DOPPLER_CLAMP_MIN = 0.1f;
+    constexpr float DOPPLER_CLAMP_MAX = 10.0f;
+    constexpr float G_FACTOR_CLAMP_MIN = 0.1f;
+    constexpr float G_FACTOR_CLAMP_MAX = 5.0f;
+    constexpr float JET_NORMALISATION = 0.1f;
+    constexpr int   BLOOM_RADIUS = 12;
+    constexpr float SHADOW_LIFT = 0.02f;
+}
+
 namespace Sirius {
 
 //==============================================================================
@@ -95,14 +114,8 @@ void RenderSession::initialise() {
         tracerConfig.integrator.rel_tolerance = 5e-6f;
 
         // Compute ISCO for disk inner radius
-        double a = m_Config.blackHoleSpin;
-        if (std::abs(a) < 0.01) {
-            tracerConfig.disk_inner = static_cast<float>(6.0 * m_Config.blackHoleMass);  // Schwarzschild ISCO
-        } else {
-            // Kerr ISCO (prograde, simplified)
-            double M = m_Config.blackHoleMass;
-            tracerConfig.disk_inner = static_cast<float>(M * (3.0 + 3.0 * std::pow(1.0 - a*a, 1.0/3.0)));
-        }
+        auto rISCO = AccretionDiskD::computeISCO(m_Config.blackHoleSpin);
+        tracerConfig.disk_inner = static_cast<float>(rISCO * m_Config.blackHoleMass);
         tracerConfig.disk_outer = static_cast<float>(20.0 * m_Config.blackHoleMass);
         tracerConfig.enable_disk = true;
 
@@ -143,15 +156,15 @@ void RenderSession::initialise() {
         }
 
         // =================================================================
-        // Phase 7: Color Mode
+        // Color Mode
         // =================================================================
         const char* modeName = "TrueColor";
         switch (m_Config.colorMode) {
-            case SessionConfig::ColorMode::TrueColor: modeName = "TrueColor (Physical)"; break;
-            case SessionConfig::ColorMode::TemperatureMap: modeName = "TemperatureMap (False Color)"; break;
-            case SessionConfig::ColorMode::RedshiftMap: modeName = "RedshiftMap (g-factor)"; break;
-            case SessionConfig::ColorMode::Narrowband: modeName = "Narrowband (Hubble Palette)"; break;
-            case SessionConfig::ColorMode::Polarisation: modeName = "Polarisation"; break;
+            case ColorModes::Mode::TrueColor: modeName = "TrueColor (Physical)"; break;
+            case ColorModes::Mode::TemperatureMap: modeName = "TemperatureMap (False Color)"; break;
+            case ColorModes::Mode::RedshiftMap: modeName = "RedshiftMap (g-factor)"; break;
+            case ColorModes::Mode::Narrowband: modeName = "Narrowband (Hubble Palette)"; break;
+            case ColorModes::Mode::Polarisation: modeName = "Polarisation"; break;
         }
         std::cout << "[Session] Color mode: " << modeName << std::endl;
 
@@ -296,459 +309,293 @@ void RenderSession::scheduleNextTile() {
 }
 
 //==============================================================================
-// Tile Rendering (Geodesic Integration - Priority 1 Fix)
+// Pixel Shading Helpers (unified for single-threaded and multi-threaded)
+//==============================================================================
+
+RenderSession::PixelResult RenderSession::shadeDiskHit(const TraceResult& result) const {
+    PixelResult px;
+
+    // Volumetric disk: use pre-integrated emission from ray marching
+    if (result.volumetric_hit) {
+        float vol_intensity = result.volumetric_emission[0];
+        float T_effective = std::pow(vol_intensity, 0.25f);
+        float T_kelvin = std::clamp(T_effective * T_INNER_KELVIN, 1000.0f, 100000.0f);
+
+        Spectral::RGB bbColor = Spectral::blackbodyToRGB(static_cast<double>(T_kelvin));
+        float mag = result.magnification;
+        px.r = bbColor.r * vol_intensity * mag;
+        px.g = bbColor.g * vol_intensity * mag;
+        px.b = bbColor.b * vol_intensity * mag;
+
+        if (result.photon_ring) {
+            px.r *= PHOTON_RING_BOOST_VOLUMETRIC;
+            px.g *= PHOTON_RING_BOOST_VOLUMETRIC;
+            px.b *= PHOTON_RING_BOOST_VOLUMETRIC;
+        }
+        return px;
+    }
+
+    // Thin disk: accumulate emission from all disk crossings
+    float total_r = 0.0f, total_g = 0.0f, total_b = 0.0f;
+
+    for (int crossing_idx = 0; crossing_idx < result.num_disk_crossings; crossing_idx++) {
+        const auto& crossing = result.disk_crossings[crossing_idx];
+        if (!crossing.valid) continue;
+
+        float T_emit = crossing.temperature;
+        float g = crossing.redshift;
+        float r_cross = crossing.r;
+
+        // Higher-order demagnification: ~exp(-nπ)
+        float order_demag = std::exp(-static_cast<float>(Math::PI) * crossing_idx);
+        float T_obs = T_emit * g;
+        float intensity = std::pow(T_obs, 4.0f);
+
+        Spectral::RGB diskColor = ColorModes::applyColorMode(
+            m_Config.colorMode, T_emit, g, intensity, nullptr);
+
+        float cr = diskColor.r;
+        float cg = diskColor.g;
+        float cb = diskColor.b;
+
+        // Limb darkening (primary crossing only)
+        if (crossing_idx == 0) {
+            float A = result.gfactor_A;
+            float B = result.gfactor_B;
+            float n_xy_squared = A * A + B * B;
+            float cos_theta = std::sqrt(std::max(0.0f, 1.0f - n_xy_squared));
+
+            Spectral::RGB limbInput(cr, cg, cb);
+            Spectral::RGB darkened = Spectral::applyLimbDarkening(limbInput, cos_theta);
+            cr = darkened.r;
+            cg = darkened.g;
+            cb = darkened.b;
+        }
+
+        // Motion blur (primary crossing only)
+        float g_blur = g;
+        if (crossing_idx == 0 && m_Config.enableMotionBlur && m_Config.motionBlurSamples > 1) {
+            float grav = result.gfactor_grav;
+            float gamma = result.gfactor_gamma;
+            float v_orb = result.gfactor_v_orb;
+            float A = result.gfactor_A;
+            float B = result.gfactor_B;
+
+            float M = static_cast<float>(m_Config.blackHoleMass);
+            float a = static_cast<float>(m_Config.blackHoleSpin * M);
+            float sqrtM = std::sqrt(M);
+            float Omega = sqrtM / (std::pow(r_cross, 1.5f) + a * sqrtM);
+
+            float delta_phi_max = Omega * m_Config.shutterTime;
+            int N = m_Config.motionBlurSamples;
+            float g_sum = 0.0f;
+
+            for (int i = 0; i < N; i++) {
+                float t = (N > 1) ? static_cast<float>(i) / (N - 1) : 0.5f;
+                float delta_phi = delta_phi_max * (t - 0.5f);
+
+                float cos_dphi = std::cos(delta_phi);
+                float sin_dphi = std::sin(delta_phi);
+                float v_dot_n_offset = v_orb * (A * cos_dphi + B * sin_dphi);
+                float doppler_denom = gamma * (1.0f - v_dot_n_offset);
+                doppler_denom = std::clamp(doppler_denom, DOPPLER_CLAMP_MIN, DOPPLER_CLAMP_MAX);
+
+                float g_offset = grav / doppler_denom;
+                g_offset = std::clamp(g_offset, G_FACTOR_CLAMP_MIN, G_FACTOR_CLAMP_MAX);
+                g_sum += g_offset;
+            }
+
+            g_blur = g_sum / N;
+        }
+
+        // Relativistic beaming: I_obs = g^4 × I_emit
+        float g4 = g_blur * g_blur * g_blur * g_blur;
+        cr *= g4;
+        cg *= g4;
+        cb *= g4;
+
+        total_r += cr * order_demag;
+        total_g += cg * order_demag;
+        total_b += cb * order_demag;
+    }
+
+    // Apply gravitational lensing magnification and cinematic boost
+    px.r = total_r * result.magnification * DISK_INTENSITY_BOOST;
+    px.g = total_g * result.magnification * DISK_INTENSITY_BOOST;
+    px.b = total_b * result.magnification * DISK_INTENSITY_BOOST;
+
+    if (result.photon_ring) {
+        px.r *= PHOTON_RING_BOOST_DISK;
+        px.g *= PHOTON_RING_BOOST_DISK;
+        px.b *= PHOTON_RING_BOOST_DISK;
+    }
+
+    return px;
+}
+
+RenderSession::PixelResult RenderSession::shadeEscaped(const TraceResult& result) const {
+    PixelResult px;
+    sampleStarfield(result.final_direction, px.r, px.g, px.b);
+
+    if (result.magnification > 1.0f) {
+        px.r *= result.magnification;
+        px.g *= result.magnification;
+        px.b *= result.magnification;
+    }
+
+    if (result.photon_ring) {
+        px.r *= PHOTON_RING_BOOST_ESCAPED;
+        px.g *= PHOTON_RING_BOOST_ESCAPED;
+        px.b *= PHOTON_RING_BOOST_ESCAPED;
+    }
+
+    // Relativistic jet emission
+    if (m_Jet && m_Config.enableJets) {
+        double obs_r = m_Config.observerDistance;
+        double obs_theta = m_Config.observerInclination;
+        float obs_x = static_cast<float>(obs_r * std::sin(obs_theta));
+        float obs_y = 0.0f;
+        float obs_z = static_cast<float>(obs_r * std::cos(obs_theta));
+
+        float end_x = static_cast<float>(result.final_position(1));
+        float end_y = static_cast<float>(result.final_position(2));
+        float end_z = static_cast<float>(result.final_position(3));
+
+        float jet_emission = JetRayMarching::integrateJetEmission(
+            *m_Jet, obs_x, obs_y, obs_z,
+            end_x, end_y, end_z,
+            obs_x, obs_y, obs_z, 64);
+
+        if (jet_emission > 0.0f) {
+            float jet_scale = m_Config.jetIntensity * JET_NORMALISATION;
+            px.r += jet_emission * jet_scale * 0.8f;
+            px.g += jet_emission * jet_scale * 0.9f;
+            px.b += jet_emission * jet_scale * 1.0f;
+        }
+    }
+
+    return px;
+}
+
+RenderSession::PixelResult RenderSession::shadePixel(int px_coord, int py_coord, GeodesicTracer* tracer) const {
+    PixelResult result;
+    float r_acc = 0.0f, g_acc = 0.0f, b_acc = 0.0f;
+    StokesVector stokes_acc;
+
+    int spp = std::max(1, m_Config.samplesPerPixel);
+    int grid_size = static_cast<int>(std::sqrt(static_cast<float>(spp)));
+    if (grid_size < 1) grid_size = 1;
+
+    for (int sy = 0; sy < grid_size; ++sy) {
+        for (int sx = 0; sx < grid_size; ++sx) {
+            float u = (sx + 0.5f) / grid_size;
+            float v = (sy + 0.5f) / grid_size;
+
+            CameraRay camRay = m_Camera->generateRay(px_coord, py_coord, u, v);
+            TraceResult traceResult = tracer->trace(camRay);
+
+            float sr = 0.0f, sg = 0.0f, sb = 0.0f;
+
+            switch (traceResult.outcome) {
+                case TraceResult::Outcome::HORIZON:
+                    break;
+
+                case TraceResult::Outcome::DISK_HIT: {
+                    PixelResult disk = shadeDiskHit(traceResult);
+                    sr = disk.r;
+                    sg = disk.g;
+                    sb = disk.b;
+                    break;
+                }
+
+                case TraceResult::Outcome::ESCAPED: {
+                    PixelResult esc = shadeEscaped(traceResult);
+                    sr = esc.r;
+                    sg = esc.g;
+                    sb = esc.b;
+                    break;
+                }
+
+                case TraceResult::Outcome::SPIRALING:
+                    sr = sg = sb = SPIRALING_BRIGHTNESS;
+                    break;
+
+                case TraceResult::Outcome::MAX_STEPS:
+                default:
+                    sr = sg = sb = MAX_STEPS_BRIGHTNESS;
+                    break;
+            }
+
+            r_acc += sr;
+            g_acc += sg;
+            b_acc += sb;
+
+            // Polarisation accumulation
+            if (m_Config.enablePolarisation && traceResult.outcome == TraceResult::Outcome::DISK_HIT) {
+                float disk_phi = traceResult.disk_phi;
+                float evpa = disk_phi + static_cast<float>(Math::HALF_PI);
+                float I_sample = std::sqrt(sr*sr + sg*sg + sb*sb);
+                StokesVector sample_stokes = PolarisedEmission::synchrotronEmission(
+                    I_sample, SYNCHROTRON_POL_DEGREE, evpa);
+                stokes_acc += sample_stokes;
+            }
+        }
+    }
+
+    int total_samples = grid_size * grid_size;
+    float inv_samples = 1.0f / static_cast<float>(total_samples);
+    result.r = r_acc * inv_samples;
+    result.g = g_acc * inv_samples;
+    result.b = b_acc * inv_samples;
+
+    if (m_Config.enablePolarisation) {
+        stokes_acc *= inv_samples;
+        stokes_acc.normalise();
+        result.stokes = stokes_acc;
+    }
+
+    return result;
+}
+
+//==============================================================================
+// Tile Rendering
 //==============================================================================
 void RenderSession::renderTile(Tile* tile) {
     if (!tile) return;
 
-    // Allocate tile buffer
     std::vector<float> tileBuffer(tile->width * tile->height * 4, 0.0f);
 
-    // DEBUG: Track outcome statistics (reset per tile, print only first)
-    static bool debug_printed = false;
-    int total_rays = 0;
-    int horizon_count = 0;
-    int disk_count = 0;
-    int escaped_count = 0;
-    int maxsteps_count = 0;
-    int spiraling_count = 0;
-
-    // Render each pixel in tile using geodesic tracing
     for (int ty = 0; ty < tile->height; ++ty) {
         for (int tx = 0; tx < tile->width; ++tx) {
             int px = tile->x + tx;
             int py = tile->y + ty;
 
-            float r_acc = 0.0f, g_acc = 0.0f, b_acc = 0.0f;
-
-            // Phase 7: Polarisation accumulator (Stokes vector)
-            StokesVector stokes_acc;
-
-            // Multi-sample anti-aliasing (stratified sampling)
-            int spp = std::max(1, m_Config.samplesPerPixel);
-            int grid_size = static_cast<int>(std::sqrt(static_cast<float>(spp)));
-            if (grid_size < 1) grid_size = 1;
-
-            for (int sy = 0; sy < grid_size; ++sy) {
-                for (int sx = 0; sx < grid_size; ++sx) {
-                    // Sub-pixel offset
-                    float u = (sx + 0.5f) / grid_size;
-                    float v = (sy + 0.5f) / grid_size;
-
-                    // Generate camera ray for this pixel sample
-                    CameraRay camRay = m_Camera->generateRay(px, py, u, v);
-
-                    // Trace ray through curved spacetime
-                    TraceResult result = m_Tracer->trace(camRay);
-
-                    float sr = 0.0f, sg = 0.0f, sb = 0.0f;
-
-                    // DEBUG: Track outcomes
-                    total_rays++;
-                    switch (result.outcome) {
-                        case TraceResult::Outcome::HORIZON:
-                            horizon_count++;
-                            // Black hole shadow - pure black
-                            sr = sg = sb = 0.0f;
-                            break;
-
-                        case TraceResult::Outcome::DISK_HIT: {
-                            disk_count++;
-
-                            // ==========================================================
-                            // Volumetric Disk Emission (Phase 6)
-                            // ==========================================================
-                            // If volumetric mode is enabled, use pre-integrated emission
-                            // from ray marching through the 3D disk volume.
-                            // ==========================================================
-                            if (result.volumetric_hit) {
-                                // Use volumetric emission directly
-                                // The ray marching has already integrated:
-                                //   I_out = ∫ S(τ) × e^(-τ) dτ
-                                // where S is the source function (blackbody)
-
-                                // Convert to blackbody colors using average temperature
-                                float vol_intensity = result.volumetric_emission[0];  // Gray approx
-
-                                // Apply optical depth attenuation for transmission through disk
-                                float transmission = std::exp(-result.optical_depth);
-
-                                // Scale intensity (normalized to thin disk inner temperature)
-                                constexpr float T_INNER_KELVIN = 30000.0f;
-                                float T_effective = std::pow(vol_intensity, 0.25f);  // T^4 -> T
-                                float T_kelvin = T_effective * T_INNER_KELVIN;
-                                T_kelvin = std::clamp(T_kelvin, 1000.0f, 100000.0f);
-
-                                // Blackbody color for effective temperature
-                                Spectral::RGB bbColor = Spectral::blackbodyToRGB(static_cast<double>(T_kelvin));
-
-                                // Apply magnification and intensity
-                                float mag = result.magnification;
-                                sr = bbColor.r * vol_intensity * mag;
-                                sg = bbColor.g * vol_intensity * mag;
-                                sb = bbColor.b * vol_intensity * mag;
-
-                                // Photon ring boost
-                                if (result.photon_ring) {
-                                    sr *= 1.5f;
-                                    sg *= 1.5f;
-                                    sb *= 1.5f;
-                                }
-
-                                break;  // Done with volumetric case
-                            }
-
-                            // ==========================================================
-                            // Thin Disk: Higher-Order Imaging
-                            // ==========================================================
-                            // Each disk crossing represents a different image order:
-                            //   n=0: Primary image (first crossing, direct view)
-                            //   n=1: Secondary image (second crossing, bent over black hole)
-                            //   n=2+: Higher-order images (multiple windings)
-                            //
-                            // Higher-order images are demagnified by ~exp(-n×γ) where γ ≈ π
-                            // due to exponential approach to unstable photon orbit.
-                            //
-                            // Reference: Gralla, Lupsasca & Marrone (2020)
-                            // ==========================================================
-
-                            // Accumulate emission from all disk crossings
-                            float total_r = 0.0f, total_g = 0.0f, total_b = 0.0f;
-
-                            for (int crossing_idx = 0; crossing_idx < result.num_disk_crossings; crossing_idx++) {
-                                const auto& crossing = result.disk_crossings[crossing_idx];
-                                if (!crossing.valid) continue;
-
-                                // Use crossing-specific values
-                                float T_emit = crossing.temperature;
-                                float g = crossing.redshift;
-                                float r_cross = crossing.r;
-
-                                // Higher-order demagnification factor
-                                // Each additional order is ~23x dimmer (exp(-π) ≈ 0.043)
-                                // This reflects the exponential approach to the photon sphere
-                                float order_demag = std::exp(-static_cast<float>(Math::PI) * crossing_idx);
-
-                                // =======================================================
-                                // Accretion Disk Emission with Relativistic Effects
-                                // =======================================================
-                                //
-                                // Physics: For a rotating disk, observed emission differs
-                                // from emitted due to:
-                                // 1. Gravitational redshift: photons lose energy escaping
-                                // 2. Doppler shift: disk rotation causes blue/redshift
-                                // 3. Relativistic beaming: I_obs = g^4 × I_emit
-                                //
-                                // g-factor: combines gravitational + Doppler effects
-                                // g = sqrt(1 - 2M/r) / (gamma * (1 - v·n))
-                                //
-                                // Reference: Luminet (1979), James et al. (2015) DNGR
-
-                                // Observed temperature: T_obs = g × T_emit
-                                float T_obs = T_emit * g;
-
-                                // =======================================================
-                                // Apply Color Mode (Phase 7)
-                                // =======================================================
-                                // Supports multiple astronomical visualization modes:
-                                // - TrueColor: Physical blackbody → sRGB
-                                // - TemperatureMap: False color temperature gradient
-                                // - RedshiftMap: g-factor visualization
-                                // - Narrowband: Hubble palette
-                                // - Polarisation: Stokes vector visualization
-                                // =======================================================
-                                float intensity = std::pow(T_obs, 4.0f);
-
-                                // Convert SessionConfig::ColorMode to ColorModes::Mode
-                                ColorModes::Mode colorMode;
-                                switch (m_Config.colorMode) {
-                                    case SessionConfig::ColorMode::TrueColor:
-                                        colorMode = ColorModes::Mode::TrueColor; break;
-                                    case SessionConfig::ColorMode::TemperatureMap:
-                                        colorMode = ColorModes::Mode::TemperatureMap; break;
-                                    case SessionConfig::ColorMode::RedshiftMap:
-                                        colorMode = ColorModes::Mode::RedshiftMap; break;
-                                    case SessionConfig::ColorMode::Narrowband:
-                                        colorMode = ColorModes::Mode::Narrowband; break;
-                                    case SessionConfig::ColorMode::Polarisation:
-                                        colorMode = ColorModes::Mode::Polarisation; break;
-                                    default:
-                                        colorMode = ColorModes::Mode::TrueColor; break;
-                                }
-
-                                Spectral::RGB diskColor = ColorModes::applyColorMode(
-                                    colorMode, T_emit, g, intensity, nullptr);
-
-                                float cr = diskColor.r;
-                                float cg = diskColor.g;
-                                float cb = diskColor.b;
-
-                                // =======================================================
-                                // Limb Darkening (analytical for primary crossing only)
-                                // =======================================================
-                                // A, B coefficients only computed for first crossing
-                                if (crossing_idx == 0) {
-                                    float A = result.gfactor_A;
-                                    float B = result.gfactor_B;
-                                    float n_xy_squared = A * A + B * B;
-                                    float cos_theta = std::sqrt(std::max(0.0f, 1.0f - n_xy_squared));
-
-                                    Spectral::RGB diskColor(cr, cg, cb);
-                                    Spectral::RGB darkened = Spectral::applyLimbDarkening(diskColor, cos_theta);
-                                    cr = darkened.r;
-                                    cg = darkened.g;
-                                    cb = darkened.b;
-                                }
-
-                                // =======================================================
-                                // Motion Blur (primary crossing only - has A, B coeffs)
-                                // =======================================================
-                                float g_blur = g;
-                                if (crossing_idx == 0 && m_Config.enableMotionBlur && m_Config.motionBlurSamples > 1) {
-                                    float grav = result.gfactor_grav;
-                                    float gamma = result.gfactor_gamma;
-                                    float v_orb = result.gfactor_v_orb;
-                                    float A = result.gfactor_A;
-                                    float B = result.gfactor_B;
-
-                                    float M = static_cast<float>(m_Config.blackHoleMass);
-                                    float a = static_cast<float>(m_Config.blackHoleSpin * M);
-                                    float sqrtM = std::sqrt(M);
-                                    float Omega = sqrtM / (std::pow(r_cross, 1.5f) + a * sqrtM);
-
-                                    float delta_phi_max = Omega * m_Config.shutterTime;
-                                    int N = m_Config.motionBlurSamples;
-                                    float g_sum = 0.0f;
-
-                                    for (int i = 0; i < N; i++) {
-                                        float t = (N > 1) ? static_cast<float>(i) / (N - 1) : 0.5f;
-                                        float delta_phi = delta_phi_max * (t - 0.5f);
-
-                                        float cos_dphi = std::cos(delta_phi);
-                                        float sin_dphi = std::sin(delta_phi);
-                                        float v_dot_n_offset = v_orb * (A * cos_dphi + B * sin_dphi);
-                                        float doppler_denom = gamma * (1.0f - v_dot_n_offset);
-                                        doppler_denom = std::clamp(doppler_denom, 0.1f, 10.0f);
-
-                                        float g_offset = grav / doppler_denom;
-                                        g_offset = std::clamp(g_offset, 0.1f, 5.0f);
-                                        g_sum += g_offset;
-                                    }
-
-                                    g_blur = g_sum / N;
-                                }
-
-                                // Relativistic beaming: I_obs = g^4 × I_emit
-                                float g4 = g_blur * g_blur * g_blur * g_blur;
-                                cr *= g4;
-                                cg *= g4;
-                                cb *= g4;
-
-                                // Apply order demagnification and accumulate
-                                total_r += cr * order_demag;
-                                total_g += cg * order_demag;
-                                total_b += cb * order_demag;
-                            }
-
-                            // Apply gravitational lensing magnification (global)
-                            sr = total_r * result.magnification;
-                            sg = total_g * result.magnification;
-                            sb = total_b * result.magnification;
-
-                            // =======================================================
-                            // Cinematic Disk Intensity Boost
-                            // =======================================================
-                            // Boost disk emission to be visually prominent against
-                            // the starfield background. The physical T^4 intensity
-                            // produces realistic but dim values; we scale for cinema.
-                            constexpr float DISK_INTENSITY_BOOST = 5.0f;
-                            sr *= DISK_INTENSITY_BOOST;
-                            sg *= DISK_INTENSITY_BOOST;
-                            sb *= DISK_INTENSITY_BOOST;
-
-                            // Photon ring boost (Einstein ring effect)
-                            if (result.photon_ring) {
-                                float ring_boost = 2.0f;  // Increased for cinematic effect
-                                sr *= ring_boost;
-                                sg *= ring_boost;
-                                sb *= ring_boost;
-                            }
-                            break;
-                        }
-
-                        case TraceResult::Outcome::ESCAPED: {
-                            escaped_count++;
-                            // Sample background starfield texture (RGB)
-                            sampleStarfield(result.final_direction, sr, sg, sb);
-
-                            // Phase 1: Apply gravitational lensing magnification
-                            // Stars near the photon ring appear brighter due to lensing
-                            if (result.magnification > 1.0f) {
-                                sr *= result.magnification;
-                                sg *= result.magnification;
-                                sb *= result.magnification;
-                            }
-
-                            // Photon ring rays show the Einstein ring effect
-                            if (result.photon_ring) {
-                                // Subtle brightness boost for lensed background
-                                float ring_boost = 1.2f;
-                                sr *= ring_boost;
-                                sg *= ring_boost;
-                                sb *= ring_boost;
-                            }
-
-                            // =======================================================
-                            // Phase 7: Relativistic Jet Emission
-                            // =======================================================
-                            // Sample jet emission if ray passed through jet volume.
-                            // Jets are bipolar outflows along rotation axis with
-                            // relativistic Doppler boosting.
-                            // =======================================================
-                            if (m_Jet && m_Config.enableJets) {
-                                // Get observer position from camera
-                                double obs_r = m_Config.observerDistance;
-                                double obs_theta = m_Config.observerInclination;
-                                float obs_x = static_cast<float>(obs_r * std::sin(obs_theta));
-                                float obs_y = 0.0f;
-                                float obs_z = static_cast<float>(obs_r * std::cos(obs_theta));
-
-                                // Sample along the geodesic path for jet emission
-                                // Use final position and direction to estimate path
-                                float end_x = static_cast<float>(result.final_position(1));
-                                float end_y = static_cast<float>(result.final_position(2));
-                                float end_z = static_cast<float>(result.final_position(3));
-
-                                // Trace back from escape point toward observer
-                                float start_x = obs_x;
-                                float start_y = obs_y;
-                                float start_z = obs_z;
-
-                                // Integrate jet emission along approximate ray path
-                                float jet_emission = JetRayMarching::integrateJetEmission(
-                                    *m_Jet,
-                                    start_x, start_y, start_z,
-                                    end_x, end_y, end_z,
-                                    obs_x, obs_y, obs_z,
-                                    64  // Number of samples
-                                );
-
-                                // Add jet contribution with intensity scaling
-                                if (jet_emission > 0.0f) {
-                                    float jet_scale = m_Config.jetIntensity * 0.1f;  // Normalize
-                                    // Jet color: synchrotron emission is typically blue-white
-                                    sr += jet_emission * jet_scale * 0.8f;
-                                    sg += jet_emission * jet_scale * 0.9f;
-                                    sb += jet_emission * jet_scale * 1.0f;
-                                }
-                            }
-                            break;
-                        }
-
-                        case TraceResult::Outcome::SPIRALING:
-                            spiraling_count++;
-                            // Spiraling ray near photon sphere - render as faint photon ring glow
-                            // These rays would produce very dim higher-order images
-                            sr = sg = sb = 0.02f;  // Slightly brighter than MAX_STEPS
-                            break;
-
-                        case TraceResult::Outcome::MAX_STEPS:
-                        default:
-                            maxsteps_count++;
-                            // Integration limit reached - render as faint grey
-                            sr = sg = sb = 0.01f;
-                            break;
-                    }
-
-                    r_acc += sr;
-                    g_acc += sg;
-                    b_acc += sb;
-
-                    // =======================================================
-                    // Phase 7: Accumulate Polarisation (Stokes vector)
-                    // =======================================================
-                    // For disk emission, synchrotron radiation is partially polarised.
-                    // EVPA is perpendicular to projected magnetic field.
-                    // Simplified model: polarisation aligned with disk rotation.
-                    // =======================================================
-                    if (m_Config.enablePolarisation && result.outcome == TraceResult::Outcome::DISK_HIT) {
-                        // Estimate polarisation from synchrotron emission
-                        // pol_degree ~ (p+1)/(p+7/3) for spectral index p ~ 2.2
-                        float pol_degree = 0.7f;  // ~70% for ordered field
-
-                        // EVPA from disk geometry (toroidal field → radial EVPA)
-                        float disk_phi = result.disk_phi;
-                        float evpa = disk_phi + static_cast<float>(Math::HALF_PI);  // Perpendicular to B
-
-                        // Create Stokes vector for this sample
-                        float I_sample = std::sqrt(sr*sr + sg*sg + sb*sb);
-                        StokesVector sample_stokes = PolarisedEmission::synchrotronEmission(
-                            I_sample, pol_degree, evpa);
-
-                        // Accumulate
-                        stokes_acc += sample_stokes;
-                    }
-                }
-            }
-
-            // Average samples
-            int total_samples = grid_size * grid_size;
-            float inv_samples = 1.0f / static_cast<float>(total_samples);
+            PixelResult pixel = shadePixel(px, py, m_Tracer.get());
 
             int idx = (ty * tile->width + tx) * 4;
-            tileBuffer[idx + 0] = r_acc * inv_samples;
-            tileBuffer[idx + 1] = g_acc * inv_samples;
-            tileBuffer[idx + 2] = b_acc * inv_samples;
+            tileBuffer[idx + 0] = pixel.r;
+            tileBuffer[idx + 1] = pixel.g;
+            tileBuffer[idx + 2] = pixel.b;
             tileBuffer[idx + 3] = 1.0f;
 
-            // Store polarisation data if enabled
             if (m_Config.enablePolarisation && !m_PolarisationBuffer.empty()) {
                 int pixel_idx = py * m_Config.width + px;
                 if (pixel_idx >= 0 && pixel_idx < static_cast<int>(m_PolarisationBuffer.size())) {
-                    stokes_acc *= inv_samples;  // Average
-                    stokes_acc.normalise();     // Ensure physicality
-                    m_PolarisationBuffer[pixel_idx] = stokes_acc;
+                    m_PolarisationBuffer[pixel_idx] = pixel.stokes;
                 }
             }
         }
     }
 
-    // Update display buffer
     m_Display.updateTile(tile->x, tile->y, tile->width, tile->height, tileBuffer.data());
 
-    // DEBUG: Print outcome statistics after first tile
-    if (!debug_printed) {
-        debug_printed = true;
-        std::cout << "\n\n=== DEBUG: Ray Outcome Statistics (first tile) ===" << std::endl;
-        std::cout << "  Total rays:   " << total_rays << std::endl;
-        std::cout << "  HORIZON:      " << horizon_count << " (" << (100.0 * horizon_count / total_rays) << "%)" << std::endl;
-        std::cout << "  DISK_HIT:     " << disk_count << " (" << (100.0 * disk_count / total_rays) << "%)" << std::endl;
-        std::cout << "  ESCAPED:      " << escaped_count << " (" << (100.0 * escaped_count / total_rays) << "%)" << std::endl;
-        std::cout << "  SPIRALING:    " << spiraling_count << " (" << (100.0 * spiraling_count / total_rays) << "%)" << std::endl;
-        std::cout << "  MAX_STEPS:    " << maxsteps_count << " (" << (100.0 * maxsteps_count / total_rays) << "%)" << std::endl;
-
-        // Debug: trace a single center ray and print details
-        int cx = m_Config.width / 2;
-        int cy = m_Config.height / 2;
-        CameraRay debugRay = m_Camera->generateRay(cx, cy, 0.5f, 0.5f);
-        TraceResult debugResult = m_Tracer->trace(debugRay);
-        std::cout << "  Center ray: outcome=" << static_cast<int>(debugResult.outcome)
-                  << ", steps=" << debugResult.steps_taken
-                  << ", min_r=" << debugResult.min_radius
-                  << ", num_crossings=" << debugResult.num_disk_crossings << std::endl;
-        std::cout << "==============================================\n" << std::endl;
-    }
-
-    // Mark tile complete
     m_Tiles.completeTile(tile->id);
     m_Progress.completeTile(tile->pixelCount());
 
-    // Print progress
     int percent = static_cast<int>(m_Progress.getProgress() * 100);
     std::cout << "\r[Session] Progress: " << percent << "% | ETA: "
               << m_Progress.getETAString() << "    " << std::flush;
 
-    // Transition back to scheduling
     m_FSM.process(SessionEvent::TileComplete);
 }
 
@@ -757,8 +604,10 @@ void RenderSession::renderTile(Tile* tile) {
 //==============================================================================
 bool RenderSession::loadStarfieldTexture(const std::string& path) {
     int channels;
-    // Load as RGBA (4 channels) for GPU compatibility
-    unsigned char* data = stbi_load(path.c_str(), &m_StarfieldWidth, &m_StarfieldHeight, &channels, 4);
+    auto deleter = [](unsigned char* p) { if (p) stbi_image_free(p); };
+    std::unique_ptr<unsigned char[], decltype(deleter)> data(
+        stbi_load(path.c_str(), &m_StarfieldWidth, &m_StarfieldHeight, &channels, 4),
+        deleter);
 
     if (!data) {
         std::cerr << "[Session] Failed to load starfield texture: " << path << std::endl;
@@ -766,10 +615,8 @@ bool RenderSession::loadStarfieldTexture(const std::string& path) {
         return false;
     }
 
-    // Copy RGBA data to member vector (4 bytes per pixel for GPU)
     size_t size = static_cast<size_t>(m_StarfieldWidth * m_StarfieldHeight * 4);
-    m_StarfieldData.assign(data, data + size);
-    stbi_image_free(data);
+    m_StarfieldData.assign(data.get(), data.get() + size);
 
     m_StarfieldLoaded = true;
     std::cout << "[Session] Loaded starfield texture: " << m_StarfieldWidth << "x"
@@ -784,7 +631,7 @@ bool RenderSession::loadStarfieldTexture(const std::string& path) {
 void RenderSession::sampleStarfield(const Vec4& direction, float& r, float& g, float& b) const {
     // Default to black if texture not loaded
     if (!m_StarfieldLoaded || m_StarfieldData.empty()) {
-        r = g = b = 0.001f;  // Very faint background
+        r = g = b = BACKGROUND_FALLBACK;
         return;
     }
 
@@ -874,12 +721,12 @@ void RenderSession::writeOutput() {
         ppConfig.enableBloom = m_Config.enableBloom;
         ppConfig.bloomIntensity = m_Config.bloomIntensity;  // Default: 0.5
         ppConfig.bloomThreshold = m_Config.bloomThreshold;  // Default: 0.3
-        ppConfig.bloomRadius = 12;                      // Wider bloom for cinematic glow
+        ppConfig.bloomRadius = BLOOM_RADIUS;
 
         // Color grading for cinematic look
         ppConfig.saturation = m_Config.saturation;      // Default: 1.15
         ppConfig.contrast = m_Config.contrast;          // Default: 1.1
-        ppConfig.lift = 0.02f;                          // Slight shadow lift (milky blacks)
+        ppConfig.lift = SHADOW_LIFT;
         ppConfig.gain = 1.0f;
 
         PostProcessor::process(m_Display.getFloatBuffer(), m_Config.width, m_Config.height, ppConfig);
@@ -1088,13 +935,9 @@ void RenderSession::renderGPU() {
     config.cameraFOV = m_Config.cameraFOV;
 
     // Compute ISCO for disk inner radius
-    double a = m_Config.blackHoleSpin;
     double M = m_Config.blackHoleMass;
-    if (std::abs(a) < 0.01) {
-        config.diskInnerRadius = static_cast<float>(6.0 * M);
-    } else {
-        config.diskInnerRadius = static_cast<float>(M * (3.0 + 3.0 * std::pow(1.0 - a*a, 1.0/3.0)));
-    }
+    auto rISCO = AccretionDiskD::computeISCO(m_Config.blackHoleSpin);
+    config.diskInnerRadius = static_cast<float>(rISCO * M);
     config.diskOuterRadius = static_cast<float>(20.0 * M);
     config.diskTemperature = 30000.0f;
 
@@ -1103,7 +946,7 @@ void RenderSession::renderGPU() {
     config.maxStepSize = 2.0f;
 
     // Metric type: 2 = Kerr
-    config.metricType = (std::abs(a) < 0.01) ? 1 : 2;  // 1=Schwarzschild, 2=Kerr
+    config.metricType = (std::abs(m_Config.blackHoleSpin) < 0.01) ? 1 : 2;  // 1=Schwarzschild, 2=Kerr
     config.metricFamily = 0;  // Kerr-Schild family
 
     // Post-processing / exposure
@@ -1149,20 +992,16 @@ void RenderSession::renderGPU() {
 void RenderSession::renderTileThreaded(Tile* tile, int threadId) {
     if (!tile) return;
 
-    // Get thread-local tracer
     GeodesicTracer* tracer = nullptr;
     if (threadId >= 0 && threadId < static_cast<int>(m_ThreadTracers.size())) {
         tracer = m_ThreadTracers[threadId].get();
     } else {
-        tracer = m_Tracer.get();  // Fallback to main tracer
+        tracer = m_Tracer.get();
     }
 
-    // Allocate tile buffer (per-thread, no mutex needed)
     std::vector<float> tileBuffer(tile->width * tile->height * 4, 0.0f);
 
-    // Render each pixel
     for (int ty = 0; ty < tile->height; ++ty) {
-        // Check for cancellation periodically
         if (ty % 8 == 0 && m_StopWorkers) {
             return;
         }
@@ -1171,163 +1010,91 @@ void RenderSession::renderTileThreaded(Tile* tile, int threadId) {
             int px = tile->x + tx;
             int py = tile->y + ty;
 
-            float r_acc = 0.0f, g_acc = 0.0f, b_acc = 0.0f;
-
-            // Multi-sample anti-aliasing (stratified sampling)
-            int spp = std::max(1, m_Config.samplesPerPixel);
-            int grid_size = static_cast<int>(std::sqrt(static_cast<float>(spp)));
-            if (grid_size < 1) grid_size = 1;
-
-            for (int sy = 0; sy < grid_size; ++sy) {
-                for (int sx = 0; sx < grid_size; ++sx) {
-                    float u = (sx + 0.5f) / grid_size;
-                    float v = (sy + 0.5f) / grid_size;
-
-                    CameraRay camRay = m_Camera->generateRay(px, py, u, v);
-                    TraceResult result = tracer->trace(camRay);
-
-                    float sr = 0.0f, sg = 0.0f, sb = 0.0f;
-
-                    switch (result.outcome) {
-                        case TraceResult::Outcome::HORIZON:
-                            sr = sg = sb = 0.0f;
-                            break;
-
-                        case TraceResult::Outcome::DISK_HIT: {
-                            // Same disk emission logic as renderTile with color mode support
-                            float total_r = 0.0f, total_g = 0.0f, total_b = 0.0f;
-
-                            // Convert color mode
-                            ColorModes::Mode colorMode;
-                            switch (m_Config.colorMode) {
-                                case SessionConfig::ColorMode::TrueColor:
-                                    colorMode = ColorModes::Mode::TrueColor; break;
-                                case SessionConfig::ColorMode::TemperatureMap:
-                                    colorMode = ColorModes::Mode::TemperatureMap; break;
-                                case SessionConfig::ColorMode::RedshiftMap:
-                                    colorMode = ColorModes::Mode::RedshiftMap; break;
-                                case SessionConfig::ColorMode::Narrowband:
-                                    colorMode = ColorModes::Mode::Narrowband; break;
-                                case SessionConfig::ColorMode::Polarisation:
-                                    colorMode = ColorModes::Mode::Polarisation; break;
-                                default:
-                                    colorMode = ColorModes::Mode::TrueColor; break;
-                            }
-
-                            for (int crossing_idx = 0; crossing_idx < result.num_disk_crossings; crossing_idx++) {
-                                const auto& crossing = result.disk_crossings[crossing_idx];
-                                if (!crossing.valid) continue;
-
-                                float T_emit = crossing.temperature;
-                                float g = crossing.redshift;
-
-                                float order_demag = std::exp(-static_cast<float>(Math::PI) * crossing_idx);
-                                float T_obs = T_emit * g;
-                                float intensity = std::pow(T_obs, 4.0f);
-
-                                // Apply color mode
-                                Spectral::RGB diskColor = ColorModes::applyColorMode(
-                                    colorMode, T_emit, g, intensity, nullptr);
-
-                                float cr = diskColor.r;
-                                float cg = diskColor.g;
-                                float cb = diskColor.b;
-
-                                total_r += cr * order_demag;
-                                total_g += cg * order_demag;
-                                total_b += cb * order_demag;
-                            }
-
-                            sr = total_r * result.magnification;
-                            sg = total_g * result.magnification;
-                            sb = total_b * result.magnification;
-
-                            // Cinematic boost
-                            constexpr float DISK_INTENSITY_BOOST = 5.0f;
-                            sr *= DISK_INTENSITY_BOOST;
-                            sg *= DISK_INTENSITY_BOOST;
-                            sb *= DISK_INTENSITY_BOOST;
-
-                            if (result.photon_ring) {
-                                sr *= 2.0f;
-                                sg *= 2.0f;
-                                sb *= 2.0f;
-                            }
-                            break;
-                        }
-
-                        case TraceResult::Outcome::ESCAPED: {
-                            sampleStarfield(result.final_direction, sr, sg, sb);
-                            if (result.magnification > 1.0f) {
-                                sr *= result.magnification;
-                                sg *= result.magnification;
-                                sb *= result.magnification;
-                            }
-                            if (result.photon_ring) {
-                                sr *= 1.2f;
-                                sg *= 1.2f;
-                                sb *= 1.2f;
-                            }
-
-                            // Jet emission (Phase 7)
-                            if (m_Jet && m_Config.enableJets) {
-                                double obs_r = m_Config.observerDistance;
-                                double obs_theta = m_Config.observerInclination;
-                                float obs_x = static_cast<float>(obs_r * std::sin(obs_theta));
-                                float obs_y = 0.0f;
-                                float obs_z = static_cast<float>(obs_r * std::cos(obs_theta));
-
-                                float end_x = static_cast<float>(result.final_position(1));
-                                float end_y = static_cast<float>(result.final_position(2));
-                                float end_z = static_cast<float>(result.final_position(3));
-
-                                float jet_emission = JetRayMarching::integrateJetEmission(
-                                    *m_Jet, obs_x, obs_y, obs_z,
-                                    end_x, end_y, end_z,
-                                    obs_x, obs_y, obs_z, 32);
-
-                                if (jet_emission > 0.0f) {
-                                    float jet_scale = m_Config.jetIntensity * 0.1f;
-                                    sr += jet_emission * jet_scale * 0.8f;
-                                    sg += jet_emission * jet_scale * 0.9f;
-                                    sb += jet_emission * jet_scale * 1.0f;
-                                }
-                            }
-                            break;
-                        }
-
-                        case TraceResult::Outcome::SPIRALING:
-                            sr = sg = sb = 0.02f;
-                            break;
-
-                        case TraceResult::Outcome::MAX_STEPS:
-                        default:
-                            sr = sg = sb = 0.01f;
-                            break;
-                    }
-
-                    r_acc += sr;
-                    g_acc += sg;
-                    b_acc += sb;
-                }
-            }
-
-            int total_samples = grid_size * grid_size;
-            float inv_samples = 1.0f / static_cast<float>(total_samples);
+            PixelResult pixel = shadePixel(px, py, tracer);
 
             int idx = (ty * tile->width + tx) * 4;
-            tileBuffer[idx + 0] = r_acc * inv_samples;
-            tileBuffer[idx + 1] = g_acc * inv_samples;
-            tileBuffer[idx + 2] = b_acc * inv_samples;
+            tileBuffer[idx + 0] = pixel.r;
+            tileBuffer[idx + 1] = pixel.g;
+            tileBuffer[idx + 2] = pixel.b;
             tileBuffer[idx + 3] = 1.0f;
+
+            if (m_Config.enablePolarisation && !m_PolarisationBuffer.empty()) {
+                int pixel_idx = py * m_Config.width + px;
+                if (pixel_idx >= 0 && pixel_idx < static_cast<int>(m_PolarisationBuffer.size())) {
+                    std::lock_guard<std::mutex> lock(m_DisplayMutex);
+                    m_PolarisationBuffer[pixel_idx] = pixel.stokes;
+                }
+            }
         }
     }
 
-    // Update display buffer (thread-safe)
     {
         std::lock_guard<std::mutex> lock(m_DisplayMutex);
         m_Display.updateTile(tile->x, tile->y, tile->width, tile->height, tileBuffer.data());
     }
+}
+
+//==============================================================================
+// Configuration Conversion
+//==============================================================================
+SessionConfig SessionConfig::fromSiriusConfig(const Configuration::SiriusConfig& config) {
+    SessionConfig sc;
+    sc.width = config.render.width;
+    sc.height = config.render.height;
+    sc.samplesPerPixel = config.render.samplesPerPixel;
+    sc.tileSize = config.render.tileSize;
+    sc.outputPath = config.render.outputPath;
+    sc.metricName = config.metric.name;
+    sc.blackHoleMass = config.metric.mass;
+    sc.blackHoleSpin = config.metric.spin;
+    sc.observerDistance = config.observer.distance;
+    sc.observerInclination = config.observer.inclination * Math::PI / 180.0;
+    sc.cameraFOV = static_cast<float>(config.observer.fov);
+
+    // Post-processing
+    sc.enableBloom = config.postprocess.enableBloom;
+    sc.bloomIntensity = config.postprocess.bloomIntensity;
+    sc.bloomThreshold = config.postprocess.bloomThreshold;
+    sc.exposure = config.postprocess.exposure;
+    sc.contrast = config.postprocess.contrast;
+    sc.saturation = config.postprocess.saturation;
+
+    // Volumetric disk
+    sc.enableVolumetricDisk = config.volumetric.enabled;
+    sc.volumetricHOverR = config.volumetric.hOverR;
+    sc.volumetricHPower = config.volumetric.hPower;
+    sc.volumetricTauMidplane = config.volumetric.tauMidplane;
+    sc.volumetricSamples = config.volumetric.samples;
+
+    // Advanced volumetric (turbulence + corona)
+    if (config.volumetric.enableTurbulence || config.volumetric.enableCorona) {
+        sc.enableVolumetricDiskAdvanced = true;
+        sc.volumetricDiskConfig.turbulence.enabled = config.volumetric.enableTurbulence;
+        sc.volumetricDiskConfig.corona.enabled = config.volumetric.enableCorona;
+        sc.volumetricDiskConfig.H_over_r = config.volumetric.hOverR;
+        sc.volumetricDiskConfig.H_power = config.volumetric.hPower;
+        sc.volumetricDiskConfig.volumetric_samples = config.volumetric.samples;
+    }
+
+    // Film simulation
+    sc.enableFilmSimulation = config.film.enabled;
+    if (config.film.enabled) {
+        if (config.film.preset == "Interstellar") {
+            sc.filmConfig = FilmConfig::Interstellar();
+        } else if (config.film.preset == "SpaceOdyssey2001") {
+            sc.filmConfig = FilmConfig::SpaceOdyssey2001();
+        } else {
+            sc.filmConfig = FilmConfig::DigitalClean();
+        }
+        sc.filmConfig.grain_intensity = config.film.grainIntensity;
+        sc.filmConfig.halation_strength = config.film.halationStrength;
+        sc.filmConfig.vignette_strength = config.film.vignetteStrength;
+    }
+
+    // Backend
+    sc.useGPU = (config.backend.preferred != "cpu");
+
+    return sc;
 }
 
 } // namespace Sirius

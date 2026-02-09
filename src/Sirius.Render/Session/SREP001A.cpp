@@ -13,9 +13,8 @@
 #include <iomanip>
 #include <cmath>
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
+#include <PHCN001A.h>
+using Sirius::Constants::Math::PI;
 
 // Architecture Includes
 #include "../Acceleration/Backend/ACBM001A.h"
@@ -87,11 +86,11 @@ RenderOptions parseArgs(int argc, char* argv[]) {
         else if(arg == "--samples" && i+1<argc) opts.config.samplesPerPixel = std::atoi(argv[++i]);
         else if(arg == "--inclination" && i+1<argc) {
             float deg = std::atof(argv[++i]);
-            opts.config.observerInclination = deg * M_PI / 180.0f;  // Convert degrees to radians
+            opts.config.observerInclination = deg * PI / 180.0f;  // Convert degrees to radians
         }
         else if(arg == "--azimuth" && i+1<argc) {
             float deg = std::atof(argv[++i]);
-            opts.config.observerAzimuth = deg * M_PI / 180.0f;  // Convert degrees to radians
+            opts.config.observerAzimuth = deg * PI / 180.0f;  // Convert degrees to radians
         }
         else if(arg == "--no-bloom") opts.ppSettings.enableBloom = false;
 
