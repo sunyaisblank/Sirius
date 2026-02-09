@@ -15,6 +15,7 @@ endif()
 
 add_executable(SiriusRender
     SREP001A.cpp
+    "${CMAKE_SOURCE_DIR}/src/Sirius.Render/Pipeline/RDST001A.cpp"
     "${CMAKE_SOURCE_DIR}/src/Sirius.Render/Acceleration/Backend/ACBF001A.cpp"
     # EXR output support
     "${CMAKE_SOURCE_DIR}/src/Sirius.Render/Output/OUEW001A.cpp"

@@ -67,8 +67,7 @@ struct OutputMetadata {
     int samplesPerPixel = 1;        // Samples per pixel (for adaptive sampling)
     double renderTimeSeconds = 0.0;
     std::string metricName;
-    double spinParameter = 0.0;
-    double blackHoleSpin = 0.0;     // Alias for spinParameter (for compatibility)
+    double blackHoleSpin = 0.0;
     double massParameter = 1.0;
     std::string comment;            // User comment/notes
 };

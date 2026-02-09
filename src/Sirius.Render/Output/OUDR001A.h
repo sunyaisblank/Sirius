@@ -8,6 +8,8 @@
 #define SIRIUS_RENDER_OUDR001A_H
 
 #include "OUMD001A.h"
+#include "OUIB001A.h"
+#include "OUEW001A.h"
 #include <atomic>
 #include <mutex>
 
@@ -178,7 +180,7 @@ private:
 
 //==============================================================================
 // OpenEXROutputDriver
-// Writes rendered image to OpenEXR file (stub for now - requires OpenEXR lib)
+// Writes rendered image to OpenEXR file via MemoryOutputDriver + EXRWriter
 //==============================================================================
 
 class OpenEXROutputDriver : public IOutputDriver {
@@ -188,55 +190,54 @@ public:
 
     bool configure(int width, int height,
                    const std::vector<OutputPass>& passes) override {
-        m_width = width;
-        m_height = height;
-        m_passes = passes;
-        m_tilesWritten = 0;
-        // In production, would validate OpenEXR library availability
-        return true;
+        return m_memDriver.configure(width, height, passes);
     }
 
     bool start() override {
-        m_active.store(true, std::memory_order_release);
-        // In production, would open EXR file for writing
-        return true;
+        return m_memDriver.start();
     }
 
     bool writeTile(const OutputTile& tile) override {
-        if (!m_active.load(std::memory_order_acquire)) return false;
-        // In production, would write tile to EXR file
-        ++m_tilesWritten;
-        return true;
+        return m_memDriver.writeTile(tile);
     }
 
     bool finish(const OutputMetadata& metadata) override {
-        m_metadata = metadata;
-        m_active.store(false, std::memory_order_release);
-        // In production, would finalize EXR file
-        return true;
+        // Convert accumulated pixels to ImageBufferRGBA
+        ImageBufferRGBA buffer;
+        buffer.allocate(m_memDriver.width(), m_memDriver.height());
+        const auto& px = m_memDriver.pixels();
+        if (buffer.pixels.size() == px.size()) {
+            std::copy(px.begin(), px.end(), buffer.pixels.begin());
+        }
+
+        // Build EXR metadata from OutputMetadata
+        EXRMetadata meta;
+        meta.metricType = metadata.metricName;
+        meta.blackHoleSpin = metadata.blackHoleSpin;
+        meta.blackHoleMass = metadata.massParameter;
+        meta.samplesPerPixel = metadata.samplesPerPixel;
+        meta.renderTimeSeconds = metadata.renderTimeSeconds;
+
+        EXRWriter::writeEXR(m_basePath, buffer, meta);
+
+        return m_memDriver.finish(metadata);
     }
 
     void cancel() override {
-        m_active.store(false, std::memory_order_release);
-        // In production, would clean up partial file
+        m_memDriver.cancel();
     }
 
     bool isActive() const override {
-        return m_active.load(std::memory_order_acquire);
+        return m_memDriver.isActive();
     }
 
     // Statistics
-    int tilesWritten() const { return m_tilesWritten; }
+    int tilesWritten() const { return m_memDriver.tilesWritten(); }
     const std::string& basePath() const { return m_basePath; }
 
 private:
     std::string m_basePath;
-    int m_width = 0;
-    int m_height = 0;
-    std::vector<OutputPass> m_passes;
-    std::atomic<bool> m_active{false};
-    int m_tilesWritten = 0;
-    OutputMetadata m_metadata;
+    MemoryOutputDriver m_memDriver;
 };
 
 } // namespace sirius::render

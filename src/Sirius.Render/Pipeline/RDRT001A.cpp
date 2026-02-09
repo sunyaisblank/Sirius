@@ -18,7 +18,6 @@
 
 
 // stb_image for texture loading
-#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 // Standard library includes
@@ -52,42 +51,15 @@
 
 using namespace Sirius;
 
-// =============================================================================
-// OptiX C API (from RDOP001A.cu)
-// =============================================================================
-extern "C" {
-    typedef void* SiriusOptixHandle;
-    
-    SiriusOptixHandle sirius_optix_create();
-    void sirius_optix_destroy(SiriusOptixHandle handle);
-    bool sirius_optix_initialize(SiriusOptixHandle handle, int width, int height);
-    bool sirius_optix_create_pipeline(SiriusOptixHandle handle, const char* ptxPath);
-    void sirius_optix_launch(SiriusOptixHandle handle, const Sirius::LaunchParams* params);
-    void sirius_optix_update_display(SiriusOptixHandle handle);
-    void sirius_optix_resize(SiriusOptixHandle handle, int width, int height);
-    void sirius_optix_cleanup(SiriusOptixHandle handle);
-    float* sirius_optix_get_frame_buffer(SiriusOptixHandle handle);
-    void sirius_optix_register_gl_texture(SiriusOptixHandle handle, unsigned int glTexture);
-    bool sirius_optix_is_initialized(SiriusOptixHandle handle);
-    bool sirius_optix_upload_background(SiriusOptixHandle handle, const unsigned char* data, int width, int height);
-    unsigned long long sirius_optix_get_background_texture(SiriusOptixHandle handle);
-    void sirius_optix_upload_numerical_metric(SiriusOptixHandle handle, 
-                                              const Sirius::NumericalMetricHostData* hostData,
-                                              Sirius::NumericalMetricData* outDeviceData);
-    void sirius_optix_set_metric_type(SiriusOptixHandle handle, int type);
-    
-    // Denoiser API
-    bool sirius_optix_init_denoiser(SiriusOptixHandle handle);
-    void sirius_optix_denoise(SiriusOptixHandle handle, float blendFactor);
-    void sirius_optix_set_denoiser_enabled(SiriusOptixHandle handle, bool enabled);
-}
+// OptiX C API - unified declarations
+#include "RDOP006A.h"
 
 // =============================================================================
 // Renderer Implementation
 // =============================================================================
 
-Renderer::Renderer() 
-    : m_ComputeProgram(0), m_ScreenProgram(0), m_Texture(0), m_Vao(0), m_MetricUBO(0), 
+Renderer::Renderer()
+    : m_ScreenProgram(0), m_Texture(0), m_Vao(0), m_Vbo(0),
       m_BackgroundTexture(0), m_BackgroundWidth(0), m_BackgroundHeight(0), m_UseBackgroundTexture(false),
       m_Width(0), m_Height(0), m_OptixHandle(nullptr), m_OptixEnabled(false), m_FrameCount(0) {
 }
@@ -246,6 +218,9 @@ void main() {
 )";
 
 void Renderer::init(int width, int height) {
+    // Guard against double-initialisation: release prior resources first
+    if (m_Vao != 0) { cleanup(); }
+
     m_Width = width;
     m_Height = height;
 
@@ -319,9 +294,8 @@ void Renderer::init(int width, int height) {
          1.0f,  1.0f, 1.0f, 1.0f
     };
     
-    GLuint quadVBO;
-    glGenBuffers(1, &quadVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+    glGenBuffers(1, &m_Vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_Vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
     
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
@@ -426,55 +400,61 @@ void Renderer::loadBloomShader(const std::string& vertPath, const std::string& f
 
 bool Renderer::loadBackgroundTexture(const std::string& path) {
     std::string fullPath = resolvePath(path);
-    
-    // Load image using stb_image
-    stbi_set_flip_vertically_on_load(true);
+
+    // Load image once without vertical flip (CUDA orientation)
+    stbi_set_flip_vertically_on_load(false);
     int width, height, channels;
     unsigned char* data = stbi_load(fullPath.c_str(), &width, &height, &channels, 4);
-    
+
     if (!data) {
         std::cerr << "Failed to load background texture: " << fullPath << std::endl;
         std::cerr << "stb_image error: " << stbi_failure_reason() << std::endl;
         return false;
     }
-    
+
     m_BackgroundWidth = width;
     m_BackgroundHeight = height;
-    
+
+#ifdef SIRIUS_HAS_OPTIX
+    // Upload unflipped data to CUDA for OptiX
+    if (m_OptixHandle) {
+        sirius_optix_upload_background(m_OptixHandle, data, width, height);
+    }
+#endif
+
+    // Flip buffer in-place (row swap) for OpenGL (which expects bottom-to-top)
+    int stride = width * 4;
+    for (int row = 0; row < height / 2; ++row) {
+        unsigned char* top = data + row * stride;
+        unsigned char* bot = data + (height - 1 - row) * stride;
+        for (int i = 0; i < stride; ++i) {
+            unsigned char tmp = top[i];
+            top[i] = bot[i];
+            bot[i] = tmp;
+        }
+    }
+
     // Delete existing texture if present
     if (m_BackgroundTexture != 0) {
         glDeleteTextures(1, &m_BackgroundTexture);
     }
-    
-    // Create OpenGL texture
+
+    // Create OpenGL texture from flipped data
     glGenTextures(1, &m_BackgroundTexture);
     glBindTexture(GL_TEXTURE_2D, m_BackgroundTexture);
-    
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    
+
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
-    
+
     stbi_image_free(data);
-    
+
     m_UseBackgroundTexture = true;
     std::cout << "Background texture loaded: " << path << " (" << width << "x" << height << ")" << std::endl;
-
-#ifdef SIRIUS_HAS_OPTIX
-    // Upload to CUDA for OptiX use
-    if (m_OptixHandle) {
-        // Reload the raw data for CUDA (OpenGL texture is separate)
-        stbi_set_flip_vertically_on_load(false);  // CUDA doesn't need flip
-        unsigned char* cudaData = stbi_load(fullPath.c_str(), &width, &height, &channels, 4);
-        if (cudaData) {
-            sirius_optix_upload_background(m_OptixHandle, cudaData, width, height);
-            stbi_image_free(cudaData);
-        }
-    }
-#endif
 
     return true;
 }
@@ -495,11 +475,6 @@ void Renderer::render(IMetric* metric, const Vec4& observerPos, const Vec4& obse
     // Clear to error color
     glClearColor(0.5f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-}
-
-void Renderer::uploadNumericalMetric(IMetric* metric) {
-    // Numerical metrics removed - system uses only analytic families
-    (void)metric;
 }
 
 #ifdef SIRIUS_HAS_OPTIX
@@ -533,16 +508,19 @@ static void extractMetricParams(IMetric* metric, Sirius::MetricParams& params) {
     params.Q = (it != cfg.end()) ? static_cast<float>(it->second.value) : 0.0f;
 }
 
-// Helper: Calculate ISCO radius for accretion disk
-static float calculateISCO(float M, float a) {
-    if (fabsf(a) < 1e-6f) {
+// Helper: Calculate ISCO radius for accretion disk (double precision internally)
+static float calculateISCOd(float M, float a) {
+    double Md = static_cast<double>(M);
+    double ad = static_cast<double>(a);
+    if (std::abs(ad) < 1e-10) {
         return 6.0f; // Schwarzschild ISCO
     }
-    float a_star = std::max(-0.999f, std::min(0.999f, a / M));
-    float Z1 = 1.0f + powf(1.0f - a_star*a_star, 1.0f/3.0f) * 
-               (powf(1.0f + a_star, 1.0f/3.0f) + powf(1.0f - a_star, 1.0f/3.0f));
-    float Z2 = sqrtf(3.0f * a_star*a_star + Z1*Z1);
-    return 3.0f + Z2 - sqrtf((3.0f - Z1) * (3.0f + Z1 + 2.0f*Z2));
+    double a_star = std::clamp(ad / Md, -0.999, 0.999);
+    double Z1 = 1.0 + std::cbrt(1.0 - a_star * a_star)
+              * (std::cbrt(1.0 + a_star) + std::cbrt(1.0 - a_star));
+    double Z2 = std::sqrt(3.0 * a_star * a_star + Z1 * Z1);
+    double isco = 3.0 + Z2 - std::sqrt((3.0 - Z1) * (3.0 + Z1 + 2.0 * Z2));
+    return static_cast<float>(isco);
 }
 void Renderer::renderOptiX(IMetric* metric, const Vec4& observerPos, const Vec4& observerVel, 
                            float cameraYaw, float cameraPitch, float cameraFOV) {
@@ -695,7 +673,7 @@ void Renderer::renderOptiX(IMetric* metric, const Vec4& observerPos, const Vec4&
     
     // Auto-calculate ISCO for accretion disk
     if (params.accretionDisk.innerRadius <= 0.001f) {
-        params.accretionDisk.innerRadius = calculateISCO(params.metricParams.M, params.metricParams.a);
+        params.accretionDisk.innerRadius = calculateISCOd(params.metricParams.M, params.metricParams.a);
         params.accretionDisk.heightScale = std::max(params.accretionDisk.heightScale, 0.005f);
     }
     
@@ -773,19 +751,6 @@ void Renderer::renderOptiX(IMetric* metric, const Vec4& observerPos, const Vec4&
 }
 #endif
 
-void Renderer::setupMetricUniforms(IMetric* /*metric*/, const Vec4& /*position*/) {
-    // Legacy - no longer used with OptiX backend
-}
-
-void Renderer::loadComputeShader(const std::string& /*path*/) {
-    // Legacy - no longer used with OptiX backend
-}
-
-void Renderer::setMetricParameters(const std::map<std::string, double>& /*params*/) {
-    // Reset frame counter to restart accumulation
-    m_FrameCount = 0;
-}
-
 void Renderer::cleanup() {
 #ifdef SIRIUS_HAS_OPTIX
     if (m_OptixHandle) {
@@ -795,31 +760,8 @@ void Renderer::cleanup() {
         m_OptixEnabled = false;
     }
     
-    // Free Pinned Memory using CUDA allocator
-    if (m_PinnedMemoryBuffer) {
-        cudaFreeHost(m_PinnedMemoryBuffer);
-        m_PinnedMemoryBuffer = nullptr;
-        m_PinnedMemoryCapacity = 0;
-    }
-#else
-    // Fallback cleanup if compiled without OptiX (but with this code enabled)
-    if (m_PinnedMemoryBuffer) {
-        delete[] m_PinnedMemoryBuffer;
-        m_PinnedMemoryBuffer = nullptr;
-        m_PinnedMemoryCapacity = 0;
-    }
 #endif
-    
-    if (m_MetricUBO != 0) {
-        glDeleteBuffers(1, &m_MetricUBO);
-        m_MetricUBO = 0;
-    }
-    
-    if (m_ComputeProgram != 0) {
-        glDeleteProgram(m_ComputeProgram);
-        m_ComputeProgram = 0;
-    }
-    
+
     if (m_ScreenProgram != 0) {
         glDeleteProgram(m_ScreenProgram);
         m_ScreenProgram = 0;
@@ -850,5 +792,10 @@ void Renderer::cleanup() {
     if (m_Vao != 0) {
         glDeleteVertexArrays(1, &m_Vao);
         m_Vao = 0;
+    }
+
+    if (m_Vbo != 0) {
+        glDeleteBuffers(1, &m_Vbo);
+        m_Vbo = 0;
     }
 }

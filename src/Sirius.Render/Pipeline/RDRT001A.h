@@ -9,7 +9,6 @@
 #pragma once
 
 #include <string>
-#include <map>
 #include <memory>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -33,7 +32,6 @@ public:
     void resize(int width, int height);
     void render(IMetric* metric, const Vec4& observerPos, const Vec4& observerVel, 
                 float cameraYaw, float cameraPitch, float cameraFOV);
-    void setMetricParameters(const std::map<std::string, double>& params);
     void cleanup();
     
     // Background texture control
@@ -71,29 +69,22 @@ public:
     int getHeight() const { return m_Height; }
 
 private:
-    void loadComputeShader(const std::string& path);
     void loadScreenShader(const std::string& vertPath, const std::string& fragPath);
     void loadLensFlareShader(const std::string& vertPath, const std::string& fragPath);
     void loadBloomShader(const std::string& vertPath, const std::string& fragPath);
-    void setupMetricUniforms(IMetric* metric, const Vec4& position);
     
 #ifdef SIRIUS_HAS_OPTIX
-    void renderOptiX(IMetric* metric, const Vec4& observerPos, const Vec4& observerVel, 
+    void renderOptiX(IMetric* metric, const Vec4& observerPos, const Vec4& observerVel,
                      float cameraYaw, float cameraPitch, float cameraFOV);
-    void uploadNumericalMetric(IMetric* metric);
-    
-    // Cache for numerical metric texture handles
-    Sirius::NumericalMetricData m_NumericalMetricData = {};
 #endif
 
     // OpenGL objects (for display)
-    GLuint m_ComputeProgram = 0;
     GLuint m_ScreenProgram = 0;
     GLuint m_LensFlareProgram = 0;  // Phase 6.5 - Lens flare post-process
     GLuint m_BloomProgram = 0;      // Phase 7 - Bloom/glow post-process
     GLuint m_Texture = 0;
     GLuint m_Vao = 0;
-    GLuint m_MetricUBO = 0;
+    GLuint m_Vbo = 0;
     
     // Lens flare control (Phase 6.5)
     bool m_LensFlareEnabled = false;
@@ -119,10 +110,6 @@ private:
     // Screen dimensions
     int m_Width = 0;
     int m_Height = 0;
-    
-    // Pinned Memory Optimization
-    float* m_PinnedMemoryBuffer = nullptr;
-    size_t m_PinnedMemoryCapacity = 0; // In number of floats
     
     // OptiX backend
     void* m_OptixHandle = nullptr;

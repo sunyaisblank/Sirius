@@ -31,9 +31,9 @@ TEST(OfflineRendererTest, Configuration) {
 
     renderer.configure(config);
 
-    // Session should be created
-    ASSERT_NE(renderer.session(), nullptr);
-    EXPECT_EQ(renderer.session()->tiles().size(), 16);  // 4x4 tiles
+    // Tile layout should be created
+    ASSERT_NE(renderer.tileLayout(), nullptr);
+    EXPECT_EQ(renderer.tileLayout()->tiles().size(), 16);  // 4x4 tiles
 }
 
 //==============================================================================

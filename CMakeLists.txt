@@ -366,6 +366,7 @@ add_executable(Sirius
 
     # Render pipeline
     src/Sirius.Render/Pipeline/RDRT001A.cpp
+    src/Sirius.Render/Pipeline/RDST001A.cpp
 
     # Render integration (geodesic tracer)
     src/Sirius.Render/Integration/GTRC001A.cpp

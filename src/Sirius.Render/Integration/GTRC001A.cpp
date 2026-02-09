@@ -141,6 +141,9 @@ TraceResult GeodesicTracer::trace(const CameraRay& camera_ray) {
     result.steps_taken = 0;
     result.numerical_failure = false;
 
+    // Cache metric parameters for this trace
+    cacheMetricParameters();
+
     // Initialize ray from camera
     Lightray ray = initializeLightray(camera_ray);
 
@@ -167,9 +170,8 @@ TraceResult GeodesicTracer::trace(const CameraRay& camera_ray) {
     //
     // Reference: Bardeen, Press & Teukolsky (1972), ApJ 178, 347
     //
-    auto params = m_Metric->getParameters();
-    double M = params.count("mass") ? params.at("mass").value : 1.0;
-    double a_over_M = params.count("spin") ? params.at("spin").value : 0.0;
+    double M = m_CachedM;
+    double a_over_M = m_CachedA;
 
     // Clamp spin to valid range |a/M| ≤ 1
     a_over_M = std::clamp(a_over_M, -0.998, 0.998);
@@ -596,6 +598,7 @@ TraceResult GeodesicTracer::trace(const CameraRay& camera_ray, double mass, doub
     // Update metric parameters
     m_Metric->setParameter("mass", mass);
     m_Metric->setParameter("spin", spin / mass);  // Store as a/M
+    cacheMetricParameters();
 
     // Update disk inner radius (ISCO) for new spin
     // ISCO for Kerr: r_isco = M * (3 + Z2 - sqrt((3-Z1)(3+Z1+2*Z2)))
@@ -640,11 +643,8 @@ TraceResult GeodesicTracer::trace(const CameraRay& camera_ray, double mass, doub
 // Compute Keplerian Orbital Velocity
 // =============================================================================
 float GeodesicTracer::computeOrbitalVelocity(float r) {
-    // Get metric parameters
-    auto params = m_Metric->getParameters();
-    double M = params.count("mass") ? params.at("mass").value : 1.0;
-    double a_over_M = params.count("spin") ? params.at("spin").value : 0.0;
-    double a = a_over_M * M;
+    double M = m_CachedM;
+    double a = m_CachedA * M;
 
     // Keplerian angular velocity for Kerr spacetime (prograde orbit)
     // Ω = sqrt(M) / (r^(3/2) + a*sqrt(M))
@@ -692,10 +692,8 @@ float GeodesicTracer::computeOrbitalVelocity(float r) {
 // The final clamping (0.1 < g < 5.0) prevents physical singularities only.
 //
 float GeodesicTracer::computeGFactor(float r, float phi, const Vec4& ray_vel) {
-    // Get metric parameters
-    auto params = m_Metric->getParameters();
-    double M = params.count("mass") ? params.at("mass").value : 1.0;
-    double a_over_M = params.count("spin") ? params.at("spin").value : 0.0;
+    double M = m_CachedM;
+    double a_over_M = m_CachedA;
 
     // Compute orbital angular velocity (exact Kerr formula)
     float Omega = computeOrbitalVelocity(r);
@@ -765,10 +763,8 @@ float GeodesicTracer::computeGFactor(float r, float phi, const Vec4& ray_vel) {
 //
 void GeodesicTracer::computeGFactorWithComponents(float r, float phi, const Vec4& ray_vel,
                                                    TraceResult& result) {
-    // Get metric parameters
-    auto params = m_Metric->getParameters();
-    double M = params.count("mass") ? params.at("mass").value : 1.0;
-    double a_over_M = params.count("spin") ? params.at("spin").value : 0.0;
+    double M = m_CachedM;
+    double a_over_M = m_CachedA;
 
     // Compute orbital angular velocity (exact Kerr formula)
     float Omega = computeOrbitalVelocity(r);

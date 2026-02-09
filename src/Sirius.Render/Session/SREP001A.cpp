@@ -20,7 +20,7 @@
 // Architecture Includes
 #include "../Acceleration/Backend/ACBM001A.h"
 #include "../Buffer/BFIO001A.h"
-#include "../../Sirius.Core/PostProcess/PPOP001A.h"
+#include "PPOP001A.h"
 #include "../Acceleration/OptiX/RDOP003A.h" // For LaunchParams struct definition if needed
 #include "../Output/OUIB001A.h"  // ImageBuffer
 #include "../Output/OUEW001A.h"  // EXR Writer
@@ -28,7 +28,6 @@
 
 
 // Dependencies
-#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 using namespace Sirius::Acceleration;

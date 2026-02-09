@@ -7,17 +7,7 @@
 #ifndef SIRIUS_RENDER_SROR001A_H
 #define SIRIUS_RENDER_SROR001A_H
 
-// MIGRATION NOTE: SRRS001A.h is deprecated. This file uses the deprecated
-// sirius::render::RenderSession for backwards compatibility.
-// New code should use Sirius::RenderSession from SNRS001A.h instead.
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable: 4996)
-#endif
-
-#include "SRRS001A.h"
+#include "SRTL001A.h"
 #include "SRCT001A.h"
 #include "SRER001A.h"
 #include "SRPG001A.h"
@@ -103,7 +93,8 @@ public:
 
     void configure(const OfflineRenderConfig& config) {
         m_config = config;
-        m_session = std::make_unique<RenderSession>(config);
+        m_tileLayout = std::make_unique<TileLayout>(
+            config.imageWidth, config.imageHeight, config.tileSize);
     }
 
     void setTileRenderCallback(TileRenderCallback callback) {
@@ -153,8 +144,6 @@ public:
         int tilesY = (m_config.imageHeight + m_config.tileSize - 1) / m_config.tileSize;
         auto tileOrder = TileScheduler::generateOrder(tilesX, tilesY, m_config.tileOrder);
 
-        // Start session
-        m_session->start();
         auto startTime = std::chrono::steady_clock::now();
 
         // Render tiles
@@ -164,7 +153,7 @@ public:
         for (int tileIdx : tileOrder) {
             if (m_cancelToken.isCancelled()) break;
 
-            const auto& tileInfo = m_session->tiles()[tileIdx];
+            const auto& tileInfo = m_tileLayout->tiles()[tileIdx];
 
             // Allocate pixel buffer
             std::vector<float> pixels(tileInfo.width * tileInfo.height * 4, 0.0f);
@@ -197,7 +186,7 @@ public:
                 }
 
                 // Mark tile completed
-                m_session->markTileCompleted(tileIdx);
+                m_tileLayout->markTileCompleted(tileIdx);
                 tilesCompleted++;
 
                 // Update ETA
@@ -282,7 +271,7 @@ public:
     bool hasErrors() const { return m_errors.hasErrors(); }
     std::vector<RenderError> errors() const { return m_errors.all(); }
 
-    const RenderSession* session() const { return m_session.get(); }
+    const TileLayout* tileLayout() const { return m_tileLayout.get(); }
 
 private:
     std::shared_ptr<IOutputDriver> createOutputDriver() {
@@ -305,7 +294,7 @@ private:
     }
 
     OfflineRenderConfig m_config;
-    std::unique_ptr<RenderSession> m_session;
+    std::unique_ptr<TileLayout> m_tileLayout;
     CancellationToken m_cancelToken;
     ErrorAccumulator m_errors;
     ETACalculator m_eta;
@@ -319,10 +308,5 @@ private:
 };
 
 } // namespace sirius::render
-
-#pragma GCC diagnostic pop
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 #endif // SIRIUS_RENDER_SROR001A_H

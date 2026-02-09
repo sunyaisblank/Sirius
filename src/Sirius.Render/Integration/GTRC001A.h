@@ -243,6 +243,13 @@ private:
     IMetric* m_Metric;
     TracerConfig m_Config;
 
+    // Cached metric parameters (populated once per trace call)
+    double m_CachedM = 1.0;
+    double m_CachedA = 0.0;  // a/M (spin parameter)
+
+    /// @brief Extract and cache M and a from the metric parameter map
+    void cacheMetricParameters();
+
     // =========================================================================
     // Internal Methods
     // =========================================================================
@@ -349,14 +356,16 @@ private:
 inline GeodesicTracer::GeodesicTracer(IMetric* metric, const TracerConfig& config)
     : m_Metric(metric), m_Config(config) {}
 
-inline float GeodesicTracer::computeHorizonRadius() {
-    // For Kerr-Schild family, extract M and a
-    // Horizon radius: r_+ = M + sqrt(M² - a²)
-    // We use horizon_factor * 2M as conservative estimate for Schwarzschild
+inline void GeodesicTracer::cacheMetricParameters() {
     auto params = m_Metric->getParameters();
-    double M = params.count("mass") ? params.at("mass").value : 1.0;
-    double a_over_M = params.count("spin") ? params.at("spin").value : 0.0;
-    double a = a_over_M * M;
+    m_CachedM = params.count("mass") ? params.at("mass").value : 1.0;
+    m_CachedA = params.count("spin") ? params.at("spin").value : 0.0;
+}
+
+inline float GeodesicTracer::computeHorizonRadius() {
+    // Horizon radius: r_+ = M + sqrt(M² - a²)
+    double M = m_CachedM;
+    double a = m_CachedA * M;
 
     double a2 = a * a;
     double M2 = M * M;

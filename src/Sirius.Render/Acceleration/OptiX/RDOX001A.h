@@ -4,26 +4,10 @@
 #pragma once
 
 #include "../Backend/ACIB001A.h"
-#include "RDOP003A.h"  // LaunchParams
+#include "RDOP006A.h"  // Unified OptiX C API declarations
 #include <vector>
 
 namespace Sirius::Acceleration::OptiX {
-
-// Raw C API declarations (avoiding including headers that might conflict)
-extern "C" {
-    typedef void* SiriusOptixHandle;
-    SiriusOptixHandle sirius_optix_create();
-    void sirius_optix_destroy(SiriusOptixHandle handle);
-    bool sirius_optix_initialize(SiriusOptixHandle handle, int width, int height);
-    bool sirius_optix_create_pipeline(SiriusOptixHandle handle, const char* ptxPath);
-    void sirius_optix_launch(SiriusOptixHandle handle, const Sirius::LaunchParams* params);
-    void sirius_optix_set_metric_type(SiriusOptixHandle handle, int type);
-    void sirius_optix_cleanup(SiriusOptixHandle handle);
-    float* sirius_optix_get_frame_buffer(SiriusOptixHandle handle);
-    bool sirius_optix_is_initialized(SiriusOptixHandle handle);
-    bool sirius_optix_upload_background(SiriusOptixHandle handle, const unsigned char* data, int width, int height);
-    unsigned long long sirius_optix_get_background_texture(SiriusOptixHandle handle);
-}
 
 class OptiXAccelerator : public IAccelerator {
 public:
