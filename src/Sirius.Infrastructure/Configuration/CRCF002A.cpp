@@ -204,7 +204,7 @@ std::vector<std::string> ConfigLoader::validate(const SiriusConfig& config) {
     // =========================================================================
     static const std::vector<std::string> validMetrics = {
         "Minkowski", "Schwarzschild", "Kerr", "Reissner-Nordstrom", "Kerr-Newman",
-        "Morris-Thorne", "Alcubierre"
+        "Morris-Thorne", "MorrisThorne", "Alcubierre", "Wormhole", "WarpDrive"
     };
     bool validMetric = std::find(validMetrics.begin(), validMetrics.end(),
                                   config.metric.name) != validMetrics.end();

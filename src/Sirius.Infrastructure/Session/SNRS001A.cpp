@@ -953,7 +953,7 @@ void RenderSession::renderGPU() {
     config.maxStepSize = 2.0f;
 
     // Metric type routing
-    if (m_Config.metricName == "MorrisThorne" || m_Config.metricName == "Wormhole") {
+    if (m_Config.metricName == "MorrisThorne" || m_Config.metricName == "Morris-Thorne" || m_Config.metricName == "Wormhole") {
         config.metricType = 7;   // EllisDrainhole
         config.metricFamily = 1; // MorrisThorne
         config.throatRadius = static_cast<float>(m_Config.throatRadius);
