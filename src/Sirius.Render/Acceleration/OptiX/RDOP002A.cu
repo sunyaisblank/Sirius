@@ -236,8 +236,14 @@ __device__ __forceinline__ float hash3D(float x, float y, float z, uint32_t seed
     return (float)(h & 0xFFFFFF) / float(0x1000000) * 2.0f - 1.0f;
 }
 
-// Smoothstep interpolation for smooth gradients
+// Smoothstep interpolation for smooth gradients (single parameter)
 __device__ __forceinline__ float smoothstep(float t) {
+    return t * t * (3.0f - 2.0f * t);
+}
+
+// Smoothstep with edge parameters (GLSL-style)
+__device__ __forceinline__ float smoothstep(float edge0, float edge1, float x) {
+    float t = clamp((x - edge0) / (edge1 - edge0 + 0.0001f), 0.0f, 1.0f);
     return t * t * (3.0f - 2.0f * t);
 }
 
@@ -2699,9 +2705,12 @@ __device__ float computeRelativisticG(
     // g = (k·u_obs) / (k·u_emit)
     // Both should be negative for physical configurations
     float g_factor = k_dot_u_obs / fminf(k_dot_u_emit, -0.001f);
-    
-    // Clamp to reasonable range
-    return clamp(fabsf(g_factor), 0.1f, 10.0f);
+
+    // Widen clamp range for more dramatic relativistic beaming
+    // Physical range for accretion disks: g ∈ [0.05, 20] depending on viewing angle
+    // Approaching side (g > 1): blueshifted, brighter
+    // Receding side (g < 1): redshifted, fainter
+    return clamp(fabsf(g_factor), 0.05f, 20.0f);
 }
 
 //==============================================================================
@@ -2878,15 +2887,32 @@ __device__ void sampleAccretionDiskVolumetric(
     // B_ν(T) represented as blackbody color
     // =========================================================================
     float3 bbColor = blackbodyColor(T_local);
-    
+
     // Emission coefficient scales intensity
     float emissionStrength = rho * disk.emissionCoefficient;
-    
+
+    // =========================================================================
+    // REALISTIC BRIGHTNESS SCALING
     // Stefan-Boltzmann: total flux ∝ T^4
-    // Normalize to ~5000K so solar-temperature disk has reasonable brightness
-    float boltzmann = powf(T_local / 5000.0f, 4.0f);
-    boltzmann = clamp(boltzmann, 0.0f, 20.0f);   // Relaxed for cinematic contrast range
-    
+    // Reference temperature lowered to 3500K (red dwarf) for:
+    //   - Darker overall scene (space should be DARK)
+    //   - Inner disk (10^6-10^7 K) still bright but not blown out
+    //   - Outer disk (10^4-10^5 K) appears warm orange-red
+    // The T^4 scaling compressed with sqrt for better dynamic range
+    // =========================================================================
+    float T_ref = 3500.0f;  // Reference temperature for normalization
+    float T_ratio = T_local / T_ref;
+
+    // Use T^2.5 instead of T^4 for better visual dynamic range
+    // This prevents inner disk from being 10000x brighter than outer
+    float boltzmann = powf(T_ratio, 2.5f);
+    boltzmann = clamp(boltzmann, 0.0f, 50.0f);   // Allow higher contrast range
+
+    // Apply radial falloff for more realistic appearance
+    // Inner disk: bright, outer disk: dimmer (inverse square-ish)
+    float radialFalloff = powf(r_inner / fmaxf(r, r_inner), 0.3f);
+    boltzmann *= radialFalloff;
+
     // Emission is step-size INDEPENDENT (source function brightness)
     // j = ρ * ε * B_ν(T) represents intrinsic emissivity
     // The step size only affects optical depth (dtau), NOT the source function
@@ -2906,6 +2932,105 @@ __device__ void sampleAccretionDiskVolumetric(
     // In Cartesian: v = (-sin(φ), 0, cos(φ)) * v_phi (for equatorial plane)
     diskVelocity = make_float3(-sinf(phi), 0.0f, cosf(phi)) * v_phi;
 }
+
+//==============================================================================
+// Corona Emission Sampling (Phase 9 - Cinematic Realism)
+// Hot X-ray corona above the inner accretion disk
+//==============================================================================
+// The corona is a region of extremely hot (10^8 - 10^9 K) plasma near the
+// black hole that produces X-ray emission via inverse Compton scattering.
+// Visually, it creates a bright diffuse glow around the black hole shadow.
+//
+// Two geometries supported:
+//   1. Spherical: Corona surrounds inner disk region
+//   2. Lamppost: Point source on rotation axis above the black hole
+//==============================================================================
+__device__ float3 sampleCorona(
+    const Vec4& pos,
+    const Sirius::CoronaParamsGPU& corona,
+    const Sirius::MetricParams& mp,
+    float ds,
+    float& dtau)
+{
+    float3 emission = make_float3(0.0f, 0.0f, 0.0f);
+    dtau = 0.0f;
+
+    if (!corona.enabled) return emission;
+
+    float r = pos.r;
+    float theta = pos.theta;
+    float M = mp.M;
+
+    // Corona geometry bounds
+    float r_inner = corona.inner_radius * M;
+    float r_outer = corona.outer_radius * M;
+    float H_corona = corona.scale_height * M;
+
+    // Distance from rotation axis (cylindrical radius)
+    float z = r * cosf(theta);
+    float rho_cyl = r * fabsf(sinf(theta));
+
+    // Check if inside corona region
+    bool inCorona = false;
+
+    if (corona.geometry == 0) {
+        // SPHERICAL CORONA: Surrounds inner disk
+        // Active within r_inner to r_outer, extended above/below disk
+        float heightAboveDisk = fabsf(z);
+        if (r >= r_inner && r <= r_outer && heightAboveDisk <= H_corona) {
+            inCorona = true;
+        }
+    } else {
+        // LAMPPOST CORONA: Point source on axis
+        // Creates a cone of illumination from the "lamppost" height
+        float lamppostZ = corona.lamppost_height * M;
+        // Corona density falls off from lamppost position
+        float distFromLamp = sqrtf(rho_cyl * rho_cyl + (z - lamppostZ) * (z - lamppostZ));
+        if (distFromLamp < H_corona * 3.0f && r > r_inner * 0.8f) {
+            inCorona = true;
+        }
+    }
+
+    if (!inCorona) return emission;
+
+    // Corona emissivity profile
+    // Density falls off with distance from center and height
+    float radialFactor = powf(r_inner / fmaxf(r, r_inner), corona.emissivity_index);
+    float verticalFactor = expf(-fabsf(z) / (H_corona + 0.001f));
+    float coronaDensity = radialFactor * verticalFactor;
+
+    // Corona temperature (extremely hot - X-ray emitting)
+    // T_corona ~ 10^8 - 10^9 K, but we visualize in optical
+    // The Comptonization process upscatters disk photons
+    float T_corona = corona.temperature_keV * 1.16e7f;  // keV to Kelvin
+
+    // For visualization, we represent X-ray emission as blue-white glow
+    // Real X-rays are invisible, but this conveys the physics
+    float3 coronaColor;
+    if (T_corona > 1e8f) {
+        // Very hot: blue-white
+        coronaColor = make_float3(0.7f, 0.85f, 1.0f);
+    } else {
+        // Warm corona: white-yellow
+        coronaColor = make_float3(1.0f, 0.95f, 0.8f);
+    }
+
+    // Emission intensity scaled by corona parameters
+    float emissionStrength = coronaDensity * corona.intensity_scale;
+
+    // Apply Comptonization y-parameter effect (spectral hardening)
+    // Higher y = more scattering = harder spectrum = bluer
+    float comptonBoost = 1.0f + corona.comptonization_y * 0.5f;
+    coronaColor.z *= comptonBoost;
+
+    emission = coronaColor * emissionStrength;
+
+    // Optical depth (corona is typically optically thin τ ~ 0.1-1)
+    dtau = coronaDensity * corona.optical_depth * ds;
+
+    return emission;
+}
+
 __device__ float dot4D(const float g[4][4], const Vec4& a, const Vec4& b) {
     float sum = 0.0f;
     // Unrolling for performance
@@ -4937,7 +5062,18 @@ __device__ void raygen_renderFrame_impl() {
     bool hitHorizon = false;
     bool escaped = false;
     float3 finalDir = rayDir;
-    
+
+    // =========================================================================
+    // PHOTON RING TRACKING (Phase 9 - Cinematic Realism)
+    // Count equatorial plane crossings to identify photon ring contributions
+    // Photons that orbit the black hole 1+ times before escaping form the
+    // characteristic thin bright ring at the shadow edge
+    // =========================================================================
+    int orbitCount = 0;              // Number of complete half-orbits (equatorial crossings)
+    float prevTheta = state.x.theta; // Track previous theta for crossing detection
+    float minRadius = state.x.r;     // Track closest approach to black hole
+    const float PI_HALF = 1.5707963f;
+
     // Adaptive step size (persists across iterations, adapted by RK45)
     float adaptiveStep = params.integration.initialStepSize; 
     
@@ -4988,15 +5124,79 @@ __device__ void raygen_renderFrame_impl() {
                 // Linear scaling: h ∝ r for r > r_scale
                 // This is conservative (actual curvature drops faster: ~r^3)
                 float scaleFactor = r / r_scale;
-                
+
                 // Cap the scaling to avoid numerical issues at extreme distances
                 scaleFactor = fminf(scaleFactor, 10.0f);
-                
+
                 // Apply far-field acceleration to step size
                 adaptiveStep = fminf(adaptiveStep * scaleFactor, params.integration.maxStepSize);
             }
+
+            // =================================================================
+            // PHOTON SPHERE STEP TIGHTENING (Phase 10 - Ultra-Sharp Lensing)
+            // =================================================================
+            // Near the photon sphere (r ≈ 3M for Schwarzschild, varies for Kerr),
+            // geodesics are extremely sensitive to initial conditions. The
+            // Lyapunov exponent diverges here, causing exponential growth of
+            // trajectory deviations from small integration errors.
+            //
+            // For sharp Einstein rings and crisp photon ring features, we
+            // dramatically tighten the step size in three zones:
+            //   1. Critical zone (r ≈ r_photon): 0.02× step (ultra-fine)
+            //   2. Inner zone (horizon to r_photon): 0.05× step (very fine)
+            //   3. Buffer zone (r_photon to r_photon + buffer): 0.1-1× step (graded)
+            //
+            float a = params.metricParams.a;
+            float r_photon;
+            if constexpr (type == Sirius::MetricType::Kerr) {
+                // Kerr prograde photon orbit (conservative bound for step tightening)
+                float a_over_M = clamp(a / M, -0.998f, 0.998f);
+                r_photon = 2.0f * M * (1.0f + cosf(0.6667f * acosf(-a_over_M)));
+            } else {
+                // Schwarzschild photon sphere at r = 3M
+                r_photon = 3.0f * M;
+            }
+
+            // Extended buffer region for gradual transition
+            float photonSphereBuffer = 1.5f * M;  // Wider region (was 0.5M)
+
+            if (r > horizonRadius && r < r_photon + photonSphereBuffer) {
+                float reductionFactor;
+                float distFromPhotonSphere = fabsf(r - r_photon);
+
+                // Critical zone: within 0.2M of photon sphere
+                if (distFromPhotonSphere < 0.2f * M) {
+                    // Ultra-fine stepping for rays grazing the photon sphere
+                    reductionFactor = 0.02f;
+                }
+                // Inner zone: between horizon and photon sphere
+                else if (r < r_photon) {
+                    // Very fine stepping inside photon sphere
+                    float innerProximity = (r - horizonRadius) / (r_photon - horizonRadius);
+                    innerProximity = clamp(innerProximity, 0.0f, 1.0f);
+                    // 0.02× near horizon/photon sphere, 0.1× midway
+                    reductionFactor = 0.02f + 0.08f * (1.0f - innerProximity * innerProximity);
+                }
+                // Buffer zone: outside photon sphere
+                else {
+                    // Graded stepping outside photon sphere
+                    float outerProximity = (r - r_photon) / photonSphereBuffer;
+                    outerProximity = clamp(outerProximity, 0.0f, 1.0f);
+                    // Smooth transition: 0.05× at photon sphere, 1× at buffer edge
+                    // Use cubic interpolation for smoother transition
+                    float t = outerProximity * outerProximity * (3.0f - 2.0f * outerProximity);
+                    reductionFactor = 0.05f + 0.95f * t;
+                }
+
+                // Apply step reduction
+                adaptiveStep *= reductionFactor;
+
+                // Very tight minimum near photon sphere for crisp features
+                float minStepFactor = (distFromPhotonSphere < 0.5f * M) ? 0.1f : 0.25f;
+                adaptiveStep = fmaxf(adaptiveStep, params.integration.minStepSize * minStepFactor);
+            }
         }
-        
+
         // VOLUMETRIC STEP CLAMPING (Phase 4.2 Fix)
         // Ensure step size reduces near the thin accretion disk to capture density profile
         // Without this, the integrator jumps over the thin disk or samples it coarsely ("chunky" look)
@@ -5090,6 +5290,28 @@ __device__ void raygen_renderFrame_impl() {
                         params.backgroundColor.z, 1.0f);
                 }
                 return;  // Terminate ray
+            }
+        }
+
+        // =====================================================================
+        // PHOTON RING ORBIT COUNTING (Phase 9 - Cinematic Realism)
+        // =====================================================================
+        // Track equatorial plane crossings to identify photon ring photons.
+        // A photon that crosses the equatorial plane twice has completed one
+        // "half-orbit" around the black hole. Multiple crossings indicate
+        // the photon was temporarily trapped near the photon sphere.
+        {
+            float currTheta = state.x.theta;
+            // Detect crossing: one side of π/2, then the other
+            bool crossedEquator = (prevTheta - PI_HALF) * (currTheta - PI_HALF) < 0.0f;
+            if (crossedEquator) {
+                orbitCount++;
+            }
+            prevTheta = currTheta;
+
+            // Track minimum approach radius (for photon ring sharpness)
+            if (state.x.r < minRadius) {
+                minRadius = state.x.r;
             }
         }
 
@@ -5460,30 +5682,67 @@ __device__ void raygen_renderFrame_impl() {
                             float phi_rotated = phi_hit + rotationAngle;
                             
                             // =========================================
-                            // Static concentric ring structure (no radial motion)
-                            // Rings are brightness variations at fixed radii
+                            // TURBULENT DENSITY STRUCTURE (Phase 10 Fix)
+                            // Using proper fBm noise instead of hard-coded rings
+                            // Creates physically realistic MHD-like structure
                             // =========================================
-                            const float numRings = 12.0f;
-                            float ringPhase = r_norm * numRings * 6.28318f;  // Static in radius
-                            float ringMod = 0.75f + 0.25f * sinf(ringPhase);  // 75-100% intensity
-                            
+
+                            // Convert disk coordinates to 3D for noise sampling
+                            // Use sheared coordinates to create spiral-like patterns
+                            float noise_x = r_hit * cosf(phi_rotated);
+                            float noise_y = r_hit * sinf(phi_rotated);
+                            float noise_z = r_norm * 2.0f;  // Radial position affects vertical structure
+
+                            // Create a local turbulence param for disk noise
+                            Sirius::TurbulenceParamsGPU diskTurb;
+                            diskTurb.enabled = 1;
+                            diskTurb.amplitude = 0.6f;       // Moderate perturbation
+                            diskTurb.outer_scale = 8.0f;     // Large-scale features
+                            diskTurb.inner_scale = 0.5f;     // Small-scale cutoff
+                            diskTurb.lacunarity = 2.2f;      // Frequency multiplier per octave
+                            diskTurb.persistence = 0.45f;    // Amplitude decay per octave
+                            diskTurb.octaves = 5;            // Multi-scale cascade
+                            diskTurb.seed = 42;              // Fixed seed for consistency
+
+                            // Use user's turbulence settings if enabled
+                            if (params.volumetricDisk.turbulence.enabled) {
+                                diskTurb.amplitude = params.volumetricDisk.turbulence.amplitude;
+                                diskTurb.outer_scale = params.volumetricDisk.turbulence.outer_scale;
+                                diskTurb.octaves = params.volumetricDisk.turbulence.octaves;
+                                diskTurb.seed = params.volumetricDisk.turbulence.seed;
+                            }
+
+                            // Sample fBm noise for density variations
+                            float densityNoise = fBm3D(noise_x * 0.3f, noise_y * 0.3f, noise_z, diskTurb);
+                            // Convert to multiplicative factor (0.4 to 1.6 range for ±0.6 amplitude)
+                            float densityMod = expf(diskTurb.amplitude * densityNoise * 0.8f);
+                            densityMod = clamp(densityMod, 0.3f, 2.5f);
+
                             // =========================================
-                            // Rotating spiral density waves
-                            // These are azimuthal features that rotate WITH the flow
-                            // Inner parts of spiral rotate faster -> creates trailing spiral
+                            // MHD-INSPIRED SPIRAL STRUCTURE
+                            // Multi-arm trailing spirals from magnetorotational instability
                             // =========================================
-                            // 2-arm logarithmic spiral: θ = log(r) * pitch + rotation
-                            float spiralPitch = 2.5f;  // Controls how tightly wound
-                            float spiralPhase = phi_rotated * 2.0f + logf(r_norm + 0.1f) * spiralPitch;
-                            float spiralMod = 0.80f + 0.20f * sinf(spiralPhase);  // 80-100%
-                            
+                            // 3-arm logarithmic spiral with noise modulation
+                            float spiralPitch = 3.5f;  // Moderately wound
+                            float spiralArms = 3.0f;   // Number of spiral arms
+                            float spiralPhase = phi_rotated * spiralArms + logf(r_norm + 0.05f) * spiralPitch;
+
+                            // Add noise to spiral to break perfect symmetry
+                            float spiralNoise = fBm3D(r_norm * 4.0f, phi_hit * 2.0f, 0.0f, diskTurb);
+                            float spiralMod = 0.75f + 0.25f * sinf(spiralPhase + spiralNoise * 1.5f);
+
                             // =========================================
-                            // Turbulent clumps rotating with the flow
-                            // Higher frequency structure that shows differential rotation
+                            // FINE-SCALE TURBULENT EDDIES
+                            // High-frequency structure from Kolmogorov cascade
                             // =========================================
-                            float turbPhase1 = phi_rotated * 5.0f + r_norm * 20.0f;  // Rotating turbulence
-                            float turbPhase2 = phi_rotated * 8.0f - r_norm * 15.0f;  // Counter-rotating layer
-                            float turbulence = 0.90f + 0.05f * sinf(turbPhase1) + 0.05f * sinf(turbPhase2);
+                            // Higher frequency noise layer for small-scale eddies
+                            Sirius::TurbulenceParamsGPU fineTurb = diskTurb;
+                            fineTurb.outer_scale = 2.0f;  // Smaller features
+                            fineTurb.octaves = 3;
+                            fineTurb.amplitude = 0.15f;
+
+                            float fineNoise = fBm3D(noise_x * 1.2f, noise_y * 1.2f, r_norm * 3.0f, fineTurb);
+                            float turbulence = 0.92f + 0.08f * fineNoise;
                             
                             // =========================================
                             // GRAVITATIONAL TIME DILATION
@@ -5550,8 +5809,9 @@ __device__ void raygen_renderFrame_impl() {
                             }
                             
                             // Combine all modulations including gravitational effects
-                            intensity *= ringMod * spiralMod * turbulence * clumpBoost * gravitationalFade;
-                            intensity = fminf(intensity, 12.0f);  // Clamp to prevent blowout
+                            // densityMod replaces the old ringMod (now fBm-based instead of sinusoidal)
+                            intensity *= densityMod * spiralMod * turbulence * clumpBoost * gravitationalFade;
+                            intensity = fminf(intensity, 15.0f);  // Clamp to prevent blowout
 
 
                             
@@ -5576,29 +5836,72 @@ __device__ void raygen_renderFrame_impl() {
                             u_photon.phi = (1.0f - t_cross) * prevState.u.phi + t_cross * state.u.phi;
                             
                             float g_total = computeRelativisticG<type>(hitPos, u_photon, u_emit, params.metricParams);
-                            
-                            // Doppler beaming: I_obs = g^(3+α) * I_emit (α~0 for thermal)
-                            float beaming = powf(g_total, params.accretionDisk.beamingExponent);
-                            beaming = clamp(beaming, 0.1f, 10.0f);
+
+                            // =========================================
+                            // FULL RELATIVISTIC BEAMING (Phase 9)
+                            // =========================================
+                            // For thermal emission: I_obs = g^4 * I_emit (flux transformation)
+                            // For optically thin: I_obs = g^(3+α) * I_emit where α is spectral index
+                            // The g^4 factor comes from:
+                            //   - g^3 from solid angle transformation
+                            //   - g^1 from frequency transformation (for ν-integrated flux)
+                            //
+                            // This creates dramatic brightness asymmetry:
+                            //   - Approaching side (g > 1): significantly brighter
+                            //   - Receding side (g < 1): significantly fainter
+                            float beamingExp = fmaxf(params.accretionDisk.beamingExponent, 3.0f);
+                            float beaming = powf(g_total, beamingExp);
+                            // Wider clamp for more dramatic visual effect
+                            beaming = clamp(beaming, 0.01f, 100.0f);
                             emission = emission * beaming;
-                            
-                            // Spectral color shift
+
+                            // Enhanced spectral color shift
                             if (params.accretionDisk.useSpectralColors) {
-                                if (g_total > 1.0f) {  // Blue shift
-                                    emission.z *= g_total;
-                                    emission.y *= sqrtf(g_total);
-                                } else {  // Red shift
-                                    emission.x /= g_total;
-                                    emission = emission * g_total;
+                                // Stronger color shift based on g-factor
+                                float colorShiftStrength = fminf(fabsf(logf(g_total)), 1.5f);
+                                if (g_total > 1.0f) {  // Blue shift (approaching)
+                                    // Shift spectrum toward blue
+                                    emission.z *= (1.0f + colorShiftStrength * 0.8f);
+                                    emission.y *= (1.0f + colorShiftStrength * 0.3f);
+                                    emission.x *= (1.0f - colorShiftStrength * 0.2f);
+                                } else {  // Red shift (receding)
+                                    // Shift spectrum toward red
+                                    emission.x *= (1.0f + colorShiftStrength * 0.8f);
+                                    emission.y *= (1.0f - colorShiftStrength * 0.2f);
+                                    emission.z *= (1.0f - colorShiftStrength * 0.5f);
                                 }
                             }
                             
+                            // =========================================
+                            // CORONA GLOW (Phase 9 - Inner Edge Enhancement)
+                            // =========================================
+                            // Add corona emission for rays hitting near the inner edge
+                            // Creates the bright inner glow characteristic of real AGN
+                            if (params.volumetricDisk.corona.enabled) {
+                                float M = params.metricParams.M;
+                                float r_corona_inner = params.volumetricDisk.corona.inner_radius * M;
+                                float r_corona_outer = params.volumetricDisk.corona.outer_radius * M;
+
+                                if (r_hit >= r_corona_inner && r_hit <= r_corona_outer) {
+                                    // Corona emission strength peaks at inner edge
+                                    float coronaFactor = powf(r_corona_inner / r_hit, params.volumetricDisk.corona.emissivity_index);
+                                    coronaFactor = clamp(coronaFactor, 0.0f, 5.0f);
+
+                                    // Hot blue-white corona color
+                                    float3 coronaColor = make_float3(0.7f, 0.85f, 1.0f);
+                                    coronaColor = coronaColor * coronaFactor * params.volumetricDisk.corona.intensity_scale;
+
+                                    // Add corona glow to disk emission
+                                    emission = emission + coronaColor;
+                                }
+                            }
+
                             // =========================================
                             // Add disk emission (pure emission, no absorption)
                             // =========================================
                             // Planar disk is treated as optically thick surface
                             float diskOpacity = 0.95f;  // Nearly opaque surface
-                            
+
                             // Composite with existing accumulated color
                             accumColor = accumColor * (1.0f - diskOpacity) + emission * diskOpacity;
                             opacity = opacity + diskOpacity * (1.0f - opacity);
@@ -5673,7 +5976,26 @@ __device__ void raygen_renderFrame_impl() {
                     subDtau,
                     subVel
                 );
-                
+
+                // =========================================
+                // CORONA SAMPLING (Phase 9 - Inner Glow)
+                // =========================================
+                // Sample hot corona emission near inner disk edge
+                // Corona creates diffuse blue-white glow around shadow
+                if (params.volumetricDisk.corona.enabled) {
+                    float coronaDtau;
+                    float3 coronaEmission = sampleCorona(
+                        subPos,
+                        params.volumetricDisk.corona,
+                        params.metricParams,
+                        subStep,
+                        coronaDtau
+                    );
+                    // Add corona contribution to disk emission
+                    subEmission = subEmission + coronaEmission;
+                    subDtau = subDtau + coronaDtau;
+                }
+
                 if (subDtau > 1e-6f || length(subEmission) > 1e-6f) {
                     // Calculate relativistic effects (G-factor) at this sub-position
                     // We can reuse photon 4-momentum 'state.u' as it doesn't change much over one step
@@ -5683,23 +6005,36 @@ __device__ void raygen_renderFrame_impl() {
                     float g_total = computeRelativisticG<type>(
                          subPos, state.u, u_emit, params.metricParams
                     );
-                    
-                    float beaming = powf(g_total, params.accretionDisk.beamingExponent);
-                    beaming = clamp(beaming, 0.1f, 10.0f);
+
+                    // =========================================
+                    // FULL RELATIVISTIC BEAMING (Phase 9)
+                    // =========================================
+                    // Consistent with planar mode: g^4 scaling for dramatic asymmetry
+                    float beamingExp = fmaxf(params.accretionDisk.beamingExponent, 3.0f);
+                    float beaming = powf(g_total, beamingExp);
+                    beaming = clamp(beaming, 0.01f, 100.0f);
                     subEmission = subEmission * beaming;
-                    
+
                     if (params.accretionDisk.useSpectralColors) {
-                        float T_ratio = g_total; 
-                        // Doppler shift approximation: shift color by T_ratio
-                        // Blue-shift (T_ratio > 1) -> multiply color by blueish tint?
-                        // Or shift blackbody? B_nu(T*g) approx g^3 B_nu(T)? 
-                        // Simplified tinting:
-                        if (T_ratio > 1.0f) { // Blue shift
-                             subEmission.z *= T_ratio; // Boost blue
-                             subEmission.y *= sqrtf(T_ratio);
-                        } else { // Red shift
-                             subEmission.x /= T_ratio; // Boost red (relative)
-                             subEmission = subEmission * T_ratio; // Diminish overall
+                        // Enhanced color shift for dramatic visual effect
+                        // Wider g range for volumetric (0.1 to 10.0)
+                        float g_clamped = clamp(g_total, 0.1f, 10.0f);
+                        float colorShiftStrength = fminf(fabsf(logf(g_clamped)), 2.0f);
+
+                        if (g_clamped > 1.1f) {
+                            // Blueshift: approaching side of disk
+                            // More pronounced effect for cinematic look
+                            subEmission.z *= (1.0f + colorShiftStrength * 0.6f);
+                            subEmission.y *= (1.0f + colorShiftStrength * 0.2f);
+                            subEmission.x *= (1.0f - colorShiftStrength * 0.15f);
+                        } else if (g_clamped < 0.9f) {
+                            // Redshift: receding side of disk
+                            // Warm reddening with dimming
+                            subEmission.x *= (1.0f + colorShiftStrength * 0.6f);
+                            subEmission.y *= (1.0f - colorShiftStrength * 0.15f);
+                            subEmission.z *= (1.0f - colorShiftStrength * 0.4f);
+                            // Additional dimming for receding material
+                            subEmission = subEmission * powf(g_clamped, 0.5f);
                         }
                     }
                     
@@ -5855,6 +6190,52 @@ __device__ void raygen_renderFrame_impl() {
     }
 
     float3 bgColor = make_float3(0.0f, 0.0f, 0.0f);
+
+    // =========================================================================
+    // DISK LIGHT SCATTERING (Phase 9 - Environmental Illumination)
+    // =========================================================================
+    // Light from the accretion disk scatters into the surrounding environment,
+    // creating a warm glow around the black hole even in regions not directly
+    // illuminated by the disk. This is particularly visible when the disk
+    // emission is strong.
+    //
+    // Implementation: Add scattered disk light to rays that passed near the
+    // disk plane, proportional to accumulated disk emission and proximity.
+    float3 scatteredDiskLight = make_float3(0.0f, 0.0f, 0.0f);
+    if (params.accretionDisk.enabled && !hitHorizon) {
+        // How much disk light was accumulated along this ray?
+        float diskLuminance = 0.2126f * accumColor.x + 0.7152f * accumColor.y + 0.0722f * accumColor.z;
+
+        // Estimate how close the ray passed to the disk plane
+        // minRadius already tracked, use it to estimate scattering
+        float M = params.metricParams.M;
+        float r_disk_inner = params.accretionDisk.innerRadius * M;
+        float r_disk_outer = params.accretionDisk.outerRadius * M;
+
+        // Scattered light is proportional to disk emission and inversely to distance
+        if (minRadius > horizonRadius && minRadius < r_disk_outer * 2.0f) {
+            // Scattering efficiency (higher near disk, lower far away)
+            float scatterDist = fmaxf(minRadius - r_disk_inner, 0.1f * M);
+            float scatterEfficiency = 0.1f * M / scatterDist;
+            scatterEfficiency = clamp(scatterEfficiency, 0.0f, 0.3f);
+
+            // Scattered light has warm disk color (average disk emission color)
+            float avgEmission = (accumColor.x + accumColor.y + accumColor.z) / 3.0f;
+            float3 scatterColor;
+            if (avgEmission > 0.001f) {
+                scatterColor = accumColor * (scatterEfficiency / fmaxf(avgEmission, 0.001f));
+            } else {
+                // Use default warm disk color if no emission accumulated
+                scatterColor = make_float3(1.0f, 0.7f, 0.4f) * scatterEfficiency * 0.1f;
+            }
+
+            // Only apply scattering if we didn't fully hit the disk
+            if (opacity < 0.9f) {
+                scatteredDiskLight = scatterColor * (1.0f - opacity) * 0.5f;
+            }
+        }
+    }
+
     if (hitHorizon) {
         // Ray fell into black hole - pure black
         bgColor = make_float3(0.0f, 0.0f, 0.0f);
@@ -5887,12 +6268,103 @@ __device__ void raygen_renderFrame_impl() {
         );
         
         bgColor = sampleBackground(worldDir);
+
+        // Add scattered disk light to background (environmental illumination)
+        bgColor = bgColor + scatteredDiskLight;
     }
-    
+
     // Composite Background
     // color = accum + (1-opacity) * bg
     float3 finalColor = accumColor + bgColor * (1.0f - opacity);
-    
+
+    // =========================================================================
+    // PHOTON RING ENHANCEMENT (Phase 10 - Sharp Critical Curve)
+    // =========================================================================
+    // The photon ring is the infinitely thin, bright boundary at the edge of
+    // the black hole shadow. It consists of stacked higher-order images where
+    // light orbited the black hole before escaping. Each successive image (n)
+    // is exponentially demagnified by e^(-2π) ≈ 0.002.
+    //
+    // Physical characteristics:
+    //   - Width: Asymptotically zero (sub-pixel in practice)
+    //   - Location: r ≈ 3M (Schwarzschild), varies with spin (Kerr)
+    //   - Brightness: Logarithmically divergent at critical curve
+    //
+    // Implementation: Apply sharp enhancement at the shadow boundary based on:
+    //   1. How close the ray's minimum radius approached the photon sphere
+    //   2. Number of equatorial plane crossings (orbit count)
+    {
+        float M = params.metricParams.M;
+        float a = params.metricParams.a;
+
+        // Photon sphere radius (unstable circular orbit)
+        // Schwarzschild: r_ph = 3M
+        // Kerr prograde: r_ph = 2M(1 + cos(2/3 * acos(-a/M)))
+        float r_photon = 3.0f * M;
+        if constexpr (type == Sirius::MetricType::Kerr) {
+            float aOverM = clamp(a / M, -0.999f, 0.999f);
+            r_photon = 2.0f * M * (1.0f + cosf(0.667f * acosf(-aOverM)));
+        }
+
+        // Critical curve proximity (how close ray came to photon sphere)
+        // This determines the "photon ring factor" even without full orbits
+        float criticalProximity = 0.0f;
+        if (minRadius > horizonRadius && minRadius < r_photon * 1.5f) {
+            // Normalized distance: 0 at horizon, 1 at photon sphere
+            float distFromHorizon = minRadius - horizonRadius;
+            float photonSphereWidth = r_photon - horizonRadius;
+            float normalizedRadius = distFromHorizon / photonSphereWidth;
+            normalizedRadius = clamp(normalizedRadius, 0.0f, 1.5f);
+
+            // Sharp peak at r = r_photon (normalizedRadius = 1.0)
+            // Uses narrow Gaussian centered on the photon sphere
+            float ringWidth = params.photonRing.ringWidth;  // Typically 0.03-0.1
+            float distFromPhotonSphere = fabsf(normalizedRadius - 1.0f);
+            criticalProximity = expf(-distFromPhotonSphere * distFromPhotonSphere / (2.0f * ringWidth * ringWidth));
+        }
+
+        // Orbit-based enhancement (for rays that completed orbits)
+        float orbitBoost = 1.0f;
+        if (params.photonRing.enabled && orbitCount >= (int)params.photonRing.minOrbits) {
+            float effectiveOrbits = orbitCount * 0.5f;
+            float boost = params.photonRing.brightnessBoost;
+            float falloff = params.photonRing.falloffPerOrbit;
+            float orbitFactor = powf(falloff, fmaxf(0.0f, effectiveOrbits - 1.0f));
+            orbitBoost = 1.0f + (boost * orbitFactor - 1.0f);
+        }
+
+        // Combine proximity and orbit enhancement
+        // Proximity creates the sharp ring shape
+        // Orbit count determines brightness within the ring
+        float innerSharpness = fmaxf(params.photonRing.innerSharpness, 3.0f);
+        float proximityBoost = 1.0f + criticalProximity * (params.photonRing.brightnessBoost - 1.0f);
+
+        // Apply sharper falloff toward the shadow interior
+        if (minRadius < r_photon && minRadius > horizonRadius) {
+            float shadowEdge = (minRadius - horizonRadius) / (r_photon - horizonRadius);
+            shadowEdge = clamp(shadowEdge, 0.0f, 1.0f);
+            float edgeSharpening = powf(shadowEdge, innerSharpness);
+            proximityBoost = 1.0f + edgeSharpening * (proximityBoost - 1.0f);
+        }
+
+        // Final photon ring factor
+        float photonRingFactor = fmaxf(proximityBoost, orbitBoost);
+
+        // Apply enhancement (multiplicative)
+        if (params.photonRing.enabled && photonRingFactor > 1.01f) {
+            finalColor = finalColor * photonRingFactor;
+
+            // Subtle color shift toward blue for strong lensing
+            if (params.photonRing.colorShift > 0.0f && photonRingFactor > 1.5f) {
+                float blueShiftAmount = params.photonRing.colorShift *
+                    fminf((photonRingFactor - 1.0f) * 0.2f, 0.4f);
+                finalColor.x *= (1.0f - blueShiftAmount * 0.3f);  // Reduce red
+                finalColor.y *= (1.0f + blueShiftAmount * 0.1f);  // Slight green
+                finalColor.z *= (1.0f + blueShiftAmount);         // Increase blue
+            }
+        }
+    }
+
     // =========================================================================
     // TEMPORAL ACCUMULATION (Phase 4.3 - Dual Mode)
     // =========================================================================
@@ -5900,15 +6372,15 @@ __device__ void raygen_renderFrame_impl() {
     // 1. Running Average: newAccum = (oldAccum * N + newColor) / (N + 1)
     //    - Unbiased, converges to ground truth
     //    - Slower convergence, equal weight to all frames
-    // 2. Exponential Moving Average (EMA): newAccum = α*newColor + (1-α)*oldAccum  
+    // 2. Exponential Moving Average (EMA): newAccum = α*newColor + (1-α)*oldAccum
     //    - Faster visual convergence
     //    - More weight to recent frames, handles slow scene changes
-    
+
     if (params.pathTracing.enableAccumulation && params.frameIndex > 0) {
         // Read previous accumulated value
         float4 prevAccum = params.accumBuffer[pixelIndex];
         float3 prevColor = make_float3(prevAccum.x, prevAccum.y, prevAccum.z);
-        
+
         if (params.pathTracing.useExponentialMA) {
             // Exponential Moving Average
             // α = blendWeight (typically 0.05-0.2 for smooth convergence)
@@ -5920,12 +6392,156 @@ __device__ void raygen_renderFrame_impl() {
             finalColor = prevColor * (1.0f - weight) + finalColor * weight;
         }
     }
-    
-    // Clamp to prevent overflow from accumulation errors
+
+    // =========================================================================
+    // HDR TONEMAPPING & EXPOSURE (Applied BEFORE clamping to preserve range)
+    // =========================================================================
+    // Apply exposure control: values < 1.0 darken, > 1.0 brighten
+    // Default 1.0 = neutral (no change to brightness)
+    // For realistic dark space scenes, use exposure 0.3-0.7
+    float exposure = fmaxf(params.film.exposure, 0.01f);
+    finalColor = finalColor * exposure;
+
+    // ACES Filmic Tonemapping (preserves color, handles HDR gracefully)
+    // f(x) = (x * (2.51*x + 0.03)) / (x * (2.43*x + 0.59) + 0.14)
+    // This maps [0, ∞) -> [0, 1) with nice shoulder rolloff
+    {
+        float3 x = finalColor;
+        // ACES per-channel: a = x * (2.51*x + 0.03), b = x * (2.43*x + 0.59) + 0.14
+        float ax = x.x * (x.x * 2.51f + 0.03f);
+        float ay = x.y * (x.y * 2.51f + 0.03f);
+        float az = x.z * (x.z * 2.51f + 0.03f);
+        float bx = x.x * (x.x * 2.43f + 0.59f) + 0.14f;
+        float by = x.y * (x.y * 2.43f + 0.59f) + 0.14f;
+        float bz = x.z * (x.z * 2.43f + 0.59f) + 0.14f;
+        finalColor.x = ax / fmaxf(bx, 0.001f);
+        finalColor.y = ay / fmaxf(by, 0.001f);
+        finalColor.z = az / fmaxf(bz, 0.001f);
+    }
+
+    // =========================================================================
+    // FILM SIMULATION (Phase 9 - Cinematic Post-Processing)
+    // =========================================================================
+    // IMAX 70mm film characteristics: grain, halation, vignette, chromatic aberration
+    // These effects are applied AFTER tonemapping for correct response curve
+    if (params.film.features & 0x08) {  // Bit 3: film enabled
+        // Normalized pixel coordinates for spatial effects
+        float px = (float)ix / (float)width;
+        float py = (float)iy / (float)height;
+        float cx = px - 0.5f;  // Center-relative X
+        float cy = py - 0.5f;  // Center-relative Y
+        float distFromCenter = sqrtf(cx * cx + cy * cy) * 2.0f;  // 0 at center, 1 at corners
+
+        // -----------------------------------------------------------------
+        // VIGNETTE (bit 2)
+        // Darkening toward image edges, characteristic of large format lenses
+        // -----------------------------------------------------------------
+        if (params.film.features & 0x04) {
+            float vignetteRadius = params.film.vignette_radius;
+            float vignetteSoftness = params.film.vignette_softness;
+            float vignetteStrength = params.film.vignette_strength;
+
+            float vignetteAmount = smoothstep(vignetteRadius - vignetteSoftness,
+                                              vignetteRadius + vignetteSoftness,
+                                              distFromCenter);
+            float vignetteFactor = 1.0f - vignetteStrength * vignetteAmount;
+            finalColor = finalColor * vignetteFactor;
+        }
+
+        // -----------------------------------------------------------------
+        // HALATION (bit 1)
+        // Red glow around bright areas from light scattering in film emulsion
+        // Simplified: boost warm tones for bright pixels
+        // -----------------------------------------------------------------
+        if (params.film.features & 0x02) {
+            float luminance = 0.2126f * finalColor.x + 0.7152f * finalColor.y + 0.0722f * finalColor.z;
+            float threshold = params.film.halation_threshold;
+            float strength = params.film.halation_strength;
+
+            if (luminance > threshold) {
+                float halationAmount = (luminance - threshold) / (1.0f - threshold + 0.001f);
+                halationAmount = halationAmount * halationAmount * strength;
+
+                // Halation color (warm red-orange tint characteristic of film)
+                float3 halationColor = make_float3(
+                    params.film.halation_color_r,
+                    params.film.halation_color_g,
+                    params.film.halation_color_b
+                );
+                finalColor = finalColor + halationColor * halationAmount;
+            }
+        }
+
+        // -----------------------------------------------------------------
+        // CHROMATIC ABERRATION (bit 4)
+        // RGB channel separation toward edges, simulating lens imperfection
+        // -----------------------------------------------------------------
+        if (params.film.features & 0x10) {
+            float chromaticStrength = params.film.chromatic_strength;
+            float chromaticPower = params.film.chromatic_radial_power;
+
+            // Aberration increases toward edges
+            float aberrationAmount = powf(distFromCenter, chromaticPower) * chromaticStrength;
+
+            // Shift R outward, B inward (typical lens chromatic aberration)
+            // This is approximate - true CA would sample different UV coords
+            // Here we simulate by adjusting channel intensities based on position
+            float rShift = 1.0f + aberrationAmount * cx * 2.0f;
+            float bShift = 1.0f - aberrationAmount * cx * 2.0f;
+
+            finalColor.x *= rShift;
+            finalColor.z *= bShift;
+        }
+
+        // -----------------------------------------------------------------
+        // FILM GRAIN (bit 0)
+        // Random luminance variation characteristic of silver halide crystals
+        // -----------------------------------------------------------------
+        if (params.film.features & 0x01) {
+            float grainIntensity = params.film.grain_intensity;
+
+            // Unique noise per pixel per frame
+            unsigned int grainSeed = pixelIndex * 1747u + params.frameIndex * 7919u + params.film.grain_seed;
+            float grain = randomFloat(grainSeed) * 2.0f - 1.0f;  // [-1, 1]
+
+            // Grain is more visible in midtones, less in shadows/highlights
+            float luminance = 0.2126f * finalColor.x + 0.7152f * finalColor.y + 0.0722f * finalColor.z;
+            float midtoneFactor = 4.0f * luminance * (1.0f - luminance);  // Peak at 0.5
+
+            float grainAmount = grain * grainIntensity * (0.3f + 0.7f * midtoneFactor);
+
+            // Apply grain as multiplicative noise for more natural look
+            finalColor.x *= (1.0f + grainAmount);
+            finalColor.y *= (1.0f + grainAmount);
+            finalColor.z *= (1.0f + grainAmount);
+        }
+
+        // -----------------------------------------------------------------
+        // CONTRAST & SATURATION (always applied when film enabled)
+        // -----------------------------------------------------------------
+        // Contrast: pivot around middle gray (0.18 in linear, ~0.5 after tonemap)
+        float contrast = params.film.contrast;
+        if (fabsf(contrast - 1.0f) > 0.01f) {
+            finalColor.x = 0.5f + (finalColor.x - 0.5f) * contrast;
+            finalColor.y = 0.5f + (finalColor.y - 0.5f) * contrast;
+            finalColor.z = 0.5f + (finalColor.z - 0.5f) * contrast;
+        }
+
+        // Saturation: blend toward grayscale
+        float saturation = params.film.saturation;
+        if (fabsf(saturation - 1.0f) > 0.01f) {
+            float gray = 0.2126f * finalColor.x + 0.7152f * finalColor.y + 0.0722f * finalColor.z;
+            finalColor.x = gray + (finalColor.x - gray) * saturation;
+            finalColor.y = gray + (finalColor.y - gray) * saturation;
+            finalColor.z = gray + (finalColor.z - gray) * saturation;
+        }
+    }
+
+    // Clamp to valid display range after all post-processing
     finalColor.x = clamp(finalColor.x, 0.0f, 1.0f);
     finalColor.y = clamp(finalColor.y, 0.0f, 1.0f);
     finalColor.z = clamp(finalColor.z, 0.0f, 1.0f);
-    
+
     params.frameBuffer[pixelIndex] = make_float4(finalColor.x, finalColor.y, finalColor.z, 1.0f);
     params.accumBuffer[pixelIndex] = make_float4(finalColor.x, finalColor.y, finalColor.z, 1.0f);
 }

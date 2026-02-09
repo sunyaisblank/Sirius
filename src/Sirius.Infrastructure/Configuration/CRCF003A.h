@@ -51,11 +51,40 @@ struct ObserverConfig {
 struct PostProcessConfig {
     bool enableBloom = true;
     float bloomIntensity = 0.3f;
+    float bloomThreshold = 0.3f;
     float exposure = 1.0f;
-    std::string tonemapper = "ACES";  ///< ACES, Reinhard, Uncharted2
+    float contrast = 1.0f;
+    float saturation = 1.0f;
+    std::string tonemapper = "ACES";  ///< ACES, Reinhard, Uncharted2, Filmic, AgX
 
     NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(PostProcessConfig,
-        enableBloom, bloomIntensity, exposure, tonemapper)
+        enableBloom, bloomIntensity, bloomThreshold, exposure, contrast, saturation, tonemapper)
+};
+
+/// @brief Volumetric disk settings
+struct VolumetricConfig {
+    bool enabled = false;
+    float hOverR = 0.1f;           ///< Scale height ratio H/r
+    float hPower = 0.25f;          ///< Flaring index
+    float tauMidplane = 10.0f;     ///< Midplane optical depth
+    int samples = 64;              ///< Ray marching samples
+    bool enableTurbulence = false; ///< Enable turbulent density perturbations
+    bool enableCorona = false;     ///< Enable corona emission
+
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(VolumetricConfig,
+        enabled, hOverR, hPower, tauMidplane, samples, enableTurbulence, enableCorona)
+};
+
+/// @brief Film simulation settings
+struct FilmSimConfig {
+    bool enabled = false;
+    std::string preset = "Interstellar";  ///< Interstellar, SpaceOdyssey2001, DigitalClean
+    float grainIntensity = 0.15f;
+    float halationStrength = 0.15f;
+    float vignetteStrength = 0.3f;
+
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(FilmSimConfig,
+        enabled, preset, grainIntensity, halationStrength, vignetteStrength)
 };
 
 /// @brief Backend (renderer) settings
@@ -75,9 +104,11 @@ struct SiriusConfig {
     ObserverConfig observer;
     PostProcessConfig postprocess;
     BackendConfig backend;
+    VolumetricConfig volumetric;
+    FilmSimConfig film;
 
     NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(SiriusConfig,
-        render, metric, observer, postprocess, backend)
+        render, metric, observer, postprocess, backend, volumetric, film)
 
     /// @brief Get default configuration
     static SiriusConfig defaults() {

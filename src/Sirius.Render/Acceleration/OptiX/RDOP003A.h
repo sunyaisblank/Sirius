@@ -569,6 +569,21 @@ struct TurbulenceParamsGPU {
 };
 
 //==============================================================================
+// Photon Ring Parameters (GPU-compatible)
+// Enhancement for light orbiting black hole before escaping
+//==============================================================================
+struct PhotonRingParams {
+    uint32_t enabled;              // Enable photon ring enhancement
+    uint32_t minOrbits;            // Minimum orbits to qualify (typically 1)
+    float brightnessBoost;         // Brightness multiplier per orbit (e.g., 2.0)
+    float falloffPerOrbit;         // Brightness decay per additional orbit (e.g., 0.5)
+    float innerSharpness;          // Edge sharpness near shadow (higher = sharper)
+    float colorShift;              // Blue shift for highly deflected photons
+    float ringWidth;               // Apparent width factor (0.01 = thin, 0.1 = thick)
+    float padding;
+};
+
+//==============================================================================
 // Corona Parameters (GPU-compatible)
 // Inverse-Compton scattering corona model
 //==============================================================================
@@ -716,8 +731,15 @@ struct FilmParamsGPU {
     float vignette_softness;
     float padding5;
 
+    // Chromatic Aberration (Phase 9 - Cinematic Lens Effect)
+    float chromatic_strength;      // RGB channel separation (0.0 = off, 0.01 = subtle)
+    float chromatic_radial_power;  // How much effect increases toward edges (2.0 typical)
+    float padding6;
+    float padding7;
+
     // Feature flags (packed as bits)
-    uint32_t features;  // bit 0: grain, bit 1: halation, bit 2: vignette, bit 3: enabled
+    // bit 0: grain, bit 1: halation, bit 2: vignette, bit 3: enabled, bit 4: chromatic
+    uint32_t features;
 };
 
 //==============================================================================
@@ -840,9 +862,12 @@ struct LaunchParams {
     
     // === Bloom/Glow (Phase 7 - Cinematic Visual Quality) ===
     BloomParams bloom;
-    
+
     // === Ray Bundles (Phase 6.3 - DNGR Anti-Aliasing) ===
     RayBundleParams rayBundle;
+
+    // === Photon Ring Enhancement (Phase 9 - Cinematic Realism) ===
+    PhotonRingParams photonRing;
 
     // === Cinematic Expansion (2026) ===
     // SMBH astrophysical parameters
@@ -1152,7 +1177,7 @@ inline LaunchParams createDefaultLaunchParams() {
     params.film.padding1 = params.film.padding2 = 0.0f;
     params.film.saturation = 0.95f;
     params.film.contrast = 1.05f;
-    params.film.exposure = 0.0f;
+    params.film.exposure = 1.0f;  // Neutral exposure (1.0 = no change)
     params.film.toe_strength = 0.5f;
     params.film.shoulder_strength = 0.5f;
     params.film.midtone_point = 0.18f;

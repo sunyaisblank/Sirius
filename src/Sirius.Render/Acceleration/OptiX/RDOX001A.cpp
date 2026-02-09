@@ -260,17 +260,69 @@ Sirius::LaunchParams OptiXAccelerator::convertConfig(const LaunchConfig& config)
         params.starfield.enabled = 0;
     }
 
-    // Film simulation parameters
+    // Film simulation parameters (Phase 10 - Enhanced visibility)
     if (config.enableFilm) {
-        params.film.grain_intensity = config.filmGrainIntensity;
+        // Grain - visible but not distracting
+        params.film.grain_intensity = config.filmGrainIntensity * 1.5f;  // Boost for visibility
+        params.film.grain_size = 1.2f;
+        params.film.grain_uniformity = 0.7f;
+        params.film.grain_seed = 12345;
+
+        // Halation - warm glow around bright areas (IMAX 70mm characteristic)
         params.film.halation_radius = config.filmHalationRadius;
-        params.film.halation_strength = config.filmHalationStrength;
-        params.film.vignette_strength = config.filmVignetteStrength;
-        // Enable film features bitfield: bit 0=grain, bit 1=halation, bit 2=vignette, bit 3=enabled
-        params.film.features = 0x0F;  // All features enabled
+        params.film.halation_strength = config.filmHalationStrength * 2.0f;  // Boost for visibility
+        params.film.halation_threshold = 0.6f;  // Lower threshold = more halation
+        params.film.halation_color_r = 1.0f;    // Warm red-orange
+        params.film.halation_color_g = 0.7f;
+        params.film.halation_color_b = 0.4f;
+
+        // Vignette - subtle edge darkening
+        params.film.vignette_strength = config.filmVignetteStrength * 1.3f;
+        params.film.vignette_radius = 0.7f;     // Start vignette at 70% from center
+        params.film.vignette_softness = 0.4f;   // Soft falloff
+
+        // Chromatic aberration - subtle lens fringing
+        params.film.chromatic_strength = 0.008f;  // Very subtle
+        params.film.chromatic_radial_power = 2.0f;  // Increases toward edges
+
+        // Enable all film features: bit 0=grain, bit 1=halation, bit 2=vignette, bit 3=enabled, bit 4=chromatic
+        params.film.features = 0x1F;  // All features enabled including chromatic
     } else {
         params.film.features = 0;
     }
+
+    // =========================================================================
+    // Exposure & Post-processing (GPU-side tonemapping)
+    // =========================================================================
+    // exposure < 1.0 darkens the scene (realistic dark space)
+    // exposure > 1.0 brightens (for artistic effect)
+    params.film.exposure = config.exposure;
+    params.film.contrast = config.contrast;
+    params.film.saturation = config.saturation;
+
+    // =========================================================================
+    // Photon Ring Enhancement (Phase 10 - Sharp Critical Curve)
+    // =========================================================================
+    params.photonRing.enabled = config.enablePhotonRing ? 1 : 0;
+    params.photonRing.brightnessBoost = config.photonRingBoost * 1.5f;  // Enhanced visibility
+    params.photonRing.falloffPerOrbit = config.photonRingFalloff;
+    params.photonRing.minOrbits = config.photonRingMinOrbits;
+    params.photonRing.innerSharpness = 4.0f;   // Sharper edge (was 2.0)
+    params.photonRing.colorShift = 0.15f;      // More noticeable blue shift
+    params.photonRing.ringWidth = 0.035f;      // Thinner ring for sharper appearance
+
+    // =========================================================================
+    // Corona Enhancement (Phase 10 - Visible Inner Glow)
+    // =========================================================================
+    params.volumetricDisk.corona.enabled = config.enableCorona ? 1 : 0;
+    params.volumetricDisk.corona.intensity_scale = config.coronaIntensity * 3.0f;  // Much brighter
+    params.volumetricDisk.corona.temperature_keV = config.coronaTemperature;
+    params.volumetricDisk.corona.inner_radius = 1.2f;   // Closer to horizon (was 1.5)
+    params.volumetricDisk.corona.outer_radius = 8.0f;   // Wider region (was 6.0)
+    params.volumetricDisk.corona.scale_height = 3.0f;   // Taller (was 2.0)
+    params.volumetricDisk.corona.emissivity_index = 2.5f;  // Steeper falloff (was 2.0)
+    params.volumetricDisk.corona.optical_depth = 0.5f;
+    params.volumetricDisk.corona.geometry = 0;  // Spherical
 
     return params;
 }

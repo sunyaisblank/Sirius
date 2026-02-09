@@ -1106,6 +1106,13 @@ void RenderSession::renderGPU() {
     config.metricType = (std::abs(a) < 0.01) ? 1 : 2;  // 1=Schwarzschild, 2=Kerr
     config.metricFamily = 0;  // Kerr-Schild family
 
+    // Post-processing / exposure
+    // For realistic dark space scenes, exposure < 1.0 darkens the scene
+    config.exposure = m_Config.exposure;
+    config.contrast = m_Config.contrast;
+    config.saturation = m_Config.saturation;
+    config.bloomIntensity = m_Config.bloomIntensity;
+
     // Reset accumulation for fresh render
     m_Accelerator->resetAccumulation();
 

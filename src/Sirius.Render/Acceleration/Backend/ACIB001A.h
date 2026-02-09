@@ -108,6 +108,29 @@ struct LaunchConfig {
     float filmHalationRadius = 8.0f;
     float filmHalationStrength = 0.15f;
     float filmVignetteStrength = 0.3f;
+
+    // Post-processing / exposure
+    float exposure = 0.5f;   // Default darker (0.5) for realistic dark space
+    float contrast = 1.1f;
+    float saturation = 1.0f;
+    float bloomIntensity = 0.3f;
+
+    // Progressive Rendering (Phase 9)
+    bool enableProgressiveRender = false;  // Enable iterative accumulation
+    int progressiveSamplesPerFrame = 4;    // Samples per progressive frame
+    int progressiveTargetFrames = 256;     // Target number of frames to accumulate
+    bool progressiveShowPreview = true;    // Show intermediate results
+
+    // Photon Ring Enhancement (Phase 9)
+    bool enablePhotonRing = true;          // Enable photon ring brightness boost
+    float photonRingBoost = 2.0f;          // Brightness multiplier
+    float photonRingFalloff = 0.5f;        // Decay per additional orbit
+    int photonRingMinOrbits = 2;           // Minimum half-orbits to qualify
+
+    // Corona (Phase 9)
+    bool enableCorona = false;
+    float coronaIntensity = 1.0f;
+    float coronaTemperature = 100.0f;      // keV
 };
 
 //==============================================================================
