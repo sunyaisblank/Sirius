@@ -6,7 +6,7 @@
 #include <cmath>
 #include <MTSB001A.h>
 
-using namespace sirius::spectral;
+using namespace Sirius;
 
 namespace {
 

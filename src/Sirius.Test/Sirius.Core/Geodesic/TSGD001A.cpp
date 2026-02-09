@@ -9,8 +9,7 @@
 #include <PHMT100B.h>
 #include <INBI001A.h>
 
-using namespace sirius::math;
-using namespace sirius::physics;
+using namespace Sirius;
 using namespace sirius::kernel;
 
 namespace {

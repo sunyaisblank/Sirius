@@ -14,10 +14,10 @@
 
 namespace sirius::kernel {
 
-// Use Vec4d from MTTP001A.h (sirius::math namespace)
-using sirius::math::Vec4d;
-using sirius::math::GeodesicStateD;
-using sirius::math::Mat4d;
+// Use Vec4d from MTTP001A.h (Sirius namespace)
+using Sirius::Vec4d;
+using Sirius::GeodesicStateD;
+using Sirius::Mat4d;
 
 //==============================================================================
 // BeamStateD

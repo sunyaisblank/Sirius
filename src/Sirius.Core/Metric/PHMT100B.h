@@ -17,7 +17,7 @@
 #include <cmath>
 #include <algorithm>
 
-namespace sirius::physics {
+namespace Sirius {
 
 //==============================================================================
 // KerrMetricD: Double-precision Kerr metric implementation
@@ -44,7 +44,16 @@ public:
     void evaluate(const Vec4d& x, double g[4][4], double g_inv[4][4]) const override {
         double r = x.r;
         double theta = x.theta;
-        
+
+        // Precondition: r must be outside horizon
+        if (r <= m_rplus) {
+            // Return Minkowski metric as safe fallback
+            for (int i = 0; i < 4; ++i)
+                for (int j = 0; j < 4; ++j)
+                    g[i][j] = g_inv[i][j] = (i == j) ? (i == 0 ? -1.0 : 1.0) : 0.0;
+            return;
+        }
+
         // Handle pole singularities
         double sinth = std::sin(theta);
         double costh = std::cos(theta);
@@ -636,4 +645,4 @@ private:
     double m_rminus;  // Inner horizon
 };
 
-} // namespace sirius::physics
+} // namespace Sirius

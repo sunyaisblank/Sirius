@@ -52,13 +52,13 @@ public:
         double phi = 0.0;     // Azimuthal angle
         double magnification = 1.0;  // |det(J)|
         double g_factor = 1.0;       // Gravitational redshift factor
-        sirius::spectral::SpectralRadiance emission;  // Disk emission at intersection
+        Sirius::SpectralRadiance emission;  // Disk emission at intersection
     };
 
-    explicit SceneIntersector(const sirius::physics::AccretionDiskD* disk)
+    explicit SceneIntersector(const Sirius::AccretionDiskD* disk)
         : m_disk(disk), m_config() {}
 
-    SceneIntersector(const sirius::physics::AccretionDiskD* disk, const Config& config)
+    SceneIntersector(const Sirius::AccretionDiskD* disk, const Config& config)
         : m_disk(disk), m_config(config) {}
 
     //--------------------------------------------------------------------------
@@ -98,7 +98,7 @@ public:
 
         // Check if in disk plane (theta ≈ π/2)
         if (m_disk && std::abs(theta - M_PI / 2.0) < 0.01) {
-            double rISCO = sirius::physics::AccretionDiskD::computeISCO(
+            double rISCO = Sirius::AccretionDiskD::computeISCO(
                 m_disk->config().a_star);
             double rOuter = m_disk->config().r_outer * m_disk->config().M;
 
@@ -139,7 +139,7 @@ public:
     }
 
 private:
-    const sirius::physics::AccretionDiskD* m_disk;
+    const Sirius::AccretionDiskD* m_disk;
     Config m_config;
 };
 

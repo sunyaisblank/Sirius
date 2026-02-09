@@ -14,8 +14,7 @@
 #include <cmath>
 #include <vector>
 
-// SpectralRadiance is defined in MTSB001A.h in sirius::spectral namespace
-// Include it to make it available
+// SpectralRadiance is defined in MTSB001A.h in Sirius namespace
 
 namespace sirius::kernel {
 
@@ -27,12 +26,12 @@ namespace sirius::kernel {
 class SpectralTransport {
 public:
     struct IntegrationResult {
-        sirius::spectral::SpectralRadiance totalRadiance;
+        Sirius::SpectralRadiance totalRadiance;
         int diskHits = 0;
         bool hitHorizon = false;
     };
 
-    explicit SpectralTransport(const sirius::physics::AccretionDiskD* disk)
+    explicit SpectralTransport(const Sirius::AccretionDiskD* disk)
         : m_disk(disk) {}
 
     //--------------------------------------------------------------------------
@@ -71,24 +70,24 @@ public:
     //--------------------------------------------------------------------------
 
     /// Evaluate emission at a single point
-    sirius::spectral::SpectralRadiance evaluateEmission(const BeamStateD& beam,
+    Sirius::SpectralRadiance evaluateEmission(const BeamStateD& beam,
                                                          double g) const {
-        if (!m_disk) return sirius::spectral::SpectralRadiance();
+        if (!m_disk) return Sirius::SpectralRadiance();
 
         double r = beam.x.r;
         double theta = beam.x.theta;
 
         // Check if in disk plane
         if (std::abs(theta - M_PI / 2.0) > 0.01) {
-            return sirius::spectral::SpectralRadiance();
+            return Sirius::SpectralRadiance();
         }
 
         // Get disk temperature at this radius
         double T = m_disk->effectiveTemperature(r);
-        if (T <= 0) return sirius::spectral::SpectralRadiance();
+        if (T <= 0) return Sirius::SpectralRadiance();
 
         // Create blackbody spectrum and apply redshift
-        auto emission = sirius::spectral::SpectralRadiance::blackbody(T);
+        auto emission = Sirius::SpectralRadiance::blackbody(T);
         return emission.applyRedshift(g);
     }
 
@@ -128,7 +127,7 @@ public:
     }
 
 private:
-    const sirius::physics::AccretionDiskD* m_disk;
+    const Sirius::AccretionDiskD* m_disk;
 };
 
 } // namespace sirius::kernel

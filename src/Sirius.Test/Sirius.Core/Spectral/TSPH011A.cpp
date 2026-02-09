@@ -7,8 +7,10 @@
 #include "PHSP001A.h"
 
 namespace sirius::test {
+using namespace Sirius;
 
 using namespace Sirius::Spectral;
+using namespace Sirius::Constants::Physical;
 
 // =============================================================================
 // Physical Constants Tests
@@ -19,7 +21,7 @@ TEST(SpectralUtilsTests, PhysicalConstantsValid) {
     EXPECT_GT(h_PLANCK, 0) << "Planck constant should be positive";
     EXPECT_GT(c_LIGHT, 0) << "Speed of light should be positive";
     EXPECT_GT(k_BOLTZMANN, 0) << "Boltzmann constant should be positive";
-    
+
     // Order of magnitude checks
     EXPECT_GT(h_PLANCK, 1e-35);
     EXPECT_LT(h_PLANCK, 1e-33);

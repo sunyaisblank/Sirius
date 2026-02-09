@@ -16,13 +16,12 @@
 #include "KNBI001A.h"
 #include "KNAA001A.h"
 #include "../Sirius.Core/Disk/PHAD001A.h"
-#include "../Sirius.Core/Symplectic/MTSB001A.h"
+#include "../Sirius.Core/Spectral/MTSB001A.h"
 #include <cmath>
 
 namespace sirius::kernel {
 
-using namespace sirius::physics;
-using namespace sirius::spectral;
+using namespace Sirius;
 
 //==============================================================================
 // SceneIntersector: Handle disk and celestial sphere intersections

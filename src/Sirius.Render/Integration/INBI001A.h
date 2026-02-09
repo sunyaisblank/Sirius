@@ -16,7 +16,7 @@
 #pragma once
 
 #include "../../Sirius.Core/Transport/MTTP001A.h"
-#include "../../Sirius.Core/Geodesic/PHMT000B.h"
+#include "../../Sirius.Core/Metric/PHMT000B.h"
 #include <cmath>
 
 // CPU/GPU compatibility macro
@@ -28,8 +28,7 @@
 
 namespace sirius::kernel {
 
-using namespace sirius::math;
-using namespace sirius::physics;
+using namespace Sirius;
 
 //==============================================================================
 // BeamStateD: Complete state for beam propagation

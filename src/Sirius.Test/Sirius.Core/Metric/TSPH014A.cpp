@@ -8,8 +8,7 @@
 #include <PHMT000B.h>
 #include <PHMT100B.h>
 
-using namespace sirius::math;
-using namespace sirius::physics;
+using namespace Sirius;
 
 namespace {
 

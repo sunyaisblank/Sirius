@@ -10,6 +10,8 @@
 #include <functional>
 #include <string>
 
+using namespace Sirius;
+
 struct GLFWwindow;
 
 class UIManager {

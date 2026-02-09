@@ -18,6 +18,7 @@
 
 // Unified constants
 #include <PHCN001A.h>
+using namespace Sirius;
 using Sirius::Constants::Math::PI;
 
 Application::Application() {

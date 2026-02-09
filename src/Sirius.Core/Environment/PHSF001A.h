@@ -207,7 +207,7 @@ private:
 
         // Direction: uniform on sphere
         float theta = std::acos(2.0f * uniform(rng) - 1.0f);
-        float phi = 2.0f * 3.14159f * uniform(rng);
+        float phi = 2.0f * static_cast<float>(M_PI) * uniform(rng);
         star.direction_x = std::sin(theta) * std::cos(phi);
         star.direction_y = std::sin(theta) * std::sin(phi);
         star.direction_z = std::cos(theta);

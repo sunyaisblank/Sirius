@@ -19,9 +19,7 @@
 
 #include "../Transport/MTTP001A.h"
 
-namespace sirius::physics {
-
-using namespace sirius::math;
+namespace Sirius {
 
 //==============================================================================
 // IMetricD: Abstract interface for double-precision metric evaluation
@@ -195,4 +193,4 @@ struct MetricParamsD {
     }
 };
 
-} // namespace sirius::physics
+} // namespace Sirius

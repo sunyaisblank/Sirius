@@ -14,7 +14,7 @@
 
 #include "PHAD002A.h"
 
-using namespace sirius::physics;
+using namespace Sirius;
 
 // =============================================================================
 // Test Fixture

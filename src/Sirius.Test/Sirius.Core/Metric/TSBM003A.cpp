@@ -25,6 +25,7 @@
 #include <PHMT100A.h>
 
 namespace sirius::test {
+using namespace Sirius;
 
 // =============================================================================
 // Utility: High-precision timer

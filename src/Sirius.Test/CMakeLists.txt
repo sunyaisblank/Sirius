@@ -107,10 +107,15 @@ add_executable(SiriusTests
     Sirius.Core/Coordinate/TSCT001A.cpp  # Coordinate transform interface tests [NEW]
 
     # ==========================================================================
+    # Sirius.Core — Camera
+    # ==========================================================================
+    Sirius.Core/Camera/TSCM001A.cpp      # Camera lens model tests
+
+    # ==========================================================================
     # Sirius.Core — Symplectic
     # ==========================================================================
     Sirius.Core/Symplectic/TSSI001A.cpp  # Symplectic integrator tests
-    # Sirius.Core/Symplectic/TSSI002A.cpp  # [DISABLED: needs Vec4d beam state updates]
+    Sirius.Core/Symplectic/TSSI002A.cpp  # Beam sampling and scene intersection tests
 
     # ==========================================================================
     # Sirius.Core — Polarisation
@@ -215,6 +220,7 @@ target_include_directories(SiriusTests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Polarisation
     ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Transport
     ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/PostProcess
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Camera
     ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Coordinate
     # Third-party image I/O libraries
     ${CMAKE_CURRENT_SOURCE_DIR}/../../lib/stb
@@ -252,7 +258,7 @@ set_property(DIRECTORY APPEND PROPERTY
 
 message(STATUS "")
 message(STATUS "=== Sirius Test Suite ===")
-message(STATUS "  Sirius.Core:           56 files (Autodiff, Tensor, Metric, Geodesic, Disk, Jet, Spectral, Coordinate, Symplectic, Polarisation, Transport, PostProcess, Environment)")
+message(STATUS "  Sirius.Core:           59 files (Autodiff, Tensor, Metric, Geodesic, Disk, Jet, Spectral, Coordinate, Symplectic, Camera, Polarisation, Transport, PostProcess, Environment)")
 message(STATUS "  Sirius.Render:         15 files (Session, Integration, Pipeline, Offline)")
 message(STATUS "  Sirius.Infrastructure:  1 file  (Configuration)")
 message(STATUS "")

@@ -9,6 +9,7 @@
 #include <PHMT102A.h>
 
 namespace sirius::test {
+using namespace Sirius;
 
 constexpr double kEps = 1e-8;
 

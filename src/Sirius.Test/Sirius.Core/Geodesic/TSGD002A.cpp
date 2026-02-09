@@ -17,8 +17,7 @@
 #include <PHMT100B.h>
 
 using namespace sirius::kernel;
-using namespace sirius::physics;
-using namespace sirius::math;
+using namespace Sirius;
 
 namespace {
 

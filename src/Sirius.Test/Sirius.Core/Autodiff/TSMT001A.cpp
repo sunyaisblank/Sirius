@@ -21,6 +21,7 @@
 #include <PHCN001A.h>  // Centralized constants
 
 namespace sirius::test {
+using namespace Sirius;
 
 // Numerical tolerance for dual number comparisons
 // Dual arithmetic is exact to machine epsilon when inputs are exact

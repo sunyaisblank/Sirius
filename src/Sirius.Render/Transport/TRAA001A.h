@@ -15,14 +15,13 @@
 #pragma once
 
 #include "KNBI001A.h"
-#include "../Sirius.Core/Symplectic/MTSB001A.h"
+#include "../Sirius.Core/Spectral/MTSB001A.h"
 #include <cmath>
 #include <vector>
 
 namespace sirius::kernel {
 
-using namespace sirius::math;
-using namespace sirius::spectral;
+using namespace Sirius;
 
 //==============================================================================
 // Star Catalog Entry

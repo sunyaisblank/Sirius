@@ -12,10 +12,8 @@
 #pragma once
 
 #include <MTTN001A.h>
+#include "PHMT000A.h"
 #include <functional>
-
-// Forward declarations
-class IMetric;
 
 namespace Sirius {
 namespace Physics {

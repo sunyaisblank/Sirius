@@ -7,6 +7,8 @@
 #include <memory>
 #include "PHMT000A.h"
 
+using namespace Sirius;
+
 class PluginManager {
 public:
     void loadPlugins();

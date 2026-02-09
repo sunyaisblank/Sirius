@@ -208,7 +208,7 @@ private:
 class TemporalAccumulator {
 public:
     /// Add a weighted sample
-    void addSample(const sirius::spectral::SpectralRadiance& sample, double weight = 1.0) {
+    void addSample(const Sirius::SpectralRadiance& sample, double weight = 1.0) {
         if (m_sampleCount == 0) {
             m_accumulated = sample * weight;
         } else {
@@ -219,19 +219,19 @@ public:
     }
 
     /// Get final accumulated radiance (weighted average)
-    sirius::spectral::SpectralRadiance result() const {
+    Sirius::SpectralRadiance result() const {
         if (m_totalWeight > 0) {
             return m_accumulated * (1.0 / m_totalWeight);
         }
-        return sirius::spectral::SpectralRadiance();
+        return Sirius::SpectralRadiance();
     }
 
     /// Alias for result() for API compatibility
-    sirius::spectral::SpectralRadiance getResult() const { return result(); }
+    Sirius::SpectralRadiance getResult() const { return result(); }
 
     /// Reset accumulator
     void reset() {
-        m_accumulated = sirius::spectral::SpectralRadiance();
+        m_accumulated = Sirius::SpectralRadiance();
         m_totalWeight = 0.0;
         m_sampleCount = 0;
     }
@@ -243,15 +243,15 @@ public:
     double totalWeight() const { return m_totalWeight; }
 
 private:
-    sirius::spectral::SpectralRadiance m_accumulated;
+    Sirius::SpectralRadiance m_accumulated;
     double m_totalWeight = 0.0;
     int m_sampleCount = 0;
 };
 
 } // namespace sirius::kernel
 
-namespace sirius::spectral {
-    // Allow tests to reference spectral namespace
+namespace Sirius {
+    // Allow access to kernel types from Sirius namespace
     using sirius::kernel::ShutterConfig;
     using sirius::kernel::TemporalSample;
     using sirius::kernel::TemporalSampler;

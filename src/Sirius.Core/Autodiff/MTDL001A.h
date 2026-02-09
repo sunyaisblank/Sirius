@@ -12,6 +12,8 @@
 #include <cmath>
 #include <limits>
 
+namespace Sirius {
+
 /// @brief Dual number for automatic differentiation
 /// @tparam T Underlying numeric type (typically double)
 template<typename T>
@@ -365,12 +367,6 @@ bool isinf(const Dual<T>& d) {
     return std::isinf(d.real) || std::isinf(d.dual);
 }
 
-// =============================================================================
-// Backward compatibility alias
-// =============================================================================
-// Legacy code may include <Dual.h> - provide compatibility
-#ifndef SIRIUS_NO_LEGACY_ALIASES
-// Dual is already named Dual, no alias needed
-#endif
+} // namespace Sirius
 
 #endif // MTDL001A_H

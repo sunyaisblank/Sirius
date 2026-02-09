@@ -470,6 +470,8 @@ set_tests_properties(
     CoordUtilityTests.InAccretionDisk
     CoordUtilityTests.CylindricalRadius
     CoordUtilityTests.AzimuthalAngle
+    CoordUtilityTests.SIMDBatchRoundTrip
+    CoordUtilityTests.SIMDScalarParity
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -585,6 +587,71 @@ set_tests_properties(
     StarfieldGeneratorTests.DifferentSeedsDifferentCatalogs
     StarfieldGeneratorTests.NoNaNInCatalog
     PROPERTIES LABELS "Correctness"
+)
+
+# =============================================================================
+# Camera Lens Model Tests (TSCM001A)
+# =============================================================================
+set_tests_properties(
+    PinholeCameraTest.CentreRayPointsInward
+    PinholeCameraTest.RayDirectionIsNormalised
+    PinholeCameraTest.OriginMatchesConfig
+    PinholeCameraTest.RightPixelIncreasesAzimuth
+    PinholeCameraTest.UpPixelDecreasesTheta
+    PinholeCameraTest.WeightIsOne
+    PinholeCameraTest.TimeComponentIsZero
+    ThinLensCameraTest.CentreRayWithDefaultSampling
+    ThinLensCameraTest.DifferentSamplesGiveDifferentRays
+    FisheyeCameraTest.CentreRayPointsInward
+    FisheyeCameraTest.EdgeRayPerpendicularAt180Fov
+    FisheyeCameraTest.OutOfBoundsRayHasZeroWeight
+    CameraFactoryTest.CreatePinhole
+    CameraFactoryTest.CreateThinLens
+    CameraFactoryTest.CreateFisheye
+    CameraFactoryTest.DefaultFallsToPinhole
+    CameraFactoryTest.ConfigPassthrough
+    ICameraTest.GetPositionReturnsConfigCoordinates
+    ICameraTest.SetConfigUpdatesRayGeneration
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+# =============================================================================
+# Beam Sampling and Scene Intersection Tests (TSSI002A)
+# =============================================================================
+set_tests_properties(
+    BeamSamplerTest.GaussianWeightDecay
+    BeamSamplerTest.EllipseOrientation
+    BeamSamplerTest.SolidAngleComputation
+    SceneIntersectorTest.DiskJacobianTransform
+    SceneIntersectorTest.DiskIntersectionDetection
+    SceneIntersectorTest.CelestialSphereDetection
+    SceneIntersectorTest.HorizonDetection
+    SceneIntersectorTest.DiskEmissionHasRedshift
+    PROPERTIES LABELS "Correctness"
+)
+
+# =============================================================================
+# Boyer-Lindquist Coordinate Transform Tests (TSPH015A)
+# =============================================================================
+set_tests_properties(
+    BLCartesianTests.RoundTripBLCartesian_Equator
+    BLCartesianTests.RoundTripBLCartesian_NearPole
+    BLCartesianTests.RoundTripBLCartesian_FarField
+    BLCartesianTests.RoundTripBLCartesian_NearHorizon
+    KerrSchildRoundTripTests.RoundTripKerrSchild_LowSpin
+    KerrSchildRoundTripTests.RoundTripKerrSchild_ModerateSpin
+    KerrSchildRoundTripTests.RoundTripKerrSchild_HighSpin
+    KerrSchildRoundTripTests.RoundTripKerrSchild_NearPole
+    JacobianTests.JacobianDeterminant_Equator
+    JacobianTests.JacobianDeterminant_MidLatitude
+    VectorTransformTests.VectorTransformRoundTrip
+    BoundaryTests.OriginHandling
+    BoundaryTests.PhiWrapping
+    BoundaryTests.NorthPoleCoordinates
+    BoundaryTests.SouthPoleCoordinates
+    KerrSpecificTests.KerrOblateSpheroidal
+    KerrSpecificTests.KerrSolveR_Accuracy
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 message(STATUS "CTest labels configured for Sirius test suite")

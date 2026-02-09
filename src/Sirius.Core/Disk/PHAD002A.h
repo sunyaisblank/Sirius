@@ -29,7 +29,7 @@
 #include <cmath>
 #include <algorithm>
 
-namespace sirius::physics {
+namespace Sirius {
 
 // =============================================================================
 // VolumetricDiskD: 3D disk with vertical structure
@@ -327,7 +327,7 @@ public:
         if (T <= 0) return 0;
 
         // Stefan-Boltzmann: B = σT^4 / π (intensity, not flux)
-        return constants::sigma_SB * std::pow(T, 4.0) / M_PI;
+        return Constants::Physical::SIGMA_SB * std::pow(T, 4.0) / M_PI;
     }
 
     // =========================================================================
@@ -355,4 +355,4 @@ private:
     AccretionDiskD m_thinDisk;
 };
 
-} // namespace sirius::physics
+} // namespace Sirius

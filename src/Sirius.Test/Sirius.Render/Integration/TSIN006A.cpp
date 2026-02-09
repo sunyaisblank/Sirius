@@ -31,6 +31,7 @@
 #include "PHGD001A.h"
 
 namespace sirius::test {
+using namespace Sirius;
 
 // =============================================================================
 // Parity Test Tolerances

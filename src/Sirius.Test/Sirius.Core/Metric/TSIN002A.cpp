@@ -23,6 +23,7 @@
 #include "PHCN001A.h"  // Centralized constants
 
 namespace sirius::test {
+using namespace Sirius;
 
 // Test tolerances (from PHCN001A.h)
 constexpr double kEpsilon = Sirius::Constants::Metric::INVERSE_TOL;   // 1e-14 for metric comparisons

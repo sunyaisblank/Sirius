@@ -11,12 +11,13 @@
 class Window;
 class UIManager;
 class PluginManager;
-class IMetric;
 class Renderer;
 
 namespace Sirius {
+    class IMetric;
     class RenderJob;
 }
+using namespace Sirius;
 
 /// @brief Application for static black hole rendering
 /// @note Real-time mode is deprecated. Use RenderJob directly for rendering.

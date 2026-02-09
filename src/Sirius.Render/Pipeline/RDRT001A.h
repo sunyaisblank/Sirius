@@ -16,7 +16,8 @@
 #include <MTTN001A.h>
 
 // Forward declarations
-class IMetric;
+namespace Sirius { class IMetric; }
+using namespace Sirius;
 
 #ifdef SIRIUS_HAS_OPTIX
 #include <cuda_runtime.h>

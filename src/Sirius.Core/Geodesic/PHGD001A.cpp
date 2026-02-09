@@ -6,6 +6,7 @@
 // Hamilton's equations: dx^μ/dλ = g^μν p_ν, dp_μ/dλ = (1/2)(∂g_αβ/∂x^μ) k^α k^β
 
 #include "PHGD001A.h"
+#include <PHCN001A.h>
 #include <algorithm>
 #include <cmath>
 
@@ -77,6 +78,8 @@ namespace DP45 {
     constexpr double e7 = -bs7;        // -1/40
 }
 
+namespace Sirius {
+
 // Helper: Compute inverse of 4x4 metric using Cramer's rule
 static void invertMetric4x4(const double m[4][4], double g_inv[4][4]) {
     // Compute 2x2 minors for cofactor expansion
@@ -104,14 +107,14 @@ static void invertMetric4x4(const double m[4][4], double g_inv[4][4]) {
                + m[0][2] * (m[1][0] * A1323 - m[1][1] * A0323 + m[1][3] * A0123)
                - m[0][3] * (m[1][0] * A1223 - m[1][1] * A0223 + m[1][2] * A0123);
     
-    if (std::abs(det) < 1e-10) {
+    if (std::abs(det) < Constants::Tolerances::METRIC_INVERSION_EPS) {
         // Degenerate metric - fall back to Minkowski
         for (int i = 0; i < 4; i++)
             for (int j = 0; j < 4; j++)
                 g_inv[i][j] = (i == j) ? (i == 0 ? -1.0 : 1.0) : 0.0;
         return;
     }
-    
+
     double invDet = 1.0 / det;
     g_inv[0][0] =  invDet * (m[1][1] * A2323 - m[1][2] * A1323 + m[1][3] * A1223);
     g_inv[0][1] = -invDet * (m[0][1] * A2323 - m[0][2] * A1323 + m[0][3] * A1223);
@@ -129,6 +132,27 @@ static void invertMetric4x4(const double m[4][4], double g_inv[4][4]) {
     g_inv[3][1] =  invDet * (m[0][0] * A1223 - m[0][1] * A0223 + m[0][2] * A0123);
     g_inv[3][2] = -invDet * (m[0][0] * A1213 - m[0][1] * A0213 + m[0][2] * A0113);
     g_inv[3][3] =  invDet * (m[0][0] * A1212 - m[0][1] * A0212 + m[0][2] * A0112);
+
+    // Condition number estimate using infinity norm: κ∞(g) = ||g||∞ × ||g⁻¹||∞
+    // ||A||∞ = max_i Σ_j |a_ij| (maximum absolute row sum)
+    constexpr double CONDITION_THRESHOLD = 1e12;
+    double norm_g = 0, norm_ginv = 0;
+    for (int i = 0; i < 4; i++) {
+        double row_g = 0, row_ginv = 0;
+        for (int j = 0; j < 4; j++) {
+            row_g += std::abs(m[i][j]);
+            row_ginv += std::abs(g_inv[i][j]);
+        }
+        norm_g = std::max(norm_g, row_g);
+        norm_ginv = std::max(norm_ginv, row_ginv);
+    }
+    double condition = norm_g * norm_ginv;
+    if (condition > CONDITION_THRESHOLD) {
+        // Ill-conditioned metric - fall back to Minkowski
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 4; j++)
+                g_inv[i][j] = (i == j) ? (i == 0 ? -1.0 : 1.0) : 0.0;
+    }
 }
 
 // Helper: Compute velocity from covariant momentum k^μ = g^μν p_ν
@@ -372,7 +396,7 @@ ObserverState Geodesic::createObserver(const Vec4& position, const Vec4& velocit
         velocity_norm = TensorOps::innerProduct(observer.velocity, observer.velocity, g);
     }
     
-    float normalization = static_cast<float>(1.0 / sqrt(-velocity_norm));
+    float normalization = static_cast<float>(1.0 / std::sqrt(-velocity_norm));
     observer.velocity *= normalization;
     
     calculateTetrads(observer, metric);
@@ -417,9 +441,9 @@ void Geodesic::calculateTetrads(ObserverState& observer, IMetric* metric) {
     }
     observer.e3 = observer.e3 - observer.e0 * e3_dot_e0 - observer.e1 * e3_dot_e1 - observer.e2 * e3_dot_e2;
     
-    float e1_norm = static_cast<float>(sqrt(std::abs(TensorOps::innerProduct(observer.e1, observer.e1, g))));
-    float e2_norm = static_cast<float>(sqrt(std::abs(TensorOps::innerProduct(observer.e2, observer.e2, g))));
-    float e3_norm = static_cast<float>(sqrt(std::abs(TensorOps::innerProduct(observer.e3, observer.e3, g))));
+    float e1_norm = static_cast<float>(std::sqrt(std::abs(TensorOps::innerProduct(observer.e1, observer.e1, g))));
+    float e2_norm = static_cast<float>(std::sqrt(std::abs(TensorOps::innerProduct(observer.e2, observer.e2, g))));
+    float e3_norm = static_cast<float>(std::sqrt(std::abs(TensorOps::innerProduct(observer.e3, observer.e3, g))));
     
     if (e1_norm > 1e-10f) observer.e1 /= e1_norm;
     if (e2_norm > 1e-10f) observer.e2 /= e2_norm;
@@ -615,3 +639,5 @@ bool Geodesic::integrateStepRK45(Lightray& ray, IMetric* metric, const Integrato
 
     return true;
 }
+
+} // namespace Sirius

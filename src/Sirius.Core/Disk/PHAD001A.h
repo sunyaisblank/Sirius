@@ -20,33 +20,14 @@
 
 #pragma once
 
-#include "../Geodesic/PHMT000B.h"
+#include "../Metric/PHMT000B.h"
 #include "../Metric/PHMT100B.h"
-#include "../Symplectic/MTSB001A.h"
+#include "../Spectral/MTSB001A.h"
 #include "PHAD000A.h"
+#include <PHCN001A.h>
 #include <cmath>
 
-namespace sirius::physics {
-
-using namespace sirius::spectral;
-
-//==============================================================================
-// Physical Constants (SI units)
-//==============================================================================
-
-namespace constants {
-
-constexpr double G = 6.67430e-11;       // Gravitational constant [m³/(kg·s²)]
-constexpr double c = 2.99792458e8;      // Speed of light [m/s]
-constexpr double sigma_SB = 5.670374e-8; // Stefan-Boltzmann [W/(m²·K⁴)]
-constexpr double M_sun = 1.98892e30;    // Solar mass [kg]
-constexpr double pc = 3.08567758e16;    // Parsec [m]
-
-// Derived
-constexpr double GM_sun = G * M_sun;    // GM for 1 solar mass
-constexpr double rs_sun = 2 * GM_sun / (c * c);  // Schwarzschild radius for 1 M_sun [m]
-
-} // namespace constants
+namespace Sirius {
 
 //==============================================================================
 // AccretionDiskD: Novikov-Thorne thin disk model
@@ -62,6 +43,13 @@ public:
         double r_inner = 0;                 // Inner edge (0 = ISCO, auto-computed)
         double r_outer = 500;               // Outer edge [GM/c²]
         double inclination = M_PI/4;        // Disk inclination to observer [rad]
+
+        void validate() {
+            if (M <= 0) M = 1.0;
+            a_star = std::clamp(a_star, -1.0, 1.0);
+            if (Mdot <= 0) Mdot = 1e-8;
+            if (r_outer <= r_inner) r_outer = r_inner + 100.0;
+        }
     };
     
     AccretionDiskD() : m_config() { init(); }
@@ -71,10 +59,11 @@ public:
 
 private:
     void init() {
+        m_config.validate();
         // Compute derived quantities
-        m_M_kg = m_config.M * constants::M_sun;
-        m_GM = constants::G * m_M_kg;
-        m_rs = 2 * m_GM / (constants::c * constants::c);  // Schwarzschild radius
+        m_M_kg = m_config.M * Constants::Physical::M_SUN;
+        m_GM = Constants::Physical::G_NEWTON * m_M_kg;
+        m_rs = 2 * m_GM / (Constants::Physical::c_LIGHT * Constants::Physical::c_LIGHT);  // Schwarzschild radius
         m_a = m_config.a_star;  // a/M in geometric units
 
         // Compute ISCO radius
@@ -85,7 +74,7 @@ private:
         m_r_outer = m_config.r_outer;
 
         // Convert accretion rate to SI
-        m_Mdot_SI = m_config.Mdot * constants::M_sun / (365.25 * 24 * 3600);  // M_sun/yr → kg/s
+        m_Mdot_SI = m_config.Mdot * Constants::Physical::M_SUN / (365.25 * 24 * 3600);  // M_sun/yr → kg/s
     }
 
 public:
@@ -124,7 +113,7 @@ public:
         double sqrtMr = std::sqrt(M * r);
         double numerator = r*r - 2*M*r + a * sqrtMr;
         double denominator = r * std::sqrt(r*r - 3*M*r + 2*a*sqrtMr);
-        if (std::abs(denominator) < 1e-15) return 1.0;
+        if (std::abs(denominator) < Constants::Tolerances::DIVISION_SAFE_EPS) return 1.0;
         return numerator / denominator;
     }
 
@@ -138,7 +127,7 @@ public:
         double sqrtMr = std::sqrt(M * r);
         double numerator = sqrtM * (r*r - 2*a*sqrtMr + a*a);
         double denominator = r * std::sqrt(r*r - 3*M*r + 2*a*sqrtMr);
-        if (std::abs(denominator) < 1e-15) return 0.0;
+        if (std::abs(denominator) < Constants::Tolerances::DIVISION_SAFE_EPS) return 0.0;
         return numerator / denominator;
     }
 
@@ -184,7 +173,7 @@ public:
         double D = r*r - 3*M*r + 2*a*sqrtMr;         // r² - 3Mr + 2a√(Mr)
 
         // Protect against D ≤ 0 (inside ISCO)
-        if (D <= 1e-15) return 0;
+        if (D <= Constants::Tolerances::DIVISION_SAFE_EPS) return 0;
         double sqrtD = std::sqrt(D);
 
         // Derivatives of N and D
@@ -198,7 +187,7 @@ public:
         // Denominator: (r√D)²
         double rSqrtD = r * sqrtD;
         double denom = rSqrtD * rSqrtD;
-        if (std::abs(denom) < 1e-30) return 0;
+        if (std::abs(denom) < Constants::Tolerances::FLUX_INTEGRAL_EPS) return 0;
 
         // Quotient rule: dL/dr = √M × [dN/dr × (r√D) - N × d(r√D)/dr] / (r√D)²
         double result = sqrtM * (dN_dr * rSqrtD - N * d_rsqrtD_dr) / denom;
@@ -227,7 +216,7 @@ public:
         double r32 = std::pow(r, 1.5);              // r^(3/2)
         double denom = r32 + a * sqrtM;             // r^(3/2) + a√M
 
-        if (std::abs(denom) < 1e-30) return 0;
+        if (std::abs(denom) < Constants::Tolerances::FLUX_INTEGRAL_EPS) return 0;
 
         // dΩ/dr = -3√(Mr) / [2(r^(3/2) + a√M)²]
         return -3.0 * sqrtMr / (2.0 * denom * denom);
@@ -256,14 +245,39 @@ public:
         // Compute the Page-Thorne flux integral from r_ISCO to r
         // ∫[r_ISCO to r] (E - ΩL) dL/dr' dr'
         //
-        // Using Simpson's rule for numerical integration
-        const int N = 100;  // Integration points
-        double dr = (r - m_r_isco) / N;
+        // 16-point Gauss-Legendre quadrature on [r_ISCO, r].
+        // Nodes are interior to the interval, avoiding the ISCO boundary
+        // where the integrand is singular.
+        //
+        // Nodes and weights for [-1, 1] (Abramowitz & Stegun, Table 25.4):
+        static constexpr double gl_nodes[16] = {
+            -0.9894009349916499, -0.9445750230732326,
+            -0.8656312023878318, -0.7554044083550030,
+            -0.6178762444026438, -0.4580167776572274,
+            -0.2816035507792589, -0.0950125098376374,
+             0.0950125098376374,  0.2816035507792589,
+             0.4580167776572274,  0.6178762444026438,
+             0.7554044083550030,  0.8656312023878318,
+             0.9445750230732326,  0.9894009349916499
+        };
+        static constexpr double gl_weights[16] = {
+            0.0271524594117541, 0.0622535239386479,
+            0.0951585116824928, 0.1246289712555339,
+            0.1495959888165767, 0.1691565193950025,
+            0.1826034150449236, 0.1894506104550685,
+            0.1894506104550685, 0.1826034150449236,
+            0.1691565193950025, 0.1495959888165767,
+            0.1246289712555339, 0.0951585116824928,
+            0.0622535239386479, 0.0271524594117541
+        };
+
+        // Map [-1, 1] → [r_ISCO, r]
+        double half_width = 0.5 * (r - m_r_isco);
+        double midpoint = 0.5 * (r + m_r_isco);
 
         double integral = 0;
-        for (int i = 0; i <= N; ++i) {
-            double r_i = m_r_isco + i * dr;
-            if (r_i <= m_r_isco * 1.001) continue;  // Skip ISCO singularity
+        for (int i = 0; i < 16; ++i) {
+            double r_i = midpoint + half_width * gl_nodes[i];
 
             double E_i = specificEnergy(r_i, M, a);
             double L_i = specificAngularMomentum(r_i, M, a);
@@ -271,16 +285,13 @@ public:
             double dL_i = dLdr(r_i, M, a);
 
             double integrand = (E_i - Omega_i * L_i) * dL_i;
-
-            // Simpson's rule weights
-            double weight = (i == 0 || i == N) ? 1.0 : (i % 2 == 0 ? 2.0 : 4.0);
-            integral += weight * integrand;
+            integral += gl_weights[i] * integrand;
         }
-        integral *= dr / 3.0;
+        integral *= half_width;
 
         // Compute (E - ΩL)² at r
         double E_minus_OmegaL = E_r - Omega_r * L_r;
-        if (std::abs(E_minus_OmegaL) < 1e-15) return 0;
+        if (std::abs(E_minus_OmegaL) < Constants::Tolerances::DIVISION_SAFE_EPS) return 0;
 
         // Compute dΩ/dr at r using ANALYTIC derivative
         double dOmega_dr = dOmegadr(r, M, a);
@@ -358,7 +369,7 @@ public:
         double F = flux(r);
         if (F <= 0) return 0;
 
-        return std::pow(F / constants::sigma_SB, 0.25);
+        return std::pow(F / Constants::Physical::SIGMA_SB, 0.25);
     }
     
     //--------------------------------------------------------------------------
@@ -504,4 +515,4 @@ private:
     double m_Mdot_SI;       // Accretion rate in kg/s
 };
 
-} // namespace sirius::physics
+} // namespace Sirius

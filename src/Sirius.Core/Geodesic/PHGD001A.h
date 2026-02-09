@@ -12,6 +12,8 @@
 #include <MTTN001A.h>
 #include "PHMT000A.h"
 
+namespace Sirius {
+
 // =============================================================================
 // Lightray - State vector for null geodesic integration
 // =============================================================================
@@ -125,3 +127,5 @@ public:
     /// @brief Get default integrator configuration
     static IntegratorConfig getDefaultConfig();
 };
+
+} // namespace Sirius

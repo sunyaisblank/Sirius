@@ -180,7 +180,7 @@ public:
     float magneticFlux(float z) const {
         float R = jetRadius(std::abs(z));
         float B = magneticField(z);
-        return 3.14159f * R * R * B;
+        return static_cast<float>(M_PI) * R * R * B;
     }
 
     // =========================================================================

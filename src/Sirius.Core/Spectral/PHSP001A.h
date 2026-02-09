@@ -27,20 +27,14 @@
 
 #include <cmath>
 #include <algorithm>
+#include <PHCN001A.h>
 
 namespace Sirius {
 namespace Spectral {
 
-// =============================================================================
-// Physical Constants
-// =============================================================================
-constexpr double h_PLANCK = 6.62607015e-34;    // Planck constant (J·s)
-constexpr double c_LIGHT = 2.99792458e8;       // Speed of light (m/s)
-constexpr double k_BOLTZMANN = 1.380649e-23;   // Boltzmann constant (J/K)
-
-// Derived constants for Planck function
-constexpr double PLANCK_C1 = 2.0 * h_PLANCK * c_LIGHT * c_LIGHT;  // 2hc²
-constexpr double PLANCK_C2 = h_PLANCK * c_LIGHT / k_BOLTZMANN;    // hc/k
+// Physical constants sourced from PHCN001A.h
+constexpr double PLANCK_C1 = Constants::Physical::PLANCK_C1;
+constexpr double PLANCK_C2 = Constants::Physical::PLANCK_C2;
 
 // =============================================================================
 // Color Structures
@@ -213,161 +207,7 @@ inline RGB blackbodyToRGB(double T) {
 }
 
 // =============================================================================
-// Spectral Bin Structure for Physical Redshift
-// =============================================================================
-
-/// @brief Spectral radiance distribution (32 wavelength bins)
-/// Covers visible range 380-780nm
-struct SpectralDistribution {
-    static constexpr int N_BINS = 32;
-    static constexpr double LAMBDA_MIN = 380e-9;  // 380 nm in meters
-    static constexpr double LAMBDA_MAX = 780e-9;  // 780 nm in meters
-    static constexpr double D_LAMBDA = (LAMBDA_MAX - LAMBDA_MIN) / N_BINS;
-
-    double bins[N_BINS];  // Spectral radiance per bin [W/(m²·sr·m)]
-
-    SpectralDistribution() {
-        for (int i = 0; i < N_BINS; i++) bins[i] = 0.0;
-    }
-
-    /// @brief Create blackbody spectrum at given temperature
-    static SpectralDistribution blackbody(double T) {
-        SpectralDistribution sd;
-        if (T <= 0) return sd;
-
-        for (int i = 0; i < N_BINS; i++) {
-            double lambda = LAMBDA_MIN + (i + 0.5) * D_LAMBDA;
-            sd.bins[i] = planckRadiance(lambda, T);
-        }
-        return sd;
-    }
-
-    /// @brief Get wavelength for bin center
-    static double binWavelength(int bin) {
-        return LAMBDA_MIN + (bin + 0.5) * D_LAMBDA;
-    }
-
-    /// @brief Get bin index for wavelength (returns -1 if out of range)
-    static int wavelengthToBin(double lambda) {
-        if (lambda < LAMBDA_MIN || lambda >= LAMBDA_MAX) return -1;
-        return static_cast<int>((lambda - LAMBDA_MIN) / D_LAMBDA);
-    }
-
-    /// @brief Total integrated radiance
-    double totalRadiance() const {
-        double total = 0;
-        for (int i = 0; i < N_BINS; i++) total += bins[i];
-        return total * D_LAMBDA;
-    }
-};
-
-// =============================================================================
-// Full Spectral Redshift Implementation (Phase 1.2)
-// =============================================================================
-
-/// @brief Apply physically correct spectral redshift via wavelength bin remapping
-/// @param emitted Emitted spectral distribution
-/// @param z Redshift (z > 0 = redshift, z < 0 = blueshift)
-/// @param g_factor Doppler/gravitational factor (g = ν_obs/ν_emit)
-/// @return Observed spectral distribution
-///
-/// MATHEMATICAL BASIS:
-/// 1. Wavelength shift: λ_obs = λ_emit × (1 + z) = λ_emit / g
-/// 2. Intensity scaling: I_obs = g⁴ × I_emit (relativistic invariant I/ν³)
-/// 3. The g⁴ factor comes from:
-///    - g³ from Liouville's theorem (I/ν³ = invariant)
-///    - Additional g from frequency shift of detector bandwidth
-///
-/// REFERENCE: Rybicki & Lightman (1979), Section 4.9
-inline SpectralDistribution applySpectralRedshiftFull(
-    const SpectralDistribution& emitted,
-    double z,
-    double g_factor = 0.0)
-{
-    SpectralDistribution observed;
-
-    // If g_factor not provided, compute from z
-    // g = ν_obs/ν_emit = 1/(1+z)
-    if (g_factor <= 0) {
-        g_factor = 1.0 / (1.0 + z);
-    }
-
-    // Clamp g_factor to physical range
-    g_factor = std::clamp(g_factor, 0.01, 100.0);
-
-    // Relativistic intensity scaling: I_obs = g⁴ × I_emit
-    // This is the Lorentz-invariant specific intensity transformation
-    double g4 = g_factor * g_factor * g_factor * g_factor;
-
-    // Remap each emitted bin to observed wavelength
-    for (int i = 0; i < SpectralDistribution::N_BINS; i++) {
-        double lambda_emit = SpectralDistribution::binWavelength(i);
-        double I_emit = emitted.bins[i];
-
-        if (I_emit <= 0) continue;
-
-        // Observed wavelength: λ_obs = λ_emit × (1 + z) = λ_emit / g
-        double lambda_obs = lambda_emit / g_factor;
-
-        // Find observed bin
-        int obs_bin = SpectralDistribution::wavelengthToBin(lambda_obs);
-
-        if (obs_bin >= 0 && obs_bin < SpectralDistribution::N_BINS) {
-            // Add scaled intensity to observed bin
-            // Scale by g⁴ for relativistic invariant
-            observed.bins[obs_bin] += I_emit * g4;
-        }
-        // If obs_bin is out of visible range, the light has shifted
-        // to UV (blueshift) or IR (redshift) and contributes zero visible flux
-    }
-
-    return observed;
-}
-
-/// @brief Convert spectral distribution to RGB via CIE XYZ color matching
-/// @param sd Spectral distribution
-/// @return Linear RGB color
-inline RGB spectralToRGB(const SpectralDistribution& sd) {
-    XYZ xyz;
-
-    for (int i = 0; i < SpectralDistribution::N_BINS; i++) {
-        double lambda_nm = SpectralDistribution::binWavelength(i) * 1e9;
-        double radiance = sd.bins[i];
-
-        if (radiance <= 0) continue;
-
-        XYZ sample = wavelengthToXYZ(lambda_nm);
-        xyz += sample * static_cast<float>(radiance * SpectralDistribution::D_LAMBDA);
-    }
-
-    // Convert to RGB
-    RGB rgb = xyzToLinearRGB(xyz);
-
-    // Normalize to max = 1 for display
-    float maxVal = std::max({rgb.r, rgb.g, rgb.b, 0.001f});
-    return RGB(rgb.r / maxVal, rgb.g / maxVal, rgb.b / maxVal);
-}
-
-/// @brief Apply full spectral redshift to blackbody and return RGB
-/// @param T Temperature in Kelvin
-/// @param z Redshift factor
-/// @param g_factor Optional Doppler factor (computed from z if not provided)
-/// @return Observed RGB color
-inline RGB applySpectralRedshiftToBlackbody(double T, double z, double g_factor = 0.0) {
-    if (T <= 0) return RGB(0, 0, 0);
-
-    // Create emitted spectrum
-    SpectralDistribution emitted = SpectralDistribution::blackbody(T);
-
-    // Apply redshift
-    SpectralDistribution observed = applySpectralRedshiftFull(emitted, z, g_factor);
-
-    // Convert to RGB
-    return spectralToRGB(observed);
-}
-
-// =============================================================================
-// Redshift Functions (Legacy + New)
+// Redshift Functions
 // =============================================================================
 
 /// @brief Apply redshift to a color (simplified approximation for compatibility)

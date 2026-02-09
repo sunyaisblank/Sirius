@@ -21,7 +21,7 @@
 #include <cmath>
 #endif
 
-namespace sirius::math {
+namespace Sirius {
 
 //==============================================================================
 // Vec4d: Double-precision 4-vector for spacetime coordinates
@@ -125,8 +125,8 @@ struct GeodesicStateD {
         Lz = k.phi;
         // Carter constant: Q = k_θ² + cos²θ(a²(μ² - E²) + L_z²/sin²θ)
         // For null geodesics (μ² = 0):
-        double costh = cos(x.theta);
-        double sinth = sin(x.theta);
+        double costh = std::cos(x.theta);
+        double sinth = std::sin(x.theta);
         double sin2th = sinth * sinth;
         Q = k.theta * k.theta + costh * costh * (-a*a*E*E + Lz*Lz/sin2th);
     }
@@ -271,4 +271,4 @@ SIRIUS_HD inline double Mat4d::determinant() const {
     return det;
 }
 
-} // namespace sirius::math
+} // namespace Sirius

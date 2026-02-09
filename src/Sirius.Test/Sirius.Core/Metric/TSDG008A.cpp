@@ -35,6 +35,7 @@
 #include <MTDL001A.h>
 
 namespace sirius::test {
+using namespace Sirius;
 
 using namespace Sirius::Constants;
 
@@ -211,7 +212,7 @@ TEST_F(AnalyticValidationTests, KerrHorizonRadius) {
     std::vector<double> spins = {0.0, 0.3, 0.5, 0.7, 0.9, 0.99};
 
     for (double a : spins) {
-        sirius::physics::KerrMetricD metric(M, a);
+        Sirius::KerrMetricD metric(M, a);
 
         double r_computed = metric.horizonRadius();
         double r_expected = computeKerrHorizon(M, a);
@@ -228,7 +229,7 @@ TEST_F(AnalyticValidationTests, KerrISCOPrograde) {
     std::vector<double> spins = {0.0, 0.3, 0.5, 0.7, 0.9};
 
     for (double a : spins) {
-        sirius::physics::KerrMetricD metric(M, a);
+        Sirius::KerrMetricD metric(M, a);
 
         double r_computed = metric.iscoRadius();
         double r_expected = computeKerrISCO(a, true);
@@ -335,14 +336,14 @@ TEST_F(AnalyticValidationTests, SolarDeflectionOrderOfMagnitude) {
 TEST_F(AnalyticValidationTests, KerrReducesToSchwarzschildAtZeroSpin) {
     double M = 1.0;
 
-    sirius::physics::KerrMetricD kerr(M, 0.0);
+    Sirius::KerrMetricD kerr(M, 0.0);
     Sirius::KerrSchildFamily schw(Sirius::KerrSchildParams::Schwarzschild(M));
 
     // Compare at several radii
     std::vector<double> radii = {3.0, 6.0, 10.0, 20.0};
 
     for (double r : radii) {
-        sirius::physics::Vec4d x_kerr;
+        Sirius::Vec4d x_kerr;
         x_kerr.t = 0; x_kerr.r = r; x_kerr.theta = Math::HALF_PI; x_kerr.phi = 0;
 
         double g_kerr[4][4], g_inv_kerr[4][4];
@@ -365,8 +366,8 @@ TEST_F(AnalyticValidationTests, AsymptoticFlatness) {
     double a = 0.9;
     double r_far = 1000.0 * M;
 
-    sirius::physics::KerrMetricD metric(M, a);
-    sirius::physics::Vec4d x;
+    Sirius::KerrMetricD metric(M, a);
+    Sirius::Vec4d x;
     x.t = 0; x.r = r_far; x.theta = Math::HALF_PI; x.phi = 0;
 
     double g[4][4], g_inv[4][4];
@@ -387,12 +388,12 @@ TEST_F(AnalyticValidationTests, AsymptoticFlatness) {
 TEST_F(AnalyticValidationTests, SchwarzschildKretschmannScalar) {
     // K = R_αβγδ R^αβγδ = 48M²/r⁶ for Schwarzschild
     double M = 1.0;
-    sirius::physics::KerrMetricD metric(M, 0.0);  // Schwarzschild
+    Sirius::KerrMetricD metric(M, 0.0);  // Schwarzschild
 
     std::vector<double> radii = {3.0, 6.0, 10.0, 20.0, 50.0};
 
     for (double r : radii) {
-        sirius::physics::Vec4d x;
+        Sirius::Vec4d x;
         x.t = 0; x.r = r; x.theta = Math::HALF_PI; x.phi = 0;
 
         double K = metric.kretschmann(x);
@@ -406,13 +407,13 @@ TEST_F(AnalyticValidationTests, SchwarzschildKretschmannScalar) {
 TEST_F(AnalyticValidationTests, KretschmannMonotonicDecrease) {
     // Curvature (Kretschmann scalar) should decrease monotonically with r
     double M = 1.0;
-    sirius::physics::KerrMetricD metric(M, 0.5);
+    Sirius::KerrMetricD metric(M, 0.5);
 
     double K_prev = std::numeric_limits<double>::max();
     std::vector<double> radii = {3.0, 5.0, 10.0, 20.0, 50.0, 100.0};
 
     for (double r : radii) {
-        sirius::physics::Vec4d x;
+        Sirius::Vec4d x;
         x.t = 0; x.r = r; x.theta = Math::HALF_PI; x.phi = 0;
 
         double K = metric.kretschmann(x);
@@ -432,7 +433,7 @@ TEST_F(AnalyticValidationTests, HorizonMetricDegeneracy) {
     double M = 1.0;
     double a = 0.5;
 
-    sirius::physics::KerrMetricD metric(M, a);
+    Sirius::KerrMetricD metric(M, a);
     double r_plus = metric.horizonRadius();
 
     // Approach horizon from outside
@@ -440,7 +441,7 @@ TEST_F(AnalyticValidationTests, HorizonMetricDegeneracy) {
 
     double prev_grr = 0;
     for (double f : factors) {
-        sirius::physics::Vec4d x;
+        Sirius::Vec4d x;
         x.t = 0; x.r = r_plus * f; x.theta = Math::HALF_PI; x.phi = 0;
 
         double g[4][4], g_inv[4][4];

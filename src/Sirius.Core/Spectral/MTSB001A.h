@@ -16,8 +16,9 @@
 
 #include <cmath>
 #include <algorithm>
+#include <PHCN001A.h>
 
-namespace sirius::spectral {
+namespace Sirius {
 
 //==============================================================================
 // Spectral Constants
@@ -131,20 +132,14 @@ struct SpectralRadiance {
     
     static SpectralRadiance blackbody(double temperature) {
         // B(λ,T) = (2hc²/λ⁵) × 1/(exp(hc/λkT) - 1)
-        // Constants in SI: h = 6.626e-34, c = 3e8, k = 1.381e-23
-        // Working in nm, we use scaled constants
-        
-        constexpr double h = 6.62607015e-34;  // J·s
-        constexpr double c = 2.99792458e8;    // m/s
-        constexpr double k = 1.380649e-23;    // J/K
-        constexpr double hc = h * c;
-        constexpr double hc2 = h * c * c;
+        constexpr double hc = Constants::Physical::h_PLANCK * Constants::Physical::c_LIGHT;
+        constexpr double hc2 = Constants::Physical::h_PLANCK * Constants::Physical::c_LIGHT * Constants::Physical::c_LIGHT;
         
         SpectralRadiance result;
         
         for (int i = 0; i < NUM_WAVELENGTH_BINS; ++i) {
             double lambda = wavelength(i) * 1e-9;  // Convert nm to m
-            double x = hc / (lambda * k * temperature);
+            double x = hc / (lambda * Constants::Physical::k_BOLTZMANN * temperature);
             
             if (x > 700) {
                 result.L[i] = 0;  // Avoid overflow
@@ -268,4 +263,4 @@ struct SpectralRadiance {
     }
 };
 
-} // namespace sirius::spectral
+} // namespace Sirius

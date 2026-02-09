@@ -22,6 +22,7 @@
 #ifndef PHCN001A_H
 #define PHCN001A_H
 
+#include <algorithm>
 #include <cmath>
 #include <limits>
 
@@ -202,6 +203,26 @@ constexpr double Q_FACTOR_MAX = 100.0;
 } // namespace Disk
 
 // =============================================================================
+// Numerical Safety Tolerances
+// =============================================================================
+
+namespace Tolerances {
+
+/// @brief Minimum determinant for metric invertibility
+constexpr double METRIC_INVERSION_EPS = 1e-12;
+
+/// @brief Angular clamp: minimum θ distance from poles
+constexpr double ANGULAR_CLAMP_EPS = 1e-6;
+
+/// @brief Safe-division threshold for general denominators
+constexpr double DIVISION_SAFE_EPS = 1e-15;
+
+/// @brief Page-Thorne integral denominator floor
+constexpr double FLUX_INTEGRAL_EPS = 1e-30;
+
+} // namespace Tolerances
+
+// =============================================================================
 // Physical Constants (SI Units)
 // Reference: CODATA 2018
 // =============================================================================
@@ -288,8 +309,8 @@ inline double clampCoordinate(double theta, double epsilon = Coordinates::POLE_E
 
 /// @brief Wrap azimuthal angle to [0, 2π)
 inline double wrapPhi(double phi) {
-    while (phi < 0) phi += Math::TWO_PI;
-    while (phi >= Math::TWO_PI) phi -= Math::TWO_PI;
+    phi = std::fmod(phi, Math::TWO_PI);
+    if (phi < 0) phi += Math::TWO_PI;
     return phi;
 }
 

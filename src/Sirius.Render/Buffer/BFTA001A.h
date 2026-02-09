@@ -13,14 +13,14 @@
 
 #pragma once
 
-#include "../Sirius.Core/Symplectic/MTSB001A.h"
+#include "../Sirius.Core/Spectral/MTSB001A.h"
 #include <vector>
 #include <random>
 #include <cmath>
 
 namespace sirius::kernel {
 
-using namespace sirius::spectral;
+using namespace Sirius;
 
 //==============================================================================
 // Shutter Configuration

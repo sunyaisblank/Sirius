@@ -13,6 +13,7 @@
 #include "PHMT100A.h"
 
 namespace sirius::test {
+using namespace Sirius;
 
 // =============================================================================
 // Performance Targets (from DevelopmentRoadmap.md)

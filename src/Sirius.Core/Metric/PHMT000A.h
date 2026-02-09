@@ -12,6 +12,8 @@
 #include <vector>
 #include <map>
 
+namespace Sirius {
+
 /// @brief Metric parameter with value and range constraints
 struct MetricParameter {
     double value;  ///< Current parameter value
@@ -175,5 +177,7 @@ inline bool validateMetricAtPoint(IMetric* metric, const Tensor<double, 4>& pos,
 }
 
 } // namespace MetricValidation
+
+} // namespace Sirius
 
 #endif // PHMT000A_H

@@ -6,7 +6,7 @@
 #include <cmath>
 #include <PHAD001A.h>
 
-using namespace sirius::physics;
+using namespace Sirius;
 
 namespace {
 

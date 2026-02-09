@@ -9,6 +9,7 @@
 #include "MTTN001A.h"
 
 namespace sirius::test {
+using namespace Sirius;
 
 using namespace Sirius::Physics;
 

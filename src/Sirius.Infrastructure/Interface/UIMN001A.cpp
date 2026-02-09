@@ -13,6 +13,8 @@
 #include <PHMT009A.h>
 #endif
 
+using namespace Sirius;
+
 void UIManager::init(GLFWwindow* window, PluginManager* pluginManager) {
     m_PluginManager = pluginManager;
     

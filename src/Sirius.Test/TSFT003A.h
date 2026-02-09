@@ -35,6 +35,7 @@
 #include <random>
 
 namespace sirius::test {
+using namespace Sirius;
 
 // =============================================================================
 // Conservation Statistics

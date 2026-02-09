@@ -36,6 +36,7 @@
 #include <functional>
 
 namespace sirius::test {
+using namespace Sirius;
 
 // =============================================================================
 // Test Point Structure

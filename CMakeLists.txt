@@ -122,7 +122,7 @@ add_library(SiriusCore SHARED
     # Geodesic integration
     src/Sirius.Core/Geodesic/PHGD001A.cpp
     src/Sirius.Core/Geodesic/PHGD002A.cpp
-    src/Sirius.Core/Geodesic/PHMT000A.cpp
+    src/Sirius.Core/Metric/PHMT000A.cpp
     
     # Tensor algebra
     src/Sirius.Core/Tensor/MTTN001A.cpp

@@ -12,6 +12,7 @@
 #include "PHMT100A.h"
 
 namespace sirius::test {
+using namespace Sirius;
 
 // =============================================================================
 // Memory Budget Constants (from roadmap)

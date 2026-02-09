@@ -11,9 +11,8 @@
 #include <PHAD001A.h>
 #include <INBI001A.h>
 
-using namespace sirius::physics;
+using namespace Sirius;
 using namespace sirius::kernel;
-using namespace sirius::math;
 
 namespace {
 

@@ -31,6 +31,7 @@
 #include "PHCN001A.h"  // Unified tolerance constants
 
 namespace sirius::test {
+using namespace Sirius;
 
 // =============================================================================
 // Tolerance Constants (from PHCN001A.h)

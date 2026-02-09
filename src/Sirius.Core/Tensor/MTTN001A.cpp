@@ -3,6 +3,8 @@
 #include "MTTN001A.h"
 #include <cmath>
 
+namespace Sirius {
+
 Metric4D TensorOps::inverse(const Metric4D& g) {
     Metric4D g_inv{};
     
@@ -233,3 +235,5 @@ Vec4 TensorOps::normalizeNull(const Vec4& velocity, const Metric4D& g) {
     
     return normalized;
 }
+
+} // namespace Sirius

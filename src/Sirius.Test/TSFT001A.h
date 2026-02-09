@@ -25,6 +25,7 @@
 #include <cmath>
 
 namespace sirius::test {
+using namespace Sirius;
 
 // =============================================================================
 // Geodesic Integration Test Tolerances

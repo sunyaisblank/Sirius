@@ -6,7 +6,7 @@
 #include <KNTA001A.h>
 
 using namespace sirius::kernel;
-using namespace sirius::spectral;
+using namespace Sirius;
 
 namespace {
 

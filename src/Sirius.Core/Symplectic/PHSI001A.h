@@ -21,10 +21,11 @@
 #pragma once
 
 #include "PHMT000B.h"
+#include <PHCN001A.h>
 #include <cmath>
 #include <algorithm>
 
-namespace sirius::physics {
+namespace Sirius {
 
 //==============================================================================
 // Symplectic Integrator Constants
@@ -442,9 +443,9 @@ private:
         s.q = s.q + dHdp * h;
         
         // Normalise angles
-        while (s.q.phi > 2*M_PI) s.q.phi -= 2*M_PI;
-        while (s.q.phi < 0) s.q.phi += 2*M_PI;
-        s.q.theta = std::clamp(s.q.theta, 1e-6, M_PI - 1e-6);
+        s.q.phi = std::fmod(s.q.phi, 2*M_PI);
+        if (s.q.phi < 0) s.q.phi += 2*M_PI;
+        s.q.theta = std::clamp(s.q.theta, Constants::Tolerances::ANGULAR_CLAMP_EPS, M_PI - Constants::Tolerances::ANGULAR_CLAMP_EPS);
         
         // Half-step momentum update (at new position)
         dHdq = m_metric->dHdq(s.q, s.p);
@@ -454,4 +455,4 @@ private:
     }
 };
 
-} // namespace sirius::physics
+} // namespace Sirius

@@ -8,6 +8,7 @@
 #include <PPOP001A.h>
 
 namespace sirius::test {
+using namespace Sirius;
 
 constexpr float kEps = 1e-5f;
 

@@ -35,6 +35,7 @@
 #include <MTDL001A.h>
 
 namespace sirius::test {
+using namespace Sirius;
 
 // =============================================================================
 // Tolerance Constants (from PHCN001A.h)
@@ -309,11 +310,11 @@ TEST_F(MetricValidationTests, KerrMetricD_MetricSymmetry) {
     std::vector<double> spins = {0.0, 0.3, 0.6, 0.9};
 
     for (double a : spins) {
-        sirius::physics::KerrMetricD metric(1.0, a);
+        Sirius::KerrMetricD metric(1.0, a);
         auto points = getSamplePoints(1.0, a);
 
         for (const auto& pt : points) {
-            sirius::physics::Vec4d x;
+            Sirius::Vec4d x;
             x.t = pt.t; x.r = pt.r; x.theta = pt.theta; x.phi = pt.phi;
 
             double g[4][4], g_inv[4][4];
@@ -338,11 +339,11 @@ TEST_F(MetricValidationTests, KerrMetricD_InverseAccuracy) {
     std::vector<double> spins = {0.0, 0.5, 0.9};
 
     for (double a : spins) {
-        sirius::physics::KerrMetricD metric(1.0, a);
+        Sirius::KerrMetricD metric(1.0, a);
         auto points = getSamplePoints(1.0, a);
 
         for (const auto& pt : points) {
-            sirius::physics::Vec4d x;
+            Sirius::Vec4d x;
             x.t = pt.t; x.r = pt.r; x.theta = pt.theta; x.phi = pt.phi;
 
             double g[4][4], g_inv[4][4];
@@ -375,11 +376,11 @@ TEST_F(MetricValidationTests, KerrMetricD_ChristoffelSymmetry) {
     std::vector<double> spins = {0.0, 0.5, 0.9};
 
     for (double a : spins) {
-        sirius::physics::KerrMetricD metric(1.0, a);
+        Sirius::KerrMetricD metric(1.0, a);
         auto points = getSamplePoints(1.0, a);
 
         for (const auto& pt : points) {
-            sirius::physics::Vec4d x;
+            Sirius::Vec4d x;
             x.t = pt.t; x.r = pt.r; x.theta = pt.theta; x.phi = pt.phi;
 
             double Gamma[4][4][4];
@@ -407,11 +408,11 @@ TEST_F(MetricValidationTests, KerrMetricD_RiemannAntisymmetry) {
     std::vector<double> spins = {0.0, 0.5, 0.9};
 
     for (double a : spins) {
-        sirius::physics::KerrMetricD metric(1.0, a);
+        Sirius::KerrMetricD metric(1.0, a);
         auto points = getSamplePoints(1.0, a);
 
         for (const auto& pt : points) {
-            sirius::physics::Vec4d x;
+            Sirius::Vec4d x;
             x.t = pt.t; x.r = pt.r; x.theta = pt.theta; x.phi = pt.phi;
 
             double violation = metric.verifyRiemannSymmetries(x);
@@ -429,12 +430,12 @@ TEST_F(MetricValidationTests, KerrMetricD_RiemannAntisymmetry) {
 // Reference: Henry, R.C. (2000), Astrophys. J. 535:350-353
 TEST_F(MetricValidationTests, KerrMetricD_KretschmannScalar) {
     // Test 1: Schwarzschild exact formula K = 48M²/r⁶
-    sirius::physics::KerrMetricD schw(1.0, 0.0);
+    Sirius::KerrMetricD schw(1.0, 0.0);
 
     std::vector<double> radii = {3.0, 5.0, 10.0, 20.0};
 
     for (double r : radii) {
-        sirius::physics::Vec4d x;
+        Sirius::Vec4d x;
         x.t = 0; x.r = r; x.theta = Math::HALF_PI; x.phi = 0;
 
         double K = schw.kretschmann(x);
@@ -450,10 +451,10 @@ TEST_F(MetricValidationTests, KerrMetricD_KretschmannScalar) {
     // Test 2: Kerr at equator (θ = π/2, so cos²θ = 0)
     // At equator: K = 48M² × r² × r⁴ / (r²)⁶ = 48M² × r⁶ / r¹² = 48M²/r⁶
     // Same as Schwarzschild!
-    sirius::physics::KerrMetricD kerr(1.0, 0.9);
+    Sirius::KerrMetricD kerr(1.0, 0.9);
 
     for (double r : radii) {
-        sirius::physics::Vec4d x;
+        Sirius::Vec4d x;
         x.t = 0; x.r = r; x.theta = Math::HALF_PI; x.phi = 0;
 
         double K = kerr.kretschmann(x);
@@ -473,10 +474,10 @@ TEST_F(MetricValidationTests, KerrMetricD_KretschmannScalar) {
     double a = 0.5;
     double a2 = a * a;
 
-    sirius::physics::KerrMetricD kerr05(1.0, a);
+    Sirius::KerrMetricD kerr05(1.0, a);
 
     for (double r : radii) {
-        sirius::physics::Vec4d x;
+        Sirius::Vec4d x;
         x.t = 0; x.r = r; x.theta = theta; x.phi = 0;
 
         double r2 = r * r;
@@ -498,7 +499,7 @@ TEST_F(MetricValidationTests, KerrMetricD_KretschmannScalar) {
     // Test 4: Kretschmann decreases with radius (monotonicity)
     double K_prev = std::numeric_limits<double>::max();
     for (double r : radii) {
-        sirius::physics::Vec4d x;
+        Sirius::Vec4d x;
         x.t = 0; x.r = r; x.theta = Math::HALF_PI; x.phi = 0;
 
         double K = schw.kretschmann(x);
@@ -507,7 +508,7 @@ TEST_F(MetricValidationTests, KerrMetricD_KretschmannScalar) {
     }
 
     // Test 5: At large radius, Kretschmann approaches zero (asymptotic flatness)
-    sirius::physics::Vec4d x_far;
+    Sirius::Vec4d x_far;
     x_far.t = 0; x_far.r = 1000.0; x_far.theta = Math::HALF_PI; x_far.phi = 0;
     double K_far = schw.kretschmann(x_far);
     double expected_far = 48.0 / std::pow(1000.0, 6);  // ~4.8e-17
@@ -518,17 +519,17 @@ TEST_F(MetricValidationTests, KerrMetricD_KretschmannScalar) {
 // Test: Horizon radius calculation
 TEST_F(MetricValidationTests, KerrMetricD_HorizonRadius) {
     // Schwarzschild: r+ = 2M
-    sirius::physics::KerrMetricD schw(1.0, 0.0);
+    Sirius::KerrMetricD schw(1.0, 0.0);
     EXPECT_NEAR(schw.horizonRadius(), 2.0, 1e-14);
 
     // Kerr with a = 0.5: r+ = 1 + sqrt(1 - 0.25) = 1 + sqrt(0.75)
-    sirius::physics::KerrMetricD kerr05(1.0, 0.5);
+    Sirius::KerrMetricD kerr05(1.0, 0.5);
     double expected_05 = 1.0 + std::sqrt(0.75);
     EXPECT_NEAR(kerr05.horizonRadius(), expected_05, 1e-14);
 
     // Near-extremal Kerr a ≈ M: r+ ≈ M + sqrt(1 - a²)
     // Note: KerrMetricD constructor clamps spin to 0.9999*M for numerical stability
-    sirius::physics::KerrMetricD kerr_ext(1.0, 0.9999);
+    Sirius::KerrMetricD kerr_ext(1.0, 0.9999);
     double expected_ext = 1.0 + std::sqrt(1.0 - 0.9999*0.9999);  // ~1.0141
     EXPECT_NEAR(kerr_ext.horizonRadius(), expected_ext, 1e-10);
 }
@@ -536,11 +537,11 @@ TEST_F(MetricValidationTests, KerrMetricD_HorizonRadius) {
 // Test: ISCO radius calculation
 TEST_F(MetricValidationTests, KerrMetricD_ISCORadius) {
     // Schwarzschild: r_ISCO = 6M
-    sirius::physics::KerrMetricD schw(1.0, 0.0);
+    Sirius::KerrMetricD schw(1.0, 0.0);
     EXPECT_NEAR(schw.iscoRadius(), 6.0, 1e-10);
 
     // Prograde extremal Kerr: r_ISCO = M
-    sirius::physics::KerrMetricD kerr099(1.0, 0.999);
+    Sirius::KerrMetricD kerr099(1.0, 0.999);
     EXPECT_LT(kerr099.iscoRadius(), 2.0);  // Should be close to M
 }
 
@@ -549,11 +550,11 @@ TEST_F(MetricValidationTests, KerrMetricD_NoNaNInf) {
     std::vector<double> spins = {0.0, 0.5, 0.9};
 
     for (double a : spins) {
-        sirius::physics::KerrMetricD metric(1.0, a);
+        Sirius::KerrMetricD metric(1.0, a);
         auto points = getSamplePoints(1.0, a);
 
         for (const auto& pt : points) {
-            sirius::physics::Vec4d x;
+            Sirius::Vec4d x;
             x.t = pt.t; x.r = pt.r; x.theta = pt.theta; x.phi = pt.phi;
 
             if (!metric.isValid(x)) continue;  // Skip invalid points
@@ -728,7 +729,7 @@ TEST_F(MetricValidationTests, MorrisThorne_LorentzianSignature) {
 TEST_F(MetricValidationTests, SchwarzschildConsistency) {
     double M = 1.0;
     Sirius::KerrSchildFamily ks_metric(Sirius::KerrSchildParams::Schwarzschild(M));
-    sirius::physics::KerrMetricD bl_metric(M, 0.0);
+    Sirius::KerrMetricD bl_metric(M, 0.0);
 
     // Test at equatorial positions
     std::vector<double> radii = {3.0, 6.0, 10.0, 20.0};
@@ -743,7 +744,7 @@ TEST_F(MetricValidationTests, SchwarzschildConsistency) {
         ks_metric.evaluate(pos_ks, g_ks, dg_ks);
 
         // Boyer-Lindquist evaluation
-        sirius::physics::Vec4d pos_bl;
+        Sirius::Vec4d pos_bl;
         pos_bl.t = 0; pos_bl.r = r; pos_bl.theta = Math::HALF_PI; pos_bl.phi = 0;
 
         double g_bl[4][4], g_inv_bl[4][4];
@@ -770,11 +771,11 @@ TEST_F(MetricValidationTests, SchwarzschildConsistency) {
 
 // Test: Metric determinant is non-zero in valid domain
 TEST_F(MetricValidationTests, KerrMetricD_DeterminantNonZero) {
-    sirius::physics::KerrMetricD metric(1.0, 0.5);
+    Sirius::KerrMetricD metric(1.0, 0.5);
     auto points = getSamplePoints(1.0, 0.5);
 
     for (const auto& pt : points) {
-        sirius::physics::Vec4d x;
+        Sirius::Vec4d x;
         x.t = pt.t; x.r = pt.r; x.theta = pt.theta; x.phi = pt.phi;
 
         if (!metric.isValid(x)) continue;
@@ -804,14 +805,14 @@ TEST_F(MetricValidationTests, KerrMetricD_DeterminantNonZero) {
 
 // Test: Behavior near horizon (should not produce NaN, may produce large values)
 TEST_F(MetricValidationTests, KerrMetricD_NearHorizonStability) {
-    sirius::physics::KerrMetricD metric(1.0, 0.5);
+    Sirius::KerrMetricD metric(1.0, 0.5);
     double r_plus = metric.horizonRadius();
 
     // Points approaching horizon
     std::vector<double> buffer_factors = {1.01, 1.005, 1.002, 1.001};
 
     for (double factor : buffer_factors) {
-        sirius::physics::Vec4d x;
+        Sirius::Vec4d x;
         x.t = 0;
         x.r = r_plus * factor;
         x.theta = Math::HALF_PI;
@@ -840,13 +841,13 @@ TEST_F(MetricValidationTests, KerrMetricD_NearHorizonStability) {
 
 // Test: Behavior near poles (theta → 0 or π)
 TEST_F(MetricValidationTests, KerrMetricD_NearPoleStability) {
-    sirius::physics::KerrMetricD metric(1.0, 0.5);
+    Sirius::KerrMetricD metric(1.0, 0.5);
 
     // Points approaching poles
     std::vector<double> thetas = {0.01, 0.001, Math::PI - 0.01, Math::PI - 0.001};
 
     for (double theta : thetas) {
-        sirius::physics::Vec4d x;
+        Sirius::Vec4d x;
         x.t = 0;
         x.r = 10.0;
         x.theta = theta;

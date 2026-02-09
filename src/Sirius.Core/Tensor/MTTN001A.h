@@ -13,10 +13,11 @@
 #pragma once
 
 #include "MTDL001A.h"
-#include "MTVT001A.h"
 #include <array>
 #include <map>
 #include <cmath>
+
+namespace Sirius {
 
 // Forward declaration for TensorOps
 class TensorOps;
@@ -214,9 +215,4 @@ public:
     static Vec4 normalizeNull(const Vec4& velocity, const Metric4D& g);
 };
 
-// =============================================================================
-// Legacy compatibility
-// =============================================================================
-#ifndef SIRIUS_NO_LEGACY_ALIASES
-// Tensor, Vec4, Metric4D, TensorOps already use standard names
-#endif
+} // namespace Sirius

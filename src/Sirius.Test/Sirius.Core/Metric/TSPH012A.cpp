@@ -15,6 +15,8 @@
 #include "PHMT101A.h"   // Morris-Thorne Family
 #include "PHMT102A.h"   // Warp Drive Family
 
+using namespace Sirius;
+
 constexpr double kEpsilon = 1e-6;
 constexpr double kFiniteDiffH = 1e-5;
 

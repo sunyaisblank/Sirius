@@ -7,6 +7,7 @@
 #include <PHCT001A.h>
 
 namespace sirius::test {
+using namespace Sirius;
 
 constexpr double kEps = 1e-10;
 constexpr double kPi = 3.14159265358979323846;
@@ -217,6 +218,74 @@ TEST_F(CoordUtilityTests, CylindricalRadius) {
 TEST_F(CoordUtilityTests, AzimuthalAngle) {
     EXPECT_NEAR(Sirius::Coordinates::azimuthalAngle(1.0, 0.0), 0.0, kEps);
     EXPECT_NEAR(Sirius::Coordinates::azimuthalAngle(0.0, 1.0), kPi / 2.0, kEps);
+}
+
+// =============================================================================
+// SIMD vs Scalar Parity (PHCT003A)
+// =============================================================================
+
+} // namespace sirius::test
+
+#include <PHCT003A.h>
+
+namespace sirius::test {
+using namespace Sirius;
+
+TEST_F(CoordUtilityTests, SIMDBatchRoundTrip) {
+    // Forward transform then inverse should recover original coordinates
+    const int N = 16;
+    float r[N], theta[N], phi[N];
+    float x[N], y[N], z[N];
+    float r2[N], theta2[N], phi2[N];
+
+    // Generate test points
+    for (int i = 0; i < N; ++i) {
+        r[i] = 1.0f + i * 2.0f;
+        theta[i] = 0.1f + i * 0.18f;  // 0.1 to ~2.88 (avoid poles)
+        phi[i] = i * 0.4f;
+    }
+
+    Sirius::Coordinates::SIMD::transformBatch(r, theta, phi, x, y, z, N);
+    Sirius::Coordinates::SIMD::inverseTransformBatch(x, y, z, r2, theta2, phi2, N);
+
+    for (int i = 0; i < N; ++i) {
+        EXPECT_NEAR(r2[i], r[i], 1e-3f)
+            << "r mismatch at index " << i;
+        EXPECT_NEAR(theta2[i], theta[i], 1e-3f)
+            << "theta mismatch at index " << i;
+        // phi wraps to [0, 2π) in inverse
+        float expected_phi = std::fmod(phi[i], 6.283185307f);
+        if (expected_phi < 0) expected_phi += 6.283185307f;
+        EXPECT_NEAR(phi2[i], expected_phi, 1e-3f)
+            << "phi mismatch at index " << i;
+    }
+}
+
+TEST_F(CoordUtilityTests, SIMDScalarParity) {
+    // transformBatch (may use AVX2) should match transformBatchScalar
+    const int N = 24;  // Not a multiple of 8 to test remainder handling
+    float r[N], theta[N], phi[N];
+    float x_simd[N], y_simd[N], z_simd[N];
+    float x_scalar[N], y_scalar[N], z_scalar[N];
+
+    for (int i = 0; i < N; ++i) {
+        r[i] = 0.5f + i * 1.5f;
+        theta[i] = 0.2f + i * 0.12f;
+        phi[i] = i * 0.25f;
+    }
+
+    Sirius::Coordinates::SIMD::transformBatch(r, theta, phi, x_simd, y_simd, z_simd, N);
+    Sirius::Coordinates::SIMD::transformBatchScalar(r, theta, phi, x_scalar, y_scalar, z_scalar, N);
+
+    // AVX2 uses fast Taylor sin/cos (~1e-4 accuracy), so tolerance is relaxed
+    for (int i = 0; i < N; ++i) {
+        EXPECT_NEAR(x_simd[i], x_scalar[i], 1e-2f)
+            << "x mismatch at index " << i;
+        EXPECT_NEAR(y_simd[i], y_scalar[i], 1e-2f)
+            << "y mismatch at index " << i;
+        EXPECT_NEAR(z_simd[i], z_scalar[i], 1e-2f)
+            << "z mismatch at index " << i;
+    }
 }
 
 } // namespace sirius::test

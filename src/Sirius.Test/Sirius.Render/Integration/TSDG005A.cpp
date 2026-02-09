@@ -31,6 +31,7 @@
 #include "../src/Sirius.Render/Acceleration/OptiX/RDOP005A.h"
 
 namespace sirius::test {
+using namespace Sirius;
 
 // =============================================================================
 // GPU Conservation Test Tolerances

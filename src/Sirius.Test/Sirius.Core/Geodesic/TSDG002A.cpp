@@ -11,6 +11,7 @@
 #include "PHMT100A.h" // Unified Kerr-Schild Family
 
 namespace sirius::test {
+using namespace Sirius;
 
 // =============================================================================
 // Test Fixture
