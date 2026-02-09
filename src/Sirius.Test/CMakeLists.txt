@@ -3,11 +3,13 @@
 # Google Test-based testing framework
 #
 # Governance: docs/specification.md
-# Test Categories:
+# Test Categories (via CTest labels):
 #   - Mandatory: Must pass for build to succeed
 #   - Correctness: Mathematical invariant tests
 #   - Stability: Numerical stability tests
 #   - Performance: FPS and resource metrics (soft gate)
+#
+# Directory structure mirrors src/ for 1:1 coverage mapping.
 # =============================================================================
 
 cmake_minimum_required(VERSION 3.16)
@@ -28,126 +30,170 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 # === Test Executable ===
-# NOTE: Legacy metrics (PHMT001A-004A) replaced by unified metric families (PHMT100A-102A)
 add_executable(SiriusTests
     # ==========================================================================
-    # Unit Tests - Math (TSMT###A)
+    # Sirius.Core — Autodiff
     # ==========================================================================
-    Unit/TSMT001A.cpp    # Dual number arithmetic and derivatives
-    Unit/TSMT002A.cpp    # Tensor operations and contractions
-    
-    # ==========================================================================
-    # Unit Tests - Physics (TSPH###A)
-    # ==========================================================================
-    Unit/TSPH001A.cpp    # Schwarzschild metric properties
-    Unit/TSPH002A.cpp    # Christoffel symbol symmetry
-    Unit/TSPH003A.cpp    # Geodesic equation integration
-    Unit/TSPH004A.cpp    # Kerr metric properties
-    Unit/TSPH005A.cpp    # Kerr-Schild coordinates
-    Unit/TSPH006A.cpp    # Ellis Drainhole (wormhole)
-    Unit/TSPH007A.cpp    # Reissner-Nordström (charged black hole)
-    Unit/TSPH008A.cpp    # Numerical metric validation (ADM)
-    Unit/TSPH009A.cpp    # RK45 integrator validation
-    Unit/TSPH010A.cpp    # Numerical geodesic integrator
-    # Unit/TSNR001A.cpp    # [DELETED] NR data loader (obsolete)
-    Unit/TSPH011A.cpp    # Spectral rendering utilities
-    Unit/TSPH012A.cpp    # Metric derivative validation
-    Unit/TSPH014A.cpp    # Double-precision metric tests (Phase 1: Offline Renderer)
-    Unit/TSPH015A.cpp    # Coordinate transformation tests (PHCT002A round-trip)
-    Unit/TSSI001A.cpp    # Symplectic integrator tests (Phase 2: Offline Renderer)
-    Unit/TSGD001A.cpp    # Beam propagation tests (Phase 3: Offline Renderer)
-    Unit/TSSP001A.cpp    # Spectral radiance tests (Phase 4: Offline Renderer)
-    Unit/TSDK001A.cpp    # Accretion disk tests (Phase 5: Offline Renderer)
-    Unit/TSDK002A.cpp    # Volumetric disk tests (Phase 6: Volumetric Disk)
-    # Unit/TSSI002A.cpp    # Scene intersection/anti-aliasing tests [DISABLED: needs Vec4d beam state updates]
-    Unit/TSGD002A.cpp    # Einstein ring magnification tests (Gate G3)
-    Unit/TSSP002A.cpp      # Spectral reference validation (Planck, Wien, Stefan-Boltzmann)
-
-    # === OFFLINE RENDERING TESTS (Production Plan) ===
-    Unit/TSOF001A.cpp    # Render session tests (Production Plan Phase 6)
-    Unit/TSOF002A.cpp    # Cancellation token tests (Production Plan Phase 1)
-    Unit/TSOF003A.cpp    # Error accumulator tests (Production Plan Phase 1)
-    Unit/TSOF004A.cpp    # Tile scheduler tests (Production Plan Phase 2)
-    Unit/TSOF005A.cpp    # ETA calculator tests (Production Plan Phase 2)
-    Unit/TSOF006A.cpp    # Output driver tests (Production Plan Phase 3)
-    Unit/TSOF007A.cpp    # Checkpoint tests (Production Plan Phase 4)
-    Unit/TSOF008A.cpp    # Display driver tests (Production Plan Phase 5)
-    Unit/TSOF009A.cpp    # PNG output driver tests (Production Plan Phase 3)
-    Unit/TSOF010A.cpp    # Offline renderer integration tests
-    Unit/TSMB001A.cpp    # Motion blur and temporal sampling tests (Phase 7)
-    Unit/TSVAL001A.cpp   # DNGR validation and analytic tests (Phase 8)
-
-    # === CINEMATIC EXPANSION TESTS (2026) ===
-    Unit/TSSM001A.cpp    # SMBH parameter scaling and invariants
-    Unit/TSTR001A.cpp    # Turbulence model power spectrum validation
-    Unit/TSJT002A.cpp    # MHD jet magnetic flux conservation
-    Unit/TSFL001A.cpp    # Film simulation unit tests
-    
-    # ==========================================================================
-    # Unit Tests - Camera/DNGR Validation (TSCM###A)
-    # ==========================================================================
-    Unit/TSCM005A.cpp    # FIDO frame consistency (DNGR Eq A.2-A.7)
-    Unit/TSCM006A.cpp    # G-factor validation (DNGR Eq A.16)
-    Unit/TSCM007A.cpp    # Geodesic deviation (DNGR Eq A.18-A.27)
-    
-    # ==========================================================================
-    # Diagnostic Tests (TSDG###A) - Numerical Stability
-    # ==========================================================================
-
-    Diagnostic/TSDG001A.cpp  # Edge cases and precision
-    Diagnostic/TSDG002A.cpp  # NaN/Inf detection
-    Diagnostic/TSDG003A.cpp  # Conservation law verification
-    Diagnostic/TSDG004A.cpp  # Determinism verification
-    Diagnostic/TSDG005A.cpp  # GPU conservation validation (Phase 2.1)
-    Diagnostic/TSDG006A.cpp  # Mandatory Killing vector tests (Phase 5.1)
-    Diagnostic/TSDG007A.cpp  # Comprehensive metric tensor validation
-    Diagnostic/TSDG008A.cpp  # Analytic solution validation (photon sphere, ISCO, deflection)
-    
-    # ==========================================================================
-    # Integration Tests (TSIN###A) - End-to-end validation
-    # ==========================================================================
-    Integration/TSIN001A.cpp  # Geodesic path validation
-    Integration/TSIN002A.cpp  # Metric loader chain (Unified Families)
-    Integration/TSIN003A.cpp  # Render pipeline integration
-    Integration/TSIN004A.cpp  # Offline renderer integration (Production Plan)
-    Integration/TSIN005A.cpp  # GeodesicTracer integration tests (Priority 1 fix)
-    Integration/TSIN006A.cpp  # GPU/CPU parity tests (Phase 2.2)
-    
-    # ==========================================================================
-    # Benchmark Tests (TSBM###A) - Performance validation
-    # ==========================================================================
-    Benchmark/TSBM001A.cpp   # Integration accuracy (Killing vectors)
-    Benchmark/TSBM002A.cpp   # FPS performance tracking
-    Benchmark/TSBM003A.cpp   # Christoffel computation: Spherical vs Cartesian
-    # Benchmark/TSBM004A.cpp   # [ARCHIVED] Symplectic vs RK45 integrator comparison
-    
-    # ==========================================================================
-    # Performance Tests (TSPF###A) - Resource usage validation
-    # ==========================================================================
-    Performance/TSPF001A.cpp  # FPS thresholds
-    Performance/TSPF002A.cpp  # Memory usage
+    Sirius.Core/Autodiff/TSMT001A.cpp    # Dual number arithmetic and derivatives
 
     # ==========================================================================
-    # Output Driver Implementations (required for PNG/EXR tests)
+    # Sirius.Core — Tensor
+    # ==========================================================================
+    Sirius.Core/Tensor/TSMT002A.cpp      # Tensor operations and contractions
+
+    # ==========================================================================
+    # Sirius.Core — Metric
+    # ==========================================================================
+    Sirius.Core/Metric/TSPH001A.cpp      # Schwarzschild metric properties
+    Sirius.Core/Metric/TSPH002A.cpp      # Christoffel symbol symmetry
+    Sirius.Core/Metric/TSPH004A.cpp      # Kerr metric properties
+    Sirius.Core/Metric/TSPH005A.cpp      # Kerr-Schild coordinates
+    Sirius.Core/Metric/TSPH006A.cpp      # Ellis Drainhole (wormhole)
+    Sirius.Core/Metric/TSPH007A.cpp      # Reissner-Nordstrom (charged black hole)
+    Sirius.Core/Metric/TSPH008A.cpp      # Numerical metric validation (ADM)
+    Sirius.Core/Metric/TSPH012A.cpp      # Metric derivative validation
+    Sirius.Core/Metric/TSPH014A.cpp      # Double-precision metric tests
+    Sirius.Core/Metric/TSCM005A.cpp      # FIDO frame consistency (DNGR Eq A.2-A.7)
+    Sirius.Core/Metric/TSCM006A.cpp      # G-factor validation (DNGR Eq A.16)
+    Sirius.Core/Metric/TSCM007A.cpp      # Geodesic deviation (DNGR Eq A.18-A.27)
+    Sirius.Core/Metric/TSSM001A.cpp      # SMBH parameter scaling and invariants
+    Sirius.Core/Metric/TSVAL001A.cpp     # DNGR validation and analytic tests
+    Sirius.Core/Metric/TSDG007A.cpp      # Comprehensive metric tensor validation
+    Sirius.Core/Metric/TSDG008A.cpp      # Analytic solution validation (photon sphere, ISCO, deflection)
+    Sirius.Core/Metric/TSIN002A.cpp      # Metric loader chain (Unified Families)
+    Sirius.Core/Metric/TSMT102A.cpp      # Alcubierre warp drive metric properties [NEW]
+
+    # ==========================================================================
+    # Sirius.Core — Geodesic
+    # ==========================================================================
+    Sirius.Core/Geodesic/TSPH003A.cpp    # Geodesic equation integration
+    Sirius.Core/Geodesic/TSPH009A.cpp    # RK45 integrator validation
+    Sirius.Core/Geodesic/TSPH010A.cpp    # Numerical geodesic integrator
+    Sirius.Core/Geodesic/TSGD001A.cpp    # Beam propagation tests
+    Sirius.Core/Geodesic/TSGD002A.cpp    # Einstein ring magnification tests
+    Sirius.Core/Geodesic/TSDG001A.cpp    # Edge cases and precision
+    Sirius.Core/Geodesic/TSDG002A.cpp    # NaN/Inf detection
+    Sirius.Core/Geodesic/TSDG003A.cpp    # Conservation law verification
+    Sirius.Core/Geodesic/TSDG004A.cpp    # Determinism verification
+    Sirius.Core/Geodesic/TSDG006A.cpp    # Mandatory Killing vector tests
+    Sirius.Core/Geodesic/TSBM001A.cpp    # Integration accuracy (Killing vectors)
+    Sirius.Core/Geodesic/TSIN001A.cpp    # Geodesic path validation
+
+    # ==========================================================================
+    # Sirius.Core — Disk
+    # ==========================================================================
+    Sirius.Core/Disk/TSDK001A.cpp        # Accretion disk tests
+    Sirius.Core/Disk/TSDK002A.cpp        # Volumetric disk tests
+    Sirius.Core/Disk/TSTR001A.cpp        # Turbulence model power spectrum validation
+    Sirius.Core/Disk/TSCR001A.cpp        # Corona model tests [NEW]
+
+    # ==========================================================================
+    # Sirius.Core — Jet
+    # ==========================================================================
+    Sirius.Core/Jet/TSJT002A.cpp         # MHD jet magnetic flux conservation
+    Sirius.Core/Jet/TSJT001A.cpp         # Relativistic jet emission model [NEW]
+
+    # ==========================================================================
+    # Sirius.Core — Spectral
+    # ==========================================================================
+    Sirius.Core/Spectral/TSPH011A.cpp    # Spectral rendering utilities
+    Sirius.Core/Spectral/TSSP001A.cpp    # Spectral radiance tests
+    Sirius.Core/Spectral/TSSP002A.cpp    # Spectral reference validation (Planck, Wien, Stefan-Boltzmann)
+
+    # ==========================================================================
+    # Sirius.Core — Coordinate
+    # ==========================================================================
+    Sirius.Core/Coordinate/TSPH015A.cpp  # Coordinate transformation tests (PHCT002A round-trip)
+    Sirius.Core/Coordinate/TSCT001A.cpp  # Coordinate transform interface tests [NEW]
+
+    # ==========================================================================
+    # Sirius.Core — Symplectic
+    # ==========================================================================
+    Sirius.Core/Symplectic/TSSI001A.cpp  # Symplectic integrator tests
+    # Sirius.Core/Symplectic/TSSI002A.cpp  # [DISABLED: needs Vec4d beam state updates]
+
+    # ==========================================================================
+    # Sirius.Core — Polarisation
+    # ==========================================================================
+    Sirius.Core/Polarisation/TSPL001A.cpp  # Stokes vector and Mueller matrix tests [NEW]
+
+    # ==========================================================================
+    # Sirius.Core — Transport
+    # ==========================================================================
+    Sirius.Core/Transport/TSTP001A.cpp   # Vec4d, GeodesicStateD, Mat4d tests [NEW]
+
+    # ==========================================================================
+    # Sirius.Core — PostProcess
+    # ==========================================================================
+    Sirius.Core/PostProcess/TSPP001A.cpp # Tonemapping operator tests [NEW]
+
+    # ==========================================================================
+    # Sirius.Core — Environment
+    # ==========================================================================
+    Sirius.Core/Environment/TSSF001A.cpp # Starfield generator tests [NEW]
+
+    # ==========================================================================
+    # Sirius.Render — Session
+    # ==========================================================================
+    Sirius.Render/Session/TSOF001A.cpp   # Render session tests
+    Sirius.Render/Session/TSOF002A.cpp   # Cancellation token tests
+    Sirius.Render/Session/TSOF003A.cpp   # Error accumulator tests
+    Sirius.Render/Session/TSOF004A.cpp   # Tile scheduler tests
+    Sirius.Render/Session/TSOF005A.cpp   # ETA calculator tests
+    Sirius.Render/Session/TSOF006A.cpp   # Output driver tests
+    Sirius.Render/Session/TSOF007A.cpp   # Checkpoint tests
+    Sirius.Render/Session/TSOF008A.cpp   # Display driver tests
+    Sirius.Render/Session/TSOF009A.cpp   # PNG output driver tests
+    Sirius.Render/Session/TSOF010A.cpp   # Offline renderer integration tests
+    Sirius.Render/Session/TSMB001A.cpp   # Motion blur and temporal sampling tests
+
+    # ==========================================================================
+    # Sirius.Render — Integration
+    # ==========================================================================
+    Sirius.Render/Integration/TSIN005A.cpp  # GeodesicTracer integration tests
+    Sirius.Render/Integration/TSDG005A.cpp  # GPU conservation validation
+    Sirius.Render/Integration/TSIN006A.cpp  # GPU/CPU parity tests
+
+    # ==========================================================================
+    # Sirius.Render — Pipeline
+    # ==========================================================================
+    Sirius.Render/Pipeline/TSIN003A.cpp  # Render pipeline integration
+
+    # ==========================================================================
+    # Sirius.Render — Offline
+    # ==========================================================================
+    Sirius.Render/Offline/TSIN004A.cpp   # Offline renderer integration
+
+    # ==========================================================================
+    # Sirius.Infrastructure — Configuration
+    # ==========================================================================
+    Sirius.Infrastructure/Configuration/TSFL001A.cpp  # Film simulation unit tests
+
+    # ==========================================================================
+    # Sirius.Core — Metric (Benchmark & Performance)
+    # ==========================================================================
+    Sirius.Core/Metric/TSBM002A.cpp      # FPS performance tracking
+    Sirius.Core/Metric/TSBM003A.cpp      # Christoffel computation: Spherical vs Cartesian
+    Sirius.Core/Metric/TSPF001A.cpp      # FPS thresholds
+    Sirius.Core/Metric/TSPF002A.cpp      # Memory usage
+
+    # ==========================================================================
+    # Implementation sources (required by tests)
     # ==========================================================================
     ../Sirius.Render/Output/OUPN001A.cpp   # PNG writer implementation
     ../Sirius.Render/Output/OUEW001A.cpp   # EXR writer implementation
     ../../lib/tinyexr/miniz.c              # miniz compression (required by tinyexr)
-
-    # ==========================================================================
-    # GeodesicTracer Implementation (required for TSIN005A tests)
-    # ==========================================================================
     ../Sirius.Render/Integration/GTRC001A.cpp  # GeodesicTracer implementation
 )
 
 # === Include Directories ===
 # Note: SiriusCore PUBLIC includes are inherited via target_link_libraries
-# Additional directories for render modules:
 target_include_directories(SiriusTests PRIVATE
-    # Test fixtures and infrastructure
-    ${CMAKE_CURRENT_SOURCE_DIR}/Fixtures
-    # Render module directories
+    # Test fixtures and infrastructure (TSFT*.h at test root)
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    # Source root (for "Sirius.Render/..." style includes)
     ${CMAKE_CURRENT_SOURCE_DIR}/..
+    # Render module directories
     ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Render
     ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Render/Integration
     ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Render/Acceleration
@@ -160,12 +206,16 @@ target_include_directories(SiriusTests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Infrastructure
     ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Infrastructure/Configuration
     ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Infrastructure/Session
-    # Core module directories for cinematic expansion
+    # Core module directories
     ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core
     ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Disk
     ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Jet
     ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Metric
     ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Environment
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Polarisation
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Transport
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/PostProcess
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Sirius.Core/Coordinate
     # Third-party image I/O libraries
     ${CMAKE_CURRENT_SOURCE_DIR}/../../lib/stb
     ${CMAKE_CURRENT_SOURCE_DIR}/../../lib/tinyexr
@@ -192,35 +242,20 @@ set_target_properties(SiriusTests PROPERTIES
 # =============================================================================
 # TEST LABELING FOR MANDATORY GATE
 # =============================================================================
-# After tests are discovered, we apply labels via test properties.
-# GoogleTest discovery happens at build time, so we use PROPERTIES in discover.
-#
-# Label Definitions:
-#   Mandatory   - Build fails if these tests fail
-#   Correctness - Mathematical invariant tests  
-#   Stability   - Numerical stability tests
-#   Performance - FPS/resource metrics (warning only)
+# Labels are applied by test fixture name in CTestLabels.cmake.
+# Directory structure encodes module affinity; labels encode test category.
+# Included via TEST_INCLUDE_FILES so labels apply after gtest discovery.
 # =============================================================================
-
-# Note: gtest_discover_tests applies labels at configure time.
-# For fine-grained control, individual test labels can be set via:
-#   set_tests_properties(TestName PROPERTIES LABELS "Mandatory;Correctness")
-#
-# Since GoogleTest creates tests dynamically, we use a post-discovery approach:
-# The following regex patterns match test names to apply labels.
-
-# After build, label tests using CTest regex matching
-# This is executed via a custom script or manually after first configure
+set_property(DIRECTORY APPEND PROPERTY
+    TEST_INCLUDE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/CTestLabels.cmake"
+)
 
 message(STATUS "")
 message(STATUS "=== Sirius Test Suite ===")
-message(STATUS "  Unit Tests:        13 files (TSMT, TSPH, TSNR)")
-message(STATUS "  Diagnostic Tests:  4 files (TSDG)")
-message(STATUS "  Integration Tests: 3 files (TSIN)")
-message(STATUS "  Benchmark Tests:   2 files (TSBM)")
-message(STATUS "  Performance Tests: 2 files (TSPF)")
+message(STATUS "  Sirius.Core:           56 files (Autodiff, Tensor, Metric, Geodesic, Disk, Jet, Spectral, Coordinate, Symplectic, Polarisation, Transport, PostProcess, Environment)")
+message(STATUS "  Sirius.Render:         15 files (Session, Integration, Pipeline, Offline)")
+message(STATUS "  Sirius.Infrastructure:  1 file  (Configuration)")
 message(STATUS "")
 message(STATUS "  Run all tests:     ctest --test-dir <build>")
 message(STATUS "  Run mandatory:     ctest --test-dir <build> -L Mandatory")
 message(STATUS "")
-

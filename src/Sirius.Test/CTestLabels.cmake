@@ -363,6 +363,228 @@ set_tests_properties(
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
+# =============================================================================
+# Polarisation Tests (TSPL001A) - Stokes/Mueller formalism
+# =============================================================================
+set_tests_properties(
+    StokesVectorTests.UnpolarisedConstruction
+    StokesVectorTests.HorizontalPolarisation
+    StokesVectorTests.VerticalPolarisation
+    StokesVectorTests.CircularPolarisation
+    StokesVectorTests.PhysicalConstraint
+    StokesVectorTests.PolarisationDegree
+    StokesVectorTests.LinearPolarisationDegree
+    StokesVectorTests.CircularPolarisationDegree
+    StokesVectorTests.EVPAComputation
+    StokesVectorTests.IsPhysicalRejectsUnphysical
+    StokesVectorTests.NormalisationProjection
+    StokesVectorTests.ZeroIntensityHandling
+    StokesVectorTests.ArithmeticOperators
+    MuellerMatrixTests.IdentityPreservesStokes
+    MuellerMatrixTests.HorizontalPolariserOnUnpolarised
+    MuellerMatrixTests.VerticalPolariserOnUnpolarised
+    MuellerMatrixTests.CrossedPolariersExtinguish
+    MuellerMatrixTests.QuarterWavePlateConvertsToCircular
+    MuellerMatrixTests.CompositionAssociativity
+    MuellerMatrixTests.DepolariserReducesPolarisation
+    MuellerMatrixTests.HalfWavePlateFlipsHandedness
+    PolarisedEmissionTests.SynchrotronPolarisationDegree
+    PolarisedEmissionTests.SynchrotronEmissionIsPhysical
+    PolarisedEmissionTests.ThomsonScatteringAt90Degrees
+    PolarisedEmissionTests.ThomsonScatteringForward
+    ParallelTransportTests.ZeroSpinNoRotation
+    ParallelTransportTests.RotationIncreasesWithSpin
+    ParallelTransportTests.ApplyPreservesIntensity
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+# =============================================================================
+# Alcubierre Warp Drive Metric Tests (TSMT102A)
+# =============================================================================
+set_tests_properties(
+    AlcubierreMetricTests.MetricSymmetry
+    AlcubierreMetricTests.LorentzianSignature
+    AlcubierreMetricTests.ReducesToMinkowskiOutside
+    AlcubierreMetricTests.ShiftVectorAtCentre
+    AlcubierreMetricTests.GttAtCentre
+    AlcubierreMetricTests.SpatialComponentsFlat
+    AlcubierreMetricTests.ShapeFunctionAtCentre
+    AlcubierreMetricTests.ShapeFunctionFarField
+    AlcubierreMetricTests.ShapeFunctionMonotoneDecrease
+    AlcubierreMetricTests.ShapeFunctionDerivativeFinite
+    AlcubierreMetricTests.SubluminalConstruction
+    AlcubierreMetricTests.SuperluminalConstruction
+    AlcubierreMetricTests.SetParameterClamping
+    AlcubierreMetricTests.NoNaNAtBubbleWall
+    AlcubierreMetricTests.NoNaNAtOrigin
+    AlcubierreMetricTests.BubblePositionUpdate
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+# =============================================================================
+# Corona Model Tests (TSCR001A)
+# =============================================================================
+set_tests_properties(
+    CoronaConfigTests.ValidateClampsTemperature
+    CoronaConfigTests.ValidateClampsOpticalDepth
+    CoronaConfigTests.ValidateEnsuresOuterGreaterThanInner
+    CoronaConfigTests.ComptonizationParameter
+    CoronaConfigTests.ComptonizationHighOpticalDepth
+    CoronaConfigTests.SpectralIndexFinite
+    CoronaGeometryTests.DisabledReturnsNoContainment
+    CoronaGeometryTests.OutsideRadialBoundsRejected
+    CoronaGeometryTests.SlabGeometryEquatorialInside
+    CoronaGeometryTests.SlabGeometryPolarOutside
+    CoronaGeometryTests.LamppostNearSourceInside
+    CoronaGeometryTests.SphereContainment
+    CoronaGeometryTests.ExtendedScalesWithRadius
+    CoronaEmissivityTests.ZeroOutsideBounds
+    CoronaEmissivityTests.DisabledReturnsZero
+    CoronaEmissivityTests.DecreasesWithRadius
+    CoronaEmissivityTests.GaussianVerticalFalloff
+    CoronaEmissivityTests.OpticalDepthDisabledIsZero
+    CoronaEmissivityTests.OpticalDepthPositiveInsideCorona
+    CoronaEmissivityTests.ScatteredIntensityZeroForZeroTau
+    CoronaEmissivityTests.ScatteredIntensityIncreasesWithTau
+    PROPERTIES LABELS "Correctness"
+)
+
+# =============================================================================
+# Coordinate Utility Tests (TSCT001A)
+# =============================================================================
+set_tests_properties(
+    CoordUtilityTests.RoundTripCartesianSpherical
+    CoordUtilityTests.RoundTripSphericalCartesian
+    CoordUtilityTests.OriginHandling
+    CoordUtilityTests.NorthPole
+    CoordUtilityTests.SouthPole
+    CoordUtilityTests.KnownValueXAxis
+    CoordUtilityTests.KnownValueZAxis
+    CoordUtilityTests.FourVectorTimePassthrough
+    CoordUtilityTests.VelocityRoundTrip
+    CoordUtilityTests.VelocityTimeComponentUnchanged
+    CoordUtilityTests.KerrRadiusZeroSpin
+    CoordUtilityTests.KerrRadiusPositive
+    CoordUtilityTests.EquirectangularBounds
+    CoordUtilityTests.EquirectangularPoles
+    CoordUtilityTests.InAccretionDisk
+    CoordUtilityTests.CylindricalRadius
+    CoordUtilityTests.AzimuthalAngle
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+# =============================================================================
+# Transport Type Tests (TSTP001A)
+# =============================================================================
+set_tests_properties(
+    Vec4dTests.DefaultConstructionAllZeros
+    Vec4dTests.ParameterisedConstruction
+    Vec4dTests.IndexedAccess
+    Vec4dTests.IndexedMutation
+    Vec4dTests.Addition
+    Vec4dTests.Subtraction
+    Vec4dTests.ScalarMultiplication
+    Vec4dTests.ScalarMultiplicationCommutative
+    Vec4dTests.ScalarDivision
+    Vec4dTests.CompoundAssignment
+    Vec4dTests.Negation
+    Vec4dTests.Norm2
+    Vec4dTests.IsZero
+    GeodesicStateDTests.DefaultConstruction
+    GeodesicStateDTests.ConstructionFromPosAndMom
+    GeodesicStateDTests.ConservedQuantitiesSchwarzschildLike
+    HamiltonianStateDTests.DefaultConstruction
+    HamiltonianStateDTests.RoundTripViaGeodesicState
+    HamiltonianStateDTests.ConstructFromGeodesicState
+    Mat4dTests.DefaultIsZero
+    Mat4dTests.IdentityDiagonal
+    Mat4dTests.Trace
+    Mat4dTests.IdentityDeterminant
+    Mat4dTests.ZeroDeterminant
+    Mat4dTests.KnownDeterminant
+    Mat4dTests.MatrixVectorMultiplication
+    Mat4dTests.ScalarMultiplication
+    Mat4dTests.Addition
+    ConversionTests.ToVec4dFromFloats
+    ConversionTests.ToFloat4RoundTrip
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+# =============================================================================
+# Post-Processing Tests (TSPP001A)
+# =============================================================================
+set_tests_properties(
+    TonemapTests.ACESAtZero
+    TonemapTests.ACESMonotone
+    TonemapTests.ACESBounded
+    TonemapTests.ReinhardAnalytic
+    TonemapTests.FilmicAtZero
+    TonemapTests.FilmicMonotone
+    TonemapTests.FilmicBounded
+    TonemapTests.AgXAtZero
+    TonemapTests.AgXMonotone
+    TonemapTests.AgXBounded
+    TonemapTests.ApplyExposureScaling
+    TonemapTests.ApplyACESDispatch
+    TonemapTests.ApplyReinhardDispatch
+    BloomFilterTests.DisabledBloomLeavesBufferUnchanged
+    BloomFilterTests.ZeroIntensityBloomLeavesUnchanged
+    BloomFilterTests.BrightPixelsCauseBloom
+    ColourGradingTests.IdentityParametersPreserveValues
+    ColourGradingTests.ZeroSaturationProducesGrey
+    ColourGradingTests.OutputClamped
+    PROPERTIES LABELS "Correctness"
+)
+
+# =============================================================================
+# Jet Emission Tests (TSJT001A)
+# =============================================================================
+set_tests_properties(
+    JetDopplerTests.HeadOnApproachBoosted
+    JetDopplerTests.RecedingDeBoosted
+    JetDopplerTests.TransverseDirection
+    JetDopplerTests.AnalyticFormula
+    JetGeometryTests.InsideJetOnAxis
+    JetGeometryTests.OutsideJetBelowLaunch
+    JetGeometryTests.OutsideJetFarOffAxis
+    JetGeometryTests.SouthernJet
+    JetGeometryTests.JetRadiusMonotone
+    JetGeometryTests.JetRadiusZeroBelowLaunch
+    JetEmissionTests.MagneticFieldAtLaunch
+    JetEmissionTests.MagneticFieldDecays
+    JetEmissionTests.ElectronDensityAtLaunch
+    JetEmissionTests.ElectronDensityDecays
+    JetEmissionTests.SynchrotronEmissivityPositive
+    JetEmissionTests.BeamingApproachingBrighterThanReceding
+    JetEmissionTests.PolarisationDegreeFormula
+    JetEmissionTests.VelocityDirection
+    JetRayMarchTests.EmissionOutsideJetIsZero
+    PROPERTIES LABELS "Correctness"
+)
+
+# =============================================================================
+# Starfield Tests (TSSF001A)
+# =============================================================================
+set_tests_properties(
+    StarfieldConfigTests.ValidateClampsStarCount
+    StarfieldConfigTests.ValidateClampsMinDistance
+    StarfieldConfigTests.ValidateEnsuresMaxGreaterThanMin
+    StarfieldConfigTests.ValidateClampsMagnitudeLimit
+    StarfieldConfigTests.ValidateClampsAperture
+    StarEntryTests.ComputeColorProducesValidRGB
+    StarEntryTests.HotStarIsBluer
+    StarEntryTests.ZeroTemperatureDefaultsToSolar
+    StarEntryTests.IntensityFromMagnitude
+    StarEntryTests.IntensityMagnitudeRelation
+    StarfieldGeneratorTests.GeneratesNonEmptyCatalog
+    StarfieldGeneratorTests.CatalogSizeBounded
+    StarfieldGeneratorTests.DirectionVectorsNormalised
+    StarfieldGeneratorTests.AllTemperaturesPositive
+    StarfieldGeneratorTests.AllDistancesPositive
+    StarfieldGeneratorTests.DeterministicWithSameSeed
+    StarfieldGeneratorTests.DifferentSeedsDifferentCatalogs
+    StarfieldGeneratorTests.NoNaNInCatalog
+    PROPERTIES LABELS "Correctness"
+)
+
 message(STATUS "CTest labels configured for Sirius test suite")
-
-
