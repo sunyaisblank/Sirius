@@ -26,11 +26,16 @@ Basic Options:
   -h, --height <n>          Image height (default: 1080)
   -s, --samples <n>         Samples per pixel (default: 64)
   -t, --tile-size <n>       Tile size in pixels (default: 64)
-  -m, --metric <name>       Metric type: Schwarzschild, Kerr (default: Schwarzschild)
+  -m, --metric <name>       Metric type: Schwarzschild, Kerr, MorrisThorne, Alcubierre
   -d, --distance <r>        Observer distance in M (default: 50)
   -i, --inclination <deg>   Observer inclination (default: 90)
   -a, --spin <a>            Black hole spin 0-1 (default: 0)
   --fov <deg>               Camera field of view (default: 60)
+  --temperature-model <m>   Temperature model: NovikovThorne, ShakuraSunyaev (default: NT)
+  --disk-temperature <T>    Disk temperature scale in Kelvin (default: 50000)
+  --throat-radius <b0>      Morris-Thorne throat radius (default: 1.0)
+  --warp-velocity <vs>      Alcubierre warp velocity (default: 0.5)
+  --bubble-radius <R>       Alcubierre bubble radius (default: 1.0)
 
 Post-Processing:
   --exposure <e>            Exposure value (default: 1.0)
@@ -139,6 +144,21 @@ bool RenderCommand::parseArgs(
             else if (arg == "--fov" && i + 1 < args.size()) {
                 config.observer.fov = std::stod(args[++i]);
             }
+            else if (arg == "--temperature-model" && i + 1 < args.size()) {
+                config.metric.temperatureModel = args[++i];
+            }
+            else if (arg == "--disk-temperature" && i + 1 < args.size()) {
+                config.metric.diskTemperature = std::stof(args[++i]);
+            }
+            else if (arg == "--throat-radius" && i + 1 < args.size()) {
+                config.metric.throatRadius = std::stod(args[++i]);
+            }
+            else if (arg == "--warp-velocity" && i + 1 < args.size()) {
+                config.metric.warpVelocity = std::stod(args[++i]);
+            }
+            else if (arg == "--bubble-radius" && i + 1 < args.size()) {
+                config.metric.bubbleRadius = std::stod(args[++i]);
+            }
             // Post-processing options
             else if (arg == "--exposure" && i + 1 < args.size()) {
                 config.postprocess.exposure = std::stof(args[++i]);
@@ -211,9 +231,9 @@ bool RenderCommand::parseArgs(
                 config.volumetric.hOverR = 0.12f;
                 config.volumetric.samples = 64;
                 config.postprocess.enableBloom = true;
-                config.postprocess.bloomIntensity = 0.5f;
-                config.postprocess.bloomThreshold = 0.25f;
-                config.postprocess.exposure = 2.5f;
+                config.postprocess.bloomIntensity = 0.35f;
+                config.postprocess.bloomThreshold = 0.4f;
+                config.postprocess.exposure = 1.2f;
                 config.postprocess.contrast = 1.1f;
                 config.postprocess.saturation = 1.15f;
             }
@@ -244,7 +264,7 @@ void RenderCommand::printConfig(const Configuration::SiriusConfig& config, bool 
     std::cout << "  Tile size:   " << config.render.tileSize << " px" << std::endl;
     std::cout << "  Metric:      " << config.metric.name;
     if (config.metric.spin > 0) {
-        std::cout << " (a=" << std::fixed << std::setprecision(2) << config.metric.spin << ")";
+        std::cout << " (a=" << std::fixed << std::setprecision(3) << config.metric.spin << ")";
     }
     std::cout << std::endl;
     std::cout << "  Observer:    r=" << std::fixed << std::setprecision(1)

@@ -99,6 +99,7 @@ add_executable(SiriusTests
     Sirius.Core/Spectral/TSPH011A.cpp    # Spectral rendering utilities
     Sirius.Core/Spectral/TSSP001A.cpp    # Spectral radiance tests
     Sirius.Core/Spectral/TSSP002A.cpp    # Spectral reference validation (Planck, Wien, Stefan-Boltzmann)
+    Sirius.Core/Spectral/TSSP003A.cpp    # GPU/CPU blackbody parity tests
 
     # ==========================================================================
     # Sirius.Core — Coordinate
@@ -163,6 +164,7 @@ add_executable(SiriusTests
     # Sirius.Render — Pipeline
     # ==========================================================================
     Sirius.Render/Pipeline/TSIN003A.cpp  # Render pipeline integration
+    Sirius.Render/Pipeline/TSIN007A.cpp  # Spectral emission pipeline validation
 
     # ==========================================================================
     # Sirius.Render — Offline

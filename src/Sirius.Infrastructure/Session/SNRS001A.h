@@ -112,6 +112,16 @@ struct SessionConfig {
     double observerInclination = 1.5708;  // 90 degrees
     float cameraFOV = 60.0f;
 
+    // Disk temperature model
+    std::string temperatureModel = "NovikovThorne";  ///< NovikovThorne or ShakuraSunyaev
+    float diskTemperatureScale = 50000.0f;           ///< T_scale (Kelvin)
+
+    // Exotic metric parameters
+    double throatRadius = 1.0;     ///< Morris-Thorne b0
+    double warpVelocity = 0.5;     ///< Alcubierre vs
+    double bubbleRadius = 1.0;     ///< Alcubierre R
+    double bubbleSigma = 0.5;      ///< Alcubierre sigma
+
     // Post-processing (cinematic defaults)
     bool enableBloom = true;
     float bloomIntensity = 0.5f;    ///< Bloom glow intensity

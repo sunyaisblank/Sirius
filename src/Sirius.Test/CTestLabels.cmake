@@ -654,4 +654,32 @@ set_tests_properties(
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
+# =============================================================================
+# GPU/CPU Blackbody Parity Tests (TSSP003A)
+# =============================================================================
+set_tests_properties(
+    ReferenceTemperatures/BlackbodyParityTest.GPUMatchesCPU/0
+    ReferenceTemperatures/BlackbodyParityTest.GPUMatchesCPU/1
+    ReferenceTemperatures/BlackbodyParityTest.GPUMatchesCPU/2
+    ReferenceTemperatures/BlackbodyParityTest.GPUMatchesCPU/3
+    ReferenceTemperatures/BlackbodyParityTest.GPUMatchesCPU/4
+    BlackbodyParityTest.ColourTemperatureOrdering
+    PROPERTIES LABELS "Correctness"
+)
+
+# =============================================================================
+# Spectral Emission Pipeline Tests (TSIN007A)
+# =============================================================================
+set_tests_properties(
+    SpectralEmissionTest.NT_QFactorZeroAtISCO_Schwarzschild
+    SpectralEmissionTest.NT_QFactorZeroAtISCO_Kerr
+    SpectralEmissionTest.NT_QFactorPositiveOutsideISCO
+    SpectralEmissionTest.NT_QFactorBounded
+    SpectralEmissionTest.TemperatureRange
+    SpectralEmissionTest.BlackbodyColourDirection
+    SpectralEmissionTest.DopplerShiftDirection
+    SpectralEmissionTest.SpinDisplayFormat
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
 message(STATUS "CTest labels configured for Sirius test suite")

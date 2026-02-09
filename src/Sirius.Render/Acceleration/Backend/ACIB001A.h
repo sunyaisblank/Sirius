@@ -78,8 +78,9 @@ struct LaunchConfig {
     // Accretion disk
     float diskInnerRadius = 6.0f;   // ISCO
     float diskOuterRadius = 30.0f;  // Extended for wider composition
-    float diskTemperature = 6500.0f;  // Warm orange (Interstellar look)
+    float diskTemperature = 50000.0f;  // T_scale for NT: Q^{1/4} maps to physical range
     float diskEmission = 2.5f;        // Emission coefficient
+    int temperatureModel = 1;         // 0=ShakuraSunyaev, 1=NovikovThorne
     
     // Integration
     float maxStepSize = 0.5f;
@@ -87,12 +88,20 @@ struct LaunchConfig {
 
     // Metric Selection
     int metricType = 2; // Default to Kerr (2) instead of Minkowski (0)
-    int metricFamily = 0; // 0=KerrSchild, 2=WarpDrive
+    int metricFamily = 0; // 0=KerrSchild, 1=MorrisThorne, 2=WarpDrive
+
+    // Morris-Thorne wormhole parameters
+    float throatRadius = 1.0f;
+
+    // Alcubierre warp drive parameters
+    float warpVelocity = 0.5f;
+    float bubbleRadius = 1.0f;
+    float bubbleSigma = 0.5f;
 
     // Cinematic Features (Phase 8)
     // Turbulence
     bool enableTurbulence = false;
-    float turbulenceAmplitude = 0.3f;
+    float turbulenceAmplitude = 0.5f;
     float turbulenceOuterScale = 5.0f;
     float turbulenceInnerScale = 0.1f;
     uint32_t turbulenceOctaves = 6;

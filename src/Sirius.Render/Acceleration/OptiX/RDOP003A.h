@@ -1031,9 +1031,9 @@ inline LaunchParams createDefaultLaunchParams() {
     params.accretionDisk.innerRadius = 0.0f;     // 0 = use ISCO (auto-calculated as 6M)
     params.accretionDisk.outerRadius = 30.0f;    // Extended for cinematic wide composition
     params.accretionDisk.heightScale = 0.005f;   // Razor thin
-    params.accretionDisk.temperatureModel = Sirius::TemperatureModel::ShakuraSunyaev;  // Cinematic: bright inner edge
-    params.accretionDisk.innerTemperature = 6500.0f; // Warm orange inner edge (Interstellar look)
-    params.accretionDisk.temperatureExponent = 0.75f;  // Standard T ∝ r^(-3/4)
+    params.accretionDisk.temperatureModel = Sirius::TemperatureModel::NovikovThorne;
+    params.accretionDisk.innerTemperature = 50000.0f; // T_scale: Q^{1/4} maps to physical range
+    params.accretionDisk.temperatureExponent = 0.75f;  // Standard T ∝ r^(-3/4) (SS fallback)
     params.accretionDisk.emissionCoefficient = 2.5f;  // Balanced emission
     params.accretionDisk.absorptionCoefficient = 2.0f;  // Translucent glow
     params.accretionDisk.scatteringAlbedo = 0.0f;

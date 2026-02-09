@@ -31,9 +31,20 @@ struct MetricConfig {
     double mass = 1.0;
     double spin = 0.0;
     double charge = 0.0;
+    std::string temperatureModel = "NovikovThorne";  ///< NovikovThorne or ShakuraSunyaev
+    float diskTemperature = 50000.0f;                ///< T_scale (Kelvin)
+
+    // Morris-Thorne wormhole parameters
+    double throatRadius = 1.0;    ///< b0: throat radius in M
+
+    // Alcubierre warp drive parameters
+    double warpVelocity = 0.5;    ///< vs: warp bubble velocity (sub-luminal)
+    double bubbleRadius = 1.0;    ///< R: warp bubble radius
+    double bubbleSigma = 0.5;     ///< sigma: wall thickness
 
     NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(MetricConfig,
-        name, mass, spin, charge)
+        name, mass, spin, charge, temperatureModel, diskTemperature,
+        throatRadius, warpVelocity, bubbleRadius, bubbleSigma)
 };
 
 /// @brief Observer/camera settings

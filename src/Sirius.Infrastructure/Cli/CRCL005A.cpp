@@ -320,7 +320,11 @@ void printConfig(const Sirius::Configuration::SiriusConfig& config) {
     rows.push_back({"Metric Settings", "", true});
     rows.push_back({"Metric", config.metric.name});
     rows.push_back({"Mass (M)", std::to_string(config.metric.mass)});
-    rows.push_back({"Spin (a)", std::to_string(config.metric.spin)});
+    {
+        std::ostringstream spinStr;
+        spinStr << std::fixed << std::setprecision(3) << config.metric.spin;
+        rows.push_back({"Spin (a)", spinStr.str()});
+    }
 
     // Observer section
     rows.push_back({"Observer Settings", "", true});

@@ -2750,6 +2750,45 @@ __device__ Vec4 computeKeplerianVelocity(
 }
 
 //==============================================================================
+// Novikov-Thorne Q(r) Flux Function
+// Page & Thorne (1974), ApJ 191, 499
+//==============================================================================
+__device__ float computeNovikovThorneQ(float r, float r_isco, float M, float a_star) {
+    a_star = fmaxf(-0.998f, fminf(0.998f, a_star));
+
+    float x = sqrtf(r / M);
+    float x_isco = sqrtf(r_isco / M);
+
+    // Auxiliary functions (Thorne 1974 Eq. 5)
+    float A = 1.0f - 2.0f/(x*x) + a_star/(x*x*x);
+    float B = 1.0f - 3.0f/(x*x) + 2.0f*a_star/(x*x*x);
+    float D_sq = B;
+    float D = (D_sq > 0.0f) ? sqrtf(D_sq) : 0.0f;
+
+    float B_isco = 1.0f - 3.0f/(x_isco*x_isco) + 2.0f*a_star/(x_isco*x_isco*x_isco);
+    float D_isco = (B_isco > 0.0f) ? sqrtf(B_isco) : 0.0f;
+
+    if (D <= 0.0f || D_isco <= 0.0f || x <= x_isco * 1.001f) {
+        return 0.0f;
+    }
+
+    float x_ratio = x_isco / x;
+    float base_factor = (1.0f - sqrtf(x_ratio));
+    float log_factor = logf(fmaxf(x / x_isco, 1.001f));
+
+    float frame_drag = 0.0f;
+    if (fabsf(a_star) > 0.01f) {
+        frame_drag = (3.0f * a_star / (2.0f * x * x * x)) * log_factor;
+    }
+
+    float redshift_factor = sqrtf(A / B);
+    float Q = base_factor * (1.0f - frame_drag) * fminf(redshift_factor, 2.0f);
+    Q *= D / D_isco;
+
+    return fmaxf(Q, 0.0f);
+}
+
+//==============================================================================
 // Volumetric Accretion Disk Sampling (Phase 4.2)
 // Shakura-Sunyaev thin disk model with volumetric ray marching
 //==============================================================================
@@ -2807,12 +2846,14 @@ __device__ void sampleAccretionDiskVolumetric(
     float beamRadius,            // Beam radius for cone tracing (Ray Bundles)
     float3& emission,            // OUT: emitted light this step
     float& dtau,                 // OUT: optical depth contribution
-    float3& diskVelocity)        // OUT: disk velocity at position
+    float3& diskVelocity,        // OUT: disk velocity at position
+    float& T_out)                // OUT: local temperature (Kelvin)
 {
     emission = make_float3(0.0f, 0.0f, 0.0f);
     dtau = 0.0f;
     diskVelocity = make_float3(0.0f, 0.0f, 0.0f);
-    
+    T_out = 0.0f;
+
     if (!disk.enabled) return;
     
     float r = pos.r;
@@ -2849,20 +2890,18 @@ __device__ void sampleAccretionDiskVolumetric(
     float rho_z = expf(-0.5f * z_norm * z_norm) * blurFactor;
     
     // =========================================================================
-    // Shakura-Sunyaev Temperature Profile
-    // T(r) = T_inner * (r_inner/r)^(3/4) * [1 - sqrt(r_inner/r)]^(1/4)
-    // Simplified: T(r) ≈ T_inner * (r_inner/r)^temperatureExponent
+    // Temperature Profile
     // =========================================================================
     float r_ratio = r_inner / r;
-    float T_local = disk.innerTemperature * powf(r_ratio, disk.temperatureExponent);
-    
-    // NOTE: Stress-free inner boundary correction REMOVED for visual appeal
-    // The standard Shakura-Sunyaev correction creates a temperature MINIMUM at ISCO,
-    // which contradicts the "hottest at inner edge" visual expected from Interstellar.
-    // For physically accurate disks, uncomment the lines below:
-    // float stress_factor = powf(fmaxf(1.0f - sqrtf(r_ratio), 0.01f), 0.25f);
-    // T_local *= stress_factor;
-    
+    float T_local;
+    if (disk.temperatureModel == Sirius::TemperatureModel::NovikovThorne) {
+        float a_star = mp.a / M;
+        float Q = computeNovikovThorneQ(r, r_inner, M, a_star);
+        T_local = disk.innerTemperature * powf(fmaxf(Q, 0.0f), 0.25f);
+    } else {
+        T_local = disk.innerTemperature * powf(r_ratio, disk.temperatureExponent);
+    }
+
     // Radial density falloff (power law)
     float rho_r = powf(r_ratio, 0.5f);  // ρ ∝ r^(-1/2) approximately
     
@@ -2886,6 +2925,7 @@ __device__ void sampleAccretionDiskVolumetric(
     // Emission: j_ν = ρ * ε * B_ν(T)
     // B_ν(T) represented as blackbody color
     // =========================================================================
+    T_out = T_local;
     float3 bbColor = blackbodyColor(T_local);
 
     // Emission coefficient scales intensity
@@ -5511,148 +5551,41 @@ __device__ void raygen_renderFrame_impl() {
                             // Peak emission at r ≈ 1.36 * r_isco (Schwarzschild) to r ≈ 1.2 * r_isco (Kerr)
                             
                             float Q_factor = 1.0f;  // Default for Shakura-Sunyaev
-                            
+
                             if (params.accretionDisk.temperatureModel == Sirius::TemperatureModel::NovikovThorne) {
-                                // Full Novikov-Thorne relativistic correction
-                                // Using dimensionless radius x = sqrt(r/M)
-                                float a_star = params.metricParams.a / M;  // Dimensionless spin
-                                a_star = fmaxf(-0.998f, fminf(0.998f, a_star));  // Clamp to physical range
-                                
-                                float x = sqrtf(r_hit / M);
-                                float x_isco = sqrtf(r_inner / M);
-                                
-                                // Kerr ISCO roots for the Q function integrands
-                                // x_ms = r_ms/M where r_ms is marginal stable orbit
-                                float Z1 = 1.0f + cbrtf(1.0f - a_star*a_star) * 
-                                           (cbrtf(1.0f + a_star) + cbrtf(1.0f - a_star));
-                                float Z2 = sqrtf(3.0f * a_star * a_star + Z1 * Z1);
-                                
-                                // Auxiliary functions for Kerr geometry (Thorne 1974 Eq. 5)
-                                // A(x) = 1 - 2/(x²) + a*/x³
-                                // B(x) = 1 - 3/(x²) + 2a*/(x³)  [related to angular momentum]
-                                // C(x) = 1 - 4a*/(x³) + 3a*²/(x⁴)
-                                float A = 1.0f - 2.0f/(x*x) + a_star/(x*x*x);
-                                float A_isco = 1.0f - 2.0f/(x_isco*x_isco) + a_star/(x_isco*x_isco*x_isco);
-                                float B = 1.0f - 3.0f/(x*x) + 2.0f*a_star/(x*x*x);
-                                
-                                // D(x) = sqrt(1 - 3/x² + 2a*/x³) - angular velocity normalization
-                                float D_sq = 1.0f - 3.0f/(x*x) + 2.0f*a_star/(x*x*x);
-                                float D = (D_sq > 0.0f) ? sqrtf(D_sq) : 0.0f;
-                                
-                                // yms factor at ISCO (determines zero-torque boundary condition)
-                                float B_isco = 1.0f - 3.0f/(x_isco*x_isco) + 2.0f*a_star/(x_isco*x_isco*x_isco);
-                                float D_isco_sq = B_isco;
-                                float D_isco = (D_isco_sq > 0.0f) ? sqrtf(D_isco_sq) : 0.0f;
-                                
-                                // C function evaluation
-                                float C = 1.0f - 4.0f*a_star/(x*x*x) + 3.0f*a_star*a_star/(x*x*x*x);
-                                
-                                if (D > 0.0f && D_isco > 0.0f && x > x_isco * 1.001f) {
-                                    // Page-Thorne (1974) Eq. 15n flux function
-                                    // Q(x) = (3/(2x⁵)) * (1/D) * ∫ L_eff dx' where L_eff is angular momentum flux
-                                    //
-                                    // Simplified analytic approximation valid for moderate spins:
-                                    // Q(x) ≈ (x² - x_isco²) / (x² * D) * [1 - sqrt(x_isco/x)]
-                                    //       * [1 + correction_terms]
-                                    
-                                    float x_ratio = x_isco / x;
-                                    float base_factor = (1.0f - sqrtf(x_ratio));
-                                    
-                                    // Relativistic corrections to radial structure
-                                    // These capture the deviation from Newtonian r^(-3) temperature profile
-                                    float sqrt_ratio = sqrtf(x_ratio);
-                                    float log_factor = logf(fmaxf(x / x_isco, 1.001f));
-                                    
-                                    // Frame-dragging contribution (Kerr only)
-                                    float frame_drag = 0.0f;
-                                    if (fabsf(a_star) > 0.01f) {
-                                        frame_drag = (3.0f * a_star / (2.0f * x * x * x)) * log_factor;
-                                    }
-                                    
-                                    // Redshift factor: gravitational redshift from emission point
-                                    float redshift_factor = sqrtf(A / B);
-                                    
-                                    // Combined Novikov-Thorne flux function
-                                    Q_factor = base_factor * (1.0f - frame_drag) * fminf(redshift_factor, 2.0f);
-                                    
-                                    // Apply relativistic D-function correction for angular velocity
-                                    Q_factor *= D / D_isco;
-                                } else {
-                                    Q_factor = 0.0f;  // At or inside ISCO
-                                }
-                                
-                                // Ensure Q >= 0 (physical constraint: no negative flux)
-                                Q_factor = fmaxf(Q_factor, 0.0f);
-                                
-                                // Q(r) affects temperature as T ∝ Q^(1/4)
-                                // For emission (proportional to T^4), we use Q directly
+                                float a_star = params.metricParams.a / M;
+                                Q_factor = computeNovikovThorneQ(r_hit, r_inner, M, a_star);
                             }
                             
                             // =========================================
-                            // Color profile based on temperature model
+                            // Physical temperature and blackbody colour
                             // =========================================
                             float3 diskColor;
-                            
+                            float T_physical;
+
                             if (params.accretionDisk.temperatureModel == Sirius::TemperatureModel::NovikovThorne) {
-                                // Novikov-Thorne: Peak temperature at ~40% from inner edge
-                                // Inner edge is COOLEST (T=0 at ISCO), peak in mid-disk
-                                float T_profile = Q_factor * powf(r_inner / r_hit, 0.75f);  // NT temperature
-                                T_profile = fmaxf(T_profile, 0.0f);
-                                
-                                // Color based on temperature: cooler = redder, hotter = whiter
-                                if (T_profile < 0.2f) {
-                                    // Very cool (near ISCO): dim red
-                                    diskColor = make_float3(0.6f + T_profile, 0.2f * T_profile, 0.1f * T_profile);
-                                } else if (T_profile < 0.5f) {
-                                    // Cool to warm: red to orange
-                                    float t = (T_profile - 0.2f) / 0.3f;
-                                    diskColor = make_float3(0.8f + 0.2f * t, 0.3f + 0.3f * t, 0.15f + 0.1f * t);
-                                } else if (T_profile < 0.8f) {
-                                    // Hot: orange to yellow-white
-                                    float t = (T_profile - 0.5f) / 0.3f;
-                                    diskColor = make_float3(1.0f, 0.6f + 0.35f * t, 0.25f + 0.55f * t);
-                                } else {
-                                    // Very hot: white
-                                    diskColor = make_float3(1.0f, 0.95f, 0.9f);
-                                }
-                            } else if (params.accretionDisk.useSpectralColors) {
-                                // Shakura-Sunyaev: Original Interstellar-style profile
-                                // Inner edge is HOTTEST (classic thin disk)
-                                if (r_norm < 0.15f) {
-                                    float t = r_norm / 0.15f;
-                                    diskColor = make_float3(1.0f, 0.95f - t * 0.25f, 0.8f - t * 0.5f);
-                                } else if (r_norm < 0.4f) {
-                                    float t = (r_norm - 0.15f) / 0.25f;
-                                    diskColor = make_float3(1.0f, 0.7f - t * 0.15f, 0.3f - t * 0.15f);
-                                } else if (r_norm < 0.7f) {
-                                    float t = (r_norm - 0.4f) / 0.3f;
-                                    diskColor = make_float3(1.0f, 0.55f - t * 0.1f, 0.15f - t * 0.05f);
-                                } else {
-                                    float t = (r_norm - 0.7f) / 0.3f;
-                                    diskColor = make_float3(0.95f - t * 0.15f, 0.45f - t * 0.15f, 0.1f);
-                                }
+                                // NT: T(r) = T_scale * Q(r)^{1/4}
+                                // Q -> 0 at ISCO (zero-torque), peaks at ~1.36 r_ISCO
+                                T_physical = params.accretionDisk.innerTemperature * powf(fmaxf(Q_factor, 0.0f), 0.25f);
                             } else {
-                                diskColor = make_float3(1.0f, 0.6f, 0.2f);  // Default orange
+                                // Shakura-Sunyaev: T(r) = T_inner * (r_inner/r)^{3/4}
+                                float r_ratio = r_inner / r_hit;
+                                T_physical = params.accretionDisk.innerTemperature * powf(r_ratio, params.accretionDisk.temperatureExponent);
                             }
+                            T_physical = clamp(T_physical, 1000.0f, 40000.0f);
+                            diskColor = blackbodyColor(T_physical);
                             
                             // =========================================
-                            // Emission intensity with NT correction
+                            // Emission intensity from physical temperature
                             // =========================================
-                            // For Novikov-Thorne: emission ∝ T^4 ∝ Q(r)
-                            // For Shakura-Sunyaev: brightest at inner edge
+                            // Stefan-Boltzmann: flux ∝ T^4
+                            // T^2.5 compression for visual dynamic range
                             float base_intensity = params.accretionDisk.emissionCoefficient;
                             float intensity;
-                            
-                            if (params.accretionDisk.temperatureModel == Sirius::TemperatureModel::NovikovThorne) {
-                                // NT: Peak emission at ~40% from inner edge, zero at ISCO
-                                float radial_factor = powf(r_inner / r_hit, 3.0f);  // Standard r^-3 falloff
-                                intensity = base_intensity * Q_factor * radial_factor;
-                                intensity = fmaxf(intensity, 0.0f);
-                            } else {
-                                // Shakura-Sunyaev: Brightest at inner edge
-                                float intensity_falloff = powf(1.0f - r_norm, 2.5f);
-                                intensity = base_intensity * (0.3f + 0.7f * intensity_falloff);
-                            }
+                            float T_ref = 5000.0f;
+                            float T_ratio = T_physical / T_ref;
+                            intensity = base_intensity * powf(fmaxf(T_ratio, 0.0f), 2.5f);
+                            intensity = clamp(intensity, 0.0f, 50.0f);
 
                             
                             // =========================================
@@ -5855,21 +5788,14 @@ __device__ void raygen_renderFrame_impl() {
                             beaming = clamp(beaming, 0.01f, 100.0f);
                             emission = emission * beaming;
 
-                            // Enhanced spectral color shift
+                            // Doppler colour shift via temperature-shifted blackbody
                             if (params.accretionDisk.useSpectralColors) {
-                                // Stronger color shift based on g-factor
-                                float colorShiftStrength = fminf(fabsf(logf(g_total)), 1.5f);
-                                if (g_total > 1.0f) {  // Blue shift (approaching)
-                                    // Shift spectrum toward blue
-                                    emission.z *= (1.0f + colorShiftStrength * 0.8f);
-                                    emission.y *= (1.0f + colorShiftStrength * 0.3f);
-                                    emission.x *= (1.0f - colorShiftStrength * 0.2f);
-                                } else {  // Red shift (receding)
-                                    // Shift spectrum toward red
-                                    emission.x *= (1.0f + colorShiftStrength * 0.8f);
-                                    emission.y *= (1.0f - colorShiftStrength * 0.2f);
-                                    emission.z *= (1.0f - colorShiftStrength * 0.5f);
-                                }
+                                float T_observed = T_physical * g_total;
+                                T_observed = clamp(T_observed, 1000.0f, 40000.0f);
+                                float3 shiftedColor = blackbodyColor(T_observed);
+                                float emLen = length(emission);
+                                float diskLen = fmaxf(length(diskColor), 0.001f);
+                                emission = shiftedColor * (emLen / diskLen);
                             }
                             
                             // =========================================
@@ -5965,7 +5891,8 @@ __device__ void raygen_renderFrame_impl() {
                 float3 subEmission;
                 float subDtau;
                 float3 subVel;
-                
+                float subT_local;
+
                 sampleAccretionDiskVolumetric(
                     subPos,
                     params.accretionDisk,
@@ -5974,7 +5901,8 @@ __device__ void raygen_renderFrame_impl() {
                     beamRadius,
                     subEmission,
                     subDtau,
-                    subVel
+                    subVel,
+                    subT_local
                 );
 
                 // =========================================
@@ -6015,27 +5943,15 @@ __device__ void raygen_renderFrame_impl() {
                     beaming = clamp(beaming, 0.01f, 100.0f);
                     subEmission = subEmission * beaming;
 
-                    if (params.accretionDisk.useSpectralColors) {
-                        // Enhanced color shift for dramatic visual effect
-                        // Wider g range for volumetric (0.1 to 10.0)
-                        float g_clamped = clamp(g_total, 0.1f, 10.0f);
-                        float colorShiftStrength = fminf(fabsf(logf(g_clamped)), 2.0f);
-
-                        if (g_clamped > 1.1f) {
-                            // Blueshift: approaching side of disk
-                            // More pronounced effect for cinematic look
-                            subEmission.z *= (1.0f + colorShiftStrength * 0.6f);
-                            subEmission.y *= (1.0f + colorShiftStrength * 0.2f);
-                            subEmission.x *= (1.0f - colorShiftStrength * 0.15f);
-                        } else if (g_clamped < 0.9f) {
-                            // Redshift: receding side of disk
-                            // Warm reddening with dimming
-                            subEmission.x *= (1.0f + colorShiftStrength * 0.6f);
-                            subEmission.y *= (1.0f - colorShiftStrength * 0.15f);
-                            subEmission.z *= (1.0f - colorShiftStrength * 0.4f);
-                            // Additional dimming for receding material
-                            subEmission = subEmission * powf(g_clamped, 0.5f);
-                        }
+                    if (params.accretionDisk.useSpectralColors && subT_local > 0.0f) {
+                        // Doppler colour shift via temperature-shifted blackbody
+                        float T_observed = subT_local * g_total;
+                        T_observed = clamp(T_observed, 1000.0f, 40000.0f);
+                        float3 shiftedColor = blackbodyColor(T_observed);
+                        float3 origColor = blackbodyColor(clamp(subT_local, 1000.0f, 40000.0f));
+                        float origLen = fmaxf(length(origColor), 0.001f);
+                        float emLen = length(subEmission);
+                        subEmission = shiftedColor * (emLen / origLen);
                     }
                     
                     // Radiative Transfer for Sub-step

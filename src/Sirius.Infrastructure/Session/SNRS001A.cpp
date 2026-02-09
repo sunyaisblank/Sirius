@@ -939,15 +939,34 @@ void RenderSession::renderGPU() {
     auto rISCO = AccretionDiskD::computeISCO(m_Config.blackHoleSpin);
     config.diskInnerRadius = static_cast<float>(rISCO * M);
     config.diskOuterRadius = static_cast<float>(20.0 * M);
-    config.diskTemperature = 30000.0f;
+    config.diskTemperature = m_Config.diskTemperatureScale;
+
+    // Temperature model
+    if (m_Config.temperatureModel == "ShakuraSunyaev" || m_Config.temperatureModel == "SS") {
+        config.temperatureModel = 0;
+    } else {
+        config.temperatureModel = 1;  // NovikovThorne default
+    }
 
     // Integration parameters
     config.maxSteps = 20000;
     config.maxStepSize = 2.0f;
 
-    // Metric type: 2 = Kerr
-    config.metricType = (std::abs(m_Config.blackHoleSpin) < 0.01) ? 1 : 2;  // 1=Schwarzschild, 2=Kerr
-    config.metricFamily = 0;  // Kerr-Schild family
+    // Metric type routing
+    if (m_Config.metricName == "MorrisThorne" || m_Config.metricName == "Wormhole") {
+        config.metricType = 7;   // EllisDrainhole
+        config.metricFamily = 1; // MorrisThorne
+        config.throatRadius = static_cast<float>(m_Config.throatRadius);
+    } else if (m_Config.metricName == "Alcubierre" || m_Config.metricName == "WarpDrive") {
+        config.metricType = 8;   // Alcubierre
+        config.metricFamily = 2; // WarpDrive
+        config.warpVelocity = static_cast<float>(m_Config.warpVelocity);
+        config.bubbleRadius = static_cast<float>(m_Config.bubbleRadius);
+        config.bubbleSigma = static_cast<float>(m_Config.bubbleSigma);
+    } else {
+        config.metricType = (std::abs(m_Config.blackHoleSpin) < 0.01) ? 1 : 2;
+        config.metricFamily = 0; // KerrSchild
+    }
 
     // Post-processing / exposure
     // For realistic dark space scenes, exposure < 1.0 darkens the scene
@@ -1047,6 +1066,17 @@ SessionConfig SessionConfig::fromSiriusConfig(const Configuration::SiriusConfig&
     sc.metricName = config.metric.name;
     sc.blackHoleMass = config.metric.mass;
     sc.blackHoleSpin = config.metric.spin;
+    if (sc.blackHoleSpin > 0.998) {
+        std::cout << "[Session] Spin parameter clamped from " << sc.blackHoleSpin
+                  << " to 0.998 (Thorne limit)" << std::endl;
+        sc.blackHoleSpin = 0.998;
+    }
+    sc.temperatureModel = config.metric.temperatureModel;
+    sc.diskTemperatureScale = config.metric.diskTemperature;
+    sc.throatRadius = config.metric.throatRadius;
+    sc.warpVelocity = config.metric.warpVelocity;
+    sc.bubbleRadius = config.metric.bubbleRadius;
+    sc.bubbleSigma = config.metric.bubbleSigma;
     sc.observerDistance = config.observer.distance;
     sc.observerInclination = config.observer.inclination * Math::PI / 180.0;
     sc.cameraFOV = static_cast<float>(config.observer.fov);

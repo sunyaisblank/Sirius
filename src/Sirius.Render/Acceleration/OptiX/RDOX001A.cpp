@@ -201,9 +201,21 @@ Sirius::LaunchParams OptiXAccelerator::convertConfig(const LaunchConfig& config)
     params.metricParams.family = static_cast<Sirius::MetricFamily>(config.metricFamily);
     
     // Set family parameters
-    params.metricParams.kerrSchild.M = config.blackHoleMass;
-    params.metricParams.kerrSchild.a = config.blackHoleSpin;
-    // Sync legacy
+    if (config.metricFamily == 1) {
+        // Morris-Thorne
+        params.metricParams.morrisThorne.b0 = config.throatRadius;
+        params.metricParams.morrisThorne.redshiftPhi = 0.0f;
+        params.metricParams.morrisThorne.shapeK = 1.0f;
+    } else if (config.metricFamily == 2) {
+        // Alcubierre warp drive
+        params.metricParams.warpDrive.vs = config.warpVelocity;
+        params.metricParams.warpDrive.sigma = config.bubbleSigma;
+        params.metricParams.warpDrive.R = config.bubbleRadius;
+    } else {
+        params.metricParams.kerrSchild.M = config.blackHoleMass;
+        params.metricParams.kerrSchild.a = config.blackHoleSpin;
+    }
+    // Sync legacy (used by various GPU kernels)
     params.metricParams.M = config.blackHoleMass;
     params.metricParams.a = config.blackHoleSpin;
     
@@ -212,6 +224,7 @@ Sirius::LaunchParams OptiXAccelerator::convertConfig(const LaunchConfig& config)
     params.accretionDisk.outerRadius = config.diskOuterRadius;
     params.accretionDisk.innerTemperature = config.diskTemperature;
     params.accretionDisk.emissionCoefficient = config.diskEmission;
+    params.accretionDisk.temperatureModel = static_cast<Sirius::TemperatureModel>(config.temperatureModel);
     
     // Integration
     params.integration.maxSteps = config.maxSteps;
@@ -315,7 +328,7 @@ Sirius::LaunchParams OptiXAccelerator::convertConfig(const LaunchConfig& config)
     // Corona Enhancement (Phase 10 - Visible Inner Glow)
     // =========================================================================
     params.volumetricDisk.corona.enabled = config.enableCorona ? 1 : 0;
-    params.volumetricDisk.corona.intensity_scale = config.coronaIntensity * 3.0f;  // Much brighter
+    params.volumetricDisk.corona.intensity_scale = config.coronaIntensity * 5.0f;  // Strong coronal glow
     params.volumetricDisk.corona.temperature_keV = config.coronaTemperature;
     params.volumetricDisk.corona.inner_radius = 1.2f;   // Closer to horizon (was 1.5)
     params.volumetricDisk.corona.outer_radius = 8.0f;   // Wider region (was 6.0)
