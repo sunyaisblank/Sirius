@@ -14,6 +14,7 @@
 #include <array>
 #include <chrono>
 #include <cstring>
+#include <stdexcept>
 
 // Unified constants (replaces M_PI macro)
 #include <PHCN001A.h>
@@ -952,20 +953,46 @@ void RenderSession::renderGPU() {
     config.maxSteps = 20000;
     config.maxStepSize = 2.0f;
 
-    // Metric type routing
-    if (m_Config.metricName == "MorrisThorne" || m_Config.metricName == "Morris-Thorne" || m_Config.metricName == "Wormhole") {
-        config.metricType = 7;   // EllisDrainhole
-        config.metricFamily = 1; // MorrisThorne
-        config.throatRadius = static_cast<float>(m_Config.throatRadius);
-    } else if (m_Config.metricName == "Alcubierre" || m_Config.metricName == "WarpDrive") {
-        config.metricType = 8;   // Alcubierre
-        config.metricFamily = 2; // WarpDrive
-        config.warpVelocity = static_cast<float>(m_Config.warpVelocity);
-        config.bubbleRadius = static_cast<float>(m_Config.bubbleRadius);
-        config.bubbleSigma = static_cast<float>(m_Config.bubbleSigma);
-    } else {
-        config.metricType = (std::abs(m_Config.blackHoleSpin) < 0.01) ? 1 : 2;
-        config.metricFamily = 0; // KerrSchild
+    // Metric routing: closed switch over the registry identity. There is no
+    // default branch; a metric the kernel cannot render is an error here,
+    // never a silently substituted spacetime.
+    if (!metricInfo(m_Config.metricId).gpuSupported) {
+        std::cerr << "[Session] Metric '" << metricInfo(m_Config.metricId).canonicalName
+                  << "' is not supported on the GPU backend; re-run with --cpu"
+                  << std::endl;
+        m_FSM.process(SessionEvent::Error);
+        return;
+    }
+    switch (m_Config.metricId) {
+        case MetricId::MorrisThorne:
+            config.metricType = 7;   // EllisDrainhole
+            config.metricFamily = 1; // MorrisThorne
+            config.throatRadius = static_cast<float>(m_Config.throatRadius);
+            break;
+        case MetricId::Alcubierre:
+            config.metricType = 8;   // Alcubierre
+            config.metricFamily = 2; // WarpDrive
+            config.warpVelocity = static_cast<float>(m_Config.warpVelocity);
+            config.bubbleRadius = static_cast<float>(m_Config.bubbleRadius);
+            config.bubbleSigma = static_cast<float>(m_Config.bubbleSigma);
+            break;
+        case MetricId::Minkowski:
+            config.metricType = 0;   // Minkowski
+            config.metricFamily = 0; // KerrSchild family (H = 0)
+            config.blackHoleMass = 0.0f;
+            break;
+        case MetricId::Schwarzschild:
+        case MetricId::Kerr:
+            config.metricType = (std::abs(m_Config.blackHoleSpin) < 0.01) ? 1 : 2;
+            config.metricFamily = 0; // KerrSchild
+            break;
+        default:
+            // gpuSupported filtered everything else above; reaching here means
+            // the registry and this switch have drifted apart.
+            std::cerr << "[Session] Metric routing incomplete for '"
+                      << metricInfo(m_Config.metricId).canonicalName << "'" << std::endl;
+            m_FSM.process(SessionEvent::Error);
+            return;
     }
 
     // Post-processing / exposure
@@ -1063,14 +1090,26 @@ SessionConfig SessionConfig::fromSiriusConfig(const Configuration::SiriusConfig&
     sc.samplesPerPixel = config.render.samplesPerPixel;
     sc.tileSize = config.render.tileSize;
     sc.outputPath = config.render.outputPath;
-    sc.metricName = config.metric.name;
-    sc.blackHoleMass = config.metric.mass;
+
+    // The validator has already accepted the name; failure to parse here is
+    // an invariant violation, not a user error, so it halts rather than
+    // substituting a default spacetime.
+    auto metricId = Sirius::parseMetricName(config.metric.name);
+    if (!metricId.has_value()) {
+        throw std::invalid_argument("SessionConfig: unvalidated metric name '" +
+                                    config.metric.name + "' reached the session boundary");
+    }
+    sc.metricId = *metricId;
+    sc.blackHoleMass = (sc.metricId == MetricId::Minkowski ||
+                        sc.metricId == MetricId::DeSitter) ? 0.0 : config.metric.mass;
     sc.blackHoleSpin = config.metric.spin;
     if (sc.blackHoleSpin > 0.998) {
         std::cout << "[Session] Spin parameter clamped from " << sc.blackHoleSpin
                   << " to 0.998 (Thorne limit)" << std::endl;
         sc.blackHoleSpin = 0.998;
     }
+    sc.blackHoleCharge = config.metric.charge;
+    sc.cosmologicalConstant = config.metric.lambda;
     sc.temperatureModel = config.metric.temperatureModel;
     sc.diskTemperatureScale = config.metric.diskTemperature;
     sc.throatRadius = config.metric.throatRadius;

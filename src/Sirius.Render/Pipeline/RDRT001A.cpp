@@ -6,6 +6,7 @@
 // =============================================================================
 
 #include "RDRT001A.h"
+#include <PHMT200A.h>  // Metric identity registry
 
 // Include CUDA runtime BEFORE RDOP003A.h to get proper float3/float4 types
 #ifdef SIRIUS_HAS_OPTIX
@@ -479,19 +480,30 @@ void Renderer::render(IMetric* metric, const Vec4& observerPos, const Vec4& obse
 
 #ifdef SIRIUS_HAS_OPTIX
 
-// Helper: Resolve metric name to MetricType enum
+// Helper: Resolve a metric display name to the kernel's MetricType. Parsing
+// goes through the identity registry (PHMT200A), so IMetric::getName()
+// spellings and CLI aliases resolve identically; the MetricId -> MetricType
+// mapping is the only GPU-specific knowledge kept here.
 static Sirius::MetricType resolveMetricType(const std::string& name) {
-    if (name == "Minkowski") return Sirius::MetricType::Minkowski;
-    if (name == "Schwarzschild") return Sirius::MetricType::Schwarzschild;
-    if (name == "Kerr") return Sirius::MetricType::Kerr;
-    if (name == "Reissner-Nordstrom") return Sirius::MetricType::ReissnerNordstrom;
-    if (name == "Gödel") return Sirius::MetricType::Godel;
-    if (name == "Taub-NUT") return Sirius::MetricType::TaubNUT;
-    if (name == "Kerr-Schild") return Sirius::MetricType::KerrSchild;
-    if (name == "Ellis-Drainhole") return Sirius::MetricType::EllisDrainhole;
-    if (name == "Alcubierre") return Sirius::MetricType::Alcubierre;
-    if (name == "de-Sitter") return Sirius::MetricType::DeSitter;
-    return Sirius::MetricType::Minkowski;
+    auto id = Sirius::parseMetricName(name);
+    if (!id.has_value()) {
+        std::cerr << "[Pipeline] Unknown metric '" << name
+                  << "'; accepted names: " << Sirius::knownMetricNames()
+                  << ". Rendering flat spacetime." << std::endl;
+        return Sirius::MetricType::Minkowski;
+    }
+    switch (*id) {
+        case Sirius::MetricId::Minkowski:             return Sirius::MetricType::Minkowski;
+        case Sirius::MetricId::Schwarzschild:         return Sirius::MetricType::Schwarzschild;
+        case Sirius::MetricId::Kerr:                  return Sirius::MetricType::Kerr;
+        case Sirius::MetricId::ReissnerNordstrom:     return Sirius::MetricType::ReissnerNordstrom;
+        case Sirius::MetricId::KerrNewman:            return Sirius::MetricType::ReissnerNordstrom;
+        case Sirius::MetricId::DeSitter:              return Sirius::MetricType::DeSitter;
+        case Sirius::MetricId::SchwarzschildDeSitter: return Sirius::MetricType::DeSitter;
+        case Sirius::MetricId::MorrisThorne:          return Sirius::MetricType::EllisDrainhole;
+        case Sirius::MetricId::Alcubierre:            return Sirius::MetricType::Alcubierre;
+    }
+    return Sirius::MetricType::Minkowski;  // Unreachable; switch is exhaustive
 }
 
 // Helper: Extract metric parameters (M, a, Q) from IMetric config

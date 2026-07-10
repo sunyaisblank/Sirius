@@ -6,10 +6,12 @@
 #include "CRCF002A.h"
 #include "CRPF001A.h"
 #include <PHCN001A.h>
+#include <PHMT200A.h>  // Metric identity registry (single naming authority)
 
 #include <fstream>
 #include <iostream>
 #include <cstdlib>
+#include <cmath>
 #include <algorithm>
 #include <cctype>
 
@@ -200,23 +202,21 @@ std::vector<std::string> ConfigLoader::validate(const SiriusConfig& config) {
     }
 
     // =========================================================================
-    // Metric Validation (per docs/specification.md Parameter Ranges)
+    // Metric Validation (single authority: the identity registry, PHMT200A)
     // =========================================================================
-    static const std::vector<std::string> validMetrics = {
-        "Minkowski", "Schwarzschild", "Kerr", "Reissner-Nordstrom", "Kerr-Newman",
-        "Morris-Thorne", "MorrisThorne", "Alcubierre", "Wormhole", "WarpDrive"
-    };
-    bool validMetric = std::find(validMetrics.begin(), validMetrics.end(),
-                                  config.metric.name) != validMetrics.end();
-    if (!validMetric) {
-        errors.push_back("metric.name must be one of: Minkowski, Schwarzschild, Kerr, "
-                         "Reissner-Nordstrom, Kerr-Newman, Morris-Thorne, Alcubierre");
+    auto metricId = Sirius::parseMetricName(config.metric.name);
+    if (!metricId.has_value()) {
+        errors.push_back("metric.name '" + config.metric.name +
+                         "' is not a known metric; accepted names: " +
+                         Sirius::knownMetricNames());
     }
 
-    // Mass M: [0.1, 100] in geometric units
+    // Mass M: [0.1, 100] in geometric units (Minkowski and de Sitter ignore mass)
     constexpr double MIN_MASS = 0.1;
     constexpr double MAX_MASS = 100.0;
-    if (config.metric.mass < MIN_MASS || config.metric.mass > MAX_MASS) {
+    const bool massless = metricId.has_value() &&
+        (*metricId == Sirius::MetricId::Minkowski || *metricId == Sirius::MetricId::DeSitter);
+    if (!massless && (config.metric.mass < MIN_MASS || config.metric.mass > MAX_MASS)) {
         errors.push_back("metric.mass must be between 0.1 and 100 (geometric units)");
     }
 
@@ -237,6 +237,17 @@ std::vector<std::string> ConfigLoader::validate(const SiriusConfig& config) {
     if (config.metric.spin * config.metric.spin +
         config.metric.charge * config.metric.charge >= 0.999) {
         errors.push_back("Combined spin² + charge² must be < 0.999 (sub-extremal condition)");
+    }
+
+    // Cosmological constant: only the a = 0 Kerr-Schild form is exact, so
+    // lambda with spin is rejected rather than approximated
+    constexpr double MAX_LAMBDA = 0.1;
+    if (std::abs(config.metric.lambda) > MAX_LAMBDA) {
+        errors.push_back("metric.lambda must be between -0.1 and 0.1");
+    }
+    if (std::abs(config.metric.lambda) > 0 && config.metric.spin != 0) {
+        errors.push_back("metric.lambda requires metric.spin = 0 "
+                         "(rotating de Sitter forms are not represented)");
     }
 
     // =========================================================================

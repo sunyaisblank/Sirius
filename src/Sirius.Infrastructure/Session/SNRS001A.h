@@ -28,6 +28,9 @@
 #include "../Sirius.Core/Environment/PHSF001A.h" // Starfield
 #include "../Sirius.Infrastructure/Configuration/CRFM001A.h" // Film config
 
+// Metric identity registry
+#include "../Sirius.Core/Metric/PHMT200A.h"
+
 // Configuration schema (for SessionConfig::fromSiriusConfig)
 #include "CRCF003A.h"
 
@@ -100,10 +103,13 @@ struct SessionConfig {
     std::string ptxPath;    ///< Path to PTX files (auto-detected if empty)
     std::string outputPath = "render.ppm";
 
-    // Black hole parameters
-    std::string metricName = "Schwarzschild";
+    // Spacetime identity and parameters. The id comes from the metric
+    // registry (PHMT200A); free-form name strings stop at the config boundary.
+    MetricId metricId = MetricId::Schwarzschild;
     double blackHoleMass = 1.0;
     double blackHoleSpin = 0.0;
+    double blackHoleCharge = 0.0;        ///< Q/M (Reissner-Nordstrom, Kerr-Newman)
+    double cosmologicalConstant = 0.0;   ///< Lambda (de Sitter family, spin = 0 only)
     double observerDistance = 50.0;
     double observerInclination = 1.5708;  // 90 degrees
     float cameraFOV = 60.0f;

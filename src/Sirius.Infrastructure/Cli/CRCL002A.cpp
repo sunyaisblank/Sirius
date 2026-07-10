@@ -26,7 +26,9 @@ Basic Options:
   -h, --height <n>          Image height (default: 1080)
   -s, --samples <n>         Samples per pixel (default: 64)
   -t, --tile-size <n>       Tile size in pixels (default: 64)
-  -m, --metric <name>       Metric type: Schwarzschild, Kerr, Morris-Thorne, Alcubierre
+  -m, --metric <name>       Metric (see 'sirius info metrics'): Minkowski, Schwarzschild,
+                            Kerr, Reissner-Nordstrom, Kerr-Newman, de-Sitter,
+                            Schwarzschild-de-Sitter, Morris-Thorne, Alcubierre
   -d, --distance <r>        Observer distance in M (default: 50)
   -i, --inclination <deg>   Observer inclination (default: 90)
   -a, --spin <a>            Black hole spin 0-1 (default: 0)

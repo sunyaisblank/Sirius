@@ -27,10 +27,11 @@ struct RenderConfig {
 
 /// @brief Metric (spacetime) settings
 struct MetricConfig {
-    std::string name = "Schwarzschild";
+    std::string name = "Schwarzschild";  ///< Parsed via Sirius::parseMetricName (PHMT200A)
     double mass = 1.0;
     double spin = 0.0;
     double charge = 0.0;
+    double lambda = 0.0;          ///< Cosmological constant (de Sitter family; requires spin = 0)
     std::string temperatureModel = "NovikovThorne";  ///< NovikovThorne or ShakuraSunyaev
     float diskTemperature = 50000.0f;                ///< T_scale (Kelvin)
 
@@ -43,7 +44,7 @@ struct MetricConfig {
     double bubbleSigma = 0.5;     ///< sigma: wall thickness
 
     NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(MetricConfig,
-        name, mass, spin, charge, temperatureModel, diskTemperature,
+        name, mass, spin, charge, lambda, temperatureModel, diskTemperature,
         throatRadius, warpVelocity, bubbleRadius, bubbleSigma)
 };
 

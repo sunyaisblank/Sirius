@@ -5,6 +5,7 @@
 #include "CRCL005A.h"
 #include "CRCF002A.h"
 #include "CRPF001A.h"
+#include <PHMT200A.h>  // Metric identity registry
 
 #include <nlohmann/json.hpp>
 
@@ -123,48 +124,36 @@ int InfoCommand::showSystem(const Configuration::GlobalOptions& globals) {
 }
 
 int InfoCommand::showMetrics(const Configuration::GlobalOptions& globals) {
-    struct MetricInfo {
-        std::string name;
-        std::string description;
-        bool hasSpinParam;
-        bool hasChargeParam;
-    };
-
-    std::vector<MetricInfo> metrics = {
-        {"Minkowski", "Flat spacetime (special relativity)", false, false},
-        {"Schwarzschild", "Non-rotating black hole", false, false},
-        {"Kerr", "Rotating black hole", true, false},
-        {"Reissner-Nordstrom", "Charged non-rotating black hole", false, true},
-        {"Kerr-Newman", "Rotating charged black hole", true, true}
-    };
+    // The identity registry (PHMT200A) is the single metric catalogue; this
+    // command previously kept its own five-entry list that had drifted from
+    // the validator's.
+    const auto& registry = Sirius::metricRegistry();
 
     if (globals.jsonOutput) {
         nlohmann::json j = nlohmann::json::array();
-        for (const auto& m : metrics) {
+        for (const auto& m : registry) {
+            nlohmann::json aliases = nlohmann::json::array();
+            for (const char* alias : m.aliases) {
+                if (alias != nullptr) aliases.push_back(alias);
+            }
             j.push_back({
-                {"name", m.name},
-                {"description", m.description},
-                {"parameters", {
-                    {"spin", m.hasSpinParam},
-                    {"charge", m.hasChargeParam}
+                {"name", m.canonicalName},
+                {"aliases", aliases},
+                {"parameters", m.parameters},
+                {"backends", {
+                    {"cpu", m.cpuSupported},
+                    {"gpu", m.gpuSupported}
                 }}
             });
         }
         Output::printJson(j.dump(2));
     } else {
         std::vector<Output::TableRow> rows;
-        for (const auto& m : metrics) {
-            std::string params;
-            if (m.hasSpinParam && m.hasChargeParam) {
-                params = "M, a, Q";
-            } else if (m.hasSpinParam) {
-                params = "M, a";
-            } else if (m.hasChargeParam) {
-                params = "M, Q";
-            } else {
-                params = "M";
-            }
-            rows.push_back({m.name, m.description + " [" + params + "]"});
+        for (const auto& m : registry) {
+            std::string backends = m.gpuSupported ? (m.cpuSupported ? "CPU, GPU" : "GPU")
+                                                  : "CPU only";
+            rows.push_back({m.canonicalName,
+                            std::string(m.parameters) + " [" + backends + "]"});
         }
         Output::printTable("Available Metrics", rows);
     }
