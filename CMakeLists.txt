@@ -453,7 +453,7 @@ endif()
 
 # =============================================================================
 # MANDATORY TEST GATING
-# Governance: docs/specification.md
+# Governance: PHCN001A.h
 # =============================================================================
 option(SIRIUS_MANDATORY_TESTS "Require mandatory tests to pass for build" OFF)
 option(SIRIUS_SKIP_MANDATORY "Skip mandatory tests (development override)" OFF)

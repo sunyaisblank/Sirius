@@ -1,7 +1,7 @@
 // CRCF002A.cpp - Configuration Loader
 // Component ID: CRCF002A (Configuration/Loader)
 //
-// Validation aligns with docs/specification.md tolerance requirements.
+// Validation aligns with PHCN001A.h tolerance requirements.
 
 #include "CRCF002A.h"
 #include "CRPF001A.h"
@@ -173,7 +173,7 @@ std::vector<std::string> ConfigLoader::validate(const SiriusConfig& config) {
     std::vector<std::string> errors;
 
     // =========================================================================
-    // Render Validation (per docs/specification.md)
+    // Render Validation (per PHCN001A.h)
     // =========================================================================
     // Resolution constraints: [128, 8192] × [128, 8192]
     constexpr int MIN_RESOLUTION = 128;
@@ -263,7 +263,7 @@ std::vector<std::string> ConfigLoader::validate(const SiriusConfig& config) {
     }
 
     // =========================================================================
-    // Observer Validation (per docs/specification.md)
+    // Observer Validation (per PHCN001A.h)
     // =========================================================================
     // Observer distance: [5M, 1000M] for valid rendering
     constexpr double MIN_DISTANCE_FACTOR = 5.0;    // In units of M

@@ -12,7 +12,7 @@
 // - Killing energy: E = -g_tμ k^μ (conserved in stationary spacetimes)
 // - Killing L_z: L = g_φμ k^μ (conserved in axisymmetric spacetimes)
 //
-// SPECIFICATION TARGETS (docs/specification.md):
+// SPECIFICATION TARGETS (PHCN001A.h):
 // - Null condition: < 10^-5 (GPU), < 10^-10 (CPU)
 // - Energy conservation: < 10^-4 relative drift
 // - Angular momentum: < 10^-4 relative drift
@@ -40,7 +40,7 @@ using namespace Sirius;
 // Import specification-compliant tolerances from centralized constants
 // Note: We use fully qualified names to avoid collision with ::Geodesic functions
 
-// Geodesic conservation tolerances (aligned with docs/specification.md)
+// Geodesic conservation tolerances (aligned with PHCN001A.h)
 constexpr double KILLING_ENERGY_TOLERANCE = Sirius::Constants::Geodesic::CONSERVATION_TOL;     // 1e-4
 constexpr double KILLING_MOMENTUM_TOLERANCE = Sirius::Constants::Geodesic::CONSERVATION_TOL;   // 1e-4
 

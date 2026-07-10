@@ -2,7 +2,7 @@
 // Component ID: OUEW001A
 // OpenEXR file output using tinyexr
 //
-// Governance: docs/specification.md
+// Governance: PHCN001A.h
 
 #ifndef SIRIUS_RENDER_OUEW001A_H
 #define SIRIUS_RENDER_OUEW001A_H

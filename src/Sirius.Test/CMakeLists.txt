@@ -2,7 +2,7 @@
 # Sirius.Test CMake Configuration
 # Google Test-based testing framework
 #
-# Governance: docs/specification.md
+# Governance: PHCN001A.h
 # Test Categories (via CTest labels):
 #   - Mandatory: Must pass for build to succeed
 #   - Correctness: Mathematical invariant tests

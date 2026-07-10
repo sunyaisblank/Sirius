@@ -5,12 +5,12 @@
 //
 // PURPOSE:
 // Centralizes all numerical tolerances, physical constants, and precision
-// requirements for the Sirius ray tracing engine. All tolerances align with
-// the requirements specified in docs/specification.md.
+// requirements for the Sirius ray tracing engine. This header is the
+// single authority for tolerances; tests and validators cite it directly.
 //
 // DESIGN PHILOSOPHY:
 // "A result is trustworthy only if the mathematical invariants of the
-// underlying physics are preserved." - docs/philosophy.md
+// underlying physics are preserved."
 //
 // PRECISION TIERS:
 // - GPU (single precision): 23 significand bits, ε ≈ 1.2×10⁻⁷
@@ -47,7 +47,6 @@ constexpr double SAFE_MIN_D = 1e-20;
 
 // =============================================================================
 // Geodesic Integration Tolerances
-// Reference: docs/specification.md Section "Error Bounds"
 // =============================================================================
 
 namespace Geodesic {
@@ -86,7 +85,6 @@ constexpr float STEP_SAFETY_FACTOR = 0.9f;
 
 // =============================================================================
 // Coordinate Domain Tolerances
-// Reference: docs/specification.md Section "Domain Constraints"
 // =============================================================================
 
 namespace Coordinates {
@@ -139,7 +137,6 @@ constexpr double STALLED_VELOCITY = 1e-8;
 
 // =============================================================================
 // Metric Tensor Tolerances
-// Reference: docs/specification.md Section "Invariants"
 // =============================================================================
 
 namespace Metric {

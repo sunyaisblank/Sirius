@@ -2,7 +2,7 @@
 // Component ID: OUIB001A
 // Floating-point image buffer for HDR rendering
 //
-// Governance: docs/specification.md
+// Governance: PHCN001A.h
 
 #ifndef SIRIUS_RENDER_OUIB001A_H
 #define SIRIUS_RENDER_OUIB001A_H

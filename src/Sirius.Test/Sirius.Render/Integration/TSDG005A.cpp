@@ -8,7 +8,7 @@
 // - Killing energy: E = -g_tμ k^μ (stationary spacetimes)
 // - Killing angular momentum: L = g_φμ k^μ (axisymmetric spacetimes)
 //
-// SPECIFICATION TARGETS (docs/specification.md):
+// SPECIFICATION TARGETS (PHCN001A.h):
 // - Null condition GPU: |H| < 10^-5
 // - Energy conservation GPU: |ΔE/E| < 10^-4
 // - Angular momentum GPU: |ΔL/L| < 10^-4

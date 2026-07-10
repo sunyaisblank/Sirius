@@ -2,7 +2,7 @@
 // Component ID: RDPTX001A
 // Multi-architecture PTX selection and path resolution
 //
-// Governance: docs/specification.md
+// Governance: PHCN001A.h
 
 #ifndef SIRIUS_RENDER_RDPTX001A_H
 #define SIRIUS_RENDER_RDPTX001A_H

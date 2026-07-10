@@ -5,7 +5,7 @@
 //
 // PURPOSE:
 // Validates all metric tensor implementations against mathematical invariants
-// defined in docs/specification.md and tolerance constants in PHCN001A.h.
+// defined in PHCN001A.h and tolerance constants in PHCN001A.h.
 //
 // TESTS:
 // 1. Metric symmetry: max|g_μν - g_νμ| < SYMMETRY_TOL (1e-15)

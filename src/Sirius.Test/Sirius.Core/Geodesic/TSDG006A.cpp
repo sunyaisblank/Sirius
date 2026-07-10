@@ -9,7 +9,7 @@
 // For axisymmetric spacetimes (∂/∂φ Killing vector):
 //   L = g_φμ k^μ = const (angular momentum conservation)
 //
-// SPECIFICATION TARGETS (docs/specification.md):
+// SPECIFICATION TARGETS (PHCN001A.h):
 // - Energy conservation: |ΔE/E| < 10^-4
 // - Angular momentum: |ΔL/L| < 10^-4
 //

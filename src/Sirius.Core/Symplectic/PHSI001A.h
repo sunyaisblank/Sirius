@@ -362,7 +362,7 @@ private:
     //
     // This preserves E and Lz while restoring the null condition.
     //
-    // Reference: docs/specification.md "Null Constraint Preservation"
+    // Reference: PHCN001A.h "Null Constraint Preservation"
     //--------------------------------------------------------------------------
 
     HamiltonianStateD renormalizeNull(const HamiltonianStateD& state) const {

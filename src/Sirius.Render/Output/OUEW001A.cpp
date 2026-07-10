@@ -2,7 +2,7 @@
 // Component ID: OUEW001A
 // Actual tinyexr integration
 //
-// Governance: docs/specification.md
+// Governance: PHCN001A.h
 
 // Include miniz implementation before tinyexr
 // miniz.h includes both header and implementation when not in header-only mode

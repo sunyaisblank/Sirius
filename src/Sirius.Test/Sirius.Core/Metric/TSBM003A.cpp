@@ -9,7 +9,7 @@
 // Determine which approach is faster for GPU implementation before committing
 // to Phase 0 of the Active Development Plan.
 //
-// Reference: docs/specification.md - Performance Requirements
+// Reference: PHCN001A.h - Performance Requirements
 // =============================================================================
 
 #define _USE_MATH_DEFINES
