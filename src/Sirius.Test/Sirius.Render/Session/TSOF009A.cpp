@@ -1,4 +1,4 @@
-// TSOF009A.cpp - PNG Output Driver Tests
+// TSOF009A.cpp - PNG Writer Tests
 // Component ID: TSOF009A
 // Tests for: OUPN001A.h
 
@@ -9,91 +9,6 @@
 #include <cmath>
 
 using namespace sirius::render;
-
-//==============================================================================
-// PNGOutputDriver Tests
-//==============================================================================
-
-TEST(PNGOutputDriverTest, Lifecycle) {
-    std::string testPath = std::filesystem::temp_directory_path().string() +
-                           "/sirius_test_png_driver.png";
-
-    PNGOutputDriver driver(testPath);
-
-    EXPECT_FALSE(driver.isActive());
-
-    EXPECT_TRUE(driver.configure(64, 64, {OutputPass::COMBINED}));
-    EXPECT_TRUE(driver.start());
-    EXPECT_TRUE(driver.isActive());
-
-    driver.cancel();
-    EXPECT_FALSE(driver.isActive());
-
-    // Cleanup
-    std::filesystem::remove(testPath);
-}
-
-TEST(PNGOutputDriverTest, WriteTile) {
-    std::string testPath = std::filesystem::temp_directory_path().string() +
-                           "/sirius_test_png_tile.png";
-
-    PNGOutputDriver driver(testPath);
-    driver.configure(64, 64, {OutputPass::COMBINED});
-    driver.start();
-
-    // Create 32x32 tile at (16, 16) with red color
-    OutputTile tile{16, 16, 32, 32, OutputPass::COMBINED, {}};
-    tile.pixels.resize(32 * 32 * 4);
-    for (size_t i = 0; i < tile.pixels.size(); i += 4) {
-        tile.pixels[i + 0] = 1.0f;  // R
-        tile.pixels[i + 1] = 0.0f;  // G
-        tile.pixels[i + 2] = 0.0f;  // B
-        tile.pixels[i + 3] = 1.0f;  // A
-    }
-
-    EXPECT_TRUE(driver.writeTile(tile));
-    EXPECT_EQ(driver.tilesWritten(), 1);
-
-    driver.cancel();
-
-    // Cleanup
-    std::filesystem::remove(testPath);
-}
-
-TEST(PNGOutputDriverTest, FinishWritesFile) {
-    std::string testPath = std::filesystem::temp_directory_path().string() +
-                           "/sirius_test_png_finish.png";
-
-    // Remove if exists from previous run
-    std::filesystem::remove(testPath);
-
-    PNGOutputDriver driver(testPath);
-    driver.configure(4, 4, {OutputPass::COMBINED});
-    driver.start();
-
-    // Create tile covering entire image
-    OutputTile tile{0, 0, 4, 4, OutputPass::COMBINED, {}};
-    tile.pixels.resize(4 * 4 * 4);
-    for (size_t i = 0; i < tile.pixels.size(); i += 4) {
-        tile.pixels[i + 0] = 0.5f;  // R
-        tile.pixels[i + 1] = 0.5f;  // G
-        tile.pixels[i + 2] = 0.5f;  // B
-        tile.pixels[i + 3] = 1.0f;  // A
-    }
-
-    driver.writeTile(tile);
-
-    OutputMetadata meta;
-    meta.width = 4;
-    meta.height = 4;
-    EXPECT_TRUE(driver.finish(meta));
-
-    // Verify file exists
-    EXPECT_TRUE(std::filesystem::exists(testPath));
-
-    // Cleanup
-    std::filesystem::remove(testPath);
-}
 
 //==============================================================================
 // PNGWriter Tests

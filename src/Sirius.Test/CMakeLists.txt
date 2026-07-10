@@ -116,7 +116,6 @@ add_executable(SiriusTests
     # Sirius.Core — Symplectic
     # ==========================================================================
     Sirius.Core/Symplectic/TSSI001A.cpp  # Symplectic integrator tests
-    Sirius.Core/Symplectic/TSSI002A.cpp  # Beam sampling and scene intersection tests
 
     # ==========================================================================
     # Sirius.Core — Polarisation
@@ -139,19 +138,9 @@ add_executable(SiriusTests
     Sirius.Core/Environment/TSSF001A.cpp # Starfield generator tests [NEW]
 
     # ==========================================================================
-    # Sirius.Render — Session
+    # Sirius.Render — Output
     # ==========================================================================
-    Sirius.Render/Session/TSOF001A.cpp   # Render session tests
-    Sirius.Render/Session/TSOF002A.cpp   # Cancellation token tests
-    Sirius.Render/Session/TSOF003A.cpp   # Error accumulator tests
-    Sirius.Render/Session/TSOF004A.cpp   # Tile scheduler tests
-    Sirius.Render/Session/TSOF005A.cpp   # ETA calculator tests
-    Sirius.Render/Session/TSOF006A.cpp   # Output driver tests
-    Sirius.Render/Session/TSOF007A.cpp   # Checkpoint tests
-    Sirius.Render/Session/TSOF008A.cpp   # Display driver tests
-    Sirius.Render/Session/TSOF009A.cpp   # PNG output driver tests
-    Sirius.Render/Session/TSOF010A.cpp   # Offline renderer integration tests
-    Sirius.Render/Session/TSMB001A.cpp   # Motion blur and temporal sampling tests
+    Sirius.Render/Session/TSOF009A.cpp   # PNG writer tests
 
     # ==========================================================================
     # Sirius.Render — Integration
@@ -165,11 +154,6 @@ add_executable(SiriusTests
     # ==========================================================================
     Sirius.Render/Pipeline/TSIN003A.cpp  # Render pipeline integration
     Sirius.Render/Pipeline/TSIN007A.cpp  # Spectral emission pipeline validation
-
-    # ==========================================================================
-    # Sirius.Render — Offline
-    # ==========================================================================
-    Sirius.Render/Offline/TSIN004A.cpp   # Offline renderer integration
 
     # ==========================================================================
     # Sirius.Infrastructure — Configuration

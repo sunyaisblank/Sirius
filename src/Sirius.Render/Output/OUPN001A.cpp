@@ -1,8 +1,6 @@
-// OUPN001A.cpp - PNG Output Driver Implementation
+// OUPN001A.cpp - PNG Writer Implementation
 // Component ID: OUPN001A
 // Actual stb_image_write integration
-//
-// Governance: docs/specification.md
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "../../../lib/stb/stb_image_write.h"
@@ -11,32 +9,6 @@
 #include <vector>
 
 namespace sirius::render {
-
-//==============================================================================
-// PNGOutputDriver Implementation
-//==============================================================================
-
-bool PNGOutputDriver::writePNG() const {
-    if (m_width <= 0 || m_height <= 0 || m_pixels.empty()) {
-        return false;
-    }
-
-    // Convert float RGBA to sRGB uint8
-    std::vector<uint8_t> rgb8(static_cast<size_t>(m_width) * m_height * 4);
-
-    for (size_t i = 0; i < static_cast<size_t>(m_width) * m_height; ++i) {
-        rgb8[i * 4 + 0] = toSRGB8(m_pixels[i * 4 + 0]);  // R
-        rgb8[i * 4 + 1] = toSRGB8(m_pixels[i * 4 + 1]);  // G
-        rgb8[i * 4 + 2] = toSRGB8(m_pixels[i * 4 + 2]);  // B
-        rgb8[i * 4 + 3] = static_cast<uint8_t>(
-            std::clamp(m_pixels[i * 4 + 3] * 255.0f + 0.5f, 0.0f, 255.0f));  // A
-    }
-
-    // Write PNG with stb
-    int result = stbi_write_png(m_outputPath.c_str(), m_width, m_height,
-                                4, rgb8.data(), m_width * 4);
-    return result != 0;
-}
 
 //==============================================================================
 // PNGWriter Implementation
