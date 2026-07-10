@@ -273,7 +273,12 @@ inline bool MorrisThorneFamily::validateFlareOutCondition() const {
 }
 
 inline double MorrisThorneFamily::redshiftFunction([[maybe_unused]] double r) const {
-    // For zero-tidal wormhole, Φ = 0 everywhere (r-independent)
+    // RECORDED DECISION: this family implements the zero-tidal-force subclass
+    // of Morris-Thorne wormholes, Phi(r) = Phi0 (constant). That is a
+    // physically legitimate subclass (Morris & Thorne 1988, Section III.F),
+    // not an approximation of a more general wormhole; variable Phi(r) is
+    // out of scope until a use case needs it. The derivative below is
+    // exactly zero as a consequence, not as a placeholder.
     return m_params.Phi0;
 }
 

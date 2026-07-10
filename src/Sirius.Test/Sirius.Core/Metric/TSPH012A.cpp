@@ -194,16 +194,26 @@ TEST_F(MetricDerivativeTests, AlcubierreDerivativeSymmetry) {
     }
 }
 
-TEST_F(MetricDerivativeTests, DISABLED_AlcubierreTimeDerivative) {
-    // Unique: Alcubierre has time-dependent metric (moving bubble)
+TEST_F(MetricDerivativeTests, AlcubierreTimeDerivative) {
+    // The metric depends on t only through the bubble position xs(t), which
+    // moves at dxs/dt = vs, so the exact identity is dg/dt = -vs * dg/dx for
+    // every component. Evaluate on the bubble wall (x = R = 1) where the
+    // shape-function derivative is order one.
     Tensor<double, 4> pos;
-    pos(0) = 0.0; pos(1) = 3.0; pos(2) = 0.0; pos(3) = 0.0;
-    
+    pos(0) = 0.0; pos(1) = 1.0; pos(2) = 0.3; pos(3) = 0.0;
+
     alcubierre.evaluate(pos, g, dg);
-    
-    // ∂g_tt/∂t should be non-zero (bubble moves)
+
+    const double vs = 1.0;  // Fixture: WarpDriveParams::Alcubierre(1.0, 1.0)
     EXPECT_NE(dg(0, 0, 0).real, 0.0)
         << "Alcubierre ∂g_tt/∂t should be non-zero (time-dependent)";
+    for (int mu = 0; mu < 4; mu++) {
+        for (int nu = 0; nu < 4; nu++) {
+            EXPECT_NEAR(dg(0, mu, nu).real, -vs * dg(1, mu, nu).real, 1e-12)
+                << "Chain-rule identity ∂_t g = -vs ∂_x g violated at ("
+                << mu << "," << nu << ")";
+        }
+    }
 }
 
 TEST_F(MetricDerivativeTests, AlcubirrreFiniteDifferenceAgreement) {

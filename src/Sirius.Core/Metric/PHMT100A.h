@@ -531,8 +531,15 @@ inline double KerrSchildFamily::iscoRadius() const {
         return (3*M + std::sqrt(disc)) / 1.0;  // Prograde equivalent
     }
 
-    // For Kerr (Q=0) or Kerr-Newman: use Kerr ISCO formula
-    // This is an approximation for Kerr-Newman
+    // For Kerr (Q=0): Bardeen-Press-Teukolsky closed form, exact.
+    //
+    // RECORDED APPROXIMATION for Kerr-Newman (a != 0 and Q != 0): the Kerr
+    // formula below ignores Q. The error vanishes as Q -> 0 and grows like
+    // (Q/M)^2; the reference anchors are exact (Q=0: this formula; a=0: the
+    // Reissner-Nordstrom branch above, which is exact at both Q=0 -> 6M and
+    // Q=M -> 4M). Replacing this with the Dadhich-Kale marginal-stability
+    // solve is a recorded follow-up gated on the test toolchain, because an
+    // unvalidated root-solve is worse than a documented approximation.
     double a_star = std::abs(a / M);
     if (a_star > 0.9999) a_star = 0.9999;
 

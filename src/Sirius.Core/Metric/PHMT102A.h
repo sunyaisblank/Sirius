@@ -159,20 +159,26 @@ inline double WarpDriveFamily::shapeFunctionDerivative(double rs) const {
 }
 
 inline void WarpDriveFamily::updateBubblePosition(double t) {
-    // Simple linear motion along x-axis
+    // Sets the reference (t = 0) bubble position. evaluate() adds vs*t on top
+    // of this reference, so calling it per integration step would double-count
+    // the motion; it exists for repositioning the bubble between renders.
     m_params.xs = m_params.vs * t;
 }
 
 inline void WarpDriveFamily::evaluate(const Tensor<double, 4>& pos, Metric4D& g,
                                        Tensor<Dual<double>, 4, 4, 4>& dg) {
-    // Note: t is unused directly; bubble position updated separately via updateBubblePosition()
-    [[maybe_unused]] double t = pos(0);
+    double t = pos(0);
     double x = pos(1);
     double y = pos(2);
     double z = pos(3);
-    
+
     double vs = m_params.vs;
-    double xs = m_params.xs;
+    // The bubble moves along x at coordinate speed vs: xs(t) = xs0 + vs t.
+    // Previously evaluate() ignored t and updateBubblePosition() was never
+    // called during integration, so the metric was silently static and its
+    // time derivative silently zero: the geodesic equation was solved for a
+    // different spacetime than the one advertised.
+    double xs = m_params.xs + vs * t;
     double ys = m_params.ys;
     double zs = m_params.zs;
     
@@ -213,12 +219,12 @@ inline void WarpDriveFamily::evaluate(const Tensor<double, 4>& pos, Metric4D& g,
     
     // Metric derivatives
     dg.zero();
-    
+
     // ∂g_tt/∂x = 2 v_s² f df/dx
     dg(1, 0, 0) = Dual<double>(2.0 * vs * vs * f * df_dx);
     dg(2, 0, 0) = Dual<double>(2.0 * vs * vs * f * df_dy);
     dg(3, 0, 0) = Dual<double>(2.0 * vs * vs * f * df_dz);
-    
+
     // ∂g_tx/∂x = -v_s df/dx
     dg(1, 0, 1) = Dual<double>(-vs * df_dx);
     dg(1, 1, 0) = Dual<double>(-vs * df_dx);
@@ -226,6 +232,14 @@ inline void WarpDriveFamily::evaluate(const Tensor<double, 4>& pos, Metric4D& g,
     dg(2, 1, 0) = Dual<double>(-vs * df_dy);
     dg(3, 0, 1) = Dual<double>(-vs * df_dz);
     dg(3, 1, 0) = Dual<double>(-vs * df_dz);
+
+    // Time derivatives, exactly, by the chain rule: the metric depends on t
+    // only through dx = x - xs(t) with dxs/dt = vs, so ∂_t g = -vs ∂_x g.
+    for (int mu = 0; mu < 4; mu++) {
+        for (int nu = 0; nu < 4; nu++) {
+            dg(0, mu, nu) = Dual<double>(-vs * dg(1, mu, nu).real);
+        }
+    }
 }
 
 } // namespace Sirius

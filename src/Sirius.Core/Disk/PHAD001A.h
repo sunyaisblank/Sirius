@@ -337,8 +337,12 @@ public:
         // Newtonian flux prefactor
         double F_newt = (3 * m_GM * m_Mdot_SI) / (8 * M_PI * r_physical * r_physical * r_physical);
 
-        // Try full Page-Thorne calculation for r > 1.5 * r_isco
-        if (r_M > m_r_isco * 1.5) {
+        // Full Page-Thorne everywhere outside the inner-edge buffer. The
+        // previous 1.5 r_isco threshold excluded exactly the band where the
+        // Novikov-Thorne profile peaks (~1.2-1.36 r_isco), leaving the peak
+        // to the simplified correction below; the fallback now serves only
+        // when the full expression fails numerically.
+        if (r_M > m_r_isco * Constants::Disk::INNER_EDGE_BUFFER) {
             double F_PT = fullPageThorneFlux(r);
             if (std::isfinite(F_PT) && F_PT > 0) {
                 return F_PT;
@@ -353,9 +357,9 @@ public:
         double denom = y3 * (y - 3.0/y + 2*m_a/(y*y));
         double Q = (std::abs(denom) > 1e-10) ? 1.0 / denom : 1.0;
 
-        // Clamp Q to reasonable range
+        // Clamp Q to the centralised validity range (PHCN001A)
         if (!std::isfinite(Q) || Q <= 0) Q = 1.0;
-        Q = std::clamp(Q, 0.1, 10.0);
+        Q = std::clamp(Q, Constants::Disk::Q_FACTOR_MIN, Constants::Disk::Q_FACTOR_MAX);
 
         return F_newt * inner_torque * Q;
     }
