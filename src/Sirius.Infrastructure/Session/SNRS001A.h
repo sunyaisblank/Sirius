@@ -180,6 +180,10 @@ struct SessionConfig {
     // SMBH Astrophysical Parameters
     SMBHParams smbhParams;              ///< Supermassive black hole scaling
 
+    // Turbulence and corona (GPU volumetric features)
+    bool enableTurbulence = false;      ///< Kolmogorov density perturbations
+    bool enableCorona = false;          ///< Inverse-Compton corona glow
+
     // Depth-Resolved Starfield
     bool enableStarfield = false;       ///< Enable parallax-correct starfield
     StarfieldConfig starfieldConfig;    ///< Starfield parameters

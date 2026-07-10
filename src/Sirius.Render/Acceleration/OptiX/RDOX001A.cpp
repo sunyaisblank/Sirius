@@ -252,6 +252,13 @@ Sirius::LaunchParams OptiXAccelerator::convertConfig(const LaunchConfig& config)
     // =========================================================================
 
     // Turbulence parameters
+    // Volumetric disk mode
+    params.volumetricDisk.enabled = config.enableVolumetricDisk ? 1 : 0;
+    params.volumetricDisk.H_over_r = config.volumetricHOverR;
+    params.volumetricDisk.H_power = config.volumetricHPower;
+    params.volumetricDisk.optical_depth_max = config.volumetricTauMax;
+    params.volumetricDisk.volumetric_samples = config.volumetricSamples;
+
     if (config.enableTurbulence) {
         params.volumetricDisk.turbulence.enabled = 1;
         params.volumetricDisk.turbulence.amplitude = config.turbulenceAmplitude;

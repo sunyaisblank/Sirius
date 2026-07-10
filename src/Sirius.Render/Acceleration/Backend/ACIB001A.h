@@ -98,6 +98,13 @@ struct LaunchConfig {
     float bubbleRadius = 1.0f;
     float bubbleSigma = 0.5f;
 
+    // Volumetric disk (3D ray-marched; when false the planar disk is used)
+    bool enableVolumetricDisk = false;
+    float volumetricHOverR = 0.1f;
+    float volumetricHPower = 0.25f;
+    float volumetricTauMax = 10.0f;
+    int volumetricSamples = 64;
+
     // Cinematic Features (Phase 8)
     // Turbulence
     bool enableTurbulence = false;

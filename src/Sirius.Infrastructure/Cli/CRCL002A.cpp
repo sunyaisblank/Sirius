@@ -33,7 +33,8 @@ Basic Options:
   -i, --inclination <deg>   Observer inclination (default: 90)
   -a, --spin <a>            Black hole spin 0-1 (default: 0)
   --fov <deg>               Camera field of view (default: 60)
-  --temperature-model <m>   Temperature model: NovikovThorne, ShakuraSunyaev (default: NT)
+  --temperature-model <m>   Disk temperature model: NovikovThorne (NT) or
+                            ShakuraSunyaev (SS); GPU backend (default: NovikovThorne)
   --disk-temperature <T>    Disk temperature scale in Kelvin (default: 50000)
   --throat-radius <b0>      Morris-Thorne throat radius (default: 1.0)
   --warp-velocity <vs>      Alcubierre warp velocity (default: 0.5)
@@ -69,6 +70,7 @@ Presets:
 
 Backend:
   --cpu                     Force CPU rendering (disable GPU)
+  --no-gpu                  Alias of --cpu
 
 Examples:
   sirius render -o test.ppm -s 32

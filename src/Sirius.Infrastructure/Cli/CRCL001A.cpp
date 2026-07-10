@@ -39,8 +39,16 @@ int CommandRouter::run(int argc, char* argv[]) {
     // Apply global settings
     Output::setColorEnabled(!globals.noColor);
 
-    // Handle help/version early
+    // Handle help/version early. '--help' beside a command shows that
+    // command's usage; on its own it shows the global help.
     if (globals.showHelp) {
+        std::string helpTarget = extractCommand(remaining);
+        for (const auto& cmd : m_commands) {
+            if (cmd->name() == helpTarget) {
+                std::cout << cmd->usage() << std::endl;
+                return 0;
+            }
+        }
         printHelp();
         return 0;
     }
@@ -92,13 +100,22 @@ void CommandRouter::printHelp() {
 
     std::cout << "Usage: sirius [global-options] <command> [options]\n\n";
 
-    std::cout << "Global Options:\n";
+    std::cout << "Global Options (recognised anywhere on the command line):\n";
     std::cout << "  -v, --verbose       Enable verbose output\n";
     std::cout << "  --json              Output in JSON format\n";
     std::cout << "  --no-color          Disable colored output\n";
     std::cout << "  --config <path>     Specify config file path\n";
     std::cout << "  --help              Show this help message\n";
     std::cout << "  --version           Show version information\n";
+    std::cout << "\n";
+
+    std::cout << "Configuration layering: defaults, then config file, then\n";
+    std::cout << "SIRIUS_* environment variables, then command-line flags.\n";
+    std::cout << "Environment overrides: SIRIUS_WIDTH, SIRIUS_HEIGHT, SIRIUS_SAMPLES,\n";
+    std::cout << "  SIRIUS_TILE_SIZE, SIRIUS_THREADS, SIRIUS_OUTPUT, SIRIUS_METRIC,\n";
+    std::cout << "  SIRIUS_MASS, SIRIUS_SPIN, SIRIUS_CHARGE, SIRIUS_DISTANCE,\n";
+    std::cout << "  SIRIUS_INCLINATION, SIRIUS_AZIMUTH, SIRIUS_FOV, SIRIUS_BLOOM,\n";
+    std::cout << "  SIRIUS_EXPOSURE, SIRIUS_BACKEND, SIRIUS_CUDA_DEVICE\n";
     std::cout << "\n";
 
     std::cout << "Commands:\n";
@@ -138,29 +155,18 @@ std::vector<std::string> CommandRouter::parseGlobalOptions(
     const std::vector<std::string>& args,
     Configuration::GlobalOptions& globals)
 {
+    // Global flags are recognised anywhere on the command line. The previous
+    // version stopped parsing them at the first command name (and its command
+    // list omitted 'view'), so documented invocations such as
+    // 'sirius info system --json' reached the command parser as unknown
+    // options and either errored or were silently ignored. No command defines
+    // a flag that collides with the global set, so position independence is
+    // unambiguous.
     std::vector<std::string> remaining;
-    bool foundCommand = false;
-
-    // Known command names
-    std::vector<std::string> commandNames = {"render", "info", "config", "help"};
 
     for (size_t i = 0; i < args.size(); ++i) {
         const std::string& arg = args[i];
 
-        // Once we hit a command, pass everything through
-        if (foundCommand) {
-            remaining.push_back(arg);
-            continue;
-        }
-
-        // Check if this is a command name
-        if (std::find(commandNames.begin(), commandNames.end(), arg) != commandNames.end()) {
-            foundCommand = true;
-            remaining.push_back(arg);
-            continue;
-        }
-
-        // Parse global options only before command
         if (arg == "-v" || arg == "--verbose") {
             globals.verbose = true;
         } else if (arg == "--json") {
@@ -170,7 +176,7 @@ std::vector<std::string> CommandRouter::parseGlobalOptions(
         } else if (arg == "--config" && i + 1 < args.size()) {
             globals.configPath = args[++i];
         } else if (arg == "--help") {
-            // Only --help, not -h (which is used for --height in render)
+            // Only --help; -h belongs to commands (render uses it for height)
             globals.showHelp = true;
         } else if (arg == "--version") {
             globals.showVersion = true;

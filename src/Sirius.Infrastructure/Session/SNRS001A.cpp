@@ -649,11 +649,10 @@ void RenderSession::renderTile(Tile* tile) {
     m_Display.updateTile(tile->x, tile->y, tile->width, tile->height, tileBuffer.data());
 
     m_Tiles.completeTile(tile->id);
+    // ProgressTracker's callback is the single progress surface (the CLI
+    // renders it); a second raw carriage-return writer here fought the
+    // progress bar for the same terminal line.
     m_Progress.completeTile(tile->pixelCount());
-
-    int percent = static_cast<int>(m_Progress.getProgress() * 100);
-    std::cout << "\r[Session] Progress: " << percent << "% | ETA: "
-              << m_Progress.getETAString() << "    " << std::flush;
 
     m_FSM.process(SessionEvent::TileComplete);
 }
@@ -1008,13 +1007,9 @@ void RenderSession::workerThread(int threadId) {
         {
             std::lock_guard<std::mutex> lock(m_TileMutex);
             m_Tiles.completeTile(tile->id);
+            // Single progress surface: the ProgressTracker callback (see the
+            // single-threaded path for the rationale).
             m_Progress.completeTile(tile->pixelCount());
-
-            // Print progress (from any thread)
-            int percent = static_cast<int>(m_Progress.getProgress() * 100);
-            std::cout << "\r[Session] Progress: " << percent << "% | ETA: "
-                      << m_Progress.getETAString() << " | Threads: " << m_ActiveWorkers.load()
-                      << "    " << std::flush;
         }
     }
 
@@ -1103,6 +1098,26 @@ void RenderSession::renderGPU() {
                       << metricInfo(m_Config.metricId).canonicalName << "'" << std::endl;
             m_FSM.process(SessionEvent::Error);
             return;
+    }
+
+    // Volumetric disk and cinematic features. These flags were parsed,
+    // echoed as enabled, and never passed to the kernel; the launch config
+    // now carries them (the translation layer already knew how to forward
+    // each one).
+    config.enableVolumetricDisk = m_Config.enableVolumetricDisk;
+    config.volumetricHOverR = m_Config.volumetricHOverR;
+    config.volumetricHPower = m_Config.volumetricHPower;
+    config.volumetricTauMax = m_Config.volumetricTauMidplane;
+    config.volumetricSamples = m_Config.volumetricSamples;
+    config.enableTurbulence = m_Config.enableTurbulence;
+    config.enableCorona = m_Config.enableCorona;
+    config.enableStarfield = m_Config.enableStarfield;
+    config.starfieldBrightness = m_Config.starfieldConfig.brightness_scale;
+    config.enableFilm = m_Config.enableFilmSimulation;
+    if (m_Config.enableFilmSimulation) {
+        config.filmGrainIntensity = m_Config.filmConfig.grain_intensity;
+        config.filmHalationStrength = m_Config.filmConfig.halation_strength;
+        config.filmVignetteStrength = m_Config.filmConfig.vignette_strength;
     }
 
     // Post-processing / exposure
@@ -1212,12 +1227,10 @@ SessionConfig SessionConfig::fromSiriusConfig(const Configuration::SiriusConfig&
     sc.metricId = *metricId;
     sc.blackHoleMass = (sc.metricId == MetricId::Minkowski ||
                         sc.metricId == MetricId::DeSitter) ? 0.0 : config.metric.mass;
+    // The config validator is the authority on the spin range; the silent
+    // clamp that duplicated it here is gone (a value above 0.998 is rejected
+    // at the boundary, not quietly rewritten).
     sc.blackHoleSpin = config.metric.spin;
-    if (sc.blackHoleSpin > 0.998) {
-        std::cout << "[Session] Spin parameter clamped from " << sc.blackHoleSpin
-                  << " to 0.998 (Thorne limit)" << std::endl;
-        sc.blackHoleSpin = 0.998;
-    }
     // Tonemapper string was validated at the config boundary; parse here.
     {
         const std::string& tm = config.postprocess.tonemapper;
@@ -1254,6 +1267,8 @@ SessionConfig SessionConfig::fromSiriusConfig(const Configuration::SiriusConfig&
     sc.volumetricHPower = config.volumetric.hPower;
     sc.volumetricTauMidplane = config.volumetric.tauMidplane;
     sc.volumetricSamples = config.volumetric.samples;
+    sc.enableTurbulence = config.volumetric.enableTurbulence;
+    sc.enableCorona = config.volumetric.enableCorona;
 
     // Film simulation
     sc.enableFilmSimulation = config.film.enabled;

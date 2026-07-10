@@ -209,7 +209,7 @@ struct SMBHParams {
     static SMBHParams Gargantua() {
         SMBHParams p;
         p.mass_solar = 1.0e8;
-        p.spin_parameter = 0.9999f;  // Near-extremal
+        p.spin_parameter = 0.998f;   // Thorne limit; 0.9999 was silently clamped here anyway
         p.inclination_deg = 85.0f;   // Nearly edge-on
         p.distance_Mpc = 0.01f;      // Close for visualization
         p.computeDerived();

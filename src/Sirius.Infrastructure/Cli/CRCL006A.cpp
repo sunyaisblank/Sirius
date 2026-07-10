@@ -120,7 +120,7 @@ bool ViewCommand::parseArgs(const std::vector<std::string>& args,
             config.observer.inclination = std::stod(args[++i]);
         } else if (arg == "--fov" && i + 1 < args.size()) {
             config.observer.fov = std::stod(args[++i]);
-        } else if (arg == "--help" || arg == "-h") {
+        } else if (arg == "--help") {
             std::cout << usage();
             return false;
         }

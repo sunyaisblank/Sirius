@@ -239,6 +239,18 @@ std::vector<std::string> ConfigLoader::validate(const SiriusConfig& config) {
         errors.push_back("Combined spin² + charge² must be < 0.999 (sub-extremal condition)");
     }
 
+    // Disk temperature model: the accepted spellings, validated here so the
+    // renderer never sees an unrecognised value (previously anything that was
+    // not ShakuraSunyaev/SS silently became Novikov-Thorne).
+    static const std::vector<std::string> validTemperatureModels = {
+        "NovikovThorne", "NT", "ShakuraSunyaev", "SS"
+    };
+    if (std::find(validTemperatureModels.begin(), validTemperatureModels.end(),
+                  config.metric.temperatureModel) == validTemperatureModels.end()) {
+        errors.push_back("metric.temperatureModel must be one of: NovikovThorne, NT, "
+                         "ShakuraSunyaev, SS");
+    }
+
     // Cosmological constant: only the a = 0 Kerr-Schild form is exact, so
     // lambda with spin is rejected rather than approximated
     constexpr double MAX_LAMBDA = 0.1;
