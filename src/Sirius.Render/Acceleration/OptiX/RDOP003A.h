@@ -374,8 +374,8 @@ struct AccretionDiskParams {
     DiskMode diskMode;         // Planar (default) or Volumetric
     
     // Disk geometry
-    float innerRadius;         // ISCO radius (units of M)
-    float outerRadius;         // Outer edge of disk
+    float innerRadius;         // Inner edge, ABSOLUTE geometric units (session sends r_isco*M); 0 = auto-ISCO
+    float outerRadius;         // Outer edge, ABSOLUTE geometric units
     float heightScale;         // H/r ratio for disk thickness (volumetric only)
     
     // Temperature model selection (Phase 8.6)

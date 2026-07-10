@@ -2864,9 +2864,11 @@ __device__ void sampleAccretionDiskVolumetric(
     float phi = pos.phi;
     float M = mp.M;
     
-    // Disk radial bounds (in units of M)
-    float r_inner = disk.innerRadius * M;
-    float r_outer = disk.outerRadius * M;
+    // Disk radial bounds. LaunchConfig radii are absolute geometric units
+    // (the session already multiplies by M); scaling by M again here made
+    // the volumetric and planar branches disagree for M != 1.
+    float r_inner = disk.innerRadius;
+    float r_outer = disk.outerRadius;
     
     if (r < r_inner || r > r_outer) return;
     
@@ -2935,26 +2937,14 @@ __device__ void sampleAccretionDiskVolumetric(
     float emissionStrength = rho * disk.emissionCoefficient;
 
     // =========================================================================
-    // REALISTIC BRIGHTNESS SCALING
-    // Stefan-Boltzmann: total flux ∝ T^4
-    // Reference temperature lowered to 3500K (red dwarf) for:
-    //   - Darker overall scene (space should be DARK)
-    //   - Inner disk (10^6-10^7 K) still bright but not blown out
-    //   - Outer disk (10^4-10^5 K) appears warm orange-red
-    // The T^4 scaling compressed with sqrt for better dynamic range
+    // Stefan-Boltzmann brightness: flux proportional to T^4, normalised by the
+    // shared DISK_T_REF and clamped for display headroom. The temperature
+    // profile (Novikov-Thorne or Shakura-Sunyaev) already encodes the radial
+    // law, so no additional radial falloff is layered on top.
     // =========================================================================
-    float T_ref = 3500.0f;  // Reference temperature for normalization
-    float T_ratio = T_local / T_ref;
-
-    // Use T^2.5 instead of T^4 for better visual dynamic range
-    // This prevents inner disk from being 10000x brighter than outer
-    float boltzmann = powf(T_ratio, 2.5f);
-    boltzmann = clamp(boltzmann, 0.0f, 50.0f);   // Allow higher contrast range
-
-    // Apply radial falloff for more realistic appearance
-    // Inner disk: bright, outer disk: dimmer (inverse square-ish)
-    float radialFalloff = powf(r_inner / fmaxf(r, r_inner), 0.3f);
-    boltzmann *= radialFalloff;
+    float T_ratio = T_local / DISK_T_REF;
+    float boltzmann = powf(fmaxf(T_ratio, 0.0f), DISK_BRIGHTNESS_EXP);
+    boltzmann = clamp(boltzmann, 0.0f, DISK_BRIGHTNESS_CLAMP);
 
     // Emission is step-size INDEPENDENT (source function brightness)
     // j = ρ * ε * B_ν(T) represents intrinsic emissivity
@@ -4213,6 +4203,17 @@ __device__ void getChristoffelByFamily(
         }
     }
 }
+
+//==============================================================================
+// Disk Brightness Normalisation (single authority)
+// Stefan-Boltzmann emission scales as T^4; both disk branches normalise by the
+// same reference temperature. Previously the planar branch used 5000 K with
+// the volumetric branch at 3500 K, and both softened the exponent to 2.5,
+// so one nominal disk had two brightness laws and neither was physical.
+//==============================================================================
+constexpr float DISK_T_REF = 5000.0f;         // Normalisation temperature [K]
+constexpr float DISK_BRIGHTNESS_EXP = 4.0f;   // Stefan-Boltzmann T^4
+constexpr float DISK_BRIGHTNESS_CLAMP = 50.0f;
 
 //==============================================================================
 // Photon-Sphere Radius (single authority)
@@ -5568,8 +5569,8 @@ __device__ void raygen_renderFrame_impl() {
                             r_inner = 6.0f * M;  // Schwarzschild ISCO = 6M
                         }
                         
-                        // Outer radius - params store value in units of M (e.g., 15 means 15*M)
-                        float r_outer = params.accretionDisk.outerRadius * M;
+                        // Outer radius: absolute geometric units, matching r_inner
+                        float r_outer = params.accretionDisk.outerRadius;
                         
                         if (r_hit >= r_inner && r_hit <= r_outer) {
                             // =========================================
@@ -5620,15 +5621,15 @@ __device__ void raygen_renderFrame_impl() {
                             
                             // =========================================
                             // Emission intensity from physical temperature
+                            // Stefan-Boltzmann T^4 against the shared
+                            // DISK_T_REF (one brightness law for both
+                            // disk branches)
                             // =========================================
-                            // Stefan-Boltzmann: flux ∝ T^4
-                            // T^2.5 compression for visual dynamic range
                             float base_intensity = params.accretionDisk.emissionCoefficient;
-                            float intensity;
-                            float T_ref = 5000.0f;
-                            float T_ratio = T_physical / T_ref;
-                            intensity = base_intensity * powf(fmaxf(T_ratio, 0.0f), 2.5f);
-                            intensity = clamp(intensity, 0.0f, 50.0f);
+                            float T_ratio = T_physical / DISK_T_REF;
+                            float intensity = base_intensity *
+                                powf(fmaxf(T_ratio, 0.0f), DISK_BRIGHTNESS_EXP);
+                            intensity = clamp(intensity, 0.0f, DISK_BRIGHTNESS_CLAMP);
 
                             
                             // =========================================
