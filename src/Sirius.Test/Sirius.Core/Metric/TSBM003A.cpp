@@ -464,13 +464,14 @@ TEST_F(ChristoffelBenchmark, VerifyNumericalAgreement) {
     
     if (mismatches == 0) {
         std::cout << "  All test points agree within tolerance (" << TOLERANCE << ")\n";
-    } else {
-        std::cout << "  " << mismatches << " test points have significant differences\n";
-        std::cout << "  Note: Some difference is expected due to coordinate transform numerical errors\n";
     }
-    
-    // This is informational - don't fail the test
-    SUCCEED();
+
+    // Spherical and Cartesian Christoffels describe one geometry; genuine
+    // disagreement is a defect, not information. This asserted nothing for
+    // several releases, which is how the CPU/GPU Christoffel drift the
+    // Jan 2026 kernel fix corrected went unnoticed.
+    EXPECT_EQ(mismatches, 0)
+        << mismatches << " test points disagree beyond tolerance " << TOLERANCE;
 }
 
 TEST_F(ChristoffelBenchmark, PoleHandlingComparison) {

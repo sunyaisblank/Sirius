@@ -40,6 +40,7 @@ add_executable(SiriusTests
     # Sirius.Core — Tensor
     # ==========================================================================
     Sirius.Core/Tensor/TSMT002A.cpp      # Tensor operations and contractions
+    Sirius.Core/Tensor/TSMT003A.cpp      # Inverse/determinant vs Kerr-Schild closed forms
 
     # ==========================================================================
     # Sirius.Core — Metric
@@ -62,6 +63,7 @@ add_executable(SiriusTests
     Sirius.Core/Metric/TSDG008A.cpp      # Analytic solution validation (photon sphere, ISCO, deflection)
     Sirius.Core/Metric/TSIN002A.cpp      # Metric loader chain (Unified Families)
     Sirius.Core/Metric/TSMT102A.cpp      # Alcubierre warp drive metric properties [NEW]
+    Sirius.Core/Metric/TSMT200A.cpp      # Metric identity registry
 
     # ==========================================================================
     # Sirius.Core — Geodesic
@@ -70,6 +72,7 @@ add_executable(SiriusTests
     Sirius.Core/Geodesic/TSPH009A.cpp    # RK45 integrator validation
     Sirius.Core/Geodesic/TSGD001A.cpp    # Beam propagation tests
     Sirius.Core/Geodesic/TSGD002A.cpp    # Einstein ring magnification tests
+    Sirius.Core/Geodesic/TSGD003A.cpp    # Live-path conservation and capture surface
     Sirius.Core/Geodesic/TSDG001A.cpp    # Edge cases and precision
     Sirius.Core/Geodesic/TSDG002A.cpp    # NaN/Inf detection
     Sirius.Core/Geodesic/TSDG003A.cpp    # Conservation law verification
@@ -137,6 +140,7 @@ add_executable(SiriusTests
     # Sirius.Render — Output
     # ==========================================================================
     Sirius.Render/Session/TSOF009A.cpp   # PNG writer tests
+    Sirius.Render/Output/TSOF011A.cpp     # EXR round-trip tests
 
     # ==========================================================================
     # Sirius.Render — Integration

@@ -199,6 +199,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Verify CTest labels are current
+        run: python3 scripts/generate-ctest-labels.py --check
+
       - name: Check for Debug Artifacts
         run: |
           # Check for files that shouldn't be committed

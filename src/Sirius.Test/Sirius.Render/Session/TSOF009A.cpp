@@ -5,6 +5,12 @@
 #include <gtest/gtest.h>
 #include "Sirius.Render/Output/OUPN001A.h"
 #include "Sirius.Render/Output/OUIB001A.h"
+
+// Decode side of the round-trip; nothing else in the test target defines the
+// stb_image implementation (OUPN001A.cpp defines only the writer's).
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
 #include <filesystem>
 #include <cmath>
 
@@ -149,4 +155,67 @@ TEST(PNGWriterTest, NullPixels) {
                            "/sirius_test_png_null.png";
 
     EXPECT_FALSE(PNGWriter::writeRGB(testPath, 10, 10, nullptr));
+}
+
+//==============================================================================
+// Decode Round-Trip
+// The writer's earlier tests only asserted that a file appeared on disk; this
+// decodes the PNG and verifies the sRGB-encoded pixel values, closing the loop
+// on the transfer function (linear in, sRGB out, one encode exactly).
+//==============================================================================
+
+namespace {
+
+uint8_t expectedSRGB8(float linear) {
+    float clamped = std::clamp(linear, 0.0f, 1.0f);
+    float srgb = (clamped <= 0.0031308f)
+        ? 12.92f * clamped
+        : 1.055f * std::pow(clamped, 1.0f / 2.4f) - 0.055f;
+    return static_cast<uint8_t>(std::clamp(srgb * 255.0f + 0.5f, 0.0f, 255.0f));
+}
+
+} // namespace
+
+TEST(PNGWriterTest, DecodeRoundTripMatchesSRGBEncoding) {
+    std::string testPath = std::filesystem::temp_directory_path().string() +
+                           "/sirius_test_png_roundtrip.png";
+    std::filesystem::remove(testPath);
+
+    const int W = 8, H = 4;
+    ImageBuffer buffer;
+    buffer.allocate(W, H);
+    for (int y = 0; y < H; ++y) {
+        for (int x = 0; x < W; ++x) {
+            buffer.setPixel(x, y,
+                            static_cast<float>(x) / (W - 1),
+                            static_cast<float>(y) / (H - 1),
+                            0.5f);
+        }
+    }
+
+    ASSERT_TRUE(PNGWriter::write(testPath, buffer));
+
+    int width = 0, height = 0, channels = 0;
+    unsigned char* data = stbi_load(testPath.c_str(), &width, &height, &channels, 3);
+    ASSERT_NE(data, nullptr) << stbi_failure_reason();
+    ASSERT_EQ(width, W);
+    ASSERT_EQ(height, H);
+
+    int worst = 0;
+    for (int y = 0; y < H; ++y) {
+        for (int x = 0; x < W; ++x) {
+            float r, g, b;
+            buffer.getPixel(x, y, r, g, b);
+            const uint8_t expected[3] = {expectedSRGB8(r), expectedSRGB8(g), expectedSRGB8(b)};
+            for (int c = 0; c < 3; ++c) {
+                int actual = data[(y * W + x) * 3 + c];
+                worst = std::max(worst, std::abs(actual - expected[c]));
+            }
+        }
+    }
+    // PNG is lossless; only the quantisation rounding itself may differ.
+    EXPECT_LE(worst, 1);
+
+    stbi_image_free(data);
+    std::filesystem::remove(testPath);
 }

@@ -190,7 +190,11 @@ protected:
 
 // --- Schwarzschild Photon Sphere Tests ---
 
-// Photon sphere orbits (r=3M) are unstable; correct momentum derivatives cause rapid escape with deviation ~80. Disabled pending investigation.
+// RECORDED DECISION: stays disabled. The r = 3M photon orbit is unstable, so
+// integration error e-folds every ~sqrt(27)M of affine parameter and no
+// finite-precision integrator holds the orbit for 2000 steps; the < 5M bound
+// is unattainable in principle, not a defect. The instability itself is the
+// physics, and the enabled PhotonSphereInstability test asserts it.
 TEST_F(GeodesicPathTests, DISABLED_PhotonSphereRadius)
 {
     double photon_sphere = 3.0 * M;
@@ -302,8 +306,10 @@ TEST_F(GeodesicPathTests, WeakFieldLightDeflection)
 
 // --- Radial Infall Tests ---
 
-// Radially infalling light should approach horizon asymptotically in coordinate time. Disabled pending investigation with correct Hamiltonian integrator.
-TEST_F(GeodesicPathTests, DISABLED_RadialInfallApproachesHorizon)
+// Radially infalling light approaches the horizon; re-enabled after the
+// termination rewrite (capture is now decided by the metric's own surface
+// instead of a hardcoded Schwarzschild radius misread from Cartesian x).
+TEST_F(GeodesicPathTests, RadialInfallApproachesHorizon)
 {
     Vec4 pos;
     pos(0) = 0.0;
