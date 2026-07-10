@@ -31,6 +31,9 @@
 // Metric identity registry
 #include "../Sirius.Core/Metric/PHMT200A.h"
 
+// Tonemapping types (TonemapType)
+#include "../Sirius.Core/PostProcess/PPOP001A.h"
+
 // Configuration schema (for SessionConfig::fromSiriusConfig)
 #include "CRCF003A.h"
 
@@ -125,6 +128,7 @@ struct SessionConfig {
     double bubbleSigma = 0.5;      ///< Alcubierre sigma
 
     // Post-processing (cinematic defaults)
+    TonemapType tonemapper = TonemapType::ACES;  ///< Display transform (PPM/PNG paths)
     bool enableBloom = true;
     float bloomIntensity = 0.5f;    ///< Bloom glow intensity
     float bloomThreshold = 0.3f;    ///< Lower threshold to capture disk glow

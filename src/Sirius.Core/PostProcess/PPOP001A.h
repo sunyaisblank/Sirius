@@ -23,7 +23,6 @@ enum class TonemapType {
     Reinhard,       ///< Reinhard global operator
     ACES,           ///< ACES filmic curve (sRGB output)
     Filmic,         ///< Hable/Uncharted 2 filmic curve
-    AgX,            ///< AgX (Blender 3.6+)
     Exposure        ///< Simple exposure + gamma
 };
 
@@ -86,23 +85,6 @@ inline float Filmic(float x) {
     return curve(x) / curve(whitePoint);
 }
 
-/// @brief AgX base contrast curve
-inline float AgX(float x) {
-
-    // AgX sigmoid with punch
-    // const float offset = 0.0f;
-    // const float slope = 1.0f;
-    const float power = 1.3f;
-    // const float saturation = 1.0f;
-    
-    float v = x;
-    v = std::max(0.0f, v);
-    v = std::pow(v, power);
-
-    v = v / (v + 1.0f);
-    return std::clamp(v, 0.0f, 1.0f);
-}
-
 /// @brief Apply tonemapping to RGB values
 inline void apply(float& r, float& g, float& b, TonemapType type, float exposure) {
     r *= exposure;
@@ -124,11 +106,6 @@ inline void apply(float& r, float& g, float& b, TonemapType type, float exposure
             r = Filmic(r);
             g = Filmic(g);
             b = Filmic(b);
-            break;
-        case TonemapType::AgX:
-            r = AgX(r);
-            g = AgX(g);
-            b = AgX(b);
             break;
         case TonemapType::Exposure:
             r = std::clamp(r, 0.0f, 1.0f);

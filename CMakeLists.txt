@@ -330,6 +330,10 @@ add_executable(Sirius
     # Render acceleration backend (GPU)
     src/Sirius.Render/Acceleration/Backend/ACBF001A.cpp
 
+    # Render output writers (PNG via stb, EXR via tinyexr)
+    src/Sirius.Render/Output/OUPN001A.cpp
+    src/Sirius.Render/Output/OUEW001A.cpp
+
     # External dependencies
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/glad/src/glad.c
 )
@@ -351,6 +355,7 @@ target_include_directories(Sirius PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Core/PostProcess"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/Pipeline"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/Integration"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/Output"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/Acceleration/Backend"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/Acceleration/OptiX"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Infrastructure"
@@ -444,12 +449,6 @@ enable_testing()
 option(BUILD_TESTS "Build test suite" ON)
 if(BUILD_TESTS)
     add_subdirectory(src/Sirius.Test)
-endif()
-
-# === Offline Rendering ===
-option(BUILD_OFFLINE "Build offline rendering tools" ON)
-if(BUILD_OFFLINE)
-    add_subdirectory(src/Sirius.Render/Session)
 endif()
 
 # =============================================================================

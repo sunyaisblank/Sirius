@@ -288,6 +288,14 @@ std::vector<std::string> ConfigLoader::validate(const SiriusConfig& config) {
     if (config.postprocess.bloomIntensity < 0 || config.postprocess.bloomIntensity > 5) {
         errors.push_back("postprocess.bloomIntensity must be between 0 and 5");
     }
+    static const std::vector<std::string> validTonemappers = {
+        "ACES", "Reinhard", "Filmic", "Uncharted2", "None", "Linear"
+    };
+    if (std::find(validTonemappers.begin(), validTonemappers.end(),
+                  config.postprocess.tonemapper) == validTonemappers.end()) {
+        errors.push_back("postprocess.tonemapper must be one of: ACES, Reinhard, "
+                         "Filmic, None");
+    }
 
     // =========================================================================
     // Backend Validation

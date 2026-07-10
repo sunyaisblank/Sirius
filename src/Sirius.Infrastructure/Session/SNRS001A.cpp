@@ -15,6 +15,11 @@
 #include <chrono>
 #include <cstring>
 #include <stdexcept>
+#include <cctype>
+
+// Output writers (extension-dispatched from writeOutput)
+#include "../Sirius.Render/Output/OUPN001A.h"
+#include "../Sirius.Render/Output/OUEW001A.h"
 
 // Unified constants (replaces M_PI macro)
 #include <PHCN001A.h>
@@ -712,44 +717,96 @@ void RenderSession::writeOutput() {
     try {
         std::cout << "\n[Session] Writing output..." << std::endl;
 
-        // Apply post-processing (cinematic pipeline)
-        PostProcessConfig ppConfig;
-        ppConfig.tonemapper = TonemapType::ACES;       // Filmic ACES curve
-        ppConfig.exposure = m_Config.exposure;          // Default: 3.0
-        ppConfig.gamma = 2.2f;
+        const int width = m_Config.width;
+        const int height = m_Config.height;
+        const size_t pixelCount = static_cast<size_t>(width) * height;
 
-        // Bloom for accretion disk glow
-        ppConfig.enableBloom = m_Config.enableBloom;
-        ppConfig.bloomIntensity = m_Config.bloomIntensity;  // Default: 0.5
-        ppConfig.bloomThreshold = m_Config.bloomThreshold;  // Default: 0.3
-        ppConfig.bloomRadius = BLOOM_RADIUS;
-
-        // Color grading for cinematic look
-        ppConfig.saturation = m_Config.saturation;      // Default: 1.15
-        ppConfig.contrast = m_Config.contrast;          // Default: 1.1
-        ppConfig.lift = SHADOW_LIFT;
-        ppConfig.gain = 1.0f;
-
-        PostProcessor::process(m_Display.getFloatBuffer(), m_Config.width, m_Config.height, ppConfig);
-
-        // Write main PPM output
-        std::ofstream file(m_Config.outputPath, std::ios::binary);
-        if (!file) {
-            throw std::runtime_error("Failed to open output file: " + m_Config.outputPath);
+        // Format follows the output extension: .exr | .png | .ppm (default).
+        std::string ext;
+        {
+            size_t dot = m_Config.outputPath.rfind('.');
+            if (dot != std::string::npos) ext = m_Config.outputPath.substr(dot + 1);
+            std::transform(ext.begin(), ext.end(), ext.begin(),
+                           [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
         }
 
-        file << "P6\n" << m_Config.width << " " << m_Config.height << "\n255\n";
+        if (ext == "exr") {
+            // EXR is the HDR interchange path: it receives the linear radiance
+            // buffer untouched. Tonemapping, grading, and transfer encoding
+            // are display concerns and deliberately do not apply here.
+            sirius::render::ImageBufferRGBA hdr(width, height);
+            std::memcpy(hdr.pixels.data(), m_Display.getFloatData(),
+                        pixelCount * 4 * sizeof(float));
 
-        const float* data = m_Display.getFloatData();
-        for (int y = 0; y < m_Config.height; ++y) {
-            for (int x = 0; x < m_Config.width; ++x) {
-                int idx = (y * m_Config.width + x) * 4;
-                unsigned char rgb[3] = {
-                    static_cast<unsigned char>(std::clamp(data[idx + 0], 0.0f, 1.0f) * 255.0f),
-                    static_cast<unsigned char>(std::clamp(data[idx + 1], 0.0f, 1.0f) * 255.0f),
-                    static_cast<unsigned char>(std::clamp(data[idx + 2], 0.0f, 1.0f) * 255.0f)
-                };
-                file.write(reinterpret_cast<char*>(rgb), 3);
+            sirius::render::EXRMetadata meta;
+            meta.metricType = metricInfo(m_Config.metricId).canonicalName;
+            meta.blackHoleMass = m_Config.blackHoleMass;
+            meta.blackHoleSpin = m_Config.blackHoleSpin;
+            meta.observerDistance = m_Config.observerDistance;
+            meta.observerInclination = m_Config.observerInclination * 180.0 / Math::PI;
+            meta.samplesPerPixel = m_Config.samplesPerPixel;
+
+            if (!sirius::render::EXRWriter::writeEXR(m_Config.outputPath, hdr, meta)) {
+                throw std::runtime_error("Failed to write EXR: " + m_Config.outputPath);
+            }
+        } else {
+            // Display pipeline: tonemap and grade to display-linear values.
+            // The transfer encode belongs to the writer, so it happens exactly
+            // once per format (PPM applies gamma below; PNG applies sRGB
+            // inside PNGWriter).
+            PostProcessConfig ppConfig;
+            ppConfig.tonemapper = m_Config.tonemapper;
+            ppConfig.exposure = m_Config.exposure;          // Default: 3.0
+            ppConfig.gamma = 1.0f;                          // Writers encode
+
+            // Bloom for accretion disk glow
+            ppConfig.enableBloom = m_Config.enableBloom;
+            ppConfig.bloomIntensity = m_Config.bloomIntensity;  // Default: 0.5
+            ppConfig.bloomThreshold = m_Config.bloomThreshold;  // Default: 0.3
+            ppConfig.bloomRadius = BLOOM_RADIUS;
+
+            // Color grading for cinematic look
+            ppConfig.saturation = m_Config.saturation;      // Default: 1.15
+            ppConfig.contrast = m_Config.contrast;          // Default: 1.1
+            ppConfig.lift = SHADOW_LIFT;
+            ppConfig.gain = 1.0f;
+
+            PostProcessor::process(m_Display.getFloatBuffer(), width, height, ppConfig);
+
+            const float* data = m_Display.getFloatData();
+
+            if (ext == "png") {
+                if (!sirius::render::PNGWriter::writeRGBA(m_Config.outputPath, width,
+                                                          height, data)) {
+                    throw std::runtime_error("Failed to write PNG: " + m_Config.outputPath);
+                }
+            } else {
+                if (ext != "ppm") {
+                    std::cout << "[Session] Unrecognised output extension '" << ext
+                              << "'; writing PPM data" << std::endl;
+                }
+                std::ofstream file(m_Config.outputPath, std::ios::binary);
+                if (!file) {
+                    throw std::runtime_error("Failed to open output file: " +
+                                             m_Config.outputPath);
+                }
+
+                file << "P6\n" << width << " " << height << "\n255\n";
+
+                constexpr float DISPLAY_GAMMA = 2.2f;
+                for (int y = 0; y < height; ++y) {
+                    for (int x = 0; x < width; ++x) {
+                        int idx = (y * width + x) * 4;
+                        unsigned char rgb[3];
+                        for (int c = 0; c < 3; ++c) {
+                            float v = std::clamp(data[idx + c], 0.0f, 1.0f);
+                            v = std::pow(v, 1.0f / DISPLAY_GAMMA);
+                            rgb[c] = static_cast<unsigned char>(
+                                std::clamp(v * 255.0f, 0.0f, 255.0f));
+                        }
+                        file.write(reinterpret_cast<char*>(rgb), 3);
+                    }
+                }
             }
         }
 
@@ -1107,6 +1164,16 @@ SessionConfig SessionConfig::fromSiriusConfig(const Configuration::SiriusConfig&
         std::cout << "[Session] Spin parameter clamped from " << sc.blackHoleSpin
                   << " to 0.998 (Thorne limit)" << std::endl;
         sc.blackHoleSpin = 0.998;
+    }
+    // Tonemapper string was validated at the config boundary; parse here.
+    {
+        const std::string& tm = config.postprocess.tonemapper;
+        if (tm == "ACES") sc.tonemapper = TonemapType::ACES;
+        else if (tm == "Reinhard") sc.tonemapper = TonemapType::Reinhard;
+        else if (tm == "Filmic" || tm == "Uncharted2") sc.tonemapper = TonemapType::Filmic;
+        else if (tm == "None" || tm == "Linear") sc.tonemapper = TonemapType::None;
+        else throw std::invalid_argument("SessionConfig: unvalidated tonemapper '" + tm +
+                                         "' reached the session boundary");
     }
     sc.blackHoleCharge = config.metric.charge;
     sc.cosmologicalConstant = config.metric.lambda;

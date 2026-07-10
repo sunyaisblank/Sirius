@@ -3,7 +3,6 @@
 # Compares rendering times at various resolutions
 
 SIRIUS_BIN="./bin/Sirius.Build/bin/Sirius"
-SIRIUS_RENDER="./bin/Sirius.Build/bin/SiriusRender"
 
 if [ ! -f "$SIRIUS_BIN" ]; then
     echo "Error: Sirius binary not found at $SIRIUS_BIN"
