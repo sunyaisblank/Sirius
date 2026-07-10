@@ -16,6 +16,7 @@
 
 // Physics integration
 #include "PHMT100A.h"  // Kerr-Schild metric family
+#include "PHMT102A.h"  // Alcubierre warp drive family
 #include "CMBS001A.h"  // Camera interface
 #include "GTRC001A.h"  // Geodesic tracer
 #include "PHJT001A.h"  // Relativistic jet model
@@ -331,7 +332,7 @@ private:
     CompletionCallback m_CompletionCallback;
 
     // Physics integration components (Priority 1 fix)
-    std::unique_ptr<KerrSchildFamily> m_Metric;
+    std::unique_ptr<IMetric> m_Metric;   ///< Constructed from MetricId; null when the CPU path cannot represent the metric
     std::unique_ptr<GeodesicTracer> m_Tracer;
     std::unique_ptr<PinholeCamera> m_Camera;
 

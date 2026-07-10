@@ -80,18 +80,46 @@ void RenderSession::initialise() {
         m_Progress.setTotals(m_Tiles.getTileCount(), m_Config.samplesPerPixel);
 
         // =================================================================
-        // Priority 1 Fix: Initialize physics components
+        // Physics components
         // =================================================================
 
-        // Create metric from config (Kerr-Schild family)
-        KerrSchildParams params;
-        params.M = m_Config.blackHoleMass;
-        params.a = m_Config.blackHoleSpin * m_Config.blackHoleMass;  // spin as a/M
-        params.Q = 0.0;  // No charge for now
-        params.Lambda = 0.0;  // No cosmological constant
-        m_Metric = std::make_unique<KerrSchildFamily>(params);
-        std::cout << "  Metric:     " << m_Metric->getName() << " (M=" << params.M
-                  << ", a=" << params.a << ")" << std::endl;
+        // Construct the spacetime from its registry identity. Charge and the
+        // cosmological constant flow through (the previous code hardcoded
+        // both to zero and ignored the metric name entirely, so exotic
+        // requests silently rendered a Kerr-Schild black hole on this path).
+        // A metric the CPU tracer cannot represent leaves m_Metric null; the
+        // scheduler then refuses the CPU path instead of substituting.
+        switch (m_Config.metricId) {
+            case MetricId::Alcubierre: {
+                WarpDriveParams wp;
+                wp.vs = m_Config.warpVelocity;
+                wp.R = m_Config.bubbleRadius;
+                wp.sigma = m_Config.bubbleSigma;
+                m_Metric = std::make_unique<WarpDriveFamily>(wp);
+                break;
+            }
+            case MetricId::MorrisThorne:
+                // Spherical-coordinate implementation, Cartesian tracer:
+                // incompatible without the recorded Cartesian embedding
+                // follow-up. GPU only (see PHMT200A).
+                m_Metric = nullptr;
+                break;
+            default: {
+                KerrSchildParams params;
+                params.M = m_Config.blackHoleMass;
+                params.a = m_Config.blackHoleSpin * m_Config.blackHoleMass;   // spin given as a/M
+                params.Q = m_Config.blackHoleCharge * m_Config.blackHoleMass; // charge given as Q/M
+                params.Lambda = m_Config.cosmologicalConstant;
+                m_Metric = std::make_unique<KerrSchildFamily>(params);
+                break;
+            }
+        }
+        if (m_Metric) {
+            std::cout << "  Metric:     " << m_Metric->getName() << std::endl;
+        } else {
+            std::cout << "  Metric:     " << metricInfo(m_Config.metricId).canonicalName
+                      << " (GPU backend only)" << std::endl;
+        }
 
         // Create camera
         CameraConfig camConfig;
@@ -119,11 +147,19 @@ void RenderSession::initialise() {
         tracerConfig.integrator.abs_tolerance = 5e-6f; // Moderate precision
         tracerConfig.integrator.rel_tolerance = 5e-6f;
 
-        // Compute ISCO for disk inner radius
+        // Compute ISCO for disk inner radius. The thin disk is a black-hole
+        // construct: horizonless spacetimes (Minkowski, de Sitter, warp
+        // bubbles) render lensing and background only.
+        const bool diskCapable =
+            m_Config.metricId == MetricId::Schwarzschild ||
+            m_Config.metricId == MetricId::Kerr ||
+            m_Config.metricId == MetricId::ReissnerNordstrom ||
+            m_Config.metricId == MetricId::KerrNewman ||
+            m_Config.metricId == MetricId::SchwarzschildDeSitter;
         auto rISCO = AccretionDiskD::computeISCO(m_Config.blackHoleSpin);
         tracerConfig.disk_inner = static_cast<float>(rISCO * m_Config.blackHoleMass);
         tracerConfig.disk_outer = static_cast<float>(20.0 * m_Config.blackHoleMass);
-        tracerConfig.enable_disk = true;
+        tracerConfig.enable_disk = diskCapable;
 
         // Phase 6: Volumetric disk configuration
         tracerConfig.enable_volumetric = m_Config.enableVolumetricDisk;
@@ -132,10 +168,14 @@ void RenderSession::initialise() {
         tracerConfig.volumetric_tau_midplane = m_Config.volumetricTauMidplane;
         tracerConfig.volumetric_samples = m_Config.volumetricSamples;
 
-        m_Tracer = std::make_unique<GeodesicTracer>(m_Metric.get(), tracerConfig);
-        std::cout << "  Disk:       r_in=" << tracerConfig.disk_inner << "M, r_out="
-                  << tracerConfig.disk_outer << "M" << std::endl;
-        std::cout << "[Session] Physics engine initialized (geodesic integration enabled)" << std::endl;
+        if (m_Metric) {
+            m_Tracer = std::make_unique<GeodesicTracer>(m_Metric.get(), tracerConfig);
+            if (diskCapable) {
+                std::cout << "  Disk:       r_in=" << tracerConfig.disk_inner << "M, r_out="
+                          << tracerConfig.disk_outer << "M" << std::endl;
+            }
+            std::cout << "[Session] Physics engine initialized (geodesic integration enabled)" << std::endl;
+        }
 
         // =================================================================
         // Phase 7: Initialize Relativistic Jets
@@ -189,8 +229,10 @@ void RenderSession::initialise() {
             // Create per-thread tracers (they share the metric but each has its own state)
             m_ThreadTracers.clear();
             m_ThreadTracers.reserve(m_NumThreads);
-            for (int i = 0; i < m_NumThreads; ++i) {
-                m_ThreadTracers.push_back(std::make_unique<GeodesicTracer>(m_Metric.get(), tracerConfig));
+            if (m_Metric) {
+                for (int i = 0; i < m_NumThreads; ++i) {
+                    m_ThreadTracers.push_back(std::make_unique<GeodesicTracer>(m_Metric.get(), tracerConfig));
+                }
             }
 
             std::cout << "[Session] Multi-threaded rendering enabled: " << m_NumThreads << " threads" << std::endl;
@@ -288,6 +330,17 @@ void RenderSession::scheduleNextTile() {
     // GPU rendering (single launch for entire frame)
     if (m_UseGPU && m_Accelerator && m_Accelerator->isInitialised()) {
         renderGPU();
+        return;
+    }
+
+    // The CPU path needs a CPU-representable metric; refuse rather than
+    // render a different spacetime.
+    if (!m_Metric) {
+        m_ErrorMessage = "Metric '" +
+            std::string(metricInfo(m_Config.metricId).canonicalName) +
+            "' is not supported on the CPU backend (GPU/OptiX required)";
+        std::cerr << "[Session] " << m_ErrorMessage << std::endl;
+        m_FSM.process(SessionEvent::Error);
         return;
     }
 
