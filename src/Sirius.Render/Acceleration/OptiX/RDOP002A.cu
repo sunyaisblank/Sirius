@@ -904,7 +904,10 @@ __device__ GeodesicState hamiltonianToGeodesic(
 
 //------------------------------------------------------------------------------
 // MAIN SYMPLECTIC INTEGRATOR INTERFACE
-// Drop-in replacement for integrateGeodesicRK45 for Kerr metric
+// NOT ON THE RENDER PATH: no call site instantiates this; the render loop
+// uses RK45 with an RK4 fallback. Kept as the candidate for a future
+// conservation-preserving integrator; removal or wiring is a recorded
+// follow-up that needs a compiler and golden renders to decide.
 //------------------------------------------------------------------------------
 __device__ GeodesicState integrateGeodesicSymplectic(
     const GeodesicState& state,
@@ -3134,20 +3137,27 @@ __device__ __forceinline__ void getMetricTensor(const Vec4& x,
         // Kerr-Schild: horizon-penetrating coordinates
         getKerrSchildMetric(x, mp.M, mp.a, g, g_inv);
     } else if constexpr (type == Sirius::MetricType::EllisDrainhole) {
-        // Ellis wormhole: m=mass-like, n=throat radius (use M and Q as proxies)
-        float m_param = mp.M * 0.5f;  // Scale down
-        float n_param = mp.M;         // Throat at ~M
-        getEllisDrainholeMetric(x, m_param, n_param, g, g_inv);
+        // Metric and connection must come from the same implementation with
+        // the same parameters. Previously this evaluated an Ellis drainhole
+        // with mass-derived proxy parameters while the Christoffel dispatch
+        // used Morris-Thorne with the configured throat radius, so force and
+        // geometry described different wormholes.
+        getMorrisThorneMetric(x, mp.morrisThorne.b0, mp.morrisThorne.redshiftPhi,
+                              WormholeShape::Ellis, g, g_inv);
     } else if constexpr (type == Sirius::MetricType::Alcubierre) {
-        // Alcubierre warp drive: vs=velocity, sigma=wall thickness, R=bubble radius
-        float vs = 2.0f;      // Default superluminal
-        float sigma = 1.0f;   // Wall thickness
-        float R = 2.0f * mp.M;  // Bubble radius scales with M
-        getAlcubierreMetric(x, vs, sigma, R, g, g_inv);
+        // Same pairing rule: the Christoffel dispatch uses the configured
+        // warp parameters with a static bubble at the origin; previously the
+        // metric hardcoded vs=2, sigma=1, R=2M and moved the bubble with t.
+        Vec4Cart x_cart = vec4SphToCart(x);
+        getWarpDriveMetric(x_cart, mp.warpDrive.vs, mp.warpDrive.sigma, mp.warpDrive.R,
+                           0.0f, 0.0f, 0.0f, g, g_inv);
     } else if constexpr (type == Sirius::MetricType::DeSitter) {
-        // de Sitter: Lambda cosmological constant (use Q as proxy)
-        float Lambda = (mp.Q != 0.0f) ? mp.Q : 0.01f;
-        getDeSitterMetric(x, Lambda, g, g_inv);
+        // Lambda comes from mp.Lambda, matching the Christoffel dispatch
+        // (previously this read mp.Q as a proxy, so force and geometry used
+        // two different cosmological constants). Known residual: this static
+        // form pairs with Kerr-Schild-form Christoffels; unifying the forms
+        // is required before the GPU backend advertises de Sitter support.
+        getDeSitterMetric(x, mp.Lambda, g, g_inv);
     } else {
         getMinkowskiMetric(x, g, g_inv);
     }
@@ -4075,6 +4085,15 @@ __device__ void getChristoffelSymbols(const Vec4& x,
                                    (WormholeShape)0 /*Ellis*/, Gamma);
         return;
     }
+
+    // Types without analytic Christoffels (Godel, Taub-NUT) fall through to a
+    // zero connection. They are unselectable from the CLI (the registry does
+    // not route them), and previously this fall-through left Gamma
+    // uninitialised, which is undefined behaviour on any instantiation.
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j++)
+            for (int k = 0; k < 4; k++)
+                Gamma[i][j][k] = 0.0f;
 }
 
 //==============================================================================
@@ -4193,6 +4212,20 @@ __device__ void getChristoffelByFamily(
             break;
         }
     }
+}
+
+//==============================================================================
+// Photon-Sphere Radius (single authority)
+// Bardeen-Press-Teukolsky prograde circular photon orbit:
+//   r_ph = 2M [1 + cos((2/3) arccos(-a/M))]
+// Reduces to 3M at a = 0 and to M at a = M. Every consumer (step control,
+// photon-ring glow, critical-curve proximity) uses this one expression;
+// previously three sites carried three drifted variants.
+//==============================================================================
+__device__ __forceinline__ float kerrPhotonSphereRadius(float M, float a) {
+    float aOverM = a / fmaxf(M, 1e-6f);
+    aOverM = clamp(aOverM, -0.998f, 0.998f);
+    return 2.0f * M * (1.0f + cosf((2.0f / 3.0f) * acosf(-aOverM)));
 }
 
 //==============================================================================
@@ -5081,6 +5114,25 @@ __device__ void raygen_renderFrame_impl() {
             horizonRadius = M;  // Naked singularity fallback
         }
         horizonRadius *= 1.12f;  // Increased buffer to eliminate shadow specs
+    } else if constexpr (type == Sirius::MetricType::EllisDrainhole ||
+                          type == Sirius::MetricType::Alcubierre ||
+                          type == Sirius::MetricType::DeSitter ||
+                          type == Sirius::MetricType::Godel ||
+                          type == Sirius::MetricType::TaubNUT) {
+        // No capture surface: wormholes have a traversable throat, warp
+        // bubbles and Godel/Taub-NUT have no event horizon at r > 0, and the
+        // de Sitter cosmological horizon is handled by the escape distance.
+        // Previously these all inherited a Schwarzschild 2M capture radius,
+        // which swallowed rays that should have traversed the geometry.
+        horizonRadius = 0.0f;
+    } else if constexpr (type == Sirius::MetricType::KerrSchild) {
+        // Full family horizon: r_+ = M + sqrt(M^2 - a^2 - Q^2)
+        float M = params.metricParams.M;
+        float a = params.metricParams.a;
+        float Q = params.metricParams.Q;
+        float discriminant = M * M - a * a - Q * Q;
+        horizonRadius = (discriminant > 0.0f) ? (M + sqrtf(discriminant)) : M;
+        horizonRadius *= 1.12f;  // Same buffer as the other capture branches
     } else {
         // Schwarzschild: r_s = 2M
         horizonRadius = 2.0f * params.metricParams.M * 1.12f;  // Increased buffer to eliminate shadow specs
@@ -5189,9 +5241,7 @@ __device__ void raygen_renderFrame_impl() {
             float a = params.metricParams.a;
             float r_photon;
             if constexpr (type == Sirius::MetricType::Kerr) {
-                // Kerr prograde photon orbit (conservative bound for step tightening)
-                float a_over_M = clamp(a / M, -0.998f, 0.998f);
-                r_photon = 2.0f * M * (1.0f + cosf(0.6667f * acosf(-a_over_M)));
+                r_photon = kerrPhotonSphereRadius(M, a);
             } else {
                 // Schwarzschild photon sphere at r = 3M
                 r_photon = 3.0f * M;
@@ -5275,12 +5325,10 @@ __device__ void raygen_renderFrame_impl() {
             // =================================================================
             // INTEGRATOR DISPATCH
             // =================================================================
-            // Select between:
-            //   - Symplectic: Time-Transformed Explicit Symplectic (Kerr - primary)
-            //   - RK4: Fixed-step Runge-Kutta (fallback for other metrics)
-            //
-            // NOTE: RK45 adaptive integrator has been removed (Jan 2026)
-            // Per user requirements, TTESI symplectic is the exclusive method.
+            // RK45 Dormand-Prince (adaptive) is the primary integrator, with
+            // fixed-step RK4 as the forced-minimum-step fallback below. The
+            // TTESI symplectic implementation earlier in this file is not on
+            // this path (see its annotation).
             // =================================================================
             
             // Use RK45 Dormand-Prince adaptive integrator for all metrics
@@ -5449,14 +5497,9 @@ __device__ void raygen_renderFrame_impl() {
                       type == Sirius::MetricType::ReissnerNordstrom) {
             
             float M = params.metricParams.M;
-            float photonSphereR = 1.5f * (2.0f * M);  // r = 3M for Schwarzschild
-            
-            // Kerr: photon sphere varies with spin, but 3M is approximate
+            float photonSphereR = 3.0f * M;  // Schwarzschild photon sphere
             if constexpr (type == Sirius::MetricType::Kerr) {
-                float a = params.metricParams.a;
-                // Prograde photon orbit: r_ph = 2M(1 + cos(2/3 * arccos(-a/M)))
-                // Simplified approximation: ranges from 1M (a=M) to 3M (a=0)
-                photonSphereR = 3.0f * M * (1.0f - 0.5f * fabsf(a) / M);
+                photonSphereR = kerrPhotonSphereRadius(M, params.metricParams.a);
             }
             
             // Calculate distance to photon sphere
@@ -6218,8 +6261,7 @@ __device__ void raygen_renderFrame_impl() {
         // Kerr prograde: r_ph = 2M(1 + cos(2/3 * acos(-a/M)))
         float r_photon = 3.0f * M;
         if constexpr (type == Sirius::MetricType::Kerr) {
-            float aOverM = clamp(a / M, -0.999f, 0.999f);
-            r_photon = 2.0f * M * (1.0f + cosf(0.667f * acosf(-aOverM)));
+            r_photon = kerrPhotonSphereRadius(M, a);
         }
 
         // Critical curve proximity (how close ray came to photon sphere)

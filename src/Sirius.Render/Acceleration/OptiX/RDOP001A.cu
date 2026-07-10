@@ -524,7 +524,15 @@ public:
         }
         
         std::cout << "[OptiX] Uploading Christoffel textures..." << std::endl;
-        
+
+        // Re-uploads (metric updates, animation) must release the previous
+        // 40 arrays and texture objects before the slots are overwritten;
+        // previously cleanup ran only in the destructor, leaking a full
+        // texture set per upload.
+        if (m_ChristoffelTextures.initialized) {
+            m_ChristoffelTextures.cleanup();
+        }
+
         // Upload all 40 components as 3D textures
         // Track arrays and textures for proper cleanup
         for (int mu = 0; mu < 4; mu++) {
@@ -948,7 +956,7 @@ void OptixRenderer::buildSBT() {
     //--------------------------------------------------------------------------
     // Ray generation records - one for each metric type (must match m_RaygenPGs.size())
     //--------------------------------------------------------------------------
-    const size_t numRaygenPrograms = m_RaygenPGs.size();  // Should be 7
+    const size_t numRaygenPrograms = m_RaygenPGs.size();  // One record per raygen program group
     m_RaygenRecords.resize(numRaygenPrograms);
     for(size_t i = 0; i < numRaygenPrograms; ++i) {
         RayGenRecord raygenRecord;
@@ -1230,12 +1238,16 @@ bool OptixRenderer::uploadBackgroundTexture(const unsigned char* data, int width
 // Set Metric Type (Kernel Switch)
 //==============================================================================
 void Sirius::OptixRenderer::setMetricType(int type) {
-    if (type >= 0 && type < m_RaygenRecords.size()) {
+    // launch() passes m_SBT to optixLaunch, so swapping the raygen record
+    // here is sufficient; no SBT rebuild is required.
+    if (type >= 0 && static_cast<size_t>(type) < m_RaygenRecords.size()) {
         m_SBT.raygenRecord = m_RaygenRecords[type];
-        // Note: We don't need to rebuild SBT, just updating the host pointer struct is enough?
-        // Wait, m_SBT is OptixShaderBindingTable struct passed to optixLaunch.
-        // We modify it here, and verify launch uses it.
-        // Yes, launch() calls optixLaunch(..., &m_SBT).
+    } else {
+        // An out-of-range type previously no-opped silently, leaving the
+        // previous metric's raygen program active.
+        std::cerr << "[OptiX] setMetricType(" << type << ") out of range (0-"
+                  << (m_RaygenRecords.size() - 1) << "); keeping current metric"
+                  << std::endl;
     }
 }
 
@@ -1376,7 +1388,12 @@ void sirius_optix_destroy(SiriusOptixHandle handle) {
 }
 
 bool sirius_optix_initialize(SiriusOptixHandle handle, int width, int height) {
-    return static_cast<Sirius::OptixRenderer*>(handle)->initialize(width, height);
+    try {
+        return static_cast<Sirius::OptixRenderer*>(handle)->initialize(width, height);
+    } catch (const std::exception& e) {
+        std::cerr << "[OptiX] initialize failed: " << e.what() << std::endl;
+        return false;
+    }
 }
 
 bool sirius_optix_create_pipeline(SiriusOptixHandle handle, const char* ptxPath) {
@@ -1391,16 +1408,31 @@ bool sirius_optix_create_pipeline(SiriusOptixHandle handle, const char* ptxPath)
     return true;
 }
 
+// OPTIX_CHECK/CUDA_CHECK throw; an exception crossing this extern "C"
+// boundary is undefined behaviour, so every wrapper catches and reports.
+
 void sirius_optix_launch(SiriusOptixHandle handle, const Sirius::LaunchParams* params) {
-    static_cast<Sirius::OptixRenderer*>(handle)->launch(*params);
+    try {
+        static_cast<Sirius::OptixRenderer*>(handle)->launch(*params);
+    } catch (const std::exception& e) {
+        std::cerr << "[OptiX] launch failed: " << e.what() << std::endl;
+    }
 }
 
 void sirius_optix_update_display(SiriusOptixHandle handle) {
-    static_cast<Sirius::OptixRenderer*>(handle)->updateDisplay();
+    try {
+        static_cast<Sirius::OptixRenderer*>(handle)->updateDisplay();
+    } catch (const std::exception& e) {
+        std::cerr << "[OptiX] updateDisplay failed: " << e.what() << std::endl;
+    }
 }
 
 void sirius_optix_resize(SiriusOptixHandle handle, int width, int height) {
-    static_cast<Sirius::OptixRenderer*>(handle)->resize(width, height);
+    try {
+        static_cast<Sirius::OptixRenderer*>(handle)->resize(width, height);
+    } catch (const std::exception& e) {
+        std::cerr << "[OptiX] resize failed: " << e.what() << std::endl;
+    }
 }
 
 void sirius_optix_set_metric_type(SiriusOptixHandle handle, int type) {
@@ -1408,7 +1440,11 @@ void sirius_optix_set_metric_type(SiriusOptixHandle handle, int type) {
 }
 
 void sirius_optix_cleanup(SiriusOptixHandle handle) {
-    static_cast<Sirius::OptixRenderer*>(handle)->cleanup();
+    try {
+        static_cast<Sirius::OptixRenderer*>(handle)->cleanup();
+    } catch (const std::exception& e) {
+        std::cerr << "[OptiX] cleanup failed: " << e.what() << std::endl;
+    }
 }
 
 float* sirius_optix_get_frame_buffer(SiriusOptixHandle handle) {

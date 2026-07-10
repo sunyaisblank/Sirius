@@ -640,45 +640,6 @@ struct VolumetricDiskParamsGPU {
 };
 
 //==============================================================================
-// MHD Jet Parameters (GPU-compatible)
-// Relativistic jet with magnetic field structure
-//==============================================================================
-struct JetMHDParamsGPU {
-    // Magnetic field
-    float B_base;
-    float power_law_index;
-    float B_field_order;
-    float padding1;
-
-    // Geometry
-    float opening_angle;
-    float z_launch;
-    float z_max;
-    float collimation;
-
-    // Kinematics
-    float lorentz_factor;
-    float beta;
-    float velocity_profile;
-    float padding2;
-
-    // Electron distribution
-    float electron_index;
-    float spectral_index;
-    float gamma_min;
-    float gamma_max;
-    float n_e_0;
-    float n_e_decay;
-    float intensity_scale;
-    float max_polarisation;
-
-    // Flags
-    uint32_t enabled;
-    uint32_t enable_polarisation;
-    uint32_t padding3[2];
-};
-
-//==============================================================================
 // Starfield Parameters (GPU-compatible)
 // Depth-resolved stellar catalog with parallax
 //==============================================================================
@@ -807,7 +768,6 @@ struct LaunchParamsExtended {
     // === Cinematic Expansion (2026) ===
     SMBHParamsGPU smbh;
     VolumetricDiskParamsGPU volumetricDisk;
-    JetMHDParamsGPU jetMHD;
     StarfieldParamsGPU starfield;
     FilmParamsGPU film;
 
@@ -875,9 +835,6 @@ struct LaunchParams {
 
     // Volumetric disk with turbulence and corona
     VolumetricDiskParamsGPU volumetricDisk;
-
-    // MHD relativistic jet
-    JetMHDParamsGPU jetMHD;
 
     // Depth-resolved starfield
     StarfieldParamsGPU starfield;
@@ -1126,31 +1083,6 @@ inline LaunchParams createDefaultLaunchParams() {
     params.volumetricDisk.corona.comptonization_y = 0.8f;
     params.volumetricDisk.corona.spectral_index = 1.7f;
     params.volumetricDisk.corona.enabled = 0;
-
-    // MHD Jet defaults
-    params.jetMHD.B_base = 1e4f;
-    params.jetMHD.power_law_index = 1.0f;
-    params.jetMHD.B_field_order = 0.5f;
-    params.jetMHD.padding1 = 0.0f;
-    params.jetMHD.opening_angle = 0.1f;
-    params.jetMHD.z_launch = 3.0f;
-    params.jetMHD.z_max = 200.0f;
-    params.jetMHD.collimation = 0.5f;
-    params.jetMHD.lorentz_factor = 5.0f;
-    params.jetMHD.beta = 0.98f;
-    params.jetMHD.velocity_profile = 0.0f;
-    params.jetMHD.padding2 = 0.0f;
-    params.jetMHD.electron_index = 2.2f;
-    params.jetMHD.spectral_index = 0.6f;
-    params.jetMHD.gamma_min = 10.0f;
-    params.jetMHD.gamma_max = 1e6f;
-    params.jetMHD.n_e_0 = 1e5f;
-    params.jetMHD.n_e_decay = 2.0f;
-    params.jetMHD.intensity_scale = 1.0f;
-    params.jetMHD.max_polarisation = 0.7f;
-    params.jetMHD.enabled = 0;  // Disabled by default
-    params.jetMHD.enable_polarisation = 1;
-    params.jetMHD.padding3[0] = params.jetMHD.padding3[1] = 0;
 
     // Starfield defaults
     params.starfield.star_buffer = 0;  // No buffer allocated
