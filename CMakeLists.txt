@@ -162,33 +162,6 @@ foreach(OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
     )
 endforeach()
 
-# === Plugins ===
-set(PLUGIN_OUTPUT_PATH "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/plugins")
-file(MAKE_DIRECTORY ${PLUGIN_OUTPUT_PATH})
-
-macro(add_metric_plugin PLUGIN_NAME SOURCE_FILE)
-    add_library(${PLUGIN_NAME} SHARED ${SOURCE_FILE})
-    target_include_directories(${PLUGIN_NAME} PRIVATE 
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Core/Metric"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Core/Tensor"
-        "${CMAKE_CURRENT_SOURCE_DIR}/lib/glm"
-    )
-    target_link_libraries(${PLUGIN_NAME} PRIVATE SiriusCore)
-    set_target_properties(${PLUGIN_NAME} PROPERTIES 
-        LIBRARY_OUTPUT_DIRECTORY "${PLUGIN_OUTPUT_PATH}" 
-        RUNTIME_OUTPUT_DIRECTORY "${PLUGIN_OUTPUT_PATH}"
-        ARCHIVE_OUTPUT_DIRECTORY "${PLUGIN_OUTPUT_PATH}"
-    )
-    foreach(OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
-        string(TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG_UPPER)
-        set_target_properties(${PLUGIN_NAME} PROPERTIES
-            RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG_UPPER} "${PLUGIN_OUTPUT_PATH}/${OUTPUTCONFIG}"
-            LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG_UPPER} "${PLUGIN_OUTPUT_PATH}/${OUTPUTCONFIG}"
-            ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG_UPPER} "${PLUGIN_OUTPUT_PATH}/${OUTPUTCONFIG}"
-        )
-    endforeach()
-endmacro()
-
 # =============================================================================
 # OptiX Render Backend
 # =============================================================================
@@ -347,17 +320,6 @@ add_executable(Sirius
     # Infrastructure - Session (FSM-based render pipeline)
     src/Sirius.Infrastructure/Session/SNRS001A.cpp
 
-    # Infrastructure - Interface (ImGui)
-    src/Sirius.Infrastructure/Interface/UIMN001A.cpp
-
-    # Infrastructure - Window (GLFW)
-    src/Sirius.Infrastructure/Window/CRWN001A.cpp
-
-    # Infrastructure - Plugin (metric management)
-    src/Sirius.Infrastructure/Plugin/CRPM001A.cpp
-
-    # Core (camera)
-
     # Render pipeline
     src/Sirius.Render/Pipeline/RDRT001A.cpp
     src/Sirius.Render/Pipeline/RDST001A.cpp
@@ -370,13 +332,6 @@ add_executable(Sirius
 
     # External dependencies
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/glad/src/glad.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/imgui.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/imgui_draw.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/imgui_tables.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/imgui_widgets.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/imgui_demo.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/backends/imgui_impl_glfw.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/backends/imgui_impl_opengl3.cpp
 )
 
 target_include_directories(Sirius PRIVATE
@@ -396,7 +351,6 @@ target_include_directories(Sirius PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Core/PostProcess"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/Pipeline"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/Integration"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/OptiX"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/Acceleration/Backend"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Render/Acceleration/OptiX"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Infrastructure"
@@ -405,12 +359,7 @@ target_include_directories(Sirius PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Infrastructure/Configuration"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Infrastructure/Platform"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Infrastructure/Session"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Infrastructure/Interface"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Infrastructure/Window"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Infrastructure/Plugin"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Sirius.Infrastructure/Viewer"
-    "${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui"
-    "${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui/backends"
     "${CMAKE_CURRENT_SOURCE_DIR}/lib/glm"
     "${CMAKE_CURRENT_SOURCE_DIR}/lib/glad/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/lib/stb"
@@ -456,10 +405,6 @@ set_target_properties(Sirius PROPERTIES
     INSTALL_RPATH "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
 )
 
-if(NOT IS_WINDOWS)
-    target_link_libraries(Sirius PRIVATE dl)
-endif()
-
 # === Resource Copying ===
 set(RESOURCE_DIR "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Sirius.Render")
 file(MAKE_DIRECTORY ${RESOURCE_DIR})
@@ -487,17 +432,11 @@ else()
 endif()
 
 message(STATUS "")
-message(STATUS "Features:")
-message(STATUS "- OpenGL 4.6 Compute Shader GPU acceleration")
 if(SIRIUS_HAS_OPTIX)
-    message(STATUS "- OptiX ${OptiX_INSTALL_DIR} RTX ray tracing backend [ENABLED]")
+    message(STATUS "- OptiX RTX ray tracing backend [ENABLED] (${OptiX_INSTALL_DIR})")
 else()
-    message(STATUS "- OptiX RTX ray tracing backend [DISABLED]")
+    message(STATUS "- OptiX RTX ray tracing backend [DISABLED] - CPU path only")
 endif()
-message(STATUS "- Geodesic integration with Christoffel symbols")
-message(STATUS "- Multiple spacetime metrics (Minkowski, Schwarzschild, Kerr, RN)")
-message(STATUS "- Full relativistic redshift calculation")
-message(STATUS "- Adaptive step size geodesic integration")
 message(STATUS "=========================================")
 
 # === Testing ===

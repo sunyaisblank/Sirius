@@ -204,7 +204,7 @@ jobs:
           # Check for files that shouldn't be committed
           FOUND=0
           
-          for pattern in "debug_*.glsl" "*.log" "imgui.ini"; do
+          for pattern in "debug_*.glsl" "*.log" "build_log*"; do
             files=$(find . -name "$pattern" -not -path "./Sirius.Build/*" 2>/dev/null)
             if [ -n "$files" ]; then
               echo "Found debug artifact: $files"
