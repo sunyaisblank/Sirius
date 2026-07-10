@@ -93,7 +93,7 @@ inline double wienPeakWavelength(double T) {
 /// @param T Temperature in Kelvin
 /// @return Total radiance in W/m²
 inline double stefanBoltzmannRadiance(double T) {
-    constexpr double SIGMA = 5.670374419e-8;  // Stefan-Boltzmann constant
+    constexpr double SIGMA = Constants::Physical::SIGMA_SB;
     return SIGMA * std::pow(T, 4);
 }
 

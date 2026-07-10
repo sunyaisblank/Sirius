@@ -4,6 +4,7 @@
 // =============================================================================
 
 #include "GTRC001A.h"
+#include "PHAD001A.h"  // AccretionDiskD::computeISCO (single ISCO authority)
 #include <iostream>
 #include <algorithm>
 
@@ -153,9 +154,6 @@ TraceResult GeodesicTracer::trace(const CameraRay& camera_ray) {
         result.numerical_failure = true;
         return result;
     }
-
-    // Compute horizon radius
-    float r_horizon = computeHorizonRadius();
 
     // =========================================================================
     // Photon Sphere Radius (Exact Kerr Formula)
@@ -355,8 +353,11 @@ TraceResult GeodesicTracer::trace(const CameraRay& camera_ray) {
         // Check Termination Conditions
         // =====================================================================
 
-        // 1. Horizon capture
-        if (r < r_horizon) {
+        // 1. Horizon capture. The metric decides in its own coordinates: for
+        // Kerr-Schild this compares the Kerr radial coordinate against r+, so
+        // the oblate horizon is placed exactly even at high spin (a
+        // Cartesian-norm comparison misplaces it near the equator).
+        if (m_Metric->insideCaptureSurface(ray.position, m_Config.horizon_factor - 1.0)) {
             result.outcome = TraceResult::Outcome::HORIZON;
             result.final_position(0) = ray.position(0);
             result.final_position(1) = ray.position(1);
@@ -600,41 +601,9 @@ TraceResult GeodesicTracer::trace(const CameraRay& camera_ray, double mass, doub
     m_Metric->setParameter("spin", spin / mass);  // Store as a/M
     cacheMetricParameters();
 
-    // Update disk inner radius (ISCO) for new spin
-    // ISCO for Kerr: r_isco = M * (3 + Z2 - sqrt((3-Z1)(3+Z1+2*Z2)))
-    // where Z1 = 1 + (1-a²)^(1/3)[(1+a)^(1/3) + (1-a)^(1/3)]
-    //       Z2 = sqrt(3*a² + Z1²)
-    // For prograde orbits with a > 0
-    double a = spin;
-    double M = mass;
-
-    if (std::abs(a) < 1e-10) {
-        m_Config.disk_inner = static_cast<float>(6.0 * M);  // Schwarzschild ISCO
-    } else {
-        double a_over_M = a / M;
-        double one_minus_a2 = 1.0 - a_over_M * a_over_M;
-
-        // Clamp for numerical stability
-        one_minus_a2 = std::max(one_minus_a2, 1e-10);
-
-        double cbrt_1_minus_a2 = std::cbrt(one_minus_a2);
-        double cbrt_1_plus_a = std::cbrt(1.0 + a_over_M);
-        double cbrt_1_minus_a = std::cbrt(1.0 - a_over_M);
-
-        double Z1 = 1.0 + cbrt_1_minus_a2 * (cbrt_1_plus_a + cbrt_1_minus_a);
-        double Z2 = std::sqrt(3.0 * a_over_M * a_over_M + Z1 * Z1);
-
-        double r_isco;
-        if (a_over_M >= 0) {
-            // Prograde ISCO
-            r_isco = M * (3.0 + Z2 - std::sqrt((3.0 - Z1) * (3.0 + Z1 + 2.0 * Z2)));
-        } else {
-            // Retrograde ISCO
-            r_isco = M * (3.0 + Z2 + std::sqrt((3.0 - Z1) * (3.0 + Z1 + 2.0 * Z2)));
-        }
-
-        m_Config.disk_inner = static_cast<float>(r_isco);
-    }
+    // Update disk inner radius to the ISCO for the new spin; the Bardeen
+    // formula lives in one place (AccretionDiskD::computeISCO, units of M).
+    m_Config.disk_inner = static_cast<float>(AccretionDiskD::computeISCO(spin / mass) * mass);
 
     return trace(camera_ray);
 }

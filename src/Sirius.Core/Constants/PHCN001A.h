@@ -112,6 +112,32 @@ constexpr double PHI_WRAP_TOL = 1e-10;
 } // namespace Coordinates
 
 // =============================================================================
+// Ray Termination Thresholds (Cartesian Kerr-Schild coordinates, units of M)
+// =============================================================================
+
+namespace Termination {
+
+/// @brief Early-exit radius: a ray beyond this and moving outward is treated
+/// as escaped (the geodesic is essentially straight in the asymptotic region)
+constexpr double ESCAPE_RADIUS = 50.0;
+
+/// @brief Unconditional background radius: beyond this the ray has escaped
+/// regardless of direction
+constexpr double BACKGROUND_RADIUS = 100.0;
+
+/// @brief Relative margin on the capture surface: terminate at
+/// r <= r_horizon * (1 + CAPTURE_MARGIN)
+constexpr double CAPTURE_MARGIN = 0.05;
+
+/// @brief Affine-parameter budget per ray; prevents runaway integration
+constexpr double MAX_AFFINE_PARAMETER = 100.0;
+
+/// @brief Velocity magnitude below which a ray is considered stuck
+constexpr double STALLED_VELOCITY = 1e-8;
+
+} // namespace Termination
+
+// =============================================================================
 // Metric Tensor Tolerances
 // Reference: docs/specification.md Section "Invariants"
 // =============================================================================

@@ -42,7 +42,7 @@ namespace PhysicalConstants {
     constexpr double year = 3.15576e7;          // Year [s]
     constexpr double k_B = 1.380649e-23;        // Boltzmann constant [J/K]
     constexpr double h = 6.62607015e-34;        // Planck constant [J·s]
-    constexpr double sigma_SB = 5.670374e-8;    // Stefan-Boltzmann [W/(m²·K⁴)]
+    constexpr double sigma_SB = 5.670374419e-8; // Stefan-Boltzmann [W/(m²·K⁴)] (CODATA 2018, matches Constants::Physical::SIGMA_SB)
 }
 
 //==============================================================================

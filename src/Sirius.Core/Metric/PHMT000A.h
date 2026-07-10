@@ -45,6 +45,28 @@ public:
 
     /// @brief Get human-readable metric name
     virtual const char* getName() const = 0;
+
+    /// @brief Analytic inverse metric, where the family has a closed form
+    /// @param pos 4-position at which to evaluate g^μν
+    /// @param g_inv [out] Inverse metric; only written when returning true
+    /// @return true when an exact closed form was supplied; false directs the
+    ///         caller to invert the evaluated metric via TensorOps::inverse
+    virtual bool inverseMetric(const Tensor<double, 4>& pos, Metric4D& g_inv) const {
+        (void)pos; (void)g_inv;
+        return false;
+    }
+
+    /// @brief Capture-surface test in the metric's own coordinates
+    /// @param pos 4-position to test
+    /// @param margin Relative safety margin on the capture radius (0.05 means
+    ///        terminate at 1.05 times the horizon radius)
+    /// @return true when a ray at pos can no longer escape and integration
+    ///         should stop. Horizonless spacetimes (wormholes, warp bubbles,
+    ///         flat space) keep the default false.
+    virtual bool insideCaptureSurface(const Tensor<double, 4>& pos, double margin) const {
+        (void)pos; (void)margin;
+        return false;
+    }
 };
 
 // =============================================================================

@@ -80,103 +80,17 @@ namespace DP45 {
 
 namespace Sirius {
 
-// Helper: Compute inverse of 4x4 metric using Cramer's rule
-static void invertMetric4x4(const double m[4][4], double g_inv[4][4]) {
-    // Compute 2x2 minors for cofactor expansion
-    double A2323 = m[2][2] * m[3][3] - m[2][3] * m[3][2];
-    double A1323 = m[2][1] * m[3][3] - m[2][3] * m[3][1];
-    double A1223 = m[2][1] * m[3][2] - m[2][2] * m[3][1];
-    double A0323 = m[2][0] * m[3][3] - m[2][3] * m[3][0];
-    double A0223 = m[2][0] * m[3][2] - m[2][2] * m[3][0];
-    double A0123 = m[2][0] * m[3][1] - m[2][1] * m[3][0];
-    double A2313 = m[1][2] * m[3][3] - m[1][3] * m[3][2];
-    double A1313 = m[1][1] * m[3][3] - m[1][3] * m[3][1];
-    double A1213 = m[1][1] * m[3][2] - m[1][2] * m[3][1];
-    double A2312 = m[1][2] * m[2][3] - m[1][3] * m[2][2];
-    double A1312 = m[1][1] * m[2][3] - m[1][3] * m[2][1];
-    double A1212 = m[1][1] * m[2][2] - m[1][2] * m[2][1];
-    double A0313 = m[1][0] * m[3][3] - m[1][3] * m[3][0];
-    double A0213 = m[1][0] * m[3][2] - m[1][2] * m[3][0];
-    double A0312 = m[1][0] * m[2][3] - m[1][3] * m[2][0];
-    double A0212 = m[1][0] * m[2][2] - m[1][2] * m[2][0];
-    double A0113 = m[1][0] * m[3][1] - m[1][1] * m[3][0];
-    double A0112 = m[1][0] * m[2][1] - m[1][1] * m[2][0];
-
-    double det = m[0][0] * (m[1][1] * A2323 - m[1][2] * A1323 + m[1][3] * A1223)
-               - m[0][1] * (m[1][0] * A2323 - m[1][2] * A0323 + m[1][3] * A0223)
-               + m[0][2] * (m[1][0] * A1323 - m[1][1] * A0323 + m[1][3] * A0123)
-               - m[0][3] * (m[1][0] * A1223 - m[1][1] * A0223 + m[1][2] * A0123);
-    
-    if (std::abs(det) < Constants::Tolerances::METRIC_INVERSION_EPS) {
-        // Degenerate metric - fall back to Minkowski
-        for (int i = 0; i < 4; i++)
-            for (int j = 0; j < 4; j++)
-                g_inv[i][j] = (i == j) ? (i == 0 ? -1.0 : 1.0) : 0.0;
-        return;
+// Helper: inverse metric at a position, preferring the family's closed form.
+// Kerr-Schild metrics supply g^μν = η^μν - H l^μ l^ν exactly; anything else
+// falls back to the full Cramer inverse in TensorOps. A degenerate metric
+// yields non-finite entries there, which hasInvalidState converts into ray
+// termination; no flat-space stand-in is fabricated.
+static Metric4D inverseAt(IMetric* metric, const Vec4& pos, const Metric4D& g) {
+    Metric4D g_inv;
+    if (!metric->inverseMetric(pos, g_inv)) {
+        g_inv = TensorOps::inverse(g);
     }
-
-    double invDet = 1.0 / det;
-    g_inv[0][0] =  invDet * (m[1][1] * A2323 - m[1][2] * A1323 + m[1][3] * A1223);
-    g_inv[0][1] = -invDet * (m[0][1] * A2323 - m[0][2] * A1323 + m[0][3] * A1223);
-    g_inv[0][2] =  invDet * (m[0][1] * A2313 - m[0][2] * A1313 + m[0][3] * A1213);
-    g_inv[0][3] = -invDet * (m[0][1] * A2312 - m[0][2] * A1312 + m[0][3] * A1212);
-    g_inv[1][0] = -invDet * (m[1][0] * A2323 - m[1][2] * A0323 + m[1][3] * A0223);
-    g_inv[1][1] =  invDet * (m[0][0] * A2323 - m[0][2] * A0323 + m[0][3] * A0223);
-    g_inv[1][2] = -invDet * (m[0][0] * A2313 - m[0][2] * A0313 + m[0][3] * A0213);
-    g_inv[1][3] =  invDet * (m[0][0] * A2312 - m[0][2] * A0312 + m[0][3] * A0212);
-    g_inv[2][0] =  invDet * (m[1][0] * A1323 - m[1][1] * A0323 + m[1][3] * A0123);
-    g_inv[2][1] = -invDet * (m[0][0] * A1323 - m[0][1] * A0323 + m[0][3] * A0123);
-    g_inv[2][2] =  invDet * (m[0][0] * A1313 - m[0][1] * A0313 + m[0][3] * A0113);
-    g_inv[2][3] = -invDet * (m[0][0] * A1312 - m[0][1] * A0312 + m[0][3] * A0112);
-    g_inv[3][0] = -invDet * (m[1][0] * A1223 - m[1][1] * A0223 + m[1][2] * A0123);
-    g_inv[3][1] =  invDet * (m[0][0] * A1223 - m[0][1] * A0223 + m[0][2] * A0123);
-    g_inv[3][2] = -invDet * (m[0][0] * A1213 - m[0][1] * A0213 + m[0][2] * A0113);
-    g_inv[3][3] =  invDet * (m[0][0] * A1212 - m[0][1] * A0212 + m[0][2] * A0112);
-
-    // Condition number estimate using infinity norm: κ∞(g) = ||g||∞ × ||g⁻¹||∞
-    // ||A||∞ = max_i Σ_j |a_ij| (maximum absolute row sum)
-    constexpr double CONDITION_THRESHOLD = 1e12;
-    double norm_g = 0, norm_ginv = 0;
-    for (int i = 0; i < 4; i++) {
-        double row_g = 0, row_ginv = 0;
-        for (int j = 0; j < 4; j++) {
-            row_g += std::abs(m[i][j]);
-            row_ginv += std::abs(g_inv[i][j]);
-        }
-        norm_g = std::max(norm_g, row_g);
-        norm_ginv = std::max(norm_ginv, row_ginv);
-    }
-    double condition = norm_g * norm_ginv;
-    if (condition > CONDITION_THRESHOLD) {
-        // Ill-conditioned metric - fall back to Minkowski
-        for (int i = 0; i < 4; i++)
-            for (int j = 0; j < 4; j++)
-                g_inv[i][j] = (i == j) ? (i == 0 ? -1.0 : 1.0) : 0.0;
-    }
-}
-
-// Helper: Compute velocity from covariant momentum k^μ = g^μν p_ν
-static Vec4 velocityFromMomentum(const Vec4& p, const Metric4D& g) {
-    Vec4 k;
-    
-    // Extract metric components
-    double m[4][4];
-    for (int i = 0; i < 4; i++)
-        for (int j = 0; j < 4; j++)
-            m[i][j] = g(i, j).real;
-    
-    // Compute inverse metric
-    double g_inv[4][4];
-    invertMetric4x4(m, g_inv);
-    
-    // Compute k^μ = g^μν p_ν
-    for (int mu = 0; mu < 4; mu++) {
-        k(mu) = 0;
-        for (int nu = 0; nu < 4; nu++) {
-            k(mu) += static_cast<float>(g_inv[mu][nu] * p(nu));
-        }
-    }
-    return k;
+    return g_inv;
 }
 
 // Helper: compute dp_μ/dλ = -(1/2)(∂g^αβ/∂x^μ) p_α p_β
@@ -186,7 +100,7 @@ static Vec4 velocityFromMomentum(const Vec4& p, const Metric4D& g) {
 // where k^μ = g^μν p_ν is the contravariant velocity
 static Vec4 momentumDerivative(const Vec4& p, const Vec4& k, const Tensor<Dual<double>, 4, 4, 4>& dg) {
     Vec4 dp;
-    
+
     for (int mu = 0; mu < 4; mu++) {
         double sum = 0.0;
         for (int rho = 0; rho < 4; rho++) {
@@ -196,7 +110,7 @@ static Vec4 momentumDerivative(const Vec4& p, const Vec4& k, const Tensor<Dual<d
                 sum += dg(mu, rho, sigma).real * k(rho) * k(sigma);
             }
         }
-        dp(mu) = static_cast<float>(0.5 * sum);
+        dp(mu) = 0.5 * sum;
     }
     return dp;
 }
@@ -239,7 +153,7 @@ bool Geodesic::integrateStep(Lightray& ray, IMetric* metric, float min_step, flo
     Metric4D g_new;
     Tensor<Dual<double>, 4, 4, 4> dg_new;
     metric->evaluate(new_position, g_new, dg_new);
-    Vec4 new_velocity = velocityFromMomentum(new_momentum, g_new);
+    Vec4 new_velocity = TensorOps::raiseIndex(new_momentum, inverseAt(metric, new_position, g_new));
     
     // Adaptive step control
     float velocity_change = (new_velocity - k0).length();
@@ -260,7 +174,7 @@ bool Geodesic::integrateStep(Lightray& ray, IMetric* metric, float min_step, flo
     ray.velocity = new_velocity;
     ray.acceleration = calculateAcceleration(new_velocity, new_position, metric);
     ray.proper_time += h;
-    ray.coordinate_time += h * static_cast<float>(std::abs(new_velocity(0)));
+    ray.coordinate_time += h * std::abs(new_velocity(0));
     ray.running_dlambda_dnew *= (1.0f + velocity_change * 0.1f);
     return true;
 }
@@ -272,95 +186,40 @@ Vec4 Geodesic::calculateAcceleration(const Vec4& velocity, const Vec4& position,
 
     // Use direct acceleration computation (bypasses Christoffel construction)
     // This is ~1.5x faster than building full Christoffel tensor
-    return TensorOps::geodesicAccelerationDirect(velocity, g, dg);
+    return TensorOps::geodesicAccelerationDirect(velocity, inverseAt(metric, position, g), dg);
 }
 
 bool Geodesic::checkTermination(const Lightray& ray, IMetric* metric) {
-    // =========================================================================
-    // EARLY RAY TERMINATION (Task 2.2 - Performance Optimization)
-    // =========================================================================
-    // Terminates rays early when they are clearly:
-    // - Escaping to infinity (r > r_escape AND dr/dλ > 0)
-    // - Captured by horizon (r < r_horizon + ε)
-    // - Hit background (for flat/asymptotic regions)
-    // =========================================================================
-    
-    const float r = ray.position(1);
-    const float dr_dlambda = ray.velocity(1);  // Radial velocity component
-    
-    // -------------------------------------------------------------------------
-    // 1. ESCAPE DETECTION
-    // -------------------------------------------------------------------------
-    // A ray is escaping if:
-    // - It's far from the source (r > r_escape)
-    // - AND moving outward (dr/dλ > 0)
-    // 
-    // At large r, the geodesic is essentially straight - no need to continue
-    // -------------------------------------------------------------------------
-    constexpr float R_ESCAPE = 50.0f;  // Escape radius threshold
-    constexpr float R_BACKGROUND = 100.0f;  // Background hit radius
-    
-    if (r > R_ESCAPE && dr_dlambda > 0.0f) {
-        // Ray is escaping - terminate early
-        return true;
-    }
-    
-    if (r > R_BACKGROUND) {
-        // Definitely hit background regardless of direction
-        return true;
-    }
-    
-    // -------------------------------------------------------------------------
-    // 2. HORIZON CAPTURE DETECTION
-    // -------------------------------------------------------------------------
-    // For black hole metrics, rays approaching the horizon will never escape.
-    // We can terminate when r < r_horizon + ε
-    //
-    // For Schwarzschild: r_s = 2M (we use M=1, so r_s = 2)
-    // For Kerr: r_+ = M + sqrt(M² - a²) (outer horizon)
-    // -------------------------------------------------------------------------
-    constexpr float R_HORIZON_SCHWARZSCHILD = 2.0f;  // For M=1
-    constexpr float HORIZON_EPSILON = 0.1f;  // Safety margin
-    
-    if (r < R_HORIZON_SCHWARZSCHILD + HORIZON_EPSILON) {
-        // Near or inside horizon - ray captured
-        return true;
-    }
-    
-    // -------------------------------------------------------------------------
-    // 3. INTEGRATION LIMITS
-    // -------------------------------------------------------------------------
-    // Prevent runaway integration
-    // -------------------------------------------------------------------------
-    constexpr float MAX_PROPER_TIME = 100.0f;
-    
-    if (ray.proper_time > MAX_PROPER_TIME) {
-        return true;
-    }
-    
-    // -------------------------------------------------------------------------
-    // 4. VELOCITY SANITY CHECK
-    // -------------------------------------------------------------------------
-    // If velocity becomes too small, ray is stuck
-    // -------------------------------------------------------------------------
-    if (ray.velocity.length() < 1e-8f) {
-        return true;
-    }
-    
-    // -------------------------------------------------------------------------
-    // 5. THETA BOUNDARY CHECK  
-    // -------------------------------------------------------------------------
-    // Rays at theta ≈ 0 or theta ≈ π can have coordinate singularities
-    // -------------------------------------------------------------------------
-    const float theta = ray.position(2);
-    constexpr float THETA_MIN = 0.01f;
-    constexpr float THETA_MAX = 3.13f;  // π - 0.01
-    
-    if (theta < THETA_MIN || theta > THETA_MAX) {
-        // Near coordinate singularity at poles
-        return true;
-    }
-    
+    // Positions are Cartesian Kerr-Schild (t, x, y, z); the earlier version of
+    // this routine read position(1) as a spherical radius and compared it to a
+    // hardcoded Schwarzschild horizon, which was wrong on both counts.
+    using namespace Constants::Termination;
+
+    const double x = ray.position(1);
+    const double y = ray.position(2);
+    const double z = ray.position(3);
+    const double R = std::sqrt(x * x + y * y + z * z);
+
+    // Outward radial rate: d(R)/dλ = (x·vx + y·vy + z·vz) / R
+    const double dR_dlambda =
+        (x * ray.velocity(1) + y * ray.velocity(2) + z * ray.velocity(3)) / std::max(R, 1e-12);
+
+    // Escape: far away and moving outward, the geodesic is essentially straight
+    if (R > ESCAPE_RADIUS && dR_dlambda > 0.0) return true;
+
+    // Unconditional background hit
+    if (R > BACKGROUND_RADIUS) return true;
+
+    // Capture: the metric family decides in its own coordinates (exact horizon
+    // for Kerr-Schild; horizonless spacetimes never report capture)
+    if (metric->insideCaptureSurface(ray.position, CAPTURE_MARGIN)) return true;
+
+    // Affine-parameter budget against runaway integration
+    if (ray.proper_time > MAX_AFFINE_PARAMETER) return true;
+
+    // A vanishing velocity means the ray is numerically stuck
+    if (ray.velocity.length() < STALLED_VELOCITY) return true;
+
     return false;
 }
 
@@ -392,11 +251,11 @@ ObserverState Geodesic::createObserver(const Vec4& position, const Vec4& velocit
     
     if (!observer.is_timelike) {
         observer.velocity = Vec4(); // Default constructor initializes to zeros
-        observer.velocity(0) = 1.0f; // Set time component
+        observer.velocity(0) = 1.0; // Set time component
         velocity_norm = TensorOps::innerProduct(observer.velocity, observer.velocity, g);
     }
     
-    float normalization = static_cast<float>(1.0 / std::sqrt(-velocity_norm));
+    double normalization = 1.0 / std::sqrt(-velocity_norm);
     observer.velocity *= normalization;
     
     calculateTetrads(observer, metric);
@@ -413,7 +272,7 @@ void Geodesic::calculateTetrads(ObserverState& observer, IMetric* metric) {
     
     observer.e1 = Vec4(); observer.e1(1) = 1.0f;
     Vec4 e1_parallel = TensorOps::lowerIndex(observer.e1, g);
-    float e1_dot_e0 = 0.0f;
+    double e1_dot_e0 = 0.0;
     for (int mu = 0; mu < 4; mu++) {
         e1_dot_e0 += observer.e0(mu) * e1_parallel(mu);
     }
@@ -421,8 +280,8 @@ void Geodesic::calculateTetrads(ObserverState& observer, IMetric* metric) {
     
     observer.e2 = Vec4(); observer.e2(2) = 1.0f;
     Vec4 e2_parallel = TensorOps::lowerIndex(observer.e2, g);
-    float e2_dot_e0 = 0.0f;
-    float e2_dot_e1 = 0.0f;
+    double e2_dot_e0 = 0.0;
+    double e2_dot_e1 = 0.0;
     for (int mu = 0; mu < 4; mu++) {
         e2_dot_e0 += observer.e0(mu) * e2_parallel(mu);
         e2_dot_e1 += observer.e1(mu) * e2_parallel(mu);
@@ -431,9 +290,9 @@ void Geodesic::calculateTetrads(ObserverState& observer, IMetric* metric) {
     
     observer.e3 = Vec4(); observer.e3(3) = 1.0f;
     Vec4 e3_parallel = TensorOps::lowerIndex(observer.e3, g);
-    float e3_dot_e0 = 0.0f;
-    float e3_dot_e1 = 0.0f;
-    float e3_dot_e2 = 0.0f;
+    double e3_dot_e0 = 0.0;
+    double e3_dot_e1 = 0.0;
+    double e3_dot_e2 = 0.0;
     for (int mu = 0; mu < 4; mu++) {
         e3_dot_e0 += observer.e0(mu) * e3_parallel(mu);
         e3_dot_e1 += observer.e1(mu) * e3_parallel(mu);
@@ -441,13 +300,13 @@ void Geodesic::calculateTetrads(ObserverState& observer, IMetric* metric) {
     }
     observer.e3 = observer.e3 - observer.e0 * e3_dot_e0 - observer.e1 * e3_dot_e1 - observer.e2 * e3_dot_e2;
     
-    float e1_norm = static_cast<float>(std::sqrt(std::abs(TensorOps::innerProduct(observer.e1, observer.e1, g))));
-    float e2_norm = static_cast<float>(std::sqrt(std::abs(TensorOps::innerProduct(observer.e2, observer.e2, g))));
-    float e3_norm = static_cast<float>(std::sqrt(std::abs(TensorOps::innerProduct(observer.e3, observer.e3, g))));
+    double e1_norm = std::sqrt(std::abs(TensorOps::innerProduct(observer.e1, observer.e1, g)));
+    double e2_norm = std::sqrt(std::abs(TensorOps::innerProduct(observer.e2, observer.e2, g)));
+    double e3_norm = std::sqrt(std::abs(TensorOps::innerProduct(observer.e3, observer.e3, g)));
     
-    if (e1_norm > 1e-10f) observer.e1 /= e1_norm;
-    if (e2_norm > 1e-10f) observer.e2 /= e2_norm;
-    if (e3_norm > 1e-10f) observer.e3 /= e3_norm;
+    if (e1_norm > 1e-10) observer.e1 /= e1_norm;
+    if (e2_norm > 1e-10) observer.e2 /= e2_norm;
+    if (e3_norm > 1e-10) observer.e3 /= e3_norm;
 }
 
 // =============================================================================
@@ -500,7 +359,7 @@ static void evaluateRK45Stage(const Vec4& x, const Vec4& p, IMetric* metric,
     Metric4D g;
     Tensor<Dual<double>, 4, 4, 4> dg;
     metric->evaluate(x, g, dg);
-    k_x = velocityFromMomentum(p, g);
+    k_x = TensorOps::raiseIndex(p, inverseAt(metric, x, g));
     k_p = momentumDerivative(p, k_x, dg);
 }
 
@@ -546,8 +405,8 @@ bool Geodesic::integrateStepRK45(Lightray& ray, IMetric* metric, const Integrato
     // Stage 2-6: Use helper for each stage
     Vec4 k2_x, k2_p, k3_x, k3_p, k4_x, k4_p, k5_x, k5_p, k6_x, k6_p;
     
-    Vec4 x2 = x0 + k1_x * static_cast<float>(a21 * h);
-    Vec4 p2 = p0 + k1_p * static_cast<float>(a21 * h);
+    Vec4 x2 = x0 + k1_x * (a21 * h);
+    Vec4 p2 = p0 + k1_p * (a21 * h);
     evaluateRK45Stage(x2, p2, metric, k2_x, k2_p);
     
     Vec4 x3 = x0 + k1_x * static_cast<float>(a31 * h) + k2_x * static_cast<float>(a32 * h);
@@ -567,8 +426,8 @@ bool Geodesic::integrateStepRK45(Lightray& ray, IMetric* metric, const Integrato
     evaluateRK45Stage(x6, p6, metric, k6_x, k6_p);
     
     // 5th order solution
-    Vec4 new_position = x0 + (k1_x * static_cast<float>(b1) + k3_x * static_cast<float>(b3) + k4_x * static_cast<float>(b4) + k5_x * static_cast<float>(b5) + k6_x * static_cast<float>(b6)) * h;
-    Vec4 new_momentum = p0 + (k1_p * static_cast<float>(b1) + k3_p * static_cast<float>(b3) + k4_p * static_cast<float>(b4) + k5_p * static_cast<float>(b5) + k6_p * static_cast<float>(b6)) * h;
+    Vec4 new_position = x0 + (k1_x * b1 + k3_x * b3 + k4_x * b4 + k5_x * b5 + k6_x * b6) * h;
+    Vec4 new_momentum = p0 + (k1_p * b1 + k3_p * b3 + k4_p * b4 + k5_p * b5 + k6_p * b6) * h;
     
     // Stage 7 (FSAL)
     Vec4 k7_x, k7_p;
@@ -576,7 +435,7 @@ bool Geodesic::integrateStepRK45(Lightray& ray, IMetric* metric, const Integrato
     Vec4 new_velocity = k7_x;
     
     // Error estimation
-    Vec4 error_x = (k1_x * static_cast<float>(e1) + k3_x * static_cast<float>(e3) + k4_x * static_cast<float>(e4) + k5_x * static_cast<float>(e5) + k6_x * static_cast<float>(e6) + k7_x * static_cast<float>(e7)) * h;
+    Vec4 error_x = (k1_x * e1 + k3_x * e3 + k4_x * e4 + k5_x * e5 + k6_x * e6 + k7_x * e7) * h;
     float error_norm = computeRK45ErrorNorm(error_x, new_position, config);
     
     // Step acceptance
@@ -591,7 +450,7 @@ bool Geodesic::integrateStepRK45(Lightray& ray, IMetric* metric, const Integrato
     ray.velocity = new_velocity;
     ray.acceleration = calculateAcceleration(new_velocity, new_position, metric);
     ray.proper_time += h;
-    ray.coordinate_time += h * static_cast<float>(std::abs(new_velocity(0)));
+    ray.coordinate_time += h * std::abs(new_velocity(0));
     ray.step_size = computeOptimalStep(h, error_norm, 1.0f, config);
 
     if (hasInvalidState(new_position, new_velocity)) { ray.terminated = 3; return false; }

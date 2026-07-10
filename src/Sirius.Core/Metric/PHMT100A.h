@@ -75,12 +75,21 @@ public:
     explicit KerrSchildFamily(const KerrSchildParams& params);
     
     // IMetric interface
-    void evaluate(const Tensor<double, 4>& pos, Metric4D& g, 
+    void evaluate(const Tensor<double, 4>& pos, Metric4D& g,
                   Tensor<Dual<double>, 4, 4, 4>& dg) override;
-    
+
     const Config& getParameters() const override { return m_Config; }
     void setParameter(const std::string& key, double value) override;
     const char* getName() const override;
+
+    /// @brief Exact closed-form inverse: g^μν = η^μν - H l^μ l^ν
+    /// Valid because l is null with respect to both η and g, which makes the
+    /// Sherman-Morrison correction terms vanish identically.
+    bool inverseMetric(const Tensor<double, 4>& pos, Metric4D& g_inv) const override;
+
+    /// @brief Capture test against the outer horizon in the Kerr radial
+    /// coordinate (exact for spin, unlike a Cartesian-norm comparison)
+    bool insideCaptureSurface(const Tensor<double, 4>& pos, double margin) const override;
     
     // Kerr-Schild specific methods
     void setParams(const KerrSchildParams& params);
@@ -232,17 +241,28 @@ inline double KerrSchildFamily::computeH(double r, double z) const {
     double M = m_params.M;
     double a = m_params.a;
     double Q = m_params.Q;
-    
+    double Lambda = m_params.Lambda;
+
     double r2 = r * r;
     double r4 = r2 * r2;
     double a2 = a * a;
-    
+
     // H = (2Mr - Q²) · r² / (r⁴ + a²z²)
     // For pure Schwarzschild: H = 2M·r³ / r⁴ = 2M/r
     double numerator = (2.0 * M * r - Q * Q) * r2;
     double denominator = r4 + a2 * z * z;
-    
-    return numerator / std::max(denominator, 1e-20);
+    double H = numerator / std::max(denominator, 1e-20);
+
+    // Schwarzschild-de Sitter is exactly Kerr-Schild with H += Λr²/3 (a = 0,
+    // where r is the ordinary radius). The rotating de Sitter forms need a
+    // different ansatz, so Λ with a ≠ 0 is not represented here; the
+    // configuration boundary rejects that combination rather than letting an
+    // approximation stand in.
+    if (std::abs(a) < 1e-12 && std::abs(Lambda) > 1e-15) {
+        H += Lambda * r2 / 3.0;
+    }
+
+    return H;
 }
 
 inline void KerrSchildFamily::evaluate(const Tensor<double, 4>& pos, Metric4D& g,
@@ -324,11 +344,13 @@ inline void KerrSchildFamily::evaluate(const Tensor<double, 4>& pos, Metric4D& g
     dl[3][3] = 1.0 / r - z * dr_dz / r2;
     
     // =========================================================================
-    // Kerr-Schild scalar function H = (2Mr - Q²)r² / (r⁴ + a²z²)
+    // Kerr-Schild scalar function H (single authority: computeH, which also
+    // folds the a = 0 cosmological term so Schwarzschild-de Sitter stays in
+    // exact Kerr-Schild form)
     // =========================================================================
     double f_denom = r4 + a2 * z * z;
-    double H = (2.0 * M * r - Q2) * r2 / f_denom;
-    
+    double H = computeH(r, z);
+
     // Derivatives of H
     double dH[4] = {0.0, 0.0, 0.0, 0.0};
     for (int lam = 1; lam <= 3; lam++) {
@@ -337,42 +359,37 @@ inline void KerrSchildFamily::evaluate(const Tensor<double, 4>& pos, Metric4D& g
         // d(f_denom)/dlam = 4r³·dr + (lam==3 ? 2a²z : 0)
         double d_f_denom = 4.0 * r3 * dr[lam];
         if (lam == 3) d_f_denom += 2.0 * a2 * z;
-        
+
         double numerator = (2.0 * M * r - Q2) * r2;
         dH[lam] = (d_num * f_denom - numerator * d_f_denom) / (f_denom * f_denom);
+
+        // a = 0 cosmological term: d(Λr²/3)/dx^λ = (2Λ/3) r dr
+        if (std::abs(a) < 1e-12 && std::abs(Lambda) > 1e-15) {
+            dH[lam] += (2.0 * Lambda / 3.0) * r * dr[lam];
+        }
     }
-    
+
     // =========================================================================
     // Metric: g_μν = η_μν + H·l_μ·l_ν
-    // For de Sitter (Λ ≠ 0), we add cosmological term separately
     // =========================================================================
     g.zero();
     g(0, 0) = Dual<double>(-1.0);
     g(1, 1) = Dual<double>(1.0);
     g(2, 2) = Dual<double>(1.0);
     g(3, 3) = Dual<double>(1.0);
-    
+
     // Add Kerr-Schild perturbation
     for (int mu = 0; mu < 4; mu++) {
         for (int nu = 0; nu < 4; nu++) {
             g(mu, nu) = Dual<double>(g(mu, nu).real + H * l[mu] * l[nu]);
         }
     }
-    
-    // Cosmological constant contribution (if non-zero)
-    // For de Sitter in static coords: g_tt → -(1 - Λr²/3), etc.
-    // In Kerr-Schild-de Sitter, this is more complex - simplified here
-    if (std::abs(Lambda) > 1e-15) {
-        double LambdaFactor = Lambda * R2 / 3.0;
-        g(0, 0) = Dual<double>(g(0, 0).real - LambdaFactor);
-        // Spatial components also modified in full treatment
-    }
-    
+
     // =========================================================================
     // Derivatives: ∂g_μν/∂x^λ = ∂H/∂x^λ·l_μ·l_ν + H·∂l_μ/∂x^λ·l_ν + H·l_μ·∂l_ν/∂x^λ
     // =========================================================================
     dg.zero();
-    
+
     for (int lam = 1; lam <= 3; lam++) {
         for (int mu = 0; mu < 4; mu++) {
             for (int nu = 0; nu < 4; nu++) {
@@ -383,16 +400,44 @@ inline void KerrSchildFamily::evaluate(const Tensor<double, 4>& pos, Metric4D& g
             }
         }
     }
-    
-    // Cosmological derivative contribution
-    if (std::abs(Lambda) > 1e-15) {
-        double dLambdaFactor_dx = 2.0 * Lambda * x / 3.0;
-        double dLambdaFactor_dy = 2.0 * Lambda * y / 3.0;
-        double dLambdaFactor_dz = 2.0 * Lambda * z / 3.0;
-        dg(1, 0, 0) = Dual<double>(dg(1, 0, 0).real - dLambdaFactor_dx);
-        dg(2, 0, 0) = Dual<double>(dg(2, 0, 0).real - dLambdaFactor_dy);
-        dg(3, 0, 0) = Dual<double>(dg(3, 0, 0).real - dLambdaFactor_dz);
+}
+
+inline bool KerrSchildFamily::inverseMetric(const Tensor<double, 4>& pos, Metric4D& g_inv) const {
+    // g = η + H l⊗l with l null (η^μν l_μ l_ν = 0, a consequence of the
+    // defining quartic for r), so the inverse is exactly
+    //   g^μν = η^μν - H l^μ l^ν,   l^μ = η^μσ l_σ = (-1, l_1, l_2, l_3).
+    // The sign of l cancels in the outer product, so the spatial covariant
+    // components from computeNullVector can be used directly.
+    double x = pos(1), y = pos(2), z = pos(3);
+
+    double r = computeKerrRadius(x, y, z);
+    double l[4];
+    computeNullVector(x, y, z, r, l);
+    double H = computeH(r, z);
+
+    double l_up[4] = {-1.0, l[1], l[2], l[3]};
+
+    g_inv.zero();
+    g_inv(0, 0) = Dual<double>(-1.0);
+    g_inv(1, 1) = Dual<double>(1.0);
+    g_inv(2, 2) = Dual<double>(1.0);
+    g_inv(3, 3) = Dual<double>(1.0);
+    for (int mu = 0; mu < 4; mu++) {
+        for (int nu = 0; nu < 4; nu++) {
+            g_inv(mu, nu) = Dual<double>(g_inv(mu, nu).real - H * l_up[mu] * l_up[nu]);
+        }
     }
+    return true;
+}
+
+inline bool KerrSchildFamily::insideCaptureSurface(const Tensor<double, 4>& pos, double margin) const {
+    if (!hasHorizon()) return false;
+
+    // Compare in the Kerr radial coordinate: the horizon r = r+ is an oblate
+    // surface in Cartesian coordinates, so a Cartesian-norm comparison would
+    // misplace it for a ≠ 0.
+    double r = computeKerrRadius(pos(1), pos(2), pos(3));
+    return r <= outerHorizonRadius() * (1.0 + margin);
 }
 
 // =============================================================================

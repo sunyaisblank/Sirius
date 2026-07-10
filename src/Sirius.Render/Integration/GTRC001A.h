@@ -275,9 +275,6 @@ private:
     /// @return Temperature in arbitrary units
     float computeDiskTemperature(float r);
 
-    /// @brief Compute horizon radius from current metric parameters
-    /// @return Event horizon radius in M units
-    float computeHorizonRadius();
 
     /// @brief Check if ray state contains NaN or Inf
     /// @param ray Current ray state
@@ -360,23 +357,6 @@ inline void GeodesicTracer::cacheMetricParameters() {
     auto params = m_Metric->getParameters();
     m_CachedM = params.count("mass") ? params.at("mass").value : 1.0;
     m_CachedA = params.count("spin") ? params.at("spin").value : 0.0;
-}
-
-inline float GeodesicTracer::computeHorizonRadius() {
-    // Horizon radius: r_+ = M + sqrt(M² - a²)
-    double M = m_CachedM;
-    double a = m_CachedA * M;
-
-    double a2 = a * a;
-    double M2 = M * M;
-
-    if (a2 >= M2) {
-        // Naked singularity or extremal - use 2M as fallback
-        return static_cast<float>(2.0 * M * m_Config.horizon_factor);
-    }
-
-    double r_plus = M + std::sqrt(M2 - a2);
-    return static_cast<float>(r_plus * m_Config.horizon_factor);
 }
 
 inline float GeodesicTracer::computeDiskTemperature(float r) {

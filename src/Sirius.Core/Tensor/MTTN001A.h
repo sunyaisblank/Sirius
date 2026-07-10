@@ -178,10 +178,12 @@ struct ChristoffelSymbols {
 /// @brief Static utility class for tensor operations in curved spacetime
 class TensorOps {
 public:
-    /// @brief Compute inverse of metric tensor
+    /// @brief Compute inverse of metric tensor (full Cramer rule)
+    /// PRECONDITION: g non-degenerate. A degenerate g yields non-finite
+    /// entries, which downstream NaN guards convert into ray termination.
     static Metric4D inverse(const Metric4D& g);
-    
-    /// @brief Compute determinant of metric tensor
+
+    /// @brief Compute determinant of metric tensor (full 4x4 expansion)
     static double determinant(const Metric4D& g);
     
     /// @brief Compute Christoffel symbols from metric and its derivatives
@@ -196,10 +198,11 @@ public:
     /// This bypasses explicit Christoffel symbol construction for better performance.
     /// a^μ = -(1/2) g^μσ (∂_ν g_σρ + ∂_ρ g_σν - ∂_σ g_νρ) v^ν v^ρ
     /// @param velocity 4-velocity v^μ
-    /// @param g Metric tensor
+    /// @param g_inv Inverse metric g^μν (analytic where the family has one,
+    ///              TensorOps::inverse otherwise)
     /// @param dg Metric derivatives: dg[σ,μ,ν] = ∂_σ g_μν
     /// @return Geodesic acceleration a^μ
-    static Vec4 geodesicAccelerationDirect(const Vec4& velocity, const Metric4D& g,
+    static Vec4 geodesicAccelerationDirect(const Vec4& velocity, const Metric4D& g_inv,
                                             const Tensor<Dual<double>, 4, 4, 4>& dg);
 
     /// @brief Lower index: v_μ = g_μν v^ν
