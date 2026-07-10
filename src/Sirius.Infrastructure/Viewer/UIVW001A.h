@@ -1,5 +1,5 @@
-// INVW001A.h - Interactive Viewer with Progressive Refinement
-// Component ID: INVW001A (Infrastructure/Viewer/InteractiveViewer)
+// UIVW001A.h - Interactive Viewer with Progressive Refinement
+// Component ID: UIVW001A (Infrastructure/Viewer/InteractiveViewer)
 //
 // Real-time black hole visualization with camera controls and progressive
 // image refinement. Starts at low resolution and progressively refines.

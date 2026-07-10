@@ -6,7 +6,7 @@
 
 #include "CRCL006A.h"
 #include "CRCL005A.h"  // Output utilities
-#include "INVW001A.h"  // Interactive viewer
+#include "UIVW001A.h"  // Interactive viewer
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>

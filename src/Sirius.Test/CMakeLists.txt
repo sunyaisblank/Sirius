@@ -258,11 +258,11 @@ set_property(DIRECTORY APPEND PROPERTY
     TEST_INCLUDE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/CTestLabels.cmake"
 )
 
+get_target_property(_SIRIUS_TEST_SOURCES SiriusTests SOURCES)
+list(LENGTH _SIRIUS_TEST_SOURCES _SIRIUS_TEST_FILE_COUNT)
 message(STATUS "")
 message(STATUS "=== Sirius Test Suite ===")
-message(STATUS "  Sirius.Core:           59 files (Autodiff, Tensor, Metric, Geodesic, Disk, Jet, Spectral, Coordinate, Symplectic, Camera, Polarisation, Transport, PostProcess, Environment)")
-message(STATUS "  Sirius.Render:         15 files (Session, Integration, Pipeline, Offline)")
-message(STATUS "  Sirius.Infrastructure:  1 file  (Configuration)")
+message(STATUS "  Test sources:      ${_SIRIUS_TEST_FILE_COUNT} files (layout mirrors src/)")
 message(STATUS "")
 message(STATUS "  Run all tests:     ctest --test-dir <build>")
 message(STATUS "  Run mandatory:     ctest --test-dir <build> -L Mandatory")
