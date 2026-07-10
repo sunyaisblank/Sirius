@@ -68,7 +68,6 @@ add_executable(SiriusTests
     # ==========================================================================
     Sirius.Core/Geodesic/TSPH003A.cpp    # Geodesic equation integration
     Sirius.Core/Geodesic/TSPH009A.cpp    # RK45 integrator validation
-    Sirius.Core/Geodesic/TSPH010A.cpp    # Numerical geodesic integrator
     Sirius.Core/Geodesic/TSGD001A.cpp    # Beam propagation tests
     Sirius.Core/Geodesic/TSGD002A.cpp    # Einstein ring magnification tests
     Sirius.Core/Geodesic/TSDG001A.cpp    # Edge cases and precision
@@ -83,14 +82,12 @@ add_executable(SiriusTests
     # Sirius.Core — Disk
     # ==========================================================================
     Sirius.Core/Disk/TSDK001A.cpp        # Accretion disk tests
-    Sirius.Core/Disk/TSDK002A.cpp        # Volumetric disk tests
     Sirius.Core/Disk/TSTR001A.cpp        # Turbulence model power spectrum validation
     Sirius.Core/Disk/TSCR001A.cpp        # Corona model tests [NEW]
 
     # ==========================================================================
     # Sirius.Core — Jet
     # ==========================================================================
-    Sirius.Core/Jet/TSJT002A.cpp         # MHD jet magnetic flux conservation
     Sirius.Core/Jet/TSJT001A.cpp         # Relativistic jet emission model [NEW]
 
     # ==========================================================================
@@ -105,7 +102,6 @@ add_executable(SiriusTests
     # Sirius.Core — Coordinate
     # ==========================================================================
     Sirius.Core/Coordinate/TSPH015A.cpp  # Coordinate transformation tests (PHCT002A round-trip)
-    Sirius.Core/Coordinate/TSCT001A.cpp  # Coordinate transform interface tests [NEW]
 
     # ==========================================================================
     # Sirius.Core — Camera

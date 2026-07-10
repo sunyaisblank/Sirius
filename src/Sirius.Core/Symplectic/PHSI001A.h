@@ -1,6 +1,8 @@
 // PHSI001A.h - Time-Transformed Explicit Symplectic Integrator (TTESI)
 // Component ID: PHSI001A
 // Purpose: Double-precision symplectic integration for Kerr geodesics
+// Role: validation oracle. Not on the render path; conservation tests use this
+// integrator as the energy/angular-momentum reference for the live RK45 path.
 //
 // MATHEMATICAL BASIS:
 // The Hamiltonian for null geodesics in Kerr spacetime:

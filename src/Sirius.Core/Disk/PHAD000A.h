@@ -4,14 +4,10 @@
 // =============================================================================
 //
 // PURPOSE:
-// Defines the common interface for all accretion disk models in Sirius.
-// This allows the rendering pipeline to work with different disk models
-// (Novikov-Thorne, Polish Donut, MAD disk) through a unified interface.
+// Defines the common interface for accretion disk models in Sirius.
 //
 // IMPLEMENTATIONS:
 // - PHAD001A: Novikov-Thorne thin disk (relativistic, radiatively efficient)
-// - PHAD002A: Polish Donut thick disk (geometrically thick torus)
-// - PHAD003A: Generic parametric disk (configurable temperature/density profiles)
 //
 // MATHEMATICAL FOUNDATION:
 // Accretion disk models provide:

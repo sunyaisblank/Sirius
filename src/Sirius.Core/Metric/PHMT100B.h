@@ -1,6 +1,8 @@
 // PHMT100B.h - Kerr-Schild Family Double-Precision Implementation
 // Component ID: PHMT100B
-// Purpose: Double-precision Kerr metric for offline rendering
+// Purpose: Double-precision Kerr metric (Boyer-Lindquist, analytic Christoffels)
+// Role: validation oracle. Not on the render path; used by the test suite as the
+// analytic reference the live Kerr-Schild implementation is compared against.
 //
 // MATHEMATICAL BASIS:
 // Boyer-Lindquist coordinates (t, r, θ, φ) with metric:

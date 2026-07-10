@@ -25,10 +25,6 @@
 
 // Cinematic Expansion (2026)
 #include "../Sirius.Core/Metric/PHSM001A.h"      // SMBH parameters
-#include "../Sirius.Core/Disk/PHTR001A.h"       // Turbulence model
-#include "../Sirius.Core/Disk/PHCR001A.h"       // Corona model
-#include "../Sirius.Core/Disk/PHAD003A.h"       // Volumetric disk
-#include "../Sirius.Core/Jet/PHJT002A.h"        // MHD jet
 #include "../Sirius.Core/Environment/PHSF001A.h" // Starfield
 #include "../Sirius.Infrastructure/Configuration/CRFM001A.h" // Film config
 
@@ -172,14 +168,6 @@ struct SessionConfig {
 
     // SMBH Astrophysical Parameters
     SMBHParams smbhParams;              ///< Supermassive black hole scaling
-
-    // Enhanced Volumetric Disk
-    bool enableVolumetricDiskAdvanced = false;  ///< Enable turbulent volumetric disk
-    VolumetricDiskConfig volumetricDiskConfig;  ///< Turbulence, corona, full volumetric
-
-    // MHD Relativistic Jet
-    bool enableJetMHD = false;          ///< Enable MHD-based jet (replaces basic jet)
-    JetMHDConfig jetMHDConfig;          ///< MHD jet parameters
 
     // Depth-Resolved Starfield
     bool enableStarfield = false;       ///< Enable parallax-correct starfield

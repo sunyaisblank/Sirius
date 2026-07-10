@@ -1,6 +1,8 @@
 // MTTP001A.h - Double-Precision Types for Geodesic Integration
 // Component ID: MTTP001A
-// Purpose: Provides Vec4d, GeodesicStateD, HamiltonianStateD for offline rendering
+// Purpose: Provides Vec4d, GeodesicStateD, HamiltonianStateD (double precision)
+// Role: validation-oracle support types; consumed by the oracle metric stack
+// (PHMT000B/PHMT100B/PHSI001A) and by the disk model for double-precision maths.
 //
 // MATHEMATICAL BASIS:
 // These types represent coordinates and momenta in 4D spacetime with double precision

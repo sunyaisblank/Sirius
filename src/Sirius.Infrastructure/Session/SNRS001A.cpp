@@ -1096,16 +1096,6 @@ SessionConfig SessionConfig::fromSiriusConfig(const Configuration::SiriusConfig&
     sc.volumetricTauMidplane = config.volumetric.tauMidplane;
     sc.volumetricSamples = config.volumetric.samples;
 
-    // Advanced volumetric (turbulence + corona)
-    if (config.volumetric.enableTurbulence || config.volumetric.enableCorona) {
-        sc.enableVolumetricDiskAdvanced = true;
-        sc.volumetricDiskConfig.turbulence.enabled = config.volumetric.enableTurbulence;
-        sc.volumetricDiskConfig.corona.enabled = config.volumetric.enableCorona;
-        sc.volumetricDiskConfig.H_over_r = config.volumetric.hOverR;
-        sc.volumetricDiskConfig.H_power = config.volumetric.hPower;
-        sc.volumetricDiskConfig.volumetric_samples = config.volumetric.samples;
-    }
-
     // Film simulation
     sc.enableFilmSimulation = config.film.enabled;
     if (config.film.enabled) {

@@ -1,5 +1,7 @@
-// KNBI001A.h - Beam State and Integration Structures
-// Component ID: KNBI001A
+// INBI001A.h - Beam State and Integration Structures
+// Component ID: INBI001A
+// Role: validation oracle. Not on the render path; the analytic validation
+// tests (TSVAL001A, TSGD001A/2A) drive this double-precision beam integrator.
 // Purpose: Beam propagation with Jacobian tracking for offline rendering
 //
 // MATHEMATICAL BASIS:

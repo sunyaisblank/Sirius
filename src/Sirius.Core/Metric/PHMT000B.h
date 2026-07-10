@@ -1,6 +1,9 @@
 // PHMT000B.h - Double-Precision Metric Interface
 // Component ID: PHMT000B
 // Purpose: Abstract base class for all double-precision spacetime metrics
+// Role: validation oracle. This Boyer-Lindquist double-precision stack is not
+// on the render path; it exists so tests can validate the live single-precision
+// Cartesian Kerr-Schild path against analytic reference results.
 //
 // MATHEMATICAL BASIS:
 // The metric tensor g_μν defines spacetime geometry and must satisfy:

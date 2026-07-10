@@ -121,8 +121,6 @@ message(STATUS "CLI dependencies: FTXUI v5.0.0, nlohmann_json v3.11.3")
 add_library(SiriusCore SHARED
     # Geodesic integration
     src/Sirius.Core/Geodesic/PHGD001A.cpp
-    src/Sirius.Core/Geodesic/PHGD002A.cpp
-    src/Sirius.Core/Metric/PHMT000A.cpp
     
     # Tensor algebra
     src/Sirius.Core/Tensor/MTTN001A.cpp
@@ -359,7 +357,6 @@ add_executable(Sirius
     src/Sirius.Infrastructure/Plugin/CRPM001A.cpp
 
     # Core (camera)
-    src/Sirius.Core/Camera/CRGC001A.cpp
 
     # Render pipeline
     src/Sirius.Render/Pipeline/RDRT001A.cpp
