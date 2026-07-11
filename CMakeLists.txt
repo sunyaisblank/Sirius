@@ -330,9 +330,10 @@ add_executable(Sirius
     # Render acceleration backend (GPU)
     src/Sirius.Render/Acceleration/Backend/ACBF001A.cpp
 
-    # Render output writers (PNG via stb, EXR via tinyexr)
+    # Render output writers (PNG via stb, EXR via tinyexr + miniz)
     src/Sirius.Render/Output/OUPN001A.cpp
     src/Sirius.Render/Output/OUEW001A.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/tinyexr/miniz.c
 
     # External dependencies
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/glad/src/glad.c

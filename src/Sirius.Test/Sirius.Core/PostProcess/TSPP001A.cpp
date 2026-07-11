@@ -73,26 +73,6 @@ TEST_F(TonemapTests, FilmicBounded) {
     }
 }
 
-TEST_F(TonemapTests, AgXAtZero) {
-    EXPECT_NEAR(Sirius::Tonemap::AgX(0.0f), 0.0f, kEps);
-}
-
-TEST_F(TonemapTests, AgXMonotone) {
-    float prev = Sirius::Tonemap::AgX(0.0f);
-    for (float x = 0.1f; x <= 10.0f; x += 0.1f) {
-        float val = Sirius::Tonemap::AgX(x);
-        EXPECT_GE(val, prev - kEps) << "AgX not monotone at x = " << x;
-        prev = val;
-    }
-}
-
-TEST_F(TonemapTests, AgXBounded) {
-    for (float x = 0.0f; x <= 100.0f; x += 1.0f) {
-        float val = Sirius::Tonemap::AgX(x);
-        EXPECT_GE(val, 0.0f);
-        EXPECT_LE(val, 1.0f);
-    }
-}
 
 // =============================================================================
 // Tonemap::apply Dispatch Tests

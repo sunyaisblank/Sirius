@@ -34,6 +34,7 @@ SUITE_LABELS = {
     "DualNumberTests": MANDATORY,
     "TensorTests": MANDATORY,
     "TensorInverseTests": MANDATORY,
+    "ChristoffelTransformTests": MANDATORY,
     "MetricRegistryTests": MANDATORY,
     "SchwarzschildTests": MANDATORY,
     "ChristoffelTests": MANDATORY,

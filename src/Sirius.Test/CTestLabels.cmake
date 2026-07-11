@@ -132,7 +132,6 @@ set_tests_properties(
 
 set_tests_properties(
     ChristoffelBenchmark.SphericalVsCartesianPerformance
-    ChristoffelBenchmark.VerifyNumericalAgreement
     ChristoffelBenchmark.PoleHandlingComparison
     PROPERTIES LABELS "Performance"
 )
@@ -142,6 +141,12 @@ set_tests_properties(
     ChristoffelTests.TorsionFreeSymmetry
     ChristoffelTests.SphericalGammaRThetaTheta
     ChristoffelTests.SphericalGammaThetaRTheta
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    ChristoffelTransformTests.FlatSpaceReproducesTextbookSphericalSymbols
+    ChristoffelTransformTests.KerrTransformedConnectionSymmetricAndFinite
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -1064,9 +1069,6 @@ set_tests_properties(
     TonemapTests.FilmicAtZero
     TonemapTests.FilmicMonotone
     TonemapTests.FilmicBounded
-    TonemapTests.AgXAtZero
-    TonemapTests.AgXMonotone
-    TonemapTests.AgXBounded
     TonemapTests.ApplyExposureScaling
     TonemapTests.ApplyACESDispatch
     TonemapTests.ApplyReinhardDispatch

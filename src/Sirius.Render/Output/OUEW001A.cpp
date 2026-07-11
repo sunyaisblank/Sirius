@@ -98,7 +98,7 @@ public:
     static bool writeRGBAFloat(const std::string& path,
                                int width, int height,
                                const float* pixels,
-                               const EXRMetadata& meta) {
+                               [[maybe_unused]] const EXRMetadata& meta) {
         if (width <= 0 || height <= 0 || !pixels) {
             return false;
         }
