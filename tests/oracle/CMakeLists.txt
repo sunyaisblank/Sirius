@@ -8,6 +8,7 @@ add_executable(sirius_oracle_tests
     analytic_benchmarks_test.cpp
     analytic_solutions_test.cpp
     metric_invariants_test.cpp
+    polarisation_transport_test.cpp
     transport_types_test.cpp
     kerr_metric_test.cpp
     symplectic_integrator_test.cpp

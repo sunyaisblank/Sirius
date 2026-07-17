@@ -131,6 +131,9 @@ SUITE_LABELS = {
     "KernelTrace": CORRECTNESS,
     "VulkanBackend": CORRECTNESS,
     "RenderSessionProbe": CORRECTNESS,
+    "OracleConnection": MANDATORY,
+    "WalkerPenrose": MANDATORY,
+    "WalkerPenroseLivePath": MANDATORY,
 }
 
 

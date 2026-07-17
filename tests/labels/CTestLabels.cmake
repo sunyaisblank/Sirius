@@ -710,6 +710,11 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    OracleConnection.AnalyticConnectionAgreesWithMetricDerivatives
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     PNGWriterTest.WriteImageBuffer
     PNGWriterTest.WriteImageBufferRGBA
     PNGWriterTest.GammaCorrection
@@ -1015,5 +1020,21 @@ set_tests_properties(
     VulkanBackend.EnumerationReportsInsteadOfThrowing
     VulkanBackend.SlangKernelMatchesCpuReference
     PROPERTIES LABELS "Correctness"
+)
+
+set_tests_properties(
+    WalkerPenrose.ImaginaryPartEqualsKillingYanoContraction
+    WalkerPenrose.PolarisationStaysOrthogonalAndNormalisedUnderTransport
+    WalkerPenrose.ConstantConservedAlongKerrGeodesics
+    WalkerPenrose.SchwarzschildEquatorialPerpendicularTransportsRigidly
+    WalkerPenrose.FlatSpacePolarisationIsConstantInCartesian
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    WalkerPenroseLivePath.ConservesConstantAndOrthonormality
+    WalkerPenroseLivePath.AgreesWithOracleAcrossCharts
+    WalkerPenroseLivePath.TransportedVectorRotatesStokesByEvpa
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 

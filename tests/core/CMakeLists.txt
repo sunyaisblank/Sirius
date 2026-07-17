@@ -31,6 +31,7 @@ add_executable(sirius_core_tests
     reissner_nordstrom_test.cpp
     rk45_integrator_test.cpp
     schwarzschild_test.cpp
+    walker_penrose_test.cpp
     warp_drive_test.cpp
     stokes_test.cpp
     tensor_inverse_test.cpp
