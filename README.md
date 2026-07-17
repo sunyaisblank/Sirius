@@ -1,72 +1,55 @@
 # Sirius
 
-Sirius is a general relativistic ray tracing engine. It renders black holes, wormholes, and warp-drive spacetimes by integrating photon geodesics through analytically specified metric tensor fields, producing gravitational lensing, black hole shadows, and accretion disk emission from the geometry itself rather than from approximations layered on flat space.
+Sirius is a general relativistic ray tracing engine. It renders black holes, wormholes, and warp-drive spacetimes by integrating photon geodesics through analytically specified metric tensor fields, producing gravitational lensing, black hole shadows, and accretion disk emission from the geometry itself rather than from approximations layered on flat space. The engine is written in C++26 with a single Slang kernel source for GPU execution, and it targets the fidelity standard of DNGR, the renderer DNEG and Kip Thorne built for Interstellar; `docs/SPECIFICATION.md` states that standard as measurable criteria and `docs/ENGAGEMENT_REPORT.md` tracks the scorecard.
 
 ## The physics
 
-Light in curved spacetime follows null geodesics, and the entire renderer exists to solve their equation of motion. For coordinates $x^\mu$ and an affine parameter $\lambda$ along the ray,
+Light in curved spacetime follows null geodesics, and the renderer exists to solve their equation of motion. For coordinates $x^\mu$ and an affine parameter $\lambda$ along the ray,
 
 $$
 \frac{d^2 x^\mu}{d\lambda^2} + \Gamma^\mu_{\nu\rho} \frac{dx^\nu}{d\lambda} \frac{dx^\rho}{d\lambda} = 0,
 $$
 
-where the Christoffel symbols $\Gamma^\mu_{\nu\rho}$ encode the curvature. They derive from the metric tensor and its first derivatives,
+where the Christoffel symbols derive from the metric and its first derivatives. Sirius supplies those derivatives analytically: each metric family implements closed-form $g_{\mu\nu}$ and $\partial_\sigma g_{\mu\nu}$, which removes the truncation error finite differencing would accumulate over the hundreds of steps a ray takes near a photon sphere. The CPU reference path integrates a Dormand-Prince RK45 scheme in Hamiltonian form with covariant momenta and per-step renormalisation of the null condition; the GPU kernels integrate with the time-transformed Yoshida symplectic family. Two independent methods agreeing within stated tolerance is stronger evidence than one method twice, so backend parity is gated statistically, and conservation of energy and angular momentum on the live path is enforced by build-failing test rather than assumed.
 
-$$
-\Gamma^\mu_{\nu\rho} = \frac{1}{2} g^{\mu\sigma} \left( \partial_\nu g_{\sigma\rho} + \partial_\rho g_{\sigma\nu} - \partial_\sigma g_{\nu\rho} \right),
-$$
-
-so the accuracy of every rendered pixel reduces to the accuracy of the metric derivatives and of the integrator. Sirius supplies the derivatives analytically: each metric family implements closed-form expressions for $g_{\mu\nu}$ and $\partial_\sigma g_{\mu\nu}$, which removes the truncation error that finite differencing would accumulate over the hundreds of integration steps a ray takes near a photon sphere. Integration uses a Dormand-Prince RK45 scheme in a Hamiltonian formulation with covariant momenta, with the null condition $g_{\mu\nu} k^\mu k^\nu = 0$ monitored and re-normalised each step. Conservation of energy and angular momentum in stationary axisymmetric spacetimes is enforced by test rather than assumed: the mandatory suite integrates rays on the live path and fails the build if drift exceeds $10^{-4}$ relative.
-
-The black hole family uses the Kerr-Schild form,
-
-$$
-g_{\mu\nu} = \eta_{\mu\nu} + H \, l_\mu l_\nu,
-$$
-
-with $\eta_{\mu\nu}$ the Minkowski metric, $H$ a scalar field, and $l_\mu$ a null vector. This Cartesian representation was chosen over Boyer-Lindquist coordinates because it has no coordinate singularity at the rotation poles and because nullity of $l$ gives two exact identities the code exploits: the inverse metric is $g^{\mu\nu} = \eta^{\mu\nu} - H l^\mu l^\nu$ in closed form, and $\det g = -1$ everywhere, both of which serve as test oracles. One four-parameter family $(M, a, Q, \Lambda)$ covers Minkowski, Schwarzschild, Kerr, Reissner-Nordstrom, Kerr-Newman, de Sitter, and Schwarzschild-de Sitter; the cosmological constant folds into $H$ exactly for $a = 0$, and the rotating de Sitter forms are rejected at the configuration boundary rather than approximated.
-
-Accretion disk emission uses the Novikov-Thorne relativistic thin-disk temperature profile with the Page and Thorne (1974) flux function, or a Shakura-Sunyaev power law when selected. Brightness scales as the physical $T^4$ against a single reference temperature. A volumetric disk mode ray-marches a Gaussian vertical structure with optional turbulence and corona; these, together with film-stock simulation, are aesthetic features and are labelled as such rather than presented as physics.
+The black hole family uses the Kerr-Schild form $g_{\mu\nu} = \eta_{\mu\nu} + H\,l_\mu l_\nu$ with null $l$, which has no coordinate singularity at the poles and yields two exact identities the tests exploit: the closed-form inverse $g^{\mu\nu} = \eta^{\mu\nu} - H\,l^\mu l^\nu$ and $\det g = -1$. One four-parameter family $(M, a, Q, \Lambda)$ covers Minkowski, Schwarzschild, Kerr, Reissner-Nordstrom, Kerr-Newman, de Sitter, and Schwarzschild-de Sitter. Accretion disk emission uses the Novikov-Thorne temperature profile with the Page-Thorne (1974) flux function, blackbody spectral colour, and $g^4$ relativistic beaming; polarisation is transported physically along geodesics and certified by conservation of the Walker-Penrose complex constant. A double-precision Boyer-Lindquist oracle stack (metric with analytic Christoffels and Riemann, symplectic integrator, geodesic-deviation beam integrator, polarisation transport) lives deliberately off the render path as the validation reference the live paths are tested against.
 
 ## What it renders
 
 | Metric | Parameters | Backends |
 |--------|------------|----------|
-| Minkowski | none | CPU, GPU |
-| Schwarzschild | mass | CPU, GPU |
-| Kerr | mass, spin | CPU, GPU |
+| Minkowski | none | CPU, Vulkan |
+| Schwarzschild | mass | CPU, Vulkan |
+| Kerr | mass, spin | CPU, Vulkan |
 | Reissner-Nordstrom | mass, charge | CPU only |
 | Kerr-Newman | mass, spin, charge | CPU only |
 | de-Sitter | lambda | CPU only |
 | Schwarzschild-de-Sitter | mass, lambda | CPU only |
-| Morris-Thorne | throat radius | GPU only |
-| Alcubierre | warp velocity, bubble radius, wall thickness | CPU, GPU |
+| Morris-Thorne | throat radius | deferred (declines on both; kernel physics parity-tested) |
+| Alcubierre | warp velocity, bubble radius, wall thickness | CPU, Vulkan |
 
-`sirius info metrics` prints this table from the same registry the validator and routers use, so it cannot drift from the code. Names are case-insensitive and common aliases are accepted (`Wormhole`, `WarpDrive`, `KerrNewman`). Requesting a metric on a backend that cannot represent it is an error with a clear message; the engine never substitutes a different spacetime. The two asymmetries are deliberate: charge and the cosmological constant are not yet plumbed into the GPU kernel, and the Morris-Thorne implementation evaluates in spherical coordinates that the Cartesian CPU tracer cannot drive (its Cartesian embedding is recorded follow-up work). The wormhole is the zero-tidal-force subclass with constant redshift function, a physically legitimate choice from Morris and Thorne (1988), not an approximation.
+`sirius info metrics` prints this catalogue from the same registry the validator and routers use. Requesting a metric on a backend that cannot represent it is a clear error; the engine never substitutes a different spacetime. Output format follows the file extension: `.png` and `.ppm` receive the display pipeline (tonemap, grade, exactly one transfer encode applied by the owning writer); `.exr` receives linear HDR radiance untouched, for compositing.
 
-Output format follows the file extension. `.ppm` and `.png` receive the display pipeline (tonemapping, grading, then exactly one transfer encode, applied by the writer that owns the format); `.exr` receives the linear HDR radiance untouched, for downstream compositing. Tonemappers: ACES (default), Reinhard, Filmic, None.
+## Backends
+
+The CPU path is the reference implementation and runs everywhere, threads over spiral-ordered tiles, and produced the pinned reference images the test estate compares against byte-for-byte. The GPU path is one Slang kernel source (`src/sirius/kernels/`) compiled to SPIR-V and dispatched through a Vulkan compute seam, which reaches AMD, Intel, and NVIDIA hardware on Windows and Linux, Apple silicon through MoltenVK, and WSL2 or GPU-less machines through Lavapipe software Vulkan; the same source emits CUDA and Metal for future native adapters. A memory governor sizes tiles to the device budget (a 2 GB integrated GPU is a supported render target, not merely a supported install), and kernel-versus-oracle parity suites run on Lavapipe in CI, so the GPU physics is tested on machines with no GPU at all. GPU rendering is explicit opt-in (`--backend vulkan` or `SIRIUS_RENDER_BACKEND=vulkan`); `auto` resolves to the CPU until the go-live decision flips it.
 
 ## Building
 
-Requirements: CMake 3.16 or newer and a C++17 compiler. CUDA 12 and the OptiX 7/8/9 SDK enable the GPU backend; without them the build degrades to the CPU path with a warning, and CI builds both configurations. OpenGL and GLFW (vendored) support the interactive viewer; FTXUI and nlohmann-json are fetched at configure time.
+Requirements: CMake 3.28+, and a compiler with a C++26 mode: GCC 14+, Clang 17+, AppleClang 16+, or MSVC 19.40+ (Visual Studio 2022 17.10). The Vulkan backend additionally wants the Vulkan headers/loader and the Slang compiler (`slangc`, found at `/opt/slang` or `SLANG_ROOT`); both degrade with a clear message when absent, leaving the CPU system complete.
 
 ```bash
 # Linux / WSL2
-cmake -B bin/Sirius.Build && cmake --build bin/Sirius.Build
-./bin/Sirius.Build/bin/Sirius
+cmake --preset linux-gcc && cmake --build --preset linux-gcc
+./bin/linux-gcc/src/sirius/app/sirius
 
 # Windows
-cmake -B bin/Sirius.Build -G "Visual Studio 17 2022" -A x64
-cmake --build bin/Sirius.Build --config Release
+cmake --preset windows-msvc && cmake --build --preset windows-msvc
 ```
 
-OptiX headers are searched in `lib/optix/`, `/opt/nvidia/optix/`, `~/NVIDIA-OptiX-SDK/`, the `OptiX_INSTALL_DIR` environment variable, and the standard Windows install paths. For WSL2, `scripts/setup-wsl2-deps.sh`, `setup-wsl2-cuda.sh`, and `setup-wsl2-optix.sh` install the toolchain end to end.
-
-Build options: `BUILD_TESTS` (default on), `SIRIUS_PTX_ALL_ARCHS` (PTX for SM 75/80/86/89, default on), and `SIRIUS_MANDATORY_TESTS`, which makes the build itself fail unless every test labelled Mandatory passes; `SIRIUS_SKIP_MANDATORY` overrides it for development.
+Presets exist for GCC and Clang (Release and Debug), MSVC, and macOS; `linux-ci` enables the Mandatory build gate. On WSL2 no extra setup is needed beyond `libvulkan-dev` and `mesa-vulkan-drivers`: Lavapipe provides the Vulkan device the backend suites use.
 
 ## Running
-
-The binary has four commands. `render` produces an image in batch, `view` opens an interactive OpenGL window with progressive refinement (WASD orbit, mouse look, scroll zoom), `info` reports the system, metric catalogue, backends, and effective configuration, and `config` manages configuration files (`show`, `validate`, `init`, `paths`).
 
 ```bash
 # A Kerr black hole with its disk, 256 samples per pixel
@@ -75,44 +58,28 @@ sirius render -m Kerr -a 0.9 -s 256 -o kerr.png
 # The same scene as linear HDR for compositing
 sirius render -m Kerr -a 0.9 -s 256 -o kerr.exr
 
-# A wormhole (GPU backend required), and a warp bubble on the CPU
-sirius render -m Morris-Thorne --throat-radius 1.5 -o wormhole.ppm
-sirius render -m Alcubierre --warp-velocity 0.8 --cpu -o warp.png
+# Through the Vulkan backend (explicit opt-in)
+sirius render -m Kerr -a 0.9 --backend vulkan -o kerr_vk.png
 
-# Machine-readable system report
+# Interactive progressive viewer, machine-readable system report
+sirius view -m Kerr -a 0.9
 sirius info system --json
 ```
 
-Configuration layers in a fixed order: struct defaults, then a JSON config file (`--config` or the standard search paths), then `SIRIUS_*` environment variables (`SIRIUS_METRIC`, `SIRIUS_SPIN`, `SIRIUS_WIDTH`, `SIRIUS_BACKEND`, and the rest listed in `sirius --help`), then command-line flags. Later layers win. Global flags (`--json`, `--verbose`, `--no-color`, `--config`) are recognised anywhere on the command line. Every parameter is validated at startup against the ranges the physics supports (spin up to the 0.998 Thorne limit, sub-extremal spin-charge combinations, lambda only with zero spin); invalid configuration stops the run rather than being silently clamped.
-
-The main render options: `-w/-h` resolution, `-s` samples per pixel, `-m` metric, `-a` spin, `-d` observer distance, `-i` inclination, `--fov`, `--temperature-model` (NovikovThorne or ShakuraSunyaev), `--tonemapper`, `--exposure`, `--bloom`, `--volumetric` with `--turbulence` and `--corona`, `--film` with `--film-preset`, and `--cpu`/`--no-gpu` to force the CPU backend. `sirius render --help` gives the full list.
-
-`render_test.sh` renders a two-image smoke test and `render_demo.sh` a thirteen-image suite across metrics, inclinations, and feature combinations; `scripts/benchmark-gpu-cpu.sh` compares backend performance across resolutions.
-
-## Architecture
-
-```
-Sirius.Infrastructure  (CLI, configuration, render session, viewer)
-        ↓
-Sirius.Render          (OptiX kernel and host, CPU tracer, output writers)
-        ↓
-Sirius.Core            (metrics, geodesics, tensors, disk physics, constants)
-```
-
-Dependencies point downward only; the physics layer compiles and tests without a GPU or a window. Two decisions shape the layout beyond the layering. First, metric identity is a closed enum with a single registry (`PHMT200A`) that every consumer parses through, because the previous free-form strings drifted into six divergent catalogues and a wormhole request once silently rendered a black hole. Second, alongside the live single-precision Cartesian path, `Sirius.Core` keeps a double-precision Boyer-Lindquist stack (metric, symplectic integrator, beam integrator) that is deliberately not on the render path: it is the validation oracle the test suite integrates against, and the live path is required by test to agree with it on conserved quantities.
-
-One caveat is worth stating honestly: the GPU kernel (`RDOP002A.cu`) carries its own inlined copies of the metric and disk physics, written for single-precision CUDA. Parity between kernel and Core is enforced where tests can reach it (blackbody colour, Christoffel agreement) and is otherwise a known maintenance surface; a harness that executes the kernel under test needs a GPU in the loop and is recorded follow-up work.
-
-Source files follow a `[Domain][Category][Sequence][Variant]` naming convention (`PHMT100A.h` reads as Physics, Metric Tensor, family 100, production variant). The scheme is terse deliberately: many small, tightly scoped files would otherwise produce long near-identical descriptive names. Each file's header comment states its component identity and role.
+Configuration layers in a fixed order: struct defaults, then a JSON config file, then `SIRIUS_*` environment variables, then command-line flags; later layers win, every parameter is validated at startup against the ranges the physics supports, and invalid configuration stops the run rather than being clamped. `sirius render --help` lists the full flag set.
 
 ## Testing
 
 ```bash
-ctest --test-dir bin/Sirius.Build --output-on-failure   # everything
-ctest --test-dir bin/Sirius.Build -L Mandatory          # the build gate
+ctest --test-dir bin/linux-gcc -j"$(nproc)"          # everything
+ctest --test-dir bin/linux-gcc -L Mandatory          # the build gate
 ```
 
-Tests carry labels with distinct gating semantics: Mandatory suites (metric properties against textbook values, Christoffel symmetry, conservation on the live path, determinism, the registry, the exact Kerr-Schild inverse identities) fail the build when `SIRIUS_MANDATORY_TESTS` is on; Correctness suites cover feature behaviour; Performance suites warn without failing. The label file is generated from the test sources by `scripts/generate-ctest-labels.py` and CI rejects a stale copy, so a renamed suite cannot silently fall out of the gate.
+Labels carry gating semantics: Mandatory suites (textbook metric values, exact Kerr-Schild identities, conservation on the live path, kernel parity, Walker-Penrose conservation, the registry) fail the build under `-DSIRIUS_MANDATORY_TESTS=ON`; Correctness suites cover feature behaviour; Performance suites warn only. The label file is generated from the test sources by `scripts/generate-ctest-labels.py` and CI rejects a stale copy, so a renamed suite cannot silently fall out of the gate.
+
+## Documentation
+
+`docs/SPECIFICATION.md` (the DNGR-parity mandate and criteria), `docs/ARCHITECTURE.md` (layers, single authorities, kernel and backend design, the legacy-name mapping), `docs/STYLE.md` (the C++26 style guide), `docs/ENGAGEMENT_REPORT.md` (the rebuild's closing report and scorecard).
 
 ## References
 
@@ -121,4 +88,5 @@ Tests carry labels with distinct gating semantics: Mandatory suites (metric prop
 - Page and Thorne (1974), "Disk-accretion onto a black hole", ApJ 191, 499.
 - Morris and Thorne (1988), "Wormholes in spacetime and their use for interstellar travel", Am. J. Phys. 56, 395.
 - James, von Tunzelmann, Franklin and Thorne (2015), "Gravitational lensing by spinning black holes in astrophysics, and in the movie Interstellar", Class. Quantum Grav. 32, 065001.
+- Walker and Penrose (1970), "On quadratic first integrals of the geodesic equations for type {22} spacetimes", Commun. Math. Phys. 18, 265.
 - Bardeen, Press and Teukolsky (1972), "Rotating black holes", ApJ 178, 347.
