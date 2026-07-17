@@ -137,6 +137,36 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    ConfigEnvironment.IntegerOverridesApplied
+    ConfigEnvironment.MetricNameAndSpinOverridesApplied
+    ConfigEnvironment.BooleanOverrideParsed
+    ConfigEnvironment.MalformedIntegerLeavesDefault
+    PROPERTIES LABELS "Correctness"
+)
+
+set_tests_properties(
+    ConfigSchema.DefaultsRoundTripThroughJson
+    ConfigSchema.LegacyFieldSpellingsParse
+    ConfigSchema.PartialJsonKeepsDefaultsForOmittedFields
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    ConfigValidation.DefaultConfigurationIsValid
+    ConfigValidation.WidthBelowMinimumRejected
+    ConfigValidation.NonPowerOfTwoTileSizeRejected
+    ConfigValidation.UnknownMetricNameRejected
+    ConfigValidation.KnownMetricAliasAccepted
+    ConfigValidation.SpinAboveNearExtremalRejected
+    ConfigValidation.RotatingLambdaRejected
+    ConfigValidation.ObserverInsidePoleBufferRejected
+    ConfigValidation.UnknownTonemapperRejected
+    ConfigValidation.GpuBackendNameRejected
+    ConfigValidation.CpuBackendAccepted
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     ConservationLawTests.NullConditionPreservedSchwarzschild
     ConservationLawTests.NullConditionPreservedKerr
     ConservationLawTests.KillingEnergyConservedSchwarzschild
@@ -217,6 +247,16 @@ set_tests_properties(
     CoronaGeometryTests.SphereContainment
     CoronaGeometryTests.ExtendedScalesWithRadius
     PROPERTIES LABELS "Correctness"
+)
+
+set_tests_properties(
+    CpuGeodesicReferenceTests.CPUBaselineSchwarzschildEscaping
+    CpuGeodesicReferenceTests.CPUBaselineSchwarzschildHorizon
+    CpuGeodesicReferenceTests.CPUBaselineKerrPrograde
+    CpuGeodesicReferenceTests.ParityToleranceSpecification
+    CpuGeodesicReferenceTests.ReferenceRayGridGeneration
+    CpuGeodesicReferenceTests.ReferenceRaysCoverImpactParameters
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -486,6 +526,7 @@ set_tests_properties(
     KerrMetricDTest.HorizonRadius
     KerrMetricDTest.ISCORadius
     KerrMetricDTest.PhotonSphereRadius
+    KerrMetricDTest.ChristoffelMatchesFiniteDifferencesOfMetric
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -745,6 +786,14 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    PlatformPaths.PlatformNameIsNonEmpty
+    PlatformPaths.ConfigSearchPathsAreOrderedAndNonEmpty
+    PlatformPaths.AbsentResourceResolvesToNullopt
+    PlatformPaths.ExecutableDirectoryIsResolved
+    PROPERTIES LABELS "Correctness"
+)
+
+set_tests_properties(
     PolarisedEmissionTests.SynchrotronPolarisationDegree
     PolarisedEmissionTests.SynchrotronEmissionIsPhysical
     PolarisedEmissionTests.ThomsonScatteringAt90Degrees
@@ -795,6 +844,33 @@ set_tests_properties(
     ReissnerNordstromTests.FunctionFCorrectness
     ReissnerNordstromTests.FPositiveOutsideHorizon
     PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    RenderCommandParse.BasicFlagsMapToConfig
+    RenderCommandParse.VolumetricAndFilmFlagsSetEnables
+    RenderCommandParse.ExplicitGpuRequestDeclinesNonZero
+    RenderCommandParse.BackendVulkanNameDeclinesNonZero
+    RenderCommandParse.UnknownMetricFailsValidation
+    RenderCommandParse.UnknownOptionRejected
+    PROPERTIES LABELS "Correctness"
+)
+
+set_tests_properties(
+    RenderPipelineTests.LightrayInitialization
+    RenderPipelineTests.LightrayPositionFinite
+    RenderPipelineTests.AccelerationIsFinite
+    RenderPipelineTests.SchwarzschildAccelerationNearHorizon
+    RenderPipelineTests.IntegrateStepProducesValidState
+    RenderPipelineTests.MultipleStepsProgressRay
+    RenderPipelineTests.RK45StepSucceeds
+    RenderPipelineTests.RK45ProducesFiniteValues
+    RenderPipelineTests.DifferentMetricsGiveDifferentPaths
+    RenderPipelineTests.HandlesNearPoleTheta
+    RenderPipelineTests.HandlesLargeRadius
+    RenderPipelineTests.IntegrationIsDeterministic
+    RenderPipelineTests.KerrFrameDragging
+    PROPERTIES LABELS "Correctness"
 )
 
 set_tests_properties(

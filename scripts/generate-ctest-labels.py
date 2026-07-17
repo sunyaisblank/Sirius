@@ -134,6 +134,12 @@ SUITE_LABELS = {
     "OracleConnection": MANDATORY,
     "WalkerPenrose": MANDATORY,
     "WalkerPenroseLivePath": MANDATORY,
+    "CpuGeodesicReferenceTests": MANDATORY,
+    "ConfigValidation": MANDATORY,
+    "ConfigEnvironment": CORRECTNESS,
+    "ConfigSchema": MANDATORY,
+    "RenderCommandParse": CORRECTNESS,
+    "PlatformPaths": CORRECTNESS,
 }
 
 

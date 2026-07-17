@@ -4,6 +4,8 @@
 add_executable(sirius_core_tests
     autodiff_dual_test.cpp
     blackbody_planck_test.cpp
+    cpu_geodesic_reference_test.cpp
+    render_pipeline_integration_test.cpp
     blackbody_test.cpp
     blackbody_wien_test.cpp
     camera_test.cpp

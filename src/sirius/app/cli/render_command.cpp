@@ -1,0 +1,370 @@
+// The render command. Ported from CRCL002A.cpp.
+
+#include "sirius/app/cli/render_command.h"
+
+#include "sirius/app/cli/cli_output.h"
+#include "sirius/app/config/config_loader.h"
+#include "sirius/render/session/render_session.h"
+
+#include <nlohmann/json.hpp>
+
+#include <algorithm>
+#include <chrono>
+#include <cmath>
+#include <iomanip>
+#include <iostream>
+
+namespace sirius::app {
+
+namespace cli = cli_output;
+
+namespace {
+
+// Backend names that select a GPU path. OptiX is retired and the Vulkan compute
+// backend is not yet wired to the render session, so any of these declines.
+bool IsGpuBackendName(std::string name) {
+    std::transform(name.begin(), name.end(), name.begin(),
+                   [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+    return name == "gpu" || name == "vulkan" || name == "optix" || name == "cuda";
+}
+
+}  // namespace
+
+std::string RenderCommand::Usage() const {
+    return R"(Usage: sirius render [options]
+
+Render a black hole visualization using geodesic ray tracing.
+
+Basic Options:
+  -o, --output <path>       Output file path (default: render.ppm)
+  -w, --width <n>           Image width (default: 1920)
+  -h, --height <n>          Image height (default: 1080)
+  -s, --samples <n>         Samples per pixel (default: 64)
+  -t, --tile-size <n>       Tile size in pixels (default: 64)
+  -m, --metric <name>       Metric (see 'sirius info metrics'): Minkowski, Schwarzschild,
+                            Kerr, Reissner-Nordstrom, Kerr-Newman, de-Sitter,
+                            Schwarzschild-de-Sitter, Morris-Thorne, Alcubierre
+  -d, --distance <r>        Observer distance in M (default: 50)
+  -i, --inclination <deg>   Observer inclination (default: 90)
+  -a, --spin <a>            Black hole spin 0-1 (default: 0)
+  --fov <deg>               Camera field of view (default: 60)
+  --temperature-model <m>   Disk temperature model: NovikovThorne (NT) or
+                            ShakuraSunyaev (SS); GPU backend (default: NovikovThorne)
+  --disk-temperature <T>    Disk temperature scale in Kelvin (default: 50000)
+  --throat-radius <b0>      Morris-Thorne throat radius (default: 1.0)
+  --warp-velocity <vs>      Alcubierre warp velocity (default: 0.5)
+  --bubble-radius <R>       Alcubierre bubble radius (default: 1.0)
+
+Post-Processing:
+  --exposure <e>            Exposure value (default: 1.0)
+  --bloom <intensity>       Bloom intensity 0-1 (default: 0.3)
+  --bloom-threshold <t>     Bloom brightness threshold (default: 0.3)
+  --contrast <c>            Contrast adjustment (default: 1.0)
+  --saturation <s>          Saturation adjustment (default: 1.0)
+  --tonemapper <name>       Tonemapper: ACES, Reinhard, Filmic, AgX (default: ACES)
+  --no-bloom                Disable bloom post-processing
+
+Volumetric Disk (3D accretion disk with thickness):
+  --volumetric              Enable volumetric disk rendering
+  --h-over-r <ratio>        Scale height ratio H/r (default: 0.1)
+  --h-power <exp>           Flaring exponent (default: 0.25)
+  --tau <depth>             Midplane optical depth (default: 10.0)
+  --vol-samples <n>         Ray marching samples (default: 64)
+  --turbulence              Enable turbulent density perturbations
+  --corona                  Enable corona emission
+
+Film Simulation (IMAX 70mm cinematic look):
+  --film                    Enable film simulation
+  --film-preset <name>      Preset: Interstellar, SpaceOdyssey2001 (default: Interstellar)
+  --grain <intensity>       Film grain intensity (default: 0.15)
+  --halation <strength>     Halation glow strength (default: 0.15)
+  --vignette <strength>     Vignette strength (default: 0.3)
+
+Presets:
+  --cinematic               Enable cinematic defaults (volumetric, bloom, high exposure)
+
+Backend:
+  --cpu                     Force CPU rendering (the reference path)
+  --no-gpu                  Alias of --cpu
+  --gpu                     Request a GPU backend (declines: not yet wired)
+  --backend <name>          Select backend: cpu, auto (gpu/vulkan decline)
+
+Examples:
+  sirius render -o test.ppm -s 32
+  sirius render -m Kerr -a 0.9 -s 256 -o kerr.ppm
+  sirius render -w 3840 -h 2160 --cinematic --volumetric -o cinematic.ppm
+  sirius render --volumetric --h-over-r 0.15 --turbulence -o volumetric.ppm
+)";
+}
+
+int RenderCommand::Execute(const std::vector<std::string>& args, const GlobalOptions& globals,
+                           SiriusConfig& config) {
+    if (!ParseArgs(args, globals, config)) {
+        return 1;
+    }
+
+    // GPU-flag decline site: the Vulkan compute backend is a later workstream,
+    // so an explicit GPU request declines cleanly here rather than silently
+    // rendering on the CPU or crashing. Checked before validation so the decline
+    // message (not a backend-name validation error) is what the user sees.
+    if (gpu_backend_requested_) {
+        cli::Error("Vulkan backend not yet wired to the render session");
+        return 1;
+    }
+
+    auto errors = ConfigLoader::Validate(config);
+    if (!errors.empty()) {
+        for (const auto& err : errors) {
+            cli::Error(err);
+        }
+        return 1;
+    }
+
+    if (!globals.json_output) {
+        PrintConfig(config, globals.verbose);
+    }
+
+    return ExecuteSession(config, globals);
+}
+
+bool RenderCommand::ParseArgs(const std::vector<std::string>& args, const GlobalOptions& /*globals*/,
+                              SiriusConfig& config) {
+    for (size_t i = 0; i < args.size(); ++i) {
+        const std::string& arg = args[i];
+
+        try {
+            if ((arg == "-o" || arg == "--output") && i + 1 < args.size()) {
+                config.render.outputPath = args[++i];
+            } else if ((arg == "-w" || arg == "--width") && i + 1 < args.size()) {
+                config.render.width = std::stoi(args[++i]);
+            } else if ((arg == "-h" || arg == "--height") && i + 1 < args.size()) {
+                config.render.height = std::stoi(args[++i]);
+            } else if ((arg == "-s" || arg == "--samples") && i + 1 < args.size()) {
+                config.render.samplesPerPixel = std::stoi(args[++i]);
+            } else if ((arg == "-t" || arg == "--tile-size") && i + 1 < args.size()) {
+                config.render.tileSize = std::stoi(args[++i]);
+            } else if ((arg == "-m" || arg == "--metric") && i + 1 < args.size()) {
+                config.metric.name = args[++i];
+            } else if ((arg == "-d" || arg == "--distance") && i + 1 < args.size()) {
+                config.observer.distance = std::stod(args[++i]);
+            } else if ((arg == "-i" || arg == "--inclination") && i + 1 < args.size()) {
+                config.observer.inclination = std::stod(args[++i]);
+            } else if ((arg == "-a" || arg == "--spin") && i + 1 < args.size()) {
+                config.metric.spin = std::stod(args[++i]);
+            } else if (arg == "--fov" && i + 1 < args.size()) {
+                config.observer.fov = std::stod(args[++i]);
+            } else if (arg == "--temperature-model" && i + 1 < args.size()) {
+                config.metric.temperatureModel = args[++i];
+            } else if (arg == "--disk-temperature" && i + 1 < args.size()) {
+                config.metric.diskTemperature = std::stof(args[++i]);
+            } else if (arg == "--throat-radius" && i + 1 < args.size()) {
+                config.metric.throatRadius = std::stod(args[++i]);
+            } else if (arg == "--warp-velocity" && i + 1 < args.size()) {
+                config.metric.warpVelocity = std::stod(args[++i]);
+            } else if (arg == "--bubble-radius" && i + 1 < args.size()) {
+                config.metric.bubbleRadius = std::stod(args[++i]);
+            } else if (arg == "--exposure" && i + 1 < args.size()) {
+                config.postprocess.exposure = std::stof(args[++i]);
+            } else if (arg == "--bloom" && i + 1 < args.size()) {
+                config.postprocess.enableBloom = true;
+                config.postprocess.bloomIntensity = std::stof(args[++i]);
+            } else if (arg == "--bloom-threshold" && i + 1 < args.size()) {
+                config.postprocess.bloomThreshold = std::stof(args[++i]);
+            } else if (arg == "--contrast" && i + 1 < args.size()) {
+                config.postprocess.contrast = std::stof(args[++i]);
+            } else if (arg == "--saturation" && i + 1 < args.size()) {
+                config.postprocess.saturation = std::stof(args[++i]);
+            } else if (arg == "--tonemapper" && i + 1 < args.size()) {
+                config.postprocess.tonemapper = args[++i];
+            } else if (arg == "--no-bloom") {
+                config.postprocess.enableBloom = false;
+            } else if (arg == "--volumetric") {
+                config.volumetric.enabled = true;
+            } else if (arg == "--h-over-r" && i + 1 < args.size()) {
+                config.volumetric.hOverR = std::stof(args[++i]);
+                config.volumetric.enabled = true;
+            } else if (arg == "--h-power" && i + 1 < args.size()) {
+                config.volumetric.hPower = std::stof(args[++i]);
+            } else if (arg == "--tau" && i + 1 < args.size()) {
+                config.volumetric.tauMidplane = std::stof(args[++i]);
+            } else if (arg == "--vol-samples" && i + 1 < args.size()) {
+                config.volumetric.samples = std::stoi(args[++i]);
+            } else if (arg == "--turbulence") {
+                config.volumetric.enableTurbulence = true;
+                config.volumetric.enabled = true;
+            } else if (arg == "--corona") {
+                config.volumetric.enableCorona = true;
+                config.volumetric.enabled = true;
+            } else if (arg == "--film") {
+                config.film.enabled = true;
+            } else if (arg == "--film-preset" && i + 1 < args.size()) {
+                config.film.preset = args[++i];
+                config.film.enabled = true;
+            } else if (arg == "--grain" && i + 1 < args.size()) {
+                config.film.grainIntensity = std::stof(args[++i]);
+            } else if (arg == "--halation" && i + 1 < args.size()) {
+                config.film.halationStrength = std::stof(args[++i]);
+            } else if (arg == "--vignette" && i + 1 < args.size()) {
+                config.film.vignetteStrength = std::stof(args[++i]);
+            } else if (arg == "--cinematic") {
+                config.volumetric.enabled = true;
+                config.volumetric.hOverR = 0.12f;
+                config.volumetric.samples = 64;
+                config.postprocess.enableBloom = true;
+                config.postprocess.bloomIntensity = 0.35f;
+                config.postprocess.bloomThreshold = 0.4f;
+                config.postprocess.exposure = 1.2f;
+                config.postprocess.contrast = 1.1f;
+                config.postprocess.saturation = 1.15f;
+            } else if (arg == "--no-gpu" || arg == "--cpu") {
+                config.backend.preferred = "cpu";
+                gpu_backend_requested_ = false;
+            } else if (arg == "--gpu") {
+                // Explicit GPU request; the decline is raised in Execute so the
+                // config's backend field stays a validated value.
+                gpu_backend_requested_ = true;
+            } else if (arg == "--backend" && i + 1 < args.size()) {
+                const std::string& name = args[++i];
+                if (IsGpuBackendName(name)) {
+                    gpu_backend_requested_ = true;
+                } else {
+                    config.backend.preferred = name;  // cpu or auto; validated later.
+                    gpu_backend_requested_ = false;
+                }
+            } else if (arg.substr(0, 1) == "-") {
+                cli::Error("Unknown option: " + arg);
+                return false;
+            }
+        } catch (const std::exception& e) {
+            cli::Error("Invalid value for " + arg + ": " + e.what());
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void RenderCommand::PrintConfig(const SiriusConfig& config, bool verbose) {
+    cli::Rule("Sirius Render");
+    std::cout << std::endl;
+
+    std::cout << "Configuration:" << std::endl;
+    std::cout << "  Resolution:  " << config.render.width << " x " << config.render.height
+              << std::endl;
+    std::cout << "  Samples:     " << config.render.samplesPerPixel << " spp" << std::endl;
+    std::cout << "  Tile size:   " << config.render.tileSize << " px" << std::endl;
+    std::cout << "  Metric:      " << config.metric.name;
+    if (config.metric.spin > 0) {
+        std::cout << " (a=" << std::fixed << std::setprecision(3) << config.metric.spin << ")";
+    }
+    std::cout << std::endl;
+    std::cout << "  Observer:    r=" << std::fixed << std::setprecision(1) << config.observer.distance
+              << "M, θ=" << config.observer.inclination << "°" << std::endl;
+    std::cout << "  FOV:         " << config.observer.fov << "°" << std::endl;
+    std::cout << "  Output:      " << config.render.outputPath << std::endl;
+    std::cout << std::endl;
+
+    if (config.volumetric.enabled) {
+        std::cout << "Volumetric Disk:" << std::endl;
+        std::cout << "  Scale height: H/r=" << std::fixed << std::setprecision(2)
+                  << config.volumetric.hOverR << std::endl;
+        std::cout << "  Flaring:      " << config.volumetric.hPower << std::endl;
+        std::cout << "  Optical depth:" << config.volumetric.tauMidplane << std::endl;
+        std::cout << "  Ray samples:  " << config.volumetric.samples << std::endl;
+        if (config.volumetric.enableTurbulence) std::cout << "  Turbulence:   enabled" << std::endl;
+        if (config.volumetric.enableCorona) std::cout << "  Corona:       enabled" << std::endl;
+        std::cout << std::endl;
+    }
+
+    if (config.film.enabled) {
+        std::cout << "Film Simulation:" << std::endl;
+        std::cout << "  Preset:      " << config.film.preset << std::endl;
+        std::cout << "  Grain:       " << std::fixed << std::setprecision(2)
+                  << config.film.grainIntensity << std::endl;
+        std::cout << "  Halation:    " << config.film.halationStrength << std::endl;
+        std::cout << "  Vignette:    " << config.film.vignetteStrength << std::endl;
+        std::cout << std::endl;
+    }
+
+    if (verbose || config.postprocess.exposure != 1.0f) {
+        std::cout << "Post-processing:" << std::endl;
+        std::cout << "  Bloom:       " << (config.postprocess.enableBloom ? "enabled" : "disabled");
+        if (config.postprocess.enableBloom) {
+            std::cout << " (intensity=" << std::fixed << std::setprecision(2)
+                      << config.postprocess.bloomIntensity << ")";
+        }
+        std::cout << std::endl;
+        std::cout << "  Exposure:    " << std::fixed << std::setprecision(2)
+                  << config.postprocess.exposure << std::endl;
+        if (config.postprocess.contrast != 1.0f || config.postprocess.saturation != 1.0f) {
+            std::cout << "  Contrast:    " << config.postprocess.contrast << std::endl;
+            std::cout << "  Saturation:  " << config.postprocess.saturation << std::endl;
+        }
+        std::cout << std::endl;
+    }
+}
+
+int RenderCommand::ExecuteSession(const SiriusConfig& config, const GlobalOptions& globals) {
+    auto session_config = render::SessionConfig::FromSiriusConfig(config);
+
+    render::RenderSession session;
+    session.Configure(session_config);
+
+    auto start_time = std::chrono::steady_clock::now();
+
+    if (!globals.json_output) {
+        session.SetProgressCallback(
+            [&](float progress, int completed, int total, double eta) {
+                auto now = std::chrono::steady_clock::now();
+                double elapsed = std::chrono::duration<double>(now - start_time).count();
+
+                cli::ProgressState state;
+                state.progress = progress;
+                state.tiles_completed = completed;
+                state.tiles_total = total;
+                state.elapsed_seconds = elapsed;
+                state.eta_seconds = eta;
+
+                cli::PrintProgress(state);
+            });
+    }
+
+    // The final state carries success; only the failure message needs capturing.
+    std::string error_message;
+    session.SetCompletionCallback(
+        [&](render::SessionState state, const std::string& message) {
+            if (!globals.json_output) {
+                cli::ClearProgress();
+            }
+            if (state != render::SessionState::Complete) {
+                error_message = message;
+            }
+        });
+
+    render::SessionState result = session.Execute();
+
+    if (globals.json_output) {
+        nlohmann::json j;
+        j["success"] = (result == render::SessionState::Complete);
+        j["output"] = config.render.outputPath;
+        j["state"] = std::string(render::StateName(result));
+        if (!error_message.empty()) {
+            j["error"] = error_message;
+        }
+        cli::PrintJson(j.dump(2));
+    } else {
+        std::cout << std::endl;
+        cli::Rule();
+        if (result == render::SessionState::Complete) {
+            cli::Success("Render complete: " + config.render.outputPath);
+        } else if (result == render::SessionState::Cancelled) {
+            cli::Warning("Render cancelled");
+        } else {
+            cli::Error("Render failed: " + error_message);
+        }
+    }
+
+    return (result == render::SessionState::Complete) ? 0 : 1;
+}
+
+}  // namespace sirius::app
