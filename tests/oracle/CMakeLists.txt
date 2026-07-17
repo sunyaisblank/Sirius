@@ -5,6 +5,9 @@
 # enforce under test.
 
 add_executable(sirius_oracle_tests
+    analytic_benchmarks_test.cpp
+    analytic_solutions_test.cpp
+    metric_invariants_test.cpp
     transport_types_test.cpp
     kerr_metric_test.cpp
     symplectic_integrator_test.cpp
@@ -13,7 +16,7 @@ add_executable(sirius_oracle_tests
     geodesic_deviation_test.cpp
 )
 
-target_link_libraries(sirius_oracle_tests PRIVATE sirius_oracle GTest::gtest_main)
+target_link_libraries(sirius_oracle_tests PRIVATE sirius_oracle sirius_core GTest::gtest_main)
 
 sirius_configure_target(sirius_oracle_tests CONTRACT_MODE 2)
 
