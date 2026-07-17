@@ -4,7 +4,10 @@
 add_executable(sirius_core_tests
     autodiff_dual_test.cpp
     camera_test.cpp
+    coordinates_test.cpp
     corona_test.cpp
+    metric_registry_test.cpp
+    tensor_inverse_test.cpp
     jet_test.cpp
     novikov_thorne_disk_test.cpp
     postprocess_test.cpp
