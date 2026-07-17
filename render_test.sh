@@ -2,11 +2,15 @@
 # Render test script for Sirius black holes
 # Run this from the Sirius project directory
 
-SIRIUS="./bin/Sirius.Build/bin/Sirius"
+# Prefer the preset build; fall back to any built sirius executable.
+SIRIUS="./bin/linux-gcc/src/sirius/app/sirius"
+if [ ! -f "$SIRIUS" ]; then
+    SIRIUS=$(find bin -name sirius -type f -path '*app*' 2>/dev/null | head -1)
+fi
 
 if [ ! -f "$SIRIUS" ]; then
     echo "Error: Sirius binary not found at $SIRIUS"
-    echo "Please build first: cmake --build bin/Sirius.Build"
+    echo "Please build first: cmake --preset linux-gcc && cmake --build --preset linux-gcc"
     exit 1
 fi
 

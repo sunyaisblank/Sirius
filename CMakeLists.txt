@@ -1,14 +1,11 @@
 # =============================================================================
 # Sirius: general-relativistic renderer.
-# Root build: new C++26 tree (src/sirius, tests) plus the verified legacy
-# C++17 system (cmake/legacy_build.cmake) during the port. Governance:
-# docs/SPECIFICATION.md, docs/ARCHITECTURE.md, docs/STYLE.md.
+# Governance: docs/SPECIFICATION.md, docs/ARCHITECTURE.md, docs/STYLE.md.
 # =============================================================================
 cmake_minimum_required(VERSION 3.28)
 project(Sirius VERSION 2.0.0 LANGUAGES CXX C)
 
 option(BUILD_TESTS "Build test suites" ON)
-option(SIRIUS_BUILD_LEGACY "Build the pre-rebuild C++17 system during the port" ON)
 option(SIRIUS_MANDATORY_TESTS "Require mandatory tests to pass for build" OFF)
 option(SIRIUS_SKIP_MANDATORY "Skip mandatory tests (development override)" OFF)
 
@@ -19,29 +16,37 @@ find_package(Threads REQUIRED)
 
 enable_testing()
 
-if(SIRIUS_BUILD_LEGACY)
-    include(cmake/legacy_build.cmake)
-endif()
-
-if(SIRIUS_MODERN_AVAILABLE)
-    add_subdirectory(src/sirius)
-    if(BUILD_TESTS)
-        FetchContent_MakeAvailable(googletest)
-        add_subdirectory(tests)
-    endif()
-else()
-    message(WARNING
-        "New tree skipped: ${SIRIUS_MODERN_UNAVAILABLE_REASON}. "
+if(NOT SIRIUS_MODERN_AVAILABLE)
+    message(FATAL_ERROR
+        "Sirius requires a C++26-mode compiler: ${SIRIUS_MODERN_UNAVAILABLE_REASON}. "
         "Use a preset from CMakePresets.json to select a supported compiler.")
 endif()
 
-# === Install and packaging (ledger item: no install target existed) ===
-if(TARGET Sirius)
-    install(TARGETS Sirius RUNTIME DESTINATION bin)
-    install(TARGETS SiriusCore
-        LIBRARY DESTINATION lib
-        RUNTIME DESTINATION bin
-        ARCHIVE DESTINATION lib)
+add_subdirectory(src/sirius)
+if(BUILD_TESTS)
+    FetchContent_MakeAvailable(googletest)
+    add_subdirectory(tests)
+endif()
+
+# === Mandatory test gating (the build gate; label authority is generated) ===
+if(BUILD_TESTS AND SIRIUS_MANDATORY_TESTS AND NOT SIRIUS_SKIP_MANDATORY)
+    add_custom_target(RunMandatoryTests ALL
+        COMMAND ${CMAKE_CTEST_COMMAND}
+            --test-dir "${CMAKE_BINARY_DIR}"
+            --output-on-failure
+            --no-tests=error
+            -L "Mandatory"
+            -C $<CONFIG>
+        DEPENDS sirius
+        COMMENT "=== MANDATORY TEST GATE ==="
+    )
+    message(STATUS "Mandatory test gating: ENABLED")
+endif()
+
+# === Install and packaging ===
+if(TARGET sirius)
+    install(TARGETS sirius RUNTIME DESTINATION bin)
+    install(FILES assets/Starfield.png DESTINATION share/sirius/assets)
 endif()
 
 set(CPACK_PACKAGE_NAME "sirius")

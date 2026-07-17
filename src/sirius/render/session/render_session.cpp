@@ -279,11 +279,11 @@ void RenderSession::Initialise() {
 
         // Load the starfield background texture (CPU background sampling needs it).
         std::vector<std::string> texturePaths = {
-            "Sirius.Render/Texture/Starfield.png",
-            "../Sirius.Render/Texture/Starfield.png",
-            "src/Sirius.Render/Texture/Starfield.png",
-            "../src/Sirius.Render/Texture/Starfield.png",
-            "../../src/Sirius.Render/Texture/Starfield.png"};
+            "assets/Starfield.png",
+            "../assets/Starfield.png",
+            "../../assets/Starfield.png",
+            "../../../assets/Starfield.png",
+            "../../../../assets/Starfield.png"};
 
         bool textureLoaded = false;
         for (const auto& path : texturePaths) {

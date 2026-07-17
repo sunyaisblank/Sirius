@@ -31,9 +31,7 @@ jobs:
       - name: Test estate
         run: ctest --preset linux-ci -j"$(nproc)"
       - name: Label file freshness
-        run: |
-          python3 scripts/generate-ctest-labels.py
-          git diff --exit-code -- src/Sirius.Test/CTestLabels.cmake
+        run: python3 scripts/generate-ctest-labels.py --check
 
   windows-build:
     runs-on: windows-2022
