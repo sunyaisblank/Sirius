@@ -76,7 +76,7 @@ Each criterion is a testable postcondition. Parity is claimed only when every P-
 DNGR was a Kerr-family instrument on a render farm. Sirius exceeds it on four axes, each already partially banked by the existing system and each verifiable without DNEG's hardware.
 
 - E1, spacetime catalogue. Nine metric families against DNGR's Kerr (plus the wormhole DNEG built separately for the film): the full existing registry, with the Morris-Thorne Cartesian embedding completing CPU support (July follow-up item 2).
-- E2, polarised transport. Parallel transport of polarisation along geodesics, which DNGR did not publish.
+- E2, polarised transport. Physical propagation of polarisation along geodesics (Walker-Penrose transport in the Kerr family), which DNGR did not publish. The existing system carries a complete Stokes/Mueller algebra used only for false-colour visualisation; the physical transport is new work this engagement delivers, validated against the Walker-Penrose conserved complex constant.
 - E3, hardware reach. Interactive progressive preview on a 2 GB integrated GPU and a functional CPU-only path on machines with no GPU at all, where DNGR required a farm.
 - E4, verification. A physics test estate with build-failing Mandatory gates and a published oracle stack. DNGR published papers; it did not publish tests.
 
