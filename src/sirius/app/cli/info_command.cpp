@@ -201,7 +201,8 @@ int InfoCommand::ShowBackends(const GlobalOptions& globals) {
 #ifdef SIRIUS_HAS_VULKAN_BACKEND
         auto devices = backend::EnumerateVulkanDevices();
         j["vulkan"]["available"] = true;
-        j["vulkan"]["description"] = "Vulkan compute backend (not yet wired to the render session)";
+        j["vulkan"]["description"] =
+            "Vulkan compute backend (wired to the render session; --backend vulkan)";
         j["vulkan"]["device_count"] = devices.has_value() ? devices->size() : 0;
 #else
         j["vulkan"] = {{"available", false},
@@ -219,8 +220,8 @@ int InfoCommand::ShowBackends(const GlobalOptions& globals) {
         auto devices = backend::EnumerateVulkanDevices();
         std::size_t count = devices.has_value() ? devices->size() : 0;
         rows.push_back(
-            {"Vulkan", "Compiled in, " + std::to_string(count) + " device(s) (not yet wired)",
-             false});
+            {"Vulkan",
+             "Compiled in, " + std::to_string(count) + " device(s) (--backend vulkan)", false});
 #else
         rows.push_back({"Vulkan", "Not available (build without Vulkan)", false});
 #endif

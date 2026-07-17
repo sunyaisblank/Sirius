@@ -11,6 +11,8 @@ add_executable(sirius_render_tests
     film_pipeline_test.cpp
     spectral_emission_test.cpp
     render_session_probe_test.cpp
+    memory_governor_test.cpp
+    vulkan_render_test.cpp
 )
 
 target_link_libraries(sirius_render_tests PRIVATE sirius_render GTest::gtest_main)
@@ -23,5 +25,15 @@ target_include_directories(sirius_render_tests PRIVATE
 )
 
 sirius_configure_target(sirius_render_tests CONTRACT_MODE 2)
+
+# The Vulkan render/parity gate loads the compiled trace kernel; point it at the
+# kernel binary dir when slangc produced one (sirius_render carries the same
+# SIRIUS_HAS_VULKAN_BACKEND define transitively). The tests skip cleanly when the
+# device or the kernel is absent.
+if(TARGET sirius_kernels)
+    target_compile_definitions(sirius_render_tests
+        PRIVATE SIRIUS_KERNEL_DIR="${SIRIUS_KERNEL_BINARY_DIR}")
+    add_dependencies(sirius_render_tests sirius_kernels)
+endif()
 
 gtest_discover_tests(sirius_render_tests PROPERTIES LABELS "Correctness")

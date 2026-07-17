@@ -27,10 +27,11 @@ class RenderCommand : public Command {
     void PrintConfig(const SiriusConfig& config, bool verbose);
 
     // Configure and run the render session; returns the process exit code.
-    int ExecuteSession(const SiriusConfig& config, const GlobalOptions& globals);
+    // `use_vulkan` routes the session onto the Vulkan render path.
+    int ExecuteSession(const SiriusConfig& config, const GlobalOptions& globals, bool use_vulkan);
 
-    // Set when --gpu or --backend selects a GPU backend; the CPU path is the
-    // only wired one, so such a request declines cleanly.
+    // Set when --gpu or --backend vulkan selects the Vulkan backend. The Vulkan
+    // render path runs when a device is present and declines cleanly when not.
     bool gpu_backend_requested_ = false;
 };
 

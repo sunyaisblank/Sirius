@@ -1,19 +1,29 @@
-// Per-pixel geodesic tracer. Each thread renders one pixel of a tile: it builds
-// the camera null ray, integrates it through the Kerr-Schild family in the
-// Cartesian chart (gr_integrator IntegrateGeodesicRK4Cart), and terminates on
-// horizon capture or escape. Captured rays shade black (the shadow); escaping
-// rays shade by their asymptotic direction. An optional thin disk adds
-// Novikov-Thorne blackbody emission where the geodesic crosses the equatorial
-// plane.
+// Per-pixel geodesic tracer, the Vulkan render path. Each thread renders one
+// pixel of a TILE: it builds the camera null ray, integrates it through the
+// dispatched metric family in the Cartesian chart, and terminates on horizon
+// capture or escape. Captured rays shade black (the shadow); escaping rays shade
+// by their asymptotic direction against the starfield; an optional thin disk
+// adds Novikov-Thorne blackbody emission with g^4 relativistic beaming where the
+// geodesic crosses the equatorial plane. The kernel returns LINEAR radiance per
+// pixel; tonemapping and grading are the host display pipeline's job.
 //
 // This is render orchestration, not a physics authority: the metric,
-// Christoffel, integrator, and blackbody routines it calls are the ported
-// authorities in the gr_* modules. Termination radii and the horizon buffer are
-// carried from RDOP002A.cu / core/constants.h.
+// Christoffel, integrator, blackbody, and disk-redshift routines it calls are
+// the ported authorities in the gr_* modules. Termination radii and the horizon
+// buffer are carried from RDOP002A.cu / core/constants.h.
 //
-// Buffer ABI (bound 0..1 in declaration order):
-//   0 radiance : RWStructuredBuffer<float>, width*height*4 (RGBA per pixel).
-//   1 params   : StructuredBuffer<float>, layout documented below.
+// Metric dispatch (params[2]) matches the registry gpu_supported set the render
+// session wires: Kerr-Schild family (Minkowski/Schwarzschild/Kerr) and the
+// Alcubierre warp family. The gr_* modules also carry Ellis/Morris-Thorne
+// physics (parity_probe covers them); their spherical-chart render integration
+// is a recorded follow-up and the session declines them, so no dispatch id here.
+//
+// Buffer ABI (bound 0..2 in declaration order):
+//   0 radiance   : RWStructuredBuffer<float>, tileWidth*tileHeight*4 (RGBA/px).
+//   1 params     : StructuredBuffer<float>, layout documented below.
+//   2 starfield  : StructuredBuffer<uint>, packed RGBA8 equirectangular texels
+//                  (R | G<<8 | B<<16 | A<<24), size starfieldWidth*starfieldHeight;
+//                  bound with a 1-texel dummy when starfieldEnabled is 0.
 import gr_types;
 import gr_metrics;
 import gr_integrator;
@@ -21,6 +31,12 @@ import gr_disk;
 
 RWStructuredBuffer<float> radiance;  // binding 0
 StructuredBuffer<float> params;      // binding 1
+StructuredBuffer<uint> starfield;    // binding 2
+
+// Kernel-side metric dispatch ids (subset of gr_types kMetric*; the ids the
+// render session emits). Kept local so this file reads without cross-reference.
+static const uint kDispatchKerrSchild = 0;
+static const uint kDispatchWarpDrive = 2;
 
 float3 P3(uint base) { return float3(params[base], params[base + 1], params[base + 2]); }
 
@@ -42,21 +58,85 @@ float SolveNullTimeComponent(float g[4][4], float3 dir) {
     return sqrt(max(-C / A, 0.0001f));
 }
 
-// Smooth escape-direction background: a bounded gradient so the escaped field
-// is finite and non-constant across directions (the smoke gate). A production
-// starfield replaces this behind the same seam.
-float3 SampleBackground(float3 dir) {
+// Smooth escape-direction background: a bounded gradient so the escaped field is
+// finite and non-constant across directions (the smoke gate, and the analytic
+// background the CPU-vs-Vulkan parity gate compares against). Used when no
+// starfield texture is uploaded (starfieldEnabled == 0).
+float3 SampleBackgroundGradient(float3 dir) {
     return float3(0.5f, 0.5f, 0.5f) + 0.5f * dir;
+}
+
+// Unpack one packed-RGBA8 starfield texel to linear-ish [0,1] RGB, matching the
+// CPU path's byte/255 read (RenderSession::SampleStarfield).
+float3 StarfieldTexel(int x, int y, int width) {
+    uint packed = starfield[y * width + x];
+    float r = float(packed & 0xFFu) / 255.0f;
+    float g = float((packed >> 8) & 0xFFu) / 255.0f;
+    float b = float((packed >> 16) & 0xFFu) / 255.0f;
+    return float3(r, g, b);
+}
+
+// Equirectangular bilinear starfield lookup along an escape direction. Byte for
+// byte the CPU projection (RenderSession::SampleStarfield): theta = acos(z),
+// phi = atan2(y, x) wrapped to [0, 2pi), (u, v) -> pixel with clamp-to-edge
+// neighbours and (1-fx)(1-fy) bilinear weights.
+float3 SampleStarfield(float3 dir, int width, int height) {
+    float len = length(dir);
+    if (len < 1e-10f) {
+        return float3(0.001f, 0.001f, 0.001f);
+    }
+    float3 d = dir / len;
+
+    float theta = acos(clamp(d.z, -1.0f, 1.0f));
+    float phi = atan2(d.y, d.x);
+    if (phi < 0.0f) phi += TWO_PI;
+
+    float u = phi / TWO_PI;
+    float v = theta / PI;
+
+    float px = u * float(width - 1);
+    float py = v * float(height - 1);
+
+    int x0 = int(floor(px));
+    int y0 = int(floor(py));
+    int x1 = min(x0 + 1, width - 1);
+    int y1 = min(y0 + 1, height - 1);
+
+    float fx = px - float(x0);
+    float fy = py - float(y0);
+
+    float3 c00 = StarfieldTexel(x0, y0, width);
+    float3 c10 = StarfieldTexel(x1, y0, width);
+    float3 c01 = StarfieldTexel(x0, y1, width);
+    float3 c11 = StarfieldTexel(x1, y1, width);
+
+    float w00 = (1.0f - fx) * (1.0f - fy);
+    float w10 = fx * (1.0f - fy);
+    float w01 = (1.0f - fx) * fy;
+    float w11 = fx * fy;
+
+    return c00 * w00 + c10 * w10 + c01 * w01 + c11 * w11;
 }
 
 [shader("compute")]
 [numthreads(8, 8, 1)]
 void ComputeMain(uint3 tid: SV_DispatchThreadID) {
-    int width = int(params[0]);
-    int height = int(params[1]);
-    int ix = int(tid.x);
-    int iy = int(tid.y);
-    if (ix >= width || iy >= height) return;
+    int imageWidth = int(params[0]);
+    int imageHeight = int(params[1]);
+    uint metricId = uint(params[2]);
+
+    int tileOriginX = int(params[32]);
+    int tileOriginY = int(params[33]);
+    int tileWidth = int(params[34]);
+    int tileHeight = int(params[35]);
+
+    int tx = int(tid.x);
+    int ty = int(tid.y);
+    if (tx >= tileWidth || ty >= tileHeight) return;
+
+    int ix = tileOriginX + tx;
+    int iy = tileOriginY + ty;
+    if (ix >= imageWidth || iy >= imageHeight) return;
 
     float M = params[3];
     float a = params[4];
@@ -83,32 +163,52 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     float innerTemperature = params[30];
     float emissionScale = params[31];
 
-    // Camera ray in world Cartesian (RDOP002A.cu raygen NDC construction).
-    float u = (2.0f * (float(ix) + 0.5f) / float(width) - 1.0f) * aspect;
-    float v = 2.0f * (float(iy) + 0.5f) / float(height) - 1.0f;
+    bool starfieldEnabled = params[36] > 0.5f;
+    int starfieldWidth = int(params[37]);
+    int starfieldHeight = int(params[38]);
+    // params[39] reserved (background fallback floor); the render path uses the
+    // analytic gradient below when no texture is uploaded.
+
+    float warpVs = params[40];
+    float warpSigma = params[41];
+    float warpR = params[42];
+
+    // Camera ray in world Cartesian. NDC follows the CPU pinhole camera geometry
+    // (the renderer builds camDir/camRight/camUp so the two paths trace the same
+    // scene): u spans [-aspect, aspect], v spans [-1, 1] top-to-bottom.
+    float u = (2.0f * (float(ix) + 0.5f) / float(imageWidth) - 1.0f) * aspect;
+    float v = 2.0f * (float(iy) + 0.5f) / float(imageHeight) - 1.0f;
     float tanHalfFov = tan(fov * 0.5f);
     u *= tanHalfFov;
     v *= tanHalfFov;
     float3 rayDir = normalize(camDir + camRight * u + camUp * v);
 
-    // Horizon capture radius: r_+ = M + sqrt(M^2 - a^2 - Q^2), buffered.
+    bool isWarp = (metricId == kDispatchWarpDrive);
+
+    // Initial 4-velocity from the null condition at the camera position, using
+    // the dispatched metric.
+    float g[4][4];
+    float g_inv[4][4];
+    Vec4Cart pos0 = MakeVec4Cart(0.0f, camPos.x, camPos.y, camPos.z);
+    if (isWarp) {
+        GetWarpDriveMetric(pos0, warpVs, warpSigma, warpR, 0.0f, 0.0f, 0.0f, g, g_inv);
+    } else {
+        GetKerrSchildFamilyMetric(pos0, M, a, Q, Lambda, g, g_inv);
+    }
+    float ut = SolveNullTimeComponent(g, rayDir);
+
+    // Horizon capture radius (Kerr-Schild family only): r_+ = M + sqrt(M^2 - a^2
+    // - Q^2), buffered. The warp bubble is horizonless: capture is disabled.
     float disc = M * M - a * a - Q * Q;
     float horizonRadius = (disc > 0.0f) ? (M + sqrt(disc)) : M;
     horizonRadius *= captureFactor;
 
-    // Initial 4-velocity from the null condition at the camera position.
-    float g[4][4];
-    float g_inv[4][4];
-    GetKerrSchildFamilyMetric(MakeVec4Cart(0.0f, camPos.x, camPos.y, camPos.z), M, a, Q, Lambda, g, g_inv);
-    float ut = SolveNullTimeComponent(g, rayDir);
-
     GeodesicStateCart state;
-    state.x = MakeVec4Cart(0.0f, camPos.x, camPos.y, camPos.z);
+    state.x = pos0;
     state.u = MakeVec4Cart(ut, rayDir.x, rayDir.y, rayDir.z);
 
     float3 color = float3(0.0f, 0.0f, 0.0f);
     float transmittance = 1.0f;
-    bool captured = false;
     bool escaped = false;
 
     for (int step = 0; step < maxSteps; step++) {
@@ -116,27 +216,40 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         float py = state.x.y;
         float pz = state.x.z;
         float rBig = sqrt(px * px + py * py + pz * pz);
-        float rKerr = ComputeKerrRadiusCart(px, py, pz, a);
 
-        if (rKerr <= horizonRadius) { captured = true; break; }
+        if (!isWarp) {
+            float rKerr = ComputeKerrRadiusCart(px, py, pz, a);
+            if (rKerr <= horizonRadius) { break; }  // captured: shadow
+        }
         if (rBig >= escapeRadius) { escaped = true; break; }
 
-        float dt = clamp(stepScale * rKerr, minStep, maxStep);
-        GeodesicStateCart next = IntegrateGeodesicRK4Cart(state, dt, M, a, Q, Lambda);
+        float rStep = isWarp ? max(rBig, 1.0f) : ComputeKerrRadiusCart(px, py, pz, a);
+        float dt = clamp(stepScale * rStep, minStep, maxStep);
 
-        // Optional thin disk: emission when the segment crosses the equatorial
-        // plane z=0 within [innerRadius, outerRadius].
-        if (diskEnabled && transmittance > 0.01f) {
+        GeodesicStateCart next = isWarp
+            ? IntegrateGeodesicRK4WarpCart(state, dt, warpVs, warpSigma, warpR, 0.0f, 0.0f, 0.0f)
+            : IntegrateGeodesicRK4Cart(state, dt, M, a, Q, Lambda);
+
+        // Optional thin disk (Kerr-Schild black holes only): emission when the
+        // segment crosses the equatorial plane z=0 within [innerRadius,
+        // outerRadius], with Novikov-Thorne temperature, blackbody colour, and
+        // g^4 relativistic beaming (gr_disk authorities).
+        if (diskEnabled && !isWarp && transmittance > 0.01f) {
             if (state.x.z * next.x.z < 0.0f) {
                 float frac = state.x.z / (state.x.z - next.x.z);
                 float cx = state.x.x + frac * (next.x.x - state.x.x);
                 float cy = state.x.y + frac * (next.x.y - state.x.y);
                 float cr = sqrt(cx * cx + cy * cy);
                 if (cr >= innerRadius && cr <= outerRadius) {
-                    float rIsco = ComputeKerrISCO(M, a);
-                    float Qflux = ComputeNovikovThorneQ(cr, rIsco, M, a);
+                    float aStar = (M > 1e-6f) ? (a / M) : a;
+                    float rIsco = ComputeKerrISCO(M, aStar);
+                    float Qflux = ComputeNovikovThorneQ(cr, rIsco, M, aStar);
                     float T = NovikovThorneTemperature(innerTemperature, Qflux);
-                    float3 emit = BlackbodyColor(T) * emissionScale;
+                    float cphi = atan2(cy, cx);
+                    float3 photonVel = float3(next.u.x, next.u.y, next.u.z);
+                    float gFactor = ComputeDiskGFactorCart(cr, cphi, photonVel, M, a);
+                    float g4 = gFactor * gFactor * gFactor * gFactor;
+                    float3 emit = BlackbodyColor(T) * emissionScale * g4;
                     color += transmittance * emit;
                     transmittance *= 0.2f;  // partial occlusion per crossing
                 }
@@ -145,14 +258,18 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         state = next;
     }
 
+    // Captured (shadow) pixels keep only whatever disk emission accumulated
+    // (black when none), exactly as the CPU horizon outcome does.
     float3 result = color;
     if (escaped) {
         float3 dir = normalize(float3(state.u.x, state.u.y, state.u.z));
-        result += transmittance * SampleBackground(dir);
+        float3 bg = starfieldEnabled
+            ? SampleStarfield(dir, starfieldWidth, starfieldHeight)
+            : SampleBackgroundGradient(dir);
+        result += transmittance * bg;
     }
-    // Captured (shadow) pixels keep only whatever disk emission accumulated.
 
-    int pixel = iy * width + ix;
+    int pixel = ty * tileWidth + tx;
     radiance[pixel * 4 + 0] = result.x;
     radiance[pixel * 4 + 1] = result.y;
     radiance[pixel * 4 + 2] = result.z;

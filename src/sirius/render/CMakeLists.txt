@@ -23,6 +23,9 @@ add_library(sirius_render STATIC
     # stb decoder translation unit (encoder impl lives in png_writer.cpp).
     stb_impl.cpp
 
+    # Memory governor (pure arithmetic; no device dependency).
+    memory_governor.cpp
+
     # Session orchestrator.
     session/render_session.cpp
 
@@ -31,6 +34,24 @@ add_library(sirius_render STATIC
 )
 
 target_link_libraries(sirius_render PUBLIC sirius_core Threads::Threads)
+
+# Vulkan render path: the trace-kernel dispatch through the ComputeDevice seam.
+# The backend target returns early when Vulkan dev files are absent, so this is
+# guarded exactly as sirius_app_lib guards its backend link; machines without
+# Vulkan build the CPU render library only.
+if(TARGET sirius_backend)
+    target_sources(sirius_render PRIVATE vulkan_renderer.cpp)
+    target_link_libraries(sirius_render PUBLIC sirius_backend)
+    target_compile_definitions(sirius_render PUBLIC SIRIUS_HAS_VULKAN_BACKEND=1)
+    # The render path loads the compiled trace kernel from the kernel binary dir
+    # when slangc produced one (SIRIUS_KERNEL_BINARY_DIR is set by the backend
+    # CMakeLists); it also searches relative fallbacks at run time.
+    if(DEFINED SIRIUS_KERNEL_BINARY_DIR)
+        target_compile_definitions(sirius_render PRIVATE
+            SIRIUS_KERNEL_DIR="${SIRIUS_KERNEL_BINARY_DIR}")
+        add_dependencies(sirius_render sirius_kernels)
+    endif()
+endif()
 
 # Vendored headers are included by the writer/decoder TUs only (PRIVATE).
 target_include_directories(sirius_render PRIVATE

@@ -146,3 +146,42 @@ public Vec4 ComputeKeplerianVelocity(float r, float M, float a, float g[4][4]) {
     float u_phi = Omega * u_t;
     return MakeVec4(u_t, 0.0f, 0.0f, u_phi);
 }
+
+// Redshift g-factor for a thin-disk crossing evaluated in the Kerr-Schild
+// Cartesian render chart. This is the closed-form gravitational x Doppler factor
+// the CPU tracer applies (GeodesicTracer::ComputeGFactor): the render integrator
+// runs in Cartesian, where the BL-basis ComputeKeplerianVelocity above does not
+// apply, so the disk redshift is authored here in the same analytic form both
+// backends share. `rayVel` is the photon spatial 4-velocity at the crossing
+// (Cartesian), `phi` the crossing azimuth, `a` the absolute spin a = a*/M.
+//   g = grav / (gamma (1 - v_orb (A))),  A = (-n_x) sin phi - (-n_y) cos phi,
+//   grav = sqrt(1 - 2 M r / (r^2 + a^2)),  v_orb = r Omega,
+//   Omega = sqrt(M) / (r^{3/2} + a sqrt(M)).   (Bardeen et al. 1972; the
+// clamps guard the physical singularities exactly as the CPU path does.)
+public float ComputeDiskGFactorCart(float r, float phi, float3 rayVel, float M, float a) {
+    float r32 = pow(r, 1.5f);
+    float sqrtM = sqrt(M);
+    float Omega = sqrtM / (r32 + a * sqrtM);
+    float v_orb = r * Omega;
+
+    float a2 = a * a;
+    float r2 = r * r;
+    float grav_factor = sqrt(max(1.0f - 2.0f * M * r / (r2 + a2), 0.0f));
+
+    float v_mag = length(rayVel);
+    if (v_mag < 1e-10f) {
+        return grav_factor;
+    }
+    float n_x = rayVel.x / v_mag;
+    float n_y = rayVel.y / v_mag;
+
+    float gamma = 1.0f / sqrt(max(1e-10f, 1.0f - v_orb * v_orb));
+
+    float sin_phi = sin(phi);
+    float cos_phi = cos(phi);
+    // n points toward the observer; negate for the outgoing-photon convention.
+    float A = (-n_x) * sin_phi - (-n_y) * cos_phi;
+
+    float doppler_denom = clamp(gamma * (1.0f - v_orb * A), 0.1f, 10.0f);
+    return clamp(grav_factor / doppler_denom, 0.1f, 5.0f);
+}

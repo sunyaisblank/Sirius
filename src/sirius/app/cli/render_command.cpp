@@ -6,11 +6,16 @@
 #include "sirius/app/config/config_loader.h"
 #include "sirius/render/session/render_session.h"
 
+#ifdef SIRIUS_HAS_VULKAN_BACKEND
+#include "sirius/backend/device.h"
+#endif
+
 #include <nlohmann/json.hpp>
 
 #include <algorithm>
 #include <chrono>
 #include <cmath>
+#include <cstdlib>
 #include <iomanip>
 #include <iostream>
 
@@ -20,8 +25,9 @@ namespace cli = cli_output;
 
 namespace {
 
-// Backend names that select a GPU path. OptiX is retired and the Vulkan compute
-// backend is not yet wired to the render session, so any of these declines.
+// Backend names that select the Vulkan render path. OptiX/CUDA are retired and
+// route to the Vulkan compute backend (the only GPU path); the request runs when
+// a device is present and declines cleanly otherwise.
 bool IsGpuBackendName(std::string name) {
     std::transform(name.begin(), name.end(), name.begin(),
                    [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
@@ -86,8 +92,8 @@ Presets:
 Backend:
   --cpu                     Force CPU rendering (the reference path)
   --no-gpu                  Alias of --cpu
-  --gpu                     Request a GPU backend (declines: not yet wired)
-  --backend <name>          Select backend: cpu, auto (gpu/vulkan decline)
+  --gpu                     Render on the Vulkan backend (declines if no device)
+  --backend <name>          Select backend: cpu, auto (=cpu today), vulkan
 
 Examples:
   sirius render -o test.ppm -s 32
@@ -103,13 +109,37 @@ int RenderCommand::Execute(const std::vector<std::string>& args, const GlobalOpt
         return 1;
     }
 
-    // GPU-flag decline site: the Vulkan compute backend is a later workstream,
-    // so an explicit GPU request declines cleanly here rather than silently
-    // rendering on the CPU or crashing. Checked before validation so the decline
-    // message (not a backend-name validation error) is what the user sees.
-    if (gpu_backend_requested_) {
-        cli::Error("Vulkan backend not yet wired to the render session");
+    // Backend selection. The Vulkan render path is wired (--gpu / --backend
+    // vulkan, or SIRIUS_RENDER_BACKEND=vulkan); it runs when a device is present
+    // and declines cleanly when the backend is not compiled in or no device is
+    // visible. 'auto' resolves to CPU today (the go-live flip is an owner
+    // milestone, specification section 1.5). Resolved before validation so a
+    // backend decline (not a config-name error) is what the user sees.
+    bool use_vulkan = gpu_backend_requested_;
+    if (const char* rb = std::getenv("SIRIUS_RENDER_BACKEND"); rb != nullptr) {
+        std::string value(rb);
+        std::transform(value.begin(), value.end(), value.begin(),
+                       [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+        if (value == "vulkan") {
+            use_vulkan = true;
+        }
+    }
+
+    if (use_vulkan) {
+#ifdef SIRIUS_HAS_VULKAN_BACKEND
+        auto devices = backend::EnumerateVulkanDevices();
+        if (!devices.has_value()) {
+            cli::Error("Vulkan device enumeration failed: " + devices.error().Description());
+            return 1;
+        }
+        if (devices->empty()) {
+            cli::Error("Vulkan backend requested but no Vulkan device is present; use --cpu");
+            return 1;
+        }
+#else
+        cli::Error("Vulkan backend requested but this build has no Vulkan support; use --cpu");
         return 1;
+#endif
     }
 
     auto errors = ConfigLoader::Validate(config);
@@ -124,7 +154,7 @@ int RenderCommand::Execute(const std::vector<std::string>& args, const GlobalOpt
         PrintConfig(config, globals.verbose);
     }
 
-    return ExecuteSession(config, globals);
+    return ExecuteSession(config, globals, use_vulkan);
 }
 
 bool RenderCommand::ParseArgs(const std::vector<std::string>& args, const GlobalOptions& /*globals*/,
@@ -220,8 +250,9 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args, const Global
                 config.backend.preferred = "cpu";
                 gpu_backend_requested_ = false;
             } else if (arg == "--gpu") {
-                // Explicit GPU request; the decline is raised in Execute so the
-                // config's backend field stays a validated value.
+                // Explicit Vulkan request; resolved in Execute (device present ->
+                // run, absent -> decline) so config.backend.preferred stays in
+                // the validator's {auto, cpu} set.
                 gpu_backend_requested_ = true;
             } else if (arg == "--backend" && i + 1 < args.size()) {
                 const std::string& name = args[++i];
@@ -304,8 +335,12 @@ void RenderCommand::PrintConfig(const SiriusConfig& config, bool verbose) {
     }
 }
 
-int RenderCommand::ExecuteSession(const SiriusConfig& config, const GlobalOptions& globals) {
+int RenderCommand::ExecuteSession(const SiriusConfig& config, const GlobalOptions& globals,
+                                  bool use_vulkan) {
     auto session_config = render::SessionConfig::FromSiriusConfig(config);
+    if (use_vulkan) {
+        session_config.backend = render::RenderBackend::Vulkan;
+    }
 
     render::RenderSession session;
     session.Configure(session_config);

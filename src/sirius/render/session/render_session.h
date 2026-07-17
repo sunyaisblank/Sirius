@@ -43,7 +43,7 @@
 namespace sirius::render {
 
 // Compile-time transition table for the session DFA.
-inline constexpr std::array<Transition<SessionState, SessionEvent>, 14> kSessionTransitions = {{
+inline constexpr std::array<Transition<SessionState, SessionEvent>, 15> kSessionTransitions = {{
     // From Idle.
     {SessionState::Idle, SessionEvent::Start, SessionState::Initialising},
 
@@ -54,6 +54,10 @@ inline constexpr std::array<Transition<SessionState, SessionEvent>, 14> kSession
     // From Scheduling.
     {SessionState::Scheduling, SessionEvent::TileAvailable, SessionState::Rendering},
     {SessionState::Scheduling, SessionEvent::AllTilesComplete, SessionState::Completing},
+    // A scheduling-time decline (a metric neither backend can render, or the
+    // Vulkan render path declining before dispatch) fails cleanly with its
+    // message rather than stranding the session mid-schedule.
+    {SessionState::Scheduling, SessionEvent::Error, SessionState::Failed},
 
     // From Rendering.
     {SessionState::Rendering, SessionEvent::TileComplete, SessionState::Scheduling},
@@ -73,8 +77,17 @@ inline constexpr std::array<Transition<SessionState, SessionEvent>, 14> kSession
     {SessionState::Scheduling, SessionEvent::Cancel, SessionState::Cancelled},
 }};
 
-inline constexpr StateMachineConfig<SessionState, SessionEvent, 14> kSessionConfig = {
+inline constexpr StateMachineConfig<SessionState, SessionEvent, 15> kSessionConfig = {
     SessionState::Idle, kSessionTransitions};
+
+// Which backend the session drives. A two-value enum, not a bool, so the
+// selection reads at the call site (docs/STYLE.md section 1). The Vulkan path
+// dispatches the Slang trace kernel through sirius::backend::ComputeDevice; the
+// CPU path is the reference tracer and is unchanged.
+enum class RenderBackend {
+    Cpu,     // the reference geodesic tracer (docs/ARCHITECTURE.md section 4)
+    Vulkan,  // the Slang compute kernel on a ComputeDevice
+};
 
 // Configuration consumed by the render session.
 struct SessionConfig {
@@ -85,9 +98,12 @@ struct SessionConfig {
     int threadCount = 0;                   // 0 = auto-detect, 1 = single-threaded.
     bool enableParallelRendering = true;   // Multi-threaded tile rendering.
 
-    // Backend selection. useGPU/ptxPath are inert until the Vulkan backend seam
-    // lands (the legacy OptiX path is removed); they are retained so the CLI
-    // config surface is unchanged for the APP workstream.
+    // Backend selection. `backend` decides the render path; useGPU/ptxPath are
+    // legacy config-surface fields retained for parity. `auto` in the config
+    // resolves to Cpu today (the go-live default flip is an owner milestone,
+    // specification section 1.5); SIRIUS_RENDER_BACKEND=vulkan or --backend
+    // vulkan opts into the Vulkan path explicitly.
+    RenderBackend backend = RenderBackend::Cpu;
     bool useGPU = true;
     std::string ptxPath;
     std::string outputPath = "render.ppm";
@@ -173,7 +189,7 @@ struct SessionConfig {
 // Orchestrates a CPU render from configuration to written output.
 class RenderSession {
   public:
-    using FSM = StateMachine<SessionState, SessionEvent, 14>;
+    using FSM = StateMachine<SessionState, SessionEvent, 15>;
     using CompletionCallback = std::function<void(SessionState finalState, const std::string& message)>;
 
     RenderSession() : fsm_(kSessionConfig) { SetupActions(); }
@@ -231,6 +247,12 @@ class RenderSession {
     void Initialise();
     void ScheduleNextTile();
     void RenderTile(Tile* tile);
+    // Vulkan render path: dispatches the trace kernel per governed tile and
+    // fills the display buffer, then fires AllTilesComplete so WriteOutput
+    // applies the host display pipeline. Declines loudly (Error) when the
+    // backend is absent, the metric is not on the Vulkan render path, or the
+    // device cannot be opened.
+    void RenderVulkanPath();
     void WriteOutput();
     void OnSessionEnd(SessionState state);
 

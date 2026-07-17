@@ -61,10 +61,12 @@ TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
     constexpr std::uint32_t kHeight = 64;
 
     // Kerr M=1, a=0.9 viewed down the spin axis from 40M. fov and distance are
-    // chosen so the capture cross-section covers a modest image fraction.
-    std::vector<float> params(32, 0.0f);
-    params[0] = kWidth;
-    params[1] = kHeight;
+    // chosen so the capture cross-section covers a modest image fraction. The
+    // full image is a single tile here (tileOrigin 0, tile == image). Background
+    // is the analytic gradient (starfield disabled), so no texture is needed.
+    std::vector<float> params(48, 0.0f);
+    params[0] = kWidth;   // imageWidth
+    params[1] = kHeight;  // imageHeight
     params[2] = 0.0f;    // metricId (Kerr-Schild family)
     params[3] = 1.0f;    // M
     params[4] = 0.9f;    // a
@@ -83,18 +85,30 @@ TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
     params[25] = 100.0f;   // escapeRadius
     params[26] = 1.12f;    // captureFactor
     params[27] = 0.0f;     // disk disabled
+    params[32] = 0.0f;               // tileOriginX
+    params[33] = 0.0f;               // tileOriginY
+    params[34] = float(kWidth);      // tileWidth
+    params[35] = float(kHeight);     // tileHeight
+    params[36] = 0.0f;               // starfield disabled (gradient background)
+    params[37] = 1.0f;               // starfieldWidth (dummy)
+    params[38] = 1.0f;               // starfieldHeight (dummy)
 
     std::vector<float> radiance(kWidth * kHeight * 4, 0.0f);
+    const std::vector<std::uint32_t> starfield_dummy = {0u};
 
     const auto rbuf =
         (*device)->CreateBuffer(radiance.size() * sizeof(float), BufferUsage::kStorage);
     const auto pbuf =
         (*device)->CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
-    ASSERT_TRUE(rbuf && pbuf);
+    const auto sbuf =
+        (*device)->CreateBuffer(starfield_dummy.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
+    ASSERT_TRUE(rbuf && pbuf && sbuf);
     ASSERT_TRUE((*device)->WriteBuffer(*rbuf, std::as_bytes(std::span<const float>(radiance))));
     ASSERT_TRUE((*device)->WriteBuffer(*pbuf, std::as_bytes(std::span<const float>(params))));
+    ASSERT_TRUE((*device)->WriteBuffer(
+        *sbuf, std::as_bytes(std::span<const std::uint32_t>(starfield_dummy))));
 
-    const BufferHandle binding[] = {*rbuf, *pbuf};
+    const BufferHandle binding[] = {*rbuf, *pbuf, *sbuf};
     const auto dispatched =
         (*device)->Dispatch(*kernel, binding, (kWidth + 7) / 8, (kHeight + 7) / 8, 1);
     ASSERT_TRUE(dispatched.has_value()) << dispatched.error().Description();

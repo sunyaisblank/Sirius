@@ -138,6 +138,8 @@ SUITE_LABELS = {
     "ConfigSchema": MANDATORY,
     "RenderCommandParse": CORRECTNESS,
     "PlatformPaths": CORRECTNESS,
+    "MemoryGovernor": CORRECTNESS,
+    "VulkanRenderSession": CORRECTNESS,
 }
 
 

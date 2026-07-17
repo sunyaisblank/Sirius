@@ -10,6 +10,13 @@
 #include "sirius/app/cli/render_command.h"
 #include "sirius/app/config/config_schema.h"
 
+#ifdef SIRIUS_HAS_VULKAN_BACKEND
+#include "sirius/backend/device.h"
+#endif
+
+#include <cstdlib>
+#include <string>
+
 namespace sirius::app::test {
 
 // Drive Execute with a trailing sentinel option so parsing populates the config
@@ -55,23 +62,40 @@ TEST(RenderCommandParse, VolumetricAndFilmFlagsSetEnables) {
     EXPECT_EQ(config.film.preset, "Interstellar");
 }
 
-TEST(RenderCommandParse, ExplicitGpuRequestDeclinesNonZero) {
+TEST(RenderCommandParse, ExplicitGpuRequestRunsVulkanWhenDevicePresent) {
     RenderCommand cmd;
     GlobalOptions globals;
     SiriusConfig config = SiriusConfig::defaults();
 
-    // --gpu selects a GPU backend; the Vulkan path is not yet wired, so the
-    // command declines cleanly with a non-zero exit rather than rendering on CPU.
-    int rc = cmd.Execute({"--gpu"}, globals, config);
-    EXPECT_EQ(rc, 1);
+    // --gpu is wired to the Vulkan render path: with a device present it renders
+    // a small Kerr scene (exit 0); with none it declines cleanly (exit 1). It
+    // never silently falls back to CPU.
+    bool device_present = false;
+#ifdef SIRIUS_HAS_VULKAN_BACKEND
+    if (auto devices = backend::EnumerateVulkanDevices(); devices.has_value() && !devices->empty()) {
+        device_present = true;
+    }
+#endif
+    const std::string out =
+        std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp") + "/sirius_gpu_parse.ppm";
+    int rc = cmd.Execute({"--gpu", "-m", "Kerr", "-w", "128", "-h", "128", "-s", "1", "-o", out},
+                         globals, config);
+    EXPECT_EQ(rc, device_present ? 0 : 1);
 }
 
-TEST(RenderCommandParse, BackendVulkanNameDeclinesNonZero) {
+TEST(RenderCommandParse, BackendVulkanDeclinesMetricOffTheRenderPath) {
     RenderCommand cmd;
     GlobalOptions globals;
     SiriusConfig config = SiriusConfig::defaults();
 
-    int rc = cmd.Execute({"--backend", "vulkan"}, globals, config);
+    // --backend vulkan routes to the Vulkan render path, which carries the
+    // registry gpu_supported render set. A charge metric (Reissner-Nordstrom,
+    // gpu_supported = false) declines cleanly with a non-zero exit whether or not
+    // a device is present: no device declines at the CLI, a device declines in
+    // the render path before any dispatch. It never falls back to CPU silently.
+    int rc = cmd.Execute(
+        {"--backend", "vulkan", "-m", "Reissner-Nordstrom", "-w", "128", "-h", "128"}, globals,
+        config);
     EXPECT_EQ(rc, 1);
 }
 

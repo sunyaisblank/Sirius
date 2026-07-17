@@ -582,6 +582,17 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile
+    MemoryGovernor.SmallerBudgetYieldsSmallerTile
+    MemoryGovernor.TinyBudgetDeclinesLoudly
+    MemoryGovernor.OverheadLargerThanUsableBudgetDeclines
+    MemoryGovernor.TileNeverExceedsImageExtent
+    MemoryGovernor.WorkingSetMatchesTheDerivedTile
+    MemoryGovernor.EnvironmentOverrideResolvesBudget
+    PROPERTIES LABELS "Correctness"
+)
+
+set_tests_properties(
     MemoryUsageTests.FundamentalTypeSizes
     MemoryUsageTests.DualNumberSize
     MemoryUsageTests.Vec4Size
@@ -849,8 +860,8 @@ set_tests_properties(
 set_tests_properties(
     RenderCommandParse.BasicFlagsMapToConfig
     RenderCommandParse.VolumetricAndFilmFlagsSetEnables
-    RenderCommandParse.ExplicitGpuRequestDeclinesNonZero
-    RenderCommandParse.BackendVulkanNameDeclinesNonZero
+    RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent
+    RenderCommandParse.BackendVulkanDeclinesMetricOffTheRenderPath
     RenderCommandParse.UnknownMetricFailsValidation
     RenderCommandParse.UnknownOptionRejected
     PROPERTIES LABELS "Correctness"
@@ -1095,6 +1106,14 @@ set_tests_properties(
 set_tests_properties(
     VulkanBackend.EnumerationReportsInsteadOfThrowing
     VulkanBackend.SlangKernelMatchesCpuReference
+    PROPERTIES LABELS "Correctness"
+)
+
+set_tests_properties(
+    VulkanRenderSession.Kerr64CompletesUnderConstrainedBudgetWithFiniteRadiance
+    VulkanRenderSession.Kerr160x120CompletesAcrossMultipleGovernedTiles
+    VulkanRenderSession.CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds
+    VulkanRenderSession.BackendCompiledOrSkipped
     PROPERTIES LABELS "Correctness"
 )
 

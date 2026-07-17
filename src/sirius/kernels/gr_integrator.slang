@@ -349,3 +349,58 @@ public GeodesicStateCart IntegrateGeodesicRK4Cart(GeodesicStateCart state, float
                                   AddVec4Cart(ScaleVec4Cart(du3, 2.0f), du4)), sixth));
     return result;
 }
+
+// --- Alcubierre warp Cartesian RK4 render integrator -------------------------
+// The warp family (gr_metrics GetWarpDrive*) shares the Cartesian chart and the
+// same du^mu/dlambda = -Gamma^mu_nu_rho u^nu u^rho law as the Kerr-Schild path,
+// so the render path reuses the RK4 structure with the warp Christoffels. The
+// bubble is centred at (xs, ys, zs); (vs, sigma, R) are the warp velocity, wall
+// thickness, and bubble radius. This is lensing-only: the warp bubble has no
+// horizon and no disk, so trace.slang integrates and shades the background.
+public Vec4Cart GeodesicAccelerationWarpCart(GeodesicStateCart state, float vs, float sigma,
+                                             float R, float xs, float ys, float zs) {
+    float Gamma[4][4][4];
+    GetWarpDriveChristoffel(state.x, vs, sigma, R, xs, ys, zs, Gamma);
+    float u[4] = { state.u.t, state.u.x, state.u.y, state.u.z };
+    float acc[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+    [unroll] for (int mu = 0; mu < 4; mu++)
+        [unroll] for (int nu = 0; nu < 4; nu++)
+            [unroll] for (int rho = 0; rho < 4; rho++)
+                acc[mu] -= Gamma[mu][nu][rho] * u[nu] * u[rho];
+    return MakeVec4Cart(acc[0], acc[1], acc[2], acc[3]);
+}
+
+public GeodesicStateCart IntegrateGeodesicRK4WarpCart(GeodesicStateCart state, float dt,
+                                                      float vs, float sigma, float R,
+                                                      float xs, float ys, float zs) {
+    Vec4Cart dx1 = ScaleVec4Cart(state.u, dt);
+    Vec4Cart du1 = ScaleVec4Cart(GeodesicAccelerationWarpCart(state, vs, sigma, R, xs, ys, zs), dt);
+
+    GeodesicStateCart s2;
+    s2.x = AddVec4Cart(state.x, ScaleVec4Cart(dx1, 0.5f));
+    s2.u = AddVec4Cart(state.u, ScaleVec4Cart(du1, 0.5f));
+    Vec4Cart dx2 = ScaleVec4Cart(s2.u, dt);
+    Vec4Cart du2 = ScaleVec4Cart(GeodesicAccelerationWarpCart(s2, vs, sigma, R, xs, ys, zs), dt);
+
+    GeodesicStateCart s3;
+    s3.x = AddVec4Cart(state.x, ScaleVec4Cart(dx2, 0.5f));
+    s3.u = AddVec4Cart(state.u, ScaleVec4Cart(du2, 0.5f));
+    Vec4Cart dx3 = ScaleVec4Cart(s3.u, dt);
+    Vec4Cart du3 = ScaleVec4Cart(GeodesicAccelerationWarpCart(s3, vs, sigma, R, xs, ys, zs), dt);
+
+    GeodesicStateCart s4;
+    s4.x = AddVec4Cart(state.x, dx3);
+    s4.u = AddVec4Cart(state.u, du3);
+    Vec4Cart dx4 = ScaleVec4Cart(s4.u, dt);
+    Vec4Cart du4 = ScaleVec4Cart(GeodesicAccelerationWarpCart(s4, vs, sigma, R, xs, ys, zs), dt);
+
+    GeodesicStateCart result;
+    float sixth = 1.0f / 6.0f;
+    result.x = AddVec4Cart(state.x,
+        ScaleVec4Cart(AddVec4Cart(AddVec4Cart(dx1, ScaleVec4Cart(dx2, 2.0f)),
+                                  AddVec4Cart(ScaleVec4Cart(dx3, 2.0f), dx4)), sixth));
+    result.u = AddVec4Cart(state.u,
+        ScaleVec4Cart(AddVec4Cart(AddVec4Cart(du1, ScaleVec4Cart(du2, 2.0f)),
+                                  AddVec4Cart(ScaleVec4Cart(du3, 2.0f), du4)), sixth));
+    return result;
+}

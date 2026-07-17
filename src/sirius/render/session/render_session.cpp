@@ -12,6 +12,10 @@
 #include "sirius/render/image_buffer.h"
 #include "sirius/render/png_writer.h"
 
+#ifdef SIRIUS_HAS_VULKAN_BACKEND
+#include "sirius/render/vulkan_renderer.h"
+#endif
+
 #include "sirius/core/constants.h"
 #include "sirius/core/spectral/blackbody.h"  // Spectral blackbody colour.
 
@@ -24,6 +28,7 @@
 #include <cctype>
 #include <chrono>
 #include <cmath>
+#include <cstdlib>
 #include <cstring>
 #include <fstream>
 #include <iostream>
@@ -320,8 +325,14 @@ void RenderSession::ScheduleNextTile() {
         return;
     }
 
-    // GPU single-launch render removed here (OptiX retired); the CPU tile path
-    // is the reference. The Vulkan backend will dispatch through the device seam.
+    // Vulkan render path: dispatches the Slang trace kernel through the device
+    // seam (replacing the retired OptiX single-launch that once lived here). It
+    // fills the display buffer directly and fires AllTilesComplete so WriteOutput
+    // applies the host display pipeline, exactly as the CPU path does.
+    if (config_.backend == RenderBackend::Vulkan) {
+        RenderVulkanPath();
+        return;
+    }
 
     // The CPU path needs a CPU-representable metric; refuse rather than render a
     // different spacetime.
@@ -638,6 +649,42 @@ void RenderSession::RenderTile(Tile* tile) {
     progress_.CompleteTile(tile->PixelCount());
 
     fsm_.Process(SessionEvent::TileComplete);
+}
+
+// =============================================================================
+// Vulkan render path.
+// =============================================================================
+void RenderSession::RenderVulkanPath() {
+#ifdef SIRIUS_HAS_VULKAN_BACKEND
+    std::cout << "[Session] Dispatching Vulkan render path..." << std::endl;
+
+    auto stats = RenderVulkanToDisplay(
+        config_, display_, [this](int /*done*/, int total) {
+            // The scheduler's tile count is the CPU spiral grid; the Vulkan path
+            // governs its own tile count, so retotal the tracker to it on the
+            // first report and then count governed tiles through CompleteTile.
+            if (progress_.GetTilesTotal() != total) {
+                progress_.SetTotals(total, 1);
+            }
+            progress_.CompleteTile(1);
+        });
+
+    if (!stats) {
+        error_message_ = stats.error().Description();
+        std::cerr << "[Session] Vulkan render declined: " << error_message_ << std::endl;
+        fsm_.Process(SessionEvent::Error);
+        return;
+    }
+
+    std::cout << "[Session] Vulkan render complete: " << stats->metric_name << " on "
+              << stats->device_name << ", " << stats->tiles_rendered << " tile(s) of "
+              << stats->tile_plan.tile_edge << "px in " << stats->seconds << "s" << std::endl;
+    fsm_.Process(SessionEvent::AllTilesComplete);
+#else
+    error_message_ = "Vulkan backend not compiled in (build without Vulkan development files)";
+    std::cerr << "[Session] " << error_message_ << std::endl;
+    fsm_.Process(SessionEvent::Error);
+#endif
 }
 
 // =============================================================================
@@ -1089,8 +1136,21 @@ SessionConfig SessionConfig::FromSiriusConfig(const SiriusConfig& config) {
         sc.filmConfig.vignette_strength = config.film.vignetteStrength;
     }
 
-    // Backend selection (inert until the Vulkan seam; kept for config parity).
+    // Backend selection. 'auto' resolves to Cpu today (the go-live default flip
+    // is an owner milestone, specification section 1.5); SIRIUS_RENDER_BACKEND=
+    // vulkan opts into the Vulkan render path explicitly. An explicit --backend
+    // vulkan / --gpu request is applied by the CLI after this conversion, because
+    // the config validator's backend.preferred set is {auto, cpu} only.
     sc.useGPU = (config.backend.preferred != "cpu");
+    sc.backend = RenderBackend::Cpu;
+    if (const char* rb = std::getenv("SIRIUS_RENDER_BACKEND"); rb != nullptr) {
+        std::string value(rb);
+        std::transform(value.begin(), value.end(), value.begin(),
+                       [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+        if (value == "vulkan") {
+            sc.backend = RenderBackend::Vulkan;
+        }
+    }
 
     return sc;
 }
