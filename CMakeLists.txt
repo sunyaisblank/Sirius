@@ -15,6 +15,8 @@ option(SIRIUS_SKIP_MANDATORY "Skip mandatory tests (development override)" OFF)
 include(cmake/sirius_toolchain.cmake)
 include(cmake/sirius_dependencies.cmake)
 
+find_package(Threads REQUIRED)
+
 enable_testing()
 
 if(SIRIUS_BUILD_LEGACY)

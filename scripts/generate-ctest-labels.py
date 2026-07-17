@@ -20,6 +20,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 TEST_DIR = ROOT / "src" / "Sirius.Test"
 OUTPUT = TEST_DIR / "CTestLabels.cmake"
+NEW_TEST_DIR = ROOT / "tests"
+NEW_OUTPUT = NEW_TEST_DIR / "labels" / "CTestLabels.cmake"
 
 MANDATORY = "Mandatory;Correctness"
 STABILITY = "Mandatory;Stability"
@@ -121,6 +123,13 @@ SUITE_LABELS = {
     "MemoryUsageTests": PERFORMANCE,
     "GeodesicBenchmarks": PERFORMANCE,
     "ChristoffelBenchmark": PERFORMANCE,
+    # New-tree suites (no legacy counterpart)
+    "Contracts": MANDATORY,
+    "ContractsDeathTest": MANDATORY,
+    "Error": MANDATORY,
+    "KernelParity": MANDATORY,
+    "KernelTrace": CORRECTNESS,
+    "VulkanBackend": CORRECTNESS,
 }
 
 
@@ -172,24 +181,73 @@ def render(tests):
     return "\n".join(lines) + "\n", unknown
 
 
+def collect_new_tree_tests():
+    tests = {}
+    pattern = re.compile(r"TEST(?:_F)?\(\s*(\w+)\s*,\s*(\w+)\s*\)")
+    for path in sorted(NEW_TEST_DIR.rglob("*_test.cpp")):
+        for suite, name in pattern.findall(path.read_text(encoding="utf-8")):
+            tests.setdefault(suite, []).append(name)
+    return tests
+
+
+def render_new_tree(tests):
+    # The new tree registers tests at build time (gtest_discover_tests), so
+    # this file is loaded by ctest AFTER each module's discovery include, via
+    # TEST_INCLUDE_FILES per module directory (the legacy mechanism). Entries
+    # for tests a directory does not own are inert: ctest-time properties for
+    # never-registered names attach to nothing. No if(TEST) guards; that
+    # predicate does not evaluate during ctest processing.
+    lines = [
+        "# GENERATED FILE - do not edit by hand.",
+        "# Regenerate with: python3 scripts/generate-ctest-labels.py",
+        "# Labels policy lives in that script; CI fails on a stale copy.",
+        "",
+    ]
+    unknown = []
+    for suite in sorted(tests):
+        labels = SUITE_LABELS.get(suite)
+        if labels is None:
+            unknown.append(suite)
+            labels = CORRECTNESS
+        names = [
+            f"    {suite}.{name}"
+            for name in tests[suite]
+            if not name.startswith("DISABLED_")
+        ]
+        if not names:
+            continue
+        lines.append("set_tests_properties(")
+        lines.extend(names)
+        lines.append(f'    PROPERTIES LABELS "{labels}"')
+        lines.append(")")
+        lines.append("")
+    return "\n".join(lines) + "\n", unknown
+
+
 def main():
     tests = collect_tests()
     content, unknown = render(tests)
-    for suite in unknown:
+    new_tests = collect_new_tree_tests()
+    new_content, new_unknown = render_new_tree(new_tests)
+    for suite in unknown + new_unknown:
         print(f"warning: suite '{suite}' not in SUITE_LABELS; defaulted to Correctness",
               file=sys.stderr)
 
     if "--check" in sys.argv:
         current = OUTPUT.read_text(encoding="utf-8") if OUTPUT.exists() else ""
-        if current != content:
-            print("CTestLabels.cmake is stale; run scripts/generate-ctest-labels.py",
+        new_current = NEW_OUTPUT.read_text(encoding="utf-8") if NEW_OUTPUT.exists() else ""
+        if current != content or new_current != new_content:
+            print("CTest label files are stale; run scripts/generate-ctest-labels.py",
                   file=sys.stderr)
             return 1
-        print("CTestLabels.cmake is up to date")
+        print("CTest label files are up to date")
         return 0
 
     OUTPUT.write_text(content, encoding="utf-8")
+    NEW_OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    NEW_OUTPUT.write_text(new_content, encoding="utf-8")
     print(f"wrote {OUTPUT} ({len(tests)} suites)")
+    print(f"wrote {NEW_OUTPUT} ({len(new_tests)} suites)")
     return 0
 
 
