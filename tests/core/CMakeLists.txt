@@ -3,10 +3,36 @@
 
 add_executable(sirius_core_tests
     autodiff_dual_test.cpp
+    blackbody_planck_test.cpp
+    blackbody_test.cpp
+    blackbody_wien_test.cpp
     camera_test.cpp
     coordinates_test.cpp
     corona_test.cpp
+    geodesic_accuracy_benchmark_test.cpp
+    geodesic_conservation_test.cpp
+    geodesic_determinism_test.cpp
+    geodesic_equation_test.cpp
+    geodesic_live_path_test.cpp
+    geodesic_naninf_test.cpp
+    geodesic_path_test.cpp
+    geodesic_stability_test.cpp
+    killing_vector_conservation_test.cpp
+    adm_metric_test.cpp
+    christoffel_benchmark_test.cpp
+    christoffel_test.cpp
+    kerr_test.cpp
+    metric_derivative_test.cpp
+    metric_fps_benchmark_test.cpp
+    metric_fps_threshold_test.cpp
+    metric_loader_test.cpp
+    metric_memory_test.cpp
     metric_registry_test.cpp
+    reissner_nordstrom_test.cpp
+    rk45_integrator_test.cpp
+    schwarzschild_test.cpp
+    warp_drive_test.cpp
+    stokes_test.cpp
     tensor_inverse_test.cpp
     jet_test.cpp
     novikov_thorne_disk_test.cpp
