@@ -1,0 +1,52 @@
+# Engagement Report: the DNGR-Parity Rebuild
+
+This is the closing report of the July 2026 rebuild engagement (Prompt.md section 19 deliverables). It is written incrementally as programmes close; the completion scorecard in section 10 is authoritative for what remains open. Baseline identity, gate evidence, and per-commit detail live in the git history of `rebuild/dngr-parity`; this report synthesises.
+
+## 1. System purpose
+
+Sirius renders black holes, wormholes, and warp-drive spacetimes by integrating photon geodesics through analytically specified metrics. The engagement's mandate: bring it to the fidelity standard of DNGR, the renderer DNEG and Kip Thorne built for Interstellar, as a ground-up C++26 rebuild that runs on every GPU vendor and down to 2 GB integrated graphics, on Windows, Linux, and WSL2.
+
+## 2. Current-state assessment at engagement start
+
+The July 2026 structural remediation had left a verified C++17 system: 757 tests (436 Mandatory) green, single authorities per concern, an accurate README, and a known ledger of deferred work. Its structural liabilities, confirmed by fresh investigation rather than inherited: a 6,561-line CUDA/OptiX device monolith carrying its own drifted copies of the physics (including two dead metric branches outside the closed registry); a CPU render path without the ray-bundle propagation that defines DNGR's approach; polarisation present only as unwired Stokes algebra; NVIDIA-only GPU support; a codename file scheme hostile to newcomers; and a build system whose forced binary directory broke preset builds.
+
+## 3. Architecture summary (as rebuilt)
+
+Seven layers, dependencies pointing downward only: `app` (CLI, config, viewer), `render` (session, tiles, writers, governor), `backend` (ComputeDevice seam; CPU tracer; Vulkan compute adapter), `kernels` (Slang single-source device physics), `core` (metrics, geodesics, tensors, disk, spectral, camera, constants), `oracle` (double-precision Boyer-Lindquist validation stack, deliberately off the render path), `base` (contracts, error channel). One kernel codebase in Slang compiles to SPIR-V for the Vulkan backend, which alone reaches AMD, Intel, and NVIDIA silicon plus Lavapipe software fallback (the WSL2 and CI path); the same source emits CUDA and Metal for future native adapters. The single authorities of the July remediation carried over intact, and the kernel-side metric catalogue can no longer diverge from the registry. `docs/ARCHITECTURE.md` holds the full design and the old-name-to-new-name mapping.
+
+## 4. Feature catalogue
+
+Complete and live: nine-metric registry (Kerr-Schild family with mass, spin, charge, cosmological constant; Morris-Thorne; Alcubierre); analytic metric derivatives with autodiff cross-checks; Dormand-Prince Hamiltonian CPU tracer with null-condition renormalisation; Yoshida symplectic Slang kernels parity-gated against legacy-extracted references; Novikov-Thorne/Page-Thorne disk with blackbody spectral pipeline; Walker-Penrose polarisation transport on oracle and live paths; thin-lens/pinhole/fisheye cameras; spiral-tile threaded session; linear-EXR and PNG writers with one transfer encode each; film simulation; CLI with layered JSON/environment/flag configuration; OpenGL progressive viewer; install and CPack packaging.
+
+Retired deliberately: CUDA/OptiX backend and PTX machinery (geodesic rendering gains nothing from triangle-BVH hardware; NVIDIA is served through Vulkan), Gödel and Taub-NUT dead kernel branches, the codename file scheme, nine legacy setup/benchmark scripts tied to the CUDA era.
+
+## 5. Historical synthesis
+
+The repository's recurring failure mode, documented across two engagements, is the additive parallel path: a second implementation of an existing concern that drifts until a bulk deletion. The July remediation answered it with single authorities; this rebuild answered it structurally, by making the GPU kernel a compilation product of one Slang source and the kernel's constant tables a generated artefact. Two latent defects surfaced as side-effects of raising the toolchain and adding physics, both fixed test-first: an FMA-sensitive discriminant in a deviation test (NaN under Clang), and hand-expanded Kerr Christoffel formulas in the oracle that disagreed with their own metric at O(1), unnoticed for a year because the integration path uses Hamiltonian derivatives. The lesson both encode: an untested algebraic transcription is a liability regardless of how authoritative its home file is, and a finite-difference pin against the defining object costs one test.
+
+## 6. Target-state design
+
+`docs/SPECIFICATION.md` defines it: parity criteria P1-P6 (geodesic accuracy, ray bundles by geodesic deviation, filtered star field, relativistic disk with a Doppler-suppression toggle, camera worldlines, HDR output discipline) and exceedance criteria E1-E4 (nine-metric catalogue, polarised transport, 2 GB-class hardware reach, a published verification estate). The engagement holds a hard behavioural invariant across the rebuild: every behaviour-preserving stage reproduces the pre-rebuild reference renders byte-for-byte, and every behaviour change lands as its own named, gated commit.
+
+## 7. Changes made
+
+In sequence, each landed behind a green gate on `rebuild/dngr-parity`: engagement foundations (specification, C++26 style guide, architecture design); repository skeleton (C++26 tree beside the legacy system, presets for GCC 14/Clang 21/MSVC, contracts and error seams, strict warnings); the backend seam with a Vulkan compute adapter proven on Lavapipe; the Slang kernel authority re-authored from the CUDA monolith with parity probes; the behaviour-preserving port of core physics, oracle stack, CPU render path, and app layer with test counts matching legacy suite-for-suite; Walker-Penrose transport; the oracle Christoffel fix; the label authority extended to the new tree; CI matrix, packaging; and finally legacy retirement, deleting 71,538 lines once the new `sirius` binary reproduced the reference tapes byte-identically. The identity gate is the engagement's central evidence: same compiler, same flags, same arithmetic, same pixels.
+
+## 8. Tests and validation performed
+
+The estate was re-founded with the port and stands at 737 tests, 456 Mandatory, all green under GCC 14 (the estate also gates under Clang 21; both compilers ran the pre-retirement suites at 763/763). Layers: unit and property gates (textbook metric values, exact Kerr-Schild identities, registry round-trips); oracle gates (live-path conservation against the Boyer-Lindquist stack, Walker-Penrose to 1e-12, beam cross-sections, finite-difference connection pins); kernel parity gates on Lavapipe (metric, inverse identity, Christoffels, symplectic step, disk temperature, blackbody, 1e-6 relative for the Kerr-Schild family); image gates (byte-identity against the pre-rebuild tapes, re-verified after asset relocation and legacy deletion); end-to-end probes (session-level render with format validation, CLI decline behaviour, config schema compatibility with legacy-written files verified three ways).
+
+## 9. Remaining limitations
+
+- No physical GPU was available to the engagement; all Vulkan evidence is Lavapipe software rasterisation. The parity architecture is hardware-independent, but performance claims on the Radeon 780M target await a machine with the silicon (the CI and backend probes will run unchanged there).
+- macOS is compile-targeted through MoltenVK but never executed here; the CI macOS job builds and runs the Correctness suites only.
+- Reflection (P2996) and native contracts (P2900) remain toolchain-absent; the macro and codegen stand-ins are in place with recorded migration paths.
+- The volumetric disk, corona, turbulence, and film features carry their legacy "aesthetic, not physics" labelling forward; they are ported and tested but not part of the parity claims.
+
+## 10. Completion scorecard
+
+Maintained at closure; see the task ledger and SPECIFICATION.md section 8 for the criteria. Status at last update: P1 (geodesic accuracy) and P6 (output discipline) hold with gates; P4 holds for the emission physics with the Doppler toggle outstanding; P2 (bundles on the live paths), P3 (filtered star field), and P5 (camera worldlines) are the open physics programme; E1, E2, E4 hold; E3 holds architecturally with hardware validation pending. The Vulkan session wiring and memory governor programme is in flight.
+
+## 11. Rejected additions
+
+Scene graphs, ECS frameworks, and renderer middleware (the system's shape gains nothing); GRMHD simulation import (out of mandate); distributed rendering (a design constraint, not a gap); WGSL/WebGPU as kernel target (no 64-bit floating point); Kompute as the Vulkan layer (obscures the memory control the 2 GB budget needs); C++ modules this cycle (toolchain interop immaturity); fp64 GPU kernels as default (the precision ladder selects them only where hardware and need align).
