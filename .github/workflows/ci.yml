@@ -1,0 +1,60 @@
+# CI matrix per docs/SPECIFICATION.md programme 6. WSL2 has no separate
+# runner: it is binary-compatible with the Ubuntu job, whose Lavapipe
+# software Vulkan exercises the same backend path WSL2 uses.
+name: ci
+
+on:
+  push:
+    branches: [main, rebuild/dngr-parity]
+  pull_request:
+
+jobs:
+  linux-gate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++-14 gcc-14 ninja-build \
+            libvulkan-dev mesa-vulkan-drivers spirv-tools \
+            xorg-dev libgl1-mesa-dev
+      - name: Slang
+        run: |
+          TAG=$(curl -s https://api.github.com/repos/shader-slang/slang/releases/latest | grep -m1 '"tag_name"' | cut -d'"' -f4)
+          curl -sL "https://github.com/shader-slang/slang/releases/download/${TAG}/slang-${TAG#v}-linux-x86_64.tar.gz" -o slang.tgz
+          sudo mkdir -p /opt/slang && sudo tar xzf slang.tgz -C /opt/slang
+      - name: Configure
+        run: cmake --preset linux-ci
+      - name: Build (strict, mandatory gate on)
+        run: cmake --build --preset linux-ci -j"$(nproc)"
+      - name: Test estate
+        run: ctest --preset linux-ci -j"$(nproc)"
+      - name: Label file freshness
+        run: |
+          python3 scripts/generate-ctest-labels.py
+          git diff --exit-code -- src/Sirius.Test/CTestLabels.cmake
+
+  windows-build:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake --preset windows-msvc
+      - name: Build
+        run: cmake --build --preset windows-msvc
+      - name: New-tree unit tests
+        run: ctest --test-dir bin/windows-msvc -C Release -L Correctness --output-on-failure
+
+  macos-build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Toolchain
+        run: brew install ninja
+      - name: Configure
+        run: cmake --preset macos
+      - name: Build
+        run: cmake --build --preset macos -j3
+      - name: New-tree unit tests
+        run: ctest --test-dir bin/macos -L Correctness --output-on-failure
