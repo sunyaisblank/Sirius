@@ -13,16 +13,13 @@
 // g_uv f^u k^v are integration-quality monitors, and the Walker-Penrose
 // constant below is the polarisation-specific invariant.
 //
-// Connection source: KerrChristoffel below builds Gamma^mu_ab analytically from
-// the metric inverse (KerrMetricD::Evaluate) and the closed-form Kerr metric
-// derivatives, NOT from KerrMetricD::Christoffel. That method is left untouched
-// (it is a protected-oracle authority and the integration path uses dHdq, never
-// it), but it disagrees with its own metric: a finite-difference connection from
-// KerrMetricD::Evaluate matches KerrChristoffel to ~1e-10 and matches
-// KerrMetricD::Christoffel only to ~1e-1 (worst component Gamma^phi_theta_phi).
-// Building the connection from the analytic derivatives that dHdq already
-// validates (the symplectic integrator conserves H, E, L_z to 1e-10 through
-// them) is the correct, self-contained route and keeps the oracle unmodified.
+// Connection source: KerrMetricD::Christoffel, the single connection authority.
+// This workstream originally found that method disagreeing with its own metric
+// (finite differences matched only to ~1e-1; the defect was latent because the
+// integration path uses dHdq); it has since been rebuilt from the analytic
+// metric derivatives and is pinned against finite differences by
+// KerrMetricDTest.ChristoffelMatchesFiniteDifferencesOfMetric. KerrChristoffel
+// below remains as the transport-local name and simply delegates.
 //
 // WALKER-PENROSE CONSTANT (Kerr, Petrov type D). For a null geodesic with
 // parallel-propagated f (f.k = 0),
@@ -145,76 +142,14 @@ struct PolarisedStateD {
 // Analytic Kerr Boyer-Lindquist connection (correct, self-contained)
 //==============================================================================
 
-// Analytic metric derivatives dg[sigma][mu][nu] = d_sigma g_munu for Kerr in
-// Boyer-Lindquist. The metric is stationary and axisymmetric, so only sigma = 1
-// (r) and sigma = 2 (theta) are non-zero. Expressions match KerrMetricD::dHdq,
-// which the symplectic reference integrator conserves through to 1e-10.
-// Reference: Kerr metric, Misner, Thorne & Wheeler (1973), chapter 33.
-inline void KerrMetricDerivatives(double M, double a, const Vec4d& x, double dg[4][4][4]) {
-    for (int s = 0; s < 4; ++s)
-        for (int mu = 0; mu < 4; ++mu)
-            for (int nu = 0; nu < 4; ++nu) dg[s][mu][nu] = 0.0;
+// KerrMetricDerivatives now lives beside the metric it differentiates
+// (kerr_boyer_lindquist.h), the single connection source.
 
-    double r = x.r;
-    double theta = x.theta;
-    double sinth = std::sin(theta);
-    double costh = std::cos(theta);
-    if (std::abs(sinth) < 1e-10) sinth = std::copysign(1e-10, sinth);
-    double sin2th = sinth * sinth;
-    double cos2th = costh * costh;
-    double sin2theta = 2.0 * sinth * costh;  // sin(2 theta)
-
-    double a2 = a * a;
-    double r2 = r * r;
-    double Sigma = r2 + a2 * cos2th;
-    double Delta = r2 - 2.0 * M * r + a2;
-    double A = (r2 + a2) * (r2 + a2) - a2 * Delta * sin2th;
-    double Sigma2 = Sigma * Sigma;
-    double Delta2 = Delta * Delta;
-
-    double dSigma_dr = 2.0 * r;
-    double dSigma_dth = -a2 * sin2theta;
-    double dDelta_dr = 2.0 * (r - M);
-    double dA_dr = 4.0 * r * (r2 + a2) - a2 * dDelta_dr * sin2th;
-    double dA_dth = -a2 * Delta * sin2theta;
-
-    // d/dr g_munu.
-    dg[1][0][0] = 2.0 * M * (Sigma - 2.0 * r2) / Sigma2;
-    dg[1][0][3] = dg[1][3][0] = -2.0 * M * a * sin2th * (Sigma - 2.0 * r2) / Sigma2;
-    dg[1][1][1] = (2.0 * r * Delta - Sigma * dDelta_dr) / Delta2;
-    dg[1][2][2] = dSigma_dr;
-    dg[1][3][3] = sin2th * (dA_dr * Sigma - A * dSigma_dr) / Sigma2;
-
-    // d/dtheta g_munu.
-    dg[2][0][0] = -2.0 * M * r * dSigma_dth / Sigma2;
-    dg[2][0][3] = dg[2][3][0] = -2.0 * M * a * r * sin2theta * (Sigma + a2 * sin2th) / Sigma2;
-    dg[2][1][1] = dSigma_dth / Delta;
-    dg[2][2][2] = dSigma_dth;
-    dg[2][3][3] = (dA_dth * sin2th + A * sin2theta) / Sigma - A * sin2th * dSigma_dth / Sigma2;
-}
-
-// Christoffel symbols Gamma^mu_nu_rho = (1/2) g^mu_sigma (d_nu g_sigma_rho +
-// d_rho g_sigma_nu - d_sigma g_nu_rho), built from the exact inverse metric
-// (KerrMetricD::Evaluate) and the analytic derivatives above. See the file
-// header for why KerrMetricD::Christoffel is not called here.
+// Transport-local name for the connection; delegates to the single authority
+// (KerrMetricD::Christoffel, rebuilt from the analytic derivatives and pinned
+// against finite differences; see the file header).
 inline void KerrChristoffel(const KerrMetricD& metric, const Vec4d& x, double Gamma[4][4][4]) {
-    double g[4][4], g_inv[4][4];
-    metric.Evaluate(x, g, g_inv);
-    double dg[4][4][4];
-    KerrMetricDerivatives(metric.mass(), metric.spin(), x, dg);
-
-    for (int mu = 0; mu < 4; ++mu) {
-        for (int nu = 0; nu < 4; ++nu) {
-            for (int rho = 0; rho < 4; ++rho) {
-                double s = 0.0;
-                for (int sigma = 0; sigma < 4; ++sigma) {
-                    s += g_inv[mu][sigma] *
-                         (dg[nu][sigma][rho] + dg[rho][sigma][nu] - dg[sigma][nu][rho]);
-                }
-                Gamma[mu][nu][rho] = 0.5 * s;
-            }
-        }
-    }
+    metric.Christoffel(x, Gamma);
 }
 
 //==============================================================================

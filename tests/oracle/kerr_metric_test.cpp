@@ -279,3 +279,51 @@ TEST(Mat4dTest, Determinant) {
 }
 
 }  // namespace
+
+// The connection must agree with finite differences of the metric it claims
+// to derive from; the July-era analytic formulas failed this (Gamma^phi_
+// theta_phi lost its leading cot(theta) term, an O(1) error at a = 0), which
+// went unnoticed because the integration path uses dHdq. Central differences
+// with h = 1e-6 resolve the true connection to ~1e-9; the 1e-6 bar leaves
+// three orders of margin while failing the O(1) defect decisively.
+TEST_F(KerrMetricDTest, ChristoffelMatchesFiniteDifferencesOfMetric) {
+    KerrMetricD metric(1.0, 0.9);
+    const Vec4d x(0.0, 5.0, 1.1, 0.3);
+
+    double Gamma[4][4][4];
+    metric.Christoffel(x, Gamma);
+
+    const double h = 1e-6;
+    double dg[4][4][4];
+    for (int sigma = 0; sigma < 4; ++sigma) {
+        Vec4d xp = x, xm = x;
+        xp[sigma] += h;
+        xm[sigma] -= h;
+        double gp[4][4], gm[4][4], gi[4][4];
+        metric.Evaluate(xp, gp, gi);
+        metric.Evaluate(xm, gm, gi);
+        for (int mu = 0; mu < 4; ++mu)
+            for (int nu = 0; nu < 4; ++nu)
+                dg[sigma][mu][nu] = (gp[mu][nu] - gm[mu][nu]) / (2.0 * h);
+    }
+
+    double g[4][4], g_inv[4][4];
+    metric.Evaluate(x, g, g_inv);
+
+    for (int mu = 0; mu < 4; ++mu) {
+        for (int nu = 0; nu < 4; ++nu) {
+            for (int rho = 0; rho < 4; ++rho) {
+                double fd = 0.0;
+                for (int sigma = 0; sigma < 4; ++sigma) {
+                    fd += g_inv[mu][sigma] *
+                          (dg[nu][sigma][rho] + dg[rho][sigma][nu] - dg[sigma][nu][rho]);
+                }
+                fd *= 0.5;
+                EXPECT_NEAR(Gamma[mu][nu][rho], fd,
+                            1e-6 * std::max(1.0, std::abs(fd)))
+                    << "Gamma^" << mu << "_" << nu << rho
+                    << " disagrees with finite differences of the metric";
+            }
+        }
+    }
+}
