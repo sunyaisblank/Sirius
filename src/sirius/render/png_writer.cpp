@@ -1,0 +1,60 @@
+// PNG writer implementation over stb_image_write. Ported from OUPN001A.cpp.
+//
+// This translation unit defines STB_IMAGE_WRITE_IMPLEMENTATION (the encode
+// side). The decode side (STB_IMAGE_IMPLEMENTATION) lives in stb_impl.cpp so
+// the two never collide.
+
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
+
+#include "sirius/render/png_writer.h"
+
+#include <vector>
+
+namespace sirius::render {
+
+bool PNGWriter::Write(const std::string& path, const ImageBuffer& buffer) {
+    return WriteRgb(path, buffer.width, buffer.height, buffer.pixels.data());
+}
+
+bool PNGWriter::Write(const std::string& path, const ImageBufferRGBA& buffer) {
+    return WriteRgba(path, buffer.width, buffer.height, buffer.pixels.data());
+}
+
+bool PNGWriter::WriteRgba(const std::string& path, int width, int height, const float* pixels) {
+    if (width <= 0 || height <= 0 || !pixels) {
+        return false;
+    }
+
+    std::vector<uint8_t> rgb8(static_cast<size_t>(width) * height * 4);
+
+    for (size_t i = 0; i < static_cast<size_t>(width) * height; ++i) {
+        rgb8[i * 4 + 0] = ToSrgb8(pixels[i * 4 + 0]);  // R
+        rgb8[i * 4 + 1] = ToSrgb8(pixels[i * 4 + 1]);  // G
+        rgb8[i * 4 + 2] = ToSrgb8(pixels[i * 4 + 2]);  // B
+        rgb8[i * 4 + 3] = static_cast<uint8_t>(
+            std::clamp(pixels[i * 4 + 3] * 255.0f + 0.5f, 0.0f, 255.0f));  // A (linear)
+    }
+
+    int result = stbi_write_png(path.c_str(), width, height, 4, rgb8.data(), width * 4);
+    return result != 0;
+}
+
+bool PNGWriter::WriteRgb(const std::string& path, int width, int height, const float* pixels) {
+    if (width <= 0 || height <= 0 || !pixels) {
+        return false;
+    }
+
+    std::vector<uint8_t> rgb8(static_cast<size_t>(width) * height * 3);
+
+    for (size_t i = 0; i < static_cast<size_t>(width) * height; ++i) {
+        rgb8[i * 3 + 0] = ToSrgb8(pixels[i * 3 + 0]);  // R
+        rgb8[i * 3 + 1] = ToSrgb8(pixels[i * 3 + 1]);  // G
+        rgb8[i * 3 + 2] = ToSrgb8(pixels[i * 3 + 2]);  // B
+    }
+
+    int result = stbi_write_png(path.c_str(), width, height, 3, rgb8.data(), width * 3);
+    return result != 0;
+}
+
+}  // namespace sirius::render

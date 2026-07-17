@@ -793,6 +793,11 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr
+    PROPERTIES LABELS "Correctness"
+)
+
+set_tests_properties(
     SchwarzschildTests.MetricIsDiagonal
     SchwarzschildTests.MetricIsSymmetric
     SchwarzschildTests.MetricHasLorentzianSignature
@@ -806,6 +811,18 @@ set_tests_properties(
     SchwarzschildTests.GravitationalRedshift
     SchwarzschildTests.MetricDeterminant
     SchwarzschildTests.DeterminantIsNegative
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    SpectralEmissionTest.NT_QFactorZeroAtISCO_Schwarzschild
+    SpectralEmissionTest.NT_QFactorZeroAtISCO_Kerr
+    SpectralEmissionTest.NT_QFactorPositiveOutsideISCO
+    SpectralEmissionTest.NT_QFactorBounded
+    SpectralEmissionTest.TemperatureRange
+    SpectralEmissionTest.BlackbodyColourDirection
+    SpectralEmissionTest.DopplerShiftDirection
+    SpectralEmissionTest.SpinDisplayFormat
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 

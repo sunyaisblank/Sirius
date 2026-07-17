@@ -130,6 +130,7 @@ SUITE_LABELS = {
     "KernelParity": MANDATORY,
     "KernelTrace": CORRECTNESS,
     "VulkanBackend": CORRECTNESS,
+    "RenderSessionProbe": CORRECTNESS,
 }
 
 
