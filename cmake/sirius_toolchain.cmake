@@ -55,7 +55,11 @@ function(sirius_configure_target target)
             target_compile_options(${target} PRIVATE /WX)
         endif()
     else()
-        target_compile_options(${target} PRIVATE -std=c++2c -Wall -Wextra -Wpedantic)
+        # -Wno-missing-field-initializers: designated initializers value-
+        # initialise omitted members by the standard; the warning penalises
+        # the exact idiom the Vulkan API structs require.
+        target_compile_options(${target} PRIVATE
+            -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers)
         if(SIRIUS_WERROR)
             target_compile_options(${target} PRIVATE -Werror)
         endif()
