@@ -172,8 +172,10 @@ TEST_F(GeodesicDeviationTests, EllipseSemiAxesPositive) {
     double a22 = xi2[1]*xi2[1] + xi2[2]*xi2[2] + xi2[3]*xi2[3];
     
     double trace = a11 + a22;
-    double det = a11 * a22 - a12 * a12;
-    double disc = std::sqrt(trace * trace - 4.0 * det);
+    // trace^2 - 4 det cancels to a sign-indeterminate epsilon under FMA
+    // contraction (NaN via sqrt on Clang -O3); the algebraically identical
+    // sum-of-squares form is non-negative by construction.
+    double disc = std::sqrt((a11 - a22) * (a11 - a22) + 4.0 * a12 * a12);
     
     double lambda1 = 0.5 * (trace + disc);
     double lambda2 = 0.5 * (trace - disc);

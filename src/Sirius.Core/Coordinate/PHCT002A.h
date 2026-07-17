@@ -30,6 +30,7 @@
 #define PHCT002A_H
 
 #include "MTTN001A.h"
+#include <algorithm>
 #include <cmath>
 #include <array>
 
