@@ -15,3 +15,10 @@ target_link_libraries(sirius_base_tests PRIVATE sirius_base GTest::gtest_main)
 sirius_configure_target(sirius_base_tests CONTRACT_MODE 2)
 
 gtest_discover_tests(sirius_base_tests PROPERTIES LABELS "Correctness")
+
+# Module suites land with their modules; same one-owner rule as src/sirius.
+foreach(module core oracle backend render app)
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${module}/CMakeLists.txt")
+        add_subdirectory(${module})
+    endif()
+endforeach()

@@ -11,3 +11,11 @@ add_library(sirius_base STATIC
 target_include_directories(sirius_base PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/..")
 
 sirius_configure_target(sirius_base)
+
+# Modules land one at a time during the port; each owns its CMakeLists so
+# parallel port workstreams never share a file.
+foreach(module core oracle backend render app)
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${module}/CMakeLists.txt")
+        add_subdirectory(${module})
+    endif()
+endforeach()
