@@ -1,0 +1,491 @@
+// Kernel-versus-legacy parity gate (docs/SPECIFICATION.md section 7,
+// docs/ARCHITECTURE.md section 9). The parity_probe Slang kernel evaluates the
+// ported device physics at fixed sample points through the Vulkan adapter on
+// Lavapipe; this suite compares each result against reference values computed
+// from the retired RDOP002A.cu functions in fp32.
+//
+// Reference provenance: the values embedded below are the stdout of a
+// mechanical extraction of the legacy device functions (scratchpad
+// kernel-ref/ref_gen.cpp: __device__/template markers removed, make_float3 and
+// sincosf shimmed, arithmetic otherwise verbatim, built with g++-14 -O2). The
+// comparison is host-cmath-fp32 (reference) against Slang->SPIR-V->Lavapipe-fp32
+// (kernel); tolerances below absorb the last-ULP differences between the two
+// transcendental libraries and are named where they exceed the nominal 1e-6.
+//
+// Sample points (as the workstream brief requires): Kerr a=0.9 near the photon
+// sphere, a=0 Schwarzschild at r=6M, an Ellis wormhole near its throat, and the
+// Alcubierre warp bubble wall, plus a charged Kerr-Newman point for inverse
+// coverage and two disk/blackbody temperatures.
+
+#include "sirius/backend/device.h"
+
+#include <gtest/gtest.h>
+
+#include <array>
+#include <cmath>
+#include <cstddef>
+#include <cstdint>
+#include <fstream>
+#include <span>
+#include <string>
+#include <vector>
+
+namespace {
+
+using sirius::backend::BufferHandle;
+using sirius::backend::BufferUsage;
+using sirius::backend::ComputeDevice;
+using sirius::backend::CreateVulkanDevice;
+using sirius::backend::EnumerateVulkanDevices;
+using sirius::backend::KernelHandle;
+
+constexpr std::uint32_t kSampleStride = 16;
+constexpr std::uint32_t kResultStride = 64;
+
+// Metric selector ids (must match gr_types.slang).
+constexpr float kKerrSchild = 0.0f;
+constexpr float kEllis = 1.0f;
+constexpr float kWarp = 2.0f;
+
+// Opcodes (must match parity_probe.slang).
+constexpr std::uint32_t kOpMetric = 0;
+constexpr std::uint32_t kOpChristoffel = 1;
+constexpr std::uint32_t kOpSymplectic = 2;
+constexpr std::uint32_t kOpDiskTemp = 3;
+constexpr std::uint32_t kOpBlackbody = 4;
+constexpr std::uint32_t kOpSymplecticS4 = 5;
+constexpr std::uint32_t kOpDeviation = 6;
+
+std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
+    std::ifstream file(path, std::ios::binary | std::ios::ate);
+    if (!file) {
+        return {};
+    }
+    const auto size = static_cast<std::size_t>(file.tellg());
+    std::vector<std::uint32_t> words(size / sizeof(std::uint32_t));
+    file.seekg(0);
+    file.read(reinterpret_cast<char*>(words.data()), static_cast<std::streamsize>(size));
+    return words;
+}
+
+// One sample record, laid out per the parity_probe ABI.
+struct Sample {
+    float metricId = 0.0f;
+    float p1 = 0.0f, p2 = 0.0f, p3 = 0.0f, p4 = 0.0f;   // family params
+    float c0 = 0.0f, c1 = 0.0f, c2 = 0.0f;              // position coords
+    float u0 = 0.0f, u1 = 0.0f, u2 = 0.0f, u3 = 0.0f;   // 4-velocity
+    float h = 0.0f, aux0 = 0.0f, aux1 = 0.0f, aux2 = 0.0f;
+};
+
+std::vector<float> Flatten(const std::vector<Sample>& samples) {
+    std::vector<float> flat;
+    flat.reserve(samples.size() * kSampleStride);
+    for (const auto& s : samples) {
+        flat.insert(flat.end(), {s.metricId, s.p1, s.p2, s.p3, s.p4, s.c0, s.c1, s.c2,
+                                 s.u0, s.u1, s.u2, s.u3, s.h, s.aux0, s.aux1, s.aux2});
+    }
+    return flat;
+}
+
+// Runs the probe for one opcode over a set of samples, returns the flat result
+// buffer (kResultStride floats per sample).
+std::vector<float> RunProbe(ComputeDevice& device, KernelHandle kernel, std::uint32_t opcode,
+                            const std::vector<Sample>& samples) {
+    const auto count = static_cast<std::uint32_t>(samples.size());
+    const std::vector<float> flat = Flatten(samples);
+    const std::vector<float> params = {static_cast<float>(opcode), static_cast<float>(count),
+                                       static_cast<float>(kSampleStride),
+                                       static_cast<float>(kResultStride)};
+    std::vector<float> results(count * kResultStride, 0.0f);
+
+    const auto sbuf = device.CreateBuffer(flat.size() * sizeof(float), BufferUsage::kStorage);
+    const auto rbuf = device.CreateBuffer(results.size() * sizeof(float), BufferUsage::kStorage);
+    const auto pbuf = device.CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
+    EXPECT_TRUE(sbuf && rbuf && pbuf);
+
+    EXPECT_TRUE(device.WriteBuffer(*sbuf, std::as_bytes(std::span<const float>(flat))));
+    // Zero the result buffer so unused slots read back deterministically.
+    EXPECT_TRUE(device.WriteBuffer(*rbuf, std::as_bytes(std::span<const float>(results))));
+    EXPECT_TRUE(device.WriteBuffer(*pbuf, std::as_bytes(std::span<const float>(params))));
+
+    const BufferHandle binding[] = {*sbuf, *rbuf, *pbuf};
+    EXPECT_TRUE(device.Dispatch(kernel, binding, (count + 63) / 64, 1, 1).has_value());
+
+    EXPECT_TRUE(device.ReadBuffer(*rbuf, std::as_writable_bytes(std::span<float>(results))));
+    return results;
+}
+
+// Relative-with-floor closeness: |a-e| <= rel*|e| + abs.
+::testing::AssertionResult Close(float a, float e, float rel, float abs_tol,
+                                 const std::string& tag) {
+    const float d = std::abs(a - e);
+    if (d <= rel * std::abs(e) + abs_tol) {
+        return ::testing::AssertionSuccess();
+    }
+    return ::testing::AssertionFailure()
+           << tag << " actual=" << a << " expected=" << e << " |diff|=" << d;
+}
+
+struct Fixture {
+    std::unique_ptr<ComputeDevice> device;
+    KernelHandle kernel;
+    bool ready = false;
+};
+
+Fixture OpenProbe() {
+    Fixture f;
+#ifndef SIRIUS_KERNEL_DIR
+    return f;
+#else
+    const auto devices = EnumerateVulkanDevices();
+    if (!devices.has_value() || devices->empty()) {
+        return f;
+    }
+    auto device = CreateVulkanDevice(0);
+    if (!device.has_value()) {
+        return f;
+    }
+    const auto spirv = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/parity_probe.spv");
+    if (spirv.empty()) {
+        return f;
+    }
+    auto kernel = (*device)->LoadKernel(spirv);
+    if (!kernel.has_value()) {
+        return f;
+    }
+    f.device = std::move(*device);
+    f.kernel = *kernel;
+    f.ready = true;
+    return f;
+#endif
+}
+
+// --- Sample points -----------------------------------------------------------
+
+Sample KerrSchildAt(float M, float a, float Q, float x, float y, float z) {
+    Sample s;
+    s.metricId = kKerrSchild;
+    s.p1 = M; s.p2 = a; s.p3 = Q; s.p4 = 0.0f;
+    s.c0 = x; s.c1 = y; s.c2 = z;
+    return s;
+}
+
+// S1 Kerr a=0.9 near photon sphere; S2 Schwarzschild r=6M; S3 Kerr-Newman.
+const Sample kS1 = KerrSchildAt(1.0f, 0.9f, 0.0f, 1.6f, 0.8f, 0.3f);
+const Sample kS2 = KerrSchildAt(1.0f, 0.0f, 0.0f, 4.0f, 2.0f, 4.0f);
+const Sample kS3 = KerrSchildAt(1.0f, 0.9f, 0.4f, 2.0f, 1.0f, 0.6f);
+
+// --- Embedded reference values (ref_gen.cpp stdout) --------------------------
+
+const std::array<float, 16> kS1_g = {
+    0.24817276f, 1.22385824f, -0.0649836585f, 0.236396417f,
+    1.22385824f, 2.20001745f, -0.0637177676f, 0.231791392f,
+    -0.0649836585f, -0.063717775f, 1.00338328f, -0.0123075135f,
+    0.236396417f, 0.231791407f, -0.0123075135f, 1.04477203f};
+const std::array<float, 16> kS1_ginv = {
+    -2.24817276f, 1.22385824f, -0.0649836585f, 0.236396417f,
+    1.22385824f, -0.200017452f, 0.0637177676f, -0.231791392f,
+    -0.0649836585f, 0.063717775f, 0.996616781f, 0.0123075135f,
+    0.236396417f, -0.231791407f, 0.0123075135f, 0.955227971f};
+const std::array<float, 16> kS2_g = {
+    -0.666666627f, 0.222222239f, 0.111111119f, 0.222222239f,
+    0.222222239f, 1.14814818f, 0.0740740821f, 0.148148164f,
+    0.111111119f, 0.0740740821f, 1.03703701f, 0.0740740821f,
+    0.222222239f, 0.148148164f, 0.0740740821f, 1.14814818f};
+const std::array<float, 16> kS2_ginv = {
+    -1.33333337f, 0.222222239f, 0.111111119f, 0.222222239f,
+    0.222222239f, 0.851851821f, -0.0740740821f, -0.148148164f,
+    0.111111119f, -0.0740740821f, 0.962962985f, -0.0740740821f,
+    0.222222239f, -0.148148164f, -0.0740740821f, 0.851851821f};
+const std::array<float, 16> kS3_g = {
+    -0.1156317f, 0.84726429f, 0.0567223616f, 0.247048855f,
+    0.84726429f, 1.81171703f, 0.054342553f, 0.236683816f,
+    0.0567223616f, 0.054342553f, 1.00363815f, 0.0158454273f,
+    0.247048855f, 0.236683816f, 0.0158454273f, 1.06901324f};
+const std::array<float, 16> kS3_ginv = {
+    -1.8843683f, 0.84726429f, 0.0567223616f, 0.247048855f,
+    0.84726429f, 0.188283026f, -0.054342553f, -0.236683816f,
+    0.0567223616f, -0.054342553f, 0.996361911f, -0.0158454273f,
+    0.247048855f, -0.236683816f, -0.0158454273f, 0.930986762f};
+
+const std::array<float, 16> kS4_g = {
+    -0.186177671f, -0.902121007f, 0.0f, 0.0f,
+    -0.902121007f, 1.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 4.08212233f, 0.0f,
+    0.0f, 0.0f, 0.0f, 4.08212233f};
+const std::array<float, 16> kS4_ginv = {
+    -1.0f, -0.902121007f, 0.0f, 0.0f,
+    -0.902121007f, 0.186177671f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.244970605f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.244970605f};
+const std::array<float, 16> kS5_g = {
+    4.76837158e-07f, -1.00000024f, 0.0f, 0.0f,
+    -1.00000024f, 1.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f};
+const std::array<float, 16> kS5_ginv = {
+    -1.0f, -1.00000024f, 0.0f, 0.0f,
+    -1.00000024f, -4.76837158e-07f, 0.0f, 0.0f,
+    0.0f, 0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f};
+
+const std::array<float, 64> kS1_christoffel = {
+    0.480513632f, 0.846556902f, 0.162684917f, 0.231745839f, 0.846556902f, 1.16810358f, 0.100205779f, 0.442988515f,
+    0.162684917f, 0.100205779f, -0.795098364f, 0.0158032775f, 0.231745839f, 0.442988515f, 0.0158032775f, -0.680479527f,
+    -0.0957495421f, -0.461975127f, -0.163184449f, -0.151768044f, -0.461975127f, -0.784428596f, -0.101850964f, -0.360365629f,
+    -0.163184449f, -0.101850964f, 0.778974175f, -0.0164174605f, -0.151768044f, -0.360365629f, -0.0164174605f, 0.682342529f,
+    0.21271883f, 0.212243751f, -0.0013024573f, 0.129806966f, 0.212243751f, 0.210141778f, -0.00353839644f, 0.135504469f,
+    -0.0013024573f, -0.00353839644f, -0.0408864506f, -0.0053072162f, 0.129806966f, 0.135504469f, -0.0053072162f, 0.00243838085f,
+    0.0497330427f, -0.0266991332f, -0.120330833f, -0.0172360651f, -0.0266991332f, -0.094480522f, -0.106526606f, -0.0585899353f,
+    -0.120330833f, -0.106526606f, 0.159526646f, -0.0199474562f, -0.0172360651f, -0.0585899353f, -0.0199474562f, 0.133927062f};
+const std::array<float, 64> kS2_christoffel = {
+    0.00925926026f, 0.0246913582f, 0.0123456791f, 0.0246913582f, 0.0246913582f, -0.00205761427f, 0.0267489739f, 0.0534979478f,
+    0.0123456791f, 0.0267489739f, -0.0421810746f, 0.0267489739f, 0.0246913582f, 0.0534979478f, 0.0267489739f, -0.00205761427f,
+    0.0123456791f, -0.00411522668f, -0.00205761334f, -0.00411522668f, -0.00411522668f, 0.00960219558f, -0.0137174213f, -0.0274348427f,
+    -0.00205761334f, -0.0137174213f, 0.0301783271f, -0.0137174213f, -0.00411522668f, -0.0274348427f, -0.0137174213f, 0.00960219558f,
+    0.00617283955f, -0.00205761334f, -0.00102880667f, -0.00205761334f, -0.00205761334f, 0.00480109872f, -0.00685871206f, -0.0137174223f,
+    -0.00102880667f, -0.00685871206f, 0.0150891654f, -0.00685871113f, -0.00205761334f, -0.0137174223f, -0.00685871113f, 0.00480109872f,
+    0.0123456791f, -0.00411522668f, -0.00205761334f, -0.00411522668f, -0.00411522668f, 0.00960219651f, -0.0137174213f, -0.0274348427f,
+    -0.00205761334f, -0.0137174213f, 0.0301783271f, -0.0137174213f, -0.00411522668f, -0.0274348427f, -0.0137174213f, 0.00960219651f};
+const std::array<float, 64> kS3_christoffel = {
+    0.17010279f, 0.334537357f, 0.0966958255f, 0.127950162f, 0.334537357f, 0.451506615f, 0.128602356f, 0.279217303f,
+    0.0966958255f, 0.128602356f, -0.392807484f, 0.0394485183f, 0.127950162f, 0.279217303f, 0.0394485183f, -0.316273749f,
+    0.00860523805f, -0.156128749f, -0.0683526099f, -0.0777029321f, -0.156128749f, -0.27508682f, -0.0999394208f, -0.224506527f,
+    -0.0683526099f, -0.0999394208f, 0.378736645f, -0.0312046371f, -0.0777029321f, -0.224506527f, -0.0312046371f, 0.314689457f,
+    0.0748754591f, 0.047447715f, -0.000699766446f, 0.0613086782f, 0.047447715f, 0.0243298467f, -0.0038289465f, 0.0449797213f,
+    -0.000699766446f, -0.0038289465f, 0.0255471226f, 0.00192844577f, 0.0613086782f, 0.0449797213f, 0.00192844577f, 0.0524292588f,
+    0.0329135135f, -0.0133464206f, -0.0674042106f, -0.0132742766f, -0.0133464206f, -0.0464611873f, -0.0744270533f, -0.0556216836f,
+    -0.0674042106f, -0.0744270533f, 0.104218721f, -0.0223035496f, -0.0132742766f, -0.0556216836f, -0.0223035496f, 0.0946279168f};
+
+// Symplectic wrapper (rejected step: returns the input state; verifies the
+// adaptive-step and Hamiltonian-error acceptance arithmetic).
+// x(4), u(4), h, accepted.
+const std::array<float, 10> kS6_wrapper = {
+    0.0f, 10.0f, 1.57079625f, 0.0f, 1.28184509f, -1.0f, 0.0f, 0.0299999993f, 0.0500000007f, 0.0f};
+const std::array<float, 10> kS7_wrapper = {
+    0.0f, 6.0f, 1.57079625f, 0.0f, 0.897496521f, -0.5f, 0.0299999993f, 0.0599999987f, 0.0500000007f, 0.0f};
+
+// One Yoshida S4 step: q(4), p(4).
+const std::array<float, 8> kS6_s4 = {
+    2.63183331f, 5.70183372f, 1.57079625f, 0.220531374f, -1.03087604f, -0.380756766f, 5.26250972e-08f, 2.79842782f};
+const std::array<float, 8> kS7_s4 = {
+    0.671619654f, 4.79422522f, 1.62458265f, 0.109132871f, -0.598330975f, -0.586659193f, 1.06740439f, 2.15999985f};
+
+const float kS6_ut = 1.28184509f;
+const float kS7_ut = 0.897496521f;
+
+// -----------------------------------------------------------------------------
+
+TEST(KernelParity, KerrSchildMetricMatchesLegacyToOnePartInMillion) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    const std::vector<Sample> samples = {kS1, kS2, kS3};
+    const auto r = RunProbe(*f.device, f.kernel, kOpMetric, samples);
+    const std::array<const std::array<float, 16>*, 3> gref = {&kS1_g, &kS2_g, &kS3_g};
+    const std::array<const std::array<float, 16>*, 3> giref = {&kS1_ginv, &kS2_ginv, &kS3_ginv};
+
+    for (std::size_t s = 0; s < samples.size(); ++s) {
+        const std::size_t base = s * kResultStride;
+        for (int k = 0; k < 16; ++k) {
+            EXPECT_TRUE(Close(r[base + k], (*gref[s])[k], 1e-6f, 1e-6f,
+                              "g[" + std::to_string(s) + "][" + std::to_string(k) + "]"));
+            EXPECT_TRUE(Close(r[base + 16 + k], (*giref[s])[k], 1e-6f, 1e-6f,
+                              "ginv[" + std::to_string(s) + "][" + std::to_string(k) + "]"));
+        }
+        // The analytic Kerr-Schild inverse satisfies g g^-1 = I to fp32.
+        EXPECT_LT(r[base + 32], 5e-6f) << "inverse-metric identity error, sample " << s;
+    }
+}
+
+TEST(KernelParity, WormholeAndWarpMetricMatchLegacy) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    Sample ellis;  // Ellis drainhole m=0.5, n=1.0, near throat (r=0.6)
+    ellis.metricId = kEllis;
+    ellis.p1 = 0.5f; ellis.p2 = 1.0f;
+    ellis.c0 = 0.6f; ellis.c1 = 1.5707963f; ellis.c2 = 0.0f;
+
+    Sample warp;  // Alcubierre bubble wall: vs=2, sigma=8, R=1 at rs=1
+    warp.metricId = kWarp;
+    warp.p1 = 2.0f; warp.p2 = 8.0f; warp.p3 = 1.0f;
+    warp.c0 = 1.0f; warp.c1 = 0.0f; warp.c2 = 0.0f;
+
+    const std::vector<Sample> samples = {ellis, warp};
+    const auto r = RunProbe(*f.device, f.kernel, kOpMetric, samples);
+    const std::array<const std::array<float, 16>*, 2> gref = {&kS4_g, &kS5_g};
+    const std::array<const std::array<float, 16>*, 2> giref = {&kS4_ginv, &kS5_ginv};
+
+    // Loosened from the nominal 1e-6 to 1e-5 relative: the Ellis areal-radius
+    // factor Rp/sqrt(1 - Fp^2) threads atan -> exp -> sqrt, and the warp shape
+    // function threads tanh, so their angular components accumulate ~1-2 ULP per
+    // transcendental of disagreement between Lavapipe and host glibc (observed
+    // worst case 1.4e-6 relative on g_thth). The Kerr-Schild family, which is
+    // algebraic apart from one sqrt for the radius, holds the strict 1e-6.
+    for (std::size_t s = 0; s < samples.size(); ++s) {
+        const std::size_t base = s * kResultStride;
+        for (int k = 0; k < 16; ++k) {
+            EXPECT_TRUE(Close(r[base + k], (*gref[s])[k], 1e-5f, 1e-6f,
+                              "g[" + std::to_string(s) + "][" + std::to_string(k) + "]"));
+            EXPECT_TRUE(Close(r[base + 16 + k], (*giref[s])[k], 1e-5f, 1e-6f,
+                              "ginv[" + std::to_string(s) + "][" + std::to_string(k) + "]"));
+        }
+    }
+}
+
+TEST(KernelParity, KerrSchildChristoffelMatchesLegacyToOnePartInMillion) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    const std::vector<Sample> samples = {kS1, kS2, kS3};
+    const auto r = RunProbe(*f.device, f.kernel, kOpChristoffel, samples);
+    const std::array<const std::array<float, 64>*, 3> cref = {
+        &kS1_christoffel, &kS2_christoffel, &kS3_christoffel};
+
+    for (std::size_t s = 0; s < samples.size(); ++s) {
+        const std::size_t base = s * kResultStride;
+        for (int k = 0; k < 64; ++k) {
+            EXPECT_TRUE(Close(r[base + k], (*cref[s])[k], 1e-6f, 1e-6f,
+                              "Gamma[" + std::to_string(s) + "][" + std::to_string(k) + "]"));
+        }
+    }
+}
+
+TEST(KernelParity, SymplecticStepMatchesLegacy) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    Sample s6;  // Kerr a=0.9 null infalling geodesic
+    s6.metricId = kKerrSchild; s6.p1 = 1.0f; s6.p2 = 0.9f;
+    s6.c0 = 10.0f; s6.c1 = 1.5707963f; s6.c2 = 0.0f;
+    s6.u0 = kS6_ut; s6.u1 = -1.0f; s6.u2 = 0.0f; s6.u3 = 0.03f;
+    s6.h = 0.1f; s6.aux0 = 1e-6f; s6.aux1 = 0.001f; s6.aux2 = 1.0f;
+
+    Sample s7;  // Schwarzschild null geodesic
+    s7.p1 = 1.0f; s7.p2 = 0.0f;
+    s7.c0 = 6.0f; s7.c1 = 1.5707963f; s7.c2 = 0.0f;
+    s7.u0 = kS7_ut; s7.u1 = -0.5f; s7.u2 = 0.03f; s7.u3 = 0.06f;
+    s7.h = 0.1f; s7.aux0 = 1e-6f; s7.aux1 = 0.001f; s7.aux2 = 1.0f;
+
+    const std::vector<Sample> samples = {s6, s7};
+    const auto r = RunProbe(*f.device, f.kernel, kOpSymplectic, samples);
+    const std::array<const std::array<float, 10>*, 2> ref = {&kS6_wrapper, &kS7_wrapper};
+
+    for (std::size_t s = 0; s < samples.size(); ++s) {
+        const std::size_t base = s * kResultStride;
+        for (int k = 0; k < 10; ++k) {
+            EXPECT_TRUE(Close(r[base + k], (*ref[s])[k], 1e-5f, 1e-6f,
+                              "sympl[" + std::to_string(s) + "][" + std::to_string(k) + "]"));
+        }
+    }
+}
+
+TEST(KernelParity, YoshidaS4StepMatchesLegacy) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    Sample s6;
+    s6.p1 = 1.0f; s6.p2 = 0.9f;
+    s6.c0 = 10.0f; s6.c1 = 1.5707963f; s6.c2 = 0.0f;
+    s6.u0 = kS6_ut; s6.u1 = -1.0f; s6.u2 = 0.0f; s6.u3 = 0.03f;
+    s6.h = 0.05f;
+
+    Sample s7;
+    s7.p1 = 1.0f; s7.p2 = 0.0f;
+    s7.c0 = 6.0f; s7.c1 = 1.5707963f; s7.c2 = 0.0f;
+    s7.u0 = kS7_ut; s7.u1 = -0.5f; s7.u2 = 0.03f; s7.u3 = 0.06f;
+    s7.h = 0.05f;
+
+    const std::vector<Sample> samples = {s6, s7};
+    const auto r = RunProbe(*f.device, f.kernel, kOpSymplecticS4, samples);
+    const std::array<const std::array<float, 8>*, 2> ref = {&kS6_s4, &kS7_s4};
+
+    for (std::size_t s = 0; s < samples.size(); ++s) {
+        const std::size_t base = s * kResultStride;
+        for (int k = 0; k < 8; ++k) {
+            EXPECT_TRUE(Close(r[base + k], (*ref[s])[k], 1e-5f, 1e-6f,
+                              "s4[" + std::to_string(s) + "][" + std::to_string(k) + "]"));
+        }
+    }
+}
+
+TEST(KernelParity, NovikovThorneDiskTemperatureMatchesLegacy) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    Sample s8;  // Kerr a=0.9 at r=8; r_isco and inner temperature in aux slots
+    s8.p1 = 1.0f; s8.p2 = 0.9f;
+    s8.c0 = 8.0f;
+    s8.aux0 = 2.32088304f;  // r_isco = ComputeKerrISCO(1, 0.9)
+    s8.aux1 = 10000.0f;
+
+    Sample s9;  // Schwarzschild at r=10
+    s9.p1 = 1.0f; s9.p2 = 0.0f;
+    s9.c0 = 10.0f;
+    s9.aux0 = 6.0f;
+    s9.aux1 = 10000.0f;
+
+    const std::vector<Sample> samples = {s8, s9};
+    const auto r = RunProbe(*f.device, f.kernel, kOpDiskTemp, samples);
+
+    // T, Q, isco. Blackbody/disk tolerance is 1e-4 relative.
+    EXPECT_TRUE(Close(r[0 * kResultStride + 0], 8364.42773f, 1e-4f, 1e-3f, "S8 T"));
+    EXPECT_TRUE(Close(r[0 * kResultStride + 1], 0.489491194f, 1e-4f, 1e-6f, "S8 Q"));
+    EXPECT_TRUE(Close(r[0 * kResultStride + 2], 2.32088304f, 1e-4f, 1e-6f, "S8 isco"));
+    EXPECT_TRUE(Close(r[1 * kResultStride + 0], 6240.35303f, 1e-4f, 1e-3f, "S9 T"));
+    EXPECT_TRUE(Close(r[1 * kResultStride + 1], 0.15164797f, 1e-4f, 1e-6f, "S9 Q"));
+    EXPECT_TRUE(Close(r[1 * kResultStride + 2], 6.0f, 1e-4f, 1e-6f, "S9 isco"));
+}
+
+TEST(KernelParity, ChebyshevBlackbodyMatchesLegacy) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    Sample t3000, t6000, t15000;
+    t3000.c0 = 3000.0f;
+    t6000.c0 = 6000.0f;
+    t15000.c0 = 15000.0f;
+
+    const std::vector<Sample> samples = {t3000, t6000, t15000};
+    const auto r = RunProbe(*f.device, f.kernel, kOpBlackbody, samples);
+
+    const std::array<std::array<float, 3>, 3> ref = {{
+        {1.28577852f, 0.937052548f, 0.781637311f},
+        {1.01414442f, 0.993740678f, 1.02034235f},
+        {0.720878243f, 1.05778944f, 1.24985516f}}};
+
+    for (std::size_t s = 0; s < samples.size(); ++s) {
+        const std::size_t base = s * kResultStride;
+        for (int k = 0; k < 3; ++k) {
+            EXPECT_TRUE(Close(r[base + k], ref[s][k], 1e-4f, 1e-5f,
+                              "bb[" + std::to_string(s) + "][" + std::to_string(k) + "]"));
+        }
+    }
+}
+
+TEST(KernelParity, GeodesicDeviationIsFiniteAndCurvedNearBlackHole) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    // Kerr a=0.9 at a Cartesian point ~4M out, with an infalling null tangent.
+    // There is no legacy reference for this Cartesian-chart deviation (the .cu
+    // evaluated it through a spherical<->Cartesian transform); the check is that
+    // both paths are finite and the full-Riemann tidal acceleration is non-zero,
+    // exercising GetRiemannTensorCart + both deviation paths through the gate.
+    Sample s;
+    s.metricId = kKerrSchild;
+    s.p1 = 1.0f; s.p2 = 0.9f; s.p3 = 0.0f; s.p4 = 0.0f;
+    s.c0 = 4.0f; s.c1 = 1.0f; s.c2 = 0.5f;
+    s.u0 = 1.0f; s.u1 = -1.0f; s.u2 = 0.0f; s.u3 = 0.0f;
+    s.aux0 = 0.05f;
+
+    const std::vector<Sample> samples = {s};
+    const auto r = RunProbe(*f.device, f.kernel, kOpDeviation, samples);
+    for (int k = 0; k < 9; ++k) {
+        EXPECT_TRUE(std::isfinite(r[k])) << "deviation component " << k << " non-finite";
+    }
+    EXPECT_GT(r[8], 1e-6f) << "full-Riemann tidal acceleration vanishes near the hole";
+}
+
+}  // namespace

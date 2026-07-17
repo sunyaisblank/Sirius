@@ -8,6 +8,8 @@ endif()
 
 add_executable(sirius_backend_tests
     vulkan_smoke_test.cpp
+    kernel_parity_test.cpp
+    kernel_trace_test.cpp
 )
 
 target_link_libraries(sirius_backend_tests PRIVATE sirius_backend GTest::gtest_main)

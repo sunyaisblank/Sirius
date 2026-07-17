@@ -31,22 +31,48 @@ endif()
 set(SIRIUS_KERNEL_BINARY_DIR "${CMAKE_BINARY_DIR}/kernels" CACHE INTERNAL "")
 file(MAKE_DIRECTORY "${SIRIUS_KERNEL_BINARY_DIR}")
 
+set(SIRIUS_KERNEL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../kernels")
+
+# Entry-point kernels (each carries a ComputeMain). The gr_* modules below are
+# imported libraries, not standalone entry points, so they are recompilation
+# dependencies rather than build targets.
 set(SIRIUS_KERNEL_SOURCES
     smoke
+    parity_probe
+    trace
 )
+
+# Shared physics modules imported (via `import`, -I include path) by the
+# entry-point kernels; any edit re-triggers the affected kernel compiles.
+file(GLOB SIRIUS_KERNEL_LIBS "${SIRIUS_KERNEL_DIR}/gr_*.slang")
+
+# spirv-val gates every emitted module when present (verification gate,
+# docs/SPECIFICATION.md section 7); when absent the build proceeds and the note
+# is printed once.
+find_program(SIRIUS_SPIRV_VAL spirv-val)
+if(NOT SIRIUS_SPIRV_VAL)
+    message(STATUS "Sirius backend: spirv-val not found; emitted kernels will not be validated at build time")
+endif()
 
 set(SIRIUS_KERNEL_OUTPUTS "")
 foreach(kernel ${SIRIUS_KERNEL_SOURCES})
-    set(kernel_src "${CMAKE_CURRENT_SOURCE_DIR}/../kernels/${kernel}.slang")
+    set(kernel_src "${SIRIUS_KERNEL_DIR}/${kernel}.slang")
     set(kernel_out "${SIRIUS_KERNEL_BINARY_DIR}/${kernel}.spv")
+    if(SIRIUS_SPIRV_VAL)
+        set(kernel_validate COMMAND "${SIRIUS_SPIRV_VAL}" "${kernel_out}")
+    else()
+        set(kernel_validate "")
+    endif()
     add_custom_command(
         OUTPUT "${kernel_out}"
         COMMAND ${SIRIUS_SLANGC} "${kernel_src}"
             -target spirv -profile spirv_1_5
             -entry ComputeMain -stage compute
+            -I "${SIRIUS_KERNEL_DIR}"
             -o "${kernel_out}"
-        DEPENDS "${kernel_src}"
-        COMMENT "Compiling Slang kernel ${kernel}.slang -> SPIR-V"
+        ${kernel_validate}
+        DEPENDS "${kernel_src}" ${SIRIUS_KERNEL_LIBS}
+        COMMENT "Compiling Slang kernel ${kernel}.slang -> SPIR-V (+spirv-val)"
         VERBATIM
     )
     list(APPEND SIRIUS_KERNEL_OUTPUTS "${kernel_out}")
