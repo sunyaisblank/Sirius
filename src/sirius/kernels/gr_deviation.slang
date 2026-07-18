@@ -27,7 +27,7 @@ import gr_metrics;
 // matching the .cu.
 public void GetRiemannTensorCart(
     Vec4Cart x, float M, float a, float Q, float Lambda,
-    out float R[4][4][4][4])
+    out Real R[4][4][4][4])
 {
     [unroll] for (int mu = 0; mu < 4; mu++)
         [unroll] for (int nu = 0; nu < 4; nu++)
@@ -35,14 +35,14 @@ public void GetRiemannTensorCart(
                 [unroll] for (int sig = 0; sig < 4; sig++)
                     R[mu][nu][rho][sig] = 0.0f;
 
-    float Gamma[4][4][4];
+    Real Gamma[4][4][4];
     GetKerrSchildFamilyChristoffel(x, M, a, Q, Lambda, Gamma);
 
-    float r = ComputeKerrRadiusCart(x.x, x.y, x.z, a);
-    const float eps = 0.001f * max(1.0f, r);
+    Real r = ComputeKerrRadiusCart(x.x, x.y, x.z, Real(a));
+    const Real eps = 0.001f * max(Real(1.0f), r);
 
     // dGamma[rho][mu][nu][sigma] = d_rho Gamma^mu_nu_sigma.
-    float dGamma[4][4][4][4];
+    Real dGamma[4][4][4][4];
     [unroll] for (int mu = 0; mu < 4; mu++)
         [unroll] for (int nu = 0; nu < 4; nu++)
             [unroll] for (int sig = 0; sig < 4; sig++)
@@ -55,8 +55,8 @@ public void GetRiemannTensorCart(
         else if (rho == 2) { xp.y += eps; xm.y -= eps; }
         else { xp.z += eps; xm.z -= eps; }
 
-        float Gamma_plus[4][4][4];
-        float Gamma_minus[4][4][4];
+        Real Gamma_plus[4][4][4];
+        Real Gamma_minus[4][4][4];
         GetKerrSchildFamilyChristoffel(xp, M, a, Q, Lambda, Gamma_plus);
         GetKerrSchildFamilyChristoffel(xm, M, a, Q, Lambda, Gamma_minus);
 
@@ -74,7 +74,7 @@ public void GetRiemannTensorCart(
         for (int nu = 0; nu < 4; nu++)
             for (int rho = 0; rho < 4; rho++)
                 for (int sig = 0; sig < 4; sig++) {
-                    float val = dGamma[rho][mu][nu][sig] - dGamma[sig][mu][nu][rho];
+                    Real val = dGamma[rho][mu][nu][sig] - dGamma[sig][mu][nu][rho];
                     for (int lam = 0; lam < 4; lam++)
                         val += Gamma[mu][lam][rho] * Gamma[lam][nu][sig]
                              - Gamma[mu][lam][sig] * Gamma[lam][nu][rho];
@@ -83,15 +83,15 @@ public void GetRiemannTensorCart(
 }
 
 // Full-Riemann deviation acceleration D^2 xi^mu/dl^2 (DNGR eq A.19).
-public float4 GeodesicDeviationAccelFullRiemann(
-    Vec4Cart x, Vec4Cart k, float4 xi, float M, float a, float Q, float Lambda)
+public Real4 GeodesicDeviationAccelFullRiemann(
+    Vec4Cart x, Vec4Cart k, Real4 xi, float M, float a, float Q, float Lambda)
 {
-    float R[4][4][4][4];
+    Real R[4][4][4][4];
     GetRiemannTensorCart(x, M, a, Q, Lambda, R);
 
-    float k_arr[4] = { k.t, k.x, k.y, k.z };
-    float xi_arr[4] = { xi.x, xi.y, xi.z, xi.w };
-    float accel[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+    Real k_arr[4] = { k.t, k.x, k.y, k.z };
+    Real xi_arr[4] = { xi.x, xi.y, xi.z, xi.w };
+    Real accel[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 
     for (int mu = 0; mu < 4; mu++)
         for (int nu = 0; nu < 4; nu++)
@@ -99,7 +99,7 @@ public float4 GeodesicDeviationAccelFullRiemann(
                 for (int sig = 0; sig < 4; sig++)
                     accel[mu] += R[mu][nu][rho][sig] * k_arr[nu] * xi_arr[rho] * k_arr[sig];
 
-    return float4(accel[0], accel[1], accel[2], accel[3]);
+    return Real4(accel[0], accel[1], accel[2], accel[3]);
 }
 
 // Tidal-approximation deviation acceleration (the .cu default fast mode):

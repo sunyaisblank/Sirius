@@ -305,10 +305,10 @@ public GeodesicState IntegrateGeodesicSymplectic(
 // Christoffels. (M, a, Q, Lambda) let the render path carry charge and the
 // cosmological sector; the legacy accel fixed Q = Lambda = 0.
 public Vec4Cart GeodesicAccelerationCart(GeodesicStateCart state, float M, float a, float Q, float Lambda) {
-    float Gamma[4][4][4];
+    Real Gamma[4][4][4];
     GetKerrSchildFamilyChristoffel(state.x, M, a, Q, Lambda, Gamma);
-    float u[4] = { state.u.t, state.u.x, state.u.y, state.u.z };
-    float acc[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+    Real u[4] = { state.u.t, state.u.x, state.u.y, state.u.z };
+    Real acc[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
     [unroll] for (int mu = 0; mu < 4; mu++)
         [unroll] for (int nu = 0; nu < 4; nu++)
             [unroll] for (int rho = 0; rho < 4; rho++)
@@ -316,7 +316,7 @@ public Vec4Cart GeodesicAccelerationCart(GeodesicStateCart state, float M, float
     return MakeVec4Cart(acc[0], acc[1], acc[2], acc[3]);
 }
 
-public GeodesicStateCart IntegrateGeodesicRK4Cart(GeodesicStateCart state, float dt,
+public GeodesicStateCart IntegrateGeodesicRK4Cart(GeodesicStateCart state, Real dt,
                                                   float M, float a, float Q, float Lambda) {
     Vec4Cart dx1 = ScaleVec4Cart(state.u, dt);
     Vec4Cart du1 = ScaleVec4Cart(GeodesicAccelerationCart(state, M, a, Q, Lambda), dt);
@@ -359,10 +359,10 @@ public GeodesicStateCart IntegrateGeodesicRK4Cart(GeodesicStateCart state, float
 // horizon and no disk, so trace.slang integrates and shades the background.
 public Vec4Cart GeodesicAccelerationWarpCart(GeodesicStateCart state, float vs, float sigma,
                                              float R, float xs, float ys, float zs) {
-    float Gamma[4][4][4];
+    Real Gamma[4][4][4];
     GetWarpDriveChristoffel(state.x, vs, sigma, R, xs, ys, zs, Gamma);
-    float u[4] = { state.u.t, state.u.x, state.u.y, state.u.z };
-    float acc[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+    Real u[4] = { state.u.t, state.u.x, state.u.y, state.u.z };
+    Real acc[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
     [unroll] for (int mu = 0; mu < 4; mu++)
         [unroll] for (int nu = 0; nu < 4; nu++)
             [unroll] for (int rho = 0; rho < 4; rho++)
@@ -370,7 +370,7 @@ public Vec4Cart GeodesicAccelerationWarpCart(GeodesicStateCart state, float vs, 
     return MakeVec4Cart(acc[0], acc[1], acc[2], acc[3]);
 }
 
-public GeodesicStateCart IntegrateGeodesicRK4WarpCart(GeodesicStateCart state, float dt,
+public GeodesicStateCart IntegrateGeodesicRK4WarpCart(GeodesicStateCart state, Real dt,
                                                       float vs, float sigma, float R,
                                                       float xs, float ys, float zs) {
     Vec4Cart dx1 = ScaleVec4Cart(state.u, dt);

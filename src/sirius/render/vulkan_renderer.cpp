@@ -136,9 +136,13 @@ struct KernelScene {
     return Fail(ErrorDomain::kDevice, "select Vulkan render metric", "unknown metric id");
 }
 
-// Selects the precision-ladder rung. The fp64 trace kernel is deferred (the fp32
-// path passes the parity gate); an explicit fp64 request therefore declines
-// loudly rather than silently running fp32 (docs/STYLE.md section 4).
+// Selects the precision-ladder rung. SIRIUS_PRECISION=fp64 selects the
+// double-precision trace kernel (trace_fp64.spv, the same Slang source with
+// the Cartesian trajectory core widened to double); it requires the device to
+// report shaderFloat64 and declines loudly otherwise, never silently running
+// fp32 (docs/STYLE.md section 4). Unset or any other value keeps the fp32
+// rung, which remains the default: fp64 costs multiples of fp32 throughput on
+// consumer GPUs and the fp32 path passes the parity gate.
 [[nodiscard]] Expected<PrecisionRung> SelectPrecisionRung(bool device_supports_fp64) {
     const char* precision = std::getenv("SIRIUS_PRECISION");
     const bool wants_fp64 = precision != nullptr && std::string(precision) == "fp64";
@@ -149,10 +153,7 @@ struct KernelScene {
         return Fail(ErrorDomain::kDevice, "select precision rung",
                     "SIRIUS_PRECISION=fp64 requested but the device lacks shaderFloat64");
     }
-    return Fail(ErrorDomain::kDevice, "select precision rung",
-                "SIRIUS_PRECISION=fp64 requested and supported, but the fp64 trace kernel is "
-                "deferred (the fp32 path passes the parity gate); unset SIRIUS_PRECISION for the "
-                "fp32 rung");
+    return PrecisionRung::Fp64;
 }
 
 // Candidate locations for a build artefact, searched relative to the working
@@ -160,8 +161,8 @@ struct KernelScene {
 [[nodiscard]] std::vector<std::string> ResourceCandidates(const std::string& relative) {
     std::vector<std::string> paths;
 #ifdef SIRIUS_KERNEL_DIR
-    if (relative == "trace.spv") {
-        paths.push_back(std::string(SIRIUS_KERNEL_DIR) + "/trace.spv");
+    if (relative == "trace.spv" || relative == "trace_fp64.spv") {
+        paths.push_back(std::string(SIRIUS_KERNEL_DIR) + "/" + relative);
     }
 #endif
     for (const char* prefix : {"", "../", "../../", "../../../", "../../../../"}) {
@@ -170,8 +171,10 @@ struct KernelScene {
     return paths;
 }
 
-[[nodiscard]] std::vector<std::uint32_t> LoadSpirv() {
-    for (const auto& path : ResourceCandidates("trace.spv")) {
+[[nodiscard]] std::vector<std::uint32_t> LoadSpirv(PrecisionRung rung) {
+    const std::string kernel_name =
+        (rung == PrecisionRung::Fp64) ? "trace_fp64.spv" : "trace.spv";
+    for (const auto& path : ResourceCandidates(kernel_name)) {
         std::ifstream file(path, std::ios::binary | std::ios::ate);
         if (!file) continue;
         const auto size = static_cast<std::size_t>(file.tellg());
@@ -308,10 +311,12 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(
         return std::unexpected(rung.error());
     }
 
-    const auto spirv = LoadSpirv();
+    const auto spirv = LoadSpirv(*rung);
     if (spirv.empty()) {
         return Fail(ErrorDomain::kKernel, "load trace kernel",
-                    "trace.spv not found (build the kernels or set SIRIUS_KERNEL_DIR)");
+                    *rung == PrecisionRung::Fp64
+                        ? "trace_fp64.spv not found (build the kernels or set SIRIUS_KERNEL_DIR)"
+                        : "trace.spv not found (build the kernels or set SIRIUS_KERNEL_DIR)");
     }
     auto kernel = device.LoadKernel(spirv);
     if (!kernel) {
@@ -350,7 +355,8 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(
     std::cout << "[Vulkan] budget: " << (budget / (1024 * 1024)) << " MiB, tile: "
               << plan->tile_edge << "x" << plan->tile_edge << " (working set "
               << (plan->tile_working_set_bytes / 1024) << " KiB)\n";
-    std::cout << "[Vulkan] precision: fp32 rung\n";
+    std::cout << "[Vulkan] precision: "
+              << (*rung == PrecisionRung::Fp64 ? "fp64" : "fp32") << " rung\n";
 
     const int edge = plan->tile_edge;
     const std::uint64_t radiance_capacity =

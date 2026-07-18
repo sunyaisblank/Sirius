@@ -8,9 +8,25 @@
 //
 // Coordinate charts follow the .cu exactly: Vec4 carries Boyer-Lindquist
 // (t, r, theta, phi); Vec4Cart carries Kerr-Schild Cartesian (t, x, y, z).
-// All arithmetic is single precision, matching the .cu's float physics
-// (docs/ARCHITECTURE.md section 6 precision ladder, plain-fp32 rung).
+//
+// Precision (docs/ARCHITECTURE.md section 6 precision ladder): the Cartesian
+// render-trajectory core (Vec4Cart state, Kerr-Schild/warp metric and
+// Christoffels, RK4, deviation) is written over Real, which the SIRIUS_FP64
+// define widens from float to double for the fp64 rung; slangc applies the
+// define session-wide, so one source serves both rungs. With the define off,
+// Real is float and every expression is the .cu's single-precision physics
+// unchanged. The spherical parity/oracle chart (Vec4) stays float: SPIR-V's
+// GLSL.std.450 restricts trig/exp/pow to 32-bit floats, and only the
+// Cartesian chain is transcendental-free along the trajectory.
 module gr_types;
+
+#ifdef SIRIUS_FP64
+public typealias Real = double;
+#else
+public typealias Real = float;
+#endif
+public typealias Real3 = vector<Real, 3>;
+public typealias Real4 = vector<Real, 4>;
 
 // pi to float precision, as the .cu spelled it (constexpr float PI).
 public static const float PI = 3.14159265358979323846f;
@@ -28,12 +44,12 @@ public struct Vec4 {
 
 // Kerr-Schild Cartesian 4-vector (t, x, y, z). The Kerr-Schild family is
 // authored in this chart because its Christoffels are polynomial with no pole
-// singularity.
+// singularity. Real-typed: this is the state the fp64 rung widens.
 public struct Vec4Cart {
-    public float t;
-    public float x;
-    public float y;
-    public float z;
+    public Real t;
+    public Real x;
+    public Real y;
+    public Real z;
 }
 
 public Vec4 MakeVec4(float t, float r, float theta, float phi) {
@@ -42,7 +58,7 @@ public Vec4 MakeVec4(float t, float r, float theta, float phi) {
     return v;
 }
 
-public Vec4Cart MakeVec4Cart(float t, float x, float y, float z) {
+public Vec4Cart MakeVec4Cart(Real t, Real x, Real y, Real z) {
     Vec4Cart v;
     v.t = t; v.x = x; v.y = y; v.z = z;
     return v;
@@ -60,7 +76,7 @@ public Vec4Cart AddVec4Cart(Vec4Cart a, Vec4Cart b) {
     return MakeVec4Cart(a.t + b.t, a.x + b.x, a.y + b.y, a.z + b.z);
 }
 
-public Vec4Cart ScaleVec4Cart(Vec4Cart a, float s) {
+public Vec4Cart ScaleVec4Cart(Vec4Cart a, Real s) {
     return MakeVec4Cart(a.t * s, a.x * s, a.y * s, a.z * s);
 }
 

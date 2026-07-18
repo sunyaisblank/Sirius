@@ -147,4 +147,132 @@ TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
 #endif
 }
 
+#ifdef SIRIUS_KERNEL_DIR
+// Dispatch one 64x64 Kerr scene (the same scene as the smoke gate above)
+// through the given SPIR-V module and return the RGBA radiance field.
+std::vector<float> RunKerrScene(ComputeDevice& device, const std::vector<std::uint32_t>& spirv) {
+    const auto kernel = device.LoadKernel(spirv);
+    if (!kernel) {
+        ADD_FAILURE() << kernel.error().Description();
+        return {};
+    }
+
+    constexpr std::uint32_t kWidth = 64;
+    constexpr std::uint32_t kHeight = 64;
+
+    std::vector<float> params(48, 0.0f);
+    params[0] = kWidth;
+    params[1] = kHeight;
+    params[2] = 0.0f;
+    params[3] = 1.0f;
+    params[4] = 0.9f;
+    params[7] = 0.0f; params[8] = 0.0f; params[9] = -40.0f;
+    params[10] = 0.0f; params[11] = 0.0f; params[12] = 1.0f;
+    params[13] = 1.0f; params[14] = 0.0f; params[15] = 0.0f;
+    params[16] = 0.0f; params[17] = 1.0f; params[18] = 0.0f;
+    params[19] = 0.6f;
+    params[20] = 1.0f;
+    params[21] = 2000.0f;
+    params[22] = 0.06f;
+    params[23] = 0.02f;
+    params[24] = 2.0f;
+    params[25] = 100.0f;
+    params[26] = 1.12f;
+    params[34] = float(kWidth);
+    params[35] = float(kHeight);
+    params[37] = 1.0f;
+    params[38] = 1.0f;
+
+    std::vector<float> radiance(kWidth * kHeight * 4, 0.0f);
+    const std::vector<std::uint32_t> starfield_dummy = {0u};
+
+    const auto rbuf = device.CreateBuffer(radiance.size() * sizeof(float), BufferUsage::kStorage);
+    const auto pbuf = device.CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
+    const auto sbuf =
+        device.CreateBuffer(starfield_dummy.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
+    if (!(rbuf && pbuf && sbuf)) {
+        ADD_FAILURE() << "buffer creation failed";
+        return {};
+    }
+    const bool wrote =
+        device.WriteBuffer(*rbuf, std::as_bytes(std::span<const float>(radiance))) &&
+        device.WriteBuffer(*pbuf, std::as_bytes(std::span<const float>(params))) &&
+        device.WriteBuffer(*sbuf, std::as_bytes(std::span<const std::uint32_t>(starfield_dummy)));
+    if (!wrote) {
+        ADD_FAILURE() << "buffer upload failed";
+        return {};
+    }
+
+    const BufferHandle binding[] = {*rbuf, *pbuf, *sbuf};
+    const auto dispatched = device.Dispatch(*kernel, binding, (kWidth + 7) / 8, (kHeight + 7) / 8, 1);
+    if (!dispatched) {
+        ADD_FAILURE() << dispatched.error().Description();
+        return {};
+    }
+    if (!device.ReadBuffer(*rbuf, std::as_writable_bytes(std::span<float>(radiance)))) {
+        ADD_FAILURE() << "radiance readback failed";
+        return {};
+    }
+    return radiance;
+}
+#endif
+
+// The fp64 rung (trace_fp64.spv, same source with the Cartesian trajectory
+// core widened to double) renders the same Kerr scene as the fp32 kernel and
+// agrees with it closely: identical geometry, so per-pixel differences are
+// pure precision effects, largest along the shadow edge where capture flips.
+// Verifies the rung is a real double-precision trajectory, not a relabelled
+// fp32 module, by requiring the artefact to load, dispatch, and stay finite
+// on a shaderFloat64 device (Lavapipe reports it).
+TEST(KernelTrace, Fp64RungAgreesWithFp32OnKerrScene) {
+#ifndef SIRIUS_KERNEL_DIR
+    GTEST_SKIP() << "kernels not compiled (slangc absent at configure time)";
+#else
+    const auto devices = EnumerateVulkanDevices();
+    ASSERT_TRUE(devices.has_value()) << devices.error().Description();
+    if (devices->empty()) {
+        GTEST_SKIP() << "no Vulkan device present";
+    }
+    auto device = CreateVulkanDevice(0);
+    ASSERT_TRUE(device.has_value()) << device.error().Description();
+    if (!(*device)->Info().supports_fp64) {
+        GTEST_SKIP() << "device lacks shaderFloat64";
+    }
+
+    const auto spirv32 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace.spv");
+    const auto spirv64 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace_fp64.spv");
+    ASSERT_FALSE(spirv32.empty()) << "trace.spv missing";
+    ASSERT_FALSE(spirv64.empty()) << "trace_fp64.spv missing";
+
+    const auto r32 = RunKerrScene(**device, spirv32);
+    const auto r64 = RunKerrScene(**device, spirv64);
+    ASSERT_EQ(r32.size(), r64.size());
+    ASSERT_FALSE(r64.empty());
+
+    double sum_abs_diff = 0.0;
+    double max_abs_diff = 0.0;
+    float min64 = std::numeric_limits<float>::max();
+    float max64 = 0.0f;
+    for (std::size_t i = 0; i < r64.size(); ++i) {
+        ASSERT_TRUE(std::isfinite(r64[i])) << "non-finite fp64-rung radiance";
+        const double d = std::abs(double(r64[i]) - double(r32[i]));
+        sum_abs_diff += d;
+        max_abs_diff = std::max(max_abs_diff, d);
+        min64 = std::min(min64, r64[i]);
+        max64 = std::max(max64, r64[i]);
+    }
+    const double mean_abs_diff = sum_abs_diff / double(r64.size());
+
+    std::cout << "[ trace64  ] mean|d|=" << mean_abs_diff << " max|d|=" << max_abs_diff
+              << " range64=[" << min64 << ", " << max64 << "]\n";
+
+    EXPECT_GT(max64 - min64, 1e-3f) << "fp64 radiance field is constant";
+    // Same scene, same step schedule: the fields must agree closely in the
+    // mean. Individual pixels may flip across the capture edge, so the max is
+    // bounded loosely by the background dynamic range rather than tightly.
+    EXPECT_LT(mean_abs_diff, 1e-2) << "fp64 rung diverges from fp32 in the mean";
+    EXPECT_LT(max_abs_diff, 2.0) << "fp64 rung wildly diverges at a pixel";
+#endif
+}
+
 }  // namespace

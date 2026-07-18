@@ -27,8 +27,9 @@ class DisplayBuffer;
 
 // The precision-ladder rung the render ran on (recorded in metadata/logs).
 enum class PrecisionRung {
-    Fp32,  // plain single precision (the only compiled trace variant today)
-    Fp64,  // deferred: no fp64 trace kernel is emitted yet
+    Fp32,  // plain single precision, the default (trace.spv)
+    Fp64,  // double-precision trajectory core (trace_fp64.spv); selected by
+           // SIRIUS_PRECISION=fp64 on devices reporting shaderFloat64
 };
 
 // What the Vulkan render produced, for logging and the parity/governor tests.

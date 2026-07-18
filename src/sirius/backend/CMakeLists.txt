@@ -78,5 +78,33 @@ foreach(kernel ${SIRIUS_KERNEL_SOURCES})
     list(APPEND SIRIUS_KERNEL_OUTPUTS "${kernel_out}")
 endforeach()
 
+# The fp64 rung: the same trace source compiled with SIRIUS_FP64, which widens
+# the Cartesian trajectory core (gr_types Real) to double. One source, two
+# artefacts; the renderer selects trace_fp64.spv when SIRIUS_PRECISION=fp64 and
+# the device reports shaderFloat64. Warning 30082 (implicit float-to-double)
+# is disabled for this compile only: the float->Real widenings at parameter
+# and literal boundaries are the design, not an accident.
+set(kernel_fp64_out "${SIRIUS_KERNEL_BINARY_DIR}/trace_fp64.spv")
+if(SIRIUS_SPIRV_VAL)
+    set(kernel_fp64_validate COMMAND "${SIRIUS_SPIRV_VAL}" "${kernel_fp64_out}")
+else()
+    set(kernel_fp64_validate "")
+endif()
+add_custom_command(
+    OUTPUT "${kernel_fp64_out}"
+    COMMAND ${SIRIUS_SLANGC} "${SIRIUS_KERNEL_DIR}/trace.slang"
+        -DSIRIUS_FP64
+        -target spirv -profile spirv_1_5
+        -entry ComputeMain -stage compute
+        -I "${SIRIUS_KERNEL_DIR}"
+        -warnings-disable 30082
+        -o "${kernel_fp64_out}"
+    ${kernel_fp64_validate}
+    DEPENDS "${SIRIUS_KERNEL_DIR}/trace.slang" ${SIRIUS_KERNEL_LIBS}
+    COMMENT "Compiling Slang kernel trace.slang (fp64 rung) -> SPIR-V (+spirv-val)"
+    VERBATIM
+)
+list(APPEND SIRIUS_KERNEL_OUTPUTS "${kernel_fp64_out}")
+
 add_custom_target(sirius_kernels ALL DEPENDS ${SIRIUS_KERNEL_OUTPUTS})
 add_dependencies(sirius_backend sirius_kernels)

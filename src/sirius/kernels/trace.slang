@@ -43,20 +43,21 @@ float3 P3(uint base) { return float3(params[base], params[base + 1], params[base
 
 // Solve the null condition g_uv u^u u^v = 0 for u^t given the spatial
 // direction, choosing the future-directed root (RDOP002A.cu
-// cartesianDirToFourVelocity, Cartesian form).
-float SolveNullTimeComponent(float g[4][4], float3 dir) {
-    float A = g[0][0];
-    float B = 2.0f * (g[0][1] * dir.x + g[0][2] * dir.y + g[0][3] * dir.z);
-    float C = g[1][1] * dir.x * dir.x + g[2][2] * dir.y * dir.y + g[3][3] * dir.z * dir.z
+// cartesianDirToFourVelocity, Cartesian form). Real: on the fp64 rung the
+// launch state is as precise as the trajectory it seeds.
+Real SolveNullTimeComponent(Real g[4][4], float3 dir) {
+    Real A = g[0][0];
+    Real B = 2.0f * (g[0][1] * dir.x + g[0][2] * dir.y + g[0][3] * dir.z);
+    Real C = g[1][1] * dir.x * dir.x + g[2][2] * dir.y * dir.y + g[3][3] * dir.z * dir.z
             + 2.0f * (g[1][2] * dir.x * dir.y + g[1][3] * dir.x * dir.z + g[2][3] * dir.y * dir.z);
-    float discriminant = B * B - 4.0f * A * C;
+    Real discriminant = B * B - 4.0f * A * C;
     if (discriminant >= 0.0f) {
-        float sqrtD = sqrt(discriminant);
-        float root1 = (-B + sqrtD) / (2.0f * A);
-        float root2 = (-B - sqrtD) / (2.0f * A);
-        return (root1 > 0.0f) ? root1 : ((root2 > 0.0f) ? root2 : 1.0f);
+        Real sqrtD = sqrt(discriminant);
+        Real root1 = (-B + sqrtD) / (2.0f * A);
+        Real root2 = (-B - sqrtD) / (2.0f * A);
+        return (root1 > 0.0f) ? root1 : ((root2 > 0.0f) ? root2 : Real(1.0f));
     }
-    return sqrt(max(-C / A, 0.0001f));
+    return sqrt(max(-C / A, Real(0.0001f)));
 }
 
 // Smooth escape-direction background: a bounded gradient so the escaped field is
@@ -195,15 +196,15 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
 
     // Initial 4-velocity from the null condition at the camera position, using
     // the dispatched metric.
-    float g[4][4];
-    float g_inv[4][4];
+    Real g[4][4];
+    Real g_inv[4][4];
     Vec4Cart pos0 = MakeVec4Cart(0.0f, camPos.x, camPos.y, camPos.z);
     if (isWarp) {
         GetWarpDriveMetric(pos0, warpVs, warpSigma, warpR, 0.0f, 0.0f, 0.0f, g, g_inv);
     } else {
         GetKerrSchildFamilyMetric(pos0, M, a, Q, Lambda, g, g_inv);
     }
-    float ut = SolveNullTimeComponent(g, rayDir);
+    Real ut = SolveNullTimeComponent(g, rayDir);
 
     // Horizon capture radius (Kerr-Schild family only): r_+ = M + sqrt(M^2 - a^2
     // - Q^2), buffered. The warp bubble is horizonless: capture is disabled.
@@ -225,23 +226,23 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     float3 seed = (abs(rayDir.z) < 0.9f) ? float3(0.0f, 0.0f, 1.0f) : float3(1.0f, 0.0f, 0.0f);
     float3 xiPerp = normalize(cross(rayDir, seed));
     const float kBeamSeed = 1.0e-3f;
-    float4 xi = float4(0.0f, xiPerp.x, xiPerp.y, xiPerp.z) * kBeamSeed;
-    float4 xiDot = float4(0.0f, 0.0f, 0.0f, 0.0f);
+    Real4 xi = Real4(0.0f, xiPerp.x, xiPerp.y, xiPerp.z) * Real(kBeamSeed);
+    Real4 xiDot = Real4(0.0f, 0.0f, 0.0f, 0.0f);
 
     for (int step = 0; step < maxSteps; step++) {
-        float px = state.x.x;
-        float py = state.x.y;
-        float pz = state.x.z;
-        float rBig = sqrt(px * px + py * py + pz * pz);
+        Real px = state.x.x;
+        Real py = state.x.y;
+        Real pz = state.x.z;
+        Real rBig = sqrt(px * px + py * py + pz * pz);
 
         if (!isWarp) {
-            float rKerr = ComputeKerrRadiusCart(px, py, pz, a);
+            Real rKerr = ComputeKerrRadiusCart(px, py, pz, Real(a));
             if (rKerr <= horizonRadius) { break; }  // captured: shadow
         }
         if (rBig >= escapeRadius) { escaped = true; break; }
 
-        float rStep = isWarp ? max(rBig, 1.0f) : ComputeKerrRadiusCart(px, py, pz, a);
-        float dt = clamp(stepScale * rStep, minStep, maxStep);
+        Real rStep = isWarp ? max(rBig, Real(1.0f)) : ComputeKerrRadiusCart(px, py, pz, Real(a));
+        Real dt = clamp(stepScale * rStep, Real(minStep), Real(maxStep));
 
         GeodesicStateCart next = isWarp
             ? IntegrateGeodesicRK4WarpCart(state, dt, warpVs, warpSigma, warpR, 0.0f, 0.0f, 0.0f)
@@ -253,9 +254,13 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         // g^4 relativistic beaming (gr_disk authorities).
         if (diskEnabled && !isWarp && transmittance > 0.01f) {
             if (state.x.z * next.x.z < 0.0f) {
-                float frac = state.x.z / (state.x.z - next.x.z);
-                float cx = state.x.x + frac * (next.x.x - state.x.x);
-                float cy = state.x.y + frac * (next.x.y - state.x.y);
+                Real frac = state.x.z / (state.x.z - next.x.z);
+                Real cxr = state.x.x + frac * (next.x.x - state.x.x);
+                Real cyr = state.x.y + frac * (next.x.y - state.x.y);
+                // Shading is float (gr_disk carries trig/pow, 32-bit-only in
+                // SPIR-V); the crossing point itself was found at Real.
+                float cx = float(cxr);
+                float cy = float(cyr);
                 float cr = sqrt(cx * cx + cy * cy);
                 if (cr >= innerRadius && cr <= outerRadius) {
                     float aStar = (M > 1e-6f) ? (a / M) : a;
@@ -263,7 +268,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                     float Qflux = ComputeNovikovThorneQ(cr, rIsco, M, aStar);
                     float T = NovikovThorneTemperature(innerTemperature, Qflux);
                     float cphi = atan2(cy, cx);
-                    float3 photonVel = float3(next.u.x, next.u.y, next.u.z);
+                    float3 photonVel = float3(float(next.u.x), float(next.u.y), float(next.u.z));
                     float gFactor = ComputeDiskGFactorCart(cr, cphi, photonVel, M, a);
                     float g4 = gFactor * gFactor * gFactor * gFactor;
                     float3 emit = BlackbodyColor(T) * emissionScale * g4;
@@ -275,8 +280,8 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         // Advance the deviation vector over this step (velocity Verlet on the
         // full-Riemann Jacobi acceleration), coefficients at the step start.
         if (beamsEnabled && !isWarp) {
-            float4 accel = GeodesicDeviationAccelFullRiemann(state.x, state.u, xi, M, a, Q, Lambda);
-            xi += xiDot * dt + accel * (0.5f * dt * dt);
+            Real4 accel = GeodesicDeviationAccelFullRiemann(state.x, state.u, xi, M, a, Q, Lambda);
+            xi += xiDot * dt + accel * (Real(0.5f) * dt * dt);
             xiDot += accel * dt;
         }
 
@@ -287,7 +292,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     // (black when none), exactly as the CPU horizon outcome does.
     float3 result = color;
     if (escaped) {
-        float3 dir = normalize(float3(state.u.x, state.u.y, state.u.z));
+        float3 dir = normalize(float3(float(state.u.x), float(state.u.y), float(state.u.z)));
         float3 bg = starfieldEnabled
             ? SampleStarfield(dir, starfieldWidth, starfieldHeight)
             : SampleBackgroundGradient(dir);
@@ -299,8 +304,8 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     // the CPU bundle); otherwise alpha stays 1, so the default render is unchanged.
     float alpha = 1.0f;
     if (beamsEnabled) {
-        float xiMag = length(float3(xi.y, xi.z, xi.w));
-        alpha = xiMag / kBeamSeed;
+        Real xiMag = sqrt(xi.y * xi.y + xi.z * xi.z + xi.w * xi.w);
+        alpha = float(xiMag / kBeamSeed);
     }
 
     int pixel = ty * tileWidth + tx;

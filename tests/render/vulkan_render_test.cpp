@@ -239,6 +239,34 @@ TEST(VulkanRenderSession, Kerr64CompletesUnderConstrainedBudgetWithFiniteRadianc
     ExpectFiniteNonConstantWithShadow(rgba, 64, 64, "vk-session-64");
 }
 
+// The fp64 rung end to end: SIRIUS_PRECISION=fp64 must select trace_fp64.spv
+// on a shaderFloat64 device and complete with a finite, non-constant frame
+// carrying the same shadow structure as the fp32 rung. On devices without
+// shaderFloat64 the session must fail (decline), never silently render fp32.
+TEST(VulkanRenderSession, Fp64RungRendersOrDeclinesLoudly) {
+    const auto devices = EnumerateVulkanDevices();
+    if (!devices.has_value() || devices->empty()) {
+        GTEST_SKIP() << "no Vulkan device present";
+    }
+    auto device = CreateVulkanDevice(0);
+    ASSERT_TRUE(device.has_value());
+    const bool fp64_supported = (*device)->Info().supports_fp64;
+    device->reset();
+
+    setenv("SIRIUS_PRECISION", "fp64", 1);
+    const std::string out = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp") +
+                            "/sirius_vk_fp64_64.exr";
+    const auto rgba = RenderSessionVulkan(64, 64, out);
+    unsetenv("SIRIUS_PRECISION");
+
+    if (fp64_supported) {
+        ASSERT_FALSE(rgba.empty()) << "fp64 rung requested and supported but did not complete";
+        ExpectFiniteNonConstantWithShadow(rgba, 64, 64, "vk-session-fp64");
+    } else {
+        EXPECT_TRUE(rgba.empty()) << "fp64 request must decline on a device without shaderFloat64";
+    }
+}
+
 TEST(VulkanRenderSession, Kerr160x120CompletesAcrossMultipleGovernedTiles) {
     if (const auto d = EnumerateVulkanDevices(); !d.has_value() || d->empty()) {
         GTEST_SKIP() << "no Vulkan device present";

@@ -533,6 +533,7 @@ set_tests_properties(
 
 set_tests_properties(
     KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow
+    KernelTrace.Fp64RungAgreesWithFp32OnKerrScene
     PROPERTIES LABELS "Correctness"
 )
 
@@ -1167,6 +1168,7 @@ set_tests_properties(
 
 set_tests_properties(
     VulkanRenderSession.Kerr64CompletesUnderConstrainedBudgetWithFiniteRadiance
+    VulkanRenderSession.Fp64RungRendersOrDeclinesLoudly
     VulkanRenderSession.Kerr160x120CompletesAcrossMultipleGovernedTiles
     VulkanRenderSession.CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds
     VulkanRenderSession.BackendCompiledOrSkipped
