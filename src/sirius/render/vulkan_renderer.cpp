@@ -68,6 +68,7 @@ constexpr std::uint32_t kParamCount = 48;
 // Kernel dispatch ids (must match trace.slang / gr_types.slang).
 constexpr float kDispatchKerrSchild = 0.0f;
 constexpr float kDispatchWarpDrive = 2.0f;
+constexpr float kDispatchMorrisThorne = 3.0f;
 
 // What the trace kernel needs to render one metric, or a decline.
 struct KernelScene {
@@ -79,16 +80,18 @@ struct KernelScene {
     float warp_vs = 0.0f;
     float warp_sigma = 0.0f;
     float warp_R = 0.0f;
+    float throat_b0 = 0.0f;  // Morris-Thorne throat radius
+    float worm_shape = 0.0f; // 0 Ellis, 1 zero-tidal, 2 absurdly benign
     bool disk_enabled = false;
     std::string metric_name;
 };
 
 // Maps a session metric onto the trace kernel, or declines. The gpu-renderable
 // set is exactly the registry's gpu_supported metrics the Cartesian render path
-// carries: Minkowski/Schwarzschild/Kerr (Kerr-Schild family) and Alcubierre.
-// Charge/lambda metrics (registry gpu_supported=false) and Morris-Thorne (a
-// spherical chart whose render-session integration is deferred; its device
-// physics is covered by the parity probe) decline loudly.
+// carries: Minkowski/Schwarzschild/Kerr (Kerr-Schild family), Alcubierre, and
+// Morris-Thorne through its Cartesian embedding (one sheet, throat capture,
+// mirroring the CPU authority). Charge/lambda metrics (registry
+// gpu_supported=false) decline loudly.
 [[nodiscard]] Expected<KernelScene> MapMetric(const SessionConfig& config) {
     KernelScene scene;
     const auto info = core::MetricInfoFor(config.metricId);
@@ -119,10 +122,11 @@ struct KernelScene {
             scene.disk_enabled = false;
             return scene;
         case core::MetricId::MorrisThorne:
-            return Fail(ErrorDomain::kDevice, "select Vulkan render metric",
-                        "Morris-Thorne renders in a spherical chart; its Vulkan render-session "
-                        "integration is a recorded follow-up (the device kernel physics is covered "
-                        "by the kernel parity probe)");
+            scene.metric_id = kDispatchMorrisThorne;
+            scene.throat_b0 = static_cast<float>(config.throatRadius);
+            scene.worm_shape = 0.0f;  // Ellis; the session constructs Ellis(b0).
+            scene.disk_enabled = false;
+            return scene;
         case core::MetricId::ReissnerNordstrom:
         case core::MetricId::KerrNewman:
         case core::MetricId::DeSitter:
@@ -136,24 +140,55 @@ struct KernelScene {
     return Fail(ErrorDomain::kDevice, "select Vulkan render metric", "unknown metric id");
 }
 
-// Selects the precision-ladder rung. SIRIUS_PRECISION=fp64 selects the
-// double-precision trace kernel (trace_fp64.spv, the same Slang source with
-// the Cartesian trajectory core widened to double); it requires the device to
-// report shaderFloat64 and declines loudly otherwise, never silently running
-// fp32 (docs/STYLE.md section 4). Unset or any other value keeps the fp32
-// rung, which remains the default: fp64 costs multiples of fp32 throughput on
-// consumer GPUs and the fp32 path passes the parity gate.
+// Selects the precision-ladder rung (docs/ARCHITECTURE.md section 6).
+// SIRIUS_PRECISION=fp64 selects the double-precision trace kernel
+// (trace_fp64.spv); it requires the device to report shaderFloat64 and
+// declines loudly otherwise, never silently running fp32 (docs/STYLE.md
+// section 4). SIRIUS_PRECISION=fp32-comp selects the compensated rung
+// (trace_fp32comp.spv, Kahan state accumulation), which any device runs.
+// Unset keeps the plain fp32 rung, the default: fp64 costs multiples of fp32
+// throughput on consumer GPUs and the fp32 path passes the parity gate. Any
+// other value is a loud error, not a silent default.
 [[nodiscard]] Expected<PrecisionRung> SelectPrecisionRung(bool device_supports_fp64) {
     const char* precision = std::getenv("SIRIUS_PRECISION");
-    const bool wants_fp64 = precision != nullptr && std::string(precision) == "fp64";
-    if (!wants_fp64) {
+    if (precision == nullptr || *precision == '\0') {
         return PrecisionRung::Fp32;
     }
-    if (!device_supports_fp64) {
-        return Fail(ErrorDomain::kDevice, "select precision rung",
-                    "SIRIUS_PRECISION=fp64 requested but the device lacks shaderFloat64");
+    const std::string requested(precision);
+    if (requested == "fp32") {
+        return PrecisionRung::Fp32;
     }
-    return PrecisionRung::Fp64;
+    if (requested == "fp32-comp") {
+        return PrecisionRung::Fp32Comp;
+    }
+    if (requested == "fp64") {
+        if (!device_supports_fp64) {
+            return Fail(ErrorDomain::kDevice, "select precision rung",
+                        "SIRIUS_PRECISION=fp64 requested but the device lacks shaderFloat64");
+        }
+        return PrecisionRung::Fp64;
+    }
+    return Fail(ErrorDomain::kDevice, "select precision rung",
+                "unknown SIRIUS_PRECISION '" + requested +
+                    "' (accepted: fp32, fp32-comp, fp64)");
+}
+
+[[nodiscard]] const char* RungName(PrecisionRung rung) {
+    switch (rung) {
+        case PrecisionRung::Fp32: return "fp32";
+        case PrecisionRung::Fp32Comp: return "fp32-comp";
+        case PrecisionRung::Fp64: return "fp64";
+    }
+    return "fp32";
+}
+
+[[nodiscard]] const char* RungKernelName(PrecisionRung rung) {
+    switch (rung) {
+        case PrecisionRung::Fp32: return "trace.spv";
+        case PrecisionRung::Fp32Comp: return "trace_fp32comp.spv";
+        case PrecisionRung::Fp64: return "trace_fp64.spv";
+    }
+    return "trace.spv";
 }
 
 // Candidate locations for a build artefact, searched relative to the working
@@ -161,7 +196,8 @@ struct KernelScene {
 [[nodiscard]] std::vector<std::string> ResourceCandidates(const std::string& relative) {
     std::vector<std::string> paths;
 #ifdef SIRIUS_KERNEL_DIR
-    if (relative == "trace.spv" || relative == "trace_fp64.spv") {
+    if (relative == "trace.spv" || relative == "trace_fp64.spv" ||
+        relative == "trace_fp32comp.spv") {
         paths.push_back(std::string(SIRIUS_KERNEL_DIR) + "/" + relative);
     }
 #endif
@@ -172,8 +208,7 @@ struct KernelScene {
 }
 
 [[nodiscard]] std::vector<std::uint32_t> LoadSpirv(PrecisionRung rung) {
-    const std::string kernel_name =
-        (rung == PrecisionRung::Fp64) ? "trace_fp64.spv" : "trace.spv";
+    const std::string kernel_name = RungKernelName(rung);
     for (const auto& path : ResourceCandidates(kernel_name)) {
         std::ifstream file(path, std::ios::binary | std::ios::ate);
         if (!file) continue;
@@ -275,6 +310,10 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
     // the beam expansion in the radiance alpha channel. Off by default so the
     // parity and pinned renders are unchanged.
     params[43] = config.rayBundles ? 1.0f : 0.0f;
+
+    // Morris-Thorne (dispatch id 3): throat radius and shape selector.
+    params[44] = scene.throat_b0;
+    params[45] = scene.worm_shape;
 }
 
 }  // namespace
@@ -314,9 +353,8 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(
     const auto spirv = LoadSpirv(*rung);
     if (spirv.empty()) {
         return Fail(ErrorDomain::kKernel, "load trace kernel",
-                    *rung == PrecisionRung::Fp64
-                        ? "trace_fp64.spv not found (build the kernels or set SIRIUS_KERNEL_DIR)"
-                        : "trace.spv not found (build the kernels or set SIRIUS_KERNEL_DIR)");
+                    std::string(RungKernelName(*rung)) +
+                        " not found (build the kernels or set SIRIUS_KERNEL_DIR)");
     }
     auto kernel = device.LoadKernel(spirv);
     if (!kernel) {
@@ -355,8 +393,7 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(
     std::cout << "[Vulkan] budget: " << (budget / (1024 * 1024)) << " MiB, tile: "
               << plan->tile_edge << "x" << plan->tile_edge << " (working set "
               << (plan->tile_working_set_bytes / 1024) << " KiB)\n";
-    std::cout << "[Vulkan] precision: "
-              << (*rung == PrecisionRung::Fp64 ? "fp64" : "fp32") << " rung\n";
+    std::cout << "[Vulkan] precision: " << RungName(*rung) << " rung\n";
 
     const int edge = plan->tile_edge;
     const std::uint64_t radiance_capacity =

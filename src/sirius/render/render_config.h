@@ -314,7 +314,7 @@ struct FilmSimConfig {
 
 // Backend (renderer) settings.
 struct BackendConfig {
-    std::string preferred = "auto";  // auto, cpu (optix retired).
+    std::string preferred = "auto";  // auto, cpu, vulkan (optix retired).
     bool enableDenoiser = false;
     int cudaDevice = 0;
 };

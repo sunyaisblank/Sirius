@@ -169,7 +169,8 @@ set_tests_properties(
     ConfigValidation.RotatingLambdaRejected
     ConfigValidation.ObserverInsidePoleBufferRejected
     ConfigValidation.UnknownTonemapperRejected
-    ConfigValidation.GpuBackendNameRejected
+    ConfigValidation.VulkanBackendNameAccepted
+    ConfigValidation.UnknownBackendNameRejected
     ConfigValidation.CpuBackendAccepted
     PROPERTIES LABELS "Mandatory;Correctness"
 )
@@ -534,6 +535,7 @@ set_tests_properties(
 set_tests_properties(
     KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow
     KernelTrace.Fp64RungAgreesWithFp32OnKerrScene
+    KernelTrace.CompensatedRungTracksFp64AtLeastAsWellAsFp32
     PROPERTIES LABELS "Correctness"
 )
 
@@ -935,6 +937,7 @@ set_tests_properties(
 
 set_tests_properties(
     RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr
+    RenderSessionProbe.BackendAutoResolvesByDeviceAndRegistry
     RenderSessionProbe.CpuMorrisThorneRenderCompletes
     PROPERTIES LABELS "Correctness"
 )
@@ -1169,8 +1172,10 @@ set_tests_properties(
 set_tests_properties(
     VulkanRenderSession.Kerr64CompletesUnderConstrainedBudgetWithFiniteRadiance
     VulkanRenderSession.Fp64RungRendersOrDeclinesLoudly
+    VulkanRenderSession.CompensatedRungRendersOnAnyDevice
     VulkanRenderSession.Kerr160x120CompletesAcrossMultipleGovernedTiles
     VulkanRenderSession.CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds
+    VulkanRenderSession.CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalBounds
     VulkanRenderSession.BackendCompiledOrSkipped
     PROPERTIES LABELS "Correctness"
 )

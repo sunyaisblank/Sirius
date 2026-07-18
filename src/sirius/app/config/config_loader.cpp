@@ -272,12 +272,14 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
     }
 
     // --- Backend validation -------------------------------------------------
-    // OptiX is retired; the accepted set is auto (later Vulkan) and cpu.
-    static const std::vector<std::string> valid_backends = {"auto", "cpu"};
+    // OptiX is retired. Since the go-live flip (2026-07-18) the accepted set is
+    // auto (resolves to Vulkan where a device and a gpu-dispatchable metric
+    // align, CPU otherwise), cpu (pinned), and vulkan (explicit).
+    static const std::vector<std::string> valid_backends = {"auto", "cpu", "vulkan"};
     bool valid_backend = std::find(valid_backends.begin(), valid_backends.end(),
                                    config.backend.preferred) != valid_backends.end();
     if (!valid_backend) {
-        errors.push_back("backend.preferred must be one of: auto, cpu");
+        errors.push_back("backend.preferred must be one of: auto, cpu, vulkan");
     }
 
     return errors;

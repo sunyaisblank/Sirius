@@ -322,16 +322,16 @@ public void GetEllisDrainholeMetric(
 // ds^2 = -e^{2 Phi} dt^2 + dr^2/(1 - b(r)/r) + r^2 (dth^2 + sin^2 th dph^2).
 // shapeType 0 = Ellis b(r) = b0^2/r ; 1 = ZeroTidal ; 2 = AbsurdlyBenign.
 // =============================================================================
-public float WormholeShapeFunction(float r, float b0, int shapeType) {
-    r = max(r, b0);
+public Real WormholeShapeFunction(Real r, float b0, int shapeType) {
+    r = max(r, Real(b0));
     if (shapeType == 1) return b0;
     if (shapeType == 2) return b0 * (2.0f - b0 / r);
     return b0 * b0 / r;  // Ellis (default)
 }
 
-public float WormholeShapeDerivative(float r, float b0, int shapeType) {
-    r = max(r, b0);
-    float r2 = r * r;
+public Real WormholeShapeDerivative(Real r, float b0, int shapeType) {
+    r = max(r, Real(b0));
+    Real r2 = r * r;
     if (shapeType == 1) return 0.0f;
     if (shapeType == 2) return b0 * b0 / r2;
     return -b0 * b0 / r2;  // Ellis (default)
@@ -348,7 +348,7 @@ public void GetMorrisThorneMetric(
     float sin2 = sin_theta * sin_theta;
     float r2 = r * r;
 
-    float b = WormholeShapeFunction(r, b0, shapeType);
+    float b = float(WormholeShapeFunction(Real(r), b0, shapeType));
     float one_minus_b_over_r = 1.0f - b / r;
     one_minus_b_over_r = max(one_minus_b_over_r, 0.001f);
 
@@ -366,6 +366,125 @@ public void GetMorrisThorneMetric(
     g_inv[1][1] = one_minus_b_over_r;
     g_inv[2][2] = 1.0f / r2;
     g_inv[3][3] = 1.0f / max(r2 * sin2, 1e-10f);
+}
+
+// =============================================================================
+// Morris-Thorne Cartesian embedding, mirroring the CPU render authority
+// (core/metrics/morris_thorne_family.h MorrisThorneCartesian). With r = |x|,
+// n = x/r the spatial metric is flat plus rank one:
+//   g_tt = -e^{2 Phi0},  g_ij = delta_ij + f n_i n_j,  f = b/(r - b),
+//   g^ij = delta_ij - (f/(1+f)) n_i n_j          (Sherman-Morrison).
+// One sheet, r clamped to b0 * 1.001 exactly as the CPU class clamps; the
+// throat is the capture surface and trace.slang tests it on |x| directly.
+// Rational arithmetic plus sqrt only, so the fp64 rung covers it unchanged.
+// =============================================================================
+public void GetMorrisThorneCartesianMetric(
+    Vec4Cart pos, float b0, float Phi0, int shapeType,
+    out Real g[4][4], out Real g_inv[4][4])
+{
+    Real x = pos.x;
+    Real y = pos.y;
+    Real z = pos.z;
+    Real r = sqrt(x * x + y * y + z * z);
+    Real r_min = b0 * 1.001f;
+    Real n1, n2, n3;
+    if (r < Real(1e-30f)) {
+        n1 = 0.0f; n2 = 0.0f; n3 = 1.0f;
+        r = r_min;
+    } else {
+        Real inv = 1.0f / r;
+        n1 = x * inv; n2 = y * inv; n3 = z * inv;
+        r = max(r, r_min);
+    }
+
+    Real b = WormholeShapeFunction(r, b0, shapeType);
+    Real r_minus_b = max(r - b, Real(1e-10f));
+    Real f = b / r_minus_b;
+    Real c = f / (1.0f + f);
+    float exp2Phi = exp(2.0f * Phi0);
+
+    Real n[3] = { n1, n2, n3 };
+    [unroll] for (int i = 0; i < 4; i++)
+        [unroll] for (int j = 0; j < 4; j++) { g[i][j] = 0.0f; g_inv[i][j] = 0.0f; }
+
+    g[0][0] = -exp2Phi;
+    g_inv[0][0] = -1.0f / exp2Phi;
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            Real dij = (i == j) ? Real(1.0f) : Real(0.0f);
+            g[i + 1][j + 1] = dij + f * n[i] * n[j];
+            g_inv[i + 1][j + 1] = dij - c * n[i] * n[j];
+        }
+    }
+}
+
+// Christoffels of the embedding, contracted from the analytic derivative
+//   d_k g_ij = f' n_k n_i n_j + (f/r)(d_ki n_j + d_kj n_i - 2 n_k n_i n_j),
+//   f' = (b' r - b)/(r - b)^2,
+// and the closed-form inverse; the time row and column vanish (static,
+// zero-tidal Phi0). Same source formulas as MorrisThorneCartesian::Evaluate.
+public void GetMorrisThorneCartesianChristoffel(
+    Vec4Cart pos, float b0, float Phi0, int shapeType,
+    out Real Gamma[4][4][4])
+{
+    [unroll] for (int i = 0; i < 4; i++)
+        [unroll] for (int j = 0; j < 4; j++)
+            [unroll] for (int k = 0; k < 4; k++)
+                Gamma[i][j][k] = 0.0f;
+
+    Real x = pos.x;
+    Real y = pos.y;
+    Real z = pos.z;
+    Real r = sqrt(x * x + y * y + z * z);
+    Real r_min = b0 * 1.001f;
+    Real n1, n2, n3;
+    if (r < Real(1e-30f)) {
+        n1 = 0.0f; n2 = 0.0f; n3 = 1.0f;
+        r = r_min;
+    } else {
+        Real inv = 1.0f / r;
+        n1 = x * inv; n2 = y * inv; n3 = z * inv;
+        r = max(r, r_min);
+    }
+
+    Real b = WormholeShapeFunction(r, b0, shapeType);
+    Real db_dr = WormholeShapeDerivative(r, b0, shapeType);
+    Real r_minus_b = max(r - b, Real(1e-10f));
+    Real f = b / r_minus_b;
+    Real df_dr = (db_dr * r - b) / (r_minus_b * r_minus_b);
+    Real c = f / (1.0f + f);
+    Real f_over_r = f / r;
+
+    Real n[3] = { n1, n2, n3 };
+
+    // dg[k][i][j] = d_k g_ij, spatial block only.
+    Real dg[3][3][3];
+    for (int k = 0; k < 3; k++) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                Real dki = (k == i) ? Real(1.0f) : Real(0.0f);
+                Real dkj = (k == j) ? Real(1.0f) : Real(0.0f);
+                dg[k][i][j] = df_dr * n[k] * n[i] * n[j]
+                            + f_over_r * (dki * n[j] + dkj * n[i]
+                                          - 2.0f * n[k] * n[i] * n[j]);
+            }
+        }
+    }
+
+    // Gamma^l_ij = 1/2 g^lm (d_i g_mj + d_j g_mi - d_m g_ij), spatial indices.
+    for (int l = 0; l < 3; l++) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = i; j < 3; j++) {
+                Real sum = 0.0f;
+                for (int m = 0; m < 3; m++) {
+                    Real g_inv_lm = ((l == m) ? Real(1.0f) : Real(0.0f)) - c * n[l] * n[m];
+                    sum += g_inv_lm * (dg[i][m][j] + dg[j][m][i] - dg[m][i][j]);
+                }
+                Gamma[l + 1][i + 1][j + 1] = 0.5f * sum;
+                Gamma[l + 1][j + 1][i + 1] = Gamma[l + 1][i + 1][j + 1];
+            }
+        }
+    }
 }
 
 // safe_cot: regularised cotangent, finite at the poles (RDOP002A.cu safe_cot).
@@ -399,8 +518,8 @@ public void GetMorrisThorneChristoffel(
     float sin2 = sin_theta * sin_theta;
     float r2 = r * r;
 
-    float b = WormholeShapeFunction(r, b0, shapeType);
-    float db_dr = WormholeShapeDerivative(r, b0, shapeType);
+    float b = float(WormholeShapeFunction(Real(r), b0, shapeType));
+    float db_dr = float(WormholeShapeDerivative(Real(r), b0, shapeType));
 
     float one_minus_b_over_r = 1.0f - b / r;
     one_minus_b_over_r = max(one_minus_b_over_r, 0.001f);

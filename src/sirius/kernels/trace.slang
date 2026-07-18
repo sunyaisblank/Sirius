@@ -13,10 +13,11 @@
 // buffer are carried from RDOP002A.cu / core/constants.h.
 //
 // Metric dispatch (params[2]) matches the registry gpu_supported set the render
-// session wires: Kerr-Schild family (Minkowski/Schwarzschild/Kerr) and the
-// Alcubierre warp family. The gr_* modules also carry Ellis/Morris-Thorne
-// physics (parity_probe covers them); their spherical-chart render integration
-// is a recorded follow-up and the session declines them, so no dispatch id here.
+// session wires: Kerr-Schild family (Minkowski/Schwarzschild/Kerr), the
+// Alcubierre warp family, and the Morris-Thorne wormhole through its Cartesian
+// embedding (gr_metrics GetMorrisThorneCartesian*, mirroring the CPU render
+// authority; one sheet, throat capture). The spherical-chart Ellis/Morris-
+// Thorne routines remain parity-probe references, not render dispatches.
 //
 // Buffer ABI (bound 0..2 in declaration order):
 //   0 radiance   : RWStructuredBuffer<float>, tileWidth*tileHeight*4 (RGBA/px).
@@ -38,6 +39,7 @@ StructuredBuffer<uint> starfield;    // binding 2
 // render session emits). Kept local so this file reads without cross-reference.
 static const uint kDispatchKerrSchild = 0;
 static const uint kDispatchWarpDrive = 2;
+static const uint kDispatchMorrisThorne = 3;
 
 float3 P3(uint base) { return float3(params[base], params[base + 1], params[base + 2]); }
 
@@ -175,6 +177,12 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     float warpSigma = params[41];
     float warpR = params[42];
 
+    // Morris-Thorne (dispatch id 3): throat radius and shape selector
+    // (0 Ellis, 1 zero-tidal, 2 absurdly benign); Phi0 = 0 is the zero-tidal
+    // subclass the CPU authority carries.
+    float throatB0 = params[44];
+    int wormShape = int(params[45]);
+
     // Ray bundles (P2): propagate one geodesic-deviation vector through the render
     // loop and report the beam's transverse expansion. Default off (params[43]==0)
     // leaves the RGBA output untouched, so the parity and pinned renders do not
@@ -193,6 +201,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     float3 rayDir = normalize(camDir + camRight * u + camUp * v);
 
     bool isWarp = (metricId == kDispatchWarpDrive);
+    bool isWormhole = (metricId == kDispatchMorrisThorne);
 
     // Initial 4-velocity from the null condition at the camera position, using
     // the dispatched metric.
@@ -201,15 +210,21 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     Vec4Cart pos0 = MakeVec4Cart(0.0f, camPos.x, camPos.y, camPos.z);
     if (isWarp) {
         GetWarpDriveMetric(pos0, warpVs, warpSigma, warpR, 0.0f, 0.0f, 0.0f, g, g_inv);
+    } else if (isWormhole) {
+        GetMorrisThorneCartesianMetric(pos0, throatB0, 0.0f, wormShape, g, g_inv);
     } else {
         GetKerrSchildFamilyMetric(pos0, M, a, Q, Lambda, g, g_inv);
     }
     Real ut = SolveNullTimeComponent(g, rayDir);
 
-    // Horizon capture radius (Kerr-Schild family only): r_+ = M + sqrt(M^2 - a^2
-    // - Q^2), buffered. The warp bubble is horizonless: capture is disabled.
+    // Capture radius: the buffered Kerr-Schild outer horizon r_+ = M +
+    // sqrt(M^2 - a^2 - Q^2) for the black-hole family; the throat radius for
+    // the one-sheet wormhole (its far mouth is unmodelled, so rays reaching
+    // the throat terminate as captured, matching the CPU path). The warp
+    // bubble is horizonless: capture is disabled.
     float disc = M * M - a * a - Q * Q;
     float horizonRadius = (disc > 0.0f) ? (M + sqrt(disc)) : M;
+    if (isWormhole) horizonRadius = throatB0;
     horizonRadius *= captureFactor;
 
     GeodesicStateCart state;
@@ -229,30 +244,59 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     Real4 xi = Real4(0.0f, xiPerp.x, xiPerp.y, xiPerp.z) * Real(kBeamSeed);
     Real4 xiDot = Real4(0.0f, 0.0f, 0.0f, 0.0f);
 
+#ifdef SIRIUS_FP32_COMP
+    // Compensated rung: running Kahan compensation for the state accumulation
+    // across steps, recovering the low-order bits plain fp32 addition drops.
+    // The RK4 increment itself is unchanged; only the commit differs.
+    Vec4Cart compX = MakeVec4Cart(0.0f, 0.0f, 0.0f, 0.0f);
+    Vec4Cart compU = MakeVec4Cart(0.0f, 0.0f, 0.0f, 0.0f);
+#endif
+
     for (int step = 0; step < maxSteps; step++) {
         Real px = state.x.x;
         Real py = state.x.y;
         Real pz = state.x.z;
         Real rBig = sqrt(px * px + py * py + pz * pz);
 
-        if (!isWarp) {
+        if (isWormhole) {
+            if (rBig <= horizonRadius) { break; }  // reached the throat: dark
+        } else if (!isWarp) {
             Real rKerr = ComputeKerrRadiusCart(px, py, pz, Real(a));
             if (rKerr <= horizonRadius) { break; }  // captured: shadow
         }
         if (rBig >= escapeRadius) { escaped = true; break; }
 
-        Real rStep = isWarp ? max(rBig, Real(1.0f)) : ComputeKerrRadiusCart(px, py, pz, Real(a));
+        Real rStep = (isWarp || isWormhole)
+            ? max(rBig, Real(1.0f))
+            : ComputeKerrRadiusCart(px, py, pz, Real(a));
         Real dt = clamp(stepScale * rStep, Real(minStep), Real(maxStep));
 
-        GeodesicStateCart next = isWarp
-            ? IntegrateGeodesicRK4WarpCart(state, dt, warpVs, warpSigma, warpR, 0.0f, 0.0f, 0.0f)
-            : IntegrateGeodesicRK4Cart(state, dt, M, a, Q, Lambda);
+        Vec4Cart dX, dU;
+        if (isWarp) {
+            IntegrateGeodesicRK4WarpCartDelta(state, dt, warpVs, warpSigma, warpR,
+                                              0.0f, 0.0f, 0.0f, dX, dU);
+        } else if (isWormhole) {
+            IntegrateGeodesicRK4MorrisThorneCartDelta(state, dt, throatB0, 0.0f, wormShape,
+                                                      dX, dU);
+        } else {
+            IntegrateGeodesicRK4CartDelta(state, dt, M, a, Q, Lambda, dX, dU);
+        }
+        GeodesicStateCart next;
+#ifdef SIRIUS_FP32_COMP
+        next.x = KahanAddVec4Cart(state.x, compX, dX);
+        next.u = KahanAddVec4Cart(state.u, compU, dU);
+#else
+        // Plain accumulation: identical arithmetic to the pre-refactor
+        // integrator, which performed these adds internally.
+        next.x = AddVec4Cart(state.x, dX);
+        next.u = AddVec4Cart(state.u, dU);
+#endif
 
         // Optional thin disk (Kerr-Schild black holes only): emission when the
         // segment crosses the equatorial plane z=0 within [innerRadius,
         // outerRadius], with Novikov-Thorne temperature, blackbody colour, and
         // g^4 relativistic beaming (gr_disk authorities).
-        if (diskEnabled && !isWarp && transmittance > 0.01f) {
+        if (diskEnabled && !isWarp && !isWormhole && transmittance > 0.01f) {
             if (state.x.z * next.x.z < 0.0f) {
                 Real frac = state.x.z / (state.x.z - next.x.z);
                 Real cxr = state.x.x + frac * (next.x.x - state.x.x);
@@ -279,7 +323,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         }
         // Advance the deviation vector over this step (velocity Verlet on the
         // full-Riemann Jacobi acceleration), coefficients at the step start.
-        if (beamsEnabled && !isWarp) {
+        if (beamsEnabled && !isWarp && !isWormhole) {
             Real4 accel = GeodesicDeviationAccelFullRiemann(state.x, state.u, xi, M, a, Q, Lambda);
             xi += xiDot * dt + accel * (Real(0.5f) * dt * dt);
             xiDot += accel * dt;

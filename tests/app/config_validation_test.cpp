@@ -70,9 +70,19 @@ TEST(ConfigValidation, UnknownTonemapperRejected) {
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
 
-TEST(ConfigValidation, GpuBackendNameRejected) {
+TEST(ConfigValidation, VulkanBackendNameAccepted) {
+    // Go-live (2026-07-18): vulkan joined the accepted set; device absence is
+    // the render's decline, not a config-name error.
     SiriusConfig config = SiriusConfig::defaults();
-    config.backend.preferred = "vulkan";  // Only auto/cpu are accepted (OptiX retired).
+    config.backend.preferred = "vulkan";
+    for (const auto& e : ConfigLoader::Validate(config)) {
+        EXPECT_EQ(e.find("backend.preferred"), std::string::npos) << e;
+    }
+}
+
+TEST(ConfigValidation, UnknownBackendNameRejected) {
+    SiriusConfig config = SiriusConfig::defaults();
+    config.backend.preferred = "optix";  // Retired; never silently remapped.
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
 

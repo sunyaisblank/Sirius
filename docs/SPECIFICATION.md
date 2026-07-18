@@ -36,7 +36,7 @@ These follow Prompt.md section 15: determinations the evidence supports, recorde
 
 - Distributed or farm rendering. DNGR ran on a render farm; Sirius targets single machines, and that difference is a design constraint, not a gap.
 - GRMHD-driven disks (imported simulation data). The disk models are analytic.
-- Flipping any behaviour flag that gates GPU auto-selection before the parity suites pass on real hardware.
+- ~~Flipping any behaviour flag that gates GPU auto-selection before the parity suites pass on real hardware.~~ Superseded by owner decision, 2026-07-18: go-live executed with the parity suites green on Lavapipe (software Vulkan; CPU/Vulkan shadow-fraction gap ~1e-3, background luminance parity ~5e-6 mean); physical-GPU validation runs via scripts/validate-hardware.sh when silicon is available, and `--cpu` remains the pinned reference path.
 - Publishing, packaging for distribution channels, or repository hosting changes.
 
 ### 1.6 Guardrails

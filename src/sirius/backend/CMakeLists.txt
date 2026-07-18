@@ -106,5 +106,29 @@ add_custom_command(
 )
 list(APPEND SIRIUS_KERNEL_OUTPUTS "${kernel_fp64_out}")
 
+# The compensated rung (ladder middle): plain fp32 arithmetic with Kahan
+# compensation on the per-step state accumulation (SIRIUS_FP32_COMP). Runs on
+# any device; SIRIUS_PRECISION=fp32-comp selects it.
+set(kernel_comp_out "${SIRIUS_KERNEL_BINARY_DIR}/trace_fp32comp.spv")
+if(SIRIUS_SPIRV_VAL)
+    set(kernel_comp_validate COMMAND "${SIRIUS_SPIRV_VAL}" "${kernel_comp_out}")
+else()
+    set(kernel_comp_validate "")
+endif()
+add_custom_command(
+    OUTPUT "${kernel_comp_out}"
+    COMMAND ${SIRIUS_SLANGC} "${SIRIUS_KERNEL_DIR}/trace.slang"
+        -DSIRIUS_FP32_COMP
+        -target spirv -profile spirv_1_5
+        -entry ComputeMain -stage compute
+        -I "${SIRIUS_KERNEL_DIR}"
+        -o "${kernel_comp_out}"
+    ${kernel_comp_validate}
+    DEPENDS "${SIRIUS_KERNEL_DIR}/trace.slang" ${SIRIUS_KERNEL_LIBS}
+    COMMENT "Compiling Slang kernel trace.slang (compensated fp32 rung) -> SPIR-V (+spirv-val)"
+    VERBATIM
+)
+list(APPEND SIRIUS_KERNEL_OUTPUTS "${kernel_comp_out}")
+
 add_custom_target(sirius_kernels ALL DEPENDS ${SIRIUS_KERNEL_OUTPUTS})
 add_dependencies(sirius_backend sirius_kernels)

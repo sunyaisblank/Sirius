@@ -13,6 +13,7 @@
 #include "sirius/render/png_writer.h"
 
 #ifdef SIRIUS_HAS_VULKAN_BACKEND
+#include "sirius/backend/device.h"  // Device enumeration for backend auto-resolution.
 #include "sirius/render/vulkan_renderer.h"
 #endif
 
@@ -1206,20 +1207,47 @@ SessionConfig SessionConfig::FromSiriusConfig(const SiriusConfig& config) {
         sc.filmConfig.vignette_strength = config.film.vignetteStrength;
     }
 
-    // Backend selection. 'auto' resolves to Cpu today (the go-live default flip
-    // is an owner milestone, specification section 1.5); SIRIUS_RENDER_BACKEND=
-    // vulkan opts into the Vulkan render path explicitly. An explicit --backend
-    // vulkan / --gpu request is applied by the CLI after this conversion, because
-    // the config validator's backend.preferred set is {auto, cpu} only.
+    // Backend selection (single authority for the config surface; the CLI's
+    // explicit --gpu/--backend vulkan override is applied on top by
+    // ExecuteSession). GO-LIVE (owner decision, 2026-07-18, specification
+    // section 1.5): 'auto' now resolves to Vulkan when the backend is compiled
+    // in, a device is present, and the registry marks the metric
+    // gpu-dispatchable; otherwise it falls back to the CPU path with the
+    // reason logged — a fallback, never a decline. 'cpu' pins the CPU path;
+    // 'vulkan' selects the Vulkan path unconditionally (device absence then
+    // surfaces as the render's loud decline, not a silent CPU switch).
+    // SIRIUS_RENDER_BACKEND overrides the config with the same three values.
     sc.useGPU = (config.backend.preferred != "cpu");
-    sc.backend = RenderBackend::Cpu;
+    std::string preferred = config.backend.preferred;
     if (const char* rb = std::getenv("SIRIUS_RENDER_BACKEND"); rb != nullptr) {
         std::string value(rb);
         std::transform(value.begin(), value.end(), value.begin(),
                        [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
-        if (value == "vulkan") {
-            sc.backend = RenderBackend::Vulkan;
+        if (value == "vulkan" || value == "cpu" || value == "auto") {
+            preferred = value;
         }
+    }
+
+    sc.backend = RenderBackend::Cpu;
+    if (preferred == "vulkan") {
+        sc.backend = RenderBackend::Vulkan;
+    } else if (preferred == "auto") {
+#ifdef SIRIUS_HAS_VULKAN_BACKEND
+        const bool gpu_metric = core::MetricInfoFor(sc.metricId).gpu_supported;
+        if (gpu_metric) {
+            if (auto devices = backend::EnumerateVulkanDevices();
+                devices.has_value() && !devices->empty()) {
+                sc.backend = RenderBackend::Vulkan;
+            } else {
+                std::cout << "[Session] backend auto: no Vulkan device visible; "
+                             "using the CPU path" << std::endl;
+            }
+        } else {
+            std::cout << "[Session] backend auto: metric '"
+                      << core::MetricInfoFor(sc.metricId).canonical_name
+                      << "' is CPU-only (registry); using the CPU path" << std::endl;
+        }
+#endif
     }
 
     return sc;

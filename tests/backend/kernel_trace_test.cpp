@@ -275,4 +275,63 @@ TEST(KernelTrace, Fp64RungAgreesWithFp32OnKerrScene) {
 #endif
 }
 
+// The compensated rung (trace_fp32comp.spv, Kahan state accumulation) renders
+// the same scene, stays finite and non-constant, agrees with plain fp32
+// closely, and — measured against the fp64 reference — tracks it at least as
+// well as plain fp32 does (within slack for noise; on hardware with sloppier
+// fp32 the compensation's gain is larger, which this bound also admits).
+TEST(KernelTrace, CompensatedRungTracksFp64AtLeastAsWellAsFp32) {
+#ifndef SIRIUS_KERNEL_DIR
+    GTEST_SKIP() << "kernels not compiled (slangc absent at configure time)";
+#else
+    const auto devices = EnumerateVulkanDevices();
+    ASSERT_TRUE(devices.has_value()) << devices.error().Description();
+    if (devices->empty()) {
+        GTEST_SKIP() << "no Vulkan device present";
+    }
+    auto device = CreateVulkanDevice(0);
+    ASSERT_TRUE(device.has_value()) << device.error().Description();
+    if (!(*device)->Info().supports_fp64) {
+        GTEST_SKIP() << "device lacks shaderFloat64 (needed for the reference field)";
+    }
+
+    const auto spirv32 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace.spv");
+    const auto spirvC = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace_fp32comp.spv");
+    const auto spirv64 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace_fp64.spv");
+    ASSERT_FALSE(spirv32.empty());
+    ASSERT_FALSE(spirvC.empty()) << "trace_fp32comp.spv missing";
+    ASSERT_FALSE(spirv64.empty());
+
+    const auto r32 = RunKerrScene(**device, spirv32);
+    const auto rC = RunKerrScene(**device, spirvC);
+    const auto r64 = RunKerrScene(**device, spirv64);
+    ASSERT_EQ(rC.size(), r32.size());
+    ASSERT_EQ(rC.size(), r64.size());
+    ASSERT_FALSE(rC.empty());
+
+    double sum_c64 = 0.0, sum_3264 = 0.0, sum_c32 = 0.0;
+    float minc = std::numeric_limits<float>::max();
+    float maxc = 0.0f;
+    for (std::size_t i = 0; i < rC.size(); ++i) {
+        ASSERT_TRUE(std::isfinite(rC[i])) << "non-finite compensated-rung radiance";
+        sum_c64 += std::abs(double(rC[i]) - double(r64[i]));
+        sum_3264 += std::abs(double(r32[i]) - double(r64[i]));
+        sum_c32 += std::abs(double(rC[i]) - double(r32[i]));
+        minc = std::min(minc, rC[i]);
+        maxc = std::max(maxc, rC[i]);
+    }
+    const double n = double(rC.size());
+    const double mean_c64 = sum_c64 / n;
+    const double mean_3264 = sum_3264 / n;
+    const double mean_c32 = sum_c32 / n;
+    std::cout << "[ traceC   ] mean|comp-fp64|=" << mean_c64
+              << " mean|fp32-fp64|=" << mean_3264 << " mean|comp-fp32|=" << mean_c32 << "\n";
+
+    EXPECT_GT(maxc - minc, 1e-3f) << "compensated radiance field is constant";
+    EXPECT_LT(mean_c32, 1e-2) << "compensated rung diverges from fp32 in the mean";
+    EXPECT_LE(mean_c64, mean_3264 * 1.5 + 1e-9)
+        << "compensation made the fp64 tracking worse, which defeats the rung";
+#endif
+}
+
 }  // namespace

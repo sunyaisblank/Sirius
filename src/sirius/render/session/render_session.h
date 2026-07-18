@@ -99,10 +99,12 @@ struct SessionConfig {
     bool enableParallelRendering = true;   // Multi-threaded tile rendering.
 
     // Backend selection. `backend` decides the render path; useGPU/ptxPath are
-    // legacy config-surface fields retained for parity. `auto` in the config
-    // resolves to Cpu today (the go-live default flip is an owner milestone,
-    // specification section 1.5); SIRIUS_RENDER_BACKEND=vulkan or --backend
-    // vulkan opts into the Vulkan path explicitly.
+    // legacy config-surface fields retained for parity. Since the go-live flip
+    // (owner decision, 2026-07-18) `auto` in the config resolves to Vulkan
+    // when a device is present and the registry marks the metric
+    // gpu-dispatchable, falling back to Cpu with the reason logged;
+    // `vulkan` selects the Vulkan path unconditionally and `cpu` pins the CPU
+    // path. SIRIUS_RENDER_BACKEND overrides with the same values.
     RenderBackend backend = RenderBackend::Cpu;
     bool useGPU = true;
     std::string ptxPath;

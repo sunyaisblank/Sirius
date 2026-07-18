@@ -35,6 +35,7 @@
 #include "sirius/core/camera.h"
 #include "sirius/core/disk/novikov_thorne_disk.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
+#include "sirius/core/metrics/morris_thorne_family.h"
 #include "sirius/render/session/display_buffer.h"
 #include "sirius/render/session/render_session.h"
 #endif
@@ -267,6 +268,22 @@ TEST(VulkanRenderSession, Fp64RungRendersOrDeclinesLoudly) {
     }
 }
 
+// The compensated rung end to end: SIRIUS_PRECISION=fp32-comp selects
+// trace_fp32comp.spv on any device and completes with a finite, non-constant
+// frame carrying the shadow structure.
+TEST(VulkanRenderSession, CompensatedRungRendersOnAnyDevice) {
+    if (const auto d = EnumerateVulkanDevices(); !d.has_value() || d->empty()) {
+        GTEST_SKIP() << "no Vulkan device present";
+    }
+    setenv("SIRIUS_PRECISION", "fp32-comp", 1);
+    const std::string out = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp") +
+                            "/sirius_vk_comp_64.exr";
+    const auto rgba = RenderSessionVulkan(64, 64, out);
+    unsetenv("SIRIUS_PRECISION");
+    ASSERT_FALSE(rgba.empty()) << "compensated rung did not complete";
+    ExpectFiniteNonConstantWithShadow(rgba, 64, 64, "vk-session-comp");
+}
+
 TEST(VulkanRenderSession, Kerr160x120CompletesAcrossMultipleGovernedTiles) {
     if (const auto d = EnumerateVulkanDevices(); !d.has_value() || d->empty()) {
         GTEST_SKIP() << "no Vulkan device present";
@@ -413,6 +430,151 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds) {
     EXPECT_LE(frac_cpu, 0.40) << "CPU shadow fraction outside the broad band";
     EXPECT_LT(std::abs(frac_vk - frac_cpu), 0.02)
         << "shadow fractions diverge: a capture-semantics or ray-kill regression";
+}
+
+// --- CPU-versus-Vulkan Morris-Thorne parity ----------------------------------
+// The wormhole's Cartesian embedding runs on both backends (MorrisThorneCartesian
+// on the CPU, gr_metrics GetMorrisThorneCartesian* under dispatch id 3 on the
+// device); same one-sheet chart, same throat capture convention, same analytic
+// gradient background. The gate mirrors the Kerr parity test: background
+// luminance agreement plus throat-shadow fractions within the tightened band.
+TEST(VulkanRenderSession, CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalBounds) {
+    KernelFixture f = OpenKernel();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or trace kernel absent";
+
+    constexpr int w = 96;
+    constexpr int h = 96;
+    constexpr float kThroat = 4.0f;
+    constexpr double kDistance = 30.0;
+    constexpr double kInclinationDeg = 80.0;
+    constexpr float kFovDeg = 50.0f;
+
+    // --- Vulkan render (direct kernel dispatch, disk + starfield off) --------
+    const double theta = kInclinationDeg * kPi / 180.0;
+    const double st = std::sin(theta);
+    const double ct = std::cos(theta);
+    std::vector<float> params(48, 0.0f);
+    params[0] = w;
+    params[1] = h;
+    params[2] = 3.0f;  // Morris-Thorne dispatch
+    params[7] = static_cast<float>(kDistance * st);
+    params[9] = static_cast<float>(kDistance * ct);
+    params[10] = static_cast<float>(-st);
+    params[12] = static_cast<float>(-ct);
+    params[14] = 1.0f;
+    params[16] = static_cast<float>(ct);
+    params[18] = static_cast<float>(-st);
+    params[19] = static_cast<float>(kFovDeg * kPi / 180.0);
+    params[20] = 1.0f;
+    params[21] = 3000.0f;
+    params[22] = 0.08f;
+    params[23] = 0.02f;
+    params[24] = 2.0f;
+    params[25] = 200.0f;
+    params[26] = 1.05f;
+    params[34] = w;
+    params[35] = h;
+    params[37] = 1.0f;
+    params[38] = 1.0f;
+    params[44] = kThroat;
+    params[45] = 0.0f;  // Ellis
+
+    std::vector<float> vk(static_cast<std::size_t>(w) * h * 4, 0.0f);
+    const std::vector<std::uint32_t> star_dummy = {0u};
+    const auto rbuf = f.device->CreateBuffer(vk.size() * sizeof(float), BufferUsage::kStorage);
+    const auto pbuf = f.device->CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
+    const auto sbuf =
+        f.device->CreateBuffer(star_dummy.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
+    ASSERT_TRUE(rbuf && pbuf && sbuf);
+    ASSERT_TRUE(f.device->WriteBuffer(*pbuf, std::as_bytes(std::span<const float>(params))));
+    ASSERT_TRUE(
+        f.device->WriteBuffer(*sbuf, std::as_bytes(std::span<const std::uint32_t>(star_dummy))));
+    const BufferHandle bind[] = {*rbuf, *pbuf, *sbuf};
+    ASSERT_TRUE(f.device->Dispatch(f.kernel, bind, (w + 7) / 8, (h + 7) / 8, 1).has_value());
+    ASSERT_TRUE(f.device->ReadBuffer(*rbuf, std::as_writable_bytes(std::span<float>(vk))));
+
+    // --- CPU reference (the geodesic tracer on the same scene) ---------------
+    sirius::core::MorrisThorneCartesian metric(
+        sirius::core::MorrisThorneParams::Ellis(kThroat));
+
+    TracerConfig tc;
+    tc.escape_radius = 200.0f;
+    tc.horizon_factor = 1.05f;
+    tc.max_steps = 20000;
+    tc.enable_disk = false;
+    tc.integrator.initial_step = 0.1f;
+    tc.integrator.max_step = 2.0f;
+    tc.integrator.min_step = 1e-5f;
+    tc.integrator.abs_tolerance = 5e-6f;
+    tc.integrator.rel_tolerance = 5e-6f;
+    GeodesicTracer tracer(&metric, tc);
+
+    CameraConfig cc;
+    cc.r = kDistance;
+    cc.theta = theta;
+    cc.phi = 0.0;
+    cc.fov = kFovDeg;
+    cc.width = w;
+    cc.height = h;
+    PinholeCamera camera(cc);
+
+    std::vector<float> cpu(static_cast<std::size_t>(w) * h * 4, 0.0f);
+    for (int y = 0; y < h; ++y) {
+        for (int x = 0; x < w; ++x) {
+            const CameraRay ray = camera.GenerateRay(x, y, 0.5f, 0.5f);
+            const TraceResult res = tracer.Trace(ray);
+            float r = 0.0f, g = 0.0f, b = 0.0f;
+            if (res.outcome == TraceResult::Outcome::Escaped) {
+                GradientBackground(res.final_direction(1), res.final_direction(2),
+                                   res.final_direction(3), r, g, b);
+            } else if (res.outcome == TraceResult::Outcome::Spiraling) {
+                r = g = b = 0.02f;
+            } else if (res.outcome == TraceResult::Outcome::MaxSteps) {
+                r = g = b = 0.01f;
+            }  // Horizon (throat) -> black
+            const int idx = (y * w + x) * 4;
+            cpu[idx + 0] = r;
+            cpu[idx + 1] = g;
+            cpu[idx + 2] = b;
+        }
+    }
+
+    // --- Statistics -----------------------------------------------------------
+    std::size_t shadow_vk = 0, shadow_cpu = 0, bg_pixels = 0;
+    double abs_sum = 0.0, max_rel = 0.0;
+    constexpr float kShadowLum = 0.02f;
+    constexpr float kRelFloor = 0.05f;
+    for (int p = 0; p < w * h; ++p) {
+        const float lv = Luminance(vk[p * 4], vk[p * 4 + 1], vk[p * 4 + 2]);
+        const float lc = Luminance(cpu[p * 4], cpu[p * 4 + 1], cpu[p * 4 + 2]);
+        ASSERT_TRUE(std::isfinite(lv) && std::isfinite(lc));
+        if (lv < kShadowLum) ++shadow_vk;
+        if (lc < kShadowLum) ++shadow_cpu;
+        if (lv >= kShadowLum && lc >= kShadowLum) {
+            ++bg_pixels;
+            const float d = std::abs(lv - lc);
+            abs_sum += d;
+            max_rel = std::max<double>(max_rel, d / std::max(lc, kRelFloor));
+        }
+    }
+
+    const double frac_vk = static_cast<double>(shadow_vk) / (w * h);
+    const double frac_cpu = static_cast<double>(shadow_cpu) / (w * h);
+    const double mean_abs = bg_pixels > 0 ? abs_sum / static_cast<double>(bg_pixels) : 0.0;
+    std::cout << "[ mt-parity ] shadow_vk=" << frac_vk << " shadow_cpu=" << frac_cpu
+              << " |dfrac|=" << std::abs(frac_vk - frac_cpu) << " bg_pixels=" << bg_pixels
+              << " mean|dlum|=" << mean_abs << " max_rel_dlum=" << max_rel << "\n";
+
+    ASSERT_GT(bg_pixels, static_cast<std::size_t>(w * h) / 4)
+        << "too few shared background pixels to compare";
+    EXPECT_LT(mean_abs, 5e-3) << "mean background luminance difference too large";
+    EXPECT_LT(max_rel, 0.2) << "worst-case background luminance disagreement too large";
+    EXPECT_GE(frac_vk, 0.005);
+    EXPECT_LE(frac_vk, 0.40);
+    EXPECT_GE(frac_cpu, 0.005);
+    EXPECT_LE(frac_cpu, 0.40);
+    EXPECT_LT(std::abs(frac_vk - frac_cpu), 0.02)
+        << "throat-shadow fractions diverge between the backends";
 }
 
 #endif  // SIRIUS_HAS_VULKAN_BACKEND

@@ -9,6 +9,11 @@
 
 #include "sirius/render/session/render_session.h"
 
+#include "sirius/render/render_config.h"
+#ifdef SIRIUS_HAS_VULKAN_BACKEND
+#include "sirius/backend/device.h"
+#endif
+
 #include <gtest/gtest.h>
 
 #include <stb_image.h>
@@ -105,6 +110,41 @@ TEST(RenderSessionProbe, CpuKerrRenderProducesValidPngAndExr) {
 
     fs::remove(pngPath);
     fs::remove(exrPath);
+}
+
+// Backend auto-resolution after the go-live flip (owner decision, 2026-07-18):
+// 'auto' selects Vulkan exactly when a device is visible AND the registry
+// marks the metric gpu-dispatchable; 'cpu' pins the CPU path regardless. The
+// registry is the single authority for the metric half of that predicate, so
+// a charge-carrying metric resolves to CPU even with a device present.
+TEST(RenderSessionProbe, BackendAutoResolvesByDeviceAndRegistry) {
+    unsetenv("SIRIUS_RENDER_BACKEND");
+
+    sirius::render::SiriusConfig cfg = sirius::render::SiriusConfig::defaults();
+    cfg.metric.name = "Kerr";
+    cfg.backend.preferred = "cpu";
+    EXPECT_EQ(SessionConfig::FromSiriusConfig(cfg).backend,
+              sirius::render::RenderBackend::Cpu)
+        << "'cpu' must pin the CPU path";
+
+    cfg.backend.preferred = "auto";
+#ifdef SIRIUS_HAS_VULKAN_BACKEND
+    const auto devices = sirius::backend::EnumerateVulkanDevices();
+    const bool device_present = devices.has_value() && !devices->empty();
+    EXPECT_EQ(SessionConfig::FromSiriusConfig(cfg).backend,
+              device_present ? sirius::render::RenderBackend::Vulkan
+                             : sirius::render::RenderBackend::Cpu)
+        << "auto must follow device presence for a gpu-dispatchable metric";
+
+    cfg.metric.name = "Reissner-Nordstrom";  // registry gpu_supported = false
+    EXPECT_EQ(SessionConfig::FromSiriusConfig(cfg).backend,
+              sirius::render::RenderBackend::Cpu)
+        << "auto must resolve CPU for a metric the registry marks CPU-only";
+#else
+    EXPECT_EQ(SessionConfig::FromSiriusConfig(cfg).backend,
+              sirius::render::RenderBackend::Cpu)
+        << "auto must resolve CPU when the Vulkan backend is not compiled in";
+#endif
 }
 
 // The Morris-Thorne wormhole renders on the CPU path through the Cartesian

@@ -101,7 +101,7 @@ Backend:
   --cpu                     Force CPU rendering (the reference path)
   --no-gpu                  Alias of --cpu
   --gpu                     Render on the Vulkan backend (declines if no device)
-  --backend <name>          Select backend: cpu, auto (=cpu today), vulkan
+  --backend <name>          Select backend: auto (Vulkan when device+metric allow), cpu, vulkan
 
 Examples:
   sirius render -o test.ppm -s 32
@@ -117,12 +117,13 @@ int RenderCommand::Execute(const std::vector<std::string>& args, const GlobalOpt
         return 1;
     }
 
-    // Backend selection. The Vulkan render path is wired (--gpu / --backend
-    // vulkan, or SIRIUS_RENDER_BACKEND=vulkan); it runs when a device is present
-    // and declines cleanly when the backend is not compiled in or no device is
-    // visible. 'auto' resolves to CPU today (the go-live flip is an owner
-    // milestone, specification section 1.5). Resolved before validation so a
-    // backend decline (not a config-name error) is what the user sees.
+    // Backend selection. An explicit request (--gpu / --backend vulkan, or
+    // SIRIUS_RENDER_BACKEND=vulkan) is resolved here, before validation, so a
+    // backend decline (not a config-name error) is what the user sees when no
+    // device is visible or the backend is not compiled in. 'auto' is resolved
+    // by SessionConfig::FromSiriusConfig (the single authority): Vulkan when a
+    // device and a registry-gpu-dispatchable metric align, CPU otherwise
+    // (go-live, owner decision 2026-07-18).
     bool use_vulkan = gpu_backend_requested_;
     if (const char* rb = std::getenv("SIRIUS_RENDER_BACKEND"); rb != nullptr) {
         std::string value(rb);

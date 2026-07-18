@@ -80,6 +80,23 @@ public Vec4Cart ScaleVec4Cart(Vec4Cart a, Real s) {
     return MakeVec4Cart(a.t * s, a.x * s, a.y * s, a.z * s);
 }
 
+// Kahan compensated accumulation s += d with running compensation c: recovers
+// the low-order bits a plain fp32 sum discards each step, which is the whole
+// of the precision ladder's middle rung (docs/ARCHITECTURE.md section 6). The
+// operation order is load-bearing; SPIR-V preserves it (only mul+add pairs are
+// contraction candidates, and there are none here). Written per component with
+// locals rather than through a scalar helper so no inout argument can even
+// appear to alias an in argument (slangc E30051).
+public Vec4Cart KahanAddVec4Cart(Vec4Cart s, inout Vec4Cart c, Vec4Cart d) {
+    Vec4Cart r;
+    Real y, t;
+    y = d.t - c.t; t = s.t + y; c.t = (t - s.t) - y; r.t = t;
+    y = d.x - c.x; t = s.x + y; c.x = (t - s.x) - y; r.x = t;
+    y = d.y - c.y; t = s.y + y; c.y = (t - s.y) - y; r.y = t;
+    y = d.z - c.z; t = s.z + y; c.z = (t - s.z) - y; r.z = t;
+    return r;
+}
+
 // --- Geodesic state ----------------------------------------------------------
 
 // Position and 4-velocity in Boyer-Lindquist coordinates.
