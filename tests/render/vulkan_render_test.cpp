@@ -398,17 +398,21 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds) {
     EXPECT_LT(mean_abs, 5e-3) << "mean background luminance difference too large (camera mismatch?)";
     EXPECT_LT(max_rel, 0.2) << "worst-case background luminance disagreement too large";
 
-    // Secondary sanity: each backend renders a horizon shadow within the broad
-    // band kernel_trace_test uses. The shadow BOUNDARY (the photon-ring, near-
-    // critical rays) is where the RK45 Hamiltonian and Cartesian RK4 integrators
-    // legitimately diverge (docs/ARCHITECTURE.md section 3), so their fractions
-    // are checked for order, not tight equality; |dfrac| is reported above.
+    // Secondary gate: each backend renders a horizon shadow within the broad
+    // band kernel_trace_test uses, and the two fractions agree closely. The
+    // historical 0.24-vs-0.11 gap (bounded loosely at 0.25) was not integrator
+    // divergence: the CPU trace loop was terminating rays at their first
+    // RK45 step rejection (outcome MaxSteps, luminance 0.01, classified as
+    // shadow here), which near-critical photon-ring rays always hit. With
+    // rejections retried, the measured gap on Lavapipe is ~1e-3; the bound
+    // carries a 20x margin for driver and transcendental-library variation
+    // while still failing a reintroduced ray-kill decisively.
     EXPECT_GE(frac_vk, 0.005);
     EXPECT_LE(frac_vk, 0.40) << "Vulkan shadow fraction outside the broad band";
     EXPECT_GE(frac_cpu, 0.005);
     EXPECT_LE(frac_cpu, 0.40) << "CPU shadow fraction outside the broad band";
-    EXPECT_LT(std::abs(frac_vk - frac_cpu), 0.25)
-        << "shadow fractions differ beyond the near-critical integrator budget";
+    EXPECT_LT(std::abs(frac_vk - frac_cpu), 0.02)
+        << "shadow fractions diverge: a capture-semantics or ray-kill regression";
 }
 
 #endif  // SIRIUS_HAS_VULKAN_BACKEND
