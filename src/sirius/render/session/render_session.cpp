@@ -17,6 +17,7 @@
 #endif
 
 #include "sirius/core/constants.h"
+#include "sirius/core/metrics/morris_thorne_family.h"
 #include "sirius/core/spectral/blackbody.h"  // Spectral blackbody colour.
 
 // stb_image decoder for the starfield texture; the implementation lives once in
@@ -146,12 +147,13 @@ void RenderSession::Initialise() {
                 metric_ = std::make_unique<WarpDriveFamily>(wp);
                 break;
             }
-            case MetricId::MorrisThorne:
-                // Spherical-coordinate implementation, Cartesian tracer:
-                // incompatible without the recorded Cartesian-embedding
-                // follow-up. GPU only (see the registry).
-                metric_ = nullptr;
+            case MetricId::MorrisThorne: {
+                // The Cartesian embedding of the spherical family; one sheet,
+                // throat as the capture surface (see morris_thorne_family.h).
+                metric_ = std::make_unique<core::MorrisThorneCartesian>(
+                    core::MorrisThorneParams::Ellis(config_.throatRadius));
                 break;
+            }
             default: {
                 KerrSchildParams params;
                 params.M = config_.blackHoleMass;

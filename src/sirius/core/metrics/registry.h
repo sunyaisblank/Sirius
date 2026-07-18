@@ -68,14 +68,14 @@ inline const std::array<MetricInfo, 9>& MetricRegistry() {
         {MetricId::SchwarzschildDeSitter, "Schwarzschild-de-Sitter",
          {"SchwarzschildDeSitter", "Schwarzschild-de Sitter", "SdS", nullptr, nullptr},
          "mass, lambda", true, false},
-        // CPU false: the Morris-Thorne family evaluates in spherical coordinates,
-        // and the CPU tracer drives Cartesian positions; wiring them together
-        // would evaluate the metric with x read as r. A Cartesian embedding is
-        // the recorded follow-up; until then the wormhole is GPU-only.
+        // CPU support arrives through MorrisThorneCartesian, the flat-plus-
+        // rank-one embedding of the spherical family (one sheet, throat as the
+        // capture surface); the spherical family remains the kernel-parity
+        // reference and is never driven by the Cartesian tracer directly.
         {MetricId::MorrisThorne, "Morris-Thorne",
          {"MorrisThorne", "Wormhole", "Morris-Thorne Wormhole", "Ellis Drainhole",
           "Zero-Tidal Wormhole"},
-         "throat radius", false, true},
+         "throat radius", true, true},
         {MetricId::Alcubierre, "Alcubierre",
          {"WarpDrive", "Alcubierre Warp Drive", nullptr, nullptr, nullptr},
          "warp velocity, bubble radius, wall thickness", true, true},

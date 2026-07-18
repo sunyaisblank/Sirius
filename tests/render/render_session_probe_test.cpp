@@ -106,3 +106,59 @@ TEST(RenderSessionProbe, CpuKerrRenderProducesValidPngAndExr) {
     fs::remove(pngPath);
     fs::remove(exrPath);
 }
+
+// The Morris-Thorne wormhole renders on the CPU path through the Cartesian
+// embedding: the session must complete (not decline), and the frame must show
+// the one-sheet wormhole structure - some rays captured at the throat (the
+// dark centre) and some escaping past it (the lensed background), so the
+// image is non-constant with genuinely dark pixels present.
+TEST(RenderSessionProbe, CpuMorrisThorneRenderCompletes) {
+    namespace fs = std::filesystem;
+    const fs::path dir = fs::temp_directory_path() / "sirius_render_probe";
+    fs::create_directories(dir);
+    const std::string pngPath = (dir / "probe_wormhole.png").string();
+    fs::remove(pngPath);
+
+    SessionConfig cfg;
+    cfg.width = 64;
+    cfg.height = 64;
+    cfg.samplesPerPixel = 4;
+    cfg.tileSize = 64;
+    cfg.enableParallelRendering = false;
+    cfg.metricId = sirius::core::MetricId::MorrisThorne;
+    // Throat large enough that its shadow spans several pixels at 64x64 with
+    // the default observer distance; a b0 = 1 throat subtends ~1 pixel and
+    // vanishes under sample jitter and tonemapping.
+    cfg.throatRadius = 5.0;
+    // The probe asserts trace physics (captured versus escaped rays), so the
+    // film bloom stays off: at these scales it floods the throat shadow with
+    // light from the surrounding Einstein ring.
+    cfg.enableBloom = false;
+    cfg.outputPath = pngPath;
+
+    RenderSession session;
+    ASSERT_TRUE(session.Configure(cfg)) << "Session must accept the CPU wormhole config";
+    ASSERT_EQ(session.Execute(), SessionState::Complete)
+        << "Morris-Thorne must render on the CPU path, not decline";
+    ASSERT_TRUE(fs::exists(pngPath));
+
+    int pw = 0, ph = 0, pc = 0;
+    unsigned char* png = stbi_load(pngPath.c_str(), &pw, &ph, &pc, 3);
+    ASSERT_NE(png, nullptr) << stbi_failure_reason();
+    EXPECT_EQ(pw, 64);
+    EXPECT_EQ(ph, 64);
+
+    bool varies = false;
+    int dark_pixels = 0;
+    for (int p = 0; p < pw * ph; ++p) {
+        unsigned char r = png[3 * p], g = png[3 * p + 1], b = png[3 * p + 2];
+        if (r != png[0] || g != png[1] || b != png[2]) varies = true;
+        if (r < 8 && g < 8 && b < 8) ++dark_pixels;
+    }
+    EXPECT_TRUE(varies) << "Wormhole frame is constant (nothing rendered)";
+    EXPECT_GT(dark_pixels, 0) << "No throat shadow: no rays were captured";
+    EXPECT_LT(dark_pixels, pw * ph) << "Frame entirely dark: no rays escaped";
+    stbi_image_free(png);
+
+    fs::remove(pngPath);
+}

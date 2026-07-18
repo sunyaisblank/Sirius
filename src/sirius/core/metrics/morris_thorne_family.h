@@ -223,6 +223,154 @@ inline double MorrisThorneFamily::RedshiftFunctionDerivative([[maybe_unused]] do
     return 0.0;
 }
 
+// Cartesian-chart embedding of the Morris-Thorne family, for the CPU tracer
+// (which drives Cartesian positions throughout). The spherical family above
+// remains the shape-function authority and the kernel-parity reference; this
+// class composes it rather than duplicating the wormhole physics.
+//
+// With r = |x|, n = x/r, the static spherically symmetric line element
+//   ds^2 = -e^{2 Phi} dt^2 + dr^2/(1 - b/r) + r^2 dOmega^2
+// becomes flat-plus-rank-one in Cartesian components:
+//   g_tt = -e^{2 Phi},   g_ij = delta_ij + f(r) n_i n_j,
+//   f = (b/r)/(1 - b/r) = b/(r - b),
+// because dr = n.dx and r^2 dOmega^2 = |dx|^2 - dr^2. The rank-one structure
+// gives the closed-form inverse by Sherman-Morrison:
+//   g^tt = -e^{-2 Phi},  g^ij = delta_ij - (f/(1+f)) n_i n_j.
+//
+// Chart domain: one sheet, r > b0, matching the spherical family's own clamp.
+// The throat is the capture surface: a ray reaching r <= b0 (1 + margin)
+// terminates as captured. RECORDED DECISION: the second sheet (the far mouth's
+// universe) is not modelled; rendering it needs two-sheet continuation through
+// the throat and a second environment map, out of scope until a scene asks
+// for it. The throat therefore renders dark, which is the honest one-sheet
+// image, not an approximation of the two-sheet one.
+class MorrisThorneCartesian : public IMetric {
+  public:
+    MorrisThorneCartesian() : family_() {}
+    explicit MorrisThorneCartesian(const MorrisThorneParams& params) : family_(params) {}
+
+    void Evaluate(const Tensor<double, 4>& pos, Metric4d& g,
+                  Tensor<Dual<double>, 4, 4, 4>& dg) override;
+
+    const Config& GetParameters() const override { return family_.GetParameters(); }
+    void SetParameter(const std::string& key, double value) override {
+        family_.SetParameter(key, value);
+    }
+    const char* GetName() const override { return family_.GetName(); }
+
+    bool InverseMetric(const Tensor<double, 4>& pos, Metric4d& g_inv) const override;
+    bool InsideCaptureSurface(const Tensor<double, 4>& pos, double margin) const override;
+
+    const MorrisThorneFamily& SphericalFamily() const { return family_; }
+
+  private:
+    // Radius clamped to the family's one-sheet domain, and the unit radial
+    // direction; the pole-free Cartesian chart needs no angular regularisation.
+    struct RadialFrame {
+        double r;
+        double n[3];
+    };
+    RadialFrame Frame(const Tensor<double, 4>& pos) const {
+        double x = pos(1), y = pos(2), z = pos(3);
+        double r = std::sqrt(x * x + y * y + z * z);
+        double b0 = family_.GetParams().b0;
+        double r_min = b0 * 1.001;  // The spherical family's own domain clamp.
+        if (r < r_min) {
+            // Inside the throat clamp the direction is still well defined
+            // unless the point is the exact origin; default to +z there.
+            if (r < 1e-300) return {r_min, {0.0, 0.0, 1.0}};
+            double s = 1.0 / r;
+            return {r_min, {x * s, y * s, z * s}};
+        }
+        double s = 1.0 / r;
+        return {r, {x * s, y * s, z * s}};
+    }
+
+    MorrisThorneFamily family_;
+};
+
+inline void MorrisThorneCartesian::Evaluate(const Tensor<double, 4>& pos, Metric4d& g,
+                                            Tensor<Dual<double>, 4, 4, 4>& dg) {
+    RadialFrame fr = Frame(pos);
+    double r = fr.r;
+    const double* n = fr.n;
+
+    double b = family_.ShapeFunction(r);
+    double db_dr = family_.ShapeFunctionDerivative(r);
+    double Phi = family_.RedshiftFunction(r);
+    double exp2Phi = std::exp(2.0 * Phi);
+
+    // f = b/(r - b); the denominator is bounded away from zero by the domain
+    // clamp (Ellis at the clamp: r - b = (r^2 - b0^2)/r ~ 2e-3 b0).
+    double r_minus_b = std::max(r - b, 1e-10);
+    double f = b / r_minus_b;
+    // df/dr = (b' r - b)/(r - b)^2.
+    double df_dr = (db_dr * r - b) / (r_minus_b * r_minus_b);
+
+    g.Zero();
+    g(0, 0) = Dual<double>(-exp2Phi);
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            double gij = ((i == j) ? 1.0 : 0.0) + f * n[i] * n[j];
+            g(i + 1, j + 1) = Dual<double>(gij);
+        }
+    }
+
+    dg.Zero();
+    // d_t and d_phi vanish (static, and the chart is Cartesian so there is no
+    // phi slot); g_tt is constant because the family is zero-tidal
+    // (RedshiftFunctionDerivative is identically zero), so only the spatial
+    // block varies:
+    //   d_k g_ij = f' n_k n_i n_j + (f/r)(delta_ki n_j + delta_kj n_i
+    //                                     - 2 n_k n_i n_j),
+    // from d_k n_i = (delta_ki - n_k n_i)/r.
+    double f_over_r = f / r;
+    for (int k = 0; k < 3; ++k) {
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                double dki = (k == i) ? 1.0 : 0.0;
+                double dkj = (k == j) ? 1.0 : 0.0;
+                double v = df_dr * n[k] * n[i] * n[j] +
+                           f_over_r * (dki * n[j] + dkj * n[i] - 2.0 * n[k] * n[i] * n[j]);
+                dg(k + 1, i + 1, j + 1) = Dual<double>(v);
+            }
+        }
+    }
+}
+
+inline bool MorrisThorneCartesian::InverseMetric(const Tensor<double, 4>& pos,
+                                                 Metric4d& g_inv) const {
+    RadialFrame fr = Frame(pos);
+    double r = fr.r;
+    const double* n = fr.n;
+
+    double b = family_.ShapeFunction(r);
+    double Phi = family_.RedshiftFunction(r);
+    double r_minus_b = std::max(r - b, 1e-10);
+    double f = b / r_minus_b;
+    // Sherman-Morrison for delta + f n n^T; 1 + f = r/(r - b) > 0 on the
+    // domain, so the update never degenerates.
+    double c = f / (1.0 + f);
+
+    g_inv.Zero();
+    g_inv(0, 0) = Dual<double>(-std::exp(-2.0 * Phi));
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            double v = ((i == j) ? 1.0 : 0.0) - c * n[i] * n[j];
+            g_inv(i + 1, j + 1) = Dual<double>(v);
+        }
+    }
+    return true;
+}
+
+inline bool MorrisThorneCartesian::InsideCaptureSurface(const Tensor<double, 4>& pos,
+                                                        double margin) const {
+    double x = pos(1), y = pos(2), z = pos(3);
+    double r = std::sqrt(x * x + y * y + z * z);
+    double b0 = family_.GetParams().b0;
+    return r <= b0 * (1.0 + margin);
+}
+
 inline void MorrisThorneFamily::Evaluate(const Tensor<double, 4>& pos, Metric4d& g,
                                          Tensor<Dual<double>, 4, 4, 4>& dg) {
     [[maybe_unused]] double t = pos(0);  // Time coordinate (unused in a static metric).

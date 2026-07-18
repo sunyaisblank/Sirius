@@ -30,6 +30,7 @@ add_executable(sirius_core_tests
     metric_loader_test.cpp
     metric_memory_test.cpp
     metric_registry_test.cpp
+    morris_thorne_cartesian_test.cpp
     reissner_nordstrom_test.cpp
     rk45_integrator_test.cpp
     schwarzschild_test.cpp

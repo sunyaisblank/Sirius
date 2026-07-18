@@ -200,10 +200,20 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
         bool success = Geodesic::IntegrateStepRk45(ray, metric_, config_.integrator);
         result.steps_taken++;
 
-        if (!success || ray.terminated || HasInvalidState(ray)) {
+        if (ray.terminated || HasInvalidState(ray)) {
             result.outcome = TraceResult::Outcome::MaxSteps;
             result.numerical_failure = HasInvalidState(ray);
             break;
+        }
+        if (!success) {
+            // Error control rejected the step: the state is unchanged and
+            // step_size was reduced, so retry. The attempt still counts
+            // against max_steps, which bounds the work a stiff region can
+            // consume. Treating rejection as termination here used to kill
+            // rays at their first rejection with outcome MaxSteps (shaded
+            // near-black), which no Kerr-Schild session scene triggered but
+            // any metric with a steeper derivative profile did.
+            continue;
         }
 
         // Advance the ray bundle over the affine step just taken, with the

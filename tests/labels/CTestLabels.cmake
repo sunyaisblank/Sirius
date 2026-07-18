@@ -711,6 +711,21 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    MorrisThorneCartesianTests.ChartAgreementWithSphericalFamily
+    MorrisThorneCartesianTests.DerivativesMatchFiniteDifferencesOfMetric
+    MorrisThorneCartesianTests.AnalyticInverseIsExact
+    MorrisThorneCartesianTests.ThroatIsTheCaptureSurface
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    MorrisThorneTracerTest.CentralRayCapturedAtThroat
+    MorrisThorneTracerTest.EdgeRayEscapes
+    MorrisThorneTracerTest.DeflectionFallsQuadraticallyWithImpactParameter
+    PROPERTIES LABELS "Correctness"
+)
+
+set_tests_properties(
     MuellerMatrixTests.IdentityPreservesStokes
     MuellerMatrixTests.HorizontalPolariserOnUnpolarised
     MuellerMatrixTests.VerticalPolariserOnUnpolarised
@@ -919,6 +934,7 @@ set_tests_properties(
 
 set_tests_properties(
     RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr
+    RenderSessionProbe.CpuMorrisThorneRenderCompletes
     PROPERTIES LABELS "Correctness"
 )
 

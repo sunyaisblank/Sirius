@@ -7,9 +7,12 @@
 #include "sirius/backend/cpu/geodesic_tracer.h"
 #include "sirius/core/camera.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
+#include "sirius/core/metrics/morris_thorne_family.h"
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
+#include <array>
 #include <chrono>
 #include <cmath>
 #include <iostream>
@@ -406,6 +409,126 @@ TEST_F(GeodesicTracerTest, TracingPerformance) {
     double rays_per_sec = 1000.0 * total_rays / duration.count();
     std::cout << "CPU tracing: " << total_rays << " rays in " << duration.count() << "ms ("
               << rays_per_sec << " rays/sec)" << std::endl;
+}
+
+// =============================================================================
+// Morris-Thorne (Ellis) wormhole through the same Cartesian tracer, via the
+// MorrisThorneCartesian embedding. One sheet; the throat is the capture
+// surface, so a central ray terminates as Horizon (the tracer's capture
+// outcome) and offset rays escape with gravitational deflection.
+// =============================================================================
+
+class MorrisThorneTracerTest : public ::testing::Test {
+  protected:
+    void SetUp() override {
+        m_Metric = std::make_unique<MorrisThorneCartesian>(MorrisThorneParams::Ellis(1.0));
+
+        TracerConfig config;
+        config.escape_radius = 200.0f;
+        config.horizon_factor = 1.05f;
+        config.max_steps = 20000;
+        config.enable_disk = false;  // The thin disk is a black-hole construct.
+        config.integrator.abs_tolerance = 1e-7f;
+        config.integrator.rel_tolerance = 1e-7f;
+        config.integrator.initial_step = 0.05f;
+        config.integrator.max_step = 1.0f;
+
+        m_Tracer = std::make_unique<GeodesicTracer>(m_Metric.get(), config);
+
+        CameraConfig camConfig;
+        camConfig.r = 50.0;
+        camConfig.theta = M_PI / 2.0;
+        camConfig.phi = 0.0;
+        camConfig.fov = 60.0f;
+        camConfig.width = 64;
+        camConfig.height = 64;
+        m_Camera = std::make_unique<PinholeCamera>(camConfig);
+    }
+
+    // Deflection angle between the launch direction and the escape direction,
+    // both in Cartesian components. At theta = pi/2, phi = 0 the camera's
+    // spherical direction slots map to Cartesian as
+    //   v_x = dir(1),  v_y = dir(3),  v_z = -dir(2)
+    // (the Jacobian in GeodesicTracer::InitializeLightray specialised to the
+    // probe's observer placement).
+    static double Deflection(const CameraRay& ray, const TraceResult& result) {
+        double ix = ray.direction(1);
+        double iy = ray.direction(3);
+        double iz = -ray.direction(2);
+        double il = std::sqrt(ix * ix + iy * iy + iz * iz);
+
+        double fx = result.final_direction(1);
+        double fy = result.final_direction(2);
+        double fz = result.final_direction(3);
+        double fl = std::sqrt(fx * fx + fy * fy + fz * fz);
+
+        double c = (ix * fx + iy * fy + iz * fz) / (il * fl);
+        return std::acos(std::clamp(c, -1.0, 1.0));
+    }
+
+    std::unique_ptr<MorrisThorneCartesian> m_Metric;
+    std::unique_ptr<GeodesicTracer> m_Tracer;
+    std::unique_ptr<PinholeCamera> m_Camera;
+};
+
+TEST_F(MorrisThorneTracerTest, CentralRayCapturedAtThroat) {
+    CameraRay ray = m_Camera->GenerateRay(32, 32, 0.5f, 0.5f);
+    TraceResult result = m_Tracer->Trace(ray);
+    EXPECT_EQ(result.outcome, TraceResult::Outcome::Horizon)
+        << "A radially ingoing ray must terminate at the throat capture surface"
+        << " (outcome=" << static_cast<int>(result.outcome)
+        << ", min_radius=" << result.min_radius << ", steps=" << result.steps_taken
+        << ", numerical_failure=" << result.numerical_failure << ")";
+}
+
+TEST_F(MorrisThorneTracerTest, EdgeRayEscapes) {
+    CameraRay ray = m_Camera->GenerateRay(2, 32, 0.5f, 0.5f);
+    TraceResult result = m_Tracer->Trace(ray);
+    EXPECT_EQ(result.outcome, TraceResult::Outcome::Escaped);
+}
+
+// Ellis lensing: the leading-order deflection is alpha ~ (pi/4)(b0/rho)^2
+// (Chetouani & Clement 1984), so doubling the impact parameter divides the
+// deflection by about four. The gate checks sign, monotone decrease, and the
+// quadratic ratio within generous bounds that still exclude both zero
+// deflection and the 1/rho scaling a mass-like defect would produce.
+TEST_F(MorrisThorneTracerTest, DeflectionFallsQuadraticallyWithImpactParameter) {
+    // Pixel offsets chosen so the impact parameters are roughly 5, 10, 20 b0.
+    struct Probe {
+        int px;
+        double deflection = 0.0;
+        double rho = 0.0;
+    };
+    std::array<Probe, 3> probes = {{{38, 0, 0}, {44, 0, 0}, {57, 0, 0}}};
+
+    for (auto& p : probes) {
+        CameraRay ray = m_Camera->GenerateRay(p.px, 32, 0.5f, 0.5f);
+        TraceResult result = m_Tracer->Trace(ray);
+        ASSERT_EQ(result.outcome, TraceResult::Outcome::Escaped)
+            << "probe pixel " << p.px << " must escape";
+        p.deflection = Deflection(ray, result);
+
+        // Impact parameter |x0 x v_hat| from the actual launch geometry.
+        double ix = ray.direction(1), iy = ray.direction(3), iz = -ray.direction(2);
+        double il = std::sqrt(ix * ix + iy * iy + iz * iz);
+        ix /= il; iy /= il; iz /= il;
+        double x0 = 50.0, y0 = 0.0, z0 = 0.0;
+        double cx = y0 * iz - z0 * iy;
+        double cy = z0 * ix - x0 * iz;
+        double cz = x0 * iy - y0 * ix;
+        p.rho = std::sqrt(cx * cx + cy * cy + cz * cz);
+    }
+
+    EXPECT_GT(probes[0].deflection, probes[1].deflection);
+    EXPECT_GT(probes[1].deflection, probes[2].deflection);
+    EXPECT_GT(probes[2].deflection, 0.0);
+
+    for (const auto& p : probes) {
+        double predicted = (M_PI / 4.0) * (1.0 / (p.rho * p.rho));  // b0 = 1.
+        EXPECT_NEAR(p.deflection, predicted, 0.5 * predicted)
+            << "Ellis leading-order deflection at rho=" << p.rho
+            << ": traced=" << p.deflection << ", predicted=" << predicted;
+    }
 }
 
 }  // namespace

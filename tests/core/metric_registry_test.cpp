@@ -94,9 +94,9 @@ TEST(MetricRegistryTests, FamilyDisplayNamesRoundTrip) {
 // Backend support flags document reality; these pin the deliberate ones so a
 // flag change is a conscious decision, not a drive-by edit.
 TEST(MetricRegistryTests, BackendSupportMatchesImplementations) {
-    // Morris-Thorne evaluates in spherical coordinates; the Cartesian CPU
-    // tracer cannot drive it (see PHMT200A).
-    EXPECT_FALSE(MetricInfoFor(MetricId::MorrisThorne).cpu_supported);
+    // Morris-Thorne renders on the CPU through MorrisThorneCartesian, the
+    // flat-plus-rank-one embedding of the spherical family.
+    EXPECT_TRUE(MetricInfoFor(MetricId::MorrisThorne).cpu_supported);
     EXPECT_TRUE(MetricInfoFor(MetricId::MorrisThorne).gpu_supported);
 
     // Charge and lambda are not plumbed to the kernel yet.
