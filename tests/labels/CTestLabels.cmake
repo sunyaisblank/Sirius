@@ -545,6 +545,7 @@ set_tests_properties(
     KerrMetricDTest.ISCORadius
     KerrMetricDTest.PhotonSphereRadius
     KerrMetricDTest.ChristoffelMatchesFiniteDifferencesOfMetric
+    KerrMetricDTest.SecondDerivativesMatchFiniteDifference
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -690,6 +691,10 @@ set_tests_properties(
     MetricValidationTests.KerrMetricD_ChristoffelSymmetry
     MetricValidationTests.KerrMetricD_RiemannAntisymmetry
     MetricValidationTests.KerrMetricD_KretschmannScalar
+    MetricValidationTests.KerrMetricD_RiemannMatchesFiniteDifferenceChristoffel
+    MetricValidationTests.KerrMetricD_RiemannVacuumRicci
+    MetricValidationTests.KerrMetricD_RiemannLoweredSymmetries
+    MetricValidationTests.KerrMetricD_KretschmannMatchesRiemannContraction
     MetricValidationTests.KerrMetricD_HorizonRadius
     MetricValidationTests.KerrMetricD_ISCORadius
     MetricValidationTests.KerrMetricD_NoNaNInf
@@ -850,6 +855,7 @@ set_tests_properties(
     RayBundleTest.FlatSpaceBundleMagnificationIsUnity
     RayBundleTest.KretschmannMatchesOracleSchwarzschild
     RayBundleTest.KretschmannMatchesOracleKerrEquatorial
+    RayBundleTest.KretschmannMatchesOracleKerrOffEquatorial
     RayBundleTest.BundleFiniteAndDeterministicKerr
     RayBundleTest.MagnificationConsistencyWithScalarJacobian
     PROPERTIES LABELS "Mandatory;Correctness"

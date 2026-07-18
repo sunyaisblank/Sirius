@@ -427,8 +427,8 @@ TEST_F(MetricValidationTests, KerrMetricD_RiemannAntisymmetry) {
 
 // Test: Kretschmann scalar (analytic validation)
 // Schwarzschild: K = 48M²/r⁶
-// Kerr: K = 48M²(r² - a²cos²θ)[(r² - a²cos²θ)² - 16a²r²cos²θ] / Σ⁶
-// Reference: Henry, R.C. (2000), Astrophys. J. 535:350-353
+// Kerr: K = 48M²(r² - a²cos²θ)[(r² + a²cos²θ)² - 16a²r²cos²θ] / Σ⁶
+// Reference: Henry, R.C. (2000), Astrophys. J. 535:350-353, eq. 18 at Q = 0
 TEST_F(MetricValidationTests, KerrMetricD_KretschmannScalar) {
     // Test 1: Schwarzschild exact formula K = 48M²/r⁶
     sirius::oracle::KerrMetricD schw(1.0, 0.0);
@@ -485,7 +485,11 @@ TEST_F(MetricValidationTests, KerrMetricD_KretschmannScalar) {
         double Sigma = r2 + a2 * cos2th;
         double Sigma6 = std::pow(Sigma, 6);
         double r_term = r2 - a2 * cos2th;
-        double bracket = r_term * r_term - 16.0 * a2 * r2 * cos2th;
+        // Henry (2000) eq. 18 at Q = 0: the bracket is Σ² - 16a²r²cos²θ.
+        // (A prior version squared r_term here, matching a defect in the
+        // implementation — a circular pin. The Riemann-contraction gate now
+        // anchors this expression independently.)
+        double bracket = Sigma * Sigma - 16.0 * a2 * r2 * cos2th;
         double expected = 48.0 * r_term * bracket / Sigma6;  // M=1
 
         double K = kerr05.Kretschmann(x);
@@ -515,6 +519,248 @@ TEST_F(MetricValidationTests, KerrMetricD_KretschmannScalar) {
     double expected_far = 48.0 / std::pow(1000.0, 6);  // ~4.8e-17
     EXPECT_NEAR(K_far, expected_far, 1e-20)
         << "Kretschmann should match 48/r⁶ at large radius";
+}
+
+namespace {
+
+// Reference Riemann tensor R^rho_sigma_mu_nu assembled from central differences
+// of the analytic Christoffel connection plus the quadratic Gamma*Gamma terms:
+//   R^rho_smn = d_m Gamma^rho_ns - d_n Gamma^rho_ms
+//             + Gamma^rho_ml Gamma^l_ns - Gamma^rho_nl Gamma^l_ms
+// The connection is exact, so the only error is the O(h^2) truncation of the
+// two coordinate derivatives (r and theta; the metric is stationary and
+// axisymmetric). This is the completeness gate the component-wise
+// implementation historically lacked: it exercises every one of the 256 slots.
+void RiemannFromChristoffelFD(const sirius::oracle::KerrMetricD& metric,
+                              const sirius::oracle::Vec4d& x, double h,
+                              double R[4][4][4][4]) {
+    double Gamma[4][4][4];
+    metric.Christoffel(x, Gamma);
+
+    // dGamma[s][m][n][r] = d_s Gamma^m_nr; only s = r, theta are non-zero.
+    double dGamma[4][4][4][4] = {};
+    for (int s = 1; s <= 2; ++s) {
+        sirius::oracle::Vec4d xp = x;
+        sirius::oracle::Vec4d xm = x;
+        if (s == 1) {
+            xp.r += h;
+            xm.r -= h;
+        } else {
+            xp.theta += h;
+            xm.theta -= h;
+        }
+        double Gp[4][4][4], Gm[4][4][4];
+        metric.Christoffel(xp, Gp);
+        metric.Christoffel(xm, Gm);
+        for (int m = 0; m < 4; ++m)
+            for (int n = 0; n < 4; ++n)
+                for (int r = 0; r < 4; ++r)
+                    dGamma[s][m][n][r] = (Gp[m][n][r] - Gm[m][n][r]) / (2.0 * h);
+    }
+
+    for (int rho = 0; rho < 4; ++rho) {
+        for (int sig = 0; sig < 4; ++sig) {
+            for (int mu = 0; mu < 4; ++mu) {
+                for (int nu = 0; nu < 4; ++nu) {
+                    double val = dGamma[mu][rho][nu][sig] - dGamma[nu][rho][mu][sig];
+                    for (int lam = 0; lam < 4; ++lam) {
+                        val += Gamma[rho][mu][lam] * Gamma[lam][nu][sig] -
+                               Gamma[rho][nu][lam] * Gamma[lam][mu][sig];
+                    }
+                    R[rho][sig][mu][nu] = val;
+                }
+            }
+        }
+    }
+}
+
+double MaxAbsComponent(const double R[4][4][4][4]) {
+    double m = 0.0;
+    for (int a = 0; a < 4; ++a)
+        for (int b = 0; b < 4; ++b)
+            for (int c = 0; c < 4; ++c)
+                for (int d = 0; d < 4; ++d) m = std::max(m, std::abs(R[a][b][c][d]));
+    return m;
+}
+
+struct RiemannTestCase {
+    double a, r, theta;
+};
+
+const std::vector<RiemannTestCase>& RiemannTestCases() {
+    static const std::vector<RiemannTestCase> cases = {
+        {0.0, 6.0, math::kHalfPi},      // Schwarzschild, equator
+        {0.0, 3.1, 1.0},                // Schwarzschild, near photon sphere
+        {0.5, 6.0, math::kPi / 3.0},    // Moderate spin, off-equator
+        {0.9, 4.0, 1.1},                // High spin, strong field
+        {0.9, 10.0, 0.4},               // High spin, toward the axis
+    };
+    return cases;
+}
+
+}  // namespace
+
+// Test: every Riemann component matches the finite-difference assembly from
+// the analytic connection. This is the gate that fails on any missing or
+// mis-derived component, on or off the diagonal blocks.
+TEST_F(MetricValidationTests, KerrMetricD_RiemannMatchesFiniteDifferenceChristoffel) {
+    const double h = 1e-5;
+
+    for (const auto& c : RiemannTestCases()) {
+        sirius::oracle::KerrMetricD metric(1.0, c.a);
+        sirius::oracle::Vec4d x;
+        x.t = 0; x.r = c.r; x.theta = c.theta; x.phi = 0;
+
+        double Rfd[4][4][4][4], Ran[4][4][4][4];
+        RiemannFromChristoffelFD(metric, x, h, Rfd);
+        metric.Riemann(x, Ran);
+
+        // FD truncation is O(h^2) on connection third derivatives; at these
+        // radii the curvature scale is O(1e-2), so 1e-7 relative headroom
+        // dominates the truncation and rounding floor comfortably.
+        double scale = MaxAbsComponent(Rfd);
+        double tol = std::max(1e-10, 1e-7 * scale);
+
+        double worst = 0.0;
+        int wi[4] = {0, 0, 0, 0};
+        for (int a = 0; a < 4; ++a)
+            for (int b = 0; b < 4; ++b)
+                for (int p = 0; p < 4; ++p)
+                    for (int q = 0; q < 4; ++q) {
+                        double err = std::abs(Ran[a][b][p][q] - Rfd[a][b][p][q]);
+                        if (err > worst) {
+                            worst = err;
+                            wi[0] = a; wi[1] = b; wi[2] = p; wi[3] = q;
+                        }
+                    }
+
+        EXPECT_LT(worst, tol)
+            << "Riemann mismatch vs finite differences for a=" << c.a << " r=" << c.r
+            << " theta=" << c.theta << " at R^" << wi[0] << "_" << wi[1] << wi[2] << wi[3]
+            << ": analytic=" << Ran[wi[0]][wi[1]][wi[2]][wi[3]]
+            << ", fd=" << Rfd[wi[0]][wi[1]][wi[2]][wi[3]];
+    }
+}
+
+// Test: Kerr is a vacuum solution, so the Ricci contraction of the Riemann
+// tensor must vanish. A partial component table generically fails this.
+TEST_F(MetricValidationTests, KerrMetricD_RiemannVacuumRicci) {
+    for (const auto& c : RiemannTestCases()) {
+        sirius::oracle::KerrMetricD metric(1.0, c.a);
+        sirius::oracle::Vec4d x;
+        x.t = 0; x.r = c.r; x.theta = c.theta; x.phi = 0;
+
+        double R[4][4][4][4];
+        metric.Riemann(x, R);
+        double scale = MaxAbsComponent(R);
+
+        double worst = 0.0;
+        for (int sig = 0; sig < 4; ++sig) {
+            for (int nu = 0; nu < 4; ++nu) {
+                double ricci = 0.0;
+                for (int rho = 0; rho < 4; ++rho) ricci += R[rho][sig][rho][nu];
+                worst = std::max(worst, std::abs(ricci));
+            }
+        }
+
+        EXPECT_LT(worst, std::max(1e-12, 1e-9 * scale))
+            << "Non-zero Ricci for vacuum Kerr a=" << c.a << " r=" << c.r
+            << " theta=" << c.theta << ": " << worst;
+    }
+}
+
+// Test: with the first index lowered, the full symmetry group holds:
+// antisymmetry in each index pair, pair-interchange symmetry, and the first
+// Bianchi identity.
+TEST_F(MetricValidationTests, KerrMetricD_RiemannLoweredSymmetries) {
+    for (const auto& c : RiemannTestCases()) {
+        sirius::oracle::KerrMetricD metric(1.0, c.a);
+        sirius::oracle::Vec4d x;
+        x.t = 0; x.r = c.r; x.theta = c.theta; x.phi = 0;
+
+        double R[4][4][4][4], g[4][4], g_inv[4][4];
+        metric.Riemann(x, R);
+        metric.Evaluate(x, g, g_inv);
+
+        double Rl[4][4][4][4];
+        for (int a = 0; a < 4; ++a)
+            for (int b = 0; b < 4; ++b)
+                for (int p = 0; p < 4; ++p)
+                    for (int q = 0; q < 4; ++q) {
+                        double v = 0.0;
+                        for (int m = 0; m < 4; ++m) v += g[a][m] * R[m][b][p][q];
+                        Rl[a][b][p][q] = v;
+                    }
+
+        double scale = MaxAbsComponent(Rl);
+        double tol = std::max(1e-12, 1e-9 * scale);
+
+        double worst_first = 0.0, worst_pair = 0.0, worst_bianchi = 0.0;
+        for (int a = 0; a < 4; ++a)
+            for (int b = 0; b < 4; ++b)
+                for (int p = 0; p < 4; ++p)
+                    for (int q = 0; q < 4; ++q) {
+                        worst_first =
+                            std::max(worst_first, std::abs(Rl[a][b][p][q] + Rl[b][a][p][q]));
+                        worst_pair =
+                            std::max(worst_pair, std::abs(Rl[a][b][p][q] - Rl[p][q][a][b]));
+                        worst_bianchi = std::max(
+                            worst_bianchi,
+                            std::abs(Rl[a][b][p][q] + Rl[a][p][q][b] + Rl[a][q][b][p]));
+                    }
+
+        EXPECT_LT(worst_first, tol) << "R_abcd != -R_bacd for a=" << c.a << " r=" << c.r;
+        EXPECT_LT(worst_pair, tol) << "R_abcd != R_cdab for a=" << c.a << " r=" << c.r;
+        EXPECT_LT(worst_bianchi, tol) << "First Bianchi violated for a=" << c.a << " r=" << c.r;
+    }
+}
+
+// Test: contracting the tensor against itself reproduces the closed-form
+// Kretschmann scalar. This ties the component table to the validated
+// invariant: K = R_abcd R^abcd.
+TEST_F(MetricValidationTests, KerrMetricD_KretschmannMatchesRiemannContraction) {
+    for (const auto& c : RiemannTestCases()) {
+        sirius::oracle::KerrMetricD metric(1.0, c.a);
+        sirius::oracle::Vec4d x;
+        x.t = 0; x.r = c.r; x.theta = c.theta; x.phi = 0;
+
+        double R[4][4][4][4], g[4][4], g_inv[4][4];
+        metric.Riemann(x, R);
+        metric.Evaluate(x, g, g_inv);
+
+        // Lower the first index, raise the last three, contract.
+        double Rl[4][4][4][4];
+        for (int a = 0; a < 4; ++a)
+            for (int b = 0; b < 4; ++b)
+                for (int p = 0; p < 4; ++p)
+                    for (int q = 0; q < 4; ++q) {
+                        double v = 0.0;
+                        for (int m = 0; m < 4; ++m) v += g[a][m] * R[m][b][p][q];
+                        Rl[a][b][p][q] = v;
+                    }
+
+        double K = 0.0;
+        for (int a = 0; a < 4; ++a)
+            for (int b = 0; b < 4; ++b)
+                for (int p = 0; p < 4; ++p)
+                    for (int q = 0; q < 4; ++q) {
+                        // R^abpq = g^aA g^bB g^pP g^qQ R_ABPQ, assembled per slot.
+                        double up = 0.0;
+                        for (int A = 0; A < 4; ++A)
+                            for (int B = 0; B < 4; ++B)
+                                for (int P = 0; P < 4; ++P)
+                                    for (int Q = 0; Q < 4; ++Q)
+                                        up += g_inv[a][A] * g_inv[b][B] * g_inv[p][P] *
+                                              g_inv[q][Q] * Rl[A][B][P][Q];
+                        K += Rl[a][b][p][q] * up;
+                    }
+
+        double expected = metric.Kretschmann(x);
+        double rel = std::abs(K - expected) / std::max(std::abs(expected), 1e-30);
+        EXPECT_LT(rel, 1e-9) << "Kretschmann contraction mismatch for a=" << c.a
+                             << " r=" << c.r << " theta=" << c.theta << ": contracted=" << K
+                             << ", analytic=" << expected;
+    }
 }
 
 // Test: Horizon radius calculation

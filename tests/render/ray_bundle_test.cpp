@@ -8,19 +8,21 @@
 // in the Kerr-Schild Cartesian chart the render integrates in. The chart-
 // invariant handle both paths compute is the Kretschmann scalar
 // K = R_mu_nu_rho_sig R^mu_nu_rho_sig; the oracle carries the analytic Kerr
-// value (KerrMetricD::Kretschmann, Henry 2000). Matching the CPU curvature to it
-// pins the tensor the whole bundle rides on. On the Schwarzschild radial-plus-
-// shear congruence (spherically symmetric, so the CPU metric is exact Kerr's
-// a=0 limit everywhere) agreement holds at every angle; for Kerr a=0.9 it holds
-// on the equatorial congruence (theta = pi/2) where the disk and photon ring
-// live and where the pinned scene views. The live fp32 bar is the conservation
-// tier (core/constants.h geodesic::kConservationTol, 1e-4); the double-precision
-// arithmetic here beats it by two orders of magnitude.
+// value (KerrMetricD::Kretschmann, Henry 2000, eq. 18). Matching the CPU
+// curvature to it pins the tensor the whole bundle rides on, at every sampled
+// angle for both the Schwarzschild and the Kerr a=0.9 congruences. The live
+// fp32 bar is the conservation tier (core/constants.h geodesic::
+// kConservationTol, 1e-4); the double-precision arithmetic here beats it by
+// two orders of magnitude.
 //
-// The oracle's own component-wise Riemann() method (which beam_integrator.h
-// contracts) is hand-coded and incomplete off the diagonal, so a full tidal
-// contraction against it disagrees; the analytic Kretschmann is the trustworthy
-// oracle handle and is what this suite pins against.
+// History: this suite originally pinned Kerr on the equator only. The closed-
+// form Kretschmann's bracket term carried (r^2 - a^2 cos^2 th)^2 where Henry's
+// equation has (r^2 + a^2 cos^2 th)^2, a defect invisible wherever a cos th
+// = 0 - exactly the two regimes then sampled - and the oracle's component-wise
+// Riemann() was incomplete off the diagonal blocks. Both were rebuilt (the
+// tensor from analytic first and second metric derivatives, the scalar to
+// Henry's form, cross-pinned by contraction in the oracle suite), which is
+// what admits the off-equator cases below.
 //
 // Magnification consistency (gate b) checks the bundle determinant against the
 // scalar photon-ring magnification the tracer already carries.
@@ -138,12 +140,23 @@ TEST(RayBundleTest, KretschmannMatchesOracleSchwarzschild) {
 }
 
 // -----------------------------------------------------------------------------
-// Oracle agreement (gate a), Kerr a=0.9 equatorial congruence.
+// Oracle agreement (gate a), Kerr a=0.9: the equatorial congruence where the
+// disk and photon ring live, and off-equator angles where a*cos(theta) != 0 -
+// the regime that separates Henry's bracket from the historical defect (see
+// the file header).
 // -----------------------------------------------------------------------------
 TEST(RayBundleTest, KretschmannMatchesOracleKerrEquatorial) {
     constexpr double kTol = sirius::core::constants::geodesic::kConservationTol;  // 1e-4.
     double worst = MaxKretschmannError(0.9, {3.0, 4.0, 6.0, 8.0, 15.0, 30.0}, {M_PI / 2});
     std::cout << "[oracle a=0.9 equatorial] max Kretschmann rel error = " << worst << "\n";
+    EXPECT_LT(worst, kTol);
+}
+
+TEST(RayBundleTest, KretschmannMatchesOracleKerrOffEquatorial) {
+    constexpr double kTol = sirius::core::constants::geodesic::kConservationTol;  // 1e-4.
+    double worst = MaxKretschmannError(0.9, {4.0, 6.0, 8.0, 15.0, 30.0},
+                                       {M_PI / 3, M_PI / 4, M_PI / 6, 2.2});
+    std::cout << "[oracle a=0.9 off-equator] max Kretschmann rel error = " << worst << "\n";
     EXPECT_LT(worst, kTol);
 }
 

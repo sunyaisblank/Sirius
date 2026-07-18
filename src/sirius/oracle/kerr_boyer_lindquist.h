@@ -70,6 +70,98 @@ inline void KerrMetricDerivatives(double M, double a, const Vec4d& x, double dg[
     dg[2][3][3] = (dA_dth * sin2th + A * sin2theta) / Sigma - A * sin2th * dSigma_dth / Sigma2;
 }
 
+// ddg[s1][s2][mu][nu] = d_s1 d_s2 g_munu for Kerr; non-zero only for
+// s1, s2 in {r, theta}, symmetric in (s1, s2). Differentiated by hand from
+// the first derivatives above and pinned against central differences of
+// KerrMetricDerivatives by KerrMetricDTest.SecondDerivativesMatchFiniteDifference;
+// together with the first derivatives this is the complete analytic input the
+// Riemann assembly below contracts. Pole clamping matches KerrMetricDerivatives
+// so the two stay consistent term by term.
+inline void KerrMetricSecondDerivatives(double M, double a, const Vec4d& x,
+                                        double ddg[4][4][4][4]) {
+    for (int s1 = 0; s1 < 4; ++s1)
+        for (int s2 = 0; s2 < 4; ++s2)
+            for (int mu = 0; mu < 4; ++mu)
+                for (int nu = 0; nu < 4; ++nu) ddg[s1][s2][mu][nu] = 0.0;
+
+    double r = x.r;
+    double theta = x.theta;
+    double sinth = std::sin(theta);
+    double costh = std::cos(theta);
+    if (std::abs(sinth) < 1e-10) sinth = std::copysign(1e-10, sinth);
+    double sin2th = sinth * sinth;
+    double cos2th = costh * costh;
+    double sin2theta = 2.0 * sinth * costh;   // sin(2 theta)
+    double cos2theta = cos2th - sin2th;       // cos(2 theta)
+
+    double a2 = a * a;
+    double r2 = r * r;
+    double Sigma = r2 + a2 * cos2th;
+    double Delta = r2 - 2.0 * M * r + a2;
+    double A = (r2 + a2) * (r2 + a2) - a2 * Delta * sin2th;
+    double Sigma2 = Sigma * Sigma;
+    double Sigma3 = Sigma2 * Sigma;
+    double Delta2 = Delta * Delta;
+    double Delta3 = Delta2 * Delta;
+
+    double dSigma_dr = 2.0 * r;
+    double ddSigma_drr = 2.0;
+    double dSigma_dth = -a2 * sin2theta;
+    double ddSigma_dthth = -2.0 * a2 * cos2theta;
+    double dDelta_dr = 2.0 * (r - M);
+    double ddDelta_drr = 2.0;
+    double dA_dr = 4.0 * r * (r2 + a2) - a2 * dDelta_dr * sin2th;
+    double ddA_drr = 4.0 * (3.0 * r2 + a2) - 2.0 * a2 * sin2th;
+    double dA_dth = -a2 * Delta * sin2theta;
+    double ddA_drth = -a2 * dDelta_dr * sin2theta;
+    double ddA_dthth = -2.0 * a2 * Delta * cos2theta;
+
+    // Second derivatives of the shared profile f = 2Mr/Sigma, from which
+    // g_tt = -1 + f and g_tphi = -a sin^2(theta) f both descend.
+    double ddf_drr = 4.0 * M * r * (4.0 * r2 - 3.0 * Sigma) / Sigma3;
+    double ddf_drth = 2.0 * M * dSigma_dth * (4.0 * r2 - Sigma) / Sigma3;
+    double ddf_dthth = -2.0 * M * r * (ddSigma_dthth * Sigma - 2.0 * dSigma_dth * dSigma_dth) / Sigma3;
+    double df_dr = 2.0 * M * (Sigma - 2.0 * r2) / Sigma2;
+
+    // d^2/dr^2 g_munu.
+    ddg[1][1][0][0] = ddf_drr;
+    ddg[1][1][0][3] = ddg[1][1][3][0] = -a * sin2th * ddf_drr;
+    ddg[1][1][1][1] = ((ddSigma_drr * Delta - Sigma * ddDelta_drr) * Delta -
+                       2.0 * dDelta_dr * (dSigma_dr * Delta - Sigma * dDelta_dr)) /
+                      Delta3;
+    ddg[1][1][2][2] = ddSigma_drr;
+    ddg[1][1][3][3] = sin2th *
+                      ((ddA_drr * Sigma - A * ddSigma_drr) * Sigma -
+                       2.0 * dSigma_dr * (dA_dr * Sigma - A * dSigma_dr)) /
+                      Sigma3;
+
+    // d^2/dr dtheta g_munu (symmetric in the derivative pair).
+    ddg[1][2][0][0] = ddf_drth;
+    ddg[1][2][0][3] = ddg[1][2][3][0] = -a * (sin2theta * df_dr + sin2th * ddf_drth);
+    ddg[1][2][1][1] = -dSigma_dth * dDelta_dr / Delta2;
+    ddg[1][2][2][2] = 0.0;
+    ddg[1][2][3][3] = sin2theta * (dA_dr * Sigma - A * dSigma_dr) / Sigma2 +
+                      sin2th *
+                          ((ddA_drth * Sigma + dA_dr * dSigma_dth - dA_dth * dSigma_dr) * Sigma -
+                           2.0 * dSigma_dth * (dA_dr * Sigma - A * dSigma_dr)) /
+                          Sigma3;
+    for (int mu = 0; mu < 4; ++mu)
+        for (int nu = 0; nu < 4; ++nu) ddg[2][1][mu][nu] = ddg[1][2][mu][nu];
+
+    // d^2/dtheta^2 g_munu.
+    double N_tphi = sin2theta * Sigma - sin2th * dSigma_dth;
+    double dN_tphi_dth = 2.0 * cos2theta * Sigma - sin2th * ddSigma_dthth;
+    ddg[2][2][0][0] = ddf_dthth;
+    ddg[2][2][0][3] = ddg[2][2][3][0] =
+        -2.0 * M * a * r * (dN_tphi_dth * Sigma - 2.0 * dSigma_dth * N_tphi) / Sigma3;
+    ddg[2][2][1][1] = ddSigma_dthth / Delta;
+    ddg[2][2][2][2] = ddSigma_dthth;
+    ddg[2][2][3][3] = (ddA_dthth * sin2th + 2.0 * dA_dth * sin2theta + 2.0 * A * cos2theta) / Sigma -
+                      2.0 * (dA_dth * sin2th + A * sin2theta) * dSigma_dth / Sigma2 -
+                      A * sin2th * ddSigma_dthth / Sigma2 +
+                      2.0 * A * sin2th * dSigma_dth * dSigma_dth / Sigma3;
+}
+
 //==============================================================================
 // KerrMetricD: Double-precision Kerr metric implementation
 //==============================================================================
@@ -176,160 +268,84 @@ class KerrMetricD : public IMetricD {
     }
 
     void Riemann(const Vec4d& x, double R[4][4][4][4]) const override {
-        // Initialize to Zero
-        for (int i = 0; i < 4; ++i)
-            for (int j = 0; j < 4; ++j)
-                for (int k = 0; k < 4; ++k)
-                    for (int l = 0; l < 4; ++l) R[i][j][k][l] = 0.0;
-
-        // ANALYTIC RIEMANN TENSOR FOR KERR SPACETIME
-        // Reference: Chandrasekhar "Mathematical Theory of Black Holes", Chapter 6
-        //
-        // The Riemann tensor for Kerr is computed analytically using the
-        // Newman-Penrose formalism, which provides exact expressions.
-        //
-        // Key quantities:
-        // - Σ = r² + a²cos²θ
-        // - ρ = -1/(r - ia·cosθ)  (complex Kinnersley tetrad)
-        // - The only non-Zero Weyl scalar is Ψ₂ = -M·ρ³
-
-        double r = x.r;
-        double theta = x.theta;
-        double M = mass_;
-        double a = spin_;
-
-        double sinth = std::sin(theta);
-        double costh = std::cos(theta);
-        if (std::abs(sinth) < 1e-10) sinth = std::copysign(1e-10, sinth);
-        double sin2th = sinth * sinth;
-        double cos2th = costh * costh;
-
-        double r2 = r * r;
-        double a2 = a * a;
-        double Sigma = r2 + a2 * cos2th;
-        double Sigma2 = Sigma * Sigma;
-        double Sigma3 = Sigma2 * Sigma;
-        double Sigma4 = Sigma3 * Sigma;
-        double Delta = r2 - 2 * M * r + a2;
-
-        // Auxiliary quantities for Riemann components
-        // These appear in the analytic expressions
-        double r_term = r2 - a2 * cos2th;                           // r² - a²cos²θ
-        [[maybe_unused]] double factor1 = 2 * M * r_term / Sigma3;  // Common factor
-
-        // For Kerr, the Weyl tensor (=Riemann in vacuum) has Petrov type D
-        // The non-Zero components can be expressed via the Weyl scalar Ψ₂
-
-        // Analytic Kretschmann scalar (for validation):
-        // K = 48M²(r² - a²cos²θ)²(r⁶ - 15r⁴a²cos²θ + 15r²a⁴cos⁴θ - a⁶cos⁶θ)/Σ¹²
-        // Simplified for Schwarzschild (a=0): K = 48M²/r⁶
-
-        // ===================================================================
-        // FULLY COVARIANT RIEMANN TENSOR R_{αβγδ} (lowered indices)
-        // ===================================================================
-        //
-        // The non-Zero independent components (modulo symmetries) are:
-        // R_{trtr}, R_{trtθ}, R_{trθr}, R_{tθtθ}, R_{tφtφ}, R_{rφrφ}, etc.
-        //
-        // Using Chandrasekhar's notation and the Kerr metric components.
-
-        // Get metric for index lowering
+        // R^rho_smn = d_m Gamma^rho_ns - d_n Gamma^rho_ms
+        //           + Gamma^rho_ml Gamma^l_ns - Gamma^rho_nl Gamma^l_ms,
+        // with the connection derivative expanded through the product rule:
+        //   d_s Gamma^m_nr = 1/2 (d_s g^ml)(d_n g_lr + d_r g_ln - d_l g_nr)
+        //                  + 1/2 g^ml (d_s d_n g_lr + d_s d_r g_ln - d_s d_l g_nr),
+        //   d_s g^ml = -g^ma g^lb d_s g_ab.
+        // Contracted from the same analytic derivative source as Christoffel,
+        // extended one order deeper by KerrMetricSecondDerivatives. Replaces a
+        // hand-expanded component table that was incomplete off the diagonal
+        // blocks (the frame-dragging t-phi sector was partial and several
+        // components disagreed with finite differences of this class's own
+        // connection); the beam integrator was the only consumer and its gates
+        // were structural, so the defect stayed latent. Pinned by
+        // KerrMetricD_RiemannMatchesFiniteDifferenceChristoffel and the
+        // vacuum-Ricci, lowered-symmetry, and Kretschmann-contraction gates.
         double g[4][4], g_inv[4][4];
         Evaluate(x, g, g_inv);
+        double dg[4][4][4];
+        KerrMetricDerivatives(mass_, spin_, x, dg);
+        double ddg[4][4][4][4];
+        KerrMetricSecondDerivatives(mass_, spin_, x, ddg);
 
-        // ===================================================================
-        // Mixed Riemann tensor R^α_βγδ (first index up)
-        // ===================================================================
-        //
-        // Key independent non-Zero components in Boyer-Lindquist coordinates:
+        double Gamma[4][4][4];
+        Christoffel(x, Gamma);
 
-        // Common factors
-        [[maybe_unused]] double M_over_Sigma3 = M / Sigma3;
-        double a2_sin2th = a2 * sin2th;
-        [[maybe_unused]] double a2_cos2th = a2 * cos2th;
-
-        // R^t components
-        // R^t_{rtr} = M(r² - a²cos²θ)(Σ - 2r²) / Σ⁴
-        R[0][1][0][1] = M * r_term * (Sigma - 2 * r2) / Sigma4;
-        R[0][1][1][0] = -R[0][1][0][1];  // Antisymmetry
-
-        // R^t_{θtθ} = -M·a²·sin(2θ)·r / Σ³
-        R[0][2][0][2] = -M * a2 * 2 * sinth * costh * r / Sigma3;
-        R[0][2][2][0] = -R[0][2][0][2];
-
-        // R^t_{rφr} terms involve cross-components
-        double term_trphi = -M * a * sin2th * (3 * r2 - a2 * cos2th) / Sigma3;
-        R[0][1][3][1] = term_trphi;
-        R[0][1][1][3] = -term_trphi;
-
-        // R^t_{θφθ} terms
-        double term_tthphi = 2 * M * a * r * (r2 + a2) * sinth * costh / Sigma3;
-        R[0][2][3][2] = term_tthphi;
-        R[0][2][2][3] = -term_tthphi;
-
-        // R^r components
-        // R^r_{trt} = M·Δ(r² - a²cos²θ)(Σ - 2r²) / Σ⁵
-        R[1][0][1][0] = M * Delta * r_term * (Sigma - 2 * r2) / (Sigma4 * Sigma);
-        R[1][0][0][1] = -R[1][0][1][0];
-
-        // R^r_{θrθ} = -M·a²·sin(2θ)·r / Σ³
-        R[1][2][1][2] = -M * a2 * 2 * sinth * costh * r / Sigma3;
-        R[1][2][2][1] = -R[1][2][1][2];
-
-        // R^r_{tφt} and R^r_{φtφ} terms
-        R[1][0][3][0] = -M * a * Delta * sin2th * r_term / (Sigma4 * Sigma);
-        R[1][0][0][3] = -R[1][0][3][0];
-        R[1][3][0][3] = R[1][0][3][0];
-        R[1][3][3][0] = -R[1][0][3][0];
-
-        // R^r_{φrφ} = -M·sin²θ·(r² - a²cos²θ)·(r²+a²)² / Σ⁴ + additional terms
-        double r2_plus_a2 = r2 + a2;
-        R[1][3][1][3] = -M * sin2th * r_term * r2_plus_a2 / Sigma4 +
-                        M * Delta * sin2th * (r2 + a2_sin2th) / Sigma4;
-        R[1][3][3][1] = -R[1][3][1][3];
-
-        // R^θ components
-        // R^θ_{tθt} = M·a²·sin(2θ)·r / Σ⁴
-        R[2][0][2][0] = M * a2 * 2 * sinth * costh * r / Sigma4;
-        R[2][0][0][2] = -R[2][0][2][0];
-
-        // R^θ_{rθr} = -M·(r² - a²cos²θ)·(Σ - 2r²)/(Σ³·Δ)
-        R[2][1][2][1] = -M * r_term * (Sigma - 2 * r2) / (Sigma3 * Delta);
-        R[2][1][1][2] = -R[2][1][2][1];
-
-        // R^θ_{tφt}, R^θ_{φθφ}
-        R[2][0][3][0] = 2 * M * a * r * (r2 + a2) * sinth * costh / Sigma4;
-        R[2][0][0][3] = -R[2][0][3][0];
-
-        // R^θ_{φθφ}
-        double A_factor = (r2 + a2) * (r2 + a2) - a2 * Delta * sin2th;
-        R[2][3][2][3] =
-            -M * r * A_factor * sinth * costh / Sigma4 - M * a2 * sin2th * r * (r2 + a2) / Sigma4;
-        R[2][3][3][2] = -R[2][3][2][3];
-
-        // R^φ components (azimuthal)
-        // R^φ_{trt} involves frame-dragging
-        R[3][0][1][0] = -M * a * r_term / (Sigma3 * Delta);
-        R[3][0][0][1] = -R[3][0][1][0];
-
-        // R^φ_{tθt}
-        R[3][0][2][0] = -2 * M * a * r * costh / (Sigma3 * sinth);
-        if (std::abs(sinth) > 1e-6) {
-            R[3][0][0][2] = -R[3][0][2][0];
+        // d_s g^ab; the metric is stationary and axisymmetric, so only
+        // s = r, theta contribute.
+        double dginv[4][4][4];
+        for (int s = 0; s < 4; ++s) {
+            for (int m = 0; m < 4; ++m) {
+                for (int n = 0; n < 4; ++n) {
+                    double v = 0.0;
+                    if (s == 1 || s == 2) {
+                        for (int p = 0; p < 4; ++p)
+                            for (int q = 0; q < 4; ++q)
+                                v -= g_inv[m][p] * g_inv[n][q] * dg[s][p][q];
+                    }
+                    dginv[s][m][n] = v;
+                }
+            }
         }
 
-        // R^φ_{rφr}
-        R[3][1][3][1] =
-            M * r_term * (r2 + a2) / (Sigma3 * Delta) - M * r * (r2 + a2) / (Sigma2 * Delta);
-        R[3][1][1][3] = -R[3][1][3][1];
+        // dGamma[s][m][n][r] = d_s Gamma^m_nr.
+        double dGamma[4][4][4][4];
+        for (int s = 0; s < 4; ++s) {
+            for (int m = 0; m < 4; ++m) {
+                for (int n = 0; n < 4; ++n) {
+                    for (int r = 0; r < 4; ++r) {
+                        double v = 0.0;
+                        if (s == 1 || s == 2) {
+                            for (int l = 0; l < 4; ++l) {
+                                v += dginv[s][m][l] *
+                                         (dg[n][l][r] + dg[r][l][n] - dg[l][n][r]) +
+                                     g_inv[m][l] * (ddg[s][n][l][r] + ddg[s][r][l][n] -
+                                                    ddg[s][l][n][r]);
+                            }
+                            v *= 0.5;
+                        }
+                        dGamma[s][m][n][r] = v;
+                    }
+                }
+            }
+        }
 
-        // R^φ_{θφθ}
-        R[3][2][3][2] = -M * a2 * r * sin2th / Sigma3 + M * (r2 + a2) * r / Sigma3;
-        R[3][2][2][3] = -R[3][2][3][2];
-
-        // Enforce Riemann symmetries for any unset components
-        // R^α_βγδ = -R^α_βδγ (already done above via antisymmetry)
-        // Additional components from first Bianchi Identity would be more complex
+        for (int rho = 0; rho < 4; ++rho) {
+            for (int sig = 0; sig < 4; ++sig) {
+                for (int mu = 0; mu < 4; ++mu) {
+                    for (int nu = 0; nu < 4; ++nu) {
+                        double v = dGamma[mu][rho][nu][sig] - dGamma[nu][rho][mu][sig];
+                        for (int lam = 0; lam < 4; ++lam) {
+                            v += Gamma[rho][mu][lam] * Gamma[lam][nu][sig] -
+                                 Gamma[rho][nu][lam] * Gamma[lam][mu][sig];
+                        }
+                        R[rho][sig][mu][nu] = v;
+                    }
+                }
+            }
+        }
     }
 
     /// @brief Compute Kretschmann scalar K = R_αβγδ R^αβγδ (analytic)
@@ -337,16 +353,21 @@ class KerrMetricD : public IMetricD {
     ///
     /// FORMULA:
     /// For Kerr spacetime in Boyer-Lindquist coordinates:
-    ///   K = 48M² × (r² - a²cos²θ) × [(r² - a²cos²θ)² - 16a²r²cos²θ] / Σ⁶
+    ///   K = 48M² × (r² - a²cos²θ) × [(r² + a²cos²θ)² - 16a²r²cos²θ] / Σ⁶
     ///
-    /// where Σ = r² + a²cos²θ
+    /// where Σ = r² + a²cos²θ. The bracket is Σ² - 16a²r²cos²θ; an earlier
+    /// version squared (r² - a²cos²θ) there instead, which coincides with the
+    /// correct value only where a·cosθ = 0 (Schwarzschild, or the Kerr
+    /// equator) — exactly the two regimes the historical gates sampled. The
+    /// contraction gate KerrMetricD_KretschmannMatchesRiemannContraction now
+    /// pins this form against the assembled tensor off-equator.
     ///
     /// Special cases:
     /// - Schwarzschild (a=0): K = 48M²/r⁶
     /// - Extremal Kerr (a=M): K finite everywhere except ring singularity
     ///
     /// Reference: Henry, R.C. (2000), "Kretschmann Scalar for a Kerr-Newman Black Hole"
-    ///            Astrophys. J. 535:350-353
+    ///            Astrophys. J. 535:350-353, equation (18) at Q = 0.
     double Kretschmann(const Vec4d& x) const {
         double r = x.r;
         double theta = x.theta;
@@ -368,9 +389,8 @@ class KerrMetricD : public IMetricD {
         // r² - a²cos²θ (appears in numerator)
         double r_term = r2 - a2 * cos2th;
 
-        // Kerr Kretschmann polynomial structure:
-        // K = 48M² × r_term × [r_term² - 16a²r²cos²θ] / Σ⁶
-        double bracket = r_term * r_term - 16.0 * a2 * r2 * cos2th;
+        // K = 48M² × r_term × [Σ² - 16a²r²cos²θ] / Σ⁶ (Henry 2000, eq. 18).
+        double bracket = Sigma * Sigma - 16.0 * a2 * r2 * cos2th;
 
         return 48.0 * M * M * r_term * bracket / Sigma6;
     }

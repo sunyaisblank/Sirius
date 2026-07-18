@@ -42,7 +42,7 @@ The estate was re-founded with the port and stands at 737 tests, 456 Mandatory, 
 - macOS is compile-targeted through MoltenVK but never executed here; the CI macOS job builds and runs the Correctness suites only.
 - Reflection (P2996) and native contracts (P2900) remain toolchain-absent; the macro and codegen stand-ins are in place with recorded migration paths.
 - The volumetric disk, corona, turbulence, and film features carry their legacy "aesthetic, not physics" labelling forward; they are ported and tested but not part of the parity claims.
-- The oracle's hand-coded component-wise Riemann method is incomplete off the diagonal (found by the beam workstream; its Christoffel sibling had a comparable defect, fixed test-first). The analytic Kretschmann invariant is the validated curvature handle and is what the gates pin; rebuilding Riemann from the analytic derivatives is recorded follow-up.
+- (Resolved post-closure, 2026-07-18.) The oracle's hand-coded component-wise Riemann method was incomplete off the diagonal. It was rebuilt test-first from the analytic metric derivatives, extended one order deeper (KerrMetricSecondDerivatives, pinned by finite differences of the first derivatives), and is now gated four ways: full-tensor agreement with finite differences of the connection, vacuum Ricci, the lowered-index symmetry group with first Bianchi, and Kretschmann by contraction. The contraction gate exposed a second latent defect: the closed-form Kretschmann's bracket carried (r² − a²cos²θ)² where Henry (2000, eq. 18) has (r² + a²cos²θ)², invisible wherever a·cosθ = 0 — exactly the regimes the historical gates sampled, including a circular off-axis pin that recomputed the same expression. Both are fixed; the live-path Kretschmann pin now extends off-equator for Kerr a=0.9.
 - The CPU and Vulkan paths integrate by different methods by design; their shadow-fraction gap (0.24 versus 0.11 on the parity scene) sits inside the pinned statistical bounds but is dominated by capture-semantics differences near the photon ring, and tightening it (one capture convention, bundle-informed edge handling) is recorded follow-up.
 - Morris-Thorne renders on neither path yet (spherical-chart session integration deferred; its kernel physics is parity-tested); the fp64 kernel rung is wired for selection but the double-precision trace variant is deferred, with requests declining loudly.
 
@@ -57,7 +57,7 @@ The estate was re-founded with the port and stands at 737 tests, 456 Mandatory, 
 - E1, spacetime catalogue: HOLDS (nine families; Morris-Thorne rendering deferred as above).
 - E2, polarised transport: HOLDS. Walker-Penrose constant conserved to ~1e-12 (oracle) and ~2e-10 (live), Stokes rotation wired.
 - E3, hardware reach: HOLDS architecturally. Governor seats a 4096 tile in 2 GiB at IMAX resolution and declines loudly below the floor; Vulkan renders end-to-end on software Vulkan; physical-GPU validation pending hardware.
-- E4, verification estate: HOLDS. 762 tests, 465 Mandatory, all green on GCC 14 and Clang 21, labels generated and CI-checked.
+- E4, verification estate: HOLDS. 768 tests, 471 Mandatory, all green on GCC 14 and Clang 21, labels generated and CI-checked (post-closure Riemann rebuild added six curvature gates).
 
 ## 11. Rejected additions
 

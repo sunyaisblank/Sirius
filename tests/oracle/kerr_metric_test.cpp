@@ -327,3 +327,44 @@ TEST_F(KerrMetricDTest, ChristoffelMatchesFiniteDifferencesOfMetric) {
         }
     }
 }
+
+// The hand-derived second metric derivatives must agree with central
+// differences of the analytic first derivatives; they feed the Riemann
+// assembly, so a slipped term here becomes a curvature error downstream.
+// Both derivative orders are checked so the (s1, s2) symmetry of the storage
+// is exercised, not assumed.
+TEST_F(KerrMetricDTest, SecondDerivativesMatchFiniteDifference) {
+    struct Case {
+        double a, r, theta;
+    };
+    const Case cases[] = {{0.0, 5.0, 1.1}, {0.9, 5.0, 1.1}, {0.5, 3.2, 0.6}, {0.9, 12.0, 2.4}};
+
+    const double h = 1e-6;
+    for (const auto& c : cases) {
+        double ddg[4][4][4][4];
+        Vec4d x(0.0, c.r, c.theta, 0.3);
+        sirius::oracle::KerrMetricSecondDerivatives(1.0, c.a, x, ddg);
+
+        for (int s = 1; s <= 2; ++s) {
+            Vec4d xp = x, xm = x;
+            xp[s] += h;
+            xm[s] -= h;
+            double dgp[4][4][4], dgm[4][4][4];
+            sirius::oracle::KerrMetricDerivatives(1.0, c.a, xp, dgp);
+            sirius::oracle::KerrMetricDerivatives(1.0, c.a, xm, dgm);
+
+            for (int s2 = 0; s2 < 4; ++s2) {
+                for (int mu = 0; mu < 4; ++mu) {
+                    for (int nu = 0; nu < 4; ++nu) {
+                        double fd = (dgp[s2][mu][nu] - dgm[s2][mu][nu]) / (2.0 * h);
+                        EXPECT_NEAR(ddg[s][s2][mu][nu], fd,
+                                    1e-6 * std::max(1.0, std::abs(fd)))
+                            << "dd g[" << s << "][" << s2 << "][" << mu << "][" << nu
+                            << "] disagrees with finite differences (a=" << c.a
+                            << ", r=" << c.r << ", theta=" << c.theta << ")";
+                    }
+                }
+            }
+        }
+    }
+}
