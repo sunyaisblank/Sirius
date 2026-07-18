@@ -38,16 +38,16 @@ constexpr double k_BOLTZMANN = 1.380649e-23;  // J/K
 constexpr double T_SUN = 5778.0;  // K
 
 // D65 white point (standard daylight)
-constexpr double T_D65 = 6504.0;  // K (approximate)
+[[maybe_unused]] constexpr double T_D65 = 6504.0;  // K (approximate)
 
 // CIE 1931 XYZ chromaticity of D65 white
-constexpr double D65_x = 0.31272;
-constexpr double D65_y = 0.32903;
+[[maybe_unused]] constexpr double D65_x = 0.31272;
+[[maybe_unused]] constexpr double D65_y = 0.32903;
 
 // Test tolerances
-constexpr double PLANCK_TOL = 1e-3;  // 0.1% for Planck function
+[[maybe_unused]] constexpr double PLANCK_TOL = 1e-3;  // 0.1% for Planck function
 constexpr double WIEN_TOL = 5.0;     // nm tolerance for peak wavelength
-constexpr double COLOR_TOL = 0.05;   // 5% for color matching
+[[maybe_unused]] constexpr double COLOR_TOL = 0.05;   // 5% for color matching
 
 } // namespace SpectralRef
 

@@ -221,7 +221,7 @@ public:
 
 private:
     sirius::core::KerrSchildFamily metric_;
-    double M_, a_;
+    [[maybe_unused]] double M_, a_;
 
     // Jacobian: ∂(x,y,z)/∂(r,θ,φ)
     void computeJacobian(double r, double theta, double phi, double J[3][3], double Jinv[3][3]) {

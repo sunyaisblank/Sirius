@@ -9,7 +9,7 @@
 namespace sirius::test {
 
 constexpr double kEpsilon = 1e-6;
-constexpr double kPi = 3.14159265358979323846;
+[[maybe_unused]] constexpr double kPi = 3.14159265358979323846;
 
 // =============================================================================
 // Test Fixture

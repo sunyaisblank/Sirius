@@ -43,7 +43,7 @@ namespace FPSThresholds {
 
     // Integration parameters
     constexpr int TYPICAL_STEPS_PER_RAY = 500;
-    constexpr double STEP_SIZE = 0.01;
+    [[maybe_unused]] constexpr double STEP_SIZE = 0.01;
 }
 
 // =============================================================================

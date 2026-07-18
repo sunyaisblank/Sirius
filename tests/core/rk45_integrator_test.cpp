@@ -20,7 +20,7 @@ using namespace sirius::core;
 
 constexpr double M = 1.0;  // Mass in geometric units
 constexpr double PI = 3.14159265358979323846;
-constexpr double kEpsilon = 1e-6;
+[[maybe_unused]] constexpr double kEpsilon = 1e-6;
 
 // =============================================================================
 // Test Fixture
@@ -371,7 +371,7 @@ TEST_F(RK45IntegratorTests, StepRejectionWorks) {
     Lightray ray = createTestRay(pos, dir, &schwarzschild);
     ray.step_size = 0.1f;  // Start with large step
 
-    int rejected_steps = 0;
+    [[maybe_unused]] int rejected_steps = 0;
     int accepted_steps = 0;
 
     for (int i = 0; i < 100; ++i) {

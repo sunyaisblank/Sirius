@@ -53,15 +53,15 @@ constexpr double SCHWARZSCHILD_ISCO = 6.0;             // r_ISCO = 6M
 
 // Einstein light deflection (weak field)
 // Δφ = 4GM/(c²b) = 4M/b in geometric units
-constexpr double EINSTEIN_DEFLECTION_COEFF = 4.0;
+[[maybe_unused]] constexpr double EINSTEIN_DEFLECTION_COEFF = 4.0;
 
 // Extremal Kerr (a = M) values
-constexpr double KERR_EXTREMAL_ISCO_PROGRADE = 1.0;    // r = M
-constexpr double KERR_EXTREMAL_ISCO_RETROGRADE = 9.0;  // r = 9M
+[[maybe_unused]] constexpr double KERR_EXTREMAL_ISCO_PROGRADE = 1.0;    // r = M
+[[maybe_unused]] constexpr double KERR_EXTREMAL_ISCO_RETROGRADE = 9.0;  // r = 9M
 
 // Tolerances for analytic comparisons
 constexpr double ANALYTIC_TOL = 1e-10;
-constexpr double WEAK_FIELD_TOL = 1e-4;  // 0.01% for weak field approximations
+[[maybe_unused]] constexpr double WEAK_FIELD_TOL = 1e-4;  // 0.01% for weak field approximations
 
 } // namespace AnalyticRef
 

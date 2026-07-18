@@ -26,7 +26,7 @@ namespace MemoryBudgets {
 
     constexpr int WIDTH_4K = 3840;
     constexpr int HEIGHT_4K = 2160;
-    constexpr int TOTAL_PIXELS_4K = WIDTH_4K * HEIGHT_4K;
+    [[maybe_unused]] constexpr int TOTAL_PIXELS_4K = WIDTH_4K * HEIGHT_4K;
 
     // Typical numerical metric grid
     constexpr int NR_GRID_SIZE_SMALL = 64;
@@ -38,10 +38,10 @@ namespace MemoryBudgets {
 
     // VRAM budget (typical GPU)
     constexpr size_t VRAM_BUDGET_8GB = 8ULL * 1024 * 1024 * 1024;
-    constexpr size_t VRAM_BUDGET_12GB = 12ULL * 1024 * 1024 * 1024;
+    [[maybe_unused]] constexpr size_t VRAM_BUDGET_12GB = 12ULL * 1024 * 1024 * 1024;
 
     // Reasonable limits
-    constexpr size_t MAX_TEXTURE_SIZE_MB = 2048;  // 2GB texture limit
+    [[maybe_unused]] constexpr size_t MAX_TEXTURE_SIZE_MB = 2048;  // 2GB texture limit
 }
 
 // =============================================================================

@@ -27,7 +27,7 @@ using namespace sirius::core;
 
 // Test tolerances (from PHCN001A.h)
 constexpr double kEpsilon = constants::metric::kInverseTol;   // 1e-14 for metric comparisons
-constexpr double kSymmetryTol = constants::metric::kSymmetryTol;  // 1e-15 for symmetry
+[[maybe_unused]] constexpr double kSymmetryTol = constants::metric::kSymmetryTol;  // 1e-15 for symmetry
 constexpr double M = 1.0;
 constexpr double PI = constants::math::kPi;
 

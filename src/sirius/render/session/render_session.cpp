@@ -82,7 +82,7 @@ constexpr float kShadowLift = 0.02f;
 void RenderSession::SetupActions() {
     fsm_.SetEntryAction([this](SessionState state) { OnEnterState(state); });
 
-    fsm_.SetTransitionAction([this](SessionState from, SessionEvent event, SessionState to) {
+    fsm_.SetTransitionAction([](SessionState from, SessionEvent event, SessionState to) {
         std::cout << "[Session] " << StateName(from) << " --" << EventName(event) << "--> "
                   << StateName(to) << std::endl;
     });

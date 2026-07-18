@@ -30,7 +30,7 @@ The repository's recurring failure mode, documented across two engagements, is t
 
 ## 7. Changes made
 
-In sequence, each landed behind a green gate on `rebuild/dngr-parity`: engagement foundations (specification, C++26 style guide, architecture design); repository skeleton (C++26 tree beside the legacy system, presets for GCC 14/Clang 21/MSVC, contracts and error seams, strict warnings); the backend seam with a Vulkan compute adapter proven on Lavapipe; the Slang kernel authority re-authored from the CUDA monolith with parity probes; the behaviour-preserving port of core physics, oracle stack, CPU render path, and app layer with test counts matching legacy suite-for-suite; Walker-Penrose transport; the oracle Christoffel fix; the label authority extended to the new tree; CI matrix, packaging; and finally legacy retirement, deleting 71,538 lines once the new `sirius` binary reproduced the reference tapes byte-identically. The identity gate is the engagement's central evidence: same compiler, same flags, same arithmetic, same pixels.
+In sequence, each landed behind a green gate on `rebuild/dngr-parity`: engagement foundations (specification, C++26 style guide, architecture design); repository skeleton (C++26 tree beside the legacy system, presets for GCC 14/Clang 21/MSVC, contracts and error seams, strict warnings); the backend seam with a Vulkan compute adapter proven on Lavapipe; the Slang kernel authority re-authored from the CUDA monolith with parity probes; the behaviour-preserving port of core physics, oracle stack, CPU render path, and app layer with test counts matching legacy suite-for-suite; Walker-Penrose transport; the oracle Christoffel fix; the label authority extended to the new tree; CI matrix, packaging; legacy retirement, deleting 71,538 lines once the new `sirius` binary reproduced the reference tapes byte-identically; the Vulkan render path through the session with the memory governor and precision selection; and the DNGR physics programme (live ray bundles, the filtered point-source star field, the Doppler toggle, camera aberration), all flag-gated so the byte-pin held to the last commit. The identity gate is the engagement's central evidence: same compiler, same flags, same arithmetic, same pixels.
 
 ## 8. Tests and validation performed
 
@@ -42,10 +42,22 @@ The estate was re-founded with the port and stands at 737 tests, 456 Mandatory, 
 - macOS is compile-targeted through MoltenVK but never executed here; the CI macOS job builds and runs the Correctness suites only.
 - Reflection (P2996) and native contracts (P2900) remain toolchain-absent; the macro and codegen stand-ins are in place with recorded migration paths.
 - The volumetric disk, corona, turbulence, and film features carry their legacy "aesthetic, not physics" labelling forward; they are ported and tested but not part of the parity claims.
+- The oracle's hand-coded component-wise Riemann method is incomplete off the diagonal (found by the beam workstream; its Christoffel sibling had a comparable defect, fixed test-first). The analytic Kretschmann invariant is the validated curvature handle and is what the gates pin; rebuilding Riemann from the analytic derivatives is recorded follow-up.
+- The CPU and Vulkan paths integrate by different methods by design; their shadow-fraction gap (0.24 versus 0.11 on the parity scene) sits inside the pinned statistical bounds but is dominated by capture-semantics differences near the photon ring, and tightening it (one capture convention, bundle-informed edge handling) is recorded follow-up.
+- Morris-Thorne renders on neither path yet (spherical-chart session integration deferred; its kernel physics is parity-tested); the fp64 kernel rung is wired for selection but the double-precision trace variant is deferred, with requests declining loudly.
 
 ## 10. Completion scorecard
 
-Maintained at closure; see the task ledger and SPECIFICATION.md section 8 for the criteria. Status at last update: P1 (geodesic accuracy) and P6 (output discipline) hold with gates; P4 holds for the emission physics with the Doppler toggle outstanding; P2 (bundles on the live paths), P3 (filtered star field), and P5 (camera worldlines) are the open physics programme; E1, E2, E4 hold; E3 holds architecturally with hardware validation pending. The Vulkan session wiring and memory governor programme is in flight.
+- P1, geodesic accuracy: HOLDS. Oracle conservation to 1e-12-class, live path within the Mandatory 1e-4 tier, live curvature pinned to the analytic oracle Kretschmann at ~2e-6 relative.
+- P2, ray bundles: HOLDS. Deviation vectors propagate on the CPU live path (beam ellipse per pixel; oracle-gated) and in the trace kernel behind the same flag (lensing-consistent expansion, defaults untouched).
+- P3, filtered star field: HOLDS. A deterministic 100,000-star point catalogue sampled through the Gaussian beam footprint; rotating-camera flicker coefficient of variation drops 3.1-fold versus point sampling.
+- P4, relativistic disk: HOLDS. Novikov-Thorne/Page-Thorne emission with g^4 beaming; the Doppler-suppression toggle collapses disk asymmetry 195-fold while retaining gravitational redshift; full physics is the default.
+- P5, camera worldlines: HOLDS. Four-velocity aberration matches the analytic formula, exact no-op at zero velocity, composing over pinhole, thin-lens, and fisheye models.
+- P6, output discipline: HOLDS. Linear-EXR untouched; one transfer encode per writer; byte-pinned throughout the engagement.
+- E1, spacetime catalogue: HOLDS (nine families; Morris-Thorne rendering deferred as above).
+- E2, polarised transport: HOLDS. Walker-Penrose constant conserved to ~1e-12 (oracle) and ~2e-10 (live), Stokes rotation wired.
+- E3, hardware reach: HOLDS architecturally. Governor seats a 4096 tile in 2 GiB at IMAX resolution and declines loudly below the floor; Vulkan renders end-to-end on software Vulkan; physical-GPU validation pending hardware.
+- E4, verification estate: HOLDS. 762 tests, 465 Mandatory, all green on GCC 14 and Clang 21, labels generated and CI-checked.
 
 ## 11. Rejected additions
 

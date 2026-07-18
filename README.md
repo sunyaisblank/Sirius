@@ -68,6 +68,8 @@ sirius info system --json
 
 Configuration layers in a fixed order: struct defaults, then a JSON config file, then `SIRIUS_*` environment variables, then command-line flags; later layers win, every parameter is validated at startup against the ranges the physics supports, and invalid configuration stops the run rather than being clamped. `sirius render --help` lists the full flag set.
 
+The DNGR-technique features are explicit flags, each default-off so the pinned reference render is bit-stable: `--beams` propagates ray bundles by the geodesic deviation equation and reports the beam ellipse per pixel; `--starfield point` replaces the background texture with a 100,000-star point catalogue filtered through the beam footprint (the anti-flicker approach of the Interstellar renderer); `--doppler-beaming off` suppresses the disk's orbital Doppler asymmetry while retaining gravitational redshift, mirroring the film's artistic choice (full physics is the default); a camera velocity applies special-relativistic aberration across all lens models.
+
 ## Testing
 
 ```bash

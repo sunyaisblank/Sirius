@@ -18,12 +18,12 @@ namespace sirius::core {
 // Dormand-Prince RK45 Butcher tableau (nodes c_i, matrix a_ij, weights b_i, b*_i,
 // and error coefficients e_i = b_i - b*_i), kept in domain notation.
 namespace dp45 {
-constexpr double c2 = 1.0 / 5.0;
-constexpr double c3 = 3.0 / 10.0;
-constexpr double c4 = 4.0 / 5.0;
-constexpr double c5 = 8.0 / 9.0;
-constexpr double c6 = 1.0;
-constexpr double c7 = 1.0;
+[[maybe_unused]] constexpr double c2 = 1.0 / 5.0;
+[[maybe_unused]] constexpr double c3 = 3.0 / 10.0;
+[[maybe_unused]] constexpr double c4 = 4.0 / 5.0;
+[[maybe_unused]] constexpr double c5 = 8.0 / 9.0;
+[[maybe_unused]] constexpr double c6 = 1.0;
+[[maybe_unused]] constexpr double c7 = 1.0;
 
 constexpr double a21 = 1.0 / 5.0;
 
@@ -45,12 +45,12 @@ constexpr double a63 = 46732.0 / 5247.0;
 constexpr double a64 = 49.0 / 176.0;
 constexpr double a65 = -5103.0 / 18656.0;
 
-constexpr double a71 = 35.0 / 384.0;
+[[maybe_unused]] constexpr double a71 = 35.0 / 384.0;
 // a72 = 0
-constexpr double a73 = 500.0 / 1113.0;
-constexpr double a74 = 125.0 / 192.0;
-constexpr double a75 = -2187.0 / 6784.0;
-constexpr double a76 = 11.0 / 84.0;
+[[maybe_unused]] constexpr double a73 = 500.0 / 1113.0;
+[[maybe_unused]] constexpr double a74 = 125.0 / 192.0;
+[[maybe_unused]] constexpr double a75 = -2187.0 / 6784.0;
+[[maybe_unused]] constexpr double a76 = 11.0 / 84.0;
 
 // 5th order weights (solution).
 constexpr double b1 = 35.0 / 384.0;
