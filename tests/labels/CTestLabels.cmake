@@ -93,6 +93,14 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    CameraAberrationTest.MatchesAnalyticFormulaAlongViewAxis
+    CameraAberrationTest.ZeroBetaIsExactNoOp
+    CameraAberrationTest.ForwardMotionBeamsTowardAxis
+    CameraAberrationTest.ComposesOverLensModels
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     CameraFactoryTest.CreatePinhole
     CameraFactoryTest.CreateThinLens
     CameraFactoryTest.CreateFisheye
@@ -275,6 +283,11 @@ set_tests_properties(
     DeterminismTests.InnerProductDeterminism
     DeterminismTests.NullNormalizationDeterminism
     PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    DopplerToggleTest.SuppressionCollapsesDiskAsymmetry
+    PROPERTIES LABELS "Correctness"
 )
 
 set_tests_properties(
@@ -498,6 +511,11 @@ set_tests_properties(
 
 set_tests_properties(
     JetRayMarchTests.EmissionOutsideJetIsZero
+    PROPERTIES LABELS "Correctness"
+)
+
+set_tests_properties(
+    KernelBeam.BeamFlagWiresDeviationWithoutMovingDefault
     PROPERTIES LABELS "Correctness"
 )
 
@@ -829,6 +847,15 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    RayBundleTest.FlatSpaceBundleMagnificationIsUnity
+    RayBundleTest.KretschmannMatchesOracleSchwarzschild
+    RayBundleTest.KretschmannMatchesOracleKerrEquatorial
+    RayBundleTest.BundleFiniteAndDeterministicKerr
+    RayBundleTest.MagnificationConsistencyWithScalarJacobian
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     ReissnerNordstromTests.MetricIsDiagonal
     ReissnerNordstromTests.MetricIsSymmetric
     ReissnerNordstromTests.MetricHasLorentzianSignature
@@ -997,6 +1024,13 @@ set_tests_properties(
     StarfieldGeneratorTests.DeterministicWithSameSeed
     StarfieldGeneratorTests.DifferentSeedsDifferentCatalogs
     StarfieldGeneratorTests.NoNaNInCatalog
+    PROPERTIES LABELS "Correctness"
+)
+
+set_tests_properties(
+    StarfieldPointTest.CatalogueMeetsSizeFloorAndIsFinite
+    StarfieldPointTest.BeamAccumulationFiniteAndNonConstant
+    StarfieldPointTest.BeamFootprintSuppressesStarFlicker
     PROPERTIES LABELS "Correctness"
 )
 

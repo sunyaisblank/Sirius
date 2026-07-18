@@ -140,6 +140,11 @@ SUITE_LABELS = {
     "PlatformPaths": CORRECTNESS,
     "MemoryGovernor": CORRECTNESS,
     "VulkanRenderSession": CORRECTNESS,
+    "RayBundleTest": MANDATORY,
+    "CameraAberrationTest": MANDATORY,
+    "DopplerToggleTest": CORRECTNESS,
+    "StarfieldPointTest": CORRECTNESS,
+    "KernelBeam": CORRECTNESS,
 }
 
 

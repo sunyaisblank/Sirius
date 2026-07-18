@@ -37,6 +37,17 @@ struct CameraConfig {
     float pitch = 0.0f;  // Pitch rotation (radians)
     float roll = 0.0f;   // Roll rotation (radians)
 
+    // Camera four-velocity: the spatial beta = v/c of the observer worldline,
+    // expressed in the local ray-direction component frame (the same orthonormal
+    // basis as CameraRay::direction indices 1,2,3, with index 1 the forward/view
+    // axis). Special-relativistic aberration of the generated ray is applied in
+    // that frame (P5); |beta| < 1 is required and enforced by clamping. Default
+    // zero leaves every generated ray untouched (byte-pin). Reference: DNGR
+    // (James et al. 2015, CQG 32 065001), arbitrary-worldline camera; MTW eq 2.29.
+    double beta_x = 0.0;
+    double beta_y = 0.0;
+    double beta_z = 0.0;
+
     // Lens properties
     float fov = 60.0f;            // Field of view (degrees)
     float focal_length = 50.0f;   // Focal length (mm, for ThinLens)
@@ -57,6 +68,62 @@ enum class LensType {
     Panoramic      // 360 degree equirectangular
 };
 
+// Special-relativistic aberration of a generated ray in the camera's local
+// frame. Given a camera moving with three-velocity beta (in the ray-component
+// orthonormal basis), a photon direction n transforms so that, along the boost
+// axis, cos theta' = (cos theta - beta) / (1 - beta cos theta) (MTW eq 2.29;
+// the light-cone form of the Lorentz boost of the null direction). The
+// perpendicular components scale by 1 / (gamma (1 - beta.n)), which keeps the
+// result a unit direction. beta = 0 returns the ray untouched with no arithmetic,
+// so the default camera path is byte-identical.
+inline void AberrateRay(CameraRay& ray, double beta_x, double beta_y, double beta_z) {
+    double b2 = beta_x * beta_x + beta_y * beta_y + beta_z * beta_z;
+    if (b2 <= 0.0) return;  // Exact no-op: preserves the pinned render.
+
+    // Enforce the sub-luminal precondition by clamping rather than asserting: a
+    // camera worldline at |beta| >= 1 is unphysical, and the render declines to a
+    // near-luminal boost instead of producing NaNs.
+    if (b2 >= 1.0) {
+        double s = 0.999999 / std::sqrt(b2);
+        beta_x *= s;
+        beta_y *= s;
+        beta_z *= s;
+        b2 = beta_x * beta_x + beta_y * beta_y + beta_z * beta_z;
+    }
+
+    double b = std::sqrt(b2);
+    double ux = beta_x / b, uy = beta_y / b, uz = beta_z / b;  // Boost unit axis.
+
+    double dx = ray.direction(1), dy = ray.direction(2), dz = ray.direction(3);
+    double dlen = std::sqrt(dx * dx + dy * dy + dz * dz);
+    if (dlen < 1e-30) return;
+    dx /= dlen;
+    dy /= dlen;
+    dz /= dlen;
+
+    double n_par = dx * ux + dy * uy + dz * uz;  // cos theta about the boost axis.
+    double px = dx - n_par * ux, py = dy - n_par * uy, pz = dz - n_par * uz;
+
+    double gamma = 1.0 / std::sqrt(1.0 - b2);
+    double denom = 1.0 - b * n_par;
+    double n_par_prime = (n_par - b) / denom;
+    double perp_scale = 1.0 / (gamma * denom);
+
+    double ax = n_par_prime * ux + px * perp_scale;
+    double ay = n_par_prime * uy + py * perp_scale;
+    double az = n_par_prime * uz + pz * perp_scale;
+    double alen = std::sqrt(ax * ax + ay * ay + az * az);
+    if (alen > 1e-30) {
+        ax /= alen;
+        ay /= alen;
+        az /= alen;
+    }
+
+    ray.direction(1) = ax;
+    ray.direction(2) = ay;
+    ray.direction(3) = az;
+}
+
 // Abstract camera: generates a ray per pixel sample.
 class ICamera {
   public:
@@ -64,6 +131,17 @@ class ICamera {
 
     // Generate a ray for pixel (x, y) with sample offset (u, v) in [0, 1).
     virtual CameraRay GenerateRay(int x, int y, float u = 0.5f, float v = 0.5f) const = 0;
+
+    // Generate a ray and apply the camera-worldline aberration from the config
+    // (P5). Composes over every lens model without each model re-implementing the
+    // boost. At beta = 0 this is exactly GenerateRay, so the default path and the
+    // pinned render are unchanged.
+    CameraRay GenerateRayAberrated(int x, int y, float u = 0.5f, float v = 0.5f) const {
+        CameraRay ray = GenerateRay(x, y, u, v);
+        const auto& cfg = GetConfig();
+        AberrateRay(ray, cfg.beta_x, cfg.beta_y, cfg.beta_z);
+        return ray;
+    }
 
     virtual LensType GetLensType() const = 0;
     virtual const char* GetName() const = 0;

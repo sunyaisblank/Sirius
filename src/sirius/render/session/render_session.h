@@ -118,9 +118,20 @@ struct SessionConfig {
     double observerInclination = 1.5708;  // 90 degrees.
     float cameraFOV = 60.0f;
 
+    // Camera four-velocity (P5): spatial beta in the local ray-component frame
+    // (forward, up, right) = direction indices (1, 2, 3). Zero is a static
+    // camera; the pinned render never sets these.
+    double cameraBetaForward = 0.0;
+    double cameraBetaUp = 0.0;
+    double cameraBetaRight = 0.0;
+
     // Disk temperature model.
     std::string temperatureModel = "NovikovThorne";  // NovikovThorne or ShakuraSunyaev.
     float diskTemperatureScale = 50000.0f;            // T_scale (Kelvin).
+
+    // Doppler beaming toggle (P4). True (default) keeps the full disk physics and
+    // the pinned render; false suppresses the approaching/receding asymmetry.
+    bool dopplerBeaming = true;
 
     // Exotic metric parameters.
     double throatRadius = 1.0;  // Morris-Thorne b0.
@@ -177,6 +188,15 @@ struct SessionConfig {
     // Depth-resolved starfield (GPU feature; inert on the CPU path).
     bool enableStarfield = false;
     core::StarfieldConfig starfieldConfig;
+
+    // Filtered point-source star field (P3): render catalogue stars through the
+    // beam footprint instead of the equirectangular texture. Default false keeps
+    // the texture path and the pinned render.
+    bool pointStarfield = false;
+
+    // Ray bundles (P2): propagate geodesic deviation on the live path and derive
+    // per-pixel beam footprints. Default false keeps the point-sampled path.
+    bool rayBundles = false;
 
     // IMAX 70mm film simulation.
     bool enableFilmSimulation = false;
@@ -295,6 +315,15 @@ class RenderSession {
 
     bool LoadStarfieldTexture(const std::string& path);
     void SampleStarfield(const core::Vec4& direction, float& r, float& g, float& b) const;
+
+    // Filtered point-source star field (P3): accumulate catalogue stars through
+    // the per-ray beam footprint (ray bundles on) or a pinhole sigma (bundles
+    // off, the flicker baseline).
+    std::vector<core::StarEntry> star_catalogue_;
+    std::unique_ptr<core::StarfieldGenerator> star_generator_;
+    double pixel_angular_size_ = 0.0;  // fov / height, radians.
+    void SampleStarfieldPoints(const backend::TraceResult& result, float& r, float& g,
+                               float& b) const;
 
     // Multi-threaded tile rendering: each worker has its own tracer sharing the
     // metric, so no synchronisation is needed on the physics path.

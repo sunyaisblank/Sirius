@@ -86,6 +86,14 @@ Film Simulation (IMAX 70mm cinematic look):
   --halation <strength>     Halation glow strength (default: 0.15)
   --vignette <strength>     Vignette strength (default: 0.3)
 
+DNGR Physics (default off; the pinned render is unchanged):
+  --beams                   Propagate ray bundles (geodesic deviation) on the live path (P2)
+  --starfield <mode>        Star field: 'point' (beam-filtered point sources, P3) or
+                            'texture' (default equirectangular lookup)
+  --doppler-beaming <on|off> Disk Doppler asymmetry: 'on' (full physics, default) or
+                            'off' (suppressed, the Interstellar look, P4)
+  --camera-beta <f[,u,r]>   Camera four-velocity beta as forward[,up,right], |beta|<1 (P5)
+
 Presets:
   --cinematic               Enable cinematic defaults (volumetric, bloom, high exposure)
 
@@ -246,6 +254,52 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args, const Global
                 config.postprocess.exposure = 1.2f;
                 config.postprocess.contrast = 1.1f;
                 config.postprocess.saturation = 1.15f;
+            } else if (arg == "--beams" || arg == "--ray-bundles") {
+                config.rayBundles = true;  // P2: propagate geodesic deviation.
+            } else if (arg == "--starfield" && i + 1 < args.size()) {
+                std::string mode = args[++i];
+                std::transform(mode.begin(), mode.end(), mode.begin(),
+                               [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+                if (mode == "point") {
+                    config.pointStarfield = true;  // P3: filtered point sources.
+                } else if (mode == "texture") {
+                    config.pointStarfield = false;
+                } else {
+                    cli::Error("--starfield expects 'point' or 'texture'");
+                    return false;
+                }
+            } else if (arg == "--doppler-beaming" && i + 1 < args.size()) {
+                std::string mode = args[++i];
+                std::transform(mode.begin(), mode.end(), mode.begin(),
+                               [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+                if (mode == "off" || mode == "false" || mode == "0") {
+                    config.dopplerBeaming = false;  // P4: suppress the asymmetry.
+                } else if (mode == "on" || mode == "true" || mode == "1") {
+                    config.dopplerBeaming = true;
+                } else {
+                    cli::Error("--doppler-beaming expects 'on' or 'off'");
+                    return false;
+                }
+            } else if (arg == "--camera-beta" && i + 1 < args.size()) {
+                // P5: camera four-velocity beta as forward[,up,right] in [0, 1).
+                std::string spec = args[++i];
+                double comp[3] = {0.0, 0.0, 0.0};
+                size_t start = 0;
+                for (int c = 0; c < 3 && start <= spec.size(); ++c) {
+                    size_t comma = spec.find(',', start);
+                    std::string tok = spec.substr(start, comma - start);
+                    if (!tok.empty()) comp[c] = std::stod(tok);
+                    if (comma == std::string::npos) break;
+                    start = comma + 1;
+                }
+                double mag = std::sqrt(comp[0] * comp[0] + comp[1] * comp[1] + comp[2] * comp[2]);
+                if (mag >= 1.0) {
+                    cli::Error("--camera-beta magnitude must be < 1 (sub-luminal worldline)");
+                    return false;
+                }
+                config.observer.cameraBetaForward = comp[0];
+                config.observer.cameraBetaUp = comp[1];
+                config.observer.cameraBetaRight = comp[2];
             } else if (arg == "--no-gpu" || arg == "--cpu") {
                 config.backend.preferred = "cpu";
                 gpu_backend_requested_ = false;

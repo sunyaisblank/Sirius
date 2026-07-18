@@ -28,6 +28,7 @@ import gr_types;
 import gr_metrics;
 import gr_integrator;
 import gr_disk;
+import gr_deviation;
 
 RWStructuredBuffer<float> radiance;  // binding 0
 StructuredBuffer<float> params;      // binding 1
@@ -173,6 +174,13 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     float warpSigma = params[41];
     float warpR = params[42];
 
+    // Ray bundles (P2): propagate one geodesic-deviation vector through the render
+    // loop and report the beam's transverse expansion. Default off (params[43]==0)
+    // leaves the RGBA output untouched, so the parity and pinned renders do not
+    // move. Uses gr_deviation's full-Riemann acceleration (DNGR eq A.19) in the
+    // same Cartesian chart the integrator runs in.
+    bool beamsEnabled = params[43] > 0.5f;
+
     // Camera ray in world Cartesian. NDC follows the CPU pinhole camera geometry
     // (the renderer builds camDir/camRight/camUp so the two paths trace the same
     // scene): u spans [-aspect, aspect], v spans [-1, 1] top-to-bottom.
@@ -210,6 +218,15 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     float3 color = float3(0.0f, 0.0f, 0.0f);
     float transmittance = 1.0f;
     bool escaped = false;
+
+    // Deviation vector for the ray bundle (P2), transverse to the initial ray, and
+    // its affine derivative; a parallel bundle (xiDot = 0) so the expansion below
+    // measures the lensing distortion of the pixel footprint.
+    float3 seed = (abs(rayDir.z) < 0.9f) ? float3(0.0f, 0.0f, 1.0f) : float3(1.0f, 0.0f, 0.0f);
+    float3 xiPerp = normalize(cross(rayDir, seed));
+    const float kBeamSeed = 1.0e-3f;
+    float4 xi = float4(0.0f, xiPerp.x, xiPerp.y, xiPerp.z) * kBeamSeed;
+    float4 xiDot = float4(0.0f, 0.0f, 0.0f, 0.0f);
 
     for (int step = 0; step < maxSteps; step++) {
         float px = state.x.x;
@@ -255,6 +272,14 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                 }
             }
         }
+        // Advance the deviation vector over this step (velocity Verlet on the
+        // full-Riemann Jacobi acceleration), coefficients at the step start.
+        if (beamsEnabled && !isWarp) {
+            float4 accel = GeodesicDeviationAccelFullRiemann(state.x, state.u, xi, M, a, Q, Lambda);
+            xi += xiDot * dt + accel * (0.5f * dt * dt);
+            xiDot += accel * dt;
+        }
+
         state = next;
     }
 
@@ -269,9 +294,18 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         result += transmittance * bg;
     }
 
+    // Beam expansion: the transverse deviation magnitude relative to its seed. The
+    // alpha channel carries it when ray bundles are on (a parity handle against
+    // the CPU bundle); otherwise alpha stays 1, so the default render is unchanged.
+    float alpha = 1.0f;
+    if (beamsEnabled) {
+        float xiMag = length(float3(xi.y, xi.z, xi.w));
+        alpha = xiMag / kBeamSeed;
+    }
+
     int pixel = ty * tileWidth + tx;
     radiance[pixel * 4 + 0] = result.x;
     radiance[pixel * 4 + 1] = result.y;
     radiance[pixel * 4 + 2] = result.z;
-    radiance[pixel * 4 + 3] = 1.0f;
+    radiance[pixel * 4 + 3] = alpha;
 }

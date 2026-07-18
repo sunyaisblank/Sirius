@@ -177,6 +177,11 @@ void RenderSession::Initialise() {
         camConfig.fov = config_.cameraFOV;
         camConfig.width = config_.width;
         camConfig.height = config_.height;
+        // Camera worldline aberration (P5): beta components in the local
+        // ray-component frame. Zero keeps every ray unaberrated (byte-pin).
+        camConfig.beta_x = config_.cameraBetaForward;
+        camConfig.beta_y = config_.cameraBetaUp;
+        camConfig.beta_z = config_.cameraBetaRight;
         camera_ = std::make_unique<PinholeCamera>(camConfig);
         std::cout << "  Observer:   r=" << camConfig.r
                   << "M, theta=" << (camConfig.theta * 180.0 / math::kPi) << " deg" << std::endl;
@@ -205,6 +210,20 @@ void RenderSession::Initialise() {
         tracerConfig.disk_inner = static_cast<float>(rISCO * config_.blackHoleMass);
         tracerConfig.disk_outer = static_cast<float>(20.0 * config_.blackHoleMass);
         tracerConfig.enable_disk = diskCapable;
+
+        // Doppler beaming toggle (P4); true keeps the full physics and the
+        // pinned render byte-for-byte.
+        tracerConfig.doppler_beaming = config_.dopplerBeaming;
+
+        // Ray bundles (P2/P3). Enabled for the beam footprint the filtered star
+        // field consumes; the pupil (point-source) mode gives the celestial-sphere
+        // footprint. Default off leaves the point-sampled path and the pinned
+        // render untouched.
+        pixel_angular_size_ =
+            (config_.cameraFOV * math::kPi / 180.0) / std::max(1, config_.height);
+        tracerConfig.enable_ray_bundles = config_.rayBundles;
+        tracerConfig.bundle_point_source = true;
+        tracerConfig.bundle_angular_size = static_cast<float>(pixel_angular_size_);
 
         // Volumetric disk configuration.
         tracerConfig.enable_volumetric = config_.enableVolumetricDisk;
@@ -302,6 +321,18 @@ void RenderSession::Initialise() {
             std::cerr << "[Session] Warning: Could not load starfield texture from any path"
                       << std::endl;
             std::cerr << "[Session] Background will render as faint grey" << std::endl;
+        }
+
+        // Filtered point-source star field (P3): build the deterministic catalogue
+        // once. The beam footprint (ray bundles on) or a pinhole sigma (bundles
+        // off) filters it per escaping ray.
+        if (config_.pointStarfield) {
+            core::StarfieldConfig scfg = config_.starfieldConfig;
+            scfg.star_count = std::max(scfg.star_count, 100000u);  // P3 catalogue floor.
+            star_generator_ = std::make_unique<core::StarfieldGenerator>(scfg);
+            star_catalogue_ = star_generator_->GenerateCatalogue();
+            std::cout << "[Session] Point-source star field: " << star_catalogue_.size()
+                      << " stars, beams " << (config_.rayBundles ? "on" : "off") << std::endl;
         }
 
         // GPU acceleration removed: the legacy OptiX backend init and starfield
@@ -490,7 +521,11 @@ RenderSession::PixelResult RenderSession::ShadeDiskHit(const TraceResult& result
 
 RenderSession::PixelResult RenderSession::ShadeEscaped(const TraceResult& result) const {
     PixelResult px;
-    SampleStarfield(result.final_direction, px.r, px.g, px.b);
+    if (config_.pointStarfield && !star_catalogue_.empty()) {
+        SampleStarfieldPoints(result, px.r, px.g, px.b);
+    } else {
+        SampleStarfield(result.final_direction, px.r, px.g, px.b);
+    }
 
     if (result.magnification > 1.0f) {
         px.r *= result.magnification;
@@ -545,7 +580,7 @@ RenderSession::PixelResult RenderSession::ShadePixel(int px_coord, int py_coord,
             float u = (sx + 0.5f) / grid_size;
             float v = (sy + 0.5f) / grid_size;
 
-            CameraRay camRay = camera_->GenerateRay(px_coord, py_coord, u, v);
+            CameraRay camRay = camera_->GenerateRayAberrated(px_coord, py_coord, u, v);
             TraceResult traceResult = tracer->Trace(camRay);
 
             float sr = 0.0f, sg = 0.0f, sb = 0.0f;
@@ -776,6 +811,33 @@ void RenderSession::SampleStarfield(const Vec4& direction, float& r, float& g, f
     r = c00[0] * w00 + c10[0] * w10 + c01[0] * w01 + c11[0] * w11;
     g = c00[1] * w00 + c10[1] * w10 + c01[1] * w01 + c11[1] * w11;
     b = c00[2] * w00 + c10[2] * w10 + c01[2] * w01 + c11[2] * w11;
+}
+
+// =============================================================================
+// Filtered point-source star field sampling (P3).
+// =============================================================================
+void RenderSession::SampleStarfieldPoints(const TraceResult& result, float& r, float& g,
+                                          float& b) const {
+    // Beam footprint radius on the sky. With ray bundles the tracer supplies the
+    // lensed footprint; a pinhole (bundles off) samples at a fraction of the pixel
+    // angular size, so a star pops in and out as the camera rotates (the flicker
+    // the beam filter removes). The footprint is floored at the pixel size so a
+    // pixel always integrates at least its own solid angle.
+    constexpr float kPinholeFraction = 0.3f;  // Pinhole sigma as a fraction of a pixel.
+    float pixel = static_cast<float>(pixel_angular_size_);
+    float sigma;
+    if (config_.rayBundles && result.beam.valid) {
+        float footprint = std::sqrt(std::max(0.0f, result.beam.footprint_major) *
+                                    std::max(0.0f, result.beam.footprint_minor));
+        sigma = std::max(footprint, pixel);
+    } else {
+        sigma = kPinholeFraction * pixel;
+    }
+
+    const auto& d = result.final_direction;
+    star_generator_->AccumulateThroughBeam(static_cast<float>(d(1)), static_cast<float>(d(2)),
+                                           static_cast<float>(d(3)), sigma, star_catalogue_, r, g,
+                                           b);
 }
 
 // =============================================================================
@@ -1096,6 +1158,9 @@ SessionConfig SessionConfig::FromSiriusConfig(const SiriusConfig& config) {
     sc.cosmologicalConstant = config.metric.lambda;
     sc.temperatureModel = config.metric.temperatureModel;
     sc.diskTemperatureScale = config.metric.diskTemperature;
+    sc.dopplerBeaming = config.dopplerBeaming;
+    sc.pointStarfield = config.pointStarfield;
+    sc.rayBundles = config.rayBundles;
     sc.throatRadius = config.metric.throatRadius;
     sc.warpVelocity = config.metric.warpVelocity;
     sc.bubbleRadius = config.metric.bubbleRadius;
@@ -1103,6 +1168,9 @@ SessionConfig SessionConfig::FromSiriusConfig(const SiriusConfig& config) {
     sc.observerDistance = config.observer.distance;
     sc.observerInclination = config.observer.inclination * math::kPi / 180.0;
     sc.cameraFOV = static_cast<float>(config.observer.fov);
+    sc.cameraBetaForward = config.observer.cameraBetaForward;
+    sc.cameraBetaUp = config.observer.cameraBetaUp;
+    sc.cameraBetaRight = config.observer.cameraBetaRight;
 
     // Post-processing.
     sc.enableBloom = config.postprocess.enableBloom;

@@ -93,6 +93,30 @@ struct TraceResult {
     float optical_depth = 0.0f;
     float volumetric_path_length = 0.0f;
     bool volumetric_hit = false;
+
+    // Ray-bundle footprint (P2): the beam ellipse the geodesic-deviation solution
+    // produces at escape or disk-hit, DNGR's distinguishing technique (James et
+    // al. 2015, CQG 32 065001, section 3 and appendix B). Populated only when the
+    // tracer runs with ray bundles enabled; otherwise valid stays false and the
+    // point-sampled behaviour is unchanged. Angles are in the same units as the
+    // initial bundle angular size.
+    struct Beam {
+        bool valid = false;
+        float semi_major = 0.0f;   // Ellipse semi-major axis.
+        float semi_minor = 0.0f;   // Ellipse semi-minor axis.
+        float orientation = 0.0f;  // Position angle of the major axis [rad].
+        float area_ratio = 1.0f;   // Final transverse area / initial area.
+        float magnification = 1.0f;  // Initial / final area (oracle 1/|det J|).
+        float transverse_area = 0.0f;  // Final transverse area (angular units^2).
+        // Angular footprint on the celestial sphere (radians), the DNGR beam that
+        // filters the star field (P3): the transverse extent divided by the
+        // affine length converges to the ray-direction spread as the ray escapes.
+        // Meaningful when the pupil (point-source) bundle mode is used.
+        float footprint_major = 0.0f;
+        float footprint_minor = 0.0f;
+    };
+
+    Beam beam;
 };
 
 // Termination, disk, and integration parameters for the tracer.
@@ -108,6 +132,31 @@ struct TracerConfig {
     float disk_outer = 20.0f;
     float disk_thickness = 0.01f;
     float disk_temperature_inner = 1.0f;
+
+    // Doppler beaming toggle (P4). When true (default, full physics) the disk
+    // g-factor carries the orbital Doppler asymmetry; when false the orbital
+    // velocity is treated as zero for the brightness/colour factor while the
+    // gravitational redshift is retained, mirroring the Interstellar artistic
+    // choice (James et al. 2015, CQG 32 065001, section 5). True reproduces the
+    // pinned render exactly. Reference: MTW section 22.3 (relativistic beaming).
+    bool doppler_beaming = true;
+
+    // Ray bundles (P2). When true the tracer propagates two geodesic-deviation
+    // vectors alongside the central ray and reports the beam ellipse at
+    // termination. Default false leaves the point-sampled path untouched (the
+    // pinned render). bundle_angular_size is the initial half-extent of the
+    // parallel bundle in the transverse plane (radians for a pixel footprint);
+    // it cancels in the magnification and only sets the ellipse's absolute scale.
+    bool enable_ray_bundles = false;
+    float bundle_angular_size = 1.0e-3f;
+
+    // Bundle initial condition. False (default) is a parallel bundle (identity
+    // Jacobian, xi = orthonormal transverse pair, D xi / d lambda = 0), matching
+    // the oracle's BeamStateD and giving the lensing magnification. True is a
+    // pupil (point-source) bundle (xi = 0, D xi / d lambda = orthonormal), whose
+    // transverse extent divided by affine length is the celestial-sphere
+    // footprint the star filter needs (P3).
+    bool bundle_point_source = false;
 
     // Volumetric disk.
     bool enable_volumetric = false;
@@ -152,6 +201,20 @@ class GeodesicTracer {
     const TracerConfig& GetConfig() const { return config_; }
     void SetMetric(sirius::core::IMetric* metric) { metric_ = metric; }
 
+    // Geodesic-deviation (tidal) acceleration a^mu = -R^mu_nu_rho_sigma k^nu
+    // xi^rho k^sigma in the tracer's Kerr-Schild Cartesian chart (P2). Exposed so
+    // the beam physics can be validated against the oracle's analytic
+    // Boyer-Lindquist Riemann tensor at a matched event: the contraction is a
+    // genuine vector, so its metric-invariant magnitude is chart-independent.
+    sirius::core::Vec4 TidalAcceleration(const sirius::core::Vec4& pos, const sirius::core::Vec4& k,
+                                         const sirius::core::Vec4& xi);
+
+    // Kretschmann scalar K = R_mu_nu_rho_sig R^mu_nu_rho_sig from the same
+    // Cartesian Riemann the bundle rides on. A coordinate invariant, so it equals
+    // the analytic value (48 M^2 / r^6 for Schwarzschild), which pins the
+    // finite-differenced curvature against a chart-independent ground truth.
+    double KretschmannScalar(const sirius::core::Vec4& pos);
+
   private:
     sirius::core::IMetric* metric_;
     TracerConfig config_;
@@ -195,6 +258,42 @@ class GeodesicTracer {
     void AccumulateVolumetricEmission(const sirius::core::Lightray& ray,
                                       const sirius::core::Vec4& entry_pos,
                                       const sirius::core::Vec4& exit_pos, TraceResult& result);
+
+    // --- Ray-bundle (geodesic deviation) machinery (P2) ----------------------
+    // A parallel bundle carried alongside the central ray: two deviation vectors
+    // xi and their covariant derivatives V = D xi / d lambda, integrated by the
+    // Jacobi equation D^2 xi^mu / d lambda^2 = -R^mu_nu_rho_sigma k^nu xi^rho
+    // k^sigma (MTW eq 11.10; James et al. 2015 appendix B).
+    struct RayBundle {
+        sirius::core::Vec4 xi[2];  // Deviation vectors.
+        sirius::core::Vec4 V[2];   // Covariant derivatives D xi / d lambda.
+    };
+
+    // Christoffel Gamma^mu_nu_rho in the tracer's Kerr-Schild Cartesian chart,
+    // from the metric's analytic derivatives (single authority, no re-derivation).
+    void ComputeChristoffelCart(const sirius::core::Vec4& pos, double Gamma[4][4][4]);
+
+    // Riemann R^mu_nu_rho_sigma by central differences of the Christoffels in the
+    // same chart the render integrates in, so k, xi, and R never mix charts
+    // (mirrors kernels/gr_deviation.slang GetRiemannTensorCart).
+    void ComputeRiemannCart(const sirius::core::Vec4& pos, double R[4][4][4][4]);
+
+    // Initialise a parallel bundle at the ray start: xi_0, xi_1 an orthonormal
+    // transverse pair scaled by the angular size, V = 0 (identity Jacobian).
+    void InitBundle(const sirius::core::Vec4& k, RayBundle& bundle) const;
+
+    // Advance the bundle by one affine step d_lambda, freezing Gamma and R at the
+    // step's start point (they vary slowly over one adaptive step); RK4 on the
+    // linear deviation system.
+    void StepBundle(const sirius::core::Vec4& pos, const sirius::core::Vec4& k, double d_lambda,
+                    RayBundle& bundle);
+
+    // Extract the beam ellipse (semi-axes, orientation, magnification) from the
+    // final bundle, projected onto the plane transverse to the ray direction; the
+    // affine length lambda converts the transverse extent to the angular sky
+    // footprint for the pupil bundle.
+    void FinaliseBundle(const RayBundle& bundle, const sirius::core::Vec4& k, double lambda,
+                        TraceResult::Beam& out) const;
 };
 
 // ---- Inline implementations -------------------------------------------------

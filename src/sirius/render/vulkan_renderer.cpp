@@ -267,6 +267,11 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
     params[40] = scene.warp_vs;
     params[41] = scene.warp_sigma;
     params[42] = scene.warp_R;
+
+    // Ray bundles (P2): propagate a deviation vector in the trace kernel and carry
+    // the beam expansion in the radiance alpha channel. Off by default so the
+    // parity and pinned renders are unchanged.
+    params[43] = config.rayBundles ? 1.0f : 0.0f;
 }
 
 }  // namespace

@@ -271,6 +271,14 @@ struct ObserverConfig {
     double inclination = 90.0;  // Inclination in degrees.
     double azimuth = 0.0;       // Azimuthal angle in degrees.
     double fov = 60.0;          // Field of view in degrees.
+
+    // Camera four-velocity (P5): spatial beta in the local ray-component frame
+    // (index 1 = forward/view axis). |beta| < 1. Zero is a static camera and
+    // leaves generated rays unaberrated. Not plumbed through the JSON codec (an
+    // app/config concern); set on the command line via --camera-beta.
+    double cameraBetaForward = 0.0;  // beta along the view axis.
+    double cameraBetaUp = 0.0;       // beta along the image-up axis.
+    double cameraBetaRight = 0.0;    // beta along the image-right axis.
 };
 
 // Post-processing settings (display path).
@@ -320,6 +328,19 @@ struct SiriusConfig {
     BackendConfig backend;
     VolumetricConfig volumetric;
     FilmSimConfig film;
+
+    // Disk Doppler beaming toggle (P4): true is full physics and the pinned
+    // render; false suppresses the disk brightness asymmetry. CLI-only surface
+    // (--doppler-beaming); not plumbed through the JSON codec (app/config scope).
+    bool dopplerBeaming = true;
+
+    // Filtered point-source star field (P3): true renders stars as beam-filtered
+    // points instead of the equirectangular texture. CLI-only (--starfield point).
+    bool pointStarfield = false;
+
+    // Ray bundles (P2): propagate geodesic deviation and derive per-pixel beam
+    // footprints. CLI-only (--beams). Default off keeps the pinned render.
+    bool rayBundles = false;
 
     static SiriusConfig defaults() { return SiriusConfig{}; }
 

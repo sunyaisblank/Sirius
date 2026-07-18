@@ -173,6 +173,16 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
     Vec4 prev_pos;
     for (int i = 0; i < 4; ++i) prev_pos(i) = ray.position(i);
 
+    // Ray-bundle state (P2); propagated only when enabled, so the point-sampled
+    // path is untouched. prev_vel and prev_pt carry the pre-step velocity and
+    // affine parameter the deviation step needs.
+    RayBundle bundle;
+    Vec4 prev_vel;
+    double prev_pt = 0.0;
+    if (config_.enable_ray_bundles) {
+        InitBundle(ray.velocity, bundle);
+    }
+
     // Spiral-orbit early termination: rays near b_crit orbit the photon sphere
     // many times; the higher-order images they produce are exponentially dim
     // (~exp(-pi n)), so they are cut once quasi-circular motion is detected.
@@ -182,6 +192,10 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
 
     for (int step = 0; step < config_.max_steps; ++step) {
         for (int i = 0; i < 4; ++i) prev_pos(i) = ray.position(i);
+        if (config_.enable_ray_bundles) {
+            prev_vel = ray.velocity;
+            prev_pt = static_cast<double>(ray.proper_time);
+        }
 
         bool success = Geodesic::IntegrateStepRk45(ray, metric_, config_.integrator);
         result.steps_taken++;
@@ -190,6 +204,15 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
             result.outcome = TraceResult::Outcome::MaxSteps;
             result.numerical_failure = HasInvalidState(ray);
             break;
+        }
+
+        // Advance the ray bundle over the affine step just taken, with the
+        // connection and curvature frozen at the step's start point.
+        if (config_.enable_ray_bundles) {
+            double d_lambda = static_cast<double>(ray.proper_time) - prev_pt;
+            if (d_lambda > 0.0) {
+                StepBundle(prev_pos, prev_vel, d_lambda, bundle);
+            }
         }
 
         double x = ray.position(1);
@@ -407,6 +430,12 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
         result.image_order = 0;
     }
 
+    // Beam ellipse from the propagated bundle (P2), evaluated against the ray's
+    // terminal direction. Only when ray bundles are enabled.
+    if (config_.enable_ray_bundles) {
+        FinaliseBundle(bundle, ray.velocity, static_cast<double>(ray.proper_time), result.beam);
+    }
+
     // No termination reached: result stays MaxSteps (default).
     return result;
 }
@@ -494,6 +523,13 @@ float GeodesicTracer::ComputeGFactor(float r, float phi, const Vec4& ray_vel) {
     double g = grav_factor / doppler_denom;
     g = std::clamp(g, 0.1, 5.0);
 
+    // Doppler suppression (P4): drop the orbital-velocity term, keeping only the
+    // gravitational redshift, so the disk's approaching/receding asymmetry
+    // collapses (the film's artistic choice).
+    if (!config_.doppler_beaming) {
+        return static_cast<float>(std::clamp(grav_factor, 0.1, 5.0));
+    }
+
     return static_cast<float>(g);
 }
 
@@ -554,6 +590,17 @@ void GeodesicTracer::ComputeGFactorWithComponents(float r, float phi, const Vec4
     g = std::clamp(g, 0.1, 5.0);
 
     result.redshift = static_cast<float>(g);
+
+    // Doppler suppression (P4): v_orb treated as zero for the brightness factor
+    // (gamma -> 1, v.n -> 0, so g -> gravitational redshift), while A and B are
+    // retained because they carry the disk-plane viewing geometry that limb
+    // darkening needs, not the Doppler asymmetry. The default (true) path above
+    // is untouched, so the pinned render does not move.
+    if (!config_.doppler_beaming) {
+        result.gfactor_gamma = 1.0f;
+        result.gfactor_v_orb = 0.0f;
+        result.redshift = static_cast<float>(std::clamp(grav_factor, 0.1, 5.0));
+    }
 }
 
 // =============================================================================
@@ -700,6 +747,306 @@ void GeodesicTracer::AccumulateVolumetricEmission([[maybe_unused]] const Lightra
     result.volumetric_emission[2] = static_cast<float>(accumulated_b);
     result.optical_depth = static_cast<float>(accumulated_tau);
     result.volumetric_hit = (accumulated_tau > 0.01);  // "Hit" threshold.
+}
+
+// =============================================================================
+// Ray-bundle (geodesic deviation) machinery (P2).
+// =============================================================================
+namespace {
+
+// Orthonormal transverse basis (e_a, e_b) spanning the plane perpendicular to a
+// unit direction n; e_b = n x e_a completes a right-handed triad. The reference
+// vector avoids the degenerate cross product when n is near the z axis.
+void TransverseBasis(double nx, double ny, double nz, double& ax, double& ay, double& az,
+                     double& bx, double& by, double& bz) {
+    double rx = 0.0, ry = 0.0, rz = 1.0;
+    if (std::abs(nz) > 0.9) {
+        rx = 1.0;
+        ry = 0.0;
+        rz = 0.0;
+    }
+    double rn = rx * nx + ry * ny + rz * nz;
+    ax = rx - rn * nx;
+    ay = ry - rn * ny;
+    az = rz - rn * nz;
+    double al = std::sqrt(ax * ax + ay * ay + az * az);
+    if (al < 1e-30) al = 1.0;
+    ax /= al;
+    ay /= al;
+    az /= al;
+    bx = ny * az - nz * ay;
+    by = nz * ax - nx * az;
+    bz = nx * ay - ny * ax;
+}
+
+}  // namespace
+
+void GeodesicTracer::ComputeChristoffelCart(const Vec4& pos, double Gamma[4][4][4]) {
+    Metric4d g;
+    Tensor<Dual<double>, 4, 4, 4> dg;
+    metric_->Evaluate(pos, g, dg);
+    ChristoffelSymbols cs = TensorOps::Christoffel(g, dg);
+    for (int mu = 0; mu < 4; ++mu)
+        for (int nu = 0; nu < 4; ++nu)
+            for (int rho = 0; rho < 4; ++rho) Gamma[mu][nu][rho] = cs.gamma(mu, nu, rho).real;
+}
+
+void GeodesicTracer::ComputeRiemannCart(const Vec4& pos, double R[4][4][4][4]) {
+    for (int mu = 0; mu < 4; ++mu)
+        for (int nu = 0; nu < 4; ++nu)
+            for (int rho = 0; rho < 4; ++rho)
+                for (int sig = 0; sig < 4; ++sig) R[mu][nu][rho][sig] = 0.0;
+
+    double Gamma[4][4][4];
+    ComputeChristoffelCart(pos, Gamma);
+
+    double rr = std::sqrt(pos(1) * pos(1) + pos(2) * pos(2) + pos(3) * pos(3));
+    // Finite-difference step scaled to the local length; the fixed relative size
+    // matches kernels/gr_deviation.slang so the two paths difference identically.
+    double eps = 1.0e-3 * std::max(1.0, rr);
+
+    // dGamma[rho][mu][nu][sig] = d_rho Gamma^mu_nu_sig; time derivatives vanish
+    // (the Kerr-Schild family is stationary).
+    double dGamma[4][4][4][4];
+    for (int mu = 0; mu < 4; ++mu)
+        for (int nu = 0; nu < 4; ++nu)
+            for (int sig = 0; sig < 4; ++sig) dGamma[0][mu][nu][sig] = 0.0;
+
+    for (int d = 1; d < 4; ++d) {
+        Vec4 xp = pos, xm = pos;
+        xp(d) += eps;
+        xm(d) -= eps;
+        double Gp[4][4][4], Gm[4][4][4];
+        ComputeChristoffelCart(xp, Gp);
+        ComputeChristoffelCart(xm, Gm);
+        for (int mu = 0; mu < 4; ++mu)
+            for (int nu = 0; nu < 4; ++nu)
+                for (int sig = 0; sig < 4; ++sig)
+                    dGamma[d][mu][nu][sig] = (Gp[mu][nu][sig] - Gm[mu][nu][sig]) / (2.0 * eps);
+    }
+
+    // R^mu_nu_rho_sig = d_rho Gamma^mu_nu_sig - d_sig Gamma^mu_nu_rho
+    //                 + Gamma^mu_lam_rho Gamma^lam_nu_sig
+    //                 - Gamma^mu_lam_sig Gamma^lam_nu_rho.
+    for (int mu = 0; mu < 4; ++mu)
+        for (int nu = 0; nu < 4; ++nu)
+            for (int rho = 0; rho < 4; ++rho)
+                for (int sig = 0; sig < 4; ++sig) {
+                    double val = dGamma[rho][mu][nu][sig] - dGamma[sig][mu][nu][rho];
+                    for (int lam = 0; lam < 4; ++lam)
+                        val += Gamma[mu][lam][rho] * Gamma[lam][nu][sig] -
+                               Gamma[mu][lam][sig] * Gamma[lam][nu][rho];
+                    R[mu][nu][rho][sig] = val;
+                }
+}
+
+void GeodesicTracer::InitBundle(const Vec4& k, RayBundle& bundle) const {
+    double nx = k(1), ny = k(2), nz = k(3);
+    double nlen = std::sqrt(nx * nx + ny * ny + nz * nz);
+    if (nlen < 1e-12) {
+        nx = 1.0;
+        ny = 0.0;
+        nz = 0.0;
+        nlen = 1.0;
+    }
+    nx /= nlen;
+    ny /= nlen;
+    nz /= nlen;
+
+    double ax, ay, az, bx, by, bz;
+    TransverseBasis(nx, ny, nz, ax, ay, az, bx, by, bz);
+
+    double eps = static_cast<double>(config_.bundle_angular_size);
+
+    bundle.xi[0] = Vec4();
+    bundle.xi[1] = Vec4();
+    bundle.V[0] = Vec4();
+    bundle.V[1] = Vec4();
+
+    if (config_.bundle_point_source) {
+        // Pupil bundle: the rays leave a point with an angular spread, so xi = 0
+        // and D xi / d lambda spans the transverse plane (P3 footprint).
+        bundle.V[0](1) = eps * ax;
+        bundle.V[0](2) = eps * ay;
+        bundle.V[0](3) = eps * az;
+        bundle.V[1](1) = eps * bx;
+        bundle.V[1](2) = eps * by;
+        bundle.V[1](3) = eps * bz;
+    } else {
+        // Parallel bundle (identity Jacobian, D xi / d lambda = 0), matching the
+        // oracle's BeamStateD::Initialise so the two are comparable (P2).
+        bundle.xi[0](1) = eps * ax;
+        bundle.xi[0](2) = eps * ay;
+        bundle.xi[0](3) = eps * az;
+        bundle.xi[1](1) = eps * bx;
+        bundle.xi[1](2) = eps * by;
+        bundle.xi[1](3) = eps * bz;
+    }
+}
+
+void GeodesicTracer::StepBundle(const Vec4& pos, const Vec4& k, double d_lambda,
+                                RayBundle& bundle) {
+    double Gamma[4][4][4];
+    double R[4][4][4][4];
+    ComputeChristoffelCart(pos, Gamma);
+    ComputeRiemannCart(pos, R);
+
+    // Deviation right-hand side, coefficients frozen over the step:
+    //   d xi^mu / d lambda = V^mu - Gamma^mu_ab k^a xi^b
+    //   d V^mu  / d lambda = -Gamma^mu_ab k^a V^b - R^mu_nu_rho_sig k^nu xi^rho k^sig
+    auto rhs = [&](const Vec4& xi, const Vec4& V, Vec4& dxi, Vec4& dV) {
+        for (int mu = 0; mu < 4; ++mu) {
+            double gk_xi = 0.0, gk_V = 0.0;
+            for (int a = 0; a < 4; ++a) {
+                double ka = k(a);
+                for (int b = 0; b < 4; ++b) {
+                    gk_xi += Gamma[mu][a][b] * ka * xi(b);
+                    gk_V += Gamma[mu][a][b] * ka * V(b);
+                }
+            }
+            double r_term = 0.0;
+            for (int nu = 0; nu < 4; ++nu)
+                for (int rho = 0; rho < 4; ++rho)
+                    for (int sig = 0; sig < 4; ++sig)
+                        r_term += R[mu][nu][rho][sig] * k(nu) * xi(rho) * k(sig);
+            dxi(mu) = V(mu) - gk_xi;
+            dV(mu) = -gk_V - r_term;
+        }
+    };
+
+    double h = d_lambda;
+    for (int i = 0; i < 2; ++i) {
+        Vec4 xi0 = bundle.xi[i];
+        Vec4 V0 = bundle.V[i];
+
+        Vec4 dxi1, dV1, dxi2, dV2, dxi3, dV3, dxi4, dV4;
+        rhs(xi0, V0, dxi1, dV1);
+        rhs(xi0 + dxi1 * (0.5 * h), V0 + dV1 * (0.5 * h), dxi2, dV2);
+        rhs(xi0 + dxi2 * (0.5 * h), V0 + dV2 * (0.5 * h), dxi3, dV3);
+        rhs(xi0 + dxi3 * h, V0 + dV3 * h, dxi4, dV4);
+
+        bundle.xi[i] = xi0 + (dxi1 + dxi2 * 2.0 + dxi3 * 2.0 + dxi4) * (h / 6.0);
+        bundle.V[i] = V0 + (dV1 + dV2 * 2.0 + dV3 * 2.0 + dV4) * (h / 6.0);
+    }
+}
+
+Vec4 GeodesicTracer::TidalAcceleration(const Vec4& pos, const Vec4& k, const Vec4& xi) {
+    double R[4][4][4][4];
+    ComputeRiemannCart(pos, R);
+    Vec4 accel;
+    for (int mu = 0; mu < 4; ++mu) {
+        double s = 0.0;
+        for (int nu = 0; nu < 4; ++nu)
+            for (int rho = 0; rho < 4; ++rho)
+                for (int sig = 0; sig < 4; ++sig)
+                    s += R[mu][nu][rho][sig] * k(nu) * xi(rho) * k(sig);
+        accel(mu) = -s;  // D^2 xi^mu / d lambda^2 = -R^mu_nu_rho_sig k^nu xi^rho k^sig.
+    }
+    return accel;
+}
+
+double GeodesicTracer::KretschmannScalar(const Vec4& pos) {
+    double R[4][4][4][4];
+    ComputeRiemannCart(pos, R);
+
+    Metric4d gm, gim;
+    Tensor<Dual<double>, 4, 4, 4> dg;
+    metric_->Evaluate(pos, gm, dg);
+    Metric4d gim_metric = metric_->InverseMetric(pos, gim) ? gim : TensorOps::Inverse(gm);
+
+    double g[4][4], gi[4][4];
+    for (int i = 0; i < 4; ++i)
+        for (int j = 0; j < 4; ++j) {
+            g[i][j] = gm(i, j).real;
+            gi[i][j] = gim_metric(i, j).real;
+        }
+
+    // Fully covariant R_mu_nu_rho_sig = g_mu_alpha R^alpha_nu_rho_sig.
+    double Rd[4][4][4][4];
+    for (int mu = 0; mu < 4; ++mu)
+        for (int nu = 0; nu < 4; ++nu)
+            for (int rho = 0; rho < 4; ++rho)
+                for (int sig = 0; sig < 4; ++sig) {
+                    double s = 0.0;
+                    for (int al = 0; al < 4; ++al) s += g[mu][al] * R[al][nu][rho][sig];
+                    Rd[mu][nu][rho][sig] = s;
+                }
+
+    // Fully contravariant R^mu_nu_rho_sig = g^nu_b g^rho_c g^sig_d R^mu_b_c_d.
+    double Ru[4][4][4][4];
+    for (int mu = 0; mu < 4; ++mu)
+        for (int nu = 0; nu < 4; ++nu)
+            for (int rho = 0; rho < 4; ++rho)
+                for (int sig = 0; sig < 4; ++sig) {
+                    double s = 0.0;
+                    for (int b = 0; b < 4; ++b)
+                        for (int c = 0; c < 4; ++c)
+                            for (int d = 0; d < 4; ++d)
+                                s += gi[nu][b] * gi[rho][c] * gi[sig][d] * R[mu][b][c][d];
+                    Ru[mu][nu][rho][sig] = s;
+                }
+
+    double K = 0.0;
+    for (int mu = 0; mu < 4; ++mu)
+        for (int nu = 0; nu < 4; ++nu)
+            for (int rho = 0; rho < 4; ++rho)
+                for (int sig = 0; sig < 4; ++sig) K += Rd[mu][nu][rho][sig] * Ru[mu][nu][rho][sig];
+    return K;
+}
+
+void GeodesicTracer::FinaliseBundle(const RayBundle& bundle, const Vec4& k, double lambda,
+                                    TraceResult::Beam& out) const {
+    double nx = k(1), ny = k(2), nz = k(3);
+    double nlen = std::sqrt(nx * nx + ny * ny + nz * nz);
+    if (nlen < 1e-12) {
+        nx = 1.0;
+        ny = 0.0;
+        nz = 0.0;
+        nlen = 1.0;
+    }
+    nx /= nlen;
+    ny /= nlen;
+    nz /= nlen;
+
+    double ex, ey, ez, fx, fy, fz;
+    TransverseBasis(nx, ny, nz, ex, ey, ez, fx, fy, fz);
+
+    // Project each deviation vector onto the transverse plane; the along-ray part
+    // is a longitudinal (gauge) displacement that does not change the beam
+    // cross-section. Columns of M are xi_0, xi_1 in the (e_a, e_b) basis.
+    double a = bundle.xi[0](1) * ex + bundle.xi[0](2) * ey + bundle.xi[0](3) * ez;  // xi0.e_a
+    double c = bundle.xi[0](1) * fx + bundle.xi[0](2) * fy + bundle.xi[0](3) * fz;  // xi0.e_b
+    double b = bundle.xi[1](1) * ex + bundle.xi[1](2) * ey + bundle.xi[1](3) * ez;  // xi1.e_a
+    double d = bundle.xi[1](1) * fx + bundle.xi[1](2) * fy + bundle.xi[1](3) * fz;  // xi1.e_b
+
+    double det = a * d - b * c;
+    double area = std::abs(det);
+    double eps = static_cast<double>(config_.bundle_angular_size);
+    double area0 = eps * eps;
+
+    out.transverse_area = static_cast<float>(area);
+    out.area_ratio = (area0 > 0.0) ? static_cast<float>(area / area0) : 0.0f;
+    out.magnification = (area > 1e-30) ? static_cast<float>(area0 / area) : 1.0e12f;
+
+    // Singular values of M give the ellipse semi-axes; the sum-of-squares
+    // discriminant form is the same one the oracle uses (BeamStateD::UpdateGeometry).
+    double p = a * a + b * b + c * c + d * d;
+    double disc = p * p - 4.0 * det * det;
+    if (disc < 0.0) disc = 0.0;
+    double s = std::sqrt(disc);
+    out.semi_major = static_cast<float>(std::sqrt(std::max(0.0, (p + s) / 2.0)));
+    out.semi_minor = static_cast<float>(std::sqrt(std::max(0.0, (p - s) / 2.0)));
+    double num = 2.0 * (a * b + c * d);
+    double den = a * a + b * b - c * c - d * d;
+    out.orientation = static_cast<float>(0.5 * std::atan2(num, den));
+
+    // Angular footprint on the sky: transverse extent per unit affine length. For
+    // the pupil bundle in flat space xi = (angular size) * lambda, so this returns
+    // the pixel angular size; lensing stretches it (P3).
+    double inv_lambda = (lambda > 1e-12) ? 1.0 / lambda : 0.0;
+    out.footprint_major = static_cast<float>(out.semi_major * inv_lambda);
+    out.footprint_minor = static_cast<float>(out.semi_minor * inv_lambda);
+    out.valid = true;
 }
 
 }  // namespace sirius::backend

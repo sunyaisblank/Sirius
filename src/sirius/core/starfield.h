@@ -117,6 +117,60 @@ class StarfieldGenerator {
         return stars;
     }
 
+    // Full deterministic catalogue for the filtered point-source star field (P3):
+    // exactly star_count entries on the celestial sphere with magnitudes and
+    // temperatures, no magnitude cull, so the catalogue size is guaranteed to meet
+    // the >= 10^5 gate. The fixed seed makes it reproducible frame to frame, which
+    // the anti-flicker measurement relies on.
+    std::vector<StarEntry> GenerateCatalogue() const {
+        std::vector<StarEntry> stars;
+        stars.reserve(config_.star_count);
+        std::mt19937 rng(config_.seed);
+        std::uniform_real_distribution<float> uniform(0.0f, 1.0f);
+        for (uint32_t i = 0; i < config_.star_count; ++i) {
+            stars.push_back(GenerateStar(rng, uniform));
+        }
+        return stars;
+    }
+
+    // Accumulate catalogue stars as point sources filtered through a beam of
+    // angular radius sigma (radians): each star's flux is weighted by a Gaussian
+    // footprint exp(-theta^2 / (2 sigma^2)), DNGR's anti-flicker approach (James
+    // et al. 2015, CQG 32 065001, section 3). A wide (lensed) beam gathers nearby
+    // stars smoothly as the camera moves; a pinhole (tiny sigma) samples them
+    // discontinuously, which is exactly the flicker the beam removes. dir_* is the
+    // escape direction (Cartesian celestial-sphere unit vector).
+    void AccumulateThroughBeam(float dir_x, float dir_y, float dir_z, float sigma,
+                               const std::vector<StarEntry>& stars, float& r, float& g,
+                               float& b) const {
+        r = g = b = 0.0f;
+        if (stars.empty() || sigma <= 0.0f) return;
+
+        float dlen = std::sqrt(dir_x * dir_x + dir_y * dir_y + dir_z * dir_z);
+        if (dlen < 1e-20f) return;
+        dir_x /= dlen;
+        dir_y /= dlen;
+        dir_z /= dlen;
+
+        // Stars beyond four sigma contribute nothing; the cosine test skips them
+        // before the transcendental acos.
+        float cos_cut = std::cos(std::min(4.0f * sigma, static_cast<float>(M_PI)));
+        float inv_two_sigma2 = 1.0f / (2.0f * sigma * sigma);
+
+        for (const auto& s : stars) {
+            float ca = dir_x * s.direction_x + dir_y * s.direction_y + dir_z * s.direction_z;
+            if (ca < cos_cut) continue;
+            float angle = std::acos(std::clamp(ca, -1.0f, 1.0f));
+            float w = std::exp(-angle * angle * inv_two_sigma2);
+            float intensity = s.Intensity() * w * config_.brightness_scale;
+            float sr, sg, sb;
+            s.ComputeColor(sr, sg, sb);
+            r += sr * intensity;
+            g += sg * intensity;
+            b += sb * intensity;
+        }
+    }
+
     // Accumulate starfield colour along view direction (dir_*) with a parallax
     // offset from the camera position (cam_*_pc) into (r, g, b).
     void SampleStarfield(float dir_x, float dir_y, float dir_z, float cam_x_pc, float cam_y_pc,
@@ -167,7 +221,8 @@ class StarfieldGenerator {
 
   private:
     // Generate a single star with realistic direction, distance, and colour.
-    StarEntry GenerateStar(std::mt19937& rng, std::uniform_real_distribution<float>& uniform) {
+    StarEntry GenerateStar(std::mt19937& rng,
+                           std::uniform_real_distribution<float>& uniform) const {
         StarEntry star;
 
         // Direction: uniform on sphere
