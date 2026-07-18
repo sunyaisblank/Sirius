@@ -4,7 +4,11 @@
 # Validates spectral emission pipeline, exotic metrics, and cinematic presets
 # =============================================================================
 
-SIRIUS="./bin/Sirius.Build/bin/Sirius"
+# Prefer the preset build; fall back to any built sirius executable.
+SIRIUS="./bin/linux-gcc/src/sirius/app/sirius"
+if [ ! -f "$SIRIUS" ]; then
+    SIRIUS=$(find bin -name sirius -type f -path '*app*' 2>/dev/null | head -1)
+fi
 
 if [ ! -f "$SIRIUS" ]; then
     echo "Error: Sirius binary not found at $SIRIUS"

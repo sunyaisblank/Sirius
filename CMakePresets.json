@@ -1,175 +1,103 @@
 {
     "version": 6,
-    "cmakeMinimumRequired": {
-        "major": 3,
-        "minor": 21,
-        "patch": 0
-    },
+    "cmakeMinimumRequired": { "major": 3, "minor": 28, "patch": 0 },
     "configurePresets": [
         {
             "name": "base",
             "hidden": true,
             "binaryDir": "${sourceDir}/bin/${presetName}",
             "cacheVariables": {
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
-            }
-        },
-        {
-            "name": "linux-debug",
-            "displayName": "Linux Debug",
-            "description": "Linux development build with debug symbols",
-            "inherits": "base",
-            "generator": "Ninja",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "BUILD_TESTS": "ON"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Linux"
             }
         },
         {
-            "name": "linux-release",
-            "displayName": "Linux Release",
-            "description": "Linux optimized release build",
+            "name": "linux-gcc",
+            "displayName": "Linux / WSL2, GCC 14, Release",
             "inherits": "base",
             "generator": "Ninja",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "BUILD_TESTS": "ON"
+                "CMAKE_C_COMPILER": "gcc-14",
+                "CMAKE_CXX_COMPILER": "g++-14"
             },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Linux"
-            }
+            "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+        },
+        {
+            "name": "linux-gcc-debug",
+            "displayName": "Linux / WSL2, GCC 14, Debug",
+            "inherits": "linux-gcc",
+            "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+        },
+        {
+            "name": "linux-clang",
+            "displayName": "Linux / WSL2, Clang 21, Release",
+            "inherits": "base",
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_C_COMPILER": "clang-21",
+                "CMAKE_CXX_COMPILER": "clang++-21"
+            },
+            "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+        },
+        {
+            "name": "linux-clang-debug",
+            "displayName": "Linux / WSL2, Clang 21, Debug",
+            "inherits": "linux-clang",
+            "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+        },
+        {
+            "name": "windows-msvc",
+            "displayName": "Windows, MSVC 2022 17.10+, x64",
+            "inherits": "base",
+            "generator": "Visual Studio 17 2022",
+            "architecture": "x64",
+            "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+        },
+        {
+            "name": "macos",
+            "displayName": "macOS, AppleClang (Xcode 16+), Release",
+            "inherits": "base",
+            "generator": "Ninja",
+            "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" },
+            "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Darwin" }
         },
         {
             "name": "linux-ci",
-            "displayName": "Linux CI",
-            "description": "Linux CI build without OptiX",
-            "inherits": "base",
-            "generator": "Ninja",
+            "displayName": "CI: strict gate build",
+            "inherits": "linux-gcc",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "BUILD_TESTS": "ON",
-                "SIRIUS_MANDATORY_TESTS": "ON"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Linux"
-            }
-        },
-        {
-            "name": "windows-debug",
-            "displayName": "Windows Debug",
-            "description": "Windows development build with debug symbols",
-            "inherits": "base",
-            "generator": "Visual Studio 17 2022",
-            "architecture": {
-                "value": "x64",
-                "strategy": "set"
-            },
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "BUILD_TESTS": "ON"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Windows"
-            }
-        },
-        {
-            "name": "windows-release",
-            "displayName": "Windows Release",
-            "description": "Windows optimized release build",
-            "inherits": "base",
-            "generator": "Visual Studio 17 2022",
-            "architecture": {
-                "value": "x64",
-                "strategy": "set"
-            },
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "BUILD_TESTS": "ON"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Windows"
+                "SIRIUS_MANDATORY_TESTS": "ON",
+                "SIRIUS_WERROR": "ON"
             }
         }
     ],
     "buildPresets": [
-        {
-            "name": "linux-debug",
-            "configurePreset": "linux-debug"
-        },
-        {
-            "name": "linux-release",
-            "configurePreset": "linux-release"
-        },
-        {
-            "name": "linux-ci",
-            "configurePreset": "linux-ci"
-        },
-        {
-            "name": "windows-debug",
-            "configurePreset": "windows-debug",
-            "configuration": "Debug"
-        },
-        {
-            "name": "windows-release",
-            "configurePreset": "windows-release",
-            "configuration": "Release"
-        }
+        { "name": "linux-gcc", "configurePreset": "linux-gcc" },
+        { "name": "linux-gcc-debug", "configurePreset": "linux-gcc-debug" },
+        { "name": "linux-clang", "configurePreset": "linux-clang" },
+        { "name": "linux-clang-debug", "configurePreset": "linux-clang-debug" },
+        { "name": "windows-msvc", "configurePreset": "windows-msvc", "configuration": "Release" },
+        { "name": "macos", "configurePreset": "macos" },
+        { "name": "linux-ci", "configurePreset": "linux-ci" }
     ],
     "testPresets": [
         {
-            "name": "linux-debug",
-            "configurePreset": "linux-debug",
-            "output": {
-                "outputOnFailure": true
-            }
+            "name": "linux-gcc",
+            "configurePreset": "linux-gcc",
+            "output": { "outputOnFailure": true }
         },
         {
-            "name": "linux-release",
-            "configurePreset": "linux-release",
-            "output": {
-                "outputOnFailure": true
-            }
+            "name": "linux-clang",
+            "configurePreset": "linux-clang",
+            "output": { "outputOnFailure": true }
         },
         {
             "name": "linux-ci",
             "configurePreset": "linux-ci",
-            "output": {
-                "outputOnFailure": true
-            },
-            "filter": {
-                "include": {
-                    "label": "Mandatory"
-                }
-            }
-        },
-        {
-            "name": "windows-debug",
-            "configurePreset": "windows-debug",
-            "configuration": "Debug",
-            "output": {
-                "outputOnFailure": true
-            }
-        },
-        {
-            "name": "windows-release",
-            "configurePreset": "windows-release",
-            "configuration": "Release",
-            "output": {
-                "outputOnFailure": true
-            }
+            "output": { "outputOnFailure": true },
+            "execution": { "stopOnFailure": false }
         }
     ]
 }

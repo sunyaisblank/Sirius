@@ -1,0 +1,110 @@
+# Sirius Rebuild Specification
+
+This document is the mandate and target-state specification for the ground-up rebuild of Sirius. It follows the engagement structure of the Repository Remediation and Refactoring Specification (mandate, locked decisions, guardrails, baseline identity, phased execution behind verification gates) and it defines, in measurable terms, what parity with the Double Negative Gravitational Renderer means and what exceeding it requires. Everything downstream, the style guide, the architecture design, the build system, and the test estate, derives its authority from this document.
+
+## 1. Mandate
+
+### 1.1 Intent
+
+Rebuild Sirius from the ground up as a C++26 codebase whose rendered output matches or exceeds the physical fidelity of DNGR, the renderer DNEG and Kip Thorne built for the film Interstellar, while running on hardware DNGR never targeted: consumer GPUs of every vendor, integrated graphics with a 2 GB memory budget, and bare CPUs, across Windows, Linux, and WSL2.
+
+### 1.2 Engagement classification
+
+Architectural overhaul, entered deliberately by owner direction rather than earned by a diagnostic matrix. The July 2026 structural remediation (commits `58f96a2..1cc9e2a`) already collapsed the system to single authorities and verified it against a 757-test gate; this engagement builds on that verified state rather than on an unaudited one. Per the specification's Profile O, the overhaul decomposes into independently gated programmes, listed in section 6.
+
+### 1.3 Locked owner decisions
+
+1. The rebuild targets C++26. Where the toolchain or third-party ecosystem cannot yet support a C++26 construct, C++23 is the accepted floor, and every such fallback sits behind a feature-test macro so the code upgrades itself as toolchains mature.
+2. The style guide combines the Google C++ Style Guide and the C++ Core Guidelines with rules for C++26 features, prioritising compile-time safety. It lives in `docs/STYLE.md`.
+3. The renderer is hardware-agnostic through multiple backends, in the manner of Blender Cycles, rather than pinned to one vendor's API. NVIDIA-exclusive design is explicitly rejected.
+4. AMD Radeon 780M-class integrated graphics with 2 GB of budget is a supported render target, not merely a supported install target.
+5. Windows, Linux, and WSL2 are first-class platforms. macOS is a supported build target through open standards (MoltenVK), validated by compilation and CI only, since no Apple hardware is available to this engagement.
+6. Existing open-source libraries are preferred over reimplementation wherever they fit.
+
+### 1.4 Decisions taken by the agent under the mandate
+
+These follow Prompt.md section 15: determinations the evidence supports, recorded rather than deferred.
+
+1. Slang is the single source language for GPU kernels. One kernel codebase compiles to SPIR-V for Vulkan today and to CUDA, Metal, and HLSL when native adapters justify themselves. This kills the CPU/GPU physics-drift failure mode structurally: the July remediation found the CUDA kernel carrying its own inlined, drifted copies of the metric physics, and no discipline short of a single source fixes that permanently.
+2. Vulkan compute is the primary GPU backend, because it is the one API that reaches AMD, Intel, and NVIDIA silicon on Windows and Linux, reaches Apple silicon through MoltenVK, and reaches WSL2 through Dozen or Lavapipe. Vendor-native adapters are optional accelerations behind the same seam, never requirements.
+3. The CUDA/OptiX backend is retired. Geodesic rendering intersects analytic surfaces, not triangle meshes, so OptiX's ray-tracing hardware acceleration structure buys nothing here; NVIDIA hardware is served by the Vulkan backend and, later, by Slang's CUDA emission if profiling justifies it.
+4. Source files take descriptive snake_case names. The `[Domain][Category][Sequence][Variant]` codename scheme documented in the pre-rebuild README is superseded by the owner's adoption of a Google-style base; `docs/ARCHITECTURE.md` carries the old-to-new mapping table for traceability to July's evidence ledger and project memory.
+5. The test estate is re-founded with the rebuild. Physics gates carry over with their tolerances intact (conservation drift, oracle agreement, exact Kerr-Schild identities); raw test counts do not, and the new baseline is recorded when the port completes.
+6. The double-precision Boyer-Lindquist oracle stack survives the rebuild unchanged in role: deliberately off the render path, the standard the live path is tested against.
+
+### 1.5 Out of scope
+
+- Distributed or farm rendering. DNGR ran on a render farm; Sirius targets single machines, and that difference is a design constraint, not a gap.
+- GRMHD-driven disks (imported simulation data). The disk models are analytic.
+- ~~Flipping any behaviour flag that gates GPU auto-selection before the parity suites pass on real hardware.~~ Superseded by owner decision, 2026-07-18: go-live executed with the parity suites green on Lavapipe (software Vulkan; CPU/Vulkan shadow-fraction gap ~1e-3, background luminance parity ~5e-6 mean); physical-GPU validation runs via scripts/validate-hardware.sh when silicon is available, and `--cpu` remains the pinned reference path.
+- Publishing, packaging for distribution channels, or repository hosting changes.
+
+### 1.6 Guardrails
+
+- All work accumulates on the `rebuild/dngr-parity` branch; `main` holds the verified July state untouched until the final gate passes.
+- The pre-rebuild render outputs in `renders/` are reference tapes. They are read-only evidence for image-comparison gates and are never regenerated in place.
+- The oracle stack and the single-authority seams (metric registry, tolerance constants, ISCO, capture surfaces, transfer encodes) survive the port; a change that would fork one of them halts for redesign.
+- Every stage lands behind the strict-build and test gates of section 7; behaviour-preserving stages additionally pass image-identity probes against the reference tapes.
+
+### 1.7 Baseline identity
+
+- Repository HEAD at engagement start: `1cc9e2a` on `main`, working tree clean.
+- Test estate: 757 tests registered, 756 enabled, 100 per cent passing in 12.6 seconds; 436 labelled Mandatory; one disabled by design (`GeodesicPathTests.PhotonSphereRadius`); one self-skipping without CUDA.
+- Build: C++17, CMake 3.28.3, GCC 13.3 default; CUDA kernel present but uncompiled (no nvcc on this machine).
+- Toolchain installed for the rebuild: GCC 14.2, Clang 21.1.8, Ninja 1.11.1, Slang 2026.12.0.1 at `/opt/slang`, Mesa 25.2.8 with Lavapipe exposing Vulkan 1.4, glslang and SPIR-V tools.
+- C++26 feature surface measured on this toolchain: pack indexing, deducing this, placeholder variables, user-message static_assert, and `= delete("reason")` are usable under `-std=c++2c` on both compilers; P2900 contracts exist only as GCC's experimental attribute-syntax `-fcontracts`; P2996 reflection is absent from both. Section 5 states the policy this implies.
+
+## 2. The reference standard: DNGR
+
+DNGR (James, von Tunzelmann, Franklin and Thorne 2015, Classical and Quantum Gravity 32, 065001) is the fidelity bar because it is the best-documented cinematic gravitational renderer: it produced the Gargantua imagery in Interstellar at IMAX resolution and yielded two physics papers. Its defining technique separates it from every per-pixel ray tracer, including present-day Sirius: instead of tracing one ray per sample, DNGR propagates a ray bundle, the central null geodesic plus the geodesic deviation equation governing an elliptical cross-section around it. The image of a pixel on the celestial sphere is then a filtered ellipse rather than a point, which eliminates the star-field flicker and aliasing that made point sampling unusable on a cinema screen, at IMAX's roughly 23 million pixels per frame.
+
+The capabilities that constitute DNGR, extracted from the paper, are: Kerr spacetime with spin to the Thorne limit; camera on an arbitrary timelike worldline with relativistic aberration; ray-bundle propagation by geodesic deviation; a lensed accretion disk in both infinitely thin and volumetric forms; gravitational and Doppler frequency shifts applied to disk emission, with the Doppler brightness asymmetry artistically suppressible (the film suppressed it; the physics mode keeps it); a star field sampled through the beam footprint; and high-dynamic-range output into a film compositing pipeline.
+
+## 3. Parity criteria
+
+Each criterion is a testable postcondition. Parity is claimed only when every P-item passes its stated gate on this machine, CPU path and Vulkan-on-Lavapipe path both.
+
+- P1, geodesic accuracy. On the double-precision oracle, energy, axial angular momentum, and Carter constant drift below one part in 10^10 over a ray's full integration in Kerr at spin 0.998; on the live path, below the existing Mandatory tolerance of one part in 10^4. The Kerr shadow boundary at 1080p matches the Bardeen analytic curve to sub-pixel displacement.
+- P2, ray bundles. The renderer propagates the geodesic deviation equation alongside the central ray and derives each sample's footprint from the deviation solution. Gate: against analytic deviation solutions in Schwarzschild (radial and circular-orbit congruences) the propagated cross-section agrees to one part in 10^6 on the oracle; and a rotating-camera star-field sequence shows bounded per-star brightness variance where per-pixel point sampling measurably flickers.
+- P3, star field. Stars render as filtered point sources through the beam ellipse, not as texture lookups; a catalogue of at least 10^5 stars renders without aliasing at 1080p and IMAX-class resolution under the memory governor.
+- P4, disk. Novikov-Thorne temperature with the Page-Thorne flux function (already present and tested), volumetric mode, gravitational plus Doppler shift on emission with the artistic suppression toggle. Gate: the existing Mandatory disk suites, plus a new test pinning the Doppler asymmetry on and off.
+- P5, camera. Arbitrary camera four-velocity with aberration applied in the camera's local frame; pinhole and finite-aperture models; resolution to 5616 by 4096 within the memory governor.
+- P6, output. Linear HDR EXR untouched by the display pipeline, and tonemapped PNG/PPM, each transfer-encoded exactly once by its owning writer. This is the July authority, preserved.
+
+## 4. Exceedance criteria
+
+DNGR was a Kerr-family instrument on a render farm. Sirius exceeds it on four axes, each already partially banked by the existing system and each verifiable without DNEG's hardware.
+
+- E1, spacetime catalogue. Nine metric families against DNGR's Kerr (plus the wormhole DNEG built separately for the film): the full existing registry, with the Morris-Thorne Cartesian embedding completing CPU support (July follow-up item 2).
+- E2, polarised transport. Physical propagation of polarisation along geodesics (Walker-Penrose transport in the Kerr family), which DNGR did not publish. The existing system carries a complete Stokes/Mueller algebra used only for false-colour visualisation; the physical transport is new work this engagement delivers, validated against the Walker-Penrose conserved complex constant.
+- E3, hardware reach. Interactive progressive preview on a 2 GB integrated GPU and a functional CPU-only path on machines with no GPU at all, where DNGR required a farm.
+- E4, verification. A physics test estate with build-failing Mandatory gates and a published oracle stack. DNGR published papers; it did not publish tests.
+
+## 5. Language standard policy
+
+The build compiles as `-std=c++2c` on GCC 14 and Clang 21 and equivalent on MSVC. C++26 constructs divide into three tiers. Tier one, usable now on the measured toolchain, is adopted directly: pack indexing, deducing this, `= delete` with reason, user-message static_assert, placeholder variables. Tier two, contracts, is wrapped: `SIRIUS_PRE`, `SIRIUS_POST`, and `SIRIUS_ASSERT` compile to native contract syntax when `__cpp_contracts` reports P2900 semantics, and to a checked-assertion implementation with enforce/observe/ignore build modes otherwise, so contract density in the source is independent of toolchain maturity. Tier three, static reflection, is not adopted in code; the two sites that want it (kernel constant tables and CLI/config binding) use build-time generation from a single source of truth, structured so that a reflection rewrite replaces the generator without touching consumers. The style guide gives the binding rules.
+
+## 6. Programmes
+
+The overhaul decomposes into six programmes, each a gated workstream.
+
+1. Foundations: this specification, the style guide, the architecture design, and the repository skeleton (build system, presets, dependency acquisition, formatting and linting configuration, packaging target).
+2. The port: Core physics, CPU render path, infrastructure, and test estate move to the new layout and style, behaviour-preserving, gated by test parity and image identity against the reference tapes.
+3. The kernel programme: Slang single-source kernels, the Vulkan compute backend, and the kernel-versus-oracle parity suites, gated on Lavapipe since no discrete GPU is present.
+4. The memory programme: VRAM budget governor, tiled progressive rendering, and the precision ladder, validated under constrained budgets.
+5. The physics programme: ray bundles, filtered star field, camera worldlines, Doppler toggle; the DNGR-parity items P2, P3, P5.
+6. Closure: CI matrix, packaging, README rewrite, final report with renders compared against the reference tapes, and the parity/exceedance scorecard.
+
+Programmes 3 and 4 depend on 2; programme 5 depends on 2 and partially on 3; closure depends on everything. Within each programme, behaviour-preserving stages land before behaviour-changing ones, and the riskiest change (the live-path reroute onto ported code) carries the identity gates of the governing specification.
+
+## 7. Verification gates
+
+- Strict build: zero warnings under `-Wall -Wextra -Wpedantic` treated as errors, on GCC 14 and Clang 21.
+- Test gate: the full ctest estate green; the Mandatory label green as a build gate exactly as before.
+- Parity gates: kernel-versus-oracle agreement suites for every quantity the kernel computes; beam propagation against analytic deviation solutions.
+- Image gates: behaviour-preserving stages reproduce the reference tapes pixel-identically for CPU renders; behaviour-changing stages record new reference images with the change named.
+- Hardware-envelope gate: a 1080p Kerr-with-disk render completes under a 2 GB simulated budget through the governor, and a CPU-only render completes with no GPU present.
+
+## 8. Completion
+
+The engagement is complete when every P-item and E-item reports green from the gates above, the six programmes have landed on `rebuild/dngr-parity` with one concern per commit, the README describes the rebuilt system accurately, and the final report (Prompt.md section 19 deliverables) is written. Merging to `main` and any deployment are separate owner decisions, per the governing specification's deployment rule.

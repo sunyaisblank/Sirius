@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regenerate src/Sirius.Test/CTestLabels.cmake from the test sources.
+"""Regenerate tests/labels/CTestLabels.cmake from the test sources.
 
 The labels file must reference tests by their exact registered names
 (Suite.TestName), which historically drifted whenever suites were renamed:
@@ -18,8 +18,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-TEST_DIR = ROOT / "src" / "Sirius.Test"
-OUTPUT = TEST_DIR / "CTestLabels.cmake"
+NEW_TEST_DIR = ROOT / "tests"
+NEW_OUTPUT = NEW_TEST_DIR / "labels" / "CTestLabels.cmake"
 
 MANDATORY = "Mandatory;Correctness"
 STABILITY = "Mandatory;Stability"
@@ -42,6 +42,7 @@ SUITE_LABELS = {
     "KerrSchildTests": MANDATORY,
     "ReissnerNordstromTests": MANDATORY,
     "EllisDrainholeTests": MANDATORY,
+    "MorrisThorneCartesianTests": MANDATORY,
     "AlcubierreMetricTests": MANDATORY,
     "NumericalMetricTests": MANDATORY,
     "MetricLoaderChainTests": MANDATORY,
@@ -106,6 +107,7 @@ SUITE_LABELS = {
     "SMBHParamsTest": CORRECTNESS,
     "RenderPipelineTests": CORRECTNESS,
     "GeodesicTracerTest": CORRECTNESS,
+    "MorrisThorneTracerTest": CORRECTNESS,
     "PNGWriterTest": CORRECTNESS,
     "EXRRoundTripTests": CORRECTNESS,
     "FilmSimulationTest": CORRECTNESS,
@@ -121,34 +123,53 @@ SUITE_LABELS = {
     "MemoryUsageTests": PERFORMANCE,
     "GeodesicBenchmarks": PERFORMANCE,
     "ChristoffelBenchmark": PERFORMANCE,
+    # New-tree suites (no legacy counterpart)
+    "Contracts": MANDATORY,
+    "ContractsDeathTest": MANDATORY,
+    "Error": MANDATORY,
+    "KernelParity": MANDATORY,
+    "KernelTrace": CORRECTNESS,
+    "VulkanBackend": CORRECTNESS,
+    "RenderSessionProbe": CORRECTNESS,
+    "OracleConnection": MANDATORY,
+    "WalkerPenrose": MANDATORY,
+    "WalkerPenroseLivePath": MANDATORY,
+    "CpuGeodesicReferenceTests": MANDATORY,
+    "ConfigValidation": MANDATORY,
+    "ConfigEnvironment": CORRECTNESS,
+    "ConfigSchema": MANDATORY,
+    "RenderCommandParse": CORRECTNESS,
+    "PlatformPaths": CORRECTNESS,
+    "MemoryGovernor": CORRECTNESS,
+    "VulkanRenderSession": CORRECTNESS,
+    "RayBundleTest": MANDATORY,
+    "CameraAberrationTest": MANDATORY,
+    "DopplerToggleTest": CORRECTNESS,
+    "StarfieldPointTest": CORRECTNESS,
+    "KernelBeam": CORRECTNESS,
 }
 
 
-def collect_tests():
+def collect_new_tree_tests():
     tests = {}
     pattern = re.compile(r"TEST(?:_F)?\(\s*(\w+)\s*,\s*(\w+)\s*\)")
-    for path in sorted(TEST_DIR.rglob("*.cpp")):
+    for path in sorted(NEW_TEST_DIR.rglob("*_test.cpp")):
         for suite, name in pattern.findall(path.read_text(encoding="utf-8")):
             tests.setdefault(suite, []).append(name)
     return tests
 
 
-def render(tests):
+def render_new_tree(tests):
+    # The new tree registers tests at build time (gtest_discover_tests), so
+    # this file is loaded by ctest AFTER each module's discovery include, via
+    # TEST_INCLUDE_FILES per module directory (the legacy mechanism). Entries
+    # for tests a directory does not own are inert: ctest-time properties for
+    # never-registered names attach to nothing. No if(TEST) guards; that
+    # predicate does not evaluate during ctest processing.
     lines = [
-        "# =============================================================================",
-        "# CTestLabels.cmake - Test labels for mandatory gating",
-        "# =============================================================================",
         "# GENERATED FILE - do not edit by hand.",
         "# Regenerate with: python3 scripts/generate-ctest-labels.py",
-        "# CI verifies freshness with --check; suite renames that would silently",
-        "# detach labels now fail the build instead.",
-        "#",
-        "# Labels:",
-        "#   Mandatory   - Build fails if these tests fail",
-        "#   Correctness - Mathematical/behavioural invariant tests",
-        "#   Stability   - Numerical stability tests",
-        "#   Performance - FPS/resource metrics (warning only)",
-        "# =============================================================================",
+        "# Labels policy lives in that script; CI fails on a stale copy.",
         "",
     ]
     unknown = []
@@ -173,23 +194,24 @@ def render(tests):
 
 
 def main():
-    tests = collect_tests()
-    content, unknown = render(tests)
-    for suite in unknown:
+    new_tests = collect_new_tree_tests()
+    new_content, new_unknown = render_new_tree(new_tests)
+    for suite in new_unknown:
         print(f"warning: suite '{suite}' not in SUITE_LABELS; defaulted to Correctness",
               file=sys.stderr)
 
     if "--check" in sys.argv:
-        current = OUTPUT.read_text(encoding="utf-8") if OUTPUT.exists() else ""
-        if current != content:
-            print("CTestLabels.cmake is stale; run scripts/generate-ctest-labels.py",
+        new_current = NEW_OUTPUT.read_text(encoding="utf-8") if NEW_OUTPUT.exists() else ""
+        if new_current != new_content:
+            print("CTest label file is stale; run scripts/generate-ctest-labels.py",
                   file=sys.stderr)
             return 1
-        print("CTestLabels.cmake is up to date")
+        print("CTest label file is up to date")
         return 0
 
-    OUTPUT.write_text(content, encoding="utf-8")
-    print(f"wrote {OUTPUT} ({len(tests)} suites)")
+    NEW_OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    NEW_OUTPUT.write_text(new_content, encoding="utf-8")
+    print(f"wrote {NEW_OUTPUT} ({len(new_tests)} suites)")
     return 0
 
 

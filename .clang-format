@@ -1,0 +1,21 @@
+# Formatting authority per docs/STYLE.md: Google base, 100 columns,
+# 4-space indent (matching the existing estate), left pointers, regrouped
+# includes in the order matching header / project / third-party / standard.
+BasedOnStyle: Google
+ColumnLimit: 100
+IndentWidth: 4
+AccessModifierOffset: -2
+DerivePointerAlignment: false
+PointerAlignment: Left
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex: '^"sirius/'
+    Priority: 1
+  - Regex: '^<(gtest|gmock)/'
+    Priority: 2
+  - Regex: '^<[[:alnum:]_./]+\.(h|hpp)>'
+    Priority: 3
+  - Regex: '^<[[:alnum:]_]+>'
+    Priority: 4
+  - Regex: '.*'
+    Priority: 3
