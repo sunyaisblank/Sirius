@@ -2,14 +2,15 @@
 // Tests: dual number edge cases, metric/Christoffel under singularities.
 // Ported from TSDG002A.cpp; assertions and tolerances unchanged.
 
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <gtest/gtest.h>
-#include <limits>
 #include "sirius/core/dual_number.h"
-#include "sirius/core/tensor.h"
+#include "sirius/core/metrics/kerr_schild_family.h"  // Unified Kerr-Schild Family
 #include "sirius/core/metrics/metric.h"
-#include "sirius/core/metrics/kerr_schild_family.h" // Unified Kerr-Schild Family
+#include "sirius/core/tensor.h"
+
+#include <gtest/gtest.h>
+
+#include <cmath>
+#include <limits>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -19,12 +20,12 @@ using namespace sirius::core;
 // =============================================================================
 
 class NaNInfDetectionTests : public ::testing::Test {
-protected:
+  protected:
     void SetUp() override {}
     void TearDown() override {}
 
     // Helper to check if a value is finite (not NaN, not Inf)
-    template<typename T>
+    template <typename T>
     bool isFinite(T value) {
         return std::isfinite(value);
     }
@@ -46,8 +47,7 @@ protected:
 // Dual Number NaN Detection
 // =============================================================================
 
-TEST_F(NaNInfDetectionTests, DualDivisionByZero)
-{
+TEST_F(NaNInfDetectionTests, DualDivisionByZero) {
     // FORMAL SPECIFICATION:
     // Division by zero in real part should produce Inf
     // This must be detectable
@@ -70,8 +70,7 @@ TEST_F(NaNInfDetectionTests, DualDivisionByZero)
     EXPECT_TRUE(std::isfinite(result.dual));
 }
 
-TEST_F(NaNInfDetectionTests, DualSqrtNegative)
-{
+TEST_F(NaNInfDetectionTests, DualSqrtNegative) {
     // FORMAL SPECIFICATION:
     // sqrt of negative real part is undefined
     // Must produce NaN, which must be detectable
@@ -79,12 +78,10 @@ TEST_F(NaNInfDetectionTests, DualSqrtNegative)
     Dual<double> negative(-1.0, 1.0);
     Dual<double> result = sqrt(negative);
 
-    EXPECT_TRUE(std::isnan(result.real))
-        << "sqrt of negative should produce NaN";
+    EXPECT_TRUE(std::isnan(result.real)) << "sqrt of negative should produce NaN";
 }
 
-TEST_F(NaNInfDetectionTests, DualLogNonPositive)
-{
+TEST_F(NaNInfDetectionTests, DualLogNonPositive) {
     // FORMAL SPECIFICATION:
     // log of non-positive real part is undefined
 
@@ -94,14 +91,11 @@ TEST_F(NaNInfDetectionTests, DualLogNonPositive)
     Dual<double> result_zero = log(zero);
     Dual<double> result_neg = log(negative);
 
-    EXPECT_FALSE(std::isfinite(result_zero.real))
-        << "log(0) should produce -Inf";
-    EXPECT_TRUE(std::isnan(result_neg.real))
-        << "log(negative) should produce NaN";
+    EXPECT_FALSE(std::isfinite(result_zero.real)) << "log(0) should produce -Inf";
+    EXPECT_TRUE(std::isnan(result_neg.real)) << "log(negative) should produce NaN";
 }
 
-TEST_F(NaNInfDetectionTests, DualSqrtNearZeroDerivative)
-{
+TEST_F(NaNInfDetectionTests, DualSqrtNearZeroDerivative) {
     // FORMAL SPECIFICATION:
     // sqrt near zero has derivative tending to infinity
     // d/dx sqrt(x) = 1/(2*sqrt(x)) -> infinity as x -> 0
@@ -123,8 +117,7 @@ TEST_F(NaNInfDetectionTests, DualSqrtNearZeroDerivative)
 // Metric Evaluation NaN Detection
 // =============================================================================
 
-TEST_F(NaNInfDetectionTests, SchwarzschildMetricFinite)
-{
+TEST_F(NaNInfDetectionTests, SchwarzschildMetricFinite) {
     // FORMAL SPECIFICATION:
     // Metric must produce finite values for all valid domain points
     // Domain: r > 2M
@@ -140,27 +133,25 @@ TEST_F(NaNInfDetectionTests, SchwarzschildMetricFinite)
 
     for (double r : test_radii) {
         // Convert Spherical to Cartesian (r, theta, phi) -> (x, y, z)
-        double theta = M_PI/2.0;
+        double theta = M_PI / 2.0;
         double sin_theta = std::sin(theta);
         double cos_theta = std::cos(theta);
-        double sin_phi = 0.0; // phi = 0
+        double sin_phi = 0.0;  // phi = 0
         double cos_phi = 1.0;
 
         Tensor<double, 4> pos;
-        pos(0) = 0.0; // t
-        pos(1) = r * sin_theta * cos_phi; // x
-        pos(2) = r * sin_theta * sin_phi; // y
-        pos(3) = r * cos_theta;           // z
+        pos(0) = 0.0;                      // t
+        pos(1) = r * sin_theta * cos_phi;  // x
+        pos(2) = r * sin_theta * sin_phi;  // y
+        pos(3) = r * cos_theta;            // z
 
         metric.Evaluate(pos, g, dg);
 
-        EXPECT_TRUE(isMetricFinite(g))
-            << "Metric should be finite at r = " << r;
+        EXPECT_TRUE(isMetricFinite(g)) << "Metric should be finite at r = " << r;
     }
 }
 
-TEST_F(NaNInfDetectionTests, SchwarzschildNearHorizon)
-{
+TEST_F(NaNInfDetectionTests, SchwarzschildNearHorizon) {
     // FORMAL SPECIFICATION:
     // Very close to horizon, numerical precision may degrade
     // Implementation should clamp to prevent singularity
@@ -177,17 +168,17 @@ TEST_F(NaNInfDetectionTests, SchwarzschildNearHorizon)
 
     for (double r : near_horizon) {
         // Convert Spherical to Cartesian (r, theta, phi) -> (x, y, z)
-        double theta = M_PI/2.0;
+        double theta = M_PI / 2.0;
         double sin_theta = std::sin(theta);
         double cos_theta = std::cos(theta);
-        double sin_phi = 0.0; // phi = 0
+        double sin_phi = 0.0;  // phi = 0
         double cos_phi = 1.0;
 
         Tensor<double, 4> pos;
-        pos(0) = 0.0; // t
-        pos(1) = r * sin_theta * cos_phi; // x
-        pos(2) = r * sin_theta * sin_phi; // y
-        pos(3) = r * cos_theta;           // z
+        pos(0) = 0.0;                      // t
+        pos(1) = r * sin_theta * cos_phi;  // x
+        pos(2) = r * sin_theta * sin_phi;  // y
+        pos(3) = r * cos_theta;            // z
 
         metric.Evaluate(pos, g, dg);
 
@@ -196,8 +187,7 @@ TEST_F(NaNInfDetectionTests, SchwarzschildNearHorizon)
     }
 }
 
-TEST_F(NaNInfDetectionTests, KerrMetricFinite)
-{
+TEST_F(NaNInfDetectionTests, KerrMetricFinite) {
     // FORMAL SPECIFICATION:
     // Kerr metric must be finite outside horizons
     // Additional singularities: Sigma = 0 (ring), Delta = 0 (horizons)
@@ -211,24 +201,24 @@ TEST_F(NaNInfDetectionTests, KerrMetricFinite)
 
     // Test at various valid positions
     std::vector<std::pair<double, double>> test_points = {
-        {3.0, M_PI/2},   // Equatorial plane
-        {3.0, M_PI/4},   // 45 degrees
-        {3.0, 0.1},      // Near pole (but not at pole)
-        {10.0, M_PI/2},  // Far field
+        {3.0, M_PI / 2},   // Equatorial plane
+        {3.0, M_PI / 4},   // 45 degrees
+        {3.0, 0.1},        // Near pole (but not at pole)
+        {10.0, M_PI / 2},  // Far field
     };
 
     for (auto& [r, theta] : test_points) {
         // Convert Spherical to Cartesian (r, theta, phi) -> (x, y, z)
         double sin_theta = std::sin(theta);
         double cos_theta = std::cos(theta);
-        double sin_phi = 0.0; // phi = 0
+        double sin_phi = 0.0;  // phi = 0
         double cos_phi = 1.0;
 
         Tensor<double, 4> pos;
-        pos(0) = 0.0; // t
-        pos(1) = r * sin_theta * cos_phi; // x
-        pos(2) = r * sin_theta * sin_phi; // y
-        pos(3) = r * cos_theta;           // z
+        pos(0) = 0.0;                      // t
+        pos(1) = r * sin_theta * cos_phi;  // x
+        pos(2) = r * sin_theta * sin_phi;  // y
+        pos(3) = r * cos_theta;            // z
 
         metric.Evaluate(pos, g, dg);
 
@@ -237,8 +227,7 @@ TEST_F(NaNInfDetectionTests, KerrMetricFinite)
     }
 }
 
-TEST_F(NaNInfDetectionTests, KerrNearPoles)
-{
+TEST_F(NaNInfDetectionTests, KerrNearPoles) {
     // FORMAL SPECIFICATION:
     // Boyer-Lindquist coordinates have singularity at poles (sin(theta) = 0)
     // Implementation should handle this gracefully
@@ -256,17 +245,17 @@ TEST_F(NaNInfDetectionTests, KerrNearPoles)
 
     for (double theta : near_pole_theta) {
         // Convert Spherical to Cartesian (r, theta, phi) -> (x, y, z)
-        double r = 5.0; // Defined as 5.0 in original loop
+        double r = 5.0;  // Defined as 5.0 in original loop
         double sin_theta = std::sin(theta);
         double cos_theta = std::cos(theta);
-        double sin_phi = 0.0; // phi = 0
+        double sin_phi = 0.0;  // phi = 0
         double cos_phi = 1.0;
 
         Tensor<double, 4> pos;
-        pos(0) = 0.0; // t
-        pos(1) = r * sin_theta * cos_phi; // x
-        pos(2) = r * sin_theta * sin_phi; // y
-        pos(3) = r * cos_theta;           // z
+        pos(0) = 0.0;                      // t
+        pos(1) = r * sin_theta * cos_phi;  // x
+        pos(2) = r * sin_theta * sin_phi;  // y
+        pos(3) = r * cos_theta;            // z
 
         metric.Evaluate(pos, g, dg);
 
@@ -280,14 +269,19 @@ TEST_F(NaNInfDetectionTests, KerrNearPoles)
 // Vector and Tensor NaN Detection
 // =============================================================================
 
-TEST_F(NaNInfDetectionTests, TensorOperationsFinite)
-{
+TEST_F(NaNInfDetectionTests, TensorOperationsFinite) {
     // FORMAL SPECIFICATION:
     // All tensor operations must produce finite results for finite inputs
 
     Vec4 v1, v2;
-    v1(0) = 1.0; v1(1) = 0.0; v1(2) = 0.0; v1(3) = 0.0;
-    v2(0) = 0.0; v2(1) = 1.0; v2(2) = 0.0; v2(3) = 0.0;
+    v1(0) = 1.0;
+    v1(1) = 0.0;
+    v1(2) = 0.0;
+    v1(3) = 0.0;
+    v2(0) = 0.0;
+    v2(1) = 1.0;
+    v2(2) = 0.0;
+    v2(3) = 0.0;
 
     // Create a simple metric (Minkowski)
     Metric4d g;
@@ -309,8 +303,7 @@ TEST_F(NaNInfDetectionTests, TensorOperationsFinite)
     }
 }
 
-TEST_F(NaNInfDetectionTests, ChristoffelFinite)
-{
+TEST_F(NaNInfDetectionTests, ChristoffelFinite) {
     // FORMAL SPECIFICATION:
     // Christoffel symbols must be finite for valid metric
 
@@ -319,17 +312,17 @@ TEST_F(NaNInfDetectionTests, ChristoffelFinite)
 
     // Convert Spherical to Cartesian (r, theta, phi) -> (x, y, z)
     double r = 5.0;
-    double theta = M_PI/2.0;
+    double theta = M_PI / 2.0;
     double sin_theta = std::sin(theta);
     double cos_theta = std::cos(theta);
-    double sin_phi = 0.0; // phi = 0
+    double sin_phi = 0.0;  // phi = 0
     double cos_phi = 1.0;
 
     Tensor<double, 4> pos;
-    pos(0) = 0.0; // t
-    pos(1) = r * sin_theta * cos_phi; // x
-    pos(2) = r * sin_theta * sin_phi; // y
-    pos(3) = r * cos_theta;           // z
+    pos(0) = 0.0;                      // t
+    pos(1) = r * sin_theta * cos_phi;  // x
+    pos(2) = r * sin_theta * sin_phi;  // y
+    pos(3) = r * cos_theta;            // z
 
     Metric4d g;
     Tensor<Dual<double>, 4, 4, 4> dg;
@@ -352,8 +345,7 @@ TEST_F(NaNInfDetectionTests, ChristoffelFinite)
 // Extreme Value Tests
 // =============================================================================
 
-TEST_F(NaNInfDetectionTests, LargeValuesDoNotOverflow)
-{
+TEST_F(NaNInfDetectionTests, LargeValuesDoNotOverflow) {
     // FORMAL SPECIFICATION:
     // Operations with large but representable values should not overflow
 
@@ -369,12 +361,10 @@ TEST_F(NaNInfDetectionTests, LargeValuesDoNotOverflow)
     Dual<double> c(1e200, 1.0);
     Dual<double> product = c * c;
     // This WILL overflow - we're testing detection
-    EXPECT_FALSE(std::isfinite(product.real))
-        << "Overflow should be detectable";
+    EXPECT_FALSE(std::isfinite(product.real)) << "Overflow should be detectable";
 }
 
-TEST_F(NaNInfDetectionTests, SmallValuesDoNotUnderflow)
-{
+TEST_F(NaNInfDetectionTests, SmallValuesDoNotUnderflow) {
     // FORMAL SPECIFICATION:
     // Very small values should remain finite (may become denormalized)
 
@@ -388,4 +378,4 @@ TEST_F(NaNInfDetectionTests, SmallValuesDoNotUnderflow)
     EXPECT_TRUE(std::isfinite(result.real));
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

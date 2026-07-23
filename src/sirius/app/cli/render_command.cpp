@@ -166,8 +166,8 @@ int RenderCommand::Execute(const std::vector<std::string>& args, const GlobalOpt
     return ExecuteSession(config, globals, use_vulkan);
 }
 
-bool RenderCommand::ParseArgs(const std::vector<std::string>& args, const GlobalOptions& /*globals*/,
-                              SiriusConfig& config) {
+bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
+                              const GlobalOptions& /*globals*/, SiriusConfig& config) {
     for (size_t i = 0; i < args.size(); ++i) {
         const std::string& arg = args[i];
 
@@ -344,8 +344,9 @@ void RenderCommand::PrintConfig(const SiriusConfig& config, bool verbose) {
         std::cout << " (a=" << std::fixed << std::setprecision(3) << config.metric.spin << ")";
     }
     std::cout << std::endl;
-    std::cout << "  Observer:    r=" << std::fixed << std::setprecision(1) << config.observer.distance
-              << "M, θ=" << config.observer.inclination << "°" << std::endl;
+    std::cout << "  Observer:    r=" << std::fixed << std::setprecision(1)
+              << config.observer.distance << "M, θ=" << config.observer.inclination << "°"
+              << std::endl;
     std::cout << "  FOV:         " << config.observer.fov << "°" << std::endl;
     std::cout << "  Output:      " << config.render.outputPath << std::endl;
     std::cout << std::endl;
@@ -403,33 +404,31 @@ int RenderCommand::ExecuteSession(const SiriusConfig& config, const GlobalOption
     auto start_time = std::chrono::steady_clock::now();
 
     if (!globals.json_output) {
-        session.SetProgressCallback(
-            [&](float progress, int completed, int total, double eta) {
-                auto now = std::chrono::steady_clock::now();
-                double elapsed = std::chrono::duration<double>(now - start_time).count();
+        session.SetProgressCallback([&](float progress, int completed, int total, double eta) {
+            auto now = std::chrono::steady_clock::now();
+            double elapsed = std::chrono::duration<double>(now - start_time).count();
 
-                cli::ProgressState state;
-                state.progress = progress;
-                state.tiles_completed = completed;
-                state.tiles_total = total;
-                state.elapsed_seconds = elapsed;
-                state.eta_seconds = eta;
+            cli::ProgressState state;
+            state.progress = progress;
+            state.tiles_completed = completed;
+            state.tiles_total = total;
+            state.elapsed_seconds = elapsed;
+            state.eta_seconds = eta;
 
-                cli::PrintProgress(state);
-            });
+            cli::PrintProgress(state);
+        });
     }
 
     // The final state carries success; only the failure message needs capturing.
     std::string error_message;
-    session.SetCompletionCallback(
-        [&](render::SessionState state, const std::string& message) {
-            if (!globals.json_output) {
-                cli::ClearProgress();
-            }
-            if (state != render::SessionState::Complete) {
-                error_message = message;
-            }
-        });
+    session.SetCompletionCallback([&](render::SessionState state, const std::string& message) {
+        if (!globals.json_output) {
+            cli::ClearProgress();
+        }
+        if (state != render::SessionState::Complete) {
+            error_message = message;
+        }
+    });
 
     render::SessionState result = session.Execute();
 

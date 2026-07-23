@@ -21,11 +21,11 @@ class CoronaConfigTests : public ::testing::Test {};
 
 TEST_F(CoronaConfigTests, ValidateClampsTemperature) {
     sirius::core::CoronaConfig c;
-    c.temperature_keV = 1.0f; // below minimum 10
+    c.temperature_keV = 1.0f;  // below minimum 10
     c.Validate();
     EXPECT_GE(c.temperature_keV, 10.0f);
 
-    c.temperature_keV = 1000.0f; // above maximum 500
+    c.temperature_keV = 1000.0f;  // above maximum 500
     c.Validate();
     EXPECT_LE(c.temperature_keV, 500.0f);
 }
@@ -44,7 +44,7 @@ TEST_F(CoronaConfigTests, ValidateClampsOpticalDepth) {
 TEST_F(CoronaConfigTests, ValidateEnsuresOuterGreaterThanInner) {
     sirius::core::CoronaConfig c;
     c.inner_radius_M = 10.0f;
-    c.outer_radius_M = 5.0f; // invalid: outer < inner
+    c.outer_radius_M = 5.0f;  // invalid: outer < inner
     c.Validate();
     EXPECT_GT(c.outer_radius_M, c.inner_radius_M);
 }
@@ -91,13 +91,13 @@ TEST_F(CoronaConfigTests, SpectralIndexFinite) {
 // =============================================================================
 
 class CoronaGeometryTests : public ::testing::Test {
-protected:
+  protected:
     sirius::core::CoronaConfig config;
     float isco = 6.0f;
 
     void SetUp() override {
         config.enabled = true;
-        config.inner_radius_M = 0.0f; // use ISCO
+        config.inner_radius_M = 0.0f;  // use ISCO
         config.outer_radius_M = 20.0f;
         config.scale_height_M = 5.0f;
     }
@@ -105,20 +105,24 @@ protected:
 
 TEST_F(CoronaGeometryTests, DisabledReturnsNoContainment) {
     config.enabled = false;
-    EXPECT_FALSE(sirius::core::corona_physics::IsInsideCorona(10.0f, kPi / 2.0f, 0.0f, config, isco));
+    EXPECT_FALSE(
+        sirius::core::corona_physics::IsInsideCorona(10.0f, kPi / 2.0f, 0.0f, config, isco));
 }
 
 TEST_F(CoronaGeometryTests, OutsideRadialBoundsRejected) {
     // Too close
-    EXPECT_FALSE(sirius::core::corona_physics::IsInsideCorona(3.0f, kPi / 2.0f, 0.0f, config, isco));
+    EXPECT_FALSE(
+        sirius::core::corona_physics::IsInsideCorona(3.0f, kPi / 2.0f, 0.0f, config, isco));
     // Too far
-    EXPECT_FALSE(sirius::core::corona_physics::IsInsideCorona(30.0f, kPi / 2.0f, 0.0f, config, isco));
+    EXPECT_FALSE(
+        sirius::core::corona_physics::IsInsideCorona(30.0f, kPi / 2.0f, 0.0f, config, isco));
 }
 
 TEST_F(CoronaGeometryTests, SlabGeometryEquatorialInside) {
     config.geometry = sirius::core::CoronaGeometry::Slab;
     // Equatorial plane (theta = pi/2, z = 0)
-    EXPECT_TRUE(sirius::core::corona_physics::IsInsideCorona(10.0f, kPi / 2.0f, 0.0f, config, isco));
+    EXPECT_TRUE(
+        sirius::core::corona_physics::IsInsideCorona(10.0f, kPi / 2.0f, 0.0f, config, isco));
 }
 
 TEST_F(CoronaGeometryTests, SlabGeometryPolarOutside) {
@@ -138,15 +142,18 @@ TEST_F(CoronaGeometryTests, LamppostNearSourceInside) {
 TEST_F(CoronaGeometryTests, SphereContainment) {
     config.geometry = sirius::core::CoronaGeometry::Sphere;
     // Inside sphere
-    EXPECT_TRUE(sirius::core::corona_physics::IsInsideCorona(10.0f, kPi / 4.0f, 0.0f, config, isco));
+    EXPECT_TRUE(
+        sirius::core::corona_physics::IsInsideCorona(10.0f, kPi / 4.0f, 0.0f, config, isco));
     // Outside sphere
-    EXPECT_FALSE(sirius::core::corona_physics::IsInsideCorona(25.0f, kPi / 4.0f, 0.0f, config, isco));
+    EXPECT_FALSE(
+        sirius::core::corona_physics::IsInsideCorona(25.0f, kPi / 4.0f, 0.0f, config, isco));
 }
 
 TEST_F(CoronaGeometryTests, ExtendedScalesWithRadius) {
     config.geometry = sirius::core::CoronaGeometry::Extended;
     // Near equator at moderate radius: should be inside
-    EXPECT_TRUE(sirius::core::corona_physics::IsInsideCorona(10.0f, kPi / 2.0f, 0.0f, config, isco));
+    EXPECT_TRUE(
+        sirius::core::corona_physics::IsInsideCorona(10.0f, kPi / 2.0f, 0.0f, config, isco));
 }
 
 // =============================================================================
@@ -154,7 +161,7 @@ TEST_F(CoronaGeometryTests, ExtendedScalesWithRadius) {
 // =============================================================================
 
 class CoronaEmissivityTests : public ::testing::Test {
-protected:
+  protected:
     sirius::core::CoronaConfig config;
     float isco = 6.0f;
 
@@ -171,12 +178,14 @@ protected:
 
 TEST_F(CoronaEmissivityTests, ZeroOutsideBounds) {
     EXPECT_FLOAT_EQ(sirius::core::corona_physics::Emissivity(3.0f, kPi / 2.0f, config, isco), 0.0f);
-    EXPECT_FLOAT_EQ(sirius::core::corona_physics::Emissivity(30.0f, kPi / 2.0f, config, isco), 0.0f);
+    EXPECT_FLOAT_EQ(sirius::core::corona_physics::Emissivity(30.0f, kPi / 2.0f, config, isco),
+                    0.0f);
 }
 
 TEST_F(CoronaEmissivityTests, DisabledReturnsZero) {
     config.enabled = false;
-    EXPECT_FLOAT_EQ(sirius::core::corona_physics::Emissivity(10.0f, kPi / 2.0f, config, isco), 0.0f);
+    EXPECT_FLOAT_EQ(sirius::core::corona_physics::Emissivity(10.0f, kPi / 2.0f, config, isco),
+                    0.0f);
 }
 
 TEST_F(CoronaEmissivityTests, DecreasesWithRadius) {
@@ -194,14 +203,14 @@ TEST_F(CoronaEmissivityTests, GaussianVerticalFalloff) {
 
 TEST_F(CoronaEmissivityTests, OpticalDepthDisabledIsZero) {
     config.enabled = false;
-    float tau = sirius::core::corona_physics::OpticalDepthAlongRay(
-        7.0f, kPi / 2.0f, 0.0f, 15.0f, kPi / 2.0f, 0.0f, config, isco);
+    float tau = sirius::core::corona_physics::OpticalDepthAlongRay(7.0f, kPi / 2.0f, 0.0f, 15.0f,
+                                                                   kPi / 2.0f, 0.0f, config, isco);
     EXPECT_FLOAT_EQ(tau, 0.0f);
 }
 
 TEST_F(CoronaEmissivityTests, OpticalDepthPositiveInsideCorona) {
-    float tau = sirius::core::corona_physics::OpticalDepthAlongRay(
-        7.0f, kPi / 2.0f, 0.0f, 15.0f, kPi / 2.0f, 0.0f, config, isco);
+    float tau = sirius::core::corona_physics::OpticalDepthAlongRay(7.0f, kPi / 2.0f, 0.0f, 15.0f,
+                                                                   kPi / 2.0f, 0.0f, config, isco);
     EXPECT_GT(tau, 0.0f);
 }
 
@@ -216,4 +225,4 @@ TEST_F(CoronaEmissivityTests, ScatteredIntensityIncreasesWithTau) {
     EXPECT_GT(I2, I1);
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

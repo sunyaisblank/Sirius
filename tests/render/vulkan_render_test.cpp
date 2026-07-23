@@ -18,6 +18,8 @@
 
 #include <gtest/gtest.h>
 
+#include "support/scoped_environment.h"
+
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
@@ -43,6 +45,7 @@
 namespace {
 
 #ifdef SIRIUS_HAS_VULKAN_BACKEND
+using sirius::test::ScopedEnvironmentVariable;
 
 using sirius::backend::BufferHandle;
 using sirius::backend::BufferUsage;
@@ -50,8 +53,8 @@ using sirius::backend::ComputeDevice;
 using sirius::backend::CreateVulkanDevice;
 using sirius::backend::EnumerateVulkanDevices;
 using sirius::backend::GeodesicTracer;
-using sirius::backend::TraceResult;
 using sirius::backend::TracerConfig;
+using sirius::backend::TraceResult;
 using sirius::core::CameraConfig;
 using sirius::core::CameraRay;
 using sirius::core::KerrSchildFamily;
@@ -132,8 +135,8 @@ std::vector<float> BuildTraceParams(const Scene& scene) {
     p[25] = 200.0f;   // escapeRadius
     p[26] = 1.05f;    // captureFactor
     p[27] = 0.0f;     // disk disabled
-    p[32] = 0.0f;                       // tileOriginX
-    p[33] = 0.0f;                       // tileOriginY
+    p[32] = 0.0f;     // tileOriginX
+    p[33] = 0.0f;     // tileOriginY
     p[34] = static_cast<float>(scene.width);
     p[35] = static_cast<float>(scene.height);
     p[36] = 0.0f;  // starfield disabled -> gradient background
@@ -220,8 +223,8 @@ void ExpectFiniteNonConstantWithShadow(const std::vector<float>& rgba, int width
         if (r < 1e-4f && g < 1e-4f && b < 1e-4f) ++shadow;
     }
     const double fraction = static_cast<double>(shadow) / (width * height);
-    std::cout << "[ " << tag << " ] shadow fraction=" << fraction << " luminance range=["
-              << min_lum << ", " << max_lum << "]\n";
+    std::cout << "[ " << tag << " ] shadow fraction=" << fraction << " luminance range=[" << min_lum
+              << ", " << max_lum << "]\n";
     EXPECT_GT(max_lum - min_lum, 1e-3f) << tag << " radiance field is constant";
     EXPECT_GE(fraction, 0.005) << tag << " shadow fraction too small";
     EXPECT_LE(fraction, 0.60) << tag << " shadow fraction too large";
@@ -231,11 +234,11 @@ TEST(VulkanRenderSession, Kerr64CompletesUnderConstrainedBudgetWithFiniteRadianc
     if (const auto d = EnumerateVulkanDevices(); !d.has_value() || d->empty()) {
         GTEST_SKIP() << "no Vulkan device present";
     }
-    setenv("SIRIUS_MEMORY_BUDGET_MB", "1", 1);  // constrained: drops the starfield
+    ScopedEnvironmentVariable budget("SIRIUS_MEMORY_BUDGET_MB",
+                                     "1");  // constrained: drops the starfield
     const std::string out = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp") +
                             "/sirius_vk_smoke_64.exr";
     const auto rgba = RenderSessionVulkan(64, 64, out);
-    unsetenv("SIRIUS_MEMORY_BUDGET_MB");
     ASSERT_FALSE(rgba.empty()) << "session Vulkan render did not complete";
     ExpectFiniteNonConstantWithShadow(rgba, 64, 64, "vk-session-64");
 }
@@ -254,11 +257,10 @@ TEST(VulkanRenderSession, Fp64RungRendersOrDeclinesLoudly) {
     const bool fp64_supported = (*device)->Info().supports_fp64;
     device->reset();
 
-    setenv("SIRIUS_PRECISION", "fp64", 1);
+    ScopedEnvironmentVariable precision("SIRIUS_PRECISION", "fp64");
     const std::string out = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp") +
                             "/sirius_vk_fp64_64.exr";
     const auto rgba = RenderSessionVulkan(64, 64, out);
-    unsetenv("SIRIUS_PRECISION");
 
     if (fp64_supported) {
         ASSERT_FALSE(rgba.empty()) << "fp64 rung requested and supported but did not complete";
@@ -275,11 +277,10 @@ TEST(VulkanRenderSession, CompensatedRungRendersOnAnyDevice) {
     if (const auto d = EnumerateVulkanDevices(); !d.has_value() || d->empty()) {
         GTEST_SKIP() << "no Vulkan device present";
     }
-    setenv("SIRIUS_PRECISION", "fp32-comp", 1);
+    ScopedEnvironmentVariable precision("SIRIUS_PRECISION", "fp32-comp");
     const std::string out = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp") +
                             "/sirius_vk_comp_64.exr";
     const auto rgba = RenderSessionVulkan(64, 64, out);
-    unsetenv("SIRIUS_PRECISION");
     ASSERT_FALSE(rgba.empty()) << "compensated rung did not complete";
     ExpectFiniteNonConstantWithShadow(rgba, 64, 64, "vk-session-comp");
 }
@@ -288,11 +289,11 @@ TEST(VulkanRenderSession, Kerr160x120CompletesAcrossMultipleGovernedTiles) {
     if (const auto d = EnumerateVulkanDevices(); !d.has_value() || d->empty()) {
         GTEST_SKIP() << "no Vulkan device present";
     }
-    setenv("SIRIUS_MEMORY_BUDGET_MB", "1", 1);  // tile edge 120 -> 2 tiles for 160 wide
+    ScopedEnvironmentVariable budget("SIRIUS_MEMORY_BUDGET_MB",
+                                     "1");  // tile edge 120 -> 2 tiles for 160 wide
     const std::string out = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp") +
                             "/sirius_vk_smoke_160.exr";
     const auto rgba = RenderSessionVulkan(160, 120, out);
-    unsetenv("SIRIUS_MEMORY_BUDGET_MB");
     ASSERT_FALSE(rgba.empty()) << "session Vulkan render did not complete";
     ExpectFiniteNonConstantWithShadow(rgba, 160, 120, "vk-session-160");
 }
@@ -321,8 +322,7 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds) {
     ASSERT_TRUE(
         f.device->WriteBuffer(*sbuf, std::as_bytes(std::span<const std::uint32_t>(star_dummy))));
     const BufferHandle bind[] = {*rbuf, *pbuf, *sbuf};
-    ASSERT_TRUE(
-        f.device->Dispatch(f.kernel, bind, (w + 7) / 8, (h + 7) / 8, 1).has_value());
+    ASSERT_TRUE(f.device->Dispatch(f.kernel, bind, (w + 7) / 8, (h + 7) / 8, 1).has_value());
     ASSERT_TRUE(f.device->ReadBuffer(*rbuf, std::as_writable_bytes(std::span<float>(vk))));
 
     // --- CPU reference (the geodesic tracer on the same scene) ---------------
@@ -379,8 +379,8 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds) {
     // isolate the integrator + camera geometry.
     std::size_t shadow_vk = 0, shadow_cpu = 0, bg_pixels = 0;
     double abs_sum = 0.0, max_rel = 0.0;
-    constexpr float kShadowLum = 0.02f;   // below this luminance a pixel is shadow-like
-    constexpr float kRelFloor = 0.05f;    // relative-diff denominator floor
+    constexpr float kShadowLum = 0.02f;  // below this luminance a pixel is shadow-like
+    constexpr float kRelFloor = 0.05f;   // relative-diff denominator floor
     for (int p = 0; p < w * h; ++p) {
         const float lv = Luminance(vk[p * 4], vk[p * 4 + 1], vk[p * 4 + 2]);
         const float lc = Luminance(cpu[p * 4], cpu[p * 4 + 1], cpu[p * 4 + 2]);
@@ -412,7 +412,8 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds) {
     // regression blows these by orders of magnitude. Achieved on Lavapipe:
     // mean|dlum| ~6e-7, max_rel ~3e-5 (printed above); the bounds carry a wide
     // margin for transcendental-library and integrator drift.
-    EXPECT_LT(mean_abs, 5e-3) << "mean background luminance difference too large (camera mismatch?)";
+    EXPECT_LT(mean_abs, 5e-3)
+        << "mean background luminance difference too large (camera mismatch?)";
     EXPECT_LT(max_rel, 0.2) << "worst-case background luminance disagreement too large";
 
     // Secondary gate: each backend renders a horizon shadow within the broad
@@ -494,8 +495,7 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalB
     ASSERT_TRUE(f.device->ReadBuffer(*rbuf, std::as_writable_bytes(std::span<float>(vk))));
 
     // --- CPU reference (the geodesic tracer on the same scene) ---------------
-    sirius::core::MorrisThorneCartesian metric(
-        sirius::core::MorrisThorneParams::Ellis(kThroat));
+    sirius::core::MorrisThorneCartesian metric(sirius::core::MorrisThorneParams::Ellis(kThroat));
 
     TracerConfig tc;
     tc.escape_radius = 200.0f;

@@ -40,7 +40,7 @@ TEST(SpectralUtilsTests, PhysicalConstantsValid) {
 // Test: Planck radiance is positive for valid inputs
 TEST(SpectralUtilsTests, PlanckRadiancePositive) {
     double lambda = 550e-9;  // Green light
-    double T = 5778;  // Sun's surface temperature
+    double T = 5778;         // Sun's surface temperature
 
     double radiance = PlanckRadiance(lambda, T);
 
@@ -54,8 +54,7 @@ TEST(SpectralUtilsTests, PlanckRadianceIncreasesWithTemp) {
     double rad_3000K = PlanckRadiance(lambda, 3000);
     double rad_6000K = PlanckRadiance(lambda, 6000);
 
-    EXPECT_GT(rad_6000K, rad_3000K)
-        << "Higher temperature should give higher radiance";
+    EXPECT_GT(rad_6000K, rad_3000K) << "Higher temperature should give higher radiance";
 }
 
 // Test: Planck radiance returns 0 for invalid inputs
@@ -167,7 +166,7 @@ TEST(SpectralUtilsTests, LinearToSRGBClamps) {
 // Test: Blackbody color is warmer at lower temperatures
 TEST(SpectralUtilsTests, BlackbodyColorTemperature) {
     Rgb cool = BlackbodyToRgb(3000);  // Warm/red
-    Rgb hot = BlackbodyToRgb(10000); // Cool/blue
+    Rgb hot = BlackbodyToRgb(10000);  // Cool/blue
 
     // Cooler temp should be more red
     EXPECT_GT(cool.r, cool.b);
@@ -222,7 +221,7 @@ TEST(SpectralUtilsTests, ApplyRedshiftEffect) {
 TEST(SpectralUtilsTests, ApplyBlueshiftEffect) {
     Rgb white(1.0f, 1.0f, 1.0f);
 
-    Rgb blueshifted = ApplyRedshift(white, -0.3);  // z = -0.3
+    Rgb blueshifted = ApplyRedshift(white, -0.3f);  // z = -0.3
 
     // Red should be reduced more than blue
     EXPECT_LT(blueshifted.r, blueshifted.b);
@@ -231,9 +230,9 @@ TEST(SpectralUtilsTests, ApplyBlueshiftEffect) {
 // Test: Total redshift combines gravitational and Doppler
 TEST(SpectralUtilsTests, TotalRedshiftCombined) {
     // Schwarzschild metric: g_tt = -(1 - rs/r)
-    double g_tt_emit = -0.9;   // Closer to BH
-    double g_tt_obs = -1.0;    // Far from BH
-    double velocity = 0.1;     // Slightly receding
+    double g_tt_emit = -0.9;  // Closer to BH
+    double g_tt_obs = -1.0;   // Far from BH
+    double velocity = 0.1;    // Slightly receding
 
     double z = TotalRedshift(g_tt_emit, g_tt_obs, velocity);
 
@@ -241,6 +240,6 @@ TEST(SpectralUtilsTests, TotalRedshiftCombined) {
     EXPECT_GT(z, 0) << "Combined effect should give net redshift";
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test
 
 // Note: main() provided by GTest::gtest_main

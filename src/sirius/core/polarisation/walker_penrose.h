@@ -122,8 +122,8 @@ inline void ParallelTransportStep(IMetric& metric, PolarisedRay& ray, double h) 
 // (trial.k / e_t.k) e_t with e_t = (1,0,0,0), giving f.k = 0 because k is null,
 // then scale to g_uv f^u f^v = 1. The residual freedom f -> f + alpha k does not
 // change the physical polarisation or the Walker-Penrose constant.
-[[nodiscard]] inline Vec4 MakeOrthonormalPolarisation(IMetric& metric, const Vec4& x,
-                                                      const Vec4& k, const Vec4& trial) {
+[[nodiscard]] inline Vec4 MakeOrthonormalPolarisation(IMetric& metric, const Vec4& x, const Vec4& k,
+                                                      const Vec4& trial) {
     Metric4d g;
     Tensor<Dual<double>, 4, 4, 4> dg;
     metric.Evaluate(x, g, dg);

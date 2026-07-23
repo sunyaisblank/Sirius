@@ -15,9 +15,11 @@
 // and the generic contraction g^{mu alpha} g_{alpha nu} = delta^mu_nu holds
 // for any non-degenerate metric.
 
-#include <gtest/gtest.h>
-#include "sirius/core/tensor.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
+#include "sirius/core/tensor.h"
+
+#include <gtest/gtest.h>
+
 #include <cmath>
 
 using namespace sirius::core;
@@ -44,12 +46,15 @@ Metric4d evaluateAt(KerrSchildFamily& metric, double x, double y, double z) {
     Metric4d g;
     Tensor<Dual<double>, 4, 4, 4> dg;
     Tensor<double, 4> pos;
-    pos(0) = 0.0; pos(1) = x; pos(2) = y; pos(3) = z;
+    pos(0) = 0.0;
+    pos(1) = x;
+    pos(2) = y;
+    pos(3) = z;
     metric.Evaluate(pos, g, dg);
     return g;
 }
 
-} // namespace
+}  // namespace
 
 TEST(TensorInverseTests, DiagonalMetricInverseIsExact) {
     Metric4d g;
@@ -68,14 +73,13 @@ TEST(TensorInverseTests, OffDiagonalMetricInverseIsExact) {
     // The defective implementation returned zero off-diagonals here.
     Metric4d g;
     const double m[4][4] = {
-        {-1.2,  0.3,  0.1, -0.2},
-        { 0.3,  1.5, -0.4,  0.2},
-        { 0.1, -0.4,  2.0,  0.5},
-        {-0.2,  0.2,  0.5,  1.1},
+        {-1.2, 0.3, 0.1, -0.2},
+        {0.3, 1.5, -0.4, 0.2},
+        {0.1, -0.4, 2.0, 0.5},
+        {-0.2, 0.2, 0.5, 1.1},
     };
     for (int i = 0; i < 4; i++)
-        for (int j = 0; j < 4; j++)
-            g(i, j) = Dual<double>(m[i][j]);
+        for (int j = 0; j < 4; j++) g(i, j) = Dual<double>(m[i][j]);
 
     Metric4d g_inv = TensorOps::Inverse(g);
     EXPECT_LT(inverseDeviation(g, g_inv), 1e-12);
@@ -91,7 +95,10 @@ TEST(TensorInverseTests, KerrSchildDeterminantIsMinusOne) {
     // because the Kerr-Schild null vector satisfies eta^{mu nu} l_mu l_nu = 0.
     KerrSchildFamily kerr(KerrSchildParams::Kerr(1.0, 0.9));
     const double points[][3] = {
-        {6.0, 0.0, 0.0}, {3.0, 2.0, 1.0}, {0.5, 0.5, 4.0}, {-2.0, 5.0, -1.5},
+        {6.0, 0.0, 0.0},
+        {3.0, 2.0, 1.0},
+        {0.5, 0.5, 4.0},
+        {-2.0, 5.0, -1.5},
     };
     for (const auto& p : points) {
         Metric4d g = evaluateAt(kerr, p[0], p[1], p[2]);
@@ -110,18 +117,23 @@ TEST(TensorInverseTests, KerrSchildNumericInverseSatisfiesIdentity) {
 TEST(TensorInverseTests, AnalyticInverseMatchesNumericInverse) {
     KerrSchildFamily kerr(KerrSchildParams::Kerr(1.0, 0.9));
     const double points[][3] = {
-        {6.0, 0.0, 0.0}, {3.0, 2.0, 1.0}, {2.0, -1.0, 0.5},
+        {6.0, 0.0, 0.0},
+        {3.0, 2.0, 1.0},
+        {2.0, -1.0, 0.5},
     };
     for (const auto& p : points) {
         Tensor<double, 4> pos;
-        pos(0) = 0.0; pos(1) = p[0]; pos(2) = p[1]; pos(3) = p[2];
+        pos(0) = 0.0;
+        pos(1) = p[0];
+        pos(2) = p[1];
+        pos(3) = p[2];
 
         Metric4d g = evaluateAt(kerr, p[0], p[1], p[2]);
         Metric4d analytic;
         ASSERT_TRUE(kerr.InverseMetric(pos, analytic));
         EXPECT_LT(inverseDeviation(g, analytic), 1e-10)
-            << "analytic inverse fails the identity at ("
-            << p[0] << ", " << p[1] << ", " << p[2] << ")";
+            << "analytic inverse fails the identity at (" << p[0] << ", " << p[1] << ", " << p[2]
+            << ")";
 
         Metric4d numeric = TensorOps::Inverse(g);
         for (int mu = 0; mu < 4; mu++) {
@@ -139,15 +151,17 @@ TEST(TensorInverseTests, ChristoffelSymbolsAreSymmetricInLowerIndices) {
     Metric4d g;
     Tensor<Dual<double>, 4, 4, 4> dg;
     Tensor<double, 4> pos;
-    pos(0) = 0.0; pos(1) = 3.0; pos(2) = 2.0; pos(3) = 1.0;
+    pos(0) = 0.0;
+    pos(1) = 3.0;
+    pos(2) = 2.0;
+    pos(3) = 1.0;
     kerr.Evaluate(pos, g, dg);
 
     ChristoffelSymbols gamma = TensorOps::Christoffel(g, dg);
     for (int lam = 0; lam < 4; lam++) {
         for (int mu = 0; mu < 4; mu++) {
             for (int nu = mu + 1; nu < 4; nu++) {
-                EXPECT_NEAR(gamma.gamma(lam, mu, nu).real,
-                            gamma.gamma(lam, nu, mu).real, 1e-12);
+                EXPECT_NEAR(gamma.gamma(lam, mu, nu).real, gamma.gamma(lam, nu, mu).real, 1e-12);
             }
         }
     }

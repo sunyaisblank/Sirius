@@ -50,9 +50,12 @@ Direction Orthogonal(const Direction& n) {
     // Cross with the axis least aligned with n.
     double ax = std::abs(n.x), ay = std::abs(n.y), az = std::abs(n.z);
     double ex = 0, ey = 0, ez = 0;
-    if (ax <= ay && ax <= az) ex = 1;
-    else if (ay <= az) ey = 1;
-    else ez = 1;
+    if (ax <= ay && ax <= az)
+        ex = 1;
+    else if (ay <= az)
+        ey = 1;
+    else
+        ez = 1;
     double cx = n.y * ez - n.z * ey;
     double cy = n.z * ex - n.x * ez;
     double cz = n.x * ey - n.y * ex;
@@ -155,8 +158,7 @@ TEST(MorrisThorneCartesianTests, DerivativesMatchFiniteDifferencesOfMetric) {
                     for (int i = 0; i < 4; ++i) {
                         for (int j = 0; j < 4; ++j) {
                             double fd = (gp(i, j).real - gm(i, j).real) / (2.0 * h);
-                            EXPECT_NEAR(dg(k, i, j).real, fd,
-                                        5e-7 * std::max(1.0, std::abs(fd)))
+                            EXPECT_NEAR(dg(k, i, j).real, fd, 5e-7 * std::max(1.0, std::abs(fd)))
                                 << "d_" << k << " g_" << i << j << " at b0=" << b0
                                 << " r=" << rf * b0;
                         }
@@ -190,8 +192,7 @@ TEST(MorrisThorneCartesianTests, AnalyticInverseIsExact) {
                 for (int mu = 0; mu < 4; ++mu) {
                     for (int nu = 0; nu < 4; ++nu) {
                         double s = 0.0;
-                        for (int al = 0; al < 4; ++al)
-                            s += gi(mu, al).real * g(al, nu).real;
+                        for (int al = 0; al < 4; ++al) s += gi(mu, al).real * g(al, nu).real;
                         double expected = (mu == nu) ? 1.0 : 0.0;
                         EXPECT_NEAR(s, expected, 1e-13)
                             << "inverse identity at b0=" << b0 << " r=" << rf * b0;

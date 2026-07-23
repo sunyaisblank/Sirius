@@ -12,18 +12,25 @@ jobs:
   linux-gate:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Toolchain
         run: |
           sudo apt-get update
-          sudo apt-get install -y g++-14 gcc-14 ninja-build \
+          sudo apt-get install -y clang-format-18 g++-14 gcc-14 ninja-build \
             libvulkan-dev mesa-vulkan-drivers spirv-tools \
-            xorg-dev libgl1-mesa-dev
+            xorg-dev libgl1-mesa-dev libwayland-dev \
+            wayland-protocols libxkbcommon-dev
       - name: Slang
         run: |
-          TAG=$(curl -s https://api.github.com/repos/shader-slang/slang/releases/latest | grep -m1 '"tag_name"' | cut -d'"' -f4)
-          curl -sL "https://github.com/shader-slang/slang/releases/download/${TAG}/slang-${TAG#v}-linux-x86_64.tar.gz" -o slang.tgz
+          TAG=v2026.12.0.1
+          curl --fail --location --silent --show-error \
+            "https://github.com/shader-slang/slang/releases/download/${TAG}/slang-${TAG#v}-linux-x86_64.tar.gz" \
+            --output slang.tgz
           sudo mkdir -p /opt/slang && sudo tar xzf slang.tgz -C /opt/slang
+      - name: First-party format
+        run: |
+          find src/sirius tests -type f \( -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \) \
+            -print0 | xargs -0 clang-format-18 --dry-run --Werror
       - name: Configure
         run: cmake --preset linux-ci
       - name: Build (strict, mandatory gate on)
@@ -36,7 +43,7 @@ jobs:
   windows-build:
     runs-on: windows-2022
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Configure
         run: cmake --preset windows-msvc
       - name: Build
@@ -47,7 +54,7 @@ jobs:
   macos-build:
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Toolchain
         run: brew install ninja
       - name: Configure

@@ -21,15 +21,16 @@
 // LABEL: Mandatory;Stability
 // =============================================================================
 
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <gtest/gtest.h>
-#include <vector>
-#include "sirius/core/tensor.h"
-#include "sirius/core/metrics/metric.h"
-#include "sirius/core/metrics/kerr_schild_family.h"  // Unified Kerr-Schild Family
-#include "sirius/core/geodesic_integrator.h"
 #include "sirius/core/constants.h"  // Unified tolerance constants
+#include "sirius/core/geodesic_integrator.h"
+#include "sirius/core/metrics/kerr_schild_family.h"  // Unified Kerr-Schild Family
+#include "sirius/core/metrics/metric.h"
+#include "sirius/core/tensor.h"
+
+#include <gtest/gtest.h>
+
+#include <cmath>
+#include <vector>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -42,15 +43,18 @@ using namespace sirius::core;
 // Note: We use fully qualified names to avoid collision with ::Geodesic functions
 
 // Geodesic conservation tolerances (aligned with sirius/core/constants.h)
-constexpr double KILLING_ENERGY_TOLERANCE = sirius::core::constants::geodesic::kConservationTol;     // 1e-4
-constexpr double KILLING_MOMENTUM_TOLERANCE = sirius::core::constants::geodesic::kConservationTol;   // 1e-4
+constexpr double KILLING_ENERGY_TOLERANCE =
+    sirius::core::constants::geodesic::kConservationTol;  // 1e-4
+constexpr double KILLING_MOMENTUM_TOLERANCE =
+    sirius::core::constants::geodesic::kConservationTol;  // 1e-4
 
 // Null condition tolerance: use GPU tolerance for these integration tests
 // CPU tests should use kNullConditionTolCpu (1e-10) for tighter validation
 // Note: The observed behavior after RK45 fixes shows ~9×10^-5 drift, which
 // meets the GPU tolerance but not the CPU tolerance. This is acceptable
 // for single-precision-style integration paths.
-constexpr double NULL_CONDITION_TOLERANCE = sirius::core::constants::geodesic::kNullConditionTolKernel;  // 1e-5
+constexpr double NULL_CONDITION_TOLERANCE =
+    sirius::core::constants::geodesic::kNullConditionTolKernel;  // 1e-5
 
 constexpr int MAX_INTEGRATION_STEPS = 1000;
 
@@ -59,7 +63,7 @@ constexpr int MAX_INTEGRATION_STEPS = 1000;
 // =============================================================================
 
 class ConservationLawTests : public ::testing::Test {
-protected:
+  protected:
     IntegratorConfig rk45_config;
 
     void SetUp() override {
@@ -89,8 +93,8 @@ protected:
         double L = 0.0;
         Vec4 xi;
         xi(0) = 0.0;
-        xi(1) = -pos(2); // -y
-        xi(2) = pos(1);  // x
+        xi(1) = -pos(2);  // -y
+        xi(2) = pos(1);   // x
         xi(3) = 0.0;
 
         for (int mu = 0; mu < 4; ++mu) {
@@ -112,9 +116,10 @@ protected:
         return norm;
     }
 
-    // Initialize a light ray at given position (Spherical input) with given spatial direction (Spherical basis)
-    Lightray createLightray(const Vec4& spherical_pos, double v_r, double v_theta,
-                           double v_phi, IMetric* metric) {
+    // Initialize a light ray at given position (Spherical input) with given spatial direction
+    // (Spherical basis)
+    Lightray createLightray(const Vec4& spherical_pos, double v_r, double v_theta, double v_phi,
+                            IMetric* metric) {
         Lightray ray;
 
         // Convert Position: Spherical (t, r, th, ph) -> Cartesian (t, x, y, z)
@@ -128,9 +133,9 @@ protected:
         double cos_ph = std::cos(ph);
 
         ray.position(0) = spherical_pos(0);
-        ray.position(1) = r * sin_th * cos_ph; // x
-        ray.position(2) = r * sin_th * sin_ph; // y
-        ray.position(3) = r * cos_th;          // z
+        ray.position(1) = r * sin_th * cos_ph;  // x
+        ray.position(2) = r * sin_th * sin_ph;  // y
+        ray.position(3) = r * cos_th;           // z
 
         ray.proper_time = 0.0f;
         ray.coordinate_time = 0.0f;
@@ -143,9 +148,11 @@ protected:
         // vy = vr sin(th)sin(ph) + r vth cos(th)sin(ph) + r vph sin(th)cos(ph)
         // vz = vr cos(th)        - r vth sin(th)
 
-        ray.velocity(1) = v_r * sin_th * cos_ph + r * v_theta * cos_th * cos_ph - r * v_phi * sin_th * sin_ph;
-        ray.velocity(2) = v_r * sin_th * sin_ph + r * v_theta * cos_th * sin_ph + r * v_phi * sin_th * cos_ph;
-        ray.velocity(3) = v_r * cos_th          - r * v_theta * sin_th;
+        ray.velocity(1) =
+            v_r * sin_th * cos_ph + r * v_theta * cos_th * cos_ph - r * v_phi * sin_th * sin_ph;
+        ray.velocity(2) =
+            v_r * sin_th * sin_ph + r * v_theta * cos_th * sin_ph + r * v_phi * sin_th * cos_ph;
+        ray.velocity(3) = v_r * cos_th - r * v_theta * sin_th;
 
         // Compute k^t from null condition
         Metric4d g;
@@ -165,8 +172,7 @@ protected:
 // Null Condition Tests
 // =============================================================================
 
-TEST_F(ConservationLawTests, NullConditionPreservedSchwarzschild)
-{
+TEST_F(ConservationLawTests, NullConditionPreservedSchwarzschild) {
     // FORMAL SPECIFICATION:
     // For null geodesics: g_μν k^μ k^ν = 0 at all points
     // Tolerance: |g_μν k^μ k^ν| < 10^-6
@@ -204,12 +210,11 @@ TEST_F(ConservationLawTests, NullConditionPreservedSchwarzschild)
     }
 
     EXPECT_LT(max_null_violation, NULL_CONDITION_TOLERANCE)
-        << "Null condition violation " << max_null_violation
-        << " exceeds tolerance " << NULL_CONDITION_TOLERANCE;
+        << "Null condition violation " << max_null_violation << " exceeds tolerance "
+        << NULL_CONDITION_TOLERANCE;
 }
 
-TEST_F(ConservationLawTests, NullConditionPreservedKerr)
-{
+TEST_F(ConservationLawTests, NullConditionPreservedKerr) {
     // FORMAL SPECIFICATION:
     // Null condition must hold for Kerr spacetime as well
 
@@ -243,16 +248,15 @@ TEST_F(ConservationLawTests, NullConditionPreservedKerr)
     }
 
     EXPECT_LT(max_null_violation, NULL_CONDITION_TOLERANCE)
-        << "Kerr null condition violation " << max_null_violation
-        << " exceeds tolerance " << NULL_CONDITION_TOLERANCE;
+        << "Kerr null condition violation " << max_null_violation << " exceeds tolerance "
+        << NULL_CONDITION_TOLERANCE;
 }
 
 // =============================================================================
 // Killing Energy Conservation Tests
 // =============================================================================
 
-TEST_F(ConservationLawTests, KillingEnergyConservedSchwarzschild)
-{
+TEST_F(ConservationLawTests, KillingEnergyConservedSchwarzschild) {
     // FORMAL SPECIFICATION:
     // For Schwarzschild metric: E = -(1 - 2M/r) dt/dλ = const
     // Relative drift must satisfy: |ΔE/E| < 10^-4 over 1000 steps
@@ -294,12 +298,11 @@ TEST_F(ConservationLawTests, KillingEnergyConservedSchwarzschild)
     }
 
     EXPECT_LT(max_energy_drift, KILLING_ENERGY_TOLERANCE)
-        << "Killing energy drift " << max_energy_drift
-        << " exceeds tolerance " << KILLING_ENERGY_TOLERANCE;
+        << "Killing energy drift " << max_energy_drift << " exceeds tolerance "
+        << KILLING_ENERGY_TOLERANCE;
 }
 
-TEST_F(ConservationLawTests, KillingEnergyConservedKerr)
-{
+TEST_F(ConservationLawTests, KillingEnergyConservedKerr) {
     // FORMAL SPECIFICATION:
     // Kerr is stationary, so Killing energy E = -g_tμ k^μ is conserved
 
@@ -338,16 +341,15 @@ TEST_F(ConservationLawTests, KillingEnergyConservedKerr)
     }
 
     EXPECT_LT(max_energy_drift, KILLING_ENERGY_TOLERANCE)
-        << "Kerr Killing energy drift " << max_energy_drift
-        << " exceeds tolerance " << KILLING_ENERGY_TOLERANCE;
+        << "Kerr Killing energy drift " << max_energy_drift << " exceeds tolerance "
+        << KILLING_ENERGY_TOLERANCE;
 }
 
 // =============================================================================
 // Killing Angular Momentum Conservation Tests
 // =============================================================================
 
-TEST_F(ConservationLawTests, KillingAngularMomentumConservedSchwarzschild)
-{
+TEST_F(ConservationLawTests, KillingAngularMomentumConservedSchwarzschild) {
     // FORMAL SPECIFICATION:
     // For Schwarzschild: L = r² sin²θ dφ/dλ = const (for equatorial orbits)
     // Relative drift must satisfy: |ΔL/L| < 10^-4
@@ -393,12 +395,11 @@ TEST_F(ConservationLawTests, KillingAngularMomentumConservedSchwarzschild)
     }
 
     EXPECT_LT(max_L_drift, KILLING_MOMENTUM_TOLERANCE)
-        << "Killing angular momentum drift " << max_L_drift
-        << " exceeds tolerance " << KILLING_MOMENTUM_TOLERANCE;
+        << "Killing angular momentum drift " << max_L_drift << " exceeds tolerance "
+        << KILLING_MOMENTUM_TOLERANCE;
 }
 
-TEST_F(ConservationLawTests, KillingAngularMomentumConservedKerr)
-{
+TEST_F(ConservationLawTests, KillingAngularMomentumConservedKerr) {
     // FORMAL SPECIFICATION:
     // Kerr is axisymmetric, so L = g_φμ k^μ is conserved
 
@@ -441,16 +442,15 @@ TEST_F(ConservationLawTests, KillingAngularMomentumConservedKerr)
     }
 
     EXPECT_LT(max_L_drift, KILLING_MOMENTUM_TOLERANCE)
-        << "Kerr angular momentum drift " << max_L_drift
-        << " exceeds tolerance " << KILLING_MOMENTUM_TOLERANCE;
+        << "Kerr angular momentum drift " << max_L_drift << " exceeds tolerance "
+        << KILLING_MOMENTUM_TOLERANCE;
 }
 
 // =============================================================================
 // Combined Conservation Test
 // =============================================================================
 
-TEST_F(ConservationLawTests, AllConservedQuantitiesSchwarzschild)
-{
+TEST_F(ConservationLawTests, AllConservedQuantitiesSchwarzschild) {
     // FORMAL SPECIFICATION:
     // Test all conservation laws simultaneously for a single integration
     // This is the key validation for geodesic integrator correctness
@@ -517,4 +517,4 @@ TEST_F(ConservationLawTests, AllConservedQuantitiesSchwarzschild)
     EXPECT_LT(max_null_violation, NULL_CONDITION_TOLERANCE);
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

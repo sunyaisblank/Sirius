@@ -2,11 +2,13 @@
 // Component ID: TSMT102A (Test/Metric/AlcubierreProperties)
 // Tests: PHMT102A.h (WarpDriveFamily)
 
-#include <gtest/gtest.h>
-#include <cmath>
-#include "sirius/core/tensor.h"
 #include "sirius/core/dual_number.h"
 #include "sirius/core/metrics/warp_drive_family.h"
+#include "sirius/core/tensor.h"
+
+#include <gtest/gtest.h>
+
+#include <cmath>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -18,7 +20,7 @@ constexpr double kEps = 1e-8;
 // =============================================================================
 
 class AlcubierreMetricTests : public ::testing::Test {
-protected:
+  protected:
     sirius::core::WarpDriveFamily metric;
     sirius::core::WarpDriveParams defaultParams;
 
@@ -29,7 +31,10 @@ protected:
 
     void evaluateAt(double x, double y, double z, Metric4d& g) {
         Tensor<double, 4> pos;
-        pos(0) = 0.0; pos(1) = x; pos(2) = y; pos(3) = z;
+        pos(0) = 0.0;
+        pos(1) = x;
+        pos(2) = y;
+        pos(3) = z;
         Tensor<Dual<double>, 4, 4, 4> dg;
         metric.Evaluate(pos, g, dg);
     }
@@ -48,8 +53,8 @@ TEST_F(AlcubierreMetricTests, MetricSymmetry) {
         for (int mu = 0; mu < 4; ++mu) {
             for (int nu = mu + 1; nu < 4; ++nu) {
                 EXPECT_NEAR(g(mu, nu).real, g(nu, mu).real, kEps)
-                    << "Asymmetry at (" << p[0] << "," << p[1] << "," << p[2]
-                    << ") indices (" << mu << "," << nu << ")";
+                    << "Asymmetry at (" << p[0] << "," << p[1] << "," << p[2] << ") indices (" << mu
+                    << "," << nu << ")";
             }
         }
     }
@@ -99,7 +104,7 @@ TEST_F(AlcubierreMetricTests, ShiftVectorAtCentre) {
 
     double vs = defaultParams.vs;
     double f = metric.ShapeFunction(0.0);
-    EXPECT_NEAR(f, 1.0, 1e-4); // shape function at centre ≈ 1
+    EXPECT_NEAR(f, 1.0, 1e-4);  // shape function at centre ≈ 1
 
     EXPECT_NEAR(g(0, 1).real, -vs * f, kEps);
 }
@@ -148,8 +153,7 @@ TEST_F(AlcubierreMetricTests, ShapeFunctionMonotoneDecrease) {
     double prev = metric.ShapeFunction(0.0);
     for (double rs = 0.1; rs <= 5.0; rs += 0.1) {
         double val = metric.ShapeFunction(rs);
-        EXPECT_LE(val, prev + kEps)
-            << "Shape function not monotone at rs = " << rs;
+        EXPECT_LE(val, prev + kEps) << "Shape function not monotone at rs = " << rs;
         prev = val;
     }
 }
@@ -181,7 +185,7 @@ TEST_F(AlcubierreMetricTests, SuperluminalConstruction) {
 TEST_F(AlcubierreMetricTests, SetParameterClamping) {
     metric.SetParameter("velocity", -5.0);
     auto params = metric.GetParams();
-    EXPECT_GE(params.vs, 0.0); // should be clamped to valid range
+    EXPECT_GE(params.vs, 0.0);  // should be clamped to valid range
 }
 
 // =============================================================================
@@ -219,4 +223,4 @@ TEST_F(AlcubierreMetricTests, BubblePositionUpdate) {
     EXPECT_NEAR(params.xs, defaultParams.vs * 5.0, kEps);
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

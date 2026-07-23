@@ -8,7 +8,8 @@
 
 #include <gtest/gtest.h>
 
-#include <cstdlib>
+#include "support/scoped_environment.h"
+
 #include <cstdint>
 
 namespace {
@@ -19,6 +20,7 @@ using sirius::render::kMinTileEdge;
 using sirius::render::kResidencyFraction;
 using sirius::render::kTileWorkingSetBytesPerPixel;
 using sirius::render::ResolveBudgetBytes;
+using sirius::test::ScopedEnvironmentVariable;
 
 constexpr std::uint64_t kMiB = 1024ULL * 1024ULL;
 constexpr std::uint64_t kGiB = 1024ULL * kMiB;
@@ -70,16 +72,19 @@ TEST(MemoryGovernor, TileNeverExceedsImageExtent) {
 TEST(MemoryGovernor, WorkingSetMatchesTheDerivedTile) {
     const auto plan = DeriveTilePlan(512 * kMiB, kImaxWidth, kImaxHeight, 8 * kMiB);
     ASSERT_TRUE(plan.has_value());
-    const std::uint64_t expected =
-        static_cast<std::uint64_t>(plan->tile_edge) * plan->tile_edge * kTileWorkingSetBytesPerPixel;
+    const std::uint64_t expected = static_cast<std::uint64_t>(plan->tile_edge) * plan->tile_edge *
+                                   kTileWorkingSetBytesPerPixel;
     EXPECT_EQ(plan->tile_working_set_bytes, expected);
     EXPECT_LE(plan->tile_working_set_bytes + plan->fixed_overhead_bytes, plan->usable_bytes);
 }
 
 TEST(MemoryGovernor, EnvironmentOverrideResolvesBudget) {
-    setenv("SIRIUS_MEMORY_BUDGET_MB", "256", 1);
-    EXPECT_EQ(ResolveBudgetBytes(9999 * kMiB), 256 * kMiB) << "override wins over device budget";
-    unsetenv("SIRIUS_MEMORY_BUDGET_MB");
+    ScopedEnvironmentVariable clean_environment("SIRIUS_MEMORY_BUDGET_MB", nullptr);
+    {
+        ScopedEnvironmentVariable budget("SIRIUS_MEMORY_BUDGET_MB", "256");
+        EXPECT_EQ(ResolveBudgetBytes(9999 * kMiB), 256 * kMiB)
+            << "override wins over device budget";
+    }
     EXPECT_EQ(ResolveBudgetBytes(2 * kGiB), 2 * kGiB) << "device budget used when no override";
 }
 

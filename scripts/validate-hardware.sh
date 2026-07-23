@@ -40,7 +40,12 @@ say "[2/5] full test estate"
 (cd "bin/$PRESET" && ctest -j"$(nproc)" --output-on-failure) 2>&1 | tail -4 | tee -a "$LOG"
 
 say "[3/5] device inventory"
-"$SIRIUS" info 2>&1 | tee -a "$LOG" || true
+DEVICE_INFO=$("$SIRIUS" info system --json 2>&1)
+printf '%s\n' "$DEVICE_INFO" | tee -a "$LOG"
+FP64_SUPPORTED=0
+if grep -q '"supports_fp64": true' <<<"$DEVICE_INFO"; then
+    FP64_SUPPORTED=1
+fi
 
 say "[4/5] governed render: 2048 MiB budget, IMAX-class frame, Kerr a=0.9"
 SIRIUS_MEMORY_BUDGET_MB=2048 "$SIRIUS" render --backend vulkan \
@@ -54,8 +59,11 @@ for rung in fp32 fp32-comp fp64; do
         -m Kerr -a 0.9 -w 512 -h 512 -s 4 -d 30 -i 80 --fov 60 \
         -o "$OUT/kerr_$rung.png" 2>&1 | tee -a "$LOG"; then
         say "rung $rung: rendered"
+    elif [[ "$rung" == "fp64" && "$FP64_SUPPORTED" -eq 0 ]]; then
+        say "rung fp64: declined (device inventory reports no shaderFloat64 support)"
     else
-        say "rung $rung: declined (acceptable only for fp64 without shaderFloat64)"
+        say "rung $rung: failed"
+        exit 1
     fi
 done
 

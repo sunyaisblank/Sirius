@@ -18,24 +18,20 @@ using namespace sirius::core::spectral;
 // Mirrors RDOP002A.cu:blackbodyColor() exactly.
 namespace {
 
-constexpr float BB_LOG_MIN = 6.907755279f;   // log(1000)
+constexpr float BB_LOG_MIN = 6.907755279f;    // log(1000)
 constexpr float BB_LOG_RANGE = 3.688879454f;  // log(40000) - log(1000)
 
 // Chebyshev coefficients for CIE x chromaticity (8 terms)
 // Must match RDOP002A.cu exactly
-constexpr float BB_X_CHEB[8] = {
-    0.332461f, -0.098234f, 0.024891f, -0.008123f,
-    0.003012f, -0.001156f, 0.000423f, -0.000148f
-};
+constexpr float BB_X_CHEB[8] = {0.332461f, -0.098234f, 0.024891f, -0.008123f,
+                                0.003012f, -0.001156f, 0.000423f, -0.000148f};
 // Chebyshev coefficients for CIE y chromaticity (8 terms)
-constexpr float BB_Y_CHEB[8] = {
-    0.341231f, -0.056789f, 0.018234f, -0.006512f,
-    0.002345f, -0.000891f, 0.000312f, -0.000108f
-};
+constexpr float BB_Y_CHEB[8] = {0.341231f, -0.056789f, 0.018234f, -0.006512f,
+                                0.002345f, -0.000891f, 0.000312f, -0.000108f};
 
 float chebyshevEval(const float* coeffs, int n, float u) {
     if (n < 2) return coeffs[0];
-    float b0 = coeffs[n-1];
+    float b0 = coeffs[n - 1];
     float b1 = 0.0f;
     for (int i = n - 2; i >= 0; --i) {
         float tmp = 2.0f * u * b0 - b1 + coeffs[i];
@@ -45,7 +41,9 @@ float chebyshevEval(const float* coeffs, int n, float u) {
     return b0;
 }
 
-struct Float3 { float x, y, z; };
+struct Float3 {
+    float x, y, z;
+};
 
 Float3 gpuBlackbodyColor(float T) {
     T = std::clamp(T, 1000.0f, 40000.0f);
@@ -65,9 +63,9 @@ Float3 gpuBlackbodyColor(float T) {
     float Z = Y * y_inv * (1.0f - cx - cy);
 
     Float3 rgb;
-    rgb.x =  3.2404542f * X - 1.5371385f * Y - 0.4985314f * Z;
+    rgb.x = 3.2404542f * X - 1.5371385f * Y - 0.4985314f * Z;
     rgb.y = -0.9692660f * X + 1.8760108f * Y + 0.0415560f * Z;
-    rgb.z =  0.0556434f * X - 0.2040259f * Y + 1.0572252f * Z;
+    rgb.z = 0.0556434f * X - 0.2040259f * Y + 1.0572252f * Z;
 
     rgb.x = std::max(rgb.x, 0.0f);
     rgb.y = std::max(rgb.y, 0.0f);
@@ -76,7 +74,7 @@ Float3 gpuBlackbodyColor(float T) {
     return rgb;
 }
 
-} // anonymous namespace
+}  // anonymous namespace
 
 // Compare GPU Chebyshev against CPU 32-sample integration at reference temps.
 // The two methods use fundamentally different approaches (Chebyshev chromaticity
@@ -115,17 +113,14 @@ TEST_P(BlackbodyParityTest, GPUMatchesCPU) {
     EXPECT_NEAR(maxCh, 1.0f, 0.01f) << "Normalised GPU output should have max ~1";
 }
 
-INSTANTIATE_TEST_SUITE_P(
-    ReferenceTemperatures,
-    BlackbodyParityTest,
-    ::testing::Values(3000.0, 5000.0, 6500.0, 10000.0, 25000.0)
-);
+INSTANTIATE_TEST_SUITE_P(ReferenceTemperatures, BlackbodyParityTest,
+                         ::testing::Values(3000.0, 5000.0, 6500.0, 10000.0, 25000.0));
 
 // Verify colour ordering: low T should be redder, high T bluer
 TEST(BlackbodyParityTest, ColourTemperatureOrdering) {
     Rgb cool = BlackbodyToRgb(3000.0);
     Rgb warm = BlackbodyToRgb(6500.0);
-    Rgb hot  = BlackbodyToRgb(25000.0);
+    Rgb hot = BlackbodyToRgb(25000.0);
 
     // 3000K: r > b (reddish)
     EXPECT_GT(cool.r, cool.b) << "3000K should be redder than blue";
@@ -138,4 +133,4 @@ TEST(BlackbodyParityTest, ColourTemperatureOrdering) {
     EXPECT_GT(warm.g, 0.5f) << "6500K should have moderate green";
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

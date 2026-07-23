@@ -149,9 +149,7 @@ class InteractiveViewer {
 
 inline InteractiveViewer::InteractiveViewer() = default;
 
-inline InteractiveViewer::~InteractiveViewer() {
-    Stop();
-}
+inline InteractiveViewer::~InteractiveViewer() { Stop(); }
 
 inline bool InteractiveViewer::Initialise(const ViewerConfig& config) {
     config_ = config;
@@ -169,9 +167,7 @@ inline bool InteractiveViewer::Initialise(const ViewerConfig& config) {
     return true;
 }
 
-inline void InteractiveViewer::AttachWindow(GLFWwindow* window) {
-    window_ = window;
-}
+inline void InteractiveViewer::AttachWindow(GLFWwindow* window) { window_ = window; }
 
 inline void InteractiveViewer::Start() {
     if (running_) return;
@@ -191,9 +187,7 @@ inline void InteractiveViewer::Stop() {
     running_ = false;
 }
 
-inline void InteractiveViewer::Restart() {
-    restart_requested_ = true;
-}
+inline void InteractiveViewer::Restart() { restart_requested_ = true; }
 
 inline void InteractiveViewer::SetCameraPosition(double r, double theta, double phi) {
     camera_.r = r;
@@ -226,8 +220,8 @@ inline void InteractiveViewer::UpdateCamera(float dt) {
         moved = true;
     }
     if (camera_.moveDown) {
-        camera_.theta =
-            std::min(core::constants::math::kPi - 0.1, camera_.theta + config_.move_speed * 0.02 * dt);
+        camera_.theta = std::min(core::constants::math::kPi - 0.1,
+                                 camera_.theta + config_.move_speed * 0.02 * dt);
         moved = true;
     }
 
@@ -243,13 +237,26 @@ inline void InteractiveViewer::ProcessKey(int key, int action) {
 
     // GLFW key codes: W=87, A=65, S=83, D=68, Q=81, E=69.
     switch (key) {
-        case 87: camera_.moveForward = pressed; break;
-        case 83: camera_.moveBackward = pressed; break;
-        case 65: camera_.moveLeft = pressed; break;
-        case 68: camera_.moveRight = pressed; break;
-        case 81: camera_.moveUp = pressed; break;
-        case 69: camera_.moveDown = pressed; break;
-        default: break;
+        case 87:
+            camera_.moveForward = pressed;
+            break;
+        case 83:
+            camera_.moveBackward = pressed;
+            break;
+        case 65:
+            camera_.moveLeft = pressed;
+            break;
+        case 68:
+            camera_.moveRight = pressed;
+            break;
+        case 81:
+            camera_.moveUp = pressed;
+            break;
+        case 69:
+            camera_.moveDown = pressed;
+            break;
+        default:
+            break;
     }
 }
 
@@ -287,8 +294,8 @@ inline const float* InteractiveViewer::GetFrameBuffer() const {
 
 inline void InteractiveViewer::GetResolutionForLevel(int level, int& width, int& height) const {
     float t = static_cast<float>(level) / std::max(1, config_.refinement_levels - 1);
-    width = static_cast<int>(config_.preview_width +
-                             t * (config_.final_width - config_.preview_width));
+    width =
+        static_cast<int>(config_.preview_width + t * (config_.final_width - config_.preview_width));
     height = static_cast<int>(config_.preview_height +
                               t * (config_.final_height - config_.preview_height));
 

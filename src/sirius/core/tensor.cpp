@@ -3,6 +3,7 @@
 
 #include "sirius/core/tensor.h"
 
+#include <algorithm>
 #include <cmath>
 
 namespace sirius::core {
@@ -20,8 +21,7 @@ struct Minors2x2 {
 
 inline void ExtractReal(const Metric4d& g, double m[4][4]) {
     for (int i = 0; i < 4; i++)
-        for (int j = 0; j < 4; j++)
-            m[i][j] = g(i, j).real;
+        for (int j = 0; j < 4; j++) m[i][j] = g(i, j).real;
 }
 
 inline Minors2x2 ComputeMinors(const double m[4][4]) {
@@ -48,10 +48,10 @@ inline Minors2x2 ComputeMinors(const double m[4][4]) {
 }
 
 inline double DeterminantFromMinors(const double m[4][4], const Minors2x2& A) {
-    return m[0][0] * (m[1][1] * A.A2323 - m[1][2] * A.A1323 + m[1][3] * A.A1223)
-         - m[0][1] * (m[1][0] * A.A2323 - m[1][2] * A.A0323 + m[1][3] * A.A0223)
-         + m[0][2] * (m[1][0] * A.A1323 - m[1][1] * A.A0323 + m[1][3] * A.A0123)
-         - m[0][3] * (m[1][0] * A.A1223 - m[1][1] * A.A0223 + m[1][2] * A.A0123);
+    return m[0][0] * (m[1][1] * A.A2323 - m[1][2] * A.A1323 + m[1][3] * A.A1223) -
+           m[0][1] * (m[1][0] * A.A2323 - m[1][2] * A.A0323 + m[1][3] * A.A0223) +
+           m[0][2] * (m[1][0] * A.A1323 - m[1][1] * A.A0323 + m[1][3] * A.A0123) -
+           m[0][3] * (m[1][0] * A.A1223 - m[1][1] * A.A0223 + m[1][2] * A.A0123);
 }
 
 }  // namespace
@@ -72,22 +72,38 @@ Metric4d TensorOps::Inverse(const Metric4d& g) {
     const double inv_det = 1.0 / det;
 
     Metric4d g_inv;
-    g_inv(0, 0) = Dual<double>( inv_det * (m[1][1] * A.A2323 - m[1][2] * A.A1323 + m[1][3] * A.A1223));
-    g_inv(0, 1) = Dual<double>(-inv_det * (m[0][1] * A.A2323 - m[0][2] * A.A1323 + m[0][3] * A.A1223));
-    g_inv(0, 2) = Dual<double>( inv_det * (m[0][1] * A.A2313 - m[0][2] * A.A1313 + m[0][3] * A.A1213));
-    g_inv(0, 3) = Dual<double>(-inv_det * (m[0][1] * A.A2312 - m[0][2] * A.A1312 + m[0][3] * A.A1212));
-    g_inv(1, 0) = Dual<double>(-inv_det * (m[1][0] * A.A2323 - m[1][2] * A.A0323 + m[1][3] * A.A0223));
-    g_inv(1, 1) = Dual<double>( inv_det * (m[0][0] * A.A2323 - m[0][2] * A.A0323 + m[0][3] * A.A0223));
-    g_inv(1, 2) = Dual<double>(-inv_det * (m[0][0] * A.A2313 - m[0][2] * A.A0313 + m[0][3] * A.A0213));
-    g_inv(1, 3) = Dual<double>( inv_det * (m[0][0] * A.A2312 - m[0][2] * A.A0312 + m[0][3] * A.A0212));
-    g_inv(2, 0) = Dual<double>( inv_det * (m[1][0] * A.A1323 - m[1][1] * A.A0323 + m[1][3] * A.A0123));
-    g_inv(2, 1) = Dual<double>(-inv_det * (m[0][0] * A.A1323 - m[0][1] * A.A0323 + m[0][3] * A.A0123));
-    g_inv(2, 2) = Dual<double>( inv_det * (m[0][0] * A.A1313 - m[0][1] * A.A0313 + m[0][3] * A.A0113));
-    g_inv(2, 3) = Dual<double>(-inv_det * (m[0][0] * A.A1312 - m[0][1] * A.A0312 + m[0][3] * A.A0112));
-    g_inv(3, 0) = Dual<double>(-inv_det * (m[1][0] * A.A1223 - m[1][1] * A.A0223 + m[1][2] * A.A0123));
-    g_inv(3, 1) = Dual<double>( inv_det * (m[0][0] * A.A1223 - m[0][1] * A.A0223 + m[0][2] * A.A0123));
-    g_inv(3, 2) = Dual<double>(-inv_det * (m[0][0] * A.A1213 - m[0][1] * A.A0213 + m[0][2] * A.A0113));
-    g_inv(3, 3) = Dual<double>( inv_det * (m[0][0] * A.A1212 - m[0][1] * A.A0212 + m[0][2] * A.A0112));
+    g_inv(0, 0) =
+        Dual<double>(inv_det * (m[1][1] * A.A2323 - m[1][2] * A.A1323 + m[1][3] * A.A1223));
+    g_inv(0, 1) =
+        Dual<double>(-inv_det * (m[0][1] * A.A2323 - m[0][2] * A.A1323 + m[0][3] * A.A1223));
+    g_inv(0, 2) =
+        Dual<double>(inv_det * (m[0][1] * A.A2313 - m[0][2] * A.A1313 + m[0][3] * A.A1213));
+    g_inv(0, 3) =
+        Dual<double>(-inv_det * (m[0][1] * A.A2312 - m[0][2] * A.A1312 + m[0][3] * A.A1212));
+    g_inv(1, 0) =
+        Dual<double>(-inv_det * (m[1][0] * A.A2323 - m[1][2] * A.A0323 + m[1][3] * A.A0223));
+    g_inv(1, 1) =
+        Dual<double>(inv_det * (m[0][0] * A.A2323 - m[0][2] * A.A0323 + m[0][3] * A.A0223));
+    g_inv(1, 2) =
+        Dual<double>(-inv_det * (m[0][0] * A.A2313 - m[0][2] * A.A0313 + m[0][3] * A.A0213));
+    g_inv(1, 3) =
+        Dual<double>(inv_det * (m[0][0] * A.A2312 - m[0][2] * A.A0312 + m[0][3] * A.A0212));
+    g_inv(2, 0) =
+        Dual<double>(inv_det * (m[1][0] * A.A1323 - m[1][1] * A.A0323 + m[1][3] * A.A0123));
+    g_inv(2, 1) =
+        Dual<double>(-inv_det * (m[0][0] * A.A1323 - m[0][1] * A.A0323 + m[0][3] * A.A0123));
+    g_inv(2, 2) =
+        Dual<double>(inv_det * (m[0][0] * A.A1313 - m[0][1] * A.A0313 + m[0][3] * A.A0113));
+    g_inv(2, 3) =
+        Dual<double>(-inv_det * (m[0][0] * A.A1312 - m[0][1] * A.A0312 + m[0][3] * A.A0112));
+    g_inv(3, 0) =
+        Dual<double>(-inv_det * (m[1][0] * A.A1223 - m[1][1] * A.A0223 + m[1][2] * A.A0123));
+    g_inv(3, 1) =
+        Dual<double>(inv_det * (m[0][0] * A.A1223 - m[0][1] * A.A0223 + m[0][2] * A.A0123));
+    g_inv(3, 2) =
+        Dual<double>(-inv_det * (m[0][0] * A.A1213 - m[0][1] * A.A0213 + m[0][2] * A.A0113));
+    g_inv(3, 3) =
+        Dual<double>(inv_det * (m[0][0] * A.A1212 - m[0][1] * A.A0212 + m[0][2] * A.A0112));
     return g_inv;
 }
 
@@ -111,8 +127,10 @@ ChristoffelSymbols TensorOps::Christoffel(const Metric4d& g,
                 gamma.gamma(mu, nu, rho) = Dual<double>(0.0, 0.0);
 
                 for (int sigma = 0; sigma < 4; sigma++) {
-                    Dual<double> term = dg(rho, sigma, nu) + dg(nu, sigma, rho) - dg(sigma, nu, rho);
-                    gamma.gamma(mu, nu, rho) = gamma.gamma(mu, nu, rho) + g_inv(mu, sigma) * term * 0.5;
+                    Dual<double> term =
+                        dg(rho, sigma, nu) + dg(nu, sigma, rho) - dg(sigma, nu, rho);
+                    gamma.gamma(mu, nu, rho) =
+                        gamma.gamma(mu, nu, rho) + g_inv(mu, sigma) * term * 0.5;
                 }
             }
         }
@@ -166,9 +184,8 @@ Vec4 TensorOps::GeodesicAccelerationDirect(const Vec4& velocity, const Metric4d&
             double sum = 0.0;
             for (int nu = 0; nu < 4; nu++) {
                 for (int rho = 0; rho < 4; rho++) {
-                    double term = dg(nu, sigma, rho).real
-                                + dg(rho, sigma, nu).real
-                                - dg(sigma, nu, rho).real;
+                    double term =
+                        dg(nu, sigma, rho).real + dg(rho, sigma, nu).real - dg(sigma, nu, rho).real;
                     sum += term * vv[nu][rho];
                 }
             }

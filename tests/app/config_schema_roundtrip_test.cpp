@@ -3,11 +3,11 @@
 // spellings, so existing config files load identically. This is the schema
 // compatibility check for the app/config port.
 
+#include "sirius/app/config/config_schema.h"
+
 #include <gtest/gtest.h>
 
 #include <nlohmann/json.hpp>
-
-#include "sirius/app/config/config_schema.h"
 
 namespace sirius::app::test {
 

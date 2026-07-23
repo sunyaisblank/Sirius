@@ -2,16 +2,17 @@
 // Tests: bit-identical results across iterations for all computations.
 // Ported from TSDG004A.cpp; assertions and tolerances unchanged.
 
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <gtest/gtest.h>
-#include <vector>
-#include <cstring>
 #include "sirius/core/dual_number.h"
-#include "sirius/core/tensor.h"
-#include "sirius/core/metrics/metric.h"
-#include "sirius/core/metrics/kerr_schild_family.h"  // Unified Kerr-Schild Family
 #include "sirius/core/geodesic_integrator.h"
+#include "sirius/core/metrics/kerr_schild_family.h"  // Unified Kerr-Schild Family
+#include "sirius/core/metrics/metric.h"
+#include "sirius/core/tensor.h"
+
+#include <gtest/gtest.h>
+
+#include <cmath>
+#include <cstring>
+#include <vector>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -27,7 +28,7 @@ constexpr int DETERMINISM_ITERATIONS = 10;
 // =============================================================================
 
 class DeterminismTests : public ::testing::Test {
-protected:
+  protected:
     sirius::core::KerrSchildFamily schwarzschild;
     sirius::core::KerrSchildFamily kerr;
 
@@ -38,9 +39,7 @@ protected:
     }
 
     // Bit-level comparison of doubles
-    bool bitIdentical(double a, double b) {
-        return std::memcmp(&a, &b, sizeof(double)) == 0;
-    }
+    bool bitIdentical(double a, double b) { return std::memcmp(&a, &b, sizeof(double)) == 0; }
 
     // Hash a Vec4 for comparison
     uint64_t hashVec4(const Vec4& v) {
@@ -72,8 +71,7 @@ protected:
 // Dual Number Determinism
 // =============================================================================
 
-TEST_F(DeterminismTests, DualArithmeticDeterminism)
-{
+TEST_F(DeterminismTests, DualArithmeticDeterminism) {
     // FORMAL SPECIFICATION D1:
     // Dual number arithmetic must be bit-identical across runs
 
@@ -114,17 +112,16 @@ TEST_F(DeterminismTests, DualArithmeticDeterminism)
 // Metric Evaluation Determinism
 // =============================================================================
 
-TEST_F(DeterminismTests, SchwarzschildMetricDeterminism)
-{
+TEST_F(DeterminismTests, SchwarzschildMetricDeterminism) {
     // FORMAL SPECIFICATION D1:
     // Metric evaluation must produce identical results across calls
 
     Vec4 pos;
     // Spherical (10.0, PI/2, 0.0) -> Cartesian (10.0, 0.0, 0.0)
     pos(0) = 0.0;
-    pos(1) = 10.0; // x
-    pos(2) = 0.0;  // y
-    pos(3) = 0.0;  // z
+    pos(1) = 10.0;  // x
+    pos(2) = 0.0;   // y
+    pos(3) = 0.0;   // z
 
     uint64_t reference_hash = 0;
 
@@ -144,8 +141,7 @@ TEST_F(DeterminismTests, SchwarzschildMetricDeterminism)
     }
 }
 
-TEST_F(DeterminismTests, KerrMetricDeterminism)
-{
+TEST_F(DeterminismTests, KerrMetricDeterminism) {
     // FORMAL SPECIFICATION D1:
     // Kerr metric evaluation must be deterministic
 
@@ -155,9 +151,9 @@ TEST_F(DeterminismTests, KerrMetricDeterminism)
     double th = M_PI / 3.0;
     double ph = 1.0;
     pos(0) = 0.0;
-    pos(1) = r * std::sin(th) * std::cos(ph); // x
-    pos(2) = r * std::sin(th) * std::sin(ph); // y
-    pos(3) = r * std::cos(th);                // z
+    pos(1) = r * std::sin(th) * std::cos(ph);  // x
+    pos(2) = r * std::sin(th) * std::sin(ph);  // y
+    pos(3) = r * std::cos(th);                 // z
 
     uint64_t reference_hash = 0;
 
@@ -181,8 +177,7 @@ TEST_F(DeterminismTests, KerrMetricDeterminism)
 // Christoffel Symbol Determinism
 // =============================================================================
 
-TEST_F(DeterminismTests, ChristoffelDeterminism)
-{
+TEST_F(DeterminismTests, ChristoffelDeterminism) {
     // FORMAL SPECIFICATION D1:
     // Christoffel symbol computation must be bit-identical
 
@@ -228,8 +223,7 @@ TEST_F(DeterminismTests, ChristoffelDeterminism)
 // Geodesic Integration Determinism
 // =============================================================================
 
-TEST_F(DeterminismTests, GeodesicIntegrationDeterminism)
-{
+TEST_F(DeterminismTests, GeodesicIntegrationDeterminism) {
     // FORMAL SPECIFICATION D1:
     // Geodesic integration with same initial conditions must be deterministic
 
@@ -243,9 +237,9 @@ TEST_F(DeterminismTests, GeodesicIntegrationDeterminism)
     // Cartesian velocity (arbitrary but valid)
     Vec4 initial_vel;
     initial_vel(0) = 1.0;
-    initial_vel(1) = -0.5; // vx
-    initial_vel(2) = 0.0;  // vy
-    initial_vel(3) = 0.1;  // vz
+    initial_vel(1) = -0.5;  // vx
+    initial_vel(2) = 0.0;   // vy
+    initial_vel(3) = 0.1;   // vz
 
     uint64_t reference_hash = 0;
 
@@ -265,7 +259,8 @@ TEST_F(DeterminismTests, GeodesicIntegrationDeterminism)
         Tensor<Dual<double>, 4, 4, 4> dg;
         schwarzschild.Evaluate(initial_pos, g, dg);
         ray.velocity = TensorOps::NormalizeNull(ray.velocity, g);
-        ray.acceleration = Geodesic::CalculateAcceleration(ray.velocity, ray.position, &schwarzschild);
+        ray.acceleration =
+            Geodesic::CalculateAcceleration(ray.velocity, ray.position, &schwarzschild);
 
         // Integrate 100 steps
         for (int step = 0; step < 100; ++step) {
@@ -289,14 +284,19 @@ TEST_F(DeterminismTests, GeodesicIntegrationDeterminism)
 // Inner Product Determinism
 // =============================================================================
 
-TEST_F(DeterminismTests, InnerProductDeterminism)
-{
+TEST_F(DeterminismTests, InnerProductDeterminism) {
     // FORMAL SPECIFICATION D1:
     // Inner product computation must be deterministic
 
     Vec4 u, v;
-    u(0) = 1.0; u(1) = 0.5; u(2) = 0.25; u(3) = 0.1;
-    v(0) = 0.8; v(1) = 0.6; v(2) = 0.4; v(3) = 0.2;
+    u(0) = 1.0;
+    u(1) = 0.5;
+    u(2) = 0.25;
+    u(3) = 0.1;
+    v(0) = 0.8;
+    v(1) = 0.6;
+    v(2) = 0.4;
+    v(3) = 0.2;
 
     Vec4 pos;
     // Spherical (5.0, PI/3, 0.0) -> Cartesian
@@ -304,9 +304,9 @@ TEST_F(DeterminismTests, InnerProductDeterminism)
     double th = M_PI / 3.0;
     double ph = 0.0;
     pos(0) = 0.0;
-    pos(1) = r * std::sin(th) * std::cos(ph); // x
-    pos(2) = r * std::sin(th) * std::sin(ph); // y
-    pos(3) = r * std::cos(th);                // z
+    pos(1) = r * std::sin(th) * std::cos(ph);  // x
+    pos(2) = r * std::sin(th) * std::sin(ph);  // y
+    pos(3) = r * std::cos(th);                 // z
 
     Metric4d g;
     Tensor<Dual<double>, 4, 4, 4> dg;
@@ -332,17 +332,22 @@ TEST_F(DeterminismTests, InnerProductDeterminism)
 // Null Normalization Determinism
 // =============================================================================
 
-TEST_F(DeterminismTests, NullNormalizationDeterminism)
-{
+TEST_F(DeterminismTests, NullNormalizationDeterminism) {
     // FORMAL SPECIFICATION D1:
     // Null vector normalization must be deterministic
 
     Vec4 pos;
     // Cartesian (on x-axis)
-    pos(0) = 0.0; pos(1) = 10.0; pos(2) = 0.0; pos(3) = 0.0;
+    pos(0) = 0.0;
+    pos(1) = 10.0;
+    pos(2) = 0.0;
+    pos(3) = 0.0;
 
     Vec4 spatial;
-    spatial(0) = 0.0; spatial(1) = -1.0; spatial(2) = 0.0; spatial(3) = 0.5;
+    spatial(0) = 0.0;
+    spatial(1) = -1.0;
+    spatial(2) = 0.0;
+    spatial(3) = 0.5;
 
     Metric4d g;
     Tensor<Dual<double>, 4, 4, 4> dg;
@@ -363,4 +368,4 @@ TEST_F(DeterminismTests, NullNormalizationDeterminism)
     }
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

@@ -78,14 +78,17 @@ TEST(StarfieldPointTest, BeamAccumulationFiniteAndNonConstant) {
     bool non_constant = false;
     for (int i = 0; i < 200; ++i) {
         double th = M_PI * (i + 0.5) / 200.0;
-        float dx = std::sin(th), dy = 0.0f, dz = std::cos(th);
+        float dx = static_cast<float>(std::sin(th));
+        float dy = 0.0f;
+        float dz = static_cast<float>(std::cos(th));
         float r, g, b;
         gen.AccumulateThroughBeam(dx, dy, dz, sigma, stars, r, g, b);
         ASSERT_TRUE(std::isfinite(r) && std::isfinite(g) && std::isfinite(b));
         EXPECT_GE(r, 0.0f);
         double lum = r + g + b;
         if (lum > 1e-6) lit++;
-        if (first < 0) first = lum;
+        if (first < 0)
+            first = lum;
         else if (std::abs(lum - first) > 1e-6)
             non_constant = true;
     }

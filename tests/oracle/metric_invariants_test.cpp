@@ -21,18 +21,19 @@
 // - MorrisThorneFamily (PHMT101A): Ellis, ZeroTidal wormholes
 // =============================================================================
 
-#include <gtest/gtest.h>
-#include <cmath>
-#include <array>
-#include <vector>
-#include <limits>
-
-#include "sirius/core/metrics/kerr_schild_family.h"
-#include "sirius/oracle/kerr_boyer_lindquist.h"
-#include "sirius/core/metrics/morris_thorne_family.h"
 #include "sirius/core/constants.h"
-#include "sirius/core/tensor.h"
 #include "sirius/core/dual_number.h"
+#include "sirius/core/metrics/kerr_schild_family.h"
+#include "sirius/core/metrics/morris_thorne_family.h"
+#include "sirius/core/tensor.h"
+#include "sirius/oracle/kerr_boyer_lindquist.h"
+
+#include <gtest/gtest.h>
+
+#include <array>
+#include <cmath>
+#include <limits>
+#include <vector>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -44,30 +45,30 @@ using sirius::oracle::KerrMetricD;
 
 using namespace sirius::core::constants;
 
-constexpr double SYMMETRY_TOL = metric::kSymmetryTol;              // 1e-15
-constexpr double INVERSE_TOL = metric::kInverseTol;                // 1e-14
+constexpr double SYMMETRY_TOL = metric::kSymmetryTol;                         // 1e-15
+constexpr double INVERSE_TOL = metric::kInverseTol;                           // 1e-14
 constexpr double CHRISTOFFEL_SYMMETRY_TOL = metric::kChristoffelSymmetryTol;  // 1e-15
-constexpr double DETERMINANT_TOL = metric::kDeterminantTol;        // 1e-30
-constexpr double SIGNATURE_TOL = metric::kSignatureTol;            // 1e-10
+constexpr double DETERMINANT_TOL = metric::kDeterminantTol;                   // 1e-30
+constexpr double SIGNATURE_TOL = metric::kSignatureTol;                       // 1e-10
 
 // =============================================================================
 // Test Fixture
 // =============================================================================
 
 class MetricValidationTests : public ::testing::Test {
-protected:
+  protected:
     void SetUp() override {}
     void TearDown() override {}
 
     // Sample points for testing (avoiding coordinate singularities)
     struct TestPoint {
-        double t, x, y, z;      // Cartesian
-        double r, theta, phi;   // Spherical (Boyer-Lindquist)
+        double t, x, y, z;     // Cartesian
+        double r, theta, phi;  // Spherical (Boyer-Lindquist)
     };
 
     std::vector<TestPoint> getSamplePoints(double M = 1.0, double a = 0.0) {
         // Outer horizon for Kerr: r+ = M + sqrt(M² - a²)
-        double r_plus = M + std::sqrt(std::max(M*M - a*a, 0.0));
+        double r_plus = M + std::sqrt(std::max(M * M - a * a, 0.0));
         double r_safe = std::max(r_plus * 1.5, 3.0 * M);  // Safe distance from horizon
 
         return {
@@ -75,27 +76,28 @@ protected:
             {0, r_safe, 0, 0, r_safe, math::kHalfPi, 0},
             {0, 0, r_safe, 0, r_safe, math::kHalfPi, math::kHalfPi},
             {0, 0, 0, r_safe, r_safe, 0.1, 0},  // Near pole but not at pole
-            {0, r_safe*0.7, r_safe*0.7, 0, r_safe, math::kHalfPi, math::kPi/4},
+            {0, r_safe * 0.7, r_safe * 0.7, 0, r_safe, math::kHalfPi, math::kPi / 4},
             // Far field
-            {0, 100*M, 0, 0, 100*M, math::kHalfPi, 0},
-            {0, 50*M, 50*M, 0, std::sqrt(2)*50*M, math::kHalfPi, math::kPi/4},
+            {0, 100 * M, 0, 0, 100 * M, math::kHalfPi, 0},
+            {0, 50 * M, 50 * M, 0, std::sqrt(2) * 50 * M, math::kHalfPi, math::kPi / 4},
             // Intermediate distances
-            {0, 10*M, 0, 0, 10*M, math::kHalfPi, 0},
-            {0, 5*M, 5*M, 5*M, std::sqrt(75)*M, std::acos(5*M/(std::sqrt(75)*M)), math::kPi/4},
+            {0, 10 * M, 0, 0, 10 * M, math::kHalfPi, 0},
+            {0, 5 * M, 5 * M, 5 * M, std::sqrt(75) * M, std::acos(5 * M / (std::sqrt(75) * M)),
+             math::kPi / 4},
         };
     }
 
     // Boundary test points (stress testing)
     std::vector<TestPoint> getBoundaryPoints(double M = 1.0, double a = 0.0) {
-        double r_plus = M + std::sqrt(std::max(M*M - a*a, 0.0));
+        double r_plus = M + std::sqrt(std::max(M * M - a * a, 0.0));
 
         return {
             // Very close to horizon (1.001 buffer per PHCN001A)
             {0, r_plus * 1.002, 0, 0, r_plus * 1.002, math::kHalfPi, 0},
             // Near pole (using POLE_EPSILON from PHCN001A)
-            {0, 10*M, 0, 0.01, 10*M, 0.001, 0},
+            {0, 10 * M, 0, 0.01, 10 * M, 0.001, 0},
             // Large radius
-            {0, 1e5*M, 0, 0, 1e5*M, math::kHalfPi, 0},
+            {0, 1e5 * M, 0, 0, 1e5 * M, math::kHalfPi, 0},
         };
     }
 };
@@ -121,7 +123,10 @@ TEST_F(MetricValidationTests, KerrSchild_MetricSymmetry) {
 
         for (const auto& pt : points) {
             Tensor<double, 4> pos;
-            pos(0) = pt.t; pos(1) = pt.x; pos(2) = pt.y; pos(3) = pt.z;
+            pos(0) = pt.t;
+            pos(1) = pt.x;
+            pos(2) = pt.y;
+            pos(3) = pt.z;
 
             Metric4d g;
             Tensor<Dual<double>, 4, 4, 4> dg;
@@ -135,9 +140,8 @@ TEST_F(MetricValidationTests, KerrSchild_MetricSymmetry) {
                 }
             }
 
-            EXPECT_LT(max_asym, SYMMETRY_TOL)
-                << "Metric asymmetry for " << metric.GetName()
-                << " at r=" << pt.r << ": " << max_asym;
+            EXPECT_LT(max_asym, SYMMETRY_TOL) << "Metric asymmetry for " << metric.GetName()
+                                              << " at r=" << pt.r << ": " << max_asym;
         }
     }
 }
@@ -156,7 +160,10 @@ TEST_F(MetricValidationTests, KerrSchild_LorentzianSignature) {
 
         for (const auto& pt : points) {
             Tensor<double, 4> pos;
-            pos(0) = pt.t; pos(1) = pt.x; pos(2) = pt.y; pos(3) = pt.z;
+            pos(0) = pt.t;
+            pos(1) = pt.x;
+            pos(2) = pt.y;
+            pos(3) = pt.z;
 
             Metric4d g;
             Tensor<Dual<double>, 4, 4, 4> dg;
@@ -169,8 +176,7 @@ TEST_F(MetricValidationTests, KerrSchild_LorentzianSignature) {
             // and diagonal spatial components should be positive
 
             EXPECT_LT(g(0, 0).real, SIGNATURE_TOL)
-                << "g_tt should be negative for " << metric.GetName()
-                << " at r=" << pt.r;
+                << "g_tt should be negative for " << metric.GetName() << " at r=" << pt.r;
 
             EXPECT_GT(g(1, 1).real, -SIGNATURE_TOL)
                 << "g_xx should be positive for " << metric.GetName();
@@ -195,7 +201,10 @@ TEST_F(MetricValidationTests, KerrSchild_NoNaNInf) {
 
         for (const auto& pt : points) {
             Tensor<double, 4> pos;
-            pos(0) = pt.t; pos(1) = pt.x; pos(2) = pt.y; pos(3) = pt.z;
+            pos(0) = pt.t;
+            pos(1) = pt.x;
+            pos(2) = pt.y;
+            pos(3) = pt.z;
 
             Metric4d g;
             Tensor<Dual<double>, 4, 4, 4> dg;
@@ -205,8 +214,8 @@ TEST_F(MetricValidationTests, KerrSchild_NoNaNInf) {
             for (int mu = 0; mu < 4; ++mu) {
                 for (int nu = 0; nu < 4; ++nu) {
                     EXPECT_FALSE(std::isnan(g(mu, nu).real))
-                        << "NaN in g_" << mu << nu << " for " << metric.GetName()
-                        << " at (" << pt.x << "," << pt.y << "," << pt.z << ")";
+                        << "NaN in g_" << mu << nu << " for " << metric.GetName() << " at (" << pt.x
+                        << "," << pt.y << "," << pt.z << ")";
                     EXPECT_FALSE(std::isinf(g(mu, nu).real))
                         << "Inf in g_" << mu << nu << " for " << metric.GetName();
                 }
@@ -232,13 +241,14 @@ TEST_F(MetricValidationTests, KerrSchild_MinkowskiLimit) {
     sirius::core::KerrSchildFamily metric(sirius::core::KerrSchildParams::Minkowski());
 
     // At any point, Minkowski metric should be η = diag(-1,1,1,1)
-    std::vector<std::array<double, 3>> positions = {
-        {10, 0, 0}, {0, 10, 0}, {5, 5, 5}, {100, 0, 0}
-    };
+    std::vector<std::array<double, 3>> positions = {{10, 0, 0}, {0, 10, 0}, {5, 5, 5}, {100, 0, 0}};
 
     for (const auto& xyz : positions) {
         Tensor<double, 4> pos;
-        pos(0) = 0; pos(1) = xyz[0]; pos(2) = xyz[1]; pos(3) = xyz[2];
+        pos(0) = 0;
+        pos(1) = xyz[0];
+        pos(2) = xyz[1];
+        pos(3) = xyz[2];
 
         Metric4d g;
         Tensor<Dual<double>, 4, 4, 4> dg;
@@ -282,7 +292,10 @@ TEST_F(MetricValidationTests, KerrSchild_SchwarzschildWeakField) {
 
     for (double r : radii) {
         Tensor<double, 4> pos;
-        pos(0) = 0; pos(1) = r; pos(2) = 0; pos(3) = 0;
+        pos(0) = 0;
+        pos(1) = r;
+        pos(2) = 0;
+        pos(3) = 0;
 
         Metric4d g;
         Tensor<Dual<double>, 4, 4, 4> dg;
@@ -291,14 +304,12 @@ TEST_F(MetricValidationTests, KerrSchild_SchwarzschildWeakField) {
         double expected_g_tt = -(1.0 - 2.0 * M / r);
         double tol = 4.0 * M * M / (r * r);  // O(1/r²) corrections
 
-        EXPECT_NEAR(g(0, 0).real, expected_g_tt, tol)
-            << "Weak field g_tt error at r=" << r;
+        EXPECT_NEAR(g(0, 0).real, expected_g_tt, tol) << "Weak field g_tt error at r=" << r;
 
         // In Kerr-Schild Cartesian, g_rr ≈ 1 + 2M/r on the x-axis
         // But full tensor form includes off-diagonal corrections
         // Check spatial components are approximately δ_ij
-        EXPECT_NEAR(g(1, 1).real, 1.0 + 2.0 * M / r, tol)
-            << "Weak field g_xx error at r=" << r;
+        EXPECT_NEAR(g(1, 1).real, 1.0 + 2.0 * M / r, tol) << "Weak field g_xx error at r=" << r;
     }
 }
 
@@ -316,7 +327,10 @@ TEST_F(MetricValidationTests, KerrMetricD_MetricSymmetry) {
 
         for (const auto& pt : points) {
             sirius::oracle::Vec4d x;
-            x.t = pt.t; x.r = pt.r; x.theta = pt.theta; x.phi = pt.phi;
+            x.t = pt.t;
+            x.r = pt.r;
+            x.theta = pt.theta;
+            x.phi = pt.phi;
 
             double g[4][4], g_inv[4][4];
             metric.Evaluate(x, g, g_inv);
@@ -345,7 +359,10 @@ TEST_F(MetricValidationTests, KerrMetricD_InverseAccuracy) {
 
         for (const auto& pt : points) {
             sirius::oracle::Vec4d x;
-            x.t = pt.t; x.r = pt.r; x.theta = pt.theta; x.phi = pt.phi;
+            x.t = pt.t;
+            x.r = pt.r;
+            x.theta = pt.theta;
+            x.phi = pt.phi;
 
             double g[4][4], g_inv[4][4];
             metric.Evaluate(x, g, g_inv);
@@ -365,9 +382,8 @@ TEST_F(MetricValidationTests, KerrMetricD_InverseAccuracy) {
                 }
             }
 
-            EXPECT_LT(max_error, INVERSE_TOL)
-                << "Inverse metric error for Kerr (a=" << a << ") at r=" << pt.r
-                << ": " << max_error;
+            EXPECT_LT(max_error, INVERSE_TOL) << "Inverse metric error for Kerr (a=" << a
+                                              << ") at r=" << pt.r << ": " << max_error;
         }
     }
 }
@@ -382,7 +398,10 @@ TEST_F(MetricValidationTests, KerrMetricD_ChristoffelSymmetry) {
 
         for (const auto& pt : points) {
             sirius::oracle::Vec4d x;
-            x.t = pt.t; x.r = pt.r; x.theta = pt.theta; x.phi = pt.phi;
+            x.t = pt.t;
+            x.r = pt.r;
+            x.theta = pt.theta;
+            x.phi = pt.phi;
 
             double Gamma[4][4][4];
             metric.Christoffel(x, Gamma);
@@ -398,8 +417,8 @@ TEST_F(MetricValidationTests, KerrMetricD_ChristoffelSymmetry) {
             }
 
             EXPECT_LT(max_asym, CHRISTOFFEL_SYMMETRY_TOL)
-                << "Christoffel asymmetry for Kerr (a=" << a << ") at r=" << pt.r
-                << ": " << max_asym;
+                << "Christoffel asymmetry for Kerr (a=" << a << ") at r=" << pt.r << ": "
+                << max_asym;
         }
     }
 }
@@ -414,13 +433,15 @@ TEST_F(MetricValidationTests, KerrMetricD_RiemannAntisymmetry) {
 
         for (const auto& pt : points) {
             sirius::oracle::Vec4d x;
-            x.t = pt.t; x.r = pt.r; x.theta = pt.theta; x.phi = pt.phi;
+            x.t = pt.t;
+            x.r = pt.r;
+            x.theta = pt.theta;
+            x.phi = pt.phi;
 
             double violation = metric.VerifyRiemannSymmetries(x);
 
-            EXPECT_LT(violation, 1e-12)
-                << "Riemann antisymmetry violation for Kerr (a=" << a
-                << ") at r=" << pt.r << ": " << violation;
+            EXPECT_LT(violation, 1e-12) << "Riemann antisymmetry violation for Kerr (a=" << a
+                                        << ") at r=" << pt.r << ": " << violation;
         }
     }
 }
@@ -437,16 +458,18 @@ TEST_F(MetricValidationTests, KerrMetricD_KretschmannScalar) {
 
     for (double r : radii) {
         sirius::oracle::Vec4d x;
-        x.t = 0; x.r = r; x.theta = math::kHalfPi; x.phi = 0;
+        x.t = 0;
+        x.r = r;
+        x.theta = math::kHalfPi;
+        x.phi = 0;
 
         double K = schw.Kretschmann(x);
         double expected = 48.0 / std::pow(r, 6);  // M=1
 
         double rel_error = std::abs(K - expected) / expected;
 
-        EXPECT_LT(rel_error, 1e-10)
-            << "Schwarzschild Kretschmann error at r=" << r
-            << ": computed=" << K << ", expected=" << expected;
+        EXPECT_LT(rel_error, 1e-10) << "Schwarzschild Kretschmann error at r=" << r
+                                    << ": computed=" << K << ", expected=" << expected;
     }
 
     // Test 2: Kerr at equator (θ = π/2, so cos²θ = 0)
@@ -456,16 +479,18 @@ TEST_F(MetricValidationTests, KerrMetricD_KretschmannScalar) {
 
     for (double r : radii) {
         sirius::oracle::Vec4d x;
-        x.t = 0; x.r = r; x.theta = math::kHalfPi; x.phi = 0;
+        x.t = 0;
+        x.r = r;
+        x.theta = math::kHalfPi;
+        x.phi = 0;
 
         double K = kerr.Kretschmann(x);
         double expected = 48.0 / std::pow(r, 6);  // Same as Schwarzschild at equator
 
         double rel_error = std::abs(K - expected) / expected;
 
-        EXPECT_LT(rel_error, 1e-10)
-            << "Kerr equatorial Kretschmann error at r=" << r
-            << ": computed=" << K << ", expected=" << expected;
+        EXPECT_LT(rel_error, 1e-10) << "Kerr equatorial Kretschmann error at r=" << r
+                                    << ": computed=" << K << ", expected=" << expected;
     }
 
     // Test 3: Kerr off-equator (θ = π/4)
@@ -479,7 +504,10 @@ TEST_F(MetricValidationTests, KerrMetricD_KretschmannScalar) {
 
     for (double r : radii) {
         sirius::oracle::Vec4d x;
-        x.t = 0; x.r = r; x.theta = theta; x.phi = 0;
+        x.t = 0;
+        x.r = r;
+        x.theta = theta;
+        x.phi = 0;
 
         double r2 = r * r;
         double Sigma = r2 + a2 * cos2th;
@@ -496,16 +524,18 @@ TEST_F(MetricValidationTests, KerrMetricD_KretschmannScalar) {
 
         double rel_error = std::abs(K - expected) / std::max(std::abs(expected), 1e-30);
 
-        EXPECT_LT(rel_error, 1e-10)
-            << "Kerr off-axis Kretschmann error at r=" << r
-            << ": computed=" << K << ", expected=" << expected;
+        EXPECT_LT(rel_error, 1e-10) << "Kerr off-axis Kretschmann error at r=" << r
+                                    << ": computed=" << K << ", expected=" << expected;
     }
 
     // Test 4: Kretschmann decreases with radius (monotonicity)
     double K_prev = std::numeric_limits<double>::max();
     for (double r : radii) {
         sirius::oracle::Vec4d x;
-        x.t = 0; x.r = r; x.theta = math::kHalfPi; x.phi = 0;
+        x.t = 0;
+        x.r = r;
+        x.theta = math::kHalfPi;
+        x.phi = 0;
 
         double K = schw.Kretschmann(x);
         EXPECT_LT(K, K_prev) << "Kretschmann should decrease with r";
@@ -514,11 +544,13 @@ TEST_F(MetricValidationTests, KerrMetricD_KretschmannScalar) {
 
     // Test 5: At large radius, Kretschmann approaches zero (asymptotic flatness)
     sirius::oracle::Vec4d x_far;
-    x_far.t = 0; x_far.r = 1000.0; x_far.theta = math::kHalfPi; x_far.phi = 0;
+    x_far.t = 0;
+    x_far.r = 1000.0;
+    x_far.theta = math::kHalfPi;
+    x_far.phi = 0;
     double K_far = schw.Kretschmann(x_far);
     double expected_far = 48.0 / std::pow(1000.0, 6);  // ~4.8e-17
-    EXPECT_NEAR(K_far, expected_far, 1e-20)
-        << "Kretschmann should match 48/r⁶ at large radius";
+    EXPECT_NEAR(K_far, expected_far, 1e-20) << "Kretschmann should match 48/r⁶ at large radius";
 }
 
 namespace {
@@ -532,8 +564,7 @@ namespace {
 // axisymmetric). This is the completeness gate the component-wise
 // implementation historically lacked: it exercises every one of the 256 slots.
 void RiemannFromChristoffelFD(const sirius::oracle::KerrMetricD& metric,
-                              const sirius::oracle::Vec4d& x, double h,
-                              double R[4][4][4][4]) {
+                              const sirius::oracle::Vec4d& x, double h, double R[4][4][4][4]) {
     double Gamma[4][4][4];
     metric.Christoffel(x, Gamma);
 
@@ -589,11 +620,11 @@ struct RiemannTestCase {
 
 const std::vector<RiemannTestCase>& RiemannTestCases() {
     static const std::vector<RiemannTestCase> cases = {
-        {0.0, 6.0, math::kHalfPi},      // Schwarzschild, equator
-        {0.0, 3.1, 1.0},                // Schwarzschild, near photon sphere
-        {0.5, 6.0, math::kPi / 3.0},    // Moderate spin, off-equator
-        {0.9, 4.0, 1.1},                // High spin, strong field
-        {0.9, 10.0, 0.4},               // High spin, toward the axis
+        {0.0, 6.0, math::kHalfPi},    // Schwarzschild, equator
+        {0.0, 3.1, 1.0},              // Schwarzschild, near photon sphere
+        {0.5, 6.0, math::kPi / 3.0},  // Moderate spin, off-equator
+        {0.9, 4.0, 1.1},              // High spin, strong field
+        {0.9, 10.0, 0.4},             // High spin, toward the axis
     };
     return cases;
 }
@@ -609,7 +640,10 @@ TEST_F(MetricValidationTests, KerrMetricD_RiemannMatchesFiniteDifferenceChristof
     for (const auto& c : RiemannTestCases()) {
         sirius::oracle::KerrMetricD metric(1.0, c.a);
         sirius::oracle::Vec4d x;
-        x.t = 0; x.r = c.r; x.theta = c.theta; x.phi = 0;
+        x.t = 0;
+        x.r = c.r;
+        x.theta = c.theta;
+        x.phi = 0;
 
         double Rfd[4][4][4][4], Ran[4][4][4][4];
         RiemannFromChristoffelFD(metric, x, h, Rfd);
@@ -630,15 +664,18 @@ TEST_F(MetricValidationTests, KerrMetricD_RiemannMatchesFiniteDifferenceChristof
                         double err = std::abs(Ran[a][b][p][q] - Rfd[a][b][p][q]);
                         if (err > worst) {
                             worst = err;
-                            wi[0] = a; wi[1] = b; wi[2] = p; wi[3] = q;
+                            wi[0] = a;
+                            wi[1] = b;
+                            wi[2] = p;
+                            wi[3] = q;
                         }
                     }
 
-        EXPECT_LT(worst, tol)
-            << "Riemann mismatch vs finite differences for a=" << c.a << " r=" << c.r
-            << " theta=" << c.theta << " at R^" << wi[0] << "_" << wi[1] << wi[2] << wi[3]
-            << ": analytic=" << Ran[wi[0]][wi[1]][wi[2]][wi[3]]
-            << ", fd=" << Rfd[wi[0]][wi[1]][wi[2]][wi[3]];
+        EXPECT_LT(worst, tol) << "Riemann mismatch vs finite differences for a=" << c.a
+                              << " r=" << c.r << " theta=" << c.theta << " at R^" << wi[0] << "_"
+                              << wi[1] << wi[2] << wi[3]
+                              << ": analytic=" << Ran[wi[0]][wi[1]][wi[2]][wi[3]]
+                              << ", fd=" << Rfd[wi[0]][wi[1]][wi[2]][wi[3]];
     }
 }
 
@@ -648,7 +685,10 @@ TEST_F(MetricValidationTests, KerrMetricD_RiemannVacuumRicci) {
     for (const auto& c : RiemannTestCases()) {
         sirius::oracle::KerrMetricD metric(1.0, c.a);
         sirius::oracle::Vec4d x;
-        x.t = 0; x.r = c.r; x.theta = c.theta; x.phi = 0;
+        x.t = 0;
+        x.r = c.r;
+        x.theta = c.theta;
+        x.phi = 0;
 
         double R[4][4][4][4];
         metric.Riemann(x, R);
@@ -664,8 +704,8 @@ TEST_F(MetricValidationTests, KerrMetricD_RiemannVacuumRicci) {
         }
 
         EXPECT_LT(worst, std::max(1e-12, 1e-9 * scale))
-            << "Non-zero Ricci for vacuum Kerr a=" << c.a << " r=" << c.r
-            << " theta=" << c.theta << ": " << worst;
+            << "Non-zero Ricci for vacuum Kerr a=" << c.a << " r=" << c.r << " theta=" << c.theta
+            << ": " << worst;
     }
 }
 
@@ -676,7 +716,10 @@ TEST_F(MetricValidationTests, KerrMetricD_RiemannLoweredSymmetries) {
     for (const auto& c : RiemannTestCases()) {
         sirius::oracle::KerrMetricD metric(1.0, c.a);
         sirius::oracle::Vec4d x;
-        x.t = 0; x.r = c.r; x.theta = c.theta; x.phi = 0;
+        x.t = 0;
+        x.r = c.r;
+        x.theta = c.theta;
+        x.phi = 0;
 
         double R[4][4][4][4], g[4][4], g_inv[4][4];
         metric.Riemann(x, R);
@@ -704,9 +747,9 @@ TEST_F(MetricValidationTests, KerrMetricD_RiemannLoweredSymmetries) {
                             std::max(worst_first, std::abs(Rl[a][b][p][q] + Rl[b][a][p][q]));
                         worst_pair =
                             std::max(worst_pair, std::abs(Rl[a][b][p][q] - Rl[p][q][a][b]));
-                        worst_bianchi = std::max(
-                            worst_bianchi,
-                            std::abs(Rl[a][b][p][q] + Rl[a][p][q][b] + Rl[a][q][b][p]));
+                        worst_bianchi =
+                            std::max(worst_bianchi,
+                                     std::abs(Rl[a][b][p][q] + Rl[a][p][q][b] + Rl[a][q][b][p]));
                     }
 
         EXPECT_LT(worst_first, tol) << "R_abcd != -R_bacd for a=" << c.a << " r=" << c.r;
@@ -722,7 +765,10 @@ TEST_F(MetricValidationTests, KerrMetricD_KretschmannMatchesRiemannContraction) 
     for (const auto& c : RiemannTestCases()) {
         sirius::oracle::KerrMetricD metric(1.0, c.a);
         sirius::oracle::Vec4d x;
-        x.t = 0; x.r = c.r; x.theta = c.theta; x.phi = 0;
+        x.t = 0;
+        x.r = c.r;
+        x.theta = c.theta;
+        x.phi = 0;
 
         double R[4][4][4][4], g[4][4], g_inv[4][4];
         metric.Riemann(x, R);
@@ -757,8 +803,8 @@ TEST_F(MetricValidationTests, KerrMetricD_KretschmannMatchesRiemannContraction) 
 
         double expected = metric.Kretschmann(x);
         double rel = std::abs(K - expected) / std::max(std::abs(expected), 1e-30);
-        EXPECT_LT(rel, 1e-9) << "Kretschmann contraction mismatch for a=" << c.a
-                             << " r=" << c.r << " theta=" << c.theta << ": contracted=" << K
+        EXPECT_LT(rel, 1e-9) << "Kretschmann contraction mismatch for a=" << c.a << " r=" << c.r
+                             << " theta=" << c.theta << ": contracted=" << K
                              << ", analytic=" << expected;
     }
 }
@@ -777,7 +823,7 @@ TEST_F(MetricValidationTests, KerrMetricD_HorizonRadius) {
     // Near-extremal Kerr a ≈ M: r+ ≈ M + sqrt(1 - a²)
     // Note: KerrMetricD constructor clamps spin to 0.9999*M for numerical stability
     sirius::oracle::KerrMetricD kerr_ext(1.0, 0.9999);
-    double expected_ext = 1.0 + std::sqrt(1.0 - 0.9999*0.9999);  // ~1.0141
+    double expected_ext = 1.0 + std::sqrt(1.0 - 0.9999 * 0.9999);  // ~1.0141
     EXPECT_NEAR(kerr_ext.HorizonRadius(), expected_ext, 1e-10);
 }
 
@@ -802,7 +848,10 @@ TEST_F(MetricValidationTests, KerrMetricD_NoNaNInf) {
 
         for (const auto& pt : points) {
             sirius::oracle::Vec4d x;
-            x.t = pt.t; x.r = pt.r; x.theta = pt.theta; x.phi = pt.phi;
+            x.t = pt.t;
+            x.r = pt.r;
+            x.theta = pt.theta;
+            x.phi = pt.phi;
 
             if (!metric.IsValid(x)) continue;  // Skip invalid points
 
@@ -856,10 +905,10 @@ TEST_F(MetricValidationTests, MorrisThorne_MetricSymmetry) {
 
         for (double r : radii) {
             Tensor<double, 4> pos;
-            pos(0) = 0;        // t
-            pos(1) = r;        // r
+            pos(0) = 0;              // t
+            pos(1) = r;              // r
             pos(2) = math::kHalfPi;  // θ = π/2
-            pos(3) = 0;        // φ
+            pos(3) = 0;              // φ
 
             Metric4d g;
             Tensor<Dual<double>, 4, 4, 4> dg;
@@ -877,8 +926,7 @@ TEST_F(MetricValidationTests, MorrisThorne_MetricSymmetry) {
             }
 
             EXPECT_LT(max_offdiag, SYMMETRY_TOL)
-                << "Non-diagonal component for " << metric.GetName()
-                << " at r=" << r;
+                << "Non-diagonal component for " << metric.GetName() << " at r=" << r;
         }
     }
 }
@@ -902,13 +950,11 @@ TEST_F(MetricValidationTests, MorrisThorne_ThroatCondition) {
 
     // Ellis: b(r) = b0²/r → b(b0) = b0²/b0 = b0
     sirius::core::MorrisThorneFamily ellis(sirius::core::MorrisThorneParams::Ellis(b0));
-    EXPECT_NEAR(ellis.ShapeFunction(b0), b0, 1e-14)
-        << "Ellis throat condition violated";
+    EXPECT_NEAR(ellis.ShapeFunction(b0), b0, 1e-14) << "Ellis throat condition violated";
 
     // Zero-tidal: b(r) = b0 → b(b0) = b0
     sirius::core::MorrisThorneFamily zero_tidal(sirius::core::MorrisThorneParams::ZeroTidal(b0));
-    EXPECT_NEAR(zero_tidal.ShapeFunction(b0), b0, 1e-14)
-        << "Zero-tidal throat condition violated";
+    EXPECT_NEAR(zero_tidal.ShapeFunction(b0), b0, 1e-14) << "Zero-tidal throat condition violated";
 }
 
 // Test: No NaN/Inf outside throat
@@ -921,7 +967,10 @@ TEST_F(MetricValidationTests, MorrisThorne_NoNaNInf) {
     for (double r : radii) {
         for (double theta : thetas) {
             Tensor<double, 4> pos;
-            pos(0) = 0; pos(1) = r; pos(2) = theta; pos(3) = 0;
+            pos(0) = 0;
+            pos(1) = r;
+            pos(2) = theta;
+            pos(3) = 0;
 
             Metric4d g;
             Tensor<Dual<double>, 4, 4, 4> dg;
@@ -947,7 +996,10 @@ TEST_F(MetricValidationTests, MorrisThorne_LorentzianSignature) {
 
     for (double r : radii) {
         Tensor<double, 4> pos;
-        pos(0) = 0; pos(1) = r; pos(2) = math::kHalfPi; pos(3) = 0;
+        pos(0) = 0;
+        pos(1) = r;
+        pos(2) = math::kHalfPi;
+        pos(3) = 0;
 
         Metric4d g;
         Tensor<Dual<double>, 4, 4, 4> dg;
@@ -984,7 +1036,10 @@ TEST_F(MetricValidationTests, SchwarzschildConsistency) {
     for (double r : radii) {
         // Kerr-Schild evaluation (Cartesian: x = r, y = z = 0)
         Tensor<double, 4> pos_ks;
-        pos_ks(0) = 0; pos_ks(1) = r; pos_ks(2) = 0; pos_ks(3) = 0;
+        pos_ks(0) = 0;
+        pos_ks(1) = r;
+        pos_ks(2) = 0;
+        pos_ks(3) = 0;
 
         Metric4d g_ks;
         Tensor<Dual<double>, 4, 4, 4> dg_ks;
@@ -992,7 +1047,10 @@ TEST_F(MetricValidationTests, SchwarzschildConsistency) {
 
         // Boyer-Lindquist evaluation
         sirius::oracle::Vec4d pos_bl;
-        pos_bl.t = 0; pos_bl.r = r; pos_bl.theta = math::kHalfPi; pos_bl.phi = 0;
+        pos_bl.t = 0;
+        pos_bl.r = r;
+        pos_bl.theta = math::kHalfPi;
+        pos_bl.phi = 0;
 
         double g_bl[4][4], g_inv_bl[4][4];
         bl_metric.Evaluate(pos_bl, g_bl, g_inv_bl);
@@ -1005,10 +1063,8 @@ TEST_F(MetricValidationTests, SchwarzschildConsistency) {
         // Both should equal -(1 - 2M/r)
         double expected_g_tt = -(1.0 - 2.0 * M / r);
 
-        EXPECT_NEAR(g_tt_ks, expected_g_tt, 1e-10)
-            << "KS g_tt error at r=" << r;
-        EXPECT_NEAR(g_tt_bl, expected_g_tt, 1e-10)
-            << "BL g_tt error at r=" << r;
+        EXPECT_NEAR(g_tt_ks, expected_g_tt, 1e-10) << "KS g_tt error at r=" << r;
+        EXPECT_NEAR(g_tt_bl, expected_g_tt, 1e-10) << "BL g_tt error at r=" << r;
     }
 }
 
@@ -1023,7 +1079,10 @@ TEST_F(MetricValidationTests, KerrMetricD_DeterminantNonZero) {
 
     for (const auto& pt : points) {
         sirius::oracle::Vec4d x;
-        x.t = pt.t; x.r = pt.r; x.theta = pt.theta; x.phi = pt.phi;
+        x.t = pt.t;
+        x.r = pt.r;
+        x.theta = pt.theta;
+        x.phi = pt.phi;
 
         if (!metric.IsValid(x)) continue;
 
@@ -1037,12 +1096,10 @@ TEST_F(MetricValidationTests, KerrMetricD_DeterminantNonZero) {
         double det_g = det_tphi * g[1][1] * g[2][2];
 
         EXPECT_GT(std::abs(det_g), DETERMINANT_TOL)
-            << "Degenerate metric at r=" << pt.r << ", θ=" << pt.theta
-            << ", det=" << det_g;
+            << "Degenerate metric at r=" << pt.r << ", θ=" << pt.theta << ", det=" << det_g;
 
         // For Lorentzian signature, determinant should be negative
-        EXPECT_LT(det_g, 0)
-            << "Metric determinant should be negative for (-,+,+,+) signature";
+        EXPECT_LT(det_g, 0) << "Metric determinant should be negative for (-,+,+,+) signature";
     }
 }
 
@@ -1071,18 +1128,14 @@ TEST_F(MetricValidationTests, KerrMetricD_NearHorizonStability) {
         // Should not be NaN or Inf even close to horizon
         for (int mu = 0; mu < 4; ++mu) {
             for (int nu = 0; nu < 4; ++nu) {
-                EXPECT_FALSE(std::isnan(g[mu][nu]))
-                    << "NaN near horizon at r/r+ = " << factor;
-                EXPECT_FALSE(std::isinf(g[mu][nu]))
-                    << "Inf near horizon at r/r+ = " << factor;
+                EXPECT_FALSE(std::isnan(g[mu][nu])) << "NaN near horizon at r/r+ = " << factor;
+                EXPECT_FALSE(std::isinf(g[mu][nu])) << "Inf near horizon at r/r+ = " << factor;
             }
         }
 
         // g_rr should be large but finite
-        EXPECT_GT(g[1][1], 1.0)
-            << "g_rr should be > 1 near horizon";
-        EXPECT_LT(g[1][1], 1e10)
-            << "g_rr should be bounded near horizon buffer";
+        EXPECT_GT(g[1][1], 1.0) << "g_rr should be > 1 near horizon";
+        EXPECT_LT(g[1][1], 1e10) << "g_rr should be bounded near horizon buffer";
     }
 }
 
@@ -1106,17 +1159,15 @@ TEST_F(MetricValidationTests, KerrMetricD_NearPoleStability) {
         // Should not be NaN
         for (int mu = 0; mu < 4; ++mu) {
             for (int nu = 0; nu < 4; ++nu) {
-                EXPECT_FALSE(std::isnan(g[mu][nu]))
-                    << "NaN near pole at θ = " << theta;
+                EXPECT_FALSE(std::isnan(g[mu][nu])) << "NaN near pole at θ = " << theta;
             }
         }
 
         // g_φφ should approach 0 at poles (sin²θ → 0)
         if (theta < 0.1 || theta > math::kPi - 0.1) {
-            EXPECT_LT(std::abs(g[3][3]), 1.0)
-                << "g_φφ should be small near poles";
+            EXPECT_LT(std::abs(g[3][3]), 1.0) << "g_φφ should be small near poles";
         }
     }
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

@@ -20,8 +20,9 @@ add_library(sirius_render STATIC
     exr_writer.cpp
     png_writer.cpp
 
-    # stb decoder translation unit (encoder impl lives in png_writer.cpp).
+    # Vendored stb implementation translation units.
     stb_impl.cpp
+    stb_write_impl.cpp
 
     # Memory governor (pure arithmetic; no device dependency).
     memory_governor.cpp
@@ -65,13 +66,13 @@ sirius_configure_target(sirius_render)
 # the target options, so -Werror has nothing to promote.
 #   - miniz.c       : vendored C; the target's -std=c++2c is not valid for C.
 #   - stb_impl.cpp  : pure vendored STB_IMAGE_IMPLEMENTATION (no first-party code).
+#   - stb_write_impl.cpp: pure vendored STB_IMAGE_WRITE_IMPLEMENTATION.
 #   - exr_writer.cpp: hosts TINYEXR_IMPLEMENTATION, which trips
 #                     -Werror=calloc-transposed-args inside tinyexr's own source.
-# png_writer.cpp hosts STB_IMAGE_WRITE_IMPLEMENTATION but compiles clean under
-# the strict flags, so it stays checked (its writer logic is first-party).
 set_source_files_properties(
     "${SIRIUS_RENDER_MINIZ}"
     stb_impl.cpp
+    stb_write_impl.cpp
     exr_writer.cpp
     PROPERTIES COMPILE_OPTIONS "-w"
 )

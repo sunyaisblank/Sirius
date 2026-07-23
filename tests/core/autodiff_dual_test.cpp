@@ -14,11 +14,12 @@
 // LABEL: Mandatory;Correctness
 // =============================================================================
 
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <gtest/gtest.h>
-#include "sirius/core/dual_number.h"
 #include "sirius/core/constants.h"  // Centralized constants
+#include "sirius/core/dual_number.h"
+
+#include <gtest/gtest.h>
+
+#include <cmath>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -32,7 +33,7 @@ constexpr double kEpsilon = 1e-12;  // Reasonable for double precision operation
 // =============================================================================
 
 class DualNumberTests : public ::testing::Test {
-protected:
+  protected:
     void SetUp() override {}
     void TearDown() override {}
 };
@@ -166,8 +167,8 @@ TEST_F(DualNumberTests, DivisionFormula) {
     Dual<double> result = x / y;
 
     // Expected: (a/c) + ((bc - ad)/c²)ε
-    double expected_real = a / c;                        // 3
-    double expected_dual = (b * c - a * d) / (c * c);   // (16 - 6) / 4 = 2.5
+    double expected_real = a / c;                      // 3
+    double expected_dual = (b * c - a * d) / (c * c);  // (16 - 6) / 4 = 2.5
 
     EXPECT_NEAR(result.real, expected_real, kEpsilon);
     EXPECT_NEAR(result.dual, expected_dual, kEpsilon);
@@ -179,7 +180,7 @@ TEST_F(DualNumberTests, DivisionFormula) {
 
 // Test: sin(a + ε) = sin(a) + cos(a)·ε
 TEST_F(DualNumberTests, SinDerivative) {
-    double a = 0.5;  // Test point
+    double a = 0.5;          // Test point
     Dual<double> x(a, 1.0);  // x with dx = 1
     Dual<double> result = sin(x);
 
@@ -189,16 +190,14 @@ TEST_F(DualNumberTests, SinDerivative) {
 
 // Test: sin at multiple angles
 TEST_F(DualNumberTests, SinDerivativeMultipleAngles) {
-    std::vector<double> angles = {0.0, M_PI/6, M_PI/4, M_PI/3, M_PI/2, M_PI};
+    std::vector<double> angles = {0.0, M_PI / 6, M_PI / 4, M_PI / 3, M_PI / 2, M_PI};
 
     for (double theta : angles) {
         Dual<double> x(theta, 1.0);
         Dual<double> result = sin(x);
 
-        EXPECT_NEAR(result.real, std::sin(theta), kEpsilon)
-            << "sin(" << theta << ") failed";
-        EXPECT_NEAR(result.dual, std::cos(theta), kEpsilon)
-            << "d/dx sin(" << theta << ") failed";
+        EXPECT_NEAR(result.real, std::sin(theta), kEpsilon) << "sin(" << theta << ") failed";
+        EXPECT_NEAR(result.dual, std::cos(theta), kEpsilon) << "d/dx sin(" << theta << ") failed";
     }
 }
 
@@ -226,7 +225,7 @@ TEST_F(DualNumberTests, SqrtDerivative) {
     Dual<double> x(a, 1.0);
     Dual<double> result = sqrt(x);
 
-    EXPECT_NEAR(result.real, std::sqrt(a), kEpsilon);  // √4 = 2
+    EXPECT_NEAR(result.real, std::sqrt(a), kEpsilon);                // √4 = 2
     EXPECT_NEAR(result.dual, 1.0 / (2.0 * std::sqrt(a)), kEpsilon);  // 1/(2*2) = 0.25
 }
 
@@ -239,8 +238,7 @@ TEST_F(DualNumberTests, SqrtDerivativeMultiplePoints) {
         Dual<double> result = sqrt(x);
 
         EXPECT_NEAR(result.real, std::sqrt(v), kEpsilon);
-        EXPECT_NEAR(result.dual, 0.5 / std::sqrt(v), kEpsilon)
-            << "d/dx sqrt(" << v << ") failed";
+        EXPECT_NEAR(result.dual, 0.5 / std::sqrt(v), kEpsilon) << "d/dx sqrt(" << v << ") failed";
     }
 }
 
@@ -315,4 +313,4 @@ TEST_F(DualNumberTests, ScalarDivision) {
     EXPECT_NEAR(result.dual, 3.0, kEpsilon);
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

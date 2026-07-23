@@ -2,14 +2,16 @@
 // Tests: Dormand-Prince coefficients, step adaptation, null constraint.
 // Ported from TSPH009A.cpp; assertions and tolerances unchanged.
 
+#include "sirius/core/dual_number.h"
+#include "sirius/core/geodesic_integrator.h"
+#include "sirius/core/metrics/kerr_schild_family.h"  // Unified Kerr-Schild family
+#include "sirius/core/metrics/metric.h"
+#include "sirius/core/tensor.h"
+
 #include <gtest/gtest.h>
+
 #include <cmath>
 #include <vector>
-#include "sirius/core/tensor.h"
-#include "sirius/core/dual_number.h"
-#include "sirius/core/metrics/metric.h"
-#include "sirius/core/metrics/kerr_schild_family.h"  // Unified Kerr-Schild family
-#include "sirius/core/geodesic_integrator.h"
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -27,15 +29,13 @@ constexpr double PI = 3.14159265358979323846;
 // =============================================================================
 
 class RK45IntegratorTests : public ::testing::Test {
-protected:
+  protected:
     // Use unified Kerr-Schild family for Minkowski (M=0) and Schwarzschild (M=1)
     sirius::core::KerrSchildFamily minkowski{sirius::core::KerrSchildParams::Minkowski()};
     sirius::core::KerrSchildFamily schwarzschild{sirius::core::KerrSchildParams::Schwarzschild(M)};
     IntegratorConfig config;
 
-    void SetUp() override {
-        config = Geodesic::GetDefaultConfig();
-    }
+    void SetUp() override { config = Geodesic::GetDefaultConfig(); }
 
     void TearDown() override {}
 
@@ -265,8 +265,8 @@ TEST_F(RK45IntegratorTests, SchwarzschildNullConstraint) {
 
     // The Hamiltonian preserves the null constraint, but coordinate effects
     // can cause apparent drift. Log the result for monitoring.
-    std::cout << "\n[RK45] Schwarzschild null constraint max violation: "
-              << max_violation << " (after " << steps_completed << " steps)\n";
+    std::cout << "\n[RK45] Schwarzschild null constraint max violation: " << max_violation
+              << " (after " << steps_completed << " steps)\n";
 
     // This is informational - the key is that we don't get NaN/Inf
     EXPECT_GT(steps_completed, 10) << "Should complete multiple steps";
@@ -290,11 +290,9 @@ TEST_F(RK45IntegratorTests, StepAdaptsToCurvature) {
     Lightray ray = createTestRay(pos, dir, &schwarzschild);
 
     std::vector<float> step_sizes;
-    std::vector<float> radii;
 
     for (int i = 0; i < 200; ++i) {
         step_sizes.push_back(ray.step_size);
-        radii.push_back(ray.position(1));
 
         Geodesic::IntegrateStepRk45(ray, &schwarzschild, config);
         if (ray.terminated) break;
@@ -419,4 +417,4 @@ TEST_F(RK45IntegratorTests, NoNaNInResults) {
     }
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

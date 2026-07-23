@@ -3,10 +3,10 @@
 // message. These exercise the CLI/config objects linked into this target (July
 // remediation ledger item 8).
 
-#include <gtest/gtest.h>
-
 #include "sirius/app/config/config_loader.h"
 #include "sirius/app/config/config_schema.h"
+
+#include <gtest/gtest.h>
 
 namespace sirius::app::test {
 

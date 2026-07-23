@@ -7,10 +7,10 @@ namespace sirius::base {
 
 namespace {
 
-void PrintViolation(const char* action, const char* kind, const char* expression,
-                    const char* file, long line) noexcept {
-    std::fprintf(stderr, "sirius: %s violated (%s): %s at %s:%ld\n", kind, action, expression,
-                 file, line);
+void PrintViolation(const char* action, const char* kind, const char* expression, const char* file,
+                    long line) noexcept {
+    std::fprintf(stderr, "sirius: %s violated (%s): %s at %s:%ld\n", kind, action, expression, file,
+                 line);
     std::fflush(stderr);
 }
 

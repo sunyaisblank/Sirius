@@ -166,14 +166,14 @@ inline constexpr double kFluxIntegralEps = 1e-30;
 
 namespace physical {
 
-inline constexpr double kPlanck = 6.62607015e-34;         // [J s]
-inline constexpr double kSpeedOfLight = 2.99792458e8;     // [m/s]
-inline constexpr double kBoltzmann = 1.380649e-23;        // [J/K]
+inline constexpr double kPlanck = 6.62607015e-34;           // [J s]
+inline constexpr double kSpeedOfLight = 2.99792458e8;       // [m/s]
+inline constexpr double kBoltzmann = 1.380649e-23;          // [J/K]
 inline constexpr double kStefanBoltzmann = 5.670374419e-8;  // [W/(m^2 K^4)]
-inline constexpr double kGravitation = 6.67430e-11;       // [m^3/(kg s^2)]
-inline constexpr double kSolarMass = 1.98892e30;          // [kg]
-inline constexpr double kParsec = 3.08567758e16;          // [m]
-inline constexpr double kWienB = 2.897771955e-3;          // [m K]
+inline constexpr double kGravitation = 6.67430e-11;         // [m^3/(kg s^2)]
+inline constexpr double kSolarMass = 1.98892e30;            // [kg]
+inline constexpr double kParsec = 3.08567758e16;            // [m]
+inline constexpr double kWienB = 2.897771955e-3;            // [m K]
 
 inline constexpr double kPlanckC1 = 2.0 * kPlanck * kSpeedOfLight * kSpeedOfLight;
 inline constexpr double kPlanckC2 = kPlanck * kSpeedOfLight / kBoltzmann;

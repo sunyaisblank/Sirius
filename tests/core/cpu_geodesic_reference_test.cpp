@@ -6,17 +6,16 @@
 // the surviving content is the CPU baseline plus the tolerance specification
 // anchors. Assertions and tolerances unchanged; includes are core-only.
 
-#define _USE_MATH_DEFINES
+#include "sirius/core/geodesic_integrator.h"
+#include "sirius/core/metrics/kerr_schild_family.h"
+#include "sirius/core/metrics/metric.h"
+#include "sirius/core/tensor.h"
+
 #include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cmath>
 #include <vector>
-
-#include "sirius/core/geodesic_integrator.h"
-#include "sirius/core/metrics/kerr_schild_family.h"
-#include "sirius/core/metrics/metric.h"
-#include "sirius/core/tensor.h"
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -103,10 +102,10 @@ class CpuGeodesicReferenceTests : public ::testing::Test {
         double sin_ph = std::sin(ref.phi_start);
         double cos_ph = std::cos(ref.phi_start);
 
-        ray.position(0) = 0.0f;                                      // t.
-        ray.position(1) = ref.r_start * sin_th * cos_ph;             // x.
-        ray.position(2) = ref.r_start * sin_th * sin_ph;             // y.
-        ray.position(3) = ref.r_start * cos_th;                      // z.
+        ray.position(0) = 0.0f;                           // t.
+        ray.position(1) = ref.r_start * sin_th * cos_ph;  // x.
+        ray.position(2) = ref.r_start * sin_th * sin_ph;  // y.
+        ray.position(3) = ref.r_start * cos_th;           // z.
 
         ray.proper_time = 0.0f;
         ray.coordinate_time = 0.0f;
@@ -115,12 +114,10 @@ class CpuGeodesicReferenceTests : public ::testing::Test {
         ray.bounce_count = 0;
 
         double r = ref.r_start;
-        ray.velocity(1) =
-            ref.v_r * sin_th * cos_ph + r * ref.v_theta * cos_th * cos_ph -
-            r * ref.v_phi * sin_th * sin_ph;
-        ray.velocity(2) =
-            ref.v_r * sin_th * sin_ph + r * ref.v_theta * cos_th * sin_ph +
-            r * ref.v_phi * sin_th * cos_ph;
+        ray.velocity(1) = ref.v_r * sin_th * cos_ph + r * ref.v_theta * cos_th * cos_ph -
+                          r * ref.v_phi * sin_th * sin_ph;
+        ray.velocity(2) = ref.v_r * sin_th * sin_ph + r * ref.v_theta * cos_th * sin_ph +
+                          r * ref.v_phi * sin_th * cos_ph;
         ray.velocity(3) = ref.v_r * cos_th - r * ref.v_theta * sin_th;
 
         Metric4d g;
@@ -154,9 +151,9 @@ class CpuGeodesicReferenceTests : public ::testing::Test {
                 break;
             }
 
-            double r = std::sqrt(ray.position(1) * ray.position(1) +
-                                 ray.position(2) * ray.position(2) +
-                                 ray.position(3) * ray.position(3));
+            double r =
+                std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
+                          ray.position(3) * ray.position(3));
             if (r > 200.0) {
                 result.escaped = true;
                 break;

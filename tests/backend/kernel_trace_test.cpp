@@ -67,41 +67,48 @@ TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
     std::vector<float> params(48, 0.0f);
     params[0] = kWidth;   // imageWidth
     params[1] = kHeight;  // imageHeight
-    params[2] = 0.0f;    // metricId (Kerr-Schild family)
-    params[3] = 1.0f;    // M
-    params[4] = 0.9f;    // a
-    params[5] = 0.0f;    // Q
-    params[6] = 0.0f;    // Lambda
-    params[7] = 0.0f; params[8] = 0.0f; params[9] = -40.0f;   // camera position
-    params[10] = 0.0f; params[11] = 0.0f; params[12] = 1.0f;  // forward
-    params[13] = 1.0f; params[14] = 0.0f; params[15] = 0.0f;  // right
-    params[16] = 0.0f; params[17] = 1.0f; params[18] = 0.0f;  // up
-    params[19] = 0.6f;   // fov (radians)
-    params[20] = 1.0f;   // aspect
-    params[21] = 2000.0f;  // maxSteps
-    params[22] = 0.06f;    // stepScale
-    params[23] = 0.02f;    // minStep
-    params[24] = 2.0f;     // maxStep
-    params[25] = 100.0f;   // escapeRadius
-    params[26] = 1.12f;    // captureFactor
-    params[27] = 0.0f;     // disk disabled
-    params[32] = 0.0f;               // tileOriginX
-    params[33] = 0.0f;               // tileOriginY
-    params[34] = float(kWidth);      // tileWidth
-    params[35] = float(kHeight);     // tileHeight
-    params[36] = 0.0f;               // starfield disabled (gradient background)
-    params[37] = 1.0f;               // starfieldWidth (dummy)
-    params[38] = 1.0f;               // starfieldHeight (dummy)
+    params[2] = 0.0f;     // metricId (Kerr-Schild family)
+    params[3] = 1.0f;     // M
+    params[4] = 0.9f;     // a
+    params[5] = 0.0f;     // Q
+    params[6] = 0.0f;     // Lambda
+    params[7] = 0.0f;
+    params[8] = 0.0f;
+    params[9] = -40.0f;  // camera position
+    params[10] = 0.0f;
+    params[11] = 0.0f;
+    params[12] = 1.0f;  // forward
+    params[13] = 1.0f;
+    params[14] = 0.0f;
+    params[15] = 0.0f;  // right
+    params[16] = 0.0f;
+    params[17] = 1.0f;
+    params[18] = 0.0f;            // up
+    params[19] = 0.6f;            // fov (radians)
+    params[20] = 1.0f;            // aspect
+    params[21] = 2000.0f;         // maxSteps
+    params[22] = 0.06f;           // stepScale
+    params[23] = 0.02f;           // minStep
+    params[24] = 2.0f;            // maxStep
+    params[25] = 100.0f;          // escapeRadius
+    params[26] = 1.12f;           // captureFactor
+    params[27] = 0.0f;            // disk disabled
+    params[32] = 0.0f;            // tileOriginX
+    params[33] = 0.0f;            // tileOriginY
+    params[34] = float(kWidth);   // tileWidth
+    params[35] = float(kHeight);  // tileHeight
+    params[36] = 0.0f;            // starfield disabled (gradient background)
+    params[37] = 1.0f;            // starfieldWidth (dummy)
+    params[38] = 1.0f;            // starfieldHeight (dummy)
 
     std::vector<float> radiance(kWidth * kHeight * 4, 0.0f);
     const std::vector<std::uint32_t> starfield_dummy = {0u};
 
     const auto rbuf =
         (*device)->CreateBuffer(radiance.size() * sizeof(float), BufferUsage::kStorage);
-    const auto pbuf =
-        (*device)->CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
-    const auto sbuf =
-        (*device)->CreateBuffer(starfield_dummy.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
+    const auto pbuf = (*device)->CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
+    const auto sbuf = (*device)->CreateBuffer(starfield_dummy.size() * sizeof(std::uint32_t),
+                                              BufferUsage::kStorage);
     ASSERT_TRUE(rbuf && pbuf && sbuf);
     ASSERT_TRUE((*device)->WriteBuffer(*rbuf, std::as_bytes(std::span<const float>(radiance))));
     ASSERT_TRUE((*device)->WriteBuffer(*pbuf, std::as_bytes(std::span<const float>(params))));
@@ -113,8 +120,7 @@ TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
         (*device)->Dispatch(*kernel, binding, (kWidth + 7) / 8, (kHeight + 7) / 8, 1);
     ASSERT_TRUE(dispatched.has_value()) << dispatched.error().Description();
 
-    ASSERT_TRUE(
-        (*device)->ReadBuffer(*rbuf, std::as_writable_bytes(std::span<float>(radiance))));
+    ASSERT_TRUE((*device)->ReadBuffer(*rbuf, std::as_writable_bytes(std::span<float>(radiance))));
 
     // Finiteness across every channel.
     for (float value : radiance) {
@@ -140,8 +146,8 @@ TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
 
     const double fraction =
         static_cast<double>(shadow_pixels) / static_cast<double>(kWidth * kHeight);
-    std::cout << "[ trace    ] shadow fraction=" << fraction << " luminance range=["
-              << min_lum << ", " << max_lum << "]\n";
+    std::cout << "[ trace    ] shadow fraction=" << fraction << " luminance range=[" << min_lum
+              << ", " << max_lum << "]\n";
     EXPECT_GE(fraction, 0.005) << "shadow fraction too small: " << fraction;
     EXPECT_LE(fraction, 0.30) << "shadow fraction too large: " << fraction;
 #endif
@@ -166,10 +172,18 @@ std::vector<float> RunKerrScene(ComputeDevice& device, const std::vector<std::ui
     params[2] = 0.0f;
     params[3] = 1.0f;
     params[4] = 0.9f;
-    params[7] = 0.0f; params[8] = 0.0f; params[9] = -40.0f;
-    params[10] = 0.0f; params[11] = 0.0f; params[12] = 1.0f;
-    params[13] = 1.0f; params[14] = 0.0f; params[15] = 0.0f;
-    params[16] = 0.0f; params[17] = 1.0f; params[18] = 0.0f;
+    params[7] = 0.0f;
+    params[8] = 0.0f;
+    params[9] = -40.0f;
+    params[10] = 0.0f;
+    params[11] = 0.0f;
+    params[12] = 1.0f;
+    params[13] = 1.0f;
+    params[14] = 0.0f;
+    params[15] = 0.0f;
+    params[16] = 0.0f;
+    params[17] = 1.0f;
+    params[18] = 0.0f;
     params[19] = 0.6f;
     params[20] = 1.0f;
     params[21] = 2000.0f;
@@ -204,7 +218,8 @@ std::vector<float> RunKerrScene(ComputeDevice& device, const std::vector<std::ui
     }
 
     const BufferHandle binding[] = {*rbuf, *pbuf, *sbuf};
-    const auto dispatched = device.Dispatch(*kernel, binding, (kWidth + 7) / 8, (kHeight + 7) / 8, 1);
+    const auto dispatched =
+        device.Dispatch(*kernel, binding, (kWidth + 7) / 8, (kHeight + 7) / 8, 1);
     if (!dispatched) {
         ADD_FAILURE() << dispatched.error().Description();
         return {};
@@ -324,8 +339,8 @@ TEST(KernelTrace, CompensatedRungTracksFp64AtLeastAsWellAsFp32) {
     const double mean_c64 = sum_c64 / n;
     const double mean_3264 = sum_3264 / n;
     const double mean_c32 = sum_c32 / n;
-    std::cout << "[ traceC   ] mean|comp-fp64|=" << mean_c64
-              << " mean|fp32-fp64|=" << mean_3264 << " mean|comp-fp32|=" << mean_c32 << "\n";
+    std::cout << "[ traceC   ] mean|comp-fp64|=" << mean_c64 << " mean|fp32-fp64|=" << mean_3264
+              << " mean|comp-fp32|=" << mean_c32 << "\n";
 
     EXPECT_GT(maxc - minc, 1e-3f) << "compensated radiance field is constant";
     EXPECT_LT(mean_c32, 1e-2) << "compensated rung diverges from fp32 in the mean";

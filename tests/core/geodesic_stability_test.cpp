@@ -2,11 +2,13 @@
 // Tests edge cases: near-singularities, small/large values, precision limits.
 // Ported from TSDG001A.cpp; assertions and tolerances unchanged.
 
+#include "sirius/core/dual_number.h"
+#include "sirius/core/tensor.h"
+
 #include <gtest/gtest.h>
+
 #include <cmath>
 #include <limits>
-#include "sirius/core/tensor.h"
-#include "sirius/core/dual_number.h"
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -18,7 +20,7 @@ constexpr double kEpsilon = 1e-10;
 // =============================================================================
 
 class NumericalStabilityTests : public ::testing::Test {
-protected:
+  protected:
     void SetUp() override {}
     void TearDown() override {}
 };
@@ -160,8 +162,14 @@ TEST_F(NumericalStabilityTests, VectorSmallMagnitude) {
 // Test: Vector operations with large components
 TEST_F(NumericalStabilityTests, VectorLargeComponents) {
     Vec4 u, v;
-    u(0) = 1e10; u(1) = 1e10; u(2) = 1e10; u(3) = 1e10;
-    v(0) = 1e10; v(1) = 1e10; v(2) = 1e10; v(3) = 1e10;
+    u(0) = 1e10;
+    u(1) = 1e10;
+    u(2) = 1e10;
+    u(3) = 1e10;
+    v(0) = 1e10;
+    v(1) = 1e10;
+    v(2) = 1e10;
+    v(3) = 1e10;
 
     Vec4 w = u + v;
 
@@ -208,7 +216,7 @@ TEST_F(NumericalStabilityTests, ChristoffelNearSingular) {
     Metric4d g;
     g.Zero();
     double small = 1e-8;
-    g(0, 0) = Dual<double>(-small, 0.0);  // Small but non-zero
+    g(0, 0) = Dual<double>(-small, 0.0);       // Small but non-zero
     g(1, 1) = Dual<double>(1.0 / small, 0.0);  // Large
     g(2, 2) = Dual<double>(1.0, 0.0);
     g(3, 3) = Dual<double>(1.0, 0.0);
@@ -265,8 +273,7 @@ TEST_F(NumericalStabilityTests, AccumulationError) {
     double relative_error = std::abs(naive_sum - expected) / expected;
 
     // Naive summation has some error, but should be reasonable
-    EXPECT_LT(relative_error, 1e-5)
-        << "Accumulation error too large: " << relative_error;
+    EXPECT_LT(relative_error, 1e-5) << "Accumulation error too large: " << relative_error;
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

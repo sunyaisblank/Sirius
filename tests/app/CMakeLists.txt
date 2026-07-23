@@ -12,6 +12,7 @@ add_executable(sirius_app_tests
 )
 
 target_link_libraries(sirius_app_tests PRIVATE sirius_app_lib GTest::gtest_main)
+target_include_directories(sirius_app_tests PRIVATE "${CMAKE_SOURCE_DIR}/tests")
 
 sirius_configure_target(sirius_app_tests)
 

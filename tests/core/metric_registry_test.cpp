@@ -8,11 +8,12 @@
 // metric families round-trip, unknown names fail rather than defaulting,
 // and the error text can enumerate the accepted set.
 
-#include <gtest/gtest.h>
-#include "sirius/core/metrics/registry.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/core/metrics/morris_thorne_family.h"
+#include "sirius/core/metrics/registry.h"
 #include "sirius/core/metrics/warp_drive_family.h"
+
+#include <gtest/gtest.h>
 
 using namespace sirius::core;
 
@@ -45,10 +46,10 @@ TEST(MetricRegistryTests, ParsingIsCaseInsensitive) {
 
 TEST(MetricRegistryTests, UnknownNamesFailInsteadOfDefaulting) {
     EXPECT_FALSE(ParseMetricName("").has_value());
-    EXPECT_FALSE(ParseMetricName("Schwarzchild").has_value());   // common misspelling
-    EXPECT_FALSE(ParseMetricName("Godel").has_value());          // unimplemented on purpose
+    EXPECT_FALSE(ParseMetricName("Schwarzchild").has_value());  // common misspelling
+    EXPECT_FALSE(ParseMetricName("Godel").has_value());         // unimplemented on purpose
     EXPECT_FALSE(ParseMetricName("Taub-NUT").has_value());
-    EXPECT_FALSE(ParseMetricName("Kerr ").has_value());          // trailing space is not a name
+    EXPECT_FALSE(ParseMetricName("Kerr ").has_value());  // trailing space is not a name
 }
 
 TEST(MetricRegistryTests, MetricInfoRoundTripsById) {

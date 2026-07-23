@@ -20,7 +20,7 @@ class StarfieldConfigTests : public ::testing::Test {};
 
 TEST_F(StarfieldConfigTests, ValidateClampsStarCount) {
     sirius::core::StarfieldConfig c;
-    c.star_count = 20000000u; // above 10^7 limit
+    c.star_count = 20000000u;  // above 10^7 limit
     c.Validate();
     EXPECT_LE(c.star_count, 10000000u);
 }
@@ -62,7 +62,7 @@ class StarEntryTests : public ::testing::Test {};
 
 TEST_F(StarEntryTests, ComputeColorProducesValidRGB) {
     sirius::core::StarEntry star{};
-    star.temperature_K = 5778.0f; // Solar temperature
+    star.temperature_K = 5778.0f;  // Solar temperature
     float r, g, b;
     star.ComputeColor(r, g, b);
 
@@ -130,12 +130,12 @@ TEST_F(StarEntryTests, IntensityMagnitudeRelation) {
 // =============================================================================
 
 class StarfieldGeneratorTests : public ::testing::Test {
-protected:
+  protected:
     sirius::core::StarfieldConfig config;
 
     void SetUp() override {
         config.star_count = 1000;
-        config.magnitude_limit = 20.0f; // accept all
+        config.magnitude_limit = 20.0f;  // accept all
         config.seed = 42;
     }
 };
@@ -156,11 +156,9 @@ TEST_F(StarfieldGeneratorTests, DirectionVectorsNormalised) {
     sirius::core::StarfieldGenerator gen(config);
     auto stars = gen.Generate();
     for (size_t i = 0; i < std::min(stars.size(), size_t(100)); ++i) {
-        float mag = std::sqrt(
-            stars[i].direction_x * stars[i].direction_x +
-            stars[i].direction_y * stars[i].direction_y +
-            stars[i].direction_z * stars[i].direction_z
-        );
+        float mag = std::sqrt(stars[i].direction_x * stars[i].direction_x +
+                              stars[i].direction_y * stars[i].direction_y +
+                              stars[i].direction_z * stars[i].direction_z);
         EXPECT_NEAR(mag, 1.0f, 1e-4f) << "Star " << i << " direction not unit";
     }
 }
@@ -229,4 +227,4 @@ TEST_F(StarfieldGeneratorTests, NoNaNInCatalog) {
     }
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

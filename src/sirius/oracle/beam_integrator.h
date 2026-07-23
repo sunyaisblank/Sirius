@@ -12,6 +12,7 @@
 #include "sirius/oracle/metric_interface.h"
 #include "sirius/oracle/transport_types.h"
 
+#include <algorithm>
 #include <cmath>
 
 // CPU/GPU compatibility macro

@@ -254,7 +254,7 @@ struct MetricConfig {
     double charge = 0.0;
     double lambda = 0.0;  // Cosmological constant (de Sitter family; requires spin = 0).
     std::string temperatureModel = "NovikovThorne";  // NovikovThorne or ShakuraSunyaev.
-    float diskTemperature = 50000.0f;                 // T_scale (Kelvin).
+    float diskTemperature = 50000.0f;                // T_scale (Kelvin).
 
     // Morris-Thorne wormhole.
     double throatRadius = 1.0;  // b0 in M.

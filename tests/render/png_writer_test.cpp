@@ -4,8 +4,9 @@
 // function is applied exactly once: linear in, sRGB out). Assertions and
 // tolerances are identical to the legacy suite.
 
-#include "sirius/render/image_buffer.h"
 #include "sirius/render/png_writer.h"
+
+#include "sirius/render/image_buffer.h"
 
 #include <gtest/gtest.h>
 

@@ -31,7 +31,6 @@
 #include "sirius/core/camera.h"
 #include "sirius/core/constants.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
-
 #include "sirius/oracle/kerr_boyer_lindquist.h"
 
 #include <gtest/gtest.h>
@@ -154,8 +153,8 @@ TEST(RayBundleTest, KretschmannMatchesOracleKerrEquatorial) {
 
 TEST(RayBundleTest, KretschmannMatchesOracleKerrOffEquatorial) {
     constexpr double kTol = sirius::core::constants::geodesic::kConservationTol;  // 1e-4.
-    double worst = MaxKretschmannError(0.9, {4.0, 6.0, 8.0, 15.0, 30.0},
-                                       {M_PI / 3, M_PI / 4, M_PI / 6, 2.2});
+    double worst =
+        MaxKretschmannError(0.9, {4.0, 6.0, 8.0, 15.0, 30.0}, {M_PI / 3, M_PI / 4, M_PI / 6, 2.2});
     std::cout << "[oracle a=0.9 off-equator] max Kretschmann rel error = " << worst << "\n";
     EXPECT_LT(worst, kTol);
 }

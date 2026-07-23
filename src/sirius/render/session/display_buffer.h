@@ -22,7 +22,7 @@ class DisplayBuffer {
         width_ = width;
         height_ = height;
         pixel_data_.resize(width * height * 4, 0.0f);  // RGBA float.
-        byte_data_.resize(width * height * 4, 0);       // RGBA uint8.
+        byte_data_.resize(width * height * 4, 0);      // RGBA uint8.
         update_counter_ = 0;
         dirty_ = true;
     }

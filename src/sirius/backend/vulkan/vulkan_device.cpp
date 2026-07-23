@@ -1,10 +1,10 @@
 #include "sirius/backend/vulkan/vulkan_device.h"
 
+#include "sirius/base/contracts.h"
+
 #include <cstring>
 #include <format>
 #include <utility>
-
-#include "sirius/base/contracts.h"
 
 namespace sirius::backend {
 
@@ -72,8 +72,7 @@ constexpr std::uint32_t kApiVersion = VK_MAKE_API_VERSION(0, 1, 3, 0);
         .pApplicationInfo = &app_info,
     };
     VkInstance instance = VK_NULL_HANDLE;
-    if (const VkResult r = vkCreateInstance(&create_info, nullptr, &instance);
-        r != VK_SUCCESS) {
+    if (const VkResult r = vkCreateInstance(&create_info, nullptr, &instance); r != VK_SUCCESS) {
         return Fail(ErrorDomain::kDevice, "create Vulkan instance", VkResultText(r));
     }
     return instance;
@@ -81,8 +80,7 @@ constexpr std::uint32_t kApiVersion = VK_MAKE_API_VERSION(0, 1, 3, 0);
 
 [[nodiscard]] Expected<std::vector<VkPhysicalDevice>> ListPhysicalDevices(VkInstance instance) {
     std::uint32_t count = 0;
-    if (const VkResult r = vkEnumeratePhysicalDevices(instance, &count, nullptr);
-        r != VK_SUCCESS) {
+    if (const VkResult r = vkEnumeratePhysicalDevices(instance, &count, nullptr); r != VK_SUCCESS) {
         return Fail(ErrorDomain::kDevice, "enumerate physical devices", VkResultText(r));
     }
     std::vector<VkPhysicalDevice> devices(count);
@@ -203,8 +201,8 @@ Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {
         .poolSizeCount = 2,
         .pPoolSizes = pool_sizes,
     };
-    if (const VkResult r = vkCreateDescriptorPool(device->device_, &descriptor_pool_info,
-                                                  nullptr, &device->descriptor_pool_);
+    if (const VkResult r = vkCreateDescriptorPool(device->device_, &descriptor_pool_info, nullptr,
+                                                  &device->descriptor_pool_);
         r != VK_SUCCESS) {
         return Fail(ErrorDomain::kDevice, "create descriptor pool", VkResultText(r));
     }
@@ -281,8 +279,7 @@ Expected<BufferHandle> VulkanDevice::CreateBuffer(std::uint64_t size_bytes, Buff
     std::uint32_t type_index = memory_properties.memoryTypeCount;
     for (std::uint32_t i = 0; i < memory_properties.memoryTypeCount; ++i) {
         const bool allowed = (requirements.memoryTypeBits & (1u << i)) != 0;
-        const bool suitable =
-            (memory_properties.memoryTypes[i].propertyFlags & kWanted) == kWanted;
+        const bool suitable = (memory_properties.memoryTypes[i].propertyFlags & kWanted) == kWanted;
         if (allowed && suitable) {
             type_index = i;
             break;
@@ -320,8 +317,7 @@ Expected<void> VulkanDevice::WriteBuffer(BufferHandle handle, std::span<const st
     Buffer& buffer = buffers_[handle.value];
     SIRIUS_PRE(data.size_bytes() <= buffer.size_bytes);
     void* mapped = nullptr;
-    if (const VkResult r =
-            vkMapMemory(device_, buffer.memory, 0, data.size_bytes(), 0, &mapped);
+    if (const VkResult r = vkMapMemory(device_, buffer.memory, 0, data.size_bytes(), 0, &mapped);
         r != VK_SUCCESS) {
         return Fail(ErrorDomain::kDevice, "map buffer for write", VkResultText(r));
     }
@@ -374,8 +370,8 @@ Expected<VulkanDevice::Pipeline*> VulkanDevice::GetOrCreatePipeline(
         .bindingCount = static_cast<std::uint32_t>(bindings.size()),
         .pBindings = bindings.data(),
     };
-    if (const VkResult r = vkCreateDescriptorSetLayout(device_, &layout_info, nullptr,
-                                                       &pipeline.set_layout);
+    if (const VkResult r =
+            vkCreateDescriptorSetLayout(device_, &layout_info, nullptr, &pipeline.set_layout);
         r != VK_SUCCESS) {
         return Fail(ErrorDomain::kKernel, "create descriptor set layout", VkResultText(r));
     }
@@ -384,8 +380,8 @@ Expected<VulkanDevice::Pipeline*> VulkanDevice::GetOrCreatePipeline(
         .setLayoutCount = 1,
         .pSetLayouts = &pipeline.set_layout,
     };
-    if (const VkResult r = vkCreatePipelineLayout(device_, &pipeline_layout_info, nullptr,
-                                                  &pipeline.layout);
+    if (const VkResult r =
+            vkCreatePipelineLayout(device_, &pipeline_layout_info, nullptr, &pipeline.layout);
         r != VK_SUCCESS) {
         vkDestroyDescriptorSetLayout(device_, pipeline.set_layout, nullptr);
         return Fail(ErrorDomain::kKernel, "create pipeline layout", VkResultText(r));
@@ -435,8 +431,7 @@ Expected<void> VulkanDevice::Dispatch(KernelHandle kernel, std::span<const Buffe
         .pSetLayouts = &(*pipeline)->set_layout,
     };
     VkDescriptorSet set = VK_NULL_HANDLE;
-    if (const VkResult r = vkAllocateDescriptorSets(device_, &set_info, &set);
-        r != VK_SUCCESS) {
+    if (const VkResult r = vkAllocateDescriptorSets(device_, &set_info, &set); r != VK_SUCCESS) {
         return Fail(ErrorDomain::kDevice, "allocate descriptor set", VkResultText(r));
     }
 
@@ -501,8 +496,7 @@ Expected<void> VulkanDevice::Dispatch(KernelHandle kernel, std::span<const Buffe
     vkFreeDescriptorSets(device_, descriptor_pool_, 1, &set);
 
     if (submit_result != VK_SUCCESS) {
-        return Fail(ErrorDomain::kDevice, "submit compute dispatch",
-                    VkResultText(submit_result));
+        return Fail(ErrorDomain::kDevice, "submit compute dispatch", VkResultText(submit_result));
     }
     return {};
 }

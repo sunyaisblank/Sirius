@@ -43,10 +43,10 @@ struct IntegratorConfig {
     float min_step = 1e-6f;
     float max_step = 0.1f;
     float initial_step = 0.01f;
-    float safety_factor = 0.9f;   // Step adaptation safety factor (0.8-0.95).
+    float safety_factor = 0.9f;  // Step adaptation safety factor (0.8-0.95).
     float step_grow_max = 2.0f;
     float step_shrink_min = 0.1f;
-    bool use_rk45 = true;         // Use RK45 (true) or RK4 (false).
+    bool use_rk45 = true;  // Use RK45 (true) or RK4 (false).
 };
 
 // Internal state for the RK45 integrator.

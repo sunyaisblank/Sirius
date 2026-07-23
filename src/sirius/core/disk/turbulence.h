@@ -15,13 +15,13 @@ namespace sirius::core {
 // Turbulence configuration.
 struct TurbulenceConfig {
     float kolmogorov_exponent = -5.0f / 3.0f;  // Spectral exponent (-5/3 Kolmogorov).
-    float outer_scale_M = 5.0f;                 // Outer scale [M] (energy injection).
-    float inner_scale_M = 0.1f;                 // Inner dissipation scale [M].
-    float amplitude = 0.3f;                     // Density fluctuation amplitude in [0, 1].
-    uint32_t octaves = 6;                       // Noise octaves (fractal detail levels).
-    uint32_t seed = 12345;                      // Random seed for reproducibility.
-    float lacunarity = 2.0f;                    // Frequency multiplier per octave.
-    float persistence = 0.5f;                   // Amplitude decay per octave.
+    float outer_scale_M = 5.0f;                // Outer scale [M] (energy injection).
+    float inner_scale_M = 0.1f;                // Inner dissipation scale [M].
+    float amplitude = 0.3f;                    // Density fluctuation amplitude in [0, 1].
+    uint32_t octaves = 6;                      // Noise octaves (fractal detail levels).
+    uint32_t seed = 12345;                     // Random seed for reproducibility.
+    float lacunarity = 2.0f;                   // Frequency multiplier per octave.
+    float persistence = 0.5f;                  // Amplitude decay per octave.
     bool enabled = true;
 
     // Physical validity ranges (enforced by clamping in Validate, not asserted):
@@ -59,11 +59,9 @@ inline uint32_t Hash(uint32_t x, uint32_t y, uint32_t z, uint32_t seed) {
 
 // Gradient vector from a hash (12 cube-edge directions).
 inline void Gradient(uint32_t h, float& gx, float& gy, float& gz) {
-    const float grads[12][3] = {
-        { 1, 1, 0}, {-1, 1, 0}, { 1,-1, 0}, {-1,-1, 0},
-        { 1, 0, 1}, {-1, 0, 1}, { 1, 0,-1}, {-1, 0,-1},
-        { 0, 1, 1}, { 0,-1, 1}, { 0, 1,-1}, { 0,-1,-1}
-    };
+    const float grads[12][3] = {{1, 1, 0}, {-1, 1, 0}, {1, -1, 0}, {-1, -1, 0},
+                                {1, 0, 1}, {-1, 0, 1}, {1, 0, -1}, {-1, 0, -1},
+                                {0, 1, 1}, {0, -1, 1}, {0, 1, -1}, {0, -1, -1}};
     int idx = h % 12;
     gx = grads[idx][0];
     gy = grads[idx][1];
@@ -71,14 +69,10 @@ inline void Gradient(uint32_t h, float& gx, float& gy, float& gz) {
 }
 
 // Hermite quintic smoothstep.
-inline float Fade(float t) {
-    return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f);
-}
+inline float Fade(float t) { return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f); }
 
 // Linear interpolation.
-inline float Lerp(float a, float b, float t) {
-    return a + t * (b - a);
-}
+inline float Lerp(float a, float b, float t) { return a + t * (b - a); }
 
 // 3D Perlin noise in [-1, 1].
 inline float Perlin3D(float x, float y, float z, uint32_t seed) {
@@ -106,13 +100,13 @@ inline float Perlin3D(float x, float y, float z, uint32_t seed) {
         return gx * fx + gy * fy + gz * fz;
     };
 
-    n000 = corner_noise(0, 0, 0, xf,       yf,       zf);
-    n100 = corner_noise(1, 0, 0, xf - 1.0f, yf,       zf);
-    n010 = corner_noise(0, 1, 0, xf,       yf - 1.0f, zf);
+    n000 = corner_noise(0, 0, 0, xf, yf, zf);
+    n100 = corner_noise(1, 0, 0, xf - 1.0f, yf, zf);
+    n010 = corner_noise(0, 1, 0, xf, yf - 1.0f, zf);
     n110 = corner_noise(1, 1, 0, xf - 1.0f, yf - 1.0f, zf);
-    n001 = corner_noise(0, 0, 1, xf,       yf,       zf - 1.0f);
-    n101 = corner_noise(1, 0, 1, xf - 1.0f, yf,       zf - 1.0f);
-    n011 = corner_noise(0, 1, 1, xf,       yf - 1.0f, zf - 1.0f);
+    n001 = corner_noise(0, 0, 1, xf, yf, zf - 1.0f);
+    n101 = corner_noise(1, 0, 1, xf - 1.0f, yf, zf - 1.0f);
+    n011 = corner_noise(0, 1, 1, xf, yf - 1.0f, zf - 1.0f);
     n111 = corner_noise(1, 1, 1, xf - 1.0f, yf - 1.0f, zf - 1.0f);
 
     // Trilinear interpolation.

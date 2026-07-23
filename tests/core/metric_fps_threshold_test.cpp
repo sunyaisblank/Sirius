@@ -1,16 +1,17 @@
 // TSPF001A.cpp - FPS Threshold Performance Tests
 // Tests: frame budget validation, metric evaluation time, per-ray budgets.
 
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <gtest/gtest.h>
-#include <chrono>
-#include <vector>
-#include <numeric>
-#include "sirius/core/tensor.h"
 #include "sirius/core/dual_number.h"
-#include "sirius/core/metrics/metric.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
+#include "sirius/core/metrics/metric.h"
+#include "sirius/core/tensor.h"
+
+#include <gtest/gtest.h>
+
+#include <chrono>
+#include <cmath>
+#include <numeric>
+#include <vector>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -20,38 +21,38 @@ using namespace sirius::core;
 // =============================================================================
 
 namespace FPSThresholds {
-    // Resolution
-    constexpr int WIDTH_1080P = 1920;
-    constexpr int HEIGHT_1080P = 1080;
-    constexpr int TOTAL_PIXELS_1080P = WIDTH_1080P * HEIGHT_1080P;  // 2,073,600
+// Resolution
+constexpr int WIDTH_1080P = 1920;
+constexpr int HEIGHT_1080P = 1080;
+constexpr int TOTAL_PIXELS_1080P = WIDTH_1080P * HEIGHT_1080P;  // 2,073,600
 
-    // FPS targets and bounds
-    constexpr double MINKOWSKI_TARGET_FPS = 120.0;
-    constexpr double MINKOWSKI_BOUND_FPS = 60.0;
-    constexpr double SCHWARZSCHILD_TARGET_FPS = 60.0;
-    constexpr double SCHWARZSCHILD_BOUND_FPS = 30.0;
-    constexpr double KERR_TARGET_FPS = 30.0;
-    constexpr double KERR_BOUND_FPS = 15.0;
-    constexpr double NUMERICAL_TARGET_FPS = 10.0;
-    constexpr double NUMERICAL_BOUND_FPS = 5.0;
+// FPS targets and bounds
+constexpr double MINKOWSKI_TARGET_FPS = 120.0;
+constexpr double MINKOWSKI_BOUND_FPS = 60.0;
+constexpr double SCHWARZSCHILD_TARGET_FPS = 60.0;
+constexpr double SCHWARZSCHILD_BOUND_FPS = 30.0;
+constexpr double KERR_TARGET_FPS = 30.0;
+constexpr double KERR_BOUND_FPS = 15.0;
+constexpr double NUMERICAL_TARGET_FPS = 10.0;
+constexpr double NUMERICAL_BOUND_FPS = 5.0;
 
-    // Frame time budgets (ms)
-    constexpr double MINKOWSKI_FRAME_BUDGET_MS = 1000.0 / MINKOWSKI_TARGET_FPS;      // 8.33ms
-    constexpr double SCHWARZSCHILD_FRAME_BUDGET_MS = 1000.0 / SCHWARZSCHILD_TARGET_FPS; // 16.67ms
-    constexpr double KERR_FRAME_BUDGET_MS = 1000.0 / KERR_TARGET_FPS;                // 33.33ms
-    constexpr double NUMERICAL_FRAME_BUDGET_MS = 1000.0 / NUMERICAL_TARGET_FPS;      // 100ms
+// Frame time budgets (ms)
+constexpr double MINKOWSKI_FRAME_BUDGET_MS = 1000.0 / MINKOWSKI_TARGET_FPS;          // 8.33ms
+constexpr double SCHWARZSCHILD_FRAME_BUDGET_MS = 1000.0 / SCHWARZSCHILD_TARGET_FPS;  // 16.67ms
+constexpr double KERR_FRAME_BUDGET_MS = 1000.0 / KERR_TARGET_FPS;                    // 33.33ms
+constexpr double NUMERICAL_FRAME_BUDGET_MS = 1000.0 / NUMERICAL_TARGET_FPS;          // 100ms
 
-    // Integration parameters
-    constexpr int TYPICAL_STEPS_PER_RAY = 500;
-    [[maybe_unused]] constexpr double STEP_SIZE = 0.01;
-}
+// Integration parameters
+constexpr int TYPICAL_STEPS_PER_RAY = 500;
+[[maybe_unused]] constexpr double STEP_SIZE = 0.01;
+}  // namespace FPSThresholds
 
 // =============================================================================
 // Test Fixture
 // =============================================================================
 
 class FPSThresholdTests : public ::testing::Test {
-protected:
+  protected:
     static constexpr double M = 1.0;  // Mass in geometric units
 
     // Create standard test position (Cartesian x=10, y=0, z=0)
@@ -84,16 +85,16 @@ protected:
 
     // Calculate estimated FPS based on per-evaluation time
     struct FPSEstimate {
-        double eval_time_us;        // Time per evaluation (µs)
-        double evals_per_pixel;     // Evaluations per pixel (typically steps_per_ray)
-        double frame_time_ms;       // Total frame time (ms)
-        double estimated_fps;       // Estimated FPS
-        bool meets_bound;           // Meets minimum bound?
-        bool meets_target;          // Meets target?
+        double eval_time_us;     // Time per evaluation (µs)
+        double evals_per_pixel;  // Evaluations per pixel (typically steps_per_ray)
+        double frame_time_ms;    // Total frame time (ms)
+        double estimated_fps;    // Estimated FPS
+        bool meets_bound;        // Meets minimum bound?
+        bool meets_target;       // Meets target?
     };
 
-    FPSEstimate estimateFPS(double eval_time_us, int evals_per_pixel,
-                            double target_fps, double bound_fps) {
+    FPSEstimate estimateFPS(double eval_time_us, int evals_per_pixel, double target_fps,
+                            double bound_fps) {
         FPSEstimate est;
         est.eval_time_us = eval_time_us;
         est.evals_per_pixel = evals_per_pixel;
@@ -130,8 +131,7 @@ TEST_F(FPSThresholdTests, FrameBudgetCalculations) {
                 1000.0 / FPSThresholds::MINKOWSKI_TARGET_FPS, 0.01);
     EXPECT_NEAR(FPSThresholds::SCHWARZSCHILD_FRAME_BUDGET_MS,
                 1000.0 / FPSThresholds::SCHWARZSCHILD_TARGET_FPS, 0.01);
-    EXPECT_NEAR(FPSThresholds::KERR_FRAME_BUDGET_MS,
-                1000.0 / FPSThresholds::KERR_TARGET_FPS, 0.01);
+    EXPECT_NEAR(FPSThresholds::KERR_FRAME_BUDGET_MS, 1000.0 / FPSThresholds::KERR_TARGET_FPS, 0.01);
     EXPECT_NEAR(FPSThresholds::NUMERICAL_FRAME_BUDGET_MS,
                 1000.0 / FPSThresholds::NUMERICAL_TARGET_FPS, 0.01);
 }
@@ -168,8 +168,7 @@ TEST_F(FPSThresholdTests, MinkowskiEvaluationTime) {
     EXPECT_LT(per_eval_us, 10.0) << "Minkowski should evaluate in < 10µs";
 
     // Report estimated FPS
-    auto est = estimateFPS(per_eval_us, 1,
-                           FPSThresholds::MINKOWSKI_TARGET_FPS,
+    auto est = estimateFPS(per_eval_us, 1, FPSThresholds::MINKOWSKI_TARGET_FPS,
                            FPSThresholds::MINKOWSKI_BOUND_FPS);
     std::cout << "  Per-eval time: " << est.eval_time_us << " µs\n";
     std::cout << "  Frame time (sequential): " << est.frame_time_ms << " ms\n";
@@ -260,7 +259,8 @@ TEST_F(FPSThresholdTests, SchwarzschildPerRayBudget) {
     double rays_per_frame = FPSThresholds::TOTAL_PIXELS_1080P;
     double budget_per_ray_us = (frame_budget_ms * 1000.0) / rays_per_frame;
 
-    std::cout << "\n[BUDGET] Schwarzschild @ " << FPSThresholds::SCHWARZSCHILD_TARGET_FPS << " FPS:\n";
+    std::cout << "\n[BUDGET] Schwarzschild @ " << FPSThresholds::SCHWARZSCHILD_TARGET_FPS
+              << " FPS:\n";
     std::cout << "  Frame budget: " << frame_budget_ms << " ms\n";
     std::cout << "  Budget per ray: " << budget_per_ray_us << " µs\n";
 
@@ -294,8 +294,7 @@ TEST_F(FPSThresholdTests, PerStepBudgetAnalysis) {
         {"Minkowski", FPSThresholds::MINKOWSKI_TARGET_FPS},
         {"Schwarzschild", FPSThresholds::SCHWARZSCHILD_TARGET_FPS},
         {"Kerr", FPSThresholds::KERR_TARGET_FPS},
-        {"Numerical", FPSThresholds::NUMERICAL_TARGET_FPS}
-    };
+        {"Numerical", FPSThresholds::NUMERICAL_TARGET_FPS}};
 
     std::cout << "\n[BUDGET] Per-step budget @ " << steps_per_ray << " steps/ray:\n";
 
@@ -305,8 +304,8 @@ TEST_F(FPSThresholdTests, PerStepBudgetAnalysis) {
         double budget_per_ray_us = (frame_budget_ms * 1000.0) / rays_per_frame;
         double budget_per_step_ns = (budget_per_ray_us * 1000.0) / steps_per_ray;
 
-        std::cout << "  " << name << " @ " << target_fps << " FPS: "
-                  << budget_per_step_ns << " ns/step\n";
+        std::cout << "  " << name << " @ " << target_fps << " FPS: " << budget_per_step_ns
+                  << " ns/step\n";
 
         EXPECT_GT(budget_per_step_ns, 0.0);
     }
@@ -337,8 +336,7 @@ TEST_F(FPSThresholdTests, GPUParallelismAssumptions) {
     std::cout << "  Speedup factor: " << effective_parallelism << "x\n";
     std::cout << "  1s sequential → " << parallel_time_ms << " ms parallel\n";
 
-    EXPECT_GT(effective_parallelism, 1000.0)
-        << "GPU should provide >1000x parallelism";
+    EXPECT_GT(effective_parallelism, 1000.0) << "GPU should provide >1000x parallelism";
 }
 
 // =============================================================================
@@ -405,4 +403,4 @@ TEST_F(FPSThresholdTests, NoNaNInCriticalPath) {
     }
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

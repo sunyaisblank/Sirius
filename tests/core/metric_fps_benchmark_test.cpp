@@ -1,14 +1,15 @@
 // TSBM002A.cpp - FPS Performance Tracking Benchmarks
 // Benchmarks metric evaluation time and extrapolates to target FPS.
 
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <gtest/gtest.h>
-#include <chrono>
-#include <vector>
-#include <numeric>
-#include "sirius/core/tensor.h"
 #include "sirius/core/dual_number.h"
+#include "sirius/core/tensor.h"
+
+#include <gtest/gtest.h>
+
+#include <chrono>
+#include <cmath>
+#include <numeric>
+#include <vector>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -31,12 +32,12 @@ struct FPSTargets {
 
 // Benchmark configuration
 struct BenchmarkConfig {
-    static constexpr int SAMPLE_PIXELS = 1000;         // Pixels to benchmark
-    static constexpr int WARMUP_ITERATIONS = 10;       // Warmup iterations
-    static constexpr int BENCHMARK_ITERATIONS = 100;   // Measurement iterations
-    static constexpr int STEPS_PER_RAY = 500;          // Integration steps per ray
-    static constexpr int RESOLUTION_WIDTH = 1920;      // Target resolution
-    static constexpr int RESOLUTION_HEIGHT = 1080;     // Target resolution
+    static constexpr int SAMPLE_PIXELS = 1000;        // Pixels to benchmark
+    static constexpr int WARMUP_ITERATIONS = 10;      // Warmup iterations
+    static constexpr int BENCHMARK_ITERATIONS = 100;  // Measurement iterations
+    static constexpr int STEPS_PER_RAY = 500;         // Integration steps per ray
+    static constexpr int RESOLUTION_WIDTH = 1920;     // Target resolution
+    static constexpr int RESOLUTION_HEIGHT = 1080;    // Target resolution
 };
 
 // =============================================================================
@@ -44,13 +45,13 @@ struct BenchmarkConfig {
 // =============================================================================
 
 class FPSBenchmarks : public ::testing::Test {
-protected:
+  protected:
     static constexpr double M = 1.0;  // Mass in geometric units
 
     // Simulate a single RK4 step for geodesic integration
     // This measures the core compute cost per ray step
-    void runRK4Step(const Metric4d& g, const Vec4& pos, const Vec4& vel,
-                    Vec4& new_pos, Vec4& new_vel) {
+    void runRK4Step(const Metric4d& g, const Vec4& pos, const Vec4& vel, Vec4& new_pos,
+                    Vec4& new_vel) {
         // Simplified RK4 step simulation
         // In real code, this would compute Christoffel symbols and update state
         double dt = 0.01;
@@ -84,7 +85,7 @@ protected:
 
         // Combine stages
         for (int i = 0; i < 4; ++i) {
-            new_pos(i) = pos(i) + (k1(i) + 2*k2(i) + 2*k3(i) + k4(i)) / 6.0;
+            new_pos(i) = pos(i) + (k1(i) + 2 * k2(i) + 2 * k3(i) + k4(i)) / 6.0;
             new_vel(i) = vel(i);  // Simplified
         }
     }
@@ -101,7 +102,7 @@ protected:
     }
 
     // Create Schwarzschild metric at given radius
-    Metric4d createSchwarzschildMetric(double r, double theta = M_PI/2) {
+    Metric4d createSchwarzschildMetric(double r, double theta = M_PI / 2) {
         Metric4d g;
         g.Zero();
 
@@ -118,7 +119,7 @@ protected:
     }
 
     // Create Kerr metric at given radius and spin
-    Metric4d createKerrMetric(double r, double a, double theta = M_PI/2) {
+    Metric4d createKerrMetric(double r, double a, double theta = M_PI / 2) {
         Metric4d g;
         g.Zero();
 
@@ -147,10 +148,10 @@ protected:
 
     // Benchmark a single metric configuration
     struct BenchmarkResult {
-        double mean_time_us;       // Mean time per ray (microseconds)
-        double std_dev_us;         // Standard deviation
-        double estimated_fps;      // Estimated FPS for full frame
-        int samples;               // Number of samples taken
+        double mean_time_us;   // Mean time per ray (microseconds)
+        double std_dev_us;     // Standard deviation
+        double estimated_fps;  // Estimated FPS for full frame
+        int samples;           // Number of samples taken
     };
 
     BenchmarkResult benchmarkMetric(std::function<Metric4d(double, double)> metric_factory,
@@ -162,20 +163,20 @@ protected:
 
         // Initial state
         Vec4 pos, vel, new_pos, new_vel;
-        pos(0) = 0.0;  // t
-        pos(1) = r_start;  // r
+        pos(0) = 0.0;         // t
+        pos(1) = r_start;     // r
         pos(2) = M_PI / 2.0;  // theta
-        pos(3) = 0.0;  // phi
+        pos(3) = 0.0;         // phi
 
-        vel(0) = 1.0;  // dt/dlambda
-        vel(1) = -0.1; // dr/dlambda
-        vel(2) = 0.0;  // dtheta/dlambda
-        vel(3) = 0.01; // dphi/dlambda
+        vel(0) = 1.0;   // dt/dlambda
+        vel(1) = -0.1;  // dr/dlambda
+        vel(2) = 0.0;   // dtheta/dlambda
+        vel(3) = 0.01;  // dphi/dlambda
 
         // Warmup
         for (int i = 0; i < BenchmarkConfig::WARMUP_ITERATIONS; ++i) {
             double r = r_start;
-            Metric4d g = metric_factory(r, M_PI/2);
+            Metric4d g = metric_factory(r, M_PI / 2);
             runRK4Step(g, pos, vel, new_pos, new_vel);
         }
 
@@ -241,7 +242,8 @@ protected:
 // Test: Minkowski metric should be fast (direct path, no curvature)
 TEST_F(FPSBenchmarks, MinkowskiFPS) {
     auto metric_factory = [this](double r, double theta) {
-        (void)r; (void)theta;
+        (void)r;
+        (void)theta;
         return createMinkowskiMetric();
     };
 
@@ -367,30 +369,30 @@ TEST_F(FPSBenchmarks, MetricComparison) {
 
     // Minkowski baseline
     auto mink_factory = [this](double r, double theta) {
-        (void)r; (void)theta;
+        (void)r;
+        (void)theta;
         return createMinkowskiMetric();
     };
     BenchmarkResult mink_result = benchmarkMetric(mink_factory, 10.0, 100.0);
     double baseline = mink_result.mean_time_us;
 
-    std::cout << "  Minkowski\t\t" << mink_result.mean_time_us
-              << "\t\t1.00x\n";
+    std::cout << "  Minkowski\t\t" << mink_result.mean_time_us << "\t\t1.00x\n";
 
     // Schwarzschild
     auto schw_factory = [this](double r, double theta) {
         return createSchwarzschildMetric(r, theta);
     };
     BenchmarkResult schw_result = benchmarkMetric(schw_factory, 10.0, 100.0);
-    std::cout << "  Schwarzschild\t\t" << schw_result.mean_time_us
-              << "\t\t" << (schw_result.mean_time_us / baseline) << "x\n";
+    std::cout << "  Schwarzschild\t\t" << schw_result.mean_time_us << "\t\t"
+              << (schw_result.mean_time_us / baseline) << "x\n";
 
     // Kerr
     auto kerr_factory = [this](double r, double theta) {
         return createKerrMetric(r, 0.9 * M, theta);
     };
     BenchmarkResult kerr_result = benchmarkMetric(kerr_factory, 10.0, 100.0);
-    std::cout << "  Kerr (a=0.9M)\t\t" << kerr_result.mean_time_us
-              << "\t\t" << (kerr_result.mean_time_us / baseline) << "x\n";
+    std::cout << "  Kerr (a=0.9M)\t\t" << kerr_result.mean_time_us << "\t\t"
+              << (kerr_result.mean_time_us / baseline) << "x\n";
 
     // Verify ordering: Minkowski <= Schwarzschild <= Kerr (generally)
     // Note: This may not always hold due to measurement noise
@@ -413,14 +415,20 @@ TEST_F(FPSBenchmarks, StepCountScaling) {
 
     for (int steps : step_counts) {
         Vec4 pos, vel, new_pos, new_vel;
-        pos(0) = 0.0; pos(1) = 20.0; pos(2) = M_PI/2; pos(3) = 0.0;
-        vel(0) = 1.0; vel(1) = -0.1; vel(2) = 0.0; vel(3) = 0.01;
+        pos(0) = 0.0;
+        pos(1) = 20.0;
+        pos(2) = M_PI / 2;
+        pos(3) = 0.0;
+        vel(0) = 1.0;
+        vel(1) = -0.1;
+        vel(2) = 0.0;
+        vel(3) = 0.01;
 
         auto start = high_resolution_clock::now();
 
         for (int s = 0; s < steps; ++s) {
             double r = 20.0 - (15.0 * s / steps);
-            Metric4d g = createSchwarzschildMetric(r, M_PI/2);
+            Metric4d g = createSchwarzschildMetric(r, M_PI / 2);
             runRK4Step(g, pos, vel, new_pos, new_vel);
             pos = new_pos;
             vel = new_vel;
@@ -430,9 +438,8 @@ TEST_F(FPSBenchmarks, StepCountScaling) {
         double elapsed_us = duration_cast<nanoseconds>(end - start).count() / 1000.0;
         double per_step_ns = (elapsed_us * 1000.0) / steps;
 
-        std::cout << "  " << steps << "\t\t" << elapsed_us
-                  << "\t\t" << per_step_ns << "\n";
+        std::cout << "  " << steps << "\t\t" << elapsed_us << "\t\t" << per_step_ns << "\n";
     }
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

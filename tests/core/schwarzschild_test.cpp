@@ -2,11 +2,12 @@
 // ds² = -(1-2M/r)dt² + dr²/(1-2M/r) + r²dΩ²
 // Tests: signature, asymptotic flatness, horizon, proper time, redshift.
 
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <gtest/gtest.h>
-#include "sirius/core/tensor.h"
 #include "sirius/core/dual_number.h"
+#include "sirius/core/tensor.h"
+
+#include <gtest/gtest.h>
+
+#include <cmath>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -18,7 +19,7 @@ constexpr double kEpsilon = 1e-10;
 // =============================================================================
 
 class SchwarzschildTests : public ::testing::Test {
-protected:
+  protected:
     // Mass parameter (in geometric units where G = c = 1)
     static constexpr double M = 1.0;
 
@@ -26,16 +27,16 @@ protected:
     static constexpr double rs = 2.0 * M;
 
     // Create Schwarzschild metric at given r, θ
-    Metric4d createSchwarzschildMetric(double r, double theta = M_PI/2) {
+    Metric4d createSchwarzschildMetric(double r, double theta = M_PI / 2) {
         Metric4d g;
         g.Zero();
 
         double f = 1.0 - rs / r;
         double sin_theta = std::sin(theta);
 
-        g(0, 0) = Dual<double>(-f, 0.0);              // g_tt
-        g(1, 1) = Dual<double>(1.0 / f, 0.0);         // g_rr
-        g(2, 2) = Dual<double>(r * r, 0.0);           // g_θθ
+        g(0, 0) = Dual<double>(-f, 0.0);                             // g_tt
+        g(1, 1) = Dual<double>(1.0 / f, 0.0);                        // g_rr
+        g(2, 2) = Dual<double>(r * r, 0.0);                          // g_θθ
         g(3, 3) = Dual<double>(r * r * sin_theta * sin_theta, 0.0);  // g_φφ
 
         return g;
@@ -99,21 +100,19 @@ TEST_F(SchwarzschildTests, AsymptoticFlatness) {
     for (double r : radii) {
         Metric4d g = createSchwarzschildMetric(r);
 
-        double expected_gtt = -(1.0 - rs/r);
-        double expected_grr = 1.0 / (1.0 - rs/r);
+        double expected_gtt = -(1.0 - rs / r);
+        double expected_grr = 1.0 / (1.0 - rs / r);
 
-        EXPECT_NEAR(g(0, 0).real, expected_gtt, kEpsilon)
-            << "g_tt incorrect at r=" << r;
-        EXPECT_NEAR(g(1, 1).real, expected_grr, kEpsilon)
-            << "g_rr incorrect at r=" << r;
+        EXPECT_NEAR(g(0, 0).real, expected_gtt, kEpsilon) << "g_tt incorrect at r=" << r;
+        EXPECT_NEAR(g(1, 1).real, expected_grr, kEpsilon) << "g_rr incorrect at r=" << r;
 
         // As r → ∞, should approach Minkowski
         double deviation_tt = std::abs(g(0, 0).real - (-1.0));
         double deviation_rr = std::abs(g(1, 1).real - 1.0);
 
-        EXPECT_LT(deviation_tt, rs/r + kEpsilon)
+        EXPECT_LT(deviation_tt, rs / r + kEpsilon)
             << "g_tt deviates too much from -1 at large r=" << r;
-        EXPECT_LT(deviation_rr, 2*rs/r + kEpsilon)  // First-order expansion
+        EXPECT_LT(deviation_rr, 2 * rs / r + kEpsilon)  // First-order expansion
             << "g_rr deviates too much from 1 at large r=" << r;
     }
 }
@@ -130,7 +129,7 @@ TEST_F(SchwarzschildTests, EventHorizonGtt) {
     for (double r : radii) {
         Metric4d g = createSchwarzschildMetric(r);
 
-        double expected_gtt = -(1.0 - rs/r);
+        double expected_gtt = -(1.0 - rs / r);
         EXPECT_NEAR(g(0, 0).real, expected_gtt, kEpsilon);
 
         // g_tt should approach 0 as r → rs
@@ -144,8 +143,7 @@ TEST_F(SchwarzschildTests, EventHorizonGrr) {
     Metric4d g = createSchwarzschildMetric(r);
 
     // g_rr should be large near horizon
-    EXPECT_GT(g(1, 1).real, 1000.0)
-        << "g_rr should blow up near horizon";
+    EXPECT_GT(g(1, 1).real, 1000.0) << "g_rr should blow up near horizon";
 }
 
 // =============================================================================
@@ -159,15 +157,14 @@ TEST_F(SchwarzschildTests, MetricThetaTheta) {
     for (double r : radii) {
         Metric4d g = createSchwarzschildMetric(r);
 
-        EXPECT_NEAR(g(2, 2).real, r * r, kEpsilon)
-            << "g_θθ should equal r² at r=" << r;
+        EXPECT_NEAR(g(2, 2).real, r * r, kEpsilon) << "g_θθ should equal r² at r=" << r;
     }
 }
 
 // Test: g_φφ = r² sin²θ
 TEST_F(SchwarzschildTests, MetricPhiPhi) {
     double r = 10.0;
-    std::vector<double> thetas = {M_PI/6, M_PI/4, M_PI/3, M_PI/2};
+    std::vector<double> thetas = {M_PI / 6, M_PI / 4, M_PI / 3, M_PI / 2};
 
     for (double theta : thetas) {
         Metric4d g = createSchwarzschildMetric(r, theta);
@@ -187,8 +184,7 @@ TEST_F(SchwarzschildTests, MetricPhiPhiAtPoles) {
         Metric4d g = createSchwarzschildMetric(r, theta);
 
         // g_φφ should be small near poles
-        EXPECT_LT(g(3, 3).real, r * r * 0.001 * 0.001 + kEpsilon)
-            << "g_φφ should vanish at poles";
+        EXPECT_LT(g(3, 3).real, r * r * 0.001 * 0.001 + kEpsilon) << "g_φφ should vanish at poles";
     }
 }
 
@@ -209,10 +205,9 @@ TEST_F(SchwarzschildTests, ProperTimeStationaryObserver) {
     double dtau = std::sqrt(dtau_squared);
 
     // Expected: dτ = √(1 - rs/r) dt
-    double expected_dtau = std::sqrt(1.0 - rs/r) * dt;
+    double expected_dtau = std::sqrt(1.0 - rs / r) * dt;
 
-    EXPECT_NEAR(dtau, expected_dtau, kEpsilon)
-        << "Proper time gravitational redshift incorrect";
+    EXPECT_NEAR(dtau, expected_dtau, kEpsilon) << "Proper time gravitational redshift incorrect";
 }
 
 // Test: Gravitational redshift factor
@@ -247,8 +242,7 @@ TEST_F(SchwarzschildTests, MetricDeterminant) {
     double sin_theta = std::sin(theta);
     double expected_det = -r * r * r * r * sin_theta * sin_theta;
 
-    EXPECT_NEAR(det, expected_det, kEpsilon)
-        << "Metric determinant incorrect";
+    EXPECT_NEAR(det, expected_det, kEpsilon) << "Metric determinant incorrect";
 }
 
 // Test: Determinant is negative (Lorentzian)
@@ -256,11 +250,11 @@ TEST_F(SchwarzschildTests, DeterminantIsNegative) {
     std::vector<double> radii = {3.0, 5.0, 10.0, 100.0};
 
     for (double r : radii) {
-        Metric4d g = createSchwarzschildMetric(r, M_PI/2);
+        Metric4d g = createSchwarzschildMetric(r, M_PI / 2);
         double det = g(0, 0).real * g(1, 1).real * g(2, 2).real * g(3, 3).real;
 
         EXPECT_LT(det, 0.0) << "Determinant should be negative at r=" << r;
     }
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

@@ -23,16 +23,17 @@
 // LABEL: Mandatory;Correctness
 // =============================================================================
 
-#include <gtest/gtest.h>
-#include <cmath>
-#include <array>
-#include <vector>
-
-#include "sirius/core/metrics/kerr_schild_family.h"
-#include "sirius/oracle/kerr_boyer_lindquist.h"
 #include "sirius/core/constants.h"
-#include "sirius/core/tensor.h"
 #include "sirius/core/dual_number.h"
+#include "sirius/core/metrics/kerr_schild_family.h"
+#include "sirius/core/tensor.h"
+#include "sirius/oracle/kerr_boyer_lindquist.h"
+
+#include <gtest/gtest.h>
+
+#include <array>
+#include <cmath>
+#include <vector>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -47,9 +48,9 @@ using namespace sirius::core::constants;
 namespace AnalyticRef {
 
 // Schwarzschild characteristic radii (units of M)
-constexpr double SCHWARZSCHILD_HORIZON = 2.0;          // r_s = 2M
-constexpr double SCHWARZSCHILD_PHOTON_SPHERE = 3.0;    // r_ph = 3M
-constexpr double SCHWARZSCHILD_ISCO = 6.0;             // r_ISCO = 6M
+constexpr double SCHWARZSCHILD_HORIZON = 2.0;        // r_s = 2M
+constexpr double SCHWARZSCHILD_PHOTON_SPHERE = 3.0;  // r_ph = 3M
+constexpr double SCHWARZSCHILD_ISCO = 6.0;           // r_ISCO = 6M
 
 // Einstein light deflection (weak field)
 // Δφ = 4GM/(c²b) = 4M/b in geometric units
@@ -63,14 +64,14 @@ constexpr double SCHWARZSCHILD_ISCO = 6.0;             // r_ISCO = 6M
 constexpr double ANALYTIC_TOL = 1e-10;
 [[maybe_unused]] constexpr double WEAK_FIELD_TOL = 1e-4;  // 0.01% for weak field approximations
 
-} // namespace AnalyticRef
+}  // namespace AnalyticRef
 
 // =============================================================================
 // Test Fixture
 // =============================================================================
 
 class AnalyticValidationTests : public ::testing::Test {
-protected:
+  protected:
     void SetUp() override {}
     void TearDown() override {}
 
@@ -116,9 +117,7 @@ protected:
 
     /// @brief Compute Kerr horizon radius analytically
     /// r_+ = M + √(M² - a²)
-    double computeKerrHorizon(double M, double a) const {
-        return M + std::sqrt(M * M - a * a);
-    }
+    double computeKerrHorizon(double M, double a) const { return M + std::sqrt(M * M - a * a); }
 
     /// @brief Compute Kerr ergosphere radius at given theta
     /// r_ergo = M + √(M² - a²cos²θ)
@@ -135,9 +134,7 @@ protected:
 
     /// @brief Compute weak-field light deflection angle
     /// Δφ = 4M/b where b is impact parameter
-    double computeWeakFieldDeflection(double M, double b) const {
-        return 4.0 * M / b;
-    }
+    double computeWeakFieldDeflection(double M, double b) const { return 4.0 * M / b; }
 };
 
 // =============================================================================
@@ -165,7 +162,10 @@ TEST_F(AnalyticValidationTests, SchwarzschildPhotonSphere) {
 
     // Verify metric signature is still Lorentzian at photon sphere
     Tensor<double, 4> pos;
-    pos(0) = 0; pos(1) = r_expected; pos(2) = 0; pos(3) = 0;
+    pos(0) = 0;
+    pos(1) = r_expected;
+    pos(2) = 0;
+    pos(3) = 0;
 
     Metric4d g;
     Tensor<Dual<double>, 4, 4, 4> dg;
@@ -219,8 +219,8 @@ TEST_F(AnalyticValidationTests, KerrHorizonRadius) {
         double r_expected = computeKerrHorizon(M, a);
 
         EXPECT_NEAR(r_computed, r_expected, AnalyticRef::ANALYTIC_TOL)
-            << "Kerr horizon for a = " << a << ": expected " << r_expected
-            << ", got " << r_computed;
+            << "Kerr horizon for a = " << a << ": expected " << r_expected << ", got "
+            << r_computed;
     }
 }
 
@@ -237,8 +237,8 @@ TEST_F(AnalyticValidationTests, KerrISCOPrograde) {
 
         // ISCO formula can have small numerical differences
         EXPECT_NEAR(r_computed, r_expected, 0.01)
-            << "Kerr prograde ISCO for a = " << a << ": expected " << r_expected
-            << ", got " << r_computed;
+            << "Kerr prograde ISCO for a = " << a << ": expected " << r_expected << ", got "
+            << r_computed;
     }
 }
 
@@ -249,8 +249,7 @@ TEST_F(AnalyticValidationTests, KerrISCODecreaseWithSpin) {
 
     for (double a = 0.1; a <= 0.95; a += 0.1) {
         double r_isco = computeKerrISCO(a, true);
-        EXPECT_LT(r_isco, prev_isco)
-            << "ISCO should decrease with spin: a = " << a;
+        EXPECT_LT(r_isco, prev_isco) << "ISCO should decrease with spin: a = " << a;
         prev_isco = r_isco;
     }
 }
@@ -268,8 +267,7 @@ TEST_F(AnalyticValidationTests, KerrErgosphereAtEquator) {
 
     // Kerr with a = 0.9M: r_ergo(π/2) = 2M (independent of spin at equator!)
     double r_ergo_kerr = computeKerrErgosphere(M, 0.9, theta_eq);
-    EXPECT_NEAR(r_ergo_kerr, 2.0 * M, AnalyticRef::ANALYTIC_TOL)
-        << "Kerr ergosphere at equator";
+    EXPECT_NEAR(r_ergo_kerr, 2.0 * M, AnalyticRef::ANALYTIC_TOL) << "Kerr ergosphere at equator";
 }
 
 TEST_F(AnalyticValidationTests, KerrErgosphereAtPole) {
@@ -307,8 +305,7 @@ TEST_F(AnalyticValidationTests, WeakFieldDeflectionFormula) {
         // Higher-order corrections are O(M²/b²), so relative error should be small
         // for large b. Require M/b ≤ 0.1 for weak-field validity.
         double relative_correction = M / b;
-        EXPECT_LE(relative_correction, 0.1)
-            << "Impact parameter should be in weak-field regime";
+        EXPECT_LE(relative_correction, 0.1) << "Impact parameter should be in weak-field regime";
     }
 }
 
@@ -326,8 +323,7 @@ TEST_F(AnalyticValidationTests, SolarDeflectionOrderOfMagnitude) {
 
     // Exact value with these parameters: 1.778 arcsec
     // Tolerance allows for variations in R_sun definition
-    EXPECT_NEAR(deflection_arcsec, 1.78, 0.05)
-        << "Solar limb deflection should be ~1.78 arcsec";
+    EXPECT_NEAR(deflection_arcsec, 1.78, 0.05) << "Solar limb deflection should be ~1.78 arcsec";
 }
 
 // =============================================================================
@@ -345,7 +341,10 @@ TEST_F(AnalyticValidationTests, KerrReducesToSchwarzschildAtZeroSpin) {
 
     for (double r : radii) {
         sirius::oracle::Vec4d x_kerr;
-        x_kerr.t = 0; x_kerr.r = r; x_kerr.theta = math::kHalfPi; x_kerr.phi = 0;
+        x_kerr.t = 0;
+        x_kerr.r = r;
+        x_kerr.theta = math::kHalfPi;
+        x_kerr.phi = 0;
 
         double g_kerr[4][4], g_inv_kerr[4][4];
         kerr.Evaluate(x_kerr, g_kerr, g_inv_kerr);
@@ -356,8 +355,7 @@ TEST_F(AnalyticValidationTests, KerrReducesToSchwarzschildAtZeroSpin) {
             << "Kerr(a=0) g_tt at r = " << r;
 
         // Off-diagonal g_tφ should be zero for Schwarzschild
-        EXPECT_NEAR(g_kerr[0][3], 0.0, AnalyticRef::ANALYTIC_TOL)
-            << "Kerr(a=0) g_tφ should vanish";
+        EXPECT_NEAR(g_kerr[0][3], 0.0, AnalyticRef::ANALYTIC_TOL) << "Kerr(a=0) g_tφ should vanish";
     }
 }
 
@@ -369,7 +367,10 @@ TEST_F(AnalyticValidationTests, AsymptoticFlatness) {
 
     sirius::oracle::KerrMetricD metric(M, a);
     sirius::oracle::Vec4d x;
-    x.t = 0; x.r = r_far; x.theta = math::kHalfPi; x.phi = 0;
+    x.t = 0;
+    x.r = r_far;
+    x.theta = math::kHalfPi;
+    x.phi = 0;
 
     double g[4][4], g_inv[4][4];
     metric.Evaluate(x, g, g_inv);
@@ -395,13 +396,15 @@ TEST_F(AnalyticValidationTests, SchwarzschildKretschmannScalar) {
 
     for (double r : radii) {
         sirius::oracle::Vec4d x;
-        x.t = 0; x.r = r; x.theta = math::kHalfPi; x.phi = 0;
+        x.t = 0;
+        x.r = r;
+        x.theta = math::kHalfPi;
+        x.phi = 0;
 
         double K = metric.Kretschmann(x);
         double K_expected = 48.0 * M * M / std::pow(r, 6);
 
-        EXPECT_NEAR(K, K_expected, K_expected * 1e-10)
-            << "Schwarzschild Kretschmann at r = " << r;
+        EXPECT_NEAR(K, K_expected, K_expected * 1e-10) << "Schwarzschild Kretschmann at r = " << r;
     }
 }
 
@@ -415,7 +418,10 @@ TEST_F(AnalyticValidationTests, KretschmannMonotonicDecrease) {
 
     for (double r : radii) {
         sirius::oracle::Vec4d x;
-        x.t = 0; x.r = r; x.theta = math::kHalfPi; x.phi = 0;
+        x.t = 0;
+        x.r = r;
+        x.theta = math::kHalfPi;
+        x.phi = 0;
 
         double K = metric.Kretschmann(x);
         EXPECT_LT(K, K_prev) << "Kretschmann should decrease with r";
@@ -443,7 +449,10 @@ TEST_F(AnalyticValidationTests, HorizonMetricDegeneracy) {
     double prev_grr = 0;
     for (double f : factors) {
         sirius::oracle::Vec4d x;
-        x.t = 0; x.r = r_plus * f; x.theta = math::kHalfPi; x.phi = 0;
+        x.t = 0;
+        x.r = r_plus * f;
+        x.theta = math::kHalfPi;
+        x.phi = 0;
 
         double g[4][4], g_inv[4][4];
         metric.Evaluate(x, g, g_inv);
@@ -478,4 +487,4 @@ TEST_F(AnalyticValidationTests, SchwarzschildISCOEnergy) {
         << "Schwarzschild radiative efficiency ~5.7%";
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

@@ -65,9 +65,7 @@ ftxui::Element RenderProgressBar(const ProgressState& state) {
 
 }  // namespace
 
-void SetColorEnabled(bool enabled) {
-    g_color_enabled = enabled;
-}
+void SetColorEnabled(bool enabled) { g_color_enabled = enabled; }
 
 // --- Coloured status lines --------------------------------------------------
 
@@ -147,9 +145,7 @@ void PrintProgress(const ProgressState& state) {
     std::cout << "\r" << screen.ToString() << std::flush;
 }
 
-void ClearProgress() {
-    std::cout << "\r" << std::string(80, ' ') << "\r" << std::flush;
-}
+void ClearProgress() { std::cout << "\r" << std::string(80, ' ') << "\r" << std::flush; }
 
 // --- Key-value table --------------------------------------------------------
 
@@ -168,8 +164,7 @@ void PrintTable(const std::string& title, const std::vector<TableRow>& rows) {
     std::cout << "+" << std::string(total_width - 2, '-') << "+" << std::endl;
     size_t title_pad = (total_width - 2 - title.length()) / 2;
     std::cout << "|" << std::string(title_pad, ' ') << title
-              << std::string(total_width - 2 - title_pad - title.length(), ' ') << "|"
-              << std::endl;
+              << std::string(total_width - 2 - title_pad - title.length(), ' ') << "|" << std::endl;
     std::cout << "+" << std::string(total_width - 2, '-') << "+" << std::endl;
 
     for (const auto& row : rows) {
@@ -198,10 +193,10 @@ void PrintConfig(const render::SiriusConfig& config) {
     std::vector<TableRow> rows;
 
     rows.push_back({"Render Settings", "", true});
-    rows.push_back({"Resolution",
-                    std::to_string(config.render.width) + " x " +
-                        std::to_string(config.render.height),
-                    false});
+    rows.push_back(
+        {"Resolution",
+         std::to_string(config.render.width) + " x " + std::to_string(config.render.height),
+         false});
     rows.push_back({"Samples/Pixel", std::to_string(config.render.samplesPerPixel), false});
     rows.push_back({"Tile Size", std::to_string(config.render.tileSize) + " px", false});
     rows.push_back({"Output", config.render.outputPath, false});
@@ -245,8 +240,6 @@ void PrintConfig(const render::SiriusConfig& config) {
 
 // --- JSON passthrough -------------------------------------------------------
 
-void PrintJson(const std::string& json) {
-    std::cout << json << std::endl;
-}
+void PrintJson(const std::string& json) { std::cout << json << std::endl; }
 
 }  // namespace sirius::app::cli_output

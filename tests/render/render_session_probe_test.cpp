@@ -7,9 +7,10 @@
 // tapes happens at the APP stage with the real CLI; this probe pins that the
 // ported session, tracer, and writers wire together and produce a real image.
 
+#include "sirius/render/render_config.h"
 #include "sirius/render/session/render_session.h"
 
-#include "sirius/render/render_config.h"
+#include "support/scoped_environment.h"
 #ifdef SIRIUS_HAS_VULKAN_BACKEND
 #include "sirius/backend/device.h"
 #endif
@@ -29,6 +30,7 @@ namespace {
 using sirius::render::RenderSession;
 using sirius::render::SessionConfig;
 using sirius::render::SessionState;
+using sirius::test::ScopedEnvironmentVariable;
 
 SessionConfig ProbeConfig(const std::string& output_path) {
     SessionConfig cfg;
@@ -118,31 +120,28 @@ TEST(RenderSessionProbe, CpuKerrRenderProducesValidPngAndExr) {
 // registry is the single authority for the metric half of that predicate, so
 // a charge-carrying metric resolves to CPU even with a device present.
 TEST(RenderSessionProbe, BackendAutoResolvesByDeviceAndRegistry) {
-    unsetenv("SIRIUS_RENDER_BACKEND");
+    ScopedEnvironmentVariable backend_override("SIRIUS_RENDER_BACKEND", nullptr);
 
     sirius::render::SiriusConfig cfg = sirius::render::SiriusConfig::defaults();
     cfg.metric.name = "Kerr";
     cfg.backend.preferred = "cpu";
-    EXPECT_EQ(SessionConfig::FromSiriusConfig(cfg).backend,
-              sirius::render::RenderBackend::Cpu)
+    EXPECT_EQ(SessionConfig::FromSiriusConfig(cfg).backend, sirius::render::RenderBackend::Cpu)
         << "'cpu' must pin the CPU path";
 
     cfg.backend.preferred = "auto";
 #ifdef SIRIUS_HAS_VULKAN_BACKEND
     const auto devices = sirius::backend::EnumerateVulkanDevices();
     const bool device_present = devices.has_value() && !devices->empty();
-    EXPECT_EQ(SessionConfig::FromSiriusConfig(cfg).backend,
-              device_present ? sirius::render::RenderBackend::Vulkan
-                             : sirius::render::RenderBackend::Cpu)
+    EXPECT_EQ(
+        SessionConfig::FromSiriusConfig(cfg).backend,
+        device_present ? sirius::render::RenderBackend::Vulkan : sirius::render::RenderBackend::Cpu)
         << "auto must follow device presence for a gpu-dispatchable metric";
 
     cfg.metric.name = "Reissner-Nordstrom";  // registry gpu_supported = false
-    EXPECT_EQ(SessionConfig::FromSiriusConfig(cfg).backend,
-              sirius::render::RenderBackend::Cpu)
+    EXPECT_EQ(SessionConfig::FromSiriusConfig(cfg).backend, sirius::render::RenderBackend::Cpu)
         << "auto must resolve CPU for a metric the registry marks CPU-only";
 #else
-    EXPECT_EQ(SessionConfig::FromSiriusConfig(cfg).backend,
-              sirius::render::RenderBackend::Cpu)
+    EXPECT_EQ(SessionConfig::FromSiriusConfig(cfg).backend, sirius::render::RenderBackend::Cpu)
         << "auto must resolve CPU when the Vulkan backend is not compiled in";
 #endif
 }

@@ -156,13 +156,16 @@ bool Geodesic::IntegrateStep(Lightray& ray, IMetric* metric, float min_step, flo
     Vec4 new_velocity = TensorOps::RaiseIndex(new_momentum, InverseAt(metric, new_position, g_new));
 
     // Adaptive step control.
-    float velocity_change = (new_velocity - k0).Length();
-    float position_change = (new_position - x0).Length();
+    const float velocity_change = static_cast<float>((new_velocity - k0).Length());
+    const float position_change = static_cast<float>((new_position - x0).Length());
     const float target_velocity_change = 0.01f, max_position_change = 0.1f;
 
     if (velocity_change > target_velocity_change * 2.0f || position_change > max_position_change) {
         ray.step_size = std::max(ray.step_size * 0.5f, min_step);
-        if (ray.step_size <= min_step) { ray.terminated = 5; return false; }
+        if (ray.step_size <= min_step) {
+            ray.terminated = 5;
+            return false;
+        }
         return false;
     }
     if (velocity_change < target_velocity_change * 0.5f && ray.step_size < max_step) {
@@ -174,7 +177,7 @@ bool Geodesic::IntegrateStep(Lightray& ray, IMetric* metric, float min_step, flo
     ray.velocity = new_velocity;
     ray.acceleration = CalculateAcceleration(new_velocity, new_position, metric);
     ray.proper_time += h;
-    ray.coordinate_time += h * std::abs(new_velocity(0));
+    ray.coordinate_time += static_cast<float>(h * std::abs(new_velocity(0)));
     ray.running_dlambda_dnew *= (1.0f + velocity_change * 0.1f);
     return true;
 }
@@ -271,7 +274,8 @@ void Geodesic::CalculateTetrads(ObserverState& observer, IMetric* metric) {
 
     observer.e0 = observer.velocity;
 
-    observer.e1 = Vec4(); observer.e1(1) = 1.0f;
+    observer.e1 = Vec4();
+    observer.e1(1) = 1.0f;
     Vec4 e1_parallel = TensorOps::LowerIndex(observer.e1, g);
     double e1_dot_e0 = 0.0;
     for (int mu = 0; mu < 4; mu++) {
@@ -279,7 +283,8 @@ void Geodesic::CalculateTetrads(ObserverState& observer, IMetric* metric) {
     }
     observer.e1 = observer.e1 - observer.e0 * e1_dot_e0;
 
-    observer.e2 = Vec4(); observer.e2(2) = 1.0f;
+    observer.e2 = Vec4();
+    observer.e2(2) = 1.0f;
     Vec4 e2_parallel = TensorOps::LowerIndex(observer.e2, g);
     double e2_dot_e0 = 0.0;
     double e2_dot_e1 = 0.0;
@@ -289,7 +294,8 @@ void Geodesic::CalculateTetrads(ObserverState& observer, IMetric* metric) {
     }
     observer.e2 = observer.e2 - observer.e0 * e2_dot_e0 - observer.e1 * e2_dot_e1;
 
-    observer.e3 = Vec4(); observer.e3(3) = 1.0f;
+    observer.e3 = Vec4();
+    observer.e3(3) = 1.0f;
     Vec4 e3_parallel = TensorOps::LowerIndex(observer.e3, g);
     double e3_dot_e0 = 0.0;
     double e3_dot_e1 = 0.0;
@@ -299,7 +305,8 @@ void Geodesic::CalculateTetrads(ObserverState& observer, IMetric* metric) {
         e3_dot_e1 += observer.e1(mu) * e3_parallel(mu);
         e3_dot_e2 += observer.e2(mu) * e3_parallel(mu);
     }
-    observer.e3 = observer.e3 - observer.e0 * e3_dot_e0 - observer.e1 * e3_dot_e1 - observer.e2 * e3_dot_e2;
+    observer.e3 =
+        observer.e3 - observer.e0 * e3_dot_e0 - observer.e1 * e3_dot_e1 - observer.e2 * e3_dot_e2;
 
     double e1_norm = std::sqrt(std::abs(TensorOps::InnerProduct(observer.e1, observer.e1, g)));
     double e2_norm = std::sqrt(std::abs(TensorOps::InnerProduct(observer.e2, observer.e2, g)));
@@ -364,8 +371,9 @@ static float ComputeRk45ErrorNorm(const Vec4& error_x, const Vec4& new_position,
                                   const IntegratorConfig& config) {
     float error_norm = 0.0f;
     for (int i = 0; i < 4; i++) {
-        float scale = config.abs_tolerance + config.rel_tolerance * std::abs(new_position(i));
-        float err_i = std::abs(error_x(i)) / scale;
+        const float scale = static_cast<float>(config.abs_tolerance +
+                                               config.rel_tolerance * std::abs(new_position(i)));
+        const float err_i = static_cast<float>(std::abs(error_x(i)) / scale);
         error_norm += err_i * err_i;
     }
     return std::sqrt(error_norm / 4.0f);
@@ -374,8 +382,8 @@ static float ComputeRk45ErrorNorm(const Vec4& error_x, const Vec4& new_position,
 // NaN/Inf check on the ray state.
 static bool HasInvalidState(const Vec4& position, const Vec4& velocity) {
     for (int i = 0; i < 4; i++) {
-        if (std::isnan(position(i)) || std::isinf(position(i)) ||
-            std::isnan(velocity(i)) || std::isinf(velocity(i))) {
+        if (std::isnan(position(i)) || std::isinf(position(i)) || std::isnan(velocity(i)) ||
+            std::isinf(velocity(i))) {
             return true;
         }
     }
@@ -409,16 +417,24 @@ bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const Integrato
     Vec4 p3 = p0 + k1_p * static_cast<float>(a31 * h) + k2_p * static_cast<float>(a32 * h);
     EvaluateRk45Stage(x3, p3, metric, k3_x, k3_p);
 
-    Vec4 x4 = x0 + k1_x * static_cast<float>(a41 * h) + k2_x * static_cast<float>(a42 * h) + k3_x * static_cast<float>(a43 * h);
-    Vec4 p4 = p0 + k1_p * static_cast<float>(a41 * h) + k2_p * static_cast<float>(a42 * h) + k3_p * static_cast<float>(a43 * h);
+    Vec4 x4 = x0 + k1_x * static_cast<float>(a41 * h) + k2_x * static_cast<float>(a42 * h) +
+              k3_x * static_cast<float>(a43 * h);
+    Vec4 p4 = p0 + k1_p * static_cast<float>(a41 * h) + k2_p * static_cast<float>(a42 * h) +
+              k3_p * static_cast<float>(a43 * h);
     EvaluateRk45Stage(x4, p4, metric, k4_x, k4_p);
 
-    Vec4 x5 = x0 + k1_x * static_cast<float>(a51 * h) + k2_x * static_cast<float>(a52 * h) + k3_x * static_cast<float>(a53 * h) + k4_x * static_cast<float>(a54 * h);
-    Vec4 p5 = p0 + k1_p * static_cast<float>(a51 * h) + k2_p * static_cast<float>(a52 * h) + k3_p * static_cast<float>(a53 * h) + k4_p * static_cast<float>(a54 * h);
+    Vec4 x5 = x0 + k1_x * static_cast<float>(a51 * h) + k2_x * static_cast<float>(a52 * h) +
+              k3_x * static_cast<float>(a53 * h) + k4_x * static_cast<float>(a54 * h);
+    Vec4 p5 = p0 + k1_p * static_cast<float>(a51 * h) + k2_p * static_cast<float>(a52 * h) +
+              k3_p * static_cast<float>(a53 * h) + k4_p * static_cast<float>(a54 * h);
     EvaluateRk45Stage(x5, p5, metric, k5_x, k5_p);
 
-    Vec4 x6 = x0 + k1_x * static_cast<float>(a61 * h) + k2_x * static_cast<float>(a62 * h) + k3_x * static_cast<float>(a63 * h) + k4_x * static_cast<float>(a64 * h) + k5_x * static_cast<float>(a65 * h);
-    Vec4 p6 = p0 + k1_p * static_cast<float>(a61 * h) + k2_p * static_cast<float>(a62 * h) + k3_p * static_cast<float>(a63 * h) + k4_p * static_cast<float>(a64 * h) + k5_p * static_cast<float>(a65 * h);
+    Vec4 x6 = x0 + k1_x * static_cast<float>(a61 * h) + k2_x * static_cast<float>(a62 * h) +
+              k3_x * static_cast<float>(a63 * h) + k4_x * static_cast<float>(a64 * h) +
+              k5_x * static_cast<float>(a65 * h);
+    Vec4 p6 = p0 + k1_p * static_cast<float>(a61 * h) + k2_p * static_cast<float>(a62 * h) +
+              k3_p * static_cast<float>(a63 * h) + k4_p * static_cast<float>(a64 * h) +
+              k5_p * static_cast<float>(a65 * h);
     EvaluateRk45Stage(x6, p6, metric, k6_x, k6_p);
 
     // 5th order solution.
@@ -437,7 +453,10 @@ bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const Integrato
     // Step acceptance.
     if (error_norm > 1.0f) {
         ray.step_size = ComputeOptimalStep(h, error_norm, 1.0f, config);
-        if (ray.step_size <= config.min_step) { ray.terminated = 5; return false; }
+        if (ray.step_size <= config.min_step) {
+            ray.terminated = 5;
+            return false;
+        }
         return false;
     }
 
@@ -446,10 +465,13 @@ bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const Integrato
     ray.velocity = new_velocity;
     ray.acceleration = CalculateAcceleration(new_velocity, new_position, metric);
     ray.proper_time += h;
-    ray.coordinate_time += h * std::abs(new_velocity(0));
+    ray.coordinate_time += static_cast<float>(h * std::abs(new_velocity(0)));
     ray.step_size = ComputeOptimalStep(h, error_norm, 1.0f, config);
 
-    if (HasInvalidState(new_position, new_velocity)) { ray.terminated = 3; return false; }
+    if (HasInvalidState(new_position, new_velocity)) {
+        ray.terminated = 3;
+        return false;
+    }
 
     // Periodic null re-normalisation: g_mu_nu k^mu k^nu = 0 drifts during
     // integration from numerical error, so the velocity is re-normalised when the

@@ -30,6 +30,19 @@ endif()
 
 # === Mandatory test gating (the build gate; label authority is generated) ===
 if(BUILD_TESTS AND SIRIUS_MANDATORY_TESTS AND NOT SIRIUS_SKIP_MANDATORY)
+    set(sirius_mandatory_test_targets)
+    foreach(test_target
+            sirius_base_tests
+            sirius_core_tests
+            sirius_oracle_tests
+            sirius_backend_tests
+            sirius_render_tests
+            sirius_app_tests)
+        if(TARGET ${test_target})
+            list(APPEND sirius_mandatory_test_targets ${test_target})
+        endif()
+    endforeach()
+
     add_custom_target(RunMandatoryTests ALL
         COMMAND ${CMAKE_CTEST_COMMAND}
             --test-dir "${CMAKE_BINARY_DIR}"
@@ -37,7 +50,10 @@ if(BUILD_TESTS AND SIRIUS_MANDATORY_TESTS AND NOT SIRIUS_SKIP_MANDATORY)
             --no-tests=error
             -L "Mandatory"
             -C $<CONFIG>
-        DEPENDS sirius
+        # gtest_discover_tests writes each suite's CTest include after linking.
+        # Depend on every available suite so the gate cannot race discovery and
+        # incorrectly report that no Mandatory tests exist.
+        DEPENDS sirius ${sirius_mandatory_test_targets}
         COMMENT "=== MANDATORY TEST GATE ==="
     )
     message(STATUS "Mandatory test gating: ENABLED")

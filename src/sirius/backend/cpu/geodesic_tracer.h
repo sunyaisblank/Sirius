@@ -30,11 +30,11 @@ namespace sirius::backend {
 struct TraceResult {
     // Ray termination classification.
     enum class Outcome {
-        Escaped,    // Escaped to infinity (sample background).
-        Horizon,    // Captured by the black hole.
-        DiskHit,    // Intersected the accretion disk.
-        MaxSteps,   // Terminated at the step limit.
-        Spiraling   // Detected as spiralling near the photon sphere.
+        Escaped,   // Escaped to infinity (sample background).
+        Horizon,   // Captured by the black hole.
+        DiskHit,   // Intersected the accretion disk.
+        MaxSteps,  // Terminated at the step limit.
+        Spiraling  // Detected as spiralling near the photon sphere.
     };
 
     Outcome outcome = Outcome::MaxSteps;
@@ -102,11 +102,11 @@ struct TraceResult {
     // initial bundle angular size.
     struct Beam {
         bool valid = false;
-        float semi_major = 0.0f;   // Ellipse semi-major axis.
-        float semi_minor = 0.0f;   // Ellipse semi-minor axis.
-        float orientation = 0.0f;  // Position angle of the major axis [rad].
-        float area_ratio = 1.0f;   // Final transverse area / initial area.
-        float magnification = 1.0f;  // Initial / final area (oracle 1/|det J|).
+        float semi_major = 0.0f;       // Ellipse semi-major axis.
+        float semi_minor = 0.0f;       // Ellipse semi-minor axis.
+        float orientation = 0.0f;      // Position angle of the major axis [rad].
+        float area_ratio = 1.0f;       // Final transverse area / initial area.
+        float magnification = 1.0f;    // Initial / final area (oracle 1/|det J|).
         float transverse_area = 0.0f;  // Final transverse area (angular units^2).
         // Angular footprint on the celestial sphere (radians), the DNGR beam that
         // filters the star field (P3): the transverse extent divided by the
@@ -128,7 +128,7 @@ struct TracerConfig {
 
     // Thin accretion disk.
     bool enable_disk = true;
-    float disk_inner = 6.0f;   // ISCO for Schwarzschild = 6M.
+    float disk_inner = 6.0f;  // ISCO for Schwarzschild = 6M.
     float disk_outer = 20.0f;
     float disk_thickness = 0.01f;
     float disk_temperature_inner = 1.0f;
@@ -230,9 +230,8 @@ class GeodesicTracer {
 
     // Whether the segment (pos_old, pos_new) crosses the equatorial disk; writes
     // the radius and azimuth of the crossing when it does.
-    bool CheckDiskIntersection(const sirius::core::Vec4& pos_old,
-                               const sirius::core::Vec4& pos_new, float& intersection_r,
-                               float& intersection_phi);
+    bool CheckDiskIntersection(const sirius::core::Vec4& pos_old, const sirius::core::Vec4& pos_new,
+                               float& intersection_r, float& intersection_phi);
 
     // Novikov-Thorne thin-disk temperature T(r) ~ r^(-3/4) normalised at the edge.
     float ComputeDiskTemperature(float r);

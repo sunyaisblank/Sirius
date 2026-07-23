@@ -6,8 +6,12 @@
 #include "sirius/app/cli/cli_output.h"
 #include "sirius/app/viewer/interactive_viewer.h"
 
-#include <glad/glad.h>
+// Prevent GLFW from including a platform OpenGL header before GLAD owns the
+// function declarations. This keeps the contract correct even when the format
+// authority alphabetizes third-party includes.
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 #include <cstring>
 #include <iomanip>
@@ -102,8 +106,8 @@ std::string ViewCommand::Usage() const {
     return ss.str();
 }
 
-bool ViewCommand::ParseArgs(const std::vector<std::string>& args,
-                            const GlobalOptions& /*globals*/, SiriusConfig& config) {
+bool ViewCommand::ParseArgs(const std::vector<std::string>& args, const GlobalOptions& /*globals*/,
+                            SiriusConfig& config) {
     for (size_t i = 0; i < args.size(); ++i) {
         const std::string& arg = args[i];
 
@@ -212,10 +216,8 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
     // Fullscreen quad.
     float quad_vertices[] = {
         // pos      // tex
-        -1.0f, -1.0f, 0.0f, 1.0f,
-         1.0f, -1.0f, 1.0f, 1.0f,
-         1.0f,  1.0f, 1.0f, 0.0f,
-        -1.0f,  1.0f, 0.0f, 0.0f,
+        -1.0f, -1.0f, 0.0f, 1.0f, 1.0f,  -1.0f, 1.0f, 1.0f,
+        1.0f,  1.0f,  1.0f, 0.0f, -1.0f, 1.0f,  0.0f, 0.0f,
     };
     unsigned int quad_indices[] = {0, 1, 2, 2, 3, 0};
 
@@ -232,8 +234,7 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
 
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
-                          (void*)(2 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
     // Passthrough blit + Reinhard tonemap (matches the legacy inline shader; the

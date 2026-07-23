@@ -2,11 +2,12 @@
 // Tests circular orbits, light deflection, energy/momentum conservation.
 // Ported from TSBM001A.cpp; assertions and tolerances unchanged.
 
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <gtest/gtest.h>
-#include "sirius/core/tensor.h"
 #include "sirius/core/dual_number.h"
+#include "sirius/core/tensor.h"
+
+#include <gtest/gtest.h>
+
+#include <cmath>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -18,7 +19,7 @@ constexpr double kEpsilon = 1e-8;
 // =============================================================================
 
 class GeodesicBenchmarks : public ::testing::Test {
-protected:
+  protected:
     static constexpr double M = 1.0;  // Mass in geometric units
 
     void SetUp() override {}
@@ -45,8 +46,7 @@ TEST_F(GeodesicBenchmarks, CircularOrbitPeriod) {
         // Expected from Kepler's law: T = 2π√(r³/M)
         double T_expected = 2.0 * M_PI * std::sqrt(r * r * r / M);
 
-        EXPECT_NEAR(T_coord, T_expected, kEpsilon * T_expected)
-            << "Period mismatch at r=" << r;
+        EXPECT_NEAR(T_coord, T_expected, kEpsilon * T_expected) << "Period mismatch at r=" << r;
     }
 }
 
@@ -104,8 +104,7 @@ TEST_F(GeodesicBenchmarks, WeakFieldLightDeflection) {
         // Check scaling: Δφ ∝ 1/b
         if (b > 100.0) {
             double ratio = (4.0 * M / 100.0) / (4.0 * M / b);
-            EXPECT_NEAR(ratio, b / 100.0, kEpsilon)
-                << "Deflection scaling incorrect at b=" << b;
+            EXPECT_NEAR(ratio, b / 100.0, kEpsilon) << "Deflection scaling incorrect at b=" << b;
         }
     }
 }
@@ -124,8 +123,7 @@ TEST_F(GeodesicBenchmarks, SolarDeflectionOrder) {
     double arcsec = delta_phi * (180.0 * 3600.0 / M_PI);
 
     // Should be approximately 1.75 arcsec
-    EXPECT_NEAR(arcsec, 1.75, 0.01)
-        << "Solar deflection should be ~1.75 arcsec";
+    EXPECT_NEAR(arcsec, 1.75, 0.01) << "Solar deflection should be ~1.75 arcsec";
 }
 
 // =============================================================================
@@ -209,8 +207,7 @@ TEST_F(GeodesicBenchmarks, PerihelionPrecession) {
     // Δφ = 6πM / r ≈ 0.188 radians per orbit
     double expected = 6.0 * M_PI * M / a;
 
-    EXPECT_NEAR(delta_phi, expected, kEpsilon * expected)
-        << "Perihelion precession incorrect";
+    EXPECT_NEAR(delta_phi, expected, kEpsilon * expected) << "Perihelion precession incorrect";
 
     // Mercury's precession (in proper units):
     // a ≈ 5.79e10 m, M_sun ≈ 1.477 km
@@ -252,9 +249,10 @@ TEST_F(GeodesicBenchmarks, VerificationDataPoints) {
 
         // For stable orbits r > 6M: E < 1 (bound orbit)
         if (cfg.r > 6.0 * M) {
-            EXPECT_LT(cfg.E, 1.0) << "Bound orbit at r=" << cfg.r << " should have E < 1, got " << cfg.E;
+            EXPECT_LT(cfg.E, 1.0) << "Bound orbit at r=" << cfg.r << " should have E < 1, got "
+                                  << cfg.E;
         }
     }
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

@@ -8,11 +8,11 @@
 //
 // Tests: PHCT002A.h coordinate transformation functions
 
-#define _USE_MATH_DEFINES
-#include <cmath>
+#include "sirius/core/coordinates.h"
+
 #include <gtest/gtest.h>
 
-#include "sirius/core/coordinates.h"
+#include <cmath>
 
 using namespace sirius::core::coordinates;
 
@@ -26,12 +26,12 @@ constexpr double kLooseEpsilon = 1e-10;  // For floating-point accumulation
 // =============================================================================
 
 class CoordinateTransformTests : public ::testing::Test {
-protected:
+  protected:
     // Standard test points in BL coordinates
-    Vec4Bl point_equator{0.0, 10.0, M_PI / 2.0, M_PI / 4.0};      // Equatorial plane
-    Vec4Bl point_pole_near{0.0, 10.0, 0.1, M_PI / 4.0};           // Near north pole
-    Vec4Bl point_far{0.0, 100.0, M_PI / 3.0, 2.0};                // Far field
-    Vec4Bl point_close{0.0, 3.0, M_PI / 4.0, -M_PI / 2.0};        // Near horizon
+    Vec4Bl point_equator{0.0, 10.0, M_PI / 2.0, M_PI / 4.0};  // Equatorial plane
+    Vec4Bl point_pole_near{0.0, 10.0, 0.1, M_PI / 4.0};       // Near north pole
+    Vec4Bl point_far{0.0, 100.0, M_PI / 3.0, 2.0};            // Far field
+    Vec4Bl point_close{0.0, 3.0, M_PI / 4.0, -M_PI / 2.0};    // Near horizon
 };
 
 // =============================================================================
@@ -41,29 +41,25 @@ protected:
 TEST_F(CoordinateTransformTests, RoundTripBLCartesian_Equator) {
     // Round-trip at equator (θ = π/2)
     double deviation = ValidateRoundTrip(point_equator, 0.0);
-    EXPECT_LT(deviation, kEpsilon)
-        << "Round-trip deviation at equator should be < 1e-12";
+    EXPECT_LT(deviation, kEpsilon) << "Round-trip deviation at equator should be < 1e-12";
 }
 
 TEST_F(CoordinateTransformTests, RoundTripBLCartesian_NearPole) {
     // Round-trip near pole (potential coordinate singularity)
     double deviation = ValidateRoundTrip(point_pole_near, 0.0);
-    EXPECT_LT(deviation, kLooseEpsilon)
-        << "Round-trip deviation near pole should be < 1e-10";
+    EXPECT_LT(deviation, kLooseEpsilon) << "Round-trip deviation near pole should be < 1e-10";
 }
 
 TEST_F(CoordinateTransformTests, RoundTripBLCartesian_FarField) {
     // Round-trip in far field
     double deviation = ValidateRoundTrip(point_far, 0.0);
-    EXPECT_LT(deviation, kEpsilon)
-        << "Round-trip deviation in far field should be < 1e-12";
+    EXPECT_LT(deviation, kEpsilon) << "Round-trip deviation in far field should be < 1e-12";
 }
 
 TEST_F(CoordinateTransformTests, RoundTripBLCartesian_NearHorizon) {
     // Round-trip near horizon (strong curvature region)
     double deviation = ValidateRoundTrip(point_close, 0.0);
-    EXPECT_LT(deviation, kEpsilon)
-        << "Round-trip deviation near horizon should be < 1e-12";
+    EXPECT_LT(deviation, kEpsilon) << "Round-trip deviation near horizon should be < 1e-12";
 }
 
 // =============================================================================
@@ -115,8 +111,7 @@ TEST_F(CoordinateTransformTests, JacobianDeterminant_Equator) {
     double det = JacobianDeterminant(J);
     double expected = point_equator.r * point_equator.r * std::sin(point_equator.theta);
 
-    EXPECT_NEAR(det, expected, 1e-10)
-        << "Jacobian determinant should equal r² sin(θ)";
+    EXPECT_NEAR(det, expected, 1e-10) << "Jacobian determinant should equal r² sin(θ)";
 }
 
 TEST_F(CoordinateTransformTests, JacobianDeterminant_MidLatitude) {
@@ -181,8 +176,7 @@ TEST_F(CoordinateTransformTests, PhiWrapping) {
     double dy = cart1.y - cart2.y;
     double dist = std::sqrt(dx * dx + dy * dy);
 
-    EXPECT_LT(dist, 0.5)
-        << "Points near phi = ±π should be close in Cartesian space";
+    EXPECT_LT(dist, 0.5) << "Points near phi = ±π should be close in Cartesian space";
 }
 
 TEST_F(CoordinateTransformTests, NorthPoleCoordinates) {
@@ -226,8 +220,7 @@ TEST_F(CoordinateTransformTests, KerrOblateSpheroidal) {
     EXPECT_NEAR(actual_xy_mag, expected_xy_mag, 1e-12)
         << "Kerr oblate spheroidal: |x,y| should equal √(r²+a²) sin(θ)";
 
-    EXPECT_NEAR(cart.z, r * std::cos(theta), 1e-12)
-        << "Kerr: z should equal r cos(θ)";
+    EXPECT_NEAR(cart.z, r * std::cos(theta), 1e-12) << "Kerr: z should equal r cos(θ)";
 }
 
 TEST_F(CoordinateTransformTests, KerrSolveR_Accuracy) {
@@ -242,8 +235,7 @@ TEST_F(CoordinateTransformTests, KerrSolveR_Accuracy) {
     Vec4Cart cart = BlToKerrSchildCart(original, a);
     Vec4Bl recovered = KerrSchildCartToBl(cart, a);
 
-    EXPECT_NEAR(original.r, recovered.r, 1e-10)
-        << "Kerr inverse should recover r accurately";
+    EXPECT_NEAR(original.r, recovered.r, 1e-10) << "Kerr inverse should recover r accurately";
     EXPECT_NEAR(original.theta, recovered.theta, 1e-10)
         << "Kerr inverse should recover θ accurately";
 }

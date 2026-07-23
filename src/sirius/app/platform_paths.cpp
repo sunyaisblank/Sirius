@@ -6,13 +6,13 @@
 #include <fstream>
 
 #if defined(_WIN32)
-    #include <windows.h>
+#include <windows.h>
 #elif defined(__linux__)
-    #include <unistd.h>
-    #include <linux/limits.h>
+#include <linux/limits.h>
+#include <unistd.h>
 #elif defined(__APPLE__)
-    #include <mach-o/dyld.h>
-    #include <limits.h>
+#include <limits.h>
+#include <mach-o/dyld.h>
 #endif
 
 namespace sirius::app {
@@ -22,26 +22,26 @@ bool PlatformPaths::executable_path_initialised_ = false;
 
 fs::path PlatformPaths::ExecutableDirectory() {
     if (!executable_path_initialised_) {
-        #if defined(_WIN32)
-            wchar_t path[MAX_PATH];
-            DWORD len = GetModuleFileNameW(NULL, path, MAX_PATH);
-            if (len > 0 && len < MAX_PATH) {
-                executable_path_ = fs::path(path).parent_path();
-            }
-        #elif defined(__linux__)
-            char path[PATH_MAX];
-            ssize_t len = readlink("/proc/self/exe", path, sizeof(path) - 1);
-            if (len != -1) {
-                path[len] = '\0';
-                executable_path_ = fs::path(path).parent_path();
-            }
-        #elif defined(__APPLE__)
-            char path[PATH_MAX];
-            uint32_t size = sizeof(path);
-            if (_NSGetExecutablePath(path, &size) == 0) {
-                executable_path_ = fs::canonical(fs::path(path)).parent_path();
-            }
-        #endif
+#if defined(_WIN32)
+        wchar_t path[MAX_PATH];
+        DWORD len = GetModuleFileNameW(NULL, path, MAX_PATH);
+        if (len > 0 && len < MAX_PATH) {
+            executable_path_ = fs::path(path).parent_path();
+        }
+#elif defined(__linux__)
+        char path[PATH_MAX];
+        ssize_t len = readlink("/proc/self/exe", path, sizeof(path) - 1);
+        if (len != -1) {
+            path[len] = '\0';
+            executable_path_ = fs::path(path).parent_path();
+        }
+#elif defined(__APPLE__)
+        char path[PATH_MAX];
+        uint32_t size = sizeof(path);
+        if (_NSGetExecutablePath(path, &size) == 0) {
+            executable_path_ = fs::canonical(fs::path(path)).parent_path();
+        }
+#endif
         executable_path_initialised_ = true;
     }
     return executable_path_;
@@ -50,27 +50,27 @@ fs::path PlatformPaths::ExecutableDirectory() {
 fs::path PlatformPaths::UserConfigDirectory() {
     fs::path config_dir;
 
-    #if defined(_WIN32)
-        const char* appdata = std::getenv("APPDATA");
-        if (appdata) {
-            config_dir = fs::path(appdata) / "Sirius";
-        }
-    #elif defined(__APPLE__)
+#if defined(_WIN32)
+    const char* appdata = std::getenv("APPDATA");
+    if (appdata) {
+        config_dir = fs::path(appdata) / "Sirius";
+    }
+#elif defined(__APPLE__)
+    const char* home = std::getenv("HOME");
+    if (home) {
+        config_dir = fs::path(home) / "Library" / "Application Support" / "Sirius";
+    }
+#else  // Linux and other Unix.
+    const char* xdg_config = std::getenv("XDG_CONFIG_HOME");
+    if (xdg_config && xdg_config[0] != '\0') {
+        config_dir = fs::path(xdg_config) / "sirius";
+    } else {
         const char* home = std::getenv("HOME");
         if (home) {
-            config_dir = fs::path(home) / "Library" / "Application Support" / "Sirius";
+            config_dir = fs::path(home) / ".config" / "sirius";
         }
-    #else  // Linux and other Unix.
-        const char* xdg_config = std::getenv("XDG_CONFIG_HOME");
-        if (xdg_config && xdg_config[0] != '\0') {
-            config_dir = fs::path(xdg_config) / "sirius";
-        } else {
-            const char* home = std::getenv("HOME");
-            if (home) {
-                config_dir = fs::path(home) / ".config" / "sirius";
-            }
-        }
-    #endif
+    }
+#endif
 
     if (!config_dir.empty() && !fs::exists(config_dir)) {
         std::error_code ec;
@@ -81,15 +81,15 @@ fs::path PlatformPaths::UserConfigDirectory() {
 }
 
 fs::path PlatformPaths::SystemConfigDirectory() {
-    #if defined(_WIN32)
-        const char* program_data = std::getenv("PROGRAMDATA");
-        if (program_data) {
-            return fs::path(program_data) / "Sirius";
-        }
-        return fs::path("C:/ProgramData/Sirius");
-    #else
-        return fs::path("/etc/sirius");
-    #endif
+#if defined(_WIN32)
+    const char* program_data = std::getenv("PROGRAMDATA");
+    if (program_data) {
+        return fs::path(program_data) / "Sirius";
+    }
+    return fs::path("C:/ProgramData/Sirius");
+#else
+    return fs::path("/etc/sirius");
+#endif
 }
 
 std::optional<fs::path> PlatformPaths::ResolveResource(const std::string& relative_path) {
@@ -141,32 +141,30 @@ std::optional<fs::path> PlatformPaths::FindConfigFile() {
 }
 
 std::string PlatformPaths::PlatformName() {
-    #if defined(_WIN32)
-        return "Windows";
-    #elif defined(__APPLE__)
-        return "macOS";
-    #else
-        return "Linux";
-    #endif
+#if defined(_WIN32)
+    return "Windows";
+#elif defined(__APPLE__)
+    return "macOS";
+#else
+    return "Linux";
+#endif
 }
 
 bool PlatformPaths::IsWsl2() {
-    #if defined(__linux__)
-        if (fs::exists("/proc/sys/fs/binfmt_misc/WSLInterop") ||
-            fs::exists("/run/WSL")) {
+#if defined(__linux__)
+    if (fs::exists("/proc/sys/fs/binfmt_misc/WSLInterop") || fs::exists("/run/WSL")) {
+        return true;
+    }
+
+    std::ifstream version_file("/proc/version");
+    if (version_file) {
+        std::string line;
+        std::getline(version_file, line);
+        if (line.find("microsoft") != std::string::npos || line.find("WSL") != std::string::npos) {
             return true;
         }
-
-        std::ifstream version_file("/proc/version");
-        if (version_file) {
-            std::string line;
-            std::getline(version_file, line);
-            if (line.find("microsoft") != std::string::npos ||
-                line.find("WSL") != std::string::npos) {
-                return true;
-            }
-        }
-    #endif
+    }
+#endif
     return false;
 }
 

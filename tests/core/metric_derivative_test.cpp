@@ -1,19 +1,16 @@
 // TSPH012A.cpp - Metric Derivative Validation Tests
 // Tests: ∂g_μν/∂x^λ symmetry, finite difference, Christoffel consistency.
 
-#include <gtest/gtest.h>
-#include <cmath>
-#include <array>
+#include "sirius/core/dual_number.h"                   // Dual numbers
+#include "sirius/core/metrics/kerr_schild_family.h"    // Kerr-Schild Family
+#include "sirius/core/metrics/morris_thorne_family.h"  // Morris-Thorne Family
+#include "sirius/core/metrics/warp_drive_family.h"     // Warp Drive Family
+#include "sirius/core/tensor.h"                        // Tensors
 
 #include <gtest/gtest.h>
-#include <cmath>
-#include <array>
 
-#include "sirius/core/dual_number.h"   // Dual numbers
-#include "sirius/core/tensor.h"   // Tensors
-#include "sirius/core/metrics/kerr_schild_family.h"   // Kerr-Schild Family
-#include "sirius/core/metrics/morris_thorne_family.h"   // Morris-Thorne Family
-#include "sirius/core/metrics/warp_drive_family.h"   // Warp Drive Family
+#include <array>
+#include <cmath>
 
 using namespace sirius::core;
 
@@ -25,7 +22,7 @@ constexpr double kFiniteDiffH = 1e-5;
 // =============================================================================
 
 class MetricDerivativeTests : public ::testing::Test {
-protected:
+  protected:
     sirius::core::KerrSchildFamily kerrSchild{sirius::core::KerrSchildParams::Kerr(1.0, 0.9)};
     sirius::core::MorrisThorneFamily ellisDrainhole{sirius::core::MorrisThorneParams::Ellis(1.0)};
     sirius::core::WarpDriveFamily alcubierre{sirius::core::WarpDriveParams::Alcubierre(1.0, 1.0)};
@@ -34,9 +31,8 @@ protected:
     Tensor<Dual<double>, 4, 4, 4> dg;
 
     // Finite difference derivative approximation
-    double finiteDiffDerivative(IMetric& metric,
-                                 const Tensor<double, 4>& pos,
-                                 int lambda, int mu, int nu) {
+    double finiteDiffDerivative(IMetric& metric, const Tensor<double, 4>& pos, int lambda, int mu,
+                                int nu) {
         Tensor<double, 4> pos_plus = pos;
         Tensor<double, 4> pos_minus = pos;
 
@@ -60,7 +56,10 @@ protected:
 TEST_F(MetricDerivativeTests, KerrSchildDerivativeSymmetry) {
     // ∂g_μν/∂x^λ = ∂g_νμ/∂x^λ (metric symmetry implies derivative symmetry)
     Tensor<double, 4> pos;
-    pos(0) = 0.0; pos(1) = 5.0; pos(2) = 2.0; pos(3) = 1.0;
+    pos(0) = 0.0;
+    pos(1) = 5.0;
+    pos(2) = 2.0;
+    pos(3) = 1.0;
 
     kerrSchild.Evaluate(pos, g, dg);
 
@@ -68,8 +67,7 @@ TEST_F(MetricDerivativeTests, KerrSchildDerivativeSymmetry) {
         for (int mu = 0; mu < 4; mu++) {
             for (int nu = mu + 1; nu < 4; nu++) {
                 EXPECT_NEAR(dg(lam, mu, nu).real, dg(lam, nu, mu).real, kEpsilon)
-                    << "Derivative asymmetry at lambda=" << lam
-                    << ", mu=" << mu << ", nu=" << nu;
+                    << "Derivative asymmetry at lambda=" << lam << ", mu=" << mu << ", nu=" << nu;
             }
         }
     }
@@ -78,7 +76,10 @@ TEST_F(MetricDerivativeTests, KerrSchildDerivativeSymmetry) {
 TEST_F(MetricDerivativeTests, KerrSchildFiniteDifferenceAgreement) {
     // Analytic derivative should match finite difference
     Tensor<double, 4> pos;
-    pos(0) = 0.0; pos(1) = 5.0; pos(2) = 2.0; pos(3) = 1.0;
+    pos(0) = 0.0;
+    pos(1) = 5.0;
+    pos(2) = 2.0;
+    pos(3) = 1.0;
 
     kerrSchild.Evaluate(pos, g, dg);
 
@@ -87,15 +88,17 @@ TEST_F(MetricDerivativeTests, KerrSchildFiniteDifferenceAgreement) {
         double fd = finiteDiffDerivative(kerrSchild, pos, lam, 0, 0);
         double analytic = dg(lam, 0, 0).real;
 
-        EXPECT_NEAR(analytic, fd, 1e-4)
-            << "Finite diff mismatch for dg_tt/dx^" << lam;
+        EXPECT_NEAR(analytic, fd, 1e-4) << "Finite diff mismatch for dg_tt/dx^" << lam;
     }
 }
 
 TEST_F(MetricDerivativeTests, KerrSchildNonZeroDerivatives) {
     // Kerr-Schild has non-trivial spatial gradients
     Tensor<double, 4> pos;
-    pos(0) = 0.0; pos(1) = 4.0; pos(2) = 0.0; pos(3) = 0.0;
+    pos(0) = 0.0;
+    pos(1) = 4.0;
+    pos(2) = 0.0;
+    pos(3) = 0.0;
 
     kerrSchild.Evaluate(pos, g, dg);
 
@@ -115,7 +118,10 @@ TEST_F(MetricDerivativeTests, KerrSchildNonZeroDerivatives) {
 
 TEST_F(MetricDerivativeTests, EllisDrainholeDerivativeSymmetry) {
     Tensor<double, 4> pos;
-    pos(0) = 0.0; pos(1) = 3.0; pos(2) = 1.0; pos(3) = 0.0;
+    pos(0) = 0.0;
+    pos(1) = 3.0;
+    pos(2) = 1.0;
+    pos(3) = 0.0;
 
     ellisDrainhole.Evaluate(pos, g, dg);
 
@@ -132,35 +138,41 @@ TEST_F(MetricDerivativeTests, EllisDrainholeDerivativeSymmetry) {
 TEST_F(MetricDerivativeTests, EllisDrainholeRadialDerivative) {
     // Radial (r) derivatives should be non-zero
     Tensor<double, 4> pos;
-    pos(0) = 0.0; pos(1) = 2.0; pos(2) = 0.5; pos(3) = 0.0;
+    pos(0) = 0.0;
+    pos(1) = 2.0;
+    pos(2) = 0.5;
+    pos(3) = 0.0;
 
     ellisDrainhole.Evaluate(pos, g, dg);
 
     // ∂g_tt/∂r should be non-zero (redshift varies with r)
     // ∂g_tt/∂r should be zero for standard Ellis (g_tt = -1)
-    EXPECT_NEAR(dg(1, 0, 0).real, 0.0, kEpsilon)
-        << "Ellis ∂g_tt/∂r should be zero";
+    EXPECT_NEAR(dg(1, 0, 0).real, 0.0, kEpsilon) << "Ellis ∂g_tt/∂r should be zero";
 
     // ∂g_θθ/∂r should be non-zero (areal radius varies with r)
-    EXPECT_NE(dg(1, 2, 2).real, 0.0)
-        << "Ellis ∂g_θθ/∂r should be non-zero";
+    EXPECT_NE(dg(1, 2, 2).real, 0.0) << "Ellis ∂g_θθ/∂r should be non-zero";
 }
 
 TEST_F(MetricDerivativeTests, EllisDrainholeAngularDerivative) {
     // ∂g_φφ/∂θ should be non-zero (sin²θ term)
     Tensor<double, 4> pos;
-    pos(0) = 0.0; pos(1) = 3.0; pos(2) = 0.8; pos(3) = 0.0;  // 0 < θ < π
+    pos(0) = 0.0;
+    pos(1) = 3.0;
+    pos(2) = 0.8;
+    pos(3) = 0.0;  // 0 < θ < π
 
     ellisDrainhole.Evaluate(pos, g, dg);
 
-    EXPECT_NE(dg(2, 3, 3).real, 0.0)
-        << "Ellis ∂g_φφ/∂θ should be non-zero for θ ≠ 0, π/2, π";
+    EXPECT_NE(dg(2, 3, 3).real, 0.0) << "Ellis ∂g_φφ/∂θ should be non-zero for θ ≠ 0, π/2, π";
 }
 
 TEST_F(MetricDerivativeTests, EllisDrainholeFiniteDifferenceAgreement) {
     // Note: Ellis Drainhole has steeper gradients near throat, requires larger tolerance
     Tensor<double, 4> pos;
-    pos(0) = 0.0; pos(1) = 5.0; pos(2) = 0.8; pos(3) = 0.0;  // Further from throat
+    pos(0) = 0.0;
+    pos(1) = 5.0;
+    pos(2) = 0.8;
+    pos(3) = 0.0;  // Further from throat
 
     ellisDrainhole.Evaluate(pos, g, dg);
 
@@ -170,8 +182,7 @@ TEST_F(MetricDerivativeTests, EllisDrainholeFiniteDifferenceAgreement) {
 
     // Use relative tolerance for larger values
     double tol = std::max(1e-3, std::abs(fd) * 0.01);  // 1% relative or 1e-3 absolute
-    EXPECT_NEAR(analytic, fd, tol)
-        << "Ellis finite diff mismatch for dg_θθ/dr";
+    EXPECT_NEAR(analytic, fd, tol) << "Ellis finite diff mismatch for dg_θθ/dr";
 }
 
 // =============================================================================
@@ -180,7 +191,10 @@ TEST_F(MetricDerivativeTests, EllisDrainholeFiniteDifferenceAgreement) {
 
 TEST_F(MetricDerivativeTests, AlcubierreDerivativeSymmetry) {
     Tensor<double, 4> pos;
-    pos(0) = 1.0; pos(1) = 5.0; pos(2) = 0.0; pos(3) = 0.0;
+    pos(0) = 1.0;
+    pos(1) = 5.0;
+    pos(2) = 0.0;
+    pos(3) = 0.0;
 
     alcubierre.Evaluate(pos, g, dg);
 
@@ -200,25 +214,29 @@ TEST_F(MetricDerivativeTests, AlcubierreTimeDerivative) {
     // every component. Evaluate on the bubble wall (x = R = 1) where the
     // shape-function derivative is order one.
     Tensor<double, 4> pos;
-    pos(0) = 0.0; pos(1) = 1.0; pos(2) = 0.3; pos(3) = 0.0;
+    pos(0) = 0.0;
+    pos(1) = 1.0;
+    pos(2) = 0.3;
+    pos(3) = 0.0;
 
     alcubierre.Evaluate(pos, g, dg);
 
     const double vs = 1.0;  // Fixture: WarpDriveParams::Alcubierre(1.0, 1.0)
-    EXPECT_NE(dg(0, 0, 0).real, 0.0)
-        << "Alcubierre ∂g_tt/∂t should be non-zero (time-dependent)";
+    EXPECT_NE(dg(0, 0, 0).real, 0.0) << "Alcubierre ∂g_tt/∂t should be non-zero (time-dependent)";
     for (int mu = 0; mu < 4; mu++) {
         for (int nu = 0; nu < 4; nu++) {
             EXPECT_NEAR(dg(0, mu, nu).real, -vs * dg(1, mu, nu).real, 1e-12)
-                << "Chain-rule identity ∂_t g = -vs ∂_x g violated at ("
-                << mu << "," << nu << ")";
+                << "Chain-rule identity ∂_t g = -vs ∂_x g violated at (" << mu << "," << nu << ")";
         }
     }
 }
 
 TEST_F(MetricDerivativeTests, AlcubirrreFiniteDifferenceAgreement) {
     Tensor<double, 4> pos;
-    pos(0) = 0.5; pos(1) = 3.0; pos(2) = 1.0; pos(3) = 0.0;
+    pos(0) = 0.5;
+    pos(1) = 3.0;
+    pos(2) = 1.0;
+    pos(3) = 0.0;
 
     alcubierre.Evaluate(pos, g, dg);
 
@@ -226,14 +244,16 @@ TEST_F(MetricDerivativeTests, AlcubirrreFiniteDifferenceAgreement) {
     double fd = finiteDiffDerivative(alcubierre, pos, 1, 0, 0);
     double analytic = dg(1, 0, 0).real;
 
-    EXPECT_NEAR(analytic, fd, 1e-4)
-        << "Alcubierre finite diff mismatch for dg_tt/dx";
+    EXPECT_NEAR(analytic, fd, 1e-4) << "Alcubierre finite diff mismatch for dg_tt/dx";
 }
 
 TEST_F(MetricDerivativeTests, AlcubierreOutsideBubble) {
     // Far from bubble center, f → 0, derivatives → 0
     Tensor<double, 4> pos;
-    pos(0) = 0.0; pos(1) = 100.0; pos(2) = 0.0; pos(3) = 0.0;  // Far from bubble
+    pos(0) = 0.0;
+    pos(1) = 100.0;
+    pos(2) = 0.0;
+    pos(3) = 0.0;  // Far from bubble
 
     alcubierre.Evaluate(pos, g, dg);
 
@@ -247,8 +267,7 @@ TEST_F(MetricDerivativeTests, AlcubierreOutsideBubble) {
         }
     }
 
-    EXPECT_LT(max_deriv, 1e-3)
-        << "Alcubierre derivatives should vanish far from bubble";
+    EXPECT_LT(max_deriv, 1e-3) << "Alcubierre derivatives should vanish far from bubble";
 }
 
 // =============================================================================
@@ -259,7 +278,10 @@ TEST_F(MetricDerivativeTests, ChristoffelSymmetryFromDerivatives) {
     // Christoffel Γ^λ_μν = Γ^λ_νμ (torsion-free)
     // This follows from derivative symmetry
     Tensor<double, 4> pos;
-    pos(0) = 0.0; pos(1) = 5.0; pos(2) = 0.5; pos(3) = 0.0;
+    pos(0) = 0.0;
+    pos(1) = 5.0;
+    pos(2) = 0.5;
+    pos(3) = 0.0;
 
     kerrSchild.Evaluate(pos, g, dg);
 
@@ -268,10 +290,10 @@ TEST_F(MetricDerivativeTests, ChristoffelSymmetryFromDerivatives) {
     for (int lam = 0; lam < 4; lam++) {
         for (int mu = 0; mu < 4; mu++) {
             for (int nu = mu + 1; nu < 4; nu++) {
-                double Gamma_lmn = 0.5 * (dg(mu, lam, nu).real + dg(nu, lam, mu).real
-                                        - dg(lam, mu, nu).real);
-                double Gamma_lnm = 0.5 * (dg(nu, lam, mu).real + dg(mu, lam, nu).real
-                                        - dg(lam, nu, mu).real);
+                double Gamma_lmn =
+                    0.5 * (dg(mu, lam, nu).real + dg(nu, lam, mu).real - dg(lam, mu, nu).real);
+                double Gamma_lnm =
+                    0.5 * (dg(nu, lam, mu).real + dg(mu, lam, nu).real - dg(lam, nu, mu).real);
 
                 EXPECT_NEAR(Gamma_lmn, Gamma_lnm, kEpsilon)
                     << "Christoffel asymmetry at lambda=" << lam;

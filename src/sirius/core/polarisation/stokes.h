@@ -61,14 +61,14 @@ struct StokesVector {
     // Total degree of polarisation p = sqrt(Q^2 + U^2 + V^2) / I, in [0, 1].
     float PolarisationDegree() const {
         if (I <= 0.0f) return 0.0f;
-        float p_sq = (Q*Q + U*U + V*V) / (I*I);
+        float p_sq = (Q * Q + U * U + V * V) / (I * I);
         return std::sqrt(std::min(p_sq, 1.0f));  // Clamp for numerical safety.
     }
 
     // Linear polarisation degree p_L = sqrt(Q^2 + U^2) / I.
     float LinearPolarisationDegree() const {
         if (I <= 0.0f) return 0.0f;
-        float p_L_sq = (Q*Q + U*U) / (I*I);
+        float p_L_sq = (Q * Q + U * U) / (I * I);
         return std::sqrt(std::min(p_L_sq, 1.0f));
     }
 
@@ -79,14 +79,12 @@ struct StokesVector {
     }
 
     // Electric Vector Position Angle chi = 0.5 * arctan(U/Q), in [-pi/2, pi/2].
-    float Evpa() const {
-        return 0.5f * std::atan2(U, Q);
-    }
+    float Evpa() const { return 0.5f * std::atan2(U, Q); }
 
     // True when Q^2 + U^2 + V^2 <= I^2 (small tolerance).
     bool IsPhysical() const {
         if (I < 0.0f) return false;
-        return (Q*Q + U*U + V*V) <= I*I * 1.001f;  // Small tolerance.
+        return (Q * Q + U * U + V * V) <= I * I * 1.001f;  // Small tolerance.
     }
 
     // Project onto the Poincare sphere to restore physicality.
@@ -95,8 +93,8 @@ struct StokesVector {
             I = Q = U = V = 0.0f;
             return;
         }
-        float p_sq = Q*Q + U*U + V*V;
-        if (p_sq > I*I) {
+        float p_sq = Q * Q + U * U + V * V;
+        if (p_sq > I * I) {
             float scale = I / std::sqrt(p_sq);
             Q *= scale;
             U *= scale;
@@ -109,7 +107,10 @@ struct StokesVector {
     }
 
     StokesVector& operator+=(const StokesVector& other) {
-        I += other.I; Q += other.Q; U += other.U; V += other.V;
+        I += other.I;
+        Q += other.Q;
+        U += other.U;
+        V += other.V;
         return *this;
     }
 
@@ -118,7 +119,10 @@ struct StokesVector {
     }
 
     StokesVector& operator*=(float scalar) {
-        I *= scalar; Q *= scalar; U *= scalar; V *= scalar;
+        I *= scalar;
+        Q *= scalar;
+        U *= scalar;
+        V *= scalar;
         return *this;
     }
 };
@@ -131,17 +135,16 @@ struct MuellerMatrix {
     MuellerMatrix() {
         // Default to identity.
         for (int i = 0; i < 4; i++)
-            for (int j = 0; j < 4; j++)
-                m[i][j] = (i == j) ? 1.0f : 0.0f;
+            for (int j = 0; j < 4; j++) m[i][j] = (i == j) ? 1.0f : 0.0f;
     }
 
     // Apply this Mueller matrix to a Stokes vector.
     StokesVector Apply(const StokesVector& s) const {
         StokesVector out;
-        out.I = m[0][0]*s.I + m[0][1]*s.Q + m[0][2]*s.U + m[0][3]*s.V;
-        out.Q = m[1][0]*s.I + m[1][1]*s.Q + m[1][2]*s.U + m[1][3]*s.V;
-        out.U = m[2][0]*s.I + m[2][1]*s.Q + m[2][2]*s.U + m[2][3]*s.V;
-        out.V = m[3][0]*s.I + m[3][1]*s.Q + m[3][2]*s.U + m[3][3]*s.V;
+        out.I = m[0][0] * s.I + m[0][1] * s.Q + m[0][2] * s.U + m[0][3] * s.V;
+        out.Q = m[1][0] * s.I + m[1][1] * s.Q + m[1][2] * s.U + m[1][3] * s.V;
+        out.U = m[2][0] * s.I + m[2][1] * s.Q + m[2][2] * s.U + m[2][3] * s.V;
+        out.V = m[3][0] * s.I + m[3][1] * s.Q + m[3][2] * s.U + m[3][3] * s.V;
         return out;
     }
 
@@ -162,24 +165,20 @@ struct MuellerMatrix {
     // Horizontal linear polariser.
     static MuellerMatrix HorizontalPolariser() {
         MuellerMatrix M;
-        M.m = {{
-            {0.5f, 0.5f, 0.0f, 0.0f},
-            {0.5f, 0.5f, 0.0f, 0.0f},
-            {0.0f, 0.0f, 0.0f, 0.0f},
-            {0.0f, 0.0f, 0.0f, 0.0f}
-        }};
+        M.m = {{{0.5f, 0.5f, 0.0f, 0.0f},
+                {0.5f, 0.5f, 0.0f, 0.0f},
+                {0.0f, 0.0f, 0.0f, 0.0f},
+                {0.0f, 0.0f, 0.0f, 0.0f}}};
         return M;
     }
 
     // Vertical linear polariser.
     static MuellerMatrix VerticalPolariser() {
         MuellerMatrix M;
-        M.m = {{
-            {0.5f, -0.5f, 0.0f, 0.0f},
-            {-0.5f, 0.5f, 0.0f, 0.0f},
-            {0.0f, 0.0f, 0.0f, 0.0f},
-            {0.0f, 0.0f, 0.0f, 0.0f}
-        }};
+        M.m = {{{0.5f, -0.5f, 0.0f, 0.0f},
+                {-0.5f, 0.5f, 0.0f, 0.0f},
+                {0.0f, 0.0f, 0.0f, 0.0f},
+                {0.0f, 0.0f, 0.0f, 0.0f}}};
         return M;
     }
 
@@ -188,36 +187,30 @@ struct MuellerMatrix {
         float c2 = std::cos(2.0f * theta);
         float s2 = std::sin(2.0f * theta);
         MuellerMatrix M;
-        M.m = {{
-            {0.5f, 0.5f * c2, 0.5f * s2, 0.0f},
-            {0.5f * c2, 0.5f * c2 * c2, 0.5f * s2 * c2, 0.0f},
-            {0.5f * s2, 0.5f * s2 * c2, 0.5f * s2 * s2, 0.0f},
-            {0.0f, 0.0f, 0.0f, 0.0f}
-        }};
+        M.m = {{{0.5f, 0.5f * c2, 0.5f * s2, 0.0f},
+                {0.5f * c2, 0.5f * c2 * c2, 0.5f * s2 * c2, 0.0f},
+                {0.5f * s2, 0.5f * s2 * c2, 0.5f * s2 * s2, 0.0f},
+                {0.0f, 0.0f, 0.0f, 0.0f}}};
         return M;
     }
 
     // Quarter-wave plate (fast axis horizontal).
     static MuellerMatrix QuarterWavePlate() {
         MuellerMatrix M;
-        M.m = {{
-            {1.0f, 0.0f, 0.0f, 0.0f},
-            {0.0f, 1.0f, 0.0f, 0.0f},
-            {0.0f, 0.0f, 0.0f, 1.0f},
-            {0.0f, 0.0f, -1.0f, 0.0f}
-        }};
+        M.m = {{{1.0f, 0.0f, 0.0f, 0.0f},
+                {0.0f, 1.0f, 0.0f, 0.0f},
+                {0.0f, 0.0f, 0.0f, 1.0f},
+                {0.0f, 0.0f, -1.0f, 0.0f}}};
         return M;
     }
 
     // Half-wave plate (fast axis horizontal).
     static MuellerMatrix HalfWavePlate() {
         MuellerMatrix M;
-        M.m = {{
-            {1.0f, 0.0f, 0.0f, 0.0f},
-            {0.0f, 1.0f, 0.0f, 0.0f},
-            {0.0f, 0.0f, -1.0f, 0.0f},
-            {0.0f, 0.0f, 0.0f, -1.0f}
-        }};
+        M.m = {{{1.0f, 0.0f, 0.0f, 0.0f},
+                {0.0f, 1.0f, 0.0f, 0.0f},
+                {0.0f, 0.0f, -1.0f, 0.0f},
+                {0.0f, 0.0f, 0.0f, -1.0f}}};
         return M;
     }
 
@@ -226,31 +219,25 @@ struct MuellerMatrix {
         float c2 = std::cos(2.0f * theta);
         float s2 = std::sin(2.0f * theta);
         MuellerMatrix M;
-        M.m = {{
-            {1.0f, 0.0f, 0.0f, 0.0f},
-            {0.0f, c2, s2, 0.0f},
-            {0.0f, -s2, c2, 0.0f},
-            {0.0f, 0.0f, 0.0f, 1.0f}
-        }};
+        M.m = {{{1.0f, 0.0f, 0.0f, 0.0f},
+                {0.0f, c2, s2, 0.0f},
+                {0.0f, -s2, c2, 0.0f},
+                {0.0f, 0.0f, 0.0f, 1.0f}}};
         return M;
     }
 
     // Faraday rotation of the polarisation plane.
     // rotation_angle = RM * lambda^2 (rotation measure times wavelength squared).
-    static MuellerMatrix FaradayRotation(float rotation_angle) {
-        return Rotation(rotation_angle);
-    }
+    static MuellerMatrix FaradayRotation(float rotation_angle) { return Rotation(rotation_angle); }
 
     // Partial depolariser retaining fraction p of the polarisation
     // (0 = fully depolarised, 1 = unchanged).
     static MuellerMatrix Depolariser(float p) {
         MuellerMatrix M;
-        M.m = {{
-            {1.0f, 0.0f, 0.0f, 0.0f},
-            {0.0f, p, 0.0f, 0.0f},
-            {0.0f, 0.0f, p, 0.0f},
-            {0.0f, 0.0f, 0.0f, p}
-        }};
+        M.m = {{{1.0f, 0.0f, 0.0f, 0.0f},
+                {0.0f, p, 0.0f, 0.0f},
+                {0.0f, 0.0f, p, 0.0f},
+                {0.0f, 0.0f, 0.0f, p}}};
         return M;
     }
 };
@@ -262,7 +249,7 @@ namespace polarised_emission {
 // n(E) ~ E^(-p): pi_L = (p + 1) / (p + 7/3). Typical p = 2-3 gives ~0.69-0.75.
 inline float SynchrotronPolarisationDegree(float spectral_index) {
     float p = spectral_index;
-    return (p + 1.0f) / (p + 7.0f/3.0f);
+    return (p + 1.0f) / (p + 7.0f / 3.0f);
 }
 
 // Synchrotron Stokes vector for emission from an ordered magnetic field;
@@ -288,7 +275,8 @@ inline float ThomsonPolarisationDegree(float cos_theta) {
 // Thermal emission polarisation from a magnetised atmosphere (simplified:
 // scales with B-field and sin^2 of the angle to B). An accurate model requires
 // solving the Stokes-I radiative transfer.
-inline float ThermalMagneticPolarisation(float temperature, float B_field_strength, float angle_to_B) {
+inline float ThermalMagneticPolarisation(float temperature, float B_field_strength,
+                                         float angle_to_B) {
     constexpr float kTRef = 10000.0f;  // Reference temperature.
     constexpr float kBRef = 1000.0f;   // Reference B-field (Gauss).
 

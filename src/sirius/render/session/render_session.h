@@ -21,16 +21,16 @@
 // Physics integration.
 #include "sirius/backend/cpu/geodesic_tracer.h"
 #include "sirius/core/camera.h"
-#include "sirius/core/disk/novikov_thorne_disk.h"      // ISCO computation.
-#include "sirius/core/jet.h"                             // Relativistic jet model.
-#include "sirius/core/metrics/astrophysical_scaling.h"   // SMBH parameters.
-#include "sirius/core/metrics/kerr_schild_family.h"      // Kerr-Schild metric family.
-#include "sirius/core/metrics/registry.h"                // Metric identity registry.
-#include "sirius/core/metrics/warp_drive_family.h"       // Alcubierre warp drive family.
-#include "sirius/core/polarisation/stokes.h"             // Stokes polarisation.
-#include "sirius/core/postprocess.h"                      // Tonemapping types.
-#include "sirius/core/spectral/colour_modes.h"            // Colour modes.
-#include "sirius/core/starfield.h"                         // Starfield configuration.
+#include "sirius/core/disk/novikov_thorne_disk.h"       // ISCO computation.
+#include "sirius/core/jet.h"                            // Relativistic jet model.
+#include "sirius/core/metrics/astrophysical_scaling.h"  // SMBH parameters.
+#include "sirius/core/metrics/kerr_schild_family.h"     // Kerr-Schild metric family.
+#include "sirius/core/metrics/registry.h"               // Metric identity registry.
+#include "sirius/core/metrics/warp_drive_family.h"      // Alcubierre warp drive family.
+#include "sirius/core/polarisation/stokes.h"            // Stokes polarisation.
+#include "sirius/core/postprocess.h"                    // Tonemapping types.
+#include "sirius/core/spectral/colour_modes.h"          // Colour modes.
+#include "sirius/core/starfield.h"                      // Starfield configuration.
 
 #include <atomic>
 #include <functional>
@@ -95,8 +95,8 @@ struct SessionConfig {
     int height = 1080;
     int tileSize = 64;
     int samplesPerPixel = 64;
-    int threadCount = 0;                   // 0 = auto-detect, 1 = single-threaded.
-    bool enableParallelRendering = true;   // Multi-threaded tile rendering.
+    int threadCount = 0;                  // 0 = auto-detect, 1 = single-threaded.
+    bool enableParallelRendering = true;  // Multi-threaded tile rendering.
 
     // Backend selection. `backend` decides the render path; useGPU/ptxPath are
     // legacy config-surface fields retained for parity. Since the go-live flip
@@ -114,8 +114,8 @@ struct SessionConfig {
     core::MetricId metricId = core::MetricId::Schwarzschild;
     double blackHoleMass = 1.0;
     double blackHoleSpin = 0.0;
-    double blackHoleCharge = 0.0;        // Q/M (Reissner-Nordstrom, Kerr-Newman).
-    double cosmologicalConstant = 0.0;   // Lambda (de Sitter family, spin = 0 only).
+    double blackHoleCharge = 0.0;       // Q/M (Reissner-Nordstrom, Kerr-Newman).
+    double cosmologicalConstant = 0.0;  // Lambda (de Sitter family, spin = 0 only).
     double observerDistance = 50.0;
     double observerInclination = 1.5708;  // 90 degrees.
     float cameraFOV = 60.0f;
@@ -129,7 +129,7 @@ struct SessionConfig {
 
     // Disk temperature model.
     std::string temperatureModel = "NovikovThorne";  // NovikovThorne or ShakuraSunyaev.
-    float diskTemperatureScale = 50000.0f;            // T_scale (Kelvin).
+    float diskTemperatureScale = 50000.0f;           // T_scale (Kelvin).
 
     // Doppler beaming toggle (P4). True (default) keeps the full disk physics and
     // the pinned render; false suppresses the approaching/receding asymmetry.
@@ -212,7 +212,8 @@ struct SessionConfig {
 class RenderSession {
   public:
     using FSM = StateMachine<SessionState, SessionEvent, 15>;
-    using CompletionCallback = std::function<void(SessionState finalState, const std::string& message)>;
+    using CompletionCallback =
+        std::function<void(SessionState finalState, const std::string& message)>;
 
     RenderSession() : fsm_(kSessionConfig) { SetupActions(); }
 

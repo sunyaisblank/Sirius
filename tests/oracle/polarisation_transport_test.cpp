@@ -115,9 +115,9 @@ void NumericChristoffel(const KerrMetricD& m, const Vec4d& x, double G[4][4][4])
 // by cancellation near 1e-9 at these radii.
 TEST(OracleConnection, AnalyticConnectionAgreesWithMetricDerivatives) {
     KerrMetricD metric(1.0, 0.9);
-    const std::vector<Vec4d> points = {
-        Vec4d(0.0, 8.0, 1.2, 0.3), Vec4d(0.0, 4.0, M_PI / 2 - 0.2, 1.0),
-        Vec4d(0.0, 15.0, 0.7, 0.0)};
+    const std::vector<Vec4d> points = {Vec4d(0.0, 8.0, 1.2, 0.3),
+                                       Vec4d(0.0, 4.0, M_PI / 2 - 0.2, 1.0),
+                                       Vec4d(0.0, 15.0, 0.7, 0.0)};
     for (const Vec4d& x : points) {
         double Ga[4][4][4], Gn[4][4][4];
         KerrChristoffel(metric, x, Ga);
@@ -125,7 +125,8 @@ TEST(OracleConnection, AnalyticConnectionAgreesWithMetricDerivatives) {
         double max_diff = 0.0;
         for (int i = 0; i < 4; ++i)
             for (int j = 0; j < 4; ++j)
-                for (int l = 0; l < 4; ++l) max_diff = std::max(max_diff, std::abs(Ga[i][j][l] - Gn[i][j][l]));
+                for (int l = 0; l < 4; ++l)
+                    max_diff = std::max(max_diff, std::abs(Ga[i][j][l] - Gn[i][j][l]));
         EXPECT_LT(max_diff, 1e-9) << "at r=" << x.r << " theta=" << x.theta;
     }
 }
@@ -153,10 +154,9 @@ TEST(WalkerPenrose, ImaginaryPartEqualsKillingYanoContraction) {
     const double Y_tth = a * r * sinth;
     const double Y_rph = -a * a * costh * sin2th;
     const double Y_thph = r * (r * r + a * a) * sinth;
-    const double kY = Y_tr * (kk[0] * ff[1] - kk[1] * ff[0]) +
-                      Y_tth * (kk[0] * ff[2] - kk[2] * ff[0]) +
-                      Y_rph * (kk[1] * ff[3] - kk[3] * ff[1]) +
-                      Y_thph * (kk[2] * ff[3] - kk[3] * ff[2]);
+    const double kY =
+        Y_tr * (kk[0] * ff[1] - kk[1] * ff[0]) + Y_tth * (kk[0] * ff[2] - kk[2] * ff[0]) +
+        Y_rph * (kk[1] * ff[3] - kk[3] * ff[1]) + Y_thph * (kk[2] * ff[3] - kk[3] * ff[2]);
 
     std::complex<double> kappa = WalkerPenroseConstant(s, a);
     EXPECT_NEAR(kappa.imag(), kY, 1e-12);
@@ -182,7 +182,8 @@ TEST(WalkerPenrose, PolarisationStaysOrthogonalAndNormalisedUnderTransport) {
     ASSERT_NEAR(InnerProductAt(metric, x0, ff, kk), 0.0, 1e-14);
     ASSERT_NEAR(InnerProductAt(metric, x0, ff, ff), 1.0, 1e-14);
 
-    const double E0 = Energy(metric, s), Lz0 = AngularMomentum(metric, s), Q0 = CarterConstant(metric, s);
+    const double E0 = Energy(metric, s), Lz0 = AngularMomentum(metric, s),
+                 Q0 = CarterConstant(metric, s);
     ASSERT_GT(std::abs(E0), 1e-6);
 
     PolarisedGeodesicIntegratorD integrator(&metric);
@@ -244,8 +245,8 @@ TEST(WalkerPenrose, ConstantConservedAlongKerrGeodesics) {
         PolarisedGeodesicIntegratorD integrator(&metric);
         const PolarisedGeodesicIntegratorD::Result result = integrator.Integrate(s);
         // A conserved constant is only meaningful over a completed geodesic.
-        ASSERT_TRUE(result.escaped) << r.name << " did not escape (captured="
-                                    << result.captured << ")";
+        ASSERT_TRUE(result.escaped)
+            << r.name << " did not escape (captured=" << result.captured << ")";
 
         double max_drift = 0.0;
         PolarisedStateD cur = s;
@@ -288,8 +289,8 @@ TEST(WalkerPenrose, SchwarzschildEquatorialPerpendicularTransportsRigidly) {
     for (int i = 0; i < 400000; ++i) {
         if (cur.x.r <= metric.HorizonRadius() * 1.05 || cur.x.r > 50.0) break;
         cur = ParallelTransportStep(metric, cur, 0.01);
-        max_in_plane = std::max({max_in_plane, std::abs(cur.f.t), std::abs(cur.f.r),
-                                 std::abs(cur.f.phi)});
+        max_in_plane =
+            std::max({max_in_plane, std::abs(cur.f.t), std::abs(cur.f.r), std::abs(cur.f.phi)});
         max_ftheta_r = std::max(max_ftheta_r, std::abs(cur.f.theta * cur.x.r - f_theta_r0));
     }
     EXPECT_LT(max_in_plane, k::geodesic::kNullConditionTolCpu);
