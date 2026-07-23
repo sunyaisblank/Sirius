@@ -8,8 +8,9 @@
 
 #include <gtest/gtest.h>
 
+#include "support/scoped_environment.h"
+
 #include <cstdint>
-#include <cstdlib>
 
 namespace {
 
@@ -19,6 +20,7 @@ using sirius::render::kMinTileEdge;
 using sirius::render::kResidencyFraction;
 using sirius::render::kTileWorkingSetBytesPerPixel;
 using sirius::render::ResolveBudgetBytes;
+using sirius::test::ScopedEnvironmentVariable;
 
 constexpr std::uint64_t kMiB = 1024ULL * 1024ULL;
 constexpr std::uint64_t kGiB = 1024ULL * kMiB;
@@ -77,9 +79,12 @@ TEST(MemoryGovernor, WorkingSetMatchesTheDerivedTile) {
 }
 
 TEST(MemoryGovernor, EnvironmentOverrideResolvesBudget) {
-    setenv("SIRIUS_MEMORY_BUDGET_MB", "256", 1);
-    EXPECT_EQ(ResolveBudgetBytes(9999 * kMiB), 256 * kMiB) << "override wins over device budget";
-    unsetenv("SIRIUS_MEMORY_BUDGET_MB");
+    ScopedEnvironmentVariable clean_environment("SIRIUS_MEMORY_BUDGET_MB", nullptr);
+    {
+        ScopedEnvironmentVariable budget("SIRIUS_MEMORY_BUDGET_MB", "256");
+        EXPECT_EQ(ResolveBudgetBytes(9999 * kMiB), 256 * kMiB)
+            << "override wins over device budget";
+    }
     EXPECT_EQ(ResolveBudgetBytes(2 * kGiB), 2 * kGiB) << "device budget used when no override";
 }
 

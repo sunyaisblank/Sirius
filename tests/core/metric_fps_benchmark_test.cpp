@@ -1,7 +1,6 @@
 // TSBM002A.cpp - FPS Performance Tracking Benchmarks
 // Benchmarks metric evaluation time and extrapolates to target FPS.
 
-#define _USE_MATH_DEFINES
 #include "sirius/core/dual_number.h"
 #include "sirius/core/tensor.h"
 

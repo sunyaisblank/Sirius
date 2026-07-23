@@ -2,7 +2,6 @@
 // Tests: bit-identical results across iterations for all computations.
 // Ported from TSDG004A.cpp; assertions and tolerances unchanged.
 
-#define _USE_MATH_DEFINES
 #include "sirius/core/dual_number.h"
 #include "sirius/core/geodesic_integrator.h"
 #include "sirius/core/metrics/kerr_schild_family.h"  // Unified Kerr-Schild Family

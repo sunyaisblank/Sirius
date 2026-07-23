@@ -1,7 +1,6 @@
 // TSPH007A.cpp - Reissner-Nordström Metric Tests
 // f(r)=1-2M/r+Q²/r². Tests: horizons, Schwarzschild limit, signature, asymptotic.
 
-#define _USE_MATH_DEFINES
 #include "sirius/core/dual_number.h"
 #include "sirius/core/tensor.h"
 

@@ -1,7 +1,6 @@
 // TSPF002A.cpp - Memory Usage Performance Tests
 // Tests: struct sizes, per-pixel/ray memory, 3D texture memory.
 
-#define _USE_MATH_DEFINES
 #include "sirius/core/dual_number.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/core/metrics/metric.h"

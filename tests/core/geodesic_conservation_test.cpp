@@ -21,7 +21,6 @@
 // LABEL: Mandatory;Stability
 // =============================================================================
 
-#define _USE_MATH_DEFINES
 #include "sirius/core/constants.h"  // Unified tolerance constants
 #include "sirius/core/geodesic_integrator.h"
 #include "sirius/core/metrics/kerr_schild_family.h"  // Unified Kerr-Schild Family

@@ -7,25 +7,15 @@
 
 #include <gtest/gtest.h>
 
-#include <cstdlib>
+#include "support/scoped_environment.h"
 
 namespace sirius::app::test {
 
-// RAII guard that sets an environment variable and restores it on scope exit.
-class ScopedEnv {
-  public:
-    ScopedEnv(const char* name, const char* value) : name_(name) { ::setenv(name_, value, 1); }
-    ~ScopedEnv() { ::unsetenv(name_); }
-    ScopedEnv(const ScopedEnv&) = delete;
-    ScopedEnv& operator=(const ScopedEnv&) = delete;
-
-  private:
-    const char* name_;
-};
+using sirius::test::ScopedEnvironmentVariable;
 
 TEST(ConfigEnvironment, IntegerOverridesApplied) {
-    ScopedEnv width("SIRIUS_WIDTH", "1280");
-    ScopedEnv samples("SIRIUS_SAMPLES", "32");
+    ScopedEnvironmentVariable width("SIRIUS_WIDTH", "1280");
+    ScopedEnvironmentVariable samples("SIRIUS_SAMPLES", "32");
 
     SiriusConfig config = SiriusConfig::defaults();
     ConfigLoader::ApplyEnvironmentOverrides(config);
@@ -37,8 +27,8 @@ TEST(ConfigEnvironment, IntegerOverridesApplied) {
 }
 
 TEST(ConfigEnvironment, MetricNameAndSpinOverridesApplied) {
-    ScopedEnv metric("SIRIUS_METRIC", "Kerr");
-    ScopedEnv spin("SIRIUS_SPIN", "0.85");
+    ScopedEnvironmentVariable metric("SIRIUS_METRIC", "Kerr");
+    ScopedEnvironmentVariable spin("SIRIUS_SPIN", "0.85");
 
     SiriusConfig config = SiriusConfig::defaults();
     ConfigLoader::ApplyEnvironmentOverrides(config);
@@ -48,7 +38,7 @@ TEST(ConfigEnvironment, MetricNameAndSpinOverridesApplied) {
 }
 
 TEST(ConfigEnvironment, BooleanOverrideParsed) {
-    ScopedEnv bloom("SIRIUS_BLOOM", "off");
+    ScopedEnvironmentVariable bloom("SIRIUS_BLOOM", "off");
 
     SiriusConfig config = SiriusConfig::defaults();
     config.postprocess.enableBloom = true;
@@ -58,7 +48,7 @@ TEST(ConfigEnvironment, BooleanOverrideParsed) {
 }
 
 TEST(ConfigEnvironment, MalformedIntegerLeavesDefault) {
-    ScopedEnv width("SIRIUS_WIDTH", "not-a-number");
+    ScopedEnvironmentVariable width("SIRIUS_WIDTH", "not-a-number");
 
     SiriusConfig config = SiriusConfig::defaults();
     ConfigLoader::ApplyEnvironmentOverrides(config);

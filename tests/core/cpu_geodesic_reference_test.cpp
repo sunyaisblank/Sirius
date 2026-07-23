@@ -6,7 +6,6 @@
 // the surviving content is the CPU baseline plus the tolerance specification
 // anchors. Assertions and tolerances unchanged; includes are core-only.
 
-#define _USE_MATH_DEFINES
 #include "sirius/core/geodesic_integrator.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/core/metrics/metric.h"

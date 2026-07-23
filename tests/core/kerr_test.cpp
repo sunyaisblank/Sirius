@@ -1,7 +1,6 @@
 // TSPH004A.cpp - Kerr Metric Tests
 // Tests: Schwarzschild/Minkowski limits, ergosphere, frame dragging, Christoffels.
 
-#define _USE_MATH_DEFINES
 #include "sirius/core/dual_number.h"
 #include "sirius/core/tensor.h"
 

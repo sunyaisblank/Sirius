@@ -2,7 +2,6 @@
 // ds² = -(1-2M/r)dt² + dr²/(1-2M/r) + r²dΩ²
 // Tests: signature, asymptotic flatness, horizon, proper time, redshift.
 
-#define _USE_MATH_DEFINES
 #include "sirius/core/dual_number.h"
 #include "sirius/core/tensor.h"
 

@@ -9,6 +9,8 @@
 
 #include "sirius/render/render_config.h"
 #include "sirius/render/session/render_session.h"
+
+#include "support/scoped_environment.h"
 #ifdef SIRIUS_HAS_VULKAN_BACKEND
 #include "sirius/backend/device.h"
 #endif
@@ -28,6 +30,7 @@ namespace {
 using sirius::render::RenderSession;
 using sirius::render::SessionConfig;
 using sirius::render::SessionState;
+using sirius::test::ScopedEnvironmentVariable;
 
 SessionConfig ProbeConfig(const std::string& output_path) {
     SessionConfig cfg;
@@ -117,7 +120,7 @@ TEST(RenderSessionProbe, CpuKerrRenderProducesValidPngAndExr) {
 // registry is the single authority for the metric half of that predicate, so
 // a charge-carrying metric resolves to CPU even with a device present.
 TEST(RenderSessionProbe, BackendAutoResolvesByDeviceAndRegistry) {
-    unsetenv("SIRIUS_RENDER_BACKEND");
+    ScopedEnvironmentVariable backend_override("SIRIUS_RENDER_BACKEND", nullptr);
 
     sirius::render::SiriusConfig cfg = sirius::render::SiriusConfig::defaults();
     cfg.metric.name = "Kerr";

@@ -8,7 +8,6 @@
 //
 // Tests: PHCT002A.h coordinate transformation functions
 
-#define _USE_MATH_DEFINES
 #include "sirius/core/coordinates.h"
 
 #include <gtest/gtest.h>

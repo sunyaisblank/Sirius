@@ -1,7 +1,6 @@
 // TSPH002A.cpp - Christoffel Symbol Tests
 // Tests: torsion-free symmetry, flat space zeros, spherical coordinate values.
 
-#define _USE_MATH_DEFINES
 #include "sirius/core/dual_number.h"
 #include "sirius/core/tensor.h"
 

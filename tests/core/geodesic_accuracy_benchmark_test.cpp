@@ -2,7 +2,6 @@
 // Tests circular orbits, light deflection, energy/momentum conservation.
 // Ported from TSBM001A.cpp; assertions and tolerances unchanged.
 
-#define _USE_MATH_DEFINES
 #include "sirius/core/dual_number.h"
 #include "sirius/core/tensor.h"
 

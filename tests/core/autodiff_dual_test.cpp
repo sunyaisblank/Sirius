@@ -14,7 +14,6 @@
 // LABEL: Mandatory;Correctness
 // =============================================================================
 
-#define _USE_MATH_DEFINES
 #include "sirius/core/constants.h"  // Centralized constants
 #include "sirius/core/dual_number.h"
 

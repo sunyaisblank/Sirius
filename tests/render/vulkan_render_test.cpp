@@ -18,6 +18,8 @@
 
 #include <gtest/gtest.h>
 
+#include "support/scoped_environment.h"
+
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
@@ -43,6 +45,7 @@
 namespace {
 
 #ifdef SIRIUS_HAS_VULKAN_BACKEND
+using sirius::test::ScopedEnvironmentVariable;
 
 using sirius::backend::BufferHandle;
 using sirius::backend::BufferUsage;
@@ -231,11 +234,11 @@ TEST(VulkanRenderSession, Kerr64CompletesUnderConstrainedBudgetWithFiniteRadianc
     if (const auto d = EnumerateVulkanDevices(); !d.has_value() || d->empty()) {
         GTEST_SKIP() << "no Vulkan device present";
     }
-    setenv("SIRIUS_MEMORY_BUDGET_MB", "1", 1);  // constrained: drops the starfield
+    ScopedEnvironmentVariable budget("SIRIUS_MEMORY_BUDGET_MB",
+                                     "1");  // constrained: drops the starfield
     const std::string out = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp") +
                             "/sirius_vk_smoke_64.exr";
     const auto rgba = RenderSessionVulkan(64, 64, out);
-    unsetenv("SIRIUS_MEMORY_BUDGET_MB");
     ASSERT_FALSE(rgba.empty()) << "session Vulkan render did not complete";
     ExpectFiniteNonConstantWithShadow(rgba, 64, 64, "vk-session-64");
 }
@@ -254,11 +257,10 @@ TEST(VulkanRenderSession, Fp64RungRendersOrDeclinesLoudly) {
     const bool fp64_supported = (*device)->Info().supports_fp64;
     device->reset();
 
-    setenv("SIRIUS_PRECISION", "fp64", 1);
+    ScopedEnvironmentVariable precision("SIRIUS_PRECISION", "fp64");
     const std::string out = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp") +
                             "/sirius_vk_fp64_64.exr";
     const auto rgba = RenderSessionVulkan(64, 64, out);
-    unsetenv("SIRIUS_PRECISION");
 
     if (fp64_supported) {
         ASSERT_FALSE(rgba.empty()) << "fp64 rung requested and supported but did not complete";
@@ -275,11 +277,10 @@ TEST(VulkanRenderSession, CompensatedRungRendersOnAnyDevice) {
     if (const auto d = EnumerateVulkanDevices(); !d.has_value() || d->empty()) {
         GTEST_SKIP() << "no Vulkan device present";
     }
-    setenv("SIRIUS_PRECISION", "fp32-comp", 1);
+    ScopedEnvironmentVariable precision("SIRIUS_PRECISION", "fp32-comp");
     const std::string out = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp") +
                             "/sirius_vk_comp_64.exr";
     const auto rgba = RenderSessionVulkan(64, 64, out);
-    unsetenv("SIRIUS_PRECISION");
     ASSERT_FALSE(rgba.empty()) << "compensated rung did not complete";
     ExpectFiniteNonConstantWithShadow(rgba, 64, 64, "vk-session-comp");
 }
@@ -288,11 +289,11 @@ TEST(VulkanRenderSession, Kerr160x120CompletesAcrossMultipleGovernedTiles) {
     if (const auto d = EnumerateVulkanDevices(); !d.has_value() || d->empty()) {
         GTEST_SKIP() << "no Vulkan device present";
     }
-    setenv("SIRIUS_MEMORY_BUDGET_MB", "1", 1);  // tile edge 120 -> 2 tiles for 160 wide
+    ScopedEnvironmentVariable budget("SIRIUS_MEMORY_BUDGET_MB",
+                                     "1");  // tile edge 120 -> 2 tiles for 160 wide
     const std::string out = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp") +
                             "/sirius_vk_smoke_160.exr";
     const auto rgba = RenderSessionVulkan(160, 120, out);
-    unsetenv("SIRIUS_MEMORY_BUDGET_MB");
     ASSERT_FALSE(rgba.empty()) << "session Vulkan render did not complete";
     ExpectFiniteNonConstantWithShadow(rgba, 160, 120, "vk-session-160");
 }

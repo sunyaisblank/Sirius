@@ -2,7 +2,6 @@
 // Tests: dual number edge cases, metric/Christoffel under singularities.
 // Ported from TSDG002A.cpp; assertions and tolerances unchanged.
 
-#define _USE_MATH_DEFINES
 #include "sirius/core/dual_number.h"
 #include "sirius/core/metrics/kerr_schild_family.h"  // Unified Kerr-Schild Family
 #include "sirius/core/metrics/metric.h"

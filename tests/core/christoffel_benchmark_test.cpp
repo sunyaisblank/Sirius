@@ -12,7 +12,6 @@
 // Reference: PHCN001A.h - Performance Requirements
 // =============================================================================
 
-#define _USE_MATH_DEFINES
 #include "sirius/core/dual_number.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/core/tensor.h"

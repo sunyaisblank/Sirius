@@ -16,7 +16,6 @@
 // LABEL: Mandatory (build gate)
 // TESTS: Schwarzschild, Kerr, Reissner-Nordström
 
-#define _USE_MATH_DEFINES
 #include "sirius/core/geodesic_integrator.h"
 #include "sirius/core/metrics/kerr_schild_family.h"  // Unified Kerr-Schild Family
 #include "sirius/core/metrics/metric.h"

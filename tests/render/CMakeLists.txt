@@ -24,6 +24,7 @@ target_link_libraries(sirius_render_tests PRIVATE sirius_render GTest::gtest_mai
 # Decode-side headers (stbi_load, LoadEXR); the implementations are provided by
 # sirius_render, so the tests need declarations only.
 target_include_directories(sirius_render_tests PRIVATE
+    "${CMAKE_SOURCE_DIR}/tests"
     "${CMAKE_SOURCE_DIR}/lib/stb"
     "${CMAKE_SOURCE_DIR}/lib/tinyexr"
 )
