@@ -59,7 +59,7 @@ The estate was re-founded with the port and stands at 737 tests, 456 Mandatory, 
 - E1, spacetime catalogue: HOLDS. Nine families, all nine CPU-renderable since the post-closure Morris-Thorne Cartesian embedding.
 - E2, polarised transport: HOLDS. Walker-Penrose constant conserved to ~1e-12 (oracle) and ~2e-10 (live), Stokes rotation wired.
 - E3, hardware reach: HOLDS architecturally. Governor seats a 4096 tile in 2 GiB at IMAX resolution and declines loudly below the floor; Vulkan renders end-to-end on software Vulkan; physical-GPU validation pending hardware.
-- E4, verification estate: HOLDS. 783 tests, 476 Mandatory, all green on GCC 14 and Clang 21, labels generated and CI-checked (post-closure sessions added the curvature, wormhole, precision-rung, GPU-parity, and backend-resolution gates).
+- E4, verification estate: HOLDS. 784 tests registered, 783 enabled, 476 Mandatory, all green on GCC 14 and Clang 21, labels generated and CI-checked (post-closure sessions added the curvature, wormhole, precision-rung, GPU-parity, and backend-resolution gates).
 
 ## 11. Rejected additions
 

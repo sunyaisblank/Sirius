@@ -58,7 +58,7 @@ sirius render -m Kerr -a 0.9 -s 256 -o kerr.png
 # The same scene as linear HDR for compositing
 sirius render -m Kerr -a 0.9 -s 256 -o kerr.exr
 
-# Through the Vulkan backend (explicit opt-in)
+# Explicitly require the Vulkan backend instead of allowing auto fallback
 sirius render -m Kerr -a 0.9 --backend vulkan -o kerr_vk.png
 
 # Interactive progressive viewer, machine-readable system report
