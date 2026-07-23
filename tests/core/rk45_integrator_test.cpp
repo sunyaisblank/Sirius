@@ -290,11 +290,9 @@ TEST_F(RK45IntegratorTests, StepAdaptsToCurvature) {
     Lightray ray = createTestRay(pos, dir, &schwarzschild);
 
     std::vector<float> step_sizes;
-    std::vector<float> radii;
 
     for (int i = 0; i < 200; ++i) {
         step_sizes.push_back(ray.step_size);
-        radii.push_back(ray.position(1));
 
         Geodesic::IntegrateStepRk45(ray, &schwarzschild, config);
         if (ray.terminated) break;

@@ -1,10 +1,5 @@
 // PNG writer implementation over stb_image_write. Ported from OUPN001A.cpp.
 //
-// This translation unit defines STB_IMAGE_WRITE_IMPLEMENTATION (the encode
-// side). The decode side (STB_IMAGE_IMPLEMENTATION) lives in stb_impl.cpp so
-// the two never collide.
-
-#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "sirius/render/png_writer.h"
 
 #include "stb_image_write.h"

@@ -54,12 +54,11 @@ TEST(PinholeCameraTest, RayDirectionIsNormalised) {
     for (auto& pos : positions) {
         CameraRay ray = camera.GenerateRay(pos[0], pos[1]);
         // direction(0) is always 0 (time), so spatial norm:
-        float spatial_norm =
+        double spatial_norm =
             std::sqrt(ray.direction(1) * ray.direction(1) + ray.direction(2) * ray.direction(2) +
                       ray.direction(3) * ray.direction(3));
-        EXPECT_NEAR(spatial_norm, 1.0f, 1e-5f)
-            << "Spatial direction should be unit length at pixel (" << pos[0] << ", " << pos[1]
-            << ")";
+        EXPECT_NEAR(spatial_norm, 1.0, 1e-5) << "Spatial direction should be unit length at pixel ("
+                                             << pos[0] << ", " << pos[1] << ")";
     }
 }
 
@@ -73,10 +72,10 @@ TEST(PinholeCameraTest, OriginMatchesConfig) {
     PinholeCamera camera(config);
     CameraRay ray = camera.GenerateRay(0, 0);
 
-    EXPECT_FLOAT_EQ(ray.origin(0), static_cast<float>(config.t));
-    EXPECT_FLOAT_EQ(ray.origin(1), static_cast<float>(config.r));
-    EXPECT_FLOAT_EQ(ray.origin(2), static_cast<float>(config.theta));
-    EXPECT_FLOAT_EQ(ray.origin(3), static_cast<float>(config.phi));
+    EXPECT_DOUBLE_EQ(ray.origin(0), config.t);
+    EXPECT_DOUBLE_EQ(ray.origin(1), config.r);
+    EXPECT_DOUBLE_EQ(ray.origin(2), config.theta);
+    EXPECT_DOUBLE_EQ(ray.origin(3), config.phi);
 }
 
 TEST(PinholeCameraTest, RightPixelIncreasesAzimuth) {
@@ -131,7 +130,7 @@ TEST(PinholeCameraTest, WeightIsOne) {
 TEST(PinholeCameraTest, TimeComponentIsZero) {
     PinholeCamera camera;
     CameraRay ray = camera.GenerateRay(50, 50);
-    EXPECT_FLOAT_EQ(ray.direction(0), 0.0f)
+    EXPECT_DOUBLE_EQ(ray.direction(0), 0.0)
         << "Time component should be zero (set by geodesic normalisation)";
 }
 
@@ -154,10 +153,10 @@ TEST(ThinLensCameraTest, CentreRayWithDefaultSampling) {
     CameraRay ray = camera.GenerateRay(50, 50, 0.5f, 0.5f);
 
     // Should produce a valid direction
-    float spatial_norm =
+    double spatial_norm =
         std::sqrt(ray.direction(1) * ray.direction(1) + ray.direction(2) * ray.direction(2) +
                   ray.direction(3) * ray.direction(3));
-    EXPECT_NEAR(spatial_norm, 1.0f, 1e-4f) << "ThinLens direction should be unit length";
+    EXPECT_NEAR(spatial_norm, 1.0, 1e-4) << "ThinLens direction should be unit length";
 }
 
 TEST(ThinLensCameraTest, DifferentSamplesGiveDifferentRays) {
@@ -304,10 +303,10 @@ TEST(ICameraTest, GetPositionReturnsConfigCoordinates) {
     PinholeCamera camera(config);
     auto pos = camera.GetPosition();
 
-    EXPECT_FLOAT_EQ(pos(0), 10.0f);
-    EXPECT_FLOAT_EQ(pos(1), 25.0f);
-    EXPECT_NEAR(pos(2), 1.2f, 1e-6f);
-    EXPECT_FLOAT_EQ(pos(3), 3.0f);
+    EXPECT_DOUBLE_EQ(pos(0), 10.0);
+    EXPECT_DOUBLE_EQ(pos(1), 25.0);
+    EXPECT_NEAR(pos(2), 1.2, 1e-6);
+    EXPECT_DOUBLE_EQ(pos(3), 3.0);
 }
 
 TEST(ICameraTest, SetConfigUpdatesRayGeneration) {
@@ -321,7 +320,7 @@ TEST(ICameraTest, SetConfigUpdatesRayGeneration) {
     camera.SetConfig(config);
 
     CameraRay ray = camera.GenerateRay(25, 25);
-    EXPECT_FLOAT_EQ(ray.origin(1), 10.0f) << "Origin should reflect updated config";
+    EXPECT_DOUBLE_EQ(ray.origin(1), 10.0) << "Origin should reflect updated config";
 }
 
 }  // namespace sirius::test

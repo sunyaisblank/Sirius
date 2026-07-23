@@ -221,7 +221,7 @@ TEST(SpectralUtilsTests, ApplyRedshiftEffect) {
 TEST(SpectralUtilsTests, ApplyBlueshiftEffect) {
     Rgb white(1.0f, 1.0f, 1.0f);
 
-    Rgb blueshifted = ApplyRedshift(white, -0.3);  // z = -0.3
+    Rgb blueshifted = ApplyRedshift(white, -0.3f);  // z = -0.3
 
     // Red should be reduced more than blue
     EXPECT_LT(blueshifted.r, blueshifted.b);

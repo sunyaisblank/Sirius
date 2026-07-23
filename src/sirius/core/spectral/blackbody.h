@@ -136,12 +136,11 @@ inline Rgb BlackbodyToRgb(double T) {
     // Integrate over the visible spectrum.
     Xyz xyz;
     constexpr int kNSamples = 32;
-    constexpr double kLambdaMin = 380e-9;  // 380 nm.
-    constexpr double kLambdaMax = 780e-9;  // 780 nm.
-    constexpr double kDLambda = (kLambdaMax - kLambdaMin) / kNSamples;
+    constexpr double kDLambda =
+        (constants::spectral::kLambdaMax - constants::spectral::kLambdaMin) / kNSamples;
 
     for (int i = 0; i < kNSamples; i++) {
-        double lambda = kLambdaMin + (i + 0.5) * kDLambda;
+        double lambda = constants::spectral::kLambdaMin + (i + 0.5) * kDLambda;
         double lambda_nm = lambda * 1e9;
 
         double radiance = PlanckRadiance(lambda, T);

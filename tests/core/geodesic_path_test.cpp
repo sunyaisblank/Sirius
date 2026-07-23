@@ -452,7 +452,7 @@ TEST_F(GeodesicPathTests, MetricSignatureCorrect) {
 
 // Verify Kerr has correct signature with non-zero frame-dragging term g_tφ
 TEST_F(GeodesicPathTests, KerrMetricSignature) {
-    sirius::core::KerrSchildFamily kerr{sirius::core::KerrSchildParams::Kerr(M, 0.9)};
+    sirius::core::KerrSchildFamily kerr_metric{sirius::core::KerrSchildParams::Kerr(M, 0.9)};
 
     // Use a position where frame dragging is evident (non-zero phi/theta)
     // Spherical (t, r, pi/4, 0)
@@ -475,7 +475,7 @@ TEST_F(GeodesicPathTests, KerrMetricSignature) {
     Metric4d g;
     Tensor<Dual<double>, 4, 4, 4> dg;
 
-    kerr.Evaluate(pos, g, dg);
+    kerr_metric.Evaluate(pos, g, dg);
 
     // Transform to Spherical
     Metric4d g_sph = transformToSpherical(g, pos);

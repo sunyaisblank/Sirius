@@ -153,9 +153,9 @@ TEST_F(MandatoryKillingTests, SchwarzschildEnergyConservation) {
         bool success = Geodesic::IntegrateStepRk45(ray, &metric, config);
         if (!success || ray.terminated) break;
 
-        float r = std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
-                            ray.position(3) * ray.position(3));
-        if (r < 2.5f || r > 100.0f) break;
+        double r = std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
+                             ray.position(3) * ray.position(3));
+        if (r < 2.5 || r > 100.0) break;
 
         Metric4d g;
         Tensor<Dual<double>, 4, 4, 4> dg;
@@ -202,9 +202,9 @@ TEST_F(MandatoryKillingTests, SchwarzschildAngularMomentumConservation) {
         bool success = Geodesic::IntegrateStepRk45(ray, &metric, config);
         if (!success || ray.terminated) break;
 
-        float r = std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
-                            ray.position(3) * ray.position(3));
-        if (r < 2.5f || r > 100.0f) break;
+        double r = std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
+                             ray.position(3) * ray.position(3));
+        if (r < 2.5 || r > 100.0) break;
 
         Metric4d g;
         Tensor<Dual<double>, 4, 4, 4> dg;
@@ -246,9 +246,9 @@ TEST_F(MandatoryKillingTests, KerrEnergyConservation) {
         bool success = Geodesic::IntegrateStepRk45(ray, &metric, config);
         if (!success || ray.terminated) break;
 
-        float r = std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
-                            ray.position(3) * ray.position(3));
-        if (r < 2.0f || r > 100.0f) break;
+        double r = std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
+                             ray.position(3) * ray.position(3));
+        if (r < 2.0 || r > 100.0) break;
 
         Metric4d g;
         Tensor<Dual<double>, 4, 4, 4> dg;
@@ -295,9 +295,9 @@ TEST_F(MandatoryKillingTests, KerrAngularMomentumConservation) {
         bool success = Geodesic::IntegrateStepRk45(ray, &metric, config);
         if (!success || ray.terminated) break;
 
-        float r = std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
-                            ray.position(3) * ray.position(3));
-        if (r < 2.0f || r > 100.0f) break;
+        double r = std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
+                             ray.position(3) * ray.position(3));
+        if (r < 2.0 || r > 100.0) break;
 
         Metric4d g;
         Tensor<Dual<double>, 4, 4, 4> dg;
@@ -340,9 +340,9 @@ TEST_F(MandatoryKillingTests, ReissnerNordstromEnergyConservation) {
         bool success = Geodesic::IntegrateStepRk45(ray, &metric, config);
         if (!success || ray.terminated) break;
 
-        float r = std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
-                            ray.position(3) * ray.position(3));
-        if (r < 2.0f || r > 100.0f) break;
+        double r = std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
+                             ray.position(3) * ray.position(3));
+        if (r < 2.0 || r > 100.0) break;
 
         Metric4d g;
         Tensor<Dual<double>, 4, 4, 4> dg;

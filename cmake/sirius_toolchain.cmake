@@ -52,6 +52,13 @@ function(sirius_configure_target target)
     if(MSVC)
         target_compile_options(${target} PRIVATE
             $<$<COMPILE_LANGUAGE:CXX>:/std:c++latest> /W4 /permissive- /utf-8)
+        # MSVC keeps its legacy C math constants and standard CRT interfaces
+        # behind compatibility switches. The code still validates environment
+        # value and file handle at its use site; these definitions only make
+        # the portable interfaces available without vendor deprecation noise.
+        target_compile_definitions(${target} PRIVATE
+            _USE_MATH_DEFINES
+            _CRT_SECURE_NO_WARNINGS)
         if(SIRIUS_WERROR)
             target_compile_options(${target} PRIVATE /WX)
         endif()
