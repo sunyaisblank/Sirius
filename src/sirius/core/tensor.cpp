@@ -3,6 +3,7 @@
 
 #include "sirius/core/tensor.h"
 
+#include <algorithm>
 #include <cmath>
 
 namespace sirius::core {

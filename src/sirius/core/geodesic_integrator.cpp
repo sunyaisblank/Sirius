@@ -156,8 +156,8 @@ bool Geodesic::IntegrateStep(Lightray& ray, IMetric* metric, float min_step, flo
     Vec4 new_velocity = TensorOps::RaiseIndex(new_momentum, InverseAt(metric, new_position, g_new));
 
     // Adaptive step control.
-    float velocity_change = (new_velocity - k0).Length();
-    float position_change = (new_position - x0).Length();
+    const float velocity_change = static_cast<float>((new_velocity - k0).Length());
+    const float position_change = static_cast<float>((new_position - x0).Length());
     const float target_velocity_change = 0.01f, max_position_change = 0.1f;
 
     if (velocity_change > target_velocity_change * 2.0f || position_change > max_position_change) {
@@ -177,7 +177,7 @@ bool Geodesic::IntegrateStep(Lightray& ray, IMetric* metric, float min_step, flo
     ray.velocity = new_velocity;
     ray.acceleration = CalculateAcceleration(new_velocity, new_position, metric);
     ray.proper_time += h;
-    ray.coordinate_time += h * std::abs(new_velocity(0));
+    ray.coordinate_time += static_cast<float>(h * std::abs(new_velocity(0)));
     ray.running_dlambda_dnew *= (1.0f + velocity_change * 0.1f);
     return true;
 }
@@ -371,8 +371,9 @@ static float ComputeRk45ErrorNorm(const Vec4& error_x, const Vec4& new_position,
                                   const IntegratorConfig& config) {
     float error_norm = 0.0f;
     for (int i = 0; i < 4; i++) {
-        float scale = config.abs_tolerance + config.rel_tolerance * std::abs(new_position(i));
-        float err_i = std::abs(error_x(i)) / scale;
+        const float scale = static_cast<float>(config.abs_tolerance +
+                                               config.rel_tolerance * std::abs(new_position(i)));
+        const float err_i = static_cast<float>(std::abs(error_x(i)) / scale);
         error_norm += err_i * err_i;
     }
     return std::sqrt(error_norm / 4.0f);
@@ -464,7 +465,7 @@ bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const Integrato
     ray.velocity = new_velocity;
     ray.acceleration = CalculateAcceleration(new_velocity, new_position, metric);
     ray.proper_time += h;
-    ray.coordinate_time += h * std::abs(new_velocity(0));
+    ray.coordinate_time += static_cast<float>(h * std::abs(new_velocity(0)));
     ray.step_size = ComputeOptimalStep(h, error_norm, 1.0f, config);
 
     if (HasInvalidState(new_position, new_velocity)) {
