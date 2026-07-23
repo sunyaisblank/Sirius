@@ -2,10 +2,12 @@
 // Tests: torsion-free symmetry, flat space zeros, spherical coordinate values.
 
 #define _USE_MATH_DEFINES
-#include <cmath>
-#include <gtest/gtest.h>
-#include "sirius/core/tensor.h"
 #include "sirius/core/dual_number.h"
+#include "sirius/core/tensor.h"
+
+#include <gtest/gtest.h>
+
+#include <cmath>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -17,7 +19,7 @@ constexpr double kEpsilon = 1e-10;
 // =============================================================================
 
 class ChristoffelTests : public ::testing::Test {
-protected:
+  protected:
     void SetUp() override {}
     void TearDown() override {}
 };
@@ -54,8 +56,7 @@ TEST_F(ChristoffelTests, FlatSpaceChristoffelAllZero) {
         }
     }
 
-    EXPECT_EQ(nonZeroCount, 0)
-        << "Flat space should have all zero Christoffel symbols";
+    EXPECT_EQ(nonZeroCount, 0) << "Flat space should have all zero Christoffel symbols";
 }
 
 // =============================================================================
@@ -94,10 +95,8 @@ TEST_F(ChristoffelTests, TorsionFreeSymmetry) {
     for (int lam = 0; lam < 4; ++lam) {
         for (int mu = 0; mu < 4; ++mu) {
             for (int nu = 0; nu < 4; ++nu) {
-                EXPECT_NEAR(gamma.gamma(lam, mu, nu).real,
-                           gamma.gamma(lam, nu, mu).real, kEpsilon)
-                    << "Torsion-free symmetry violated at Γ^"
-                    << lam << "_" << mu << nu;
+                EXPECT_NEAR(gamma.gamma(lam, mu, nu).real, gamma.gamma(lam, nu, mu).real, kEpsilon)
+                    << "Torsion-free symmetry violated at Γ^" << lam << "_" << mu << nu;
             }
         }
     }
@@ -129,8 +128,7 @@ TEST_F(ChristoffelTests, SphericalGammaRThetaTheta) {
     ChristoffelSymbols gamma = TensorOps::Christoffel(g, dg);
 
     // Γʳ_θθ = -r (r = index 1, θ = index 2)
-    EXPECT_NEAR(gamma.gamma(1, 2, 2).real, -r, kEpsilon)
-        << "Γʳ_θθ should equal -r";
+    EXPECT_NEAR(gamma.gamma(1, 2, 2).real, -r, kEpsilon) << "Γʳ_θθ should equal -r";
 }
 
 // Test: Γᶿ_rθ = 1/r in flat spherical coordinates
@@ -155,8 +153,7 @@ TEST_F(ChristoffelTests, SphericalGammaThetaRTheta) {
     ChristoffelSymbols gamma = TensorOps::Christoffel(g, dg);
 
     // Γᶿ_rθ = 1/r (θ = index 2, r = index 1)
-    EXPECT_NEAR(gamma.gamma(2, 1, 2).real, 1.0 / r, kEpsilon)
-        << "Γᶿ_rθ should equal 1/r";
+    EXPECT_NEAR(gamma.gamma(2, 1, 2).real, 1.0 / r, kEpsilon) << "Γᶿ_rθ should equal 1/r";
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

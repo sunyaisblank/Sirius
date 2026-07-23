@@ -28,7 +28,7 @@ struct Tile {
     int x, y;           // Top-left corner (pixels).
     int width, height;  // Tile dimensions.
     TileState state = TileState::Pending;
-    int priority = 0;   // Lower = higher priority (rendered earlier).
+    int priority = 0;  // Lower = higher priority (rendered earlier).
 
     int CentreX() const { return x + width / 2; }
     int CentreY() const { return y + height / 2; }

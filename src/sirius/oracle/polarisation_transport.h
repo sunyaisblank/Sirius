@@ -308,7 +308,7 @@ class PolarisedGeodesicIntegratorD {
         double baseStep = kPolarisedTransportStep;
         double minStep = 1e-5;
         double maxStep = 0.05;
-        double escapeRadius = 60.0;  // Units of M; a full deflected geodesic.
+        double escapeRadius = 60.0;   // Units of M; a full deflected geodesic.
         double horizonBuffer = 1.02;  // Terminate at r <= r_+ * this.
         int maxSteps = 400000;
     };

@@ -4,12 +4,12 @@
 // Ported from TSIN003A.cpp; assertions and tolerances unchanged, includes are
 // core-only (metric family + geodesic integrator).
 
+#include "sirius/core/geodesic_integrator.h"
+#include "sirius/core/metrics/kerr_schild_family.h"
+
 #include <gtest/gtest.h>
 
 #include <cmath>
-
-#include "sirius/core/geodesic_integrator.h"
-#include "sirius/core/metrics/kerr_schild_family.h"
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -28,9 +28,7 @@ inline double getTheta(const Vec4& pos) {
     return std::acos(pos(3) / r);
 }
 
-inline double getPhi(const Vec4& pos) {
-    return std::atan2(pos(2), pos(1));
-}
+inline double getPhi(const Vec4& pos) { return std::atan2(pos(2), pos(1)); }
 
 // Fixture providing Schwarzschild, Kerr, and Minkowski metrics.
 class RenderPipelineTests : public ::testing::Test {
@@ -212,7 +210,8 @@ TEST_F(RenderPipelineTests, HandlesLargeRadius) {
     bool success = Geodesic::IntegrateStep(ray, &schwarzschild);
 
     if (success) {
-        EXPECT_TRUE(std::isfinite(getRadius(ray.position))) << "r should be finite if step succeeds";
+        EXPECT_TRUE(std::isfinite(getRadius(ray.position)))
+            << "r should be finite if step succeeds";
     }
     EXPECT_TRUE(std::isfinite(getRadius(ray.position))) << "Position should be finite";
 }

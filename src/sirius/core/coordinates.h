@@ -37,18 +37,26 @@ struct Vec4Bl {
 
     double& operator[](int i) {
         switch (i) {
-            case 0: return t;
-            case 1: return r;
-            case 2: return theta;
-            default: return phi;
+            case 0:
+                return t;
+            case 1:
+                return r;
+            case 2:
+                return theta;
+            default:
+                return phi;
         }
     }
     double operator[](int i) const {
         switch (i) {
-            case 0: return t;
-            case 1: return r;
-            case 2: return theta;
-            default: return phi;
+            case 0:
+                return t;
+            case 1:
+                return r;
+            case 2:
+                return theta;
+            default:
+                return phi;
         }
     }
 };
@@ -65,18 +73,26 @@ struct Vec4Cart {
 
     double& operator[](int i) {
         switch (i) {
-            case 0: return t;
-            case 1: return x;
-            case 2: return y;
-            default: return z;
+            case 0:
+                return t;
+            case 1:
+                return x;
+            case 2:
+                return y;
+            default:
+                return z;
         }
     }
     double operator[](int i) const {
         switch (i) {
-            case 0: return t;
-            case 1: return x;
-            case 2: return y;
-            default: return z;
+            case 0:
+                return t;
+            case 1:
+                return x;
+            case 2:
+                return y;
+            default:
+                return z;
         }
     }
 
@@ -283,22 +299,18 @@ inline Vec4Bl TransformVectorCartToBl(const Vec4Cart& v_cart, const Vec4Cart& po
 // Jacobian determinant; equals r^2 sin(theta) for the BL->Cart map.
 inline double JacobianDeterminant(const Jacobian4x4& J) {
     // J[0][0] = 1, so the full determinant reduces to the spatial 3x3 block.
-    double det3x3 =
-        J[1][1] * (J[2][2] * J[3][3] - J[2][3] * J[3][2]) -
-        J[1][2] * (J[2][1] * J[3][3] - J[2][3] * J[3][1]) +
-        J[1][3] * (J[2][1] * J[3][2] - J[2][2] * J[3][1]);
+    double det3x3 = J[1][1] * (J[2][2] * J[3][3] - J[2][3] * J[3][2]) -
+                    J[1][2] * (J[2][1] * J[3][3] - J[2][3] * J[3][1]) +
+                    J[1][3] * (J[2][1] * J[3][2] - J[2][2] * J[3][1]);
     return det3x3;
 }
 
 // Round-trip BL -> Cart -> BL, returning the maximum coordinate deviation.
 inline double ValidateRoundTrip(const Vec4Bl& original, double a = 0) {
-    Vec4Cart cart = (std::abs(a) < 1e-12)
-        ? BlToCartesian(original)
-        : BlToKerrSchildCart(original, a);
+    Vec4Cart cart =
+        (std::abs(a) < 1e-12) ? BlToCartesian(original) : BlToKerrSchildCart(original, a);
 
-    Vec4Bl recovered = (std::abs(a) < 1e-12)
-        ? CartesianToBl(cart)
-        : KerrSchildCartToBl(cart, a);
+    Vec4Bl recovered = (std::abs(a) < 1e-12) ? CartesianToBl(cart) : KerrSchildCartToBl(cart, a);
 
     double max_dev = 0;
     max_dev = std::max(max_dev, std::abs(original.t - recovered.t));

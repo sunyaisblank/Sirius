@@ -25,11 +25,7 @@ TEST(ContractsDeathTest, EnforcedPreconditionViolationTerminates) {
 }
 
 TEST(ContractsDeathTest, EnforcedAssertionViolationTerminates) {
-    EXPECT_DEATH(
-        [] {
-            SIRIUS_ASSERT(2 + 2 == 5);
-        }(),
-        "assertion violated");
+    EXPECT_DEATH([] { SIRIUS_ASSERT(2 + 2 == 5); }(), "assertion violated");
 }
 
 TEST(Contracts, AxiomIsNeverEvaluated) {

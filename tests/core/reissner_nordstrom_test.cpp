@@ -2,10 +2,12 @@
 // f(r)=1-2M/r+Q²/r². Tests: horizons, Schwarzschild limit, signature, asymptotic.
 
 #define _USE_MATH_DEFINES
-#include <cmath>
-#include <gtest/gtest.h>
-#include "sirius/core/tensor.h"
 #include "sirius/core/dual_number.h"
+#include "sirius/core/tensor.h"
+
+#include <gtest/gtest.h>
+
+#include <cmath>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -17,7 +19,7 @@ constexpr double kEpsilon = 1e-10;
 // =============================================================================
 
 class ReissnerNordstromTests : public ::testing::Test {
-protected:
+  protected:
     // Mass parameter (in geometric units where G = c = 1)
     static constexpr double M = 1.0;
 
@@ -25,7 +27,7 @@ protected:
     static constexpr double rs = 2.0 * M;
 
     // Create Reissner-Nordström metric at given r, θ with charge Q
-    Metric4d createRNMetric(double r, double Q, double theta = M_PI/2) {
+    Metric4d createRNMetric(double r, double Q, double theta = M_PI / 2) {
         Metric4d g;
         g.Zero();
 
@@ -36,9 +38,9 @@ protected:
         double f = 1.0 - 2.0 * M / r + (Q_actual * Q_actual) / (r * r);
         double sin_theta = std::sin(theta);
 
-        g(0, 0) = Dual<double>(-f, 0.0);              // g_tt
-        g(1, 1) = Dual<double>(1.0 / f, 0.0);         // g_rr
-        g(2, 2) = Dual<double>(r * r, 0.0);           // g_θθ
+        g(0, 0) = Dual<double>(-f, 0.0);                             // g_tt
+        g(1, 1) = Dual<double>(1.0 / f, 0.0);                        // g_rr
+        g(2, 2) = Dual<double>(r * r, 0.0);                          // g_θθ
         g(3, 3) = Dual<double>(r * r * sin_theta * sin_theta, 0.0);  // g_φφ
 
         return g;
@@ -142,12 +144,10 @@ TEST_F(ReissnerNordstromTests, ReducesToSchwarzschildZeroCharge) {
     // Expected Schwarzschild values
     double f_schw = 1.0 - rs / r;
 
-    EXPECT_NEAR(g_rn(0, 0).real, -f_schw, kEpsilon)
-        << "g_tt should match Schwarzschild at Q=0";
+    EXPECT_NEAR(g_rn(0, 0).real, -f_schw, kEpsilon) << "g_tt should match Schwarzschild at Q=0";
     EXPECT_NEAR(g_rn(1, 1).real, 1.0 / f_schw, kEpsilon)
         << "g_rr should match Schwarzschild at Q=0";
-    EXPECT_NEAR(g_rn(2, 2).real, r * r, kEpsilon)
-        << "g_θθ should match Schwarzschild at Q=0";
+    EXPECT_NEAR(g_rn(2, 2).real, r * r, kEpsilon) << "g_θθ should match Schwarzschild at Q=0";
 
     double sin_theta = std::sin(M_PI / 2);
     EXPECT_NEAR(g_rn(3, 3).real, r * r * sin_theta * sin_theta, kEpsilon)
@@ -226,8 +226,7 @@ TEST_F(ReissnerNordstromTests, OuterHorizonFormula) {
 
         // Verify f(r₊) = 0
         double f_at_horizon = f_of_r(r_plus, Q);
-        EXPECT_NEAR(f_at_horizon, 0.0, 1e-9)
-            << "f(r₊) should equal 0 at Q=" << Q;
+        EXPECT_NEAR(f_at_horizon, 0.0, 1e-9) << "f(r₊) should equal 0 at Q=" << Q;
     }
 }
 
@@ -325,7 +324,7 @@ TEST_F(ReissnerNordstromTests, MetricThetaTheta) {
 TEST_F(ReissnerNordstromTests, MetricPhiPhi) {
     double r = 10.0;
     double Q = 0.7;
-    std::vector<double> thetas = {M_PI/6, M_PI/4, M_PI/3, M_PI/2};
+    std::vector<double> thetas = {M_PI / 6, M_PI / 4, M_PI / 3, M_PI / 2};
 
     for (double theta : thetas) {
         Metric4d g = createRNMetric(r, Q, theta);
@@ -354,8 +353,7 @@ TEST_F(ReissnerNordstromTests, MetricDeterminant) {
     double sin_theta = std::sin(theta);
     double expected_det = -r * r * r * r * sin_theta * sin_theta;
 
-    EXPECT_NEAR(det, expected_det, kEpsilon)
-        << "Metric determinant incorrect";
+    EXPECT_NEAR(det, expected_det, kEpsilon) << "Metric determinant incorrect";
 }
 
 // Test: Determinant is negative (Lorentzian) for all charges
@@ -365,11 +363,10 @@ TEST_F(ReissnerNordstromTests, DeterminantIsNegative) {
 
     for (double r : radii) {
         for (double Q : charges) {
-            Metric4d g = createRNMetric(r, Q, M_PI/2);
+            Metric4d g = createRNMetric(r, Q, M_PI / 2);
             double det = g(0, 0).real * g(1, 1).real * g(2, 2).real * g(3, 3).real;
 
-            EXPECT_LT(det, 0.0)
-                << "Determinant should be negative at r=" << r << ", Q=" << Q;
+            EXPECT_LT(det, 0.0) << "Determinant should be negative at r=" << r << ", Q=" << Q;
         }
     }
 }
@@ -394,8 +391,7 @@ TEST_F(ReissnerNordstromTests, ProperTimeStationaryObserver) {
     // Expected: dτ = √f(r) dt
     double expected_dtau = std::sqrt(f_of_r(r, Q)) * dt;
 
-    EXPECT_NEAR(dtau, expected_dtau, kEpsilon)
-        << "Proper time gravitational redshift incorrect";
+    EXPECT_NEAR(dtau, expected_dtau, kEpsilon) << "Proper time gravitational redshift incorrect";
 }
 
 // Test: Charge increases redshift compared to Schwarzschild (for same r)
@@ -408,8 +404,7 @@ TEST_F(ReissnerNordstromTests, ChargeIncreasesRedshift) {
 
     // For RN, Q²/r² term is positive, so f(r) is larger than Schwarzschild
     // This means LESS redshift (observer is less deep in potential well)
-    EXPECT_GT(f_rn, f_schw)
-        << "Charge should increase f(r), reducing gravitational potential";
+    EXPECT_GT(f_rn, f_schw) << "Charge should increase f(r), reducing gravitational potential";
 }
 
 // Test: Effective potential structure (photon sphere differs from Schwarzschild)
@@ -426,8 +421,7 @@ TEST_F(ReissnerNordstromTests, PhotonSphereExists) {
 
         // Verify it's outside outer horizon
         double r_plus = outerHorizon(Q);
-        EXPECT_GT(r_photon, r_plus)
-            << "Photon sphere should be outside outer horizon";
+        EXPECT_GT(r_photon, r_plus) << "Photon sphere should be outside outer horizon";
     }
 }
 
@@ -444,8 +438,7 @@ TEST_F(ReissnerNordstromTests, ChargeShrinksOuterHorizon) {
         double r_plus = outerHorizon(Q);
 
         if (Q > 0.0) {
-            EXPECT_LT(r_plus, prev_r_plus)
-                << "Outer horizon should shrink with increasing charge";
+            EXPECT_LT(r_plus, prev_r_plus) << "Outer horizon should shrink with increasing charge";
         }
         prev_r_plus = r_plus;
     }
@@ -459,8 +452,7 @@ TEST_F(ReissnerNordstromTests, ChargeExpandsInnerHorizon) {
     for (double Q : charges) {
         double r_minus = innerHorizon(Q);
 
-        EXPECT_GT(r_minus, prev_r_minus)
-            << "Inner horizon should expand with increasing charge";
+        EXPECT_GT(r_minus, prev_r_minus) << "Inner horizon should expand with increasing charge";
         prev_r_minus = r_minus;
     }
 }
@@ -472,10 +464,10 @@ TEST_F(ReissnerNordstromTests, ChargeExpandsInnerHorizon) {
 // Test: f(r) formula correctness
 TEST_F(ReissnerNordstromTests, FunctionFCorrectness) {
     std::vector<std::pair<double, double>> test_cases = {
-        {10.0, 0.0},   // Schwarzschild limit
-        {10.0, 0.5},   // Medium charge
-        {5.0, 0.3},    // Different r
-        {20.0, 0.9},   // Large r, high charge
+        {10.0, 0.0},  // Schwarzschild limit
+        {10.0, 0.5},  // Medium charge
+        {5.0, 0.3},   // Different r
+        {20.0, 0.9},  // Large r, high charge
     };
 
     for (auto [r, Q] : test_cases) {
@@ -483,8 +475,7 @@ TEST_F(ReissnerNordstromTests, FunctionFCorrectness) {
         double Q_actual = Q * M;
         double f_expected = 1.0 - 2.0 * M / r + (Q_actual * Q_actual) / (r * r);
 
-        EXPECT_NEAR(f_computed, f_expected, kEpsilon)
-            << "f(r) incorrect at r=" << r << ", Q=" << Q;
+        EXPECT_NEAR(f_computed, f_expected, kEpsilon) << "f(r) incorrect at r=" << r << ", Q=" << Q;
     }
 }
 
@@ -500,10 +491,9 @@ TEST_F(ReissnerNordstromTests, FPositiveOutsideHorizon) {
             double r = r_plus * factor;
             double f = f_of_r(r, Q);
 
-            EXPECT_GT(f, 0.0)
-                << "f(r) should be positive at r=" << r << ", Q=" << Q;
+            EXPECT_GT(f, 0.0) << "f(r) should be positive at r=" << r << ", Q=" << Q;
         }
     }
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

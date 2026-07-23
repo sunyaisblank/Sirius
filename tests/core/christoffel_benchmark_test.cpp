@@ -13,16 +13,18 @@
 // =============================================================================
 
 #define _USE_MATH_DEFINES
-#include <cmath>
-#include <chrono>
-#include <vector>
-#include <numeric>
-#include <algorithm>
-#include <iomanip>
-#include <gtest/gtest.h>
-#include "sirius/core/tensor.h"
 #include "sirius/core/dual_number.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
+#include "sirius/core/tensor.h"
+
+#include <gtest/gtest.h>
+
+#include <algorithm>
+#include <chrono>
+#include <cmath>
+#include <iomanip>
+#include <numeric>
+#include <vector>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -31,13 +33,14 @@ using namespace sirius::core;
 // Utility: High-precision timer
 // =============================================================================
 class Timer {
-public:
+  public:
     void start() { m_start = std::chrono::high_resolution_clock::now(); }
     void stop() { m_end = std::chrono::high_resolution_clock::now(); }
     double microseconds() const {
         return std::chrono::duration<double, std::micro>(m_end - m_start).count();
     }
-private:
+
+  private:
     std::chrono::high_resolution_clock::time_point m_start, m_end;
 };
 
@@ -51,8 +54,8 @@ private:
 // transform against exact flat-space results instead.
 // =============================================================================
 class SphericalKerrSchild {
-public:
-    static constexpr int NUM_COMPONENTS = 64; // 4×4×4
+  public:
+    static constexpr int NUM_COMPONENTS = 64;  // 4×4×4
 
     SphericalKerrSchild(double M, double a) : M_(M), a_(a) {}
 
@@ -62,19 +65,19 @@ public:
         double sin_t = std::sin(theta);
         if (std::abs(sin_t) < MIN_SIN) {
             // Taylor expansion near poles: cot(θ) ≈ 1/θ - θ/3 - θ³/45
-            double t = (theta < M_PI/2) ? theta : (M_PI - theta);
+            double t = (theta < M_PI / 2) ? theta : (M_PI - theta);
             double sign = (sin_t >= 0) ? 1.0 : -1.0;
-            return sign * (1.0/t - t/3.0 - t*t*t/45.0);
+            return sign * (1.0 / t - t / 3.0 - t * t * t / 45.0);
         }
         return std::cos(theta) / sin_t;
     }
 
-    void computeChristoffel(double r, double theta, [[maybe_unused]] double phi, double Gamma[4][4][4]) {
+    void computeChristoffel(double r, double theta, [[maybe_unused]] double phi,
+                            double Gamma[4][4][4]) {
         // Initialize to zero
         for (int i = 0; i < 4; i++)
             for (int j = 0; j < 4; j++)
-                for (int k = 0; k < 4; k++)
-                    Gamma[i][j][k] = 0.0;
+                for (int k = 0; k < 4; k++) Gamma[i][j][k] = 0.0;
 
         r = std::max(r, 0.01);
         double r2 = r * r;
@@ -139,7 +142,8 @@ public:
         Gamma[0][2][0] = Gamma[0][0][2];
 
         // Γ^r_tt
-        Gamma[1][0][0] = 0.5 * g_inv_rr * (-dg_tt_dr) + 0.5 * g_inv_tr * (2.0 * dg_tr_dr - dg_tt_dr);
+        Gamma[1][0][0] =
+            0.5 * g_inv_rr * (-dg_tt_dr) + 0.5 * g_inv_tr * (2.0 * dg_tr_dr - dg_tt_dr);
 
         // Γ^r_rr
         Gamma[1][1][1] = 0.5 * (g_inv_rr * dg_rr_dr + g_inv_tr * dg_tt_dr);
@@ -170,7 +174,7 @@ public:
         Gamma[3][3][2] = Gamma[3][2][3];
     }
 
-private:
+  private:
     double M_, a_;
 };
 
@@ -179,11 +183,10 @@ private:
 // Uses PHMT100A unified family with coordinate transformation
 // =============================================================================
 class CartesianKerrSchild {
-public:
+  public:
     CartesianKerrSchild(double M, double a) : M_(M), a_(a) {
-        metric_.SetParams((M == 0.0 && a == 0.0)
-                              ? sirius::core::KerrSchildParams::Minkowski()
-                              : sirius::core::KerrSchildParams::Kerr(M, a));
+        metric_.SetParams((M == 0.0 && a == 0.0) ? sirius::core::KerrSchildParams::Minkowski()
+                                                 : sirius::core::KerrSchildParams::Kerr(M, a));
     }
 
     // Spherical to Cartesian conversion
@@ -215,11 +218,12 @@ public:
         ChristoffelSymbols gamma = TensorOps::Christoffel(g, dg);
 
         // 4. Transform Christoffel from Cartesian to Spherical basis
-        // This is the expensive part: Γ'λ_μν = (∂x'λ/∂xα)(∂xβ/∂x'μ)(∂xγ/∂x'ν) Γα_βγ + (∂x'λ/∂xα)(∂²xα/∂x'μ∂x'ν)
+        // This is the expensive part: Γ'λ_μν = (∂x'λ/∂xα)(∂xβ/∂x'μ)(∂xγ/∂x'ν) Γα_βγ +
+        // (∂x'λ/∂xα)(∂²xα/∂x'μ∂x'ν)
         transformChristoffelCartToSph(gamma, r, theta, phi, Gamma);
     }
 
-private:
+  private:
     sirius::core::KerrSchildFamily metric_;
     [[maybe_unused]] double M_, a_;
 
@@ -231,17 +235,17 @@ private:
         double cos_p = std::cos(phi);
 
         // J[i][j] = ∂x^i/∂x'^j where x = (x,y,z), x' = (r,θ,φ)
-        J[0][0] = sin_t * cos_p;  // ∂x/∂r
-        J[0][1] = r * cos_t * cos_p;  // ∂x/∂θ
-        J[0][2] = -r * sin_t * sin_p; // ∂x/∂φ
+        J[0][0] = sin_t * cos_p;       // ∂x/∂r
+        J[0][1] = r * cos_t * cos_p;   // ∂x/∂θ
+        J[0][2] = -r * sin_t * sin_p;  // ∂x/∂φ
 
-        J[1][0] = sin_t * sin_p;  // ∂y/∂r
+        J[1][0] = sin_t * sin_p;      // ∂y/∂r
         J[1][1] = r * cos_t * sin_p;  // ∂y/∂θ
         J[1][2] = r * sin_t * cos_p;  // ∂y/∂φ
 
-        J[2][0] = cos_t;          // ∂z/∂r
-        J[2][1] = -r * sin_t;     // ∂z/∂θ
-        J[2][2] = 0.0;            // ∂z/∂φ
+        J[2][0] = cos_t;       // ∂z/∂r
+        J[2][1] = -r * sin_t;  // ∂z/∂θ
+        J[2][2] = 0.0;         // ∂z/∂φ
 
         // Inverse Jacobian: ∂(r,θ,φ)/∂(x,y,z)
         double rho = std::sqrt(r * r * sin_t * sin_t + 1e-20);
@@ -249,26 +253,25 @@ private:
         Jinv[0][1] = sin_t * sin_p;  // ∂r/∂y
         Jinv[0][2] = cos_t;          // ∂r/∂z
 
-        Jinv[1][0] = cos_t * cos_p / r; // ∂θ/∂x
-        Jinv[1][1] = cos_t * sin_p / r; // ∂θ/∂y
-        Jinv[1][2] = -sin_t / r;        // ∂θ/∂z
+        Jinv[1][0] = cos_t * cos_p / r;  // ∂θ/∂x
+        Jinv[1][1] = cos_t * sin_p / r;  // ∂θ/∂y
+        Jinv[1][2] = -sin_t / r;         // ∂θ/∂z
 
-        Jinv[2][0] = -sin_p / rho;      // ∂φ/∂x
-        Jinv[2][1] = cos_p / rho;       // ∂φ/∂y
-        Jinv[2][2] = 0.0;               // ∂φ/∂z
+        Jinv[2][0] = -sin_p / rho;  // ∂φ/∂x
+        Jinv[2][1] = cos_p / rho;   // ∂φ/∂y
+        Jinv[2][2] = 0.0;           // ∂φ/∂z
     }
 
-    void transformChristoffelCartToSph(const ChristoffelSymbols& gamma_cart,
-                                        double r, double theta, double phi,
-                                        double Gamma[4][4][4]) {
+    void transformChristoffelCartToSph(const ChristoffelSymbols& gamma_cart, double r, double theta,
+                                       double phi, double Gamma[4][4][4]) {
         double J3[3][3], Jinv3[3][3];
         computeJacobian(r, theta, phi, J3, Jinv3);
 
         // Extend the spatial Jacobians to 4x4 (time maps to itself), so the
         // transform covers every component, including mixed time indices that
         // the previous version silently dropped.
-        double B[4][4] = {{0}};   // B[a][mu] = dx^a/dx'^mu
-        double A[4][4] = {{0}};   // A[lam][a] = dx'^lam/dx^a
+        double B[4][4] = {{0}};  // B[a][mu] = dx^a/dx'^mu
+        double A[4][4] = {{0}};  // A[lam][a] = dx'^lam/dx^a
         B[0][0] = 1.0;
         A[0][0] = 1.0;
         for (int i = 0; i < 3; i++) {
@@ -284,14 +287,14 @@ private:
         // symbols (Gamma^r_theta,theta = -r and its relatives), and omitting
         // them made even Minkowski disagree with the textbook values.
         double st = std::sin(theta), ct = std::cos(theta);
-        double sp = std::sin(phi),   cp = std::cos(phi);
+        double sp = std::sin(phi), cp = std::cos(phi);
         double Hd[4][4][4] = {{{0}}};
         // x = r st cp
-        Hd[1][1][2] = Hd[1][2][1] = ct * cp;        // d2x/dr dtheta
-        Hd[1][1][3] = Hd[1][3][1] = -st * sp;       // d2x/dr dphi
-        Hd[1][2][2] = -r * st * cp;                 // d2x/dtheta2
-        Hd[1][2][3] = Hd[1][3][2] = -r * ct * sp;   // d2x/dtheta dphi
-        Hd[1][3][3] = -r * st * cp;                 // d2x/dphi2
+        Hd[1][1][2] = Hd[1][2][1] = ct * cp;       // d2x/dr dtheta
+        Hd[1][1][3] = Hd[1][3][1] = -st * sp;      // d2x/dr dphi
+        Hd[1][2][2] = -r * st * cp;                // d2x/dtheta2
+        Hd[1][2][3] = Hd[1][3][2] = -r * ct * sp;  // d2x/dtheta dphi
+        Hd[1][3][3] = -r * st * cp;                // d2x/dphi2
         // y = r st sp
         Hd[2][1][2] = Hd[2][2][1] = ct * sp;
         Hd[2][1][3] = Hd[2][3][1] = st * cp;
@@ -313,8 +316,7 @@ private:
                         if (Ala == 0.0) continue;
                         for (int b = 0; b < 4; b++) {
                             for (int c = 0; c < 4; c++) {
-                                sum += Ala * B[b][mu] * B[c][nu]
-                                     * gamma_cart.gamma(a, b, c).real;
+                                sum += Ala * B[b][mu] * B[c][nu] * gamma_cart.gamma(a, b, c).real;
                             }
                         }
                         sum += Ala * Hd[a][mu][nu];
@@ -330,7 +332,7 @@ private:
 // Benchmark Test Fixture
 // =============================================================================
 class ChristoffelBenchmark : public ::testing::Test {
-protected:
+  protected:
     static constexpr double M = 1.0;
     static constexpr double a = 0.9;  // High spin for maximum difference
     static constexpr int NUM_ITERATIONS = 10000;
@@ -345,13 +347,13 @@ protected:
     };
 
     std::vector<TestPoint> testPoints_{
-        {10.0, M_PI/4, 0.0, "Far field, mid-latitude"},
-        {10.0, M_PI/2, 0.0, "Far field, equatorial"},
+        {10.0, M_PI / 4, 0.0, "Far field, mid-latitude"},
+        {10.0, M_PI / 2, 0.0, "Far field, equatorial"},
         {10.0, 0.01, 0.0, "Far field, near pole"},
-        {3.0, M_PI/2, 0.0, "Photon sphere, equatorial"},
+        {3.0, M_PI / 2, 0.0, "Photon sphere, equatorial"},
         {3.0, 0.01, 0.0, "Photon sphere, near pole"},
-        {2.5, M_PI/2, 0.0, "Near horizon, equatorial"},
-        {50.0, M_PI/2, 0.0, "Very far field"},
+        {2.5, M_PI / 2, 0.0, "Near horizon, equatorial"},
+        {50.0, M_PI / 2, 0.0, "Very far field"},
     };
 
     double runSphericalBenchmark(const TestPoint& pt) {
@@ -402,14 +404,12 @@ TEST_F(ChristoffelBenchmark, SphericalVsCartesianPerformance) {
     std::cout << "=============================================================================\n";
     std::cout << "CHRISTOFFEL COMPUTATION BENCHMARK: Spherical vs Cartesian Kerr-Schild\n";
     std::cout << "=============================================================================\n";
-    std::cout << "Parameters: M = " << M << ", a = " << a << " (spin = " << a/M << ")\n";
+    std::cout << "Parameters: M = " << M << ", a = " << a << " (spin = " << a / M << ")\n";
     std::cout << "Iterations: " << NUM_ITERATIONS << " per test point\n\n";
 
-    std::cout << std::setw(35) << std::left << "Test Point"
-              << std::setw(15) << "Spherical (µs)"
-              << std::setw(15) << "Cartesian (µs)"
-              << std::setw(10) << "Ratio"
-              << std::setw(15) << "Winner" << "\n";
+    std::cout << std::setw(35) << std::left << "Test Point" << std::setw(15) << "Spherical (µs)"
+              << std::setw(15) << "Cartesian (µs)" << std::setw(10) << "Ratio" << std::setw(15)
+              << "Winner" << "\n";
     std::cout << std::string(90, '-') << "\n";
 
     double total_sph = 0, total_cart = 0;
@@ -424,21 +424,21 @@ TEST_F(ChristoffelBenchmark, SphericalVsCartesianPerformance) {
         total_cart += cart_time;
 
         const char* winner = (sph_time < cart_time) ? "SPHERICAL" : "CARTESIAN";
-        if (sph_time < cart_time) sph_wins++; else cart_wins++;
+        if (sph_time < cart_time)
+            sph_wins++;
+        else
+            cart_wins++;
 
-        std::cout << std::setw(35) << std::left << pt.name
-                  << std::setw(15) << std::fixed << std::setprecision(3) << sph_time
-                  << std::setw(15) << cart_time
-                  << std::setw(10) << std::setprecision(2) << ratio << "x"
-                  << std::setw(15) << winner << "\n";
+        std::cout << std::setw(35) << std::left << pt.name << std::setw(15) << std::fixed
+                  << std::setprecision(3) << sph_time << std::setw(15) << cart_time << std::setw(10)
+                  << std::setprecision(2) << ratio << "x" << std::setw(15) << winner << "\n";
     }
 
     std::cout << std::string(90, '-') << "\n";
-    std::cout << std::setw(35) << std::left << "TOTAL"
-              << std::setw(15) << std::fixed << std::setprecision(3) << total_sph
-              << std::setw(15) << total_cart
-              << std::setw(10) << std::setprecision(2) << (total_cart / total_sph) << "x"
-              << std::setw(15) << (total_sph < total_cart ? "SPHERICAL" : "CARTESIAN") << "\n\n";
+    std::cout << std::setw(35) << std::left << "TOTAL" << std::setw(15) << std::fixed
+              << std::setprecision(3) << total_sph << std::setw(15) << total_cart << std::setw(10)
+              << std::setprecision(2) << (total_cart / total_sph) << "x" << std::setw(15)
+              << (total_sph < total_cart ? "SPHERICAL" : "CARTESIAN") << "\n\n";
 
     std::cout << "SUMMARY:\n";
     std::cout << "  Spherical wins: " << sph_wins << "/" << testPoints_.size() << " test points\n";
@@ -446,7 +446,8 @@ TEST_F(ChristoffelBenchmark, SphericalVsCartesianPerformance) {
     std::cout << "  Overall speedup: " << std::setprecision(2) << (total_cart / total_sph) << "x ";
     std::cout << (total_sph < total_cart ? "(Spherical faster)" : "(Cartesian faster)") << "\n";
 
-    std::cout << "\n=============================================================================\n";
+    std::cout
+        << "\n=============================================================================\n";
     std::cout << "RECOMMENDATION FOR ACTIVE DEVELOPMENT PLAN:\n";
     if (total_sph < total_cart) {
         std::cout << "  The SPHERICAL approach is faster. Phase 0's coordinate migration\n";
@@ -455,7 +456,8 @@ TEST_F(ChristoffelBenchmark, SphericalVsCartesianPerformance) {
     } else {
         std::cout << "  The CARTESIAN approach is faster. Proceed with Phase 0.\n";
     }
-    std::cout << "=============================================================================\n\n";
+    std::cout
+        << "=============================================================================\n\n";
 
     // The test always passes - it's for informational purposes
     SUCCEED();
@@ -473,8 +475,12 @@ TEST_F(ChristoffelBenchmark, SphericalVsCartesianPerformance) {
 
 TEST(ChristoffelTransformTests, FlatSpaceReproducesTextbookSphericalSymbols) {
     CartesianKerrSchild flat(0.0, 0.0);
-    const struct { double r, theta, phi; } pts[] = {
-        {10.0, M_PI / 4, 0.3}, {3.0, M_PI / 2, 1.2}, {50.0, 1.0, 4.0},
+    const struct {
+        double r, theta, phi;
+    } pts[] = {
+        {10.0, M_PI / 4, 0.3},
+        {3.0, M_PI / 2, 1.2},
+        {50.0, 1.0, 4.0},
     };
     for (const auto& pt : pts) {
         double G[4][4][4];
@@ -482,24 +488,23 @@ TEST(ChristoffelTransformTests, FlatSpaceReproducesTextbookSphericalSymbols) {
 
         const double st = std::sin(pt.theta), ct = std::cos(pt.theta);
         // The complete set of non-zero flat-space spherical symbols
-        EXPECT_NEAR(G[1][2][2], -pt.r, 1e-9);                 // Gamma^r_theta,theta
-        EXPECT_NEAR(G[1][3][3], -pt.r * st * st, 1e-9);       // Gamma^r_phi,phi
-        EXPECT_NEAR(G[2][1][2], 1.0 / pt.r, 1e-9);            // Gamma^theta_r,theta
-        EXPECT_NEAR(G[2][3][3], -st * ct, 1e-9);              // Gamma^theta_phi,phi
-        EXPECT_NEAR(G[3][1][3], 1.0 / pt.r, 1e-9);            // Gamma^phi_r,phi
-        EXPECT_NEAR(G[3][2][3], ct / st, 1e-9);               // Gamma^phi_theta,phi
+        EXPECT_NEAR(G[1][2][2], -pt.r, 1e-9);            // Gamma^r_theta,theta
+        EXPECT_NEAR(G[1][3][3], -pt.r * st * st, 1e-9);  // Gamma^r_phi,phi
+        EXPECT_NEAR(G[2][1][2], 1.0 / pt.r, 1e-9);       // Gamma^theta_r,theta
+        EXPECT_NEAR(G[2][3][3], -st * ct, 1e-9);         // Gamma^theta_phi,phi
+        EXPECT_NEAR(G[3][1][3], 1.0 / pt.r, 1e-9);       // Gamma^phi_r,phi
+        EXPECT_NEAR(G[3][2][3], ct / st, 1e-9);          // Gamma^phi_theta,phi
 
         // Everything else vanishes in flat space
         double offBudget = 0.0;
         for (int l = 0; l < 4; l++)
             for (int m = 0; m < 4; m++)
                 for (int n = 0; n < 4; n++) {
-                    bool expected =
-                        (l == 1 && m == 2 && n == 2) || (l == 1 && m == 3 && n == 3) ||
-                        (l == 2 && ((m == 1 && n == 2) || (m == 2 && n == 1))) ||
-                        (l == 2 && m == 3 && n == 3) ||
-                        (l == 3 && ((m == 1 && n == 3) || (m == 3 && n == 1))) ||
-                        (l == 3 && ((m == 2 && n == 3) || (m == 3 && n == 2)));
+                    bool expected = (l == 1 && m == 2 && n == 2) || (l == 1 && m == 3 && n == 3) ||
+                                    (l == 2 && ((m == 1 && n == 2) || (m == 2 && n == 1))) ||
+                                    (l == 2 && m == 3 && n == 3) ||
+                                    (l == 3 && ((m == 1 && n == 3) || (m == 3 && n == 1))) ||
+                                    (l == 3 && ((m == 2 && n == 3) || (m == 3 && n == 2)));
                     if (!expected) offBudget = std::max(offBudget, std::abs(G[l][m][n]));
                 }
         EXPECT_LT(offBudget, 1e-9) << "spurious component in flat space";
@@ -508,8 +513,12 @@ TEST(ChristoffelTransformTests, FlatSpaceReproducesTextbookSphericalSymbols) {
 
 TEST(ChristoffelTransformTests, KerrTransformedConnectionSymmetricAndFinite) {
     CartesianKerrSchild kerr(1.0, 0.9);
-    const struct { double r, theta, phi; } pts[] = {
-        {10.0, M_PI / 4, 0.0}, {3.0, M_PI / 2, 0.0}, {2.5, M_PI / 2, 0.0},
+    const struct {
+        double r, theta, phi;
+    } pts[] = {
+        {10.0, M_PI / 4, 0.0},
+        {3.0, M_PI / 2, 0.0},
+        {2.5, M_PI / 2, 0.0},
     };
     for (const auto& pt : pts) {
         double G[4][4][4];
@@ -519,8 +528,7 @@ TEST(ChristoffelTransformTests, KerrTransformedConnectionSymmetricAndFinite) {
                 for (int n = m + 1; n < 4; n++) {
                     ASSERT_TRUE(std::isfinite(G[l][m][n]));
                     EXPECT_NEAR(G[l][m][n], G[l][n][m], 1e-9)
-                        << "asymmetry at (" << l << "," << m << "," << n
-                        << ") r=" << pt.r;
+                        << "asymmetry at (" << l << "," << m << "," << n << ") r=" << pt.r;
                 }
             }
         }
@@ -550,14 +558,14 @@ TEST_F(ChristoffelBenchmark, PoleHandlingComparison) {
             }
         }
 
-        std::cout << "  θ = " << std::setprecision(4) << theta
-                  << " (" << (theta < M_PI/2 ? "north" : "south") << " pole): "
-                  << "Spherical " << (sph_ok ? "OK" : "NaN/Inf") << ", "
-                  << "Cartesian " << (cart_ok ? "OK" : "NaN/Inf") << "\n";
+        std::cout << "  θ = " << std::setprecision(4) << theta << " ("
+                  << (theta < M_PI / 2 ? "north" : "south") << " pole): " << "Spherical "
+                  << (sph_ok ? "OK" : "NaN/Inf") << ", " << "Cartesian "
+                  << (cart_ok ? "OK" : "NaN/Inf") << "\n";
 
         EXPECT_TRUE(sph_ok) << "Spherical has NaN/Inf at θ=" << theta;
         EXPECT_TRUE(cart_ok) << "Cartesian has NaN/Inf at θ=" << theta;
     }
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

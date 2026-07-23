@@ -223,8 +223,7 @@ int ConfigCommand::ShowPaths(const GlobalOptions& globals) {
         nlohmann::json j;
         j["search_paths"] = nlohmann::json::array();
         for (const auto& path : paths) {
-            j["search_paths"].push_back(
-                {{"path", path.string()}, {"exists", fs::exists(path)}});
+            j["search_paths"].push_back({{"path", path.string()}, {"exists", fs::exists(path)}});
         }
         if (found_path.has_value()) {
             j["active_config"] = found_path->string();

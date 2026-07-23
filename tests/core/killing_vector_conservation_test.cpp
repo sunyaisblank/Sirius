@@ -17,13 +17,15 @@
 // TESTS: Schwarzschild, Kerr, Reissner-Nordström
 
 #define _USE_MATH_DEFINES
-#include <cmath>
-#include <gtest/gtest.h>
-#include <vector>
-#include "sirius/core/tensor.h"
-#include "sirius/core/metrics/metric.h"
-#include "sirius/core/metrics/kerr_schild_family.h"  // Unified Kerr-Schild Family
 #include "sirius/core/geodesic_integrator.h"
+#include "sirius/core/metrics/kerr_schild_family.h"  // Unified Kerr-Schild Family
+#include "sirius/core/metrics/metric.h"
+#include "sirius/core/tensor.h"
+
+#include <gtest/gtest.h>
+
+#include <cmath>
+#include <vector>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -34,16 +36,16 @@ using namespace sirius::core;
 // These tolerances define pass/fail criteria for build gating.
 // Failures indicate fundamental integrator issues that must be fixed.
 
-constexpr double MANDATORY_ENERGY_TOLERANCE = 1e-4;     // |ΔE/E| < 10^-4
-constexpr double MANDATORY_L_TOLERANCE = 1e-4;          // |ΔL/L| < 10^-4
-constexpr int INTEGRATION_STEPS = 500;                   // Sufficient for meaningful test
+constexpr double MANDATORY_ENERGY_TOLERANCE = 1e-4;  // |ΔE/E| < 10^-4
+constexpr double MANDATORY_L_TOLERANCE = 1e-4;       // |ΔL/L| < 10^-4
+constexpr int INTEGRATION_STEPS = 500;               // Sufficient for meaningful test
 
 // =============================================================================
 // Test Fixture
 // =============================================================================
 
 class MandatoryKillingTests : public ::testing::Test {
-protected:
+  protected:
     IntegratorConfig config;
 
     void SetUp() override {
@@ -71,8 +73,8 @@ protected:
         double L = 0.0;
         Vec4 xi;
         xi(0) = 0.0;
-        xi(1) = -pos(2); // -y
-        xi(2) = pos(1);  // x
+        xi(1) = -pos(2);  // -y
+        xi(2) = pos(1);   // x
         xi(3) = 0.0;
 
         for (int mu = 0; mu < 4; ++mu) {
@@ -84,8 +86,8 @@ protected:
     }
 
     // Initialize lightray from spherical to Cartesian
-    Lightray createLightray(const Vec4& spherical_pos, double v_r, double v_theta,
-                           double v_phi, IMetric* metric) {
+    Lightray createLightray(const Vec4& spherical_pos, double v_r, double v_theta, double v_phi,
+                            IMetric* metric) {
         Lightray ray;
 
         double r = spherical_pos(1);
@@ -108,9 +110,11 @@ protected:
         ray.step_size = config.initial_step;
         ray.bounce_count = 0;
 
-        ray.velocity(1) = v_r * sin_th * cos_ph + r * v_theta * cos_th * cos_ph - r * v_phi * sin_th * sin_ph;
-        ray.velocity(2) = v_r * sin_th * sin_ph + r * v_theta * cos_th * sin_ph + r * v_phi * sin_th * cos_ph;
-        ray.velocity(3) = v_r * cos_th          - r * v_theta * sin_th;
+        ray.velocity(1) =
+            v_r * sin_th * cos_ph + r * v_theta * cos_th * cos_ph - r * v_phi * sin_th * sin_ph;
+        ray.velocity(2) =
+            v_r * sin_th * sin_ph + r * v_theta * cos_th * sin_ph + r * v_phi * sin_th * cos_ph;
+        ray.velocity(3) = v_r * cos_th - r * v_theta * sin_th;
 
         Metric4d g;
         Tensor<Dual<double>, 4, 4, 4> dg;
@@ -126,8 +130,7 @@ protected:
 // MANDATORY: Schwarzschild Energy Conservation
 // =============================================================================
 
-TEST_F(MandatoryKillingTests, SchwarzschildEnergyConservation)
-{
+TEST_F(MandatoryKillingTests, SchwarzschildEnergyConservation) {
     // MANDATORY: Schwarzschild is stationary → E must be conserved
     sirius::core::KerrSchildFamily metric{sirius::core::KerrSchildParams::Schwarzschild(1.0)};
 
@@ -150,9 +153,8 @@ TEST_F(MandatoryKillingTests, SchwarzschildEnergyConservation)
         bool success = Geodesic::IntegrateStepRk45(ray, &metric, config);
         if (!success || ray.terminated) break;
 
-        float r = std::sqrt(ray.position(1)*ray.position(1) +
-                           ray.position(2)*ray.position(2) +
-                           ray.position(3)*ray.position(3));
+        float r = std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
+                            ray.position(3) * ray.position(3));
         if (r < 2.5f || r > 100.0f) break;
 
         Metric4d g;
@@ -165,16 +167,15 @@ TEST_F(MandatoryKillingTests, SchwarzschildEnergyConservation)
     }
 
     EXPECT_LT(max_drift, MANDATORY_ENERGY_TOLERANCE)
-        << "MANDATORY: Schwarzschild energy drift " << max_drift
-        << " exceeds tolerance " << MANDATORY_ENERGY_TOLERANCE;
+        << "MANDATORY: Schwarzschild energy drift " << max_drift << " exceeds tolerance "
+        << MANDATORY_ENERGY_TOLERANCE;
 }
 
 // =============================================================================
 // MANDATORY: Schwarzschild Angular Momentum Conservation
 // =============================================================================
 
-TEST_F(MandatoryKillingTests, SchwarzschildAngularMomentumConservation)
-{
+TEST_F(MandatoryKillingTests, SchwarzschildAngularMomentumConservation) {
     // MANDATORY: Schwarzschild is spherically symmetric → L must be conserved
     sirius::core::KerrSchildFamily metric{sirius::core::KerrSchildParams::Schwarzschild(1.0)};
 
@@ -201,9 +202,8 @@ TEST_F(MandatoryKillingTests, SchwarzschildAngularMomentumConservation)
         bool success = Geodesic::IntegrateStepRk45(ray, &metric, config);
         if (!success || ray.terminated) break;
 
-        float r = std::sqrt(ray.position(1)*ray.position(1) +
-                           ray.position(2)*ray.position(2) +
-                           ray.position(3)*ray.position(3));
+        float r = std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
+                            ray.position(3) * ray.position(3));
         if (r < 2.5f || r > 100.0f) break;
 
         Metric4d g;
@@ -215,17 +215,15 @@ TEST_F(MandatoryKillingTests, SchwarzschildAngularMomentumConservation)
         max_drift = std::max(max_drift, drift);
     }
 
-    EXPECT_LT(max_drift, MANDATORY_L_TOLERANCE)
-        << "MANDATORY: Schwarzschild L drift " << max_drift
-        << " exceeds tolerance " << MANDATORY_L_TOLERANCE;
+    EXPECT_LT(max_drift, MANDATORY_L_TOLERANCE) << "MANDATORY: Schwarzschild L drift " << max_drift
+                                                << " exceeds tolerance " << MANDATORY_L_TOLERANCE;
 }
 
 // =============================================================================
 // MANDATORY: Kerr Energy Conservation
 // =============================================================================
 
-TEST_F(MandatoryKillingTests, KerrEnergyConservation)
-{
+TEST_F(MandatoryKillingTests, KerrEnergyConservation) {
     // MANDATORY: Kerr is stationary → E must be conserved
     sirius::core::KerrSchildFamily metric{sirius::core::KerrSchildParams::Kerr(1.0, 0.9)};
 
@@ -248,9 +246,8 @@ TEST_F(MandatoryKillingTests, KerrEnergyConservation)
         bool success = Geodesic::IntegrateStepRk45(ray, &metric, config);
         if (!success || ray.terminated) break;
 
-        float r = std::sqrt(ray.position(1)*ray.position(1) +
-                           ray.position(2)*ray.position(2) +
-                           ray.position(3)*ray.position(3));
+        float r = std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
+                            ray.position(3) * ray.position(3));
         if (r < 2.0f || r > 100.0f) break;
 
         Metric4d g;
@@ -263,16 +260,15 @@ TEST_F(MandatoryKillingTests, KerrEnergyConservation)
     }
 
     EXPECT_LT(max_drift, MANDATORY_ENERGY_TOLERANCE)
-        << "MANDATORY: Kerr energy drift " << max_drift
-        << " exceeds tolerance " << MANDATORY_ENERGY_TOLERANCE;
+        << "MANDATORY: Kerr energy drift " << max_drift << " exceeds tolerance "
+        << MANDATORY_ENERGY_TOLERANCE;
 }
 
 // =============================================================================
 // MANDATORY: Kerr Angular Momentum Conservation
 // =============================================================================
 
-TEST_F(MandatoryKillingTests, KerrAngularMomentumConservation)
-{
+TEST_F(MandatoryKillingTests, KerrAngularMomentumConservation) {
     // MANDATORY: Kerr is axisymmetric → L_z must be conserved
     sirius::core::KerrSchildFamily metric{sirius::core::KerrSchildParams::Kerr(1.0, 0.7)};
 
@@ -299,9 +295,8 @@ TEST_F(MandatoryKillingTests, KerrAngularMomentumConservation)
         bool success = Geodesic::IntegrateStepRk45(ray, &metric, config);
         if (!success || ray.terminated) break;
 
-        float r = std::sqrt(ray.position(1)*ray.position(1) +
-                           ray.position(2)*ray.position(2) +
-                           ray.position(3)*ray.position(3));
+        float r = std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
+                            ray.position(3) * ray.position(3));
         if (r < 2.0f || r > 100.0f) break;
 
         Metric4d g;
@@ -313,19 +308,18 @@ TEST_F(MandatoryKillingTests, KerrAngularMomentumConservation)
         max_drift = std::max(max_drift, drift);
     }
 
-    EXPECT_LT(max_drift, MANDATORY_L_TOLERANCE)
-        << "MANDATORY: Kerr L drift " << max_drift
-        << " exceeds tolerance " << MANDATORY_L_TOLERANCE;
+    EXPECT_LT(max_drift, MANDATORY_L_TOLERANCE) << "MANDATORY: Kerr L drift " << max_drift
+                                                << " exceeds tolerance " << MANDATORY_L_TOLERANCE;
 }
 
 // =============================================================================
 // MANDATORY: Reissner-Nordström Energy Conservation
 // =============================================================================
 
-TEST_F(MandatoryKillingTests, ReissnerNordstromEnergyConservation)
-{
+TEST_F(MandatoryKillingTests, ReissnerNordstromEnergyConservation) {
     // MANDATORY: RN is stationary → E must be conserved
-    sirius::core::KerrSchildFamily metric{sirius::core::KerrSchildParams::ReissnerNordstrom(1.0, 0.5)};
+    sirius::core::KerrSchildFamily metric{
+        sirius::core::KerrSchildParams::ReissnerNordstrom(1.0, 0.5)};
 
     Vec4 pos;
     pos(0) = 0.0;
@@ -346,9 +340,8 @@ TEST_F(MandatoryKillingTests, ReissnerNordstromEnergyConservation)
         bool success = Geodesic::IntegrateStepRk45(ray, &metric, config);
         if (!success || ray.terminated) break;
 
-        float r = std::sqrt(ray.position(1)*ray.position(1) +
-                           ray.position(2)*ray.position(2) +
-                           ray.position(3)*ray.position(3));
+        float r = std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
+                            ray.position(3) * ray.position(3));
         if (r < 2.0f || r > 100.0f) break;
 
         Metric4d g;
@@ -361,8 +354,8 @@ TEST_F(MandatoryKillingTests, ReissnerNordstromEnergyConservation)
     }
 
     EXPECT_LT(max_drift, MANDATORY_ENERGY_TOLERANCE)
-        << "MANDATORY: RN energy drift " << max_drift
-        << " exceeds tolerance " << MANDATORY_ENERGY_TOLERANCE;
+        << "MANDATORY: RN energy drift " << max_drift << " exceeds tolerance "
+        << MANDATORY_ENERGY_TOLERANCE;
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

@@ -47,8 +47,7 @@ struct BoyerLindquistVector {
 // dphi_BL = dphi_KS - (a/Delta) dr. The twist sign is fixed by requiring the
 // transported tangent to stay null in the oracle chart (asserted below).
 // Reference: Visser, "The Kerr spacetime" (arXiv:0706.0622), Kerr-Schild forms.
-BoyerLindquistVector KerrSchildToBoyerLindquist(double M, double a, const Vec4& X,
-                                                const Vec4& V) {
+BoyerLindquistVector KerrSchildToBoyerLindquist(double M, double a, const Vec4& X, const Vec4& V) {
     const double x = X(1), y = X(2), z = X(3);
     const double a2 = a * a;
     const double R2 = x * x + y * y + z * z;
@@ -98,17 +97,14 @@ std::complex<double> WalkerPenroseFromBoyerLindquist(const BoyerLindquistVector&
                                                      const BoyerLindquistVector& F, double a) {
     const double r = K.r, theta = K.theta;
     const double sinth = std::sin(theta), costh = std::cos(theta), sin2th = sinth * sinth;
-    const double A =
-        (K.kt * F.kr - K.kr * F.kt) + a * sin2th * (K.kr * F.kphi - K.kphi * F.kr);
+    const double A = (K.kt * F.kr - K.kr * F.kt) + a * sin2th * (K.kr * F.kphi - K.kphi * F.kr);
     const double B = ((r * r + a * a) * (K.kphi * F.ktheta - K.ktheta * F.kphi) -
                       a * (K.kt * F.ktheta - K.ktheta * F.kt)) *
                      sinth;
     return std::complex<double>(A, -B) * std::complex<double>(r, -a * costh);
 }
 
-double CartesianRadius(const Vec4& x) {
-    return std::sqrt(x(1) * x(1) + x(2) * x(2) + x(3) * x(3));
-}
+double CartesianRadius(const Vec4& x) { return std::sqrt(x(1) * x(1) + x(2) * x(2) + x(3) * x(3)); }
 
 }  // namespace
 
@@ -149,14 +145,16 @@ TEST(WalkerPenroseLivePath, ConservesConstantAndOrthonormality) {
     ASSERT_NEAR(ff0, 1.0, 1e-12);
 
     const BoyerLindquistVector K0 = KerrSchildToBoyerLindquist(M, a, ray.position, ray.velocity);
-    const BoyerLindquistVector F0 = KerrSchildToBoyerLindquist(M, a, ray.position, ray.polarisation);
+    const BoyerLindquistVector F0 =
+        KerrSchildToBoyerLindquist(M, a, ray.position, ray.polarisation);
     const std::complex<double> kappa0 = WalkerPenroseFromBoyerLindquist(K0, F0, a);
     ASSERT_GT(std::abs(kappa0), 1e-6);
 
     double max_fk = 0, max_ff = 0, max_kappa = 0;
     bool escaped = false;
     for (int i = 0; i < 200000; ++i) {
-        const double r_kerr = metric.ComputeKerrRadius(ray.position(1), ray.position(2), ray.position(3));
+        const double r_kerr =
+            metric.ComputeKerrRadius(ray.position(1), ray.position(2), ray.position(3));
         if (r_kerr <= metric.OuterHorizonRadius() * 1.05) break;
         if (CartesianRadius(ray.position) > 55.0) {
             escaped = true;
@@ -164,11 +162,13 @@ TEST(WalkerPenroseLivePath, ConservesConstantAndOrthonormality) {
         }
         ParallelTransportStep(metric, ray, 0.01);
         metric.Evaluate(ray.position, g, dg);
-        max_fk = std::max(max_fk, std::abs(TensorOps::InnerProduct(ray.polarisation, ray.velocity, g)));
-        max_ff =
-            std::max(max_ff, std::abs(TensorOps::InnerProduct(ray.polarisation, ray.polarisation, g) - 1.0));
+        max_fk =
+            std::max(max_fk, std::abs(TensorOps::InnerProduct(ray.polarisation, ray.velocity, g)));
+        max_ff = std::max(
+            max_ff, std::abs(TensorOps::InnerProduct(ray.polarisation, ray.polarisation, g) - 1.0));
         const BoyerLindquistVector K = KerrSchildToBoyerLindquist(M, a, ray.position, ray.velocity);
-        const BoyerLindquistVector F = KerrSchildToBoyerLindquist(M, a, ray.position, ray.polarisation);
+        const BoyerLindquistVector F =
+            KerrSchildToBoyerLindquist(M, a, ray.position, ray.polarisation);
         const std::complex<double> kappa = WalkerPenroseFromBoyerLindquist(K, F, a);
         max_kappa = std::max(max_kappa, std::abs(kappa - kappa0) / std::abs(kappa0));
     }
@@ -212,7 +212,8 @@ TEST(WalkerPenroseLivePath, AgreesWithOracleAcrossCharts) {
 
     // Transform the shared initial data to Boyer-Lindquist for the oracle.
     const BoyerLindquistVector K0 = KerrSchildToBoyerLindquist(M, a, ray.position, ray.velocity);
-    const BoyerLindquistVector F0 = KerrSchildToBoyerLindquist(M, a, ray.position, ray.polarisation);
+    const BoyerLindquistVector F0 =
+        KerrSchildToBoyerLindquist(M, a, ray.position, ray.polarisation);
 
     sirius::oracle::Vec4d x_bl(0.0, K0.r, K0.theta, 0.0);
     sirius::oracle::Vec4d k_bl(K0.kt, K0.kr, K0.ktheta, K0.kphi);
@@ -250,7 +251,8 @@ TEST(WalkerPenroseLivePath, AgreesWithOracleAcrossCharts) {
     std::complex<double> kappa_live_final = kappa_live0;
     bool escaped = false;
     for (int i = 0; i < 200000; ++i) {
-        const double r_kerr = live.ComputeKerrRadius(ray.position(1), ray.position(2), ray.position(3));
+        const double r_kerr =
+            live.ComputeKerrRadius(ray.position(1), ray.position(2), ray.position(3));
         if (r_kerr <= live.OuterHorizonRadius() * 1.05) break;
         if (CartesianRadius(ray.position) > 55.0) {
             escaped = true;
@@ -258,7 +260,8 @@ TEST(WalkerPenroseLivePath, AgreesWithOracleAcrossCharts) {
         }
         ParallelTransportStep(live, ray, 0.01);
         const BoyerLindquistVector K = KerrSchildToBoyerLindquist(M, a, ray.position, ray.velocity);
-        const BoyerLindquistVector F = KerrSchildToBoyerLindquist(M, a, ray.position, ray.polarisation);
+        const BoyerLindquistVector F =
+            KerrSchildToBoyerLindquist(M, a, ray.position, ray.polarisation);
         kappa_live_final = WalkerPenroseFromBoyerLindquist(K, F, a);
     }
     ASSERT_TRUE(escaped);

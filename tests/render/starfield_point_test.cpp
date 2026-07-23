@@ -85,7 +85,8 @@ TEST(StarfieldPointTest, BeamAccumulationFiniteAndNonConstant) {
         EXPECT_GE(r, 0.0f);
         double lum = r + g + b;
         if (lum > 1e-6) lit++;
-        if (first < 0) first = lum;
+        if (first < 0)
+            first = lum;
         else if (std::abs(lum - first) > 1e-6)
             non_constant = true;
     }

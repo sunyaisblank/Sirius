@@ -54,13 +54,12 @@ TEST(PinholeCameraTest, RayDirectionIsNormalised) {
     for (auto& pos : positions) {
         CameraRay ray = camera.GenerateRay(pos[0], pos[1]);
         // direction(0) is always 0 (time), so spatial norm:
-        float spatial_norm = std::sqrt(
-            ray.direction(1) * ray.direction(1) +
-            ray.direction(2) * ray.direction(2) +
-            ray.direction(3) * ray.direction(3));
+        float spatial_norm =
+            std::sqrt(ray.direction(1) * ray.direction(1) + ray.direction(2) * ray.direction(2) +
+                      ray.direction(3) * ray.direction(3));
         EXPECT_NEAR(spatial_norm, 1.0f, 1e-5f)
-            << "Spatial direction should be unit length at pixel ("
-            << pos[0] << ", " << pos[1] << ")";
+            << "Spatial direction should be unit length at pixel (" << pos[0] << ", " << pos[1]
+            << ")";
     }
 }
 
@@ -155,12 +154,10 @@ TEST(ThinLensCameraTest, CentreRayWithDefaultSampling) {
     CameraRay ray = camera.GenerateRay(50, 50, 0.5f, 0.5f);
 
     // Should produce a valid direction
-    float spatial_norm = std::sqrt(
-        ray.direction(1) * ray.direction(1) +
-        ray.direction(2) * ray.direction(2) +
-        ray.direction(3) * ray.direction(3));
-    EXPECT_NEAR(spatial_norm, 1.0f, 1e-4f)
-        << "ThinLens direction should be unit length";
+    float spatial_norm =
+        std::sqrt(ray.direction(1) * ray.direction(1) + ray.direction(2) * ray.direction(2) +
+                  ray.direction(3) * ray.direction(3));
+    EXPECT_NEAR(spatial_norm, 1.0f, 1e-4f) << "ThinLens direction should be unit length";
 }
 
 TEST(ThinLensCameraTest, DifferentSamplesGiveDifferentRays) {
@@ -324,8 +321,7 @@ TEST(ICameraTest, SetConfigUpdatesRayGeneration) {
     camera.SetConfig(config);
 
     CameraRay ray = camera.GenerateRay(25, 25);
-    EXPECT_FLOAT_EQ(ray.origin(1), 10.0f)
-        << "Origin should reflect updated config";
+    EXPECT_FLOAT_EQ(ray.origin(1), 10.0f) << "Origin should reflect updated config";
 }
 
 }  // namespace sirius::test

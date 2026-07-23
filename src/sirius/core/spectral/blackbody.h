@@ -24,9 +24,14 @@ struct Rgb {
     Rgb() : r(0), g(0), b(0) {}
     Rgb(float r_, float g_, float b_) : r(r_), g(g_), b(b_) {}
 
-    Rgb operator*(float s) const { return Rgb(r*s, g*s, b*s); }
-    Rgb operator+(const Rgb& o) const { return Rgb(r+o.r, g+o.g, b+o.b); }
-    Rgb& operator+=(const Rgb& o) { r+=o.r; g+=o.g; b+=o.b; return *this; }
+    Rgb operator*(float s) const { return Rgb(r * s, g * s, b * s); }
+    Rgb operator+(const Rgb& o) const { return Rgb(r + o.r, g + o.g, b + o.b); }
+    Rgb& operator+=(const Rgb& o) {
+        r += o.r;
+        g += o.g;
+        b += o.b;
+        return *this;
+    }
 };
 
 // CIE 1931 XYZ colour.
@@ -36,9 +41,14 @@ struct Xyz {
     Xyz() : X(0), Y(0), Z(0) {}
     Xyz(float x, float y, float z) : X(x), Y(y), Z(z) {}
 
-    Xyz operator*(float s) const { return Xyz(X*s, Y*s, Z*s); }
-    Xyz operator+(const Xyz& o) const { return Xyz(X+o.X, Y+o.Y, Z+o.Z); }
-    Xyz& operator+=(const Xyz& o) { X+=o.X; Y+=o.Y; Z+=o.Z; return *this; }
+    Xyz operator*(float s) const { return Xyz(X * s, Y * s, Z * s); }
+    Xyz operator+(const Xyz& o) const { return Xyz(X + o.X, Y + o.Y, Z + o.Z); }
+    Xyz& operator+=(const Xyz& o) {
+        X += o.X;
+        Y += o.Y;
+        Z += o.Z;
+        return *this;
+    }
 };
 
 // Planck blackbody radiance B(lambda, T) = (2hc^2/lambda^5)/(exp(hc/lambda k T) - 1),
@@ -69,25 +79,22 @@ inline double CieX(double lambda_nm) {
     double t1 = (lambda_nm - 442.0) * ((lambda_nm < 442.0) ? 0.0624 : 0.0374);
     double t2 = (lambda_nm - 599.8) * ((lambda_nm < 599.8) ? 0.0264 : 0.0323);
     double t3 = (lambda_nm - 501.1) * ((lambda_nm < 501.1) ? 0.0490 : 0.0382);
-    return 0.362 * std::exp(-0.5 * t1 * t1)
-         + 1.056 * std::exp(-0.5 * t2 * t2)
-         - 0.065 * std::exp(-0.5 * t3 * t3);
+    return 0.362 * std::exp(-0.5 * t1 * t1) + 1.056 * std::exp(-0.5 * t2 * t2) -
+           0.065 * std::exp(-0.5 * t3 * t3);
 }
 
 // CIE 1931 Y colour matching function (Gaussian fit), lambda in nm.
 inline double CieY(double lambda_nm) {
     double t1 = (lambda_nm - 568.8) * ((lambda_nm < 568.8) ? 0.0213 : 0.0247);
     double t2 = (lambda_nm - 530.9) * ((lambda_nm < 530.9) ? 0.0613 : 0.0322);
-    return 0.821 * std::exp(-0.5 * t1 * t1)
-         + 0.286 * std::exp(-0.5 * t2 * t2);
+    return 0.821 * std::exp(-0.5 * t1 * t1) + 0.286 * std::exp(-0.5 * t2 * t2);
 }
 
 // CIE 1931 Z colour matching function (Gaussian fit), lambda in nm.
 inline double CieZ(double lambda_nm) {
     double t1 = (lambda_nm - 437.0) * ((lambda_nm < 437.0) ? 0.0845 : 0.0278);
     double t2 = (lambda_nm - 459.0) * ((lambda_nm < 459.0) ? 0.0385 : 0.0725);
-    return 1.217 * std::exp(-0.5 * t1 * t1)
-         + 0.681 * std::exp(-0.5 * t2 * t2);
+    return 1.217 * std::exp(-0.5 * t1 * t1) + 0.681 * std::exp(-0.5 * t2 * t2);
 }
 
 // Wavelength (nm) to CIE XYZ; zero outside the 380-780 nm visible range.
@@ -95,18 +102,15 @@ inline Xyz WavelengthToXyz(double lambda_nm) {
     if (lambda_nm < 380.0 || lambda_nm > 780.0) {
         return Xyz(0, 0, 0);
     }
-    return Xyz(
-        static_cast<float>(CieX(lambda_nm)),
-        static_cast<float>(CieY(lambda_nm)),
-        static_cast<float>(CieZ(lambda_nm))
-    );
+    return Xyz(static_cast<float>(CieX(lambda_nm)), static_cast<float>(CieY(lambda_nm)),
+               static_cast<float>(CieZ(lambda_nm)));
 }
 
 // XYZ to linear RGB via the sRGB D65 primaries.
 inline Rgb XyzToLinearRgb(const Xyz& xyz) {
-    float r =  3.2404542f * xyz.X - 1.5371385f * xyz.Y - 0.4985314f * xyz.Z;
+    float r = 3.2404542f * xyz.X - 1.5371385f * xyz.Y - 0.4985314f * xyz.Z;
     float g = -0.9692660f * xyz.X + 1.8760108f * xyz.Y + 0.0415560f * xyz.Z;
-    float b =  0.0556434f * xyz.X - 0.2040259f * xyz.Y + 1.0572252f * xyz.Z;
+    float b = 0.0556434f * xyz.X - 0.2040259f * xyz.Y + 1.0572252f * xyz.Z;
     return Rgb(r, g, b);
 }
 
@@ -115,16 +119,14 @@ inline float SrgbGamma(float linear) {
     if (linear <= 0.0031308f) {
         return 12.92f * linear;
     }
-    return 1.055f * std::pow(linear, 1.0f/2.4f) - 0.055f;
+    return 1.055f * std::pow(linear, 1.0f / 2.4f) - 0.055f;
 }
 
 // Linear RGB to gamma-corrected sRGB.
 inline Rgb LinearToSrgb(const Rgb& linear) {
-    return Rgb(
-        SrgbGamma(std::clamp(linear.r, 0.0f, 1.0f)),
-        SrgbGamma(std::clamp(linear.g, 0.0f, 1.0f)),
-        SrgbGamma(std::clamp(linear.b, 0.0f, 1.0f))
-    );
+    return Rgb(SrgbGamma(std::clamp(linear.r, 0.0f, 1.0f)),
+               SrgbGamma(std::clamp(linear.g, 0.0f, 1.0f)),
+               SrgbGamma(std::clamp(linear.b, 0.0f, 1.0f)));
 }
 
 // Blackbody temperature T (K) to normalised RGB (brightest channel = 1).
@@ -165,19 +167,11 @@ inline Rgb ApplyRedshift(const Rgb& color, float z) {
 
     if (z > 0) {
         // Redshift: move towards red.
-        return Rgb(
-            color.r,
-            color.g * factor,
-            color.b * factor * factor
-        );
+        return Rgb(color.r, color.g * factor, color.b * factor * factor);
     } else {
         // Blueshift: move towards blue.
         float inv = 1.0f + z;  // < 1 for blueshift.
-        return Rgb(
-            color.r * inv * inv,
-            color.g * inv,
-            color.b
-        );
+        return Rgb(color.r * inv * inv, color.g * inv, color.b);
     }
 }
 
@@ -210,8 +204,8 @@ inline double TotalRedshift(double g_tt_emit, double g_tt_obs, double velocity) 
 inline double LimbDarkeningCoeff(double lambda_nm) {
     // Linear interpolation between empirical values,
     // u(lambda) ~ 1.2 - 0.00114 * lambda(nm) over 400-800 nm.
-    constexpr double kUBlue = 0.9;    // u at 400 nm.
-    constexpr double kURed = 0.4;     // u at 700 nm.
+    constexpr double kUBlue = 0.9;  // u at 400 nm.
+    constexpr double kURed = 0.4;   // u at 700 nm.
     constexpr double kLambdaBlue = 400.0;
     constexpr double kLambdaRed = 700.0;
 

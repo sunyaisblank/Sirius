@@ -12,13 +12,13 @@ namespace sirius::core {
 // Result of a ray/disk intersection test.
 struct DiskIntersection {
     bool hit = false;            // True when the ray intersects the disk.
-    double r = 0.0;             // Radial coordinate at intersection [M].
-    double theta = 0.0;         // Polar angle at intersection [rad].
-    double phi = 0.0;           // Azimuthal angle at intersection [rad].
-    double z = 0.0;             // Height above the midplane [M].
-    double temperature = 0.0;   // Local temperature [K].
-    double density = 0.0;       // Local density [kg/m^3 or dimensionless].
-    double optical_depth = 0.0; // Optical depth to the surface.
+    double r = 0.0;              // Radial coordinate at intersection [M].
+    double theta = 0.0;          // Polar angle at intersection [rad].
+    double phi = 0.0;            // Azimuthal angle at intersection [rad].
+    double z = 0.0;              // Height above the midplane [M].
+    double temperature = 0.0;    // Local temperature [K].
+    double density = 0.0;        // Local density [kg/m^3 or dimensionless].
+    double optical_depth = 0.0;  // Optical depth to the surface.
 };
 
 // Emission properties at a disk point.

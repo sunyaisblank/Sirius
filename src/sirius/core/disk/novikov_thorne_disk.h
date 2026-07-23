@@ -28,12 +28,12 @@ namespace sirius::core {
 class AccretionDiskD : public IDiskModel {
   public:
     struct Config {
-        double M = 1.0;                // Black hole mass [M_sun].
-        double a_star = 0.0;           // Dimensionless spin a/M in [-1, 1].
-        double Mdot = 1e-8;            // Accretion rate [M_sun/year].
-        double r_inner = 0;            // Inner edge (0 = ISCO, auto-computed).
-        double r_outer = 500;          // Outer edge [GM/c^2].
-        double inclination = M_PI / 4; // Disk inclination to the observer [rad].
+        double M = 1.0;                 // Black hole mass [M_sun].
+        double a_star = 0.0;            // Dimensionless spin a/M in [-1, 1].
+        double Mdot = 1e-8;             // Accretion rate [M_sun/year].
+        double r_inner = 0;             // Inner edge (0 = ISCO, auto-computed).
+        double r_outer = 500;           // Outer edge [GM/c^2].
+        double inclination = M_PI / 4;  // Disk inclination to the observer [rad].
 
         void Validate() {
             if (M <= 0) M = 1.0;
@@ -123,7 +123,7 @@ class AccretionDiskD : public IDiskModel {
         double sqrtMr = std::sqrt(M * r);
         double sqrtR = std::sqrt(r);
 
-        double N = r * r - 2 * a * sqrtMr + a * a;   // r^2 - 2a sqrt(Mr) + a^2
+        double N = r * r - 2 * a * sqrtMr + a * a;      // r^2 - 2a sqrt(Mr) + a^2
         double D = r * r - 3 * M * r + 2 * a * sqrtMr;  // r^2 - 3Mr + 2a sqrt(Mr)
 
         // Guard D <= 0 (inside the ISCO).
@@ -178,25 +178,15 @@ class AccretionDiskD : public IDiskModel {
         // nodes avoid the ISCO boundary where the integrand is singular
         // (Abramowitz & Stegun, Table 25.4).
         static constexpr double kGlNodes[16] = {
-            -0.9894009349916499, -0.9445750230732326,
-            -0.8656312023878318, -0.7554044083550030,
-            -0.6178762444026438, -0.4580167776572274,
-            -0.2816035507792589, -0.0950125098376374,
-             0.0950125098376374,  0.2816035507792589,
-             0.4580167776572274,  0.6178762444026438,
-             0.7554044083550030,  0.8656312023878318,
-             0.9445750230732326,  0.9894009349916499
-        };
+            -0.9894009349916499, -0.9445750230732326, -0.8656312023878318, -0.7554044083550030,
+            -0.6178762444026438, -0.4580167776572274, -0.2816035507792589, -0.0950125098376374,
+            0.0950125098376374,  0.2816035507792589,  0.4580167776572274,  0.6178762444026438,
+            0.7554044083550030,  0.8656312023878318,  0.9445750230732326,  0.9894009349916499};
         static constexpr double kGlWeights[16] = {
-            0.0271524594117541, 0.0622535239386479,
-            0.0951585116824928, 0.1246289712555339,
-            0.1495959888165767, 0.1691565193950025,
-            0.1826034150449236, 0.1894506104550685,
-            0.1894506104550685, 0.1826034150449236,
-            0.1691565193950025, 0.1495959888165767,
-            0.1246289712555339, 0.0951585116824928,
-            0.0622535239386479, 0.0271524594117541
-        };
+            0.0271524594117541, 0.0622535239386479, 0.0951585116824928, 0.1246289712555339,
+            0.1495959888165767, 0.1691565193950025, 0.1826034150449236, 0.1894506104550685,
+            0.1894506104550685, 0.1826034150449236, 0.1691565193950025, 0.1495959888165767,
+            0.1246289712555339, 0.0951585116824928, 0.0622535239386479, 0.0271524594117541};
 
         // Map [-1, 1] -> [r_ISCO, r].
         double half_width = 0.5 * (r - r_isco_);
@@ -386,14 +376,14 @@ class AccretionDiskD : public IDiskModel {
     Config config_;
 
     // Derived quantities.
-    double m_kg_;      // Mass in kg.
-    double gm_;        // GM in SI.
-    double rs_;        // Schwarzschild radius in metres.
-    double a_;         // Dimensionless spin.
-    double r_isco_;    // ISCO radius in units of M.
-    double r_inner_;   // Inner edge in units of M.
-    double r_outer_;   // Outer edge in units of M.
-    double mdot_si_;   // Accretion rate in kg/s.
+    double m_kg_;     // Mass in kg.
+    double gm_;       // GM in SI.
+    double rs_;       // Schwarzschild radius in metres.
+    double a_;        // Dimensionless spin.
+    double r_isco_;   // ISCO radius in units of M.
+    double r_inner_;  // Inner edge in units of M.
+    double r_outer_;  // Outer edge in units of M.
+    double mdot_si_;  // Accretion rate in kg/s.
 };
 
 }  // namespace sirius::core

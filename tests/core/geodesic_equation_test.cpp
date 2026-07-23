@@ -2,10 +2,12 @@
 // Tests: flat space acceleration, null normalization, timelike/null geodesics.
 // Ported from TSPH003A.cpp; assertions and tolerances unchanged.
 
-#include <gtest/gtest.h>
-#include <cmath>
-#include "sirius/core/tensor.h"
 #include "sirius/core/dual_number.h"
+#include "sirius/core/tensor.h"
+
+#include <gtest/gtest.h>
+
+#include <cmath>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -17,7 +19,7 @@ constexpr double kEpsilon = 1e-8;
 // =============================================================================
 
 class GeodesicTests : public ::testing::Test {
-protected:
+  protected:
     void SetUp() override {}
     void TearDown() override {}
 };
@@ -81,8 +83,7 @@ TEST_F(GeodesicTests, NormalizeNullPreservesCondition) {
     Vec4 normalized = TensorOps::NormalizeNull(k, eta);
     double norm_sq = TensorOps::InnerProduct(normalized, normalized, eta);
 
-    EXPECT_NEAR(norm_sq, 0.0, kEpsilon)
-        << "Normalized null vector should have zero norm squared";
+    EXPECT_NEAR(norm_sq, 0.0, kEpsilon) << "Normalized null vector should have zero norm squared";
 }
 
 // =============================================================================
@@ -112,16 +113,15 @@ TEST_F(GeodesicTests, InnerProductConservation) {
     // For radial null geodesic: -f(dt)² + (1/f)(dr)² = 0
     // => dr/dt = f (outgoing photon)
     Vec4 k;
-    k(0) = 1.0;         // dt/dλ
-    k(1) = f;           // dr/dλ = f * dt/dλ
+    k(0) = 1.0;  // dt/dλ
+    k(1) = f;    // dr/dλ = f * dt/dλ
     k(2) = 0.0;
     k(3) = 0.0;
 
     double norm_sq = TensorOps::InnerProduct(k, k, g);
 
     // Should be zero for null geodesic
-    EXPECT_NEAR(norm_sq, 0.0, kEpsilon)
-        << "Radial null geodesic should satisfy null condition";
+    EXPECT_NEAR(norm_sq, 0.0, kEpsilon) << "Radial null geodesic should satisfy null condition";
 }
 
 // Test: Timelike vector normalization
@@ -144,8 +144,7 @@ TEST_F(GeodesicTests, TimelikeVectorNormalization) {
     double norm_sq = TensorOps::InnerProduct(u, u, eta);
 
     // Timelike: g_μν u^μ u^ν = -1
-    EXPECT_NEAR(norm_sq, -1.0, kEpsilon)
-        << "Stationary observer 4-velocity should have norm² = -1";
+    EXPECT_NEAR(norm_sq, -1.0, kEpsilon) << "Stationary observer 4-velocity should have norm² = -1";
 }
 
 // Test: Moving observer with Lorentz boost
@@ -170,8 +169,7 @@ TEST_F(GeodesicTests, LorentzBoostedObserver) {
     double norm_sq = TensorOps::InnerProduct(u, u, eta);
 
     // Should still be -1 for timelike
-    EXPECT_NEAR(norm_sq, -1.0, kEpsilon)
-        << "Boosted observer should maintain norm² = -1";
+    EXPECT_NEAR(norm_sq, -1.0, kEpsilon) << "Boosted observer should maintain norm² = -1";
 }
 
 // =============================================================================
@@ -215,8 +213,7 @@ TEST_F(GeodesicTests, CircularOrbitISCO) {
     double norm_sq = TensorOps::InnerProduct(u, u, g);
 
     // Timelike: should be -1
-    EXPECT_NEAR(norm_sq, -1.0, kEpsilon)
-        << "Circular orbit 4-velocity should have norm² = -1";
+    EXPECT_NEAR(norm_sq, -1.0, kEpsilon) << "Circular orbit 4-velocity should have norm² = -1";
 }
 
 // =============================================================================
@@ -253,8 +250,7 @@ TEST_F(GeodesicTests, PhotonSphereOrbit) {
 
     double norm_sq = TensorOps::InnerProduct(k, k, g);
 
-    EXPECT_NEAR(norm_sq, 0.0, kEpsilon)
-        << "Circular photon orbit should be null";
+    EXPECT_NEAR(norm_sq, 0.0, kEpsilon) << "Circular photon orbit should be null";
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

@@ -2,10 +2,12 @@
 // Tests: Schwarzschild/Minkowski limits, ergosphere, frame dragging, Christoffels.
 
 #define _USE_MATH_DEFINES
-#include <cmath>
-#include <gtest/gtest.h>
-#include "sirius/core/tensor.h"
 #include "sirius/core/dual_number.h"
+#include "sirius/core/tensor.h"
+
+#include <gtest/gtest.h>
+
+#include <cmath>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -17,7 +19,7 @@ constexpr double kEpsilon = 1e-10;
 // =============================================================================
 
 class KerrTests : public ::testing::Test {
-protected:
+  protected:
     // Mass and spin parameters
     static constexpr double M = 1.0;
 
@@ -26,9 +28,7 @@ protected:
         return r * r + a * a * std::cos(theta) * std::cos(theta);
     }
 
-    double Delta(double r, double a) {
-        return r * r - 2.0 * M * r + a * a;
-    }
+    double Delta(double r, double a) { return r * r - 2.0 * M * r + a * a; }
 
     // Create Kerr metric at given r, θ with spin a
     Metric4d createKerrMetric(double r, double theta, double a) {
@@ -81,16 +81,12 @@ TEST_F(KerrTests, ReducesToSchwarzschildAtZeroSpin) {
     // Expected Schwarzschild values
     double f = 1.0 - 2.0 * M / r;
 
-    EXPECT_NEAR(g_kerr(0, 0).real, -f, kEpsilon)
-        << "g_tt should match Schwarzschild";
-    EXPECT_NEAR(g_kerr(1, 1).real, 1.0 / f, kEpsilon)
-        << "g_rr should match Schwarzschild";
-    EXPECT_NEAR(g_kerr(2, 2).real, r * r, kEpsilon)
-        << "g_θθ should match Schwarzschild";
+    EXPECT_NEAR(g_kerr(0, 0).real, -f, kEpsilon) << "g_tt should match Schwarzschild";
+    EXPECT_NEAR(g_kerr(1, 1).real, 1.0 / f, kEpsilon) << "g_rr should match Schwarzschild";
+    EXPECT_NEAR(g_kerr(2, 2).real, r * r, kEpsilon) << "g_θθ should match Schwarzschild";
     EXPECT_NEAR(g_kerr(3, 3).real, r * r, kEpsilon)  // sin²(π/2) = 1
         << "g_φφ should match Schwarzschild at equator";
-    EXPECT_NEAR(g_kerr(0, 3).real, 0.0, kEpsilon)
-        << "Off-diagonal should vanish for a = 0";
+    EXPECT_NEAR(g_kerr(0, 3).real, 0.0, kEpsilon) << "Off-diagonal should vanish for a = 0";
 }
 
 // =============================================================================
@@ -110,12 +106,10 @@ TEST_F(KerrTests, ApproachesMinkowskiAtZeroMass) {
 
     // At large r, should approach spheroidal coordinates
     // g_tt → -1 + O(M/r)
-    EXPECT_NEAR(g_far(0, 0).real, -1.0, 0.01)
-        << "g_tt should approach -1 at large r";
+    EXPECT_NEAR(g_far(0, 0).real, -1.0, 0.01) << "g_tt should approach -1 at large r";
 
     // g_tφ → 0 + O(M/r)
-    EXPECT_NEAR(g_far(0, 3).real, 0.0, 0.01)
-        << "Frame dragging should vanish at large r";
+    EXPECT_NEAR(g_far(0, 3).real, 0.0, 0.01) << "Frame dragging should vanish at large r";
 }
 
 // =============================================================================
@@ -144,12 +138,12 @@ TEST_F(KerrTests, MetricIsSymmetric) {
 
 // Test: g_tt > 0 inside ergosphere
 TEST_F(KerrTests, ErgosphereGttPositive) {
-    double a = 0.9;  // High spin
+    double a = 0.9;           // High spin
     double theta = M_PI / 2;  // Equator (widest ergosphere)
 
     // Ergosphere outer boundary (equator): r_ergo = M + √(M² - a²cos²θ)
     // At equator (cos θ = 0): r_ergo = M + M = 2M
-    double r_horizon = M + std::sqrt(M * M - a * a);  // Event horizon
+    double r_horizon = M + std::sqrt(M * M - a * a);   // Event horizon
     double r_ergo = M + std::sqrt(M * M - a * a * 0);  // = 2M at equator
 
     // Inside ergosphere but outside horizon
@@ -158,8 +152,7 @@ TEST_F(KerrTests, ErgosphereGttPositive) {
     Metric4d g = createKerrMetric(r_inside, theta, a);
 
     // g_tt > 0 inside ergosphere (stationary limit surface)
-    EXPECT_GT(g(0, 0).real, 0.0)
-        << "g_tt should be positive inside ergosphere";
+    EXPECT_GT(g(0, 0).real, 0.0) << "g_tt should be positive inside ergosphere";
 }
 
 // Test: g_tt < 0 outside ergosphere
@@ -170,8 +163,7 @@ TEST_F(KerrTests, GttNegativeOutsideErgosphere) {
 
     Metric4d g = createKerrMetric(r, theta, a);
 
-    EXPECT_LT(g(0, 0).real, 0.0)
-        << "g_tt should be negative far from black hole";
+    EXPECT_LT(g(0, 0).real, 0.0) << "g_tt should be negative far from black hole";
 }
 
 // =============================================================================
@@ -186,8 +178,7 @@ TEST_F(KerrTests, FrameDraggingPresent) {
 
     Metric4d g = createKerrMetric(r, theta, a);
 
-    EXPECT_NE(g(0, 3).real, 0.0)
-        << "Frame dragging term g_tφ should be non-zero";
+    EXPECT_NE(g(0, 3).real, 0.0) << "Frame dragging term g_tφ should be non-zero";
 }
 
 // Test: Frame dragging sign convention
@@ -199,8 +190,7 @@ TEST_F(KerrTests, FrameDraggingSign) {
     Metric4d g = createKerrMetric(r, theta, a);
 
     // For a > 0, g_tφ < 0 (prograde frame dragging)
-    EXPECT_LT(g(0, 3).real, 0.0)
-        << "Frame dragging should have correct sign for prograde rotation";
+    EXPECT_LT(g(0, 3).real, 0.0) << "Frame dragging should have correct sign for prograde rotation";
 }
 
 // Test: Frame dragging vanishes at poles
@@ -212,8 +202,7 @@ TEST_F(KerrTests, FrameDraggingVanishesAtPoles) {
     double theta_pole = 0.001;  // Near pole
     Metric4d g = createKerrMetric(r, theta_pole, a);
 
-    EXPECT_NEAR(g(0, 3).real, 0.0, 1e-6)
-        << "Frame dragging should vanish at poles";
+    EXPECT_NEAR(g(0, 3).real, 0.0, 1e-6) << "Frame dragging should vanish at poles";
 }
 
 // =============================================================================
@@ -240,8 +229,7 @@ TEST_F(KerrTests, FrameDraggingAngularVelocity) {
     Metric4d g2 = createKerrMetric(r2, theta, a);
     double omega2 = -g2(0, 3).real / g2(3, 3).real;
 
-    EXPECT_LT(omega2, omega)
-        << "Frame dragging should decrease with radius";
+    EXPECT_LT(omega2, omega) << "Frame dragging should decrease with radius";
 }
 
 // =============================================================================
@@ -263,8 +251,8 @@ TEST_F(KerrTests, DeterminantFormula) {
 
     // For 4x4 with off-diagonal terms, need full determinant
     // Simplified check: det(g) < 0 (Lorentzian)
-    double det = g(0, 0).real * g(1, 1).real * g(2, 2).real * g(3, 3).real
-                - g(0, 3).real * g(0, 3).real * g(1, 1).real * g(2, 2).real;
+    double det = g(0, 0).real * g(1, 1).real * g(2, 2).real * g(3, 3).real -
+                 g(0, 3).real * g(0, 3).real * g(1, 1).real * g(2, 2).real;
 
     EXPECT_LT(det, 0.0) << "Determinant should be negative (Lorentzian)";
 }
@@ -274,7 +262,8 @@ TEST_F(KerrTests, DeterminantFormula) {
 // =============================================================================
 
 // Helper: Create Kerr metric with derivatives using dual numbers
-Metric4d createKerrMetricWithDerivatives(double r, double theta, double a, double M_param, int deriv_wrt) {
+Metric4d createKerrMetricWithDerivatives(double r, double theta, double a, double M_param,
+                                         int deriv_wrt) {
     // Create metric where the derivative direction uses dual part = 1
     Metric4d g;
     g.Zero();
@@ -356,8 +345,7 @@ TEST_F(KerrTests, ChristoffelSymmetry) {
     for (int lam = 0; lam < 4; lam++) {
         for (int mu = 0; mu < 4; mu++) {
             for (int nu = 0; nu < 4; nu++) {
-                EXPECT_NEAR(gamma.gamma(lam, mu, nu).real,
-                           gamma.gamma(lam, nu, mu).real, 1e-8)
+                EXPECT_NEAR(gamma.gamma(lam, mu, nu).real, gamma.gamma(lam, nu, mu).real, 1e-8)
                     << "Christoffel symmetry violated at Γ^" << lam << "_" << mu << nu;
             }
         }
@@ -419,4 +407,4 @@ TEST_F(KerrTests, ChristoffelNonZeroForRotatingBH) {
     EXPECT_NE(gamma.gamma(2, 1, 2).real, 0.0) << "Γ^θ_rθ should be non-zero";
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

@@ -73,14 +73,19 @@ TEST_F(StokesVectorTests, PolarisationDegree) {
 }
 
 TEST_F(StokesVectorTests, LinearPolarisationDegree) {
-    EXPECT_NEAR(sirius::core::StokesVector::Horizontal(1.0f).LinearPolarisationDegree(), 1.0f, kEps);
-    EXPECT_NEAR(sirius::core::StokesVector::RightCircular(1.0f).LinearPolarisationDegree(), 0.0f, kEps);
+    EXPECT_NEAR(sirius::core::StokesVector::Horizontal(1.0f).LinearPolarisationDegree(), 1.0f,
+                kEps);
+    EXPECT_NEAR(sirius::core::StokesVector::RightCircular(1.0f).LinearPolarisationDegree(), 0.0f,
+                kEps);
 }
 
 TEST_F(StokesVectorTests, CircularPolarisationDegree) {
-    EXPECT_NEAR(sirius::core::StokesVector::RightCircular(1.0f).CircularPolarisationDegree(), 1.0f, kEps);
-    EXPECT_NEAR(sirius::core::StokesVector::Horizontal(1.0f).CircularPolarisationDegree(), 0.0f, kEps);
-    EXPECT_NEAR(sirius::core::StokesVector::LeftCircular(1.0f).CircularPolarisationDegree(), -1.0f, kEps);
+    EXPECT_NEAR(sirius::core::StokesVector::RightCircular(1.0f).CircularPolarisationDegree(), 1.0f,
+                kEps);
+    EXPECT_NEAR(sirius::core::StokesVector::Horizontal(1.0f).CircularPolarisationDegree(), 0.0f,
+                kEps);
+    EXPECT_NEAR(sirius::core::StokesVector::LeftCircular(1.0f).CircularPolarisationDegree(), -1.0f,
+                kEps);
 }
 
 TEST_F(StokesVectorTests, EVPAComputation) {
@@ -93,7 +98,7 @@ TEST_F(StokesVectorTests, EVPAComputation) {
 }
 
 TEST_F(StokesVectorTests, IsPhysicalRejectsUnphysical) {
-    sirius::core::StokesVector bad(1.0f, 2.0f, 0.0f, 0.0f); // Q^2 > I^2
+    sirius::core::StokesVector bad(1.0f, 2.0f, 0.0f, 0.0f);  // Q^2 > I^2
     EXPECT_FALSE(bad.IsPhysical());
 }
 
@@ -117,7 +122,7 @@ TEST_F(StokesVectorTests, ArithmeticOperators) {
     auto b = sirius::core::StokesVector::Vertical(1.0f);
     auto sum = a + b;
     EXPECT_FLOAT_EQ(sum.I, 2.0f);
-    EXPECT_FLOAT_EQ(sum.Q, 0.0f); // +1 + -1
+    EXPECT_FLOAT_EQ(sum.Q, 0.0f);  // +1 + -1
 
     auto scaled = a * 3.0f;
     EXPECT_FLOAT_EQ(scaled.I, 3.0f);
@@ -131,7 +136,7 @@ TEST_F(StokesVectorTests, ArithmeticOperators) {
 class MuellerMatrixTests : public ::testing::Test {};
 
 TEST_F(MuellerMatrixTests, IdentityPreservesStokes) {
-    sirius::core::MuellerMatrix M; // default = identity
+    sirius::core::MuellerMatrix M;  // default = identity
     auto s = sirius::core::StokesVector(1.0f, 0.5f, 0.3f, 0.1f);
     auto out = M.Apply(s);
     EXPECT_NEAR(out.I, s.I, kEps);
@@ -170,7 +175,7 @@ TEST_F(MuellerMatrixTests, CrossedPolariersExtinguish) {
 
 TEST_F(MuellerMatrixTests, QuarterWavePlateConvertsToCircular) {
     auto QWP = sirius::core::MuellerMatrix::QuarterWavePlate();
-    auto s = sirius::core::StokesVector::Diagonal45(1.0f); // (1, 0, 1, 0)
+    auto s = sirius::core::StokesVector::Diagonal45(1.0f);  // (1, 0, 1, 0)
     auto out = QWP.Apply(s);
     // +45 linear through QWP(horizontal fast axis) → right circular
     EXPECT_NEAR(out.I, 1.0f, kEps);
@@ -195,7 +200,7 @@ TEST_F(MuellerMatrixTests, CompositionAssociativity) {
 }
 
 TEST_F(MuellerMatrixTests, DepolariserReducesPolarisation) {
-    auto M = sirius::core::MuellerMatrix::Depolariser(0.0f); // full depolarisation
+    auto M = sirius::core::MuellerMatrix::Depolariser(0.0f);  // full depolarisation
     auto s = sirius::core::StokesVector::Horizontal(1.0f);
     auto out = M.Apply(s);
     EXPECT_NEAR(out.I, 1.0f, kEps);
@@ -206,9 +211,9 @@ TEST_F(MuellerMatrixTests, DepolariserReducesPolarisation) {
 
 TEST_F(MuellerMatrixTests, HalfWavePlateFlipsHandedness) {
     auto HWP = sirius::core::MuellerMatrix::HalfWavePlate();
-    auto s = sirius::core::StokesVector::RightCircular(1.0f); // (1, 0, 0, 1)
+    auto s = sirius::core::StokesVector::RightCircular(1.0f);  // (1, 0, 0, 1)
     auto out = HWP.Apply(s);
-    EXPECT_NEAR(out.V, -1.0f, kEps); // right → left
+    EXPECT_NEAR(out.V, -1.0f, kEps);  // right → left
 }
 
 // =============================================================================
@@ -230,7 +235,7 @@ TEST_F(PolarisedEmissionTests, SynchrotronPolarisationDegree) {
 TEST_F(PolarisedEmissionTests, SynchrotronEmissionIsPhysical) {
     auto s = sirius::core::polarised_emission::SynchrotronEmission(1.0f, 0.7f, 0.0f);
     EXPECT_TRUE(s.IsPhysical());
-    EXPECT_NEAR(s.V, 0.0f, kEps); // no circular from synchrotron
+    EXPECT_NEAR(s.V, 0.0f, kEps);  // no circular from synchrotron
 }
 
 TEST_F(PolarisedEmissionTests, ThomsonScatteringAt90Degrees) {
@@ -252,20 +257,23 @@ TEST_F(PolarisedEmissionTests, ThomsonScatteringForward) {
 class ParallelTransportTests : public ::testing::Test {};
 
 TEST_F(ParallelTransportTests, ZeroSpinNoRotation) {
-    float angle = sirius::core::parallel_transport::GravitationalFaradayRotation(0.0f, 10.0f, kPi / 2.0f);
+    float angle =
+        sirius::core::parallel_transport::GravitationalFaradayRotation(0.0f, 10.0f, kPi / 2.0f);
     EXPECT_NEAR(angle, 0.0f, kEps);
 }
 
 TEST_F(ParallelTransportTests, RotationIncreasesWithSpin) {
-    float a1 = sirius::core::parallel_transport::GravitationalFaradayRotation(0.5f, 10.0f, kPi / 2.0f);
-    float a2 = sirius::core::parallel_transport::GravitationalFaradayRotation(0.9f, 10.0f, kPi / 2.0f);
+    float a1 =
+        sirius::core::parallel_transport::GravitationalFaradayRotation(0.5f, 10.0f, kPi / 2.0f);
+    float a2 =
+        sirius::core::parallel_transport::GravitationalFaradayRotation(0.9f, 10.0f, kPi / 2.0f);
     EXPECT_GT(std::abs(a2), std::abs(a1));
 }
 
 TEST_F(ParallelTransportTests, ApplyPreservesIntensity) {
     auto s = sirius::core::StokesVector::Horizontal(1.0f);
     auto out = sirius::core::parallel_transport::ApplyParallelTransport(s, 0.5f);
-    EXPECT_NEAR(out.I, s.I, kEps); // rotation preserves I
+    EXPECT_NEAR(out.I, s.I, kEps);  // rotation preserves I
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

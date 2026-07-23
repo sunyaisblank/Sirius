@@ -11,12 +11,14 @@
 // =============================================================================
 
 #define _USE_MATH_DEFINES
-#include <cmath>
-#include <gtest/gtest.h>
-#include <array>
-#include "sirius/core/tensor.h"
-#include "sirius/core/dual_number.h"
 #include "sirius/core/constants.h"  // Centralized constants
+#include "sirius/core/dual_number.h"
+#include "sirius/core/tensor.h"
+
+#include <gtest/gtest.h>
+
+#include <array>
+#include <cmath>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -30,9 +32,9 @@ constexpr double kRelTol = 1e-8;  // Relative tolerance for convergence tests
 // =============================================================================
 
 struct TestADMState {
-    double alpha;           // Lapse
-    double beta[3];         // Shift vector β^i
-    double gamma[3][3];     // Spatial 3-metric γ_ij
+    double alpha;        // Lapse
+    double beta[3];      // Shift vector β^i
+    double gamma[3][3];  // Spatial 3-metric γ_ij
 };
 
 // =============================================================================
@@ -40,8 +42,7 @@ struct TestADMState {
 // =============================================================================
 
 class NumericalMetricTests : public ::testing::Test {
-protected:
-
+  protected:
     // =========================================================================
     // ADM to 4-Metric Reconstruction
     // =========================================================================
@@ -76,14 +77,14 @@ protected:
 
         // g_0i = g_i0 = β_i
         for (int i = 0; i < 3; ++i) {
-            g[0][i+1] = beta_lower[i];
-            g[i+1][0] = beta_lower[i];
+            g[0][i + 1] = beta_lower[i];
+            g[i + 1][0] = beta_lower[i];
         }
 
         // g_ij = γ_ij
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                g[i+1][j+1] = adm.gamma[i][j];
+                g[i + 1][j + 1] = adm.gamma[i][j];
             }
         }
 
@@ -92,21 +93,21 @@ protected:
 
     // Invert 3x3 matrix
     void invert3x3(const double g[3][3], double g_inv[3][3]) {
-        double det = g[0][0] * (g[1][1]*g[2][2] - g[1][2]*g[2][1])
-                   - g[0][1] * (g[1][0]*g[2][2] - g[1][2]*g[2][0])
-                   + g[0][2] * (g[1][0]*g[2][1] - g[1][1]*g[2][0]);
+        double det = g[0][0] * (g[1][1] * g[2][2] - g[1][2] * g[2][1]) -
+                     g[0][1] * (g[1][0] * g[2][2] - g[1][2] * g[2][0]) +
+                     g[0][2] * (g[1][0] * g[2][1] - g[1][1] * g[2][0]);
 
         double inv_det = 1.0 / det;
 
-        g_inv[0][0] = (g[1][1]*g[2][2] - g[1][2]*g[2][1]) * inv_det;
-        g_inv[0][1] = (g[0][2]*g[2][1] - g[0][1]*g[2][2]) * inv_det;
-        g_inv[0][2] = (g[0][1]*g[1][2] - g[0][2]*g[1][1]) * inv_det;
-        g_inv[1][0] = (g[1][2]*g[2][0] - g[1][0]*g[2][2]) * inv_det;
-        g_inv[1][1] = (g[0][0]*g[2][2] - g[0][2]*g[2][0]) * inv_det;
-        g_inv[1][2] = (g[0][2]*g[1][0] - g[0][0]*g[1][2]) * inv_det;
-        g_inv[2][0] = (g[1][0]*g[2][1] - g[1][1]*g[2][0]) * inv_det;
-        g_inv[2][1] = (g[0][1]*g[2][0] - g[0][0]*g[2][1]) * inv_det;
-        g_inv[2][2] = (g[0][0]*g[1][1] - g[0][1]*g[1][0]) * inv_det;
+        g_inv[0][0] = (g[1][1] * g[2][2] - g[1][2] * g[2][1]) * inv_det;
+        g_inv[0][1] = (g[0][2] * g[2][1] - g[0][1] * g[2][2]) * inv_det;
+        g_inv[0][2] = (g[0][1] * g[1][2] - g[0][2] * g[1][1]) * inv_det;
+        g_inv[1][0] = (g[1][2] * g[2][0] - g[1][0] * g[2][2]) * inv_det;
+        g_inv[1][1] = (g[0][0] * g[2][2] - g[0][2] * g[2][0]) * inv_det;
+        g_inv[1][2] = (g[0][2] * g[1][0] - g[0][0] * g[1][2]) * inv_det;
+        g_inv[2][0] = (g[1][0] * g[2][1] - g[1][1] * g[2][0]) * inv_det;
+        g_inv[2][1] = (g[0][1] * g[2][0] - g[0][0] * g[2][1]) * inv_det;
+        g_inv[2][2] = (g[0][0] * g[1][1] - g[0][1] * g[1][0]) * inv_det;
     }
 
     // Compute inverse 4-metric from ADM variables
@@ -124,15 +125,14 @@ protected:
 
         // g^0i = g^i0 = β^i/α²
         for (int i = 0; i < 3; ++i) {
-            g_inv[0][i+1] = adm.beta[i] / alpha2;
-            g_inv[i+1][0] = adm.beta[i] / alpha2;
+            g_inv[0][i + 1] = adm.beta[i] / alpha2;
+            g_inv[i + 1][0] = adm.beta[i] / alpha2;
         }
 
         // g^ij = γ^ij - β^i β^j/α²
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                g_inv[i+1][j+1] = gamma_inv[i][j] -
-                                  adm.beta[i] * adm.beta[j] / alpha2;
+                g_inv[i + 1][j + 1] = gamma_inv[i][j] - adm.beta[i] * adm.beta[j] / alpha2;
             }
         }
 
@@ -281,10 +281,7 @@ TEST_F(NumericalMetricTests, InverseMetricIsSymmetric) {
 // Test: g_00 < 0 for valid ADM data (timelike direction)
 TEST_F(NumericalMetricTests, MetricHasNegativeGtt) {
     std::vector<TestADMState> states = {
-        createMinkowskiADM(),
-        createSchwarzschildIsotropicADM(10.0, 1.0),
-        createGenericADM()
-    };
+        createMinkowskiADM(), createSchwarzschildIsotropicADM(10.0, 1.0), createGenericADM()};
 
     for (size_t idx = 0; idx < states.size(); ++idx) {
         auto g = admTo4Metric(states[idx]);
@@ -303,12 +300,10 @@ TEST_F(NumericalMetricTests, SpatialMetricPositiveDefinite) {
     EXPECT_GT(adm.gamma[2][2], 0.0);
 
     // Check 3-metric determinant is positive
-    double det = adm.gamma[0][0] * (adm.gamma[1][1]*adm.gamma[2][2] -
-                                     adm.gamma[1][2]*adm.gamma[2][1])
-               - adm.gamma[0][1] * (adm.gamma[1][0]*adm.gamma[2][2] -
-                                     adm.gamma[1][2]*adm.gamma[2][0])
-               + adm.gamma[0][2] * (adm.gamma[1][0]*adm.gamma[2][1] -
-                                     adm.gamma[1][1]*adm.gamma[2][0]);
+    double det =
+        adm.gamma[0][0] * (adm.gamma[1][1] * adm.gamma[2][2] - adm.gamma[1][2] * adm.gamma[2][1]) -
+        adm.gamma[0][1] * (adm.gamma[1][0] * adm.gamma[2][2] - adm.gamma[1][2] * adm.gamma[2][0]) +
+        adm.gamma[0][2] * (adm.gamma[1][0] * adm.gamma[2][1] - adm.gamma[1][1] * adm.gamma[2][0]);
 
     EXPECT_GT(det, 0.0) << "3-metric determinant should be positive";
 }
@@ -331,8 +326,7 @@ TEST_F(NumericalMetricTests, InverseMetricIdentity) {
                 sum += g_inv[mu][alpha] * g[alpha][nu];
             }
             double expected = (mu == nu) ? 1.0 : 0.0;
-            EXPECT_NEAR(sum, expected, kRelTol)
-                << "Identity failed at (" << mu << "," << nu << ")";
+            EXPECT_NEAR(sum, expected, kRelTol) << "Identity failed at (" << mu << "," << nu << ")";
         }
     }
 }
@@ -370,10 +364,8 @@ TEST_F(NumericalMetricTests, SchwarzschildAsymptoticFlatness) {
         auto g = admTo4Metric(adm);
 
         // At large r, should approach Minkowski
-        EXPECT_NEAR(g[0][0], -1.0, M / r * 10)
-            << "g_tt not approaching -1 at r=" << r;
-        EXPECT_NEAR(g[1][1], 1.0, M / r * 10)
-            << "g_xx not approaching 1 at r=" << r;
+        EXPECT_NEAR(g[0][0], -1.0, M / r * 10) << "g_tt not approaching -1 at r=" << r;
+        EXPECT_NEAR(g[1][1], 1.0, M / r * 10) << "g_xx not approaching 1 at r=" << r;
     }
 }
 
@@ -385,8 +377,7 @@ TEST_F(NumericalMetricTests, SchwarzschildLapseDecreasesTowardHorizon) {
 
     for (double r : radii) {
         TestADMState adm = createSchwarzschildIsotropicADM(r, M);
-        EXPECT_LT(adm.alpha, prev_alpha)
-            << "Lapse should decrease toward horizon";
+        EXPECT_LT(adm.alpha, prev_alpha) << "Lapse should decrease toward horizon";
         prev_alpha = adm.alpha;
     }
 }
@@ -426,8 +417,7 @@ TEST_F(NumericalMetricTests, NonzeroShiftCreatesOffDiagonal) {
     auto g = admTo4Metric(adm);
 
     // With non-zero shift, g_0i should be non-zero
-    bool has_offdiag = (std::abs(g[0][1]) > kEpsilon ||
-                        std::abs(g[0][2]) > kEpsilon ||
+    bool has_offdiag = (std::abs(g[0][1]) > kEpsilon || std::abs(g[0][2]) > kEpsilon ||
                         std::abs(g[0][3]) > kEpsilon);
     EXPECT_TRUE(has_offdiag) << "Non-zero shift should create off-diagonal terms";
 }
@@ -460,12 +450,10 @@ TEST_F(NumericalMetricTests, FourMetricDeterminant) {
     [[maybe_unused]] auto g = admTo4Metric(adm);
 
     // Compute det(γ)
-    double det_gamma = adm.gamma[0][0] * (adm.gamma[1][1]*adm.gamma[2][2] -
-                                           adm.gamma[1][2]*adm.gamma[2][1])
-                     - adm.gamma[0][1] * (adm.gamma[1][0]*adm.gamma[2][2] -
-                                           adm.gamma[1][2]*adm.gamma[2][0])
-                     + adm.gamma[0][2] * (adm.gamma[1][0]*adm.gamma[2][1] -
-                                           adm.gamma[1][1]*adm.gamma[2][0]);
+    double det_gamma =
+        adm.gamma[0][0] * (adm.gamma[1][1] * adm.gamma[2][2] - adm.gamma[1][2] * adm.gamma[2][1]) -
+        adm.gamma[0][1] * (adm.gamma[1][0] * adm.gamma[2][2] - adm.gamma[1][2] * adm.gamma[2][0]) +
+        adm.gamma[0][2] * (adm.gamma[1][0] * adm.gamma[2][1] - adm.gamma[1][1] * adm.gamma[2][0]);
 
     // Expected: det(g) = -α² det(γ)
     double expected_det = -adm.alpha * adm.alpha * det_gamma;
@@ -490,11 +478,11 @@ TEST_F(NumericalMetricTests, SphericalToCartesian) {
     };
 
     std::vector<TestCase> cases = {
-        {1.0, M_PI/2, 0.0,          1.0, 0.0, 0.0},    // +x axis
-        {1.0, M_PI/2, M_PI/2,       0.0, 1.0, 0.0},    // +y axis
-        {1.0, 0.0, 0.0,             0.0, 0.0, 1.0},    // +z axis
-        {1.0, M_PI, 0.0,            0.0, 0.0, -1.0},   // -z axis
-        {2.0, M_PI/2, M_PI,        -2.0, 0.0, 0.0},    // -x axis, r=2
+        {1.0, M_PI / 2, 0.0, 1.0, 0.0, 0.0},       // +x axis
+        {1.0, M_PI / 2, M_PI / 2, 0.0, 1.0, 0.0},  // +y axis
+        {1.0, 0.0, 0.0, 0.0, 0.0, 1.0},            // +z axis
+        {1.0, M_PI, 0.0, 0.0, 0.0, -1.0},          // -z axis
+        {2.0, M_PI / 2, M_PI, -2.0, 0.0, 0.0},     // -x axis, r=2
     };
 
     for (const auto& tc : cases) {
@@ -529,10 +517,7 @@ TEST_F(NumericalMetricTests, SmallLapseHandled) {
 // Test: No NaN/Inf in metric components
 TEST_F(NumericalMetricTests, NoNaNInMetric) {
     std::vector<TestADMState> states = {
-        createMinkowskiADM(),
-        createSchwarzschildIsotropicADM(10.0, 1.0),
-        createGenericADM()
-    };
+        createMinkowskiADM(), createSchwarzschildIsotropicADM(10.0, 1.0), createGenericADM()};
 
     for (const auto& adm : states) {
         auto g = admTo4Metric(adm);
@@ -556,10 +541,7 @@ TEST_F(NumericalMetricTests, NoNaNInMetric) {
 // Test: Proper time is real for stationary observer
 TEST_F(NumericalMetricTests, ProperTimeReal) {
     std::vector<TestADMState> states = {
-        createMinkowskiADM(),
-        createSchwarzschildIsotropicADM(10.0, 1.0),
-        createGenericADM()
-    };
+        createMinkowskiADM(), createSchwarzschildIsotropicADM(10.0, 1.0), createGenericADM()};
 
     for (const auto& adm : states) {
         auto g = admTo4Metric(adm);
@@ -587,4 +569,4 @@ TEST_F(NumericalMetricTests, NullVectorsExist) {
     EXPECT_NEAR(norm, 0.0, kEpsilon) << "Null vector should have zero norm";
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

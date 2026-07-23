@@ -15,23 +15,23 @@ namespace sirius::core {
 
 // Corona geometry family.
 enum class CoronaGeometry : uint32_t {
-    Slab = 0,       // Thin slab above the disk (sandwich geometry).
-    Lamppost = 1,   // Compact on-axis source (jet base).
-    Sphere = 2,     // Spherical cloud around the black hole.
-    Extended = 3    // Extended corona following the disk shape.
+    Slab = 0,      // Thin slab above the disk (sandwich geometry).
+    Lamppost = 1,  // Compact on-axis source (jet base).
+    Sphere = 2,    // Spherical cloud around the black hole.
+    Extended = 3   // Extended corona following the disk shape.
 };
 
 // Corona configuration and derived spectral quantities.
 struct CoronaConfig {
-    float temperature_keV = 100.0f;     // Electron temperature [keV].
-    float optical_depth = 0.5f;         // Thomson optical depth tau.
-    float scale_height_M = 5.0f;        // Vertical extent [M].
-    float inner_radius_M = 0.0f;        // Inner boundary [M] (0 = use ISCO).
-    float outer_radius_M = 20.0f;       // Outer boundary [M].
+    float temperature_keV = 100.0f;  // Electron temperature [keV].
+    float optical_depth = 0.5f;      // Thomson optical depth tau.
+    float scale_height_M = 5.0f;     // Vertical extent [M].
+    float inner_radius_M = 0.0f;     // Inner boundary [M] (0 = use ISCO).
+    float outer_radius_M = 20.0f;    // Outer boundary [M].
     CoronaGeometry geometry = CoronaGeometry::Extended;
-    float lamppost_height_M = 10.0f;    // Height for lamppost geometry [M].
-    float emissivity_index = 3.0f;      // Emissivity ~ r^(-q) index.
-    float intensity_scale = 1.0f;       // Overall intensity multiplier.
+    float lamppost_height_M = 10.0f;  // Height for lamppost geometry [M].
+    float emissivity_index = 3.0f;    // Emissivity ~ r^(-q) index.
+    float intensity_scale = 1.0f;     // Overall intensity multiplier.
     bool enabled = true;
 
     static constexpr float kMeKeV = 511.0f;  // Electron rest mass in keV.
@@ -91,7 +91,8 @@ inline bool IsInsideCorona(float r, float theta, [[maybe_unused]] float phi,
         }
         case CoronaGeometry::Lamppost: {
             // Compact source at height h on the axis.
-            float dist = std::sqrt(rho * rho + (z - config.lamppost_height_M) * (z - config.lamppost_height_M));
+            float dist = std::sqrt(rho * rho +
+                                   (z - config.lamppost_height_M) * (z - config.lamppost_height_M));
             return dist < config.scale_height_M;
         }
         case CoronaGeometry::Sphere: {
@@ -133,9 +134,8 @@ inline float Emissivity(float r, float theta, const CoronaConfig& config, float 
 
 // Corona optical depth tau along the ray segment from (r1, theta1, phi1) to
 // (r2, theta2, phi2) by trapezoidal integration over num_samples samples.
-inline float OpticalDepthAlongRay(float r1, float theta1, float phi1,
-                                  float r2, float theta2, float phi2,
-                                  const CoronaConfig& config, float isco,
+inline float OpticalDepthAlongRay(float r1, float theta1, float phi1, float r2, float theta2,
+                                  float phi2, const CoronaConfig& config, float isco,
                                   int num_samples = 16) {
     if (!config.enabled) return 0.0f;
 
@@ -154,7 +154,8 @@ inline float OpticalDepthAlongRay(float r1, float theta1, float phi1,
     to_cart(r1, theta1, phi1, x1, y1, z1);
     to_cart(r2, theta2, phi2, x2, y2, z2);
 
-    float path_length = std::sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1));
+    float path_length =
+        std::sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) + (z2 - z1) * (z2 - z1));
 
     for (int i = 0; i < num_samples; ++i) {
         float t = (static_cast<float>(i) + 0.5f) * ds;
@@ -173,8 +174,7 @@ inline float OpticalDepthAlongRay(float r1, float theta1, float phi1,
 }
 
 // Scattered intensity from the corona via a simplified inverse-Compton model.
-inline float ScatteredIntensity(float incident_intensity, float tau,
-                                const CoronaConfig& config) {
+inline float ScatteredIntensity(float incident_intensity, float tau, const CoronaConfig& config) {
     if (!config.enabled || tau < 1e-6f) return 0.0f;
 
     // Fraction scattered: 1 - exp(-tau).

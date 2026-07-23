@@ -85,9 +85,9 @@ TEST(DopplerToggleTest, SuppressionCollapsesDiskAsymmetry) {
     double asym_on = DiskAsymmetry(true, hits_on);
     double asym_off = DiskAsymmetry(false, hits_off);
 
-    std::cout << "[doppler] asym_on=" << asym_on << " (" << hits_on << " hits) asym_off=" << asym_off
-              << " (" << hits_off << " hits) collapse=" << (asym_on / std::max(asym_off, 1e-9))
-              << "\n";
+    std::cout << "[doppler] asym_on=" << asym_on << " (" << hits_on
+              << " hits) asym_off=" << asym_off << " (" << hits_off
+              << " hits) collapse=" << (asym_on / std::max(asym_off, 1e-9)) << "\n";
 
     ASSERT_GT(hits_on, 100) << "too few disk hits to measure asymmetry";
     EXPECT_EQ(hits_on, hits_off) << "the toggle must not change the geometry, only the shading";

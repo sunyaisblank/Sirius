@@ -112,9 +112,7 @@ class StateMachine {
 
     void SetEntryAction(StateAction<State> action) { entry_action_ = action; }
     void SetExitAction(StateAction<State> action) { exit_action_ = action; }
-    void SetTransitionAction(TransitionAction<State, Event> action) {
-        transition_action_ = action;
-    }
+    void SetTransitionAction(TransitionAction<State, Event> action) { transition_action_ = action; }
 
   private:
     const Config& config_;

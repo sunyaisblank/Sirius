@@ -23,30 +23,31 @@
 // them so each nested from_json/to_json is visible where it is used.
 namespace sirius::render {
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(RenderConfig,
-    width, height, samplesPerPixel, tileSize, threadCount, outputPath)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(RenderConfig, width, height, samplesPerPixel,
+                                                tileSize, threadCount, outputPath)
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(MetricConfig,
-    name, mass, spin, charge, lambda, temperatureModel, diskTemperature,
-    throatRadius, warpVelocity, bubbleRadius, bubbleSigma)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(MetricConfig, name, mass, spin, charge, lambda,
+                                                temperatureModel, diskTemperature, throatRadius,
+                                                warpVelocity, bubbleRadius, bubbleSigma)
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(ObserverConfig,
-    distance, inclination, azimuth, fov)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(ObserverConfig, distance, inclination, azimuth, fov)
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(PostProcessConfig,
-    enableBloom, bloomIntensity, bloomThreshold, exposure, contrast, saturation, tonemapper)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(PostProcessConfig, enableBloom, bloomIntensity,
+                                                bloomThreshold, exposure, contrast, saturation,
+                                                tonemapper)
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(VolumetricConfig,
-    enabled, hOverR, hPower, tauMidplane, samples, enableTurbulence, enableCorona)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(VolumetricConfig, enabled, hOverR, hPower,
+                                                tauMidplane, samples, enableTurbulence,
+                                                enableCorona)
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(FilmSimConfig,
-    enabled, preset, grainIntensity, halationStrength, vignetteStrength)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(FilmSimConfig, enabled, preset, grainIntensity,
+                                                halationStrength, vignetteStrength)
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(BackendConfig,
-    preferred, enableDenoiser, cudaDevice)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(BackendConfig, preferred, enableDenoiser,
+                                                cudaDevice)
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(SiriusConfig,
-    render, metric, observer, postprocess, backend, volumetric, film)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(SiriusConfig, render, metric, observer, postprocess,
+                                                backend, volumetric, film)
 
 }  // namespace sirius::render
 

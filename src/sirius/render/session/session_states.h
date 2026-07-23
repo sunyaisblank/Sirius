@@ -35,15 +35,24 @@ constexpr bool IsActive(SessionState state) {
 // Human-readable state name (for logging).
 constexpr std::string_view StateName(SessionState state) {
     switch (state) {
-        case SessionState::Idle:         return "Idle";
-        case SessionState::Initialising: return "Initialising";
-        case SessionState::Scheduling:   return "Scheduling";
-        case SessionState::Rendering:    return "Rendering";
-        case SessionState::Paused:       return "Paused";
-        case SessionState::Completing:   return "Completing";
-        case SessionState::Complete:     return "Complete";
-        case SessionState::Failed:       return "Failed";
-        case SessionState::Cancelled:    return "Cancelled";
+        case SessionState::Idle:
+            return "Idle";
+        case SessionState::Initialising:
+            return "Initialising";
+        case SessionState::Scheduling:
+            return "Scheduling";
+        case SessionState::Rendering:
+            return "Rendering";
+        case SessionState::Paused:
+            return "Paused";
+        case SessionState::Completing:
+            return "Completing";
+        case SessionState::Complete:
+            return "Complete";
+        case SessionState::Failed:
+            return "Failed";
+        case SessionState::Cancelled:
+            return "Cancelled";
     }
     return "Unknown";
 }

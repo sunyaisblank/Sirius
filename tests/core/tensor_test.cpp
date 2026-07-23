@@ -1,10 +1,13 @@
 // TSMT002A.cpp - First-Principles Validation for Tensor Operations
 // Tests: vector ops, Minkowski metric, inner products, Christoffel symbols.
 
-#include <gtest/gtest.h>
-#include <cmath>
 #include "sirius/core/tensor.h"
+
 #include "sirius/core/dual_number.h"
+
+#include <gtest/gtest.h>
+
+#include <cmath>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -16,7 +19,7 @@ constexpr double kEpsilon = 1e-10;
 // =============================================================================
 
 class TensorTests : public ::testing::Test {
-protected:
+  protected:
     void SetUp() override {}
     void TearDown() override {}
 };
@@ -38,8 +41,14 @@ TEST_F(TensorTests, VectorZeroInitialization) {
 // Test: Vector addition
 TEST_F(TensorTests, VectorAddition) {
     Vec4 u, v;
-    u(0) = 1.0; u(1) = 2.0; u(2) = 3.0; u(3) = 4.0;
-    v(0) = 5.0; v(1) = 6.0; v(2) = 7.0; v(3) = 8.0;
+    u(0) = 1.0;
+    u(1) = 2.0;
+    u(2) = 3.0;
+    u(3) = 4.0;
+    v(0) = 5.0;
+    v(1) = 6.0;
+    v(2) = 7.0;
+    v(3) = 8.0;
 
     Vec4 w = u + v;
 
@@ -52,8 +61,14 @@ TEST_F(TensorTests, VectorAddition) {
 // Test: Vector subtraction
 TEST_F(TensorTests, VectorSubtraction) {
     Vec4 u, v;
-    u(0) = 5.0; u(1) = 6.0; u(2) = 7.0; u(3) = 8.0;
-    v(0) = 1.0; v(1) = 2.0; v(2) = 3.0; v(3) = 4.0;
+    u(0) = 5.0;
+    u(1) = 6.0;
+    u(2) = 7.0;
+    u(3) = 8.0;
+    v(0) = 1.0;
+    v(1) = 2.0;
+    v(2) = 3.0;
+    v(3) = 4.0;
 
     Vec4 w = u - v;
 
@@ -66,7 +81,10 @@ TEST_F(TensorTests, VectorSubtraction) {
 // Test: Scalar multiplication
 TEST_F(TensorTests, VectorScalarMultiplication) {
     Vec4 u;
-    u(0) = 1.0; u(1) = 2.0; u(2) = 3.0; u(3) = 4.0;
+    u(0) = 1.0;
+    u(1) = 2.0;
+    u(2) = 3.0;
+    u(3) = 4.0;
 
     Vec4 v = u * 2.0;
     Vec4 w = 3.0 * u;
@@ -80,7 +98,10 @@ TEST_F(TensorTests, VectorScalarMultiplication) {
 // Test: Vector length (Euclidean)
 TEST_F(TensorTests, VectorLength) {
     Vec4 u;
-    u(0) = 1.0; u(1) = 2.0; u(2) = 2.0; u(3) = 0.0;
+    u(0) = 1.0;
+    u(1) = 2.0;
+    u(2) = 2.0;
+    u(3) = 0.0;
 
     double len = u.Length();
 
@@ -90,7 +111,10 @@ TEST_F(TensorTests, VectorLength) {
 // Test: Unary minus
 TEST_F(TensorTests, VectorUnaryMinus) {
     Vec4 u;
-    u(0) = 1.0; u(1) = -2.0; u(2) = 3.0; u(3) = -4.0;
+    u(0) = 1.0;
+    u(1) = -2.0;
+    u(2) = 3.0;
+    u(3) = -4.0;
 
     Vec4 v = -u;
 
@@ -177,8 +201,14 @@ TEST_F(TensorTests, InnerProductMinkowski) {
     Metric4d eta = createMinkowskiMetric();
 
     Vec4 u, v;
-    u(0) = 1.0; u(1) = 0.0; u(2) = 0.0; u(3) = 0.0;  // Temporal unit vector
-    v(0) = 1.0; v(1) = 0.0; v(2) = 0.0; v(3) = 0.0;
+    u(0) = 1.0;
+    u(1) = 0.0;
+    u(2) = 0.0;
+    u(3) = 0.0;  // Temporal unit vector
+    v(0) = 1.0;
+    v(1) = 0.0;
+    v(2) = 0.0;
+    v(3) = 0.0;
 
     double inner = TensorOps::InnerProduct(u, v, eta);
 
@@ -191,7 +221,10 @@ TEST_F(TensorTests, InnerProductSpatial) {
     Metric4d eta = createMinkowskiMetric();
 
     Vec4 u;
-    u(0) = 0.0; u(1) = 1.0; u(2) = 0.0; u(3) = 0.0;  // Spatial unit vector
+    u(0) = 0.0;
+    u(1) = 1.0;
+    u(2) = 0.0;
+    u(3) = 0.0;  // Spatial unit vector
 
     double inner = TensorOps::InnerProduct(u, u, eta);
 
@@ -204,7 +237,10 @@ TEST_F(TensorTests, NullVectorInnerProduct) {
 
     // Light-like vector: (1, 1, 0, 0)
     Vec4 k;
-    k(0) = 1.0; k(1) = 1.0; k(2) = 0.0; k(3) = 0.0;
+    k(0) = 1.0;
+    k(1) = 1.0;
+    k(2) = 0.0;
+    k(3) = 0.0;
 
     double inner = TensorOps::InnerProduct(k, k, eta);
 
@@ -263,20 +299,20 @@ TEST_F(TensorTests, ChristoffelSymmetry) {
     g.Zero();
     double r = 10.0;  // Some radius
     double rs = 1.0;  // Schwarzschild radius
-    double f = 1.0 - rs/r;
+    double f = 1.0 - rs / r;
 
     g(0, 0) = Dual<double>(-f, 0.0);
-    g(1, 1) = Dual<double>(1.0/f, 0.0);
-    g(2, 2) = Dual<double>(r*r, 0.0);
-    g(3, 3) = Dual<double>(r*r, 0.0);  // Simplified (ignoring sin²θ)
+    g(1, 1) = Dual<double>(1.0 / f, 0.0);
+    g(2, 2) = Dual<double>(r * r, 0.0);
+    g(3, 3) = Dual<double>(r * r, 0.0);  // Simplified (ignoring sin²θ)
 
     // Create metric derivatives (simplified)
     Tensor<Dual<double>, 4, 4, 4> dg;
     dg.Zero();
     // ∂g_00/∂r = -∂f/∂r = -rs/r²
-    dg(1, 0, 0) = Dual<double>(rs/(r*r), 0.0);
+    dg(1, 0, 0) = Dual<double>(rs / (r * r), 0.0);
     // ∂g_11/∂r = ∂(1/f)/∂r = rs/(r²f²)
-    dg(1, 1, 1) = Dual<double>(-rs/(r*r*f*f), 0.0);
+    dg(1, 1, 1) = Dual<double>(-rs / (r * r * f * f), 0.0);
 
     ChristoffelSymbols gamma = TensorOps::Christoffel(g, dg);
 
@@ -284,12 +320,11 @@ TEST_F(TensorTests, ChristoffelSymmetry) {
     for (int lam = 0; lam < 4; ++lam) {
         for (int mu = 0; mu < 4; ++mu) {
             for (int nu = 0; nu < 4; ++nu) {
-                EXPECT_NEAR(gamma.gamma(lam, mu, nu).real,
-                           gamma.gamma(lam, nu, mu).real, kEpsilon)
+                EXPECT_NEAR(gamma.gamma(lam, mu, nu).real, gamma.gamma(lam, nu, mu).real, kEpsilon)
                     << "Torsion-free symmetry violated at Γ^" << lam << "_" << mu << nu;
             }
         }
     }
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

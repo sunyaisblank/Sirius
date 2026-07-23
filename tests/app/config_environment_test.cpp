@@ -2,21 +2,19 @@
 // and writes them onto the configuration, leaving unset fields at their prior
 // value. Each test scopes its own variables so the estate stays order-independent.
 
+#include "sirius/app/config/config_loader.h"
+#include "sirius/app/config/config_schema.h"
+
 #include <gtest/gtest.h>
 
 #include <cstdlib>
-
-#include "sirius/app/config/config_loader.h"
-#include "sirius/app/config/config_schema.h"
 
 namespace sirius::app::test {
 
 // RAII guard that sets an environment variable and restores it on scope exit.
 class ScopedEnv {
   public:
-    ScopedEnv(const char* name, const char* value) : name_(name) {
-        ::setenv(name_, value, 1);
-    }
+    ScopedEnv(const char* name, const char* value) : name_(name) { ::setenv(name_, value, 1); }
     ~ScopedEnv() { ::unsetenv(name_); }
     ScopedEnv(const ScopedEnv&) = delete;
     ScopedEnv& operator=(const ScopedEnv&) = delete;

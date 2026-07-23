@@ -113,9 +113,7 @@ inline void MorrisThorneFamily::SetParams(const MorrisThorneParams& params) {
     config_["redshift"].value = params.Phi0;
 }
 
-inline MorrisThorneParams MorrisThorneFamily::GetParams() const {
-    return params_;
-}
+inline MorrisThorneParams MorrisThorneFamily::GetParams() const { return params_; }
 
 inline void MorrisThorneFamily::SetParameter(const std::string& key, double value) {
     if (config_.find(key) != config_.end()) {
@@ -127,10 +125,14 @@ inline void MorrisThorneFamily::SetParameter(const std::string& key, double valu
 
 inline const char* MorrisThorneFamily::GetName() const {
     switch (params_.shape_type) {
-        case WormholeShapeType::Ellis: return "Ellis Drainhole";
-        case WormholeShapeType::ZeroTidal: return "Zero-Tidal Wormhole";
-        case WormholeShapeType::AbsurdlyBenign: return "Absurdly Benign Wormhole";
-        default: return "Morris-Thorne Wormhole";
+        case WormholeShapeType::Ellis:
+            return "Ellis Drainhole";
+        case WormholeShapeType::ZeroTidal:
+            return "Zero-Tidal Wormhole";
+        case WormholeShapeType::AbsurdlyBenign:
+            return "Absurdly Benign Wormhole";
+        default:
+            return "Morris-Thorne Wormhole";
     }
 }
 

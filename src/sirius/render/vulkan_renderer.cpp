@@ -74,14 +74,14 @@ constexpr float kDispatchMorrisThorne = 3.0f;
 struct KernelScene {
     float metric_id = kDispatchKerrSchild;
     float M = 0.0f;
-    float a = 0.0f;       // absolute spin a = (a/M) * M
+    float a = 0.0f;  // absolute spin a = (a/M) * M
     float Q = 0.0f;
     float Lambda = 0.0f;
     float warp_vs = 0.0f;
     float warp_sigma = 0.0f;
     float warp_R = 0.0f;
-    float throat_b0 = 0.0f;  // Morris-Thorne throat radius
-    float worm_shape = 0.0f; // 0 Ellis, 1 zero-tidal, 2 absurdly benign
+    float throat_b0 = 0.0f;   // Morris-Thorne throat radius
+    float worm_shape = 0.0f;  // 0 Ellis, 1 zero-tidal, 2 absurdly benign
     bool disk_enabled = false;
     std::string metric_name;
 };
@@ -169,24 +169,29 @@ struct KernelScene {
         return PrecisionRung::Fp64;
     }
     return Fail(ErrorDomain::kDevice, "select precision rung",
-                "unknown SIRIUS_PRECISION '" + requested +
-                    "' (accepted: fp32, fp32-comp, fp64)");
+                "unknown SIRIUS_PRECISION '" + requested + "' (accepted: fp32, fp32-comp, fp64)");
 }
 
 [[nodiscard]] const char* RungName(PrecisionRung rung) {
     switch (rung) {
-        case PrecisionRung::Fp32: return "fp32";
-        case PrecisionRung::Fp32Comp: return "fp32-comp";
-        case PrecisionRung::Fp64: return "fp64";
+        case PrecisionRung::Fp32:
+            return "fp32";
+        case PrecisionRung::Fp32Comp:
+            return "fp32-comp";
+        case PrecisionRung::Fp64:
+            return "fp64";
     }
     return "fp32";
 }
 
 [[nodiscard]] const char* RungKernelName(PrecisionRung rung) {
     switch (rung) {
-        case PrecisionRung::Fp32: return "trace.spv";
-        case PrecisionRung::Fp32Comp: return "trace_fp32comp.spv";
-        case PrecisionRung::Fp64: return "trace_fp64.spv";
+        case PrecisionRung::Fp32:
+            return "trace.spv";
+        case PrecisionRung::Fp32Comp:
+            return "trace_fp32comp.spv";
+        case PrecisionRung::Fp64:
+            return "trace_fp64.spv";
     }
     return "trace.spv";
 }
@@ -318,9 +323,9 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
 
 }  // namespace
 
-Expected<VulkanRenderStats> RenderVulkanToDisplay(
-    const SessionConfig& config, DisplayBuffer& display,
-    const std::function<void(int, int)>& on_tile) {
+Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
+                                                  DisplayBuffer& display,
+                                                  const std::function<void(int, int)>& on_tile) {
     const auto start = std::chrono::steady_clock::now();
 
     auto scene = MapMetric(config);
@@ -371,8 +376,9 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(
     const std::uint64_t starfield_bytes = starfield.size() * sizeof(std::uint32_t);
     const std::uint64_t budget = ResolveBudgetBytes(info.device_local_bytes);
     if (budget == 0) {
-        return Fail(ErrorDomain::kDevice, "resolve memory budget",
-                    "device reports no device-local memory and no SIRIUS_MEMORY_BUDGET_MB override");
+        return Fail(
+            ErrorDomain::kDevice, "resolve memory budget",
+            "device reports no device-local memory and no SIRIUS_MEMORY_BUDGET_MB override");
     }
 
     bool use_starfield = !starfield.empty();
@@ -390,8 +396,8 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(
     }
 
     std::cout << "[Vulkan] device: " << info.name << " (" << backend::ToString(info.kind) << ")\n";
-    std::cout << "[Vulkan] budget: " << (budget / (1024 * 1024)) << " MiB, tile: "
-              << plan->tile_edge << "x" << plan->tile_edge << " (working set "
+    std::cout << "[Vulkan] budget: " << (budget / (1024 * 1024))
+              << " MiB, tile: " << plan->tile_edge << "x" << plan->tile_edge << " (working set "
               << (plan->tile_working_set_bytes / 1024) << " KiB)\n";
     std::cout << "[Vulkan] precision: " << RungName(*rung) << " rung\n";
 
@@ -400,8 +406,8 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(
         static_cast<std::uint64_t>(edge) * edge * 4 * sizeof(float);
 
     auto radiance_buf = device.CreateBuffer(radiance_capacity, backend::BufferUsage::kStorage);
-    auto params_buf = device.CreateBuffer(kParamCount * sizeof(float),
-                                          backend::BufferUsage::kStorage);
+    auto params_buf =
+        device.CreateBuffer(kParamCount * sizeof(float), backend::BufferUsage::kStorage);
     const std::vector<std::uint32_t> dummy_star = {0u};
     const std::span<const std::uint32_t> star_span =
         use_starfield ? std::span<const std::uint32_t>(starfield)
@@ -436,8 +442,8 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(
             params[33] = static_cast<float>(oy);
             params[34] = static_cast<float>(tw);
             params[35] = static_cast<float>(th);
-            if (auto w = device.WriteBuffer(*params_buf,
-                                            std::as_bytes(std::span<const float>(params)));
+            if (auto w =
+                    device.WriteBuffer(*params_buf, std::as_bytes(std::span<const float>(params)));
                 !w) {
                 return std::unexpected(w.error());
             }
@@ -449,9 +455,8 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(
             }
 
             const std::size_t tile_floats = static_cast<std::size_t>(tw) * th * 4;
-            if (auto rd = device.ReadBuffer(
-                    *radiance_buf,
-                    std::as_writable_bytes(std::span<float>(tile_pixels.data(), tile_floats)));
+            if (auto rd = device.ReadBuffer(*radiance_buf, std::as_writable_bytes(std::span<float>(
+                                                               tile_pixels.data(), tile_floats)));
                 !rd) {
                 return std::unexpected(rd.error());
             }

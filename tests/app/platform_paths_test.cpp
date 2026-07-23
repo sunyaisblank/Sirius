@@ -1,15 +1,13 @@
 // Platform path tests: the resolver reports a platform name, a non-empty config
 // search list, and declines an absent resource without throwing.
 
-#include <gtest/gtest.h>
-
 #include "sirius/app/platform_paths.h"
+
+#include <gtest/gtest.h>
 
 namespace sirius::app::test {
 
-TEST(PlatformPaths, PlatformNameIsNonEmpty) {
-    EXPECT_FALSE(PlatformPaths::PlatformName().empty());
-}
+TEST(PlatformPaths, PlatformNameIsNonEmpty) { EXPECT_FALSE(PlatformPaths::PlatformName().empty()); }
 
 TEST(PlatformPaths, ConfigSearchPathsAreOrderedAndNonEmpty) {
     auto paths = PlatformPaths::ConfigSearchPaths();

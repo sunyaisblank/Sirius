@@ -13,11 +13,13 @@
 // and the null condition g_{mu nu} k^mu k^nu = 0. Tolerances follow
 // docs-era spec values: conservation drift < 1e-4 relative, null < 1e-6.
 
-#include <gtest/gtest.h>
+#include "sirius/core/constants.h"
 #include "sirius/core/geodesic_integrator.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/core/metrics/warp_drive_family.h"
-#include "sirius/core/constants.h"
+
+#include <gtest/gtest.h>
+
 #include <cmath>
 
 using namespace sirius::core;
@@ -40,8 +42,7 @@ double angularMomentumOf(const Lightray& ray, const Metric4d& g) {
     return TensorOps::InnerProduct(xi, ray.velocity, g);
 }
 
-Lightray makeRay(IMetric& metric, double x, double y, double z,
-                 double vx, double vy, double vz) {
+Lightray makeRay(IMetric& metric, double x, double y, double z, double vx, double vy, double vz) {
     Lightray ray{};
     ray.position(0) = 0.0;
     ray.position(1) = x;
@@ -62,16 +63,16 @@ Lightray makeRay(IMetric& metric, double x, double y, double z,
     return ray;
 }
 
-} // namespace
+}  // namespace
 
 class LivePathConservationTests : public ::testing::Test {
-protected:
+  protected:
     IntegratorConfig config = Geodesic::GetDefaultConfig();
 
     // Integrate up to maxSteps accepted steps or until termination; returns
     // the worst relative drift of E and L_z and the worst null violation.
-    void run(IMetric& metric, Lightray ray, int maxSteps,
-             double& worstEDrift, double& worstLDrift, double& worstNull) {
+    void run(IMetric& metric, Lightray ray, int maxSteps, double& worstEDrift, double& worstLDrift,
+             double& worstNull) {
         Metric4d g;
         Tensor<Dual<double>, 4, 4, 4> dg;
         metric.Evaluate(ray.position, g, dg);
@@ -91,15 +92,13 @@ protected:
             if (Geodesic::CheckTermination(ray, &metric)) break;
 
             metric.Evaluate(ray.position, g, dg);
-            worstEDrift = std::max(worstEDrift,
-                                   std::abs(energyOf(ray, g) - E0) / std::abs(E0));
+            worstEDrift = std::max(worstEDrift, std::abs(energyOf(ray, g) - E0) / std::abs(E0));
             if (std::abs(L0) > 1e-6) {
-                worstLDrift = std::max(worstLDrift,
-                                       std::abs(angularMomentumOf(ray, g) - L0) / std::abs(L0));
+                worstLDrift =
+                    std::max(worstLDrift, std::abs(angularMomentumOf(ray, g) - L0) / std::abs(L0));
             }
             worstNull = std::max(worstNull,
-                                 std::abs(TensorOps::InnerProduct(ray.velocity,
-                                                                  ray.velocity, g)));
+                                 std::abs(TensorOps::InnerProduct(ray.velocity, ray.velocity, g)));
         }
         ASSERT_GT(accepted, 100) << "integrator made too little progress";
     }

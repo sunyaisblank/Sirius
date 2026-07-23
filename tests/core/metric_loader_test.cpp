@@ -10,24 +10,27 @@
 // LABEL: Mandatory;Correctness
 // =============================================================================
 
-#include <gtest/gtest.h>
-#include <cmath>
-#include <vector>
-#include <memory>
-#include "sirius/core/tensor.h"
+#include "sirius/core/constants.h"  // Centralized constants
 #include "sirius/core/dual_number.h"
-#include "sirius/core/metrics/metric.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
+#include "sirius/core/metrics/metric.h"
 #include "sirius/core/metrics/morris_thorne_family.h"
 #include "sirius/core/metrics/warp_drive_family.h"
-#include "sirius/core/constants.h"  // Centralized constants
+#include "sirius/core/tensor.h"
+
+#include <gtest/gtest.h>
+
+#include <cmath>
+#include <memory>
+#include <vector>
 
 namespace sirius::test {
 using namespace sirius::core;
 
 // Test tolerances (from PHCN001A.h)
-constexpr double kEpsilon = constants::metric::kInverseTol;   // 1e-14 for metric comparisons
-[[maybe_unused]] constexpr double kSymmetryTol = constants::metric::kSymmetryTol;  // 1e-15 for symmetry
+constexpr double kEpsilon = constants::metric::kInverseTol;  // 1e-14 for metric comparisons
+[[maybe_unused]] constexpr double kSymmetryTol =
+    constants::metric::kSymmetryTol;  // 1e-15 for symmetry
 constexpr double M = 1.0;
 constexpr double PI = constants::math::kPi;
 
@@ -36,8 +39,8 @@ Metric4d transformToSpherical(const Metric4d& g_cart, const Vec4& pos_cart) {
     double x = pos_cart(1);
     double y = pos_cart(2);
     double z = pos_cart(3);
-    double rho = std::sqrt(x*x + y*y);
-    double r = std::sqrt(x*x + y*y + z*z);
+    double rho = std::sqrt(x * x + y * y);
+    double r = std::sqrt(x * x + y * y + z * z);
 
     // Jacobian d(x,y,z)/d(r,th,ph)
     // dx/dr = sin(th)cos(ph) = x/r
@@ -45,43 +48,43 @@ Metric4d transformToSpherical(const Metric4d& g_cart, const Vec4& pos_cart) {
     // dx/dph = -r sin(th)sin(ph) = -y
 
     // Actually simpler to use trigonometric forms if available, but from Cartesian:
-    double st = rho/r;
-    double ct = z/r;
-    double cp = (rho > 1e-10) ? x/rho : 1.0;
-    double sp = (rho > 1e-10) ? y/rho : 0.0;
+    double st = rho / r;
+    double ct = z / r;
+    double cp = (rho > 1e-10) ? x / rho : 1.0;
+    double sp = (rho > 1e-10) ? y / rho : 0.0;
 
-    Tensor<double, 4, 4> J; // Transformation matrix Lambda^mu_nu = dx^mu / dx'^nu
+    Tensor<double, 4, 4> J;  // Transformation matrix Lambda^mu_nu = dx^mu / dx'^nu
     J.Zero();
-    J(0,0) = 1.0; // dt/dt
+    J(0, 0) = 1.0;  // dt/dt
 
     // dr column
-    J(1,1) = st * cp; // dx/dr
-    J(2,1) = st * sp; // dy/dr
-    J(3,1) = ct;      // dz/dr
+    J(1, 1) = st * cp;  // dx/dr
+    J(2, 1) = st * sp;  // dy/dr
+    J(3, 1) = ct;       // dz/dr
 
     // dth column
-    J(1,2) = r * ct * cp; // dx/dth
-    J(2,2) = r * ct * sp; // dy/dth
-    J(3,2) = -r * st;     // dz/dth
+    J(1, 2) = r * ct * cp;  // dx/dth
+    J(2, 2) = r * ct * sp;  // dy/dth
+    J(3, 2) = -r * st;      // dz/dth
 
     // dph column
-    J(1,3) = -r * st * sp; // dx/dph
-    J(2,3) = r * st * cp;  // dy/dph
-    J(3,3) = 0.0;          // dz/dph
+    J(1, 3) = -r * st * sp;  // dx/dph
+    J(2, 3) = r * st * cp;   // dy/dph
+    J(3, 3) = 0.0;           // dz/dph
 
     Metric4d g_sph;
     g_sph.Zero();
 
     // g'_ab = J^c_a J^d_b g_cd
-    for(int a=0; a<4; ++a) {
-        for(int b=0; b<4; ++b) {
+    for (int a = 0; a < 4; ++a) {
+        for (int b = 0; b < 4; ++b) {
             Dual<double> sum = 0.0;
-            for(int c=0; c<4; ++c) {
-                for(int d=0; d<4; ++d) {
-                    sum = sum + g_cart(c,d) * J(c,a) * J(d,b);
+            for (int c = 0; c < 4; ++c) {
+                for (int d = 0; d < 4; ++d) {
+                    sum = sum + g_cart(c, d) * J(c, a) * J(d, b);
                 }
             }
-            g_sph(a,b) = sum;
+            g_sph(a, b) = sum;
         }
     }
     return g_sph;
@@ -89,37 +92,41 @@ Metric4d transformToSpherical(const Metric4d& g_cart, const Vec4& pos_cart) {
 
 // Test fixture providing collection of all metric implementations
 class MetricLoaderChainTests : public ::testing::Test {
-protected:
+  protected:
     std::vector<std::unique_ptr<IMetric>> metrics;
 
     void SetUp() override {
         // Create one instance of each metric type
-        metrics.push_back(std::make_unique<sirius::core::KerrSchildFamily>(sirius::core::KerrSchildParams::Minkowski()));
-        metrics.push_back(std::make_unique<sirius::core::KerrSchildFamily>(sirius::core::KerrSchildParams::Schwarzschild(1.0)));
-        metrics.push_back(std::make_unique<sirius::core::KerrSchildFamily>(sirius::core::KerrSchildParams::Kerr(1.0, 0.5)));
-        metrics.push_back(std::make_unique<sirius::core::KerrSchildFamily>(sirius::core::KerrSchildParams::ReissnerNordstrom(1.0, 0.5)));
-        metrics.push_back(std::make_unique<sirius::core::KerrSchildFamily>(sirius::core::KerrSchildParams::Kerr(1.0, 0.0)));
-        metrics.push_back(std::make_unique<sirius::core::MorrisThorneFamily>(sirius::core::MorrisThorneParams::Ellis(1.0)));
+        metrics.push_back(std::make_unique<sirius::core::KerrSchildFamily>(
+            sirius::core::KerrSchildParams::Minkowski()));
+        metrics.push_back(std::make_unique<sirius::core::KerrSchildFamily>(
+            sirius::core::KerrSchildParams::Schwarzschild(1.0)));
+        metrics.push_back(std::make_unique<sirius::core::KerrSchildFamily>(
+            sirius::core::KerrSchildParams::Kerr(1.0, 0.5)));
+        metrics.push_back(std::make_unique<sirius::core::KerrSchildFamily>(
+            sirius::core::KerrSchildParams::ReissnerNordstrom(1.0, 0.5)));
+        metrics.push_back(std::make_unique<sirius::core::KerrSchildFamily>(
+            sirius::core::KerrSchildParams::Kerr(1.0, 0.0)));
+        metrics.push_back(std::make_unique<sirius::core::MorrisThorneFamily>(
+            sirius::core::MorrisThorneParams::Ellis(1.0)));
     }
 
-    void TearDown() override {
-        metrics.clear();
-    }
+    void TearDown() override { metrics.clear(); }
 
     // Standard test position safe for all metrics (Cartesian equivalent of r=10, th=PI/2, ph=0)
     // (x=10, y=0, z=0)
     Vec4 getStandardPosition() {
         Vec4 pos;
         pos(0) = 0.0;
-        pos(1) = 10.0; // x
-        pos(2) = 0.0;  // y
-        pos(3) = 0.0;  // z
+        pos(1) = 10.0;  // x
+        pos(2) = 0.0;   // y
+        pos(3) = 0.0;   // z
         return pos;
     }
 
     // Evaluate metric and verify no NaN/Inf in output
     bool evaluateMetricSafe(IMetric* metric, const Vec4& pos, Metric4d& g,
-                           Tensor<Dual<double>, 4, 4, 4>& dg) {
+                            Tensor<Dual<double>, 4, 4, 4>& dg) {
         try {
             metric->Evaluate(pos, g, dg);
 
@@ -205,8 +212,7 @@ TEST_F(MetricLoaderChainTests, AllMetricsAreSymmetric) {
         for (int i = 0; i < 4; ++i) {
             for (int j = 0; j < 4; ++j) {
                 EXPECT_NEAR(g(i, j).real, g(j, i).real, kEpsilon)
-                    << "Metric " << metric->GetName()
-                    << " asymmetric at (" << i << "," << j << ")";
+                    << "Metric " << metric->GetName() << " asymmetric at (" << i << "," << j << ")";
             }
         }
     }
@@ -229,8 +235,7 @@ TEST_F(MetricLoaderChainTests, SchwarzschildMassParameterWorks) {
     Tensor<Dual<double>, 4, 4, 4> dg2;
     schw.Evaluate(pos, g2, dg2);
 
-    EXPECT_NE(g1(0, 0).real, g2(0, 0).real)
-        << "Mass parameter should affect metric";
+    EXPECT_NE(g1(0, 0).real, g2(0, 0).real) << "Mass parameter should affect metric";
     EXPECT_LT(std::abs(g2(0, 0).real), std::abs(g1(0, 0).real))
         << "Larger mass should give smaller |g_tt|";
 }
@@ -253,10 +258,8 @@ TEST_F(MetricLoaderChainTests, KerrSpinParameterWorks) {
     Metric4d g_zero_sph = transformToSpherical(g_zero_spin, pos);
     Metric4d g_high_sph = transformToSpherical(g_high_spin, pos);
 
-    EXPECT_NEAR(g_zero_sph(0, 3).real, 0.0, kEpsilon)
-        << "Zero spin should have no frame dragging";
-    EXPECT_NE(g_high_sph(0, 3).real, 0.0)
-        << "High spin should have frame dragging (g_tφ ≠ 0)";
+    EXPECT_NEAR(g_zero_sph(0, 3).real, 0.0, kEpsilon) << "Zero spin should have no frame dragging";
+    EXPECT_NE(g_high_sph(0, 3).real, 0.0) << "High spin should have frame dragging (g_tφ ≠ 0)";
 }
 
 // Verify Reissner-Nordström charge parameter affects metric
@@ -273,8 +276,7 @@ TEST_F(MetricLoaderChainTests, RNChargeParameterWorks) {
     Metric4d g_with_charge;
     rn.Evaluate(pos, g_with_charge, dg);
 
-    EXPECT_NE(g_zero_charge(0, 0).real, g_with_charge(0, 0).real)
-        << "Charge should affect g_tt";
+    EXPECT_NE(g_zero_charge(0, 0).real, g_with_charge(0, 0).real) << "Charge should affect g_tt";
 }
 
 // --- Cross-Metric Consistency Tests ---
@@ -357,9 +359,18 @@ TEST_F(MetricLoaderChainTests, MinkowskiIsExactlyFlat) {
     for (double r : {1.0, 10.0, 100.0}) {
         // Cartesian on x-axis, y-axis, z-axis
         Vec4 px, py, pz;
-        px(0)=0; px(1)=r; px(2)=0; px(3)=0;
-        py(0)=0; py(1)=0; py(2)=r; py(3)=0;
-        pz(0)=0; pz(1)=0; pz(2)=0; pz(3)=r;
+        px(0) = 0;
+        px(1) = r;
+        px(2) = 0;
+        px(3) = 0;
+        py(0) = 0;
+        py(1) = 0;
+        py(2) = r;
+        py(3) = 0;
+        pz(0) = 0;
+        pz(1) = 0;
+        pz(2) = 0;
+        pz(3) = r;
         positions.push_back(px);
         positions.push_back(py);
         positions.push_back(pz);
@@ -408,15 +419,14 @@ TEST_F(MetricLoaderChainTests, HandlesNearPoles) {
             pos(0) = 0.0;
             pos(1) = r * std::sin(theta) * std::cos(phi);
             pos(2) = r * std::sin(theta) * std::sin(phi);
-            pos(3) = r * std::cos(theta); // z ~ +/- r
+            pos(3) = r * std::cos(theta);  // z ~ +/- r
 
             Metric4d g;
             Tensor<Dual<double>, 4, 4, 4> dg;
 
             bool valid = evaluateMetricSafe(metric.get(), pos, g, dg);
-            EXPECT_TRUE(valid)
-                << "Metric " << metric->GetName()
-                << " should handle theta near pole (" << theta << ")";
+            EXPECT_TRUE(valid) << "Metric " << metric->GetName()
+                               << " should handle theta near pole (" << theta << ")";
         }
     }
 }
@@ -431,7 +441,7 @@ TEST_F(MetricLoaderChainTests, HandlesNearHorizon) {
     for (double r : near_horizon_r) {
         Vec4 pos;
         pos(0) = 0.0;
-        pos(1) = r; // x=r (on axis)
+        pos(1) = r;  // x=r (on axis)
         pos(2) = 0.0;
         pos(3) = 0.0;
 
@@ -439,22 +449,20 @@ TEST_F(MetricLoaderChainTests, HandlesNearHorizon) {
         Tensor<Dual<double>, 4, 4, 4> dg;
 
         bool valid = evaluateMetricSafe(&schw, pos, g, dg);
-        EXPECT_TRUE(valid)
-            << "Schwarzschild should handle near-horizon r=" << r;
+        EXPECT_TRUE(valid) << "Schwarzschild should handle near-horizon r=" << r;
 
         // Check for singularity vs regularity
         // Schwarzschild coordinates: g_rr diverges at r=2
         // Kerr-Schild coordinates: g_rr is finite (~1 + 2M/r) at r=2
         // We know we are testing Schwarzschild metric.
-        // If the implementation is KerrSchildFamily, it uses Kerr-Schild coordinates (Horizon Penetrating).
-        // If it is SchwarzschildFamily (if it existed) it might use Schwarzschild coords.
-        // The current implementation uses KerrSchildFamily for Schwarzschild.
+        // If the implementation is KerrSchildFamily, it uses Kerr-Schild coordinates (Horizon
+        // Penetrating). If it is SchwarzschildFamily (if it existed) it might use Schwarzschild
+        // coords. The current implementation uses KerrSchildFamily for Schwarzschild.
 
         // So we expect FINITE g_rr for Kerr-Schild
         EXPECT_LT(g(1, 1).real, 100.0)
             << "g_rr should be finite near horizon for Kerr-Schild coordinates";
-        EXPECT_GT(g(1, 1).real, 1.0)
-            << "g_rr should be > 1";
+        EXPECT_GT(g(1, 1).real, 1.0) << "g_rr should be > 1";
     }
 }
 
@@ -480,8 +488,7 @@ TEST_F(MetricLoaderChainTests, MetricDerivativesFinite) {
             }
         }
 
-        EXPECT_TRUE(all_finite)
-            << "Metric " << metric->GetName() << " has non-finite derivatives";
+        EXPECT_TRUE(all_finite) << "Metric " << metric->GetName() << " has non-finite derivatives";
     }
 }
 
@@ -536,9 +543,9 @@ TEST_F(MetricLoaderChainTests, DifferentPositionsDifferentMetrics) {
     bool first = true;
 
     for (double r : radii) {
-         Vec4 pos;
+        Vec4 pos;
         pos(0) = 0.0;
-        pos(1) = r; // x=r
+        pos(1) = r;  // x=r
         pos(2) = 0.0;
         pos(3) = 0.0;
 
@@ -556,4 +563,4 @@ TEST_F(MetricLoaderChainTests, DifferentPositionsDifferentMetrics) {
     }
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

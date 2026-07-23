@@ -17,9 +17,9 @@ namespace sirius::core {
 
 // Ray emitted by a camera: observer position and unit 4-direction.
 struct CameraRay {
-    Vec4 origin;      // Ray origin (observer position)
-    Vec4 direction;   // Ray direction (unit 4-vector)
-    float weight;     // Ray weight (for importance sampling)
+    Vec4 origin;     // Ray origin (observer position)
+    Vec4 direction;  // Ray direction (unit 4-vector)
+    float weight;    // Ray weight (for importance sampling)
 
     CameraRay() : weight(1.0f) {}
 };
@@ -49,9 +49,9 @@ struct CameraConfig {
     double beta_z = 0.0;
 
     // Lens properties
-    float fov = 60.0f;            // Field of view (degrees)
-    float focal_length = 50.0f;   // Focal length (mm, for ThinLens)
-    float aperture = 2.8f;        // f-number (for depth of field)
+    float fov = 60.0f;             // Field of view (degrees)
+    float focal_length = 50.0f;    // Focal length (mm, for ThinLens)
+    float aperture = 2.8f;         // f-number (for depth of field)
     float focus_distance = 50.0f;  // Focus distance (M)
 
     // Image properties
@@ -225,10 +225,10 @@ class PinholeCamera : public ICamera {
         //
         // The tracer expects: dir(1)=vr, dir(2)=r*vtheta, dir(3)=r*sin theta*vphi
         // =======================================================================
-        ray.direction(0) = 0.0f;         // dt/dlambda (set by geodesic normalisation)
-        ray.direction(1) = rz2 / len;    // vr = vx_global (toward -r)
-        ray.direction(2) = -ry2 / len;   // r*vtheta = -vz_global (minus sign: +Y -> -theta)
-        ray.direction(3) = rx2 / len;    // r*sin theta*vphi = vy_global
+        ray.direction(0) = 0.0f;        // dt/dlambda (set by geodesic normalisation)
+        ray.direction(1) = rz2 / len;   // vr = vx_global (toward -r)
+        ray.direction(2) = -ry2 / len;  // r*vtheta = -vz_global (minus sign: +Y -> -theta)
+        ray.direction(3) = rx2 / len;   // r*sin theta*vphi = vy_global
 
         ray.weight = 1.0f;
         return ray;
@@ -295,9 +295,9 @@ class ThinLensCamera : public ICamera {
 
         // Same coordinate mapping as PinholeCamera (see detailed comments there)
         ray.direction(0) = 0.0f;
-        ray.direction(1) = dz / len;    // vr
-        ray.direction(2) = -dy / len;   // r*vtheta (minus sign: +Y -> -theta)
-        ray.direction(3) = dx / len;    // r*sin theta*vphi
+        ray.direction(1) = dz / len;   // vr
+        ray.direction(2) = -dy / len;  // r*vtheta (minus sign: +Y -> -theta)
+        ray.direction(3) = dx / len;   // r*sin theta*vphi
 
         ray.weight = 1.0f;
         return ray;
@@ -361,9 +361,9 @@ class FisheyeCamera : public ICamera {
 
         // Same coordinate mapping as PinholeCamera (see detailed comments there)
         ray.direction(0) = 0.0f;
-        ray.direction(1) = dz;    // vr
-        ray.direction(2) = -dy;   // r*vtheta (minus sign: +Y -> -theta)
-        ray.direction(3) = dx;    // r*sin theta*vphi
+        ray.direction(1) = dz;   // vr
+        ray.direction(2) = -dy;  // r*vtheta (minus sign: +Y -> -theta)
+        ray.direction(3) = dx;   // r*sin theta*vphi
 
         ray.weight = 1.0f;
         return ray;

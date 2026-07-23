@@ -20,8 +20,8 @@ Expected<TilePlan> DeriveTilePlan(std::uint64_t budget_bytes, int image_width, i
                                   std::uint64_t fixed_overhead_bytes) {
     SIRIUS_PRE(image_width > 0 && image_height > 0);
 
-    const auto usable = static_cast<std::uint64_t>(static_cast<double>(budget_bytes) *
-                                                   kResidencyFraction);
+    const auto usable =
+        static_cast<std::uint64_t>(static_cast<double>(budget_bytes) * kResidencyFraction);
 
     if (usable <= fixed_overhead_bytes) {
         return Fail(ErrorDomain::kDevice, "derive tile plan",
@@ -51,9 +51,8 @@ Expected<TilePlan> DeriveTilePlan(std::uint64_t budget_bytes, int image_width, i
     plan.budget_bytes = budget_bytes;
     plan.usable_bytes = usable;
     plan.fixed_overhead_bytes = fixed_overhead_bytes;
-    plan.tile_working_set_bytes =
-        static_cast<std::uint64_t>(edge) * static_cast<std::uint64_t>(edge) *
-        kTileWorkingSetBytesPerPixel;
+    plan.tile_working_set_bytes = static_cast<std::uint64_t>(edge) *
+                                  static_cast<std::uint64_t>(edge) * kTileWorkingSetBytesPerPixel;
     return plan;
 }
 

@@ -5,10 +5,10 @@
 // config populated for inspection, and the GPU-request and unknown-metric paths
 // return non-zero without rendering.
 
-#include <gtest/gtest.h>
-
 #include "sirius/app/cli/render_command.h"
 #include "sirius/app/config/config_schema.h"
+
+#include <gtest/gtest.h>
 
 #ifdef SIRIUS_HAS_VULKAN_BACKEND
 #include "sirius/backend/device.h"
@@ -28,9 +28,9 @@ TEST(RenderCommandParse, BasicFlagsMapToConfig) {
     GlobalOptions globals;
     SiriusConfig config = SiriusConfig::defaults();
 
-    std::vector<std::string> args = {"-w",   "640", "-h",   "360",  "-s", "16",
-                                     "-m",   "Kerr", "-a",  "0.9",  "-d", "40",
-                                     "--fov", "75",  "--cpu", kStopSentinel};
+    std::vector<std::string> args = {"-w",    "640",  "-h",    "360",        "-s", "16",
+                                     "-m",    "Kerr", "-a",    "0.9",        "-d", "40",
+                                     "--fov", "75",   "--cpu", kStopSentinel};
 
     int rc = cmd.Execute(args, globals, config);
 
@@ -50,7 +50,7 @@ TEST(RenderCommandParse, VolumetricAndFilmFlagsSetEnables) {
     GlobalOptions globals;
     SiriusConfig config = SiriusConfig::defaults();
 
-    std::vector<std::string> args = {"--volumetric", "--turbulence", "--film",
+    std::vector<std::string> args = {"--volumetric",  "--turbulence", "--film",
                                      "--film-preset", "Interstellar", kStopSentinel};
 
     int rc = cmd.Execute(args, globals, config);
@@ -72,12 +72,13 @@ TEST(RenderCommandParse, ExplicitGpuRequestRunsVulkanWhenDevicePresent) {
     // never silently falls back to CPU.
     bool device_present = false;
 #ifdef SIRIUS_HAS_VULKAN_BACKEND
-    if (auto devices = backend::EnumerateVulkanDevices(); devices.has_value() && !devices->empty()) {
+    if (auto devices = backend::EnumerateVulkanDevices();
+        devices.has_value() && !devices->empty()) {
         device_present = true;
     }
 #endif
-    const std::string out =
-        std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp") + "/sirius_gpu_parse.ppm";
+    const std::string out = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp") +
+                            "/sirius_gpu_parse.ppm";
     int rc = cmd.Execute({"--gpu", "-m", "Kerr", "-w", "128", "-h", "128", "-s", "1", "-o", out},
                          globals, config);
     EXPECT_EQ(rc, device_present ? 0 : 1);
@@ -93,9 +94,9 @@ TEST(RenderCommandParse, BackendVulkanDeclinesMetricOffTheRenderPath) {
     // gpu_supported = false) declines cleanly with a non-zero exit whether or not
     // a device is present: no device declines at the CLI, a device declines in
     // the render path before any dispatch. It never falls back to CPU silently.
-    int rc = cmd.Execute(
-        {"--backend", "vulkan", "-m", "Reissner-Nordstrom", "-w", "128", "-h", "128"}, globals,
-        config);
+    int rc =
+        cmd.Execute({"--backend", "vulkan", "-m", "Reissner-Nordstrom", "-w", "128", "-h", "128"},
+                    globals, config);
     EXPECT_EQ(rc, 1);
 }
 

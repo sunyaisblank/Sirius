@@ -28,12 +28,8 @@ struct WarpDriveParams {
     static WarpDriveParams Alcubierre(double vs, double R, double sigma = 8.0) {
         return {vs, sigma, R, 0.0, 0.0, 0.0};
     }
-    static WarpDriveParams Subluminal(double R) {
-        return {0.5, 8.0, R, 0.0, 0.0, 0.0};
-    }
-    static WarpDriveParams Superluminal(double vs, double R) {
-        return {vs, 8.0, R, 0.0, 0.0, 0.0};
-    }
+    static WarpDriveParams Subluminal(double R) { return {0.5, 8.0, R, 0.0, 0.0, 0.0}; }
+    static WarpDriveParams Superluminal(double vs, double R) { return {vs, 8.0, R, 0.0, 0.0, 0.0}; }
 };
 
 // Warp drive family metric.
@@ -82,9 +78,7 @@ inline void WarpDriveFamily::SetParams(const WarpDriveParams& params) {
     config_["radius"].value = params.R;
 }
 
-inline WarpDriveParams WarpDriveFamily::GetParams() const {
-    return params_;
-}
+inline WarpDriveParams WarpDriveFamily::GetParams() const { return params_; }
 
 inline void WarpDriveFamily::SetParameter(const std::string& key, double value) {
     if (config_.find(key) != config_.end()) {

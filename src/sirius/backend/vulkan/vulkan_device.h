@@ -6,13 +6,13 @@
 // overlap arrive with the memory governor (specification programme 4),
 // where profiling can justify them.
 
-#include <cstdint>
-#include <map>
-#include <vector>
+#include "sirius/backend/device.h"
 
 #include <vulkan/vulkan.h>
 
-#include "sirius/backend/device.h"
+#include <cstdint>
+#include <map>
+#include <vector>
 
 namespace sirius::backend {
 

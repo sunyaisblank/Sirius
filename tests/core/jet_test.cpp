@@ -17,7 +17,7 @@ constexpr float kEps = 1e-4f;
 // =============================================================================
 
 class JetDopplerTests : public ::testing::Test {
-protected:
+  protected:
     sirius::core::RelativisticJet jet;
     float beta;
     float gamma;
@@ -68,7 +68,7 @@ TEST_F(JetDopplerTests, AnalyticFormula) {
 // =============================================================================
 
 class JetGeometryTests : public ::testing::Test {
-protected:
+  protected:
     sirius::core::RelativisticJet jet;
 };
 
@@ -90,7 +90,7 @@ TEST_F(JetGeometryTests, OutsideJetFarOffAxis) {
 TEST_F(JetGeometryTests, SouthernJet) {
     float h = jet.GetConfig().r_launch + 5.0f;
     EXPECT_TRUE(jet.IsInsideJet(0.0f, 0.0f, -h, -1));
-    EXPECT_FALSE(jet.IsInsideJet(0.0f, 0.0f, -h, 1)); // wrong sign
+    EXPECT_FALSE(jet.IsInsideJet(0.0f, 0.0f, -h, 1));  // wrong sign
 }
 
 TEST_F(JetGeometryTests, JetRadiusMonotone) {
@@ -113,13 +113,12 @@ TEST_F(JetGeometryTests, JetRadiusZeroBelowLaunch) {
 // =============================================================================
 
 class JetEmissionTests : public ::testing::Test {
-protected:
+  protected:
     sirius::core::RelativisticJet jet;
 };
 
 TEST_F(JetEmissionTests, MagneticFieldAtLaunch) {
-    EXPECT_FLOAT_EQ(jet.MagneticField(jet.GetConfig().r_launch),
-                    jet.GetConfig().B_field_0);
+    EXPECT_FLOAT_EQ(jet.MagneticField(jet.GetConfig().r_launch), jet.GetConfig().B_field_0);
 }
 
 TEST_F(JetEmissionTests, MagneticFieldDecays) {
@@ -129,8 +128,7 @@ TEST_F(JetEmissionTests, MagneticFieldDecays) {
 }
 
 TEST_F(JetEmissionTests, ElectronDensityAtLaunch) {
-    EXPECT_FLOAT_EQ(jet.ElectronDensity(jet.GetConfig().r_launch),
-                    jet.GetConfig().n_e_0);
+    EXPECT_FLOAT_EQ(jet.ElectronDensity(jet.GetConfig().r_launch), jet.GetConfig().n_e_0);
 }
 
 TEST_F(JetEmissionTests, ElectronDensityDecays) {
@@ -179,13 +177,11 @@ TEST_F(JetRayMarchTests, EmissionOutsideJetIsZero) {
     sirius::core::RelativisticJet jet;
     // Ray entirely outside jet volume
     float emission = sirius::core::jet_ray_marching::IntegrateJetEmission(
-        jet,
-        100.0f, 100.0f, 0.0f,   // start far off-axis
-        100.0f, 100.0f, 100.0f, // end far off-axis
-        0.0f, 0.0f, 1000.0f,    // observer
-        16
-    );
+        jet, 100.0f, 100.0f, 0.0f,  // start far off-axis
+        100.0f, 100.0f, 100.0f,     // end far off-axis
+        0.0f, 0.0f, 1000.0f,        // observer
+        16);
     EXPECT_FLOAT_EQ(emission, 0.0f);
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

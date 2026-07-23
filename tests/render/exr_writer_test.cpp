@@ -5,6 +5,7 @@
 // the HDR interchange format: values above 1.0 must survive.
 
 #include "sirius/render/exr_writer.h"
+
 #include "sirius/render/image_buffer.h"
 
 #include <gtest/gtest.h>
@@ -37,8 +38,8 @@ TEST(EXRRoundTripTests, HDRGradientSurvivesWriteAndRead) {
         for (int x = 0; x < W; ++x) {
             // HDR values beyond 1.0 on purpose.
             buffer.SetPixel(x, y, 0.25f * x,  // R: 0 .. 3.75
-                            2.0f * y,          // G: 0 .. 14
-                            0.5f,              // B: constant
+                            2.0f * y,         // G: 0 .. 14
+                            0.5f,             // B: constant
                             1.0f);
         }
     }

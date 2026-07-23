@@ -44,10 +44,10 @@ inline constexpr int kMaxTileEdge = 4096;
 // The tile size the scheduler receives on the Vulkan path, with the budget
 // arithmetic that produced it (recorded for the render metadata and tests).
 struct TilePlan {
-    int tile_edge = 0;                       // Square tile edge in pixels.
-    std::uint64_t budget_bytes = 0;          // Reported (or overridden) budget.
-    std::uint64_t usable_bytes = 0;          // kResidencyFraction * budget.
-    std::uint64_t fixed_overhead_bytes = 0;  // Persistent device buffers.
+    int tile_edge = 0;                         // Square tile edge in pixels.
+    std::uint64_t budget_bytes = 0;            // Reported (or overridden) budget.
+    std::uint64_t usable_bytes = 0;            // kResidencyFraction * budget.
+    std::uint64_t fixed_overhead_bytes = 0;    // Persistent device buffers.
     std::uint64_t tile_working_set_bytes = 0;  // tile_edge^2 * bytes-per-pixel.
 };
 

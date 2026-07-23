@@ -78,10 +78,10 @@ TEST(VulkanBackend, SlangKernelMatchesCpuReference) {
         (*device)->CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
     ASSERT_TRUE(radii_buffer && factors_buffer && params_buffer);
 
-    ASSERT_TRUE((*device)->WriteBuffer(
-        *radii_buffer, std::as_bytes(std::span<const float>(radii))));
-    ASSERT_TRUE((*device)->WriteBuffer(
-        *params_buffer, std::as_bytes(std::span<const float>(params))));
+    ASSERT_TRUE(
+        (*device)->WriteBuffer(*radii_buffer, std::as_bytes(std::span<const float>(radii))));
+    ASSERT_TRUE(
+        (*device)->WriteBuffer(*params_buffer, std::as_bytes(std::span<const float>(params))));
 
     const sirius::backend::BufferHandle bindings[] = {*radii_buffer, *factors_buffer,
                                                       *params_buffer};
@@ -89,8 +89,7 @@ TEST(VulkanBackend, SlangKernelMatchesCpuReference) {
     ASSERT_TRUE(dispatched.has_value()) << dispatched.error().Description();
 
     std::vector<float> factors(kCount);
-    ASSERT_TRUE(
-        (*device)->ReadBuffer(*factors_buffer, std::as_writable_bytes(std::span(factors))));
+    ASSERT_TRUE((*device)->ReadBuffer(*factors_buffer, std::as_writable_bytes(std::span(factors))));
 
     float max_difference = 0.0f;
     for (std::uint32_t i = 0; i < kCount; ++i) {

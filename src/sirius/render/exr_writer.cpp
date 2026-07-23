@@ -9,9 +9,9 @@
 
 #define TINYEXR_IMPLEMENTATION
 #define TINYEXR_USE_MINIZ 1
-#include "tinyexr.h"
-
 #include "sirius/render/exr_writer.h"
+
+#include "tinyexr.h"
 
 #include <cstring>
 #include <vector>

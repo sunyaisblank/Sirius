@@ -19,7 +19,9 @@ using namespace sirius::core;
 // Initialise a Lightray from a camera ray.
 // =============================================================================
 Lightray GeodesicTracer::InitializeLightray(const CameraRay& camera_ray) {
-    Lightray ray;
+    // Value-initialize the full device-facing record so screen coordinates and
+    // alignment padding never carry indeterminate bytes into copies or hashes.
+    Lightray ray{};
 
     // Camera ray origin is Boyer-Lindquist (t, r, theta, phi).
     double t = camera_ray.origin(0);
@@ -49,8 +51,9 @@ Lightray GeodesicTracer::InitializeLightray(const CameraRay& camera_ray) {
     //   v_y = v_r sin th sin ph + r v_th cos th sin ph + r v_ph sin th cos ph
     //   v_z = v_r cos th        - r v_th sin th
     double v_r = camera_ray.direction(1);
-    double v_th = camera_ray.direction(2) / r;             // Camera stores r dtheta/dlambda.
-    double v_ph = camera_ray.direction(3) / (r * sin_th);  // Camera stores r sin(theta) dphi/dlambda.
+    double v_th = camera_ray.direction(2) / r;  // Camera stores r dtheta/dlambda.
+    double v_ph =
+        camera_ray.direction(3) / (r * sin_th);  // Camera stores r sin(theta) dphi/dlambda.
 
     // Avoid division by zero at the poles.
     if (std::abs(sin_th) < 1e-10) {
@@ -656,8 +659,8 @@ float GeodesicTracer::ComputeVolumetricOpacityDensity(float r, float z) {
     float r_ratio = r / r_ref;
 
     float kappa_rho0 = config_.volumetric_tau_midplane /
-                       (std::sqrt(2.0f * static_cast<float>(M_PI)) * H) *
-                       std::pow(r_ratio, -1.5f) * (H_ref / H);
+                       (std::sqrt(2.0f * static_cast<float>(M_PI)) * H) * std::pow(r_ratio, -1.5f) *
+                       (H_ref / H);
 
     return kappa_rho0 * gaussian;
 }

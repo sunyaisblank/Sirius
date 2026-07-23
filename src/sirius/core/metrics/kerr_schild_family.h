@@ -114,9 +114,7 @@ inline void KerrSchildFamily::SetParams(const KerrSchildParams& params) {
     config_["lambda"].value = params.Lambda;
 }
 
-inline KerrSchildParams KerrSchildFamily::GetParams() const {
-    return params_;
-}
+inline KerrSchildParams KerrSchildFamily::GetParams() const { return params_; }
 
 inline void KerrSchildFamily::SetParameter(const std::string& key, double value) {
     if (config_.find(key) != config_.end()) {
@@ -246,12 +244,7 @@ inline void KerrSchildFamily::Evaluate(const Tensor<double, 4>& pos, Metric4d& g
     // Null vector l^mu and its derivatives.
     double denom = r2 + a2;
     double denom2 = denom * denom;
-    double l[4] = {
-        1.0,
-        (r * x + a * y) / denom,
-        (r * y - a * x) / denom,
-        z / r
-    };
+    double l[4] = {1.0, (r * x + a * y) / denom, (r * y - a * x) / denom, z / r};
 
     // dl[lam][mu] = d l^mu / d x^lam.
     double dl[4][4] = {{0}};
@@ -313,9 +306,8 @@ inline void KerrSchildFamily::Evaluate(const Tensor<double, 4>& pos, Metric4d& g
     for (int lam = 1; lam <= 3; lam++) {
         for (int mu = 0; mu < 4; mu++) {
             for (int nu = 0; nu < 4; nu++) {
-                double dg_val = dH[lam] * l[mu] * l[nu]
-                              + H * dl[lam][mu] * l[nu]
-                              + H * l[mu] * dl[lam][nu];
+                double dg_val =
+                    dH[lam] * l[mu] * l[nu] + H * dl[lam][mu] * l[nu] + H * l[mu] * dl[lam][nu];
                 dg(lam, mu, nu) = Dual<double>(dg_val);
             }
         }
@@ -448,7 +440,8 @@ inline double KerrSchildFamily::IscoRadius() const {
     double a_star = std::abs(a / M);
     if (a_star > 0.9999) a_star = 0.9999;
 
-    double Z1 = 1 + std::cbrt(1 - a_star * a_star) * (std::cbrt(1 + a_star) + std::cbrt(1 - a_star));
+    double Z1 =
+        1 + std::cbrt(1 - a_star * a_star) * (std::cbrt(1 + a_star) + std::cbrt(1 - a_star));
     double Z2 = std::sqrt(3 * a_star * a_star + Z1 * Z1);
 
     double r_isco;

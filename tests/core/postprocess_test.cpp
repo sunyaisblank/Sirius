@@ -19,9 +19,7 @@ constexpr float kEps = 1e-5f;
 
 class TonemapTests : public ::testing::Test {};
 
-TEST_F(TonemapTests, ACESAtZero) {
-    EXPECT_NEAR(sirius::core::tonemap::Aces(0.0f), 0.0f, kEps);
-}
+TEST_F(TonemapTests, ACESAtZero) { EXPECT_NEAR(sirius::core::tonemap::Aces(0.0f), 0.0f, kEps); }
 
 TEST_F(TonemapTests, ACESMonotone) {
     float prev = sirius::core::tonemap::Aces(0.0f);
@@ -74,7 +72,6 @@ TEST_F(TonemapTests, FilmicBounded) {
     }
 }
 
-
 // =============================================================================
 // Tonemap::apply Dispatch Tests
 // =============================================================================
@@ -84,7 +81,7 @@ TEST_F(TonemapTests, ApplyExposureScaling) {
     float exposure = 2.0f;
     // Using None: just clamp after exposure scaling
     sirius::core::tonemap::Apply(r, g, b, sirius::core::TonemapType::None, exposure);
-    EXPECT_NEAR(r, 1.0f, kEps); // 0.5 * 2.0 = 1.0
+    EXPECT_NEAR(r, 1.0f, kEps);  // 0.5 * 2.0 = 1.0
 }
 
 TEST_F(TonemapTests, ApplyACESDispatch) {
@@ -155,7 +152,7 @@ TEST_F(BloomFilterTests, BrightPixelsCauseBloom) {
     sirius::core::BloomFilter::Apply(buffer, w, h, config);
 
     // Neighbours should now have non-zero values from bloom spread
-    int neighbour = ((cy) * w + (cx + 1)) * 4;
+    int neighbour = ((cy)*w + (cx + 1)) * 4;
     EXPECT_GT(buffer[neighbour], 0.0f) << "Bloom should spread to neighbours";
 }
 
@@ -196,7 +193,7 @@ TEST_F(ColourGradingTests, ZeroSaturationProducesGrey) {
 
 TEST_F(ColourGradingTests, OutputClamped) {
     sirius::core::PostProcessConfig config;
-    config.gain = 10.0f; // extreme gain
+    config.gain = 10.0f;  // extreme gain
     config.lift = 0.0f;
     config.saturation = 1.0f;
     config.contrast = 1.0f;
@@ -207,4 +204,4 @@ TEST_F(ColourGradingTests, OutputClamped) {
     EXPECT_GE(r, 0.0f);
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

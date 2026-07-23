@@ -40,8 +40,8 @@
 namespace sirius::render {
 
 using backend::GeodesicTracer;
-using backend::TraceResult;
 using backend::TracerConfig;
+using backend::TraceResult;
 using core::AccretionDiskD;
 using core::CameraConfig;
 using core::CameraRay;
@@ -222,8 +222,7 @@ void RenderSession::Initialise() {
         // field consumes; the pupil (point-source) mode gives the celestial-sphere
         // footprint. Default off leaves the point-sampled path and the pinned
         // render untouched.
-        pixel_angular_size_ =
-            (config_.cameraFOV * math::kPi / 180.0) / std::max(1, config_.height);
+        pixel_angular_size_ = (config_.cameraFOV * math::kPi / 180.0) / std::max(1, config_.height);
         tracerConfig.enable_ray_bundles = config_.rayBundles;
         tracerConfig.bundle_point_source = true;
         tracerConfig.bundle_angular_size = static_cast<float>(pixel_angular_size_);
@@ -269,11 +268,21 @@ void RenderSession::Initialise() {
         // Colour mode.
         const char* modeName = "TrueColor";
         switch (config_.colorMode) {
-            case core::color_modes::Mode::TrueColor: modeName = "TrueColor (Physical)"; break;
-            case core::color_modes::Mode::TemperatureMap: modeName = "TemperatureMap (False Color)"; break;
-            case core::color_modes::Mode::RedshiftMap: modeName = "RedshiftMap (g-factor)"; break;
-            case core::color_modes::Mode::Narrowband: modeName = "Narrowband (Hubble Palette)"; break;
-            case core::color_modes::Mode::Polarisation: modeName = "Polarisation"; break;
+            case core::color_modes::Mode::TrueColor:
+                modeName = "TrueColor (Physical)";
+                break;
+            case core::color_modes::Mode::TemperatureMap:
+                modeName = "TemperatureMap (False Color)";
+                break;
+            case core::color_modes::Mode::RedshiftMap:
+                modeName = "RedshiftMap (g-factor)";
+                break;
+            case core::color_modes::Mode::Narrowband:
+                modeName = "Narrowband (Hubble Palette)";
+                break;
+            case core::color_modes::Mode::Polarisation:
+                modeName = "Polarisation";
+                break;
         }
         std::cout << "[Session] Color mode: " << modeName << std::endl;
 
@@ -306,11 +315,8 @@ void RenderSession::Initialise() {
 
         // Load the starfield background texture (CPU background sampling needs it).
         std::vector<std::string> texturePaths = {
-            "assets/Starfield.png",
-            "../assets/Starfield.png",
-            "../../assets/Starfield.png",
-            "../../../assets/Starfield.png",
-            "../../../../assets/Starfield.png"};
+            "assets/Starfield.png", "../assets/Starfield.png", "../../assets/Starfield.png",
+            "../../../assets/Starfield.png", "../../../../assets/Starfield.png"};
 
         bool textureLoaded = false;
         for (const auto& path : texturePaths) {
@@ -623,7 +629,8 @@ RenderSession::PixelResult RenderSession::ShadePixel(int px_coord, int py_coord,
             b_acc += sb;
 
             // Polarisation accumulation.
-            if (config_.enablePolarisation && traceResult.outcome == TraceResult::Outcome::DiskHit) {
+            if (config_.enablePolarisation &&
+                traceResult.outcome == TraceResult::Outcome::DiskHit) {
                 float disk_phi = traceResult.disk_phi;
                 float evpa = disk_phi + static_cast<float>(math::kHalfPi);
                 float I_sample = std::sqrt(sr * sr + sg * sg + sb * sb);
@@ -696,16 +703,15 @@ void RenderSession::RenderVulkanPath() {
 #ifdef SIRIUS_HAS_VULKAN_BACKEND
     std::cout << "[Session] Dispatching Vulkan render path..." << std::endl;
 
-    auto stats = RenderVulkanToDisplay(
-        config_, display_, [this](int /*done*/, int total) {
-            // The scheduler's tile count is the CPU spiral grid; the Vulkan path
-            // governs its own tile count, so retotal the tracker to it on the
-            // first report and then count governed tiles through CompleteTile.
-            if (progress_.GetTilesTotal() != total) {
-                progress_.SetTotals(total, 1);
-            }
-            progress_.CompleteTile(1);
-        });
+    auto stats = RenderVulkanToDisplay(config_, display_, [this](int /*done*/, int total) {
+        // The scheduler's tile count is the CPU spiral grid; the Vulkan path
+        // governs its own tile count, so retotal the tracker to it on the
+        // first report and then count governed tiles through CompleteTile.
+        if (progress_.GetTilesTotal() != total) {
+            progress_.SetTotals(total, 1);
+        }
+        progress_.CompleteTile(1);
+    });
 
     if (!stats) {
         error_message_ = stats.error().Description();
@@ -742,7 +748,8 @@ bool RenderSession::LoadStarfieldTexture(const std::string& path) {
         return false;
     }
 
-    size_t size = static_cast<size_t>(starfield_width_ * starfield_height_ * 4);
+    const size_t size =
+        static_cast<size_t>(starfield_width_) * static_cast<size_t>(starfield_height_) * 4;
     starfield_data_.assign(data.get(), data.get() + size);
 
     starfield_loaded_ = true;
@@ -868,8 +875,7 @@ void RenderSession::WriteOutput() {
             // written untouched. Tonemapping, grading, and transfer encoding are
             // display concerns and deliberately do not apply here.
             ImageBufferRGBA hdr(width, height);
-            std::memcpy(hdr.pixels.data(), display_.GetFloatData(),
-                        pixelCount * 4 * sizeof(float));
+            std::memcpy(hdr.pixels.data(), display_.GetFloatData(), pixelCount * 4 * sizeof(float));
 
             EXRMetadata meta;
             meta.metricType = core::MetricInfoFor(config_.metricId).canonical_name;
@@ -930,7 +936,8 @@ void RenderSession::WriteOutput() {
                         for (int c = 0; c < 3; ++c) {
                             float val = std::clamp(data[idx + c], 0.0f, 1.0f);
                             val = std::pow(val, 1.0f / kDisplayGamma);
-                            rgb[c] = static_cast<unsigned char>(std::clamp(val * 255.0f, 0.0f, 255.0f));
+                            rgb[c] =
+                                static_cast<unsigned char>(std::clamp(val * 255.0f, 0.0f, 255.0f));
                         }
                         file.write(reinterpret_cast<char*>(rgb), 3);
                     }
@@ -1136,8 +1143,8 @@ SessionConfig SessionConfig::FromSiriusConfig(const SiriusConfig& config) {
     // invariant violation, so it halts rather than substituting a default.
     auto metricId = core::ParseMetricName(config.metric.name);
     if (!metricId.has_value()) {
-        throw std::invalid_argument("SessionConfig: unvalidated metric name '" + config.metric.name +
-                                    "' reached the session boundary");
+        throw std::invalid_argument("SessionConfig: unvalidated metric name '" +
+                                    config.metric.name + "' reached the session boundary");
     }
     sc.metricId = *metricId;
     sc.blackHoleMass = (sc.metricId == MetricId::Minkowski || sc.metricId == MetricId::DeSitter)
@@ -1149,10 +1156,14 @@ SessionConfig SessionConfig::FromSiriusConfig(const SiriusConfig& config) {
     // Tonemapper string was validated at the config boundary; parse here.
     {
         const std::string& tm = config.postprocess.tonemapper;
-        if (tm == "ACES") sc.tonemapper = core::TonemapType::Aces;
-        else if (tm == "Reinhard") sc.tonemapper = core::TonemapType::Reinhard;
-        else if (tm == "Filmic" || tm == "Uncharted2") sc.tonemapper = core::TonemapType::Filmic;
-        else if (tm == "None" || tm == "Linear") sc.tonemapper = core::TonemapType::None;
+        if (tm == "ACES")
+            sc.tonemapper = core::TonemapType::Aces;
+        else if (tm == "Reinhard")
+            sc.tonemapper = core::TonemapType::Reinhard;
+        else if (tm == "Filmic" || tm == "Uncharted2")
+            sc.tonemapper = core::TonemapType::Filmic;
+        else if (tm == "None" || tm == "Linear")
+            sc.tonemapper = core::TonemapType::None;
         else
             throw std::invalid_argument("SessionConfig: unvalidated tonemapper '" + tm +
                                         "' reached the session boundary");
@@ -1240,7 +1251,8 @@ SessionConfig SessionConfig::FromSiriusConfig(const SiriusConfig& config) {
                 sc.backend = RenderBackend::Vulkan;
             } else {
                 std::cout << "[Session] backend auto: no Vulkan device visible; "
-                             "using the CPU path" << std::endl;
+                             "using the CPU path"
+                          << std::endl;
             }
         } else {
             std::cout << "[Session] backend auto: metric '"

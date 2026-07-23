@@ -91,8 +91,8 @@ inline void KerrMetricSecondDerivatives(double M, double a, const Vec4d& x,
     if (std::abs(sinth) < 1e-10) sinth = std::copysign(1e-10, sinth);
     double sin2th = sinth * sinth;
     double cos2th = costh * costh;
-    double sin2theta = 2.0 * sinth * costh;   // sin(2 theta)
-    double cos2theta = cos2th - sin2th;       // cos(2 theta)
+    double sin2theta = 2.0 * sinth * costh;  // sin(2 theta)
+    double cos2theta = cos2th - sin2th;      // cos(2 theta)
 
     double a2 = a * a;
     double r2 = r * r;
@@ -120,7 +120,8 @@ inline void KerrMetricSecondDerivatives(double M, double a, const Vec4d& x,
     // g_tt = -1 + f and g_tphi = -a sin^2(theta) f both descend.
     double ddf_drr = 4.0 * M * r * (4.0 * r2 - 3.0 * Sigma) / Sigma3;
     double ddf_drth = 2.0 * M * dSigma_dth * (4.0 * r2 - Sigma) / Sigma3;
-    double ddf_dthth = -2.0 * M * r * (ddSigma_dthth * Sigma - 2.0 * dSigma_dth * dSigma_dth) / Sigma3;
+    double ddf_dthth =
+        -2.0 * M * r * (ddSigma_dthth * Sigma - 2.0 * dSigma_dth * dSigma_dth) / Sigma3;
     double df_dr = 2.0 * M * (Sigma - 2.0 * r2) / Sigma2;
 
     // d^2/dr^2 g_munu.
@@ -156,10 +157,10 @@ inline void KerrMetricSecondDerivatives(double M, double a, const Vec4d& x,
         -2.0 * M * a * r * (dN_tphi_dth * Sigma - 2.0 * dSigma_dth * N_tphi) / Sigma3;
     ddg[2][2][1][1] = ddSigma_dthth / Delta;
     ddg[2][2][2][2] = ddSigma_dthth;
-    ddg[2][2][3][3] = (ddA_dthth * sin2th + 2.0 * dA_dth * sin2theta + 2.0 * A * cos2theta) / Sigma -
-                      2.0 * (dA_dth * sin2th + A * sin2theta) * dSigma_dth / Sigma2 -
-                      A * sin2th * ddSigma_dthth / Sigma2 +
-                      2.0 * A * sin2th * dSigma_dth * dSigma_dth / Sigma3;
+    ddg[2][2][3][3] =
+        (ddA_dthth * sin2th + 2.0 * dA_dth * sin2theta + 2.0 * A * cos2theta) / Sigma -
+        2.0 * (dA_dth * sin2th + A * sin2theta) * dSigma_dth / Sigma2 -
+        A * sin2th * ddSigma_dthth / Sigma2 + 2.0 * A * sin2th * dSigma_dth * dSigma_dth / Sigma3;
 }
 
 //==============================================================================
@@ -319,10 +320,9 @@ class KerrMetricD : public IMetricD {
                         double v = 0.0;
                         if (s == 1 || s == 2) {
                             for (int l = 0; l < 4; ++l) {
-                                v += dginv[s][m][l] *
-                                         (dg[n][l][r] + dg[r][l][n] - dg[l][n][r]) +
-                                     g_inv[m][l] * (ddg[s][n][l][r] + ddg[s][r][l][n] -
-                                                    ddg[s][l][n][r]);
+                                v += dginv[s][m][l] * (dg[n][l][r] + dg[r][l][n] - dg[l][n][r]) +
+                                     g_inv[m][l] *
+                                         (ddg[s][n][l][r] + ddg[s][r][l][n] - ddg[s][l][n][r]);
                             }
                             v *= 0.5;
                         }

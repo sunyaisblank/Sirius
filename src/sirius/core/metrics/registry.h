@@ -47,38 +47,65 @@ struct MetricInfo {
 // never a substituted spacetime.
 inline const std::array<MetricInfo, 9>& MetricRegistry() {
     static const std::array<MetricInfo, 9> registry = {{
-        {MetricId::Minkowski, "Minkowski",
+        {MetricId::Minkowski,
+         "Minkowski",
          {nullptr, nullptr, nullptr, nullptr, nullptr},
-         "none (flat spacetime)", true, true},
-        {MetricId::Schwarzschild, "Schwarzschild",
+         "none (flat spacetime)",
+         true,
+         true},
+        {MetricId::Schwarzschild,
+         "Schwarzschild",
          {nullptr, nullptr, nullptr, nullptr, nullptr},
-         "mass", true, true},
-        {MetricId::Kerr, "Kerr",
+         "mass",
+         true,
+         true},
+        {MetricId::Kerr,
+         "Kerr",
          {nullptr, nullptr, nullptr, nullptr, nullptr},
-         "mass, spin", true, true},
-        {MetricId::ReissnerNordstrom, "Reissner-Nordstrom",
+         "mass, spin",
+         true,
+         true},
+        {MetricId::ReissnerNordstrom,
+         "Reissner-Nordstrom",
          {"ReissnerNordstrom", "Reissner-Nordström", nullptr, nullptr, nullptr},
-         "mass, charge", true, false},
-        {MetricId::KerrNewman, "Kerr-Newman",
+         "mass, charge",
+         true,
+         false},
+        {MetricId::KerrNewman,
+         "Kerr-Newman",
          {"KerrNewman", nullptr, nullptr, nullptr, nullptr},
-         "mass, spin, charge", true, false},
-        {MetricId::DeSitter, "de-Sitter",
+         "mass, spin, charge",
+         true,
+         false},
+        {MetricId::DeSitter,
+         "de-Sitter",
          {"DeSitter", "de Sitter", nullptr, nullptr, nullptr},
-         "lambda", true, false},
-        {MetricId::SchwarzschildDeSitter, "Schwarzschild-de-Sitter",
+         "lambda",
+         true,
+         false},
+        {MetricId::SchwarzschildDeSitter,
+         "Schwarzschild-de-Sitter",
          {"SchwarzschildDeSitter", "Schwarzschild-de Sitter", "SdS", nullptr, nullptr},
-         "mass, lambda", true, false},
+         "mass, lambda",
+         true,
+         false},
         // CPU support arrives through MorrisThorneCartesian, the flat-plus-
         // rank-one embedding of the spherical family (one sheet, throat as the
         // capture surface); the spherical family remains the kernel-parity
         // reference and is never driven by the Cartesian tracer directly.
-        {MetricId::MorrisThorne, "Morris-Thorne",
+        {MetricId::MorrisThorne,
+         "Morris-Thorne",
          {"MorrisThorne", "Wormhole", "Morris-Thorne Wormhole", "Ellis Drainhole",
           "Zero-Tidal Wormhole"},
-         "throat radius", true, true},
-        {MetricId::Alcubierre, "Alcubierre",
+         "throat radius",
+         true,
+         true},
+        {MetricId::Alcubierre,
+         "Alcubierre",
          {"WarpDrive", "Alcubierre Warp Drive", nullptr, nullptr, nullptr},
-         "warp velocity, bubble radius, wall thickness", true, true},
+         "warp velocity, bubble radius, wall thickness",
+         true,
+         true},
     }};
     return registry;
 }
@@ -97,7 +124,7 @@ namespace detail {
 // Reissner-Nordström display name) passes through byte-exact.
 inline bool NamesEqual(const char* a, const std::string& b) {
     std::size_t i = 0;
-    for (; a[i] != '\0' && i < b.size(); ++i) {
+    for (; i < b.size() && a[i] != '\0'; ++i) {
         unsigned char ca = static_cast<unsigned char>(a[i]);
         unsigned char cb = static_cast<unsigned char>(b[i]);
         if (std::tolower(ca) != std::tolower(cb)) return false;

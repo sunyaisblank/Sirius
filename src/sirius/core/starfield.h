@@ -237,8 +237,8 @@ class StarfieldGenerator {
         float d_min = config_.min_distance_pc;
         float d_max = config_.max_distance_pc;
         // r^2 dr weighting (uniform in volume)
-        star.distance_pc = std::cbrt(u * (d_max * d_max * d_max) +
-                                     (1.0f - u) * (d_min * d_min * d_min));
+        star.distance_pc =
+            std::cbrt(u * (d_max * d_max * d_max) + (1.0f - u) * (d_min * d_min * d_min));
 
         // Absolute magnitude: Salpeter IMF approximation
         // More low-luminosity stars

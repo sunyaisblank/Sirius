@@ -5,6 +5,7 @@
 // tolerances are identical to the legacy suite.
 
 #include "sirius/backend/cpu/geodesic_tracer.h"
+
 #include "sirius/core/camera.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/core/metrics/morris_thorne_family.h"
@@ -74,12 +75,12 @@ TEST_F(GeodesicTracerTest, Construction) {
 TEST_F(GeodesicTracerTest, CameraRayGeneration) {
     CameraRay ray = m_Camera->GenerateRay(32, 32, 0.5f, 0.5f);
 
-    EXPECT_NEAR(ray.origin(1), 50.0, 0.1);        // r = 50M.
+    EXPECT_NEAR(ray.origin(1), 50.0, 0.1);         // r = 50M.
     EXPECT_NEAR(ray.origin(2), M_PI / 2.0, 0.01);  // theta = pi/2.
 
-    double dir_len = std::sqrt(ray.direction(1) * ray.direction(1) +
-                               ray.direction(2) * ray.direction(2) +
-                               ray.direction(3) * ray.direction(3));
+    double dir_len =
+        std::sqrt(ray.direction(1) * ray.direction(1) + ray.direction(2) * ray.direction(2) +
+                  ray.direction(3) * ray.direction(3));
     EXPECT_GT(dir_len, 0.0);
 }
 
@@ -476,9 +477,9 @@ TEST_F(MorrisThorneTracerTest, CentralRayCapturedAtThroat) {
     TraceResult result = m_Tracer->Trace(ray);
     EXPECT_EQ(result.outcome, TraceResult::Outcome::Horizon)
         << "A radially ingoing ray must terminate at the throat capture surface"
-        << " (outcome=" << static_cast<int>(result.outcome)
-        << ", min_radius=" << result.min_radius << ", steps=" << result.steps_taken
-        << ", numerical_failure=" << result.numerical_failure << ")";
+        << " (outcome=" << static_cast<int>(result.outcome) << ", min_radius=" << result.min_radius
+        << ", steps=" << result.steps_taken << ", numerical_failure=" << result.numerical_failure
+        << ")";
 }
 
 TEST_F(MorrisThorneTracerTest, EdgeRayEscapes) {
@@ -511,7 +512,9 @@ TEST_F(MorrisThorneTracerTest, DeflectionFallsQuadraticallyWithImpactParameter) 
         // Impact parameter |x0 x v_hat| from the actual launch geometry.
         double ix = ray.direction(1), iy = ray.direction(3), iz = -ray.direction(2);
         double il = std::sqrt(ix * ix + iy * iy + iz * iz);
-        ix /= il; iy /= il; iz /= il;
+        ix /= il;
+        iy /= il;
+        iz /= il;
         double x0 = 50.0, y0 = 0.0, z0 = 0.0;
         double cx = y0 * iz - z0 * iy;
         double cy = z0 * ix - x0 * iz;
@@ -526,8 +529,8 @@ TEST_F(MorrisThorneTracerTest, DeflectionFallsQuadraticallyWithImpactParameter) 
     for (const auto& p : probes) {
         double predicted = (M_PI / 4.0) * (1.0 / (p.rho * p.rho));  // b0 = 1.
         EXPECT_NEAR(p.deflection, predicted, 0.5 * predicted)
-            << "Ellis leading-order deflection at rho=" << p.rho
-            << ": traced=" << p.deflection << ", predicted=" << predicted;
+            << "Ellis leading-order deflection at rho=" << p.rho << ": traced=" << p.deflection
+            << ", predicted=" << predicted;
     }
 }
 

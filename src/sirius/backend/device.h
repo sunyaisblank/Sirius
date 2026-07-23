@@ -6,14 +6,14 @@
 // behind it. The first adapter is Vulkan compute (vulkan/), which alone
 // reaches AMD, Intel, and NVIDIA silicon plus Lavapipe software fallback.
 
+#include "sirius/base/error.h"
+
 #include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <span>
 #include <string>
 #include <vector>
-
-#include "sirius/base/error.h"
 
 namespace sirius::backend {
 
@@ -101,7 +101,6 @@ class ComputeDevice {
 [[nodiscard]] base::Expected<std::vector<DeviceInfo>> EnumerateVulkanDevices();
 
 // Opens device `index` as enumerated by EnumerateVulkanDevices.
-[[nodiscard]] base::Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(
-    std::size_t index);
+[[nodiscard]] base::Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index);
 
 }  // namespace sirius::backend

@@ -8,8 +8,8 @@
 
 #include <gtest/gtest.h>
 
-#include <cstdlib>
 #include <cstdint>
+#include <cstdlib>
 
 namespace {
 
@@ -70,8 +70,8 @@ TEST(MemoryGovernor, TileNeverExceedsImageExtent) {
 TEST(MemoryGovernor, WorkingSetMatchesTheDerivedTile) {
     const auto plan = DeriveTilePlan(512 * kMiB, kImaxWidth, kImaxHeight, 8 * kMiB);
     ASSERT_TRUE(plan.has_value());
-    const std::uint64_t expected =
-        static_cast<std::uint64_t>(plan->tile_edge) * plan->tile_edge * kTileWorkingSetBytesPerPixel;
+    const std::uint64_t expected = static_cast<std::uint64_t>(plan->tile_edge) * plan->tile_edge *
+                                   kTileWorkingSetBytesPerPixel;
     EXPECT_EQ(plan->tile_working_set_bytes, expected);
     EXPECT_LE(plan->tile_working_set_bytes + plan->fixed_overhead_bytes, plan->usable_bytes);
 }

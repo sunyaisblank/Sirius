@@ -1,13 +1,15 @@
 // Geodesic Path Validation
 // Ported from TSIN001A.cpp; assertions and tolerances unchanged.
 
+#include "sirius/core/geodesic_integrator.h"
+#include "sirius/core/metrics/kerr_schild_family.h"
+#include "sirius/core/metrics/metric.h"
+#include "sirius/core/tensor.h"
+
 #include <gtest/gtest.h>
+
 #include <cmath>
 #include <vector>
-#include "sirius/core/tensor.h"
-#include "sirius/core/metrics/metric.h"
-#include "sirius/core/metrics/kerr_schild_family.h"
-#include "sirius/core/geodesic_integrator.h"
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -18,17 +20,15 @@ constexpr double PI = 3.14159265358979323846;
 
 // Helper: Calculate radius from Cartesian position
 inline double getRadius(const Vec4& pos) {
-    return std::sqrt(pos(1)*pos(1) + pos(2)*pos(2) + pos(3)*pos(3));
+    return std::sqrt(pos(1) * pos(1) + pos(2) * pos(2) + pos(3) * pos(3));
 }
 
 // Helper: Calculate phi from Cartesian position
-inline double getPhi(const Vec4& pos) {
-    return std::atan2(pos(2), pos(1));
-}
+inline double getPhi(const Vec4& pos) { return std::atan2(pos(2), pos(1)); }
 
 // Test fixture providing Schwarzschild and Kerr metrics with RK45 integration
 class GeodesicPathTests : public ::testing::Test {
-protected:
+  protected:
     sirius::core::KerrSchildFamily schwarzschild{sirius::core::KerrSchildParams::Schwarzschild(M)};
     sirius::core::KerrSchildFamily kerr{sirius::core::KerrSchildParams::Kerr(M, 0.5)};
     IntegratorConfig rk45_config;
@@ -56,9 +56,9 @@ protected:
         double ph = spherical_pos(3);
 
         ray.position(0) = spherical_pos(0);
-        ray.position(1) = r * std::sin(th) * std::cos(ph); // x
-        ray.position(2) = r * std::sin(th) * std::sin(ph); // y
-        ray.position(3) = r * std::cos(th);                // z
+        ray.position(1) = r * std::sin(th) * std::cos(ph);  // x
+        ray.position(2) = r * std::sin(th) * std::sin(ph);  // y
+        ray.position(3) = r * std::cos(th);                 // z
 
         // Convert Direction: Spherical Basis (vt, vr, vth, vph) -> Cartesian Basis (vt, vx, vy, vz)
         double vr = spherical_dir(1);
@@ -71,9 +71,9 @@ protected:
         double cp = std::cos(ph);
 
         ray.velocity(0) = spherical_dir(0);
-        ray.velocity(1) = vr * st * cp + r * vth * ct * cp - r * vph * st * sp; // vx
-        ray.velocity(2) = vr * st * sp + r * vth * ct * sp + r * vph * st * cp; // vy
-        ray.velocity(3) = vr * ct      - r * vth * st;                          // vz
+        ray.velocity(1) = vr * st * cp + r * vth * ct * cp - r * vph * st * sp;  // vx
+        ray.velocity(2) = vr * st * sp + r * vth * ct * sp + r * vph * st * cp;  // vy
+        ray.velocity(3) = vr * ct - r * vth * st;                                // vz
 
         ray.proper_time = 0.0f;
         ray.coordinate_time = 0.0f;
@@ -95,8 +95,8 @@ protected:
         double x = pos_cart(1);
         double y = pos_cart(2);
         double z = pos_cart(3);
-        double rho = std::sqrt(x*x + y*y);
-        double r = std::sqrt(x*x + y*y + z*z);
+        double rho = std::sqrt(x * x + y * y);
+        double r = std::sqrt(x * x + y * y + z * z);
 
         // Jacobian d(x,y,z)/d(r,th,ph)
         // dx/dr = sin(th)cos(ph) = x/r
@@ -104,43 +104,43 @@ protected:
         // dx/dph = -r sin(th)sin(ph) = -y
 
         // Actually simpler to use trigonometric forms if available, but from Cartesian:
-        double st = rho/r;
-        double ct = z/r;
-        double cp = (rho > 1e-10) ? x/rho : 1.0;
-        double sp = (rho > 1e-10) ? y/rho : 0.0;
+        double st = rho / r;
+        double ct = z / r;
+        double cp = (rho > 1e-10) ? x / rho : 1.0;
+        double sp = (rho > 1e-10) ? y / rho : 0.0;
 
-        Tensor<double, 4, 4> J; // Transformation matrix Lambda^mu_nu = dx^mu / dx'^nu
+        Tensor<double, 4, 4> J;  // Transformation matrix Lambda^mu_nu = dx^mu / dx'^nu
         J.Zero();
-        J(0,0) = 1.0; // dt/dt
+        J(0, 0) = 1.0;  // dt/dt
 
         // dr column
-        J(1,1) = st * cp; // dx/dr
-        J(2,1) = st * sp; // dy/dr
-        J(3,1) = ct;      // dz/dr
+        J(1, 1) = st * cp;  // dx/dr
+        J(2, 1) = st * sp;  // dy/dr
+        J(3, 1) = ct;       // dz/dr
 
         // dth column
-        J(1,2) = r * ct * cp; // dx/dth
-        J(2,2) = r * ct * sp; // dy/dth
-        J(3,2) = -r * st;     // dz/dth
+        J(1, 2) = r * ct * cp;  // dx/dth
+        J(2, 2) = r * ct * sp;  // dy/dth
+        J(3, 2) = -r * st;      // dz/dth
 
         // dph column
-        J(1,3) = -r * st * sp; // dx/dph
-        J(2,3) = r * st * cp;  // dy/dph
-        J(3,3) = 0.0;          // dz/dph
+        J(1, 3) = -r * st * sp;  // dx/dph
+        J(2, 3) = r * st * cp;   // dy/dph
+        J(3, 3) = 0.0;           // dz/dph
 
         Metric4d g_sph;
         g_sph.Zero();
 
         // g'_ab = J^c_a J^d_b g_cd
-        for(int a=0; a<4; ++a) {
-            for(int b=0; b<4; ++b) {
+        for (int a = 0; a < 4; ++a) {
+            for (int b = 0; b < 4; ++b) {
                 Dual<double> sum = 0.0;
-                for(int c=0; c<4; ++c) {
-                    for(int d=0; d<4; ++d) {
-                        sum = sum + g_cart(c,d) * J(c,a) * J(d,b);
+                for (int c = 0; c < 4; ++c) {
+                    for (int d = 0; d < 4; ++d) {
+                        sum = sum + g_cart(c, d) * J(c, a) * J(d, b);
                     }
                 }
-                g_sph(a,b) = sum;
+                g_sph(a, b) = sum;
             }
         }
         return g_sph;
@@ -196,8 +196,7 @@ protected:
 // finite-precision integrator holds the orbit for 2000 steps; the < 5M bound
 // is unattainable in principle, not a defect. The instability itself is the
 // physics, and the enabled PhotonSphereInstability test asserts it.
-TEST_F(GeodesicPathTests, DISABLED_PhotonSphereRadius)
-{
+TEST_F(GeodesicPathTests, DISABLED_PhotonSphereRadius) {
     double photon_sphere = 3.0 * M;
 
     Vec4 pos;
@@ -208,9 +207,9 @@ TEST_F(GeodesicPathTests, DISABLED_PhotonSphereRadius)
 
     Vec4 dir;
     dir(0) = 0.0;
-    dir(1) = 0.0;   // No radial component
+    dir(1) = 0.0;  // No radial component
     dir(2) = 0.0;
-    dir(3) = 1.0;   // Pure azimuthal motion
+    dir(3) = 1.0;  // Pure azimuthal motion
 
     Lightray ray = createRay(pos, dir, &schwarzschild);
 
@@ -226,13 +225,12 @@ TEST_F(GeodesicPathTests, DISABLED_PhotonSphereRadius)
         if (ray.terminated) break;
     }
 
-    EXPECT_LT(max_r_deviation, 5.0)
-        << "Photon sphere orbit deviated by " << max_r_deviation;
+    EXPECT_LT(max_r_deviation, 5.0) << "Photon sphere orbit deviated by " << max_r_deviation;
 }
 
-// Verify photon sphere instability: small perturbation outside r=3M should cause outward motion or escape.
-TEST_F(GeodesicPathTests, PhotonSphereInstability)
-{
+// Verify photon sphere instability: small perturbation outside r=3M should cause outward motion or
+// escape.
+TEST_F(GeodesicPathTests, PhotonSphereInstability) {
     double photon_sphere = 3.0 * M;
 
     Vec4 pos;
@@ -257,9 +255,9 @@ TEST_F(GeodesicPathTests, PhotonSphereInstability)
 
 // --- Light Deflection Tests ---
 
-// Basic ray tracing sanity check: radially outward ray from r=50 with small tangential component should escape to r>200.
-TEST_F(GeodesicPathTests, WeakFieldLightDeflection)
-{
+// Basic ray tracing sanity check: radially outward ray from r=50 with small tangential component
+// should escape to r>200.
+TEST_F(GeodesicPathTests, WeakFieldLightDeflection) {
     Vec4 pos;
     pos(0) = 0.0;
     pos(1) = 50.0;
@@ -268,14 +266,14 @@ TEST_F(GeodesicPathTests, WeakFieldLightDeflection)
 
     Vec4 dir;
     dir(0) = 0.0;
-    dir(1) = 1.0;       // Radially outward
+    dir(1) = 1.0;  // Radially outward
     dir(2) = 0.0;
-    dir(3) = 0.01;      // Small tangential component
+    dir(3) = 0.01;  // Small tangential component
 
     Lightray ray = createRay(pos, dir, &schwarzschild);
 
-    printf("DEFLECT: After createRay: k0=%.4f k1=%.4f k3=%.4f\n",
-           ray.velocity(0), ray.velocity(1), ray.velocity(3));
+    printf("DEFLECT: After createRay: k0=%.4f k1=%.4f k3=%.4f\n", ray.velocity(0), ray.velocity(1),
+           ray.velocity(3));
     fflush(stdout);
 
     double initial_r = getRadius(ray.position);
@@ -285,8 +283,8 @@ TEST_F(GeodesicPathTests, WeakFieldLightDeflection)
     for (int step = 0; step < 5000; ++step) {
         bool success = Geodesic::IntegrateStepRk45(ray, &schwarzschild, rk45_config);
         if (!success || ray.terminated) {
-            printf("DEFLECT: Terminated at step %d, success=%d terminated=%d\n",
-                   step, success, ray.terminated);
+            printf("DEFLECT: Terminated at step %d, success=%d terminated=%d\n", step, success,
+                   ray.terminated);
             break;
         }
         step_count++;
@@ -297,8 +295,8 @@ TEST_F(GeodesicPathTests, WeakFieldLightDeflection)
     double final_r = getRadius(ray.position);
     double final_phi = getPhi(ray.position);
 
-    printf("DEFLECT: steps=%d init_r=%.1f final_r=%.1f delta_phi=%.4f\n",
-           step_count, initial_r, final_r, final_phi - initial_phi);
+    printf("DEFLECT: steps=%d init_r=%.1f final_r=%.1f delta_phi=%.4f\n", step_count, initial_r,
+           final_r, final_phi - initial_phi);
     fflush(stdout);
 
     EXPECT_GT(step_count, 10) << "Ray should take multiple steps";
@@ -310,8 +308,7 @@ TEST_F(GeodesicPathTests, WeakFieldLightDeflection)
 // Radially infalling light approaches the horizon; re-enabled after the
 // termination rewrite (capture is now decided by the metric's own surface
 // instead of a hardcoded Schwarzschild radius misread from Cartesian x).
-TEST_F(GeodesicPathTests, RadialInfallApproachesHorizon)
-{
+TEST_F(GeodesicPathTests, RadialInfallApproachesHorizon) {
     Vec4 pos;
     pos(0) = 0.0;
     pos(1) = 10.0;
@@ -334,18 +331,17 @@ TEST_F(GeodesicPathTests, RadialInfallApproachesHorizon)
     }
 
     double final_r = getRadius(ray.position);
-    EXPECT_LT(final_r, initial_r)
-        << "Radial infall should approach horizon, moved from " << initial_r << " to " << final_r;
+    EXPECT_LT(final_r, initial_r) << "Radial infall should approach horizon, moved from "
+                                  << initial_r << " to " << final_r;
 
-    EXPECT_GT(ray.coordinate_time, 0.0)
-        << "Coordinate time should accumulate during infall";
+    EXPECT_GT(ray.coordinate_time, 0.0) << "Coordinate time should accumulate during infall";
 }
 
 // --- Kerr Frame Dragging Tests ---
 
-// Frame dragging in Kerr spacetime causes prograde and retrograde rays to behave differently; verifies integrator handles non-diagonal metrics.
-TEST_F(GeodesicPathTests, KerrFrameDragging)
-{
+// Frame dragging in Kerr spacetime causes prograde and retrograde rays to behave differently;
+// verifies integrator handles non-diagonal metrics.
+TEST_F(GeodesicPathTests, KerrFrameDragging) {
     kerr.SetParameter("spin", 0.9);
 
     Vec4 pos;
@@ -382,9 +378,9 @@ TEST_F(GeodesicPathTests, KerrFrameDragging)
 
 // --- Coordinate Continuity Tests ---
 
-// Verify φ coordinate wraps smoothly from 2π to 0 without discontinuity. Light rays outside photon sphere don't orbit at constant radius.
-TEST_F(GeodesicPathTests, PhiWrapContinuity)
-{
+// Verify φ coordinate wraps smoothly from 2π to 0 without discontinuity. Light rays outside photon
+// sphere don't orbit at constant radius.
+TEST_F(GeodesicPathTests, PhiWrapContinuity) {
     Vec4 pos;
     pos(0) = 0.0;
     pos(1) = 10.0;
@@ -429,8 +425,7 @@ TEST_F(GeodesicPathTests, PhiWrapContinuity)
 // --- Metric Signature Tests ---
 
 // Verify Schwarzschild has Lorentzian signature (-,+,+,+)
-TEST_F(GeodesicPathTests, MetricSignatureCorrect)
-{
+TEST_F(GeodesicPathTests, MetricSignatureCorrect) {
     Vec4 pos;
     pos(0) = 0.0;
     pos(1) = 10.0;
@@ -441,7 +436,7 @@ TEST_F(GeodesicPathTests, MetricSignatureCorrect)
     Tensor<Dual<double>, 4, 4, 4> dg;
 
     Lightray ray = createRay(pos, Vec4(), &schwarzschild);
-    schwarzschild.Evaluate(ray.position, g, dg); // Evaluated in Cartesian
+    schwarzschild.Evaluate(ray.position, g, dg);  // Evaluated in Cartesian
 
     // Transform to Spherical for signature check
     Metric4d g_sph = transformToSpherical(g, ray.position);
@@ -472,10 +467,10 @@ TEST_F(GeodesicPathTests, KerrMetricSignature) {
 
     // Let's manually set a Cartesian position
     double r = 4.0;
-    double theta = PI/4.0;
-    pos(1) = r * std::sin(theta); // x
-    pos(2) = 0.0;                 // y
-    pos(3) = r * std::cos(theta); // z
+    double theta = PI / 4.0;
+    pos(1) = r * std::sin(theta);  // x
+    pos(2) = 0.0;                  // y
+    pos(3) = r * std::cos(theta);  // z
 
     Metric4d g;
     Tensor<Dual<double>, 4, 4, 4> dg;
@@ -494,4 +489,4 @@ TEST_F(GeodesicPathTests, KerrMetricSignature) {
     EXPECT_DOUBLE_EQ(g_sph(0, 3).real, g_sph(3, 0).real) << "Metric should be symmetric";
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

@@ -46,11 +46,11 @@ void ReportContractViolation(const char* kind, const char* expression, const cha
 
 #if SIRIUS_CONTRACT_MODE == 2
 
-#define SIRIUS_CONTRACT_CHECK_(kind, expr)                                              \
-    do {                                                                                \
-        if (!(expr)) {                                                                  \
-            ::sirius::base::EnforceContractViolation(kind, #expr, __FILE__, __LINE__);  \
-        }                                                                               \
+#define SIRIUS_CONTRACT_CHECK_(kind, expr)                                             \
+    do {                                                                               \
+        if (!(expr)) {                                                                 \
+            ::sirius::base::EnforceContractViolation(kind, #expr, __FILE__, __LINE__); \
+        }                                                                              \
     } while (false)
 
 #elif SIRIUS_CONTRACT_MODE == 1
@@ -69,11 +69,11 @@ void ReportContractViolation(const char* kind, const char* expression, const cha
 
 // The expression still has to compile, so a renamed symbol cannot silently
 // strand a contract in ignore-mode builds.
-#define SIRIUS_CONTRACT_CHECK_(kind, expr)   \
-    do {                                     \
-        if (false) {                         \
-            static_cast<void>(expr);         \
-        }                                    \
+#define SIRIUS_CONTRACT_CHECK_(kind, expr) \
+    do {                                   \
+        if (false) {                       \
+            static_cast<void>(expr);       \
+        }                                  \
     } while (false)
 
 #endif

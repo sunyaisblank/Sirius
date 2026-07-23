@@ -64,8 +64,8 @@ class ProgressTracker {
             if (smoothed_tiles_per_second_ <= 0) {
                 smoothed_tiles_per_second_ = current_rate;
             } else {
-                smoothed_tiles_per_second_ =
-                    kSmoothingAlpha * current_rate + (1.0 - kSmoothingAlpha) * smoothed_tiles_per_second_;
+                smoothed_tiles_per_second_ = kSmoothingAlpha * current_rate +
+                                             (1.0 - kSmoothingAlpha) * smoothed_tiles_per_second_;
             }
 
             last_update_time_ = now;

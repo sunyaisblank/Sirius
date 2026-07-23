@@ -151,9 +151,7 @@ void ConfigLoader::ApplyEnvironmentOverrides(SiriusConfig& config) {
     }
 }
 
-std::optional<fs::path> ConfigLoader::GetLoadedConfigPath() {
-    return loaded_path_;
-}
+std::optional<fs::path> ConfigLoader::GetLoadedConfigPath() { return loaded_path_; }
 
 std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
     std::vector<std::string> errors;
@@ -163,8 +161,8 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
     constexpr int kMaxResolution = 8192;
 
     if (config.render.width < kMinResolution || config.render.width > kMaxResolution) {
-        errors.push_back("render.width must be between " + std::to_string(kMinResolution) + " and " +
-                         std::to_string(kMaxResolution) + " (spec requirement)");
+        errors.push_back("render.width must be between " + std::to_string(kMinResolution) +
+                         " and " + std::to_string(kMaxResolution) + " (spec requirement)");
     }
     if (config.render.height < kMinResolution || config.render.height > kMaxResolution) {
         errors.push_back("render.height must be between " + std::to_string(kMinResolution) +
@@ -215,7 +213,7 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
     }
 
     static const std::vector<std::string> valid_temperature_models = {"NovikovThorne", "NT",
-                                                                       "ShakuraSunyaev", "SS"};
+                                                                      "ShakuraSunyaev", "SS"};
     if (std::find(valid_temperature_models.begin(), valid_temperature_models.end(),
                   config.metric.temperatureModel) == valid_temperature_models.end()) {
         errors.push_back(
@@ -229,7 +227,8 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
     }
     if (std::abs(config.metric.lambda) > 0 && config.metric.spin != 0) {
         errors.push_back(
-            "metric.lambda requires metric.spin = 0 (rotating de Sitter forms are not represented)");
+            "metric.lambda requires metric.spin = 0 (rotating de Sitter forms are not "
+            "represented)");
     }
 
     // --- Observer validation ------------------------------------------------
@@ -241,8 +240,8 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
 
     if (config.observer.distance < min_distance || config.observer.distance > max_distance) {
         errors.push_back("observer.distance must be between 5M and 1000M (currently " +
-                         std::to_string(config.observer.distance) + ", M=" +
-                         std::to_string(config.metric.mass) + ")");
+                         std::to_string(config.observer.distance) +
+                         ", M=" + std::to_string(config.metric.mass) + ")");
     }
 
     constexpr double kPoleBuffer = 0.1;
@@ -264,7 +263,7 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
     if (config.postprocess.bloomIntensity < 0 || config.postprocess.bloomIntensity > 5) {
         errors.push_back("postprocess.bloomIntensity must be between 0 and 5");
     }
-    static const std::vector<std::string> valid_tonemappers = {"ACES",      "Reinhard", "Filmic",
+    static const std::vector<std::string> valid_tonemappers = {"ACES",       "Reinhard", "Filmic",
                                                                "Uncharted2", "None",     "Linear"};
     if (std::find(valid_tonemappers.begin(), valid_tonemappers.end(),
                   config.postprocess.tonemapper) == valid_tonemappers.end()) {

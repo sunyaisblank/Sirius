@@ -16,8 +16,7 @@ using sirius::base::Fail;
 
 Expected<int> ParsePositive(int value) {
     if (value <= 0) {
-        return Fail(ErrorDomain::kConfiguration, "parse positive integer",
-                    std::to_string(value));
+        return Fail(ErrorDomain::kConfiguration, "parse positive integer", std::to_string(value));
     }
     return value;
 }

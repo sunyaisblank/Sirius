@@ -2,14 +2,16 @@
 // Tests: struct sizes, per-pixel/ray memory, 3D texture memory.
 
 #define _USE_MATH_DEFINES
-#include <cmath>
+#include "sirius/core/dual_number.h"
+#include "sirius/core/metrics/kerr_schild_family.h"
+#include "sirius/core/metrics/metric.h"
+#include "sirius/core/tensor.h"
+
 #include <gtest/gtest.h>
+
+#include <cmath>
 #include <cstddef>
 #include <vector>
-#include "sirius/core/tensor.h"
-#include "sirius/core/dual_number.h"
-#include "sirius/core/metrics/metric.h"
-#include "sirius/core/metrics/kerr_schild_family.h"
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -19,37 +21,37 @@ using namespace sirius::core;
 // =============================================================================
 
 namespace MemoryBudgets {
-    // Resolution
-    constexpr int WIDTH_1080P = 1920;
-    constexpr int HEIGHT_1080P = 1080;
-    constexpr int TOTAL_PIXELS_1080P = WIDTH_1080P * HEIGHT_1080P;
+// Resolution
+constexpr int WIDTH_1080P = 1920;
+constexpr int HEIGHT_1080P = 1080;
+constexpr int TOTAL_PIXELS_1080P = WIDTH_1080P * HEIGHT_1080P;
 
-    constexpr int WIDTH_4K = 3840;
-    constexpr int HEIGHT_4K = 2160;
-    [[maybe_unused]] constexpr int TOTAL_PIXELS_4K = WIDTH_4K * HEIGHT_4K;
+constexpr int WIDTH_4K = 3840;
+constexpr int HEIGHT_4K = 2160;
+[[maybe_unused]] constexpr int TOTAL_PIXELS_4K = WIDTH_4K * HEIGHT_4K;
 
-    // Typical numerical metric grid
-    constexpr int NR_GRID_SIZE_SMALL = 64;
-    constexpr int NR_GRID_SIZE_MEDIUM = 128;
-    constexpr int NR_GRID_SIZE_LARGE = 256;
+// Typical numerical metric grid
+constexpr int NR_GRID_SIZE_SMALL = 64;
+constexpr int NR_GRID_SIZE_MEDIUM = 128;
+constexpr int NR_GRID_SIZE_LARGE = 256;
 
-    // ADM variable count (10 components: alp, betax/y/z, gxx, gxy, gxz, gyy, gyz, gzz)
-    constexpr int ADM_COMPONENT_COUNT = 10;
+// ADM variable count (10 components: alp, betax/y/z, gxx, gxy, gxz, gyy, gyz, gzz)
+constexpr int ADM_COMPONENT_COUNT = 10;
 
-    // VRAM budget (typical GPU)
-    constexpr size_t VRAM_BUDGET_8GB = 8ULL * 1024 * 1024 * 1024;
-    [[maybe_unused]] constexpr size_t VRAM_BUDGET_12GB = 12ULL * 1024 * 1024 * 1024;
+// VRAM budget (typical GPU)
+constexpr size_t VRAM_BUDGET_8GB = 8ULL * 1024 * 1024 * 1024;
+[[maybe_unused]] constexpr size_t VRAM_BUDGET_12GB = 12ULL * 1024 * 1024 * 1024;
 
-    // Reasonable limits
-    [[maybe_unused]] constexpr size_t MAX_TEXTURE_SIZE_MB = 2048;  // 2GB texture limit
-}
+// Reasonable limits
+[[maybe_unused]] constexpr size_t MAX_TEXTURE_SIZE_MB = 2048;  // 2GB texture limit
+}  // namespace MemoryBudgets
 
 // =============================================================================
 // Test Fixture
 // =============================================================================
 
 class MemoryUsageTests : public ::testing::Test {
-protected:
+  protected:
     // Helper: format bytes as human-readable string
     std::string formatBytes(size_t bytes) {
         if (bytes < 1024) return std::to_string(bytes) + " B";
@@ -135,8 +137,7 @@ TEST_F(MemoryUsageTests, PerRayMemory) {
     std::cout << "  Total ray memory @ 1080p: " << formatBytes(total_ray_memory) << "\n";
 
     // Should be reasonable (< 1GB for 1080p)
-    EXPECT_LT(total_ray_memory, 1ULL * 1024 * 1024 * 1024)
-        << "Ray memory at 1080p should be < 1GB";
+    EXPECT_LT(total_ray_memory, 1ULL * 1024 * 1024 * 1024) << "Ray memory at 1080p should be < 1GB";
 }
 
 // Test: Memory per pixel for metric storage
@@ -147,7 +148,8 @@ TEST_F(MemoryUsageTests, PerPixelMetricStorage) {
     // - Christoffel symbols: 40 unique × 8 bytes = 320 bytes (if cached)
 
     size_t per_pixel_minimal = 10 * sizeof(double);  // Just metric components
-    size_t per_pixel_full = 10 * sizeof(Dual<double>) + 40 * sizeof(double);  // Metric + Christoffel
+    size_t per_pixel_full =
+        10 * sizeof(Dual<double>) + 40 * sizeof(double);  // Metric + Christoffel
 
     std::cout << "\n[MEMORY] Per-pixel metric storage:\n";
     std::cout << "  Minimal (metric only): " << per_pixel_minimal << " bytes\n";
@@ -307,7 +309,10 @@ TEST_F(MemoryUsageTests, MetricEvaluationNoLeak) {
     sirius::core::KerrSchildFamily mink{sirius::core::KerrSchildParams::Minkowski()};
 
     Vec4 pos;
-    pos(0) = 0; pos(1) = 10; pos(2) = 0; pos(3) = 0;
+    pos(0) = 0;
+    pos(1) = 10;
+    pos(2) = 0;
+    pos(3) = 0;
 
     Metric4d g;
     Tensor<Dual<double>, 4, 4, 4> dg;
@@ -327,10 +332,10 @@ TEST_F(MemoryUsageTests, TestMemoryOverhead) {
     std::cout << "  sizeof(Dual<double>): " << sizeof(Dual<double>) << " bytes\n";
     std::cout << "  sizeof(Vec4): " << sizeof(Vec4) << " bytes\n";
     std::cout << "  sizeof(Metric4D): " << sizeof(Metric4d) << " bytes\n";
-    std::cout << "  sizeof(Tensor<Dual<double>,4,4,4>): "
-              << sizeof(Tensor<Dual<double>, 4, 4, 4>) << " bytes\n";
+    std::cout << "  sizeof(Tensor<Dual<double>,4,4,4>): " << sizeof(Tensor<Dual<double>, 4, 4, 4>)
+              << " bytes\n";
 
     EXPECT_TRUE(true);  // Documentation test
 }
 
-} // namespace sirius::test
+}  // namespace sirius::test

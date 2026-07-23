@@ -119,9 +119,9 @@ namespace narrowband {
 
 // Emission-line strengths for a temperature region.
 struct EmissionLines {
-    float SII = 0.0f;    // Sulfur II (cool regions).
-    float Halpha = 0.0f; // Hydrogen alpha (warm regions).
-    float OIII = 0.0f;   // Oxygen III (hot regions).
+    float SII = 0.0f;     // Sulfur II (cool regions).
+    float Halpha = 0.0f;  // Hydrogen alpha (warm regions).
+    float OIII = 0.0f;    // Oxygen III (hot regions).
 };
 
 // Approximate emission-line strength from normalised temperature T in [0, 1].
@@ -173,7 +173,7 @@ namespace polarisation_vis {
 inline spectral::Rgb StokesToRgbHsv(const StokesVector& stokes) {
     float I = stokes.I;
     float p = stokes.PolarisationDegree();  // [0, 1].
-    float chi = stokes.Evpa();  // [-pi/2, pi/2].
+    float chi = stokes.Evpa();              // [-pi/2, pi/2].
 
     // Map EVPA to hue [0, 1].
     float hue = (chi + static_cast<float>(M_PI / 2.0)) / static_cast<float>(M_PI);
@@ -194,12 +194,24 @@ inline spectral::Rgb StokesToRgbHsv(const StokesVector& stokes) {
 
     spectral::Rgb color;
     switch (i % 6) {
-        case 0: color = {val, t, q}; break;
-        case 1: color = {p_val, val, q}; break;
-        case 2: color = {q, val, t}; break;
-        case 3: color = {q, p_val, val}; break;
-        case 4: color = {t, q, val}; break;
-        case 5: color = {val, q, p_val}; break;
+        case 0:
+            color = {val, t, q};
+            break;
+        case 1:
+            color = {p_val, val, q};
+            break;
+        case 2:
+            color = {q, val, t};
+            break;
+        case 3:
+            color = {q, p_val, val};
+            break;
+        case 4:
+            color = {t, q, val};
+            break;
+        case 5:
+            color = {val, q, p_val};
+            break;
     }
 
     return color;
@@ -239,22 +251,15 @@ inline spectral::Rgb StokesToRgbFalseColor(const StokesVector& stokes) {
 }
 
 // EVPA angle (radians) for drawing a polarisation tick.
-inline float GetEvpa(const StokesVector& stokes) {
-    return stokes.Evpa();
-}
+inline float GetEvpa(const StokesVector& stokes) { return stokes.Evpa(); }
 
 }  // namespace polarisation_vis
 
 // Apply a colour mode to disk emission. T_emit is the emitted temperature
 // (normalised), g the redshift factor, intensity the Stefan-Boltzmann term,
 // and stokes optional data for the polarisation mode.
-inline spectral::Rgb ApplyColorMode(
-    Mode mode,
-    float T_emit,
-    float g,
-    float intensity,
-    const StokesVector* stokes = nullptr)
-{
+inline spectral::Rgb ApplyColorMode(Mode mode, float T_emit, float g, float intensity,
+                                    const StokesVector* stokes = nullptr) {
     switch (mode) {
         case Mode::TrueColor: {
             // Physical blackbody -> sRGB.

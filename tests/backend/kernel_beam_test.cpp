@@ -57,22 +57,30 @@ std::vector<float> BaseParams(std::uint32_t w, std::uint32_t h) {
     params[2] = 0.0f;  // Kerr-Schild family.
     params[3] = 1.0f;  // M
     params[4] = 0.9f;  // a
-    params[7] = 0.0f; params[8] = 0.0f; params[9] = -40.0f;   // camera position
-    params[10] = 0.0f; params[11] = 0.0f; params[12] = 1.0f;  // forward
-    params[13] = 1.0f; params[14] = 0.0f; params[15] = 0.0f;  // right
-    params[16] = 0.0f; params[17] = 1.0f; params[18] = 0.0f;  // up
-    params[19] = 0.6f;   // fov
-    params[20] = 1.0f;   // aspect
-    params[21] = 2000.0f;  // maxSteps
-    params[22] = 0.06f;    // stepScale
-    params[23] = 0.02f;    // minStep
-    params[24] = 2.0f;     // maxStep
-    params[25] = 100.0f;   // escapeRadius
-    params[26] = 1.12f;    // captureFactor
-    params[27] = 0.0f;     // disk disabled
-    params[34] = float(w);   // tileWidth
-    params[35] = float(h);   // tileHeight
-    params[37] = 1.0f;       // dummy starfield dims
+    params[7] = 0.0f;
+    params[8] = 0.0f;
+    params[9] = -40.0f;  // camera position
+    params[10] = 0.0f;
+    params[11] = 0.0f;
+    params[12] = 1.0f;  // forward
+    params[13] = 1.0f;
+    params[14] = 0.0f;
+    params[15] = 0.0f;  // right
+    params[16] = 0.0f;
+    params[17] = 1.0f;
+    params[18] = 0.0f;      // up
+    params[19] = 0.6f;      // fov
+    params[20] = 1.0f;      // aspect
+    params[21] = 2000.0f;   // maxSteps
+    params[22] = 0.06f;     // stepScale
+    params[23] = 0.02f;     // minStep
+    params[24] = 2.0f;      // maxStep
+    params[25] = 100.0f;    // escapeRadius
+    params[26] = 1.12f;     // captureFactor
+    params[27] = 0.0f;      // disk disabled
+    params[34] = float(w);  // tileWidth
+    params[35] = float(h);  // tileHeight
+    params[37] = 1.0f;      // dummy starfield dims
     params[38] = 1.0f;
     return params;
 }
@@ -135,7 +143,7 @@ TEST(KernelBeam, BeamFlagWiresDeviationWithoutMovingDefault) {
     // Beam expansion (alpha) is finite; measure it against proximity to the
     // shadow. Escaped pixels near the shadow are strongly lensed (large
     // expansion); edge pixels sit near the seed value.
-    float center_max = 0.0f;   // Near the shadow (image centre).
+    float center_max = 0.0f;  // Near the shadow (image centre).
     float edge_expansion = 0.0f;
     int edge_count = 0;
     for (std::uint32_t y = 0; y < kH; ++y) {

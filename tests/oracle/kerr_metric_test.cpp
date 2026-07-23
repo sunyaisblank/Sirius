@@ -319,8 +319,7 @@ TEST_F(KerrMetricDTest, ChristoffelMatchesFiniteDifferencesOfMetric) {
                           (dg[nu][sigma][rho] + dg[rho][sigma][nu] - dg[sigma][nu][rho]);
                 }
                 fd *= 0.5;
-                EXPECT_NEAR(Gamma[mu][nu][rho], fd,
-                            1e-6 * std::max(1.0, std::abs(fd)))
+                EXPECT_NEAR(Gamma[mu][nu][rho], fd, 1e-6 * std::max(1.0, std::abs(fd)))
                     << "Gamma^" << mu << "_" << nu << rho
                     << " disagrees with finite differences of the metric";
             }
@@ -357,11 +356,10 @@ TEST_F(KerrMetricDTest, SecondDerivativesMatchFiniteDifference) {
                 for (int mu = 0; mu < 4; ++mu) {
                     for (int nu = 0; nu < 4; ++nu) {
                         double fd = (dgp[s2][mu][nu] - dgm[s2][mu][nu]) / (2.0 * h);
-                        EXPECT_NEAR(ddg[s][s2][mu][nu], fd,
-                                    1e-6 * std::max(1.0, std::abs(fd)))
+                        EXPECT_NEAR(ddg[s][s2][mu][nu], fd, 1e-6 * std::max(1.0, std::abs(fd)))
                             << "dd g[" << s << "][" << s2 << "][" << mu << "][" << nu
-                            << "] disagrees with finite differences (a=" << c.a
-                            << ", r=" << c.r << ", theta=" << c.theta << ")";
+                            << "] disagrees with finite differences (a=" << c.a << ", r=" << c.r
+                            << ", theta=" << c.theta << ")";
                     }
                 }
             }

@@ -27,6 +27,10 @@ jobs:
             "https://github.com/shader-slang/slang/releases/download/${TAG}/slang-${TAG#v}-linux-x86_64.tar.gz" \
             --output slang.tgz
           sudo mkdir -p /opt/slang && sudo tar xzf slang.tgz -C /opt/slang
+      - name: First-party format
+        run: |
+          find src/sirius tests -type f \( -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \) \
+            -print0 | xargs -0 clang-format-18 --dry-run --Werror
       - name: Configure
         run: cmake --preset linux-ci
       - name: Build (strict, mandatory gate on)
