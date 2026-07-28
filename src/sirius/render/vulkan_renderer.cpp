@@ -15,6 +15,7 @@
 #include "sirius/core/coordinates.h"
 #include "sirius/core/disk/novikov_thorne_disk.h"
 #include "sirius/core/metrics/registry.h"
+#include "sirius/render/dispatch_governor.h"
 #include "sirius/render/session/display_buffer.h"
 #include "sirius/render/session/render_session.h"
 
@@ -401,6 +402,19 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
               << (plan->tile_working_set_bytes / 1024) << " KiB)\n";
     std::cout << "[Vulkan] precision: " << RungName(*rung) << " rung\n";
 
+    // Dispatch-duration governor: tiles are submitted as adaptive row bands so
+    // no single dispatch can outlive the OS GPU watchdog (dispatch_governor.h).
+    auto target_ms = ResolveDispatchTargetMs();
+    if (!target_ms) {
+        return std::unexpected(target_ms.error());
+    }
+    BandController bands(plan->tile_edge, *target_ms);
+    if (bands.Enabled()) {
+        std::cout << "[Vulkan] dispatch governor: " << *target_ms << " ms/band target\n";
+    } else {
+        std::cout << "[Vulkan] dispatch governor disabled: one dispatch per tile\n";
+    }
+
     const int edge = plan->tile_edge;
     const std::uint64_t radiance_capacity =
         static_cast<std::uint64_t>(edge) * edge * 4 * sizeof(float);
@@ -430,6 +444,7 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
     std::vector<float> tile_pixels(static_cast<std::size_t>(edge) * edge * 4, 0.0f);
 
     int tiles_done = 0;
+    int band_dispatches = 0;
     const backend::BufferHandle bindings[] = {*radiance_buf, *params_buf, *star_buf};
     for (int tj = 0; tj < tiles_y; ++tj) {
         for (int ti = 0; ti < tiles_x; ++ti) {
@@ -439,29 +454,44 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
             const int th = std::min(edge, config.height - oy);
 
             params[32] = static_cast<float>(ox);
-            params[33] = static_cast<float>(oy);
             params[34] = static_cast<float>(tw);
-            params[35] = static_cast<float>(th);
-            if (auto w =
-                    device.WriteBuffer(*params_buf, std::as_bytes(std::span<const float>(params)));
-                !w) {
-                return std::unexpected(w.error());
+
+            // The kernel addresses pixels absolutely (tile origin + thread id),
+            // so submitting the tile as row bands changes submission
+            // granularity and no pixel value.
+            for (int by = 0; by < th;) {
+                const int bh = bands.NextRows(th - by);
+                params[33] = static_cast<float>(oy + by);
+                params[35] = static_cast<float>(bh);
+                if (auto w = device.WriteBuffer(*params_buf,
+                                                std::as_bytes(std::span<const float>(params)));
+                    !w) {
+                    return std::unexpected(w.error());
+                }
+
+                const auto gx = static_cast<std::uint32_t>((tw + 7) / 8);
+                const auto gy = static_cast<std::uint32_t>((bh + 7) / 8);
+                const auto band_start = std::chrono::steady_clock::now();
+                if (auto d = device.Dispatch(*kernel, bindings, gx, gy, 1); !d) {
+                    return std::unexpected(d.error());
+                }
+                bands.Record(std::chrono::duration<double, std::milli>(
+                                 std::chrono::steady_clock::now() - band_start)
+                                 .count());
+                ++band_dispatches;
+
+                const std::size_t band_floats = static_cast<std::size_t>(tw) * bh * 4;
+                if (auto rd = device.ReadBuffer(
+                        *radiance_buf,
+                        std::as_writable_bytes(std::span<float>(tile_pixels.data(), band_floats)));
+                    !rd) {
+                    return std::unexpected(rd.error());
+                }
+
+                display.UpdateTile(ox, oy + by, tw, bh, tile_pixels.data());
+                by += bh;
             }
 
-            const auto gx = static_cast<std::uint32_t>((tw + 7) / 8);
-            const auto gy = static_cast<std::uint32_t>((th + 7) / 8);
-            if (auto d = device.Dispatch(*kernel, bindings, gx, gy, 1); !d) {
-                return std::unexpected(d.error());
-            }
-
-            const std::size_t tile_floats = static_cast<std::size_t>(tw) * th * 4;
-            if (auto rd = device.ReadBuffer(*radiance_buf, std::as_writable_bytes(std::span<float>(
-                                                               tile_pixels.data(), tile_floats)));
-                !rd) {
-                return std::unexpected(rd.error());
-            }
-
-            display.UpdateTile(ox, oy, tw, th, tile_pixels.data());
             ++tiles_done;
             if (on_tile) {
                 on_tile(tiles_done, tiles_total);
@@ -476,6 +506,7 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
     stats.precision = *rung;
     stats.starfield_uploaded = use_starfield;
     stats.tiles_rendered = tiles_total;
+    stats.band_dispatches = band_dispatches;
     stats.seconds = std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
     return stats;
 }

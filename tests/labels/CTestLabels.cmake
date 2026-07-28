@@ -287,6 +287,19 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    DispatchGovernor.FirstBandIsTheInitialHeightClampedToTheTile
+    DispatchGovernor.BandsNeverExceedRemainingRowsNorDropBelowOne
+    DispatchGovernor.GrowthPerStepIsBoundedByTheCap
+    DispatchGovernor.ZeroMeasurementTakesTheCappedGrowthStep
+    DispatchGovernor.OvershootShrinksProportionallyInOneStep
+    DispatchGovernor.DisabledControllerDispatchesWholeTilesAndIgnoresFeedback
+    DispatchGovernor.TargetDefaultsWhenTheEnvironmentIsUnset
+    DispatchGovernor.TargetHonoursTheOverrideIncludingZero
+    DispatchGovernor.TargetFailsLoudOnGarbageAndNegatives
+    PROPERTIES LABELS "Correctness"
+)
+
+set_tests_properties(
     DopplerToggleTest.SuppressionCollapsesDiskAsymmetry
     PROPERTIES LABELS "Correctness"
 )

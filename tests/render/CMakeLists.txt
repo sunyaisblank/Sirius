@@ -12,6 +12,7 @@ add_executable(sirius_render_tests
     spectral_emission_test.cpp
     render_session_probe_test.cpp
     memory_governor_test.cpp
+    dispatch_governor_test.cpp
     vulkan_render_test.cpp
     ray_bundle_test.cpp
     starfield_point_test.cpp
