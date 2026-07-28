@@ -17,10 +17,25 @@
 // wall-time target per dispatch, because a static height cannot serve both the
 // fp32 and fp64 rungs (an order of magnitude apart on consumer silicon) nor
 // devices of unknown throughput.
+//
+// The controller's state is a band AREA in pixels, not a row count, and every
+// measurement is attributed to the pixels the dispatch actually covered. Both
+// choices are load-bearing (adversarial review of 2026-07-28, two confirmed
+// findings): a row-count controller misreads a tile's truncated tail band as
+// a fast full-height band and ratchets up by the growth cap at every tile
+// boundary, and it carries a height learned on a narrow last-column tile into
+// the next full-width tile, where the same rows cost proportionally more —
+// the whole-tile dispatch shape the governor exists to prevent. Area
+// accounting closes both routes. The residual risk is a genuine cost cliff
+// between adjacent regions of the image: one dispatch after the cliff may
+// overshoot before feedback arrives, bounded by kBandGrowthCap times the
+// target per step; a lower SIRIUS_DISPATCH_TARGET_MS buys margin at the cost
+// of submission overhead.
 
 #include "sirius/base/error.h"
 
 #include <algorithm>
+#include <cstdint>
 
 namespace sirius::render {
 
@@ -29,9 +44,10 @@ namespace sirius::render {
 // submission overhead on the rungs that could sustain longer dispatches.
 inline constexpr double kDefaultDispatchTargetMs = 250.0;
 
-// Rows in the first band, before any measurement exists. Small enough that
-// even the fp64 rung on integrated silicon finishes well inside the target's
-// order of magnitude; the controller grows from here within a few bands.
+// Rows in the first band, at governed-tile width, before any measurement
+// exists. Small enough that even the fp64 rung on integrated silicon finishes
+// well inside the target's order of magnitude; the controller grows from here
+// within a few bands.
 inline constexpr int kInitialBandRows = 8;
 
 // Per-step growth bound. Growth is damped so one spuriously fast measurement
@@ -40,45 +56,53 @@ inline constexpr int kInitialBandRows = 8;
 // target risks device removal while undershooting only costs overhead.
 inline constexpr double kBandGrowthCap = 2.0;
 
-// Adaptive band-height controller. One instance persists across a render so
-// the learned throughput carries from tile to tile. Pure arithmetic; no device
-// handles cross this boundary, so it is unit-testable without Vulkan.
+// Adaptive band-area controller. One instance persists across a render so the
+// learned throughput carries from tile to tile; NextRows converts the learned
+// area to rows at the width of the band being planned, which is what makes
+// the carried state width-safe. Pure arithmetic; no device handles cross this
+// boundary, so it is unit-testable without Vulkan.
 //
 // Invariants: NextRows always returns a value in [1, remaining_rows]; with the
 // governor disabled (target_ms <= 0) it returns remaining_rows unchanged, which
 // restores the historical one-dispatch-per-tile behaviour.
 class BandController {
   public:
-    // max_rows caps a band at the governed tile edge; target_ms <= 0 disables
-    // banding (the escape hatch SIRIUS_DISPATCH_TARGET_MS=0 documents).
-    BandController(int max_rows, double target_ms)
-        : max_rows_(std::max(1, max_rows)),
+    // tile_edge bounds the learned area at one governed tile (the radiance
+    // buffer's capacity); target_ms <= 0 disables banding (the escape hatch
+    // SIRIUS_DISPATCH_TARGET_MS=0 documents).
+    BandController(int tile_edge, double target_ms)
+        : max_pixels_(static_cast<std::int64_t>(std::max(1, tile_edge)) * std::max(1, tile_edge)),
           target_ms_(target_ms),
-          rows_(std::clamp(kInitialBandRows, 1, std::max(1, max_rows))) {}
+          pixels_(std::min<std::int64_t>(
+              static_cast<std::int64_t>(kInitialBandRows) * std::max(1, tile_edge), max_pixels_)) {}
 
-    // Rows the next dispatch should cover, given the rows still unrendered in
-    // the current tile. Postcondition: 1 <= result <= remaining_rows, unless
-    // banding is disabled, in which case result == remaining_rows.
-    [[nodiscard]] int NextRows(int remaining_rows) const;
+    // Rows the next dispatch should cover for a band `band_width` pixels wide,
+    // given the rows still unrendered in the current tile. Preconditions:
+    // remaining_rows > 0, band_width > 0. Postcondition: 1 <= result <=
+    // remaining_rows, unless banding is disabled, in which case result ==
+    // remaining_rows.
+    [[nodiscard]] int NextRows(int remaining_rows, int band_width) const;
 
-    // Feeds one dispatch's measured wall time back into the controller. Growth
-    // is capped at kBandGrowthCap per step; shrink is proportional and
-    // uncapped (floor one row). Disabled controllers ignore measurements.
-    void Record(double measured_ms);
+    // Feeds one dispatch's outcome back: the pixels it ACTUALLY covered (which
+    // a tail band makes smaller than the controller asked for) and its wall
+    // time. Growth is capped at kBandGrowthCap per step; shrink is
+    // proportional and uncapped (floor one pixel). Disabled controllers
+    // ignore measurements.
+    void Record(std::int64_t dispatched_pixels, double measured_ms);
 
     [[nodiscard]] bool Enabled() const { return target_ms_ > 0.0; }
     [[nodiscard]] double TargetMs() const { return target_ms_; }
 
   private:
-    int max_rows_;
+    std::int64_t max_pixels_;
     double target_ms_;
-    int rows_;
+    std::int64_t pixels_;  // learned band area
 };
 
 // Resolves the per-dispatch wall-time target: kDefaultDispatchTargetMs unless
-// SIRIUS_DISPATCH_TARGET_MS overrides it. Zero disables banding; a negative or
-// unparseable value is a loud error, never a silent default (the same contract
-// SIRIUS_PRECISION carries).
+// SIRIUS_DISPATCH_TARGET_MS overrides it. Zero disables banding; a negative,
+// non-finite, overflowing, or unparseable value is a loud error, never a
+// silent default (the same contract SIRIUS_PRECISION carries).
 [[nodiscard]] base::Expected<double> ResolveDispatchTargetMs();
 
 }  // namespace sirius::render

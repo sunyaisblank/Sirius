@@ -460,7 +460,7 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
             // so submitting the tile as row bands changes submission
             // granularity and no pixel value.
             for (int by = 0; by < th;) {
-                const int bh = bands.NextRows(th - by);
+                const int bh = bands.NextRows(th - by, tw);
                 params[33] = static_cast<float>(oy + by);
                 params[35] = static_cast<float>(bh);
                 if (auto w = device.WriteBuffer(*params_buf,
@@ -475,7 +475,8 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
                 if (auto d = device.Dispatch(*kernel, bindings, gx, gy, 1); !d) {
                     return std::unexpected(d.error());
                 }
-                bands.Record(std::chrono::duration<double, std::milli>(
+                bands.Record(static_cast<std::int64_t>(tw) * bh,
+                             std::chrono::duration<double, std::milli>(
                                  std::chrono::steady_clock::now() - band_start)
                                  .count());
                 ++band_dispatches;
