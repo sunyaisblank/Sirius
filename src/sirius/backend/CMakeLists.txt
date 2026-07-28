@@ -130,5 +130,45 @@ add_custom_command(
 )
 list(APPEND SIRIUS_KERNEL_OUTPUTS "${kernel_comp_out}")
 
+# --- Portability emissions ----------------------------------------------------
+# Hardware agnosticism is a standing gate, not a one-off claim: the same trace
+# source that ships as SPIR-V also emits vendor-native kernel source for the
+# two ecosystems Vulkan compute does not reach natively — CUDA C++ for the
+# nvcc toolchain and Metal Shading Language for Apple silicon. No adapter
+# consumes these yet (recorded deferral, docs/ARCHITECTURE.md section 4); the
+# build proves single-source portability and the KernelPortability suite pins
+# each artefact's entry point, so a kernel edit that breaks a vendor target
+# fails here rather than on first contact with that vendor's hardware.
+set(SIRIUS_PORTABILITY_DIR "${SIRIUS_KERNEL_BINARY_DIR}/portability")
+file(MAKE_DIRECTORY "${SIRIUS_PORTABILITY_DIR}")
+
+set(kernel_cuda_out "${SIRIUS_PORTABILITY_DIR}/trace.cu")
+add_custom_command(
+    OUTPUT "${kernel_cuda_out}"
+    COMMAND ${SIRIUS_SLANGC} "${SIRIUS_KERNEL_DIR}/trace.slang"
+        -target cuda
+        -entry ComputeMain -stage compute
+        -I "${SIRIUS_KERNEL_DIR}"
+        -o "${kernel_cuda_out}"
+    DEPENDS "${SIRIUS_KERNEL_DIR}/trace.slang" ${SIRIUS_KERNEL_LIBS}
+    COMMENT "Emitting Slang kernel trace.slang -> CUDA C++ (portability gate)"
+    VERBATIM
+)
+list(APPEND SIRIUS_KERNEL_OUTPUTS "${kernel_cuda_out}")
+
+set(kernel_metal_out "${SIRIUS_PORTABILITY_DIR}/trace.metal")
+add_custom_command(
+    OUTPUT "${kernel_metal_out}"
+    COMMAND ${SIRIUS_SLANGC} "${SIRIUS_KERNEL_DIR}/trace.slang"
+        -target metal
+        -entry ComputeMain -stage compute
+        -I "${SIRIUS_KERNEL_DIR}"
+        -o "${kernel_metal_out}"
+    DEPENDS "${SIRIUS_KERNEL_DIR}/trace.slang" ${SIRIUS_KERNEL_LIBS}
+    COMMENT "Emitting Slang kernel trace.slang -> Metal Shading Language (portability gate)"
+    VERBATIM
+)
+list(APPEND SIRIUS_KERNEL_OUTPUTS "${kernel_metal_out}")
+
 add_custom_target(sirius_kernels ALL DEPENDS ${SIRIUS_KERNEL_OUTPUTS})
 add_dependencies(sirius_backend sirius_kernels)

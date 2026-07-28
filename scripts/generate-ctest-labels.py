@@ -148,6 +148,7 @@ SUITE_LABELS = {
     "DopplerToggleTest": CORRECTNESS,
     "StarfieldPointTest": CORRECTNESS,
     "KernelBeam": CORRECTNESS,
+    "KernelPortability": CORRECTNESS,
 }
 
 
