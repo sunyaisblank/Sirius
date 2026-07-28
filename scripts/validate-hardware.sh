@@ -8,6 +8,17 @@
 # gate, then exercises the governed-budget and precision-ladder paths on the
 # physical device and records everything under renders/hardware-validation/.
 #
+# WSL2 route (validated 2026-07-28): stock Ubuntu Mesa ships no Dozen ICD, so
+# the physical GPU is invisible to Vulkan even though /dev/dxg is present.
+# Build Mesa with -Dvulkan-drivers=microsoft-experimental and point the loader
+# at the built manifest:
+#   VK_ICD_FILENAMES=<mesa>/build/src/microsoft/vulkan/dzn_devenv_icd.x86_64.json
+# Dozen presents the GPU as Vulkan 1.2 over D3D12 (SPIR-V 1.5 kernels load
+# as-is) and, on the 780M, exposes shaderFloat64, so all three rungs run on
+# silicon. Performance through the D3D12 translation is indicative, not
+# native; treat native-driver numbers (Windows AMD Vulkan) as the benchmark
+# of record when both are available.
+#
 # Pass criteria (record the log with the machine name):
 #   1. Full ctest estate green.
 #   2. The governed render completes inside a 2048 MiB budget cap at IMAX-class
