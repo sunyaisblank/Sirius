@@ -42,6 +42,7 @@ struct VulkanRenderStats {
     PrecisionRung precision = PrecisionRung::Fp32;
     bool starfield_uploaded = false;
     int tiles_rendered = 0;
+    int band_dispatches = 0;  // compute submissions; >= tiles_rendered under banding
     double seconds = 0.0;
 };
 

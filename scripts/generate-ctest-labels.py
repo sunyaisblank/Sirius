@@ -141,6 +141,7 @@ SUITE_LABELS = {
     "RenderCommandParse": CORRECTNESS,
     "PlatformPaths": CORRECTNESS,
     "MemoryGovernor": CORRECTNESS,
+    "DispatchGovernor": CORRECTNESS,
     "VulkanRenderSession": CORRECTNESS,
     "RayBundleTest": MANDATORY,
     "CameraAberrationTest": MANDATORY,

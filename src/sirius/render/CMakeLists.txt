@@ -24,8 +24,10 @@ add_library(sirius_render STATIC
     stb_impl.cpp
     stb_write_impl.cpp
 
-    # Memory governor (pure arithmetic; no device dependency).
+    # Governors (pure arithmetic; no device dependency). Memory bounds tile
+    # residency; dispatch bounds per-submission duration under OS watchdogs.
     memory_governor.cpp
+    dispatch_governor.cpp
 
     # Session orchestrator.
     session/render_session.cpp
