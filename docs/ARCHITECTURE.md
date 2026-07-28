@@ -50,9 +50,9 @@ Precision inside kernels follows the ladder in section 6; conserved quantities (
 | Backend | Reaches | Status in this engagement |
 |---|---|---|
 | CPU tracer | every machine, no GPU or loader required | Ported live; the reference implementation |
-| Vulkan compute | AMD, Intel, NVIDIA on Windows and Linux; Apple via MoltenVK; WSL2 via Dozen or Lavapipe; CPU-only machines via Lavapipe/SwiftShader | Built and gated on Lavapipe here |
-| Slang→CUDA native | NVIDIA, if profiling shows Vulkan leaves performance unclaimed | Emission compile-checked only; adapter deferred |
-| Slang→Metal native | Apple silicon | Emission compile-checked only; adapter deferred |
+| Vulkan compute | AMD, Intel, NVIDIA on Windows and Linux; Apple via MoltenVK; WSL2 via Dozen or Lavapipe; CPU-only machines via Lavapipe/SwiftShader | Built and gated on Lavapipe; validated on physical 780M silicon via Dozen (2026-07-28) |
+| Slang→CUDA native | NVIDIA, if profiling shows Vulkan leaves performance unclaimed | Emission is a standing build gate: trace.slang → trace.cu every build, entry point pinned by the KernelPortability suite; adapter deferred |
+| Slang→Metal native | Apple silicon | Emission is a standing build gate: trace.slang → trace.metal every build, entry point pinned by the KernelPortability suite; adapter deferred |
 
 WSL2 is a named platform tier, not an afterthought: no native GPU kernel driver exists there, so the backend probes in order Dozen (Vulkan over the D3D12 paravirtual device), then Lavapipe, then declines to the CPU tracer with a clear message. The OptiX and CUDA host code, the PTX loader, and the vendored OptiX headers are retired with the kernel monolith; the Radeon 780M-class target is served by the Vulkan backend through the standard AMD drivers on Windows and RADV on Linux.
 

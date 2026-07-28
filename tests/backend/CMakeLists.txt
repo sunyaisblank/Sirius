@@ -11,6 +11,7 @@ add_executable(sirius_backend_tests
     kernel_parity_test.cpp
     kernel_trace_test.cpp
     kernel_beam_test.cpp
+    kernel_portability_test.cpp
 )
 
 target_link_libraries(sirius_backend_tests PRIVATE sirius_backend GTest::gtest_main)

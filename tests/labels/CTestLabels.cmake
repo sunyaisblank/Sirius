@@ -546,6 +546,12 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    KernelPortability.CudaEmissionCarriesTheNativeComputeEntryPoint
+    KernelPortability.MetalEmissionCarriesTheNativeComputeEntryPoint
+    PROPERTIES LABELS "Correctness"
+)
+
+set_tests_properties(
     KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow
     KernelTrace.Fp64RungAgreesWithFp32OnKerrScene
     KernelTrace.CompensatedRungTracksFp64AtLeastAsWellAsFp32
