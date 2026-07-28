@@ -292,10 +292,12 @@ set_tests_properties(
     DispatchGovernor.GrowthPerStepIsBoundedByTheCap
     DispatchGovernor.ZeroMeasurementTakesTheCappedGrowthStep
     DispatchGovernor.OvershootShrinksProportionallyInOneStep
+    DispatchGovernor.TruncatedTailBandFeedsBackOnlyItsOwnWork
+    DispatchGovernor.LearnedAreaNormalisesAcrossBandWidths
     DispatchGovernor.DisabledControllerDispatchesWholeTilesAndIgnoresFeedback
     DispatchGovernor.TargetDefaultsWhenTheEnvironmentIsUnset
     DispatchGovernor.TargetHonoursTheOverrideIncludingZero
-    DispatchGovernor.TargetFailsLoudOnGarbageAndNegatives
+    DispatchGovernor.TargetFailsLoudOnGarbageNegativesAndNonFinite
     PROPERTIES LABELS "Correctness"
 )
 
