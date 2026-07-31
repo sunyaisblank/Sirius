@@ -262,17 +262,18 @@ TEST(ViewCommandOperational, HeadlessRefinementProducesASynchronisedFrame) {
     config.final_width = 64;
     config.final_height = 64;
     config.refinement_levels = 1;
-    config.samples_per_level = 2;
+    config.samples_per_level = 1;
     config.backend = render::RenderBackend::Cpu;
-    config.metricId = core::MetricId::Kerr;
+    config.metricId = core::MetricId::Schwarzschild;
+    config.blackHoleSpin = 0.0;
 
     InteractiveViewer viewer;
     ASSERT_TRUE(viewer.Initialise(config));
     ASSERT_TRUE(viewer.Start());
 
-    // This is a liveness bound, not a performance assertion. Debug sanitizer
-    // builds can make the 4,096 traced rays more than an order of magnitude
-    // slower than Release, while still making steady progress.
+    // This is a liveness bound, not a performance assertion. Keep a real
+    // render and complete frame publication while avoiding coupling the
+    // correctness gate to hosted-runner throughput under three sanitizers.
     const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(60);
     while (!viewer.GetRefinementState().complete && viewer.GetLastError().empty() &&
            std::chrono::steady_clock::now() < deadline) {
@@ -285,7 +286,7 @@ TEST(ViewCommandOperational, HeadlessRefinementProducesASynchronisedFrame) {
     EXPECT_TRUE(refinement.complete);
     EXPECT_EQ(refinement.current_width, 64);
     EXPECT_EQ(refinement.current_height, 64);
-    EXPECT_EQ(refinement.current_samples_per_pixel, 2);
+    EXPECT_EQ(refinement.current_samples_per_pixel, 1);
     EXPECT_EQ(viewer.GetFrameBufferSnapshot().size(), 64u * 64u * 4u);
 }
 

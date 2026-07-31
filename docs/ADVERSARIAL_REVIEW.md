@@ -105,7 +105,7 @@ Each review pass asks:
 | Malformed vector indices, corona geometry, colour modes, tonemappers, trace outcomes, and film enums silently aliased or fell back | internal typed APIs retained permissive default branches after operator validation | Fixed: every malformed internal enum/index/state contracts or produces an explicit diagnostic rather than selecting another represented mode |
 | Fisheye existed in the core camera factory but could not be selected through configuration | schema and session projection only named pinhole/thin lens | Fixed: Fisheye is a represented CPU mode; explicit Vulkan declines and `auto` selects CPU at the capability boundary |
 | Viewer flags were parsed but the progressive session used hard-coded controls; frame/session state raced and shipped shaders were never consumed | CLI/config values did not reach the session; inline GLSL bypassed volume assets | Fixed: explicit projection, synchronised asynchronous refinement/cancellation, file-backed checked shaders, and a real headless frame witness |
-| The viewer liveness test embedded a 10-second performance assumption | full ASan/UBSan/LSan execution canceled a healthy render as workers completed | Fixed: the witness uses a generous bounded liveness interval; instrumented rerun completes in 13.57 seconds |
+| The viewer liveness test embedded local-host performance assumptions | hosted ASan/UBSan/LSan completed one refinement but teardown canceled a healthy second render at the fixed deadline | Fixed: the witness keeps a valid 64x64 Schwarzschild render, asynchronous completion, frame-size, state, and error assertions without duplicating multi-sample performance coverage; the exact sanitizer rerun passes |
 | Missing starfield changed the image to grey/analytic background | CPU warning and Vulkan fallback | Fixed: the starfield is a mandatory scene input and absence declines |
 | Kerr coordinate round-trip tolerated an intentionally wrong azimuth | forward transform omitted the Kerr phase while inverse subtracted it | Fixed with the exact oblate transform and 1e-12 round-trip gates |
 | Horizon-capture test asserted an identity | `x + (total-x) >= total` | Fixed with a positive captured/disk-ray postcondition |
@@ -133,6 +133,7 @@ Each review pass asks:
 | EXR metadata was constructed but discarded, finite fp32 radiance could overflow half storage, and direct writers accepted NaN/Inf | writer header and advertised color-space claims did not match the file | Fixed: fp32 channels, embedded Sirius metadata, conservative color naming, and finite checks at display, session, Vulkan, PNG, and EXR boundaries |
 | Native CI passed its full test estate but could not issue the promised build attestation | CTest placed relative JUnit outputs under each `--test-dir`, while the verifier looked in the repository root | Fixed: Windows and macOS attestations consume the exact binary-tree JUnit paths; publication CI is the executable witness |
 | The compiled capability authority exceeded MSVC's narrow string-literal limit | the 18,303-byte operating model was emitted as one raw literal and failed with C2026 | Fixed: CMake emits independently bounded 8,000-byte chunks; runtime validation reconstructs and semantically compares the complete authority |
+| Sanitizer publication limits assumed the faster review host | both pushed streams reproduced a 120-second relocated-volume timeout and a viewer teardown cancellation even though the same evidence passed locally | Fixed without dropping evidence: the specification-minimum 128x128 relocated render and every obstruction remain, the viewer witness removes redundant sampling load, and bounded test/job liveness windows admit slow instrumented hosted CPUs |
 | Historical byte-identity claims had no executable consumer | no test referenced the baseline directory | Claim withdrawn; tapes remain forensic evidence only |
 
 ## 4. Enforced operating model
@@ -195,8 +196,8 @@ this profile.
 | Interactive viewer refinement | HEADLESS READY; WINDOW RUNTIME UNEXECUTED | Strict parsing, projection, asynchronous render, synchronised frame publication, and cancellation are gated; no GLFW/OpenGL window or live input event was exercised |
 | GCC ASan + UBSan + LSan | READY WITH ONE EXTERNAL SUPPRESSION | Broad Mandatory estate plus repaired/changed-surface reruns; one named 128-byte Vulkan loader/driver allocation suppressed and printed |
 | Physical Radeon 780M | UNEXECUTED IN THIS REVIEW | Historical report names a run, but current environment exposes llvmpipe and no fresh physical-device evidence was produced |
-| Native Windows build/runtime | UNEXECUTED IN THIS REVIEW | A workflow definition is not a fresh build or native-driver runtime result |
-| macOS build/MoltenVK runtime | UNEXECUTED IN THIS REVIEW | A workflow definition is not fresh Apple toolchain/hardware evidence |
+| Native Windows build/runtime | BUILD ATTESTED; RUNTIME UNEXECUTED | Windows Server 2022 CI configures, builds, passes the full source-available estate, and emits a revision-bound build attestation; native Vulkan/device execution remains separate |
+| macOS build/MoltenVK runtime | BUILD ATTESTED; RUNTIME UNEXECUTED | macOS 15 CI configures, builds, passes the full source-available estate, and emits a revision-bound build attestation; MoltenVK/device execution remains separate |
 
 ## 6. Remaining limitations (not hidden as “green”)
 

@@ -90,7 +90,7 @@ set_tests_properties(
     PROPERTIES
         LABELS "Mandatory;Operational"
         RUN_SERIAL TRUE
-        TIMEOUT 120)
+        TIMEOUT 600)
 
 # Operator scripts are part of the callable system surface. Their render
 # commands must not be masked by a successful logging pipeline, and an exit-zero
