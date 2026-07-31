@@ -132,6 +132,7 @@ Each review pass asks:
 | Operator render scripts could report success from `tail` after a failed renderer and choose an arbitrary stale binary | pipeline status belonged to `tail`; `find ... | head -1` selected an unspecified build | Fixed: exact/explicit binary selection, status propagation, non-empty artefact checks, and failure/no-output negative controls |
 | EXR metadata was constructed but discarded, finite fp32 radiance could overflow half storage, and direct writers accepted NaN/Inf | writer header and advertised color-space claims did not match the file | Fixed: fp32 channels, embedded Sirius metadata, conservative color naming, and finite checks at display, session, Vulkan, PNG, and EXR boundaries |
 | Native CI passed its full test estate but could not issue the promised build attestation | CTest placed relative JUnit outputs under each `--test-dir`, while the verifier looked in the repository root | Fixed: Windows and macOS attestations consume the exact binary-tree JUnit paths; publication CI is the executable witness |
+| The compiled capability authority exceeded MSVC's narrow string-literal limit | the 18,303-byte operating model was emitted as one raw literal and failed with C2026 | Fixed: CMake emits independently bounded 8,000-byte chunks; runtime validation reconstructs and semantically compares the complete authority |
 | Historical byte-identity claims had no executable consumer | no test referenced the baseline directory | Claim withdrawn; tapes remain forensic evidence only |
 
 ## 4. Enforced operating model
@@ -252,7 +253,7 @@ corresponding profile. They are not projected from registration counts.
 
 - GCC 14 strict required-Vulkan profile and repeated CPU/Vulkan P1 burn-in:
   889/889 passed; 678 Mandatory, 152 Operational, 47 Performance, and 27
-  Stability tests passed. The isolated P1 burn-in ran for 14.29 seconds with
+  Stability tests passed. The isolated P1 burn-in ran for 14.42 seconds with
   required Vulkan and volume evidence.
 - GCC 14 Release portable profile: 886/886 passed; 675 Mandatory, 149
   Operational, 47 Performance, and 26 Stability tests passed.

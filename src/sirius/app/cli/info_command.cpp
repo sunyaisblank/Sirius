@@ -153,8 +153,12 @@ bool LoadAndValidateOperatingModel(const std::filesystem::path& path, nlohmann::
         }
         payload.assign(std::istreambuf_iterator<char>(input), std::istreambuf_iterator<char>());
         model = nlohmann::json::parse(payload);
-        const nlohmann::json authority = nlohmann::json::parse(
-            base::kEmbeddedOperatingModel.begin(), base::kEmbeddedOperatingModel.end());
+        std::string authority_payload;
+        authority_payload.reserve(base::kEmbeddedOperatingModelSize);
+        for (const std::string_view chunk : base::kEmbeddedOperatingModelChunks) {
+            authority_payload.append(chunk);
+        }
+        const nlohmann::json authority = nlohmann::json::parse(authority_payload);
         if (model != authority) {
             reason = "operating model does not match the compiled capability authority";
             return false;

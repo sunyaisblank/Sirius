@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+#include <cstddef>
 #include <string_view>
 
 namespace sirius::base {
@@ -7,7 +9,9 @@ namespace sirius::base {
 // Configured from tests/operating_model.json. Runtime capability reporting
 // requires semantic equality with this authority, so an installed ledger
 // cannot change a claim while retaining a schema shape that looks valid.
-inline constexpr std::string_view kEmbeddedOperatingModel =
-    R"SIRIUS_MODEL(@SIRIUS_OPERATING_MODEL_JSON@)SIRIUS_MODEL";
+inline constexpr std::size_t kEmbeddedOperatingModelSize = @SIRIUS_OPERATING_MODEL_SIZE@;
+inline constexpr std::array<std::string_view, @SIRIUS_OPERATING_MODEL_CHUNK_COUNT@>
+    kEmbeddedOperatingModelChunks = {
+@SIRIUS_OPERATING_MODEL_CPP_CHUNKS@};
 
 }  // namespace sirius::base
