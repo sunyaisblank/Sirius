@@ -81,7 +81,7 @@ jobs:
           --source-revision ${{ github.sha }}
           --artifact bin/windows-msvc/windows-tests.xml
           --output attestations/windows-build.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: sirius-windows-native-attestation
           path: attestations
@@ -105,7 +105,7 @@ jobs:
           --source-revision ${{ github.sha }}
           --artifact bin/macos/macos-tests.xml
           --output attestations/macos-build.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: sirius-macos-native-attestation
           path: attestations
