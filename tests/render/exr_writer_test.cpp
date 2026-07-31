@@ -16,6 +16,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <filesystem>
+#include <limits>
 #include <string>
 
 using namespace sirius::render;
@@ -49,6 +50,27 @@ TEST(EXRRoundTripTests, HDRGradientSurvivesWriteAndRead) {
     ASSERT_TRUE(EXRWriter::WriteExr(path, buffer, meta));
     ASSERT_TRUE(std::filesystem::exists(path));
 
+    EXRVersion version{};
+    ASSERT_EQ(ParseEXRVersionFromFile(&version, path.c_str()), TINYEXR_SUCCESS);
+    EXRHeader header{};
+    InitEXRHeader(&header);
+    const char* header_error = nullptr;
+    ASSERT_EQ(ParseEXRHeaderFromFile(&header, &version, path.c_str(), &header_error),
+              TINYEXR_SUCCESS)
+        << (header_error ? header_error : "unknown EXR header error");
+    std::string metric_attribute;
+    std::string colour_attribute;
+    for (int i = 0; i < header.num_custom_attributes; ++i) {
+        const EXRAttribute& attribute = header.custom_attributes[i];
+        const std::string value(reinterpret_cast<const char*>(attribute.value),
+                                static_cast<std::size_t>(attribute.size));
+        if (std::string(attribute.name) == "siriusMetric") metric_attribute = value;
+        if (std::string(attribute.name) == "siriusColorSpace") colour_attribute = value;
+    }
+    EXPECT_EQ(metric_attribute, "Kerr");
+    EXPECT_EQ(colour_attribute, "Sirius linear RGB");
+    FreeEXRHeader(&header);
+
     float* rgba = nullptr;
     int width = 0, height = 0;
     const char* err = nullptr;
@@ -57,8 +79,8 @@ TEST(EXRRoundTripTests, HDRGradientSurvivesWriteAndRead) {
     ASSERT_EQ(width, W);
     ASSERT_EQ(height, H);
 
-    // Half-float storage carries ~11 bits of significand; tolerate the
-    // corresponding relative error.
+    // The file stores fp32 so the round trip should be substantially tighter
+    // than half-float precision.
     double worstRel = 0.0;
     for (int y = 0; y < H; ++y) {
         for (int x = 0; x < W; ++x) {
@@ -70,7 +92,7 @@ TEST(EXRRoundTripTests, HDRGradientSurvivesWriteAndRead) {
             }
         }
     }
-    EXPECT_LT(worstRel, 2e-3) << "pixel data degraded beyond half-float precision";
+    EXPECT_LT(worstRel, 1e-6) << "pixel data degraded beyond fp32 precision";
 
     std::free(rgba);
     std::filesystem::remove(path);
@@ -79,4 +101,35 @@ TEST(EXRRoundTripTests, HDRGradientSurvivesWriteAndRead) {
 TEST(EXRRoundTripTests, WriteFailsCleanlyOnBadPath) {
     ImageBufferRGBA buffer(4, 4);
     EXPECT_FALSE(EXRWriter::WriteExr("/nonexistent-dir-sirius/out.exr", buffer));
+}
+
+TEST(EXRRoundTripTests, NonFiniteRadianceIsRejected) {
+    ImageBufferRGBA buffer(1, 1);
+    buffer.pixels[0] = std::numeric_limits<float>::infinity();
+    const std::string path = tempPath("sirius_nonfinite_must_not_write.exr");
+    std::filesystem::remove(path);
+    EXPECT_FALSE(EXRWriter::WriteExr(path, buffer));
+    EXPECT_FALSE(std::filesystem::exists(path));
+}
+
+TEST(EXRRoundTripTests, MalformedBufferShapesAreRejectedByEveryPublicWriter) {
+    ImageBuffer buffer(2, 2);
+    buffer.pixels.pop_back();
+    const std::string exr_path = tempPath("sirius_malformed.exr");
+    const std::string ppm_path = tempPath("sirius_malformed.ppm");
+    const std::string pfm_path = tempPath("sirius_malformed.pfm");
+    std::filesystem::remove(exr_path);
+    std::filesystem::remove(ppm_path);
+    std::filesystem::remove(pfm_path);
+
+    EXPECT_FALSE(EXRWriter::WriteExr(exr_path, buffer));
+    EXPECT_FALSE(EXRWriter::WritePpm(ppm_path, buffer));
+    EXPECT_FALSE(EXRWriter::WritePfm(pfm_path, buffer));
+    EXPECT_FALSE(std::filesystem::exists(exr_path));
+    EXPECT_FALSE(std::filesystem::exists(ppm_path));
+    EXPECT_FALSE(std::filesystem::exists(pfm_path));
+
+    ImageBufferRGBA rgba(2, 2);
+    rgba.pixels.pop_back();
+    EXPECT_FALSE(EXRWriter::WriteExr(exr_path, rgba));
 }

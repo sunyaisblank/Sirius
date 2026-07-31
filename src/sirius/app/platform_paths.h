@@ -28,9 +28,8 @@ class PlatformPaths {
     // System configuration directory (Linux /etc/sirius, Windows %PROGRAMDATA%).
     static fs::path SystemConfigDirectory();
 
-    // Resolve a resource (shader, texture) by searching the executable dir, the
-    // new-tree shaders/ subdir, the legacy Sirius.Render subdir, and the source
-    // tree. Returns the canonical path if found.
+    // Resolve an installed or build-staged runtime resource. Setting
+    // SIRIUS_RESOURCE_DIR selects one strict resource root.
     static std::optional<fs::path> ResolveResource(const std::string& relative_path);
 
     // Config file search locations, highest priority first.
@@ -44,10 +43,6 @@ class PlatformPaths {
 
     // Whether the process runs under WSL2.
     static bool IsWsl2();
-
-  private:
-    static fs::path executable_path_;
-    static bool executable_path_initialised_;
 };
 
 }  // namespace sirius::app

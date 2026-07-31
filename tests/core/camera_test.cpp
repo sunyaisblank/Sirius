@@ -269,11 +269,13 @@ TEST(CameraFactoryTest, CreateFisheye) {
     EXPECT_STREQ(camera->GetName(), "Fisheye Camera");
 }
 
-TEST(CameraFactoryTest, DefaultFallsToPinhole) {
-    auto camera = CreateCamera(LensType::Panoramic);  // Not implemented
-    ASSERT_NE(camera, nullptr);
-    EXPECT_EQ(camera->GetLensType(), LensType::Pinhole)
-        << "Unimplemented types should fall back to Pinhole";
+TEST(CameraFactoryTest, MalformedLensValueFailsClosed) {
+    EXPECT_DEATH(
+        {
+            const auto camera = CreateCamera(static_cast<LensType>(999));
+            static_cast<void>(camera);
+        },
+        "assertion.*enforced, terminating");
 }
 
 TEST(CameraFactoryTest, ConfigPassthrough) {

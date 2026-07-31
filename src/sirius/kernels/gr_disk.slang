@@ -125,6 +125,91 @@ public float NovikovThorneTemperature(float innerTemperature, float Q) {
     return innerTemperature * pow(max(Q, 0.0f), 0.25f);
 }
 
+// --- Full Page-Thorne profile ------------------------------------------------
+// Independent fp32 port of core::AccretionDiskD::FullPageThorneFlux. The
+// physical prefactor cancels when the operator temperature scale is normalised
+// at 1.5 r_ISCO, leaving Q(r)/r^3.
+static const float PT_GL_NODES[16] = {
+    -0.989400935f, -0.944575024f, -0.865631202f, -0.755404408f,
+    -0.617876244f, -0.458016778f, -0.281603551f, -0.095012510f,
+     0.095012510f,  0.281603551f,  0.458016778f,  0.617876244f,
+     0.755404408f,  0.865631202f,  0.944575024f,  0.989400935f
+};
+static const float PT_GL_WEIGHTS[16] = {
+    0.027152459f, 0.062253524f, 0.095158512f, 0.124628971f,
+    0.149595989f, 0.169156520f, 0.182603515f, 0.189450611f,
+    0.189450611f, 0.182603515f, 0.169156520f, 0.149595989f,
+    0.124628971f, 0.095158512f, 0.062253524f, 0.027152459f
+};
+
+float PtSpecificEnergy(float r, float a) {
+    float sqrtR = sqrt(r);
+    float root = sqrt(max(r * r - 3.0f * r + 2.0f * a * sqrtR, 1.0e-20f));
+    return (r * r - 2.0f * r + a * sqrtR) / (r * root);
+}
+
+float PtSpecificAngularMomentum(float r, float a) {
+    float sqrtR = sqrt(r);
+    float root = sqrt(max(r * r - 3.0f * r + 2.0f * a * sqrtR, 1.0e-20f));
+    return (r * r - 2.0f * a * sqrtR + a * a) / (sqrtR * root);
+}
+
+float PtAngularVelocity(float r, float a) {
+    return 1.0f / (pow(r, 1.5f) + a);
+}
+
+float PtAngularMomentumDerivative(float r, float a) {
+    float sqrtR = sqrt(r);
+    float N = r * r - 2.0f * a * sqrtR + a * a;
+    float radicand = r * r - 3.0f * r + 2.0f * a * sqrtR;
+    if (radicand <= 1.0e-12f) return 0.0f;
+    float aOverSqrtR = a / sqrtR;
+    float dN = 2.0f * r - aOverSqrtR;
+    float dRadicand = 2.0f * r - 3.0f + aOverSqrtR;
+    float denominator = sqrtR * sqrt(radicand);
+    float dLogDenominator = 0.5f / r + 0.5f * dRadicand / radicand;
+    return (dN - N * dLogDenominator) / denominator;
+}
+
+float PtAngularVelocityDerivative(float r, float a) {
+    float denominator = pow(r, 1.5f) + a;
+    return -3.0f * sqrt(r) / (2.0f * denominator * denominator);
+}
+
+public float FullPageThorneFluxShape(float r, float rIsco, float aStar) {
+    if (r <= rIsco * 1.001f) return 0.0f;
+    float energy = PtSpecificEnergy(r, aStar);
+    float angularMomentum = PtSpecificAngularMomentum(r, aStar);
+    float omega = PtAngularVelocity(r, aStar);
+    float halfWidth = 0.5f * (r - rIsco);
+    float midpoint = 0.5f * (r + rIsco);
+    float integral = 0.0f;
+    for (int i = 0; i < 16; ++i) {
+        float ri = midpoint + halfWidth * PT_GL_NODES[i];
+        float ei = PtSpecificEnergy(ri, aStar);
+        float li = PtSpecificAngularMomentum(ri, aStar);
+        float oi = PtAngularVelocity(ri, aStar);
+        integral += PT_GL_WEIGHTS[i] * (ei - oi * li) *
+                    PtAngularMomentumDerivative(ri, aStar);
+    }
+    integral *= halfWidth;
+    float invariant = energy - omega * angularMomentum;
+    if (abs(invariant) < 1.0e-12f) return 0.0f;
+    float correction =
+        -PtAngularVelocityDerivative(r, aStar) * integral / (invariant * invariant);
+    return max(correction / (r * r * r), 0.0f);
+}
+
+public float FullPageThorneTemperature(float temperatureScale, float r, float rIsco,
+                                       float M, float aStar) {
+    float radiusInM = r / M;
+    float iscoInM = rIsco / M;
+    float flux = FullPageThorneFluxShape(radiusInM, iscoInM, aStar);
+    float reference = FullPageThorneFluxShape(1.5f * iscoInM, iscoInM, aStar);
+    if (flux <= 0.0f || reference <= 0.0f) return 0.0f;
+    return temperatureScale * pow(flux / reference, 0.25f);
+}
+
 // --- Invariant redshift g-factor (RDOP002A.cu computeRelativisticG) -----------
 // g = (k.u_obs)/(k.u_emit) with a static observer at infinity u_obs=(1,0,0,0).
 // The metric at the emission point is supplied by the caller.
@@ -184,4 +269,13 @@ public float ComputeDiskGFactorCart(float r, float phi, float3 rayVel, float M, 
 
     float doppler_denom = clamp(gamma * (1.0f - v_orb * A), 0.1f, 10.0f);
     return clamp(grav_factor / doppler_denom, 0.1f, 5.0f);
+}
+
+// Gravitational-only branch used by the artistic Doppler-suppression toggle.
+// This is the same grav term as ComputeDiskGFactorCart with orbital velocity
+// set to zero.
+public float ComputeDiskGravitationalFactorCart(float r, float M, float a) {
+    float r2 = r * r;
+    float grav = sqrt(max(1.0f - 2.0f * M * r / (r2 + a * a), 0.0f));
+    return clamp(grav, 0.1f, 5.0f);
 }

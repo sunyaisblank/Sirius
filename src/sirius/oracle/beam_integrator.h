@@ -37,8 +37,9 @@ struct BeamStateD {
     // Maps initial conditions to current position
     double J[4][4];
 
-    // Jacobian velocity dJ^i_j/dλ (128 bytes)
-    // Needed for second-order geodesic deviation equation
+    // Covariant Jacobian velocity V^i_j = D J^i_j/dλ (128 bytes).
+    // Storing V rather than the coordinate derivative is what makes the
+    // Jacobi evolution tensorial in a non-Cartesian chart.
     double dJ[4][4];
 
     // Affine parameter
@@ -126,9 +127,11 @@ struct BeamStateD {
         majorAxis = std::sqrt(std::max(0.0, (p + s) / 2));
         minorAxis = std::sqrt(std::max(0.0, (p - s) / 2));
 
-        // Orientation: angle of major axis from θ direction
-        // From SVD: tan(2φ) = 2(ab + cd) / (a² + b² - c² - d²)
-        double num = 2 * (a * b + c * d);
+        // Orientation of the output ellipse: the major eigenvector of J J^T.
+        // For J=[[a,b],[c,d]], tan(2φ)=2(ac+bd)/(a²+b²-c²-d²).
+        // The former ab+cd expression is the right-singular-vector angle in the
+        // input plane and does not orient an ellipse on the rendered sky.
+        double num = 2 * (a * c + b * d);
         double den = a * a + b * b - c * c - d * d;
         orientation = 0.5 * std::atan2(num, den);
 
@@ -208,144 +211,103 @@ class BeamIntegratorD {
             return false;
         }
 
-        // ============================================================
-        // GEODESIC INTEGRATION: Symplectic leapfrog (Störmer-Verlet)
-        // Uses the metric's dHdq for momentum evolution
-        // ============================================================
-
-        // Get metric and inverse metric
-        double g[4][4], g_inv[4][4];
-        metric_->Evaluate(beam.x, g, g_inv);
-
-        // Contravariant wave vector k^μ = g^μν k_ν (for position update)
-        auto computeKup = [&](const Vec4d& k_cov, double* k_up) {
-            for (int mu = 0; mu < 4; ++mu) {
-                k_up[mu] = 0;
-                for (int nu = 0; nu < 4; ++nu) {
-                    k_up[mu] += g_inv[mu][nu] * k_cov[nu];
-                }
-            }
+        // Integrate the central Hamiltonian ray and every Jacobi column in the
+        // same RK4 tableau. The former implementation leapfrogged the ray while
+        // freezing curvature for an unrelated RK4 update, and treated dJ as an
+        // ordinary derivative. In Boyer-Lindquist coordinates that drops the
+        // connection terms and is not the covariant Jacobi equation.
+        struct Derivative {
+            Vec4d x;
+            Vec4d k;
+            double J[4][4];
+            double V[4][4];
         };
 
-        double k_up[4];
-        computeKup(beam.k, k_up);
+        auto right_hand_side = [&](const Vec4d& x, const Vec4d& k, const double J[4][4],
+                                   const double V[4][4], Derivative& out) {
+            if (!metric_->IsValid(x)) {
+                return false;
+            }
+            out.x = metric_->dHdp(x, k);
+            out.k = metric_->dHdq(x, k);
 
-        // Leapfrog Step (kick-drift-kick):
-        // 1. Half-Step momentum: k' = k + (h/2) dk/dλ
-        Vec4d dk_dlambda = metric_->dHdq(beam.x, beam.k);
-        Vec4d k_half = beam.k;
-        for (int mu = 0; mu < 4; ++mu) {
-            k_half[mu] += 0.5 * h * dk_dlambda[mu];
-        }
+            double Gamma[4][4][4];
+            double R[4][4][4][4];
+            metric_->Christoffel(x, Gamma);
+            metric_->Riemann(x, R);
 
-        // Update g_inv for midpoint
-        metric_->Evaluate(beam.x, g, g_inv);
-        double k_up_half[4];
-        computeKup(k_half, k_up_half);
+            for (int mu = 0; mu < 4; ++mu) {
+                for (int column = 0; column < 4; ++column) {
+                    double connection_j = 0.0;
+                    double connection_v = 0.0;
+                    for (int nu = 0; nu < 4; ++nu) {
+                        for (int rho = 0; rho < 4; ++rho) {
+                            connection_j += Gamma[mu][nu][rho] * out.x[nu] * J[rho][column];
+                            connection_v += Gamma[mu][nu][rho] * out.x[nu] * V[rho][column];
+                        }
+                    }
 
-        // 2. Full-Step position: x' = x + h * k^μ
-        Vec4d x_new = beam.x;
-        for (int mu = 0; mu < 4; ++mu) {
-            x_new[mu] += h * k_up_half[mu];
-        }
-
-        // 3. Half-Step momentum at new position: k'' = k' + (h/2) dk/dλ|_x'
-        Vec4d dk_dlambda_new = metric_->dHdq(x_new, k_half);
-        Vec4d k_new = k_half;
-        for (int mu = 0; mu < 4; ++mu) {
-            k_new[mu] += 0.5 * h * dk_dlambda_new[mu];
-        }
-
-        // ============================================================
-        // JACOBIAN INTEGRATION: RK4 for geodesic deviation equation
-        // d²J/dλ² = -R·k·k·J (Jacobi equation)
-        // Converted to first-order: dY/dλ = f(Y) where Y = (J, dJ)
-        // ============================================================
-
-        // Get Riemann tensor at current position
-        double R[4][4][4][4];
-        metric_->Riemann(beam.x, R);
-
-        // RK4 coefficients for Jacobian
-        double J_k1[4][4], dJ_k1[4][4];
-        double J_k2[4][4], dJ_k2[4][4];
-        double J_k3[4][4], dJ_k3[4][4];
-        double J_k4[4][4], dJ_k4[4][4];
-
-        // Lambda to compute dJ/dλ and d²J/dλ² given current state
-        auto computeJacobianRHS = [&](const double J_in[4][4], const double dJ_in[4][4],
-                                      const double* kup, double J_out[4][4], double dJ_out[4][4]) {
-            for (int i = 0; i < 4; ++i) {
-                for (int j = 0; j < 4; ++j) {
-                    // dJ/dλ = dJ (trivial)
-                    J_out[i][j] = dJ_in[i][j];
-
-                    // d²J/dλ² = -R^i_νρσ k^ν k^σ J^ρ_j
-                    double ddJ = 0;
+                    double tidal = 0.0;
                     for (int nu = 0; nu < 4; ++nu) {
                         for (int rho = 0; rho < 4; ++rho) {
                             for (int sigma = 0; sigma < 4; ++sigma) {
-                                ddJ -= R[i][nu][rho][sigma] * kup[nu] * kup[sigma] * J_in[rho][j];
+                                tidal += R[mu][nu][rho][sigma] * out.x[nu] * J[rho][column] *
+                                         out.x[sigma];
                             }
                         }
                     }
-                    dJ_out[i][j] = ddJ;
+
+                    // V = D J / dλ, hence ordinary coordinate derivatives are:
+                    // dJ/dλ = V - Γ(k,J), dV/dλ = -Γ(k,V) - R(k,J)k.
+                    out.J[mu][column] = V[mu][column] - connection_j;
+                    out.V[mu][column] = -connection_v - tidal;
+                }
+            }
+            return true;
+        };
+
+        Derivative k1{}, k2{}, k3{}, k4{};
+        double stage_J[4][4];
+        double stage_V[4][4];
+        SIRIUS_ASSERT(right_hand_side(beam.x, beam.k, beam.J, beam.dJ, k1));
+
+        auto make_stage = [&](const Derivative& derivative, double scale) {
+            for (int i = 0; i < 4; ++i) {
+                for (int j = 0; j < 4; ++j) {
+                    stage_J[i][j] = beam.J[i][j] + scale * derivative.J[i][j];
+                    stage_V[i][j] = beam.dJ[i][j] + scale * derivative.V[i][j];
                 }
             }
         };
 
-        // RK4 stage 1: k1 = f(y_n)
-        computeJacobianRHS(beam.J, beam.dJ, k_up, J_k1, dJ_k1);
-
-        // RK4 stage 2: k2 = f(y_n + h/2 * k1)
-        double J_tmp[4][4], dJ_tmp[4][4];
-        for (int i = 0; i < 4; ++i) {
-            for (int j = 0; j < 4; ++j) {
-                J_tmp[i][j] = beam.J[i][j] + 0.5 * h * J_k1[i][j];
-                dJ_tmp[i][j] = beam.dJ[i][j] + 0.5 * h * dJ_k1[i][j];
-            }
-        }
-        computeJacobianRHS(J_tmp, dJ_tmp, k_up, J_k2, dJ_k2);
-
-        // RK4 stage 3: k3 = f(y_n + h/2 * k2)
-        for (int i = 0; i < 4; ++i) {
-            for (int j = 0; j < 4; ++j) {
-                J_tmp[i][j] = beam.J[i][j] + 0.5 * h * J_k2[i][j];
-                dJ_tmp[i][j] = beam.dJ[i][j] + 0.5 * h * dJ_k2[i][j];
-            }
-        }
-        computeJacobianRHS(J_tmp, dJ_tmp, k_up, J_k3, dJ_k3);
-
-        // RK4 stage 4: k4 = f(y_n + h * k3)
-        for (int i = 0; i < 4; ++i) {
-            for (int j = 0; j < 4; ++j) {
-                J_tmp[i][j] = beam.J[i][j] + h * J_k3[i][j];
-                dJ_tmp[i][j] = beam.dJ[i][j] + h * dJ_k3[i][j];
-            }
-        }
-        computeJacobianRHS(J_tmp, dJ_tmp, k_up, J_k4, dJ_k4);
-
-        // Final RK4 update: y_{n+1} = y_n + h/6 * (k1 + 2k2 + 2k3 + k4)
-        double J_new[4][4], dJ_new[4][4];
-        for (int i = 0; i < 4; ++i) {
-            for (int j = 0; j < 4; ++j) {
-                J_new[i][j] = beam.J[i][j] + (h / 6.0) * (J_k1[i][j] + 2 * J_k2[i][j] +
-                                                          2 * J_k3[i][j] + J_k4[i][j]);
-                dJ_new[i][j] = beam.dJ[i][j] + (h / 6.0) * (dJ_k1[i][j] + 2 * dJ_k2[i][j] +
-                                                            2 * dJ_k3[i][j] + dJ_k4[i][j]);
-            }
+        make_stage(k1, 0.5 * h);
+        if (!right_hand_side(beam.x + k1.x * (0.5 * h), beam.k + k1.k * (0.5 * h), stage_J, stage_V,
+                             k2)) {
+            beam.terminated = true;
+            return false;
         }
 
-        // ============================================================
-        // Update beam state
-        // ============================================================
+        make_stage(k2, 0.5 * h);
+        if (!right_hand_side(beam.x + k2.x * (0.5 * h), beam.k + k2.k * (0.5 * h), stage_J, stage_V,
+                             k3)) {
+            beam.terminated = true;
+            return false;
+        }
 
-        beam.x = x_new;
-        beam.k = k_new;
+        make_stage(k3, h);
+        if (!right_hand_side(beam.x + k3.x * h, beam.k + k3.k * h, stage_J, stage_V, k4)) {
+            beam.terminated = true;
+            return false;
+        }
+
+        beam.x += (k1.x + k2.x * 2.0 + k3.x * 2.0 + k4.x) * (h / 6.0);
+        beam.k += (k1.k + k2.k * 2.0 + k3.k * 2.0 + k4.k) * (h / 6.0);
         for (int i = 0; i < 4; ++i) {
             for (int j = 0; j < 4; ++j) {
-                beam.J[i][j] = J_new[i][j];
-                beam.dJ[i][j] = dJ_new[i][j];
+                beam.J[i][j] +=
+                    (k1.J[i][j] + 2.0 * k2.J[i][j] + 2.0 * k3.J[i][j] + k4.J[i][j]) * (h / 6.0);
+                beam.dJ[i][j] +=
+                    (k1.V[i][j] + 2.0 * k2.V[i][j] + 2.0 * k3.V[i][j] + k4.V[i][j]) * (h / 6.0);
             }
         }
         beam.lambda += h;

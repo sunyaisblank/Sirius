@@ -114,7 +114,7 @@ void NumericChristoffel(const KerrMetricD& m, const Vec4d& x, double G[4][4][4])
 // metric resolves the connection to O(h^2) ~ 1e-12 in principle but is floored
 // by cancellation near 1e-9 at these radii.
 TEST(OracleConnection, AnalyticConnectionAgreesWithMetricDerivatives) {
-    KerrMetricD metric(1.0, 0.9);
+    KerrMetricD metric(1.0, 0.998);
     const std::vector<Vec4d> points = {Vec4d(0.0, 8.0, 1.2, 0.3),
                                        Vec4d(0.0, 4.0, M_PI / 2 - 0.2, 1.0),
                                        Vec4d(0.0, 15.0, 0.7, 0.0)};
@@ -173,7 +173,7 @@ TEST(WalkerPenrose, ImaginaryPartEqualsKillingYanoContraction) {
 // same conservation-of-a-quadratic-form conditions as the null constraint, and
 // double-precision RK4 with adaptive stepping holds them to ~1e-11 here.
 TEST(WalkerPenrose, PolarisationStaysOrthogonalAndNormalisedUnderTransport) {
-    KerrMetricD metric(1.0, 0.9);
+    KerrMetricD metric(1.0, 0.998);
     Vec4d x0(0.0, 18.0, M_PI / 2 - 0.15, 0.0);
     Vec4d kk = MakeNullTangent(metric, x0, -1.0, 0.02, 0.04);
     Vec4d ff = MakeOrthonormalPolarisation(metric, x0, kk, Vec4d(0.0, 0.0, 1.0, 0.0));

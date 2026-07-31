@@ -27,6 +27,7 @@ using sirius::backend::BufferUsage;
 using sirius::backend::ComputeDevice;
 using sirius::backend::CreateVulkanDevice;
 using sirius::backend::EnumerateVulkanDevices;
+using sirius::backend::ResolveVulkanDeviceIndex;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -49,7 +50,9 @@ TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
     if (devices->empty()) {
         GTEST_SKIP() << "no Vulkan device present";
     }
-    auto device = CreateVulkanDevice(0);
+    const auto selected = ResolveVulkanDeviceIndex(*devices);
+    ASSERT_TRUE(selected.has_value()) << selected.error().Description();
+    auto device = CreateVulkanDevice(*selected);
     ASSERT_TRUE(device.has_value()) << device.error().Description();
 
     const auto spirv = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace.spv");
@@ -64,7 +67,10 @@ TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
     // chosen so the capture cross-section covers a modest image fraction. The
     // full image is a single tile here (tileOrigin 0, tile == image). Background
     // is the analytic gradient (starfield disabled), so no texture is needed.
-    std::vector<float> params(48, 0.0f);
+    std::vector<float> params(72, 0.0f);
+    params[46] = 0.5f;
+    params[47] = 0.5f;
+    params[53] = 1.0f;
     params[0] = kWidth;   // imageWidth
     params[1] = kHeight;  // imageHeight
     params[2] = 0.0f;     // metricId (Kerr-Schild family)
@@ -109,13 +115,16 @@ TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
     const auto pbuf = (*device)->CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
     const auto sbuf = (*device)->CreateBuffer(starfield_dummy.size() * sizeof(std::uint32_t),
                                               BufferUsage::kStorage);
-    ASSERT_TRUE(rbuf && pbuf && sbuf);
+    const auto psbuf = (*device)->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
+    const auto pobuf = (*device)->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
+    const auto pibuf = (*device)->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
+    ASSERT_TRUE(rbuf && pbuf && sbuf && psbuf && pobuf && pibuf);
     ASSERT_TRUE((*device)->WriteBuffer(*rbuf, std::as_bytes(std::span<const float>(radiance))));
     ASSERT_TRUE((*device)->WriteBuffer(*pbuf, std::as_bytes(std::span<const float>(params))));
     ASSERT_TRUE((*device)->WriteBuffer(
         *sbuf, std::as_bytes(std::span<const std::uint32_t>(starfield_dummy))));
 
-    const BufferHandle binding[] = {*rbuf, *pbuf, *sbuf};
+    const BufferHandle binding[] = {*rbuf, *pbuf, *sbuf, *psbuf, *pobuf, *pibuf};
     const auto dispatched =
         (*device)->Dispatch(*kernel, binding, (kWidth + 7) / 8, (kHeight + 7) / 8, 1);
     ASSERT_TRUE(dispatched.has_value()) << dispatched.error().Description();
@@ -166,7 +175,10 @@ std::vector<float> RunKerrScene(ComputeDevice& device, const std::vector<std::ui
     constexpr std::uint32_t kWidth = 64;
     constexpr std::uint32_t kHeight = 64;
 
-    std::vector<float> params(48, 0.0f);
+    std::vector<float> params(72, 0.0f);
+    params[46] = 0.5f;
+    params[47] = 0.5f;
+    params[53] = 1.0f;
     params[0] = kWidth;
     params[1] = kHeight;
     params[2] = 0.0f;
@@ -204,7 +216,10 @@ std::vector<float> RunKerrScene(ComputeDevice& device, const std::vector<std::ui
     const auto pbuf = device.CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
     const auto sbuf =
         device.CreateBuffer(starfield_dummy.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
-    if (!(rbuf && pbuf && sbuf)) {
+    const auto psbuf = device.CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
+    const auto pobuf = device.CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
+    const auto pibuf = device.CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
+    if (!(rbuf && pbuf && sbuf && psbuf && pobuf && pibuf)) {
         ADD_FAILURE() << "buffer creation failed";
         return {};
     }
@@ -217,7 +232,7 @@ std::vector<float> RunKerrScene(ComputeDevice& device, const std::vector<std::ui
         return {};
     }
 
-    const BufferHandle binding[] = {*rbuf, *pbuf, *sbuf};
+    const BufferHandle binding[] = {*rbuf, *pbuf, *sbuf, *psbuf, *pobuf, *pibuf};
     const auto dispatched =
         device.Dispatch(*kernel, binding, (kWidth + 7) / 8, (kHeight + 7) / 8, 1);
     if (!dispatched) {
@@ -248,7 +263,9 @@ TEST(KernelTrace, Fp64RungAgreesWithFp32OnKerrScene) {
     if (devices->empty()) {
         GTEST_SKIP() << "no Vulkan device present";
     }
-    auto device = CreateVulkanDevice(0);
+    const auto selected = ResolveVulkanDeviceIndex(*devices);
+    ASSERT_TRUE(selected.has_value()) << selected.error().Description();
+    auto device = CreateVulkanDevice(*selected);
     ASSERT_TRUE(device.has_value()) << device.error().Description();
     if (!(*device)->Info().supports_fp64) {
         GTEST_SKIP() << "device lacks shaderFloat64";
@@ -304,7 +321,9 @@ TEST(KernelTrace, CompensatedRungTracksFp64AtLeastAsWellAsFp32) {
     if (devices->empty()) {
         GTEST_SKIP() << "no Vulkan device present";
     }
-    auto device = CreateVulkanDevice(0);
+    const auto selected = ResolveVulkanDeviceIndex(*devices);
+    ASSERT_TRUE(selected.has_value()) << selected.error().Description();
+    auto device = CreateVulkanDevice(*selected);
     ASSERT_TRUE(device.has_value()) << device.error().Description();
     if (!(*device)->Info().supports_fp64) {
         GTEST_SKIP() << "device lacks shaderFloat64 (needed for the reference field)";

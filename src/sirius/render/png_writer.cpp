@@ -4,20 +4,29 @@
 
 #include "stb_image_write.h"
 
+#include <algorithm>
+#include <cmath>
 #include <vector>
 
 namespace sirius::render {
 
 bool PNGWriter::Write(const std::string& path, const ImageBuffer& buffer) {
+    if (!buffer.HasValidShape()) return false;
     return WriteRgb(path, buffer.width, buffer.height, buffer.pixels.data());
 }
 
 bool PNGWriter::Write(const std::string& path, const ImageBufferRGBA& buffer) {
+    if (!buffer.HasValidShape()) return false;
     return WriteRgba(path, buffer.width, buffer.height, buffer.pixels.data());
 }
 
 bool PNGWriter::WriteRgba(const std::string& path, int width, int height, const float* pixels) {
     if (width <= 0 || height <= 0 || !pixels) {
+        return false;
+    }
+    const std::size_t sample_count = static_cast<std::size_t>(width) * height * 4;
+    if (!std::all_of(pixels, pixels + sample_count,
+                     [](float value) { return std::isfinite(value); })) {
         return false;
     }
 
@@ -37,6 +46,11 @@ bool PNGWriter::WriteRgba(const std::string& path, int width, int height, const 
 
 bool PNGWriter::WriteRgb(const std::string& path, int width, int height, const float* pixels) {
     if (width <= 0 || height <= 0 || !pixels) {
+        return false;
+    }
+    const std::size_t sample_count = static_cast<std::size_t>(width) * height * 3;
+    if (!std::all_of(pixels, pixels + sample_count,
+                     [](float value) { return std::isfinite(value); })) {
         return false;
     }
 

@@ -23,6 +23,8 @@ class InfoCommand : public Command {
     int ShowMetrics(const GlobalOptions& globals);
     int ShowConfig(const GlobalOptions& globals, const SiriusConfig& config);
     int ShowBackends(const GlobalOptions& globals);
+    int ShowReadiness(const GlobalOptions& globals);
+    int ShowCapabilities(const GlobalOptions& globals);
 };
 
 }  // namespace sirius::app

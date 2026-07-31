@@ -1,7 +1,8 @@
 // Vulkan render-path gates (specification programmes 3 and 4). Three concerns:
-//   1. a Kerr render through the RenderSession Vulkan path completes under a
-//      constrained memory budget and yields finite, non-constant radiance with a
-//      bounded horizon shadow (64x64 and 160x120, exercising >1 governed tile);
+//   1. a Kerr render through the RenderSession Vulkan path yields finite,
+//      non-constant radiance with a bounded horizon shadow (64x64 and 160x120,
+//      exercising >1 governed tile), while a budget below the mandatory scene
+//      residency declines instead of changing the scene;
 //   2. the same kernel dispatched directly agrees with the CPU reference tracer
 //      on the same scene geometry within statistical bounds (the two integrators
 //      differ by design, docs/ARCHITECTURE.md section 3, so the gate is on
@@ -25,6 +26,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <fstream>
+#include <functional>
 #include <limits>
 #include <numbers>
 #include <span>
@@ -40,6 +42,7 @@
 #include "sirius/core/metrics/morris_thorne_family.h"
 #include "sirius/render/session/display_buffer.h"
 #include "sirius/render/session/render_session.h"
+#include "sirius/render/vulkan_renderer.h"
 #endif
 
 namespace {
@@ -53,6 +56,7 @@ using sirius::backend::ComputeDevice;
 using sirius::backend::CreateVulkanDevice;
 using sirius::backend::EnumerateVulkanDevices;
 using sirius::backend::GeodesicTracer;
+using sirius::backend::ResolveVulkanDeviceIndex;
 using sirius::backend::TracerConfig;
 using sirius::backend::TraceResult;
 using sirius::core::CameraConfig;
@@ -73,8 +77,9 @@ std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     return words;
 }
 
-// A scene shared by the parity gate: Kerr M=1, a=0.9 seen from 30M at 80 deg
-// inclination, disk and starfield off (analytic gradient background).
+// A scene shared by the kernel-integration gate: Kerr M=1, a=0.9 seen from 30M
+// at 80 degrees, with disk and starfield disabled so the geometric comparison
+// isolates camera and trajectory behavior.
 struct Scene {
     int width = 96;
     int height = 96;
@@ -107,24 +112,33 @@ std::vector<float> BuildTraceParams(const Scene& scene) {
     const double st = std::sin(theta);
     const double ct = std::cos(theta);
     const double r = scene.distance;
+    const double absolute_spin = scene.spin * scene.M;
+    const double x = r * st;
+    const double y = absolute_spin * st;
+    const double cartesian_phi = std::atan2(y, x);
+    const double sp = std::sin(cartesian_phi);
+    const double cp = std::cos(cartesian_phi);
 
-    std::vector<float> p(48, 0.0f);
+    std::vector<float> p(72, 0.0f);
+    p[46] = 0.5f;
+    p[47] = 0.5f;
+    p[53] = 1.0f;
     p[0] = static_cast<float>(scene.width);
     p[1] = static_cast<float>(scene.height);
     p[2] = 0.0f;  // Kerr-Schild dispatch
     p[3] = scene.M;
     p[4] = scene.spin * scene.M;  // absolute a
-    p[7] = static_cast<float>(r * st);
-    p[8] = 0.0f;
+    p[7] = static_cast<float>(x);
+    p[8] = static_cast<float>(y);
     p[9] = static_cast<float>(r * ct);
-    p[10] = static_cast<float>(-st);
-    p[11] = 0.0f;
+    p[10] = static_cast<float>(-st * cp);
+    p[11] = static_cast<float>(-st * sp);
     p[12] = static_cast<float>(-ct);
-    p[13] = 0.0f;
-    p[14] = 1.0f;
+    p[13] = static_cast<float>(-sp);
+    p[14] = static_cast<float>(cp);
     p[15] = 0.0f;
-    p[16] = static_cast<float>(ct);
-    p[17] = 0.0f;
+    p[16] = static_cast<float>(ct * cp);
+    p[17] = static_cast<float>(ct * sp);
     p[18] = static_cast<float>(-st);
     p[19] = static_cast<float>(scene.fov_deg * kPi / 180.0);
     p[20] = static_cast<float>(scene.width) / static_cast<float>(scene.height);
@@ -133,7 +147,7 @@ std::vector<float> BuildTraceParams(const Scene& scene) {
     p[23] = 0.02f;    // minStep
     p[24] = 2.0f;     // maxStep
     p[25] = 200.0f;   // escapeRadius
-    p[26] = 1.05f;    // captureFactor
+    p[26] = 1.0f;     // exact Kerr-Schild horizon capture surface
     p[27] = 0.0f;     // disk disabled
     p[32] = 0.0f;     // tileOriginX
     p[33] = 0.0f;     // tileOriginY
@@ -158,7 +172,9 @@ KernelFixture OpenKernel() {
 #ifdef SIRIUS_KERNEL_DIR
     const auto devices = EnumerateVulkanDevices();
     if (!devices.has_value() || devices->empty()) return f;
-    auto device = CreateVulkanDevice(0);
+    const auto selected = ResolveVulkanDeviceIndex(*devices);
+    if (!selected.has_value()) return f;
+    auto device = CreateVulkanDevice(*selected);
     if (!device.has_value()) return f;
     const auto spirv = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace.spv");
     if (spirv.empty()) return f;
@@ -171,12 +187,35 @@ KernelFixture OpenKernel() {
     return f;
 }
 
+struct VulkanScreenPoint {
+    double alpha;
+    double beta;
+};
+
+std::optional<VulkanScreenPoint> BardeenScreenPoint(double photon_radius, double spin,
+                                                    double inclination) {
+    const double r = photon_radius;
+    const double a2 = spin * spin;
+    const double xi = (r * r * (r - 3.0) + a2 * (r + 1.0)) / (spin * (1.0 - r));
+    const double eta =
+        r * r * r * (4.0 * a2 - r * (r - 3.0) * (r - 3.0)) / (a2 * (1.0 - r) * (1.0 - r));
+    const double sin_i = std::sin(inclination);
+    const double cos_i = std::cos(inclination);
+    const double alpha = -xi / sin_i;
+    const double beta_squared =
+        eta + a2 * cos_i * cos_i - xi * xi * cos_i * cos_i / (sin_i * sin_i);
+    if (beta_squared < 0.0) return std::nullopt;
+    return VulkanScreenPoint{alpha, std::sqrt(beta_squared)};
+}
+
 // --- Session Vulkan path smoke ----------------------------------------------
 
 // Renders a Kerr scene through the RenderSession Vulkan path to an EXR (which
-// leaves the display buffer's linear radiance untouched) under a constrained
-// budget, returning the linear RGBA buffer, or an empty vector when skipped.
-std::vector<float> RenderSessionVulkan(int width, int height, const std::string& out_path) {
+// leaves the display buffer's linear radiance untouched), returning the linear
+// RGBA buffer, or an empty vector when the session declines.
+std::vector<float> RenderSessionVulkan(
+    int width, int height, const std::string& out_path,
+    const std::function<void(sirius::render::SessionConfig&)>& configure = {}) {
     const auto devices = EnumerateVulkanDevices();
     if (!devices.has_value() || devices->empty()) return {};
 
@@ -194,6 +233,7 @@ std::vector<float> RenderSessionVulkan(int width, int height, const std::string&
     config.observerInclination = 80.0 * kPi / 180.0;
     config.cameraFOV = 50.0f;
     config.outputPath = out_path;
+    if (configure) configure(config);
 
     sirius::render::RenderSession session;
     session.Configure(config);
@@ -230,17 +270,210 @@ void ExpectFiniteNonConstantWithShadow(const std::vector<float>& rgba, int width
     EXPECT_LE(fraction, 0.60) << tag << " shadow fraction too large";
 }
 
-TEST(VulkanRenderSession, Kerr64CompletesUnderConstrainedBudgetWithFiniteRadiance) {
+TEST(VulkanRenderSession, CapabilityBoundaryAcceptsRepresentedSceneSemantics) {
+    sirius::render::SessionConfig config;
+    config.samplesPerPixel = 7;
+    config.temperatureModel = sirius::render::DiskTemperatureModel::ShakuraSunyaev;
+    config.dopplerBeaming = false;
+    config.cameraBetaForward = 0.1;
+    config.lensType = sirius::core::LensType::ThinLens;
+    config.enableVolumetricDisk = true;
+    config.enableTurbulence = true;
+    config.enableCorona = true;
+    config.volumetricSamples = 64;
+    EXPECT_TRUE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
+}
+
+TEST(VulkanRenderSession, CapabilityBoundaryRejectsUnrepresentedSceneSemantics) {
+    sirius::render::SessionConfig config;
+    config.enableVolumetricDisk = true;
+    config.volumetricSamples = 129;
+    EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
+
+    config.volumetricSamples = 64;
+    config.pointStarfield = true;
+    EXPECT_TRUE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
+
+    config.temperatureModel = static_cast<sirius::render::DiskTemperatureModel>(255);
+    EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
+    config.temperatureModel = sirius::render::DiskTemperatureModel::NovikovThorne;
+    config.lensType = sirius::core::LensType::Fisheye;
+    EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
+    config.lensType = static_cast<sirius::core::LensType>(255);
+    EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
+    config.lensType = sirius::core::LensType::Pinhole;
+    config.enablePolarisation = true;
+    EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
+    config.enablePolarisation = false;
+    config.metricId = sirius::core::MetricId::KerrNewman;
+    config.enableDisk = true;
+    EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
+    config.metricId = sirius::core::MetricId::Minkowski;
+    config.blackHoleMass = 0.0;
+    EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
+    config.metricId = sirius::core::MetricId::Schwarzschild;
+    config.blackHoleMass = 1.0;
+    config.blackHoleSpin = 0.4;
+    EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
+    config.blackHoleSpin = 0.0;
+    config.enableJets = true;
+    EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
+    config.enableJets = false;
+    config.enableMotionBlur = true;
+    EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
+    config.enableMotionBlur = false;
+    config.colorMode = sirius::core::color_modes::Mode::RedshiftMap;
+    EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
+}
+
+TEST(VulkanRenderSession, VolumetricTurbulenceAndCoronaReachLiveKernel) {
+    if (const auto devices = EnumerateVulkanDevices(); !devices || devices->empty()) {
+        GTEST_SKIP() << "no Vulkan device present";
+    }
+    const std::string root = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp");
+    const auto baseline = RenderSessionVulkan(40, 24, root + "/sirius_vk_volume_baseline.exr",
+                                              [](sirius::render::SessionConfig& config) {
+                                                  config.enableVolumetricDisk = true;
+                                                  config.volumetricSamples = 4;
+                                              });
+    const auto represented =
+        RenderSessionVulkan(40, 24, root + "/sirius_vk_volume_turbulence_corona.exr",
+                            [](sirius::render::SessionConfig& config) {
+                                config.enableVolumetricDisk = true;
+                                config.enableTurbulence = true;
+                                config.enableCorona = true;
+                                config.volumetricSamples = 4;
+                            });
+    ASSERT_FALSE(baseline.empty());
+    ASSERT_EQ(represented.size(), baseline.size());
+    double absoluteDifference = 0.0;
+    for (std::size_t i = 0; i < represented.size(); ++i) {
+        ASSERT_TRUE(std::isfinite(represented[i]));
+        absoluteDifference += std::abs(static_cast<double>(represented[i] - baseline[i]));
+    }
+    EXPECT_GT(absoluteDifference, 1.0e-5)
+        << "Vulkan turbulence/corona controls did not affect live volumetric transfer";
+}
+
+TEST(VulkanRenderSession, NonSquareMultisamplingCameraAndLensReachLiveKernel) {
+    if (const auto d = EnumerateVulkanDevices(); !d.has_value() || d->empty()) {
+        GTEST_SKIP() << "no Vulkan device present";
+    }
+    const std::string root = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp");
+    const auto baseline = RenderSessionVulkan(48, 32, root + "/sirius_vk_semantics_baseline.exr");
+    const auto represented = RenderSessionVulkan(
+        48, 32, root + "/sirius_vk_semantics_represented.exr",
+        [](sirius::render::SessionConfig& config) {
+            config.samplesPerPixel = 3;
+            config.cameraBetaForward = 0.1;
+            config.lensType = sirius::core::LensType::ThinLens;
+            config.cameraAperture = 2.8f;
+            config.cameraFocalLength = 50.0f;
+            config.cameraFocusDistance = 30.0f;
+            config.temperatureModel = sirius::render::DiskTemperatureModel::ShakuraSunyaev;
+            config.dopplerBeaming = false;
+        });
+    ASSERT_FALSE(baseline.empty());
+    ASSERT_EQ(represented.size(), baseline.size());
+    double absolute_difference = 0.0;
+    for (std::size_t i = 0; i < represented.size(); ++i) {
+        ASSERT_TRUE(std::isfinite(represented[i]));
+        absolute_difference += std::abs(static_cast<double>(represented[i] - baseline[i]));
+    }
+    EXPECT_GT(absolute_difference, 1.0e-4)
+        << "represented Vulkan sampling/camera/lens controls did not affect the live output";
+}
+
+TEST(VulkanRenderSession, IndexedPointCatalogueReachesLiveKernel) {
+    if (const auto devices = EnumerateVulkanDevices(); !devices || devices->empty()) {
+        GTEST_SKIP() << "no Vulkan device present";
+    }
+    const std::string root = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp");
+    const auto texture = RenderSessionVulkan(48, 32, root + "/sirius_vk_texture_stars.exr");
+    const auto points = RenderSessionVulkan(48, 32, root + "/sirius_vk_point_stars.exr",
+                                            [](sirius::render::SessionConfig& config) {
+                                                config.pointStarfield = true;
+                                                config.rayBundles = true;
+                                                config.starfieldConfig.star_count = 100000;
+                                                config.starfieldConfig.brightness_scale = 2.0f;
+                                            });
+    ASSERT_FALSE(texture.empty());
+    ASSERT_EQ(points.size(), texture.size());
+    double point_energy = 0.0;
+    double absolute_difference = 0.0;
+    for (std::size_t i = 0; i < points.size(); i += 4) {
+        ASSERT_TRUE(std::isfinite(points[i]) && std::isfinite(points[i + 1]) &&
+                    std::isfinite(points[i + 2]));
+        point_energy += points[i] + points[i + 1] + points[i + 2];
+        absolute_difference += std::abs(static_cast<double>(points[i] - texture[i])) +
+                               std::abs(static_cast<double>(points[i + 1] - texture[i + 1])) +
+                               std::abs(static_cast<double>(points[i + 2] - texture[i + 2]));
+    }
+    EXPECT_GT(point_energy, 1.0e-5) << "indexed point catalogue produced no live radiance";
+    EXPECT_GT(absolute_difference, 1.0e-3)
+        << "point-catalogue request appears to have sampled the texture path";
+}
+
+TEST(VulkanRenderSession, CpuVulkanPointCatalogueAgreeOnFlatScene) {
+    if (const auto devices = EnumerateVulkanDevices(); !devices || devices->empty()) {
+        GTEST_SKIP() << "no Vulkan device present";
+    }
+    const std::string root = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp");
+    auto configure_points = [](sirius::render::SessionConfig& config) {
+        config.metricId = sirius::core::MetricId::Minkowski;
+        config.blackHoleMass = 0.0;
+        config.blackHoleSpin = 0.0;
+        config.enableDisk = false;
+        config.observerDistance = 20.0;
+        config.observerInclination = 1.1;
+        config.cameraFOV = 30.0f;
+        config.pointStarfield = true;
+        config.rayBundles = false;
+        config.starfieldConfig.star_count = 100000;
+        config.starfieldConfig.brightness_scale = 1.0f;
+    };
+    const auto gpu =
+        RenderSessionVulkan(32, 20, root + "/sirius_vk_point_flat.exr", configure_points);
+    const auto cpu = RenderSessionVulkan(32, 20, root + "/sirius_cpu_point_flat.exr",
+                                         [&](sirius::render::SessionConfig& config) {
+                                             configure_points(config);
+                                             config.backend = sirius::render::RenderBackend::Cpu;
+                                         });
+    ASSERT_EQ(gpu.size(), cpu.size());
+    ASSERT_FALSE(gpu.empty());
+    double absolute_sum = 0.0;
+    double signal_sum = 0.0;
+    double maximum = 0.0;
+    std::size_t channels = 0;
+    for (std::size_t i = 0; i < gpu.size(); i += 4) {
+        for (int channel = 0; channel < 3; ++channel) {
+            const double difference = std::abs(static_cast<double>(gpu[i + channel]) -
+                                               static_cast<double>(cpu[i + channel]));
+            absolute_sum += difference;
+            maximum = std::max(maximum, difference);
+            signal_sum += std::abs(static_cast<double>(cpu[i + channel]));
+            ++channels;
+        }
+    }
+    const double mean = absolute_sum / static_cast<double>(channels);
+    std::cout << "[ point-star parity ] mean|d|=" << mean << " max|d|=" << maximum
+              << " relative L1=" << absolute_sum / std::max(signal_sum, 1.0e-20) << "\n";
+    EXPECT_GT(signal_sum, 1.0e-5);
+    EXPECT_LT(mean, 2.0e-5);
+    EXPECT_LT(absolute_sum / signal_sum, 0.02);
+}
+
+TEST(VulkanRenderSession, ConstrainedBudgetDeclinesRatherThanChangingBackground) {
     if (const auto d = EnumerateVulkanDevices(); !d.has_value() || d->empty()) {
         GTEST_SKIP() << "no Vulkan device present";
     }
     ScopedEnvironmentVariable budget("SIRIUS_MEMORY_BUDGET_MB",
-                                     "1");  // constrained: drops the starfield
+                                     "1");  // Less than the mandatory starfield residency.
     const std::string out = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp") +
                             "/sirius_vk_smoke_64.exr";
     const auto rgba = RenderSessionVulkan(64, 64, out);
-    ASSERT_FALSE(rgba.empty()) << "session Vulkan render did not complete";
-    ExpectFiniteNonConstantWithShadow(rgba, 64, 64, "vk-session-64");
+    EXPECT_TRUE(rgba.empty())
+        << "the Vulkan path must not substitute an analytic background under pressure";
 }
 
 // The fp64 rung end to end: SIRIUS_PRECISION=fp64 must select trace_fp64.spv
@@ -252,7 +485,9 @@ TEST(VulkanRenderSession, Fp64RungRendersOrDeclinesLoudly) {
     if (!devices.has_value() || devices->empty()) {
         GTEST_SKIP() << "no Vulkan device present";
     }
-    auto device = CreateVulkanDevice(0);
+    const auto selected = ResolveVulkanDeviceIndex(*devices);
+    ASSERT_TRUE(selected.has_value()) << selected.error().Description();
+    auto device = CreateVulkanDevice(*selected);
     ASSERT_TRUE(device.has_value());
     const bool fp64_supported = (*device)->Info().supports_fp64;
     device->reset();
@@ -289,8 +524,6 @@ TEST(VulkanRenderSession, Kerr160x120CompletesAcrossMultipleGovernedTiles) {
     if (const auto d = EnumerateVulkanDevices(); !d.has_value() || d->empty()) {
         GTEST_SKIP() << "no Vulkan device present";
     }
-    ScopedEnvironmentVariable budget("SIRIUS_MEMORY_BUDGET_MB",
-                                     "1");  // tile edge 120 -> 2 tiles for 160 wide
     const std::string out = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp") +
                             "/sirius_vk_smoke_160.exr";
     const auto rgba = RenderSessionVulkan(160, 120, out);
@@ -317,11 +550,14 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds) {
     const auto pbuf = f.device->CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
     const auto sbuf =
         f.device->CreateBuffer(star_dummy.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
-    ASSERT_TRUE(rbuf && pbuf && sbuf);
+    const auto psbuf = f.device->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
+    const auto pobuf = f.device->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
+    const auto pibuf = f.device->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
+    ASSERT_TRUE(rbuf && pbuf && sbuf && psbuf && pobuf && pibuf);
     ASSERT_TRUE(f.device->WriteBuffer(*pbuf, std::as_bytes(std::span<const float>(params))));
     ASSERT_TRUE(
         f.device->WriteBuffer(*sbuf, std::as_bytes(std::span<const std::uint32_t>(star_dummy))));
-    const BufferHandle bind[] = {*rbuf, *pbuf, *sbuf};
+    const BufferHandle bind[] = {*rbuf, *pbuf, *sbuf, *psbuf, *pobuf, *pibuf};
     ASSERT_TRUE(f.device->Dispatch(f.kernel, bind, (w + 7) / 8, (h + 7) / 8, 1).has_value());
     ASSERT_TRUE(f.device->ReadBuffer(*rbuf, std::as_writable_bytes(std::span<float>(vk))));
 
@@ -333,7 +569,7 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds) {
 
     TracerConfig tc;
     tc.escape_radius = 200.0f;
-    tc.horizon_factor = 1.05f;
+    tc.horizon_factor = 1.0f;
     tc.max_steps = 20000;
     tc.enable_disk = false;
     tc.integrator.initial_step = 0.1f;
@@ -433,6 +669,106 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds) {
         << "shadow fractions diverge: a capture-semantics or ray-kill regression";
 }
 
+TEST(VulkanRenderSession, KerrNearExtremalBardeenBoundaryAt1080p) {
+    KernelFixture fixture = OpenKernel();
+    if (!fixture.ready) GTEST_SKIP() << "no Vulkan device or trace kernel absent";
+
+    Scene scene;
+    scene.width = 1920;
+    scene.height = 1080;
+    scene.spin = 0.998f;
+    scene.distance = 50.0;
+    scene.inclination_deg = 60.0;
+    scene.fov_deg = 100.0f;
+    std::vector<float> params = BuildTraceParams(scene);
+    params[21] = 30000.0f;
+    params[22] = 0.02f;
+    params[24] = 0.25f;
+    params[34] = 1.0f;
+    params[35] = 1.0f;
+
+    std::array<float, 4> radiance{};
+    const std::array<std::uint32_t, 1> star_dummy{0u};
+    const auto radiance_buffer =
+        fixture.device->CreateBuffer(sizeof(radiance), BufferUsage::kStorage);
+    const auto params_buffer =
+        fixture.device->CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
+    const auto star_buffer =
+        fixture.device->CreateBuffer(sizeof(star_dummy), BufferUsage::kStorage);
+    const auto point_star_buffer =
+        fixture.device->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
+    const auto point_offset_buffer =
+        fixture.device->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
+    const auto point_index_buffer =
+        fixture.device->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
+    ASSERT_TRUE(radiance_buffer && params_buffer && star_buffer && point_star_buffer &&
+                point_offset_buffer && point_index_buffer);
+    ASSERT_TRUE(fixture.device->WriteBuffer(
+        *star_buffer, std::as_bytes(std::span<const std::uint32_t>(star_dummy))));
+    const BufferHandle bindings[] = {*radiance_buffer,   *params_buffer,       *star_buffer,
+                                     *point_star_buffer, *point_offset_buffer, *point_index_buffer};
+
+    constexpr double kInclination = 60.0 * kPi / 180.0;
+    constexpr VulkanScreenPoint kAnalyticCentre{-2.1573218480479185, 0.0};
+    const double tan_half_fov = std::tan(scene.fov_deg * kPi / 360.0);
+    const double aspect = static_cast<double>(scene.width) / scene.height;
+    const double pixels_per_screen_unit = 0.5 * scene.height / (scene.distance * tan_half_fov);
+
+    auto is_captured = [&](const VulkanScreenPoint& point) {
+        const double image_x =
+            0.5 * scene.width * (1.0 + point.alpha / (scene.distance * tan_half_fov * aspect));
+        const double image_y =
+            0.5 * scene.height * (1.0 - point.beta / (scene.distance * tan_half_fov));
+        const int pixel_x = static_cast<int>(std::floor(image_x));
+        const int pixel_y = static_cast<int>(std::floor(image_y));
+        params[32] = static_cast<float>(pixel_x);
+        params[33] = static_cast<float>(pixel_y);
+        params[46] = static_cast<float>(image_x - pixel_x);
+        params[47] = static_cast<float>(image_y - pixel_y);
+        radiance.fill(0.0f);
+        EXPECT_TRUE(fixture.device->WriteBuffer(*radiance_buffer,
+                                                std::as_bytes(std::span<const float>(radiance))));
+        EXPECT_TRUE(fixture.device->WriteBuffer(*params_buffer,
+                                                std::as_bytes(std::span<const float>(params))));
+        EXPECT_TRUE(fixture.device->Dispatch(fixture.kernel, bindings, 1, 1, 1));
+        EXPECT_TRUE(fixture.device->ReadBuffer(*radiance_buffer,
+                                               std::as_writable_bytes(std::span<float>(radiance))));
+        return std::max({radiance[0], radiance[1], radiance[2]}) < 1.0e-6f;
+    };
+
+    // Same full-curve sample set as the independent CPU classifier.
+    for (const double photon_radius : {1.12, 1.2, 1.35, 1.5, 1.8, 2.1, 2.5, 3.0, 3.5, 3.7}) {
+        const auto analytic = BardeenScreenPoint(photon_radius, scene.spin, kInclination);
+        ASSERT_TRUE(analytic.has_value());
+        const VulkanScreenPoint camera_convention{-analytic->alpha, analytic->beta};
+        const VulkanScreenPoint delta{camera_convention.alpha - kAnalyticCentre.alpha,
+                                      camera_convention.beta - kAnalyticCentre.beta};
+        auto scaled = [&](double scale) {
+            return VulkanScreenPoint{kAnalyticCentre.alpha + scale * delta.alpha,
+                                     kAnalyticCentre.beta + scale * delta.beta};
+        };
+
+        double inside = 0.70;
+        double outside = 1.30;
+        ASSERT_TRUE(is_captured(scaled(inside)));
+        ASSERT_FALSE(is_captured(scaled(outside)));
+        for (int iteration = 0; iteration < 14; ++iteration) {
+            const double middle = 0.5 * (inside + outside);
+            if (is_captured(scaled(middle))) {
+                inside = middle;
+            } else {
+                outside = middle;
+            }
+        }
+        const VulkanScreenPoint measured = scaled(0.5 * (inside + outside));
+        const double displacement = std::hypot(measured.alpha - camera_convention.alpha,
+                                               measured.beta - camera_convention.beta) *
+                                    pixels_per_screen_unit;
+        EXPECT_LT(displacement, 1.0) << "Vulkan photon orbit r/M=" << photon_radius
+                                     << ", scale bracket=[" << inside << ", " << outside << "]";
+    }
+}
+
 // --- CPU-versus-Vulkan Morris-Thorne parity ----------------------------------
 // The wormhole's Cartesian embedding runs on both backends (MorrisThorneCartesian
 // on the CPU, gr_metrics GetMorrisThorneCartesian* under dispatch id 3 on the
@@ -454,7 +790,10 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalB
     const double theta = kInclinationDeg * kPi / 180.0;
     const double st = std::sin(theta);
     const double ct = std::cos(theta);
-    std::vector<float> params(48, 0.0f);
+    std::vector<float> params(72, 0.0f);
+    params[46] = 0.5f;
+    params[47] = 0.5f;
+    params[53] = 1.0f;
     params[0] = w;
     params[1] = h;
     params[2] = 3.0f;  // Morris-Thorne dispatch
@@ -486,11 +825,14 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalB
     const auto pbuf = f.device->CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
     const auto sbuf =
         f.device->CreateBuffer(star_dummy.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
-    ASSERT_TRUE(rbuf && pbuf && sbuf);
+    const auto psbuf = f.device->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
+    const auto pobuf = f.device->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
+    const auto pibuf = f.device->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
+    ASSERT_TRUE(rbuf && pbuf && sbuf && psbuf && pobuf && pibuf);
     ASSERT_TRUE(f.device->WriteBuffer(*pbuf, std::as_bytes(std::span<const float>(params))));
     ASSERT_TRUE(
         f.device->WriteBuffer(*sbuf, std::as_bytes(std::span<const std::uint32_t>(star_dummy))));
-    const BufferHandle bind[] = {*rbuf, *pbuf, *sbuf};
+    const BufferHandle bind[] = {*rbuf, *pbuf, *sbuf, *psbuf, *pobuf, *pibuf};
     ASSERT_TRUE(f.device->Dispatch(f.kernel, bind, (w + 7) / 8, (h + 7) / 8, 1).has_value());
     ASSERT_TRUE(f.device->ReadBuffer(*rbuf, std::as_writable_bytes(std::span<float>(vk))));
 

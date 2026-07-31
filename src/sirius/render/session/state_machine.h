@@ -68,30 +68,38 @@ class StateMachine {
         return config_.FindTransition(current_state_, event).has_value();
     }
 
-    // Process an event; returns true when a transition occurred.
+    // Process an event; returns true when a transition occurred. State changes
+    // are serialised, but actions run after releasing the state mutex so a
+    // long-running entry action cannot make GetState() observationally block
+    // for the duration of the operation it launched.
     bool Process(Event event) {
-        std::lock_guard<std::recursive_mutex> lock(mutex_);
-
-        auto next_state = config_.FindTransition(current_state_, event);
-        if (!next_state.has_value()) {
-            return false;
+        State prev_state;
+        State new_state;
+        StateAction<State> exit_action;
+        StateAction<State> entry_action;
+        TransitionAction<State, Event> transition_action;
+        {
+            std::lock_guard<std::recursive_mutex> lock(mutex_);
+            auto next_state = config_.FindTransition(current_state_, event);
+            if (!next_state.has_value()) {
+                return false;
+            }
+            prev_state = current_state_;
+            new_state = *next_state;
+            current_state_ = new_state;
+            exit_action = exit_action_;
+            entry_action = entry_action_;
+            transition_action = transition_action_;
         }
 
-        State prev_state = current_state_;
-        State new_state = *next_state;
-
-        if (exit_action_) {
-            exit_action_(prev_state);
+        if (exit_action) {
+            exit_action(prev_state);
         }
-
-        if (transition_action_) {
-            transition_action_(prev_state, event, new_state);
+        if (transition_action) {
+            transition_action(prev_state, event, new_state);
         }
-
-        current_state_ = new_state;
-
-        if (entry_action_) {
-            entry_action_(new_state);
+        if (entry_action) {
+            entry_action(new_state);
         }
 
         return true;
@@ -110,9 +118,18 @@ class StateMachine {
         return ((current == terminal_states) || ...);
     }
 
-    void SetEntryAction(StateAction<State> action) { entry_action_ = action; }
-    void SetExitAction(StateAction<State> action) { exit_action_ = action; }
-    void SetTransitionAction(TransitionAction<State, Event> action) { transition_action_ = action; }
+    void SetEntryAction(StateAction<State> action) {
+        std::lock_guard<std::recursive_mutex> lock(mutex_);
+        entry_action_ = std::move(action);
+    }
+    void SetExitAction(StateAction<State> action) {
+        std::lock_guard<std::recursive_mutex> lock(mutex_);
+        exit_action_ = std::move(action);
+    }
+    void SetTransitionAction(TransitionAction<State, Event> action) {
+        std::lock_guard<std::recursive_mutex> lock(mutex_);
+        transition_action_ = std::move(action);
+    }
 
   private:
     const Config& config_;

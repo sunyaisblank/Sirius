@@ -2,50 +2,14 @@
 
 #include "sirius/app/platform_paths.h"
 
+#include "sirius/base/resource_locator.h"
+
 #include <cstdlib>
 #include <fstream>
 
-#if defined(_WIN32)
-#include <windows.h>
-#elif defined(__linux__)
-#include <linux/limits.h>
-#include <unistd.h>
-#elif defined(__APPLE__)
-#include <limits.h>
-#include <mach-o/dyld.h>
-#endif
-
 namespace sirius::app {
 
-fs::path PlatformPaths::executable_path_;
-bool PlatformPaths::executable_path_initialised_ = false;
-
-fs::path PlatformPaths::ExecutableDirectory() {
-    if (!executable_path_initialised_) {
-#if defined(_WIN32)
-        wchar_t path[MAX_PATH];
-        DWORD len = GetModuleFileNameW(NULL, path, MAX_PATH);
-        if (len > 0 && len < MAX_PATH) {
-            executable_path_ = fs::path(path).parent_path();
-        }
-#elif defined(__linux__)
-        char path[PATH_MAX];
-        ssize_t len = readlink("/proc/self/exe", path, sizeof(path) - 1);
-        if (len != -1) {
-            path[len] = '\0';
-            executable_path_ = fs::path(path).parent_path();
-        }
-#elif defined(__APPLE__)
-        char path[PATH_MAX];
-        uint32_t size = sizeof(path);
-        if (_NSGetExecutablePath(path, &size) == 0) {
-            executable_path_ = fs::canonical(fs::path(path)).parent_path();
-        }
-#endif
-        executable_path_initialised_ = true;
-    }
-    return executable_path_;
-}
+fs::path PlatformPaths::ExecutableDirectory() { return base::ExecutableDirectory(); }
 
 fs::path PlatformPaths::UserConfigDirectory() {
     fs::path config_dir;
@@ -93,26 +57,7 @@ fs::path PlatformPaths::SystemConfigDirectory() {
 }
 
 std::optional<fs::path> PlatformPaths::ResolveResource(const std::string& relative_path) {
-    // Search order, highest priority first. The shaders/ subdir is the new-tree
-    // home the app CMakeLists copies viewer shaders into; the Sirius.Render entry
-    // preserves the legacy runtime-load path.
-    std::vector<fs::path> search_paths = {
-        fs::current_path() / relative_path,
-        ExecutableDirectory() / relative_path,
-        ExecutableDirectory() / "shaders" / relative_path,
-        ExecutableDirectory() / "Sirius.Render" / relative_path,
-        ExecutableDirectory().parent_path() / relative_path,
-        ExecutableDirectory().parent_path().parent_path() / relative_path,
-        ExecutableDirectory().parent_path().parent_path().parent_path() / "src" / relative_path,
-    };
-
-    for (const auto& path : search_paths) {
-        if (fs::exists(path)) {
-            return fs::canonical(path);
-        }
-    }
-
-    return std::nullopt;
+    return base::ResolveResource(relative_path);
 }
 
 std::vector<fs::path> PlatformPaths::ConfigSearchPaths() {

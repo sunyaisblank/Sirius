@@ -112,6 +112,12 @@ class ImageBuffer {
     ImageBuffer(int w, int h) { Allocate(w, h); }
 
     void Allocate(int w, int h) {
+        if (w <= 0 || h <= 0) {
+            width = 0;
+            height = 0;
+            pixels.clear();
+            return;
+        }
         width = w;
         height = h;
         pixels.resize(static_cast<size_t>(w) * h * 3, 0.0f);
@@ -119,11 +125,14 @@ class ImageBuffer {
 
     void Clear() { std::fill(pixels.begin(), pixels.end(), 0.0f); }
 
-    size_t PixelCount() const { return static_cast<size_t>(width) * height; }
+    size_t PixelCount() const {
+        return width > 0 && height > 0 ? static_cast<size_t>(width) * height : 0;
+    }
     size_t BufferSize() const { return pixels.size(); }
+    bool HasValidShape() const { return PixelCount() > 0 && pixels.size() == PixelCount() * 3; }
 
     void SetPixel(int x, int y, float r, float g, float b) {
-        if (x < 0 || x >= width || y < 0 || y >= height) return;
+        if (!HasValidShape() || x < 0 || x >= width || y < 0 || y >= height) return;
         size_t idx = (static_cast<size_t>(y) * width + x) * 3;
         pixels[idx + 0] = r;
         pixels[idx + 1] = g;
@@ -131,7 +140,7 @@ class ImageBuffer {
     }
 
     void GetPixel(int x, int y, float& r, float& g, float& b) const {
-        if (x < 0 || x >= width || y < 0 || y >= height) {
+        if (!HasValidShape() || x < 0 || x >= width || y < 0 || y >= height) {
             r = g = b = 0.0f;
             return;
         }
@@ -147,6 +156,7 @@ class ImageBuffer {
 
     // Convert to 8-bit sRGB (gamma corrected); the display transfer applied once.
     std::vector<uint8_t> ToSrgb8() const {
+        if (!HasValidShape()) return {};
         std::vector<uint8_t> result(PixelCount() * 3);
 
         for (size_t i = 0; i < PixelCount(); ++i) {
@@ -170,6 +180,7 @@ class ImageBuffer {
 
     // Convert to RGBA float with alpha = 1.0.
     std::vector<float> ToRgba() const {
+        if (!HasValidShape()) return {};
         std::vector<float> result(PixelCount() * 4);
 
         for (size_t i = 0; i < PixelCount(); ++i) {
@@ -195,13 +206,19 @@ class ImageBufferRGBA {
     ImageBufferRGBA(int w, int h) { Allocate(w, h); }
 
     void Allocate(int w, int h) {
+        if (w <= 0 || h <= 0) {
+            width = 0;
+            height = 0;
+            pixels.clear();
+            return;
+        }
         width = w;
         height = h;
         pixels.resize(static_cast<size_t>(w) * h * 4, 0.0f);
     }
 
     void SetPixel(int x, int y, float r, float g, float b, float a = 1.0f) {
-        if (x < 0 || x >= width || y < 0 || y >= height) return;
+        if (!HasValidShape() || x < 0 || x >= width || y < 0 || y >= height) return;
         size_t idx = (static_cast<size_t>(y) * width + x) * 4;
         pixels[idx + 0] = r;
         pixels[idx + 1] = g;
@@ -209,7 +226,10 @@ class ImageBufferRGBA {
         pixels[idx + 3] = a;
     }
 
-    size_t PixelCount() const { return static_cast<size_t>(width) * height; }
+    size_t PixelCount() const {
+        return width > 0 && height > 0 ? static_cast<size_t>(width) * height : 0;
+    }
+    bool HasValidShape() const { return PixelCount() > 0 && pixels.size() == PixelCount() * 4; }
 };
 
 }  // namespace sirius::render

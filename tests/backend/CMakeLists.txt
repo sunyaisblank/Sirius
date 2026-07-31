@@ -15,6 +15,7 @@ add_executable(sirius_backend_tests
 )
 
 target_link_libraries(sirius_backend_tests PRIVATE sirius_backend GTest::gtest_main)
+target_include_directories(sirius_backend_tests PRIVATE "${CMAKE_SOURCE_DIR}/tests")
 
 sirius_configure_target(sirius_backend_tests CONTRACT_MODE 2)
 
@@ -24,4 +25,7 @@ if(TARGET sirius_kernels)
     add_dependencies(sirius_backend_tests sirius_kernels)
 endif()
 
-gtest_discover_tests(sirius_backend_tests PROPERTIES LABELS "Correctness")
+gtest_discover_tests(
+    sirius_backend_tests
+    PROPERTIES
+        LABELS "Correctness")

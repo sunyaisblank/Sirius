@@ -13,7 +13,7 @@ set_tests_properties(
     AccretionDiskTest.DiskBoundaries
     AccretionDiskTest.SpectralEmission
     AccretionDiskTest.FluxProfile
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -29,7 +29,7 @@ set_tests_properties(
     AlcubierreMetricTests.ShapeFunctionDerivativeFinite
     AlcubierreMetricTests.SubluminalConstruction
     AlcubierreMetricTests.SuperluminalConstruction
-    AlcubierreMetricTests.SetParameterClamping
+    AlcubierreMetricTests.SetParameterMatchesTheOperatorVelocityDomain
     AlcubierreMetricTests.NoNaNAtBubbleWall
     AlcubierreMetricTests.NoNaNAtOrigin
     AlcubierreMetricTests.BubblePositionUpdate
@@ -73,14 +73,18 @@ set_tests_properties(
     BeamPropagationTest.BeamInitialisation
     BeamPropagationTest.JacobianDeterminantFlat
     BeamPropagationTest.BeamGeometryExtraction
+    BeamPropagationTest.OrientationDescribesOutputEllipseRatherThanInputBasis
     BeamPropagationTest.CausticDetection
     BeamPropagationTest.BeamIntegrationStep
+    BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion
+    BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion
     BeamPropagationTest.HorizonTermination
     BeamPropagationTest.ConversionRoundTrip
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
+    BlackbodyParityTest.GPUMatchesCPUAtReferenceTemperatures
     BlackbodyParityTest.ColourTemperatureOrdering
     PROPERTIES LABELS "Mandatory;Correctness"
 )
@@ -104,7 +108,7 @@ set_tests_properties(
     CameraFactoryTest.CreatePinhole
     CameraFactoryTest.CreateThinLens
     CameraFactoryTest.CreateFisheye
-    CameraFactoryTest.DefaultFallsToPinhole
+    CameraFactoryTest.MalformedLensValueFailsClosed
     CameraFactoryTest.ConfigPassthrough
     PROPERTIES LABELS "Mandatory;Correctness"
 )
@@ -145,11 +149,38 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    CommandRouter.UnknownCommandReturnsFailure
+    CommandRouter.NoCommandStillPrintsHelpSuccessfully
+    CommandRouter.ExplicitMissingConfigPropagatesFailure
+    CommandRouter.InfoRejectsEmptyAndSurplusArguments
+    CommandRouter.ConfigRejectsMalformedSubcommandArguments
+    PROPERTIES LABELS "Mandatory;Operational"
+)
+
+set_tests_properties(
     ConfigEnvironment.IntegerOverridesApplied
     ConfigEnvironment.MetricNameAndSpinOverridesApplied
     ConfigEnvironment.BooleanOverrideParsed
-    ConfigEnvironment.MalformedIntegerLeavesDefault
-    PROPERTIES LABELS "Correctness"
+    ConfigEnvironment.ColorModeOverrideApplied
+    ConfigEnvironment.MalformedIntegerDeclines
+    ConfigEnvironment.TrailingNumericGarbageDeclines
+    ConfigEnvironment.NonFiniteNumberDeclines
+    ConfigEnvironment.MalformedBooleanDeclines
+    PROPERTIES LABELS "Mandatory;Operational"
+)
+
+set_tests_properties(
+    ConfigLoading.ExplicitMissingFileDeclines
+    ConfigLoading.MalformedJsonDeclinesWithoutDefaults
+    ConfigLoading.UnknownNestedFieldDeclines
+    ConfigLoading.UnknownTopLevelFieldDeclines
+    ConfigLoading.DuplicateFieldsDeclineInsteadOfUsingParserOrder
+    ConfigLoading.ValidateCommandUsesTheSameStrictParserAsStartup
+    ConfigLoading.InvalidKnownValueDeclines
+    ConfigLoading.ValidPartialFileMergesOverDefaults
+    ConfigLoading.SaveDeclinesWhenParentCannotBeCreated
+    ConfigLoading.SaveDeclinesInvalidConfiguration
+    PROPERTIES LABELS "Mandatory;Operational"
 )
 
 set_tests_properties(
@@ -172,6 +203,16 @@ set_tests_properties(
     ConfigValidation.VulkanBackendNameAccepted
     ConfigValidation.UnknownBackendNameRejected
     ConfigValidation.CpuBackendAccepted
+    ConfigValidation.NonFiniteValuesAreRejected
+    ConfigValidation.UnknownOutputExtensionIsRejected
+    ConfigValidation.VolumetricExtensionsRequireTheLiveVolumePath
+    ConfigValidation.UnimplementedDenoiserRequestIsRejected
+    ConfigValidation.ObserverAzimuthRangeIsValidated
+    ConfigValidation.CameraWorldlineAndLensAreValidated
+    ConfigValidation.MasslessMetricUsesAUnitObserverDistanceScale
+    ConfigValidation.PolarisationRequiresRepresentedThinBlackHoleDisk
+    ConfigValidation.MotionBlurAndWormholeTopologyHaveExplicitOperatorBoundaries
+    ConfigValidation.DiskRequestDeclinesForEveryMetricWithoutAnEmissionModel
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -189,6 +230,7 @@ set_tests_properties(
 set_tests_properties(
     Contracts.SatisfiedContractsPassSilently
     Contracts.AxiomIsNeverEvaluated
+    Contracts.LanguageCapabilitiesDistinguishNativeFeaturesFromSubstitutes
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -212,6 +254,7 @@ set_tests_properties(
     CoordinateTransformTests.RoundTripKerrSchild_LowSpin
     CoordinateTransformTests.RoundTripKerrSchild_ModerateSpin
     CoordinateTransformTests.RoundTripKerrSchild_HighSpin
+    CoordinateTransformTests.KerrDiskRadiusIsSpheroidalNotCylindrical
     CoordinateTransformTests.RoundTripKerrSchild_NearPole
     CoordinateTransformTests.JacobianDeterminant_Equator
     CoordinateTransformTests.JacobianDeterminant_MidLatitude
@@ -243,6 +286,7 @@ set_tests_properties(
     CoronaEmissivityTests.OpticalDepthDisabledIsZero
     CoronaEmissivityTests.OpticalDepthPositiveInsideCorona
     CoronaEmissivityTests.ScatteredIntensityZeroForZeroTau
+    CoronaEmissivityTests.ComptonizedSourceLeavesOpticalDepthToTheRayMarcher
     CoronaEmissivityTests.ScatteredIntensityIncreasesWithTau
     PROPERTIES LABELS "Correctness"
 )
@@ -298,12 +342,18 @@ set_tests_properties(
     DispatchGovernor.TargetDefaultsWhenTheEnvironmentIsUnset
     DispatchGovernor.TargetHonoursTheOverrideIncludingZero
     DispatchGovernor.TargetFailsLoudOnGarbageNegativesAndNonFinite
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Operational"
+)
+
+set_tests_properties(
+    DisplayBuffer.NonFiniteRadianceIsIdentifiedBeforeEncoding
+    DisplayBuffer.MalformedDimensionsTilesAndGammaFailClosed
+    PROPERTIES LABELS "Mandatory;Operational"
 )
 
 set_tests_properties(
     DopplerToggleTest.SuppressionCollapsesDiskAsymmetry
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Operational"
 )
 
 set_tests_properties(
@@ -332,7 +382,9 @@ set_tests_properties(
 set_tests_properties(
     EXRRoundTripTests.HDRGradientSurvivesWriteAndRead
     EXRRoundTripTests.WriteFailsCleanlyOnBadPath
-    PROPERTIES LABELS "Correctness"
+    EXRRoundTripTests.NonFiniteRadianceIsRejected
+    EXRRoundTripTests.MalformedBufferShapesAreRejectedByEveryPublicWriter
+    PROPERTIES LABELS "Mandatory;Operational"
 )
 
 set_tests_properties(
@@ -341,7 +393,7 @@ set_tests_properties(
     EinsteinRingTest.MagnificationDefinition
     EinsteinRingTest.DeflectionAngleFormula
     EinsteinRingTest.MagnificationScaling
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -444,7 +496,7 @@ set_tests_properties(
     GeodesicPathTests.PhiWrapContinuity
     GeodesicPathTests.MetricSignatureCorrect
     GeodesicPathTests.KerrMetricSignature
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -473,13 +525,21 @@ set_tests_properties(
     GeodesicTracerTest.EscapeToInfinity
     GeodesicTracerTest.DiskIntersection
     GeodesicTracerTest.DiskTemperatureProfile
+    GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile
+    GeodesicTracerTest.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation
     GeodesicTracerTest.NoNumericalFailures
     GeodesicTracerTest.KerrMetricTracing
     GeodesicTracerTest.GFactorDecompositionConsistency
     GeodesicTracerTest.MotionBlurConvergence
     GeodesicTracerTest.GFactorCoefficientNormalization
     GeodesicTracerTest.TracingPerformance
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Operational"
+)
+
+set_tests_properties(
+    GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment
+    GeodesicTracerVolumetric.TurbulenceAndCoronaAlterLiveTransferDeterministically
+    PROPERTIES LABELS "Mandatory;Operational"
 )
 
 set_tests_properties(
@@ -541,7 +601,7 @@ set_tests_properties(
     KernelParity.KerrSchildChristoffelMatchesLegacyToOnePartInMillion
     KernelParity.SymplecticStepMatchesLegacy
     KernelParity.YoshidaS4StepMatchesLegacy
-    KernelParity.NovikovThorneDiskTemperatureMatchesLegacy
+    KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel
     KernelParity.ChebyshevBlackbodyMatchesLegacy
     KernelParity.GeodesicDeviationIsFiniteAndCurvedNearBlackHole
     PROPERTIES LABELS "Mandatory;Correctness"
@@ -550,14 +610,14 @@ set_tests_properties(
 set_tests_properties(
     KernelPortability.CudaEmissionCarriesTheNativeComputeEntryPoint
     KernelPortability.MetalEmissionCarriesTheNativeComputeEntryPoint
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Operational"
 )
 
 set_tests_properties(
     KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow
     KernelTrace.Fp64RungAgreesWithFp32OnKerrScene
     KernelTrace.CompensatedRungTracksFp64AtLeastAsWellAsFp32
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Operational"
 )
 
 set_tests_properties(
@@ -592,6 +652,7 @@ set_tests_properties(
 set_tests_properties(
     LivePathConservationTests.SchwarzschildEnergyAndAngularMomentum
     LivePathConservationTests.KerrEnergyAndAngularMomentum
+    LivePathConservationTests.NearExtremalKerrEnergyAndAngularMomentum
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -632,7 +693,8 @@ set_tests_properties(
     MemoryGovernor.TileNeverExceedsImageExtent
     MemoryGovernor.WorkingSetMatchesTheDerivedTile
     MemoryGovernor.EnvironmentOverrideResolvesBudget
-    PROPERTIES LABELS "Correctness"
+    MemoryGovernor.MalformedOverrideDeclinesInsteadOfBorrowingTheDeviceBudget
+    PROPERTIES LABELS "Mandatory;Operational"
 )
 
 set_tests_properties(
@@ -836,8 +898,10 @@ set_tests_properties(
     PNGWriterTest.EmptyBuffer
     PNGWriterTest.ZeroSizeBuffer
     PNGWriterTest.NullPixels
+    PNGWriterTest.NonFiniteRadianceIsRejected
+    PNGWriterTest.MalformedBufferShapesAreRejected
     PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Operational"
 )
 
 set_tests_properties(
@@ -859,11 +923,21 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    PixelSampling.EmitsExactlyEveryRequestedNonSquareCount
+    PixelSampling.NonPositiveInputStillEmitsOneDefensiveSample
+    PixelSampling.NonSquareCountsCoverBothAxesWithoutRemainderBias
+    PixelSampling.PatternIsDeterministic
+    PROPERTIES LABELS "Mandatory;Operational"
+)
+
+set_tests_properties(
     PlatformPaths.PlatformNameIsNonEmpty
     PlatformPaths.ConfigSearchPathsAreOrderedAndNonEmpty
     PlatformPaths.AbsentResourceResolvesToNullopt
     PlatformPaths.ExecutableDirectoryIsResolved
-    PROPERTIES LABELS "Correctness"
+    PlatformPaths.ExplicitResourceRootDisablesFallbacks
+    PlatformPaths.ResourceNamesAndSymlinksCannotEscapeTheSelectedVolume
+    PROPERTIES LABELS "Mandatory;Operational"
 )
 
 set_tests_properties(
@@ -931,12 +1005,21 @@ set_tests_properties(
 
 set_tests_properties(
     RenderCommandParse.BasicFlagsMapToConfig
-    RenderCommandParse.VolumetricAndFilmFlagsSetEnables
+    RenderCommandParse.RepresentedVolumetricAndFilmFlagsSetEnables
+    RenderCommandParse.MotionBlurAndWormholeTopologyReachTheValidatedSchema
     RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent
     RenderCommandParse.BackendVulkanDeclinesMetricOffTheRenderPath
+    RenderCommandParse.ReusedCommandDoesNotRetainAnEarlierGpuRequest
+    RenderCommandParse.CliCpuOverridesLowerLayerVulkanBackend
     RenderCommandParse.UnknownMetricFailsValidation
     RenderCommandParse.UnknownOptionRejected
-    PROPERTIES LABELS "Correctness"
+    RenderCommandParse.TrailingNumericGarbageRejected
+    RenderCommandParse.NonFiniteNumericValueRejected
+    RenderCommandParse.UnexpectedPositionalArgumentRejected
+    RenderCommandParse.ExplicitMassOnMasslessMetricIsNotSilentlyDiscarded
+    RenderCommandParse.RetiredBackendNamesAreNotRemapped
+    RenderCommandParse.MalformedCameraBetaRejected
+    PROPERTIES LABELS "Mandatory;Operational"
 )
 
 set_tests_properties(
@@ -958,9 +1041,17 @@ set_tests_properties(
 
 set_tests_properties(
     RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr
-    RenderSessionProbe.BackendAutoResolvesByDeviceAndRegistry
+    RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr
+    RenderSessionProbe.BackendAutoResolvesByDeviceRegistryAndCapabilities
+    RenderSessionProbe.ConfigurationConversionPreservesObserverAndDiskControls
+    RenderSessionProbe.StartIsAsynchronousAndCancellationIsTerminalWithoutOutput
+    RenderSessionProbe.CompletionCallbackCanReenterLifecycleWithoutDeadlock
+    RenderSessionProbe.PointStarfieldRejectsValuesItsGeneratorWouldClamp
+    RenderSessionProbe.TypedNumericBoundariesMatchTheExternalConfigurationBoundary
+    RenderSessionProbe.PolarisedAndTwoSheetRequestsDeclineAtTheTypedBoundary
+    RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes
     RenderSessionProbe.CpuMorrisThorneRenderCompletes
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Operational"
 )
 
 set_tests_properties(
@@ -981,6 +1072,12 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p
+    ShadowBoundary.SchwarzschildCriticalImpactParameterMatchesAnalyticAt1080p
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     SpectralEmissionTest.NT_QFactorZeroAtISCO_Schwarzschild
     SpectralEmissionTest.NT_QFactorZeroAtISCO_Kerr
     SpectralEmissionTest.NT_QFactorPositiveOutsideISCO
@@ -988,6 +1085,8 @@ set_tests_properties(
     SpectralEmissionTest.TemperatureRange
     SpectralEmissionTest.BlackbodyColourDirection
     SpectralEmissionTest.DopplerShiftDirection
+    SpectralEmissionTest.TrueColorAppliesExactlyOneGFourthIntensityFactor
+    SpectralEmissionTest.MotionBlurAveragesNonlinearTemporalRadiance
     SpectralEmissionTest.SpinDisplayFormat
     PROPERTIES LABELS "Mandatory;Correctness"
 )
@@ -1076,9 +1175,13 @@ set_tests_properties(
 
 set_tests_properties(
     StarfieldPointTest.CatalogueMeetsSizeFloorAndIsFinite
+    StarfieldPointTest.CataloguePreservesTheRequestedCount
     StarfieldPointTest.BeamAccumulationFiniteAndNonConstant
+    StarfieldPointTest.SpatialIndexMatchesExhaustiveBeamOracle
+    StarfieldPointTest.EllipticalFootprintUsesBothAxesAndOrientation
+    StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope
     StarfieldPointTest.BeamFootprintSuppressesStarFlicker
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Operational"
 )
 
 set_tests_properties(
@@ -1148,6 +1251,11 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    TileScheduler.ReinitialiseResetsCompletionLedger
+    PROPERTIES LABELS "Mandatory;Operational"
+)
+
+set_tests_properties(
     TonemapTests.ACESAtZero
     TonemapTests.ACESMonotone
     TonemapTests.ACESBounded
@@ -1185,20 +1293,35 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    VulkanBackend.EnumerationReportsInsteadOfThrowing
-    VulkanBackend.SlangKernelMatchesCpuReference
-    PROPERTIES LABELS "Correctness"
+    ViewCommandOperational.StrictParsingAndSessionProjection
+    ViewCommandOperational.HeadlessRefinementProducesASynchronisedFrame
+    ViewCommandOperational.InputStateHandlesPressRepeatReleaseMouseAndScroll
+    PROPERTIES LABELS "Mandatory;Operational"
 )
 
 set_tests_properties(
-    VulkanRenderSession.Kerr64CompletesUnderConstrainedBudgetWithFiniteRadiance
+    VulkanBackend.EnumerationReportsInsteadOfThrowing
+    VulkanBackend.SlangKernelMatchesCpuReference
+    VulkanBackend.DeviceSelectionIsStrictAndRangeChecked
+    PROPERTIES LABELS "Mandatory;Operational"
+)
+
+set_tests_properties(
+    VulkanRenderSession.CapabilityBoundaryAcceptsRepresentedSceneSemantics
+    VulkanRenderSession.CapabilityBoundaryRejectsUnrepresentedSceneSemantics
+    VulkanRenderSession.VolumetricTurbulenceAndCoronaReachLiveKernel
+    VulkanRenderSession.NonSquareMultisamplingCameraAndLensReachLiveKernel
+    VulkanRenderSession.IndexedPointCatalogueReachesLiveKernel
+    VulkanRenderSession.CpuVulkanPointCatalogueAgreeOnFlatScene
+    VulkanRenderSession.ConstrainedBudgetDeclinesRatherThanChangingBackground
     VulkanRenderSession.Fp64RungRendersOrDeclinesLoudly
     VulkanRenderSession.CompensatedRungRendersOnAnyDevice
     VulkanRenderSession.Kerr160x120CompletesAcrossMultipleGovernedTiles
     VulkanRenderSession.CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds
+    VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p
     VulkanRenderSession.CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalBounds
     VulkanRenderSession.BackendCompiledOrSkipped
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Operational"
 )
 
 set_tests_properties(

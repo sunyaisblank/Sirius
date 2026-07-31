@@ -82,13 +82,11 @@ public void GetRiemannTensorCart(
                 }
 }
 
-// Full-Riemann deviation acceleration D^2 xi^mu/dl^2 (DNGR eq A.19).
-public Real4 GeodesicDeviationAccelFullRiemann(
-    Vec4Cart x, Vec4Cart k, Real4 xi, float M, float a, float Q, float Lambda)
-{
-    Real R[4][4][4][4];
-    GetRiemannTensorCart(x, M, a, Q, Lambda, R);
-
+// Contract a precomputed Riemann tensor with one deviation vector. A beam has
+// two vectors, so separating construction from contraction prevents computing
+// the same 256-component tensor twice per geodesic step.
+public Real4 GeodesicDeviationAccelFromRiemann(
+    Real R[4][4][4][4], Vec4Cart k, Real4 xi) {
     Real k_arr[4] = { k.t, k.x, k.y, k.z };
     Real xi_arr[4] = { xi.x, xi.y, xi.z, xi.w };
     Real accel[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -100,6 +98,15 @@ public Real4 GeodesicDeviationAccelFullRiemann(
                     accel[mu] += R[mu][nu][rho][sig] * k_arr[nu] * xi_arr[rho] * k_arr[sig];
 
     return Real4(accel[0], accel[1], accel[2], accel[3]);
+}
+
+// Full-Riemann deviation acceleration D^2 xi^mu/dl^2 (DNGR eq A.19).
+public Real4 GeodesicDeviationAccelFullRiemann(
+    Vec4Cart x, Vec4Cart k, Real4 xi, float M, float a, float Q, float Lambda)
+{
+    Real R[4][4][4][4];
+    GetRiemannTensorCart(x, M, a, Q, Lambda, R);
+    return GeodesicDeviationAccelFromRiemann(R, k, xi);
 }
 
 // Tidal-approximation deviation acceleration (the .cu default fast mode):

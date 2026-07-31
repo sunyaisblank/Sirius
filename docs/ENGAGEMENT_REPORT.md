@@ -1,5 +1,9 @@
 # Engagement Report: the DNGR-Parity Rebuild
 
+> Historical report. Its counts and closure claims describe earlier July 2026
+> sessions and are not the current operational authority. See
+> `docs/ADVERSARIAL_REVIEW.md` for the re-audited ground truth.
+
 This is the closing report of the July 2026 rebuild engagement (Prompt.md section 19 deliverables). It is written incrementally as programmes close; the completion scorecard in section 10 is authoritative for what remains open. Baseline identity, gate evidence, and per-commit detail live in the git history of `rebuild/dngr-parity`; this report synthesises.
 
 ## 1. System purpose

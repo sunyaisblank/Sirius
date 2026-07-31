@@ -8,7 +8,10 @@
             "binaryDir": "${sourceDir}/bin/${presetName}",
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "BUILD_TESTS": "ON"
+                "BUILD_TESTS": "ON",
+                "SIRIUS_CONTRACT_MODE": "2",
+                "SIRIUS_MANDATORY_TESTS": "ON",
+                "SIRIUS_WERROR": "ON"
             }
         },
         {
@@ -48,6 +51,15 @@
             "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
         },
         {
+            "name": "linux-gcc-sanitize",
+            "displayName": "Linux / WSL2, GCC 14, ASan + UBSan + LSan",
+            "inherits": "linux-gcc-debug",
+            "cacheVariables": {
+                "SIRIUS_SANITIZERS": "address-undefined",
+                "SIRIUS_MANDATORY_TESTS": "ON"
+            }
+        },
+        {
             "name": "windows-msvc",
             "displayName": "Windows, MSVC 2022 17.10+, x64",
             "inherits": "base",
@@ -69,7 +81,8 @@
             "inherits": "linux-gcc",
             "cacheVariables": {
                 "SIRIUS_MANDATORY_TESTS": "ON",
-                "SIRIUS_WERROR": "ON"
+                "SIRIUS_WERROR": "ON",
+                "SIRIUS_REQUIRE_VULKAN_RUNTIME": "ON"
             }
         }
     ],
@@ -78,6 +91,7 @@
         { "name": "linux-gcc-debug", "configurePreset": "linux-gcc-debug" },
         { "name": "linux-clang", "configurePreset": "linux-clang" },
         { "name": "linux-clang-debug", "configurePreset": "linux-clang-debug" },
+        { "name": "linux-gcc-sanitize", "configurePreset": "linux-gcc-sanitize" },
         { "name": "windows-msvc", "configurePreset": "windows-msvc", "configuration": "Release" },
         { "name": "macos", "configurePreset": "macos" },
         { "name": "linux-ci", "configurePreset": "linux-ci" }
@@ -98,6 +112,17 @@
             "configurePreset": "linux-ci",
             "output": { "outputOnFailure": true },
             "execution": { "stopOnFailure": false }
+        },
+        {
+            "name": "linux-gcc-sanitize",
+            "configurePreset": "linux-gcc-sanitize",
+            "output": { "outputOnFailure": true },
+            "environment": {
+                "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1:strict_string_checks=1",
+                "LSAN_OPTIONS": "suppressions=${sourceDir}/sanitizers/lsan-vulkan.supp:print_suppressions=1",
+                "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+            },
+            "execution": { "stopOnFailure": true }
         }
     ]
 }

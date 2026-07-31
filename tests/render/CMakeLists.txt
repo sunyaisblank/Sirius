@@ -18,6 +18,8 @@ add_executable(sirius_render_tests
     starfield_point_test.cpp
     doppler_toggle_test.cpp
     camera_aberration_test.cpp
+    pixel_sampling_test.cpp
+    shadow_boundary_test.cpp
 )
 
 target_link_libraries(sirius_render_tests PRIVATE sirius_render GTest::gtest_main)
@@ -32,6 +34,12 @@ target_include_directories(sirius_render_tests PRIVATE
 
 sirius_configure_target(sirius_render_tests CONTRACT_MODE 2)
 
+if(TARGET sirius)
+    # Session-level tests resolve the same staged volume as the executable in
+    # CPU-only and Vulkan-enabled builds alike.
+    add_dependencies(sirius_render_tests sirius)
+endif()
+
 # The Vulkan render/parity gate loads the compiled trace kernel; point it at the
 # kernel binary dir when slangc produced one (sirius_render carries the same
 # SIRIUS_HAS_VULKAN_BACKEND define transitively). The tests skip cleanly when the
@@ -42,4 +50,8 @@ if(TARGET sirius_kernels)
     add_dependencies(sirius_render_tests sirius_kernels)
 endif()
 
-gtest_discover_tests(sirius_render_tests PROPERTIES LABELS "Correctness")
+gtest_discover_tests(
+    sirius_render_tests
+    PROPERTIES
+        LABELS "Correctness"
+        ENVIRONMENT "SIRIUS_RESOURCE_DIR=$<TARGET_FILE_DIR:sirius>/resources")

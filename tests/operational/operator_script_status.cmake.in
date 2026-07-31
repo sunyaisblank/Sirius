@@ -1,0 +1,33 @@
+set(_audit "@CMAKE_BINARY_DIR@/operator-script-audit")
+file(REMOVE_RECURSE "${_audit}")
+file(MAKE_DIRECTORY "${_audit}")
+
+set(_failure "${_audit}/renderer-fails")
+set(_empty_success "${_audit}/renderer-emits-nothing")
+file(WRITE "${_failure}" "#!/bin/sh\nexit 19\n")
+file(WRITE "${_empty_success}" "#!/bin/sh\nexit 0\n")
+file(CHMOD "${_failure}" "${_empty_success}"
+    PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE
+                WORLD_READ WORLD_EXECUTE)
+
+foreach(_fake IN ITEMS "${_failure}" "${_empty_success}")
+    foreach(_script IN ITEMS render_test.sh render_demo.sh)
+        execute_process(
+            COMMAND "@CMAKE_COMMAND@" -E env
+                "SIRIUS_BINARY=${_fake}"
+                "SIRIUS_RENDER_TEST_DIR=${_audit}/render-test"
+                "SIRIUS_DEMO_DIR=${_audit}/render-demo"
+                "@SIRIUS_BASH_EXECUTABLE@" "@CMAKE_SOURCE_DIR@/${_script}"
+            WORKING_DIRECTORY "${_audit}"
+            RESULT_VARIABLE _result
+            OUTPUT_VARIABLE _stdout
+            ERROR_VARIABLE _stderr)
+        if(_result EQUAL 0)
+            message(FATAL_ERROR
+                "${_script} presented a failed or output-free renderer as successful\n"
+                "${_stdout}\n${_stderr}")
+        endif()
+    endforeach()
+endforeach()
+
+file(REMOVE_RECURSE "${_audit}")

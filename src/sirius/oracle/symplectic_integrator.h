@@ -16,6 +16,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 
 namespace sirius::oracle {
 
@@ -146,8 +147,10 @@ class SymplecticIntegratorD {
                 result.terminated = true;
                 result.state = s;
                 result.lambdaAdvance = lambdaAccum;
-                result.hamiltonianError = std::abs(metric_->Hamiltonian(s.q, s.p));
-                result.nullConditionError = ComputeNullError(s);
+                // Boyer-Lindquist is outside its chart domain here. Do not
+                // evaluate the metric merely to decorate a termination result.
+                result.hamiltonianError = std::numeric_limits<double>::infinity();
+                result.nullConditionError = std::numeric_limits<double>::infinity();
                 return result;
             }
 
@@ -419,6 +422,14 @@ class SymplecticIntegratorD {
         // 1e-6 == core/constants.h kAngularClampEps; inlined to keep the
         // oracle self-contained (STYLE.md self-containment over shared const).
         s.q.theta = std::clamp(s.q.theta, 1e-6, M_PI - 1e-6);
+
+        // A composed substep can cross the Boyer-Lindquist horizon even when
+        // the enclosing step began outside it. Return the position for the
+        // caller's termination check before evaluating dH/dq outside the
+        // metric chart.
+        if (!metric_->IsValid(s.q)) {
+            return s;
+        }
 
         // Half-Step momentum update (at new position)
         dHdq = metric_->dHdq(s.q, s.p);

@@ -8,6 +8,7 @@
 #include <cmath>
 #include <cstdint>
 #include <mutex>
+#include <optional>
 #include <vector>
 
 namespace sirius::render {
@@ -19,10 +20,21 @@ class DisplayBuffer {
     // Allocate to the given dimensions and clear to black.
     void Initialise(int width, int height) {
         std::lock_guard<std::mutex> lock(mutex_);
+        if (width < 1 || width > 8192 || height < 1 || height > 8192) {
+            width_ = 0;
+            height_ = 0;
+            pixel_data_.clear();
+            byte_data_.clear();
+            update_counter_ = 0;
+            dirty_ = false;
+            return;
+        }
         width_ = width;
         height_ = height;
-        pixel_data_.resize(width * height * 4, 0.0f);  // RGBA float.
-        byte_data_.resize(width * height * 4, 0);      // RGBA uint8.
+        const std::size_t channels =
+            static_cast<std::size_t>(width) * static_cast<std::size_t>(height) * 4;
+        pixel_data_.resize(channels, 0.0f);  // RGBA float.
+        byte_data_.resize(channels, 0);      // RGBA uint8.
         update_counter_ = 0;
         dirty_ = true;
     }
@@ -30,6 +42,7 @@ class DisplayBuffer {
     // Copy a tile region into the buffer (called from a render thread).
     void UpdateTile(int tile_x, int tile_y, int tile_width, int tile_height,
                     const float* tile_data) {
+        if (tile_data == nullptr || tile_width <= 0 || tile_height <= 0) return;
         std::lock_guard<std::mutex> lock(mutex_);
 
         for (int y = 0; y < tile_height; ++y) {
@@ -40,8 +53,9 @@ class DisplayBuffer {
                 int dest_x = tile_x + x;
                 if (dest_x < 0 || dest_x >= width_) continue;
 
-                int src_idx = (y * tile_width + x) * 4;
-                int dst_idx = (dest_y * width_ + dest_x) * 4;
+                const std::size_t src_idx = (static_cast<std::size_t>(y) * tile_width + x) * 4;
+                const std::size_t dst_idx =
+                    (static_cast<std::size_t>(dest_y) * width_ + dest_x) * 4;
 
                 pixel_data_[dst_idx + 0] = tile_data[src_idx + 0];
                 pixel_data_[dst_idx + 1] = tile_data[src_idx + 1];
@@ -56,6 +70,7 @@ class DisplayBuffer {
 
     // Gamma-corrected 8-bit RGBA for GL upload (recomputed when dirty).
     const uint8_t* GetByteData(float gamma = 2.2f) {
+        if (!std::isfinite(gamma) || gamma <= 0.0f) return nullptr;
         std::lock_guard<std::mutex> lock(mutex_);
 
         if (dirty_) {
@@ -75,6 +90,22 @@ class DisplayBuffer {
     // Raw linear float data (for file output).
     const float* GetFloatData() const { return pixel_data_.data(); }
     std::vector<float>& GetFloatBuffer() { return pixel_data_; }
+
+    // Stable copy for consumers that may overlap a render-thread update.
+    [[nodiscard]] std::vector<float> SnapshotFloatData() const {
+        std::lock_guard<std::mutex> lock(mutex_);
+        return pixel_data_;
+    }
+
+    [[nodiscard]] std::optional<std::size_t> FirstNonFiniteIndex() const {
+        std::lock_guard<std::mutex> lock(mutex_);
+        for (std::size_t i = 0; i < pixel_data_.size(); ++i) {
+            if (!std::isfinite(pixel_data_[i])) {
+                return i;
+            }
+        }
+        return std::nullopt;
+    }
 
     void Clear() {
         std::lock_guard<std::mutex> lock(mutex_);

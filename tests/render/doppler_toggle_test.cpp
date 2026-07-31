@@ -22,10 +22,17 @@ namespace {
 using namespace sirius::core;
 using namespace sirius::backend;
 
-// Ratio of the approaching/receding brightness asymmetry: |L_left - L_right| /
-// (L_left + L_right), where luminance per disk-hit pixel is the beamed observed
-// flux g^4 T_emit^4. Rendered near edge-on at the given Doppler setting.
-double DiskAsymmetry(bool doppler_beaming, int& disk_hits) {
+struct AsymmetryMeasurement {
+    double observed = 0.0;
+    double doppler_factor = 0.0;
+    int disk_hits = 0;
+};
+
+// Measures both the rendered g^4 T^4 asymmetry and the isolated Doppler factor
+// (g/g_grav)^4. The latter is averaged per hit on each image half so Kerr
+// frame-dragging/lensing cannot masquerade as an unsuppressed emitter velocity
+// merely by mapping different radii or hit counts onto the two halves.
+AsymmetryMeasurement DiskAsymmetry(bool doppler_beaming) {
     KerrSchildParams p;
     p.M = 1.0;
     p.a = 0.9;
@@ -55,24 +62,42 @@ double DiskAsymmetry(bool doppler_beaming, int& disk_hits) {
     PinholeCamera camera(cam);
 
     double lum_left = 0.0, lum_right = 0.0;
-    disk_hits = 0;
+    double factor_left = 0.0, factor_right = 0.0;
+    int hits_left = 0, hits_right = 0;
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
             CameraRay ray = camera.GenerateRay(x, y, 0.5f, 0.5f);
             TraceResult r = tracer.Trace(ray);
             if (r.outcome != TraceResult::Outcome::DiskHit) continue;
-            disk_hits++;
+            const bool left = x < width / 2;
+            if (left)
+                ++hits_left;
+            else
+                ++hits_right;
             double g = r.redshift;
             double t_emit = r.disk_temperature;
             double lum = std::pow(g, 4.0) * std::pow(t_emit, 4.0);  // Observed beamed flux.
-            if (x < width / 2)
+            const double doppler_factor = std::pow(g / r.gfactor_grav, 4.0);
+            if (left) {
                 lum_left += lum;
-            else
+                factor_left += doppler_factor;
+            } else {
                 lum_right += lum;
+                factor_right += doppler_factor;
+            }
         }
     }
-    double total = lum_left + lum_right;
-    return (total > 1e-30) ? std::abs(lum_left - lum_right) / total : 0.0;
+    const double total = lum_left + lum_right;
+    const double mean_factor_left = factor_left / std::max(hits_left, 1);
+    const double mean_factor_right = factor_right / std::max(hits_right, 1);
+    const double factor_total = mean_factor_left + mean_factor_right;
+    return AsymmetryMeasurement{
+        .observed = (total > 1e-30) ? std::abs(lum_left - lum_right) / total : 0.0,
+        .doppler_factor = (factor_total > 1e-30)
+                              ? std::abs(mean_factor_left - mean_factor_right) / factor_total
+                              : 0.0,
+        .disk_hits = hits_left + hits_right,
+    };
 }
 
 // -----------------------------------------------------------------------------
@@ -81,21 +106,22 @@ double DiskAsymmetry(bool doppler_beaming, int& disk_hits) {
 // symmetric about the spin axis at fixed radius).
 // -----------------------------------------------------------------------------
 TEST(DopplerToggleTest, SuppressionCollapsesDiskAsymmetry) {
-    int hits_on = 0, hits_off = 0;
-    double asym_on = DiskAsymmetry(true, hits_on);
-    double asym_off = DiskAsymmetry(false, hits_off);
+    const AsymmetryMeasurement on = DiskAsymmetry(true);
+    const AsymmetryMeasurement off = DiskAsymmetry(false);
 
-    std::cout << "[doppler] asym_on=" << asym_on << " (" << hits_on
-              << " hits) asym_off=" << asym_off << " (" << hits_off
-              << " hits) collapse=" << (asym_on / std::max(asym_off, 1e-9)) << "\n";
+    std::cout << "[doppler] observed_on=" << on.observed << " observed_off=" << off.observed
+              << " factor_on=" << on.doppler_factor << " factor_off=" << off.doppler_factor
+              << " hits=" << on.disk_hits << "\n";
 
-    ASSERT_GT(hits_on, 100) << "too few disk hits to measure asymmetry";
-    EXPECT_EQ(hits_on, hits_off) << "the toggle must not change the geometry, only the shading";
+    ASSERT_GT(on.disk_hits, 100) << "too few disk hits to measure asymmetry";
+    EXPECT_EQ(on.disk_hits, off.disk_hits)
+        << "the toggle must not change the geometry, only the shading";
 
-    // The full-physics asymmetry is large.
-    EXPECT_GT(asym_on, 0.1);
-    // Suppression collapses it by a wide margin.
-    EXPECT_LT(asym_off, 0.2 * asym_on);
+    EXPECT_GT(on.doppler_factor, 0.1);
+    EXPECT_LT(off.doppler_factor, 1.0e-6)
+        << "emitter-velocity beaming remains after Doppler suppression";
+    EXPECT_LT(off.observed, 0.25 * on.observed)
+        << "the rendered image did not substantially reduce its total asymmetry";
 }
 
 }  // namespace

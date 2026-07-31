@@ -28,9 +28,12 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(RenderConfig, width, height, sam
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(MetricConfig, name, mass, spin, charge, lambda,
                                                 temperatureModel, diskTemperature, throatRadius,
-                                                warpVelocity, bubbleRadius, bubbleSigma)
+                                                wormholeTopology, warpVelocity, bubbleRadius,
+                                                bubbleSigma)
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(ObserverConfig, distance, inclination, azimuth, fov)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(ObserverConfig, distance, inclination, azimuth, fov,
+                                                cameraBetaForward, cameraBetaUp, cameraBetaRight,
+                                                lensModel, focalLength, aperture, focusDistance)
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(PostProcessConfig, enableBloom, bloomIntensity,
                                                 bloomThreshold, exposure, contrast, saturation,
@@ -40,6 +43,8 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(VolumetricConfig, enabled, hOver
                                                 tauMidplane, samples, enableTurbulence,
                                                 enableCorona)
 
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(MotionBlurConfig, enabled, shutterTime, samples)
+
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(FilmSimConfig, enabled, preset, grainIntensity,
                                                 halationStrength, vignetteStrength)
 
@@ -47,7 +52,9 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(BackendConfig, preferred, enable
                                                 cudaDevice)
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(SiriusConfig, render, metric, observer, postprocess,
-                                                backend, volumetric, film)
+                                                backend, volumetric, motionBlur, film, diskEnabled,
+                                                dopplerBeaming, pointStarfield, rayBundles,
+                                                colorMode)
 
 }  // namespace sirius::render
 
@@ -61,6 +68,7 @@ using MetricConfig = render::MetricConfig;
 using ObserverConfig = render::ObserverConfig;
 using PostProcessConfig = render::PostProcessConfig;
 using VolumetricConfig = render::VolumetricConfig;
+using MotionBlurConfig = render::MotionBlurConfig;
 using FilmSimConfig = render::FilmSimConfig;
 using BackendConfig = render::BackendConfig;
 using SiriusConfig = render::SiriusConfig;

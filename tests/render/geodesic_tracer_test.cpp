@@ -116,7 +116,7 @@ TEST_F(GeodesicTracerTest, HorizonCapture) {
     }
 
     EXPECT_GT(total, 0) << "No rays traced";
-    EXPECT_GE(horizon_or_disk + (total - horizon_or_disk), total);
+    EXPECT_GT(horizon_or_disk, 0) << "the central image region contains no captured or disk rays";
 }
 
 TEST_F(GeodesicTracerTest, EscapeToInfinity) {
@@ -187,6 +187,173 @@ TEST_F(GeodesicTracerTest, DiskTemperatureProfile) {
 
     EXPECT_GT(config.disk_inner, 0.0f);
     EXPECT_GT(config.disk_outer, config.disk_inner);
+}
+
+TEST_F(GeodesicTracerTest, LiveDiskTemperatureUsesFullPageThorneProfile) {
+    AccretionDiskD::Config disk_config;
+    disk_config.M = 1.0;
+    disk_config.a_star = 0.0;
+    AccretionDiskD oracle(disk_config);
+    const double reference = oracle.Temperature(1.5 * oracle.IscoRadius());
+    ASSERT_GT(reference, 0.0);
+
+    int compared = 0;
+    for (int y = 8; y < 56 && compared < 12; y += 2) {
+        for (int x = 8; x < 56 && compared < 12; x += 2) {
+            const TraceResult result = m_Tracer->Trace(m_Camera->GenerateRay(x, y, 0.5f, 0.5f));
+            for (int i = 0; i < result.num_disk_crossings; ++i) {
+                const auto& crossing = result.disk_crossings[i];
+                if (!crossing.valid) continue;
+                const double expected = oracle.Temperature(crossing.r) / reference;
+                EXPECT_NEAR(crossing.temperature, expected, 2.0e-5)
+                    << "live crossing at r=" << crossing.r
+                    << " did not consume the full Page-Thorne profile";
+                ++compared;
+            }
+        }
+    }
+    EXPECT_GE(compared, 6) << "insufficient live disk crossings for the Page-Thorne gate";
+}
+
+TEST_F(GeodesicTracerTest, LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation) {
+    CameraRay disk_ray;
+    bool found = false;
+    for (int y = 8; y < 56 && !found; y += 2) {
+        for (int x = 8; x < 56 && !found; x += 2) {
+            const CameraRay candidate = m_Camera->GenerateRay(x, y, 0.5f, 0.5f);
+            if (m_Tracer->Trace(candidate).outcome == TraceResult::Outcome::DiskHit) {
+                disk_ray = candidate;
+                found = true;
+            }
+        }
+    }
+    ASSERT_TRUE(found) << "no thin-disk ray available for the live polarisation witness";
+
+    TracerConfig config = m_Tracer->GetConfig();
+    config.enable_polarisation = true;
+    GeodesicTracer polarised_tracer(m_Metric.get(), config);
+    const TraceResult first = polarised_tracer.Trace(disk_ray);
+    const TraceResult repeat = polarised_tracer.Trace(disk_ray);
+
+    ASSERT_EQ(first.outcome, TraceResult::Outcome::DiskHit);
+    ASSERT_GT(first.num_disk_crossings, 0);
+    ASSERT_EQ(first.num_disk_crossings, repeat.num_disk_crossings);
+    for (int i = 0; i < first.num_disk_crossings; ++i) {
+        const auto& crossing = first.disk_crossings[i];
+        const auto& repeated = repeat.disk_crossings[i];
+        ASSERT_TRUE(crossing.polarisation_valid);
+        EXPECT_TRUE(std::isfinite(crossing.polarisation_evpa));
+        EXPECT_GE(crossing.polarisation_degree, 0.0f);
+        EXPECT_LE(crossing.polarisation_degree, 1.0f);
+        EXPECT_FLOAT_EQ(crossing.polarisation_evpa, repeated.polarisation_evpa);
+        EXPECT_FLOAT_EQ(crossing.polarisation_degree, repeated.polarisation_degree);
+    }
+
+    const TraceResult unpolarised = m_Tracer->Trace(disk_ray);
+    EXPECT_FALSE(unpolarised.disk_crossings[0].polarisation_valid);
+}
+
+TEST(GeodesicTracerVolumetric, TransferAccumulatesAcrossEveryTraversedSegment) {
+    KerrSchildParams params;
+    params.M = 0.0;
+    KerrSchildFamily flat(params);
+
+    TracerConfig config;
+    config.escape_radius = 80.0f;
+    config.max_steps = 2000;
+    config.enable_disk = true;
+    config.enable_volumetric = true;
+    config.disk_inner = 6.0f;
+    config.disk_outer = 20.0f;
+    config.disk_temperature_inner = 1.0f;
+    config.disk_temperature_model = DiskTemperatureModel::ShakuraSunyaev;
+    config.volumetric_H_over_r = 0.1f;
+    config.volumetric_tau_midplane = 2.0f;
+    config.volumetric_samples = 4;
+    config.integrator.initial_step = 0.5f;
+    config.integrator.max_step = 1.0f;
+    GeodesicTracer tracer(&flat, config);
+
+    CameraConfig camera_config;
+    camera_config.r = 50.0;
+    camera_config.theta = M_PI / 2.0;
+    camera_config.width = 3;
+    camera_config.height = 3;
+    PinholeCamera camera(camera_config);
+
+    const TraceResult result = tracer.Trace(camera.GenerateRay(1, 1, 0.5f, 0.5f));
+    EXPECT_EQ(result.outcome, TraceResult::Outcome::Escaped)
+        << "volumetric transfer must not replace the ray's terminal outcome";
+    EXPECT_TRUE(result.volumetric_hit);
+    EXPECT_GT(result.volumetric_path_length, 10.0f)
+        << "only a final RK45 segment appears to have been retained";
+    EXPECT_GT(result.optical_depth, 0.1f);
+    EXPECT_GT(result.volumetric_emission[0], 0.0f);
+    EXPECT_TRUE(std::isfinite(result.volumetric_emission[0]));
+
+    TracerConfig capped_config = config;
+    capped_config.volumetric_tau_max = 0.25f;
+    GeodesicTracer capped_tracer(&flat, capped_config);
+    const TraceResult capped = capped_tracer.Trace(camera.GenerateRay(1, 1, 0.5f, 0.5f));
+    EXPECT_TRUE(capped.volumetric_hit);
+    EXPECT_NEAR(capped.optical_depth, capped_config.volumetric_tau_max, 1.0e-6f);
+    EXPECT_LE(capped.optical_depth, capped_config.volumetric_tau_max + 1.0e-6f)
+        << "the final transfer sample overshot the configured optical-depth ceiling";
+}
+
+TEST(GeodesicTracerVolumetric, TurbulenceAndCoronaAlterLiveTransferDeterministically) {
+    KerrSchildParams params;
+    params.M = 0.0;
+    KerrSchildFamily flat(params);
+
+    TracerConfig baseline_config;
+    baseline_config.escape_radius = 80.0f;
+    baseline_config.max_steps = 2000;
+    baseline_config.enable_disk = true;
+    baseline_config.enable_volumetric = true;
+    baseline_config.disk_inner = 6.0f;
+    baseline_config.disk_outer = 20.0f;
+    baseline_config.disk_temperature_inner = 1.0f;
+    baseline_config.disk_temperature_model = DiskTemperatureModel::ShakuraSunyaev;
+    baseline_config.volumetric_H_over_r = 0.1f;
+    baseline_config.volumetric_tau_midplane = 2.0f;
+    baseline_config.volumetric_samples = 4;
+    baseline_config.integrator.initial_step = 0.5f;
+    baseline_config.integrator.max_step = 1.0f;
+
+    CameraConfig camera_config;
+    camera_config.r = 50.0;
+    camera_config.theta = M_PI / 2.0;
+    camera_config.width = 3;
+    camera_config.height = 3;
+    PinholeCamera camera(camera_config);
+    const CameraRay ray = camera.GenerateRay(1, 1, 0.5f, 0.5f);
+
+    GeodesicTracer baseline_tracer(&flat, baseline_config);
+    const TraceResult baseline = baseline_tracer.Trace(ray);
+
+    TracerConfig enhanced_config = baseline_config;
+    enhanced_config.enable_turbulence = true;
+    enhanced_config.turbulence.enabled = true;
+    enhanced_config.enable_corona = true;
+    enhanced_config.corona.enabled = true;
+    enhanced_config.corona.inner_radius_M = enhanced_config.disk_inner;
+    enhanced_config.corona.outer_radius_M = enhanced_config.disk_outer;
+    GeodesicTracer enhanced_tracer(&flat, enhanced_config);
+
+    const TraceResult first = enhanced_tracer.Trace(ray);
+    const TraceResult repeat = enhanced_tracer.Trace(ray);
+    ASSERT_TRUE(first.volumetric_hit);
+    EXPECT_TRUE(std::isfinite(first.optical_depth));
+    EXPECT_TRUE(std::isfinite(first.volumetric_emission[0]));
+    EXPECT_NE(first.optical_depth, baseline.optical_depth);
+    EXPECT_NE(first.volumetric_emission[0], baseline.volumetric_emission[0]);
+    EXPECT_LT(first.volumetric_emission[0], first.volumetric_emission[2])
+        << "the Compton corona spectral contribution did not reach the live transfer";
+    EXPECT_FLOAT_EQ(first.optical_depth, repeat.optical_depth);
+    for (int channel = 0; channel < 3; ++channel) {
+        EXPECT_FLOAT_EQ(first.volumetric_emission[channel], repeat.volumetric_emission[channel]);
+    }
 }
 
 TEST_F(GeodesicTracerTest, NoNumericalFailures) {
@@ -314,7 +481,7 @@ TEST_F(GeodesicTracerTest, MotionBlurConvergence) {
     float delta_phi_max = Omega * shutter_time;
 
     auto compute_blur = [&](int N) -> float {
-        float g_sum = 0.0f;
+        float radiance_sum = 0.0f;
         for (int i = 0; i < N; i++) {
             float t = (N > 1) ? static_cast<float>(i) / (N - 1) : 0.5f;
             float delta_phi = delta_phi_max * (t - 0.5f);
@@ -324,9 +491,9 @@ TEST_F(GeodesicTracerTest, MotionBlurConvergence) {
             float denom = gamma * (1.0f - v_dot_n);
             denom = std::clamp(denom, 0.1f, 10.0f);
             float g_offset = std::clamp(grav / denom, 0.1f, 5.0f);
-            g_sum += g_offset;
+            radiance_sum += std::pow(g_offset, 4.0f);
         }
-        return g_sum / N;
+        return radiance_sum / N;
     };
 
     float g_N4 = compute_blur(4);
@@ -349,7 +516,7 @@ TEST_F(GeodesicTracerTest, MotionBlurConvergence) {
 
     EXPECT_GT(g_N4, 0.0f);
     EXPECT_GT(g_N64, 0.0f);
-    EXPECT_LT(g_N64, 10.0f);
+    EXPECT_LT(g_N64, 625.0f);
 }
 
 TEST_F(GeodesicTracerTest, GFactorCoefficientNormalization) {

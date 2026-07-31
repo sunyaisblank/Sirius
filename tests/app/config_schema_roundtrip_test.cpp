@@ -17,6 +17,17 @@ TEST(ConfigSchema, DefaultsRoundTripThroughJson) {
     original.metric.spin = 0.9;
     original.render.samplesPerPixel = 128;
     original.postprocess.tonemapper = "Filmic";
+    original.observer.cameraBetaForward = 0.2;
+    original.observer.lensModel = "ThinLens";
+    original.metric.wormholeTopology = "TwoSheet";
+    original.motionBlur.enabled = true;
+    original.motionBlur.shutterTime = 0.25f;
+    original.motionBlur.samples = 7;
+    original.diskEnabled = false;
+    original.dopplerBeaming = false;
+    original.pointStarfield = true;
+    original.rayBundles = true;
+    original.colorMode = "Polarisation";
 
     nlohmann::json j = original;
     SiriusConfig restored = j.get<SiriusConfig>();
@@ -25,6 +36,17 @@ TEST(ConfigSchema, DefaultsRoundTripThroughJson) {
     EXPECT_DOUBLE_EQ(restored.metric.spin, 0.9);
     EXPECT_EQ(restored.render.samplesPerPixel, 128);
     EXPECT_EQ(restored.postprocess.tonemapper, "Filmic");
+    EXPECT_DOUBLE_EQ(restored.observer.cameraBetaForward, 0.2);
+    EXPECT_EQ(restored.observer.lensModel, "ThinLens");
+    EXPECT_EQ(restored.metric.wormholeTopology, "TwoSheet");
+    EXPECT_TRUE(restored.motionBlur.enabled);
+    EXPECT_FLOAT_EQ(restored.motionBlur.shutterTime, 0.25f);
+    EXPECT_EQ(restored.motionBlur.samples, 7);
+    EXPECT_FALSE(restored.diskEnabled);
+    EXPECT_FALSE(restored.dopplerBeaming);
+    EXPECT_TRUE(restored.pointStarfield);
+    EXPECT_TRUE(restored.rayBundles);
+    EXPECT_EQ(restored.colorMode, "Polarisation");
 }
 
 TEST(ConfigSchema, LegacyFieldSpellingsParse) {
@@ -36,6 +58,7 @@ TEST(ConfigSchema, LegacyFieldSpellingsParse) {
         "metric": { "name": "Kerr", "mass": 2.0, "spin": 0.75, "charge": 0.1,
                     "lambda": 0.0, "temperatureModel": "ShakuraSunyaev",
                     "diskTemperature": 60000.0, "throatRadius": 1.5,
+                    "wormholeTopology": "OneSheetCapture",
                     "warpVelocity": 0.8, "bubbleRadius": 2.0, "bubbleSigma": 0.25 },
         "observer": { "distance": 100.0, "inclination": 60.0, "azimuth": 30.0, "fov": 45.0 },
         "postprocess": { "enableBloom": false, "bloomIntensity": 0.5, "bloomThreshold": 0.2,
@@ -43,6 +66,7 @@ TEST(ConfigSchema, LegacyFieldSpellingsParse) {
                          "tonemapper": "Reinhard" },
         "volumetric": { "enabled": true, "hOverR": 0.15, "hPower": 0.3, "tauMidplane": 12.0,
                         "samples": 96, "enableTurbulence": true, "enableCorona": false },
+        "motionBlur": { "enabled": true, "shutterTime": 0.5, "samples": 9 },
         "film": { "enabled": true, "preset": "SpaceOdyssey2001", "grainIntensity": 0.2,
                   "halationStrength": 0.1, "vignetteStrength": 0.4 },
         "backend": { "preferred": "cpu", "enableDenoiser": false, "cudaDevice": 0 }
@@ -60,6 +84,8 @@ TEST(ConfigSchema, LegacyFieldSpellingsParse) {
     EXPECT_FALSE(config.postprocess.enableBloom);
     EXPECT_EQ(config.postprocess.tonemapper, "Reinhard");
     EXPECT_TRUE(config.volumetric.enableTurbulence);
+    EXPECT_TRUE(config.motionBlur.enabled);
+    EXPECT_EQ(config.motionBlur.samples, 9);
     EXPECT_EQ(config.film.preset, "SpaceOdyssey2001");
     EXPECT_EQ(config.backend.preferred, "cpu");
 }

@@ -20,6 +20,8 @@ class ViewCommand : public Command {
   private:
     bool ParseArgs(const std::vector<std::string>& args, const GlobalOptions& globals,
                    SiriusConfig& config);
+
+    bool jets_enabled_ = false;
 };
 
 }  // namespace sirius::app

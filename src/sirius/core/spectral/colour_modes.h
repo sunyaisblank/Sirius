@@ -6,11 +6,13 @@
 // Ported from PHSC001A.h.
 // Reference: NASA Hubble Space Telescope imaging guidelines.
 
+#include "sirius/base/contracts.h"
 #include "sirius/core/polarisation/stokes.h"
 #include "sirius/core/spectral/blackbody.h"
 
 #include <algorithm>
 #include <cmath>
+#include <span>
 
 namespace sirius::core::color_modes {
 
@@ -259,13 +261,13 @@ inline float GetEvpa(const StokesVector& stokes) { return stokes.Evpa(); }
 // (normalised), g the redshift factor, intensity the Stefan-Boltzmann term,
 // and stokes optional data for the polarisation mode.
 inline spectral::Rgb ApplyColorMode(Mode mode, float T_emit, float g, float intensity,
-                                    const StokesVector* stokes = nullptr) {
+                                    const StokesVector* stokes = nullptr,
+                                    float temperature_scale_kelvin = 30000.0f) {
     switch (mode) {
         case Mode::TrueColor: {
             // Physical blackbody -> sRGB.
             float T_obs = T_emit * g;
-            constexpr float kTInnerKelvin = 30000.0f;
-            float T_kelvin = T_obs * kTInnerKelvin;
+            float T_kelvin = T_obs * temperature_scale_kelvin;
             T_kelvin = std::clamp(T_kelvin, 1000.0f, 100000.0f);
             spectral::Rgb color = spectral::BlackbodyToRgb(static_cast<double>(T_kelvin));
 
@@ -287,16 +289,47 @@ inline spectral::Rgb ApplyColorMode(Mode mode, float T_emit, float g, float inte
             return narrowband::MapNarrowband(T_emit, intensity);
 
         case Mode::Polarisation:
-            if (stokes) {
-                return polarisation_vis::StokesToRgbHsv(*stokes);
-            } else {
-                // Fall back to true colour when no Stokes data is present.
-                return ApplyColorMode(Mode::TrueColor, T_emit, g, intensity, nullptr);
-            }
+            SIRIUS_PRE(stokes != nullptr);
+            return stokes != nullptr ? polarisation_vis::StokesToRgbHsv(*stokes)
+                                     : spectral::Rgb{1.0f, 0.0f, 1.0f};
 
         default:
-            return spectral::Rgb{1.0f, 0.0f, 1.0f};  // Magenta for unknown mode.
+            SIRIUS_PRE(false);
+            return spectral::Rgb{1.0f, 0.0f, 1.0f};
     }
+}
+
+// Average radiance/diagnostic colour over temporal redshift samples. Averaging
+// g before applying the nonlinear g^4 and blackbody transformations is not a
+// temporal radiance integral and systematically biases motion-blurred output.
+inline spectral::Rgb AverageTemporalColorMode(Mode mode, float T_emit,
+                                              std::span<const float> redshifts,
+                                              float emitted_intensity,
+                                              float temperature_scale_kelvin = 30000.0f) {
+    SIRIUS_PRE(mode != Mode::Polarisation);
+    SIRIUS_PRE(!redshifts.empty());
+    if (mode == Mode::Polarisation || redshifts.empty()) {
+        return spectral::Rgb{1.0f, 0.0f, 1.0f};
+    }
+
+    spectral::Rgb total;
+    for (const float g : redshifts) {
+        const float g2 = g * g;
+        const float observed_intensity = emitted_intensity * g2 * g2;
+        const float mode_intensity =
+            mode == Mode::TrueColor ? emitted_intensity : observed_intensity;
+        const spectral::Rgb sample =
+            ApplyColorMode(mode, T_emit, g, mode_intensity, nullptr, temperature_scale_kelvin);
+        total.r += sample.r;
+        total.g += sample.g;
+        total.b += sample.b;
+    }
+
+    const float inverse_count = 1.0f / static_cast<float>(redshifts.size());
+    total.r *= inverse_count;
+    total.g *= inverse_count;
+    total.b *= inverse_count;
+    return total;
 }
 
 }  // namespace sirius::core::color_modes

@@ -1,0 +1,33 @@
+# Install-time resource invariant. CMAKE_INSTALL_PREFIX may be redirected by
+# DESTDIR; include it in every physical path while retaining the logical
+# prefix used by the installed executable.
+set(_sirius_install_root "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}")
+set(_sirius_required
+    "${_sirius_install_root}/bin/sirius@CMAKE_EXECUTABLE_SUFFIX@"
+    "${_sirius_install_root}/share/sirius/assets/Starfield.png"
+    "${_sirius_install_root}/share/sirius/model/operating_model.json")
+
+if("@SIRIUS_INSTALL_HAS_VIEWER@" STREQUAL "TRUE")
+    list(APPEND _sirius_required
+        "${_sirius_install_root}/share/sirius/shaders/RDSD003A.vert"
+        "${_sirius_install_root}/share/sirius/shaders/RDSD003A.frag")
+endif()
+
+if("@SIRIUS_INSTALL_HAS_VULKAN@" STREQUAL "TRUE")
+    list(APPEND _sirius_required
+        "${_sirius_install_root}/share/sirius/kernels/trace.spv"
+        "${_sirius_install_root}/share/sirius/kernels/trace_fp32comp.spv"
+        "${_sirius_install_root}/share/sirius/kernels/trace_fp64.spv")
+endif()
+
+foreach(_sirius_path IN LISTS _sirius_required)
+    if(NOT EXISTS "${_sirius_path}")
+        message(FATAL_ERROR "Sirius install invariant failed: missing ${_sirius_path}")
+    endif()
+    file(SIZE "${_sirius_path}" _sirius_size)
+    if(_sirius_size EQUAL 0)
+        message(FATAL_ERROR "Sirius install invariant failed: empty ${_sirius_path}")
+    endif()
+endforeach()
+
+message(STATUS "Sirius install invariant: runtime volume is structurally complete")

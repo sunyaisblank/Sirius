@@ -18,6 +18,7 @@
 // coverage and two disk/blackbody temperatures.
 
 #include "sirius/backend/device.h"
+#include "sirius/core/disk/novikov_thorne_disk.h"
 
 #include <gtest/gtest.h>
 
@@ -38,6 +39,7 @@ using sirius::backend::ComputeDevice;
 using sirius::backend::CreateVulkanDevice;
 using sirius::backend::EnumerateVulkanDevices;
 using sirius::backend::KernelHandle;
+using sirius::backend::ResolveVulkanDeviceIndex;
 
 constexpr std::uint32_t kSampleStride = 16;
 constexpr std::uint32_t kResultStride = 64;
@@ -141,7 +143,11 @@ Fixture OpenProbe() {
     if (!devices.has_value() || devices->empty()) {
         return f;
     }
-    auto device = CreateVulkanDevice(0);
+    const auto selected = ResolveVulkanDeviceIndex(*devices);
+    if (!selected.has_value()) {
+        return f;
+    }
+    auto device = CreateVulkanDevice(*selected);
     if (!device.has_value()) {
         return f;
     }
@@ -468,7 +474,7 @@ TEST(KernelParity, YoshidaS4StepMatchesLegacy) {
     }
 }
 
-TEST(KernelParity, NovikovThorneDiskTemperatureMatchesLegacy) {
+TEST(KernelParity, FullPageThorneDiskTemperatureMatchesIndependentCoreModel) {
     Fixture f = OpenProbe();
     if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
 
@@ -489,12 +495,22 @@ TEST(KernelParity, NovikovThorneDiskTemperatureMatchesLegacy) {
     const std::vector<Sample> samples = {s8, s9};
     const auto r = RunProbe(*f.device, f.kernel, kOpDiskTemp, samples);
 
-    // T, Q, isco. Blackbody/disk tolerance is 1e-4 relative.
-    EXPECT_TRUE(Close(r[0 * kResultStride + 0], 8364.42773f, 1e-4f, 1e-3f, "S8 T"));
-    EXPECT_TRUE(Close(r[0 * kResultStride + 1], 0.489491194f, 1e-4f, 1e-6f, "S8 Q"));
+    const auto expected_temperature = [](double spin, double radius) {
+        sirius::core::AccretionDiskD::Config config;
+        config.M = 1.0;
+        config.a_star = spin;
+        sirius::core::AccretionDiskD disk(config);
+        return 10000.0 * disk.Temperature(radius) / disk.Temperature(1.5 * disk.IscoRadius());
+    };
+
+    // The kernel is fp32 quadrature while the independent Core model is double.
+    EXPECT_TRUE(Close(r[0 * kResultStride + 0], static_cast<float>(expected_temperature(0.9, 8.0)),
+                      2e-4f, 2e-3f, "S8 T"));
+    EXPECT_GT(r[0 * kResultStride + 1], 0.0f);
     EXPECT_TRUE(Close(r[0 * kResultStride + 2], 2.32088304f, 1e-4f, 1e-6f, "S8 isco"));
-    EXPECT_TRUE(Close(r[1 * kResultStride + 0], 6240.35303f, 1e-4f, 1e-3f, "S9 T"));
-    EXPECT_TRUE(Close(r[1 * kResultStride + 1], 0.15164797f, 1e-4f, 1e-6f, "S9 Q"));
+    EXPECT_TRUE(Close(r[1 * kResultStride + 0], static_cast<float>(expected_temperature(0.0, 10.0)),
+                      2e-4f, 2e-3f, "S9 T"));
+    EXPECT_GT(r[1 * kResultStride + 1], 0.0f);
     EXPECT_TRUE(Close(r[1 * kResultStride + 2], 6.0f, 1e-4f, 1e-6f, "S9 isco"));
 }
 

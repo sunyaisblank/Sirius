@@ -14,17 +14,27 @@
 
 #include "sirius/core/camera.h"
 #include "sirius/core/coordinates.h"
+#include "sirius/core/disk/corona.h"
+#include "sirius/core/disk/novikov_thorne_disk.h"
+#include "sirius/core/disk/turbulence.h"
 #include "sirius/core/geodesic_integrator.h"
 #include "sirius/core/metrics/metric.h"
+#include "sirius/core/polarisation/walker_penrose.h"
 #include "sirius/core/tensor.h"
 
 #include <cmath>
+#include <memory>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
 
 namespace sirius::backend {
+
+enum class DiskTemperatureModel {
+    NovikovThorne,
+    ShakuraSunyaev,
+};
 
 // Outcome and per-ray data produced by a trace.
 struct TraceResult {
@@ -83,6 +93,12 @@ struct TraceResult {
         float redshift = 1.0f;
         int crossing_index = 0;
         bool valid = false;
+        // Thermal single-scattering disk polarisation, expressed in the
+        // observer's transported screen basis. Valid only when the tracer's
+        // polarisation path was enabled.
+        float polarisation_evpa = 0.0f;
+        float polarisation_degree = 0.0f;
+        bool polarisation_valid = false;
     };
 
     DiskCrossing disk_crossings[kMaxDiskCrossings] = {};
@@ -123,7 +139,9 @@ struct TraceResult {
 struct TracerConfig {
     // Termination.
     float escape_radius = 100.0f;
-    float horizon_factor = 1.05f;
+    // Kerr-Schild is horizon penetrating: the physical event horizon is the
+    // capture boundary. Tests may opt into a larger diagnostic surface.
+    float horizon_factor = 1.0f;
     int max_steps = 5000;
 
     // Thin accretion disk.
@@ -132,6 +150,20 @@ struct TracerConfig {
     float disk_outer = 20.0f;
     float disk_thickness = 0.01f;
     float disk_temperature_inner = 1.0f;
+    DiskTemperatureModel disk_temperature_model = DiskTemperatureModel::NovikovThorne;
+
+    // Cinematic work bound for rays that orbit near the photon separatrix.
+    // Production may terminate these exponentially dim higher-order paths as
+    // Spiraling; analytic shadow classifiers disable the heuristic because an
+    // escaping near-critical ray is not a captured ray.
+    bool enable_spiral_termination = true;
+
+    // Optional strong-field integration cap for accuracy-critical probes. When
+    // both values are positive, only steps inside the named radius are capped;
+    // asymptotic travel retains the ordinary adaptive maximum so escape remains
+    // reachable within max_steps.
+    float strong_field_radius = 0.0f;
+    float strong_field_max_step = 0.0f;
 
     // Doppler beaming toggle (P4). When true (default, full physics) the disk
     // g-factor carries the orbital Doppler asymmetry; when false the orbital
@@ -158,6 +190,11 @@ struct TracerConfig {
     // footprint the star filter needs (P3).
     bool bundle_point_source = false;
 
+    // E2: transport an observer screen basis along the ray and project the
+    // disk's single-scattering polarisation into it at every thin-disk crossing.
+    // Off by default so ordinary renders pay no transport cost.
+    bool enable_polarisation = false;
+
     // Volumetric disk.
     bool enable_volumetric = false;
     float volumetric_H_over_r = 0.1f;
@@ -165,6 +202,10 @@ struct TracerConfig {
     float volumetric_tau_midplane = 10.0f;
     int volumetric_samples = 32;
     float volumetric_tau_max = 10.0f;
+    bool enable_turbulence = false;
+    sirius::core::TurbulenceConfig turbulence;
+    bool enable_corona = false;
+    sirius::core::CoronaConfig corona;
 
     // Integration (core RK45 configuration).
     sirius::core::IntegratorConfig integrator;
@@ -222,6 +263,10 @@ class GeodesicTracer {
     // Metric parameters cached once per trace.
     double cached_m_ = 1.0;
     double cached_a_ = 0.0;  // a/M.
+    std::unique_ptr<sirius::core::AccretionDiskD> page_thorne_disk_;
+    double page_thorne_reference_temperature_ = 0.0;
+    double page_thorne_cached_m_ = -1.0;
+    double page_thorne_cached_a_ = -2.0;
 
     void CacheMetricParameters();
 
@@ -252,7 +297,7 @@ class GeodesicTracer {
     // Volumetric disk helpers.
     bool IsInVolumetricDisk(float r, float z);
     float ComputeScaleHeight(float r);
-    float ComputeVolumetricOpacityDensity(float r, float z);
+    float ComputeVolumetricOpacityDensity(float r, float z, float phi);
     float ComputeVolumetricTemperature(float r, float z);
     void AccumulateVolumetricEmission(const sirius::core::Lightray& ray,
                                       const sirius::core::Vec4& entry_pos,
@@ -293,6 +338,18 @@ class GeodesicTracer {
     // footprint for the pupil bundle.
     void FinaliseBundle(const RayBundle& bundle, const sirius::core::Vec4& k, double lambda,
                         TraceResult::Beam& out) const;
+
+    // --- Polarisation transport (E2) -----------------------------------------
+    struct PolarisationFrame {
+        sirius::core::PolarisedRay reference;
+        sirius::core::PolarisedRay perpendicular;
+    };
+
+    void InitPolarisationFrame(const sirius::core::Lightray& ray, PolarisationFrame& frame);
+    void AdvancePolarisationFrame(PolarisationFrame& frame, double d_lambda);
+    void ReconditionPolarisationFrame(PolarisationFrame& frame, const sirius::core::Vec4& position,
+                                      const sirius::core::Vec4& velocity);
+    void SetDiskPolarisation(const PolarisationFrame& frame, TraceResult::DiskCrossing& crossing);
 };
 
 // ---- Inline implementations -------------------------------------------------
@@ -304,14 +361,39 @@ inline void GeodesicTracer::CacheMetricParameters() {
     const auto& params = metric_->GetParameters();
     cached_m_ = params.count("mass") ? params.at("mass").value : 1.0;
     cached_a_ = params.count("spin") ? params.at("spin").value : 0.0;
+    if (page_thorne_disk_ == nullptr || cached_m_ != page_thorne_cached_m_ ||
+        cached_a_ != page_thorne_cached_a_) {
+        sirius::core::AccretionDiskD::Config disk_config;
+        disk_config.M = std::max(std::abs(cached_m_), 0.1);
+        disk_config.a_star = cached_a_;
+        disk_config.r_outer =
+            std::max(500.0, static_cast<double>(config_.disk_outer) / std::max(cached_m_, 0.1));
+        page_thorne_disk_ = std::make_unique<sirius::core::AccretionDiskD>(disk_config);
+        const double reference_radius = 1.5 * page_thorne_disk_->IscoRadius();
+        page_thorne_reference_temperature_ = page_thorne_disk_->Temperature(reference_radius);
+        page_thorne_cached_m_ = cached_m_;
+        page_thorne_cached_a_ = cached_a_;
+    }
 }
 
 inline float GeodesicTracer::ComputeDiskTemperature(float r) {
-    // Novikov-Thorne T(r) ~ r^(-3/4), normalised so T(disk_inner) = the inner
-    // temperature.
     float r_in = config_.disk_inner;
     float T_in = config_.disk_temperature_inner;
-    return T_in * std::pow(r_in / r, 0.75f);
+    if (config_.disk_temperature_model == DiskTemperatureModel::ShakuraSunyaev) {
+        return T_in * std::pow(r_in / r, 0.75f);
+    }
+
+    // Full Page-Thorne flux authority, normalised at 1.5 r_ISCO so
+    // disk_temperature_inner remains the operator's Kelvin scale rather than
+    // silently becoming an accretion-rate input.
+    if (page_thorne_disk_ == nullptr || page_thorne_reference_temperature_ <= 0.0 ||
+        cached_m_ <= 0.0) {
+        return 0.0f;
+    }
+    const double model_temperature =
+        page_thorne_disk_->Temperature(static_cast<double>(r) / cached_m_);
+    return T_in * static_cast<float>(std::max(model_temperature, 0.0) /
+                                     page_thorne_reference_temperature_);
 }
 
 inline bool GeodesicTracer::HasInvalidState(const sirius::core::Lightray& ray) {
@@ -337,7 +419,9 @@ inline bool GeodesicTracer::CheckDiskIntersection(const sirius::core::Vec4& pos_
     double x_cross = pos_old(1) + alpha * (pos_new(1) - pos_old(1));
     double y_cross = pos_old(2) + alpha * (pos_new(2) - pos_old(2));
 
-    double r_cross = std::sqrt(x_cross * x_cross + y_cross * y_cross);
+    sirius::core::coordinates::Vec4Cart crossing_cart{0.0, x_cross, y_cross, 0.0};
+    const double absolute_spin = cached_a_ * cached_m_;
+    double r_cross = sirius::core::coordinates::KerrSchildRadius(crossing_cart, absolute_spin);
 
     if (r_cross < config_.disk_inner || r_cross > config_.disk_outer) {
         return false;

@@ -67,6 +67,54 @@ class BeamPropagationTest : public ::testing::Test {
     std::unique_ptr<BeamIntegratorD> integrator_kerr;
 };
 
+void ClearJacobiState(BeamStateD& beam) {
+    for (int mu = 0; mu < 4; ++mu) {
+        for (int column = 0; column < 4; ++column) {
+            beam.J[mu][column] = 0.0;
+            beam.dJ[mu][column] = 0.0;
+        }
+    }
+}
+
+// BeamStateD stores V = Dxi/dlambda. Analytic Schwarzschild solutions are
+// conventionally written as coordinate xi and dxi/dlambda, so this performs the
+// non-optional connection conversion at the initial event.
+void SetJacobiColumn(const IMetricD& metric, BeamStateD& beam, int column, const Vec4d& xi,
+                     const Vec4d& coordinate_derivative) {
+    double g[4][4], g_inv[4][4];
+    metric.Evaluate(beam.x, g, g_inv);
+    const Vec4d k = metric.dHdp(beam.x, beam.k);
+
+    double Gamma[4][4][4];
+    metric.Christoffel(beam.x, Gamma);
+    for (int mu = 0; mu < 4; ++mu) {
+        beam.J[mu][column] = xi[mu];
+        double covariant_derivative = coordinate_derivative[mu];
+        for (int nu = 0; nu < 4; ++nu) {
+            for (int rho = 0; rho < 4; ++rho) {
+                covariant_derivative += Gamma[mu][nu][rho] * k[nu] * xi[rho];
+            }
+        }
+        beam.dJ[mu][column] = covariant_derivative;
+    }
+}
+
+double MetricInnerProduct(const IMetricD& metric, const Vec4d& x, const Vec4d& a, const Vec4d& b) {
+    double g[4][4], g_inv[4][4];
+    metric.Evaluate(x, g, g_inv);
+    double result = 0.0;
+    for (int mu = 0; mu < 4; ++mu) {
+        for (int nu = 0; nu < 4; ++nu) {
+            result += g[mu][nu] * a[mu] * b[nu];
+        }
+    }
+    return result;
+}
+
+Vec4d JacobiColumn(const BeamStateD& beam, int column) {
+    return Vec4d(beam.J[0][column], beam.J[1][column], beam.J[2][column], beam.J[3][column]);
+}
+
 //==============================================================================
 // Test: BeamStateD Initialisation
 // Verifies: Jacobian starts as Identity matrix
@@ -152,6 +200,30 @@ TEST_F(BeamPropagationTest, BeamGeometryExtraction) {
     EXPECT_NEAR(beam.solidAngle, M_PI * 1e-6, 1e-8);
 }
 
+TEST_F(BeamPropagationTest, OrientationDescribesOutputEllipseRatherThanInputBasis) {
+    BeamStateD beam;
+    beam.Initialise();
+
+    // J = R(0.4) diag(3, 1) R(-0.2). The right rotation changes only the input
+    // basis; the rendered output ellipse must remain oriented at +0.4 radians.
+    constexpr double output_angle = 0.4;
+    constexpr double input_angle = -0.2;
+    const double co = std::cos(output_angle);
+    const double so = std::sin(output_angle);
+    const double ci = std::cos(input_angle);
+    const double si = std::sin(input_angle);
+    beam.J[2][2] = 3.0 * co * ci - so * si;
+    beam.J[2][3] = -3.0 * co * si - so * ci;
+    beam.J[3][2] = 3.0 * so * ci + co * si;
+    beam.J[3][3] = -3.0 * so * si + co * ci;
+
+    beam.UpdateGeometry();
+
+    EXPECT_NEAR(beam.majorAxis, 3.0, 1.0e-12);
+    EXPECT_NEAR(beam.minorAxis, 1.0, 1.0e-12);
+    EXPECT_NEAR(beam.orientation, output_angle, 1.0e-12);
+}
+
 //==============================================================================
 // Test: Caustic Detection
 // Verifies: atCaustic flag set when det(J_angular) → 0
@@ -190,6 +262,99 @@ TEST_F(BeamPropagationTest, BeamIntegrationStep) {
 
     // For outgoing ray, r should increase
     EXPECT_GT(beam.x.r, initial_r) << "Outgoing ray should move outward";
+}
+
+// Closed-form null-deviation solutions are from Morales-Ruiz and Raposo,
+// arXiv:2308.07098, equations (19)-(24). For an outgoing radial ray,
+// r(lambda)=r0+E lambda. Choosing point-source screen data xi(0)=0 and unit
+// physical derivative gives r*xi_theta = r*sin(theta)*xi_phi = lambda exactly.
+TEST_F(BeamPropagationTest, SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion) {
+    constexpr double mass = 1.0;
+    constexpr double energy = 1.0;
+    constexpr double initial_radius = 10.0;
+    constexpr double final_lambda = 2.0;
+    constexpr double step = 1.0e-3;
+
+    BeamStateD beam;
+    beam.Initialise();
+    beam.x = Vec4d(0.0, initial_radius, M_PI / 2.0, 0.0);
+    beam.k = Vec4d(-energy, energy * initial_radius / (initial_radius - 2.0 * mass), 0.0, 0.0);
+    beam.E = energy;
+    ClearJacobiState(beam);
+
+    SetJacobiColumn(*schwarzschild, beam, 0, Vec4d(), Vec4d(0.0, 0.0, 1.0 / initial_radius, 0.0));
+    SetJacobiColumn(*schwarzschild, beam, 1, Vec4d(), Vec4d(0.0, 0.0, 0.0, 1.0 / initial_radius));
+
+    const int steps = static_cast<int>(final_lambda / step);
+    for (int i = 0; i < steps; ++i) {
+        ASSERT_TRUE(integrator_sch->Step(beam, step));
+    }
+
+    const Vec4d polar = JacobiColumn(beam, 0);
+    const Vec4d azimuthal = JacobiColumn(beam, 1);
+    const double polar_axis =
+        std::sqrt(std::abs(MetricInnerProduct(*schwarzschild, beam.x, polar, polar)));
+    const double azimuthal_axis =
+        std::sqrt(std::abs(MetricInnerProduct(*schwarzschild, beam.x, azimuthal, azimuthal)));
+    const double cross = MetricInnerProduct(*schwarzschild, beam.x, polar, azimuthal);
+
+    EXPECT_NEAR(beam.x.r, initial_radius + energy * final_lambda, 1.0e-10);
+    EXPECT_NEAR(polar_axis / final_lambda, 1.0, 1.0e-6);
+    EXPECT_NEAR(azimuthal_axis / final_lambda, 1.0, 1.0e-6);
+    EXPECT_NEAR(cross, 0.0, 1.0e-12);
+}
+
+// Equations (16)-(18) of the same independent source give the photon-sphere
+// orbit and its constant-coefficient variational system. Equal physical screen
+// axes at lambda=0 evolve as cosh(E lambda/(sqrt(3) M)) in the radial direction
+// and cos(E lambda/(sqrt(3) M)) normal to the orbital plane.
+TEST_F(BeamPropagationTest,
+       SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion) {
+    constexpr double mass = 1.0;
+    constexpr double energy = 1.0;
+    constexpr double initial_axis = 1.0e-3;
+    constexpr double final_lambda = 1.0;
+    constexpr double step = 5.0e-4;
+    constexpr double sqrt_three = 1.7320508075688772935;
+
+    BeamStateD beam;
+    beam.Initialise();
+    beam.x = Vec4d(0.0, 3.0 * mass, M_PI / 2.0, 0.0);
+    beam.k = Vec4d(-energy, 0.0, 0.0, 3.0 * sqrt_three * mass * energy);
+    beam.E = energy;
+    beam.Lz = beam.k.phi;
+    ClearJacobiState(beam);
+
+    const double radial_coordinate_axis = initial_axis / sqrt_three;
+    const Vec4d radial_xi(0.0, radial_coordinate_axis, 0.0, 0.0);
+    const Vec4d radial_coordinate_derivative(
+        -2.0 * energy * radial_coordinate_axis / mass, 0.0, 0.0,
+        -2.0 * energy * radial_coordinate_axis / (3.0 * sqrt_three * mass * mass));
+    SetJacobiColumn(*schwarzschild, beam, 0, radial_xi, radial_coordinate_derivative);
+
+    const Vec4d polar_xi(0.0, 0.0, initial_axis / (3.0 * mass), 0.0);
+    SetJacobiColumn(*schwarzschild, beam, 1, polar_xi, Vec4d());
+
+    const int steps = static_cast<int>(final_lambda / step);
+    for (int i = 0; i < steps; ++i) {
+        ASSERT_TRUE(integrator_sch->Step(beam, step));
+    }
+
+    const Vec4d radial = JacobiColumn(beam, 0);
+    const Vec4d polar = JacobiColumn(beam, 1);
+    const double radial_axis =
+        std::sqrt(std::abs(MetricInnerProduct(*schwarzschild, beam.x, radial, radial)));
+    const double polar_axis =
+        std::sqrt(std::abs(MetricInnerProduct(*schwarzschild, beam.x, polar, polar)));
+    const double omega_lambda = energy * final_lambda / (sqrt_three * mass);
+    const double expected_radial = initial_axis * std::cosh(omega_lambda);
+    const double expected_polar = initial_axis * std::abs(std::cos(omega_lambda));
+    const double cross = MetricInnerProduct(*schwarzschild, beam.x, radial, polar);
+
+    EXPECT_NEAR(beam.x.r, 3.0 * mass, 1.0e-10);
+    EXPECT_NEAR(radial_axis / expected_radial, 1.0, 1.0e-6);
+    EXPECT_NEAR(polar_axis / expected_polar, 1.0, 1.0e-6);
+    EXPECT_NEAR(cross, 0.0, 1.0e-12);
 }
 
 //==============================================================================

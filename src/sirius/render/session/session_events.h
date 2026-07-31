@@ -15,8 +15,6 @@ enum class SessionEvent : uint8_t {
     TileComplete,      // Tile finished rendering.
     AllTilesComplete,  // All tiles processed.
     OutputWritten,     // Output file written.
-    Pause,             // User requests a pause.
-    Resume,            // User resumes from pause.
     Cancel,            // User cancels the render.
     Error              // Error occurred.
 };
@@ -36,10 +34,6 @@ constexpr std::string_view EventName(SessionEvent event) {
             return "AllTilesComplete";
         case SessionEvent::OutputWritten:
             return "OutputWritten";
-        case SessionEvent::Pause:
-            return "Pause";
-        case SessionEvent::Resume:
-            return "Resume";
         case SessionEvent::Cancel:
             return "Cancel";
         case SessionEvent::Error:

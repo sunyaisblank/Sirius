@@ -7,8 +7,10 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstddef>
 #include <cstdint>
 #include <random>
+#include <span>
 #include <vector>
 
 namespace sirius::core {
@@ -57,6 +59,9 @@ struct StarEntry {
     float Intensity() const { return std::pow(10.0f, -0.4f * magnitude); }
 };
 
+static_assert(sizeof(StarEntry) == 8 * sizeof(float),
+              "StarEntry must remain eight packed floats for the Slang upload ABI");
+
 // Catalog generation and sampling parameters.
 struct StarfieldConfig {
     uint32_t star_count = 100000;      // Number of stars in catalog
@@ -71,12 +76,6 @@ struct StarfieldConfig {
     bool enable_parallax = true;  // Enable parallax for camera motion
     bool enable_dof = true;       // Enable depth of field blur
 
-    // Star distribution parameters (galactic model)
-    float thin_disk_scale_height_pc = 300.0f;    // Thin disk scale height [pc]
-    float thick_disk_scale_height_pc = 1000.0f;  // Thick disk scale height [pc]
-    float disk_scale_length_pc = 2500.0f;        // Disk radial scale [pc]
-    float thin_disk_fraction = 0.9f;             // Fraction of stars in thin disk
-
     // Invariants (enforced by clamping, not assertion):
     //   star_count <= 10^7
     //   min_distance_pc > 0
@@ -88,6 +87,120 @@ struct StarfieldConfig {
         magnitude_limit = std::clamp(magnitude_limit, 0.0f, 20.0f);
         aperture_mm = std::clamp(aperture_mm, 0.0f, 1000.0f);
         focus_distance_pc = std::clamp(focus_distance_pc, min_distance_pc, max_distance_pc);
+    }
+};
+
+// Deterministic latitude/longitude acceleration structure for beam queries.
+// The exact Gaussian and angular cutoff remain in StarfieldGenerator; this
+// index only produces a conservative candidate superset, so it cannot change
+// the represented star field. Its fixed topology is below 1 MiB for a 100k
+// catalogue and avoids the previous O(stars * pixels) IMAX failure mode.
+class StarfieldSpatialIndex {
+  public:
+    static constexpr int kThetaBins = 256;
+    static constexpr int kPhiBins = 512;
+
+    explicit StarfieldSpatialIndex(const std::vector<StarEntry>& stars) { Build(stars); }
+
+    template <typename Callback>
+    void ForEachCandidate(float dir_x, float dir_y, float dir_z, float sigma,
+                          Callback&& callback) const {
+        if (indices_.empty() || sigma <= 0.0f) return;
+        const float length = std::sqrt(dir_x * dir_x + dir_y * dir_y + dir_z * dir_z);
+        if (length < 1.0e-20f) return;
+        dir_x /= length;
+        dir_y /= length;
+        dir_z /= length;
+
+        constexpr float kPi = 3.14159265358979323846f;
+        constexpr float kTwoPi = 2.0f * kPi;
+        const float theta = std::acos(std::clamp(dir_z, -1.0f, 1.0f));
+        float phi = std::atan2(dir_y, dir_x);
+        if (phi < 0.0f) phi += kTwoPi;
+        const float cutoff = std::min(4.0f * sigma, kPi);
+
+        const int first_theta = std::clamp(
+            static_cast<int>(std::floor(std::max(theta - cutoff, 0.0f) / kPi * kThetaBins)), 0,
+            kThetaBins - 1);
+        const int last_theta = std::clamp(
+            static_cast<int>(std::floor(std::min(theta + cutoff, kPi) / kPi * kThetaBins)), 0,
+            kThetaBins - 1);
+
+        float phi_half_width = kPi;
+        const float sin_theta = std::sin(theta);
+        if (theta > cutoff && kPi - theta > cutoff && sin_theta > 1.0e-8f) {
+            phi_half_width = std::asin(std::clamp(std::sin(cutoff) / sin_theta, 0.0f, 1.0f));
+        }
+        const float phi_bin_width = kTwoPi / static_cast<float>(kPhiBins);
+        const int centre_phi =
+            std::min(static_cast<int>(std::floor(phi / kTwoPi * kPhiBins)), kPhiBins - 1);
+        const int phi_radius =
+            std::min(static_cast<int>(std::ceil(phi_half_width / phi_bin_width)) + 1, kPhiBins);
+        const bool all_phi = 2 * phi_radius + 1 >= kPhiBins;
+
+        for (int theta_bin = first_theta; theta_bin <= last_theta; ++theta_bin) {
+            if (all_phi) {
+                for (int phi_bin = 0; phi_bin < kPhiBins; ++phi_bin) {
+                    VisitCell(theta_bin, phi_bin, callback);
+                }
+                continue;
+            }
+            for (int delta = -phi_radius; delta <= phi_radius; ++delta) {
+                int phi_bin = (centre_phi + delta) % kPhiBins;
+                if (phi_bin < 0) phi_bin += kPhiBins;
+                VisitCell(theta_bin, phi_bin, callback);
+            }
+        }
+    }
+
+    [[nodiscard]] std::size_t MemoryBytes() const {
+        return offsets_.size() * sizeof(std::uint32_t) + indices_.size() * sizeof(std::uint32_t);
+    }
+    [[nodiscard]] std::span<const std::uint32_t> Offsets() const noexcept { return offsets_; }
+    [[nodiscard]] std::span<const std::uint32_t> Indices() const noexcept { return indices_; }
+
+  private:
+    std::vector<std::uint32_t> offsets_;
+    std::vector<std::uint32_t> indices_;
+
+    static std::size_t Cell(int theta_bin, int phi_bin) {
+        return static_cast<std::size_t>(theta_bin) * kPhiBins + phi_bin;
+    }
+
+    void Build(const std::vector<StarEntry>& stars) {
+        constexpr float kPi = 3.14159265358979323846f;
+        constexpr float kTwoPi = 2.0f * kPi;
+        constexpr std::size_t kCells = static_cast<std::size_t>(kThetaBins) * kPhiBins;
+        offsets_.assign(kCells + 1, 0);
+        std::vector<std::size_t> cells(stars.size());
+        for (std::size_t i = 0; i < stars.size(); ++i) {
+            const auto& star = stars[i];
+            const float theta = std::acos(std::clamp(star.direction_z, -1.0f, 1.0f));
+            float phi = std::atan2(star.direction_y, star.direction_x);
+            if (phi < 0.0f) phi += kTwoPi;
+            const int theta_bin = std::clamp(static_cast<int>(std::floor(theta / kPi * kThetaBins)),
+                                             0, kThetaBins - 1);
+            const int phi_bin =
+                std::clamp(static_cast<int>(std::floor(phi / kTwoPi * kPhiBins)), 0, kPhiBins - 1);
+            cells[i] = Cell(theta_bin, phi_bin);
+            ++offsets_[cells[i] + 1];
+        }
+        for (std::size_t cell = 1; cell < offsets_.size(); ++cell) {
+            offsets_[cell] += offsets_[cell - 1];
+        }
+        indices_.resize(stars.size());
+        std::vector<std::uint32_t> cursor(offsets_.begin(), offsets_.end() - 1);
+        for (std::size_t i = 0; i < cells.size(); ++i) {
+            indices_[cursor[cells[i]]++] = static_cast<std::uint32_t>(i);
+        }
+    }
+
+    template <typename Callback>
+    void VisitCell(int theta_bin, int phi_bin, Callback& callback) const {
+        const std::size_t cell = Cell(theta_bin, phi_bin);
+        for (std::uint32_t at = offsets_[cell]; at < offsets_[cell + 1]; ++at) {
+            callback(indices_[at]);
+        }
     }
 };
 
@@ -119,9 +232,10 @@ class StarfieldGenerator {
 
     // Full deterministic catalogue for the filtered point-source star field (P3):
     // exactly star_count entries on the celestial sphere with magnitudes and
-    // temperatures, no magnitude cull, so the catalogue size is guaranteed to meet
-    // the >= 10^5 gate. The fixed seed makes it reproducible frame to frame, which
-    // the anti-flicker measurement relies on.
+    // temperatures and no magnitude cull. The function preserves the requested
+    // count exactly; the operating profile requests at least 10^5. The fixed seed
+    // makes it reproducible frame to frame, which the anti-flicker measurement
+    // relies on.
     std::vector<StarEntry> GenerateCatalogue() const {
         std::vector<StarEntry> stars;
         stars.reserve(config_.star_count);
@@ -171,6 +285,120 @@ class StarfieldGenerator {
         }
     }
 
+    // Indexed form of the exact beam accumulation above. The index returns a
+    // conservative angular candidate superset; the same dot-product cutoff and
+    // Gaussian decide every contribution.
+    void AccumulateThroughBeam(float dir_x, float dir_y, float dir_z, float sigma,
+                               const std::vector<StarEntry>& stars,
+                               const StarfieldSpatialIndex& index, float& r, float& g,
+                               float& b) const {
+        r = g = b = 0.0f;
+        if (stars.empty() || sigma <= 0.0f) return;
+        const float dlen = std::sqrt(dir_x * dir_x + dir_y * dir_y + dir_z * dir_z);
+        if (dlen < 1.0e-20f) return;
+        dir_x /= dlen;
+        dir_y /= dlen;
+        dir_z /= dlen;
+        const float cos_cut = std::cos(std::min(4.0f * sigma, static_cast<float>(M_PI)));
+        const float inv_two_sigma2 = 1.0f / (2.0f * sigma * sigma);
+
+        index.ForEachCandidate(dir_x, dir_y, dir_z, sigma, [&](std::uint32_t star_index) {
+            const auto& star = stars[star_index];
+            const float cosine =
+                dir_x * star.direction_x + dir_y * star.direction_y + dir_z * star.direction_z;
+            if (cosine < cos_cut) return;
+            const float angle = std::acos(std::clamp(cosine, -1.0f, 1.0f));
+            const float weight = std::exp(-angle * angle * inv_two_sigma2);
+            const float intensity = star.Intensity() * weight * config_.brightness_scale;
+            float sr = 0.0f;
+            float sg = 0.0f;
+            float sb = 0.0f;
+            star.ComputeColor(sr, sg, sb);
+            r += sr * intensity;
+            g += sg * intensity;
+            b += sb * intensity;
+        });
+    }
+
+    // Elliptical DNGR footprint. `orientation` is the position angle of the
+    // major axis in the deterministic tangent basis used by the ray-bundle
+    // geometry extractor. The spatial index is queried with the major axis, a
+    // conservative circular bound; the anisotropic Gaussian is the exact
+    // contribution decision.
+    void AccumulateThroughBeam(float dir_x, float dir_y, float dir_z, float sigma_major,
+                               float sigma_minor, float orientation,
+                               const std::vector<StarEntry>& stars,
+                               const StarfieldSpatialIndex& index, float& r, float& g,
+                               float& b) const {
+        r = g = b = 0.0f;
+        if (stars.empty() || sigma_major <= 0.0f || sigma_minor <= 0.0f) return;
+        const float dlen = std::sqrt(dir_x * dir_x + dir_y * dir_y + dir_z * dir_z);
+        if (dlen < 1.0e-20f) return;
+        dir_x /= dlen;
+        dir_y /= dlen;
+        dir_z /= dlen;
+
+        // Same transverse-basis convention as GeodesicTracer::FinaliseBundle:
+        // project z unless the direction is near z, then project x.
+        float ref_x = 0.0f;
+        float ref_y = 0.0f;
+        float ref_z = 1.0f;
+        if (std::abs(dir_z) > 0.9f) {
+            ref_x = 1.0f;
+            ref_z = 0.0f;
+        }
+        const float ref_dot = ref_x * dir_x + ref_y * dir_y + ref_z * dir_z;
+        float ex = ref_x - ref_dot * dir_x;
+        float ey = ref_y - ref_dot * dir_y;
+        float ez = ref_z - ref_dot * dir_z;
+        const float elen = std::sqrt(ex * ex + ey * ey + ez * ez);
+        ex /= elen;
+        ey /= elen;
+        ez /= elen;
+        const float fx = dir_y * ez - dir_z * ey;
+        const float fy = dir_z * ex - dir_x * ez;
+        const float fz = dir_x * ey - dir_y * ex;
+
+        const float major = std::max(sigma_major, sigma_minor);
+        const float minor = std::min(sigma_major, sigma_minor);
+        const float cos_orientation = std::cos(orientation);
+        const float sin_orientation = std::sin(orientation);
+        const float cos_cut = std::cos(std::min(4.0f * major, static_cast<float>(M_PI)));
+        const float inv_major_squared = 1.0f / (major * major);
+        const float inv_minor_squared = 1.0f / (minor * minor);
+
+        index.ForEachCandidate(dir_x, dir_y, dir_z, major, [&](std::uint32_t star_index) {
+            const auto& star = stars[star_index];
+            const float cosine =
+                dir_x * star.direction_x + dir_y * star.direction_y + dir_z * star.direction_z;
+            if (cosine < cos_cut) return;
+            const float angle = std::acos(std::clamp(cosine, -1.0f, 1.0f));
+            float tangent_x = 0.0f;
+            float tangent_y = 0.0f;
+            const float sin_angle = std::sin(angle);
+            if (sin_angle > 1.0e-8f) {
+                const float tx = (star.direction_x - cosine * dir_x) / sin_angle;
+                const float ty = (star.direction_y - cosine * dir_y) / sin_angle;
+                const float tz = (star.direction_z - cosine * dir_z) / sin_angle;
+                tangent_x = angle * (tx * ex + ty * ey + tz * ez);
+                tangent_y = angle * (tx * fx + ty * fy + tz * fz);
+            }
+            const float along_major = cos_orientation * tangent_x + sin_orientation * tangent_y;
+            const float along_minor = -sin_orientation * tangent_x + cos_orientation * tangent_y;
+            const float exponent = -0.5f * (along_major * along_major * inv_major_squared +
+                                            along_minor * along_minor * inv_minor_squared);
+            const float weight = std::exp(exponent);
+            const float intensity = star.Intensity() * weight * config_.brightness_scale;
+            float sr = 0.0f;
+            float sg = 0.0f;
+            float sb = 0.0f;
+            star.ComputeColor(sr, sg, sb);
+            r += sr * intensity;
+            g += sg * intensity;
+            b += sb * intensity;
+        });
+    }
+
     // Accumulate starfield colour along view direction (dir_*) with a parallax
     // offset from the camera position (cam_*_pc) into (r, g, b).
     void SampleStarfield(float dir_x, float dir_y, float dir_z, float cam_x_pc, float cam_y_pc,
@@ -182,9 +410,12 @@ class StarfieldGenerator {
 
         for (const auto& star : stars) {
             // Parallax-adjusted direction
-            float dx = star.direction_x * star.distance_pc - cam_x_pc;
-            float dy = star.direction_y * star.distance_pc - cam_y_pc;
-            float dz = star.direction_z * star.distance_pc - cam_z_pc;
+            const float camera_x = config_.enable_parallax ? cam_x_pc : 0.0f;
+            const float camera_y = config_.enable_parallax ? cam_y_pc : 0.0f;
+            const float camera_z = config_.enable_parallax ? cam_z_pc : 0.0f;
+            float dx = star.direction_x * star.distance_pc - camera_x;
+            float dy = star.direction_y * star.distance_pc - camera_y;
+            float dz = star.direction_z * star.distance_pc - camera_z;
             float d = std::sqrt(dx * dx + dy * dy + dz * dz);
 
             if (d < 1e-6f) continue;

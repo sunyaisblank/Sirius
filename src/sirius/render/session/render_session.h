@@ -4,11 +4,8 @@
 // display buffer, and the physics components (metric, tracer, camera, jets).
 // Ported from SNRS001A.h.
 //
-// The GPU/OptiX backend that legacy drove from here is removed: OptiX is retired
-// and the Vulkan compute path arrives later through sirius::backend::device. The
-// removal sites are marked in the implementation. The CPU render path is
-// preserved byte-for-byte, including the spiral tile order, the thread-pool
-// structure, and the per-pixel shading sequence.
+// OptiX is retired. Vulkan enters through sirius::backend::device behind the
+// same asynchronous, cancellable session lifecycle as the CPU reference path.
 
 #include "sirius/render/render_config.h"
 #include "sirius/render/session/display_buffer.h"
@@ -21,35 +18,37 @@
 // Physics integration.
 #include "sirius/backend/cpu/geodesic_tracer.h"
 #include "sirius/core/camera.h"
-#include "sirius/core/disk/novikov_thorne_disk.h"       // ISCO computation.
-#include "sirius/core/jet.h"                            // Relativistic jet model.
-#include "sirius/core/metrics/astrophysical_scaling.h"  // SMBH parameters.
-#include "sirius/core/metrics/kerr_schild_family.h"     // Kerr-Schild metric family.
-#include "sirius/core/metrics/registry.h"               // Metric identity registry.
-#include "sirius/core/metrics/warp_drive_family.h"      // Alcubierre warp drive family.
-#include "sirius/core/polarisation/stokes.h"            // Stokes polarisation.
-#include "sirius/core/postprocess.h"                    // Tonemapping types.
-#include "sirius/core/spectral/colour_modes.h"          // Colour modes.
-#include "sirius/core/starfield.h"                      // Starfield configuration.
+#include "sirius/core/disk/novikov_thorne_disk.h"    // ISCO computation.
+#include "sirius/core/jet.h"                         // Relativistic jet model.
+#include "sirius/core/metrics/kerr_schild_family.h"  // Kerr-Schild metric family.
+#include "sirius/core/metrics/registry.h"            // Metric identity registry.
+#include "sirius/core/metrics/warp_drive_family.h"   // Alcubierre warp drive family.
+#include "sirius/core/postprocess.h"                 // Tonemapping types.
+#include "sirius/core/spectral/colour_modes.h"       // Colour modes.
+#include "sirius/core/starfield.h"                   // Starfield configuration.
 
 #include <atomic>
+#include <condition_variable>
 #include <functional>
 #include <memory>
 #include <mutex>
+#include <optional>
 #include <string>
 #include <thread>
+#include <utility>
 #include <vector>
 
 namespace sirius::render {
 
 // Compile-time transition table for the session DFA.
-inline constexpr std::array<Transition<SessionState, SessionEvent>, 15> kSessionTransitions = {{
+inline constexpr std::array<Transition<SessionState, SessionEvent>, 14> kSessionTransitions = {{
     // From Idle.
     {SessionState::Idle, SessionEvent::Start, SessionState::Initialising},
 
     // From Initialising.
     {SessionState::Initialising, SessionEvent::Ready, SessionState::Scheduling},
     {SessionState::Initialising, SessionEvent::Error, SessionState::Failed},
+    {SessionState::Initialising, SessionEvent::Cancel, SessionState::Cancelled},
 
     // From Scheduling.
     {SessionState::Scheduling, SessionEvent::TileAvailable, SessionState::Rendering},
@@ -61,23 +60,19 @@ inline constexpr std::array<Transition<SessionState, SessionEvent>, 15> kSession
 
     // From Rendering.
     {SessionState::Rendering, SessionEvent::TileComplete, SessionState::Scheduling},
-    {SessionState::Rendering, SessionEvent::Pause, SessionState::Paused},
     {SessionState::Rendering, SessionEvent::Cancel, SessionState::Cancelled},
     {SessionState::Rendering, SessionEvent::Error, SessionState::Failed},
-
-    // From Paused.
-    {SessionState::Paused, SessionEvent::Resume, SessionState::Rendering},
-    {SessionState::Paused, SessionEvent::Cancel, SessionState::Cancelled},
 
     // From Completing.
     {SessionState::Completing, SessionEvent::OutputWritten, SessionState::Complete},
     {SessionState::Completing, SessionEvent::Error, SessionState::Failed},
+    {SessionState::Completing, SessionEvent::Cancel, SessionState::Cancelled},
 
     // Cancel available from Scheduling.
     {SessionState::Scheduling, SessionEvent::Cancel, SessionState::Cancelled},
 }};
 
-inline constexpr StateMachineConfig<SessionState, SessionEvent, 15> kSessionConfig = {
+inline constexpr StateMachineConfig<SessionState, SessionEvent, 14> kSessionConfig = {
     SessionState::Idle, kSessionTransitions};
 
 // Which backend the session drives. A two-value enum, not a bool, so the
@@ -89,6 +84,11 @@ enum class RenderBackend {
     Vulkan,  // the Slang compute kernel on a ComputeDevice
 };
 
+enum class WormholeTopology {
+    OneSheetCapture,
+    TwoSheet,
+};
+
 // Configuration consumed by the render session.
 struct SessionConfig {
     int width = 1920;
@@ -97,17 +97,13 @@ struct SessionConfig {
     int samplesPerPixel = 64;
     int threadCount = 0;                  // 0 = auto-detect, 1 = single-threaded.
     bool enableParallelRendering = true;  // Multi-threaded tile rendering.
+    bool writeOutput = true;              // False for in-memory progressive previews.
 
-    // Backend selection. `backend` decides the render path; useGPU/ptxPath are
-    // legacy config-surface fields retained for parity. Since the go-live flip
-    // (owner decision, 2026-07-18) `auto` in the config resolves to Vulkan
-    // when a device is present and the registry marks the metric
-    // gpu-dispatchable, falling back to Cpu with the reason logged;
-    // `vulkan` selects the Vulkan path unconditionally and `cpu` pins the CPU
-    // path. SIRIUS_RENDER_BACKEND overrides with the same values.
+    // Backend selection. Since the go-live flip (owner decision, 2026-07-18)
+    // `auto` in the external config resolves to Vulkan when a device is present
+    // and the complete scene is represented, falling back to Cpu with the
+    // reason logged; `vulkan` selects Vulkan unconditionally and `cpu` pins CPU.
     RenderBackend backend = RenderBackend::Cpu;
-    bool useGPU = true;
-    std::string ptxPath;
     std::string outputPath = "render.ppm";
 
     // Spacetime identity and parameters; the id comes from the core registry.
@@ -118,6 +114,7 @@ struct SessionConfig {
     double cosmologicalConstant = 0.0;  // Lambda (de Sitter family, spin = 0 only).
     double observerDistance = 50.0;
     double observerInclination = 1.5708;  // 90 degrees.
+    double observerAzimuth = 0.0;
     float cameraFOV = 60.0f;
 
     // Camera four-velocity (P5): spatial beta in the local ray-component frame
@@ -126,10 +123,15 @@ struct SessionConfig {
     double cameraBetaForward = 0.0;
     double cameraBetaUp = 0.0;
     double cameraBetaRight = 0.0;
+    core::LensType lensType = core::LensType::Pinhole;
+    float cameraFocalLength = 50.0f;
+    float cameraAperture = 2.8f;
+    float cameraFocusDistance = 50.0f;
 
     // Disk temperature model.
-    std::string temperatureModel = "NovikovThorne";  // NovikovThorne or ShakuraSunyaev.
-    float diskTemperatureScale = 50000.0f;           // T_scale (Kelvin).
+    DiskTemperatureModel temperatureModel = DiskTemperatureModel::NovikovThorne;
+    float diskTemperatureScale = 50000.0f;  // T_scale (Kelvin).
+    bool enableDisk = true;
 
     // Doppler beaming toggle (P4). True (default) keeps the full disk physics and
     // the pinned render; false suppresses the approaching/receding asymmetry.
@@ -137,6 +139,7 @@ struct SessionConfig {
 
     // Exotic metric parameters.
     double throatRadius = 1.0;  // Morris-Thorne b0.
+    WormholeTopology wormholeTopology = WormholeTopology::OneSheetCapture;
     double warpVelocity = 0.5;  // Alcubierre vs.
     double bubbleRadius = 1.0;  // Alcubierre R.
     double bubbleSigma = 0.5;   // Alcubierre sigma.
@@ -176,19 +179,17 @@ struct SessionConfig {
     using ColorMode = core::color_modes::Mode;
     ColorMode colorMode = core::color_modes::Mode::TrueColor;
 
-    // Polarisation output.
+    // Polarisation transport is a strict companion to ColorMode::Polarisation.
+    // Typed callers must set both coherently; the external schema derives this
+    // bool from its single colorMode field.
     bool enablePolarisation = false;
-    bool outputPolarisationMap = false;
 
-    // SMBH astrophysical scaling.
-    core::SmbhParams smbhParams;
-
-    // Turbulence and corona (GPU volumetric features; inert on the CPU path).
+    // Optional deterministic density turbulence and inverse-Compton corona
+    // contributions on both live volumetric transfer paths.
     bool enableTurbulence = false;
     bool enableCorona = false;
 
-    // Depth-resolved starfield (GPU feature; inert on the CPU path).
-    bool enableStarfield = false;
+    // Depth-resolved starfield catalogue parameters.
     core::StarfieldConfig starfieldConfig;
 
     // Filtered point-source star field (P3): render catalogue stars through the
@@ -208,39 +209,35 @@ struct SessionConfig {
     static SessionConfig FromSiriusConfig(const SiriusConfig& config);
 };
 
+// Typed boundary shared by CPU initialisation and Vulkan capability selection.
+// Small positive dimensions remain legal for probes, while production limits
+// and every enum/feature dependency are enforced before allocation or dispatch.
+[[nodiscard]] std::optional<std::string> SessionConfigIssue(const SessionConfig& config);
+
 // Orchestrates a CPU render from configuration to written output.
 class RenderSession {
   public:
-    using FSM = StateMachine<SessionState, SessionEvent, 15>;
+    using FSM = StateMachine<SessionState, SessionEvent, 14>;
     using CompletionCallback =
         std::function<void(SessionState finalState, const std::string& message)>;
 
     RenderSession() : fsm_(kSessionConfig) { SetupActions(); }
+    ~RenderSession();
+
+    RenderSession(const RenderSession&) = delete;
+    RenderSession& operator=(const RenderSession&) = delete;
+    RenderSession(RenderSession&&) = delete;
+    RenderSession& operator=(RenderSession&&) = delete;
 
     // Configure the session (must be in the Idle state).
-    bool Configure(const SessionConfig& config) {
-        if (fsm_.GetState() != SessionState::Idle) {
-            return false;
-        }
-        config_ = config;
-        return true;
-    }
+    bool Configure(const SessionConfig& config);
 
-    bool Start() { return fsm_.Process(SessionEvent::Start); }
-    bool Pause() { return fsm_.Process(SessionEvent::Pause); }
-    bool Resume() { return fsm_.Process(SessionEvent::Resume); }
-
-    bool Cancel() {
-        progress_.GetCancellationToken().Cancel();
-        return fsm_.Process(SessionEvent::Cancel);
-    }
+    // Launch asynchronously. Execute() is the synchronous convenience wrapper.
+    bool Start();
+    bool Cancel();
 
     // Block until the render thread (if any) finishes.
-    void WaitForCompletion() {
-        if (render_thread_.joinable()) {
-            render_thread_.join();
-        }
-    }
+    void WaitForCompletion();
 
     // Run synchronously and return the final state.
     SessionState Execute() {
@@ -260,7 +257,10 @@ class RenderSession {
     const TileScheduler& GetTileScheduler() const { return tiles_; }
     DisplayBuffer& GetDisplayBuffer() { return display_; }
 
-    void SetCompletionCallback(CompletionCallback cb) { completion_callback_ = cb; }
+    void SetCompletionCallback(CompletionCallback cb) {
+        std::lock_guard<std::mutex> lock(callback_mutex_);
+        completion_callback_ = std::move(cb);
+    }
     void SetProgressCallback(ProgressCallback cb) { progress_.SetCallback(cb); }
 
   private:
@@ -282,7 +282,6 @@ class RenderSession {
     // Shaded result of a single ray sample.
     struct PixelResult {
         float r = 0.0f, g = 0.0f, b = 0.0f;
-        core::StokesVector stokes;
     };
 
     PixelResult ShadePixel(int px, int py, backend::GeodesicTracer* tracer) const;
@@ -297,18 +296,16 @@ class RenderSession {
     std::thread render_thread_;
     std::string error_message_;
     CompletionCallback completion_callback_;
+    mutable std::mutex callback_mutex_;
 
     // Physics components. metric_ is null when the CPU path cannot represent the
     // requested spacetime; the scheduler then refuses rather than substituting.
     std::unique_ptr<core::IMetric> metric_;
     std::unique_ptr<backend::GeodesicTracer> tracer_;
-    std::unique_ptr<core::PinholeCamera> camera_;
+    std::unique_ptr<core::ICamera> camera_;
 
     // Relativistic jet model.
     std::unique_ptr<core::RelativisticJet> jet_;
-
-    // Polarisation output buffer.
-    std::vector<core::StokesVector> polarisation_buffer_;
 
     // Starfield background texture (equirectangular RGBA).
     std::vector<unsigned char> starfield_data_;
@@ -324,6 +321,7 @@ class RenderSession {
     // off, the flicker baseline).
     std::vector<core::StarEntry> star_catalogue_;
     std::unique_ptr<core::StarfieldGenerator> star_generator_;
+    std::unique_ptr<core::StarfieldSpatialIndex> star_index_;
     double pixel_angular_size_ = 0.0;  // fov / height, radians.
     void SampleStarfieldPoints(const backend::TraceResult& result, float& r, float& g,
                                float& b) const;
@@ -332,7 +330,7 @@ class RenderSession {
     // metric, so no synchronisation is needed on the physics path.
     void RenderTilesParallel();
     void WorkerThread(int thread_id);
-    void RenderTileThreaded(Tile* tile, int thread_id);
+    [[nodiscard]] bool RenderTileThreaded(Tile* tile, int thread_id);
 
     std::vector<std::thread> worker_threads_;
     std::vector<std::unique_ptr<backend::GeodesicTracer>> thread_tracers_;  // Per-thread tracers.
@@ -341,6 +339,10 @@ class RenderSession {
     std::atomic<bool> stop_workers_{false};  // Signal workers to stop.
     std::atomic<int> active_workers_{0};     // Workers currently rendering.
     int num_threads_ = 1;                    // Actual thread count.
+    mutable std::mutex lifecycle_mutex_;
+    std::condition_variable lifecycle_cv_;
+    bool join_in_progress_ = false;
+    std::thread::id render_thread_id_;
 };
 
 }  // namespace sirius::render

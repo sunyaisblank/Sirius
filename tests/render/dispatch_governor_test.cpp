@@ -10,9 +10,9 @@
 
 #include <gtest/gtest.h>
 
-#include <cstdint>
-
 #include "support/scoped_environment.h"
+
+#include <cstdint>
 
 namespace {
 

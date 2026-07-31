@@ -1,62 +1,52 @@
 #!/bin/bash
-# Render test script for Sirius black holes
-# Run this from the Sirius project directory
+# Two-image operator smoke test. A render counts only when the selected binary
+# exits successfully and creates a non-empty output.
 
-# Prefer the preset build; fall back to any built sirius executable.
-SIRIUS="./bin/linux-gcc/src/sirius/app/sirius"
-if [ ! -f "$SIRIUS" ]; then
-    SIRIUS=$(find bin -name sirius -type f -path '*app*' 2>/dev/null | head -1)
-fi
+set -uo pipefail
 
-if [ ! -f "$SIRIUS" ]; then
-    echo "Error: Sirius binary not found at $SIRIUS"
-    echo "Please build first: cmake --preset linux-gcc && cmake --build --preset linux-gcc"
+SIRIUS="${SIRIUS_BINARY:-./bin/linux-gcc/src/sirius/app/sirius}"
+if [ ! -x "$SIRIUS" ]; then
+    echo "Error: Sirius binary is not executable: $SIRIUS" >&2
+    echo "Build first: cmake --preset linux-gcc && cmake --build --preset linux-gcc" >&2
     exit 1
 fi
 
+OUT="${SIRIUS_RENDER_TEST_DIR:-renders}"
+mkdir -p "$OUT"
+PASS=0
+FAIL=0
+W="${SIRIUS_RENDER_TEST_WIDTH:-512}"
+H="${SIRIUS_RENDER_TEST_HEIGHT:-512}"
+SPP="${SIRIUS_RENDER_TEST_SAMPLES:-32}"
+
+run_render() {
+    local name="$1"
+    local output="$2"
+    shift 2
+    local log="${output}.log"
+    rm -f "$output"
+    echo "Rendering $name..."
+    if "$SIRIUS" render "$@" --output "$output" >"$log" 2>&1 && [ -s "$output" ]; then
+        echo "  -> $output created"
+        PASS=$((PASS + 1))
+    else
+        echo "  -> Failed to render $name" >&2
+        tail -n 20 "$log" >&2
+        FAIL=$((FAIL + 1))
+    fi
+}
+
 echo "=== Sirius Black Hole Render Test ==="
-echo ""
 
-# Create output directory
-mkdir -p renders
+run_render "Schwarzschild black hole" "$OUT/schwarzschild.png" \
+    --metric Schwarzschild --width "$W" --height "$H" --samples "$SPP" \
+    --distance 30 --inclination 80 --fov 60
 
-# Render Schwarzschild (non-spinning black hole)
-echo "Rendering Schwarzschild black hole..."
-$SIRIUS render \
-    -m Schwarzschild \
-    -w 512 -h 512 \
-    -s 32 \
-    -d 30 \
-    -i 80 \
-    --fov 60 \
-    -o renders/schwarzschild.png
+run_render "Kerr black hole (spin=0.9)" "$OUT/kerr.png" \
+    --metric Kerr --spin 0.9 --width "$W" --height "$H" --samples "$SPP" \
+    --distance 30 --inclination 80 --fov 60
 
-if [ $? -eq 0 ]; then
-    echo "  -> renders/schwarzschild.png created"
-else
-    echo "  -> Failed to render Schwarzschild"
+echo "=== Results: $PASS passed, $FAIL failed out of 2 ==="
+if [ "$FAIL" -ne 0 ]; then
+    exit 1
 fi
-
-echo ""
-
-# Render Kerr (spinning black hole, a=0.9)
-echo "Rendering Kerr black hole (spin=0.9)..."
-$SIRIUS render \
-    -m Kerr \
-    -a 0.9 \
-    -w 512 -h 512 \
-    -s 32 \
-    -d 30 \
-    -i 80 \
-    --fov 60 \
-    -o renders/kerr.png
-
-if [ $? -eq 0 ]; then
-    echo "  -> renders/kerr.png created"
-else
-    echo "  -> Failed to render Kerr"
-fi
-
-echo ""
-echo "=== Done ==="
-echo "Check the 'renders' directory for output images."

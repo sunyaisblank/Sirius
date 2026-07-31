@@ -8,11 +8,13 @@
 // needs b(b0) = b0 and Phi finite everywhere.
 // Reference: Morris & Thorne, Am. J. Phys. 56, 395 (1988).
 
+#include "sirius/base/contracts.h"
 #include "sirius/core/metrics/metric.h"
 
 #include <algorithm>
 #include <cmath>
 #include <functional>
+#include <limits>
 
 namespace sirius::core {
 
@@ -50,6 +52,7 @@ struct MorrisThorneParams {
     // b(b0) = b0; the derivative is computed numerically when null.
     static MorrisThorneParams Custom(double b0, ShapeFunctionCallback shape_func,
                                      ShapeDerivativeCallback deriv_func = nullptr) {
+        SIRIUS_PRE(static_cast<bool>(shape_func));
         MorrisThorneParams p;
         p.b0 = b0;
         p.Phi0 = 0.0;
@@ -97,7 +100,7 @@ class MorrisThorneFamily : public IMetric {
 };
 
 inline MorrisThorneFamily::MorrisThorneFamily() {
-    config_["throat_radius"] = {1.0, 0.1, 100.0};
+    config_["throat_radius"] = {1.0, std::numeric_limits<double>::min(), 1000.0};
     config_["redshift"] = {0.0, -10.0, 10.0};
     params_ = MorrisThorneParams::Ellis(1.0);
 }
@@ -108,6 +111,17 @@ inline MorrisThorneFamily::MorrisThorneFamily(const MorrisThorneParams& params)
 }
 
 inline void MorrisThorneFamily::SetParams(const MorrisThorneParams& params) {
+    const bool known_shape = params.shape_type == WormholeShapeType::Ellis ||
+                             params.shape_type == WormholeShapeType::ZeroTidal ||
+                             params.shape_type == WormholeShapeType::AbsurdlyBenign ||
+                             params.shape_type == WormholeShapeType::Custom;
+    const bool valid = known_shape && std::isfinite(params.b0) && params.b0 > 0.0 &&
+                       params.b0 <= 1000.0 && std::isfinite(params.Phi0) &&
+                       (params.shape_type != WormholeShapeType::Custom ||
+                        static_cast<bool>(params.custom_shape_func));
+    SIRIUS_PRE(valid);
+    if (!valid) return;
+
     params_ = params;
     config_["throat_radius"].value = params.b0;
     config_["redshift"].value = params.Phi0;
@@ -116,9 +130,11 @@ inline void MorrisThorneFamily::SetParams(const MorrisThorneParams& params) {
 inline MorrisThorneParams MorrisThorneFamily::GetParams() const { return params_; }
 
 inline void MorrisThorneFamily::SetParameter(const std::string& key, double value) {
-    if (config_.find(key) != config_.end()) {
-        config_[key].value = std::clamp(value, config_[key].min, config_[key].max);
-    }
+    const auto found = config_.find(key);
+    SIRIUS_PRE(found != config_.end());
+    SIRIUS_PRE(std::isfinite(value));
+    if (found == config_.end() || !std::isfinite(value)) return;
+    found->second.value = std::clamp(value, found->second.min, found->second.max);
     params_.b0 = config_["throat_radius"].value;
     params_.Phi0 = config_["redshift"].value;
 }
@@ -131,8 +147,11 @@ inline const char* MorrisThorneFamily::GetName() const {
             return "Zero-Tidal Wormhole";
         case WormholeShapeType::AbsurdlyBenign:
             return "Absurdly Benign Wormhole";
+        case WormholeShapeType::Custom:
+            return "Custom Morris-Thorne Wormhole";
         default:
-            return "Morris-Thorne Wormhole";
+            SIRIUS_PRE(false);
+            return "Invalid Morris-Thorne Wormhole";
     }
 }
 
@@ -151,9 +170,11 @@ inline double MorrisThorneFamily::ShapeFunction(double r) const {
             if (params_.custom_shape_func) {
                 return params_.custom_shape_func(r);
             }
-            return b0 * b0 / r;  // Fallback to Ellis.
+            SIRIUS_ASSERT(false);
+            return std::numeric_limits<double>::quiet_NaN();
         default:
-            return b0 * b0 / r;  // Default to Ellis.
+            SIRIUS_ASSERT(false);
+            return std::numeric_limits<double>::quiet_NaN();
     }
 }
 
@@ -179,9 +200,11 @@ inline double MorrisThorneFamily::ShapeFunctionDerivative(double r) const {
                 double b_minus = params_.custom_shape_func(r - h);
                 return (b_plus - b_minus) / (2.0 * h);
             }
-            return -b0 * b0 / (r * r);
+            SIRIUS_ASSERT(false);
+            return std::numeric_limits<double>::quiet_NaN();
         default:
-            return -b0 * b0 / (r * r);
+            SIRIUS_ASSERT(false);
+            return std::numeric_limits<double>::quiet_NaN();
     }
 }
 

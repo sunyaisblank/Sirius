@@ -66,6 +66,13 @@ TEST(CameraAberrationTest, ZeroBetaIsExactNoOp) {
     EXPECT_EQ(ray.direction(1), original.direction(1));
     EXPECT_EQ(ray.direction(2), original.direction(2));
     EXPECT_EQ(ray.direction(3), original.direction(3));
+
+    EXPECT_DEATH(
+        {
+            CameraRay invalid = RayAlong(1.0, 0.0, 0.0);
+            AberrateRay(invalid, 1.0, 0.0, 0.0);
+        },
+        "precondition.*enforced, terminating");
 }
 
 // -----------------------------------------------------------------------------

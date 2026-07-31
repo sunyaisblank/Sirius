@@ -16,8 +16,9 @@ namespace sirius::app {
 
 namespace cli = cli_output;
 
-// Version string for `--version`.
-static const char* kSiriusVersion = "2.0.0";
+#ifndef SIRIUS_VERSION
+#define SIRIUS_VERSION "unknown"
+#endif
 
 CommandRouter::CommandRouter() {
     commands_.push_back(std::make_unique<RenderCommand>());
@@ -80,7 +81,10 @@ int CommandRouter::Run(int argc, char* argv[]) {
         if (!command_name.empty() && !remaining.empty() && remaining[0] == command_name) {
             command_args = std::vector<std::string>(remaining.begin() + 1, remaining.end());
         } else {
-            command_args = remaining;
+            // Preserve an unrecognised command token so RouteCommand emits a
+            // non-zero diagnostic. The empty string is reserved for no command.
+            command_name = remaining[0];
+            command_args = std::vector<std::string>(remaining.begin() + 1, remaining.end());
         }
     }
 
@@ -130,7 +134,7 @@ void CommandRouter::PrintHelp() {
 }
 
 void CommandRouter::PrintVersion() {
-    std::cout << "Sirius v" << kSiriusVersion << "\n";
+    std::cout << "Sirius v" << SIRIUS_VERSION << "\n";
     std::cout << "General Relativistic Ray Tracer\n";
     std::cout << "\n";
     std::cout << "Build info:\n";

@@ -82,10 +82,21 @@ TEST(MemoryGovernor, EnvironmentOverrideResolvesBudget) {
     ScopedEnvironmentVariable clean_environment("SIRIUS_MEMORY_BUDGET_MB", nullptr);
     {
         ScopedEnvironmentVariable budget("SIRIUS_MEMORY_BUDGET_MB", "256");
-        EXPECT_EQ(ResolveBudgetBytes(9999 * kMiB), 256 * kMiB)
-            << "override wins over device budget";
+        const auto resolved = ResolveBudgetBytes(9999 * kMiB);
+        ASSERT_TRUE(resolved.has_value());
+        EXPECT_EQ(*resolved, 256 * kMiB) << "override wins over device budget";
     }
-    EXPECT_EQ(ResolveBudgetBytes(2 * kGiB), 2 * kGiB) << "device budget used when no override";
+    const auto resolved = ResolveBudgetBytes(2 * kGiB);
+    ASSERT_TRUE(resolved.has_value());
+    EXPECT_EQ(*resolved, 2 * kGiB) << "device budget used when no override";
+}
+
+TEST(MemoryGovernor, MalformedOverrideDeclinesInsteadOfBorrowingTheDeviceBudget) {
+    for (const char* malformed : {"garbage", "256junk", "-1", "0", "nan", "inf", "1e999"}) {
+        ScopedEnvironmentVariable budget("SIRIUS_MEMORY_BUDGET_MB", malformed);
+        const auto resolved = ResolveBudgetBytes(2 * kGiB);
+        EXPECT_FALSE(resolved.has_value()) << malformed;
+    }
 }
 
 }  // namespace

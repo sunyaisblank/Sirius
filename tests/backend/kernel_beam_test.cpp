@@ -1,19 +1,17 @@
 // Ray-bundle wiring in the trace kernel (specification P2, Vulkan side).
 //
-// trace.slang propagates one geodesic-deviation vector through its render loop
+// trace.slang propagates two geodesic-deviation vectors through its render loop
 // when the beam flag (params[43]) is set, using gr_deviation's full-Riemann
 // Jacobi acceleration (DNGR eq A.19), and carries the beam's transverse
 // expansion in the radiance alpha channel. This suite runs on Lavapipe and pins:
 //   - beams off leaves alpha == 1 everywhere (the default render is unmoved);
-//   - beams on yields a finite expansion field that grows toward the shadow,
-//     the lensing signature the CPU bundle also shows.
+//   - beams on yields a finite area-expansion field that grows toward the
+//     shadow, the lensing signature the CPU bundle also shows.
 //
-// The kernel and the CPU tracer deviate by construction (the kernel integrates
-// the coordinate-form full-Riemann equation the .cu carried, the CPU tracer the
-// covariant Jacobi equation), so this is a behavioural parity - both defocus
-// toward the shadow - not a bitwise one, matching the two-independent-methods
-// design (docs/ARCHITECTURE.md section 3). A tight numeric CPU/Vulkan beam parity
-// is recorded as deferred.
+// The kernel and CPU use independent live integrators, so this is behavioural
+// parity rather than a bitwise claim. The exact radial/circular congruence
+// tolerance belongs to the double-precision covariant oracle; the two live
+// paths are additionally joined at the ellipse-filtered point-catalogue output.
 
 #include "sirius/backend/device.h"
 
@@ -38,6 +36,7 @@ using sirius::backend::ComputeDevice;
 using sirius::backend::CreateVulkanDevice;
 using sirius::backend::EnumerateVulkanDevices;
 using sirius::backend::KernelHandle;
+using sirius::backend::ResolveVulkanDeviceIndex;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -51,7 +50,10 @@ std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
 
 // Kerr a=0.9 down the spin axis from 40M, single tile, gradient background.
 std::vector<float> BaseParams(std::uint32_t w, std::uint32_t h) {
-    std::vector<float> params(48, 0.0f);
+    std::vector<float> params(72, 0.0f);
+    params[46] = 0.5f;
+    params[47] = 0.5f;
+    params[53] = 1.0f;
     params[0] = float(w);
     params[1] = float(h);
     params[2] = 0.0f;  // Kerr-Schild family.
@@ -93,12 +95,18 @@ std::vector<float> Dispatch(ComputeDevice& device, KernelHandle kernel,
     const auto pbuf = device.CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
     const auto sbuf =
         device.CreateBuffer(star_dummy.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
-    EXPECT_TRUE(rbuf && pbuf && sbuf);
+    const auto psbuf =
+        device.CreateBuffer(star_dummy.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
+    const auto pobuf =
+        device.CreateBuffer(star_dummy.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
+    const auto pibuf =
+        device.CreateBuffer(star_dummy.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
+    EXPECT_TRUE(rbuf && pbuf && sbuf && psbuf && pobuf && pibuf);
     EXPECT_TRUE(device.WriteBuffer(*rbuf, std::as_bytes(std::span<const float>(radiance))));
     EXPECT_TRUE(device.WriteBuffer(*pbuf, std::as_bytes(std::span<const float>(params))));
     EXPECT_TRUE(
         device.WriteBuffer(*sbuf, std::as_bytes(std::span<const std::uint32_t>(star_dummy))));
-    const BufferHandle binding[] = {*rbuf, *pbuf, *sbuf};
+    const BufferHandle binding[] = {*rbuf, *pbuf, *sbuf, *psbuf, *pobuf, *pibuf};
     EXPECT_TRUE(device.Dispatch(kernel, binding, (w + 7) / 8, (h + 7) / 8, 1).has_value());
     EXPECT_TRUE(device.ReadBuffer(*rbuf, std::as_writable_bytes(std::span<float>(radiance))));
     return radiance;
@@ -111,7 +119,9 @@ TEST(KernelBeam, BeamFlagWiresDeviationWithoutMovingDefault) {
     const auto devices = EnumerateVulkanDevices();
     ASSERT_TRUE(devices.has_value()) << devices.error().Description();
     if (devices->empty()) GTEST_SKIP() << "no Vulkan device present";
-    auto device = CreateVulkanDevice(0);
+    const auto selected = ResolveVulkanDeviceIndex(*devices);
+    ASSERT_TRUE(selected.has_value()) << selected.error().Description();
+    auto device = CreateVulkanDevice(*selected);
     ASSERT_TRUE(device.has_value()) << device.error().Description();
     const auto spirv = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace.spv");
     ASSERT_FALSE(spirv.empty()) << "trace.spv missing";

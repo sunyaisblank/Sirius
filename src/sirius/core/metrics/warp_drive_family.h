@@ -9,10 +9,12 @@
 // Already Cartesian, so there are no poles.
 // Reference: Alcubierre, Class. Quantum Grav. 11, L73 (1994).
 
+#include "sirius/base/contracts.h"
 #include "sirius/core/metrics/metric.h"
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 
 namespace sirius::core {
 
@@ -61,9 +63,9 @@ class WarpDriveFamily : public IMetric {
 };
 
 inline WarpDriveFamily::WarpDriveFamily() {
-    config_["velocity"] = {1.0, 0.0, 10.0};
-    config_["sigma"] = {8.0, 1.0, 50.0};
-    config_["radius"] = {1.0, 0.1, 100.0};
+    config_["velocity"] = {1.0, -10.0, 10.0};
+    config_["sigma"] = {8.0, std::numeric_limits<double>::min(), 1000.0};
+    config_["radius"] = {1.0, std::numeric_limits<double>::min(), 1000.0};
     params_ = WarpDriveParams::Alcubierre(1.0, 1.0);
 }
 
@@ -72,6 +74,14 @@ inline WarpDriveFamily::WarpDriveFamily(const WarpDriveParams& params) : WarpDri
 }
 
 inline void WarpDriveFamily::SetParams(const WarpDriveParams& params) {
+    const bool valid = std::isfinite(params.vs) && std::abs(params.vs) <= 10.0 &&
+                       std::isfinite(params.sigma) && params.sigma > 0.0 &&
+                       params.sigma <= 1000.0 && std::isfinite(params.R) && params.R > 0.0 &&
+                       params.R <= 1000.0 && std::isfinite(params.xs) && std::isfinite(params.ys) &&
+                       std::isfinite(params.zs);
+    SIRIUS_PRE(valid);
+    if (!valid) return;
+
     params_ = params;
     config_["velocity"].value = params.vs;
     config_["sigma"].value = params.sigma;
@@ -81,9 +91,11 @@ inline void WarpDriveFamily::SetParams(const WarpDriveParams& params) {
 inline WarpDriveParams WarpDriveFamily::GetParams() const { return params_; }
 
 inline void WarpDriveFamily::SetParameter(const std::string& key, double value) {
-    if (config_.find(key) != config_.end()) {
-        config_[key].value = std::clamp(value, config_[key].min, config_[key].max);
-    }
+    const auto found = config_.find(key);
+    SIRIUS_PRE(found != config_.end());
+    SIRIUS_PRE(std::isfinite(value));
+    if (found == config_.end() || !std::isfinite(value)) return;
+    found->second.value = std::clamp(value, found->second.min, found->second.max);
     params_.vs = config_["velocity"].value;
     params_.sigma = config_["sigma"].value;
     params_.R = config_["radius"].value;

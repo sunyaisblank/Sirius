@@ -4,12 +4,13 @@
 // Kerr-Schild Cartesian (t, x, y, z), and the observer frame, with the Jacobian
 // matrices for tensor transformation. Ported from PHCT002A.h.
 //
-// The full Kerr embedding is
-//   x = sqrt(r^2 + a^2) sin(theta) cos(phi)
-//   y = sqrt(r^2 + a^2) sin(theta) sin(phi)
+// The full Kerr-Schild embedding is
+//   x = (r cos(phi) - a sin(phi)) sin(theta)
+//   y = (r sin(phi) + a cos(phi)) sin(theta)
 //   z = r cos(theta),
 // which degenerates to the ordinary spherical map at a = 0 or large r.
 
+#include "sirius/base/contracts.h"
 #include "sirius/core/tensor.h"
 
 #include <algorithm>
@@ -43,7 +44,10 @@ struct Vec4Bl {
                 return r;
             case 2:
                 return theta;
+            case 3:
+                return phi;
             default:
+                SIRIUS_PRE(i >= 0 && i < 4);
                 return phi;
         }
     }
@@ -55,7 +59,10 @@ struct Vec4Bl {
                 return r;
             case 2:
                 return theta;
+            case 3:
+                return phi;
             default:
+                SIRIUS_PRE(i >= 0 && i < 4);
                 return phi;
         }
     }
@@ -79,7 +86,10 @@ struct Vec4Cart {
                 return x;
             case 2:
                 return y;
+            case 3:
+                return z;
             default:
+                SIRIUS_PRE(i >= 0 && i < 4);
                 return z;
         }
     }
@@ -91,7 +101,10 @@ struct Vec4Cart {
                 return x;
             case 2:
                 return y;
+            case 3:
+                return z;
             default:
+                SIRIUS_PRE(i >= 0 && i < 4);
                 return z;
         }
     }
@@ -129,13 +142,28 @@ inline Vec4Cart BlToKerrSchildCart(const Vec4Bl& bl, double a) {
     double sin_phi = std::sin(bl.phi);
     double cos_phi = std::cos(bl.phi);
 
-    double rho = std::sqrt(bl.r * bl.r + a * a);
-
-    cart.x = rho * sin_theta * cos_phi;
-    cart.y = rho * sin_theta * sin_phi;
+    // x + i y = (r + i a) exp(i phi) sin(theta).
+    cart.x = (bl.r * cos_phi - a * sin_phi) * sin_theta;
+    cart.y = (bl.r * sin_phi + a * cos_phi) * sin_theta;
     cart.z = bl.r * cos_theta;
 
     return cart;
+}
+
+// Boyer-Lindquist/Kerr spheroidal radius represented by a Kerr-Schild
+// Cartesian point. This is not the Euclidean cylindrical or spherical radius
+// when a != 0. Disk orbit, ISCO, Page-Thorne, and horizon calculations must use
+// this authority.
+inline double KerrSchildRadius(const Vec4Cart& cart, double a) {
+    const double a2 = a * a;
+    const double R2 = cart.x * cart.x + cart.y * cart.y + cart.z * cart.z;
+    if (std::abs(a) < 1e-12) {
+        return std::sqrt(std::max(R2, 1e-20));
+    }
+    const double Rm2 = R2 - a2;
+    const double disc = Rm2 * Rm2 + 4.0 * a2 * cart.z * cart.z;
+    const double r2 = (Rm2 + std::sqrt(std::max(disc, 0.0))) / 2.0;
+    return std::sqrt(std::max(r2, 1e-20));
 }
 
 // Cartesian to Boyer-Lindquist, simplified for a = 0.
@@ -163,21 +191,10 @@ inline Vec4Bl KerrSchildCartToBl(const Vec4Cart& cart, double a) {
     Vec4Bl bl;
     bl.t = cart.t;
 
-    double x = cart.x;
-    double y = cart.y;
-    double z = cart.z;
-    double a2 = a * a;
-
-    double R2 = x * x + y * y + z * z;
-
-    if (std::abs(a) < 1e-12) {
-        bl.r = std::sqrt(R2);
-    } else {
-        double Rm2 = R2 - a2;
-        double disc = Rm2 * Rm2 + 4 * a2 * z * z;
-        double r2 = (Rm2 + std::sqrt(disc)) / 2.0;
-        bl.r = std::sqrt(std::max(r2, 1e-20));
-    }
+    const double x = cart.x;
+    const double y = cart.y;
+    const double z = cart.z;
+    bl.r = KerrSchildRadius(cart, a);
 
     if (bl.r < 1e-15) {
         bl.theta = M_PI / 2.0;
@@ -223,6 +240,29 @@ inline Jacobian4x4 JacobianBlToCartesian(const Vec4Bl& bl) {
     J[3][2] = -r * sin_th;
     J[3][3] = 0.0;
 
+    return J;
+}
+
+// Exact spatial Jacobian of BlToKerrSchildCart. This includes the spin-coupled
+// azimuth terms; using the spherical a=0 Jacobian changes a Kerr camera ray's
+// conserved angular momentum before integration begins.
+inline Jacobian4x4 JacobianBlToKerrSchildCart(const Vec4Bl& bl, double a) {
+    Jacobian4x4 J = {};
+    const double sin_th = std::sin(bl.theta);
+    const double cos_th = std::cos(bl.theta);
+    const double sin_ph = std::sin(bl.phi);
+    const double cos_ph = std::cos(bl.phi);
+    const double r = bl.r;
+
+    J[0][0] = 1.0;
+    J[1][1] = cos_ph * sin_th;
+    J[1][2] = (r * cos_ph - a * sin_ph) * cos_th;
+    J[1][3] = (-r * sin_ph - a * cos_ph) * sin_th;
+    J[2][1] = sin_ph * sin_th;
+    J[2][2] = (r * sin_ph + a * cos_ph) * cos_th;
+    J[2][3] = (r * cos_ph - a * sin_ph) * sin_th;
+    J[3][1] = cos_th;
+    J[3][2] = -r * sin_th;
     return J;
 }
 

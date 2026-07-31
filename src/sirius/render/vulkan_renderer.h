@@ -10,8 +10,8 @@
 // The renderer is self-contained: it opens the device, applies the memory
 // governor and the precision ladder, uploads the starfield when it fits the
 // budget, and dispatches the kernel. It declines loudly (a base::Error) for any
-// metric not on the Vulkan render path and for an fp64 request the deferred
-// fp64 kernel cannot satisfy, never substituting a different render.
+// metric or scene semantics outside the Vulkan render path and when a requested
+// precision rung is unsupported, never substituting a different render.
 
 #include "sirius/base/error.h"
 #include "sirius/render/memory_governor.h"
@@ -41,10 +41,15 @@ struct VulkanRenderStats {
     TilePlan tile_plan;
     PrecisionRung precision = PrecisionRung::Fp32;
     bool starfield_uploaded = false;
+    bool point_catalogue_uploaded = false;
     int tiles_rendered = 0;
     int band_dispatches = 0;  // compute submissions; >= tiles_rendered under banding
     double seconds = 0.0;
 };
+
+// Checks the scene features the current one-sample Vulkan kernel represents.
+// Auto-selection and the dispatch boundary both use this contract.
+[[nodiscard]] base::Expected<void> ValidateVulkanRenderConfig(const SessionConfig& config);
 
 // Renders `config`'s scene on the first Vulkan device into `display` (which the
 // caller has already sized to config.width x config.height). `on_tile` reports
@@ -54,6 +59,7 @@ struct VulkanRenderStats {
 // committed to the caller beyond the error return.
 [[nodiscard]] base::Expected<VulkanRenderStats> RenderVulkanToDisplay(
     const SessionConfig& config, DisplayBuffer& display,
-    const std::function<void(int tiles_done, int tiles_total)>& on_tile = {});
+    const std::function<void(int tiles_done, int tiles_total)>& on_tile = {},
+    const std::function<bool()>& should_cancel = {});
 
 }  // namespace sirius::render

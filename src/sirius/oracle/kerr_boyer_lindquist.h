@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include "sirius/base/contracts.h"
 #include "sirius/oracle/metric_interface.h"
 
 #include <algorithm>
@@ -192,14 +193,9 @@ class KerrMetricD : public IMetricD {
         double r = x.r;
         double theta = x.theta;
 
-        // Precondition: r must be outside horizon
-        if (r <= r_plus_) {
-            // Return Minkowski metric as safe fallback
-            for (int i = 0; i < 4; ++i)
-                for (int j = 0; j < 4; ++j)
-                    g[i][j] = g_inv[i][j] = (i == j) ? (i == 0 ? -1.0 : 1.0) : 0.0;
-            return;
-        }
+        // Boyer-Lindquist is singular at the horizon. The oracle caller must
+        // remain in its valid domain; it may not acquire flat-space evidence.
+        SIRIUS_PRE(r > r_plus_);
 
         // Handle pole singularities
         double sinth = std::sin(theta);

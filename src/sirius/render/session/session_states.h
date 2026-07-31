@@ -13,7 +13,6 @@ enum class SessionState : uint8_t {
     Initialising,  // Loading resources, creating tiles.
     Scheduling,    // Assigning the next tile to a worker.
     Rendering,     // Active tile processing.
-    Paused,        // User-requested pause.
     Completing,    // All tiles done, writing output.
     Complete,      // Success (terminal).
     Failed,        // Error occurred (terminal).
@@ -28,8 +27,8 @@ constexpr bool IsTerminal(SessionState state) {
 
 // Whether the session is actively running (schedulable or paused).
 constexpr bool IsActive(SessionState state) {
-    return state == SessionState::Scheduling || state == SessionState::Rendering ||
-           state == SessionState::Paused;
+    return state == SessionState::Initialising || state == SessionState::Scheduling ||
+           state == SessionState::Rendering || state == SessionState::Completing;
 }
 
 // Human-readable state name (for logging).
@@ -43,8 +42,6 @@ constexpr std::string_view StateName(SessionState state) {
             return "Scheduling";
         case SessionState::Rendering:
             return "Rendering";
-        case SessionState::Paused:
-            return "Paused";
         case SessionState::Completing:
             return "Completing";
         case SessionState::Complete:

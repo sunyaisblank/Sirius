@@ -107,6 +107,12 @@ TEST_F(CoronaGeometryTests, DisabledReturnsNoContainment) {
     config.enabled = false;
     EXPECT_FALSE(
         sirius::core::corona_physics::IsInsideCorona(10.0f, kPi / 2.0f, 0.0f, config, isco));
+
+    config.enabled = true;
+    config.geometry = static_cast<sirius::core::CoronaGeometry>(255);
+    EXPECT_DEATH(static_cast<void>(sirius::core::corona_physics::IsInsideCorona(
+                     10.0f, kPi / 2.0f, 0.0f, config, isco)),
+                 "violated");
 }
 
 TEST_F(CoronaGeometryTests, OutsideRadialBoundsRejected) {
@@ -217,6 +223,15 @@ TEST_F(CoronaEmissivityTests, OpticalDepthPositiveInsideCorona) {
 TEST_F(CoronaEmissivityTests, ScatteredIntensityZeroForZeroTau) {
     float I = sirius::core::corona_physics::ScatteredIntensity(1.0f, 0.0f, config);
     EXPECT_FLOAT_EQ(I, 0.0f);
+}
+
+TEST_F(CoronaEmissivityTests, ComptonizedSourceLeavesOpticalDepthToTheRayMarcher) {
+    config.temperature_keV = 100.0f;
+    config.optical_depth = 0.5f;
+    const float seed = 0.4f;
+    const float expected = seed * (1.0f + config.ComptonizationParameter());
+    EXPECT_NEAR(corona_physics::ComptonizedSource(seed, config), expected, kEps);
+    EXPECT_FLOAT_EQ(corona_physics::ComptonizedSource(0.0f, config), 0.0f);
 }
 
 TEST_F(CoronaEmissivityTests, ScatteredIntensityIncreasesWithTau) {

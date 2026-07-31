@@ -10,10 +10,13 @@
 // the Morris-Thorne routing defect (a validator-accepted name falling through a
 // GPU router to the wrong spacetime) was the direct result.
 
+#include "sirius/base/contracts.h"
+
 #include <array>
 #include <cctype>
 #include <optional>
 #include <string>
+#include <string_view>
 
 namespace sirius::core {
 
@@ -41,6 +44,95 @@ struct MetricInfo {
     bool cpu_supported;                  // Constructible on the CPU tracer path.
     bool gpu_supported;                  // Dispatchable to the device kernel.
 };
+
+enum class DiskSupport {
+    PageThorne,
+    NotApplicable,
+    Unsupported,
+};
+
+[[nodiscard]] constexpr DiskSupport DiskSupportFor(MetricId id) noexcept {
+    switch (id) {
+        case MetricId::Schwarzschild:
+        case MetricId::Kerr:
+            return DiskSupport::PageThorne;
+        case MetricId::ReissnerNordstrom:
+        case MetricId::KerrNewman:
+        case MetricId::SchwarzschildDeSitter:
+            return DiskSupport::Unsupported;
+        case MetricId::Minkowski:
+        case MetricId::DeSitter:
+        case MetricId::MorrisThorne:
+        case MetricId::Alcubierre:
+            return DiskSupport::NotApplicable;
+    }
+    SIRIUS_ASSERT(false);
+    return DiskSupport::Unsupported;
+}
+
+[[nodiscard]] constexpr const char* ToString(DiskSupport support) noexcept {
+    switch (support) {
+        case DiskSupport::PageThorne:
+            return "Page-Thorne";
+        case DiskSupport::NotApplicable:
+            return "not applicable";
+        case DiskSupport::Unsupported:
+            return "disabled required";
+    }
+    SIRIUS_ASSERT(false);
+    return "unknown";
+}
+
+// Identity/parameter compatibility shared by config, CPU session, and Vulkan
+// capability boundaries. Numeric range checks remain the owning boundary's
+// responsibility; this authority prevents one metric name from acquiring
+// another metric's spin, charge, or cosmological sector.
+[[nodiscard]] constexpr std::optional<std::string_view> MetricParameterIssue(
+    MetricId id, double spin, double charge, double lambda) noexcept {
+    const bool has_spin = spin != 0.0;
+    const bool has_charge = charge != 0.0;
+    const bool has_lambda = lambda != 0.0;
+    switch (id) {
+        case MetricId::Schwarzschild:
+            if (has_spin || has_charge || has_lambda) {
+                return "Schwarzschild requires spin, charge, and lambda to be zero";
+            }
+            break;
+        case MetricId::Kerr:
+            if (has_charge || has_lambda) return "Kerr requires charge and lambda to be zero";
+            break;
+        case MetricId::ReissnerNordstrom:
+            if (has_spin || has_lambda) {
+                return "Reissner-Nordstrom requires spin and lambda to be zero";
+            }
+            break;
+        case MetricId::KerrNewman:
+            if (has_lambda) return "Kerr-Newman requires lambda to be zero";
+            break;
+        case MetricId::SchwarzschildDeSitter:
+            if (has_spin || has_charge) {
+                return "Schwarzschild-de-Sitter requires spin and charge to be zero";
+            }
+            break;
+        case MetricId::DeSitter:
+            if (has_spin || has_charge) return "de-Sitter requires spin and charge to be zero";
+            break;
+        case MetricId::Minkowski:
+            if (has_spin || has_charge || has_lambda) {
+                return "Minkowski requires spin, charge, and lambda to be zero";
+            }
+            break;
+        case MetricId::MorrisThorne:
+        case MetricId::Alcubierre:
+            if (has_spin || has_charge || has_lambda) {
+                return "Morris-Thorne and Alcubierre require spin, charge, and lambda to be zero";
+            }
+            break;
+        default:
+            return "unknown metric identity";
+    }
+    return std::nullopt;
+}
 
 // The registry. Backend flags state what each path genuinely renders today;
 // requesting an unsupported combination is an error at the session boundary,
@@ -115,7 +207,9 @@ inline const MetricInfo& MetricInfoFor(MetricId id) {
     for (const auto& info : MetricRegistry()) {
         if (info.id == id) return info;
     }
-    // The registry covers every enumerator; reaching here is a logic error.
+    // The registry covers every enumerator; a malformed enum must not acquire
+    // Minkowski semantics.
+    SIRIUS_ASSERT(false);
     return MetricRegistry()[0];
 }
 

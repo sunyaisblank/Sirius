@@ -21,4 +21,7 @@ target_link_libraries(sirius_oracle_tests PRIVATE sirius_oracle sirius_core GTes
 
 sirius_configure_target(sirius_oracle_tests CONTRACT_MODE 2)
 
-gtest_discover_tests(sirius_oracle_tests PROPERTIES LABELS "Correctness")
+gtest_discover_tests(
+    sirius_oracle_tests
+    PROPERTIES
+        LABELS "Correctness")

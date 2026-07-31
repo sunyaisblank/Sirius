@@ -1,10 +1,8 @@
 // Film simulation unit tests. Ported from TSFL001A.cpp.
 //
 // Tests IMAX 70mm film simulation (format, stock, grain, halation, vignette,
-// colour grade, presets, full pipeline). The legacy suite's two GPUConversion
-// tests depended on FilmParamsGPU from the retired OptiX launch header; they are
-// deferred (that struct's successor arrives with the Vulkan backend). Assertions
-// and tolerances for the ported tests are identical.
+// colour grade, presets, full pipeline). Film is intentionally host-side for
+// both render backends, after linear readback and before display encoding.
 
 #include "sirius/render/film_pipeline.h"
 
@@ -45,6 +43,7 @@ TEST_F(FilmSimulationTest, IMAX_AspectRatio_143) {
     FilmConfig cfg;
     cfg.ApplyFormat(FilmFormat::IMAX70mm_15perf);
     EXPECT_NEAR(cfg.aspect_ratio, 1.43f, 0.01f);
+    EXPECT_DEATH(cfg.ApplyFormat(static_cast<FilmFormat>(255)), "violated");
 }
 
 TEST_F(FilmSimulationTest, IMAX5perf_AspectRatio_220) {
@@ -80,6 +79,7 @@ TEST_F(FilmSimulationTest, KodakVision3_500T_Settings) {
     EXPECT_FLOAT_EQ(cfg.iso, 500.0f);
     EXPECT_GT(cfg.grain_intensity, 0.0f);
     EXPECT_NEAR(cfg.color_temperature_K, 3200.0f, 100.0f);  // Tungsten.
+    EXPECT_DEATH(cfg.ApplyStock(static_cast<FilmStock>(255)), "violated");
 }
 
 TEST_F(FilmSimulationTest, KodakVision3_50D_LowerGrain) {

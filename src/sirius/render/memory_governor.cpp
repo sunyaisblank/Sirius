@@ -6,9 +6,12 @@
 #include "sirius/base/contracts.h"
 
 #include <algorithm>
+#include <cerrno>
 #include <cmath>
 #include <cstdlib>
 #include <format>
+#include <limits>
+#include <string>
 
 namespace sirius::render {
 
@@ -56,16 +59,30 @@ Expected<TilePlan> DeriveTilePlan(std::uint64_t budget_bytes, int image_width, i
     return plan;
 }
 
-std::uint64_t ResolveBudgetBytes(std::uint64_t device_local_bytes) {
+Expected<std::uint64_t> ResolveBudgetBytes(std::uint64_t render_memory_bytes) {
     if (const char* override_mb = std::getenv("SIRIUS_MEMORY_BUDGET_MB");
         override_mb != nullptr && override_mb[0] != '\0') {
         char* end = nullptr;
+        errno = 0;
         const double mb = std::strtod(override_mb, &end);
-        if (end != override_mb && mb > 0.0) {
-            return static_cast<std::uint64_t>(mb * 1024.0 * 1024.0);
+        constexpr double kBytesPerMiB = 1024.0 * 1024.0;
+        const bool valid =
+            end != override_mb && *end == '\0' && errno != ERANGE && std::isfinite(mb) &&
+            mb > 0.0 &&
+            mb <= static_cast<double>(std::numeric_limits<std::uint64_t>::max()) / kBytesPerMiB;
+        if (!valid) {
+            return Fail(ErrorDomain::kConfiguration, "resolve memory budget",
+                        "SIRIUS_MEMORY_BUDGET_MB='" + std::string(override_mb) +
+                            "' is not a finite positive MiB count in range");
         }
+        const auto bytes = static_cast<std::uint64_t>(mb * kBytesPerMiB);
+        if (bytes == 0) {
+            return Fail(ErrorDomain::kConfiguration, "resolve memory budget",
+                        "SIRIUS_MEMORY_BUDGET_MB resolves below one byte");
+        }
+        return bytes;
     }
-    return device_local_bytes;
+    return render_memory_bytes;
 }
 
 }  // namespace sirius::render

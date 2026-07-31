@@ -6,6 +6,7 @@ unset(CMAKE_CXX_STANDARD_REQUIRED)
 
 add_library(sirius_base STATIC
     base/contracts.cpp
+    base/resource_locator.cpp
 )
 
 target_include_directories(sirius_base PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/..")

@@ -2,7 +2,8 @@
 //
 // This translation unit is the single home of TINYEXR_IMPLEMENTATION for the
 // render library; miniz.c (compiled separately) provides the deflate codec.
-// Values are stored as half float, so HDR radiance above 1.0 survives.
+// Values are stored as float so every finite fp32 radiance value survives
+// without half-float overflow.
 
 // miniz must precede tinyexr; it supplies the zlib-compatible codec.
 #include "miniz.h"
@@ -13,7 +14,11 @@
 
 #include "tinyexr.h"
 
+#include <algorithm>
+#include <array>
+#include <cmath>
 #include <cstring>
+#include <string>
 #include <vector>
 
 namespace sirius::render {
@@ -21,16 +26,68 @@ namespace sirius::render {
 namespace {
 
 // Write an interleaved RGB float buffer to EXR (channels stored B, G, R).
-bool WriteRgbFloat(const std::string& path, int width, int height, const float* pixels) {
+struct AttributeStorage {
+    std::vector<std::string> values;
+    std::vector<EXRAttribute> attributes;
+};
+
+AttributeStorage BuildAttributes(const EXRMetadata& meta) {
+    AttributeStorage storage;
+    storage.values = {
+        meta.softwareVersion,
+        meta.cameraModel,
+        meta.metricType,
+        std::to_string(meta.blackHoleMass),
+        std::to_string(meta.blackHoleSpin),
+        std::to_string(meta.observerDistance),
+        std::to_string(meta.observerInclination),
+        std::to_string(meta.samplesPerPixel),
+        std::to_string(meta.renderTimeSeconds),
+        meta.colorSpace,
+        meta.chromaticities,
+    };
+    constexpr std::array<const char*, 11> names = {
+        "siriusSoftware",
+        "siriusCamera",
+        "siriusMetric",
+        "siriusBlackHoleMass",
+        "siriusBlackHoleSpin",
+        "siriusObserverDistance",
+        "siriusObserverInclination",
+        "siriusSamplesPerPixel",
+        "siriusRenderTimeSeconds",
+        "siriusColorSpace",
+        "siriusChromaticities",
+    };
+    storage.attributes.resize(names.size());
+    for (std::size_t i = 0; i < names.size(); ++i) {
+        EXRAttribute& attribute = storage.attributes[i];
+        std::memset(&attribute, 0, sizeof(attribute));
+        std::strncpy(attribute.name, names[i], sizeof(attribute.name) - 1);
+        std::strncpy(attribute.type, "string", sizeof(attribute.type) - 1);
+        attribute.value = reinterpret_cast<unsigned char*>(storage.values[i].data());
+        attribute.size = static_cast<int>(storage.values[i].size());
+    }
+    return storage;
+}
+
+bool AllFinite(const float* pixels, std::size_t count) {
+    return std::all_of(pixels, pixels + count, [](float value) { return std::isfinite(value); });
+}
+
+bool WriteRgbFloat(const std::string& path, int width, int height, const float* pixels,
+                   const EXRMetadata& meta) {
     if (width <= 0 || height <= 0 || !pixels) {
         return false;
     }
+    const std::size_t pixel_count = static_cast<std::size_t>(width) * height;
+    if (!AllFinite(pixels, pixel_count * 3)) return false;
 
-    std::vector<float> r(static_cast<size_t>(width) * height);
-    std::vector<float> g(static_cast<size_t>(width) * height);
-    std::vector<float> b(static_cast<size_t>(width) * height);
+    std::vector<float> r(pixel_count);
+    std::vector<float> g(pixel_count);
+    std::vector<float> b(pixel_count);
 
-    for (size_t i = 0; i < static_cast<size_t>(width) * height; ++i) {
+    for (size_t i = 0; i < pixel_count; ++i) {
         r[i] = pixels[i * 3 + 0];
         g[i] = pixels[i * 3 + 1];
         b[i] = pixels[i * 3 + 2];
@@ -60,14 +117,18 @@ bool WriteRgbFloat(const std::string& path, int width, int height, const float* 
     header.channels = channelInfo;
     header.num_channels = 3;
 
-    // Stored as float in memory, requested as half for the file.
+    // Store fp32 in the file: converting a finite value above 65504 to half
+    // would create infinity and violate the output-integrity contract.
     int pixelTypes[3] = {TINYEXR_PIXELTYPE_FLOAT, TINYEXR_PIXELTYPE_FLOAT, TINYEXR_PIXELTYPE_FLOAT};
-    int requestedPixelTypes[3] = {TINYEXR_PIXELTYPE_HALF, TINYEXR_PIXELTYPE_HALF,
-                                  TINYEXR_PIXELTYPE_HALF};
+    int requestedPixelTypes[3] = {TINYEXR_PIXELTYPE_FLOAT, TINYEXR_PIXELTYPE_FLOAT,
+                                  TINYEXR_PIXELTYPE_FLOAT};
 
     header.pixel_types = pixelTypes;
     header.requested_pixel_types = requestedPixelTypes;
 
+    AttributeStorage attributes = BuildAttributes(meta);
+    header.num_custom_attributes = static_cast<int>(attributes.attributes.size());
+    header.custom_attributes = attributes.attributes.data();
     header.compression_type = TINYEXR_COMPRESSIONTYPE_ZIP;
 
     const char* err = nullptr;
@@ -84,17 +145,20 @@ bool WriteRgbFloat(const std::string& path, int width, int height, const float* 
 }
 
 // Write an interleaved RGBA float buffer to EXR (channels stored A, B, G, R).
-bool WriteRgbaFloat(const std::string& path, int width, int height, const float* pixels) {
+bool WriteRgbaFloat(const std::string& path, int width, int height, const float* pixels,
+                    const EXRMetadata& meta) {
     if (width <= 0 || height <= 0 || !pixels) {
         return false;
     }
+    const std::size_t pixel_count = static_cast<std::size_t>(width) * height;
+    if (!AllFinite(pixels, pixel_count * 4)) return false;
 
-    std::vector<float> r(static_cast<size_t>(width) * height);
-    std::vector<float> g(static_cast<size_t>(width) * height);
-    std::vector<float> b(static_cast<size_t>(width) * height);
-    std::vector<float> a(static_cast<size_t>(width) * height);
+    std::vector<float> r(pixel_count);
+    std::vector<float> g(pixel_count);
+    std::vector<float> b(pixel_count);
+    std::vector<float> a(pixel_count);
 
-    for (size_t i = 0; i < static_cast<size_t>(width) * height; ++i) {
+    for (size_t i = 0; i < pixel_count; ++i) {
         r[i] = pixels[i * 4 + 0];
         g[i] = pixels[i * 4 + 1];
         b[i] = pixels[i * 4 + 2];
@@ -128,12 +192,15 @@ bool WriteRgbaFloat(const std::string& path, int width, int height, const float*
 
     int pixelTypes[4] = {TINYEXR_PIXELTYPE_FLOAT, TINYEXR_PIXELTYPE_FLOAT, TINYEXR_PIXELTYPE_FLOAT,
                          TINYEXR_PIXELTYPE_FLOAT};
-    int requestedPixelTypes[4] = {TINYEXR_PIXELTYPE_HALF, TINYEXR_PIXELTYPE_HALF,
-                                  TINYEXR_PIXELTYPE_HALF, TINYEXR_PIXELTYPE_HALF};
+    int requestedPixelTypes[4] = {TINYEXR_PIXELTYPE_FLOAT, TINYEXR_PIXELTYPE_FLOAT,
+                                  TINYEXR_PIXELTYPE_FLOAT, TINYEXR_PIXELTYPE_FLOAT};
 
     header.pixel_types = pixelTypes;
     header.requested_pixel_types = requestedPixelTypes;
 
+    AttributeStorage attributes = BuildAttributes(meta);
+    header.num_custom_attributes = static_cast<int>(attributes.attributes.size());
+    header.custom_attributes = attributes.attributes.data();
     header.compression_type = TINYEXR_COMPRESSIONTYPE_ZIP;
 
     const char* err = nullptr;
@@ -152,19 +219,17 @@ bool WriteRgbaFloat(const std::string& path, int width, int height, const float*
 }  // namespace
 
 bool EXRWriter::WriteExr(const std::string& path, const ImageBuffer& buffer,
-                         [[maybe_unused]] const EXRMetadata& meta) {
-    if (buffer.width <= 0 || buffer.height <= 0) return false;
-    if (buffer.pixels.empty()) return false;
+                         const EXRMetadata& meta) {
+    if (!buffer.HasValidShape()) return false;
 
-    return WriteRgbFloat(path, buffer.width, buffer.height, buffer.pixels.data());
+    return WriteRgbFloat(path, buffer.width, buffer.height, buffer.pixels.data(), meta);
 }
 
 bool EXRWriter::WriteExr(const std::string& path, const ImageBufferRGBA& buffer,
-                         [[maybe_unused]] const EXRMetadata& meta) {
-    if (buffer.width <= 0 || buffer.height <= 0) return false;
-    if (buffer.pixels.empty()) return false;
+                         const EXRMetadata& meta) {
+    if (!buffer.HasValidShape()) return false;
 
-    return WriteRgbaFloat(path, buffer.width, buffer.height, buffer.pixels.data());
+    return WriteRgbaFloat(path, buffer.width, buffer.height, buffer.pixels.data(), meta);
 }
 
 }  // namespace sirius::render

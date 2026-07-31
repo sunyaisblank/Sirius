@@ -182,10 +182,10 @@ TEST_F(AlcubierreMetricTests, SuperluminalConstruction) {
     EXPECT_GT(params.vs, 1.0);
 }
 
-TEST_F(AlcubierreMetricTests, SetParameterClamping) {
+TEST_F(AlcubierreMetricTests, SetParameterMatchesTheOperatorVelocityDomain) {
     metric.SetParameter("velocity", -5.0);
     auto params = metric.GetParams();
-    EXPECT_GE(params.vs, 0.0);  // should be clamped to valid range
+    EXPECT_DOUBLE_EQ(params.vs, -5.0);
 }
 
 // =============================================================================

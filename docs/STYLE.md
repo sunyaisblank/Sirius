@@ -16,13 +16,23 @@ The purpose of adopting C++26 early is compile-time safety, so the default postu
 
 ## 2. Contracts
 
-C++26 contracts (P2900) are the intended end state, but the measured toolchain provides them only as GCC's experimental attribute syntax, so contract expressions are written once behind macros and the macros track the toolchain. `sirius/base/contracts.h` defines:
+C++26 contracts (P2900) are the intended end state, but the measured release
+toolchains do not define `__cpp_contracts`, so contract expressions are written
+once behind macros and the macros track the toolchain.
+`sirius/base/language_capabilities.h` is the compile-time reporting authority
+and `sirius/base/contracts.h` defines:
 
 - `SIRIUS_PRE(expr)` and `SIRIUS_POST(expr)` for preconditions and postconditions, placed at the top of the function body (P2900's declaration syntax is adopted mechanically when both compilers ship it; the macro spelling is chosen so that migration is a script, not a review).
 - `SIRIUS_ASSERT(expr)` for invariants mid-function, the analogue of `contract_assert`.
 - `SIRIUS_AXIOM(expr)` for conditions too expensive to evaluate even in checked builds; documentation that a checker may exploit, never executed.
 
-Semantics follow build mode: Debug and test builds enforce (violation terminates with location and expression text), Release builds of the CPU oracle observe (log and continue, because the oracle's job is to measure error, not to hide it), and Release hot paths ignore. The mode is a CMake-level decision, never a per-file one. When `__cpp_contracts` reports P2900 on both release compilers, the macros compile to native syntax and this section shrinks to the mapping table.
+The operational default is enforce in every build type: a violation terminates
+with location and expression text. `SIRIUS_CONTRACT_MODE` is a cache-visible
+CMake policy (`2` enforce, `1` observe, `0` ignore); selecting a weaker mode is
+an explicit non-operational build decision, never a per-file source choice.
+Tests always compile in enforce mode. When `__cpp_contracts` reports P2900 on
+both release compilers, the macros compile to native syntax and this section
+shrinks to the mapping table.
 
 Contract expressions state the caller's observable obligations, not implementation detail: preconditions are the minimum the function needs, and a precondition stronger than necessary is itself a defect, because it restricts callers without benefit. Data crossing a module boundary is validated at that boundary once; a downstream re-check of an upstream guarantee duplicates authority and is removed.
 
@@ -36,9 +46,9 @@ Tier one features are used directly wherever they apply.
 - `static_assert` always carries a user message stating the violated requirement, not restating the condition.
 - Placeholder variables (`auto _ =`) for RAII guards whose name would never be read.
 
-Toolchain probe of record (re-measured 2026-07-28, GCC 14.2 and Clang 21.1.8 under `-std=c++2c`): tier-one feature-test macros live today are `__cpp_placeholder_variables` (both compilers) plus `__cpp_pack_indexing` and `__cpp_deleted_function` (Clang); GCC-only translation units therefore stay within the shared subset. Neither compiler defines `__cpp_contracts` or any reflection macro, and P2900 declaration syntax is rejected under every flag combination either compiler accepts, so the section-2 macros and the generator remain the standard-tracking stand-ins; the `__cpp_contracts >= 202502L` gate in `sirius/base/contracts.h` upgrades mechanically the day a release compiler ships it.
+Toolchain probe of record (re-measured 2026-07-28, GCC 14.2 and Clang 21.1.8 under `-std=c++2c`): tier-one feature-test macros live today are `__cpp_placeholder_variables` (both compilers) plus `__cpp_pack_indexing` and `__cpp_deleted_function` (Clang); GCC-only translation units therefore stay within the shared subset. Neither compiler defines `__cpp_contracts` or a P2996 reflection macro, and P2900 declaration syntax is rejected under every flag combination either compiler accepts. The section-2 checked macros and explicit schemas are therefore the active substitutes. The build-gated language-capability test proves that the reported native/substitute state follows the compiler feature macros.
 
-Tier two, contracts, is section 2. Tier three, static reflection (P2996), is absent from the toolchain: no code in the repository may require it. The two subsystems that will eventually want it, the kernel constant tables and CLI/config binding, are structured as generated code (`*_gen.h`, emitted at build time by scripts under `scripts/` from a single declared source of truth) so that when reflection arrives it replaces a generator, not an architecture. Handwritten edits to generated files are build errors; the generator re-runs and CI diffs the output.
+Tier two, contracts, is section 2. Tier three, static reflection (P2996), is absent from the toolchain: no code in the repository may require it. Configuration binding uses explicit nlohmann serializers with strict shape validation, while the Slang dispatch uses explicit parameter packing with CPU/kernel parity gates. Sirius does not claim these are reflection or code generation. P2996 adoption is a deliberate future rewrite of those authorities, not an automatic change triggered by an experimental compiler.
 
 Library features: `std::expected` (section 4), `std::span` and `std::mdspan` at every boundary that today would take pointer plus length or a raw 2D index computation, `std::print` in tools and tests (the render CLI keeps FTXUI), `<numbers>` constants over literals. `std::simd` and senders/receivers are not yet in either standard library; the threading and SIMD abstractions live behind seams in `sirius/base/` so they can adopt the standard forms when they ship.
 

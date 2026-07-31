@@ -47,6 +47,7 @@ class TileScheduler {
         tile_size_ = tile_size;
         tiles_.clear();
         next_tile_index_ = 0;
+        completed_count_ = 0;
 
         int tiles_x = (image_width + tile_size - 1) / tile_size;
         int tiles_y = (image_height + tile_size - 1) / tile_size;

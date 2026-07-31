@@ -1,0 +1,5 @@
+# Mesa/LLVM Vulkan initialisation retains one 128-byte process-lifetime
+# allocation below the loader's physical-device enumeration call. Keep the
+# suppression at the first public Vulkan frame so first-party leaks, including
+# every Sirius allocation above it, remain reportable.
+leak:vkEnumeratePhysicalDevices

@@ -7,6 +7,8 @@
 // Reference: Haardt & Maraschi (1991) ApJ 380, L51; Dove et al. (1997) ApJ
 // 487, 759; Zdziarski & Gierlinski (2004) PTPS 155, 99.
 
+#include "sirius/base/contracts.h"
+
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
@@ -99,12 +101,14 @@ inline bool IsInsideCorona(float r, float theta, [[maybe_unused]] float phi,
             // Spherical shell around the black hole.
             return r < config.outer_radius_M;
         }
-        case CoronaGeometry::Extended:
-        default: {
+        case CoronaGeometry::Extended: {
             // Extended corona: |z| < H(r) where H scales with r.
             float H_local = config.scale_height_M * std::sqrt(r / inner);
             return std::abs(z) < H_local;
         }
+        default:
+            SIRIUS_PRE(false);
+            return false;
     }
 }
 
@@ -185,6 +189,16 @@ inline float ScatteredIntensity(float incident_intensity, float tau, const Coron
     float energy_boost = (y < 1.0f) ? (1.0f + y) : std::exp(y);
 
     return incident_intensity * scattered_fraction * energy_boost * config.intensity_scale;
+}
+
+// Local source function used by live volumetric transfer before the optical
+// depth recurrence is applied. Separating the source from the scattered
+// fraction avoids applying (1-exp(-tau)) twice in a ray marcher.
+inline float ComptonizedSource(float seed_intensity, const CoronaConfig& config) {
+    if (!config.enabled || seed_intensity <= 0.0f) return 0.0f;
+    const float y = config.ComptonizationParameter();
+    const float energy_boost = (y < 1.0f) ? (1.0f + y) : std::exp(y);
+    return seed_intensity * energy_boost;
 }
 
 }  // namespace corona_physics

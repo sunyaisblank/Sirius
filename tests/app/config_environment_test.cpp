@@ -47,14 +47,36 @@ TEST(ConfigEnvironment, BooleanOverrideParsed) {
     EXPECT_FALSE(config.postprocess.enableBloom);
 }
 
-TEST(ConfigEnvironment, MalformedIntegerLeavesDefault) {
+TEST(ConfigEnvironment, ColorModeOverrideApplied) {
+    ScopedEnvironmentVariable color_mode("SIRIUS_COLOR_MODE", "Polarisation");
+    SiriusConfig config = SiriusConfig::defaults();
+    ConfigLoader::ApplyEnvironmentOverrides(config);
+    EXPECT_EQ(config.colorMode, "Polarisation");
+}
+
+TEST(ConfigEnvironment, MalformedIntegerDeclines) {
     ScopedEnvironmentVariable width("SIRIUS_WIDTH", "not-a-number");
 
     SiriusConfig config = SiriusConfig::defaults();
-    ConfigLoader::ApplyEnvironmentOverrides(config);
+    EXPECT_THROW(ConfigLoader::ApplyEnvironmentOverrides(config), std::invalid_argument);
+}
 
-    // A parse failure declines the override rather than corrupting the field.
-    EXPECT_EQ(config.render.width, 1920);
+TEST(ConfigEnvironment, TrailingNumericGarbageDeclines) {
+    ScopedEnvironmentVariable spin("SIRIUS_SPIN", "0.5junk");
+    SiriusConfig config = SiriusConfig::defaults();
+    EXPECT_THROW(ConfigLoader::ApplyEnvironmentOverrides(config), std::invalid_argument);
+}
+
+TEST(ConfigEnvironment, NonFiniteNumberDeclines) {
+    ScopedEnvironmentVariable spin("SIRIUS_SPIN", "nan");
+    SiriusConfig config = SiriusConfig::defaults();
+    EXPECT_THROW(ConfigLoader::ApplyEnvironmentOverrides(config), std::invalid_argument);
+}
+
+TEST(ConfigEnvironment, MalformedBooleanDeclines) {
+    ScopedEnvironmentVariable bloom("SIRIUS_BLOOM", "sometimes");
+    SiriusConfig config = SiriusConfig::defaults();
+    EXPECT_THROW(ConfigLoader::ApplyEnvironmentOverrides(config), std::invalid_argument);
 }
 
 }  // namespace sirius::app::test

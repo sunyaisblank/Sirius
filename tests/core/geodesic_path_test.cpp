@@ -191,43 +191,6 @@ class GeodesicPathTests : public ::testing::Test {
 
 // --- Schwarzschild Photon Sphere Tests ---
 
-// RECORDED DECISION: stays disabled. The r = 3M photon orbit is unstable, so
-// integration error e-folds every ~sqrt(27)M of affine parameter and no
-// finite-precision integrator holds the orbit for 2000 steps; the < 5M bound
-// is unattainable in principle, not a defect. The instability itself is the
-// physics, and the enabled PhotonSphereInstability test asserts it.
-TEST_F(GeodesicPathTests, DISABLED_PhotonSphereRadius) {
-    double photon_sphere = 3.0 * M;
-
-    Vec4 pos;
-    pos(0) = 0.0;
-    pos(1) = photon_sphere;
-    pos(2) = PI / 2.0;
-    pos(3) = 0.0;
-
-    Vec4 dir;
-    dir(0) = 0.0;
-    dir(1) = 0.0;  // No radial component
-    dir(2) = 0.0;
-    dir(3) = 1.0;  // Pure azimuthal motion
-
-    Lightray ray = createRay(pos, dir, &schwarzschild);
-
-    double max_r_deviation = 0.0;
-    double initial_r = getRadius(ray.position);
-
-    for (int step = 0; step < 2000; ++step) {
-        Geodesic::IntegrateStepRk45(ray, &schwarzschild, rk45_config);
-
-        double r_deviation = std::abs(getRadius(ray.position) - initial_r);
-        max_r_deviation = std::max(max_r_deviation, r_deviation);
-
-        if (ray.terminated) break;
-    }
-
-    EXPECT_LT(max_r_deviation, 5.0) << "Photon sphere orbit deviated by " << max_r_deviation;
-}
-
 // Verify photon sphere instability: small perturbation outside r=3M should cause outward motion or
 // escape.
 TEST_F(GeodesicPathTests, PhotonSphereInstability) {

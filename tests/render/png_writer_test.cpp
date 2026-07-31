@@ -19,6 +19,7 @@
 #include <algorithm>
 #include <cmath>
 #include <filesystem>
+#include <limits>
 #include <string>
 
 using namespace sirius::render;
@@ -142,6 +143,34 @@ TEST(PNGWriterTest, NullPixels) {
         std::filesystem::temp_directory_path().string() + "/sirius_test_png_null.png";
 
     EXPECT_FALSE(PNGWriter::WriteRgb(testPath, 10, 10, nullptr));
+}
+
+TEST(PNGWriterTest, NonFiniteRadianceIsRejected) {
+    const std::string path =
+        (std::filesystem::temp_directory_path() / "sirius_nonfinite_must_not_write.png").string();
+    std::filesystem::remove(path);
+    const float pixels[] = {0.0f, std::numeric_limits<float>::quiet_NaN(), 0.0f};
+    EXPECT_FALSE(PNGWriter::WriteRgb(path, 1, 1, pixels));
+    EXPECT_FALSE(std::filesystem::exists(path));
+}
+
+TEST(PNGWriterTest, MalformedBufferShapesAreRejected) {
+    const std::string rgb_path =
+        (std::filesystem::temp_directory_path() / "sirius_malformed_rgb.png").string();
+    const std::string rgba_path =
+        (std::filesystem::temp_directory_path() / "sirius_malformed_rgba.png").string();
+    std::filesystem::remove(rgb_path);
+    std::filesystem::remove(rgba_path);
+
+    ImageBuffer rgb(2, 2);
+    rgb.pixels.pop_back();
+    ImageBufferRGBA rgba(2, 2);
+    rgba.pixels.pop_back();
+
+    EXPECT_FALSE(PNGWriter::Write(rgb_path, rgb));
+    EXPECT_FALSE(PNGWriter::Write(rgba_path, rgba));
+    EXPECT_FALSE(std::filesystem::exists(rgb_path));
+    EXPECT_FALSE(std::filesystem::exists(rgba_path));
 }
 
 namespace {

@@ -1,6 +1,6 @@
-# CI matrix per docs/SPECIFICATION.md programme 6. WSL2 has no separate
-# runner: it is binary-compatible with the Ubuntu job, whose Lavapipe
-# software Vulkan exercises the same backend path WSL2 uses.
+# CI matrix per docs/SPECIFICATION.md programme 6. Lavapipe is the required
+# software-Vulkan runtime gate; WSL2/Dozen and physical-driver evidence remain
+# separate hardware attestations produced by scripts/validate-hardware.sh.
 name: ci
 
 on:
@@ -40,6 +40,30 @@ jobs:
       - name: Label file freshness
         run: python3 scripts/generate-ctest-labels.py --check
 
+  linux-sanitizers:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+      - name: Toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++-14 gcc-14 ninja-build \
+            libvulkan-dev mesa-vulkan-drivers spirv-tools \
+            xorg-dev libgl1-mesa-dev libwayland-dev \
+            wayland-protocols libxkbcommon-dev
+      - name: Slang
+        run: |
+          TAG=v2026.12.0.1
+          curl --fail --location --silent --show-error \
+            "https://github.com/shader-slang/slang/releases/download/${TAG}/slang-${TAG#v}-linux-x86_64.tar.gz" \
+            --output slang.tgz
+          sudo mkdir -p /opt/slang && sudo tar xzf slang.tgz -C /opt/slang
+      - name: Configure
+        run: cmake --preset linux-gcc-sanitize
+      - name: Build and mandatory ASan/UBSan/LSan gate
+        run: cmake --build --preset linux-gcc-sanitize -j"$(nproc)"
+
   windows-build:
     runs-on: windows-2022
     steps:
@@ -48,8 +72,18 @@ jobs:
         run: cmake --preset windows-msvc
       - name: Build
         run: cmake --build --preset windows-msvc
-      - name: New-tree unit tests
-        run: ctest --test-dir bin/windows-msvc -C Release -L Correctness --output-on-failure
+      - name: Full source-available test estate
+        run: ctest --test-dir bin/windows-msvc -C Release --output-on-failure --output-junit windows-tests.xml
+      - name: Native build attestation
+        run: >-
+          python scripts/verify-attestation.py --record-build
+          --domain windows-native-build --platform windows
+          --source-revision ${{ github.sha }} --artifact windows-tests.xml
+          --output attestations/windows-build.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sirius-windows-native-attestation
+          path: attestations
 
   macos-build:
     runs-on: macos-15
@@ -61,5 +95,15 @@ jobs:
         run: cmake --preset macos
       - name: Build
         run: cmake --build --preset macos -j3
-      - name: New-tree unit tests
-        run: ctest --test-dir bin/macos -L Correctness --output-on-failure
+      - name: Full source-available test estate
+        run: ctest --test-dir bin/macos --output-on-failure --output-junit macos-tests.xml
+      - name: Native build attestation
+        run: >-
+          python3 scripts/verify-attestation.py --record-build
+          --domain macos-native-build --platform macos
+          --source-revision ${{ github.sha }} --artifact macos-tests.xml
+          --output attestations/macos-build.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sirius-macos-native-attestation
+          path: attestations

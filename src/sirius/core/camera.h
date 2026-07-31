@@ -4,6 +4,7 @@
 // rays in Boyer-Lindquist coordinates for the geodesic tracer. Strategy pattern
 // over ICamera for interchangeable lens models. Ported from CMBS001A.h.
 
+#include "sirius/base/contracts.h"
 #include "sirius/core/tensor.h"
 
 #include <cmath>
@@ -41,7 +42,7 @@ struct CameraConfig {
     // expressed in the local ray-direction component frame (the same orthonormal
     // basis as CameraRay::direction indices 1,2,3, with index 1 the forward/view
     // axis). Special-relativistic aberration of the generated ray is applied in
-    // that frame (P5); |beta| < 1 is required and enforced by clamping. Default
+    // that frame (P5); finite |beta| < 1 is a fail-closed precondition. Default
     // zero leaves every generated ray untouched (byte-pin). Reference: DNGR
     // (James et al. 2015, CQG 32 065001), arbitrary-worldline camera; MTW eq 2.29.
     double beta_x = 0.0;
@@ -61,11 +62,9 @@ struct CameraConfig {
 
 // Lens projection models.
 enum class LensType {
-    Pinhole,       // Ideal pinhole (infinite depth of field)
-    ThinLens,      // Thin lens model with depth of field
-    Fisheye,       // Equidistant fisheye projection
-    Orthographic,  // Orthographic projection
-    Panoramic      // 360 degree equirectangular
+    Pinhole,   // Ideal pinhole (infinite depth of field)
+    ThinLens,  // Thin lens model with depth of field
+    Fisheye    // Equidistant fisheye projection
 };
 
 // Special-relativistic aberration of a generated ray in the camera's local
@@ -80,16 +79,11 @@ inline void AberrateRay(CameraRay& ray, double beta_x, double beta_y, double bet
     double b2 = beta_x * beta_x + beta_y * beta_y + beta_z * beta_z;
     if (b2 <= 0.0) return;  // Exact no-op: preserves the pinned render.
 
-    // Enforce the sub-luminal precondition by clamping rather than asserting: a
-    // camera worldline at |beta| >= 1 is unphysical, and the render declines to a
-    // near-luminal boost instead of producing NaNs.
-    if (b2 >= 1.0) {
-        double s = 0.999999 / std::sqrt(b2);
-        beta_x *= s;
-        beta_y *= s;
-        beta_z *= s;
-        b2 = beta_x * beta_x + beta_y * beta_y + beta_z * beta_z;
-    }
+    // Operator input is rejected by ConfigLoader before session construction.
+    // Keep the lower-level typed API fail-closed as well: silently projecting
+    // an invalid worldline onto a different, near-luminal one changes the
+    // requested camera.
+    SIRIUS_PRE(std::isfinite(b2) && b2 < 1.0);
 
     double b = std::sqrt(b2);
     double ux = beta_x / b, uy = beta_y / b, uz = beta_z / b;  // Boost unit axis.
@@ -385,7 +379,8 @@ class FisheyeCamera : public ICamera {
     float aspect_ratio_ = 1.0f;
 };
 
-// Construct a camera for the requested lens; unimplemented types fall to Pinhole.
+// Construct a camera for the requested lens. LensType contains only represented
+// models, so an ordinary typed call cannot request a silent approximation.
 inline std::unique_ptr<ICamera> CreateCamera(LensType type,
                                              const CameraConfig& config = CameraConfig()) {
     switch (type) {
@@ -395,9 +390,9 @@ inline std::unique_ptr<ICamera> CreateCamera(LensType type,
             return std::make_unique<ThinLensCamera>(config);
         case LensType::Fisheye:
             return std::make_unique<FisheyeCamera>(config);
-        default:
-            return std::make_unique<PinholeCamera>(config);
     }
+    SIRIUS_ASSERT(false);  // Malformed enum value from an unsafe cast.
+    return nullptr;
 }
 
 }  // namespace sirius::core

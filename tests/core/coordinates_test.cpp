@@ -67,38 +67,41 @@ TEST_F(CoordinateTransformTests, RoundTripBLCartesian_NearHorizon) {
 // =============================================================================
 
 TEST_F(CoordinateTransformTests, RoundTripKerrSchild_LowSpin) {
-    // Kerr with low spin a = 0.1
-    // Note: Kerr round-trip has larger deviation due to phi adjustment term:
-    //   φ_BL = atan2(y, x) - atan2(a, r)
-    // This introduces arctan precision limits, acceptable for physics use.
     double a = 0.1;
     double deviation = ValidateRoundTrip(point_equator, a);
-    EXPECT_LT(deviation, 0.02)  // ~a/r deviation acceptable
-        << "Kerr round-trip with a=0.1 should have deviation < 0.02";
+    EXPECT_LT(deviation, kEpsilon);
 }
 
 TEST_F(CoordinateTransformTests, RoundTripKerrSchild_ModerateSpin) {
     // Kerr with moderate spin a = 0.5
     double a = 0.5;
     double deviation = ValidateRoundTrip(point_equator, a);
-    EXPECT_LT(deviation, 0.1)  // ~a/r deviation acceptable
-        << "Kerr round-trip with a=0.5 should have deviation < 0.1";
+    EXPECT_LT(deviation, kEpsilon);
 }
 
 TEST_F(CoordinateTransformTests, RoundTripKerrSchild_HighSpin) {
     // Kerr with high spin a = 0.9 (near extremal)
     double a = 0.9;
     double deviation = ValidateRoundTrip(point_equator, a);
-    EXPECT_LT(deviation, 0.15)  // ~a/r deviation acceptable
-        << "Kerr round-trip with a=0.9 should have deviation < 0.15";
+    EXPECT_LT(deviation, kEpsilon);
+}
+
+TEST_F(CoordinateTransformTests, KerrDiskRadiusIsSpheroidalNotCylindrical) {
+    constexpr double spin = 0.9;
+    const Vec4Cart cart = BlToKerrSchildCart(point_equator, spin);
+    const double cylindrical_radius = std::hypot(cart.x, cart.y);
+
+    EXPECT_NEAR(KerrSchildRadius(cart, spin), point_equator.r, kEpsilon);
+    EXPECT_NEAR(cylindrical_radius, std::sqrt(point_equator.r * point_equator.r + spin * spin),
+                kEpsilon);
+    EXPECT_GT(cylindrical_radius - KerrSchildRadius(cart, spin), 0.0);
 }
 
 TEST_F(CoordinateTransformTests, RoundTripKerrSchild_NearPole) {
     // Kerr near pole (tests oblate spheroidal effects)
     double a = 0.5;
     double deviation = ValidateRoundTrip(point_pole_near, a);
-    EXPECT_LT(deviation, 0.1)  // Looser tolerance for polar + Kerr
-        << "Kerr round-trip near pole should have reasonable deviation";
+    EXPECT_LT(deviation, kEpsilon);
 }
 
 // =============================================================================
@@ -161,6 +164,15 @@ TEST_F(CoordinateTransformTests, OriginHandling) {
     EXPECT_EQ(cart.y, 0.0);
     EXPECT_EQ(cart.z, 0.0);
     EXPECT_EQ(cart.t, 0.0);
+
+    Vec4Bl bl;
+    const Vec4Bl& const_bl = bl;
+    Vec4Cart ks;
+    const Vec4Cart& const_ks = ks;
+    EXPECT_DEATH(static_cast<void>(bl[-1]), "violated");
+    EXPECT_DEATH(static_cast<void>(const_bl[4]), "violated");
+    EXPECT_DEATH(static_cast<void>(ks[-1]), "violated");
+    EXPECT_DEATH(static_cast<void>(const_ks[4]), "violated");
 }
 
 TEST_F(CoordinateTransformTests, PhiWrapping) {

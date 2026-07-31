@@ -11,6 +11,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 #include <map>
 #include <string>
 
@@ -39,7 +40,8 @@ class IMetric {
     // Current parameter configuration.
     virtual const Config& GetParameters() const = 0;
 
-    // Set a parameter, clamped to its [min, max] range.
+    // Set a known parameter, clamped to its declared [min, max] range. Unknown
+    // keys violate the concrete family's contract rather than disappearing.
     virtual void SetParameter(const std::string& key, double value) = 0;
 
     // Human-readable metric name.
@@ -111,20 +113,83 @@ inline double CheckInverse(const Metric4d& g, const double g_inv[4][4]) {
     return max_deviation;
 }
 
-// Lorentzian signature (-, +, +, +) via the diagonal signs; a diagonal-dominant
-// approximation that tolerates the g00 -> 0 coordinate singularity at horizons.
+// Lorentzian signature (-,+,+,+) from the inertia of the full symmetric
+// tensor. Diagonal signs are not a signature test when time-space cross terms
+// are present (for example inside a Kerr ergoregion), and accepting g00 == 0
+// would allow genuinely degenerate tensors. A Jacobi eigensolve is small and
+// deterministic for this fixed 4x4 diagnostic.
 inline bool CheckLorentzianSignature(const Metric4d& g) {
-    double g00 = g(0, 0).real;
-    double g11 = g(1, 1).real;
-    double g22 = g(2, 2).real;
-    double g33 = g(3, 3).real;
+    double a[4][4] = {};
+    double scale = 0.0;
+    for (int row = 0; row < 4; ++row) {
+        for (int col = 0; col < 4; ++col) {
+            const double value = g(row, col).real;
+            if (!std::isfinite(value)) return false;
+            a[row][col] = value;
+            scale = std::max(scale, std::abs(value));
+        }
+    }
+    if (scale == 0.0) return false;
 
-    if (std::abs(g00) < 1e-10) return true;  // Degenerate at the horizon.
+    const double tolerance = 64.0 * std::numeric_limits<double>::epsilon() * scale;
+    for (int row = 0; row < 4; ++row) {
+        for (int col = row + 1; col < 4; ++col) {
+            if (std::abs(a[row][col] - a[col][row]) > tolerance) return false;
+            const double symmetric = 0.5 * (a[row][col] + a[col][row]);
+            a[row][col] = symmetric;
+            a[col][row] = symmetric;
+        }
+    }
 
-    bool time_negative = g00 < 0;
-    bool space_positive = (g11 > 0) && (g22 > 0) && (g33 > 0);
+    for (int iteration = 0; iteration < 64; ++iteration) {
+        int p = 0;
+        int q = 1;
+        double largest = 0.0;
+        for (int row = 0; row < 4; ++row) {
+            for (int col = row + 1; col < 4; ++col) {
+                const double candidate = std::abs(a[row][col]);
+                if (candidate > largest) {
+                    largest = candidate;
+                    p = row;
+                    q = col;
+                }
+            }
+        }
+        if (largest <= tolerance) break;
 
-    return time_negative && space_positive;
+        const double apq = a[p][q];
+        const double tau = (a[q][q] - a[p][p]) / (2.0 * apq);
+        const double t = std::copysign(1.0 / (std::abs(tau) + std::sqrt(1.0 + tau * tau)), tau);
+        const double c = 1.0 / std::sqrt(1.0 + t * t);
+        const double s = t * c;
+        const double app = a[p][p];
+        const double aqq = a[q][q];
+
+        for (int index = 0; index < 4; ++index) {
+            if (index == p || index == q) continue;
+            const double aip = a[index][p];
+            const double aiq = a[index][q];
+            a[index][p] = c * aip - s * aiq;
+            a[p][index] = a[index][p];
+            a[index][q] = s * aip + c * aiq;
+            a[q][index] = a[index][q];
+        }
+        a[p][p] = app - t * apq;
+        a[q][q] = aqq + t * apq;
+        a[p][q] = 0.0;
+        a[q][p] = 0.0;
+    }
+
+    int negative = 0;
+    int positive = 0;
+    for (int index = 0; index < 4; ++index) {
+        if (a[index][index] < -tolerance) {
+            ++negative;
+        } else if (a[index][index] > tolerance) {
+            ++positive;
+        }
+    }
+    return negative == 1 && positive == 3;
 }
 
 // True when every metric component is finite.
@@ -149,9 +214,8 @@ inline bool CheckChristoffelFinite(const double Gamma[4][4][4]) {
     return true;
 }
 
-// Full metric validation at a point: finite, symmetric within tolerance. The
-// signature check is intentionally skipped because it fails near horizons where
-// g00 -> 0.
+// Full metric validation at a point: finite, symmetric within tolerance, and
+// non-degenerate with exactly one timelike direction.
 inline bool ValidateMetricAtPoint(IMetric* metric, const Tensor<double, 4>& pos,
                                   double tolerance = 1e-10) {
     Metric4d g;
@@ -162,7 +226,7 @@ inline bool ValidateMetricAtPoint(IMetric* metric, const Tensor<double, 4>& pos,
 
     if (CheckSymmetry(g) > tolerance) return false;
 
-    return true;
+    return CheckLorentzianSignature(g);
 }
 
 }  // namespace metric_validation

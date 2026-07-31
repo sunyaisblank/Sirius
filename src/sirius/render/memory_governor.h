@@ -61,8 +61,9 @@ struct TilePlan {
                                                       std::uint64_t fixed_overhead_bytes);
 
 // Resolves the budget to plan against: the SIRIUS_MEMORY_BUDGET_MB override when
-// set (for constrained-budget testing), else the device-local heap size. A zero
-// device budget with no override is itself a decline signal the caller reports.
-[[nodiscard]] std::uint64_t ResolveBudgetBytes(std::uint64_t device_local_bytes);
+// set (for constrained-budget testing), else the host-visible render-memory
+// domain reported by device enumeration. A zero device budget with no override
+// is itself a decline signal the caller reports.
+[[nodiscard]] base::Expected<std::uint64_t> ResolveBudgetBytes(std::uint64_t render_memory_bytes);
 
 }  // namespace sirius::render

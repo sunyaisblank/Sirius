@@ -130,6 +130,18 @@ TEST_F(LivePathConservationTests, KerrEnergyAndAngularMomentum) {
     EXPECT_LT(nullViolation, 1e-6);
 }
 
+TEST_F(LivePathConservationTests, NearExtremalKerrEnergyAndAngularMomentum) {
+    KerrSchildFamily metric(KerrSchildParams::Kerr(1.0, 0.998));
+    Lightray ray = makeRay(metric, 12.0, 0.0, 3.0, 0.08, 1.0, -0.03);
+
+    double eDrift, lDrift, nullViolation;
+    run(metric, ray, 2000, eDrift, lDrift, nullViolation);
+
+    EXPECT_LT(eDrift, constants::geodesic::kConservationTol);
+    EXPECT_LT(lDrift, constants::geodesic::kConservationTol);
+    EXPECT_LT(nullViolation, 1e-6);
+}
+
 //==============================================================================
 // Capture surface and termination
 //==============================================================================

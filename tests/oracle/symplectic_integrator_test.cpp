@@ -32,15 +32,16 @@ class SymplecticIntegratorTest : public ::testing::Test {
     }
 
     // Create a null ray at given position - use NEGATIVE p_r for ingoing
-    GeodesicStateD createIngoingNullRay(const IMetricD* metric, double r, double theta) {
+    GeodesicStateD createIngoingNullRay(const IMetricD* metric, double r, double theta,
+                                        double angular_momentum = 0.1) {
         Vec4d x(0, r, theta, 0);
 
         double g[4][4], g_inv[4][4];
         metric->Evaluate(x, g, g_inv);
 
         Vec4d p;
-        p.t = -1.0;   // E = 1 (E = -p_t)
-        p.phi = 0.1;  // Small angular momentum
+        p.t = -1.0;  // E = 1 (E = -p_t)
+        p.phi = angular_momentum;
         p.theta = 0;
 
         // Solve for |p_r| from null condition: g^μν p_μ p_ν = 0
@@ -119,7 +120,9 @@ TEST_F(SymplecticIntegratorTest, EnergyConservation) {
     const int numSteps = 5000;
     const double stepSize = 0.05;
 
-    GeodesicStateD initial = createIngoingNullRay(schwarzschild.get(), 15.0, M_PI / 3);
+    // b=L/E=6 exceeds the Schwarzschild capture threshold 3 sqrt(3), so this
+    // is a long scattering ray rather than a vacuous horizon termination.
+    GeodesicStateD initial = createIngoingNullRay(schwarzschild.get(), 15.0, M_PI / 3, 6.0);
 
     auto stats = integrator_sch->TestConservation(initial, numSteps, stepSize);
 
@@ -128,6 +131,8 @@ TEST_F(SymplecticIntegratorTest, EnergyConservation) {
 
     EXPECT_LT(relError, tolerance)
         << "Relative energy drift: " << relError << " (ΔE = " << deltaE << ")";
+    EXPECT_GT(stats.steps, numSteps * 0.5)
+        << "energy witness terminated before a meaningful trajectory";
 }
 
 //==============================================================================
@@ -141,7 +146,7 @@ TEST_F(SymplecticIntegratorTest, AngularMomentumConservation) {
     const int numSteps = 5000;
     const double stepSize = 0.05;
 
-    GeodesicStateD initial = createIngoingNullRay(schwarzschild.get(), 12.0, M_PI / 2);
+    GeodesicStateD initial = createIngoingNullRay(schwarzschild.get(), 12.0, M_PI / 2, 6.0);
 
     auto stats = integrator_sch->TestConservation(initial, numSteps, stepSize);
 
@@ -150,6 +155,8 @@ TEST_F(SymplecticIntegratorTest, AngularMomentumConservation) {
 
     EXPECT_LT(relError, tolerance)
         << "Relative Lz drift: " << relError << " (ΔLz = " << deltaLz << ")";
+    EXPECT_GT(stats.steps, numSteps * 0.5)
+        << "angular-momentum witness terminated before a meaningful trajectory";
 }
 
 //==============================================================================

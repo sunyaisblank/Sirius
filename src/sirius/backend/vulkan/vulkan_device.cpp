@@ -2,8 +2,11 @@
 
 #include "sirius/base/contracts.h"
 
+#include <charconv>
+#include <cstdlib>
 #include <cstring>
 #include <format>
+#include <string_view>
 #include <utility>
 
 namespace sirius::backend {
@@ -36,8 +39,15 @@ constexpr std::uint32_t kApiVersion = VK_MAKE_API_VERSION(0, 1, 3, 0);
 }
 
 [[nodiscard]] DeviceInfo DescribeDevice(VkPhysicalDevice physical) {
-    VkPhysicalDeviceProperties properties{};
-    vkGetPhysicalDeviceProperties(physical, &properties);
+    VkPhysicalDeviceDriverProperties driver{
+        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES,
+    };
+    VkPhysicalDeviceProperties2 properties2{
+        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2,
+        .pNext = &driver,
+    };
+    vkGetPhysicalDeviceProperties2(physical, &properties2);
+    const VkPhysicalDeviceProperties& properties = properties2.properties;
     VkPhysicalDeviceFeatures features{};
     vkGetPhysicalDeviceFeatures(physical, &features);
     VkPhysicalDeviceMemoryProperties memory{};
@@ -50,10 +60,28 @@ constexpr std::uint32_t kApiVersion = VK_MAKE_API_VERSION(0, 1, 3, 0);
         }
     }
 
+    constexpr VkMemoryPropertyFlags kRenderMemory =
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+    std::uint64_t render_memory = 0;
+    for (std::uint32_t i = 0; i < memory.memoryTypeCount; ++i) {
+        if ((memory.memoryTypes[i].propertyFlags & kRenderMemory) != kRenderMemory) {
+            continue;
+        }
+        const std::uint32_t heap = memory.memoryTypes[i].heapIndex;
+        render_memory = std::max(render_memory, memory.memoryHeaps[heap].size);
+    }
+
     return DeviceInfo{
         .name = properties.deviceName,
+        .driver_name = driver.driverName,
+        .driver_info = driver.driverInfo,
         .kind = ClassifyDevice(properties),
+        .vendor_id = properties.vendorID,
+        .device_id = properties.deviceID,
+        .api_version = properties.apiVersion,
+        .driver_id = static_cast<std::uint32_t>(driver.driverID),
         .device_local_bytes = device_local,
+        .render_memory_bytes = render_memory,
         .supports_fp64 = features.shaderFloat64 == VK_TRUE,
     };
 }
@@ -114,6 +142,30 @@ Expected<std::vector<DeviceInfo>> EnumerateVulkanDevices() {
     }
     vkDestroyInstance(*instance, nullptr);
     return infos;
+}
+
+Expected<std::size_t> ResolveVulkanDeviceIndex(std::span<const DeviceInfo> devices) {
+    if (devices.empty()) {
+        return Fail(ErrorDomain::kDevice, "select Vulkan device", "no devices were enumerated");
+    }
+    const char* raw = std::getenv("SIRIUS_VULKAN_DEVICE");
+    if (raw == nullptr || *raw == '\0') {
+        return std::size_t{0};
+    }
+
+    const std::string_view value(raw);
+    std::size_t index = 0;
+    const auto [end, error] = std::from_chars(value.data(), value.data() + value.size(), index);
+    if (error != std::errc{} || end != value.data() + value.size()) {
+        return Fail(ErrorDomain::kConfiguration, "select Vulkan device",
+                    std::format("SIRIUS_VULKAN_DEVICE='{}' is not a zero-based integer", value));
+    }
+    if (index >= devices.size()) {
+        return Fail(ErrorDomain::kConfiguration, "select Vulkan device",
+                    std::format("SIRIUS_VULKAN_DEVICE={} is out of range for {} device(s)", index,
+                                devices.size()));
+    }
+    return index;
 }
 
 Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {
@@ -277,12 +329,15 @@ Expected<BufferHandle> VulkanDevice::CreateBuffer(std::uint64_t size_bytes, Buff
     constexpr VkMemoryPropertyFlags kWanted =
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
     std::uint32_t type_index = memory_properties.memoryTypeCount;
+    std::uint64_t selected_heap_size = 0;
     for (std::uint32_t i = 0; i < memory_properties.memoryTypeCount; ++i) {
         const bool allowed = (requirements.memoryTypeBits & (1u << i)) != 0;
         const bool suitable = (memory_properties.memoryTypes[i].propertyFlags & kWanted) == kWanted;
-        if (allowed && suitable) {
+        const std::uint64_t heap_size =
+            memory_properties.memoryHeaps[memory_properties.memoryTypes[i].heapIndex].size;
+        if (allowed && suitable && heap_size > selected_heap_size) {
             type_index = i;
-            break;
+            selected_heap_size = heap_size;
         }
     }
     if (type_index == memory_properties.memoryTypeCount) {

@@ -1,0 +1,386 @@
+{
+  "schema_version": 2,
+  "method": "adversarial-claim-ledger",
+  "required_dimensions": [
+    {
+      "id": "compile_time_contracts",
+      "evidence": [
+        {"kind": "gtest", "name": "ContractsDeathTest.EnforcedPreconditionViolationTerminates"}
+      ]
+    },
+    {
+      "id": "test_evidence_integrity",
+      "evidence": [
+        {"kind": "ctest", "name": "OperationalEvidence.RequiredProfileRejectsGoogleTestSkip"}
+      ]
+    },
+    {
+      "id": "test_registration_completeness",
+      "evidence": [
+        {"kind": "ctest", "name": "OperationalEvidence.SourceGovernanceRejectsUngovernedParameterizedTests"},
+        {"kind": "gtest", "name": "BlackbodyParityTest.GPUMatchesCPUAtReferenceTemperatures"}
+      ]
+    },
+    {
+      "id": "configuration_and_input_boundary",
+      "evidence": [
+        {"kind": "gtest", "name": "ConfigLoading.UnknownNestedFieldDeclines"},
+        {"kind": "gtest", "name": "RenderCommandParse.TrailingNumericGarbageRejected"},
+        {"kind": "gtest", "name": "CommandRouter.UnknownCommandReturnsFailure"},
+        {"kind": "gtest", "name": "RenderSessionProbe.ConfigurationConversionPreservesObserverAndDiskControls"}
+      ]
+    },
+    {
+      "id": "install_and_volume_initialisation",
+      "evidence": [
+        {"kind": "ctest", "name": "OperationalVolume.InstallRelocateInitialiseAndFailClosed"}
+      ]
+    },
+    {
+      "id": "operator_script_exit_and_artifact_integrity",
+      "evidence": [
+        {"kind": "ctest", "name": "OperationalScripts.RenderFailuresAndMissingOutputsPropagate"}
+      ]
+    },
+    {
+      "id": "runtime_resource_integrity",
+      "evidence": [
+        {"kind": "gtest", "name": "PlatformPaths.ExplicitResourceRootDisablesFallbacks"},
+        {"kind": "gtest", "name": "PlatformPaths.ResourceNamesAndSymlinksCannotEscapeTheSelectedVolume"},
+        {"kind": "ctest", "name": "OperationalVolume.InstallRelocateInitialiseAndFailClosed"}
+      ]
+    },
+    {
+      "id": "cpu_render_path",
+      "evidence": [
+        {"kind": "gtest", "name": "RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr"}
+      ]
+    },
+    {
+      "id": "session_lifecycle_and_cancellation",
+      "evidence": [
+        {"kind": "gtest", "name": "RenderSessionProbe.StartIsAsynchronousAndCancellationIsTerminalWithoutOutput"},
+        {"kind": "gtest", "name": "RenderSessionProbe.CompletionCallbackCanReenterLifecycleWithoutDeadlock"},
+        {"kind": "gtest", "name": "TileScheduler.ReinitialiseResetsCompletionLedger"}
+      ]
+    },
+    {
+      "id": "vulkan_capability_and_render_path",
+      "evidence": [
+        {"kind": "gtest", "name": "VulkanRenderSession.CapabilityBoundaryRejectsUnrepresentedSceneSemantics"},
+        {"kind": "gtest", "name": "VulkanRenderSession.BackendCompiledOrSkipped"},
+        {"kind": "ctest", "name": "OperationalVulkan.RequiredRuntimeDispatch"}
+      ]
+    },
+    {
+      "id": "sampling_semantics",
+      "evidence": [
+        {"kind": "gtest", "name": "PixelSampling.EmitsExactlyEveryRequestedNonSquareCount"}
+      ]
+    },
+    {
+      "id": "device_identity_and_allocation_domain",
+      "evidence": [
+        {"kind": "gtest", "name": "VulkanBackend.DeviceSelectionIsStrictAndRangeChecked"},
+        {"kind": "gtest", "name": "VulkanBackend.EnumerationReportsInsteadOfThrowing"},
+        {"kind": "gtest", "name": "MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile"}
+      ]
+    },
+    {
+      "id": "physics_oracles_and_near_extremal_boundary",
+      "evidence": [
+        {"kind": "gtest", "name": "ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p"},
+        {"kind": "gtest", "name": "VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p"},
+        {"kind": "ctest", "name": "OperationalP1.NearExtremalBurnIn"},
+        {"kind": "gtest", "name": "LivePathConservationTests.NearExtremalKerrEnergyAndAngularMomentum"}
+      ]
+    },
+    {
+      "id": "polarised_transport_to_film",
+      "evidence": [
+        {"kind": "gtest", "name": "WalkerPenrose.PolarisationStaysOrthogonalAndNormalisedUnderTransport"},
+        {"kind": "gtest", "name": "WalkerPenroseLivePath.ConservesConstantAndOrthonormality"},
+        {"kind": "gtest", "name": "WalkerPenroseLivePath.AgreesWithOracleAcrossCharts"},
+        {"kind": "gtest", "name": "GeodesicTracerTest.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation"},
+        {"kind": "gtest", "name": "RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes"}
+      ]
+    },
+    {
+      "id": "page_thorne_and_volumetric_transfer",
+      "evidence": [
+        {"kind": "gtest", "name": "CoordinateTransformTests.KerrDiskRadiusIsSpheroidalNotCylindrical"},
+        {"kind": "gtest", "name": "KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel"},
+        {"kind": "gtest", "name": "GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile"},
+        {"kind": "gtest", "name": "GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment"},
+        {"kind": "gtest", "name": "GeodesicTracerVolumetric.TurbulenceAndCoronaAlterLiveTransferDeterministically"},
+        {"kind": "gtest", "name": "VulkanRenderSession.VolumetricTurbulenceAndCoronaReachLiveKernel"}
+      ]
+    },
+    {
+      "id": "ray_bundles_and_filtered_point_catalogue",
+      "evidence": [
+        {"kind": "gtest", "name": "RayBundleTest.MagnificationConsistencyWithScalarJacobian"},
+        {"kind": "gtest", "name": "BeamPropagationTest.OrientationDescribesOutputEllipseRatherThanInputBasis"},
+        {"kind": "gtest", "name": "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion"},
+        {"kind": "gtest", "name": "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion"},
+        {"kind": "gtest", "name": "StarfieldPointTest.EllipticalFootprintUsesBothAxesAndOrientation"},
+        {"kind": "gtest", "name": "StarfieldPointTest.SpatialIndexMatchesExhaustiveBeamOracle"},
+        {"kind": "gtest", "name": "StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope"},
+        {"kind": "gtest", "name": "VulkanRenderSession.CpuVulkanPointCatalogueAgreeOnFlatScene"}
+      ]
+    },
+    {
+      "id": "camera_worldline_lens_and_film",
+      "evidence": [
+        {"kind": "gtest", "name": "CameraFactoryTest.MalformedLensValueFailsClosed"},
+        {"kind": "gtest", "name": "ConfigValidation.CameraWorldlineAndLensAreValidated"},
+        {"kind": "gtest", "name": "CameraAberrationTest.MatchesAnalyticFormulaAlongViewAxis"},
+        {"kind": "gtest", "name": "CameraAberrationTest.ComposesOverLensModels"},
+        {"kind": "gtest", "name": "RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr"}
+      ]
+    },
+    {
+      "id": "interactive_viewer_projection",
+      "evidence": [
+        {"kind": "gtest", "name": "ViewCommandOperational.StrictParsingAndSessionProjection"},
+        {"kind": "gtest", "name": "ViewCommandOperational.HeadlessRefinementProducesASynchronisedFrame"}
+      ]
+    },
+    {
+      "id": "output_encoding",
+      "evidence": [
+        {"kind": "gtest", "name": "PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding"},
+        {"kind": "gtest", "name": "PNGWriterTest.NonFiniteRadianceIsRejected"},
+        {"kind": "gtest", "name": "EXRRoundTripTests.HDRGradientSurvivesWriteAndRead"},
+        {"kind": "gtest", "name": "EXRRoundTripTests.NonFiniteRadianceIsRejected"},
+        {"kind": "gtest", "name": "DisplayBuffer.NonFiniteRadianceIsIdentifiedBeforeEncoding"}
+      ]
+    },
+    {
+      "id": "memory_and_dispatch_governance",
+      "evidence": [
+        {"kind": "gtest", "name": "MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile"},
+        {"kind": "gtest", "name": "MemoryGovernor.MalformedOverrideDeclinesInsteadOfBorrowingTheDeviceBudget"},
+        {"kind": "gtest", "name": "DispatchGovernor.TargetFailsLoudOnGarbageNegativesAndNonFinite"}
+      ]
+    },
+    {
+      "id": "kernel_portability",
+      "evidence": [
+        {"kind": "gtest", "name": "KernelPortability.CudaEmissionCarriesTheNativeComputeEntryPoint"},
+        {"kind": "gtest", "name": "KernelPortability.MetalEmissionCarriesTheNativeComputeEntryPoint"}
+      ]
+    },
+    {
+      "id": "metric_catalogue_and_declines",
+      "evidence": [
+        {"kind": "gtest", "name": "MetricRegistryTests.EveryCanonicalNameParsesToItsOwnId"},
+        {"kind": "gtest", "name": "ConfigValidation.DiskRequestDeclinesForEveryMetricWithoutAnEmissionModel"},
+        {"kind": "gtest", "name": "RenderCommandParse.BackendVulkanDeclinesMetricOffTheRenderPath"}
+      ]
+    }
+  ],
+  "capability_contracts": [
+    {
+      "id": "polarised_thin_disk_cpu",
+      "state": "supported",
+      "profiles": ["cpu"],
+      "request": "colorMode=Polarisation with a Schwarzschild/Kerr thin disk",
+      "behavior": "Transport the observer screen basis, form physical disk Stokes emission, and publish a film result.",
+      "evidence": [
+        {"kind": "gtest", "name": "RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes"}
+      ]
+    },
+    {
+      "id": "polarised_volumetric_transfer",
+      "state": "fail_closed",
+      "profiles": ["cpu", "vulkan"],
+      "request": "Polarisation combined with volumetric disk transfer",
+      "behavior": "Decline before rendering; scalar volume emission may not impersonate transported Stokes transfer.",
+      "evidence": [
+        {"kind": "gtest", "name": "RenderSessionProbe.PolarisedAndTwoSheetRequestsDeclineAtTheTypedBoundary"},
+        {"kind": "gtest", "name": "ConfigValidation.PolarisationRequiresRepresentedThinBlackHoleDisk"}
+      ]
+    },
+    {
+      "id": "polarised_temporal_motion_blur",
+      "state": "fail_closed",
+      "profiles": ["cpu", "vulkan"],
+      "request": "Polarisation combined with temporal disk motion blur",
+      "behavior": "Decline before rendering until Stokes states are transported and integrated at every temporal sample.",
+      "evidence": [
+        {"kind": "gtest", "name": "RenderSessionProbe.PolarisedAndTwoSheetRequestsDeclineAtTheTypedBoundary"},
+        {"kind": "gtest", "name": "ConfigValidation.PolarisationRequiresRepresentedThinBlackHoleDisk"}
+      ]
+    },
+    {
+      "id": "polarised_vulkan_render",
+      "state": "fail_closed",
+      "profiles": ["vulkan"],
+      "request": "Vulkan rendering with polarisation enabled",
+      "behavior": "Decline before device dispatch; CPU evidence is not borrowed by the Vulkan profile.",
+      "evidence": [
+        {"kind": "gtest", "name": "VulkanRenderSession.CapabilityBoundaryRejectsUnrepresentedSceneSemantics"}
+      ]
+    },
+    {
+      "id": "cpu_scalar_motion_blur",
+      "state": "supported",
+      "profiles": ["cpu"],
+      "request": "Scalar thin-disk temporal motion blur",
+      "behavior": "Integrate the primary disk crossing over the requested shutter interval and exact temporal sample count.",
+      "evidence": [
+        {"kind": "gtest", "name": "GeodesicTracerTest.MotionBlurConvergence"},
+        {"kind": "gtest", "name": "RenderCommandParse.MotionBlurAndWormholeTopologyReachTheValidatedSchema"}
+      ]
+    },
+    {
+      "id": "vulkan_scalar_motion_blur",
+      "state": "fail_closed",
+      "profiles": ["vulkan"],
+      "request": "Scalar thin-disk temporal motion blur on Vulkan",
+      "behavior": "Decline before device dispatch; temporal sampling is not silently reduced or replaced by a static Vulkan frame.",
+      "evidence": [
+        {"kind": "gtest", "name": "VulkanRenderSession.CapabilityBoundaryRejectsUnrepresentedSceneSemantics"}
+      ]
+    },
+    {
+      "id": "disk_emission_outside_schwarzschild_kerr",
+      "state": "fail_closed",
+      "profiles": ["cpu", "vulkan"],
+      "request": "Accretion-disk emission for any metric other than Schwarzschild or Kerr",
+      "behavior": "Require diskEnabled=false; no Kerr Page-Thorne approximation is substituted.",
+      "evidence": [
+        {"kind": "gtest", "name": "ConfigValidation.DiskRequestDeclinesForEveryMetricWithoutAnEmissionModel"}
+      ]
+    },
+    {
+      "id": "morris_thorne_one_sheet",
+      "state": "supported",
+      "profiles": ["cpu", "vulkan"],
+      "request": "Morris-Thorne OneSheetCapture topology",
+      "behavior": "Render one exterior sheet and classify the throat as a dark capture surface.",
+      "evidence": [
+        {"kind": "gtest", "name": "RenderSessionProbe.CpuMorrisThorneRenderCompletes"},
+        {"kind": "gtest", "name": "VulkanRenderSession.CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalBounds"}
+      ]
+    },
+    {
+      "id": "morris_thorne_two_sheet",
+      "state": "fail_closed",
+      "profiles": ["cpu", "vulkan"],
+      "request": "Morris-Thorne TwoSheet topology",
+      "behavior": "Decline explicitly; no dark-throat one-sheet image may be presented as a second asymptotic region.",
+      "evidence": [
+        {"kind": "gtest", "name": "ConfigValidation.MotionBlurAndWormholeTopologyHaveExplicitOperatorBoundaries"},
+        {"kind": "gtest", "name": "RenderSessionProbe.PolarisedAndTwoSheetRequestsDeclineAtTheTypedBoundary"}
+      ]
+    },
+    {
+      "id": "vulkan_volumetric_sample_bound",
+      "state": "bounded",
+      "profiles": ["vulkan"],
+      "request": "Volumetric midpoint samples per geodesic segment",
+      "behavior": "Accept 1..128; explicit Vulkan requests above 128 decline and auto selects CPU with the reason.",
+      "evidence": [
+        {"kind": "gtest", "name": "VulkanRenderSession.CapabilityBoundaryAcceptsRepresentedSceneSemantics"},
+        {"kind": "gtest", "name": "VulkanRenderSession.CapabilityBoundaryRejectsUnrepresentedSceneSemantics"},
+        {"kind": "gtest", "name": "RenderSessionProbe.BackendAutoResolvesByDeviceRegistryAndCapabilities"}
+      ]
+    },
+    {
+      "id": "viewer_input_state_logic",
+      "state": "supported",
+      "profiles": ["viewer"],
+      "request": "Keyboard press/repeat/release, pointer drag, and scroll input",
+      "behavior": "Update finite camera state deterministically and restart progressive refinement.",
+      "evidence": [
+        {"kind": "gtest", "name": "ViewCommandOperational.InputStateHandlesPressRepeatReleaseMouseAndScroll"}
+      ]
+    },
+    {
+      "id": "viewer_native_window_input",
+      "state": "attestation_required",
+      "profiles": ["viewer-native-window"],
+      "request": "GLFW/OpenGL window creation and native keyboard/pointer event delivery",
+      "behavior": "Admit only a viewer-native-window-input attestation containing observed keyboard and pointer callbacks.",
+      "evidence": [
+        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
+      ]
+    },
+    {
+      "id": "native_p2900_contracts",
+      "state": "substituted",
+      "profiles": ["compile"],
+      "request": "C++26 P2900 contract semantics",
+      "behavior": "Use native P2900 only when the feature macro is present; otherwise use build-enforced checked contract macros and report native support as false.",
+      "evidence": [
+        {"kind": "gtest", "name": "Contracts.LanguageCapabilitiesDistinguishNativeFeaturesFromSubstitutes"},
+        {"kind": "gtest", "name": "ContractsDeathTest.EnforcedPreconditionViolationTerminates"}
+      ]
+    },
+    {
+      "id": "native_p2996_reflection",
+      "state": "substituted",
+      "profiles": ["compile"],
+      "request": "C++26 P2996 static reflection",
+      "behavior": "Keep explicit configuration serializers and kernel parameter bindings; do not claim or require native reflection.",
+      "evidence": [
+        {"kind": "gtest", "name": "Contracts.LanguageCapabilitiesDistinguishNativeFeaturesFromSubstitutes"},
+        {"kind": "gtest", "name": "ConfigSchema.DefaultsRoundTripThroughJson"}
+      ]
+    },
+    {
+      "id": "physical_radeon_780m_runtime",
+      "state": "attestation_required",
+      "profiles": ["physical-radeon-780m"],
+      "request": "Physical Radeon 780M Vulkan runtime support",
+      "behavior": "Admit only selected non-software Radeon 780M device evidence with readiness, full tests, artefact hashes, and driver identity.",
+      "evidence": [
+        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
+      ]
+    },
+    {
+      "id": "wsl2_dozen_runtime",
+      "state": "attestation_required",
+      "profiles": ["wsl2-dozen"],
+      "request": "WSL2 Vulkan through Mesa Dozen/dzn",
+      "behavior": "Admit only a WSL2 attestation whose selected physical device reports Dozen/dzn driver identity.",
+      "evidence": [
+        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
+      ]
+    },
+    {
+      "id": "windows_native_build_and_runtime",
+      "state": "attestation_required",
+      "profiles": ["windows-native-build", "windows-native-vulkan"],
+      "request": "Native Windows compilation/tests and native Vulkan runtime",
+      "behavior": "CI emits a verified build attestation; native Vulkan remains a distinct physical-device attestation and may not use Dozen.",
+      "evidence": [
+        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
+      ]
+    },
+    {
+      "id": "macos_native_build_and_moltenvk",
+      "state": "attestation_required",
+      "profiles": ["macos-native-build", "macos-moltenvk"],
+      "request": "Native macOS compilation/tests and MoltenVK runtime",
+      "behavior": "CI emits a verified build attestation; runtime closure separately requires physical MoltenVK driver evidence.",
+      "evidence": [
+        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
+      ]
+    },
+    {
+      "id": "physical_imax_5616x4096",
+      "state": "attestation_required",
+      "profiles": ["physical-imax-5616x4096"],
+      "request": "Full 5616x4096 physical-device render under a 2048 MiB governed budget",
+      "behavior": "Static memory planning is necessary but insufficient; closure requires exact decoded PNG dimensions, measured wall time, physical device identity, and hashed artefacts.",
+      "evidence": [
+        {"kind": "gtest", "name": "MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile"},
+        {"kind": "gtest", "name": "StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope"},
+        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
+      ]
+    }
+  ]
+}

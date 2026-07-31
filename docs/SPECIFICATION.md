@@ -52,7 +52,7 @@ These follow Prompt.md section 15: determinations the evidence supports, recorde
 - Test estate: 757 tests registered, 756 enabled, 100 per cent passing in 12.6 seconds; 436 labelled Mandatory; one disabled by design (`GeodesicPathTests.PhotonSphereRadius`); one self-skipping without CUDA.
 - Build: C++17, CMake 3.28.3, GCC 13.3 default; CUDA kernel present but uncompiled (no nvcc on this machine).
 - Toolchain installed for the rebuild: GCC 14.2, Clang 21.1.8, Ninja 1.11.1, Slang 2026.12.0.1 at `/opt/slang`, Mesa 25.2.8 with Lavapipe exposing Vulkan 1.4, glslang and SPIR-V tools.
-- C++26 feature surface measured on this toolchain: pack indexing, deducing this, placeholder variables, user-message static_assert, and `= delete("reason")` are usable under `-std=c++2c` on both compilers; P2900 contracts exist only as GCC's experimental attribute-syntax `-fcontracts`; P2996 reflection is absent from both. Section 5 states the policy this implies.
+- C++26 feature surface measured on this toolchain: pack indexing, deducing this, placeholder variables, user-message static_assert, and `= delete("reason")` are usable under `-std=c++2c`; neither measured release compiler defines `__cpp_contracts` or a P2996 reflection macro. Section 5 states the checked-macro and explicit-schema policy this implies.
 
 ## 2. The reference standard: DNGR
 
@@ -76,13 +76,13 @@ Each criterion is a testable postcondition. Parity is claimed only when every P-
 DNGR was a Kerr-family instrument on a render farm. Sirius exceeds it on four axes, each already partially banked by the existing system and each verifiable without DNEG's hardware.
 
 - E1, spacetime catalogue. Nine metric families against DNGR's Kerr (plus the wormhole DNEG built separately for the film): the full existing registry, with the Morris-Thorne Cartesian embedding completing CPU support (July follow-up item 2).
-- E2, polarised transport. Physical propagation of polarisation along geodesics (Walker-Penrose transport in the Kerr family), which DNGR did not publish. The existing system carries a complete Stokes/Mueller algebra used only for false-colour visualisation; the physical transport is new work this engagement delivers, validated against the Walker-Penrose conserved complex constant.
+- E2, polarised transport. Physical propagation of polarisation along geodesics (Walker-Penrose transport in the Kerr family), which DNGR did not publish. Gate: the live Kerr-Schild path conserves the Walker-Penrose complex constant to the live tolerance and agrees across charts with the independent Boyer-Lindquist oracle; thermal disk Stokes emission is physical and reaches a rendered film output. Any backend or transfer model without that full chain declines.
 - E3, hardware reach. Interactive progressive preview on a 2 GB integrated GPU and a functional CPU-only path on machines with no GPU at all, where DNGR required a farm.
 - E4, verification. A physics test estate with build-failing Mandatory gates and a published oracle stack. DNGR published papers; it did not publish tests.
 
 ## 5. Language standard policy
 
-The build compiles as `-std=c++2c` on GCC 14 and Clang 21 and equivalent on MSVC. C++26 constructs divide into three tiers. Tier one, usable now on the measured toolchain, is adopted directly: pack indexing, deducing this, `= delete` with reason, user-message static_assert, placeholder variables. Tier two, contracts, is wrapped: `SIRIUS_PRE`, `SIRIUS_POST`, and `SIRIUS_ASSERT` compile to native contract syntax when `__cpp_contracts` reports P2900 semantics, and to a checked-assertion implementation with enforce/observe/ignore build modes otherwise, so contract density in the source is independent of toolchain maturity. Tier three, static reflection, is not adopted in code; the two sites that want it (kernel constant tables and CLI/config binding) use build-time generation from a single source of truth, structured so that a reflection rewrite replaces the generator without touching consumers. The style guide gives the binding rules.
+The build compiles as `-std=c++2c` on GCC 14 and Clang 21 and equivalent on MSVC. C++26 constructs divide into three tiers. Tier one, usable now on the measured toolchain, is adopted directly. Tier two, contracts, is wrapped: `SIRIUS_PRE`, `SIRIUS_POST`, and `SIRIUS_ASSERT` compile to native contract syntax when `__cpp_contracts` reports P2900 semantics, and to a checked implementation with enforce/observe/ignore build modes otherwise. Tier three, static reflection, is not adopted or implied: CLI/config binding and Slang parameter packing remain explicit, independently tested authorities. `language_capabilities.h`, the build gate, and `info system` distinguish native support from these substitutes.
 
 ## 6. Programmes
 

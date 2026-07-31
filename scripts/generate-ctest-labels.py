@@ -15,6 +15,7 @@ Usage:
 
 import re
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -25,10 +26,10 @@ MANDATORY = "Mandatory;Correctness"
 STABILITY = "Mandatory;Stability"
 CORRECTNESS = "Correctness"
 PERFORMANCE = "Performance"
+OPERATIONAL = "Mandatory;Operational"
 
-# Suite -> labels. A suite absent from this map gets CORRECTNESS and a
-# warning, so new suites are never silently ungated; DISABLED_ tests are
-# skipped by gtest itself and need no exclusion here.
+# Suite -> labels. An absent suite is a hard policy error: assigning a default
+# would let a new operating surface silently escape the build gate.
 SUITE_LABELS = {
     # Mathematical foundations (build gate)
     "DualNumberTests": MANDATORY,
@@ -85,10 +86,10 @@ SUITE_LABELS = {
     "GPUConservationTests": STABILITY,
     "CPUGPUParityTests": STABILITY,
     # Correctness, not gating (feature-level behaviour)
-    "GeodesicPathTests": CORRECTNESS,
-    "BeamPropagationTest": CORRECTNESS,
-    "EinsteinRingTest": CORRECTNESS,
-    "AccretionDiskTest": CORRECTNESS,
+    "GeodesicPathTests": MANDATORY,
+    "BeamPropagationTest": MANDATORY,
+    "EinsteinRingTest": MANDATORY,
+    "AccretionDiskTest": MANDATORY,
     "TurbulenceTest": CORRECTNESS,
     "CoronaConfigTests": CORRECTNESS,
     "CoronaEmissivityTests": CORRECTNESS,
@@ -106,10 +107,11 @@ SUITE_LABELS = {
     "GFactorTests": CORRECTNESS,
     "SMBHParamsTest": CORRECTNESS,
     "RenderPipelineTests": CORRECTNESS,
-    "GeodesicTracerTest": CORRECTNESS,
+    "GeodesicTracerTest": OPERATIONAL,
+    "GeodesicTracerVolumetric": OPERATIONAL,
     "MorrisThorneTracerTest": CORRECTNESS,
-    "PNGWriterTest": CORRECTNESS,
-    "EXRRoundTripTests": CORRECTNESS,
+    "PNGWriterTest": OPERATIONAL,
+    "EXRRoundTripTests": OPERATIONAL,
     "FilmSimulationTest": CORRECTNESS,
     "StarEntryTests": CORRECTNESS,
     "StarfieldConfigTests": CORRECTNESS,
@@ -128,35 +130,57 @@ SUITE_LABELS = {
     "ContractsDeathTest": MANDATORY,
     "Error": MANDATORY,
     "KernelParity": MANDATORY,
-    "KernelTrace": CORRECTNESS,
-    "VulkanBackend": CORRECTNESS,
-    "RenderSessionProbe": CORRECTNESS,
+    "KernelTrace": OPERATIONAL,
+    "VulkanBackend": OPERATIONAL,
+    "RenderSessionProbe": OPERATIONAL,
+    "TileScheduler": OPERATIONAL,
+    "DisplayBuffer": OPERATIONAL,
     "OracleConnection": MANDATORY,
     "WalkerPenrose": MANDATORY,
     "WalkerPenroseLivePath": MANDATORY,
     "CpuGeodesicReferenceTests": MANDATORY,
     "ConfigValidation": MANDATORY,
-    "ConfigEnvironment": CORRECTNESS,
+    "ConfigEnvironment": OPERATIONAL,
+    "ConfigLoading": OPERATIONAL,
     "ConfigSchema": MANDATORY,
-    "RenderCommandParse": CORRECTNESS,
-    "PlatformPaths": CORRECTNESS,
-    "MemoryGovernor": CORRECTNESS,
-    "DispatchGovernor": CORRECTNESS,
-    "VulkanRenderSession": CORRECTNESS,
+    "RenderCommandParse": OPERATIONAL,
+    "ViewCommandOperational": OPERATIONAL,
+    "CommandRouter": OPERATIONAL,
+    "PlatformPaths": OPERATIONAL,
+    "MemoryGovernor": OPERATIONAL,
+    "DispatchGovernor": OPERATIONAL,
+    "VulkanRenderSession": OPERATIONAL,
     "RayBundleTest": MANDATORY,
     "CameraAberrationTest": MANDATORY,
-    "DopplerToggleTest": CORRECTNESS,
-    "StarfieldPointTest": CORRECTNESS,
+    "DopplerToggleTest": OPERATIONAL,
+    "StarfieldPointTest": OPERATIONAL,
     "KernelBeam": CORRECTNESS,
-    "KernelPortability": CORRECTNESS,
+    "KernelPortability": OPERATIONAL,
+    "PixelSampling": OPERATIONAL,
+    "ShadowBoundary": MANDATORY,
 }
 
 
-def collect_new_tree_tests():
+def collect_new_tree_tests(test_dir=NEW_TEST_DIR):
     tests = {}
     pattern = re.compile(r"TEST(?:_F)?\(\s*(\w+)\s*,\s*(\w+)\s*\)")
-    for path in sorted(NEW_TEST_DIR.rglob("*_test.cpp")):
-        for suite, name in pattern.findall(path.read_text(encoding="utf-8")):
+    unsupported = re.compile(
+        r"^\s*(TEST_P|TYPED_TEST|TYPED_TEST_P)\s*\(",
+        re.MULTILINE,
+    )
+    for path in sorted(test_dir.rglob("*_test.cpp")):
+        content = path.read_text(encoding="utf-8")
+        macro = unsupported.search(content)
+        if macro:
+            try:
+                display_path = path.relative_to(ROOT)
+            except ValueError:
+                display_path = path
+            raise ValueError(
+                f"{display_path} uses {macro.group(1)}, whose discovered "
+                "names are not covered by the Mandatory-label generator"
+            )
+        for suite, name in pattern.findall(content):
             tests.setdefault(suite, []).append(name)
     return tests
 
@@ -179,7 +203,7 @@ def render_new_tree(tests):
         labels = SUITE_LABELS.get(suite)
         if labels is None:
             unknown.append(suite)
-            labels = CORRECTNESS
+            continue
         names = [
             f"    {suite}.{name}"
             for name in tests[suite]
@@ -196,11 +220,33 @@ def render_new_tree(tests):
 
 
 def main():
-    new_tests = collect_new_tree_tests()
+    if "--self-test" in sys.argv:
+        with tempfile.TemporaryDirectory(prefix="sirius-label-governance-") as directory:
+            fixture = Path(directory) / "escape_test.cpp"
+            fixture.write_text(
+                "TEST_P(EscapeSuite, Ungoverned) {}\\n",
+                encoding="utf-8",
+            )
+            try:
+                collect_new_tree_tests(Path(directory))
+            except ValueError as error:
+                if "TEST_P" in str(error):
+                    print("source governance rejected an ungoverned parameterised test")
+                    return 0
+            print("error: source governance accepted an ungoverned parameterised test",
+                  file=sys.stderr)
+            return 1
+
+    try:
+        new_tests = collect_new_tree_tests()
+    except ValueError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 1
     new_content, new_unknown = render_new_tree(new_tests)
     for suite in new_unknown:
-        print(f"warning: suite '{suite}' not in SUITE_LABELS; defaulted to Correctness",
-              file=sys.stderr)
+        print(f"error: suite '{suite}' has no explicit label policy", file=sys.stderr)
+    if new_unknown:
+        return 1
 
     if "--check" in sys.argv:
         new_current = NEW_OUTPUT.read_text(encoding="utf-8") if NEW_OUTPUT.exists() else ""

@@ -181,15 +181,25 @@ TEST_F(MetricLoaderChainTests, AllMetricsEvaluateAtStandardPosition) {
 
 // Verify all metrics have Lorentzian signature (-,+,+,+)
 TEST_F(MetricLoaderChainTests, AllMetricsHaveLorentzianSignature) {
-    Vec4 pos = getStandardPosition();
-
     for (const auto& metric : metrics) {
+        Vec4 pos = getStandardPosition();
+        const bool spherical_morris =
+            dynamic_cast<const MorrisThorneFamily*>(metric.get()) != nullptr;
+        if (spherical_morris) {
+            pos(0) = 0.0;
+            pos(1) = 10.0;
+            pos(2) = PI / 2.0;
+            pos(3) = 0.0;
+        }
+
         Metric4d g;
         Tensor<Dual<double>, 4, 4, 4> dg;
         metric->Evaluate(pos, g, dg);
 
-        Metric4d g_sph = transformToSpherical(g, pos);
+        Metric4d g_sph = spherical_morris ? g : transformToSpherical(g, pos);
 
+        EXPECT_TRUE(metric_validation::CheckLorentzianSignature(g))
+            << "Metric " << metric->GetName() << " does not have inertia (-,+,+,+)";
         EXPECT_LT(g_sph(0, 0).real, 0.0)
             << "Metric " << metric->GetName() << " g_tt should be negative";
 
@@ -198,6 +208,26 @@ TEST_F(MetricLoaderChainTests, AllMetricsHaveLorentzianSignature) {
         EXPECT_GT(g_sph(3, 3).real, 0.0)
             << "Metric " << metric->GetName() << " g_φφ should be positive";
     }
+
+    // Cross terms can make every diagonal entry positive while the tensor
+    // still has one negative eigenvalue. Conversely, g00 == 0 is not evidence
+    // of a coordinate horizon: a zero eigenvalue is a degenerate metric.
+    Metric4d off_diagonal_lorentzian;
+    off_diagonal_lorentzian.Zero();
+    off_diagonal_lorentzian(0, 0) = 1.0;
+    off_diagonal_lorentzian(0, 1) = 2.0;
+    off_diagonal_lorentzian(1, 0) = 2.0;
+    off_diagonal_lorentzian(1, 1) = 1.0;
+    off_diagonal_lorentzian(2, 2) = 1.0;
+    off_diagonal_lorentzian(3, 3) = 1.0;
+    EXPECT_TRUE(metric_validation::CheckLorentzianSignature(off_diagonal_lorentzian));
+
+    Metric4d degenerate;
+    degenerate.Zero();
+    degenerate(1, 1) = 1.0;
+    degenerate(2, 2) = 1.0;
+    degenerate(3, 3) = 1.0;
+    EXPECT_FALSE(metric_validation::CheckLorentzianSignature(degenerate));
 }
 
 // Verify all metrics are symmetric: g_μν = g_νμ

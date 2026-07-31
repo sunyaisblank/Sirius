@@ -1,0 +1,151 @@
+set(_audit_parent "@CMAKE_BINARY_DIR@/operational-volume-audit")
+set(_stage "${_audit_parent}/stage")
+set(_volume "${_audit_parent}/relocated/sirius-volume")
+set(_hostile "${_audit_parent}/hostile-working-directory")
+
+file(REMOVE_RECURSE "${_audit_parent}")
+file(MAKE_DIRECTORY "${_stage}" "${_hostile}" "${_audit_parent}/relocated")
+
+set(_install_command
+    "@CMAKE_COMMAND@" --install "@CMAKE_BINARY_DIR@" --prefix "${_stage}")
+if(DEFINED SIRIUS_TEST_CONFIG AND NOT SIRIUS_TEST_CONFIG STREQUAL "")
+    list(APPEND _install_command --config "${SIRIUS_TEST_CONFIG}")
+endif()
+execute_process(
+    COMMAND ${_install_command}
+    RESULT_VARIABLE _install_result
+    OUTPUT_VARIABLE _install_stdout
+    ERROR_VARIABLE _install_stderr)
+if(NOT _install_result EQUAL 0)
+    message(FATAL_ERROR
+        "staged Sirius install failed (${_install_result})\n"
+        "${_install_stdout}\n${_install_stderr}")
+endif()
+
+file(RENAME "${_stage}" "${_volume}")
+set(_binary "${_volume}/bin/sirius@CMAKE_EXECUTABLE_SUFFIX@")
+set(_resource_root "${_volume}/share/sirius")
+set(_render "${_audit_parent}/volume-smoke.ppm")
+
+execute_process(
+    COMMAND "${_binary}" --json info readiness
+    WORKING_DIRECTORY "${_hostile}"
+    RESULT_VARIABLE _readiness_result
+    OUTPUT_VARIABLE _readiness_stdout
+    ERROR_VARIABLE _readiness_stderr)
+if(NOT _readiness_result EQUAL 0 OR NOT _readiness_stdout MATCHES "\"ready\": true")
+    message(FATAL_ERROR
+        "relocated Sirius volume did not report ready (${_readiness_result})\n"
+        "${_readiness_stdout}\n${_readiness_stderr}")
+endif()
+if("@SIRIUS_INSTALL_HAS_VIEWER@" STREQUAL "TRUE" AND
+   (NOT _readiness_stdout MATCHES "\"interactive_viewer\"" OR
+    NOT _readiness_stdout MATCHES "\"state\": \"attestation_required\""))
+    message(FATAL_ERROR
+        "compiled viewer logic was silently promoted to native-window readiness\n"
+        "${_readiness_stdout}\n${_readiness_stderr}")
+endif()
+
+execute_process(
+    COMMAND "${_binary}" --json info capabilities
+    WORKING_DIRECTORY "${_hostile}"
+    RESULT_VARIABLE _capability_result
+    OUTPUT_VARIABLE _capability_stdout
+    ERROR_VARIABLE _capability_stderr)
+if(NOT _capability_result EQUAL 0 OR
+   NOT _capability_stdout MATCHES "\"morris_thorne_two_sheet\"" OR
+   NOT _capability_stdout MATCHES "\"attestation_required\"")
+    message(FATAL_ERROR
+        "relocated Sirius volume did not expose its capability contract (${_capability_result})\n"
+        "${_capability_stdout}\n${_capability_stderr}")
+endif()
+
+# Presence and schema shape alone are not model integrity. Change one behavior
+# while retaining every governed entry and prove both readiness and capability
+# reporting reject the tampered volume.
+set(_model "${_resource_root}/model/operating_model.json")
+file(READ "${_model}" _model_contents)
+string(REPLACE
+    "Decline explicitly; no dark-throat one-sheet image may be presented as a second asymptotic region."
+    "Silently substitute the one-sheet capture image."
+    _tampered_model "${_model_contents}")
+if(_tampered_model STREQUAL _model_contents)
+    message(FATAL_ERROR "volume obstruction could not locate the capability claim to mutate")
+endif()
+file(WRITE "${_model}" "${_tampered_model}")
+execute_process(
+    COMMAND "${_binary}" --json info readiness
+    WORKING_DIRECTORY "${_hostile}"
+    RESULT_VARIABLE _tampered_readiness_result
+    OUTPUT_VARIABLE _tampered_readiness_stdout
+    ERROR_VARIABLE _tampered_readiness_stderr)
+if(_tampered_readiness_result EQUAL 0 OR
+   NOT _tampered_readiness_stdout MATCHES "\"ready\": false" OR
+   NOT _tampered_readiness_stdout MATCHES "\"valid\": false")
+    message(FATAL_ERROR
+        "readiness accepted a capability-tampered operating model "
+        "(${_tampered_readiness_result})\n"
+        "${_tampered_readiness_stdout}\n${_tampered_readiness_stderr}")
+endif()
+execute_process(
+    COMMAND "${_binary}" --json info capabilities
+    WORKING_DIRECTORY "${_hostile}"
+    RESULT_VARIABLE _tampered_capability_result
+    OUTPUT_VARIABLE _tampered_capability_stdout
+    ERROR_VARIABLE _tampered_capability_stderr)
+set(_tampered_capability_log
+    "${_tampered_capability_stdout}\n${_tampered_capability_stderr}")
+if(_tampered_capability_result EQUAL 0 OR
+   NOT _tampered_capability_log MATCHES "operating model")
+    message(FATAL_ERROR
+        "capability reporting accepted a capability-tampered operating model "
+        "(${_tampered_capability_result})\n${_tampered_capability_log}")
+endif()
+file(WRITE "${_model}" "${_model_contents}")
+
+execute_process(
+    COMMAND "${_binary}" render
+        --cpu --metric Minkowski --width 128 --height 128 --samples 1
+        --no-disk --no-bloom --output "${_render}"
+    WORKING_DIRECTORY "${_hostile}"
+    RESULT_VARIABLE _render_result
+    OUTPUT_VARIABLE _render_stdout
+    ERROR_VARIABLE _render_stderr)
+if(NOT _render_result EQUAL 0 OR NOT EXISTS "${_render}")
+    message(FATAL_ERROR
+        "relocated Sirius volume did not initialise and render (${_render_result})\n"
+        "${_render_stdout}\n${_render_stderr}")
+endif()
+file(SIZE "${_render}" _render_size)
+if(_render_size LESS 1024)
+    message(FATAL_ERROR "relocated render output is implausibly small: ${_render_size} bytes")
+endif()
+
+# An incomplete volume must not borrow a same-named asset from its working
+# directory. Plant a valid decoy so this is a constructive obstruction test,
+# not merely an absence test.
+file(MAKE_DIRECTORY "${_hostile}/assets")
+file(COPY "@CMAKE_SOURCE_DIR@/assets/Starfield.png"
+    DESTINATION "${_hostile}/assets")
+file(RENAME
+    "${_resource_root}/assets/Starfield.png"
+    "${_resource_root}/assets/Starfield.png.missing")
+execute_process(
+    COMMAND "${_binary}" render
+        --cpu --metric Minkowski --width 128 --height 128 --samples 1
+        --no-disk --no-bloom --output "${_audit_parent}/must-not-exist.ppm"
+    WORKING_DIRECTORY "${_hostile}"
+    RESULT_VARIABLE _missing_result
+    OUTPUT_VARIABLE _missing_stdout
+    ERROR_VARIABLE _missing_stderr)
+if(_missing_result EQUAL 0)
+    message(FATAL_ERROR
+        "Sirius rendered after its volume resource was removed by borrowing the hostile decoy")
+endif()
+set(_missing_log "${_missing_stdout}\n${_missing_stderr}")
+if(NOT _missing_log MATCHES "required runtime resource assets/Starfield.png")
+    message(FATAL_ERROR
+        "missing-resource decline did not identify the failed invariant\n${_missing_log}")
+endif()
+
+file(REMOVE_RECURSE "${_audit_parent}")

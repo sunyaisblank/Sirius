@@ -14,6 +14,7 @@
 // absent here (the render library must not depend on the JSON codec). Field
 // names and defaults are preserved exactly so the alias is a no-op.
 
+#include "sirius/base/contracts.h"
 #include "sirius/core/constants.h"
 
 #include <cmath>
@@ -115,7 +116,6 @@ struct FilmConfig {
 
     // Apply a format preset (sets aspect_ratio, recomputes height).
     void ApplyFormat(FilmFormat fmt) {
-        format = fmt;
         switch (fmt) {
             case FilmFormat::IMAX70mm_15perf:
                 aspect_ratio = 1.43f;
@@ -136,13 +136,16 @@ struct FilmConfig {
             case FilmFormat::Digital:
                 aspect_ratio = 16.0f / 9.0f;
                 break;
+            default:
+                SIRIUS_PRE(false);
+                return;
         }
+        format = fmt;
         ComputeHeight();
     }
 
     // Apply a film-stock preset (ISO, grain, colour response).
     void ApplyStock(FilmStock stk) {
-        stock = stk;
         switch (stk) {
             case FilmStock::KodakVision3_500T:
                 iso = 500.0f;
@@ -186,7 +189,11 @@ struct FilmConfig {
                 break;
             case FilmStock::Custom:
                 break;  // Keep current values.
+            default:
+                SIRIUS_PRE(false);
+                return;
         }
+        stock = stk;
     }
 
     // Interstellar-style IMAX configuration.
@@ -246,6 +253,14 @@ struct RenderConfig {
     std::string outputPath = "render.ppm";
 };
 
+// Compile-time identity used after the external string configuration has crossed
+// its validation/conversion boundary. Render code must not infer one model from
+// an unrecognised string.
+enum class DiskTemperatureModel : uint8_t {
+    NovikovThorne,
+    ShakuraSunyaev,
+};
+
 // Metric (spacetime) settings; name is parsed via the core registry.
 struct MetricConfig {
     std::string name = "Schwarzschild";
@@ -258,6 +273,9 @@ struct MetricConfig {
 
     // Morris-Thorne wormhole.
     double throatRadius = 1.0;  // b0 in M.
+    // The represented chart has one exterior sheet and a dark throat capture
+    // surface. TwoSheet remains a named request so it can decline precisely.
+    std::string wormholeTopology = "OneSheetCapture";
 
     // Alcubierre warp drive.
     double warpVelocity = 0.5;  // vs (sub-luminal).
@@ -274,11 +292,17 @@ struct ObserverConfig {
 
     // Camera four-velocity (P5): spatial beta in the local ray-component frame
     // (index 1 = forward/view axis). |beta| < 1. Zero is a static camera and
-    // leaves generated rays unaberrated. Not plumbed through the JSON codec (an
-    // app/config concern); set on the command line via --camera-beta.
+    // leaves generated rays unaberrated.
     double cameraBetaForward = 0.0;  // beta along the view axis.
     double cameraBetaUp = 0.0;       // beta along the image-up axis.
     double cameraBetaRight = 0.0;    // beta along the image-right axis.
+
+    // Live lens selection (P5). ThinLens uses the deterministic per-sample
+    // aperture construction in core/camera.h.
+    std::string lensModel = "Pinhole";  // Pinhole or ThinLens.
+    float focalLength = 50.0f;          // Millimetres.
+    float aperture = 2.8f;              // f-number.
+    float focusDistance = 50.0f;        // Geometric units M.
 };
 
 // Post-processing settings (display path).
@@ -289,7 +313,7 @@ struct PostProcessConfig {
     float exposure = 1.0f;
     float contrast = 1.0f;
     float saturation = 1.0f;
-    std::string tonemapper = "ACES";  // ACES, Reinhard, Uncharted2, Filmic, AgX.
+    std::string tonemapper = "ACES";  // ACES, Reinhard, Uncharted2, Filmic, None, Linear.
 };
 
 // Volumetric disk settings.
@@ -301,6 +325,13 @@ struct VolumetricConfig {
     int samples = 64;
     bool enableTurbulence = false;
     bool enableCorona = false;
+};
+
+// Temporal integration of the rotating thin-disk emitter.
+struct MotionBlurConfig {
+    bool enabled = false;
+    float shutterTime = 0.1f;
+    int samples = 3;
 };
 
 // Film simulation settings (a subset toggled from config; presets fill the rest).
@@ -327,20 +358,30 @@ struct SiriusConfig {
     PostProcessConfig postprocess;
     BackendConfig backend;
     VolumetricConfig volumetric;
+    MotionBlurConfig motionBlur;
     FilmSimConfig film;
 
+    // Thin/volumetric accretion disk. Charged and cosmological black holes
+    // currently require this false because their circular-orbit/flux model is
+    // not represented by the Kerr-only Page-Thorne implementation.
+    bool diskEnabled = true;
+
     // Disk Doppler beaming toggle (P4): true is full physics and the pinned
-    // render; false suppresses the disk brightness asymmetry. CLI-only surface
-    // (--doppler-beaming); not plumbed through the JSON codec (app/config scope).
+    // render; false suppresses the disk brightness asymmetry.
     bool dopplerBeaming = true;
 
     // Filtered point-source star field (P3): true renders stars as beam-filtered
-    // points instead of the equirectangular texture. CLI-only (--starfield point).
+    // points instead of the equirectangular texture.
     bool pointStarfield = false;
 
     // Ray bundles (P2): propagate geodesic deviation and derive per-pixel beam
-    // footprints. CLI-only (--beams). Default off keeps the pinned render.
+    // footprints. Default off keeps the pinned render.
     bool rayBundles = false;
+
+    // Astronomical output representation. Polarisation selects the CPU
+    // parallel-transport/Stokes path; diagnostic modes select CPU false-colour
+    // paths. The Vulkan capability boundary declines every non-TrueColor mode.
+    std::string colorMode = "TrueColor";
 
     static SiriusConfig defaults() { return SiriusConfig{}; }
 

@@ -15,9 +15,10 @@
 #include <algorithm>
 #include <chrono>
 #include <cmath>
-#include <cstdlib>
 #include <iomanip>
 #include <iostream>
+#include <limits>
+#include <stdexcept>
 
 namespace sirius::app {
 
@@ -25,13 +26,36 @@ namespace cli = cli_output;
 
 namespace {
 
-// Backend names that select the Vulkan render path. OptiX/CUDA are retired and
-// route to the Vulkan compute backend (the only GPU path); the request runs when
-// a device is present and declines cleanly otherwise.
 bool IsGpuBackendName(std::string name) {
     std::transform(name.begin(), name.end(), name.begin(),
                    [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
-    return name == "gpu" || name == "vulkan" || name == "optix" || name == "cuda";
+    return name == "gpu" || name == "vulkan";
+}
+
+int ParseInteger(const std::string& text) {
+    std::size_t consumed = 0;
+    const int value = std::stoi(text, &consumed);
+    if (consumed != text.size()) {
+        throw std::invalid_argument("trailing characters");
+    }
+    return value;
+}
+
+double ParseDouble(const std::string& text) {
+    std::size_t consumed = 0;
+    const double value = std::stod(text, &consumed);
+    if (consumed != text.size() || !std::isfinite(value)) {
+        throw std::invalid_argument("expected one finite number");
+    }
+    return value;
+}
+
+float ParseFloat(const std::string& text) {
+    const double value = ParseDouble(text);
+    if (value < -std::numeric_limits<float>::max() || value > std::numeric_limits<float>::max()) {
+        throw std::out_of_range("outside the float range");
+    }
+    return static_cast<float>(value);
 }
 
 }  // namespace
@@ -50,14 +74,22 @@ Basic Options:
   -m, --metric <name>       Metric (see 'sirius info metrics'): Minkowski, Schwarzschild,
                             Kerr, Reissner-Nordstrom, Kerr-Newman, de-Sitter,
                             Schwarzschild-de-Sitter, Morris-Thorne, Alcubierre
+  --mass <M>                Metric mass scale (0 for Minkowski/de-Sitter; otherwise 0.1-100)
   -d, --distance <r>        Observer distance in M (default: 50)
   -i, --inclination <deg>   Observer inclination (default: 90)
   -a, --spin <a>            Black hole spin 0-1 (default: 0)
   --fov <deg>               Camera field of view (default: 60)
+  --lens <name>             Lens: Pinhole, ThinLens, or Fisheye (CPU; default: Pinhole)
+  --focal-length <mm>       Thin-lens focal length (default: 50)
+  --aperture <f-number>     Thin-lens aperture (default: 2.8)
+  --focus-distance <M>      Thin-lens focus distance (default: 50)
   --temperature-model <m>   Disk temperature model: NovikovThorne (NT) or
-                            ShakuraSunyaev (SS); GPU backend (default: NovikovThorne)
+                            ShakuraSunyaev (SS) (default: NovikovThorne)
   --disk-temperature <T>    Disk temperature scale in Kelvin (default: 50000)
+  --color-mode <name>       Output: TrueColor, TemperatureMap, RedshiftMap,
+                            Narrowband, or Polarisation (CPU thin disk)
   --throat-radius <b0>      Morris-Thorne throat radius (default: 1.0)
+  --wormhole-topology <t>   OneSheetCapture (supported) or TwoSheet (declines explicitly)
   --warp-velocity <vs>      Alcubierre warp velocity (default: 0.5)
   --bubble-radius <R>       Alcubierre bubble radius (default: 1.0)
 
@@ -67,7 +99,8 @@ Post-Processing:
   --bloom-threshold <t>     Bloom brightness threshold (default: 0.3)
   --contrast <c>            Contrast adjustment (default: 1.0)
   --saturation <s>          Saturation adjustment (default: 1.0)
-  --tonemapper <name>       Tonemapper: ACES, Reinhard, Filmic, AgX (default: ACES)
+  --tonemapper <name>       Tonemapper: ACES, Reinhard, Filmic, Uncharted2,
+                            None, Linear (default: ACES)
   --no-bloom                Disable bloom post-processing
 
 Volumetric Disk (3D accretion disk with thickness):
@@ -76,12 +109,19 @@ Volumetric Disk (3D accretion disk with thickness):
   --h-power <exp>           Flaring exponent (default: 0.25)
   --tau <depth>             Midplane optical depth (default: 10.0)
   --vol-samples <n>         Ray marching samples (default: 64)
-  --turbulence              Enable turbulent density perturbations
-  --corona                  Enable corona emission
+  --turbulence              Enable deterministic turbulent density perturbations
+  --corona                  Enable inverse-Compton corona emission and opacity
+  --no-disk                 Disable accretion-disk emission (required for charged/Λ metrics)
+
+Temporal Disk:
+  --motion-blur             Enable CPU temporal integration of thin-disk rotation
+  --shutter-time <t>        Exposure interval in geometric time units (default: 0.1)
+  --motion-samples <n>      Temporal samples (default: 3)
 
 Film Simulation (IMAX 70mm cinematic look):
   --film                    Enable film simulation
-  --film-preset <name>      Preset: Interstellar, SpaceOdyssey2001 (default: Interstellar)
+  --film-preset <name>      Preset: Interstellar, SpaceOdyssey2001, DigitalClean
+                            (default: Interstellar)
   --grain <intensity>       Film grain intensity (default: 0.15)
   --halation <strength>     Halation glow strength (default: 0.15)
   --vignette <strength>     Vignette strength (default: 0.3)
@@ -101,38 +141,34 @@ Backend:
   --cpu                     Force CPU rendering (the reference path)
   --no-gpu                  Alias of --cpu
   --gpu                     Render on the Vulkan backend (declines if no device)
-  --backend <name>          Select backend: auto (Vulkan when device+metric allow), cpu, vulkan
+  --backend <name>          Select backend: auto (Vulkan only when the entire scene is
+                            representable), cpu, vulkan
 
 Examples:
   sirius render -o test.ppm -s 32
   sirius render -m Kerr -a 0.9 -s 256 -o kerr.ppm
   sirius render -w 3840 -h 2160 --cinematic --volumetric -o cinematic.ppm
-  sirius render --volumetric --h-over-r 0.15 --turbulence -o volumetric.ppm
+  sirius render --volumetric --h-over-r 0.15 -o volumetric.ppm
 )";
 }
 
 int RenderCommand::Execute(const std::vector<std::string>& args, const GlobalOptions& globals,
                            SiriusConfig& config) {
+    // Command objects are reusable through the router/test seam. Backend intent
+    // belongs to this invocation and must never leak from an earlier --gpu run.
+    gpu_backend_requested_ = IsGpuBackendName(config.backend.preferred);
     if (!ParseArgs(args, globals, config)) {
         return 1;
     }
 
-    // Backend selection. An explicit request (--gpu / --backend vulkan, or
-    // SIRIUS_RENDER_BACKEND=vulkan) is resolved here, before validation, so a
-    // backend decline (not a config-name error) is what the user sees when no
-    // device is visible or the backend is not compiled in. 'auto' is resolved
+    // Backend selection. An explicit request (--gpu / --backend vulkan, or a
+    // lower-layer SIRIUS_BACKEND=vulkan) is resolved here, before validation,
+    // so a backend decline (not a config-name error) is what the user sees when
+    // no device is visible or the backend is not compiled in. 'auto' is resolved
     // by SessionConfig::FromSiriusConfig (the single authority): Vulkan when a
     // device and a registry-gpu-dispatchable metric align, CPU otherwise
     // (go-live, owner decision 2026-07-18).
-    bool use_vulkan = gpu_backend_requested_;
-    if (const char* rb = std::getenv("SIRIUS_RENDER_BACKEND"); rb != nullptr) {
-        std::string value(rb);
-        std::transform(value.begin(), value.end(), value.begin(),
-                       [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
-        if (value == "vulkan") {
-            use_vulkan = true;
-        }
-    }
+    const bool use_vulkan = gpu_backend_requested_;
 
     if (use_vulkan) {
 #ifdef SIRIUS_HAS_VULKAN_BACKEND
@@ -143,6 +179,10 @@ int RenderCommand::Execute(const std::vector<std::string>& args, const GlobalOpt
         }
         if (devices->empty()) {
             cli::Error("Vulkan backend requested but no Vulkan device is present; use --cpu");
+            return 1;
+        }
+        if (auto selected = backend::ResolveVulkanDeviceIndex(*devices); !selected) {
+            cli::Error(selected.error().Description());
             return 1;
         }
 #else
@@ -168,6 +208,8 @@ int RenderCommand::Execute(const std::vector<std::string>& args, const GlobalOpt
 
 bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
                               const GlobalOptions& /*globals*/, SiriusConfig& config) {
+    bool metric_overridden = false;
+    bool mass_overridden = false;
     for (size_t i = 0; i < args.size(); ++i) {
         const std::string& arg = args[i];
 
@@ -175,44 +217,70 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
             if ((arg == "-o" || arg == "--output") && i + 1 < args.size()) {
                 config.render.outputPath = args[++i];
             } else if ((arg == "-w" || arg == "--width") && i + 1 < args.size()) {
-                config.render.width = std::stoi(args[++i]);
+                config.render.width = ParseInteger(args[++i]);
             } else if ((arg == "-h" || arg == "--height") && i + 1 < args.size()) {
-                config.render.height = std::stoi(args[++i]);
+                config.render.height = ParseInteger(args[++i]);
             } else if ((arg == "-s" || arg == "--samples") && i + 1 < args.size()) {
-                config.render.samplesPerPixel = std::stoi(args[++i]);
+                config.render.samplesPerPixel = ParseInteger(args[++i]);
             } else if ((arg == "-t" || arg == "--tile-size") && i + 1 < args.size()) {
-                config.render.tileSize = std::stoi(args[++i]);
+                config.render.tileSize = ParseInteger(args[++i]);
             } else if ((arg == "-m" || arg == "--metric") && i + 1 < args.size()) {
                 config.metric.name = args[++i];
+                metric_overridden = true;
+            } else if (arg == "--mass" && i + 1 < args.size()) {
+                config.metric.mass = ParseDouble(args[++i]);
+                mass_overridden = true;
             } else if ((arg == "-d" || arg == "--distance") && i + 1 < args.size()) {
-                config.observer.distance = std::stod(args[++i]);
+                config.observer.distance = ParseDouble(args[++i]);
             } else if ((arg == "-i" || arg == "--inclination") && i + 1 < args.size()) {
-                config.observer.inclination = std::stod(args[++i]);
+                config.observer.inclination = ParseDouble(args[++i]);
             } else if ((arg == "-a" || arg == "--spin") && i + 1 < args.size()) {
-                config.metric.spin = std::stod(args[++i]);
+                config.metric.spin = ParseDouble(args[++i]);
             } else if (arg == "--fov" && i + 1 < args.size()) {
-                config.observer.fov = std::stod(args[++i]);
+                config.observer.fov = ParseDouble(args[++i]);
+            } else if (arg == "--lens" && i + 1 < args.size()) {
+                config.observer.lensModel = args[++i];
+            } else if (arg == "--focal-length" && i + 1 < args.size()) {
+                config.observer.focalLength = ParseFloat(args[++i]);
+            } else if (arg == "--aperture" && i + 1 < args.size()) {
+                config.observer.aperture = ParseFloat(args[++i]);
+            } else if (arg == "--focus-distance" && i + 1 < args.size()) {
+                config.observer.focusDistance = ParseFloat(args[++i]);
             } else if (arg == "--temperature-model" && i + 1 < args.size()) {
                 config.metric.temperatureModel = args[++i];
             } else if (arg == "--disk-temperature" && i + 1 < args.size()) {
-                config.metric.diskTemperature = std::stof(args[++i]);
+                config.metric.diskTemperature = ParseFloat(args[++i]);
+            } else if (arg == "--color-mode" && i + 1 < args.size()) {
+                config.colorMode = args[++i];
             } else if (arg == "--throat-radius" && i + 1 < args.size()) {
-                config.metric.throatRadius = std::stod(args[++i]);
+                config.metric.throatRadius = ParseDouble(args[++i]);
+            } else if (arg == "--wormhole-topology" && i + 1 < args.size()) {
+                const std::string topology = args[++i];
+                if (topology == "one-sheet" || topology == "OneSheetCapture") {
+                    config.metric.wormholeTopology = "OneSheetCapture";
+                } else if (topology == "two-sheet" || topology == "TwoSheet") {
+                    config.metric.wormholeTopology = "TwoSheet";
+                } else {
+                    cli::Error(
+                        "--wormhole-topology expects OneSheetCapture/one-sheet or "
+                        "TwoSheet/two-sheet");
+                    return false;
+                }
             } else if (arg == "--warp-velocity" && i + 1 < args.size()) {
-                config.metric.warpVelocity = std::stod(args[++i]);
+                config.metric.warpVelocity = ParseDouble(args[++i]);
             } else if (arg == "--bubble-radius" && i + 1 < args.size()) {
-                config.metric.bubbleRadius = std::stod(args[++i]);
+                config.metric.bubbleRadius = ParseDouble(args[++i]);
             } else if (arg == "--exposure" && i + 1 < args.size()) {
-                config.postprocess.exposure = std::stof(args[++i]);
+                config.postprocess.exposure = ParseFloat(args[++i]);
             } else if (arg == "--bloom" && i + 1 < args.size()) {
                 config.postprocess.enableBloom = true;
-                config.postprocess.bloomIntensity = std::stof(args[++i]);
+                config.postprocess.bloomIntensity = ParseFloat(args[++i]);
             } else if (arg == "--bloom-threshold" && i + 1 < args.size()) {
-                config.postprocess.bloomThreshold = std::stof(args[++i]);
+                config.postprocess.bloomThreshold = ParseFloat(args[++i]);
             } else if (arg == "--contrast" && i + 1 < args.size()) {
-                config.postprocess.contrast = std::stof(args[++i]);
+                config.postprocess.contrast = ParseFloat(args[++i]);
             } else if (arg == "--saturation" && i + 1 < args.size()) {
-                config.postprocess.saturation = std::stof(args[++i]);
+                config.postprocess.saturation = ParseFloat(args[++i]);
             } else if (arg == "--tonemapper" && i + 1 < args.size()) {
                 config.postprocess.tonemapper = args[++i];
             } else if (arg == "--no-bloom") {
@@ -220,31 +288,41 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
             } else if (arg == "--volumetric") {
                 config.volumetric.enabled = true;
             } else if (arg == "--h-over-r" && i + 1 < args.size()) {
-                config.volumetric.hOverR = std::stof(args[++i]);
+                config.volumetric.hOverR = ParseFloat(args[++i]);
                 config.volumetric.enabled = true;
             } else if (arg == "--h-power" && i + 1 < args.size()) {
-                config.volumetric.hPower = std::stof(args[++i]);
+                config.volumetric.hPower = ParseFloat(args[++i]);
             } else if (arg == "--tau" && i + 1 < args.size()) {
-                config.volumetric.tauMidplane = std::stof(args[++i]);
+                config.volumetric.tauMidplane = ParseFloat(args[++i]);
             } else if (arg == "--vol-samples" && i + 1 < args.size()) {
-                config.volumetric.samples = std::stoi(args[++i]);
+                config.volumetric.samples = ParseInteger(args[++i]);
             } else if (arg == "--turbulence") {
+                config.volumetric.enabled = true;
                 config.volumetric.enableTurbulence = true;
-                config.volumetric.enabled = true;
             } else if (arg == "--corona") {
-                config.volumetric.enableCorona = true;
                 config.volumetric.enabled = true;
+                config.volumetric.enableCorona = true;
+            } else if (arg == "--no-disk") {
+                config.diskEnabled = false;
+            } else if (arg == "--motion-blur") {
+                config.motionBlur.enabled = true;
+            } else if (arg == "--shutter-time" && i + 1 < args.size()) {
+                config.motionBlur.shutterTime = ParseFloat(args[++i]);
+                config.motionBlur.enabled = true;
+            } else if (arg == "--motion-samples" && i + 1 < args.size()) {
+                config.motionBlur.samples = ParseInteger(args[++i]);
+                config.motionBlur.enabled = true;
             } else if (arg == "--film") {
                 config.film.enabled = true;
             } else if (arg == "--film-preset" && i + 1 < args.size()) {
                 config.film.preset = args[++i];
                 config.film.enabled = true;
             } else if (arg == "--grain" && i + 1 < args.size()) {
-                config.film.grainIntensity = std::stof(args[++i]);
+                config.film.grainIntensity = ParseFloat(args[++i]);
             } else if (arg == "--halation" && i + 1 < args.size()) {
-                config.film.halationStrength = std::stof(args[++i]);
+                config.film.halationStrength = ParseFloat(args[++i]);
             } else if (arg == "--vignette" && i + 1 < args.size()) {
-                config.film.vignetteStrength = std::stof(args[++i]);
+                config.film.vignetteStrength = ParseFloat(args[++i]);
             } else if (arg == "--cinematic") {
                 config.volumetric.enabled = true;
                 config.volumetric.hOverR = 0.12f;
@@ -283,13 +361,22 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
                 }
             } else if (arg == "--camera-beta" && i + 1 < args.size()) {
                 // P5: camera four-velocity beta as forward[,up,right] in [0, 1).
-                std::string spec = args[++i];
+                const std::string spec = args[++i];
                 double comp[3] = {0.0, 0.0, 0.0};
                 size_t start = 0;
-                for (int c = 0; c < 3 && start <= spec.size(); ++c) {
+                int components = 0;
+                while (start <= spec.size()) {
+                    if (components == 3) {
+                        cli::Error("--camera-beta accepts at most three components");
+                        return false;
+                    }
                     size_t comma = spec.find(',', start);
                     std::string tok = spec.substr(start, comma - start);
-                    if (!tok.empty()) comp[c] = std::stod(tok);
+                    if (tok.empty()) {
+                        cli::Error("--camera-beta components must not be empty");
+                        return false;
+                    }
+                    comp[components++] = ParseDouble(tok);
                     if (comma == std::string::npos) break;
                     start = comma + 1;
                 }
@@ -305,13 +392,16 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
                 config.backend.preferred = "cpu";
                 gpu_backend_requested_ = false;
             } else if (arg == "--gpu") {
-                // Explicit Vulkan request; resolved in Execute (device present ->
-                // run, absent -> decline) so config.backend.preferred stays in
-                // the validator's {auto, cpu} set.
+                // Keep the schema and the explicit execution override aligned.
+                // Execute performs the early device probe; the typed session
+                // must still see "vulkan" so it cannot emit an auto-fallback
+                // diagnostic before ExecuteSession pins the Vulkan path.
+                config.backend.preferred = "vulkan";
                 gpu_backend_requested_ = true;
             } else if (arg == "--backend" && i + 1 < args.size()) {
                 const std::string& name = args[++i];
                 if (IsGpuBackendName(name)) {
+                    config.backend.preferred = "vulkan";
                     gpu_backend_requested_ = true;
                 } else {
                     config.backend.preferred = name;  // cpu or auto; validated later.
@@ -320,6 +410,9 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
             } else if (arg.substr(0, 1) == "-") {
                 cli::Error("Unknown option: " + arg);
                 return false;
+            } else {
+                cli::Error("Unexpected positional argument: " + arg);
+                return false;
             }
         } catch (const std::exception& e) {
             cli::Error("Invalid value for " + arg + ": " + e.what());
@@ -327,6 +420,13 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
         }
     }
 
+    if (metric_overridden && !mass_overridden) {
+        const auto metric = core::ParseMetricName(config.metric.name);
+        if (metric.has_value() &&
+            (*metric == core::MetricId::Minkowski || *metric == core::MetricId::DeSitter)) {
+            config.metric.mass = 0.0;
+        }
+    }
     return true;
 }
 
@@ -348,6 +448,7 @@ void RenderCommand::PrintConfig(const SiriusConfig& config, bool verbose) {
               << config.observer.distance << "M, θ=" << config.observer.inclination << "°"
               << std::endl;
     std::cout << "  FOV:         " << config.observer.fov << "°" << std::endl;
+    std::cout << "  Color mode:  " << config.colorMode << std::endl;
     std::cout << "  Output:      " << config.render.outputPath << std::endl;
     std::cout << std::endl;
 

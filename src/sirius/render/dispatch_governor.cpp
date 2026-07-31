@@ -21,8 +21,8 @@ int BandController::NextRows(int remaining_rows, int band_width) const {
     if (!Enabled()) {
         return remaining_rows;
     }
-    const auto rows = static_cast<int>(std::min<std::int64_t>(
-        pixels_ / band_width, remaining_rows));
+    const auto rows =
+        static_cast<int>(std::min<std::int64_t>(pixels_ / band_width, remaining_rows));
     return std::max(rows, 1);
 }
 

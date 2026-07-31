@@ -12,10 +12,12 @@
 // singularities.
 // Reference: Visser, "The Kerr spacetime" (arXiv:0706.0622).
 
+#include "sirius/base/contracts.h"
 #include "sirius/core/metrics/metric.h"
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 
 namespace sirius::core {
 
@@ -106,7 +108,21 @@ inline KerrSchildFamily::KerrSchildFamily(const KerrSchildParams& params) : Kerr
     SetParams(params);
 }
 
+inline bool IsRepresentedKerrSchildParameters(const KerrSchildParams& params) {
+    if (!std::isfinite(params.M) || !std::isfinite(params.a) || !std::isfinite(params.Q) ||
+        !std::isfinite(params.Lambda) || params.M < 0.0) {
+        return false;
+    }
+    if (params.M == 0.0 && (params.a != 0.0 || params.Q != 0.0)) return false;
+    // This Cartesian ansatz represents the cosmological sector exactly only
+    // for de Sitter and Schwarzschild-de Sitter.
+    return params.Lambda == 0.0 || (params.a == 0.0 && params.Q == 0.0);
+}
+
 inline void KerrSchildFamily::SetParams(const KerrSchildParams& params) {
+    SIRIUS_PRE(IsRepresentedKerrSchildParameters(params));
+    if (!IsRepresentedKerrSchildParameters(params)) return;
+
     params_ = params;
     config_["mass"].value = params.M;
     config_["spin"].value = params.a / std::max(params.M, 1e-10);
@@ -117,25 +133,36 @@ inline void KerrSchildFamily::SetParams(const KerrSchildParams& params) {
 inline KerrSchildParams KerrSchildFamily::GetParams() const { return params_; }
 
 inline void KerrSchildFamily::SetParameter(const std::string& key, double value) {
-    if (config_.find(key) != config_.end()) {
-        config_[key].value = std::clamp(value, config_[key].min, config_[key].max);
+    const auto found = config_.find(key);
+    SIRIUS_PRE(found != config_.end());
+    if (found == config_.end()) return;
+
+    const double previous = found->second.value;
+    found->second.value = std::clamp(value, found->second.min, found->second.max);
+    KerrSchildParams next;
+    next.M = config_["mass"].value;
+    next.a = config_["spin"].value * next.M;
+    next.Q = config_["charge"].value * next.M;
+    next.Lambda = config_["lambda"].value;
+    const bool represented = IsRepresentedKerrSchildParameters(next);
+    SIRIUS_PRE(represented);
+    if (!represented) {
+        found->second.value = previous;
+        return;
     }
-    params_.M = config_["mass"].value;
-    params_.a = config_["spin"].value * params_.M;
-    params_.Q = config_["charge"].value * params_.M;
-    params_.Lambda = config_["lambda"].value;
+    params_ = next;
 }
 
 inline const char* KerrSchildFamily::GetName() const {
     if (params_.M == 0 && params_.Lambda == 0) return "Minkowski";
+    if (params_.M == 0 && params_.Lambda != 0) return "de Sitter";
+    if (params_.Lambda != 0) return "Schwarzschild-de Sitter";
     if (params_.a == 0 && params_.Q == 0 && params_.Lambda == 0) return "Schwarzschild";
     if (params_.Q == 0 && params_.Lambda == 0) return "Kerr";
     if (params_.a == 0 && params_.Lambda == 0) return "Reissner-Nordström";
     if (params_.Lambda == 0) return "Kerr-Newman";
-    if (params_.M == 0) return "de Sitter";
-    if (params_.a == 0 && params_.Q == 0) return "Schwarzschild-de Sitter";
-    if (params_.Q == 0) return "Kerr-de Sitter";
-    return "Kerr-Newman-de Sitter";
+    SIRIUS_ASSERT(false);
+    return "Invalid Kerr-Schild metric";
 }
 
 inline double KerrSchildFamily::ComputeKerrRadius(double x, double y, double z) const {
@@ -400,8 +427,8 @@ inline double KerrSchildFamily::ErgosphereRadius(double theta) const {
 
     double disc_charged = M * M - Q * Q - a * a * cos2th;
     if (disc_charged < 0) {
-        // The ergosphere does not exist at this angle.
-        return M;  // Return the event horizon as a fallback.
+        // The static-limit surface does not exist at this angle.
+        return std::numeric_limits<double>::quiet_NaN();
     }
 
     return M + std::sqrt(disc_charged);
@@ -417,26 +444,11 @@ inline double KerrSchildFamily::IscoRadius() const {
         return 6.0 * M;
     }
 
-    // Reissner-Nordstrom (a = 0, Q != 0): r_ISCO = 3M + sqrt(9M^2 - 8Q^2),
-    // reducing to 6M at Q = 0 and 4M at Q^2 = M^2/2.
-    if (std::abs(a) < 1e-12) {
-        double disc = 9 * M * M - 8 * Q * Q;
-        if (disc < 0) {
-            // Very high charge: use the minimum.
-            return 4.0 * M;
-        }
-        return (3 * M + std::sqrt(disc)) / 1.0;  // Prograde equivalent.
-    }
+    // The Page-Thorne implementation is an uncharged Kerr model. Charged ISCOs
+    // require a distinct marginal-stability solve and must not inherit Kerr.
+    SIRIUS_PRE(std::abs(Q) < 1e-12);
 
     // Kerr (Q = 0): Bardeen-Press-Teukolsky closed form, exact.
-    //
-    // RECORDED APPROXIMATION for Kerr-Newman (a != 0 and Q != 0): the Kerr
-    // formula below ignores Q. The error vanishes as Q -> 0 and grows like
-    // (Q/M)^2; the reference anchors are exact (Q=0: this formula; a=0: the
-    // Reissner-Nordstrom branch above, which is exact at both Q=0 -> 6M and
-    // Q=M -> 4M). Replacing this with the Dadhich-Kale marginal-stability solve
-    // is a recorded follow-up gated on the test toolchain, because an
-    // unvalidated root-solve is worse than a documented approximation.
     double a_star = std::abs(a / M);
     if (a_star > 0.9999) a_star = 0.9999;
 

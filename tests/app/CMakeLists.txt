@@ -9,6 +9,8 @@ add_executable(sirius_app_tests
     config_schema_roundtrip_test.cpp
     render_command_parse_test.cpp
     platform_paths_test.cpp
+    config_loading_test.cpp
+    command_router_test.cpp
 )
 
 target_link_libraries(sirius_app_tests PRIVATE sirius_app_lib GTest::gtest_main)
@@ -16,4 +18,14 @@ target_include_directories(sirius_app_tests PRIVATE "${CMAKE_SOURCE_DIR}/tests")
 
 sirius_configure_target(sirius_app_tests)
 
-gtest_discover_tests(sirius_app_tests PROPERTIES LABELS "Correctness")
+if(TARGET sirius)
+    # RenderCommand is exercised through the application library, so ensure its
+    # runtime-volume test sees the same staged resources as the real executable.
+    add_dependencies(sirius_app_tests sirius)
+endif()
+
+gtest_discover_tests(
+    sirius_app_tests
+    PROPERTIES
+        LABELS "Correctness"
+        ENVIRONMENT "SIRIUS_RESOURCE_DIR=$<TARGET_FILE_DIR:sirius>/resources")

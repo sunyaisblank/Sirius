@@ -82,6 +82,10 @@ TEST_F(TonemapTests, ApplyExposureScaling) {
     // Using None: just clamp after exposure scaling
     sirius::core::tonemap::Apply(r, g, b, sirius::core::TonemapType::None, exposure);
     EXPECT_NEAR(r, 1.0f, kEps);  // 0.5 * 2.0 = 1.0
+
+    EXPECT_DEATH(
+        sirius::core::tonemap::Apply(r, g, b, static_cast<sirius::core::TonemapType>(255), 1.0f),
+        "violated");
 }
 
 TEST_F(TonemapTests, ApplyACESDispatch) {

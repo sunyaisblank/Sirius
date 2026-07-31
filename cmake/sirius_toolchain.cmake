@@ -41,11 +41,30 @@ else()
 endif()
 
 option(SIRIUS_WERROR "Treat warnings as errors in the new tree" ON)
+set(SIRIUS_SANITIZERS "none" CACHE STRING
+    "First-party runtime instrumentation: none or address-undefined")
+set_property(CACHE SIRIUS_SANITIZERS PROPERTY STRINGS none address-undefined)
+if(NOT SIRIUS_SANITIZERS STREQUAL "none" AND
+   NOT SIRIUS_SANITIZERS STREQUAL "address-undefined")
+    message(FATAL_ERROR
+        "SIRIUS_SANITIZERS must be exactly 'none' or 'address-undefined'")
+endif()
+if(SIRIUS_SANITIZERS STREQUAL "address-undefined" AND MSVC)
+    message(FATAL_ERROR
+        "SIRIUS_SANITIZERS=address-undefined is supported by the GCC/Clang profiles only")
+endif()
+set(SIRIUS_CONTRACT_MODE "2" CACHE STRING
+    "Contract policy for first-party targets: 2=enforce, 1=observe, 0=ignore")
+set_property(CACHE SIRIUS_CONTRACT_MODE PROPERTY STRINGS 2 1 0)
+if(NOT SIRIUS_CONTRACT_MODE MATCHES "^[012]$")
+    message(FATAL_ERROR
+        "SIRIUS_CONTRACT_MODE must be exactly 2 (enforce), 1 (observe), or 0 (ignore)")
+endif()
 
 # Applies the standard mode, strict warnings, and contract semantics to a
-# new-tree target. Contract mode: 2 enforce, 1 observe, 0 ignore; the default
-# (enforce in Debug, observe otherwise) is in base/contracts.h, and targets
-# that need a different mode say so here rather than in source.
+# first-party target. Enforce is the operational default in every build type;
+# a weaker policy is an explicit, cache-visible build decision. Targets may
+# request a stricter local mode (the test estate always requests enforce).
 function(sirius_configure_target target)
     cmake_parse_arguments(ARG "" "CONTRACT_MODE" "" ${ARGN})
 
@@ -77,6 +96,20 @@ function(sirius_configure_target target)
     endif()
 
     if(DEFINED ARG_CONTRACT_MODE)
-        target_compile_definitions(${target} PRIVATE SIRIUS_CONTRACT_MODE=${ARG_CONTRACT_MODE})
+        set(target_contract_mode "${ARG_CONTRACT_MODE}")
+    else()
+        set(target_contract_mode "${SIRIUS_CONTRACT_MODE}")
+    endif()
+    target_compile_definitions(${target} PRIVATE
+        SIRIUS_CONTRACT_MODE=${target_contract_mode})
+
+    if(SIRIUS_SANITIZERS STREQUAL "address-undefined")
+        target_compile_options(${target} PRIVATE
+            -fsanitize=address,undefined
+            -fno-omit-frame-pointer
+            -fno-sanitize-recover=all)
+        target_link_options(${target} PRIVATE
+            -fsanitize=address,undefined
+            -fno-sanitize-recover=all)
     endif()
 endfunction()

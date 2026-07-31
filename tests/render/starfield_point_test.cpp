@@ -61,6 +61,13 @@ TEST(StarfieldPointTest, CatalogueMeetsSizeFloorAndIsFinite) {
     EXPECT_FLOAT_EQ(stars[500].magnitude, stars2[500].magnitude);
 }
 
+TEST(StarfieldPointTest, CataloguePreservesTheRequestedCount) {
+    StarfieldConfig cfg;
+    cfg.star_count = 17;
+    const StarfieldGenerator generator(cfg);
+    EXPECT_EQ(generator.GenerateCatalogue().size(), 17u);
+}
+
 // -----------------------------------------------------------------------------
 // Beam accumulation over a small frame is finite, free of NaN, and non-constant.
 // -----------------------------------------------------------------------------
@@ -94,6 +101,101 @@ TEST(StarfieldPointTest, BeamAccumulationFiniteAndNonConstant) {
     }
     EXPECT_GT(lit, 0) << "no stars accumulated anywhere";
     EXPECT_TRUE(non_constant) << "star field is constant across directions";
+}
+
+TEST(StarfieldPointTest, SpatialIndexMatchesExhaustiveBeamOracle) {
+    StarfieldConfig cfg;
+    cfg.star_count = 100000;
+    cfg.seed = 19;
+    cfg.brightness_scale = 80.0f;
+    StarfieldGenerator generator(cfg);
+    const auto stars = generator.GenerateCatalogue();
+    const StarfieldSpatialIndex index(stars);
+
+    struct Query {
+        float x;
+        float y;
+        float z;
+        float sigma;
+    };
+    const Query queries[] = {
+        {1.0f, 0.0f, 0.0f, 0.002f},
+        {-1.0f, 1.0e-4f, 0.0f, 0.01f},  // Longitude wrap.
+        {1.0e-4f, 0.0f, 1.0f, 0.02f},   // North-pole cap.
+        {0.2f, -0.8f, -0.5f, 0.05f},
+    };
+    for (const Query& query : queries) {
+        float oracle_r = 0.0f;
+        float oracle_g = 0.0f;
+        float oracle_b = 0.0f;
+        float indexed_r = 0.0f;
+        float indexed_g = 0.0f;
+        float indexed_b = 0.0f;
+        generator.AccumulateThroughBeam(query.x, query.y, query.z, query.sigma, stars, oracle_r,
+                                        oracle_g, oracle_b);
+        generator.AccumulateThroughBeam(query.x, query.y, query.z, query.sigma, stars, index,
+                                        indexed_r, indexed_g, indexed_b);
+        const float scale =
+            std::max({std::abs(oracle_r), std::abs(oracle_g), std::abs(oracle_b), 1.0e-8f});
+        EXPECT_NEAR(indexed_r, oracle_r, 2.0e-5f * scale);
+        EXPECT_NEAR(indexed_g, oracle_g, 2.0e-5f * scale);
+        EXPECT_NEAR(indexed_b, oracle_b, 2.0e-5f * scale);
+    }
+}
+
+TEST(StarfieldPointTest, EllipticalFootprintUsesBothAxesAndOrientation) {
+    StarfieldConfig cfg;
+    cfg.star_count = 100000;
+    cfg.seed = 27;
+    cfg.brightness_scale = 80.0f;
+    StarfieldGenerator generator(cfg);
+    const auto stars = generator.GenerateCatalogue();
+    const StarfieldSpatialIndex index(stars);
+
+    float circular_r = 0.0f;
+    float circular_g = 0.0f;
+    float circular_b = 0.0f;
+    float horizontal_r = 0.0f;
+    float horizontal_g = 0.0f;
+    float horizontal_b = 0.0f;
+    float vertical_r = 0.0f;
+    float vertical_g = 0.0f;
+    float vertical_b = 0.0f;
+    generator.AccumulateThroughBeam(1.0f, 0.0f, 0.0f, 0.03f, 0.03f, 0.0f, stars, index, circular_r,
+                                    circular_g, circular_b);
+    generator.AccumulateThroughBeam(1.0f, 0.0f, 0.0f, 0.03f, 0.003f, 0.0f, stars, index,
+                                    horizontal_r, horizontal_g, horizontal_b);
+    generator.AccumulateThroughBeam(1.0f, 0.0f, 0.0f, 0.03f, 0.003f, static_cast<float>(M_PI_2),
+                                    stars, index, vertical_r, vertical_g, vertical_b);
+
+    const float circular = circular_r + circular_g + circular_b;
+    const float horizontal = horizontal_r + horizontal_g + horizontal_b;
+    const float vertical = vertical_r + vertical_g + vertical_b;
+    EXPECT_GT(circular, 0.0f);
+    EXPECT_LT(horizontal, circular);
+    EXPECT_LT(vertical, circular);
+    EXPECT_GT(std::abs(horizontal - vertical), 1.0e-8f)
+        << "rotating a non-circular footprint did not change the filtered catalogue";
+}
+
+TEST(StarfieldPointTest, ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope) {
+    StarfieldConfig cfg;
+    cfg.star_count = 100000;
+    StarfieldGenerator generator(cfg);
+    const auto stars = generator.GenerateCatalogue();
+    const StarfieldSpatialIndex index(stars);
+    const std::size_t fixed_residency = stars.size() * sizeof(StarEntry) + index.MemoryBytes();
+
+    EXPECT_LT(index.MemoryBytes(), 2u * 1024u * 1024u);
+    EXPECT_LT(fixed_residency, 8u * 1024u * 1024u)
+        << "the filtered-star catalogue/index cannot be resident on the 2 GiB floor target";
+
+    std::size_t candidates = 0;
+    const float imax_pixel_sigma = (60.0f * static_cast<float>(M_PI) / 180.0f) / 4096.0f;
+    index.ForEachCandidate(1.0f, 0.0f, 0.0f, imax_pixel_sigma,
+                           [&](std::uint32_t) { ++candidates; });
+    EXPECT_LT(candidates, stars.size() / 100)
+        << "IMAX-sized beams fell back to an effectively exhaustive catalogue scan";
 }
 
 // -----------------------------------------------------------------------------

@@ -40,10 +40,20 @@ enum class DeviceKind {
 
 struct DeviceInfo {
     std::string name;
+    std::string driver_name;
+    std::string driver_info;
     DeviceKind kind = DeviceKind::kOther;
-    // Largest device-local heap; the memory governor derives tile budgets
-    // from this, never from full-frame hope.
+    std::uint32_t vendor_id = 0;
+    std::uint32_t device_id = 0;
+    std::uint32_t api_version = 0;
+    std::uint32_t driver_id = 0;
+    // Largest device-local heap, reported as inventory rather than used as an
+    // allocation promise.
     std::uint64_t device_local_bytes = 0;
+    // Largest heap addressable by the host-visible coherent memory types used
+    // by this adapter. The memory governor derives its default budget from
+    // this value.
+    std::uint64_t render_memory_bytes = 0;
     // Whether fp64 kernels are available (precision ladder rung one).
     bool supports_fp64 = false;
 };
@@ -99,6 +109,12 @@ class ComputeDevice {
 // Enumerates Vulkan-visible devices (empty vector when no loader or ICD is
 // present; that is a decline, not an error).
 [[nodiscard]] base::Expected<std::vector<DeviceInfo>> EnumerateVulkanDevices();
+
+// Resolves SIRIUS_VULKAN_DEVICE as a strict zero-based index into `devices`.
+// An unset selector chooses index zero; malformed and out-of-range selectors
+// decline rather than silently targeting different silicon.
+[[nodiscard]] base::Expected<std::size_t> ResolveVulkanDeviceIndex(
+    std::span<const DeviceInfo> devices);
 
 // Opens device `index` as enumerated by EnumerateVulkanDevices.
 [[nodiscard]] base::Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index);

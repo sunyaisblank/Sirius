@@ -146,10 +146,10 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         float r = c0;
         float r_isco = samples[sb + 13];
         float innerT = samples[sb + 14];
-        float Q = ComputeNovikovThorneQ(r, r_isco, p1, p2);
-        float T = NovikovThorneTemperature(innerT, Q);
+        float fluxShape = FullPageThorneFluxShape(r / p1, r_isco / p1, p2);
+        float T = FullPageThorneTemperature(innerT, r, r_isco, p1, p2);
         results[rb + 0] = T;
-        results[rb + 1] = Q;
+        results[rb + 1] = fluxShape;
         results[rb + 2] = ComputeKerrISCO(p1, p2);
     } else if (opcode == OP_BLACKBODY) {
         // c0 = temperature (K).

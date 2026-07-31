@@ -33,13 +33,17 @@ The July remediation's central lesson was that every duplicated authority eventu
 | Device physics | one Slang kernel set under `src/sirius/kernels/` | New. Replaces the 6,561-line CUDA monolith that inlined its own drifted copies of metric and disk physics. |
 | Dispatch duration | `render/dispatch_governor.h` (`BandController`) | New (2026-07-28, physical-GPU validation). Bounds how long any single compute dispatch holds the device, the constraint OS GPU watchdogs enforce; the memory governor remains the sole authority for residency. |
 
-The generated-table mechanism is the reflection stand-in the style guide names: a build-time script reads the registry and constants headers (their declarative sections carry structured comments) and emits both the Slang-side tables and a C++ mirror test that fails if generation is stale. When P2996 reflection lands in release compilers, the generator is replaced and nothing downstream moves.
+P2996 reflection is not available and is not simulated. The metric registry is
+the C++ identity authority; configuration has explicit serializers and strict
+shape validation; Slang constants and dispatch parameters have explicit
+packing plus CPU/kernel parity witnesses. The compile-time language capability
+authority reports this as `explicit-schema`, never as native reflection.
 
 ## 3. Kernel strategy
 
 All device physics is written once, in Slang, as modules with interfaces per concern (metric family, integrator, disk emission, beam propagation). Slang was chosen over three alternatives: raw GLSL lacks the module and generics system a physics library needs; SYCL single-source C++ has no Metal path and weak Windows support outside oneAPI; WGSL has no 64-bit floating point at all. Slang compiles the same source to SPIR-V for Vulkan today, and to CUDA, Metal, and HLSL when a native adapter earns its keep by profiling; the compiler is Khronos-hosted, Apache-licensed, and ships prebuilt for all three desktop platforms.
 
-Two live integrators exist by design, and the difference is methodological rather than accidental. The kernel integrates with the time-transformed Yoshida symplectic family the GPU path already uses, horizon-regularised and conservation-preserving in single precision; the CPU reference tracer keeps the Dormand-Prince RK45 Hamiltonian formulation. Two independent methods agreeing within stated tolerance is stronger evidence than one method executed twice, so backend parity gates are statistical (per-pixel relative radiance bounds, conserved-quantity drift bounds) rather than bitwise. The reference tapes in `renders/` remain CPU-produced.
+Two live integrators exist by design, and the difference is methodological rather than accidental. The kernel integrates Cartesian geodesics with fixed-form RK4 and compensated or fp64 state accumulation on the corresponding precision rungs; the CPU reference tracer uses adaptive Dormand-Prince RK45. The time-transformed Yoshida symplectic integrator is deliberately confined to the double-precision oracle stack. Two independent live methods agreeing within stated tolerance is stronger evidence than one method executed twice, so backend parity gates are statistical (per-pixel relative radiance bounds, conserved-quantity drift bounds) rather than bitwise. The reference tapes in `renders/` remain CPU-produced.
 
 Precision inside kernels follows the ladder in section 6; conserved quantities (E, L_z, Carter Q, the null condition) are monitored per ray and renormalised on the schedule the constants authority sets, exactly as the CPU path does.
 
@@ -50,7 +54,7 @@ Precision inside kernels follows the ladder in section 6; conserved quantities (
 | Backend | Reaches | Status in this engagement |
 |---|---|---|
 | CPU tracer | every machine, no GPU or loader required | Ported live; the reference implementation |
-| Vulkan compute | AMD, Intel, NVIDIA on Windows and Linux; Apple via MoltenVK; WSL2 via Dozen or Lavapipe; CPU-only machines via Lavapipe/SwiftShader | Built and gated on Lavapipe; validated on physical 780M silicon via Dozen (2026-07-28) |
+| Vulkan compute | AMD, Intel, NVIDIA on Windows and Linux; Apple via MoltenVK; WSL2 via Dozen or Lavapipe; CPU-only machines via Lavapipe/SwiftShader | Required and non-skipping on Lavapipe in the current Linux operational profile. A 2026-07-28 Dozen/780M run is historical evidence; the current review does not present it as a fresh physical-driver attestation. |
 | Slang→CUDA native | NVIDIA, if profiling shows Vulkan leaves performance unclaimed | Emission is a standing build gate: trace.slang → trace.cu every build, entry point pinned by the KernelPortability suite; adapter deferred |
 | Slang→Metal native | Apple silicon | Emission is a standing build gate: trace.slang → trace.metal every build, entry point pinned by the KernelPortability suite; adapter deferred |
 
@@ -58,7 +62,16 @@ WSL2 is a named platform tier, not an afterthought: no native GPU kernel driver 
 
 ## 5. Render orchestration
 
-The session orchestrator, tile scheduler, progress tracking, and viewer port forward with their roles intact. Tiles remain the unit of work everywhere: the CPU tracer threads over tiles, the Vulkan backend dispatches a compute grid per tile batch, and the viewer's progressive refinement consumes tiles in the existing spiral order. Beam propagation (specification P2) joins the live path in both backends: the kernel already carries deviation-vector state per ray from the GPU implementation, and the CPU tracer gains the same propagation, both validated against the double-precision oracle beam integrator, which remains off the render path.
+The session orchestrator, tile scheduler, progress tracking, and viewer port forward with their roles intact. Tiles remain the unit of work everywhere: the CPU tracer threads over tiles, the Vulkan backend dispatches a compute grid per tile batch, and the viewer's progressive refinement consumes tiles in the existing spiral order. Both live paths propagate two deviation vectors, extract the singular axes and output-plane orientation, and feed that literal ellipse to the indexed point-star filter. The kernel constructs the Riemann tensor once per step and contracts it with both vectors. The double-precision beam integrator remains off the render path as an oracle; its covariant Jacobi state shares one RK4 tableau with the central ray and is gated against the exact radial and circular Schwarzschild null-congruence solutions to one part in \(10^6\).
+
+The CPU polarisation path carries two observer screen vectors through the same
+accepted geodesic steps, reconditions them only to remove integrator drift, and
+projects the thin-disk thermal scattering state into that transported basis.
+The live Kerr-Schild implementation conserves the Walker-Penrose constant and
+agrees across charts with the independent Boyer-Lindquist oracle. Stokes
+crossings are accumulated before false-colour film visualisation. Vulkan,
+volumetric transfer, and temporal disk blur do not cross this capability
+boundary.
 
 ## 6. Memory governor and precision ladder
 
@@ -128,4 +141,4 @@ Kept, vendored in `lib/` as now: GLFW, glad, Dear ImGui, stb, tinyexr with miniz
 
 ## 9. Validation architecture
 
-Four gate families, layered exactly as the governing specification requires. Unit and property gates: the ported Mandatory suites (textbook metric values, Christoffel symmetry, exact Kerr-Schild identities, registry round-trips, conservation on the live path, determinism). Oracle gates: live-path agreement with the double-precision Boyer-Lindquist stack on conserved quantities, beam cross-sections against the oracle beam integrator, per-rung precision-ladder error quantification. Backend parity gates: CPU tracer versus Vulkan-on-Lavapipe on radiance statistics and conservation, kernel blackbody and Christoffel agreement suites carried from July, all executable in this environment because Lavapipe needs no hardware. Image gates: behaviour-preserving port stages reproduce the CPU reference tapes pixel-identically; behaviour-changing stages (beams on the CPU path, the kernel integrator on Vulkan) land with named re-baselined references and the difference explained in the commit.
+Five gate families. Unit and property gates cover textbook values, exact identities, registry round-trips, live-path conservation, and determinism. Oracle gates compare the live path with the independent double-precision Boyer-Lindquist stack. Backend gates compare CPU and Vulkan statistics and enforce the Vulkan capability boundary. Operational gates install to a staged volume, relocate it, initialise from a hostile working directory, render, remove a mandatory resource to prove fail-closed behaviour, require a real software-Vulkan dispatch, and repeat the P1 near-extremal classifier as burn-in. The sanitizer profile runs the Mandatory estate under ASan, UBSan, and LSan with one named software-Vulkan process-lifetime suppression. Historical image tapes remain useful forensic material, but no current executable byte-identity gate consumes them; `docs/ADVERSARIAL_REVIEW.md` records that claim as unverified rather than treating files alone as evidence.

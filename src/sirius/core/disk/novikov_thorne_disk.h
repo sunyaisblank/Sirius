@@ -14,6 +14,7 @@
 // replaced by the core coordinates::Vec4Bl (same {t, r, theta, phi} layout and
 // member access); behaviour is unchanged.
 
+#include "sirius/base/contracts.h"
 #include "sirius/core/constants.h"
 #include "sirius/core/coordinates.h"
 #include "sirius/core/disk/disk_model.h"
@@ -96,12 +97,13 @@ class AccretionDiskD : public IDiskModel {
     }
 
     // Specific angular momentum for a circular orbit (Page & Thorne 1974, Eq. 15.12):
-    // L(r) = sqrt(M) (r^2 - 2a sqrt(Mr) + a^2) / (r sqrt(r^2 - 3Mr + 2a sqrt(Mr))).
+    // L(r) = sqrt(M) (r^2 - 2a sqrt(Mr) + a^2) /
+    //        (sqrt(r) sqrt(r^2 - 3Mr + 2a sqrt(Mr))).
     static double SpecificAngularMomentum(double r, double M, double a) {
         double sqrtM = std::sqrt(M);
         double sqrtMr = std::sqrt(M * r);
         double numerator = sqrtM * (r * r - 2 * a * sqrtMr + a * a);
-        double denominator = r * std::sqrt(r * r - 3 * M * r + 2 * a * sqrtMr);
+        double denominator = std::sqrt(r) * std::sqrt(r * r - 3 * M * r + 2 * a * sqrtMr);
         if (std::abs(denominator) < constants::tolerances::kDivisionSafeEps) return 0.0;
         return numerator / denominator;
     }
@@ -119,32 +121,18 @@ class AccretionDiskD : public IDiskModel {
     static double dLdr(double r, double M, double a) {
         if (r <= 0 || M <= 0) return 0;
 
-        double sqrtM = std::sqrt(M);
-        double sqrtMr = std::sqrt(M * r);
-        double sqrtR = std::sqrt(r);
+        const double sqrtM = std::sqrt(M);
+        const double sqrtMr = std::sqrt(M * r);
+        const double sqrtR = std::sqrt(r);
+        const double N = r * r - 2 * a * sqrtMr + a * a;
+        const double radicand = r * r - 3 * M * r + 2 * a * sqrtMr;
+        if (radicand <= constants::tolerances::kDivisionSafeEps) return 0;
 
-        double N = r * r - 2 * a * sqrtMr + a * a;      // r^2 - 2a sqrt(Mr) + a^2
-        double D = r * r - 3 * M * r + 2 * a * sqrtMr;  // r^2 - 3Mr + 2a sqrt(Mr)
-
-        // Guard D <= 0 (inside the ISCO).
-        if (D <= constants::tolerances::kDivisionSafeEps) return 0;
-        double sqrtD = std::sqrt(D);
-
-        double aSqrtMoverR = a * sqrtM / sqrtR;      // a sqrt(M/r)
-        double dN_dr = 2 * r - aSqrtMoverR;          // 2r - a sqrt(M/r)
-        double dD_dr = 2 * r - 3 * M + aSqrtMoverR;  // 2r - 3M + a sqrt(M/r)
-
-        // d(r sqrt(D))/dr = (2D + r dD/dr) / (2 sqrt(D)).
-        double d_rsqrtD_dr = (2 * D + r * dD_dr) / (2 * sqrtD);
-
-        double rSqrtD = r * sqrtD;
-        double denom = rSqrtD * rSqrtD;
-        if (std::abs(denom) < constants::tolerances::kFluxIntegralEps) return 0;
-
-        // dL/dr = sqrt(M) [dN/dr (r sqrt(D)) - N d(r sqrt(D))/dr] / (r sqrt(D))^2.
-        double result = sqrtM * (dN_dr * rSqrtD - N * d_rsqrtD_dr) / denom;
-
-        return result;
+        const double denominator = sqrtR * std::sqrt(radicand);
+        const double dN = 2 * r - a * sqrtM / sqrtR;
+        const double dRadicand = 2 * r - 3 * M + a * sqrtM / sqrtR;
+        const double dLogDenominator = 0.5 / r + 0.5 * dRadicand / radicand;
+        return sqrtM * (dN - N * dLogDenominator) / denominator;
     }
 
     // dOmega/dr, the analytic derivative of the angular velocity (from Bardeen
@@ -235,39 +223,16 @@ class AccretionDiskD : public IDiskModel {
         // Must be outside the ISCO for emission.
         if (r_M <= r_isco_) return 0;
 
-        // Inner torque factor: ensures F -> 0 at the ISCO.
-        double sqrt_ratio = std::sqrt(r_isco_ / r_M);
-        double inner_torque = 1 - sqrt_ratio;
-        if (inner_torque <= 0) return 0;
-
-        // r in physical units (rs = 2GM/c^2).
-        double r_physical = r_M * rs_ / 2;
-
-        double F_newt = (3 * gm_ * mdot_si_) / (8 * M_PI * r_physical * r_physical * r_physical);
-
-        // Full Page-Thorne everywhere outside the inner-edge buffer. The previous
-        // 1.5 r_isco threshold excluded exactly the band where the Novikov-Thorne
-        // profile peaks (~1.2-1.36 r_isco), leaving the peak to the simplified
-        // correction below; the fallback now serves only when the full expression
-        // fails numerically.
+        // Full Page-Thorne everywhere outside the inner-edge buffer. A numerical
+        // failure must not substitute a different relativistic correction.
         if (r_M > r_isco_ * constants::disk::kInnerEdgeBuffer) {
-            double F_PT = FullPageThorneFlux(r);
-            if (std::isfinite(F_PT) && F_PT > 0) {
-                return F_PT;
-            }
+            const double F_PT = FullPageThorneFlux(r);
+            SIRIUS_ASSERT(std::isfinite(F_PT) && F_PT > 0.0);
+            return std::isfinite(F_PT) && F_PT > 0.0 ? F_PT : 0.0;
         }
 
-        // Fallback: simplified relativistic correction.
-        double y = std::sqrt(r_M);
-        double y3 = y * y * y;
-
-        double denom = y3 * (y - 3.0 / y + 2 * a_ / (y * y));
-        double Q = (std::abs(denom) > 1e-10) ? 1.0 / denom : 1.0;
-
-        if (!std::isfinite(Q) || Q <= 0) Q = 1.0;
-        Q = std::clamp(Q, constants::disk::kQFactorMin, constants::disk::kQFactorMax);
-
-        return F_newt * inner_torque * Q;
+        // The zero-torque boundary is exactly dark inside the guarded buffer.
+        return 0.0;
     }
 
     // Temperature T(r) = [F(r) / sigma_SB]^(1/4) (IDiskModel::Temperature).

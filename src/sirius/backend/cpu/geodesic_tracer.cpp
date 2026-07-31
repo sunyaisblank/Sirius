@@ -15,6 +15,13 @@ namespace sirius::backend {
 
 using namespace sirius::core;
 
+namespace {
+
+void TransverseBasis(double nx, double ny, double nz, double& ax, double& ay, double& az,
+                     double& bx, double& by, double& bz);
+
+}  // namespace
+
 // =============================================================================
 // Initialise a Lightray from a camera ray.
 // =============================================================================
@@ -32,9 +39,11 @@ Lightray GeodesicTracer::InitializeLightray(const CameraRay& camera_ray) {
     // Clamp theta away from the poles.
     th = std::clamp(th, 0.01, M_PI - 0.01);
 
-    // Position: Boyer-Lindquist -> Kerr-Schild Cartesian (consolidated transforms).
+    // Position: Boyer-Lindquist -> Kerr-Schild Cartesian using the spin-aware
+    // oblate transform.
     coordinates::Vec4Bl pos_bl(t, r, th, ph);
-    coordinates::Vec4Cart pos_cart = coordinates::BlToCartesian(pos_bl);
+    const double absolute_spin = cached_a_ * cached_m_;
+    coordinates::Vec4Cart pos_cart = coordinates::BlToKerrSchildCart(pos_bl, absolute_spin);
 
     ray.position(0) = static_cast<float>(pos_cart.t);
     ray.position(1) = static_cast<float>(pos_cart.x);
@@ -42,29 +51,20 @@ Lightray GeodesicTracer::InitializeLightray(const CameraRay& camera_ray) {
     ray.position(3) = static_cast<float>(pos_cart.z);
 
     double sin_th = std::sin(th);
-    double cos_th = std::cos(th);
-    double sin_ph = std::sin(ph);
-    double cos_ph = std::cos(ph);
-
-    // Velocity: spherical basis -> Cartesian basis via the Jacobian
-    //   v_x = v_r sin th cos ph + r v_th cos th cos ph - r v_ph sin th sin ph
-    //   v_y = v_r sin th sin ph + r v_th cos th sin ph + r v_ph sin th cos ph
-    //   v_z = v_r cos th        - r v_th sin th
-    double v_r = camera_ray.direction(1);
-    double v_th = camera_ray.direction(2) / r;  // Camera stores r dtheta/dlambda.
-    double v_ph =
-        camera_ray.direction(3) / (r * sin_th);  // Camera stores r sin(theta) dphi/dlambda.
-
-    // Avoid division by zero at the poles.
-    if (std::abs(sin_th) < 1e-10) {
-        v_ph = 0.0;
-    }
-
-    ray.velocity(1) = static_cast<float>(v_r * sin_th * cos_ph + r * v_th * cos_th * cos_ph -
-                                         r * v_ph * sin_th * sin_ph);
-    ray.velocity(2) = static_cast<float>(v_r * sin_th * sin_ph + r * v_th * cos_th * sin_ph +
-                                         r * v_ph * sin_th * cos_ph);
-    ray.velocity(3) = static_cast<float>(v_r * cos_th - r * v_th * sin_th);
+    // Direction components are an orthonormal camera-local triad, not BL
+    // coordinate derivatives. Rotate that triad directly into the asymptotic
+    // Cartesian frame at the actual oblate position.
+    const double cartesian_phi = std::atan2(pos_cart.y, pos_cart.x);
+    const double sin_ph = std::sin(cartesian_phi);
+    const double cos_ph = std::cos(cartesian_phi);
+    const double v_r = camera_ray.direction(1);
+    const double v_theta = camera_ray.direction(2);
+    const double v_phi = camera_ray.direction(3);
+    ray.velocity(1) = static_cast<float>(v_r * sin_th * cos_ph + v_theta * std::cos(th) * cos_ph -
+                                         v_phi * sin_ph);
+    ray.velocity(2) = static_cast<float>(v_r * sin_th * sin_ph + v_theta * std::cos(th) * sin_ph +
+                                         v_phi * cos_ph);
+    ray.velocity(3) = static_cast<float>(v_r * std::cos(th) - v_theta * sin_th);
 
     // Normalise to the null condition g_mu_nu k^mu k^nu = 0; solve for k^0.
     Metric4d g;
@@ -109,6 +109,131 @@ Lightray GeodesicTracer::InitializeLightray(const CameraRay& camera_ray) {
     ray.running_dlambda_dnew = 1.0f;
 
     return ray;
+}
+
+void GeodesicTracer::InitPolarisationFrame(const Lightray& ray, PolarisationFrame& frame) {
+    Vec4 position = ray.position;
+    Vec4 velocity = ray.velocity;
+
+    double nx = velocity(1);
+    double ny = velocity(2);
+    double nz = velocity(3);
+    double length = std::sqrt(nx * nx + ny * ny + nz * nz);
+    SIRIUS_PRE(length > 0.0);
+    nx /= length;
+    ny /= length;
+    nz /= length;
+
+    double ax, ay, az, bx, by, bz;
+    TransverseBasis(nx, ny, nz, ax, ay, az, bx, by, bz);
+
+    Vec4 reference_trial;
+    reference_trial(1) = ax;
+    reference_trial(2) = ay;
+    reference_trial(3) = az;
+    Vec4 perpendicular_trial;
+    perpendicular_trial(1) = bx;
+    perpendicular_trial(2) = by;
+    perpendicular_trial(3) = bz;
+
+    frame.reference.position = position;
+    frame.reference.velocity = velocity;
+    frame.reference.polarisation =
+        MakeOrthonormalPolarisation(*metric_, position, velocity, reference_trial);
+    frame.reference.affine = 0.0;
+
+    frame.perpendicular.position = position;
+    frame.perpendicular.velocity = velocity;
+    frame.perpendicular.polarisation =
+        MakeOrthonormalPolarisation(*metric_, position, velocity, perpendicular_trial);
+    frame.perpendicular.affine = 0.0;
+
+    ReconditionPolarisationFrame(frame, position, velocity);
+}
+
+void GeodesicTracer::AdvancePolarisationFrame(PolarisationFrame& frame, double d_lambda) {
+    SIRIUS_PRE(d_lambda > 0.0);
+    ParallelTransportStep(*metric_, frame.reference, d_lambda);
+    ParallelTransportStep(*metric_, frame.perpendicular, d_lambda);
+}
+
+void GeodesicTracer::ReconditionPolarisationFrame(PolarisationFrame& frame, const Vec4& position,
+                                                  const Vec4& velocity) {
+    // Reset the carrier path to the accepted RK45 endpoint and remove only
+    // numerical gauge/norm drift from the transported screen vectors.
+    frame.reference.position = position;
+    frame.reference.velocity = velocity;
+    frame.reference.polarisation =
+        MakeOrthonormalPolarisation(*metric_, position, velocity, frame.reference.polarisation);
+
+    Metric4d g;
+    Tensor<Dual<double>, 4, 4, 4> dg;
+    metric_->Evaluate(position, g, dg);
+
+    frame.perpendicular.position = position;
+    frame.perpendicular.velocity = velocity;
+    Vec4 perpendicular =
+        MakeOrthonormalPolarisation(*metric_, position, velocity, frame.perpendicular.polarisation);
+    perpendicular -= frame.reference.polarisation *
+                     TensorOps::InnerProduct(perpendicular, frame.reference.polarisation, g);
+    const double norm = TensorOps::InnerProduct(perpendicular, perpendicular, g);
+    SIRIUS_PRE(norm > 0.0);
+    frame.perpendicular.polarisation = perpendicular / std::sqrt(norm);
+}
+
+void GeodesicTracer::SetDiskPolarisation(const PolarisationFrame& frame,
+                                         TraceResult::DiskCrossing& crossing) {
+    const Vec4& position = frame.reference.position;
+    const Vec4& wave = frame.reference.velocity;
+
+    Metric4d g;
+    Tensor<Dual<double>, 4, 4, 4> dg;
+    metric_->Evaluate(position, g, dg);
+
+    // Equatorial Page-Thorne emitter: u is the normalised circular worldline
+    // with angular velocity Omega. At z=0 the Cartesian Kerr-Schild azimuth has
+    // the same fixed-r derivative as Boyer-Lindquist phi.
+    const double x = position(1);
+    const double y = position(2);
+    const coordinates::Vec4Cart crossing_cart{position(0), x, y, position(3)};
+    const double orbital_radius =
+        coordinates::KerrSchildRadius(crossing_cart, cached_a_ * cached_m_);
+    const double omega = ComputeOrbitalVelocity(static_cast<float>(orbital_radius));
+    Vec4 emitter;
+    emitter(0) = 1.0;
+    emitter(1) = -omega * y;
+    emitter(2) = omega * x;
+    const double emitter_norm = TensorOps::InnerProduct(emitter, emitter, g);
+    SIRIUS_PRE(emitter_norm < 0.0);
+    emitter = emitter / std::sqrt(-emitter_norm);
+
+    const double emitted_frequency = -TensorOps::InnerProduct(emitter, wave, g);
+    SIRIUS_PRE(emitted_frequency > 0.0);
+    const Vec4 photon_direction = wave / emitted_frequency - emitter;
+
+    Vec4 disk_normal;
+    disk_normal(3) = 1.0;
+    const double normal_norm = TensorOps::InnerProduct(disk_normal, disk_normal, g);
+    SIRIUS_PRE(normal_norm > 0.0);
+    disk_normal = disk_normal / std::sqrt(normal_norm);
+
+    const float inclination_cosine = static_cast<float>(
+        std::clamp(std::abs(TensorOps::InnerProduct(photon_direction, disk_normal, g)), 0.0, 1.0));
+    crossing.polarisation_degree =
+        polarised_emission::ThomsonPolarisationDegree(inclination_cosine);
+
+    // The electric vector of the single-scattering atmosphere is parallel to
+    // the disk plane, hence perpendicular to the projected disk normal. Gauge
+    // additions proportional to k vanish against the transported screen basis.
+    const Vec4 meridian = MakeOrthonormalPolarisation(*metric_, position, wave, disk_normal);
+    const double meridian_reference =
+        TensorOps::InnerProduct(meridian, frame.reference.polarisation, g);
+    const double meridian_perpendicular =
+        TensorOps::InnerProduct(meridian, frame.perpendicular.polarisation, g);
+    const double meridian_angle = std::atan2(meridian_perpendicular, meridian_reference);
+    crossing.polarisation_evpa =
+        static_cast<float>(std::remainder(meridian_angle + M_PI / 2.0, M_PI));
+    crossing.polarisation_valid = true;
 }
 
 // =============================================================================
@@ -185,6 +310,11 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
     if (config_.enable_ray_bundles) {
         InitBundle(ray.velocity, bundle);
     }
+    PolarisationFrame polarisation_frame;
+    PolarisationFrame previous_polarisation_frame;
+    if (config_.enable_polarisation) {
+        InitPolarisationFrame(ray, polarisation_frame);
+    }
 
     // Spiral-orbit early termination: rays near b_crit orbit the photon sphere
     // many times; the higher-order images they produce are exponentially dim
@@ -195,12 +325,24 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
 
     for (int step = 0; step < config_.max_steps; ++step) {
         for (int i = 0; i < 4; ++i) prev_pos(i) = ray.position(i);
-        if (config_.enable_ray_bundles) {
+        if (config_.enable_ray_bundles || config_.enable_polarisation) {
             prev_vel = ray.velocity;
             prev_pt = static_cast<double>(ray.proper_time);
         }
+        if (config_.enable_polarisation) {
+            previous_polarisation_frame = polarisation_frame;
+        }
 
-        bool success = Geodesic::IntegrateStepRk45(ray, metric_, config_.integrator);
+        const double pre_step_radius =
+            std::sqrt(static_cast<double>(ray.position(1)) * ray.position(1) +
+                      static_cast<double>(ray.position(2)) * ray.position(2) +
+                      static_cast<double>(ray.position(3)) * ray.position(3));
+        auto step_config = config_.integrator;
+        if (config_.strong_field_radius > 0.0f && config_.strong_field_max_step > 0.0f &&
+            pre_step_radius < config_.strong_field_radius) {
+            step_config.max_step = std::min(step_config.max_step, config_.strong_field_max_step);
+        }
+        bool success = Geodesic::IntegrateStepRk45(ray, metric_, step_config);
         result.steps_taken++;
 
         if (ray.terminated || HasInvalidState(ray)) {
@@ -219,13 +361,18 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
             continue;
         }
 
+        const double d_lambda = static_cast<double>(ray.proper_time) - prev_pt;
+
         // Advance the ray bundle over the affine step just taken, with the
         // connection and curvature frozen at the step's start point.
         if (config_.enable_ray_bundles) {
-            double d_lambda = static_cast<double>(ray.proper_time) - prev_pt;
             if (d_lambda > 0.0) {
                 StepBundle(prev_pos, prev_vel, d_lambda, bundle);
             }
+        }
+        if (config_.enable_polarisation && d_lambda > 0.0) {
+            AdvancePolarisationFrame(polarisation_frame, d_lambda);
+            ReconditionPolarisationFrame(polarisation_frame, ray.position, ray.velocity);
         }
 
         double x = ray.position(1);
@@ -254,7 +401,8 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
         prev_z = curr_z;
 
         // Spiral-orbit early termination.
-        if ((step % SPIRAL_CHECK_INTERVAL == 0) && step > SPIRAL_CHECK_INTERVAL) {
+        if (config_.enable_spiral_termination && (step % SPIRAL_CHECK_INTERVAL == 0) &&
+            step > SPIRAL_CHECK_INTERVAL) {
             float r_ratio = min_r / r_photon;
             bool near_photon_sphere = (r_ratio < SPIRAL_R_THRESHOLD) && (r_ratio > 0.9f);
             bool has_spiraled = (total_phi_change > SPIRAL_PHI_THRESHOLD);
@@ -338,17 +486,22 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
         }
 
         // 3. Volumetric disk (ray marching through a 3D disk volume).
-        if (config_.enable_disk && config_.enable_volumetric) {
-            float prev_r = static_cast<float>(
-                std::sqrt(prev_pos(1) * prev_pos(1) + prev_pos(2) * prev_pos(2)));
+        if ((config_.enable_disk && config_.enable_volumetric) || config_.enable_corona) {
+            const double absolute_spin = cached_a_ * cached_m_;
+            const coordinates::Vec4Cart previous_cart{prev_pos(0), prev_pos(1), prev_pos(2),
+                                                      prev_pos(3)};
+            const coordinates::Vec4Cart current_cart{ray.position(0), x, y, z};
+            float prev_r =
+                static_cast<float>(coordinates::KerrSchildRadius(previous_cart, absolute_spin));
             float prev_z_cyl = static_cast<float>(prev_pos(3));
-            float curr_r = static_cast<float>(std::sqrt(x * x + y * y));
+            float curr_r =
+                static_cast<float>(coordinates::KerrSchildRadius(current_cart, absolute_spin));
             float curr_z_cyl = static_cast<float>(z);
 
             bool was_inside = IsInVolumetricDisk(prev_r, prev_z_cyl);
             bool is_inside = IsInVolumetricDisk(curr_r, curr_z_cyl);
 
-            if (was_inside || is_inside) {
+            if (was_inside || is_inside || config_.enable_corona) {
                 Vec4 segment_start, segment_end;
                 for (int i = 0; i < 4; ++i) {
                     segment_start(i) = prev_pos(i);
@@ -356,12 +509,6 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
                 }
 
                 AccumulateVolumetricEmission(ray, segment_start, segment_end, result);
-
-                if (result.volumetric_hit && result.outcome != TraceResult::Outcome::DiskHit) {
-                    result.outcome = TraceResult::Outcome::DiskHit;
-                    result.disk_radius = curr_r;
-                    result.disk_phi = static_cast<float>(std::atan2(y, x));
-                }
             }
         }
 
@@ -402,6 +549,18 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
                         result.disk_temperature = crossing.temperature;
                     } else {
                         crossing.redshift = ComputeGFactor(disk_r, disk_phi, ray_vel);
+                    }
+
+                    if (config_.enable_polarisation) {
+                        const double denominator = ray.position(3) - prev_pos(3);
+                        SIRIUS_ASSERT(std::abs(denominator) > 0.0);
+                        const double crossing_fraction =
+                            std::clamp(-prev_pos(3) / denominator, 0.0, 1.0);
+                        PolarisationFrame crossing_frame = previous_polarisation_frame;
+                        if (crossing_fraction > 0.0 && d_lambda > 0.0) {
+                            AdvancePolarisationFrame(crossing_frame, crossing_fraction * d_lambda);
+                        }
+                        SetDiskPolarisation(crossing_frame, crossing);
                     }
 
                     result.num_disk_crossings++;
@@ -642,7 +801,7 @@ bool GeodesicTracer::IsInVolumetricDisk(float r, float z) {
     return std::abs(z) <= z_max;
 }
 
-float GeodesicTracer::ComputeVolumetricOpacityDensity(float r, float z) {
+float GeodesicTracer::ComputeVolumetricOpacityDensity(float r, float z, float phi) {
     if (!IsInVolumetricDisk(r, z)) return 0;
 
     float H = ComputeScaleHeight(r);
@@ -662,7 +821,15 @@ float GeodesicTracer::ComputeVolumetricOpacityDensity(float r, float z) {
                        (std::sqrt(2.0f * static_cast<float>(M_PI)) * H) * std::pow(r_ratio, -1.5f) *
                        (H_ref / H);
 
-    return kappa_rho0 * gaussian;
+    float density = kappa_rho0 * gaussian;
+    if (config_.enable_turbulence) {
+        const float spherical_r = std::sqrt(r * r + z * z);
+        const float theta =
+            spherical_r > 0.0f ? std::acos(std::clamp(z / spherical_r, -1.0f, 1.0f)) : 0.0f;
+        density *= turbulence_noise::SampleDensityPerturbation(spherical_r, theta, phi,
+                                                               config_.turbulence);
+    }
+    return density;
 }
 
 float GeodesicTracer::ComputeVolumetricTemperature(float r, float z) {
@@ -702,15 +869,24 @@ void GeodesicTracer::AccumulateVolumetricEmission([[maybe_unused]] const Lightra
 
     if (path_length < 1e-10) return;
 
-    result.volumetric_path_length = static_cast<float>(path_length);
-
     int N = config_.volumetric_samples;
     double ds = path_length / N;
 
-    double accumulated_tau = 0.0;
-    double accumulated_r = 0.0;
-    double accumulated_g = 0.0;
-    double accumulated_b = 0.0;
+    // Carry the radiative-transfer solution across integration segments. The
+    // previous implementation restarted from zero for every RK45 segment and
+    // overwrote the result, so the reported optical depth depended on the final
+    // step rather than the traversed volume.
+    double accumulated_tau = result.optical_depth;
+    double accumulated_r = result.volumetric_emission[0];
+    double accumulated_g = result.volumetric_emission[1];
+    double accumulated_b = result.volumetric_emission[2];
+    double active_path_length = 0.0;
+    const double max_tau = static_cast<double>(config_.volumetric_tau_max);
+
+    if (accumulated_tau >= max_tau) {
+        result.optical_depth = static_cast<float>(max_tau);
+        return;
+    }
 
     double dir_x = dx / path_length;
     double dir_y = dy / path_length;
@@ -723,43 +899,71 @@ void GeodesicTracer::AccumulateVolumetricEmission([[maybe_unused]] const Lightra
         double y = entry_pos(2) + t * dir_y;
         double z = entry_pos(3) + t * dir_z;
 
-        double r = std::sqrt(x * x + y * y);
-        double z_cyl = z;
+        const double cylindrical_r = std::sqrt(x * x + y * y);
+        const double spherical_r = std::sqrt(cylindrical_r * cylindrical_r + z * z);
+        const coordinates::Vec4Cart sample_cart{0.0, x, y, z};
+        const double disk_r = coordinates::KerrSchildRadius(sample_cart, cached_a_ * cached_m_);
+        const float phi = static_cast<float>(std::atan2(y, x));
+        const float theta =
+            spherical_r > 0.0
+                ? static_cast<float>(std::acos(std::clamp(z / spherical_r, -1.0, 1.0)))
+                : 0.0f;
 
-        if (!IsInVolumetricDisk(static_cast<float>(r), static_cast<float>(z_cyl))) {
-            continue;
+        float disk_opacity = 0.0f;
+        float disk_source = 0.0f;
+        if (config_.enable_volumetric &&
+            IsInVolumetricDisk(static_cast<float>(disk_r), static_cast<float>(z))) {
+            disk_opacity = ComputeVolumetricOpacityDensity(static_cast<float>(disk_r),
+                                                           static_cast<float>(z), phi);
+            const float temperature =
+                ComputeVolumetricTemperature(static_cast<float>(disk_r), static_cast<float>(z));
+            if (disk_opacity > 0.0f && temperature > 0.0f) {
+                disk_source = std::pow(temperature / config_.disk_temperature_inner, 4.0f);
+            }
         }
 
-        float kappa_rho =
-            ComputeVolumetricOpacityDensity(static_cast<float>(r), static_cast<float>(z_cyl));
-        float T = ComputeVolumetricTemperature(static_cast<float>(r), static_cast<float>(z_cyl));
+        float corona_opacity = 0.0f;
+        float corona_source = 0.0f;
+        if (config_.enable_corona &&
+            corona_physics::IsInsideCorona(static_cast<float>(spherical_r), theta, phi,
+                                           config_.corona, config_.disk_inner)) {
+            corona_opacity = config_.corona.optical_depth / config_.corona.scale_height_M;
+            const float seed = corona_physics::Emissivity(static_cast<float>(spherical_r), theta,
+                                                          config_.corona, config_.disk_inner);
+            corona_source = corona_physics::ComptonizedSource(seed, config_.corona);
+        }
 
-        if (kappa_rho <= 0 || T <= 0) continue;
+        const float total_opacity = disk_opacity + corona_opacity;
+        if (total_opacity <= 0.0f) continue;
+        const double remaining_tau = max_tau - accumulated_tau;
+        const double dtau = std::min(static_cast<double>(total_opacity) * ds, remaining_tau);
+        active_path_length += dtau / total_opacity;
+        const double source_r =
+            (disk_opacity * disk_source + corona_opacity * corona_source * 0.65f) / total_opacity;
+        const double source_g =
+            (disk_opacity * disk_source + corona_opacity * corona_source * 0.80f) / total_opacity;
+        const double source_b =
+            (disk_opacity * disk_source + corona_opacity * corona_source) / total_opacity;
 
-        double dtau = kappa_rho * ds;
-
-        // Grey source function, Stefan-Boltzmann normalised to the inner edge.
-        float T_inner = config_.disk_temperature_inner;
-        double B = std::pow(T / T_inner, 4.0);
-
-        // Radiative transfer I_out = I_in exp(-dtau) + B (1 - exp(-dtau)).
-        double transmission = std::exp(-dtau);
+        // Radiative transfer I_out = I_in exp(-dtau) + S (1 - exp(-dtau)).
+        const double transmission = std::exp(-dtau);
         double one_minus_trans = 1.0 - transmission;
 
-        accumulated_r = accumulated_r * transmission + B * one_minus_trans;
-        accumulated_g = accumulated_g * transmission + B * one_minus_trans;
-        accumulated_b = accumulated_b * transmission + B * one_minus_trans;
+        accumulated_r = accumulated_r * transmission + source_r * one_minus_trans;
+        accumulated_g = accumulated_g * transmission + source_g * one_minus_trans;
+        accumulated_b = accumulated_b * transmission + source_b * one_minus_trans;
 
         accumulated_tau += dtau;
 
-        if (accumulated_tau > config_.volumetric_tau_max) break;
+        if (accumulated_tau >= max_tau) break;
     }
 
     result.volumetric_emission[0] = static_cast<float>(accumulated_r);
     result.volumetric_emission[1] = static_cast<float>(accumulated_g);
     result.volumetric_emission[2] = static_cast<float>(accumulated_b);
     result.optical_depth = static_cast<float>(accumulated_tau);
-    result.volumetric_hit = (accumulated_tau > 0.01);  // "Hit" threshold.
+    result.volumetric_path_length += static_cast<float>(active_path_length);
+    result.volumetric_hit = result.volumetric_hit || (accumulated_tau > 0.01);
 }
 
 // =============================================================================
@@ -1049,7 +1253,9 @@ void GeodesicTracer::FinaliseBundle(const RayBundle& bundle, const Vec4& k, doub
     double s = std::sqrt(disc);
     out.semi_major = static_cast<float>(std::sqrt(std::max(0.0, (p + s) / 2.0)));
     out.semi_minor = static_cast<float>(std::sqrt(std::max(0.0, (p - s) / 2.0)));
-    double num = 2.0 * (a * b + c * d);
+    // Output-plane orientation is the major eigenvector of M M^T. The
+    // right-singular-vector expression (ab+cd) orients the input basis instead.
+    double num = 2.0 * (a * c + b * d);
     double den = a * a + b * b - c * c - d * d;
     out.orientation = static_cast<float>(0.5 * std::atan2(num, den));
 

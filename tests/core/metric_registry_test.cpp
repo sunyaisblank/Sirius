@@ -57,6 +57,15 @@ TEST(MetricRegistryTests, MetricInfoRoundTripsById) {
         EXPECT_EQ(MetricInfoFor(info.id).id, info.id);
         EXPECT_STREQ(MetricInfoFor(info.id).canonical_name, info.canonical_name);
     }
+    EXPECT_DEATH(static_cast<void>(MetricInfoFor(static_cast<MetricId>(255))), "violated");
+    EXPECT_DEATH(static_cast<void>(DiskSupportFor(static_cast<MetricId>(255))), "violated");
+    EXPECT_DEATH(static_cast<void>(ToString(static_cast<DiskSupport>(255))), "violated");
+
+    EXPECT_FALSE(MetricParameterIssue(MetricId::Kerr, 0.9, 0.0, 0.0).has_value());
+    EXPECT_TRUE(MetricParameterIssue(MetricId::Kerr, 0.9, 0.1, 0.0).has_value());
+    EXPECT_TRUE(MetricParameterIssue(MetricId::MorrisThorne, 0.1, 0.0, 0.0).has_value());
+    EXPECT_TRUE(MetricParameterIssue(MetricId::Alcubierre, 0.0, 0.1, 0.0).has_value());
+    EXPECT_TRUE(MetricParameterIssue(static_cast<MetricId>(255), 0.0, 0.0, 0.0).has_value());
 }
 
 TEST(MetricRegistryTests, KnownMetricNamesListsEveryCanonicalName) {
@@ -90,6 +99,17 @@ TEST(MetricRegistryTests, FamilyDisplayNamesRoundTrip) {
 
     WarpDriveFamily warp(WarpDriveParams::Alcubierre(1.0, 1.0));
     EXPECT_EQ(ParseMetricName(warp.GetName()), MetricId::Alcubierre);
+
+    EXPECT_DEATH(
+        {
+            KerrSchildParams invalid = KerrSchildParams::Kerr(1.0, 0.5);
+            invalid.Lambda = 0.01;
+            KerrSchildFamily rotating_de_sitter(invalid);
+        },
+        "violated");
+    EXPECT_DEATH(schw.SetParameter("mas", 1.0), "violated");
+    EXPECT_DEATH(wormhole.SetParameter("throat", 1.0), "violated");
+    EXPECT_DEATH(warp.SetParameter("speed", 1.0), "violated");
 }
 
 // Backend support flags document reality; these pin the deliberate ones so a

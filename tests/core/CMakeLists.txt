@@ -50,4 +50,7 @@ target_link_libraries(sirius_core_tests PRIVATE sirius_core GTest::gtest_main)
 
 sirius_configure_target(sirius_core_tests CONTRACT_MODE 2)
 
-gtest_discover_tests(sirius_core_tests PROPERTIES LABELS "Correctness")
+gtest_discover_tests(
+    sirius_core_tests
+    PROPERTIES
+        LABELS "Correctness")

@@ -4,6 +4,8 @@
 // colour grading, all on linear float RGBA. Reference: Academy Color Encoding
 // System (ACES), Reinhard et al. (2002). Ported from PPOP001A.h.
 
+#include "sirius/base/contracts.h"
+
 #include <algorithm>
 #include <cmath>
 #include <vector>
@@ -98,10 +100,15 @@ inline void Apply(float& r, float& g, float& b, TonemapType type, float exposure
             b = std::clamp(b, 0.0f, 1.0f);
             break;
         case TonemapType::None:
-        default:
             r = std::clamp(r, 0.0f, 1.0f);
             g = std::clamp(g, 0.0f, 1.0f);
             b = std::clamp(b, 0.0f, 1.0f);
+            break;
+        default:
+            SIRIUS_PRE(false);
+            r = 1.0f;
+            g = 0.0f;
+            b = 1.0f;
             break;
     }
 }

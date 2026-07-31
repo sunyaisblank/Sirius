@@ -22,15 +22,18 @@ namespace fs = std::filesystem;
 class ConfigLoader {
   public:
     // Load merged configuration; override_path forces a specific config file.
+    // Missing, malformed, unknown, or invalid values throw: configuration never
+    // degrades to defaults after the operator supplied an input.
     static SiriusConfig Load(const std::optional<std::string>& override_path = std::nullopt);
 
-    // Load from a specific JSON file; returns defaults on error.
+    // Load and validate a specific JSON file; throws on every read/parse error.
     static SiriusConfig LoadFromFile(const fs::path& path);
 
     // Serialise a configuration to a JSON file. Returns false on IO failure.
     static bool SaveToFile(const SiriusConfig& config, const fs::path& path);
 
-    // Apply SIRIUS_* environment overrides in place.
+    // Apply SIRIUS_* environment overrides in place; malformed set variables
+    // throw rather than being treated as unset.
     static void ApplyEnvironmentOverrides(SiriusConfig& config);
 
     // Path of the config file the last Load() used, or nullopt for defaults.

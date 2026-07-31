@@ -39,17 +39,30 @@ Examples:
 int ConfigCommand::Execute(const std::vector<std::string>& args, const GlobalOptions& globals,
                            SiriusConfig& config) {
     std::string subcommand = "show";
-    if (!args.empty() && args[0][0] != '-') {
+    if (!args.empty()) {
+        if (args[0].empty() || args[0].front() == '-') {
+            cli::Error("config requires a named subcommand before its arguments");
+            std::cout << Usage() << std::endl;
+            return 1;
+        }
         subcommand = args[0];
     }
 
     if (subcommand == "show") {
+        if (args.size() > 1) {
+            cli::Error("config show accepts no additional arguments");
+            return 1;
+        }
         return ShowConfig(globals, config);
     } else if (subcommand == "validate") {
         return ValidateConfig(args, globals);
     } else if (subcommand == "init") {
         return InitConfig(args, globals);
     } else if (subcommand == "paths") {
+        if (args.size() > 1) {
+            cli::Error("config paths accepts no additional arguments");
+            return 1;
+        }
         return ShowPaths(globals);
     } else {
         cli::Error("Unknown subcommand: " + subcommand);
@@ -92,12 +105,11 @@ int ConfigCommand::ShowConfig(const GlobalOptions& globals, const SiriusConfig& 
 int ConfigCommand::ValidateConfig(const std::vector<std::string>& args,
                                   const GlobalOptions& globals) {
     std::string file_path;
-    for (size_t i = 1; i < args.size(); ++i) {
-        if (args[i][0] != '-') {
-            file_path = args[i];
-            break;
-        }
+    if (args.size() > 2 || (args.size() == 2 && (args[1].empty() || args[1].front() == '-'))) {
+        cli::Error("Usage: sirius config validate [path]");
+        return 1;
     }
+    if (args.size() == 2) file_path = args[1];
 
     if (file_path.empty()) {
         auto default_path = PlatformPaths::FindConfigFile();
@@ -124,43 +136,27 @@ int ConfigCommand::ValidateConfig(const std::vector<std::string>& args,
     }
 
     try {
-        std::ifstream file(file_path);
-        nlohmann::json j;
-        file >> j;
-
-        SiriusConfig config = j.get<SiriusConfig>();
-
-        auto errors = ConfigLoader::Validate(config);
-
+        (void)ConfigLoader::LoadFromFile(file_path);
         if (globals.json_output) {
             nlohmann::json result;
-            result["valid"] = errors.empty();
+            result["valid"] = true;
             result["file"] = file_path;
-            result["errors"] = errors;
+            result["errors"] = nlohmann::json::array();
             cli::PrintJson(result.dump(2));
         } else {
-            if (errors.empty()) {
-                cli::Success("Configuration is valid: " + file_path);
-            } else {
-                cli::Error("Configuration has errors:");
-                for (const auto& err : errors) {
-                    std::cout << "  - " << err << std::endl;
-                }
-            }
+            cli::Success("Configuration is valid: " + file_path);
         }
-
-        return errors.empty() ? 0 : 1;
-
-    } catch (const nlohmann::json::exception& e) {
+        return 0;
+    } catch (const std::exception& e) {
         if (globals.json_output) {
             nlohmann::json result;
             result["valid"] = false;
             result["file"] = file_path;
             result["errors"] = nlohmann::json::array();
-            result["errors"].push_back(std::string("JSON parse error: ") + e.what());
+            result["errors"].push_back(e.what());
             cli::PrintJson(result.dump(2));
         } else {
-            cli::Error("JSON parse error: " + std::string(e.what()));
+            cli::Error("Configuration is invalid: " + std::string(e.what()));
         }
         return 1;
     }
@@ -169,10 +165,16 @@ int ConfigCommand::ValidateConfig(const std::vector<std::string>& args,
 int ConfigCommand::InitConfig(const std::vector<std::string>& args, const GlobalOptions& globals) {
     std::string output_path = "sirius.json";
 
-    for (size_t i = 1; i < args.size(); ++i) {
-        if ((args[i] == "-o" || args[i] == "--output") && i + 1 < args.size()) {
-            output_path = args[++i];
+    if (args.size() != 1 && args.size() != 3) {
+        cli::Error("Usage: sirius config init [--output path]");
+        return 1;
+    }
+    if (args.size() == 3) {
+        if ((args[1] != "-o" && args[1] != "--output") || args[2].empty()) {
+            cli::Error("Usage: sirius config init [--output path]");
+            return 1;
         }
+        output_path = args[2];
     }
 
     if (fs::exists(output_path)) {

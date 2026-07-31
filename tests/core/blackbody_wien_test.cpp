@@ -9,6 +9,7 @@
 #include <gtest/gtest.h>
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 
 namespace sirius::test {
@@ -76,45 +77,42 @@ Float3 gpuBlackbodyColor(float T) {
 
 }  // anonymous namespace
 
-// Compare GPU Chebyshev against CPU 32-sample integration at reference temps.
-// The two methods use fundamentally different approaches (Chebyshev chromaticity
-// fit vs CIE observer function integration), so we test colour direction (which
-// channel dominates) rather than exact per-channel agreement.
-class BlackbodyParityTest : public ::testing::TestWithParam<double> {};
+// Keep every reference temperature inside one statically named test. The
+// Mandatory-label generator deliberately rejects parameterised GoogleTest
+// macros until it can prove the exact discovered names they register.
+TEST(BlackbodyParityTest, GPUMatchesCPUAtReferenceTemperatures) {
+    constexpr std::array<double, 5> temperatures = {3000.0, 5000.0, 6500.0, 10000.0, 25000.0};
+    for (const double T : temperatures) {
+        SCOPED_TRACE(T);
+        const Rgb cpuRGB = BlackbodyToRgb(T);
+        const Float3 gpuRGB = gpuBlackbodyColor(static_cast<float>(T));
 
-TEST_P(BlackbodyParityTest, GPUMatchesCPU) {
-    double T = GetParam();
-    Rgb cpuRGB = BlackbodyToRgb(T);
-    Float3 gpuRGB = gpuBlackbodyColor(static_cast<float>(T));
+        // Normalise GPU output to max=1 for comparison
+        const float gpuMax = std::max({gpuRGB.x, gpuRGB.y, gpuRGB.z, 0.001f});
+        const float gR = gpuRGB.x / gpuMax;
+        const float gG = gpuRGB.y / gpuMax;
+        const float gB = gpuRGB.z / gpuMax;
 
-    // Normalise GPU output to max=1 for comparison
-    float gpuMax = std::max({gpuRGB.x, gpuRGB.y, gpuRGB.z, 0.001f});
-    float gR = gpuRGB.x / gpuMax;
-    float gG = gpuRGB.y / gpuMax;
-    float gB = gpuRGB.z / gpuMax;
+        // Both methods must agree on colour direction (blue vs red dominant).
+        // Near-white temperatures (~5500-7000K) have nearly equal R and B channels,
+        // so we only test dominance when one channel leads by > 15%.
+        const float cpuBR = cpuRGB.b / std::max(cpuRGB.r, 0.01f);
+        const float gpuBR = gB / std::max(gR, 0.01f);
+        if (cpuBR > 1.3f) {
+            EXPECT_GT(gpuBR, 1.0f) << "GPU should also be blue-dominant at T=" << T;
+        } else if (cpuBR < 0.7f) {
+            EXPECT_LT(gpuBR, 1.0f) << "GPU should also be red-dominant at T=" << T;
+        }
+        // else: near-white, both methods may disagree on which channel barely leads
 
-    // Both methods must agree on colour direction (blue vs red dominant).
-    // Near-white temperatures (~5500-7000K) have nearly equal R and B channels,
-    // so we only test dominance when one channel leads by > 15%.
-    float cpuBR = cpuRGB.b / std::max(cpuRGB.r, 0.01f);
-    float gpuBR = gB / std::max(gR, 0.01f);
-    if (cpuBR > 1.3f) {
-        EXPECT_GT(gpuBR, 1.0f) << "GPU should also be blue-dominant at T=" << T;
-    } else if (cpuBR < 0.7f) {
-        EXPECT_LT(gpuBR, 1.0f) << "GPU should also be red-dominant at T=" << T;
+        // All channels should be non-negative and at least one should be near 1
+        EXPECT_GE(gR, 0.0f);
+        EXPECT_GE(gG, 0.0f);
+        EXPECT_GE(gB, 0.0f);
+        const float maxCh = std::max({gR, gG, gB});
+        EXPECT_NEAR(maxCh, 1.0f, 0.01f) << "Normalised GPU output should have max ~1";
     }
-    // else: near-white, both methods may disagree on which channel barely leads
-
-    // All channels should be non-negative and at least one should be near 1
-    EXPECT_GE(gR, 0.0f);
-    EXPECT_GE(gG, 0.0f);
-    EXPECT_GE(gB, 0.0f);
-    float maxCh = std::max({gR, gG, gB});
-    EXPECT_NEAR(maxCh, 1.0f, 0.01f) << "Normalised GPU output should have max ~1";
 }
-
-INSTANTIATE_TEST_SUITE_P(ReferenceTemperatures, BlackbodyParityTest,
-                         ::testing::Values(3000.0, 5000.0, 6500.0, 10000.0, 25000.0));
 
 // Verify colour ordering: low T should be redder, high T bluer
 TEST(BlackbodyParityTest, ColourTemperatureOrdering) {
