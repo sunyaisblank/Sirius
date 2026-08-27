@@ -202,6 +202,7 @@ def integration_boundary_errors(workflow: str) -> list[str]:
     if windows_integration is not None:
         for loader_marker in (
             "install_runtime: true",
+            "cache: false",
             r"runtime\x64",
             "vulkan-1.dll",
             "$env:GITHUB_PATH",
@@ -260,6 +261,7 @@ def verify_integration_boundary_policy() -> None:
             f"  {name}:\n"
             + (
                 "    install_runtime: true\n"
+                "    cache: false\n"
                 "    runtime\\x64\n"
                 "    vulkan-1.dll\n"
                 "    $env:GITHUB_PATH\n"
@@ -284,6 +286,9 @@ def verify_integration_boundary_policy() -> None:
     missing_windows_loader = valid.replace("    install_runtime: true\n", "", 1)
     if not integration_boundary_errors(missing_windows_loader):
         raise RuntimeError("integration-boundary policy accepted an unloadable Windows binary")
+    cached_without_loader = valid.replace("    cache: false\n", "    cache: true\n", 1)
+    if not integration_boundary_errors(cached_without_loader):
+        raise RuntimeError("integration-boundary policy accepted the runtime-blind SDK cache")
     driver_enabled = valid.replace(
         "    install_runtime: true\n",
         "    install_runtime: true\n    install_swiftshader: true\n",
