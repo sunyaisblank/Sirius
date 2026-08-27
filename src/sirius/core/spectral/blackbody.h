@@ -177,10 +177,15 @@ inline Rgb ApplyRedshift(const Rgb& color, float z) {
 // Relativistic Doppler factor nu_obs/nu_emit for radial velocity (positive =
 // receding); c defaults to geometric units.
 inline double DopplerFactor(double velocity, double c = 1.0) {
-    double beta = velocity / c;
-    if (std::abs(beta) >= 1.0) return 1.0;  // Invalid velocity.
+    if (!std::isfinite(velocity) || !std::isfinite(c) || c <= 0.0) return 1.0;
+    const double numerator = c - velocity;
+    const double denominator = c + velocity;
+    if (!std::isfinite(numerator) || !std::isfinite(denominator) || numerator <= 0.0 ||
+        denominator <= 0.0) {
+        return 1.0;  // Invalid or luminal velocity.
+    }
 
-    return std::sqrt((1.0 - beta) / (1.0 + beta));
+    return std::sqrt(numerator / denominator);
 }
 
 // Combined gravitational and Doppler redshift z, given g_tt at emission and

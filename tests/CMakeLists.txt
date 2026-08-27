@@ -9,8 +9,13 @@ include(GoogleTest)
 # GTEST_SKIP() to CTest's successful skip state. Force-include a test-only
 # policy header which turns GTEST_SKIP into a fatal assertion in that profile.
 if(SIRIUS_REQUIRE_VULKAN_RUNTIME)
-    add_compile_options(
-        $<$<COMPILE_LANGUAGE:CXX>:-include${CMAKE_CURRENT_SOURCE_DIR}/support/fail_on_skip.h>)
+    if(MSVC)
+        add_compile_options(
+            "$<$<COMPILE_LANGUAGE:CXX>:/FI${CMAKE_CURRENT_SOURCE_DIR}/support/fail_on_skip.h>")
+    else()
+        add_compile_options(
+            "$<$<COMPILE_LANGUAGE:CXX>:-include${CMAKE_CURRENT_SOURCE_DIR}/support/fail_on_skip.h>")
+    endif()
 endif()
 
 add_executable(sirius_base_tests

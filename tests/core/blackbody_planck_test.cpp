@@ -112,6 +112,8 @@ TEST(SpectralValidationTests, DopplerFactorMatchesIndependentLorentzFormula) {
     }
     EXPECT_DOUBLE_EQ(DopplerFactor(-1.0), 1.0);
     EXPECT_DOUBLE_EQ(DopplerFactor(1.0), 1.0);
+    EXPECT_DOUBLE_EQ(DopplerFactor(0.5, 0.0), 1.0);
+    EXPECT_DOUBLE_EQ(DopplerFactor(0.5, -1.0), 1.0);
 }
 
 TEST(SpectralValidationTests, TotalRedshiftComposesGravitationalAndDopplerFactors) {
