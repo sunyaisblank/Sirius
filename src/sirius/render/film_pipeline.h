@@ -4,14 +4,14 @@
 //
 // Stages, in order: grain -> halation -> colour grade -> vignette -> bloom.
 // Each stage operates on an RGBA float framebuffer in place. FilmConfig now
-// comes from render_config.h; the legacy header also pulled in the OptiX launch
+// comes from film_config.h; the legacy header also pulled in the OptiX launch
 // header solely so test code could reach FilmParamsGPU, and that include is
 // dropped here (OptiX is retired; the GPU film path returns via the Vulkan
 // backend seam later).
 //
 // References: Kodak Vision3 technical data; IMAX film standards.
 
-#include "sirius/render/render_config.h"
+#include "sirius/render/film_config.h"
 
 #include <algorithm>
 #include <cmath>
@@ -27,7 +27,7 @@ class FilmPipeline {
         : config_(config) {}
 
     // Apply the full pipeline. frame_index seeds temporal effects (grain).
-    void Apply(float* pixels, int width, int height, uint32_t frame_index) {
+    void Apply(float* pixels, int width, int height, std::uint32_t frame_index) {
         if (!config_.enabled) return;
 
         if (config_.grain_enabled) {
@@ -50,8 +50,8 @@ class FilmPipeline {
     }
 
     // Film grain: signal-dependent noise, sigma^2 proportional to luminance.
-    void ApplyGrain(float* pixels, int width, int height, uint32_t frame_seed) {
-        uint32_t seed = frame_seed * 1664525u + 1013904223u;
+    void ApplyGrain(float* pixels, int width, int height, std::uint32_t frame_seed) {
+        std::uint32_t seed = frame_seed * 1664525u + 1013904223u;
 
         for (int y = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
@@ -226,7 +226,7 @@ class FilmPipeline {
 
   private:
     // Gaussian sample from a uniform seed (Box-Muller); u1 floored off 0 and 1.
-    float GaussianNoise(uint32_t seed) const {
+    float GaussianNoise(std::uint32_t seed) const {
         float u1 = (seed & 0xFFFF) / 65536.0f + 1e-6f;
         u1 = std::clamp(u1, 1e-6f, 1.0f - 1e-6f);
         float u2 = ((seed >> 16) & 0xFFFF) / 65535.0f;

@@ -10,6 +10,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <numbers>
 
 using namespace sirius::oracle;
 
@@ -23,8 +24,8 @@ class BeamPropagationTest : public ::testing::Test {
         kerr = std::make_unique<KerrMetricD>(1.0, 0.5);
 
         BeamIntegratorD::Config config;
-        config.stepSize = 0.1;
-        config.escapeRadius = 1000.0;
+        config.step_size = 0.1;
+        config.escape_radius = 1000.0;
 
         integrator_sch = std::make_unique<BeamIntegratorD>(schwarzschild.get(), config);
         integrator_kerr = std::make_unique<BeamIntegratorD>(kerr.get(), config);
@@ -56,7 +57,7 @@ class BeamPropagationTest : public ::testing::Test {
 
         beam.E = -beam.k.t;
         beam.Lz = beam.k.phi;
-        beam.initialPixelSolidAngle = 1e-6;  // 1 arcsec² roughly
+        beam.initial_pixel_solid_angle = 1e-6;  // 1 arcsec² roughly
 
         return beam;
     }
@@ -137,7 +138,7 @@ TEST_F(BeamPropagationTest, BeamInitialisation) {
     }
 
     EXPECT_FALSE(beam.terminated);
-    EXPECT_FALSE(beam.atCaustic);
+    EXPECT_FALSE(beam.at_caustic);
     EXPECT_DOUBLE_EQ(beam.magnification, 1.0);
 }
 
@@ -148,7 +149,7 @@ TEST_F(BeamPropagationTest, BeamInitialisation) {
 
 TEST_F(BeamPropagationTest, JacobianDeterminantFlat) {
     // For very large r, Schwarzschild approaches flat space
-    BeamStateD beam = createOutgoingBeam(schwarzschild.get(), 1000.0, M_PI / 2);
+    BeamStateD beam = createOutgoingBeam(schwarzschild.get(), 1000.0, std::numbers::pi / 2);
 
     // Initial Determinant should be 1 (Identity matrix)
     double det0 = beam.J[0][0] *
@@ -178,7 +179,7 @@ TEST_F(BeamPropagationTest, JacobianDeterminantFlat) {
 TEST_F(BeamPropagationTest, BeamGeometryExtraction) {
     BeamStateD beam;
     beam.Initialise();
-    beam.initialPixelSolidAngle = 1e-6;
+    beam.initial_pixel_solid_angle = 1e-6;
 
     // Set a known Jacobian with specific eigenvalues
     // 2×2 angular block with singular values 2 and 0.5
@@ -190,14 +191,14 @@ TEST_F(BeamPropagationTest, BeamGeometryExtraction) {
     beam.UpdateGeometry();
 
     // Major axis = 2, minor axis = 0.5
-    EXPECT_NEAR(beam.majorAxis, 2.0, 0.01);
-    EXPECT_NEAR(beam.minorAxis, 0.5, 0.01);
+    EXPECT_NEAR(beam.major_axis, 2.0, 0.01);
+    EXPECT_NEAR(beam.minor_axis, 0.5, 0.01);
 
     // Magnification = 1/det = 1/(2×0.5) = 1
     EXPECT_NEAR(beam.magnification, 1.0, 0.01);
 
     // Solid angle = π × 2 × 0.5 × 1e-6 = π×1e-6
-    EXPECT_NEAR(beam.solidAngle, M_PI * 1e-6, 1e-8);
+    EXPECT_NEAR(beam.solid_angle, std::numbers::pi * 1e-6, 1e-8);
 }
 
 TEST_F(BeamPropagationTest, OrientationDescribesOutputEllipseRatherThanInputBasis) {
@@ -219,14 +220,14 @@ TEST_F(BeamPropagationTest, OrientationDescribesOutputEllipseRatherThanInputBasi
 
     beam.UpdateGeometry();
 
-    EXPECT_NEAR(beam.majorAxis, 3.0, 1.0e-12);
-    EXPECT_NEAR(beam.minorAxis, 1.0, 1.0e-12);
+    EXPECT_NEAR(beam.major_axis, 3.0, 1.0e-12);
+    EXPECT_NEAR(beam.minor_axis, 1.0, 1.0e-12);
     EXPECT_NEAR(beam.orientation, output_angle, 1.0e-12);
 }
 
 //==============================================================================
 // Test: Caustic Detection
-// Verifies: atCaustic flag set when det(J_angular) → 0
+// Verifies: at_caustic flag set when det(J_angular) → 0
 //==============================================================================
 
 TEST_F(BeamPropagationTest, CausticDetection) {
@@ -241,7 +242,7 @@ TEST_F(BeamPropagationTest, CausticDetection) {
 
     beam.UpdateGeometry();
 
-    EXPECT_TRUE(beam.atCaustic) << "Should detect caustic when det ≈ 0";
+    EXPECT_TRUE(beam.at_caustic) << "Should detect caustic when det ≈ 0";
     EXPECT_GT(beam.magnification, 1e10) << "Magnification should be very high at caustic";
 }
 
@@ -251,7 +252,7 @@ TEST_F(BeamPropagationTest, CausticDetection) {
 //==============================================================================
 
 TEST_F(BeamPropagationTest, BeamIntegrationStep) {
-    BeamStateD beam = createOutgoingBeam(schwarzschild.get(), 10.0, M_PI / 2);
+    BeamStateD beam = createOutgoingBeam(schwarzschild.get(), 10.0, std::numbers::pi / 2);
     double initial_r = beam.x.r;
     double initial_lambda = beam.lambda;
 
@@ -277,7 +278,7 @@ TEST_F(BeamPropagationTest, SchwarzschildRadialCongruenceMatchesClosedFormToOneP
 
     BeamStateD beam;
     beam.Initialise();
-    beam.x = Vec4d(0.0, initial_radius, M_PI / 2.0, 0.0);
+    beam.x = Vec4d(0.0, initial_radius, std::numbers::pi / 2.0, 0.0);
     beam.k = Vec4d(-energy, energy * initial_radius / (initial_radius - 2.0 * mass), 0.0, 0.0);
     beam.E = energy;
     ClearJacobiState(beam);
@@ -319,7 +320,7 @@ TEST_F(BeamPropagationTest,
 
     BeamStateD beam;
     beam.Initialise();
-    beam.x = Vec4d(0.0, 3.0 * mass, M_PI / 2.0, 0.0);
+    beam.x = Vec4d(0.0, 3.0 * mass, std::numbers::pi / 2.0, 0.0);
     beam.k = Vec4d(-energy, 0.0, 0.0, 3.0 * sqrt_three * mass * energy);
     beam.E = energy;
     beam.Lz = beam.k.phi;
@@ -366,7 +367,7 @@ TEST_F(BeamPropagationTest, HorizonTermination) {
     // Create ingoing beam near horizon
     BeamStateD beam;
     beam.Initialise();
-    beam.x = Vec4d(0, 3.0, M_PI / 2, 0);
+    beam.x = Vec4d(0, 3.0, std::numbers::pi / 2, 0);
 
     double g[4][4], g_inv[4][4];
     schwarzschild->Evaluate(beam.x, g, g_inv);
@@ -399,7 +400,7 @@ TEST_F(BeamPropagationTest, HorizonTermination) {
 
 TEST_F(BeamPropagationTest, ConversionRoundTrip) {
     GeodesicStateD geo;
-    geo.x = Vec4d(1.0, 10.0, M_PI / 3, M_PI / 4);
+    geo.x = Vec4d(1.0, 10.0, std::numbers::pi / 3, std::numbers::pi / 4);
     geo.k = Vec4d(-1.0, 0.5, 0.1, 2.0);
     geo.lambda = 42.0;
     geo.E = 1.0;

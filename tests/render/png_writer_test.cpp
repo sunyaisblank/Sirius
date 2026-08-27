@@ -175,11 +175,11 @@ TEST(PNGWriterTest, MalformedBufferShapesAreRejected) {
 
 namespace {
 
-uint8_t expectedSRGB8(float linear) {
+std::uint8_t expectedSRGB8(float linear) {
     float clamped = std::clamp(linear, 0.0f, 1.0f);
     float srgb = (clamped <= 0.0031308f) ? 12.92f * clamped
                                          : 1.055f * std::pow(clamped, 1.0f / 2.4f) - 0.055f;
-    return static_cast<uint8_t>(std::clamp(srgb * 255.0f + 0.5f, 0.0f, 255.0f));
+    return static_cast<std::uint8_t>(std::clamp(srgb * 255.0f + 0.5f, 0.0f, 255.0f));
 }
 
 }  // namespace
@@ -212,7 +212,7 @@ TEST(PNGWriterTest, DecodeRoundTripMatchesSRGBEncoding) {
         for (int x = 0; x < W; ++x) {
             float r, g, b;
             buffer.GetPixel(x, y, r, g, b);
-            const uint8_t expected[3] = {expectedSRGB8(r), expectedSRGB8(g), expectedSRGB8(b)};
+            const std::uint8_t expected[3] = {expectedSRGB8(r), expectedSRGB8(g), expectedSRGB8(b)};
             for (int c = 0; c < 3; ++c) {
                 int actual = data[(y * W + x) * 3 + c];
                 worst = std::max(worst, std::abs(actual - expected[c]));

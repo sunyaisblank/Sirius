@@ -92,11 +92,11 @@ TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
     params[18] = 0.0f;            // up
     params[19] = 0.6f;            // fov (radians)
     params[20] = 1.0f;            // aspect
-    params[21] = 2000.0f;         // maxSteps
+    params[21] = 2000.0f;         // max_steps
     params[22] = 0.06f;           // stepScale
-    params[23] = 0.02f;           // minStep
-    params[24] = 2.0f;            // maxStep
-    params[25] = 100.0f;          // escapeRadius
+    params[23] = 0.02f;           // min_step
+    params[24] = 2.0f;            // max_step
+    params[25] = 100.0f;          // escape_radius
     params[26] = 1.12f;           // captureFactor
     params[27] = 0.0f;            // disk disabled
     params[32] = 0.0f;            // tileOriginX

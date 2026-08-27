@@ -1,6 +1,6 @@
 # Sirius C++26 Style Guide
 
-This guide governs all C++ in the rebuilt Sirius. It layers three sources in priority order: the rules in this document, then the C++ Core Guidelines for semantic questions this document does not answer, then the Google C++ Style Guide for mechanical questions neither answers. Formatting is not debated in review at all; `.clang-format` at the repository root is the authority, and a file that round-trips through clang-format unchanged is correctly formatted. The measured toolchain baseline is GCC 14.2, Clang 21.1, and MSVC 19.4x, all in `-std=c++2c` mode or equivalent; every rule here compiles on that baseline today.
+This guide governs all C++ in the rebuilt Sirius. It layers three sources in priority order: the rules in this document, then the C++ Core Guidelines for semantic questions this document does not answer, then the Google C++ Style Guide for mechanical questions neither answers. Formatting is not debated in review at all; `.clang-format` at the repository root is the authority, and a file that round-trips through clang-format unchanged is correctly formatted. The measured toolchain baseline is GCC 14.2, Clang 21.1, and MSVC 19.4x, all in `-std=c++2c` mode or equivalent; every rule here compiles on that baseline today. Isolated vendored C translation units are compiled as portable C17 rather than an implementation-default dialect.
 
 ## 1. The safety posture
 
@@ -64,7 +64,8 @@ Errors classify by recoverability, and each class has exactly one channel.
 
 - Files: `snake_case.h` / `snake_case.cpp`; kernels `snake_case.slang`; a test file is `<subject>_test.cpp`. The codename scheme (`PHMT200A.h`) is retired; `docs/ARCHITECTURE.md` holds the mapping.
 - Types and functions: `PascalCase`. Cheap accessors may be `snake_case` per Google practice.
-- Variables `snake_case`; data members `snake_case_`; compile-time constants `kPascalCase`.
+- Variables and public aggregate fields `snake_case`; private and protected data
+  members `snake_case_`; compile-time constants `kPascalCase`.
 - Namespaces: everything lives under `sirius::`, one nested level per layer (`sirius::core`, `sirius::render`, `sirius::backend`, `sirius::app`). No `using namespace` in headers, no aliases that flatten layers.
 - Physics symbols may use domain notation where the referenced equation makes single letters clearer than words (`g`, `Gamma`, `E`, `Lz`, `Q`), provided the declaration cites the equation or reference. `MTW` and paper citations belong at the declaration, not in every use.
 

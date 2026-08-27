@@ -15,30 +15,30 @@
 namespace sirius::app::test {
 
 TEST(ConfigValidation, DefaultConfigurationIsValid) {
-    SiriusConfig config = SiriusConfig::defaults();
+    SiriusConfig config = SiriusConfig::Defaults();
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
 }
 
 TEST(ConfigValidation, WidthBelowMinimumRejected) {
-    SiriusConfig config = SiriusConfig::defaults();
+    SiriusConfig config = SiriusConfig::Defaults();
     config.render.width = 64;  // Below the 128 floor.
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
 
 TEST(ConfigValidation, NonPowerOfTwoTileSizeRejected) {
-    SiriusConfig config = SiriusConfig::defaults();
-    config.render.tileSize = 48;  // In range but not a power of two.
+    SiriusConfig config = SiriusConfig::Defaults();
+    config.render.tile_size = 48;  // In range but not a power of two.
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
 
 TEST(ConfigValidation, UnknownMetricNameRejected) {
-    SiriusConfig config = SiriusConfig::defaults();
+    SiriusConfig config = SiriusConfig::Defaults();
     config.metric.name = "Gargantua";
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
 
 TEST(ConfigValidation, KnownMetricAliasAccepted) {
-    SiriusConfig config = SiriusConfig::defaults();
+    SiriusConfig config = SiriusConfig::Defaults();
     config.metric.name = "Wormhole";  // Morris-Thorne alias in the registry.
     // The name is valid; validation does not gate on backend support (that is
     // the session's decline), so no metric-name error is produced.
@@ -49,27 +49,27 @@ TEST(ConfigValidation, KnownMetricAliasAccepted) {
 }
 
 TEST(ConfigValidation, SpinAboveNearExtremalRejected) {
-    SiriusConfig config = SiriusConfig::defaults();
+    SiriusConfig config = SiriusConfig::Defaults();
     config.metric.name = "Kerr";
     config.metric.spin = 1.5;
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
 
 TEST(ConfigValidation, RotatingLambdaRejected) {
-    SiriusConfig config = SiriusConfig::defaults();
+    SiriusConfig config = SiriusConfig::Defaults();
     config.metric.spin = 0.5;
-    config.metric.lambda = 0.01;  // Lambda requires spin = 0.
+    config.metric.cosmological_constant = 0.01;  // Lambda requires spin = 0.
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
 
 TEST(ConfigValidation, ObserverInsidePoleBufferRejected) {
-    SiriusConfig config = SiriusConfig::defaults();
+    SiriusConfig config = SiriusConfig::Defaults();
     config.observer.inclination = 0.0;  // At the pole.
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
 
 TEST(ConfigValidation, UnknownTonemapperRejected) {
-    SiriusConfig config = SiriusConfig::defaults();
+    SiriusConfig config = SiriusConfig::Defaults();
     config.postprocess.tonemapper = "Cineon";
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
@@ -77,7 +77,7 @@ TEST(ConfigValidation, UnknownTonemapperRejected) {
 TEST(ConfigValidation, VulkanBackendNameAccepted) {
     // Go-live (2026-07-18): vulkan joined the accepted set; device absence is
     // the render's decline, not a config-name error.
-    SiriusConfig config = SiriusConfig::defaults();
+    SiriusConfig config = SiriusConfig::Defaults();
     config.backend.preferred = "vulkan";
     for (const auto& e : ConfigLoader::Validate(config)) {
         EXPECT_EQ(e.find("backend.preferred"), std::string::npos) << e;
@@ -85,100 +85,100 @@ TEST(ConfigValidation, VulkanBackendNameAccepted) {
 }
 
 TEST(ConfigValidation, UnknownBackendNameRejected) {
-    SiriusConfig config = SiriusConfig::defaults();
+    SiriusConfig config = SiriusConfig::Defaults();
     config.backend.preferred = "optix";  // Retired; never silently remapped.
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
 
 TEST(ConfigValidation, CpuBackendAccepted) {
-    SiriusConfig config = SiriusConfig::defaults();
+    SiriusConfig config = SiriusConfig::Defaults();
     config.backend.preferred = "cpu";
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
 }
 
 TEST(ConfigValidation, NonFiniteValuesAreRejected) {
-    SiriusConfig config = SiriusConfig::defaults();
+    SiriusConfig config = SiriusConfig::Defaults();
     config.metric.spin = std::numeric_limits<double>::quiet_NaN();
     config.postprocess.exposure = std::numeric_limits<float>::infinity();
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
 
 TEST(ConfigValidation, UnknownOutputExtensionIsRejected) {
-    SiriusConfig config = SiriusConfig::defaults();
-    config.render.outputPath = "render.png.exe";
+    SiriusConfig config = SiriusConfig::Defaults();
+    config.render.output_path = "render.png.exe";
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
 
 TEST(ConfigValidation, VolumetricExtensionsRequireTheLiveVolumePath) {
-    SiriusConfig config = SiriusConfig::defaults();
-    config.volumetric.enableCorona = true;
-    config.volumetric.enableTurbulence = true;
+    SiriusConfig config = SiriusConfig::Defaults();
+    config.volumetric.enable_corona = true;
+    config.volumetric.enable_turbulence = true;
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 
     config.volumetric.enabled = true;
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
 
-    config.diskEnabled = false;
+    config.disk_enabled = false;
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
 
 TEST(ConfigValidation, UnimplementedDenoiserRequestIsRejected) {
-    SiriusConfig config = SiriusConfig::defaults();
-    config.backend.enableDenoiser = true;
+    SiriusConfig config = SiriusConfig::Defaults();
+    config.backend.enable_denoiser = true;
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
 
 TEST(ConfigValidation, ObserverAzimuthRangeIsValidated) {
-    SiriusConfig config = SiriusConfig::defaults();
+    SiriusConfig config = SiriusConfig::Defaults();
     config.observer.azimuth = 361.0;
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
 
 TEST(ConfigValidation, CameraWorldlineAndLensAreValidated) {
-    SiriusConfig config = SiriusConfig::defaults();
-    config.observer.cameraBetaForward = 1.0;
-    config.observer.lensModel = "UnknownLens";
+    SiriusConfig config = SiriusConfig::Defaults();
+    config.observer.camera_beta_forward = 1.0;
+    config.observer.lens_model = "UnknownLens";
     config.observer.aperture = 0.0f;
     const auto errors = ConfigLoader::Validate(config);
     EXPECT_GE(errors.size(), 3u);
 
-    config = SiriusConfig::defaults();
-    config.observer.cameraBetaForward = std::numeric_limits<double>::max();
+    config = SiriusConfig::Defaults();
+    config.observer.camera_beta_forward = std::numeric_limits<double>::max();
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 
-    config = SiriusConfig::defaults();
-    config.observer.cameraBetaForward = 0.2;
-    config.observer.lensModel = "ThinLens";
+    config = SiriusConfig::Defaults();
+    config.observer.camera_beta_forward = 0.2;
+    config.observer.lens_model = "ThinLens";
     config.observer.aperture = 1.4f;
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
 
-    config.observer.lensModel = "Fisheye";
+    config.observer.lens_model = "Fisheye";
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
 
-    config = SiriusConfig::defaults();
+    config = SiriusConfig::Defaults();
     config.metric.name = "Schwarzschild";
     config.metric.spin = 0.4;
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 
-    config = SiriusConfig::defaults();
+    config = SiriusConfig::Defaults();
     config.metric.name = "Kerr-Newman";
     config.metric.spin = 0.4;
     config.metric.charge = 0.2;
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
-    config.diskEnabled = false;
+    config.disk_enabled = false;
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
 }
 
 TEST(ConfigValidation, MasslessMetricUsesAUnitObserverDistanceScale) {
-    SiriusConfig config = SiriusConfig::defaults();
+    SiriusConfig config = SiriusConfig::Defaults();
     config.metric.name = "Minkowski";
     config.metric.mass = 0.0;
     config.metric.spin = 0.0;
-    config.diskEnabled = false;
+    config.disk_enabled = false;
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
 
     config.metric.name = "de-Sitter";
-    config.metric.lambda = 0.001;
+    config.metric.cosmological_constant = 0.001;
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
 
     config.metric.mass = 1.0;
@@ -186,8 +186,8 @@ TEST(ConfigValidation, MasslessMetricUsesAUnitObserverDistanceScale) {
 }
 
 TEST(ConfigValidation, PolarisationRequiresRepresentedThinBlackHoleDisk) {
-    SiriusConfig config = SiriusConfig::defaults();
-    config.colorMode = "Polarisation";
+    SiriusConfig config = SiriusConfig::Defaults();
+    config.color_mode = "Polarisation";
     config.metric.name = "Kerr";
     config.metric.spin = 0.7;
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
@@ -196,30 +196,30 @@ TEST(ConfigValidation, PolarisationRequiresRepresentedThinBlackHoleDisk) {
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 
     config.volumetric.enabled = false;
-    config.motionBlur.enabled = true;
+    config.motion_blur.enabled = true;
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 
-    config.motionBlur.enabled = false;
-    config.diskEnabled = false;
+    config.motion_blur.enabled = false;
+    config.disk_enabled = false;
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 
-    config.diskEnabled = true;
+    config.disk_enabled = true;
     config.metric.name = "Morris-Thorne";
     config.metric.spin = 0.0;
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 
-    config = SiriusConfig::defaults();
-    config.colorMode = "UnverifiedPolarMap";
+    config = SiriusConfig::Defaults();
+    config.color_mode = "UnverifiedPolarMap";
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
 
 TEST(ConfigValidation, MotionBlurAndWormholeTopologyHaveExplicitOperatorBoundaries) {
-    SiriusConfig config = SiriusConfig::defaults();
+    SiriusConfig config = SiriusConfig::Defaults();
     config.metric.name = "Kerr";
     config.metric.spin = 0.7;
-    config.motionBlur.enabled = true;
-    config.motionBlur.shutterTime = 0.25f;
-    config.motionBlur.samples = 7;
+    config.motion_blur.enabled = true;
+    config.motion_blur.shutter_time = 0.25f;
+    config.motion_blur.samples = 7;
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
 
     config.backend.preferred = "vulkan";
@@ -227,18 +227,18 @@ TEST(ConfigValidation, MotionBlurAndWormholeTopologyHaveExplicitOperatorBoundari
     // configuration itself remains coherent.
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
 
-    config.motionBlur.samples = 0;
+    config.motion_blur.samples = 0;
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
-    config.motionBlur.samples = 7;
-    config.diskEnabled = false;
+    config.motion_blur.samples = 7;
+    config.disk_enabled = false;
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 
-    config = SiriusConfig::defaults();
+    config = SiriusConfig::Defaults();
     config.metric.name = "Morris-Thorne";
-    config.diskEnabled = false;
-    config.metric.wormholeTopology = "OneSheetCapture";
+    config.disk_enabled = false;
+    config.metric.wormhole_topology = "OneSheetCapture";
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
-    config.metric.wormholeTopology = "TwoSheet";
+    config.metric.wormhole_topology = "TwoSheet";
     const auto errors = ConfigLoader::Validate(config);
     ASSERT_FALSE(errors.empty());
     EXPECT_NE(std::find_if(errors.begin(), errors.end(),
@@ -250,8 +250,8 @@ TEST(ConfigValidation, MotionBlurAndWormholeTopologyHaveExplicitOperatorBoundari
 }
 
 TEST(ConfigValidation, DiskRequestDeclinesForEveryMetricWithoutAnEmissionModel) {
-    SiriusConfig config = SiriusConfig::defaults();
-    config.diskEnabled = true;
+    SiriusConfig config = SiriusConfig::Defaults();
+    config.disk_enabled = true;
     config.metric.spin = 0.0;
     for (const std::string_view metric :
          {"Minkowski", "de-Sitter", "Morris-Thorne", "Alcubierre", "Reissner-Nordstrom",

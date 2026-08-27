@@ -60,7 +60,7 @@ TEST_F(FilmSimulationTest, ComputeHeight_Correct) {
 
     int expected_height = static_cast<int>(std::round(4096.0f / 1.43f));
     expected_height = (expected_height / 2) * 2;  // Even.
-    EXPECT_EQ(cfg.height, static_cast<uint32_t>(expected_height));
+    EXPECT_EQ(cfg.height, static_cast<std::uint32_t>(expected_height));
 }
 
 TEST_F(FilmSimulationTest, ComputeHeight_EvenDimension) {
@@ -78,7 +78,7 @@ TEST_F(FilmSimulationTest, KodakVision3_500T_Settings) {
 
     EXPECT_FLOAT_EQ(cfg.iso, 500.0f);
     EXPECT_GT(cfg.grain_intensity, 0.0f);
-    EXPECT_NEAR(cfg.color_temperature_K, 3200.0f, 100.0f);  // Tungsten.
+    EXPECT_NEAR(cfg.color_temperature_kelvin, 3200.0f, 100.0f);  // Tungsten.
     EXPECT_DEATH(cfg.ApplyStock(static_cast<FilmStock>(255)), "violated");
 }
 
@@ -101,7 +101,7 @@ TEST_F(FilmSimulationTest, Grain_AddsNoise) {
     pipeline->ApplyGrain(buffer.data(), width, height, 12345);
 
     bool changed = false;
-    for (size_t i = 0; i < buffer.size(); ++i) {
+    for (std::size_t i = 0; i < buffer.size(); ++i) {
         if (std::abs(buffer[i] - original[i]) > 1e-6f) {
             changed = true;
             break;
@@ -122,7 +122,7 @@ TEST_F(FilmSimulationTest, Grain_DifferentFrames_DifferentNoise) {
     pipeline->ApplyGrain(buffer2.data(), width, height, 2);
 
     bool different = false;
-    for (size_t i = 0; i < buffer1.size(); ++i) {
+    for (std::size_t i = 0; i < buffer1.size(); ++i) {
         if (std::abs(buffer1[i] - buffer2[i]) > 1e-6f) {
             different = true;
             break;
@@ -188,9 +188,8 @@ TEST_F(FilmSimulationTest, Halation_RedBias) {
     pipeline->ApplyHalation(buffer.data(), width, height);
 
     int sample_idx = (32 * width + 36) * 4;
-    if (buffer[sample_idx] > 0.0f) {
-        EXPECT_GE(buffer[sample_idx + 0], buffer[sample_idx + 2]);  // R >= B.
-    }
+    ASSERT_GT(buffer[sample_idx], 0.0f) << "halation produced no signal at the probe radius";
+    EXPECT_GE(buffer[sample_idx + 0], buffer[sample_idx + 2]);  // R >= B.
 }
 
 TEST_F(FilmSimulationTest, Vignette_DarkensCorners) {
@@ -308,7 +307,7 @@ TEST_F(FilmSimulationTest, FullPipeline_DoesNotCrash) {
 
     EXPECT_NO_THROW(pipeline->Apply(buffer.data(), width, height, 0));
 
-    for (size_t i = 0; i < buffer.size(); ++i) {
+    for (std::size_t i = 0; i < buffer.size(); ++i) {
         EXPECT_FALSE(std::isnan(buffer[i]));
         EXPECT_FALSE(std::isinf(buffer[i]));
     }

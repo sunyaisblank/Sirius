@@ -1,21 +1,15 @@
-# sirius_render: the CPU render library (output writers, film pipeline, session
-# orchestrator) plus the CPU geodesic tracer. The tracer's descriptive home is
-# src/sirius/backend/cpu (per docs/ARCHITECTURE.md), but the backend target owns
-# a separate CMakeLists this workstream must not touch; the tracer source is
-# compiled here for now and re-homes into sirius_backend once that seam is ready.
+# sirius_render: render orchestration, output writers, film processing, and
+# session lifecycle. Concrete execution belongs to backend targets.
 #
-# Vendored deps (stb, tinyexr + miniz) are used exactly as the legacy render
-# target used them. Their translation units must not be poisoned by the strict
-# -Werror the new tree applies (and miniz.c is C, so the target's -std=c++2c is
-# not even valid for it): each such TU gets a per-source "-w" below, relaxing
-# only those files and never the whole target.
+# Vendored deps (stb, tinyexr + miniz) remain isolated implementation details.
+# Their translation units must not be poisoned by the strict -Werror policy
+# (and miniz.c is C, so the target's -std=c++2c flag is deliberately C++-only):
+# each such TU gets a per-source "-w" below, relaxing only those files and never
+# the whole target.
 
 set(SIRIUS_RENDER_MINIZ "${CMAKE_SOURCE_DIR}/lib/tinyexr/miniz.c")
 
 add_library(sirius_render STATIC
-    # Tracer (deferred re-home into sirius_backend; see header comment above).
-    "${CMAKE_CURRENT_SOURCE_DIR}/../backend/cpu/geodesic_tracer.cpp"
-
     # Output writers.
     exr_writer.cpp
     png_writer.cpp
@@ -36,7 +30,7 @@ add_library(sirius_render STATIC
     "${SIRIUS_RENDER_MINIZ}"
 )
 
-target_link_libraries(sirius_render PUBLIC sirius_core Threads::Threads)
+target_link_libraries(sirius_render PUBLIC sirius_core sirius_backend_cpu Threads::Threads)
 
 # Vulkan render path: the trace-kernel dispatch through the ComputeDevice seam.
 # The backend target returns early when Vulkan dev files are absent, so this is

@@ -35,9 +35,12 @@ target_include_directories(sirius_render_tests PRIVATE
 sirius_configure_target(sirius_render_tests CONTRACT_MODE 2)
 
 if(TARGET sirius)
-    # Session-level tests resolve the same staged volume as the executable in
-    # CPU-only and Vulkan-enabled builds alike.
+    # Session-level tests consume the exact executable-adjacent runtime volume
+    # in every alignment mode. This keeps strict resource locking active rather
+    # than substituting a development-only environment-selected tree.
     add_dependencies(sirius_render_tests sirius)
+    set_target_properties(sirius_render_tests PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "$<TARGET_FILE_DIR:sirius>")
 endif()
 
 # The Vulkan render/parity gate loads the compiled trace kernel; point it at the
@@ -53,5 +56,4 @@ endif()
 gtest_discover_tests(
     sirius_render_tests
     PROPERTIES
-        LABELS "Correctness"
-        ENVIRONMENT "SIRIUS_RESOURCE_DIR=$<TARGET_FILE_DIR:sirius>/resources")
+        LABELS "Correctness")

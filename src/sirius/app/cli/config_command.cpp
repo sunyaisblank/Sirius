@@ -135,8 +135,8 @@ int ConfigCommand::ValidateConfig(const std::vector<std::string>& args,
         return 1;
     }
 
-    try {
-        (void)ConfigLoader::LoadFromFile(file_path);
+    const auto loaded = ConfigLoader::LoadFromFile(file_path);
+    if (loaded) {
         if (globals.json_output) {
             nlohmann::json result;
             result["valid"] = true;
@@ -147,19 +147,18 @@ int ConfigCommand::ValidateConfig(const std::vector<std::string>& args,
             cli::Success("Configuration is valid: " + file_path);
         }
         return 0;
-    } catch (const std::exception& e) {
-        if (globals.json_output) {
-            nlohmann::json result;
-            result["valid"] = false;
-            result["file"] = file_path;
-            result["errors"] = nlohmann::json::array();
-            result["errors"].push_back(e.what());
-            cli::PrintJson(result.dump(2));
-        } else {
-            cli::Error("Configuration is invalid: " + std::string(e.what()));
-        }
-        return 1;
     }
+    if (globals.json_output) {
+        nlohmann::json result;
+        result["valid"] = false;
+        result["file"] = file_path;
+        result["errors"] = nlohmann::json::array();
+        result["errors"].push_back(loaded.error().Description());
+        cli::PrintJson(result.dump(2));
+    } else {
+        cli::Error("Configuration is invalid: " + loaded.error().Description());
+    }
+    return 1;
 }
 
 int ConfigCommand::InitConfig(const std::vector<std::string>& args, const GlobalOptions& globals) {
@@ -191,9 +190,10 @@ int ConfigCommand::InitConfig(const std::vector<std::string>& args, const Global
         return 1;
     }
 
-    SiriusConfig default_config = SiriusConfig::defaults();
+    SiriusConfig default_config = SiriusConfig::Defaults();
 
-    if (ConfigLoader::SaveToFile(default_config, output_path)) {
+    const auto saved = ConfigLoader::SaveToFile(default_config, output_path);
+    if (saved) {
         if (globals.json_output) {
             nlohmann::json result;
             result["success"] = true;
@@ -208,10 +208,10 @@ int ConfigCommand::InitConfig(const std::vector<std::string>& args, const Global
             nlohmann::json result;
             result["success"] = false;
             result["file"] = output_path;
-            result["error"] = "Failed to write file";
+            result["error"] = saved.error().Description();
             cli::PrintJson(result.dump(2));
         } else {
-            cli::Error("Failed to create configuration file");
+            cli::Error("Failed to create configuration file: " + saved.error().Description());
         }
         return 1;
     }

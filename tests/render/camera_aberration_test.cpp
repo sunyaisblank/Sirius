@@ -12,6 +12,7 @@
 
 #include <gtest/gtest.h>
 
+#include <array>
 #include <cmath>
 
 namespace {
@@ -52,6 +53,47 @@ TEST(CameraAberrationTest, MatchesAnalyticFormulaAlongViewAxis) {
             EXPECT_NEAR(ray.direction(2), sin_prime, 1e-12)
                 << "beta=" << beta << " theta=" << theta;
             EXPECT_NEAR(ray.direction(3), 0.0, 1e-12);
+        }
+    }
+}
+
+TEST(CameraAberrationTest, MatchesGeneralLorentzBoostForThreeAxisVelocities) {
+    const std::array<std::array<double, 3>, 5> velocities = {
+        std::array<double, 3>{0.1, 0.2, -0.3},   std::array<double, 3>{-0.4, 0.05, 0.2},
+        std::array<double, 3>{0.0, -0.7, 0.1},   std::array<double, 3>{0.55, 0.55, 0.55},
+        std::array<double, 3>{-0.97, 0.1, 0.05},
+    };
+    const std::array<std::array<double, 3>, 4> directions = {
+        std::array<double, 3>{1.0, 0.0, 0.0},
+        std::array<double, 3>{0.0, 1.0, 0.0},
+        std::array<double, 3>{0.3, -0.4, std::sqrt(0.75)},
+        std::array<double, 3>{-0.2, 0.9, std::sqrt(0.15)},
+    };
+
+    for (const auto& beta : velocities) {
+        const double beta_squared = beta[0] * beta[0] + beta[1] * beta[1] + beta[2] * beta[2];
+        ASSERT_LT(beta_squared, 1.0);
+        const double gamma = 1.0 / std::sqrt(1.0 - beta_squared);
+        for (const auto& direction : directions) {
+            CameraRay actual = RayAlong(direction[0], direction[1], direction[2]);
+            AberrateRay(actual, beta[0], beta[1], beta[2]);
+
+            // Independent Lorentz transform of photon four-momentum k=(1,n):
+            // k'^0=gamma(1-beta.n), k'=n+[((gamma-1)beta.n/beta^2)-gamma]beta.
+            const double dot =
+                beta[0] * direction[0] + beta[1] * direction[1] + beta[2] * direction[2];
+            const double time = gamma * (1.0 - dot);
+            const double coefficient = (gamma - 1.0) * dot / beta_squared - gamma;
+            for (int component = 0; component < 3; ++component) {
+                const double expected =
+                    (direction[component] + coefficient * beta[component]) / time;
+                EXPECT_NEAR(actual.direction(component + 1), expected, 2.0e-12);
+                EXPECT_TRUE(std::isfinite(actual.direction(component + 1)));
+            }
+            const double length = std::sqrt(actual.direction(1) * actual.direction(1) +
+                                            actual.direction(2) * actual.direction(2) +
+                                            actual.direction(3) * actual.direction(3));
+            EXPECT_NEAR(length, 1.0, 2.0e-12);
         }
     }
 }

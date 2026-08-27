@@ -1,10 +1,12 @@
-// Time-transformed explicit symplectic integrator (Yoshida composition of
-// Stormer-Verlet leapfrog steps) for double-precision Kerr geodesics: the
-// oracle's energy and angular-momentum conservation reference for the live
-// RK45 path. Off the render path.
-//   H = (1/2) g^uv p_u p_v = 0 (null),  time transform d tau = Sigma d lambda
-// Reference: Yoshida (1990); Preto and Saha (1999); James et al. (2015) A.4.
-// Ported from PHSI001A.h; numeric content bit-identical. The single
+// Canonical symplectic integrator for the double-precision Kerr Hamiltonian:
+// Yoshida composition of symmetric implicit-midpoint maps. Implicit midpoint
+// is required because H(q,p) = (1/2) g^uv(q) p_u p_v is non-separable; an
+// explicit kick-drift-kick map is not symplectic for this Hamiltonian.
+// Optional state-dependent step selection and null projection are operational
+// stabilisers outside the strict fixed-step symplectic claim. Off the render
+// path.
+// Reference: Yoshida (1990); implicit midpoint as a symplectic Runge-Kutta map.
+// The single
 // core-constants reference (ANGULAR_CLAMP_EPS) is inlined as its literal
 // 1e-6 to keep the oracle self-contained; see core/constants.h
 // (kAngularClampEps).
@@ -17,6 +19,7 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <numbers>
 
 namespace sirius::oracle {
 
@@ -66,33 +69,33 @@ enum class IntegratorOrder {
 };
 
 //==============================================================================
-// SymplecticIntegratorD: Multi-order TTESI implementation for Kerr geodesics
+// SymplecticIntegratorD: multi-order fixed-step canonical composition
 //==============================================================================
 
 class SymplecticIntegratorD {
   public:
     struct Config {
-        double initialStepSize = 0.1;
-        double minStepSize = 1e-8;
-        double maxStepSize = 1.0;
+        double initial_step_size = 0.1;
+        double min_step_size = 1e-8;
+        double max_step_size = 1.0;
         double tolerance = 1e-10;
-        int maxStepsPerCall = 10000;
-        double horizonBuffer = 1.01;
+        int max_steps_per_call = 10000;
+        double horizon_buffer = 1.01;
         IntegratorOrder order = IntegratorOrder::kYoshida6;  // Default: 6th-order
 
         // Null condition renormalization settings
-        bool enforceNullCondition = true;  // Renormalize to g_μν k^μ k^ν = 0
-        double nullConditionTol = 1e-6;    // Tolerance for null condition drift
-        int renormalizeEveryNSteps = 10;   // Frequency of renormalization (0 = every Step)
+        bool enforce_null_condition = true;      // Renormalize to g_μν k^μ k^ν = 0
+        double null_condition_tolerance = 1e-6;  // Tolerance for null condition drift
+        int renormalize_every_n_steps = 10;      // Frequency of renormalization (0 = every Step)
 
         Config() = default;  // Explicit default constructor
     };
 
     struct StepResult {
         HamiltonianStateD state;
-        double lambdaAdvance;
-        double hamiltonianError;
-        double nullConditionError;  // |g_μν k^μ k^ν|
+        double lambda_advance;
+        double hamiltonian_error;
+        double null_condition_error;  // |g_μν k^μ k^ν|
         bool terminated;
         int substeps;
     };
@@ -114,81 +117,82 @@ class SymplecticIntegratorD {
         StepResult result;
         result.substeps = 0;
         result.terminated = false;
-        result.nullConditionError = 0;
+        result.null_condition_error = 0;
 
         HamiltonianStateD s = state;
 
         // Select coefficients based on order
         const double* weights = nullptr;
-        int numSubsteps = 0;
+        int substep_count = 0;
 
         switch (config_.order) {
             case IntegratorOrder::kYoshida4:
                 weights = symplectic::kOrder4Weights;
-                numSubsteps = symplectic::kOrder4Substeps;
+                substep_count = symplectic::kOrder4Substeps;
                 break;
             case IntegratorOrder::kYoshida6:
                 weights = symplectic::kOrder6Weights;
-                numSubsteps = symplectic::kOrder6Substeps;
+                substep_count = symplectic::kOrder6Substeps;
                 break;
             case IntegratorOrder::kYoshida8:
                 weights = symplectic::kOrder8Weights;
-                numSubsteps = symplectic::kOrder8Substeps;
+                substep_count = symplectic::kOrder8Substeps;
                 break;
         }
 
-        // Apply Yoshida composition: each weight is a leapfrog Step with that fraction of h
-        double lambdaAccum = 0;
-        for (int i = 0; i < numSubsteps; ++i) {
+        // Apply Yoshida composition: each weight is one symmetric second-order
+        // implicit-midpoint map with that fraction of h.
+        double lambda_accumulator = 0;
+        for (int i = 0; i < substep_count; ++i) {
             double wi = weights[i];
-            s = LeapfrogStep(s, wi * h);
+            s = ImplicitMidpointStep(s, wi * h);
 
             if (!metric_->IsValid(s.q)) {
                 result.terminated = true;
                 result.state = s;
-                result.lambdaAdvance = lambdaAccum;
+                result.lambda_advance = lambda_accumulator;
                 // Boyer-Lindquist is outside its chart domain here. Do not
                 // evaluate the metric merely to decorate a termination result.
-                result.hamiltonianError = std::numeric_limits<double>::infinity();
-                result.nullConditionError = std::numeric_limits<double>::infinity();
+                result.hamiltonian_error = std::numeric_limits<double>::infinity();
+                result.null_condition_error = std::numeric_limits<double>::infinity();
                 return result;
             }
 
-            lambdaAccum += wi * h;
+            lambda_accumulator += wi * h;
             result.substeps++;
         }
 
         // Compute null condition error before potential renormalization
-        result.nullConditionError = ComputeNullError(s);
+        result.null_condition_error = ComputeNullError(s);
 
         // Apply null condition renormalization if enabled and needed
-        if (config_.enforceNullCondition) {
+        if (config_.enforce_null_condition) {
             steps_since_renorm_++;
 
-            bool shouldRenorm = false;
-            if (config_.renormalizeEveryNSteps == 0) {
+            bool should_renormalize = false;
+            if (config_.renormalize_every_n_steps == 0) {
                 // Renormalize every Step
-                shouldRenorm = true;
-            } else if (steps_since_renorm_ >= config_.renormalizeEveryNSteps) {
-                shouldRenorm = true;
-            } else if (result.nullConditionError > config_.nullConditionTol) {
+                should_renormalize = true;
+            } else if (steps_since_renorm_ >= config_.renormalize_every_n_steps) {
+                should_renormalize = true;
+            } else if (result.null_condition_error > config_.null_condition_tolerance) {
                 // Renormalize if error exceeds tolerance
-                shouldRenorm = true;
+                should_renormalize = true;
             }
 
-            if (shouldRenorm) {
+            if (should_renormalize) {
                 s = RenormalizeNull(s);
                 steps_since_renorm_ = 0;
                 // Recompute error after renormalization
-                result.nullConditionError = ComputeNullError(s);
+                result.null_condition_error = ComputeNullError(s);
             }
         }
 
         // Compute Hamiltonian error
         result.state = s;
         result.state.H = metric_->Hamiltonian(s.q, s.p);
-        result.hamiltonianError = std::abs(result.state.H);
-        result.lambdaAdvance = h;  // Total Step is always h (weights sum to 1)
+        result.hamiltonian_error = std::abs(result.state.H);
+        result.lambda_advance = h;  // Total Step is always h (weights sum to 1)
 
         return result;
     }
@@ -198,69 +202,70 @@ class SymplecticIntegratorD {
     //--------------------------------------------------------------------------
 
     struct IntegrationResult {
-        GeodesicStateD finalState;
-        double totalLambda;
-        double maxHamiltonianError;
-        int totalSteps;
-        bool hitHorizon;
+        GeodesicStateD final_state;
+        double total_lambda;
+        double max_hamiltonian_error;
+        int total_steps;
+        bool hit_horizon;
         bool escaped;
     };
 
     IntegrationResult Integrate(const GeodesicStateD& initial, double lambdaMax,
-                                double escapeRadius = 1e6) const {
+                                double escape_radius = 1e6) const {
         IntegrationResult result;
-        result.totalLambda = 0;
-        result.maxHamiltonianError = 0;
-        result.totalSteps = 0;
-        result.hitHorizon = false;
+        result.total_lambda = 0;
+        result.max_hamiltonian_error = 0;
+        result.total_steps = 0;
+        result.hit_horizon = false;
         result.escaped = false;
 
         HamiltonianStateD hs(initial);
-        double h = config_.initialStepSize;
+        double h = config_.initial_step_size;
 
-        while (result.totalLambda < lambdaMax && result.totalSteps < config_.maxStepsPerCall) {
+        while (result.total_lambda < lambdaMax && result.total_steps < config_.max_steps_per_call) {
             // Adaptive Step size based on position (smaller near horizon)
             double r = hs.q.r;
             double r_horizon = metric_->HorizonRadius();
 
-            if (r < r_horizon * config_.horizonBuffer) {
-                result.hitHorizon = true;
+            if (r < r_horizon * config_.horizon_buffer) {
+                result.hit_horizon = true;
                 break;
             }
 
-            if (r > escapeRadius) {
+            if (r > escape_radius) {
                 result.escaped = true;
                 break;
             }
 
             // Adapt Step size: smaller near horizon, larger when far away
             double r_ratio = (r - r_horizon) / r_horizon;
-            h = config_.initialStepSize * std::min(1.0, r_ratio * r_ratio);
-            h = std::clamp(h, config_.minStepSize, config_.maxStepSize);
+            h = config_.initial_step_size * std::min(1.0, r_ratio * r_ratio);
+            h = std::clamp(h, config_.min_step_size, config_.max_step_size);
 
             // Don't overshoot lambdaMax
-            if (result.totalLambda + h > lambdaMax) {
-                h = lambdaMax - result.totalLambda;
+            if (result.total_lambda + h > lambdaMax) {
+                h = lambdaMax - result.total_lambda;
             }
 
             // Take Step
             StepResult sr = Step(hs, h);
 
             if (sr.terminated) {
-                result.hitHorizon = true;
+                result.hit_horizon = true;
                 break;
             }
 
             hs = sr.state;
-            result.totalLambda += sr.lambdaAdvance;
-            result.maxHamiltonianError = std::max(result.maxHamiltonianError, sr.hamiltonianError);
-            result.totalSteps++;
+            result.total_lambda += sr.lambda_advance;
+            result.max_hamiltonian_error =
+                std::max(result.max_hamiltonian_error, sr.hamiltonian_error);
+            result.total_steps++;
         }
 
         // Convert back to GeodesicStateD
-        result.finalState = hs.ToGeodesicState(result.totalLambda);
-        result.finalState.E = -hs.p.t;
-        result.finalState.Lz = hs.p.phi;
+        result.final_state = hs.ToGeodesicState(result.total_lambda);
+        result.final_state.E = -hs.p.t;
+        result.final_state.Lz = hs.p.phi;
 
         return result;
     }
@@ -271,43 +276,43 @@ class SymplecticIntegratorD {
 
     // Integrate for N steps and return conservation statistics
     struct ConservationStats {
-        double initialH;
-        double finalH;
-        double maxHError;
-        double initialE;
-        double finalE;
-        double initialLz;
-        double finalLz;
+        double initial_h;
+        double final_h;
+        double max_h_error;
+        double initial_e;
+        double final_e;
+        double initial_lz;
+        double final_lz;
         int steps;
     };
 
     ConservationStats TestConservation(const GeodesicStateD& initial, int numSteps,
-                                       double stepSize) const {
+                                       double step_size) const {
         ConservationStats stats;
         stats.steps = 0;
 
         HamiltonianStateD hs(initial);
 
         // Initial quantities
-        stats.initialH = metric_->Hamiltonian(hs.q, hs.p);
-        stats.initialE = -hs.p.t;
-        stats.initialLz = hs.p.phi;
-        stats.maxHError = std::abs(stats.initialH);
+        stats.initial_h = metric_->Hamiltonian(hs.q, hs.p);
+        stats.initial_e = -hs.p.t;
+        stats.initial_lz = hs.p.phi;
+        stats.max_h_error = std::abs(stats.initial_h);
 
         // Integrate
         for (int i = 0; i < numSteps; ++i) {
-            StepResult sr = Step(hs, stepSize);
+            StepResult sr = Step(hs, step_size);
             if (sr.terminated) break;
 
             hs = sr.state;
-            stats.maxHError = std::max(stats.maxHError, sr.hamiltonianError);
+            stats.max_h_error = std::max(stats.max_h_error, sr.hamiltonian_error);
             stats.steps++;
         }
 
         // Final quantities
-        stats.finalH = metric_->Hamiltonian(hs.q, hs.p);
-        stats.finalE = -hs.p.t;
-        stats.finalLz = hs.p.phi;
+        stats.final_h = metric_->Hamiltonian(hs.q, hs.p);
+        stats.final_e = -hs.p.t;
+        stats.final_lz = hs.p.phi;
 
         return stats;
     }
@@ -398,44 +403,54 @@ class SymplecticIntegratorD {
     }
 
     //--------------------------------------------------------------------------
-    // Leapfrog (Störmer-Verlet) Substep
+    // Symmetric implicit-midpoint substep
     //--------------------------------------------------------------------------
 
-    HamiltonianStateD LeapfrogStep(const HamiltonianStateD& state, double h) const {
-        // Leapfrog: p_{n+1/2} = p_n - (h/2) ∂H/∂q
-        //           q_{n+1} = q_n + h ∂H/∂p(q_n, p_{n+1/2})
-        //           p_{n+1} = p_{n+1/2} - (h/2) ∂H/∂q(q_{n+1})
+    HamiltonianStateD ImplicitMidpointStep(const HamiltonianStateD& state, double h) const {
+        // z_(n+1) = z_n + h J grad H((z_n + z_(n+1))/2). Fixed-point
+        // iteration solves the nonlinear midpoint equations to near machine
+        // precision. Every iterate is derived from the original state so the
+        // converged map remains the implicit Runge-Kutta map, not a chain of
+        // explicit Euler updates.
+        HamiltonianStateD next = state;
+        next.q = state.q + metric_->dHdp(state.q, state.p) * h;
+        next.p = state.p + metric_->dHdq(state.q, state.p) * h;
 
-        HamiltonianStateD s = state;
+        constexpr int kMaximumIterations = 64;
+        constexpr double kRelativeTolerance = 2.0e-14;
+        bool converged = false;
+        for (int iteration = 0; iteration < kMaximumIterations; ++iteration) {
+            HamiltonianStateD midpoint;
+            midpoint.q = (state.q + next.q) * 0.5;
+            midpoint.p = (state.p + next.p) * 0.5;
+            if (!metric_->IsValid(midpoint.q)) return next;
 
-        // Half-Step momentum update
-        Vec4d dHdq = metric_->dHdq(s.q, s.p);
-        s.p = s.p + dHdq * (h * 0.5);  // Note: dHdq returns dp/dλ = -∂H/∂q (negated)
+            HamiltonianStateD candidate = state;
+            candidate.q = state.q + metric_->dHdp(midpoint.q, midpoint.p) * h;
+            candidate.p = state.p + metric_->dHdq(midpoint.q, midpoint.p) * h;
 
-        // Full-Step position update
-        Vec4d dHdp = metric_->dHdp(s.q, s.p);
-        s.q = s.q + dHdp * h;
+            double error = 0.0;
+            double scale = 1.0;
+            for (int component = 0; component < 4; ++component) {
+                error = std::max(error, std::abs(candidate.q[component] - next.q[component]));
+                error = std::max(error, std::abs(candidate.p[component] - next.p[component]));
+                scale = std::max(scale, std::abs(candidate.q[component]));
+                scale = std::max(scale, std::abs(candidate.p[component]));
+            }
+            next = candidate;
+            if (error <= kRelativeTolerance * scale) {
+                converged = true;
+                break;
+            }
+        }
+        SIRIUS_ASSERT(converged);
 
-        // Normalise angles
-        s.q.phi = std::fmod(s.q.phi, 2 * M_PI);
-        if (s.q.phi < 0) s.q.phi += 2 * M_PI;
+        next.q.phi = std::fmod(next.q.phi, 2 * std::numbers::pi);
+        if (next.q.phi < 0) next.q.phi += 2 * std::numbers::pi;
         // 1e-6 == core/constants.h kAngularClampEps; inlined to keep the
         // oracle self-contained (STYLE.md self-containment over shared const).
-        s.q.theta = std::clamp(s.q.theta, 1e-6, M_PI - 1e-6);
-
-        // A composed substep can cross the Boyer-Lindquist horizon even when
-        // the enclosing step began outside it. Return the position for the
-        // caller's termination check before evaluating dH/dq outside the
-        // metric chart.
-        if (!metric_->IsValid(s.q)) {
-            return s;
-        }
-
-        // Half-Step momentum update (at new position)
-        dHdq = metric_->dHdq(s.q, s.p);
-        s.p = s.p + dHdq * (h * 0.5);
-
-        return s;
+        next.q.theta = std::clamp(next.q.theta, 1e-6, std::numbers::pi - 1e-6);
+        return next;
     }
 };
 

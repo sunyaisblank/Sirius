@@ -9,10 +9,7 @@
 
 #include <cmath>
 #include <memory>
-
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
+#include <numbers>
 
 namespace sirius::core {
 
@@ -29,9 +26,9 @@ struct CameraRay {
 struct CameraConfig {
     // Position (Boyer-Lindquist coordinates: t, r, theta, phi)
     double t = 0.0;
-    double r = 50.0;            // Distance from centre (in M)
-    double theta = M_PI / 2.0;  // Polar angle (pi/2 = equatorial)
-    double phi = 0.0;           // Azimuthal angle
+    double r = 50.0;                        // Distance from centre (in M)
+    double theta = std::numbers::pi / 2.0;  // Polar angle (pi/2 = equatorial)
+    double phi = 0.0;                       // Azimuthal angle
 
     // Orientation
     float yaw = 0.0f;    // Yaw rotation (radians)
@@ -51,7 +48,7 @@ struct CameraConfig {
 
     // Lens properties
     float fov = 60.0f;             // Field of view (degrees)
-    float focal_length = 50.0f;    // Focal length (mm, for ThinLens)
+    float focal_length = 50.0f;    // Focal length (mm-equivalent, for ThinLens)
     float aperture = 2.8f;         // f-number (for depth of field)
     float focus_distance = 50.0f;  // Focus distance (M)
 
@@ -240,7 +237,7 @@ class PinholeCamera : public ICamera {
   private:
     void UpdateInternals() {
         aspect_ratio_ = static_cast<float>(config_.width) / config_.height;
-        tan_half_fov_ = std::tan(config_.fov * static_cast<float>(M_PI) / 360.0f);
+        tan_half_fov_ = std::tan(config_.fov * static_cast<float>(std::numbers::pi) / 360.0f);
     }
 
     CameraConfig config_;
@@ -267,15 +264,24 @@ class ThinLensCamera : public ICamera {
         float px = (2.0f * (x + u) / config_.width - 1.0f) * aspect_ratio_;
         float py = 1.0f - 2.0f * (y + v) / config_.height;
 
-        // Point on focus plane
-        float focus_x = px * config_.focus_distance / config_.focal_length;
-        float focus_y = py * config_.focus_distance / config_.focal_length;
+        // Point on the focus plane. A ray through the centre of the aperture
+        // must have exactly the same perspective projection as the pinhole
+        // camera; the previous focal-length division silently collapsed a 60
+        // degree request to roughly two degrees at the default 50 mm setting.
+        float focus_x = px * tan_half_fov_ * config_.focus_distance;
+        float focus_y = py * tan_half_fov_ * config_.focus_distance;
         float focus_z = -config_.focus_distance;
 
-        // Random point on aperture (for depth of field)
-        float aperture_radius = config_.focal_length / (2.0f * config_.aperture);
+        // Random point on the aperture (for depth of field). The spacetime uses
+        // geometric M units and has no physical mass-to-millimetre scale, so a
+        // 50 mm-equivalent lens defines one virtual lens unit. This preserves
+        // the f-number and focal-length controls without mixing raw millimetres
+        // directly with a focus distance measured in M.
+        constexpr float kReferenceFocalLengthMillimetres = 50.0f;
+        float aperture_radius =
+            (config_.focal_length / kReferenceFocalLengthMillimetres) / (2.0f * config_.aperture);
         // Use deterministic jitter based on u, v
-        float theta = 2.0f * static_cast<float>(M_PI) * u;
+        float theta = 2.0f * static_cast<float>(std::numbers::pi) * u;
         float r_lens = aperture_radius * std::sqrt(v);
         float lens_x = r_lens * std::cos(theta);
         float lens_y = r_lens * std::sin(theta);
@@ -307,10 +313,14 @@ class ThinLensCamera : public ICamera {
     }
 
   private:
-    void UpdateInternals() { aspect_ratio_ = static_cast<float>(config_.width) / config_.height; }
+    void UpdateInternals() {
+        aspect_ratio_ = static_cast<float>(config_.width) / config_.height;
+        tan_half_fov_ = std::tan(config_.fov * static_cast<float>(std::numbers::pi) / 360.0f);
+    }
 
     CameraConfig config_;
     float aspect_ratio_ = 1.0f;
+    float tan_half_fov_ = 1.0f;
 };
 
 // Equidistant fisheye projection (angle proportional to image radius).
@@ -337,10 +347,10 @@ class FisheyeCamera : public ICamera {
         float phi_img = std::atan2(py, px);
 
         // Equidistant projection: theta = r * (FOV/2)
-        float theta_ray = r_img * config_.fov * static_cast<float>(M_PI) / 360.0f;
+        float theta_ray = r_img * config_.fov * static_cast<float>(std::numbers::pi) / 360.0f;
 
         // Clamp to hemisphere
-        if (theta_ray > static_cast<float>(M_PI)) {
+        if (theta_ray > static_cast<float>(std::numbers::pi)) {
             ray.weight = 0.0f;
             return ray;
         }

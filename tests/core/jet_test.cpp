@@ -6,6 +6,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <limits>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -61,6 +62,57 @@ TEST_F(JetDopplerTests, AnalyticFormula) {
     float D = jet.DopplerFactor(cos_theta);
     float expected = 1.0f / (gamma * (1.0f - beta * cos_theta));
     EXPECT_NEAR(D, expected, kEps);
+}
+
+TEST_F(JetDopplerTests, ConstructorSanitizesNonFiniteConfiguration) {
+    sirius::core::JetConfig config;
+    const float nan = std::numeric_limits<float>::quiet_NaN();
+    const float infinity = std::numeric_limits<float>::infinity();
+    config.r_launch = nan;
+    config.r_max = infinity;
+    config.opening_angle = nan;
+    config.collimation = infinity;
+    config.lorentz_factor = nan;
+    config.velocity_profile = -infinity;
+    config.spectral_index = nan;
+    config.B_field_0 = infinity;
+    config.B_field_decay = nan;
+    config.n_e_0 = infinity;
+    config.n_e_decay = nan;
+    config.gamma_min = nan;
+    config.gamma_max = infinity;
+    config.B_field_order = nan;
+
+    const sirius::core::RelativisticJet sanitized(config);
+    const auto& result = sanitized.GetConfig();
+    EXPECT_TRUE(std::isfinite(result.r_launch));
+    EXPECT_TRUE(std::isfinite(result.r_max));
+    EXPECT_TRUE(std::isfinite(result.opening_angle));
+    EXPECT_TRUE(std::isfinite(result.collimation));
+    EXPECT_TRUE(std::isfinite(result.lorentz_factor));
+    EXPECT_TRUE(std::isfinite(result.velocity_profile));
+    EXPECT_TRUE(std::isfinite(result.spectral_index));
+    EXPECT_TRUE(std::isfinite(result.B_field_0));
+    EXPECT_TRUE(std::isfinite(result.B_field_decay));
+    EXPECT_TRUE(std::isfinite(result.n_e_0));
+    EXPECT_TRUE(std::isfinite(result.n_e_decay));
+    EXPECT_TRUE(std::isfinite(result.gamma_min));
+    EXPECT_TRUE(std::isfinite(result.gamma_max));
+    EXPECT_TRUE(std::isfinite(result.B_field_order));
+    EXPECT_GT(result.r_max, result.r_launch);
+    EXPECT_GE(result.lorentz_factor, 1.0f);
+    EXPECT_TRUE(std::isfinite(sanitized.DopplerFactor(0.5f)));
+
+    config.r_launch = std::numeric_limits<float>::max();
+    config.r_max = -std::numeric_limits<float>::max();
+    config.lorentz_factor = std::numeric_limits<float>::max();
+    config.gamma_min = std::numeric_limits<float>::max();
+    config.gamma_max = -std::numeric_limits<float>::max();
+    const sirius::core::RelativisticJet extreme(config);
+    EXPECT_GT(extreme.GetConfig().r_max, extreme.GetConfig().r_launch);
+    EXPECT_GT(extreme.GetConfig().gamma_max, extreme.GetConfig().gamma_min);
+    EXPECT_LE(extreme.GetConfig().lorentz_factor, 1000.0f);
+    EXPECT_TRUE(std::isfinite(extreme.DopplerFactor(1.0f)));
 }
 
 // =============================================================================

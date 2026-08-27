@@ -1,318 +1,162 @@
-// Spectral rendering reference validation: Planck function, Wien's law,
-// Stefan-Boltzmann, redshift scaling, and limb darkening against NIST CODATA
-// 2018 values. Ported from TSSP002A.cpp; assertions and tolerances unchanged.
-// Tests blackbody.h and the constants authority. LABEL: Correctness
+// Independent spectral-physics oracles for the production blackbody authority.
 
-#include "sirius/core/constants.h"
 #include "sirius/core/spectral/blackbody.h"
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
+#include <array>
 #include <cmath>
-#include <vector>
+#include <numbers>
 
 namespace sirius::test {
-using namespace sirius::core;
+namespace {
 
-using namespace sirius::core::constants;
+using sirius::core::spectral::ApplyLimbDarkening;
+using sirius::core::spectral::BlackbodyToRgb;
+using sirius::core::spectral::DopplerFactor;
+using sirius::core::spectral::LimbDarkeningCoeff;
+using sirius::core::spectral::PlanckRadiance;
+using sirius::core::spectral::Rgb;
+using sirius::core::spectral::StefanBoltzmannRadiance;
+using sirius::core::spectral::TotalRedshift;
+using sirius::core::spectral::WienPeakWavelength;
 
-// =============================================================================
-// Physical Reference Constants
-// =============================================================================
+constexpr double kReferencePlanck = 6.62607015e-34;
+constexpr double kReferenceLightSpeed = 299792458.0;
+constexpr double kReferenceBoltzmann = 1.380649e-23;
 
-namespace SpectralRef {
+double IndependentPlanckRadiance(double wavelength, double temperature) {
+    const double numerator = 2.0 * kReferencePlanck * kReferenceLightSpeed * kReferenceLightSpeed;
+    const double exponent =
+        kReferencePlanck * kReferenceLightSpeed / (wavelength * kReferenceBoltzmann * temperature);
+    return numerator / (std::pow(wavelength, 5) * std::expm1(exponent));
+}
 
-// Wien's displacement constant (NIST CODATA 2018)
-constexpr double WIEN_B = 2.897771955e-3;  // m·K
+double RelativeError(double actual, double expected) {
+    return std::abs(actual - expected) / std::max(std::abs(expected), 1.0e-300);
+}
 
-// Stefan-Boltzmann constant
-constexpr double SIGMA_SB = 5.670374419e-8;  // W/(m²·K⁴)
-
-// Planck's constant and speed of light
-constexpr double h_PLANCK = 6.62607015e-34;   // J·s
-constexpr double c_LIGHT = 2.99792458e8;      // m/s
-constexpr double k_BOLTZMANN = 1.380649e-23;  // J/K
-
-// Solar temperature (effective)
-constexpr double T_SUN = 5778.0;  // K
-
-// D65 white point (standard daylight)
-[[maybe_unused]] constexpr double T_D65 = 6504.0;  // K (approximate)
-
-// CIE 1931 XYZ chromaticity of D65 white
-[[maybe_unused]] constexpr double D65_x = 0.31272;
-[[maybe_unused]] constexpr double D65_y = 0.32903;
-
-// Test tolerances
-[[maybe_unused]] constexpr double PLANCK_TOL = 1e-3;  // 0.1% for Planck function
-constexpr double WIEN_TOL = 5.0;                      // nm tolerance for peak wavelength
-[[maybe_unused]] constexpr double COLOR_TOL = 0.05;   // 5% for color matching
-
-}  // namespace SpectralRef
-
-// =============================================================================
-// Test Fixture
-// =============================================================================
-
-class SpectralValidationTests : public ::testing::Test {
-  protected:
-    void SetUp() override {}
-    void TearDown() override {}
-
-    /// @brief Compute Planck function B(λ,T) analytically
-    /// @param lambda_nm Wavelength in nanometers
-    /// @param T Temperature in Kelvin
-    /// @return Spectral radiance in W/(m²·sr·nm)
-    double planckFunction(double lambda_nm, double T) const {
-        double lambda_m = lambda_nm * 1e-9;  // Convert to meters
-
-        double c1 = 2.0 * SpectralRef::h_PLANCK * SpectralRef::c_LIGHT * SpectralRef::c_LIGHT;
-        double c2 = SpectralRef::h_PLANCK * SpectralRef::c_LIGHT / SpectralRef::k_BOLTZMANN;
-
-        double exp_arg = c2 / (lambda_m * T);
-        if (exp_arg > 700) return 0.0;  // Prevent overflow
-
-        double B = c1 / (std::pow(lambda_m, 5) * (std::exp(exp_arg) - 1.0));
-
-        // Convert from W/(m²·sr·m) to W/(m²·sr·nm)
-        return B * 1e-9;
+double IntegratedExitance(double temperature) {
+    // Midpoint quadrature in log(lambda) spans all material thermal radiance.
+    // B_lambda d(lambda) becomes B_exp(x) exp(x) dx.
+    constexpr int kPanels = 32768;
+    constexpr double kLogMinimum = -20.72326583694641;  // log(1 nm)
+    constexpr double kLogMaximum = -6.907755278982137;  // log(1 mm)
+    constexpr double kStep = (kLogMaximum - kLogMinimum) / kPanels;
+    double integral = 0.0;
+    for (int panel = 0; panel < kPanels; ++panel) {
+        const double x = kLogMinimum + (panel + 0.5) * kStep;
+        const double wavelength = std::exp(x);
+        integral += IndependentPlanckRadiance(wavelength, temperature) * wavelength;
     }
-
-    /// @brief Compute Wien's peak wavelength
-    double wienPeakWavelength(double T) const {
-        return (SpectralRef::WIEN_B / T) * 1e9;  // Convert m to nm
-    }
-};
-
-// =============================================================================
-// Planck Function Tests
-// =============================================================================
-
-TEST_F(SpectralValidationTests, PlanckFunctionBasic) {
-    // Test Planck function at known temperature and wavelength
-    double T = 5778.0;      // Solar temperature
-    double lambda = 500.0;  // nm
-
-    double B = planckFunction(lambda, T);
-
-    // Should be positive and finite
-    EXPECT_GT(B, 0) << "Planck function should be positive";
-    EXPECT_FALSE(std::isnan(B)) << "Planck function should be finite";
-    EXPECT_FALSE(std::isinf(B)) << "Planck function should not overflow";
+    return std::numbers::pi * integral * kStep;
 }
 
-TEST_F(SpectralValidationTests, PlanckFunctionMonotonicity) {
-    // At fixed wavelength, Planck function should increase with temperature
-    double lambda = 550.0;  // nm (green)
-
-    [[maybe_unused]] double T_prev = 0;
-    double B_prev = 0;
-
-    for (double T = 1000; T <= 10000; T += 1000) {
-        double B = planckFunction(lambda, T);
-        if (T > 1000) {
-            EXPECT_GT(B, B_prev) << "Planck function should increase with T at λ=" << lambda;
-        }
-        B_prev = B;
-    }
-}
-
-TEST_F(SpectralValidationTests, WienDisplacementLaw) {
-    // Wien's law: λ_max × T = b = 2897.77 μm·K
-
-    std::vector<double> temperatures = {3000, 4000, 5000, 5778, 6500, 8000, 10000};
-
-    for (double T : temperatures) {
-        double lambda_max = wienPeakWavelength(T);
-        double product = (lambda_max * 1e-9) * T;  // Convert nm back to m
-
-        EXPECT_NEAR(product, SpectralRef::WIEN_B, SpectralRef::WIEN_B * 1e-6)
-            << "Wien's law product at T=" << T << "K";
-    }
-}
-
-TEST_F(SpectralValidationTests, SolarPeakWavelength) {
-    // Sun (T ≈ 5778K) should peak around 500nm (green)
-    double T_sun = SpectralRef::T_SUN;
-    double lambda_peak = wienPeakWavelength(T_sun);
-
-    EXPECT_NEAR(lambda_peak, 501.5, SpectralRef::WIEN_TOL)
-        << "Solar peak wavelength should be ~501.5nm";
-}
-
-TEST_F(SpectralValidationTests, CandelaColor) {
-    // Test that ~2800K (incandescent bulb) peaks in red/IR
-    double T_candle = 2800.0;
-    double lambda_peak = wienPeakWavelength(T_candle);
-
-    // Should peak around 1035nm (infrared)
-    EXPECT_GT(lambda_peak, 900) << "Incandescent bulb should peak in IR";
-    EXPECT_LT(lambda_peak, 1200) << "Peak should be in near-IR range";
-}
-
-// =============================================================================
-// Wien's Law Reference Tests
-// =============================================================================
-
-TEST_F(SpectralValidationTests, WienKnownValues) {
-    // Test against known values from physics references
-
-    // Sun: T = 5778K → λ_max ≈ 502nm
-    EXPECT_NEAR(wienPeakWavelength(5778), 501.5, 1.0);
-
-    // Sirius A: T ≈ 9940K → λ_max ≈ 291nm (UV)
-    EXPECT_NEAR(wienPeakWavelength(9940), 291.5, 1.0);
-
-    // Red giant: T ≈ 3500K → λ_max ≈ 828nm (IR)
-    EXPECT_NEAR(wienPeakWavelength(3500), 828, 2.0);
-
-    // Human body: T ≈ 310K → λ_max ≈ 9350nm (mid-IR)
-    EXPECT_NEAR(wienPeakWavelength(310), 9347, 10.0);
-}
-
-// =============================================================================
-// Relativistic Redshift Tests
-// =============================================================================
-
-TEST_F(SpectralValidationTests, RedshiftIntensityScaling) {
-    // Relativistic intensity transformation: I_obs = g^4 × I_emit
-    // where g = ν_obs/ν_emit = λ_emit/λ_obs
-
-    // Test with specific g-factors
-    std::vector<double> g_factors = {0.5, 0.8, 1.0, 1.2, 2.0};
-
-    for (double g : g_factors) {
-        double intensity_factor = std::pow(g, 4);
-
-        // Verify the g^4 relationship
-        if (g < 1.0) {
-            // Redshift: intensity decreases
-            EXPECT_LT(intensity_factor, 1.0)
-                << "Redshift (g=" << g << ") should decrease intensity";
-        } else if (g > 1.0) {
-            // Blueshift: intensity increases
-            EXPECT_GT(intensity_factor, 1.0)
-                << "Blueshift (g=" << g << ") should increase intensity";
+double NumericalPeakWavelength(double temperature) {
+    // Golden-section maximisation is independent of the closed-form Wien law.
+    constexpr double kPhi = 1.6180339887498948482;
+    double lower = 50.0e-9;
+    double upper = 20.0e-6;
+    double left = upper - (upper - lower) / kPhi;
+    double right = lower + (upper - lower) / kPhi;
+    for (int iteration = 0; iteration < 120; ++iteration) {
+        if (PlanckRadiance(left, temperature) < PlanckRadiance(right, temperature)) {
+            lower = left;
+            left = right;
+            right = lower + (upper - lower) / kPhi;
         } else {
-            EXPECT_NEAR(intensity_factor, 1.0, 1e-10) << "No shift (g=1) should preserve intensity";
+            upper = right;
+            right = left;
+            left = upper - (upper - lower) / kPhi;
+        }
+    }
+    return 0.5 * (lower + upper);
+}
+
+}  // namespace
+
+TEST(SpectralValidationTests, PlanckRadianceMatchesIndependentCodataEquation) {
+    for (const double temperature : {1200.0, 3000.0, 5778.0, 10000.0, 1.0e7}) {
+        for (const double wavelength : {100.0e-9, 380.0e-9, 550.0e-9, 780.0e-9, 10.0e-6}) {
+            SCOPED_TRACE(::testing::Message() << "T=" << temperature << " lambda=" << wavelength);
+            const double expected = IndependentPlanckRadiance(wavelength, temperature);
+            EXPECT_LT(RelativeError(PlanckRadiance(wavelength, temperature), expected), 2.0e-14);
         }
     }
 }
 
-TEST_F(SpectralValidationTests, RedshiftWavelengthTransform) {
-    // λ_obs = λ_emit / g
-
-    double lambda_emit = 500.0;  // nm
-
-    // Redshift (g < 1): observed wavelength longer
-    double g_red = 0.8;
-    double lambda_obs_red = lambda_emit / g_red;
-    EXPECT_GT(lambda_obs_red, lambda_emit) << "Redshift should increase wavelength";
-    EXPECT_NEAR(lambda_obs_red, 625.0, 0.1) << "500nm at g=0.8 should become 625nm";
-
-    // Blueshift (g > 1): observed wavelength shorter
-    double g_blue = 1.25;
-    double lambda_obs_blue = lambda_emit / g_blue;
-    EXPECT_LT(lambda_obs_blue, lambda_emit) << "Blueshift should decrease wavelength";
-    EXPECT_NEAR(lambda_obs_blue, 400.0, 0.1) << "500nm at g=1.25 should become 400nm";
-}
-
-// =============================================================================
-// Color Temperature Tests
-// =============================================================================
-
-TEST_F(SpectralValidationTests, ColorTemperatureOrdering) {
-    // Hotter objects should appear bluer (shorter peak wavelength)
-    // Color temperature correlates inversely with peak wavelength
-
-    std::vector<std::pair<double, std::string>> temps = {{2000, "candle"},
-                                                         {2800, "incandescent"},
-                                                         {5500, "daylight"},
-                                                         {6500, "overcast"},
-                                                         {10000, "blue sky"}};
-
-    double prev_lambda = std::numeric_limits<double>::max();
-    for (const auto& [T, name] : temps) {
-        double lambda_peak = wienPeakWavelength(T);
-        EXPECT_LT(lambda_peak, prev_lambda)
-            << name << " (" << T << "K) should have shorter peak than cooler objects";
-        prev_lambda = lambda_peak;
+TEST(SpectralValidationTests, WienAuthorityMatchesNumericalPlanckMaximum) {
+    for (const double temperature : {1200.0, 3000.0, 5778.0, 10000.0}) {
+        SCOPED_TRACE(temperature);
+        const double analytic = WienPeakWavelength(temperature);
+        const double numerical = NumericalPeakWavelength(temperature);
+        EXPECT_LT(RelativeError(analytic, numerical), 2.0e-8);
     }
 }
 
-// =============================================================================
-// Limb Darkening Tests
-// =============================================================================
-
-TEST_F(SpectralValidationTests, LimbDarkeningCoefficient) {
-    // Solar limb darkening coefficient varies with wavelength
-    // Blue light: higher u (more darkening)
-    // Red light: lower u (less darkening)
-
-    // From blackbody.h: u(λ) ≈ 1.2 - 0.00114λ (linear approximation)
-
-    double u_blue = 1.2 - 0.00114 * 450;   // λ = 450nm
-    double u_green = 1.2 - 0.00114 * 550;  // λ = 550nm
-    double u_red = 1.2 - 0.00114 * 650;    // λ = 650nm
-
-    EXPECT_GT(u_blue, u_green) << "Blue should have higher limb darkening";
-    EXPECT_GT(u_green, u_red) << "Green should have higher limb darkening than red";
-
-    // Values should be in reasonable range [0, 1]
-    EXPECT_GT(u_blue, 0.4);
-    EXPECT_LT(u_red, 0.6);
-}
-
-// =============================================================================
-// Blackbody Color Tests
-// =============================================================================
-
-TEST_F(SpectralValidationTests, BlackbodyColorProgression) {
-    // As temperature increases, color should progress:
-    // red → orange → yellow → white → blue-white
-
-    // At 2000K, should be reddish (R > G > B)
-    // At 5500K, should be white-ish (R ≈ G ≈ B)
-    // At 10000K, should be bluish (B > G > R)
-
-    // These are qualitative tests; actual implementation details depend on
-    // the color conversion pipeline
-    EXPECT_TRUE(true) << "Color progression is qualitatively correct";
-}
-
-// =============================================================================
-// Energy Conservation Tests
-// =============================================================================
-
-TEST_F(SpectralValidationTests, StefanBoltzmannLaw) {
-    // Total radiant exitance: M = σT⁴
-
-    std::vector<double> temperatures = {3000, 5000, 5778, 7000, 10000};
-
-    for (double T : temperatures) {
-        double M = SpectralRef::SIGMA_SB * std::pow(T, 4);
-
-        // Verify it's positive and scales as T^4
-        EXPECT_GT(M, 0) << "Radiant exitance should be positive";
-
-        // Double the temperature → 16× the flux
-        double M_2T = SpectralRef::SIGMA_SB * std::pow(2 * T, 4);
-        EXPECT_NEAR(M_2T / M, 16.0, 1e-10) << "Stefan-Boltzmann T^4 scaling";
+TEST(SpectralValidationTests, StefanBoltzmannAuthorityMatchesIntegratedPlanckSpectrum) {
+    for (const double temperature : {1200.0, 3000.0, 5778.0, 10000.0}) {
+        SCOPED_TRACE(temperature);
+        const double analytic = StefanBoltzmannRadiance(temperature);
+        const double quadrature = IntegratedExitance(temperature);
+        EXPECT_LT(RelativeError(analytic, quadrature), 2.0e-7);
     }
 }
 
-TEST_F(SpectralValidationTests, SolarLuminosity) {
-    // Sun: T = 5778K, R = 6.96×10⁸ m
-    // L = 4πR²σT⁴ ≈ 3.83×10²⁶ W
+TEST(SpectralValidationTests, DopplerFactorMatchesIndependentLorentzFormula) {
+    for (const double beta : {-0.95, -0.5, 0.0, 0.5, 0.95}) {
+        SCOPED_TRACE(beta);
+        const double expected = std::sqrt((1.0 - beta) / (1.0 + beta));
+        EXPECT_NEAR(DopplerFactor(beta), expected, 2.0e-15);
+    }
+    EXPECT_DOUBLE_EQ(DopplerFactor(-1.0), 1.0);
+    EXPECT_DOUBLE_EQ(DopplerFactor(1.0), 1.0);
+}
 
-    double T_sun = 5778.0;
-    double R_sun = 6.96e8;  // meters
+TEST(SpectralValidationTests, TotalRedshiftComposesGravitationalAndDopplerFactors) {
+    constexpr double kEmitGtt = -0.42;
+    constexpr double kObserverGtt = -0.98;
+    constexpr double kBeta = 0.37;
+    const double gravitational = std::sqrt(std::abs(kObserverGtt / kEmitGtt));
+    const double doppler = std::sqrt((1.0 - kBeta) / (1.0 + kBeta));
+    const double expected = 1.0 / (gravitational * doppler) - 1.0;
+    EXPECT_NEAR(TotalRedshift(kEmitGtt, kObserverGtt, kBeta), expected, 2.0e-15);
+}
 
-    double surface_flux = SpectralRef::SIGMA_SB * std::pow(T_sun, 4);
-    double L_sun = 4.0 * math::kPi * R_sun * R_sun * surface_flux;
+TEST(SpectralValidationTests, LimbDarkeningAuthorityMatchesEmpiricalLawAndLiveApplication) {
+    const Rgb input{0.8f, 0.6f, 0.4f};
+    constexpr double kCosTheta = 0.31;
+    const Rgb output = ApplyLimbDarkening(input, kCosTheta);
+    for (const auto [wavelength, channel_in, channel_out] : std::array{
+             std::array<double, 3>{650.0, input.r, output.r},
+             std::array<double, 3>{550.0, input.g, output.g},
+             std::array<double, 3>{450.0, input.b, output.b},
+         }) {
+        const double t = (wavelength - 400.0) / 300.0;
+        const double expected_u = 0.9 + t * (0.4 - 0.9);
+        const double expected_channel =
+            channel_in * (1.0 + expected_u * kCosTheta) / (1.0 + expected_u);
+        EXPECT_NEAR(LimbDarkeningCoeff(wavelength), expected_u, 2.0e-15);
+        EXPECT_NEAR(channel_out, expected_channel, 2.0e-7);
+    }
+    const Rgb hidden = ApplyLimbDarkening(input, 0.0);
+    EXPECT_FLOAT_EQ(hidden.r, 0.0f);
+    EXPECT_FLOAT_EQ(hidden.g, 0.0f);
+    EXPECT_FLOAT_EQ(hidden.b, 0.0f);
+}
 
-    // Expected: ~3.83×10²⁶ W
-    EXPECT_NEAR(L_sun / 1e26, 3.83, 0.05) << "Solar luminosity should be ~3.83×10²⁶ W";
+TEST(SpectralValidationTests, BlackbodyColourProgressionConsumesIntegratedSpectrum) {
+    const Rgb cold = BlackbodyToRgb(2000.0);
+    const Rgb solar = BlackbodyToRgb(5500.0);
+    const Rgb hot = BlackbodyToRgb(10000.0);
+    const auto blue_to_red = [](const Rgb& colour) {
+        return colour.b / std::max(colour.r, 1.0e-6f);
+    };
+    EXPECT_GT(cold.r, cold.b);
+    EXPECT_GT(hot.b, hot.r);
+    EXPECT_LT(blue_to_red(cold), blue_to_red(solar));
+    EXPECT_LT(blue_to_red(solar), blue_to_red(hot));
 }
 
 }  // namespace sirius::test

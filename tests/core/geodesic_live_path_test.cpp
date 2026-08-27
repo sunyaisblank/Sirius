@@ -14,6 +14,7 @@
 // docs-era spec values: conservation drift < 1e-4 relative, null < 1e-6.
 
 #include "sirius/core/constants.h"
+#include "sirius/core/coordinates.h"
 #include "sirius/core/geodesic_integrator.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/core/metrics/warp_drive_family.h"
@@ -40,6 +41,44 @@ double angularMomentumOf(const Lightray& ray, const Metric4d& g) {
     xi(1) = -ray.position(2);
     xi(2) = ray.position(1);
     return TensorOps::InnerProduct(xi, ray.velocity, g);
+}
+
+double carterConstantOf(const Lightray& ray, const Metric4d& g, double mass, double spin) {
+    const coordinates::Vec4Cart position{ray.position(0), ray.position(1), ray.position(2),
+                                         ray.position(3)};
+    const coordinates::Vec4Cart velocity{ray.velocity(0), ray.velocity(1), ray.velocity(2),
+                                         ray.velocity(3)};
+    const coordinates::Vec4Bl position_bl = coordinates::KerrSchildCartToBl(position, spin);
+    const coordinates::Vec4Bl velocity_bl =
+        coordinates::TransformVectorKerrSchildCartToBl(velocity, position, mass, spin);
+    const double energy = energyOf(ray, g);
+    const double angular_momentum = angularMomentumOf(ray, g);
+    const double cosine = std::cos(position_bl.theta);
+    const double sine = std::sin(position_bl.theta);
+    const double sigma = position_bl.r * position_bl.r + spin * spin * cosine * cosine;
+    const double polar_momentum = sigma * velocity_bl.theta;
+    return polar_momentum * polar_momentum +
+           cosine * cosine *
+               (-spin * spin * energy * energy +
+                angular_momentum * angular_momentum / (sine * sine));
+}
+
+bool reachedPhysicalBoundary(const Lightray& ray, const IMetric& metric) {
+    using namespace constants::termination;
+    const double x = ray.position(1);
+    const double y = ray.position(2);
+    const double z = ray.position(3);
+    const double vx = ray.velocity(1);
+    const double vy = ray.velocity(2);
+    const double vz = ray.velocity(3);
+    if (!std::isfinite(x) || !std::isfinite(y) || !std::isfinite(z) || !std::isfinite(vx) ||
+        !std::isfinite(vy) || !std::isfinite(vz)) {
+        return false;
+    }
+    const double radius = std::sqrt(x * x + y * y + z * z);
+    const double radial_rate = (x * vx + y * vy + z * vz) / std::max(radius, 1.0e-12);
+    return (radius > kEscapeRadius && radial_rate > 0.0) || radius > kBackgroundRadius ||
+           metric.InsideCaptureSurface(ray.position, kCaptureMargin);
 }
 
 Lightray makeRay(IMetric& metric, double x, double y, double z, double vx, double vy, double vz) {
@@ -69,36 +108,71 @@ class LivePathConservationTests : public ::testing::Test {
   protected:
     IntegratorConfig config = Geodesic::GetDefaultConfig();
 
-    // Integrate up to maxSteps accepted steps or until termination; returns
-    // the worst relative drift of E and L_z and the worst null violation.
-    void run(IMetric& metric, Lightray ray, int maxSteps, double& worstEDrift, double& worstLDrift,
-             double& worstNull) {
+    // Integrate up to max_steps accepted steps or until termination; returns
+    // the worst relative drift of E and L_z and the worst null violation. Kerr
+    // callers may also monitor the Carter constant through the exact
+    // Kerr-Schild-to-Boyer-Lindquist vector transform.
+    void run(IMetric& metric, Lightray ray, int max_steps, double& worstEDrift, double& worstLDrift,
+             double& worstNull, double* worstCarterDrift = nullptr, double mass = 0.0,
+             double spin = 0.0, bool* reached_physical_boundary = nullptr) {
         Metric4d g;
         Tensor<Dual<double>, 4, 4, 4> dg;
         metric.Evaluate(ray.position, g, dg);
         const double E0 = energyOf(ray, g);
         const double L0 = angularMomentumOf(ray, g);
+        const double carter0 =
+            worstCarterDrift != nullptr ? carterConstantOf(ray, g, mass, spin) : 0.0;
         ASSERT_GT(std::abs(E0), 1e-12) << "degenerate initial energy";
+        if (worstCarterDrift != nullptr) {
+            ASSERT_GT(std::abs(carter0), 1e-12) << "degenerate initial Carter constant";
+            *worstCarterDrift = 0.0;
+        }
 
         worstEDrift = worstLDrift = worstNull = 0.0;
+        if (reached_physical_boundary != nullptr) *reached_physical_boundary = false;
         int accepted = 0, attempts = 0;
-        while (accepted < maxSteps && attempts < maxSteps * 10) {
+        while (accepted < max_steps && attempts < max_steps * 10) {
             ++attempts;
             if (!Geodesic::IntegrateStepRk45(ray, &metric, config)) {
-                if (ray.terminated != 0) break;
+                if (ray.terminated != 0) {
+                    if (reached_physical_boundary != nullptr) {
+                        *reached_physical_boundary = reachedPhysicalBoundary(ray, metric);
+                    }
+                    break;
+                }
                 continue;  // step rejected, retry with adapted step
             }
             ++accepted;
-            if (Geodesic::CheckTermination(ray, &metric)) break;
+            const bool terminated = Geodesic::CheckTermination(ray, &metric);
+            const bool captured =
+                metric.InsideCaptureSurface(ray.position, constants::termination::kCaptureMargin);
 
-            metric.Evaluate(ray.position, g, dg);
-            worstEDrift = std::max(worstEDrift, std::abs(energyOf(ray, g) - E0) / std::abs(E0));
-            if (std::abs(L0) > 1e-6) {
-                worstLDrift =
-                    std::max(worstLDrift, std::abs(angularMomentumOf(ray, g) - L0) / std::abs(L0));
+            // The escaping terminal state is part of the complete-ray witness.
+            // A captured state may already be inside the family's safe metric
+            // domain, so its immediately preceding exterior sample remains the
+            // last conservation sample.
+            if (!captured) {
+                metric.Evaluate(ray.position, g, dg);
+                worstEDrift = std::max(worstEDrift, std::abs(energyOf(ray, g) - E0) / std::abs(E0));
+                if (std::abs(L0) > 1e-6) {
+                    worstLDrift = std::max(worstLDrift,
+                                           std::abs(angularMomentumOf(ray, g) - L0) / std::abs(L0));
+                }
+                worstNull = std::max(
+                    worstNull, std::abs(TensorOps::InnerProduct(ray.velocity, ray.velocity, g)));
+                if (worstCarterDrift != nullptr) {
+                    *worstCarterDrift =
+                        std::max(*worstCarterDrift,
+                                 std::abs(carterConstantOf(ray, g, mass, spin) - carter0) /
+                                     std::abs(carter0));
+                }
             }
-            worstNull = std::max(worstNull,
-                                 std::abs(TensorOps::InnerProduct(ray.velocity, ray.velocity, g)));
+            if (terminated) {
+                if (reached_physical_boundary != nullptr) {
+                    *reached_physical_boundary = reachedPhysicalBoundary(ray, metric);
+                }
+                break;
+            }
         }
         ASSERT_GT(accepted, 100) << "integrator made too little progress";
     }
@@ -130,15 +204,20 @@ TEST_F(LivePathConservationTests, KerrEnergyAndAngularMomentum) {
     EXPECT_LT(nullViolation, 1e-6);
 }
 
-TEST_F(LivePathConservationTests, NearExtremalKerrEnergyAndAngularMomentum) {
+TEST_F(LivePathConservationTests, NearExtremalKerrEnergyAngularMomentumAndCarter) {
     KerrSchildFamily metric(KerrSchildParams::Kerr(1.0, 0.998));
     Lightray ray = makeRay(metric, 12.0, 0.0, 3.0, 0.08, 1.0, -0.03);
 
-    double eDrift, lDrift, nullViolation;
-    run(metric, ray, 2000, eDrift, lDrift, nullViolation);
+    double eDrift, lDrift, nullViolation, carterDrift;
+    bool reached_physical_boundary = false;
+    run(metric, ray, 2000, eDrift, lDrift, nullViolation, &carterDrift, 1.0, 0.998,
+        &reached_physical_boundary);
 
+    EXPECT_TRUE(reached_physical_boundary)
+        << "the live witness ended numerically instead of at escape/capture";
     EXPECT_LT(eDrift, constants::geodesic::kConservationTol);
     EXPECT_LT(lDrift, constants::geodesic::kConservationTol);
+    EXPECT_LT(carterDrift, constants::geodesic::kConservationTol);
     EXPECT_LT(nullViolation, 1e-6);
 }
 

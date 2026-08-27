@@ -11,6 +11,15 @@ add_library(sirius_base STATIC
 
 target_include_directories(sirius_base PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/..")
 
+# This is derived directly from the non-negotiable alignment mode rather than a
+# separate cache option. Keeping it on the base target makes resource lookup
+# release-locked in every downstream consumer, including render and viewer code.
+if(NOT SIRIUS_ALIGNMENT_MODE STREQUAL "development")
+    target_compile_definitions(sirius_base PUBLIC SIRIUS_RELEASE_RESOURCE_LOCKED=1)
+else()
+    target_compile_definitions(sirius_base PUBLIC SIRIUS_RELEASE_RESOURCE_LOCKED=0)
+endif()
+
 sirius_configure_target(sirius_base)
 
 # Modules land one at a time during the port; each owns its CMakeLists so

@@ -25,7 +25,7 @@ struct Transition {
 };
 
 // Initial state plus the full transition table.
-template <typename State, typename Event, size_t TransitionCount>
+template <typename State, typename Event, std::size_t TransitionCount>
 struct StateMachineConfig {
     State initial_state;
     std::array<Transition<State, Event>, TransitionCount> transitions;
@@ -48,7 +48,7 @@ template <typename State, typename Event>
 using TransitionAction = std::function<void(State from, Event event, State to)>;
 
 // Mealy machine: transitions fire exit, transition, then entry actions.
-template <typename State, typename Event, size_t TransitionCount>
+template <typename State, typename Event, std::size_t TransitionCount>
 class StateMachine {
   public:
     using Config = StateMachineConfig<State, Event, TransitionCount>;

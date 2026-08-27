@@ -360,19 +360,23 @@ TEST_F(GeodesicPathTests, PhiWrapContinuity) {
 
     double prev_phi = getPhi(ray.position);
     int wrap_count = 0;
-    int smooth_transitions = 0;
+    double max_wrapped_delta = 0.0;
+    int accepted_steps = 0;
 
     for (int step = 0; step < 500; ++step) {
-        Geodesic::IntegrateStepRk45(ray, &schwarzschild, rk45_config);
+        const bool accepted = Geodesic::IntegrateStepRk45(ray, &schwarzschild, rk45_config);
+        ASSERT_TRUE(accepted || ray.terminated)
+            << "the adaptive integrator rejected a step without adapting to a retry";
+        if (!accepted) break;
+        ++accepted_steps;
 
         double curr_phi = getPhi(ray.position);
+        const double raw_delta = curr_phi - prev_phi;
+        const double wrapped_delta = std::abs(std::remainder(raw_delta, 2.0 * PI));
+        max_wrapped_delta = std::max(max_wrapped_delta, wrapped_delta);
 
-        if (std::abs(curr_phi - prev_phi) > PI) {
+        if (std::abs(raw_delta) > PI) {
             wrap_count++;
-            double wrapped_diff = std::abs(curr_phi - prev_phi);
-            if (wrapped_diff > 2.0 * PI - 0.5 || wrapped_diff < 0.5) {
-                smooth_transitions++;
-            }
         }
 
         prev_phi = curr_phi;
@@ -381,8 +385,10 @@ TEST_F(GeodesicPathTests, PhiWrapContinuity) {
         if (getRadius(ray.position) < 2.5 || getRadius(ray.position) > 100.0) break;
     }
 
-    std::cout << "Phi wraps detected: " << wrap_count << std::endl;
-    std::cout << "Smooth transitions: " << smooth_transitions << std::endl;
+    ASSERT_GT(accepted_steps, 0) << "the live path made no integration progress";
+    EXPECT_GT(wrap_count, 0) << "the witness never exercised the atan2 branch cut";
+    EXPECT_LT(max_wrapped_delta, 0.5)
+        << "azimuth changed discontinuously after reducing the branch-cut jump modulo 2pi";
 }
 
 // --- Metric Signature Tests ---

@@ -32,7 +32,7 @@ class PNGWriter {
 
   private:
     // Linear channel to 8-bit sRGB.
-    static uint8_t ToSrgb8(float linear) {
+    static std::uint8_t ToSrgb8(float linear) {
         float clamped = std::clamp(linear, 0.0f, 1.0f);
         float srgb;
         if (clamped <= 0.0031308f) {
@@ -40,7 +40,7 @@ class PNGWriter {
         } else {
             srgb = 1.055f * std::pow(clamped, 1.0f / 2.4f) - 0.055f;
         }
-        return static_cast<uint8_t>(std::clamp(srgb * 255.0f + 0.5f, 0.0f, 255.0f));
+        return static_cast<std::uint8_t>(std::clamp(srgb * 255.0f + 0.5f, 0.0f, 255.0f));
     }
 };
 

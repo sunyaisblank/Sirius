@@ -11,6 +11,7 @@
 
 #include <cmath>
 #include <limits>
+#include <numbers>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -133,7 +134,7 @@ TEST_F(NaNInfDetectionTests, SchwarzschildMetricFinite) {
 
     for (double r : test_radii) {
         // Convert Spherical to Cartesian (r, theta, phi) -> (x, y, z)
-        double theta = M_PI / 2.0;
+        double theta = std::numbers::pi / 2.0;
         double sin_theta = std::sin(theta);
         double cos_theta = std::cos(theta);
         double sin_phi = 0.0;  // phi = 0
@@ -168,7 +169,7 @@ TEST_F(NaNInfDetectionTests, SchwarzschildNearHorizon) {
 
     for (double r : near_horizon) {
         // Convert Spherical to Cartesian (r, theta, phi) -> (x, y, z)
-        double theta = M_PI / 2.0;
+        double theta = std::numbers::pi / 2.0;
         double sin_theta = std::sin(theta);
         double cos_theta = std::cos(theta);
         double sin_phi = 0.0;  // phi = 0
@@ -201,10 +202,10 @@ TEST_F(NaNInfDetectionTests, KerrMetricFinite) {
 
     // Test at various valid positions
     std::vector<std::pair<double, double>> test_points = {
-        {3.0, M_PI / 2},   // Equatorial plane
-        {3.0, M_PI / 4},   // 45 degrees
-        {3.0, 0.1},        // Near pole (but not at pole)
-        {10.0, M_PI / 2},  // Far field
+        {3.0, std::numbers::pi / 2},   // Equatorial plane
+        {3.0, std::numbers::pi / 4},   // 45 degrees
+        {3.0, 0.1},                    // Near pole (but not at pole)
+        {10.0, std::numbers::pi / 2},  // Far field
     };
 
     for (auto& [r, theta] : test_points) {
@@ -241,7 +242,7 @@ TEST_F(NaNInfDetectionTests, KerrNearPoles) {
 
     // Test near but not at poles
     double pole_offset = 1e-6;
-    std::vector<double> near_pole_theta = {pole_offset, M_PI - pole_offset};
+    std::vector<double> near_pole_theta = {pole_offset, std::numbers::pi - pole_offset};
 
     for (double theta : near_pole_theta) {
         // Convert Spherical to Cartesian (r, theta, phi) -> (x, y, z)
@@ -312,7 +313,7 @@ TEST_F(NaNInfDetectionTests, ChristoffelFinite) {
 
     // Convert Spherical to Cartesian (r, theta, phi) -> (x, y, z)
     double r = 5.0;
-    double theta = M_PI / 2.0;
+    double theta = std::numbers::pi / 2.0;
     double sin_theta = std::sin(theta);
     double cos_theta = std::cos(theta);
     double sin_phi = 0.0;  // phi = 0

@@ -4,10 +4,12 @@
 # never linked to the CLI objects; they are linked here).
 
 add_executable(sirius_app_tests
+    alignment_authority_test.cpp
     config_validation_test.cpp
     config_environment_test.cpp
     config_schema_roundtrip_test.cpp
     render_command_parse_test.cpp
+    session_config_adapter_test.cpp
     platform_paths_test.cpp
     config_loading_test.cpp
     command_router_test.cpp
@@ -19,13 +21,15 @@ target_include_directories(sirius_app_tests PRIVATE "${CMAKE_SOURCE_DIR}/tests")
 sirius_configure_target(sirius_app_tests)
 
 if(TARGET sirius)
-    # RenderCommand is exercised through the application library, so ensure its
-    # runtime-volume test sees the same staged resources as the real executable.
+    # Resource-locked qualification/release tests must consume the exact staged
+    # product volume. Place this executable beside sirius instead of relying on
+    # a development-only resource override.
     add_dependencies(sirius_app_tests sirius)
+    set_target_properties(sirius_app_tests PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "$<TARGET_FILE_DIR:sirius>")
 endif()
 
 gtest_discover_tests(
     sirius_app_tests
     PROPERTIES
-        LABELS "Correctness"
-        ENVIRONMENT "SIRIUS_RESOURCE_DIR=$<TARGET_FILE_DIR:sirius>/resources")
+        LABELS "Correctness")

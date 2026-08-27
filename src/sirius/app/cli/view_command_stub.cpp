@@ -68,7 +68,7 @@ bool ViewCommand::ParseArgs(const std::vector<std::string>& args, const GlobalOp
             } else if (arg == "--fov") {
                 config.observer.fov = ParseDouble(RequireValue(args, i, arg));
             } else if (arg == "--no-disk") {
-                config.diskEnabled = false;
+                config.disk_enabled = false;
             } else if (arg == "--jets") {
                 jets_enabled_ = true;
             } else if (arg == "--cpu") {

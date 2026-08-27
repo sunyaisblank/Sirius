@@ -371,7 +371,7 @@ float VolumeDiskTemperature(float cylindricalR, float z, float innerRadius,
 // CPU defaults.
 void AccumulateVolumeSegment(float3 start, float3 finish, int sampleCount,
                              bool volumeEnabled, bool turbulenceEnabled,
-                             bool coronaEnabled, float innerRadius,
+                             bool coronaEnabled, bool dopplerBeaming, float innerRadius,
                              float outerRadius, float innerTemperature,
                              int temperatureModel, float rIsco, float M,
                              float a, float aStar, float hOverR, float hPower,
@@ -408,7 +408,12 @@ void AccumulateVolumeSegment(float3 start, float3 finish, int sampleCount,
                                       innerTemperature, temperatureModel, rIsco,
                                       M, aStar, hOverR, hPower);
             if (diskOpacity > 0.0f && temperature > 0.0f) {
-                diskSource = pow(temperature / innerTemperature, 4.0f);
+                float emittedSource = pow(temperature / innerTemperature, 4.0f);
+                float phi = atan2(point.y, point.x);
+                float gFactor = dopplerBeaming
+                    ? ComputeDiskGFactorCart(diskR, phi, direction, M, a)
+                    : ComputeDiskGravitationalFactorCart(diskR, M, a);
+                diskSource = ObservedDiskBolometricSource(emittedSource, gFactor);
             }
         }
 
@@ -534,9 +539,12 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     float tanHalfFov = tan(fov * 0.5f);
     float3 localDir;
     if (lensModel == 1) {
-        float focusX = imageX * focusDistance / focalLength;
-        float focusY = imageY * focusDistance / focalLength;
-        float apertureRadius = focalLength / (2.0f * aperture);
+        // The centre-aperture projection is exactly the pinhole projection.
+        // 50 mm-equivalent defines one virtual lens unit because the geometric
+        // spacetime has no physical M-to-millimetre scale (core/camera.h).
+        float focusX = imageX * tanHalfFov * focusDistance;
+        float focusY = imageY * tanHalfFov * focusDistance;
+        float apertureRadius = (focalLength / 50.0f) / (2.0f * aperture);
         float lensTheta = TWO_PI * sampleU;
         float lensRadius = apertureRadius * sqrt(sampleV);
         float lensX = lensRadius * cos(lensTheta);
@@ -664,6 +672,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                 float3(float(state.x.x), float(state.x.y), float(state.x.z)),
                 float3(float(next.x.x), float(next.x.y), float(next.x.z)),
                 volumeSamples, volumeEnabled, turbulenceEnabled, coronaEnabled,
+                dopplerBeaming,
                 innerRadius, outerRadius, innerTemperature, temperatureModel,
                 rIsco, M, a, aStar, volumeHOverR, volumeHPower,
                 volumeTauMidplane, volumeOpticalDepth, volumeEmission);
@@ -699,8 +708,9 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                     float gFactor = dopplerBeaming
                         ? ComputeDiskGFactorCart(cr, cphi, photonVel, M, a)
                         : ComputeDiskGravitationalFactorCart(cr, M, a);
-                    float g4 = gFactor * gFactor * gFactor * gFactor;
-                    float3 emit = BlackbodyColor(T) * emissionScale * g4;
+                    float observedScale =
+                        ObservedDiskBolometricSource(emissionScale, gFactor);
+                    float3 emit = BlackbodyColor(T) * observedScale;
                     color += transmittance * emit;
                     transmittance *= 0.2f;  // partial occlusion per crossing
                 }
@@ -739,20 +749,10 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     float beamB = dot(xiBSpatial, beamTangentA);
     float beamC = dot(xiASpatial, beamTangentB);
     float beamD = dot(xiBSpatial, beamTangentB);
-    float beamDeterminant = beamA * beamD - beamB * beamC;
-    float beamPower =
-        beamA * beamA + beamB * beamB + beamC * beamC + beamD * beamD;
-    float beamDiscriminant =
-        sqrt(max(beamPower * beamPower -
-                 4.0f * beamDeterminant * beamDeterminant, 0.0f));
-    float beamSemiMajor =
-        sqrt(max(0.5f * (beamPower + beamDiscriminant), 0.0f));
-    float beamSemiMinor =
-        sqrt(max(0.5f * (beamPower - beamDiscriminant), 0.0f));
-    float beamOrientation =
-        0.5f * atan2(2.0f * (beamA * beamC + beamB * beamD),
-                     beamA * beamA + beamB * beamB -
-                     beamC * beamC - beamD * beamD);
+    float beamSemiMajor, beamSemiMinor, beamOrientation, beamDeterminant;
+    BeamEllipseFromTransverseMap(beamA, beamB, beamC, beamD,
+                                 beamSemiMajor, beamSemiMinor, beamOrientation,
+                                 beamDeterminant);
     float beamNormalization = pupilBundle
         ? max(float(beamAffineLength) * kBeamSeed, 1.0e-12f)
         : kBeamSeed;

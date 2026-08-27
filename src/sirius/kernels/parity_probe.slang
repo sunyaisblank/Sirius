@@ -32,6 +32,86 @@ static const uint OP_DISK_TEMP = 3;
 static const uint OP_BLACKBODY = 4;
 static const uint OP_SYMPLECTIC_S4 = 5;
 static const uint OP_DEVIATION = 6;
+static const uint OP_DISK_REDSHIFT = 7;
+static const uint OP_LIVE_CART_CONSERVATION = 8;
+static const uint OP_BEAM_ELLIPSE = 9;
+
+// Future-directed null root used by the render kernel, repeated here only for
+// the diagnostic launch boundary. The integration below calls the production
+// Cartesian RK4 authority directly.
+Real ProbeNullTimeComponent(Real g[4][4], Real ux, Real uy, Real uz) {
+    Real A = g[0][0];
+    Real B = 2.0f * (g[0][1] * ux + g[0][2] * uy + g[0][3] * uz);
+    Real C = g[1][1] * ux * ux + g[2][2] * uy * uy + g[3][3] * uz * uz
+           + 2.0f * (g[1][2] * ux * uy + g[1][3] * ux * uz + g[2][3] * uy * uz);
+    Real discriminant = B * B - 4.0f * A * C;
+    if (discriminant >= 0.0f) {
+        Real sqrtD = sqrt(discriminant);
+        Real root1 = (-B + sqrtD) / (2.0f * A);
+        Real root2 = (-B - sqrtD) / (2.0f * A);
+        return (root1 > 0.0f) ? root1 : ((root2 > 0.0f) ? root2 : Real(1.0f));
+    }
+    return sqrt(max(-C / A, Real(0.0001f)));
+}
+
+// Stationary-axisymmetric Kerr invariants for a Cartesian Kerr-Schild state.
+// E and L_z are evaluated directly with the two Killing vectors. Carter Q
+// requires p_theta, obtained from the exact inverse oblate spatial Jacobian;
+// this is the Slang counterpart of coordinates::
+// TransformVectorKerrSchildCartToBl used by the CPU live-path monitor.
+void KerrCartConservedQuantities(GeodesicStateCart state, float M, float a,
+                                 out Real energy, out Real angularMomentum,
+                                 out Real carter, out Real nullResidual) {
+    Real g[4][4];
+    Real gInv[4][4];
+    GetKerrSchildFamilyMetric(state.x, M, a, 0.0f, 0.0f, g, gInv);
+    Real u[4] = { state.u.t, state.u.x, state.u.y, state.u.z };
+
+    energy = 0.0f;
+    [unroll] for (int nu = 0; nu < 4; nu++) energy -= g[0][nu] * u[nu];
+
+    Real xi[4] = { 0.0f, -state.x.y, state.x.x, 0.0f };
+    angularMomentum = 0.0f;
+    nullResidual = 0.0f;
+    [unroll] for (int mu = 0; mu < 4; mu++) {
+        [unroll] for (int nu = 0; nu < 4; nu++) {
+            angularMomentum += xi[mu] * g[mu][nu] * u[nu];
+            nullResidual += g[mu][nu] * u[mu] * u[nu];
+        }
+    }
+
+    Real x = state.x.x;
+    Real y = state.x.y;
+    Real z = state.x.z;
+    Real spin = Real(a);
+    Real a2 = spin * spin;
+    Real radius2 = x * x + y * y + z * z;
+    Real reducedRadius2 = radius2 - a2;
+    Real discriminant = max(reducedRadius2 * reducedRadius2 + 4.0f * a2 * z * z,
+                            Real(1.0e-20f));
+    Real discriminantRoot = sqrt(discriminant);
+    Real r2 = max((reducedRadius2 + discriminantRoot) / 2.0f, Real(1.0e-12f));
+    Real r = sqrt(r2);
+
+    Real discriminantDx = 4.0f * x * reducedRadius2;
+    Real discriminantDy = 4.0f * y * reducedRadius2;
+    Real discriminantDz = 4.0f * z * (radius2 + a2);
+    Real drDx = (x + discriminantDx / (4.0f * discriminantRoot)) / (2.0f * r);
+    Real drDy = (y + discriminantDy / (4.0f * discriminantRoot)) / (2.0f * r);
+    Real drDz = (z + discriminantDz / (4.0f * discriminantRoot)) / (2.0f * r);
+
+    Real cosTheta = clamp(z / r, Real(-1.0f), Real(1.0f));
+    Real sin2Theta = max(Real(1.0f) - cosTheta * cosTheta, Real(1.0e-20f));
+    Real sinTheta = sqrt(sin2Theta);
+    Real dThetaDx = z * drDx / (r2 * sinTheta);
+    Real dThetaDy = z * drDy / (r2 * sinTheta);
+    Real dThetaDz = -(r - z * drDz) / (r2 * sinTheta);
+    Real uTheta = dThetaDx * state.u.x + dThetaDy * state.u.y + dThetaDz * state.u.z;
+    Real sigma = r2 + a2 * cosTheta * cosTheta;
+    Real pTheta = sigma * uTheta;
+    carter = pTheta * pTheta + cosTheta * cosTheta *
+             (-a2 * energy * energy + angularMomentum * angularMomentum / sin2Theta);
+}
 
 void MetricById(uint metricId, float p1, float p2, float p3, float p4,
                 float c0, float c1, float c2,
@@ -157,6 +237,87 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         results[rb + 0] = rgb.x;
         results[rb + 1] = rgb.y;
         results[rb + 2] = rgb.z;
+    } else if (opcode == OP_DISK_REDSHIFT) {
+        // c0 = emitted bolometric source, c1 = redshift g.
+        results[rb + 0] = ObservedDiskBolometricSource(c0, c1);
+    } else if (opcode == OP_LIVE_CART_CONSERVATION) {
+        // Actual Vulkan render integrator burn-in. p1=M, p2=a; c=(x,y,z);
+        // u1..u3 are the spatial launch tangent; h=stepScale, aux0=maxSteps,
+        // aux1=minStep, aux2=maxStep. Termination matches the production Kerr
+        // trace (exact outer horizon and the governed 200M escape surface).
+        GeodesicStateCart state;
+        state.x = MakeVec4Cart(0.0f, c0, c1, c2);
+        state.u = MakeVec4Cart(0.0f, samples[sb + 9], samples[sb + 10], samples[sb + 11]);
+        Real launchMetric[4][4];
+        Real launchMetricInv[4][4];
+        GetKerrSchildFamilyMetric(state.x, p1, p2, 0.0f, 0.0f,
+                                  launchMetric, launchMetricInv);
+        state.u.t = ProbeNullTimeComponent(launchMetric, state.u.x, state.u.y, state.u.z);
+
+        Real energy0, angularMomentum0, carter0, null0;
+        KerrCartConservedQuantities(state, p1, p2, energy0, angularMomentum0, carter0, null0);
+        Real worstEnergy = 0.0f;
+        Real worstAngularMomentum = 0.0f;
+        Real worstCarter = 0.0f;
+        Real worstNull = abs(null0);
+        int completedSteps = 0;
+        int maxSteps = int(samples[sb + 13]);
+        Real stepScale = Real(samples[sb + 12]);
+        Real minStep = Real(samples[sb + 14]);
+        Real maxStep = Real(samples[sb + 15]);
+        Real horizon = Real(p1 + sqrt(max(p1 * p1 - p2 * p2, 0.0f)));
+        const Real escapeRadius = Real(200.0f);
+        int termination = 0;
+
+        for (int step = 0; step < maxSteps; step++) {
+            Real rKerr = ComputeKerrRadiusCart(state.x.x, state.x.y, state.x.z, Real(p2));
+            Real rCartesian = sqrt(state.x.x * state.x.x + state.x.y * state.x.y +
+                                   state.x.z * state.x.z);
+            if (rKerr <= horizon) {
+                termination = 1;
+                break;
+            }
+            if (rCartesian >= escapeRadius) {
+                termination = 2;
+                break;
+            }
+            Real dt = clamp(stepScale * rKerr, minStep, maxStep);
+            state = IntegrateGeodesicRK4Cart(state, dt, p1, p2, 0.0f, 0.0f);
+            completedSteps++;
+
+            Real energy, angularMomentum, carter, nullResidual;
+            KerrCartConservedQuantities(state, p1, p2, energy, angularMomentum, carter, nullResidual);
+            worstEnergy = max(worstEnergy,
+                              abs(energy - energy0) / max(abs(energy0), Real(1.0e-12f)));
+            worstAngularMomentum =
+                max(worstAngularMomentum,
+                    abs(angularMomentum - angularMomentum0) /
+                    max(abs(angularMomentum0), Real(1.0e-12f)));
+            worstCarter = max(worstCarter,
+                              abs(carter - carter0) / max(abs(carter0), Real(1.0e-12f)));
+            worstNull = max(worstNull, abs(nullResidual));
+        }
+
+        results[rb + 0] = float(worstEnergy);
+        results[rb + 1] = float(worstAngularMomentum);
+        results[rb + 2] = float(worstCarter);
+        results[rb + 3] = float(worstNull);
+        results[rb + 4] = float(completedSteps);
+        results[rb + 5] = float(sqrt(state.x.x * state.x.x + state.x.y * state.x.y +
+                                     state.x.z * state.x.z));
+        results[rb + 6] = float(energy0);
+        results[rb + 7] = float(angularMomentum0);
+        results[rb + 8] = float(carter0);
+        results[rb + 9] = float(termination);
+    } else if (opcode == OP_BEAM_ELLIPSE) {
+        // c0,c1,c2,u0 are the row-major transverse Jacobi map.
+        float semiMajor, semiMinor, orientation, determinant;
+        BeamEllipseFromTransverseMap(c0, c1, c2, samples[sb + 8], semiMajor, semiMinor,
+                                     orientation, determinant);
+        results[rb + 0] = semiMajor;
+        results[rb + 1] = semiMinor;
+        results[rb + 2] = orientation;
+        results[rb + 3] = determinant;
     } else if (opcode == OP_DEVIATION) {
         // Ray-bundle deviation at a Cartesian point: full-Riemann and tidal
         // acceleration on a unit deviation vector. p1=M, p2=a, p3=Q, p4=Lambda;

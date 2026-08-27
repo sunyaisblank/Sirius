@@ -7,6 +7,7 @@
 #include "sirius/backend/cpu/geodesic_tracer.h"
 
 #include "sirius/core/camera.h"
+#include "sirius/core/disk/temporal_emission.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/core/metrics/morris_thorne_family.h"
 
@@ -18,10 +19,7 @@
 #include <cmath>
 #include <iostream>
 #include <memory>
-
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
+#include <numbers>
 
 namespace {
 
@@ -53,7 +51,7 @@ class GeodesicTracerTest : public ::testing::Test {
 
         CameraConfig camConfig;
         camConfig.r = 50.0;
-        camConfig.theta = M_PI / 2.0;
+        camConfig.theta = std::numbers::pi / 2.0;
         camConfig.phi = 0.0;
         camConfig.fov = 60.0f;
         camConfig.width = 64;
@@ -75,8 +73,8 @@ TEST_F(GeodesicTracerTest, Construction) {
 TEST_F(GeodesicTracerTest, CameraRayGeneration) {
     CameraRay ray = m_Camera->GenerateRay(32, 32, 0.5f, 0.5f);
 
-    EXPECT_NEAR(ray.origin(1), 50.0, 0.1);         // r = 50M.
-    EXPECT_NEAR(ray.origin(2), M_PI / 2.0, 0.01);  // theta = pi/2.
+    EXPECT_NEAR(ray.origin(1), 50.0, 0.1);                     // r = 50M.
+    EXPECT_NEAR(ray.origin(2), std::numbers::pi / 2.0, 0.01);  // theta = pi/2.
 
     double dir_len =
         std::sqrt(ray.direction(1) * ray.direction(1) + ray.direction(2) * ray.direction(2) +
@@ -124,16 +122,11 @@ TEST_F(GeodesicTracerTest, EscapeToInfinity) {
 
     TraceResult result = m_Tracer->Trace(ray);
 
-    EXPECT_TRUE(result.outcome == TraceResult::Outcome::Escaped ||
-                result.outcome == TraceResult::Outcome::DiskHit ||
-                result.outcome == TraceResult::Outcome::MaxSteps);
-
-    if (result.outcome == TraceResult::Outcome::Escaped) {
-        double dir_len = std::sqrt(result.final_direction(1) * result.final_direction(1) +
-                                   result.final_direction(2) * result.final_direction(2) +
-                                   result.final_direction(3) * result.final_direction(3));
-        EXPECT_GT(dir_len, 0.0);
-    }
+    ASSERT_EQ(result.outcome, TraceResult::Outcome::Escaped);
+    double dir_len = std::sqrt(result.final_direction(1) * result.final_direction(1) +
+                               result.final_direction(2) * result.final_direction(2) +
+                               result.final_direction(3) * result.final_direction(3));
+    EXPECT_GT(dir_len, 0.0);
 }
 
 TEST_F(GeodesicTracerTest, DiskIntersection) {
@@ -160,11 +153,9 @@ TEST_F(GeodesicTracerTest, DiskIntersection) {
         }
     }
 
-    if (disk_hits > 0) {
-        EXPECT_TRUE(disk_data_valid) << "Invalid disk intersection data";
-    }
-
     EXPECT_GT(total_rays, 0) << "No rays traced";
+    ASSERT_GT(disk_hits, 0) << "deterministic disk scene produced no disk intersection";
+    EXPECT_TRUE(disk_data_valid) << "Invalid disk intersection data";
 }
 
 TEST_F(GeodesicTracerTest, DiskTemperatureProfile) {
@@ -267,7 +258,7 @@ TEST(GeodesicTracerVolumetric, TransferAccumulatesAcrossEveryTraversedSegment) {
     config.disk_outer = 20.0f;
     config.disk_temperature_inner = 1.0f;
     config.disk_temperature_model = DiskTemperatureModel::ShakuraSunyaev;
-    config.volumetric_H_over_r = 0.1f;
+    config.volumetric_scale_height_ratio = 0.1f;
     config.volumetric_tau_midplane = 2.0f;
     config.volumetric_samples = 4;
     config.integrator.initial_step = 0.5f;
@@ -276,7 +267,7 @@ TEST(GeodesicTracerVolumetric, TransferAccumulatesAcrossEveryTraversedSegment) {
 
     CameraConfig camera_config;
     camera_config.r = 50.0;
-    camera_config.theta = M_PI / 2.0;
+    camera_config.theta = std::numbers::pi / 2.0;
     camera_config.width = 3;
     camera_config.height = 3;
     PinholeCamera camera(camera_config);
@@ -301,6 +292,50 @@ TEST(GeodesicTracerVolumetric, TransferAccumulatesAcrossEveryTraversedSegment) {
         << "the final transfer sample overshot the configured optical-depth ceiling";
 }
 
+TEST(GeodesicTracerVolumetric, RedshiftAndDopplerReachTheLiveVolumeSource) {
+    KerrSchildParams params;
+    params.M = 1.0;
+    params.a = 0.6;
+    KerrSchildFamily metric(params);
+
+    TracerConfig config;
+    config.escape_radius = 80.0f;
+    config.max_steps = 4000;
+    config.enable_disk = true;
+    config.enable_volumetric = true;
+    config.disk_inner = 4.0f;
+    config.disk_outer = 20.0f;
+    config.disk_temperature_inner = 1.0f;
+    config.disk_temperature_model = DiskTemperatureModel::ShakuraSunyaev;
+    config.volumetric_scale_height_ratio = 0.15f;
+    config.volumetric_tau_midplane = 1.0f;
+    config.volumetric_samples = 2;
+    config.integrator.initial_step = 0.25f;
+    config.integrator.max_step = 1.0f;
+
+    CameraConfig camera_config;
+    camera_config.r = 40.0;
+    camera_config.theta = std::numbers::pi / 2.0;
+    camera_config.width = 3;
+    camera_config.height = 3;
+    PinholeCamera camera(camera_config);
+    const CameraRay ray = camera.GenerateRay(1, 1, 0.5f, 0.5f);
+
+    config.doppler_beaming = true;
+    GeodesicTracer beamed_tracer(&metric, config);
+    const TraceResult beamed = beamed_tracer.Trace(ray);
+    config.doppler_beaming = false;
+    GeodesicTracer gravity_only_tracer(&metric, config);
+    const TraceResult gravity_only = gravity_only_tracer.Trace(ray);
+
+    ASSERT_TRUE(beamed.volumetric_hit);
+    ASSERT_TRUE(gravity_only.volumetric_hit);
+    EXPECT_GT(beamed.volumetric_emission[0], 0.0f);
+    EXPECT_GT(gravity_only.volumetric_emission[0], 0.0f);
+    EXPECT_LT(beamed.volumetric_emission[0], gravity_only.volumetric_emission[0])
+        << "the orbital Doppler term did not reach the live volumetric source";
+}
+
 TEST(GeodesicTracerVolumetric, TurbulenceAndCoronaAlterLiveTransferDeterministically) {
     KerrSchildParams params;
     params.M = 0.0;
@@ -315,7 +350,7 @@ TEST(GeodesicTracerVolumetric, TurbulenceAndCoronaAlterLiveTransferDeterministic
     baseline_config.disk_outer = 20.0f;
     baseline_config.disk_temperature_inner = 1.0f;
     baseline_config.disk_temperature_model = DiskTemperatureModel::ShakuraSunyaev;
-    baseline_config.volumetric_H_over_r = 0.1f;
+    baseline_config.volumetric_scale_height_ratio = 0.1f;
     baseline_config.volumetric_tau_midplane = 2.0f;
     baseline_config.volumetric_samples = 4;
     baseline_config.integrator.initial_step = 0.5f;
@@ -323,7 +358,7 @@ TEST(GeodesicTracerVolumetric, TurbulenceAndCoronaAlterLiveTransferDeterministic
 
     CameraConfig camera_config;
     camera_config.r = 50.0;
-    camera_config.theta = M_PI / 2.0;
+    camera_config.theta = std::numbers::pi / 2.0;
     camera_config.width = 3;
     camera_config.height = 3;
     PinholeCamera camera(camera_config);
@@ -425,7 +460,7 @@ TEST_F(GeodesicTracerTest, GFactorDecompositionConsistency) {
                 float grav = result.gfactor_grav;
                 float gamma = result.gfactor_gamma;
                 float v_orb = result.gfactor_v_orb;
-                float A = result.gfactor_A;
+                float A = result.gfactor_cosine_coefficient;
 
                 float v_dot_n = v_orb * A;
                 float doppler_denom = gamma * (1.0f - v_dot_n);
@@ -448,6 +483,48 @@ TEST_F(GeodesicTracerTest, GFactorDecompositionConsistency) {
     EXPECT_LT(max_relative_error, 1e-4) << "Max relative error in g-factor reconstruction";
 }
 
+TEST(GeodesicTracerRedshift, NearExtremalInnerDiskEmissionRemainsFinite) {
+    KerrSchildParams params;
+    params.M = 1.0;
+    params.a = 0.998;
+    KerrSchildFamily metric(params);
+
+    TracerConfig config;
+    config.escape_radius = 100.0f;
+    config.horizon_factor = 1.0f;
+    config.max_steps = 20000;
+    config.enable_disk = true;
+    config.disk_inner = static_cast<float>(AccretionDiskD::ComputeIsco(0.998));
+    config.disk_outer = 20.0f;
+    config.integrator.initial_step = 0.1f;
+    config.integrator.max_step = 1.0f;
+    GeodesicTracer tracer(&metric, config);
+
+    CameraConfig camera_config;
+    camera_config.r = 30.0;
+    camera_config.theta = 80.0 * std::numbers::pi / 180.0;
+    camera_config.fov = 55.0f;
+    camera_config.width = 96;
+    camera_config.height = 54;
+    PinholeCamera camera(camera_config);
+
+    int inner_crossings = 0;
+    for (int y = 4; y < camera_config.height - 4 && inner_crossings < 3; y += 2) {
+        for (int x = 4; x < camera_config.width - 4 && inner_crossings < 3; x += 2) {
+            const TraceResult result = tracer.Trace(camera.GenerateRay(x, y, 0.5f, 0.5f));
+            for (int i = 0; i < result.num_disk_crossings; ++i) {
+                const auto& crossing = result.disk_crossings[i];
+                if (!crossing.valid || crossing.r >= 2.0f) continue;
+                EXPECT_TRUE(std::isfinite(crossing.redshift));
+                EXPECT_GE(crossing.redshift, 0.1f);
+                ++inner_crossings;
+            }
+        }
+    }
+    EXPECT_GE(inner_crossings, 1)
+        << "the near-extremal probe did not exercise disk emission inside r=2M";
+}
+
 TEST_F(GeodesicTracerTest, MotionBlurConvergence) {
     TraceResult disk_result;
     bool found = false;
@@ -461,16 +538,13 @@ TEST_F(GeodesicTracerTest, MotionBlurConvergence) {
         }
     }
 
-    if (!found) {
-        GTEST_SKIP() << "No disk hit found for motion blur test";
-        return;
-    }
+    ASSERT_TRUE(found) << "deterministic camera scan found no disk hit for motion-blur evidence";
 
     float grav = disk_result.gfactor_grav;
     float gamma = disk_result.gfactor_gamma;
     float v_orb = disk_result.gfactor_v_orb;
-    float A = disk_result.gfactor_A;
-    float B = disk_result.gfactor_B;
+    float A = disk_result.gfactor_cosine_coefficient;
+    float B = disk_result.gfactor_sine_coefficient;
     float r = disk_result.disk_radius;
 
     float M = 1.0f;  // Schwarzschild.
@@ -480,22 +554,30 @@ TEST_F(GeodesicTracerTest, MotionBlurConvergence) {
     float shutter_time = 0.1f;
     float delta_phi_max = Omega * shutter_time;
 
+    auto independent_redshift = [&](int sample, int sample_count) {
+        const float time = sample_count > 1
+                               ? static_cast<float>(sample) / static_cast<float>(sample_count - 1)
+                               : 0.5f;
+        const float delta_phi = delta_phi_max * (time - 0.5f);
+        const float projected_velocity =
+            v_orb * (A * std::cos(delta_phi) + B * std::sin(delta_phi));
+        const float denominator = std::clamp(gamma * (1.0f - projected_velocity), 0.1f, 10.0f);
+        return std::clamp(grav / denominator, 0.1f, 5.0f);
+    };
     auto compute_blur = [&](int N) -> float {
+        const std::vector<float> redshifts = sirius::core::disk_emission::SampleTemporalRedshifts(
+            grav, gamma, v_orb, A, B, delta_phi_max, N);
+        EXPECT_EQ(redshifts.size(), static_cast<std::size_t>(N));
         float radiance_sum = 0.0f;
         for (int i = 0; i < N; i++) {
-            float t = (N > 1) ? static_cast<float>(i) / (N - 1) : 0.5f;
-            float delta_phi = delta_phi_max * (t - 0.5f);
-            float cos_dphi = std::cos(delta_phi);
-            float sin_dphi = std::sin(delta_phi);
-            float v_dot_n = v_orb * (A * cos_dphi + B * sin_dphi);
-            float denom = gamma * (1.0f - v_dot_n);
-            denom = std::clamp(denom, 0.1f, 10.0f);
-            float g_offset = std::clamp(grav / denom, 0.1f, 5.0f);
-            radiance_sum += std::pow(g_offset, 4.0f);
+            EXPECT_FLOAT_EQ(redshifts[static_cast<std::size_t>(i)], independent_redshift(i, N));
+            radiance_sum += std::pow(redshifts[static_cast<std::size_t>(i)], 4.0f);
         }
         return radiance_sum / N;
     };
 
+    (void)compute_blur(1);
+    (void)compute_blur(7);
     float g_N4 = compute_blur(4);
     float g_N8 = compute_blur(8);
     float g_N16 = compute_blur(16);
@@ -530,8 +612,8 @@ TEST_F(GeodesicTracerTest, GFactorCoefficientNormalization) {
             if (result.outcome == TraceResult::Outcome::DiskHit) {
                 disk_hits++;
 
-                float A = result.gfactor_A;
-                float B = result.gfactor_B;
+                float A = result.gfactor_cosine_coefficient;
+                float B = result.gfactor_sine_coefficient;
                 float norm_squared = A * A + B * B;
 
                 EXPECT_LE(norm_squared, 1.01f) << "A^2 + B^2 should be <= 1, got " << norm_squared;
@@ -605,7 +687,7 @@ class MorrisThorneTracerTest : public ::testing::Test {
 
         CameraConfig camConfig;
         camConfig.r = 50.0;
-        camConfig.theta = M_PI / 2.0;
+        camConfig.theta = std::numbers::pi / 2.0;
         camConfig.phi = 0.0;
         camConfig.fov = 60.0f;
         camConfig.width = 64;
@@ -694,7 +776,7 @@ TEST_F(MorrisThorneTracerTest, DeflectionFallsQuadraticallyWithImpactParameter) 
     EXPECT_GT(probes[2].deflection, 0.0);
 
     for (const auto& p : probes) {
-        double predicted = (M_PI / 4.0) * (1.0 / (p.rho * p.rho));  // b0 = 1.
+        double predicted = (std::numbers::pi / 4.0) * (1.0 / (p.rho * p.rho));  // b0 = 1.
         EXPECT_NEAR(p.deflection, predicted, 0.5 * predicted)
             << "Ellis leading-order deflection at rho=" << p.rho << ": traced=" << p.deflection
             << ", predicted=" << predicted;

@@ -11,61 +11,121 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
 #include <cmath>
+#include <numbers>
 
 using namespace sirius::core;
 using namespace sirius::oracle;
 
 namespace {
 
+double IndependentSpecificEnergy(double radius, double spin) {
+    const double sqrt_radius = std::sqrt(radius);
+    const double root = std::sqrt(radius * radius - 3.0 * radius + 2.0 * spin * sqrt_radius);
+    return (radius * radius - 2.0 * radius + spin * sqrt_radius) / (radius * root);
+}
+
+double IndependentSpecificAngularMomentum(double radius, double spin) {
+    const double sqrt_radius = std::sqrt(radius);
+    const double root = std::sqrt(radius * radius - 3.0 * radius + 2.0 * spin * sqrt_radius);
+    return (radius * radius - 2.0 * spin * sqrt_radius + spin * spin) / (sqrt_radius * root);
+}
+
+double IndependentAngularVelocity(double radius, double spin) {
+    return 1.0 / (std::pow(radius, 1.5) + spin);
+}
+
+double IndependentAngularMomentumDerivative(double radius, double spin) {
+    const double step = 1.0e-4 * radius;
+    return (-IndependentSpecificAngularMomentum(radius + 2.0 * step, spin) +
+            8.0 * IndependentSpecificAngularMomentum(radius + step, spin) -
+            8.0 * IndependentSpecificAngularMomentum(radius - step, spin) +
+            IndependentSpecificAngularMomentum(radius - 2.0 * step, spin)) /
+           (12.0 * step);
+}
+
+double IndependentAngularVelocityDerivative(double radius, double spin) {
+    const double step = 1.0e-4 * radius;
+    return (-IndependentAngularVelocity(radius + 2.0 * step, spin) +
+            8.0 * IndependentAngularVelocity(radius + step, spin) -
+            8.0 * IndependentAngularVelocity(radius - step, spin) +
+            IndependentAngularVelocity(radius - 2.0 * step, spin)) /
+           (12.0 * step);
+}
+
+// Page & Thorne (1974), Eq. 15n. This uses a composite midpoint rule and
+// finite-difference derivatives, independent of Core's 16-point Gauss-Legendre
+// rule and analytic derivatives. The returned shape is Q(r)/r^3; its physical
+// prefactor cancels when temperature profiles are normalised.
+double IndependentPageThorneFluxShape(double radius, double spin) {
+    const double isco = AccretionDiskD::ComputeIsco(spin);
+    if (radius <= isco) return 0.0;
+
+    constexpr int kPanels = 32768;
+    const double width = (radius - isco) / kPanels;
+    double integral = 0.0;
+    for (int panel = 0; panel < kPanels; ++panel) {
+        const double sample_radius = isco + (static_cast<double>(panel) + 0.5) * width;
+        const double energy = IndependentSpecificEnergy(sample_radius, spin);
+        const double angular_momentum = IndependentSpecificAngularMomentum(sample_radius, spin);
+        const double angular_velocity = IndependentAngularVelocity(sample_radius, spin);
+        integral += (energy - angular_velocity * angular_momentum) *
+                    IndependentAngularMomentumDerivative(sample_radius, spin);
+    }
+    integral *= width;
+
+    const double energy = IndependentSpecificEnergy(radius, spin);
+    const double angular_momentum = IndependentSpecificAngularMomentum(radius, spin);
+    const double angular_velocity = IndependentAngularVelocity(radius, spin);
+    const double invariant = energy - angular_velocity * angular_momentum;
+    const double correction =
+        -IndependentAngularVelocityDerivative(radius, spin) * integral / (invariant * invariant);
+    return correction / (radius * radius * radius);
+}
+
+double NormalisedOracleTemperature(double radius, double reference_radius, double spin) {
+    return std::pow(IndependentPageThorneFluxShape(radius, spin) /
+                        IndependentPageThorneFluxShape(reference_radius, spin),
+                    0.25);
+}
+
+void ExpectCircularNullOrbit(KerrMetricD& metric, double radius, double impact_parameter) {
+    const Vec4d position(0.0, radius, std::numbers::pi / 2.0, 0.0);
+    const Vec4d momentum(-1.0, 0.0, 0.0, impact_parameter);
+    EXPECT_NEAR(metric.Hamiltonian(position, momentum), 0.0, 2.0e-13)
+        << "null condition at r/M=" << radius;
+    EXPECT_NEAR(metric.dHdq(position, momentum).r, 0.0, 2.0e-13)
+        << "radial canonical acceleration at r/M=" << radius;
+}
+
 //==============================================================================
 // Photon Sphere Radius Tests (DNGR Eq. 5)
 //==============================================================================
 
 TEST(AnalyticValidationTest, PhotonSphereSchwarzschildExact) {
-    // For Schwarzschild (a = 0): r_ph = 3M exactly
-    double M = 1.0;
-    [[maybe_unused]] double a = 0.0;
-
-    double r_photon = 3.0 * M;  // Exact analytic result
-
-    // Verify via orbital equation: V_eff(r_ph) = 0 and V_eff'(r_ph) = 0
-    // For circular orbits at photon sphere: 1 - 2M/r = 0 for light
-    // This gives r = 3M
-
-    EXPECT_DOUBLE_EQ(r_photon, 3.0) << "Schwarzschild photon sphere should be at r = 3M";
+    KerrMetricD metric(1.0, 0.0);
+    ASSERT_NO_FATAL_FAILURE(ExpectCircularNullOrbit(metric, 3.0, 3.0 * std::sqrt(3.0)));
 }
 
 TEST(AnalyticValidationTest, PhotonSphereKerrPrograde) {
-    // For Kerr prograde orbits (equatorial), photon sphere is inside Schwarzschild
-    // Approximate formula: r_ph ≈ 2M(1 + cos(2/3 × arccos(-|a|/M)))
-    // For a/M = 0.9, prograde photon orbit is at ~1.5M < r < 3M
-
-    double M = 1.0;
-    double a = 0.9;
-
-    // The prograde photon sphere radius decreases with increasing spin
-    // For a → M: r_ph → M (approaching horizon)
-    // Just verify it's between horizon and Schwarzschild value
-    double r_horizon = M + std::sqrt(M * M - a * a);  // ~1.436
-
-    // Prograde photon sphere should be between horizon and 3M
-    EXPECT_GT(r_horizon, 1.0) << "Horizon should be > M";
-    EXPECT_LT(r_horizon, 2.0) << "Kerr horizon should be < 2M";
+    constexpr double spin = 0.9;
+    const double radius = 2.0 * (1.0 + std::cos((2.0 / 3.0) * std::acos(-spin)));
+    const double impact_parameter =
+        (radius * radius * (radius - 3.0) + spin * spin * (radius + 1.0)) / (spin * (1.0 - radius));
+    EXPECT_NEAR(radius, 1.5578546274233829, 1.0e-14);
+    KerrMetricD metric(1.0, spin);
+    ExpectCircularNullOrbit(metric, radius, impact_parameter);
 }
 
 TEST(AnalyticValidationTest, PhotonSphereKerrRetrograde) {
-    // For Kerr retrograde orbits, photon sphere is outside Schwarzschild
-    // For a/M = 0.9, retrograde photon orbit is at ~3.6M - 4M
-
-    double M = 1.0;
-    [[maybe_unused]] double a = 0.9;
-
-    // Retrograde photon sphere should be > 3M (larger than Schwarzschild)
-    double r_ph_schwarzschild = 3.0 * M;
-
-    // Just verify the Schwarzschild value is correct
-    EXPECT_DOUBLE_EQ(r_ph_schwarzschild, 3.0) << "Schwarzschild r_ph = 3M";
+    constexpr double spin = 0.9;
+    const double radius = 2.0 * (1.0 + std::cos((2.0 / 3.0) * std::acos(spin)));
+    const double impact_parameter =
+        (radius * radius * (radius - 3.0) + spin * spin * (radius + 1.0)) / (spin * (1.0 - radius));
+    EXPECT_NEAR(radius, 3.910267939103037, 1.0e-14);
+    KerrMetricD metric(1.0, spin);
+    ExpectCircularNullOrbit(metric, radius, impact_parameter);
 }
 
 //==============================================================================
@@ -79,7 +139,7 @@ TEST(AnalyticValidationTest, ISCOSchwarzschildExact) {
     config.a_star = 0.0;
     AccretionDiskD disk(config);
 
-    EXPECT_NEAR(disk.IscoRadius(), 6.0, 1e-6) << "Schwarzschild ISCO should be at r = 6M";
+    EXPECT_NEAR(disk.IscoRadius(), 6.0, 1.0e-14) << "Schwarzschild ISCO should be at r = 6M";
 }
 
 TEST(AnalyticValidationTest, ISCOKerrPrograde) {
@@ -91,9 +151,7 @@ TEST(AnalyticValidationTest, ISCOKerrPrograde) {
 
     double r_isco = disk.IscoRadius();
 
-    EXPECT_GT(r_isco, 1.0) << "ISCO should be > horizon";
-    EXPECT_LT(r_isco, 6.0) << "Prograde ISCO should be < 6M";
-    EXPECT_NEAR(r_isco, 2.32, 0.1) << "a=0.9 prograde ISCO should be ~2.32M";
+    EXPECT_NEAR(r_isco, 2.320883041761887, 1.0e-14);
 }
 
 TEST(AnalyticValidationTest, ISCONearExtremal) {
@@ -105,35 +163,33 @@ TEST(AnalyticValidationTest, ISCONearExtremal) {
 
     double r_isco = disk.IscoRadius();
 
-    EXPECT_LT(r_isco, 2.0) << "Near-extremal ISCO should approach horizon";
+    EXPECT_NEAR(r_isco, 1.2369706551751847, 1.0e-14);
 }
 
-//==============================================================================
-// Einstein Ring Radius Tests (DNGR Eq. 12)
-//==============================================================================
-
-TEST(AnalyticValidationTest, EinsteinRingSchwarzschildWeak) {
-    // Weak-field Einstein ring: θ_E = √(4GM/(c²D_LS × D_S / D_L))
-    // In geometric units for source at infinity: θ_E = √(2r_s / D)
-    // where r_s = 2M and D is observer distance
-
-    double M = 1.0;
-    double r_s = 2.0 * M;
-    double D = 1000.0 * M;  // Observer far away
-
-    double theta_E = std::sqrt(2.0 * r_s / D);
-
-    // Should be small angle
-    EXPECT_NEAR(theta_E, std::sqrt(4.0 / 1000.0), 1e-10) << "Einstein angle should be √(4M/D)";
-    EXPECT_LT(theta_E, 0.1) << "θ_E should be small for weak field";
+TEST(AnalyticValidationTest, PageThorneFluxMatchesIndependentQuadrature) {
+    for (const double spin : {-0.7, 0.0, 0.9}) {
+        AccretionDiskD::Config config;
+        config.a_star = spin;
+        AccretionDiskD disk(config);
+        const double reference_radius = 1.5 * disk.IscoRadius();
+        const double reference_temperature = disk.Temperature(reference_radius);
+        ASSERT_GT(reference_temperature, 0.0);
+        for (const double radius_scale : {1.05, 1.2, 2.0, 4.0}) {
+            const double radius = radius_scale * disk.IscoRadius();
+            const double production = disk.Temperature(radius) / reference_temperature;
+            const double oracle = NormalisedOracleTemperature(radius, reference_radius, spin);
+            EXPECT_NEAR(production / oracle, 1.0, 2.0e-5) << "spin=" << spin << ", r/M=" << radius;
+        }
+    }
 }
 
-TEST(AnalyticValidationTest, CriticalImpactParameterExact) {
-    // Critical impact parameter for Schwarzschild: b_c = 3√3 M
-    double M = 1.0;
-    double b_critical = 3.0 * std::sqrt(3.0) * M;
-
-    EXPECT_NEAR(b_critical, 5.196, 0.001) << "Critical impact parameter should be 3√3 M ≈ 5.196";
+TEST(AnalyticValidationTest, PageThorneTemperatureHasZeroTorqueInnerEdge) {
+    AccretionDiskD disk;
+    const double isco = disk.IscoRadius();
+    EXPECT_EQ(disk.Temperature(isco), 0.0);
+    EXPECT_EQ(IndependentPageThorneFluxShape(isco, 0.0), 0.0);
+    EXPECT_GT(disk.Temperature(1.05 * isco), 0.0);
+    EXPECT_GT(disk.Temperature(1.5 * isco), disk.Temperature(1.05 * isco));
 }
 
 //==============================================================================
@@ -149,9 +205,8 @@ TEST(DNGRParityTest, ExtremalKerrConfiguration) {
 
     // Horizon should be very close to r = M
     // r_+ = M + √(M² - a²) = 1 + √(1 - 0.998001) = 1 + 0.0447 ≈ 1.045
-    double r_horizon = M + std::sqrt(M * M - a * a);
-
-    EXPECT_NEAR(r_horizon, 1.0447, 0.01) << "a=0.999 horizon should be ~1.045M";
+    const double analytic_horizon = M + std::sqrt(M * M - a * a);
+    EXPECT_NEAR(metric.HorizonRadius(), analytic_horizon, 1.0e-14);
 }
 
 TEST(DNGRParityTest, CameraDistance) {
@@ -170,16 +225,6 @@ TEST(DNGRParityTest, CameraDistance) {
     EXPECT_GT(r_camera, r_isco) << "Camera at 6.03M should be outside ISCO for a=0.999";
 }
 
-TEST(DNGRParityTest, InclinationAngle) {
-    // DNGR uses inclination ~83° from polar axis
-    // This means θ = 83° (close to equatorial plane)
-    double inclination_deg = 83.0;
-    double theta = inclination_deg * M_PI / 180.0;
-
-    EXPECT_NEAR(theta, 1.449, 0.01) << "83° inclination should be ~1.449 rad";
-    EXPECT_GT(std::sin(theta), 0.99) << "Camera should be nearly in equatorial plane";
-}
-
 //==============================================================================
 // Numerical Stability Tests
 //==============================================================================
@@ -189,10 +234,10 @@ TEST(NumericalStabilityTest, NoNaNInMetric) {
 
     // Test at various locations
     std::vector<Vec4d> positions = {
-        Vec4d(0, 100, M_PI / 2, 0),   // Far field
-        Vec4d(0, 10, M_PI / 4, 1.0),  // Moderate distance
-        Vec4d(0, 2.0, M_PI / 2, 0),   // Near horizon
-        Vec4d(0, 6.03, 1.449, 0),     // DNGR camera position
+        Vec4d(0, 100, std::numbers::pi / 2, 0),   // Far field
+        Vec4d(0, 10, std::numbers::pi / 4, 1.0),  // Moderate distance
+        Vec4d(0, 2.0, std::numbers::pi / 2, 0),   // Near horizon
+        Vec4d(0, 6.03, 1.449, 0),                 // DNGR camera position
     };
 
     for (const auto& pos : positions) {
@@ -217,7 +262,7 @@ TEST(NumericalStabilityTest, DeterministicIntegration) {
     // Run integration twice with same initial conditions
     auto runIntegration = [&]() {
         BeamStateD beam;
-        beam.x = Vec4d(0, 100, M_PI / 2, 0);
+        beam.x = Vec4d(0, 100, std::numbers::pi / 2, 0);
         beam.k.t = -1.0;
         beam.k.r = -0.1;
         beam.k.theta = 0;

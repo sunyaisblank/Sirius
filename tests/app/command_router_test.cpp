@@ -37,15 +37,15 @@ TEST(CommandRouter, NoCommandStillPrintsHelpSuccessfully) {
 
 TEST(CommandRouter, ExplicitMissingConfigPropagatesFailure) {
     CommandRouter router;
-    EXPECT_THROW(InvokeRouter(router, {"sirius", "--config", "/definitely/absent/sirius.json",
-                                       "info", "system"}),
-                 std::runtime_error);
+    EXPECT_EQ(InvokeRouter(router, {"sirius", "--config", "/definitely/absent/sirius.json", "info",
+                                    "system"}),
+              1);
 }
 
 TEST(CommandRouter, InfoRejectsEmptyAndSurplusArguments) {
     InfoCommand command;
     GlobalOptions globals;
-    SiriusConfig config = SiriusConfig::defaults();
+    SiriusConfig config = SiriusConfig::Defaults();
     EXPECT_EQ(command.Execute({"system", "ignored"}, globals, config), 1);
     EXPECT_EQ(command.Execute({""}, globals, config), 1);
     EXPECT_EQ(command.Execute({"--unknown"}, globals, config), 1);
@@ -54,7 +54,7 @@ TEST(CommandRouter, InfoRejectsEmptyAndSurplusArguments) {
 TEST(CommandRouter, ConfigRejectsMalformedSubcommandArguments) {
     ConfigCommand command;
     GlobalOptions globals;
-    SiriusConfig config = SiriusConfig::defaults();
+    SiriusConfig config = SiriusConfig::Defaults();
     EXPECT_EQ(command.Execute({"show", "ignored"}, globals, config), 1);
     EXPECT_EQ(command.Execute({"paths", "ignored"}, globals, config), 1);
     EXPECT_EQ(command.Execute({"validate", "--unknown"}, globals, config), 1);

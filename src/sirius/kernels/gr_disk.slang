@@ -12,6 +12,13 @@ module gr_disk;
 import gr_types;
 import gr_metrics;
 
+// Bolometric Liouville scaling for disk emission. Both thin and volumetric
+// render paths call this single kernel authority so g^4 is applied once.
+public float ObservedDiskBolometricSource(float emittedSource, float redshift) {
+    float g2 = redshift * redshift;
+    return emittedSource * g2 * g2;
+}
+
 // --- Chebyshev blackbody colour fit (RDOP002A.cu BB_* / blackbodyColor) -------
 
 // log(T) domain mapping: T in [1000 K, 40000 K].
@@ -83,46 +90,6 @@ public float ComputeKerrISCO(float M, float a) {
     float inner = (3.0f - Z1) * (3.0f + Z1 + 2.0f * Z2);
     float r_isco = M * (3.0f + Z2 - sqrt(max(inner, 0.0f)));
     return r_isco;
-}
-
-// --- Novikov-Thorne flux Q(r) (RDOP002A.cu computeNovikovThorneQ) -------------
-public float ComputeNovikovThorneQ(float r, float r_isco, float M, float a_star) {
-    a_star = max(-0.998f, min(0.998f, a_star));
-
-    float x = sqrt(r / M);
-    float x_isco = sqrt(r_isco / M);
-
-    float A = 1.0f - 2.0f / (x * x) + a_star / (x * x * x);
-    float B = 1.0f - 3.0f / (x * x) + 2.0f * a_star / (x * x * x);
-    float D_sq = B;
-    float D = (D_sq > 0.0f) ? sqrt(D_sq) : 0.0f;
-
-    float B_isco = 1.0f - 3.0f / (x_isco * x_isco) + 2.0f * a_star / (x_isco * x_isco * x_isco);
-    float D_isco = (B_isco > 0.0f) ? sqrt(B_isco) : 0.0f;
-
-    if (D <= 0.0f || D_isco <= 0.0f || x <= x_isco * 1.001f) {
-        return 0.0f;
-    }
-
-    float x_ratio = x_isco / x;
-    float base_factor = (1.0f - sqrt(x_ratio));
-    float log_factor = log(max(x / x_isco, 1.001f));
-
-    float frame_drag = 0.0f;
-    if (abs(a_star) > 0.01f) {
-        frame_drag = (3.0f * a_star / (2.0f * x * x * x)) * log_factor;
-    }
-
-    float redshift_factor = sqrt(A / B);
-    float Q = base_factor * (1.0f - frame_drag) * min(redshift_factor, 2.0f);
-    Q *= D / D_isco;
-    return max(Q, 0.0f);
-}
-
-// Novikov-Thorne surface temperature: T = T_inner * Q^{1/4} (RDOP002A.cu
-// sampleAccretionDiskVolumetric temperature branch).
-public float NovikovThorneTemperature(float innerTemperature, float Q) {
-    return innerTemperature * pow(max(Q, 0.0f), 0.25f);
 }
 
 // --- Full Page-Thorne profile ------------------------------------------------

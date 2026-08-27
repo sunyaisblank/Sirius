@@ -67,9 +67,9 @@ class ShadowClassifier {
         EXPECT_FALSE(result.numerical_failure);
         EXPECT_NE(result.outcome, backend::TraceResult::Outcome::MaxSteps)
             << "P1 classifier reached its work bound instead of a physical outcome";
-        const auto outcome = result.outcome;
-        return outcome == backend::TraceResult::Outcome::Horizon ||
-               outcome == backend::TraceResult::Outcome::Spiraling;
+        EXPECT_NE(result.outcome, backend::TraceResult::Outcome::Spiraling)
+            << "P1 classifier accepted a cinematic work-bound outcome as capture";
+        return result.outcome == backend::TraceResult::Outcome::Horizon;
     }
 
     double PixelDistance(const ScreenPoint& lhs, const ScreenPoint& rhs) const {

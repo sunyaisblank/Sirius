@@ -18,6 +18,7 @@
 #include <stdexcept>
 #include <string_view>
 #include <unordered_set>
+#include <utility>
 
 namespace sirius::app {
 
@@ -129,8 +130,8 @@ void RequireKnownConfigShape(const nlohmann::json& source) {
 
 std::optional<fs::path> ConfigLoader::loaded_path_ = std::nullopt;
 
-SiriusConfig ConfigLoader::Load(const std::optional<std::string>& override_path) {
-    SiriusConfig config = SiriusConfig::defaults();
+base::Expected<SiriusConfig> ConfigLoader::Load(const std::optional<std::string>& override_path) {
+    SiriusConfig config = SiriusConfig::Defaults();
     loaded_path_ = std::nullopt;
 
     std::optional<fs::path> config_path;
@@ -138,8 +139,8 @@ SiriusConfig ConfigLoader::Load(const std::optional<std::string>& override_path)
     if (override_path.has_value() && !override_path->empty()) {
         fs::path path(*override_path);
         if (!fs::is_regular_file(path)) {
-            throw std::runtime_error("explicit configuration file does not exist: " +
-                                     path.string());
+            return base::Fail(base::ErrorDomain::kIo, "load configuration",
+                              "explicit file does not exist: " + path.string());
         }
         config_path = path;
     } else {
@@ -149,125 +150,130 @@ SiriusConfig ConfigLoader::Load(const std::optional<std::string>& override_path)
     if (config_path.has_value()) {
         std::ifstream file(config_path.value());
         if (!file) {
-            throw std::runtime_error("cannot open configuration file: " + config_path->string());
+            return base::Fail(base::ErrorDomain::kIo, "load configuration",
+                              "cannot open file: " + config_path->string());
         }
-        const nlohmann::json j = ParseJsonStrict(file);
-        MergeConfig(config, j);
-        loaded_path_ = config_path;
+        try {
+            const nlohmann::json json = ParseJsonStrict(file);
+            MergeConfig(config, json);
+        } catch (const std::exception& error) {
+            return base::Fail(base::ErrorDomain::kConfiguration, "parse configuration",
+                              config_path->string() + ": " + error.what());
+        }
     }
 
-    ApplyEnvironmentOverrides(config);
+    if (auto environment = ApplyEnvironmentOverrides(config); !environment) {
+        return std::unexpected(environment.error());
+    }
     const auto errors = Validate(config);
     if (!errors.empty()) {
-        throw std::invalid_argument("invalid Sirius configuration: " + JoinErrors(errors));
+        return base::Fail(base::ErrorDomain::kConfiguration, "validate configuration",
+                          JoinErrors(errors));
     }
 
+    loaded_path_ = config_path;
     return config;
 }
 
-SiriusConfig ConfigLoader::LoadFromFile(const fs::path& path) {
+base::Expected<SiriusConfig> ConfigLoader::LoadFromFile(const fs::path& path) {
     if (!fs::is_regular_file(path)) {
-        throw std::runtime_error("configuration file does not exist: " + path.string());
+        return base::Fail(base::ErrorDomain::kIo, "load configuration",
+                          "file does not exist: " + path.string());
     }
     std::ifstream file(path);
     if (!file) {
-        throw std::runtime_error("cannot open configuration file: " + path.string());
+        return base::Fail(base::ErrorDomain::kIo, "load configuration",
+                          "cannot open file: " + path.string());
     }
-    const nlohmann::json j = ParseJsonStrict(file);
-    SiriusConfig config = SiriusConfig::defaults();
-    MergeConfig(config, j);
+    SiriusConfig config = SiriusConfig::Defaults();
+    try {
+        const nlohmann::json json = ParseJsonStrict(file);
+        MergeConfig(config, json);
+    } catch (const std::exception& error) {
+        return base::Fail(base::ErrorDomain::kConfiguration, "parse configuration",
+                          path.string() + ": " + error.what());
+    }
     const auto errors = Validate(config);
     if (!errors.empty()) {
-        throw std::invalid_argument("invalid Sirius configuration: " + JoinErrors(errors));
+        return base::Fail(base::ErrorDomain::kConfiguration, "validate configuration",
+                          path.string() + ": " + JoinErrors(errors));
     }
     return config;
 }
 
-bool ConfigLoader::SaveToFile(const SiriusConfig& config, const fs::path& path) {
+base::Expected<void> ConfigLoader::SaveToFile(const SiriusConfig& config, const fs::path& path) {
+    const auto errors = Validate(config);
+    if (!errors.empty()) {
+        return base::Fail(base::ErrorDomain::kConfiguration, "save configuration",
+                          JoinErrors(errors));
+    }
     try {
-        if (!Validate(config).empty()) return false;
         if (path.has_parent_path()) {
             std::error_code ec;
             fs::create_directories(path.parent_path(), ec);
-            if (ec) return false;
+            if (ec) {
+                return base::Fail(base::ErrorDomain::kIo, "create configuration directory",
+                                  path.parent_path().string() + ": " + ec.message());
+            }
         }
 
         std::ofstream file(path);
         if (!file) {
-            return false;
+            return base::Fail(base::ErrorDomain::kIo, "open configuration for writing",
+                              path.string());
         }
 
-        nlohmann::json j = config;
-        file << j.dump(2);
+        nlohmann::json json = config;
+        file << json.dump(2);
         file.flush();
-        return file.good();
-    } catch (const std::exception&) {
-        return false;
+        if (!file.good()) {
+            return base::Fail(base::ErrorDomain::kIo, "write configuration", path.string());
+        }
+    } catch (const std::exception& error) {
+        return base::Fail(base::ErrorDomain::kIo, "save configuration",
+                          path.string() + ": " + error.what());
     }
+    return {};
 }
 
-void ConfigLoader::ApplyEnvironmentOverrides(SiriusConfig& config) {
-    if (auto val = GetEnvInt("SIRIUS_WIDTH")) {
-        config.render.width = *val;
-    }
-    if (auto val = GetEnvInt("SIRIUS_HEIGHT")) {
-        config.render.height = *val;
-    }
-    if (auto val = GetEnvInt("SIRIUS_SAMPLES")) {
-        config.render.samplesPerPixel = *val;
-    }
-    if (auto val = GetEnvInt("SIRIUS_TILE_SIZE")) {
-        config.render.tileSize = *val;
-    }
-    if (auto val = GetEnvInt("SIRIUS_THREADS")) {
-        config.render.threadCount = *val;
-    }
-    if (auto val = GetEnv("SIRIUS_OUTPUT")) {
-        config.render.outputPath = *val;
-    }
+base::Expected<void> ConfigLoader::ApplyEnvironmentOverrides(SiriusConfig& config) {
+    SiriusConfig updated = config;
+    try {
+        if (auto value = GetEnvInt("SIRIUS_WIDTH")) updated.render.width = *value;
+        if (auto value = GetEnvInt("SIRIUS_HEIGHT")) updated.render.height = *value;
+        if (auto value = GetEnvInt("SIRIUS_SAMPLES")) updated.render.samples_per_pixel = *value;
+        if (auto value = GetEnvInt("SIRIUS_TILE_SIZE")) updated.render.tile_size = *value;
+        if (auto value = GetEnvInt("SIRIUS_THREADS")) updated.render.thread_count = *value;
+        if (auto value = GetEnv("SIRIUS_OUTPUT")) updated.render.output_path = *value;
 
-    if (auto val = GetEnv("SIRIUS_METRIC")) {
-        config.metric.name = *val;
-    }
-    if (auto val = GetEnvDouble("SIRIUS_MASS")) {
-        config.metric.mass = *val;
-    }
-    if (auto val = GetEnvDouble("SIRIUS_SPIN")) {
-        config.metric.spin = *val;
-    }
-    if (auto val = GetEnvDouble("SIRIUS_CHARGE")) {
-        config.metric.charge = *val;
-    }
+        if (auto value = GetEnv("SIRIUS_METRIC")) updated.metric.name = *value;
+        if (auto value = GetEnvDouble("SIRIUS_MASS")) updated.metric.mass = *value;
+        if (auto value = GetEnvDouble("SIRIUS_SPIN")) updated.metric.spin = *value;
+        if (auto value = GetEnvDouble("SIRIUS_CHARGE")) updated.metric.charge = *value;
 
-    if (auto val = GetEnvDouble("SIRIUS_DISTANCE")) {
-        config.observer.distance = *val;
-    }
-    if (auto val = GetEnvDouble("SIRIUS_INCLINATION")) {
-        config.observer.inclination = *val;
-    }
-    if (auto val = GetEnvDouble("SIRIUS_AZIMUTH")) {
-        config.observer.azimuth = *val;
-    }
-    if (auto val = GetEnvDouble("SIRIUS_FOV")) {
-        config.observer.fov = *val;
-    }
+        if (auto value = GetEnvDouble("SIRIUS_DISTANCE")) updated.observer.distance = *value;
+        if (auto value = GetEnvDouble("SIRIUS_INCLINATION")) {
+            updated.observer.inclination = *value;
+        }
+        if (auto value = GetEnvDouble("SIRIUS_AZIMUTH")) updated.observer.azimuth = *value;
+        if (auto value = GetEnvDouble("SIRIUS_FOV")) updated.observer.fov = *value;
 
-    if (auto val = GetEnvBool("SIRIUS_BLOOM")) {
-        config.postprocess.enableBloom = *val;
-    }
-    if (auto val = GetEnvDouble("SIRIUS_EXPOSURE")) {
-        config.postprocess.exposure = static_cast<float>(*val);
-    }
+        if (auto value = GetEnvBool("SIRIUS_BLOOM")) {
+            updated.postprocess.enable_bloom = *value;
+        }
+        if (auto value = GetEnvDouble("SIRIUS_EXPOSURE")) {
+            updated.postprocess.exposure = static_cast<float>(*value);
+        }
 
-    if (auto val = GetEnv("SIRIUS_BACKEND")) {
-        config.backend.preferred = *val;
+        if (auto value = GetEnv("SIRIUS_BACKEND")) updated.backend.preferred = *value;
+        if (auto value = GetEnv("SIRIUS_COLOR_MODE")) updated.color_mode = *value;
+        if (auto value = GetEnvInt("SIRIUS_CUDA_DEVICE")) updated.backend.cuda_device = *value;
+    } catch (const std::exception& error) {
+        return base::Fail(base::ErrorDomain::kConfiguration, "apply environment overrides",
+                          error.what());
     }
-    if (auto val = GetEnv("SIRIUS_COLOR_MODE")) {
-        config.colorMode = *val;
-    }
-    if (auto val = GetEnvInt("SIRIUS_CUDA_DEVICE")) {
-        config.backend.cudaDevice = *val;
-    }
+    config = std::move(updated);
+    return {};
 }
 
 std::optional<fs::path> ConfigLoader::GetLoadedConfigPath() { return loaded_path_; }
@@ -295,28 +301,28 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
                          " and " + std::to_string(kMaxResolution) + " (spec requirement)");
     }
 
-    if (config.render.samplesPerPixel < 1 || config.render.samplesPerPixel > 4096) {
-        errors.push_back("render.samplesPerPixel must be between 1 and 4096");
+    if (config.render.samples_per_pixel < 1 || config.render.samples_per_pixel > 4096) {
+        errors.push_back("render.samples_per_pixel must be between 1 and 4096");
     }
 
-    if (config.render.tileSize < 8 || config.render.tileSize > 256) {
-        errors.push_back("render.tileSize must be between 8 and 256");
+    if (config.render.tile_size < 8 || config.render.tile_size > 256) {
+        errors.push_back("render.tile_size must be between 8 and 256");
     }
-    if ((config.render.tileSize & (config.render.tileSize - 1)) != 0) {
-        errors.push_back("render.tileSize should be a power of 2 for GPU efficiency");
+    if ((config.render.tile_size & (config.render.tile_size - 1)) != 0) {
+        errors.push_back("render.tile_size should be a power of 2 for GPU efficiency");
     }
-    if (config.render.threadCount < 0 || config.render.threadCount > 1024) {
-        errors.push_back("render.threadCount must be between 0 (automatic) and 1024");
+    if (config.render.thread_count < 0 || config.render.thread_count > 1024) {
+        errors.push_back("render.thread_count must be between 0 (automatic) and 1024");
     }
-    if (config.render.outputPath.empty() ||
-        config.render.outputPath.find('\0') != std::string::npos) {
-        errors.push_back("render.outputPath must not be empty");
+    if (config.render.output_path.empty() ||
+        config.render.output_path.find('\0') != std::string::npos) {
+        errors.push_back("render.output_path must not be empty");
     } else {
-        std::string extension = fs::path(config.render.outputPath).extension().string();
+        std::string extension = fs::path(config.render.output_path).extension().string();
         std::transform(extension.begin(), extension.end(), extension.begin(),
                        [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
         if (extension != ".ppm" && extension != ".png" && extension != ".exr") {
-            errors.push_back("render.outputPath extension must be .ppm, .png, or .exr");
+            errors.push_back("render.output_path extension must be .ppm, .png, or .exr");
         }
     }
 
@@ -327,8 +333,9 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
                          "' is not a known metric; accepted names: " + core::KnownMetricNames());
     }
     if (metric_id.has_value()) {
-        if (const auto issue = core::MetricParameterIssue(
-                *metric_id, config.metric.spin, config.metric.charge, config.metric.lambda);
+        if (const auto issue =
+                core::MetricParameterIssue(*metric_id, config.metric.spin, config.metric.charge,
+                                           config.metric.cosmological_constant);
             issue.has_value()) {
             errors.emplace_back(*issue);
         }
@@ -369,55 +376,55 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
     static const std::vector<std::string> valid_temperature_models = {"NovikovThorne", "NT",
                                                                       "ShakuraSunyaev", "SS"};
     if (std::find(valid_temperature_models.begin(), valid_temperature_models.end(),
-                  config.metric.temperatureModel) == valid_temperature_models.end()) {
+                  config.metric.temperature_model) == valid_temperature_models.end()) {
         errors.push_back(
-            "metric.temperatureModel must be one of: NovikovThorne, NT, ShakuraSunyaev, SS");
+            "metric.temperature_model must be one of: NovikovThorne, NT, ShakuraSunyaev, SS");
     }
 
     // Only the a = 0 Kerr-Schild form is exact, so lambda with spin is rejected.
     constexpr double kMaxLambda = 0.1;
-    if (finite(config.metric.lambda, "metric.lambda") &&
-        std::abs(config.metric.lambda) > kMaxLambda) {
+    if (finite(config.metric.cosmological_constant, "metric.lambda") &&
+        std::abs(config.metric.cosmological_constant) > kMaxLambda) {
         errors.push_back("metric.lambda must be between -0.1 and 0.1");
     }
-    if (std::abs(config.metric.lambda) > 0 && config.metric.spin != 0) {
+    if (std::abs(config.metric.cosmological_constant) > 0 && config.metric.spin != 0) {
         errors.push_back(
             "metric.lambda requires metric.spin = 0 (rotating de Sitter forms are not "
             "represented)");
     }
-    if (finite(config.metric.diskTemperature, "metric.diskTemperature") &&
-        (config.metric.diskTemperature < 100.0f || config.metric.diskTemperature > 1.0e8f)) {
-        errors.push_back("metric.diskTemperature must be between 100 and 100000000 Kelvin");
+    if (finite(config.metric.disk_temperature, "metric.disk_temperature") &&
+        (config.metric.disk_temperature < 100.0f || config.metric.disk_temperature > 1.0e8f)) {
+        errors.push_back("metric.disk_temperature must be between 100 and 100000000 Kelvin");
     }
-    if (config.diskEnabled && metric_id.has_value() &&
+    if (config.disk_enabled && metric_id.has_value() &&
         core::DiskSupportFor(*metric_id) != core::DiskSupport::PageThorne) {
         errors.push_back(
             "diskEnabled must be false when the selected metric has no represented "
             "Page-Thorne accretion-disk emission model");
     }
-    if (finite(config.metric.throatRadius, "metric.throatRadius") &&
-        (config.metric.throatRadius <= 0.0 || config.metric.throatRadius > 1000.0)) {
-        errors.push_back("metric.throatRadius must be greater than 0 and at most 1000");
+    if (finite(config.metric.throat_radius, "metric.throat_radius") &&
+        (config.metric.throat_radius <= 0.0 || config.metric.throat_radius > 1000.0)) {
+        errors.push_back("metric.throat_radius must be greater than 0 and at most 1000");
     }
-    if (config.metric.wormholeTopology != "OneSheetCapture" &&
-        config.metric.wormholeTopology != "TwoSheet") {
-        errors.push_back("metric.wormholeTopology must be one of: OneSheetCapture, TwoSheet");
-    } else if (config.metric.wormholeTopology == "TwoSheet") {
+    if (config.metric.wormhole_topology != "OneSheetCapture" &&
+        config.metric.wormhole_topology != "TwoSheet") {
+        errors.push_back("metric.wormhole_topology must be one of: OneSheetCapture, TwoSheet");
+    } else if (config.metric.wormhole_topology == "TwoSheet") {
         errors.push_back(
-            "metric.wormholeTopology TwoSheet is not represented: Sirius currently renders "
+            "metric.wormhole_topology TwoSheet is not represented: Sirius currently renders "
             "one exterior sheet with the throat as a dark capture surface");
     }
-    if (finite(config.metric.warpVelocity, "metric.warpVelocity") &&
-        std::abs(config.metric.warpVelocity) > 10.0) {
-        errors.push_back("metric.warpVelocity magnitude must be at most 10");
+    if (finite(config.metric.warp_velocity, "metric.warp_velocity") &&
+        std::abs(config.metric.warp_velocity) > 10.0) {
+        errors.push_back("metric.warp_velocity magnitude must be at most 10");
     }
-    if (finite(config.metric.bubbleRadius, "metric.bubbleRadius") &&
-        (config.metric.bubbleRadius <= 0.0 || config.metric.bubbleRadius > 1000.0)) {
-        errors.push_back("metric.bubbleRadius must be greater than 0 and at most 1000");
+    if (finite(config.metric.bubble_radius, "metric.bubble_radius") &&
+        (config.metric.bubble_radius <= 0.0 || config.metric.bubble_radius > 1000.0)) {
+        errors.push_back("metric.bubble_radius must be greater than 0 and at most 1000");
     }
-    if (finite(config.metric.bubbleSigma, "metric.bubbleSigma") &&
-        (config.metric.bubbleSigma <= 0.0 || config.metric.bubbleSigma > 1000.0)) {
-        errors.push_back("metric.bubbleSigma must be greater than 0 and at most 1000");
+    if (finite(config.metric.bubble_sigma, "metric.bubble_sigma") &&
+        (config.metric.bubble_sigma <= 0.0 || config.metric.bubble_sigma > 1000.0)) {
+        errors.push_back("metric.bubble_sigma must be greater than 0 and at most 1000");
     }
 
     // --- Observer validation ------------------------------------------------
@@ -456,34 +463,34 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
         errors.push_back("observer.fov must be between 1 and 170 degrees");
     }
     const bool beta_forward_finite =
-        finite(config.observer.cameraBetaForward, "observer.cameraBetaForward");
-    const bool beta_up_finite = finite(config.observer.cameraBetaUp, "observer.cameraBetaUp");
+        finite(config.observer.camera_beta_forward, "observer.camera_beta_forward");
+    const bool beta_up_finite = finite(config.observer.camera_beta_up, "observer.camera_beta_up");
     const bool beta_right_finite =
-        finite(config.observer.cameraBetaRight, "observer.cameraBetaRight");
+        finite(config.observer.camera_beta_right, "observer.camera_beta_right");
     const double beta_squared =
-        config.observer.cameraBetaForward * config.observer.cameraBetaForward +
-        config.observer.cameraBetaUp * config.observer.cameraBetaUp +
-        config.observer.cameraBetaRight * config.observer.cameraBetaRight;
+        config.observer.camera_beta_forward * config.observer.camera_beta_forward +
+        config.observer.camera_beta_up * config.observer.camera_beta_up +
+        config.observer.camera_beta_right * config.observer.camera_beta_right;
     if (beta_forward_finite && beta_up_finite && beta_right_finite &&
         (!std::isfinite(beta_squared) || beta_squared >= 1.0)) {
         errors.push_back("observer camera beta magnitude must be less than 1");
     }
     static const std::vector<std::string> valid_lens_models = {"Pinhole", "ThinLens", "Fisheye"};
-    if (std::find(valid_lens_models.begin(), valid_lens_models.end(), config.observer.lensModel) ==
+    if (std::find(valid_lens_models.begin(), valid_lens_models.end(), config.observer.lens_model) ==
         valid_lens_models.end()) {
-        errors.push_back("observer.lensModel must be one of: Pinhole, ThinLens, Fisheye");
+        errors.push_back("observer.lens_model must be one of: Pinhole, ThinLens, Fisheye");
     }
-    if (finite(config.observer.focalLength, "observer.focalLength") &&
-        (config.observer.focalLength <= 0.0f || config.observer.focalLength > 10000.0f)) {
-        errors.push_back("observer.focalLength must be greater than 0 and at most 10000");
+    if (finite(config.observer.focal_length, "observer.focal_length") &&
+        (config.observer.focal_length <= 0.0f || config.observer.focal_length > 10000.0f)) {
+        errors.push_back("observer.focal_length must be greater than 0 and at most 10000");
     }
     if (finite(config.observer.aperture, "observer.aperture") &&
         (config.observer.aperture <= 0.0f || config.observer.aperture > 128.0f)) {
         errors.push_back("observer.aperture must be greater than 0 and at most 128");
     }
-    if (finite(config.observer.focusDistance, "observer.focusDistance") &&
-        (config.observer.focusDistance <= 0.0f || config.observer.focusDistance > 1.0e6f)) {
-        errors.push_back("observer.focusDistance must be greater than 0 and at most 1000000");
+    if (finite(config.observer.focus_distance, "observer.focus_distance") &&
+        (config.observer.focus_distance <= 0.0f || config.observer.focus_distance > 1.0e6f)) {
+        errors.push_back("observer.focus_distance must be greater than 0 and at most 1000000");
     }
 
     // --- Post-process validation --------------------------------------------
@@ -491,13 +498,13 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
         (config.postprocess.exposure <= 0 || config.postprocess.exposure > 100)) {
         errors.push_back("postprocess.exposure must be between 0 and 100 stops");
     }
-    if (finite(config.postprocess.bloomIntensity, "postprocess.bloomIntensity") &&
-        (config.postprocess.bloomIntensity < 0 || config.postprocess.bloomIntensity > 5)) {
-        errors.push_back("postprocess.bloomIntensity must be between 0 and 5");
+    if (finite(config.postprocess.bloom_intensity, "postprocess.bloom_intensity") &&
+        (config.postprocess.bloom_intensity < 0 || config.postprocess.bloom_intensity > 5)) {
+        errors.push_back("postprocess.bloom_intensity must be between 0 and 5");
     }
-    if (finite(config.postprocess.bloomThreshold, "postprocess.bloomThreshold") &&
-        (config.postprocess.bloomThreshold < 0 || config.postprocess.bloomThreshold > 100)) {
-        errors.push_back("postprocess.bloomThreshold must be between 0 and 100");
+    if (finite(config.postprocess.bloom_threshold, "postprocess.bloom_threshold") &&
+        (config.postprocess.bloom_threshold < 0 || config.postprocess.bloom_threshold > 100)) {
+        errors.push_back("postprocess.bloom_threshold must be between 0 and 100");
     }
     if (finite(config.postprocess.contrast, "postprocess.contrast") &&
         (config.postprocess.contrast < 0 || config.postprocess.contrast > 4)) {
@@ -517,56 +524,56 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
     }
 
     // --- Volumetric and film validation ------------------------------------
-    if (finite(config.volumetric.hOverR, "volumetric.hOverR") &&
-        (config.volumetric.hOverR <= 0 || config.volumetric.hOverR > 2)) {
-        errors.push_back("volumetric.hOverR must be greater than 0 and at most 2");
+    if (finite(config.volumetric.h_over_r, "volumetric.h_over_r") &&
+        (config.volumetric.h_over_r <= 0 || config.volumetric.h_over_r > 2)) {
+        errors.push_back("volumetric.h_over_r must be greater than 0 and at most 2");
     }
-    if (finite(config.volumetric.hPower, "volumetric.hPower") &&
-        (config.volumetric.hPower < -2 || config.volumetric.hPower > 4)) {
-        errors.push_back("volumetric.hPower must be between -2 and 4");
+    if (finite(config.volumetric.h_power, "volumetric.h_power") &&
+        (config.volumetric.h_power < -2 || config.volumetric.h_power > 4)) {
+        errors.push_back("volumetric.h_power must be between -2 and 4");
     }
-    if (finite(config.volumetric.tauMidplane, "volumetric.tauMidplane") &&
-        (config.volumetric.tauMidplane < 0 || config.volumetric.tauMidplane > 1.0e6f)) {
-        errors.push_back("volumetric.tauMidplane must be between 0 and 1000000");
+    if (finite(config.volumetric.tau_midplane, "volumetric.tau_midplane") &&
+        (config.volumetric.tau_midplane < 0 || config.volumetric.tau_midplane > 1.0e6f)) {
+        errors.push_back("volumetric.tau_midplane must be between 0 and 1000000");
     }
     if (config.volumetric.samples < 1 || config.volumetric.samples > 4096) {
         errors.push_back("volumetric.samples must be between 1 and 4096");
     }
-    if ((config.volumetric.enableTurbulence || config.volumetric.enableCorona) &&
+    if ((config.volumetric.enable_turbulence || config.volumetric.enable_corona) &&
         !config.volumetric.enabled) {
         errors.push_back("volumetric.enabled must be true when turbulence or corona is enabled");
     }
-    if (config.volumetric.enabled && !config.diskEnabled) {
+    if (config.volumetric.enabled && !config.disk_enabled) {
         errors.push_back("diskEnabled must be true when volumetric disk rendering is enabled");
     }
-    if (finite(config.motionBlur.shutterTime, "motionBlur.shutterTime") &&
-        (config.motionBlur.shutterTime < 0.0f || config.motionBlur.shutterTime > 1000.0f)) {
-        errors.push_back("motionBlur.shutterTime must be between 0 and 1000");
+    if (finite(config.motion_blur.shutter_time, "motionBlur.shutter_time") &&
+        (config.motion_blur.shutter_time < 0.0f || config.motion_blur.shutter_time > 1000.0f)) {
+        errors.push_back("motionBlur.shutter_time must be between 0 and 1000");
     }
-    if (config.motionBlur.samples < 1 || config.motionBlur.samples > 4096) {
+    if (config.motion_blur.samples < 1 || config.motion_blur.samples > 4096) {
         errors.push_back("motionBlur.samples must be between 1 and 4096");
     }
-    if (config.motionBlur.enabled && !config.diskEnabled) {
+    if (config.motion_blur.enabled && !config.disk_enabled) {
         errors.push_back("diskEnabled must be true when motion blur is enabled");
     }
 
     static const std::vector<std::string> valid_color_modes = {
         "TrueColor", "TemperatureMap", "RedshiftMap", "Narrowband", "Polarisation"};
-    if (std::find(valid_color_modes.begin(), valid_color_modes.end(), config.colorMode) ==
+    if (std::find(valid_color_modes.begin(), valid_color_modes.end(), config.color_mode) ==
         valid_color_modes.end()) {
         errors.push_back(
             "colorMode must be one of: TrueColor, TemperatureMap, RedshiftMap, Narrowband, "
             "Polarisation");
     }
-    if (config.colorMode == "Polarisation") {
-        if (!config.diskEnabled) {
+    if (config.color_mode == "Polarisation") {
+        if (!config.disk_enabled) {
             errors.push_back("colorMode Polarisation requires diskEnabled");
         }
         if (config.volumetric.enabled) {
             errors.push_back(
                 "colorMode Polarisation requires the thin disk; volumetric.enabled must be false");
         }
-        if (config.motionBlur.enabled) {
+        if (config.motion_blur.enabled) {
             errors.push_back(
                 "colorMode Polarisation is not represented with temporal disk motion blur");
         }
@@ -584,17 +591,17 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
         errors.push_back(
             "film.preset must be one of: Interstellar, SpaceOdyssey2001, DigitalClean");
     }
-    if (finite(config.film.grainIntensity, "film.grainIntensity") &&
-        (config.film.grainIntensity < 0 || config.film.grainIntensity > 1)) {
-        errors.push_back("film.grainIntensity must be between 0 and 1");
+    if (finite(config.film.grain_intensity, "film.grain_intensity") &&
+        (config.film.grain_intensity < 0 || config.film.grain_intensity > 1)) {
+        errors.push_back("film.grain_intensity must be between 0 and 1");
     }
-    if (finite(config.film.halationStrength, "film.halationStrength") &&
-        (config.film.halationStrength < 0 || config.film.halationStrength > 5)) {
-        errors.push_back("film.halationStrength must be between 0 and 5");
+    if (finite(config.film.halation_strength, "film.halation_strength") &&
+        (config.film.halation_strength < 0 || config.film.halation_strength > 5)) {
+        errors.push_back("film.halation_strength must be between 0 and 5");
     }
-    if (finite(config.film.vignetteStrength, "film.vignetteStrength") &&
-        (config.film.vignetteStrength < 0 || config.film.vignetteStrength > 2)) {
-        errors.push_back("film.vignetteStrength must be between 0 and 2");
+    if (finite(config.film.vignette_strength, "film.vignette_strength") &&
+        (config.film.vignette_strength < 0 || config.film.vignette_strength > 2)) {
+        errors.push_back("film.vignette_strength must be between 0 and 2");
     }
 
     // --- Backend validation -------------------------------------------------
@@ -607,18 +614,18 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
     if (!valid_backend) {
         errors.push_back("backend.preferred must be one of: auto, cpu, vulkan");
     }
-    if (config.backend.enableDenoiser) {
-        errors.push_back("backend.enableDenoiser is not implemented and must be false");
+    if (config.backend.enable_denoiser) {
+        errors.push_back("backend.enable_denoiser is not implemented and must be false");
     }
-    if (config.backend.cudaDevice != 0) {
-        errors.push_back("backend.cudaDevice is retired with CUDA/OptiX and must be 0");
+    if (config.backend.cuda_device != 0) {
+        errors.push_back("backend.cuda_device is retired with CUDA/OptiX and must be 0");
     }
 
     return errors;
 }
 
 std::string ConfigLoader::GenerateDefaultConfig() {
-    SiriusConfig config = SiriusConfig::defaults();
+    SiriusConfig config = SiriusConfig::Defaults();
     nlohmann::json j = config;
     return j.dump(2);
 }

@@ -5,7 +5,10 @@
 // Reference: Blandford & Koenigl (1979), ApJ 232, 34; Rybicki & Lightman
 // (1979) ch. 6. Ported from PHJT001A.h.
 
+#include <algorithm>
 #include <cmath>
+#include <limits>
+#include <numbers>
 
 namespace sirius::core {
 
@@ -33,12 +36,53 @@ struct JetConfig {
     // Polarisation
     bool enable_polarisation = true;
     float B_field_order = 0.5f;  // Magnetic field ordering (0 = random, 1 = ordered)
+
+    void Validate() {
+        if (!std::isfinite(r_launch) || r_launch <= 0.0f) r_launch = 3.0f;
+        if (!std::isfinite(r_max)) r_max = 200.0f;
+        if (!std::isfinite(opening_angle)) opening_angle = 0.1f;
+        if (!std::isfinite(collimation)) collimation = 0.5f;
+        if (!std::isfinite(lorentz_factor) || lorentz_factor < 1.0f) lorentz_factor = 1.0f;
+        if (!std::isfinite(velocity_profile)) velocity_profile = 0.0f;
+        if (!std::isfinite(spectral_index) || spectral_index <= 1.0f) spectral_index = 2.2f;
+        if (!std::isfinite(B_field_0) || B_field_0 <= 0.0f) B_field_0 = 1e4f;
+        if (!std::isfinite(B_field_decay)) B_field_decay = 1.0f;
+        if (!std::isfinite(n_e_0) || n_e_0 <= 0.0f) n_e_0 = 1e5f;
+        if (!std::isfinite(n_e_decay)) n_e_decay = 2.0f;
+        if (!std::isfinite(gamma_min) || gamma_min < 1.0f) gamma_min = 10.0f;
+        if (!std::isfinite(gamma_max)) gamma_max = 1e6f;
+        if (!std::isfinite(B_field_order)) B_field_order = 0.5f;
+
+        if (!(r_max > r_launch)) {
+            r_max = std::nextafter(r_launch, std::numeric_limits<float>::infinity());
+            if (!std::isfinite(r_max)) {
+                r_launch = 3.0f;
+                r_max = 200.0f;
+            }
+        }
+        constexpr float kMaximumOpeningAngle = std::numbers::pi_v<float> / 2.0f - 1.0e-4f;
+        opening_angle = std::clamp(opening_angle, 0.0f, kMaximumOpeningAngle);
+        collimation = std::clamp(collimation, 0.0f, 1.0f);
+        lorentz_factor = std::min(lorentz_factor, 1000.0f);
+        velocity_profile = std::max(velocity_profile, 0.0f);
+        B_field_decay = std::max(B_field_decay, 0.0f);
+        n_e_decay = std::max(n_e_decay, 0.0f);
+        if (!(gamma_max > gamma_min)) {
+            gamma_max = std::nextafter(gamma_min, std::numeric_limits<float>::infinity());
+            if (!std::isfinite(gamma_max)) {
+                gamma_min = 10.0f;
+                gamma_max = 1e6f;
+            }
+        }
+        B_field_order = std::clamp(B_field_order, 0.0f, 1.0f);
+    }
 };
 
 // Relativistic jet emission model.
 class RelativisticJet {
   public:
     explicit RelativisticJet(const JetConfig& config = JetConfig()) : config_(config) {
+        config_.Validate();
         // Precompute velocity from Lorentz factor
         beta_ = std::sqrt(1.0f - 1.0f / (config_.lorentz_factor * config_.lorentz_factor));
     }
@@ -162,6 +206,7 @@ class RelativisticJet {
     const JetConfig& GetConfig() const { return config_; }
     void SetConfig(const JetConfig& config) {
         config_ = config;
+        config_.Validate();
         beta_ = std::sqrt(1.0f - 1.0f / (config_.lorentz_factor * config_.lorentz_factor));
     }
 

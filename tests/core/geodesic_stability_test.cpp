@@ -95,51 +95,6 @@ TEST_F(NumericalStabilityTests, TrigLargeAngles) {
 }
 
 // =============================================================================
-// Metric Singularities
-// =============================================================================
-
-// Test: Schwarzschild near horizon (r → 2M)
-TEST_F(NumericalStabilityTests, SchwarzschildNearHorizon) {
-    double M = 1.0;
-    double rs = 2.0 * M;
-
-    // Approach horizon from outside
-    std::vector<double> radii = {2.1, 2.01, 2.001};
-
-    for (double r : radii) {
-        double f = 1.0 - rs / r;
-
-        // g_tt should be small but not NaN
-        double g_tt = -f;
-        EXPECT_FALSE(std::isnan(g_tt)) << "g_tt NaN at r=" << r;
-        EXPECT_GT(g_tt, -1.0) << "g_tt should approach 0 near horizon";
-
-        // g_rr should be large but finite
-        double g_rr = 1.0 / f;
-        EXPECT_FALSE(std::isnan(g_rr)) << "g_rr NaN at r=" << r;
-        EXPECT_FALSE(std::isinf(g_rr)) << "g_rr Inf at r=" << r;
-    }
-}
-
-// Test: Polar axis (sin θ → 0)
-TEST_F(NumericalStabilityTests, PolarAxisSingularity) {
-    double r = 10.0;
-    [[maybe_unused]] double M = 1.0;
-
-    // Near pole
-    std::vector<double> thetas = {0.01, 0.001, 0.0001};
-
-    for (double theta : thetas) {
-        double sin_theta = std::sin(theta);
-        double g_phiphi = r * r * sin_theta * sin_theta;
-
-        // Should be small but not negative
-        EXPECT_GE(g_phiphi, 0.0) << "g_φφ should be non-negative";
-        EXPECT_FALSE(std::isnan(g_phiphi)) << "g_φφ NaN near pole";
-    }
-}
-
-// =============================================================================
 // Vector Operations
 // =============================================================================
 
@@ -236,44 +191,6 @@ TEST_F(NumericalStabilityTests, ChristoffelNearSingular) {
             }
         }
     }
-}
-
-// =============================================================================
-// Precision Tests
-// =============================================================================
-
-// Test: Machine epsilon handling
-TEST_F(NumericalStabilityTests, MachineEpsilonAddition) {
-    double x = 1.0;
-    double eps = std::numeric_limits<double>::epsilon();
-
-    // x + eps/2 should equal x (catastrophic cancellation)
-    double y = x + eps / 2.0;
-
-    // This tests understanding of floating point limits
-    EXPECT_EQ(x, y) << "Addition below machine epsilon should not change value";
-
-    // x + eps should differ from x
-    double z = x + eps;
-    EXPECT_NE(x, z) << "Addition at machine epsilon should change value";
-}
-
-// Test: Compensated summation concept (Kahan)
-TEST_F(NumericalStabilityTests, AccumulationError) {
-    // Accumulate many small numbers
-    double naive_sum = 0.0;
-    double small = 1e-15;
-    int N = 1000000;
-
-    for (int i = 0; i < N; ++i) {
-        naive_sum += small;
-    }
-
-    double expected = small * N;  // 1e-9
-    double relative_error = std::abs(naive_sum - expected) / expected;
-
-    // Naive summation has some error, but should be reasonable
-    EXPECT_LT(relative_error, 1e-5) << "Accumulation error too large: " << relative_error;
 }
 
 }  // namespace sirius::test

@@ -2,6 +2,7 @@
 // Tests: Dormand-Prince coefficients, step adaptation, null constraint.
 // Ported from TSPH009A.cpp; assertions and tolerances unchanged.
 
+#include "sirius/core/constants.h"
 #include "sirius/core/dual_number.h"
 #include "sirius/core/geodesic_integrator.h"
 #include "sirius/core/metrics/kerr_schild_family.h"  // Unified Kerr-Schild family
@@ -10,6 +11,7 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
 #include <cmath>
 #include <vector>
 
@@ -229,12 +231,8 @@ TEST_F(RK45IntegratorTests, SchwarzschildIntegration) {
     EXPECT_FALSE(std::isnan(ray.position(1))) << "Position should not be NaN";
 }
 
-// Test: Null constraint behavior in Schwarzschild (informational)
-// NOTE: The Hamiltonian formulation preserves H = (1/2)g^μν p_μ p_ν = 0,
-// but the measured g_μν k^μ k^ν can show apparent drift due to:
-// - Numerical precision in momentum ↔ velocity conversion
-// - Coordinate scaling effects near horizon
-// The key invariant is that the Hamiltonian constraint is preserved.
+// Test: the live Schwarzschild RK45 path preserves its null constraint at the
+// named double-precision CPU tolerance.
 TEST_F(RK45IntegratorTests, SchwarzschildNullConstraint) {
     Vec4 pos;
     pos(0) = 0.0f;
@@ -263,14 +261,10 @@ TEST_F(RK45IntegratorTests, SchwarzschildNullConstraint) {
         if (ray.terminated) break;
     }
 
-    // The Hamiltonian preserves the null constraint, but coordinate effects
-    // can cause apparent drift. Log the result for monitoring.
-    std::cout << "\n[RK45] Schwarzschild null constraint max violation: " << max_violation
-              << " (after " << steps_completed << " steps)\n";
-
-    // This is informational - the key is that we don't get NaN/Inf
     EXPECT_GT(steps_completed, 10) << "Should complete multiple steps";
-    EXPECT_FALSE(std::isnan(max_violation)) << "Violation should not be NaN";
+    ASSERT_TRUE(std::isfinite(max_violation)) << "Violation must be finite";
+    EXPECT_LT(max_violation, constants::geodesic::kNullConditionTolCpu)
+        << "Schwarzschild RK45 path exceeded the CPU null-condition authority";
 }
 
 // Test: Step size adapts to curvature
@@ -301,8 +295,9 @@ TEST_F(RK45IntegratorTests, StepAdaptsToCurvature) {
 
     EXPECT_GT(step_sizes.size(), 10) << "Should collect multiple samples";
 
-    // In curved spacetime, step should generally decrease as we approach BH
-    // (This is a soft expectation - the adaptive controller decides)
+    const auto [min_step, max_step] = std::minmax_element(step_sizes.begin(), step_sizes.end());
+    EXPECT_LT(*min_step, *max_step)
+        << "the adaptive controller never changed its step on the curved path";
 }
 
 // =============================================================================

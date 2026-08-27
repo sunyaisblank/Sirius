@@ -48,9 +48,8 @@ using namespace sirius::core::constants;
 namespace AnalyticRef {
 
 // Schwarzschild characteristic radii (units of M)
-constexpr double SCHWARZSCHILD_HORIZON = 2.0;        // r_s = 2M
-constexpr double SCHWARZSCHILD_PHOTON_SPHERE = 3.0;  // r_ph = 3M
-constexpr double SCHWARZSCHILD_ISCO = 6.0;           // r_ISCO = 6M
+constexpr double SCHWARZSCHILD_HORIZON = 2.0;  // r_s = 2M
+constexpr double SCHWARZSCHILD_ISCO = 6.0;     // r_ISCO = 6M
 
 // Einstein light deflection (weak field)
 // Δφ = 4GM/(c²b) = 4M/b in geometric units
@@ -118,23 +117,6 @@ class AnalyticValidationTests : public ::testing::Test {
     /// @brief Compute Kerr horizon radius analytically
     /// r_+ = M + √(M² - a²)
     double computeKerrHorizon(double M, double a) const { return M + std::sqrt(M * M - a * a); }
-
-    /// @brief Compute Kerr ergosphere radius at given theta
-    /// r_ergo = M + √(M² - a²cos²θ)
-    double computeKerrErgosphere(double M, double a, double theta) const {
-        double cos_th = std::cos(theta);
-        return M + std::sqrt(M * M - a * a * cos_th * cos_th);
-    }
-
-    /// @brief Compute Schwarzschild orbital angular velocity
-    /// Ω = √(M/r³) = dφ/dt for circular orbits
-    double computeSchwarzschildOmega(double M, double r) const {
-        return std::sqrt(M / (r * r * r));
-    }
-
-    /// @brief Compute weak-field light deflection angle
-    /// Δφ = 4M/b where b is impact parameter
-    double computeWeakFieldDeflection(double M, double b) const { return 4.0 * M / b; }
 };
 
 // =============================================================================
@@ -151,35 +133,6 @@ TEST_F(AnalyticValidationTests, SchwarzschildHorizonRadius) {
         << "Schwarzschild horizon should be at r = 2M";
 }
 
-TEST_F(AnalyticValidationTests, SchwarzschildPhotonSphere) {
-    // Photon sphere at r = 3M where circular null orbits exist
-    double M = 1.0;
-    sirius::core::KerrSchildFamily metric(sirius::core::KerrSchildParams::Schwarzschild(M));
-
-    // The photon sphere is where V_eff has an extremum for null geodesics
-    // For Schwarzschild: r_ph = 3M
-    double r_expected = AnalyticRef::SCHWARZSCHILD_PHOTON_SPHERE * M;
-
-    // Verify metric signature is still Lorentzian at photon sphere
-    Tensor<double, 4> pos;
-    pos(0) = 0;
-    pos(1) = r_expected;
-    pos(2) = 0;
-    pos(3) = 0;
-
-    Metric4d g;
-    Tensor<Dual<double>, 4, 4, 4> dg;
-    metric.Evaluate(pos, g, dg);
-
-    // g_tt should be negative (outside horizon)
-    EXPECT_LT(g(0, 0).real, 0) << "Metric should be Lorentzian at photon sphere";
-
-    // At r = 3M: g_tt = -(1 - 2M/r) = -(1 - 2/3) = -1/3
-    double expected_gtt = -(1.0 - 2.0 * M / r_expected);
-    EXPECT_NEAR(g(0, 0).real, expected_gtt, AnalyticRef::ANALYTIC_TOL)
-        << "g_tt at photon sphere should be -1/3";
-}
-
 TEST_F(AnalyticValidationTests, SchwarzschildISCO) {
     // ISCO at r = 6M
     double M = 1.0;
@@ -188,20 +141,6 @@ TEST_F(AnalyticValidationTests, SchwarzschildISCO) {
     double r_isco = metric.IscoRadius();
     EXPECT_NEAR(r_isco, AnalyticRef::SCHWARZSCHILD_ISCO * M, AnalyticRef::ANALYTIC_TOL)
         << "Schwarzschild ISCO should be at r = 6M";
-}
-
-TEST_F(AnalyticValidationTests, SchwarzschildOrbitalVelocity) {
-    // For circular orbits: Ω² = M/r³ (Kepler's third law in strong gravity form)
-    double M = 1.0;
-    std::vector<double> radii = {10.0, 20.0, 50.0, 100.0};
-
-    for (double r : radii) {
-        double omega_expected = computeSchwarzschildOmega(M, r);
-        double omega_squared = M / (r * r * r);
-
-        EXPECT_NEAR(omega_expected * omega_expected, omega_squared, AnalyticRef::ANALYTIC_TOL)
-            << "Orbital angular velocity at r = " << r;
-    }
 }
 
 // =============================================================================
@@ -244,11 +183,12 @@ TEST_F(AnalyticValidationTests, KerrISCOPrograde) {
 
 TEST_F(AnalyticValidationTests, KerrISCODecreaseWithSpin) {
     // Verify that prograde ISCO monotonically decreases with spin
-    [[maybe_unused]] double M = 1.0;
+    const double M = 1.0;
     double prev_isco = 6.0;  // Schwarzschild value
 
     for (double a = 0.1; a <= 0.95; a += 0.1) {
-        double r_isco = computeKerrISCO(a, true);
+        sirius::oracle::KerrMetricD metric(M, a);
+        const double r_isco = metric.IscoRadius();
         EXPECT_LT(r_isco, prev_isco) << "ISCO should decrease with spin: a = " << a;
         prev_isco = r_isco;
     }
@@ -260,13 +200,16 @@ TEST_F(AnalyticValidationTests, KerrErgosphereAtEquator) {
     double M = 1.0;
     double theta_eq = math::kHalfPi;
 
+    sirius::core::KerrSchildFamily schwarzschild(sirius::core::KerrSchildParams::Schwarzschild(M));
+    sirius::core::KerrSchildFamily kerr(sirius::core::KerrSchildParams::Kerr(M, 0.9));
+
     // Schwarzschild: ergosphere = horizon = 2M
-    double r_ergo_schw = computeKerrErgosphere(M, 0.0, theta_eq);
+    double r_ergo_schw = schwarzschild.ErgosphereRadius(theta_eq);
     EXPECT_NEAR(r_ergo_schw, 2.0 * M, AnalyticRef::ANALYTIC_TOL)
         << "Schwarzschild ergosphere at equator";
 
     // Kerr with a = 0.9M: r_ergo(π/2) = 2M (independent of spin at equator!)
-    double r_ergo_kerr = computeKerrErgosphere(M, 0.9, theta_eq);
+    double r_ergo_kerr = kerr.ErgosphereRadius(theta_eq);
     EXPECT_NEAR(r_ergo_kerr, 2.0 * M, AnalyticRef::ANALYTIC_TOL) << "Kerr ergosphere at equator";
 }
 
@@ -276,54 +219,12 @@ TEST_F(AnalyticValidationTests, KerrErgosphereAtPole) {
     double M = 1.0;
     double a = 0.7;
 
-    double r_horizon = computeKerrHorizon(M, a);
-    double r_ergo_pole = computeKerrErgosphere(M, a, 0.0);
+    sirius::core::KerrSchildFamily metric(sirius::core::KerrSchildParams::Kerr(M, a));
+    double r_horizon = metric.OuterHorizonRadius();
+    double r_ergo_pole = metric.ErgosphereRadius(0.0);
 
     EXPECT_NEAR(r_ergo_pole, r_horizon, AnalyticRef::ANALYTIC_TOL)
         << "Ergosphere should touch horizon at poles";
-}
-
-// =============================================================================
-// Weak-Field Light Deflection Tests
-// =============================================================================
-
-TEST_F(AnalyticValidationTests, WeakFieldDeflectionFormula) {
-    // Einstein's prediction: Δφ = 4GM/(c²b) = 4M/b in geometric units
-    // For Sun grazing ray: b ≈ R_sun, M ≈ 1.5 km
-    // Δφ ≈ 1.75 arcsec (verified by Eddington 1919)
-
-    double M = 1.0;
-    std::vector<double> impact_params = {10.0, 50.0, 100.0, 500.0, 1000.0};
-
-    for (double b : impact_params) {
-        double deflection = computeWeakFieldDeflection(M, b);
-        double expected = 4.0 * M / b;
-
-        EXPECT_NEAR(deflection, expected, AnalyticRef::ANALYTIC_TOL)
-            << "Weak-field deflection for b = " << b;
-
-        // Higher-order corrections are O(M²/b²), so relative error should be small
-        // for large b. Require M/b ≤ 0.1 for weak-field validity.
-        double relative_correction = M / b;
-        EXPECT_LE(relative_correction, 0.1) << "Impact parameter should be in weak-field regime";
-    }
-}
-
-TEST_F(AnalyticValidationTests, SolarDeflectionOrderOfMagnitude) {
-    // Sun: M_sun ≈ 1.5 km (in geometric units c=G=1)
-    // R_sun ≈ 696,000 km
-    // Exact formula: Δφ = 4GM/(c²R) = 4 × 1.5 / 696000 ≈ 8.62e-6 rad ≈ 1.78 arcsec
-    // Historical value (Eddington 1919): ~1.75 arcsec (used different R_sun value)
-
-    double M_sun_geometric = 1.5;  // km
-    double R_sun = 696000.0;       // km
-
-    double deflection_rad = computeWeakFieldDeflection(M_sun_geometric, R_sun);
-    double deflection_arcsec = deflection_rad * (180.0 / math::kPi) * 3600.0;
-
-    // Exact value with these parameters: 1.778 arcsec
-    // Tolerance allows for variations in R_sun definition
-    EXPECT_NEAR(deflection_arcsec, 1.78, 0.05) << "Solar limb deflection should be ~1.78 arcsec";
 }
 
 // =============================================================================
@@ -334,8 +235,6 @@ TEST_F(AnalyticValidationTests, KerrReducesToSchwarzschildAtZeroSpin) {
     double M = 1.0;
 
     sirius::oracle::KerrMetricD kerr(M, 0.0);
-    sirius::core::KerrSchildFamily schw(sirius::core::KerrSchildParams::Schwarzschild(M));
-
     // Compare at several radii
     std::vector<double> radii = {3.0, 6.0, 10.0, 20.0};
 
@@ -462,29 +361,6 @@ TEST_F(AnalyticValidationTests, HorizonMetricDegeneracy) {
             << "g_rr should increase approaching horizon (f = " << f << ")";
         prev_grr = g[1][1];
     }
-}
-
-// =============================================================================
-// Energy and Angular Momentum at ISCO
-// =============================================================================
-
-TEST_F(AnalyticValidationTests, SchwarzschildISCOEnergy) {
-    // At ISCO (r = 6M): E/m = √(8/9) ≈ 0.9428 for massive particles
-    // This gives the radiative efficiency: η = 1 - E/m ≈ 5.7%
-    double M = 1.0;
-    double r_isco = 6.0 * M;
-
-    // Specific energy for circular orbits: E = (1 - 2M/r) / √(1 - 3M/r)
-    double E_per_m = (1.0 - 2.0 * M / r_isco) / std::sqrt(1.0 - 3.0 * M / r_isco);
-    double E_expected = std::sqrt(8.0 / 9.0);
-
-    EXPECT_NEAR(E_per_m, E_expected, AnalyticRef::ANALYTIC_TOL)
-        << "ISCO specific energy should be √(8/9)";
-
-    // Radiative efficiency
-    double efficiency = 1.0 - E_per_m;
-    EXPECT_NEAR(efficiency, 1.0 - std::sqrt(8.0 / 9.0), AnalyticRef::ANALYTIC_TOL)
-        << "Schwarzschild radiative efficiency ~5.7%";
 }
 
 }  // namespace sirius::test

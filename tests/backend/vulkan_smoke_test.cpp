@@ -13,6 +13,9 @@
 #include <cstddef>
 #include <cstdint>
 #include <fstream>
+#include <optional>
+#include <span>
+#include <thread>
 #include <vector>
 
 namespace {
@@ -34,6 +37,65 @@ std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     file.seekg(0);
     file.read(reinterpret_cast<char*>(words.data()), static_cast<std::streamsize>(size));
     return words;
+}
+
+sirius::base::Expected<float> DispatchSmokeKernel(std::size_t device_index,
+                                                  std::span<const std::uint32_t> spirv) {
+    auto device = CreateVulkanDevice(device_index);
+    if (!device) return std::unexpected(device.error());
+
+    auto kernel = (*device)->LoadKernel(spirv);
+    if (!kernel) return std::unexpected(kernel.error());
+
+    constexpr std::uint32_t kCount = 4096;
+    constexpr float kMass = 0.5f;
+    std::vector<float> radii(kCount);
+    for (std::uint32_t i = 0; i < kCount; ++i) {
+        radii[i] = 1.0f + 0.01f * static_cast<float>(i);
+    }
+    const std::vector<float> params = {kMass, static_cast<float>(kCount)};
+
+    auto radii_buffer =
+        (*device)->CreateBuffer(radii.size() * sizeof(float), BufferUsage::kStorage);
+    if (!radii_buffer) return std::unexpected(radii_buffer.error());
+    auto factors_buffer =
+        (*device)->CreateBuffer(radii.size() * sizeof(float), BufferUsage::kStorage);
+    if (!factors_buffer) return std::unexpected(factors_buffer.error());
+    auto params_buffer =
+        (*device)->CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
+    if (!params_buffer) return std::unexpected(params_buffer.error());
+
+    if (auto written =
+            (*device)->WriteBuffer(*radii_buffer, std::as_bytes(std::span<const float>(radii)));
+        !written) {
+        return std::unexpected(written.error());
+    }
+    if (auto written =
+            (*device)->WriteBuffer(*params_buffer, std::as_bytes(std::span<const float>(params)));
+        !written) {
+        return std::unexpected(written.error());
+    }
+
+    const sirius::backend::BufferHandle bindings[] = {*radii_buffer, *factors_buffer,
+                                                      *params_buffer};
+    if (auto dispatched = (*device)->Dispatch(*kernel, bindings, (kCount + 63) / 64, 1, 1);
+        !dispatched) {
+        return std::unexpected(dispatched.error());
+    }
+
+    std::vector<float> factors(kCount);
+    if (auto read =
+            (*device)->ReadBuffer(*factors_buffer, std::as_writable_bytes(std::span(factors)));
+        !read) {
+        return std::unexpected(read.error());
+    }
+
+    float max_difference = 0.0f;
+    for (std::uint32_t i = 0; i < kCount; ++i) {
+        const float reference = 1.0f - 2.0f * kMass / radii[i];
+        max_difference = std::max(max_difference, std::abs(factors[i] - reference));
+    }
+    return max_difference;
 }
 
 TEST(VulkanBackend, EnumerationReportsInsteadOfThrowing) {
@@ -65,50 +127,37 @@ TEST(VulkanBackend, SlangKernelMatchesCpuReference) {
 
     const auto selected = ResolveVulkanDeviceIndex(*devices);
     ASSERT_TRUE(selected.has_value()) << selected.error().Description();
-    auto device = CreateVulkanDevice(*selected);
-    ASSERT_TRUE(device.has_value()) << device.error().Description();
-
     const auto spirv = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/smoke.spv");
     ASSERT_FALSE(spirv.empty()) << "smoke.spv missing or empty";
 
-    const auto kernel = (*device)->LoadKernel(spirv);
-    ASSERT_TRUE(kernel.has_value()) << kernel.error().Description();
+    const auto max_difference = DispatchSmokeKernel(*selected, spirv);
+    ASSERT_TRUE(max_difference.has_value()) << max_difference.error().Description();
+    EXPECT_LE(*max_difference, 1e-6f) << "kernel diverges from CPU reference";
+#endif
+}
 
-    constexpr std::uint32_t kCount = 4096;
-    constexpr float kMass = 0.5f;
-    std::vector<float> radii(kCount);
-    for (std::uint32_t i = 0; i < kCount; ++i) {
-        radii[i] = 1.0f + 0.01f * static_cast<float>(i);
+TEST(VulkanBackend, WorkerThreadDispatchTearsDownSafely) {
+#ifndef SIRIUS_KERNEL_DIR
+    GTEST_SKIP() << "kernels not compiled (slangc absent at configure time)";
+#else
+    const auto devices = EnumerateVulkanDevices();
+    ASSERT_TRUE(devices.has_value()) << devices.error().Description();
+    if (devices->empty()) {
+        GTEST_SKIP() << "no Vulkan device present";
     }
-    const std::vector<float> params = {kMass, static_cast<float>(kCount)};
 
-    const auto radii_buffer =
-        (*device)->CreateBuffer(radii.size() * sizeof(float), BufferUsage::kStorage);
-    const auto factors_buffer =
-        (*device)->CreateBuffer(radii.size() * sizeof(float), BufferUsage::kStorage);
-    const auto params_buffer =
-        (*device)->CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
-    ASSERT_TRUE(radii_buffer && factors_buffer && params_buffer);
+    const auto selected = ResolveVulkanDeviceIndex(*devices);
+    ASSERT_TRUE(selected.has_value()) << selected.error().Description();
+    const auto spirv = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/smoke.spv");
+    ASSERT_FALSE(spirv.empty()) << "smoke.spv missing or empty";
 
-    ASSERT_TRUE(
-        (*device)->WriteBuffer(*radii_buffer, std::as_bytes(std::span<const float>(radii))));
-    ASSERT_TRUE(
-        (*device)->WriteBuffer(*params_buffer, std::as_bytes(std::span<const float>(params))));
+    std::optional<sirius::base::Expected<float> > result;
+    std::jthread worker([&] { result.emplace(DispatchSmokeKernel(*selected, spirv)); });
+    worker.join();
 
-    const sirius::backend::BufferHandle bindings[] = {*radii_buffer, *factors_buffer,
-                                                      *params_buffer};
-    const auto dispatched = (*device)->Dispatch(*kernel, bindings, (kCount + 63) / 64, 1, 1);
-    ASSERT_TRUE(dispatched.has_value()) << dispatched.error().Description();
-
-    std::vector<float> factors(kCount);
-    ASSERT_TRUE((*device)->ReadBuffer(*factors_buffer, std::as_writable_bytes(std::span(factors))));
-
-    float max_difference = 0.0f;
-    for (std::uint32_t i = 0; i < kCount; ++i) {
-        const float reference = 1.0f - 2.0f * kMass / radii[i];
-        max_difference = std::max(max_difference, std::abs(factors[i] - reference));
-    }
-    EXPECT_LE(max_difference, 1e-6f) << "kernel diverges from CPU reference";
+    ASSERT_TRUE(result.has_value());
+    ASSERT_TRUE(result->has_value()) << result->error().Description();
+    EXPECT_LE(**result, 1e-6f) << "worker-thread kernel diverges from CPU reference";
 #endif
 }
 

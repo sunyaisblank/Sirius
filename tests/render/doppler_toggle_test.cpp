@@ -16,6 +16,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <numbers>
 
 namespace {
 
@@ -54,7 +55,7 @@ AsymmetryMeasurement DiskAsymmetry(bool doppler_beaming) {
     const int width = 120, height = 68;
     CameraConfig cam;
     cam.r = 30.0;
-    cam.theta = 80.0 * M_PI / 180.0;  // ~80 deg inclination (near edge-on).
+    cam.theta = 80.0 * std::numbers::pi / 180.0;  // ~80 deg inclination (near edge-on).
     cam.phi = 0.0;
     cam.fov = 55.0f;
     cam.width = width;

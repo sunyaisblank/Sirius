@@ -8,6 +8,7 @@
 // file, SIRIUS_* environment variables, command-line arguments.
 
 #include "sirius/app/config/config_schema.h"
+#include "sirius/base/error.h"
 
 #include <filesystem>
 #include <optional>
@@ -22,19 +23,22 @@ namespace fs = std::filesystem;
 class ConfigLoader {
   public:
     // Load merged configuration; override_path forces a specific config file.
-    // Missing, malformed, unknown, or invalid values throw: configuration never
-    // degrades to defaults after the operator supplied an input.
-    static SiriusConfig Load(const std::optional<std::string>& override_path = std::nullopt);
+    // Configuration never degrades to defaults after the operator supplied an
+    // input; every failure is returned through the shared error channel.
+    [[nodiscard]] static base::Expected<SiriusConfig> Load(
+        const std::optional<std::string>& override_path = std::nullopt);
 
-    // Load and validate a specific JSON file; throws on every read/parse error.
-    static SiriusConfig LoadFromFile(const fs::path& path);
+    // Load and validate a specific JSON file.
+    [[nodiscard]] static base::Expected<SiriusConfig> LoadFromFile(const fs::path& path);
 
-    // Serialise a configuration to a JSON file. Returns false on IO failure.
-    static bool SaveToFile(const SiriusConfig& config, const fs::path& path);
+    // Serialise a configuration to a JSON file.
+    [[nodiscard]] static base::Expected<void> SaveToFile(const SiriusConfig& config,
+                                                         const fs::path& path);
 
     // Apply SIRIUS_* environment overrides in place; malformed set variables
-    // throw rather than being treated as unset.
-    static void ApplyEnvironmentOverrides(SiriusConfig& config);
+    // return an error rather than being treated as unset. The update is atomic:
+    // an invalid later variable cannot leave earlier overrides applied.
+    [[nodiscard]] static base::Expected<void> ApplyEnvironmentOverrides(SiriusConfig& config);
 
     // Path of the config file the last Load() used, or nullopt for defaults.
     static std::optional<fs::path> GetLoadedConfigPath();

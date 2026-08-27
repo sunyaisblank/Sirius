@@ -20,6 +20,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <numbers>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -190,7 +191,12 @@ TEST_F(DualNumberTests, SinDerivative) {
 
 // Test: sin at multiple angles
 TEST_F(DualNumberTests, SinDerivativeMultipleAngles) {
-    std::vector<double> angles = {0.0, M_PI / 6, M_PI / 4, M_PI / 3, M_PI / 2, M_PI};
+    std::vector<double> angles = {0.0,
+                                  std::numbers::pi / 6,
+                                  std::numbers::pi / 4,
+                                  std::numbers::pi / 3,
+                                  std::numbers::pi / 2,
+                                  std::numbers::pi};
 
     for (double theta : angles) {
         Dual<double> x(theta, 1.0);

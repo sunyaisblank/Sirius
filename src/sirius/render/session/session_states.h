@@ -8,7 +8,7 @@
 namespace sirius::render {
 
 // All valid states of the render session.
-enum class SessionState : uint8_t {
+enum class SessionState : std::uint8_t {
     Idle,          // Awaiting configuration.
     Initialising,  // Loading resources, creating tiles.
     Scheduling,    // Assigning the next tile to a worker.

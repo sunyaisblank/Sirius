@@ -162,16 +162,19 @@ TEST_F(RenderPipelineTests, RK45ProducesFiniteValues) {
     Lightray ray = createRay(0.0, 10.0, PI / 3.0, PI / 6.0, 1.0, -0.3, 0.2, 0.1, &schwarzschild);
 
     IntegratorConfig config = Geodesic::GetDefaultConfig();
+    int accepted_steps = 0;
 
     for (int i = 0; i < 20; i++) {
         bool success = Geodesic::IntegrateStepRk45(ray, &schwarzschild, config);
         if (!success || ray.terminated) break;
+        ++accepted_steps;
 
         for (int mu = 0; mu < 4; mu++) {
             EXPECT_TRUE(std::isfinite(ray.position(mu)));
             EXPECT_TRUE(std::isfinite(ray.velocity(mu)));
         }
     }
+    EXPECT_GT(accepted_steps, 0) << "RK45 witness accepted no integration step";
 }
 
 // --- Cross-metric consistency -----------------------------------------------
@@ -194,13 +197,16 @@ TEST_F(RenderPipelineTests, DifferentMetricsGiveDifferentPaths) {
 
 TEST_F(RenderPipelineTests, HandlesNearPoleTheta) {
     Lightray ray = createRay(0.0, 10.0, 0.01, 0.0, 1.0, 0.5, 0.1, 0.0, &schwarzschild);
+    int accepted_steps = 0;
 
     for (int i = 0; i < 10; i++) {
         bool success = Geodesic::IntegrateStep(ray, &schwarzschild);
         if (!success || ray.terminated) break;
+        ++accepted_steps;
 
         EXPECT_TRUE(std::isfinite(getTheta(ray.position))) << "Theta should be finite";
     }
+    EXPECT_GT(accepted_steps, 0) << "near-pole witness accepted no integration step";
 }
 
 TEST_F(RenderPipelineTests, HandlesLargeRadius) {
@@ -209,10 +215,7 @@ TEST_F(RenderPipelineTests, HandlesLargeRadius) {
 
     bool success = Geodesic::IntegrateStep(ray, &schwarzschild);
 
-    if (success) {
-        EXPECT_TRUE(std::isfinite(getRadius(ray.position)))
-            << "r should be finite if step succeeds";
-    }
+    ASSERT_TRUE(success) << "large-radius integration step failed";
     EXPECT_TRUE(std::isfinite(getRadius(ray.position))) << "Position should be finite";
 }
 

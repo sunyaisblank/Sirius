@@ -6,6 +6,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <limits>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -54,6 +55,36 @@ TEST_F(StarfieldConfigTests, ValidateClampsAperture) {
     EXPECT_LE(c.aperture_mm, 1000.0f);
 }
 
+TEST_F(StarfieldConfigTests, ValidateReplacesEveryNonFiniteScalar) {
+    sirius::core::StarfieldConfig c;
+    const float nan = std::numeric_limits<float>::quiet_NaN();
+    const float infinity = std::numeric_limits<float>::infinity();
+    c.min_distance_pc = nan;
+    c.max_distance_pc = infinity;
+    c.magnitude_limit = nan;
+    c.aperture_mm = infinity;
+    c.focus_distance_pc = nan;
+    c.brightness_scale = infinity;
+    c.Validate();
+
+    EXPECT_TRUE(std::isfinite(c.min_distance_pc));
+    EXPECT_TRUE(std::isfinite(c.max_distance_pc));
+    EXPECT_TRUE(std::isfinite(c.magnitude_limit));
+    EXPECT_TRUE(std::isfinite(c.aperture_mm));
+    EXPECT_TRUE(std::isfinite(c.focus_distance_pc));
+    EXPECT_TRUE(std::isfinite(c.brightness_scale));
+    EXPECT_GE(c.max_distance_pc, c.min_distance_pc + 1.0f);
+    EXPECT_GE(c.focus_distance_pc, c.min_distance_pc);
+    EXPECT_LE(c.focus_distance_pc, c.max_distance_pc);
+
+    c.min_distance_pc = std::numeric_limits<float>::max();
+    c.max_distance_pc = -std::numeric_limits<float>::max();
+    c.Validate();
+    EXPECT_TRUE(std::isfinite(c.min_distance_pc));
+    EXPECT_TRUE(std::isfinite(c.max_distance_pc));
+    EXPECT_GT(c.max_distance_pc, c.min_distance_pc);
+}
+
 // =============================================================================
 // StarEntry Tests
 // =============================================================================
@@ -95,11 +126,23 @@ TEST_F(StarEntryTests, HotStarIsBluer) {
 }
 
 TEST_F(StarEntryTests, ZeroTemperatureDefaultsToSolar) {
-    sirius::core::StarEntry star{};
-    star.temperature_K = 0.0f;
-    float r, g, b;
-    star.ComputeColor(r, g, b);
-    EXPECT_FALSE(std::isnan(r));
+    sirius::core::StarEntry invalid{};
+    invalid.temperature_K = 0.0f;
+    sirius::core::StarEntry solar{};
+    solar.temperature_K = 5778.0f;
+    float invalid_r, invalid_g, invalid_b;
+    float solar_r, solar_g, solar_b;
+    invalid.ComputeColor(invalid_r, invalid_g, invalid_b);
+    solar.ComputeColor(solar_r, solar_g, solar_b);
+    EXPECT_FLOAT_EQ(invalid_r, solar_r);
+    EXPECT_FLOAT_EQ(invalid_g, solar_g);
+    EXPECT_FLOAT_EQ(invalid_b, solar_b);
+
+    invalid.temperature_K = std::numeric_limits<float>::quiet_NaN();
+    invalid.ComputeColor(invalid_r, invalid_g, invalid_b);
+    EXPECT_FLOAT_EQ(invalid_r, solar_r);
+    EXPECT_FLOAT_EQ(invalid_g, solar_g);
+    EXPECT_FLOAT_EQ(invalid_b, solar_b);
 }
 
 TEST_F(StarEntryTests, IntensityFromMagnitude) {
@@ -149,13 +192,15 @@ TEST_F(StarfieldGeneratorTests, GeneratesNonEmptyCatalog) {
 TEST_F(StarfieldGeneratorTests, CatalogSizeBounded) {
     sirius::core::StarfieldGenerator gen(config);
     auto stars = gen.Generate();
-    EXPECT_LE(stars.size(), static_cast<size_t>(config.star_count));
+    ASSERT_FALSE(stars.empty());
+    EXPECT_LE(stars.size(), static_cast<std::size_t>(config.star_count));
 }
 
 TEST_F(StarfieldGeneratorTests, DirectionVectorsNormalised) {
     sirius::core::StarfieldGenerator gen(config);
     auto stars = gen.Generate();
-    for (size_t i = 0; i < std::min(stars.size(), size_t(100)); ++i) {
+    ASSERT_FALSE(stars.empty());
+    for (std::size_t i = 0; i < std::min(stars.size(), std::size_t(100)); ++i) {
         float mag = std::sqrt(stars[i].direction_x * stars[i].direction_x +
                               stars[i].direction_y * stars[i].direction_y +
                               stars[i].direction_z * stars[i].direction_z);
@@ -166,6 +211,7 @@ TEST_F(StarfieldGeneratorTests, DirectionVectorsNormalised) {
 TEST_F(StarfieldGeneratorTests, AllTemperaturesPositive) {
     sirius::core::StarfieldGenerator gen(config);
     auto stars = gen.Generate();
+    ASSERT_FALSE(stars.empty());
     for (const auto& s : stars) {
         EXPECT_GT(s.temperature_K, 0.0f);
     }
@@ -174,6 +220,7 @@ TEST_F(StarfieldGeneratorTests, AllTemperaturesPositive) {
 TEST_F(StarfieldGeneratorTests, AllDistancesPositive) {
     sirius::core::StarfieldGenerator gen(config);
     auto stars = gen.Generate();
+    ASSERT_FALSE(stars.empty());
     for (const auto& s : stars) {
         EXPECT_GT(s.distance_pc, 0.0f);
     }
@@ -187,7 +234,8 @@ TEST_F(StarfieldGeneratorTests, DeterministicWithSameSeed) {
     auto stars2 = gen2.Generate();
 
     ASSERT_EQ(stars1.size(), stars2.size());
-    for (size_t i = 0; i < stars1.size(); ++i) {
+    ASSERT_FALSE(stars1.empty());
+    for (std::size_t i = 0; i < stars1.size(); ++i) {
         EXPECT_FLOAT_EQ(stars1[i].direction_x, stars2[i].direction_x);
         EXPECT_FLOAT_EQ(stars1[i].magnitude, stars2[i].magnitude);
     }
@@ -204,8 +252,8 @@ TEST_F(StarfieldGeneratorTests, DifferentSeedsDifferentCatalogs) {
 
     // At least some stars should differ
     bool any_different = false;
-    size_t n = std::min(stars1.size(), stars2.size());
-    for (size_t i = 0; i < n; ++i) {
+    std::size_t n = std::min(stars1.size(), stars2.size());
+    for (std::size_t i = 0; i < n; ++i) {
         if (stars1[i].direction_x != stars2[i].direction_x) {
             any_different = true;
             break;
@@ -217,6 +265,7 @@ TEST_F(StarfieldGeneratorTests, DifferentSeedsDifferentCatalogs) {
 TEST_F(StarfieldGeneratorTests, NoNaNInCatalog) {
     sirius::core::StarfieldGenerator gen(config);
     auto stars = gen.Generate();
+    ASSERT_FALSE(stars.empty());
     for (const auto& s : stars) {
         EXPECT_FALSE(std::isnan(s.direction_x));
         EXPECT_FALSE(std::isnan(s.direction_y));

@@ -16,7 +16,7 @@ namespace sirius::core {
 enum class TonemapType {
     None,      // No tonemapping (clamp only)
     Reinhard,  // Reinhard global operator
-    Aces,      // ACES filmic curve (sRGB output)
+    Aces,      // ACES filmic curve (display-linear output; writer owns transfer)
     Filmic,    // Hable/Uncharted 2 filmic curve
     Exposure   // Simple exposure + gamma
 };
@@ -188,7 +188,7 @@ class BloomFilter {
         }
 
         // Add bloom to original
-        for (size_t i = 0; i < buffer.size(); i += 4) {
+        for (std::size_t i = 0; i < buffer.size(); i += 4) {
             buffer[i] += blurred[i] * config.bloom_intensity;
             buffer[i + 1] += blurred[i + 1] * config.bloom_intensity;
             buffer[i + 2] += blurred[i + 2] * config.bloom_intensity;

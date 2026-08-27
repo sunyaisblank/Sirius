@@ -13,6 +13,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <numbers>
 
 using namespace sirius::core::coordinates;
 
@@ -28,10 +29,11 @@ constexpr double kLooseEpsilon = 1e-10;  // For floating-point accumulation
 class CoordinateTransformTests : public ::testing::Test {
   protected:
     // Standard test points in BL coordinates
-    Vec4Bl point_equator{0.0, 10.0, M_PI / 2.0, M_PI / 4.0};  // Equatorial plane
-    Vec4Bl point_pole_near{0.0, 10.0, 0.1, M_PI / 4.0};       // Near north pole
-    Vec4Bl point_far{0.0, 100.0, M_PI / 3.0, 2.0};            // Far field
-    Vec4Bl point_close{0.0, 3.0, M_PI / 4.0, -M_PI / 2.0};    // Near horizon
+    Vec4Bl point_equator{0.0, 10.0, std::numbers::pi / 2.0,
+                         std::numbers::pi / 4.0};                    // Equatorial plane
+    Vec4Bl point_pole_near{0.0, 10.0, 0.1, std::numbers::pi / 4.0};  // Near north pole
+    Vec4Bl point_far{0.0, 100.0, std::numbers::pi / 3.0, 2.0};       // Far field
+    Vec4Bl point_close{0.0, 3.0, std::numbers::pi / 4.0, -std::numbers::pi / 2.0};  // Near horizon
 };
 
 // =============================================================================
@@ -119,7 +121,7 @@ TEST_F(CoordinateTransformTests, JacobianDeterminant_Equator) {
 
 TEST_F(CoordinateTransformTests, JacobianDeterminant_MidLatitude) {
     // At θ = π/3: det(J) = r² sin(π/3) = r² × √3/2
-    Vec4Bl mid_lat{0.0, 10.0, M_PI / 3.0, 0.0};
+    Vec4Bl mid_lat{0.0, 10.0, std::numbers::pi / 3.0, 0.0};
     Jacobian4x4 J = JacobianBlToCartesian(mid_lat);
     double det = JacobianDeterminant(J);
     double expected = mid_lat.r * mid_lat.r * std::sin(mid_lat.theta);
@@ -146,8 +148,8 @@ TEST_F(CoordinateTransformTests, VectorTransformRoundTrip) {
 
     // Phi may wrap, so check with modular arithmetic
     double dphi = v_orig.phi - v_recovered.phi;
-    while (dphi > M_PI) dphi -= 2 * M_PI;
-    while (dphi < -M_PI) dphi += 2 * M_PI;
+    while (dphi > std::numbers::pi) dphi -= 2 * std::numbers::pi;
+    while (dphi < -std::numbers::pi) dphi += 2 * std::numbers::pi;
     EXPECT_NEAR(dphi, 0.0, kLooseEpsilon);
 }
 
@@ -157,7 +159,7 @@ TEST_F(CoordinateTransformTests, VectorTransformRoundTrip) {
 
 TEST_F(CoordinateTransformTests, OriginHandling) {
     // Test behavior at r → 0 (should be handled gracefully)
-    Vec4Bl origin{0.0, 0.0, M_PI / 2.0, 0.0};
+    Vec4Bl origin{0.0, 0.0, std::numbers::pi / 2.0, 0.0};
     Vec4Cart cart = BlToCartesian(origin);
 
     EXPECT_EQ(cart.x, 0.0);
@@ -177,8 +179,8 @@ TEST_F(CoordinateTransformTests, OriginHandling) {
 
 TEST_F(CoordinateTransformTests, PhiWrapping) {
     // Test phi wrapping at ±π boundary
-    Vec4Bl pos1{0.0, 10.0, M_PI / 2.0, M_PI - 0.01};
-    Vec4Bl pos2{0.0, 10.0, M_PI / 2.0, -M_PI + 0.01};
+    Vec4Bl pos1{0.0, 10.0, std::numbers::pi / 2.0, std::numbers::pi - 0.01};
+    Vec4Bl pos2{0.0, 10.0, std::numbers::pi / 2.0, -std::numbers::pi + 0.01};
 
     Vec4Cart cart1 = BlToCartesian(pos1);
     Vec4Cart cart2 = BlToCartesian(pos2);
@@ -203,7 +205,7 @@ TEST_F(CoordinateTransformTests, NorthPoleCoordinates) {
 
 TEST_F(CoordinateTransformTests, SouthPoleCoordinates) {
     // At south pole (θ = π), x = y = 0, z = -r
-    Vec4Bl south_pole{0.0, 10.0, M_PI, 0.0};
+    Vec4Bl south_pole{0.0, 10.0, std::numbers::pi, 0.0};
     Vec4Cart cart = BlToCartesian(south_pole);
 
     EXPECT_NEAR(cart.x, 0.0, 1e-14);
@@ -220,7 +222,7 @@ TEST_F(CoordinateTransformTests, KerrOblateSpheroidal) {
     // Test that oblate spheroidal transformation is correct
     double a = 0.9;
     double r = 10.0;
-    double theta = M_PI / 3.0;
+    double theta = std::numbers::pi / 3.0;
 
     Vec4Bl pos{0.0, r, theta, 0.0};
     Vec4Cart cart = BlToKerrSchildCart(pos, a);
@@ -240,7 +242,7 @@ TEST_F(CoordinateTransformTests, KerrSolveR_Accuracy) {
     // from x² + y² + z² = r² + a² (1 - z²/r²)
     double a = 0.7;
     double r_original = 8.0;
-    double theta = M_PI / 4.0;
+    double theta = std::numbers::pi / 4.0;
     double phi = 1.5;
 
     Vec4Bl original{0.0, r_original, theta, phi};

@@ -7,6 +7,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <numbers>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -67,7 +68,7 @@ TEST_F(ChristoffelTests, TorsionFreeSymmetry) {
     // Create non-trivial metric (spherical coordinates in flat space)
     // ds² = -dt² + dr² + r²dθ² + r²sin²θ dφ²
     double r = 5.0;
-    double theta = M_PI / 4;
+    double theta = std::numbers::pi / 4;
     double sin_theta = std::sin(theta);
     double cos_theta = std::cos(theta);
 
@@ -108,7 +109,7 @@ TEST_F(ChristoffelTests, TorsionFreeSymmetry) {
 // Test: Γʳ_θθ = -r in flat spherical coordinates
 TEST_F(ChristoffelTests, SphericalGammaRThetaTheta) {
     double r = 5.0;
-    double theta = M_PI / 3;
+    double theta = std::numbers::pi / 3;
     double sin_theta = std::sin(theta);
 
     Metric4d g;
@@ -133,7 +134,7 @@ TEST_F(ChristoffelTests, SphericalGammaRThetaTheta) {
 // Test: Γᶿ_rθ = 1/r in flat spherical coordinates
 TEST_F(ChristoffelTests, SphericalGammaThetaRTheta) {
     double r = 5.0;
-    double theta = M_PI / 3;
+    double theta = std::numbers::pi / 3;
     double sin_theta = std::sin(theta);
 
     Metric4d g;

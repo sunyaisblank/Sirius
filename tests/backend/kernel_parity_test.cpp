@@ -19,6 +19,7 @@
 
 #include "sirius/backend/device.h"
 #include "sirius/core/disk/novikov_thorne_disk.h"
+#include "sirius/core/spectral/colour_modes.h"
 
 #include <gtest/gtest.h>
 
@@ -57,6 +58,9 @@ constexpr std::uint32_t kOpDiskTemp = 3;
 constexpr std::uint32_t kOpBlackbody = 4;
 constexpr std::uint32_t kOpSymplecticS4 = 5;
 constexpr std::uint32_t kOpDeviation = 6;
+constexpr std::uint32_t kOpDiskRedshift = 7;
+constexpr std::uint32_t kOpLiveCartConservation = 8;
+constexpr std::uint32_t kOpBeamEllipse = 9;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -72,7 +76,7 @@ std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
 
 // One sample record, laid out per the parity_probe ABI.
 struct Sample {
-    float metricId = 0.0f;
+    float metric_id = 0.0f;
     float p1 = 0.0f, p2 = 0.0f, p3 = 0.0f, p4 = 0.0f;  // family params
     float c0 = 0.0f, c1 = 0.0f, c2 = 0.0f;             // position coords
     float u0 = 0.0f, u1 = 0.0f, u2 = 0.0f, u3 = 0.0f;  // 4-velocity
@@ -83,7 +87,7 @@ std::vector<float> Flatten(const std::vector<Sample>& samples) {
     std::vector<float> flat;
     flat.reserve(samples.size() * kSampleStride);
     for (const auto& s : samples) {
-        flat.insert(flat.end(), {s.metricId, s.p1, s.p2, s.p3, s.p4, s.c0, s.c1, s.c2, s.u0, s.u1,
+        flat.insert(flat.end(), {s.metric_id, s.p1, s.p2, s.p3, s.p4, s.c0, s.c1, s.c2, s.u0, s.u1,
                                  s.u2, s.u3, s.h, s.aux0, s.aux1, s.aux2});
     }
     return flat;
@@ -170,7 +174,7 @@ Fixture OpenProbe() {
 
 Sample KerrSchildAt(float M, float a, float Q, float x, float y, float z) {
     Sample s;
-    s.metricId = kKerrSchild;
+    s.metric_id = kKerrSchild;
     s.p1 = M;
     s.p2 = a;
     s.p3 = Q;
@@ -329,7 +333,7 @@ TEST(KernelParity, WormholeAndWarpMetricMatchLegacy) {
     if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
 
     Sample ellis;  // Ellis drainhole m=0.5, n=1.0, near throat (r=0.6)
-    ellis.metricId = kEllis;
+    ellis.metric_id = kEllis;
     ellis.p1 = 0.5f;
     ellis.p2 = 1.0f;
     ellis.c0 = 0.6f;
@@ -337,7 +341,7 @@ TEST(KernelParity, WormholeAndWarpMetricMatchLegacy) {
     ellis.c2 = 0.0f;
 
     Sample warp;  // Alcubierre bubble wall: vs=2, sigma=8, R=1 at rs=1
-    warp.metricId = kWarp;
+    warp.metric_id = kWarp;
     warp.p1 = 2.0f;
     warp.p2 = 8.0f;
     warp.p3 = 1.0f;
@@ -390,7 +394,7 @@ TEST(KernelParity, SymplecticStepMatchesLegacy) {
     if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
 
     Sample s6;  // Kerr a=0.9 null infalling geodesic
-    s6.metricId = kKerrSchild;
+    s6.metric_id = kKerrSchild;
     s6.p1 = 1.0f;
     s6.p2 = 0.9f;
     s6.c0 = 10.0f;
@@ -539,6 +543,91 @@ TEST(KernelParity, ChebyshevBlackbodyMatchesLegacy) {
     }
 }
 
+TEST(KernelParity, DiskEmissionAppliesExactlyOneGFourthFactor) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    Sample receding;
+    receding.c0 = 0.37f;
+    receding.c1 = 0.5f;
+    Sample approaching;
+    approaching.c0 = 0.37f;
+    approaching.c1 = 1.25f;
+    const std::vector<Sample> samples = {receding, approaching};
+    const auto results = RunProbe(*f.device, f.kernel, kOpDiskRedshift, samples);
+
+    for (std::size_t i = 0; i < samples.size(); ++i) {
+        const float expected =
+            sirius::core::color_modes::ObservedBolometricIntensity(samples[i].c0, samples[i].c1);
+        EXPECT_FLOAT_EQ(results[i * kResultStride], expected);
+    }
+}
+
+TEST(KernelParity, NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    // Same off-plane a=0.998 launch used by the independent CPU live-path
+    // conservation gate. The shader supplies the future-directed null root,
+    // then advances the ray with the production Vulkan render schedule.
+    Sample near_extremal;
+    near_extremal.metric_id = kKerrSchild;
+    near_extremal.p1 = 1.0f;
+    near_extremal.p2 = 0.998f;
+    near_extremal.c0 = 12.0f;
+    near_extremal.c1 = 0.0f;
+    near_extremal.c2 = 3.0f;
+    near_extremal.u1 = 0.08f;
+    near_extremal.u2 = 1.0f;
+    near_extremal.u3 = -0.03f;
+    near_extremal.h = 0.08f;       // production stepScale
+    near_extremal.aux0 = 3000.0f;  // production maxSteps
+    near_extremal.aux1 = 0.02f;    // production minStep
+    near_extremal.aux2 = 2.0f;     // production maxStep
+
+    const auto results = RunProbe(*f.device, f.kernel, kOpLiveCartConservation, {near_extremal});
+    for (int component = 0; component < 10; ++component) {
+        EXPECT_TRUE(std::isfinite(results[component]))
+            << "conservation result component " << component << " is non-finite";
+    }
+    EXPECT_GT(results[4], 100.0f) << "render integrator made too little progress";
+    EXPECT_FLOAT_EQ(results[9], 2.0f)
+        << "render integrator exhausted its work bound instead of escaping";
+    EXPECT_GE(results[5], 200.0f) << "render integrator did not reach the escape surface";
+    EXPECT_GT(std::abs(results[6]), 1.0e-6f) << "degenerate initial energy";
+    EXPECT_GT(std::abs(results[7]), 1.0e-6f) << "degenerate initial angular momentum";
+    EXPECT_GT(std::abs(results[8]), 1.0e-6f) << "degenerate initial Carter constant";
+    EXPECT_LT(results[0], 1.0e-4f) << "energy drift";
+    EXPECT_LT(results[1], 1.0e-4f) << "axial angular-momentum drift";
+    EXPECT_LT(results[2], 1.0e-4f) << "Carter-constant drift";
+}
+
+TEST(KernelParity, BeamEllipseRetainsBothAxesAndOutputOrientation) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    // J = R(0.4) diag(3, 1) R(-0.2). The right rotation changes only the
+    // input basis; the output ellipse must retain axes 3:1 at +0.4 radians.
+    constexpr float output_angle = 0.4f;
+    constexpr float input_angle = -0.2f;
+    const float co = std::cos(output_angle);
+    const float so = std::sin(output_angle);
+    const float ci = std::cos(input_angle);
+    const float si = std::sin(input_angle);
+    Sample map;
+    map.c0 = 3.0f * co * ci - so * si;
+    map.c1 = -3.0f * co * si - so * ci;
+    map.c2 = 3.0f * so * ci + co * si;
+    map.u0 = -3.0f * so * si + co * ci;
+
+    const auto results = RunProbe(*f.device, f.kernel, kOpBeamEllipse, {map});
+    EXPECT_NEAR(results[0], 3.0f, 2.0e-6f);
+    EXPECT_NEAR(results[1], 1.0f, 2.0e-6f);
+    EXPECT_NEAR(std::cos(2.0f * results[2]), std::cos(2.0f * output_angle), 2.0e-6f);
+    EXPECT_NEAR(std::sin(2.0f * results[2]), std::sin(2.0f * output_angle), 2.0e-6f);
+    EXPECT_NEAR(results[3], 3.0f, 2.0e-6f);
+}
+
 TEST(KernelParity, GeodesicDeviationIsFiniteAndCurvedNearBlackHole) {
     Fixture f = OpenProbe();
     if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
@@ -549,7 +638,7 @@ TEST(KernelParity, GeodesicDeviationIsFiniteAndCurvedNearBlackHole) {
     // both paths are finite and the full-Riemann tidal acceleration is non-zero,
     // exercising GetRiemannTensorCart + both deviation paths through the gate.
     Sample s;
-    s.metricId = kKerrSchild;
+    s.metric_id = kKerrSchild;
     s.p1 = 1.0f;
     s.p2 = 0.9f;
     s.p3 = 0.0f;

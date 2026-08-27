@@ -5,6 +5,7 @@
 // Ported from PHAD000A.h.
 
 #include <cmath>
+#include <numbers>
 #include <string>
 
 namespace sirius::core {
@@ -94,8 +95,8 @@ class IDiskModel {
 
 // Height z to polar angle theta = pi/2 - atan(z/r) for a thin disk.
 inline double ZToTheta(double r, double z) {
-    if (r <= 0) return M_PI / 2.0;
-    return M_PI / 2.0 - std::atan(z / r);
+    if (r <= 0) return std::numbers::pi / 2.0;
+    return std::numbers::pi / 2.0 - std::atan(z / r);
 }
 
 // Polar angle theta to height z = r cot(theta) for a thin disk.

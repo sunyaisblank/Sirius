@@ -13,8 +13,6 @@ add_executable(sirius_oracle_tests
     kerr_metric_test.cpp
     symplectic_integrator_test.cpp
     beam_propagation_test.cpp
-    einstein_ring_test.cpp
-    geodesic_deviation_test.cpp
 )
 
 target_link_libraries(sirius_oracle_tests PRIVATE sirius_oracle sirius_core GTest::gtest_main)

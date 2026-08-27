@@ -22,6 +22,8 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
+#include <numbers>
 
 namespace sirius::core {
 
@@ -29,18 +31,29 @@ namespace sirius::core {
 class AccretionDiskD : public IDiskModel {
   public:
     struct Config {
-        double M = 1.0;                 // Black hole mass [M_sun].
-        double a_star = 0.0;            // Dimensionless spin a/M in [-1, 1].
-        double Mdot = 1e-8;             // Accretion rate [M_sun/year].
-        double r_inner = 0;             // Inner edge (0 = ISCO, auto-computed).
-        double r_outer = 500;           // Outer edge [GM/c^2].
-        double inclination = M_PI / 4;  // Disk inclination to the observer [rad].
+        double M = 1.0;                             // Black hole mass [M_sun].
+        double a_star = 0.0;                        // Dimensionless spin a/M in [-1, 1].
+        double Mdot = 1e-8;                         // Accretion rate [M_sun/year].
+        double r_inner = 0;                         // Inner edge (0 = ISCO, auto-computed).
+        double r_outer = 500;                       // Outer edge [GM/c^2].
+        double inclination = std::numbers::pi / 4;  // Disk inclination to the observer [rad].
 
         void Validate() {
-            if (M <= 0) M = 1.0;
+            if (!std::isfinite(M) || M <= 0) M = 1.0;
+            if (!std::isfinite(a_star)) a_star = 0.0;
             a_star = std::clamp(a_star, -1.0, 1.0);
-            if (Mdot <= 0) Mdot = 1e-8;
-            if (r_outer <= r_inner) r_outer = r_inner + 100.0;
+            if (!std::isfinite(Mdot) || Mdot <= 0) Mdot = 1e-8;
+            if (!std::isfinite(r_inner) || r_inner < 0) r_inner = 0.0;
+            if (!std::isfinite(r_outer)) r_outer = 500.0;
+            if (!(r_outer > r_inner)) {
+                r_outer = std::nextafter(r_inner, std::numeric_limits<double>::infinity());
+                if (!std::isfinite(r_outer)) {
+                    r_inner = 0.0;
+                    r_outer = 500.0;
+                }
+            }
+            if (!std::isfinite(inclination)) inclination = std::numbers::pi / 4;
+            inclination = std::clamp(inclination, 0.0, std::numbers::pi);
         }
     };
 
@@ -205,7 +218,8 @@ class AccretionDiskD : public IDiskModel {
 
         // Classical Newtonian flux prefactor in SI.
         double r_physical = r * rs_ / 2;  // r in metres.
-        double F_newt = (3 * gm_ * mdot_si_) / (8 * M_PI * r_physical * r_physical * r_physical);
+        double F_newt =
+            (3 * gm_ * mdot_si_) / (8 * std::numbers::pi * r_physical * r_physical * r_physical);
 
         double F = F_newt * Q;
 
@@ -266,7 +280,7 @@ class AccretionDiskD : public IDiskModel {
     // Whether a point is within the disk (IDiskModel::IsInDisk).
     bool IsInDisk(double r, double theta) const override {
         // Equatorial plane: |theta - pi/2| < epsilon.
-        double equatorial_distance = std::abs(theta - M_PI / 2);
+        double equatorial_distance = std::abs(theta - std::numbers::pi / 2);
         if (equatorial_distance > 0.01) return false;  // ~0.5 degrees from equator.
 
         return (r >= r_inner_ && r <= r_outer_);
@@ -283,7 +297,7 @@ class AccretionDiskD : public IDiskModel {
 
         if (std::abs(dtheta) < 1e-10) return -1;  // Parallel to the equator.
 
-        double lambda_cross = (M_PI / 2 - theta0) / dtheta;
+        double lambda_cross = (std::numbers::pi / 2 - theta0) / dtheta;
 
         if (lambda_cross < 0 || lambda_cross > lambda_max) return -1;
 

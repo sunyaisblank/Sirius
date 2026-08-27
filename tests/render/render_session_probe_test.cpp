@@ -5,15 +5,11 @@
 // exist, the PNG decodes (stb) and the EXR loads (tinyexr), and each decoded
 // image is finite and non-constant.
 
-#include "sirius/render/render_config.h"
 #include "sirius/render/session/render_session.h"
-
-#ifdef SIRIUS_HAS_VULKAN_BACKEND
-#include "sirius/backend/device.h"
-#endif
 
 #include <gtest/gtest.h>
 
+#include "support/scoped_temporary_directory.h"
 #include <stb_image.h>
 #include <tinyexr.h>
 
@@ -21,6 +17,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <filesystem>
+#include <fstream>
 #include <limits>
 #include <numbers>
 #include <string>
@@ -31,18 +28,19 @@ namespace {
 using sirius::render::RenderSession;
 using sirius::render::SessionConfig;
 using sirius::render::SessionState;
+using sirius::test::ScopedTemporaryDirectory;
 
 SessionConfig ProbeConfig(const std::string& output_path) {
     SessionConfig cfg;
     cfg.width = 64;
     cfg.height = 64;
-    cfg.samplesPerPixel = 4;
-    cfg.tileSize = 64;
-    cfg.enableParallelRendering = false;  // Deterministic single-thread for the probe.
-    cfg.metricId = sirius::core::MetricId::Kerr;
-    cfg.blackHoleMass = 1.0;
-    cfg.blackHoleSpin = 0.9;
-    cfg.outputPath = output_path;
+    cfg.samples_per_pixel = 4;
+    cfg.tile_size = 64;
+    cfg.enable_parallel_rendering = false;  // Deterministic single-thread for the probe.
+    cfg.metric_id = sirius::core::MetricId::Kerr;
+    cfg.black_hole_mass = 1.0;
+    cfg.black_hole_spin = 0.9;
+    cfg.output_path = output_path;
     return cfg;
 }
 
@@ -59,20 +57,18 @@ SessionState RenderTo(const std::string& output_path) {
 
 TEST(RenderSessionProbe, CpuKerrRenderProducesValidPngAndExr) {
     namespace fs = std::filesystem;
-    const fs::path dir = fs::temp_directory_path() / "sirius_render_probe";
-    fs::create_directories(dir);
+    const ScopedTemporaryDirectory temporary_directory("sirius-render-probe");
+    const fs::path& dir = temporary_directory.path();
 
-    const std::string pngPath = (dir / "probe_kerr.png").string();
-    const std::string exrPath = (dir / "probe_kerr.exr").string();
-    fs::remove(pngPath);
-    fs::remove(exrPath);
+    const std::string png_path = (dir / "probe_kerr.png").string();
+    const std::string exr_path = (dir / "probe_kerr.exr").string();
 
     // --- PNG render ---------------------------------------------------------
-    ASSERT_EQ(RenderTo(pngPath), SessionState::Complete) << "PNG render did not complete";
-    ASSERT_TRUE(fs::exists(pngPath)) << "PNG file was not written";
+    ASSERT_EQ(RenderTo(png_path), SessionState::Complete) << "PNG render did not complete";
+    ASSERT_TRUE(fs::exists(png_path)) << "PNG file was not written";
 
     int pw = 0, ph = 0, pc = 0;
-    unsigned char* png = stbi_load(pngPath.c_str(), &pw, &ph, &pc, 3);
+    unsigned char* png = stbi_load(png_path.c_str(), &pw, &ph, &pc, 3);
     ASSERT_NE(png, nullptr) << "PNG failed to decode: " << stbi_failure_reason();
     EXPECT_EQ(pw, 64);
     EXPECT_EQ(ph, 64);
@@ -86,13 +82,13 @@ TEST(RenderSessionProbe, CpuKerrRenderProducesValidPngAndExr) {
     stbi_image_free(png);
 
     // --- EXR render ---------------------------------------------------------
-    ASSERT_EQ(RenderTo(exrPath), SessionState::Complete) << "EXR render did not complete";
-    ASSERT_TRUE(fs::exists(exrPath)) << "EXR file was not written";
+    ASSERT_EQ(RenderTo(exr_path), SessionState::Complete) << "EXR render did not complete";
+    ASSERT_TRUE(fs::exists(exr_path)) << "EXR file was not written";
 
     float* exr = nullptr;
     int ew = 0, eh = 0;
     const char* err = nullptr;
-    int ret = LoadEXR(&exr, &ew, &eh, exrPath.c_str(), &err);
+    int ret = LoadEXR(&exr, &ew, &eh, exr_path.c_str(), &err);
     ASSERT_EQ(ret, TINYEXR_SUCCESS) << (err ? err : "unknown tinyexr error");
     EXPECT_EQ(ew, 64);
     EXPECT_EQ(eh, 64);
@@ -109,36 +105,63 @@ TEST(RenderSessionProbe, CpuKerrRenderProducesValidPngAndExr) {
     EXPECT_TRUE(exr_finite) << "EXR contains non-finite samples";
     EXPECT_TRUE(exr_varies) << "EXR image is constant (nothing rendered)";
     std::free(exr);
+}
 
-    fs::remove(pngPath);
-    fs::remove(exrPath);
+TEST(RenderSessionProbe, CpuKerrRenderProducesValidPpmThroughTheOwnedWriter) {
+    namespace fs = std::filesystem;
+    const ScopedTemporaryDirectory temporary_directory("sirius-ppm-probe");
+    const fs::path output = temporary_directory.path() / "probe_kerr.ppm";
+
+    ASSERT_EQ(RenderTo(output.string()), SessionState::Complete) << "PPM render did not complete";
+    std::ifstream file(output, std::ios::binary);
+    ASSERT_TRUE(file) << "PPM file was not written";
+    std::string magic;
+    int width = 0;
+    int height = 0;
+    int maximum = 0;
+    ASSERT_TRUE(file >> magic >> width >> height >> maximum);
+    EXPECT_EQ(magic, "P6");
+    EXPECT_EQ(width, 64);
+    EXPECT_EQ(height, 64);
+    EXPECT_EQ(maximum, 255);
+    ASSERT_EQ(file.get(), '\n');
+
+    std::vector<unsigned char> pixels(static_cast<std::size_t>(width) * height * 3);
+    file.read(reinterpret_cast<char*>(pixels.data()), static_cast<std::streamsize>(pixels.size()));
+    ASSERT_EQ(file.gcount(), static_cast<std::streamsize>(pixels.size()));
+    EXPECT_EQ(file.peek(), std::char_traits<char>::eof())
+        << "PPM has an unexpected trailing payload";
+    const bool varies =
+        std::any_of(pixels.begin() + 1, pixels.end(),
+                    [first = pixels.front()](unsigned char value) { return value != first; });
+    EXPECT_TRUE(varies) << "PPM image is constant (nothing rendered)";
 }
 
 TEST(RenderSessionProbe, FilmAffectsDisplayOutputButNeverLinearExr) {
     namespace fs = std::filesystem;
-    const fs::path dir = fs::temp_directory_path() / "sirius_render_probe";
-    fs::create_directories(dir);
+    const ScopedTemporaryDirectory temporary_directory("sirius-film-probe");
+    const fs::path& dir = temporary_directory.path();
 
     auto render = [&](bool film, const std::string& extension) {
         SessionConfig cfg;
         cfg.width = 16;
         cfg.height = 12;
-        cfg.samplesPerPixel = 1;
-        cfg.tileSize = 16;
-        cfg.enableParallelRendering = false;
-        cfg.metricId = sirius::core::MetricId::Minkowski;
-        cfg.blackHoleMass = 0.0;
-        cfg.enableDisk = false;
-        cfg.enableBloom = false;
-        cfg.enableFilmSimulation = film;
-        cfg.filmConfig = sirius::render::FilmConfig::Interstellar();
-        cfg.outputPath = (dir / ("film_probe_" + std::to_string(film) + extension)).string();
+        cfg.samples_per_pixel = 1;
+        cfg.tile_size = 16;
+        cfg.enable_parallel_rendering = false;
+        cfg.metric_id = sirius::core::MetricId::Minkowski;
+        cfg.black_hole_mass = 0.0;
+        cfg.enable_disk = false;
+        cfg.enable_bloom = false;
+        cfg.enable_film_simulation = film;
+        cfg.film_config = sirius::render::FilmConfig::Interstellar();
+        cfg.output_path = (dir / ("film_probe_" + std::to_string(film) + extension)).string();
         RenderSession session;
         EXPECT_TRUE(session.Configure(cfg));
         EXPECT_EQ(session.Execute(), SessionState::Complete);
         const float* pixels = session.GetDisplayBuffer().GetFloatData();
         std::vector<float> copy(pixels, pixels + cfg.width * cfg.height * 4);
-        fs::remove(cfg.outputPath);
+        fs::remove(cfg.output_path);
         return copy;
     };
 
@@ -158,186 +181,17 @@ TEST(RenderSessionProbe, FilmAffectsDisplayOutputButNeverLinearExr) {
         << "film simulation contaminated the untouched linear-HDR EXR branch";
 }
 
-// Backend auto-resolution after the go-live flip (owner decision, 2026-07-18):
-// 'auto' selects Vulkan only when the device, metric, and requested scene
-// semantics are all represented, including exact non-square multisampling.
-TEST(RenderSessionProbe, BackendAutoResolvesByDeviceRegistryAndCapabilities) {
-    sirius::render::SiriusConfig cfg = sirius::render::SiriusConfig::defaults();
-    cfg.metric.name = "Kerr";
-    cfg.backend.preferred = "cpu";
-    EXPECT_EQ(SessionConfig::FromSiriusConfig(cfg).backend, sirius::render::RenderBackend::Cpu)
-        << "'cpu' must pin the CPU path";
-
-    cfg.backend.preferred = "auto";
-#ifdef SIRIUS_HAS_VULKAN_BACKEND
-    const auto devices = sirius::backend::EnumerateVulkanDevices();
-    const bool device_present = devices.has_value() && !devices->empty();
-    EXPECT_EQ(
-        SessionConfig::FromSiriusConfig(cfg).backend,
-        device_present ? sirius::render::RenderBackend::Vulkan : sirius::render::RenderBackend::Cpu)
-        << "auto must follow device presence when the full sampled scene is represented";
-
-    cfg.volumetric.enabled = true;
-    cfg.volumetric.samples = 129;
-    EXPECT_EQ(SessionConfig::FromSiriusConfig(cfg).backend, sirius::render::RenderBackend::Cpu)
-        << "auto must select CPU above the Vulkan volume-sample boundary";
-    cfg.volumetric.enabled = false;
-    cfg.volumetric.samples = 64;
-
-    cfg.metric.name = "Reissner-Nordstrom";  // registry gpu_supported = false
-    EXPECT_EQ(SessionConfig::FromSiriusConfig(cfg).backend, sirius::render::RenderBackend::Cpu)
-        << "auto must resolve CPU for a metric the registry marks CPU-only";
-#else
-    EXPECT_EQ(SessionConfig::FromSiriusConfig(cfg).backend, sirius::render::RenderBackend::Cpu)
-        << "auto must resolve CPU when the Vulkan backend is not compiled in";
-#endif
-}
-
-TEST(RenderSessionProbe, ConfigurationConversionPreservesObserverAndDiskControls) {
-    sirius::render::SiriusConfig cfg = sirius::render::SiriusConfig::defaults();
-    cfg.backend.preferred = "cpu";
-    cfg.observer.azimuth = 37.5;
-    cfg.metric.temperatureModel = "ShakuraSunyaev";
-    cfg.metric.diskTemperature = 42000.0f;
-    cfg.render.threadCount = 7;
-    cfg.observer.cameraBetaForward = 0.1;
-    cfg.observer.lensModel = "ThinLens";
-    cfg.observer.focalLength = 85.0f;
-    cfg.observer.aperture = 1.4f;
-    cfg.observer.focusDistance = 40.0f;
-    cfg.colorMode = "Polarisation";
-    cfg.motionBlur.enabled = false;
-    cfg.motionBlur.shutterTime = 0.25f;
-    cfg.motionBlur.samples = 7;
-
-    const SessionConfig session = SessionConfig::FromSiriusConfig(cfg);
-    EXPECT_NEAR(session.observerAzimuth, 37.5 * std::numbers::pi / 180.0, 1e-12);
-    EXPECT_EQ(session.temperatureModel, sirius::render::DiskTemperatureModel::ShakuraSunyaev);
-    EXPECT_FLOAT_EQ(session.diskTemperatureScale, 42000.0f);
-    EXPECT_EQ(session.threadCount, 7);
-    EXPECT_DOUBLE_EQ(session.cameraBetaForward, 0.1);
-    EXPECT_EQ(session.lensType, sirius::core::LensType::ThinLens);
-    EXPECT_FLOAT_EQ(session.cameraFocalLength, 85.0f);
-    EXPECT_FLOAT_EQ(session.cameraAperture, 1.4f);
-    EXPECT_FLOAT_EQ(session.shutterTime, 0.25f);
-    EXPECT_EQ(session.motionBlurSamples, 7);
-    EXPECT_FLOAT_EQ(session.cameraFocusDistance, 40.0f);
-    EXPECT_EQ(session.colorMode, sirius::core::color_modes::Mode::Polarisation);
-    EXPECT_TRUE(session.enablePolarisation);
-
-    cfg.metric.temperatureModel = "UnknownTemperature";
-    EXPECT_THROW(SessionConfig::FromSiriusConfig(cfg), std::invalid_argument);
-    cfg.metric.temperatureModel = "NovikovThorne";
-    cfg.observer.lensModel = "UnknownLens";
-    EXPECT_THROW(SessionConfig::FromSiriusConfig(cfg), std::invalid_argument);
-    cfg.observer.lensModel = "Pinhole";
-    cfg.film.preset = "UnknownFilm";
-    EXPECT_THROW(SessionConfig::FromSiriusConfig(cfg), std::invalid_argument);
-    cfg.film.preset = "Interstellar";
-    cfg.observer.lensModel = "Fisheye";
-    EXPECT_EQ(SessionConfig::FromSiriusConfig(cfg).lensType, sirius::core::LensType::Fisheye);
-
-    SessionConfig malformed = session;
-    malformed.width = 1;
-    malformed.height = 1;
-    malformed.tileSize = 1;
-    malformed.samplesPerPixel = 1;
-    malformed.enableParallelRendering = false;
-    malformed.temperatureModel = static_cast<sirius::render::DiskTemperatureModel>(255);
-    RenderSession cpu_session;
-    ASSERT_TRUE(cpu_session.Configure(malformed));
-    EXPECT_EQ(cpu_session.Execute(), SessionState::Failed);
-
-    malformed.temperatureModel = sirius::render::DiskTemperatureModel::NovikovThorne;
-    malformed.colorMode = sirius::core::color_modes::Mode::TrueColor;
-    malformed.enablePolarisation = true;
-    RenderSession polarisation_session;
-    ASSERT_TRUE(polarisation_session.Configure(malformed));
-    EXPECT_EQ(polarisation_session.Execute(), SessionState::Failed);
-
-    malformed.colorMode = sirius::core::color_modes::Mode::Polarisation;
-    malformed.enablePolarisation = false;
-    RenderSession polarisation_colour_session;
-    ASSERT_TRUE(polarisation_colour_session.Configure(malformed));
-    EXPECT_EQ(polarisation_colour_session.Execute(), SessionState::Failed);
-
-    malformed.colorMode = static_cast<sirius::core::color_modes::Mode>(255);
-    RenderSession invalid_colour_session;
-    ASSERT_TRUE(invalid_colour_session.Configure(malformed));
-    EXPECT_EQ(invalid_colour_session.Execute(), SessionState::Failed);
-
-    malformed.colorMode = sirius::core::color_modes::Mode::TrueColor;
-    malformed.tonemapper = static_cast<sirius::core::TonemapType>(255);
-    RenderSession invalid_tonemapper_session;
-    ASSERT_TRUE(invalid_tonemapper_session.Configure(malformed));
-    EXPECT_EQ(invalid_tonemapper_session.Execute(), SessionState::Failed);
-
-    malformed.tonemapper = sirius::core::TonemapType::Aces;
-    malformed.metricId = sirius::core::MetricId::Schwarzschild;
-    malformed.blackHoleSpin = 0.4;
-    RenderSession mismatched_metric_session;
-    ASSERT_TRUE(mismatched_metric_session.Configure(malformed));
-    EXPECT_EQ(mismatched_metric_session.Execute(), SessionState::Failed);
-
-    malformed.metricId = sirius::core::MetricId::KerrNewman;
-    malformed.blackHoleSpin = 0.4;
-    malformed.blackHoleCharge = 0.2;
-    malformed.enableDisk = true;
-    RenderSession charged_disk_session;
-    ASSERT_TRUE(charged_disk_session.Configure(malformed));
-    EXPECT_EQ(charged_disk_session.Execute(), SessionState::Failed);
-
-    malformed.metricId = sirius::core::MetricId::Minkowski;
-    malformed.blackHoleMass = 0.0;
-    malformed.blackHoleSpin = 0.0;
-    malformed.blackHoleCharge = 0.0;
-    malformed.enableDisk = true;
-    RenderSession inapplicable_disk_session;
-    ASSERT_TRUE(inapplicable_disk_session.Configure(malformed));
-    EXPECT_EQ(inapplicable_disk_session.Execute(), SessionState::Failed);
-
-    malformed.metricId = sirius::core::MetricId::Schwarzschild;
-    malformed.blackHoleMass = 1.0;
-    malformed.blackHoleSpin = 0.0;
-    malformed.blackHoleCharge = 0.0;
-    malformed.enableDisk = true;
-    malformed.width = 0;
-    RenderSession invalid_dimensions_session;
-    ASSERT_TRUE(invalid_dimensions_session.Configure(malformed));
-    EXPECT_EQ(invalid_dimensions_session.Execute(), SessionState::Failed);
-
-    const auto preview_path =
-        std::filesystem::temp_directory_path() / "sirius_in_memory_preview_must_not_exist.ppm";
-    std::filesystem::remove(preview_path);
-    SessionConfig preview;
-    preview.width = 8;
-    preview.height = 8;
-    preview.tileSize = 8;
-    preview.samplesPerPixel = 1;
-    preview.enableParallelRendering = false;
-    preview.metricId = sirius::core::MetricId::Minkowski;
-    preview.blackHoleMass = 0.0;
-    preview.enableDisk = false;
-    preview.writeOutput = false;
-    preview.outputPath = preview_path.string();
-    RenderSession preview_session;
-    ASSERT_TRUE(preview_session.Configure(preview));
-    EXPECT_EQ(preview_session.Execute(), SessionState::Complete);
-    EXPECT_FALSE(std::filesystem::exists(preview_path));
-}
-
 TEST(RenderSessionProbe, StartIsAsynchronousAndCancellationIsTerminalWithoutOutput) {
     namespace fs = std::filesystem;
-    const fs::path output =
-        fs::temp_directory_path() / "sirius_cancelled_render_must_not_exist.ppm";
-    fs::remove(output);
+    const ScopedTemporaryDirectory temporary_directory("sirius-cancellation-probe");
+    const fs::path output = temporary_directory.path() / "cancelled-render-must-not-exist.ppm";
 
     SessionConfig config = ProbeConfig(output.string());
     config.width = 512;
     config.height = 512;
-    config.samplesPerPixel = 4;
-    config.tileSize = 64;
-    config.enableParallelRendering = false;
+    config.samples_per_pixel = 4;
+    config.tile_size = 64;
+    config.enable_parallel_rendering = false;
 
     RenderSession session;
     ASSERT_TRUE(session.Configure(config));
@@ -358,13 +212,13 @@ TEST(RenderSessionProbe, CompletionCallbackCanReenterLifecycleWithoutDeadlock) {
     SessionConfig config = ProbeConfig("unused.ppm");
     config.width = 8;
     config.height = 8;
-    config.tileSize = 8;
-    config.samplesPerPixel = 1;
-    config.metricId = sirius::core::MetricId::Minkowski;
-    config.blackHoleMass = 0.0;
-    config.blackHoleSpin = 0.0;
-    config.enableDisk = false;
-    config.writeOutput = false;
+    config.tile_size = 8;
+    config.samples_per_pixel = 1;
+    config.metric_id = sirius::core::MetricId::Minkowski;
+    config.black_hole_mass = 0.0;
+    config.black_hole_spin = 0.0;
+    config.enable_disk = false;
+    config.write_output = false;
 
     RenderSession session;
     ASSERT_TRUE(session.Configure(config));
@@ -372,7 +226,7 @@ TEST(RenderSessionProbe, CompletionCallbackCanReenterLifecycleWithoutDeadlock) {
     bool callback_configured = true;
     session.SetCompletionCallback([&](SessionState state, const std::string&) {
         EXPECT_EQ(state, SessionState::Complete);
-        callback_configured = session.Configure(config);
+        callback_configured = session.Configure(config).has_value();
         session.WaitForCompletion();
         callback_completed = true;
     });
@@ -384,76 +238,121 @@ TEST(RenderSessionProbe, CompletionCallbackCanReenterLifecycleWithoutDeadlock) {
 
 TEST(RenderSessionProbe, PointStarfieldRejectsValuesItsGeneratorWouldClamp) {
     SessionConfig config;
-    config.pointStarfield = true;
-    config.starfieldConfig.star_count = std::numeric_limits<std::uint32_t>::max();
+    config.point_starfield = true;
+    config.starfield_config.star_count = std::numeric_limits<std::uint32_t>::max();
     const auto issue = sirius::render::SessionConfigIssue(config);
     ASSERT_TRUE(issue.has_value());
     EXPECT_NE(issue->find("point-starfield"), std::string::npos);
 
-    config.starfieldConfig = sirius::core::StarfieldConfig{};
-    config.starfieldConfig.min_distance_pc = std::numeric_limits<float>::quiet_NaN();
+    config.starfield_config = sirius::core::StarfieldConfig{};
+    config.starfield_config.min_distance_pc = std::numeric_limits<float>::quiet_NaN();
     EXPECT_TRUE(sirius::render::SessionConfigIssue(config).has_value());
+}
+
+TEST(RenderSessionProbe, SceneEvidenceBindsCanonicalTypedConfiguration) {
+    SessionConfig config;
+    config.backend = sirius::render::RenderBackend::Vulkan;
+    config.metric_id = sirius::core::MetricId::Kerr;
+    config.black_hole_spin = 0.9;
+    config.width = 5616;
+    config.height = 4096;
+    config.samples_per_pixel = 4;
+    config.camera_fov = 60.0f;
+    config.enable_disk = false;
+    config.ray_bundles = true;
+    config.point_starfield = true;
+    config.camera_beta_forward = 0.1;
+    config.camera_beta_up = 0.02;
+    config.camera_beta_right = -0.01;
+    config.lens_type = sirius::core::LensType::ThinLens;
+    config.camera_focal_length = 50.0f;
+    config.camera_aperture = 2.8f;
+    config.camera_focus_distance = 30.0f;
+
+    const std::string evidence = sirius::render::SessionSceneEvidenceJson(config, 100000);
+    EXPECT_TRUE(
+        evidence.starts_with("{\"schema\":\"sirius-render-scene-v1\",\"backend\":\"Vulkan\","));
+    for (const char* field : {
+             "\"metric\":\"Kerr\"",
+             "\"width\":5616",
+             "\"height\":4096",
+             "\"samples_per_pixel\":4",
+             "\"field_of_view\":60",
+             "\"disk_enabled\":false",
+             "\"ray_bundles\":true",
+             "\"point_starfield\":true",
+             "\"point_star_count\":100000",
+             "\"point_brightness_scale\":100",
+             "\"camera_beta\":[",
+             "\"lens\":\"ThinLens\"",
+             "\"focal_length\":50",
+             "\"aperture\":",
+             "\"focus_distance\":30",
+         }) {
+        EXPECT_NE(evidence.find(field), std::string::npos) << field;
+    }
+    EXPECT_EQ(evidence.back(), '}');
 }
 
 TEST(RenderSessionProbe, TypedNumericBoundariesMatchTheExternalConfigurationBoundary) {
     SessionConfig config;
 
-    config.cameraFocalLength = 10000.1f;
+    config.camera_focal_length = 10000.1f;
     EXPECT_TRUE(sirius::render::SessionConfigIssue(config).has_value());
-    config.cameraFocalLength = 50.0f;
+    config.camera_focal_length = 50.0f;
 
-    config.volumetricTauMidplane = 1.0e6f + 1.0f;
+    config.volumetric_tau_midplane = 1.0e6f + 1.0f;
     EXPECT_TRUE(sirius::render::SessionConfigIssue(config).has_value());
-    config.volumetricTauMidplane = 10.0f;
+    config.volumetric_tau_midplane = 10.0f;
 
-    config.enableTurbulence = true;
+    config.enable_turbulence = true;
     EXPECT_EQ(sirius::render::SessionConfigIssue(config),
               "turbulence and corona require volumetric transfer");
-    config.enableTurbulence = false;
+    config.enable_turbulence = false;
 
     config.exposure = 100.1f;
     EXPECT_TRUE(sirius::render::SessionConfigIssue(config).has_value());
     config.exposure = 3.0f;
 
-    config.enableMotionBlur = true;
-    config.shutterTime = 1000.1f;
+    config.enable_motion_blur = true;
+    config.shutter_time = 1000.1f;
     EXPECT_TRUE(sirius::render::SessionConfigIssue(config).has_value());
-    config.enableMotionBlur = false;
+    config.enable_motion_blur = false;
 
-    config.enableFilmSimulation = true;
-    config.filmConfig.halation_radius = std::numeric_limits<float>::infinity();
+    config.enable_film_simulation = true;
+    config.film_config.halation_radius = std::numeric_limits<float>::infinity();
     EXPECT_EQ(sirius::render::SessionConfigIssue(config),
               "film-simulation parameters are outside the represented domain");
-    config.filmConfig.halation_radius = 257.0f;
+    config.film_config.halation_radius = 257.0f;
     EXPECT_EQ(sirius::render::SessionConfigIssue(config),
               "film-simulation parameters are outside the represented domain");
-    config.filmConfig.halation_radius = 8.0f;
+    config.film_config.halation_radius = 8.0f;
     EXPECT_FALSE(sirius::render::SessionConfigIssue(config).has_value());
 }
 
 TEST(RenderSessionProbe, PolarisedAndTwoSheetRequestsDeclineAtTheTypedBoundary) {
     SessionConfig config;
-    config.metricId = sirius::core::MetricId::Kerr;
-    config.blackHoleSpin = 0.7;
-    config.colorMode = sirius::core::color_modes::Mode::Polarisation;
-    config.enablePolarisation = true;
+    config.metric_id = sirius::core::MetricId::Kerr;
+    config.black_hole_spin = 0.7;
+    config.color_mode = sirius::core::color_modes::Mode::Polarisation;
+    config.enable_polarisation = true;
 
-    config.enableVolumetricDisk = true;
+    config.enable_volumetric_disk = true;
     EXPECT_EQ(sirius::render::SessionConfigIssue(config),
               "polarisation is not represented for volumetric transfer");
 
-    config.enableVolumetricDisk = false;
-    config.enableMotionBlur = true;
+    config.enable_volumetric_disk = false;
+    config.enable_motion_blur = true;
     EXPECT_EQ(sirius::render::SessionConfigIssue(config),
               "polarisation is not represented with temporal disk motion blur");
 
-    config.enableMotionBlur = false;
-    config.colorMode = sirius::core::color_modes::Mode::TrueColor;
-    config.enablePolarisation = false;
-    config.enableDisk = false;
-    config.metricId = sirius::core::MetricId::MorrisThorne;
-    config.blackHoleSpin = 0.0;
-    config.wormholeTopology = sirius::render::WormholeTopology::TwoSheet;
+    config.enable_motion_blur = false;
+    config.color_mode = sirius::core::color_modes::Mode::TrueColor;
+    config.enable_polarisation = false;
+    config.enable_disk = false;
+    config.metric_id = sirius::core::MetricId::MorrisThorne;
+    config.black_hole_spin = 0.0;
+    config.wormhole_topology = sirius::render::WormholeTopology::TwoSheet;
     EXPECT_EQ(sirius::render::SessionConfigIssue(config),
               "two-sheet wormhole continuation and a second environment are not represented");
 }
@@ -502,17 +401,17 @@ TEST(RenderSessionProbe, CpuPolarisationModeConsumesTransportedDiskStokes) {
         SessionConfig cfg;
         cfg.width = 24;
         cfg.height = 24;
-        cfg.tileSize = 32;
-        cfg.samplesPerPixel = 1;
-        cfg.enableParallelRendering = false;
-        cfg.writeOutput = false;
-        cfg.metricId = sirius::core::MetricId::Kerr;
-        cfg.blackHoleMass = 1.0;
-        cfg.blackHoleSpin = 0.7;
-        cfg.observerInclination = 75.0 * std::numbers::pi / 180.0;
-        cfg.colorMode = mode;
-        cfg.enablePolarisation = mode == sirius::core::color_modes::Mode::Polarisation;
-        cfg.enableBloom = false;
+        cfg.tile_size = 32;
+        cfg.samples_per_pixel = 1;
+        cfg.enable_parallel_rendering = false;
+        cfg.write_output = false;
+        cfg.metric_id = sirius::core::MetricId::Kerr;
+        cfg.black_hole_mass = 1.0;
+        cfg.black_hole_spin = 0.7;
+        cfg.observer_inclination = 75.0 * std::numbers::pi / 180.0;
+        cfg.color_mode = mode;
+        cfg.enable_polarisation = mode == sirius::core::color_modes::Mode::Polarisation;
+        cfg.enable_bloom = false;
         cfg.tonemapper = sirius::core::TonemapType::None;
         cfg.exposure = 1.0f;
         cfg.contrast = 1.0f;
@@ -549,37 +448,36 @@ TEST(RenderSessionProbe, CpuPolarisationModeConsumesTransportedDiskStokes) {
 // image is non-constant with genuinely dark pixels present.
 TEST(RenderSessionProbe, CpuMorrisThorneRenderCompletes) {
     namespace fs = std::filesystem;
-    const fs::path dir = fs::temp_directory_path() / "sirius_render_probe";
-    fs::create_directories(dir);
-    const std::string pngPath = (dir / "probe_wormhole.png").string();
-    fs::remove(pngPath);
+    const ScopedTemporaryDirectory temporary_directory("sirius-wormhole-probe");
+    const fs::path& dir = temporary_directory.path();
+    const std::string png_path = (dir / "probe_wormhole.png").string();
 
     SessionConfig cfg;
     cfg.width = 64;
     cfg.height = 64;
-    cfg.samplesPerPixel = 4;
-    cfg.tileSize = 64;
-    cfg.enableParallelRendering = false;
-    cfg.metricId = sirius::core::MetricId::MorrisThorne;
-    cfg.enableDisk = false;
+    cfg.samples_per_pixel = 4;
+    cfg.tile_size = 64;
+    cfg.enable_parallel_rendering = false;
+    cfg.metric_id = sirius::core::MetricId::MorrisThorne;
+    cfg.enable_disk = false;
     // Throat large enough that its shadow spans several pixels at 64x64 with
     // the default observer distance; a b0 = 1 throat subtends ~1 pixel and
     // vanishes under sample jitter and tonemapping.
-    cfg.throatRadius = 5.0;
+    cfg.throat_radius = 5.0;
     // The probe asserts trace physics (captured versus escaped rays), so the
     // film bloom stays off: at these scales it floods the throat shadow with
     // light from the surrounding Einstein ring.
-    cfg.enableBloom = false;
-    cfg.outputPath = pngPath;
+    cfg.enable_bloom = false;
+    cfg.output_path = png_path;
 
     RenderSession session;
     ASSERT_TRUE(session.Configure(cfg)) << "Session must accept the CPU wormhole config";
     ASSERT_EQ(session.Execute(), SessionState::Complete)
         << "Morris-Thorne must render on the CPU path, not decline";
-    ASSERT_TRUE(fs::exists(pngPath));
+    ASSERT_TRUE(fs::exists(png_path));
 
     int pw = 0, ph = 0, pc = 0;
-    unsigned char* png = stbi_load(pngPath.c_str(), &pw, &ph, &pc, 3);
+    unsigned char* png = stbi_load(png_path.c_str(), &pw, &ph, &pc, 3);
     ASSERT_NE(png, nullptr) << stbi_failure_reason();
     EXPECT_EQ(pw, 64);
     EXPECT_EQ(ph, 64);
@@ -595,6 +493,56 @@ TEST(RenderSessionProbe, CpuMorrisThorneRenderCompletes) {
     EXPECT_GT(dark_pixels, 0) << "No throat shadow: no rays were captured";
     EXPECT_LT(dark_pixels, pw * ph) << "Frame entirely dark: no rays escaped";
     stbi_image_free(png);
+}
 
-    fs::remove(pngPath);
+TEST(RenderSessionProbe, EveryRegisteredCpuMetricCompletesAFrame) {
+    std::size_t advertised_cpu_metrics = 0;
+    for (const auto& info : sirius::core::MetricRegistry()) {
+        if (!info.cpu_supported) continue;
+        ++advertised_cpu_metrics;
+        SCOPED_TRACE(info.canonical_name);
+
+        SessionConfig cfg;
+        cfg.width = 4;
+        cfg.height = 4;
+        cfg.samples_per_pixel = 1;
+        cfg.tile_size = 8;
+        cfg.enable_parallel_rendering = false;
+        cfg.write_output = false;
+        cfg.enable_disk = false;
+        cfg.enable_bloom = false;
+        cfg.metric_id = info.id;
+
+        switch (info.id) {
+            case sirius::core::MetricId::Minkowski:
+                cfg.black_hole_mass = 0.0;
+                break;
+            case sirius::core::MetricId::Kerr:
+                cfg.black_hole_spin = 0.5;
+                break;
+            case sirius::core::MetricId::ReissnerNordstrom:
+                cfg.black_hole_charge = 0.3;
+                break;
+            case sirius::core::MetricId::KerrNewman:
+                cfg.black_hole_spin = 0.3;
+                cfg.black_hole_charge = 0.3;
+                break;
+            case sirius::core::MetricId::DeSitter:
+                cfg.black_hole_mass = 0.0;
+                cfg.cosmological_constant = 0.001;
+                break;
+            case sirius::core::MetricId::SchwarzschildDeSitter:
+                cfg.cosmological_constant = 0.001;
+                break;
+            case sirius::core::MetricId::Schwarzschild:
+            case sirius::core::MetricId::MorrisThorne:
+            case sirius::core::MetricId::Alcubierre:
+                break;
+        }
+
+        RenderSession session;
+        ASSERT_TRUE(session.Configure(cfg));
+        EXPECT_EQ(session.Execute(), SessionState::Complete);
+    }
+    EXPECT_EQ(advertised_cpu_metrics, 9u);
 }

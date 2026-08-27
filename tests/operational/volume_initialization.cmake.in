@@ -16,6 +16,17 @@ execute_process(
     RESULT_VARIABLE _install_result
     OUTPUT_VARIABLE _install_stdout
     ERROR_VARIABLE _install_stderr)
+if(NOT "@SIRIUS_ALIGNMENT_MODE@" STREQUAL "development" AND
+   NOT EXISTS "@CMAKE_BINARY_DIR@/generated/sirius/mandatory_gate.json")
+    set(_install_log "${_install_stdout}\n${_install_stderr}")
+    if(_install_result EQUAL 0 OR NOT _install_log MATCHES "mandatory_gate.json|Mandatory gate")
+        message(FATAL_ERROR
+            "strict installation did not reject its pre-gate bootstrap state "
+            "(${_install_result})\n${_install_log}")
+    endif()
+    file(REMOVE_RECURSE "${_audit_parent}")
+    return()
+endif()
 if(NOT _install_result EQUAL 0)
     message(FATAL_ERROR
         "staged Sirius install failed (${_install_result})\n"
@@ -33,9 +44,26 @@ execute_process(
     RESULT_VARIABLE _readiness_result
     OUTPUT_VARIABLE _readiness_stdout
     ERROR_VARIABLE _readiness_stderr)
-if(NOT _readiness_result EQUAL 0 OR NOT _readiness_stdout MATCHES "\"ready\": true")
+string(JSON _system_ready ERROR_VARIABLE _readiness_json_error
+    GET "${_readiness_stdout}" ready)
+string(JSON _evidence_ready ERROR_VARIABLE _evidence_json_error
+    GET "${_readiness_stdout}" evidence_generation_ready)
+set(_readiness_contract_valid TRUE)
+if(NOT _readiness_json_error STREQUAL "NOTFOUND" OR
+   NOT _evidence_json_error STREQUAL "NOTFOUND" OR
+   NOT _evidence_ready)
+    set(_readiness_contract_valid FALSE)
+elseif("@SIRIUS_ALIGNMENT_MODE@" STREQUAL "release")
+    if(NOT _readiness_result EQUAL 0 OR NOT _system_ready)
+        set(_readiness_contract_valid FALSE)
+    endif()
+elseif(_readiness_result EQUAL 0 OR _system_ready)
+    set(_readiness_contract_valid FALSE)
+endif()
+if(NOT _readiness_contract_valid)
     message(FATAL_ERROR
-        "relocated Sirius volume did not report ready (${_readiness_result})\n"
+        "relocated Sirius volume reported a contradictory readiness scope "
+        "(${_readiness_result})\n"
         "${_readiness_stdout}\n${_readiness_stderr}")
 endif()
 if("@SIRIUS_INSTALL_HAS_VIEWER@" STREQUAL "TRUE" AND
@@ -52,7 +80,16 @@ execute_process(
     RESULT_VARIABLE _capability_result
     OUTPUT_VARIABLE _capability_stdout
     ERROR_VARIABLE _capability_stderr)
+string(JSON _dimension_count ERROR_VARIABLE _dimension_count_error
+    LENGTH "${_capability_stdout}" required_dimensions)
 if(NOT _capability_result EQUAL 0 OR
+   NOT _dimension_count_error STREQUAL "NOTFOUND" OR
+   NOT _dimension_count EQUAL 23 OR
+   NOT _capability_stdout MATCHES "\"criteria_total\": 10" OR
+   NOT _capability_stdout MATCHES "\"criteria_build_gated\": 7" OR
+   NOT _capability_stdout MATCHES "\"criteria_attestation_required\": 3" OR
+   NOT _capability_stdout MATCHES "\"id\": \"P1\"" OR
+   NOT _capability_stdout MATCHES "\"id\": \"E4\"" OR
    NOT _capability_stdout MATCHES "\"morris_thorne_two_sheet\"" OR
    NOT _capability_stdout MATCHES "\"attestation_required\"")
     message(FATAL_ERROR
@@ -60,17 +97,17 @@ if(NOT _capability_result EQUAL 0 OR
         "${_capability_stdout}\n${_capability_stderr}")
 endif()
 
-# Presence and schema shape alone are not model integrity. Change one behavior
-# while retaining every governed entry and prove both readiness and capability
-# reporting reject the tampered volume.
+# Presence and schema shape alone are not model integrity. Change a required
+# P/E criterion while retaining every governed entry and prove both readiness
+# and capability reporting reject the tampered installed volume.
 set(_model "${_resource_root}/model/operating_model.json")
 file(READ "${_model}" _model_contents)
 string(REPLACE
-    "Decline explicitly; no dark-throat one-sheet image may be presented as a second asymptotic region."
-    "Silently substitute the one-sheet capture image."
+    "Near-extremal Kerr geodesics satisfy the stated oracle and live conservation tolerances, and the 1080p shadow boundary agrees with Bardeen to below one pixel on both live backends."
+    "Near-extremal Kerr output may be accepted without the Bardeen boundary witness."
     _tampered_model "${_model_contents}")
 if(_tampered_model STREQUAL _model_contents)
-    message(FATAL_ERROR "volume obstruction could not locate the capability claim to mutate")
+    message(FATAL_ERROR "volume obstruction could not locate the P1 criterion to mutate")
 endif()
 file(WRITE "${_model}" "${_tampered_model}")
 execute_process(
@@ -83,7 +120,7 @@ if(_tampered_readiness_result EQUAL 0 OR
    NOT _tampered_readiness_stdout MATCHES "\"ready\": false" OR
    NOT _tampered_readiness_stdout MATCHES "\"valid\": false")
     message(FATAL_ERROR
-        "readiness accepted a capability-tampered operating model "
+        "readiness accepted a P/E-tampered operating model "
         "(${_tampered_readiness_result})\n"
         "${_tampered_readiness_stdout}\n${_tampered_readiness_stderr}")
 endif()
@@ -98,7 +135,7 @@ set(_tampered_capability_log
 if(_tampered_capability_result EQUAL 0 OR
    NOT _tampered_capability_log MATCHES "operating model")
     message(FATAL_ERROR
-        "capability reporting accepted a capability-tampered operating model "
+        "capability reporting accepted a P/E-tampered operating model "
         "(${_tampered_capability_result})\n${_tampered_capability_log}")
 endif()
 file(WRITE "${_model}" "${_model_contents}")
@@ -143,7 +180,8 @@ if(_missing_result EQUAL 0)
         "Sirius rendered after its volume resource was removed by borrowing the hostile decoy")
 endif()
 set(_missing_log "${_missing_stdout}\n${_missing_stderr}")
-if(NOT _missing_log MATCHES "required runtime resource assets/Starfield.png")
+if(NOT _missing_log MATCHES "io: load render resource:" OR
+   NOT _missing_log MATCHES "assets/Starfield.png is missing or unreadable")
     message(FATAL_ERROR
         "missing-resource decline did not identify the failed invariant\n${_missing_log}")
 endif()

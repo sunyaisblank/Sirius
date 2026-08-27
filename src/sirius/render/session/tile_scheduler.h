@@ -15,7 +15,7 @@
 namespace sirius::render {
 
 // Per-tile lifecycle state.
-enum class TileState : uint8_t {
+enum class TileState : std::uint8_t {
     Pending,   // Not yet started.
     Active,    // Currently rendering.
     Complete,  // Finished successfully.
@@ -73,7 +73,7 @@ class TileScheduler {
     Tile* GetNextTile() {
         std::lock_guard<std::mutex> lock(mutex_);
 
-        for (size_t i = next_tile_index_; i < tiles_.size(); ++i) {
+        for (std::size_t i = next_tile_index_; i < tiles_.size(); ++i) {
             if (tiles_[i].state == TileState::Pending) {
                 tiles_[i].state = TileState::Active;
                 next_tile_index_ = i + 1;
@@ -141,7 +141,7 @@ class TileScheduler {
         std::sort(tiles_.begin(), tiles_.end(),
                   [](const Tile& a, const Tile& b) { return a.priority < b.priority; });
 
-        for (size_t i = 0; i < tiles_.size(); ++i) {
+        for (std::size_t i = 0; i < tiles_.size(); ++i) {
             tiles_[i].id = static_cast<int>(i);
         }
     }
@@ -150,7 +150,7 @@ class TileScheduler {
     int image_height_ = 0;
     int tile_size_ = 64;
     std::vector<Tile> tiles_;
-    size_t next_tile_index_ = 0;
+    std::size_t next_tile_index_ = 0;
     std::atomic<int> completed_count_{0};
     mutable std::mutex mutex_;
 };

@@ -6,6 +6,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <numbers>
 
 using namespace sirius::core;
 
@@ -22,7 +23,7 @@ TEST(PinholeCameraTest, CentreRayPointsInward) {
     config.height = 100;
     config.fov = 90.0f;
     config.r = 50.0;
-    config.theta = M_PI / 2.0;
+    config.theta = std::numbers::pi / 2.0;
     config.phi = 0.0;
     config.yaw = 0.0f;
     config.pitch = 0.0f;
@@ -66,7 +67,7 @@ TEST(PinholeCameraTest, OriginMatchesConfig) {
     CameraConfig config;
     config.t = 0.0;
     config.r = 30.0;
-    config.theta = M_PI / 3.0;
+    config.theta = std::numbers::pi / 3.0;
     config.phi = 1.5;
 
     PinholeCamera camera(config);
@@ -181,6 +182,34 @@ TEST(ThinLensCameraTest, DifferentSamplesGiveDifferentRays) {
         }
     }
     EXPECT_TRUE(different) << "Different aperture samples should produce different rays";
+}
+
+TEST(ThinLensCameraTest, CentreApertureSharesPinholeProjectionAndFieldOfView) {
+    CameraConfig config;
+    config.width = 200;
+    config.height = 100;
+    config.fov = 60.0f;
+    config.focal_length = 50.0f;
+    config.aperture = 2.8f;
+    config.focus_distance = 30.0f;
+
+    PinholeCamera pinhole(config);
+    ThinLensCamera thin_lens(config);
+
+    // v=0 places the sample at the aperture centre. At that point the finite
+    // aperture model must preserve the requested perspective projection.
+    const CameraRay pinhole_ray = pinhole.GenerateRay(150, 50, 0.25f, 0.0f);
+    const CameraRay thin_lens_ray = thin_lens.GenerateRay(150, 50, 0.25f, 0.0f);
+    for (int component = 1; component < 4; ++component) {
+        EXPECT_NEAR(thin_lens_ray.direction(component), pinhole_ray.direction(component), 1.0e-6)
+            << "direction component " << component;
+    }
+
+    config.fov = 30.0f;
+    ThinLensCamera narrow(config);
+    const CameraRay narrow_ray = narrow.GenerateRay(150, 50, 0.25f, 0.0f);
+    EXPECT_LT(std::abs(narrow_ray.direction(3)), std::abs(thin_lens_ray.direction(3)))
+        << "finite-aperture projection ignored the configured field of view";
 }
 
 //==============================================================================

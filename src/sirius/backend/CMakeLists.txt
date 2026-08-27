@@ -1,7 +1,18 @@
-# Backend module: device seam plus the Vulkan compute adapter, and the
-# Slang kernel build (single source authority in ../kernels compiled to
-# SPIR-V here). Both degrade with a clear message rather than failing the
-# configure: machines without Vulkan or slangc build the CPU system only.
+# Backend module. The CPU tracer is an always-available backend with no device
+# loader dependency. Vulkan and its Slang artefacts are optional additions;
+# machines without either still build the complete CPU system.
+
+add_library(sirius_backend_cpu STATIC
+    cpu/geodesic_tracer.cpp
+)
+
+target_link_libraries(sirius_backend_cpu PUBLIC sirius_core)
+
+sirius_configure_target(sirius_backend_cpu)
+
+# Vulkan device seam plus the Slang kernel build (single source authority in
+# ../kernels compiled to SPIR-V here). Both degrade with a clear message rather
+# than failing configuration.
 
 find_package(Vulkan QUIET)
 if(NOT Vulkan_FOUND)
@@ -13,7 +24,7 @@ add_library(sirius_backend STATIC
     vulkan/vulkan_device.cpp
 )
 
-target_link_libraries(sirius_backend PUBLIC sirius_base Vulkan::Vulkan)
+target_link_libraries(sirius_backend PUBLIC sirius_base Vulkan::Vulkan ${CMAKE_DL_LIBS})
 
 sirius_configure_target(sirius_backend)
 

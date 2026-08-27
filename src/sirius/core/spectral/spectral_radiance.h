@@ -56,7 +56,8 @@ struct SpectralRadiance {
     static double Wavelength(int bin) { return kLambdaMin + (bin + 0.5) * kLambdaStep; }
 
     static int BinIndex(double wavelength) {
-        return static_cast<int>((wavelength - kLambdaMin) / kLambdaStep);
+        if (!std::isfinite(wavelength)) return -1;
+        return static_cast<int>(std::floor((wavelength - kLambdaMin) / kLambdaStep));
     }
 
     SpectralRadiance operator+(const SpectralRadiance& o) const {
@@ -91,6 +92,7 @@ struct SpectralRadiance {
 
     // Planck blackbody spectrum B(lambda, T) = (2hc^2/lambda^5)/(exp(hc/lambda k T) - 1).
     static SpectralRadiance Blackbody(double temperature) {
+        if (!std::isfinite(temperature) || temperature <= 0.0) return Zero();
         constexpr double hc = constants::physical::kPlanck * constants::physical::kSpeedOfLight;
         constexpr double hc2 = constants::physical::kPlanck * constants::physical::kSpeedOfLight *
                                constants::physical::kSpeedOfLight;
@@ -104,7 +106,7 @@ struct SpectralRadiance {
             if (x > 700) {
                 result.L[i] = 0;  // Avoid overflow.
             } else {
-                double B = (2 * hc2 / std::pow(lambda, 5)) / (std::exp(x) - 1);
+                double B = (2 * hc2 / std::pow(lambda, 5)) / std::expm1(x);
                 result.L[i] = B * 1e-9;  // Convert to per-nm.
             }
         }
@@ -116,6 +118,7 @@ struct SpectralRadiance {
     // lambda_obs = lambda_emit/g, I_obs = g^4 I_emit.
     SpectralRadiance ApplyRedshift(double g) const {
         SpectralRadiance result;
+        if (!std::isfinite(g) || g <= 0.0) return result;
         double g4 = g * g * g * g;
 
         for (int i = 0; i < kNumWavelengthBins; ++i) {

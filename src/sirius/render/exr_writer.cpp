@@ -34,16 +34,16 @@ struct AttributeStorage {
 AttributeStorage BuildAttributes(const EXRMetadata& meta) {
     AttributeStorage storage;
     storage.values = {
-        meta.softwareVersion,
-        meta.cameraModel,
-        meta.metricType,
-        std::to_string(meta.blackHoleMass),
-        std::to_string(meta.blackHoleSpin),
-        std::to_string(meta.observerDistance),
-        std::to_string(meta.observerInclination),
-        std::to_string(meta.samplesPerPixel),
-        std::to_string(meta.renderTimeSeconds),
-        meta.colorSpace,
+        meta.software_version,
+        meta.camera_model,
+        meta.metric_type,
+        std::to_string(meta.black_hole_mass),
+        std::to_string(meta.black_hole_spin),
+        std::to_string(meta.observer_distance),
+        std::to_string(meta.observer_inclination),
+        std::to_string(meta.samples_per_pixel),
+        std::to_string(meta.render_time_seconds),
+        meta.color_space,
         meta.chromaticities,
     };
     constexpr std::array<const char*, 11> names = {
@@ -87,7 +87,7 @@ bool WriteRgbFloat(const std::string& path, int width, int height, const float* 
     std::vector<float> g(pixel_count);
     std::vector<float> b(pixel_count);
 
-    for (size_t i = 0; i < pixel_count; ++i) {
+    for (std::size_t i = 0; i < pixel_count; ++i) {
         r[i] = pixels[i * 3 + 0];
         g[i] = pixels[i * 3 + 1];
         b[i] = pixels[i * 3 + 2];
@@ -158,7 +158,7 @@ bool WriteRgbaFloat(const std::string& path, int width, int height, const float*
     std::vector<float> b(pixel_count);
     std::vector<float> a(pixel_count);
 
-    for (size_t i = 0; i < pixel_count; ++i) {
+    for (std::size_t i = 0; i < pixel_count; ++i) {
         r[i] = pixels[i * 4 + 0];
         g[i] = pixels[i * 4 + 1];
         b[i] = pixels[i * 4 + 2];

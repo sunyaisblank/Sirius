@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <numbers>
 
 namespace sirius::core::coordinates {
 
@@ -180,7 +181,7 @@ inline Vec4Bl CartesianToBl(const Vec4Cart& cart) {
 
     bl.theta = std::acos(std::clamp(cart.z / bl.r, -1.0, 1.0));
     bl.phi = std::atan2(cart.y, cart.x);
-    if (bl.phi < 0) bl.phi += 2.0 * M_PI;
+    if (bl.phi < 0) bl.phi += 2.0 * std::numbers::pi;
 
     return bl;
 }
@@ -197,7 +198,7 @@ inline Vec4Bl KerrSchildCartToBl(const Vec4Cart& cart, double a) {
     bl.r = KerrSchildRadius(cart, a);
 
     if (bl.r < 1e-15) {
-        bl.theta = M_PI / 2.0;
+        bl.theta = std::numbers::pi / 2.0;
         bl.phi = 0;
         return bl;
     }
@@ -209,10 +210,71 @@ inline Vec4Bl KerrSchildCartToBl(const Vec4Cart& cart, double a) {
     if (std::abs(a) > 1e-12) {
         bl.phi -= std::atan2(a, bl.r);
     }
-    while (bl.phi < 0) bl.phi += 2.0 * M_PI;
-    while (bl.phi >= 2.0 * M_PI) bl.phi -= 2.0 * M_PI;
+    while (bl.phi < 0) bl.phi += 2.0 * std::numbers::pi;
+    while (bl.phi >= 2.0 * std::numbers::pi) bl.phi -= 2.0 * std::numbers::pi;
 
     return bl;
+}
+
+// Transform a contravariant vector from Cartesian Kerr-Schild to
+// Boyer-Lindquist components. Besides the inverse spatial oblate Jacobian, the
+// time and azimuth components include the Kerr-Schild twist
+//   dt_BL = dt_KS - 2Mr/Delta dr,
+//   dphi_BL = dphi_KS - a/Delta dr.
+// This is the chart authority used by live-path Carter and Walker-Penrose
+// monitors; copying a spherical inverse Jacobian here loses both invariants.
+inline Vec4Bl TransformVectorKerrSchildCartToBl(const Vec4Cart& vector, const Vec4Cart& position,
+                                                double mass, double spin) {
+    const double x = position.x;
+    const double y = position.y;
+    const double z = position.z;
+    const double a2 = spin * spin;
+    const double radius_squared = x * x + y * y + z * z;
+    const double reduced_radius_squared = radius_squared - a2;
+    const double discriminant =
+        std::max(reduced_radius_squared * reduced_radius_squared + 4.0 * a2 * z * z, 1.0e-20);
+    const double discriminant_root = std::sqrt(discriminant);
+    const double r2 = std::max((reduced_radius_squared + discriminant_root) / 2.0, 1.0e-12);
+    const double r = std::sqrt(r2);
+
+    const double discriminant_dx = 4.0 * x * reduced_radius_squared;
+    const double discriminant_dy = 4.0 * y * reduced_radius_squared;
+    const double discriminant_dz = 4.0 * z * (radius_squared + a2);
+    const double dr_dx = (x + discriminant_dx / (4.0 * discriminant_root)) / (2.0 * r);
+    const double dr_dy = (y + discriminant_dy / (4.0 * discriminant_root)) / (2.0 * r);
+    const double dr_dz = (z + discriminant_dz / (4.0 * discriminant_root)) / (2.0 * r);
+
+    const double cos_theta = std::clamp(z / r, -1.0, 1.0);
+    const double sin_theta =
+        std::max(std::sqrt(std::max(0.0, 1.0 - cos_theta * cos_theta)), 1.0e-12);
+    const double dtheta_dx = z * dr_dx / (r2 * sin_theta);
+    const double dtheta_dy = z * dr_dy / (r2 * sin_theta);
+    const double dtheta_dz = -(r - z * dr_dz) / (r2 * sin_theta);
+
+    const double numerator = r * y - spin * x;
+    const double denominator = r * x + spin * y;
+    const double phi_denominator = std::max((r2 + a2) * (r2 + a2) * sin_theta * sin_theta, 1.0e-20);
+    const double numerator_dx = y * dr_dx - spin;
+    const double numerator_dy = y * dr_dy + r;
+    const double numerator_dz = y * dr_dz;
+    const double denominator_dx = x * dr_dx + r;
+    const double denominator_dy = x * dr_dy + spin;
+    const double denominator_dz = x * dr_dz;
+    const double dphi_dx =
+        (denominator * numerator_dx - numerator * denominator_dx) / phi_denominator;
+    const double dphi_dy =
+        (denominator * numerator_dy - numerator * denominator_dy) / phi_denominator;
+    const double dphi_dz =
+        (denominator * numerator_dz - numerator * denominator_dz) / phi_denominator;
+
+    const double radial = dr_dx * vector.x + dr_dy * vector.y + dr_dz * vector.z;
+    const double polar = dtheta_dx * vector.x + dtheta_dy * vector.y + dtheta_dz * vector.z;
+    const double azimuth_ks = dphi_dx * vector.x + dphi_dy * vector.y + dphi_dz * vector.z;
+    const double delta = r2 - 2.0 * mass * r + a2;
+    SIRIUS_PRE(std::abs(delta) > 1.0e-12);
+
+    return Vec4Bl{vector.t - (2.0 * mass * r / delta) * radial, radial, polar,
+                  azimuth_ks - (spin / delta) * radial};
 }
 
 // Jacobian J[mu][nu] = d x^mu_Cart / d x^nu_BL; transforms contravariant
@@ -358,8 +420,8 @@ inline double ValidateRoundTrip(const Vec4Bl& original, double a = 0) {
     max_dev = std::max(max_dev, std::abs(original.theta - recovered.theta));
 
     double dphi = original.phi - recovered.phi;
-    while (dphi > M_PI) dphi -= 2 * M_PI;
-    while (dphi < -M_PI) dphi += 2 * M_PI;
+    while (dphi > std::numbers::pi) dphi -= 2 * std::numbers::pi;
+    while (dphi < -std::numbers::pi) dphi += 2 * std::numbers::pi;
     max_dev = std::max(max_dev, std::abs(dphi));
 
     return max_dev;

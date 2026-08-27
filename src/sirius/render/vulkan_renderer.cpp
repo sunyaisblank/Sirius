@@ -101,10 +101,10 @@ struct KernelScene {
 // gpu_supported=false) decline loudly.
 [[nodiscard]] Expected<KernelScene> MapMetric(const SessionConfig& config) {
     KernelScene scene;
-    const auto info = core::MetricInfoFor(config.metricId);
+    const auto info = core::MetricInfoFor(config.metric_id);
     scene.metric_name = info.canonical_name;
 
-    switch (config.metricId) {
+    switch (config.metric_id) {
         case core::MetricId::Minkowski:
             scene.metric_id = kDispatchKerrSchild;
             scene.M = 0.0f;
@@ -112,25 +112,25 @@ struct KernelScene {
             return scene;
         case core::MetricId::Schwarzschild:
             scene.metric_id = kDispatchKerrSchild;
-            scene.M = static_cast<float>(config.blackHoleMass);
+            scene.M = static_cast<float>(config.black_hole_mass);
             scene.disk_enabled = true;
             return scene;
         case core::MetricId::Kerr:
             scene.metric_id = kDispatchKerrSchild;
-            scene.M = static_cast<float>(config.blackHoleMass);
-            scene.a = static_cast<float>(config.blackHoleSpin * config.blackHoleMass);
+            scene.M = static_cast<float>(config.black_hole_mass);
+            scene.a = static_cast<float>(config.black_hole_spin * config.black_hole_mass);
             scene.disk_enabled = true;
             return scene;
         case core::MetricId::Alcubierre:
             scene.metric_id = kDispatchWarpDrive;
-            scene.warp_vs = static_cast<float>(config.warpVelocity);
-            scene.warp_sigma = static_cast<float>(config.bubbleSigma);
-            scene.warp_R = static_cast<float>(config.bubbleRadius);
+            scene.warp_vs = static_cast<float>(config.warp_velocity);
+            scene.warp_sigma = static_cast<float>(config.bubble_sigma);
+            scene.warp_R = static_cast<float>(config.bubble_radius);
             scene.disk_enabled = false;
             return scene;
         case core::MetricId::MorrisThorne:
             scene.metric_id = kDispatchMorrisThorne;
-            scene.throat_b0 = static_cast<float>(config.throatRadius);
+            scene.throat_b0 = static_cast<float>(config.throat_radius);
             scene.worm_shape = 0.0f;  // Ellis; the session constructs Ellis(b0).
             scene.disk_enabled = false;
             return scene;
@@ -250,13 +250,13 @@ struct KernelScene {
 void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
                      const KernelScene& scene, bool starfield_enabled, int starfield_width,
                      int starfield_height) {
-    const double theta = config.observerInclination;
+    const double theta = config.observer_inclination;
     const double st = std::sin(theta);
     const double ct = std::cos(theta);
-    const double phi = config.observerAzimuth;
+    const double phi = config.observer_azimuth;
     const double sp = std::sin(phi);
     const double cp = std::cos(phi);
-    const double r = config.observerDistance;
+    const double r = config.observer_distance;
 
     params[0] = static_cast<float>(config.width);
     params[1] = static_cast<float>(config.height);
@@ -288,7 +288,7 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
     params[17] = static_cast<float>(ct * cart_sp);
     params[18] = static_cast<float>(-st);
 
-    params[19] = static_cast<float>(config.cameraFOV * math::kPi / 180.0);  // full-angle radians
+    params[19] = static_cast<float>(config.camera_fov * math::kPi / 180.0);  // full-angle radians
     params[20] = static_cast<float>(config.width) / static_cast<float>(config.height);
 
     params[21] = kTraceMaxSteps;
@@ -298,12 +298,12 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
     params[25] = kTraceEscapeRadius;
     params[26] = kTraceCaptureFactor;
 
-    const double spin = (config.blackHoleMass > 0.0) ? config.blackHoleSpin : 0.0;
+    const double spin = (config.black_hole_mass > 0.0) ? config.black_hole_spin : 0.0;
     const double isco = core::AccretionDiskD::ComputeIsco(spin);
     params[27] = scene.disk_enabled ? 1.0f : 0.0f;
-    params[28] = static_cast<float>(isco * config.blackHoleMass);
-    params[29] = static_cast<float>(kDiskOuterFactor * config.blackHoleMass);
-    params[30] = config.diskTemperatureScale;
+    params[28] = static_cast<float>(isco * config.black_hole_mass);
+    params[29] = static_cast<float>(kDiskOuterFactor * config.black_hole_mass);
+    params[30] = config.disk_temperature_scale;
     params[31] = kDiskEmissionScale;
 
     // [32..35] tile origin/size: written per tile.
@@ -318,7 +318,7 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
     // Ray bundles (P2): propagate two deviation vectors in the trace kernel and
     // carry the geometric-mean expansion in radiance alpha. Off by default so the
     // parity and pinned renders are unchanged.
-    params[43] = config.rayBundles ? 1.0f : 0.0f;
+    params[43] = config.ray_bundles ? 1.0f : 0.0f;
 
     // Morris-Thorne (dispatch id 3): throat radius and shape selector.
     params[44] = scene.throat_b0;
@@ -326,26 +326,26 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
     params[46] = 0.5f;  // Per-dispatch sub-pixel sample u.
     params[47] = 0.5f;  // Per-dispatch sub-pixel sample v.
     params[48] = 0.0f;  // Running-average sample index.
-    params[49] = static_cast<float>(config.cameraBetaForward);
-    params[50] = static_cast<float>(config.cameraBetaUp);
-    params[51] = static_cast<float>(config.cameraBetaRight);
-    params[52] = config.temperatureModel == DiskTemperatureModel::ShakuraSunyaev ? 1.0f : 0.0f;
-    params[53] = config.dopplerBeaming ? 1.0f : 0.0f;
-    params[54] = config.lensType == core::LensType::ThinLens ? 1.0f : 0.0f;
-    params[55] = config.cameraFocalLength;
-    params[56] = config.cameraAperture;
-    params[57] = config.cameraFocusDistance;
-    params[58] = config.pointStarfield ? 1.0f : 0.0f;
+    params[49] = static_cast<float>(config.camera_beta_forward);
+    params[50] = static_cast<float>(config.camera_beta_up);
+    params[51] = static_cast<float>(config.camera_beta_right);
+    params[52] = config.temperature_model == DiskTemperatureModel::ShakuraSunyaev ? 1.0f : 0.0f;
+    params[53] = config.doppler_beaming ? 1.0f : 0.0f;
+    params[54] = config.lens_type == core::LensType::ThinLens ? 1.0f : 0.0f;
+    params[55] = config.camera_focal_length;
+    params[56] = config.camera_aperture;
+    params[57] = config.camera_focus_distance;
+    params[58] = config.point_starfield ? 1.0f : 0.0f;
     params[59] =
-        static_cast<float>((config.cameraFOV * math::kPi / 180.0) / std::max(1, config.height));
-    params[60] = config.starfieldConfig.brightness_scale;
-    params[61] = config.enableVolumetricDisk ? 1.0f : 0.0f;
-    params[62] = config.volumetricHOverR;
-    params[63] = config.volumetricHPower;
-    params[64] = config.volumetricTauMidplane;
-    params[65] = static_cast<float>(config.volumetricSamples);
-    params[66] = config.enableTurbulence ? 1.0f : 0.0f;
-    params[67] = config.enableCorona ? 1.0f : 0.0f;
+        static_cast<float>((config.camera_fov * math::kPi / 180.0) / std::max(1, config.height));
+    params[60] = config.starfield_config.brightness_scale;
+    params[61] = config.enable_volumetric_disk ? 1.0f : 0.0f;
+    params[62] = config.volumetric_h_over_r;
+    params[63] = config.volumetric_h_power;
+    params[64] = config.volumetric_tau_midplane;
+    params[65] = static_cast<float>(config.volumetric_samples);
+    params[66] = config.enable_turbulence ? 1.0f : 0.0f;
+    params[67] = config.enable_corona ? 1.0f : 0.0f;
 }
 
 }  // namespace
@@ -354,34 +354,34 @@ Expected<void> ValidateVulkanRenderConfig(const SessionConfig& config) {
     if (const auto issue = SessionConfigIssue(config); issue.has_value()) {
         return Fail(ErrorDomain::kConfiguration, "validate Vulkan render configuration", *issue);
     }
-    if (!config.enableDisk &&
-        (config.enableVolumetricDisk || config.enableTurbulence || config.enableCorona)) {
+    if (!config.enable_disk &&
+        (config.enable_volumetric_disk || config.enable_turbulence || config.enable_corona)) {
         return Fail(ErrorDomain::kConfiguration, "validate Vulkan render configuration",
                     "volumetric disk, turbulence, and corona require the disk");
     }
-    if (config.enableJets) {
+    if (config.enable_jets) {
         return Fail(ErrorDomain::kConfiguration, "validate Vulkan render configuration",
                     "relativistic jets are represented only by the CPU render path");
     }
-    if (config.enableMotionBlur) {
+    if (config.enable_motion_blur) {
         return Fail(ErrorDomain::kConfiguration, "validate Vulkan render configuration",
                     "disk motion blur is represented only by the CPU render path");
     }
-    if (config.enablePolarisation) {
+    if (config.enable_polarisation) {
         return Fail(ErrorDomain::kConfiguration, "validate Vulkan render configuration",
                     "rendered polarisation is not represented by the live Vulkan kernel");
     }
-    if (config.colorMode != core::color_modes::Mode::TrueColor) {
+    if (config.color_mode != core::color_modes::Mode::TrueColor) {
         return Fail(ErrorDomain::kConfiguration, "validate Vulkan render configuration",
                     "the requested diagnostic colour mode is not represented by the Vulkan "
                     "render kernel");
     }
-    if (config.enableDisk &&
-        core::DiskSupportFor(config.metricId) != core::DiskSupport::PageThorne) {
+    if (config.enable_disk &&
+        core::DiskSupportFor(config.metric_id) != core::DiskSupport::PageThorne) {
         return Fail(ErrorDomain::kConfiguration, "validate Vulkan render configuration",
                     "the selected metric has no represented accretion-disk emission model");
     }
-    switch (config.temperatureModel) {
+    switch (config.temperature_model) {
         case DiskTemperatureModel::NovikovThorne:
         case DiskTemperatureModel::ShakuraSunyaev:
             break;
@@ -389,7 +389,7 @@ Expected<void> ValidateVulkanRenderConfig(const SessionConfig& config) {
             return Fail(ErrorDomain::kConfiguration, "validate Vulkan render configuration",
                         "invalid disk temperature model");
     }
-    switch (config.lensType) {
+    switch (config.lens_type) {
         case core::LensType::Pinhole:
         case core::LensType::ThinLens:
             break;
@@ -400,8 +400,8 @@ Expected<void> ValidateVulkanRenderConfig(const SessionConfig& config) {
             return Fail(ErrorDomain::kConfiguration, "validate Vulkan render configuration",
                         "invalid lens model");
     }
-    if ((config.enableVolumetricDisk || config.enableTurbulence || config.enableCorona) &&
-        config.volumetricSamples > kMaxVulkanVolumeSamples) {
+    if ((config.enable_volumetric_disk || config.enable_turbulence || config.enable_corona) &&
+        config.volumetric_samples > kMaxVulkanVolumeSamples) {
         return Fail(ErrorDomain::kDevice, "validate Vulkan render configuration",
                     "Vulkan volumetric transfer supports at most " +
                         std::to_string(kMaxVulkanVolumeSamples) +
@@ -425,7 +425,7 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
     if (!scene) {
         return std::unexpected(scene.error());
     }
-    scene->disk_enabled = scene->disk_enabled && config.enableDisk;
+    scene->disk_enabled = scene->disk_enabled && config.enable_disk;
 
     // Resolve the same explicit device identity used by readiness, direct
     // backend tests, and physical attestations.
@@ -455,10 +455,15 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
 
     const auto spirv = LoadSpirv(*rung);
     if (spirv.empty()) {
-        return Fail(ErrorDomain::kKernel, "load trace kernel",
-                    std::string(RungKernelName(*rung)) +
-                        " not found below the Sirius runtime resource root "
-                        "(set SIRIUS_RESOURCE_DIR to an installed share/sirius directory)");
+        return Fail(
+            ErrorDomain::kKernel, "load trace kernel",
+#if SIRIUS_RELEASE_RESOURCE_LOCKED
+            std::string(RungKernelName(*rung)) + " not found in the packaged Sirius volume");
+#else
+            std::string(RungKernelName(*rung)) +
+                " not found below the Sirius runtime resource root "
+                "(set SIRIUS_RESOURCE_DIR to an installed share/sirius directory)");
+#endif
     }
     auto kernel = device.LoadKernel(spirv);
     if (!kernel) {
@@ -479,8 +484,8 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
     const std::uint64_t starfield_bytes = starfield.size() * sizeof(std::uint32_t);
     std::vector<core::StarEntry> point_stars;
     std::unique_ptr<core::StarfieldSpatialIndex> point_index;
-    if (config.pointStarfield) {
-        core::StarfieldConfig catalogue_config = config.starfieldConfig;
+    if (config.point_starfield) {
+        core::StarfieldConfig catalogue_config = config.starfield_config;
         core::StarfieldGenerator generator(catalogue_config);
         point_stars = generator.GenerateCatalogue();
         point_index = std::make_unique<core::StarfieldSpatialIndex>(point_stars);
@@ -498,7 +503,7 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
                     "SIRIUS_MEMORY_BUDGET_MB override");
     }
 
-    const bool use_starfield = !config.pointStarfield;
+    const bool use_starfield = !config.point_starfield;
     auto plan =
         DeriveTilePlan(budget, config.width, config.height,
                        params_overhead + (use_starfield ? starfield_bytes : 0) + point_bytes);
@@ -512,7 +517,7 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
               << " MiB, tile: " << plan->tile_edge << "x" << plan->tile_edge << " (working set "
               << (plan->tile_working_set_bytes / 1024) << " KiB)\n";
     std::cout << "[Vulkan] precision: " << RungName(*rung) << " rung\n";
-    if (config.pointStarfield) {
+    if (config.point_starfield) {
         std::cout << "[Vulkan] point-source star field: " << point_stars.size() << " stars, "
                   << (point_index->MemoryBytes() / 1024) << " KiB index\n";
     }
@@ -621,7 +626,7 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
                 const auto gy = static_cast<std::uint32_t>((bh + 7) / 8);
                 int sample_index = 0;
                 std::optional<base::Error> sample_error;
-                ForEachPixelSample(config.samplesPerPixel, [&](float sample_u, float sample_v) {
+                ForEachPixelSample(config.samples_per_pixel, [&](float sample_u, float sample_v) {
                     if (sample_error.has_value()) return;
                     if (should_cancel && should_cancel()) {
                         sample_error =
@@ -698,7 +703,7 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
     stats.tile_plan = *plan;
     stats.precision = *rung;
     stats.starfield_uploaded = use_starfield;
-    stats.point_catalogue_uploaded = config.pointStarfield;
+    stats.point_catalogue_uploaded = config.point_starfield;
     stats.tiles_rendered = tiles_total;
     stats.band_dispatches = band_dispatches;
     stats.seconds = std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();

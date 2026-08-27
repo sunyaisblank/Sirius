@@ -21,6 +21,7 @@
 #endif
 
 #include "sirius/core/constants.h"
+#include "sirius/core/disk/temporal_emission.h"
 #include "sirius/core/metrics/morris_thorne_family.h"
 #include "sirius/core/spectral/blackbody.h"  // Spectral blackbody colour.
 
@@ -35,9 +36,12 @@
 #include <cmath>
 #include <cstring>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <limits>
+#include <locale>
 #include <memory>
+#include <sstream>
 #include <stdexcept>
 
 namespace sirius::render {
@@ -67,10 +71,6 @@ constexpr float kPhotonRingBoostVolumetric = 1.5f;
 constexpr float kPhotonRingBoostEscaped = 1.2f;
 constexpr float kSpiralingBrightness = 0.02f;
 constexpr float kMaxStepsBrightness = 0.01f;
-constexpr float kDopplerClampMin = 0.1f;
-constexpr float kDopplerClampMax = 10.0f;
-constexpr float kGFactorClampMin = 0.1f;
-constexpr float kGFactorClampMax = 5.0f;
 constexpr float kJetNormalisation = 0.1f;
 constexpr int kBloomRadius = 12;
 constexpr float kShadowLift = 0.02f;
@@ -81,13 +81,17 @@ RenderSession::~RenderSession() {
     WaitForCompletion();
 }
 
-bool RenderSession::Configure(const SessionConfig& config) {
+base::Expected<void> RenderSession::Configure(const SessionConfig& config) {
     std::lock_guard<std::mutex> lock(lifecycle_mutex_);
     if (fsm_.GetState() != SessionState::Idle || render_thread_.joinable() || join_in_progress_) {
-        return false;
+        return base::Fail(base::ErrorDomain::kConfiguration, "configure render session",
+                          "session is not idle");
+    }
+    if (const auto issue = SessionConfigIssue(config); issue.has_value()) {
+        return base::Fail(base::ErrorDomain::kConfiguration, "configure render session", *issue);
     }
     config_ = config;
-    return true;
+    return {};
 }
 
 bool RenderSession::Start() {
@@ -167,6 +171,60 @@ void RenderSession::WaitForCompletion() {
     lifecycle_cv_.notify_all();
 }
 
+std::string SessionSceneEvidenceJson(const SessionConfig& config, std::size_t point_star_count) {
+    const char* backend = nullptr;
+    switch (config.backend) {
+        case RenderBackend::Cpu:
+            backend = "Cpu";
+            break;
+        case RenderBackend::Vulkan:
+            backend = "Vulkan";
+            break;
+        default:
+            SIRIUS_ASSERT(false);
+            backend = "Invalid";
+            break;
+    }
+
+    const char* lens = nullptr;
+    switch (config.lens_type) {
+        case core::LensType::Pinhole:
+            lens = "Pinhole";
+            break;
+        case core::LensType::ThinLens:
+            lens = "ThinLens";
+            break;
+        case core::LensType::Fisheye:
+            lens = "Fisheye";
+            break;
+        default:
+            SIRIUS_ASSERT(false);
+            lens = "Invalid";
+            break;
+    }
+
+    std::ostringstream evidence;
+    evidence.imbue(std::locale::classic());
+    evidence << std::setprecision(std::numeric_limits<double>::max_digits10)
+             << "{\"schema\":\"sirius-render-scene-v1\"" << ",\"backend\":\"" << backend << "\""
+             << ",\"metric\":\"" << core::MetricInfoFor(config.metric_id).canonical_name << "\""
+             << ",\"spin\":" << config.black_hole_spin << ",\"width\":" << config.width
+             << ",\"height\":" << config.height
+             << ",\"samples_per_pixel\":" << config.samples_per_pixel
+             << ",\"field_of_view\":" << static_cast<double>(config.camera_fov)
+             << ",\"disk_enabled\":" << (config.enable_disk ? "true" : "false")
+             << ",\"ray_bundles\":" << (config.ray_bundles ? "true" : "false")
+             << ",\"point_starfield\":" << (config.point_starfield ? "true" : "false")
+             << ",\"point_star_count\":" << point_star_count << ",\"point_brightness_scale\":"
+             << static_cast<double>(config.starfield_config.brightness_scale)
+             << ",\"camera_beta\":[" << config.camera_beta_forward << ',' << config.camera_beta_up
+             << ',' << config.camera_beta_right << "]" << ",\"lens\":\"" << lens << "\""
+             << ",\"focal_length\":" << static_cast<double>(config.camera_focal_length)
+             << ",\"aperture\":" << static_cast<double>(config.camera_aperture)
+             << ",\"focus_distance\":" << static_cast<double>(config.camera_focus_distance) << '}';
+    return evidence.str();
+}
+
 std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
     const auto finite = [](double value) { return std::isfinite(value); };
     const auto in_range = [&finite](double value, double minimum, double maximum) {
@@ -176,18 +234,18 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
     if (config.width < 1 || config.width > 8192 || config.height < 1 || config.height > 8192) {
         return "width and height must each be between 1 and 8192";
     }
-    if (config.tileSize < 1 || config.tileSize > 256 ||
-        (config.tileSize & (config.tileSize - 1)) != 0) {
+    if (config.tile_size < 1 || config.tile_size > 256 ||
+        (config.tile_size & (config.tile_size - 1)) != 0) {
         return "tile size must be a power of two between 1 and 256";
     }
-    if (config.samplesPerPixel < 1 || config.samplesPerPixel > 4096) {
+    if (config.samples_per_pixel < 1 || config.samples_per_pixel > 4096) {
         return "samples per pixel must be between 1 and 4096";
     }
-    if (config.threadCount < 0 || config.threadCount > 1024) {
+    if (config.thread_count < 0 || config.thread_count > 1024) {
         return "thread count must be between 0 and 1024";
     }
-    if (config.pointStarfield) {
-        const core::StarfieldConfig& stars = config.starfieldConfig;
+    if (config.point_starfield) {
+        const core::StarfieldConfig& stars = config.starfield_config;
         if (!stars.enabled || stars.star_count < 1 || stars.star_count > 10000000u ||
             !finite(stars.min_distance_pc) || stars.min_distance_pc < 0.1f ||
             !finite(stars.max_distance_pc) ||
@@ -197,17 +255,17 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
             stars.aperture_mm < 0.0f || stars.aperture_mm > 1000.0f ||
             !finite(stars.focus_distance_pc) || stars.focus_distance_pc < stars.min_distance_pc ||
             stars.focus_distance_pc > stars.max_distance_pc || !finite(stars.brightness_scale) ||
-            stars.brightness_scale < 0.0f) {
+            stars.brightness_scale < 0.0f || stars.brightness_scale > 1000000.0f) {
             return "point-starfield parameters are outside the represented domain";
         }
     }
-    if (config.writeOutput) {
-        if (config.outputPath.empty() || config.outputPath.find('\0') != std::string::npos) {
+    if (config.write_output) {
+        if (config.output_path.empty() || config.output_path.find('\0') != std::string::npos) {
             return "output path must not be empty or contain a null byte";
         }
         std::string extension;
-        if (const auto dot = config.outputPath.rfind('.'); dot != std::string::npos) {
-            extension = config.outputPath.substr(dot);
+        if (const auto dot = config.output_path.rfind('.'); dot != std::string::npos) {
+            extension = config.output_path.substr(dot);
             std::transform(extension.begin(), extension.end(), extension.begin(),
                            [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
         }
@@ -224,48 +282,49 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
             return "invalid render backend";
     }
     if (const auto issue =
-            core::MetricParameterIssue(config.metricId, config.blackHoleSpin,
-                                       config.blackHoleCharge, config.cosmologicalConstant);
+            core::MetricParameterIssue(config.metric_id, config.black_hole_spin,
+                                       config.black_hole_charge, config.cosmological_constant);
         issue.has_value()) {
         return std::string(*issue);
     }
     const bool massless_metric =
-        config.metricId == MetricId::Minkowski || config.metricId == MetricId::DeSitter;
-    if (!finite(config.blackHoleMass) || config.blackHoleMass < 0.0 ||
-        config.blackHoleMass > 100.0 || !finite(config.blackHoleSpin) ||
-        config.blackHoleSpin < 0.0 || config.blackHoleSpin > 0.998 ||
-        !finite(config.blackHoleCharge) || config.blackHoleCharge < 0.0 ||
-        config.blackHoleCharge > 0.999 || !finite(config.cosmologicalConstant) ||
-        std::abs(config.cosmologicalConstant) > 0.1) {
+        config.metric_id == MetricId::Minkowski || config.metric_id == MetricId::DeSitter;
+    if (!finite(config.black_hole_mass) || config.black_hole_mass < 0.0 ||
+        config.black_hole_mass > 100.0 || !finite(config.black_hole_spin) ||
+        config.black_hole_spin < 0.0 || config.black_hole_spin > 0.998 ||
+        !finite(config.black_hole_charge) || config.black_hole_charge < 0.0 ||
+        config.black_hole_charge > 0.999 || !finite(config.cosmological_constant) ||
+        std::abs(config.cosmological_constant) > 0.1) {
         return "metric mass, spin, charge, or lambda is outside the represented domain";
     }
-    if (config.blackHoleSpin * config.blackHoleSpin +
-            config.blackHoleCharge * config.blackHoleCharge >=
+    if (config.black_hole_spin * config.black_hole_spin +
+            config.black_hole_charge * config.black_hole_charge >=
         0.999) {
         return "combined spin squared plus charge squared must be below 0.999";
     }
-    if ((massless_metric && config.blackHoleMass != 0.0) ||
-        (!massless_metric && config.blackHoleMass < 0.1)) {
+    if ((massless_metric && config.black_hole_mass != 0.0) ||
+        (!massless_metric && config.black_hole_mass < 0.1)) {
         return massless_metric ? "massless metrics require mass to be zero"
                                : "mass must be between 0.1 and 100 for this metric";
     }
 
-    const double distance_scale = massless_metric ? 1.0 : config.blackHoleMass;
-    if (!finite(config.observerDistance) || config.observerDistance < 5.0 * distance_scale ||
-        config.observerDistance > 1000.0 * distance_scale || !finite(config.observerInclination) ||
-        config.observerInclination <= 0.1 * math::kPi / 180.0 ||
-        config.observerInclination >= 179.9 * math::kPi / 180.0 ||
-        !finite(config.observerAzimuth) || std::abs(config.observerAzimuth) > 2.0 * math::kPi ||
-        !finite(config.cameraFOV) || config.cameraFOV < 1.0f || config.cameraFOV > 170.0f) {
+    const double distance_scale = massless_metric ? 1.0 : config.black_hole_mass;
+    if (!finite(config.observer_distance) || config.observer_distance < 5.0 * distance_scale ||
+        config.observer_distance > 1000.0 * distance_scale ||
+        !finite(config.observer_inclination) ||
+        config.observer_inclination <= 0.1 * math::kPi / 180.0 ||
+        config.observer_inclination >= 179.9 * math::kPi / 180.0 ||
+        !finite(config.observer_azimuth) || std::abs(config.observer_azimuth) > 2.0 * math::kPi ||
+        !finite(config.camera_fov) || config.camera_fov < 1.0f || config.camera_fov > 170.0f) {
         return "observer distance, angles, or field of view is outside the represented domain";
     }
-    const double beta_squared = config.cameraBetaForward * config.cameraBetaForward +
-                                config.cameraBetaUp * config.cameraBetaUp +
-                                config.cameraBetaRight * config.cameraBetaRight;
+    const double beta_squared = config.camera_beta_forward * config.camera_beta_forward +
+                                config.camera_beta_up * config.camera_beta_up +
+                                config.camera_beta_right * config.camera_beta_right;
     if (!finite(beta_squared) || beta_squared >= 1.0) {
         return "camera beta magnitude must be finite and below one";
     }
-    switch (config.lensType) {
+    switch (config.lens_type) {
         case core::LensType::Pinhole:
         case core::LensType::ThinLens:
         case core::LensType::Fisheye:
@@ -273,44 +332,44 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         default:
             return "invalid lens model";
     }
-    if (!in_range(config.cameraFocalLength, std::numeric_limits<float>::min(), 10000.0) ||
-        !in_range(config.cameraAperture, std::numeric_limits<float>::min(), 128.0) ||
-        !in_range(config.cameraFocusDistance, std::numeric_limits<float>::min(), 1.0e6)) {
+    if (!in_range(config.camera_focal_length, std::numeric_limits<float>::min(), 10000.0) ||
+        !in_range(config.camera_aperture, std::numeric_limits<float>::min(), 128.0) ||
+        !in_range(config.camera_focus_distance, std::numeric_limits<float>::min(), 1.0e6)) {
         return "camera focal length, aperture, or focus distance is outside the represented domain";
     }
 
-    switch (config.temperatureModel) {
+    switch (config.temperature_model) {
         case DiskTemperatureModel::NovikovThorne:
         case DiskTemperatureModel::ShakuraSunyaev:
             break;
         default:
             return "invalid disk temperature model";
     }
-    if (!finite(config.diskTemperatureScale) || config.diskTemperatureScale < 100.0f ||
-        config.diskTemperatureScale > 1.0e8f) {
+    if (!finite(config.disk_temperature_scale) || config.disk_temperature_scale < 100.0f ||
+        config.disk_temperature_scale > 1.0e8f) {
         return "disk temperature scale must be between 100 and 100000000 Kelvin";
     }
-    if (config.enableDisk &&
-        core::DiskSupportFor(config.metricId) != core::DiskSupport::PageThorne) {
+    if (config.enable_disk &&
+        core::DiskSupportFor(config.metric_id) != core::DiskSupport::PageThorne) {
         return "the selected metric has no represented accretion-disk emission model";
     }
-    if (!config.enableDisk &&
-        (config.enableVolumetricDisk || config.enableTurbulence || config.enableCorona)) {
+    if (!config.enable_disk &&
+        (config.enable_volumetric_disk || config.enable_turbulence || config.enable_corona)) {
         return "volumetric disk, turbulence, and corona require the disk";
     }
-    if (!config.enableVolumetricDisk && (config.enableTurbulence || config.enableCorona)) {
+    if (!config.enable_volumetric_disk && (config.enable_turbulence || config.enable_corona)) {
         return "turbulence and corona require volumetric transfer";
     }
-    if (config.volumetricSamples < 1 || config.volumetricSamples > 4096 ||
-        !finite(config.volumetricHOverR) || config.volumetricHOverR <= 0.0f ||
-        config.volumetricHOverR > 2.0f || !finite(config.volumetricHPower) ||
-        config.volumetricHPower < -2.0f || config.volumetricHPower > 4.0f ||
-        !finite(config.volumetricTauMidplane) || config.volumetricTauMidplane < 0.0f ||
-        config.volumetricTauMidplane > 1.0e6f) {
+    if (config.volumetric_samples < 1 || config.volumetric_samples > 4096 ||
+        !finite(config.volumetric_h_over_r) || config.volumetric_h_over_r <= 0.0f ||
+        config.volumetric_h_over_r > 2.0f || !finite(config.volumetric_h_power) ||
+        config.volumetric_h_power < -2.0f || config.volumetric_h_power > 4.0f ||
+        !finite(config.volumetric_tau_midplane) || config.volumetric_tau_midplane < 0.0f ||
+        config.volumetric_tau_midplane > 1.0e6f) {
         return "volumetric transfer parameters are outside the represented domain";
     }
 
-    switch (config.colorMode) {
+    switch (config.color_mode) {
         case core::color_modes::Mode::TrueColor:
         case core::color_modes::Mode::TemperatureMap:
         case core::color_modes::Mode::RedshiftMap:
@@ -320,21 +379,21 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         default:
             return "invalid colour mode";
     }
-    const bool polarisation_mode = config.colorMode == core::color_modes::Mode::Polarisation;
-    if (config.enablePolarisation != polarisation_mode) {
+    const bool polarisation_mode = config.color_mode == core::color_modes::Mode::Polarisation;
+    if (config.enable_polarisation != polarisation_mode) {
         return "polarisation transport and colour mode must be enabled together";
     }
     if (polarisation_mode) {
-        if (!config.enableDisk) {
+        if (!config.enable_disk) {
             return "polarisation requires the thin accretion disk";
         }
-        if (config.enableVolumetricDisk) {
+        if (config.enable_volumetric_disk) {
             return "polarisation is not represented for volumetric transfer";
         }
-        if (config.metricId != MetricId::Schwarzschild && config.metricId != MetricId::Kerr) {
+        if (config.metric_id != MetricId::Schwarzschild && config.metric_id != MetricId::Kerr) {
             return "polarisation is represented only for Schwarzschild and Kerr";
         }
-        if (config.enableMotionBlur) {
+        if (config.enable_motion_blur) {
             return "polarisation is not represented with temporal disk motion blur";
         }
     }
@@ -349,22 +408,22 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
             return "invalid tonemapper";
     }
     if (!in_range(config.exposure, std::numeric_limits<float>::min(), 100.0) ||
-        !in_range(config.bloomIntensity, 0.0, 5.0) ||
-        !in_range(config.bloomThreshold, 0.0, 100.0) || !in_range(config.contrast, 0.0, 4.0) ||
+        !in_range(config.bloom_intensity, 0.0, 5.0) ||
+        !in_range(config.bloom_threshold, 0.0, 100.0) || !in_range(config.contrast, 0.0, 4.0) ||
         !in_range(config.saturation, 0.0, 4.0)) {
         return "display-pipeline parameters are outside the represented domain";
     }
-    if (config.enableMotionBlur) {
-        if (!config.enableDisk) {
+    if (config.enable_motion_blur) {
+        if (!config.enable_disk) {
             return "temporal disk motion blur requires the disk";
         }
-        if (!in_range(config.shutterTime, 0.0, 1000.0) || config.motionBlurSamples < 1 ||
-            config.motionBlurSamples > 4096) {
+        if (!in_range(config.shutter_time, 0.0, 1000.0) || config.motion_blur_samples < 1 ||
+            config.motion_blur_samples > 4096) {
             return "motion-blur parameters are outside the represented domain";
         }
     }
-    if (config.enableFilmSimulation) {
-        const FilmConfig& film = config.filmConfig;
+    if (config.enable_film_simulation) {
+        const FilmConfig& film = config.film_config;
         switch (film.format) {
             case FilmFormat::IMAX70mm_15perf:
             case FilmFormat::IMAX70mm_5perf:
@@ -399,7 +458,7 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
             !in_range(film.halation_color_g, 0.0, 10.0) ||
             !in_range(film.halation_color_b, 0.0, 10.0) || !in_range(film.saturation, 0.0, 4.0) ||
             !in_range(film.contrast, 0.0, 4.0) || !in_range(film.exposure, -100.0, 100.0) ||
-            !in_range(film.color_temperature_K, 100.0, 100000.0) ||
+            !in_range(film.color_temperature_kelvin, 100.0, 100000.0) ||
             !in_range(film.tint, -10.0, 10.0) || !in_range(film.toe_strength, 0.0, 10.0) ||
             !in_range(film.shoulder_strength, 0.0, 10.0) ||
             !in_range(film.midtone_point, 0.01, 0.99) ||
@@ -415,14 +474,15 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
             return "film-simulation parameters are outside the represented domain";
         }
     }
-    if (!finite(config.throatRadius) || config.throatRadius <= 0.0 ||
-        config.throatRadius > 1000.0 || !finite(config.warpVelocity) ||
-        std::abs(config.warpVelocity) > 10.0 || !finite(config.bubbleRadius) ||
-        config.bubbleRadius <= 0.0 || config.bubbleRadius > 1000.0 || !finite(config.bubbleSigma) ||
-        config.bubbleSigma <= 0.0 || config.bubbleSigma > 1000.0) {
+    if (!finite(config.throat_radius) || config.throat_radius <= 0.0 ||
+        config.throat_radius > 1000.0 || !finite(config.warp_velocity) ||
+        std::abs(config.warp_velocity) > 10.0 || !finite(config.bubble_radius) ||
+        config.bubble_radius <= 0.0 || config.bubble_radius > 1000.0 ||
+        !finite(config.bubble_sigma) || config.bubble_sigma <= 0.0 ||
+        config.bubble_sigma > 1000.0) {
         return "wormhole or warp-drive parameters are outside the represented domain";
     }
-    switch (config.wormholeTopology) {
+    switch (config.wormhole_topology) {
         case WormholeTopology::OneSheetCapture:
             break;
         case WormholeTopology::TwoSheet:
@@ -430,13 +490,13 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         default:
             return "invalid wormhole topology";
     }
-    if (config.enableJets &&
-        (!finite(config.jetLorentzFactor) || config.jetLorentzFactor < 1.0f ||
-         !finite(config.jetOpeningAngle) || config.jetOpeningAngle <= 0.0f ||
-         !finite(config.jetLaunchRadius) || config.jetLaunchRadius <= 0.0f ||
-         !finite(config.jetMaxExtent) || config.jetMaxExtent <= config.jetLaunchRadius ||
-         !finite(config.jetCollimation) || !finite(config.jetSpectralIndex) ||
-         !finite(config.jetIntensity) || config.jetIntensity < 0.0f)) {
+    if (config.enable_jets &&
+        (!finite(config.jet_lorentz_factor) || config.jet_lorentz_factor < 1.0f ||
+         !finite(config.jet_opening_angle) || config.jet_opening_angle <= 0.0f ||
+         !finite(config.jet_launch_radius) || config.jet_launch_radius <= 0.0f ||
+         !finite(config.jet_max_extent) || config.jet_max_extent <= config.jet_launch_radius ||
+         !finite(config.jet_collimation) || !finite(config.jet_spectral_index) ||
+         !finite(config.jet_intensity) || config.jet_intensity < 0.0f)) {
         return "relativistic-jet parameters are outside the represented domain";
     }
     return std::nullopt;
@@ -456,18 +516,29 @@ void RenderSession::SetupActions() {
 
 void RenderSession::OnEnterState(SessionState state) {
     switch (state) {
-        case SessionState::Initialising:
-            Initialise();
+        case SessionState::Initialising: {
+            auto initialised = Initialise();
+            if (!initialised) {
+                error_message_ = initialised.error().Description();
+                fsm_.Process(progress_.GetCancellationToken().IsCancelled() ? SessionEvent::Cancel
+                                                                            : SessionEvent::Error);
+            }
             break;
+        }
         case SessionState::Scheduling:
             ScheduleNextTile();
             break;
         case SessionState::Rendering:
             // Tile is being processed.
             break;
-        case SessionState::Completing:
-            WriteOutput();
+        case SessionState::Completing: {
+            auto written = WriteOutput();
+            if (!written) {
+                error_message_ = written.error().Description();
+                fsm_.Process(SessionEvent::Error);
+            }
             break;
+        }
         case SessionState::Complete:
         case SessionState::Failed:
         case SessionState::Cancelled:
@@ -484,317 +555,301 @@ void RenderSession::OnEnterState(SessionState state) {
 // =============================================================================
 // Initialisation.
 // =============================================================================
-void RenderSession::Initialise() {
-    try {
-        if (progress_.GetCancellationToken().IsCancelled()) {
-            fsm_.Process(SessionEvent::Cancel);
-            return;
-        }
-        if (const auto issue = SessionConfigIssue(config_); issue.has_value()) {
-            throw std::invalid_argument("SessionConfig: " + *issue);
-        }
-        std::cout << "[Session] Initialising render..." << std::endl;
-        std::cout << "  Resolution: " << config_.width << " x " << config_.height << std::endl;
-        std::cout << "  Tile size:  " << config_.tileSize << std::endl;
-        std::cout << "  Samples:    " << config_.samplesPerPixel << std::endl;
-
-        // Tiles.
-        tiles_.Initialise(config_.width, config_.height, config_.tileSize);
-        std::cout << "  Tiles:      " << tiles_.GetTileCount() << " (spiral order)" << std::endl;
-
-        // Display buffer.
-        display_.Initialise(config_.width, config_.height);
-
-        // Progress tracker (Start() before SetTotals to avoid a reset).
-        progress_.Start();
-        progress_.SetTotals(tiles_.GetTileCount(), config_.samplesPerPixel);
-
-        // Construct the spacetime from its registry identity. Charge and the
-        // cosmological constant flow through; a metric the CPU tracer cannot
-        // represent leaves metric_ null, and the scheduler then refuses the CPU
-        // path instead of substituting a different spacetime.
-        switch (config_.metricId) {
-            case MetricId::Minkowski:
-                metric_ = std::make_unique<KerrSchildFamily>(KerrSchildParams::Minkowski());
-                break;
-            case MetricId::Schwarzschild:
-                if (config_.blackHoleSpin != 0.0 || config_.blackHoleCharge != 0.0 ||
-                    config_.cosmologicalConstant != 0.0) {
-                    throw std::invalid_argument(
-                        "SessionConfig: Schwarzschild received spin, charge, or lambda");
-                }
-                metric_ = std::make_unique<KerrSchildFamily>(
-                    KerrSchildParams::Schwarzschild(config_.blackHoleMass));
-                break;
-            case MetricId::Kerr:
-                if (config_.blackHoleCharge != 0.0 || config_.cosmologicalConstant != 0.0) {
-                    throw std::invalid_argument("SessionConfig: Kerr received charge or lambda");
-                }
-                metric_ = std::make_unique<KerrSchildFamily>(KerrSchildParams::Kerr(
-                    config_.blackHoleMass, config_.blackHoleSpin * config_.blackHoleMass));
-                break;
-            case MetricId::ReissnerNordstrom:
-                if (config_.blackHoleSpin != 0.0 || config_.cosmologicalConstant != 0.0) {
-                    throw std::invalid_argument(
-                        "SessionConfig: Reissner-Nordstrom received spin or lambda");
-                }
-                metric_ = std::make_unique<KerrSchildFamily>(KerrSchildParams::ReissnerNordstrom(
-                    config_.blackHoleMass, config_.blackHoleCharge * config_.blackHoleMass));
-                break;
-            case MetricId::KerrNewman:
-                if (config_.cosmologicalConstant != 0.0) {
-                    throw std::invalid_argument("SessionConfig: Kerr-Newman received lambda");
-                }
-                metric_ = std::make_unique<KerrSchildFamily>(KerrSchildParams::KerrNewman(
-                    config_.blackHoleMass, config_.blackHoleSpin * config_.blackHoleMass,
-                    config_.blackHoleCharge * config_.blackHoleMass));
-                break;
-            case MetricId::DeSitter: {
-                if (config_.blackHoleSpin != 0.0 || config_.blackHoleCharge != 0.0) {
-                    throw std::invalid_argument("SessionConfig: de-Sitter received spin or charge");
-                }
-                metric_ = std::make_unique<KerrSchildFamily>(
-                    KerrSchildParams::DeSitter(config_.cosmologicalConstant));
-                break;
-            }
-            case MetricId::SchwarzschildDeSitter: {
-                if (config_.blackHoleSpin != 0.0 || config_.blackHoleCharge != 0.0) {
-                    throw std::invalid_argument(
-                        "SessionConfig: Schwarzschild-de-Sitter received spin or charge");
-                }
-                KerrSchildParams params = KerrSchildParams::Schwarzschild(config_.blackHoleMass);
-                params.Lambda = config_.cosmologicalConstant;
-                metric_ = std::make_unique<KerrSchildFamily>(params);
-                break;
-            }
-            case MetricId::Alcubierre: {
-                WarpDriveParams wp;
-                wp.vs = config_.warpVelocity;
-                wp.R = config_.bubbleRadius;
-                wp.sigma = config_.bubbleSigma;
-                metric_ = std::make_unique<WarpDriveFamily>(wp);
-                break;
-            }
-            case MetricId::MorrisThorne: {
-                // The Cartesian embedding of the spherical family; one sheet,
-                // throat as the capture surface (see morris_thorne_family.h).
-                metric_ = std::make_unique<core::MorrisThorneCartesian>(
-                    core::MorrisThorneParams::Ellis(config_.throatRadius));
-                break;
-            }
-        }
-        if (metric_) {
-            std::cout << "  Metric:     " << metric_->GetName() << std::endl;
-        } else {
-            std::cout << "  Metric:     " << core::MetricInfoFor(config_.metricId).canonical_name
-                      << " (GPU backend only)" << std::endl;
-        }
-
-        // Camera.
-        CameraConfig camConfig;
-        camConfig.r = config_.observerDistance;
-        camConfig.theta = config_.observerInclination;
-        camConfig.phi = config_.observerAzimuth;
-        camConfig.fov = config_.cameraFOV;
-        camConfig.width = config_.width;
-        camConfig.height = config_.height;
-        // Camera worldline aberration (P5): beta components in the local
-        // ray-component frame. Zero keeps every ray unaberrated (byte-pin).
-        camConfig.beta_x = config_.cameraBetaForward;
-        camConfig.beta_y = config_.cameraBetaUp;
-        camConfig.beta_z = config_.cameraBetaRight;
-        camConfig.focal_length = config_.cameraFocalLength;
-        camConfig.aperture = config_.cameraAperture;
-        camConfig.focus_distance = config_.cameraFocusDistance;
-        camera_ = core::CreateCamera(config_.lensType, camConfig);
-        std::cout << "  Observer:   r=" << camConfig.r
-                  << "M, theta=" << (camConfig.theta * 180.0 / math::kPi) << " deg" << std::endl;
-
-        // Geodesic tracer.
-        TracerConfig tracerConfig;
-        tracerConfig.escape_radius = 200.0f;
-        // Kerr-Schild coordinates are horizon-penetrating, so the exact capture
-        // surface is numerically safe. Enlarging it inflates the near-extremal
-        // shadow.
-        tracerConfig.horizon_factor = 1.0f;
-        tracerConfig.max_steps = 20000;
-
-        // Large steps far from the hole, small near the horizon.
-        tracerConfig.integrator.initial_step = 0.1f;
-        tracerConfig.integrator.max_step = 2.0f;
-        tracerConfig.integrator.min_step = 1e-5f;
-        tracerConfig.integrator.abs_tolerance = 5e-6f;
-        tracerConfig.integrator.rel_tolerance = 5e-6f;
-
-        // Disk inner edge from the ISCO. The thin disk is a black-hole construct;
-        // horizonless spacetimes render lensing and background only.
-        const auto diskSupport = core::DiskSupportFor(config_.metricId);
-        const bool diskCapable = diskSupport == core::DiskSupport::PageThorne;
-        if (config_.enableDisk && diskSupport != core::DiskSupport::PageThorne) {
-            throw std::invalid_argument(
-                "SessionConfig: the selected metric has no represented accretion-disk emission "
-                "model; disable the disk");
-        }
-        if (!config_.enableDisk &&
-            (config_.enableVolumetricDisk || config_.enableTurbulence || config_.enableCorona)) {
-            throw std::invalid_argument(
-                "SessionConfig: volumetric disk, turbulence, and corona require the disk");
-        }
-        auto rISCO = AccretionDiskD::ComputeIsco(config_.blackHoleSpin);
-        tracerConfig.disk_inner = static_cast<float>(rISCO * config_.blackHoleMass);
-        tracerConfig.disk_outer = static_cast<float>(20.0 * config_.blackHoleMass);
-        tracerConfig.enable_disk = config_.enableDisk && diskCapable;
-        tracerConfig.enable_polarisation = config_.enablePolarisation;
-
-        // Doppler beaming toggle (P4); true keeps the full physics and the
-        // pinned render byte-for-byte.
-        tracerConfig.doppler_beaming = config_.dopplerBeaming;
-        switch (config_.temperatureModel) {
-            case DiskTemperatureModel::NovikovThorne:
-                tracerConfig.disk_temperature_model = backend::DiskTemperatureModel::NovikovThorne;
-                break;
-            case DiskTemperatureModel::ShakuraSunyaev:
-                tracerConfig.disk_temperature_model = backend::DiskTemperatureModel::ShakuraSunyaev;
-                break;
-            default:
-                throw std::invalid_argument(
-                    "SessionConfig: invalid disk temperature model reached CPU initialisation");
-        }
-
-        // Ray bundles (P2/P3). Enabled for the beam footprint the filtered star
-        // field consumes; the pupil (point-source) mode gives the celestial-sphere
-        // footprint. Default off leaves the point-sampled path and the pinned
-        // render untouched.
-        pixel_angular_size_ = (config_.cameraFOV * math::kPi / 180.0) / std::max(1, config_.height);
-        tracerConfig.enable_ray_bundles = config_.rayBundles;
-        tracerConfig.bundle_point_source = true;
-        tracerConfig.bundle_angular_size = static_cast<float>(pixel_angular_size_);
-
-        // Volumetric disk configuration.
-        tracerConfig.enable_volumetric = config_.enableVolumetricDisk;
-        tracerConfig.volumetric_H_over_r = config_.volumetricHOverR;
-        tracerConfig.volumetric_H_power = config_.volumetricHPower;
-        tracerConfig.volumetric_tau_midplane = config_.volumetricTauMidplane;
-        tracerConfig.volumetric_samples = config_.volumetricSamples;
-        tracerConfig.enable_turbulence = config_.enableTurbulence;
-        tracerConfig.turbulence.enabled = config_.enableTurbulence;
-        tracerConfig.enable_corona = config_.enableCorona;
-        tracerConfig.corona.enabled = config_.enableCorona;
-        tracerConfig.corona.inner_radius_M = tracerConfig.disk_inner;
-        tracerConfig.corona.outer_radius_M = tracerConfig.disk_outer;
-
-        if (metric_) {
-            tracer_ = std::make_unique<GeodesicTracer>(metric_.get(), tracerConfig);
-            if (diskCapable) {
-                std::cout << "  Disk:       r_in=" << tracerConfig.disk_inner
-                          << "M, r_out=" << tracerConfig.disk_outer << "M" << std::endl;
-            }
-            std::cout << "[Session] Physics engine initialized (geodesic integration enabled)"
-                      << std::endl;
-        }
-
-        // Relativistic jets.
-        if (config_.enableJets) {
-            JetConfig jetConfig;
-            jetConfig.lorentz_factor = config_.jetLorentzFactor;
-            jetConfig.opening_angle = config_.jetOpeningAngle;
-            jetConfig.r_launch = config_.jetLaunchRadius;
-            jetConfig.r_max = config_.jetMaxExtent;
-            jetConfig.collimation = config_.jetCollimation;
-            jetConfig.spectral_index = config_.jetSpectralIndex;
-            jet_ = std::make_unique<RelativisticJet>(jetConfig);
-            std::cout << "[Session] Relativistic jets enabled: Gamma=" << jetConfig.lorentz_factor
-                      << ", theta_open=" << (jetConfig.opening_angle * 180.0 / math::kPi) << " deg"
-                      << std::endl;
-        }
-
-        // Colour mode.
-        const char* modeName = "TrueColor";
-        switch (config_.colorMode) {
-            case core::color_modes::Mode::TrueColor:
-                modeName = "TrueColor (Physical)";
-                break;
-            case core::color_modes::Mode::TemperatureMap:
-                modeName = "TemperatureMap (False Color)";
-                break;
-            case core::color_modes::Mode::RedshiftMap:
-                modeName = "RedshiftMap (g-factor)";
-                break;
-            case core::color_modes::Mode::Narrowband:
-                modeName = "Narrowband (Hubble Palette)";
-                break;
-            case core::color_modes::Mode::Polarisation:
-                modeName = "Polarisation";
-                break;
-        }
-        std::cout << "[Session] Color mode: " << modeName << std::endl;
-
-        // Multi-threaded rendering setup.
-        if (config_.enableParallelRendering) {
-            num_threads_ = config_.threadCount;
-            if (num_threads_ <= 0) {
-                // Auto-detect: hardware concurrency, leaving one core for the system.
-                num_threads_ = static_cast<int>(std::thread::hardware_concurrency());
-                if (num_threads_ > 1) num_threads_--;
-                if (num_threads_ < 1) num_threads_ = 1;
-            }
-
-            // Per-thread tracers share the metric but keep independent state.
-            thread_tracers_.clear();
-            thread_tracers_.reserve(num_threads_);
-            if (metric_) {
-                for (int i = 0; i < num_threads_; ++i) {
-                    thread_tracers_.push_back(
-                        std::make_unique<GeodesicTracer>(metric_.get(), tracerConfig));
-                }
-            }
-
-            std::cout << "[Session] Multi-threaded rendering enabled: " << num_threads_
-                      << " threads" << std::endl;
-        } else {
-            num_threads_ = 1;
-            std::cout << "[Session] Single-threaded rendering" << std::endl;
-        }
-
-        // The background texture is a physics input, not decorative packaging:
-        // substituting grey changes every escaped ray. Missing resources
-        // therefore fail initialisation instead of quietly changing the scene.
-        const auto starfield = base::ResolveResource("assets/Starfield.png");
-        if (!starfield || !LoadStarfieldTexture(starfield->string())) {
-            throw std::runtime_error(
-                "required runtime resource assets/Starfield.png is missing or unreadable "
-                "(set SIRIUS_RESOURCE_DIR to an installed share/sirius directory)");
-        }
-
-        // Filtered point-source star field (P3): build the deterministic catalogue
-        // once. The beam footprint (ray bundles on) or a pinhole sigma (bundles
-        // off) filters it per escaping ray.
-        if (config_.pointStarfield) {
-            core::StarfieldConfig scfg = config_.starfieldConfig;
-            star_generator_ = std::make_unique<core::StarfieldGenerator>(scfg);
-            star_catalogue_ = star_generator_->GenerateCatalogue();
-            star_index_ = std::make_unique<core::StarfieldSpatialIndex>(star_catalogue_);
-            std::cout << "[Session] Point-source star field: " << star_catalogue_.size()
-                      << " stars, " << (star_index_->MemoryBytes() / 1024) << " KiB index, beams "
-                      << (config_.rayBundles ? "on" : "off") << std::endl;
-        }
-
-        // GPU acceleration removed: the legacy OptiX backend init and starfield
-        // upload lived here. OptiX is retired; the Vulkan compute path arrives
-        // through sirius::backend::device later. The CPU path renders directly.
-
-        if (progress_.GetCancellationToken().IsCancelled()) {
-            fsm_.Process(SessionEvent::Cancel);
-            return;
-        }
-
-        // Transition to Scheduling.
-        fsm_.Process(SessionEvent::Ready);
-    } catch (const std::exception& e) {
-        error_message_ = e.what();
-        fsm_.Process(progress_.GetCancellationToken().IsCancelled() ? SessionEvent::Cancel
-                                                                    : SessionEvent::Error);
+base::Expected<void> RenderSession::Initialise() {
+    if (progress_.GetCancellationToken().IsCancelled()) {
+        fsm_.Process(SessionEvent::Cancel);
+        return {};
     }
+    std::cout << "[Session] Initialising render..." << std::endl;
+    std::cout << "  Resolution: " << config_.width << " x " << config_.height << std::endl;
+    std::cout << "  Tile size:  " << config_.tile_size << std::endl;
+    std::cout << "  Samples:    " << config_.samples_per_pixel << std::endl;
+
+    // Tiles.
+    tiles_.Initialise(config_.width, config_.height, config_.tile_size);
+    std::cout << "  Tiles:      " << tiles_.GetTileCount() << " (spiral order)" << std::endl;
+
+    // Display buffer.
+    display_.Initialise(config_.width, config_.height);
+
+    // Progress tracker (Start() before SetTotals to avoid a reset).
+    progress_.Start();
+    progress_.SetTotals(tiles_.GetTileCount(), config_.samples_per_pixel);
+
+    // Construct the spacetime from its registry identity. Charge and the
+    // cosmological constant flow through; a metric the CPU tracer cannot
+    // represent leaves metric_ null, and the scheduler then refuses the CPU
+    // path instead of substituting a different spacetime.
+    switch (config_.metric_id) {
+        case MetricId::Minkowski:
+            metric_ = std::make_unique<KerrSchildFamily>(KerrSchildParams::Minkowski());
+            break;
+        case MetricId::Schwarzschild:
+            SIRIUS_ASSERT(config_.black_hole_spin == 0.0);
+            SIRIUS_ASSERT(config_.black_hole_charge == 0.0);
+            SIRIUS_ASSERT(config_.cosmological_constant == 0.0);
+            metric_ = std::make_unique<KerrSchildFamily>(
+                KerrSchildParams::Schwarzschild(config_.black_hole_mass));
+            break;
+        case MetricId::Kerr:
+            SIRIUS_ASSERT(config_.black_hole_charge == 0.0);
+            SIRIUS_ASSERT(config_.cosmological_constant == 0.0);
+            metric_ = std::make_unique<KerrSchildFamily>(KerrSchildParams::Kerr(
+                config_.black_hole_mass, config_.black_hole_spin * config_.black_hole_mass));
+            break;
+        case MetricId::ReissnerNordstrom:
+            SIRIUS_ASSERT(config_.black_hole_spin == 0.0);
+            SIRIUS_ASSERT(config_.cosmological_constant == 0.0);
+            metric_ = std::make_unique<KerrSchildFamily>(KerrSchildParams::ReissnerNordstrom(
+                config_.black_hole_mass, config_.black_hole_charge * config_.black_hole_mass));
+            break;
+        case MetricId::KerrNewman:
+            SIRIUS_ASSERT(config_.cosmological_constant == 0.0);
+            metric_ = std::make_unique<KerrSchildFamily>(KerrSchildParams::KerrNewman(
+                config_.black_hole_mass, config_.black_hole_spin * config_.black_hole_mass,
+                config_.black_hole_charge * config_.black_hole_mass));
+            break;
+        case MetricId::DeSitter: {
+            SIRIUS_ASSERT(config_.black_hole_spin == 0.0);
+            SIRIUS_ASSERT(config_.black_hole_charge == 0.0);
+            metric_ = std::make_unique<KerrSchildFamily>(
+                KerrSchildParams::DeSitter(config_.cosmological_constant));
+            break;
+        }
+        case MetricId::SchwarzschildDeSitter: {
+            SIRIUS_ASSERT(config_.black_hole_spin == 0.0);
+            SIRIUS_ASSERT(config_.black_hole_charge == 0.0);
+            KerrSchildParams params = KerrSchildParams::Schwarzschild(config_.black_hole_mass);
+            params.Lambda = config_.cosmological_constant;
+            metric_ = std::make_unique<KerrSchildFamily>(params);
+            break;
+        }
+        case MetricId::Alcubierre: {
+            WarpDriveParams wp;
+            wp.vs = config_.warp_velocity;
+            wp.R = config_.bubble_radius;
+            wp.sigma = config_.bubble_sigma;
+            metric_ = std::make_unique<WarpDriveFamily>(wp);
+            break;
+        }
+        case MetricId::MorrisThorne: {
+            // The Cartesian embedding of the spherical family; one sheet,
+            // throat as the capture surface (see morris_thorne_family.h).
+            metric_ = std::make_unique<core::MorrisThorneCartesian>(
+                core::MorrisThorneParams::Ellis(config_.throat_radius));
+            break;
+        }
+    }
+    if (metric_) {
+        std::cout << "  Metric:     " << metric_->GetName() << std::endl;
+    } else {
+        std::cout << "  Metric:     " << core::MetricInfoFor(config_.metric_id).canonical_name
+                  << " (GPU backend only)" << std::endl;
+    }
+
+    // Camera.
+    CameraConfig camera_config;
+    camera_config.r = config_.observer_distance;
+    camera_config.theta = config_.observer_inclination;
+    camera_config.phi = config_.observer_azimuth;
+    camera_config.fov = config_.camera_fov;
+    camera_config.width = config_.width;
+    camera_config.height = config_.height;
+    // Camera worldline aberration (P5): beta components in the local
+    // ray-component frame. Zero keeps every ray unaberrated (byte-pin).
+    camera_config.beta_x = config_.camera_beta_forward;
+    camera_config.beta_y = config_.camera_beta_up;
+    camera_config.beta_z = config_.camera_beta_right;
+    camera_config.focal_length = config_.camera_focal_length;
+    camera_config.aperture = config_.camera_aperture;
+    camera_config.focus_distance = config_.camera_focus_distance;
+    camera_ = core::CreateCamera(config_.lens_type, camera_config);
+    std::cout << "  Observer:   r=" << camera_config.r
+              << "M, theta=" << (camera_config.theta * 180.0 / math::kPi) << " deg" << std::endl;
+
+    // Geodesic tracer.
+    TracerConfig tracer_config;
+    tracer_config.escape_radius = 200.0f;
+    // Kerr-Schild coordinates are horizon-penetrating, so the exact capture
+    // surface is numerically safe. Enlarging it inflates the near-extremal
+    // shadow.
+    tracer_config.horizon_factor = 1.0f;
+    tracer_config.max_steps = 20000;
+
+    // Large steps far from the hole, small near the horizon.
+    tracer_config.integrator.initial_step = 0.1f;
+    tracer_config.integrator.max_step = 2.0f;
+    tracer_config.integrator.min_step = 1e-5f;
+    tracer_config.integrator.abs_tolerance = 5e-6f;
+    tracer_config.integrator.rel_tolerance = 5e-6f;
+
+    // Disk inner edge from the ISCO. The thin disk is a black-hole construct;
+    // horizonless spacetimes render lensing and background only.
+    const auto disk_support = core::DiskSupportFor(config_.metric_id);
+    const bool disk_capable = disk_support == core::DiskSupport::PageThorne;
+    SIRIUS_ASSERT(!config_.enable_disk || disk_support == core::DiskSupport::PageThorne);
+    SIRIUS_ASSERT(config_.enable_disk || (!config_.enable_volumetric_disk &&
+                                          !config_.enable_turbulence && !config_.enable_corona));
+    auto isco_radius = AccretionDiskD::ComputeIsco(config_.black_hole_spin);
+    tracer_config.disk_inner = static_cast<float>(isco_radius * config_.black_hole_mass);
+    tracer_config.disk_outer = static_cast<float>(20.0 * config_.black_hole_mass);
+    tracer_config.enable_disk = config_.enable_disk && disk_capable;
+    tracer_config.enable_polarisation = config_.enable_polarisation;
+
+    // Doppler beaming toggle (P4); true keeps the full physics and the
+    // pinned render byte-for-byte.
+    tracer_config.doppler_beaming = config_.doppler_beaming;
+    switch (config_.temperature_model) {
+        case DiskTemperatureModel::NovikovThorne:
+            tracer_config.disk_temperature_model = backend::DiskTemperatureModel::NovikovThorne;
+            break;
+        case DiskTemperatureModel::ShakuraSunyaev:
+            tracer_config.disk_temperature_model = backend::DiskTemperatureModel::ShakuraSunyaev;
+            break;
+        default:
+            return base::Fail(base::ErrorDomain::kConfiguration, "initialise render session",
+                              "invalid disk temperature model reached initialisation");
+    }
+
+    // Ray bundles (P2/P3). Enabled for the beam footprint the filtered star
+    // field consumes; the pupil (point-source) mode gives the celestial-sphere
+    // footprint. Default off leaves the point-sampled path and the pinned
+    // render untouched.
+    pixel_angular_size_ = (config_.camera_fov * math::kPi / 180.0) / std::max(1, config_.height);
+    tracer_config.enable_ray_bundles = config_.ray_bundles;
+    tracer_config.bundle_point_source = true;
+    tracer_config.bundle_angular_size = static_cast<float>(pixel_angular_size_);
+
+    // Volumetric disk configuration.
+    tracer_config.enable_volumetric = config_.enable_volumetric_disk;
+    tracer_config.volumetric_scale_height_ratio = config_.volumetric_h_over_r;
+    tracer_config.volumetric_flare_power = config_.volumetric_h_power;
+    tracer_config.volumetric_tau_midplane = config_.volumetric_tau_midplane;
+    tracer_config.volumetric_samples = config_.volumetric_samples;
+    tracer_config.enable_turbulence = config_.enable_turbulence;
+    tracer_config.turbulence.enabled = config_.enable_turbulence;
+    tracer_config.enable_corona = config_.enable_corona;
+    tracer_config.corona.enabled = config_.enable_corona;
+    tracer_config.corona.inner_radius_M = tracer_config.disk_inner;
+    tracer_config.corona.outer_radius_M = tracer_config.disk_outer;
+
+    if (metric_) {
+        tracer_ = std::make_unique<GeodesicTracer>(metric_.get(), tracer_config);
+        if (tracer_config.enable_disk) {
+            std::cout << "  Disk:       r_in=" << tracer_config.disk_inner
+                      << "M, r_out=" << tracer_config.disk_outer << "M" << std::endl;
+        } else if (disk_capable) {
+            std::cout << "  Disk:       disabled" << std::endl;
+        }
+        std::cout << "[Session] Physics engine initialized (geodesic integration enabled)"
+                  << std::endl;
+    }
+
+    // Relativistic jets.
+    if (config_.enable_jets) {
+        JetConfig jet_config;
+        jet_config.lorentz_factor = config_.jet_lorentz_factor;
+        jet_config.opening_angle = config_.jet_opening_angle;
+        jet_config.r_launch = config_.jet_launch_radius;
+        jet_config.r_max = config_.jet_max_extent;
+        jet_config.collimation = config_.jet_collimation;
+        jet_config.spectral_index = config_.jet_spectral_index;
+        jet_ = std::make_unique<RelativisticJet>(jet_config);
+        std::cout << "[Session] Relativistic jets enabled: Gamma=" << jet_config.lorentz_factor
+                  << ", theta_open=" << (jet_config.opening_angle * 180.0 / math::kPi) << " deg"
+                  << std::endl;
+    }
+
+    // Colour mode.
+    const char* mode_name = "TrueColor";
+    switch (config_.color_mode) {
+        case core::color_modes::Mode::TrueColor:
+            mode_name = "TrueColor (Physical)";
+            break;
+        case core::color_modes::Mode::TemperatureMap:
+            mode_name = "TemperatureMap (False Color)";
+            break;
+        case core::color_modes::Mode::RedshiftMap:
+            mode_name = "RedshiftMap (g-factor)";
+            break;
+        case core::color_modes::Mode::Narrowband:
+            mode_name = "Narrowband (Hubble Palette)";
+            break;
+        case core::color_modes::Mode::Polarisation:
+            mode_name = "Polarisation";
+            break;
+    }
+    std::cout << "[Session] Color mode: " << mode_name << std::endl;
+
+    // Multi-threaded rendering setup.
+    if (config_.enable_parallel_rendering) {
+        num_threads_ = config_.thread_count;
+        if (num_threads_ <= 0) {
+            // Auto-detect: hardware concurrency, leaving one core for the system.
+            num_threads_ = static_cast<int>(std::thread::hardware_concurrency());
+            if (num_threads_ > 1) num_threads_--;
+            if (num_threads_ < 1) num_threads_ = 1;
+        }
+
+        // Per-thread tracers share the metric but keep independent state.
+        thread_tracers_.clear();
+        thread_tracers_.reserve(num_threads_);
+        if (metric_) {
+            for (int i = 0; i < num_threads_; ++i) {
+                thread_tracers_.push_back(
+                    std::make_unique<GeodesicTracer>(metric_.get(), tracer_config));
+            }
+        }
+
+        std::cout << "[Session] Multi-threaded rendering enabled: " << num_threads_ << " threads"
+                  << std::endl;
+    } else {
+        num_threads_ = 1;
+        std::cout << "[Session] Single-threaded rendering" << std::endl;
+    }
+
+    // The background texture is a physics input, not decorative packaging:
+    // substituting grey changes every escaped ray. Missing resources
+    // therefore fail initialisation instead of quietly changing the scene.
+    const auto starfield = base::ResolveResource("assets/Starfield.png");
+    if (!starfield || !LoadStarfieldTexture(starfield->string())) {
+        return base::Fail(
+            base::ErrorDomain::kIo, "load render resource",
+#if SIRIUS_RELEASE_RESOURCE_LOCKED
+            "assets/Starfield.png is missing or unreadable in the packaged Sirius volume");
+#else
+            "assets/Starfield.png is missing or unreadable (set SIRIUS_RESOURCE_DIR to an "
+            "installed share/sirius directory)");
+#endif
+    }
+
+    // Filtered point-source star field (P3): build the deterministic catalogue
+    // once. The beam footprint (ray bundles on) or a pinhole sigma (bundles
+    // off) filters it per escaping ray.
+    if (config_.point_starfield) {
+        core::StarfieldConfig scfg = config_.starfield_config;
+        star_generator_ = std::make_unique<core::StarfieldGenerator>(scfg);
+        star_catalogue_ = star_generator_->GenerateCatalogue();
+        star_index_ = std::make_unique<core::StarfieldSpatialIndex>(star_catalogue_);
+        std::cout << "[Session] Point-source star field: " << star_catalogue_.size() << " stars, "
+                  << (star_index_->MemoryBytes() / 1024) << " KiB index, beams "
+                  << (config_.ray_bundles ? "on" : "off") << std::endl;
+    }
+    std::cout << "[Session] Scene evidence: "
+              << SessionSceneEvidenceJson(config_, star_catalogue_.size()) << std::endl;
+
+    // GPU acceleration removed: the legacy OptiX backend init and starfield
+    // upload lived here. OptiX is retired; the Vulkan compute path arrives
+    // through sirius::backend::device later. The CPU path renders directly.
+
+    if (progress_.GetCancellationToken().IsCancelled()) {
+        fsm_.Process(SessionEvent::Cancel);
+        return {};
+    }
+
+    // Transition to Scheduling.
+    fsm_.Process(SessionEvent::Ready);
+    return {};
 }
 
 // =============================================================================
@@ -819,7 +874,7 @@ void RenderSession::ScheduleNextTile() {
     // different spacetime.
     if (!metric_) {
         error_message_ = "Metric '" +
-                         std::string(core::MetricInfoFor(config_.metricId).canonical_name) +
+                         std::string(core::MetricInfoFor(config_.metric_id).canonical_name) +
                          "' is not supported on the CPU backend (GPU/Vulkan required)";
         std::cerr << "[Session] " << error_message_ << std::endl;
         fsm_.Process(SessionEvent::Error);
@@ -827,7 +882,7 @@ void RenderSession::ScheduleNextTile() {
     }
 
     // Parallel rendering when enabled and multiple threads are available.
-    if (config_.enableParallelRendering && num_threads_ > 1) {
+    if (config_.enable_parallel_rendering && num_threads_ > 1) {
         RenderTilesParallel();
         return;
     }
@@ -855,13 +910,15 @@ RenderSession::PixelResult RenderSession::ShadeDiskHit(const TraceResult& result
     if (result.volumetric_hit) {
         float vol_intensity = result.volumetric_emission[0];
         float T_effective = std::pow(vol_intensity, 0.25f);
-        float T_kelvin = std::clamp(T_effective * config_.diskTemperatureScale, 1000.0f, 100000.0f);
+        float temperature_kelvin =
+            std::clamp(T_effective * config_.disk_temperature_scale, 1000.0f, 100000.0f);
 
-        core::spectral::Rgb bbColor = core::spectral::BlackbodyToRgb(static_cast<double>(T_kelvin));
+        core::spectral::Rgb blackbody_color =
+            core::spectral::BlackbodyToRgb(static_cast<double>(temperature_kelvin));
         float mag = result.magnification;
-        px.r = bbColor.r * result.volumetric_emission[0] * mag;
-        px.g = bbColor.g * result.volumetric_emission[1] * mag;
-        px.b = bbColor.b * result.volumetric_emission[2] * mag;
+        px.r = blackbody_color.r * result.volumetric_emission[0] * mag;
+        px.g = blackbody_color.g * result.volumetric_emission[1] * mag;
+        px.b = blackbody_color.b * result.volumetric_emission[2] * mag;
 
         if (result.photon_ring) {
             px.r *= kPhotonRingBoostVolumetric;
@@ -875,7 +932,7 @@ RenderSession::PixelResult RenderSession::ShadeDiskHit(const TraceResult& result
     // beaming is applied exactly once: emitted T^4 becomes observed g^4 T^4.
     float total_r = 0.0f, total_g = 0.0f, total_b = 0.0f;
     core::StokesVector total_stokes;
-    const bool polarisation_mode = config_.colorMode == core::color_modes::Mode::Polarisation;
+    const bool polarisation_mode = config_.color_mode == core::color_modes::Mode::Polarisation;
 
     for (int crossing_idx = 0; crossing_idx < result.num_disk_crossings; crossing_idx++) {
         const auto& crossing = result.disk_crossings[crossing_idx];
@@ -892,49 +949,33 @@ RenderSession::PixelResult RenderSession::ShadeDiskHit(const TraceResult& result
         // radiance and colour are nonlinear in g, so averaging g itself is not
         // a represented temporal integral.
         std::vector<float> temporal_redshifts{g};
-        if (crossing_idx == 0 && config_.enableMotionBlur && config_.motionBlurSamples > 1) {
+        if (crossing_idx == 0 && config_.enable_motion_blur) {
             float grav = result.gfactor_grav;
             float gamma = result.gfactor_gamma;
             float v_orb = result.gfactor_v_orb;
-            float A = result.gfactor_A;
-            float B = result.gfactor_B;
+            float A = result.gfactor_cosine_coefficient;
+            float B = result.gfactor_sine_coefficient;
 
-            float M = static_cast<float>(config_.blackHoleMass);
-            float a = static_cast<float>(config_.blackHoleSpin * M);
-            float sqrtM = std::sqrt(M);
-            float Omega = sqrtM / (std::pow(r_cross, 1.5f) + a * sqrtM);
+            float M = static_cast<float>(config_.black_hole_mass);
+            float a = static_cast<float>(config_.black_hole_spin * M);
+            float sqrt_mass = std::sqrt(M);
+            float Omega = sqrt_mass / (std::pow(r_cross, 1.5f) + a * sqrt_mass);
 
-            float delta_phi_max = Omega * config_.shutterTime;
-            int N = config_.motionBlurSamples;
-            temporal_redshifts.clear();
-            temporal_redshifts.reserve(static_cast<std::size_t>(N));
-
-            for (int i = 0; i < N; i++) {
-                float t = (N > 1) ? static_cast<float>(i) / (N - 1) : 0.5f;
-                float delta_phi = delta_phi_max * (t - 0.5f);
-
-                float cos_dphi = std::cos(delta_phi);
-                float sin_dphi = std::sin(delta_phi);
-                float v_dot_n_offset = v_orb * (A * cos_dphi + B * sin_dphi);
-                float doppler_denom = gamma * (1.0f - v_dot_n_offset);
-                doppler_denom = std::clamp(doppler_denom, kDopplerClampMin, kDopplerClampMax);
-
-                float g_offset = grav / doppler_denom;
-                g_offset = std::clamp(g_offset, kGFactorClampMin, kGFactorClampMax);
-                temporal_redshifts.push_back(g_offset);
-            }
+            float delta_phi_max = Omega * config_.shutter_time;
+            temporal_redshifts = core::disk_emission::SampleTemporalRedshifts(
+                grav, gamma, v_orb, A, B, delta_phi_max, config_.motion_blur_samples);
         }
 
         const float emitted_intensity = std::pow(T_emit, 4.0f);
-        const float g2 = g * g;
-        const float observed_intensity = emitted_intensity * g2 * g2;
+        const float observed_intensity =
+            core::color_modes::ObservedBolometricIntensity(emitted_intensity, g);
 
         // Limb darkening (primary crossing only). It is scalar for the
         // Chandrasekhar atmosphere, so it applies coherently to I, Q, and U.
         float limb_scale = 1.0f;
         if (crossing_idx == 0) {
-            float A = result.gfactor_A;
-            float B = result.gfactor_B;
+            float A = result.gfactor_cosine_coefficient;
+            float B = result.gfactor_sine_coefficient;
             float n_xy_squared = A * A + B * B;
             float cos_theta = std::sqrt(std::max(0.0f, 1.0f - n_xy_squared));
             const core::spectral::Rgb darkened = core::spectral::ApplyLimbDarkening(
@@ -956,13 +997,13 @@ RenderSession::PixelResult RenderSession::ShadeDiskHit(const TraceResult& result
             continue;
         }
 
-        const core::spectral::Rgb diskColor = core::color_modes::AverageTemporalColorMode(
-            config_.colorMode, T_emit, temporal_redshifts, emitted_intensity,
-            config_.diskTemperatureScale);
+        const core::spectral::Rgb disk_color = core::color_modes::AverageTemporalColorMode(
+            config_.color_mode, T_emit, temporal_redshifts, emitted_intensity,
+            config_.disk_temperature_scale);
 
-        total_r += diskColor.r * limb_scale * order_demag;
-        total_g += diskColor.g * limb_scale * order_demag;
-        total_b += diskColor.b * limb_scale * order_demag;
+        total_r += disk_color.r * limb_scale * order_demag;
+        total_g += disk_color.g * limb_scale * order_demag;
+        total_b += disk_color.b * limb_scale * order_demag;
     }
 
     // Gravitational lensing magnification and cinematic boost.
@@ -990,7 +1031,7 @@ RenderSession::PixelResult RenderSession::ShadeDiskHit(const TraceResult& result
 
 RenderSession::PixelResult RenderSession::ShadeEscaped(const TraceResult& result) const {
     PixelResult px;
-    if (config_.pointStarfield && !star_catalogue_.empty()) {
+    if (config_.point_starfield && !star_catalogue_.empty()) {
         SampleStarfieldPoints(result, px.r, px.g, px.b);
     } else {
         SampleStarfield(result.final_direction, px.r, px.g, px.b);
@@ -1009,9 +1050,9 @@ RenderSession::PixelResult RenderSession::ShadeEscaped(const TraceResult& result
     }
 
     // Relativistic jet emission.
-    if (jet_ && config_.enableJets) {
-        double obs_r = config_.observerDistance;
-        double obs_theta = config_.observerInclination;
+    if (jet_ && config_.enable_jets) {
+        double obs_r = config_.observer_distance;
+        double obs_theta = config_.observer_inclination;
         float obs_x = static_cast<float>(obs_r * std::sin(obs_theta));
         float obs_y = 0.0f;
         float obs_z = static_cast<float>(obs_r * std::cos(obs_theta));
@@ -1024,7 +1065,7 @@ RenderSession::PixelResult RenderSession::ShadeEscaped(const TraceResult& result
             *jet_, obs_x, obs_y, obs_z, end_x, end_y, end_z, obs_x, obs_y, obs_z, 64);
 
         if (jet_emission > 0.0f) {
-            float jet_scale = config_.jetIntensity * kJetNormalisation;
+            float jet_scale = config_.jet_intensity * kJetNormalisation;
             px.r += jet_emission * jet_scale * 0.8f;
             px.g += jet_emission * jet_scale * 0.9f;
             px.b += jet_emission * jet_scale * 1.0f;
@@ -1039,18 +1080,18 @@ RenderSession::PixelResult RenderSession::ShadePixel(int px_coord, int py_coord,
     PixelResult result;
     float r_acc = 0.0f, g_acc = 0.0f, b_acc = 0.0f;
 
-    const int samples_taken = ForEachPixelSample(config_.samplesPerPixel, [&](float u, float v) {
-        CameraRay camRay = camera_->GenerateRayAberrated(px_coord, py_coord, u, v);
-        TraceResult traceResult = tracer->Trace(camRay);
+    const int samples_taken = ForEachPixelSample(config_.samples_per_pixel, [&](float u, float v) {
+        CameraRay camera_ray = camera_->GenerateRayAberrated(px_coord, py_coord, u, v);
+        TraceResult trace_result = tracer->Trace(camera_ray);
 
         float sr = 0.0f, sg = 0.0f, sb = 0.0f;
 
-        switch (traceResult.outcome) {
+        switch (trace_result.outcome) {
             case TraceResult::Outcome::Horizon:
                 break;
 
             case TraceResult::Outcome::DiskHit: {
-                PixelResult disk = ShadeDiskHit(traceResult);
+                PixelResult disk = ShadeDiskHit(trace_result);
                 sr = disk.r;
                 sg = disk.g;
                 sb = disk.b;
@@ -1058,7 +1099,7 @@ RenderSession::PixelResult RenderSession::ShadePixel(int px_coord, int py_coord,
             }
 
             case TraceResult::Outcome::Escaped: {
-                PixelResult esc = ShadeEscaped(traceResult);
+                PixelResult esc = ShadeEscaped(trace_result);
                 sr = esc.r;
                 sg = esc.g;
                 sb = esc.b;
@@ -1083,9 +1124,9 @@ RenderSession::PixelResult RenderSession::ShadePixel(int px_coord, int py_coord,
         // Volumetric transfer composes with the terminal surface/background;
         // it is not a terminal ray outcome. Apply I = I_bg exp(-tau) + I_vol
         // after shading the actual fate of the central ray.
-        if (traceResult.volumetric_hit) {
-            PixelResult volume = ShadeDiskHit(traceResult);
-            const float transmission = std::exp(-std::max(traceResult.optical_depth, 0.0f));
+        if (trace_result.volumetric_hit) {
+            PixelResult volume = ShadeDiskHit(trace_result);
+            const float transmission = std::exp(-std::max(trace_result.optical_depth, 0.0f));
             sr = sr * transmission + volume.r;
             sg = sg * transmission + volume.g;
             sb = sb * transmission + volume.b;
@@ -1201,8 +1242,8 @@ bool RenderSession::LoadStarfieldTexture(const std::string& path) {
         return false;
     }
 
-    const size_t size =
-        static_cast<size_t>(starfield_width_) * static_cast<size_t>(starfield_height_) * 4;
+    const std::size_t size = static_cast<std::size_t>(starfield_width_) *
+                             static_cast<std::size_t>(starfield_height_) * 4;
     starfield_data_.assign(data.get(), data.get() + size);
 
     starfield_loaded_ = true;
@@ -1293,7 +1334,7 @@ void RenderSession::SampleStarfieldPoints(const TraceResult& result, float& r, f
     float sigma_major;
     float sigma_minor;
     float orientation = 0.0f;
-    if (config_.rayBundles && result.beam.valid) {
+    if (config_.ray_bundles && result.beam.valid) {
         sigma_major = std::max(result.beam.footprint_major, pixel);
         sigma_minor = std::max(result.beam.footprint_minor, pixel);
         orientation = result.beam.orientation;
@@ -1311,129 +1352,106 @@ void RenderSession::SampleStarfieldPoints(const TraceResult& result, float& r, f
 // =============================================================================
 // Output writing.
 // =============================================================================
-void RenderSession::WriteOutput() {
-    try {
-        std::cout << "\n[Session] Writing output..." << std::endl;
+base::Expected<void> RenderSession::WriteOutput() {
+    std::cout << "\n[Session] Writing output..." << std::endl;
 
-        const int width = config_.width;
-        const int height = config_.height;
-        const size_t pixelCount = static_cast<size_t>(width) * height;
+    const int width = config_.width;
+    const int height = config_.height;
+    const std::size_t pixel_count = static_cast<std::size_t>(width) * height;
+
+    if (const auto bad = display_.FirstNonFiniteIndex(); bad.has_value()) {
+        return base::Fail(
+            base::ErrorDomain::kPhysics, "write render output",
+            "linear radiance contains a non-finite sample at channel " + std::to_string(*bad));
+    }
+
+    // Format follows the output extension: .exr | .png | .ppm (default).
+    std::string ext;
+    {
+        std::size_t dot = config_.output_path.rfind('.');
+        if (dot != std::string::npos) ext = config_.output_path.substr(dot + 1);
+        std::transform(ext.begin(), ext.end(), ext.begin(),
+                       [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+    }
+
+    if (config_.write_output && ext == "exr") {
+        // EXR is the HDR interchange path: the linear radiance buffer is
+        // written untouched. Tonemapping, grading, and transfer encoding are
+        // display concerns and deliberately do not apply here.
+        ImageBufferRGBA hdr(width, height);
+        std::memcpy(hdr.pixels.data(), display_.GetFloatData(), pixel_count * 4 * sizeof(float));
+
+        EXRMetadata meta;
+        meta.metric_type = core::MetricInfoFor(config_.metric_id).canonical_name;
+        meta.black_hole_mass = config_.black_hole_mass;
+        meta.black_hole_spin = config_.black_hole_spin;
+        meta.observer_distance = config_.observer_distance;
+        meta.observer_inclination = config_.observer_inclination * 180.0 / math::kPi;
+        meta.samples_per_pixel = config_.samples_per_pixel;
+
+        if (!EXRWriter::WriteExr(config_.output_path, hdr, meta)) {
+            return base::Fail(base::ErrorDomain::kIo, "write EXR", config_.output_path);
+        }
+    } else {
+        // Display pipeline: tonemap and grade to display-linear values. The
+        // transfer encode belongs to the writer, so it happens exactly once
+        // per format (EXRWriter's PPM boundary and PNGWriter each apply sRGB).
+        core::PostProcessConfig postprocess_config;
+        postprocess_config.tonemapper = config_.tonemapper;
+        postprocess_config.exposure = config_.exposure;
+        postprocess_config.gamma = 1.0f;  // Writers encode.
+
+        postprocess_config.enable_bloom = config_.enable_bloom;
+        postprocess_config.bloom_intensity = config_.bloom_intensity;
+        postprocess_config.bloom_threshold = config_.bloom_threshold;
+        postprocess_config.bloom_radius = kBloomRadius;
+
+        postprocess_config.saturation = config_.saturation;
+        postprocess_config.contrast = config_.contrast;
+        postprocess_config.lift = kShadowLift;
+        postprocess_config.gain = 1.0f;
+
+        core::PostProcessor::Process(display_.GetFloatBuffer(), width, height, postprocess_config);
+
+        // Film is a display-referred finishing pipeline. It is intentionally
+        // absent from the EXR branch above, which must retain untouched
+        // linear HDR radiance.
+        if (config_.enable_film_simulation) {
+            FilmPipeline film(config_.film_config);
+            film.Apply(display_.GetFloatBuffer().data(), width, height, 0);
+        }
 
         if (const auto bad = display_.FirstNonFiniteIndex(); bad.has_value()) {
-            throw std::runtime_error("linear radiance contains a non-finite sample at channel " +
-                                     std::to_string(*bad));
+            return base::Fail(base::ErrorDomain::kInternal, "apply display pipeline",
+                              "produced a non-finite sample at channel " + std::to_string(*bad));
         }
 
-        // Format follows the output extension: .exr | .png | .ppm (default).
-        std::string ext;
-        {
-            size_t dot = config_.outputPath.rfind('.');
-            if (dot != std::string::npos) ext = config_.outputPath.substr(dot + 1);
-            std::transform(ext.begin(), ext.end(), ext.begin(),
-                           [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
-        }
+        const float* data = display_.GetFloatData();
 
-        if (config_.writeOutput && ext == "exr") {
-            // EXR is the HDR interchange path: the linear radiance buffer is
-            // written untouched. Tonemapping, grading, and transfer encoding are
-            // display concerns and deliberately do not apply here.
-            ImageBufferRGBA hdr(width, height);
-            std::memcpy(hdr.pixels.data(), display_.GetFloatData(), pixelCount * 4 * sizeof(float));
-
-            EXRMetadata meta;
-            meta.metricType = core::MetricInfoFor(config_.metricId).canonical_name;
-            meta.blackHoleMass = config_.blackHoleMass;
-            meta.blackHoleSpin = config_.blackHoleSpin;
-            meta.observerDistance = config_.observerDistance;
-            meta.observerInclination = config_.observerInclination * 180.0 / math::kPi;
-            meta.samplesPerPixel = config_.samplesPerPixel;
-
-            if (!EXRWriter::WriteExr(config_.outputPath, hdr, meta)) {
-                throw std::runtime_error("Failed to write EXR: " + config_.outputPath);
+        if (!config_.write_output) {
+            // In-memory progressive previews consume the display-linear
+            // buffer directly and must not overwrite the configured output.
+        } else if (ext == "png") {
+            if (!PNGWriter::WriteRgba(config_.output_path, width, height, data)) {
+                return base::Fail(base::ErrorDomain::kIo, "write PNG", config_.output_path);
             }
         } else {
-            // Display pipeline: tonemap and grade to display-linear values. The
-            // transfer encode belongs to the writer, so it happens exactly once
-            // per format (PPM applies gamma below; PNG applies sRGB inside
-            // PNGWriter).
-            core::PostProcessConfig ppConfig;
-            ppConfig.tonemapper = config_.tonemapper;
-            ppConfig.exposure = config_.exposure;
-            ppConfig.gamma = 1.0f;  // Writers encode.
-
-            ppConfig.enable_bloom = config_.enableBloom;
-            ppConfig.bloom_intensity = config_.bloomIntensity;
-            ppConfig.bloom_threshold = config_.bloomThreshold;
-            ppConfig.bloom_radius = kBloomRadius;
-
-            ppConfig.saturation = config_.saturation;
-            ppConfig.contrast = config_.contrast;
-            ppConfig.lift = kShadowLift;
-            ppConfig.gain = 1.0f;
-
-            core::PostProcessor::Process(display_.GetFloatBuffer(), width, height, ppConfig);
-
-            // Film is a display-referred finishing pipeline. It is intentionally
-            // absent from the EXR branch above, which must retain untouched
-            // linear HDR radiance.
-            if (config_.enableFilmSimulation) {
-                FilmPipeline film(config_.filmConfig);
-                film.Apply(display_.GetFloatBuffer().data(), width, height, 0);
+            if (ext != "ppm") {
+                std::cout << "[Session] Unrecognised output extension '" << ext
+                          << "'; writing PPM data" << std::endl;
             }
-
-            if (const auto bad = display_.FirstNonFiniteIndex(); bad.has_value()) {
-                throw std::runtime_error(
-                    "display pipeline produced a non-finite sample at channel " +
-                    std::to_string(*bad));
-            }
-
-            const float* data = display_.GetFloatData();
-
-            if (!config_.writeOutput) {
-                // In-memory progressive previews consume the display-linear
-                // buffer directly and must not overwrite the configured output.
-            } else if (ext == "png") {
-                if (!PNGWriter::WriteRgba(config_.outputPath, width, height, data)) {
-                    throw std::runtime_error("Failed to write PNG: " + config_.outputPath);
-                }
-            } else {
-                if (ext != "ppm") {
-                    std::cout << "[Session] Unrecognised output extension '" << ext
-                              << "'; writing PPM data" << std::endl;
-                }
-                std::ofstream file(config_.outputPath, std::ios::binary);
-                if (!file) {
-                    throw std::runtime_error("Failed to open output file: " + config_.outputPath);
-                }
-
-                file << "P6\n" << width << " " << height << "\n255\n";
-
-                constexpr float kDisplayGamma = 2.2f;
-                for (int y = 0; y < height; ++y) {
-                    for (int x = 0; x < width; ++x) {
-                        int idx = (y * width + x) * 4;
-                        unsigned char rgb[3];
-                        for (int c = 0; c < 3; ++c) {
-                            float val = std::clamp(data[idx + c], 0.0f, 1.0f);
-                            val = std::pow(val, 1.0f / kDisplayGamma);
-                            rgb[c] =
-                                static_cast<unsigned char>(std::clamp(val * 255.0f, 0.0f, 255.0f));
-                        }
-                        file.write(reinterpret_cast<char*>(rgb), 3);
-                    }
-                }
+            if (!EXRWriter::WritePpmRgba(config_.output_path, width, height, data)) {
+                return base::Fail(base::ErrorDomain::kIo, "write PPM", config_.output_path);
             }
         }
-
-        if (config_.writeOutput) {
-            std::cout << "[Session] Wrote: " << config_.outputPath << std::endl;
-        }
-
-        fsm_.Process(SessionEvent::OutputWritten);
-    } catch (const std::exception& e) {
-        error_message_ = e.what();
-        fsm_.Process(SessionEvent::Error);
     }
+
+    if (config_.write_output) {
+        std::cout << "[Session] Wrote: " << config_.output_path << std::endl;
+    }
+
+    fsm_.Process(SessionEvent::OutputWritten);
+    return {};
 }
 
 // =============================================================================
@@ -1448,7 +1466,7 @@ void RenderSession::OnSessionEnd(SessionState state) {
             message = "Render completed successfully";
             break;
         case SessionState::Failed:
-            message = "Render failed: " + error_message_;
+            message = error_message_;
             break;
         case SessionState::Cancelled:
             message = "Render cancelled by user";
@@ -1584,193 +1602,6 @@ bool RenderSession::RenderTileThreaded(Tile* tile, int thread_id) {
         display_.UpdateTile(tile->x, tile->y, tile->width, tile->height, tileBuffer.data());
     }
     return true;
-}
-
-// =============================================================================
-// Configuration conversion.
-// =============================================================================
-SessionConfig SessionConfig::FromSiriusConfig(const SiriusConfig& config) {
-    SessionConfig sc;
-    sc.width = config.render.width;
-    sc.height = config.render.height;
-    sc.samplesPerPixel = config.render.samplesPerPixel;
-    sc.tileSize = config.render.tileSize;
-    sc.threadCount = config.render.threadCount;
-    sc.outputPath = config.render.outputPath;
-    sc.enableDisk = config.diskEnabled;
-
-    // The validator has already accepted the name; a parse failure here is an
-    // invariant violation, so it halts rather than substituting a default.
-    auto metricId = core::ParseMetricName(config.metric.name);
-    if (!metricId.has_value()) {
-        throw std::invalid_argument("SessionConfig: unvalidated metric name '" +
-                                    config.metric.name + "' reached the session boundary");
-    }
-    sc.metricId = *metricId;
-    sc.blackHoleMass = config.metric.mass;
-    // The config validator is the authority on the spin range; no silent clamp
-    // is duplicated here.
-    sc.blackHoleSpin = config.metric.spin;
-    // Tonemapper string was validated at the config boundary; parse here.
-    {
-        const std::string& tm = config.postprocess.tonemapper;
-        if (tm == "ACES")
-            sc.tonemapper = core::TonemapType::Aces;
-        else if (tm == "Reinhard")
-            sc.tonemapper = core::TonemapType::Reinhard;
-        else if (tm == "Filmic" || tm == "Uncharted2")
-            sc.tonemapper = core::TonemapType::Filmic;
-        else if (tm == "None" || tm == "Linear")
-            sc.tonemapper = core::TonemapType::None;
-        else
-            throw std::invalid_argument("SessionConfig: unvalidated tonemapper '" + tm +
-                                        "' reached the session boundary");
-    }
-    sc.blackHoleCharge = config.metric.charge;
-    sc.cosmologicalConstant = config.metric.lambda;
-    if (config.metric.temperatureModel == "NovikovThorne" ||
-        config.metric.temperatureModel == "NT") {
-        sc.temperatureModel = DiskTemperatureModel::NovikovThorne;
-    } else if (config.metric.temperatureModel == "ShakuraSunyaev" ||
-               config.metric.temperatureModel == "SS") {
-        sc.temperatureModel = DiskTemperatureModel::ShakuraSunyaev;
-    } else {
-        throw std::invalid_argument("SessionConfig: unvalidated disk temperature model '" +
-                                    config.metric.temperatureModel +
-                                    "' reached the session boundary");
-    }
-    sc.diskTemperatureScale = config.metric.diskTemperature;
-    sc.dopplerBeaming = config.dopplerBeaming;
-    sc.pointStarfield = config.pointStarfield;
-    sc.rayBundles = config.rayBundles;
-    if (config.colorMode == "TrueColor") {
-        sc.colorMode = core::color_modes::Mode::TrueColor;
-    } else if (config.colorMode == "TemperatureMap") {
-        sc.colorMode = core::color_modes::Mode::TemperatureMap;
-    } else if (config.colorMode == "RedshiftMap") {
-        sc.colorMode = core::color_modes::Mode::RedshiftMap;
-    } else if (config.colorMode == "Narrowband") {
-        sc.colorMode = core::color_modes::Mode::Narrowband;
-    } else if (config.colorMode == "Polarisation") {
-        sc.colorMode = core::color_modes::Mode::Polarisation;
-    } else {
-        throw std::invalid_argument("SessionConfig: unvalidated color mode '" + config.colorMode +
-                                    "' reached the session boundary");
-    }
-    sc.enablePolarisation = sc.colorMode == core::color_modes::Mode::Polarisation;
-    sc.throatRadius = config.metric.throatRadius;
-    if (config.metric.wormholeTopology == "OneSheetCapture") {
-        sc.wormholeTopology = WormholeTopology::OneSheetCapture;
-    } else if (config.metric.wormholeTopology == "TwoSheet") {
-        sc.wormholeTopology = WormholeTopology::TwoSheet;
-    } else {
-        throw std::invalid_argument("SessionConfig: unvalidated wormhole topology '" +
-                                    config.metric.wormholeTopology +
-                                    "' reached the session boundary");
-    }
-    sc.warpVelocity = config.metric.warpVelocity;
-    sc.bubbleRadius = config.metric.bubbleRadius;
-    sc.bubbleSigma = config.metric.bubbleSigma;
-    sc.observerDistance = config.observer.distance;
-    sc.observerInclination = config.observer.inclination * math::kPi / 180.0;
-    sc.observerAzimuth = config.observer.azimuth * math::kPi / 180.0;
-    sc.cameraFOV = static_cast<float>(config.observer.fov);
-    sc.cameraBetaForward = config.observer.cameraBetaForward;
-    sc.cameraBetaUp = config.observer.cameraBetaUp;
-    sc.cameraBetaRight = config.observer.cameraBetaRight;
-    if (config.observer.lensModel == "Pinhole") {
-        sc.lensType = core::LensType::Pinhole;
-    } else if (config.observer.lensModel == "ThinLens") {
-        sc.lensType = core::LensType::ThinLens;
-    } else if (config.observer.lensModel == "Fisheye") {
-        sc.lensType = core::LensType::Fisheye;
-    } else {
-        throw std::invalid_argument("SessionConfig: unvalidated lens model '" +
-                                    config.observer.lensModel + "' reached the session boundary");
-    }
-    sc.cameraFocalLength = config.observer.focalLength;
-    sc.cameraAperture = config.observer.aperture;
-    sc.cameraFocusDistance = config.observer.focusDistance;
-
-    // Post-processing.
-    sc.enableBloom = config.postprocess.enableBloom;
-    sc.bloomIntensity = config.postprocess.bloomIntensity;
-    sc.bloomThreshold = config.postprocess.bloomThreshold;
-    sc.exposure = config.postprocess.exposure;
-    sc.contrast = config.postprocess.contrast;
-    sc.saturation = config.postprocess.saturation;
-
-    // Volumetric disk.
-    sc.enableVolumetricDisk = config.volumetric.enabled;
-    sc.volumetricHOverR = config.volumetric.hOverR;
-    sc.volumetricHPower = config.volumetric.hPower;
-    sc.volumetricTauMidplane = config.volumetric.tauMidplane;
-    sc.volumetricSamples = config.volumetric.samples;
-    sc.enableTurbulence = config.volumetric.enableTurbulence;
-    sc.enableCorona = config.volumetric.enableCorona;
-
-    // Temporal thin-disk integration.
-    sc.enableMotionBlur = config.motionBlur.enabled;
-    sc.shutterTime = config.motionBlur.shutterTime;
-    sc.motionBlurSamples = config.motionBlur.samples;
-
-    // Film simulation.
-    sc.enableFilmSimulation = config.film.enabled;
-    if (config.film.preset == "Interstellar") {
-        sc.filmConfig = FilmConfig::Interstellar();
-    } else if (config.film.preset == "SpaceOdyssey2001") {
-        sc.filmConfig = FilmConfig::SpaceOdyssey2001();
-    } else if (config.film.preset == "DigitalClean") {
-        sc.filmConfig = FilmConfig::DigitalClean();
-    } else {
-        throw std::invalid_argument("SessionConfig: unvalidated film preset '" +
-                                    config.film.preset + "' reached the session boundary");
-    }
-    if (config.film.enabled) {
-        sc.filmConfig.grain_intensity = config.film.grainIntensity;
-        sc.filmConfig.halation_strength = config.film.halationStrength;
-        sc.filmConfig.vignette_strength = config.film.vignetteStrength;
-    }
-
-    // Backend selection from the fully layered SiriusConfig. ConfigLoader has
-    // already applied file and environment values; CLI parsing, when present,
-    // has applied the highest-priority override. GO-LIVE (owner decision,
-    // 2026-07-18, specification
-    // section 1.5): 'auto' now resolves to Vulkan when the backend is compiled
-    // in, a device is present, and the registry marks the metric
-    // gpu-dispatchable; otherwise it falls back to the CPU path with the
-    // reason logged — a fallback, never a decline. 'cpu' pins the CPU path;
-    // 'vulkan' selects the Vulkan path unconditionally (device absence then
-    // surfaces as the render's loud decline, not a silent CPU switch).
-    sc.backend = RenderBackend::Cpu;
-    if (config.backend.preferred == "vulkan") {
-        sc.backend = RenderBackend::Vulkan;
-    } else if (config.backend.preferred == "auto") {
-#ifdef SIRIUS_HAS_VULKAN_BACKEND
-        const bool gpu_metric = core::MetricInfoFor(sc.metricId).gpu_supported;
-        if (gpu_metric) {
-            if (auto compatible = ValidateVulkanRenderConfig(sc); !compatible) {
-                std::cout << "[Session] backend auto: " << compatible.error().detail()
-                          << "; using the CPU path" << std::endl;
-            } else {
-                if (auto devices = backend::EnumerateVulkanDevices();
-                    devices.has_value() && !devices->empty()) {
-                    sc.backend = RenderBackend::Vulkan;
-                } else {
-                    std::cout << "[Session] backend auto: no Vulkan device visible; "
-                                 "using the CPU path"
-                              << std::endl;
-                }
-            }
-        } else {
-            std::cout << "[Session] backend auto: metric '"
-                      << core::MetricInfoFor(sc.metricId).canonical_name
-                      << "' is CPU-only (registry); using the CPU path" << std::endl;
-        }
-#endif
-    }
-
-    return sc;
 }
 
 }  // namespace sirius::render

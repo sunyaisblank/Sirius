@@ -2,6 +2,7 @@
 
 #include "sirius/app/cli/command_router.h"
 
+#include "sirius/app/alignment_authority.h"
 #include "sirius/app/cli/cli_output.h"
 #include "sirius/app/cli/config_command.h"
 #include "sirius/app/cli/info_command.h"
@@ -11,6 +12,7 @@
 
 #include <iostream>
 #include <optional>
+#include <utility>
 
 namespace sirius::app {
 
@@ -60,7 +62,12 @@ int CommandRouter::Run(int argc, char* argv[]) {
     if (!globals.config_path.empty()) {
         config_path = globals.config_path;
     }
-    SiriusConfig config = ConfigLoader::Load(config_path);
+    auto loaded_config = ConfigLoader::Load(config_path);
+    if (!loaded_config) {
+        cli::Error(loaded_config.error().Description());
+        return 1;
+    }
+    SiriusConfig config = std::move(*loaded_config);
 
     std::string command_name;
     std::vector<std::string> command_args;
@@ -117,7 +124,7 @@ void CommandRouter::PrintHelp() {
     std::cout << "Commands:\n";
     for (const auto& cmd : commands_) {
         std::cout << "  " << cmd->Name();
-        size_t pad = 16 - cmd->Name().length();
+        std::size_t pad = 16 - cmd->Name().length();
         std::cout << std::string(pad, ' ') << cmd->Description() << "\n";
     }
     std::cout << "  help            Show this help message\n";
@@ -153,7 +160,7 @@ std::vector<std::string> CommandRouter::ParseGlobalOptions(const std::vector<std
     // unambiguous.
     std::vector<std::string> remaining;
 
-    for (size_t i = 0; i < args.size(); ++i) {
+    for (std::size_t i = 0; i < args.size(); ++i) {
         const std::string& arg = args[i];
 
         if (arg == "-v" || arg == "--verbose") {
@@ -222,6 +229,39 @@ int CommandRouter::RouteCommand(const std::string& command_name,
     if (command_name == "help" || command_name.empty()) {
         PrintHelp();
         return 0;
+    }
+
+    // Render and viewer initialisation consume the installed operating volume.
+    // Require its receipt to equal the compile-time authority in every mode;
+    // Release binaries additionally cannot exist unless that receipt admits
+    // every external ideal domain for this exact clean revision. Information
+    // commands remain available so a broken volume can diagnose itself.
+    if (command_name == "render" || command_name == "view") {
+        auto alignment = LoadInstalledAlignmentAuthority();
+        if (!alignment) {
+            cli::Error("Sirius initialisation declined: " + alignment.error());
+            return 1;
+        }
+        if (alignment->release_enforced && !alignment->satisfied) {
+            cli::Error("Sirius release initialisation declined: ultimate ideal is not aligned");
+            return 1;
+        }
+        if (alignment->release_enforced || alignment->qualification_enforced) {
+            auto build_gate = LoadInstalledBuildGateAuthority(*alignment);
+            if (!build_gate) {
+                cli::Error("Sirius strict initialisation declined: " + build_gate.error());
+                return 1;
+            }
+        }
+        if (alignment->qualification_enforced) {
+            cli::Warning(
+                "Qualification evidence-generation mode: this execution is candidate evidence, "
+                "not a release");
+        } else if (!alignment->satisfied) {
+            cli::Warning(
+                "Development mode: the ultimate ideal is not aligned; this execution is "
+                "not admissible release evidence");
+        }
     }
 
     for (auto& cmd : commands_) {

@@ -16,6 +16,9 @@ namespace fs = std::filesystem;
 // Resolves the platform-dependent locations Sirius reads and writes.
 class PlatformPaths {
   public:
+    // Absolute path to the running executable.
+    static fs::path ExecutablePath();
+
     // Directory containing the running executable (absolute).
     static fs::path ExecutableDirectory();
 
@@ -28,8 +31,8 @@ class PlatformPaths {
     // System configuration directory (Linux /etc/sirius, Windows %PROGRAMDATA%).
     static fs::path SystemConfigDirectory();
 
-    // Resolve an installed or build-staged runtime resource. Setting
-    // SIRIUS_RESOURCE_DIR selects one strict resource root.
+    // Resolve an installed or build-staged runtime resource. In development,
+    // SIRIUS_RESOURCE_DIR selects one strict root; releases ignore the override.
     static std::optional<fs::path> ResolveResource(const std::string& relative_path);
 
     // Config file search locations, highest priority first.

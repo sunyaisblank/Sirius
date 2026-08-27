@@ -9,6 +9,8 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
+#include <limits>
+#include <numbers>
 #include <random>
 #include <span>
 #include <vector>
@@ -31,7 +33,7 @@ struct StarEntry {
     void ComputeColor(float& r, float& g, float& b) const {
         // Temperature to RGB (simplified Planckian locus)
         float T = temperature_K;
-        if (T <= 0.0f) T = 5778.0f;  // Default to solar
+        if (!std::isfinite(T) || T <= 0.0f) T = 5778.0f;  // Default to solar
 
         // Normalize to 6500K white point
         float T_norm = T / 6500.0f;
@@ -64,29 +66,46 @@ static_assert(sizeof(StarEntry) == 8 * sizeof(float),
 
 // Catalog generation and sampling parameters.
 struct StarfieldConfig {
-    uint32_t star_count = 100000;      // Number of stars in catalog
-    float min_distance_pc = 1.0f;      // Nearest star distance [pc]
-    float max_distance_pc = 10000.0f;  // Farthest star distance [pc]
-    float magnitude_limit = 12.0f;     // Faintest visible magnitude
-    float aperture_mm = 50.0f;         // Virtual aperture for DoF (0 = infinite)
-    float focus_distance_pc = 100.0f;  // Focus plane distance [pc]
-    float brightness_scale = 1.0f;     // Overall brightness multiplier
-    uint32_t seed = 42;                // Random seed
+    std::uint32_t star_count = 100000;  // Number of stars in catalog
+    float min_distance_pc = 1.0f;       // Nearest star distance [pc]
+    float max_distance_pc = 10000.0f;   // Farthest star distance [pc]
+    float magnitude_limit = 12.0f;      // Faintest visible magnitude
+    float aperture_mm = 50.0f;          // Virtual aperture for DoF (0 = infinite)
+    float focus_distance_pc = 100.0f;   // Focus plane distance [pc]
+    // Catalogue magnitudes are relative fluxes. A factor of 100 maps their
+    // zero point into the renderer's display-linear range; scale 1 survives in
+    // HDR but quantises away in an ordinary P3 PNG.
+    float brightness_scale = 100.0f;
+    std::uint32_t seed = 42;  // Random seed
     bool enabled = true;
     bool enable_parallax = true;  // Enable parallax for camera motion
     bool enable_dof = true;       // Enable depth of field blur
 
     // Invariants (enforced by clamping, not assertion):
-    //   star_count <= 10^7
+    //   star_count in [1, 10^7]
     //   min_distance_pc > 0
     //   aperture_mm in [0, 1000] (0 = infinite DoF)
     void Validate() {
-        star_count = std::min(star_count, 10000000u);
+        star_count = std::clamp(star_count, 1u, 10000000u);
+        if (!std::isfinite(min_distance_pc)) min_distance_pc = 1.0f;
+        if (!std::isfinite(max_distance_pc)) max_distance_pc = 10000.0f;
+        if (!std::isfinite(magnitude_limit)) magnitude_limit = 12.0f;
+        if (!std::isfinite(aperture_mm)) aperture_mm = 50.0f;
+        if (!std::isfinite(focus_distance_pc)) focus_distance_pc = 100.0f;
+        if (!std::isfinite(brightness_scale)) brightness_scale = 100.0f;
         min_distance_pc = std::max(min_distance_pc, 0.1f);
-        max_distance_pc = std::max(max_distance_pc, min_distance_pc + 1.0f);
+        if (!(max_distance_pc > min_distance_pc)) {
+            max_distance_pc =
+                std::nextafter(min_distance_pc, std::numeric_limits<float>::infinity());
+            if (!std::isfinite(max_distance_pc)) {
+                min_distance_pc = 1.0f;
+                max_distance_pc = 10000.0f;
+            }
+        }
         magnitude_limit = std::clamp(magnitude_limit, 0.0f, 20.0f);
         aperture_mm = std::clamp(aperture_mm, 0.0f, 1000.0f);
         focus_distance_pc = std::clamp(focus_distance_pc, min_distance_pc, max_distance_pc);
+        brightness_scale = std::clamp(brightness_scale, 0.0f, 1000000.0f);
     }
 };
 
@@ -220,7 +239,7 @@ class StarfieldGenerator {
         std::mt19937 rng(config_.seed);
         std::uniform_real_distribution<float> uniform(0.0f, 1.0f);
 
-        for (uint32_t i = 0; i < config_.star_count; ++i) {
+        for (std::uint32_t i = 0; i < config_.star_count; ++i) {
             StarEntry star = GenerateStar(rng, uniform);
             if (star.magnitude <= config_.magnitude_limit) {
                 stars.push_back(star);
@@ -241,7 +260,7 @@ class StarfieldGenerator {
         stars.reserve(config_.star_count);
         std::mt19937 rng(config_.seed);
         std::uniform_real_distribution<float> uniform(0.0f, 1.0f);
-        for (uint32_t i = 0; i < config_.star_count; ++i) {
+        for (std::uint32_t i = 0; i < config_.star_count; ++i) {
             stars.push_back(GenerateStar(rng, uniform));
         }
         return stars;
@@ -268,7 +287,7 @@ class StarfieldGenerator {
 
         // Stars beyond four sigma contribute nothing; the cosine test skips them
         // before the transcendental acos.
-        float cos_cut = std::cos(std::min(4.0f * sigma, static_cast<float>(M_PI)));
+        float cos_cut = std::cos(std::min(4.0f * sigma, static_cast<float>(std::numbers::pi)));
         float inv_two_sigma2 = 1.0f / (2.0f * sigma * sigma);
 
         for (const auto& s : stars) {
@@ -299,7 +318,8 @@ class StarfieldGenerator {
         dir_x /= dlen;
         dir_y /= dlen;
         dir_z /= dlen;
-        const float cos_cut = std::cos(std::min(4.0f * sigma, static_cast<float>(M_PI)));
+        const float cos_cut =
+            std::cos(std::min(4.0f * sigma, static_cast<float>(std::numbers::pi)));
         const float inv_two_sigma2 = 1.0f / (2.0f * sigma * sigma);
 
         index.ForEachCandidate(dir_x, dir_y, dir_z, sigma, [&](std::uint32_t star_index) {
@@ -363,7 +383,8 @@ class StarfieldGenerator {
         const float minor = std::min(sigma_major, sigma_minor);
         const float cos_orientation = std::cos(orientation);
         const float sin_orientation = std::sin(orientation);
-        const float cos_cut = std::cos(std::min(4.0f * major, static_cast<float>(M_PI)));
+        const float cos_cut =
+            std::cos(std::min(4.0f * major, static_cast<float>(std::numbers::pi)));
         const float inv_major_squared = 1.0f / (major * major);
         const float inv_minor_squared = 1.0f / (minor * minor);
 
@@ -458,7 +479,7 @@ class StarfieldGenerator {
 
         // Direction: uniform on sphere
         float theta = std::acos(2.0f * uniform(rng) - 1.0f);
-        float phi = 2.0f * static_cast<float>(M_PI) * uniform(rng);
+        float phi = 2.0f * static_cast<float>(std::numbers::pi) * uniform(rng);
         star.direction_x = std::sin(theta) * std::cos(phi);
         star.direction_y = std::sin(theta) * std::sin(phi);
         star.direction_z = std::cos(theta);

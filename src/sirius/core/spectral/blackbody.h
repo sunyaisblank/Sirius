@@ -59,7 +59,7 @@ inline double PlanckRadiance(double lambda, double T) {
     double x = kPlanckC2 / (lambda * T);
     if (x > 700) return 0.0;  // Prevent overflow.
 
-    return kPlanckC1 / (std::pow(lambda, 5) * (std::exp(x) - 1.0));
+    return kPlanckC1 / (std::pow(lambda, 5) * std::expm1(x));
 }
 
 // Wien's displacement law: peak wavelength (m) for temperature T (K).

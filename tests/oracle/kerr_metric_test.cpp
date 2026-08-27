@@ -9,6 +9,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <numbers>
 
 using namespace sirius::oracle;
 
@@ -39,10 +40,10 @@ TEST_F(KerrMetricDTest, MetricInverseIdentity_Schwarzschild) {
 
     // Test at various positions
     std::vector<Vec4d> positions = {
-        Vec4d(0, 10.0, M_PI / 2, 0),        // Equatorial plane
-        Vec4d(0, 5.0, M_PI / 4, 0),         // Off-equator
-        Vec4d(0, 3.0, M_PI / 3, M_PI / 2),  // Near photon sphere
-        Vec4d(0, 100.0, M_PI / 2, 0),       // Far field
+        Vec4d(0, 10.0, std::numbers::pi / 2, 0),                    // Equatorial plane
+        Vec4d(0, 5.0, std::numbers::pi / 4, 0),                     // Off-equator
+        Vec4d(0, 3.0, std::numbers::pi / 3, std::numbers::pi / 2),  // Near photon sphere
+        Vec4d(0, 100.0, std::numbers::pi / 2, 0),                   // Far field
     };
 
     for (const auto& x : positions) {
@@ -70,9 +71,9 @@ TEST_F(KerrMetricDTest, MetricInverseIdentity_Kerr) {
     const double tolerance = 1e-14;
 
     std::vector<Vec4d> positions = {
-        Vec4d(0, 10.0, M_PI / 2, 0),
-        Vec4d(0, 5.0, M_PI / 4, 0),
-        Vec4d(0, 3.0, M_PI / 3, M_PI / 2),
+        Vec4d(0, 10.0, std::numbers::pi / 2, 0),
+        Vec4d(0, 5.0, std::numbers::pi / 4, 0),
+        Vec4d(0, 3.0, std::numbers::pi / 3, std::numbers::pi / 2),
     };
 
     for (const auto& x : positions) {
@@ -102,7 +103,7 @@ TEST_F(KerrMetricDTest, MetricInverseIdentity_Kerr) {
 TEST_F(KerrMetricDTest, ChristoffelSymmetry) {
     const double tolerance = 1e-12;
 
-    Vec4d x(0, 6.0, M_PI / 3, 0);  // Test position
+    Vec4d x(0, 6.0, std::numbers::pi / 3, 0);  // Test position
     double Gamma[4][4][4];
     kerr_moderate->Christoffel(x, Gamma);
 
@@ -125,7 +126,7 @@ TEST_F(KerrMetricDTest, HamiltonianNullGeodesic) {
     const double tolerance = 1e-10;
 
     // Set up a null ray at r=10M pointing inward
-    Vec4d x(0, 10.0, M_PI / 2, 0);
+    Vec4d x(0, 10.0, std::numbers::pi / 2, 0);
 
     // Get metric at position
     double g[4][4], g_inv[4][4];

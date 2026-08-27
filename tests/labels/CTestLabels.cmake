@@ -4,6 +4,7 @@
 
 set_tests_properties(
     AccretionDiskTest.ISCO_Schwarzschild
+    AccretionDiskTest.ConfigurationSanitizesEveryNonFiniteScalar
     AccretionDiskTest.ISCO_ExtremalKerr_Prograde
     AccretionDiskTest.ISCO_ExtremalKerr_Retrograde
     AccretionDiskTest.ISCO_ModerateSpin
@@ -37,35 +38,36 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority
+    PROPERTIES LABELS "Mandatory;Operational"
+)
+
+set_tests_properties(
     AnalyticValidationTest.PhotonSphereSchwarzschildExact
     AnalyticValidationTest.PhotonSphereKerrPrograde
     AnalyticValidationTest.PhotonSphereKerrRetrograde
     AnalyticValidationTest.ISCOSchwarzschildExact
     AnalyticValidationTest.ISCOKerrPrograde
     AnalyticValidationTest.ISCONearExtremal
-    AnalyticValidationTest.EinsteinRingSchwarzschildWeak
-    AnalyticValidationTest.CriticalImpactParameterExact
+    AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature
+    AnalyticValidationTest.PageThorneTemperatureHasZeroTorqueInnerEdge
+    AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
     AnalyticValidationTests.SchwarzschildHorizonRadius
-    AnalyticValidationTests.SchwarzschildPhotonSphere
     AnalyticValidationTests.SchwarzschildISCO
-    AnalyticValidationTests.SchwarzschildOrbitalVelocity
     AnalyticValidationTests.KerrHorizonRadius
     AnalyticValidationTests.KerrISCOPrograde
     AnalyticValidationTests.KerrISCODecreaseWithSpin
     AnalyticValidationTests.KerrErgosphereAtEquator
     AnalyticValidationTests.KerrErgosphereAtPole
-    AnalyticValidationTests.WeakFieldDeflectionFormula
-    AnalyticValidationTests.SolarDeflectionOrderOfMagnitude
     AnalyticValidationTests.KerrReducesToSchwarzschildAtZeroSpin
     AnalyticValidationTests.AsymptoticFlatness
     AnalyticValidationTests.SchwarzschildKretschmannScalar
     AnalyticValidationTests.KretschmannMonotonicDecrease
     AnalyticValidationTests.HorizonMetricDegeneracy
-    AnalyticValidationTests.SchwarzschildISCOEnergy
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -84,20 +86,20 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    BlackbodyParityTest.GPUMatchesCPUAtReferenceTemperatures
-    BlackbodyParityTest.ColourTemperatureOrdering
+    BloomFilterTests.DisabledBloomLeavesBufferUnchanged
+    BloomFilterTests.ZeroIntensityBloomLeavesUnchanged
+    BloomFilterTests.BrightPixelsCauseBloom
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
-    BloomFilterTests.DisabledBloomLeavesBufferUnchanged
-    BloomFilterTests.ZeroIntensityBloomLeavesUnchanged
-    BloomFilterTests.BrightPixelsCauseBloom
-    PROPERTIES LABELS "Correctness"
+    BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation
+    PROPERTIES LABELS "Mandatory;Operational"
 )
 
 set_tests_properties(
     CameraAberrationTest.MatchesAnalyticFormulaAlongViewAxis
+    CameraAberrationTest.MatchesGeneralLorentzBoostForThreeAxisVelocities
     CameraAberrationTest.ZeroBetaIsExactNoOp
     CameraAberrationTest.ForwardMotionBeamsTowardAxis
     CameraAberrationTest.ComposesOverLensModels
@@ -122,12 +124,6 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    ChristoffelBenchmark.SphericalVsCartesianPerformance
-    ChristoffelBenchmark.PoleHandlingComparison
-    PROPERTIES LABELS "Performance"
-)
-
-set_tests_properties(
     ChristoffelTests.FlatSpaceChristoffelAllZero
     ChristoffelTests.TorsionFreeSymmetry
     ChristoffelTests.SphericalGammaRThetaTheta
@@ -136,16 +132,10 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    ChristoffelTransformTests.FlatSpaceReproducesTextbookSphericalSymbols
-    ChristoffelTransformTests.KerrTransformedConnectionSymmetricAndFinite
-    PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
     ColourGradingTests.IdentityParametersPreserveValues
     ColourGradingTests.ZeroSaturationProducesGrey
     ColourGradingTests.OutputClamped
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -166,6 +156,7 @@ set_tests_properties(
     ConfigEnvironment.TrailingNumericGarbageDeclines
     ConfigEnvironment.NonFiniteNumberDeclines
     ConfigEnvironment.MalformedBooleanDeclines
+    ConfigEnvironment.FailedOverrideLeavesConfigurationUnchanged
     PROPERTIES LABELS "Mandatory;Operational"
 )
 
@@ -272,10 +263,11 @@ set_tests_properties(
     CoronaConfigTests.ValidateClampsTemperature
     CoronaConfigTests.ValidateClampsOpticalDepth
     CoronaConfigTests.ValidateEnsuresOuterGreaterThanInner
+    CoronaConfigTests.ValidateReplacesEveryNonFiniteScalar
     CoronaConfigTests.ComptonizationParameter
     CoronaConfigTests.ComptonizationHighOpticalDepth
     CoronaConfigTests.SpectralIndexFinite
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -288,7 +280,7 @@ set_tests_properties(
     CoronaEmissivityTests.ScatteredIntensityZeroForZeroTau
     CoronaEmissivityTests.ComptonizedSourceLeavesOpticalDepthToTheRayMarcher
     CoronaEmissivityTests.ScatteredIntensityIncreasesWithTau
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -299,7 +291,7 @@ set_tests_properties(
     CoronaGeometryTests.LamppostNearSourceInside
     CoronaGeometryTests.SphereContainment
     CoronaGeometryTests.ExtendedScalesWithRadius
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -315,7 +307,6 @@ set_tests_properties(
 set_tests_properties(
     DNGRParityTest.ExtremalKerrConfiguration
     DNGRParityTest.CameraDistance
-    DNGRParityTest.InclinationAngle
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -383,17 +374,9 @@ set_tests_properties(
     EXRRoundTripTests.HDRGradientSurvivesWriteAndRead
     EXRRoundTripTests.WriteFailsCleanlyOnBadPath
     EXRRoundTripTests.NonFiniteRadianceIsRejected
+    EXRRoundTripTests.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode
     EXRRoundTripTests.MalformedBufferShapesAreRejectedByEveryPublicWriter
     PROPERTIES LABELS "Mandatory;Operational"
-)
-
-set_tests_properties(
-    EinsteinRingTest.EinsteinRingRadius
-    EinsteinRingTest.CriticalImpactParameter
-    EinsteinRingTest.MagnificationDefinition
-    EinsteinRingTest.DeflectionAngleFormula
-    EinsteinRingTest.MagnificationScaling
-    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -401,35 +384,6 @@ set_tests_properties(
     Error.FailCarriesDomainOperationAndDetail
     Error.DescriptionNamesDomainOperationAndDetail
     PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
-    FPSBenchmarks.MinkowskiFPS
-    FPSBenchmarks.SchwarzschildFPS
-    FPSBenchmarks.SchwarzschildNearHorizonFPS
-    FPSBenchmarks.KerrFPS
-    FPSBenchmarks.KerrSpinComparison
-    FPSBenchmarks.MetricComparison
-    FPSBenchmarks.StepCountScaling
-    PROPERTIES LABELS "Performance"
-)
-
-set_tests_properties(
-    FPSThresholdTests.FrameBudgetCalculations
-    FPSThresholdTests.ResolutionCalculations
-    FPSThresholdTests.TargetsExceedBounds
-    FPSThresholdTests.MinkowskiEvaluationTime
-    FPSThresholdTests.SchwarzschildEvaluationTime
-    FPSThresholdTests.KerrEvaluationTime
-    FPSThresholdTests.MetricComplexityOrdering
-    FPSThresholdTests.MinkowskiPerRayBudget
-    FPSThresholdTests.SchwarzschildPerRayBudget
-    FPSThresholdTests.KerrPerRayBudget
-    FPSThresholdTests.PerStepBudgetAnalysis
-    FPSThresholdTests.GPUParallelismAssumptions
-    FPSThresholdTests.EvaluationConsistency
-    FPSThresholdTests.NoNaNInCriticalPath
-    PROPERTIES LABELS "Performance"
 )
 
 set_tests_properties(
@@ -453,7 +407,7 @@ set_tests_properties(
     FilmSimulationTest.Interstellar_Preset
     FilmSimulationTest.DigitalClean_NoEffects
     FilmSimulationTest.FullPipeline_DoesNotCrash
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -461,31 +415,6 @@ set_tests_properties(
     FisheyeCameraTest.EdgeRayPerpendicularAt180Fov
     FisheyeCameraTest.OutOfBoundsRayHasZeroWeight
     PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
-    GeodesicBenchmarks.CircularOrbitPeriod
-    GeodesicBenchmarks.ISCORadius
-    GeodesicBenchmarks.PhotonSphereRadius
-    GeodesicBenchmarks.WeakFieldLightDeflection
-    GeodesicBenchmarks.SolarDeflectionOrder
-    GeodesicBenchmarks.GeodesicConservedQuantities
-    GeodesicBenchmarks.RadialFallProperTime
-    GeodesicBenchmarks.PerihelionPrecession
-    GeodesicBenchmarks.VerificationDataPoints
-    PROPERTIES LABELS "Performance"
-)
-
-set_tests_properties(
-    GeodesicDeviationTests.MinkowskiRiemannZero
-    GeodesicDeviationTests.DeviationConstantInFlatSpace
-    GeodesicDeviationTests.SchwarzschildRiemannNonzero
-    GeodesicDeviationTests.RiemannDecreasesWithDistance
-    GeodesicDeviationTests.EllipseSemiAxesPositive
-    GeodesicDeviationTests.CircularBundleInitialization
-    GeodesicDeviationTests.BundleInitializationCorrect
-    GeodesicDeviationTests.PropagationRemainsFinite
-    PROPERTIES LABELS "Correctness"
 )
 
 set_tests_properties(
@@ -509,12 +438,15 @@ set_tests_properties(
 set_tests_properties(
     GeodesicTests.FlatSpaceZeroAcceleration
     GeodesicTests.NormalizeNullPreservesCondition
-    GeodesicTests.InnerProductConservation
+    GeodesicTests.RadialNullVectorSatisfiesSchwarzschildForm
     GeodesicTests.TimelikeVectorNormalization
     GeodesicTests.LorentzBoostedObserver
-    GeodesicTests.CircularOrbitISCO
-    GeodesicTests.PhotonSphereOrbit
     PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    GeodesicTracerRedshift.NearExtremalInnerDiskEmissionRemainsFinite
+    PROPERTIES LABELS "Mandatory;Operational"
 )
 
 set_tests_properties(
@@ -538,6 +470,7 @@ set_tests_properties(
 
 set_tests_properties(
     GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment
+    GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource
     GeodesicTracerVolumetric.TurbulenceAndCoronaAlterLiveTransferDeterministically
     PROPERTIES LABELS "Mandatory;Operational"
 )
@@ -560,7 +493,8 @@ set_tests_properties(
     JetDopplerTests.RecedingDeBoosted
     JetDopplerTests.TransverseDirection
     JetDopplerTests.AnalyticFormula
-    PROPERTIES LABELS "Correctness"
+    JetDopplerTests.ConstructorSanitizesNonFiniteConfiguration
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -572,7 +506,7 @@ set_tests_properties(
     JetEmissionTests.BeamingApproachingBrighterThanReceding
     JetEmissionTests.PolarisationDegreeFormula
     JetEmissionTests.VelocityDirection
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -582,17 +516,17 @@ set_tests_properties(
     JetGeometryTests.SouthernJet
     JetGeometryTests.JetRadiusMonotone
     JetGeometryTests.JetRadiusZeroBelowLaunch
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
     JetRayMarchTests.EmissionOutsideJetIsZero
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
     KernelBeam.BeamFlagWiresDeviationWithoutMovingDefault
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -603,6 +537,9 @@ set_tests_properties(
     KernelParity.YoshidaS4StepMatchesLegacy
     KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel
     KernelParity.ChebyshevBlackbodyMatchesLegacy
+    KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor
+    KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter
+    KernelParity.BeamEllipseRetainsBothAxesAndOutputOrientation
     KernelParity.GeodesicDeviationIsFiniteAndCurvedNearBlackHole
     PROPERTIES LABELS "Mandatory;Correctness"
 )
@@ -634,25 +571,19 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    KerrTests.ReducesToSchwarzschildAtZeroSpin
-    KerrTests.ApproachesMinkowskiAtZeroMass
-    KerrTests.MetricIsSymmetric
-    KerrTests.ErgosphereGttPositive
-    KerrTests.GttNegativeOutsideErgosphere
-    KerrTests.FrameDraggingPresent
-    KerrTests.FrameDraggingSign
-    KerrTests.FrameDraggingVanishesAtPoles
-    KerrTests.FrameDraggingAngularVelocity
-    KerrTests.DeterminantFormula
-    KerrTests.ChristoffelSymmetry
-    KerrTests.ChristoffelNonZeroForRotatingBH
+    KerrTests.MetricMatchesIndependentCartesianKerrSchildForm
+    KerrTests.ComputedRadiusSatisfiesTheDefiningOblateQuartic
+    KerrTests.HorizonsAndCaptureFollowTheIndependentKerrPolynomial
+    KerrTests.StaticLimitAuthorityIsAZeroOfProductionGtt
+    KerrTests.ZeroSpinEqualsProductionSchwarzschild
+    KerrTests.ClosedFormInverseMultipliesToIdentity
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
     LivePathConservationTests.SchwarzschildEnergyAndAngularMomentum
     LivePathConservationTests.KerrEnergyAndAngularMomentum
-    LivePathConservationTests.NearExtremalKerrEnergyAndAngularMomentum
+    LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -695,25 +626,6 @@ set_tests_properties(
     MemoryGovernor.EnvironmentOverrideResolvesBudget
     MemoryGovernor.MalformedOverrideDeclinesInsteadOfBorrowingTheDeviceBudget
     PROPERTIES LABELS "Mandatory;Operational"
-)
-
-set_tests_properties(
-    MemoryUsageTests.FundamentalTypeSizes
-    MemoryUsageTests.DualNumberSize
-    MemoryUsageTests.Vec4Size
-    MemoryUsageTests.Metric4DSize
-    MemoryUsageTests.PerRayMemory
-    MemoryUsageTests.PerPixelMetricStorage
-    MemoryUsageTests.NumericalMetricSmallGrid
-    MemoryUsageTests.NumericalMetricMediumGrid
-    MemoryUsageTests.NumericalMetricLargeGrid
-    MemoryUsageTests.ChristoffelTextureMemory
-    MemoryUsageTests.TotalVRAMAnalytic1080p
-    MemoryUsageTests.TotalVRAMNumerical1080p
-    MemoryUsageTests.VectorAllocationSafe
-    MemoryUsageTests.MetricEvaluationNoLeak
-    MemoryUsageTests.TestMemoryOverhead
-    PROPERTIES LABELS "Performance"
 )
 
 set_tests_properties(
@@ -808,7 +720,7 @@ set_tests_properties(
     MorrisThorneTracerTest.CentralRayCapturedAtThroat
     MorrisThorneTracerTest.EdgeRayEscapes
     MorrisThorneTracerTest.DeflectionFallsQuadraticallyWithImpactParameter
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -840,30 +752,6 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    NumericalMetricTests.MinkowskiADMReturnsMinkowski
-    NumericalMetricTests.MinkowskiInverseMetric
-    NumericalMetricTests.MetricIsSymmetric
-    NumericalMetricTests.InverseMetricIsSymmetric
-    NumericalMetricTests.MetricHasNegativeGtt
-    NumericalMetricTests.SpatialMetricPositiveDefinite
-    NumericalMetricTests.InverseMetricIdentity
-    NumericalMetricTests.InverseMetricIdentitySchwarzschild
-    NumericalMetricTests.SchwarzschildAsymptoticFlatness
-    NumericalMetricTests.SchwarzschildLapseDecreasesTowardHorizon
-    NumericalMetricTests.SchwarzschildConformalFactorIncreasesTowardHorizon
-    NumericalMetricTests.ZeroShiftGivesDiagonalTimeComponents
-    NumericalMetricTests.NonzeroShiftCreatesOffDiagonal
-    NumericalMetricTests.LapseSquaredInGtt
-    NumericalMetricTests.FourMetricDeterminant
-    NumericalMetricTests.SphericalToCartesian
-    NumericalMetricTests.SmallLapseHandled
-    NumericalMetricTests.NoNaNInMetric
-    NumericalMetricTests.ProperTimeReal
-    NumericalMetricTests.NullVectorsExist
-    PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
     NumericalStabilityTest.NoNaNInMetric
     NumericalStabilityTest.DeterministicIntegration
     PROPERTIES LABELS "Mandatory;Stability"
@@ -874,14 +762,10 @@ set_tests_properties(
     NumericalStabilityTests.DualDivisionSmallDenominator
     NumericalStabilityTests.SqrtNearZero
     NumericalStabilityTests.TrigLargeAngles
-    NumericalStabilityTests.SchwarzschildNearHorizon
-    NumericalStabilityTests.PolarAxisSingularity
     NumericalStabilityTests.VectorSmallMagnitude
     NumericalStabilityTests.VectorLargeComponents
     NumericalStabilityTests.InnerProductNearNull
     NumericalStabilityTests.ChristoffelNearSingular
-    NumericalStabilityTests.MachineEpsilonAddition
-    NumericalStabilityTests.AccumulationError
     PROPERTIES LABELS "Mandatory;Stability"
 )
 
@@ -945,7 +829,7 @@ set_tests_properties(
     PolarisedEmissionTests.SynchrotronEmissionIsPhysical
     PolarisedEmissionTests.ThomsonScatteringAt90Degrees
     PolarisedEmissionTests.ThomsonScatteringForward
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -975,31 +859,12 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    ReissnerNordstromTests.MetricIsDiagonal
-    ReissnerNordstromTests.MetricIsSymmetric
-    ReissnerNordstromTests.MetricHasLorentzianSignature
-    ReissnerNordstromTests.SignatureForVariousCharges
-    ReissnerNordstromTests.ReducesToSchwarzschildZeroCharge
-    ReissnerNordstromTests.SchwarzschildLimitMultipleRadii
-    ReissnerNordstromTests.AsymptoticFlatness
-    ReissnerNordstromTests.ChargeEffectsFallOffFaster
-    ReissnerNordstromTests.OuterHorizonFormula
-    ReissnerNordstromTests.InnerHorizonFormula
-    ReissnerNordstromTests.SchwarzschildHorizon
-    ReissnerNordstromTests.NearExtremalHorizons
-    ReissnerNordstromTests.EventHorizonGtt
-    ReissnerNordstromTests.EventHorizonGrr
-    ReissnerNordstromTests.MetricThetaTheta
-    ReissnerNordstromTests.MetricPhiPhi
-    ReissnerNordstromTests.MetricDeterminant
-    ReissnerNordstromTests.DeterminantIsNegative
-    ReissnerNordstromTests.ProperTimeStationaryObserver
-    ReissnerNordstromTests.ChargeIncreasesRedshift
-    ReissnerNordstromTests.PhotonSphereExists
-    ReissnerNordstromTests.ChargeShrinksOuterHorizon
-    ReissnerNordstromTests.ChargeExpandsInnerHorizon
-    ReissnerNordstromTests.FunctionFCorrectness
-    ReissnerNordstromTests.FPositiveOutsideHorizon
+    ReissnerNordstromTests.MetricMatchesIndependentCartesianKerrSchildForm
+    ReissnerNordstromTests.AnalyticDerivativesMatchIndependentFiniteDifferences
+    ReissnerNordstromTests.ZeroChargeEqualsProductionSchwarzschild
+    ReissnerNordstromTests.HorizonAuthoritiesSatisfyTheIndependentPolynomial
+    ReissnerNordstromTests.SuperExtremalDomainHasNoHorizonOrCaptureSurface
+    ReissnerNordstromTests.ClosedFormInverseMultipliesToIdentity
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -1036,38 +901,42 @@ set_tests_properties(
     RenderPipelineTests.HandlesLargeRadius
     RenderPipelineTests.IntegrationIsDeterministic
     RenderPipelineTests.KerrFrameDragging
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
-    RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr
-    RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr
     RenderSessionProbe.BackendAutoResolvesByDeviceRegistryAndCapabilities
     RenderSessionProbe.ConfigurationConversionPreservesObserverAndDiskControls
+    RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr
+    RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter
+    RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr
     RenderSessionProbe.StartIsAsynchronousAndCancellationIsTerminalWithoutOutput
     RenderSessionProbe.CompletionCallbackCanReenterLifecycleWithoutDeadlock
     RenderSessionProbe.PointStarfieldRejectsValuesItsGeneratorWouldClamp
+    RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration
     RenderSessionProbe.TypedNumericBoundariesMatchTheExternalConfigurationBoundary
     RenderSessionProbe.PolarisedAndTwoSheetRequestsDeclineAtTheTypedBoundary
     RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes
     RenderSessionProbe.CpuMorrisThorneRenderCompletes
+    RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame
     PROPERTIES LABELS "Mandatory;Operational"
 )
 
 set_tests_properties(
-    SchwarzschildTests.MetricIsDiagonal
-    SchwarzschildTests.MetricIsSymmetric
-    SchwarzschildTests.MetricHasLorentzianSignature
-    SchwarzschildTests.AsymptoticFlatness
-    SchwarzschildTests.EventHorizonGtt
-    SchwarzschildTests.EventHorizonGrr
-    SchwarzschildTests.MetricThetaTheta
-    SchwarzschildTests.MetricPhiPhi
-    SchwarzschildTests.MetricPhiPhiAtPoles
-    SchwarzschildTests.ProperTimeStationaryObserver
-    SchwarzschildTests.GravitationalRedshift
-    SchwarzschildTests.MetricDeterminant
-    SchwarzschildTests.DeterminantIsNegative
+    SchwarzschildTests.MetricMatchesIndependentCartesianKerrSchildForm
+    SchwarzschildTests.AnalyticDerivativesMatchIndependentFiniteDifferences
+    SchwarzschildTests.HorizonAndCaptureUseTheExactArealRadius
+    SchwarzschildTests.FarFieldPerturbationHasExactInverseRadiusScaling
+    SchwarzschildTests.StationaryClockRateMatchesTheExactStaticPotential
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    Sha256Tests.EmptyStringMatchesNistKnownAnswer
+    Sha256Tests.AbcMatchesNistKnownAnswer
+    Sha256Tests.MultiBlockPaddingMatchesNistKnownAnswer
+    Sha256Tests.FileStreamingMatchesTheSameKnownAnswer
+    Sha256Tests.MillionByteFileMatchesNistKnownAnswerAcrossReadChunks
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -1078,14 +947,10 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    SpectralEmissionTest.NT_QFactorZeroAtISCO_Schwarzschild
-    SpectralEmissionTest.NT_QFactorZeroAtISCO_Kerr
-    SpectralEmissionTest.NT_QFactorPositiveOutsideISCO
-    SpectralEmissionTest.NT_QFactorBounded
-    SpectralEmissionTest.TemperatureRange
     SpectralEmissionTest.BlackbodyColourDirection
     SpectralEmissionTest.DopplerShiftDirection
     SpectralEmissionTest.TrueColorAppliesExactlyOneGFourthIntensityFactor
+    SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor
     SpectralEmissionTest.MotionBlurAveragesNonlinearTemporalRadiance
     SpectralEmissionTest.SpinDisplayFormat
     PROPERTIES LABELS "Mandatory;Correctness"
@@ -1094,13 +959,14 @@ set_tests_properties(
 set_tests_properties(
     SpectralRadianceTest.BlackbodyPeakWavelength
     SpectralRadianceTest.BlackbodyWhitePoint
-    SpectralRadianceTest.RedshiftEnergyConservation
+    SpectralRadianceTest.BlackbodyBinsMatchPlanckAuthorityAndRejectInvalidTemperature
+    SpectralRadianceTest.RedshiftDepositsExactlyOneGFourthWeightedBin
     SpectralRadianceTest.RedshiftWavelengthShift
     SpectralRadianceTest.SRGBConversionRange
     SpectralRadianceTest.ACESConversion
     SpectralRadianceTest.SpectralArithmetic
     SpectralRadianceTest.WavelengthBinIndexing
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -1123,24 +989,18 @@ set_tests_properties(
     SpectralUtilsTests.ApplyRedshiftEffect
     SpectralUtilsTests.ApplyBlueshiftEffect
     SpectralUtilsTests.TotalRedshiftCombined
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
-    SpectralValidationTests.PlanckFunctionBasic
-    SpectralValidationTests.PlanckFunctionMonotonicity
-    SpectralValidationTests.WienDisplacementLaw
-    SpectralValidationTests.SolarPeakWavelength
-    SpectralValidationTests.CandelaColor
-    SpectralValidationTests.WienKnownValues
-    SpectralValidationTests.RedshiftIntensityScaling
-    SpectralValidationTests.RedshiftWavelengthTransform
-    SpectralValidationTests.ColorTemperatureOrdering
-    SpectralValidationTests.LimbDarkeningCoefficient
-    SpectralValidationTests.BlackbodyColorProgression
-    SpectralValidationTests.StefanBoltzmannLaw
-    SpectralValidationTests.SolarLuminosity
-    PROPERTIES LABELS "Correctness"
+    SpectralValidationTests.PlanckRadianceMatchesIndependentCodataEquation
+    SpectralValidationTests.WienAuthorityMatchesNumericalPlanckMaximum
+    SpectralValidationTests.StefanBoltzmannAuthorityMatchesIntegratedPlanckSpectrum
+    SpectralValidationTests.DopplerFactorMatchesIndependentLorentzFormula
+    SpectralValidationTests.TotalRedshiftComposesGravitationalAndDopplerFactors
+    SpectralValidationTests.LimbDarkeningAuthorityMatchesEmpiricalLawAndLiveApplication
+    SpectralValidationTests.BlackbodyColourProgressionConsumesIntegratedSpectrum
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -1149,7 +1009,7 @@ set_tests_properties(
     StarEntryTests.ZeroTemperatureDefaultsToSolar
     StarEntryTests.IntensityFromMagnitude
     StarEntryTests.IntensityMagnitudeRelation
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -1158,7 +1018,8 @@ set_tests_properties(
     StarfieldConfigTests.ValidateEnsuresMaxGreaterThanMin
     StarfieldConfigTests.ValidateClampsMagnitudeLimit
     StarfieldConfigTests.ValidateClampsAperture
-    PROPERTIES LABELS "Correctness"
+    StarfieldConfigTests.ValidateReplacesEveryNonFiniteScalar
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -1170,7 +1031,7 @@ set_tests_properties(
     StarfieldGeneratorTests.DeterministicWithSameSeed
     StarfieldGeneratorTests.DifferentSeedsDifferentCatalogs
     StarfieldGeneratorTests.NoNaNInCatalog
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -1247,6 +1108,7 @@ set_tests_properties(
 set_tests_properties(
     ThinLensCameraTest.CentreRayWithDefaultSampling
     ThinLensCameraTest.DifferentSamplesGiveDifferentRays
+    ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -1266,7 +1128,12 @@ set_tests_properties(
     TonemapTests.ApplyExposureScaling
     TonemapTests.ApplyACESDispatch
     TonemapTests.ApplyReinhardDispatch
-    PROPERTIES LABELS "Correctness"
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    TurbulenceTest.ValidateRestoresFiniteOrderedDomain
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -1295,6 +1162,7 @@ set_tests_properties(
 set_tests_properties(
     ViewCommandOperational.StrictParsingAndSessionProjection
     ViewCommandOperational.HeadlessRefinementProducesASynchronisedFrame
+    ViewCommandOperational.VulkanRefinementPublishesProgressiveFrames
     ViewCommandOperational.InputStateHandlesPressRepeatReleaseMouseAndScroll
     PROPERTIES LABELS "Mandatory;Operational"
 )
@@ -1302,6 +1170,7 @@ set_tests_properties(
 set_tests_properties(
     VulkanBackend.EnumerationReportsInsteadOfThrowing
     VulkanBackend.SlangKernelMatchesCpuReference
+    VulkanBackend.WorkerThreadDispatchTearsDownSafely
     VulkanBackend.DeviceSelectionIsStrictAndRangeChecked
     PROPERTIES LABELS "Mandatory;Operational"
 )
@@ -1310,8 +1179,10 @@ set_tests_properties(
     VulkanRenderSession.CapabilityBoundaryAcceptsRepresentedSceneSemantics
     VulkanRenderSession.CapabilityBoundaryRejectsUnrepresentedSceneSemantics
     VulkanRenderSession.VolumetricTurbulenceAndCoronaReachLiveKernel
+    VulkanRenderSession.ThinAndVolumetricDopplerSuppressionAffectLiveEmission
     VulkanRenderSession.NonSquareMultisamplingCameraAndLensReachLiveKernel
     VulkanRenderSession.IndexedPointCatalogueReachesLiveKernel
+    VulkanRenderSession.CombinedParitySceneRetainsResolvedImageStructure
     VulkanRenderSession.CpuVulkanPointCatalogueAgreeOnFlatScene
     VulkanRenderSession.ConstrainedBudgetDeclinesRatherThanChangingBackground
     VulkanRenderSession.Fp64RungRendersOrDeclinesLoudly
@@ -1320,7 +1191,6 @@ set_tests_properties(
     VulkanRenderSession.CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds
     VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p
     VulkanRenderSession.CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalBounds
-    VulkanRenderSession.BackendCompiledOrSkipped
     PROPERTIES LABELS "Mandatory;Operational"
 )
 

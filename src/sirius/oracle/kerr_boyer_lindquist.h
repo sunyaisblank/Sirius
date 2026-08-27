@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <numbers>
 
 namespace sirius::oracle {
 
@@ -24,10 +25,10 @@ namespace sirius::oracle {
 //==============================================================================
 
 // dg[sigma][mu][nu] = d_sigma g_munu for Kerr; stationary and axisymmetric, so
-// only sigma = r, theta are non-zero. These expressions match dHdq, which the
-// symplectic reference integrator conserves through to 1e-10, and they are the
-// single source the connection below contracts. Reference: Misner, Thorne &
-// Wheeler (1973), chapter 33.
+// only sigma = r, theta are non-zero. These expressions are the single source
+// consumed by dHdq and by the connection below; their finite-difference gates
+// are independent of either consumer. Reference: Misner, Thorne & Wheeler
+// (1973), chapter 33.
 inline void KerrMetricDerivatives(double M, double a, const Vec4d& x, double dg[4][4][4]) {
     for (int s = 0; s < 4; ++s)
         for (int mu = 0; mu < 4; ++mu)
@@ -563,7 +564,7 @@ class KerrMetricD : public IMetricD {
         if (x.r > 1e6 * mass_) return false;       // Too far (numerical issues)
 
         // Check angular coordinate
-        if (x.theta <= 1e-6 || x.theta >= M_PI - 1e-6) return false;  // At poles
+        if (x.theta <= 1e-6 || x.theta >= std::numbers::pi - 1e-6) return false;  // At poles
 
         return true;
     }

@@ -24,6 +24,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <numbers>
 #include <vector>
 
 namespace sirius::test {
@@ -136,7 +137,7 @@ TEST_F(MandatoryKillingTests, SchwarzschildEnergyConservation) {
     Vec4 pos;
     pos(0) = 0.0;
     pos(1) = 20.0;  // Well outside horizon
-    pos(2) = M_PI / 2.0;
+    pos(2) = std::numbers::pi / 2.0;
     pos(3) = 0.0;
 
     Lightray ray = createLightray(pos, -0.5, 0.0, 0.5, &metric);
@@ -145,12 +146,16 @@ TEST_F(MandatoryKillingTests, SchwarzschildEnergyConservation) {
     Tensor<Dual<double>, 4, 4, 4> dg_init;
     metric.Evaluate(ray.position, g_init, dg_init);
     double E_initial = computeKillingEnergy(ray.velocity, g_init);
+    ASSERT_GT(std::abs(E_initial), 1e-10)
+        << "deterministic witness produced degenerate initial energy";
 
     double max_drift = 0.0;
+    int accepted_steps = 0;
 
     for (int step = 0; step < INTEGRATION_STEPS; ++step) {
         bool success = Geodesic::IntegrateStepRk45(ray, &metric, config);
         if (!success || ray.terminated) break;
+        ++accepted_steps;
 
         double r = std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
                              ray.position(3) * ray.position(3));
@@ -165,6 +170,7 @@ TEST_F(MandatoryKillingTests, SchwarzschildEnergyConservation) {
         max_drift = std::max(max_drift, drift);
     }
 
+    ASSERT_GT(accepted_steps, 0) << "conservation witness accepted no integration step";
     EXPECT_LT(max_drift, MANDATORY_ENERGY_TOLERANCE)
         << "MANDATORY: Schwarzschild energy drift " << max_drift << " exceeds tolerance "
         << MANDATORY_ENERGY_TOLERANCE;
@@ -181,7 +187,7 @@ TEST_F(MandatoryKillingTests, SchwarzschildAngularMomentumConservation) {
     Vec4 pos;
     pos(0) = 0.0;
     pos(1) = 15.0;
-    pos(2) = M_PI / 2.0;  // Equatorial
+    pos(2) = std::numbers::pi / 2.0;  // Equatorial
     pos(3) = 0.0;
 
     Lightray ray = createLightray(pos, -0.3, 0.0, 0.8, &metric);
@@ -191,15 +197,16 @@ TEST_F(MandatoryKillingTests, SchwarzschildAngularMomentumConservation) {
     metric.Evaluate(ray.position, g_init, dg_init);
     double L_initial = computeKillingAngularMomentum(ray.velocity, g_init, ray.position);
 
-    if (std::abs(L_initial) < 1e-10) {
-        GTEST_SKIP() << "Initial L too small for meaningful test";
-    }
+    ASSERT_GT(std::abs(L_initial), 1e-10)
+        << "deterministic witness produced degenerate initial angular momentum";
 
     double max_drift = 0.0;
+    int accepted_steps = 0;
 
     for (int step = 0; step < INTEGRATION_STEPS; ++step) {
         bool success = Geodesic::IntegrateStepRk45(ray, &metric, config);
         if (!success || ray.terminated) break;
+        ++accepted_steps;
 
         double r = std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
                              ray.position(3) * ray.position(3));
@@ -214,6 +221,7 @@ TEST_F(MandatoryKillingTests, SchwarzschildAngularMomentumConservation) {
         max_drift = std::max(max_drift, drift);
     }
 
+    ASSERT_GT(accepted_steps, 0) << "conservation witness accepted no integration step";
     EXPECT_LT(max_drift, MANDATORY_L_TOLERANCE) << "MANDATORY: Schwarzschild L drift " << max_drift
                                                 << " exceeds tolerance " << MANDATORY_L_TOLERANCE;
 }
@@ -229,7 +237,7 @@ TEST_F(MandatoryKillingTests, KerrEnergyConservation) {
     Vec4 pos;
     pos(0) = 0.0;
     pos(1) = 15.0;
-    pos(2) = M_PI / 3.0;  // Off-equatorial
+    pos(2) = std::numbers::pi / 3.0;  // Off-equatorial
     pos(3) = 0.0;
 
     Lightray ray = createLightray(pos, -0.4, 0.1, 0.5, &metric);
@@ -238,12 +246,16 @@ TEST_F(MandatoryKillingTests, KerrEnergyConservation) {
     Tensor<Dual<double>, 4, 4, 4> dg_init;
     metric.Evaluate(ray.position, g_init, dg_init);
     double E_initial = computeKillingEnergy(ray.velocity, g_init);
+    ASSERT_GT(std::abs(E_initial), 1e-10)
+        << "deterministic witness produced degenerate initial energy";
 
     double max_drift = 0.0;
+    int accepted_steps = 0;
 
     for (int step = 0; step < INTEGRATION_STEPS; ++step) {
         bool success = Geodesic::IntegrateStepRk45(ray, &metric, config);
         if (!success || ray.terminated) break;
+        ++accepted_steps;
 
         double r = std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
                              ray.position(3) * ray.position(3));
@@ -258,6 +270,7 @@ TEST_F(MandatoryKillingTests, KerrEnergyConservation) {
         max_drift = std::max(max_drift, drift);
     }
 
+    ASSERT_GT(accepted_steps, 0) << "conservation witness accepted no integration step";
     EXPECT_LT(max_drift, MANDATORY_ENERGY_TOLERANCE)
         << "MANDATORY: Kerr energy drift " << max_drift << " exceeds tolerance "
         << MANDATORY_ENERGY_TOLERANCE;
@@ -274,7 +287,7 @@ TEST_F(MandatoryKillingTests, KerrAngularMomentumConservation) {
     Vec4 pos;
     pos(0) = 0.0;
     pos(1) = 12.0;
-    pos(2) = M_PI / 2.0;
+    pos(2) = std::numbers::pi / 2.0;
     pos(3) = 0.0;
 
     Lightray ray = createLightray(pos, -0.3, 0.0, 0.7, &metric);
@@ -284,15 +297,16 @@ TEST_F(MandatoryKillingTests, KerrAngularMomentumConservation) {
     metric.Evaluate(ray.position, g_init, dg_init);
     double L_initial = computeKillingAngularMomentum(ray.velocity, g_init, ray.position);
 
-    if (std::abs(L_initial) < 1e-10) {
-        GTEST_SKIP() << "Initial L too small";
-    }
+    ASSERT_GT(std::abs(L_initial), 1e-10)
+        << "deterministic witness produced degenerate initial angular momentum";
 
     double max_drift = 0.0;
+    int accepted_steps = 0;
 
     for (int step = 0; step < INTEGRATION_STEPS; ++step) {
         bool success = Geodesic::IntegrateStepRk45(ray, &metric, config);
         if (!success || ray.terminated) break;
+        ++accepted_steps;
 
         double r = std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
                              ray.position(3) * ray.position(3));
@@ -307,6 +321,7 @@ TEST_F(MandatoryKillingTests, KerrAngularMomentumConservation) {
         max_drift = std::max(max_drift, drift);
     }
 
+    ASSERT_GT(accepted_steps, 0) << "conservation witness accepted no integration step";
     EXPECT_LT(max_drift, MANDATORY_L_TOLERANCE) << "MANDATORY: Kerr L drift " << max_drift
                                                 << " exceeds tolerance " << MANDATORY_L_TOLERANCE;
 }
@@ -323,7 +338,7 @@ TEST_F(MandatoryKillingTests, ReissnerNordstromEnergyConservation) {
     Vec4 pos;
     pos(0) = 0.0;
     pos(1) = 15.0;
-    pos(2) = M_PI / 2.0;
+    pos(2) = std::numbers::pi / 2.0;
     pos(3) = 0.0;
 
     Lightray ray = createLightray(pos, -0.5, 0.0, 0.4, &metric);
@@ -332,12 +347,16 @@ TEST_F(MandatoryKillingTests, ReissnerNordstromEnergyConservation) {
     Tensor<Dual<double>, 4, 4, 4> dg_init;
     metric.Evaluate(ray.position, g_init, dg_init);
     double E_initial = computeKillingEnergy(ray.velocity, g_init);
+    ASSERT_GT(std::abs(E_initial), 1e-10)
+        << "deterministic witness produced degenerate initial energy";
 
     double max_drift = 0.0;
+    int accepted_steps = 0;
 
     for (int step = 0; step < INTEGRATION_STEPS; ++step) {
         bool success = Geodesic::IntegrateStepRk45(ray, &metric, config);
         if (!success || ray.terminated) break;
+        ++accepted_steps;
 
         double r = std::sqrt(ray.position(1) * ray.position(1) + ray.position(2) * ray.position(2) +
                              ray.position(3) * ray.position(3));
@@ -352,6 +371,7 @@ TEST_F(MandatoryKillingTests, ReissnerNordstromEnergyConservation) {
         max_drift = std::max(max_drift, drift);
     }
 
+    ASSERT_GT(accepted_steps, 0) << "conservation witness accepted no integration step";
     EXPECT_LT(max_drift, MANDATORY_ENERGY_TOLERANCE)
         << "MANDATORY: RN energy drift " << max_drift << " exceeds tolerance "
         << MANDATORY_ENERGY_TOLERANCE;

@@ -12,41 +12,41 @@
 namespace sirius::app::test {
 
 TEST(ConfigSchema, DefaultsRoundTripThroughJson) {
-    SiriusConfig original = SiriusConfig::defaults();
+    SiriusConfig original = SiriusConfig::Defaults();
     original.metric.name = "Kerr";
     original.metric.spin = 0.9;
-    original.render.samplesPerPixel = 128;
+    original.render.samples_per_pixel = 128;
     original.postprocess.tonemapper = "Filmic";
-    original.observer.cameraBetaForward = 0.2;
-    original.observer.lensModel = "ThinLens";
-    original.metric.wormholeTopology = "TwoSheet";
-    original.motionBlur.enabled = true;
-    original.motionBlur.shutterTime = 0.25f;
-    original.motionBlur.samples = 7;
-    original.diskEnabled = false;
-    original.dopplerBeaming = false;
-    original.pointStarfield = true;
-    original.rayBundles = true;
-    original.colorMode = "Polarisation";
+    original.observer.camera_beta_forward = 0.2;
+    original.observer.lens_model = "ThinLens";
+    original.metric.wormhole_topology = "TwoSheet";
+    original.motion_blur.enabled = true;
+    original.motion_blur.shutter_time = 0.25f;
+    original.motion_blur.samples = 7;
+    original.disk_enabled = false;
+    original.doppler_beaming = false;
+    original.point_starfield = true;
+    original.ray_bundles = true;
+    original.color_mode = "Polarisation";
 
     nlohmann::json j = original;
     SiriusConfig restored = j.get<SiriusConfig>();
 
     EXPECT_EQ(restored.metric.name, "Kerr");
     EXPECT_DOUBLE_EQ(restored.metric.spin, 0.9);
-    EXPECT_EQ(restored.render.samplesPerPixel, 128);
+    EXPECT_EQ(restored.render.samples_per_pixel, 128);
     EXPECT_EQ(restored.postprocess.tonemapper, "Filmic");
-    EXPECT_DOUBLE_EQ(restored.observer.cameraBetaForward, 0.2);
-    EXPECT_EQ(restored.observer.lensModel, "ThinLens");
-    EXPECT_EQ(restored.metric.wormholeTopology, "TwoSheet");
-    EXPECT_TRUE(restored.motionBlur.enabled);
-    EXPECT_FLOAT_EQ(restored.motionBlur.shutterTime, 0.25f);
-    EXPECT_EQ(restored.motionBlur.samples, 7);
-    EXPECT_FALSE(restored.diskEnabled);
-    EXPECT_FALSE(restored.dopplerBeaming);
-    EXPECT_TRUE(restored.pointStarfield);
-    EXPECT_TRUE(restored.rayBundles);
-    EXPECT_EQ(restored.colorMode, "Polarisation");
+    EXPECT_DOUBLE_EQ(restored.observer.camera_beta_forward, 0.2);
+    EXPECT_EQ(restored.observer.lens_model, "ThinLens");
+    EXPECT_EQ(restored.metric.wormhole_topology, "TwoSheet");
+    EXPECT_TRUE(restored.motion_blur.enabled);
+    EXPECT_FLOAT_EQ(restored.motion_blur.shutter_time, 0.25f);
+    EXPECT_EQ(restored.motion_blur.samples, 7);
+    EXPECT_FALSE(restored.disk_enabled);
+    EXPECT_FALSE(restored.doppler_beaming);
+    EXPECT_TRUE(restored.point_starfield);
+    EXPECT_TRUE(restored.ray_bundles);
+    EXPECT_EQ(restored.color_mode, "Polarisation");
 }
 
 TEST(ConfigSchema, LegacyFieldSpellingsParse) {
@@ -75,17 +75,17 @@ TEST(ConfigSchema, LegacyFieldSpellingsParse) {
     SiriusConfig config = nlohmann::json::parse(legacy).get<SiriusConfig>();
 
     EXPECT_EQ(config.render.width, 800);
-    EXPECT_EQ(config.render.outputPath, "out.exr");
+    EXPECT_EQ(config.render.output_path, "out.exr");
     EXPECT_EQ(config.metric.name, "Kerr");
     EXPECT_DOUBLE_EQ(config.metric.mass, 2.0);
-    EXPECT_EQ(config.metric.temperatureModel, "ShakuraSunyaev");
-    EXPECT_FLOAT_EQ(config.metric.diskTemperature, 60000.0f);
+    EXPECT_EQ(config.metric.temperature_model, "ShakuraSunyaev");
+    EXPECT_FLOAT_EQ(config.metric.disk_temperature, 60000.0f);
     EXPECT_DOUBLE_EQ(config.observer.azimuth, 30.0);
-    EXPECT_FALSE(config.postprocess.enableBloom);
+    EXPECT_FALSE(config.postprocess.enable_bloom);
     EXPECT_EQ(config.postprocess.tonemapper, "Reinhard");
-    EXPECT_TRUE(config.volumetric.enableTurbulence);
-    EXPECT_TRUE(config.motionBlur.enabled);
-    EXPECT_EQ(config.motionBlur.samples, 9);
+    EXPECT_TRUE(config.volumetric.enable_turbulence);
+    EXPECT_TRUE(config.motion_blur.enabled);
+    EXPECT_EQ(config.motion_blur.samples, 9);
     EXPECT_EQ(config.film.preset, "SpaceOdyssey2001");
     EXPECT_EQ(config.backend.preferred, "cpu");
 }
@@ -98,10 +98,10 @@ TEST(ConfigSchema, PartialJsonKeepsDefaultsForOmittedFields) {
     SiriusConfig config = nlohmann::json::parse(partial).get<SiriusConfig>();
 
     EXPECT_EQ(config.metric.name, "Alcubierre");
-    EXPECT_DOUBLE_EQ(config.metric.warpVelocity, 0.6);
+    EXPECT_DOUBLE_EQ(config.metric.warp_velocity, 0.6);
     // Omitted fields keep defaults.
     EXPECT_EQ(config.render.width, 1920);
-    EXPECT_EQ(config.render.outputPath, "render.ppm");
+    EXPECT_EQ(config.render.output_path, "render.ppm");
     EXPECT_DOUBLE_EQ(config.metric.charge, 0.0);
 }
 

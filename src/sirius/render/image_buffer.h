@@ -120,20 +120,20 @@ class ImageBuffer {
         }
         width = w;
         height = h;
-        pixels.resize(static_cast<size_t>(w) * h * 3, 0.0f);
+        pixels.resize(static_cast<std::size_t>(w) * h * 3, 0.0f);
     }
 
     void Clear() { std::fill(pixels.begin(), pixels.end(), 0.0f); }
 
-    size_t PixelCount() const {
-        return width > 0 && height > 0 ? static_cast<size_t>(width) * height : 0;
+    std::size_t PixelCount() const {
+        return width > 0 && height > 0 ? static_cast<std::size_t>(width) * height : 0;
     }
-    size_t BufferSize() const { return pixels.size(); }
+    std::size_t BufferSize() const { return pixels.size(); }
     bool HasValidShape() const { return PixelCount() > 0 && pixels.size() == PixelCount() * 3; }
 
     void SetPixel(int x, int y, float r, float g, float b) {
         if (!HasValidShape() || x < 0 || x >= width || y < 0 || y >= height) return;
-        size_t idx = (static_cast<size_t>(y) * width + x) * 3;
+        std::size_t idx = (static_cast<std::size_t>(y) * width + x) * 3;
         pixels[idx + 0] = r;
         pixels[idx + 1] = g;
         pixels[idx + 2] = b;
@@ -144,7 +144,7 @@ class ImageBuffer {
             r = g = b = 0.0f;
             return;
         }
-        size_t idx = (static_cast<size_t>(y) * width + x) * 3;
+        std::size_t idx = (static_cast<std::size_t>(y) * width + x) * 3;
         r = pixels[idx + 0];
         g = pixels[idx + 1];
         b = pixels[idx + 2];
@@ -155,11 +155,11 @@ class ImageBuffer {
     }
 
     // Convert to 8-bit sRGB (gamma corrected); the display transfer applied once.
-    std::vector<uint8_t> ToSrgb8() const {
+    std::vector<std::uint8_t> ToSrgb8() const {
         if (!HasValidShape()) return {};
-        std::vector<uint8_t> result(PixelCount() * 3);
+        std::vector<std::uint8_t> result(PixelCount() * 3);
 
-        for (size_t i = 0; i < PixelCount(); ++i) {
+        for (std::size_t i = 0; i < PixelCount(); ++i) {
             for (int c = 0; c < 3; ++c) {
                 float linear = pixels[i * 3 + c];
                 float clamped = std::clamp(linear, 0.0f, 1.0f);
@@ -171,7 +171,7 @@ class ImageBuffer {
                     srgb = 1.055f * std::pow(clamped, 1.0f / 2.4f) - 0.055f;
                 }
 
-                result[i * 3 + c] = static_cast<uint8_t>(srgb * 255.0f + 0.5f);
+                result[i * 3 + c] = static_cast<std::uint8_t>(srgb * 255.0f + 0.5f);
             }
         }
 
@@ -183,7 +183,7 @@ class ImageBuffer {
         if (!HasValidShape()) return {};
         std::vector<float> result(PixelCount() * 4);
 
-        for (size_t i = 0; i < PixelCount(); ++i) {
+        for (std::size_t i = 0; i < PixelCount(); ++i) {
             result[i * 4 + 0] = pixels[i * 3 + 0];
             result[i * 4 + 1] = pixels[i * 3 + 1];
             result[i * 4 + 2] = pixels[i * 3 + 2];
@@ -214,20 +214,20 @@ class ImageBufferRGBA {
         }
         width = w;
         height = h;
-        pixels.resize(static_cast<size_t>(w) * h * 4, 0.0f);
+        pixels.resize(static_cast<std::size_t>(w) * h * 4, 0.0f);
     }
 
     void SetPixel(int x, int y, float r, float g, float b, float a = 1.0f) {
         if (!HasValidShape() || x < 0 || x >= width || y < 0 || y >= height) return;
-        size_t idx = (static_cast<size_t>(y) * width + x) * 4;
+        std::size_t idx = (static_cast<std::size_t>(y) * width + x) * 4;
         pixels[idx + 0] = r;
         pixels[idx + 1] = g;
         pixels[idx + 2] = b;
         pixels[idx + 3] = a;
     }
 
-    size_t PixelCount() const {
-        return width > 0 && height > 0 ? static_cast<size_t>(width) * height : 0;
+    std::size_t PixelCount() const {
+        return width > 0 && height > 0 ? static_cast<std::size_t>(width) * height : 0;
     }
     bool HasValidShape() const { return PixelCount() > 0 && pixels.size() == PixelCount() * 4; }
 };

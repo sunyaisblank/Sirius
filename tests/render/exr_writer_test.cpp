@@ -16,6 +16,8 @@
 #include <cmath>
 #include <cstdlib>
 #include <filesystem>
+#include <fstream>
+#include <iterator>
 #include <limits>
 #include <string>
 
@@ -46,7 +48,7 @@ TEST(EXRRoundTripTests, HDRGradientSurvivesWriteAndRead) {
     }
 
     EXRMetadata meta;
-    meta.metricType = "Kerr";
+    meta.metric_type = "Kerr";
     ASSERT_TRUE(EXRWriter::WriteExr(path, buffer, meta));
     ASSERT_TRUE(std::filesystem::exists(path));
 
@@ -84,7 +86,7 @@ TEST(EXRRoundTripTests, HDRGradientSurvivesWriteAndRead) {
     double worstRel = 0.0;
     for (int y = 0; y < H; ++y) {
         for (int x = 0; x < W; ++x) {
-            size_t idx = (static_cast<size_t>(y) * W + x) * 4;
+            std::size_t idx = (static_cast<std::size_t>(y) * W + x) * 4;
             const float expected[3] = {0.25f * x, 2.0f * y, 0.5f};
             for (int c = 0; c < 3; ++c) {
                 double denom = std::max(1.0, static_cast<double>(expected[c]));
@@ -110,6 +112,27 @@ TEST(EXRRoundTripTests, NonFiniteRadianceIsRejected) {
     std::filesystem::remove(path);
     EXPECT_FALSE(EXRWriter::WriteExr(path, buffer));
     EXPECT_FALSE(std::filesystem::exists(path));
+}
+
+TEST(EXRRoundTripTests, PpmRgbaBoundaryAppliesExactlyOneSrgbEncode) {
+    const std::string path = tempPath("sirius_ppm_srgb_boundary.ppm");
+    std::filesystem::remove(path);
+    const float pixels[] = {
+        0.0f,  0.5f,  1.0f, 0.25f,  // alpha is not transfer encoded or written
+        -1.0f, 0.25f, 2.0f, 1.0f,
+    };
+
+    ASSERT_TRUE(EXRWriter::WritePpmRgba(path, 2, 1, pixels));
+    std::ifstream file(path, std::ios::binary);
+    ASSERT_TRUE(file);
+    const std::vector<unsigned char> bytes{std::istreambuf_iterator<char>(file),
+                                           std::istreambuf_iterator<char>()};
+    const std::string header = "P6\n2 1\n255\n";
+    const std::vector<unsigned char> expected(header.begin(), header.end());
+    std::vector<unsigned char> expected_file = expected;
+    expected_file.insert(expected_file.end(), {0, 188, 255, 0, 137, 255});
+    EXPECT_EQ(bytes, expected_file);
+    std::filesystem::remove(path);
 }
 
 TEST(EXRRoundTripTests, MalformedBufferShapesAreRejectedByEveryPublicWriter) {

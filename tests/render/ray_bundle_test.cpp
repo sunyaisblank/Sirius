@@ -37,6 +37,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <numbers>
 
 namespace {
 
@@ -100,7 +101,7 @@ struct BundleProbe {
         tracer = std::make_unique<GeodesicTracer>(metric.get(), cfg);
         CameraConfig cam;
         cam.r = 50.0;
-        cam.theta = M_PI / 2.0;
+        cam.theta = std::numbers::pi / 2.0;
         cam.phi = 0.0;
         cam.fov = 60.0f;
         cam.width = width;
@@ -132,8 +133,9 @@ TEST(RayBundleTest, FlatSpaceBundleMagnificationIsUnity) {
 // -----------------------------------------------------------------------------
 TEST(RayBundleTest, KretschmannMatchesOracleSchwarzschild) {
     constexpr double kTol = sirius::core::constants::geodesic::kConservationTol;  // 1e-4.
-    double worst =
-        MaxKretschmannError(0.0, {4.0, 6.0, 8.0, 15.0}, {M_PI / 2, M_PI / 3, M_PI / 4, M_PI / 6});
+    double worst = MaxKretschmannError(
+        0.0, {4.0, 6.0, 8.0, 15.0},
+        {std::numbers::pi / 2, std::numbers::pi / 3, std::numbers::pi / 4, std::numbers::pi / 6});
     std::cout << "[oracle a=0] max Kretschmann rel error = " << worst << "\n";
     EXPECT_LT(worst, kTol);
 }
@@ -146,15 +148,17 @@ TEST(RayBundleTest, KretschmannMatchesOracleSchwarzschild) {
 // -----------------------------------------------------------------------------
 TEST(RayBundleTest, KretschmannMatchesOracleKerrEquatorial) {
     constexpr double kTol = sirius::core::constants::geodesic::kConservationTol;  // 1e-4.
-    double worst = MaxKretschmannError(0.9, {3.0, 4.0, 6.0, 8.0, 15.0, 30.0}, {M_PI / 2});
+    double worst =
+        MaxKretschmannError(0.9, {3.0, 4.0, 6.0, 8.0, 15.0, 30.0}, {std::numbers::pi / 2});
     std::cout << "[oracle a=0.9 equatorial] max Kretschmann rel error = " << worst << "\n";
     EXPECT_LT(worst, kTol);
 }
 
 TEST(RayBundleTest, KretschmannMatchesOracleKerrOffEquatorial) {
     constexpr double kTol = sirius::core::constants::geodesic::kConservationTol;  // 1e-4.
-    double worst =
-        MaxKretschmannError(0.9, {4.0, 6.0, 8.0, 15.0, 30.0}, {M_PI / 3, M_PI / 4, M_PI / 6, 2.2});
+    double worst = MaxKretschmannError(
+        0.9, {4.0, 6.0, 8.0, 15.0, 30.0},
+        {std::numbers::pi / 3, std::numbers::pi / 4, std::numbers::pi / 6, 2.2});
     std::cout << "[oracle a=0.9 off-equator] max Kretschmann rel error = " << worst << "\n";
     EXPECT_LT(worst, kTol);
 }
@@ -223,9 +227,8 @@ TEST(RayBundleTest, MagnificationConsistencyWithScalarJacobian) {
     EXPECT_LT(area_grazing, 5.0);
     // Where the scalar magnification flags the photon ring, the bundle agrees the
     // ray is strongly (de)magnified.
-    if (ring_flagged > 0) {
-        EXPECT_GT(ring_area_min, 10.0);
-    }
+    ASSERT_GT(ring_flagged, 0) << "scalar photon-ring authority flagged no sampled ray";
+    EXPECT_GT(ring_area_min, 10.0);
 }
 
 }  // namespace

@@ -25,6 +25,7 @@
 
 #include <cmath>
 #include <complex>
+#include <numbers>
 #include <vector>
 
 namespace sirius::test {
@@ -116,7 +117,7 @@ void NumericChristoffel(const KerrMetricD& m, const Vec4d& x, double G[4][4][4])
 TEST(OracleConnection, AnalyticConnectionAgreesWithMetricDerivatives) {
     KerrMetricD metric(1.0, 0.998);
     const std::vector<Vec4d> points = {Vec4d(0.0, 8.0, 1.2, 0.3),
-                                       Vec4d(0.0, 4.0, M_PI / 2 - 0.2, 1.0),
+                                       Vec4d(0.0, 4.0, std::numbers::pi / 2 - 0.2, 1.0),
                                        Vec4d(0.0, 15.0, 0.7, 0.0)};
     for (const Vec4d& x : points) {
         double Ga[4][4][4], Gn[4][4][4];
@@ -174,7 +175,7 @@ TEST(WalkerPenrose, ImaginaryPartEqualsKillingYanoContraction) {
 // double-precision RK4 with adaptive stepping holds them to ~1e-11 here.
 TEST(WalkerPenrose, PolarisationStaysOrthogonalAndNormalisedUnderTransport) {
     KerrMetricD metric(1.0, 0.998);
-    Vec4d x0(0.0, 18.0, M_PI / 2 - 0.15, 0.0);
+    Vec4d x0(0.0, 18.0, std::numbers::pi / 2 - 0.15, 0.0);
     Vec4d kk = MakeNullTangent(metric, x0, -1.0, 0.02, 0.04);
     Vec4d ff = MakeOrthonormalPolarisation(metric, x0, kk, Vec4d(0.0, 0.0, 1.0, 0.0));
     PolarisedStateD s(x0, kk, ff);
@@ -228,10 +229,10 @@ TEST(WalkerPenrose, ConstantConservedAlongKerrGeodesics) {
     // kphi = 0.01 ray reaches r ~ 2.8, close to the a = 0.9 prograde photon
     // orbit) plus an off-equatorial ray so k^theta participates.
     const std::vector<Ray> rays = {
-        {"weak prograde", 20.0, M_PI / 2, -1.0, 0.0, 0.02},
-        {"near photon sphere", 20.0, M_PI / 2, -1.0, 0.0, 0.01},
-        {"retrograde", 20.0, M_PI / 2, -1.0, 0.0, -0.03},
-        {"off-equatorial", 18.0, M_PI / 2 - 0.2, -1.0, 0.02, 0.03},
+        {"weak prograde", 20.0, std::numbers::pi / 2, -1.0, 0.0, 0.02},
+        {"near photon sphere", 20.0, std::numbers::pi / 2, -1.0, 0.0, 0.01},
+        {"retrograde", 20.0, std::numbers::pi / 2, -1.0, 0.0, -0.03},
+        {"off-equatorial", 18.0, std::numbers::pi / 2 - 0.2, -1.0, 0.02, 0.03},
     };
 
     for (const Ray& r : rays) {
@@ -276,7 +277,7 @@ TEST(WalkerPenrose, ConstantConservedAlongKerrGeodesics) {
 // by r.
 TEST(WalkerPenrose, SchwarzschildEquatorialPerpendicularTransportsRigidly) {
     KerrMetricD metric(1.0, 0.0);
-    Vec4d x0(0.0, 15.0, M_PI / 2, 0.0);
+    Vec4d x0(0.0, 15.0, std::numbers::pi / 2, 0.0);
     Vec4d kk = MakeNullTangent(metric, x0, -1.0, 0.0, 0.03);  // Equatorial: k^theta = 0.
     Vec4d ff(0.0, 0.0, 1.0 / x0.r, 0.0);                      // Unit: r^2 (1/r)^2 = 1.
 

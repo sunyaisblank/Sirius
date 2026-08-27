@@ -15,6 +15,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <numbers>
 #include <vector>
 
 namespace sirius::test {
@@ -61,7 +62,7 @@ class CpuGeodesicReferenceTests : public ::testing::Test {
         referenceRays.clear();
 
         double r_obs = 50.0;
-        double theta_obs = M_PI / 2.0;  // Equatorial plane.
+        double theta_obs = std::numbers::pi / 2.0;  // Equatorial plane.
         double phi_obs = 0.0;
 
         int n_b = 10;    // Impact parameter samples.
@@ -71,7 +72,7 @@ class CpuGeodesicReferenceTests : public ::testing::Test {
             double b = 1.0 + 14.0 * ib / (n_b - 1);
 
             for (int ip = 0; ip < n_phi; ++ip) {
-                double phi_dir = 2.0 * M_PI * ip / n_phi;
+                double phi_dir = 2.0 * std::numbers::pi * ip / n_phi;
 
                 ReferenceRay ray;
                 ray.r_start = r_obs;
@@ -182,7 +183,7 @@ TEST_F(CpuGeodesicReferenceTests, CPUBaselineSchwarzschildEscaping) {
 
     ReferenceRay ref;
     ref.r_start = 50.0;
-    ref.theta_start = M_PI / 2.0;
+    ref.theta_start = std::numbers::pi / 2.0;
     ref.phi_start = 0.0;
     ref.v_r = -1.0;
     ref.v_theta = 0.0;
@@ -201,7 +202,7 @@ TEST_F(CpuGeodesicReferenceTests, CPUBaselineSchwarzschildHorizon) {
 
     ReferenceRay ref;
     ref.r_start = 10.0;
-    ref.theta_start = M_PI / 2.0;
+    ref.theta_start = std::numbers::pi / 2.0;
     ref.phi_start = 0.0;
     ref.v_r = -1.0;
     ref.v_theta = 0.0;
@@ -220,7 +221,7 @@ TEST_F(CpuGeodesicReferenceTests, CPUBaselineKerrPrograde) {
 
     ReferenceRay ref;
     ref.r_start = 50.0;
-    ref.theta_start = M_PI / 2.0;
+    ref.theta_start = std::numbers::pi / 2.0;
     ref.phi_start = 0.0;
     ref.v_r = -1.0;
     ref.v_theta = 0.0;
@@ -242,13 +243,13 @@ TEST_F(CpuGeodesicReferenceTests, ParityToleranceSpecification) {
 }
 
 TEST_F(CpuGeodesicReferenceTests, ReferenceRayGridGeneration) {
-    EXPECT_EQ(referenceRays.size(), static_cast<size_t>(NUM_REFERENCE_RAYS))
+    EXPECT_EQ(referenceRays.size(), static_cast<std::size_t>(NUM_REFERENCE_RAYS))
         << "Should generate " << NUM_REFERENCE_RAYS << " reference rays";
 
     for (const auto& ray : referenceRays) {
         EXPECT_GT(ray.r_start, 0) << "Radius should be positive";
         EXPECT_GE(ray.theta_start, 0) << "Theta should be >= 0";
-        EXPECT_LE(ray.theta_start, M_PI) << "Theta should be <= pi";
+        EXPECT_LE(ray.theta_start, std::numbers::pi) << "Theta should be <= pi";
     }
 }
 

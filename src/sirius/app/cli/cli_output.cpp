@@ -150,8 +150,8 @@ void ClearProgress() { std::cout << "\r" << std::string(80, ' ') << "\r" << std:
 // --- Key-value table --------------------------------------------------------
 
 void PrintTable(const std::string& title, const std::vector<TableRow>& rows) {
-    size_t max_key_width = title.length();
-    size_t max_value_width = 0;
+    std::size_t max_key_width = title.length();
+    std::size_t max_value_width = 0;
     for (const auto& row : rows) {
         if (!row.is_header) {
             max_key_width = std::max(max_key_width, row.key.length());
@@ -159,10 +159,10 @@ void PrintTable(const std::string& title, const std::vector<TableRow>& rows) {
         }
     }
 
-    size_t total_width = max_key_width + max_value_width + 7;
+    std::size_t total_width = max_key_width + max_value_width + 7;
 
     std::cout << "+" << std::string(total_width - 2, '-') << "+" << std::endl;
-    size_t title_pad = (total_width - 2 - title.length()) / 2;
+    std::size_t title_pad = (total_width - 2 - title.length()) / 2;
     std::cout << "|" << std::string(title_pad, ' ') << title
               << std::string(total_width - 2 - title_pad - title.length(), ' ') << "|" << std::endl;
     std::cout << "+" << std::string(total_width - 2, '-') << "+" << std::endl;
@@ -170,7 +170,7 @@ void PrintTable(const std::string& title, const std::vector<TableRow>& rows) {
     for (const auto& row : rows) {
         if (row.is_header) {
             std::cout << "+" << std::string(total_width - 2, '-') << "+" << std::endl;
-            size_t pad = (total_width - 2 - row.key.length()) / 2;
+            std::size_t pad = (total_width - 2 - row.key.length()) / 2;
             std::cout << "|" << std::string(pad, ' ') << row.key
                       << std::string(total_width - 2 - pad - row.key.length(), ' ') << "|"
                       << std::endl;
@@ -189,7 +189,7 @@ void PrintTable(const std::string& title, const std::vector<TableRow>& rows) {
 
 // --- Configuration view -----------------------------------------------------
 
-void PrintConfig(const render::SiriusConfig& config) {
+void PrintConfig(const SiriusConfig& config) {
     std::vector<TableRow> rows;
 
     rows.push_back({"Render Settings", "", true});
@@ -197,9 +197,9 @@ void PrintConfig(const render::SiriusConfig& config) {
         {"Resolution",
          std::to_string(config.render.width) + " x " + std::to_string(config.render.height),
          false});
-    rows.push_back({"Samples/Pixel", std::to_string(config.render.samplesPerPixel), false});
-    rows.push_back({"Tile Size", std::to_string(config.render.tileSize) + " px", false});
-    rows.push_back({"Output", config.render.outputPath, false});
+    rows.push_back({"Samples/Pixel", std::to_string(config.render.samples_per_pixel), false});
+    rows.push_back({"Tile Size", std::to_string(config.render.tile_size) + " px", false});
+    rows.push_back({"Output", config.render.output_path, false});
 
     rows.push_back({"Metric Settings", "", true});
     rows.push_back({"Metric", config.metric.name, false});
@@ -228,7 +228,7 @@ void PrintConfig(const render::SiriusConfig& config) {
     }
 
     rows.push_back({"Post-Processing", "", true});
-    rows.push_back({"Bloom", config.postprocess.enableBloom ? "Enabled" : "Disabled", false});
+    rows.push_back({"Bloom", config.postprocess.enable_bloom ? "Enabled" : "Disabled", false});
     {
         std::ostringstream exp;
         exp << std::fixed << std::setprecision(2) << config.postprocess.exposure;

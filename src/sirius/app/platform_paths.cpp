@@ -9,6 +9,8 @@
 
 namespace sirius::app {
 
+fs::path PlatformPaths::ExecutablePath() { return base::ExecutablePath(); }
+
 fs::path PlatformPaths::ExecutableDirectory() { return base::ExecutableDirectory(); }
 
 fs::path PlatformPaths::UserConfigDirectory() {

@@ -16,9 +16,11 @@ endif()
 add_executable(sirius_base_tests
     base/contracts_test.cpp
     base/error_test.cpp
+    base/sha256_test.cpp
 )
 
 target_link_libraries(sirius_base_tests PRIVATE sirius_base GTest::gtest_main)
+target_include_directories(sirius_base_tests PRIVATE "${CMAKE_SOURCE_DIR}/tests")
 
 # Death tests require enforce semantics regardless of build type.
 sirius_configure_target(sirius_base_tests CONTRACT_MODE 2)
@@ -46,18 +48,43 @@ set_property(DIRECTORY APPEND
     PROPERTY TEST_INCLUDE_FILES
         "${CMAKE_CURRENT_SOURCE_DIR}/labels/CTestLabels.cmake")
 
-# Negative control for source-to-CTest governance: a synthetic TEST_P must be
-# rejected because its dynamically discovered names cannot receive the static
-# Mandatory policy without explicit generator support.
+# Source-to-CTest governance rejects unlabelled dynamic registration, and the
+# operating-model verifier requires every P/E acceptance criterion as a
+# Mandatory-backed obligation.
+configure_file(
+    operational/evidence_governance.cmake.in
+    "${CMAKE_CURRENT_BINARY_DIR}/evidence_governance.cmake"
+    @ONLY)
 add_test(
-    NAME OperationalEvidence.SourceGovernanceRejectsUngovernedParameterizedTests
-    COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_SOURCE_DIR}/scripts/generate-ctest-labels.py" --self-test)
+    NAME OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims
+    COMMAND "${CMAKE_COMMAND}"
+        -DSIRIUS_TEST_CONFIG=$<CONFIG>
+        -P "${CMAKE_CURRENT_BINARY_DIR}/evidence_governance.cmake")
 set_tests_properties(
-    OperationalEvidence.SourceGovernanceRejectsUngovernedParameterizedTests
+    OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims
     PROPERTIES
         LABELS "Mandatory;Operational"
         TIMEOUT 30)
+
+add_test(
+    NAME OperationalBuildPolicy.ReleaseCannotWeakenGates
+    COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_SOURCE_DIR}/scripts/verify-build-policy.py" --self-test)
+set_tests_properties(
+    OperationalBuildPolicy.ReleaseCannotWeakenGates
+    PROPERTIES
+        LABELS "Mandatory;Operational"
+        TIMEOUT 10)
+
+add_test(
+    NAME OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate
+    COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_SOURCE_DIR}/scripts/verify-build-gate.py" --self-test)
+set_tests_properties(
+    OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate
+    PROPERTIES
+        LABELS "Mandatory;Operational"
+        TIMEOUT 10)
 
 # External platform/device evidence is admitted only through a strict schema.
 # This local negative control does not attest hardware; it proves fabricated,
@@ -68,6 +95,48 @@ add_test(
         "${CMAKE_SOURCE_DIR}/scripts/verify-attestation.py" --self-test)
 set_tests_properties(
     OperationalAttestation.FalseExternalEvidenceIsRejected
+    PROPERTIES
+        LABELS "Mandatory;Operational"
+        TIMEOUT 30)
+
+# The two native runtime domains have one cross-platform producer with a
+# fail-closed host/device policy. Its local self-test is metadata-only: actual
+# Windows Vulkan and MoltenVK completion remains external evidence.
+add_test(
+    NAME OperationalAttestation.NativeRuntimeProducerRejectsWrongHostAndDevice
+    COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_SOURCE_DIR}/scripts/validate-native-runtime.py" --self-test)
+set_tests_properties(
+    OperationalAttestation.NativeRuntimeProducerRejectsWrongHostAndDevice
+    PROPERTIES
+        LABELS "Mandatory;Operational"
+        TIMEOUT 30)
+
+# A valid individual record is still insufficient for release. Admission must
+# cover every external domain exactly once, bind the current clean revision,
+# and produce a deterministic receipt for compile/runtime comparison.
+add_test(
+    NAME OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected
+    COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_SOURCE_DIR}/scripts/verify-alignment.py" --self-test)
+set_tests_properties(
+    OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected
+    PROPERTIES
+        LABELS "Mandatory;Operational"
+        TIMEOUT 30)
+
+configure_file(
+    operational/alignment_receipt_integrity.cmake.in
+    "${CMAKE_CURRENT_BINARY_DIR}/alignment_receipt_integrity.cmake"
+    @ONLY)
+add_test(
+    NAME OperationalAlignment.InstalledReceiptTamperingBlocksReadiness
+    COMMAND "${CMAKE_COMMAND}"
+        -DSIRIUS_BINARY=$<TARGET_FILE:sirius>
+        -DSIRIUS_RESOURCE_SOURCE=$<TARGET_FILE_DIR:sirius>/resources
+        -P "${CMAKE_CURRENT_BINARY_DIR}/alignment_receipt_integrity.cmake")
+set_tests_properties(
+    OperationalAlignment.InstalledReceiptTamperingBlocksReadiness
     PROPERTIES
         LABELS "Mandatory;Operational"
         TIMEOUT 30)

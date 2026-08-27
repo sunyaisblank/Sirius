@@ -3,6 +3,8 @@
 
 #include "sirius/app/platform_paths.h"
 
+#include "sirius/base/resource_locator.h"
+
 #include <gtest/gtest.h>
 
 #include "support/scoped_environment.h"
@@ -28,7 +30,9 @@ TEST(PlatformPaths, AbsentResourceResolvesToNullopt) {
 
 TEST(PlatformPaths, ExecutableDirectoryIsResolved) {
     // On Linux the /proc/self/exe readlink yields a concrete directory.
+    EXPECT_TRUE(std::filesystem::is_regular_file(PlatformPaths::ExecutablePath()));
     EXPECT_FALSE(PlatformPaths::ExecutableDirectory().empty());
+    EXPECT_EQ(PlatformPaths::ExecutablePath().parent_path(), PlatformPaths::ExecutableDirectory());
 }
 
 TEST(PlatformPaths, ExplicitResourceRootDisablesFallbacks) {
@@ -38,8 +42,18 @@ TEST(PlatformPaths, ExplicitResourceRootDisablesFallbacks) {
     std::filesystem::remove_all(empty_root, ec);
     sirius::test::ScopedEnvironmentVariable strict_root("SIRIUS_RESOURCE_DIR",
                                                         empty_root.string().c_str());
+    const auto candidates = base::ResourceCandidates("assets/Starfield.png");
+#if SIRIUS_RELEASE_RESOURCE_LOCKED
+    ASSERT_FALSE(candidates.empty());
+    EXPECT_NE(candidates.front(), empty_root / "assets/Starfield.png")
+        << "a strict volume must ignore operator-controlled resource redirection";
+    EXPECT_TRUE(PlatformPaths::ResolveResource("assets/Starfield.png").has_value());
+#else
+    ASSERT_EQ(candidates.size(), 1U);
+    EXPECT_EQ(candidates.front(), empty_root / "assets/Starfield.png");
     EXPECT_FALSE(PlatformPaths::ResolveResource("assets/Starfield.png").has_value())
-        << "an explicit volume root must not borrow assets from the source tree";
+        << "an explicit development volume root must not borrow assets from fallbacks";
+#endif
 }
 
 TEST(PlatformPaths, ResourceNamesAndSymlinksCannotEscapeTheSelectedVolume) {

@@ -18,8 +18,8 @@ struct TurbulenceConfig {
     float outer_scale_M = 5.0f;                // Outer scale [M] (energy injection).
     float inner_scale_M = 0.1f;                // Inner dissipation scale [M].
     float amplitude = 0.3f;                    // Density fluctuation amplitude in [0, 1].
-    uint32_t octaves = 6;                      // Noise octaves (fractal detail levels).
-    uint32_t seed = 12345;                     // Random seed for reproducibility.
+    std::uint32_t octaves = 6;                 // Noise octaves (fractal detail levels).
+    std::uint32_t seed = 12345;                // Random seed for reproducibility.
     float lacunarity = 2.0f;                   // Frequency multiplier per octave.
     float persistence = 0.5f;                  // Amplitude decay per octave.
     bool enabled = true;
@@ -30,6 +30,12 @@ struct TurbulenceConfig {
 
     // Clamp parameters into their valid ranges.
     void Validate() {
+        if (!std::isfinite(kolmogorov_exponent)) kolmogorov_exponent = -5.0f / 3.0f;
+        if (!std::isfinite(outer_scale_M)) outer_scale_M = 5.0f;
+        if (!std::isfinite(inner_scale_M)) inner_scale_M = 0.1f;
+        if (!std::isfinite(amplitude)) amplitude = 0.3f;
+        if (!std::isfinite(lacunarity)) lacunarity = 2.0f;
+        if (!std::isfinite(persistence)) persistence = 0.5f;
         kolmogorov_exponent = std::clamp(kolmogorov_exponent, -2.0f, -1.5f);
         if (inner_scale_M >= outer_scale_M) {
             inner_scale_M = outer_scale_M * 0.01f;
@@ -47,8 +53,8 @@ struct TurbulenceConfig {
 namespace turbulence_noise {
 
 // Integer hash for gradient selection.
-inline uint32_t Hash(uint32_t x, uint32_t y, uint32_t z, uint32_t seed) {
-    uint32_t h = seed;
+inline std::uint32_t Hash(std::uint32_t x, std::uint32_t y, std::uint32_t z, std::uint32_t seed) {
+    std::uint32_t h = seed;
     h ^= x * 374761393u;
     h ^= y * 668265263u;
     h ^= z * 1013904223u;
@@ -58,7 +64,7 @@ inline uint32_t Hash(uint32_t x, uint32_t y, uint32_t z, uint32_t seed) {
 }
 
 // Gradient vector from a hash (12 cube-edge directions).
-inline void Gradient(uint32_t h, float& gx, float& gy, float& gz) {
+inline void Gradient(std::uint32_t h, float& gx, float& gy, float& gz) {
     const float grads[12][3] = {{1, 1, 0}, {-1, 1, 0}, {1, -1, 0}, {-1, -1, 0},
                                 {1, 0, 1}, {-1, 0, 1}, {1, 0, -1}, {-1, 0, -1},
                                 {0, 1, 1}, {0, -1, 1}, {0, 1, -1}, {0, -1, -1}};
@@ -75,7 +81,7 @@ inline float Fade(float t) { return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f)
 inline float Lerp(float a, float b, float t) { return a + t * (b - a); }
 
 // 3D Perlin noise in [-1, 1].
-inline float Perlin3D(float x, float y, float z, uint32_t seed) {
+inline float Perlin3D(float x, float y, float z, std::uint32_t seed) {
     // Integer cell coordinates.
     int xi = static_cast<int>(std::floor(x));
     int yi = static_cast<int>(std::floor(y));
@@ -129,7 +135,7 @@ inline float Fbm3D(float x, float y, float z, const TurbulenceConfig& config) {
     float frequency = 1.0f / config.outer_scale_M;
     float total_amplitude = 0.0f;
 
-    for (uint32_t i = 0; i < config.octaves; ++i) {
+    for (std::uint32_t i = 0; i < config.octaves; ++i) {
         value += amplitude * Perlin3D(x * frequency, y * frequency, z * frequency, config.seed + i);
         total_amplitude += amplitude;
         amplitude *= config.persistence;

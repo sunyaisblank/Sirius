@@ -6,6 +6,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <limits>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -46,6 +47,40 @@ TEST_F(CoronaConfigTests, ValidateEnsuresOuterGreaterThanInner) {
     c.inner_radius_M = 10.0f;
     c.outer_radius_M = 5.0f;  // invalid: outer < inner
     c.Validate();
+    EXPECT_GT(c.outer_radius_M, c.inner_radius_M);
+}
+
+TEST_F(CoronaConfigTests, ValidateReplacesEveryNonFiniteScalar) {
+    sirius::core::CoronaConfig c;
+    const float nan = std::numeric_limits<float>::quiet_NaN();
+    const float infinity = std::numeric_limits<float>::infinity();
+    c.temperature_keV = nan;
+    c.optical_depth = infinity;
+    c.scale_height_M = nan;
+    c.inner_radius_M = infinity;
+    c.outer_radius_M = nan;
+    c.lamppost_height_M = infinity;
+    c.emissivity_index = nan;
+    c.intensity_scale = infinity;
+    c.geometry = static_cast<CoronaGeometry>(999);
+    c.Validate();
+
+    EXPECT_TRUE(std::isfinite(c.temperature_keV));
+    EXPECT_TRUE(std::isfinite(c.optical_depth));
+    EXPECT_TRUE(std::isfinite(c.scale_height_M));
+    EXPECT_TRUE(std::isfinite(c.inner_radius_M));
+    EXPECT_TRUE(std::isfinite(c.outer_radius_M));
+    EXPECT_TRUE(std::isfinite(c.lamppost_height_M));
+    EXPECT_TRUE(std::isfinite(c.emissivity_index));
+    EXPECT_TRUE(std::isfinite(c.intensity_scale));
+    EXPECT_GT(c.outer_radius_M, c.inner_radius_M);
+    EXPECT_EQ(c.geometry, CoronaGeometry::Extended);
+
+    c.inner_radius_M = std::numeric_limits<float>::max();
+    c.outer_radius_M = -std::numeric_limits<float>::max();
+    c.Validate();
+    EXPECT_TRUE(std::isfinite(c.inner_radius_M));
+    EXPECT_TRUE(std::isfinite(c.outer_radius_M));
     EXPECT_GT(c.outer_radius_M, c.inner_radius_M);
 }
 

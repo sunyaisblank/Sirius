@@ -13,10 +13,11 @@ Usage:
   python3 scripts/generate-ctest-labels.py --check   # exit 1 if stale
 """
 
-import re
 import sys
 import tempfile
 from pathlib import Path
+
+from test_source_governance import collect_source_tests
 
 ROOT = Path(__file__).resolve().parent.parent
 NEW_TEST_DIR = ROOT / "tests"
@@ -24,8 +25,7 @@ NEW_OUTPUT = NEW_TEST_DIR / "labels" / "CTestLabels.cmake"
 
 MANDATORY = "Mandatory;Correctness"
 STABILITY = "Mandatory;Stability"
-CORRECTNESS = "Correctness"
-PERFORMANCE = "Performance"
+CORRECTNESS = "Mandatory;Correctness"
 OPERATIONAL = "Mandatory;Operational"
 
 # Suite -> labels. An absent suite is a hard policy error: assigning a default
@@ -35,7 +35,6 @@ SUITE_LABELS = {
     "DualNumberTests": MANDATORY,
     "TensorTests": MANDATORY,
     "TensorInverseTests": MANDATORY,
-    "ChristoffelTransformTests": MANDATORY,
     "MetricRegistryTests": MANDATORY,
     "SchwarzschildTests": MANDATORY,
     "ChristoffelTests": MANDATORY,
@@ -45,7 +44,6 @@ SUITE_LABELS = {
     "EllisDrainholeTests": MANDATORY,
     "MorrisThorneCartesianTests": MANDATORY,
     "AlcubierreMetricTests": MANDATORY,
-    "NumericalMetricTests": MANDATORY,
     "MetricLoaderChainTests": MANDATORY,
     "MetricDerivativeTests": MANDATORY,
     "MetricValidationTests": MANDATORY,
@@ -78,17 +76,16 @@ SUITE_LABELS = {
     "ICameraTest": MANDATORY,
     "CameraFactoryTest": MANDATORY,
     "SpectralEmissionTest": MANDATORY,
-    "BlackbodyParityTest": MANDATORY,
     # Numerical stability (build gate)
     "NumericalStabilityTests": STABILITY,
     "NumericalStabilityTest": STABILITY,
     "NaNInfDetectionTests": STABILITY,
     "GPUConservationTests": STABILITY,
     "CPUGPUParityTests": STABILITY,
-    # Correctness, not gating (feature-level behaviour)
+    # Feature-level correctness. Every enabled source test is build-gating;
+    # category labels remain useful for focused local and CI runs.
     "GeodesicPathTests": MANDATORY,
     "BeamPropagationTest": MANDATORY,
-    "EinsteinRingTest": MANDATORY,
     "AccretionDiskTest": MANDATORY,
     "TurbulenceTest": CORRECTNESS,
     "CoronaConfigTests": CORRECTNESS,
@@ -102,13 +99,13 @@ SUITE_LABELS = {
     "SpectralValidationTests": CORRECTNESS,
     "SpectralUtilsTests": CORRECTNESS,
     "PolarisedEmissionTests": CORRECTNESS,
-    "GeodesicDeviationTests": CORRECTNESS,
     "FIDOFrameTests": CORRECTNESS,
     "GFactorTests": CORRECTNESS,
     "SMBHParamsTest": CORRECTNESS,
     "RenderPipelineTests": CORRECTNESS,
     "GeodesicTracerTest": OPERATIONAL,
     "GeodesicTracerVolumetric": OPERATIONAL,
+    "GeodesicTracerRedshift": OPERATIONAL,
     "MorrisThorneTracerTest": CORRECTNESS,
     "PNGWriterTest": OPERATIONAL,
     "EXRRoundTripTests": OPERATIONAL,
@@ -119,16 +116,11 @@ SUITE_LABELS = {
     "TonemapTests": CORRECTNESS,
     "BloomFilterTests": CORRECTNESS,
     "ColourGradingTests": CORRECTNESS,
-    # Performance (warning only)
-    "FPSBenchmarks": PERFORMANCE,
-    "FPSThresholdTests": PERFORMANCE,
-    "MemoryUsageTests": PERFORMANCE,
-    "GeodesicBenchmarks": PERFORMANCE,
-    "ChristoffelBenchmark": PERFORMANCE,
     # New-tree suites (no legacy counterpart)
     "Contracts": MANDATORY,
     "ContractsDeathTest": MANDATORY,
     "Error": MANDATORY,
+    "Sha256Tests": MANDATORY,
     "KernelParity": MANDATORY,
     "KernelTrace": OPERATIONAL,
     "VulkanBackend": OPERATIONAL,
@@ -147,6 +139,8 @@ SUITE_LABELS = {
     "ViewCommandOperational": OPERATIONAL,
     "CommandRouter": OPERATIONAL,
     "PlatformPaths": OPERATIONAL,
+    "AlignmentAuthority": OPERATIONAL,
+    "BuildGateAuthority": OPERATIONAL,
     "MemoryGovernor": OPERATIONAL,
     "DispatchGovernor": OPERATIONAL,
     "VulkanRenderSession": OPERATIONAL,
@@ -154,7 +148,7 @@ SUITE_LABELS = {
     "CameraAberrationTest": MANDATORY,
     "DopplerToggleTest": OPERATIONAL,
     "StarfieldPointTest": OPERATIONAL,
-    "KernelBeam": CORRECTNESS,
+    "KernelBeam": MANDATORY,
     "KernelPortability": OPERATIONAL,
     "PixelSampling": OPERATIONAL,
     "ShadowBoundary": MANDATORY,
@@ -163,25 +157,8 @@ SUITE_LABELS = {
 
 def collect_new_tree_tests(test_dir=NEW_TEST_DIR):
     tests = {}
-    pattern = re.compile(r"TEST(?:_F)?\(\s*(\w+)\s*,\s*(\w+)\s*\)")
-    unsupported = re.compile(
-        r"^\s*(TEST_P|TYPED_TEST|TYPED_TEST_P)\s*\(",
-        re.MULTILINE,
-    )
-    for path in sorted(test_dir.rglob("*_test.cpp")):
-        content = path.read_text(encoding="utf-8")
-        macro = unsupported.search(content)
-        if macro:
-            try:
-                display_path = path.relative_to(ROOT)
-            except ValueError:
-                display_path = path
-            raise ValueError(
-                f"{display_path} uses {macro.group(1)}, whose discovered "
-                "names are not covered by the Mandatory-label generator"
-            )
-        for suite, name in pattern.findall(content):
-            tests.setdefault(suite, []).append(name)
+    for record in collect_source_tests(test_dir, ROOT).values():
+        tests.setdefault(record.suite, []).append(record.case)
     return tests
 
 
@@ -232,9 +209,76 @@ def main():
             except ValueError as error:
                 if "TEST_P" in str(error):
                     print("source governance rejected an ungoverned parameterised test")
+                else:
+                    print(f"error: unexpected rejection: {error}", file=sys.stderr)
+                    return 1
+            else:
+                print("error: source governance accepted an ungoverned parameterised test",
+                      file=sys.stderr)
+                return 1
+
+            fixture.write_text(
+                "TEST(EscapeSuite, NoOp) { EXPECT_TRUE(true); }\\n",
+                encoding="utf-8",
+            )
+            try:
+                collect_new_tree_tests(Path(directory))
+            except ValueError as error:
+                if "no-op assertion" in str(error):
+                    print("source governance rejected an obvious no-op assertion")
+                else:
+                    print(f"error: unexpected rejection: {error}", file=sys.stderr)
+                    return 1
+            else:
+                print("error: source governance accepted an obvious no-op assertion",
+                      file=sys.stderr)
+                return 1
+
+            fixture.write_text(
+                "TEST(EscapeSuite, AssertionFree) { observe(); }\\n",
+                encoding="utf-8",
+            )
+            try:
+                collect_new_tree_tests(Path(directory))
+            except ValueError as error:
+                if "no direct" in str(error):
+                    print("source governance rejected an assertion-free test")
+                else:
+                    print(f"error: unexpected rejection: {error}", file=sys.stderr)
+                    return 1
+            else:
+                print("error: source governance accepted an assertion-free test", file=sys.stderr)
+                return 1
+
+            fixture.write_text(
+                "TEST(EscapeSuite, DISABLED_Hidden) { EXPECT_TRUE(observe()); }\n",
+                encoding="utf-8",
+            )
+            try:
+                collect_new_tree_tests(Path(directory))
+            except ValueError as error:
+                if "disabled test" in str(error):
+                    print("source governance rejected a disabled test")
+                else:
+                    print(f"error: unexpected rejection: {error}", file=sys.stderr)
+                    return 1
+            else:
+                print("error: source governance accepted a disabled test", file=sys.stderr)
+                return 1
+
+            fixture.write_text(
+                "#if 0\nTEST(EscapeSuite, Inactive) { EXPECT_TRUE(observe()); }\n#endif\n",
+                encoding="utf-8",
+            )
+            try:
+                collect_new_tree_tests(Path(directory))
+            except ValueError as error:
+                if "inactive #if 0" in str(error):
+                    print("source governance rejected an inactive test block")
                     return 0
-            print("error: source governance accepted an ungoverned parameterised test",
-                  file=sys.stderr)
+                print(f"error: unexpected rejection: {error}", file=sys.stderr)
+                return 1
+            print("error: source governance accepted an inactive test block", file=sys.stderr)
             return 1
 
     try:

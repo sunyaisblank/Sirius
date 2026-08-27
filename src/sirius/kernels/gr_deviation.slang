@@ -116,3 +116,23 @@ public float4 TidalDeviationAccel(float4 xi, float M, float r, float step) {
     float tf = tidalFactor * step;
     return float4(xi.x * tf, xi.y * tf, xi.z * tf, xi.w * tf);
 }
+
+// Singular-value geometry of the propagated transverse 2x2 Jacobi map. The
+// semi-axes are its singular values and the orientation is the major
+// eigenvector of J J^T, so a rotation of the input basis cannot rotate the
+// rendered output ellipse. Shared by trace.slang and the parity probe to keep
+// this final P2 projection a single device authority.
+public void BeamEllipseFromTransverseMap(float beamA, float beamB, float beamC, float beamD,
+                                         out float semiMajor, out float semiMinor,
+                                         out float orientation, out float determinant) {
+    float mapDeterminant = beamA * beamD - beamB * beamC;
+    float mapPower = beamA * beamA + beamB * beamB + beamC * beamC + beamD * beamD;
+    float discriminant = sqrt(max(mapPower * mapPower -
+                                  4.0f * mapDeterminant * mapDeterminant, 0.0f));
+    semiMajor = sqrt(max(0.5f * (mapPower + discriminant), 0.0f));
+    semiMinor = sqrt(max(0.5f * (mapPower - discriminant), 0.0f));
+    orientation = 0.5f * atan2(2.0f * (beamA * beamC + beamB * beamD),
+                               beamA * beamA + beamB * beamB -
+                               beamC * beamC - beamD * beamD);
+    determinant = mapDeterminant;
+}

@@ -12,11 +12,12 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
+#include <limits>
 
 namespace sirius::core {
 
 // Corona geometry family.
-enum class CoronaGeometry : uint32_t {
+enum class CoronaGeometry : std::uint32_t {
     Slab = 0,      // Thin slab above the disk (sandwich geometry).
     Lamppost = 1,  // Compact on-axis source (jet base).
     Sphere = 2,    // Spherical cloud around the black hole.
@@ -44,13 +45,31 @@ struct CoronaConfig {
 
     // Clamp parameters into their valid ranges.
     void Validate() {
+        if (!std::isfinite(temperature_keV)) temperature_keV = 100.0f;
+        if (!std::isfinite(optical_depth)) optical_depth = 0.5f;
+        if (!std::isfinite(scale_height_M)) scale_height_M = 5.0f;
+        if (!std::isfinite(inner_radius_M)) inner_radius_M = 0.0f;
+        if (!std::isfinite(outer_radius_M)) outer_radius_M = 20.0f;
+        if (!std::isfinite(lamppost_height_M)) lamppost_height_M = 10.0f;
+        if (!std::isfinite(emissivity_index)) emissivity_index = 3.0f;
+        if (!std::isfinite(intensity_scale)) intensity_scale = 1.0f;
         temperature_keV = std::clamp(temperature_keV, 10.0f, 500.0f);
         optical_depth = std::clamp(optical_depth, 0.1f, 5.0f);
         scale_height_M = std::max(scale_height_M, 0.1f);
         inner_radius_M = std::max(inner_radius_M, 0.0f);
-        outer_radius_M = std::max(outer_radius_M, inner_radius_M + 1.0f);
+        if (!(outer_radius_M > inner_radius_M)) {
+            outer_radius_M = std::nextafter(inner_radius_M, std::numeric_limits<float>::infinity());
+            if (!std::isfinite(outer_radius_M)) {
+                inner_radius_M = 0.0f;
+                outer_radius_M = 20.0f;
+            }
+        }
+        lamppost_height_M = std::max(lamppost_height_M, 0.0f);
         emissivity_index = std::clamp(emissivity_index, 0.0f, 10.0f);
         intensity_scale = std::max(intensity_scale, 0.0f);
+        if (geometry < CoronaGeometry::Slab || geometry > CoronaGeometry::Extended) {
+            geometry = CoronaGeometry::Extended;
+        }
     }
 
     // Comptonisation parameter y = 4 k T_e / (m_e c^2) * max(tau, tau^2).

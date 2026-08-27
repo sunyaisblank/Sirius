@@ -1,0 +1,69 @@
+execute_process(
+    COMMAND "@Python3_EXECUTABLE@"
+        "@CMAKE_SOURCE_DIR@/scripts/generate-ctest-labels.py" --self-test
+    RESULT_VARIABLE _source_result
+    OUTPUT_VARIABLE _source_stdout
+    ERROR_VARIABLE _source_stderr)
+if(NOT _source_result EQUAL 0)
+    message(FATAL_ERROR
+        "source-registration governance accepted an uncovered test\n"
+        "${_source_stdout}\n${_source_stderr}")
+endif()
+
+set(_inventory_command "@CMAKE_CTEST_COMMAND@"
+    --test-dir "@CMAKE_BINARY_DIR@" --show-only=json-v1)
+if(DEFINED SIRIUS_TEST_CONFIG AND NOT SIRIUS_TEST_CONFIG STREQUAL "")
+    list(APPEND _inventory_command -C "${SIRIUS_TEST_CONFIG}")
+endif()
+execute_process(
+    COMMAND ${_inventory_command}
+    RESULT_VARIABLE _inventory_result
+    OUTPUT_VARIABLE _inventory_stdout
+    ERROR_VARIABLE _inventory_stderr)
+if(NOT _inventory_result EQUAL 0)
+    message(FATAL_ERROR
+        "could not inspect live CTest registration\n"
+        "${_inventory_stdout}\n${_inventory_stderr}")
+endif()
+set(_inventory_path "@CMAKE_CURRENT_BINARY_DIR@/source-governance-ctest.json")
+file(WRITE "${_inventory_path}" "${_inventory_stdout}")
+
+execute_process(
+    COMMAND "@Python3_EXECUTABLE@"
+        "@CMAKE_SOURCE_DIR@/scripts/verify-operating-model.py"
+        --ctest-inventory "${_inventory_path}"
+    RESULT_VARIABLE _ideal_result
+    OUTPUT_VARIABLE _ideal_stdout
+    ERROR_VARIABLE _ideal_stderr)
+if(NOT _ideal_result EQUAL 0)
+    message(FATAL_ERROR
+        "ultimate-ideal governance accepted an uncovered or de-gated criterion\n"
+        "${_ideal_stdout}\n${_ideal_stderr}")
+endif()
+
+execute_process(
+    COMMAND "@Python3_EXECUTABLE@"
+        "@CMAKE_SOURCE_DIR@/scripts/verify-operating-model.py" --self-test
+    RESULT_VARIABLE _ideal_negative_result
+    OUTPUT_VARIABLE _ideal_negative_stdout
+    ERROR_VARIABLE _ideal_negative_stderr)
+if(NOT _ideal_negative_result EQUAL 0)
+    message(FATAL_ERROR
+        "ultimate-ideal governance accepted duplicate or malformed evidence\n"
+        "${_ideal_negative_stdout}\n${_ideal_negative_stderr}")
+endif()
+
+execute_process(
+    COMMAND "@Python3_EXECUTABLE@"
+        "@CMAKE_SOURCE_DIR@/scripts/verify-repository-structure.py"
+    RESULT_VARIABLE _structure_result
+    OUTPUT_VARIABLE _structure_stdout
+    ERROR_VARIABLE _structure_stderr)
+if(NOT _structure_result EQUAL 0)
+    message(FATAL_ERROR
+        "repository ownership or dependency governance failed\n"
+        "${_structure_stdout}\n${_structure_stderr}")
+endif()
+
+message(STATUS
+    "source registration, required P/E criteria, and repository structure are governed")

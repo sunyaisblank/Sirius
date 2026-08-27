@@ -12,6 +12,7 @@
 
 #include <cmath>
 #include <cstring>
+#include <numbers>
 #include <vector>
 
 namespace sirius::test {
@@ -42,10 +43,10 @@ class DeterminismTests : public ::testing::Test {
     bool bitIdentical(double a, double b) { return std::memcmp(&a, &b, sizeof(double)) == 0; }
 
     // Hash a Vec4 for comparison
-    uint64_t hashVec4(const Vec4& v) {
-        uint64_t hash = 0;
+    std::uint64_t hashVec4(const Vec4& v) {
+        std::uint64_t hash = 0;
         for (int i = 0; i < 4; ++i) {
-            uint64_t bits;
+            std::uint64_t bits;
             std::memcpy(&bits, &v(i), sizeof(double));
             hash ^= bits + 0x9e3779b97f4a7c15 + (hash << 6) + (hash >> 2);
         }
@@ -53,11 +54,11 @@ class DeterminismTests : public ::testing::Test {
     }
 
     // Hash a Metric4d for comparison
-    uint64_t hashMetric(const Metric4d& g) {
-        uint64_t hash = 0;
+    std::uint64_t hashMetric(const Metric4d& g) {
+        std::uint64_t hash = 0;
         for (int mu = 0; mu < 4; ++mu) {
             for (int nu = 0; nu < 4; ++nu) {
-                uint64_t bits;
+                std::uint64_t bits;
                 double val = g(mu, nu).real;
                 std::memcpy(&bits, &val, sizeof(double));
                 hash ^= bits + 0x9e3779b97f4a7c15 + (hash << 6) + (hash >> 2);
@@ -123,14 +124,14 @@ TEST_F(DeterminismTests, SchwarzschildMetricDeterminism) {
     pos(2) = 0.0;   // y
     pos(3) = 0.0;   // z
 
-    uint64_t reference_hash = 0;
+    std::uint64_t reference_hash = 0;
 
     for (int iter = 0; iter < DETERMINISM_ITERATIONS; ++iter) {
         Metric4d g;
         Tensor<Dual<double>, 4, 4, 4> dg;
         schwarzschild.Evaluate(pos, g, dg);
 
-        uint64_t current_hash = hashMetric(g);
+        std::uint64_t current_hash = hashMetric(g);
 
         if (iter == 0) {
             reference_hash = current_hash;
@@ -148,21 +149,21 @@ TEST_F(DeterminismTests, KerrMetricDeterminism) {
     Vec4 pos;
     // Spherical (5.0, PI/3, 1.0) -> Cartesian
     double r = 5.0;
-    double th = M_PI / 3.0;
+    double th = std::numbers::pi / 3.0;
     double ph = 1.0;
     pos(0) = 0.0;
     pos(1) = r * std::sin(th) * std::cos(ph);  // x
     pos(2) = r * std::sin(th) * std::sin(ph);  // y
     pos(3) = r * std::cos(th);                 // z
 
-    uint64_t reference_hash = 0;
+    std::uint64_t reference_hash = 0;
 
     for (int iter = 0; iter < DETERMINISM_ITERATIONS; ++iter) {
         Metric4d g;
         Tensor<Dual<double>, 4, 4, 4> dg;
         kerr.Evaluate(pos, g, dg);
 
-        uint64_t current_hash = hashMetric(g);
+        std::uint64_t current_hash = hashMetric(g);
 
         if (iter == 0) {
             reference_hash = current_hash;
@@ -192,17 +193,17 @@ TEST_F(DeterminismTests, ChristoffelDeterminism) {
     Tensor<Dual<double>, 4, 4, 4> dg;
     schwarzschild.Evaluate(pos, g, dg);
 
-    uint64_t reference_hash = 0;
+    std::uint64_t reference_hash = 0;
 
     for (int iter = 0; iter < DETERMINISM_ITERATIONS; ++iter) {
         ChristoffelSymbols christoffel = TensorOps::Christoffel(g, dg);
 
         // Hash all Christoffel components
-        uint64_t hash = 0;
+        std::uint64_t hash = 0;
         for (int l = 0; l < 4; ++l) {
             for (int m = 0; m < 4; ++m) {
                 for (int n = 0; n < 4; ++n) {
-                    uint64_t bits;
+                    std::uint64_t bits;
                     double val = christoffel.gamma(l, m, n).real;
                     std::memcpy(&bits, &val, sizeof(double));
                     hash ^= bits + 0x9e3779b97f4a7c15 + (hash << 6) + (hash >> 2);
@@ -241,7 +242,7 @@ TEST_F(DeterminismTests, GeodesicIntegrationDeterminism) {
     initial_vel(2) = 0.0;   // vy
     initial_vel(3) = 0.1;   // vz
 
-    uint64_t reference_hash = 0;
+    std::uint64_t reference_hash = 0;
 
     for (int iter = 0; iter < DETERMINISM_ITERATIONS; ++iter) {
         // Create identical rays
@@ -269,7 +270,7 @@ TEST_F(DeterminismTests, GeodesicIntegrationDeterminism) {
         }
 
         // Hash final state
-        uint64_t hash = hashVec4(ray.position) ^ hashVec4(ray.velocity);
+        std::uint64_t hash = hashVec4(ray.position) ^ hashVec4(ray.velocity);
 
         if (iter == 0) {
             reference_hash = hash;
@@ -301,7 +302,7 @@ TEST_F(DeterminismTests, InnerProductDeterminism) {
     Vec4 pos;
     // Spherical (5.0, PI/3, 0.0) -> Cartesian
     double r = 5.0;
-    double th = M_PI / 3.0;
+    double th = std::numbers::pi / 3.0;
     double ph = 0.0;
     pos(0) = 0.0;
     pos(1) = r * std::sin(th) * std::cos(ph);  // x
@@ -353,11 +354,11 @@ TEST_F(DeterminismTests, NullNormalizationDeterminism) {
     Tensor<Dual<double>, 4, 4, 4> dg;
     schwarzschild.Evaluate(pos, g, dg);
 
-    uint64_t reference_hash = 0;
+    std::uint64_t reference_hash = 0;
 
     for (int iter = 0; iter < DETERMINISM_ITERATIONS; ++iter) {
         Vec4 k = TensorOps::NormalizeNull(spatial, g);
-        uint64_t hash = hashVec4(k);
+        std::uint64_t hash = hashVec4(k);
 
         if (iter == 0) {
             reference_hash = hash;

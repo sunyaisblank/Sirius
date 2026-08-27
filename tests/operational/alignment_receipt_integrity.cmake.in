@@ -1,0 +1,195 @@
+if(NOT DEFINED SIRIUS_BINARY OR NOT DEFINED SIRIUS_RESOURCE_SOURCE)
+    message(FATAL_ERROR "alignment receipt probe requires the binary and staged resources")
+endif()
+
+set(_audit "@CMAKE_BINARY_DIR@/operational-alignment-receipt-audit")
+set(_resources "${_audit}/resources")
+file(REMOVE_RECURSE "${_audit}")
+file(MAKE_DIRECTORY "${_audit}")
+file(COPY "${SIRIUS_RESOURCE_SOURCE}/" DESTINATION "${_resources}")
+
+# The strict gate deliberately removes its prior receipt before executing the
+# estate it is about to certify. In that pre-gate phase the packaged resource
+# override must already be disabled: mutate the selected tree and prove the
+# strict executable continues to consume its executable-adjacent authority.
+if(NOT "@SIRIUS_ALIGNMENT_MODE@" STREQUAL "development")
+    set(_copied_receipt "${_resources}/model/alignment_receipt.json")
+    file(READ "${_copied_receipt}" _copied_receipt_contents)
+    string(REPLACE
+        "\"schema_version\": 1"
+        "\"schema_version\": 2"
+        _copied_tamper "${_copied_receipt_contents}")
+    if(_copied_tamper STREQUAL _copied_receipt_contents)
+        message(FATAL_ERROR "strict override obstruction could not mutate the copied receipt")
+    endif()
+    file(WRITE "${_copied_receipt}" "${_copied_tamper}")
+
+    execute_process(
+        COMMAND "@CMAKE_COMMAND@" -E env
+            "SIRIUS_RESOURCE_DIR=${_resources}"
+            "${SIRIUS_BINARY}" --json info readiness
+        RESULT_VARIABLE _release_result
+        OUTPUT_VARIABLE _release_stdout
+        ERROR_VARIABLE _release_stderr)
+    string(JSON _release_satisfied ERROR_VARIABLE _release_satisfied_error
+        GET "${_release_stdout}" ultimate_ideal satisfied)
+    string(JSON _release_admitted ERROR_VARIABLE _release_admitted_error
+        GET "${_release_stdout}" ultimate_ideal external_domains_admitted)
+    string(JSON _release_required ERROR_VARIABLE _release_required_error
+        GET "${_release_stdout}" ultimate_ideal external_domains_required)
+    string(JSON _release_gate_required ERROR_VARIABLE _release_gate_required_error
+        GET "${_release_stdout}" mandatory_build_gate required)
+    string(JSON _release_gate_valid ERROR_VARIABLE _release_gate_valid_error
+        GET "${_release_stdout}" mandatory_build_gate valid)
+    string(FIND "${_release_stdout}" "${_resources}" _release_override_reference)
+    if(_release_result EQUAL 0 OR
+       NOT _release_satisfied_error STREQUAL "NOTFOUND" OR
+       NOT _release_admitted_error STREQUAL "NOTFOUND" OR
+       NOT _release_required_error STREQUAL "NOTFOUND" OR
+       NOT _release_gate_required_error STREQUAL "NOTFOUND" OR
+       NOT _release_gate_valid_error STREQUAL "NOTFOUND" OR
+       NOT _release_required EQUAL 8 OR
+       NOT _release_gate_required OR _release_gate_valid OR
+       NOT _release_override_reference EQUAL -1)
+        message(FATAL_ERROR
+            "strict pre-gate readiness did not remain bound to the executable volume "
+            "(${_release_result})\n${_release_stdout}\n${_release_stderr}")
+    endif()
+    if("@SIRIUS_ALIGNMENT_MODE@" STREQUAL "release" AND
+       (NOT _release_satisfied OR NOT _release_admitted EQUAL 8))
+        message(FATAL_ERROR
+            "release pre-gate authority was not already aligned\n${_release_stdout}")
+    endif()
+
+    execute_process(
+        COMMAND "@CMAKE_COMMAND@" -E env
+            "SIRIUS_RESOURCE_DIR=${_resources}"
+            "${SIRIUS_BINARY}" --json info capabilities
+        RESULT_VARIABLE _release_capability_result
+        OUTPUT_VARIABLE _release_capability_stdout
+        ERROR_VARIABLE _release_capability_stderr)
+    set(_release_capability_log
+        "${_release_capability_stdout}\n${_release_capability_stderr}")
+    if(_release_capability_result EQUAL 0 OR
+       NOT _release_capability_log MATCHES "build-gate receipt is missing")
+        message(FATAL_ERROR
+            "strict pre-gate capability reporting did not fail closed "
+            "(${_release_capability_result})\n${_release_capability_log}")
+    endif()
+    file(REMOVE_RECURSE "${_audit}")
+    return()
+endif()
+
+execute_process(
+    COMMAND "@CMAKE_COMMAND@" -E env
+        "SIRIUS_RESOURCE_DIR=${_resources}"
+        "${SIRIUS_BINARY}" --json info readiness
+    RESULT_VARIABLE _valid_result
+    OUTPUT_VARIABLE _valid_stdout
+    ERROR_VARIABLE _valid_stderr)
+string(JSON _valid_system_ready ERROR_VARIABLE _valid_json_error
+    GET "${_valid_stdout}" ready)
+string(JSON _valid_evidence_ready ERROR_VARIABLE _valid_evidence_error
+    GET "${_valid_stdout}" evidence_generation_ready)
+string(JSON _valid_admitted_count ERROR_VARIABLE _valid_admitted_error
+    GET "${_valid_stdout}" ultimate_ideal external_domains_admitted)
+string(JSON _valid_required_count ERROR_VARIABLE _valid_required_error
+    GET "${_valid_stdout}" ultimate_ideal external_domains_required)
+string(JSON _valid_admitted_ids_count ERROR_VARIABLE _valid_admitted_ids_error
+    LENGTH "${_valid_stdout}" ultimate_ideal external_domain_ids_admitted)
+string(JSON _valid_pending_ids_count ERROR_VARIABLE _valid_pending_ids_error
+    LENGTH "${_valid_stdout}" ultimate_ideal external_domain_ids_pending)
+string(JSON _valid_required_ids_count ERROR_VARIABLE _valid_required_ids_error
+    LENGTH "${_valid_stdout}" ultimate_ideal external_domain_ids_required)
+math(EXPR _valid_partition_count
+    "${_valid_admitted_ids_count} + ${_valid_pending_ids_count}")
+set(_valid_contract TRUE)
+if(NOT _valid_json_error STREQUAL "NOTFOUND" OR
+   NOT _valid_evidence_error STREQUAL "NOTFOUND" OR
+   NOT _valid_admitted_error STREQUAL "NOTFOUND" OR
+   NOT _valid_required_error STREQUAL "NOTFOUND" OR
+   NOT _valid_admitted_ids_error STREQUAL "NOTFOUND" OR
+   NOT _valid_pending_ids_error STREQUAL "NOTFOUND" OR
+   NOT _valid_required_ids_error STREQUAL "NOTFOUND" OR
+   NOT _valid_admitted_count EQUAL _valid_admitted_ids_count OR
+   NOT _valid_required_count EQUAL 8 OR
+   NOT _valid_required_ids_count EQUAL 8 OR
+   NOT _valid_partition_count EQUAL 8 OR
+   NOT _valid_evidence_ready OR NOT _valid_stdout MATCHES "\"valid\": true")
+    set(_valid_contract FALSE)
+elseif("@SIRIUS_ALIGNMENT_MODE@" STREQUAL "release")
+    if(NOT _valid_result EQUAL 0 OR NOT _valid_system_ready)
+        set(_valid_contract FALSE)
+    endif()
+elseif(_valid_result EQUAL 0 OR _valid_system_ready)
+    set(_valid_contract FALSE)
+endif()
+
+set(_expected_domains
+    macos-moltenvk
+    macos-native-build
+    physical-imax-5616x4096
+    physical-radeon-780m
+    viewer-native-window-input
+    windows-native-build
+    windows-native-vulkan
+    wsl2-dozen)
+foreach(_domain_index RANGE 0 7)
+    list(GET _expected_domains ${_domain_index} _expected_domain)
+    string(JSON _reported_domain ERROR_VARIABLE _reported_domain_error
+        GET "${_valid_stdout}" ultimate_ideal external_domain_ids_required
+        ${_domain_index})
+    if(NOT _reported_domain_error STREQUAL "NOTFOUND" OR
+       NOT _reported_domain STREQUAL _expected_domain)
+        set(_valid_contract FALSE)
+    endif()
+endforeach()
+if(NOT _valid_contract)
+    message(FATAL_ERROR
+        "the untampered alignment receipt reported contradictory readiness "
+        "(${_valid_result})\n"
+        "${_valid_stdout}\n${_valid_stderr}")
+endif()
+
+set(_receipt "${_resources}/model/alignment_receipt.json")
+file(READ "${_receipt}" _receipt_contents)
+string(REPLACE
+    "\"schema_version\": 1"
+    "\"schema_version\": 2"
+    _tampered_receipt "${_receipt_contents}")
+if(_tampered_receipt STREQUAL _receipt_contents)
+    message(FATAL_ERROR "alignment obstruction could not mutate the receipt schema")
+endif()
+file(WRITE "${_receipt}" "${_tampered_receipt}")
+
+execute_process(
+    COMMAND "@CMAKE_COMMAND@" -E env
+        "SIRIUS_RESOURCE_DIR=${_resources}"
+        "${SIRIUS_BINARY}" --json info readiness
+    RESULT_VARIABLE _tampered_result
+    OUTPUT_VARIABLE _tampered_stdout
+    ERROR_VARIABLE _tampered_stderr)
+if(_tampered_result EQUAL 0 OR
+   NOT _tampered_stdout MATCHES "\"ready\": false" OR
+   NOT _tampered_stdout MATCHES "\"valid\": false" OR
+   NOT _tampered_stdout MATCHES "\"state\": \"blocked\"")
+    message(FATAL_ERROR
+        "runtime readiness accepted a tampered alignment receipt (${_tampered_result})\n"
+        "${_tampered_stdout}\n${_tampered_stderr}")
+endif()
+
+execute_process(
+    COMMAND "@CMAKE_COMMAND@" -E env
+        "SIRIUS_RESOURCE_DIR=${_resources}"
+        "${SIRIUS_BINARY}" --json info capabilities
+    RESULT_VARIABLE _capability_result
+    OUTPUT_VARIABLE _capability_stdout
+    ERROR_VARIABLE _capability_stderr)
+set(_capability_log "${_capability_stdout}\n${_capability_stderr}")
+if(_capability_result EQUAL 0 OR NOT _capability_log MATCHES "alignment receipt")
+    message(FATAL_ERROR
+        "capability reporting accepted a tampered alignment receipt "
+        "(${_capability_result})\n${_capability_log}")
+endif()
+
+file(REMOVE_RECURSE "${_audit}")

@@ -30,6 +30,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <numbers>
 #include <vector>
 
 namespace sirius::test {
@@ -184,7 +185,7 @@ TEST_F(ConservationLawTests, NullConditionPreservedSchwarzschild) {
     Vec4 pos;
     pos(0) = 0.0;
     pos(1) = 10.0;
-    pos(2) = M_PI / 2.0;
+    pos(2) = std::numbers::pi / 2.0;
     pos(3) = 0.0;
 
     Lightray ray = createLightray(pos, -1.0, 0.0, 0.1, &metric);
@@ -226,7 +227,7 @@ TEST_F(ConservationLawTests, NullConditionPreservedKerr) {
     Vec4 pos;
     pos(0) = 0.0;
     pos(1) = 10.0;
-    pos(2) = M_PI / 2.0;
+    pos(2) = std::numbers::pi / 2.0;
     pos(3) = 0.0;
 
     Lightray ray = createLightray(pos, -1.0, 0.0, 0.2, &metric);
@@ -267,7 +268,7 @@ TEST_F(ConservationLawTests, KillingEnergyConservedSchwarzschild) {
     Vec4 pos;
     pos(0) = 0.0;
     pos(1) = 10.0;
-    pos(2) = M_PI / 2.0;
+    pos(2) = std::numbers::pi / 2.0;
     pos(3) = 0.0;
 
     Lightray ray = createLightray(pos, -0.5, 0.0, 0.5, &metric);
@@ -313,7 +314,7 @@ TEST_F(ConservationLawTests, KillingEnergyConservedKerr) {
     Vec4 pos;
     pos(0) = 0.0;
     pos(1) = 15.0;
-    pos(2) = M_PI / 3.0;  // Not equatorial
+    pos(2) = std::numbers::pi / 3.0;  // Not equatorial
     pos(3) = 0.0;
 
     Lightray ray = createLightray(pos, -0.3, 0.1, 0.4, &metric);
@@ -361,7 +362,7 @@ TEST_F(ConservationLawTests, KillingAngularMomentumConservedSchwarzschild) {
     Vec4 pos;
     pos(0) = 0.0;
     pos(1) = 10.0;
-    pos(2) = M_PI / 2.0;
+    pos(2) = std::numbers::pi / 2.0;
     pos(3) = 0.0;
 
     // Primarily azimuthal motion
@@ -372,10 +373,8 @@ TEST_F(ConservationLawTests, KillingAngularMomentumConservedSchwarzschild) {
     metric.Evaluate(ray.position, g_init, dg_init);
     double L_initial = computeKillingAngularMomentum(ray.velocity, g_init, ray.position);
 
-    // Skip if initial L is too small (numerical issues)
-    if (std::abs(L_initial) < 1e-10) {
-        GTEST_SKIP() << "Initial angular momentum too small for meaningful test";
-    }
+    ASSERT_GT(std::abs(L_initial), 1e-10)
+        << "deterministic witness produced degenerate initial angular momentum";
 
     double max_L_drift = 0.0;
 
@@ -410,7 +409,7 @@ TEST_F(ConservationLawTests, KillingAngularMomentumConservedKerr) {
     Vec4 pos;
     pos(0) = 0.0;
     pos(1) = 10.0;
-    pos(2) = M_PI / 2.0;
+    pos(2) = std::numbers::pi / 2.0;
     pos(3) = 0.0;
 
     Lightray ray = createLightray(pos, -0.3, 0.0, 0.8, &metric);
@@ -420,9 +419,8 @@ TEST_F(ConservationLawTests, KillingAngularMomentumConservedKerr) {
     metric.Evaluate(ray.position, g_init, dg_init);
     double L_initial = computeKillingAngularMomentum(ray.velocity, g_init, ray.position);
 
-    if (std::abs(L_initial) < 1e-10) {
-        GTEST_SKIP() << "Initial angular momentum too small for meaningful test";
-    }
+    ASSERT_GT(std::abs(L_initial), 1e-10)
+        << "deterministic witness produced degenerate initial angular momentum";
 
     double max_L_drift = 0.0;
 
@@ -461,7 +459,7 @@ TEST_F(ConservationLawTests, AllConservedQuantitiesSchwarzschild) {
     Vec4 pos;
     pos(0) = 0.0;
     pos(1) = 15.0;
-    pos(2) = M_PI / 2.0;
+    pos(2) = std::numbers::pi / 2.0;
     pos(3) = 0.0;
 
     Lightray ray = createLightray(pos, -0.4, 0.0, 0.6, &metric);

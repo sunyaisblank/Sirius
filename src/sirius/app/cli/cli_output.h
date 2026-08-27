@@ -8,9 +8,9 @@
 #include <string>
 #include <vector>
 
-// The config view takes the render-layer config tree by const reference; a
+// The config view takes the app-layer config tree by const reference; a
 // forward declaration keeps the JSON codec out of this header.
-namespace sirius::render {
+namespace sirius::app {
 struct SiriusConfig;
 }
 
@@ -58,7 +58,7 @@ struct TableRow {
 void PrintTable(const std::string& title, const std::vector<TableRow>& rows);
 
 // --- Configuration view -----------------------------------------------------
-void PrintConfig(const render::SiriusConfig& config);
+void PrintConfig(const SiriusConfig& config);
 
 // --- JSON passthrough (for the --json flag) ---------------------------------
 void PrintJson(const std::string& json);

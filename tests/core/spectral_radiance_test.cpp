@@ -3,9 +3,12 @@
 
 #include "sirius/core/spectral/spectral_radiance.h"
 
+#include "sirius/core/spectral/blackbody.h"
+
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <limits>
 
 using namespace sirius::core;
 
@@ -45,19 +48,36 @@ TEST(SpectralRadianceTest, BlackbodyWhitePoint) {
     EXPECT_LT(zRatio, 1.20) << "Z/Y ratio too high for white";
 }
 
-// Total energy stays positive and mostly conserved under a small blueshift.
-TEST(SpectralRadianceTest, RedshiftEnergyConservation) {
-    SpectralRadiance original = SpectralRadiance::Blackbody(5000);
+TEST(SpectralRadianceTest, BlackbodyBinsMatchPlanckAuthorityAndRejectInvalidTemperature) {
+    const SpectralRadiance spectrum = SpectralRadiance::Blackbody(5778.0);
+    for (int bin = 0; bin < kNumWavelengthBins; ++bin) {
+        const double wavelength = SpectralRadiance::Wavelength(bin) * 1.0e-9;
+        const double expected_per_nanometre = spectral::PlanckRadiance(wavelength, 5778.0) * 1.0e-9;
+        EXPECT_LT(std::abs(spectrum.L[bin] - expected_per_nanometre) / spectrum.L[bin], 2.0e-14);
+    }
+    for (const double invalid : {0.0, -1.0, std::numeric_limits<double>::infinity(),
+                                 std::numeric_limits<double>::quiet_NaN()}) {
+        const SpectralRadiance rejected = SpectralRadiance::Blackbody(invalid);
+        EXPECT_DOUBLE_EQ(rejected.TotalEnergy(), 0.0);
+    }
+}
 
-    double E0 = original.TotalEnergy();
+TEST(SpectralRadianceTest, RedshiftDepositsExactlyOneGFourthWeightedBin) {
+    SpectralRadiance original = SpectralRadiance::Zero();
+    constexpr int kEmitBin = 9;
+    constexpr int kObservedBin = 19;
+    original.L[kEmitBin] = 3.25;
+    const double g =
+        SpectralRadiance::Wavelength(kEmitBin) / SpectralRadiance::Wavelength(kObservedBin);
+    const double expected = original.L[kEmitBin] * std::pow(g, 4);
+    const SpectralRadiance shifted = original.ApplyRedshift(g);
 
-    double g = 1.05;  // 5% blueshift.
-    SpectralRadiance shifted = original.ApplyRedshift(g);
-
-    double E1 = shifted.TotalEnergy();
-
-    EXPECT_GT(E1, 0) << "Shifted energy should be positive";
-    EXPECT_GT(E1, E0 * 0.5) << "Too much energy lost in shift";
+    EXPECT_DOUBLE_EQ(shifted.L[kObservedBin], expected);
+    EXPECT_DOUBLE_EQ(shifted.TotalEnergy(), expected * kLambdaStep);
+    EXPECT_DOUBLE_EQ(original.ApplyRedshift(0.0).TotalEnergy(), 0.0);
+    EXPECT_DOUBLE_EQ(original.ApplyRedshift(-1.0).TotalEnergy(), 0.0);
+    EXPECT_DOUBLE_EQ(original.ApplyRedshift(std::numeric_limits<double>::quiet_NaN()).TotalEnergy(),
+                     0.0);
 }
 
 // Redshift moves spectral content to longer wavelengths.
@@ -134,6 +154,10 @@ TEST(SpectralRadianceTest, WavelengthBinIndexing) {
     int bin500 = SpectralRadiance::BinIndex(500);
     double w500 = SpectralRadiance::Wavelength(bin500);
     EXPECT_LT(std::abs(w500 - 500), kLambdaStep);
+    EXPECT_EQ(SpectralRadiance::BinIndex(kLambdaMin - 0.01), -1);
+    EXPECT_EQ(SpectralRadiance::BinIndex(kLambdaMin), 0);
+    EXPECT_EQ(SpectralRadiance::BinIndex(kLambdaMax - 0.01), kNumWavelengthBins - 1);
+    EXPECT_EQ(SpectralRadiance::BinIndex(kLambdaMax), kNumWavelengthBins);
 }
 
 }  // namespace

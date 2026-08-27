@@ -14,6 +14,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <numbers>
 #include <vector>
 
 namespace {
@@ -94,7 +95,7 @@ TEST(MorrisThorneCartesianTests, ChartAgreementWithSphericalFamily) {
                 Tensor<Dual<double>, 4, 4, 4> dgs;
                 Vec4 spos;
                 spos(1) = r;
-                spos(2) = M_PI / 2.0;
+                spos(2) = std::numbers::pi / 2.0;
                 sph.Evaluate(spos, gs, dgs);
 
                 double nn[3] = {n.x, n.y, n.z};

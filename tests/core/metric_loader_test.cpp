@@ -158,8 +158,8 @@ TEST_F(MetricLoaderChainTests, AllMetricsHaveName) {
 // Verify all metrics implement getParameters() without throwing
 TEST_F(MetricLoaderChainTests, AllMetricsHaveParameters) {
     for (const auto& metric : metrics) {
-        const auto& params = metric->GetParameters();
-        (void)params;  // Just verify it doesn't throw
+        EXPECT_NO_THROW(static_cast<void>(metric->GetParameters()))
+            << "parameter access failed for " << metric->GetName();
     }
 }
 

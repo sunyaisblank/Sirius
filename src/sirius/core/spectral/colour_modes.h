@@ -12,9 +12,18 @@
 
 #include <algorithm>
 #include <cmath>
+#include <numbers>
 #include <span>
 
 namespace sirius::core::color_modes {
+
+// Bolometric Liouville scaling for disk emission. This is the CPU authority for
+// the one g^4 factor applied after emission; thin and volumetric paths both call
+// it rather than re-deriving the exponent independently.
+inline float ObservedBolometricIntensity(float emitted_intensity, float redshift) {
+    const float g2 = redshift * redshift;
+    return emitted_intensity * g2 * g2;
+}
 
 // Colour mode selection (mirrors SessionConfig::ColorMode).
 enum class Mode {
@@ -178,7 +187,8 @@ inline spectral::Rgb StokesToRgbHsv(const StokesVector& stokes) {
     float chi = stokes.Evpa();              // [-pi/2, pi/2].
 
     // Map EVPA to hue [0, 1].
-    float hue = (chi + static_cast<float>(M_PI / 2.0)) / static_cast<float>(M_PI);
+    float hue =
+        (chi + static_cast<float>(std::numbers::pi / 2.0)) / static_cast<float>(std::numbers::pi);
 
     // Polarisation degree as saturation.
     float sat = p;
@@ -226,7 +236,8 @@ inline spectral::Rgb StokesToRgbFalseColor(const StokesVector& stokes) {
     float chi = stokes.Evpa();
 
     // Map EVPA to a blue-white-red diverging colormap.
-    float t = (chi + static_cast<float>(M_PI / 2.0)) / static_cast<float>(M_PI);  // [0, 1].
+    float t = (chi + static_cast<float>(std::numbers::pi / 2.0)) /
+              static_cast<float>(std::numbers::pi);  // [0, 1].
 
     spectral::Rgb color;
     if (t < 0.5f) {
@@ -265,17 +276,17 @@ inline spectral::Rgb ApplyColorMode(Mode mode, float T_emit, float g, float inte
                                     float temperature_scale_kelvin = 30000.0f) {
     switch (mode) {
         case Mode::TrueColor: {
-            // Physical blackbody -> sRGB.
+            // Physical blackbody -> linear RGB in the sRGB/D65 primaries.
             float T_obs = T_emit * g;
             float T_kelvin = T_obs * temperature_scale_kelvin;
             T_kelvin = std::clamp(T_kelvin, 1000.0f, 100000.0f);
             spectral::Rgb color = spectral::BlackbodyToRgb(static_cast<double>(T_kelvin));
 
             // Apply relativistic beaming.
-            float g4 = g * g * g * g;
-            color.r *= intensity * g4;
-            color.g *= intensity * g4;
-            color.b *= intensity * g4;
+            const float observed_intensity = ObservedBolometricIntensity(intensity, g);
+            color.r *= observed_intensity;
+            color.g *= observed_intensity;
+            color.b *= observed_intensity;
             return color;
         }
 
@@ -314,8 +325,7 @@ inline spectral::Rgb AverageTemporalColorMode(Mode mode, float T_emit,
 
     spectral::Rgb total;
     for (const float g : redshifts) {
-        const float g2 = g * g;
-        const float observed_intensity = emitted_intensity * g2 * g2;
+        const float observed_intensity = ObservedBolometricIntensity(emitted_intensity, g);
         const float mode_intensity =
             mode == Mode::TrueColor ? emitted_intensity : observed_intensity;
         const spectral::Rgb sample =

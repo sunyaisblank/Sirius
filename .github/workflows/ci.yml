@@ -12,7 +12,7 @@ jobs:
   linux-gate:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Toolchain
         run: |
           sudo apt-get update
@@ -26,6 +26,8 @@ jobs:
           curl --fail --location --silent --show-error \
             "https://github.com/shader-slang/slang/releases/download/${TAG}/slang-${TAG#v}-linux-x86_64.tar.gz" \
             --output slang.tgz
+          echo "bbd36968b5aefdf91c2ede0d2e131f8b552cba6ed2444da59f1a0bc0bfc6792d  slang.tgz" \
+            | sha256sum --check -
           sudo mkdir -p /opt/slang && sudo tar xzf slang.tgz -C /opt/slang
       - name: First-party format
         run: |
@@ -44,7 +46,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 75
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Toolchain
         run: |
           sudo apt-get update
@@ -58,6 +60,8 @@ jobs:
           curl --fail --location --silent --show-error \
             "https://github.com/shader-slang/slang/releases/download/${TAG}/slang-${TAG#v}-linux-x86_64.tar.gz" \
             --output slang.tgz
+          echo "bbd36968b5aefdf91c2ede0d2e131f8b552cba6ed2444da59f1a0bc0bfc6792d  slang.tgz" \
+            | sha256sum --check -
           sudo mkdir -p /opt/slang && sudo tar xzf slang.tgz -C /opt/slang
       - name: Configure
         run: cmake --preset linux-gcc-sanitize
@@ -67,9 +71,42 @@ jobs:
   windows-build:
     runs-on: windows-2022
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Vulkan SDK + SwiftShader qualification runtime
+        uses: jakoch/install-vulkan-sdk-action@37effcfa045411f8bfbbda26df2fd1b3bf3436fa
+        with:
+          vulkan_version: 1.4.357.0
+          install_runtime: true
+          cache: true
+          stripdown: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pinned SwiftShader qualification runtime
+        shell: pwsh
+        run: |
+          $archive = Join-Path $env:RUNNER_TEMP "swiftshader-win64-5.0.0.1.zip"
+          $destination = "C:\swiftshader"
+          Invoke-WebRequest -UseBasicParsing `
+            -Uri "https://github.com/jakoch/rasterizers/releases/download/20260731/swiftshader-win64-5.0.0.1.zip" `
+            -OutFile $archive
+          $expected = "63e97af8b88c2c8cbc61495fc5ef4fad1ce60a874f2c19207cd072c46944065f"
+          $actual = (Get-FileHash -Algorithm SHA256 $archive).Hash.ToLowerInvariant()
+          if ($actual -ne $expected) { throw "SwiftShader archive SHA-256 mismatch" }
+          Expand-Archive -Path $archive -DestinationPath $destination -Force
+          $destination | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          "VK_DRIVER_FILES=$destination\vk_swiftshader_icd.json" `
+            | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: Prove qualification Vulkan toolchain
+        shell: pwsh
+        run: |
+          Get-Command slangc -ErrorAction Stop
+          Get-Command spirv-val -ErrorAction Stop
+          & "$env:VULKAN_SDK\bin\vulkaninfoSDK.exe" --summary
       - name: Configure
-        run: cmake --preset windows-msvc
+        run: >-
+          cmake --preset windows-msvc
+          -DSIRIUS_ALIGNMENT_MODE=qualification
+          -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON
+          -DCMAKE_CONFIGURATION_TYPES=Release
       - name: Build
         run: cmake --build --preset windows-msvc
       - name: Full source-available test estate
@@ -79,9 +116,16 @@ jobs:
           python scripts/verify-attestation.py --record-build
           --domain windows-native-build --platform windows
           --source-revision ${{ github.sha }}
+          --source-root .
           --artifact bin/windows-msvc/windows-tests.xml
+          --alignment-receipt bin/windows-msvc/generated/sirius/alignment_receipt.json
+          --mandatory-gate bin/windows-msvc/generated/sirius/mandatory_gate.json
+          --mandatory-gate-junit bin/windows-msvc/generated/sirius/mandatory_gate_junit.xml
+          --mandatory-gate-log bin/windows-msvc/generated/sirius/mandatory_gate_ctest.log
+          --qualification-executable bin/windows-msvc/src/sirius/app/Release/sirius.exe
+          --test-dir bin/windows-msvc
           --output attestations/windows-build.json
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: sirius-windows-native-attestation
           path: attestations
@@ -89,11 +133,28 @@ jobs:
   macos-build:
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Toolchain
         run: brew install ninja
+      - name: Vulkan SDK + MoltenVK qualification runtime
+        uses: jakoch/install-vulkan-sdk-action@37effcfa045411f8bfbbda26df2fd1b3bf3436fa
+        with:
+          vulkan_version: 1.4.357.0
+          cache: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Prove qualification Vulkan toolchain
+        run: |
+          command -v slangc
+          command -v spirv-val
+          test -f "$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json"
+          echo "VK_DRIVER_FILES=$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json" >> "$GITHUB_ENV"
+          export VK_DRIVER_FILES="$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json"
+          vulkaninfo --summary
       - name: Configure
-        run: cmake --preset macos
+        run: >-
+          cmake --preset macos
+          -DSIRIUS_ALIGNMENT_MODE=qualification
+          -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON
       - name: Build
         run: cmake --build --preset macos -j3
       - name: Full source-available test estate
@@ -103,9 +164,16 @@ jobs:
           python3 scripts/verify-attestation.py --record-build
           --domain macos-native-build --platform macos
           --source-revision ${{ github.sha }}
+          --source-root .
           --artifact bin/macos/macos-tests.xml
+          --alignment-receipt bin/macos/generated/sirius/alignment_receipt.json
+          --mandatory-gate bin/macos/generated/sirius/mandatory_gate.json
+          --mandatory-gate-junit bin/macos/generated/sirius/mandatory_gate_junit.xml
+          --mandatory-gate-log bin/macos/generated/sirius/mandatory_gate_ctest.log
+          --qualification-executable bin/macos/src/sirius/app/sirius
+          --test-dir bin/macos
           --output attestations/macos-build.json
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: sirius-macos-native-attestation
           path: attestations

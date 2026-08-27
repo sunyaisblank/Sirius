@@ -6,6 +6,8 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <limits>
+#include <numbers>
 
 using namespace sirius::core;
 
@@ -16,6 +18,38 @@ TEST(AccretionDiskTest, ISCO_Schwarzschild) {
     double r_isco = AccretionDiskD::ComputeIsco(0.0);
 
     EXPECT_NEAR(r_isco, 6.0, 1e-10) << "Schwarzschild ISCO should be 6M";
+}
+
+TEST(AccretionDiskTest, ConfigurationSanitizesEveryNonFiniteScalar) {
+    AccretionDiskD::Config config;
+    const double nan = std::numeric_limits<double>::quiet_NaN();
+    const double infinity = std::numeric_limits<double>::infinity();
+    config.M = nan;
+    config.a_star = infinity;
+    config.Mdot = nan;
+    config.r_inner = -infinity;
+    config.r_outer = nan;
+    config.inclination = infinity;
+
+    const AccretionDiskD disk(config);
+    const auto& result = disk.GetConfig();
+    EXPECT_TRUE(std::isfinite(result.M));
+    EXPECT_TRUE(std::isfinite(result.a_star));
+    EXPECT_TRUE(std::isfinite(result.Mdot));
+    EXPECT_TRUE(std::isfinite(result.r_inner));
+    EXPECT_TRUE(std::isfinite(result.r_outer));
+    EXPECT_TRUE(std::isfinite(result.inclination));
+    EXPECT_GT(result.M, 0.0);
+    EXPECT_GT(result.Mdot, 0.0);
+    EXPECT_GT(result.r_outer, result.r_inner);
+    EXPECT_TRUE(std::isfinite(disk.EffectiveTemperature(disk.IscoRadius() * 2.0)));
+
+    config.r_inner = std::numeric_limits<double>::max();
+    config.r_outer = -std::numeric_limits<double>::max();
+    const AccretionDiskD extreme(config);
+    EXPECT_TRUE(std::isfinite(extreme.GetConfig().r_inner));
+    EXPECT_TRUE(std::isfinite(extreme.GetConfig().r_outer));
+    EXPECT_GT(extreme.GetConfig().r_outer, extreme.GetConfig().r_inner);
 }
 
 // r_ISCO -> 1M for a prograde orbit around extremal Kerr.
@@ -112,13 +146,15 @@ TEST(AccretionDiskTest, DiskBoundaries) {
 
     double r_isco = disk.IscoRadius();
 
-    EXPECT_FALSE(disk.IsInDisk(r_isco * 0.5, M_PI / 2)) << "Inside ISCO should not be in disk";
-    EXPECT_TRUE(disk.IsInDisk(r_isco * 1.5, M_PI / 2))
+    EXPECT_FALSE(disk.IsInDisk(r_isco * 0.5, std::numbers::pi / 2))
+        << "Inside ISCO should not be in disk";
+    EXPECT_TRUE(disk.IsInDisk(r_isco * 1.5, std::numbers::pi / 2))
         << "Outside ISCO at equator should be in disk";
-    EXPECT_TRUE(disk.IsInDisk(50, M_PI / 2)) << "Mid-disk should be in disk";
-    EXPECT_FALSE(disk.IsInDisk(200, M_PI / 2)) << "Beyond outer edge should not be in disk";
+    EXPECT_TRUE(disk.IsInDisk(50, std::numbers::pi / 2)) << "Mid-disk should be in disk";
+    EXPECT_FALSE(disk.IsInDisk(200, std::numbers::pi / 2))
+        << "Beyond outer edge should not be in disk";
 
-    EXPECT_FALSE(disk.IsInDisk(50, M_PI / 4)) << "Off equator should not be in disk";
+    EXPECT_FALSE(disk.IsInDisk(50, std::numbers::pi / 4)) << "Off equator should not be in disk";
 }
 
 // Blackbody spectrum for the disk temperature; zero inside the ISCO.

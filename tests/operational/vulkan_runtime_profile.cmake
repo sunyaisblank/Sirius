@@ -10,9 +10,14 @@ execute_process(
     RESULT_VARIABLE _readiness_result
     OUTPUT_VARIABLE _readiness_stdout
     ERROR_VARIABLE _readiness_stderr)
-if(NOT _readiness_result EQUAL 0 OR
-   NOT _readiness_stdout MATCHES "\"vulkan\"[ \t\r\n]*:" OR
-   NOT _readiness_stdout MATCHES "\"ready\"[ \t\r\n]*:[ \t\r\n]*true")
+string(JSON _evidence_ready ERROR_VARIABLE _evidence_error
+    GET "${_readiness_stdout}" evidence_generation_ready)
+string(JSON _vulkan_ready ERROR_VARIABLE _vulkan_error
+    GET "${_readiness_stdout}" backends vulkan ready)
+if((NOT _readiness_result EQUAL 0 AND NOT _readiness_result EQUAL 1) OR
+   NOT _evidence_error STREQUAL "NOTFOUND" OR
+   NOT _vulkan_error STREQUAL "NOTFOUND" OR
+   NOT _evidence_ready OR NOT _vulkan_ready)
     message(FATAL_ERROR
         "required Vulkan runtime is not ready (${_readiness_result})\n"
         "${_readiness_stdout}\n${_readiness_stderr}")
@@ -28,6 +33,7 @@ execute_process(
         --doppler-beaming off
         --camera-beta 0.08,0.02,0.01
         --lens ThinLens --focal-length 50 --aperture 2.8 --focus-distance 30
+        --beams --starfield point
         --no-bloom --output "${SIRIUS_OUTPUT}"
     RESULT_VARIABLE _render_result
     OUTPUT_VARIABLE _render_stdout

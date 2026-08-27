@@ -12,7 +12,7 @@ $$
 
 where the Christoffel symbols derive from the metric and its first derivatives. Sirius supplies those derivatives analytically. The CPU reference path integrates the Cartesian geodesic equation with adaptive Dormand-Prince RK45 and null normalisation; the live Vulkan kernel uses Cartesian RK4. Backend parity is statistical rather than bitwise, and conservation on the live path is a build-failing test.
 
-The black hole family uses the Kerr-Schild form $g_{\mu\nu} = \eta_{\mu\nu} + H\,l_\mu l_\nu$ with null $l$, which has no coordinate singularity at the poles and yields two exact identities the tests exploit: the closed-form inverse $g^{\mu\nu} = \eta^{\mu\nu} - H\,l^\mu l^\nu$ and $\det g = -1$. One four-parameter family $(M, a, Q, \Lambda)$ covers Minkowski, Schwarzschild, Kerr, Reissner-Nordstrom, Kerr-Newman, de Sitter, and Schwarzschild-de Sitter. Schwarzschild and Kerr accretion-disk emission uses the Novikov-Thorne temperature profile with the full Page-Thorne (1974) flux function, blackbody spectral colour, and exactly one $g^4$ relativistic-beaming factor. A double-precision Boyer-Lindquist oracle stack (metric with analytic Christoffels and Riemann, symplectic integrator, geodesic-deviation beam integrator, Walker-Penrose polarisation transport) lives deliberately off the render path as the validation reference. On CPU, `Polarisation` mode parallel-transports an observer screen basis along the live Kerr-Schild ray, forms thermal Thomson Stokes emission in the Page-Thorne disk frame, and carries the accumulated state into the film buffer. Live and oracle transport are independently pinned by the Walker-Penrose constant; Vulkan and volumetric polarisation requests decline explicitly.
+The black hole family uses the Kerr-Schild form $g_{\mu\nu} = \eta_{\mu\nu} + H\,l_\mu l_\nu$ with null $l$, which has no coordinate singularity at the poles and yields two exact identities the tests exploit: the closed-form inverse $g^{\mu\nu} = \eta^{\mu\nu} - H\,l^\mu l^\nu$ and $\det g = -1$. One four-parameter family $(M, a, Q, \Lambda)$ covers Minkowski, Schwarzschild, Kerr, Reissner-Nordstrom, Kerr-Newman, de Sitter, and Schwarzschild-de Sitter. Schwarzschild and Kerr accretion-disk emission uses the Novikov-Thorne temperature profile with the full Page-Thorne (1974) flux function, blackbody spectral colour, and exactly one $g^4$ relativistic-beaming factor. A double-precision Boyer-Lindquist oracle stack (metric with analytic Christoffels and Riemann, a fixed-step implicit-midpoint/Yoshida symplectic map, geodesic-deviation beam integrator, Walker-Penrose polarisation transport) lives deliberately off the render path as the validation reference. Its canonical two-form is tested directly; optional null projection is treated only as a stabiliser. On CPU, `Polarisation` mode parallel-transports an observer screen basis along the live Kerr-Schild ray, forms thermal Thomson Stokes emission in the Page-Thorne disk frame, and carries the accumulated state into the film buffer. Live and oracle transport are independently pinned by the Walker-Penrose constant; Vulkan and volumetric polarisation requests decline explicitly.
 
 ## What it renders
 
@@ -32,11 +32,11 @@ The black hole family uses the Kerr-Schild form $g_{\mu\nu} = \eta_{\mu\nu} + H\
 
 ## Backends
 
-The CPU path is the reference implementation and runs without Vulkan or OpenGL. It supports pinhole, thin-lens, and fisheye projection plus the physical thin-disk polarisation output. The GPU path is one Slang kernel source (`src/sirius/kernels/`) compiled to SPIR-V and dispatched through Vulkan; the same source is also compiled to CUDA and Metal as a portability gate, not as a CUDA or Metal runtime backend. A memory governor sizes tiles against the host-visible coherent heap the adapter actually allocates from, and a dispatch governor bounds device occupancy. `SIRIUS_VULKAN_DEVICE=<zero-based-index>` selects one enumerated device strictly; the readiness report, renderer, tests, and hardware attestation use the same identity. Backend `auto` selects Vulkan only when a device, metric, and requested scene semantics are all represented; otherwise it logs the reason and selects CPU. Vulkan represents exact arbitrary sample counts, camera aberration, pinhole and finite-aperture thin lenses, Page-Thorne and Shakura-Sunyaev temperature modes, Doppler suppression, dual-vector ray bundles, ellipse-filtered 100,000-star catalogues, and volumetric disk/turbulence/corona transfer. Vulkan volumetric marching is deliberately bounded at 128 midpoint samples per geodesic segment; larger explicit requests decline and `auto` uses CPU. Diagnostic colour and polarisation modes are CPU-only. The precision ladder offers plain fp32, `SIRIUS_PRECISION=fp32-comp`, and `SIRIUS_PRECISION=fp64` on devices exposing `shaderFloat64`.
+The CPU path is the reference implementation and runs without Vulkan or OpenGL. It supports pinhole, thin-lens, and fisheye projection plus the physical thin-disk polarisation output. Thin-lens rays preserve the requested field of view at the aperture centre; because the scale-free spacetime has no physical M-to-millimetre conversion, 50 mm-equivalent defines one virtual lens unit for the f-number calculation. The GPU path is one Slang kernel source (`src/sirius/kernels/`) compiled to SPIR-V and dispatched through Vulkan; the same source is also compiled to CUDA and Metal as a portability gate, not as a CUDA or Metal runtime backend. A memory governor sizes tiles against the host-visible coherent heap the adapter actually allocates from, and a dispatch governor bounds device occupancy. `SIRIUS_VULKAN_DEVICE=<zero-based-index>` selects one enumerated device strictly; the readiness report, renderer, tests, and hardware attestation use the same identity. Backend `auto` selects Vulkan only when a device, metric, and requested scene semantics are all represented; otherwise it logs the reason and selects CPU. Vulkan represents exact arbitrary sample counts, camera aberration, pinhole and finite-aperture thin lenses, Page-Thorne and Shakura-Sunyaev temperature modes, Doppler suppression, dual-vector ray bundles, ellipse-filtered 100,000-star catalogues, and volumetric disk/turbulence/corona transfer. Vulkan volumetric marching is deliberately bounded at 128 midpoint samples per geodesic segment; larger explicit requests decline and `auto` uses CPU. Diagnostic colour and polarisation modes are CPU-only. The precision ladder offers plain fp32, `SIRIUS_PRECISION=fp32-comp`, and `SIRIUS_PRECISION=fp64` on devices exposing `shaderFloat64`.
 
 ## Building
 
-Requirements: CMake 3.28+, and a compiler with a C++26 mode: GCC 14+, Clang 17+, AppleClang 16+, or MSVC 19.40+ (Visual Studio 2022 17.10). The Vulkan backend additionally wants the Vulkan headers/loader and the Slang compiler (`slangc`, found at `/opt/slang` or `SLANG_ROOT`). The interactive window uses OpenGL and GLFW; when OpenGL development files are absent, or `SIRIUS_BUILD_VIEWER=OFF`, Sirius builds the complete CPU/Vulkan CLI and the `view` command declines explicitly. Portable builds likewise degrade clearly to a complete CPU system when Vulkan is absent; the `linux-ci` operational profile sets `SIRIUS_REQUIRE_VULKAN_RUNTIME=ON` and rejects configuration, missing kernels, runtime skips, or failed dispatch.
+Requirements: CMake 3.28+, Python 3.10+, and a compiler with a C++26 mode: GCC 14+, Clang 17+, AppleClang 16+, or MSVC 19.40+ (Visual Studio 2022 17.10). First-party targets use C++26; their isolated vendored C translation units are pinned to portable C17. The Vulkan backend additionally wants the Vulkan headers/loader and the Slang compiler (`slangc`, found at `/opt/slang` or `SLANG_ROOT`). The interactive window uses OpenGL and GLFW; when OpenGL development files are absent, or `SIRIUS_BUILD_VIEWER=OFF`, Sirius builds the complete CPU/Vulkan CLI and the `view` command declines explicitly. Portable builds likewise degrade clearly to a complete CPU system when Vulkan is absent; the `linux-ci` operational profile sets `SIRIUS_REQUIRE_VULKAN_RUNTIME=ON` and rejects configuration, missing kernels, runtime skips, or failed dispatch.
 
 ```bash
 # Linux / WSL2
@@ -47,7 +47,57 @@ cmake --preset linux-gcc && cmake --build --preset linux-gcc
 cmake --preset windows-msvc && cmake --build --preset windows-msvc
 ```
 
-Presets exist for GCC and Clang (Release and Debug), MSVC, macOS, required Linux Vulkan CI, and GCC ASan/UBSan/LSan. Every supported preset pins warnings as errors, enforce-mode contracts, Mandatory tests, and source governance; `linux-ci` additionally runs the non-skipping Vulkan/P1 operational profile. `cmake --install` creates a relocatable volume containing the binary, starfield, installed operating model, every compiled backend resource, and viewer shaders when the viewer is compiled, then verifies that exact capability-specific structure before succeeding.
+Presets exist for GCC and Clang (Release and Debug), MSVC, macOS, required Linux Vulkan CI, and GCC ASan/UBSan/LSan. Every supported preset pins warnings as errors, enforce-mode contracts, Mandatory tests, and source governance; `linux-ci` additionally runs the non-skipping Vulkan/P1 operational profile. Source governance also enforces one CMake owner per first-party translation unit, downward-only layer dependencies, boundary naming, and the closed live-vendor set. `cmake --install` creates a relocatable volume containing the binary, starfield, installed operating model, every compiled backend resource, and viewer shaders when the viewer is compiled, then verifies that exact capability-specific structure before succeeding. A release install additionally requires the deterministic Mandatory-gate receipt emitted only after live CTest registration exactly equals a zero-skip JUnit estate; the receipt binds the revision, model, alignment authority, all test executables, and every installed product hash.
+
+Resource-consuming application and render tests execute beside the candidate, so strict modes inspect that same product volume without a development resource override. Source governance rejects either a relocated test executable or restoration of the override.
+
+Remote CI Actions and fetched source dependencies are pinned to immutable commits. Direct qualification-tool downloads use versioned URLs and checked-in SHA-256 values; source governance rejects movable tags, latest-release selection, or unchecked direct downloads.
+
+Normal presets use `SIRIUS_ALIGNMENT_MODE=development`: they compile and test
+the system while reporting every absent external domain as pending, but their
+artifacts are deliberately inadmissible as external evidence. Hardware, native
+runtime, viewer, and native CI producers reconfigure the exact clean revision in
+`qualification` mode. Qualification enforces the complete release-equivalent
+build/product policy, the zero-skip Mandatory gate, executable-volume resource
+locking, and candidate hashing while allowing external domains to remain
+pending; it cannot package or report top-level readiness. Each record includes
+the copied qualification executable, alignment receipt, product/test gate,
+gate-generated JUnit and log, and an independently rerun JUnit/inventory pair.
+The verifier cross-checks their byte hashes and exact test identities before the
+record can become release input. A distributable package is available only from
+`release` mode. That mode requires
+a clean Git revision plus verified evidence for the physical Radeon, WSL2/Dozen,
+native Windows build and Vulkan, native macOS build and MoltenVK, native viewer
+input, and exact IMAX domain. Configure generates one deterministic receipt;
+every build revalidates it, the compiler embeds it, installation carries it,
+and render/view initialisation rejects a missing or altered copy:
+
+```bash
+cmake --preset linux-gcc \
+  -DSIRIUS_ALIGNMENT_MODE=release \
+  -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON \
+  -DSIRIUS_ATTESTATION_ROOT=/absolute/path/to/attestation-bundles
+cmake --build --preset linux-gcc
+```
+
+Qualification and release policy require tests and the Mandatory build gate, enforce-mode
+contracts, warnings-as-errors, the sole `Release` configuration, compiled
+Vulkan/Slang kernels validated by `spirv-val`, and the native viewer. Configure
+fails rather than packaging a reduced product. Installation and CPack fail if
+the complete gate was not run after the last artifact or registration change.
+Release readiness, render, and viewer initialisation then parse that installed
+gate receipt and rehash the running executable plus every installed product;
+missing, skipped, stale, or same-size altered evidence fails closed. Development
+builds do not require a gate receipt and remain local diagnostic builds; they
+cannot generate admissible external evidence. `SIRIUS_RESOURCE_DIR` is
+likewise development-only; qualification and release binaries ignore it and resolve the receipt,
+executable, and resources exclusively from their packaged volume. To avoid a
+self-proving gate, the Mandatory target removes any prior staged receipt before
+CTest, requires pre-gate strict-mode install/readiness to decline, and stages only
+the receipt issued after the exact zero-skip estate succeeds.
+Release install/CPack then invokes the relocated binary's non-rendering
+`info capabilities` path, so external byte verification and the product's own
+runtime authority must agree before installation succeeds.
 
 ## Running
 
@@ -76,11 +126,20 @@ sirius info readiness --json
 sirius info capabilities --json
 ```
 
+`info readiness` reserves top-level `ready`/`release_ready` for the strict
+aligned-system claim. Development and qualification builds with valid resources
+but pending external domains return non-zero with `ready: false` and
+`evidence_generation_ready: true`; only the qualification artifacts emitted by
+hardware/native runbooks are admissible. The `ultimate_ideal` object also reports the exact
+sorted admitted, pending, and required domain IDs, so an operator can act on a
+blocked count without consulting the source tree. A release build can report
+ready only after all eight revision-bound domains have been admitted.
+
 Configuration layers in a fixed order: struct defaults, then a JSON config file, then `SIRIUS_*` environment variables, then command-line flags; later layers win, every parameter is validated at startup against the ranges the physics supports, and invalid configuration stops the run rather than being clamped. `sirius render --help` lists the full flag set.
 
 `render_test.sh` and `render_demo.sh` select only the exact preset binary (or an explicit `SIRIUS_BINARY`), propagate renderer failures, and require every declared output to exist and be non-empty. They never search for an arbitrary stale build.
 
-The DNGR-technique features are explicit flags, each default-off so the pinned reference render is stable: `--beams` propagates two ray-bundle deviation vectors and derives the oriented beam ellipse; `--starfield point` replaces the background texture with a spatially indexed 100,000-star point catalogue filtered through both ellipse axes; `--volumetric`, `--turbulence`, and `--corona` select live radiative transfer; `--motion-blur` selects scalar CPU temporal disk integration; `--doppler-beaming off` suppresses the disk's orbital Doppler asymmetry while retaining gravitational redshift; `--color-mode Polarisation` selects transported CPU Stokes output; and a camera velocity applies special-relativistic aberration across all lens models. Polarisation combined with volume, temporal blur, or Vulkan declines. `--wormhole-topology TwoSheet` is a named but fail-closed request; `OneSheetCapture` is the represented dark-throat topology.
+The DNGR-technique features are explicit flags, each default-off so the pinned reference render is stable: `--beams` propagates two ray-bundle deviation vectors and derives the oriented beam ellipse; `--starfield point` replaces the background texture with a spatially indexed 100,000-star point catalogue filtered through both ellipse axes, using a display-calibrated relative-flux zero point so the catalogue survives PNG quantisation; `--volumetric`, `--turbulence`, and `--corona` select live radiative transfer; `--motion-blur` selects scalar CPU temporal disk integration; `--doppler-beaming off` suppresses the disk's orbital Doppler asymmetry while retaining gravitational redshift; `--color-mode Polarisation` selects transported CPU Stokes output; and a camera velocity applies special-relativistic aberration across all lens models. Polarisation combined with volume, temporal blur, or Vulkan declines. `--wormhole-topology TwoSheet` is a named but fail-closed request; `OneSheetCapture` is the represented dark-throat topology.
 
 ## Testing
 
@@ -93,7 +152,12 @@ cmake --preset linux-gcc-sanitize
 cmake --build --preset linux-gcc-sanitize -j"$(nproc)"
 ```
 
-Labels carry gating semantics: Mandatory and Operational suites fail every normal build by default; Correctness suites cover additional feature behaviour; Performance suites measure without gating. New suites without an explicit policy are a hard generator error. Parameterised/typed GoogleTest macros are also rejected until the generator can prove their exact discovered names, preventing tests from escaping the Mandatory label. `tests/operating_model.json` maps 22 required operating dimensions and 19 explicit capability contracts to Mandatory evidence. The build rejects a missing state, renamed witness, or de-gated claim; the same model is installed and available through `info capabilities`.
+Labels carry gating semantics: Mandatory and Operational suites fail every normal build by default; Correctness suites cover additional feature behaviour; Performance suites measure without gating. New suites without an explicit policy are a hard generator error. Parameterised/typed GoogleTest macros are also rejected until the generator can prove their exact discovered names, preventing tests from escaping the Mandatory label. `tests/operating_model.json` maps all ten required P1–P6/E1–E4 acceptance criteria, 23 operating dimensions, and 20 explicit capability contracts to Mandatory evidence. Seven criteria are source/build gated; P3, P5, and E3 remain explicitly attestation-required because present software evidence cannot prove physical IMAX/780M operation. The build rejects a missing state, renamed witness, de-gated claim, or incomplete revision-bound release receipt; the same authorities are installed and available through `info capabilities` and `info readiness`.
+
+External native/runtime evidence additionally carries CTest's JSON inventory:
+its non-skipping JUnit names must equal every enabled registration and meet the
+operating model's conservative 700-case source-available floor. A green subset
+cannot be relabelled as the complete estate.
 
 ## Documentation
 

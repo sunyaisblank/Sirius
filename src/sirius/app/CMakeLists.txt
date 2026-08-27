@@ -12,9 +12,9 @@ option(SIRIUS_BUILD_VIEWER "Build the GLFW/OpenGL interactive window when availa
 # CMAKE_CONFIGURE_DEPENDS ensures editing the JSON reruns configuration before
 # the executable can be relinked with a stale embedded authority.
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
-    "${CMAKE_SOURCE_DIR}/tests/operating_model.json")
-file(READ "${CMAKE_SOURCE_DIR}/tests/operating_model.json"
-    SIRIUS_OPERATING_MODEL_JSON)
+    "${SIRIUS_OPERATING_MODEL}")
+file(READ "${SIRIUS_OPERATING_MODEL}" SIRIUS_OPERATING_MODEL_JSON)
+file(SHA256 "${SIRIUS_OPERATING_MODEL}" SIRIUS_OPERATING_MODEL_SHA256)
 string(FIND "${SIRIUS_OPERATING_MODEL_JSON}" ")SIRIUS_MODEL\""
     SIRIUS_OPERATING_MODEL_DELIMITER)
 if(NOT SIRIUS_OPERATING_MODEL_DELIMITER EQUAL -1)
@@ -53,6 +53,68 @@ while(SIRIUS_OPERATING_MODEL_OFFSET LESS SIRIUS_OPERATING_MODEL_SIZE)
         "${SIRIUS_OPERATING_MODEL_CHUNK_COUNT} + 1")
 endwhile()
 
+# Embed the alignment receipt beside the operating model. Release mode reaches
+# this point only after the root configure gate has admitted every required
+# external domain for the exact clean revision.
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+    "${SIRIUS_ALIGNMENT_RECEIPT}")
+file(READ "${SIRIUS_ALIGNMENT_RECEIPT}" SIRIUS_ALIGNMENT_RECEIPT_JSON)
+string(FIND "${SIRIUS_ALIGNMENT_RECEIPT_JSON}" ")SIRIUS_ALIGN\""
+    SIRIUS_ALIGNMENT_RECEIPT_DELIMITER)
+if(NOT SIRIUS_ALIGNMENT_RECEIPT_DELIMITER EQUAL -1)
+    message(FATAL_ERROR
+        "alignment_receipt.json contains the reserved embedded-string delimiter")
+endif()
+string(JSON SIRIUS_ALIGNMENT_RECEIPT_SATISFIED
+    GET "${SIRIUS_ALIGNMENT_RECEIPT_JSON}" ultimate_ideal satisfied)
+if(SIRIUS_ALIGNMENT_MODE STREQUAL "release")
+    set(SIRIUS_RELEASE_ALIGNMENT_ENFORCED true)
+    set(SIRIUS_QUALIFICATION_ALIGNMENT_ENFORCED false)
+    if(NOT SIRIUS_ALIGNMENT_RECEIPT_SATISFIED)
+        message(FATAL_ERROR
+            "Release alignment reached compilation without a satisfied receipt")
+    endif()
+elseif(SIRIUS_ALIGNMENT_MODE STREQUAL "qualification")
+    set(SIRIUS_RELEASE_ALIGNMENT_ENFORCED false)
+    set(SIRIUS_QUALIFICATION_ALIGNMENT_ENFORCED true)
+else()
+    set(SIRIUS_RELEASE_ALIGNMENT_ENFORCED false)
+    set(SIRIUS_QUALIFICATION_ALIGNMENT_ENFORCED false)
+endif()
+if(SIRIUS_ALIGNMENT_RECEIPT_SATISFIED)
+    set(SIRIUS_EMBEDDED_ALIGNMENT_SATISFIED true)
+else()
+    set(SIRIUS_EMBEDDED_ALIGNMENT_SATISFIED false)
+endif()
+
+set(SIRIUS_ALIGNMENT_RECEIPT_CPP_CHUNKS "")
+set(SIRIUS_ALIGNMENT_RECEIPT_CHUNK_COUNT 0)
+set(SIRIUS_ALIGNMENT_RECEIPT_OFFSET 0)
+set(SIRIUS_ALIGNMENT_RECEIPT_CHUNK_SIZE 8000)
+string(LENGTH "${SIRIUS_ALIGNMENT_RECEIPT_JSON}"
+    SIRIUS_ALIGNMENT_RECEIPT_SIZE)
+while(SIRIUS_ALIGNMENT_RECEIPT_OFFSET LESS SIRIUS_ALIGNMENT_RECEIPT_SIZE)
+    math(EXPR SIRIUS_ALIGNMENT_RECEIPT_REMAINING
+        "${SIRIUS_ALIGNMENT_RECEIPT_SIZE} - ${SIRIUS_ALIGNMENT_RECEIPT_OFFSET}")
+    if(SIRIUS_ALIGNMENT_RECEIPT_REMAINING GREATER SIRIUS_ALIGNMENT_RECEIPT_CHUNK_SIZE)
+        set(SIRIUS_ALIGNMENT_RECEIPT_CURRENT_SIZE
+            "${SIRIUS_ALIGNMENT_RECEIPT_CHUNK_SIZE}")
+    else()
+        set(SIRIUS_ALIGNMENT_RECEIPT_CURRENT_SIZE
+            "${SIRIUS_ALIGNMENT_RECEIPT_REMAINING}")
+    endif()
+    string(SUBSTRING "${SIRIUS_ALIGNMENT_RECEIPT_JSON}"
+        "${SIRIUS_ALIGNMENT_RECEIPT_OFFSET}"
+        "${SIRIUS_ALIGNMENT_RECEIPT_CURRENT_SIZE}"
+        SIRIUS_ALIGNMENT_RECEIPT_CHUNK)
+    string(APPEND SIRIUS_ALIGNMENT_RECEIPT_CPP_CHUNKS
+        "    R\"SIRIUS_ALIGN(${SIRIUS_ALIGNMENT_RECEIPT_CHUNK})SIRIUS_ALIGN\",\n")
+    math(EXPR SIRIUS_ALIGNMENT_RECEIPT_OFFSET
+        "${SIRIUS_ALIGNMENT_RECEIPT_OFFSET} + ${SIRIUS_ALIGNMENT_RECEIPT_CURRENT_SIZE}")
+    math(EXPR SIRIUS_ALIGNMENT_RECEIPT_CHUNK_COUNT
+        "${SIRIUS_ALIGNMENT_RECEIPT_CHUNK_COUNT} + 1")
+endwhile()
+
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/generated/sirius/base")
 configure_file(
     "${CMAKE_SOURCE_DIR}/cmake/operating_model_embedded.h.in"
@@ -81,23 +143,29 @@ set(SIRIUS_INSTALL_HAS_VIEWER "${SIRIUS_VIEWER_AVAILABLE}" CACHE INTERNAL
     "Whether the installed Sirius volume contains the interactive viewer" FORCE)
 
 set(SIRIUS_APP_SOURCES
+    alignment_authority.cpp
     cli/command_router.cpp
     cli/render_command.cpp
     cli/info_command.cpp
     cli/config_command.cpp
     cli/cli_output.cpp
     config/config_loader.cpp
+    config/session_config_adapter.cpp
     platform_paths.cpp
 )
 
 if(SIRIUS_VIEWER_AVAILABLE)
     set(SIRIUS_GLAD "${CMAKE_SOURCE_DIR}/lib/glad/src/glad.c")
-    list(APPEND SIRIUS_APP_SOURCES cli/view_command.cpp "${SIRIUS_GLAD}")
+    list(APPEND SIRIUS_APP_SOURCES
+        cli/view_command.cpp
+        viewer/interactive_viewer.cpp
+        "${SIRIUS_GLAD}")
 else()
     list(APPEND SIRIUS_APP_SOURCES cli/view_command_stub.cpp)
 endif()
 
 add_library(sirius_app_lib STATIC ${SIRIUS_APP_SOURCES})
+add_dependencies(sirius_app_lib SiriusAlignmentGate)
 
 target_include_directories(sirius_app_lib PRIVATE "${CMAKE_BINARY_DIR}/generated")
 target_link_libraries(sirius_app_lib PUBLIC
@@ -136,7 +204,7 @@ add_executable(sirius main.cpp)
 target_link_libraries(sirius PRIVATE sirius_app_lib)
 sirius_configure_target(sirius)
 set_property(TARGET sirius APPEND PROPERTY LINK_DEPENDS
-    "${CMAKE_SOURCE_DIR}/tests/operating_model.json")
+    "${SIRIUS_OPERATING_MODEL}")
 
 # Stage the exact runtime tree used by installed volumes beside the build-tree
 # executable. Resource discovery is therefore identical in both environments.
@@ -149,8 +217,11 @@ add_custom_command(TARGET sirius POST_BUILD
         "${CMAKE_SOURCE_DIR}/assets/Starfield.png"
         "$<TARGET_FILE_DIR:sirius>/resources/assets/Starfield.png"
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_SOURCE_DIR}/tests/operating_model.json"
+        "${SIRIUS_OPERATING_MODEL}"
         "$<TARGET_FILE_DIR:sirius>/resources/model/operating_model.json"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${SIRIUS_ALIGNMENT_RECEIPT}"
+        "$<TARGET_FILE_DIR:sirius>/resources/model/alignment_receipt.json"
     COMMENT "Staging Sirius runtime resources beside the executable"
 )
 

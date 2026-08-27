@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <numbers>
 
 namespace sirius::core {
 
@@ -84,7 +85,7 @@ struct SmbhParams {
         r_horizon = r_horizon_m * m_geometric;
 
         // Eddington luminosity: L_Edd = 4 pi G M m_p c / sigma_T
-        l_edd = 4.0 * M_PI * G * m_kg * m_p * c / sigma_T;
+        l_edd = 4.0 * std::numbers::pi * G * m_kg * m_p * c / sigma_T;
 
         // Gravitational time unit: GM/c^3
         t_g = m_geometric / c;

@@ -1,24 +1,207 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "method": "adversarial-claim-ledger",
+  "source_available_test_floor": 700,
+  "acceptance_criteria": [
+    {
+      "id": "P1",
+      "required": true,
+      "verification": "build_gated",
+      "profiles": ["cpu", "vulkan"],
+      "requirement": "Near-extremal Kerr geodesics satisfy the stated oracle and live conservation tolerances, and the 1080p shadow boundary agrees with Bardeen to below one pixel on both live backends.",
+      "capability_dependencies": [],
+      "evidence": [
+        {"kind": "gtest", "name": "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter"},
+        {"kind": "gtest", "name": "LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter"},
+        {"kind": "gtest", "name": "KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter"},
+        {"kind": "gtest", "name": "ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p"},
+        {"kind": "gtest", "name": "VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p"},
+        {"kind": "ctest", "name": "OperationalP1.NearExtremalBurnIn"}
+      ]
+    },
+    {
+      "id": "P2",
+      "required": true,
+      "verification": "build_gated",
+      "profiles": ["cpu", "vulkan"],
+      "requirement": "Both live backends propagate two geodesic-deviation vectors into an oriented beam ellipse; the independent Schwarzschild congruence oracle agrees to one part per million and the footprint measurably suppresses star flicker.",
+      "capability_dependencies": [],
+      "evidence": [
+        {"kind": "gtest", "name": "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion"},
+        {"kind": "gtest", "name": "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion"},
+        {"kind": "gtest", "name": "RayBundleTest.MagnificationConsistencyWithScalarJacobian"},
+        {"kind": "gtest", "name": "KernelBeam.BeamFlagWiresDeviationWithoutMovingDefault"},
+        {"kind": "gtest", "name": "KernelParity.BeamEllipseRetainsBothAxesAndOutputOrientation"},
+        {"kind": "gtest", "name": "StarfieldPointTest.BeamFootprintSuppressesStarFlicker"}
+      ]
+    },
+    {
+      "id": "P3",
+      "required": true,
+      "verification": "attestation_required",
+      "profiles": ["cpu", "vulkan", "physical-imax-5616x4096"],
+      "requirement": "At least 100000 point stars are sampled through the full oriented beam ellipse without aliasing at 1080p and 5616x4096 within the two-gigabyte governed envelope, and a disk-free gate proves their radiance remains spatially resolved after display quantisation.",
+      "capability_dependencies": ["physical_imax_5616x4096"],
+      "evidence": [
+        {"kind": "gtest", "name": "StarfieldPointTest.CatalogueMeetsSizeFloorAndIsFinite"},
+        {"kind": "gtest", "name": "StarfieldPointTest.SpatialIndexMatchesExhaustiveBeamOracle"},
+        {"kind": "gtest", "name": "StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope"},
+        {"kind": "gtest", "name": "VulkanRenderSession.IndexedPointCatalogueReachesLiveKernel"},
+        {"kind": "gtest", "name": "VulkanRenderSession.CombinedParitySceneRetainsResolvedImageStructure"},
+        {"kind": "gtest", "name": "RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration"},
+        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
+      ]
+    },
+    {
+      "id": "P4",
+      "required": true,
+      "verification": "build_gated",
+      "profiles": ["cpu", "vulkan"],
+      "requirement": "The live thin and volumetric disk paths use Page-Thorne emission with gravitational and Doppler shift exactly once, and the Doppler-suppression request has a measured live effect.",
+      "capability_dependencies": [],
+      "evidence": [
+        {"kind": "gtest", "name": "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature"},
+        {"kind": "gtest", "name": "KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel"},
+        {"kind": "gtest", "name": "GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile"},
+        {"kind": "gtest", "name": "SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor"},
+        {"kind": "gtest", "name": "KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor"},
+        {"kind": "gtest", "name": "GeodesicTracerRedshift.NearExtremalInnerDiskEmissionRemainsFinite"},
+        {"kind": "gtest", "name": "GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment"},
+        {"kind": "gtest", "name": "GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource"},
+        {"kind": "gtest", "name": "VulkanRenderSession.ThinAndVolumetricDopplerSuppressionAffectLiveEmission"},
+        {"kind": "gtest", "name": "VulkanRenderSession.VolumetricTurbulenceAndCoronaReachLiveKernel"},
+        {"kind": "gtest", "name": "DopplerToggleTest.SuppressionCollapsesDiskAsymmetry"}
+      ]
+    },
+    {
+      "id": "P5",
+      "required": true,
+      "verification": "attestation_required",
+      "profiles": ["cpu", "vulkan", "physical-imax-5616x4096"],
+      "requirement": "Arbitrary finite timelike camera velocity and aberration compose with pinhole and finite-aperture lenses, and 5616x4096 resolves within the governed hardware envelope.",
+      "capability_dependencies": ["physical_imax_5616x4096"],
+      "evidence": [
+        {"kind": "gtest", "name": "CameraAberrationTest.MatchesAnalyticFormulaAlongViewAxis"},
+        {"kind": "gtest", "name": "CameraAberrationTest.MatchesGeneralLorentzBoostForThreeAxisVelocities"},
+        {"kind": "gtest", "name": "CameraAberrationTest.ComposesOverLensModels"},
+        {"kind": "gtest", "name": "ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView"},
+        {"kind": "gtest", "name": "VulkanRenderSession.NonSquareMultisamplingCameraAndLensReachLiveKernel"},
+        {"kind": "gtest", "name": "VulkanRenderSession.CombinedParitySceneRetainsResolvedImageStructure"},
+        {"kind": "gtest", "name": "RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration"},
+        {"kind": "gtest", "name": "MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile"},
+        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
+      ]
+    },
+    {
+      "id": "P6",
+      "required": true,
+      "verification": "build_gated",
+      "profiles": ["cpu", "vulkan"],
+      "requirement": "EXR preserves finite fp32 linear HDR radiance outside the display pipeline, while PNG and PPM receive one owned display transfer encode.",
+      "capability_dependencies": [],
+      "evidence": [
+        {"kind": "gtest", "name": "RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr"},
+        {"kind": "gtest", "name": "RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter"},
+        {"kind": "gtest", "name": "PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding"},
+        {"kind": "gtest", "name": "EXRRoundTripTests.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode"},
+        {"kind": "gtest", "name": "EXRRoundTripTests.HDRGradientSurvivesWriteAndRead"}
+      ]
+    },
+    {
+      "id": "E1",
+      "required": true,
+      "verification": "build_gated",
+      "profiles": ["cpu", "vulkan"],
+      "requirement": "The single registry exposes nine CPU-renderable spacetime families, advertises only implemented backend support, and rejects disk semantics absent from a metric.",
+      "capability_dependencies": [],
+      "evidence": [
+        {"kind": "gtest", "name": "MetricRegistryTests.EveryCanonicalNameParsesToItsOwnId"},
+        {"kind": "gtest", "name": "MetricRegistryTests.BackendSupportMatchesImplementations"},
+        {"kind": "gtest", "name": "RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame"},
+        {"kind": "gtest", "name": "ConfigValidation.DiskRequestDeclinesForEveryMetricWithoutAnEmissionModel"},
+        {"kind": "gtest", "name": "RenderSessionProbe.CpuMorrisThorneRenderCompletes"},
+        {"kind": "gtest", "name": "VulkanRenderSession.CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalBounds"}
+      ]
+    },
+    {
+      "id": "E2",
+      "required": true,
+      "verification": "build_gated",
+      "profiles": ["cpu"],
+      "requirement": "Schwarzschild and Kerr thin-disk polarisation conserves the Walker-Penrose constant, agrees across charts with the independent oracle, emits physical Stokes state, and reaches film output; incomplete combinations decline.",
+      "capability_dependencies": [],
+      "evidence": [
+        {"kind": "gtest", "name": "WalkerPenroseLivePath.ConservesConstantAndOrthonormality"},
+        {"kind": "gtest", "name": "WalkerPenroseLivePath.AgreesWithOracleAcrossCharts"},
+        {"kind": "gtest", "name": "WalkerPenrose.SchwarzschildEquatorialPerpendicularTransportsRigidly"},
+        {"kind": "gtest", "name": "GeodesicTracerTest.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation"},
+        {"kind": "gtest", "name": "RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes"},
+        {"kind": "gtest", "name": "ConfigValidation.PolarisationRequiresRepresentedThinBlackHoleDisk"},
+        {"kind": "gtest", "name": "RenderSessionProbe.PolarisedAndTwoSheetRequestsDeclineAtTheTypedBoundary"}
+      ]
+    },
+    {
+      "id": "E3",
+      "required": true,
+      "verification": "attestation_required",
+      "profiles": ["cpu", "physical-radeon-780m", "physical-imax-5616x4096", "viewer-native-window-input"],
+      "requirement": "A complete CPU-only render works without a GPU, and interactive progressive Vulkan rendering completes on the named two-gigabyte integrated-GPU floor target.",
+      "capability_dependencies": ["physical_radeon_780m_runtime", "physical_imax_5616x4096", "viewer_native_window_input"],
+      "evidence": [
+        {"kind": "gtest", "name": "RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr"},
+        {"kind": "gtest", "name": "MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile"},
+        {"kind": "gtest", "name": "VulkanRenderSession.Kerr160x120CompletesAcrossMultipleGovernedTiles"},
+        {"kind": "gtest", "name": "ViewCommandOperational.VulkanRefinementPublishesProgressiveFrames"},
+        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
+      ]
+    },
+    {
+      "id": "E4",
+      "required": true,
+      "verification": "build_gated",
+      "profiles": ["compile", "cpu", "vulkan"],
+      "requirement": "Independent physics oracles, immutable qualification build inputs, registration-complete non-skipping Mandatory tests, and the non-weakenable qualification-to-release build/product/install/initialisation topology are artifact-bound failures rather than advisory policy.",
+      "capability_dependencies": [],
+      "evidence": [
+        {"kind": "gtest", "name": "KernelParity.KerrSchildMetricMatchesLegacyToOnePartInMillion"},
+        {"kind": "gtest", "name": "OracleConnection.AnalyticConnectionAgreesWithMetricDerivatives"},
+        {"kind": "gtest", "name": "BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation"},
+        {"kind": "ctest", "name": "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims"},
+        {"kind": "ctest", "name": "OperationalBuildPolicy.ReleaseCannotWeakenGates"},
+        {"kind": "ctest", "name": "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate"},
+        {"kind": "ctest", "name": "OperationalEvidence.RequiredProfileRejectsGoogleTestSkip"}
+      ]
+    }
+  ],
   "required_dimensions": [
+    {
+      "id": "attestation_admission_and_release_alignment",
+      "evidence": [
+        {"kind": "ctest", "name": "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected"},
+        {"kind": "ctest", "name": "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness"},
+        {"kind": "ctest", "name": "OperationalAttestation.NativeRuntimeProducerRejectsWrongHostAndDevice"},
+        {"kind": "gtest", "name": "AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority"}
+      ]
+    },
     {
       "id": "compile_time_contracts",
       "evidence": [
-        {"kind": "gtest", "name": "ContractsDeathTest.EnforcedPreconditionViolationTerminates"}
+        {"kind": "gtest", "name": "ContractsDeathTest.EnforcedPreconditionViolationTerminates"},
+        {"kind": "ctest", "name": "OperationalBuildPolicy.ReleaseCannotWeakenGates"}
       ]
     },
     {
       "id": "test_evidence_integrity",
       "evidence": [
-        {"kind": "ctest", "name": "OperationalEvidence.RequiredProfileRejectsGoogleTestSkip"}
+        {"kind": "ctest", "name": "OperationalEvidence.RequiredProfileRejectsGoogleTestSkip"},
+        {"kind": "ctest", "name": "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate"},
+        {"kind": "gtest", "name": "BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation"}
       ]
     },
     {
       "id": "test_registration_completeness",
       "evidence": [
-        {"kind": "ctest", "name": "OperationalEvidence.SourceGovernanceRejectsUngovernedParameterizedTests"},
-        {"kind": "gtest", "name": "BlackbodyParityTest.GPUMatchesCPUAtReferenceTemperatures"}
+        {"kind": "ctest", "name": "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims"}
       ]
     },
     {
@@ -33,7 +216,9 @@
     {
       "id": "install_and_volume_initialisation",
       "evidence": [
-        {"kind": "ctest", "name": "OperationalVolume.InstallRelocateInitialiseAndFailClosed"}
+        {"kind": "ctest", "name": "OperationalVolume.InstallRelocateInitialiseAndFailClosed"},
+        {"kind": "ctest", "name": "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate"},
+        {"kind": "gtest", "name": "BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation"}
       ]
     },
     {
@@ -47,6 +232,7 @@
       "evidence": [
         {"kind": "gtest", "name": "PlatformPaths.ExplicitResourceRootDisablesFallbacks"},
         {"kind": "gtest", "name": "PlatformPaths.ResourceNamesAndSymlinksCannotEscapeTheSelectedVolume"},
+        {"kind": "gtest", "name": "BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation"},
         {"kind": "ctest", "name": "OperationalVolume.InstallRelocateInitialiseAndFailClosed"}
       ]
     },
@@ -68,7 +254,6 @@
       "id": "vulkan_capability_and_render_path",
       "evidence": [
         {"kind": "gtest", "name": "VulkanRenderSession.CapabilityBoundaryRejectsUnrepresentedSceneSemantics"},
-        {"kind": "gtest", "name": "VulkanRenderSession.BackendCompiledOrSkipped"},
         {"kind": "ctest", "name": "OperationalVulkan.RequiredRuntimeDispatch"}
       ]
     },
@@ -92,7 +277,9 @@
         {"kind": "gtest", "name": "ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p"},
         {"kind": "gtest", "name": "VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p"},
         {"kind": "ctest", "name": "OperationalP1.NearExtremalBurnIn"},
-        {"kind": "gtest", "name": "LivePathConservationTests.NearExtremalKerrEnergyAndAngularMomentum"}
+        {"kind": "gtest", "name": "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter"},
+        {"kind": "gtest", "name": "LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter"},
+        {"kind": "gtest", "name": "KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter"}
       ]
     },
     {
@@ -101,6 +288,7 @@
         {"kind": "gtest", "name": "WalkerPenrose.PolarisationStaysOrthogonalAndNormalisedUnderTransport"},
         {"kind": "gtest", "name": "WalkerPenroseLivePath.ConservesConstantAndOrthonormality"},
         {"kind": "gtest", "name": "WalkerPenroseLivePath.AgreesWithOracleAcrossCharts"},
+        {"kind": "gtest", "name": "WalkerPenrose.SchwarzschildEquatorialPerpendicularTransportsRigidly"},
         {"kind": "gtest", "name": "GeodesicTracerTest.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation"},
         {"kind": "gtest", "name": "RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes"}
       ]
@@ -112,6 +300,8 @@
         {"kind": "gtest", "name": "KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel"},
         {"kind": "gtest", "name": "GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile"},
         {"kind": "gtest", "name": "GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment"},
+        {"kind": "gtest", "name": "GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource"},
+        {"kind": "gtest", "name": "VulkanRenderSession.ThinAndVolumetricDopplerSuppressionAffectLiveEmission"},
         {"kind": "gtest", "name": "GeodesicTracerVolumetric.TurbulenceAndCoronaAlterLiveTransferDeterministically"},
         {"kind": "gtest", "name": "VulkanRenderSession.VolumetricTurbulenceAndCoronaReachLiveKernel"}
       ]
@@ -123,6 +313,7 @@
         {"kind": "gtest", "name": "BeamPropagationTest.OrientationDescribesOutputEllipseRatherThanInputBasis"},
         {"kind": "gtest", "name": "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion"},
         {"kind": "gtest", "name": "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion"},
+        {"kind": "gtest", "name": "KernelParity.BeamEllipseRetainsBothAxesAndOutputOrientation"},
         {"kind": "gtest", "name": "StarfieldPointTest.EllipticalFootprintUsesBothAxesAndOrientation"},
         {"kind": "gtest", "name": "StarfieldPointTest.SpatialIndexMatchesExhaustiveBeamOracle"},
         {"kind": "gtest", "name": "StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope"},
@@ -135,6 +326,7 @@
         {"kind": "gtest", "name": "CameraFactoryTest.MalformedLensValueFailsClosed"},
         {"kind": "gtest", "name": "ConfigValidation.CameraWorldlineAndLensAreValidated"},
         {"kind": "gtest", "name": "CameraAberrationTest.MatchesAnalyticFormulaAlongViewAxis"},
+        {"kind": "gtest", "name": "CameraAberrationTest.MatchesGeneralLorentzBoostForThreeAxisVelocities"},
         {"kind": "gtest", "name": "CameraAberrationTest.ComposesOverLensModels"},
         {"kind": "gtest", "name": "RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr"}
       ]
@@ -143,7 +335,8 @@
       "id": "interactive_viewer_projection",
       "evidence": [
         {"kind": "gtest", "name": "ViewCommandOperational.StrictParsingAndSessionProjection"},
-        {"kind": "gtest", "name": "ViewCommandOperational.HeadlessRefinementProducesASynchronisedFrame"}
+        {"kind": "gtest", "name": "ViewCommandOperational.HeadlessRefinementProducesASynchronisedFrame"},
+        {"kind": "gtest", "name": "ViewCommandOperational.VulkanRefinementPublishesProgressiveFrames"}
       ]
     },
     {
@@ -151,6 +344,8 @@
       "evidence": [
         {"kind": "gtest", "name": "PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding"},
         {"kind": "gtest", "name": "PNGWriterTest.NonFiniteRadianceIsRejected"},
+        {"kind": "gtest", "name": "EXRRoundTripTests.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode"},
+        {"kind": "gtest", "name": "RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter"},
         {"kind": "gtest", "name": "EXRRoundTripTests.HDRGradientSurvivesWriteAndRead"},
         {"kind": "gtest", "name": "EXRRoundTripTests.NonFiniteRadianceIsRejected"},
         {"kind": "gtest", "name": "DisplayBuffer.NonFiniteRadianceIsIdentifiedBeforeEncoding"}
@@ -175,12 +370,26 @@
       "id": "metric_catalogue_and_declines",
       "evidence": [
         {"kind": "gtest", "name": "MetricRegistryTests.EveryCanonicalNameParsesToItsOwnId"},
+        {"kind": "gtest", "name": "RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame"},
         {"kind": "gtest", "name": "ConfigValidation.DiskRequestDeclinesForEveryMetricWithoutAnEmissionModel"},
         {"kind": "gtest", "name": "RenderCommandParse.BackendVulkanDeclinesMetricOffTheRenderPath"}
       ]
     }
   ],
   "capability_contracts": [
+    {
+      "id": "revision_bound_release_alignment",
+      "state": "supported",
+      "profiles": ["compile", "build", "initialisation"],
+      "request": "Produce a release build whose ultimate ideal is internally aligned",
+      "behavior": "Require every external record to come from a clean strict qualification build with immutable governed build inputs and to carry the gate-generated JUnit/log, independently rerun complete JUnit/inventory, alignment receipt, and copied candidate executable bytes under one cross-checked hash chain; then require one authority for every model-derived domain, a deterministic model-bound release receipt, a fresh artifact-bound zero-skip release gate, installed-product rehashing before render or viewer initialisation, and top-level readiness that remains false outside an aligned release.",
+      "evidence": [
+        {"kind": "ctest", "name": "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected"},
+        {"kind": "ctest", "name": "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness"},
+        {"kind": "gtest", "name": "AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority"},
+        {"kind": "gtest", "name": "BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation"}
+      ]
+    },
     {
       "id": "polarised_thin_disk_cpu",
       "state": "supported",
@@ -301,9 +510,9 @@
     {
       "id": "viewer_native_window_input",
       "state": "attestation_required",
-      "profiles": ["viewer-native-window"],
-      "request": "GLFW/OpenGL window creation and native keyboard/pointer event delivery",
-      "behavior": "Admit only a viewer-native-window-input attestation containing observed keyboard and pointer callbacks.",
+      "profiles": ["viewer-native-window-input"],
+      "request": "Native GLFW/OpenGL window with a physical-Radeon Vulkan refinement frame and host-delivered keyboard/pointer events",
+      "behavior": "Admit only a strict-qualification viewer-native-window-input attestation that binds the copied candidate executable and its build gate to a published progressive Vulkan frame, the selected physical Radeon, full non-skipping tests, and observed keyboard and pointer callbacks in hashed evidence.",
       "evidence": [
         {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
       ]
@@ -335,7 +544,7 @@
       "state": "attestation_required",
       "profiles": ["physical-radeon-780m"],
       "request": "Physical Radeon 780M Vulkan runtime support",
-      "behavior": "Admit only selected non-software Radeon 780M device evidence with readiness, full tests, artefact hashes, and driver identity.",
+      "behavior": "Admit only strict-qualification evidence binding the copied candidate executable and its build gate to selected non-software Radeon 780M readiness, full tests, artefact hashes, and driver identity.",
       "evidence": [
         {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
       ]
@@ -355,9 +564,10 @@
       "state": "attestation_required",
       "profiles": ["windows-native-build", "windows-native-vulkan"],
       "request": "Native Windows compilation/tests and native Vulkan runtime",
-      "behavior": "CI emits a verified build attestation; native Vulkan remains a distinct physical-device attestation and may not use Dozen.",
+      "behavior": "CI emits a clean strict-qualification build attestation bound to the copied tested executable, exact product gate, and complete zero-skip estate; native Vulkan remains a distinct physical-device attestation and may not use Dozen.",
       "evidence": [
-        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
+        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"},
+        {"kind": "ctest", "name": "OperationalAttestation.NativeRuntimeProducerRejectsWrongHostAndDevice"}
       ]
     },
     {
@@ -365,20 +575,23 @@
       "state": "attestation_required",
       "profiles": ["macos-native-build", "macos-moltenvk"],
       "request": "Native macOS compilation/tests and MoltenVK runtime",
-      "behavior": "CI emits a verified build attestation; runtime closure separately requires physical MoltenVK driver evidence.",
+      "behavior": "CI emits a clean strict-qualification build attestation bound to the copied tested executable, exact product gate, and complete zero-skip estate; runtime closure separately requires physical MoltenVK driver evidence.",
       "evidence": [
-        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
+        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"},
+        {"kind": "ctest", "name": "OperationalAttestation.NativeRuntimeProducerRejectsWrongHostAndDevice"}
       ]
     },
     {
       "id": "physical_imax_5616x4096",
       "state": "attestation_required",
       "profiles": ["physical-imax-5616x4096"],
-      "request": "Full 5616x4096 physical-device render under a 2048 MiB governed budget",
-      "behavior": "Static memory planning is necessary but insufficient; closure requires exact decoded PNG dimensions, measured wall time, physical device identity, and hashed artefacts.",
+      "request": "Full 5616x4096 physical-device P3/P5 render under a 2048 MiB governed budget",
+      "behavior": "Static memory planning is necessary but insufficient; closure requires exact decoded PNG dimensions and point-star structure in a disk-free frame, measured wall time, physical device identity, hashed artefacts, and one completed typed-session transcript event binding the display-calibrated beam-filtered 100000-star catalogue to Vulkan dispatch with a moving finite-aperture camera in the same governed scene.",
       "evidence": [
         {"kind": "gtest", "name": "MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile"},
         {"kind": "gtest", "name": "StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope"},
+        {"kind": "gtest", "name": "VulkanRenderSession.CombinedParitySceneRetainsResolvedImageStructure"},
+        {"kind": "gtest", "name": "RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration"},
         {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
       ]
     }

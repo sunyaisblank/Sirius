@@ -22,12 +22,10 @@
 #include "sirius/core/polarisation/walker_penrose.h"
 #include "sirius/core/tensor.h"
 
+#include <array>
 #include <cmath>
 #include <memory>
-
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
+#include <numbers>
 
 namespace sirius::backend {
 
@@ -63,8 +61,8 @@ struct TraceResult {
     float gfactor_grav = 1.0f;
     float gfactor_gamma = 1.0f;
     float gfactor_v_orb = 0.0f;
-    float gfactor_A = 0.0f;
-    float gfactor_B = 0.0f;
+    float gfactor_cosine_coefficient = 0.0f;
+    float gfactor_sine_coefficient = 0.0f;
 
     // Diagnostics.
     int steps_taken = 0;
@@ -101,11 +99,11 @@ struct TraceResult {
         bool polarisation_valid = false;
     };
 
-    DiskCrossing disk_crossings[kMaxDiskCrossings] = {};
+    std::array<DiskCrossing, kMaxDiskCrossings> disk_crossings{};
     int num_disk_crossings = 0;
 
     // Volumetric disk accumulation (ray marching through a 3D disk).
-    float volumetric_emission[3] = {0.0f, 0.0f, 0.0f};
+    std::array<float, 3> volumetric_emission{};
     float optical_depth = 0.0f;
     float volumetric_path_length = 0.0f;
     bool volumetric_hit = false;
@@ -197,8 +195,8 @@ struct TracerConfig {
 
     // Volumetric disk.
     bool enable_volumetric = false;
-    float volumetric_H_over_r = 0.1f;
-    float volumetric_H_power = 0.25f;
+    float volumetric_scale_height_ratio = 0.1f;
+    float volumetric_flare_power = 0.25f;
     float volumetric_tau_midplane = 10.0f;
     int volumetric_samples = 32;
     float volumetric_tau_max = 10.0f;
@@ -238,7 +236,11 @@ class GeodesicTracer {
     // to the ISCO for the new spin.
     TraceResult Trace(const sirius::core::CameraRay& camera_ray, double mass, double spin);
 
-    void SetConfig(const TracerConfig& config) { config_ = config; }
+    void SetConfig(const TracerConfig& config) {
+        config_ = config;
+        config_.turbulence.Validate();
+        config_.corona.Validate();
+    }
     const TracerConfig& GetConfig() const { return config_; }
     void SetMetric(sirius::core::IMetric* metric) { metric_ = metric; }
 
@@ -355,7 +357,10 @@ class GeodesicTracer {
 // ---- Inline implementations -------------------------------------------------
 
 inline GeodesicTracer::GeodesicTracer(sirius::core::IMetric* metric, const TracerConfig& config)
-    : metric_(metric), config_(config) {}
+    : metric_(metric), config_(config) {
+    config_.turbulence.Validate();
+    config_.corona.Validate();
+}
 
 inline void GeodesicTracer::CacheMetricParameters() {
     const auto& params = metric_->GetParameters();

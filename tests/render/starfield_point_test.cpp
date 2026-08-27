@@ -16,6 +16,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <numbers>
 #include <vector>
 
 namespace {
@@ -44,7 +45,7 @@ TEST(StarfieldPointTest, CatalogueMeetsSizeFloorAndIsFinite) {
     auto stars = gen.GenerateCatalogue();
 
     ASSERT_GE(stars.size(), 100000u);
-    for (size_t i = 0; i < stars.size(); i += 97) {  // Sample the catalogue.
+    for (std::size_t i = 0; i < stars.size(); i += 97) {  // Sample the catalogue.
         const auto& s = stars[i];
         double n = std::sqrt(s.direction_x * s.direction_x + s.direction_y * s.direction_y +
                              s.direction_z * s.direction_z);
@@ -84,7 +85,7 @@ TEST(StarfieldPointTest, BeamAccumulationFiniteAndNonConstant) {
     double first = -1.0;
     bool non_constant = false;
     for (int i = 0; i < 200; ++i) {
-        double th = M_PI * (i + 0.5) / 200.0;
+        double th = std::numbers::pi * (i + 0.5) / 200.0;
         float dx = static_cast<float>(std::sin(th));
         float dy = 0.0f;
         float dz = static_cast<float>(std::cos(th));
@@ -165,8 +166,9 @@ TEST(StarfieldPointTest, EllipticalFootprintUsesBothAxesAndOrientation) {
                                     circular_g, circular_b);
     generator.AccumulateThroughBeam(1.0f, 0.0f, 0.0f, 0.03f, 0.003f, 0.0f, stars, index,
                                     horizontal_r, horizontal_g, horizontal_b);
-    generator.AccumulateThroughBeam(1.0f, 0.0f, 0.0f, 0.03f, 0.003f, static_cast<float>(M_PI_2),
-                                    stars, index, vertical_r, vertical_g, vertical_b);
+    generator.AccumulateThroughBeam(1.0f, 0.0f, 0.0f, 0.03f, 0.003f,
+                                    static_cast<float>(std::numbers::pi / 2.0), stars, index,
+                                    vertical_r, vertical_g, vertical_b);
 
     const float circular = circular_r + circular_g + circular_b;
     const float horizontal = horizontal_r + horizontal_g + horizontal_b;
@@ -191,7 +193,8 @@ TEST(StarfieldPointTest, ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope) 
         << "the filtered-star catalogue/index cannot be resident on the 2 GiB floor target";
 
     std::size_t candidates = 0;
-    const float imax_pixel_sigma = (60.0f * static_cast<float>(M_PI) / 180.0f) / 4096.0f;
+    const float imax_pixel_sigma =
+        (60.0f * static_cast<float>(std::numbers::pi) / 180.0f) / 4096.0f;
     index.ForEachCandidate(1.0f, 0.0f, 0.0f, imax_pixel_sigma,
                            [&](std::uint32_t) { ++candidates; });
     EXPECT_LT(candidates, stars.size() / 100)
@@ -220,7 +223,7 @@ TEST(StarfieldPointTest, BeamFootprintSuppressesStarFlicker) {
 
     const int width = 24, height = 14;
     const float fov = 40.0f;
-    double pixel_angular = (fov * M_PI / 180.0) / height;
+    double pixel_angular = (fov * std::numbers::pi / 180.0) / height;
 
     TracerConfig tc;
     tc.escape_radius = 80.0f;
@@ -246,7 +249,7 @@ TEST(StarfieldPointTest, BeamFootprintSuppressesStarFlicker) {
     for (int f = 0; f < frames; ++f) {
         CameraConfig cam;
         cam.r = 50.0;
-        cam.theta = M_PI / 2.0;
+        cam.theta = std::numbers::pi / 2.0;
         cam.phi = 0.0;
         cam.fov = fov;
         cam.width = width;

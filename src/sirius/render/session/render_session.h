@@ -1,5 +1,7 @@
 #pragma once
 
+#include "sirius/base/error.h"
+
 // FSM-based CPU render session: owns tile scheduling, progress tracking, the
 // display buffer, and the physics components (metric, tracer, camera, jets).
 // Ported from SNRS001A.h.
@@ -7,7 +9,7 @@
 // OptiX is retired. Vulkan enters through sirius::backend::device behind the
 // same asynchronous, cancellable session lifecycle as the CPU reference path.
 
-#include "sirius/render/render_config.h"
+#include "sirius/render/film_config.h"
 #include "sirius/render/session/display_buffer.h"
 #include "sirius/render/session/progress_tracker.h"
 #include "sirius/render/session/session_events.h"
@@ -29,6 +31,7 @@
 
 #include <atomic>
 #include <condition_variable>
+#include <cstddef>
 #include <functional>
 #include <memory>
 #include <mutex>
@@ -89,125 +92,133 @@ enum class WormholeTopology {
     TwoSheet,
 };
 
+enum class DiskTemperatureModel : std::uint8_t {
+    NovikovThorne,
+    ShakuraSunyaev,
+};
+
 // Configuration consumed by the render session.
 struct SessionConfig {
     int width = 1920;
     int height = 1080;
-    int tileSize = 64;
-    int samplesPerPixel = 64;
-    int threadCount = 0;                  // 0 = auto-detect, 1 = single-threaded.
-    bool enableParallelRendering = true;  // Multi-threaded tile rendering.
-    bool writeOutput = true;              // False for in-memory progressive previews.
+    int tile_size = 64;
+    int samples_per_pixel = 64;
+    int thread_count = 0;                   // 0 = auto-detect, 1 = single-threaded.
+    bool enable_parallel_rendering = true;  // Multi-threaded tile rendering.
+    bool write_output = true;               // False for in-memory progressive previews.
 
     // Backend selection. Since the go-live flip (owner decision, 2026-07-18)
     // `auto` in the external config resolves to Vulkan when a device is present
     // and the complete scene is represented, falling back to Cpu with the
     // reason logged; `vulkan` selects Vulkan unconditionally and `cpu` pins CPU.
     RenderBackend backend = RenderBackend::Cpu;
-    std::string outputPath = "render.ppm";
+    std::string output_path = "render.ppm";
 
     // Spacetime identity and parameters; the id comes from the core registry.
-    core::MetricId metricId = core::MetricId::Schwarzschild;
-    double blackHoleMass = 1.0;
-    double blackHoleSpin = 0.0;
-    double blackHoleCharge = 0.0;       // Q/M (Reissner-Nordstrom, Kerr-Newman).
-    double cosmologicalConstant = 0.0;  // Lambda (de Sitter family, spin = 0 only).
-    double observerDistance = 50.0;
-    double observerInclination = 1.5708;  // 90 degrees.
-    double observerAzimuth = 0.0;
-    float cameraFOV = 60.0f;
+    core::MetricId metric_id = core::MetricId::Schwarzschild;
+    double black_hole_mass = 1.0;
+    double black_hole_spin = 0.0;
+    double black_hole_charge = 0.0;      // Q/M (Reissner-Nordstrom, Kerr-Newman).
+    double cosmological_constant = 0.0;  // Lambda (de Sitter family, spin = 0 only).
+    double observer_distance = 50.0;
+    double observer_inclination = 1.5708;  // 90 degrees.
+    double observer_azimuth = 0.0;
+    float camera_fov = 60.0f;
 
     // Camera four-velocity (P5): spatial beta in the local ray-component frame
     // (forward, up, right) = direction indices (1, 2, 3). Zero is a static
     // camera; the pinned render never sets these.
-    double cameraBetaForward = 0.0;
-    double cameraBetaUp = 0.0;
-    double cameraBetaRight = 0.0;
-    core::LensType lensType = core::LensType::Pinhole;
-    float cameraFocalLength = 50.0f;
-    float cameraAperture = 2.8f;
-    float cameraFocusDistance = 50.0f;
+    double camera_beta_forward = 0.0;
+    double camera_beta_up = 0.0;
+    double camera_beta_right = 0.0;
+    core::LensType lens_type = core::LensType::Pinhole;
+    float camera_focal_length = 50.0f;
+    float camera_aperture = 2.8f;
+    float camera_focus_distance = 50.0f;
 
     // Disk temperature model.
-    DiskTemperatureModel temperatureModel = DiskTemperatureModel::NovikovThorne;
-    float diskTemperatureScale = 50000.0f;  // T_scale (Kelvin).
-    bool enableDisk = true;
+    DiskTemperatureModel temperature_model = DiskTemperatureModel::NovikovThorne;
+    float disk_temperature_scale = 50000.0f;  // T_scale (Kelvin).
+    bool enable_disk = true;
 
     // Doppler beaming toggle (P4). True (default) keeps the full disk physics and
     // the pinned render; false suppresses the approaching/receding asymmetry.
-    bool dopplerBeaming = true;
+    bool doppler_beaming = true;
 
     // Exotic metric parameters.
-    double throatRadius = 1.0;  // Morris-Thorne b0.
-    WormholeTopology wormholeTopology = WormholeTopology::OneSheetCapture;
-    double warpVelocity = 0.5;  // Alcubierre vs.
-    double bubbleRadius = 1.0;  // Alcubierre R.
-    double bubbleSigma = 0.5;   // Alcubierre sigma.
+    double throat_radius = 1.0;  // Morris-Thorne b0.
+    WormholeTopology wormhole_topology = WormholeTopology::OneSheetCapture;
+    double warp_velocity = 0.5;  // Alcubierre vs.
+    double bubble_radius = 1.0;  // Alcubierre R.
+    double bubble_sigma = 0.5;   // Alcubierre sigma.
 
     // Post-processing (cinematic defaults).
     core::TonemapType tonemapper = core::TonemapType::Aces;  // Display transform (PPM/PNG).
-    bool enableBloom = true;
-    float bloomIntensity = 0.5f;
-    float bloomThreshold = 0.3f;
+    bool enable_bloom = true;
+    float bloom_intensity = 0.5f;
+    float bloom_threshold = 0.3f;
     float exposure = 3.0f;
     float contrast = 1.1f;
     float saturation = 1.15f;
 
     // Motion blur (disk rotation).
-    bool enableMotionBlur = false;
-    float shutterTime = 0.1f;
-    int motionBlurSamples = 3;
+    bool enable_motion_blur = false;
+    float shutter_time = 0.1f;
+    int motion_blur_samples = 3;
 
     // Volumetric disk.
-    bool enableVolumetricDisk = false;
-    float volumetricHOverR = 0.1f;
-    float volumetricHPower = 0.25f;
-    float volumetricTauMidplane = 10.0f;
-    int volumetricSamples = 32;
+    bool enable_volumetric_disk = false;
+    float volumetric_h_over_r = 0.1f;
+    float volumetric_h_power = 0.25f;
+    float volumetric_tau_midplane = 10.0f;
+    int volumetric_samples = 32;
 
     // Relativistic jets.
-    bool enableJets = false;
-    float jetLorentzFactor = 5.0f;
-    float jetOpeningAngle = 0.1f;
-    float jetLaunchRadius = 3.0f;
-    float jetMaxExtent = 200.0f;
-    float jetCollimation = 0.5f;
-    float jetSpectralIndex = 2.2f;
-    float jetIntensity = 1.0f;
+    bool enable_jets = false;
+    float jet_lorentz_factor = 5.0f;
+    float jet_opening_angle = 0.1f;
+    float jet_launch_radius = 3.0f;
+    float jet_max_extent = 200.0f;
+    float jet_collimation = 0.5f;
+    float jet_spectral_index = 2.2f;
+    float jet_intensity = 1.0f;
 
     // Astronomical colouring mode.
     using ColorMode = core::color_modes::Mode;
-    ColorMode colorMode = core::color_modes::Mode::TrueColor;
+    ColorMode color_mode = core::color_modes::Mode::TrueColor;
 
     // Polarisation transport is a strict companion to ColorMode::Polarisation.
     // Typed callers must set both coherently; the external schema derives this
     // bool from its single colorMode field.
-    bool enablePolarisation = false;
+    bool enable_polarisation = false;
 
     // Optional deterministic density turbulence and inverse-Compton corona
     // contributions on both live volumetric transfer paths.
-    bool enableTurbulence = false;
-    bool enableCorona = false;
+    bool enable_turbulence = false;
+    bool enable_corona = false;
 
     // Depth-resolved starfield catalogue parameters.
-    core::StarfieldConfig starfieldConfig;
+    core::StarfieldConfig starfield_config;
 
     // Filtered point-source star field (P3): render catalogue stars through the
     // beam footprint instead of the equirectangular texture. Default false keeps
     // the texture path and the pinned render.
-    bool pointStarfield = false;
+    bool point_starfield = false;
 
     // Ray bundles (P2): propagate geodesic deviation on the live path and derive
     // per-pixel beam footprints. Default false keeps the point-sampled path.
-    bool rayBundles = false;
+    bool ray_bundles = false;
 
     // IMAX 70mm film simulation.
-    bool enableFilmSimulation = false;
-    FilmConfig filmConfig;
-
-    // Build a SessionConfig from the unified render-config schema.
-    static SessionConfig FromSiriusConfig(const SiriusConfig& config);
+    bool enable_film_simulation = false;
+    FilmConfig film_config;
 };
+
+// Canonical, machine-readable witness emitted from the typed configuration
+// that the session actually consumes. External attestation compares this event
+// with its claims instead of trusting runbook metadata alone.
+[[nodiscard]] std::string SessionSceneEvidenceJson(const SessionConfig& config,
+                                                   std::size_t point_star_count);
 
 // Typed boundary shared by CPU initialisation and Vulkan capability selection.
 // Small positive dimensions remain legal for probes, while production limits
@@ -219,7 +230,7 @@ class RenderSession {
   public:
     using FSM = StateMachine<SessionState, SessionEvent, 14>;
     using CompletionCallback =
-        std::function<void(SessionState finalState, const std::string& message)>;
+        std::function<void(SessionState final_state, const std::string& message)>;
 
     RenderSession() : fsm_(kSessionConfig) { SetupActions(); }
     ~RenderSession();
@@ -229,8 +240,8 @@ class RenderSession {
     RenderSession(RenderSession&&) = delete;
     RenderSession& operator=(RenderSession&&) = delete;
 
-    // Configure the session (must be in the Idle state).
-    bool Configure(const SessionConfig& config);
+    // Configure and validate the session (must be in the Idle state).
+    [[nodiscard]] base::Expected<void> Configure(const SessionConfig& config);
 
     // Launch asynchronously. Execute() is the synchronous convenience wrapper.
     bool Start();
@@ -267,7 +278,7 @@ class RenderSession {
     void SetupActions();
     void OnEnterState(SessionState state);
 
-    void Initialise();
+    [[nodiscard]] base::Expected<void> Initialise();
     void ScheduleNextTile();
     void RenderTile(Tile* tile);
     // Vulkan render path: dispatches the trace kernel per governed tile and
@@ -276,7 +287,7 @@ class RenderSession {
     // backend is absent, the metric is not on the Vulkan render path, or the
     // device cannot be opened.
     void RenderVulkanPath();
-    void WriteOutput();
+    [[nodiscard]] base::Expected<void> WriteOutput();
     void OnSessionEnd(SessionState state);
 
     // Shaded result of a single ray sample.

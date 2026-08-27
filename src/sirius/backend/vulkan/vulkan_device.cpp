@@ -9,6 +9,10 @@
 #include <string_view>
 #include <utility>
 
+#if defined(__linux__)
+#include <dlfcn.h>
+#endif
+
 namespace sirius::backend {
 
 namespace {
@@ -84,6 +88,50 @@ constexpr std::uint32_t kApiVersion = VK_MAKE_API_VERSION(0, 1, 3, 0);
         .render_memory_bytes = render_memory,
         .supports_fp64 = features.shaderFloat64 == VK_TRUE,
     };
+}
+
+[[nodiscard]] Expected<void> RetainDozenThreadRuntime(const DeviceInfo& info) {
+#if defined(__linux__)
+    if (info.driver_id != static_cast<std::uint32_t>(VK_DRIVER_ID_MESA_DOZEN)) {
+        return {};
+    }
+
+    // WSL's D3D12 runtime registers a pthread TLS destructor from
+    // libd3d12core.so. Dozen normally dlcloses the libd3d12 wrapper and its
+    // core with the Vulkan instance, which can leave a render worker calling
+    // unmapped code as the thread exits. Process-lifetime references to both
+    // mappings keep the registered destructor valid. The raw handles are
+    // intentionally never dlclosed: the required lifetime is the process,
+    // not a VulkanDevice instance.
+    struct RuntimeLease {
+        void* core = nullptr;
+        void* wrapper = nullptr;
+        std::string error;
+    };
+    static const RuntimeLease lease = [] {
+        dlerror();
+        void* core = dlopen("libd3d12core.so", RTLD_NOW | RTLD_LOCAL);
+        const char* core_error = core == nullptr ? dlerror() : nullptr;
+        if (core == nullptr) {
+            return RuntimeLease{.error = core_error == nullptr ? "could not load libd3d12core.so"
+                                                               : core_error};
+        }
+        dlerror();
+        void* wrapper = dlopen("libd3d12.so", RTLD_NOW | RTLD_LOCAL);
+        const char* wrapper_error = wrapper == nullptr ? dlerror() : nullptr;
+        return RuntimeLease{
+            .core = core,
+            .wrapper = wrapper,
+            .error = wrapper_error == nullptr ? "could not load libd3d12.so" : wrapper_error,
+        };
+    }();
+    if (lease.core == nullptr || lease.wrapper == nullptr) {
+        return Fail(ErrorDomain::kDevice, "retain Dozen D3D12 thread runtime", lease.error);
+    }
+#else
+    (void)info;
+#endif
+    return {};
 }
 
 [[nodiscard]] Expected<VkInstance> CreateInstance() {
@@ -186,6 +234,9 @@ Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {
     }
     device->physical_ = (*physicals)[index];
     device->info_ = DescribeDevice(device->physical_);
+    if (auto retained = RetainDozenThreadRuntime(device->info_); !retained) {
+        return std::unexpected(retained.error());
+    }
 
     // Queue family with compute.
     std::uint32_t family_count = 0;

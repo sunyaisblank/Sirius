@@ -6,6 +6,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <numbers>
 
 namespace sirius::test {
 using namespace sirius::oracle;
@@ -158,7 +159,7 @@ TEST_F(GeodesicStateDTests, ConstructionFromPosAndMom) {
 }
 
 TEST_F(GeodesicStateDTests, ConservedQuantitiesSchwarzschildLike) {
-    sirius::oracle::Vec4d pos(0.0, 10.0, M_PI / 2.0, 0.0);
+    sirius::oracle::Vec4d pos(0.0, 10.0, std::numbers::pi / 2.0, 0.0);
     sirius::oracle::Vec4d mom(-0.9, 0.3, 0.0, 3.0);
     sirius::oracle::GeodesicStateD g(pos, mom);
     g.ComputeConservedQuantities(0.0);  // a=0 (Schwarzschild)

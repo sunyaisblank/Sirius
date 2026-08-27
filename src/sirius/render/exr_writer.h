@@ -11,6 +11,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdint>
 #include <cstdio>
 #include <sstream>
 #include <string>
@@ -19,24 +20,24 @@ namespace sirius::render {
 
 // Metadata embedded in (or accompanying) an EXR file.
 struct EXRMetadata {
-    std::string softwareVersion = "Sirius 1.0";
-    std::string cameraModel;
-    std::string metricType;
+    std::string software_version = "Sirius 1.0";
+    std::string camera_model;
+    std::string metric_type;
 
     // Physical parameters.
-    double blackHoleMass = 1.0;
-    double blackHoleSpin = 0.0;
-    double observerDistance = 50.0;
-    double observerInclination = 90.0;
+    double black_hole_mass = 1.0;
+    double black_hole_spin = 0.0;
+    double observer_distance = 50.0;
+    double observer_inclination = 90.0;
 
     // Render parameters.
-    int samplesPerPixel = 1;
-    double renderTimeSeconds = 0.0;
+    int samples_per_pixel = 1;
+    double render_time_seconds = 0.0;
 
     // Sirius currently emits its linear working RGB values without an ACES
     // primary conversion. State that exactly instead of attaching false ACES
     // chromaticity metadata.
-    std::string colorSpace = "Sirius linear RGB";
+    std::string color_space = "Sirius linear RGB";
     std::string chromaticities = "unspecified";
 };
 
@@ -47,21 +48,21 @@ class EXRWriter {
     static std::string GenerateMetadataHeader(const EXRMetadata& meta) {
         std::ostringstream oss;
 
-        oss << "# " << meta.colorSpace << "\n";
+        oss << "# " << meta.color_space << "\n";
         oss << "# Sirius Ray Tracer\n";
-        oss << "# Software: " << meta.softwareVersion << "\n";
+        oss << "# Software: " << meta.software_version << "\n";
         oss << "#\n";
         oss << "# Physical Parameters:\n";
-        oss << "#   Black Hole Mass: " << meta.blackHoleMass << " M_sun\n";
-        oss << "#   Black Hole Spin: " << meta.blackHoleSpin << "\n";
-        oss << "#   Observer Distance: " << meta.observerDistance << " M\n";
-        oss << "#   Observer Inclination: " << meta.observerInclination << " deg\n";
+        oss << "#   Black Hole Mass: " << meta.black_hole_mass << " M_sun\n";
+        oss << "#   Black Hole Spin: " << meta.black_hole_spin << "\n";
+        oss << "#   Observer Distance: " << meta.observer_distance << " M\n";
+        oss << "#   Observer Inclination: " << meta.observer_inclination << " deg\n";
         oss << "#\n";
         oss << "# Render Settings:\n";
-        oss << "#   Samples Per Pixel: " << meta.samplesPerPixel << "\n";
-        oss << "#   Render Time: " << meta.renderTimeSeconds << " s\n";
+        oss << "#   Samples Per Pixel: " << meta.samples_per_pixel << "\n";
+        oss << "#   Render Time: " << meta.render_time_seconds << " s\n";
         oss << "#\n";
-        oss << "# Color Space: " << meta.colorSpace << "\n";
+        oss << "# Color Space: " << meta.color_space << "\n";
 
         return oss.str();
     }
@@ -89,10 +90,42 @@ class EXRWriter {
             return false;
         }
 
-        auto srgb = buffer.ToSrgb8();
+        std::vector<std::uint8_t> srgb(buffer.pixels.size());
+        std::transform(buffer.pixels.begin(), buffer.pixels.end(), srgb.begin(), EncodeSrgb8);
         const std::size_t written = std::fwrite(srgb.data(), 1, srgb.size(), fp);
         const int close_result = std::fclose(fp);
         return written == srgb.size() && close_result == 0;
+    }
+
+    // Write display-linear RGBA pixels as an RGB PPM. This is the render
+    // session's PPM boundary: alpha is discarded and this writer applies the
+    // one and only sRGB transfer encode.
+    static bool WritePpmRgba(const std::string& path, int width, int height, const float* pixels) {
+        if (width <= 0 || height <= 0 || pixels == nullptr) return false;
+        const std::size_t pixel_count = static_cast<std::size_t>(width) * height;
+        if (!std::all_of(pixels, pixels + pixel_count * 4,
+                         [](float value) { return std::isfinite(value); })) {
+            return false;
+        }
+
+        FILE* fp = std::fopen(path.c_str(), "wb");
+        if (!fp) return false;
+        if (std::fprintf(fp, "P6\n%d %d\n255\n", width, height) < 0) {
+            std::fclose(fp);
+            return false;
+        }
+
+        bool write_ok = true;
+        for (std::size_t i = 0; i < pixel_count; ++i) {
+            const std::uint8_t rgb[3] = {EncodeSrgb8(pixels[i * 4]), EncodeSrgb8(pixels[i * 4 + 1]),
+                                         EncodeSrgb8(pixels[i * 4 + 2])};
+            if (std::fwrite(rgb, 1, sizeof(rgb), fp) != sizeof(rgb)) {
+                write_ok = false;
+                break;
+            }
+        }
+        const int close_result = std::fclose(fp);
+        return write_ok && close_result == 0;
     }
 
     // Explicit PFM writer (portable float map, HDR, little-endian, bottom-to-top).
@@ -112,7 +145,7 @@ class EXRWriter {
 
         bool write_ok = true;
         for (int y = buffer.height - 1; y >= 0; --y) {
-            const size_t idx = static_cast<size_t>(y) * buffer.width * 3;
+            const std::size_t idx = static_cast<std::size_t>(y) * buffer.width * 3;
             const std::size_t written = std::fwrite(&buffer.pixels[idx], sizeof(float),
                                                     static_cast<std::size_t>(buffer.width) * 3, fp);
             if (written != static_cast<std::size_t>(buffer.width) * 3) {
@@ -123,6 +156,14 @@ class EXRWriter {
 
         const int close_result = std::fclose(fp);
         return write_ok && close_result == 0;
+    }
+
+  private:
+    static std::uint8_t EncodeSrgb8(float linear) {
+        const float clamped = std::clamp(linear, 0.0f, 1.0f);
+        const float srgb = clamped <= 0.0031308f ? 12.92f * clamped
+                                                 : 1.055f * std::pow(clamped, 1.0f / 2.4f) - 0.055f;
+        return static_cast<std::uint8_t>(std::clamp(srgb * 255.0f + 0.5f, 0.0f, 255.0f));
     }
 };
 

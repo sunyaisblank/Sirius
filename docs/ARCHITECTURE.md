@@ -7,8 +7,8 @@ This document is the design authority for the rebuilt system. It records the lay
 The system keeps the July layering, orchestration above primitives, dependencies pointing downward only, and adds one layer the old system lacked: a device abstraction that makes every GPU vendor an adapter rather than an architecture.
 
 ```
-sirius::app        CLI, configuration, session orchestration, viewer
-sirius::render     tracing orchestration, tiles, memory governor, output writers
+sirius::app        CLI, external configuration, typed session projection, viewer
+sirius::render     session lifecycle, tiles, memory governor, output writers
 sirius::backend    device abstraction: CPU tracer, Vulkan compute, future adapters
 sirius::kernels    Slang single-source device physics (+ generated tables)
 sirius::core       metrics, geodesics, tensors, disk, spectral, camera, constants
@@ -17,6 +17,59 @@ sirius::base       contracts, error types, threading and SIMD seams
 ```
 
 `core` and `oracle` compile and test with no GPU, no window, and no Slang toolchain present. `kernels` is source consumed by `backend` at build time; nothing above `backend` knows which device executes a render.
+
+Each compiled implementation has one CMake owner. `sirius_backend_cpu` always
+owns the CPU tracer; `sirius_backend` owns only the optional Vulkan device; and
+`sirius_render` consumes those targets without compiling their source files.
+Application JSON structs stay in `app/config`, retain the public camel-case JSON
+wire keys for compatibility, and project once into closed render-domain enums
+and snake-case values through `session_config_adapter`. Exceptions do not cross
+that boundary: projection returns `std::expected<SessionConfig, Error>`.
+
+The interactive viewer follows the same ownership rule. Its public header holds
+declarations and state; `viewer/interactive_viewer.cpp` owns the threaded
+refinement loop. CLI and test translation units therefore do not compile the
+viewer implementation through an oversized header.
+
+The source repository contains only these durable top-level concerns:
+
+| Path | Ownership |
+|---|---|
+| `src/sirius/` | First-party C++ and Slang, split by the layers above |
+| `tests/` | Unit, oracle, backend, render, application, and operational gates |
+| `scripts/` | Test-label, operating-model, structure, attestation governance, and native evidence producers |
+| `cmake/` | Toolchain, dependency, embedded-model, and install-volume logic |
+| `assets/` | Required runtime assets installed with the executable |
+| `lib/` | Only the four live header/source vendors enumerated in section 8 |
+| `docs/` | Specification, architecture, style, current review, and history |
+
+`scripts/verify-repository-structure.py` makes this more than a diagram: normal
+builds fail if a translation unit gains two owners, a lower layer reaches up, a
+retired vendor/configuration path returns, or boundary identifiers regress.
+
+External evidence has the same one-authority shape. Individual bundles are
+validated by `verify-attestation.py`; `verify-alignment.py` admits exactly one
+witness for each model-derived required domain at one clean revision and emits
+the sole alignment receipt, including the exact operating-model digest. An
+external witness is admissible only from a strict, non-packageable qualification
+build: its copied candidate executable, qualification gate, gate-generated
+JUnit/log, independently rerun JUnit/live inventory, and configure-time
+alignment receipt form one cross-checked byte and test-identity chain.
+Development artifacts cannot enter that chain, while qualification may retain
+pending domains so evidence production does not circularly require the release
+it is intended to enable. CMake
+rechecks and embeds that receipt, while
+`app/alignment_authority` compares the installed copy with the compiled bytes
+before operational initialisation and exposes the exact admitted/pending/required
+domain partition through readiness. Thus upstream evidence cannot drift from the
+downstream runtime claim or collapse into an unactionable count.
+
+External test-estate claims follow the same rule: CTest's JSON registration is
+hashed beside JUnit, the enabled-name sets must be identical, and a local
+source parser plus the external verifier independently enforce the model's
+700-case floor so a trivially self-consistent subset cannot become an authority.
+Runtime records additionally bind the clean
+configure receipt to the JUnit case that compared it with the compiled binary.
 
 ## 2. Single authorities
 
@@ -43,9 +96,14 @@ authority reports this as `explicit-schema`, never as native reflection.
 
 All device physics is written once, in Slang, as modules with interfaces per concern (metric family, integrator, disk emission, beam propagation). Slang was chosen over three alternatives: raw GLSL lacks the module and generics system a physics library needs; SYCL single-source C++ has no Metal path and weak Windows support outside oneAPI; WGSL has no 64-bit floating point at all. Slang compiles the same source to SPIR-V for Vulkan today, and to CUDA, Metal, and HLSL when a native adapter earns its keep by profiling; the compiler is Khronos-hosted, Apache-licensed, and ships prebuilt for all three desktop platforms.
 
-Two live integrators exist by design, and the difference is methodological rather than accidental. The kernel integrates Cartesian geodesics with fixed-form RK4 and compensated or fp64 state accumulation on the corresponding precision rungs; the CPU reference tracer uses adaptive Dormand-Prince RK45. The time-transformed Yoshida symplectic integrator is deliberately confined to the double-precision oracle stack. Two independent live methods agreeing within stated tolerance is stronger evidence than one method executed twice, so backend parity gates are statistical (per-pixel relative radiance bounds, conserved-quantity drift bounds) rather than bitwise. The reference tapes in `renders/` remain CPU-produced.
+Two live integrators exist by design, and the difference is methodological rather than accidental. The kernel integrates Cartesian geodesics with fixed-form RK4 and compensated or fp64 state accumulation on the corresponding precision rungs; the CPU reference tracer uses adaptive Dormand-Prince RK45. A fixed-step Yoshida composition of implicit-midpoint maps is deliberately confined to the double-precision oracle stack; its canonical two-form is tested directly, while state-dependent step selection and optional null projection are not misreported as symplectic operations. Two independent live methods agreeing within stated tolerance is stronger evidence than one method executed twice, so backend parity gates are statistical (per-pixel relative radiance bounds, conserved-quantity drift bounds) rather than bitwise. The reference tapes in `renders/` remain CPU-produced.
 
-Precision inside kernels follows the ladder in section 6; conserved quantities (E, L_z, Carter Q, the null condition) are monitored per ray and renormalised on the schedule the constants authority sets, exactly as the CPU path does.
+Precision inside kernels follows the ladder in section 6. Full-ray Mandatory
+diagnostics independently measure energy, axial angular momentum, Carter Q,
+and the null residual on the CPU RK45 and Vulkan Cartesian-RK4 paths. The CPU
+integrator additionally re-normalises a ray when its null residual crosses the
+owned threshold; the Vulkan render loop remains the fixed RK4 method being
+measured and is not silently altered by its diagnostic.
 
 ## 4. Backends and platforms
 
@@ -59,6 +117,14 @@ Precision inside kernels follows the ladder in section 6; conserved quantities (
 | Slang→Metal native | Apple silicon | Emission is a standing build gate: trace.slang → trace.metal every build, entry point pinned by the KernelPortability suite; adapter deferred |
 
 WSL2 is a named platform tier, not an afterthought: no native GPU kernel driver exists there, so the backend probes in order Dozen (Vulkan over the D3D12 paravirtual device), then Lavapipe, then declines to the CPU tracer with a clear message. The OptiX and CUDA host code, the PTX loader, and the vendored OptiX headers are retired with the kernel monolith; the Radeon 780M-class target is served by the Vulkan backend through the standard AMD drivers on Windows and RADV on Linux.
+
+On WSL, Dozen's dynamically loaded `libd3d12.so` wrapper and
+`libd3d12core.so` register a pthread TLS destructor. Sirius retains both
+mappings for process lifetime after and only after the Vulkan driver identifies
+itself as `VK_DRIVER_ID_MESA_DOZEN`; without the lease, destroying the instance
+on a render worker can unmap the destructor before the worker exits. The backend
+worker-thread dispatch gate exercises this ordering, while other Vulkan drivers
+never enter the WSL-specific path.
 
 ## 5. Render orchestration
 
@@ -78,7 +144,7 @@ boundary.
 The governor exists because the 780M-class target has a 2 GB budget that a naive full-frame HDR pipeline exhausts (a 5616 by 4096 IMAX frame at RGBA32F is 368 MB per buffer before ray state, which at 96 bytes per ray for position, momentum, deviation vectors, and accumulators is another 2.2 GB full-frame). The design bounds device residency by construction rather than by hope.
 
 - At startup the backend reports usable budget (`VK_EXT_memory_budget` where present, else a conservative fraction of device-local memory, else a user cap). The governor derives the largest tile whose complete working set (ray state, accumulation, readback staging) fits a fixed fraction of that budget, and the tile scheduler simply receives a smaller tile size on smaller devices. Full-frame buffers live host-side only.
-- The precision ladder has three rungs, selected per device and recorded in the render metadata: fp64 kernels where the device offers usable `shaderFloat64`; fp32 with double-single compensated arithmetic for the four integration-critical accumulations (Hamiltonian constraint, E, L_z, Q drift) elsewhere; plain fp32 for preview quality. The oracle's job is to quantify what each rung costs: per-rung error against the double-precision reference is a recorded test artefact, not a guess.
+- The precision ladder has three rungs, selected per device and recorded in the render metadata: fp64 kernels where the device offers usable `shaderFloat64`; fp32 with Kahan compensation on Cartesian position and velocity state accumulation elsewhere; and plain fp32 for preview quality. Full-ray diagnostics derive Hamiltonian/null residual, E, L_z, and Carter-Q drift from those states. The oracle's job is to quantify what each rung costs: per-rung error against the double-precision reference is a recorded test artefact, not a guess.
 - Progressive refinement is the interactivity strategy on weak devices: samples per pixel grow monotonically across passes, every pass is a complete image, and the viewer stays responsive at one pass per tile budget regardless of device speed.
 - The dispatch governor (`render/dispatch_governor.h`) is the memory governor's time-domain companion, added when physical-GPU validation showed the two constraints are independent: a tile can fit the memory budget and still exceed the operating system's GPU watchdog in a single dispatch (Windows TDR removes the device after ~2 s; software Vulkan has no watchdog, so only silicon exposed this). Tiles are submitted as adaptive row bands targeting a wall-time budget per dispatch (default 250 ms, `SIRIUS_DISPATCH_TARGET_MS` overrides, 0 disables). The trace kernel addresses pixels absolutely, so banding is value-transparent by construction; the controller's growth is damped and its shrink unbounded because overshooting risks device removal while undershooting only costs submission overhead.
 
@@ -127,18 +193,34 @@ The port renames every file per the style guide. The table is the traceability r
 | Sirius.Render/Shader/RDSD00*.{vert,frag} | app/viewer/shaders/*.{vert,frag} |
 | Sirius.Infrastructure/Application/CREP001A.cpp | app/main.cpp |
 | Sirius.Infrastructure/Cli/CRCL001A–006A | app/cli/{command_router,render_command,info_command,config_command,cli_output,view_command}.{h,cpp} |
-| Sirius.Infrastructure/Configuration/CRCF002A, CRCF003A, CRFM001A | app/config/{config_loader,config_schema,film_config}.h/.cpp |
+| Sirius.Infrastructure/Configuration/CRCF002A, CRCF003A | app/config/{config_loader,config_schema,session_config_adapter}.{h,cpp} |
+| Sirius.Infrastructure/Configuration/CRFM001A | render/film_config.h |
 | Sirius.Infrastructure/Platform/CRPF001A.{h,cpp} | app/platform_paths.{h,cpp} |
 | Sirius.Infrastructure/Session/SMSM001A, SNST001A, SNEV001A, SNPR001A, SNDP001A, SNTL001A, SNRS001A | render/session/{state_machine,session_states,session_events,progress_tracker,display_buffer,tile_scheduler,render_session}.h/.cpp |
-| Sirius.Infrastructure/Viewer/UIVW001A.h | app/viewer/interactive_viewer.h |
+| Sirius.Infrastructure/Viewer/UIVW001A.h | app/viewer/interactive_viewer.{h,cpp} |
 | Sirius.Test/TS*.cpp | tests/, one file per subject, names per style guide |
 
 New files with no predecessor: `base/contracts.h`, `base/error.h`, `base/threading.h`, `kernels/*.slang`, `backend/vulkan/*`, `render/memory_governor.{h,cpp}`, `core/polarisation/walker_penrose.h` (specification E2), and the beam propagation additions to the CPU tracer (P2).
 
 ## 8. Dependencies
 
-Kept, vendored in `lib/` as now: GLFW, glad, Dear ImGui, stb, tinyexr with miniz, glm (viewer mathematics only; Core keeps its own tensor types because glm is float-first and 3/4-component, the wrong shape for 4x4 double tensors with derivative stacks). Kept, fetched at configure time with pinned tags: FTXUI, nlohmann_json, GoogleTest. Added: Slang (build-time compiler, found at `/opt/slang` or `SLANG_ROOT`, plus optional runtime library for on-device kernel specialisation later), Vulkan loader and headers (system packages), and Vulkan Memory Allocator (vendored header) for the governor's budget-aware allocation. Removed: CUDA toolkit, OptiX SDK headers, the PTX multi-arch machinery, and glad's OpenGL-for-compute duties (GL remains only in the viewer blit path). Nothing else enters; in particular no scene-graph, ECS, or renderer-framework dependency, because the system's shape (analytic surfaces, one scene, physics-driven) gains nothing from them.
+The vendored source set is deliberately small and closed: GLFW and glad serve
+the optional OpenGL viewer, while stb and tinyexr/miniz serve image IO. FTXUI,
+nlohmann_json, and GoogleTest are fetched at configure time with immutable
+commit pins. Slang is a build-time compiler found at `/opt/slang` or
+`SLANG_ROOT`; Vulkan's
+loader and headers are system dependencies. GLM and Dear ImGui were removed
+after a source/build audit proved they had no consumer; the viewer uses its own
+small camera state and direct OpenGL blit. CUDA, OptiX, PTX host machinery, and
+glad's former compute duties remain retired. GLFW's disabled upstream examples,
+self-tests, and demo-only dependency copies are also omitted; its runtime,
+platform, Wayland, and MinGW compatibility sources remain intact. No scene graph, ECS, renderer
+framework, or unused prebuilt library is carried in the repository.
 
 ## 9. Validation architecture
 
-Five gate families. Unit and property gates cover textbook values, exact identities, registry round-trips, live-path conservation, and determinism. Oracle gates compare the live path with the independent double-precision Boyer-Lindquist stack. Backend gates compare CPU and Vulkan statistics and enforce the Vulkan capability boundary. Operational gates install to a staged volume, relocate it, initialise from a hostile working directory, render, remove a mandatory resource to prove fail-closed behaviour, require a real software-Vulkan dispatch, and repeat the P1 near-extremal classifier as burn-in. The sanitizer profile runs the Mandatory estate under ASan, UBSan, and LSan with one named software-Vulkan process-lifetime suppression. Historical image tapes remain useful forensic material, but no current executable byte-identity gate consumes them; `docs/ADVERSARIAL_REVIEW.md` records that claim as unverified rather than treating files alone as evidence.
+Resource-consuming application and render test executables run beside the strict candidate. They inspect the same staged resources and receipt lifecycle, never an environment-selected substitute; repository governance pins that topology.
+
+Resource-consuming application and render test executables run beside the strict candidate. They inspect the same staged resources and receipt lifecycle, never an environment-selected substitute; repository governance pins that topology.
+
+Six gate families. Unit and property gates cover textbook values, exact identities, registry round-trips, live-path conservation, and determinism. Oracle gates compare the live path with the independent double-precision Boyer-Lindquist stack. Backend gates compare CPU and Vulkan statistics and enforce the Vulkan capability boundary. Operational gates install to a staged volume, relocate it, initialise from a hostile working directory, render, remove a mandatory resource to prove fail-closed behaviour, require a real software-Vulkan dispatch, and repeat the P1 near-extremal classifier as burn-in. Attestation-admission gates keep physical and native evidence revision- and qualification-candidate-bound and make complete admission a configure/build/compile/runtime invariant for releases. Qualification and release build gates remove their prior runtime receipt, then emit a deterministic zero-skip JUnit receipt bound to live CTest registration, every test executable, and every strict product; pre-gate strict-mode install/readiness are negative controls, and install rejects an absent, stale, or product-mismatched final receipt. Only after CTest succeeds is the new receipt staged beside the build-tree executable. Qualification cannot package or report top-level readiness, but it locks resource discovery to its executable volume and is the sole mode accepted by external-evidence admission. Release separately regenerates its own gate for the final product; release install/package creation, readiness, and render/view initialisation parse the installed receipt and independently rehash the running executable plus the complete installed product set. Qualification and release resource discovery ignore the development `SIRIUS_RESOURCE_DIR` override, preventing an environment-selected tree from substituting for that volume. Development initialisation remains receipt-optional and override-capable for local diagnosis, but its artifacts cannot be promoted to evidence. The sanitizer profile runs the Mandatory estate under ASan, UBSan, and LSan with one named software-Vulkan process-lifetime suppression. Historical image tapes remain useful forensic material, but no current executable byte-identity gate consumes them; `docs/ADVERSARIAL_REVIEW.md` records that claim as unverified rather than treating files alone as evidence.

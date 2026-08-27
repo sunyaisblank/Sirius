@@ -6,7 +6,7 @@ This document is the mandate and target-state specification for the ground-up re
 
 ### 1.1 Intent
 
-Rebuild Sirius from the ground up as a C++26 codebase whose rendered output matches or exceeds the physical fidelity of DNGR, the renderer DNEG and Kip Thorne built for the film Interstellar, while running on hardware DNGR never targeted: consumer GPUs of every vendor, integrated graphics with a 2 GB memory budget, and bare CPUs, across Windows, Linux, and WSL2.
+Rebuild Sirius from the ground up as a C++26 codebase whose rendered output matches or exceeds the physical fidelity of DNGR, the renderer DNEG and Kip Thorne built for the film Interstellar, while running on hardware DNGR never targeted: consumer GPUs of every vendor, integrated graphics with a 2 GB memory budget, and bare CPUs, across Windows, Linux, WSL2, and the supported macOS/MoltenVK route.
 
 ### 1.2 Engagement classification
 
@@ -18,7 +18,7 @@ Architectural overhaul, entered deliberately by owner direction rather than earn
 2. The style guide combines the Google C++ Style Guide and the C++ Core Guidelines with rules for C++26 features, prioritising compile-time safety. It lives in `docs/STYLE.md`.
 3. The renderer is hardware-agnostic through multiple backends, in the manner of Blender Cycles, rather than pinned to one vendor's API. NVIDIA-exclusive design is explicitly rejected.
 4. AMD Radeon 780M-class integrated graphics with 2 GB of budget is a supported render target, not merely a supported install target.
-5. Windows, Linux, and WSL2 are first-class platforms. macOS is a supported build target through open standards (MoltenVK), validated by compilation and CI only, since no Apple hardware is available to this engagement.
+5. Windows, Linux, and WSL2 are first-class platforms. macOS is supported through open standards (MoltenVK). Native compilation is CI-gated; an aligned release additionally requires the external MoltenVK runtime attestation because absent Apple hardware may be recorded as unexecuted, never inferred as a pass.
 6. Existing open-source libraries are preferred over reimplementation wherever they fit.
 
 ### 1.4 Decisions taken by the agent under the mandate
@@ -41,10 +41,10 @@ These follow Prompt.md section 15: determinations the evidence supports, recorde
 
 ### 1.6 Guardrails
 
-- All work accumulates on the `rebuild/dngr-parity` branch; `main` holds the verified July state untouched until the final gate passes.
-- The pre-rebuild render outputs in `renders/` are reference tapes. They are read-only evidence for image-comparison gates and are never regenerated in place.
+- Programme work must remain reviewable and release only from one exact clean revision. Branch integration and deployment remain owner decisions; the enforcement model does not infer correctness from a branch name.
+- The pre-rebuild render outputs in `renders/` are read-only forensic tapes. They are not current pass evidence without a checked manifest and executable comparator, and are never regenerated in place.
 - The oracle stack and the single-authority seams (metric registry, tolerance constants, ISCO, capture surfaces, transfer encodes) survive the port; a change that would fork one of them halts for redesign.
-- Every stage lands behind the strict-build and test gates of section 7; behaviour-preserving stages additionally pass image-identity probes against the reference tapes.
+- Every stage lands behind the strict-build and test gates of section 7. Behaviour-preserving claims require executable semantic/oracle evidence; byte identity may be claimed only when a checked manifest and comparator make it reproducible.
 
 ### 1.7 Baseline identity
 
@@ -62,11 +62,15 @@ The capabilities that constitute DNGR, extracted from the paper, are: Kerr space
 
 ## 3. Parity criteria
 
-Each criterion is a testable postcondition. Parity is claimed only when every P-item passes its stated gate on this machine, CPU path and Vulkan-on-Lavapipe path both.
+Each criterion is a testable postcondition. Build-gated parity evidence must pass
+on the CPU and required Vulkan profiles without skips. P3 and P5 additionally
+quantify physical full-frame behaviour and therefore remain unexecuted until a
+revision-bound physical-device attestation passes; software Vulkan evidence is
+never promoted into that result.
 
 - P1, geodesic accuracy. On the double-precision oracle, energy, axial angular momentum, and Carter constant drift below one part in 10^10 over a ray's full integration in Kerr at spin 0.998; on the live path, below the existing Mandatory tolerance of one part in 10^4. The Kerr shadow boundary at 1080p matches the Bardeen analytic curve to sub-pixel displacement.
 - P2, ray bundles. The renderer propagates the geodesic deviation equation alongside the central ray and derives each sample's footprint from the deviation solution. Gate: against analytic deviation solutions in Schwarzschild (radial and circular-orbit congruences) the propagated cross-section agrees to one part in 10^6 on the oracle; and a rotating-camera star-field sequence shows bounded per-star brightness variance where per-pixel point sampling measurably flickers.
-- P3, star field. Stars render as filtered point sources through the beam ellipse, not as texture lookups; a catalogue of at least 10^5 stars renders without aliasing at 1080p and IMAX-class resolution under the memory governor.
+- P3, star field. Stars render as filtered point sources through the beam ellipse, not as texture lookups; a catalogue of at least 10^5 stars renders without aliasing at 1920 by 1080 and 5616 by 4096 under the memory governor.
 - P4, disk. Novikov-Thorne temperature with the Page-Thorne flux function (already present and tested), volumetric mode, gravitational plus Doppler shift on emission with the artistic suppression toggle. Gate: the existing Mandatory disk suites, plus a new test pinning the Doppler asymmetry on and off.
 - P5, camera. Arbitrary camera four-velocity with aberration applied in the camera's local frame; pinhole and finite-aperture models; resolution to 5616 by 4096 within the memory governor.
 - P6, output. Linear HDR EXR untouched by the display pipeline, and tonemapped PNG/PPM, each transfer-encoded exactly once by its owning writer. This is the July authority, preserved.
@@ -89,22 +93,24 @@ The build compiles as `-std=c++2c` on GCC 14 and Clang 21 and equivalent on MSVC
 The overhaul decomposes into six programmes, each a gated workstream.
 
 1. Foundations: this specification, the style guide, the architecture design, and the repository skeleton (build system, presets, dependency acquisition, formatting and linting configuration, packaging target).
-2. The port: Core physics, CPU render path, infrastructure, and test estate move to the new layout and style, behaviour-preserving, gated by test parity and image identity against the reference tapes.
+2. The port: Core physics, CPU render path, infrastructure, and test estate move to the new layout and style, behaviour-preserving, gated by registration-complete tests, independent physics oracles, and output encoding/round-trip invariants.
 3. The kernel programme: Slang single-source kernels, the Vulkan compute backend, and the kernel-versus-oracle parity suites, gated on Lavapipe since no discrete GPU is present.
 4. The memory programme: VRAM budget governor, tiled progressive rendering, and the precision ladder, validated under constrained budgets.
 5. The physics programme: ray bundles, filtered star field, camera worldlines, Doppler toggle; the DNGR-parity items P2, P3, P5.
-6. Closure: CI matrix, packaging, README rewrite, final report with renders compared against the reference tapes, and the parity/exceedance scorecard.
+6. Closure: CI matrix, release-aligned packaging, README rewrite, current evidence report, and the parity/exceedance scorecard; historical tapes remain contextual rather than self-authenticating evidence.
 
 Programmes 3 and 4 depend on 2; programme 5 depends on 2 and partially on 3; closure depends on everything. Within each programme, behaviour-preserving stages land before behaviour-changing ones, and the riskiest change (the live-path reroute onto ported code) carries the identity gates of the governing specification.
 
 ## 7. Verification gates
 
 - Strict build: zero warnings under `-Wall -Wextra -Wpedantic` treated as errors, on GCC 14 and Clang 21.
-- Test gate: the full ctest estate green; the Mandatory label green as a build gate exactly as before.
+- Build-input gate: remote GitHub Actions and FetchContent dependencies use immutable full-commit identities; directly downloaded qualification tools use versioned URLs plus checked-in SHA-256 values, and repository governance rejects movable tags, latest-release routes, or unchecked direct downloads.
+- Test gate: live CTest registration equals a zero-failure, zero-error, zero-skip Mandatory JUnit estate; a deterministic receipt binds that execution to all test executables and strict-mode products. Resource-consuming test executables run beside the candidate and inspect that exact volume without a development resource override. Any prior runtime copy is removed before CTest, qualification/release pre-gate installation and readiness must decline, and only the newly issued receipt is staged afterward, avoiding a receipt that depends on itself.
 - Parity gates: kernel-versus-oracle agreement suites for every quantity the kernel computes; beam propagation against analytic deviation solutions.
-- Image gates: behaviour-preserving stages reproduce the reference tapes pixel-identically for CPU renders; behaviour-changing stages record new reference images with the change named.
-- Hardware-envelope gate: a 1080p Kerr-with-disk render completes under a 2 GB simulated budget through the governor, and a CPU-only render completes with no GPU present.
+- Output-evidence gates: physics is checked against independent analytic/numerical oracles, CPU/Vulkan agreement uses claim-scoped statistical tolerances, encoders use decode/round-trip invariants, and physical full-frame claims use decoded dimensions plus governed morphology. Pixel identity is not claimed without a checked manifest and executable comparator.
+- Hardware-envelope gate: build evidence proves a viable 2 GB plan and a CPU-only render with no GPU; revision closure additionally requires the same disk-free, beam-filtered 100,000-star moving-ThinLens Vulkan scene to complete at 1920 by 1080 and 5616 by 4096 on the named physical floor device under a 2048 MiB governed budget.
+- Qualification-to-release alignment gate: development artifacts are local diagnostics and are never admitted as external evidence. Every physical, native-platform, and native-viewer producer must first configure the exact clean revision in non-packageable `qualification` mode. Qualification permits pending external domains but otherwise fixes the build to the same sole Release configuration, complete Mandatory gate, warnings-as-errors, enforce-mode contracts, Vulkan/Slang kernels, SPIR-V validation, and native viewer required by release. Each record hashes the copied qualification executable, alignment receipt, candidate/product gate, gate-generated JUnit/log, independently rerun complete JUnit, and live CTest inventory; admission requires their revision, model digest, test identities, counts, and candidate bytes to cross-bind exactly. A release configuration then requires one such verified authority for every domain at that same clean revision. Its deterministic alignment receipt is rechecked during every build and embedded at compile time. A fresh release Mandatory-gate receipt independently binds and retests the final release product, is rehashed during install/package creation, and install/CPack executes the relocated binary's non-rendering capability-initialisation path. Release readiness plus render/view initialisation repeat the same C++ verification and rehash the running executable plus every installed product. Configuration, development evidence, a qualification bundle with a substituted candidate, or a subsequently altered volume therefore cannot promote an untested product. Qualification and release resource lookup ignore `SIRIUS_RESOURCE_DIR` and remain anchored to the executable volume; development retains the override, exposes pending domains, requires no gate receipt, and cannot package or issue admissible evidence.
 
 ## 8. Completion
 
-The engagement is complete when every P-item and E-item reports green from the gates above, the six programmes have landed on `rebuild/dngr-parity` with one concern per commit, the README describes the rebuilt system accurately, and the final report (Prompt.md section 19 deliverables) is written. Merging to `main` and any deployment are separate owner decisions, per the governing specification's deployment rule.
+The engagement is complete when every P-item and E-item reports green from the gates above for one exact clean revision, all model-derived external domains are admitted by the release-alignment gate, the six programmes are present and reviewable, the README describes the rebuilt system accurately, and the current evidence report is complete. Branch integration and any deployment are separate owner decisions.

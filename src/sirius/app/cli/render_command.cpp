@@ -4,6 +4,7 @@
 
 #include "sirius/app/cli/cli_output.h"
 #include "sirius/app/config/config_loader.h"
+#include "sirius/app/config/session_config_adapter.h"
 #include "sirius/render/session/render_session.h"
 
 #ifdef SIRIUS_HAS_VULKAN_BACKEND
@@ -79,8 +80,9 @@ Basic Options:
   -i, --inclination <deg>   Observer inclination (default: 90)
   -a, --spin <a>            Black hole spin 0-1 (default: 0)
   --fov <deg>               Camera field of view (default: 60)
-  --lens <name>             Lens: Pinhole, ThinLens, or Fisheye (CPU; default: Pinhole)
-  --focal-length <mm>       Thin-lens focal length (default: 50)
+  --lens <name>             Lens: Pinhole, ThinLens, or Fisheye (fisheye CPU-only;
+                            default: Pinhole)
+  --focal-length <mm-eq>    Thin-lens focal length, 50 mm-equivalent = 1 lens unit
   --aperture <f-number>     Thin-lens aperture (default: 2.8)
   --focus-distance <M>      Thin-lens focus distance (default: 50)
   --temperature-model <m>   Disk temperature model: NovikovThorne (NT) or
@@ -165,7 +167,7 @@ int RenderCommand::Execute(const std::vector<std::string>& args, const GlobalOpt
     // lower-layer SIRIUS_BACKEND=vulkan) is resolved here, before validation,
     // so a backend decline (not a config-name error) is what the user sees when
     // no device is visible or the backend is not compiled in. 'auto' is resolved
-    // by SessionConfig::FromSiriusConfig (the single authority): Vulkan when a
+    // by MakeSessionConfig (the single authority): Vulkan when a
     // device and a registry-gpu-dispatchable metric align, CPU otherwise
     // (go-live, owner decision 2026-07-18).
     const bool use_vulkan = gpu_backend_requested_;
@@ -210,20 +212,20 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
                               const GlobalOptions& /*globals*/, SiriusConfig& config) {
     bool metric_overridden = false;
     bool mass_overridden = false;
-    for (size_t i = 0; i < args.size(); ++i) {
+    for (std::size_t i = 0; i < args.size(); ++i) {
         const std::string& arg = args[i];
 
         try {
             if ((arg == "-o" || arg == "--output") && i + 1 < args.size()) {
-                config.render.outputPath = args[++i];
+                config.render.output_path = args[++i];
             } else if ((arg == "-w" || arg == "--width") && i + 1 < args.size()) {
                 config.render.width = ParseInteger(args[++i]);
             } else if ((arg == "-h" || arg == "--height") && i + 1 < args.size()) {
                 config.render.height = ParseInteger(args[++i]);
             } else if ((arg == "-s" || arg == "--samples") && i + 1 < args.size()) {
-                config.render.samplesPerPixel = ParseInteger(args[++i]);
+                config.render.samples_per_pixel = ParseInteger(args[++i]);
             } else if ((arg == "-t" || arg == "--tile-size") && i + 1 < args.size()) {
-                config.render.tileSize = ParseInteger(args[++i]);
+                config.render.tile_size = ParseInteger(args[++i]);
             } else if ((arg == "-m" || arg == "--metric") && i + 1 < args.size()) {
                 config.metric.name = args[++i];
                 metric_overridden = true;
@@ -239,27 +241,27 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
             } else if (arg == "--fov" && i + 1 < args.size()) {
                 config.observer.fov = ParseDouble(args[++i]);
             } else if (arg == "--lens" && i + 1 < args.size()) {
-                config.observer.lensModel = args[++i];
+                config.observer.lens_model = args[++i];
             } else if (arg == "--focal-length" && i + 1 < args.size()) {
-                config.observer.focalLength = ParseFloat(args[++i]);
+                config.observer.focal_length = ParseFloat(args[++i]);
             } else if (arg == "--aperture" && i + 1 < args.size()) {
                 config.observer.aperture = ParseFloat(args[++i]);
             } else if (arg == "--focus-distance" && i + 1 < args.size()) {
-                config.observer.focusDistance = ParseFloat(args[++i]);
+                config.observer.focus_distance = ParseFloat(args[++i]);
             } else if (arg == "--temperature-model" && i + 1 < args.size()) {
-                config.metric.temperatureModel = args[++i];
+                config.metric.temperature_model = args[++i];
             } else if (arg == "--disk-temperature" && i + 1 < args.size()) {
-                config.metric.diskTemperature = ParseFloat(args[++i]);
+                config.metric.disk_temperature = ParseFloat(args[++i]);
             } else if (arg == "--color-mode" && i + 1 < args.size()) {
-                config.colorMode = args[++i];
+                config.color_mode = args[++i];
             } else if (arg == "--throat-radius" && i + 1 < args.size()) {
-                config.metric.throatRadius = ParseDouble(args[++i]);
+                config.metric.throat_radius = ParseDouble(args[++i]);
             } else if (arg == "--wormhole-topology" && i + 1 < args.size()) {
                 const std::string topology = args[++i];
                 if (topology == "one-sheet" || topology == "OneSheetCapture") {
-                    config.metric.wormholeTopology = "OneSheetCapture";
+                    config.metric.wormhole_topology = "OneSheetCapture";
                 } else if (topology == "two-sheet" || topology == "TwoSheet") {
-                    config.metric.wormholeTopology = "TwoSheet";
+                    config.metric.wormhole_topology = "TwoSheet";
                 } else {
                     cli::Error(
                         "--wormhole-topology expects OneSheetCapture/one-sheet or "
@@ -267,16 +269,16 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
                     return false;
                 }
             } else if (arg == "--warp-velocity" && i + 1 < args.size()) {
-                config.metric.warpVelocity = ParseDouble(args[++i]);
+                config.metric.warp_velocity = ParseDouble(args[++i]);
             } else if (arg == "--bubble-radius" && i + 1 < args.size()) {
-                config.metric.bubbleRadius = ParseDouble(args[++i]);
+                config.metric.bubble_radius = ParseDouble(args[++i]);
             } else if (arg == "--exposure" && i + 1 < args.size()) {
                 config.postprocess.exposure = ParseFloat(args[++i]);
             } else if (arg == "--bloom" && i + 1 < args.size()) {
-                config.postprocess.enableBloom = true;
-                config.postprocess.bloomIntensity = ParseFloat(args[++i]);
+                config.postprocess.enable_bloom = true;
+                config.postprocess.bloom_intensity = ParseFloat(args[++i]);
             } else if (arg == "--bloom-threshold" && i + 1 < args.size()) {
-                config.postprocess.bloomThreshold = ParseFloat(args[++i]);
+                config.postprocess.bloom_threshold = ParseFloat(args[++i]);
             } else if (arg == "--contrast" && i + 1 < args.size()) {
                 config.postprocess.contrast = ParseFloat(args[++i]);
             } else if (arg == "--saturation" && i + 1 < args.size()) {
@@ -284,65 +286,65 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
             } else if (arg == "--tonemapper" && i + 1 < args.size()) {
                 config.postprocess.tonemapper = args[++i];
             } else if (arg == "--no-bloom") {
-                config.postprocess.enableBloom = false;
+                config.postprocess.enable_bloom = false;
             } else if (arg == "--volumetric") {
                 config.volumetric.enabled = true;
             } else if (arg == "--h-over-r" && i + 1 < args.size()) {
-                config.volumetric.hOverR = ParseFloat(args[++i]);
+                config.volumetric.h_over_r = ParseFloat(args[++i]);
                 config.volumetric.enabled = true;
             } else if (arg == "--h-power" && i + 1 < args.size()) {
-                config.volumetric.hPower = ParseFloat(args[++i]);
+                config.volumetric.h_power = ParseFloat(args[++i]);
             } else if (arg == "--tau" && i + 1 < args.size()) {
-                config.volumetric.tauMidplane = ParseFloat(args[++i]);
+                config.volumetric.tau_midplane = ParseFloat(args[++i]);
             } else if (arg == "--vol-samples" && i + 1 < args.size()) {
                 config.volumetric.samples = ParseInteger(args[++i]);
             } else if (arg == "--turbulence") {
                 config.volumetric.enabled = true;
-                config.volumetric.enableTurbulence = true;
+                config.volumetric.enable_turbulence = true;
             } else if (arg == "--corona") {
                 config.volumetric.enabled = true;
-                config.volumetric.enableCorona = true;
+                config.volumetric.enable_corona = true;
             } else if (arg == "--no-disk") {
-                config.diskEnabled = false;
+                config.disk_enabled = false;
             } else if (arg == "--motion-blur") {
-                config.motionBlur.enabled = true;
+                config.motion_blur.enabled = true;
             } else if (arg == "--shutter-time" && i + 1 < args.size()) {
-                config.motionBlur.shutterTime = ParseFloat(args[++i]);
-                config.motionBlur.enabled = true;
+                config.motion_blur.shutter_time = ParseFloat(args[++i]);
+                config.motion_blur.enabled = true;
             } else if (arg == "--motion-samples" && i + 1 < args.size()) {
-                config.motionBlur.samples = ParseInteger(args[++i]);
-                config.motionBlur.enabled = true;
+                config.motion_blur.samples = ParseInteger(args[++i]);
+                config.motion_blur.enabled = true;
             } else if (arg == "--film") {
                 config.film.enabled = true;
             } else if (arg == "--film-preset" && i + 1 < args.size()) {
                 config.film.preset = args[++i];
                 config.film.enabled = true;
             } else if (arg == "--grain" && i + 1 < args.size()) {
-                config.film.grainIntensity = ParseFloat(args[++i]);
+                config.film.grain_intensity = ParseFloat(args[++i]);
             } else if (arg == "--halation" && i + 1 < args.size()) {
-                config.film.halationStrength = ParseFloat(args[++i]);
+                config.film.halation_strength = ParseFloat(args[++i]);
             } else if (arg == "--vignette" && i + 1 < args.size()) {
-                config.film.vignetteStrength = ParseFloat(args[++i]);
+                config.film.vignette_strength = ParseFloat(args[++i]);
             } else if (arg == "--cinematic") {
                 config.volumetric.enabled = true;
-                config.volumetric.hOverR = 0.12f;
+                config.volumetric.h_over_r = 0.12f;
                 config.volumetric.samples = 64;
-                config.postprocess.enableBloom = true;
-                config.postprocess.bloomIntensity = 0.35f;
-                config.postprocess.bloomThreshold = 0.4f;
+                config.postprocess.enable_bloom = true;
+                config.postprocess.bloom_intensity = 0.35f;
+                config.postprocess.bloom_threshold = 0.4f;
                 config.postprocess.exposure = 1.2f;
                 config.postprocess.contrast = 1.1f;
                 config.postprocess.saturation = 1.15f;
             } else if (arg == "--beams" || arg == "--ray-bundles") {
-                config.rayBundles = true;  // P2: propagate geodesic deviation.
+                config.ray_bundles = true;  // P2: propagate geodesic deviation.
             } else if (arg == "--starfield" && i + 1 < args.size()) {
                 std::string mode = args[++i];
                 std::transform(mode.begin(), mode.end(), mode.begin(),
                                [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
                 if (mode == "point") {
-                    config.pointStarfield = true;  // P3: filtered point sources.
+                    config.point_starfield = true;  // P3: filtered point sources.
                 } else if (mode == "texture") {
-                    config.pointStarfield = false;
+                    config.point_starfield = false;
                 } else {
                     cli::Error("--starfield expects 'point' or 'texture'");
                     return false;
@@ -352,9 +354,9 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
                 std::transform(mode.begin(), mode.end(), mode.begin(),
                                [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
                 if (mode == "off" || mode == "false" || mode == "0") {
-                    config.dopplerBeaming = false;  // P4: suppress the asymmetry.
+                    config.doppler_beaming = false;  // P4: suppress the asymmetry.
                 } else if (mode == "on" || mode == "true" || mode == "1") {
-                    config.dopplerBeaming = true;
+                    config.doppler_beaming = true;
                 } else {
                     cli::Error("--doppler-beaming expects 'on' or 'off'");
                     return false;
@@ -363,14 +365,14 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
                 // P5: camera four-velocity beta as forward[,up,right] in [0, 1).
                 const std::string spec = args[++i];
                 double comp[3] = {0.0, 0.0, 0.0};
-                size_t start = 0;
+                std::size_t start = 0;
                 int components = 0;
                 while (start <= spec.size()) {
                     if (components == 3) {
                         cli::Error("--camera-beta accepts at most three components");
                         return false;
                     }
-                    size_t comma = spec.find(',', start);
+                    std::size_t comma = spec.find(',', start);
                     std::string tok = spec.substr(start, comma - start);
                     if (tok.empty()) {
                         cli::Error("--camera-beta components must not be empty");
@@ -385,9 +387,9 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
                     cli::Error("--camera-beta magnitude must be < 1 (sub-luminal worldline)");
                     return false;
                 }
-                config.observer.cameraBetaForward = comp[0];
-                config.observer.cameraBetaUp = comp[1];
-                config.observer.cameraBetaRight = comp[2];
+                config.observer.camera_beta_forward = comp[0];
+                config.observer.camera_beta_up = comp[1];
+                config.observer.camera_beta_right = comp[2];
             } else if (arg == "--no-gpu" || arg == "--cpu") {
                 config.backend.preferred = "cpu";
                 gpu_backend_requested_ = false;
@@ -437,8 +439,8 @@ void RenderCommand::PrintConfig(const SiriusConfig& config, bool verbose) {
     std::cout << "Configuration:" << std::endl;
     std::cout << "  Resolution:  " << config.render.width << " x " << config.render.height
               << std::endl;
-    std::cout << "  Samples:     " << config.render.samplesPerPixel << " spp" << std::endl;
-    std::cout << "  Tile size:   " << config.render.tileSize << " px" << std::endl;
+    std::cout << "  Samples:     " << config.render.samples_per_pixel << " spp" << std::endl;
+    std::cout << "  Tile size:   " << config.render.tile_size << " px" << std::endl;
     std::cout << "  Metric:      " << config.metric.name;
     if (config.metric.spin > 0) {
         std::cout << " (a=" << std::fixed << std::setprecision(3) << config.metric.spin << ")";
@@ -448,19 +450,20 @@ void RenderCommand::PrintConfig(const SiriusConfig& config, bool verbose) {
               << config.observer.distance << "M, θ=" << config.observer.inclination << "°"
               << std::endl;
     std::cout << "  FOV:         " << config.observer.fov << "°" << std::endl;
-    std::cout << "  Color mode:  " << config.colorMode << std::endl;
-    std::cout << "  Output:      " << config.render.outputPath << std::endl;
+    std::cout << "  Color mode:  " << config.color_mode << std::endl;
+    std::cout << "  Output:      " << config.render.output_path << std::endl;
     std::cout << std::endl;
 
     if (config.volumetric.enabled) {
         std::cout << "Volumetric Disk:" << std::endl;
         std::cout << "  Scale height: H/r=" << std::fixed << std::setprecision(2)
-                  << config.volumetric.hOverR << std::endl;
-        std::cout << "  Flaring:      " << config.volumetric.hPower << std::endl;
-        std::cout << "  Optical depth:" << config.volumetric.tauMidplane << std::endl;
+                  << config.volumetric.h_over_r << std::endl;
+        std::cout << "  Flaring:      " << config.volumetric.h_power << std::endl;
+        std::cout << "  Optical depth:" << config.volumetric.tau_midplane << std::endl;
         std::cout << "  Ray samples:  " << config.volumetric.samples << std::endl;
-        if (config.volumetric.enableTurbulence) std::cout << "  Turbulence:   enabled" << std::endl;
-        if (config.volumetric.enableCorona) std::cout << "  Corona:       enabled" << std::endl;
+        if (config.volumetric.enable_turbulence)
+            std::cout << "  Turbulence:   enabled" << std::endl;
+        if (config.volumetric.enable_corona) std::cout << "  Corona:       enabled" << std::endl;
         std::cout << std::endl;
     }
 
@@ -468,18 +471,19 @@ void RenderCommand::PrintConfig(const SiriusConfig& config, bool verbose) {
         std::cout << "Film Simulation:" << std::endl;
         std::cout << "  Preset:      " << config.film.preset << std::endl;
         std::cout << "  Grain:       " << std::fixed << std::setprecision(2)
-                  << config.film.grainIntensity << std::endl;
-        std::cout << "  Halation:    " << config.film.halationStrength << std::endl;
-        std::cout << "  Vignette:    " << config.film.vignetteStrength << std::endl;
+                  << config.film.grain_intensity << std::endl;
+        std::cout << "  Halation:    " << config.film.halation_strength << std::endl;
+        std::cout << "  Vignette:    " << config.film.vignette_strength << std::endl;
         std::cout << std::endl;
     }
 
     if (verbose || config.postprocess.exposure != 1.0f) {
         std::cout << "Post-processing:" << std::endl;
-        std::cout << "  Bloom:       " << (config.postprocess.enableBloom ? "enabled" : "disabled");
-        if (config.postprocess.enableBloom) {
+        std::cout << "  Bloom:       "
+                  << (config.postprocess.enable_bloom ? "enabled" : "disabled");
+        if (config.postprocess.enable_bloom) {
             std::cout << " (intensity=" << std::fixed << std::setprecision(2)
-                      << config.postprocess.bloomIntensity << ")";
+                      << config.postprocess.bloom_intensity << ")";
         }
         std::cout << std::endl;
         std::cout << "  Exposure:    " << std::fixed << std::setprecision(2)
@@ -494,13 +498,21 @@ void RenderCommand::PrintConfig(const SiriusConfig& config, bool verbose) {
 
 int RenderCommand::ExecuteSession(const SiriusConfig& config, const GlobalOptions& globals,
                                   bool use_vulkan) {
-    auto session_config = render::SessionConfig::FromSiriusConfig(config);
+    auto adapted = MakeSessionConfig(config);
+    if (!adapted) {
+        cli::Error(adapted.error().Description());
+        return 1;
+    }
+    auto session_config = std::move(*adapted);
     if (use_vulkan) {
         session_config.backend = render::RenderBackend::Vulkan;
     }
 
     render::RenderSession session;
-    session.Configure(session_config);
+    if (auto configured = session.Configure(session_config); !configured) {
+        cli::Error(configured.error().Description());
+        return 1;
+    }
 
     auto start_time = std::chrono::steady_clock::now();
 
@@ -536,7 +548,7 @@ int RenderCommand::ExecuteSession(const SiriusConfig& config, const GlobalOption
     if (globals.json_output) {
         nlohmann::json j;
         j["success"] = (result == render::SessionState::Complete);
-        j["output"] = config.render.outputPath;
+        j["output"] = config.render.output_path;
         j["state"] = std::string(render::StateName(result));
         if (!error_message.empty()) {
             j["error"] = error_message;
@@ -546,7 +558,7 @@ int RenderCommand::ExecuteSession(const SiriusConfig& config, const GlobalOption
         std::cout << std::endl;
         cli::Rule();
         if (result == render::SessionState::Complete) {
-            cli::Success("Render complete: " + config.render.outputPath);
+            cli::Success("Render complete: " + config.render.output_path);
         } else if (result == render::SessionState::Cancelled) {
             cli::Warning("Render cancelled");
         } else {

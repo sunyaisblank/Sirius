@@ -1,7 +1,6 @@
 // Double-precision beam (ray-bundle) integrator for the validation oracle:
-// central geodesic by symplectic leapfrog, Jacobian by RK4 geodesic
-// deviation. Drives the analytic beam-propagation benchmarks. Off the
-// render path.
+// central geodesic and covariant Jacobi columns share one RK4 tableau. Drives
+// the analytic beam-propagation benchmarks. Off the render path.
 //   D^2 xi^mu / d lambda^2 + R^mu_nu_rho_sigma k^nu xi^rho k^sigma = 0
 // Reference: James et al. (2015), Appendix B.
 // Ported from INBI001A.h; numeric content bit-identical.
@@ -14,6 +13,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <numbers>
 
 // CPU/GPU compatibility macro
 #ifdef __CUDACC__
@@ -51,18 +51,18 @@ struct BeamStateD {
     double Q;   // Carter constant (Kerr only)
 
     // Derived beam properties (cached)
-    double solidAngle;     // Beam solid angle on sky
+    double solid_angle;    // Beam solid angle on sky
     double magnification;  // |det(J_angular)|^{-1}
-    double majorAxis;      // Ellipse semi-major axis [rad]
-    double minorAxis;      // Ellipse semi-minor axis [rad]
+    double major_axis;     // Ellipse semi-major axis [rad]
+    double minor_axis;     // Ellipse semi-minor axis [rad]
     double orientation;    // PA of major axis [rad]
 
     // Beam status
     bool terminated;  // Hit horizon or escaped
-    bool atCaustic;   // det(J) ≈ 0 (magnification → ∞)
+    bool at_caustic;  // det(J) ≈ 0 (magnification → ∞)
 
     // Initial pixel solid angle (set at creation)
-    double initialPixelSolidAngle;
+    double initial_pixel_solid_angle;
 
     //--------------------------------------------------------------------------
     // Initialisation
@@ -78,14 +78,14 @@ struct BeamStateD {
         }
 
         lambda = 0;
-        solidAngle = 0;
+        solid_angle = 0;
         magnification = 1.0;
-        majorAxis = 0;
-        minorAxis = 0;
+        major_axis = 0;
+        minor_axis = 0;
         orientation = 0;
         terminated = false;
-        atCaustic = false;
-        initialPixelSolidAngle = 0;
+        at_caustic = false;
+        initial_pixel_solid_angle = 0;
     }
 
     //--------------------------------------------------------------------------
@@ -106,10 +106,10 @@ struct BeamStateD {
 
         // Check for caustic (det → 0)
         if (std::abs(det) < 1e-12) {
-            atCaustic = true;
+            at_caustic = true;
             magnification = 1e12;  // Cap at large value
         } else {
-            atCaustic = false;
+            at_caustic = false;
             magnification = 1.0 / std::abs(det);
         }
 
@@ -124,8 +124,8 @@ struct BeamStateD {
         if (disc < 0) disc = 0;  // Numerical protection
         double s = std::sqrt(disc);
 
-        majorAxis = std::sqrt(std::max(0.0, (p + s) / 2));
-        minorAxis = std::sqrt(std::max(0.0, (p - s) / 2));
+        major_axis = std::sqrt(std::max(0.0, (p + s) / 2));
+        minor_axis = std::sqrt(std::max(0.0, (p - s) / 2));
 
         // Orientation of the output ellipse: the major eigenvector of J J^T.
         // For J=[[a,b],[c,d]], tan(2φ)=2(ac+bd)/(a²+b²-c²-d²).
@@ -136,7 +136,7 @@ struct BeamStateD {
         orientation = 0.5 * std::atan2(num, den);
 
         // Solid angle = π × σ_max × σ_min × (initial pixel solid angle)
-        solidAngle = M_PI * majorAxis * minorAxis * initialPixelSolidAngle;
+        solid_angle = std::numbers::pi * major_axis * minor_axis * initial_pixel_solid_angle;
     }
 
     //--------------------------------------------------------------------------
@@ -175,12 +175,12 @@ struct BeamStateD {
 class BeamIntegratorD {
   public:
     struct Config {
-        double stepSize = 0.1;
-        double minStepSize = 1e-6;
-        double maxStepSize = 1.0;
-        int maxSteps = 100000;
-        double escapeRadius = 1e6;
-        double causticThreshold = 1e-12;
+        double step_size = 0.1;
+        double min_step_size = 1e-6;
+        double max_step_size = 1.0;
+        int max_steps = 100000;
+        double escape_radius = 1e6;
+        double caustic_threshold = 1e-12;
     };
 
     explicit BeamIntegratorD(const IMetricD* metric) : metric_(metric), config_() {
@@ -206,7 +206,7 @@ class BeamIntegratorD {
         }
 
         // Check if escaped
-        if (beam.x.r > config_.escapeRadius) {
+        if (beam.x.r > config_.escape_radius) {
             beam.terminated = true;
             return false;
         }

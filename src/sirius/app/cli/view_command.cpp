@@ -5,6 +5,7 @@
 
 #include "sirius/app/cli/cli_output.h"
 #include "sirius/app/config/config_loader.h"
+#include "sirius/app/config/session_config_adapter.h"
 #include "sirius/app/viewer/interactive_viewer.h"
 #include "sirius/base/resource_locator.h"
 
@@ -17,6 +18,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdlib>
 #include <cstring>
 #include <fstream>
 #include <iomanip>
@@ -25,6 +27,7 @@
 #include <mutex>
 #include <sstream>
 #include <stdexcept>
+#include <string_view>
 #include <vector>
 
 namespace sirius::app {
@@ -33,16 +36,37 @@ namespace cli = cli_output;
 
 namespace {
 
-// GLFW's C callback API cannot take closures, so viewer state the callbacks need
-// lives at file scope. One viewer runs at a time.
-InteractiveViewer* g_viewer = nullptr;
-bool g_mouse_dragging = false;
-GLuint g_texture = 0;
-bool g_texture_needs_update = false;
-std::mutex g_frame_mutex;
-std::vector<float> g_frame_data;
-int g_frame_width = 0;
-int g_frame_height = 0;
+struct DisplayFrame {
+    std::mutex mutex;
+    std::vector<float> pixels;
+    int width = 0;
+    int height = 0;
+    bool needs_upload = false;
+};
+
+struct ViewerCallbackState {
+    InteractiveViewer* viewer = nullptr;
+    std::ostream* transcript = nullptr;
+    std::mutex transcript_mutex;
+    bool mouse_dragging = false;
+};
+
+ViewerCallbackState* GetCallbackState(GLFWwindow* window) {
+    return static_cast<ViewerCallbackState*>(glfwGetWindowUserPointer(window));
+}
+
+std::string_view ActionName(int action) {
+    switch (action) {
+        case GLFW_RELEASE:
+            return "release";
+        case GLFW_PRESS:
+            return "press";
+        case GLFW_REPEAT:
+            return "repeat";
+        default:
+            return "unknown";
+    }
+}
 
 std::string LoadShaderSource(const std::string& relative_path) {
     const auto path = base::ResolveResource(relative_path);
@@ -105,7 +129,7 @@ GLuint BuildViewerShaderProgram() {
     throw std::runtime_error("viewer shader link failed: " + std::string(log.data()));
 }
 
-const std::string& RequireValue(const std::vector<std::string>& args, size_t& index,
+const std::string& RequireValue(const std::vector<std::string>& args, std::size_t& index,
                                 const std::string& option) {
     if (++index >= args.size()) {
         throw std::invalid_argument(option + " requires a value");
@@ -129,48 +153,62 @@ double ParseDouble(const std::string& text) {
     return value;
 }
 
-void KeyCallback(GLFWwindow* /*window*/, int key, int /*scancode*/, int action, int /*mods*/) {
-    if (g_viewer) {
+void KeyCallback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/) {
+    if (ViewerCallbackState* state = GetCallbackState(window); state != nullptr) {
+        if (state->transcript != nullptr) {
+            std::lock_guard<std::mutex> lock(state->transcript_mutex);
+            *state->transcript << "keyboard-callback key=" << key
+                               << " action=" << ActionName(action) << '\n'
+                               << std::flush;
+        }
         if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-            g_viewer->Stop();
+            state->viewer->Stop();
+            glfwSetWindowShouldClose(window, GLFW_TRUE);
             return;
         }
-        g_viewer->ProcessKey(key, action);
+        state->viewer->ProcessKey(key, action);
     }
 }
 
-void CursorPosCallback(GLFWwindow* /*window*/, double xpos, double ypos) {
-    if (g_viewer) {
-        g_viewer->ProcessMouseMove(xpos, ypos, g_mouse_dragging);
+void CursorPosCallback(GLFWwindow* window, double xpos, double ypos) {
+    if (ViewerCallbackState* state = GetCallbackState(window); state != nullptr) {
+        if (state->transcript != nullptr) {
+            std::lock_guard<std::mutex> lock(state->transcript_mutex);
+            *state->transcript << "pointer-callback kind=cursor x=" << xpos << " y=" << ypos
+                               << " dragging=" << std::boolalpha << state->mouse_dragging << '\n'
+                               << std::flush;
+        }
+        state->viewer->ProcessMouseMove(xpos, ypos, state->mouse_dragging);
     }
 }
 
-void MouseButtonCallback(GLFWwindow* /*window*/, int button, int action, int /*mods*/) {
-    if (button == GLFW_MOUSE_BUTTON_LEFT) {
-        g_mouse_dragging = (action == GLFW_PRESS);
+void MouseButtonCallback(GLFWwindow* window, int button, int action, int /*mods*/) {
+    if (ViewerCallbackState* state = GetCallbackState(window); state != nullptr) {
+        if (state->transcript != nullptr) {
+            std::lock_guard<std::mutex> lock(state->transcript_mutex);
+            *state->transcript << "pointer-callback kind=button button=" << button
+                               << " action=" << ActionName(action) << '\n'
+                               << std::flush;
+        }
+        if (button == GLFW_MOUSE_BUTTON_LEFT) {
+            state->mouse_dragging = (action == GLFW_PRESS);
+        }
     }
 }
 
-void ScrollCallback(GLFWwindow* /*window*/, double /*xoffset*/, double yoffset) {
-    if (g_viewer) {
-        g_viewer->ProcessScroll(yoffset);
+void ScrollCallback(GLFWwindow* window, double /*xoffset*/, double yoffset) {
+    if (ViewerCallbackState* state = GetCallbackState(window); state != nullptr) {
+        if (state->transcript != nullptr) {
+            std::lock_guard<std::mutex> lock(state->transcript_mutex);
+            *state->transcript << "pointer-callback kind=scroll yoffset=" << yoffset << '\n'
+                               << std::flush;
+        }
+        state->viewer->ProcessScroll(yoffset);
     }
 }
 
 void FramebufferSizeCallback(GLFWwindow* /*window*/, int /*width*/, int /*height*/) {
     // Handled in the main loop via glfwGetFramebufferSize.
-}
-
-// Frame callback, invoked from the render thread; snapshots the frame for the
-// GL thread to upload.
-void FrameCallback(const float* data, int width, int height) {
-    std::lock_guard<std::mutex> lock(g_frame_mutex);
-    size_t size = static_cast<size_t>(width) * static_cast<size_t>(height) * 4;
-    g_frame_data.resize(size);
-    std::memcpy(g_frame_data.data(), data, size * sizeof(float));
-    g_frame_width = width;
-    g_frame_height = height;
-    g_texture_needs_update = true;
 }
 
 }  // namespace
@@ -203,7 +241,7 @@ std::string ViewCommand::Usage() const {
 
 bool ViewCommand::ParseArgs(const std::vector<std::string>& args, const GlobalOptions& /*globals*/,
                             SiriusConfig& config) {
-    for (size_t i = 0; i < args.size(); ++i) {
+    for (std::size_t i = 0; i < args.size(); ++i) {
         const std::string& arg = args[i];
 
         try {
@@ -221,7 +259,7 @@ bool ViewCommand::ParseArgs(const std::vector<std::string>& args, const GlobalOp
             } else if (arg == "--fov") {
                 config.observer.fov = ParseDouble(RequireValue(args, i, arg));
             } else if (arg == "--no-disk") {
-                config.diskEnabled = false;
+                config.disk_enabled = false;
             } else if (arg == "--jets") {
                 jets_enabled_ = true;
             } else if (arg == "--cpu") {
@@ -245,16 +283,8 @@ bool ViewCommand::ParseArgs(const std::vector<std::string>& args, const GlobalOp
 int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptions& globals,
                          SiriusConfig& config) {
     jets_enabled_ = false;
-    g_mouse_dragging = false;
-    {
-        // A command instance can be invoked repeatedly in one process. The
-        // native callback bridge must not upload a prior viewer's frame.
-        std::lock_guard<std::mutex> lock(g_frame_mutex);
-        g_texture_needs_update = false;
-        g_frame_data.clear();
-        g_frame_width = 0;
-        g_frame_height = 0;
-    }
+    DisplayFrame display_frame;
+    std::ofstream input_transcript;
 
     if (!ParseArgs(args, globals, config)) {
         return 1;
@@ -265,9 +295,26 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
         return 1;
     }
 
-    render::SessionConfig resolved = render::SessionConfig::FromSiriusConfig(config);
-    if (resolved.metricId != core::MetricId::Schwarzschild &&
-        resolved.metricId != core::MetricId::Kerr) {
+    if (const char* path = std::getenv("SIRIUS_VIEWER_INPUT_TRANSCRIPT"); path != nullptr) {
+        if (*path == '\0') {
+            cli::Error("SIRIUS_VIEWER_INPUT_TRANSCRIPT must name a file when set");
+            return 1;
+        }
+        input_transcript.open(path, std::ios::out | std::ios::trunc);
+        if (!input_transcript) {
+            cli::Error("Could not open the requested viewer input transcript");
+            return 1;
+        }
+    }
+
+    auto adapted = MakeSessionConfig(config);
+    if (!adapted) {
+        cli::Error(adapted.error().Description());
+        return 1;
+    }
+    render::SessionConfig resolved = std::move(*adapted);
+    if (resolved.metric_id != core::MetricId::Schwarzschild &&
+        resolved.metric_id != core::MetricId::Kerr) {
         cli::Error("The interactive viewer currently represents Schwarzschild and Kerr only");
         return 1;
     }
@@ -321,21 +368,31 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
     }
     cli::Info("OpenGL " + std::string(reinterpret_cast<const char*>(gl_version)));
 
-    glfwSetKeyCallback(window, KeyCallback);
-    glfwSetCursorPosCallback(window, CursorPosCallback);
-    glfwSetMouseButtonCallback(window, MouseButtonCallback);
-    glfwSetScrollCallback(window, ScrollCallback);
-    glfwSetFramebufferSizeCallback(window, FramebufferSizeCallback);
-
-    glGenTextures(1, &g_texture);
-    glBindTexture(GL_TEXTURE_2D, g_texture);
+    GLuint texture = 0;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     InteractiveViewer viewer;
-    g_viewer = &viewer;
+    ViewerCallbackState callback_state{
+        .viewer = &viewer,
+        .transcript = input_transcript ? &input_transcript : nullptr,
+    };
+    glfwSetWindowUserPointer(window, &callback_state);
+    glfwSetKeyCallback(window, KeyCallback);
+    glfwSetCursorPosCallback(window, CursorPosCallback);
+    glfwSetMouseButtonCallback(window, MouseButtonCallback);
+    glfwSetScrollCallback(window, ScrollCallback);
+    glfwSetFramebufferSizeCallback(window, FramebufferSizeCallback);
+    if (callback_state.transcript != nullptr) {
+        std::lock_guard<std::mutex> lock(callback_state.transcript_mutex);
+        *callback_state.transcript
+            << "window-created opengl-version=" << reinterpret_cast<const char*>(gl_version) << '\n'
+            << std::flush;
+    }
 
     ViewerConfig view_config;
     view_config.session_template = resolved;
@@ -345,28 +402,47 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
         std::min(config.render.height, std::max(64, config.render.height / 4));
     view_config.final_width = config.render.width;
     view_config.final_height = config.render.height;
-    view_config.blackHoleMass = resolved.blackHoleMass;
-    view_config.blackHoleSpin = resolved.blackHoleSpin;
-    view_config.metricId = resolved.metricId;
-    view_config.observerDistance = config.observer.distance;
-    view_config.observerInclination = config.inclinationRadians();
-    view_config.observerAzimuth = config.observer.azimuth * core::constants::math::kPi / 180.0;
-    view_config.observerFov = static_cast<float>(config.observer.fov);
-    view_config.enableDisk = config.diskEnabled;
-    view_config.enableVolumetric = config.volumetric.enabled;
-    view_config.enableJets = jets_enabled_;
+    view_config.black_hole_mass = resolved.black_hole_mass;
+    view_config.black_hole_spin = resolved.black_hole_spin;
+    view_config.metric_id = resolved.metric_id;
+    view_config.observer_distance = config.observer.distance;
+    view_config.observer_inclination = config.inclination_radians();
+    view_config.observer_azimuth = config.observer.azimuth * core::constants::math::kPi / 180.0;
+    view_config.observer_fov = static_cast<float>(config.observer.fov);
+    view_config.enable_disk = config.disk_enabled;
+    view_config.enable_volumetric = config.volumetric.enabled;
+    view_config.enable_jets = jets_enabled_;
     view_config.backend = resolved.backend;
 
     if (!viewer.Initialise(view_config)) {
         cli::Error("Viewer configuration is outside the represented operating domain");
-        g_viewer = nullptr;
-        glDeleteTextures(1, &g_texture);
+        glfwSetWindowUserPointer(window, nullptr);
+        glDeleteTextures(1, &texture);
         glfwDestroyWindow(window);
         glfwTerminate();
         return 1;
     }
-    viewer.AttachWindow(window);
-    viewer.SetFrameCallback(FrameCallback);
+    viewer.SetFrameCallback([&display_frame, &callback_state, backend = view_config.backend](
+                                const float* data, int width, int height) {
+        {
+            std::lock_guard<std::mutex> lock(display_frame.mutex);
+            const std::size_t size =
+                static_cast<std::size_t>(width) * static_cast<std::size_t>(height) * 4;
+            display_frame.pixels.resize(size);
+            std::memcpy(display_frame.pixels.data(), data, size * sizeof(float));
+            display_frame.width = width;
+            display_frame.height = height;
+            display_frame.needs_upload = true;
+        }
+        if (callback_state.transcript != nullptr) {
+            std::lock_guard<std::mutex> lock(callback_state.transcript_mutex);
+            *callback_state.transcript
+                << "frame-published backend="
+                << (backend == render::RenderBackend::Vulkan ? "Vulkan" : "Cpu")
+                << " width=" << width << " height=" << height << '\n'
+                << std::flush;
+        }
+    });
 
     // Fullscreen quad.
     float quad_vertices[] = {
@@ -397,11 +473,11 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
         shader_program = BuildViewerShaderProgram();
     } catch (const std::exception& error) {
         cli::Error(error.what());
-        g_viewer = nullptr;
+        glfwSetWindowUserPointer(window, nullptr);
         glDeleteVertexArrays(1, &vao);
         glDeleteBuffers(1, &vbo);
         glDeleteBuffers(1, &ebo);
-        glDeleteTextures(1, &g_texture);
+        glDeleteTextures(1, &texture);
         glfwDestroyWindow(window);
         glfwTerminate();
         return 1;
@@ -409,12 +485,12 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
 
     if (!viewer.Start()) {
         cli::Error("Failed to start the viewer render thread");
-        g_viewer = nullptr;
+        glfwSetWindowUserPointer(window, nullptr);
         glDeleteVertexArrays(1, &vao);
         glDeleteBuffers(1, &vbo);
         glDeleteBuffers(1, &ebo);
         glDeleteProgram(shader_program);
-        glDeleteTextures(1, &g_texture);
+        glDeleteTextures(1, &texture);
         glfwDestroyWindow(window);
         glfwTerminate();
         return 1;
@@ -434,12 +510,13 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
         glfwPollEvents();
 
         {
-            std::lock_guard<std::mutex> lock(g_frame_mutex);
-            if (g_texture_needs_update && !g_frame_data.empty()) {
-                glBindTexture(GL_TEXTURE_2D, g_texture);
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, g_frame_width, g_frame_height, 0,
-                             GL_RGBA, GL_FLOAT, g_frame_data.data());
-                g_texture_needs_update = false;
+            std::lock_guard<std::mutex> lock(display_frame.mutex);
+            if (display_frame.needs_upload && !display_frame.pixels.empty()) {
+                glBindTexture(GL_TEXTURE_2D, texture);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, display_frame.width,
+                             display_frame.height, 0, GL_RGBA, GL_FLOAT,
+                             display_frame.pixels.data());
+                display_frame.needs_upload = false;
             }
         }
 
@@ -450,7 +527,7 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shader_program);
-        glBindTexture(GL_TEXTURE_2D, g_texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
         glBindVertexArray(vao);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -472,13 +549,13 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
 
     viewer.Stop();
     const std::string viewer_error = viewer.GetLastError();
-    g_viewer = nullptr;
+    glfwSetWindowUserPointer(window, nullptr);
 
     glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(1, &vbo);
     glDeleteBuffers(1, &ebo);
     glDeleteProgram(shader_program);
-    glDeleteTextures(1, &g_texture);
+    glDeleteTextures(1, &texture);
 
     glfwDestroyWindow(window);
     glfwTerminate();

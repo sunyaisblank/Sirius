@@ -68,6 +68,14 @@ endif()
 function(sirius_configure_target target)
     cmake_parse_arguments(ARG "" "CONTRACT_MODE" "" ${ARGN})
 
+    # First-party targets are C++26. The few mixed targets also host isolated
+    # vendored C translation units; pin those to portable C17 rather than the
+    # compiler's changing default dialect.
+    set_target_properties(${target} PROPERTIES
+        C_STANDARD 17
+        C_STANDARD_REQUIRED YES
+        C_EXTENSIONS NO)
+
     if(MSVC)
         target_compile_options(${target} PRIVATE
             $<$<COMPILE_LANGUAGE:CXX>:/std:c++latest> /W4 /permissive- /utf-8)

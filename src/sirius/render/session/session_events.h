@@ -8,7 +8,7 @@
 namespace sirius::render {
 
 // All valid events driving the render session.
-enum class SessionEvent : uint8_t {
+enum class SessionEvent : std::uint8_t {
     Start,             // User initiates a render.
     Ready,             // Initialisation complete.
     TileAvailable,     // Tile ready for processing.

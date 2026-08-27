@@ -5,12 +5,17 @@ set(_sirius_install_root "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}")
 set(_sirius_required
     "${_sirius_install_root}/bin/sirius@CMAKE_EXECUTABLE_SUFFIX@"
     "${_sirius_install_root}/share/sirius/assets/Starfield.png"
-    "${_sirius_install_root}/share/sirius/model/operating_model.json")
+    "${_sirius_install_root}/share/sirius/model/operating_model.json"
+    "${_sirius_install_root}/share/sirius/model/alignment_receipt.json")
 
 if("@SIRIUS_INSTALL_HAS_VIEWER@" STREQUAL "TRUE")
     list(APPEND _sirius_required
         "${_sirius_install_root}/share/sirius/shaders/RDSD003A.vert"
-        "${_sirius_install_root}/share/sirius/shaders/RDSD003A.frag")
+        "${_sirius_install_root}/share/sirius/shaders/RDSD003A.frag"
+        "${_sirius_install_root}/share/sirius/shaders/RDSD004A.vert"
+        "${_sirius_install_root}/share/sirius/shaders/RDSD004A.frag"
+        "${_sirius_install_root}/share/sirius/shaders/RDSD005A.vert"
+        "${_sirius_install_root}/share/sirius/shaders/RDSD005A.frag")
 endif()
 
 if("@SIRIUS_INSTALL_HAS_VULKAN@" STREQUAL "TRUE")
@@ -29,5 +34,71 @@ foreach(_sirius_path IN LISTS _sirius_required)
         message(FATAL_ERROR "Sirius install invariant failed: empty ${_sirius_path}")
     endif()
 endforeach()
+
+if(NOT "@SIRIUS_ALIGNMENT_MODE@" STREQUAL "development")
+    set(_sirius_gate_stamp
+        "${_sirius_install_root}/share/sirius/model/mandatory_gate.json")
+    if(NOT EXISTS "${_sirius_gate_stamp}")
+        message(FATAL_ERROR
+            "Sirius strict install requires the completed Mandatory gate receipt")
+    endif()
+    set(_sirius_gate_config "@CMAKE_BUILD_TYPE@")
+    if(DEFINED CMAKE_INSTALL_CONFIG_NAME AND NOT CMAKE_INSTALL_CONFIG_NAME STREQUAL "")
+        set(_sirius_gate_config "${CMAKE_INSTALL_CONFIG_NAME}")
+    endif()
+    execute_process(
+        COMMAND "@Python3_EXECUTABLE@"
+            "@CMAKE_SOURCE_DIR@/scripts/verify-build-gate.py"
+            --action check
+            --stamp "@SIRIUS_MANDATORY_GATE_STAMP@"
+            --alignment-mode "@SIRIUS_ALIGNMENT_MODE@"
+            --source-root "@CMAKE_SOURCE_DIR@"
+            --build-dir "@CMAKE_BINARY_DIR@"
+            --source-revision "@SIRIUS_SOURCE_REVISION@"
+            --ctest "@CMAKE_CTEST_COMMAND@"
+            --config "${_sirius_gate_config}"
+            --installed-root "${_sirius_install_root}"
+            --executable-suffix "@CMAKE_EXECUTABLE_SUFFIX@"
+        RESULT_VARIABLE _sirius_gate_result
+        OUTPUT_VARIABLE _sirius_gate_stdout
+        ERROR_VARIABLE _sirius_gate_stderr)
+    if(NOT _sirius_gate_result EQUAL 0)
+        message(FATAL_ERROR
+            "Sirius strict install rejected an untested or stale product:\n"
+            "${_sirius_gate_stdout}${_sirius_gate_stderr}")
+    endif()
+
+    # The independent install verifier above checks bytes from outside the
+    # product. Complete the trust chain by making the relocated executable parse
+    # and accept those same installed authorities through its non-rendering
+    # runtime initialisation path.
+    execute_process(
+        COMMAND
+            "${_sirius_install_root}/bin/sirius@CMAKE_EXECUTABLE_SUFFIX@"
+            --json info capabilities
+        WORKING_DIRECTORY "${_sirius_install_root}"
+        RESULT_VARIABLE _sirius_runtime_result
+        OUTPUT_VARIABLE _sirius_runtime_stdout
+        ERROR_VARIABLE _sirius_runtime_stderr)
+    string(JSON _sirius_runtime_schema ERROR_VARIABLE _sirius_runtime_schema_error
+        GET "${_sirius_runtime_stdout}" schema_version)
+    string(JSON _sirius_runtime_mode ERROR_VARIABLE _sirius_runtime_mode_error
+        GET "${_sirius_runtime_stdout}" ultimate_ideal alignment_mode)
+    string(JSON _sirius_runtime_aligned ERROR_VARIABLE _sirius_runtime_aligned_error
+        GET "${_sirius_runtime_stdout}" ultimate_ideal satisfied)
+    if(NOT _sirius_runtime_result EQUAL 0 OR
+       NOT _sirius_runtime_schema_error STREQUAL "NOTFOUND" OR
+       NOT _sirius_runtime_mode_error STREQUAL "NOTFOUND" OR
+       NOT _sirius_runtime_aligned_error STREQUAL "NOTFOUND" OR
+       NOT _sirius_runtime_schema EQUAL 3 OR
+       NOT _sirius_runtime_mode STREQUAL "@SIRIUS_ALIGNMENT_MODE@" OR
+       ("@SIRIUS_ALIGNMENT_MODE@" STREQUAL "release" AND
+        NOT _sirius_runtime_aligned))
+        message(FATAL_ERROR
+            "Sirius strict install failed relocated runtime-authority initialisation "
+            "(${_sirius_runtime_result}):\n"
+            "${_sirius_runtime_stdout}${_sirius_runtime_stderr}")
+    endif()
+endif()
 
 message(STATUS "Sirius install invariant: runtime volume is structurally complete")

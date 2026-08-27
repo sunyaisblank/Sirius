@@ -69,13 +69,13 @@ class DisplayBuffer {
     }
 
     // Gamma-corrected 8-bit RGBA for GL upload (recomputed when dirty).
-    const uint8_t* GetByteData(float gamma = 2.2f) {
+    const std::uint8_t* GetByteData(float gamma = 2.2f) {
         if (!std::isfinite(gamma) || gamma <= 0.0f) return nullptr;
         std::lock_guard<std::mutex> lock(mutex_);
 
         if (dirty_) {
             float inv_gamma = 1.0f / gamma;
-            for (size_t i = 0; i < pixel_data_.size(); i += 4) {
+            for (std::size_t i = 0; i < pixel_data_.size(); i += 4) {
                 byte_data_[i + 0] = FloatToByte(std::pow(pixel_data_[i + 0], inv_gamma));
                 byte_data_[i + 1] = FloatToByte(std::pow(pixel_data_[i + 1], inv_gamma));
                 byte_data_[i + 2] = FloatToByte(std::pow(pixel_data_[i + 2], inv_gamma));
@@ -115,20 +115,20 @@ class DisplayBuffer {
 
     int GetWidth() const { return width_; }
     int GetHeight() const { return height_; }
-    uint64_t GetUpdateCounter() const { return update_counter_.load(); }
+    std::uint64_t GetUpdateCounter() const { return update_counter_.load(); }
 
   private:
-    static uint8_t FloatToByte(float v) {
+    static std::uint8_t FloatToByte(float v) {
         if (v <= 0.0f) return 0;
         if (v >= 1.0f) return 255;
-        return static_cast<uint8_t>(v * 255.0f + 0.5f);
+        return static_cast<std::uint8_t>(v * 255.0f + 0.5f);
     }
 
     int width_ = 0;
     int height_ = 0;
-    std::vector<float> pixel_data_;   // RGBA float [0, inf).
-    std::vector<uint8_t> byte_data_;  // RGBA uint8 [0, 255].
-    std::atomic<uint64_t> update_counter_{0};
+    std::vector<float> pixel_data_;        // RGBA float [0, inf).
+    std::vector<std::uint8_t> byte_data_;  // RGBA uint8 [0, 255].
+    std::atomic<std::uint64_t> update_counter_{0};
     bool dirty_ = false;
     mutable std::mutex mutex_;
 };

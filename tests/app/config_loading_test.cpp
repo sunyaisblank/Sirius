@@ -41,36 +41,36 @@ TEST(ConfigLoading, ExplicitMissingFileDeclines) {
         std::filesystem::temp_directory_path() / "sirius-config-definitely-absent.json";
     std::error_code ec;
     std::filesystem::remove(path, ec);
-    EXPECT_THROW(ConfigLoader::Load(path.string()), std::runtime_error);
+    EXPECT_FALSE(ConfigLoader::Load(path.string()).has_value());
 }
 
 TEST(ConfigLoading, MalformedJsonDeclinesWithoutDefaults) {
     TemporaryConfig config(R"({"render": {"width": 512,})");
-    EXPECT_THROW(ConfigLoader::LoadFromFile(config.Path()), nlohmann::json::exception);
+    EXPECT_FALSE(ConfigLoader::LoadFromFile(config.Path()).has_value());
 }
 
 TEST(ConfigLoading, UnknownNestedFieldDeclines) {
     TemporaryConfig config(R"({"render": {"widht": 512}})");
-    EXPECT_THROW(ConfigLoader::LoadFromFile(config.Path()), std::invalid_argument);
+    EXPECT_FALSE(ConfigLoader::LoadFromFile(config.Path()).has_value());
 }
 
 TEST(ConfigLoading, UnknownTopLevelFieldDeclines) {
     TemporaryConfig config(R"({"renderer": {"width": 512}})");
-    EXPECT_THROW(ConfigLoader::LoadFromFile(config.Path()), std::invalid_argument);
+    EXPECT_FALSE(ConfigLoader::LoadFromFile(config.Path()).has_value());
 }
 
 TEST(ConfigLoading, DuplicateFieldsDeclineInsteadOfUsingParserOrder) {
     TemporaryConfig top_level(R"({"diskEnabled": true, "diskEnabled": false})");
-    EXPECT_THROW(ConfigLoader::LoadFromFile(top_level.Path()), std::invalid_argument);
+    EXPECT_FALSE(ConfigLoader::LoadFromFile(top_level.Path()).has_value());
 
     TemporaryConfig nested(R"({"render": {"width": 512, "width": 1024}})");
-    EXPECT_THROW(ConfigLoader::LoadFromFile(nested.Path()), std::invalid_argument);
+    EXPECT_FALSE(ConfigLoader::LoadFromFile(nested.Path()).has_value());
 }
 
 TEST(ConfigLoading, ValidateCommandUsesTheSameStrictParserAsStartup) {
     ConfigCommand command;
     GlobalOptions globals;
-    SiriusConfig config = SiriusConfig::defaults();
+    SiriusConfig config = SiriusConfig::Defaults();
 
     TemporaryConfig unknown(R"({"render": {"widht": 512}})");
     EXPECT_EQ(command.Execute({"validate", unknown.Path().string()}, globals, config), 1);
@@ -84,28 +84,29 @@ TEST(ConfigLoading, ValidateCommandUsesTheSameStrictParserAsStartup) {
 
 TEST(ConfigLoading, InvalidKnownValueDeclines) {
     TemporaryConfig config(R"({"render": {"width": 64}})");
-    EXPECT_THROW(ConfigLoader::LoadFromFile(config.Path()), std::invalid_argument);
+    EXPECT_FALSE(ConfigLoader::LoadFromFile(config.Path()).has_value());
 }
 
 TEST(ConfigLoading, ValidPartialFileMergesOverDefaults) {
     TemporaryConfig config(R"({"render": {"width": 512}})");
-    const SiriusConfig loaded = ConfigLoader::LoadFromFile(config.Path());
-    EXPECT_EQ(loaded.render.width, 512);
-    EXPECT_EQ(loaded.render.height, SiriusConfig::defaults().render.height);
+    const auto loaded = ConfigLoader::LoadFromFile(config.Path());
+    ASSERT_TRUE(loaded.has_value()) << loaded.error().Description();
+    EXPECT_EQ(loaded->render.width, 512);
+    EXPECT_EQ(loaded->render.height, SiriusConfig::Defaults().render.height);
 }
 
 TEST(ConfigLoading, SaveDeclinesWhenParentCannotBeCreated) {
     TemporaryConfig regular_file_parent("{}");
     const auto impossible_child = regular_file_parent.Path() / "child.json";
-    EXPECT_FALSE(ConfigLoader::SaveToFile(SiriusConfig::defaults(), impossible_child));
+    EXPECT_FALSE(ConfigLoader::SaveToFile(SiriusConfig::Defaults(), impossible_child).has_value());
     EXPECT_FALSE(std::filesystem::exists(impossible_child));
 }
 
 TEST(ConfigLoading, SaveDeclinesInvalidConfiguration) {
     TemporaryConfig output("{}");
-    SiriusConfig invalid = SiriusConfig::defaults();
+    SiriusConfig invalid = SiriusConfig::Defaults();
     invalid.render.width = 0;
-    EXPECT_FALSE(ConfigLoader::SaveToFile(invalid, output.Path()));
+    EXPECT_FALSE(ConfigLoader::SaveToFile(invalid, output.Path()).has_value());
 }
 
 }  // namespace sirius::app::test

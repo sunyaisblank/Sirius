@@ -55,6 +55,7 @@
 #include <algorithm>
 #include <cmath>
 #include <complex>
+#include <numbers>
 
 namespace sirius::oracle {
 
@@ -272,8 +273,8 @@ struct PolarisedDerivD {
 }  // namespace detail
 
 // Classical fourth-order Runge-Kutta step of size h on the coupled system.
-// RK4 rather than the oracle's symplectic leapfrog because the transported f
-// has no Hamiltonian structure to preserve; the shared connection evaluation
+// RK4 rather than the oracle's canonical midpoint map because the transported
+// f has no Hamiltonian structure to preserve; the shared connection evaluation
 // keeps k and f consistent, which is what conserves the Walker-Penrose
 // constant. Reference: geodesic and Jacobi transport of Kerr null rays, James
 // et al. (2015), Appendix; matches the RK4 style of beam_integrator.h.
@@ -294,7 +295,8 @@ struct PolarisedDerivD {
 
     // Keep the next Christoffel evaluation away from the axis singularity; rays
     // integrated here stay well clear of it, so the clamp is inert in practice.
-    out.x.theta = std::clamp(out.x.theta, kPolarisedPoleClamp, M_PI - kPolarisedPoleClamp);
+    out.x.theta =
+        std::clamp(out.x.theta, kPolarisedPoleClamp, std::numbers::pi - kPolarisedPoleClamp);
     return out;
 }
 
@@ -305,12 +307,12 @@ struct PolarisedDerivD {
 class PolarisedGeodesicIntegratorD {
   public:
     struct Config {
-        double baseStep = kPolarisedTransportStep;
-        double minStep = 1e-5;
-        double maxStep = 0.05;
-        double escapeRadius = 60.0;   // Units of M; a full deflected geodesic.
-        double horizonBuffer = 1.02;  // Terminate at r <= r_+ * this.
-        int maxSteps = 400000;
+        double base_step = kPolarisedTransportStep;
+        double min_step = 1e-5;
+        double max_step = 0.05;
+        double escape_radius = 60.0;   // Units of M; a full deflected geodesic.
+        double horizon_buffer = 1.02;  // Terminate at r <= r_+ * this.
+        int max_steps = 400000;
     };
 
     struct Result {
@@ -329,14 +331,14 @@ class PolarisedGeodesicIntegratorD {
         SIRIUS_PRE(metric != nullptr);
     }
 
-    // Step shrinks quadratically as the geodesic approaches the horizon, exactly
-    // as the oracle symplectic integrator adapts, concentrating resolution where
-    // the connection is strongest (near the photon sphere).
+    // Step shrinks quadratically as the geodesic approaches the horizon,
+    // concentrating resolution where the connection is strongest (near the
+    // photon sphere). This state-dependent controller is not a symplectic claim.
     [[nodiscard]] double AdaptiveStepSize(double r) const {
         const double r_h = metric_->HorizonRadius();
         const double ratio = (r - r_h) / r_h;
-        const double h = config_.baseStep * std::min(1.0, ratio * ratio);
-        return std::clamp(h, config_.minStep, config_.maxStep);
+        const double h = config_.base_step * std::min(1.0, ratio * ratio);
+        return std::clamp(h, config_.min_step, config_.max_step);
     }
 
     [[nodiscard]] Result Integrate(const PolarisedStateD& initial) const {
@@ -344,12 +346,12 @@ class PolarisedGeodesicIntegratorD {
         PolarisedStateD s = initial;
         const double r_h = metric_->HorizonRadius();
 
-        for (int i = 0; i < config_.maxSteps; ++i) {
-            if (s.x.r <= r_h * config_.horizonBuffer) {
+        for (int i = 0; i < config_.max_steps; ++i) {
+            if (s.x.r <= r_h * config_.horizon_buffer) {
                 result.captured = true;
                 break;
             }
-            if (s.x.r > config_.escapeRadius) {
+            if (s.x.r > config_.escape_radius) {
                 result.escaped = true;
                 break;
             }

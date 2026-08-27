@@ -142,11 +142,11 @@ std::vector<float> BuildTraceParams(const Scene& scene) {
     p[18] = static_cast<float>(-st);
     p[19] = static_cast<float>(scene.fov_deg * kPi / 180.0);
     p[20] = static_cast<float>(scene.width) / static_cast<float>(scene.height);
-    p[21] = 3000.0f;  // maxSteps
+    p[21] = 3000.0f;  // max_steps
     p[22] = 0.08f;    // stepScale
-    p[23] = 0.02f;    // minStep
-    p[24] = 2.0f;     // maxStep
-    p[25] = 200.0f;   // escapeRadius
+    p[23] = 0.02f;    // min_step
+    p[24] = 2.0f;     // max_step
+    p[25] = 200.0f;   // escape_radius
     p[26] = 1.0f;     // exact Kerr-Schild horizon capture surface
     p[27] = 0.0f;     // disk disabled
     p[32] = 0.0f;     // tileOriginX
@@ -222,21 +222,25 @@ std::vector<float> RenderSessionVulkan(
     sirius::render::SessionConfig config;
     config.width = width;
     config.height = height;
-    config.samplesPerPixel = 1;
-    config.tileSize = 64;
-    config.enableParallelRendering = false;
+    config.samples_per_pixel = 1;
+    config.tile_size = 64;
+    config.enable_parallel_rendering = false;
     config.backend = sirius::render::RenderBackend::Vulkan;
-    config.metricId = sirius::core::MetricId::Kerr;
-    config.blackHoleMass = 1.0;
-    config.blackHoleSpin = 0.9;
-    config.observerDistance = 30.0;
-    config.observerInclination = 80.0 * kPi / 180.0;
-    config.cameraFOV = 50.0f;
-    config.outputPath = out_path;
+    config.metric_id = sirius::core::MetricId::Kerr;
+    config.black_hole_mass = 1.0;
+    config.black_hole_spin = 0.9;
+    config.observer_distance = 30.0;
+    config.observer_inclination = 80.0 * kPi / 180.0;
+    config.camera_fov = 50.0f;
+    config.output_path = out_path;
     if (configure) configure(config);
 
     sirius::render::RenderSession session;
-    session.Configure(config);
+    const auto configured = session.Configure(config);
+    if (!configured) {
+        ADD_FAILURE() << configured.error().Description();
+        return {};
+    }
     const sirius::render::SessionState state = session.Execute();
     if (state != sirius::render::SessionState::Complete) return {};
 
@@ -270,59 +274,85 @@ void ExpectFiniteNonConstantWithShadow(const std::vector<float>& rgba, int width
     EXPECT_LE(fraction, 0.60) << tag << " shadow fraction too large";
 }
 
+void ExpectFiniteResolvedPointField(const std::vector<float>& rgba, int width, int height,
+                                    const char* tag) {
+    ASSERT_EQ(rgba.size(), static_cast<std::size_t>(width) * height * 4) << tag;
+    float minimum_luminance = std::numeric_limits<float>::max();
+    float maximum_luminance = 0.0f;
+    std::size_t lit_pixels = 0;
+    for (int pixel = 0; pixel < width * height; ++pixel) {
+        const float r = rgba[pixel * 4 + 0];
+        const float g = rgba[pixel * 4 + 1];
+        const float b = rgba[pixel * 4 + 2];
+        ASSERT_TRUE(std::isfinite(r) && std::isfinite(g) && std::isfinite(b))
+            << tag << " non-finite radiance";
+        const float luminance = Luminance(r, g, b);
+        minimum_luminance = std::min(minimum_luminance, luminance);
+        maximum_luminance = std::max(maximum_luminance, luminance);
+        if (luminance > 1.0e-4f) ++lit_pixels;
+    }
+    const double lit_fraction = static_cast<double>(lit_pixels) / (width * height);
+    std::cout << "[ " << tag << " ] lit fraction=" << lit_fraction << " luminance range=["
+              << minimum_luminance << ", " << maximum_luminance << "]\n";
+    EXPECT_GT(maximum_luminance - minimum_luminance, 1.0e-2f)
+        << tag << " point radiance does not survive display quantisation";
+    EXPECT_GE(lit_fraction, 0.02) << tag << " has too few resolved point-source pixels";
+    EXPECT_LE(lit_fraction, 0.50) << tag << " collapsed into a diffuse background";
+}
+
 TEST(VulkanRenderSession, CapabilityBoundaryAcceptsRepresentedSceneSemantics) {
     sirius::render::SessionConfig config;
-    config.samplesPerPixel = 7;
-    config.temperatureModel = sirius::render::DiskTemperatureModel::ShakuraSunyaev;
-    config.dopplerBeaming = false;
-    config.cameraBetaForward = 0.1;
-    config.lensType = sirius::core::LensType::ThinLens;
-    config.enableVolumetricDisk = true;
-    config.enableTurbulence = true;
-    config.enableCorona = true;
-    config.volumetricSamples = 64;
+    config.samples_per_pixel = 7;
+    config.temperature_model = sirius::render::DiskTemperatureModel::ShakuraSunyaev;
+    config.doppler_beaming = false;
+    config.camera_beta_forward = 0.1;
+    config.lens_type = sirius::core::LensType::ThinLens;
+    config.enable_volumetric_disk = true;
+    config.enable_turbulence = true;
+    config.enable_corona = true;
+    config.volumetric_samples = 64;
     EXPECT_TRUE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
 }
 
 TEST(VulkanRenderSession, CapabilityBoundaryRejectsUnrepresentedSceneSemantics) {
     sirius::render::SessionConfig config;
-    config.enableVolumetricDisk = true;
-    config.volumetricSamples = 129;
+    config.enable_volumetric_disk = true;
+    config.volumetric_samples = 129;
     EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
 
-    config.volumetricSamples = 64;
-    config.pointStarfield = true;
+    config.volumetric_samples = 64;
+    config.point_starfield = true;
     EXPECT_TRUE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
 
-    config.temperatureModel = static_cast<sirius::render::DiskTemperatureModel>(255);
+    config.temperature_model = static_cast<sirius::render::DiskTemperatureModel>(255);
     EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
-    config.temperatureModel = sirius::render::DiskTemperatureModel::NovikovThorne;
-    config.lensType = sirius::core::LensType::Fisheye;
+    config.temperature_model = sirius::render::DiskTemperatureModel::NovikovThorne;
+    config.lens_type = sirius::core::LensType::Fisheye;
     EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
-    config.lensType = static_cast<sirius::core::LensType>(255);
+    config.lens_type = static_cast<sirius::core::LensType>(255);
     EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
-    config.lensType = sirius::core::LensType::Pinhole;
-    config.enablePolarisation = true;
+    config.lens_type = sirius::core::LensType::Pinhole;
+    config.enable_polarisation = true;
     EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
-    config.enablePolarisation = false;
-    config.metricId = sirius::core::MetricId::KerrNewman;
-    config.enableDisk = true;
+    config.enable_polarisation = false;
+    config.metric_id = sirius::core::MetricId::KerrNewman;
+    config.enable_disk = true;
     EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
-    config.metricId = sirius::core::MetricId::Minkowski;
-    config.blackHoleMass = 0.0;
+    config.metric_id = sirius::core::MetricId::Minkowski;
+    config.black_hole_mass = 0.0;
     EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
-    config.metricId = sirius::core::MetricId::Schwarzschild;
-    config.blackHoleMass = 1.0;
-    config.blackHoleSpin = 0.4;
+    config.metric_id = sirius::core::MetricId::Schwarzschild;
+    config.black_hole_mass = 1.0;
+    config.black_hole_spin = 0.4;
     EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
-    config.blackHoleSpin = 0.0;
-    config.enableJets = true;
+    config.black_hole_spin = 0.0;
+    config.enable_jets = true;
     EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
-    config.enableJets = false;
-    config.enableMotionBlur = true;
+    config.enable_jets = false;
+    config.enable_motion_blur = true;
     EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
-    config.enableMotionBlur = false;
-    config.colorMode = sirius::core::color_modes::Mode::RedshiftMap;
+    config.enable_motion_blur = false;
+    config.color_mode = sirius::core::color_modes::Mode::RedshiftMap;
     EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
 }
 
@@ -333,16 +363,16 @@ TEST(VulkanRenderSession, VolumetricTurbulenceAndCoronaReachLiveKernel) {
     const std::string root = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp");
     const auto baseline = RenderSessionVulkan(40, 24, root + "/sirius_vk_volume_baseline.exr",
                                               [](sirius::render::SessionConfig& config) {
-                                                  config.enableVolumetricDisk = true;
-                                                  config.volumetricSamples = 4;
+                                                  config.enable_volumetric_disk = true;
+                                                  config.volumetric_samples = 4;
                                               });
     const auto represented =
         RenderSessionVulkan(40, 24, root + "/sirius_vk_volume_turbulence_corona.exr",
                             [](sirius::render::SessionConfig& config) {
-                                config.enableVolumetricDisk = true;
-                                config.enableTurbulence = true;
-                                config.enableCorona = true;
-                                config.volumetricSamples = 4;
+                                config.enable_volumetric_disk = true;
+                                config.enable_turbulence = true;
+                                config.enable_corona = true;
+                                config.volumetric_samples = 4;
                             });
     ASSERT_FALSE(baseline.empty());
     ASSERT_EQ(represented.size(), baseline.size());
@@ -355,6 +385,42 @@ TEST(VulkanRenderSession, VolumetricTurbulenceAndCoronaReachLiveKernel) {
         << "Vulkan turbulence/corona controls did not affect live volumetric transfer";
 }
 
+TEST(VulkanRenderSession, ThinAndVolumetricDopplerSuppressionAffectLiveEmission) {
+    if (const auto devices = EnumerateVulkanDevices(); !devices || devices->empty()) {
+        GTEST_SKIP() << "no Vulkan device present";
+    }
+    const std::string root = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp");
+    auto render = [&](const char* suffix, bool volumetric, bool doppler) {
+        return RenderSessionVulkan(40, 24, root + "/sirius_vk_doppler_" + suffix + ".exr",
+                                   [=](sirius::render::SessionConfig& config) {
+                                       config.enable_volumetric_disk = volumetric;
+                                       config.volumetric_samples = 4;
+                                       config.doppler_beaming = doppler;
+                                   });
+    };
+    const auto thin_beamed = render("thin_on", false, true);
+    const auto thin_gravity = render("thin_off", false, false);
+    const auto volume_beamed = render("volume_on", true, true);
+    const auto volume_gravity = render("volume_off", true, false);
+
+    auto absolute_difference = [](const std::vector<float>& lhs, const std::vector<float>& rhs) {
+        EXPECT_FALSE(lhs.empty());
+        EXPECT_EQ(lhs.size(), rhs.size());
+        double difference = 0.0;
+        for (std::size_t i = 0; i < std::min(lhs.size(), rhs.size()); ++i) {
+            EXPECT_TRUE(std::isfinite(lhs[i]));
+            EXPECT_TRUE(std::isfinite(rhs[i]));
+            difference += std::abs(static_cast<double>(lhs[i] - rhs[i]));
+        }
+        return difference;
+    };
+
+    EXPECT_GT(absolute_difference(thin_beamed, thin_gravity), 1.0e-5)
+        << "the Doppler toggle did not reach live Vulkan thin-disk emission";
+    EXPECT_GT(absolute_difference(volume_beamed, volume_gravity), 1.0e-5)
+        << "the Doppler toggle did not reach live Vulkan volumetric emission";
+}
+
 TEST(VulkanRenderSession, NonSquareMultisamplingCameraAndLensReachLiveKernel) {
     if (const auto d = EnumerateVulkanDevices(); !d.has_value() || d->empty()) {
         GTEST_SKIP() << "no Vulkan device present";
@@ -364,14 +430,14 @@ TEST(VulkanRenderSession, NonSquareMultisamplingCameraAndLensReachLiveKernel) {
     const auto represented = RenderSessionVulkan(
         48, 32, root + "/sirius_vk_semantics_represented.exr",
         [](sirius::render::SessionConfig& config) {
-            config.samplesPerPixel = 3;
-            config.cameraBetaForward = 0.1;
-            config.lensType = sirius::core::LensType::ThinLens;
-            config.cameraAperture = 2.8f;
-            config.cameraFocalLength = 50.0f;
-            config.cameraFocusDistance = 30.0f;
-            config.temperatureModel = sirius::render::DiskTemperatureModel::ShakuraSunyaev;
-            config.dopplerBeaming = false;
+            config.samples_per_pixel = 3;
+            config.camera_beta_forward = 0.1;
+            config.lens_type = sirius::core::LensType::ThinLens;
+            config.camera_aperture = 2.8f;
+            config.camera_focal_length = 50.0f;
+            config.camera_focus_distance = 30.0f;
+            config.temperature_model = sirius::render::DiskTemperatureModel::ShakuraSunyaev;
+            config.doppler_beaming = false;
         });
     ASSERT_FALSE(baseline.empty());
     ASSERT_EQ(represented.size(), baseline.size());
@@ -389,29 +455,67 @@ TEST(VulkanRenderSession, IndexedPointCatalogueReachesLiveKernel) {
         GTEST_SKIP() << "no Vulkan device present";
     }
     const std::string root = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp");
-    const auto texture = RenderSessionVulkan(48, 32, root + "/sirius_vk_texture_stars.exr");
+    const auto texture = RenderSessionVulkan(
+        48, 32, root + "/sirius_vk_texture_stars.exr",
+        [](sirius::render::SessionConfig& config) { config.enable_disk = false; });
     const auto points = RenderSessionVulkan(48, 32, root + "/sirius_vk_point_stars.exr",
                                             [](sirius::render::SessionConfig& config) {
-                                                config.pointStarfield = true;
-                                                config.rayBundles = true;
-                                                config.starfieldConfig.star_count = 100000;
-                                                config.starfieldConfig.brightness_scale = 2.0f;
+                                                config.point_starfield = true;
+                                                config.ray_bundles = true;
+                                                config.enable_disk = false;
+                                                config.starfield_config.star_count = 100000;
+                                                config.starfield_config.brightness_scale = 100.0f;
                                             });
     ASSERT_FALSE(texture.empty());
     ASSERT_EQ(points.size(), texture.size());
     double point_energy = 0.0;
     double absolute_difference = 0.0;
+    double minimum_luminance = std::numeric_limits<double>::infinity();
+    double maximum_luminance = 0.0;
     for (std::size_t i = 0; i < points.size(); i += 4) {
         ASSERT_TRUE(std::isfinite(points[i]) && std::isfinite(points[i + 1]) &&
                     std::isfinite(points[i + 2]));
         point_energy += points[i] + points[i + 1] + points[i + 2];
+        const double luminance = Luminance(points[i], points[i + 1], points[i + 2]);
+        minimum_luminance = std::min(minimum_luminance, luminance);
+        maximum_luminance = std::max(maximum_luminance, luminance);
         absolute_difference += std::abs(static_cast<double>(points[i] - texture[i])) +
                                std::abs(static_cast<double>(points[i + 1] - texture[i + 1])) +
                                std::abs(static_cast<double>(points[i + 2] - texture[i + 2]));
     }
-    EXPECT_GT(point_energy, 1.0e-5) << "indexed point catalogue produced no live radiance";
+    EXPECT_GT(point_energy, 1.0e-2) << "indexed point catalogue produced no visible radiance";
+    EXPECT_GT(maximum_luminance - minimum_luminance, 1.0e-4)
+        << "indexed point catalogue collapsed to a display-invisible constant field";
     EXPECT_GT(absolute_difference, 1.0e-3)
         << "point-catalogue request appears to have sampled the texture path";
+}
+
+TEST(VulkanRenderSession, CombinedParitySceneRetainsResolvedImageStructure) {
+    if (const auto devices = EnumerateVulkanDevices(); !devices || devices->empty()) {
+        GTEST_SKIP() << "no Vulkan device present";
+    }
+    const std::string root = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp");
+    constexpr int kWidth = 192;
+    constexpr int kHeight = 128;
+    const auto represented =
+        RenderSessionVulkan(kWidth, kHeight, root + "/sirius_vk_combined_p3_p5.exr",
+                            [](sirius::render::SessionConfig& config) {
+                                config.samples_per_pixel = 3;
+                                config.camera_fov = 60.0f;
+                                config.camera_beta_forward = 0.1;
+                                config.camera_beta_up = 0.02;
+                                config.camera_beta_right = -0.01;
+                                config.lens_type = sirius::core::LensType::ThinLens;
+                                config.camera_focal_length = 50.0f;
+                                config.camera_aperture = 2.8f;
+                                config.camera_focus_distance = 30.0f;
+                                config.point_starfield = true;
+                                config.ray_bundles = true;
+                                config.enable_disk = false;
+                                config.starfield_config.star_count = 100000;
+                            });
+    ASSERT_FALSE(represented.empty());
+    ExpectFiniteResolvedPointField(represented, kWidth, kHeight, "combined P3/P5 scene");
 }
 
 TEST(VulkanRenderSession, CpuVulkanPointCatalogueAgreeOnFlatScene) {
@@ -420,17 +524,17 @@ TEST(VulkanRenderSession, CpuVulkanPointCatalogueAgreeOnFlatScene) {
     }
     const std::string root = std::string(std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp");
     auto configure_points = [](sirius::render::SessionConfig& config) {
-        config.metricId = sirius::core::MetricId::Minkowski;
-        config.blackHoleMass = 0.0;
-        config.blackHoleSpin = 0.0;
-        config.enableDisk = false;
-        config.observerDistance = 20.0;
-        config.observerInclination = 1.1;
-        config.cameraFOV = 30.0f;
-        config.pointStarfield = true;
-        config.rayBundles = false;
-        config.starfieldConfig.star_count = 100000;
-        config.starfieldConfig.brightness_scale = 1.0f;
+        config.metric_id = sirius::core::MetricId::Minkowski;
+        config.black_hole_mass = 0.0;
+        config.black_hole_spin = 0.0;
+        config.enable_disk = false;
+        config.observer_distance = 20.0;
+        config.observer_inclination = 1.1;
+        config.camera_fov = 30.0f;
+        config.point_starfield = true;
+        config.ray_bundles = false;
+        config.starfield_config.star_count = 100000;
+        config.starfield_config.brightness_scale = 1.0f;
     };
     const auto gpu =
         RenderSessionVulkan(32, 20, root + "/sirius_vk_point_flat.exr", configure_points);
@@ -920,15 +1024,5 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalB
 }
 
 #endif  // SIRIUS_HAS_VULKAN_BACKEND
-
-// A always-present placeholder so the suite is never empty when the backend is
-// compiled out; it documents why the real gates are absent.
-TEST(VulkanRenderSession, BackendCompiledOrSkipped) {
-#ifndef SIRIUS_HAS_VULKAN_BACKEND
-    GTEST_SKIP() << "Vulkan backend not compiled in";
-#else
-    SUCCEED();
-#endif
-}
 
 }  // namespace

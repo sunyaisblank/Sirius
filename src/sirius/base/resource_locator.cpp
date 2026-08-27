@@ -33,7 +33,7 @@ namespace {
     return true;
 }
 
-[[nodiscard]] fs::path DiscoverExecutableDirectory() {
+[[nodiscard]] fs::path DiscoverExecutablePath() {
 #if defined(_WIN32)
     std::vector<wchar_t> path(512);
     while (path.size() <= 32768) {
@@ -41,7 +41,7 @@ namespace {
             GetModuleFileNameW(nullptr, path.data(), static_cast<DWORD>(path.size()));
         if (length == 0) return {};
         if (length < path.size()) {
-            return fs::path(std::wstring_view(path.data(), length)).parent_path();
+            return fs::path(std::wstring_view(path.data(), length));
         }
         path.resize(path.size() * 2);
     }
@@ -51,8 +51,7 @@ namespace {
         const ssize_t length = readlink("/proc/self/exe", path.data(), path.size());
         if (length < 0) return {};
         if (static_cast<std::size_t>(length) < path.size()) {
-            return fs::path(std::string_view(path.data(), static_cast<std::size_t>(length)))
-                .parent_path();
+            return fs::path(std::string_view(path.data(), static_cast<std::size_t>(length)));
         }
         path.resize(path.size() * 2);
     }
@@ -64,9 +63,9 @@ namespace {
         std::error_code ec;
         const fs::path canonical = fs::canonical(fs::path(path.data()), ec);
         if (!ec) {
-            return canonical.parent_path();
+            return canonical;
         }
-        return fs::path(path.data()).parent_path();
+        return fs::path(path.data());
     }
 #endif
     return {};
@@ -74,18 +73,30 @@ namespace {
 
 }  // namespace
 
+fs::path ExecutablePath() {
+    static const fs::path path = DiscoverExecutablePath();
+    return path;
+}
+
 fs::path ExecutableDirectory() {
-    static const fs::path directory = DiscoverExecutableDirectory();
-    return directory;
+    const fs::path path = ExecutablePath();
+    return path.empty() ? fs::path{} : path.parent_path();
 }
 
 std::vector<fs::path> ResourceCandidates(std::string_view relative_path) {
     const fs::path relative(relative_path);
     if (!IsSafeRelativePath(relative)) return {};
+        // An explicit root is a development-only diagnostic facility. A strict
+        // qualification or release executable must consume the volume installed
+        // beside itself; otherwise an environment variable could redirect both
+        // the receipt and the resources it purports to authenticate to an
+        // operator-controlled tree.
+#if !SIRIUS_RELEASE_RESOURCE_LOCKED
     if (const char* explicit_root = std::getenv("SIRIUS_RESOURCE_DIR");
         explicit_root != nullptr && *explicit_root != '\0') {
         return {fs::path(explicit_root) / relative};
     }
+#endif
 
     const fs::path executable = ExecutableDirectory();
     std::vector<fs::path> candidates;
@@ -97,24 +108,31 @@ std::vector<fs::path> ResourceCandidates(std::string_view relative_path) {
     return candidates;
 }
 
+std::optional<fs::path> ResolveResourceFromRoot(const fs::path& root,
+                                                std::string_view relative_path) {
+    const fs::path relative(relative_path);
+    if (!IsSafeRelativePath(relative)) return std::nullopt;
+
+    std::error_code ec;
+    const fs::path canonical_root = fs::canonical(root, ec);
+    if (ec || !fs::is_directory(canonical_root, ec) || ec) return std::nullopt;
+    const fs::path candidate = root / relative;
+    if (!fs::is_regular_file(candidate, ec) || ec) return std::nullopt;
+    const fs::path canonical = fs::canonical(candidate, ec);
+    if (ec || !IsWithin(canonical, canonical_root)) return std::nullopt;
+    return canonical;
+}
+
 std::optional<fs::path> ResolveResource(std::string_view relative_path) {
     const fs::path relative(relative_path);
     if (!IsSafeRelativePath(relative)) return std::nullopt;
 
     for (const fs::path& candidate : ResourceCandidates(relative_path)) {
-        std::error_code ec;
-        if (!fs::is_regular_file(candidate, ec) || ec) {
-            continue;
-        }
-        const fs::path canonical = fs::canonical(candidate, ec);
-        if (ec) continue;
-
         fs::path root = candidate;
         for (auto it = relative.begin(); it != relative.end(); ++it) {
             root = root.parent_path();
         }
-        const fs::path canonical_root = fs::canonical(root, ec);
-        if (!ec && IsWithin(canonical, canonical_root)) return canonical;
+        if (auto resolved = ResolveResourceFromRoot(root, relative_path)) return resolved;
     }
     return std::nullopt;
 }

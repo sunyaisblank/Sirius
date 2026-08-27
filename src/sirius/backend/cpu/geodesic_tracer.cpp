@@ -7,9 +7,11 @@
 #include "sirius/backend/cpu/geodesic_tracer.h"
 
 #include "sirius/core/disk/novikov_thorne_disk.h"  // AccretionDiskD::ComputeIsco (ISCO authority).
+#include "sirius/core/spectral/colour_modes.h"
 
 #include <algorithm>
 #include <cmath>
+#include <numbers>
 
 namespace sirius::backend {
 
@@ -37,7 +39,7 @@ Lightray GeodesicTracer::InitializeLightray(const CameraRay& camera_ray) {
     double ph = camera_ray.origin(3);
 
     // Clamp theta away from the poles.
-    th = std::clamp(th, 0.01, M_PI - 0.01);
+    th = std::clamp(th, 0.01, std::numbers::pi - 0.01);
 
     // Position: Boyer-Lindquist -> Kerr-Schild Cartesian using the spin-aware
     // oblate transform.
@@ -231,8 +233,8 @@ void GeodesicTracer::SetDiskPolarisation(const PolarisationFrame& frame,
     const double meridian_perpendicular =
         TensorOps::InnerProduct(meridian, frame.perpendicular.polarisation, g);
     const double meridian_angle = std::atan2(meridian_perpendicular, meridian_reference);
-    crossing.polarisation_evpa =
-        static_cast<float>(std::remainder(meridian_angle + M_PI / 2.0, M_PI));
+    crossing.polarisation_evpa = static_cast<float>(
+        std::remainder(meridian_angle + std::numbers::pi / 2.0, std::numbers::pi));
     crossing.polarisation_valid = true;
 }
 
@@ -319,9 +321,9 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
     // Spiral-orbit early termination: rays near b_crit orbit the photon sphere
     // many times; the higher-order images they produce are exponentially dim
     // (~exp(-pi n)), so they are cut once quasi-circular motion is detected.
-    constexpr float SPIRAL_PHI_THRESHOLD = 2.0f * static_cast<float>(M_PI);
-    constexpr float SPIRAL_R_THRESHOLD = 1.5f;
-    constexpr int SPIRAL_CHECK_INTERVAL = 100;
+    constexpr float kSpiralPhiThreshold = 2.0f * static_cast<float>(std::numbers::pi);
+    constexpr float kSpiralRadiusThreshold = 1.5f;
+    constexpr int kSpiralCheckInterval = 100;
 
     for (int step = 0; step < config_.max_steps; ++step) {
         for (int i = 0; i < 4; ++i) prev_pos(i) = ray.position(i);
@@ -393,19 +395,19 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
         }
 
         float dphi = curr_phi - prev_phi;
-        if (dphi > M_PI) dphi -= 2.0f * static_cast<float>(M_PI);
-        if (dphi < -M_PI) dphi += 2.0f * static_cast<float>(M_PI);
+        if (dphi > std::numbers::pi) dphi -= 2.0f * static_cast<float>(std::numbers::pi);
+        if (dphi < -std::numbers::pi) dphi += 2.0f * static_cast<float>(std::numbers::pi);
         total_phi_change += std::abs(dphi);
 
         prev_phi = curr_phi;
         prev_z = curr_z;
 
         // Spiral-orbit early termination.
-        if (config_.enable_spiral_termination && (step % SPIRAL_CHECK_INTERVAL == 0) &&
-            step > SPIRAL_CHECK_INTERVAL) {
+        if (config_.enable_spiral_termination && (step % kSpiralCheckInterval == 0) &&
+            step > kSpiralCheckInterval) {
             float r_ratio = min_r / r_photon;
-            bool near_photon_sphere = (r_ratio < SPIRAL_R_THRESHOLD) && (r_ratio > 0.9f);
-            bool has_spiraled = (total_phi_change > SPIRAL_PHI_THRESHOLD);
+            bool near_photon_sphere = (r_ratio < kSpiralRadiusThreshold) && (r_ratio > 0.9f);
+            bool has_spiraled = (total_phi_change > kSpiralPhiThreshold);
 
             if (near_photon_sphere && has_spiraled) {
                 double vx = ray.velocity(1);
@@ -423,7 +425,7 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
                     }
                     result.equatorial_crossings = equatorial_crossings;
                     result.total_phi_change = total_phi_change;
-                    result.image_order = static_cast<int>(total_phi_change / M_PI);
+                    result.image_order = static_cast<int>(total_phi_change / std::numbers::pi);
                     break;
                 }
             }
@@ -663,7 +665,7 @@ float GeodesicTracer::ComputeGFactor(float r, float phi, const Vec4& ray_vel) {
     double a = a_over_M * M;
     double a2 = a * a;
     double r2 = r_d * r_d;
-    double grav_factor = std::sqrt(1.0 - 2.0 * M * r_d / (r2 + a2));
+    double grav_factor = std::sqrt(std::max(0.0, 1.0 - 2.0 * M * r_d / (r2 + a2)));
 
     double n_x = ray_vel(1);
     double n_y = ray_vel(2);
@@ -671,7 +673,7 @@ float GeodesicTracer::ComputeGFactor(float r, float phi, const Vec4& ray_vel) {
     double v_mag = std::sqrt(n_x * n_x + n_y * n_y + n_z * n_z);
 
     if (v_mag < 1e-10) {
-        return static_cast<float>(grav_factor);
+        return static_cast<float>(std::clamp(grav_factor, 0.1, 5.0));
     }
 
     n_x /= v_mag;
@@ -720,7 +722,7 @@ void GeodesicTracer::ComputeGFactorWithComponents(float r, float phi, const Vec4
     double a = a_over_M * M;
     double a2 = a * a;
     double r2 = r_d * r_d;
-    double grav_factor = std::sqrt(1.0 - 2.0 * M * r_d / (r2 + a2));
+    double grav_factor = std::sqrt(std::max(0.0, 1.0 - 2.0 * M * r_d / (r2 + a2)));
 
     double n_x = ray_vel(1);
     double n_y = ray_vel(2);
@@ -728,12 +730,12 @@ void GeodesicTracer::ComputeGFactorWithComponents(float r, float phi, const Vec4
     double v_mag = std::sqrt(n_x * n_x + n_y * n_y + n_z * n_z);
 
     if (v_mag < 1e-10) {
-        result.redshift = static_cast<float>(grav_factor);
+        result.redshift = static_cast<float>(std::clamp(grav_factor, 0.1, 5.0));
         result.gfactor_grav = static_cast<float>(grav_factor);
         result.gfactor_gamma = 1.0f;
         result.gfactor_v_orb = static_cast<float>(v_orb);
-        result.gfactor_A = 0.0f;
-        result.gfactor_B = 0.0f;
+        result.gfactor_cosine_coefficient = 0.0f;
+        result.gfactor_sine_coefficient = 0.0f;
         return;
     }
 
@@ -752,8 +754,8 @@ void GeodesicTracer::ComputeGFactorWithComponents(float r, float phi, const Vec4
     result.gfactor_grav = static_cast<float>(grav_factor);
     result.gfactor_gamma = static_cast<float>(gamma);
     result.gfactor_v_orb = static_cast<float>(v_orb);
-    result.gfactor_A = static_cast<float>(A);
-    result.gfactor_B = static_cast<float>(B);
+    result.gfactor_cosine_coefficient = static_cast<float>(A);
+    result.gfactor_sine_coefficient = static_cast<float>(B);
 
     double v_dot_n = v_orb * A;
     double doppler_denom = gamma * (1.0 - v_dot_n);
@@ -784,7 +786,8 @@ float GeodesicTracer::ComputeScaleHeight(float r) {
     // H(r) = H_over_r r (r/r_ref)^H_power, referenced at the inner edge.
     float r_ref = config_.disk_inner;
     float r_ratio = r / r_ref;
-    float H_over_r = config_.volumetric_H_over_r * std::pow(r_ratio, config_.volumetric_H_power);
+    float H_over_r =
+        config_.volumetric_scale_height_ratio * std::pow(r_ratio, config_.volumetric_flare_power);
 
     H_over_r = std::clamp(H_over_r, 0.01f, 0.5f);
 
@@ -818,8 +821,8 @@ float GeodesicTracer::ComputeVolumetricOpacityDensity(float r, float z, float ph
     float r_ratio = r / r_ref;
 
     float kappa_rho0 = config_.volumetric_tau_midplane /
-                       (std::sqrt(2.0f * static_cast<float>(M_PI)) * H) * std::pow(r_ratio, -1.5f) *
-                       (H_ref / H);
+                       (std::sqrt(2.0f * static_cast<float>(std::numbers::pi)) * H) *
+                       std::pow(r_ratio, -1.5f) * (H_ref / H);
 
     float density = kappa_rho0 * gaussian;
     if (config_.enable_turbulence) {
@@ -857,9 +860,8 @@ float GeodesicTracer::ComputeVolumetricTemperature(float r, float z) {
     return T_mid * std::pow(T4_factor, 0.25f);
 }
 
-void GeodesicTracer::AccumulateVolumetricEmission([[maybe_unused]] const Lightray& ray,
-                                                  const Vec4& entry_pos, const Vec4& exit_pos,
-                                                  TraceResult& result) {
+void GeodesicTracer::AccumulateVolumetricEmission(const Lightray& ray, const Vec4& entry_pos,
+                                                  const Vec4& exit_pos, TraceResult& result) {
     // ray is retained in the signature for parity with the legacy interface; the
     // segment endpoints carry everything the ray march needs.
     double dx = exit_pos(1) - entry_pos(1);
@@ -891,6 +893,10 @@ void GeodesicTracer::AccumulateVolumetricEmission([[maybe_unused]] const Lightra
     double dir_x = dx / path_length;
     double dir_y = dy / path_length;
     double dir_z = dz / path_length;
+    Vec4 ray_velocity;
+    for (int component = 0; component < 4; ++component) {
+        ray_velocity(component) = ray.velocity(component);
+    }
 
     for (int i = 0; i < N; i++) {
         // Midpoint sample.
@@ -918,7 +924,10 @@ void GeodesicTracer::AccumulateVolumetricEmission([[maybe_unused]] const Lightra
             const float temperature =
                 ComputeVolumetricTemperature(static_cast<float>(disk_r), static_cast<float>(z));
             if (disk_opacity > 0.0f && temperature > 0.0f) {
-                disk_source = std::pow(temperature / config_.disk_temperature_inner, 4.0f);
+                const float emitted_source =
+                    std::pow(temperature / config_.disk_temperature_inner, 4.0f);
+                const float g = ComputeGFactor(static_cast<float>(disk_r), phi, ray_velocity);
+                disk_source = core::color_modes::ObservedBolometricIntensity(emitted_source, g);
             }
         }
 

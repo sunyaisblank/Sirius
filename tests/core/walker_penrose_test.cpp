@@ -20,6 +20,7 @@
 #include "sirius/core/polarisation/walker_penrose.h"
 
 #include "sirius/core/constants.h"
+#include "sirius/core/coordinates.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/oracle/polarisation_transport.h"
 
@@ -27,6 +28,7 @@
 
 #include <cmath>
 #include <complex>
+#include <string>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -48,49 +50,13 @@ struct BoyerLindquistVector {
 // transported tangent to stay null in the oracle chart (asserted below).
 // Reference: Visser, "The Kerr spacetime" (arXiv:0706.0622), Kerr-Schild forms.
 BoyerLindquistVector KerrSchildToBoyerLindquist(double M, double a, const Vec4& X, const Vec4& V) {
-    const double x = X(1), y = X(2), z = X(3);
-    const double a2 = a * a;
-    const double R2 = x * x + y * y + z * z;
-    const double Rm2 = R2 - a2;
-    double disc = Rm2 * Rm2 + 4.0 * a2 * z * z;
-    disc = std::max(disc, 1e-20);
-    const double sq = std::sqrt(disc);
-    const double r2 = std::max((Rm2 + sq) / 2.0, 1e-12);
-    const double r = std::sqrt(r2);
-
-    // dr/dx_i, matching KerrSchildFamily::Evaluate.
-    const double d_disc_dx = 4.0 * x * Rm2, d_disc_dy = 4.0 * y * Rm2,
-                 d_disc_dz = 4.0 * z * (R2 + a2);
-    const double dr_dx = (x + d_disc_dx / (4.0 * sq)) / (2.0 * r);
-    const double dr_dy = (y + d_disc_dy / (4.0 * sq)) / (2.0 * r);
-    const double dr_dz = (z + d_disc_dz / (4.0 * sq)) / (2.0 * r);
-
-    const double costh = z / r;
-    const double theta = std::acos(std::clamp(costh, -1.0, 1.0));
-    const double sinth = std::sin(theta);
-
-    // dtheta/dx_i from theta = arccos(z/r).
-    const double dth_dx = z * dr_dx / (r2 * sinth);
-    const double dth_dy = z * dr_dy / (r2 * sinth);
-    const double dth_dz = -(r - z * dr_dz) / (r2 * sinth);
-
-    // dphi_KS/dx_i from phi_KS = atan2(ry - ax, rx + ay).
-    const double N = r * y - a * x, D = r * x + a * y;
-    const double denom = (r2 + a2) * (r2 + a2) * sinth * sinth;
-    const double dN_dx = y * dr_dx - a, dN_dy = y * dr_dy + r, dN_dz = y * dr_dz;
-    const double dD_dx = x * dr_dx + r, dD_dy = x * dr_dy + a, dD_dz = x * dr_dz;
-    const double dphi_dx = (D * dN_dx - N * dD_dx) / denom;
-    const double dphi_dy = (D * dN_dy - N * dD_dy) / denom;
-    const double dphi_dz = (D * dN_dz - N * dD_dz) / denom;
-
-    const double kr = dr_dx * V(1) + dr_dy * V(2) + dr_dz * V(3);
-    const double ktheta = dth_dx * V(1) + dth_dy * V(2) + dth_dz * V(3);
-    const double kphi_ks = dphi_dx * V(1) + dphi_dy * V(2) + dphi_dz * V(3);
-
-    const double Delta = r2 - 2.0 * M * r + a2;
-    const double kt = V(0) - (2.0 * M * r / Delta) * kr;
-    const double kphi = kphi_ks - (a / Delta) * kr;
-    return {r, theta, kt, kr, ktheta, kphi};
+    const coordinates::Vec4Cart position{X(0), X(1), X(2), X(3)};
+    const coordinates::Vec4Cart vector{V(0), V(1), V(2), V(3)};
+    const coordinates::Vec4Bl position_bl = coordinates::KerrSchildCartToBl(position, a);
+    const coordinates::Vec4Bl vector_bl =
+        coordinates::TransformVectorKerrSchildCartToBl(vector, position, M, a);
+    return {position_bl.r, position_bl.theta, vector_bl.t,
+            vector_bl.r,   vector_bl.theta,   vector_bl.phi};
 }
 
 std::complex<double> WalkerPenroseFromBoyerLindquist(const BoyerLindquistVector& K,
@@ -189,88 +155,96 @@ TEST(WalkerPenroseLivePath, ConservesConstantAndOrthonormality) {
 // twist. Agreement bound is the live-path tolerance kConservationTol = 1e-4; the
 // oracle holds its own to 1e-10.
 TEST(WalkerPenroseLivePath, AgreesWithOracleAcrossCharts) {
-    const double M = 1.0, a = 0.9;
-    KerrSchildFamily live(KerrSchildParams::Kerr(M, a));
-    sirius::oracle::KerrMetricD oracle(M, a);
+    const double M = 1.0;
+    for (const double a : {0.0, 0.9}) {
+        SCOPED_TRACE("spin=" + std::to_string(a));
+        KerrSchildFamily live(KerrSchildParams::Kerr(M, a));
+        sirius::oracle::KerrMetricD oracle(M, a);
 
-    // Physical ray in Kerr-Schild Cartesian.
-    PolarisedRay ray{};
-    ray.position(1) = 14.0;
-    ray.position(2) = 0.0;
-    ray.position(3) = 1.0;
-    ray.velocity(1) = -1.0;
-    ray.velocity(2) = 0.30;
-    ray.velocity(3) = -0.02;
+        // Physical ray in Kerr-Schild Cartesian.
+        PolarisedRay ray{};
+        ray.position(1) = 14.0;
+        ray.position(2) = 0.0;
+        ray.position(3) = 1.0;
+        ray.velocity(1) = -1.0;
+        // Schwarzschild needs the larger impact parameter to stay outside its
+        // b_crit = 3 sqrt(3) M capture cone; the prograde Kerr witness remains
+        // the stronger-field pass used by the original gate.
+        ray.velocity(2) = a == 0.0 ? 0.45 : 0.30;
+        ray.velocity(3) = -0.02;
 
-    Metric4d g;
-    Tensor<Dual<double>, 4, 4, 4> dg;
-    live.Evaluate(ray.position, g, dg);
-    ray.velocity = TensorOps::NormalizeNull(ray.velocity, g);
-    Vec4 trial;
-    trial(3) = 1.0;
-    ray.polarisation = MakeOrthonormalPolarisation(live, ray.position, ray.velocity, trial);
+        Metric4d g;
+        Tensor<Dual<double>, 4, 4, 4> dg;
+        live.Evaluate(ray.position, g, dg);
+        ray.velocity = TensorOps::NormalizeNull(ray.velocity, g);
+        Vec4 trial;
+        trial(3) = 1.0;
+        ray.polarisation = MakeOrthonormalPolarisation(live, ray.position, ray.velocity, trial);
 
-    // Transform the shared initial data to Boyer-Lindquist for the oracle.
-    const BoyerLindquistVector K0 = KerrSchildToBoyerLindquist(M, a, ray.position, ray.velocity);
-    const BoyerLindquistVector F0 =
-        KerrSchildToBoyerLindquist(M, a, ray.position, ray.polarisation);
-
-    sirius::oracle::Vec4d x_bl(0.0, K0.r, K0.theta, 0.0);
-    sirius::oracle::Vec4d k_bl(K0.kt, K0.kr, K0.ktheta, K0.kphi);
-    sirius::oracle::Vec4d f_bl(F0.kt, F0.kr, F0.ktheta, F0.kphi);
-
-    // The transform preserves the invariants: the tangent stays null and the
-    // polarisation stays unit and orthogonal in the oracle chart. These pin the
-    // twist (a wrong sign breaks the null condition badly, ~0.3).
-    double gg[4][4], gg_inv[4][4];
-    oracle.Evaluate(x_bl, gg, gg_inv);
-    EXPECT_NEAR(sirius::oracle::InnerProductD(gg, k_bl, k_bl), 0.0, 1e-9);
-    EXPECT_NEAR(sirius::oracle::InnerProductD(gg, f_bl, f_bl), 1.0, 1e-9);
-    EXPECT_NEAR(sirius::oracle::InnerProductD(gg, f_bl, k_bl), 0.0, 1e-9);
-
-    // Both charts read the same Walker-Penrose constant at the start.
-    const std::complex<double> kappa_live0 = WalkerPenroseFromBoyerLindquist(K0, F0, a);
-    sirius::oracle::PolarisedStateD oracle_state(x_bl, k_bl, f_bl);
-    const std::complex<double> kappa_oracle0 =
-        sirius::oracle::WalkerPenroseConstant(oracle_state, oracle);
-    ASSERT_GT(std::abs(kappa_live0), 1e-6);
-    EXPECT_LT(std::abs(kappa_live0 - kappa_oracle0) / std::abs(kappa_live0), 1e-9);
-
-    // Advance the oracle to escape; it conserves the constant to oracle tier.
-    sirius::oracle::PolarisedGeodesicIntegratorD integrator(&oracle);
-    const sirius::oracle::PolarisedGeodesicIntegratorD::Result oracle_result =
-        integrator.Integrate(oracle_state);
-    ASSERT_TRUE(oracle_result.escaped);
-    const std::complex<double> kappa_oracle_final =
-        sirius::oracle::WalkerPenroseConstant(oracle_result.state, oracle);
-    EXPECT_LT(std::abs(kappa_oracle_final - kappa_oracle0) / std::abs(kappa_oracle0),
-              sirius::oracle::kWalkerPenroseConservationTol);
-
-    // Advance the live path to escape; it conserves the same constant to the
-    // live-path tolerance, so the two charts stay in agreement throughout.
-    std::complex<double> kappa_live_final = kappa_live0;
-    bool escaped = false;
-    for (int i = 0; i < 200000; ++i) {
-        const double r_kerr =
-            live.ComputeKerrRadius(ray.position(1), ray.position(2), ray.position(3));
-        if (r_kerr <= live.OuterHorizonRadius() * 1.05) break;
-        if (CartesianRadius(ray.position) > 55.0) {
-            escaped = true;
-            break;
-        }
-        ParallelTransportStep(live, ray, 0.01);
-        const BoyerLindquistVector K = KerrSchildToBoyerLindquist(M, a, ray.position, ray.velocity);
-        const BoyerLindquistVector F =
+        // Transform the shared initial data to Boyer-Lindquist for the oracle.
+        const BoyerLindquistVector K0 =
+            KerrSchildToBoyerLindquist(M, a, ray.position, ray.velocity);
+        const BoyerLindquistVector F0 =
             KerrSchildToBoyerLindquist(M, a, ray.position, ray.polarisation);
-        kappa_live_final = WalkerPenroseFromBoyerLindquist(K, F, a);
-    }
-    ASSERT_TRUE(escaped);
-    EXPECT_LT(std::abs(kappa_live_final - kappa_live0) / std::abs(kappa_live0),
-              kc::geodesic::kConservationTol);
 
-    // Live and oracle final readings of the invariant agree.
-    EXPECT_LT(std::abs(kappa_live_final - kappa_oracle_final) / std::abs(kappa_live0),
-              kc::geodesic::kConservationTol);
+        sirius::oracle::Vec4d x_bl(0.0, K0.r, K0.theta, 0.0);
+        sirius::oracle::Vec4d k_bl(K0.kt, K0.kr, K0.ktheta, K0.kphi);
+        sirius::oracle::Vec4d f_bl(F0.kt, F0.kr, F0.ktheta, F0.kphi);
+
+        // The transform preserves the invariants: the tangent stays null and the
+        // polarisation stays unit and orthogonal in the oracle chart. These pin the
+        // twist (a wrong sign breaks the null condition badly, ~0.3 for Kerr).
+        double gg[4][4], gg_inv[4][4];
+        oracle.Evaluate(x_bl, gg, gg_inv);
+        EXPECT_NEAR(sirius::oracle::InnerProductD(gg, k_bl, k_bl), 0.0, 1e-9);
+        EXPECT_NEAR(sirius::oracle::InnerProductD(gg, f_bl, f_bl), 1.0, 1e-9);
+        EXPECT_NEAR(sirius::oracle::InnerProductD(gg, f_bl, k_bl), 0.0, 1e-9);
+
+        // Both charts read the same Walker-Penrose constant at the start.
+        const std::complex<double> kappa_live0 = WalkerPenroseFromBoyerLindquist(K0, F0, a);
+        sirius::oracle::PolarisedStateD oracle_state(x_bl, k_bl, f_bl);
+        const std::complex<double> kappa_oracle0 =
+            sirius::oracle::WalkerPenroseConstant(oracle_state, oracle);
+        ASSERT_GT(std::abs(kappa_live0), 1e-6);
+        EXPECT_LT(std::abs(kappa_live0 - kappa_oracle0) / std::abs(kappa_live0), 1e-9);
+
+        // Advance the oracle to escape; it conserves the constant to oracle tier.
+        sirius::oracle::PolarisedGeodesicIntegratorD integrator(&oracle);
+        const sirius::oracle::PolarisedGeodesicIntegratorD::Result oracle_result =
+            integrator.Integrate(oracle_state);
+        ASSERT_TRUE(oracle_result.escaped);
+        const std::complex<double> kappa_oracle_final =
+            sirius::oracle::WalkerPenroseConstant(oracle_result.state, oracle);
+        EXPECT_LT(std::abs(kappa_oracle_final - kappa_oracle0) / std::abs(kappa_oracle0),
+                  sirius::oracle::kWalkerPenroseConservationTol);
+
+        // Advance the live path to escape; it conserves the same constant to the
+        // live-path tolerance, so the two charts stay in agreement throughout.
+        std::complex<double> kappa_live_final = kappa_live0;
+        bool escaped = false;
+        for (int i = 0; i < 200000; ++i) {
+            const double r_kerr =
+                live.ComputeKerrRadius(ray.position(1), ray.position(2), ray.position(3));
+            if (r_kerr <= live.OuterHorizonRadius() * 1.05) break;
+            if (CartesianRadius(ray.position) > 55.0) {
+                escaped = true;
+                break;
+            }
+            ParallelTransportStep(live, ray, 0.01);
+            const BoyerLindquistVector K =
+                KerrSchildToBoyerLindquist(M, a, ray.position, ray.velocity);
+            const BoyerLindquistVector F =
+                KerrSchildToBoyerLindquist(M, a, ray.position, ray.polarisation);
+            kappa_live_final = WalkerPenroseFromBoyerLindquist(K, F, a);
+        }
+        ASSERT_TRUE(escaped);
+        EXPECT_LT(std::abs(kappa_live_final - kappa_live0) / std::abs(kappa_live0),
+                  kc::geodesic::kConservationTol);
+
+        // Live and oracle final readings of the invariant agree.
+        EXPECT_LT(std::abs(kappa_live_final - kappa_oracle_final) / std::abs(kappa_live0),
+                  kc::geodesic::kConservationTol);
+    }
 }
 
 //==============================================================================
