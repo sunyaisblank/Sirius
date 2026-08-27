@@ -267,8 +267,11 @@ std::expected<AlignmentAuthority, std::string> ValidateReceipt(const nlohmann::j
         satisfied != base::kEmbeddedAlignmentSatisfied) {
         return std::unexpected("alignment receipt state contradicts its evidence");
     }
-    if (base::kReleaseAlignmentEnforced && !satisfied) {
-        return std::unexpected("release initialisation requires the ultimate ideal to be aligned");
+    if constexpr (base::kReleaseAlignmentEnforced) {
+        if (!satisfied) {
+            return std::unexpected(
+                "release initialisation requires the ultimate ideal to be aligned");
+        }
     }
 
     return AlignmentAuthority{
@@ -341,7 +344,8 @@ std::expected<BuildGateAuthority, std::string> ValidateBuildGateReceipt(
         !NonEmptyString(inputs, "alignment_receipt_sha256") ||
         inputs["operating_model_sha256"] != products["operating_model"]["sha256"] ||
         inputs["alignment_receipt_sha256"] != products["alignment_receipt"]["sha256"] ||
-        products["operating_model"]["sha256"] != base::kEmbeddedOperatingModelSha256) {
+        products["operating_model"]["sha256"].get_ref<const std::string&>() !=
+            base::kEmbeddedOperatingModelSha256) {
         return std::unexpected(
             "Mandatory build-gate inputs differ from the compiled alignment/model authority");
     }

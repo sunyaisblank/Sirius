@@ -755,7 +755,7 @@ int InfoCommand::ShowReadiness(const GlobalOptions& globals) {
         "model/operating_model.json",
         "model/alignment_receipt.json",
     };
-    if (base::kReleaseAlignmentEnforced || base::kQualificationAlignmentEnforced) {
+    if constexpr (base::kReleaseAlignmentEnforced || base::kQualificationAlignmentEnforced) {
         required.push_back("model/mandatory_gate.json");
     }
 #ifdef SIRIUS_HAS_INTERACTIVE_VIEWER
