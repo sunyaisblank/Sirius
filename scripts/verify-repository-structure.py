@@ -200,8 +200,17 @@ def integration_boundary_errors(workflow: str) -> list[str]:
 
     windows_integration = workflow_job(workflow, "integration-windows-no-render")
     if windows_integration is not None:
-        if "install_runtime: true" not in windows_integration:
-            errors.append("Windows non-render integration cannot load linked Vulkan binaries")
+        for loader_marker in (
+            "install_runtime: true",
+            r"runtime\x64",
+            "vulkan-1.dll",
+            "$env:GITHUB_PATH",
+        ):
+            if loader_marker not in windows_integration:
+                errors.append(
+                    "Windows non-render integration cannot load linked Vulkan binaries: "
+                    + loader_marker
+                )
         for driver_marker in (
             "install_swiftshader: true",
             "install_lavapipe: true",
@@ -251,6 +260,9 @@ def verify_integration_boundary_policy() -> None:
             f"  {name}:\n"
             + (
                 "    install_runtime: true\n"
+                "    runtime\\x64\n"
+                "    vulkan-1.dll\n"
+                "    $env:GITHUB_PATH\n"
                 if name == "integration-windows-no-render"
                 else ""
             )

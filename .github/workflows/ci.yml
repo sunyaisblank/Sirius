@@ -76,6 +76,11 @@ jobs:
         run: |
           Get-Command slangc -ErrorAction Stop
           Get-Command spirv-val -ErrorAction Stop
+          $runtime = Join-Path $env:VULKAN_SDK "runtime\x64"
+          if (-not (Test-Path (Join-Path $runtime "vulkan-1.dll"))) {
+            throw "pinned Vulkan loader is absent"
+          }
+          $runtime | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
       - name: Configure strict non-promoting candidate
         run: >-
           cmake --preset windows-msvc
