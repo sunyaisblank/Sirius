@@ -67,6 +67,7 @@ jobs:
         uses: jakoch/install-vulkan-sdk-action@37effcfa045411f8bfbbda26df2fd1b3bf3436fa
         with:
           vulkan_version: 1.4.357.0
+          install_runtime: true
           cache: true
           stripdown: true
           github_token: ${{ secrets.GITHUB_TOKEN }}

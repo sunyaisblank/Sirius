@@ -198,6 +198,22 @@ def integration_boundary_errors(workflow: str) -> list[str]:
             if control.replace(".", r"\.") not in integration:
                 errors.append(f"non-render integration {name} omits control {control}")
 
+    windows_integration = workflow_job(workflow, "integration-windows-no-render")
+    if windows_integration is not None:
+        if "install_runtime: true" not in windows_integration:
+            errors.append("Windows non-render integration cannot load linked Vulkan binaries")
+        for driver_marker in (
+            "install_swiftshader: true",
+            "install_lavapipe: true",
+            "VK_DRIVER_FILES=",
+            "vulkaninfo",
+        ):
+            if driver_marker in windows_integration:
+                errors.append(
+                    "Windows non-render integration can select or exercise a Vulkan driver: "
+                    + driver_marker
+                )
+
     for name in FULL_QUALIFICATION_JOBS:
         job = workflow_job(workflow, name)
         if job is None:
@@ -232,7 +248,14 @@ def verify_integration_boundary_policy() -> None:
         "workflow_dispatch:\n"
         "jobs:\n"
         + "".join(
-            f"  {name}:\n{integration_body}" for name in NON_RENDER_INTEGRATION_JOBS
+            f"  {name}:\n"
+            + (
+                "    install_runtime: true\n"
+                if name == "integration-windows-no-render"
+                else ""
+            )
+            + integration_body
+            for name in NON_RENDER_INTEGRATION_JOBS
         )
         + "".join(
             f"  {name}:\n    if: github.event_name == 'push'\n"
@@ -246,6 +269,16 @@ def verify_integration_boundary_policy() -> None:
     ).replace("ctest --test-dir", "ctest --preset", 1)
     if not integration_boundary_errors(weakened):
         raise RuntimeError("integration-boundary policy accepted full-estate PR execution")
+    missing_windows_loader = valid.replace("    install_runtime: true\n", "", 1)
+    if not integration_boundary_errors(missing_windows_loader):
+        raise RuntimeError("integration-boundary policy accepted an unloadable Windows binary")
+    driver_enabled = valid.replace(
+        "    install_runtime: true\n",
+        "    install_runtime: true\n    install_swiftshader: true\n",
+        1,
+    )
+    if not integration_boundary_errors(driver_enabled):
+        raise RuntimeError("integration-boundary policy accepted Windows driver execution")
 
 
 def verify_immutable_input_policy() -> None:
