@@ -127,6 +127,8 @@ def immutable_input_errors(workflow: str, dependencies: str) -> list[str]:
 
     if "releases/latest" in workflow or "/download/latest/" in workflow:
         errors.append("CI downloads an asset through a mutable latest-release route")
+    if re.search(r"--output\s+['\"]?slang\.tgz", workflow):
+        errors.append("CI downloads Slang into the qualification source tree")
     if re.search(r"install_(?:swiftshader|lavapipe):\s*true", workflow):
         errors.append("CI delegates a qualification rasterizer to mutable latest selection")
 
@@ -261,6 +263,13 @@ def verify_immutable_input_policy() -> None:
     )
     if len(weakened) != 6:
         raise RuntimeError("immutable build-input policy accepted a mutable input")
+    dirty_checkout = immutable_input_errors(
+        "curl --fail --location https://example.invalid/slang --output slang.tgz\n"
+        "sha256sum --check -\n",
+        f"GIT_TAG {revision}\n",
+    )
+    if dirty_checkout != ["CI downloads Slang into the qualification source tree"]:
+        raise RuntimeError("immutable build-input policy accepted a dirty qualification tree")
 
 
 def strict_test_volume_errors(documents: dict[str, tuple[str, str]]) -> list[str]:

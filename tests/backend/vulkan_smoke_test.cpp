@@ -152,7 +152,7 @@ TEST(VulkanBackend, WorkerThreadDispatchTearsDownSafely) {
     ASSERT_FALSE(spirv.empty()) << "smoke.spv missing or empty";
 
     std::optional<sirius::base::Expected<float> > result;
-    std::jthread worker([&] { result.emplace(DispatchSmokeKernel(*selected, spirv)); });
+    std::thread worker([&] { result.emplace(DispatchSmokeKernel(*selected, spirv)); });
     worker.join();
 
     ASSERT_TRUE(result.has_value());

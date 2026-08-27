@@ -102,7 +102,9 @@ def parse_artifacts(values: list[str], option: str) -> dict[str, Path]:
 
 
 def locate_under_roots(path: Path, source_root: Path, build_dir: Path) -> tuple[str, str]:
-    for name, root in (("build", build_dir), ("source", source_root)):
+    path = path.resolve()
+    for name, unresolved_root in (("build", build_dir), ("source", source_root)):
+        root = unresolved_root.resolve()
         try:
             relative = path.relative_to(root)
         except ValueError:
@@ -144,7 +146,7 @@ def resolve_record(record: dict[str, object], source_root: Path, build_dir: Path
     require(not relative_path.is_absolute() and relative_path.parts and
             ".." not in relative_path.parts,
             "artifact receipt path escapes its declared root")
-    root = source_root if root_name == "source" else build_dir
+    root = (source_root if root_name == "source" else build_dir).resolve()
     path = (root / relative_path).resolve()
     try:
         path.relative_to(root)

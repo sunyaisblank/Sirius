@@ -29,12 +29,13 @@ jobs:
       - name: Slang
         run: |
           TAG=v2026.12.0.1
+          archive="$RUNNER_TEMP/slang-${TAG#v}.tgz"
           curl --fail --location --silent --show-error \
             "https://github.com/shader-slang/slang/releases/download/${TAG}/slang-${TAG#v}-linux-x86_64.tar.gz" \
-            --output slang.tgz
-          echo "bbd36968b5aefdf91c2ede0d2e131f8b552cba6ed2444da59f1a0bc0bfc6792d  slang.tgz" \
+            --output "$archive"
+          echo "bbd36968b5aefdf91c2ede0d2e131f8b552cba6ed2444da59f1a0bc0bfc6792d  $archive" \
             | sha256sum --check -
-          sudo mkdir -p /opt/slang && sudo tar xzf slang.tgz -C /opt/slang
+          sudo mkdir -p /opt/slang && sudo tar xzf "$archive" -C /opt/slang
       - name: First-party format
         run: |
           find src/sirius tests -type f \( -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \) \
@@ -146,12 +147,13 @@ jobs:
       - name: Slang
         run: |
           TAG=v2026.12.0.1
+          archive="$RUNNER_TEMP/slang-${TAG#v}.tgz"
           curl --fail --location --silent --show-error \
             "https://github.com/shader-slang/slang/releases/download/${TAG}/slang-${TAG#v}-linux-x86_64.tar.gz" \
-            --output slang.tgz
-          echo "bbd36968b5aefdf91c2ede0d2e131f8b552cba6ed2444da59f1a0bc0bfc6792d  slang.tgz" \
+            --output "$archive"
+          echo "bbd36968b5aefdf91c2ede0d2e131f8b552cba6ed2444da59f1a0bc0bfc6792d  $archive" \
             | sha256sum --check -
-          sudo mkdir -p /opt/slang && sudo tar xzf slang.tgz -C /opt/slang
+          sudo mkdir -p /opt/slang && sudo tar xzf "$archive" -C /opt/slang
       - name: First-party format
         run: |
           find src/sirius tests -type f \( -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \) \
@@ -181,12 +183,13 @@ jobs:
       - name: Slang
         run: |
           TAG=v2026.12.0.1
+          archive="$RUNNER_TEMP/slang-${TAG#v}.tgz"
           curl --fail --location --silent --show-error \
             "https://github.com/shader-slang/slang/releases/download/${TAG}/slang-${TAG#v}-linux-x86_64.tar.gz" \
-            --output slang.tgz
-          echo "bbd36968b5aefdf91c2ede0d2e131f8b552cba6ed2444da59f1a0bc0bfc6792d  slang.tgz" \
+            --output "$archive"
+          echo "bbd36968b5aefdf91c2ede0d2e131f8b552cba6ed2444da59f1a0bc0bfc6792d  $archive" \
             | sha256sum --check -
-          sudo mkdir -p /opt/slang && sudo tar xzf slang.tgz -C /opt/slang
+          sudo mkdir -p /opt/slang && sudo tar xzf "$archive" -C /opt/slang
       - name: Configure
         run: cmake --preset linux-gcc-sanitize
       - name: Build and mandatory ASan/UBSan/LSan gate
