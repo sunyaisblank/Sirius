@@ -131,28 +131,30 @@ class StarfieldSpatialIndex {
         dir_y /= length;
         dir_z /= length;
 
-        constexpr float kPi = 3.14159265358979323846f;
-        constexpr float kTwoPi = 2.0f * kPi;
+        constexpr float kStarfieldPi = 3.14159265358979323846f;
+        constexpr float kStarfieldTwoPi = 2.0f * kStarfieldPi;
         const float theta = std::acos(std::clamp(dir_z, -1.0f, 1.0f));
         float phi = std::atan2(dir_y, dir_x);
-        if (phi < 0.0f) phi += kTwoPi;
-        const float cutoff = std::min(4.0f * sigma, kPi);
+        if (phi < 0.0f) phi += kStarfieldTwoPi;
+        const float cutoff = std::min(4.0f * sigma, kStarfieldPi);
 
-        const int first_theta = std::clamp(
-            static_cast<int>(std::floor(std::max(theta - cutoff, 0.0f) / kPi * kThetaBins)), 0,
-            kThetaBins - 1);
-        const int last_theta = std::clamp(
-            static_cast<int>(std::floor(std::min(theta + cutoff, kPi) / kPi * kThetaBins)), 0,
-            kThetaBins - 1);
+        const int first_theta =
+            std::clamp(static_cast<int>(
+                           std::floor(std::max(theta - cutoff, 0.0f) / kStarfieldPi * kThetaBins)),
+                       0, kThetaBins - 1);
+        const int last_theta =
+            std::clamp(static_cast<int>(std::floor(std::min(theta + cutoff, kStarfieldPi) /
+                                                   kStarfieldPi * kThetaBins)),
+                       0, kThetaBins - 1);
 
-        float phi_half_width = kPi;
+        float phi_half_width = kStarfieldPi;
         const float sin_theta = std::sin(theta);
-        if (theta > cutoff && kPi - theta > cutoff && sin_theta > 1.0e-8f) {
+        if (theta > cutoff && kStarfieldPi - theta > cutoff && sin_theta > 1.0e-8f) {
             phi_half_width = std::asin(std::clamp(std::sin(cutoff) / sin_theta, 0.0f, 1.0f));
         }
-        const float phi_bin_width = kTwoPi / static_cast<float>(kPhiBins);
+        const float phi_bin_width = kStarfieldTwoPi / static_cast<float>(kPhiBins);
         const int centre_phi =
-            std::min(static_cast<int>(std::floor(phi / kTwoPi * kPhiBins)), kPhiBins - 1);
+            std::min(static_cast<int>(std::floor(phi / kStarfieldTwoPi * kPhiBins)), kPhiBins - 1);
         const int phi_radius =
             std::min(static_cast<int>(std::ceil(phi_half_width / phi_bin_width)) + 1, kPhiBins);
         const bool all_phi = 2 * phi_radius + 1 >= kPhiBins;
@@ -187,8 +189,8 @@ class StarfieldSpatialIndex {
     }
 
     void Build(const std::vector<StarEntry>& stars) {
-        constexpr float kPi = 3.14159265358979323846f;
-        constexpr float kTwoPi = 2.0f * kPi;
+        constexpr float kStarfieldPi = 3.14159265358979323846f;
+        constexpr float kStarfieldTwoPi = 2.0f * kStarfieldPi;
         constexpr std::size_t kCells = static_cast<std::size_t>(kThetaBins) * kPhiBins;
         offsets_.assign(kCells + 1, 0);
         std::vector<std::size_t> cells(stars.size());
@@ -196,11 +198,11 @@ class StarfieldSpatialIndex {
             const auto& star = stars[i];
             const float theta = std::acos(std::clamp(star.direction_z, -1.0f, 1.0f));
             float phi = std::atan2(star.direction_y, star.direction_x);
-            if (phi < 0.0f) phi += kTwoPi;
-            const int theta_bin = std::clamp(static_cast<int>(std::floor(theta / kPi * kThetaBins)),
-                                             0, kThetaBins - 1);
-            const int phi_bin =
-                std::clamp(static_cast<int>(std::floor(phi / kTwoPi * kPhiBins)), 0, kPhiBins - 1);
+            if (phi < 0.0f) phi += kStarfieldTwoPi;
+            const int theta_bin = std::clamp(
+                static_cast<int>(std::floor(theta / kStarfieldPi * kThetaBins)), 0, kThetaBins - 1);
+            const int phi_bin = std::clamp(
+                static_cast<int>(std::floor(phi / kStarfieldTwoPi * kPhiBins)), 0, kPhiBins - 1);
             cells[i] = Cell(theta_bin, phi_bin);
             ++offsets_[cells[i] + 1];
         }
