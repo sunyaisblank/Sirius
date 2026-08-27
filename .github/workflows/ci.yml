@@ -7,6 +7,7 @@ on:
   push:
     branches: [main, rebuild/dngr-parity]
   pull_request:
+  workflow_dispatch:
 
 jobs:
   # Pull requests prove that the complete strict topology compiles and that the
@@ -14,7 +15,7 @@ jobs:
   # the Mandatory estate, produce an attestation, or claim qualification. Full
   # rendering/runtime qualification remains a protected-branch push concern.
   integration-no-render:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -55,6 +56,80 @@ jobs:
           test ! -e bin/linux-ci/generated/sirius/mandatory_gate.json
       - name: Label file freshness
         run: python3 scripts/generate-ctest-labels.py --check
+
+  integration-windows-no-render:
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Vulkan SDK qualification toolchain
+        uses: jakoch/install-vulkan-sdk-action@37effcfa045411f8bfbbda26df2fd1b3bf3436fa
+        with:
+          vulkan_version: 1.4.357.0
+          cache: true
+          stripdown: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Prove qualification compile tools
+        shell: pwsh
+        run: |
+          Get-Command slangc -ErrorAction Stop
+          Get-Command spirv-val -ErrorAction Stop
+      - name: Configure strict non-promoting candidate
+        run: >-
+          cmake --preset windows-msvc
+          -DSIRIUS_ALIGNMENT_MODE=qualification
+          -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON
+          -DCMAKE_CONFIGURATION_TYPES=Release
+      - name: Compile complete product and test topology
+        run: >-
+          cmake --build --preset windows-msvc --config Release
+          --target SiriusAlignmentGate SiriusSourceGovernance sirius
+          sirius_base_tests sirius_core_tests sirius_oracle_tests
+          sirius_backend_tests sirius_app_tests sirius_render_tests
+          -j2
+      - name: Non-render authority controls
+        shell: pwsh
+        run: |
+          if (Test-Path "bin/windows-msvc/generated/sirius/mandatory_gate.json") { throw "unexpected promotion receipt before integration controls" }
+          ctest --test-dir bin/windows-msvc -C Release --output-on-failure --no-tests=error `
+            -R '^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.NativeRuntimeProducerRejectsWrongHostAndDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$'
+          if (Test-Path "bin/windows-msvc/generated/sirius/mandatory_gate.json") { throw "integration controls created a promotion receipt" }
+
+  integration-macos-no-render:
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Toolchain
+        run: brew install ninja
+      - name: Vulkan SDK qualification toolchain
+        uses: jakoch/install-vulkan-sdk-action@37effcfa045411f8bfbbda26df2fd1b3bf3436fa
+        with:
+          vulkan_version: 1.4.357.0
+          cache: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Prove qualification compile tools
+        run: |
+          command -v slangc
+          command -v spirv-val
+      - name: Configure strict non-promoting candidate
+        run: >-
+          cmake --preset macos
+          -DSIRIUS_ALIGNMENT_MODE=qualification
+          -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON
+      - name: Compile complete product and test topology
+        run: >-
+          cmake --build --preset macos
+          --target SiriusAlignmentGate SiriusSourceGovernance sirius
+          sirius_base_tests sirius_core_tests sirius_oracle_tests
+          sirius_backend_tests sirius_app_tests sirius_render_tests
+          -j3
+      - name: Non-render authority controls
+        run: |
+          test ! -e bin/macos/generated/sirius/mandatory_gate.json
+          ctest --test-dir bin/macos --output-on-failure --no-tests=error \
+            -R '^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.NativeRuntimeProducerRejectsWrongHostAndDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$'
+          test ! -e bin/macos/generated/sirius/mandatory_gate.json
 
   linux-gate:
     if: github.event_name == 'push'

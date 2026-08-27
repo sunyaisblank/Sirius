@@ -68,6 +68,11 @@ FULL_QUALIFICATION_JOBS = (
     "windows-build",
     "macos-build",
 )
+NON_RENDER_INTEGRATION_JOBS = (
+    "integration-no-render",
+    "integration-windows-no-render",
+    "integration-macos-no-render",
+)
 INTEGRATION_CONTROLS = (
     "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims",
     "OperationalBuildPolicy.ReleaseCannotWeakenGates",
@@ -148,31 +153,36 @@ def workflow_job(workflow: str, name: str) -> str | None:
 def integration_boundary_errors(workflow: str) -> list[str]:
     """Keep cheap integration proof distinct from promotable qualification."""
     errors: list[str] = []
-    integration = workflow_job(workflow, "integration-no-render")
-    if integration is None:
-        errors.append("CI has no non-render pull-request integration job")
-    else:
-        if "if: github.event_name == 'pull_request'" not in integration:
-            errors.append("the non-render integration job is not limited to pull requests")
+    if "workflow_dispatch:" not in workflow:
+        errors.append("CI has no explicit non-render integration dispatch")
+    integration_condition = (
+        "if: github.event_name == 'pull_request' || "
+        "github.event_name == 'workflow_dispatch'"
+    )
+    for name in NON_RENDER_INTEGRATION_JOBS:
+        integration = workflow_job(workflow, name)
+        if integration is None:
+            errors.append(f"CI has no non-render integration job: {name}")
+            continue
+        if integration_condition not in integration:
+            errors.append(f"non-render integration has an unsafe event boundary: {name}")
         if "-DSIRIUS_ALIGNMENT_MODE=qualification" not in integration:
-            errors.append("pull-request compilation does not use the strict topology")
+            errors.append(f"non-render integration does not use strict topology: {name}")
         if "RunMandatoryTests" in integration or "ctest --preset" in integration:
-            errors.append("pull-request integration can execute the full Mandatory estate")
+            errors.append(f"non-render integration can execute the full estate: {name}")
         if integration.count("cmake --build") != 1 or "--target" not in integration:
-            errors.append("pull-request integration can escape its explicit compile targets")
+            errors.append(f"non-render integration can escape compile targets: {name}")
         if integration.count("ctest ") != 1 or "--no-tests=error" not in integration:
-            errors.append("pull-request integration does not have one fail-closed CTest selection")
+            errors.append(f"non-render integration lacks one fail-closed CTest: {name}")
         if "-R '^(" not in integration:
-            errors.append("pull-request integration does not bound CTest to the named controls")
-        if integration.count(
-            "test ! -e bin/linux-ci/generated/sirius/mandatory_gate.json"
-        ) != 2:
-            errors.append("pull-request integration does not prove non-promotion before and after")
+            errors.append(f"non-render integration does not bound CTest controls: {name}")
+        if integration.count("mandatory_gate.json") != 2:
+            errors.append(f"non-render integration does not prove non-promotion: {name}")
         if (
             "verify-attestation.py --record" in integration
             or "upload-artifact@" in integration
         ):
-            errors.append("pull-request integration can publish qualification evidence")
+            errors.append(f"non-render integration can publish evidence: {name}")
         for target in INTEGRATION_TARGETS:
             if (
                 re.search(
@@ -181,10 +191,10 @@ def integration_boundary_errors(workflow: str) -> list[str]:
                 )
                 is None
             ):
-                errors.append(f"pull-request integration does not compile {target}")
+                errors.append(f"non-render integration {name} does not compile {target}")
         for control in INTEGRATION_CONTROLS:
             if control.replace(".", r"\.") not in integration:
-                errors.append(f"pull-request integration omits non-render control {control}")
+                errors.append(f"non-render integration {name} omits control {control}")
 
     for name in FULL_QUALIFICATION_JOBS:
         job = workflow_job(workflow, name)
@@ -200,17 +210,28 @@ def integration_boundary_errors(workflow: str) -> list[str]:
 def verify_integration_boundary_policy() -> None:
     targets = " ".join(INTEGRATION_TARGETS)
     controls = "|".join(name.replace(".", r"\.") for name in INTEGRATION_CONTROLS)
-    valid = (
-        "jobs:\n"
-        "  integration-no-render:\n"
-        "    if: github.event_name == 'pull_request'\n"
-        "    run: cmake -DSIRIUS_ALIGNMENT_MODE=qualification\n"
-        "    run: cmake --build --target " + targets + "\n"
-        "    run: ctest --test-dir bin/linux-ci --no-tests=error -R '^("
+    integration_condition = (
+        "    if: github.event_name == 'pull_request' || "
+        "github.event_name == 'workflow_dispatch'\n"
+    )
+    integration_body = (
+        integration_condition
+        + "    run: cmake -DSIRIUS_ALIGNMENT_MODE=qualification\n"
+        + "    run: cmake --build --target "
+        + targets
+        + "\n"
+        + "    run: ctest --test-dir bin/integration --no-tests=error -R '^("
         + controls
         + ")$'\n"
-        "    run: test ! -e bin/linux-ci/generated/sirius/mandatory_gate.json\n"
-        "    run: test ! -e bin/linux-ci/generated/sirius/mandatory_gate.json\n"
+        + "    run: test ! -e mandatory_gate.json\n"
+        + "    run: test ! -e mandatory_gate.json\n"
+    )
+    valid = (
+        "workflow_dispatch:\n"
+        "jobs:\n"
+        + "".join(
+            f"  {name}:\n{integration_body}" for name in NON_RENDER_INTEGRATION_JOBS
+        )
         + "".join(
             f"  {name}:\n    if: github.event_name == 'push'\n"
             for name in FULL_QUALIFICATION_JOBS
@@ -219,7 +240,7 @@ def verify_integration_boundary_policy() -> None:
     if integration_boundary_errors(valid):
         raise RuntimeError("integration-boundary policy rejected the strict split")
     weakened = valid.replace(
-        "if: github.event_name == 'pull_request'", "if: github.event_name == 'push'", 1
+        "github.event_name == 'pull_request'", "github.event_name == 'push'", 1
     ).replace("ctest --test-dir", "ctest --preset", 1)
     if not integration_boundary_errors(weakened):
         raise RuntimeError("integration-boundary policy accepted full-estate PR execution")

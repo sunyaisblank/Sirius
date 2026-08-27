@@ -97,12 +97,12 @@ compiled authority, preventing a partial, development-mode, or stale
 report/binary tree from being relabelled as the current revision. These build
 records do not close native Vulkan.
 
-Pull requests use a separate non-render integration job. It compiles the same
-product and test topology and exercises governance/authority negative controls,
-but it neither runs the Mandatory estate nor creates, uploads, or admits an
-attestation. Repository governance requires the full native jobs to remain
-push-only and requires the pull-request job to prove that no promotion receipt
-appears.
+Pull requests and explicit integration dispatches use separate non-render
+Linux, Windows, and macOS jobs. Each compiles the same product and test topology
+and exercises governance/authority negative controls, but neither runs the
+Mandatory estate nor creates, uploads, or admits an attestation. Repository
+governance requires the full native jobs to remain push-only and requires every
+integration job to prove that no promotion receipt appears.
 
 `windows-native-vulkan` separately requires a native Windows host, a physical
 Vulkan device, readiness, and runtime artifacts; Dozen is expressly rejected
