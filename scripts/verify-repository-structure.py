@@ -62,6 +62,34 @@ STRICT_TEST_VOLUME_TARGETS = {
     ROOT / "tests" / "app" / "CMakeLists.txt": "sirius_app_tests",
     ROOT / "tests" / "render" / "CMakeLists.txt": "sirius_render_tests",
 }
+FULL_QUALIFICATION_JOBS = (
+    "linux-gate",
+    "linux-sanitizers",
+    "windows-build",
+    "macos-build",
+)
+INTEGRATION_CONTROLS = (
+    "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims",
+    "OperationalBuildPolicy.ReleaseCannotWeakenGates",
+    "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate",
+    "OperationalAttestation.FalseExternalEvidenceIsRejected",
+    "OperationalAttestation.NativeRuntimeProducerRejectsWrongHostAndDevice",
+    "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected",
+    "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness",
+    "AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority",
+    "BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation",
+)
+INTEGRATION_TARGETS = (
+    "SiriusAlignmentGate",
+    "SiriusSourceGovernance",
+    "sirius",
+    "sirius_base_tests",
+    "sirius_core_tests",
+    "sirius_oracle_tests",
+    "sirius_backend_tests",
+    "sirius_app_tests",
+    "sirius_render_tests",
+)
 
 
 def relative(path: Path) -> str:
@@ -106,6 +134,95 @@ def immutable_input_errors(workflow: str, dependencies: str) -> list[str]:
     if powershell_hash_checks < powershell_downloads:
         errors.append("a CI PowerShell download has no checked-in SHA-256 verification")
     return errors
+
+
+def workflow_job(workflow: str, name: str) -> str | None:
+    match = re.search(
+        rf"^  {re.escape(name)}:\s*\n(.*?)(?=^  [A-Za-z0-9_-]+:\s*\n|\Z)",
+        workflow,
+        re.MULTILINE | re.DOTALL,
+    )
+    return None if match is None else match.group(1)
+
+
+def integration_boundary_errors(workflow: str) -> list[str]:
+    """Keep cheap integration proof distinct from promotable qualification."""
+    errors: list[str] = []
+    integration = workflow_job(workflow, "integration-no-render")
+    if integration is None:
+        errors.append("CI has no non-render pull-request integration job")
+    else:
+        if "if: github.event_name == 'pull_request'" not in integration:
+            errors.append("the non-render integration job is not limited to pull requests")
+        if "-DSIRIUS_ALIGNMENT_MODE=qualification" not in integration:
+            errors.append("pull-request compilation does not use the strict topology")
+        if "RunMandatoryTests" in integration or "ctest --preset" in integration:
+            errors.append("pull-request integration can execute the full Mandatory estate")
+        if integration.count("cmake --build") != 1 or "--target" not in integration:
+            errors.append("pull-request integration can escape its explicit compile targets")
+        if integration.count("ctest ") != 1 or "--no-tests=error" not in integration:
+            errors.append("pull-request integration does not have one fail-closed CTest selection")
+        if "-R '^(" not in integration:
+            errors.append("pull-request integration does not bound CTest to the named controls")
+        if integration.count(
+            "test ! -e bin/linux-ci/generated/sirius/mandatory_gate.json"
+        ) != 2:
+            errors.append("pull-request integration does not prove non-promotion before and after")
+        if (
+            "verify-attestation.py --record" in integration
+            or "upload-artifact@" in integration
+        ):
+            errors.append("pull-request integration can publish qualification evidence")
+        for target in INTEGRATION_TARGETS:
+            if (
+                re.search(
+                    rf"(?<![A-Za-z0-9_]){re.escape(target)}(?![A-Za-z0-9_])",
+                    integration,
+                )
+                is None
+            ):
+                errors.append(f"pull-request integration does not compile {target}")
+        for control in INTEGRATION_CONTROLS:
+            if control.replace(".", r"\.") not in integration:
+                errors.append(f"pull-request integration omits non-render control {control}")
+
+    for name in FULL_QUALIFICATION_JOBS:
+        job = workflow_job(workflow, name)
+        if job is None:
+            errors.append(f"CI full qualification job is missing: {name}")
+        elif "if: github.event_name == 'push'" not in job:
+            errors.append(
+                f"CI full qualification job can execute outside protected pushes: {name}"
+            )
+    return errors
+
+
+def verify_integration_boundary_policy() -> None:
+    targets = " ".join(INTEGRATION_TARGETS)
+    controls = "|".join(name.replace(".", r"\.") for name in INTEGRATION_CONTROLS)
+    valid = (
+        "jobs:\n"
+        "  integration-no-render:\n"
+        "    if: github.event_name == 'pull_request'\n"
+        "    run: cmake -DSIRIUS_ALIGNMENT_MODE=qualification\n"
+        "    run: cmake --build --target " + targets + "\n"
+        "    run: ctest --test-dir bin/linux-ci --no-tests=error -R '^("
+        + controls
+        + ")$'\n"
+        "    run: test ! -e bin/linux-ci/generated/sirius/mandatory_gate.json\n"
+        "    run: test ! -e bin/linux-ci/generated/sirius/mandatory_gate.json\n"
+        + "".join(
+            f"  {name}:\n    if: github.event_name == 'push'\n"
+            for name in FULL_QUALIFICATION_JOBS
+        )
+    )
+    if integration_boundary_errors(valid):
+        raise RuntimeError("integration-boundary policy rejected the strict split")
+    weakened = valid.replace(
+        "if: github.event_name == 'pull_request'", "if: github.event_name == 'push'", 1
+    ).replace("ctest --test-dir", "ctest --preset", 1)
+    if not integration_boundary_errors(weakened):
+        raise RuntimeError("integration-boundary policy accepted full-estate PR execution")
 
 
 def verify_immutable_input_policy() -> None:
@@ -178,11 +295,13 @@ def verify() -> list[str]:
 
     verify_immutable_input_policy()
     verify_strict_test_volume_policy()
+    verify_integration_boundary_policy()
     workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
     dependencies = (ROOT / "cmake" / "sirius_dependencies.cmake").read_text(
         encoding="utf-8"
     )
     errors.extend(immutable_input_errors(workflow, dependencies))
+    errors.extend(integration_boundary_errors(workflow))
     strict_test_documents = {
         relative(path): (target, path.read_text(encoding="utf-8"))
         for path, target in STRICT_TEST_VOLUME_TARGETS.items()

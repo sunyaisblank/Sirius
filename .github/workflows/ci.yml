@@ -9,7 +9,55 @@ on:
   pull_request:
 
 jobs:
+  # Pull requests prove that the complete strict topology compiles and that the
+  # governance/release authorities fail closed. They deliberately do not run
+  # the Mandatory estate, produce an attestation, or claim qualification. Full
+  # rendering/runtime qualification remains a protected-branch push concern.
+  integration-no-render:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-format-18 g++-14 gcc-14 ninja-build \
+            libvulkan-dev mesa-vulkan-drivers spirv-tools \
+            xorg-dev libgl1-mesa-dev libwayland-dev \
+            wayland-protocols libxkbcommon-dev
+      - name: Slang
+        run: |
+          TAG=v2026.12.0.1
+          curl --fail --location --silent --show-error \
+            "https://github.com/shader-slang/slang/releases/download/${TAG}/slang-${TAG#v}-linux-x86_64.tar.gz" \
+            --output slang.tgz
+          echo "bbd36968b5aefdf91c2ede0d2e131f8b552cba6ed2444da59f1a0bc0bfc6792d  slang.tgz" \
+            | sha256sum --check -
+          sudo mkdir -p /opt/slang && sudo tar xzf slang.tgz -C /opt/slang
+      - name: First-party format
+        run: |
+          find src/sirius tests -type f \( -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \) \
+            -print0 | xargs -0 clang-format-18 --dry-run --Werror
+      - name: Configure strict non-promoting candidate
+        run: cmake --preset linux-ci -DSIRIUS_ALIGNMENT_MODE=qualification
+      - name: Compile complete product and test topology
+        run: >-
+          cmake --build --preset linux-ci
+          --target SiriusAlignmentGate SiriusSourceGovernance sirius
+          sirius_base_tests sirius_core_tests sirius_oracle_tests
+          sirius_backend_tests sirius_app_tests sirius_render_tests
+          -j"$(nproc)"
+      - name: Non-render authority controls
+        run: |
+          test ! -e bin/linux-ci/generated/sirius/mandatory_gate.json
+          ctest --test-dir bin/linux-ci --output-on-failure --no-tests=error \
+            -R '^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.NativeRuntimeProducerRejectsWrongHostAndDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$'
+          test ! -e bin/linux-ci/generated/sirius/mandatory_gate.json
+      - name: Label file freshness
+        run: python3 scripts/generate-ctest-labels.py --check
+
   linux-gate:
+    if: github.event_name == 'push'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -43,6 +91,7 @@ jobs:
         run: python3 scripts/generate-ctest-labels.py --check
 
   linux-sanitizers:
+    if: github.event_name == 'push'
     runs-on: ubuntu-24.04
     timeout-minutes: 75
     steps:
@@ -69,6 +118,7 @@ jobs:
         run: cmake --build --preset linux-gcc-sanitize -j"$(nproc)"
 
   windows-build:
+    if: github.event_name == 'push'
     runs-on: windows-2022
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -131,6 +181,7 @@ jobs:
           path: attestations
 
   macos-build:
+    if: github.event_name == 'push'
     runs-on: macos-15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7

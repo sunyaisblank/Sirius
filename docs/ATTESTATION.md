@@ -83,9 +83,9 @@ Lavapipe is rejected because its device kind is software.
 
 ## Windows and macOS
 
-The CI matrix emits downloadable `windows-native-build` and
-`macos-native-build` records only after a clean strict qualification compilation
-and the complete
+On protected-branch pushes, the CI matrix emits downloadable
+`windows-native-build` and `macos-native-build` records only after a clean
+strict qualification compilation and the complete
 source-available CTest estate succeed. The producer derives the recorded commit
 from the tested Git checkout, requires that checkout to remain clean after the
 tests, and cross-checks it against the workflow revision; caller-provided text
@@ -96,6 +96,13 @@ equality and requires the JUnit witness that compared that receipt to the
 compiled authority, preventing a partial, development-mode, or stale
 report/binary tree from being relabelled as the current revision. These build
 records do not close native Vulkan.
+
+Pull requests use a separate non-render integration job. It compiles the same
+product and test topology and exercises governance/authority negative controls,
+but it neither runs the Mandatory estate nor creates, uploads, or admits an
+attestation. Repository governance requires the full native jobs to remain
+push-only and requires the pull-request job to prove that no promotion receipt
+appears.
 
 `windows-native-vulkan` separately requires a native Windows host, a physical
 Vulkan device, readiness, and runtime artifacts; Dozen is expressly rejected
