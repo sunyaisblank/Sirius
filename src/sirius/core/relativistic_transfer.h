@@ -50,14 +50,14 @@ struct GreyTransferState {
 // For a past-directed ray k and a future-directed fluid worldline u, k.u is
 // the positive comoving photon frequency. With observer-normalised affine
 // parameter, the proper path traversed in that fluid frame is (k.u) dlambda.
-[[nodiscard]] inline std::optional<double> ComovingPathLength(
-    const Vec4& past_ray, const Vec4& fluid_velocity, const Metric4d& metric,
-    double affine_length) {
+[[nodiscard]] inline std::optional<double> ComovingPathLength(const Vec4& past_ray,
+                                                              const Vec4& fluid_velocity,
+                                                              const Metric4d& metric,
+                                                              double affine_length) {
     if (!std::isfinite(affine_length) || !(affine_length > 0.0)) return std::nullopt;
     const double norm = TensorOps::InnerProduct(fluid_velocity, fluid_velocity, metric);
     const double frequency = TensorOps::InnerProduct(past_ray, fluid_velocity, metric);
-    if (!std::isfinite(norm) || !(norm < 0.0) || !std::isfinite(frequency) ||
-        !(frequency > 0.0)) {
+    if (!std::isfinite(norm) || !(norm < 0.0) || !std::isfinite(frequency) || !(frequency > 0.0)) {
         return std::nullopt;
     }
     return frequency * affine_length;
@@ -68,8 +68,8 @@ struct GreyTransferState {
 // does not attenuate emission already accumulated closer to the observer.
 // Returns the accepted fraction of delta_tau when max_tau clips the layer.
 [[nodiscard]] inline std::optional<double> AccumulateObserverToSourceLayer(
-    GreyTransferState& state, const std::array<double, 3>& observed_source,
-    double delta_tau, double max_tau) {
+    GreyTransferState& state, const std::array<double, 3>& observed_source, double delta_tau,
+    double max_tau) {
     if (!std::isfinite(state.optical_depth) || state.optical_depth < 0.0 ||
         !std::isfinite(delta_tau) || !(delta_tau > 0.0) || !std::isfinite(max_tau) ||
         !(max_tau > state.optical_depth)) {
@@ -80,8 +80,7 @@ struct GreyTransferState {
     }
     const double accepted_tau = std::min(delta_tau, max_tau - state.optical_depth);
     const double accepted_fraction = accepted_tau / delta_tau;
-    const double layer_weight =
-        std::exp(-state.optical_depth) * (1.0 - std::exp(-accepted_tau));
+    const double layer_weight = std::exp(-state.optical_depth) * (1.0 - std::exp(-accepted_tau));
     for (std::size_t channel = 0; channel < state.observed_emission.size(); ++channel) {
         state.observed_emission[channel] += observed_source[channel] * layer_weight;
     }
@@ -95,8 +94,8 @@ struct GreyTransferState {
         !std::isfinite(angular_velocity) || !(g_phi_phi > 0.0)) {
         return std::nullopt;
     }
-    const double norm = g_tt + 2.0 * angular_velocity * g_t_phi +
-                        angular_velocity * angular_velocity * g_phi_phi;
+    const double norm =
+        g_tt + 2.0 * angular_velocity * g_t_phi + angular_velocity * angular_velocity * g_phi_phi;
     if (!std::isfinite(norm) || !(norm < 0.0)) return std::nullopt;
     return EquatorialCircularFrame{angular_velocity, 1.0 / std::sqrt(-norm)};
 }
@@ -106,8 +105,8 @@ struct GreyTransferState {
 // observer_frequency is the positive -k.u measured at the camera.  E and L_z
 // are the photon's conserved Killing quantities in the same affine scaling.
 [[nodiscard]] inline std::optional<KerrDiskFrequencyTransfer> KerrDiskTransfer(
-    double observer_frequency, double photon_energy, double photon_angular_momentum,
-    double mass, double spin, double radius) {
+    double observer_frequency, double photon_energy, double photon_angular_momentum, double mass,
+    double spin, double radius) {
     if (!std::isfinite(observer_frequency) || !(observer_frequency > 0.0) ||
         !std::isfinite(photon_energy) || !(photon_energy > 0.0) ||
         !std::isfinite(photon_angular_momentum) || !std::isfinite(mass) || !(mass > 0.0) ||
@@ -118,22 +117,19 @@ struct GreyTransferState {
 
     const double g_tt = -(1.0 - 2.0 * mass / radius);
     const double g_t_phi = -2.0 * mass * spin / radius;
-    const double g_phi_phi =
-        radius * radius + spin * spin + 2.0 * mass * spin * spin / radius;
+    const double g_phi_phi = radius * radius + spin * spin + 2.0 * mass * spin * spin / radius;
     const double sqrt_mass = std::sqrt(mass);
-    const double emitter_omega =
-        sqrt_mass / (std::pow(radius, 1.5) + spin * sqrt_mass);
+    const double emitter_omega = sqrt_mass / (std::pow(radius, 1.5) + spin * sqrt_mass);
     const double zamo_omega = -g_t_phi / g_phi_phi;
     const auto emitter = EquatorialFrame(g_tt, g_t_phi, g_phi_phi, emitter_omega);
     const auto zamo = EquatorialFrame(g_tt, g_t_phi, g_phi_phi, zamo_omega);
     if (!emitter || !zamo) return std::nullopt;
 
-    const double emitter_frequency = emitter->time_component *
-                                     (photon_energy - emitter->angular_velocity *
-                                                          photon_angular_momentum);
+    const double emitter_frequency =
+        emitter->time_component *
+        (photon_energy - emitter->angular_velocity * photon_angular_momentum);
     const double zamo_frequency =
-        zamo->time_component *
-        (photon_energy - zamo->angular_velocity * photon_angular_momentum);
+        zamo->time_component * (photon_energy - zamo->angular_velocity * photon_angular_momentum);
     if (!std::isfinite(emitter_frequency) || !(emitter_frequency > 0.0) ||
         !std::isfinite(zamo_frequency) || !(zamo_frequency > 0.0)) {
         return std::nullopt;

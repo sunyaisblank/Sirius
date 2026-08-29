@@ -728,7 +728,7 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
                 ray.position = crossing_position;
                 ray.velocity = ray_vel;
                 ray.proper_time = static_cast<float>(prev_pt + crossing_fraction * d_lambda);
-                ray.coordinate_time = crossing_position(0);
+                ray.coordinate_time = static_cast<float>(crossing_position(0));
                 const double crossing_cartesian_radius =
                     std::sqrt(crossing_position(1) * crossing_position(1) +
                               crossing_position(2) * crossing_position(2) +

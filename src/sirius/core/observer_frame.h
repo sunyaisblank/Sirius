@@ -45,8 +45,10 @@ struct ObserverFrame {
 // This construction is independent of whether k is future- or past-directed,
 // remains exactly transverse when a numerical ray has small null drift, and
 // never treats a chart basis vector as an observer worldline.
-[[nodiscard]] inline std::optional<Vec4> ProjectToObserverScreen(
-    const Metric4d& metric, const Vec4& observer, const Vec4& ray, const Vec4& trial) {
+[[nodiscard]] inline std::optional<Vec4> ProjectToObserverScreen(const Metric4d& metric,
+                                                                 const Vec4& observer,
+                                                                 const Vec4& ray,
+                                                                 const Vec4& trial) {
     const auto dot = [&metric](const Vec4& lhs, const Vec4& rhs) {
         return TensorOps::InnerProduct(lhs, rhs, metric);
     };
@@ -108,8 +110,7 @@ struct ObserverFrame {
 
 [[nodiscard]] inline std::optional<ObserverFrame> BoostObserverFrame(
     const ObserverFrame& reference, const std::array<double, 3>& beta) {
-    const double beta_squared =
-        beta[0] * beta[0] + beta[1] * beta[1] + beta[2] * beta[2];
+    const double beta_squared = beta[0] * beta[0] + beta[1] * beta[1] + beta[2] * beta[2];
     if (!std::isfinite(beta_squared) || beta_squared >= 1.0) return std::nullopt;
     if (beta_squared == 0.0) return reference;
 
