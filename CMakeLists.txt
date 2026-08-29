@@ -327,6 +327,35 @@ if(BUILD_TESTS AND SIRIUS_MANDATORY_TESTS)
             "${CMAKE_BINARY_DIR}/generated/sirius/mandatory_gate_ctest.log"
         COMMENT "=== MANDATORY TEST GATE ==="
     )
+
+    # Build-domain evidence is intentionally distinct from the promotion gate.
+    # It hashes the complete strict product/test topology and runs only the
+    # fixed non-render authority selection. It is never part of ALL, never
+    # staged into the runtime volume, and cannot satisfy a runtime/image domain.
+    set(SIRIUS_NATIVE_BUILD_GATE_STAMP
+        "${CMAKE_BINARY_DIR}/generated/sirius/native_build_gate.json")
+    add_custom_target(RunNativeBuildEvidence
+        COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_SOURCE_DIR}/scripts/verify-build-gate.py"
+            --action run-native-build
+            --stamp "${SIRIUS_NATIVE_BUILD_GATE_STAMP}"
+            --alignment-mode "${SIRIUS_ALIGNMENT_MODE}"
+            --source-root "${CMAKE_SOURCE_DIR}"
+            --build-dir "${CMAKE_BINARY_DIR}"
+            --source-revision "${SIRIUS_SOURCE_REVISION}"
+            --source-tree-clean "${SIRIUS_SOURCE_TREE_CLEAN}"
+            --ctest "${CMAKE_CTEST_COMMAND}"
+            --config "$<CONFIG>"
+            ${sirius_gate_test_artifacts}
+            ${sirius_gate_product_artifacts}
+        DEPENDS sirius ${sirius_mandatory_test_targets}
+            SiriusAlignmentGate SiriusSourceGovernance
+        BYPRODUCTS
+            "${SIRIUS_NATIVE_BUILD_GATE_STAMP}"
+            "${CMAKE_BINARY_DIR}/generated/sirius/native_build_gate_junit.xml"
+            "${CMAKE_BINARY_DIR}/generated/sirius/native_build_gate_ctest.log"
+        COMMENT "=== NATIVE BUILD NON-RENDER EVIDENCE GATE ==="
+    )
     message(STATUS "Mandatory test gating: ENABLED")
 endif()
 

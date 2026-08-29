@@ -11,9 +11,12 @@ Every admitted record uses schema version 1 and passes:
 python3 scripts/verify-attestation.py path/to/attestation.json
 ```
 
-The verifier requires a passing test estate, source revision, UTC completion
-time, exact domain identity, and byte count plus SHA-256 for every artifact.
-Runtime records must also identify the physical device, driver, Vulkan API,
+The verifier requires a passing domain-appropriate test estate, source revision,
+UTC completion time, exact domain identity, and byte count plus SHA-256 for every
+artifact. Native-build records bind the full governed CTest registration, the
+exact nine-case non-render authority estate, every compiled test executable, all
+thirteen products, the alignment receipt, and the copied candidate. Runtime
+records must additionally identify the physical device, driver, Vulkan API,
 memory budget, and fp64 capability, and must hash the rendered PNG, execution
 transcript, device inventory, configure-time alignment receipt, qualification
 build-gate receipt, copied qualification executable, gate-generated JUnit/log,
@@ -25,9 +28,10 @@ build/product topology as release without claiming that pending external domains
 were already satisfied. The local
 operating-model gate independently parses the source estate and rejects fewer
 than 700 enabled GoogleTests. This governed floor is not a historical fixed
-estate count: the external JUnit case-name set must equal every enabled
-registered test, meet that same conservative floor, and contain the
-compiled-receipt authority witness;
+estate count. Build-domain evidence must register the full governed estate and
+execute the fixed non-render authority selection; runtime-domain JUnit case
+names must equal every enabled registered test and meet that same floor. Both
+contain the compiled-receipt authority witness;
 the receipt must name the same clean revision and exact model-derived domains.
 The gate-generated and rerun JUnit case-name sets and summaries must agree; the
 gate must bind the submitted alignment receipt, operating-model digest, all
@@ -83,26 +87,25 @@ Lavapipe is rejected because its device kind is software.
 
 ## Windows and macOS
 
-On protected-branch pushes, the CI matrix emits downloadable
-`windows-native-build` and `macos-native-build` records only after a clean
-strict qualification compilation and the complete
-source-available CTest estate succeed. The producer derives the recorded commit
+On explicit workflow dispatches and protected-branch pushes, the native CI
+matrix can emit downloadable `windows-native-build` and `macos-native-build`
+records after a clean strict qualification compilation and the exact non-render
+build-authority estate succeed. The producer derives the recorded commit
 from the tested Git checkout, requires that checkout to remain clean after the
 tests, and cross-checks it against the workflow revision; caller-provided text
 cannot name a different source. Each record also carries the configure-time
-alignment receipt, candidate/product build gate, gate JUnit/log, copied tested
-executable, and current CTest registration. It requires exact inventory/JUnit
-equality and requires the JUnit witness that compared that receipt to the
-compiled authority, preventing a partial, development-mode, or stale
-report/binary tree from being relabelled as the current revision. These build
-records do not close native Vulkan.
+alignment receipt, non-promoting native-build gate, gate JUnit/log, all seven
+compiled executables, all thirteen products, copied candidate, and current CTest
+registration. The verifier requires at least 700 governed registered tests and
+the exact nine zero-skip authority cases; it rejects any claim that this proves
+runtime or the unexecuted estate. These records do not close native Vulkan.
 
-Pull requests and explicit integration dispatches use separate non-render
-Linux, Windows, and macOS jobs. Each compiles the same product and test topology
-and exercises governance/authority negative controls, but neither runs the
-Mandatory estate nor creates, uploads, or admits an attestation. Repository
-governance requires the full native jobs to remain push-only and requires every
-integration job to prove that no promotion receipt appears.
+Pull requests and explicit integration dispatches use the same non-render Linux,
+Windows, and macOS jobs. Pull requests compile and exercise the authority
+controls but cannot publish evidence. An explicit dispatch may additionally
+issue only the Windows/macOS compilation domains through the separate
+native-build gate. Neither path creates a Mandatory promotion receipt;
+physical/runtime attestations remain push-only or external-runbook evidence.
 
 `windows-native-vulkan` separately requires a native Windows host, a physical
 Vulkan device, readiness, and runtime artifacts; Dozen is expressly rejected

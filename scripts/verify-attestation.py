@@ -3,6 +3,7 @@
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import math
 import re
@@ -52,6 +53,14 @@ QUALIFICATION_PRODUCT_EVIDENCE = {
     "viewer_rdsd005a_fragment": "qualification-product-viewer_rdsd005a_fragment",
     "viewer_rdsd005a_vertex": "qualification-product-viewer_rdsd005a_vertex",
 }
+QUALIFICATION_TEST_EVIDENCE = {
+    "sirius_app_tests": "native-build-tested-sirius_app_tests",
+    "sirius_backend_tests": "native-build-tested-sirius_backend_tests",
+    "sirius_base_tests": "native-build-tested-sirius_base_tests",
+    "sirius_core_tests": "native-build-tested-sirius_core_tests",
+    "sirius_oracle_tests": "native-build-tested-sirius_oracle_tests",
+    "sirius_render_tests": "native-build-tested-sirius_render_tests",
+}
 QUALIFICATION_RUNTIME_RESOURCE_PATHS = {
     "operating_model": Path("model/operating_model.json"),
     "starfield": Path("assets/Starfield.png"),
@@ -70,6 +79,16 @@ QUALIFICATION_RUNTIME_RESOURCE_PATHS = {
 def require(condition, message):
     if not condition:
         raise ValueError(message)
+
+
+def load_build_gate_verifier():
+    path = Path(__file__).with_name("verify-build-gate.py")
+    spec = importlib.util.spec_from_file_location("sirius_build_gate_verifier", path)
+    require(spec is not None and spec.loader is not None,
+            "could not load the native build-gate verifier")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def text_contains(device, *needles):
@@ -606,6 +625,122 @@ def inspect_qualification_build_gate(
     return gate
 
 
+def inspect_native_build_gate(
+    path, source_revision, alignment_path, report_path, inventory_path, claims,
+    artifacts,
+):
+    try:
+        gate = json.loads(path.read_text(encoding="utf-8"))
+        inventory = json.loads(inventory_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as error:
+        raise ValueError("native build-gate evidence is not valid JSON") from error
+    build_gate = load_build_gate_verifier()
+    build_gate.validate_native_build_document(gate)
+    require(gate.get("source") == {"revision": source_revision, "clean": True},
+            "native build gate is not bound to the clean attested revision")
+
+    inventory_names = inspect_ctest_inventory(inventory_path)
+    require(len(inventory_names) >= MINIMUM_SOURCE_AVAILABLE_TESTS,
+            "native build registration is below the governed source test floor")
+    tests = inventory.get("tests", [])
+    for test in tests:
+        labels = []
+        disabled = False
+        for prop in test.get("properties", []):
+            if prop.get("name") == "LABELS" and isinstance(prop.get("value"), list):
+                labels = prop["value"]
+            if prop.get("name") == "DISABLED":
+                disabled = prop.get("value") in (True, 1, "1", "ON", "TRUE")
+        if not disabled:
+            require("Mandatory" in labels,
+                    f"native build registration escaped governance: {test.get('name')}")
+
+    def artifact_record(record):
+        return (
+            isinstance(record, dict)
+            and set(record) == {"root", "path", "bytes", "sha256"}
+            and record.get("root") in {"source", "build"}
+            and isinstance(record.get("path"), str) and record["path"]
+            and type(record.get("bytes")) is int and record["bytes"] > 0
+            and isinstance(record.get("sha256"), str)
+            and re.fullmatch(r"[0-9a-f]{64}", record["sha256"]) is not None
+        )
+
+    tested = gate["tested_artifacts"]
+    products = gate["product_artifacts"]
+    require(all(artifact_record(record) for record in tested.values()) and
+            all(artifact_record(record) for record in products.values()),
+            "native build gate contains a malformed artifact record")
+    alignment_payload = alignment_path.read_bytes()
+    alignment_digest = hashlib.sha256(alignment_payload).hexdigest()
+    inputs = gate["inputs"]
+    require(inputs["alignment_receipt_sha256"] == alignment_digest and
+            products["alignment_receipt"]["sha256"] == alignment_digest and
+            products["alignment_receipt"]["bytes"] == len(alignment_payload),
+            "native build gate is not bound to the attested alignment receipt")
+    alignment = json.loads(alignment_payload)
+    require(inputs["operating_model_sha256"]
+            == alignment.get("operating_model", {}).get("sha256")
+            == products["operating_model"]["sha256"],
+            "native build gate differs from the attested operating model")
+
+    for product_name, artifact_name in QUALIFICATION_PRODUCT_EVIDENCE.items():
+        product_path = artifacts.get(artifact_name)
+        product_payload = product_path.read_bytes() if product_path is not None else b""
+        require(product_path is not None and
+                products[product_name]["bytes"] == len(product_payload) and
+                products[product_name]["sha256"]
+                == hashlib.sha256(product_payload).hexdigest(),
+                f"native build product is absent or differs from its gate: {product_name}")
+    for test_name, artifact_name in QUALIFICATION_TEST_EVIDENCE.items():
+        test_path = artifacts.get(artifact_name)
+        test_payload = test_path.read_bytes() if test_path is not None else b""
+        require(test_path is not None and
+                tested[test_name]["bytes"] == len(test_payload) and
+                tested[test_name]["sha256"] == hashlib.sha256(test_payload).hexdigest(),
+                f"compiled test executable is absent or differs from its gate: {test_name}")
+
+    report = inspect_junit(report_path)
+    report_names = junit_case_names(report_path)
+    expected_names = set(build_gate.NATIVE_BUILD_EVIDENCE_TESTS)
+    require(report_names == expected_names and report["skipped"] == 0 and
+            claims.get("test_report") == report,
+            "native build JUnit is not the exact zero-skip non-render authority estate")
+    log_path = artifacts.get("native-build-gate-log")
+    log_payload = log_path.read_bytes() if log_path is not None else b""
+    report_payload = report_path.read_bytes()
+    ctest = gate["ctest"]
+    require(log_path is not None and
+            ctest["junit"]["bytes"] == len(report_payload) and
+            ctest["junit"]["sha256"] == hashlib.sha256(report_payload).hexdigest() and
+            ctest["log"]["bytes"] == len(log_payload) and
+            ctest["log"]["sha256"] == hashlib.sha256(log_payload).hexdigest() and
+            ctest["registered"] == len(inventory_names) and
+            ctest["selected"] == ctest["executed"] == len(expected_names),
+            "native build gate does not prove the attested authority execution")
+    canonical_inventory = json.dumps(
+        inventory, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
+    require(ctest["inventory_sha256"] == hashlib.sha256(canonical_inventory).hexdigest(),
+            "native build gate differs from the attested CTest inventory")
+
+    candidate = claims.get("qualification_executable")
+    candidate_path = artifacts.get("qualification-sirius.bin")
+    candidate_payload = candidate_path.read_bytes() if candidate_path is not None else b""
+    require(isinstance(candidate, dict) and
+            candidate == {
+                "artifact": "qualification-sirius.bin",
+                "bytes": products["sirius"]["bytes"],
+                "sha256": products["sirius"]["sha256"],
+            } and candidate_path is not None and
+            len(candidate_payload) == candidate["bytes"] and
+            hashlib.sha256(candidate_payload).hexdigest() == candidate["sha256"] and
+            tested["sirius"]["bytes"] == candidate["bytes"] and
+            tested["sirius"]["sha256"] == candidate["sha256"],
+            "native build attestation is not bound to its exact candidate executable")
+    return gate
+
+
 def verify_document(data, location):
     require(data.get("schema_version") == 1, "schema_version must be 1")
     require(data.get("status") == "pass", "status must be pass")
@@ -742,12 +877,16 @@ def verify_document(data, location):
 
     build_domains = {"windows-native-build", "macos-native-build"}
     if build_domains.intersection(domains):
+        require(claims.get("test_estate_kind") ==
+                "native-build-non-render-authority" and
+                claims.get("compiled_topology_complete") is True and
+                claims.get("runtime_ready") is False,
+                "native build claim must be scoped to compiled topology and non-render authority")
         reports = [path for path in artifact_paths if path.suffix.casefold() == ".xml"]
         require(len(reports) == 1, "native build attestation requires exactly one JUnit XML report")
         report = inspect_junit(reports[0])
-        require(report["cases"] >= MINIMUM_SOURCE_AVAILABLE_TESTS
-                and report["skipped"] == 0,
-                "native build JUnit evidence is not a non-skipping test estate")
+        require(report["cases"] > 0 and report["skipped"] == 0,
+                "native build JUnit evidence is not a non-skipping authority estate")
         require(claims.get("test_report") == report,
                 "native build JUnit summary does not match the attested claim")
         case_names = junit_case_names(reports[0])
@@ -770,6 +909,7 @@ def verify_document(data, location):
             path for path, document in json_artifacts.items()
             if isinstance(document, dict)
             and document.get("status") == "passed"
+            and document.get("kind") == "sirius-native-build-gate"
             and "tested_artifacts" in document
             and "product_artifacts" in document
         ]
@@ -780,14 +920,14 @@ def verify_document(data, location):
         require(len(inventories) == 1,
                 "native build attestation requires exactly one CTest inventory")
         require(len(gates) == 1,
-                "native build attestation requires exactly one qualification build gate")
+                "native build attestation requires exactly one native build gate")
         inspect_build_alignment_receipt(receipts[0], source_revision)
-        inspect_qualification_build_gate(
+        inspect_native_build_gate(
             gates[0], source_revision, receipts[0], reports[0], inventories[0], claims,
             artifact_files,
         )
-        require(case_names == inspect_ctest_inventory(inventories[0]),
-                "native build JUnit does not equal the registered CTest estate")
+        require(case_names <= inspect_ctest_inventory(inventories[0]),
+                "native build authority estate is absent from CTest registration")
     hardware_floor_domains = {
         "physical-radeon-780m",
         "wsl2-dozen",
@@ -1872,34 +2012,112 @@ def self_test():
             raise ValueError(f"negative control accepted: {label}")
 
         native_build_report = root / "native-build-tests.xml"
-        native_build_names = [alignment_case] + [
-            f"native-build-case-{index}"
-            for index in range(1, MINIMUM_SOURCE_AVAILABLE_TESTS)
-        ]
+        build_gate_verifier = load_build_gate_verifier()
+        native_build_names = list(build_gate_verifier.NATIVE_BUILD_EVIDENCE_TESTS)
         native_build_report.write_text(
             "<testsuite>"
             + "".join(f'<testcase name="{name}"/>' for name in native_build_names)
             + "</testsuite>\n",
             encoding="utf-8",
         )
+        native_registration_names = native_build_names + [
+            f"native-build-registered-case-{index}"
+            for index in range(
+                MINIMUM_SOURCE_AVAILABLE_TESTS - len(native_build_names)
+            )
+        ]
         native_build_inventory = root / "native-build-ctest-inventory.json"
         native_build_inventory.write_text(
             json.dumps({
                 "kind": "ctestInfo",
                 "version": {"major": 1, "minor": 0},
                 "tests": [
-                    {"name": name, "properties": []} for name in native_build_names
+                    {
+                        "name": name,
+                        "properties": [
+                            {"name": "LABELS", "value": ["Mandatory"]}
+                        ],
+                    }
+                    for name in native_registration_names
                 ],
             }),
             encoding="utf-8",
         )
-        native_build_gate = root / "native-build-mandatory-gate.json"
-        write_qualification_gate(
-            native_build_gate,
-            native_build_report,
-            native_build_inventory,
-            qualification_executable,
+        native_build_gate_log = root / "native-build-gate-log"
+        native_build_gate_log.write_text(
+            "exact non-render authority estate passed\n", encoding="utf-8"
         )
+        native_test_products = {}
+        for logical_name, evidence_name in QUALIFICATION_TEST_EVIDENCE.items():
+            path = root / evidence_name
+            path.write_bytes(f"compiled native test: {logical_name}\n".encode())
+            native_test_products[logical_name] = path
+
+        def native_gate_record(name, payload):
+            return {
+                "root": "build",
+                "path": name,
+                "bytes": len(payload),
+                "sha256": hashlib.sha256(payload).hexdigest(),
+            }
+
+        native_tested = {
+            logical_name: native_gate_record(path.name, path.read_bytes())
+            for logical_name, path in native_test_products.items()
+        }
+        candidate_payload = qualification_executable.read_bytes()
+        native_tested["sirius"] = native_gate_record(
+            qualification_executable.name, candidate_payload
+        )
+        native_products = {
+            logical_name: native_gate_record(path.name, path.read_bytes())
+            for logical_name, path in self_test_products.items()
+        }
+        receipt_payload = native_build_receipt.read_bytes()
+        native_products["alignment_receipt"] = native_gate_record(
+            native_build_receipt.name, receipt_payload
+        )
+        native_products["sirius"] = native_gate_record(
+            qualification_executable.name, candidate_payload
+        )
+        native_inventory_document = json.loads(
+            native_build_inventory.read_text(encoding="utf-8")
+        )
+        native_inventory_digest = hashlib.sha256(json.dumps(
+            native_inventory_document, sort_keys=True, separators=(",", ":")
+        ).encode("utf-8")).hexdigest()
+        native_build_gate = root / "native_build_gate.json"
+        native_build_gate.write_text(json.dumps({
+            "schema_version": 1,
+            "kind": build_gate_verifier.NATIVE_BUILD_GATE_KIND,
+            "status": "passed",
+            "alignment_mode": "qualification",
+            "source": {"revision": source_revision, "clean": True},
+            "ctest": {
+                "inventory_sha256": native_inventory_digest,
+                "junit": native_gate_record(
+                    native_build_report.name, native_build_report.read_bytes()
+                ),
+                "log": native_gate_record(
+                    native_build_gate_log.name, native_build_gate_log.read_bytes()
+                ),
+                "registered": len(native_registration_names),
+                "selected": len(native_build_names),
+                "executed": len(native_build_names),
+                "failures": 0,
+                "errors": 0,
+                "skipped": 0,
+                "selection": sorted(native_build_names),
+            },
+            "inputs": {
+                "operating_model_sha256": self_test_model_digest,
+                "alignment_receipt_sha256": hashlib.sha256(
+                    receipt_payload
+                ).hexdigest(),
+            },
+            "tested_artifacts": native_tested,
+            "product_artifacts": native_products,
+        }), encoding="utf-8")
         def self_test_artifact(path):
             payload = path.read_bytes()
             return {
@@ -1918,10 +2136,12 @@ def self_test():
             "device": {},
             "claims": {
                 "test_estate_passed": True,
+                "test_estate_kind": "native-build-non-render-authority",
+                "compiled_topology_complete": True,
                 "runtime_ready": False,
                 "qualification_executable": qualification_claim,
                 "test_report": {
-                    "cases": MINIMUM_SOURCE_AVAILABLE_TESTS,
+                    "cases": len(native_build_names),
                     "failures": 0,
                     "errors": 0,
                     "skipped": 0,
@@ -1935,15 +2155,16 @@ def self_test():
                 qualification_executable.name: self_test_artifact(
                     qualification_executable
                 ),
-                "qualification-gate-junit": self_test_artifact(
-                    root / "qualification-gate-junit"
-                ),
-                "qualification-gate-log": self_test_artifact(
-                    root / "qualification-gate-log"
+                native_build_gate_log.name: self_test_artifact(
+                    native_build_gate_log
                 ),
                 **{
                     path.name: self_test_artifact(path)
                     for path in self_test_products.values()
+                },
+                **{
+                    path.name: self_test_artifact(path)
+                    for path in native_test_products.values()
                 },
             },
         }
@@ -1953,9 +2174,9 @@ def self_test():
             native_build_inventory.name,
             native_build_gate.name,
             qualification_executable.name,
-            "qualification-gate-junit",
-            "qualification-gate-log",
+            native_build_gate_log.name,
             *(path.name for path in self_test_products.values()),
+            *(path.name for path in native_test_products.values()),
         ):
             incomplete_build = json.loads(json.dumps(native_build_document))
             incomplete_build["artifacts"].pop(missing_artifact)
@@ -2055,20 +2276,26 @@ def record_build(args):
     require(args.artifact.is_file(), f"build evidence is missing: {args.artifact}")
     require(args.alignment_receipt.is_file(),
             f"build alignment receipt is missing: {args.alignment_receipt}")
-    require(args.mandatory_gate.is_file(),
-            f"qualification build gate is missing: {args.mandatory_gate}")
+    require(args.native_build_gate.is_file(),
+            f"native build gate is missing: {args.native_build_gate}")
     require(args.qualification_executable.is_file(),
             f"qualification executable is missing: {args.qualification_executable}")
-    require(args.mandatory_gate_junit.is_file(),
-            f"qualification gate JUnit is missing: {args.mandatory_gate_junit}")
-    require(args.mandatory_gate_log.is_file(),
-            f"qualification gate log is missing: {args.mandatory_gate_log}")
+    require(args.native_build_gate_log.is_file(),
+            f"native build gate log is missing: {args.native_build_gate_log}")
     require(args.test_dir.is_dir(), f"native build test directory is missing: {args.test_dir}")
     report = inspect_junit(args.artifact)
-    require(report["cases"] >= MINIMUM_SOURCE_AVAILABLE_TESTS
-            and report["skipped"] == 0,
-            "native build JUnit evidence is not a non-skipping test estate")
+    build_gate_verifier = load_build_gate_verifier()
+    expected_names = set(build_gate_verifier.NATIVE_BUILD_EVIDENCE_TESTS)
+    require(junit_case_names(args.artifact) == expected_names and report["skipped"] == 0,
+            "native build JUnit is not the exact non-render authority estate")
     inspect_build_alignment_receipt(args.alignment_receipt, revision)
+    try:
+        gate = json.loads(args.native_build_gate.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as error:
+        raise ValueError("native build gate is not valid JSON") from error
+    build_gate_verifier.validate_native_build_document(gate)
+    require(gate["source"] == {"revision": revision, "clean": True},
+            "native build gate names a different or dirty source")
     args.output.parent.mkdir(parents=True, exist_ok=True)
     bundled = args.output.parent / args.artifact.name
     if args.artifact.resolve() != bundled.resolve():
@@ -2076,18 +2303,15 @@ def record_build(args):
     bundled_receipt = args.output.parent / "alignment_receipt.json"
     if args.alignment_receipt.resolve() != bundled_receipt.resolve():
         shutil.copy2(args.alignment_receipt, bundled_receipt)
-    bundled_gate = args.output.parent / "mandatory_gate.json"
-    if args.mandatory_gate.resolve() != bundled_gate.resolve():
-        shutil.copy2(args.mandatory_gate, bundled_gate)
+    bundled_gate = args.output.parent / "native_build_gate.json"
+    if args.native_build_gate.resolve() != bundled_gate.resolve():
+        shutil.copy2(args.native_build_gate, bundled_gate)
     bundled_executable = args.output.parent / "qualification-sirius.bin"
     if args.qualification_executable.resolve() != bundled_executable.resolve():
         shutil.copy2(args.qualification_executable, bundled_executable)
-    bundled_gate_junit = args.output.parent / "qualification-gate-junit"
-    if args.mandatory_gate_junit.resolve() != bundled_gate_junit.resolve():
-        shutil.copy2(args.mandatory_gate_junit, bundled_gate_junit)
-    bundled_gate_log = args.output.parent / "qualification-gate-log"
-    if args.mandatory_gate_log.resolve() != bundled_gate_log.resolve():
-        shutil.copy2(args.mandatory_gate_log, bundled_gate_log)
+    bundled_gate_log = args.output.parent / "native-build-gate-log"
+    if args.native_build_gate_log.resolve() != bundled_gate_log.resolve():
+        shutil.copy2(args.native_build_gate_log, bundled_gate_log)
     bundled_products = {}
     qualification_resource_root = args.qualification_executable.parent / "resources"
     for logical_name, relative_path in QUALIFICATION_RUNTIME_RESOURCE_PATHS.items():
@@ -2096,6 +2320,36 @@ def record_build(args):
         destination = args.output.parent / QUALIFICATION_PRODUCT_EVIDENCE[logical_name]
         shutil.copy2(source, destination)
         bundled_products[logical_name] = destination
+
+    def resolve_gate_artifact(record):
+        require(isinstance(record, dict) and
+                set(record) == {"root", "path", "bytes", "sha256"},
+                "native build gate artifact record is malformed")
+        root = args.source_root if record["root"] == "source" else args.test_dir
+        relative = Path(record["path"])
+        require(not relative.is_absolute() and relative.parts and
+                ".." not in relative.parts,
+                "native build gate artifact escapes its declared root")
+        resolved_root = root.resolve()
+        source = (resolved_root / relative).resolve()
+        try:
+            source.relative_to(resolved_root)
+        except ValueError as error:
+            raise ValueError("native build artifact resolves outside its root") from error
+        require(source.is_file() and source.stat().st_size == record["bytes"] and
+                hashlib.sha256(source.read_bytes()).hexdigest() == record["sha256"],
+                f"native build artifact changed after the gate: {source}")
+        return source
+
+    bundled_tests = {}
+    for logical_name, evidence_name in QUALIFICATION_TEST_EVIDENCE.items():
+        source = resolve_gate_artifact(gate["tested_artifacts"][logical_name])
+        destination = args.output.parent / evidence_name
+        shutil.copy2(source, destination)
+        bundled_tests[logical_name] = destination
+    gated_candidate = resolve_gate_artifact(gate["tested_artifacts"]["sirius"])
+    require(gated_candidate.read_bytes() == args.qualification_executable.read_bytes(),
+            "qualification candidate differs from the native build gate")
     inventory_command = [
         "ctest",
         "--test-dir",
@@ -2115,18 +2369,23 @@ def record_build(args):
         raise ValueError(f"could not inventory native CTest registration: {error}") from error
     bundled_inventory = args.output.parent / "ctest-inventory.json"
     bundled_inventory.write_text(inventory_result.stdout, encoding="utf-8")
-    require(junit_case_names(bundled) == inspect_ctest_inventory(bundled_inventory),
-            "native build JUnit does not equal current CTest registration")
+    inventory_names = inspect_ctest_inventory(bundled_inventory)
+    require(len(inventory_names) >= MINIMUM_SOURCE_AVAILABLE_TESTS and
+            junit_case_names(bundled) == expected_names <= inventory_names,
+            "native build authority selection is absent from governed CTest registration")
     payload = bundled.read_bytes()
     receipt_payload = bundled_receipt.read_bytes()
     inventory_payload = bundled_inventory.read_bytes()
     gate_payload = bundled_gate.read_bytes()
     executable_payload = bundled_executable.read_bytes()
-    gate_junit_payload = bundled_gate_junit.read_bytes()
     gate_log_payload = bundled_gate_log.read_bytes()
     product_payloads = {
         logical_name: path.read_bytes()
         for logical_name, path in bundled_products.items()
+    }
+    test_payloads = {
+        logical_name: path.read_bytes()
+        for logical_name, path in bundled_tests.items()
     }
     document = {
         "schema_version": 1,
@@ -2138,6 +2397,8 @@ def record_build(args):
         "device": {},
         "claims": {
             "test_estate_passed": True,
+            "test_estate_kind": "native-build-non-render-authority",
+            "compiled_topology_complete": True,
             "runtime_ready": False,
             "test_report": report,
             "qualification_executable": {
@@ -2172,11 +2433,6 @@ def record_build(args):
                 "bytes": len(executable_payload),
                 "sha256": hashlib.sha256(executable_payload).hexdigest(),
             },
-            bundled_gate_junit.name: {
-                "path": bundled_gate_junit.name,
-                "bytes": len(gate_junit_payload),
-                "sha256": hashlib.sha256(gate_junit_payload).hexdigest(),
-            },
             bundled_gate_log.name: {
                 "path": bundled_gate_log.name,
                 "bytes": len(gate_log_payload),
@@ -2191,6 +2447,14 @@ def record_build(args):
                     ).hexdigest(),
                 }
                 for logical_name, path in bundled_products.items()
+            },
+            **{
+                path.name: {
+                    "path": path.name,
+                    "bytes": len(test_payloads[logical_name]),
+                    "sha256": hashlib.sha256(test_payloads[logical_name]).hexdigest(),
+                }
+                for logical_name, path in bundled_tests.items()
             },
         },
     }
@@ -2211,10 +2475,9 @@ def main():
     parser.add_argument("--source-root", type=Path)
     parser.add_argument("--artifact", type=Path)
     parser.add_argument("--alignment-receipt", type=Path)
-    parser.add_argument("--mandatory-gate", type=Path)
+    parser.add_argument("--native-build-gate", type=Path)
     parser.add_argument("--qualification-executable", type=Path)
-    parser.add_argument("--mandatory-gate-junit", type=Path)
-    parser.add_argument("--mandatory-gate-log", type=Path)
+    parser.add_argument("--native-build-gate-log", type=Path)
     parser.add_argument("--test-dir", type=Path)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
@@ -2226,13 +2489,12 @@ def main():
             require(args.platform in {"windows", "macos"},
                     "record-build platform must be windows or macos")
             require(args.artifact is not None and args.alignment_receipt is not None
-                    and args.mandatory_gate is not None
+                    and args.native_build_gate is not None
                     and args.qualification_executable is not None
-                    and args.mandatory_gate_junit is not None
-                    and args.mandatory_gate_log is not None
+                    and args.native_build_gate_log is not None
                     and args.test_dir is not None and args.output is not None,
                     "record-build requires --artifact, --alignment-receipt, "
-                    "--mandatory-gate, --mandatory-gate-junit, --mandatory-gate-log, "
+                    "--native-build-gate, --native-build-gate-log, "
                     "--qualification-executable, --test-dir, and --output")
             require(args.source_root is not None,
                     "record-build requires --source-root")

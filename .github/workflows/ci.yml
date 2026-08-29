@@ -11,9 +11,10 @@ on:
 
 jobs:
   # Pull requests prove that the complete strict topology compiles and that the
-  # governance/release authorities fail closed. They deliberately do not run
-  # the Mandatory estate, produce an attestation, or claim qualification. Full
-  # rendering/runtime qualification remains a protected-branch push concern.
+  # governance/release authorities fail closed. Explicit dispatch may also
+  # publish the precisely scoped native-build domains. Neither runs the
+  # Mandatory estate or claims runtime; physical qualification remains a
+  # protected-branch/external-host concern.
   integration-no-render:
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
@@ -101,6 +102,30 @@ jobs:
           ctest --test-dir bin/windows-msvc -C Release --output-on-failure --no-tests=error `
             -R '^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.NativeRuntimeProducerRejectsWrongHostAndDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$'
           if (Test-Path "bin/windows-msvc/generated/sirius/mandatory_gate.json") { throw "integration controls created a promotion receipt" }
+      - name: Exact native-build evidence gate
+        if: github.event_name == 'workflow_dispatch'
+        run: >-
+          cmake --build --preset windows-msvc --config Release
+          --target RunNativeBuildEvidence -j2
+      - name: Native-build attestation
+        if: github.event_name == 'workflow_dispatch'
+        run: >-
+          python scripts/verify-attestation.py --record-build
+          --domain windows-native-build --platform windows
+          --source-revision ${{ github.sha }}
+          --source-root .
+          --artifact bin/windows-msvc/generated/sirius/native_build_gate_junit.xml
+          --alignment-receipt bin/windows-msvc/generated/sirius/alignment_receipt.json
+          --native-build-gate bin/windows-msvc/generated/sirius/native_build_gate.json
+          --native-build-gate-log bin/windows-msvc/generated/sirius/native_build_gate_ctest.log
+          --qualification-executable bin/windows-msvc/src/sirius/app/Release/sirius.exe
+          --test-dir bin/windows-msvc
+          --output attestations/windows-build.json
+      - if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: sirius-windows-native-attestation
+          path: attestations
 
   integration-macos-no-render:
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
@@ -137,6 +162,28 @@ jobs:
           ctest --test-dir bin/macos --output-on-failure --no-tests=error \
             -R '^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.NativeRuntimeProducerRejectsWrongHostAndDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$'
           test ! -e bin/macos/generated/sirius/mandatory_gate.json
+      - name: Exact native-build evidence gate
+        if: github.event_name == 'workflow_dispatch'
+        run: cmake --build --preset macos --target RunNativeBuildEvidence -j3
+      - name: Native-build attestation
+        if: github.event_name == 'workflow_dispatch'
+        run: >-
+          python3 scripts/verify-attestation.py --record-build
+          --domain macos-native-build --platform macos
+          --source-revision ${{ github.sha }}
+          --source-root .
+          --artifact bin/macos/generated/sirius/native_build_gate_junit.xml
+          --alignment-receipt bin/macos/generated/sirius/alignment_receipt.json
+          --native-build-gate bin/macos/generated/sirius/native_build_gate.json
+          --native-build-gate-log bin/macos/generated/sirius/native_build_gate_ctest.log
+          --qualification-executable bin/macos/src/sirius/app/sirius
+          --test-dir bin/macos
+          --output attestations/macos-build.json
+      - if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: sirius-macos-native-attestation
+          path: attestations
 
   linux-gate:
     if: github.event_name == 'push'
@@ -245,17 +292,20 @@ jobs:
         run: cmake --build --preset windows-msvc
       - name: Full source-available test estate
         run: ctest --test-dir bin/windows-msvc -C Release --output-on-failure --output-junit windows-tests.xml
+      - name: Exact native-build evidence gate
+        run: >-
+          cmake --build --preset windows-msvc --config Release
+          --target RunNativeBuildEvidence -j2
       - name: Native build attestation
         run: >-
           python scripts/verify-attestation.py --record-build
           --domain windows-native-build --platform windows
           --source-revision ${{ github.sha }}
           --source-root .
-          --artifact bin/windows-msvc/windows-tests.xml
+          --artifact bin/windows-msvc/generated/sirius/native_build_gate_junit.xml
           --alignment-receipt bin/windows-msvc/generated/sirius/alignment_receipt.json
-          --mandatory-gate bin/windows-msvc/generated/sirius/mandatory_gate.json
-          --mandatory-gate-junit bin/windows-msvc/generated/sirius/mandatory_gate_junit.xml
-          --mandatory-gate-log bin/windows-msvc/generated/sirius/mandatory_gate_ctest.log
+          --native-build-gate bin/windows-msvc/generated/sirius/native_build_gate.json
+          --native-build-gate-log bin/windows-msvc/generated/sirius/native_build_gate_ctest.log
           --qualification-executable bin/windows-msvc/src/sirius/app/Release/sirius.exe
           --test-dir bin/windows-msvc
           --output attestations/windows-build.json
@@ -294,17 +344,18 @@ jobs:
         run: cmake --build --preset macos -j3
       - name: Full source-available test estate
         run: ctest --test-dir bin/macos --output-on-failure --output-junit macos-tests.xml
+      - name: Exact native-build evidence gate
+        run: cmake --build --preset macos --target RunNativeBuildEvidence -j3
       - name: Native build attestation
         run: >-
           python3 scripts/verify-attestation.py --record-build
           --domain macos-native-build --platform macos
           --source-revision ${{ github.sha }}
           --source-root .
-          --artifact bin/macos/macos-tests.xml
+          --artifact bin/macos/generated/sirius/native_build_gate_junit.xml
           --alignment-receipt bin/macos/generated/sirius/alignment_receipt.json
-          --mandatory-gate bin/macos/generated/sirius/mandatory_gate.json
-          --mandatory-gate-junit bin/macos/generated/sirius/mandatory_gate_junit.xml
-          --mandatory-gate-log bin/macos/generated/sirius/mandatory_gate_ctest.log
+          --native-build-gate bin/macos/generated/sirius/native_build_gate.json
+          --native-build-gate-log bin/macos/generated/sirius/native_build_gate_ctest.log
           --qualification-executable bin/macos/src/sirius/app/sirius
           --test-dir bin/macos
           --output attestations/macos-build.json

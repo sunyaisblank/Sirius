@@ -172,7 +172,8 @@ def integration_boundary_errors(workflow: str) -> list[str]:
             errors.append(f"non-render integration does not use strict topology: {name}")
         if "RunMandatoryTests" in integration or "ctest --preset" in integration:
             errors.append(f"non-render integration can execute the full estate: {name}")
-        if integration.count("cmake --build") != 1 or "--target" not in integration:
+        expected_builds = 1 if name == "integration-no-render" else 2
+        if integration.count("cmake --build") != expected_builds or "--target" not in integration:
             errors.append(f"non-render integration can escape compile targets: {name}")
         if integration.count("ctest ") != 1 or "--no-tests=error" not in integration:
             errors.append(f"non-render integration lacks one fail-closed CTest: {name}")
@@ -180,11 +181,32 @@ def integration_boundary_errors(workflow: str) -> list[str]:
             errors.append(f"non-render integration does not bound CTest controls: {name}")
         if integration.count("mandatory_gate.json") != 2:
             errors.append(f"non-render integration does not prove non-promotion: {name}")
-        if (
-            "verify-attestation.py --record" in integration
-            or "upload-artifact@" in integration
-        ):
-            errors.append(f"non-render integration can publish evidence: {name}")
+        records_build = integration.count("verify-attestation.py --record-build")
+        uploads = integration.count("upload-artifact@")
+        if name == "integration-no-render":
+            if records_build or uploads or "RunNativeBuildEvidence" in integration:
+                errors.append("Linux integration can publish an unrepresented build domain")
+        else:
+            expected_domain = (
+                "windows-native-build"
+                if name == "integration-windows-no-render"
+                else "macos-native-build"
+            )
+            if records_build != 1 or uploads != 1:
+                errors.append(f"native integration lacks one build evidence producer: {name}")
+            if integration.count("if: github.event_name == 'workflow_dispatch'") != 3:
+                errors.append(
+                    f"native build evidence is not dispatch-only inside integration: {name}"
+                )
+            for marker in (
+                "RunNativeBuildEvidence",
+                "native_build_gate_junit.xml",
+                "--native-build-gate",
+                "--native-build-gate-log",
+                expected_domain,
+            ):
+                if marker not in integration:
+                    errors.append(f"native integration evidence omits {marker}: {name}")
         for target in INTEGRATION_TARGETS:
             if (
                 re.search(
@@ -254,6 +276,17 @@ def verify_integration_boundary_policy() -> None:
         + "    run: test ! -e mandatory_gate.json\n"
         + "    run: test ! -e mandatory_gate.json\n"
     )
+    native_evidence_body = (
+        "    if: github.event_name == 'workflow_dispatch'\n"
+        "    run: cmake --build --target RunNativeBuildEvidence\n"
+        "    if: github.event_name == 'workflow_dispatch'\n"
+        "    run: python scripts/verify-attestation.py --record-build "
+        "--native-build-gate native_build_gate.json "
+        "--native-build-gate-log native_build_gate_ctest.log "
+        "--artifact native_build_gate_junit.xml --domain {domain}\n"
+        "    if: github.event_name == 'workflow_dispatch'\n"
+        "    uses: actions/upload-artifact@0123456789012345678901234567890123456789\n"
+    )
     valid = (
         "workflow_dispatch:\n"
         "jobs:\n"
@@ -269,6 +302,17 @@ def verify_integration_boundary_policy() -> None:
                 else ""
             )
             + integration_body
+            + (
+                native_evidence_body.format(
+                    domain=(
+                        "windows-native-build"
+                        if name == "integration-windows-no-render"
+                        else "macos-native-build"
+                    )
+                )
+                if name != "integration-no-render"
+                else ""
+            )
             for name in NON_RENDER_INTEGRATION_JOBS
         )
         + "".join(
@@ -289,6 +333,14 @@ def verify_integration_boundary_policy() -> None:
     cached_without_loader = valid.replace("    cache: false\n", "    cache: true\n", 1)
     if not integration_boundary_errors(cached_without_loader):
         raise RuntimeError("integration-boundary policy accepted the runtime-blind SDK cache")
+    promotable_pull_request = valid.replace(
+        "    if: github.event_name == 'workflow_dispatch'\n"
+        "    run: cmake --build --target RunNativeBuildEvidence\n",
+        "    run: cmake --build --target RunNativeBuildEvidence\n",
+        1,
+    )
+    if not integration_boundary_errors(promotable_pull_request):
+        raise RuntimeError("integration-boundary policy accepted PR-produced build evidence")
     driver_enabled = valid.replace(
         "    install_runtime: true\n",
         "    install_runtime: true\n    install_swiftshader: true\n",
