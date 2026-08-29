@@ -1,9 +1,12 @@
 #pragma once
 
-// Depth-resolved procedural starfield: parallax-correct stellar catalog with
-// aperture-dependent depth-of-field blur for cinematic backgrounds. Magnitude
-// system m = -2.5 log10(F/F0), apparent m = M + 5 log10(d/10pc). References:
-// Hipparcos (ESA 1997), Tycho-2 (Hoeg et al. 2000). Ported from PHSF001A.h.
+// Depth-resolved procedural starfield: a deterministic synthetic catalogue
+// with parallax and aperture-dependent depth-of-field blur. It is not an
+// imported astrometric catalogue. Magnitudes obey m = -2.5 log10(F/F0) and
+// apparent m = M + 5 log10(d/10pc); effective temperature uses the Ballesteros
+// (2012) B-V blackbody estimate. Ported from PHSF001A.h.
+
+#include "sirius/core/spectral/blackbody.h"
 
 #include <algorithm>
 #include <cmath>
@@ -28,33 +31,15 @@ struct StarEntry {
     float temperature_K;  // Effective temperature [K]
     float padding;        // Alignment
 
-    // RGB colour from a simplified Planckian locus (T ~ 4600 / (0.92 + B-V)
-    // for B-V > 0), normalised so the brightest channel is 1.
+    // RGB colour from the same Planck/CIE/linear-sRGB authority used by disk
+    // emission, normalised so the brightest channel is 1.
     void ComputeColor(float& r, float& g, float& b) const {
-        // Temperature to RGB (simplified Planckian locus)
         float T = temperature_K;
         if (!std::isfinite(T) || T <= 0.0f) T = 5778.0f;  // Default to solar
-
-        // Normalize to 6500K white point
-        float T_norm = T / 6500.0f;
-
-        if (T <= 6500.0f) {
-            // Cool stars: more red
-            r = 1.0f;
-            g = std::pow(T_norm, 0.4f);
-            b = std::pow(T_norm, 0.8f);
-        } else {
-            // Hot stars: more blue
-            r = std::pow(1.0f / T_norm, 0.3f);
-            g = std::pow(1.0f / T_norm, 0.15f);
-            b = 1.0f;
-        }
-
-        // Normalize
-        float max_c = std::max({r, g, b});
-        r /= max_c;
-        g /= max_c;
-        b /= max_c;
+        const spectral::Rgb color = spectral::BlackbodyToRgb(T);
+        r = color.r;
+        g = color.g;
+        b = color.b;
     }
 
     // Relative flux from magnitude: F propto 10^(-0.4 m).
@@ -508,12 +493,9 @@ class StarfieldGenerator {
         star.color_bv = -0.3f + 2.0f * t + 0.3f * (uniform(rng) - 0.5f);
         star.color_bv = std::clamp(star.color_bv, -0.4f, 2.0f);
 
-        // Temperature from B-V
-        if (star.color_bv > -0.1f) {
-            star.temperature_K = 4600.0f / (0.92f + star.color_bv);
-        } else {
-            star.temperature_K = 30000.0f + 10000.0f * (-star.color_bv - 0.1f);
-        }
+        // Ballesteros (2012), EPL 97 34008, blackbody estimate from Johnson B-V.
+        const float colour_term = 0.92f * star.color_bv;
+        star.temperature_K = 4600.0f * (1.0f / (colour_term + 1.7f) + 1.0f / (colour_term + 0.62f));
         star.temperature_K = std::clamp(star.temperature_K, 2500.0f, 50000.0f);
 
         star.padding = 0.0f;

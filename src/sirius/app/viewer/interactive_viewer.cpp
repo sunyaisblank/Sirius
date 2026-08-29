@@ -318,8 +318,6 @@ render::SessionConfig InteractiveViewer::CreateSessionConfig(int width, int heig
     config.camera_fov = camera.fov;
     config.enable_disk = viewer.enable_disk;
     config.enable_volumetric_disk = viewer.enable_disk && viewer.enable_volumetric;
-    config.enable_jets = viewer.enable_jets || config.enable_jets;
-
     config.enable_bloom = true;
     config.exposure = 3.0f;
 

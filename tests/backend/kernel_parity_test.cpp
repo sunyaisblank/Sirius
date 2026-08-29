@@ -1,8 +1,6 @@
-// Kernel-versus-legacy parity gate (docs/SPECIFICATION.md section 7,
+// Kernel-versus-core parity gate (docs/SPECIFICATION.md section 7,
 // docs/ARCHITECTURE.md section 9). The parity_probe Slang kernel evaluates the
-// ported device physics at fixed sample points through the Vulkan adapter on
-// Lavapipe; this suite compares each result against reference values computed
-// from the retired RDOP002A.cu functions in fp32.
+// live device physics at fixed sample points through the Vulkan adapter.
 //
 // Reference provenance: the values embedded below are the stdout of a
 // mechanical extraction of the legacy device functions (scratchpad
@@ -19,6 +17,7 @@
 
 #include "sirius/backend/device.h"
 #include "sirius/core/disk/novikov_thorne_disk.h"
+#include "sirius/core/spectral/blackbody.h"
 #include "sirius/core/spectral/colour_modes.h"
 
 #include <gtest/gtest.h>
@@ -53,14 +52,12 @@ constexpr float kWarp = 2.0f;
 // Opcodes (must match parity_probe.slang).
 constexpr std::uint32_t kOpMetric = 0;
 constexpr std::uint32_t kOpChristoffel = 1;
-constexpr std::uint32_t kOpSymplectic = 2;
-constexpr std::uint32_t kOpDiskTemp = 3;
-constexpr std::uint32_t kOpBlackbody = 4;
-constexpr std::uint32_t kOpSymplecticS4 = 5;
-constexpr std::uint32_t kOpDeviation = 6;
-constexpr std::uint32_t kOpDiskRedshift = 7;
-constexpr std::uint32_t kOpLiveCartConservation = 8;
-constexpr std::uint32_t kOpBeamEllipse = 9;
+constexpr std::uint32_t kOpDiskTemp = 2;
+constexpr std::uint32_t kOpBlackbody = 3;
+constexpr std::uint32_t kOpDeviation = 4;
+constexpr std::uint32_t kOpDiskRedshift = 5;
+constexpr std::uint32_t kOpLiveCartConservation = 6;
+constexpr std::uint32_t kOpBeamEllipse = 7;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -286,24 +283,6 @@ const std::array<float, 64> kS3_christoffel = {
     -0.0556216836f,   -0.0674042106f, -0.0744270533f, 0.104218721f,   -0.0223035496f,
     -0.0132742766f,   -0.0556216836f, -0.0223035496f, 0.0946279168f};
 
-// Symplectic wrapper (rejected step: returns the input state; verifies the
-// adaptive-step and Hamiltonian-error acceptance arithmetic).
-// x(4), u(4), h, accepted.
-const std::array<float, 10> kS6_wrapper = {0.0f,  10.0f, 1.57079625f,   0.0f,          1.28184509f,
-                                           -1.0f, 0.0f,  0.0299999993f, 0.0500000007f, 0.0f};
-const std::array<float, 10> kS7_wrapper = {0.0f,          6.0f,  1.57079625f,   0.0f,
-                                           0.897496521f,  -0.5f, 0.0299999993f, 0.0599999987f,
-                                           0.0500000007f, 0.0f};
-
-// One Yoshida S4 step: q(4), p(4).
-const std::array<float, 8> kS6_s4 = {2.63183331f,  5.70183372f,   1.57079625f,     0.220531374f,
-                                     -1.03087604f, -0.380756766f, 5.26250972e-08f, 2.79842782f};
-const std::array<float, 8> kS7_s4 = {0.671619654f,  4.79422522f,   1.62458265f, 0.109132871f,
-                                     -0.598330975f, -0.586659193f, 1.06740439f, 2.15999985f};
-
-const float kS6_ut = 1.28184509f;
-const float kS7_ut = 0.897496521f;
-
 // -----------------------------------------------------------------------------
 
 TEST(KernelParity, KerrSchildMetricMatchesLegacyToOnePartInMillion) {
@@ -389,95 +368,6 @@ TEST(KernelParity, KerrSchildChristoffelMatchesLegacyToOnePartInMillion) {
     }
 }
 
-TEST(KernelParity, SymplecticStepMatchesLegacy) {
-    Fixture f = OpenProbe();
-    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
-
-    Sample s6;  // Kerr a=0.9 null infalling geodesic
-    s6.metric_id = kKerrSchild;
-    s6.p1 = 1.0f;
-    s6.p2 = 0.9f;
-    s6.c0 = 10.0f;
-    s6.c1 = 1.5707963f;
-    s6.c2 = 0.0f;
-    s6.u0 = kS6_ut;
-    s6.u1 = -1.0f;
-    s6.u2 = 0.0f;
-    s6.u3 = 0.03f;
-    s6.h = 0.1f;
-    s6.aux0 = 1e-6f;
-    s6.aux1 = 0.001f;
-    s6.aux2 = 1.0f;
-
-    Sample s7;  // Schwarzschild null geodesic
-    s7.p1 = 1.0f;
-    s7.p2 = 0.0f;
-    s7.c0 = 6.0f;
-    s7.c1 = 1.5707963f;
-    s7.c2 = 0.0f;
-    s7.u0 = kS7_ut;
-    s7.u1 = -0.5f;
-    s7.u2 = 0.03f;
-    s7.u3 = 0.06f;
-    s7.h = 0.1f;
-    s7.aux0 = 1e-6f;
-    s7.aux1 = 0.001f;
-    s7.aux2 = 1.0f;
-
-    const std::vector<Sample> samples = {s6, s7};
-    const auto r = RunProbe(*f.device, f.kernel, kOpSymplectic, samples);
-    const std::array<const std::array<float, 10>*, 2> ref = {&kS6_wrapper, &kS7_wrapper};
-
-    for (std::size_t s = 0; s < samples.size(); ++s) {
-        const std::size_t base = s * kResultStride;
-        for (int k = 0; k < 10; ++k) {
-            EXPECT_TRUE(Close(r[base + k], (*ref[s])[k], 1e-5f, 1e-6f,
-                              "sympl[" + std::to_string(s) + "][" + std::to_string(k) + "]"));
-        }
-    }
-}
-
-TEST(KernelParity, YoshidaS4StepMatchesLegacy) {
-    Fixture f = OpenProbe();
-    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
-
-    Sample s6;
-    s6.p1 = 1.0f;
-    s6.p2 = 0.9f;
-    s6.c0 = 10.0f;
-    s6.c1 = 1.5707963f;
-    s6.c2 = 0.0f;
-    s6.u0 = kS6_ut;
-    s6.u1 = -1.0f;
-    s6.u2 = 0.0f;
-    s6.u3 = 0.03f;
-    s6.h = 0.05f;
-
-    Sample s7;
-    s7.p1 = 1.0f;
-    s7.p2 = 0.0f;
-    s7.c0 = 6.0f;
-    s7.c1 = 1.5707963f;
-    s7.c2 = 0.0f;
-    s7.u0 = kS7_ut;
-    s7.u1 = -0.5f;
-    s7.u2 = 0.03f;
-    s7.u3 = 0.06f;
-    s7.h = 0.05f;
-
-    const std::vector<Sample> samples = {s6, s7};
-    const auto r = RunProbe(*f.device, f.kernel, kOpSymplecticS4, samples);
-    const std::array<const std::array<float, 8>*, 2> ref = {&kS6_s4, &kS7_s4};
-
-    for (std::size_t s = 0; s < samples.size(); ++s) {
-        const std::size_t base = s * kResultStride;
-        for (int k = 0; k < 8; ++k) {
-            EXPECT_TRUE(Close(r[base + k], (*ref[s])[k], 1e-5f, 1e-6f,
-                              "s4[" + std::to_string(s) + "][" + std::to_string(k) + "]"));
-        }
-    }
-}
-
 TEST(KernelParity, FullPageThorneDiskTemperatureMatchesIndependentCoreModel) {
     Fixture f = OpenProbe();
     if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
@@ -496,7 +386,16 @@ TEST(KernelParity, FullPageThorneDiskTemperatureMatchesIndependentCoreModel) {
     s9.aux0 = 6.0f;
     s9.aux1 = 10000.0f;
 
-    const std::vector<Sample> samples = {s8, s9};
+    const float retrograde_isco =
+        static_cast<float>(sirius::core::AccretionDiskD::ComputeIsco(-0.7));
+    Sample s10;  // Retrograde Kerr at dimensionless r/M=10 with M=2
+    s10.p1 = 2.0f;
+    s10.p2 = -0.7f;
+    s10.c0 = 20.0f;
+    s10.aux0 = 2.0f * retrograde_isco;
+    s10.aux1 = 10000.0f;
+
+    const std::vector<Sample> samples = {s8, s9, s10};
     const auto r = RunProbe(*f.device, f.kernel, kOpDiskTemp, samples);
 
     const auto expected_temperature = [](double spin, double radius) {
@@ -516,28 +415,32 @@ TEST(KernelParity, FullPageThorneDiskTemperatureMatchesIndependentCoreModel) {
                       2e-4f, 2e-3f, "S9 T"));
     EXPECT_GT(r[1 * kResultStride + 1], 0.0f);
     EXPECT_TRUE(Close(r[1 * kResultStride + 2], 6.0f, 1e-4f, 1e-6f, "S9 isco"));
+    EXPECT_TRUE(Close(r[2 * kResultStride + 0],
+                      static_cast<float>(expected_temperature(-0.7, 10.0)), 2e-4f, 2e-3f, "S10 T"));
+    EXPECT_GT(r[2 * kResultStride + 1], 0.0f);
+    EXPECT_TRUE(Close(r[2 * kResultStride + 2], 2.0f * retrograde_isco, 1e-4f, 1e-6f, "S10 isco"));
 }
 
-TEST(KernelParity, ChebyshevBlackbodyMatchesLegacy) {
+TEST(KernelParity, BlackbodyMatchesIntegratedCoreSpectrum) {
     Fixture f = OpenProbe();
     if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
 
-    Sample t3000, t6000, t15000;
+    Sample t500, t3000, t6000, t15000, t1000000;
+    t500.c0 = 500.0f;
     t3000.c0 = 3000.0f;
     t6000.c0 = 6000.0f;
     t15000.c0 = 15000.0f;
+    t1000000.c0 = 1000000.0f;
 
-    const std::vector<Sample> samples = {t3000, t6000, t15000};
+    const std::vector<Sample> samples = {t500, t3000, t6000, t15000, t1000000};
     const auto r = RunProbe(*f.device, f.kernel, kOpBlackbody, samples);
 
-    const std::array<std::array<float, 3>, 3> ref = {{{1.28577852f, 0.937052548f, 0.781637311f},
-                                                      {1.01414442f, 0.993740678f, 1.02034235f},
-                                                      {0.720878243f, 1.05778944f, 1.24985516f}}};
-
     for (std::size_t s = 0; s < samples.size(); ++s) {
+        const auto expected = sirius::core::spectral::BlackbodyToRgb(samples[s].c0);
+        const std::array<float, 3> ref = {expected.r, expected.g, expected.b};
         const std::size_t base = s * kResultStride;
         for (int k = 0; k < 3; ++k) {
-            EXPECT_TRUE(Close(r[base + k], ref[s][k], 1e-4f, 1e-5f,
+            EXPECT_TRUE(Close(r[base + k], ref[k], 2e-3f, 2e-4f,
                               "bb[" + std::to_string(s) + "][" + std::to_string(k) + "]"));
         }
     }
@@ -600,6 +503,7 @@ TEST(KernelParity, NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMom
     EXPECT_LT(results[0], 1.0e-4f) << "energy drift";
     EXPECT_LT(results[1], 1.0e-4f) << "axial angular-momentum drift";
     EXPECT_LT(results[2], 1.0e-4f) << "Carter-constant drift";
+    EXPECT_LT(results[3], 5.0e-4f) << "relative null residual";
 }
 
 TEST(KernelParity, BeamEllipseRetainsBothAxesAndOutputOrientation) {
@@ -635,8 +539,8 @@ TEST(KernelParity, GeodesicDeviationIsFiniteAndCurvedNearBlackHole) {
     // Kerr a=0.9 at a Cartesian point ~4M out, with an infalling null tangent.
     // There is no legacy reference for this Cartesian-chart deviation (the .cu
     // evaluated it through a spherical<->Cartesian transform); the check is that
-    // both paths are finite and the full-Riemann tidal acceleration is non-zero,
-    // exercising GetRiemannTensorCart + both deviation paths through the gate.
+    // the full-Riemann acceleration is finite and non-zero, exercising the sole
+    // represented deviation authority through the gate.
     Sample s;
     s.metric_id = kKerrSchild;
     s.p1 = 1.0f;

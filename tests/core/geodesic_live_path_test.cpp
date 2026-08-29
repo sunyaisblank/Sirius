@@ -18,9 +18,11 @@
 #include "sirius/core/geodesic_integrator.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/core/metrics/warp_drive_family.h"
+#include "sirius/core/observer_frame.h"
 
 #include <gtest/gtest.h>
 
+#include <array>
 #include <cmath>
 
 using namespace sirius::core;
@@ -289,4 +291,153 @@ TEST(CaptureSurfaceTests, CheckTerminationUsesCartesianNormAndCapture) {
     // half of every image.
     Lightray equatorial = makeRay(metric, 10.0, 0.001, 0.0, 0.0, 1.0, 0.0);
     EXPECT_FALSE(Geodesic::CheckTermination(equatorial, &metric));
+}
+
+TEST(ObserverFrameTests, MovingKerrSchildObserverProducesAnOrthonormalTetrad) {
+    KerrSchildFamily metric(KerrSchildParams::Kerr(1.0, 0.7));
+    Vec4 position;
+    position(1) = 12.0;
+    position(2) = 1.5;
+    position(3) = 0.8;
+    Vec4 coordinate_velocity;
+    coordinate_velocity(0) = 1.0;
+    coordinate_velocity(1) = 0.08;
+    coordinate_velocity(2) = -0.03;
+    coordinate_velocity(3) = 0.02;
+
+    const ObserverState observer = Geodesic::CreateObserver(position, coordinate_velocity, &metric);
+    Metric4d g;
+    Tensor<Dual<double>, 4, 4, 4> dg;
+    metric.Evaluate(position, g, dg);
+    const std::array<Vec4, 4> basis = {observer.e0, observer.e1, observer.e2, observer.e3};
+    for (int row = 0; row < 4; ++row) {
+        for (int column = 0; column < 4; ++column) {
+            const double expected = (row == column) ? (row == 0 ? -1.0 : 1.0) : 0.0;
+            EXPECT_NEAR(TensorOps::InnerProduct(basis[row], basis[column], g), expected, 2.0e-13)
+                << "row=" << row << " column=" << column;
+        }
+    }
+}
+
+TEST(ObserverFrameTests, InvalidWorldlineCannotBecomeASilentStaticObserver) {
+    KerrSchildFamily metric(KerrSchildParams::Minkowski());
+    Vec4 position;
+    Vec4 spacelike_velocity;
+    spacelike_velocity(1) = 1.0;
+    EXPECT_DEATH((void)Geodesic::CreateObserver(position, spacelike_velocity, &metric),
+                 "precondition.*enforced, terminating");
+}
+
+TEST(ObserverFrameTests, MovingCameraLaunchMatchesIndependentLorentzTransform) {
+    KerrSchildFamily metric(KerrSchildParams::Minkowski());
+    Vec4 position;
+    Metric4d g;
+    Tensor<Dual<double>, 4, 4, 4> derivatives;
+    metric.Evaluate(position, g, derivatives);
+
+    std::array<Vec4, 3> seeds;
+    seeds[0](1) = 1.0;
+    seeds[1](2) = 1.0;
+    seeds[2](3) = 1.0;
+    const Metric4d inverse = TensorOps::Inverse(g);
+    const auto reference = relativity::EulerianObserverFrame(g, inverse, seeds);
+    ASSERT_TRUE(reference.has_value());
+    const std::array<double, 3> beta{0.25, -0.4, 0.1};
+    const auto moving = relativity::BoostObserverFrame(*reference, beta);
+    ASSERT_TRUE(moving.has_value());
+    const std::array<double, 3> screen_direction{-0.8, 0.3, std::sqrt(0.27)};
+    const auto past_ray = relativity::PastDirectedCameraRay(*moving, screen_direction);
+    ASSERT_TRUE(past_ray.has_value());
+
+    const double beta_squared = beta[0] * beta[0] + beta[1] * beta[1] + beta[2] * beta[2];
+    const double gamma = 1.0 / std::sqrt(1.0 - beta_squared);
+    const double beta_dot_screen = beta[0] * screen_direction[0] + beta[1] * screen_direction[1] +
+                                   beta[2] * screen_direction[2];
+    // Independent boost of the physical photon q'=(1,-n) from the moving
+    // camera rest frame into the static Minkowski frame.
+    const double expected_time = gamma * (1.0 - beta_dot_screen);
+    const double coefficient = gamma - (gamma - 1.0) * beta_dot_screen / beta_squared;
+    EXPECT_NEAR(-(*past_ray)(0), expected_time, 2.0e-14);
+    for (int component = 0; component < 3; ++component) {
+        const double expected_spatial =
+            -screen_direction[component] + coefficient * beta[component];
+        EXPECT_NEAR(-(*past_ray)(component + 1), expected_spatial, 2.0e-14);
+    }
+}
+
+TEST(ObserverFrameTests, KerrCameraRayIsPastNullAndLaunchFrequencyIsOne) {
+    KerrSchildFamily metric(KerrSchildParams::Kerr(1.0, 0.9));
+    Vec4 position;
+    position(1) = 30.0;
+    position(2) = 2.0;
+    position(3) = 4.0;
+    Metric4d g;
+    Tensor<Dual<double>, 4, 4, 4> derivatives;
+    metric.Evaluate(position, g, derivatives);
+
+    std::array<Vec4, 3> seeds;
+    seeds[0](1) = 1.0;
+    seeds[1](2) = 1.0;
+    seeds[2](3) = 1.0;
+    Metric4d inverse;
+    ASSERT_TRUE(metric.InverseMetric(position, inverse));
+    const auto reference = relativity::EulerianObserverFrame(g, inverse, seeds);
+    ASSERT_TRUE(reference.has_value());
+    const auto moving = relativity::BoostObserverFrame(*reference, {0.7, -0.2, 0.1});
+    ASSERT_TRUE(moving.has_value());
+    const auto past_ray = relativity::PastDirectedCameraRay(*moving, {-0.9, 0.3, std::sqrt(0.1)});
+    ASSERT_TRUE(past_ray.has_value());
+    const auto screen = relativity::ObserverScreenBasis(*moving, {-0.9, 0.3, std::sqrt(0.1)});
+    ASSERT_TRUE(screen.has_value());
+
+    EXPECT_LT((*past_ray)(0), 0.0);
+    EXPECT_NEAR(TensorOps::InnerProduct(*past_ray, *past_ray, g), 0.0, 3.0e-13);
+    const Vec4 physical_photon = *past_ray * -1.0;
+    EXPECT_NEAR(-TensorOps::InnerProduct(physical_photon, moving->time, g), 1.0, 3.0e-13);
+    const std::array<Vec4, 4> tetrad = {moving->time, moving->spatial[0], moving->spatial[1],
+                                        moving->spatial[2]};
+    for (int row = 0; row < 4; ++row) {
+        for (int column = 0; column < 4; ++column) {
+            const double expected = row == column ? (row == 0 ? -1.0 : 1.0) : 0.0;
+            EXPECT_NEAR(TensorOps::InnerProduct(tetrad[row], tetrad[column], g), expected, 3.0e-13);
+        }
+    }
+    for (int axis = 0; axis < 2; ++axis) {
+        EXPECT_NEAR(TensorOps::InnerProduct((*screen)[axis], moving->time, g), 0.0, 3.0e-13);
+        EXPECT_NEAR(TensorOps::InnerProduct((*screen)[axis], *past_ray, g), 0.0, 3.0e-13);
+        EXPECT_NEAR(TensorOps::InnerProduct((*screen)[axis], (*screen)[axis], g), 1.0, 3.0e-13);
+    }
+    EXPECT_NEAR(TensorOps::InnerProduct((*screen)[0], (*screen)[1], g), 0.0, 3.0e-13);
+}
+
+TEST(ObserverFrameTests, EulerianReferenceRemainsTimelikeInsideTheKerrErgosphere) {
+    KerrSchildFamily metric(KerrSchildParams::Kerr(1.0, 0.998));
+    const double radius = 1.5;
+    Vec4 position;
+    position(1) = std::sqrt(radius * radius + 0.998 * 0.998);
+    Metric4d g;
+    Metric4d inverse;
+    Tensor<Dual<double>, 4, 4, 4> derivatives;
+    metric.Evaluate(position, g, derivatives);
+    ASSERT_TRUE(metric.InverseMetric(position, inverse));
+    ASSERT_GT(g(0, 0).real, 0.0) << "probe must lie inside the static limit";
+
+    std::array<Vec4, 3> seeds;
+    seeds[0](1) = 1.0;
+    seeds[1](2) = 1.0;
+    seeds[2](3) = 1.0;
+    const auto frame = relativity::EulerianObserverFrame(g, inverse, seeds);
+    ASSERT_TRUE(frame.has_value());
+    EXPECT_GT(frame->time(0), 0.0);
+    EXPECT_NEAR(TensorOps::InnerProduct(frame->time, frame->time, g), -1.0, 3.0e-13);
+
+    const auto ray = relativity::PastDirectedCameraRay(*frame, {-0.8, 0.3, 0.2});
+    ASSERT_TRUE(ray.has_value());
+    Vec4 trial;
+    trial(2) = 1.0;
+    const auto screen = relativity::ProjectToObserverScreen(g, frame->time, *ray, trial);
+    ASSERT_TRUE(screen.has_value());
+    EXPECT_NEAR(TensorOps::InnerProduct(*screen, frame->time, g), 0.0, 3.0e-13);
+    EXPECT_NEAR(TensorOps::InnerProduct(*screen, *ray, g), 0.0, 3.0e-13);
+    EXPECT_NEAR(TensorOps::InnerProduct(*screen, *screen, g), 1.0, 3.0e-13);
 }

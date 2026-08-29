@@ -67,13 +67,15 @@ class RenderPipelineTests : public ::testing::Test {
         ray.coordinate_time = 0.0f;
         ray.terminated = 0;
         ray.step_size = 0.05f;
-        ray.bounce_count = 0;
         ray.padding = 0;
         ray.sx = 0;
         ray.sy = 0;
         ray.ku_uobsu = 1.0f;
-        ray.running_dlambda_dnew = 1.0f;
 
+        Metric4d g;
+        Tensor<Dual<double>, 4, 4, 4> dg;
+        metric->Evaluate(ray.position, g, dg);
+        ray.velocity = TensorOps::NormalizeNull(ray.velocity, g);
         ray.acceleration = Geodesic::CalculateAcceleration(ray.velocity, ray.position, metric);
 
         return ray;
@@ -86,7 +88,10 @@ TEST_F(RenderPipelineTests, LightrayInitialization) {
     Lightray ray = createRay(0.0, 10.0, PI / 2.0, 0.0, 1.0, 0.5, 0.0, 0.1, &schwarzschild);
 
     EXPECT_DOUBLE_EQ(getRadius(ray.position), 10.0);
-    EXPECT_DOUBLE_EQ(ray.velocity(0), 1.0);
+    Metric4d g;
+    Tensor<Dual<double>, 4, 4, 4> dg;
+    schwarzschild.Evaluate(ray.position, g, dg);
+    EXPECT_NEAR(TensorOps::InnerProduct(ray.velocity, ray.velocity, g), 0.0, 1.0e-12);
     EXPECT_EQ(ray.terminated, 0);
 }
 
@@ -125,7 +130,10 @@ TEST_F(RenderPipelineTests, SchwarzschildAccelerationNearHorizon) {
 TEST_F(RenderPipelineTests, IntegrateStepProducesValidState) {
     Lightray ray = createRay(0.0, 15.0, PI / 2.0, 0.0, 1.0, 0.5, 0.0, 0.1, &schwarzschild);
 
-    bool success = Geodesic::IntegrateStep(ray, &schwarzschild);
+    bool success = false;
+    for (int attempt = 0; attempt < 32 && !success && !ray.terminated; ++attempt) {
+        success = Geodesic::IntegrateStep(ray, &schwarzschild);
+    }
 
     EXPECT_TRUE(success) << "Integration step should succeed";
     EXPECT_TRUE(std::isfinite(getRadius(ray.position))) << "r should be finite";
@@ -153,7 +161,10 @@ TEST_F(RenderPipelineTests, RK45StepSucceeds) {
     IntegratorConfig config = Geodesic::GetDefaultConfig();
     config.use_rk45 = true;
 
-    bool success = Geodesic::IntegrateStepRk45(ray, &schwarzschild, config);
+    bool success = false;
+    for (int attempt = 0; attempt < 32 && !success && !ray.terminated; ++attempt) {
+        success = Geodesic::IntegrateStepRk45(ray, &schwarzschild, config);
+    }
 
     EXPECT_TRUE(success) << "RK45 step should succeed";
 }
@@ -166,7 +177,8 @@ TEST_F(RenderPipelineTests, RK45ProducesFiniteValues) {
 
     for (int i = 0; i < 20; i++) {
         bool success = Geodesic::IntegrateStepRk45(ray, &schwarzschild, config);
-        if (!success || ray.terminated) break;
+        if (ray.terminated) break;
+        if (!success) continue;
         ++accepted_steps;
 
         for (int mu = 0; mu < 4; mu++) {
@@ -213,7 +225,10 @@ TEST_F(RenderPipelineTests, HandlesLargeRadius) {
     Lightray ray = createRay(0.0, 100.0, PI / 2.0, 0.0, 1.0, 1.0, 0.0, 0.0, &schwarzschild);
     ray.step_size = 0.5f;
 
-    bool success = Geodesic::IntegrateStep(ray, &schwarzschild);
+    bool success = false;
+    for (int attempt = 0; attempt < 32 && !success && !ray.terminated; ++attempt) {
+        success = Geodesic::IntegrateStep(ray, &schwarzschild);
+    }
 
     ASSERT_TRUE(success) << "large-radius integration step failed";
     EXPECT_TRUE(std::isfinite(getRadius(ray.position))) << "Position should be finite";

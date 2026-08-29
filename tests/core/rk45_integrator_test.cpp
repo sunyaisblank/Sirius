@@ -50,9 +50,7 @@ class RK45IntegratorTests : public ::testing::Test {
         ray.coordinate_time = 0.0f;
         ray.terminated = 0;
         ray.step_size = config.initial_step;
-        ray.bounce_count = 0;
         ray.ku_uobsu = 1.0f;
-        ray.running_dlambda_dnew = 1.0f;
 
         // Normalize to null
         Metric4d g;

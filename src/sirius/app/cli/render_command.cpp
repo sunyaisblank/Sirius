@@ -88,8 +88,8 @@ Basic Options:
   --temperature-model <m>   Disk temperature model: NovikovThorne (NT) or
                             ShakuraSunyaev (SS) (default: NovikovThorne)
   --disk-temperature <T>    Disk temperature scale in Kelvin (default: 50000)
-  --color-mode <name>       Output: TrueColor, TemperatureMap, RedshiftMap,
-                            Narrowband, or Polarisation (CPU thin disk)
+  --color-mode <name>       TrueColor, TemperatureMap, RedshiftMap, or
+                            Polarisation (Narrowband is reserved and declines)
   --throat-radius <b0>      Morris-Thorne throat radius (default: 1.0)
   --wormhole-topology <t>   OneSheetCapture (supported) or TwoSheet (declines explicitly)
   --warp-velocity <vs>      Alcubierre warp velocity (default: 0.5)
@@ -107,12 +107,12 @@ Post-Processing:
 
 Volumetric Disk (3D accretion disk with thickness):
   --volumetric              Enable volumetric disk rendering
-  --h-over-r <ratio>        Scale height ratio H/r (default: 0.1)
+  --h-over-r <ratio>        Inner-edge H/r in [0.01,0.5] (default: 0.1)
   --h-power <exp>           Flaring exponent (default: 0.25)
-  --tau <depth>             Midplane optical depth (default: 10.0)
+  --tau <depth>             Inner-edge vertical optical depth (default: 10.0)
   --vol-samples <n>         Ray marching samples (default: 64)
-  --turbulence              Enable deterministic turbulent density perturbations
-  --corona                  Enable inverse-Compton corona emission and opacity
+  --turbulence              Enable deterministic procedural density perturbations (not GRMHD)
+  --corona                  Decline: spectral covariant Compton transfer is not represented
   --no-disk                 Disable accretion-disk emission (required for charged/Λ metrics)
 
 Temporal Disk:

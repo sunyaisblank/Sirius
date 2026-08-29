@@ -112,7 +112,6 @@ class CpuGeodesicReferenceTests : public ::testing::Test {
         ray.coordinate_time = 0.0f;
         ray.terminated = 0;
         ray.step_size = cpu_config.initial_step;
-        ray.bounce_count = 0;
 
         double r = ref.r_start;
         ray.velocity(1) = ref.v_r * sin_th * cos_ph + r * ref.v_theta * cos_th * cos_ph -

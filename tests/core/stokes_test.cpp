@@ -7,6 +7,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <limits>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -222,32 +223,30 @@ TEST_F(MuellerMatrixTests, HalfWavePlateFlipsHandedness) {
 
 class PolarisedEmissionTests : public ::testing::Test {};
 
-TEST_F(PolarisedEmissionTests, SynchrotronPolarisationDegree) {
-    // p=2: (2+1)/(2+7/3) = 3/(13/3) = 9/13 ≈ 0.6923
-    float pi_L = sirius::core::polarised_emission::SynchrotronPolarisationDegree(2.0f);
-    EXPECT_NEAR(pi_L, 9.0f / 13.0f, kEps);
-
-    // p=3: (3+1)/(3+7/3) = 4/(16/3) = 12/16 = 0.75
-    pi_L = sirius::core::polarised_emission::SynchrotronPolarisationDegree(3.0f);
-    EXPECT_NEAR(pi_L, 0.75f, kEps);
+TEST_F(PolarisedEmissionTests, ChandrasekharAtmosphereHasPhysicalEndpointPolarisation) {
+    const auto edge = polarised_emission::ChandrasekharElectronScatteringAtmosphere(0.0f);
+    const auto face = polarised_emission::ChandrasekharElectronScatteringAtmosphere(1.0f);
+    ASSERT_TRUE(edge.has_value());
+    ASSERT_TRUE(face.has_value());
+    EXPECT_NEAR(edge->linear_polarisation_degree, 0.1171f, kEps);
+    EXPECT_NEAR(face->linear_polarisation_degree, 0.0f, kEps);
+    EXPECT_GT(edge->intensity_scale, 0.0f);
+    EXPECT_GT(face->intensity_scale, edge->intensity_scale);
 }
 
-TEST_F(PolarisedEmissionTests, SynchrotronEmissionIsPhysical) {
-    auto s = sirius::core::polarised_emission::SynchrotronEmission(1.0f, 0.7f, 0.0f);
-    EXPECT_TRUE(s.IsPhysical());
-    EXPECT_NEAR(s.V, 0.0f, kEps);  // no circular from synchrotron
+TEST_F(PolarisedEmissionTests, ChandrasekharAtmospherePreservesHemisphericFlux) {
+    // The analytic integral of 2 mu (1+a mu)/(1+2a/3) from zero to one is one.
+    constexpr double a = 2.06;
+    const double integrated_flux = 2.0 * (0.5 + a / 3.0) / (1.0 + 2.0 * a / 3.0);
+    EXPECT_NEAR(integrated_flux, 1.0, 2.0e-15);
 }
 
-TEST_F(PolarisedEmissionTests, ThomsonScatteringAt90Degrees) {
-    // At 90 degrees (cos_theta = 0): pi = sin^2(90)/(1+cos^2(90)) = 1/1 = 1
-    float pi = sirius::core::polarised_emission::ThomsonPolarisationDegree(0.0f);
-    EXPECT_NEAR(pi, 1.0f, kEps);
-}
-
-TEST_F(PolarisedEmissionTests, ThomsonScatteringForward) {
-    // At 0 degrees (cos_theta = 1): pi = 0/(1+1) = 0
-    float pi = sirius::core::polarised_emission::ThomsonPolarisationDegree(1.0f);
-    EXPECT_NEAR(pi, 0.0f, kEps);
+TEST_F(PolarisedEmissionTests, ChandrasekharAtmosphereRejectsInvalidDirectionCosines) {
+    EXPECT_FALSE(polarised_emission::ChandrasekharElectronScatteringAtmosphere(-0.01f).has_value());
+    EXPECT_FALSE(polarised_emission::ChandrasekharElectronScatteringAtmosphere(1.01f).has_value());
+    EXPECT_FALSE(polarised_emission::ChandrasekharElectronScatteringAtmosphere(
+                     std::numeric_limits<float>::quiet_NaN())
+                     .has_value());
 }
 
 // =============================================================================
@@ -255,20 +254,6 @@ TEST_F(PolarisedEmissionTests, ThomsonScatteringForward) {
 // =============================================================================
 
 class ParallelTransportTests : public ::testing::Test {};
-
-TEST_F(ParallelTransportTests, ZeroSpinNoRotation) {
-    float angle =
-        sirius::core::parallel_transport::GravitationalFaradayRotation(0.0f, 10.0f, kPi / 2.0f);
-    EXPECT_NEAR(angle, 0.0f, kEps);
-}
-
-TEST_F(ParallelTransportTests, RotationIncreasesWithSpin) {
-    float a1 =
-        sirius::core::parallel_transport::GravitationalFaradayRotation(0.5f, 10.0f, kPi / 2.0f);
-    float a2 =
-        sirius::core::parallel_transport::GravitationalFaradayRotation(0.9f, 10.0f, kPi / 2.0f);
-    EXPECT_GT(std::abs(a2), std::abs(a1));
-}
 
 TEST_F(ParallelTransportTests, ApplyPreservesIntensity) {
     auto s = sirius::core::StokesVector::Horizontal(1.0f);

@@ -108,6 +108,19 @@ TEST_F(StarEntryTests, ComputeColorProducesValidRGB) {
     EXPECT_FALSE(std::isnan(b));
 }
 
+TEST_F(StarEntryTests, ComputeColorUsesTheIntegratedBlackbodyAuthority) {
+    sirius::core::StarEntry star{};
+    star.temperature_K = 5778.0f;
+    float r = 0.0f;
+    float g = 0.0f;
+    float b = 0.0f;
+    star.ComputeColor(r, g, b);
+    const auto expected = sirius::core::spectral::BlackbodyToRgb(star.temperature_K);
+    EXPECT_FLOAT_EQ(r, expected.r);
+    EXPECT_FLOAT_EQ(g, expected.g);
+    EXPECT_FLOAT_EQ(b, expected.b);
+}
+
 TEST_F(StarEntryTests, HotStarIsBluer) {
     sirius::core::StarEntry hot{};
     hot.temperature_K = 30000.0f;

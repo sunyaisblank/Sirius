@@ -7,7 +7,6 @@
 #include "sirius/backend/cpu/geodesic_tracer.h"
 
 #include "sirius/core/camera.h"
-#include "sirius/core/disk/temporal_emission.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/core/metrics/morris_thorne_family.h"
 
@@ -149,6 +148,9 @@ TEST_F(GeodesicTracerTest, DiskIntersection) {
                 if (result.disk_temperature <= 0.0f) {
                     disk_data_valid = false;
                 }
+                if (std::abs(result.final_position(3)) > 1.0e-6f) {
+                    disk_data_valid = false;
+                }
             }
         }
     }
@@ -235,9 +237,12 @@ TEST_F(GeodesicTracerTest, LiveDiskCrossingCarriesTransportedPhysicalStokesOrien
         ASSERT_TRUE(crossing.polarisation_valid);
         EXPECT_TRUE(std::isfinite(crossing.polarisation_evpa));
         EXPECT_GE(crossing.polarisation_degree, 0.0f);
-        EXPECT_LE(crossing.polarisation_degree, 1.0f);
+        EXPECT_LE(crossing.polarisation_degree, 0.1171f);
+        EXPECT_GT(crossing.polarisation_intensity_scale, 0.0f);
         EXPECT_FLOAT_EQ(crossing.polarisation_evpa, repeated.polarisation_evpa);
         EXPECT_FLOAT_EQ(crossing.polarisation_degree, repeated.polarisation_degree);
+        EXPECT_FLOAT_EQ(crossing.polarisation_intensity_scale,
+                        repeated.polarisation_intensity_scale);
     }
 
     const TraceResult unpolarised = m_Tracer->Trace(disk_ray);
@@ -276,7 +281,7 @@ TEST(GeodesicTracerVolumetric, TransferAccumulatesAcrossEveryTraversedSegment) {
     EXPECT_EQ(result.outcome, TraceResult::Outcome::Escaped)
         << "volumetric transfer must not replace the ray's terminal outcome";
     EXPECT_TRUE(result.volumetric_hit);
-    EXPECT_GT(result.volumetric_path_length, 10.0f)
+    EXPECT_GT(result.volumetric_affine_length, 10.0f)
         << "only a final RK45 segment appears to have been retained";
     EXPECT_GT(result.optical_depth, 0.1f);
     EXPECT_GT(result.volumetric_emission[0], 0.0f);
@@ -336,7 +341,7 @@ TEST(GeodesicTracerVolumetric, RedshiftAndDopplerReachTheLiveVolumeSource) {
         << "the orbital Doppler term did not reach the live volumetric source";
 }
 
-TEST(GeodesicTracerVolumetric, TurbulenceAndCoronaAlterLiveTransferDeterministically) {
+TEST(GeodesicTracerVolumetric, ProceduralTurbulenceAltersLiveTransferDeterministically) {
     KerrSchildParams params;
     params.M = 0.0;
     KerrSchildFamily flat(params);
@@ -370,10 +375,6 @@ TEST(GeodesicTracerVolumetric, TurbulenceAndCoronaAlterLiveTransferDeterministic
     TracerConfig enhanced_config = baseline_config;
     enhanced_config.enable_turbulence = true;
     enhanced_config.turbulence.enabled = true;
-    enhanced_config.enable_corona = true;
-    enhanced_config.corona.enabled = true;
-    enhanced_config.corona.inner_radius_M = enhanced_config.disk_inner;
-    enhanced_config.corona.outer_radius_M = enhanced_config.disk_outer;
     GeodesicTracer enhanced_tracer(&flat, enhanced_config);
 
     const TraceResult first = enhanced_tracer.Trace(ray);
@@ -383,8 +384,6 @@ TEST(GeodesicTracerVolumetric, TurbulenceAndCoronaAlterLiveTransferDeterministic
     EXPECT_TRUE(std::isfinite(first.volumetric_emission[0]));
     EXPECT_NE(first.optical_depth, baseline.optical_depth);
     EXPECT_NE(first.volumetric_emission[0], baseline.volumetric_emission[0]);
-    EXPECT_LT(first.volumetric_emission[0], first.volumetric_emission[2])
-        << "the Compton corona spectral contribution did not reach the live transfer";
     EXPECT_FLOAT_EQ(first.optical_depth, repeat.optical_depth);
     for (int channel = 0; channel < 3; ++channel) {
         EXPECT_FLOAT_EQ(first.volumetric_emission[channel], repeat.volumetric_emission[channel]);
@@ -431,7 +430,7 @@ TEST_F(GeodesicTracerTest, KerrMetricTracing) {
     config.horizon_factor = 1.1f;
     config.max_steps = 10000;
     config.enable_disk = true;
-    config.disk_inner = 2.32f;  // Approximate prograde ISCO.
+    config.disk_inner = static_cast<float>(AccretionDiskD::ComputeIsco(0.9));
     config.disk_outer = 20.0f;
 
     auto kerrTracer = std::make_unique<GeodesicTracer>(kerrMetric.get(), config);
@@ -445,9 +444,8 @@ TEST_F(GeodesicTracerTest, KerrMetricTracing) {
     }
 }
 
-TEST_F(GeodesicTracerTest, GFactorDecompositionConsistency) {
+TEST_F(GeodesicTracerTest, InvariantFrequencyTransferSelectsTheCircularEmitterBranch) {
     int disk_hits = 0;
-    double max_relative_error = 0.0;
 
     for (int y = 20; y < 44; y += 2) {
         for (int x = 20; x < 44; x += 2) {
@@ -456,31 +454,19 @@ TEST_F(GeodesicTracerTest, GFactorDecompositionConsistency) {
 
             if (result.outcome == TraceResult::Outcome::DiskHit) {
                 disk_hits++;
-
-                float grav = result.gfactor_grav;
-                float gamma = result.gfactor_gamma;
-                float v_orb = result.gfactor_v_orb;
-                float A = result.gfactor_cosine_coefficient;
-
-                float v_dot_n = v_orb * A;
-                float doppler_denom = gamma * (1.0f - v_dot_n);
-                doppler_denom = std::clamp(doppler_denom, 0.1f, 10.0f);
-                float g_reconstructed = grav / doppler_denom;
-                g_reconstructed = std::clamp(g_reconstructed, 0.1f, 5.0f);
-
-                float g_stored = result.redshift;
-                float rel_error = std::abs(g_reconstructed - g_stored) / g_stored;
-                max_relative_error = std::max(max_relative_error, static_cast<double>(rel_error));
-
-                EXPECT_NEAR(g_reconstructed, g_stored, 1e-5f)
-                    << "g-factor decomposition mismatch at disk_r=" << result.disk_radius
-                    << ", disk_phi=" << result.disk_phi;
+                EXPECT_TRUE(std::isfinite(result.full_disk_redshift));
+                EXPECT_TRUE(std::isfinite(result.zamo_disk_redshift));
+                EXPECT_GT(result.full_disk_redshift, 0.0f);
+                EXPECT_GT(result.zamo_disk_redshift, 0.0f);
+                EXPECT_FLOAT_EQ(result.redshift, result.full_disk_redshift);
+                ASSERT_GT(result.num_disk_crossings, 0);
+                EXPECT_FLOAT_EQ(result.disk_crossings[0].full_redshift, result.full_disk_redshift);
+                EXPECT_FLOAT_EQ(result.disk_crossings[0].zamo_redshift, result.zamo_disk_redshift);
             }
         }
     }
 
     EXPECT_GT(disk_hits, 10) << "Need sufficient disk hits to validate";
-    EXPECT_LT(max_relative_error, 1e-4) << "Max relative error in g-factor reconstruction";
 }
 
 TEST(GeodesicTracerRedshift, NearExtremalInnerDiskEmissionRemainsFinite) {
@@ -516,114 +502,13 @@ TEST(GeodesicTracerRedshift, NearExtremalInnerDiskEmissionRemainsFinite) {
                 const auto& crossing = result.disk_crossings[i];
                 if (!crossing.valid || crossing.r >= 2.0f) continue;
                 EXPECT_TRUE(std::isfinite(crossing.redshift));
-                EXPECT_GE(crossing.redshift, 0.1f);
+                EXPECT_GT(crossing.redshift, 0.0f);
                 ++inner_crossings;
             }
         }
     }
     EXPECT_GE(inner_crossings, 1)
         << "the near-extremal probe did not exercise disk emission inside r=2M";
-}
-
-TEST_F(GeodesicTracerTest, MotionBlurConvergence) {
-    TraceResult disk_result;
-    bool found = false;
-    for (int y = 16; y < 48 && !found; y += 2) {
-        for (int x = 16; x < 48 && !found; x += 2) {
-            CameraRay ray = m_Camera->GenerateRay(x, y, 0.5f, 0.5f);
-            disk_result = m_Tracer->Trace(ray);
-            if (disk_result.outcome == TraceResult::Outcome::DiskHit) {
-                found = true;
-            }
-        }
-    }
-
-    ASSERT_TRUE(found) << "deterministic camera scan found no disk hit for motion-blur evidence";
-
-    float grav = disk_result.gfactor_grav;
-    float gamma = disk_result.gfactor_gamma;
-    float v_orb = disk_result.gfactor_v_orb;
-    float A = disk_result.gfactor_cosine_coefficient;
-    float B = disk_result.gfactor_sine_coefficient;
-    float r = disk_result.disk_radius;
-
-    float M = 1.0f;  // Schwarzschild.
-    float a = 0.0f;
-    float sqrtM = std::sqrt(M);
-    float Omega = sqrtM / (std::pow(r, 1.5f) + a * sqrtM);
-    float shutter_time = 0.1f;
-    float delta_phi_max = Omega * shutter_time;
-
-    auto independent_redshift = [&](int sample, int sample_count) {
-        const float time = sample_count > 1
-                               ? static_cast<float>(sample) / static_cast<float>(sample_count - 1)
-                               : 0.5f;
-        const float delta_phi = delta_phi_max * (time - 0.5f);
-        const float projected_velocity =
-            v_orb * (A * std::cos(delta_phi) + B * std::sin(delta_phi));
-        const float denominator = std::clamp(gamma * (1.0f - projected_velocity), 0.1f, 10.0f);
-        return std::clamp(grav / denominator, 0.1f, 5.0f);
-    };
-    auto compute_blur = [&](int N) -> float {
-        const std::vector<float> redshifts = sirius::core::disk_emission::SampleTemporalRedshifts(
-            grav, gamma, v_orb, A, B, delta_phi_max, N);
-        EXPECT_EQ(redshifts.size(), static_cast<std::size_t>(N));
-        float radiance_sum = 0.0f;
-        for (int i = 0; i < N; i++) {
-            EXPECT_FLOAT_EQ(redshifts[static_cast<std::size_t>(i)], independent_redshift(i, N));
-            radiance_sum += std::pow(redshifts[static_cast<std::size_t>(i)], 4.0f);
-        }
-        return radiance_sum / N;
-    };
-
-    (void)compute_blur(1);
-    (void)compute_blur(7);
-    float g_N4 = compute_blur(4);
-    float g_N8 = compute_blur(8);
-    float g_N16 = compute_blur(16);
-    float g_N32 = compute_blur(32);
-    float g_N64 = compute_blur(64);
-
-    float err_4_to_64 = std::abs(g_N4 - g_N64);
-    float err_8_to_64 = std::abs(g_N8 - g_N64);
-    float err_16_to_64 = std::abs(g_N16 - g_N64);
-    float err_32_to_64 = std::abs(g_N32 - g_N64);
-    (void)err_32_to_64;
-
-    EXPECT_LE(err_8_to_64, err_4_to_64 + 1e-6f) << "Error should not increase with more samples";
-    EXPECT_LE(err_16_to_64, err_8_to_64 + 1e-6f) << "Error should not increase with more samples";
-
-    float relative_err_8 = (g_N64 > 1e-6f) ? (err_8_to_64 / g_N64) : 0.0f;
-    EXPECT_LT(relative_err_8, 0.01f) << "N=8 should be within 1% of converged value";
-
-    EXPECT_GT(g_N4, 0.0f);
-    EXPECT_GT(g_N64, 0.0f);
-    EXPECT_LT(g_N64, 625.0f);
-}
-
-TEST_F(GeodesicTracerTest, GFactorCoefficientNormalization) {
-    int disk_hits = 0;
-
-    for (int y = 20; y < 44; y += 3) {
-        for (int x = 20; x < 44; x += 3) {
-            CameraRay ray = m_Camera->GenerateRay(x, y, 0.5f, 0.5f);
-            TraceResult result = m_Tracer->Trace(ray);
-
-            if (result.outcome == TraceResult::Outcome::DiskHit) {
-                disk_hits++;
-
-                float A = result.gfactor_cosine_coefficient;
-                float B = result.gfactor_sine_coefficient;
-                float norm_squared = A * A + B * B;
-
-                EXPECT_LE(norm_squared, 1.01f) << "A^2 + B^2 should be <= 1, got " << norm_squared;
-                EXPECT_GT(norm_squared, 0.0f)
-                    << "A^2 + B^2 should be > 0 for rays hitting equatorial disk";
-            }
-        }
-    }
-
-    EXPECT_GT(disk_hits, 5) << "Need disk hits to validate coefficients";
 }
 
 TEST_F(GeodesicTracerTest, TracingPerformance) {

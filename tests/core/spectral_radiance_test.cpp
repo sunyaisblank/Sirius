@@ -62,18 +62,16 @@ TEST(SpectralRadianceTest, BlackbodyBinsMatchPlanckAuthorityAndRejectInvalidTemp
     }
 }
 
-TEST(SpectralRadianceTest, RedshiftDepositsExactlyOneGFourthWeightedBin) {
+TEST(SpectralRadianceTest, RedshiftRebinsILambdaWithGFiveAndGFourBolometricScaling) {
     SpectralRadiance original = SpectralRadiance::Zero();
-    constexpr int kEmitBin = 9;
-    constexpr int kObservedBin = 19;
-    original.L[kEmitBin] = 3.25;
-    const double g =
-        SpectralRadiance::Wavelength(kEmitBin) / SpectralRadiance::Wavelength(kObservedBin);
-    const double expected = original.L[kEmitBin] * std::pow(g, 4);
+    for (int bin = 10; bin < 18; ++bin) original.L[bin] = 3.25;
+    constexpr double g = 0.9;
     const SpectralRadiance shifted = original.ApplyRedshift(g);
 
-    EXPECT_DOUBLE_EQ(shifted.L[kObservedBin], expected);
-    EXPECT_DOUBLE_EQ(shifted.TotalEnergy(), expected * kLambdaStep);
+    EXPECT_NEAR(shifted.TotalEnergy(), original.TotalEnergy() * std::pow(g, 4), 2.0e-12);
+    const double observed_lower = (kLambdaMin + 10 * kLambdaStep) / g;
+    const int first_full_bin = SpectralRadiance::BinIndex(observed_lower) + 1;
+    EXPECT_NEAR(shifted.L[first_full_bin], 3.25 * std::pow(g, 5), 2.0e-14);
     EXPECT_DOUBLE_EQ(original.ApplyRedshift(0.0).TotalEnergy(), 0.0);
     EXPECT_DOUBLE_EQ(original.ApplyRedshift(-1.0).TotalEnergy(), 0.0);
     EXPECT_DOUBLE_EQ(original.ApplyRedshift(std::numeric_limits<double>::quiet_NaN()).TotalEnergy(),

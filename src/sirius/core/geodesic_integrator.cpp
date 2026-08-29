@@ -1,8 +1,11 @@
 // Implementation of the geodesic integrator declared in geodesic_integrator.h.
 // Ported from PHGD001A.cpp; arithmetic order, casts, and literals bit-identical.
 //
-// Hamiltonian formulation with covariant momenta preserves the null constraint
-// H = (1/2) g^mu_nu p_mu p_nu = 0 automatically. Hamilton's equations:
+// Hamiltonian formulation with covariant momenta makes the continuum null
+// constraint H = (1/2) g^mu_nu p_mu p_nu = 0 a conserved quantity. Numerical
+// steps are accepted only when both truncation error and relative constraint
+// residual are within tolerance; the state is never projected onto H=0.
+// Hamilton's equations:
 //   dx^mu/dlambda = g^mu_nu p_nu,   dp_mu/dlambda = (1/2)(d g_alpha_beta/dx^mu) k^alpha k^beta.
 
 #include "sirius/core/geodesic_integrator.h"
@@ -12,6 +15,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 
 namespace sirius::core {
 
@@ -178,7 +182,6 @@ bool Geodesic::IntegrateStep(Lightray& ray, IMetric* metric, float min_step, flo
     ray.acceleration = CalculateAcceleration(new_velocity, new_position, metric);
     ray.proper_time += h;
     ray.coordinate_time += static_cast<float>(h * std::abs(new_velocity(0)));
-    ray.running_dlambda_dnew *= (1.0f + velocity_change * 0.1f);
     return true;
 }
 
@@ -227,6 +230,9 @@ bool Geodesic::CheckTermination(const Lightray& ray, IMetric* metric) {
 
 float Geodesic::CalculateRedshift(const Lightray& ray, const ObserverState& observer,
                                   IMetric* metric) {
+    SIRIUS_PRE(metric != nullptr);
+    SIRIUS_PRE(observer.is_timelike);
+    SIRIUS_PRE(std::isfinite(ray.ku_uobsu) && ray.ku_uobsu > 0.0f);
     Metric4d g;
     Tensor<Dual<double>, 4, 4, 4> dg;
     metric->Evaluate(ray.position, g, dg);
@@ -238,11 +244,18 @@ float Geodesic::CalculateRedshift(const Lightray& ray, const ObserverState& obse
         dot_product += ray.velocity(mu) * observer_lower(mu);
     }
 
-    return static_cast<float>(dot_product / ray.ku_uobsu);
+    // Frequency is positive for either affine orientation. Render rays are
+    // past-directed camera-to-source tangents; forward transport rays may be
+    // future-directed. Their physical frequency differs only by the sign of k.
+    const double measured_frequency = std::abs(dot_product);
+    SIRIUS_ASSERT(std::isfinite(measured_frequency) && measured_frequency > 0.0);
+    // 1 + z = lambda_obs/lambda_emit = nu_emit/nu_obs.
+    return static_cast<float>(measured_frequency / ray.ku_uobsu - 1.0);
 }
 
 ObserverState Geodesic::CreateObserver(const Vec4& position, const Vec4& velocity,
                                        IMetric* metric) {
+    SIRIUS_PRE(metric != nullptr);
     ObserverState observer;
     observer.position = position;
     observer.velocity = velocity;
@@ -251,13 +264,8 @@ ObserverState Geodesic::CreateObserver(const Vec4& position, const Vec4& velocit
     Tensor<Dual<double>, 4, 4, 4> dg;
     metric->Evaluate(position, g, dg);
     double velocity_norm = TensorOps::InnerProduct(velocity, velocity, g);
-    observer.is_timelike = velocity_norm < 0.0;
-
-    if (!observer.is_timelike) {
-        observer.velocity = Vec4();  // Default constructor initialises to zeros.
-        observer.velocity(0) = 1.0;  // Set the time component.
-        velocity_norm = TensorOps::InnerProduct(observer.velocity, observer.velocity, g);
-    }
+    observer.is_timelike = std::isfinite(velocity_norm) && velocity_norm < 0.0;
+    SIRIUS_PRE(observer.is_timelike);
 
     double normalization = 1.0 / std::sqrt(-velocity_norm);
     observer.velocity *= normalization;
@@ -268,53 +276,44 @@ ObserverState Geodesic::CreateObserver(const Vec4& position, const Vec4& velocit
 }
 
 void Geodesic::CalculateTetrads(ObserverState& observer, IMetric* metric) {
+    SIRIUS_PRE(metric != nullptr);
+    SIRIUS_PRE(observer.is_timelike);
     Metric4d g;
     Tensor<Dual<double>, 4, 4, 4> dg;
     metric->Evaluate(observer.position, g, dg);
 
     observer.e0 = observer.velocity;
 
+    const auto dot = [&g](const Vec4& lhs, const Vec4& rhs) {
+        return TensorOps::InnerProduct(lhs, rhs, g);
+    };
+    const auto normalise_spacelike = [&dot](Vec4& vector) {
+        const double norm_squared = dot(vector, vector);
+        SIRIUS_ASSERT(std::isfinite(norm_squared) && norm_squared > 1.0e-20);
+        vector /= std::sqrt(norm_squared);
+    };
+
+    // Lorentzian Gram-Schmidt.  Since g(e0,e0)=-1, removing the
+    // timelike projection is v + g(v,e0)e0 (the previous subtraction had
+    // the wrong sign).  Each spacelike vector is normalised before it is used
+    // to project the next seed.
     observer.e1 = Vec4();
-    observer.e1(1) = 1.0f;
-    Vec4 e1_parallel = TensorOps::LowerIndex(observer.e1, g);
-    double e1_dot_e0 = 0.0;
-    for (int mu = 0; mu < 4; mu++) {
-        e1_dot_e0 += observer.e0(mu) * e1_parallel(mu);
-    }
-    observer.e1 = observer.e1 - observer.e0 * e1_dot_e0;
+    observer.e1(1) = 1.0;
+    observer.e1 += observer.e0 * dot(observer.e1, observer.e0);
+    normalise_spacelike(observer.e1);
 
     observer.e2 = Vec4();
-    observer.e2(2) = 1.0f;
-    Vec4 e2_parallel = TensorOps::LowerIndex(observer.e2, g);
-    double e2_dot_e0 = 0.0;
-    double e2_dot_e1 = 0.0;
-    for (int mu = 0; mu < 4; mu++) {
-        e2_dot_e0 += observer.e0(mu) * e2_parallel(mu);
-        e2_dot_e1 += observer.e1(mu) * e2_parallel(mu);
-    }
-    observer.e2 = observer.e2 - observer.e0 * e2_dot_e0 - observer.e1 * e2_dot_e1;
+    observer.e2(2) = 1.0;
+    observer.e2 += observer.e0 * dot(observer.e2, observer.e0);
+    observer.e2 -= observer.e1 * dot(observer.e2, observer.e1);
+    normalise_spacelike(observer.e2);
 
     observer.e3 = Vec4();
-    observer.e3(3) = 1.0f;
-    Vec4 e3_parallel = TensorOps::LowerIndex(observer.e3, g);
-    double e3_dot_e0 = 0.0;
-    double e3_dot_e1 = 0.0;
-    double e3_dot_e2 = 0.0;
-    for (int mu = 0; mu < 4; mu++) {
-        e3_dot_e0 += observer.e0(mu) * e3_parallel(mu);
-        e3_dot_e1 += observer.e1(mu) * e3_parallel(mu);
-        e3_dot_e2 += observer.e2(mu) * e3_parallel(mu);
-    }
-    observer.e3 =
-        observer.e3 - observer.e0 * e3_dot_e0 - observer.e1 * e3_dot_e1 - observer.e2 * e3_dot_e2;
-
-    double e1_norm = std::sqrt(std::abs(TensorOps::InnerProduct(observer.e1, observer.e1, g)));
-    double e2_norm = std::sqrt(std::abs(TensorOps::InnerProduct(observer.e2, observer.e2, g)));
-    double e3_norm = std::sqrt(std::abs(TensorOps::InnerProduct(observer.e3, observer.e3, g)));
-
-    if (e1_norm > 1e-10) observer.e1 /= e1_norm;
-    if (e2_norm > 1e-10) observer.e2 /= e2_norm;
-    if (e3_norm > 1e-10) observer.e3 /= e3_norm;
+    observer.e3(3) = 1.0;
+    observer.e3 += observer.e0 * dot(observer.e3, observer.e0);
+    observer.e3 -= observer.e1 * dot(observer.e3, observer.e1);
+    observer.e3 -= observer.e2 * dot(observer.e3, observer.e2);
+    normalise_spacelike(observer.e3);
 }
 
 IntegratorConfig Geodesic::GetDefaultConfig() {
@@ -367,16 +366,23 @@ static void EvaluateRk45Stage(const Vec4& x, const Vec4& p, IMetric* metric, Vec
 }
 
 // RK45 error norm.
-static float ComputeRk45ErrorNorm(const Vec4& error_x, const Vec4& new_position,
+static float ComputeRk45ErrorNorm(const Vec4& error_x, const Vec4& error_p,
+                                  const Vec4& old_position, const Vec4& old_momentum,
+                                  const Vec4& new_position, const Vec4& new_momentum,
                                   const IntegratorConfig& config) {
-    float error_norm = 0.0f;
+    double error_norm = 0.0;
     for (int i = 0; i < 4; i++) {
-        const float scale = static_cast<float>(config.abs_tolerance +
-                                               config.rel_tolerance * std::abs(new_position(i)));
-        const float err_i = static_cast<float>(std::abs(error_x(i)) / scale);
-        error_norm += err_i * err_i;
+        const double position_scale =
+            config.abs_tolerance +
+            config.rel_tolerance * std::max(std::abs(old_position(i)), std::abs(new_position(i)));
+        const double momentum_scale =
+            config.abs_tolerance +
+            config.rel_tolerance * std::max(std::abs(old_momentum(i)), std::abs(new_momentum(i)));
+        const double position_error = std::abs(error_x(i)) / position_scale;
+        const double momentum_error = std::abs(error_p(i)) / momentum_scale;
+        error_norm += position_error * position_error + momentum_error * momentum_error;
     }
-    return std::sqrt(error_norm / 4.0f);
+    return static_cast<float>(std::sqrt(error_norm / 8.0));
 }
 
 // NaN/Inf check on the ray state.
@@ -388,6 +394,27 @@ static bool HasInvalidState(const Vec4& position, const Vec4& velocity) {
         }
     }
     return false;
+}
+
+// Scale-free null residual. Affine reparameterisation k -> Ck multiplies both
+// numerator and denominator by C^2, so admission does not depend on the chosen
+// photon-frequency normalisation or large coordinate components near a chart
+// boundary.
+static double RelativeNullResidual(const Vec4& velocity, const Metric4d& metric) {
+    double contraction = 0.0;
+    double absolute_scale = 0.0;
+    for (int mu = 0; mu < 4; ++mu) {
+        for (int nu = 0; nu < 4; ++nu) {
+            const double term = metric(mu, nu).real * velocity(mu) * velocity(nu);
+            contraction += term;
+            absolute_scale += std::abs(term);
+        }
+    }
+    if (!std::isfinite(contraction) || !std::isfinite(absolute_scale) ||
+        absolute_scale <= std::numeric_limits<double>::min()) {
+        return std::numeric_limits<double>::infinity();
+    }
+    return std::abs(contraction) / absolute_scale;
 }
 
 bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const IntegratorConfig& config) {
@@ -402,6 +429,11 @@ bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const Integrato
     metric->Evaluate(x0, g0, dg0);
     Vec4 p0 = ComputeMomentum(ray.velocity, g0);
     Vec4 k0 = ray.velocity;
+    constexpr double kMaximumRelativeNullResidual = 1e-6;
+    if (RelativeNullResidual(k0, g0) > kMaximumRelativeNullResidual) {
+        ray.terminated = 6;
+        return false;
+    }
 
     // Stage 1.
     Vec4 k1_x = k0, k1_p = MomentumDerivative(p0, k0, dg0);
@@ -448,7 +480,9 @@ bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const Integrato
 
     // Error estimation.
     Vec4 error_x = (k1_x * e1 + k3_x * e3 + k4_x * e4 + k5_x * e5 + k6_x * e6 + k7_x * e7) * h;
-    float error_norm = ComputeRk45ErrorNorm(error_x, new_position, config);
+    Vec4 error_p = (k1_p * e1 + k3_p * e3 + k4_p * e4 + k5_p * e5 + k6_p * e6 + k7_p * e7) * h;
+    float error_norm =
+        ComputeRk45ErrorNorm(error_x, error_p, x0, p0, new_position, new_momentum, config);
 
     // Step acceptance.
     if (error_norm > 1.0f) {
@@ -460,49 +494,35 @@ bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const Integrato
         return false;
     }
 
-    // Update ray state.
+    if (HasInvalidState(new_position, new_velocity)) {
+        ray.terminated = 3;
+        return false;
+    }
+
+    // The Hamiltonian flow must remain on the null constraint surface. Reject a
+    // step that leaves it; projecting only k^0 changes the conserved momentum
+    // and can select the opposite light cone.
+    {
+        Metric4d g_check;
+        Tensor<Dual<double>, 4, 4, 4> dg_check;
+        metric->Evaluate(new_position, g_check, dg_check);
+        if (RelativeNullResidual(new_velocity, g_check) > kMaximumRelativeNullResidual) {
+            ray.step_size = std::max(config.min_step, h * 0.5f);
+            if (ray.step_size <= config.min_step) {
+                ray.terminated = 6;
+            }
+            return false;
+        }
+    }
+
+    // Commit only after both embedded error and the physical constraint admit
+    // the candidate state.
     ray.position = new_position;
     ray.velocity = new_velocity;
     ray.acceleration = CalculateAcceleration(new_velocity, new_position, metric);
     ray.proper_time += h;
     ray.coordinate_time += static_cast<float>(h * std::abs(new_velocity(0)));
     ray.step_size = ComputeOptimalStep(h, error_norm, 1.0f, config);
-
-    if (HasInvalidState(new_position, new_velocity)) {
-        ray.terminated = 3;
-        return false;
-    }
-
-    // Periodic null re-normalisation: g_mu_nu k^mu k^nu = 0 drifts during
-    // integration from numerical error, so the velocity is re-normalised when the
-    // drift exceeds the threshold. Checked every step for tight control.
-    {
-        Metric4d g_check;
-        Tensor<Dual<double>, 4, 4, 4> dg_check;
-        metric->Evaluate(new_position, g_check, dg_check);
-
-        // Null condition violation H = g_mu_nu k^mu k^nu (should be 0).
-        double null_violation = TensorOps::InnerProduct(new_velocity, new_velocity, g_check);
-
-        // Phase 3 P3: tightened from 1e-4 to 1e-6 for better geodesic accuracy.
-        constexpr double kNullRenormThreshold = 1e-6;
-        if (std::abs(null_violation) > kNullRenormThreshold) {
-            Vec4 renormalized = TensorOps::NormalizeNull(new_velocity, g_check);
-
-            // Reject a numerically failed normalisation.
-            bool valid = true;
-            for (int i = 0; i < 4; i++) {
-                if (std::isnan(renormalized(i)) || std::isinf(renormalized(i))) {
-                    valid = false;
-                    break;
-                }
-            }
-
-            if (valid) {
-                ray.velocity = renormalized;
-            }
-        }
-    }
 
     return true;
 }

@@ -58,13 +58,10 @@ constexpr float kTraceMaxStep = 2.0f;
 constexpr float kTraceEscapeRadius = 200.0f;
 constexpr float kTraceCaptureFactor = 1.0f;
 
-// Thin-disk extent (units of M) and a cinematic radiance scale for the emitted
-// blackbody colour. The outer edge matches the CPU session's disk_outer = 20 M;
-// the inner edge is the ISCO. The emission scale is a display choice (the disk
-// is not a parity-gated quantity), sized so the disk reads under the default
-// ACES exposure without clipping the starfield.
+// Thin-disk extent in units of M. The outer edge matches the CPU session's
+// disk_outer = 20 M and the inner edge is the ISCO. Emission and transfer are
+// owned by the shared Page-Thorne/blackbody/invariant-transfer kernel path.
 constexpr float kDiskOuterFactor = 20.0f;
-constexpr float kDiskEmissionScale = 2.0f;
 
 // params buffer ABI (indices documented in trace.slang). Keep power-of-two
 // capacity so represented camera/disk/sampling semantics remain one stable
@@ -304,7 +301,7 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
     params[28] = static_cast<float>(isco * config.black_hole_mass);
     params[29] = static_cast<float>(kDiskOuterFactor * config.black_hole_mass);
     params[30] = config.disk_temperature_scale;
-    params[31] = kDiskEmissionScale;
+    params[31] = 0.0f;  // Reserved; kernel derives T^4 from the Page-Thorne profile.
 
     // [32..35] tile origin/size: written per tile.
     params[36] = starfield_enabled ? 1.0f : 0.0f;
@@ -345,7 +342,7 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
     params[64] = config.volumetric_tau_midplane;
     params[65] = static_cast<float>(config.volumetric_samples);
     params[66] = config.enable_turbulence ? 1.0f : 0.0f;
-    params[67] = config.enable_corona ? 1.0f : 0.0f;
+    params[67] = 0.0f;  // Reserved for a future represented spectral corona.
 }
 
 }  // namespace
@@ -354,18 +351,9 @@ Expected<void> ValidateVulkanRenderConfig(const SessionConfig& config) {
     if (const auto issue = SessionConfigIssue(config); issue.has_value()) {
         return Fail(ErrorDomain::kConfiguration, "validate Vulkan render configuration", *issue);
     }
-    if (!config.enable_disk &&
-        (config.enable_volumetric_disk || config.enable_turbulence || config.enable_corona)) {
+    if (!config.enable_disk && (config.enable_volumetric_disk || config.enable_turbulence)) {
         return Fail(ErrorDomain::kConfiguration, "validate Vulkan render configuration",
-                    "volumetric disk, turbulence, and corona require the disk");
-    }
-    if (config.enable_jets) {
-        return Fail(ErrorDomain::kConfiguration, "validate Vulkan render configuration",
-                    "relativistic jets are represented only by the CPU render path");
-    }
-    if (config.enable_motion_blur) {
-        return Fail(ErrorDomain::kConfiguration, "validate Vulkan render configuration",
-                    "disk motion blur is represented only by the CPU render path");
+                    "volumetric disk and turbulence require the disk");
     }
     if (config.enable_polarisation) {
         return Fail(ErrorDomain::kConfiguration, "validate Vulkan render configuration",
@@ -400,7 +388,7 @@ Expected<void> ValidateVulkanRenderConfig(const SessionConfig& config) {
             return Fail(ErrorDomain::kConfiguration, "validate Vulkan render configuration",
                         "invalid lens model");
     }
-    if ((config.enable_volumetric_disk || config.enable_turbulence || config.enable_corona) &&
+    if ((config.enable_volumetric_disk || config.enable_turbulence) &&
         config.volumetric_samples > kMaxVulkanVolumeSamples) {
         return Fail(ErrorDomain::kDevice, "validate Vulkan render configuration",
                     "Vulkan volumetric transfer supports at most " +

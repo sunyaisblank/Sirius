@@ -142,7 +142,6 @@ class ConservationLawTests : public ::testing::Test {
         ray.coordinate_time = 0.0f;
         ray.terminated = 0;
         ray.step_size = 0.01f;
-        ray.bounce_count = 0;
 
         // Convert Velocity: Spherical Basis (vr, vth, vph) -> Cartesian Basis (vx, vy, vz)
         // vx = vr sin(th)cos(ph) + r vth cos(th)cos(ph) - r vph sin(th)sin(ph)

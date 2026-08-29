@@ -402,6 +402,12 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
             "diskEnabled must be false when the selected metric has no represented "
             "Page-Thorne accretion-disk emission model");
     }
+    if (config.ray_bundles && metric_id.has_value() && *metric_id != core::MetricId::Minkowski &&
+        *metric_id != core::MetricId::Schwarzschild && *metric_id != core::MetricId::Kerr) {
+        errors.push_back(
+            "rayBundles require Minkowski, Schwarzschild, or Kerr: covariant curvature "
+            "transport is not represented for the selected metric");
+    }
     if (finite(config.metric.throat_radius, "metric.throat_radius") &&
         (config.metric.throat_radius <= 0.0 || config.metric.throat_radius > 1000.0)) {
         errors.push_back("metric.throat_radius must be greater than 0 and at most 1000");
@@ -525,8 +531,8 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
 
     // --- Volumetric and film validation ------------------------------------
     if (finite(config.volumetric.h_over_r, "volumetric.h_over_r") &&
-        (config.volumetric.h_over_r <= 0 || config.volumetric.h_over_r > 2)) {
-        errors.push_back("volumetric.h_over_r must be greater than 0 and at most 2");
+        (config.volumetric.h_over_r < 0.01f || config.volumetric.h_over_r > 0.5f)) {
+        errors.push_back("volumetric.h_over_r must be between 0.01 and 0.5");
     }
     if (finite(config.volumetric.h_power, "volumetric.h_power") &&
         (config.volumetric.h_power < -2 || config.volumetric.h_power > 4)) {
@@ -539,9 +545,13 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
     if (config.volumetric.samples < 1 || config.volumetric.samples > 4096) {
         errors.push_back("volumetric.samples must be between 1 and 4096");
     }
-    if ((config.volumetric.enable_turbulence || config.volumetric.enable_corona) &&
-        !config.volumetric.enabled) {
-        errors.push_back("volumetric.enabled must be true when turbulence or corona is enabled");
+    if (config.volumetric.enable_corona) {
+        errors.push_back(
+            "volumetric.enable_corona is not represented: frequency-dependent covariant "
+            "Compton transfer is required");
+    }
+    if (config.volumetric.enable_turbulence && !config.volumetric.enabled) {
+        errors.push_back("volumetric.enabled must be true when turbulence is enabled");
     }
     if (config.volumetric.enabled && !config.disk_enabled) {
         errors.push_back("diskEnabled must be true when volumetric disk rendering is enabled");
@@ -556,6 +566,11 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
     if (config.motion_blur.enabled && !config.disk_enabled) {
         errors.push_back("diskEnabled must be true when motion blur is enabled");
     }
+    if (config.motion_blur.enabled) {
+        errors.push_back(
+            "motionBlur is not represented for the stationary axisymmetric disk: a covariant "
+            "temporal emissivity model is required before shutter integration can be enabled");
+    }
 
     static const std::vector<std::string> valid_color_modes = {
         "TrueColor", "TemperatureMap", "RedshiftMap", "Narrowband", "Polarisation"};
@@ -564,6 +579,12 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
         errors.push_back(
             "colorMode must be one of: TrueColor, TemperatureMap, RedshiftMap, Narrowband, "
             "Polarisation");
+    }
+    if (config.color_mode == "Narrowband") {
+        errors.push_back(
+            "colorMode Narrowband is not represented: line emission requires ionisation, "
+            "abundance, density, and frequency-dependent transfer rather than a temperature "
+            "palette");
     }
     if (config.color_mode == "Polarisation") {
         if (!config.disk_enabled) {

@@ -1,10 +1,8 @@
 #pragma once
 
-// Kolmogorov-cascade density perturbations for accretion disks via fractional
-// Brownian motion over 3D Perlin gradient noise (power spectrum P(k) ~ k^-5/3).
-// Ported from PHTR001A.h.
-// Reference: Kolmogorov (1941); Balbus & Hawley (1991) ApJ 376, 214 (MRI);
-// McKinney et al. (2012) MNRAS 423, 3083.
+// Deterministic procedural density perturbations for accretion-disk
+// visualisation via fractional Brownian motion over 3D Perlin gradient noise.
+// This is not a Kolmogorov, MRI, or GRMHD solution. Ported from PHTR001A.h.
 
 #include <algorithm>
 #include <cmath>
@@ -12,35 +10,25 @@
 
 namespace sirius::core {
 
-// Turbulence configuration.
+// Procedural density-noise configuration.
 struct TurbulenceConfig {
-    float kolmogorov_exponent = -5.0f / 3.0f;  // Spectral exponent (-5/3 Kolmogorov).
-    float outer_scale_M = 5.0f;                // Outer scale [M] (energy injection).
-    float inner_scale_M = 0.1f;                // Inner dissipation scale [M].
-    float amplitude = 0.3f;                    // Density fluctuation amplitude in [0, 1].
-    std::uint32_t octaves = 6;                 // Noise octaves (fractal detail levels).
-    std::uint32_t seed = 12345;                // Random seed for reproducibility.
-    float lacunarity = 2.0f;                   // Frequency multiplier per octave.
-    float persistence = 0.5f;                  // Amplitude decay per octave.
+    float outer_scale_M = 5.0f;  // Largest noise scale [M].
+    float amplitude = 0.3f;      // Density fluctuation amplitude in [0, 1].
+    std::uint32_t octaves = 6;   // Noise octaves (fractal detail levels).
+    std::uint32_t seed = 12345;  // Random seed for reproducibility.
+    float lacunarity = 2.0f;     // Frequency multiplier per octave.
+    float persistence = 0.5f;    // Amplitude decay per octave.
     bool enabled = true;
 
-    // Physical validity ranges (enforced by clamping in Validate, not asserted):
-    //   kolmogorov_exponent in [-2.0, -1.5], outer_scale_M > inner_scale_M > 0,
-    //   amplitude in [0, 1], octaves in [1, 8].
+    // Numerical validity ranges (enforced by clamping in Validate):
+    // outer_scale_M > 0, amplitude in [0, 1], octaves in [1, 8].
 
     // Clamp parameters into their valid ranges.
     void Validate() {
-        if (!std::isfinite(kolmogorov_exponent)) kolmogorov_exponent = -5.0f / 3.0f;
         if (!std::isfinite(outer_scale_M)) outer_scale_M = 5.0f;
-        if (!std::isfinite(inner_scale_M)) inner_scale_M = 0.1f;
         if (!std::isfinite(amplitude)) amplitude = 0.3f;
         if (!std::isfinite(lacunarity)) lacunarity = 2.0f;
         if (!std::isfinite(persistence)) persistence = 0.5f;
-        kolmogorov_exponent = std::clamp(kolmogorov_exponent, -2.0f, -1.5f);
-        if (inner_scale_M >= outer_scale_M) {
-            inner_scale_M = outer_scale_M * 0.01f;
-        }
-        inner_scale_M = std::max(inner_scale_M, 0.001f);
         outer_scale_M = std::max(outer_scale_M, 0.01f);
         amplitude = std::clamp(amplitude, 0.0f, 1.0f);
         octaves = std::clamp(octaves, 1u, 8u);

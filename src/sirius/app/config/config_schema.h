@@ -61,9 +61,9 @@ struct PostProcessConfig {
 
 struct VolumetricConfig {
     bool enabled = false;
-    float h_over_r = 0.1f;
-    float h_power = 0.25f;
-    float tau_midplane = 10.0f;
+    float h_over_r = 0.1f;       // Reference H/r at the disk inner edge.
+    float h_power = 0.25f;       // Radial exponent before the [0.01,0.5] saturation.
+    float tau_midplane = 10.0f;  // Full vertical optical depth at the inner edge.
     int samples = 64;
     bool enable_turbulence = false;
     bool enable_corona = false;

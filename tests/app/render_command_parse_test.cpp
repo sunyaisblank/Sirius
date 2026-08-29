@@ -237,7 +237,6 @@ TEST(ViewCommandOperational, StrictParsingAndSessionProjection) {
     viewer_config.metric_id = core::MetricId::Kerr;
     viewer_config.enable_disk = false;
     viewer_config.enable_volumetric = true;
-    viewer_config.enable_jets = true;
     InteractiveViewer viewer;
     ASSERT_TRUE(viewer.Initialise(viewer_config));
     viewer.SetCameraPosition(40.0, 1.0, 0.25);
@@ -247,13 +246,20 @@ TEST(ViewCommandOperational, StrictParsingAndSessionProjection) {
     EXPECT_DOUBLE_EQ(projected.observer_azimuth, 0.25);
     EXPECT_FALSE(projected.enable_disk);
     EXPECT_FALSE(projected.enable_volumetric_disk);
-    EXPECT_TRUE(projected.enable_jets);
+    EXPECT_FALSE(projected.enable_jets);
     EXPECT_FALSE(projected.write_output);
 
     ViewerConfig invalid = viewer_config;
     invalid.refinement_levels = 0;
     InteractiveViewer invalid_viewer;
     EXPECT_FALSE(invalid_viewer.Initialise(invalid));
+}
+
+TEST(ViewCommandOperational, RelativisticJetsDeclineBeforeViewerInitialisation) {
+    ViewCommand view;
+    GlobalOptions globals;
+    SiriusConfig config = SiriusConfig::Defaults();
+    EXPECT_EQ(view.Execute({"--jets"}, globals, config), 1);
 }
 
 TEST(ViewCommandOperational, HeadlessRefinementProducesASynchronisedFrame) {

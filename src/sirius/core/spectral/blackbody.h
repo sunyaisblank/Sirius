@@ -2,7 +2,7 @@
 
 // Physically-based spectral rendering primitives: Planck blackbody radiance,
 // Wien and Stefan-Boltzmann laws, CIE 1931 colour matching (Gaussian fits),
-// wavelength/XYZ/sRGB conversion, redshift, and limb darkening.
+// wavelength/XYZ/sRGB conversion and redshift.
 // Ported from PHSP001A.h.
 // Reference: Planck (1901); CIE 1931 observer; sRGB IEC 61966-2-1:1999.
 
@@ -10,6 +10,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 
 namespace sirius::core::spectral {
 
@@ -129,9 +130,11 @@ inline Rgb LinearToSrgb(const Rgb& linear) {
                SrgbGamma(std::clamp(linear.b, 0.0f, 1.0f)));
 }
 
-// Blackbody temperature T (K) to normalised RGB (brightest channel = 1).
+// Blackbody temperature T (K) to normalised, display-gamut linear RGB
+// (brightest channel = 1). Negative out-of-gamut primary values are clipped;
+// they are not negative radiance.
 inline Rgb BlackbodyToRgb(double T) {
-    if (T <= 0) return Rgb(0, 0, 0);
+    if (!std::isfinite(T) || T <= 0) return Rgb(0, 0, 0);
 
     // Integrate over the visible spectrum.
     Xyz xyz;
@@ -151,38 +154,26 @@ inline Rgb BlackbodyToRgb(double T) {
 
     // Convert to RGB.
     Rgb rgb = XyzToLinearRgb(xyz);
+    rgb.r = std::max(rgb.r, 0.0f);
+    rgb.g = std::max(rgb.g, 0.0f);
+    rgb.b = std::max(rgb.b, 0.0f);
 
     // Normalise to max = 1.
     float maxVal = std::max({rgb.r, rgb.g, rgb.b, 0.001f});
     return Rgb(rgb.r / maxVal, rgb.g / maxVal, rgb.b / maxVal);
 }
 
-// Approximate hue shift for a redshift z (z > 0 redshift, z < 0 blueshift).
-// A simplified colour model; the full spectral shift is more involved.
-inline Rgb ApplyRedshift(const Rgb& color, float z) {
-    if (std::abs(z) < 0.001f) return color;
-
-    float factor = 1.0f / (1.0f + z);
-
-    if (z > 0) {
-        // Redshift: move towards red.
-        return Rgb(color.r, color.g * factor, color.b * factor * factor);
-    } else {
-        // Blueshift: move towards blue.
-        float inv = 1.0f + z;  // < 1 for blueshift.
-        return Rgb(color.r * inv * inv, color.g * inv, color.b);
-    }
-}
-
 // Relativistic Doppler factor nu_obs/nu_emit for radial velocity (positive =
 // receding); c defaults to geometric units.
 inline double DopplerFactor(double velocity, double c = 1.0) {
-    if (!std::isfinite(velocity) || !std::isfinite(c) || c <= 0.0) return 1.0;
+    if (!std::isfinite(velocity) || !std::isfinite(c) || c <= 0.0) {
+        return std::numeric_limits<double>::quiet_NaN();
+    }
     const double numerator = c - velocity;
     const double denominator = c + velocity;
     if (!std::isfinite(numerator) || !std::isfinite(denominator) || numerator <= 0.0 ||
         denominator <= 0.0) {
-        return 1.0;  // Invalid or luminal velocity.
+        return std::numeric_limits<double>::quiet_NaN();
     }
 
     return std::sqrt(numerator / denominator);
@@ -191,50 +182,31 @@ inline double DopplerFactor(double velocity, double c = 1.0) {
 // Combined gravitational and Doppler redshift z, given g_tt at emission and
 // observation and the radial velocity at emission.
 inline double TotalRedshift(double g_tt_emit, double g_tt_obs, double velocity) {
-    // Gravitational redshift: sqrt(-g_tt_obs / -g_tt_emit).
-    double grav_factor = std::sqrt(std::abs(g_tt_obs / g_tt_emit));
+    // For static observers in a stationary metric, the measured frequency is
+    // proportional to 1/sqrt(-g_tt).  Therefore
+    //
+    //   g_grav = nu_obs / nu_emit = sqrt(g_tt_emit / g_tt_obs),
+    //
+    // with both metric components negative.  The previous quotient was the
+    // reciprocal and turned a pure gravitational redshift into a blueshift.
+    // This utility represents only the static-observer domain; ergoregions and
+    // moving observers require the invariant k.u transfer authority used by the
+    // live renderer.
+    if (!std::isfinite(g_tt_emit) || !std::isfinite(g_tt_obs) || g_tt_emit >= 0.0 ||
+        g_tt_obs >= 0.0) {
+        return std::numeric_limits<double>::quiet_NaN();
+    }
+    double grav_factor = std::sqrt(g_tt_emit / g_tt_obs);
 
     double dopp_factor = DopplerFactor(velocity);
 
     double total_factor = grav_factor * dopp_factor;
+    if (!std::isfinite(total_factor) || total_factor <= 0.0) {
+        return std::numeric_limits<double>::quiet_NaN();
+    }
 
     // z = (lambda_obs - lambda_emit) / lambda_emit = 1/factor - 1.
     return (1.0 / total_factor) - 1.0;
-}
-
-// Wavelength-dependent limb darkening coefficient u(lambda), lambda in nm.
-// Law: I(theta)/I(0) = (1 + u cos(theta)) / (1 + u), with u decreasing towards
-// red. Reference: Wade & Rucinski (1985), Claret (2000).
-inline double LimbDarkeningCoeff(double lambda_nm) {
-    // Linear interpolation between empirical values,
-    // u(lambda) ~ 1.2 - 0.00114 * lambda(nm) over 400-800 nm.
-    constexpr double kUBlue = 0.9;  // u at 400 nm.
-    constexpr double kURed = 0.4;   // u at 700 nm.
-    constexpr double kLambdaBlue = 400.0;
-    constexpr double kLambdaRed = 700.0;
-
-    if (lambda_nm <= kLambdaBlue) return kUBlue;
-    if (lambda_nm >= kLambdaRed) return kURed;
-
-    double t = (lambda_nm - kLambdaBlue) / (kLambdaRed - kLambdaBlue);
-    return kUBlue + t * (kURed - kUBlue);
-}
-
-// Apply wavelength-dependent limb darkening to a colour; cos_theta = 0 at the
-// edge, 1 face-on. Effective channel wavelengths R=650, G=550, B=450 nm.
-inline Rgb ApplyLimbDarkening(const Rgb& color, double cos_theta) {
-    if (cos_theta <= 0) return Rgb(0, 0, 0);
-
-    double u_r = LimbDarkeningCoeff(650.0);
-    double u_g = LimbDarkeningCoeff(550.0);
-    double u_b = LimbDarkeningCoeff(450.0);
-
-    // Limb darkening law I(theta)/I(0) = (1 + u cos(theta)) / (1 + u).
-    float limb_r = static_cast<float>((1.0 + u_r * cos_theta) / (1.0 + u_r));
-    float limb_g = static_cast<float>((1.0 + u_g * cos_theta) / (1.0 + u_g));
-    float limb_b = static_cast<float>((1.0 + u_b * cos_theta) / (1.0 + u_b));
-
-    return Rgb(color.r * limb_r, color.g * limb_g, color.b * limb_b);
 }
 
 }  // namespace sirius::core::spectral

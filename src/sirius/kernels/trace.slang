@@ -5,15 +5,16 @@
 // by their asymptotic direction against the starfield; an optional thin disk
 // adds Novikov-Thorne blackbody emission with g^4 relativistic beaming where the
 // geodesic crosses the equatorial plane. Volumetric mode instead integrates
-// emission/absorption through every geodesic segment, with the same deterministic
-// turbulence and extended inverse-Compton corona represented by the CPU tracer.
+// emission/absorption through every geodesic segment, with the same optional
+// procedural density modulation represented by the CPU tracer.
 // The kernel returns LINEAR radiance per pixel; tonemapping and grading are the
 // host display pipeline's job.
 //
 // This is render orchestration, not a physics authority: the metric,
 // Christoffel, integrator, blackbody, and disk-redshift routines it calls are
-// the ported authorities in the gr_* modules. Termination radii and the horizon
-// buffer are carried from RDOP002A.cu / core/constants.h.
+// the ported authorities in the gr_* modules. Termination radii and adaptive
+// tolerances arrive through the host/session ABI or are explicit per-precision
+// device policy pinned by the live kernel-parity probes.
 //
 // Metric dispatch (params[2]) matches the registry gpu_supported set the render
 // session wires: Kerr-Schild family (Minkowski/Schwarzschild/Kerr), the
@@ -53,39 +54,132 @@ static const uint kDispatchMorrisThorne = 3;
 
 float3 P3(uint base) { return float3(params[base], params[base + 1], params[base + 2]); }
 
-// Same local-frame light-cone boost as core/camera.h::AberrateRay. beta and n
-// use the camera-local (radial, theta, phi) component order.
-float3 AberrateLocal(float3 n, float3 beta) {
-    float b2 = dot(beta, beta);
-    if (b2 <= 0.0f) return n;
-    float b = sqrt(b2);
-    float3 axis = beta / b;
-    float nPar = dot(n, axis);
-    float3 perpendicular = n - nPar * axis;
-    float gamma = 1.0f / sqrt(1.0f - b2);
-    float denom = 1.0f - b * nPar;
-    float nParPrime = (nPar - b) / denom;
-    float perpendicularScale = 1.0f / (gamma * denom);
-    return normalize(nParPrime * axis + perpendicular * perpendicularScale);
+struct CameraObserverFrame {
+    Vec4Cart time;
+    Vec4Cart forward;
+    Vec4Cart up;
+    Vec4Cart right;
+};
+
+Real MetricDotCart(Real metric[4][4], Vec4Cart lhs, Vec4Cart rhs) {
+    Real a[4] = { lhs.t, lhs.x, lhs.y, lhs.z };
+    Real b[4] = { rhs.t, rhs.x, rhs.y, rhs.z };
+    Real result = Real(0.0f);
+    [unroll] for (int mu = 0; mu < 4; ++mu) {
+        [unroll] for (int nu = 0; nu < 4; ++nu) {
+            result += metric[mu][nu] * a[mu] * b[nu];
+        }
+    }
+    return result;
 }
 
-// Solve the null condition g_uv u^u u^v = 0 for u^t given the spatial
-// direction, choosing the future-directed root (RDOP002A.cu
-// cartesianDirToFourVelocity, Cartesian form). Real: on the fp64 rung the
-// launch state is as precise as the trajectory it seeds.
-Real SolveNullTimeComponent(Real g[4][4], float3 dir) {
-    Real A = g[0][0];
-    Real B = 2.0f * (g[0][1] * dir.x + g[0][2] * dir.y + g[0][3] * dir.z);
-    Real C = g[1][1] * dir.x * dir.x + g[2][2] * dir.y * dir.y + g[3][3] * dir.z * dir.z
-            + 2.0f * (g[1][2] * dir.x * dir.y + g[1][3] * dir.x * dir.z + g[2][3] * dir.y * dir.z);
-    Real discriminant = B * B - 4.0f * A * C;
-    if (discriminant >= 0.0f) {
-        Real sqrtD = sqrt(discriminant);
-        Real root1 = (-B + sqrtD) / (2.0f * A);
-        Real root2 = (-B - sqrtD) / (2.0f * A);
-        return (root1 > 0.0f) ? root1 : ((root2 > 0.0f) ? root2 : Real(1.0f));
+Vec4Cart NormaliseSpacelike(Real metric[4][4], Vec4Cart vector) {
+    return ScaleVec4Cart(vector, Real(1.0f) / sqrt(MetricDotCart(metric, vector, vector)));
+}
+
+// Metric-orthonormal screen frame followed by a local Lorentz boost. This is
+// the shader counterpart of core/observer_frame.h. cameraBeta is expressed in
+// screen-forward/up/right axes and is validated by the typed host boundary.
+CameraObserverFrame BuildCameraObserverFrame(Real metric[4][4], Real inverseMetric[4][4],
+                                              float3 camDir,
+                                              float3 camUp, float3 camRight,
+                                              float3 cameraBeta) {
+    CameraObserverFrame reference;
+    Real lapse = Real(1.0f) / sqrt(-inverseMetric[0][0]);
+    reference.time = MakeVec4Cart(-lapse * inverseMetric[0][0],
+                                  -lapse * inverseMetric[1][0],
+                                  -lapse * inverseMetric[2][0],
+                                  -lapse * inverseMetric[3][0]);
+    reference.forward =
+        MakeVec4Cart(Real(0.0f), Real(camDir.x), Real(camDir.y), Real(camDir.z));
+    reference.forward = AddVec4Cart(
+        reference.forward,
+        ScaleVec4Cart(reference.time,
+                      MetricDotCart(metric, reference.forward, reference.time)));
+    reference.forward = NormaliseSpacelike(metric, reference.forward);
+
+    // The host's camUp vector is the +theta (screen-down) axis.
+    reference.up =
+        MakeVec4Cart(Real(0.0f), Real(-camUp.x), Real(-camUp.y), Real(-camUp.z));
+    reference.up = AddVec4Cart(
+        reference.up,
+        ScaleVec4Cart(reference.time, MetricDotCart(metric, reference.up, reference.time)));
+    reference.up = AddVec4Cart(
+        reference.up,
+        ScaleVec4Cart(reference.forward,
+                      -MetricDotCart(metric, reference.up, reference.forward)));
+    reference.up = NormaliseSpacelike(metric, reference.up);
+
+    reference.right =
+        MakeVec4Cart(Real(0.0f), Real(camRight.x), Real(camRight.y), Real(camRight.z));
+    reference.right = AddVec4Cart(
+        reference.right,
+        ScaleVec4Cart(reference.time, MetricDotCart(metric, reference.right, reference.time)));
+    reference.right = AddVec4Cart(
+        reference.right,
+        ScaleVec4Cart(reference.forward,
+                      -MetricDotCart(metric, reference.right, reference.forward)));
+    reference.right = AddVec4Cart(
+        reference.right,
+        ScaleVec4Cart(reference.up, -MetricDotCart(metric, reference.right, reference.up)));
+    reference.right = NormaliseSpacelike(metric, reference.right);
+
+    Real betaSquared = Real(dot(cameraBeta, cameraBeta));
+    if (betaSquared == Real(0.0f)) return reference;
+    Real gamma = Real(1.0f) / sqrt(Real(1.0f) - betaSquared);
+    Vec4Cart betaVector = AddVec4Cart(
+        AddVec4Cart(ScaleVec4Cart(reference.forward, Real(cameraBeta.x)),
+                    ScaleVec4Cart(reference.up, Real(cameraBeta.y))),
+        ScaleVec4Cart(reference.right, Real(cameraBeta.z)));
+    CameraObserverFrame boosted;
+    boosted.time = ScaleVec4Cart(AddVec4Cart(reference.time, betaVector), gamma);
+    Real coefficient = (gamma - Real(1.0f)) / betaSquared;
+    boosted.forward = AddVec4Cart(
+        AddVec4Cart(reference.forward,
+                    ScaleVec4Cart(betaVector, coefficient * Real(cameraBeta.x))),
+        ScaleVec4Cart(reference.time, gamma * Real(cameraBeta.x)));
+    boosted.up = AddVec4Cart(
+        AddVec4Cart(reference.up,
+                    ScaleVec4Cart(betaVector, coefficient * Real(cameraBeta.y))),
+        ScaleVec4Cart(reference.time, gamma * Real(cameraBeta.y)));
+    boosted.right = AddVec4Cart(
+        AddVec4Cart(reference.right,
+                    ScaleVec4Cart(betaVector, coefficient * Real(cameraBeta.z))),
+        ScaleVec4Cart(reference.time, gamma * Real(cameraBeta.z)));
+    return boosted;
+}
+
+Vec4Cart PastDirectedCameraRay(CameraObserverFrame frame, float3 screenDirection) {
+    float3 direction = normalize(screenDirection);
+    return AddVec4Cart(
+        AddVec4Cart(
+            AddVec4Cart(ScaleVec4Cart(frame.time, Real(-1.0f)),
+                        ScaleVec4Cart(frame.forward, Real(direction.x))),
+            ScaleVec4Cart(frame.up, Real(direction.y))),
+        ScaleVec4Cart(frame.right, Real(direction.z)));
+}
+
+void SachsScreenBasis(CameraObserverFrame frame, float3 restDirection,
+                      out Vec4Cart first, out Vec4Cart second) {
+    float3 direction = normalize(restDirection);
+    float3 reference;
+    if (abs(direction.x) <= abs(direction.y) && abs(direction.x) <= abs(direction.z)) {
+        reference = float3(1.0f, 0.0f, 0.0f);
+    } else if (abs(direction.y) <= abs(direction.z)) {
+        reference = float3(0.0f, 1.0f, 0.0f);
+    } else {
+        reference = float3(0.0f, 0.0f, 1.0f);
     }
-    return sqrt(max(-C / A, Real(0.0001f)));
+    float3 firstComponents = normalize(reference - dot(reference, direction) * direction);
+    float3 secondComponents = cross(direction, firstComponents);
+    first = AddVec4Cart(
+        AddVec4Cart(ScaleVec4Cart(frame.forward, Real(firstComponents.x)),
+                    ScaleVec4Cart(frame.up, Real(firstComponents.y))),
+        ScaleVec4Cart(frame.right, Real(firstComponents.z)));
+    second = AddVec4Cart(
+        AddVec4Cart(ScaleVec4Cart(frame.forward, Real(secondComponents.x)),
+                    ScaleVec4Cart(frame.up, Real(secondComponents.y))),
+        ScaleVec4Cart(frame.right, Real(secondComponents.z)));
 }
 
 // Smooth escape-direction background: a bounded gradient so the escaped field is
@@ -152,15 +246,7 @@ float3 PointStarColor(uint starIndex) {
     uint base = starIndex * 8u;
     float temperature = pointStars[base + 6u];
     if (temperature <= 0.0f) temperature = 5778.0f;
-    float normalized = temperature / 6500.0f;
-    float3 color;
-    if (temperature <= 6500.0f) {
-        color = float3(1.0f, pow(normalized, 0.4f), pow(normalized, 0.8f));
-    } else {
-        color = float3(pow(1.0f / normalized, 0.3f),
-                       pow(1.0f / normalized, 0.15f), 1.0f);
-    }
-    return color / max(color.x, max(color.y, color.z));
+    return BlackbodyColor(temperature);
 }
 
 void AccumulatePointStarCell(int thetaBin, int phiBin, float3 dir,
@@ -267,7 +353,7 @@ float3 SamplePointStarfield(float3 direction, float sigmaMajor, float sigmaMinor
     return color;
 }
 
-// Deterministic turbulence authority mirrored from core/disk/turbulence.h. The
+// Deterministic procedural-noise authority mirrored from core/disk/turbulence.h. The
 // config surface currently exposes the feature toggle only, so these are the
 // exact shared defaults rather than a second operator-visible parameter set.
 uint TurbulenceHash(uint x, uint y, uint z, uint seed) {
@@ -355,51 +441,97 @@ float VolumeDiskTemperature(float cylindricalR, float z, float innerRadius,
     float midplane = temperatureModel == 1
         ? innerTemperature * pow(innerRadius / cylindricalR, 0.75f)
         : FullPageThorneTemperature(innerTemperature, cylindricalR, rIsco, M, aStar);
-    if (midplane <= 0.0f) return 0.0f;
-    float H = VolumeScaleHeight(cylindricalR, innerRadius, hOverR, hPower);
-    float zOverHSquared = min((z / H) * (z / H), 9.0f);
-    static const float kAtmosphereFourthPower = 0.4096f;  // 0.8^4.
-    float fourthPower =
-        max(1.0f - zOverHSquared * (1.0f - kAtmosphereFourthPower) / 9.0f,
-            kAtmosphereFourthPower);
-    return midplane * pow(fourthPower, 0.25f);
+    // Vertically isothermal closure. z, hOverR, and hPower define membership
+    // and opacity only; no synthetic atmosphere-temperature law is implied.
+    return max(midplane, 0.0f);
+}
+
+// Cubic Hermite sample of one accepted central-ray segment. The position and
+// affine tangent match both endpoints, unlike a chord interpolation through a
+// curved geodesic.
+Vec4Cart AcceptedSegmentPosition(Vec4Cart start, Vec4Cart startVelocity,
+                                 Vec4Cart finish, Vec4Cart finishVelocity,
+                                 Real affineLength, Real fraction) {
+    Real s2 = fraction * fraction;
+    Real s3 = s2 * fraction;
+    Real h00 = Real(2.0f) * s3 - Real(3.0f) * s2 + Real(1.0f);
+    Real h10 = s3 - Real(2.0f) * s2 + fraction;
+    Real h01 = Real(-2.0f) * s3 + Real(3.0f) * s2;
+    Real h11 = s3 - s2;
+    return AddVec4Cart(
+        AddVec4Cart(ScaleVec4Cart(start, h00),
+                    ScaleVec4Cart(startVelocity, affineLength * h10)),
+        AddVec4Cart(ScaleVec4Cart(finish, h01),
+                    ScaleVec4Cart(finishVelocity, affineLength * h11)));
+}
+
+Vec4Cart AcceptedSegmentTangent(Vec4Cart start, Vec4Cart startVelocity,
+                                Vec4Cart finish, Vec4Cart finishVelocity,
+                                Real affineLength, Real fraction) {
+    Real s2 = fraction * fraction;
+    Real dh00 = Real(6.0f) * s2 - Real(6.0f) * fraction;
+    Real dh10 = Real(3.0f) * s2 - Real(4.0f) * fraction + Real(1.0f);
+    Real dh01 = Real(-6.0f) * s2 + Real(6.0f) * fraction;
+    Real dh11 = Real(3.0f) * s2 - Real(2.0f) * fraction;
+    return AddVec4Cart(
+        AddVec4Cart(ScaleVec4Cart(start, dh00 / affineLength),
+                    ScaleVec4Cart(startVelocity, dh10)),
+        AddVec4Cart(ScaleVec4Cart(finish, dh01 / affineLength),
+                    ScaleVec4Cart(finishVelocity, dh11)));
+}
+
+Real EvaluateCubic(Real coefficientA, Real coefficientB, Real coefficientC,
+                   Real coefficientD, Real fraction) {
+    return ((coefficientA * fraction + coefficientB) * fraction + coefficientC) *
+               fraction +
+           coefficientD;
 }
 
 // Integrate one geodesic segment using the same midpoint transfer recurrence as
-// GeodesicTracer::AccumulateVolumetricEmission. The corona config surface is a
-// boolean today, so the Extended geometry and physical constants are the exact
-// CPU defaults.
-void AccumulateVolumeSegment(float3 start, float3 finish, int sampleCount,
+// GeodesicTracer::AccumulateVolumetricEmission.
+void AccumulateVolumeSegment(Vec4Cart start, Vec4Cart finish,
+                             Vec4Cart startVelocity, Vec4Cart finishVelocity,
+                             Real affineLength, int sampleCount,
                              bool volumeEnabled, bool turbulenceEnabled,
-                             bool coronaEnabled, bool dopplerBeaming, float innerRadius,
+                             bool dopplerBeaming, float innerRadius,
                              float outerRadius, float innerTemperature,
                              int temperatureModel, float rIsco, float M,
                              float a, float aStar, float hOverR, float hPower,
-                             float tauMidplane, inout float opticalDepth,
+                             float tauMidplane, float observerFrequency, inout float opticalDepth,
                              inout float3 emission) {
-    float3 delta = finish - start;
-    float pathLength = length(delta);
-    if (pathLength < 1.0e-10f || opticalDepth >= 10.0f) return;
-    float ds = pathLength / float(sampleCount);
-    float3 direction = delta / pathLength;
-    float referenceH = VolumeScaleHeight(innerRadius, innerRadius, hOverR, hPower);
-
+    if (affineLength <= 0.0f || opticalDepth >= 10.0f) return;
+    float deltaLambda = float(affineLength) / float(sampleCount);
     for (int sample = 0; sample < sampleCount; ++sample) {
-        float3 point = start + (float(sample) + 0.5f) * ds * direction;
-        float sphericalR = length(point);
+        Real fraction = Real((float(sample) + 0.5f) / float(sampleCount));
+        Vec4Cart position = AcceptedSegmentPosition(
+            start, startVelocity, finish, finishVelocity, affineLength, fraction);
+        Vec4Cart photonVelocity = AcceptedSegmentTangent(
+            start, startVelocity, finish, finishVelocity, affineLength, fraction);
+        float3 point = float3(float(position.x), float(position.y), float(position.z));
         float diskR =
             float(ComputeKerrRadiusCart(point.x, point.y, point.z, Real(a)));
-        float diskOpacity = 0.0f;
-        float diskSource = 0.0f;
+
+        Real localMetric[4][4];
+        Real localInverse[4][4];
+        GetKerrSchildFamilyMetric(position, M, a, 0.0f, 0.0f, localMetric, localInverse);
+        Real lapse = Real(1.0f) / sqrt(-localInverse[0][0]);
+        Vec4Cart eulerian = MakeVec4Cart(-lapse * localInverse[0][0],
+                                         -lapse * localInverse[1][0],
+                                         -lapse * localInverse[2][0],
+                                         -lapse * localInverse[3][0]);
+        float eulerianFrequency = float(MetricDotCart(localMetric, photonVelocity, eulerian));
+
+        float diskDeltaTau = 0.0f;
+        float3 diskSource = float3(0.0f);
 
         if (volumeEnabled &&
             IsInsideVolumeDisk(diskR, point.z, innerRadius, outerRadius,
                                hOverR, hPower)) {
             float H = VolumeScaleHeight(diskR, innerRadius, hOverR, hPower);
             float zOverH = point.z / H;
-            diskOpacity = tauMidplane / (sqrt(TWO_PI) * H) *
+            float diskOpacity = tauMidplane / (sqrt(TWO_PI) * H) *
                           pow(diskR / innerRadius, -1.5f) *
-                          (referenceH / H) * exp(-0.5f * zOverH * zOverH);
+                          exp(-0.5f * zOverH * zOverH);
             if (turbulenceEnabled) {
                 diskOpacity *= TurbulenceDensityFactor(point);
             }
@@ -408,37 +540,29 @@ void AccumulateVolumeSegment(float3 start, float3 finish, int sampleCount,
                                       innerTemperature, temperatureModel, rIsco,
                                       M, aStar, hOverR, hPower);
             if (diskOpacity > 0.0f && temperature > 0.0f) {
+                float sqrtM = sqrt(M);
+                float omega = sqrtM / (pow(diskR, 1.5f) + a * sqrtM);
+                Vec4Cart emitter = MakeVec4Cart(Real(1.0f), Real(-omega * point.y),
+                                                Real(omega * point.x), Real(0.0f));
+                Real emitterNorm = MetricDotCart(localMetric, emitter, emitter);
+                emitter = ScaleVec4Cart(emitter, Real(1.0f) / sqrt(-emitterNorm));
+                float emittedFrequency =
+                    float(MetricDotCart(localMetric, photonVelocity, emitter));
+                diskDeltaTau = diskOpacity * emittedFrequency * deltaLambda;
                 float emittedSource = pow(temperature / innerTemperature, 4.0f);
-                float phi = atan2(point.y, point.x);
-                float gFactor = dopplerBeaming
-                    ? ComputeDiskGFactorCart(diskR, phi, direction, M, a)
-                    : ComputeDiskGravitationalFactorCart(diskR, M, a);
-                diskSource = ObservedDiskBolometricSource(emittedSource, gFactor);
+                float sourceFrequency = dopplerBeaming ? emittedFrequency : eulerianFrequency;
+                float gFactor = observerFrequency / sourceFrequency;
+                float observedSource = ObservedDiskBolometricSource(emittedSource, gFactor);
+                diskSource = BlackbodyColor(temperature * gFactor) * observedSource;
             }
         }
 
-        float coronaOpacity = 0.0f;
-        float coronaSource = 0.0f;
-        if (coronaEnabled && sphericalR >= innerRadius && sphericalR <= outerRadius) {
-            float coronaH = 5.0f * sqrt(sphericalR / innerRadius);
-            if (abs(point.z) < coronaH) {
-                coronaOpacity = 0.5f / 5.0f;
-                float seed = pow(innerRadius / sphericalR, 3.0f) *
-                             exp(-0.5f * point.z * point.z / (coronaH * coronaH));
-                // Default y=4*(100/511)*max(0.5,0.5^2), and y<1 => boost=1+y.
-                coronaSource = seed * (1.0f + 4.0f * (100.0f / 511.0f) * 0.5f);
-            }
-        }
-
-        float totalOpacity = diskOpacity + coronaOpacity;
-        if (totalOpacity <= 0.0f) continue;
-        float3 source = float3(
-            diskOpacity * diskSource + coronaOpacity * coronaSource * 0.65f,
-            diskOpacity * diskSource + coronaOpacity * coronaSource * 0.80f,
-            diskOpacity * diskSource + coronaOpacity * coronaSource) / totalOpacity;
-        float deltaTau = min(totalOpacity * ds, 10.0f - opticalDepth);
+        float uncappedDeltaTau = diskDeltaTau;
+        if (uncappedDeltaTau <= 0.0f) continue;
+        float deltaTau = min(uncappedDeltaTau, 10.0f - opticalDepth);
+        float3 source = diskSource;
         float transmission = exp(-deltaTau);
-        emission = emission * transmission + source * (1.0f - transmission);
+        emission += exp(-opticalDepth) * source * (1.0f - transmission);
         opticalDepth += deltaTau;
         if (opticalDepth >= 10.0f) break;
     }
@@ -487,7 +611,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     float innerRadius = params[28];
     float outerRadius = params[29];
     float innerTemperature = params[30];
-    float emissionScale = params[31];
+    // params[31] is reserved; the physical emission scale is (T/T_inner)^4.
 
     bool starfieldEnabled = params[36] > 0.5f;
     int starfieldWidth = int(params[37]);
@@ -522,7 +646,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     float volumeTauMidplane = params[64];
     int volumeSamples = int(params[65]);
     bool turbulenceEnabled = params[66] > 0.5f;
-    bool coronaEnabled = params[67] > 0.5f;
+    // params[67] is reserved for a future represented spectral corona.
 
     // Ray bundles (P2): propagate two geodesic-deviation vectors through the render
     // loop and report the beam's transverse ellipse. Default off (params[43]==0)
@@ -553,9 +677,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     } else {
         localDir = normalize(float3(-1.0f, -imageY * tanHalfFov, imageX * tanHalfFov));
     }
-    localDir = AberrateLocal(localDir, cameraBeta);
-    float3 rayDir =
-        normalize(camDir * (-localDir.x) + camUp * localDir.y + camRight * localDir.z);
+    float3 screenDirection = float3(-localDir.x, -localDir.y, localDir.z);
 
     bool isWarp = (metricId == kDispatchWarpDrive);
     bool isWormhole = (metricId == kDispatchMorrisThorne);
@@ -572,8 +694,6 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     } else {
         GetKerrSchildFamilyMetric(pos0, M, a, Q, Lambda, g, g_inv);
     }
-    Real ut = SolveNullTimeComponent(g, rayDir);
-
     // Capture radius: the buffered Kerr-Schild outer horizon r_+ = M +
     // sqrt(M^2 - a^2 - Q^2) for the black-hole family; the throat radius for
     // the one-sheet wormhole (its far mouth is unmodelled, so rays reaching
@@ -586,7 +706,10 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
 
     GeodesicStateCart state;
     state.x = pos0;
-    state.u = MakeVec4Cart(ut, rayDir.x, rayDir.y, rayDir.z);
+    CameraObserverFrame cameraFrame =
+        BuildCameraObserverFrame(g, g_inv, camDir, camUp, camRight, cameraBeta);
+    state.u = PastDirectedCameraRay(cameraFrame, screenDirection);
+    float observerFrequency = 1.0f;
 
     float3 color = float3(0.0f, 0.0f, 0.0f);
     float transmittance = 1.0f;
@@ -597,24 +720,27 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     // Two deviation vectors span the ray bundle (P2). A point-source/pupil bundle
     // is used when the point-star field consumes the ellipse; the diagnostic beam
     // path otherwise retains the parallel-bundle initial condition.
-    float3 seed = (abs(rayDir.z) < 0.9f) ? float3(0.0f, 0.0f, 1.0f) : float3(1.0f, 0.0f, 0.0f);
-    float3 xiPerpA = normalize(seed - dot(seed, rayDir) * rayDir);
-    float3 xiPerpB = cross(rayDir, xiPerpA);
+    Vec4Cart launchScreenA;
+    Vec4Cart launchScreenB;
+    SachsScreenBasis(cameraFrame, screenDirection, launchScreenA, launchScreenB);
     const float kBeamSeed = 1.0e-3f;
     bool pupilBundle = pointStarfieldEnabled;
     Real4 xiA = pupilBundle
         ? Real4(0.0f)
-        : Real4(0.0f, xiPerpA.x, xiPerpA.y, xiPerpA.z) * Real(kBeamSeed);
+        : Real4(launchScreenA.t, launchScreenA.x, launchScreenA.y, launchScreenA.z) *
+              Real(kBeamSeed);
     Real4 xiB = pupilBundle
         ? Real4(0.0f)
-        : Real4(0.0f, xiPerpB.x, xiPerpB.y, xiPerpB.z) * Real(kBeamSeed);
+        : Real4(launchScreenB.t, launchScreenB.x, launchScreenB.y, launchScreenB.z) *
+              Real(kBeamSeed);
     Real4 xiDotA = pupilBundle
-        ? Real4(0.0f, xiPerpA.x, xiPerpA.y, xiPerpA.z) * Real(kBeamSeed)
+        ? Real4(launchScreenA.t, launchScreenA.x, launchScreenA.y, launchScreenA.z) *
+              Real(kBeamSeed)
         : Real4(0.0f);
     Real4 xiDotB = pupilBundle
-        ? Real4(0.0f, xiPerpB.x, xiPerpB.y, xiPerpB.z) * Real(kBeamSeed)
+        ? Real4(launchScreenB.t, launchScreenB.x, launchScreenB.y, launchScreenB.z) *
+              Real(kBeamSeed)
         : Real4(0.0f);
-    Real beamAffineLength = 0.0f;
 
 #ifdef SIRIUS_FP32_COMP
     // Compensated rung: running Kahan compensation for the state accumulation
@@ -623,6 +749,8 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     Vec4Cart compX = MakeVec4Cart(0.0f, 0.0f, 0.0f, 0.0f);
     Vec4Cart compU = MakeVec4Cart(0.0f, 0.0f, 0.0f, 0.0f);
 #endif
+
+    Real adaptiveStep = Real(maxStep);
 
     for (int step = 0; step < maxSteps; step++) {
         Real px = state.x.x;
@@ -641,41 +769,40 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         Real rStep = (isWarp || isWormhole)
             ? max(rBig, Real(1.0f))
             : ComputeKerrRadiusCart(px, py, pz, Real(a));
-        Real dt = clamp(stepScale * rStep, Real(minStep), Real(maxStep));
+        Real geometricStep = clamp(stepScale * rStep, Real(minStep), Real(maxStep));
+        Real dt = min(geometricStep, adaptiveStep);
 
-        Vec4Cart dX, dU;
-        if (isWarp) {
-            IntegrateGeodesicRK4WarpCartDelta(state, dt, warpVs, warpSigma, warpR,
-                                              0.0f, 0.0f, 0.0f, dX, dU);
-        } else if (isWormhole) {
-            IntegrateGeodesicRK4MorrisThorneCartDelta(state, dt, throatB0, 0.0f, wormShape,
-                                                      dX, dU);
-        } else {
-            IntegrateGeodesicRK4CartDelta(state, dt, M, a, Q, Lambda, dX, dU);
+        AdaptiveGeodesicStep attempted = AttemptAdaptiveGeodesicStep(
+            state, dt, isWarp, isWormhole, M, a, Q, Lambda,
+            warpVs, warpSigma, warpR, throatB0, wormShape,
+            AdaptiveIntegrationTolerance(), AdaptiveNullTolerance());
+        if (!attempted.accepted) {
+            if (dt <= Real(minStep) * Real(1.0001f)) break;
+            adaptiveStep = max(Real(minStep), dt * attempted.stepFactor);
+            continue;
         }
-        GeodesicStateCart next;
+        adaptiveStep = clamp(dt * attempted.stepFactor, Real(minStep), Real(maxStep));
+
+        GeodesicStateCart next = attempted.candidate;
+        bool terminalDiskHit = false;
 #ifdef SIRIUS_FP32_COMP
-        next.x = KahanAddVec4Cart(state.x, compX, dX);
-        next.u = KahanAddVec4Cart(state.u, compU, dU);
-#else
-        // Plain accumulation: identical arithmetic to the pre-refactor
-        // integrator, which performed these adds internally.
-        next.x = AddVec4Cart(state.x, dX);
-        next.u = AddVec4Cart(state.u, dU);
+        Vec4Cart acceptedDX = AddVec4Cart(next.x, ScaleVec4Cart(state.x, Real(-1.0f)));
+        Vec4Cart acceptedDU = AddVec4Cart(next.u, ScaleVec4Cart(state.u, Real(-1.0f)));
+        next.x = KahanAddVec4Cart(state.x, compX, acceptedDX);
+        next.u = KahanAddVec4Cart(state.u, compU, acceptedDU);
 #endif
 
-        // Optional volumetric disk/corona (Kerr-Schild black holes only).
-        if ((volumeEnabled || coronaEnabled) && !isWarp && !isWormhole) {
+        // Optional volumetric disk (Kerr-Schild black holes only).
+        if (volumeEnabled && !isWarp && !isWormhole) {
             float aStar = (M > 1e-6f) ? (a / M) : a;
             float rIsco = ComputeKerrISCO(M, aStar);
             AccumulateVolumeSegment(
-                float3(float(state.x.x), float(state.x.y), float(state.x.z)),
-                float3(float(next.x.x), float(next.x.y), float(next.x.z)),
-                volumeSamples, volumeEnabled, turbulenceEnabled, coronaEnabled,
-                dopplerBeaming,
+                state.x, next.x, state.u, next.u, dt, volumeSamples,
+                volumeEnabled, turbulenceEnabled, dopplerBeaming,
                 innerRadius, outerRadius, innerTemperature, temperatureModel,
                 rIsco, M, a, aStar, volumeHOverR, volumeHPower,
-                volumeTauMidplane, volumeOpticalDepth, volumeEmission);
+                volumeTauMidplane, observerFrequency,
+                volumeOpticalDepth, volumeEmission);
         }
 
         // Optional thin disk (Kerr-Schild black holes only): emission when the
@@ -684,17 +811,194 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         // g^4 relativistic beaming (gr_disk authorities).
         if (diskEnabled && !volumeEnabled && !isWarp && !isWormhole &&
             transmittance > 0.01f) {
-            if (state.x.z * next.x.z < 0.0f) {
-                Real frac = state.x.z / (state.x.z - next.x.z);
-                Real cxr = state.x.x + frac * (next.x.x - state.x.x);
-                Real cyr = state.x.y + frac * (next.x.y - state.x.y);
-                // Shading is float (gr_disk carries trig/pow, 32-bit-only in
-                // SPIR-V); the crossing point itself was found at Real.
-                float cx = float(cxr);
-                float cy = float(cyr);
-                float cr =
-                    float(ComputeKerrRadiusCart(cxr, cyr, Real(0.0f), Real(a)));
-                if (cr >= innerRadius && cr <= outerRadius) {
+            Real dzStart = dt * state.u.z;
+            Real dzEnd = dt * next.u.z;
+            Real coefficientA = Real(2.0f) * state.x.z - Real(2.0f) * next.x.z +
+                                dzStart + dzEnd;
+            Real coefficientB = Real(-3.0f) * state.x.z + Real(3.0f) * next.x.z -
+                                Real(2.0f) * dzStart - dzEnd;
+            Real coefficientC = dzStart;
+            Real coefficientD = state.x.z;
+            Real coefficientScale = max(
+                Real(1.0f), max(max(abs(coefficientA), abs(coefficientB)),
+                                max(abs(coefficientC), abs(coefficientD))));
+#ifdef SIRIUS_FP64
+            Real rootTolerance = Real(1.5e-14) * coefficientScale;
+            Real fractionTolerance = Real(2.0e-12);
+#else
+            Real rootTolerance = Real(8.0e-6f) * coefficientScale;
+            Real fractionTolerance = Real(2.0e-5f);
+#endif
+            Real rootFractions[4];
+            rootFractions[0] = Real(0.0f);
+            rootFractions[1] = Real(0.0f);
+            rootFractions[2] = Real(0.0f);
+            rootFractions[3] = Real(0.0f);
+            int rootCount = 0;
+            bool coplanar = abs(coefficientA) <= rootTolerance &&
+                            abs(coefficientB) <= rootTolerance &&
+                            abs(coefficientC) <= rootTolerance &&
+                            abs(coefficientD) <= rootTolerance;
+            if (coplanar) {
+                // The governed device step is at most 2 M, below the supported
+                // ISCO-to-20 M annulus width. Bracket its first radial entry.
+                float startRadius = float(ComputeKerrRadiusCart(
+                    state.x.x, state.x.y, Real(0.0f), Real(a)));
+                if (startRadius >= innerRadius && startRadius <= outerRadius) {
+                    rootFractions[rootCount++] = Real(0.0f);
+                } else {
+                    Real radialLower = Real(0.0f);
+                    for (int radialInterval = 1; radialInterval <= 64 && rootCount == 0;
+                         ++radialInterval) {
+                        Real radialUpper = Real(float(radialInterval) / 64.0f);
+                        Vec4Cart upperPosition = AcceptedSegmentPosition(
+                            state.x, state.u, next.x, next.u, dt, radialUpper);
+                        float upperRadius = float(ComputeKerrRadiusCart(
+                            upperPosition.x, upperPosition.y, Real(0.0f), Real(a)));
+                        bool upperInside = upperRadius >= innerRadius && upperRadius <= outerRadius;
+                        if (upperInside) {
+                            for (int radialIteration = 0; radialIteration < 40;
+                                 ++radialIteration) {
+                                Real radialMidpoint =
+                                    (radialLower + radialUpper) * Real(0.5f);
+                                Vec4Cart midpointPosition = AcceptedSegmentPosition(
+                                    state.x, state.u, next.x, next.u, dt, radialMidpoint);
+                                float midpointRadius = float(ComputeKerrRadiusCart(
+                                    midpointPosition.x, midpointPosition.y, Real(0.0f), Real(a)));
+                                bool midpointInside = midpointRadius >= innerRadius &&
+                                                      midpointRadius <= outerRadius;
+                                if (midpointInside) {
+                                    radialUpper = radialMidpoint;
+                                } else {
+                                    radialLower = radialMidpoint;
+                                }
+                            }
+                            rootFractions[rootCount++] = radialUpper;
+                        }
+                        radialLower = radialUpper;
+                    }
+                }
+            } else {
+                // The Hermite z(s) is cubic. Split it at the roots of z'(s),
+                // making every interval monotone, then retain all plane roots
+                // in observer-to-scene order. This includes tangent contacts
+                // and two crossings with equal-sign segment endpoints.
+                Real breakpoints[4];
+                breakpoints[0] = Real(0.0f);
+                breakpoints[1] = Real(1.0f);
+                int breakpointCount = 2;
+                Real derivativeDiscriminant =
+                    coefficientB * coefficientB -
+                    Real(3.0f) * coefficientA * coefficientC;
+                Real discriminantScale = max(
+                    Real(1.0f), max(coefficientB * coefficientB,
+                                    abs(Real(3.0f) * coefficientA * coefficientC)));
+#ifdef SIRIUS_FP64
+                Real discriminantTolerance = Real(1.5e-14) * discriminantScale;
+#else
+                Real discriminantTolerance = Real(8.0e-6f) * discriminantScale;
+#endif
+                if (abs(coefficientA) > rootTolerance &&
+                    derivativeDiscriminant >= -discriminantTolerance) {
+                    Real derivativeRoot = sqrt(max(derivativeDiscriminant, Real(0.0f)));
+                    Real firstCritical = (-coefficientB - derivativeRoot) /
+                                         (Real(3.0f) * coefficientA);
+                    Real secondCritical = (-coefficientB + derivativeRoot) /
+                                          (Real(3.0f) * coefficientA);
+                    if (firstCritical > Real(0.0f) && firstCritical < Real(1.0f))
+                        breakpoints[breakpointCount++] = firstCritical;
+                    if (secondCritical > Real(0.0f) && secondCritical < Real(1.0f))
+                        breakpoints[breakpointCount++] = secondCritical;
+                } else if (abs(coefficientB) > rootTolerance) {
+                    Real critical = -coefficientC / (Real(2.0f) * coefficientB);
+                    if (critical > Real(0.0f) && critical < Real(1.0f))
+                        breakpoints[breakpointCount++] = critical;
+                }
+                for (int left = 0; left < breakpointCount; ++left) {
+                    for (int right = left + 1; right < breakpointCount; ++right) {
+                        if (breakpoints[right] < breakpoints[left]) {
+                            Real swapValue = breakpoints[left];
+                            breakpoints[left] = breakpoints[right];
+                            breakpoints[right] = swapValue;
+                        }
+                    }
+                }
+                for (int rootInterval = 0; rootInterval + 1 < breakpointCount;
+                     ++rootInterval) {
+                    Real lower = breakpoints[rootInterval];
+                    Real upper = breakpoints[rootInterval + 1];
+                    Real lowerZ = EvaluateCubic(coefficientA, coefficientB, coefficientC,
+                                                coefficientD, lower);
+                    Real upperZ = EvaluateCubic(coefficientA, coefficientB, coefficientC,
+                                                coefficientD, upper);
+                    if (abs(lowerZ) <= rootTolerance && rootCount < 4 &&
+                        (rootCount == 0 ||
+                         abs(lower - rootFractions[rootCount - 1]) >
+                             fractionTolerance)) {
+                        rootFractions[rootCount++] = lower;
+                    }
+                    if ((lowerZ < Real(0.0f)) != (upperZ < Real(0.0f))) {
+                        Real rootLower = lower;
+                        Real rootUpper = upper;
+                        Real rootLowerZ = lowerZ;
+                        for (int rootIteration = 0; rootIteration < 40; ++rootIteration) {
+                            Real midpoint = (rootLower + rootUpper) * Real(0.5f);
+                            Real midpointZ = EvaluateCubic(
+                                coefficientA, coefficientB, coefficientC, coefficientD,
+                                midpoint);
+                            if ((rootLowerZ < Real(0.0f)) ==
+                                (midpointZ < Real(0.0f))) {
+                                rootLower = midpoint;
+                                rootLowerZ = midpointZ;
+                            } else {
+                                rootUpper = midpoint;
+                            }
+                        }
+                        Real rootFraction = (rootLower + rootUpper) * Real(0.5f);
+                        if (rootCount < 4 &&
+                            (rootCount == 0 ||
+                             abs(rootFraction - rootFractions[rootCount - 1]) >
+                                 fractionTolerance)) {
+                            rootFractions[rootCount++] = rootFraction;
+                        }
+                    }
+                }
+                Real finalZ = EvaluateCubic(coefficientA, coefficientB, coefficientC,
+                                            coefficientD, Real(1.0f));
+                if (abs(finalZ) <= rootTolerance && rootCount < 4 &&
+                    (rootCount == 0 ||
+                     abs(Real(1.0f) - rootFractions[rootCount - 1]) >
+                         fractionTolerance)) {
+                    rootFractions[rootCount++] = Real(1.0f);
+                }
+            }
+
+            bool foundDiskCrossing = false;
+            Real frac = Real(0.0f);
+            Vec4Cart crossingPosition;
+            Vec4Cart photonVelocity;
+            float cr = 0.0f;
+            for (int rootIndex = 0; rootIndex < rootCount && !foundDiskCrossing;
+                 ++rootIndex) {
+                Real candidateFraction = rootFractions[rootIndex];
+                Vec4Cart candidatePosition = AcceptedSegmentPosition(
+                    state.x, state.u, next.x, next.u, dt, candidateFraction);
+                float candidateRadius = float(ComputeKerrRadiusCart(
+                    candidatePosition.x, candidatePosition.y, Real(0.0f), Real(a)));
+                if (candidateRadius >= innerRadius && candidateRadius <= outerRadius) {
+                    foundDiskCrossing = true;
+                    frac = candidateFraction;
+                    crossingPosition = candidatePosition;
+                    photonVelocity = AcceptedSegmentTangent(
+                        state.x, state.u, next.x, next.u, dt, candidateFraction);
+                    cr = candidateRadius;
+                }
+            }
+            if (foundDiskCrossing) {
+                    // Shading is float (gr_disk carries trig/pow, 32-bit-only in
+                    // SPIR-V); the crossing point itself was found at Real.
+                    float cx = float(crossingPosition.x);
+                    float cy = float(crossingPosition.y);
                     float aStar = (M > 1e-6f) ? (a / M) : a;
                     float rIsco = ComputeKerrISCO(M, aStar);
                     float T;
@@ -704,57 +1008,118 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                         T = FullPageThorneTemperature(innerTemperature, cr, rIsco, M, aStar);
                     }
                     float cphi = atan2(cy, cx);
-                    float3 photonVel = float3(float(next.u.x), float(next.u.y), float(next.u.z));
-                    float gFactor = dopplerBeaming
-                        ? ComputeDiskGFactorCart(cr, cphi, photonVel, M, a)
-                        : ComputeDiskGravitationalFactorCart(cr, M, a);
+                    float2 transfer = ComputeKerrDiskTransferCart(
+                        cr, cphi, photonVelocity, observerFrequency, M, a);
+                    float gFactor = dopplerBeaming ? transfer.x : transfer.y;
+                    float emittedSource = pow(T / innerTemperature, 4.0f);
                     float observedScale =
-                        ObservedDiskBolometricSource(emissionScale, gFactor);
-                    float3 emit = BlackbodyColor(T) * observedScale;
-                    color += transmittance * emit;
-                    transmittance *= 0.2f;  // partial occlusion per crossing
-                }
+                        ObservedDiskBolometricSource(emittedSource, gFactor);
+                    float3 emit = BlackbodyColor(T * gFactor) * observedScale;
+                    // Novikov-Thorne is optically thick: the first surface met
+                    // along the past ray hides all farther crossings.
+                    color = emit;
+                    transmittance = 0.0f;
+                    next.x = crossingPosition;
+                    next.u = photonVelocity;
+                    dt *= frac;
+                    terminalDiskHit = true;
             }
         }
-        // Advance the deviation vector over this step (velocity Verlet on the
-        // full-Riemann Jacobi acceleration), coefficients at the step start.
+        // RK4 on the covariant first-order Jacobi system. Connection and
+        // curvature are evaluated at the start, Hermite midpoint, and end of
+        // the accepted central-ray step; freezing them at the start lowers the
+        // bundle update to first order in a varying tidal field.
         if (beamsEnabled && !isWarp && !isWormhole) {
             Real beamRiemann[4][4][4][4];
+            Real beamGamma[4][4][4];
+            Real4 k1XiA, k1VA, k2XiA, k2VA, k3XiA, k3VA, k4XiA, k4VA;
+            Real4 k1XiB, k1VB, k2XiB, k2VB, k3XiB, k3VB, k4XiB, k4VB;
+
             GetRiemannTensorCart(state.x, M, a, Q, Lambda, beamRiemann);
-            Real4 accelA =
-                GeodesicDeviationAccelFromRiemann(beamRiemann, state.u, xiA);
-            Real4 accelB =
-                GeodesicDeviationAccelFromRiemann(beamRiemann, state.u, xiB);
-            xiA += xiDotA * dt + accelA * (Real(0.5f) * dt * dt);
-            xiB += xiDotB * dt + accelB * (Real(0.5f) * dt * dt);
-            xiDotA += accelA * dt;
-            xiDotB += accelB * dt;
-            beamAffineLength += dt;
+            GetKerrSchildFamilyChristoffel(state.x, M, a, Q, Lambda, beamGamma);
+            GeodesicDeviationRhs(beamGamma, beamRiemann, state.u, xiA, xiDotA, k1XiA, k1VA);
+            GeodesicDeviationRhs(beamGamma, beamRiemann, state.u, xiB, xiDotB, k1XiB, k1VB);
+
+            // Cubic Hermite midpoint of the accepted central ray. It matches
+            // both endpoint events and tangents and supplies the same stage
+            // geometry used by the CPU bundle path.
+            Vec4Cart beamMidPosition = AddVec4Cart(
+                ScaleVec4Cart(AddVec4Cart(state.x, next.x), Real(0.5f)),
+                ScaleVec4Cart(AddVec4Cart(state.u, ScaleVec4Cart(next.u, Real(-1.0f))),
+                              dt / Real(8.0f)));
+            Vec4Cart beamMidTangent = AddVec4Cart(
+                ScaleVec4Cart(AddVec4Cart(next.x, ScaleVec4Cart(state.x, Real(-1.0f))),
+                              Real(1.5f) / dt),
+                ScaleVec4Cart(AddVec4Cart(state.u, next.u), Real(-0.25f)));
+            GetRiemannTensorCart(beamMidPosition, M, a, Q, Lambda, beamRiemann);
+            GetKerrSchildFamilyChristoffel(beamMidPosition, M, a, Q, Lambda, beamGamma);
+
+            GeodesicDeviationRhs(beamGamma, beamRiemann, beamMidTangent,
+                                 xiA + k1XiA * (Real(0.5f) * dt),
+                                 xiDotA + k1VA * (Real(0.5f) * dt), k2XiA, k2VA);
+            GeodesicDeviationRhs(beamGamma, beamRiemann, beamMidTangent,
+                                 xiA + k2XiA * (Real(0.5f) * dt),
+                                 xiDotA + k2VA * (Real(0.5f) * dt), k3XiA, k3VA);
+            GeodesicDeviationRhs(beamGamma, beamRiemann, beamMidTangent,
+                                 xiB + k1XiB * (Real(0.5f) * dt),
+                                 xiDotB + k1VB * (Real(0.5f) * dt), k2XiB, k2VB);
+            GeodesicDeviationRhs(beamGamma, beamRiemann, beamMidTangent,
+                                 xiB + k2XiB * (Real(0.5f) * dt),
+                                 xiDotB + k2VB * (Real(0.5f) * dt), k3XiB, k3VB);
+
+            GetRiemannTensorCart(next.x, M, a, Q, Lambda, beamRiemann);
+            GetKerrSchildFamilyChristoffel(next.x, M, a, Q, Lambda, beamGamma);
+            GeodesicDeviationRhs(beamGamma, beamRiemann, next.u,
+                                 xiA + k3XiA * dt, xiDotA + k3VA * dt, k4XiA, k4VA);
+            GeodesicDeviationRhs(beamGamma, beamRiemann, next.u,
+                                 xiB + k3XiB * dt, xiDotB + k3VB * dt, k4XiB, k4VB);
+
+            const Real sixthStep = dt / Real(6.0f);
+            xiA += (k1XiA + k2XiA * Real(2.0f) + k3XiA * Real(2.0f) + k4XiA) * sixthStep;
+            xiDotA += (k1VA + k2VA * Real(2.0f) + k3VA * Real(2.0f) + k4VA) * sixthStep;
+            xiB += (k1XiB + k2XiB * Real(2.0f) + k3XiB * Real(2.0f) + k4XiB) * sixthStep;
+            xiDotB += (k1VB + k2VB * Real(2.0f) + k3VB * Real(2.0f) + k4VB) * sixthStep;
         }
 
         state = next;
+        if (terminalDiskHit) break;
     }
 
-    float3 terminalDirection =
-        normalize(float3(float(state.u.x), float(state.u.y), float(state.u.z)));
-    float3 beamReference = abs(terminalDirection.z) > 0.9f
-        ? float3(1.0f, 0.0f, 0.0f)
-        : float3(0.0f, 0.0f, 1.0f);
-    float3 beamTangentA =
-        normalize(beamReference - dot(beamReference, terminalDirection) * terminalDirection);
-    float3 beamTangentB = cross(terminalDirection, beamTangentA);
-    float3 xiASpatial = float3(float(xiA.y), float(xiA.z), float(xiA.w));
-    float3 xiBSpatial = float3(float(xiB.y), float(xiB.z), float(xiB.w));
-    float beamA = dot(xiASpatial, beamTangentA);
-    float beamB = dot(xiBSpatial, beamTangentA);
-    float beamC = dot(xiASpatial, beamTangentB);
-    float beamD = dot(xiBSpatial, beamTangentB);
+    Real terminalMetric[4][4];
+    Real terminalInverse[4][4];
+    if (isWarp) {
+        GetWarpDriveMetric(state.x, warpVs, warpSigma, warpR, 0.0f, 0.0f, 0.0f,
+                           terminalMetric, terminalInverse);
+    } else if (isWormhole) {
+        GetMorrisThorneCartesianMetric(state.x, throatB0, 0.0f, wormShape,
+                                       terminalMetric, terminalInverse);
+    } else {
+        GetKerrSchildFamilyMetric(state.x, M, a, Q, Lambda, terminalMetric, terminalInverse);
+    }
+    CameraObserverFrame terminalFrame = BuildCameraObserverFrame(
+        terminalMetric, terminalInverse, float3(1.0f, 0.0f, 0.0f),
+        float3(0.0f, -1.0f, 0.0f), float3(0.0f, 0.0f, 1.0f), float3(0.0f));
+    Real terminalFrequency = MetricDotCart(terminalMetric, state.u, terminalFrame.time);
+    float3 terminalDirection = normalize(float3(
+        float(MetricDotCart(terminalMetric, state.u, terminalFrame.forward) / terminalFrequency),
+        float(MetricDotCart(terminalMetric, state.u, terminalFrame.up) / terminalFrequency),
+        float(MetricDotCart(terminalMetric, state.u, terminalFrame.right) / terminalFrequency)));
+    Vec4Cart terminalScreenA;
+    Vec4Cart terminalScreenB;
+    SachsScreenBasis(terminalFrame, terminalDirection, terminalScreenA, terminalScreenB);
+    Vec4Cart xiACart = MakeVec4Cart(xiA.x, xiA.y, xiA.z, xiA.w);
+    Vec4Cart xiBCart = MakeVec4Cart(xiB.x, xiB.y, xiB.z, xiB.w);
+    float beamA = float(MetricDotCart(terminalMetric, xiACart, terminalScreenA));
+    float beamB = float(MetricDotCart(terminalMetric, xiBCart, terminalScreenA));
+    float beamC = float(MetricDotCart(terminalMetric, xiACart, terminalScreenB));
+    float beamD = float(MetricDotCart(terminalMetric, xiBCart, terminalScreenB));
     float beamSemiMajor, beamSemiMinor, beamOrientation, beamDeterminant;
     BeamEllipseFromTransverseMap(beamA, beamB, beamC, beamD,
                                  beamSemiMajor, beamSemiMinor, beamOrientation,
                                  beamDeterminant);
+    float terminalRadius = length(float3(float(state.x.x), float(state.x.y), float(state.x.z)));
     float beamNormalization = pupilBundle
-        ? max(float(beamAffineLength) * kBeamSeed, 1.0e-12f)
+        ? max(terminalRadius * kBeamSeed, 1.0e-12f)
         : kBeamSeed;
     float beamMajorExpansion = beamSemiMajor / beamNormalization;
     float beamMinorExpansion = beamSemiMinor / beamNormalization;
@@ -780,12 +1145,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         result += transmittance * bg;
     }
     if (volumeOpticalDepth > 0.01f) {
-        float effectiveTemperature =
-            clamp(pow(max(volumeEmission.x, 0.0f), 0.25f) * innerTemperature,
-                  1000.0f, 100000.0f);
-        float3 volumeColor =
-            BlackbodyColor(effectiveTemperature) * volumeEmission;
-        result = result * exp(-volumeOpticalDepth) + volumeColor;
+        result = result * exp(-volumeOpticalDepth) + volumeEmission;
     }
 
     // Beam expansion: the transverse deviation magnitude relative to its seed. The

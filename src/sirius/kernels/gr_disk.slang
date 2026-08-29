@@ -1,9 +1,6 @@
 // Accretion-disk emission physics: the Novikov-Thorne / Page-Thorne flux
-// function Q(r), the Kerr ISCO, the branch-free Chebyshev blackbody colour fit,
-// and the invariant redshift g-factor. Every coefficient (the eight-term
-// Chebyshev fits, the log-domain mapping, the XYZ->sRGB matrix, the clamp
-// ranges) is copied verbatim from RDOP002A.cu so fp32 output matches the legacy
-// device functions.
+// function Q(r), the Kerr ISCO, Planck/CIE blackbody colour, and the invariant
+// redshift g-factor.
 //
 // References: Page & Thorne (1974) ApJ 191, 499 (flux Q); Bardeen et al.
 // (1972) (ISCO); the invariant g = (k.u_obs)/(k.u_emit).
@@ -19,65 +16,54 @@ public float ObservedDiskBolometricSource(float emittedSource, float redshift) {
     return emittedSource * g2 * g2;
 }
 
-// --- Chebyshev blackbody colour fit (RDOP002A.cu BB_* / blackbodyColor) -------
+// --- Planck spectrum through the Wyman-Sloan-Shirley CIE 1931 fit -----------
 
-// log(T) domain mapping: T in [1000 K, 40000 K].
-static const float BB_LOG_MIN = 6.907755279f;    // log(1000)
-static const float BB_LOG_RANGE = 3.688879454f;  // log(40000) - log(1000)
-
-static const float BB_X_CHEB[8] = {
-    0.332461f, -0.098234f, 0.024891f, -0.008123f,
-    0.003012f, -0.001156f, 0.000423f, -0.000148f
-};
-static const float BB_Y_CHEB[8] = {
-    0.341231f, -0.056789f, 0.018234f, -0.006512f,
-    0.002345f, -0.000891f, 0.000312f, -0.000108f
-};
-
-// Clenshaw recurrence for sum c_i T_i(u) (RDOP002A.cu chebyshevEval).
-public float ChebyshevEval(float c[8], int n, float u) {
-    float b0 = 0.0f;
-    float b1 = 0.0f;
-    for (int i = n - 1; i >= 0; i--) {
-        float b2 = b1;
-        b1 = b0;
-        b0 = 2.0f * u * b1 - b2 + c[i];
-    }
-    return b0 - u * b1;
+float CieGaussian(float wavelengthNm, float centre, float leftWidth,
+                  float rightWidth, float amplitude) {
+    float width = wavelengthNm < centre ? leftWidth : rightWidth;
+    float offset = (wavelengthNm - centre) * width;
+    return amplitude * exp(-0.5f * offset * offset);
 }
 
-// T -> linear sRGB via CIE xy chromaticity (RDOP002A.cu blackbodyColor).
+float3 CieXyz(float wavelengthNm) {
+    float X = CieGaussian(wavelengthNm, 442.0f, 0.0624f, 0.0374f, 0.362f) +
+              CieGaussian(wavelengthNm, 599.8f, 0.0264f, 0.0323f, 1.056f) -
+              CieGaussian(wavelengthNm, 501.1f, 0.0490f, 0.0382f, 0.065f);
+    float Y = CieGaussian(wavelengthNm, 568.8f, 0.0213f, 0.0247f, 0.821f) +
+              CieGaussian(wavelengthNm, 530.9f, 0.0613f, 0.0322f, 0.286f);
+    float Z = CieGaussian(wavelengthNm, 437.0f, 0.0845f, 0.0278f, 1.217f) +
+              CieGaussian(wavelengthNm, 459.0f, 0.0385f, 0.0725f, 0.681f);
+    return float3(X, Y, Z);
+}
+
+// The wavelength-independent Planck prefactor and integration interval cancel
+// during chromaticity normalisation. Wavelength is in nm and c2 in nm K.
 public float3 BlackbodyColor(float T) {
-    T = clamp(T, 1000.0f, 40000.0f);
-
-    float logT = log(T);
-    float u = 2.0f * (logT - BB_LOG_MIN) / BB_LOG_RANGE - 1.0f;
-
-    float x = ChebyshevEval(BB_X_CHEB, 8, u);
-    float y = ChebyshevEval(BB_Y_CHEB, 8, u);
-
-    x = clamp(x, 0.1f, 0.65f);
-    y = clamp(y, 0.1f, 0.65f);
-
-    float Y = 1.0f;
-    float y_inv = 1.0f / max(y, 0.01f);
-    float X = Y * y_inv * x;
-    float Z = Y * y_inv * (1.0f - x - y);
+    if (T <= 0.0f) return float3(0.0f);
+    float3 xyz = float3(0.0f);
+    static const int kSamples = 32;
+    static const float kMinimumNm = 380.0f;
+    static const float kIntervalNm = 400.0f / float(kSamples);
+    static const float kPlanckC2NmK = 1.4387768775e7f;
+    for (int sample = 0; sample < kSamples; ++sample) {
+        float wavelengthNm = kMinimumNm + (float(sample) + 0.5f) * kIntervalNm;
+        float exponent = kPlanckC2NmK / (wavelengthNm * T);
+        float relativeRadiance =
+            1.0f / (pow(wavelengthNm, 5.0f) * (exp(exponent) - 1.0f));
+        xyz += CieXyz(wavelengthNm) * relativeRadiance;
+    }
 
     float3 rgb;
-    rgb.x =  3.2404542f * X - 1.5371385f * Y - 0.4985314f * Z;
-    rgb.y = -0.9692660f * X + 1.8760108f * Y + 0.0415560f * Z;
-    rgb.z =  0.0556434f * X - 0.2040259f * Y + 1.0572252f * Z;
-
-    rgb.x = max(rgb.x, 0.0f);
-    rgb.y = max(rgb.y, 0.0f);
-    rgb.z = max(rgb.z, 0.0f);
-    return rgb;
+    rgb.x =  3.2404542f * xyz.x - 1.5371385f * xyz.y - 0.4985314f * xyz.z;
+    rgb.y = -0.9692660f * xyz.x + 1.8760108f * xyz.y + 0.0415560f * xyz.z;
+    rgb.z =  0.0556434f * xyz.x - 0.2040259f * xyz.y + 1.0572252f * xyz.z;
+    rgb = max(rgb, float3(0.0f));
+    return rgb / max(max(rgb.x, rgb.y), max(rgb.z, 1.0e-20f));
 }
 
-// --- Kerr ISCO (RDOP002A.cu computeKerrISCO), geometric units, prograde -------
-public float ComputeKerrISCO(float M, float a) {
-    float spin = clamp(abs(a), 0.0f, 0.998f);
+// --- Kerr ISCO (Bardeen et al. 1972), signed dimensionless spin ---------------
+public float ComputeKerrISCO(float M, float aStar) {
+    float spin = clamp(abs(aStar), 0.0f, 0.998f);
     if (spin < 0.001f) {
         return 6.0f * M;
     }
@@ -88,14 +74,16 @@ public float ComputeKerrISCO(float M, float a) {
     float Z1 = 1.0f + oneMa2_13 * (onePa_13 + oneMa_13);
     float Z2 = sqrt(3.0f * a2 + Z1 * Z1);
     float inner = (3.0f - Z1) * (3.0f + Z1 + 2.0f * Z2);
-    float r_isco = M * (3.0f + Z2 - sqrt(max(inner, 0.0f)));
+    float branch = aStar >= 0.0f ? -1.0f : 1.0f;
+    float r_isco = M * (3.0f + Z2 + branch * sqrt(max(inner, 0.0f)));
     return r_isco;
 }
 
 // --- Full Page-Thorne profile ------------------------------------------------
 // Independent fp32 port of core::AccretionDiskD::FullPageThorneFlux. The
 // physical prefactor cancels when the operator temperature scale is normalised
-// at 1.5 r_ISCO, leaving Q(r)/r^3.
+// at 1.5 r_ISCO, leaving q(r)/r because the Kerr equatorial determinant factor
+// e^(nu+psi+mu) is r.
 static const float PT_GL_NODES[16] = {
     -0.989400935f, -0.944575024f, -0.865631202f, -0.755404408f,
     -0.617876244f, -0.458016778f, -0.281603551f, -0.095012510f,
@@ -164,7 +152,7 @@ public float FullPageThorneFluxShape(float r, float rIsco, float aStar) {
     if (abs(invariant) < 1.0e-12f) return 0.0f;
     float correction =
         -PtAngularVelocityDerivative(r, aStar) * integral / (invariant * invariant);
-    return max(correction / (r * r * r), 0.0f);
+    return max(correction / r, 0.0f);
 }
 
 public float FullPageThorneTemperature(float temperatureScale, float r, float rIsco,
@@ -177,72 +165,64 @@ public float FullPageThorneTemperature(float temperatureScale, float r, float rI
     return temperatureScale * pow(flux / reference, 0.25f);
 }
 
-// --- Invariant redshift g-factor (RDOP002A.cu computeRelativisticG) -----------
-// g = (k.u_obs)/(k.u_emit) with a static observer at infinity u_obs=(1,0,0,0).
-// The metric at the emission point is supplied by the caller.
-public float ComputeRelativisticGFromMetric(float g[4][4], Vec4 k, Vec4 u_emit) {
-    Vec4 u_obs = MakeVec4(1.0f, 0.0f, 0.0f, 0.0f);
-    float k_dot_u_obs = Dot4D(g, k, u_obs);
-    float k_dot_u_emit = Dot4D(g, k, u_emit);
-    float g_factor = k_dot_u_obs / min(k_dot_u_emit, -0.001f);
-    return clamp(abs(g_factor), 0.05f, 20.0f);
-}
-
-// Keplerian disk 4-velocity for an equatorial circular geodesic
-// (RDOP002A.cu computeKeplerianVelocity). Metric supplied by the caller.
-public Vec4 ComputeKeplerianVelocity(float r, float M, float a, float g[4][4]) {
-    float r32 = pow(r, 1.5f);
-    float Omega = sqrt(M) / (r32 + a * sqrt(M));
-    float denom = g[0][0] + 2.0f * Omega * g[0][3] + Omega * Omega * g[3][3];
-    float u_t = 1.0f / sqrt(max(-denom, 0.01f));
-    float u_phi = Omega * u_t;
-    return MakeVec4(u_t, 0.0f, 0.0f, u_phi);
-}
-
-// Redshift g-factor for a thin-disk crossing evaluated in the Kerr-Schild
-// Cartesian render chart. This is the closed-form gravitational x Doppler factor
-// the CPU tracer applies (GeodesicTracer::ComputeGFactor): the render integrator
-// runs in Cartesian, where the BL-basis ComputeKeplerianVelocity above does not
-// apply, so the disk redshift is authored here in the same analytic form both
-// backends share. `rayVel` is the photon spatial 4-velocity at the crossing
-// (Cartesian), `phi` the crossing azimuth, `a` the absolute spin a = a*/M.
-//   g = grav / (gamma (1 - v_orb (A))),  A = (-n_x) sin phi - (-n_y) cos phi,
-//   grav = sqrt(1 - 2 M r / (r^2 + a^2)),  v_orb = r Omega,
-//   Omega = sqrt(M) / (r^{3/2} + a sqrt(M)).   (Bardeen et al. 1972; the
-// clamps guard the physical singularities exactly as the CPU path does.)
-public float ComputeDiskGFactorCart(float r, float phi, float3 rayVel, float M, float a) {
-    float r32 = pow(r, 1.5f);
-    float sqrtM = sqrt(M);
-    float Omega = sqrtM / (r32 + a * sqrtM);
-    float v_orb = r * Omega;
-
-    float a2 = a * a;
-    float r2 = r * r;
-    float grav_factor = sqrt(max(1.0f - 2.0f * M * r / (r2 + a2), 0.0f));
-
-    float v_mag = length(rayVel);
-    if (v_mag < 1e-10f) {
-        return grav_factor;
+// Exact stationary/axisymmetric transfer shared with
+// core/relativistic_transfer.h.  The renderer integrates in Kerr-Schild
+// Cartesian coordinates, so the photon covector is formed there.  The Killing
+// quantities E=-p_t and L_z=p_phi=x p_y-y p_x are unchanged by the
+// Boyer-Lindquist/Kerr-Schild chart transformation.  For every circular frame
+// u=u^t(partial_t+Omega partial_phi), nu=-p.u=u^t(E-Omega L_z).
+//
+// x/y are reconstructed on the equatorial surface with
+// rho=sqrt(r^2+a^2).  This also defines the explicit midplane projection used
+// by the current axisymmetric volumetric disk model.  The return value is
+// (full circular-emitter g, ZAMO g); zero means the requested frame or photon
+// frequency lies outside the physical domain.  No display-oriented clamp is
+// permitted in this frequency authority.
+public float2 ComputeKerrDiskTransferCart(float r, float phi, Vec4Cart photonVelocity,
+                                          float observerFrequency, float M, float a) {
+    if (M <= 0.0f || r <= 0.0f || observerFrequency <= 0.0f || abs(a) > M) {
+        return float2(0.0f);
     }
-    float n_x = rayVel.x / v_mag;
-    float n_y = rayVel.y / v_mag;
 
-    float gamma = 1.0f / sqrt(max(1e-10f, 1.0f - v_orb * v_orb));
+    float rho = sqrt(r * r + a * a);
+    Vec4Cart position =
+        MakeVec4Cart(Real(0.0f), Real(rho * cos(phi)), Real(rho * sin(phi)), Real(0.0f));
+    Real metric[4][4];
+    Real metricInverse[4][4];
+    GetKerrSchildFamilyMetric(position, M, a, 0.0f, 0.0f, metric, metricInverse);
 
-    float sin_phi = sin(phi);
-    float cos_phi = cos(phi);
-    // n points toward the observer; negate for the outgoing-photon convention.
-    float A = (-n_x) * sin_phi - (-n_y) * cos_phi;
+    // The live tracer advances the past-directed camera-to-source tangent.
+    // Transfer uses the corresponding physical future photon, -k_past.
+    Real k[4] = {
+        -photonVelocity.t, -photonVelocity.x, -photonVelocity.y, -photonVelocity.z
+    };
+    Real p[4] = { Real(0.0f), Real(0.0f), Real(0.0f), Real(0.0f) };
+    [unroll] for (int mu = 0; mu < 4; ++mu) {
+        [unroll] for (int nu = 0; nu < 4; ++nu) {
+            p[mu] += metric[mu][nu] * k[nu];
+        }
+    }
 
-    float doppler_denom = clamp(gamma * (1.0f - v_orb * A), 0.1f, 10.0f);
-    return clamp(grav_factor / doppler_denom, 0.1f, 5.0f);
-}
+    float energy = -float(p[0]);
+    float angularMomentum =
+        -float(position.y) * float(p[1]) + float(position.x) * float(p[2]);
+    if (energy <= 0.0f) return float2(0.0f);
 
-// Gravitational-only branch used by the artistic Doppler-suppression toggle.
-// This is the same grav term as ComputeDiskGFactorCart with orbital velocity
-// set to zero.
-public float ComputeDiskGravitationalFactorCart(float r, float M, float a) {
-    float r2 = r * r;
-    float grav = sqrt(max(1.0f - 2.0f * M * r / (r2 + a * a), 0.0f));
-    return clamp(grav, 0.1f, 5.0f);
+    float gtt = -(1.0f - 2.0f * M / r);
+    float gtphi = -2.0f * M * a / r;
+    float gphiphi = r * r + a * a + 2.0f * M * a * a / r;
+    float sqrtM = sqrt(M);
+    float emitterOmega = sqrtM / (pow(r, 1.5f) + a * sqrtM);
+    float zamoOmega = -gtphi / gphiphi;
+    float emitterNorm =
+        gtt + 2.0f * emitterOmega * gtphi + emitterOmega * emitterOmega * gphiphi;
+    float zamoNorm = gtt + 2.0f * zamoOmega * gtphi + zamoOmega * zamoOmega * gphiphi;
+    if (emitterNorm >= 0.0f || zamoNorm >= 0.0f) return float2(0.0f);
+
+    float emitterFrequency =
+        (energy - emitterOmega * angularMomentum) / sqrt(-emitterNorm);
+    float zamoFrequency = (energy - zamoOmega * angularMomentum) / sqrt(-zamoNorm);
+    if (emitterFrequency <= 0.0f || zamoFrequency <= 0.0f) return float2(0.0f);
+    return float2(observerFrequency / emitterFrequency,
+                  observerFrequency / zamoFrequency);
 }

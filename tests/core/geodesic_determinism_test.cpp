@@ -253,7 +253,6 @@ TEST_F(DeterminismTests, GeodesicIntegrationDeterminism) {
         ray.coordinate_time = 0.0f;
         ray.terminated = 0;
         ray.step_size = 0.01f;
-        ray.bounce_count = 0;
 
         // Normalize to null
         Metric4d g;

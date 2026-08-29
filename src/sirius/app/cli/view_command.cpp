@@ -232,7 +232,7 @@ std::string ViewCommand::Usage() const {
        << "  --inclination <deg> Observer inclination (default: 90)\n"
        << "  --fov <deg>         Field of view (default: 60)\n"
        << "  --no-disk           Disable accretion disk\n"
-       << "  --jets              Enable relativistic jets\n"
+       << "  --jets              Decline: covariant jet transfer is not represented\n"
        << "  --cpu                Pin the CPU render path\n"
        << "  --gpu                Require the Vulkan render path\n"
        << "  --backend <name>     Select auto, cpu, or vulkan\n";
@@ -294,6 +294,12 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
         for (const auto& error : errors) cli::Error(error);
         return 1;
     }
+    if (jets_enabled_) {
+        cli::Error(
+            "Relativistic jets require covariant geodesic radiative transfer, which is not "
+            "represented");
+        return 1;
+    }
 
     if (const char* path = std::getenv("SIRIUS_VIEWER_INPUT_TRANSCRIPT"); path != nullptr) {
         if (*path == '\0') {
@@ -318,15 +324,6 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
         cli::Error("The interactive viewer currently represents Schwarzschild and Kerr only");
         return 1;
     }
-    if (jets_enabled_ && resolved.backend == render::RenderBackend::Vulkan) {
-        if (config.backend.preferred == "vulkan") {
-            cli::Error("The Vulkan viewer does not represent relativistic jets; use --cpu");
-            return 1;
-        }
-        resolved.backend = render::RenderBackend::Cpu;
-        cli::Info("Viewer jets require the CPU render path; backend auto selected CPU");
-    }
-
     if (!glfwInit()) {
         cli::Error("Failed to initialize GLFW");
         return 1;
@@ -411,7 +408,6 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
     view_config.observer_fov = static_cast<float>(config.observer.fov);
     view_config.enable_disk = config.disk_enabled;
     view_config.enable_volumetric = config.volumetric.enabled;
-    view_config.enable_jets = jets_enabled_;
     view_config.backend = resolved.backend;
 
     if (!viewer.Initialise(view_config)) {

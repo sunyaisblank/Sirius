@@ -27,14 +27,12 @@ StructuredBuffer<float> params;      // binding 2
 
 static const uint OP_METRIC = 0;
 static const uint OP_CHRISTOFFEL = 1;
-static const uint OP_SYMPLECTIC = 2;
-static const uint OP_DISK_TEMP = 3;
-static const uint OP_BLACKBODY = 4;
-static const uint OP_SYMPLECTIC_S4 = 5;
-static const uint OP_DEVIATION = 6;
-static const uint OP_DISK_REDSHIFT = 7;
-static const uint OP_LIVE_CART_CONSERVATION = 8;
-static const uint OP_BEAM_ELLIPSE = 9;
+static const uint OP_DISK_TEMP = 2;
+static const uint OP_BLACKBODY = 3;
+static const uint OP_DEVIATION = 4;
+static const uint OP_DISK_REDSHIFT = 5;
+static const uint OP_LIVE_CART_CONSERVATION = 6;
+static const uint OP_BEAM_ELLIPSE = 7;
 
 // Future-directed null root used by the render kernel, repeated here only for
 // the diagnostic launch boundary. The integration below calls the production
@@ -45,13 +43,17 @@ Real ProbeNullTimeComponent(Real g[4][4], Real ux, Real uy, Real uz) {
     Real C = g[1][1] * ux * ux + g[2][2] * uy * uy + g[3][3] * uz * uz
            + 2.0f * (g[1][2] * ux * uy + g[1][3] * ux * uz + g[2][3] * uy * uz);
     Real discriminant = B * B - 4.0f * A * C;
-    if (discriminant >= 0.0f) {
+    if (discriminant >= 0.0f && abs(A) > Real(1.0e-20f)) {
         Real sqrtD = sqrt(discriminant);
         Real root1 = (-B + sqrtD) / (2.0f * A);
         Real root2 = (-B - sqrtD) / (2.0f * A);
-        return (root1 > 0.0f) ? root1 : ((root2 > 0.0f) ? root2 : Real(1.0f));
+        return (root1 > 0.0f) ? root1 : ((root2 > 0.0f) ? root2 : Real(0.0f));
     }
-    return sqrt(max(-C / A, Real(0.0001f)));
+    if (abs(B) > Real(1.0e-20f)) {
+        Real linearRoot = -C / B;
+        return linearRoot > Real(0.0f) ? linearRoot : Real(0.0f);
+    }
+    return Real(0.0f);
 }
 
 // Stationary-axisymmetric Kerr invariants for a Cartesian Kerr-Schild state.
@@ -189,38 +191,6 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
             [unroll] for (int n = 0; n < 4; n++)
                 [unroll] for (int k = 0; k < 4; k++)
                     results[rb + uint(m * 16 + n * 4 + k)] = Gamma[m][n][k];
-    } else if (opcode == OP_SYMPLECTIC) {
-        // Kerr Boyer-Lindquist symplectic step: p1=M, p2=a.
-        GeodesicState st;
-        st.x = MakeVec4(0.0f, c0, c1, c2);
-        st.u = MakeVec4(samples[sb + 8], samples[sb + 9], samples[sb + 10], samples[sb + 11]);
-        float h = samples[sb + 12];
-        float tolerance = samples[sb + 13];
-        float minStep = samples[sb + 14];
-        float maxStep = samples[sb + 15];
-        bool accepted;
-        GeodesicState res = IntegrateGeodesicSymplectic(st, h, p1, p2, tolerance, minStep, maxStep, accepted);
-        results[rb + 0] = res.x.t;
-        results[rb + 1] = res.x.r;
-        results[rb + 2] = res.x.theta;
-        results[rb + 3] = res.x.phi;
-        results[rb + 4] = res.u.t;
-        results[rb + 5] = res.u.r;
-        results[rb + 6] = res.u.theta;
-        results[rb + 7] = res.u.phi;
-        results[rb + 8] = h;
-        results[rb + 9] = accepted ? 1.0f : 0.0f;
-    } else if (opcode == OP_SYMPLECTIC_S4) {
-        // One Yoshida 4th-order step on the Hamiltonian state built from the
-        // input geodesic: p1=M, p2=a; h=sample[12].
-        GeodesicState st;
-        st.x = MakeVec4(0.0f, c0, c1, c2);
-        st.u = MakeVec4(samples[sb + 8], samples[sb + 9], samples[sb + 10], samples[sb + 11]);
-        float h = samples[sb + 12];
-        HamiltonianState hs = GeodesicToHamiltonian(st, p1, p2);
-        IntegrateSymplecticS4(hs, h, p1, p2);
-        [unroll] for (int k = 0; k < 4; k++) results[rb + uint(k)] = hs.q[k];
-        [unroll] for (int k = 0; k < 4; k++) results[rb + uint(4 + k)] = hs.p[k];
     } else if (opcode == OP_DISK_TEMP) {
         // p1=M, p2=a_star; c0=r; aux0=r_isco, aux1=innerTemperature.
         float r = c0;
@@ -253,18 +223,26 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         GetKerrSchildFamilyMetric(state.x, p1, p2, 0.0f, 0.0f,
                                   launchMetric, launchMetricInv);
         state.u.t = ProbeNullTimeComponent(launchMetric, state.u.x, state.u.y, state.u.z);
+        if (state.u.t <= Real(0.0f)) {
+            [unroll] for (int component = 0; component < 9; ++component) {
+                results[rb + uint(component)] = 0.0f;
+            }
+            results[rb + 9] = -1.0f;
+            return;
+        }
 
         Real energy0, angularMomentum0, carter0, null0;
         KerrCartConservedQuantities(state, p1, p2, energy0, angularMomentum0, carter0, null0);
         Real worstEnergy = 0.0f;
         Real worstAngularMomentum = 0.0f;
         Real worstCarter = 0.0f;
-        Real worstNull = abs(null0);
+        Real worstNull = RelativeNullConstraint(launchMetric, state.u);
         int completedSteps = 0;
         int maxSteps = int(samples[sb + 13]);
         Real stepScale = Real(samples[sb + 12]);
         Real minStep = Real(samples[sb + 14]);
         Real maxStep = Real(samples[sb + 15]);
+        Real adaptiveStep = maxStep;
         Real horizon = Real(p1 + sqrt(max(p1 * p1 - p2 * p2, 0.0f)));
         const Real escapeRadius = Real(200.0f);
         int termination = 0;
@@ -281,8 +259,22 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                 termination = 2;
                 break;
             }
-            Real dt = clamp(stepScale * rKerr, minStep, maxStep);
-            state = IntegrateGeodesicRK4Cart(state, dt, p1, p2, 0.0f, 0.0f);
+            Real geometricStep = clamp(stepScale * rKerr, minStep, maxStep);
+            Real dt = min(geometricStep, adaptiveStep);
+            AdaptiveGeodesicStep attempted = AttemptAdaptiveGeodesicStep(
+                state, dt, false, false, p1, p2, 0.0f, 0.0f,
+                0.0f, 0.0f, 0.0f, 0.0f, 0,
+                AdaptiveIntegrationTolerance(), AdaptiveNullTolerance());
+            if (!attempted.accepted) {
+                if (dt <= minStep * Real(1.0001f)) {
+                    termination = 3;
+                    break;
+                }
+                adaptiveStep = max(minStep, dt * attempted.stepFactor);
+                continue;
+            }
+            adaptiveStep = clamp(dt * attempted.stepFactor, minStep, maxStep);
+            state = attempted.candidate;
             completedSteps++;
 
             Real energy, angularMomentum, carter, nullResidual;
@@ -295,7 +287,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                     max(abs(angularMomentum0), Real(1.0e-12f)));
             worstCarter = max(worstCarter,
                               abs(carter - carter0) / max(abs(carter0), Real(1.0e-12f)));
-            worstNull = max(worstNull, abs(nullResidual));
+            worstNull = max(worstNull, attempted.nullResidual);
         }
 
         results[rb + 0] = float(worstEnergy);
@@ -319,20 +311,17 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         results[rb + 2] = orientation;
         results[rb + 3] = determinant;
     } else if (opcode == OP_DEVIATION) {
-        // Ray-bundle deviation at a Cartesian point: full-Riemann and tidal
-        // acceleration on a unit deviation vector. p1=M, p2=a, p3=Q, p4=Lambda;
-        // c=(x,y,z); u=(k^t,k^x,k^y,k^z); aux0=step.
+        // Full-Riemann ray-bundle deviation at a Cartesian point on a unit
+        // deviation vector. p1=M, p2=a, p3=Q, p4=Lambda; c=(x,y,z);
+        // u=(k^t,k^x,k^y,k^z).
         Vec4Cart pos = MakeVec4Cart(0.0f, c0, c1, c2);
         Vec4Cart k = MakeVec4Cart(samples[sb + 8], samples[sb + 9], samples[sb + 10], samples[sb + 11]);
         float4 xi = float4(0.0f, 1.0f, 0.0f, 0.0f);
-        float step = samples[sb + 13];
-        float rKerr = ComputeKerrRadiusCart(c0, c1, c2, p2);
         float4 full = GeodesicDeviationAccelFullRiemann(pos, k, xi, p1, p2, p3, p4);
-        float4 tidal = TidalDeviationAccel(xi, p1, rKerr, step);
         results[rb + 0] = full.x; results[rb + 1] = full.y;
         results[rb + 2] = full.z; results[rb + 3] = full.w;
-        results[rb + 4] = tidal.x; results[rb + 5] = tidal.y;
-        results[rb + 6] = tidal.z; results[rb + 7] = tidal.w;
+        results[rb + 4] = 0.0f; results[rb + 5] = 0.0f;
+        results[rb + 6] = 0.0f; results[rb + 7] = 0.0f;
         results[rb + 8] = length(float3(full.y, full.z, full.w));
     }
 }

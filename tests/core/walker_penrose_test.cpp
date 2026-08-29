@@ -22,6 +22,7 @@
 #include "sirius/core/constants.h"
 #include "sirius/core/coordinates.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
+#include "sirius/core/observer_frame.h"
 #include "sirius/oracle/polarisation_transport.h"
 
 #include <gtest/gtest.h>
@@ -72,6 +73,22 @@ std::complex<double> WalkerPenroseFromBoyerLindquist(const BoyerLindquistVector&
 
 double CartesianRadius(const Vec4& x) { return std::sqrt(x(1) * x(1) + x(2) * x(2) + x(3) * x(3)); }
 
+std::optional<Vec4> EulerianScreenPolarisation(IMetric& metric, const Vec4& position,
+                                               const Vec4& ray, const Vec4& trial) {
+    Metric4d g;
+    Metric4d inverse;
+    Tensor<Dual<double>, 4, 4, 4> derivatives;
+    metric.Evaluate(position, g, derivatives);
+    if (!metric.InverseMetric(position, inverse)) inverse = TensorOps::Inverse(g);
+    std::array<Vec4, 3> seeds;
+    seeds[0](1) = 1.0;
+    seeds[1](2) = 1.0;
+    seeds[2](3) = 1.0;
+    const auto observer = relativity::EulerianObserverFrame(g, inverse, seeds);
+    if (!observer.has_value()) return std::nullopt;
+    return relativity::ProjectToObserverScreen(g, observer->time, ray, trial);
+}
+
 }  // namespace
 
 //==============================================================================
@@ -102,7 +119,9 @@ TEST(WalkerPenroseLivePath, ConservesConstantAndOrthonormality) {
     ray.velocity = TensorOps::NormalizeNull(ray.velocity, g);
     Vec4 trial;
     trial(3) = 1.0;
-    ray.polarisation = MakeOrthonormalPolarisation(metric, ray.position, ray.velocity, trial);
+    const auto polarisation = EulerianScreenPolarisation(metric, ray.position, ray.velocity, trial);
+    ASSERT_TRUE(polarisation.has_value());
+    ray.polarisation = *polarisation;
 
     metric.Evaluate(ray.position, g, dg);
     const double fk0 = TensorOps::InnerProduct(ray.polarisation, ray.velocity, g);
@@ -179,7 +198,10 @@ TEST(WalkerPenroseLivePath, AgreesWithOracleAcrossCharts) {
         ray.velocity = TensorOps::NormalizeNull(ray.velocity, g);
         Vec4 trial;
         trial(3) = 1.0;
-        ray.polarisation = MakeOrthonormalPolarisation(live, ray.position, ray.velocity, trial);
+        const auto polarisation =
+            EulerianScreenPolarisation(live, ray.position, ray.velocity, trial);
+        ASSERT_TRUE(polarisation.has_value());
+        ray.polarisation = *polarisation;
 
         // Transform the shared initial data to Boyer-Lindquist for the oracle.
         const BoyerLindquistVector K0 =

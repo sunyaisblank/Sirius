@@ -24,8 +24,8 @@
 // Henry's form, cross-pinned by contraction in the oracle suite), which is
 // what admits the off-equator cases below.
 //
-// Magnification consistency (gate b) checks the bundle determinant against the
-// scalar photon-ring magnification the tracer already carries.
+// Magnification consistency (gate b) uses only the propagated Jacobi map; no
+// separate scalar brightness heuristic is admitted.
 
 #include "sirius/backend/cpu/geodesic_tracer.h"
 #include "sirius/core/camera.h"
@@ -183,19 +183,16 @@ TEST(RayBundleTest, BundleFiniteAndDeterministicKerr) {
 }
 
 // -----------------------------------------------------------------------------
-// Magnification consistency (gate b): the bundle determinant and the tracer's
-// scalar photon-ring magnification agree on which rays are strongly lensed - a
-// close approach defocuses the bundle (large area_ratio) exactly where the
-// scalar magnification is elevated; a grazing ray leaves the bundle near unity.
+// Magnification consistency (gate b): the Jacobi determinant is the only
+// magnification authority. A close approach defocuses the bundle while a
+// grazing ray leaves its cross-section near unity.
 // -----------------------------------------------------------------------------
-TEST(RayBundleTest, MagnificationConsistencyWithScalarJacobian) {
+TEST(RayBundleTest, MagnificationComesOnlyFromJacobiMap) {
     BundleProbe probe;
     probe.Build(1.0, 0.0, 120.0f);
 
-    double min_r_closest = 1e30, area_closest = 0.0, scalar_closest = 0.0;
+    double min_r_closest = 1e30, area_closest = 0.0;
     double area_grazing = 1e30, min_r_grazing = 0.0;
-    int ring_flagged = 0;
-    double ring_area_min = 1e30;
 
     for (int x = 0; x < 64; ++x) {
         CameraRay ray = probe.camera->GenerateRay(x, 32, 0.5f, 0.5f);
@@ -204,31 +201,20 @@ TEST(RayBundleTest, MagnificationConsistencyWithScalarJacobian) {
         if (r.min_radius < min_r_closest) {
             min_r_closest = r.min_radius;
             area_closest = r.beam.area_ratio;
-            scalar_closest = r.magnification;
         }
         if (r.min_radius > min_r_grazing) {
             min_r_grazing = r.min_radius;
             area_grazing = r.beam.area_ratio;
         }
-        if (r.photon_ring) {
-            ring_flagged++;
-            ring_area_min = std::min(ring_area_min, static_cast<double>(r.beam.area_ratio));
-        }
     }
 
     std::cout << "[gate-b] closest: min_r=" << min_r_closest << " area_ratio=" << area_closest
-              << " scalar_mag=" << scalar_closest << " | grazing: min_r=" << min_r_grazing
-              << " area_ratio=" << area_grazing << " | photon_ring rays=" << ring_flagged
-              << " min ring area_ratio=" << ring_area_min << "\n";
+              << " | grazing: min_r=" << min_r_grazing << " area_ratio=" << area_grazing << "\n";
 
     // The most-deflected ray defocuses the bundle far more than the grazing ray.
     EXPECT_GT(area_closest, 5.0 * area_grazing);
     // A grazing ray keeps the bundle near the flat-space cross-section.
     EXPECT_LT(area_grazing, 5.0);
-    // Where the scalar magnification flags the photon ring, the bundle agrees the
-    // ray is strongly (de)magnified.
-    ASSERT_GT(ring_flagged, 0) << "scalar photon-ring authority flagged no sampled ray";
-    EXPECT_GT(ring_area_min, 10.0);
 }
 
 }  // namespace

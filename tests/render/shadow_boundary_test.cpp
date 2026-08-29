@@ -67,8 +67,6 @@ class ShadowClassifier {
         EXPECT_FALSE(result.numerical_failure);
         EXPECT_NE(result.outcome, backend::TraceResult::Outcome::MaxSteps)
             << "P1 classifier reached its work bound instead of a physical outcome";
-        EXPECT_NE(result.outcome, backend::TraceResult::Outcome::Spiraling)
-            << "P1 classifier accepted a cinematic work-bound outcome as capture";
         return result.outcome == backend::TraceResult::Outcome::Horizon;
     }
 
@@ -89,7 +87,6 @@ class ShadowClassifier {
     static backend::TracerConfig TracerParameters() {
         backend::TracerConfig config;
         config.enable_disk = false;
-        config.enable_spiral_termination = false;
         config.escape_radius = 200.0f;
         config.horizon_factor = 1.0f;
         config.max_steps = 30000;

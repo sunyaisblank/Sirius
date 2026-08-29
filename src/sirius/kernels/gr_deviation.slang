@@ -1,14 +1,10 @@
-// Ray-bundle geodesic deviation (DNGR's distinguishing technique). Two paths,
-// exactly the two the .cu carried:
+// Ray-bundle geodesic deviation (DNGR's distinguishing technique). The sole
+// represented path contracts the full Riemann tensor:
 //
-//   1. Full-Riemann: R^mu_nu_rho_sigma finite-differenced from the analytic
-//      Christoffels, contracted D^2 xi^mu/dl^2 = R^mu_nu_rho_sigma k^nu xi^rho
+//   R^mu_nu_rho_sigma is finite-differenced from the analytic
+//      Christoffels, contracted D^2 xi^mu/dl^2 = -R^mu_nu_rho_sigma k^nu xi^rho
 //      k^sigma (RDOP002A.cu getRiemannTensor + geodesicDeviationAccel,
 //      DNGR eq A.18-A.19).
-//
-//   2. Tidal approximation (the .cu's default fast mode): leading-order tidal
-//      stretch xi *= M/r^3 * step (RDOP002A.cu render loop, "TIDAL
-//      APPROXIMATION" branch).
 //
 // Chart choice, deliberate and documented: the .cu evaluated the Riemann path
 // through a spherical<->Cartesian Christoffel transform while the render
@@ -95,9 +91,39 @@ public Real4 GeodesicDeviationAccelFromRiemann(
         for (int nu = 0; nu < 4; nu++)
             for (int rho = 0; rho < 4; rho++)
                 for (int sig = 0; sig < 4; sig++)
-                    accel[mu] += R[mu][nu][rho][sig] * k_arr[nu] * xi_arr[rho] * k_arr[sig];
+                    accel[mu] -= R[mu][nu][rho][sig] * k_arr[nu] * xi_arr[rho] * k_arr[sig];
 
     return Real4(accel[0], accel[1], accel[2], accel[3]);
+}
+
+// Coordinate form of the covariant Jacobi system. V = D xi/dlambda is a
+// vector, so both xi and V carry connection terms in coordinate components.
+// Advancing xi'' = -R(k,xi)k as an ordinary Cartesian second derivative drops
+// these terms and is not equivalent outside an inertial chart.
+public void GeodesicDeviationRhs(
+    Real Gamma[4][4][4], Real R[4][4][4][4], Vec4Cart k, Real4 xi, Real4 V,
+    out Real4 dXi, out Real4 dV) {
+    Real k_arr[4] = { k.t, k.x, k.y, k.z };
+    Real xi_arr[4] = { xi.x, xi.y, xi.z, xi.w };
+    Real V_arr[4] = { V.x, V.y, V.z, V.w };
+    Real d_xi[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+    Real d_v[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+    for (int mu = 0; mu < 4; ++mu) {
+        d_xi[mu] = V_arr[mu];
+        for (int alpha = 0; alpha < 4; ++alpha) {
+            for (int beta = 0; beta < 4; ++beta) {
+                d_xi[mu] -= Gamma[mu][alpha][beta] * k_arr[alpha] * xi_arr[beta];
+                d_v[mu] -= Gamma[mu][alpha][beta] * k_arr[alpha] * V_arr[beta];
+            }
+        }
+        for (int nu = 0; nu < 4; ++nu)
+            for (int rho = 0; rho < 4; ++rho)
+                for (int sigma = 0; sigma < 4; ++sigma)
+                    d_v[mu] -= R[mu][nu][rho][sigma] * k_arr[nu] * xi_arr[rho] * k_arr[sigma];
+    }
+    dXi = Real4(d_xi[0], d_xi[1], d_xi[2], d_xi[3]);
+    dV = Real4(d_v[0], d_v[1], d_v[2], d_v[3]);
 }
 
 // Full-Riemann deviation acceleration D^2 xi^mu/dl^2 (DNGR eq A.19).
@@ -107,14 +133,6 @@ public Real4 GeodesicDeviationAccelFullRiemann(
     Real R[4][4][4][4];
     GetRiemannTensorCart(x, M, a, Q, Lambda, R);
     return GeodesicDeviationAccelFromRiemann(R, k, xi);
-}
-
-// Tidal-approximation deviation acceleration (the .cu default fast mode):
-// leading-order Riemann scale M/r^3 times the step.
-public float4 TidalDeviationAccel(float4 xi, float M, float r, float step) {
-    float tidalFactor = M / (r * r * r);
-    float tf = tidalFactor * step;
-    return float4(xi.x * tf, xi.y * tf, xi.z * tf, xi.w * tf);
 }
 
 // Singular-value geometry of the propagated transverse 2x2 Jacobi map. The

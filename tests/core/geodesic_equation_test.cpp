@@ -84,6 +84,12 @@ TEST_F(GeodesicTests, NormalizeNullPreservesCondition) {
     double norm_sq = TensorOps::InnerProduct(normalized, normalized, eta);
 
     EXPECT_NEAR(norm_sq, 0.0, kEpsilon) << "Normalized null vector should have zero norm squared";
+
+    Vec4 past = k;
+    past(0) = -0.8;  // identifies the past-directed null family.
+    const Vec4 past_normalized = TensorOps::NormalizeNull(past, eta);
+    EXPECT_LT(past_normalized(0), 0.0);
+    EXPECT_NEAR(TensorOps::InnerProduct(past_normalized, past_normalized, eta), 0.0, kEpsilon);
 }
 
 // =============================================================================

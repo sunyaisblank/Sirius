@@ -214,22 +214,32 @@ inline void KerrChristoffel(const KerrMetricD& metric, const Vec4d& x, double Ga
     return Vec4d(kt, kr, kth, kph);
 }
 
-// Orthonormalise a trial vector against a null tangent: f = trial - (trial.k /
-// e_t.k) e_t with e_t = (1,0,0,0), which gives f.k = 0 because e_t.k = -k_t != 0,
-// then scale to g_uv f^u f^v = 1. Precondition: the projected f is spacelike.
-// Adding a multiple of k leaves f.k and the Walker-Penrose constant unchanged
-// (kappa_WP vanishes when f = k), so this fixes the residual polarisation gauge.
+// Project a trial vector into the Eulerian observer's physical screen.  The
+// Boyer-Lindquist coordinate-time basis is spacelike inside the Kerr
+// ergosphere and therefore cannot define a polarisation screen.  The unit
+// future slice normal u^mu=-alpha g^{mu t}, alpha=(-g^{tt})^-1/2, remains
+// timelike outside the horizon.  Removing u and the observer-spatial ray
+// direction produces f.u=f.k=0 and f.f=1 for either orientation of k.
 [[nodiscard]] inline Vec4d MakeOrthonormalPolarisation(const KerrMetricD& metric, const Vec4d& x,
                                                        const Vec4d& k, const Vec4d& trial) {
     double g[4][4], g_inv[4][4];
     metric.Evaluate(x, g, g_inv);
 
-    const Vec4d e_t(1.0, 0.0, 0.0, 0.0);
-    const double trial_dot_k = InnerProductD(g, trial, k);
-    const double et_dot_k = InnerProductD(g, e_t, k);
-    SIRIUS_PRE(std::abs(et_dot_k) > 0.0);
+    SIRIUS_PRE(std::isfinite(g_inv[0][0]) && g_inv[0][0] < 0.0);
+    const double lapse = 1.0 / std::sqrt(-g_inv[0][0]);
+    Vec4d observer;
+    for (int component = 0; component < 4; ++component) {
+        observer[component] = -lapse * g_inv[component][0];
+    }
+    SIRIUS_PRE(std::abs(InnerProductD(g, observer, observer) + 1.0) < 1.0e-10);
 
-    Vec4d f = trial - e_t * (trial_dot_k / et_dot_k);
+    Vec4d propagation = k + observer * InnerProductD(g, k, observer);
+    const double propagation_norm = InnerProductD(g, propagation, propagation);
+    SIRIUS_PRE(propagation_norm > 0.0);
+    propagation = propagation / std::sqrt(propagation_norm);
+
+    Vec4d f = trial + observer * InnerProductD(g, trial, observer);
+    f -= propagation * InnerProductD(g, f, propagation);
     const double norm2 = InnerProductD(g, f, f);
     SIRIUS_PRE(norm2 > 0.0);  // Spacelike polarisation.
     return f / std::sqrt(norm2);

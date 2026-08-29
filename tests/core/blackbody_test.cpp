@@ -207,26 +207,6 @@ TEST(SpectralUtilsTests, DopplerFactorApproaching) {
     EXPECT_GT(factor, 1.0) << "Approaching source should have factor > 1";
 }
 
-// Test: Apply redshift shifts color towards red
-TEST(SpectralUtilsTests, ApplyRedshiftEffect) {
-    Rgb white(1.0f, 1.0f, 1.0f);
-
-    Rgb redshifted = ApplyRedshift(white, 0.5);  // z = 0.5
-
-    // Blue should be reduced more than red
-    EXPECT_LT(redshifted.b, redshifted.r);
-}
-
-// Test: Apply blueshift shifts color towards blue
-TEST(SpectralUtilsTests, ApplyBlueshiftEffect) {
-    Rgb white(1.0f, 1.0f, 1.0f);
-
-    Rgb blueshifted = ApplyRedshift(white, -0.3f);  // z = -0.3
-
-    // Red should be reduced more than blue
-    EXPECT_LT(blueshifted.r, blueshifted.b);
-}
-
 // Test: Total redshift combines gravitational and Doppler
 TEST(SpectralUtilsTests, TotalRedshiftCombined) {
     // Schwarzschild metric: g_tt = -(1 - rs/r)

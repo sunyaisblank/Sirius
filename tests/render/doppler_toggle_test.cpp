@@ -1,7 +1,6 @@
 // Doppler beaming toggle tests (specification P4).
 //
-// The disk g-factor separates the gravitational redshift from the orbital
-// Doppler term (tracer gfactor_grav, gfactor_gamma, gfactor_v_orb). The toggle
+// The disk transfer records exact circular-emitter and ZAMO frequency ratios. The toggle
 // (TracerConfig::doppler_beaming) suppresses the Doppler asymmetry - the film's
 // artistic choice (James et al. 2015, CQG 32 065001, section 5) - while keeping
 // the gravitational redshift. Viewed near edge-on, the approaching and receding
@@ -78,7 +77,8 @@ AsymmetryMeasurement DiskAsymmetry(bool doppler_beaming) {
             double g = r.redshift;
             double t_emit = r.disk_temperature;
             double lum = std::pow(g, 4.0) * std::pow(t_emit, 4.0);  // Observed beamed flux.
-            const double doppler_factor = std::pow(g / r.gfactor_grav, 4.0);
+            const double doppler_factor =
+                std::pow(r.full_disk_redshift / r.zamo_disk_redshift, 4.0);
             if (left) {
                 lum_left += lum;
                 factor_left += doppler_factor;

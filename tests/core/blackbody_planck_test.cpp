@@ -1,5 +1,6 @@
 // Independent spectral-physics oracles for the production blackbody authority.
 
+#include "sirius/core/relativistic_transfer.h"
 #include "sirius/core/spectral/blackbody.h"
 
 #include <gtest/gtest.h>
@@ -12,10 +13,8 @@
 namespace sirius::test {
 namespace {
 
-using sirius::core::spectral::ApplyLimbDarkening;
 using sirius::core::spectral::BlackbodyToRgb;
 using sirius::core::spectral::DopplerFactor;
-using sirius::core::spectral::LimbDarkeningCoeff;
 using sirius::core::spectral::PlanckRadiance;
 using sirius::core::spectral::Rgb;
 using sirius::core::spectral::StefanBoltzmannRadiance;
@@ -110,48 +109,121 @@ TEST(SpectralValidationTests, DopplerFactorMatchesIndependentLorentzFormula) {
         const double expected = std::sqrt((1.0 - beta) / (1.0 + beta));
         EXPECT_NEAR(DopplerFactor(beta), expected, 2.0e-15);
     }
-    EXPECT_DOUBLE_EQ(DopplerFactor(-1.0), 1.0);
-    EXPECT_DOUBLE_EQ(DopplerFactor(1.0), 1.0);
-    EXPECT_DOUBLE_EQ(DopplerFactor(0.5, 0.0), 1.0);
-    EXPECT_DOUBLE_EQ(DopplerFactor(0.5, -1.0), 1.0);
+    EXPECT_TRUE(std::isnan(DopplerFactor(-1.0)));
+    EXPECT_TRUE(std::isnan(DopplerFactor(1.0)));
+    EXPECT_TRUE(std::isnan(DopplerFactor(0.5, 0.0)));
+    EXPECT_TRUE(std::isnan(DopplerFactor(0.5, -1.0)));
 }
 
 TEST(SpectralValidationTests, TotalRedshiftComposesGravitationalAndDopplerFactors) {
     constexpr double kEmitGtt = -0.42;
     constexpr double kObserverGtt = -0.98;
     constexpr double kBeta = 0.37;
-    const double gravitational = std::sqrt(std::abs(kObserverGtt / kEmitGtt));
+    const double gravitational = std::sqrt(kEmitGtt / kObserverGtt);
     const double doppler = std::sqrt((1.0 - kBeta) / (1.0 + kBeta));
     const double expected = 1.0 / (gravitational * doppler) - 1.0;
     EXPECT_NEAR(TotalRedshift(kEmitGtt, kObserverGtt, kBeta), expected, 2.0e-15);
 }
 
-TEST(SpectralValidationTests, LimbDarkeningAuthorityMatchesEmpiricalLawAndLiveApplication) {
-    const Rgb input{0.8f, 0.6f, 0.4f};
-    constexpr double kCosTheta = 0.31;
-    const Rgb output = ApplyLimbDarkening(input, kCosTheta);
-    for (const auto [wavelength, channel_in, channel_out] : std::array{
-             std::array<double, 3>{650.0, input.r, output.r},
-             std::array<double, 3>{550.0, input.g, output.g},
-             std::array<double, 3>{450.0, input.b, output.b},
-         }) {
-        const double t = (wavelength - 400.0) / 300.0;
-        const double expected_u = 0.9 + t * (0.4 - 0.9);
-        const double expected_channel =
-            channel_in * (1.0 + expected_u * kCosTheta) / (1.0 + expected_u);
-        EXPECT_NEAR(LimbDarkeningCoeff(wavelength), expected_u, 2.0e-15);
-        EXPECT_NEAR(channel_out, expected_channel, 2.0e-7);
-    }
-    const Rgb hidden = ApplyLimbDarkening(input, 0.0);
-    EXPECT_FLOAT_EQ(hidden.r, 0.0f);
-    EXPECT_FLOAT_EQ(hidden.g, 0.0f);
-    EXPECT_FLOAT_EQ(hidden.b, 0.0f);
+TEST(SpectralValidationTests, StaticMetricRedshiftHasThePhysicalDirection) {
+    constexpr double kEmitRadius = 6.0;
+    constexpr double kObserverRadius = 100.0;
+    constexpr double kMass = 1.0;
+    const double emit_gtt = -(1.0 - 2.0 * kMass / kEmitRadius);
+    const double observer_gtt = -(1.0 - 2.0 * kMass / kObserverRadius);
+    const double expected_g = std::sqrt(emit_gtt / observer_gtt);
+    const double redshift = TotalRedshift(emit_gtt, observer_gtt, 0.0);
+    EXPECT_GT(redshift, 0.0);
+    EXPECT_NEAR(1.0 / (1.0 + redshift), expected_g, 2.0e-15);
+    EXPECT_TRUE(std::isnan(TotalRedshift(0.1, observer_gtt, 0.0)));
+    EXPECT_TRUE(std::isnan(TotalRedshift(emit_gtt, 0.0, 0.0)));
+}
+
+TEST(SpectralValidationTests, KerrDiskTransferMatchesKillingFieldContraction) {
+    constexpr double kMass = 1.0;
+    constexpr double kSpin = 0.7;
+    constexpr double kRadius = 6.0;
+    constexpr double kEnergy = 1.0;
+    constexpr double kAngularMomentum = 2.0;
+    constexpr double kObserverFrequency = 0.93;
+    const auto transfer = sirius::core::relativity::KerrDiskTransfer(
+        kObserverFrequency, kEnergy, kAngularMomentum, kMass, kSpin, kRadius);
+    ASSERT_TRUE(transfer.has_value());
+
+    const double g_tt = -(1.0 - 2.0 * kMass / kRadius);
+    const double g_t_phi = -2.0 * kMass * kSpin / kRadius;
+    const double g_phi_phi =
+        kRadius * kRadius + kSpin * kSpin + 2.0 * kMass * kSpin * kSpin / kRadius;
+    const double omega = std::sqrt(kMass) / (std::pow(kRadius, 1.5) + kSpin * std::sqrt(kMass));
+    const double u_t = 1.0 / std::sqrt(-(g_tt + 2.0 * omega * g_t_phi + omega * omega * g_phi_phi));
+    const double expected_emitter_frequency = u_t * (kEnergy - omega * kAngularMomentum);
+    EXPECT_NEAR(transfer->emitter_frequency, expected_emitter_frequency, 2.0e-15);
+    EXPECT_NEAR(transfer->full_g, kObserverFrequency / expected_emitter_frequency, 2.0e-15);
+
+    const double zamo_omega = -g_t_phi / g_phi_phi;
+    const double zamo_u_t =
+        1.0 / std::sqrt(-(g_tt + 2.0 * zamo_omega * g_t_phi + zamo_omega * zamo_omega * g_phi_phi));
+    const double expected_zamo_frequency = zamo_u_t * (kEnergy - zamo_omega * kAngularMomentum);
+    EXPECT_NEAR(transfer->zamo_frequency, expected_zamo_frequency, 2.0e-15);
+    EXPECT_NEAR(transfer->zamo_g, kObserverFrequency / expected_zamo_frequency, 2.0e-15);
+}
+
+TEST(SpectralValidationTests, ZamoBranchRemainsTimelikeInsideTheErgosphere) {
+    constexpr double kRadius = 1.5;
+    const auto static_ratio =
+        sirius::core::relativity::StaticObserverFrequencyRatio(1.0 / 3.0, -1.0);
+    EXPECT_FALSE(static_ratio.has_value());
+    const auto transfer =
+        sirius::core::relativity::KerrDiskTransfer(1.0, 1.0, 1.5, 1.0, 0.998, kRadius);
+    ASSERT_TRUE(transfer.has_value());
+    EXPECT_GT(transfer->zamo_frequency, 0.0);
+    EXPECT_TRUE(std::isfinite(transfer->zamo_g));
+}
+
+TEST(SpectralValidationTests, ComovingOpacityUsesInvariantAffinePathLength) {
+    sirius::core::Metric4d metric;
+    metric(0, 0) = -1.0;
+    metric(1, 1) = 1.0;
+    metric(2, 2) = 1.0;
+    metric(3, 3) = 1.0;
+    sirius::core::Vec4 past_ray;
+    past_ray(0) = -1.0;
+    past_ray(1) = 1.0;
+    constexpr double kBeta = 0.6;
+    const double gamma = 1.0 / std::sqrt(1.0 - kBeta * kBeta);
+    sirius::core::Vec4 fluid;
+    fluid(0) = gamma;
+    fluid(1) = gamma * kBeta;
+
+    const auto path = sirius::core::relativity::ComovingPathLength(past_ray, fluid, metric, 2.5);
+    ASSERT_TRUE(path.has_value());
+    EXPECT_NEAR(*path, gamma * (1.0 + kBeta) * 2.5, 2.0e-15);
+}
+
+TEST(SpectralValidationTests, ObserverToSourceTransferPreservesForegroundEmissionOrder) {
+    sirius::core::relativity::GreyTransferState state;
+    const double layer_tau = std::log(2.0);
+    ASSERT_TRUE(sirius::core::relativity::AccumulateObserverToSourceLayer(state, {1.0, 0.0, 0.0},
+                                                                          layer_tau, 10.0)
+                    .has_value());
+    ASSERT_TRUE(sirius::core::relativity::AccumulateObserverToSourceLayer(state, {0.0, 0.0, 1.0},
+                                                                          layer_tau, 10.0)
+                    .has_value());
+
+    EXPECT_NEAR(state.observed_emission[0], 0.5, 2.0e-15);
+    EXPECT_NEAR(state.observed_emission[1], 0.0, 2.0e-15);
+    EXPECT_NEAR(state.observed_emission[2], 0.25, 2.0e-15);
+    EXPECT_NEAR(std::exp(-state.optical_depth), 0.25, 2.0e-15);
 }
 
 TEST(SpectralValidationTests, BlackbodyColourProgressionConsumesIntegratedSpectrum) {
+    const Rgb very_cold = BlackbodyToRgb(500.0);
+    const Rgb former_cold_boundary = BlackbodyToRgb(1000.0);
     const Rgb cold = BlackbodyToRgb(2000.0);
     const Rgb solar = BlackbodyToRgb(5500.0);
     const Rgb hot = BlackbodyToRgb(10000.0);
+    const Rgb former_hot_boundary = BlackbodyToRgb(100000.0);
+    const Rgb very_hot = BlackbodyToRgb(1000000.0);
     const auto blue_to_red = [](const Rgb& colour) {
         return colour.b / std::max(colour.r, 1.0e-6f);
     };
@@ -159,6 +231,14 @@ TEST(SpectralValidationTests, BlackbodyColourProgressionConsumesIntegratedSpectr
     EXPECT_GT(hot.b, hot.r);
     EXPECT_LT(blue_to_red(cold), blue_to_red(solar));
     EXPECT_LT(blue_to_red(solar), blue_to_red(hot));
+    EXPECT_GT(std::abs(very_cold.r - former_cold_boundary.r) +
+                  std::abs(very_cold.g - former_cold_boundary.g) +
+                  std::abs(very_cold.b - former_cold_boundary.b),
+              1.0e-3f);
+    EXPECT_GT(std::abs(very_hot.r - former_hot_boundary.r) +
+                  std::abs(very_hot.g - former_hot_boundary.g) +
+                  std::abs(very_hot.b - former_hot_boundary.b),
+              1.0e-3f);
 }
 
 }  // namespace sirius::test

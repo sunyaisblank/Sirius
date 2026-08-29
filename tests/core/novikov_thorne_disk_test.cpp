@@ -52,6 +52,18 @@ TEST(AccretionDiskTest, ConfigurationSanitizesEveryNonFiniteScalar) {
     EXPECT_GT(extreme.GetConfig().r_outer, extreme.GetConfig().r_inner);
 }
 
+TEST(AccretionDiskTest, AutoIscoIsValidatedAgainstTheDerivedOuterEdge) {
+    AccretionDiskD::Config config;
+    config.a_star = 0.0;
+    config.r_inner = 0.0;
+    config.r_outer = 1.0;
+    const AccretionDiskD disk(config);
+
+    EXPECT_DOUBLE_EQ(disk.InnerRadius(), 6.0);
+    EXPECT_GT(disk.OuterRadius(), disk.InnerRadius());
+    EXPECT_GT(disk.GetConfig().r_outer, disk.InnerRadius());
+}
+
 // r_ISCO -> 1M for a prograde orbit around extremal Kerr.
 TEST(AccretionDiskTest, ISCO_ExtremalKerr_Prograde) {
     double r_isco = AccretionDiskD::ComputeIsco(0.998);  // Near-extremal.
@@ -120,20 +132,6 @@ TEST(AccretionDiskTest, TemperatureScalingWithMass) {
 
     EXPECT_GT(T1, 0) << "Temperature should be positive";
     EXPECT_GT(T2, 0) << "Temperature should be positive";
-}
-
-// Face-on (cos = 1) gives maximum intensity; behind (cos < 0) gives zero.
-TEST(AccretionDiskTest, LimbDarkening) {
-    double I_faceon = AccretionDiskD::LimbDarkening(1.0, 0.6);
-
-    double I_limb = AccretionDiskD::LimbDarkening(0.1, 0.6);
-
-    EXPECT_GT(I_faceon, I_limb) << "Face-on should be brighter than limb";
-
-    EXPECT_NEAR(I_faceon, 1.0, 0.01) << "Face-on limb darkening should be ~1.0";
-
-    double I_behind = AccretionDiskD::LimbDarkening(-0.5, 0.6);
-    EXPECT_DOUBLE_EQ(I_behind, 0.0) << "Behind disk should have zero intensity";
 }
 
 // IsInDisk enforces inner/outer edges and the equatorial band.

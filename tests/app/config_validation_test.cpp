@@ -109,14 +109,35 @@ TEST(ConfigValidation, UnknownOutputExtensionIsRejected) {
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
 
-TEST(ConfigValidation, VolumetricExtensionsRequireTheLiveVolumePath) {
+TEST(ConfigValidation, UnrepresentedNarrowbandEmissionDeclines) {
     SiriusConfig config = SiriusConfig::Defaults();
-    config.volumetric.enable_corona = true;
+    config.color_mode = "Narrowband";
+    const auto errors = ConfigLoader::Validate(config);
+    EXPECT_NE(std::find_if(errors.begin(), errors.end(),
+                           [](const std::string& error) {
+                               return error.find("ionisation") != std::string::npos &&
+                                      error.find("frequency-dependent transfer") !=
+                                          std::string::npos;
+                           }),
+              errors.end());
+}
+
+TEST(ConfigValidation, TurbulenceRequiresVolumeAndSpectralCoronaDeclines) {
+    SiriusConfig config = SiriusConfig::Defaults();
     config.volumetric.enable_turbulence = true;
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 
     config.volumetric.enabled = true;
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
+
+    config.volumetric.enable_corona = true;
+    const auto corona_errors = ConfigLoader::Validate(config);
+    EXPECT_NE(std::find_if(corona_errors.begin(), corona_errors.end(),
+                           [](const std::string& error) {
+                               return error.find("covariant Compton transfer") != std::string::npos;
+                           }),
+              corona_errors.end());
+    config.volumetric.enable_corona = false;
 
     config.disk_enabled = false;
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
@@ -220,12 +241,16 @@ TEST(ConfigValidation, MotionBlurAndWormholeTopologyHaveExplicitOperatorBoundari
     config.motion_blur.enabled = true;
     config.motion_blur.shutter_time = 0.25f;
     config.motion_blur.samples = 7;
-    EXPECT_TRUE(ConfigLoader::Validate(config).empty());
+    auto errors = ConfigLoader::Validate(config);
+    EXPECT_FALSE(errors.empty());
+    EXPECT_NE(std::find_if(errors.begin(), errors.end(),
+                           [](const std::string& error) {
+                               return error.find("temporal emissivity model") != std::string::npos;
+                           }),
+              errors.end());
 
     config.backend.preferred = "vulkan";
-    // Backend-specific capability is checked after projection; the external
-    // configuration itself remains coherent.
-    EXPECT_TRUE(ConfigLoader::Validate(config).empty());
+    EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 
     config.motion_blur.samples = 0;
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
@@ -239,14 +264,14 @@ TEST(ConfigValidation, MotionBlurAndWormholeTopologyHaveExplicitOperatorBoundari
     config.metric.wormhole_topology = "OneSheetCapture";
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
     config.metric.wormhole_topology = "TwoSheet";
-    const auto errors = ConfigLoader::Validate(config);
-    ASSERT_FALSE(errors.empty());
-    EXPECT_NE(std::find_if(errors.begin(), errors.end(),
+    const auto topology_errors = ConfigLoader::Validate(config);
+    ASSERT_FALSE(topology_errors.empty());
+    EXPECT_NE(std::find_if(topology_errors.begin(), topology_errors.end(),
                            [](const std::string& error) {
                                return error.find("TwoSheet is not represented") !=
                                       std::string::npos;
                            }),
-              errors.end());
+              topology_errors.end());
 }
 
 TEST(ConfigValidation, DiskRequestDeclinesForEveryMetricWithoutAnEmissionModel) {
@@ -264,6 +289,33 @@ TEST(ConfigValidation, DiskRequestDeclinesForEveryMetricWithoutAnEmissionModel) 
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
     config.metric.name = "Kerr";
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
+}
+
+TEST(ConfigValidation, RayBundlesRejectMetricsWithoutStationaryCurvatureTransport) {
+    SiriusConfig config = SiriusConfig::Defaults();
+    config.disk_enabled = false;
+    config.ray_bundles = true;
+
+    for (const std::string_view metric :
+         {"de-Sitter", "Morris-Thorne", "Alcubierre", "Reissner-Nordstrom", "Kerr-Newman",
+          "Schwarzschild-de-Sitter"}) {
+        config.metric.name = metric;
+        const auto errors = ConfigLoader::Validate(config);
+        EXPECT_NE(std::find_if(errors.begin(), errors.end(),
+                               [](const std::string& error) {
+                                   return error.find("covariant curvature transport") !=
+                                          std::string::npos;
+                               }),
+                  errors.end())
+            << metric;
+    }
+
+    for (const std::string_view metric : {"Minkowski", "Schwarzschild", "Kerr"}) {
+        config.metric.name = metric;
+        config.metric.mass = metric == "Minkowski" ? 0.0 : 1.0;
+        config.metric.spin = metric == "Kerr" ? 0.7 : 0.0;
+        EXPECT_TRUE(ConfigLoader::Validate(config).empty()) << metric;
+    }
 }
 
 }  // namespace sirius::app::test

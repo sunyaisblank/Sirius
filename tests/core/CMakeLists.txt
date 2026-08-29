@@ -9,7 +9,6 @@ add_executable(sirius_core_tests
     blackbody_test.cpp
     camera_test.cpp
     coordinates_test.cpp
-    corona_test.cpp
     geodesic_conservation_test.cpp
     geodesic_determinism_test.cpp
     geodesic_equation_test.cpp
@@ -31,7 +30,6 @@ add_executable(sirius_core_tests
     warp_drive_test.cpp
     stokes_test.cpp
     tensor_inverse_test.cpp
-    jet_test.cpp
     novikov_thorne_disk_test.cpp
     turbulence_test.cpp
     postprocess_test.cpp

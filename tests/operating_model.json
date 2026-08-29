@@ -29,7 +29,7 @@
       "evidence": [
         {"kind": "gtest", "name": "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion"},
         {"kind": "gtest", "name": "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion"},
-        {"kind": "gtest", "name": "RayBundleTest.MagnificationConsistencyWithScalarJacobian"},
+        {"kind": "gtest", "name": "RayBundleTest.MagnificationComesOnlyFromJacobiMap"},
         {"kind": "gtest", "name": "KernelBeam.BeamFlagWiresDeviationWithoutMovingDefault"},
         {"kind": "gtest", "name": "KernelParity.BeamEllipseRetainsBothAxesAndOutputOrientation"},
         {"kind": "gtest", "name": "StarfieldPointTest.BeamFootprintSuppressesStarFlicker"}
@@ -57,10 +57,13 @@
       "required": true,
       "verification": "build_gated",
       "profiles": ["cpu", "vulkan"],
-      "requirement": "The live thin and volumetric disk paths use Page-Thorne emission with gravitational and Doppler shift exactly once, and the Doppler-suppression request has a measured live effect.",
+      "requirement": "The live optically thick thin disk uses the zero-torque Page-Thorne flux with invariant circular-emitter frequency transfer exactly once; the bounded grey volume uses the same radial temperature under its declared phenomenological closure; and Doppler suppression is identified and measured as a ZAMO diagnostic substitution rather than physical disk emission.",
       "capability_dependencies": [],
       "evidence": [
         {"kind": "gtest", "name": "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature"},
+        {"kind": "gtest", "name": "AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff"},
+        {"kind": "gtest", "name": "SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction"},
+        {"kind": "gtest", "name": "SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere"},
         {"kind": "gtest", "name": "KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel"},
         {"kind": "gtest", "name": "GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile"},
         {"kind": "gtest", "name": "SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor"},
@@ -69,7 +72,7 @@
         {"kind": "gtest", "name": "GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment"},
         {"kind": "gtest", "name": "GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource"},
         {"kind": "gtest", "name": "VulkanRenderSession.ThinAndVolumetricDopplerSuppressionAffectLiveEmission"},
-        {"kind": "gtest", "name": "VulkanRenderSession.VolumetricTurbulenceAndCoronaReachLiveKernel"},
+        {"kind": "gtest", "name": "VulkanRenderSession.ProceduralVolumetricTurbulenceReachesLiveKernel"},
         {"kind": "gtest", "name": "DopplerToggleTest.SuppressionCollapsesDiskAsymmetry"}
       ]
     },
@@ -81,9 +84,9 @@
       "requirement": "Arbitrary finite timelike camera velocity and aberration compose with pinhole and finite-aperture lenses, and 5616x4096 resolves within the governed hardware envelope.",
       "capability_dependencies": ["physical_imax_5616x4096"],
       "evidence": [
-        {"kind": "gtest", "name": "CameraAberrationTest.MatchesAnalyticFormulaAlongViewAxis"},
-        {"kind": "gtest", "name": "CameraAberrationTest.MatchesGeneralLorentzBoostForThreeAxisVelocities"},
-        {"kind": "gtest", "name": "CameraAberrationTest.ComposesOverLensModels"},
+        {"kind": "gtest", "name": "ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform"},
+        {"kind": "gtest", "name": "ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne"},
+        {"kind": "gtest", "name": "CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels"},
         {"kind": "gtest", "name": "ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView"},
         {"kind": "gtest", "name": "VulkanRenderSession.NonSquareMultisamplingCameraAndLensReachLiveKernel"},
         {"kind": "gtest", "name": "VulkanRenderSession.CombinedParitySceneRetainsResolvedImageStructure"},
@@ -128,7 +131,7 @@
       "required": true,
       "verification": "build_gated",
       "profiles": ["cpu"],
-      "requirement": "Schwarzschild and Kerr thin-disk polarisation conserves the Walker-Penrose constant, agrees across charts with the independent oracle, emits physical Stokes state, and reaches film output; incomplete combinations decline.",
+      "requirement": "Schwarzschild and Kerr thin-disk polarisation transports an observer-screen basis on the accepted central ray, conserves the Walker-Penrose constant, agrees across charts with the independent oracle, and applies a flux-normalised Chandrasekhar-Sobolev semi-infinite pure electron-scattering atmosphere excluding absorption, finite optical depth, magnetic/Faraday effects, and returning radiation; incomplete combinations decline.",
       "capability_dependencies": [],
       "evidence": [
         {"kind": "gtest", "name": "WalkerPenroseLivePath.ConservesConstantAndOrthonormality"},
@@ -302,14 +305,14 @@
         {"kind": "gtest", "name": "GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment"},
         {"kind": "gtest", "name": "GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource"},
         {"kind": "gtest", "name": "VulkanRenderSession.ThinAndVolumetricDopplerSuppressionAffectLiveEmission"},
-        {"kind": "gtest", "name": "GeodesicTracerVolumetric.TurbulenceAndCoronaAlterLiveTransferDeterministically"},
-        {"kind": "gtest", "name": "VulkanRenderSession.VolumetricTurbulenceAndCoronaReachLiveKernel"}
+        {"kind": "gtest", "name": "GeodesicTracerVolumetric.ProceduralTurbulenceAltersLiveTransferDeterministically"},
+        {"kind": "gtest", "name": "VulkanRenderSession.ProceduralVolumetricTurbulenceReachesLiveKernel"}
       ]
     },
     {
       "id": "ray_bundles_and_filtered_point_catalogue",
       "evidence": [
-        {"kind": "gtest", "name": "RayBundleTest.MagnificationConsistencyWithScalarJacobian"},
+        {"kind": "gtest", "name": "RayBundleTest.MagnificationComesOnlyFromJacobiMap"},
         {"kind": "gtest", "name": "BeamPropagationTest.OrientationDescribesOutputEllipseRatherThanInputBasis"},
         {"kind": "gtest", "name": "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion"},
         {"kind": "gtest", "name": "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion"},
@@ -325,9 +328,9 @@
       "evidence": [
         {"kind": "gtest", "name": "CameraFactoryTest.MalformedLensValueFailsClosed"},
         {"kind": "gtest", "name": "ConfigValidation.CameraWorldlineAndLensAreValidated"},
-        {"kind": "gtest", "name": "CameraAberrationTest.MatchesAnalyticFormulaAlongViewAxis"},
-        {"kind": "gtest", "name": "CameraAberrationTest.MatchesGeneralLorentzBoostForThreeAxisVelocities"},
-        {"kind": "gtest", "name": "CameraAberrationTest.ComposesOverLensModels"},
+        {"kind": "gtest", "name": "ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform"},
+        {"kind": "gtest", "name": "ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne"},
+        {"kind": "gtest", "name": "CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels"},
         {"kind": "gtest", "name": "RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr"}
       ]
     },
@@ -395,7 +398,7 @@
       "state": "supported",
       "profiles": ["cpu"],
       "request": "colorMode=Polarisation with a Schwarzschild/Kerr thin disk",
-      "behavior": "Transport the observer screen basis, form physical disk Stokes emission, and publish a film result.",
+      "behavior": "Transport the observer screen basis on the accepted geodesic, project in the emitter screen, apply the flux-normalised Chandrasekhar-Sobolev semi-infinite pure electron-scattering atmosphere (excluding absorption, magnetic/Faraday effects, finite optical depth, and returning radiation), and publish a film result.",
       "evidence": [
         {"kind": "gtest", "name": "RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes"}
       ]
@@ -434,12 +437,12 @@
     },
     {
       "id": "cpu_scalar_motion_blur",
-      "state": "supported",
+      "state": "fail_closed",
       "profiles": ["cpu"],
       "request": "Scalar thin-disk temporal motion blur",
-      "behavior": "Integrate the primary disk crossing over the requested shutter interval and exact temporal sample count.",
+      "behavior": "Decline before rendering: an axisymmetric stationary disk cannot acquire physical blur by rotating one crossing's Euclidean line-of-sight factor; support requires an explicit time-dependent emissivity and covariant shutter integral.",
       "evidence": [
-        {"kind": "gtest", "name": "GeodesicTracerTest.MotionBlurConvergence"},
+        {"kind": "gtest", "name": "ConfigValidation.MotionBlurAndWormholeTopologyHaveExplicitOperatorBoundaries"},
         {"kind": "gtest", "name": "RenderCommandParse.MotionBlurAndWormholeTopologyReachTheValidatedSchema"}
       ]
     },
@@ -451,6 +454,71 @@
       "behavior": "Decline before device dispatch; temporal sampling is not silently reduced or replaced by a static Vulkan frame.",
       "evidence": [
         {"kind": "gtest", "name": "VulkanRenderSession.CapabilityBoundaryRejectsUnrepresentedSceneSemantics"}
+      ]
+    },
+    {
+      "id": "covariant_relativistic_jet_transfer",
+      "state": "fail_closed",
+      "profiles": ["cpu", "vulkan", "viewer"],
+      "request": "Relativistic jet emission in a rendered scene",
+      "behavior": "Decline before rendering or viewer initialisation; a local phenomenological chord integral may not impersonate covariant geodesic radiative transfer.",
+      "evidence": [
+        {"kind": "gtest", "name": "ViewCommandOperational.RelativisticJetsDeclineBeforeViewerInitialisation"},
+        {"kind": "gtest", "name": "VulkanRenderSession.CapabilityBoundaryRejectsUnrepresentedSceneSemantics"}
+      ]
+    },
+    {
+      "id": "ray_bundles_outside_stationary_black_holes",
+      "state": "fail_closed",
+      "profiles": ["cpu", "vulkan"],
+      "request": "Ray-bundle propagation outside Minkowski, Schwarzschild, or Kerr",
+      "behavior": "Decline at the configuration boundary until covariant curvature transport is validated for the requested metric, including its time dependence and topology.",
+      "evidence": [
+        {"kind": "gtest", "name": "ConfigValidation.RayBundlesRejectMetricsWithoutStationaryCurvatureTransport"}
+      ]
+    },
+    {
+      "id": "inverse_compton_corona_transfer",
+      "state": "fail_closed",
+      "profiles": ["cpu", "vulkan"],
+      "request": "Inverse-Compton corona emission or opacity",
+      "behavior": "Decline before rendering until a frequency-dependent covariant Compton source and transfer model replaces the removed grey energy multiplier and fixed colour tint.",
+      "evidence": [
+        {"kind": "gtest", "name": "ConfigValidation.TurbulenceRequiresVolumeAndSpectralCoronaDeclines"},
+        {"kind": "gtest", "name": "VulkanRenderSession.CapabilityBoundaryRejectsUnrepresentedSceneSemantics"}
+      ]
+    },
+    {
+      "id": "narrowband_line_transfer",
+      "state": "fail_closed",
+      "profiles": ["cpu", "vulkan"],
+      "request": "colorMode=Narrowband emission-line rendering",
+      "behavior": "Decline before rendering until ionisation, elemental abundance, density, line emissivity, and frequency-dependent covariant transfer are represented; temperature-only SHO colour Gaussians are not an emission model.",
+      "evidence": [
+        {"kind": "gtest", "name": "ConfigValidation.UnrepresentedNarrowbandEmissionDeclines"}
+      ]
+    },
+    {
+      "id": "doppler_suppression_diagnostic",
+      "state": "substituted",
+      "profiles": ["cpu", "vulkan"],
+      "request": "Disable orbital Doppler shift while retaining gravitational transfer",
+      "behavior": "Use the exact locally non-rotating Eulerian/ZAMO frequency branch as an explicitly nonphysical diagnostic substitution; the default remains the circular-emitter invariant frequency transfer.",
+      "evidence": [
+        {"kind": "gtest", "name": "DopplerToggleTest.SuppressionCollapsesDiskAsymmetry"},
+        {"kind": "gtest", "name": "SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere"}
+      ]
+    },
+    {
+      "id": "phenomenological_volumetric_disk",
+      "state": "bounded",
+      "profiles": ["cpu", "vulkan"],
+      "request": "Grey volumetric accretion-disk transfer",
+      "behavior": "Represent a stationary, vertically isothermal, Gaussian atmosphere truncated at three scale heights with H/r clamped to [0.01,0.5], inner-edge vertical optical depth tau_ref, tau(r)=tau_ref(r/r_ref)^(-3/2), circular Kerr flow, invariant comoving path length, Page-Thorne radial temperature, and optional explicitly procedural density modulation; make no GRMHD, ionisation, or frequency-dependent opacity claim.",
+      "evidence": [
+        {"kind": "gtest", "name": "GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment"},
+        {"kind": "gtest", "name": "GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource"},
+        {"kind": "gtest", "name": "ConfigValidation.TurbulenceRequiresVolumeAndSpectralCoronaDeclines"}
       ]
     },
     {

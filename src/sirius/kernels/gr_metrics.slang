@@ -43,17 +43,6 @@ public Vec4 Vec4CartToSph(Vec4Cart cart) {
     return MakeVec4(float(cart.t), float(r), theta, phi);
 }
 
-// Full 4x4 contraction g_mu_nu a^mu b^nu (RDOP002A.cu dot4D).
-public float Dot4D(float g[4][4], Vec4 a, Vec4 b) {
-    float av[4] = { a.t, a.r, a.theta, a.phi };
-    float bv[4] = { b.t, b.r, b.theta, b.phi };
-    float sum = 0.0f;
-    [unroll] for (int i = 0; i < 4; i++)
-        [unroll] for (int j = 0; j < 4; j++)
-            sum += g[i][j] * av[i] * bv[j];
-    return sum;
-}
-
 // =============================================================================
 // Unified Kerr-Schild family (RDOP002A.cu getKerrSchildFamily*).
 // g_mu_nu = eta_mu_nu + H l_mu l_nu ; g^mu_nu = eta^mu_nu - H l^mu l^nu.
@@ -104,6 +93,9 @@ public void GetKerrSchildFamilyMetric(
 
     Real f_denom = r4 + a2 * z * z;
     Real H = (2.0f * M * r - Q2) * r2 / max(f_denom, Real(1e-20f));
+    if (abs(a) < 1e-15f && abs(Lambda) > 1e-15f) {
+        H += Lambda * r2 / 3.0f;
+    }
 
     Real denom = r2 + a2;
     Real l[4] = {
@@ -122,12 +114,6 @@ public void GetKerrSchildFamilyMetric(
         [unroll] for (int nu = 0; nu < 4; nu++)
             g_inv[mu][nu] -= H * l_up[mu] * l_up[nu];
 
-    if (abs(Lambda) > 1e-15f) {
-        Real R2 = x * x + y * y + z * z;
-        Real LambdaFactor = Lambda * R2 / 3.0f;
-        g[0][0] -= LambdaFactor;
-        g_inv[0][0] += LambdaFactor;
-    }
 }
 
 // Christoffel symbols Gamma^lambda_mu_nu = (1/2) g^{lambda sigma}
@@ -214,6 +200,9 @@ public void GetKerrSchildFamilyChristoffel(
     Real f_denom = r4 + a2 * z * z;
     Real numerator = (2.0f * M * r - Q2) * r2;
     Real H = numerator / max(f_denom, Real(1e-20f));
+    if (abs(a) < 1e-15f && abs(Lambda) > 1e-15f) {
+        H += Lambda * r2 / 3.0f;
+    }
 
     Real dH[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
     for (int lam = 1; lam <= 3; lam++) {
@@ -221,6 +210,9 @@ public void GetKerrSchildFamilyChristoffel(
         Real d_f_denom = 4.0f * r3 * dr[lam];
         if (lam == 3) d_f_denom += 2.0f * a2 * z;
         dH[lam] = (d_num * f_denom - numerator * d_f_denom) / (f_denom * f_denom);
+        if (abs(a) < 1e-15f && abs(Lambda) > 1e-15f) {
+            dH[lam] += (2.0f * Lambda / 3.0f) * r * dr[lam];
+        }
     }
 
     Real dg[4][4][4];
@@ -249,15 +241,6 @@ public void GetKerrSchildFamilyChristoffel(
         }
     }
 
-    if (abs(Lambda) > 1e-15f) {
-        Real LambdaThird = Lambda / 3.0f;
-        Gamma[0][0][1] += LambdaThird * x;
-        Gamma[0][1][0] += LambdaThird * x;
-        Gamma[0][0][2] += LambdaThird * y;
-        Gamma[0][2][0] += LambdaThird * y;
-        Gamma[0][0][3] += LambdaThird * z;
-        Gamma[0][3][0] += LambdaThird * z;
-    }
 }
 
 // =============================================================================
@@ -571,7 +554,10 @@ public void GetWarpDriveMetric(
     Real y = pos.y;
     Real z = pos.z;
 
-    Real dx = x - xs;
+    // The bubble centre follows xs(t)=xs0+vs*t, matching
+    // core::WarpDriveFamily. Freezing xs at its t=0 value solves a different,
+    // stationary spacetime.
+    Real dx = x - (xs + vs * pos.t);
     Real dy = y - ys;
     Real dz = z - zs;
     Real rs = sqrt(dx * dx + dy * dy + dz * dz);
@@ -619,7 +605,7 @@ public void GetWarpDriveChristoffel(
     Real y = pos.y;
     Real z = pos.z;
 
-    Real dx = x - xs;
+    Real dx = x - (xs + vs * pos.t);
     Real dy = y - ys;
     Real dz = z - zs;
     Real rs = sqrt(dx * dx + dy * dy + dz * dz);
@@ -629,35 +615,37 @@ public void GetWarpDriveChristoffel(
     float f = AlcubierreShapeFunction(float(rs), sigma, R);
     float df_drs = AlcubierreShapeDerivative(float(rs), sigma, R);
 
-    Real drs[4] = { 0.0f, dx / rs, dy / rs, dz / rs };
-    Real df[4] = { 0.0f, df_drs * drs[1], df_drs * drs[2], df_drs * drs[3] };
+    Real drs[4] = { -vs * dx / rs, dx / rs, dy / rs, dz / rs };
+    Real df[4] = {
+        df_drs * drs[0], df_drs * drs[1], df_drs * drs[2], df_drs * drs[3]
+    };
 
-    Real vsf = vs * f;
-    Real vsf2 = vsf * vsf;
-
-    Real dg_tt[4];
-    Real dg_tx[4];
-    for (int i = 0; i < 4; i++) {
-        dg_tt[i] = 2.0f * vs * vs * f * df[i];
-        dg_tx[i] = -vs * df[i];
+    Real metric[4][4];
+    Real inverseMetric[4][4];
+    GetWarpDriveMetric(pos, vs, sigma, R, xs, ys, zs, metric, inverseMetric);
+    Real dg[4][4][4];
+    [unroll] for (int derivative = 0; derivative < 4; ++derivative) {
+        [unroll] for (int mu = 0; mu < 4; ++mu) {
+            [unroll] for (int nu = 0; nu < 4; ++nu) {
+                dg[derivative][mu][nu] = Real(0.0f);
+            }
+        }
+        dg[derivative][0][0] = 2.0f * vs * vs * f * df[derivative];
+        dg[derivative][0][1] = -vs * df[derivative];
+        dg[derivative][1][0] = dg[derivative][0][1];
     }
 
-    Real g_inv_tt = -1.0f - vsf2;
-    Real g_inv_tx = -vsf;
-
-    Gamma[0][1][1] = -0.5f * g_inv_tt * dg_tt[1] - g_inv_tx * dg_tx[1];
-    Gamma[0][0][1] = 0.5f * g_inv_tt * dg_tt[1];
-    Gamma[0][1][0] = Gamma[0][0][1];
-    Gamma[1][0][0] = -0.5f * dg_tt[1];
-    Gamma[1][0][1] = 0.5f * dg_tt[1];
-    Gamma[1][1][0] = Gamma[1][0][1];
-
-    for (int i = 2; i <= 3; i++) {
-        Gamma[0][0][i] = 0.5f * g_inv_tt * dg_tt[i];
-        Gamma[0][i][0] = Gamma[0][0][i];
-        Gamma[0][1][i] = -g_inv_tx * dg_tx[i];
-        Gamma[0][i][1] = Gamma[0][1][i];
-        Gamma[1][0][i] = dg_tx[i];
-        Gamma[1][i][0] = Gamma[1][0][i];
+    [unroll] for (int alpha = 0; alpha < 4; ++alpha) {
+        [unroll] for (int mu = 0; mu < 4; ++mu) {
+            [unroll] for (int nu = 0; nu < 4; ++nu) {
+                Real sum = Real(0.0f);
+                [unroll] for (int sigmaIndex = 0; sigmaIndex < 4; ++sigmaIndex) {
+                    sum += inverseMetric[alpha][sigmaIndex] *
+                           (dg[mu][sigmaIndex][nu] + dg[nu][sigmaIndex][mu] -
+                            dg[sigmaIndex][mu][nu]);
+                }
+                Gamma[alpha][mu][nu] = Real(0.5f) * sum;
+            }
+        }
     }
 }

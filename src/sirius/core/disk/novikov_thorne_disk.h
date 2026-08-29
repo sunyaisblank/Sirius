@@ -73,6 +73,13 @@ class AccretionDiskD : public IDiskModel {
         r_isco_ = ComputeIsco(a_);
 
         r_inner_ = (config_.r_inner > 0) ? config_.r_inner : r_isco_;
+        // Validation must apply to the derived domain, not only the raw
+        // sentinel. With r_inner=0 (auto ISCO), an operator r_outer below ISCO
+        // previously produced an empty/inverted disk after validation passed.
+        if (!(config_.r_outer > r_inner_)) {
+            config_.r_outer =
+                std::max(500.0, std::nextafter(r_inner_, std::numeric_limits<double>::infinity()));
+        }
         r_outer_ = config_.r_outer;
 
         // Accretion rate M_sun/yr -> kg/s.
@@ -212,16 +219,23 @@ class AccretionDiskD : public IDiskModel {
 
         double dOmega_dr = dOmegadr(r, M, a);
 
-        // Page-Thorne Q-factor (relativistic correction):
-        // Q = (-Omega,r / (E - Omega L)^2) integral (E - Omega L) L,r dr.
-        double Q = (-dOmega_dr / (E_minus_OmegaL * E_minus_OmegaL)) * integral;
+        // Page-Thorne radial factor:
+        // q = (-Omega,r / (E - Omega L)^2) integral (E - Omega L) L,r dr.
+        // The emitted flux is Mdot*q/(4*pi*r) in M=1 units because the
+        // equatorial determinant factor e^(nu+psi+mu) is r.  Expressing that
+        // result as the Newtonian 3GM*Mdot/(8*pi*R^3) prefactor requires the
+        // dimensionless correction R_PT=(2/3)*r^2*q, which tends to one in the
+        // Newtonian large-radius limit.  Multiplying the Newtonian prefactor by
+        // q directly would introduce a spurious extra r^-2 falloff.
+        const double radial_factor = (-dOmega_dr / (E_minus_OmegaL * E_minus_OmegaL)) * integral;
+        const double relativistic_correction = (2.0 / 3.0) * r * r * radial_factor;
 
         // Classical Newtonian flux prefactor in SI.
         double r_physical = r * rs_ / 2;  // r in metres.
         double F_newt =
             (3 * gm_ * mdot_si_) / (8 * std::numbers::pi * r_physical * r_physical * r_physical);
 
-        double F = F_newt * Q;
+        double F = F_newt * relativistic_correction;
 
         if (!std::isfinite(F) || F < 0) return 0;
 
@@ -257,24 +271,12 @@ class AccretionDiskD : public IDiskModel {
         return std::pow(F / constants::physical::kStefanBoltzmann, 0.25);
     }
 
-    // Peak temperature, near 1.5 r_ISCO.
-    double PeakTemperature() const {
-        double r_peak = 1.5 * r_isco_;
-        return Temperature(r_peak);
-    }
-
     // Blackbody emission spectrum at the local temperature.
     SpectralRadiance EmissionSpectrum(double r) const {
         double T = Temperature(r);
         if (T <= 0) return SpectralRadiance::Zero();
 
         return SpectralRadiance::Blackbody(T);
-    }
-
-    // Limb darkening I(theta) = I0 (1 + u cos theta) / (1 + u).
-    static double LimbDarkening(double cos_theta, double u = 0.6) {
-        if (cos_theta <= 0) return 0;
-        return (1 + u * cos_theta) / (1 + u);
     }
 
     // Whether a point is within the disk (IDiskModel::IsInDisk).
@@ -284,31 +286,6 @@ class AccretionDiskD : public IDiskModel {
         if (equatorial_distance > 0.01) return false;  // ~0.5 degrees from equator.
 
         return (r >= r_inner_ && r <= r_outer_);
-    }
-
-    // Ray/disk intersection: returns the affine parameter at intersection, or -1
-    // for no intersection. The BL 4-vector type is the core coordinates::Vec4Bl
-    // (see the oracle-decoupling note above).
-    double IntersectRay(const coordinates::Vec4Bl& x, const coordinates::Vec4Bl& k,
-                        double lambda_max = 1000) const {
-        // Check when theta crosses pi/2.
-        double theta0 = x.theta;
-        double dtheta = k.theta;  // Approximate: k_theta ~ dtheta/dlambda.
-
-        if (std::abs(dtheta) < 1e-10) return -1;  // Parallel to the equator.
-
-        double lambda_cross = (std::numbers::pi / 2 - theta0) / dtheta;
-
-        if (lambda_cross < 0 || lambda_cross > lambda_max) return -1;
-
-        // Estimate r at crossing.
-        double r_cross = x.r + k.r * lambda_cross;
-
-        if (r_cross >= r_inner_ && r_cross <= r_outer_) {
-            return lambda_cross;
-        }
-
-        return -1;
     }
 
     // Accessors.
@@ -331,11 +308,6 @@ class AccretionDiskD : public IDiskModel {
 
     // Thin disk: H = 0.
     double HalfThickness([[maybe_unused]] double r) const override { return 0.0; }
-
-    // Thin disk: normalised value for optical-depth calculations.
-    double Density([[maybe_unused]] double r, [[maybe_unused]] double z = 0) const override {
-        return 1.0;
-    }
 
     double AngularVelocity(double r) const override {
         return AngularVelocity(r, 1.0, a_);  // Static version with M = 1.

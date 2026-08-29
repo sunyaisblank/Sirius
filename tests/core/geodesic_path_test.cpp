@@ -79,7 +79,6 @@ class GeodesicPathTests : public ::testing::Test {
         ray.coordinate_time = 0.0f;
         ray.terminated = 0;
         ray.step_size = 0.01f;
-        ray.bounce_count = 0;
 
         Metric4d g;
         Tensor<Dual<double>, 4, 4, 4> dg;

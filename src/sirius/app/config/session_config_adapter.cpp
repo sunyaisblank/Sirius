@@ -37,7 +37,6 @@ std::optional<core::color_modes::Mode> ParseColorMode(const std::string& value) 
     if (value == "TrueColor") return core::color_modes::Mode::TrueColor;
     if (value == "TemperatureMap") return core::color_modes::Mode::TemperatureMap;
     if (value == "RedshiftMap") return core::color_modes::Mode::RedshiftMap;
-    if (value == "Narrowband") return core::color_modes::Mode::Narrowband;
     if (value == "Polarisation") return core::color_modes::Mode::Polarisation;
     return std::nullopt;
 }

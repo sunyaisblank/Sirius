@@ -3,7 +3,7 @@
 #include "sirius/base/error.h"
 
 // FSM-based CPU render session: owns tile scheduling, progress tracking, the
-// display buffer, and the physics components (metric, tracer, camera, jets).
+// display buffer, and the physics components (metric, tracer, camera).
 // Ported from SNRS001A.h.
 //
 // OptiX is retired. Vulkan enters through sirius::backend::device behind the
@@ -21,7 +21,6 @@
 #include "sirius/backend/cpu/geodesic_tracer.h"
 #include "sirius/core/camera.h"
 #include "sirius/core/disk/novikov_thorne_disk.h"    // ISCO computation.
-#include "sirius/core/jet.h"                         // Relativistic jet model.
 #include "sirius/core/metrics/kerr_schild_family.h"  // Kerr-Schild metric family.
 #include "sirius/core/metrics/registry.h"            // Metric identity registry.
 #include "sirius/core/metrics/warp_drive_family.h"   // Alcubierre warp drive family.
@@ -173,15 +172,9 @@ struct SessionConfig {
     float volumetric_tau_midplane = 10.0f;
     int volumetric_samples = 32;
 
-    // Relativistic jets.
+    // Reserved typed request. The session rejects it until a covariant
+    // geodesic radiative-transfer model is represented.
     bool enable_jets = false;
-    float jet_lorentz_factor = 5.0f;
-    float jet_opening_angle = 0.1f;
-    float jet_launch_radius = 3.0f;
-    float jet_max_extent = 200.0f;
-    float jet_collimation = 0.5f;
-    float jet_spectral_index = 2.2f;
-    float jet_intensity = 1.0f;
 
     // Astronomical colouring mode.
     using ColorMode = core::color_modes::Mode;
@@ -192,9 +185,10 @@ struct SessionConfig {
     // bool from its single colorMode field.
     bool enable_polarisation = false;
 
-    // Optional deterministic density turbulence and inverse-Compton corona
-    // contributions on both live volumetric transfer paths.
+    // Optional deterministic procedural density modulation.
     bool enable_turbulence = false;
+    // Reserved request: rejected until frequency-dependent covariant Compton
+    // transfer is represented.
     bool enable_corona = false;
 
     // Depth-resolved starfield catalogue parameters.
@@ -316,7 +310,6 @@ class RenderSession {
     std::unique_ptr<core::ICamera> camera_;
 
     // Relativistic jet model.
-    std::unique_ptr<core::RelativisticJet> jet_;
 
     // Starfield background texture (equirectangular RGBA).
     std::vector<unsigned char> starfield_data_;

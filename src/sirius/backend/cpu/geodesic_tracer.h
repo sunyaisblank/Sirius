@@ -14,12 +14,14 @@
 
 #include "sirius/core/camera.h"
 #include "sirius/core/coordinates.h"
-#include "sirius/core/disk/corona.h"
 #include "sirius/core/disk/novikov_thorne_disk.h"
 #include "sirius/core/disk/turbulence.h"
 #include "sirius/core/geodesic_integrator.h"
 #include "sirius/core/metrics/metric.h"
+#include "sirius/core/observer_frame.h"
 #include "sirius/core/polarisation/walker_penrose.h"
+#include "sirius/core/relativistic_transfer.h"
+#include "sirius/core/spectral/colour_modes.h"
 #include "sirius/core/tensor.h"
 
 #include <array>
@@ -38,16 +40,16 @@ enum class DiskTemperatureModel {
 struct TraceResult {
     // Ray termination classification.
     enum class Outcome {
-        Escaped,   // Escaped to infinity (sample background).
-        Horizon,   // Captured by the black hole.
-        DiskHit,   // Intersected the accretion disk.
-        MaxSteps,  // Terminated at the step limit.
-        Spiraling  // Detected as spiralling near the photon sphere.
+        Escaped,  // Escaped to infinity (sample background).
+        Horizon,  // Captured by the black hole.
+        DiskHit,  // Intersected the accretion disk.
+        MaxSteps  // Terminated at the step limit.
     };
 
     Outcome outcome = Outcome::MaxSteps;
 
-    // Final state (valid for Escaped).
+    // Terminal event/state position for every outcome. final_direction is the
+    // Eulerian sky direction and is valid only for Escaped.
     sirius::core::Vec4 final_position;
     sirius::core::Vec4 final_direction;
 
@@ -56,32 +58,22 @@ struct TraceResult {
     float disk_temperature = 0.0f;
     float disk_phi = 0.0f;
 
-    // Motion-blur decomposition of the g-factor (valid for DiskHit); enables
-    // analytic g(phi + dphi) = grav / (gamma (1 - v_orb (A cos dphi + B sin dphi))).
-    float gfactor_grav = 1.0f;
-    float gfactor_gamma = 1.0f;
-    float gfactor_v_orb = 0.0f;
-    float gfactor_cosine_coefficient = 0.0f;
-    float gfactor_sine_coefficient = 0.0f;
+    // Exact first-crossing frequency transfers. full_disk_redshift uses the
+    // circular geodesic emitter; zamo_disk_redshift is the locally non-rotating
+    // diagnostic branch selected when orbital Doppler transfer is suppressed.
+    float full_disk_redshift = 1.0f;
+    float zamo_disk_redshift = 1.0f;
 
     // Diagnostics.
     int steps_taken = 0;
     float redshift = 1.0f;
     bool numerical_failure = false;
 
-    // Magnification and photon ring.
-    float magnification = 1.0f;
+    // Exact minimum Kerr-Schild chart radius reached by the accepted samples.
     float min_radius = 1e10f;
-    bool photon_ring = false;
 
-    // Higher-order imaging (winding number and image order).
-    int equatorial_crossings = 0;
-    float total_phi_change = 0.0f;
-    int image_order = 0;
-    float impact_parameter = 0.0f;
-
-    // Track up to n = 3 images.
-    static constexpr int kMaxDiskCrossings = 4;
+    // An optically thick thin disk terminates the ray at its nearest crossing.
+    static constexpr int kMaxDiskCrossings = 1;
 
     // Per-intersection disk crossing data.
     struct DiskCrossing {
@@ -89,13 +81,17 @@ struct TraceResult {
         float phi = 0.0f;
         float temperature = 0.0f;
         float redshift = 1.0f;
+        float full_redshift = 1.0f;
+        float zamo_redshift = 1.0f;
+        float emission_cosine = 1.0f;
         int crossing_index = 0;
         bool valid = false;
-        // Thermal single-scattering disk polarisation, expressed in the
+        // Semi-infinite pure electron-scattering atmosphere, expressed in the
         // observer's transported screen basis. Valid only when the tracer's
         // polarisation path was enabled.
         float polarisation_evpa = 0.0f;
         float polarisation_degree = 0.0f;
+        float polarisation_intensity_scale = 0.0f;
         bool polarisation_valid = false;
     };
 
@@ -105,7 +101,8 @@ struct TraceResult {
     // Volumetric disk accumulation (ray marching through a 3D disk).
     std::array<float, 3> volumetric_emission{};
     float optical_depth = 0.0f;
-    float volumetric_path_length = 0.0f;
+    // Observer-normalised affine length over samples containing extinction.
+    float volumetric_affine_length = 0.0f;
     bool volumetric_hit = false;
 
     // Ray-bundle footprint (P2): the beam ellipse the geodesic-deviation solution
@@ -146,15 +143,10 @@ struct TracerConfig {
     bool enable_disk = true;
     float disk_inner = 6.0f;  // ISCO for Schwarzschild = 6M.
     float disk_outer = 20.0f;
-    float disk_thickness = 0.01f;
     float disk_temperature_inner = 1.0f;
+    float disk_temperature_scale_kelvin = 30000.0f;
+    sirius::core::color_modes::Mode color_mode = sirius::core::color_modes::Mode::TrueColor;
     DiskTemperatureModel disk_temperature_model = DiskTemperatureModel::NovikovThorne;
-
-    // Cinematic work bound for rays that orbit near the photon separatrix.
-    // Production may terminate these exponentially dim higher-order paths as
-    // Spiraling; analytic shadow classifiers disable the heuristic because an
-    // escaping near-critical ray is not a captured ray.
-    bool enable_spiral_termination = true;
 
     // Optional strong-field integration cap for accuracy-critical probes. When
     // both values are positive, only steps inside the named radius are capped;
@@ -163,12 +155,10 @@ struct TracerConfig {
     float strong_field_radius = 0.0f;
     float strong_field_max_step = 0.0f;
 
-    // Doppler beaming toggle (P4). When true (default, full physics) the disk
-    // g-factor carries the orbital Doppler asymmetry; when false the orbital
-    // velocity is treated as zero for the brightness/colour factor while the
-    // gravitational redshift is retained, mirroring the Interstellar artistic
-    // choice (James et al. 2015, CQG 32 065001, section 5). True reproduces the
-    // pinned render exactly. Reference: MTW section 22.3 (relativistic beaming).
+    // Doppler transfer toggle (P4). True (the physical default) uses the
+    // circular-emitter invariant frequency. False substitutes the exact ZAMO
+    // branch as an explicitly nonphysical frame-dragging/gravitational
+    // diagnostic inspired by the film treatment (James et al. 2015, section 5).
     bool doppler_beaming = true;
 
     // Ray bundles (P2). When true the tracer propagates two geodesic-deviation
@@ -189,8 +179,9 @@ struct TracerConfig {
     bool bundle_point_source = false;
 
     // E2: transport an observer screen basis along the ray and project the
-    // disk's single-scattering polarisation into it at every thin-disk crossing.
-    // Off by default so ordinary renders pay no transport cost.
+    // disk's semi-infinite pure electron-scattering atmosphere into it at the
+    // observer-nearest thin-disk crossing. Off by default so ordinary renders
+    // pay no transport cost.
     bool enable_polarisation = false;
 
     // Volumetric disk.
@@ -202,8 +193,6 @@ struct TracerConfig {
     float volumetric_tau_max = 10.0f;
     bool enable_turbulence = false;
     sirius::core::TurbulenceConfig turbulence;
-    bool enable_corona = false;
-    sirius::core::CoronaConfig corona;
 
     // Integration (core RK45 configuration).
     sirius::core::IntegratorConfig integrator;
@@ -239,7 +228,6 @@ class GeodesicTracer {
     void SetConfig(const TracerConfig& config) {
         config_ = config;
         config_.turbulence.Validate();
-        config_.corona.Validate();
     }
     const TracerConfig& GetConfig() const { return config_; }
     void SetMetric(sirius::core::IMetric* metric) { metric_ = metric; }
@@ -272,13 +260,23 @@ class GeodesicTracer {
 
     void CacheMetricParameters();
 
-    // Convert a camera ray (BL) into a Cartesian Lightray, normalised to null.
-    sirius::core::Lightray InitializeLightray(const sirius::core::CameraRay& camera_ray);
+    // Convert a camera ray (BL) into a Cartesian Lightray, normalised to null,
+    // and return the same metric-orthonormal camera frame used for launch.
+    sirius::core::Lightray InitializeLightray(
+        const sirius::core::CameraRay& camera_ray,
+        sirius::core::relativity::ObserverFrame* launch_frame);
 
-    // Whether the segment (pos_old, pos_new) crosses the equatorial disk; writes
-    // the radius and azimuth of the crossing when it does.
-    bool CheckDiskIntersection(const sirius::core::Vec4& pos_old, const sirius::core::Vec4& pos_new,
-                               float& intersection_r, float& intersection_phi);
+    // Whether an accepted central-ray segment crosses the equatorial disk.
+    // Solves z(lambda)=0 on the cubic Hermite segment and returns the crossing
+    // event, tangent, affine fraction, radius, and azimuth.
+    bool FindDiskIntersection(const sirius::core::Vec4& start_position,
+                              const sirius::core::Vec4& start_tangent,
+                              const sirius::core::Vec4& end_position,
+                              const sirius::core::Vec4& end_tangent, double d_lambda,
+                              float& intersection_r, float& intersection_phi,
+                              double& intersection_fraction,
+                              sirius::core::Vec4& intersection_position,
+                              sirius::core::Vec4& intersection_tangent);
 
     // Novikov-Thorne thin-disk temperature T(r) ~ r^(-3/4) normalised at the edge.
     float ComputeDiskTemperature(float r);
@@ -286,12 +284,20 @@ class GeodesicTracer {
     // Whether any ray component is NaN/Inf.
     bool HasInvalidState(const sirius::core::Lightray& ray);
 
-    // g-factor (gravitational + Doppler) for disk emission; intensity ~ g^4.
-    float ComputeGFactor(float r, float phi, const sirius::core::Vec4& ray_vel);
+    struct DiskFrequencySample {
+        sirius::core::relativity::KerrDiskFrequencyTransfer transfer;
+        float emission_cosine = 1.0f;
+    };
 
-    // g-factor with the decomposed components stored for analytic motion blur.
-    void ComputeGFactorWithComponents(float r, float phi, const sirius::core::Vec4& ray_vel,
-                                      TraceResult& result);
+    // Invariant g-factor (gravitational, frame-dragging, and orbital Doppler)
+    // for disk emission; intensity ~ g^4. The observer frequency and the
+    // photon's Killing quantities retain one affine scaling end to end.
+    DiskFrequencySample ComputeDiskFrequencySample(float r, float cartesian_phi,
+                                                   const sirius::core::Vec4& ray_vel,
+                                                   float observer_frequency);
+    void SetDiskFrequencyTransfer(float r, float phi, const sirius::core::Vec4& ray_vel,
+                                  float observer_frequency, TraceResult& result,
+                                  TraceResult::DiskCrossing& crossing);
 
     // Keplerian angular velocity Omega(r) for the Kerr prograde orbit.
     float ComputeOrbitalVelocity(float r);
@@ -301,8 +307,9 @@ class GeodesicTracer {
     float ComputeScaleHeight(float r);
     float ComputeVolumetricOpacityDensity(float r, float z, float phi);
     float ComputeVolumetricTemperature(float r, float z);
-    void AccumulateVolumetricEmission(const sirius::core::Lightray& ray,
-                                      const sirius::core::Vec4& entry_pos,
+    void AccumulateVolumetricEmission(const sirius::core::Vec4& entry_velocity,
+                                      const sirius::core::Vec4& exit_velocity, double affine_length,
+                                      float observer_frequency, const sirius::core::Vec4& entry_pos,
                                       const sirius::core::Vec4& exit_pos, TraceResult& result);
 
     // --- Ray-bundle (geodesic deviation) machinery (P2) ----------------------
@@ -324,22 +331,24 @@ class GeodesicTracer {
     // (mirrors kernels/gr_deviation.slang GetRiemannTensorCart).
     void ComputeRiemannCart(const sirius::core::Vec4& pos, double R[4][4][4][4]);
 
-    // Initialise a parallel bundle at the ray start: xi_0, xi_1 an orthonormal
-    // transverse pair scaled by the angular size, V = 0 (identity Jacobian).
-    void InitBundle(const sirius::core::Vec4& k, RayBundle& bundle) const;
+    // Initialise in the observer's Sachs screen, not a Euclidean chart plane.
+    void InitBundle(const std::array<sirius::core::Vec4, 2>& launch_screen,
+                    RayBundle& bundle) const;
 
-    // Advance the bundle by one affine step d_lambda, freezing Gamma and R at the
-    // step's start point (they vary slowly over one adaptive step); RK4 on the
-    // linear deviation system.
-    void StepBundle(const sirius::core::Vec4& pos, const sirius::core::Vec4& k, double d_lambda,
-                    RayBundle& bundle);
+    // Advance the bundle by one accepted affine step. RK4 evaluates connection
+    // and curvature at its own start/midpoint/end stages; a cubic Hermite
+    // interpolant of the accepted central ray supplies the midpoint event and
+    // tangent without introducing a second geodesic authority.
+    void StepBundle(const sirius::core::Vec4& start_position,
+                    const sirius::core::Vec4& start_tangent, const sirius::core::Vec4& end_position,
+                    const sirius::core::Vec4& end_tangent, double d_lambda, RayBundle& bundle);
 
     // Extract the beam ellipse (semi-axes, orientation, magnification) from the
     // final bundle, projected onto the plane transverse to the ray direction; the
     // affine length lambda converts the transverse extent to the angular sky
     // footprint for the pupil bundle.
-    void FinaliseBundle(const RayBundle& bundle, const sirius::core::Vec4& k, double lambda,
-                        TraceResult::Beam& out) const;
+    void FinaliseBundle(const RayBundle& bundle, const sirius::core::Vec4& position,
+                        const sirius::core::Vec4& k, TraceResult::Beam& out) const;
 
     // --- Polarisation transport (E2) -----------------------------------------
     struct PolarisationFrame {
@@ -347,8 +356,11 @@ class GeodesicTracer {
         sirius::core::PolarisedRay perpendicular;
     };
 
-    void InitPolarisationFrame(const sirius::core::Lightray& ray, PolarisationFrame& frame);
-    void AdvancePolarisationFrame(PolarisationFrame& frame, double d_lambda);
+    void InitPolarisationFrame(const sirius::core::Lightray& ray,
+                               const std::array<sirius::core::Vec4, 2>& launch_screen,
+                               PolarisationFrame& frame);
+    void AdvancePolarisationFrame(PolarisationFrame& frame, const sirius::core::Vec4& end_position,
+                                  const sirius::core::Vec4& end_tangent, double d_lambda);
     void ReconditionPolarisationFrame(PolarisationFrame& frame, const sirius::core::Vec4& position,
                                       const sirius::core::Vec4& velocity);
     void SetDiskPolarisation(const PolarisationFrame& frame, TraceResult::DiskCrossing& crossing);
@@ -359,7 +371,6 @@ class GeodesicTracer {
 inline GeodesicTracer::GeodesicTracer(sirius::core::IMetric* metric, const TracerConfig& config)
     : metric_(metric), config_(config) {
     config_.turbulence.Validate();
-    config_.corona.Validate();
 }
 
 inline void GeodesicTracer::CacheMetricParameters() {
@@ -369,7 +380,11 @@ inline void GeodesicTracer::CacheMetricParameters() {
     if (page_thorne_disk_ == nullptr || cached_m_ != page_thorne_cached_m_ ||
         cached_a_ != page_thorne_cached_a_) {
         sirius::core::AccretionDiskD::Config disk_config;
-        disk_config.M = std::max(std::abs(cached_m_), 0.1);
+        // Only the dimensionless Page-Thorne radial shape is consumed below;
+        // its physical flux amplitude is divided out at the reference radius.
+        // Fixing M=1 makes that normalisation explicit and prevents the chart's
+        // geometric mass scale from masquerading as a solar-mass input.
+        disk_config.M = 1.0;
         disk_config.a_star = cached_a_;
         disk_config.r_outer =
             std::max(500.0, static_cast<double>(config_.disk_outer) / std::max(cached_m_, 0.1));
@@ -407,35 +422,6 @@ inline bool GeodesicTracer::HasInvalidState(const sirius::core::Lightray& ray) {
         if (std::isnan(ray.velocity(i)) || std::isinf(ray.velocity(i))) return true;
     }
     return false;
-}
-
-inline bool GeodesicTracer::CheckDiskIntersection(const sirius::core::Vec4& pos_old,
-                                                  const sirius::core::Vec4& pos_new,
-                                                  float& intersection_r, float& intersection_phi) {
-    // Equatorial-plane crossing (z = 0 in Cartesian).
-    double z_old = pos_old(3);
-    double z_new = pos_new(3);
-
-    if (z_old * z_new >= 0) return false;
-
-    // Linear interpolation to the crossing point.
-    double alpha = -z_old / (z_new - z_old);
-
-    double x_cross = pos_old(1) + alpha * (pos_new(1) - pos_old(1));
-    double y_cross = pos_old(2) + alpha * (pos_new(2) - pos_old(2));
-
-    sirius::core::coordinates::Vec4Cart crossing_cart{0.0, x_cross, y_cross, 0.0};
-    const double absolute_spin = cached_a_ * cached_m_;
-    double r_cross = sirius::core::coordinates::KerrSchildRadius(crossing_cart, absolute_spin);
-
-    if (r_cross < config_.disk_inner || r_cross > config_.disk_outer) {
-        return false;
-    }
-
-    intersection_r = static_cast<float>(r_cross);
-    intersection_phi = static_cast<float>(std::atan2(y_cross, x_cross));
-
-    return true;
 }
 
 }  // namespace sirius::backend

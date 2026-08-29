@@ -14,18 +14,16 @@ namespace sirius::core {
 
 // State vector for a null geodesic.
 struct Lightray {
-    Vec4 position;               // 4-position (t, r, theta, phi) or (t, x, y, z).
-    Vec4 velocity;               // 4-velocity k^mu = dx^mu/dlambda.
-    Vec4 acceleration;           // 4-acceleration d^2 x^mu/dlambda^2.
-    float ku_uobsu;              // Initial k.u, for redshift.
-    float proper_time;           // Accumulated affine parameter lambda.
-    float coordinate_time;       // Accumulated coordinate time t.
-    float running_dlambda_dnew;  // Jacobian for intensity.
-    int terminated;              // Termination status (0 = active).
-    int sx, sy;                  // Screen pixel coordinates.
-    int bounce_count;            // Number of reflections/interactions.
-    float step_size;             // Current adaptive step size.
-    int padding;                 // Alignment padding.
+    Vec4 position;          // 4-position (t, r, theta, phi) or (t, x, y, z).
+    Vec4 velocity;          // 4-velocity k^mu = dx^mu/dlambda.
+    Vec4 acceleration;      // 4-acceleration d^2 x^mu/dlambda^2.
+    float ku_uobsu;         // Positive launch-observer frequency -k.u_obs.
+    float proper_time;      // Accumulated affine parameter lambda.
+    float coordinate_time;  // Accumulated coordinate time t.
+    int terminated;         // Termination status (0 = active).
+    int sx, sy;             // Screen pixel coordinates.
+    float step_size;        // Current adaptive step size.
+    int padding;            // Alignment padding.
 };
 
 // Local observer reference frame.
@@ -61,9 +59,9 @@ struct Rk45State {
 // Static methods for geodesic integration.
 class Geodesic {
   public:
-    // Integrate one RK4 step. Precondition: metric != nullptr. Postcondition:
-    // ray.velocity satisfies the null condition. Returns false on
-    // failure/termination.
+    // Attempt one adaptive Dormand-Prince RK45 step. A false result with
+    // terminated == 0 is a
+    // recoverable rejection: step_size is reduced and the state is unchanged.
     static bool IntegrateStep(Lightray& ray, IMetric* metric, float min_step = 1e-6f,
                               float max_step = 0.1f);
 
@@ -73,11 +71,15 @@ class Geodesic {
     // Whether the ray should terminate.
     static bool CheckTermination(const Lightray& ray, IMetric* metric);
 
-    // Gravitational redshift factor z = (lambda_obs - lambda_emit)/lambda_emit.
+    // Static-observer frequency shift z = nu_emit/nu_obs - 1 where both static
+    // worldlines are timelike. Live disk transfer uses invariant emitter and
+    // observer contractions instead.
     static float CalculateRedshift(const Lightray& ray, const ObserverState& observer,
                                    IMetric* metric);
 
-    // Create and initialise an observer; the velocity is normalised to
+    // Create and initialise an observer. The supplied coordinate velocity must
+    // be finite and timelike; invalid worldlines contract-fail rather than
+    // silently becoming a different static observer. The velocity is normalised to
     // g(u, u) = -1.
     static ObserverState CreateObserver(const Vec4& position, const Vec4& velocity,
                                         IMetric* metric);
@@ -87,8 +89,8 @@ class Geodesic {
     static void CalculateTetrads(ObserverState& observer, IMetric* metric);
 
     // Integrate one step with the RK45 (Dormand-Prince) embedded 4th/5th order
-    // pair; the step is adapted from ||y5 - y4||. Returns false on
-    // failure/termination.
+    // pair; the step is adapted from ||y5 - y4||. A false result with
+    // terminated == 0 is a recoverable rejection and must be retried.
     static bool IntegrateStepRk45(Lightray& ray, IMetric* metric, const IntegratorConfig& config);
 
     // Optimal step from the error estimate: h_new = h safety (tol/err)^(1/5).

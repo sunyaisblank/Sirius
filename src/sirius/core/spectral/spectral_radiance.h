@@ -1,7 +1,7 @@
 #pragma once
 
 // 32-bin spectral radiance across the visible band (380-780 nm, 12.5 nm/bin) for
-// colour-accurate rendering, with Planck emission, g^4 redshift scaling, and CIE
+// colour-accurate rendering, with Planck emission, invariant redshift rebinning, and CIE
 // colour conversion. Ported from MTSB001A.h.
 // Reference: James et al. (2015), "DNGR", Section 3.4.
 
@@ -9,6 +9,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 
 namespace sirius::core {
 
@@ -114,23 +115,38 @@ struct SpectralRadiance {
         return result;
     }
 
-    // Gravitational/Doppler redshift with g^4 intensity scaling: g = nu_obs/nu_emit,
-    // lambda_obs = lambda_emit/g, I_obs = g^4 I_emit.
+    // Gravitational/Doppler transfer for wavelength-specific radiance.
+    // Liouville invariance I_nu/nu^3 gives
+    //
+    //   lambda_obs = lambda_emit/g,
+    //   I_lambda,obs(lambda_obs) = g^5 I_lambda,emit(g lambda_obs).
+    //
+    // Each stored value is a density per nanometre over its bin. Rebinning by
+    // interval overlap applies the g^5 density and the 1/g wavelength stretch,
+    // so the integrated bolometric radiance is exactly g^4 when the shifted
+    // support remains in the represented band.
     SpectralRadiance ApplyRedshift(double g) const {
         SpectralRadiance result;
         if (!std::isfinite(g) || g <= 0.0) return result;
-        double g4 = g * g * g * g;
+        const double g2 = g * g;
+        const double g5 = g2 * g2 * g;
 
         for (int i = 0; i < kNumWavelengthBins; ++i) {
-            double lambda_emit = Wavelength(i);
-            double lambda_obs = lambda_emit / g;
-
-            int j = BinIndex(lambda_obs);
-
-            if (j >= 0 && j < kNumWavelengthBins) {
-                result.L[j] += L[i] * g4;
+            if (!std::isfinite(L[i]) || L[i] == 0.0) continue;
+            const double observed_lower = (kLambdaMin + i * kLambdaStep) / g;
+            const double observed_upper = (kLambdaMin + (i + 1) * kLambdaStep) / g;
+            const int first_bin = std::max(0, BinIndex(observed_lower));
+            const int last_bin = std::min(
+                kNumWavelengthBins - 1,
+                BinIndex(std::nextafter(observed_upper, -std::numeric_limits<double>::infinity())));
+            for (int j = first_bin; j <= last_bin; ++j) {
+                const double destination_lower = kLambdaMin + j * kLambdaStep;
+                const double destination_upper = destination_lower + kLambdaStep;
+                const double overlap =
+                    std::max(0.0, std::min(observed_upper, destination_upper) -
+                                      std::max(observed_lower, destination_lower));
+                result.L[j] += L[i] * g5 * overlap / kLambdaStep;
             }
-            // Else: shifted out of the visible range (UV or IR).
         }
 
         return result;

@@ -77,8 +77,8 @@ The July remediation's central lesson was that every duplicated authority eventu
 
 | Concern | Authority | Change from July |
 |---|---|---|
-| Metric identity | `core/metrics/registry.h`, closed `MetricId` enum | Carried. The GPU kernel's private `MetricType` enum (which had grown Gödel and Taub-NUT dead branches and a `Custom` escape hatch) is deleted; the kernel-side enum and dispatch tables are generated from the registry at build time, so a second catalogue can no longer exist. |
-| Tolerances and constants | `core/constants.h` | Carried; the kernel-side constant block is generated from it. |
+| Metric identity | `core/metrics/registry.h`, closed `MetricId` enum | Carried. The GPU kernel's former physics catalogue (including dead Gödel, Taub-NUT, and `Custom` branches) is deleted. A compact device-family ABI remains, but `MapMetric` exhaustively translates every registry identity to a represented family or an explicit decline, and parity probes pin those ABI values. |
+| Host tolerances and constants | `core/constants.h` | Carried. Device-only fp32/fp64 controller tolerances have different accumulation semantics and therefore live once in `gr_integrator.slang`; production and the live P1 parity probe call the same policy functions, while the probe binds that accepted envelope to CPU/oracle invariants. |
 | ISCO | `AccretionDisk::ComputeIsco` | Carried. |
 | Capture surfaces | `IMetric::InsideCaptureSurface`, analytic Kerr-Schild inverses | Carried. |
 | Test labels | `scripts/generate-ctest-labels.py` | Carried. |
@@ -96,14 +96,13 @@ authority reports this as `explicit-schema`, never as native reflection.
 
 All device physics is written once, in Slang, as modules with interfaces per concern (metric family, integrator, disk emission, beam propagation). Slang was chosen over three alternatives: raw GLSL lacks the module and generics system a physics library needs; SYCL single-source C++ has no Metal path and weak Windows support outside oneAPI; WGSL has no 64-bit floating point at all. Slang compiles the same source to SPIR-V for Vulkan today, and to CUDA, Metal, and HLSL when a native adapter earns its keep by profiling; the compiler is Khronos-hosted, Apache-licensed, and ships prebuilt for all three desktop platforms.
 
-Two live integrators exist by design, and the difference is methodological rather than accidental. The kernel integrates Cartesian geodesics with fixed-form RK4 and compensated or fp64 state accumulation on the corresponding precision rungs; the CPU reference tracer uses adaptive Dormand-Prince RK45. A fixed-step Yoshida composition of implicit-midpoint maps is deliberately confined to the double-precision oracle stack; its canonical two-form is tested directly, while state-dependent step selection and optional null projection are not misreported as symplectic operations. Two independent live methods agreeing within stated tolerance is stronger evidence than one method executed twice, so backend parity gates are statistical (per-pixel relative radiance bounds, conserved-quantity drift bounds) rather than bitwise. The reference tapes in `renders/` remain CPU-produced.
+Two live integrators exist by design, and the difference is methodological rather than accidental. The kernel integrates Cartesian geodesics with adaptive RK4 step doubling and compensated or fp64 state accumulation on the corresponding precision rungs; the CPU reference tracer uses adaptive Dormand-Prince RK45. Both methods reject a candidate step when either its scale-aware truncation estimate or relative null residual exceeds the owned tolerance, preserving the prior state for retry. A fixed-step Yoshida composition of implicit-midpoint maps is deliberately confined to the double-precision oracle stack; its canonical two-form is tested directly, while state-dependent step selection and optional oracle-only null projection are not misreported as symplectic operations. Two independent live methods agreeing within stated tolerance is stronger evidence than one method executed twice, so backend parity gates are statistical (per-pixel relative radiance bounds, conserved-quantity drift bounds) rather than bitwise. The reference tapes in `renders/` remain CPU-produced.
 
 Precision inside kernels follows the ladder in section 6. Full-ray Mandatory
 diagnostics independently measure energy, axial angular momentum, Carter Q,
-and the null residual on the CPU RK45 and Vulkan Cartesian-RK4 paths. The CPU
-integrator additionally re-normalises a ray when its null residual crosses the
-owned threshold; the Vulkan render loop remains the fixed RK4 method being
-measured and is not silently altered by its diagnostic.
+and the null residual on the CPU RK45 and Vulkan Cartesian-RK4 paths. Constraint
+drift participates in live step acceptance on both paths; neither live method
+re-normalises, projects, or otherwise changes the null branch after a step.
 
 ## 4. Backends and platforms
 
@@ -128,11 +127,15 @@ never enter the WSL-specific path.
 
 ## 5. Render orchestration
 
-The session orchestrator, tile scheduler, progress tracking, and viewer port forward with their roles intact. Tiles remain the unit of work everywhere: the CPU tracer threads over tiles, the Vulkan backend dispatches a compute grid per tile batch, and the viewer's progressive refinement consumes tiles in the existing spiral order. Both live paths propagate two deviation vectors, extract the singular axes and output-plane orientation, and feed that literal ellipse to the indexed point-star filter. The kernel constructs the Riemann tensor once per step and contracts it with both vectors. The double-precision beam integrator remains off the render path as an oracle; its covariant Jacobi state shares one RK4 tableau with the central ray and is gated against the exact radial and circular Schwarzschild null-congruence solutions to one part in \(10^6\).
+The session orchestrator, tile scheduler, progress tracking, and viewer port forward with their roles intact. Tiles remain the unit of work everywhere: the CPU tracer threads over tiles, the Vulkan backend dispatches a compute grid per tile batch, and the viewer's progressive refinement consumes tiles in the existing spiral order. Both live paths propagate two deviation vectors, extract the singular axes and output-plane orientation, and feed that literal ellipse to the indexed point-star filter. For each accepted central-ray segment, the Jacobi RK4 tableau evaluates connection and full Riemann curvature at the accepted start, cubic-Hermite midpoint, and accepted end, sharing each stage across both deviation columns. The double-precision beam integrator remains off the render path as an oracle and is gated against the exact radial and circular Schwarzschild null-congruence solutions to one part in \(10^6\).
 
-The CPU polarisation path carries two observer screen vectors through the same
-accepted geodesic steps, reconditions them only to remove integrator drift, and
-projects the thin-disk thermal scattering state into that transported basis.
+The CPU polarisation path carries two observer-screen vectors through the same
+accepted central-ray segments, reconditions them within the local observer
+screen only to remove integrator drift, and projects the circular-emitter disk
+screen into that transported basis. Emission uses the flux-normalised
+Chandrasekhar-Sobolev semi-infinite pure electron-scattering atmosphere; it
+does not claim absorption, finite optical depth, returning radiation, or
+magnetic/Faraday effects.
 The live Kerr-Schild implementation conserves the Walker-Penrose constant and
 agrees across charts with the independent Boyer-Lindquist oracle. Stokes
 crossings are accumulated before false-colour film visualisation. Vulkan,
@@ -163,15 +166,13 @@ The port renames every file per the style guide. The table is the traceability r
 | Sirius.Core/Metric/PHMT101A.h | core/metrics/morris_thorne_family.h |
 | Sirius.Core/Metric/PHMT102A.h | core/metrics/warp_drive_family.h |
 | Sirius.Core/Metric/PHMT200A.h | core/metrics/registry.h |
-| Sirius.Core/Metric/PHSM001A.h | core/metrics/astrophysical_scaling.h |
+| Sirius.Core/Metric/PHSM001A.h | retired: unused preset-only SI scaling; constants remain central in core/constants.h |
 | Sirius.Core/Geodesic/PHGD001A.{h,cpp} | core/geodesic_integrator.{h,cpp} |
 | Sirius.Core/Camera/CMBS001A.h | core/camera.h |
 | Sirius.Core/Disk/PHAD000A.h | core/disk/disk_model.h |
 | Sirius.Core/Disk/PHAD001A.h | core/disk/novikov_thorne_disk.h |
-| Sirius.Core/Disk/PHCR001A.h | core/disk/corona.h |
 | Sirius.Core/Disk/PHTR001A.h | core/disk/turbulence.h |
 | Sirius.Core/Environment/PHSF001A.h | core/starfield.h |
-| Sirius.Core/Jet/PHJT001A.h | core/jet.h |
 | Sirius.Core/Spectral/PHSP001A.h | core/spectral/blackbody.h |
 | Sirius.Core/Spectral/MTSB001A.h | core/spectral/spectral_radiance.h |
 | Sirius.Core/Spectral/PHSC001A.h | core/spectral/colour_modes.h |

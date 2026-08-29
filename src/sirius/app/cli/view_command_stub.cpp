@@ -99,6 +99,12 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
         for (const auto& error : errors) cli::Error(error);
         return 1;
     }
+    if (jets_enabled_) {
+        cli::Error(
+            "Relativistic jets require covariant geodesic radiative transfer, which is not "
+            "represented");
+        return 1;
+    }
 
     cli::Error(
         "Interactive viewer was not compiled; CPU and Vulkan render commands remain "

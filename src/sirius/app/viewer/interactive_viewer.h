@@ -43,7 +43,6 @@ struct ViewerConfig {
 
     bool enable_disk = true;
     bool enable_volumetric = false;
-    bool enable_jets = false;
     render::RenderBackend backend = render::RenderBackend::Cpu;
 };
 

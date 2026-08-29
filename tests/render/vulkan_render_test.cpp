@@ -14,8 +14,8 @@
 // return linear radiance; tonemapping is host-side and out of scope here). The
 // parity scene disables the disk and the starfield so the comparison isolates
 // the integrator + camera geometry against the shared analytic gradient
-// background; the disk emission models differ deliberately between the cinematic
-// CPU shading and the physical kernel radiance and are not parity-gated.
+// background. Disk physics is independently governed by the non-render P4
+// kernel-parity probes, so this scene does not duplicate that programme.
 
 #include <gtest/gtest.h>
 
@@ -309,7 +309,6 @@ TEST(VulkanRenderSession, CapabilityBoundaryAcceptsRepresentedSceneSemantics) {
     config.lens_type = sirius::core::LensType::ThinLens;
     config.enable_volumetric_disk = true;
     config.enable_turbulence = true;
-    config.enable_corona = true;
     config.volumetric_samples = 64;
     EXPECT_TRUE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
 }
@@ -349,6 +348,9 @@ TEST(VulkanRenderSession, CapabilityBoundaryRejectsUnrepresentedSceneSemantics) 
     config.enable_jets = true;
     EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
     config.enable_jets = false;
+    config.enable_corona = true;
+    EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
+    config.enable_corona = false;
     config.enable_motion_blur = true;
     EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
     config.enable_motion_blur = false;
@@ -356,7 +358,7 @@ TEST(VulkanRenderSession, CapabilityBoundaryRejectsUnrepresentedSceneSemantics) 
     EXPECT_FALSE(sirius::render::ValidateVulkanRenderConfig(config).has_value());
 }
 
-TEST(VulkanRenderSession, VolumetricTurbulenceAndCoronaReachLiveKernel) {
+TEST(VulkanRenderSession, ProceduralVolumetricTurbulenceReachesLiveKernel) {
     if (const auto devices = EnumerateVulkanDevices(); !devices || devices->empty()) {
         GTEST_SKIP() << "no Vulkan device present";
     }
@@ -366,14 +368,12 @@ TEST(VulkanRenderSession, VolumetricTurbulenceAndCoronaReachLiveKernel) {
                                                   config.enable_volumetric_disk = true;
                                                   config.volumetric_samples = 4;
                                               });
-    const auto represented =
-        RenderSessionVulkan(40, 24, root + "/sirius_vk_volume_turbulence_corona.exr",
-                            [](sirius::render::SessionConfig& config) {
-                                config.enable_volumetric_disk = true;
-                                config.enable_turbulence = true;
-                                config.enable_corona = true;
-                                config.volumetric_samples = 4;
-                            });
+    const auto represented = RenderSessionVulkan(40, 24, root + "/sirius_vk_volume_turbulence.exr",
+                                                 [](sirius::render::SessionConfig& config) {
+                                                     config.enable_volumetric_disk = true;
+                                                     config.enable_turbulence = true;
+                                                     config.volumetric_samples = 4;
+                                                 });
     ASSERT_FALSE(baseline.empty());
     ASSERT_EQ(represented.size(), baseline.size());
     double absoluteDifference = 0.0;
@@ -382,7 +382,7 @@ TEST(VulkanRenderSession, VolumetricTurbulenceAndCoronaReachLiveKernel) {
         absoluteDifference += std::abs(static_cast<double>(represented[i] - baseline[i]));
     }
     EXPECT_GT(absoluteDifference, 1.0e-5)
-        << "Vulkan turbulence/corona controls did not affect live volumetric transfer";
+        << "Vulkan procedural turbulence did not affect live volumetric transfer";
 }
 
 TEST(VulkanRenderSession, ThinAndVolumetricDopplerSuppressionAffectLiveEmission) {
@@ -701,11 +701,7 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds) {
             if (res.outcome == TraceResult::Outcome::Escaped) {
                 GradientBackground(res.final_direction(1), res.final_direction(2),
                                    res.final_direction(3), r, g, b);
-            } else if (res.outcome == TraceResult::Outcome::Spiraling) {
-                r = g = b = 0.02f;
-            } else if (res.outcome == TraceResult::Outcome::MaxSteps) {
-                r = g = b = 0.01f;
-            }  // Horizon -> black
+            }  // Horizon or numerical work-bound outcome -> black
             const int idx = (y * w + x) * 4;
             cpu[idx + 0] = r;
             cpu[idx + 1] = g;
@@ -973,11 +969,7 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalB
             if (res.outcome == TraceResult::Outcome::Escaped) {
                 GradientBackground(res.final_direction(1), res.final_direction(2),
                                    res.final_direction(3), r, g, b);
-            } else if (res.outcome == TraceResult::Outcome::Spiraling) {
-                r = g = b = 0.02f;
-            } else if (res.outcome == TraceResult::Outcome::MaxSteps) {
-                r = g = b = 0.01f;
-            }  // Horizon (throat) -> black
+            }  // Horizon (throat) or numerical work-bound outcome -> black
             const int idx = (y * w + x) * 4;
             cpu[idx + 0] = r;
             cpu[idx + 1] = g;

@@ -5,12 +5,12 @@
 set_tests_properties(
     AccretionDiskTest.ISCO_Schwarzschild
     AccretionDiskTest.ConfigurationSanitizesEveryNonFiniteScalar
+    AccretionDiskTest.AutoIscoIsValidatedAgainstTheDerivedOuterEdge
     AccretionDiskTest.ISCO_ExtremalKerr_Prograde
     AccretionDiskTest.ISCO_ExtremalKerr_Retrograde
     AccretionDiskTest.ISCO_ModerateSpin
     AccretionDiskTest.TemperatureProfileShape
     AccretionDiskTest.TemperatureScalingWithMass
-    AccretionDiskTest.LimbDarkening
     AccretionDiskTest.DiskBoundaries
     AccretionDiskTest.SpectralEmission
     AccretionDiskTest.FluxProfile
@@ -51,6 +51,7 @@ set_tests_properties(
     AnalyticValidationTest.ISCONearExtremal
     AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature
     AnalyticValidationTest.PageThorneTemperatureHasZeroTorqueInnerEdge
+    AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff
     AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter
     PROPERTIES LABELS "Mandatory;Correctness"
 )
@@ -98,20 +99,18 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    CameraAberrationTest.MatchesAnalyticFormulaAlongViewAxis
-    CameraAberrationTest.MatchesGeneralLorentzBoostForThreeAxisVelocities
-    CameraAberrationTest.ZeroBetaIsExactNoOp
-    CameraAberrationTest.ForwardMotionBeamsTowardAxis
-    CameraAberrationTest.ComposesOverLensModels
-    PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
     CameraFactoryTest.CreatePinhole
     CameraFactoryTest.CreateThinLens
     CameraFactoryTest.CreateFisheye
     CameraFactoryTest.MalformedLensValueFailsClosed
     CameraFactoryTest.ConfigPassthrough
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels
+    CameraWorldlineTest.ZeroVelocityIsExactlyRepresented
+    CameraWorldlineTest.InvalidInternalWorldlineFailsClosed
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -196,7 +195,8 @@ set_tests_properties(
     ConfigValidation.CpuBackendAccepted
     ConfigValidation.NonFiniteValuesAreRejected
     ConfigValidation.UnknownOutputExtensionIsRejected
-    ConfigValidation.VolumetricExtensionsRequireTheLiveVolumePath
+    ConfigValidation.UnrepresentedNarrowbandEmissionDeclines
+    ConfigValidation.TurbulenceRequiresVolumeAndSpectralCoronaDeclines
     ConfigValidation.UnimplementedDenoiserRequestIsRejected
     ConfigValidation.ObserverAzimuthRangeIsValidated
     ConfigValidation.CameraWorldlineAndLensAreValidated
@@ -204,6 +204,7 @@ set_tests_properties(
     ConfigValidation.PolarisationRequiresRepresentedThinBlackHoleDisk
     ConfigValidation.MotionBlurAndWormholeTopologyHaveExplicitOperatorBoundaries
     ConfigValidation.DiskRequestDeclinesForEveryMetricWithoutAnEmissionModel
+    ConfigValidation.RayBundlesRejectMetricsWithoutStationaryCurvatureTransport
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -256,41 +257,6 @@ set_tests_properties(
     CoordinateTransformTests.SouthPoleCoordinates
     CoordinateTransformTests.KerrOblateSpheroidal
     CoordinateTransformTests.KerrSolveR_Accuracy
-    PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
-    CoronaConfigTests.ValidateClampsTemperature
-    CoronaConfigTests.ValidateClampsOpticalDepth
-    CoronaConfigTests.ValidateEnsuresOuterGreaterThanInner
-    CoronaConfigTests.ValidateReplacesEveryNonFiniteScalar
-    CoronaConfigTests.ComptonizationParameter
-    CoronaConfigTests.ComptonizationHighOpticalDepth
-    CoronaConfigTests.SpectralIndexFinite
-    PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
-    CoronaEmissivityTests.ZeroOutsideBounds
-    CoronaEmissivityTests.DisabledReturnsZero
-    CoronaEmissivityTests.DecreasesWithRadius
-    CoronaEmissivityTests.GaussianVerticalFalloff
-    CoronaEmissivityTests.OpticalDepthDisabledIsZero
-    CoronaEmissivityTests.OpticalDepthPositiveInsideCorona
-    CoronaEmissivityTests.ScatteredIntensityZeroForZeroTau
-    CoronaEmissivityTests.ComptonizedSourceLeavesOpticalDepthToTheRayMarcher
-    CoronaEmissivityTests.ScatteredIntensityIncreasesWithTau
-    PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
-    CoronaGeometryTests.DisabledReturnsNoContainment
-    CoronaGeometryTests.OutsideRadialBoundsRejected
-    CoronaGeometryTests.SlabGeometryEquatorialInside
-    CoronaGeometryTests.SlabGeometryPolarOutside
-    CoronaGeometryTests.LamppostNearSourceInside
-    CoronaGeometryTests.SphereContainment
-    CoronaGeometryTests.ExtendedScalesWithRadius
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -461,9 +427,7 @@ set_tests_properties(
     GeodesicTracerTest.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation
     GeodesicTracerTest.NoNumericalFailures
     GeodesicTracerTest.KerrMetricTracing
-    GeodesicTracerTest.GFactorDecompositionConsistency
-    GeodesicTracerTest.MotionBlurConvergence
-    GeodesicTracerTest.GFactorCoefficientNormalization
+    GeodesicTracerTest.InvariantFrequencyTransferSelectsTheCircularEmitterBranch
     GeodesicTracerTest.TracingPerformance
     PROPERTIES LABELS "Mandatory;Operational"
 )
@@ -471,7 +435,7 @@ set_tests_properties(
 set_tests_properties(
     GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment
     GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource
-    GeodesicTracerVolumetric.TurbulenceAndCoronaAlterLiveTransferDeterministically
+    GeodesicTracerVolumetric.ProceduralTurbulenceAltersLiveTransferDeterministically
     PROPERTIES LABELS "Mandatory;Operational"
 )
 
@@ -489,42 +453,6 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    JetDopplerTests.HeadOnApproachBoosted
-    JetDopplerTests.RecedingDeBoosted
-    JetDopplerTests.TransverseDirection
-    JetDopplerTests.AnalyticFormula
-    JetDopplerTests.ConstructorSanitizesNonFiniteConfiguration
-    PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
-    JetEmissionTests.MagneticFieldAtLaunch
-    JetEmissionTests.MagneticFieldDecays
-    JetEmissionTests.ElectronDensityAtLaunch
-    JetEmissionTests.ElectronDensityDecays
-    JetEmissionTests.SynchrotronEmissivityPositive
-    JetEmissionTests.BeamingApproachingBrighterThanReceding
-    JetEmissionTests.PolarisationDegreeFormula
-    JetEmissionTests.VelocityDirection
-    PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
-    JetGeometryTests.InsideJetOnAxis
-    JetGeometryTests.OutsideJetBelowLaunch
-    JetGeometryTests.OutsideJetFarOffAxis
-    JetGeometryTests.SouthernJet
-    JetGeometryTests.JetRadiusMonotone
-    JetGeometryTests.JetRadiusZeroBelowLaunch
-    PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
-    JetRayMarchTests.EmissionOutsideJetIsZero
-    PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
     KernelBeam.BeamFlagWiresDeviationWithoutMovingDefault
     PROPERTIES LABELS "Mandatory;Correctness"
 )
@@ -533,10 +461,8 @@ set_tests_properties(
     KernelParity.KerrSchildMetricMatchesLegacyToOnePartInMillion
     KernelParity.WormholeAndWarpMetricMatchLegacy
     KernelParity.KerrSchildChristoffelMatchesLegacyToOnePartInMillion
-    KernelParity.SymplecticStepMatchesLegacy
-    KernelParity.YoshidaS4StepMatchesLegacy
     KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel
-    KernelParity.ChebyshevBlackbodyMatchesLegacy
+    KernelParity.BlackbodyMatchesIntegratedCoreSpectrum
     KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor
     KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter
     KernelParity.BeamEllipseRetainsBothAxesAndOutputOrientation
@@ -770,6 +696,15 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    ObserverFrameTests.MovingKerrSchildObserverProducesAnOrthonormalTetrad
+    ObserverFrameTests.InvalidWorldlineCannotBecomeASilentStaticObserver
+    ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform
+    ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne
+    ObserverFrameTests.EulerianReferenceRemainsTimelikeInsideTheKerrErgosphere
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     OracleConnection.AnalyticConnectionAgreesWithMetricDerivatives
     PROPERTIES LABELS "Mandatory;Correctness"
 )
@@ -789,8 +724,6 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    ParallelTransportTests.ZeroSpinNoRotation
-    ParallelTransportTests.RotationIncreasesWithSpin
     ParallelTransportTests.ApplyPreservesIntensity
     PROPERTIES LABELS "Mandatory;Correctness"
 )
@@ -825,10 +758,9 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    PolarisedEmissionTests.SynchrotronPolarisationDegree
-    PolarisedEmissionTests.SynchrotronEmissionIsPhysical
-    PolarisedEmissionTests.ThomsonScatteringAt90Degrees
-    PolarisedEmissionTests.ThomsonScatteringForward
+    PolarisedEmissionTests.ChandrasekharAtmosphereHasPhysicalEndpointPolarisation
+    PolarisedEmissionTests.ChandrasekharAtmospherePreservesHemisphericFlux
+    PolarisedEmissionTests.ChandrasekharAtmosphereRejectsInvalidDirectionCosines
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -854,7 +786,7 @@ set_tests_properties(
     RayBundleTest.KretschmannMatchesOracleKerrEquatorial
     RayBundleTest.KretschmannMatchesOracleKerrOffEquatorial
     RayBundleTest.BundleFiniteAndDeterministicKerr
-    RayBundleTest.MagnificationConsistencyWithScalarJacobian
+    RayBundleTest.MagnificationComesOnlyFromJacobiMap
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -960,7 +892,7 @@ set_tests_properties(
     SpectralRadianceTest.BlackbodyPeakWavelength
     SpectralRadianceTest.BlackbodyWhitePoint
     SpectralRadianceTest.BlackbodyBinsMatchPlanckAuthorityAndRejectInvalidTemperature
-    SpectralRadianceTest.RedshiftDepositsExactlyOneGFourthWeightedBin
+    SpectralRadianceTest.RedshiftRebinsILambdaWithGFiveAndGFourBolometricScaling
     SpectralRadianceTest.RedshiftWavelengthShift
     SpectralRadianceTest.SRGBConversionRange
     SpectralRadianceTest.ACESConversion
@@ -986,8 +918,6 @@ set_tests_properties(
     SpectralUtilsTests.DopplerFactorZeroVelocity
     SpectralUtilsTests.DopplerFactorReceding
     SpectralUtilsTests.DopplerFactorApproaching
-    SpectralUtilsTests.ApplyRedshiftEffect
-    SpectralUtilsTests.ApplyBlueshiftEffect
     SpectralUtilsTests.TotalRedshiftCombined
     PROPERTIES LABELS "Mandatory;Correctness"
 )
@@ -998,13 +928,18 @@ set_tests_properties(
     SpectralValidationTests.StefanBoltzmannAuthorityMatchesIntegratedPlanckSpectrum
     SpectralValidationTests.DopplerFactorMatchesIndependentLorentzFormula
     SpectralValidationTests.TotalRedshiftComposesGravitationalAndDopplerFactors
-    SpectralValidationTests.LimbDarkeningAuthorityMatchesEmpiricalLawAndLiveApplication
+    SpectralValidationTests.StaticMetricRedshiftHasThePhysicalDirection
+    SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction
+    SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere
+    SpectralValidationTests.ComovingOpacityUsesInvariantAffinePathLength
+    SpectralValidationTests.ObserverToSourceTransferPreservesForegroundEmissionOrder
     SpectralValidationTests.BlackbodyColourProgressionConsumesIntegratedSpectrum
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
     StarEntryTests.ComputeColorProducesValidRGB
+    StarEntryTests.ComputeColorUsesTheIntegratedBlackbodyAuthority
     StarEntryTests.HotStarIsBluer
     StarEntryTests.ZeroTemperatureDefaultsToSolar
     StarEntryTests.IntensityFromMagnitude
@@ -1132,7 +1067,7 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    TurbulenceTest.ValidateRestoresFiniteOrderedDomain
+    TurbulenceTest.ValidateRestoresFiniteProceduralDomain
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -1161,6 +1096,7 @@ set_tests_properties(
 
 set_tests_properties(
     ViewCommandOperational.StrictParsingAndSessionProjection
+    ViewCommandOperational.RelativisticJetsDeclineBeforeViewerInitialisation
     ViewCommandOperational.HeadlessRefinementProducesASynchronisedFrame
     ViewCommandOperational.VulkanRefinementPublishesProgressiveFrames
     ViewCommandOperational.InputStateHandlesPressRepeatReleaseMouseAndScroll
@@ -1178,7 +1114,7 @@ set_tests_properties(
 set_tests_properties(
     VulkanRenderSession.CapabilityBoundaryAcceptsRepresentedSceneSemantics
     VulkanRenderSession.CapabilityBoundaryRejectsUnrepresentedSceneSemantics
-    VulkanRenderSession.VolumetricTurbulenceAndCoronaReachLiveKernel
+    VulkanRenderSession.ProceduralVolumetricTurbulenceReachesLiveKernel
     VulkanRenderSession.ThinAndVolumetricDopplerSuppressionAffectLiveEmission
     VulkanRenderSession.NonSquareMultisamplingCameraAndLensReachLiveKernel
     VulkanRenderSession.IndexedPointCatalogueReachesLiveKernel

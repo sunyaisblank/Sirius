@@ -21,7 +21,6 @@
 #endif
 
 #include "sirius/core/constants.h"
-#include "sirius/core/disk/temporal_emission.h"
 #include "sirius/core/metrics/morris_thorne_family.h"
 #include "sirius/core/spectral/blackbody.h"  // Spectral blackbody colour.
 
@@ -52,11 +51,9 @@ using backend::TraceResult;
 using core::AccretionDiskD;
 using core::CameraConfig;
 using core::CameraRay;
-using core::JetConfig;
 using core::KerrSchildFamily;
 using core::KerrSchildParams;
 using core::MetricId;
-using core::RelativisticJet;
 using core::Vec4;
 using core::WarpDriveFamily;
 using core::WarpDriveParams;
@@ -64,14 +61,6 @@ using core::WarpDriveParams;
 namespace math = core::constants::math;
 
 namespace {
-// Shading and grading constants (kept from the legacy reference path).
-constexpr float kDiskIntensityBoost = 5.0f;
-constexpr float kPhotonRingBoostDisk = 2.0f;
-constexpr float kPhotonRingBoostVolumetric = 1.5f;
-constexpr float kPhotonRingBoostEscaped = 1.2f;
-constexpr float kSpiralingBrightness = 0.02f;
-constexpr float kMaxStepsBrightness = 0.01f;
-constexpr float kJetNormalisation = 0.1f;
 constexpr int kBloomRadius = 12;
 constexpr float kShadowLift = 0.02f;
 }  // namespace
@@ -241,6 +230,11 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
     if (config.samples_per_pixel < 1 || config.samples_per_pixel > 4096) {
         return "samples per pixel must be between 1 and 4096";
     }
+    if (config.ray_bundles && config.metric_id != MetricId::Minkowski &&
+        config.metric_id != MetricId::Schwarzschild && config.metric_id != MetricId::Kerr) {
+        return "ray-bundle curvature transport is represented only for Minkowski, Schwarzschild, "
+               "and Kerr";
+    }
     if (config.thread_count < 0 || config.thread_count > 1024) {
         return "thread count must be between 0 and 1024";
     }
@@ -353,16 +347,19 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         core::DiskSupportFor(config.metric_id) != core::DiskSupport::PageThorne) {
         return "the selected metric has no represented accretion-disk emission model";
     }
-    if (!config.enable_disk &&
-        (config.enable_volumetric_disk || config.enable_turbulence || config.enable_corona)) {
-        return "volumetric disk, turbulence, and corona require the disk";
+    if (config.enable_corona) {
+        return "corona emission requires frequency-dependent covariant Compton transfer, which "
+               "is not represented";
     }
-    if (!config.enable_volumetric_disk && (config.enable_turbulence || config.enable_corona)) {
-        return "turbulence and corona require volumetric transfer";
+    if (!config.enable_disk && (config.enable_volumetric_disk || config.enable_turbulence)) {
+        return "volumetric disk and turbulence require the disk";
+    }
+    if (!config.enable_volumetric_disk && config.enable_turbulence) {
+        return "turbulence requires volumetric transfer";
     }
     if (config.volumetric_samples < 1 || config.volumetric_samples > 4096 ||
-        !finite(config.volumetric_h_over_r) || config.volumetric_h_over_r <= 0.0f ||
-        config.volumetric_h_over_r > 2.0f || !finite(config.volumetric_h_power) ||
+        !finite(config.volumetric_h_over_r) || config.volumetric_h_over_r < 0.01f ||
+        config.volumetric_h_over_r > 0.5f || !finite(config.volumetric_h_power) ||
         config.volumetric_h_power < -2.0f || config.volumetric_h_power > 4.0f ||
         !finite(config.volumetric_tau_midplane) || config.volumetric_tau_midplane < 0.0f ||
         config.volumetric_tau_midplane > 1.0e6f) {
@@ -373,7 +370,6 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         case core::color_modes::Mode::TrueColor:
         case core::color_modes::Mode::TemperatureMap:
         case core::color_modes::Mode::RedshiftMap:
-        case core::color_modes::Mode::Narrowband:
         case core::color_modes::Mode::Polarisation:
             break;
         default:
@@ -414,13 +410,11 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         return "display-pipeline parameters are outside the represented domain";
     }
     if (config.enable_motion_blur) {
-        if (!config.enable_disk) {
-            return "temporal disk motion blur requires the disk";
-        }
         if (!in_range(config.shutter_time, 0.0, 1000.0) || config.motion_blur_samples < 1 ||
             config.motion_blur_samples > 4096) {
             return "motion-blur parameters are outside the represented domain";
         }
+        return "temporal disk motion blur requires a represented time-dependent emissivity model";
     }
     if (config.enable_film_simulation) {
         const FilmConfig& film = config.film_config;
@@ -490,14 +484,9 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         default:
             return "invalid wormhole topology";
     }
-    if (config.enable_jets &&
-        (!finite(config.jet_lorentz_factor) || config.jet_lorentz_factor < 1.0f ||
-         !finite(config.jet_opening_angle) || config.jet_opening_angle <= 0.0f ||
-         !finite(config.jet_launch_radius) || config.jet_launch_radius <= 0.0f ||
-         !finite(config.jet_max_extent) || config.jet_max_extent <= config.jet_launch_radius ||
-         !finite(config.jet_collimation) || !finite(config.jet_spectral_index) ||
-         !finite(config.jet_intensity) || config.jet_intensity < 0.0f)) {
-        return "relativistic-jet parameters are outside the represented domain";
+    if (config.enable_jets) {
+        return "relativistic jets require covariant geodesic radiative transfer, which is not "
+               "represented";
     }
     return std::nullopt;
 }
@@ -688,13 +677,15 @@ base::Expected<void> RenderSession::Initialise() {
     const auto disk_support = core::DiskSupportFor(config_.metric_id);
     const bool disk_capable = disk_support == core::DiskSupport::PageThorne;
     SIRIUS_ASSERT(!config_.enable_disk || disk_support == core::DiskSupport::PageThorne);
-    SIRIUS_ASSERT(config_.enable_disk || (!config_.enable_volumetric_disk &&
-                                          !config_.enable_turbulence && !config_.enable_corona));
+    SIRIUS_ASSERT(config_.enable_disk ||
+                  (!config_.enable_volumetric_disk && !config_.enable_turbulence));
     auto isco_radius = AccretionDiskD::ComputeIsco(config_.black_hole_spin);
     tracer_config.disk_inner = static_cast<float>(isco_radius * config_.black_hole_mass);
     tracer_config.disk_outer = static_cast<float>(20.0 * config_.black_hole_mass);
     tracer_config.enable_disk = config_.enable_disk && disk_capable;
     tracer_config.enable_polarisation = config_.enable_polarisation;
+    tracer_config.disk_temperature_scale_kelvin = config_.disk_temperature_scale;
+    tracer_config.color_mode = config_.color_mode;
 
     // Doppler beaming toggle (P4); true keeps the full physics and the
     // pinned render byte-for-byte.
@@ -728,11 +719,6 @@ base::Expected<void> RenderSession::Initialise() {
     tracer_config.volumetric_samples = config_.volumetric_samples;
     tracer_config.enable_turbulence = config_.enable_turbulence;
     tracer_config.turbulence.enabled = config_.enable_turbulence;
-    tracer_config.enable_corona = config_.enable_corona;
-    tracer_config.corona.enabled = config_.enable_corona;
-    tracer_config.corona.inner_radius_M = tracer_config.disk_inner;
-    tracer_config.corona.outer_radius_M = tracer_config.disk_outer;
-
     if (metric_) {
         tracer_ = std::make_unique<GeodesicTracer>(metric_.get(), tracer_config);
         if (tracer_config.enable_disk) {
@@ -746,20 +732,6 @@ base::Expected<void> RenderSession::Initialise() {
     }
 
     // Relativistic jets.
-    if (config_.enable_jets) {
-        JetConfig jet_config;
-        jet_config.lorentz_factor = config_.jet_lorentz_factor;
-        jet_config.opening_angle = config_.jet_opening_angle;
-        jet_config.r_launch = config_.jet_launch_radius;
-        jet_config.r_max = config_.jet_max_extent;
-        jet_config.collimation = config_.jet_collimation;
-        jet_config.spectral_index = config_.jet_spectral_index;
-        jet_ = std::make_unique<RelativisticJet>(jet_config);
-        std::cout << "[Session] Relativistic jets enabled: Gamma=" << jet_config.lorentz_factor
-                  << ", theta_open=" << (jet_config.opening_angle * 180.0 / math::kPi) << " deg"
-                  << std::endl;
-    }
-
     // Colour mode.
     const char* mode_name = "TrueColor";
     switch (config_.color_mode) {
@@ -771,9 +743,6 @@ base::Expected<void> RenderSession::Initialise() {
             break;
         case core::color_modes::Mode::RedshiftMap:
             mode_name = "RedshiftMap (g-factor)";
-            break;
-        case core::color_modes::Mode::Narrowband:
-            mode_name = "Narrowband (Hubble Palette)";
             break;
         case core::color_modes::Mode::Polarisation:
             mode_name = "Polarisation";
@@ -908,23 +877,12 @@ RenderSession::PixelResult RenderSession::ShadeDiskHit(const TraceResult& result
 
     // Volumetric disk: use the pre-integrated emission from ray marching.
     if (result.volumetric_hit) {
-        float vol_intensity = result.volumetric_emission[0];
-        float T_effective = std::pow(vol_intensity, 0.25f);
-        float temperature_kelvin =
-            std::clamp(T_effective * config_.disk_temperature_scale, 1000.0f, 100000.0f);
-
-        core::spectral::Rgb blackbody_color =
-            core::spectral::BlackbodyToRgb(static_cast<double>(temperature_kelvin));
-        float mag = result.magnification;
-        px.r = blackbody_color.r * result.volumetric_emission[0] * mag;
-        px.g = blackbody_color.g * result.volumetric_emission[1] * mag;
-        px.b = blackbody_color.b * result.volumetric_emission[2] * mag;
-
-        if (result.photon_ring) {
-            px.r *= kPhotonRingBoostVolumetric;
-            px.g *= kPhotonRingBoostVolumetric;
-            px.b *= kPhotonRingBoostVolumetric;
-        }
+        // Samples were coloured at their own temperature and g-factor before
+        // invariant transfer. Reconstructing one effective blackbody here would
+        // apply the spectral mapping twice.
+        px.r = result.volumetric_emission[0];
+        px.g = result.volumetric_emission[1];
+        px.b = result.volumetric_emission[2];
         return px;
     }
 
@@ -940,48 +898,15 @@ RenderSession::PixelResult RenderSession::ShadeDiskHit(const TraceResult& result
 
         float T_emit = crossing.temperature;
         float g = crossing.redshift;
-        float r_cross = crossing.r;
 
-        // Higher-order demagnification ~exp(-n pi).
-        float order_demag = std::exp(-static_cast<float>(math::kPi) * crossing_idx);
-
-        // Motion blur (primary crossing only). Retain the temporal samples:
-        // radiance and colour are nonlinear in g, so averaging g itself is not
-        // a represented temporal integral.
-        std::vector<float> temporal_redshifts{g};
-        if (crossing_idx == 0 && config_.enable_motion_blur) {
-            float grav = result.gfactor_grav;
-            float gamma = result.gfactor_gamma;
-            float v_orb = result.gfactor_v_orb;
-            float A = result.gfactor_cosine_coefficient;
-            float B = result.gfactor_sine_coefficient;
-
-            float M = static_cast<float>(config_.black_hole_mass);
-            float a = static_cast<float>(config_.black_hole_spin * M);
-            float sqrt_mass = std::sqrt(M);
-            float Omega = sqrt_mass / (std::pow(r_cross, 1.5f) + a * sqrt_mass);
-
-            float delta_phi_max = Omega * config_.shutter_time;
-            temporal_redshifts = core::disk_emission::SampleTemporalRedshifts(
-                grav, gamma, v_orb, A, B, delta_phi_max, config_.motion_blur_samples);
-        }
+        // The stationary axisymmetric disk has one covariant transfer sample at
+        // a crossing. Temporal requests fail at validation until an evolving
+        // emissivity (rather than an azimuth-shifted steady flow) is represented.
+        const std::array<float, 1> temporal_redshifts{g};
 
         const float emitted_intensity = std::pow(T_emit, 4.0f);
         const float observed_intensity =
             core::color_modes::ObservedBolometricIntensity(emitted_intensity, g);
-
-        // Limb darkening (primary crossing only). It is scalar for the
-        // Chandrasekhar atmosphere, so it applies coherently to I, Q, and U.
-        float limb_scale = 1.0f;
-        if (crossing_idx == 0) {
-            float A = result.gfactor_cosine_coefficient;
-            float B = result.gfactor_sine_coefficient;
-            float n_xy_squared = A * A + B * B;
-            float cos_theta = std::sqrt(std::max(0.0f, 1.0f - n_xy_squared));
-            const core::spectral::Rgb darkened = core::spectral::ApplyLimbDarkening(
-                core::spectral::Rgb(1.0f, 1.0f, 1.0f), cos_theta);
-            limb_scale = darkened.r;
-        }
 
         if (polarisation_mode) {
             SIRIUS_ASSERT(crossing.polarisation_valid);
@@ -989,10 +914,11 @@ RenderSession::PixelResult RenderSession::ShadeDiskHit(const TraceResult& result
 
             const float chi = crossing.polarisation_evpa;
             const float degree = crossing.polarisation_degree;
+            const float atmosphere_intensity =
+                observed_intensity * crossing.polarisation_intensity_scale;
             core::StokesVector crossing_stokes{
-                observed_intensity, observed_intensity * degree * std::cos(2.0f * chi),
-                observed_intensity * degree * std::sin(2.0f * chi), 0.0f};
-            crossing_stokes *= limb_scale * order_demag;
+                atmosphere_intensity, atmosphere_intensity * degree * std::cos(2.0f * chi),
+                atmosphere_intensity * degree * std::sin(2.0f * chi), 0.0f};
             total_stokes += crossing_stokes;
             continue;
         }
@@ -1001,16 +927,13 @@ RenderSession::PixelResult RenderSession::ShadeDiskHit(const TraceResult& result
             config_.color_mode, T_emit, temporal_redshifts, emitted_intensity,
             config_.disk_temperature_scale);
 
-        total_r += disk_color.r * limb_scale * order_demag;
-        total_g += disk_color.g * limb_scale * order_demag;
-        total_b += disk_color.b * limb_scale * order_demag;
+        total_r += disk_color.r;
+        total_g += disk_color.g;
+        total_b += disk_color.b;
     }
 
-    // Gravitational lensing magnification and cinematic boost.
-    float output_scale = result.magnification * kDiskIntensityBoost;
-    if (result.photon_ring) {
-        output_scale *= kPhotonRingBoostDisk;
-    }
+    // Lensing changes the ray-to-solid-angle map, not radiance along one ray.
+    constexpr float output_scale = 1.0f;
 
     if (polarisation_mode) {
         total_stokes *= output_scale;
@@ -1037,41 +960,6 @@ RenderSession::PixelResult RenderSession::ShadeEscaped(const TraceResult& result
         SampleStarfield(result.final_direction, px.r, px.g, px.b);
     }
 
-    if (result.magnification > 1.0f) {
-        px.r *= result.magnification;
-        px.g *= result.magnification;
-        px.b *= result.magnification;
-    }
-
-    if (result.photon_ring) {
-        px.r *= kPhotonRingBoostEscaped;
-        px.g *= kPhotonRingBoostEscaped;
-        px.b *= kPhotonRingBoostEscaped;
-    }
-
-    // Relativistic jet emission.
-    if (jet_ && config_.enable_jets) {
-        double obs_r = config_.observer_distance;
-        double obs_theta = config_.observer_inclination;
-        float obs_x = static_cast<float>(obs_r * std::sin(obs_theta));
-        float obs_y = 0.0f;
-        float obs_z = static_cast<float>(obs_r * std::cos(obs_theta));
-
-        float end_x = static_cast<float>(result.final_position(1));
-        float end_y = static_cast<float>(result.final_position(2));
-        float end_z = static_cast<float>(result.final_position(3));
-
-        float jet_emission = core::jet_ray_marching::IntegrateJetEmission(
-            *jet_, obs_x, obs_y, obs_z, end_x, end_y, end_z, obs_x, obs_y, obs_z, 64);
-
-        if (jet_emission > 0.0f) {
-            float jet_scale = config_.jet_intensity * kJetNormalisation;
-            px.r += jet_emission * jet_scale * 0.8f;
-            px.g += jet_emission * jet_scale * 0.9f;
-            px.b += jet_emission * jet_scale * 1.0f;
-        }
-    }
-
     return px;
 }
 
@@ -1081,7 +969,7 @@ RenderSession::PixelResult RenderSession::ShadePixel(int px_coord, int py_coord,
     float r_acc = 0.0f, g_acc = 0.0f, b_acc = 0.0f;
 
     const int samples_taken = ForEachPixelSample(config_.samples_per_pixel, [&](float u, float v) {
-        CameraRay camera_ray = camera_->GenerateRayAberrated(px_coord, py_coord, u, v);
+        CameraRay camera_ray = camera_->GenerateRayForObserver(px_coord, py_coord, u, v);
         TraceResult trace_result = tracer->Trace(camera_ray);
 
         float sr = 0.0f, sg = 0.0f, sb = 0.0f;
@@ -1106,12 +994,8 @@ RenderSession::PixelResult RenderSession::ShadePixel(int px_coord, int py_coord,
                 break;
             }
 
-            case TraceResult::Outcome::Spiraling:
-                sr = sg = sb = kSpiralingBrightness;
-                break;
-
             case TraceResult::Outcome::MaxSteps:
-                sr = sg = sb = kMaxStepsBrightness;
+                sr = sg = sb = 0.0f;
                 break;
             default:
                 SIRIUS_ASSERT(false);

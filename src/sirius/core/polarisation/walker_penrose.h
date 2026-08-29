@@ -114,30 +114,34 @@ inline void ParallelTransportStep(IMetric& metric, PolarisedRay& ray, double h) 
     ray.affine += h;
 }
 
-//==============================================================================
-// Polarisation gauge fixing and inner products
-//==============================================================================
+// Transport a polarisation vector along one already-accepted central-ray
+// segment. A cubic Hermite interpolant supplies the RK4 midpoint event and
+// tangent from the central integrator's accepted endpoints. This keeps the
+// optical state on the rendered ray instead of evolving a second approximate
+// geodesic and overwriting its endpoint afterward.
+[[nodiscard]] inline Vec4 ParallelTransportAlongAcceptedSegment(
+    IMetric& metric, const Vec4& start_position, const Vec4& start_tangent,
+    const Vec4& end_position, const Vec4& end_tangent, double h, const Vec4& initial_polarisation) {
+    SIRIUS_PRE(std::isfinite(h) && h > 0.0);
+    const Vec4 midpoint_position =
+        (start_position + end_position) * 0.5 + (start_tangent - end_tangent) * (h / 8.0);
+    const Vec4 midpoint_tangent =
+        (end_position - start_position) * (1.5 / h) - (start_tangent + end_tangent) * 0.25;
+    const auto rhs = [&metric](const Vec4& position, const Vec4& tangent,
+                               const Vec4& polarisation) {
+        Metric4d g;
+        Tensor<Dual<double>, 4, 4, 4> dg;
+        metric.Evaluate(position, g, dg);
+        return NegConnectionContraction(TensorOps::Christoffel(g, dg), tangent, polarisation);
+    };
 
-// Orthonormalise a trial polarisation against a null tangent: f = trial -
-// (trial.k / e_t.k) e_t with e_t = (1,0,0,0), giving f.k = 0 because k is null,
-// then scale to g_uv f^u f^v = 1. The residual freedom f -> f + alpha k does not
-// change the physical polarisation or the Walker-Penrose constant.
-[[nodiscard]] inline Vec4 MakeOrthonormalPolarisation(IMetric& metric, const Vec4& x, const Vec4& k,
-                                                      const Vec4& trial) {
-    Metric4d g;
-    Tensor<Dual<double>, 4, 4, 4> dg;
-    metric.Evaluate(x, g, dg);
-
-    Vec4 e_t;
-    e_t(0) = 1.0;
-    const double trial_dot_k = TensorOps::InnerProduct(trial, k, g);
-    const double et_dot_k = TensorOps::InnerProduct(e_t, k, g);
-    SIRIUS_PRE(std::abs(et_dot_k) > 0.0);
-
-    Vec4 f = trial - e_t * (trial_dot_k / et_dot_k);
-    const double norm2 = TensorOps::InnerProduct(f, f, g);
-    SIRIUS_PRE(norm2 > 0.0);  // Spacelike polarisation.
-    return f / std::sqrt(norm2);
+    const Vec4 stage1 = rhs(start_position, start_tangent, initial_polarisation);
+    const Vec4 stage2 =
+        rhs(midpoint_position, midpoint_tangent, initial_polarisation + stage1 * (0.5 * h));
+    const Vec4 stage3 =
+        rhs(midpoint_position, midpoint_tangent, initial_polarisation + stage2 * (0.5 * h));
+    const Vec4 stage4 = rhs(end_position, end_tangent, initial_polarisation + stage3 * h);
+    return initial_polarisation + (stage1 + stage2 * 2.0 + stage3 * 2.0 + stage4) * (h / 6.0);
 }
 
 //==============================================================================

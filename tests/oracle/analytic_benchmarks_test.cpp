@@ -54,10 +54,11 @@ double IndependentAngularVelocityDerivative(double radius, double spin) {
            (12.0 * step);
 }
 
-// Page & Thorne (1974), Eq. 15n. This uses a composite midpoint rule and
-// finite-difference derivatives, independent of Core's 16-point Gauss-Legendre
-// rule and analytic derivatives. The returned shape is Q(r)/r^3; its physical
-// prefactor cancels when temperature profiles are normalised.
+// Page & Thorne (1974), Eqs. 11b and 15n. This uses a composite midpoint rule
+// and finite-difference derivatives, independent of Core's 16-point
+// Gauss-Legendre rule and analytic derivatives. The returned flux shape is
+// q(r)/sqrt(-g_3)=q(r)/r on the Kerr equatorial plane; its physical prefactor
+// cancels when temperature profiles are normalised.
 double IndependentPageThorneFluxShape(double radius, double spin) {
     const double isco = AccretionDiskD::ComputeIsco(spin);
     if (radius <= isco) return 0.0;
@@ -81,7 +82,7 @@ double IndependentPageThorneFluxShape(double radius, double spin) {
     const double invariant = energy - angular_velocity * angular_momentum;
     const double correction =
         -IndependentAngularVelocityDerivative(radius, spin) * integral / (invariant * invariant);
-    return correction / (radius * radius * radius);
+    return correction / radius;
 }
 
 double NormalisedOracleTemperature(double radius, double reference_radius, double spin) {
@@ -190,6 +191,21 @@ TEST(AnalyticValidationTest, PageThorneTemperatureHasZeroTorqueInnerEdge) {
     EXPECT_EQ(IndependentPageThorneFluxShape(isco, 0.0), 0.0);
     EXPECT_GT(disk.Temperature(1.05 * isco), 0.0);
     EXPECT_GT(disk.Temperature(1.5 * isco), disk.Temperature(1.05 * isco));
+}
+
+TEST(AnalyticValidationTest, PageThorneFluxApproachesNewtonianCubicFalloff) {
+    AccretionDiskD::Config config;
+    config.r_outer = 100000.0;
+    AccretionDiskD disk(config);
+
+    // At large radius the Page-Thorne correction tends to one, so doubling
+    // radius reduces the emitted flux by 2^3.  The former erroneous extra
+    // r^-2 factor instead produced a ratio near 2^5.
+    const double inner_flux = disk.Flux(10000.0);
+    const double outer_flux = disk.Flux(20000.0);
+    ASSERT_GT(inner_flux, 0.0);
+    ASSERT_GT(outer_flux, 0.0);
+    EXPECT_NEAR(inner_flux / outer_flux, 8.0, 0.2);
 }
 
 //==============================================================================

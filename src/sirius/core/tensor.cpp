@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 
 namespace sirius::core {
 
@@ -254,32 +255,32 @@ Vec4 TensorOps::NormalizeNull(const Vec4& velocity, const Metric4d& g) {
     }
 
     if (std::abs(g00) < 1e-15) {
-        // Degenerate g_00 ~ 0 near the horizon: fall back to the linear solution.
+        // Degenerate g_00 ~ 0: use the exact linear branch when it exists.
         if (std::abs(B) > 1e-15) {
             normalized(0) = -C / B;
         } else {
-            normalized(0) = 1.0;
+            normalized(0) = std::numeric_limits<double>::quiet_NaN();
         }
     } else {
         double discriminant = B * B - 4.0 * g00 * C;
 
         if (discriminant < 0.0) {
-            normalized(0) = 1.0;
+            normalized(0) = std::numeric_limits<double>::quiet_NaN();
         } else {
             double sqrt_disc = std::sqrt(discriminant);
-
-            // Lorentzian signature has g00 < 0 (timelike), so pick the positive,
-            // future-directed root.
             double k0_plus = (-B + sqrt_disc) / (2.0 * g00);
             double k0_minus = (-B - sqrt_disc) / (2.0 * g00);
-
-            if (k0_plus > 0.0) {
-                normalized(0) = k0_plus;
-            } else if (k0_minus > 0.0) {
-                normalized(0) = k0_minus;
-            } else {
-                normalized(0) = std::max(k0_plus, k0_minus);
-            }
+            // A nonzero input k^0 identifies the null family and must survive a
+            // projection (in particular, past-directed render rays must not be
+            // replaced by the other physical light cone). A zero input is the
+            // legacy explicit-initialisation request and selects the larger
+            // coordinate-time root outside an ergoregion.
+            normalized(0) =
+                std::abs(velocity(0)) > 1.0e-15
+                    ? (std::abs(k0_plus - velocity(0)) <= std::abs(k0_minus - velocity(0))
+                           ? k0_plus
+                           : k0_minus)
+                    : std::max(k0_plus, k0_minus);
         }
     }
 

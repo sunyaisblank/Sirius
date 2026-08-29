@@ -1,8 +1,8 @@
 #pragma once
 
 // Scientific-visualisation colouring strategies for disk emission: physical
-// true colour, false-colour temperature and g-factor maps, the Hubble
-// narrowband palette, and polarisation visualisation.
+// true colour, false-colour temperature and g-factor maps, and polarisation
+// visualisation.
 // Ported from PHSC001A.h.
 // Reference: NASA Hubble Space Telescope imaging guidelines.
 
@@ -30,7 +30,6 @@ enum class Mode {
     TrueColor,       // Physical blackbody colours.
     TemperatureMap,  // False-colour temperature visualisation.
     RedshiftMap,     // g-factor visualisation.
-    Narrowband,      // Hubble palette (emission-line mapping).
     Polarisation     // Polarisation degree and EVPA.
 };
 
@@ -122,60 +121,6 @@ inline spectral::Rgb MapRedshift(float g, float intensity) {
 }
 
 }  // namespace redshift_map
-
-// Maps emission-line strengths to RGB channels (Hubble SHO palette):
-// S-II -> R, H-alpha -> G, O-III -> B. Line strengths approximated from disk
-// temperature: hot inner disk high-ionisation (blue), cool outer disk (red).
-namespace narrowband {
-
-// Emission-line strengths for a temperature region.
-struct EmissionLines {
-    float SII = 0.0f;     // Sulfur II (cool regions).
-    float Halpha = 0.0f;  // Hydrogen alpha (warm regions).
-    float OIII = 0.0f;    // Oxygen III (hot regions).
-};
-
-// Approximate emission-line strength from normalised temperature T in [0, 1].
-inline EmissionLines EstimateEmission(float T) {
-    EmissionLines lines;
-
-    // Temperature-dependent emission strength (simplified Gaussian model; real
-    // emission depends on ionisation equilibrium and density).
-
-    // S-II peaks at cooler temperatures (outer disk).
-    float T_SII = 0.3f;
-    float sigma_SII = 0.2f;
-    lines.SII = std::exp(-0.5f * std::pow((T - T_SII) / sigma_SII, 2.0f));
-
-    // H-alpha: broad emission peaking at moderate temperature.
-    float T_Ha = 0.5f;
-    float sigma_Ha = 0.3f;
-    lines.Halpha = std::exp(-0.5f * std::pow((T - T_Ha) / sigma_Ha, 2.0f));
-
-    // O-III peaks at hot temperatures (inner disk).
-    float T_OIII = 0.8f;
-    float sigma_OIII = 0.25f;
-    lines.OIII = std::exp(-0.5f * std::pow((T - T_OIII) / sigma_OIII, 2.0f));
-
-    return lines;
-}
-
-// Emission lines to Hubble palette RGB (SII -> R, Halpha -> G, OIII -> B).
-inline spectral::Rgb HubblePalette(const EmissionLines& lines, float intensity = 1.0f) {
-    spectral::Rgb color;
-    color.r = lines.SII * intensity;
-    color.g = lines.Halpha * intensity;
-    color.b = lines.OIII * intensity;
-    return color;
-}
-
-// Map normalised temperature to the Hubble palette.
-inline spectral::Rgb MapNarrowband(float T, float intensity = 1.0f) {
-    EmissionLines lines = EstimateEmission(T);
-    return HubblePalette(lines, intensity);
-}
-
-}  // namespace narrowband
 
 // Maps polarisation degree and EVPA to colour.
 namespace polarisation_vis {
@@ -279,7 +224,6 @@ inline spectral::Rgb ApplyColorMode(Mode mode, float T_emit, float g, float inte
             // Physical blackbody -> linear RGB in the sRGB/D65 primaries.
             float T_obs = T_emit * g;
             float T_kelvin = T_obs * temperature_scale_kelvin;
-            T_kelvin = std::clamp(T_kelvin, 1000.0f, 100000.0f);
             spectral::Rgb color = spectral::BlackbodyToRgb(static_cast<double>(T_kelvin));
 
             // Apply relativistic beaming.
@@ -295,9 +239,6 @@ inline spectral::Rgb ApplyColorMode(Mode mode, float T_emit, float g, float inte
 
         case Mode::RedshiftMap:
             return redshift_map::MapRedshift(g, intensity);
-
-        case Mode::Narrowband:
-            return narrowband::MapNarrowband(T_emit, intensity);
 
         case Mode::Polarisation:
             SIRIUS_PRE(stokes != nullptr);

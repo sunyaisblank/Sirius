@@ -46,6 +46,12 @@ REQUIRED_CAPABILITIES = {
     "polarised_vulkan_render",
     "cpu_scalar_motion_blur",
     "vulkan_scalar_motion_blur",
+    "covariant_relativistic_jet_transfer",
+    "ray_bundles_outside_stationary_black_holes",
+    "inverse_compton_corona_transfer",
+    "narrowband_line_transfer",
+    "doppler_suppression_diagnostic",
+    "phenomenological_volumetric_disk",
     "disk_emission_outside_schwarzschild_kerr",
     "morris_thorne_one_sheet",
     "morris_thorne_two_sheet",
@@ -86,7 +92,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion",
         "gtest:KernelBeam.BeamFlagWiresDeviationWithoutMovingDefault",
         "gtest:KernelParity.BeamEllipseRetainsBothAxesAndOutputOrientation",
-        "gtest:RayBundleTest.MagnificationConsistencyWithScalarJacobian",
+        "gtest:RayBundleTest.MagnificationComesOnlyFromJacobiMap",
         "gtest:StarfieldPointTest.BeamFootprintSuppressesStarFlicker",
     },
     "P3": {
@@ -99,6 +105,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:VulkanRenderSession.IndexedPointCatalogueReachesLiveKernel",
     },
     "P4": {
+        "gtest:AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff",
         "gtest:AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature",
         "gtest:DopplerToggleTest.SuppressionCollapsesDiskAsymmetry",
         "gtest:GeodesicTracerRedshift.NearExtremalInnerDiskEmissionRemainsFinite",
@@ -107,16 +114,18 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment",
         "gtest:KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor",
         "gtest:KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel",
+        "gtest:SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction",
+        "gtest:SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere",
         "gtest:SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor",
         "gtest:VulkanRenderSession.ThinAndVolumetricDopplerSuppressionAffectLiveEmission",
-        "gtest:VulkanRenderSession.VolumetricTurbulenceAndCoronaReachLiveKernel",
+        "gtest:VulkanRenderSession.ProceduralVolumetricTurbulenceReachesLiveKernel",
     },
     "P5": {
         "ctest:OperationalAttestation.FalseExternalEvidenceIsRejected",
-        "gtest:CameraAberrationTest.ComposesOverLensModels",
-        "gtest:CameraAberrationTest.MatchesAnalyticFormulaAlongViewAxis",
-        "gtest:CameraAberrationTest.MatchesGeneralLorentzBoostForThreeAxisVelocities",
+        "gtest:CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels",
         "gtest:MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile",
+        "gtest:ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne",
+        "gtest:ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform",
         "gtest:RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration",
         "gtest:ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView",
         "gtest:VulkanRenderSession.CombinedParitySceneRetainsResolvedImageStructure",
@@ -188,9 +197,9 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "5907704c33264ca4f42cbb672d7f88ce61c21a5a1d380815e75ec11847fab38d",
-    "required_dimensions": "7fb0d80b85ed1b4dbfc6465d7807f901b47c1585ea93a003f7abd159750dde9a",
-    "capability_contracts": "81491e23f540f620f1277d42eb275a03435c2f91ff4d0d947805ab6a7ca1b96d",
+    "acceptance_criteria": "5f11fb88292964612498adf0937ae28b6d05456518289c7533631d1515b8c0fa",
+    "required_dimensions": "df0cdbaeeb68ec9b5eb74eb6ef4c66c76e355f7a7cacb291ee85ddba91e3f22d",
+    "capability_contracts": "877d0fd3a7a2254d37d1792132c1e750bbc3e60a0714db04f413d056a081babb",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
 

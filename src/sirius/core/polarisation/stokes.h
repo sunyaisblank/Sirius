@@ -1,8 +1,9 @@
 #pragma once
 
 // Stokes formalism (I, Q, U, V) for partially polarised light: polarisation
-// degree and EVPA, Mueller matrices for standard optical elements, synchrotron
-// and Thomson emission models, and parallel-transport Faraday rotation.
+// degree and EVPA, Mueller matrices for standard optical elements, the
+// represented semi-infinite electron-scattering atmosphere, and
+// parallel-transport Faraday rotation.
 // Ported from PHPL001A.h.
 // Reference: Chandrasekhar (1960) "Radiative Transfer"; Rybicki & Lightman
 // (1979) Chapter 2.
@@ -10,6 +11,7 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <optional>
 
 namespace sirius::core {
 
@@ -245,46 +247,36 @@ struct MuellerMatrix {
 // Polarised emission models.
 namespace polarised_emission {
 
-// Synchrotron polarisation degree for a power-law electron distribution
-// n(E) ~ E^(-p): pi_L = (p + 1) / (p + 7/3). Typical p = 2-3 gives ~0.69-0.75.
-inline float SynchrotronPolarisationDegree(float spectral_index) {
-    float p = spectral_index;
-    return (p + 1.0f) / (p + 7.0f / 3.0f);
-}
+struct ElectronScatteringAtmosphereSample {
+    float intensity_scale = 0.0f;
+    float linear_polarisation_degree = 0.0f;
+};
 
-// Synchrotron Stokes vector for emission from an ordered magnetic field;
-// evpa is the electric vector position angle (perpendicular to B).
-inline StokesVector SynchrotronEmission(float intensity, float pol_degree, float evpa) {
-    StokesVector s;
-    s.I = intensity;
-    s.Q = intensity * pol_degree * std::cos(2.0f * evpa);
-    s.U = intensity * pol_degree * std::sin(2.0f * evpa);
-    s.V = 0.0f;  // No circular polarisation from synchrotron (in vacuum).
-    return s;
-}
-
-// Thomson single-scattering polarisation degree as a function of scattering
-// angle theta: pi_L = sin^2(theta) / (1 + cos^2(theta)).
-inline float ThomsonPolarisationDegree(float cos_theta) {
-    float sin2 = 1.0f - cos_theta * cos_theta;
-    float cos2 = cos_theta * cos_theta;
-    if (1.0f + cos2 < 1e-10f) return 0.0f;
-    return sin2 / (1.0f + cos2);
-}
-
-// Thermal emission polarisation from a magnetised atmosphere (simplified:
-// scales with B-field and sin^2 of the angle to B). An accurate model requires
-// solving the Stokes-I radiative transfer.
-inline float ThermalMagneticPolarisation(float temperature, float B_field_strength,
-                                         float angle_to_B) {
-    constexpr float kTRef = 10000.0f;  // Reference temperature.
-    constexpr float kBRef = 1000.0f;   // Reference B-field (Gauss).
-
-    float B_factor = std::min(B_field_strength / kBRef, 1.0f);
-    float T_factor = std::min(kTRef / temperature, 1.0f);
-    float sin2_angle = 1.0f - std::cos(angle_to_B) * std::cos(angle_to_B);
-
-    return B_factor * T_factor * sin2_angle * 0.3f;  // Max ~30% for strong B.
+// Angular radiance and linear polarisation of the Chandrasekhar-Sobolev Milne
+// problem: a plane-parallel, semi-infinite, pure electron-scattering
+// atmosphere with internally generated unpolarised thermal radiation.  mu is
+// the comoving emission-direction cosine.  The standard accurate fits are
+//
+//   I(mu)/<I> = (1 + 2.06 mu) / (1 + (2/3) 2.06),
+//   p(mu)     = 0.1171 (1-mu) / (1 + 3.582 mu).
+//
+// The intensity normalisation preserves hemispheric flux:
+// integral_0^1 2 mu I(mu)/<I> dmu = 1.  The electric vector is parallel to the
+// disk plane; orientation is constructed covariantly by the tracer.  These
+// assumptions exclude absorption, magnetic/Faraday effects, finite optical
+// depth, and returning radiation.
+inline std::optional<ElectronScatteringAtmosphereSample> ChandrasekharElectronScatteringAtmosphere(
+    float mu) {
+    if (!std::isfinite(mu) || mu < 0.0f || mu > 1.0f) return std::nullopt;
+    constexpr float kAngularCoefficient = 2.06f;
+    constexpr float kMaximumPolarisation = 0.1171f;
+    constexpr float kPolarisationDenominator = 3.582f;
+    ElectronScatteringAtmosphereSample sample;
+    sample.intensity_scale =
+        (1.0f + kAngularCoefficient * mu) / (1.0f + (2.0f / 3.0f) * kAngularCoefficient);
+    sample.linear_polarisation_degree =
+        kMaximumPolarisation * (1.0f - mu) / (1.0f + kPolarisationDenominator * mu);
+    return sample;
 }
 
 }  // namespace polarised_emission
@@ -294,14 +286,6 @@ inline float ThermalMagneticPolarisation(float temperature, float B_field_streng
 // Kerr) and geometric rotation from the non-flat connection.
 // Reference: Connors, Piran & Stark (1980), ApJ 235, 224.
 namespace parallel_transport {
-
-// Gravitational Faraday rotation angle. Simplified small-a formula
-// delta_chi ~ 2a / r_impact^2 * sin(inclination); the full result integrates
-// along the geodesic.
-inline float GravitationalFaradayRotation(float a, float r_impact, float inclination) {
-    float factor = 2.0f * a / (r_impact * r_impact);
-    return factor * std::sin(inclination);
-}
 
 // Apply an accumulated parallel-transport rotation to a Stokes vector.
 inline StokesVector ApplyParallelTransport(const StokesVector& s, float rotation_angle) {

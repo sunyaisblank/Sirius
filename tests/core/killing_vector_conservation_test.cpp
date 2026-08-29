@@ -108,7 +108,6 @@ class MandatoryKillingTests : public ::testing::Test {
         ray.coordinate_time = 0.0f;
         ray.terminated = 0;
         ray.step_size = config.initial_step;
-        ray.bounce_count = 0;
 
         ray.velocity(1) =
             v_r * sin_th * cos_ph + r * v_theta * cos_th * cos_ph - r * v_phi * sin_th * sin_ph;

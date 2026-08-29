@@ -99,12 +99,6 @@ public Vec4Cart KahanAddVec4Cart(Vec4Cart s, inout Vec4Cart c, Vec4Cart d) {
 
 // --- Geodesic state ----------------------------------------------------------
 
-// Position and 4-velocity in Boyer-Lindquist coordinates.
-public struct GeodesicState {
-    public Vec4 x;   // position (t, r, theta, phi)
-    public Vec4 u;   // 4-velocity dx^mu/dlambda
-}
-
 // Position and 4-velocity in Kerr-Schild Cartesian coordinates. The render
 // path integrates here to dodge the pole singularity (RDOP002A.cu
 // integrateGeodesicRK4Cart).
@@ -113,45 +107,12 @@ public struct GeodesicStateCart {
     public Vec4Cart u;
 }
 
-// Canonical (q, p) state for the time-transformed symplectic integrator
-// (RDOP002A.cu HamiltonianState). q = (t, r, theta, phi); p are conjugate
-// momenta p_mu = g_mu_nu u^nu.
-public struct HamiltonianState {
-    public float q[4];
-    public float p[4];
-}
-
-public HamiltonianState ZeroHamiltonian() {
-    HamiltonianState h;
-    [unroll] for (int i = 0; i < 4; i++) { h.q[i] = 0.0f; h.p[i] = 0.0f; }
-    return h;
-}
-
-// --- Ray bundle (DNGR geodesic deviation, RDOP003A.h RayBundleState) ----------
-
-// The central ray plus two deviation vectors defining the pixel's celestial
-// cross-section. xi1/xi2 are the deviation vectors, dxi1/dxi2 their affine
-// derivatives. float4 components map to (t, r, theta, phi).
-public struct RayBundleState {
-    public float4 x;
-    public float4 u;
-    public float4 xi1;
-    public float4 dxi1;
-    public float4 xi2;
-    public float4 dxi2;
-    public float semiMajor;
-    public float semiMinor;
-    public float orientation;
-    public float affineParam;
-    public bool terminated;
-}
-
 // --- Metric family parameters ------------------------------------------------
 
-// Metric selector. The values match the render kernel's dispatch id used by
-// trace/parity_probe; they are a kernel-local encoding, not the C++ MetricId
-// authority (docs/ARCHITECTURE.md section 2 deletes the kernel's private
-// MetricType enum in favour of a generated table, a later workstream).
+// Compact device-dispatch ABI, not a second metric catalogue. The C++ registry
+// remains the identity/support authority; MapMetric exhaustively translates
+// each registry MetricId to one of these represented kernel families or an
+// explicit decline, and parity probes pin the ABI values.
 public static const uint kMetricKerrSchild = 0;   // Kerr-Schild family (M, a, Q, Lambda)
 public static const uint kMetricEllis      = 1;   // Ellis drainhole wormhole
 public static const uint kMetricWarpDrive  = 2;   // Alcubierre / warp-drive family
