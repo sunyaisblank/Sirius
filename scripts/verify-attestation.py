@@ -10,6 +10,7 @@ import re
 import shutil
 import struct
 import subprocess
+import sys
 import tempfile
 import xml.etree.ElementTree as ET
 import zlib
@@ -2224,6 +2225,16 @@ def self_test():
             == clean_revision,
             "clean native-build source identity was not accepted",
         )
+        require(validate_build_host("windows", "win32") == "windows" and
+                validate_build_host("macos", "darwin") == "macos",
+                "native build host identity was not accepted")
+        for reported, host in (("windows", "darwin"), ("macos", "win32"),
+                               ("windows", "linux")):
+            try:
+                validate_build_host(reported, host)
+            except ValueError:
+                continue
+            raise ValueError("negative control accepted: relabelled native build host")
         for label, revision, status, expected in (
             ("dirty native-build source", clean_revision, " M source.cpp", clean_revision),
             ("short native-build revision", "abcd", "", "abcd"),
@@ -2244,6 +2255,14 @@ def validate_build_source_identity(revision, status, expected_revision=None):
         require(expected_revision == revision,
                 "expected source revision differs from the tested Git worktree")
     return revision
+
+
+def validate_build_host(reported_platform, host_platform=None):
+    platform_id = sys.platform if host_platform is None else host_platform
+    actual = "windows" if platform_id == "win32" else "macos" if platform_id == "darwin" else None
+    require(actual is not None and reported_platform == actual,
+            "native build attestation platform differs from the executing host")
+    return actual
 
 
 def inspect_build_source(source_root, expected_revision=None):
@@ -2272,6 +2291,7 @@ def inspect_build_source(source_root, expected_revision=None):
 def record_build(args):
     require(args.domain in {"windows-native-build", "macos-native-build"},
             "record-build accepts only native build domains")
+    validate_build_host(args.platform)
     revision = inspect_build_source(args.source_root, args.source_revision)
     require(args.artifact.is_file(), f"build evidence is missing: {args.artifact}")
     require(args.alignment_receipt.is_file(),
@@ -2356,8 +2376,7 @@ def record_build(args):
         str(args.test_dir),
         "--show-only=json-v1",
     ]
-    if args.platform == "windows":
-        inventory_command[3:3] = ["-C", "Release"]
+    inventory_command[3:3] = ["-C", "Release"]
     try:
         inventory_result = subprocess.run(
             inventory_command,
