@@ -246,23 +246,31 @@ governed multi-sample dispatch, or the repeated CPU/Vulkan P1 classifiers.
 Portable source profiles may omit Vulkan, but cannot be cited as evidence for
 this profile.
 
-## 5. Current status by profile
+## 5. Evidence semantics by profile
+
+Live attestation status is deliberately not frozen into this source file. An
+attestation names the exact source revision that it verifies, so committing a
+new status count would create a different revision and immediately invalidate
+that count. The deterministic alignment receipt generated from independently
+verified, same-revision bundles is the only authority for the live admitted and
+pending partition. The table records durable implementation and evidence
+boundaries instead.
 
 | Profile | Status | Evidence boundary |
 |---|---|---|
-| Revision-bound release alignment | CLEAN CANDIDATE PUBLISHED; EVIDENCE SET INCOMPLETE | The non-default upstream candidate is a real clean Git revision and reports 0/8 domains admitted. Development artifacts remain inadmissible; release configure names and rejects all eight absent domains, and packaging/initialisation remain fail-closed until their clean-revision records exist. |
+| Revision-bound release alignment | EXTERNAL LEDGER AUTHORITATIVE | A source-only qualification configure intentionally admits no external domains. Development artifacts remain inadmissible; release configure reports every domain absent from the supplied same-revision ledger, and packaging/initialisation remain fail-closed until all eight verified records exist. |
 | Pull-request/integration boundary | GOVERNED NON-RENDER PATH PRESENT | Linux, Windows, and macOS compile the complete strict topology and execute exactly nine authority controls without creating a Mandatory receipt. Pull requests cannot publish evidence; explicit dispatch may issue only the precisely scoped Windows/macOS compilation domains. |
-| Configure/compile/build, GCC 14 | CLEAN QUALIFICATION COMPILES; FULL PROFILE SNAPSHOT ONLY | The clean upstream candidate configured the strict release-equivalent qualification profile and compiled all seven gate-bound executables plus 13 products under warnings as errors; nine selected non-render controls pass, while the required Vulkan dispatch/P1 burn-in and full estate were not run. |
-| Configure/compile/build, Clang 21 | CLEAN QUALIFICATION COMPILES; FULL PROFILE SNAPSHOT ONLY | The clean upstream candidate configured the strict release-equivalent qualification profile, emitted/validated every Slang kernel, and compiled all seven gate-bound executables plus 13 products under warnings as errors; nine selected non-render controls pass, while the full estate was not run. |
+| Configure/compile/build, GCC 14 | STRICT NON-RENDER PATH PRESENT | Qualification binds all seven test executables and 13 products under warnings as errors, then runs the exact nine authority controls without issuing a Mandatory receipt. Execution outcomes belong to the workflow record for the tested revision. |
+| Configure/compile/build, Clang 21 | STRICT NON-RENDER PATH PRESENT | Qualification also emits and validates every Slang kernel, binds all seven test executables and 13 products under warnings as errors, and runs the exact nine authority controls without issuing a Mandatory receipt. Execution outcomes belong to the workflow record for the tested revision. |
 | Relocatable CPU volume | CURRENT INITIALISATION CHECKED; FULL PROFILE SNAPSHOT ONLY | Installed authority/resource readiness and tamper rejection pass after relocation; the relocation render snapshot predates this delta |
 | Viewer-disabled build/install | PRE-ALIGNMENT FULL-PROFILE SNAPSHOT | Capability-specific install verification, readiness, and fail-closed `view` were previously exercised; no current-delta full profile is claimed |
 | CPU physics/render path | ORACLE DELTA READY; RENDER PROFILE SNAPSHOT ONLY | Current Page-Thorne and canonical-symplectic oracle corrections pass on both compilers; near-extremal, shadow, volume, and film-output executions remain the immediately preceding snapshot under the no-render validation constraint |
-| Vulkan on WSL2 software and physical devices | PRE-ALIGNMENT FULL-PROFILE SNAPSHOT | Prior llvmpipe/Radeon-Dozen evidence covered dispatch and bounded scene semantics, but it is not admitted for the dirty current revision |
-| Interactive viewer refinement | PRE-ALIGNMENT PREFLIGHT; REVISION ATTESTATION PENDING | The prior source opened a GLFW/OpenGL XWayland window, published a Radeon Vulkan frame, and received host-delivered input; current-revision native-viewer admission remains absent |
-| GCC ASan + UBSan + LSan | PRE-ALIGNMENT FULL-PROFILE SNAPSHOT | The 904-test sanitizer result predates the current alignment/oracle delta and is not promoted to current-revision evidence |
-| Physical Radeon 780M | PRE-ALIGNMENT WORKTREE SNAPSHOT; CLEAN-REVISION ATTESTATION PENDING | The 907-test and 697-test Radeon/Dozen runs plus both exact sparse-star frames predate the current delta; the dirty tree and revision change prevent their admission |
-| Native Windows build/runtime | CURRENT REVISION UNEXECUTED | Explicit Windows dispatch can emit a clean-Git compilation record binding the full registration, exact non-render authority estate, all executables/products, and receipt. Native Vulkan remains a separate full-estate physical-host domain and rejects Dozen; neither current-revision record is yet claimed. |
-| macOS build/MoltenVK runtime | CURRENT REVISION UNEXECUTED | Explicit macOS dispatch can emit a clean-Git compilation record binding the full registration, exact non-render authority estate, all executables/products, and receipt. MoltenVK remains a separate full-estate physical-host domain; neither current-revision record is yet claimed. |
+| Vulkan on WSL2 software and physical devices | PRE-ALIGNMENT FULL-PROFILE SNAPSHOT | Prior llvmpipe/Radeon-Dozen evidence covered dispatch and bounded scene semantics, but historical records are not admitted for a later source revision. |
+| Interactive viewer refinement | PRE-ALIGNMENT PREFLIGHT | The prior source opened a GLFW/OpenGL XWayland window, published a Radeon Vulkan frame, and received host-delivered input; native-viewer admission is asserted only by a verified same-revision external record. |
+| GCC ASan + UBSan + LSan | PRE-ALIGNMENT FULL-PROFILE SNAPSHOT | The historical 904-test sanitizer result is not promoted to evidence for a later source revision. |
+| Physical Radeon 780M | PRE-ALIGNMENT WORKTREE SNAPSHOT | The historical 907-test and 697-test Radeon/Dozen runs plus both exact sparse-star frames are revision-specific and cannot be admitted for later source. |
+| Native Windows build/runtime | BUILD PRODUCER PRESENT; LIVE RECORD EXTERNAL | Explicit Windows dispatch can emit a clean-Git compilation record binding the full registration, exact non-render authority estate, all executables/products, and receipt. Native Vulkan remains a separate full-estate physical-host domain and rejects Dozen. The alignment receipt, not this table, states whether either record exists for a revision. |
+| macOS build/MoltenVK runtime | BUILD PRODUCER PRESENT; LIVE RECORD EXTERNAL | Explicit macOS dispatch can emit a clean-Git compilation record binding the full registration, exact non-render authority estate, all executables/products, and receipt. MoltenVK remains a separate full-estate physical-host domain. The alignment receipt, not this table, states whether either record exists for a revision. |
 
 ## 6. Remaining limitations (not hidden as “green”)
 
@@ -337,12 +345,12 @@ this profile.
   compilers. Enforced contract macros and explicit serializers/parameter
   bindings are the active, gated substitutes. `info system` reports both
   native feature states as false.
-- Native Windows and macOS builds, native Windows Vulkan, and macOS/MoltenVK
-  remain unexecuted for the current revision.
-  The verifier rejects llvmpipe for physical domains, Dozen for native Windows,
-  and non-MoltenVK macOS runtime evidence. Native CI emits build-only
-  attestations after its test gate; the shared physical runtime producer is
-  available but cannot substitute for execution on those hosts.
+- Native Windows and macOS build outcomes, native Windows Vulkan, and
+  macOS/MoltenVK are revision-bound external facts and are not asserted by
+  source prose. The verifier rejects llvmpipe for physical domains, Dozen for
+  native Windows, and non-MoltenVK macOS runtime evidence. Native CI can emit
+  build-only attestations after its test gate; the shared physical runtime
+  producer is available but cannot substitute for execution on those hosts.
 - Historical reference images have no current byte-identity test. Any new
   identity claim requires a checked-in manifest and an executable comparator.
 

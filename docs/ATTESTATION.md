@@ -165,6 +165,13 @@ only. A workflow definition, historical report, record from another commit,
 software Vulkan run, or successful memory-plan unit test cannot be promoted
 into a physical/native pass.
 
+The current admitted-domain count is external state and is deliberately not
+hardcoded in source documentation. Editing source to record that count creates
+a new source revision for which the records do not apply. Operators obtain the
+live admitted and pending partition only by running `verify-alignment.py` over
+the independently verified, same-revision bundles; its deterministic receipt
+is the authority consumed by release configuration and the installed runtime.
+
 An individual passing record also does not make a release aligned. Sirius
 admits a set only when all eight domains are covered exactly once and every
 record passes this verifier for the same clean source revision. The release
