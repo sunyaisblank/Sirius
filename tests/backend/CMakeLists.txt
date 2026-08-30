@@ -7,6 +7,7 @@ if(NOT TARGET sirius_backend)
 endif()
 
 add_executable(sirius_backend_tests
+    cpu_jacobi_oracle_test.cpp
     cpu_trace_boundary_test.cpp
     vulkan_smoke_test.cpp
     kernel_parity_test.cpp
