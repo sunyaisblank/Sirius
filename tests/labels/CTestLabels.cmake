@@ -608,6 +608,7 @@ set_tests_properties(
     MetricRegistryTests.ParsingIsCaseInsensitive
     MetricRegistryTests.UnknownNamesFailInsteadOfDefaulting
     MetricRegistryTests.MetricInfoRoundTripsById
+    MetricRegistryTests.PositiveLambdaObserverAndHorizonShareOneCausalDomain
     MetricRegistryTests.KnownMetricNamesListsEveryCanonicalName
     MetricRegistryTests.FamilyDisplayNamesRoundTrip
     MetricRegistryTests.BackendSupportMatchesImplementations

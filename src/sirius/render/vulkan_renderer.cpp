@@ -289,6 +289,7 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
     const TraceDomainParameters trace_domain = BuildTraceDomainParameters({
         .metric_id = config.metric_id,
         .metric_mass = config.black_hole_mass,
+        .cosmological_constant = config.cosmological_constant,
         .observer_radius = config.observer_distance,
         .throat_radius = config.throat_radius,
         .bubble_radius = config.bubble_radius,

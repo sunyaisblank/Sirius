@@ -491,9 +491,6 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
     }
 
     // --- Observer validation ------------------------------------------------
-    constexpr double kMinDistanceFactor = 5.0;
-    constexpr double kMaxDistanceFactor = 1000.0;
-
     // observer.distance is the coordinate radius r, not a dimensionless ratio.
     // The launch observer remains exterior to the governed central scene and
     // the finite trace budget scales with the same authority.
@@ -502,13 +499,25 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
                                     *metric_id, config.metric.mass, config.metric.throat_radius,
                                     config.metric.bubble_radius, config.metric.bubble_sigma)
                               : 1.0;
-    const double min_distance = kMinDistanceFactor * distance_scale;
-    const double max_distance = kMaxDistanceFactor * distance_scale;
+    const core::MetricObserverRadiusIssue observer_radius_issue =
+        metric_id.has_value()
+            ? core::MetricObserverRadiusIssueFor(
+                  *metric_id, config.metric.mass, config.metric.cosmological_constant,
+                  config.observer.distance, config.metric.throat_radius,
+                  config.metric.bubble_radius, config.metric.bubble_sigma)
+            : core::MetricObserverRadiusIssue::NaturalScale;
 
     if (finite(config.observer.distance, "observer.distance") && std::isfinite(distance_scale) &&
-        distance_scale > 0.0 &&
-        (config.observer.distance < min_distance || config.observer.distance > max_distance)) {
-        if (uses_mass) {
+        distance_scale > 0.0 && observer_radius_issue != core::MetricObserverRadiusIssue::None) {
+        if (observer_radius_issue == core::MetricObserverRadiusIssue::CosmologicalHorizon) {
+            const double horizon = *core::MetricCosmologicalHorizonRadius(
+                *metric_id, config.metric.mass, config.metric.cosmological_constant);
+            errors.push_back(
+                "positive-lambda observer.distance must remain at or below 0.99*r_c inside the "
+                "cosmological horizon (r=" +
+                std::to_string(config.observer.distance) + ", r_c=" + std::to_string(horizon) +
+                ")");
+        } else if (uses_mass) {
             errors.push_back(
                 "observer.distance coordinate radius must satisfy 5*M <= r <= 1000*M "
                 "(r=" +

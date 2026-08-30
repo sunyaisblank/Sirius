@@ -386,14 +386,30 @@ TEST(ConfigValidation, DeSitterRequestsEnforcePositiveLambdaAndSubNariaiBlackHol
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
     config.metric.cosmological_constant = 0.001;
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
+    config.observer.distance = 55.0;
+    auto errors = ConfigLoader::Validate(config);
+    EXPECT_NE(std::find_if(errors.begin(), errors.end(),
+                           [](const std::string& error) {
+                               return error.find("cosmological horizon") != std::string::npos;
+                           }),
+              errors.end());
+    config.observer.distance = 50.0;
 
     config.metric.name = "Schwarzschild-de-Sitter";
     config.metric.mass = 2.0;
-    config.metric.cosmological_constant = 0.02;  // 9 Lambda M^2 = 0.72.
+    config.metric.cosmological_constant = 0.001;
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
 
+    config.metric.cosmological_constant = 0.02;  // Sub-Nariai, but r=50 lies outside r_c.
+    errors = ConfigLoader::Validate(config);
+    EXPECT_NE(std::find_if(errors.begin(), errors.end(),
+                           [](const std::string& error) {
+                               return error.find("cosmological horizon") != std::string::npos;
+                           }),
+              errors.end());
+
     config.metric.cosmological_constant = 0.03;  // 9 Lambda M^2 = 1.08.
-    const auto errors = ConfigLoader::Validate(config);
+    errors = ConfigLoader::Validate(config);
     EXPECT_NE(std::find_if(errors.begin(), errors.end(),
                            [](const std::string& error) {
                                return error.find("sub-Nariai") != std::string::npos;

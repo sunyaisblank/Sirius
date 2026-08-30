@@ -6,6 +6,7 @@
 #include "sirius/core/disk/novikov_thorne_disk.h"  // AccretionDiskD::ComputeIsco (ISCO authority).
 #include "sirius/core/observer_frame.h"
 #include "sirius/core/spectral/colour_modes.h"
+#include "sirius/core/trace_boundary.h"
 
 #include <algorithm>
 #include <array>
@@ -19,35 +20,6 @@ namespace sirius::backend {
 using namespace sirius::core;
 
 namespace {
-struct AcceptedRaySample {
-    Vec4 position;
-    Vec4 tangent;
-};
-
-AcceptedRaySample SampleAcceptedRaySegment(const Vec4& start_position, const Vec4& start_tangent,
-                                           const Vec4& end_position, const Vec4& end_tangent,
-                                           double affine_length, double fraction) {
-    SIRIUS_PRE(std::isfinite(affine_length) && affine_length > 0.0);
-    SIRIUS_PRE(std::isfinite(fraction) && fraction >= 0.0 && fraction <= 1.0);
-    const double s2 = fraction * fraction;
-    const double s3 = s2 * fraction;
-    const double h00 = 2.0 * s3 - 3.0 * s2 + 1.0;
-    const double h10 = s3 - 2.0 * s2 + fraction;
-    const double h01 = -2.0 * s3 + 3.0 * s2;
-    const double h11 = s3 - s2;
-    const double dh00 = 6.0 * s2 - 6.0 * fraction;
-    const double dh10 = 3.0 * s2 - 4.0 * fraction + 1.0;
-    const double dh01 = -6.0 * s2 + 6.0 * fraction;
-    const double dh11 = 3.0 * s2 - 2.0 * fraction;
-
-    AcceptedRaySample sample;
-    sample.position = start_position * h00 + start_tangent * (affine_length * h10) +
-                      end_position * h01 + end_tangent * (affine_length * h11);
-    sample.tangent = start_position * (dh00 / affine_length) + start_tangent * dh10 +
-                     end_position * (dh01 / affine_length) + end_tangent * dh11;
-    return sample;
-}
-
 struct ObserverSkySample {
     Metric4d metric;
     relativity::ObserverFrame observer;
@@ -130,7 +102,7 @@ bool GeodesicTracer::FindDiskIntersection(const Vec4& start_position, const Vec4
                coefficient_d;
     };
     const auto radius_at = [&](double fraction) {
-        const AcceptedRaySample sample = SampleAcceptedRaySegment(
+        const AcceptedTraceSegmentSample sample = SampleAcceptedTraceSegment(
             start_position, start_tangent, end_position, end_tangent, d_lambda, fraction);
         const coordinates::Vec4Cart cart{sample.position(0), sample.position(1), sample.position(2),
                                          sample.position(3)};
@@ -600,24 +572,39 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
             break;
         }
 
-        // 2. Escape to infinity.
+        // 2. Escape to the configured outer boundary. Positive-Lambda scenes
+        // impose a finite causal-patch boundary condition, so localise their
+        // terminal state on the accepted segment rather than sampling beyond it.
         if (r > config_.escape_radius) {
             double vx = ray.velocity(1);
             double vy = ray.velocity(2);
             double vz = ray.velocity(3);
             double v_radial = (x * vx + y * vy + z * vz) / r;
 
-            if (v_radial > 0) {
+            if (v_radial > 0 || config_.finite_causal_boundary) {
                 // A disk hit found earlier keeps priority for rendering.
                 if (result.num_disk_crossings == 0) {
                     result.outcome = TraceResult::Outcome::Escaped;
                 }
 
-                result.final_position(0) = ray.position(0);
-                result.final_position(1) = ray.position(1);
-                result.final_position(2) = ray.position(2);
-                result.final_position(3) = ray.position(3);
-                const auto sky = SampleEulerianSky(*metric_, ray.position, ray.velocity);
+                Vec4 boundary_position = ray.position;
+                Vec4 boundary_tangent = ray.velocity;
+                if (config_.finite_causal_boundary) {
+                    const auto boundary = FindCausalBoundaryEvent(
+                        prev_pos, prev_vel, ray.position, ray.velocity, d_lambda,
+                        static_cast<double>(config_.escape_radius));
+                    if (!boundary.has_value()) {
+                        result.outcome = TraceResult::Outcome::MaxSteps;
+                        result.numerical_failure = true;
+                        break;
+                    }
+                    boundary_position = boundary->position;
+                    boundary_tangent = boundary->tangent;
+                }
+                for (int component = 0; component < 4; ++component) {
+                    result.final_position(component) = boundary_position(component);
+                }
+                const auto sky = SampleEulerianSky(*metric_, boundary_position, boundary_tangent);
                 SIRIUS_ASSERT(sky.has_value());
                 if (!sky.has_value()) {
                     result.outcome = TraceResult::Outcome::MaxSteps;
@@ -934,7 +921,7 @@ void GeodesicTracer::AccumulateVolumetricEmission(const Vec4& entry_velocity,
 
     for (int i = 0; i < N; i++) {
         const double fraction = (static_cast<double>(i) + 0.5) / N;
-        const AcceptedRaySample sample = SampleAcceptedRaySegment(
+        const AcceptedTraceSegmentSample sample = SampleAcceptedTraceSegment(
             entry_pos, entry_velocity, exit_pos, exit_velocity, affine_length, fraction);
         const Vec4& position = sample.position;
         const Vec4& past_velocity = sample.tangent;
@@ -1152,8 +1139,8 @@ void GeodesicTracer::StepBundle(const Vec4& start_position, const Vec4& start_ta
     const double h = d_lambda;
     // Cubic Hermite central-ray midpoint. It matches both accepted endpoint
     // events and tangents and is fourth-order accurate for a smooth geodesic.
-    const AcceptedRaySample midpoint =
-        SampleAcceptedRaySegment(start_position, start_tangent, end_position, end_tangent, h, 0.5);
+    const AcceptedTraceSegmentSample midpoint = SampleAcceptedTraceSegment(
+        start_position, start_tangent, end_position, end_tangent, h, 0.5);
 
     RayBundle stage1, stage2, stage3, stage4;
     rhs(start_position, start_tangent, bundle, stage1);

@@ -16,6 +16,7 @@
 
 #include "sirius/base/contracts.h"
 #include "sirius/core/metrics/metric.h"
+#include "sirius/core/metrics/registry.h"
 
 #include <algorithm>
 #include <cmath>
@@ -403,7 +404,7 @@ inline double KerrSchildFamily::KottlerStaticLapse(double radius) const {
     if (params_.a != 0.0 || params_.Q != 0.0 || !(radius > 0.0) || !std::isfinite(radius)) {
         return std::numeric_limits<double>::quiet_NaN();
     }
-    return 1.0 - 2.0 * params_.M / radius - params_.Lambda * radius * radius / 3.0;
+    return sirius::core::KottlerStaticLapse(params_.M, params_.Lambda, radius);
 }
 
 inline double KerrSchildFamily::OuterHorizonRadius() const {
@@ -414,19 +415,7 @@ inline double KerrSchildFamily::OuterHorizonRadius() const {
     double Q = params_.Q;
 
     if (params_.Lambda > 0.0) {
-        const double stationary_radius = std::cbrt(3.0 * M / params_.Lambda);
-        double lower = 2.0 * M;
-        double upper = stationary_radius;
-        // f(lower)<=0 and f(upper)>=0 throughout the sub-Nariai sector.
-        for (int iteration = 0; iteration < 128; ++iteration) {
-            const double midpoint = lower + 0.5 * (upper - lower);
-            if (KottlerStaticLapse(midpoint) > 0.0) {
-                upper = midpoint;
-            } else {
-                lower = midpoint;
-            }
-        }
-        return lower + 0.5 * (upper - lower);
+        return KottlerBlackHoleHorizonRadius(M, params_.Lambda);
     }
 
     double discriminant = M * M - a * a - Q * Q;
@@ -461,22 +450,7 @@ inline bool KerrSchildFamily::HasHorizon() const {
 
 inline double KerrSchildFamily::CosmologicalHorizonRadius() const {
     if (!(params_.Lambda > 0.0) || params_.a != 0.0 || params_.Q != 0.0) return -1.0;
-    if (params_.M == 0.0) return std::sqrt(3.0 / params_.Lambda);
-    if (!HasHorizon()) return -1.0;
-
-    const double stationary_radius = std::cbrt(3.0 * params_.M / params_.Lambda);
-    double lower = stationary_radius;
-    double upper = std::sqrt(3.0 / params_.Lambda);
-    // f(lower)>=0 and f(upper)<0 throughout the sub-Nariai sector.
-    for (int iteration = 0; iteration < 128; ++iteration) {
-        const double midpoint = lower + 0.5 * (upper - lower);
-        if (KottlerStaticLapse(midpoint) > 0.0) {
-            lower = midpoint;
-        } else {
-            upper = midpoint;
-        }
-    }
-    return lower + 0.5 * (upper - lower);
+    return KottlerCosmologicalHorizonRadius(params_.M, params_.Lambda);
 }
 
 inline double KerrSchildFamily::ErgosphereRadius(double theta) const {

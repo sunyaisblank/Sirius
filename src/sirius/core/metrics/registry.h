@@ -16,6 +16,7 @@
 #include <array>
 #include <cctype>
 #include <cmath>
+#include <limits>
 #include <optional>
 #include <string>
 #include <string_view>
@@ -41,6 +42,63 @@ inline constexpr double kDefaultAlcubierreBubbleRadius = 1.0;
 inline constexpr double kDefaultAlcubierreBubbleSigma = 0.5;
 inline constexpr double kMinAlcubierreSigmaRadius = 0.1;
 inline constexpr double kMaxAlcubierreSigmaRadius = 100.0;
+inline constexpr double kMaxCosmologicalObserverFraction = 0.99;
+
+// Exact spherical positive-Lambda horizon authority.  These functions live
+// below the metric class so configuration, tracing, and KerrSchildFamily cannot
+// drift onto different roots of the Kottler lapse
+//   f(r) = 1 - 2M/r - Lambda r^2/3.
+// The scale-safe forms avoid overflowing 3/Lambda or Lambda*r^2 for very small
+// positive Lambda values that are otherwise representable in double precision.
+[[nodiscard]] inline double KottlerStaticLapse(double mass, double lambda, double radius) noexcept {
+    if (!(mass >= 0.0) || !(lambda >= 0.0) || !(radius > 0.0) || !std::isfinite(mass) ||
+        !std::isfinite(lambda) || !std::isfinite(radius)) {
+        return std::numeric_limits<double>::quiet_NaN();
+    }
+    const double scaled_radius = std::sqrt(lambda) * radius / std::sqrt(3.0);
+    return 1.0 - 2.0 * mass / radius - scaled_radius * scaled_radius;
+}
+
+[[nodiscard]] inline double KottlerBlackHoleHorizonRadius(double mass, double lambda) noexcept {
+    if (!(mass > 0.0) || !(lambda > 0.0) || !std::isfinite(mass) || !std::isfinite(lambda) ||
+        !(9.0 * lambda * mass * mass <= 1.0)) {
+        return -1.0;
+    }
+    const double stationary_radius = std::cbrt(3.0 * mass) / std::cbrt(lambda);
+    double lower = 2.0 * mass;
+    double upper = stationary_radius;
+    for (int iteration = 0; iteration < 128; ++iteration) {
+        const double midpoint = lower + 0.5 * (upper - lower);
+        if (KottlerStaticLapse(mass, lambda, midpoint) > 0.0) {
+            upper = midpoint;
+        } else {
+            lower = midpoint;
+        }
+    }
+    return lower + 0.5 * (upper - lower);
+}
+
+[[nodiscard]] inline double KottlerCosmologicalHorizonRadius(double mass, double lambda) noexcept {
+    if (!(mass >= 0.0) || !(lambda > 0.0) || !std::isfinite(mass) || !std::isfinite(lambda) ||
+        !(9.0 * lambda * mass * mass <= 1.0)) {
+        return -1.0;
+    }
+    const double curvature_radius = std::sqrt(3.0) / std::sqrt(lambda);
+    if (mass == 0.0) return curvature_radius;
+
+    const double stationary_radius = std::cbrt(3.0 * mass) / std::cbrt(lambda);
+    double lower = stationary_radius;
+    double upper = curvature_radius;
+    for (int iteration = 0; iteration < 128; ++iteration) {
+        const double midpoint = lower + 0.5 * (upper - lower);
+        if (KottlerStaticLapse(mass, lambda, midpoint) > 0.0) {
+            lower = midpoint;
+        } else {
+            upper = midpoint;
+        }
+    }
+    return lower + 0.5 * (upper - lower);
+}
 
 // Registry row: identity, spellings, parameters, backend support.
 struct MetricInfo {
@@ -136,6 +194,61 @@ enum class DiskSupport {
         return std::min(bubble_radius, 1.0 / bubble_sigma);
     }
     return MetricSceneLengthScale(id, mass, throat_radius, bubble_radius, bubble_sigma);
+}
+
+// The positive-Lambda renderer represents a causal-patch boundary-value
+// problem, not an asymptotically flat sky.  Its observer must remain strictly
+// inside the cosmological horizon and the trace boundary may not pass through
+// that horizon.  A one-percent separation is the governed fp32 event margin;
+// the camera itself remains the chart's timelike ADM/Eulerian observer rather
+// than being reinterpreted as a static-coordinate observer.
+[[nodiscard]] inline std::optional<double> MetricCosmologicalHorizonRadius(MetricId id, double mass,
+                                                                           double lambda) noexcept {
+    double horizon = -1.0;
+    switch (id) {
+        case MetricId::DeSitter:
+            horizon = KottlerCosmologicalHorizonRadius(0.0, lambda);
+            break;
+        case MetricId::SchwarzschildDeSitter:
+            horizon = KottlerCosmologicalHorizonRadius(mass, lambda);
+            break;
+        case MetricId::Minkowski:
+        case MetricId::Schwarzschild:
+        case MetricId::Kerr:
+        case MetricId::ReissnerNordstrom:
+        case MetricId::KerrNewman:
+        case MetricId::MorrisThorne:
+        case MetricId::Alcubierre:
+            return std::nullopt;
+        default:
+            SIRIUS_ASSERT(false);
+            return std::nullopt;
+    }
+    if (std::isfinite(horizon) && horizon > 0.0) return horizon;
+    return std::nullopt;
+}
+
+enum class MetricObserverRadiusIssue {
+    None,
+    NaturalScale,
+    CosmologicalHorizon,
+};
+
+[[nodiscard]] inline MetricObserverRadiusIssue MetricObserverRadiusIssueFor(
+    MetricId id, double mass, double lambda, double observer_radius, double throat_radius,
+    double bubble_radius, double bubble_sigma) noexcept {
+    const double scale =
+        MetricSceneLengthScale(id, mass, throat_radius, bubble_radius, bubble_sigma);
+    if (!std::isfinite(observer_radius) || !std::isfinite(scale) || !(scale > 0.0) ||
+        observer_radius < 5.0 * scale || observer_radius > 1000.0 * scale) {
+        return MetricObserverRadiusIssue::NaturalScale;
+    }
+    if (const auto cosmological_horizon = MetricCosmologicalHorizonRadius(id, mass, lambda);
+        cosmological_horizon.has_value() &&
+        !(observer_radius <= kMaxCosmologicalObserverFraction * *cosmological_horizon)) {
+        return MetricObserverRadiusIssue::CosmologicalHorizon;
+    }
+    return MetricObserverRadiusIssue::None;
 }
 
 // A very diffuse profile makes the two tanh terms nearly coincident in fp32; a

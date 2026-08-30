@@ -102,6 +102,42 @@ TEST(MetricRegistryTests, MetricInfoRoundTripsById) {
     EXPECT_TRUE(MetricParameterIssue(static_cast<MetricId>(255), 0.0, 0.0, 0.0).has_value());
 }
 
+TEST(MetricRegistryTests, PositiveLambdaObserverAndHorizonShareOneCausalDomain) {
+    constexpr double lambda = 0.001;
+    const double de_sitter_horizon = KottlerCosmologicalHorizonRadius(0.0, lambda);
+    ASSERT_TRUE(std::isfinite(de_sitter_horizon));
+    EXPECT_NEAR(KottlerStaticLapse(0.0, lambda, de_sitter_horizon), 0.0, 3.0e-16);
+    ASSERT_TRUE(MetricCosmologicalHorizonRadius(MetricId::DeSitter, 0.0, lambda).has_value());
+    EXPECT_DOUBLE_EQ(*MetricCosmologicalHorizonRadius(MetricId::DeSitter, 0.0, lambda),
+                     de_sitter_horizon);
+    EXPECT_EQ(MetricObserverRadiusIssueFor(MetricId::DeSitter, 0.0, lambda, 50.0, 1.0, 1.0, 0.5),
+              MetricObserverRadiusIssue::None);
+    EXPECT_EQ(MetricObserverRadiusIssueFor(MetricId::DeSitter, 0.0, lambda, 55.0, 1.0, 1.0, 0.5),
+              MetricObserverRadiusIssue::CosmologicalHorizon);
+
+    KerrSchildFamily kottler({2.0, 0.0, 0.0, lambda});
+    const double kottler_horizon = KottlerCosmologicalHorizonRadius(2.0, lambda);
+    EXPECT_DOUBLE_EQ(kottler.CosmologicalHorizonRadius(), kottler_horizon);
+    EXPECT_DOUBLE_EQ(kottler.OuterHorizonRadius(), KottlerBlackHoleHorizonRadius(2.0, lambda));
+    EXPECT_EQ(MetricObserverRadiusIssueFor(MetricId::SchwarzschildDeSitter, 2.0, lambda, 50.0, 1.0,
+                                           1.0, 0.5),
+              MetricObserverRadiusIssue::None);
+    EXPECT_EQ(MetricObserverRadiusIssueFor(MetricId::SchwarzschildDeSitter, 2.0, 0.02, 50.0, 1.0,
+                                           1.0, 0.5),
+              MetricObserverRadiusIssue::CosmologicalHorizon);
+    EXPECT_FALSE(MetricCosmologicalHorizonRadius(MetricId::Kerr, 2.0, 0.0).has_value());
+    EXPECT_FALSE(MetricCosmologicalHorizonRadius(MetricId::DeSitter, 0.0, 0.0).has_value());
+    EXPECT_FALSE(
+        MetricCosmologicalHorizonRadius(MetricId::SchwarzschildDeSitter, 2.0, 0.03).has_value());
+
+    const double tiny_lambda_horizon =
+        KottlerCosmologicalHorizonRadius(0.0, std::numeric_limits<double>::denorm_min());
+    EXPECT_TRUE(std::isfinite(tiny_lambda_horizon));
+    EXPECT_NEAR(
+        KottlerStaticLapse(0.0, std::numeric_limits<double>::denorm_min(), tiny_lambda_horizon),
+        0.0, 3.0e-16);
+}
+
 TEST(MetricRegistryTests, KnownMetricNamesListsEveryCanonicalName) {
     std::string names = KnownMetricNames();
     for (const auto& info : MetricRegistry()) {

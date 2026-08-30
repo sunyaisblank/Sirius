@@ -134,6 +134,9 @@ struct TraceResult {
 struct TracerConfig {
     // Termination.
     float escape_radius = 100.0f;
+    // A finite causal boundary is an absorbing event, not an asymptotic-radius
+    // heuristic. Its terminal state is localised on the accepted segment.
+    bool finite_causal_boundary = false;
     // Kerr-Schild is horizon penetrating: the physical event horizon is the
     // capture boundary. Tests may opt into a larger diagnostic surface.
     float horizon_factor = 1.0f;

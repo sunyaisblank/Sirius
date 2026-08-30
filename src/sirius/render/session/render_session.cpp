@@ -345,11 +345,15 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         }
     }
 
-    const double distance_scale =
-        core::MetricSceneLengthScale(config.metric_id, config.black_hole_mass, config.throat_radius,
-                                     config.bubble_radius, config.bubble_sigma);
-    if (!finite(config.observer_distance) || config.observer_distance < 5.0 * distance_scale ||
-        config.observer_distance > 1000.0 * distance_scale ||
+    const core::MetricObserverRadiusIssue observer_radius_issue =
+        core::MetricObserverRadiusIssueFor(config.metric_id, config.black_hole_mass,
+                                           config.cosmological_constant, config.observer_distance,
+                                           config.throat_radius, config.bubble_radius,
+                                           config.bubble_sigma);
+    if (observer_radius_issue == core::MetricObserverRadiusIssue::CosmologicalHorizon) {
+        return "positive-lambda observer must remain inside the cosmological trace boundary";
+    }
+    if (observer_radius_issue != core::MetricObserverRadiusIssue::None ||
         !finite(config.observer_inclination) ||
         config.observer_inclination <= 0.1 * math::kPi / 180.0 ||
         config.observer_inclination >= 179.9 * math::kPi / 180.0 ||
@@ -735,12 +739,14 @@ base::Expected<void> RenderSession::Initialise() {
     const TraceDomainParameters trace_domain = BuildTraceDomainParameters({
         .metric_id = config_.metric_id,
         .metric_mass = config_.black_hole_mass,
+        .cosmological_constant = config_.cosmological_constant,
         .observer_radius = config_.observer_distance,
         .throat_radius = config_.throat_radius,
         .bubble_radius = config_.bubble_radius,
         .bubble_sigma = config_.bubble_sigma,
     });
     tracer_config.escape_radius = trace_domain.escape_radius;
+    tracer_config.finite_causal_boundary = trace_domain.finite_causal_boundary;
     // Kerr-Schild coordinates are horizon-penetrating, so the exact capture
     // surface is numerically safe. Enlarging it inflates the near-extremal
     // shadow.

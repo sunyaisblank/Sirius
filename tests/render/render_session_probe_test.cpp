@@ -336,9 +336,17 @@ TEST(RenderSessionProbe, TypedNumericBoundariesMatchTheExternalConfigurationBoun
     EXPECT_EQ(sirius::render::SessionConfigIssue(config), "de-Sitter requires positive lambda");
     config.cosmological_constant = 0.001;
     EXPECT_FALSE(sirius::render::SessionConfigIssue(config).has_value());
+    config.observer_distance = 55.0;
+    EXPECT_EQ(sirius::render::SessionConfigIssue(config),
+              "positive-lambda observer must remain inside the cosmological trace boundary");
+    config.observer_distance = 50.0;
 
     config.metric_id = sirius::core::MetricId::SchwarzschildDeSitter;
     config.black_hole_mass = 2.0;
+    EXPECT_FALSE(sirius::render::SessionConfigIssue(config).has_value());
+    config.cosmological_constant = 0.02;
+    EXPECT_EQ(sirius::render::SessionConfigIssue(config),
+              "positive-lambda observer must remain inside the cosmological trace boundary");
     config.cosmological_constant = 0.03;
     EXPECT_EQ(sirius::render::SessionConfigIssue(config),
               "Schwarzschild-de-Sitter requires 9*lambda*mass^2 < 1 (sub-Nariai sector)");

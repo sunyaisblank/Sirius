@@ -1,5 +1,6 @@
 #include "sirius/app/config/session_config_adapter.h"
 
+#include "sirius/core/trace_boundary.h"
 #include "sirius/render/exr_writer.h"
 #include "sirius/render/session/render_session.h"
 #include "sirius/render/trace_domain.h"
@@ -21,12 +22,14 @@ using render::SessionState;
 
 TEST(RenderSessionProbe, TraceDomainScalesWithMassAndEnclosesTheObserver) {
     const auto request = [](core::MetricId metric_id, double mass, double observer,
+                            double lambda = 0.0,
                             double throat = core::kDefaultMorrisThorneThroatRadius,
                             double radius = core::kDefaultAlcubierreBubbleRadius,
                             double sigma = core::kDefaultAlcubierreBubbleSigma) {
         return render::TraceDomainRequest{
             .metric_id = metric_id,
             .metric_mass = mass,
+            .cosmological_constant = lambda,
             .observer_radius = observer,
             .throat_radius = throat,
             .bubble_radius = radius,
@@ -57,25 +60,54 @@ TEST(RenderSessionProbe, TraceDomainScalesWithMassAndEnclosesTheObserver) {
     EXPECT_FLOAT_EQ(large.max_step, 200.0f);
 
     const render::TraceDomainParameters massless =
-        render::BuildTraceDomainParameters(request(core::MetricId::DeSitter, 0.0, 1000.0));
-    EXPECT_GT(massless.escape_radius, 1000.0f);
+        render::BuildTraceDomainParameters(request(core::MetricId::DeSitter, 0.0, 50.0, 0.001));
+    const double de_sitter_horizon = core::KottlerCosmologicalHorizonRadius(0.0, 0.001);
+    EXPECT_GT(massless.escape_radius, 50.0f);
+    EXPECT_NEAR(massless.escape_radius, de_sitter_horizon, 1.0e-5);
+    EXPECT_LE(static_cast<double>(massless.escape_radius), de_sitter_horizon);
+    EXPECT_TRUE(massless.finite_causal_boundary);
     EXPECT_FLOAT_EQ(massless.max_step, 2.0f);
 
-    const render::TraceDomainParameters non_mass_geometry =
-        render::BuildTraceDomainParameters(request(core::MetricId::MorrisThorne, 0.0, 50.0, 4.0));
+    const render::TraceDomainParameters kottler = render::BuildTraceDomainParameters(
+        request(core::MetricId::SchwarzschildDeSitter, 2.0, 50.0, 0.001));
+    EXPECT_GT(kottler.escape_radius, 50.0f);
+    EXPECT_NEAR(kottler.escape_radius, core::KottlerCosmologicalHorizonRadius(2.0, 0.001), 1.0e-5);
+    EXPECT_LE(static_cast<double>(kottler.escape_radius),
+              core::KottlerCosmologicalHorizonRadius(2.0, 0.001));
+    EXPECT_TRUE(kottler.finite_causal_boundary);
+    EXPECT_FLOAT_EQ(kottler.cpu_initial_step, 0.2f);
+    EXPECT_FLOAT_EQ(kottler.max_step, 4.0f);
+
+    const render::TraceDomainParameters non_mass_geometry = render::BuildTraceDomainParameters(
+        request(core::MetricId::MorrisThorne, 0.0, 50.0, 0.0, 4.0));
     EXPECT_FLOAT_EQ(non_mass_geometry.escape_radius, 800.0f);
     EXPECT_FLOAT_EQ(non_mass_geometry.cpu_initial_step, 0.4f);
     EXPECT_FLOAT_EQ(non_mass_geometry.max_step, 8.0f);
+    EXPECT_FALSE(non_mass_geometry.finite_causal_boundary);
+
+    core::Vec4 boundary_start;
+    boundary_start(1) = 50.0;
+    core::Vec4 boundary_end;
+    boundary_end(1) = 56.0;
+    core::Vec4 boundary_tangent;
+    boundary_tangent(1) = 6.0;
+    const auto boundary =
+        core::FindCausalBoundaryEvent(boundary_start, boundary_tangent, boundary_end,
+                                      boundary_tangent, 1.0, massless.escape_radius);
+    ASSERT_TRUE(boundary.has_value());
+    EXPECT_LE(std::hypot(boundary->position(1), boundary->position(2), boundary->position(3)),
+              static_cast<double>(massless.escape_radius));
+    EXPECT_NEAR(boundary->position(1), massless.escape_radius, 1.0e-12);
 
     const render::TraceDomainParameters sharp_warp = render::BuildTraceDomainParameters(
-        request(core::MetricId::Alcubierre, 0.0, 20.0, 1.0, 2.0, 4.0));
+        request(core::MetricId::Alcubierre, 0.0, 20.0, 0.0, 1.0, 2.0, 4.0));
     EXPECT_FLOAT_EQ(sharp_warp.escape_radius, 400.0f);
     EXPECT_FLOAT_EQ(sharp_warp.cpu_initial_step, 0.025f);
     EXPECT_FLOAT_EQ(sharp_warp.vulkan_min_step, 0.005f);
     EXPECT_FLOAT_EQ(sharp_warp.max_step, 4.0f);
 
     const render::TraceDomainParameters diffuse_warp = render::BuildTraceDomainParameters(
-        request(core::MetricId::Alcubierre, 0.0, 100.0, 1.0, 2.0, 0.05));
+        request(core::MetricId::Alcubierre, 0.0, 100.0, 0.0, 1.0, 2.0, 0.05));
     EXPECT_FLOAT_EQ(diffuse_warp.escape_radius, 4000.0f);
     EXPECT_FLOAT_EQ(diffuse_warp.cpu_initial_step, 0.2f);
     EXPECT_FLOAT_EQ(diffuse_warp.max_step, 40.0f);
@@ -123,6 +155,23 @@ TEST(RenderSessionProbe, TraceDomainScalesWithMassAndEnclosesTheObserver) {
     warp_session.throat_radius = 2.0;
     EXPECT_EQ(render::SessionConfigIssue(warp_session),
               "throat radius and wormhole topology apply only to Morris-Thorne");
+
+    SessionConfig cosmological_session;
+    cosmological_session.metric_id = core::MetricId::DeSitter;
+    cosmological_session.black_hole_mass = 0.0;
+    cosmological_session.cosmological_constant = 0.001;
+    cosmological_session.enable_disk = false;
+    EXPECT_FALSE(render::SessionConfigIssue(cosmological_session).has_value());
+    cosmological_session.observer_distance = 55.0;
+    EXPECT_EQ(render::SessionConfigIssue(cosmological_session),
+              "positive-lambda observer must remain inside the cosmological trace boundary");
+    cosmological_session.metric_id = core::MetricId::SchwarzschildDeSitter;
+    cosmological_session.black_hole_mass = 2.0;
+    cosmological_session.observer_distance = 50.0;
+    EXPECT_FALSE(render::SessionConfigIssue(cosmological_session).has_value());
+    cosmological_session.cosmological_constant = 0.02;
+    EXPECT_EQ(render::SessionConfigIssue(cosmological_session),
+              "positive-lambda observer must remain inside the cosmological trace boundary");
 }
 
 TEST(RenderSessionProbe, GeometricMetadataNeverInventsPhysicalLengthUnits) {

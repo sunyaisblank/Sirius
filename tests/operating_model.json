@@ -120,11 +120,12 @@
       "required": true,
       "verification": "build_gated",
       "profiles": ["cpu", "vulkan"],
-      "requirement": "The single registry exposes nine CPU-renderable spacetime families, advertises only implemented backend support, rejects parameters absent from a metric, preserves observer distance as a geometric coordinate radius with metric-natural scaling, resolves the bounded Alcubierre wall profile, and rejects disk semantics absent from a metric.",
+      "requirement": "The single registry exposes nine CPU-renderable spacetime families, advertises only implemented backend support, rejects parameters absent from a metric, preserves observer distance as a geometric coordinate radius with metric-natural scaling, keeps every positive-Lambda observer and directional background boundary inside its cosmological causal patch, resolves the bounded Alcubierre wall profile, and rejects disk semantics absent from a metric.",
       "capability_dependencies": [],
       "evidence": [
         {"kind": "gtest", "name": "MetricRegistryTests.EveryCanonicalNameParsesToItsOwnId"},
         {"kind": "gtest", "name": "MetricRegistryTests.BackendSupportMatchesImplementations"},
+        {"kind": "gtest", "name": "MetricRegistryTests.PositiveLambdaObserverAndHorizonShareOneCausalDomain"},
         {"kind": "gtest", "name": "ConfigValidation.MetricMassAndObserverCoordinateRadiusAreIdentityAware"},
         {"kind": "gtest", "name": "RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame"},
         {"kind": "gtest", "name": "ConfigValidation.DiskRequestDeclinesForEveryMetricWithoutAnEmissionModel"},
@@ -302,6 +303,7 @@
       "id": "natural_scaled_trace_domain",
       "evidence": [
         {"kind": "gtest", "name": "ConfigValidation.MetricMassAndObserverCoordinateRadiusAreIdentityAware"},
+        {"kind": "gtest", "name": "MetricRegistryTests.PositiveLambdaObserverAndHorizonShareOneCausalDomain"},
         {"kind": "gtest", "name": "RenderSessionProbe.TraceDomainScalesWithMassAndEnclosesTheObserver"}
       ]
     },
@@ -575,11 +577,14 @@
       "state": "bounded",
       "profiles": ["cpu"],
       "request": "de-Sitter or Schwarzschild-de-Sitter metric rendering",
-      "behavior": "Represent the exact spherical positive-Lambda Kottler metric in horizon-penetrating Cartesian Kerr-Schild coordinates; classify black-hole capture with the smaller positive root and expose the distinct cosmological root. Pure de Sitter has no black-hole capture surface, and Schwarzschild-de-Sitter requests require 9 Lambda M^2 < 1. The launch observer is the renderer's ADM/Eulerian worldline, not an implicitly static observer; the celestial texture is a directional boundary condition, not cosmological radiative transfer. Negative Lambda, rotating/charged Lambda sectors, Nariai, and super-Nariai requests decline.",
+      "behavior": "Represent the exact spherical positive-Lambda Kottler metric in horizon-penetrating Cartesian Kerr-Schild coordinates; classify black-hole capture with the smaller positive root and use the distinct cosmological root as the outer causal-patch bound. Pure de Sitter has no black-hole capture surface, and Schwarzschild-de-Sitter requests require 9 Lambda M^2 < 1. Require the launch radius to remain at or below 0.99 of the cosmological horizon, round the fp32 directional celestial boundary inward from that horizon, and localise an accepted crossing segment back onto the bound before sky sampling, reusing one scale-safe root authority across the metric, public and typed validation, and CPU tracing. The launch observer is the renderer's ADM/Eulerian worldline, not an implicitly static observer; the celestial texture is a finite directional boundary condition, not cosmological radiative transfer. Negative Lambda, rotating/charged Lambda sectors, Nariai, super-Nariai, and observers outside the governed causal patch decline.",
       "evidence": [
         {"kind": "gtest", "name": "KottlerHorizonTests.ExactRootsSeparateBlackHoleCaptureFromCosmologicalHorizon"},
         {"kind": "gtest", "name": "KottlerHorizonTests.PureDeSitterHasOnlyACosmologicalHorizon"},
-        {"kind": "gtest", "name": "ConfigValidation.DeSitterRequestsEnforcePositiveLambdaAndSubNariaiBlackHole"}
+        {"kind": "gtest", "name": "MetricRegistryTests.PositiveLambdaObserverAndHorizonShareOneCausalDomain"},
+        {"kind": "gtest", "name": "ConfigValidation.DeSitterRequestsEnforcePositiveLambdaAndSubNariaiBlackHole"},
+        {"kind": "gtest", "name": "RenderSessionProbe.TraceDomainScalesWithMassAndEnclosesTheObserver"},
+        {"kind": "gtest", "name": "RenderSessionProbe.TypedNumericBoundariesMatchTheExternalConfigurationBoundary"}
       ]
     },
     {
