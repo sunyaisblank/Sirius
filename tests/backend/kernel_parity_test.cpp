@@ -58,6 +58,7 @@ constexpr std::uint32_t kOpDeviation = 4;
 constexpr std::uint32_t kOpDiskRedshift = 5;
 constexpr std::uint32_t kOpLiveCartConservation = 6;
 constexpr std::uint32_t kOpBeamEllipse = 7;
+constexpr std::uint32_t kOpAdaptiveEventDomain = 8;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -323,6 +324,58 @@ TEST(KernelParity, KerrSchildMetricMatchesLegacyToOnePartInMillion) {
         // The analytic Kerr-Schild inverse satisfies g g^-1 = I to fp32.
         EXPECT_LT(r[base + 32], 5e-6f) << "inverse-metric identity error, sample " << s;
     }
+}
+
+TEST(KernelParity, RepresentedSubThresholdKerrMetricIsScaleCovariant) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    constexpr float scale = 1.0e-9f;
+    const Sample unit = KerrSchildAt(1.0f, 0.05f, 0.0f, 2.0f, 1.0f, 0.5f);
+    const Sample tiny =
+        KerrSchildAt(scale, 0.05f * scale, 0.0f, 2.0f * scale, 1.0f * scale, 0.5f * scale);
+    const auto result = RunProbe(*f.device, f.kernel, kOpMetric, {unit, tiny});
+
+    for (int component = 0; component < 32; ++component) {
+        EXPECT_TRUE(Close(result[kResultStride + component], result[component], 3.0e-5f, 3.0e-6f,
+                          "scale-covariant metric component " + std::to_string(component)));
+    }
+    EXPECT_LT(result[32], 5.0e-6f);
+    EXPECT_LT(result[kResultStride + 32], 5.0e-6f);
+
+    const auto connection = RunProbe(*f.device, f.kernel, kOpChristoffel, {unit, tiny});
+    for (int component = 0; component < 64; ++component) {
+        EXPECT_TRUE(Close(scale * connection[kResultStride + component], connection[component],
+                          2.0e-4f, 3.0e-5f,
+                          "scale-covariant connection component " + std::to_string(component)));
+    }
+}
+
+TEST(KernelParity, UnrepresentedKerrStageShrinksBeforeMetricEvaluation) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    // At a=0.5, (x,y,z)=(1,0,0) is on the differentiable positive-r
+    // sheet. The RK4 midpoint for h=2 and u^x=-1 is exactly the non-unique
+    // r=0 Kerr disk. The production adaptive authority must reject that
+    // tableau and preserve the input state rather than sampling the metric.
+    Sample crossing;
+    crossing.metric_id = kKerrSchild;
+    crossing.p1 = 1.0f;
+    crossing.p2 = 0.5f;
+    crossing.c0 = 1.0f;
+    crossing.u1 = -1.0f;
+    crossing.h = 2.0f;
+    const auto result = RunProbe(*f.device, f.kernel, kOpAdaptiveEventDomain, {crossing});
+
+    EXPECT_FLOAT_EQ(result[0], 1.0f) << "initial event was not represented";
+    EXPECT_FLOAT_EQ(result[1], 0.0f) << "singular-sheet midpoint was admitted";
+    EXPECT_FLOAT_EQ(result[2], 0.0f) << "unrepresented tableau was accepted";
+    EXPECT_FLOAT_EQ(result[3], crossing.c0) << "rejected tableau mutated x";
+    EXPECT_FLOAT_EQ(result[4], crossing.c1) << "rejected tableau mutated y";
+    EXPECT_FLOAT_EQ(result[5], crossing.c2) << "rejected tableau mutated z";
+    EXPECT_GT(result[6], 1.0f) << "rejection did not exceed the controller envelope";
+    EXPECT_FLOAT_EQ(result[7], 0.5f) << "rejection did not request a smaller step";
 }
 
 TEST(KernelParity, WormholeAndWarpMetricMatchLegacy) {

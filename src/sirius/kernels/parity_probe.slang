@@ -33,6 +33,7 @@ static const uint OP_DEVIATION = 4;
 static const uint OP_DISK_REDSHIFT = 5;
 static const uint OP_LIVE_CART_CONSERVATION = 6;
 static const uint OP_BEAM_ELLIPSE = 7;
+static const uint OP_ADAPTIVE_EVENT_DOMAIN = 8;
 
 // Future-directed null root used by the render kernel, repeated here only for
 // the diagnostic launch boundary. The integration below calls the production
@@ -89,21 +90,16 @@ void KerrCartConservedQuantities(GeodesicStateCart state, float M, float a,
     Real a2 = spin * spin;
     Real radius2 = x * x + y * y + z * z;
     Real reducedRadius2 = radius2 - a2;
-    Real discriminant = max(reducedRadius2 * reducedRadius2 + 4.0f * a2 * z * z,
-                            Real(1.0e-20f));
-    Real discriminantRoot = sqrt(discriminant);
-    Real r2 = max((reducedRadius2 + discriminantRoot) / 2.0f, Real(1.0e-12f));
-    Real r = sqrt(r2);
+    Real r = ComputeKerrRadiusCart(x, y, z, spin);
+    Real r2 = r * r;
+    Real discriminantRoot = 2.0f * r2 - reducedRadius2;
 
-    Real discriminantDx = 4.0f * x * reducedRadius2;
-    Real discriminantDy = 4.0f * y * reducedRadius2;
-    Real discriminantDz = 4.0f * z * (radius2 + a2);
-    Real drDx = (x + discriminantDx / (4.0f * discriminantRoot)) / (2.0f * r);
-    Real drDy = (y + discriminantDy / (4.0f * discriminantRoot)) / (2.0f * r);
-    Real drDz = (z + discriminantDz / (4.0f * discriminantRoot)) / (2.0f * r);
+    Real drDx = x * r / discriminantRoot;
+    Real drDy = y * r / discriminantRoot;
+    Real drDz = z * (r2 + a2) / (r * discriminantRoot);
 
     Real cosTheta = clamp(z / r, Real(-1.0f), Real(1.0f));
-    Real sin2Theta = max(Real(1.0f) - cosTheta * cosTheta, Real(1.0e-20f));
+    Real sin2Theta = Real(1.0f) - cosTheta * cosTheta;
     Real sinTheta = sqrt(sin2Theta);
     Real dThetaDx = z * drDx / (r2 * sinTheta);
     Real dThetaDy = z * drDy / (r2 * sinTheta);
@@ -343,6 +339,25 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         results[rb + 9] = float(termination);
         results[rb + 10] = float(lastRejectedError);
         results[rb + 11] = float(lastRejectedNull);
+    } else if (opcode == OP_ADAPTIVE_EVENT_DOMAIN) {
+        // Direct event-domain witness for the production adaptive RK4
+        // authority. c=(x,y,z), u=(t,x,y,z), h=attempted step.
+        GeodesicStateCart state;
+        state.x = MakeVec4Cart(Real(0.0f), Real(c0), Real(c1), Real(c2));
+        state.u = MakeVec4Cart(Real(samples[sb + 8]), Real(samples[sb + 9]),
+                               Real(samples[sb + 10]), Real(samples[sb + 11]));
+        Vec4Cart secondStage = AddVec4Cart(state.x, ScaleVec4Cart(state.u, Real(0.5f * samples[sb + 12])));
+        AdaptiveGeodesicStep attempted = AttemptAdaptiveGeodesicStep(
+            state, Real(samples[sb + 12]), false, false, p1, p2, p3, p4,
+            0.0f, 0.0f, 0.0f, 0.0f, 0, Real(1.0f), Real(1.0f));
+        results[rb + 0] = IsKerrSchildFamilyEventRepresented(state.x, p1, p2, p3, p4) ? 1.0f : 0.0f;
+        results[rb + 1] = IsKerrSchildFamilyEventRepresented(secondStage, p1, p2, p3, p4) ? 1.0f : 0.0f;
+        results[rb + 2] = attempted.accepted ? 1.0f : 0.0f;
+        results[rb + 3] = float(attempted.candidate.x.x);
+        results[rb + 4] = float(attempted.candidate.x.y);
+        results[rb + 5] = float(attempted.candidate.x.z);
+        results[rb + 6] = float(attempted.errorRatio);
+        results[rb + 7] = float(attempted.stepFactor);
     } else if (opcode == OP_BEAM_ELLIPSE) {
         // c0,c1,c2,u0 are the row-major transverse Jacobi map.
         float semiMajor, semiMinor, orientation, determinant;

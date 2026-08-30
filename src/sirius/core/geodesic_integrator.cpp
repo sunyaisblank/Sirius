@@ -118,14 +118,28 @@ static Vec4 MomentumDerivative([[maybe_unused]] const Vec4& p, const Vec4& k,
 }
 
 // Forward declarations for helpers defined later.
-static void EvaluateRk45Stage(const Vec4& x, const Vec4& p, IMetric* metric, Vec4& k_x, Vec4& k_p);
+static bool EvaluateRk45Stage(const Vec4& x, const Vec4& p, IMetric* metric, Vec4& k_x, Vec4& k_p);
 static Vec4 ComputeMomentum(const Vec4& velocity, const Metric4d& g);
+
+static bool RejectUnrepresentedStage(Lightray& ray, float minimum_step) {
+    if (ray.step_size <= minimum_step) {
+        ray.terminated = 3;
+    } else {
+        ray.step_size = std::max(minimum_step, ray.step_size * 0.5f);
+    }
+    return false;
+}
 
 bool Geodesic::IntegrateStep(Lightray& ray, IMetric* metric, float min_step, float max_step) {
     SIRIUS_PRE(metric != nullptr);
 
     Vec4 x0 = ray.position;
     float h = ray.step_size;
+
+    if (!metric->IsValidEvent(x0)) {
+        ray.terminated = 3;
+        return false;
+    }
 
     // Metric and initial momentum.
     Metric4d g0;
@@ -139,15 +153,21 @@ bool Geodesic::IntegrateStep(Lightray& ray, IMetric* metric, float min_step, flo
 
     Vec4 x1 = x0 + k1_x * (0.5f * h), p1 = p0 + k1_p * (0.5f * h);
     Vec4 k2_x, k2_p;
-    EvaluateRk45Stage(x1, p1, metric, k2_x, k2_p);
+    if (!EvaluateRk45Stage(x1, p1, metric, k2_x, k2_p)) {
+        return RejectUnrepresentedStage(ray, min_step);
+    }
 
     Vec4 x2 = x0 + k2_x * (0.5f * h), p2 = p0 + k2_p * (0.5f * h);
     Vec4 k3_x, k3_p;
-    EvaluateRk45Stage(x2, p2, metric, k3_x, k3_p);
+    if (!EvaluateRk45Stage(x2, p2, metric, k3_x, k3_p)) {
+        return RejectUnrepresentedStage(ray, min_step);
+    }
 
     Vec4 x3 = x0 + k3_x * h, p3 = p0 + k3_p * h;
     Vec4 k4_x, k4_p;
-    EvaluateRk45Stage(x3, p3, metric, k4_x, k4_p);
+    if (!EvaluateRk45Stage(x3, p3, metric, k4_x, k4_p)) {
+        return RejectUnrepresentedStage(ray, min_step);
+    }
 
     // Combine RK4.
     Vec4 new_position = x0 + (k1_x + k2_x * 2.0f + k3_x * 2.0f + k4_x) * (h / 6.0f);
@@ -156,6 +176,9 @@ bool Geodesic::IntegrateStep(Lightray& ray, IMetric* metric, float min_step, flo
     // New velocity.
     Metric4d g_new;
     Tensor<Dual<double>, 4, 4, 4> dg_new;
+    if (!metric->IsValidEvent(new_position)) {
+        return RejectUnrepresentedStage(ray, min_step);
+    }
     metric->Evaluate(new_position, g_new, dg_new);
     Vec4 new_velocity = TensorOps::RaiseIndex(new_momentum, InverseAt(metric, new_position, g_new));
 
@@ -360,12 +383,14 @@ static Vec4 ComputeMomentum(const Vec4& velocity, const Metric4d& g) {
 }
 
 // Evaluate one RK45 stage, returning the position and momentum derivatives.
-static void EvaluateRk45Stage(const Vec4& x, const Vec4& p, IMetric* metric, Vec4& k_x, Vec4& k_p) {
+static bool EvaluateRk45Stage(const Vec4& x, const Vec4& p, IMetric* metric, Vec4& k_x, Vec4& k_p) {
+    if (!metric->IsValidEvent(x)) return false;
     Metric4d g;
     Tensor<Dual<double>, 4, 4, 4> dg;
     metric->Evaluate(x, g, dg);
     k_x = TensorOps::RaiseIndex(p, InverseAt(metric, x, g));
     k_p = MomentumDerivative(p, k_x, dg);
+    return true;
 }
 
 // RK45 error norm.
@@ -431,6 +456,11 @@ bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const Integrato
     Vec4 x0 = ray.position;
     float h = ray.step_size;
 
+    if (!metric->IsValidEvent(x0)) {
+        ray.terminated = 3;
+        return false;
+    }
+
     // Metric and initial momentum.
     Metric4d g0;
     Tensor<Dual<double>, 4, 4, 4> dg0;
@@ -451,23 +481,31 @@ bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const Integrato
 
     Vec4 x2 = x0 + k1_x * (a21 * h);
     Vec4 p2 = p0 + k1_p * (a21 * h);
-    EvaluateRk45Stage(x2, p2, metric, k2_x, k2_p);
+    if (!EvaluateRk45Stage(x2, p2, metric, k2_x, k2_p)) {
+        return RejectUnrepresentedStage(ray, config.min_step);
+    }
 
     Vec4 x3 = x0 + k1_x * static_cast<float>(a31 * h) + k2_x * static_cast<float>(a32 * h);
     Vec4 p3 = p0 + k1_p * static_cast<float>(a31 * h) + k2_p * static_cast<float>(a32 * h);
-    EvaluateRk45Stage(x3, p3, metric, k3_x, k3_p);
+    if (!EvaluateRk45Stage(x3, p3, metric, k3_x, k3_p)) {
+        return RejectUnrepresentedStage(ray, config.min_step);
+    }
 
     Vec4 x4 = x0 + k1_x * static_cast<float>(a41 * h) + k2_x * static_cast<float>(a42 * h) +
               k3_x * static_cast<float>(a43 * h);
     Vec4 p4 = p0 + k1_p * static_cast<float>(a41 * h) + k2_p * static_cast<float>(a42 * h) +
               k3_p * static_cast<float>(a43 * h);
-    EvaluateRk45Stage(x4, p4, metric, k4_x, k4_p);
+    if (!EvaluateRk45Stage(x4, p4, metric, k4_x, k4_p)) {
+        return RejectUnrepresentedStage(ray, config.min_step);
+    }
 
     Vec4 x5 = x0 + k1_x * static_cast<float>(a51 * h) + k2_x * static_cast<float>(a52 * h) +
               k3_x * static_cast<float>(a53 * h) + k4_x * static_cast<float>(a54 * h);
     Vec4 p5 = p0 + k1_p * static_cast<float>(a51 * h) + k2_p * static_cast<float>(a52 * h) +
               k3_p * static_cast<float>(a53 * h) + k4_p * static_cast<float>(a54 * h);
-    EvaluateRk45Stage(x5, p5, metric, k5_x, k5_p);
+    if (!EvaluateRk45Stage(x5, p5, metric, k5_x, k5_p)) {
+        return RejectUnrepresentedStage(ray, config.min_step);
+    }
 
     Vec4 x6 = x0 + k1_x * static_cast<float>(a61 * h) + k2_x * static_cast<float>(a62 * h) +
               k3_x * static_cast<float>(a63 * h) + k4_x * static_cast<float>(a64 * h) +
@@ -475,7 +513,9 @@ bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const Integrato
     Vec4 p6 = p0 + k1_p * static_cast<float>(a61 * h) + k2_p * static_cast<float>(a62 * h) +
               k3_p * static_cast<float>(a63 * h) + k4_p * static_cast<float>(a64 * h) +
               k5_p * static_cast<float>(a65 * h);
-    EvaluateRk45Stage(x6, p6, metric, k6_x, k6_p);
+    if (!EvaluateRk45Stage(x6, p6, metric, k6_x, k6_p)) {
+        return RejectUnrepresentedStage(ray, config.min_step);
+    }
 
     // 5th order solution.
     Vec4 new_position = x0 + (k1_x * b1 + k3_x * b3 + k4_x * b4 + k5_x * b5 + k6_x * b6) * h;
@@ -483,7 +523,9 @@ bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const Integrato
 
     // Stage 7 (FSAL).
     Vec4 k7_x, k7_p;
-    EvaluateRk45Stage(new_position, new_momentum, metric, k7_x, k7_p);
+    if (!EvaluateRk45Stage(new_position, new_momentum, metric, k7_x, k7_p)) {
+        return RejectUnrepresentedStage(ray, config.min_step);
+    }
     Vec4 new_velocity = k7_x;
 
     // Error estimation.

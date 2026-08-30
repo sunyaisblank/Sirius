@@ -3,10 +3,10 @@
 // returns the covariant metric g_mu_nu, its inverse g^mu_nu, and (where the
 // .cu carried a closed form) the Christoffel symbols Gamma^lambda_mu_nu.
 //
-// Every expression, guard constant, and operation order is copied verbatim
-// from the retired src/Sirius.Render/Acceleration/OptiX/RDOP002A.cu so that
-// fp32 output is bit-comparable with the legacy device functions. Deliberately
-// NOT ported: the older spherical getAlcubierreMetric approximation (the
+// The live Kerr-Schild branch uses the exact represented parameter and chart
+// domain: scale-safe radial arithmetic replaces the retired implementation's
+// epsilon radii and low-spin aliases. Deliberately NOT ported: the older
+// spherical getAlcubierreMetric approximation (the
 // WarpDrive Cartesian family below is the render dispatch's authority and
 // supersedes it) and the Godel/Taub-NUT branches (docs/ARCHITECTURE.md
 // section 2 deletes them).
@@ -53,15 +53,46 @@ public Vec4 Vec4CartToSph(Vec4Cart cart) {
 
 // Kerr radius from Cartesian position: solves r^4 - (R^2 - a^2) r^2 - a^2 z^2 = 0.
 public Real ComputeKerrRadiusCart(Real x, Real y, Real z, Real a) {
-    Real a2 = a * a;
-    Real R2 = x * x + y * y + z * z;
-    if (abs(a) < Real(1e-10f)) {
-        return sqrt(max(R2, Real(1e-20f)));
+    Real scale = max(max(abs(x), abs(y)), max(abs(z), abs(a)));
+    if (scale == Real(0.0f)) return Real(0.0f);
+
+    Real scaledX = x / scale;
+    Real scaledY = y / scale;
+    Real scaledZ = z / scale;
+    Real scaledA = a / scale;
+    Real scaledA2 = scaledA * scaledA;
+    Real reduced = scaledX * scaledX + scaledY * scaledY + scaledZ * scaledZ - scaledA2;
+    Real scaledCross = Real(2.0f) * scaledA * scaledZ;
+    Real discriminantRoot = sqrt(reduced * reduced + scaledCross * scaledCross);
+    Real scaledRadius = Real(0.0f);
+    if (reduced >= Real(0.0f)) {
+        scaledRadius = sqrt(Real(0.5f) * (reduced + discriminantRoot));
+    } else if (scaledA != Real(0.0f) && scaledZ != Real(0.0f)) {
+        scaledRadius = sqrt(Real(2.0f)) * abs(scaledA * scaledZ) /
+                       sqrt(discriminantRoot - reduced);
     }
-    Real Rm2 = R2 - a2;
-    Real disc = Rm2 * Rm2 + 4.0f * a2 * z * z;
-    Real r2 = (Rm2 + sqrt(max(disc, Real(0.0f)))) / 2.0f;
-    return sqrt(max(r2, Real(1e-20f)));
+    return scale * scaledRadius;
+}
+
+// Numerical event domain shared by the live device integrator and the
+// Kerr-Schild metric. Flat space is defined at every finite event; the pure
+// de-Sitter Cartesian origin has an exact analytic limit. Every other r=0
+// event is either a physical spherical singularity or the non-unique rotating
+// sheet boundary and must be declined before a metric/connection evaluation.
+public bool IsKerrSchildFamilyEventRepresented(Vec4Cart event, float M, float a,
+                                               float Q, float Lambda) {
+    if (!isfinite(event.t) || !isfinite(event.x) || !isfinite(event.y) ||
+        !isfinite(event.z) || !isfinite(M) || !isfinite(a) ||
+        !isfinite(Q) || !isfinite(Lambda)) {
+        return false;
+    }
+    if (M == 0.0f && a == 0.0f && Q == 0.0f && Lambda == 0.0f) return true;
+    if (M == 0.0f && a == 0.0f && Q == 0.0f &&
+        event.x == Real(0.0f) && event.y == Real(0.0f) && event.z == Real(0.0f)) {
+        return true;
+    }
+    Real r = ComputeKerrRadiusCart(event.x, event.y, event.z, Real(a));
+    return isfinite(r) && r > Real(0.0f);
 }
 
 public void GetKerrSchildFamilyMetric(
@@ -83,17 +114,24 @@ public void GetKerrSchildFamilyMetric(
     g[2][2] = 1.0f;  g_inv[2][2] = 1.0f;
     g[3][3] = 1.0f;  g_inv[3][3] = 1.0f;
 
-    if (M < 1e-15f && abs(Lambda) < 1e-15f) {
+    if (M == 0.0f && a == 0.0f && Q == 0.0f && Lambda == 0.0f) {
         return;
     }
 
     Real r = ComputeKerrRadiusCart(x, y, z, Real(a));
     Real r2 = r * r;
-    Real r4 = r2 * r2;
 
-    Real f_denom = r4 + a2 * z * z;
-    Real H = (2.0f * M * r - Q2) * r2 / max(f_denom, Real(1e-20f));
-    if (abs(a) < 1e-15f && abs(Lambda) > 1e-15f) {
+    if (M == 0.0f && a == 0.0f && Q == 0.0f && r == Real(0.0f)) {
+        return;
+    }
+
+    Real H = Real(0.0f);
+    if (M != 0.0f || Q != 0.0f) {
+        Real cosine = z / r;
+        Real sigma = r2 + a2 * cosine * cosine;
+        H = (2.0f * M * r - Q2) / sigma;
+    }
+    if (a == 0.0f && Lambda != 0.0f) {
         H += Lambda * r2 / 3.0f;
     }
 
@@ -102,7 +140,7 @@ public void GetKerrSchildFamilyMetric(
         1.0f,
         (r * x + a * y) / denom,
         (r * y - a * x) / denom,
-        z / max(r, Real(1e-10f))
+        z / r
     };
 
     [unroll] for (int mu = 0; mu < 4; mu++)
@@ -128,7 +166,7 @@ public void GetKerrSchildFamilyChristoffel(
             [unroll] for (int k = 0; k < 4; k++)
                 Gamma[i][j][k] = 0.0f;
 
-    if (M < 1e-15f && abs(Lambda) < 1e-15f) {
+    if (M == 0.0f && a == 0.0f && Q == 0.0f && Lambda == 0.0f) {
         return;
     }
 
@@ -141,13 +179,14 @@ public void GetKerrSchildFamilyChristoffel(
     Real R2 = x * x + y * y + z * z;
 
     Real r = ComputeKerrRadiusCart(x, y, z, Real(a));
+    if (M == 0.0f && a == 0.0f && Q == 0.0f && r == Real(0.0f)) {
+        return;
+    }
     Real r2 = r * r;
-    Real r3 = r2 * r;
-    Real r4 = r2 * r2;
 
     Real Rm2 = R2 - a2;
     Real disc = Rm2 * Rm2 + 4.0f * a2 * z * z;
-    Real sqrt_disc = sqrt(max(disc, Real(1e-20f)));
+    Real sqrt_disc = sqrt(disc);
 
     Real d_disc_dx = 4.0f * x * Rm2;
     Real d_disc_dy = 4.0f * y * Rm2;
@@ -165,13 +204,11 @@ public void GetKerrSchildFamilyChristoffel(
 
     Real denom = r2 + a2;
     Real denom2 = denom * denom;
-    Real r_safe = max(r, Real(1e-10f));
-
     Real l[4] = {
         1.0f,
         (r * x + a * y) / denom,
         (r * y - a * x) / denom,
-        z / r_safe
+        z / r
     };
     Real l_up[4] = { 1.0f, -l[1], -l[2], -l[3] };
 
@@ -192,25 +229,32 @@ public void GetKerrSchildFamilyChristoffel(
     dl[2][2] = (r + y * dr[2]) / f2 - g1 * (2.0f * r * dr[2]) / denom2;
     dl[3][2] = (y * dr[3]) / f2 - g1 * (2.0f * r * dr[3]) / denom2;
 
-    Real r2_safe = r_safe * r_safe;
-    dl[1][3] = -z * dr[1] / r2_safe;
-    dl[2][3] = -z * dr[2] / r2_safe;
-    dl[3][3] = 1.0f / r_safe - z * dr[3] / r2_safe;
+    dl[1][3] = -z * dr[1] / r2;
+    dl[2][3] = -z * dr[2] / r2;
+    dl[3][3] = 1.0f / r - z * dr[3] / r2;
 
-    Real f_denom = r4 + a2 * z * z;
-    Real numerator = (2.0f * M * r - Q2) * r2;
-    Real H = numerator / max(f_denom, Real(1e-20f));
-    if (abs(a) < 1e-15f && abs(Lambda) > 1e-15f) {
+    Real cosine = z / r;
+    Real sigma = r2 + a2 * cosine * cosine;
+    Real H = Real(0.0f);
+    Real asymptoticH = Real(0.0f);
+    if (M != 0.0f || Q != 0.0f) {
+        asymptoticH = (2.0f * M * r - Q2) / sigma;
+        H = asymptoticH;
+    }
+    if (a == 0.0f && Lambda != 0.0f) {
         H += Lambda * r2 / 3.0f;
     }
 
     Real dH[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
     for (int lam = 1; lam <= 3; lam++) {
-        Real d_num = 2.0f * r * dr[lam] * (3.0f * M * r - Q2);
-        Real d_f_denom = 4.0f * r3 * dr[lam];
-        if (lam == 3) d_f_denom += 2.0f * a2 * z;
-        dH[lam] = (d_num * f_denom - numerator * d_f_denom) / (f_denom * f_denom);
-        if (abs(a) < 1e-15f && abs(Lambda) > 1e-15f) {
+        if (M != 0.0f || Q != 0.0f) {
+            Real dCosine = (lam == 3 ? Real(1.0f) / r : Real(0.0f)) -
+                           z * dr[lam] / r2;
+            Real dSigma = 2.0f * r * dr[lam] + 2.0f * a2 * cosine * dCosine;
+            Real dNumerator = 2.0f * M * dr[lam];
+            dH[lam] = (dNumerator - asymptoticH * dSigma) / sigma;
+        }
+        if (a == 0.0f && Lambda != 0.0f) {
             dH[lam] += (2.0f * Lambda / 3.0f) * r * dr[lam];
         }
     }

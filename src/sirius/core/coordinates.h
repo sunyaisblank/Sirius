@@ -16,7 +16,9 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <limits>
 #include <numbers>
+#include <optional>
 
 namespace sirius::core::coordinates {
 
@@ -113,6 +115,69 @@ struct Vec4Cart {
     double Radius() const { return std::sqrt(x * x + y * y + z * z); }
 };
 
+// The non-negative oblate radial root and its Cartesian gradient.  The root is
+// defined by
+//   r^4 - (x^2 + y^2 + z^2 - a^2) r^2 - a^2 z^2 = 0.
+// Its differential is absent at r=0, where the positive-root sheet terminates
+// on the Kerr disk (or at the spherical origin when a=0).  Callers that need
+// only the coordinate radius may still observe the exact zero root.
+struct KerrSchildRadiusDifferential {
+    double radius = 0.0;
+    double dx = 0.0;
+    double dy = 0.0;
+    double dz = 0.0;
+};
+
+namespace detail {
+
+struct KerrSchildRadiusSolution {
+    double radius = 0.0;
+    double scaled_radius = 0.0;
+    double scaled_discriminant_root = 0.0;
+    double scaled_x = 0.0;
+    double scaled_y = 0.0;
+    double scaled_z = 0.0;
+    double scaled_a = 0.0;
+};
+
+[[nodiscard]] inline std::optional<KerrSchildRadiusSolution> TrySolveKerrSchildRadius(
+    const Vec4Cart& cart, double a) {
+    if (!std::isfinite(cart.t) || !std::isfinite(cart.x) || !std::isfinite(cart.y) ||
+        !std::isfinite(cart.z) || !std::isfinite(a)) {
+        return std::nullopt;
+    }
+
+    const double scale =
+        std::max({std::abs(cart.x), std::abs(cart.y), std::abs(cart.z), std::abs(a)});
+    if (scale == 0.0) return KerrSchildRadiusSolution{};
+
+    const double x = cart.x / scale;
+    const double y = cart.y / scale;
+    const double z = cart.z / scale;
+    const double spin = a / scale;
+    const double spin2 = spin * spin;
+    const double reduced = x * x + y * y + z * z - spin2;
+    const double discriminant_root = std::hypot(reduced, 2.0 * spin * z);
+
+    // The ordinary quadratic expression loses the entire positive root when
+    // reduced < 0 and |z| is small.  Compute sqrt(r^2) directly from the
+    // conjugate expression in that branch, avoiding both cancellation and the
+    // underflow-prone square of a*z.
+    double scaled_radius = 0.0;
+    if (reduced >= 0.0) {
+        scaled_radius = std::sqrt(0.5 * (reduced + discriminant_root));
+    } else if (spin != 0.0 && z != 0.0) {
+        scaled_radius =
+            std::numbers::sqrt2 * std::abs(spin * z) / std::sqrt(discriminant_root - reduced);
+    }
+
+    const double radius = scale * scaled_radius;
+    if (!std::isfinite(radius)) return std::nullopt;
+    return KerrSchildRadiusSolution{radius, scaled_radius, discriminant_root, x, y, z, spin};
+}
+
+}  // namespace detail
+
 // 4x4 Jacobian J[mu][nu] = d x'^mu / d x^nu.
 using Jacobian4x4 = std::array<std::array<double, 4>, 4>;
 
@@ -156,15 +221,38 @@ inline Vec4Cart BlToKerrSchildCart(const Vec4Bl& bl, double a) {
 // when a != 0. Disk orbit, ISCO, Page-Thorne, and horizon calculations must use
 // this authority.
 inline double KerrSchildRadius(const Vec4Cart& cart, double a) {
-    const double a2 = a * a;
-    const double R2 = cart.x * cart.x + cart.y * cart.y + cart.z * cart.z;
-    if (std::abs(a) < 1e-12) {
-        return std::sqrt(std::max(R2, 1e-20));
+    const auto solution = detail::TrySolveKerrSchildRadius(cart, a);
+    SIRIUS_PRE(solution.has_value());
+    return solution ? solution->radius : std::numeric_limits<double>::quiet_NaN();
+}
+
+// Fallible radius-and-gradient authority for metric derivatives and inverse
+// chart Jacobians.  It accepts each numerically representable finite
+// differentiable point, including non-zero spin below the former epsilon
+// branch, and declines the exact r=0 sheet boundary instead of manufacturing
+// an epsilon radius.
+[[nodiscard]] inline std::optional<KerrSchildRadiusDifferential> TryKerrSchildRadiusDifferential(
+    const Vec4Cart& cart, double a) {
+    const auto solution = detail::TrySolveKerrSchildRadius(cart, a);
+    if (!solution || !(solution->radius > 0.0) || !(solution->scaled_radius > 0.0) ||
+        !(solution->scaled_discriminant_root > 0.0)) {
+        return std::nullopt;
     }
-    const double Rm2 = R2 - a2;
-    const double disc = Rm2 * Rm2 + 4.0 * a2 * cart.z * cart.z;
-    const double r2 = (Rm2 + std::sqrt(std::max(disc, 0.0))) / 2.0;
-    return std::sqrt(std::max(r2, 1e-20));
+
+    const double scaled_r = solution->scaled_radius;
+    const double scaled_d = solution->scaled_discriminant_root;
+    const double scaled_r2 = scaled_r * scaled_r;
+    const double scaled_a2 = solution->scaled_a * solution->scaled_a;
+    KerrSchildRadiusDifferential differential;
+    differential.radius = solution->radius;
+    differential.dx = solution->scaled_x * scaled_r / scaled_d;
+    differential.dy = solution->scaled_y * scaled_r / scaled_d;
+    differential.dz = solution->scaled_z * (scaled_r2 + scaled_a2) / (scaled_r * scaled_d);
+    if (!std::isfinite(differential.dx) || !std::isfinite(differential.dy) ||
+        !std::isfinite(differential.dz)) {
+        return std::nullopt;
+    }
+    return differential;
 }
 
 // Cartesian to Boyer-Lindquist, simplified for a = 0.
@@ -197,17 +285,24 @@ inline Vec4Bl KerrSchildCartToBl(const Vec4Cart& cart, double a) {
     const double z = cart.z;
     bl.r = KerrSchildRadius(cart, a);
 
-    if (bl.r < 1e-15) {
-        bl.theta = std::numbers::pi / 2.0;
-        bl.phi = 0;
-        return bl;
+    const bool represented = std::isfinite(bl.r) && bl.r > 0.0;
+    SIRIUS_PRE(represented);
+    if (!represented) {
+        const double nan = std::numeric_limits<double>::quiet_NaN();
+        return Vec4Bl{nan, nan, nan, nan};
     }
 
+    const double cylindrical_radius = std::hypot(x, y);
+    SIRIUS_PRE(cylindrical_radius > 0.0);
+    if (!(cylindrical_radius > 0.0)) {
+        const double nan = std::numeric_limits<double>::quiet_NaN();
+        return Vec4Bl{nan, nan, nan, nan};
+    }
     bl.theta = std::acos(std::clamp(z / bl.r, -1.0, 1.0));
 
     // phi_BL = atan2(y, x) - atan2(a, r) for the full Kerr transform.
     bl.phi = std::atan2(y, x);
-    if (std::abs(a) > 1e-12) {
+    if (a != 0.0) {
         bl.phi -= std::atan2(a, bl.r);
     }
     while (bl.phi < 0) bl.phi += 2.0 * std::numbers::pi;
@@ -228,53 +323,82 @@ inline Vec4Bl TransformVectorKerrSchildCartToBl(const Vec4Cart& vector, const Ve
     const double x = position.x;
     const double y = position.y;
     const double z = position.z;
-    const double a2 = spin * spin;
-    const double radius_squared = x * x + y * y + z * z;
-    const double reduced_radius_squared = radius_squared - a2;
-    const double discriminant =
-        std::max(reduced_radius_squared * reduced_radius_squared + 4.0 * a2 * z * z, 1.0e-20);
-    const double discriminant_root = std::sqrt(discriminant);
-    const double r2 = std::max((reduced_radius_squared + discriminant_root) / 2.0, 1.0e-12);
-    const double r = std::sqrt(r2);
+    const bool finite = std::isfinite(vector.t) && std::isfinite(vector.x) &&
+                        std::isfinite(vector.y) && std::isfinite(vector.z) && std::isfinite(mass) &&
+                        std::isfinite(spin);
+    const auto radial_geometry =
+        finite ? TryKerrSchildRadiusDifferential(position, spin) : std::nullopt;
+    SIRIUS_PRE(radial_geometry.has_value());
+    if (!radial_geometry) {
+        const double nan = std::numeric_limits<double>::quiet_NaN();
+        return Vec4Bl{nan, nan, nan, nan};
+    }
+    const double r = radial_geometry->radius;
+    const double dr_dx = radial_geometry->dx;
+    const double dr_dy = radial_geometry->dy;
+    const double dr_dz = radial_geometry->dz;
 
-    const double discriminant_dx = 4.0 * x * reduced_radius_squared;
-    const double discriminant_dy = 4.0 * y * reduced_radius_squared;
-    const double discriminant_dz = 4.0 * z * (radius_squared + a2);
-    const double dr_dx = (x + discriminant_dx / (4.0 * discriminant_root)) / (2.0 * r);
-    const double dr_dy = (y + discriminant_dy / (4.0 * discriminant_root)) / (2.0 * r);
-    const double dr_dz = (z + discriminant_dz / (4.0 * discriminant_root)) / (2.0 * r);
+    const double scale =
+        std::max({std::abs(x), std::abs(y), std::abs(z), std::abs(r), std::abs(spin)});
+    SIRIUS_ASSERT(scale > 0.0);
+    const double scaled_x = x / scale;
+    const double scaled_y = y / scale;
+    const double scaled_z = z / scale;
+    const double scaled_r = r / scale;
+    const double scaled_a = spin / scale;
+    const double scaled_r2 = scaled_r * scaled_r;
+    const double sin_theta = std::hypot(scaled_x, scaled_y) / std::hypot(scaled_r, scaled_a);
+    SIRIUS_PRE(std::isfinite(sin_theta) && sin_theta > 0.0);
+    if (!(std::isfinite(sin_theta) && sin_theta > 0.0)) {
+        const double nan = std::numeric_limits<double>::quiet_NaN();
+        return Vec4Bl{nan, nan, nan, nan};
+    }
+    const double inverse_theta_denominator = 1.0 / (scale * scaled_r2 * sin_theta);
+    const double dtheta_dx = scaled_z * dr_dx * inverse_theta_denominator;
+    const double dtheta_dy = scaled_z * dr_dy * inverse_theta_denominator;
+    const double dtheta_dz = -(scaled_r - scaled_z * dr_dz) * inverse_theta_denominator;
 
-    const double cos_theta = std::clamp(z / r, -1.0, 1.0);
-    const double sin_theta =
-        std::max(std::sqrt(std::max(0.0, 1.0 - cos_theta * cos_theta)), 1.0e-12);
-    const double dtheta_dx = z * dr_dx / (r2 * sin_theta);
-    const double dtheta_dy = z * dr_dy / (r2 * sin_theta);
-    const double dtheta_dz = -(r - z * dr_dz) / (r2 * sin_theta);
-
-    const double numerator = r * y - spin * x;
-    const double denominator = r * x + spin * y;
-    const double phi_denominator = std::max((r2 + a2) * (r2 + a2) * sin_theta * sin_theta, 1.0e-20);
-    const double numerator_dx = y * dr_dx - spin;
-    const double numerator_dy = y * dr_dy + r;
-    const double numerator_dz = y * dr_dz;
-    const double denominator_dx = x * dr_dx + r;
-    const double denominator_dy = x * dr_dy + spin;
-    const double denominator_dz = x * dr_dz;
+    const double numerator = scaled_r * scaled_y - scaled_a * scaled_x;
+    const double denominator = scaled_r * scaled_x + scaled_a * scaled_y;
+    const double phi_denominator = numerator * numerator + denominator * denominator;
+    SIRIUS_PRE(std::isfinite(phi_denominator) && phi_denominator > 0.0);
+    if (!(std::isfinite(phi_denominator) && phi_denominator > 0.0)) {
+        const double nan = std::numeric_limits<double>::quiet_NaN();
+        return Vec4Bl{nan, nan, nan, nan};
+    }
+    const double numerator_dx = scaled_y * dr_dx - scaled_a;
+    const double numerator_dy = scaled_y * dr_dy + scaled_r;
+    const double numerator_dz = scaled_y * dr_dz;
+    const double denominator_dx = scaled_x * dr_dx + scaled_r;
+    const double denominator_dy = scaled_x * dr_dy + scaled_a;
+    const double denominator_dz = scaled_x * dr_dz;
     const double dphi_dx =
-        (denominator * numerator_dx - numerator * denominator_dx) / phi_denominator;
+        (denominator * numerator_dx - numerator * denominator_dx) / (scale * phi_denominator);
     const double dphi_dy =
-        (denominator * numerator_dy - numerator * denominator_dy) / phi_denominator;
+        (denominator * numerator_dy - numerator * denominator_dy) / (scale * phi_denominator);
     const double dphi_dz =
-        (denominator * numerator_dz - numerator * denominator_dz) / phi_denominator;
+        (denominator * numerator_dz - numerator * denominator_dz) / (scale * phi_denominator);
 
     const double radial = dr_dx * vector.x + dr_dy * vector.y + dr_dz * vector.z;
     const double polar = dtheta_dx * vector.x + dtheta_dy * vector.y + dtheta_dz * vector.z;
     const double azimuth_ks = dphi_dx * vector.x + dphi_dy * vector.y + dphi_dz * vector.z;
-    const double delta = r2 - 2.0 * mass * r + a2;
-    SIRIUS_PRE(std::abs(delta) > 1.0e-12);
+    const double delta_scale = std::max({std::abs(r), std::abs(mass), std::abs(spin)});
+    const double scaled_mass = mass / delta_scale;
+    const double delta_radius = r / delta_scale;
+    const double delta_spin = spin / delta_scale;
+    const double scaled_delta =
+        delta_radius * delta_radius - 2.0 * scaled_mass * delta_radius + delta_spin * delta_spin;
+    SIRIUS_PRE(std::isfinite(scaled_delta) && scaled_delta != 0.0);
+    if (!std::isfinite(scaled_delta) || scaled_delta == 0.0) {
+        const double nan = std::numeric_limits<double>::quiet_NaN();
+        return Vec4Bl{nan, nan, nan, nan};
+    }
 
-    return Vec4Bl{vector.t - (2.0 * mass * r / delta) * radial, radial, polar,
-                  azimuth_ks - (spin / delta) * radial};
+    const double time_twist = 2.0 * scaled_mass * delta_radius / scaled_delta;
+    const double azimuth_twist = delta_spin / (delta_scale * scaled_delta);
+
+    return Vec4Bl{vector.t - time_twist * radial, radial, polar,
+                  azimuth_ks - azimuth_twist * radial};
 }
 
 // Jacobian J[mu][nu] = d x^mu_Cart / d x^nu_BL; transforms contravariant
@@ -409,10 +533,9 @@ inline double JacobianDeterminant(const Jacobian4x4& J) {
 
 // Round-trip BL -> Cart -> BL, returning the maximum coordinate deviation.
 inline double ValidateRoundTrip(const Vec4Bl& original, double a = 0) {
-    Vec4Cart cart =
-        (std::abs(a) < 1e-12) ? BlToCartesian(original) : BlToKerrSchildCart(original, a);
+    Vec4Cart cart = (a == 0.0) ? BlToCartesian(original) : BlToKerrSchildCart(original, a);
 
-    Vec4Bl recovered = (std::abs(a) < 1e-12) ? CartesianToBl(cart) : KerrSchildCartToBl(cart, a);
+    Vec4Bl recovered = (a == 0.0) ? CartesianToBl(cart) : KerrSchildCartToBl(cart, a);
 
     double max_dev = 0;
     max_dev = std::max(max_dev, std::abs(original.t - recovered.t));

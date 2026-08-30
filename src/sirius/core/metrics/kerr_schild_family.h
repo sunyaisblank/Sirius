@@ -15,6 +15,7 @@
 // Reference: Visser, "The Kerr spacetime" (arXiv:0706.0622).
 
 #include "sirius/base/contracts.h"
+#include "sirius/core/coordinates.h"
 #include "sirius/core/metrics/metric.h"
 #include "sirius/core/metrics/registry.h"
 
@@ -51,6 +52,7 @@ class KerrSchildFamily : public IMetric {
     const Config& GetParameters() const override { return config_; }
     void SetParameter(const std::string& key, double value) override;
     const char* GetName() const override;
+    bool IsValidEvent(const Tensor<double, 4>& pos) const override;
 
     // Exact closed-form inverse g^mu_nu = eta^mu_nu - H l^mu l^nu. Valid because
     // l is null with respect to both eta and g, so the Sherman-Morrison
@@ -144,12 +146,32 @@ inline void KerrSchildFamily::SetParams(const KerrSchildParams& params) {
 
     params_ = params;
     config_["mass"].value = params.M;
-    config_["spin"].value = params.a / std::max(params.M, 1e-10);
-    config_["charge"].value = params.Q / std::max(params.M, 1e-10);
+    config_["spin"].value = params.M == 0.0 ? 0.0 : params.a / params.M;
+    config_["charge"].value = params.M == 0.0 ? 0.0 : params.Q / params.M;
     config_["lambda"].value = params.Lambda;
 }
 
 inline KerrSchildParams KerrSchildFamily::GetParams() const { return params_; }
+
+inline bool KerrSchildFamily::IsValidEvent(const Tensor<double, 4>& pos) const {
+    for (int component = 0; component < 4; ++component) {
+        if (!std::isfinite(pos(component))) return false;
+    }
+
+    // The exact flat limit is defined everywhere.  Pure de Sitter is also
+    // regular at its Cartesian origin even though the auxiliary radial null
+    // direction is not unique there; Evaluate supplies the analytic limit.
+    if (params_.M == 0.0 && params_.a == 0.0 && params_.Q == 0.0 && params_.Lambda == 0.0) {
+        return true;
+    }
+    if (params_.M == 0.0 && params_.a == 0.0 && params_.Q == 0.0 && pos(1) == 0.0 &&
+        pos(2) == 0.0 && pos(3) == 0.0) {
+        return true;
+    }
+
+    const coordinates::Vec4Cart event{pos(0), pos(1), pos(2), pos(3)};
+    return coordinates::TryKerrSchildRadiusDifferential(event, params_.a).has_value();
+}
 
 inline void KerrSchildFamily::SetParameter(const std::string& key, double value) {
     const auto found = config_.find(key);
@@ -190,25 +212,15 @@ inline const char* KerrSchildFamily::GetName() const {
 }
 
 inline double KerrSchildFamily::ComputeKerrRadius(double x, double y, double z) const {
-    double a = params_.a;
-    double a2 = a * a;
-    double R2 = x * x + y * y + z * z;
-
-    // a = 0 (Schwarzschild): r = R directly.
-    if (std::abs(a) < 1e-12) {
-        return std::sqrt(std::max(R2, 1e-20));
-    }
-
-    // Solve u^2 - (R^2 - a^2) u - a^2 z^2 = 0 for u = r^2.
-    double Rm2 = R2 - a2;
-    double disc = Rm2 * Rm2 + 4.0 * a2 * z * z;
-    double r2 = (Rm2 + std::sqrt(std::max(disc, 0.0))) / 2.0;
-
-    return std::sqrt(std::max(r2, 1e-20));
+    return coordinates::KerrSchildRadius(coordinates::Vec4Cart{0.0, x, y, z}, params_.a);
 }
 
 inline void KerrSchildFamily::ComputeNullVector(double x, double y, double z, double r,
                                                 double l[4]) const {
+    const bool represented = std::isfinite(x) && std::isfinite(y) && std::isfinite(z) &&
+                             std::isfinite(r) && r > 0.0 && l != nullptr;
+    SIRIUS_PRE(represented);
+    if (!represented) return;
     double a = params_.a;
     double a2 = a * a;
     double r2 = r * r;
@@ -218,7 +230,7 @@ inline void KerrSchildFamily::ComputeNullVector(double x, double y, double z, do
     l[0] = 1.0;
     l[1] = (r * x + a * y) / denom;
     l[2] = (r * y - a * x) / denom;
-    l[3] = z / std::max(r, 1e-10);
+    l[3] = z / r;
 }
 
 inline double KerrSchildFamily::ComputeH(double r, double z) const {
@@ -227,20 +239,35 @@ inline double KerrSchildFamily::ComputeH(double r, double z) const {
     double Q = params_.Q;
     double Lambda = params_.Lambda;
 
-    double r2 = r * r;
-    double r4 = r2 * r2;
-    double a2 = a * a;
+    const bool finite = std::isfinite(r) && r >= 0.0 && std::isfinite(z);
+    SIRIUS_PRE(finite);
+    if (!finite) return std::numeric_limits<double>::quiet_NaN();
 
-    // H = (2 M r - Q^2) r^2 / (r^4 + a^2 z^2); pure Schwarzschild gives 2M/r.
-    double numerator = (2.0 * M * r - Q * Q) * r2;
-    double denominator = r4 + a2 * z * z;
-    double H = numerator / std::max(denominator, 1e-20);
+    const double r2 = r * r;
+    const double a2 = a * a;
+
+    // Divide numerator and denominator by r^2:
+    //   H = (2 M r - Q^2) / (r^2 + a^2 (z/r)^2).
+    // This is algebraically identical to the Kerr-Schild form but does not
+    // square an O(r^2) denominator when the whole represented scene is small.
+    double H = 0.0;
+    if (M != 0.0 || Q != 0.0) {
+        const bool positive_radius = r > 0.0;
+        SIRIUS_PRE(positive_radius);
+        if (!positive_radius) return std::numeric_limits<double>::quiet_NaN();
+        const double cosine = z / r;
+        const double sigma = r2 + a2 * cosine * cosine;
+        const bool represented = std::isfinite(sigma) && sigma > 0.0;
+        SIRIUS_PRE(represented);
+        if (!represented) return std::numeric_limits<double>::quiet_NaN();
+        H = (2.0 * M * r - Q * Q) / sigma;
+    }
 
     // Schwarzschild-de Sitter is exactly Kerr-Schild with H += Lambda r^2/3 at
     // a = 0. The rotating de Sitter forms need a different ansatz, so Lambda with
     // a != 0 is not represented here; the configuration boundary rejects that
     // combination rather than letting an approximation stand in.
-    if (std::abs(a) < 1e-12 && std::abs(Lambda) > 1e-15) {
+    if (a == 0.0 && Lambda != 0.0) {
         H += Lambda * r2 / 3.0;
     }
 
@@ -249,6 +276,18 @@ inline double KerrSchildFamily::ComputeH(double r, double z) const {
 
 inline void KerrSchildFamily::Evaluate(const Tensor<double, 4>& pos, Metric4d& g,
                                        Tensor<Dual<double>, 4, 4, 4>& dg) {
+    const bool represented = IsValidEvent(pos);
+    SIRIUS_PRE(represented);
+    if (!represented) {
+        const Dual<double> nan(std::numeric_limits<double>::quiet_NaN());
+        for (int mu = 0; mu < 4; ++mu)
+            for (int nu = 0; nu < 4; ++nu) g(mu, nu) = nan;
+        for (int axis = 0; axis < 4; ++axis)
+            for (int mu = 0; mu < 4; ++mu)
+                for (int nu = 0; nu < 4; ++nu) dg(axis, mu, nu) = nan;
+        return;
+    }
+
     [[maybe_unused]] double t = pos(0);  // Time coordinate (unused in a static metric).
     double x = pos(1);
     double y = pos(2);
@@ -262,34 +301,50 @@ inline void KerrSchildFamily::Evaluate(const Tensor<double, 4>& pos, Metric4d& g
     double a2 = a * a;
     double Q2 = Q * Q;
 
-    // Kerr radius.
-    double R2 = x * x + y * y + z * z;
-    double Rm2 = R2 - a2;
-    double disc = Rm2 * Rm2 + 4.0 * a2 * z * z;
-    disc = std::max(disc, 1e-20);
-    double sqrt_disc = std::sqrt(disc);
-    double r2 = (Rm2 + sqrt_disc) / 2.0;
-    r2 = std::max(r2, 1e-10);
-    double r = std::sqrt(r2);
-    double r3 = r2 * r;
-    double r4 = r2 * r2;
+    const auto initialise_minkowski = [&] {
+        g.Zero();
+        g(0, 0) = Dual<double>(-1.0);
+        g(1, 1) = Dual<double>(1.0);
+        g(2, 2) = Dual<double>(1.0);
+        g(3, 3) = Dual<double>(1.0);
+        dg.Zero();
+    };
+
+    // Exact analytic limits that do not need the non-unique radial null vector.
+    if (M == 0.0 && a == 0.0 && Q == 0.0 && Lambda == 0.0) {
+        initialise_minkowski();
+        return;
+    }
+    if (M == 0.0 && a == 0.0 && Q == 0.0 && x == 0.0 && y == 0.0 && z == 0.0) {
+        initialise_minkowski();
+        return;
+    }
+
+    // One scale-safe radial authority supplies both r and its exact Cartesian
+    // gradient.  In particular, no interval of small non-zero a is identified
+    // with Schwarzschild and no r=0 event is moved off the singular sheet.
+    const coordinates::Vec4Cart event{pos(0), x, y, z};
+    const auto radial = coordinates::TryKerrSchildRadiusDifferential(event, a);
+    SIRIUS_ASSERT(radial.has_value());
+    if (!radial) {
+        const Dual<double> nan(std::numeric_limits<double>::quiet_NaN());
+        for (int mu = 0; mu < 4; ++mu)
+            for (int nu = 0; nu < 4; ++nu) g(mu, nu) = nan;
+        for (int axis = 0; axis < 4; ++axis)
+            for (int mu = 0; mu < 4; ++mu)
+                for (int nu = 0; nu < 4; ++nu) dg(axis, mu, nu) = nan;
+        return;
+    }
+    double r = radial->radius;
+    double r2 = r * r;
 
     // Derivatives of r with respect to the spatial coordinates.
-    double d_disc_dx = 4.0 * x * Rm2;
-    double d_disc_dy = 4.0 * y * Rm2;
-    double d_disc_dz = 4.0 * z * (R2 + a2);
-
-    double d_sqrt_disc_dx = d_disc_dx / (2.0 * sqrt_disc);
-    double d_sqrt_disc_dy = d_disc_dy / (2.0 * sqrt_disc);
-    double d_sqrt_disc_dz = d_disc_dz / (2.0 * sqrt_disc);
-
-    double d_r2_dx = x + d_sqrt_disc_dx / 2.0;
-    double d_r2_dy = y + d_sqrt_disc_dy / 2.0;
-    double d_r2_dz = z + d_sqrt_disc_dz / 2.0;
-
-    double dr_dx = d_r2_dx / (2.0 * r);
-    double dr_dy = d_r2_dy / (2.0 * r);
-    double dr_dz = d_r2_dz / (2.0 * r);
+    double dr_dx = radial->dx;
+    double dr_dy = radial->dy;
+    double dr_dz = radial->dz;
+    double d_r2_dx = 2.0 * r * dr_dx;
+    double d_r2_dy = 2.0 * r * dr_dy;
+    double d_r2_dz = 2.0 * r * dr_dz;
     double dr[4] = {0.0, dr_dx, dr_dy, dr_dz};
 
     // Null vector l^mu and its derivatives.
@@ -319,31 +374,29 @@ inline void KerrSchildFamily::Evaluate(const Tensor<double, 4>& pos, Metric4d& g
     // Kerr-Schild scalar H (single authority ComputeH, which folds the a = 0
     // cosmological term so Schwarzschild-de Sitter stays in exact Kerr-Schild
     // form).
-    double f_denom = r4 + a2 * z * z;
     double H = ComputeH(r, z);
 
     // Derivatives of H.
     double dH[4] = {0.0, 0.0, 0.0, 0.0};
+    const double cosine = z / r;
+    const double sigma = r2 + a2 * cosine * cosine;
+    const double asymptotic_h = (M != 0.0 || Q != 0.0) ? (2.0 * M * r - Q2) / sigma : 0.0;
     for (int lam = 1; lam <= 3; lam++) {
-        double d_num = 2.0 * r * dr[lam] * (3.0 * M * r - Q2);
-        double d_f_denom = 4.0 * r3 * dr[lam];
-        if (lam == 3) d_f_denom += 2.0 * a2 * z;
-
-        double numerator = (2.0 * M * r - Q2) * r2;
-        dH[lam] = (d_num * f_denom - numerator * d_f_denom) / (f_denom * f_denom);
+        if (M != 0.0 || Q != 0.0) {
+            const double d_cosine = ((lam == 3) ? 1.0 / r : 0.0) - z * dr[lam] / r2;
+            const double d_sigma = 2.0 * r * dr[lam] + 2.0 * a2 * cosine * d_cosine;
+            const double d_numerator = 2.0 * M * dr[lam];
+            dH[lam] = (d_numerator - asymptotic_h * d_sigma) / sigma;
+        }
 
         // a = 0 cosmological term: d(Lambda r^2/3)/d x^lam = (2 Lambda/3) r dr.
-        if (std::abs(a) < 1e-12 && std::abs(Lambda) > 1e-15) {
+        if (a == 0.0 && Lambda != 0.0) {
             dH[lam] += (2.0 * Lambda / 3.0) * r * dr[lam];
         }
     }
 
     // Metric g_mu_nu = eta_mu_nu + H l_mu l_nu.
-    g.Zero();
-    g(0, 0) = Dual<double>(-1.0);
-    g(1, 1) = Dual<double>(1.0);
-    g(2, 2) = Dual<double>(1.0);
-    g(3, 3) = Dual<double>(1.0);
+    initialise_minkowski();
 
     for (int mu = 0; mu < 4; mu++) {
         for (int nu = 0; nu < 4; nu++) {
@@ -352,8 +405,6 @@ inline void KerrSchildFamily::Evaluate(const Tensor<double, 4>& pos, Metric4d& g
     }
 
     // Derivatives d g_mu_nu / d x^lam = dH l_mu l_nu + H dl_mu l_nu + H l_mu dl_nu.
-    dg.Zero();
-
     for (int lam = 1; lam <= 3; lam++) {
         for (int mu = 0; mu < 4; mu++) {
             for (int nu = 0; nu < 4; nu++) {
@@ -371,7 +422,28 @@ inline bool KerrSchildFamily::InverseMetric(const Tensor<double, 4>& pos, Metric
     //   g^mu_nu = eta^mu_nu - H l^mu l^nu,   l^mu = eta^mu_sigma l_sigma = (-1, l_1, l_2, l_3).
     // The sign of l cancels in the outer product, so the spatial covariant
     // components from ComputeNullVector can be used directly.
+    const bool represented = IsValidEvent(pos);
+    SIRIUS_PRE(represented);
+    if (!represented) {
+        const Dual<double> nan(std::numeric_limits<double>::quiet_NaN());
+        for (int mu = 0; mu < 4; ++mu)
+            for (int nu = 0; nu < 4; ++nu) g_inv(mu, nu) = nan;
+        return false;
+    }
+
     double x = pos(1), y = pos(2), z = pos(3);
+
+    g_inv.Zero();
+    g_inv(0, 0) = Dual<double>(-1.0);
+    g_inv(1, 1) = Dual<double>(1.0);
+    g_inv(2, 2) = Dual<double>(1.0);
+    g_inv(3, 3) = Dual<double>(1.0);
+
+    const bool flat =
+        params_.M == 0.0 && params_.a == 0.0 && params_.Q == 0.0 && params_.Lambda == 0.0;
+    const bool de_sitter_origin = params_.M == 0.0 && params_.a == 0.0 && params_.Q == 0.0 &&
+                                  x == 0.0 && y == 0.0 && z == 0.0;
+    if (flat || de_sitter_origin) return true;
 
     double r = ComputeKerrRadius(x, y, z);
     double l[4];
@@ -380,11 +452,6 @@ inline bool KerrSchildFamily::InverseMetric(const Tensor<double, 4>& pos, Metric
 
     double l_up[4] = {-1.0, l[1], l[2], l[3]};
 
-    g_inv.Zero();
-    g_inv(0, 0) = Dual<double>(-1.0);
-    g_inv(1, 1) = Dual<double>(1.0);
-    g_inv(2, 2) = Dual<double>(1.0);
-    g_inv(3, 3) = Dual<double>(1.0);
     for (int mu = 0; mu < 4; mu++) {
         for (int nu = 0; nu < 4; nu++) {
             g_inv(mu, nu) = Dual<double>(g_inv(mu, nu).real - H * l_up[mu] * l_up[nu]);
@@ -396,6 +463,10 @@ inline bool KerrSchildFamily::InverseMetric(const Tensor<double, 4>& pos, Metric
 inline bool KerrSchildFamily::InsideCaptureSurface(const Tensor<double, 4>& pos,
                                                    double margin) const {
     if (!HasHorizon()) return false;
+    if (!std::isfinite(margin) || margin < 0.0) return false;
+    for (int component = 0; component < 4; ++component) {
+        if (!std::isfinite(pos(component))) return false;
+    }
 
     // Compare in the Kerr radial coordinate: the horizon r = r+ is an oblate
     // surface in Cartesian coordinates, so a Cartesian-norm comparison would

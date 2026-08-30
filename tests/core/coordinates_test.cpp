@@ -99,6 +99,42 @@ TEST_F(CoordinateTransformTests, KerrDiskRadiusIsSpheroidalNotCylindrical) {
     EXPECT_GT(cylindrical_radius - KerrSchildRadius(cart, spin), 0.0);
 }
 
+TEST_F(CoordinateTransformTests, KerrRadiusPreservesExactZeroAndScaleCovariance) {
+    constexpr double spin = 0.9;
+    constexpr double scale = 1.0e-140;
+    const Vec4Cart disk{0.0, 0.5 * spin, 0.0, 0.0};
+    const Vec4Cart unit{0.0, 2.0, 1.0, 0.5};
+    const Vec4Cart scaled{0.0, 2.0 * scale, scale, 0.5 * scale};
+
+    EXPECT_DOUBLE_EQ(KerrSchildRadius(disk, spin), 0.0);
+    EXPECT_FALSE(TryKerrSchildRadiusDifferential(disk, spin).has_value());
+
+    const auto unit_differential = TryKerrSchildRadiusDifferential(unit, 0.5);
+    const auto scaled_differential = TryKerrSchildRadiusDifferential(scaled, 0.5 * scale);
+    ASSERT_TRUE(unit_differential);
+    ASSERT_TRUE(scaled_differential);
+    EXPECT_NEAR(scaled_differential->radius / scale, unit_differential->radius, 3.0e-15);
+    EXPECT_NEAR(scaled_differential->dx, unit_differential->dx, 3.0e-15);
+    EXPECT_NEAR(scaled_differential->dy, unit_differential->dy, 3.0e-15);
+    EXPECT_NEAR(scaled_differential->dz, unit_differential->dz, 3.0e-15);
+
+    const Vec4Cart unit_vector{0.2, 0.3, -0.1, 0.05};
+    const Vec4Cart scaled_vector{0.2 * scale, 0.3 * scale, -0.1 * scale, 0.05 * scale};
+    const Vec4Bl unit_bl = TransformVectorKerrSchildCartToBl(unit_vector, unit, 1.0, 0.5);
+    const Vec4Bl scaled_bl =
+        TransformVectorKerrSchildCartToBl(scaled_vector, scaled, scale, 0.5 * scale);
+    EXPECT_NEAR(scaled_bl.t / scale, unit_bl.t, 3.0e-14);
+    EXPECT_NEAR(scaled_bl.r / scale, unit_bl.r, 3.0e-14);
+    EXPECT_NEAR(scaled_bl.theta, unit_bl.theta, 3.0e-14);
+    EXPECT_NEAR(scaled_bl.phi, unit_bl.phi, 3.0e-14);
+
+    EXPECT_DEATH((void)KerrSchildCartToBl(disk, spin), "precondition.*enforced, terminating");
+    const Vec4Cart axis{0.0, 0.0, 0.0, 2.0};
+    EXPECT_DEATH((void)KerrSchildCartToBl(axis, 0.5), "precondition.*enforced, terminating");
+    EXPECT_DEATH((void)TransformVectorKerrSchildCartToBl(unit_vector, axis, 1.0, 0.5),
+                 "precondition.*enforced, terminating");
+}
+
 TEST_F(CoordinateTransformTests, RoundTripKerrSchild_NearPole) {
     // Kerr near pole (tests oblate spheroidal effects)
     double a = 0.5;

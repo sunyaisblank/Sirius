@@ -88,6 +88,12 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter",
         "gtest:AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct",
         "gtest:KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter",
+        "gtest:KerrTests.CartesianMetricIsScaleCovariantBelowTheFormerSpinFloor",
+        "gtest:KerrTests.SingularKerrDiskDeclinesInsteadOfReceivingAnEpsilonRadius",
+        "gtest:CoordinateTransformTests.KerrRadiusPreservesExactZeroAndScaleCovariance",
+        "gtest:RK45IntegratorTests.UnrepresentedStageShrinksBeforeMetricEvaluation",
+        "gtest:KernelParity.RepresentedSubThresholdKerrMetricIsScaleCovariant",
+        "gtest:KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation",
         "gtest:KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability",
         "gtest:KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison",
         "gtest:LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter",
@@ -215,9 +221,9 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "7a377fab24e3f98d3be4067df81f9eff34d9551f8bdc2bfacff824fdefc2df19",
-    "required_dimensions": "1b78449912216a61dccfcb0a02dea822027e5e360408f7484e30f60f19d91c6d",
-    "capability_contracts": "c89066d2769561c45ccf5eaed3c9ebcdf161a3e3c83c1954f51561054c5e52bc",
+    "acceptance_criteria": "bf19f61b5bb39061032dcb0de9859cdc4abc9260d7ba6e2a24842f6502ebfe05",
+    "required_dimensions": "ad0ef6da589478ef69759ade8f7c6f317aa5e9e86c92dc30224cc9c6df48c246",
+    "capability_contracts": "8de4ae150c713767259c25dbd0601b770c387a2d86c96fcc1879e1d5e86e1c14",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
 

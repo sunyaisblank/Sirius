@@ -255,6 +255,7 @@ set_tests_properties(
     CoordinateTransformTests.RoundTripKerrSchild_ModerateSpin
     CoordinateTransformTests.RoundTripKerrSchild_HighSpin
     CoordinateTransformTests.KerrDiskRadiusIsSpheroidalNotCylindrical
+    CoordinateTransformTests.KerrRadiusPreservesExactZeroAndScaleCovariance
     CoordinateTransformTests.RoundTripKerrSchild_NearPole
     CoordinateTransformTests.JacobianDeterminant_Equator
     CoordinateTransformTests.JacobianDeterminant_MidLatitude
@@ -473,6 +474,8 @@ set_tests_properties(
 
 set_tests_properties(
     KernelParity.KerrSchildMetricMatchesLegacyToOnePartInMillion
+    KernelParity.RepresentedSubThresholdKerrMetricIsScaleCovariant
+    KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation
     KernelParity.WormholeAndWarpMetricMatchLegacy
     KernelParity.KerrSchildChristoffelMatchesLegacyToOnePartInMillion
     KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel
@@ -519,6 +522,8 @@ set_tests_properties(
 set_tests_properties(
     KerrTests.MetricMatchesIndependentCartesianKerrSchildForm
     KerrTests.ComputedRadiusSatisfiesTheDefiningOblateQuartic
+    KerrTests.CartesianMetricIsScaleCovariantBelowTheFormerSpinFloor
+    KerrTests.SingularKerrDiskDeclinesInsteadOfReceivingAnEpsilonRadius
     KerrTests.HorizonsAndCaptureFollowTheIndependentKerrPolynomial
     KerrTests.ExactExtremalIscoIsNotClampedAndUndefinedDomainsDecline
     KerrTests.StaticLimitAuthorityIsAZeroOfProductionGtt
@@ -530,6 +535,7 @@ set_tests_properties(
 set_tests_properties(
     KottlerHorizonTests.ExactRootsSeparateBlackHoleCaptureFromCosmologicalHorizon
     KottlerHorizonTests.PureDeSitterHasOnlyACosmologicalHorizon
+    KottlerHorizonTests.RegularDeSitterOriginUsesTheExactAnalyticLimit
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -804,6 +810,7 @@ set_tests_properties(
     RK45IntegratorTests.StepAdaptsToCurvature
     RK45IntegratorTests.RK45MatchesRK4Approximately
     RK45IntegratorTests.StepRejectionWorks
+    RK45IntegratorTests.UnrepresentedStageShrinksBeforeMetricEvaluation
     RK45IntegratorTests.NoNaNInResults
     PROPERTIES LABELS "Mandatory;Correctness"
 )
