@@ -328,6 +328,19 @@ TEST(RenderSessionProbe, TypedNumericBoundariesMatchTheExternalConfigurationBoun
               "film-simulation parameters are outside the represented domain");
     config.film_config.halation_radius = 8.0f;
     EXPECT_FALSE(sirius::render::SessionConfigIssue(config).has_value());
+
+    config.enable_disk = false;
+    config.metric_id = sirius::core::MetricId::DeSitter;
+    config.black_hole_mass = 0.0;
+    EXPECT_EQ(sirius::render::SessionConfigIssue(config), "de-Sitter requires positive lambda");
+    config.cosmological_constant = 0.001;
+    EXPECT_FALSE(sirius::render::SessionConfigIssue(config).has_value());
+
+    config.metric_id = sirius::core::MetricId::SchwarzschildDeSitter;
+    config.black_hole_mass = 2.0;
+    config.cosmological_constant = 0.03;
+    EXPECT_EQ(sirius::render::SessionConfigIssue(config),
+              "Schwarzschild-de-Sitter requires 9*lambda*mass^2 < 1 (sub-Nariai sector)");
 }
 
 TEST(RenderSessionProbe, PolarisedAndTwoSheetRequestsDeclineAtTheTypedBoundary) {

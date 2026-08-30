@@ -85,7 +85,7 @@ The July remediation's central lesson was that every duplicated authority eventu
 | Metric identity | `core/metrics/registry.h`, closed `MetricId` enum | Carried. The GPU kernel's former physics catalogue (including dead Gödel, Taub-NUT, and `Custom` branches) is deleted. A compact device-family ABI remains, but `MapMetric` exhaustively translates every registry identity to a represented family or an explicit decline, and parity probes pin those ABI values. |
 | Host tolerances and constants | `core/constants.h` | Carried. Device-only fp32/fp64 controller tolerances have different accumulation semantics and therefore live once in `gr_integrator.slang`; production and the live P1 parity probe call the same policy functions, while the probe binds that accepted envelope to CPU/oracle invariants. |
 | ISCO | `AccretionDisk::ComputeIsco` | Carried. |
-| Capture surfaces | `IMetric::InsideCaptureSurface`, analytic Kerr-Schild inverses | Carried. |
+| Capture surfaces | `IMetric::InsideCaptureSurface`, analytic Kerr-Schild inverses, exact Kottler black-hole/cosmological roots | Carried and corrected for the spherical positive-Lambda sector. |
 | Test labels | `scripts/generate-ctest-labels.py` | Carried. |
 | Transfer encodes | each writer applies its own, once; EXR stays linear | Carried. |
 | Device physics | one Slang kernel set under `src/sirius/kernels/` | New. Replaces the 6,561-line CUDA monolith that inlined its own drifted copies of metric and disk physics. |

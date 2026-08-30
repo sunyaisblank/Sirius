@@ -206,6 +206,33 @@ TEST(ConfigValidation, MasslessMetricUsesAUnitObserverDistanceScale) {
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
 
+TEST(ConfigValidation, DeSitterRequestsEnforcePositiveLambdaAndSubNariaiBlackHole) {
+    SiriusConfig config = SiriusConfig::Defaults();
+    config.disk_enabled = false;
+    config.metric.name = "de-Sitter";
+    config.metric.mass = 0.0;
+
+    config.metric.cosmological_constant = 0.0;
+    EXPECT_FALSE(ConfigLoader::Validate(config).empty());
+    config.metric.cosmological_constant = -0.001;
+    EXPECT_FALSE(ConfigLoader::Validate(config).empty());
+    config.metric.cosmological_constant = 0.001;
+    EXPECT_TRUE(ConfigLoader::Validate(config).empty());
+
+    config.metric.name = "Schwarzschild-de-Sitter";
+    config.metric.mass = 2.0;
+    config.metric.cosmological_constant = 0.02;  // 9 Lambda M^2 = 0.72.
+    EXPECT_TRUE(ConfigLoader::Validate(config).empty());
+
+    config.metric.cosmological_constant = 0.03;  // 9 Lambda M^2 = 1.08.
+    const auto errors = ConfigLoader::Validate(config);
+    EXPECT_NE(std::find_if(errors.begin(), errors.end(),
+                           [](const std::string& error) {
+                               return error.find("sub-Nariai") != std::string::npos;
+                           }),
+              errors.end());
+}
+
 TEST(ConfigValidation, PolarisationRequiresRepresentedThinBlackHoleDisk) {
     SiriusConfig config = SiriusConfig::Defaults();
     config.color_mode = "Polarisation";

@@ -65,6 +65,10 @@ TEST(MetricRegistryTests, MetricInfoRoundTripsById) {
     EXPECT_TRUE(MetricParameterIssue(MetricId::Kerr, 0.9, 0.1, 0.0).has_value());
     EXPECT_TRUE(MetricParameterIssue(MetricId::MorrisThorne, 0.1, 0.0, 0.0).has_value());
     EXPECT_TRUE(MetricParameterIssue(MetricId::Alcubierre, 0.0, 0.1, 0.0).has_value());
+    EXPECT_TRUE(MetricParameterIssue(MetricId::DeSitter, 0.0, 0.0, 0.0).has_value());
+    EXPECT_FALSE(MetricParameterIssue(MetricId::DeSitter, 0.0, 0.0, 0.01).has_value());
+    EXPECT_FALSE(MetricHorizonIssue(MetricId::SchwarzschildDeSitter, 1.0, 0.01).has_value());
+    EXPECT_TRUE(MetricHorizonIssue(MetricId::SchwarzschildDeSitter, 2.0, 0.03).has_value());
     EXPECT_TRUE(MetricParameterIssue(static_cast<MetricId>(255), 0.0, 0.0, 0.0).has_value());
 }
 

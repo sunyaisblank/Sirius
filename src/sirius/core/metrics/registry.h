@@ -113,9 +113,13 @@ enum class DiskSupport {
             if (has_spin || has_charge) {
                 return "Schwarzschild-de-Sitter requires spin and charge to be zero";
             }
+            if (!(lambda > 0.0)) {
+                return "Schwarzschild-de-Sitter requires positive lambda";
+            }
             break;
         case MetricId::DeSitter:
             if (has_spin || has_charge) return "de-Sitter requires spin and charge to be zero";
+            if (!(lambda > 0.0)) return "de-Sitter requires positive lambda";
             break;
         case MetricId::Minkowski:
             if (has_spin || has_charge || has_lambda) {
@@ -130,6 +134,22 @@ enum class DiskSupport {
             break;
         default:
             return "unknown metric identity";
+    }
+    return std::nullopt;
+}
+
+// The named Schwarzschild-de Sitter scene is restricted to the black-hole
+// Kottler sector with distinct black-hole and cosmological horizons. At the
+// Nariai value 9 Lambda M^2 = 1 the static region degenerates; above it there
+// is no black-hole exterior to advertise as Schwarzschild-de Sitter rendering.
+[[nodiscard]] constexpr std::optional<std::string_view> MetricHorizonIssue(MetricId id, double mass,
+                                                                           double lambda) noexcept {
+    if (id != MetricId::SchwarzschildDeSitter) return std::nullopt;
+    if (!(mass > 0.0) || !(lambda > 0.0)) {
+        return "Schwarzschild-de-Sitter requires positive mass and lambda";
+    }
+    if (!(9.0 * lambda * mass * mass < 1.0)) {
+        return "Schwarzschild-de-Sitter requires 9*lambda*mass^2 < 1 (sub-Nariai sector)";
     }
     return std::nullopt;
 }
@@ -172,13 +192,13 @@ inline const std::array<MetricInfo, 9>& MetricRegistry() {
         {MetricId::DeSitter,
          "de-Sitter",
          {"DeSitter", "de Sitter", nullptr, nullptr, nullptr},
-         "lambda",
+         "positive lambda",
          true,
          false},
         {MetricId::SchwarzschildDeSitter,
          "Schwarzschild-de-Sitter",
          {"SchwarzschildDeSitter", "Schwarzschild-de Sitter", "SdS", nullptr, nullptr},
-         "mass, lambda",
+         "mass, positive lambda; 9 lambda mass^2 < 1",
          true,
          false},
         // CPU support arrives through MorrisThorneCartesian, the flat-plus-

@@ -37,6 +37,7 @@ SUITE_LABELS = {
     "TensorInverseTests": MANDATORY,
     "MetricRegistryTests": MANDATORY,
     "SchwarzschildTests": MANDATORY,
+    "KottlerHorizonTests": MANDATORY,
     "ChristoffelTests": MANDATORY,
     "KerrTests": MANDATORY,
     "KerrSchildTests": MANDATORY,

@@ -381,16 +381,22 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
             "metric.temperature_model must be one of: NovikovThorne, NT, ShakuraSunyaev, SS");
     }
 
-    // Only the a = 0 Kerr-Schild form is exact, so lambda with spin is rejected.
+    // Only the positive-Lambda spherical Kottler sector is publicly named.
+    // Identity compatibility above rejects rotating/charged cosmological
+    // requests; the horizon authority below rejects the Nariai boundary.
     constexpr double kMaxLambda = 0.1;
     if (finite(config.metric.cosmological_constant, "metric.lambda") &&
-        std::abs(config.metric.cosmological_constant) > kMaxLambda) {
-        errors.push_back("metric.lambda must be between -0.1 and 0.1");
+        (config.metric.cosmological_constant < 0.0 ||
+         config.metric.cosmological_constant > kMaxLambda)) {
+        errors.push_back("metric.lambda must be between 0 and 0.1");
     }
-    if (std::abs(config.metric.cosmological_constant) > 0 && config.metric.spin != 0) {
-        errors.push_back(
-            "metric.lambda requires metric.spin = 0 (rotating de Sitter forms are not "
-            "represented)");
+    if (metric_id.has_value() && std::isfinite(config.metric.mass) &&
+        std::isfinite(config.metric.cosmological_constant)) {
+        if (const auto issue = core::MetricHorizonIssue(*metric_id, config.metric.mass,
+                                                        config.metric.cosmological_constant);
+            issue.has_value()) {
+            errors.emplace_back(*issue);
+        }
     }
     if (finite(config.metric.disk_temperature, "metric.disk_temperature") &&
         (config.metric.disk_temperature < 100.0f || config.metric.disk_temperature > 1.0e8f)) {

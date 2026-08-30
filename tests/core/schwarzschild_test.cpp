@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <numbers>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -101,6 +102,45 @@ TEST(SchwarzschildTests, HorizonAndCaptureUseTheExactArealRadius) {
     EXPECT_DOUBLE_EQ(metric.InnerHorizonRadius(), 0.0);
     EXPECT_TRUE(metric.InsideCaptureSurface(Position(1.999, 0.0, 0.0), 0.0));
     EXPECT_FALSE(metric.InsideCaptureSurface(Position(2.001, 0.0, 0.0), 0.0));
+}
+
+TEST(KottlerHorizonTests, ExactRootsSeparateBlackHoleCaptureFromCosmologicalHorizon) {
+    constexpr double lambda = 0.01;
+    KerrSchildParams parameters = KerrSchildParams::Schwarzschild(kMass);
+    parameters.Lambda = lambda;
+    KerrSchildFamily metric(parameters);
+
+    const double root_angle = std::acos(-3.0 * kMass * std::sqrt(lambda));
+    const double expected_black_hole =
+        2.0 / std::sqrt(lambda) * std::cos((root_angle + 4.0 * std::numbers::pi) / 3.0);
+    const double expected_cosmological = 2.0 / std::sqrt(lambda) * std::cos(root_angle / 3.0);
+    const double black_hole = metric.OuterHorizonRadius();
+    const double cosmological = metric.CosmologicalHorizonRadius();
+
+    ASSERT_TRUE(metric.HasHorizon());
+    EXPECT_NEAR(black_hole, expected_black_hole, 2.0e-14);
+    EXPECT_NEAR(cosmological, expected_cosmological, 2.0e-14);
+    EXPECT_GT(black_hole, 2.0 * kMass);
+    EXPECT_LT(cosmological, std::sqrt(3.0 / lambda));
+    EXPECT_NEAR(metric.KottlerStaticLapse(black_hole), 0.0, 2.0e-16);
+    EXPECT_NEAR(metric.KottlerStaticLapse(cosmological), 0.0, 2.0e-15);
+    EXPECT_GT(metric.KottlerStaticLapse(0.5 * (black_hole + cosmological)), 0.0);
+    EXPECT_TRUE(metric.InsideCaptureSurface(Position(0.999 * black_hole, 0.0, 0.0), 0.0));
+    EXPECT_FALSE(metric.InsideCaptureSurface(Position(1.001 * black_hole, 0.0, 0.0), 0.0));
+    EXPECT_DEATH((void)metric.ErgosphereRadius(0.0), "precondition.*enforced, terminating");
+    EXPECT_DEATH((void)metric.IscoRadius(), "precondition.*enforced, terminating");
+    EXPECT_DEATH((void)metric.ExtremalityParameter(), "precondition.*enforced, terminating");
+}
+
+TEST(KottlerHorizonTests, PureDeSitterHasOnlyACosmologicalHorizon) {
+    constexpr double lambda = 0.01;
+    KerrSchildFamily metric(KerrSchildParams::DeSitter(lambda));
+    EXPECT_FALSE(metric.HasHorizon());
+    EXPECT_EQ(metric.OuterHorizonRadius(), -1.0);
+    EXPECT_EQ(metric.InnerHorizonRadius(), -1.0);
+    EXPECT_DOUBLE_EQ(metric.CosmologicalHorizonRadius(), std::sqrt(3.0 / lambda));
+    EXPECT_NEAR(metric.KottlerStaticLapse(metric.CosmologicalHorizonRadius()), 0.0, 3.0e-16);
+    EXPECT_FALSE(metric.InsideCaptureSurface(Position(0.001, 0.0, 0.0), 0.0));
 }
 
 TEST(SchwarzschildTests, FarFieldPerturbationHasExactInverseRadiusScaling) {

@@ -60,6 +60,8 @@ DNGR (James, von Tunzelmann, Franklin and Thorne 2015, Classical and Quantum Gra
 
 The capabilities that constitute DNGR, extracted from the paper, are: Kerr spacetime with spin to the Thorne limit; camera on an arbitrary timelike worldline with relativistic aberration; ray-bundle propagation by geodesic deviation; a lensed accretion disk in both infinitely thin and volumetric forms; gravitational and Doppler frequency shifts applied to disk emission, with the Doppler brightness asymmetry artistically suppressible (the film suppressed it; the physics mode keeps it); a star field sampled through the beam footprint; and high-dynamic-range output into a film compositing pipeline.
 
+Metrics outside that DNGR parity core remain explicit bounded capabilities. The CPU cosmological sector is the exact spherical positive-$\Lambda$ Kottler metric in horizon-penetrating Cartesian Kerr-Schild coordinates. Its smaller positive root is the black-hole capture surface and its larger root is exposed as the cosmological horizon; pure de Sitter has only the latter. Named Schwarzschild-de Sitter requests require $9\Lambda M^2<1$. Negative $\Lambda$, rotating/charged cosmological sectors, and Nariai/super-Nariai requests decline. The camera is an ADM/Eulerian worldline in this chart and the celestial texture is a directional boundary condition, not a static-observer or cosmological radiative-transfer claim.
+
 ## 3. Parity criteria
 
 Each criterion is a testable postcondition. Build-gated parity evidence must pass

@@ -51,6 +51,7 @@ REQUIRED_CAPABILITIES = {
     "inverse_compton_corona_transfer",
     "narrowband_line_transfer",
     "newtonian_shakura_sunyaev_temperature_profile",
+    "spherical_kottler_cosmological_sector",
     "doppler_suppression_diagnostic",
     "phenomenological_volumetric_disk",
     "disk_emission_outside_schwarzschild_kerr",
@@ -205,8 +206,8 @@ REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
     "acceptance_criteria": "104aa322e48c7ba24bd5a234e090c584d1a70436c282ba5b489bcb5b12f3b361",
-    "required_dimensions": "be5b2585bdecaba3c3fb753dd778d7f87794eb7f1f73c23f1c76f5a24b32ab9c",
-    "capability_contracts": "dc20a8018f263728fabd6227a6add501d418da6e08284b1cbf1bf5e96bda4d9a",
+    "required_dimensions": "b120eef299d295cce0c0b5af78a80bd07b4dd1932132ddb483bdb74e6a87d0a5",
+    "capability_contracts": "414821dc75cfd02b01ac055522c21975ea9d77efd889880744a9af7ed4d37e8f",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
 

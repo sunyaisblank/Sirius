@@ -202,6 +202,7 @@ set_tests_properties(
     ConfigValidation.ObserverAzimuthRangeIsValidated
     ConfigValidation.CameraWorldlineAndLensAreValidated
     ConfigValidation.MasslessMetricUsesAUnitObserverDistanceScale
+    ConfigValidation.DeSitterRequestsEnforcePositiveLambdaAndSubNariaiBlackHole
     ConfigValidation.PolarisationRequiresRepresentedThinBlackHoleDisk
     ConfigValidation.MotionBlurAndWormholeTopologyHaveExplicitOperatorBoundaries
     ConfigValidation.DiskRequestDeclinesForEveryMetricWithoutAnEmissionModel
@@ -505,6 +506,12 @@ set_tests_properties(
     KerrTests.StaticLimitAuthorityIsAZeroOfProductionGtt
     KerrTests.ZeroSpinEqualsProductionSchwarzschild
     KerrTests.ClosedFormInverseMultipliesToIdentity
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    KottlerHorizonTests.ExactRootsSeparateBlackHoleCaptureFromCosmologicalHorizon
+    KottlerHorizonTests.PureDeSitterHasOnlyACosmologicalHorizon
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 

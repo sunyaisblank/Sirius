@@ -301,6 +301,11 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         return massless_metric ? "massless metrics require mass to be zero"
                                : "mass must be between 0.1 and 100 for this metric";
     }
+    if (const auto issue = core::MetricHorizonIssue(config.metric_id, config.black_hole_mass,
+                                                    config.cosmological_constant);
+        issue.has_value()) {
+        return std::string(*issue);
+    }
 
     const double distance_scale = massless_metric ? 1.0 : config.black_hole_mass;
     if (!finite(config.observer_distance) || config.observer_distance < 5.0 * distance_scale ||

@@ -1,8 +1,10 @@
 #pragma once
 
-// Unified Kerr-Schild black hole family: one implementation covering Minkowski,
-// Schwarzschild, Kerr, Reissner-Nordstrom, Kerr-Newman, and their de Sitter
-// extensions through the parameters (M, a, Q, Lambda). Ported from PHMT100A.h.
+// Unified Kerr-Schild metric family: one implementation covering Minkowski,
+// Schwarzschild, Kerr, Reissner-Nordstrom, Kerr-Newman, de Sitter, and the
+// spherical Schwarzschild-de Sitter (Kottler) sector through (M, a, Q, Lambda).
+// Rotating or charged cosmological sectors are not represented. Ported from
+// PHMT100A.h.
 //
 // Kerr-Schild ansatz in Cartesian coordinates:
 //   g_mu_nu = eta_mu_nu + H l_mu l_nu,   g^mu_nu = eta^mu_nu - H l^mu l^nu,
@@ -71,24 +73,40 @@ class KerrSchildFamily : public IMetric {
     // Scalar function H = (2 M r - Q^2) r^2 / (r^4 + a^2 z^2).
     double ComputeH(double r, double z) const;
 
-    // Outer event horizon r+ = M + sqrt(M^2 - a^2 - Q^2), or -1 for a naked
-    // singularity.
+    // Outer black-hole horizon. This is r+ for the asymptotically flat
+    // Kerr-Newman sector and the smaller positive Kottler root for Lambda > 0;
+    // returns -1 when no black-hole horizon exists.
     double OuterHorizonRadius() const;
 
-    // Inner (Cauchy) horizon r- = M - sqrt(M^2 - a^2 - Q^2), or -1 for a naked
-    // singularity.
+    // Inner (Cauchy) horizon r- in the asymptotically flat Kerr-Newman sector.
+    // The spherical uncharged sector retains the Schwarzschild limit r-=0;
+    // returns -1 when no black-hole horizon exists.
     double InnerHorizonRadius() const;
 
-    // True when M^2 >= a^2 + Q^2 (horizons exist).
+    // True when the represented parameters contain a black-hole horizon.
     bool HasHorizon() const;
 
-    // Ergosphere boundary radius at polar angle theta.
+    // Larger positive Kottler root for Lambda > 0, including sqrt(3/Lambda)
+    // for pure de Sitter; -1 outside the spherical positive-Lambda sector or
+    // when the Kottler horizons do not exist.
+    double CosmologicalHorizonRadius() const;
+
+    // Static-coordinate lapse function f(r)=1-2M/r-Lambda*r^2/3 for the
+    // spherical uncharged sector. Horizon-penetrating renderer observers are
+    // ADM/Eulerian and are not silently treated as static observers.
+    double KottlerStaticLapse(double radius) const;
+
+    // Kerr-Newman ergosphere boundary radius at polar angle theta. The
+    // cosmological sector has two static-limit horizons and must use the
+    // explicit Kottler horizon authorities instead.
     double ErgosphereRadius(double theta) const;
 
-    // ISCO radius for prograde equatorial orbits.
+    // ISCO radius for prograde equatorial orbits in the uncharged,
+    // asymptotically flat Schwarzschild/Kerr sector.
     double IscoRadius() const;
 
-    // Extremality parameter chi = sqrt(a^2 + Q^2) / M, in [0, 1] for black holes.
+    // Asymptotically flat Kerr-Newman extremality parameter
+    // chi=sqrt(a^2+Q^2)/M, in [0,1] for black holes.
     double ExtremalityParameter() const;
 
   private:
@@ -100,7 +118,7 @@ inline KerrSchildFamily::KerrSchildFamily() {
     config_["mass"] = {1.0, 0.0, 100.0};
     config_["spin"] = {0.0, -0.998, 0.998};
     config_["charge"] = {0.0, -1.0, 1.0};
-    config_["lambda"] = {0.0, -0.1, 0.1};
+    config_["lambda"] = {0.0, 0.0, 0.1};
     params_ = KerrSchildParams::Schwarzschild(1.0);
 }
 
@@ -110,7 +128,7 @@ inline KerrSchildFamily::KerrSchildFamily(const KerrSchildParams& params) : Kerr
 
 inline bool IsRepresentedKerrSchildParameters(const KerrSchildParams& params) {
     if (!std::isfinite(params.M) || !std::isfinite(params.a) || !std::isfinite(params.Q) ||
-        !std::isfinite(params.Lambda) || params.M < 0.0) {
+        !std::isfinite(params.Lambda) || params.M < 0.0 || params.Lambda < 0.0) {
         return false;
     }
     if (params.M == 0.0 && (params.a != 0.0 || params.Q != 0.0)) return false;
@@ -380,31 +398,51 @@ inline bool KerrSchildFamily::InsideCaptureSurface(const Tensor<double, 4>& pos,
     return r <= OuterHorizonRadius() * (1.0 + margin);
 }
 
+inline double KerrSchildFamily::KottlerStaticLapse(double radius) const {
+    SIRIUS_PRE(params_.a == 0.0 && params_.Q == 0.0 && radius > 0.0 && std::isfinite(radius));
+    if (params_.a != 0.0 || params_.Q != 0.0 || !(radius > 0.0) || !std::isfinite(radius)) {
+        return std::numeric_limits<double>::quiet_NaN();
+    }
+    return 1.0 - 2.0 * params_.M / radius - params_.Lambda * radius * radius / 3.0;
+}
+
 inline double KerrSchildFamily::OuterHorizonRadius() const {
+    if (!HasHorizon()) return -1.0;
+
     double M = params_.M;
     double a = params_.a;
     double Q = params_.Q;
 
-    double discriminant = M * M - a * a - Q * Q;
-
-    if (discriminant < 0) {
-        return -1.0;  // No horizon (naked singularity).
+    if (params_.Lambda > 0.0) {
+        const double stationary_radius = std::cbrt(3.0 * M / params_.Lambda);
+        double lower = 2.0 * M;
+        double upper = stationary_radius;
+        // f(lower)<=0 and f(upper)>=0 throughout the sub-Nariai sector.
+        for (int iteration = 0; iteration < 128; ++iteration) {
+            const double midpoint = lower + 0.5 * (upper - lower);
+            if (KottlerStaticLapse(midpoint) > 0.0) {
+                upper = midpoint;
+            } else {
+                lower = midpoint;
+            }
+        }
+        return lower + 0.5 * (upper - lower);
     }
 
+    double discriminant = M * M - a * a - Q * Q;
     return M + std::sqrt(discriminant);
 }
 
 inline double KerrSchildFamily::InnerHorizonRadius() const {
+    if (!HasHorizon()) return -1.0;
+
     double M = params_.M;
     double a = params_.a;
     double Q = params_.Q;
 
+    if (params_.Lambda > 0.0) return 0.0;
+
     double discriminant = M * M - a * a - Q * Q;
-
-    if (discriminant < 0) {
-        return -1.0;  // No horizon (naked singularity).
-    }
-
     return M - std::sqrt(discriminant);
 }
 
@@ -413,10 +451,38 @@ inline bool KerrSchildFamily::HasHorizon() const {
     double a = params_.a;
     double Q = params_.Q;
 
+    if (!(M > 0.0)) return false;
+    if (params_.Lambda > 0.0) {
+        SIRIUS_ASSERT(a == 0.0 && Q == 0.0);
+        return 9.0 * params_.Lambda * M * M <= 1.0;
+    }
     return (M * M >= a * a + Q * Q);
 }
 
+inline double KerrSchildFamily::CosmologicalHorizonRadius() const {
+    if (!(params_.Lambda > 0.0) || params_.a != 0.0 || params_.Q != 0.0) return -1.0;
+    if (params_.M == 0.0) return std::sqrt(3.0 / params_.Lambda);
+    if (!HasHorizon()) return -1.0;
+
+    const double stationary_radius = std::cbrt(3.0 * params_.M / params_.Lambda);
+    double lower = stationary_radius;
+    double upper = std::sqrt(3.0 / params_.Lambda);
+    // f(lower)>=0 and f(upper)<0 throughout the sub-Nariai sector.
+    for (int iteration = 0; iteration < 128; ++iteration) {
+        const double midpoint = lower + 0.5 * (upper - lower);
+        if (KottlerStaticLapse(midpoint) > 0.0) {
+            lower = midpoint;
+        } else {
+            upper = midpoint;
+        }
+    }
+    return lower + 0.5 * (upper - lower);
+}
+
 inline double KerrSchildFamily::ErgosphereRadius(double theta) const {
+    SIRIUS_PRE(params_.Lambda == 0.0);
+    if (params_.Lambda != 0.0) return std::numeric_limits<double>::quiet_NaN();
+
     double M = params_.M;
     double a = params_.a;
     double Q = params_.Q;
@@ -435,6 +501,9 @@ inline double KerrSchildFamily::ErgosphereRadius(double theta) const {
 }
 
 inline double KerrSchildFamily::IscoRadius() const {
+    SIRIUS_PRE(params_.Lambda == 0.0);
+    if (params_.Lambda != 0.0) return std::numeric_limits<double>::quiet_NaN();
+
     double M = params_.M;
     double a = params_.a;
     double Q = params_.Q;
@@ -467,6 +536,9 @@ inline double KerrSchildFamily::IscoRadius() const {
 }
 
 inline double KerrSchildFamily::ExtremalityParameter() const {
+    SIRIUS_PRE(params_.Lambda == 0.0);
+    if (params_.Lambda != 0.0) return std::numeric_limits<double>::quiet_NaN();
+
     double M = params_.M;
     double a = params_.a;
     double Q = params_.Q;

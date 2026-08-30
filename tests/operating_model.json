@@ -382,6 +382,9 @@
       "id": "metric_catalogue_and_declines",
       "evidence": [
         {"kind": "gtest", "name": "MetricRegistryTests.EveryCanonicalNameParsesToItsOwnId"},
+        {"kind": "gtest", "name": "KottlerHorizonTests.ExactRootsSeparateBlackHoleCaptureFromCosmologicalHorizon"},
+        {"kind": "gtest", "name": "KottlerHorizonTests.PureDeSitterHasOnlyACosmologicalHorizon"},
+        {"kind": "gtest", "name": "ConfigValidation.DeSitterRequestsEnforcePositiveLambdaAndSubNariaiBlackHole"},
         {"kind": "gtest", "name": "RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame"},
         {"kind": "gtest", "name": "ConfigValidation.DiskRequestDeclinesForEveryMetricWithoutAnEmissionModel"},
         {"kind": "gtest", "name": "RenderCommandParse.BackendVulkanDeclinesMetricOffTheRenderPath"}
@@ -540,6 +543,18 @@
         {"kind": "gtest", "name": "GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment"},
         {"kind": "gtest", "name": "GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource"},
         {"kind": "gtest", "name": "ConfigValidation.TurbulenceRequiresVolumeAndSpectralCoronaDeclines"}
+      ]
+    },
+    {
+      "id": "spherical_kottler_cosmological_sector",
+      "state": "bounded",
+      "profiles": ["cpu"],
+      "request": "de-Sitter or Schwarzschild-de-Sitter metric rendering",
+      "behavior": "Represent the exact spherical positive-Lambda Kottler metric in horizon-penetrating Cartesian Kerr-Schild coordinates; classify black-hole capture with the smaller positive root and expose the distinct cosmological root. Pure de Sitter has no black-hole capture surface, and Schwarzschild-de-Sitter requests require 9 Lambda M^2 < 1. The launch observer is the renderer's ADM/Eulerian worldline, not an implicitly static observer; the celestial texture is a directional boundary condition, not cosmological radiative transfer. Negative Lambda, rotating/charged Lambda sectors, Nariai, and super-Nariai requests decline.",
+      "evidence": [
+        {"kind": "gtest", "name": "KottlerHorizonTests.ExactRootsSeparateBlackHoleCaptureFromCosmologicalHorizon"},
+        {"kind": "gtest", "name": "KottlerHorizonTests.PureDeSitterHasOnlyACosmologicalHorizon"},
+        {"kind": "gtest", "name": "ConfigValidation.DeSitterRequestsEnforcePositiveLambdaAndSubNariaiBlackHole"}
       ]
     },
     {
