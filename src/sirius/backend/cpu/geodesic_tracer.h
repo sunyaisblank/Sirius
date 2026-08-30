@@ -69,6 +69,10 @@ struct TraceResult {
     int steps_taken = 0;
     float redshift = 1.0f;
     bool numerical_failure = false;
+    // Affine distance from the launch event to the published terminal event in
+    // the camera-frequency normalisation used by the live integrator. Coupled
+    // transport (Jacobi, polarisation, and volume) consumes this same interval.
+    float affine_length = 0.0f;
 
     // Exact minimum Kerr-Schild chart radius reached by the accepted samples.
     float min_radius = 1e10f;
@@ -434,7 +438,8 @@ class GeodesicTracer {
 
     // Riemann R^mu_nu_rho_sigma by central differences of the Christoffels in the
     // same chart the render integrates in, so k, xi, and R never mix charts
-    // (mirrors kernels/gr_deviation.slang GetRiemannTensorCart).
+    // (the central-difference stencil mirrors GetRiemannTensorCart; each path
+    // selects a step appropriate to its arithmetic precision).
     void ComputeRiemannCart(const sirius::core::Vec4& pos, double R[4][4][4][4]);
 
     // Initialise in the observer's Sachs screen, not a Euclidean chart plane.

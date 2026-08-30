@@ -280,6 +280,13 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    CpuJacobiOracle.TidalContractionMatchesAnalyticSchwarzschildAtMatchedEvents
+    CpuJacobiOracle.CurvatureScalarMatchesAnalyticKerrOffEquator
+    CpuJacobiOracle.RadialPointSourceCongruenceMatchesClosedForm
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle
     CpuTraceBoundary.JacobiBundleTerminatesAtTheSameCausalEvent
     PROPERTIES LABELS "Mandatory;Correctness"

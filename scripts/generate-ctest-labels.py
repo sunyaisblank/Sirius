@@ -151,6 +151,7 @@ SUITE_LABELS = {
     "DopplerToggleTest": OPERATIONAL,
     "StarfieldPointTest": OPERATIONAL,
     "KernelBeam": MANDATORY,
+    "CpuJacobiOracle": MANDATORY,
     "CpuTraceBoundary": MANDATORY,
     "KernelPortability": OPERATIONAL,
     "PixelSampling": OPERATIONAL,

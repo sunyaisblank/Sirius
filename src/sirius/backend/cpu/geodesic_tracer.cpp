@@ -763,6 +763,7 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
     for (int component = 0; component < 4; ++component) {
         result.final_position(component) = ray.position(component);
     }
+    result.affine_length = ray.proper_time;
     result.min_radius = std::min(result.min_radius, min_r);
 
     // Beam ellipse from the propagated bundle (P2), evaluated against the ray's
@@ -1034,9 +1035,12 @@ void GeodesicTracer::ComputeRiemannCart(const Vec4& pos, double R[4][4][4][4]) {
     ComputeChristoffelCart(pos, Gamma);
 
     double rr = std::sqrt(pos(1) * pos(1) + pos(2) * pos(2) + pos(3) * pos(3));
-    // Finite-difference step scaled to the local length; the fixed relative size
-    // matches kernels/gr_deviation.slang so the two paths difference identically.
-    double eps = 1.0e-3 * std::max(1.0, rr);
+    // Scale the central-difference stencil to the local length. The CPU path is
+    // double precision, so its smaller relative step resolves the analytic
+    // Schwarzschild tidal contraction below 5e-7; the fp32 device path uses the
+    // same stencil with its own precision-appropriate step.
+    constexpr double kRelativeRiemannStep = 2.5e-5;
+    double eps = kRelativeRiemannStep * std::max(1.0, rr);
 
     // dGamma[rho][mu][nu][sig] = d_rho Gamma^mu_nu_sig; time derivatives vanish
     // (the Kerr-Schild family is stationary).
