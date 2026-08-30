@@ -135,6 +135,25 @@ public Real4 GeodesicDeviationAccelFullRiemann(
     return GeodesicDeviationAccelFromRiemann(R, k, xi);
 }
 
+// Deterministic tangent basis on the unit celestial sphere. The beam ellipse
+// angle is measured in this basis and point-catalogue filtering consumes that
+// same angle, so the least-aligned reference-axis decision must have one device
+// authority. This mirrors core/celestial_tangent_basis.h.
+public void MakeCelestialTangentBasis(float3 inputDirection,
+                                      out float3 first, out float3 second) {
+    float3 direction = normalize(inputDirection);
+    float3 reference;
+    if (abs(direction.x) <= abs(direction.y) && abs(direction.x) <= abs(direction.z)) {
+        reference = float3(1.0f, 0.0f, 0.0f);
+    } else if (abs(direction.y) <= abs(direction.z)) {
+        reference = float3(0.0f, 1.0f, 0.0f);
+    } else {
+        reference = float3(0.0f, 0.0f, 1.0f);
+    }
+    first = normalize(reference - dot(reference, direction) * direction);
+    second = cross(direction, first);
+}
+
 // Singular-value geometry of the propagated transverse 2x2 Jacobi map. The
 // semi-axes are its singular values and the orientation is the major
 // eigenvector of J J^T, so a rotation of the input basis cannot rotate the

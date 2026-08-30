@@ -106,7 +106,9 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion",
         "gtest:KernelBeam.BeamFlagWiresDeviationWithoutMovingDefault",
         "gtest:KernelParity.BeamEllipseRetainsBothAxesAndOutputOrientation",
+        "gtest:KernelParity.CelestialTangentBasisIsSharedByBeamAndPointFilter",
         "gtest:RayBundleTest.MagnificationComesOnlyFromJacobiMap",
+        "gtest:StarfieldGeneratorTests.EllipticalFilterUsesTheBeamSachsBasis",
         "gtest:StarfieldPointTest.BeamFootprintSuppressesStarFlicker",
     },
     "P3": {
@@ -116,6 +118,8 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:StarfieldPointTest.CatalogueMeetsSizeFloorAndIsFinite",
         "gtest:StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope",
         "gtest:StarfieldPointTest.SpatialIndexMatchesExhaustiveBeamOracle",
+        "gtest:StarfieldGeneratorTests.EllipticalFilterUsesTheBeamSachsBasis",
+        "gtest:KernelParity.CelestialTangentBasisIsSharedByBeamAndPointFilter",
         "gtest:VulkanRenderSession.CombinedParitySceneRetainsResolvedImageStructure",
         "gtest:VulkanRenderSession.IndexedPointCatalogueReachesLiveKernel",
     },
@@ -224,8 +228,8 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "83318c418e620348454334a31feda57940ce97e961cb06236b884791737a4f9c",
-    "required_dimensions": "730eb0cb3b5653317be61cf98bb390b0962244e10d8a3958006402f43ff62346",
+    "acceptance_criteria": "92dd11b0596f52fe4a8e6e216a8096114d7316aab8d9311a9b2370509673f6a1",
+    "required_dimensions": "44ab9bbb8d8c6d7c491564fddef62f87397accb897eaf6d86a1b0bf4a84c840a",
     "capability_contracts": "0f1927e0de623ab55e3327b0ad8657fc28e2908e285ca3c9f6b77d820c94c66b",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}

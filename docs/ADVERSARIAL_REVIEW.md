@@ -149,6 +149,7 @@ Each review pass asks:
 | “Beam ellipse” collapsed to a circular Gaussian; Vulkan propagated one vector | star filter accepted one sigma and kernel alpha carried one norm | Fixed: both paths propagate two vectors, extract both singular axes and output-plane orientation, and apply an anisotropic tangent-plane Gaussian |
 | Beam orientation used the input right-singular vector | formula used `ab+cd` while documenting output position angle | Fixed in live and oracle geometry to the `MM^T` expression `ac+bd`, with a rotated-SVD witness |
 | Vulkan beam integration exposed only scalar area, so the device output-orientation formula could regress while P2 remained green | the live kernel alpha carried geometric-mean expansion and only the CPU/oracle rotated-SVD witnesses observed orientation | Fixed: trace and parity probe consume one Slang ellipse-projection authority; a device rotated-SVD witness pins both singular axes, determinant, and output-plane orientation while the live trace gate proves propagated deviation reaches it |
+| Beam orientation crossed an implicit tangent-basis rotation before point-star filtering | CPU and Slang Sachs screens measured the ellipse angle after projecting the least-aligned coordinate axis, while both catalogue filters interpreted it after projecting z except near the pole | Fixed: the host screen and filter call one typed celestial-basis authority, the Slang screen and filter call one device authority, an anisotropic single-star witness pins the physical rotation, and a live Vulkan probe agrees with the host on x/y/z least-axis fixtures |
 | The oracle beam step treated a Boyer-Lindquist coordinate derivative as a covariant derivative and froze curvature outside the ray's integration tableau | the exact radial and circular Schwarzschild null-congruence solutions exposed the missing connection/stage coupling | Fixed: central ray and four covariant Jacobi columns share one RK4 tableau; radial and photon-sphere screen axes agree with independent closed forms to one part in 1e6 |
 | The claimed symplectic-structure gate bounded nearby-ray separation instead of testing the canonical two-form | bounded separation is not implied by symplecticity, and the explicit kick-drift-kick map is not symplectic for the non-separable Kerr Hamiltonian | Fixed: the fixed-step oracle composes symmetric implicit-midpoint maps; a finite-difference gate enforces `D(Phi)^T J D(Phi) = J`, order accuracy is measured against the independent adaptive Hamiltonian solver, and variable-step/null-projection stabilisers are expressly outside the symplectic claim |
 | The flat CPU/Vulkan point-catalogue parity fixture changed the metric to Minkowski but retained Kerr spin and disk state | the shared typed session boundary correctly declined both sessions | Fixed in evidence: the fixture now projects a coherent massless, spinless, diskless Minkowski scene instead of weakening product validation |
@@ -633,6 +634,21 @@ corresponding profile. They are not projected from registration counts.
   receipt writer emits and checks explicit UTF-8/LF bytes. Repository and
   alignment self-tests reject both missing checkout attributes and a simulated
   CRLF authority. No rendering test was executed.
+- 2026-08-31 celestial tangent-basis correction: the observer/terminal Sachs
+  screen and anisotropic point-catalogue filter now select one deterministic
+  least-aligned coordinate axis on each host/device path, so the propagated
+  ellipse angle cannot cross an implicit basis rotation before sampling. An
+  anisotropic one-star CPU witness distinguishes the former z-projection, and
+  a live Vulkan parity probe pins the mirrored Slang authority on x/y/z least-
+  axis fixtures. GCC 14 and Clang 21 each compiled the complete product, all
+  six test executables, all three SPIR-V precision rungs, and CUDA and Metal
+  emissions under contracts and warnings-as-errors; the render executable was
+  compiled but not run. On each compiler, the exact nine non-render authority
+  controls, all 13 base tests, all 383 core tests, all 129 oracle tests, and
+  both pure beam-geometry parity probes passed. Governance accepts 777 source
+  GoogleTests, 786 development CTests, and 789 strict-qualification CTests over
+  24 operating dimensions and 29 capability contracts. No rendering test was
+  executed.
 - GCC 14 strict required-Vulkan profile: the pre-alignment snapshot passed the complete
   907/907 estate on the Radeon 780M through Dozen in 210.36 seconds. A separate
   required-only run passed 697/697 on the Radeon in 281.34 seconds and the same

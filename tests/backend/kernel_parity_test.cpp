@@ -16,6 +16,7 @@
 // coverage and two disk/blackbody temperatures.
 
 #include "sirius/backend/device.h"
+#include "sirius/core/celestial_tangent_basis.h"
 #include "sirius/core/disk/novikov_thorne_disk.h"
 #include "sirius/core/disk/volumetric_disk.h"
 #include "sirius/core/spectral/blackbody.h"
@@ -63,6 +64,7 @@ constexpr std::uint32_t kOpBeamEllipse = 7;
 constexpr std::uint32_t kOpAdaptiveEventDomain = 8;
 constexpr std::uint32_t kOpVolumeOpacity = 9;
 constexpr std::uint32_t kOpNullProjection = 10;
+constexpr std::uint32_t kOpCelestialTangentBasis = 11;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -840,6 +842,38 @@ TEST(KernelParity, BeamEllipseRetainsBothAxesAndOutputOrientation) {
     EXPECT_NEAR(std::cos(2.0f * results[2]), std::cos(2.0f * output_angle), 2.0e-6f);
     EXPECT_NEAR(std::sin(2.0f * results[2]), std::sin(2.0f * output_angle), 2.0e-6f);
     EXPECT_NEAR(results[3], 3.0f, 2.0e-6f);
+}
+
+TEST(KernelParity, CelestialTangentBasisIsSharedByBeamAndPointFilter) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    // Include directions for which the least-aligned axis is respectively y,
+    // x, and z. The old point filter's z/near-z heuristic disagreed with the
+    // beam Sachs basis on the first two fixtures.
+    std::vector<Sample> samples(3);
+    samples[0].c0 = 0.8f;
+    samples[0].c1 = 0.1f;
+    samples[0].c2 = 0.59f;
+    samples[1].c0 = 0.1f;
+    samples[1].c1 = 0.7f;
+    samples[1].c2 = 0.7f;
+    samples[2].c0 = 0.6f;
+    samples[2].c1 = 0.7f;
+    samples[2].c2 = 0.05f;
+
+    const auto results = RunProbe(*f.device, f.kernel, kOpCelestialTangentBasis, samples);
+    for (std::size_t sample = 0; sample < samples.size(); ++sample) {
+        const std::array<float, 3> direction{samples[sample].c0, samples[sample].c1,
+                                             samples[sample].c2};
+        const auto expected = sirius::core::relativity::MakeCelestialTangentBasis(direction);
+        ASSERT_TRUE(expected.has_value());
+        const std::size_t offset = sample * kResultStride;
+        for (std::size_t component = 0; component < 3; ++component) {
+            EXPECT_NEAR(results[offset + component], expected->first[component], 2.0e-6f);
+            EXPECT_NEAR(results[offset + 3 + component], expected->second[component], 2.0e-6f);
+        }
+    }
 }
 
 TEST(KernelParity, GeodesicDeviationIsFiniteAndCurvedNearBlackHole) {

@@ -36,6 +36,7 @@ static const uint OP_BEAM_ELLIPSE = 7;
 static const uint OP_ADAPTIVE_EVENT_DOMAIN = 8;
 static const uint OP_VOLUME_OPACITY = 9;
 static const uint OP_NULL_PROJECTION = 10;
+static const uint OP_CELESTIAL_TANGENT_BASIS = 11;
 
 // Future-directed null root used by the render kernel, repeated here only for
 // the diagnostic launch boundary. The integration below calls the production
@@ -394,6 +395,18 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         results[rb + 1] = semiMinor;
         results[rb + 2] = orientation;
         results[rb + 3] = determinant;
+    } else if (opcode == OP_CELESTIAL_TANGENT_BASIS) {
+        // c0,c1,c2 are a finite nonzero celestial direction. This is the same
+        // helper called by the terminal Sachs screen and point-star filter.
+        float3 first;
+        float3 second;
+        MakeCelestialTangentBasis(float3(c0, c1, c2), first, second);
+        results[rb + 0] = first.x;
+        results[rb + 1] = first.y;
+        results[rb + 2] = first.z;
+        results[rb + 3] = second.x;
+        results[rb + 4] = second.y;
+        results[rb + 5] = second.z;
     } else if (opcode == OP_DEVIATION) {
         // Full-Riemann ray-bundle deviation at a Cartesian point on a unit
         // deviation vector. p1=M, p2=a, p3=Q, p4=Lambda; c=(x,y,z);

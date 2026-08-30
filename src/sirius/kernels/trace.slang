@@ -163,17 +163,9 @@ Vec4Cart PastDirectedCameraRay(CameraObserverFrame frame, float3 screenDirection
 
 void SachsScreenBasis(CameraObserverFrame frame, float3 restDirection,
                       out Vec4Cart first, out Vec4Cart second) {
-    float3 direction = normalize(restDirection);
-    float3 reference;
-    if (abs(direction.x) <= abs(direction.y) && abs(direction.x) <= abs(direction.z)) {
-        reference = float3(1.0f, 0.0f, 0.0f);
-    } else if (abs(direction.y) <= abs(direction.z)) {
-        reference = float3(0.0f, 1.0f, 0.0f);
-    } else {
-        reference = float3(0.0f, 0.0f, 1.0f);
-    }
-    float3 firstComponents = normalize(reference - dot(reference, direction) * direction);
-    float3 secondComponents = cross(direction, firstComponents);
+    float3 firstComponents;
+    float3 secondComponents;
+    MakeCelestialTangentBasis(restDirection, firstComponents, secondComponents);
     first = AddVec4Cart(
         AddVec4Cart(ScaleVec4Cart(frame.forward, Real(firstComponents.x)),
                     ScaleVec4Cart(frame.up, Real(firstComponents.y))),
@@ -300,11 +292,9 @@ float3 SamplePointStarfield(float3 direction, float sigmaMajor, float sigmaMinor
     if (lengthDirection < 1e-20f || sigmaMajor <= 0.0f || sigmaMinor <= 0.0f)
         return float3(0.0f);
     float3 dir = direction / lengthDirection;
-    float3 reference = abs(dir.z) > 0.9f
-        ? float3(1.0f, 0.0f, 0.0f)
-        : float3(0.0f, 0.0f, 1.0f);
-    float3 tangentA = normalize(reference - dot(reference, dir) * dir);
-    float3 tangentB = cross(dir, tangentA);
+    float3 tangentA;
+    float3 tangentB;
+    MakeCelestialTangentBasis(dir, tangentA, tangentB);
     float theta = acos(clamp(dir.z, -1.0f, 1.0f));
     float phi = atan2(dir.y, dir.x);
     if (phi < 0.0f) phi += TWO_PI;

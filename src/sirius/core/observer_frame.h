@@ -15,6 +15,7 @@
 // components as an orthonormal frame and avoids replacing backward ray tracing
 // with a distinct future-directed ingoing null family.
 
+#include "sirius/core/celestial_tangent_basis.h"
 #include "sirius/core/tensor.h"
 
 #include <array>
@@ -154,50 +155,13 @@ struct ObserverFrame {
 // chart components as Euclidean vectors in a curved or shifted metric.
 [[nodiscard]] inline std::optional<std::array<Vec4, 2>> ObserverScreenBasis(
     const ObserverFrame& frame, const std::array<double, 3>& rest_direction) {
-    double direction_norm_squared = 0.0;
-    for (const double component : rest_direction) {
-        direction_norm_squared += component * component;
-    }
-    if (!std::isfinite(direction_norm_squared) || !(direction_norm_squared > 0.0)) {
-        return std::nullopt;
-    }
-
-    std::array<double, 3> direction{};
-    const double inverse_norm = 1.0 / std::sqrt(direction_norm_squared);
-    for (std::size_t component = 0; component < direction.size(); ++component) {
-        direction[component] = rest_direction[component] * inverse_norm;
-    }
-
-    std::size_t reference_index = 0;
-    for (std::size_t component = 1; component < direction.size(); ++component) {
-        if (std::abs(direction[component]) < std::abs(direction[reference_index])) {
-            reference_index = component;
-        }
-    }
-
-    std::array<double, 3> first_components{};
-    first_components[reference_index] = 1.0;
-    const double projection = direction[reference_index];
-    double first_norm_squared = 0.0;
-    for (std::size_t component = 0; component < direction.size(); ++component) {
-        first_components[component] -= projection * direction[component];
-        first_norm_squared += first_components[component] * first_components[component];
-    }
-    if (!std::isfinite(first_norm_squared) || !(first_norm_squared > 0.0)) {
-        return std::nullopt;
-    }
-    const double first_inverse_norm = 1.0 / std::sqrt(first_norm_squared);
-    for (double& component : first_components) component *= first_inverse_norm;
-
-    const std::array<double, 3> second_components{
-        direction[1] * first_components[2] - direction[2] * first_components[1],
-        direction[2] * first_components[0] - direction[0] * first_components[2],
-        direction[0] * first_components[1] - direction[1] * first_components[0]};
+    const auto components = MakeCelestialTangentBasis(rest_direction);
+    if (!components.has_value()) return std::nullopt;
 
     std::array<Vec4, 2> screen{};
-    for (std::size_t component = 0; component < direction.size(); ++component) {
-        screen[0] += frame.spatial[component] * first_components[component];
-        screen[1] += frame.spatial[component] * second_components[component];
+    for (std::size_t component = 0; component < rest_direction.size(); ++component) {
+        screen[0] += frame.spatial[component] * components->first[component];
+        screen[1] += frame.spatial[component] * components->second[component];
     }
     if (!IsFinite(screen[0]) || !IsFinite(screen[1])) return std::nullopt;
     return screen;
