@@ -6,8 +6,11 @@
 #include <gtest/gtest.h>
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <limits>
+#include <numbers>
+#include <vector>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -251,6 +254,71 @@ TEST_F(StarfieldGeneratorTests, SpatialIndexOwnsValidatedCatalogueSnapshot) {
     stars[0].direction_x = std::numeric_limits<float>::quiet_NaN();
     EXPECT_FALSE(IsRepresentedStarEntry(stars[0]));
     EXPECT_DEATH((void)StarfieldSpatialIndex(stars), "precondition.*enforced, terminating");
+}
+
+TEST_F(StarfieldGeneratorTests, EllipticalFilterUsesTheBeamSachsBasis) {
+    // This direction's least-aligned coordinate axis is y. The former point
+    // filter projected z here, so it interpreted a beam angle in a different
+    // tangent basis and rotated an anisotropic footprint.
+    std::array<float, 3> direction{0.8f, 0.1f, 0.59f};
+    float norm = std::sqrt(direction[0] * direction[0] + direction[1] * direction[1] +
+                           direction[2] * direction[2]);
+    for (float& component : direction) component /= norm;
+    const auto basis = relativity::MakeCelestialTangentBasis(direction);
+    ASSERT_TRUE(basis.has_value());
+    EXPECT_GT(std::abs(basis->first[1]), 0.9f)
+        << "fixture no longer distinguishes the old z-projection basis";
+
+    constexpr float angular_offset = 0.02f;
+    StarEntry star{};
+    for (std::size_t component = 0; component < direction.size(); ++component) {
+        const float value = std::cos(angular_offset) * direction[component] +
+                            std::sin(angular_offset) * basis->first[component];
+        if (component == 0) star.direction_x = value;
+        if (component == 1) star.direction_y = value;
+        if (component == 2) star.direction_z = value;
+    }
+    star.distance_pc = 10.0f;
+    star.magnitude = 0.0f;
+    star.color_bv = 0.65f;
+    star.temperature_K = 5778.0f;
+    ASSERT_TRUE(IsRepresentedStarEntry(star));
+
+    config.star_count = 1;
+    config.brightness_scale = 1.0f;
+    StarfieldGenerator generator(config);
+    const StarfieldSpatialIndex index(std::vector<StarEntry>{star});
+    constexpr float sigma_major = 0.05f;
+    constexpr float sigma_minor = 0.005f;
+
+    float color_r = 0.0f;
+    float color_g = 0.0f;
+    float color_b = 0.0f;
+    star.ComputeColor(color_r, color_g, color_b);
+    const float expected_major_weight =
+        std::exp(-0.5f * angular_offset * angular_offset / (sigma_major * sigma_major));
+    const float expected_minor_weight =
+        std::exp(-0.5f * angular_offset * angular_offset / (sigma_minor * sigma_minor));
+
+    float major_r = 0.0f;
+    float major_g = 0.0f;
+    float major_b = 0.0f;
+    generator.AccumulateThroughBeam(direction[0], direction[1], direction[2], sigma_major,
+                                    sigma_minor, 0.0f, index, major_r, major_g, major_b);
+    EXPECT_NEAR(major_r, color_r * expected_major_weight, 2.0e-5f);
+    EXPECT_NEAR(major_g, color_g * expected_major_weight, 2.0e-5f);
+    EXPECT_NEAR(major_b, color_b * expected_major_weight, 2.0e-5f);
+
+    float minor_r = 0.0f;
+    float minor_g = 0.0f;
+    float minor_b = 0.0f;
+    generator.AccumulateThroughBeam(direction[0], direction[1], direction[2], sigma_major,
+                                    sigma_minor, static_cast<float>(std::numbers::pi / 2.0), index,
+                                    minor_r, minor_g, minor_b);
+    EXPECT_NEAR(minor_r, color_r * expected_minor_weight, 2.0e-5f);
+    EXPECT_NEAR(minor_g, color_g * expected_minor_weight, 2.0e-5f);
+    EXPECT_NEAR(minor_b, color_b * expected_minor_weight, 2.0e-5f);
+    EXPECT_GT(major_r + major_g + major_b, 100.0f * (minor_r + minor_g + minor_b));
 }
 
 TEST_F(StarfieldGeneratorTests, CatalogSizeBounded) {

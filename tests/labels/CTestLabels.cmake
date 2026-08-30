@@ -489,6 +489,7 @@ set_tests_properties(
     KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability
     KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison
     KernelParity.BeamEllipseRetainsBothAxesAndOutputOrientation
+    KernelParity.CelestialTangentBasisIsSharedByBeamAndPointFilter
     KernelParity.GeodesicDeviationIsFiniteAndCurvedNearBlackHole
     PROPERTIES LABELS "Mandatory;Correctness"
 )
@@ -1007,6 +1008,7 @@ set_tests_properties(
 set_tests_properties(
     StarfieldGeneratorTests.GeneratesNonEmptyCatalog
     StarfieldGeneratorTests.SpatialIndexOwnsValidatedCatalogueSnapshot
+    StarfieldGeneratorTests.EllipticalFilterUsesTheBeamSachsBasis
     StarfieldGeneratorTests.CatalogSizeBounded
     StarfieldGeneratorTests.DirectionVectorsNormalised
     StarfieldGeneratorTests.AllTemperaturesPositive

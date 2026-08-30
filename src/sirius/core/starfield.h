@@ -7,6 +7,7 @@
 // (2012) B-V blackbody estimate. Ported from PHSF001A.h.
 
 #include "sirius/base/contracts.h"
+#include "sirius/core/celestial_tangent_basis.h"
 #include "sirius/core/spectral/blackbody.h"
 
 #include <algorithm>
@@ -415,26 +416,18 @@ class StarfieldGenerator {
         dir_y /= dlen;
         dir_z /= dlen;
 
-        // Same transverse-basis convention as GeodesicTracer::FinaliseBundle:
-        // project z unless the direction is near z, then project x.
-        float ref_x = 0.0f;
-        float ref_y = 0.0f;
-        float ref_z = 1.0f;
-        if (std::abs(dir_z) > 0.9f) {
-            ref_x = 1.0f;
-            ref_z = 0.0f;
-        }
-        const float ref_dot = ref_x * dir_x + ref_y * dir_y + ref_z * dir_z;
-        float ex = ref_x - ref_dot * dir_x;
-        float ey = ref_y - ref_dot * dir_y;
-        float ez = ref_z - ref_dot * dir_z;
-        const float elen = std::sqrt(ex * ex + ey * ey + ez * ez);
-        ex /= elen;
-        ey /= elen;
-        ez /= elen;
-        const float fx = dir_y * ez - dir_z * ey;
-        const float fy = dir_z * ex - dir_x * ez;
-        const float fz = dir_x * ey - dir_y * ex;
+        // The ellipse angle was measured in this exact Sachs basis at the
+        // terminal ray. Reusing it here preserves the footprint orientation.
+        const auto tangent_basis =
+            relativity::MakeCelestialTangentBasis(std::array{dir_x, dir_y, dir_z});
+        SIRIUS_ASSERT(tangent_basis.has_value());
+        if (!tangent_basis.has_value()) return;
+        const float ex = tangent_basis->first[0];
+        const float ey = tangent_basis->first[1];
+        const float ez = tangent_basis->first[2];
+        const float fx = tangent_basis->second[0];
+        const float fy = tangent_basis->second[1];
+        const float fz = tangent_basis->second[2];
 
         const float major = std::max(sigma_major, sigma_minor);
         const float minor = std::min(sigma_major, sigma_minor);

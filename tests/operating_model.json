@@ -34,7 +34,7 @@
       "required": true,
       "verification": "build_gated",
       "profiles": ["cpu", "vulkan"],
-      "requirement": "Both live backends propagate two geodesic-deviation vectors into an oriented beam ellipse; the independent Schwarzschild congruence oracle agrees to one part per million and the footprint measurably suppresses star flicker.",
+      "requirement": "Both live backends propagate two geodesic-deviation vectors into an oriented beam ellipse and interpret that orientation in the same deterministic celestial tangent basis during point-catalogue filtering; the independent Schwarzschild congruence oracle agrees to one part per million and the footprint measurably suppresses star flicker.",
       "capability_dependencies": [],
       "evidence": [
         {"kind": "gtest", "name": "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion"},
@@ -42,6 +42,8 @@
         {"kind": "gtest", "name": "RayBundleTest.MagnificationComesOnlyFromJacobiMap"},
         {"kind": "gtest", "name": "KernelBeam.BeamFlagWiresDeviationWithoutMovingDefault"},
         {"kind": "gtest", "name": "KernelParity.BeamEllipseRetainsBothAxesAndOutputOrientation"},
+        {"kind": "gtest", "name": "KernelParity.CelestialTangentBasisIsSharedByBeamAndPointFilter"},
+        {"kind": "gtest", "name": "StarfieldGeneratorTests.EllipticalFilterUsesTheBeamSachsBasis"},
         {"kind": "gtest", "name": "StarfieldPointTest.BeamFootprintSuppressesStarFlicker"}
       ]
     },
@@ -56,6 +58,8 @@
         {"kind": "gtest", "name": "StarfieldPointTest.CatalogueMeetsSizeFloorAndIsFinite"},
         {"kind": "gtest", "name": "StarfieldPointTest.SpatialIndexMatchesExhaustiveBeamOracle"},
         {"kind": "gtest", "name": "StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope"},
+        {"kind": "gtest", "name": "StarfieldGeneratorTests.EllipticalFilterUsesTheBeamSachsBasis"},
+        {"kind": "gtest", "name": "KernelParity.CelestialTangentBasisIsSharedByBeamAndPointFilter"},
         {"kind": "gtest", "name": "VulkanRenderSession.IndexedPointCatalogueReachesLiveKernel"},
         {"kind": "gtest", "name": "VulkanRenderSession.CombinedParitySceneRetainsResolvedImageStructure"},
         {"kind": "gtest", "name": "RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration"},
@@ -379,6 +383,8 @@
         {"kind": "gtest", "name": "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion"},
         {"kind": "gtest", "name": "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion"},
         {"kind": "gtest", "name": "KernelParity.BeamEllipseRetainsBothAxesAndOutputOrientation"},
+        {"kind": "gtest", "name": "KernelParity.CelestialTangentBasisIsSharedByBeamAndPointFilter"},
+        {"kind": "gtest", "name": "StarfieldGeneratorTests.EllipticalFilterUsesTheBeamSachsBasis"},
         {"kind": "gtest", "name": "StarfieldPointTest.EllipticalFootprintUsesBothAxesAndOrientation"},
         {"kind": "gtest", "name": "StarfieldPointTest.SpatialIndexMatchesExhaustiveBeamOracle"},
         {"kind": "gtest", "name": "StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope"},
