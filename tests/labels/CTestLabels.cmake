@@ -476,6 +476,7 @@ set_tests_properties(
     KernelParity.KerrSchildMetricMatchesLegacyToOnePartInMillion
     KernelParity.RepresentedSubThresholdKerrMetricIsScaleCovariant
     KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation
+    KernelParity.NullProjectionPreservesConeBranchAndFailsClosed
     KernelParity.WormholeAndWarpMetricMatchLegacy
     KernelParity.KerrSchildChristoffelMatchesLegacyToOnePartInMillion
     KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel

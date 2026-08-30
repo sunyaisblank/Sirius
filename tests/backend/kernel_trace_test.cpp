@@ -296,10 +296,28 @@ TEST(KernelTrace, Fp64RungAgreesWithFp32OnKerrScene) {
     }
     const double mean_abs_diff = sum_abs_diff / double(r64.size());
 
+    std::size_t black32 = 0;
+    std::size_t black64 = 0;
+    for (std::size_t pixel = 0; pixel < r64.size() / 4; ++pixel) {
+        const std::size_t base = pixel * 4;
+        if (r32[base] < 1e-4f && r32[base + 1] < 1e-4f && r32[base + 2] < 1e-4f) {
+            ++black32;
+        }
+        if (r64[base] < 1e-4f && r64[base + 1] < 1e-4f && r64[base + 2] < 1e-4f) {
+            ++black64;
+        }
+    }
+
     std::cout << "[ trace64  ] mean|d|=" << mean_abs_diff << " max|d|=" << max_abs_diff
-              << " range64=[" << min64 << ", " << max64 << "]\n";
+              << " range64=[" << min64 << ", " << max64 << "] black32=" << black32
+              << " black64=" << black64 << "\n";
 
     EXPECT_GT(max64 - min64, 1e-3f) << "fp64 radiance field is constant";
+    const std::size_t shadow_count_tolerance = (r64.size() / 4) / 50;  // two percent
+    const std::size_t shadow_count_difference =
+        black64 > black32 ? black64 - black32 : black32 - black64;
+    EXPECT_LE(shadow_count_difference, shadow_count_tolerance)
+        << "precision rungs disagree on the physical-termination population";
     // Same scene, independently controlled precision schedules: the fields
     // must agree closely in the mean. Individual pixels may flip across the
     // capture edge, so the max is bounded loosely by the background dynamic

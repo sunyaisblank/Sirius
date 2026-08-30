@@ -23,6 +23,7 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <cstddef>
@@ -61,6 +62,7 @@ constexpr std::uint32_t kOpLiveCartConservation = 6;
 constexpr std::uint32_t kOpBeamEllipse = 7;
 constexpr std::uint32_t kOpAdaptiveEventDomain = 8;
 constexpr std::uint32_t kOpVolumeOpacity = 9;
+constexpr std::uint32_t kOpNullProjection = 10;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -378,6 +380,78 @@ TEST(KernelParity, UnrepresentedKerrStageShrinksBeforeMetricEvaluation) {
     EXPECT_FLOAT_EQ(result[5], crossing.c2) << "rejected tableau mutated z";
     EXPECT_GT(result[6], 1.0f) << "rejection did not exceed the controller envelope";
     EXPECT_FLOAT_EQ(result[7], 0.5f) << "rejection did not request a smaller step";
+}
+
+TEST(KernelParity, NullProjectionPreservesConeBranchAndFailsClosed) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    Sample flat_past = KerrSchildAt(0.0f, 0.0f, 0.0f, 4.0f, 0.0f, 0.0f);
+    flat_past.u0 = -0.8f;
+    flat_past.u1 = 1.0f;
+    Sample flat_future = flat_past;
+    flat_future.u0 = 0.8f;
+
+    // At Schwarzschild Kerr-Schild r=M, fixed outward spatial tangent has two
+    // past-coordinate-time null roots, -1 and -3.  Nearest-root selection is
+    // the branch witness; a sign-only selector cannot distinguish them.
+    Sample inner_near = KerrSchildAt(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+    inner_near.u0 = -1.2f;
+    inner_near.u1 = 1.0f;
+    Sample inner_far = inner_near;
+    inner_far.u0 = -2.8f;
+
+    // A merely small nonzero g_00 remains quadratic.  Near the stationary
+    // limit the second root is large but represented; collapsing this event to
+    // the finite linear-limit root would switch branches discontinuously.
+    Sample near_stationary = KerrSchildAt(1.0f, 0.0f, 0.0f, 1.99999f, 0.0f, 0.0f);
+    near_stationary.u1 = 1.0f;
+    const double h = 1.0 / static_cast<double>(near_stationary.c0);
+    const double a = -1.0 + 2.0 * h;
+    const double b = 4.0 * h;
+    const double c = 1.0 + 2.0 * h;
+    const double root_discriminant = b * b - 4.0 * a * c;
+    const double first_root = (-b + std::sqrt(root_discriminant)) / (2.0 * a);
+    const double second_root = (-b - std::sqrt(root_discriminant)) / (2.0 * a);
+    const float large_root =
+        static_cast<float>(std::abs(first_root) > std::abs(second_root) ? first_root : second_root);
+    near_stationary.u0 = large_root + 1000.0f;
+
+    // At r=2M, g_00 is exactly zero.  A radial tangent has a linear temporal
+    // root; a purely transverse tangent has neither a quadratic nor a linear
+    // solution and must be rejected.
+    Sample linear = KerrSchildAt(1.0f, 0.0f, 0.0f, 2.0f, 0.0f, 0.0f);
+    linear.u0 = 0.8f;
+    linear.u1 = -1.0f;
+    Sample absent = linear;
+    absent.u1 = 0.0f;
+    absent.u2 = 1.0f;
+
+    const std::vector<Sample> samples = {flat_past,       flat_future, inner_near, inner_far,
+                                         near_stationary, linear,      absent};
+    const auto result = RunProbe(*f.device, f.kernel, kOpNullProjection, samples);
+    const std::array<float, 6> expected_temporal = {-1.0f, 1.0f, -1.0f, -3.0f, large_root, 1.0f};
+
+    for (std::size_t index = 0; index < expected_temporal.size(); ++index) {
+        const std::size_t base = index * kResultStride;
+        EXPECT_FLOAT_EQ(result[base], 1.0f) << "sample " << index;
+        const float temporal_tolerance =
+            std::max(2.0e-6f, 2.0e-5f * std::abs(expected_temporal[index]));
+        EXPECT_NEAR(result[base + 1], expected_temporal[index], temporal_tolerance)
+            << "temporal branch, sample " << index;
+        EXPECT_FLOAT_EQ(result[base + 2], samples[index].u1);
+        EXPECT_FLOAT_EQ(result[base + 3], samples[index].u2);
+        EXPECT_FLOAT_EQ(result[base + 4], samples[index].u3);
+        EXPECT_GT(result[base + 5], 1.0e-4f) << "sample was not detectably off-null";
+        EXPECT_LT(result[base + 6], 2.0e-6f) << "projected null residual, sample " << index;
+    }
+
+    const std::size_t absent_base = expected_temporal.size() * kResultStride;
+    EXPECT_FLOAT_EQ(result[absent_base], 0.0f);
+    EXPECT_FLOAT_EQ(result[absent_base + 1], absent.u0);
+    EXPECT_FLOAT_EQ(result[absent_base + 2], absent.u1);
+    EXPECT_FLOAT_EQ(result[absent_base + 3], absent.u2);
+    EXPECT_FLOAT_EQ(result[absent_base + 4], absent.u3);
 }
 
 TEST(KernelParity, WormholeAndWarpMetricMatchLegacy) {

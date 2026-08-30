@@ -139,7 +139,7 @@ TEST(KernelBeam, BeamFlagWiresDeviationWithoutMovingDefault) {
 
     // Beams on.
     std::vector<float> p_on = BaseParams(kW, kH);
-    p_on[43] = 1.0f;
+    p_on[41] = 1.0f;
     std::vector<float> on = Dispatch(**device, *kernel, p_on, kW, kH);
 
     // RGB is untouched by the beam wiring; only alpha changes.

@@ -150,13 +150,15 @@ CameraObserverFrame BuildCameraObserverFrame(Real metric[4][4], Real inverseMetr
 }
 
 Vec4Cart PastDirectedCameraRay(CameraObserverFrame frame, float3 screenDirection) {
-    float3 direction = normalize(screenDirection);
+    Real3 direction = Real3(Real(screenDirection.x), Real(screenDirection.y),
+                            Real(screenDirection.z));
+    direction /= sqrt(dot(direction, direction));
     return AddVec4Cart(
         AddVec4Cart(
             AddVec4Cart(ScaleVec4Cart(frame.time, Real(-1.0f)),
-                        ScaleVec4Cart(frame.forward, Real(direction.x))),
-            ScaleVec4Cart(frame.up, Real(direction.y))),
-        ScaleVec4Cart(frame.right, Real(direction.z)));
+                        ScaleVec4Cart(frame.forward, direction.x)),
+            ScaleVec4Cart(frame.up, direction.y)),
+        ScaleVec4Cart(frame.right, direction.z));
 }
 
 void SachsScreenBasis(CameraObserverFrame frame, float3 restDirection,

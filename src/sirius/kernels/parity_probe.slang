@@ -35,6 +35,7 @@ static const uint OP_LIVE_CART_CONSERVATION = 6;
 static const uint OP_BEAM_ELLIPSE = 7;
 static const uint OP_ADAPTIVE_EVENT_DOMAIN = 8;
 static const uint OP_VOLUME_OPACITY = 9;
+static const uint OP_NULL_PROJECTION = 10;
 
 // Future-directed null root used by the render kernel, repeated here only for
 // the diagnostic launch boundary. The integration below calls the production
@@ -234,6 +235,27 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         // p1=reference radius, p2=H, p3=tau_ref; c0=radius, c1=z.
         results[rb + 0] =
             TruncatedGaussianOpacityDensity(p3, c0, p1, p2, c1);
+    } else if (opcode == OP_NULL_PROJECTION) {
+        // Direct witness for the production accepted-state constraint method.
+        // The sample supplies a metric family/event and u=(t,x,y,z).
+        Real metric[4][4];
+        Real metricInverse[4][4];
+        MetricById(metricId, p1, p2, p3, p4, c0, c1, c2,
+                   metric, metricInverse);
+        Vec4Cart tangent = MakeVec4Cart(Real(samples[sb + 8]), Real(samples[sb + 9]),
+                                        Real(samples[sb + 10]), Real(samples[sb + 11]));
+        Vec4Cart projected;
+        bool represented =
+            ProjectNullTangentPreservingBranch(metric, tangent, projected);
+        results[rb + 0] = represented ? 1.0f : 0.0f;
+        results[rb + 1] = float(projected.t);
+        results[rb + 2] = float(projected.x);
+        results[rb + 3] = float(projected.y);
+        results[rb + 4] = float(projected.z);
+        results[rb + 5] = float(RelativeNullConstraint(metric, tangent));
+        results[rb + 6] = represented
+                              ? float(RelativeNullConstraint(metric, projected))
+                              : 1.0e30f;
     } else if (opcode == OP_LIVE_CART_CONSERVATION) {
         // Actual Vulkan render integrator burn-in. p1=M, p2=a; c=(x,y,z);
         // u1..u3 are the spatial launch tangent; h=stepScale, aux0=maxSteps,

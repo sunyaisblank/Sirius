@@ -200,7 +200,11 @@ public GeodesicStateCart IntegrateGeodesicRK4WarpCart(GeodesicStateCart state, R
 public struct AdaptiveGeodesicStep {
     public GeodesicStateCart candidate;
     public Real errorRatio;
+    // Defect produced by the unprojected RK4 candidate.  This is the local
+    // constraint error judged by the adaptive controller.
     public Real nullResidual;
+    // Residual of candidate.u after the accepted-state null projection.
+    public Real projectedNullResidual;
     public Real stepFactor;
     public bool accepted;
 }
@@ -257,6 +261,92 @@ public Real RelativeNullConstraint(Real metric[4][4], Vec4Cart tangent) {
     return abs(contraction) / max(scale, Real(1.0e-20f));
 }
 
+Real DeviceRealEpsilon() {
+#ifdef SIRIUS_FP64
+    return Real(2.2204460492503131e-16);
+#else
+    return Real(1.1920928955078125e-7f);
+#endif
+}
+
+// Project one contravariant tangent onto the metric null cone while preserving
+// its spatial components.  The incoming temporal component identifies the
+// continuous light-cone branch, including where both coordinate-time roots
+// have the same sign.  The stable quadratic form avoids cancellation in the
+// smaller root; genuinely linear g_00=0 events are handled without division by
+// a vanishing coefficient.  An unrepresented root fails closed.
+public bool ProjectNullTangentPreservingBranch(Real metric[4][4], Vec4Cart tangent,
+                                               out Vec4Cart projected) {
+    projected = tangent;
+    if (!isfinite(tangent.t) || !isfinite(tangent.x) ||
+        !isfinite(tangent.y) || !isfinite(tangent.z)) {
+        return false;
+    }
+
+    Real components[4] = { tangent.t, tangent.x, tangent.y, tangent.z };
+    Real metricScale = Real(0.0f);
+    [unroll] for (int mu = 0; mu < 4; ++mu) {
+        [unroll] for (int nu = 0; nu < 4; ++nu) {
+            if (!isfinite(metric[mu][nu])) return false;
+            metricScale = max(metricScale, abs(metric[mu][nu]));
+        }
+    }
+    if (!(metricScale > Real(0.0f))) return false;
+
+    Real A = metric[0][0];
+    Real B = Real(0.0f);
+    Real C = Real(0.0f);
+    [unroll] for (int i = 1; i < 4; ++i) {
+        B += Real(2.0f) * metric[0][i] * components[i];
+        [unroll] for (int j = 1; j < 4; ++j) {
+            C += metric[i][j] * components[i] * components[j];
+        }
+    }
+    if (!isfinite(A) || !isfinite(B) || !isfinite(C)) return false;
+
+    Real roundoff = Real(64.0f) * DeviceRealEpsilon();
+    Real root = tangent.t;
+    if (A == Real(0.0f)) {
+        if (B == Real(0.0f)) return false;
+        root = -C / B;
+    } else {
+        Real fourAC = Real(4.0f) * A * C;
+        Real discriminant = B * B - fourAC;
+        Real discriminantScale = B * B + abs(fourAC);
+        if (!isfinite(discriminant) ||
+            discriminant < -roundoff * discriminantScale) {
+            return false;
+        }
+        discriminant = max(discriminant, Real(0.0f));
+        Real sqrtDiscriminant = sqrt(discriminant);
+        Real q = Real(-0.5f) *
+                 (B + (B >= Real(0.0f) ? sqrtDiscriminant : -sqrtDiscriminant));
+        Real firstRoot;
+        Real secondRoot;
+        if (q == Real(0.0f)) {
+            firstRoot = -B / (Real(2.0f) * A);
+            secondRoot = firstRoot;
+        } else {
+            firstRoot = q / A;
+            secondRoot = C / q;
+        }
+        bool firstRepresented = isfinite(firstRoot);
+        bool secondRepresented = isfinite(secondRoot);
+        if (!firstRepresented && !secondRepresented) return false;
+        if (firstRepresented && secondRepresented) {
+            root = abs(firstRoot - tangent.t) <= abs(secondRoot - tangent.t)
+                       ? firstRoot
+                       : secondRoot;
+        } else {
+            root = firstRepresented ? firstRoot : secondRoot;
+        }
+    }
+
+    if (!isfinite(root)) return false;
+    projected.t = root;
+    return true;
+}
+
 // One device-precision policy consumed by both the production trace and its P1
 // live parity probe. Keeping these here prevents a probe from silently judging
 // a different adaptive/null controller envelope than the renderer executes.
@@ -305,6 +395,7 @@ public AdaptiveGeodesicStep AttemptAdaptiveGeodesicStep(
         result.candidate = state;
         result.errorRatio = Real(1.0e30f);
         result.nullResidual = Real(1.0e30f);
+        result.projectedNullResidual = Real(1.0e30f);
         result.stepFactor = Real(0.5f);
         result.accepted = false;
         return result;
@@ -325,12 +416,25 @@ public AdaptiveGeodesicStep AttemptAdaptiveGeodesicStep(
                                   candidateMetric, candidateInverse);
     }
     result.nullResidual = RelativeNullConstraint(candidateMetric, result.candidate.u);
+    Vec4Cart projectedTangent;
+    bool projectionRepresented = ProjectNullTangentPreservingBranch(
+        candidateMetric, result.candidate.u, projectedTangent);
+    if (projectionRepresented) {
+        result.candidate.u = projectedTangent;
+        result.projectedNullResidual =
+            RelativeNullConstraint(candidateMetric, result.candidate.u);
+    } else {
+        result.projectedNullResidual = Real(1.0e30f);
+    }
     float controllerError = max(float(result.errorRatio), 1.0e-12f);
     result.stepFactor =
         Real(clamp(0.9f * pow(1.0f / controllerError, 0.2f), 0.2f, 2.0f));
-    result.accepted = result.errorRatio <= Real(1.0f) &&
-                      result.nullResidual <= nullTolerance;
-    if (!result.accepted && result.nullResidual > nullTolerance) {
+    result.accepted = projectionRepresented && result.errorRatio <= Real(1.0f) &&
+                      result.nullResidual <= nullTolerance &&
+                      result.projectedNullResidual <= nullTolerance;
+    if (!result.accepted &&
+        (!projectionRepresented || result.nullResidual > nullTolerance ||
+         result.projectedNullResidual > nullTolerance)) {
         result.stepFactor = min(result.stepFactor, Real(0.5f));
     }
     return result;
