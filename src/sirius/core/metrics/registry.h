@@ -138,15 +138,17 @@ enum class DiskSupport {
     return MetricSceneLengthScale(id, mass, throat_radius, bubble_radius, bubble_sigma);
 }
 
-// A very diffuse profile has not decayed at the governed outer boundary; a very
-// sharp profile is not reliably resolved by the fp32 state shared with the
-// device path. This dimensionless bound keeps both claims explicit.
+// A very diffuse profile makes the two tanh terms nearly coincident in fp32; a
+// very sharp profile makes the wall too narrow relative to R. This bound keeps
+// the smallest named scale at least one percent of the scene scale used by the
+// shared fp32 state. The separate max(R, 1/sigma) authority places the outer
+// boundary in the asymptotic region.
 [[nodiscard]] constexpr std::optional<std::string_view> AlcubierreScaleIssue(
     double bubble_radius, double bubble_sigma) noexcept {
     const double sigma_radius = bubble_sigma * bubble_radius;
     if (!(sigma_radius >= kMinAlcubierreSigmaRadius && sigma_radius <= kMaxAlcubierreSigmaRadius)) {
-        return "Alcubierre requires 0.1 <= bubble_sigma*bubble_radius <= 100 so the wall is "
-               "resolved and the outer boundary is asymptotic";
+        return "Alcubierre requires 0.1 <= bubble_sigma*bubble_radius <= 100 so its radius "
+               "and inverse-wall scales remain jointly resolved";
     }
     return std::nullopt;
 }
