@@ -142,6 +142,12 @@ inline constexpr double kEquatorialTol = 0.01;
 // Inner emission edge relative to the ISCO.
 inline constexpr double kInnerEdgeBuffer = 1.001;
 
+// Operator disk-temperature scale is the effective temperature at this
+// multiple of the inner edge for every selectable radial profile. A
+// zero-torque profile is identically cold at the edge itself, so calling the
+// scale an "inner temperature" would misstate its physical meaning.
+inline constexpr double kTemperatureReferenceRadiusRatio = 1.5;
+
 // Simpson points for the Page-Thorne flux integral.
 inline constexpr int kIntegrationPoints = 100;
 

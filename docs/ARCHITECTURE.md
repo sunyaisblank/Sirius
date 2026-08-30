@@ -147,6 +147,15 @@ crossings are accumulated before false-colour film visualisation. Vulkan,
 volumetric transfer, and temporal disk blur do not cross this capability
 boundary.
 
+The relativistic thin-disk default and physical parity authority remains the
+zero-torque Page-Thorne profile. `ShakuraSunyaev` is an explicit, narrower
+substitution: CPU and Slang evaluate the Newtonian zero-torque shape
+$F(r)\propto r^{-3}[1-\sqrt{r_\mathrm{in}/r}]$ and define the operator
+temperature at $1.5r_\mathrm{in}$. The shared normalisation and CPU/Slang
+parity prevent the former bare power law from reappearing; this mode does not
+represent relativistic flux or alpha-disk density, opacity, or vertical
+structure.
+
 ## 6. Memory governor and precision ladder
 
 The governor exists because the 780M-class target has a 2 GB budget that a naive full-frame HDR pipeline exhausts (a 5616 by 4096 IMAX frame at RGBA32F is 368 MB per buffer before ray state, which at 96 bytes per ray for position, momentum, deviation vectors, and accumulators is another 2.2 GB full-frame). The design bounds device residency by construction rather than by hope.

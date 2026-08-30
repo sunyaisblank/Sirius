@@ -137,7 +137,8 @@ struct SessionConfig {
 
     // Disk temperature model.
     DiskTemperatureModel temperature_model = DiskTemperatureModel::NovikovThorne;
-    float disk_temperature_scale = 50000.0f;  // T_scale (Kelvin).
+    // Effective temperature at 1.5 times the disk inner edge [K].
+    float disk_temperature_scale = 50000.0f;
     bool enable_disk = true;
 
     // Doppler beaming toggle (P4). True (default) keeps the full disk physics and

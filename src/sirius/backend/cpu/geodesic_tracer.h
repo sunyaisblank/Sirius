@@ -143,6 +143,9 @@ struct TracerConfig {
     bool enable_disk = true;
     float disk_inner = 6.0f;  // ISCO for Schwarzschild = 6M.
     float disk_outer = 20.0f;
+    // Dimensionless radial-profile scale at 1.5 times the inner edge;
+    // disk_temperature_scale_kelvin carries the corresponding physical scale.
+    // A zero-torque edge itself has zero temperature.
     float disk_temperature_inner = 1.0f;
     float disk_temperature_scale_kelvin = 30000.0f;
     sirius::core::color_modes::Mode color_mode = sirius::core::color_modes::Mode::TrueColor;
@@ -389,7 +392,9 @@ inline void GeodesicTracer::CacheMetricParameters() {
         disk_config.r_outer =
             std::max(500.0, static_cast<double>(config_.disk_outer) / std::max(cached_m_, 0.1));
         page_thorne_disk_ = std::make_unique<sirius::core::AccretionDiskD>(disk_config);
-        const double reference_radius = 1.5 * page_thorne_disk_->IscoRadius();
+        const double reference_radius =
+            sirius::core::constants::disk::kTemperatureReferenceRadiusRatio *
+            page_thorne_disk_->IscoRadius();
         page_thorne_reference_temperature_ = page_thorne_disk_->Temperature(reference_radius);
         page_thorne_cached_m_ = cached_m_;
         page_thorne_cached_a_ = cached_a_;
@@ -397,23 +402,24 @@ inline void GeodesicTracer::CacheMetricParameters() {
 }
 
 inline float GeodesicTracer::ComputeDiskTemperature(float r) {
-    float r_in = config_.disk_inner;
-    float T_in = config_.disk_temperature_inner;
+    const float inner_radius = config_.disk_inner;
+    const float temperature_scale = config_.disk_temperature_inner;
     if (config_.disk_temperature_model == DiskTemperatureModel::ShakuraSunyaev) {
-        return T_in * std::pow(r_in / r, 0.75f);
+        return static_cast<float>(
+            sirius::core::ShakuraSunyaevTemperature(temperature_scale, r, inner_radius));
     }
 
     // Full Page-Thorne flux authority, normalised at 1.5 r_ISCO so
-    // disk_temperature_inner remains the operator's Kelvin scale rather than
-    // silently becoming an accretion-rate input.
+    // disk_temperature_inner remains the tracer's dimensionless profile scale
+    // rather than silently becoming an accretion-rate input.
     if (page_thorne_disk_ == nullptr || page_thorne_reference_temperature_ <= 0.0 ||
         cached_m_ <= 0.0) {
         return 0.0f;
     }
     const double model_temperature =
         page_thorne_disk_->Temperature(static_cast<double>(r) / cached_m_);
-    return T_in * static_cast<float>(std::max(model_temperature, 0.0) /
-                                     page_thorne_reference_temperature_);
+    return temperature_scale * static_cast<float>(std::max(model_temperature, 0.0) /
+                                                  page_thorne_reference_temperature_);
 }
 
 inline bool GeodesicTracer::HasInvalidState(const sirius::core::Lightray& ray) {

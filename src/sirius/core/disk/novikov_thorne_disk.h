@@ -27,6 +27,39 @@
 
 namespace sirius::core {
 
+// Newtonian zero-torque standard thin-disk profile. Shakura & Sunyaev's
+// radially integrated surface flux has the shape
+//
+//   F(r) proportional to r^-3 [1 - sqrt(r_inner / r)],
+//
+// so T_eff is its fourth root. The operator temperature is defined at the
+// shared reference radius 1.5 r_inner, matching the Page-Thorne renderer
+// convention; it is not (and cannot be) a non-zero temperature at the
+// zero-torque edge. This is an explicit Newtonian substitute, not a
+// relativistic Page-Thorne or complete alpha-disk vertical-structure claim.
+[[nodiscard]] inline double ShakuraSunyaevFluxShape(double radius, double inner_radius) {
+    if (!std::isfinite(radius) || !std::isfinite(inner_radius) || inner_radius <= 0.0 ||
+        radius <= inner_radius) {
+        return 0.0;
+    }
+    const double ratio = inner_radius / radius;
+    return ratio * ratio * ratio * std::max(1.0 - std::sqrt(ratio), 0.0);
+}
+
+[[nodiscard]] inline double ShakuraSunyaevTemperature(double temperature_scale, double radius,
+                                                      double inner_radius) {
+    if (!std::isfinite(temperature_scale) || temperature_scale <= 0.0) {
+        return 0.0;
+    }
+    const double flux = ShakuraSunyaevFluxShape(radius, inner_radius);
+    const double reference_flux = ShakuraSunyaevFluxShape(
+        constants::disk::kTemperatureReferenceRadiusRatio * inner_radius, inner_radius);
+    if (flux <= 0.0 || reference_flux <= 0.0) {
+        return 0.0;
+    }
+    return temperature_scale * std::pow(flux / reference_flux, 0.25);
+}
+
 // Novikov-Thorne thin disk model, implementing IDiskModel.
 class AccretionDiskD : public IDiskModel {
   public:

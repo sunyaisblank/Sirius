@@ -201,6 +201,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         results[rb + 0] = T;
         results[rb + 1] = fluxShape;
         results[rb + 2] = ComputeKerrISCO(p1, p2);
+        results[rb + 3] = ShakuraSunyaevTemperature(innerT, r, r_isco);
     } else if (opcode == OP_BLACKBODY) {
         // c0 = temperature (K).
         float3 rgb = BlackbodyColor(c0);

@@ -50,6 +50,7 @@ REQUIRED_CAPABILITIES = {
     "ray_bundles_outside_stationary_black_holes",
     "inverse_compton_corona_transfer",
     "narrowband_line_transfer",
+    "newtonian_shakura_sunyaev_temperature_profile",
     "doppler_suppression_diagnostic",
     "phenomenological_volumetric_disk",
     "disk_emission_outside_schwarzschild_kerr",
@@ -111,6 +112,9 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:DopplerToggleTest.SuppressionCollapsesDiskAsymmetry",
         "gtest:GeodesicTracerRedshift.NearExtremalInnerDiskEmissionRemainsFinite",
         "gtest:GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile",
+        "gtest:AccretionDiskTest.ShakuraSunyaevProfileHasZeroTorqueEdgeAndDeclaredScale",
+        "gtest:GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile",
+        "gtest:KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel",
         "gtest:GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource",
         "gtest:GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment",
         "gtest:KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor",
@@ -200,9 +204,9 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "a2cd06bdec4fc142227359cb89dd120e165f9d6d6b0a015f43bccfb82e8fe38c",
-    "required_dimensions": "2ab185869bf31f4085cd9fd6298151b7978af0babc610d5cd56a7002e03e43c7",
-    "capability_contracts": "213d95a3b7cb29bf56eeba1ed4825fa78332782762c620fbfb69fda4d86a6d7b",
+    "acceptance_criteria": "104aa322e48c7ba24bd5a234e090c584d1a70436c282ba5b489bcb5b12f3b361",
+    "required_dimensions": "be5b2585bdecaba3c3fb753dd778d7f87794eb7f1f73c23f1c76f5a24b32ab9c",
+    "capability_contracts": "dc20a8018f263728fabd6227a6add501d418da6e08284b1cbf1bf5e96bda4d9a",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
 

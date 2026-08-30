@@ -87,7 +87,8 @@ Basic Options:
   --focus-distance <M>      Thin-lens focus distance (default: 50)
   --temperature-model <m>   Disk temperature model: NovikovThorne (NT) or
                             ShakuraSunyaev (SS) (default: NovikovThorne)
-  --disk-temperature <T>    Disk temperature scale in Kelvin (default: 50000)
+  --disk-temperature <T>    Disk temperature at 1.5 times the inner edge in Kelvin
+                            (default: 50000)
   --color-mode <name>       TrueColor, TemperatureMap, RedshiftMap, or
                             Polarisation (Narrowband is reserved and declines)
   --throat-radius <b0>      Morris-Thorne throat radius (default: 1.0)

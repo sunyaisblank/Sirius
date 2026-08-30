@@ -64,6 +64,36 @@ TEST(AccretionDiskTest, AutoIscoIsValidatedAgainstTheDerivedOuterEdge) {
     EXPECT_GT(disk.GetConfig().r_outer, disk.InnerRadius());
 }
 
+TEST(AccretionDiskTest, ShakuraSunyaevProfileHasZeroTorqueEdgeAndDeclaredScale) {
+    constexpr double inner_radius = 6.0;
+    constexpr double temperature_scale = 10000.0;
+    constexpr double reference_radius =
+        constants::disk::kTemperatureReferenceRadiusRatio * inner_radius;
+
+    EXPECT_DOUBLE_EQ(ShakuraSunyaevFluxShape(inner_radius, inner_radius), 0.0);
+    EXPECT_DOUBLE_EQ(ShakuraSunyaevTemperature(temperature_scale, inner_radius, inner_radius), 0.0);
+    EXPECT_DOUBLE_EQ(ShakuraSunyaevTemperature(temperature_scale, 0.5 * inner_radius, inner_radius),
+                     0.0);
+    EXPECT_DOUBLE_EQ(ShakuraSunyaevTemperature(temperature_scale, reference_radius, inner_radius),
+                     temperature_scale);
+
+    constexpr double sample_radius = 6.0 * inner_radius;
+    const double ratio = inner_radius / sample_radius;
+    const double reference_ratio = inner_radius / reference_radius;
+    const double expected =
+        temperature_scale * std::pow((ratio * ratio * ratio * (1.0 - std::sqrt(ratio))) /
+                                         (reference_ratio * reference_ratio * reference_ratio *
+                                          (1.0 - std::sqrt(reference_ratio))),
+                                     0.25);
+    EXPECT_NEAR(ShakuraSunyaevTemperature(temperature_scale, sample_radius, inner_radius), expected,
+                1.0e-12);
+    EXPECT_LT(ShakuraSunyaevTemperature(temperature_scale, sample_radius, inner_radius),
+              temperature_scale);
+    EXPECT_DOUBLE_EQ(ShakuraSunyaevTemperature(std::numeric_limits<double>::quiet_NaN(),
+                                               sample_radius, inner_radius),
+                     0.0);
+}
+
 // r_ISCO -> 1M for a prograde orbit around extremal Kerr.
 TEST(AccretionDiskTest, ISCO_ExtremalKerr_Prograde) {
     double r_isco = AccretionDiskD::ComputeIsco(0.998);  // Near-extremal.

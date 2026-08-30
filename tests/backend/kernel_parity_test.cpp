@@ -421,6 +421,39 @@ TEST(KernelParity, FullPageThorneDiskTemperatureMatchesIndependentCoreModel) {
     EXPECT_TRUE(Close(r[2 * kResultStride + 2], 2.0f * retrograde_isco, 1e-4f, 1e-6f, "S10 isco"));
 }
 
+TEST(KernelParity, ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    Sample near_edge;
+    near_edge.p1 = 1.0f;
+    near_edge.c0 = 6.6f;
+    near_edge.aux0 = 6.0f;
+    near_edge.aux1 = 10000.0f;
+
+    Sample reference = near_edge;
+    reference.c0 = 9.0f;
+
+    Sample far = near_edge;
+    far.c0 = 36.0f;
+
+    Sample edge = near_edge;
+    edge.c0 = edge.aux0;
+
+    const std::vector<Sample> samples = {near_edge, reference, far, edge};
+    const auto results = RunProbe(*f.device, f.kernel, kOpDiskTemp, samples);
+    for (std::size_t sample = 0; sample < samples.size(); ++sample) {
+        const float expected = static_cast<float>(sirius::core::ShakuraSunyaevTemperature(
+            samples[sample].aux1, samples[sample].c0, samples[sample].aux0));
+        EXPECT_TRUE(Close(results[sample * kResultStride + 3], expected, 2.0e-6f, 2.0e-3f,
+                          "Shakura-Sunyaev temperature"));
+    }
+    EXPECT_FLOAT_EQ(results[1 * kResultStride + 3], reference.aux1);
+    EXPECT_GT(results[0 * kResultStride + 3], 0.0f);
+    EXPECT_LT(results[2 * kResultStride + 3], reference.aux1);
+    EXPECT_FLOAT_EQ(results[3 * kResultStride + 3], 0.0f);
+}
+
 TEST(KernelParity, BlackbodyMatchesIntegratedCoreSpectrum) {
     Fixture f = OpenProbe();
     if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";

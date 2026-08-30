@@ -6,6 +6,7 @@ set_tests_properties(
     AccretionDiskTest.ISCO_Schwarzschild
     AccretionDiskTest.ConfigurationSanitizesEveryNonFiniteScalar
     AccretionDiskTest.AutoIscoIsValidatedAgainstTheDerivedOuterEdge
+    AccretionDiskTest.ShakuraSunyaevProfileHasZeroTorqueEdgeAndDeclaredScale
     AccretionDiskTest.ISCO_ExtremalKerr_Prograde
     AccretionDiskTest.ISCO_ExtremalKerr_Retrograde
     AccretionDiskTest.ISCO_ModerateSpin
@@ -422,7 +423,7 @@ set_tests_properties(
     GeodesicTracerTest.HorizonCapture
     GeodesicTracerTest.EscapeToInfinity
     GeodesicTracerTest.DiskIntersection
-    GeodesicTracerTest.DiskTemperatureProfile
+    GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile
     GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile
     GeodesicTracerTest.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation
     GeodesicTracerTest.NoNumericalFailures
@@ -462,6 +463,7 @@ set_tests_properties(
     KernelParity.WormholeAndWarpMetricMatchLegacy
     KernelParity.KerrSchildChristoffelMatchesLegacyToOnePartInMillion
     KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel
+    KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel
     KernelParity.BlackbodyMatchesIntegratedCoreSpectrum
     KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor
     KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter

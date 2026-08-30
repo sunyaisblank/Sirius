@@ -96,6 +96,7 @@ static const float PT_GL_WEIGHTS[16] = {
     0.189450611f, 0.182603515f, 0.169156520f, 0.149595989f,
     0.124628971f, 0.095158512f, 0.062253524f, 0.027152459f
 };
+static const float DISK_TEMPERATURE_REFERENCE_RADIUS_RATIO = 1.5f;
 
 float PtSpecificEnergy(float r, float a) {
     float sqrtR = sqrt(r);
@@ -160,7 +161,28 @@ public float FullPageThorneTemperature(float temperatureScale, float r, float rI
     float radiusInM = r / M;
     float iscoInM = rIsco / M;
     float flux = FullPageThorneFluxShape(radiusInM, iscoInM, aStar);
-    float reference = FullPageThorneFluxShape(1.5f * iscoInM, iscoInM, aStar);
+    float reference = FullPageThorneFluxShape(
+        DISK_TEMPERATURE_REFERENCE_RADIUS_RATIO * iscoInM, iscoInM, aStar);
+    if (flux <= 0.0f || reference <= 0.0f) return 0.0f;
+    return temperatureScale * pow(flux / reference, 0.25f);
+}
+
+// Explicit Newtonian zero-torque standard thin-disk substitute. This is the
+// Shakura-Sunyaev radial effective-temperature closure only; it does not claim
+// relativistic Page-Thorne flux or alpha-disk vertical structure. As on the
+// CPU, temperatureScale is the effective temperature at 1.5 rInner.
+float ShakuraSunyaevFluxShape(float r, float rInner) {
+    if (r <= rInner || rInner <= 0.0f) return 0.0f;
+    float ratio = rInner / r;
+    return ratio * ratio * ratio * max(1.0f - sqrt(ratio), 0.0f);
+}
+
+public float ShakuraSunyaevTemperature(float temperatureScale, float r,
+                                       float rInner) {
+    if (temperatureScale <= 0.0f) return 0.0f;
+    float flux = ShakuraSunyaevFluxShape(r, rInner);
+    float reference = ShakuraSunyaevFluxShape(
+        DISK_TEMPERATURE_REFERENCE_RADIUS_RATIO * rInner, rInner);
     if (flux <= 0.0f || reference <= 0.0f) return 0.0f;
     return temperatureScale * pow(flux / reference, 0.25f);
 }

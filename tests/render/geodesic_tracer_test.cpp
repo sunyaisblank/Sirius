@@ -160,26 +160,30 @@ TEST_F(GeodesicTracerTest, DiskIntersection) {
     EXPECT_TRUE(disk_data_valid) << "Invalid disk intersection data";
 }
 
-TEST_F(GeodesicTracerTest, DiskTemperatureProfile) {
+TEST_F(GeodesicTracerTest, LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile) {
     TracerConfig config = m_Tracer->GetConfig();
+    config.disk_temperature_model = DiskTemperatureModel::ShakuraSunyaev;
+    config.disk_temperature_inner = 10000.0f;
+    GeodesicTracer tracer(m_Metric.get(), config);
 
-    float T_inner = config.disk_temperature_inner;
-    float r_in = config.disk_inner;
-
-    // Novikov-Thorne: T(r) ~ r^(-3/4).
-    float T_at_inner = T_inner * std::pow(r_in / r_in, 0.75f);
-    EXPECT_NEAR(T_at_inner, T_inner, 0.001f);
-
-    float T_at_2r = T_inner * std::pow(r_in / (2.0f * r_in), 0.75f);
-    EXPECT_NEAR(T_at_2r, T_inner * 0.5946f, 0.01f);
-
-    for (float r = r_in; r <= 20.0f; r += 2.0f) {
-        float T = T_inner * std::pow(r_in / r, 0.75f);
-        EXPECT_GT(T, 0.0f) << "Temperature should be positive at r=" << r;
+    int compared = 0;
+    for (int y = 8; y < 56 && compared < 12; y += 2) {
+        for (int x = 8; x < 56 && compared < 12; x += 2) {
+            const TraceResult result = tracer.Trace(m_Camera->GenerateRay(x, y, 0.5f, 0.5f));
+            for (int i = 0; i < result.num_disk_crossings; ++i) {
+                const auto& crossing = result.disk_crossings[i];
+                if (!crossing.valid) continue;
+                const double expected = ShakuraSunyaevTemperature(config.disk_temperature_inner,
+                                                                  crossing.r, config.disk_inner);
+                EXPECT_NEAR(crossing.temperature, expected, 2.0e-3)
+                    << "live crossing at r=" << crossing.r
+                    << " did not consume the zero-torque Shakura-Sunyaev profile";
+                ++compared;
+            }
+        }
     }
-
-    EXPECT_GT(config.disk_inner, 0.0f);
-    EXPECT_GT(config.disk_outer, config.disk_inner);
+    EXPECT_GE(compared, 6)
+        << "insufficient live disk crossings for the Shakura-Sunyaev profile gate";
 }
 
 TEST_F(GeodesicTracerTest, LiveDiskTemperatureUsesFullPageThorneProfile) {

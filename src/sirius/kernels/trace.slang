@@ -439,7 +439,7 @@ float VolumeDiskTemperature(float cylindricalR, float z, float innerRadius,
                             float rIsco, float M, float aStar,
                             float hOverR, float hPower) {
     float midplane = temperatureModel == 1
-        ? innerTemperature * pow(innerRadius / cylindricalR, 0.75f)
+        ? ShakuraSunyaevTemperature(innerTemperature, cylindricalR, innerRadius)
         : FullPageThorneTemperature(innerTemperature, cylindricalR, rIsco, M, aStar);
     // Vertically isothermal closure. z, hOverR, and hPower define membership
     // and opacity only; no synthetic atmosphere-temperature law is implied.
@@ -1003,7 +1003,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                     float rIsco = ComputeKerrISCO(M, aStar);
                     float T;
                     if (temperatureModel == 1) {
-                        T = innerTemperature * pow(innerRadius / cr, 0.75f);
+                        T = ShakuraSunyaevTemperature(innerTemperature, cr, innerRadius);
                     } else {
                         T = FullPageThorneTemperature(innerTemperature, cr, rIsco, M, aStar);
                     }
