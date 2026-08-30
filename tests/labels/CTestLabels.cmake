@@ -280,6 +280,12 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle
+    CpuTraceBoundary.JacobiBundleTerminatesAtTheSameCausalEvent
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     DNGRParityTest.ExtremalKerrConfiguration
     DNGRParityTest.CameraDistance
     PROPERTIES LABELS "Mandatory;Correctness"

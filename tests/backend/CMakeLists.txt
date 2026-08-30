@@ -7,6 +7,7 @@ if(NOT TARGET sirius_backend)
 endif()
 
 add_executable(sirius_backend_tests
+    cpu_trace_boundary_test.cpp
     vulkan_smoke_test.cpp
     kernel_parity_test.cpp
     kernel_trace_test.cpp
@@ -14,7 +15,7 @@ add_executable(sirius_backend_tests
     kernel_portability_test.cpp
 )
 
-target_link_libraries(sirius_backend_tests PRIVATE sirius_backend GTest::gtest_main)
+target_link_libraries(sirius_backend_tests PRIVATE sirius_backend sirius_backend_cpu GTest::gtest_main)
 target_include_directories(sirius_backend_tests PRIVATE "${CMAKE_SOURCE_DIR}/tests")
 
 sirius_configure_target(sirius_backend_tests CONTRACT_MODE 2)
