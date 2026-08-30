@@ -107,7 +107,7 @@ Each review pass asks:
 | Kerr disk calculations used Kerr–Schild cylindrical radius as Boyer–Lindquist orbital radius | at the equator `sqrt(x^2+y^2)=sqrt(r^2+a^2)`, so ISCO clipping, Page–Thorne temperature, volume density, redshift, and polarised emitter motion used the wrong radius | Fixed: the shared spheroidal-radius authority now drives CPU and Slang thin/volume disk paths; an exact coordinate witness distinguishes the two radii |
 | Malformed vector indices, corona geometry, colour modes, tonemappers, trace outcomes, and film enums silently aliased or fell back | internal typed APIs retained permissive default branches after operator validation | Fixed: every malformed internal enum/index/state contracts or produces an explicit diagnostic rather than selecting another represented mode |
 | Fisheye existed in the core camera factory but could not be selected through configuration | schema and session projection only named pinhole/thin lens | Fixed: Fisheye is a represented CPU mode; explicit Vulkan declines and `auto` selects CPU at the capability boundary |
-| Viewer flags were parsed but the progressive session used hard-coded controls; frame/session state raced and shipped shaders were never consumed | CLI/config values did not reach the session; inline GLSL bypassed volume assets | Fixed: explicit projection, synchronised asynchronous refinement/cancellation, file-backed checked shaders, and a real headless frame witness |
+| Viewer flags were parsed but the progressive session used hard-coded controls; its later projection still overwrote validated tile, parallelism, bloom, and exposure policy, silently disabled a volume requested without its disk owner, orbit input could leave the typed azimuth domain, frame/session state raced, and shipped shaders were never consumed | CLI/config values did not reach the session; preview-only literals and dependent-feature coercion replaced the session template; unbounded azimuth accumulation made a previously admitted viewer fail on a later refinement; inline GLSL bypassed volume assets | Fixed: one projection preserves every template-owned and viewer-requested control, overrides only live viewer state, and passes the complete typed-session authority before initialization, so impossible feature ownership declines; orbit input is reduced to its periodic equivalent, asynchronous refinement/cancellation is synchronised, shaders are file-backed and checked, and pure projection plus real headless-frame witnesses gate the boundary |
 | The viewer liveness test embedded local-host performance assumptions | hosted ASan/UBSan/LSan completed one refinement but teardown canceled a healthy second render at the fixed deadline | Fixed: the witness keeps a valid 64x64 Schwarzschild render, asynchronous completion, frame-size, state, and error assertions without duplicating multi-sample performance coverage; the exact sanitizer rerun passes |
 | Missing starfield changed the image to grey/analytic background | CPU warning and Vulkan fallback | Fixed: the starfield is a mandatory scene input and absence declines |
 | Kerr coordinate round-trip tolerated an intentionally wrong azimuth | forward transform omitted the Kerr phase while inverse subtracted it | Fixed with the exact oblate transform and 1e-12 round-trip gates |
@@ -546,6 +546,17 @@ corresponding profile. They are not projected from registration counts.
   probes pass on both. The estate now contains 745 governed source GoogleTests,
   754 development CTests, 24 operating dimensions, and 29 capability contracts.
   No rendering test was executed.
+- 2026-08-30 interactive-projection correction: progressive sessions now
+  preserve template-owned tile, thread, parallelism, bloom, and exposure
+  policy instead of replacing it with viewer literals. The same projection
+  preserves requested volumetric state and rejects it without its disk owner,
+  passes `SessionConfigIssue` before initialization, and keeps orbit azimuth in
+  its periodic typed domain. GCC 14 and Clang 21 each compiled the complete
+  product and six-test-executable topology, including the render test
+  executable without executing it; both passed the two pure viewer
+  projection/input controls and the exact nine non-render authority CTests.
+  The estate remains 745 governed source GoogleTests and 754 development
+  CTests. No rendering test was executed.
 - GCC 14 strict required-Vulkan profile: the pre-alignment snapshot passed the complete
   907/907 estate on the Radeon 780M through Dozen in 210.36 seconds. A separate
   required-only run passed 697/697 on the Radeon in 281.34 seconds and the same

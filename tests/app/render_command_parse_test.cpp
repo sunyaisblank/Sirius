@@ -314,8 +314,12 @@ TEST(ViewCommandOperational, StrictParsingAndSessionProjection) {
     ViewerConfig viewer_config;
     viewer_config.backend = render::RenderBackend::Vulkan;
     viewer_config.metric_id = core::MetricId::Kerr;
-    viewer_config.enable_disk = false;
     viewer_config.enable_volumetric = true;
+    viewer_config.session_template.tile_size = 8;
+    viewer_config.session_template.thread_count = 7;
+    viewer_config.session_template.enable_parallel_rendering = false;
+    viewer_config.session_template.enable_bloom = false;
+    viewer_config.session_template.exposure = 1.25f;
     InteractiveViewer viewer;
     ASSERT_TRUE(viewer.Initialise(viewer_config));
     viewer.SetCameraPosition(40.0, 1.0, 0.25);
@@ -323,14 +327,32 @@ TEST(ViewCommandOperational, StrictParsingAndSessionProjection) {
     EXPECT_EQ(projected.backend, render::RenderBackend::Vulkan);
     EXPECT_EQ(projected.metric_id, core::MetricId::Kerr);
     EXPECT_DOUBLE_EQ(projected.observer_azimuth, 0.25);
-    EXPECT_FALSE(projected.enable_disk);
-    EXPECT_FALSE(projected.enable_volumetric_disk);
+    EXPECT_TRUE(projected.enable_disk);
+    EXPECT_TRUE(projected.enable_volumetric_disk);
     EXPECT_FALSE(projected.enable_jets);
     EXPECT_FALSE(projected.write_output);
+    EXPECT_EQ(projected.tile_size, 8);
+    EXPECT_EQ(projected.thread_count, 7);
+    EXPECT_FALSE(projected.enable_parallel_rendering);
+    EXPECT_FALSE(projected.enable_bloom);
+    EXPECT_FLOAT_EQ(projected.exposure, 1.25f);
+
+    viewer.SetCameraPosition(40.0, 1.0, 10.0 * core::constants::math::kPi + 0.5);
+    const render::SessionConfig wrapped = viewer.CreateSessionConfig(320, 180, 3);
+    EXPECT_NEAR(wrapped.observer_azimuth, 0.5, 1.0e-12);
+    EXPECT_FALSE(render::SessionConfigIssue(wrapped).has_value());
 
     ViewerConfig invalid = viewer_config;
     invalid.refinement_levels = 0;
     InteractiveViewer invalid_viewer;
+    EXPECT_FALSE(invalid_viewer.Initialise(invalid));
+
+    invalid = viewer_config;
+    invalid.session_template.exposure = std::numeric_limits<float>::infinity();
+    EXPECT_FALSE(invalid_viewer.Initialise(invalid));
+
+    invalid = viewer_config;
+    invalid.enable_disk = false;
     EXPECT_FALSE(invalid_viewer.Initialise(invalid));
 }
 

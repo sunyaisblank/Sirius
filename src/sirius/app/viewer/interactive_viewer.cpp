@@ -10,6 +10,36 @@
 
 namespace sirius::app {
 
+namespace {
+
+double NormaliseAzimuth(double phi) {
+    return std::remainder(phi, 2.0 * core::constants::math::kPi);
+}
+
+render::SessionConfig ProjectSessionConfig(const ViewerConfig& viewer, const CameraState& camera,
+                                           int width, int height, int samples_per_pixel) {
+    render::SessionConfig config = viewer.session_template;
+    config.width = width;
+    config.height = height;
+    config.samples_per_pixel = samples_per_pixel;
+    config.write_output = false;
+
+    config.metric_id = viewer.metric_id;
+    config.black_hole_mass = viewer.black_hole_mass;
+    config.black_hole_spin = viewer.black_hole_spin;
+    config.observer_distance = camera.r;
+    config.observer_inclination = camera.theta;
+    config.observer_azimuth = camera.phi;
+    config.camera_fov = camera.fov;
+    config.enable_disk = viewer.enable_disk;
+    config.enable_volumetric_disk = viewer.enable_volumetric;
+    config.backend = viewer.backend;
+
+    return config;
+}
+
+}  // namespace
+
 InteractiveViewer::InteractiveViewer() = default;
 
 InteractiveViewer::~InteractiveViewer() { Stop(); }
@@ -39,6 +69,18 @@ bool InteractiveViewer::Initialise(const ViewerConfig& config) {
         config.observer_inclination > core::constants::math::kPi - 0.1 ||
         !std::isfinite(config.observer_azimuth) || !std::isfinite(config.observer_fov) ||
         config.observer_fov < 1.0f || config.observer_fov > 170.0f) {
+        return false;
+    }
+    const CameraState initial_camera{
+        .r = config.observer_distance,
+        .theta = config.observer_inclination,
+        .phi = config.observer_azimuth,
+        .fov = config.observer_fov,
+    };
+    if (render::SessionConfigIssue(ProjectSessionConfig(config, initial_camera,
+                                                        config.preview_width, config.preview_height,
+                                                        1))
+            .has_value()) {
         return false;
     }
 
@@ -131,7 +173,7 @@ void InteractiveViewer::SetCameraPosition(double r, double theta, double phi) {
         std::lock_guard<std::mutex> lock(state_mutex_);
         camera_.r = std::clamp(r, 5.0 * config_.black_hole_mass, 1000.0 * config_.black_hole_mass);
         camera_.theta = std::clamp(theta, 0.1, core::constants::math::kPi - 0.1);
-        camera_.phi = phi;
+        camera_.phi = NormaliseAzimuth(phi);
     }
     Restart();
 }
@@ -141,33 +183,36 @@ void InteractiveViewer::UpdateCamera(float dt) {
     bool moved = false;
     {
         std::lock_guard<std::mutex> lock(state_mutex_);
+        const double movement = static_cast<double>(config_.move_speed) * static_cast<double>(dt);
+        const double angular_radius = camera_.r;
         if (camera_.move_forward) {
-            camera_.r -= config_.move_speed * dt;
+            camera_.r -= movement;
             moved = true;
         }
         if (camera_.move_backward) {
-            camera_.r += config_.move_speed * dt;
+            camera_.r += movement;
             moved = true;
         }
         if (camera_.move_left) {
-            camera_.phi -= config_.move_speed * dt / camera_.r;
+            camera_.phi -= movement / angular_radius;
             moved = true;
         }
         if (camera_.move_right) {
-            camera_.phi += config_.move_speed * dt / camera_.r;
+            camera_.phi += movement / angular_radius;
             moved = true;
         }
         if (camera_.move_up) {
-            camera_.theta = std::max(0.1, camera_.theta - config_.move_speed * 0.02 * dt);
+            camera_.theta = std::max(0.1, camera_.theta - movement * 0.02);
             moved = true;
         }
         if (camera_.move_down) {
-            camera_.theta = std::min(core::constants::math::kPi - 0.1,
-                                     camera_.theta + config_.move_speed * 0.02 * dt);
+            camera_.theta =
+                std::min(core::constants::math::kPi - 0.1, camera_.theta + movement * 0.02);
             moved = true;
         }
         camera_.r =
             std::clamp(camera_.r, 5.0 * config_.black_hole_mass, 1000.0 * config_.black_hole_mass);
+        camera_.phi = NormaliseAzimuth(camera_.phi);
     }
 
     if (moved) {
@@ -222,11 +267,13 @@ void InteractiveViewer::ProcessMouseMove(double xpos, double ypos, bool dragging
         if (dragging) {
             const double dx = xpos - last_mouse_x_;
             const double dy = ypos - last_mouse_y_;
-
-            camera_.phi += dx * config_.mouse_sensitivity;
-            camera_.theta = std::clamp(camera_.theta + dy * config_.mouse_sensitivity, 0.1,
-                                       core::constants::math::kPi - 0.1);
-            moved = true;
+            const double next_phi = camera_.phi + dx * config_.mouse_sensitivity;
+            const double next_theta = camera_.theta + dy * config_.mouse_sensitivity;
+            if (std::isfinite(next_phi) && std::isfinite(next_theta)) {
+                camera_.phi = NormaliseAzimuth(next_phi);
+                camera_.theta = std::clamp(next_theta, 0.1, core::constants::math::kPi - 0.1);
+                moved = true;
+            }
         }
 
         last_mouse_x_ = xpos;
@@ -302,29 +349,7 @@ render::SessionConfig InteractiveViewer::CreateSessionConfig(int width, int heig
         viewer = config_;
         camera = camera_;
     }
-    render::SessionConfig config = viewer.session_template;
-    config.width = width;
-    config.height = height;
-    config.samples_per_pixel = spp;
-    config.tile_size = 32;
-    config.write_output = false;
-
-    config.metric_id = viewer.metric_id;
-    config.black_hole_mass = viewer.black_hole_mass;
-    config.black_hole_spin = viewer.black_hole_spin;
-    config.observer_distance = camera.r;
-    config.observer_inclination = camera.theta;
-    config.observer_azimuth = camera.phi;
-    config.camera_fov = camera.fov;
-    config.enable_disk = viewer.enable_disk;
-    config.enable_volumetric_disk = viewer.enable_disk && viewer.enable_volumetric;
-    config.enable_bloom = true;
-    config.exposure = 3.0f;
-
-    config.enable_parallel_rendering = true;
-    config.backend = viewer.backend;
-
-    return config;
+    return ProjectSessionConfig(viewer, camera, width, height, spp);
 }
 
 void InteractiveViewer::RenderThread() {
