@@ -16,6 +16,33 @@ public float ObservedDiskBolometricSource(float emittedSource, float redshift) {
     return emittedSource * g2 * g2;
 }
 
+// Finite-support vertical opacity for the declared phenomenological volume.
+// integral[-3H,+3H] exp(-z^2/(2H^2)) dz
+//   = sqrt(2 pi) erf(3/sqrt(2)) H
+//   = 2.4998608894830947 H.
+// The rounded fp32 constant has the same value used by the CPU closure after
+// conversion to float, so tauMidplane is the represented truncated column.
+static const float VOLUME_VERTICAL_TRUNCATION_SIGMA = 3.0f;
+static const float TRUNCATED_GAUSSIAN_COLUMN_INTEGRAL = 2.499861f;
+
+public float TruncatedGaussianOpacityDensity(float tauRef, float radius,
+                                             float referenceRadius, float scaleHeight,
+                                             float height) {
+    if (!isfinite(tauRef) || tauRef < 0.0f || !isfinite(radius) || radius <= 0.0f ||
+        !isfinite(referenceRadius) || referenceRadius <= 0.0f ||
+        !isfinite(scaleHeight) || scaleHeight <= 0.0f || !isfinite(height)) {
+        return 0.0f;
+    }
+    float zOverH = height / scaleHeight;
+    if (!isfinite(zOverH) || abs(zOverH) > VOLUME_VERTICAL_TRUNCATION_SIGMA) {
+        return 0.0f;
+    }
+    float radialColumn = tauRef * pow(radius / referenceRadius, -1.5f);
+    float density = radialColumn * exp(-0.5f * zOverH * zOverH) /
+                    (TRUNCATED_GAUSSIAN_COLUMN_INTEGRAL * scaleHeight);
+    return isfinite(density) && density >= 0.0f ? density : 0.0f;
+}
+
 // --- Planck spectrum through the Wyman-Sloan-Shirley CIE 1931 fit -----------
 
 float CieGaussian(float wavelengthNm, float centre, float leftWidth,

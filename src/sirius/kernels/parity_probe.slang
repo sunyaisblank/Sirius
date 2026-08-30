@@ -34,6 +34,7 @@ static const uint OP_DISK_REDSHIFT = 5;
 static const uint OP_LIVE_CART_CONSERVATION = 6;
 static const uint OP_BEAM_ELLIPSE = 7;
 static const uint OP_ADAPTIVE_EVENT_DOMAIN = 8;
+static const uint OP_VOLUME_OPACITY = 9;
 
 // Future-directed null root used by the render kernel, repeated here only for
 // the diagnostic launch boundary. The integration below calls the production
@@ -229,6 +230,10 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     } else if (opcode == OP_DISK_REDSHIFT) {
         // c0 = emitted bolometric source, c1 = redshift g.
         results[rb + 0] = ObservedDiskBolometricSource(c0, c1);
+    } else if (opcode == OP_VOLUME_OPACITY) {
+        // p1=reference radius, p2=H, p3=tau_ref; c0=radius, c1=z.
+        results[rb + 0] =
+            TruncatedGaussianOpacityDensity(p3, c0, p1, p2, c1);
     } else if (opcode == OP_LIVE_CART_CONSERVATION) {
         // Actual Vulkan render integrator burn-in. p1=M, p2=a; c=(x,y,z);
         // u1..u3 are the spatial launch tangent; h=stepScale, aux0=maxSteps,

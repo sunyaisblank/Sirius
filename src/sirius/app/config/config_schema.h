@@ -71,7 +71,7 @@ struct VolumetricConfig {
     float h_over_r = core::kDefaultVolumetricHOverR;  // H/r at the disk inner edge.
     float h_power = core::kDefaultVolumetricHPower;   // Radial exponent before saturation.
     float tau_midplane =
-        core::kDefaultVolumetricTauMidplane;  // Full vertical depth at the inner edge.
+        core::kDefaultVolumetricTauMidplane;  // Baseline full vertical depth at the inner edge.
     int samples = core::kDefaultVolumetricSamples;
     bool enable_turbulence = false;
     bool enable_corona = false;

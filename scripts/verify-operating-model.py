@@ -131,6 +131,8 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel",
         "gtest:GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource",
         "gtest:GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment",
+        "gtest:VolumetricDiskClosure.TruncatedGaussianColumnEqualsDeclaredOpticalDepth",
+        "gtest:KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure",
         "gtest:KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor",
         "gtest:KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel",
         "gtest:SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction",
@@ -221,9 +223,9 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "bf19f61b5bb39061032dcb0de9859cdc4abc9260d7ba6e2a24842f6502ebfe05",
-    "required_dimensions": "ad0ef6da589478ef69759ade8f7c6f317aa5e9e86c92dc30224cc9c6df48c246",
-    "capability_contracts": "08efb5d1e09209c33061013db22034e9c3cf1058e25021a84e7a85bb4b41de60",
+    "acceptance_criteria": "49e0a1193c6c487699e261df215c1101a0c89f569a7d53345865d37f61bce22c",
+    "required_dimensions": "6de6433ceef82b3982637ddcb637a5738f59c36b37ee6a2fad3423b151c8f169",
+    "capability_contracts": "0f1927e0de623ab55e3327b0ad8657fc28e2908e285ca3c9f6b77d820c94c66b",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
 

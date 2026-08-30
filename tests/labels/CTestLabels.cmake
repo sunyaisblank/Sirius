@@ -481,6 +481,7 @@ set_tests_properties(
     KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel
     KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco
     KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel
+    KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure
     KernelParity.BlackbodyMatchesIntegratedCoreSpectrum
     KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor
     KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter
@@ -1147,6 +1148,11 @@ set_tests_properties(
     ViewCommandOperational.VulkanRefinementPublishesProgressiveFrames
     ViewCommandOperational.InputStateHandlesPressRepeatReleaseMouseAndScroll
     PROPERTIES LABELS "Mandatory;Operational"
+)
+
+set_tests_properties(
+    VolumetricDiskClosure.TruncatedGaussianColumnEqualsDeclaredOpticalDepth
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(

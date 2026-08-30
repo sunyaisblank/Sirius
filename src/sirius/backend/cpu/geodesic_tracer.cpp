@@ -846,21 +846,11 @@ float GeodesicTracer::ComputeVolumetricOpacityDensity(float r, float z, float ph
     float H = ComputeScaleHeight(r);
     if (H <= 0) return 0;
 
-    // Gaussian vertical profile rho ~ exp(-z^2 / (2 H^2)).
-    float z_over_H = z / H;
-    float gaussian = std::exp(-0.5f * z_over_H * z_over_H);
-
-    // Radial scaling normalised so the full Gaussian vertical optical depth is
-    // tau_midplane at r_ref and tau(r)=tau_ref(r/r_ref)^(-3/2):
-    // kappa rho_0(r) = tau_ref (r/r_ref)^(-3/2) / (sqrt(2 pi) H(r)).
-    float r_ref = config_.disk_inner;
-    float r_ratio = r / r_ref;
-
-    float kappa_rho0 = config_.volumetric_tau_midplane /
-                       (std::sqrt(2.0f * static_cast<float>(std::numbers::pi)) * H) *
-                       std::pow(r_ratio, -1.5f);
-
-    float density = kappa_rho0 * gaussian;
+    // Normalise over the represented finite support, not an unrepresented
+    // infinite Gaussian tail. Thus the integral from -3H to +3H is exactly
+    // tau_ref (r/r_ref)^(-3/2).
+    float density = static_cast<float>(core::volumetric_disk::TruncatedGaussianOpacityDensity(
+        config_.volumetric_tau_midplane, r, config_.disk_inner, H, z));
     if (config_.enable_turbulence) {
         const float spherical_r = std::sqrt(r * r + z * z);
         const float theta =
