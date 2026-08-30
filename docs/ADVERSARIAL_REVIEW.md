@@ -70,6 +70,7 @@ Each review pass asks:
 
 | Finding | Ground-truth witness | Disposition |
 |---|---|---|
+| One exact revision produced different operating-model and receipt identities on Windows and macOS | Exact-main native-build artifacts hashed automatic CRLF checkout/output bytes on Windows and LF bytes on macOS | Fixed: Git pins the governed model to LF, configuration rejects noncanonical model bytes, receipt emission uses explicit UTF-8/LF bytes, and repository/alignment negative controls reject missing attributes and CRLF authority inputs |
 | Installed binary omitted SPIR-V and viewer shaders and embedded a build kernel path | Staged install contained only the binary and starfield | Fixed: one resource locator, staged build tree, complete install tree, install-time invariant |
 | Source/build tree or an escaping symlink could mask an incomplete volume | Runtime searched working-directory parents and accepted canonical files outside the selected root | Fixed: only executable-volume roots are searched; absolute/traversing names and escaping symlinks decline; relocation removes an asset beside a valid working-directory decoy |
 | Vulkan renderer could compile without Slang kernels | Backend target existed before `slangc` detection | Fixed: live Vulkan render is compiled only when backend and kernels both exist |
@@ -623,6 +624,14 @@ corresponding profile. They are not projected from registration counts.
   source GoogleTests, 781 development CTests, 784 strict-qualification CTests,
   24 operating dimensions, and 29 capability contracts. No rendering test was
   executed.
+- 2026-08-31 cross-platform authority-identity correction: exact-main native
+  build artifacts exposed that automatic Windows CRLF checkout and text output
+  gave one Git revision different operating-model and alignment-receipt byte
+  identities from Linux/macOS. The governed model is now pinned to LF checkout
+  bytes, qualification rejects CRLF or non-LF-terminated model input, and the
+  receipt writer emits and checks explicit UTF-8/LF bytes. Repository and
+  alignment self-tests reject both missing checkout attributes and a simulated
+  CRLF authority. No rendering test was executed.
 - GCC 14 strict required-Vulkan profile: the pre-alignment snapshot passed the complete
   907/907 estate on the Radeon 780M through Dozen in 210.36 seconds. A separate
   required-only run passed 697/697 on the Radeon in 281.34 seconds and the same

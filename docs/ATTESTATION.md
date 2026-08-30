@@ -242,7 +242,11 @@ cmake --preset linux-gcc \
 
 `scripts/verify-alignment.py` derives those eight domains from the exact
 attestation-required capability profiles and binds the operating-model SHA-256
-into the deterministic admission receipt.
+into the deterministic admission receipt. The governed model is checked out as
+LF-terminated UTF-8 on every host, qualification rejects any platform-local
+CRLF model identity, and the receipt is written as explicit UTF-8/LF bytes;
+therefore the same revision, model, and admitted record set has one byte-level
+authority across Linux, Windows, and macOS.
 Configuration fails on missing, duplicate, dirty, wrong-revision, or
 non-qualification evidence;
 it also refuses disabled tests, a weakened Mandatory/Werror/contract policy,

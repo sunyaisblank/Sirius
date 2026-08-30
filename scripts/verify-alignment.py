@@ -54,9 +54,13 @@ def inspect_operating_model(path: Path) -> tuple[str, tuple[str, ...]]:
     """Bind admission to the external profiles declared by the model itself."""
     require(path.is_file(), f"operating model is missing: {path}")
     payload = path.read_bytes()
+    require(
+        payload.endswith(b"\n") and b"\r" not in payload,
+        "operating model must use canonical LF-terminated UTF-8 bytes",
+    )
     try:
-        model = json.loads(payload)
-    except json.JSONDecodeError as error:
+        model = json.loads(payload.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
         raise ValueError(f"operating model JSON is unreadable: {error}") from error
     require(
         isinstance(model, dict)
@@ -220,6 +224,11 @@ def render_receipt(receipt: dict) -> str:
     return json.dumps(receipt, indent=2, sort_keys=True) + "\n"
 
 
+def render_receipt_bytes(receipt: dict) -> bytes:
+    """Emit one cross-platform byte identity for a deterministic receipt."""
+    return render_receipt(receipt).encode("utf-8")
+
+
 def inspect_git_source(source_root: Path) -> tuple[str, bool]:
     require((source_root / ".git").exists(),
             "alignment source root is not a Git worktree")
@@ -311,19 +320,41 @@ def self_test() -> None:
         raise ValueError("qualification alignment accepted a dirty source tree")
     with tempfile.TemporaryDirectory(prefix="sirius-alignment-") as directory:
         receipt_path = Path(directory) / "receipt.json"
-        receipt_path.write_text(render_receipt(development), encoding="utf-8")
+        receipt_payload = render_receipt_bytes(development)
         require(
-            receipt_path.read_text(encoding="utf-8") == render_receipt(development),
+            receipt_payload.endswith(b"\n") and b"\r" not in receipt_payload,
+            "alignment receipt is not canonical LF-terminated UTF-8",
+        )
+        receipt_path.write_bytes(receipt_payload)
+        require(
+            receipt_path.read_bytes() == receipt_payload,
             "alignment receipt is not deterministic",
         )
+        source_model_path = ROOT / "tests" / "operating_model.json"
+        source_model_payload = source_model_path.read_bytes()
+        noncanonical_models = {
+            "CRLF": source_model_payload.replace(b"\n", b"\r\n"),
+            "unterminated": source_model_payload.rstrip(b"\n"),
+            "non-UTF-8": b"\xff\n",
+        }
+        for label, payload in noncanonical_models.items():
+            invalid_model_path = Path(directory) / f"operating_model-{label}.json"
+            invalid_model_path.write_bytes(payload)
+            try:
+                inspect_operating_model(invalid_model_path)
+            except ValueError:
+                continue
+            raise ValueError(f"alignment accepted noncanonical {label} model identity")
         drifted_model_path = Path(directory) / "operating_model.json"
         drifted_model = json.loads(
-            (ROOT / "tests" / "operating_model.json").read_text(encoding="utf-8")
+            source_model_path.read_text(encoding="utf-8")
         )
         for capability in drifted_model["capability_contracts"]:
             if capability.get("id") == "viewer_native_window_input":
                 capability["profiles"] = ["viewer-native-window"]
-        drifted_model_path.write_text(json.dumps(drifted_model), encoding="utf-8")
+        drifted_model_path.write_bytes(
+            (json.dumps(drifted_model, indent=2, sort_keys=True) + "\n").encode("utf-8")
+        )
         try:
             inspect_operating_model(drifted_model_path)
         except ValueError:
@@ -377,11 +408,11 @@ def main() -> None:
             args.mode,
             model_digest,
         )
-        payload = render_receipt(receipt)
+        payload = render_receipt_bytes(receipt)
         if args.check:
             require(args.output.is_file(), f"alignment receipt is missing: {args.output}")
             require(
-                args.output.read_text(encoding="utf-8") == payload,
+                args.output.read_bytes() == payload,
                 "alignment receipt is stale; reconfigure the build",
             )
             print(
@@ -390,7 +421,7 @@ def main() -> None:
             )
             return
         args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(payload, encoding="utf-8")
+        args.output.write_bytes(payload)
         print(
             f"alignment receipt generated: {len(receipt['admitted_domains'])}/"
             f"{len(REQUIRED_DOMAINS)} domains admitted"
