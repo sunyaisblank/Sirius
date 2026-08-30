@@ -5,6 +5,7 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
 #include <cmath>
 #include <limits>
 #include <numbers>
@@ -49,6 +50,46 @@ TEST(AccretionDiskTest, OuterEdgeInsideDerivedIscoFailsClosed) {
     config.M = std::numeric_limits<double>::max();
     EXPECT_FALSE(AccretionDiskD::IsRepresentedConfig(config));
     EXPECT_DEATH((void)AccretionDiskD(config), "precondition.*enforced, terminating");
+}
+
+TEST(AccretionDiskTest, ExplicitInnerEdgeCannotEnterTheUnstableOrbitDomain) {
+    AccretionDiskD::Config config;
+    config.a_star = 0.0;
+    config.r_inner = 5.0;
+    config.r_outer = 100.0;
+
+    EXPECT_FALSE(AccretionDiskD::IsRepresentedConfig(config));
+    EXPECT_DEATH((void)AccretionDiskD(config), "precondition.*enforced, terminating");
+
+    config.r_inner = AccretionDiskD::ComputeIsco(config.a_star);
+    EXPECT_TRUE(AccretionDiskD::IsRepresentedConfig(config));
+}
+
+TEST(DiskCoordinateTest, CylindricalHeightAndPolarAngleRoundTripOnTheirOwnedDomain) {
+    for (const double radius : {1.0, 10.0, 100.0}) {
+        for (const double height : {-100.0, -1.0, 0.0, 1.0, 100.0}) {
+            const auto theta = ZToTheta(radius, height);
+            ASSERT_TRUE(theta.has_value());
+            const auto reconstructed = ThetaToZ(radius, *theta);
+            ASSERT_TRUE(reconstructed.has_value());
+            EXPECT_NEAR(*reconstructed, height,
+                        2.0e-13 * std::max({1.0, radius, std::abs(height)}));
+        }
+    }
+}
+
+TEST(DiskCoordinateTest, AxisAndNonFiniteCoordinatesDeclineInsteadOfBecomingEquatorial) {
+    const double nan = std::numeric_limits<double>::quiet_NaN();
+    const double infinity = std::numeric_limits<double>::infinity();
+
+    EXPECT_FALSE(ZToTheta(0.0, 1.0).has_value());
+    EXPECT_FALSE(ZToTheta(-1.0, 1.0).has_value());
+    EXPECT_FALSE(ZToTheta(1.0, nan).has_value());
+    EXPECT_FALSE(ZToTheta(infinity, 1.0).has_value());
+    EXPECT_FALSE(ThetaToZ(0.0, std::numbers::pi / 2.0).has_value());
+    EXPECT_FALSE(ThetaToZ(1.0, 0.0).has_value());
+    EXPECT_FALSE(ThetaToZ(1.0, std::numbers::pi).has_value());
+    EXPECT_FALSE(ThetaToZ(1.0, nan).has_value());
 }
 
 TEST(AccretionDiskTest, ShakuraSunyaevProfileHasZeroTorqueEdgeAndDeclaredScale) {

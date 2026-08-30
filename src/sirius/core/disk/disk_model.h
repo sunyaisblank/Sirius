@@ -6,6 +6,7 @@
 
 #include <cmath>
 #include <numbers>
+#include <optional>
 #include <string>
 
 namespace sirius::core {
@@ -52,17 +53,29 @@ class IDiskModel {
     virtual double BlackHoleSpin() const = 0;
 };
 
-// Height z to polar angle theta = pi/2 - atan(z/r) for a thin disk.
-inline double ZToTheta(double r, double z) {
-    if (r <= 0) return std::numbers::pi / 2.0;
-    return std::numbers::pi / 2.0 - std::atan(z / r);
+// Height z to polar angle theta = pi/2 - atan(z/r) for a thin disk. The
+// cylindrical radius must be positive: the axis has no owned azimuthal disk
+// chart and may not be silently projected onto the equatorial plane.
+[[nodiscard]] inline std::optional<double> ZToTheta(double r, double z) {
+    if (!std::isfinite(r) || !std::isfinite(z) || !(r > 0.0)) return std::nullopt;
+    const double theta = std::numbers::pi / 2.0 - std::atan(z / r);
+    if (!std::isfinite(theta) || !(theta > 0.0) || !(theta < std::numbers::pi)) {
+        return std::nullopt;
+    }
+    return theta;
 }
 
-// Polar angle theta to height z = r cot(theta) for a thin disk.
-inline double ThetaToZ(double r, double theta) {
-    double sin_theta = std::sin(theta);
-    if (std::abs(sin_theta) < 1e-10) return 0;
-    return r * std::cos(theta) / sin_theta;
+// Polar angle theta to height z = r cot(theta) for a thin disk. Both polar
+// axes are coordinate singularities and decline instead of impersonating the
+// finite equatorial height z=0.
+[[nodiscard]] inline std::optional<double> ThetaToZ(double r, double theta) {
+    if (!std::isfinite(r) || !(r > 0.0) || !std::isfinite(theta) || !(theta > 0.0) ||
+        !(theta < std::numbers::pi)) {
+        return std::nullopt;
+    }
+    const double height = r * std::cos(theta) / std::sin(theta);
+    if (!std::isfinite(height)) return std::nullopt;
+    return height;
 }
 
 }  // namespace sirius::core

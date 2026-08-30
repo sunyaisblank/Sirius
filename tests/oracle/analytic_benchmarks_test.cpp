@@ -59,15 +59,14 @@ double IndependentAngularVelocityDerivative(double radius, double spin) {
 // Gauss-Legendre rule and analytic derivatives. The returned flux shape is
 // q(r)/sqrt(-g_3)=q(r)/r on the Kerr equatorial plane; its physical prefactor
 // cancels when temperature profiles are normalised.
-double IndependentPageThorneFluxShape(double radius, double spin) {
-    const double isco = AccretionDiskD::ComputeIsco(spin);
-    if (radius <= isco) return 0.0;
+double IndependentPageThorneFluxShape(double radius, double inner_radius, double spin) {
+    if (radius <= inner_radius) return 0.0;
 
     constexpr int kPanels = 32768;
-    const double width = (radius - isco) / kPanels;
+    const double width = (radius - inner_radius) / kPanels;
     double integral = 0.0;
     for (int panel = 0; panel < kPanels; ++panel) {
-        const double sample_radius = isco + (static_cast<double>(panel) + 0.5) * width;
+        const double sample_radius = inner_radius + (static_cast<double>(panel) + 0.5) * width;
         const double energy = IndependentSpecificEnergy(sample_radius, spin);
         const double angular_momentum = IndependentSpecificAngularMomentum(sample_radius, spin);
         const double angular_velocity = IndependentAngularVelocity(sample_radius, spin);
@@ -83,6 +82,10 @@ double IndependentPageThorneFluxShape(double radius, double spin) {
     const double correction =
         -IndependentAngularVelocityDerivative(radius, spin) * integral / (invariant * invariant);
     return correction / radius;
+}
+
+double IndependentPageThorneFluxShape(double radius, double spin) {
+    return IndependentPageThorneFluxShape(radius, AccretionDiskD::ComputeIsco(spin), spin);
 }
 
 double NormalisedOracleTemperature(double radius, double reference_radius, double spin) {
@@ -191,6 +194,33 @@ TEST(AnalyticValidationTest, PageThorneTemperatureHasZeroTorqueInnerEdge) {
     EXPECT_EQ(IndependentPageThorneFluxShape(isco, 0.0), 0.0);
     EXPECT_GT(disk.Temperature(1.05 * isco), 0.0);
     EXPECT_GT(disk.Temperature(1.5 * isco), disk.Temperature(1.05 * isco));
+}
+
+TEST(AnalyticValidationTest, TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge) {
+    constexpr double inner_radius = 10.0;
+    constexpr double spin = 0.0;
+    AccretionDiskD::Config config;
+    config.a_star = spin;
+    config.r_inner = inner_radius;
+    config.r_outer = 100.0;
+    AccretionDiskD disk(config);
+
+    EXPECT_DOUBLE_EQ(disk.InnerRadius(), inner_radius);
+    EXPECT_DOUBLE_EQ(disk.Flux(inner_radius), 0.0);
+    EXPECT_DOUBLE_EQ(disk.Flux(inner_radius * constants::disk::kInnerEdgeBuffer), 0.0);
+
+    constexpr double reference_radius = 1.5 * inner_radius;
+    const double reference_temperature = disk.Temperature(reference_radius);
+    ASSERT_GT(reference_temperature, 0.0);
+    for (const double radius_scale : {1.05, 1.2, 2.0, 4.0}) {
+        const double radius = radius_scale * inner_radius;
+        const double production = disk.Temperature(radius) / reference_temperature;
+        const double oracle =
+            std::pow(IndependentPageThorneFluxShape(radius, inner_radius, spin) /
+                         IndependentPageThorneFluxShape(reference_radius, inner_radius, spin),
+                     0.25);
+        EXPECT_NEAR(production / oracle, 1.0, 2.0e-5) << "r/M=" << radius;
+    }
 }
 
 TEST(AnalyticValidationTest, PageThorneFluxApproachesNewtonianCubicFalloff) {

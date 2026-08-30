@@ -169,18 +169,32 @@ inline void KerrMetricSecondDerivatives(double M, double a, const Vec4d& x,
 // KerrMetricD: Double-precision Kerr metric implementation
 //==============================================================================
 
+[[nodiscard]] inline bool IsRepresentedKerrMetricParameters(const MetricParamsD& params) {
+    return std::isfinite(params.M) && params.M >= 0.0 && std::isfinite(params.a) &&
+           std::abs(params.a) <= params.M && std::isfinite(params.Q) && params.Q == 0.0 &&
+           std::isfinite(params.Lambda) && params.Lambda == 0.0;
+}
+
 class KerrMetricD : public IMetricD {
   public:
     explicit KerrMetricD(const MetricParamsD& params)
         : mass_(params.M),
           spin_(params.a),
           charge_(params.Q),
-          r_plus_(params.rplus),
-          r_minus_(params.rminus) {
-        // Clamp spin to avoid naked singularity
-        if (std::abs(spin_) > 0.9999 * mass_) {
-            spin_ = std::copysign(0.9999 * mass_, spin_);
-        }
+          r_plus_(std::numeric_limits<double>::quiet_NaN()),
+          r_minus_(std::numeric_limits<double>::quiet_NaN()) {
+        // This oracle implements uncharged, asymptotically flat Kerr and its
+        // exact M=0,a=0 Minkowski limit.
+        // Rewriting spin would make its metric and characteristic radii name
+        // different spacetimes; accepting charge would be worse because the
+        // equations below contain no Q terms. Unsupported inputs decline.
+        const bool represented = IsRepresentedKerrMetricParameters(params);
+        SIRIUS_PRE(represented);
+        if (!represented) return;
+        const double discriminant = mass_ * mass_ - spin_ * spin_;
+        const double horizon_offset = std::sqrt(std::max(discriminant, 0.0));
+        r_plus_ = mass_ + horizon_offset;
+        r_minus_ = mass_ - horizon_offset;
     }
 
     KerrMetricD(double M = 1.0, double a = 0.0, double Q = 0.0)
@@ -559,9 +573,14 @@ class KerrMetricD : public IMetricD {
     }
 
     bool IsValid(const Vec4d& x) const override {
+        if (!std::isfinite(x.t) || !std::isfinite(x.r) || !std::isfinite(x.theta) ||
+            !std::isfinite(x.phi)) {
+            return false;
+        }
+
         // Check radial coordinate
-        if (x.r <= r_plus_ * 1.001) return false;  // Inside or at horizon
-        if (x.r > 1e6 * mass_) return false;       // Too far (numerical issues)
+        if (x.r <= r_plus_ * 1.001) return false;            // Inside or at horizon
+        if (mass_ > 0.0 && x.r > 1e6 * mass_) return false;  // Too far (numerical issues)
 
         // Check angular coordinate
         if (x.theta <= 1e-6 || x.theta >= std::numbers::pi - 1e-6) return false;  // At poles
@@ -574,24 +593,35 @@ class KerrMetricD : public IMetricD {
 
     double ErgosphereRadius(double theta) const override {
         // r_ergo = M + √(M² - a²cos²θ)
+        const bool represented =
+            mass_ > 0.0 && std::isfinite(theta) && theta >= 0.0 && theta <= std::numbers::pi;
+        SIRIUS_PRE(represented);
+        if (!represented) return std::numeric_limits<double>::quiet_NaN();
         double cos2th = std::cos(theta) * std::cos(theta);
-        return mass_ + std::sqrt(mass_ * mass_ - spin_ * spin_ * cos2th);
+        return mass_ + std::sqrt(std::max(mass_ * mass_ - spin_ * spin_ * cos2th, 0.0));
     }
 
     double IscoRadius() const override {
-        // ISCO for prograde orbit
-        if (std::abs(spin_) < 1e-10) return 6.0 * mass_;  // Schwarzschild
+        // Equatorial ISCO with the disk's fixed positive-phi orientation.
+        const bool represented = mass_ > 0.0;
+        SIRIUS_PRE(represented);
+        if (!represented) return std::numeric_limits<double>::quiet_NaN();
+        if (spin_ == 0.0) return 6.0 * mass_;  // Schwarzschild
 
         double a_star = spin_ / mass_;
         double Z1 =
             1 + std::cbrt(1 - a_star * a_star) * (std::cbrt(1 + a_star) + std::cbrt(1 - a_star));
         double Z2 = std::sqrt(3 * a_star * a_star + Z1 * Z1);
-        return mass_ * (3 + Z2 - std::sqrt((3 - Z1) * (3 + Z1 + 2 * Z2)));
+        double orientation_term = std::sqrt(std::max((3 - Z1) * (3 + Z1 + 2 * Z2), 0.0));
+        return mass_ * (3 + Z2 - std::copysign(orientation_term, spin_));
     }
 
     double PhotonSphereRadius() const override {
-        // Prograde photon sphere for Kerr
-        if (std::abs(spin_) < 1e-10) return 3.0 * mass_;  // Schwarzschild
+        // Equatorial photon orbit with the disk's fixed positive-phi orientation.
+        const bool represented = mass_ > 0.0;
+        SIRIUS_PRE(represented);
+        if (!represented) return std::numeric_limits<double>::quiet_NaN();
+        if (spin_ == 0.0) return 3.0 * mass_;  // Schwarzschild
 
         double a_star = spin_ / mass_;
         return 2 * mass_ * (1 + std::cos(2.0 / 3.0 * std::acos(-a_star)));

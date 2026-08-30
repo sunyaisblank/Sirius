@@ -6,6 +6,7 @@ set_tests_properties(
     AccretionDiskTest.ISCO_Schwarzschild
     AccretionDiskTest.NonFiniteConfigurationFailsClosedWithoutRewritingTheRequest
     AccretionDiskTest.OuterEdgeInsideDerivedIscoFailsClosed
+    AccretionDiskTest.ExplicitInnerEdgeCannotEnterTheUnstableOrbitDomain
     AccretionDiskTest.ShakuraSunyaevProfileHasZeroTorqueEdgeAndDeclaredScale
     AccretionDiskTest.ISCO_ExtremalKerr_Prograde
     AccretionDiskTest.ISCO_ExtremalKerr_Retrograde
@@ -52,6 +53,7 @@ set_tests_properties(
     AnalyticValidationTest.ISCONearExtremal
     AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature
     AnalyticValidationTest.PageThorneTemperatureHasZeroTorqueInnerEdge
+    AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge
     AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff
     AnalyticValidationTest.MalformedBeamEscapeDomainFailsClosed
     AnalyticValidationTest.MalformedIntegratorControlsFailClosedBeforeIntegration
@@ -293,6 +295,12 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    DiskCoordinateTest.CylindricalHeightAndPolarAngleRoundTripOnTheirOwnedDomain
+    DiskCoordinateTest.AxisAndNonFiniteCoordinatesDeclineInsteadOfBecomingEquatorial
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     DispatchGovernor.FirstBandIsTheInitialHeightClampedToTheTile
     DispatchGovernor.BandsNeverExceedRemainingRowsNorDropBelowOne
     DispatchGovernor.GrowthPerStepIsBoundedByTheCap
@@ -495,6 +503,7 @@ set_tests_properties(
     KerrMetricDTest.ChristoffelSymmetry
     KerrMetricDTest.HamiltonianNullGeodesic
     KerrMetricDTest.HorizonRadius
+    KerrMetricDTest.ExactExtremalParametersAreNotSilentlyRewritten
     KerrMetricDTest.ISCORadius
     KerrMetricDTest.PhotonSphereRadius
     KerrMetricDTest.ChristoffelMatchesFiniteDifferencesOfMetric
@@ -506,6 +515,7 @@ set_tests_properties(
     KerrTests.MetricMatchesIndependentCartesianKerrSchildForm
     KerrTests.ComputedRadiusSatisfiesTheDefiningOblateQuartic
     KerrTests.HorizonsAndCaptureFollowTheIndependentKerrPolynomial
+    KerrTests.ExactExtremalIscoIsNotClampedAndUndefinedDomainsDecline
     KerrTests.StaticLimitAuthorityIsAZeroOfProductionGtt
     KerrTests.ZeroSpinEqualsProductionSchwarzschild
     KerrTests.ClosedFormInverseMultipliesToIdentity

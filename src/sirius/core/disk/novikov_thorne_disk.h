@@ -82,8 +82,8 @@ class AccretionDiskD : public IDiskModel {
             config.inclination < 0.0 || config.inclination > std::numbers::pi) {
             return false;
         }
-        const double represented_inner =
-            config.r_inner > 0.0 ? config.r_inner : ComputeIsco(config.a_star);
+        const double isco = ComputeIsco(config.a_star);
+        const double represented_inner = config.r_inner > 0.0 ? config.r_inner : isco;
         const double mass_kg = config.M * constants::physical::kSolarMass;
         const double gravitational_parameter = constants::physical::kGravitation * mass_kg;
         const double gravitational_radius =
@@ -91,9 +91,10 @@ class AccretionDiskD : public IDiskModel {
             (constants::physical::kSpeedOfLight * constants::physical::kSpeedOfLight);
         const double accretion_rate =
             config.Mdot * constants::physical::kSolarMass / kSecondsPerJulianYear;
-        return config.r_outer > represented_inner && std::isfinite(mass_kg) &&
-               std::isfinite(gravitational_parameter) && std::isfinite(gravitational_radius) &&
-               gravitational_radius > 0.0 && std::isfinite(accretion_rate) && accretion_rate > 0.0;
+        return represented_inner >= isco && config.r_outer > represented_inner &&
+               std::isfinite(mass_kg) && std::isfinite(gravitational_parameter) &&
+               std::isfinite(gravitational_radius) && gravitational_radius > 0.0 &&
+               std::isfinite(accretion_rate) && accretion_rate > 0.0;
     }
 
     AccretionDiskD() : config_() { Init(); }
@@ -203,9 +204,11 @@ class AccretionDiskD : public IDiskModel {
     }
 
     // Full Page & Thorne (1974) relativistic flux, using 16-point Gauss-Legendre
-    // quadrature of the flux integral over [r_ISCO, r].
+    // quadrature of the flux integral over [r_inner, r]. The default inner edge
+    // is the ISCO. A larger explicit edge represents a torque-free truncated
+    // disk; an edge inside the ISCO is rejected by IsRepresentedConfig.
     double FullPageThorneFlux(double r) const {
-        if (r <= r_isco_ || r > r_outer_) return 0;
+        if (r <= r_inner_ || r > r_outer_) return 0;
 
         double M = 1.0;  // Working in units of M = 1.
         double a = a_;
@@ -228,9 +231,9 @@ class AccretionDiskD : public IDiskModel {
             0.1894506104550685, 0.1826034150449236, 0.1691565193950025, 0.1495959888165767,
             0.1246289712555339, 0.0951585116824928, 0.0622535239386479, 0.0271524594117541};
 
-        // Map [-1, 1] -> [r_ISCO, r].
-        double half_width = 0.5 * (r - r_isco_);
-        double midpoint = 0.5 * (r + r_isco_);
+        // Map [-1, 1] -> [r_inner, r].
+        double half_width = 0.5 * (r - r_inner_);
+        double midpoint = 0.5 * (r + r_inner_);
 
         double integral = 0;
         for (int i = 0; i < 16; ++i) {
@@ -280,12 +283,12 @@ class AccretionDiskD : public IDiskModel {
 
         double r_M = r;  // r is in units of M.
 
-        // Must be outside the ISCO for emission.
-        if (r_M <= r_isco_) return 0;
+        // Must be outside the declared stable-orbit inner edge for emission.
+        if (r_M <= r_inner_) return 0;
 
         // Full Page-Thorne everywhere outside the inner-edge buffer. A numerical
         // failure must not substitute a different relativistic correction.
-        if (r_M > r_isco_ * constants::disk::kInnerEdgeBuffer) {
+        if (r_M > r_inner_ * constants::disk::kInnerEdgeBuffer) {
             const double F_PT = FullPageThorneFlux(r);
             SIRIUS_ASSERT(std::isfinite(F_PT) && F_PT > 0.0);
             return std::isfinite(F_PT) && F_PT > 0.0 ? F_PT : 0.0;

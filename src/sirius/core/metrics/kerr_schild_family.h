@@ -480,25 +480,22 @@ inline double KerrSchildFamily::ErgosphereRadius(double theta) const {
 }
 
 inline double KerrSchildFamily::IscoRadius() const {
-    SIRIUS_PRE(params_.Lambda == 0.0);
-    if (params_.Lambda != 0.0) return std::numeric_limits<double>::quiet_NaN();
-
     double M = params_.M;
     double a = params_.a;
     double Q = params_.Q;
 
+    const bool represented = params_.Lambda == 0.0 && Q == 0.0 && M > 0.0 && std::isfinite(M) &&
+                             std::isfinite(a) && std::abs(a) <= M;
+    SIRIUS_PRE(represented);
+    if (!represented) return std::numeric_limits<double>::quiet_NaN();
+
     // Schwarzschild (a = 0, Q = 0): r_ISCO = 6M.
-    if (std::abs(a) < 1e-12 && std::abs(Q) < 1e-12) {
+    if (a == 0.0) {
         return 6.0 * M;
     }
 
-    // The Page-Thorne implementation is an uncharged Kerr model. Charged ISCOs
-    // require a distinct marginal-stability solve and must not inherit Kerr.
-    SIRIUS_PRE(std::abs(Q) < 1e-12);
-
     // Kerr (Q = 0): Bardeen-Press-Teukolsky closed form, exact.
     double a_star = std::abs(a / M);
-    if (a_star > 0.9999) a_star = 0.9999;
 
     double Z1 =
         1 + std::cbrt(1 - a_star * a_star) * (std::cbrt(1 + a_star) + std::cbrt(1 - a_star));

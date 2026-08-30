@@ -6,6 +6,7 @@
 
 #include <array>
 #include <cmath>
+#include <limits>
 #include <numbers>
 
 namespace sirius::test {
@@ -96,6 +97,20 @@ TEST(KerrTests, HorizonsAndCaptureFollowTheIndependentKerrPolynomial) {
     };
     EXPECT_TRUE(metric.InsideCaptureSurface(equatorial_position(outer * 0.999), 0.0));
     EXPECT_FALSE(metric.InsideCaptureSurface(equatorial_position(outer * 1.001), 0.0));
+}
+
+TEST(KerrTests, ExactExtremalIscoIsNotClampedAndUndefinedDomainsDecline) {
+    KerrSchildFamily prograde(KerrSchildParams::Kerr(1.0, 1.0));
+    KerrSchildFamily retrograde(KerrSchildParams::Kerr(1.0, -1.0));
+    EXPECT_DOUBLE_EQ(prograde.IscoRadius(), 1.0);
+    EXPECT_DOUBLE_EQ(retrograde.IscoRadius(), 9.0);
+
+    KerrSchildFamily super_extremal(KerrSchildParams::Kerr(1.0, 1.01));
+    KerrSchildFamily charged(KerrSchildParams::KerrNewman(1.0, 0.5, 0.2));
+    KerrSchildFamily minkowski(KerrSchildParams::Minkowski());
+    EXPECT_DEATH((void)super_extremal.IscoRadius(), "precondition.*enforced, terminating");
+    EXPECT_DEATH((void)charged.IscoRadius(), "precondition.*enforced, terminating");
+    EXPECT_DEATH((void)minkowski.IscoRadius(), "precondition.*enforced, terminating");
 }
 
 TEST(KerrTests, StaticLimitAuthorityIsAZeroOfProductionGtt) {

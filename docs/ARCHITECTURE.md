@@ -153,7 +153,8 @@ volumetric transfer, and temporal disk blur do not cross this capability
 boundary.
 
 The relativistic thin-disk default and physical parity authority remains the
-zero-torque Page-Thorne profile. `ShakuraSunyaev` is an explicit, narrower
+zero-torque Page-Thorne profile integrated from the declared stable-orbit
+inner edge, which must be at or outside the ISCO. `ShakuraSunyaev` is an explicit, narrower
 substitution: CPU and Slang evaluate the Newtonian zero-torque shape
 $F(r)\propto r^{-3}[1-\sqrt{r_\mathrm{in}/r}]$ and define the operator
 temperature at $1.5r_\mathrm{in}$. The shared normalisation and CPU/Slang

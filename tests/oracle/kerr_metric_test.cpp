@@ -9,6 +9,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <limits>
 #include <numbers>
 
 using namespace sirius::oracle;
@@ -175,6 +176,40 @@ TEST_F(KerrMetricDTest, HorizonRadius) {
     // Kerr a=0.999: r_+ → 1 as a → 1
     double expected_extreme = 1.0 + std::sqrt(1 - 0.999 * 0.999);
     EXPECT_NEAR(kerr_extreme->HorizonRadius(), expected_extreme, tolerance);
+}
+
+TEST_F(KerrMetricDTest, ExactExtremalParametersAreNotSilentlyRewritten) {
+    KerrMetricD extremal(1.0, 1.0);
+    EXPECT_DOUBLE_EQ(extremal.mass(), 1.0);
+    EXPECT_DOUBLE_EQ(extremal.spin(), 1.0);
+    EXPECT_DOUBLE_EQ(extremal.charge(), 0.0);
+    EXPECT_DOUBLE_EQ(extremal.HorizonRadius(), 1.0);
+    EXPECT_DOUBLE_EQ(extremal.InnerHorizonRadius(), 1.0);
+    EXPECT_DOUBLE_EQ(extremal.IscoRadius(), 1.0);
+    EXPECT_DOUBLE_EQ(extremal.PhotonSphereRadius(), 1.0);
+
+    KerrMetricD retrograde_extremal(1.0, -1.0);
+    EXPECT_DOUBLE_EQ(retrograde_extremal.HorizonRadius(), 1.0);
+    EXPECT_DOUBLE_EQ(retrograde_extremal.IscoRadius(), 9.0);
+    EXPECT_DOUBLE_EQ(retrograde_extremal.PhotonSphereRadius(), 4.0);
+
+    KerrMetricD flat_limit(0.0, 0.0);
+    EXPECT_DOUBLE_EQ(flat_limit.mass(), 0.0);
+    EXPECT_DOUBLE_EQ(flat_limit.spin(), 0.0);
+    EXPECT_DOUBLE_EQ(flat_limit.HorizonRadius(), 0.0);
+    EXPECT_TRUE(flat_limit.IsValid(Vec4d(0.0, 10.0, std::numbers::pi / 2.0, 0.0)));
+    EXPECT_FALSE(flat_limit.IsValid(
+        Vec4d(std::numeric_limits<double>::quiet_NaN(), 10.0, std::numbers::pi / 2.0, 0.0)));
+    EXPECT_DEATH((void)flat_limit.ErgosphereRadius(std::numbers::pi / 2),
+                 "precondition.*enforced, terminating");
+    EXPECT_DEATH((void)flat_limit.IscoRadius(), "precondition.*enforced, terminating");
+    EXPECT_DEATH((void)flat_limit.PhotonSphereRadius(), "precondition.*enforced, terminating");
+
+    EXPECT_DEATH((void)KerrMetricD(1.0, 1.0001), "precondition.*enforced, terminating");
+    EXPECT_DEATH((void)KerrMetricD(1.0, 0.5, 0.1), "precondition.*enforced, terminating");
+    EXPECT_DEATH((void)KerrMetricD(-1.0, 0.0), "precondition.*enforced, terminating");
+    EXPECT_DEATH((void)KerrMetricD(1.0, std::numeric_limits<double>::quiet_NaN()),
+                 "precondition.*enforced, terminating");
 }
 
 //==============================================================================

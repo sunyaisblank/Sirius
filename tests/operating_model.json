@@ -58,10 +58,11 @@
       "required": true,
       "verification": "build_gated",
       "profiles": ["cpu", "vulkan"],
-      "requirement": "The physical relativistic thin-disk default uses the zero-torque Page-Thorne flux with invariant circular-emitter frequency transfer exactly once. An explicit ShakuraSunyaev request instead uses the Newtonian zero-torque flux shape r^-3[1-sqrt(r_in/r)], normalised at 1.5 r_in, without claiming relativistic or alpha-disk vertical structure. The bounded grey volume uses the selected declared radial profile under its phenomenological closure, and Doppler suppression is identified and measured as a ZAMO diagnostic substitution rather than physical disk emission.",
+      "requirement": "The physical relativistic thin-disk default uses the zero-torque Page-Thorne flux integrated from a declared stable-orbit inner edge at or outside the ISCO, with invariant circular-emitter frequency transfer exactly once. An explicit ShakuraSunyaev request instead uses the Newtonian zero-torque flux shape r^-3[1-sqrt(r_in/r)], normalised at 1.5 r_in, without claiming relativistic or alpha-disk vertical structure. The bounded grey volume uses the selected declared radial profile under its phenomenological closure, and Doppler suppression is identified and measured as a ZAMO diagnostic substitution rather than physical disk emission.",
       "capability_dependencies": [],
       "evidence": [
         {"kind": "gtest", "name": "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature"},
+        {"kind": "gtest", "name": "AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge"},
         {"kind": "gtest", "name": "AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff"},
         {"kind": "gtest", "name": "SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction"},
         {"kind": "gtest", "name": "SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere"},
@@ -291,6 +292,8 @@
     {
       "id": "physics_oracles_and_near_extremal_boundary",
       "evidence": [
+        {"kind": "gtest", "name": "KerrTests.ExactExtremalIscoIsNotClampedAndUndefinedDomainsDecline"},
+        {"kind": "gtest", "name": "KerrMetricDTest.ExactExtremalParametersAreNotSilentlyRewritten"},
         {"kind": "gtest", "name": "ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p"},
         {"kind": "gtest", "name": "VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p"},
         {"kind": "ctest", "name": "OperationalP1.NearExtremalBurnIn"},
@@ -321,6 +324,8 @@
     {
       "id": "page_thorne_and_volumetric_transfer",
       "evidence": [
+        {"kind": "gtest", "name": "DiskCoordinateTest.AxisAndNonFiniteCoordinatesDeclineInsteadOfBecomingEquatorial"},
+        {"kind": "gtest", "name": "DiskCoordinateTest.CylindricalHeightAndPolarAngleRoundTripOnTheirOwnedDomain"},
         {"kind": "gtest", "name": "CoordinateTransformTests.KerrDiskRadiusIsSpheroidalNotCylindrical"},
         {"kind": "gtest", "name": "KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel"},
         {"kind": "gtest", "name": "GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile"},

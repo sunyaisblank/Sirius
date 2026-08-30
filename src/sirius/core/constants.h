@@ -139,7 +139,9 @@ namespace disk {
 // |theta - pi/2| below this defines the thin-disk plane (~0.5 degrees).
 inline constexpr double kEquatorialTol = 0.01;
 
-// Inner emission edge relative to the ISCO.
+// Numerical guard immediately outside the declared zero-torque inner edge.
+// The physical default declares the ISCO; a represented truncated disk may
+// declare a larger stable-orbit edge, but never an edge inside the ISCO.
 inline constexpr double kInnerEdgeBuffer = 1.001;
 
 // Operator disk-temperature scale is the effective temperature at this

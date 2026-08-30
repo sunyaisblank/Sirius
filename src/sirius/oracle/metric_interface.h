@@ -144,26 +144,10 @@ struct MetricParamsD {
     double Q;       // Charge parameter
     double Lambda;  // Cosmological constant
 
-    // Derived quantities (computed from parameters)
-    double rs;      // Schwarzschild radius 2M
-    double rplus;   // Outer horizon radius
-    double rminus;  // Inner horizon radius
-
-    MetricParamsD() : M(1.0), a(0), Q(0), Lambda(0), rs(2.0), rplus(2.0), rminus(0) {}
+    MetricParamsD() : M(1.0), a(0), Q(0), Lambda(0) {}
 
     MetricParamsD(double mass, double spin = 0, double charge = 0)
-        : M(mass), a(spin), Q(charge), Lambda(0) {
-        rs = 2.0 * M;
-        // r± = M ± √(M² - a² - Q²)
-        double discriminant = M * M - a * a - Q * Q;
-        if (discriminant >= 0) {
-            rplus = M + std::sqrt(discriminant);
-            rminus = M - std::sqrt(discriminant);
-        } else {
-            // Naked singularity (invalid for physical black holes)
-            rplus = rminus = 0;
-        }
-    }
+        : M(mass), a(spin), Q(charge), Lambda(0) {}
 };
 
 }  // namespace sirius::oracle

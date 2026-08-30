@@ -89,6 +89,7 @@ SUITE_LABELS = {
     "GeodesicPathTests": MANDATORY,
     "BeamPropagationTest": MANDATORY,
     "AccretionDiskTest": MANDATORY,
+    "DiskCoordinateTest": MANDATORY,
     "TurbulenceTest": CORRECTNESS,
     "CoronaConfigTests": CORRECTNESS,
     "CoronaEmissivityTests": CORRECTNESS,
