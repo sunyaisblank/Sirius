@@ -147,6 +147,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr",
     },
     "E1": {
+        "gtest:ConfigValidation.MetricMassAndObserverCoordinateRadiusAreIdentityAware",
         "gtest:ConfigValidation.DiskRequestDeclinesForEveryMetricWithoutAnEmissionModel",
         "gtest:MetricRegistryTests.BackendSupportMatchesImplementations",
         "gtest:MetricRegistryTests.EveryCanonicalNameParsesToItsOwnId",
@@ -206,8 +207,8 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "104aa322e48c7ba24bd5a234e090c584d1a70436c282ba5b489bcb5b12f3b361",
-    "required_dimensions": "7e141b19d0f91b356415fdf07899ffca3fd4d5f47f5d478ae05d12be454ad3e1",
+    "acceptance_criteria": "c304fec87cdffe8c92e6d921311b9202c5739e5e989431e39e5d037393b06d20",
+    "required_dimensions": "72ae3c5dba028b7808f98bb874621ae5e35a192925b5de8e3e04ee81cf5ae7ab",
     "capability_contracts": "414821dc75cfd02b01ac055522c21975ea9d77efd889880744a9af7ed4d37e8f",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}

@@ -228,7 +228,7 @@ std::string ViewCommand::Usage() const {
        << "  --width <w>         Window width (default: 1920)\n"
        << "  --height <h>        Window height (default: 1080)\n"
        << "  --spin <a>          Black hole spin a/M (default: 0)\n"
-       << "  --distance <r>      Observer distance (default: 50M)\n"
+       << "  --distance <r>      Observer coordinate radius (5M-1000M; default: 50)\n"
        << "  --inclination <deg> Observer inclination (default: 90)\n"
        << "  --fov <deg>         Field of view (default: 60)\n"
        << "  --no-disk           Disable accretion disk\n"
@@ -534,7 +534,8 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
         std::ostringstream status;
         const int displayed_level =
             std::min(refinement.current_level + 1, view_config.refinement_levels);
-        status << "Sirius - r=" << std::fixed << std::setprecision(1) << camera.r << "M, Level "
+        status << "Sirius - r=" << std::fixed << std::setprecision(1) << camera.r
+               << " (r/M=" << camera.r / view_config.black_hole_mass << "), Level "
                << displayed_level << "/" << view_config.refinement_levels << " ("
                << refinement.current_width << "x" << refinement.current_height << ")";
         if (refinement.complete) {

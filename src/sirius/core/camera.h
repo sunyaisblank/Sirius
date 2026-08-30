@@ -50,7 +50,7 @@ struct CameraConfig {
     float fov = 60.0f;             // Field of view (degrees)
     float focal_length = 50.0f;    // Focal length (mm-equivalent, for ThinLens)
     float aperture = 2.8f;         // f-number (for depth of field)
-    float focus_distance = 50.0f;  // Focus distance (M)
+    float focus_distance = 50.0f;  // Focus distance in geometric coordinate units.
 
     // Image properties
     int width = 1920;
@@ -228,7 +228,7 @@ class ThinLensCamera : public ICamera {
         // geometric M units and has no physical mass-to-millimetre scale, so a
         // 50 mm-equivalent lens defines one virtual lens unit. This preserves
         // the f-number and focal-length controls without mixing raw millimetres
-        // directly with a focus distance measured in M.
+        // directly with a focus distance measured in geometric coordinates.
         constexpr float kReferenceFocalLengthMillimetres = 50.0f;
         float aperture_radius =
             (config_.focal_length / kReferenceFocalLengthMillimetres) / (2.0f * config_.aperture);

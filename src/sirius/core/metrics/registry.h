@@ -33,6 +33,11 @@ enum class MetricId {
     Alcubierre,
 };
 
+inline constexpr double kDefaultMorrisThorneThroatRadius = 1.0;
+inline constexpr double kDefaultAlcubierreWarpVelocity = 0.5;
+inline constexpr double kDefaultAlcubierreBubbleRadius = 1.0;
+inline constexpr double kDefaultAlcubierreBubbleSigma = 0.5;
+
 // Registry row: identity, spellings, parameters, backend support.
 struct MetricInfo {
     MetricId id;
@@ -68,6 +73,61 @@ enum class DiskSupport {
     }
     SIRIUS_ASSERT(false);
     return DiskSupport::Unsupported;
+}
+
+// Whether M is an actual parameter of this spacetime identity. This authority
+// is shared by operator validation, typed-session validation, and numerical
+// trace scaling so an unrelated value cannot silently alter a metric that has
+// no mass parameter.
+[[nodiscard]] constexpr bool MetricUsesMass(MetricId id) noexcept {
+    switch (id) {
+        case MetricId::Schwarzschild:
+        case MetricId::Kerr:
+        case MetricId::ReissnerNordstrom:
+        case MetricId::KerrNewman:
+        case MetricId::SchwarzschildDeSitter:
+            return true;
+        case MetricId::Minkowski:
+        case MetricId::DeSitter:
+        case MetricId::MorrisThorne:
+        case MetricId::Alcubierre:
+            return false;
+    }
+    SIRIUS_ASSERT(false);
+    return false;
+}
+
+// Identity compatibility for parameters whose schema defaults must remain
+// populated even when their owning exotic metric is inactive. A canonical
+// inactive default is harmless; changing an irrelevant value is an operator
+// error rather than a silently ignored request.
+[[nodiscard]] constexpr std::optional<std::string_view> MetricSpecificParameterIssue(
+    MetricId id, double throat_radius, bool one_sheet_topology, double warp_velocity,
+    double bubble_radius, double bubble_sigma) noexcept {
+    switch (id) {
+        case MetricId::Minkowski:
+        case MetricId::Schwarzschild:
+        case MetricId::Kerr:
+        case MetricId::ReissnerNordstrom:
+        case MetricId::KerrNewman:
+        case MetricId::DeSitter:
+        case MetricId::SchwarzschildDeSitter:
+        case MetricId::MorrisThorne:
+        case MetricId::Alcubierre:
+            break;
+        default:
+            return "unknown metric identity";
+    }
+    if (id != MetricId::MorrisThorne &&
+        (throat_radius != kDefaultMorrisThorneThroatRadius || !one_sheet_topology)) {
+        return "throat radius and wormhole topology apply only to Morris-Thorne";
+    }
+    if (id != MetricId::Alcubierre && (warp_velocity != kDefaultAlcubierreWarpVelocity ||
+                                       bubble_radius != kDefaultAlcubierreBubbleRadius ||
+                                       bubble_sigma != kDefaultAlcubierreBubbleSigma)) {
+        return "warp velocity, bubble radius, and bubble sigma apply only to Alcubierre";
+    }
+    return std::nullopt;
 }
 
 [[nodiscard]] constexpr const char* ToString(DiskSupport support) noexcept {

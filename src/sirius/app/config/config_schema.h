@@ -4,6 +4,8 @@
 // the Sirius style guide; the explicit JSON codec preserves the established
 // camelCase file format without leaking those legacy spellings downstream.
 
+#include "sirius/core/metrics/registry.h"
+
 #include <nlohmann/json.hpp>
 
 #include <numbers>
@@ -22,21 +24,21 @@ struct RenderConfig {
 
 struct MetricConfig {
     std::string name = "Schwarzschild";
-    double mass = 1.0;
+    double mass = 1.0;  // Geometric coordinate length; zero when M is not a parameter.
     double spin = 0.0;
     double charge = 0.0;
     double cosmological_constant = 0.0;
     std::string temperature_model = "NovikovThorne";
     float disk_temperature = 50000.0f;
-    double throat_radius = 1.0;
+    double throat_radius = core::kDefaultMorrisThorneThroatRadius;
     std::string wormhole_topology = "OneSheetCapture";
-    double warp_velocity = 0.5;
-    double bubble_radius = 1.0;
-    double bubble_sigma = 0.5;
+    double warp_velocity = core::kDefaultAlcubierreWarpVelocity;
+    double bubble_radius = core::kDefaultAlcubierreBubbleRadius;
+    double bubble_sigma = core::kDefaultAlcubierreBubbleSigma;
 };
 
 struct ObserverConfig {
-    double distance = 50.0;
+    double distance = 50.0;  // Coordinate radius r, not the dimensionless ratio r/M.
     double inclination = 90.0;
     double azimuth = 0.0;
     double fov = 60.0;
@@ -46,7 +48,7 @@ struct ObserverConfig {
     std::string lens_model = "Pinhole";
     float focal_length = 50.0f;
     float aperture = 2.8f;
-    float focus_distance = 50.0f;
+    float focus_distance = 50.0f;  // Geometric coordinate length from the camera.
 };
 
 struct PostProcessConfig {

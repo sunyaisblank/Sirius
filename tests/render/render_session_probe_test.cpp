@@ -365,6 +365,12 @@ TEST(RenderSessionProbe, PolarisedAndTwoSheetRequestsDeclineAtTheTypedBoundary) 
     config.enable_disk = false;
     config.metric_id = sirius::core::MetricId::MorrisThorne;
     config.black_hole_spin = 0.0;
+    config.black_hole_mass = 1.0;
+    config.wormhole_topology = sirius::render::WormholeTopology::OneSheetCapture;
+    EXPECT_EQ(sirius::render::SessionConfigIssue(config),
+              "metrics without a mass parameter require mass to be zero");
+
+    config.black_hole_mass = 0.0;
     config.wormhole_topology = sirius::render::WormholeTopology::TwoSheet;
     EXPECT_EQ(sirius::render::SessionConfigIssue(config),
               "two-sheet wormhole continuation and a second environment are not represented");
@@ -472,6 +478,7 @@ TEST(RenderSessionProbe, CpuMorrisThorneRenderCompletes) {
     cfg.tile_size = 64;
     cfg.enable_parallel_rendering = false;
     cfg.metric_id = sirius::core::MetricId::MorrisThorne;
+    cfg.black_hole_mass = 0.0;
     cfg.enable_disk = false;
     // Throat large enough that its shadow spans several pixels at 64x64 with
     // the default observer distance; a b0 = 1 throat subtends ~1 pixel and
@@ -548,8 +555,10 @@ TEST(RenderSessionProbe, EveryRegisteredCpuMetricCompletesAFrame) {
                 cfg.cosmological_constant = 0.001;
                 break;
             case sirius::core::MetricId::Schwarzschild:
+                break;
             case sirius::core::MetricId::MorrisThorne:
             case sirius::core::MetricId::Alcubierre:
+                cfg.black_hole_mass = 0.0;
                 break;
         }
 

@@ -120,11 +120,12 @@
       "required": true,
       "verification": "build_gated",
       "profiles": ["cpu", "vulkan"],
-      "requirement": "The single registry exposes nine CPU-renderable spacetime families, advertises only implemented backend support, and rejects disk semantics absent from a metric.",
+      "requirement": "The single registry exposes nine CPU-renderable spacetime families, advertises only implemented backend support, rejects parameters absent from a metric, preserves observer distance as a geometric coordinate radius with identity-aware mass scaling, and rejects disk semantics absent from a metric.",
       "capability_dependencies": [],
       "evidence": [
         {"kind": "gtest", "name": "MetricRegistryTests.EveryCanonicalNameParsesToItsOwnId"},
         {"kind": "gtest", "name": "MetricRegistryTests.BackendSupportMatchesImplementations"},
+        {"kind": "gtest", "name": "ConfigValidation.MetricMassAndObserverCoordinateRadiusAreIdentityAware"},
         {"kind": "gtest", "name": "RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame"},
         {"kind": "gtest", "name": "ConfigValidation.DiskRequestDeclinesForEveryMetricWithoutAnEmissionModel"},
         {"kind": "gtest", "name": "RenderSessionProbe.CpuMorrisThorneRenderCompletes"},
@@ -217,6 +218,7 @@
       "id": "configuration_and_input_boundary",
       "evidence": [
         {"kind": "gtest", "name": "ConfigLoading.UnknownNestedFieldDeclines"},
+        {"kind": "gtest", "name": "ConfigValidation.MetricMassAndObserverCoordinateRadiusAreIdentityAware"},
         {"kind": "gtest", "name": "RenderCommandParse.TrailingNumericGarbageRejected"},
         {"kind": "gtest", "name": "CommandRouter.UnknownCommandReturnsFailure"},
         {"kind": "gtest", "name": "RenderSessionProbe.ConfigurationConversionPreservesObserverAndDiskControls"}
@@ -360,6 +362,7 @@
     {
       "id": "output_encoding",
       "evidence": [
+        {"kind": "gtest", "name": "RenderSessionProbe.GeometricMetadataNeverInventsPhysicalLengthUnits"},
         {"kind": "gtest", "name": "PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding"},
         {"kind": "gtest", "name": "PNGWriterTest.NonFiniteRadianceIsRejected"},
         {"kind": "gtest", "name": "EXRRoundTripTests.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode"},
@@ -388,6 +391,7 @@
       "id": "metric_catalogue_and_declines",
       "evidence": [
         {"kind": "gtest", "name": "MetricRegistryTests.EveryCanonicalNameParsesToItsOwnId"},
+        {"kind": "gtest", "name": "ConfigValidation.MetricMassAndObserverCoordinateRadiusAreIdentityAware"},
         {"kind": "gtest", "name": "KottlerHorizonTests.ExactRootsSeparateBlackHoleCaptureFromCosmologicalHorizon"},
         {"kind": "gtest", "name": "KottlerHorizonTests.PureDeSitterHasOnlyACosmologicalHorizon"},
         {"kind": "gtest", "name": "ConfigValidation.DeSitterRequestsEnforcePositiveLambdaAndSubNariaiBlackHole"},

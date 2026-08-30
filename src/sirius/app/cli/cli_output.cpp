@@ -3,6 +3,7 @@
 #include "sirius/app/cli/cli_output.h"
 
 #include "sirius/app/config/config_schema.h"
+#include "sirius/core/metrics/registry.h"
 
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
@@ -203,7 +204,12 @@ void PrintConfig(const SiriusConfig& config) {
 
     rows.push_back({"Metric Settings", "", true});
     rows.push_back({"Metric", config.metric.name, false});
-    rows.push_back({"Mass (M)", std::to_string(config.metric.mass), false});
+    const auto metric_id = core::ParseMetricName(config.metric.name);
+    const bool uses_mass = metric_id.has_value() && core::MetricUsesMass(*metric_id);
+    rows.push_back(
+        {"Metric mass",
+         uses_mass ? std::to_string(config.metric.mass) + " coordinate units" : "not applicable",
+         false});
     {
         std::ostringstream spin_str;
         spin_str << std::fixed << std::setprecision(3) << config.metric.spin;
@@ -213,7 +219,9 @@ void PrintConfig(const SiriusConfig& config) {
     rows.push_back({"Observer Settings", "", true});
     {
         std::ostringstream dist;
-        dist << std::fixed << std::setprecision(1) << config.observer.distance << " M";
+        dist << std::fixed << std::setprecision(1) << config.observer.distance
+             << " coordinate units";
+        if (uses_mass) dist << " (r/M=" << config.observer.distance / config.metric.mass << ")";
         rows.push_back({"Distance", dist.str(), false});
     }
     {

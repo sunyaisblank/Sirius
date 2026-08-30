@@ -115,11 +115,11 @@ struct SessionConfig {
 
     // Spacetime identity and parameters; the id comes from the core registry.
     core::MetricId metric_id = core::MetricId::Schwarzschild;
-    double black_hole_mass = 1.0;
+    double black_hole_mass = 1.0;  // Geometric coordinate length; zero if M is not a parameter.
     double black_hole_spin = 0.0;
-    double black_hole_charge = 0.0;      // Q/M (Reissner-Nordstrom, Kerr-Newman).
-    double cosmological_constant = 0.0;  // Lambda (de Sitter family, spin = 0 only).
-    double observer_distance = 50.0;
+    double black_hole_charge = 0.0;        // Q/M (Reissner-Nordstrom, Kerr-Newman).
+    double cosmological_constant = 0.0;    // Lambda (de Sitter family, spin = 0 only).
+    double observer_distance = 50.0;       // Coordinate radius r, not the ratio r/M.
     double observer_inclination = 1.5708;  // 90 degrees.
     double observer_azimuth = 0.0;
     float camera_fov = 60.0f;
@@ -133,7 +133,7 @@ struct SessionConfig {
     core::LensType lens_type = core::LensType::Pinhole;
     float camera_focal_length = 50.0f;
     float camera_aperture = 2.8f;
-    float camera_focus_distance = 50.0f;
+    float camera_focus_distance = 50.0f;  // Geometric coordinate length from the camera.
 
     // Disk temperature model.
     DiskTemperatureModel temperature_model = DiskTemperatureModel::NovikovThorne;
@@ -146,11 +146,11 @@ struct SessionConfig {
     bool doppler_beaming = true;
 
     // Exotic metric parameters.
-    double throat_radius = 1.0;  // Morris-Thorne b0.
+    double throat_radius = core::kDefaultMorrisThorneThroatRadius;  // Morris-Thorne b0.
     WormholeTopology wormhole_topology = WormholeTopology::OneSheetCapture;
-    double warp_velocity = 0.5;  // Alcubierre vs.
-    double bubble_radius = 1.0;  // Alcubierre R.
-    double bubble_sigma = 0.5;   // Alcubierre sigma.
+    double warp_velocity = core::kDefaultAlcubierreWarpVelocity;  // Alcubierre vs.
+    double bubble_radius = core::kDefaultAlcubierreBubbleRadius;  // Alcubierre R.
+    double bubble_sigma = core::kDefaultAlcubierreBubbleSigma;    // Alcubierre sigma.
 
     // Post-processing (cinematic defaults).
     core::TonemapType tonemapper = core::TonemapType::Aces;  // Display transform (PPM/PNG).

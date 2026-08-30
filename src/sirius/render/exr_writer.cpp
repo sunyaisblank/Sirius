@@ -45,8 +45,9 @@ AttributeStorage BuildAttributes(const EXRMetadata& meta) {
         std::to_string(meta.render_time_seconds),
         meta.color_space,
         meta.chromaticities,
+        "geometric-coordinate",
     };
-    constexpr std::array<const char*, 11> names = {
+    constexpr std::array<const char*, 12> names = {
         "siriusSoftware",
         "siriusCamera",
         "siriusMetric",
@@ -58,6 +59,7 @@ AttributeStorage BuildAttributes(const EXRMetadata& meta) {
         "siriusRenderTimeSeconds",
         "siriusColorSpace",
         "siriusChromaticities",
+        "siriusLengthUnit",
     };
     storage.attributes.resize(names.size());
     for (std::size_t i = 0; i < names.size(); ++i) {

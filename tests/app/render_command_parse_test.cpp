@@ -215,14 +215,30 @@ TEST(RenderCommandParse, UnexpectedPositionalArgumentRejected) {
     EXPECT_EQ(cmd.Execute({"unclaimed-scene-name"}, globals, config), 1);
 }
 
-TEST(RenderCommandParse, ExplicitMassOnMasslessMetricIsNotSilentlyDiscarded) {
+TEST(RenderCommandParse, MetricOverrideDefaultsMassWithoutDiscardingExplicitInput) {
+    GlobalOptions globals;
+    for (const char* metric : {"Minkowski", "Morris-Thorne", "Alcubierre"}) {
+        RenderCommand cmd;
+        SiriusConfig config = SiriusConfig::Defaults();
+        EXPECT_NE(cmd.Execute({"--cpu", "--metric", metric, "--mass", "1", "--no-disk", "--width",
+                               "128", "--height", "128", "--samples", "1"},
+                              globals, config),
+                  0)
+            << metric;
+        EXPECT_DOUBLE_EQ(config.metric.mass, 1.0) << metric;
+    }
+
     RenderCommand cmd;
     SiriusConfig config = SiriusConfig::Defaults();
-    GlobalOptions globals;
-    EXPECT_NE(cmd.Execute({"--cpu", "--metric", "Minkowski", "--mass", "1", "--no-disk", "--width",
-                           "128", "--height", "128", "--samples", "1"},
-                          globals, config),
-              0);
+    EXPECT_EQ(
+        cmd.Execute({"--metric", "Morris-Thorne", "--no-disk", "--width", "64"}, globals, config),
+        1);
+    EXPECT_DOUBLE_EQ(config.metric.mass, 0.0);
+
+    config = SiriusConfig::Defaults();
+    config.metric.mass = 10.0;
+    EXPECT_EQ(cmd.Execute({"--metric", "Kerr", "--width", "64"}, globals, config), 1);
+    EXPECT_DOUBLE_EQ(config.metric.mass, 10.0);
 }
 
 TEST(ViewCommandOperational, StrictParsingAndSessionProjection) {

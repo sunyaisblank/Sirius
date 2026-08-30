@@ -190,20 +190,85 @@ TEST(ConfigValidation, CameraWorldlineAndLensAreValidated) {
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
 }
 
-TEST(ConfigValidation, MasslessMetricUsesAUnitObserverDistanceScale) {
-    SiriusConfig config = SiriusConfig::Defaults();
-    config.metric.name = "Minkowski";
-    config.metric.mass = 0.0;
-    config.metric.spin = 0.0;
-    config.disk_enabled = false;
-    EXPECT_TRUE(ConfigLoader::Validate(config).empty());
+TEST(ConfigValidation, MetricMassAndObserverCoordinateRadiusAreIdentityAware) {
+    for (const std::string_view name : {"Minkowski", "de-Sitter", "Morris-Thorne", "Alcubierre"}) {
+        SiriusConfig config = SiriusConfig::Defaults();
+        config.metric.name = name;
+        config.metric.mass = 0.0;
+        config.metric.cosmological_constant = name == "de-Sitter" ? 0.001 : 0.0;
+        config.disk_enabled = false;
+        EXPECT_TRUE(ConfigLoader::Validate(config).empty()) << name;
 
-    config.metric.name = "de-Sitter";
-    config.metric.cosmological_constant = 0.001;
-    EXPECT_TRUE(ConfigLoader::Validate(config).empty());
+        config.metric.mass = 1.0;
+        const auto mass_errors = ConfigLoader::Validate(config);
+        EXPECT_NE(std::find_if(mass_errors.begin(), mass_errors.end(),
+                               [](const std::string& error) {
+                                   return error.find("without a mass parameter") !=
+                                          std::string::npos;
+                               }),
+                  mass_errors.end())
+            << name;
 
-    config.metric.mass = 1.0;
-    EXPECT_FALSE(ConfigLoader::Validate(config).empty());
+        config.metric.mass = 0.0;
+        config.observer.distance = 4.0;
+        const auto distance_errors = ConfigLoader::Validate(config);
+        EXPECT_NE(std::find_if(distance_errors.begin(), distance_errors.end(),
+                               [](const std::string& error) {
+                                   return error.find("geometric coordinate units") !=
+                                          std::string::npos;
+                               }),
+                  distance_errors.end())
+            << name;
+    }
+
+    SiriusConfig scaled = SiriusConfig::Defaults();
+    scaled.metric.mass = 10.0;
+    scaled.observer.distance = 49.0;
+    const auto below_errors = ConfigLoader::Validate(scaled);
+    EXPECT_NE(std::find_if(below_errors.begin(), below_errors.end(),
+                           [](const std::string& error) {
+                               return error.find("5*M <= r <= 1000*M") != std::string::npos;
+                           }),
+              below_errors.end());
+    scaled.observer.distance = 50.0;
+    EXPECT_TRUE(ConfigLoader::Validate(scaled).empty());
+    scaled.observer.distance = 10000.0;
+    EXPECT_TRUE(ConfigLoader::Validate(scaled).empty());
+    scaled.observer.distance = 10001.0;
+    EXPECT_FALSE(ConfigLoader::Validate(scaled).empty());
+
+    SiriusConfig metric_specific = SiriusConfig::Defaults();
+    metric_specific.metric.throat_radius = 2.0;
+    auto specific_errors = ConfigLoader::Validate(metric_specific);
+    EXPECT_NE(std::find_if(specific_errors.begin(), specific_errors.end(),
+                           [](const std::string& error) {
+                               return error.find("only to Morris-Thorne") != std::string::npos;
+                           }),
+              specific_errors.end());
+
+    metric_specific = SiriusConfig::Defaults();
+    metric_specific.metric.name = "Morris-Thorne";
+    metric_specific.metric.mass = 0.0;
+    metric_specific.metric.throat_radius = 2.0;
+    metric_specific.disk_enabled = false;
+    EXPECT_TRUE(ConfigLoader::Validate(metric_specific).empty());
+    metric_specific.metric.warp_velocity = 1.0;
+    specific_errors = ConfigLoader::Validate(metric_specific);
+    EXPECT_NE(std::find_if(specific_errors.begin(), specific_errors.end(),
+                           [](const std::string& error) {
+                               return error.find("only to Alcubierre") != std::string::npos;
+                           }),
+              specific_errors.end());
+
+    metric_specific = SiriusConfig::Defaults();
+    metric_specific.metric.name = "Alcubierre";
+    metric_specific.metric.mass = 0.0;
+    metric_specific.metric.warp_velocity = 1.0;
+    metric_specific.metric.bubble_radius = 2.0;
+    metric_specific.disk_enabled = false;
+    EXPECT_TRUE(ConfigLoader::Validate(metric_specific).empty());
+    metric_specific.metric.throat_radius = 2.0;
+    EXPECT_FALSE(ConfigLoader::Validate(metric_specific).empty());
 }
 
 TEST(ConfigValidation, DeSitterRequestsEnforcePositiveLambdaAndSubNariaiBlackHole) {
@@ -287,6 +352,7 @@ TEST(ConfigValidation, MotionBlurAndWormholeTopologyHaveExplicitOperatorBoundari
 
     config = SiriusConfig::Defaults();
     config.metric.name = "Morris-Thorne";
+    config.metric.mass = 0.0;
     config.disk_enabled = false;
     config.metric.wormhole_topology = "OneSheetCapture";
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());

@@ -149,7 +149,7 @@ set_tests_properties(
 
 set_tests_properties(
     ConfigEnvironment.IntegerOverridesApplied
-    ConfigEnvironment.MetricNameAndSpinOverridesApplied
+    ConfigEnvironment.MetricOverridesApplyIdentityAwareMassDefault
     ConfigEnvironment.BooleanOverrideParsed
     ConfigEnvironment.ColorModeOverrideApplied
     ConfigEnvironment.MalformedIntegerDeclines
@@ -201,7 +201,7 @@ set_tests_properties(
     ConfigValidation.UnimplementedDenoiserRequestIsRejected
     ConfigValidation.ObserverAzimuthRangeIsValidated
     ConfigValidation.CameraWorldlineAndLensAreValidated
-    ConfigValidation.MasslessMetricUsesAUnitObserverDistanceScale
+    ConfigValidation.MetricMassAndObserverCoordinateRadiusAreIdentityAware
     ConfigValidation.DeSitterRequestsEnforcePositiveLambdaAndSubNariaiBlackHole
     ConfigValidation.PolarisationRequiresRepresentedThinBlackHoleDisk
     ConfigValidation.MotionBlurAndWormholeTopologyHaveExplicitOperatorBoundaries
@@ -822,7 +822,7 @@ set_tests_properties(
     RenderCommandParse.TrailingNumericGarbageRejected
     RenderCommandParse.NonFiniteNumericValueRejected
     RenderCommandParse.UnexpectedPositionalArgumentRejected
-    RenderCommandParse.ExplicitMassOnMasslessMetricIsNotSilentlyDiscarded
+    RenderCommandParse.MetricOverrideDefaultsMassWithoutDiscardingExplicitInput
     RenderCommandParse.RetiredBackendNamesAreNotRemapped
     RenderCommandParse.MalformedCameraBetaRejected
     PROPERTIES LABELS "Mandatory;Operational"
@@ -847,6 +847,7 @@ set_tests_properties(
 
 set_tests_properties(
     RenderSessionProbe.TraceDomainScalesWithMassAndEnclosesTheObserver
+    RenderSessionProbe.GeometricMetadataNeverInventsPhysicalLengthUnits
     RenderSessionProbe.BackendAutoResolvesByDeviceRegistryAndCapabilities
     RenderSessionProbe.ConfigurationConversionPreservesObserverAndDiskControls
     RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr

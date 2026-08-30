@@ -26,15 +26,34 @@ TEST(ConfigEnvironment, IntegerOverridesApplied) {
     EXPECT_EQ(config.render.height, 1080);
 }
 
-TEST(ConfigEnvironment, MetricNameAndSpinOverridesApplied) {
-    ScopedEnvironmentVariable metric("SIRIUS_METRIC", "Kerr");
-    ScopedEnvironmentVariable spin("SIRIUS_SPIN", "0.85");
+TEST(ConfigEnvironment, MetricOverridesApplyIdentityAwareMassDefault) {
+    {
+        ScopedEnvironmentVariable metric("SIRIUS_METRIC", "Kerr");
+        ScopedEnvironmentVariable mass("SIRIUS_MASS", nullptr);
+        ScopedEnvironmentVariable spin("SIRIUS_SPIN", "0.85");
 
-    SiriusConfig config = SiriusConfig::Defaults();
-    ASSERT_TRUE(ConfigLoader::ApplyEnvironmentOverrides(config).has_value());
-
-    EXPECT_EQ(config.metric.name, "Kerr");
-    EXPECT_DOUBLE_EQ(config.metric.spin, 0.85);
+        SiriusConfig config = SiriusConfig::Defaults();
+        config.metric.mass = 0.0;
+        ASSERT_TRUE(ConfigLoader::ApplyEnvironmentOverrides(config).has_value());
+        EXPECT_EQ(config.metric.name, "Kerr");
+        EXPECT_DOUBLE_EQ(config.metric.mass, 1.0);
+        EXPECT_DOUBLE_EQ(config.metric.spin, 0.85);
+    }
+    {
+        ScopedEnvironmentVariable metric("SIRIUS_METRIC", "Alcubierre");
+        ScopedEnvironmentVariable mass("SIRIUS_MASS", nullptr);
+        SiriusConfig config = SiriusConfig::Defaults();
+        ASSERT_TRUE(ConfigLoader::ApplyEnvironmentOverrides(config).has_value());
+        EXPECT_DOUBLE_EQ(config.metric.mass, 0.0);
+    }
+    {
+        ScopedEnvironmentVariable metric("SIRIUS_METRIC", "Alcubierre");
+        ScopedEnvironmentVariable mass("SIRIUS_MASS", "1.0");
+        SiriusConfig config = SiriusConfig::Defaults();
+        ASSERT_TRUE(ConfigLoader::ApplyEnvironmentOverrides(config).has_value());
+        EXPECT_DOUBLE_EQ(config.metric.mass, 1.0);
+        EXPECT_FALSE(ConfigLoader::Validate(config).empty());
+    }
 }
 
 TEST(ConfigEnvironment, BooleanOverrideParsed) {

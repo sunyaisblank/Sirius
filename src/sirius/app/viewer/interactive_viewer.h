@@ -30,7 +30,7 @@ struct ViewerConfig {
     int refinement_levels = 4;
     int samples_per_level = 4;
 
-    float move_speed = 2.0f;           // Movement speed [M/s].
+    float move_speed = 2.0f;           // Movement speed [geometric coordinate units/s].
     float mouse_sensitivity = 0.002f;  // Mouse look sensitivity.
 
     double black_hole_mass = 1.0;
@@ -48,7 +48,7 @@ struct ViewerConfig {
 
 // Orbital camera state in spherical coordinates plus per-axis input velocities.
 struct CameraState {
-    double r = 50.0;       // Radial distance [M].
+    double r = 50.0;       // Coordinate radius; divide by metric M for r/M.
     double theta = 1.308;  // Inclination [radians].
     double phi = 0.0;      // Azimuthal angle [radians].
     float fov = 60.0f;     // Field of view [degrees].

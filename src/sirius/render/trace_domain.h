@@ -25,21 +25,11 @@ struct TraceDomainParameters {
 [[nodiscard]] inline double MetricTraceLengthScale(core::MetricId metric_id, double metric_mass) {
     SIRIUS_PRE(std::isfinite(metric_mass) && metric_mass >= 0.0);
 
-    switch (metric_id) {
-        case core::MetricId::Schwarzschild:
-        case core::MetricId::Kerr:
-        case core::MetricId::ReissnerNordstrom:
-        case core::MetricId::KerrNewman:
-        case core::MetricId::SchwarzschildDeSitter:
-            SIRIUS_PRE(metric_mass > 0.0);
-            return metric_mass;
-        case core::MetricId::Minkowski:
-        case core::MetricId::DeSitter:
-        case core::MetricId::MorrisThorne:
-        case core::MetricId::Alcubierre:
-            return 1.0;
+    if (core::MetricUsesMass(metric_id)) {
+        SIRIUS_PRE(metric_mass > 0.0);
+        return metric_mass;
     }
-    SIRIUS_ASSERT(false);
+    SIRIUS_PRE(metric_mass == 0.0);
     return 1.0;
 }
 

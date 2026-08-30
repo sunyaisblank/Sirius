@@ -88,11 +88,24 @@ TEST(ConfigLoading, InvalidKnownValueDeclines) {
 }
 
 TEST(ConfigLoading, ValidPartialFileMergesOverDefaults) {
-    TemporaryConfig config(R"({"render": {"width": 512}})");
-    const auto loaded = ConfigLoader::LoadFromFile(config.Path());
-    ASSERT_TRUE(loaded.has_value()) << loaded.error().Description();
-    EXPECT_EQ(loaded->render.width, 512);
-    EXPECT_EQ(loaded->render.height, SiriusConfig::Defaults().render.height);
+    {
+        TemporaryConfig config(R"({"render": {"width": 512}})");
+        const auto loaded = ConfigLoader::LoadFromFile(config.Path());
+        ASSERT_TRUE(loaded.has_value()) << loaded.error().Description();
+        EXPECT_EQ(loaded->render.width, 512);
+        EXPECT_EQ(loaded->render.height, SiriusConfig::Defaults().render.height);
+    }
+    {
+        TemporaryConfig config(R"({"metric": {"name": "Alcubierre"}, "diskEnabled": false})");
+        const auto loaded = ConfigLoader::LoadFromFile(config.Path());
+        ASSERT_TRUE(loaded.has_value()) << loaded.error().Description();
+        EXPECT_DOUBLE_EQ(loaded->metric.mass, 0.0);
+    }
+    {
+        TemporaryConfig config(
+            R"({"metric": {"name": "Alcubierre", "mass": 1.0}, "diskEnabled": false})");
+        EXPECT_FALSE(ConfigLoader::LoadFromFile(config.Path()).has_value());
+    }
 }
 
 TEST(ConfigLoading, SaveDeclinesWhenParentCannotBeCreated) {

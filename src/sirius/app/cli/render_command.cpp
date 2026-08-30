@@ -75,26 +75,29 @@ Basic Options:
   -m, --metric <name>       Metric (see 'sirius info metrics'): Minkowski, Schwarzschild,
                             Kerr, Reissner-Nordstrom, Kerr-Newman, de-Sitter,
                             Schwarzschild-de-Sitter, Morris-Thorne, Alcubierre
-  --mass <M>                Metric mass scale (0 for Minkowski/de-Sitter; otherwise 0.1-100)
-  -d, --distance <r>        Observer distance in M (default: 50)
+  --mass <length>           Metric mass M in geometric coordinate units (0 when absent;
+                            otherwise 0.1-100)
+  -d, --distance <r>        Observer coordinate radius (5M-1000M for mass metrics;
+                            default: 50)
   -i, --inclination <deg>   Observer inclination (default: 90)
-  -a, --spin <a>            Black hole spin 0-1 (default: 0)
+  -a, --spin <a/M>          Dimensionless black-hole spin 0-0.998 (default: 0)
   --fov <deg>               Camera field of view (default: 60)
   --lens <name>             Lens: Pinhole, ThinLens, or Fisheye (fisheye CPU-only;
                             default: Pinhole)
   --focal-length <mm-eq>    Thin-lens focal length, 50 mm-equivalent = 1 lens unit
   --aperture <f-number>     Thin-lens aperture (default: 2.8)
-  --focus-distance <M>      Thin-lens focus distance (default: 50)
+  --focus-distance <length> Thin-lens focus distance in geometric coordinate units
+                            (default: 50)
   --temperature-model <m>   Disk temperature model: NovikovThorne (NT) or
                             ShakuraSunyaev (SS) (default: NovikovThorne)
   --disk-temperature <T>    Disk temperature at 1.5 times the inner edge in Kelvin
                             (default: 50000)
   --color-mode <name>       TrueColor, TemperatureMap, RedshiftMap, or
                             Polarisation (Narrowband is reserved and declines)
-  --throat-radius <b0>      Morris-Thorne throat radius (default: 1.0)
+  --throat-radius <b0>      Morris-Thorne-only throat radius (default: 1.0)
   --wormhole-topology <t>   OneSheetCapture (supported) or TwoSheet (declines explicitly)
-  --warp-velocity <vs>      Alcubierre warp velocity (default: 0.5)
-  --bubble-radius <R>       Alcubierre bubble radius (default: 1.0)
+  --warp-velocity <vs>      Alcubierre-only warp velocity (default: 0.5)
+  --bubble-radius <R>       Alcubierre-only bubble radius (default: 1.0)
 
 Post-Processing:
   --exposure <e>            Exposure value (default: 1.0)
@@ -425,9 +428,12 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
 
     if (metric_overridden && !mass_overridden) {
         const auto metric = core::ParseMetricName(config.metric.name);
-        if (metric.has_value() &&
-            (*metric == core::MetricId::Minkowski || *metric == core::MetricId::DeSitter)) {
-            config.metric.mass = 0.0;
+        if (metric.has_value()) {
+            if (!core::MetricUsesMass(*metric)) {
+                config.metric.mass = 0.0;
+            } else if (config.metric.mass == 0.0) {
+                config.metric.mass = MetricConfig{}.mass;
+            }
         }
     }
     return true;
@@ -447,9 +453,17 @@ void RenderCommand::PrintConfig(const SiriusConfig& config, bool verbose) {
         std::cout << " (a=" << std::fixed << std::setprecision(3) << config.metric.spin << ")";
     }
     std::cout << std::endl;
+    const auto metric_id = core::ParseMetricName(config.metric.name);
+    const bool uses_mass = metric_id.has_value() && core::MetricUsesMass(*metric_id);
+    if (uses_mass) {
+        std::cout << "  Metric mass: " << config.metric.mass << " coordinate units" << std::endl;
+    }
     std::cout << "  Observer:    r=" << std::fixed << std::setprecision(1)
-              << config.observer.distance << "M, θ=" << config.observer.inclination << "°"
-              << std::endl;
+              << config.observer.distance << " coordinate units";
+    if (uses_mass) {
+        std::cout << " (r/M=" << config.observer.distance / config.metric.mass << ")";
+    }
+    std::cout << ", θ=" << config.observer.inclination << "°" << std::endl;
     std::cout << "  FOV:         " << config.observer.fov << "°" << std::endl;
     std::cout << "  Color mode:  " << config.color_mode << std::endl;
     std::cout << "  Output:      " << config.render.output_path << std::endl;

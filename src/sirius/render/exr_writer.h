@@ -24,7 +24,7 @@ struct EXRMetadata {
     std::string camera_model;
     std::string metric_type;
 
-    // Physical parameters.
+    // Geometric scene parameters. Sirius does not infer a solar-mass scale.
     double black_hole_mass = 1.0;
     double black_hole_spin = 0.0;
     double observer_distance = 50.0;
@@ -52,10 +52,11 @@ class EXRWriter {
         oss << "# Sirius Ray Tracer\n";
         oss << "# Software: " << meta.software_version << "\n";
         oss << "#\n";
-        oss << "# Physical Parameters:\n";
-        oss << "#   Black Hole Mass: " << meta.black_hole_mass << " M_sun\n";
-        oss << "#   Black Hole Spin: " << meta.black_hole_spin << "\n";
-        oss << "#   Observer Distance: " << meta.observer_distance << " M\n";
+        oss << "# Geometric Scene Parameters:\n";
+        oss << "#   Metric Mass Parameter: " << meta.black_hole_mass << " coordinate units\n";
+        oss << "#   Dimensionless Spin a/M: " << meta.black_hole_spin << "\n";
+        oss << "#   Observer Coordinate Radius: " << meta.observer_distance
+            << " coordinate units\n";
         oss << "#   Observer Inclination: " << meta.observer_inclination << " deg\n";
         oss << "#\n";
         oss << "# Render Settings:\n";

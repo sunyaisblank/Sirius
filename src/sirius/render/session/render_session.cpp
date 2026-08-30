@@ -282,8 +282,7 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         issue.has_value()) {
         return std::string(*issue);
     }
-    const bool massless_metric =
-        config.metric_id == MetricId::Minkowski || config.metric_id == MetricId::DeSitter;
+    const bool uses_mass = core::MetricUsesMass(config.metric_id);
     if (!finite(config.black_hole_mass) || config.black_hole_mass < 0.0 ||
         config.black_hole_mass > 100.0 || !finite(config.black_hole_spin) ||
         config.black_hole_spin < 0.0 || config.black_hole_spin > 0.998 ||
@@ -297,10 +296,10 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         0.999) {
         return "combined spin squared plus charge squared must be below 0.999";
     }
-    if ((massless_metric && config.black_hole_mass != 0.0) ||
-        (!massless_metric && config.black_hole_mass < 0.1)) {
-        return massless_metric ? "massless metrics require mass to be zero"
-                               : "mass must be between 0.1 and 100 for this metric";
+    if ((!uses_mass && config.black_hole_mass != 0.0) ||
+        (uses_mass && config.black_hole_mass < 0.1)) {
+        return uses_mass ? "mass must be between 0.1 and 100 for this metric"
+                         : "metrics without a mass parameter require mass to be zero";
     }
     if (const auto issue = core::MetricHorizonIssue(config.metric_id, config.black_hole_mass,
                                                     config.cosmological_constant);
@@ -308,7 +307,7 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         return std::string(*issue);
     }
 
-    const double distance_scale = massless_metric ? 1.0 : config.black_hole_mass;
+    const double distance_scale = uses_mass ? config.black_hole_mass : 1.0;
     if (!finite(config.observer_distance) || config.observer_distance < 5.0 * distance_scale ||
         config.observer_distance > 1000.0 * distance_scale ||
         !finite(config.observer_inclination) ||
@@ -482,13 +481,24 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         config.bubble_sigma > 1000.0) {
         return "wormhole or warp-drive parameters are outside the represented domain";
     }
+    bool one_sheet_topology = false;
     switch (config.wormhole_topology) {
         case WormholeTopology::OneSheetCapture:
+            one_sheet_topology = true;
             break;
         case WormholeTopology::TwoSheet:
-            return "two-sheet wormhole continuation and a second environment are not represented";
+            break;
         default:
             return "invalid wormhole topology";
+    }
+    if (const auto issue = core::MetricSpecificParameterIssue(
+            config.metric_id, config.throat_radius, one_sheet_topology, config.warp_velocity,
+            config.bubble_radius, config.bubble_sigma);
+        issue.has_value()) {
+        return std::string(*issue);
+    }
+    if (config.metric_id == MetricId::MorrisThorne && !one_sheet_topology) {
+        return "two-sheet wormhole continuation and a second environment are not represented";
     }
     if (config.enable_jets) {
         return "relativistic jets require covariant geodesic radiative transfer, which is not "

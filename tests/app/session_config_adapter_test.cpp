@@ -1,5 +1,6 @@
 #include "sirius/app/config/session_config_adapter.h"
 
+#include "sirius/render/exr_writer.h"
 #include "sirius/render/session/render_session.h"
 #include "sirius/render/trace_domain.h"
 
@@ -48,9 +49,46 @@ TEST(RenderSessionProbe, TraceDomainScalesWithMassAndEnclosesTheObserver) {
     EXPECT_FLOAT_EQ(massless.max_step, 2.0f);
 
     const render::TraceDomainParameters non_mass_geometry =
-        render::BuildTraceDomainParameters(core::MetricId::MorrisThorne, 100.0, 50.0);
+        render::BuildTraceDomainParameters(core::MetricId::MorrisThorne, 0.0, 50.0);
     EXPECT_FLOAT_EQ(non_mass_geometry.escape_radius, 200.0f);
     EXPECT_FLOAT_EQ(non_mass_geometry.max_step, 2.0f);
+
+    SessionConfig non_mass_session;
+    non_mass_session.metric_id = core::MetricId::MorrisThorne;
+    non_mass_session.enable_disk = false;
+    EXPECT_EQ(render::SessionConfigIssue(non_mass_session),
+              "metrics without a mass parameter require mass to be zero");
+    non_mass_session.black_hole_mass = 0.0;
+    EXPECT_FALSE(render::SessionConfigIssue(non_mass_session).has_value());
+    non_mass_session.throat_radius = 2.0;
+    EXPECT_FALSE(render::SessionConfigIssue(non_mass_session).has_value());
+    non_mass_session.warp_velocity = 1.0;
+    EXPECT_EQ(render::SessionConfigIssue(non_mass_session),
+              "warp velocity, bubble radius, and bubble sigma apply only to Alcubierre");
+
+    SessionConfig warp_session;
+    warp_session.metric_id = core::MetricId::Alcubierre;
+    warp_session.black_hole_mass = 0.0;
+    warp_session.enable_disk = false;
+    warp_session.warp_velocity = 1.0;
+    warp_session.bubble_radius = 2.0;
+    EXPECT_FALSE(render::SessionConfigIssue(warp_session).has_value());
+    warp_session.throat_radius = 2.0;
+    EXPECT_EQ(render::SessionConfigIssue(warp_session),
+              "throat radius and wormhole topology apply only to Morris-Thorne");
+}
+
+TEST(RenderSessionProbe, GeometricMetadataNeverInventsPhysicalLengthUnits) {
+    render::EXRMetadata metadata;
+    metadata.black_hole_mass = 2.0;
+    metadata.black_hole_spin = 0.5;
+    metadata.observer_distance = 100.0;
+    const std::string header = render::EXRWriter::GenerateMetadataHeader(metadata);
+
+    EXPECT_NE(header.find("Metric Mass Parameter: 2 coordinate units"), std::string::npos);
+    EXPECT_NE(header.find("Dimensionless Spin a/M: 0.5"), std::string::npos);
+    EXPECT_NE(header.find("Observer Coordinate Radius: 100 coordinate units"), std::string::npos);
+    EXPECT_EQ(header.find("M_sun"), std::string::npos);
 }
 
 TEST(RenderSessionProbe, BackendAutoResolvesByDeviceRegistryAndCapabilities) {

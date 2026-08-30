@@ -33,6 +33,16 @@ namespace {
     return joined.str();
 }
 
+void ApplyCompatibleMassDefault(MetricConfig& metric) {
+    const auto id = core::ParseMetricName(metric.name);
+    if (!id.has_value()) return;
+    if (!core::MetricUsesMass(*id)) {
+        metric.mass = 0.0;
+    } else if (metric.mass == 0.0) {
+        metric.mass = MetricConfig{}.mass;
+    }
+}
+
 [[nodiscard]] nlohmann::json ParseJsonStrict(std::istream& input) {
     std::vector<std::unordered_set<std::string>> object_keys;
     std::optional<std::string> duplicate;
@@ -246,8 +256,14 @@ base::Expected<void> ConfigLoader::ApplyEnvironmentOverrides(SiriusConfig& confi
         if (auto value = GetEnvInt("SIRIUS_THREADS")) updated.render.thread_count = *value;
         if (auto value = GetEnv("SIRIUS_OUTPUT")) updated.render.output_path = *value;
 
-        if (auto value = GetEnv("SIRIUS_METRIC")) updated.metric.name = *value;
-        if (auto value = GetEnvDouble("SIRIUS_MASS")) updated.metric.mass = *value;
+        const auto metric_override = GetEnv("SIRIUS_METRIC");
+        const auto mass_override = GetEnvDouble("SIRIUS_MASS");
+        if (metric_override) updated.metric.name = *metric_override;
+        if (mass_override) {
+            updated.metric.mass = *mass_override;
+        } else if (metric_override) {
+            ApplyCompatibleMassDefault(updated.metric);
+        }
         if (auto value = GetEnvDouble("SIRIUS_SPIN")) updated.metric.spin = *value;
         if (auto value = GetEnvDouble("SIRIUS_CHARGE")) updated.metric.charge = *value;
 
@@ -343,12 +359,12 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
 
     constexpr double kMinMass = 0.1;
     constexpr double kMaxMass = 100.0;
-    const bool massless = metric_id.has_value() && (*metric_id == core::MetricId::Minkowski ||
-                                                    *metric_id == core::MetricId::DeSitter);
+    const bool uses_mass = metric_id.has_value() && core::MetricUsesMass(*metric_id);
     if (finite(config.metric.mass, "metric.mass")) {
-        if (massless && config.metric.mass != 0.0) {
-            errors.push_back("metric.mass must be zero for Minkowski and de-Sitter");
-        } else if (!massless && (config.metric.mass < kMinMass || config.metric.mass > kMaxMass)) {
+        if (metric_id.has_value() && !uses_mass && config.metric.mass != 0.0) {
+            errors.push_back("metric.mass must be zero for metrics without a mass parameter");
+        } else if ((!metric_id.has_value() || uses_mass) &&
+                   (config.metric.mass < kMinMass || config.metric.mass > kMaxMass)) {
             errors.push_back("metric.mass must be between 0.1 and 100 (geometric units)");
         }
     }
@@ -421,7 +437,8 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
     if (config.metric.wormhole_topology != "OneSheetCapture" &&
         config.metric.wormhole_topology != "TwoSheet") {
         errors.push_back("metric.wormhole_topology must be one of: OneSheetCapture, TwoSheet");
-    } else if (config.metric.wormhole_topology == "TwoSheet") {
+    } else if (config.metric.wormhole_topology == "TwoSheet" && metric_id.has_value() &&
+               *metric_id == core::MetricId::MorrisThorne) {
         errors.push_back(
             "metric.wormhole_topology TwoSheet is not represented: Sirius currently renders "
             "one exterior sheet with the throat as a dark capture surface");
@@ -438,23 +455,41 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
         (config.metric.bubble_sigma <= 0.0 || config.metric.bubble_sigma > 1000.0)) {
         errors.push_back("metric.bubble_sigma must be greater than 0 and at most 1000");
     }
+    if (metric_id.has_value()) {
+        if (const auto issue = core::MetricSpecificParameterIssue(
+                *metric_id, config.metric.throat_radius,
+                config.metric.wormhole_topology == "OneSheetCapture", config.metric.warp_velocity,
+                config.metric.bubble_radius, config.metric.bubble_sigma);
+            issue.has_value()) {
+            errors.emplace_back(*issue);
+        }
+    }
 
     // --- Observer validation ------------------------------------------------
     constexpr double kMinDistanceFactor = 5.0;
     constexpr double kMaxDistanceFactor = 1000.0;
 
-    // Flat/de-Sitter scenes intentionally project a zero mass into the typed
-    // session. Their coordinates still need a finite operator scale, so use
-    // one geometric unit instead of making the valid interval [0, 0].
-    const double distance_scale = massless ? 1.0 : config.metric.mass;
+    // observer.distance is the coordinate radius r, not the dimensionless
+    // ratio r/M. Mass-bearing scenes admit 5M <= r <= 1000M; metrics without M
+    // retain the established [5, 1000] geometric-coordinate interval.
+    const double distance_scale = uses_mass ? config.metric.mass : 1.0;
     const double min_distance = kMinDistanceFactor * distance_scale;
     const double max_distance = kMaxDistanceFactor * distance_scale;
 
     if (finite(config.observer.distance, "observer.distance") &&
         (config.observer.distance < min_distance || config.observer.distance > max_distance)) {
-        errors.push_back("observer.distance must be between 5M and 1000M (currently " +
-                         std::to_string(config.observer.distance) +
-                         ", M=" + std::to_string(config.metric.mass) + ")");
+        if (uses_mass) {
+            errors.push_back(
+                "observer.distance coordinate radius must satisfy 5*M <= r <= 1000*M "
+                "(r=" +
+                std::to_string(config.observer.distance) +
+                ", M=" + std::to_string(config.metric.mass) + ")");
+        } else {
+            errors.push_back(
+                "observer.distance coordinate radius must be between 5 and 1000 geometric "
+                "coordinate units (r=" +
+                std::to_string(config.observer.distance) + ")");
+        }
     }
 
     constexpr double kPoleBuffer = 0.1;
@@ -672,6 +707,10 @@ void ConfigLoader::MergeConfig(SiriusConfig& target, const nlohmann::json& sourc
     }
 
     target = target_json.get<SiriusConfig>();
+    if (const auto metric = source.find("metric");
+        metric != source.end() && metric->contains("name") && !metric->contains("mass")) {
+        ApplyCompatibleMassDefault(target.metric);
+    }
 }
 
 std::optional<std::string> ConfigLoader::GetEnv(const std::string& name) {
