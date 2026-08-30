@@ -20,8 +20,21 @@ using render::SessionConfig;
 using render::SessionState;
 
 TEST(RenderSessionProbe, TraceDomainScalesWithMassAndEnclosesTheObserver) {
+    const auto request = [](core::MetricId metric_id, double mass, double observer,
+                            double throat = core::kDefaultMorrisThorneThroatRadius,
+                            double radius = core::kDefaultAlcubierreBubbleRadius,
+                            double sigma = core::kDefaultAlcubierreBubbleSigma) {
+        return render::TraceDomainRequest{
+            .metric_id = metric_id,
+            .metric_mass = mass,
+            .observer_radius = observer,
+            .throat_radius = throat,
+            .bubble_radius = radius,
+            .bubble_sigma = sigma,
+        };
+    };
     const render::TraceDomainParameters baseline =
-        render::BuildTraceDomainParameters(core::MetricId::Kerr, 1.0, 50.0);
+        render::BuildTraceDomainParameters(request(core::MetricId::Kerr, 1.0, 50.0));
     EXPECT_FLOAT_EQ(baseline.escape_radius, 200.0f);
     EXPECT_FLOAT_EQ(baseline.cpu_initial_step, 0.1f);
     EXPECT_FLOAT_EQ(baseline.cpu_min_step, 1.0e-5f);
@@ -29,13 +42,13 @@ TEST(RenderSessionProbe, TraceDomainScalesWithMassAndEnclosesTheObserver) {
     EXPECT_FLOAT_EQ(baseline.max_step, 2.0f);
 
     const render::TraceDomainParameters small =
-        render::BuildTraceDomainParameters(core::MetricId::Kerr, 0.1, 100.0);
+        render::BuildTraceDomainParameters(request(core::MetricId::Kerr, 0.1, 100.0));
     EXPECT_GT(small.escape_radius, 100.0f);
     EXPECT_FLOAT_EQ(small.escape_radius, 125.0f);
     EXPECT_FLOAT_EQ(small.max_step, 0.2f);
 
     const render::TraceDomainParameters large =
-        render::BuildTraceDomainParameters(core::MetricId::Kerr, 100.0, 100000.0);
+        render::BuildTraceDomainParameters(request(core::MetricId::Kerr, 100.0, 100000.0));
     EXPECT_GT(large.escape_radius, 100000.0f);
     EXPECT_FLOAT_EQ(large.escape_radius, 125000.0f);
     EXPECT_FLOAT_EQ(large.cpu_initial_step, 10.0f);
@@ -44,14 +57,28 @@ TEST(RenderSessionProbe, TraceDomainScalesWithMassAndEnclosesTheObserver) {
     EXPECT_FLOAT_EQ(large.max_step, 200.0f);
 
     const render::TraceDomainParameters massless =
-        render::BuildTraceDomainParameters(core::MetricId::DeSitter, 0.0, 1000.0);
+        render::BuildTraceDomainParameters(request(core::MetricId::DeSitter, 0.0, 1000.0));
     EXPECT_GT(massless.escape_radius, 1000.0f);
     EXPECT_FLOAT_EQ(massless.max_step, 2.0f);
 
     const render::TraceDomainParameters non_mass_geometry =
-        render::BuildTraceDomainParameters(core::MetricId::MorrisThorne, 0.0, 50.0);
-    EXPECT_FLOAT_EQ(non_mass_geometry.escape_radius, 200.0f);
-    EXPECT_FLOAT_EQ(non_mass_geometry.max_step, 2.0f);
+        render::BuildTraceDomainParameters(request(core::MetricId::MorrisThorne, 0.0, 50.0, 4.0));
+    EXPECT_FLOAT_EQ(non_mass_geometry.escape_radius, 800.0f);
+    EXPECT_FLOAT_EQ(non_mass_geometry.cpu_initial_step, 0.4f);
+    EXPECT_FLOAT_EQ(non_mass_geometry.max_step, 8.0f);
+
+    const render::TraceDomainParameters sharp_warp = render::BuildTraceDomainParameters(
+        request(core::MetricId::Alcubierre, 0.0, 20.0, 1.0, 2.0, 4.0));
+    EXPECT_FLOAT_EQ(sharp_warp.escape_radius, 400.0f);
+    EXPECT_FLOAT_EQ(sharp_warp.cpu_initial_step, 0.025f);
+    EXPECT_FLOAT_EQ(sharp_warp.vulkan_min_step, 0.005f);
+    EXPECT_FLOAT_EQ(sharp_warp.max_step, 4.0f);
+
+    const render::TraceDomainParameters diffuse_warp = render::BuildTraceDomainParameters(
+        request(core::MetricId::Alcubierre, 0.0, 100.0, 1.0, 2.0, 0.05));
+    EXPECT_FLOAT_EQ(diffuse_warp.escape_radius, 4000.0f);
+    EXPECT_FLOAT_EQ(diffuse_warp.cpu_initial_step, 0.2f);
+    EXPECT_FLOAT_EQ(diffuse_warp.max_step, 40.0f);
 
     SessionConfig non_mass_session;
     non_mass_session.metric_id = core::MetricId::MorrisThorne;
@@ -62,6 +89,14 @@ TEST(RenderSessionProbe, TraceDomainScalesWithMassAndEnclosesTheObserver) {
     EXPECT_FALSE(render::SessionConfigIssue(non_mass_session).has_value());
     non_mass_session.throat_radius = 2.0;
     EXPECT_FALSE(render::SessionConfigIssue(non_mass_session).has_value());
+    non_mass_session.throat_radius = 20.0;
+    non_mass_session.observer_distance = 99.0;
+    EXPECT_EQ(render::SessionConfigIssue(non_mass_session),
+              "observer distance, angles, or field of view is outside the represented domain");
+    non_mass_session.observer_distance = 100.0;
+    EXPECT_FALSE(render::SessionConfigIssue(non_mass_session).has_value());
+    non_mass_session.throat_radius = 2.0;
+    non_mass_session.observer_distance = 50.0;
     non_mass_session.warp_velocity = 1.0;
     EXPECT_EQ(render::SessionConfigIssue(non_mass_session),
               "warp velocity, bubble radius, and bubble sigma apply only to Alcubierre");
@@ -73,6 +108,18 @@ TEST(RenderSessionProbe, TraceDomainScalesWithMassAndEnclosesTheObserver) {
     warp_session.warp_velocity = 1.0;
     warp_session.bubble_radius = 2.0;
     EXPECT_FALSE(render::SessionConfigIssue(warp_session).has_value());
+    warp_session.bubble_sigma = 0.05;
+    warp_session.observer_distance = 99.0;
+    EXPECT_EQ(render::SessionConfigIssue(warp_session),
+              "observer distance, angles, or field of view is outside the represented domain");
+    warp_session.observer_distance = 100.0;
+    EXPECT_FALSE(render::SessionConfigIssue(warp_session).has_value());
+    warp_session.bubble_sigma = 0.04;
+    const auto unresolved_wall = render::SessionConfigIssue(warp_session);
+    ASSERT_TRUE(unresolved_wall.has_value());
+    EXPECT_NE(unresolved_wall->find("bubble_sigma*bubble_radius"), std::string::npos);
+    warp_session.bubble_sigma = 0.5;
+    warp_session.observer_distance = 50.0;
     warp_session.throat_radius = 2.0;
     EXPECT_EQ(render::SessionConfigIssue(warp_session),
               "throat radius and wormhole topology apply only to Morris-Thorne");

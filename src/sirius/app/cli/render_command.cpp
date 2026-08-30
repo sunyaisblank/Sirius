@@ -86,7 +86,7 @@ Basic Options:
   --mass <length>           Metric mass M in geometric coordinate units (0 when absent;
                             otherwise 0.1-100)
   -d, --distance <r>        Observer coordinate radius (5M-1000M for mass metrics;
-                            default: 50)
+                            5L-1000L for governed exotic metrics; default: 50)
   -i, --inclination <deg>   Observer inclination (default: 90)
   -a, --spin <a/M>          Dimensionless black-hole spin 0-0.998 (default: 0)
   --fov <deg>               Camera field of view (default: 60)
@@ -106,6 +106,8 @@ Basic Options:
   --wormhole-topology <t>   OneSheetCapture (supported) or TwoSheet (declines explicitly)
   --warp-velocity <vs>      Alcubierre-only warp velocity (default: 0.5)
   --bubble-radius <R>       Alcubierre-only bubble radius (default: 1.0)
+  --bubble-sigma <1/length> Alcubierre inverse wall scale (default: 0.5;
+                            0.1 <= sigma*R <= 100)
 
 Post-Processing:
   --exposure <e>            Exposure value (default: 1.0)
@@ -291,6 +293,8 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
                 config.metric.warp_velocity = ParseDouble(args[++i]);
             } else if (arg == "--bubble-radius" && i + 1 < args.size()) {
                 config.metric.bubble_radius = ParseDouble(args[++i]);
+            } else if (arg == "--bubble-sigma" && i + 1 < args.size()) {
+                config.metric.bubble_sigma = ParseDouble(args[++i]);
             } else if (arg == "--exposure" && i + 1 < args.size()) {
                 config.postprocess.exposure = ParseFloat(args[++i]);
             } else if (arg == "--bloom" && i + 1 < args.size()) {

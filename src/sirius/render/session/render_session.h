@@ -153,7 +153,7 @@ struct SessionConfig {
     WormholeTopology wormhole_topology = WormholeTopology::OneSheetCapture;
     double warp_velocity = core::kDefaultAlcubierreWarpVelocity;  // Alcubierre vs.
     double bubble_radius = core::kDefaultAlcubierreBubbleRadius;  // Alcubierre R.
-    double bubble_sigma = core::kDefaultAlcubierreBubbleSigma;    // Alcubierre sigma.
+    double bubble_sigma = core::kDefaultAlcubierreBubbleSigma;    // Inverse wall length sigma.
 
     // Post-processing (cinematic defaults).
     core::TonemapType tonemapper = core::TonemapType::Aces;  // Display transform (PPM/PNG).

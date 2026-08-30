@@ -280,10 +280,13 @@ TEST(ConfigValidation, MetricMassAndObserverCoordinateRadiusAreIdentityAware) {
         config.metric.mass = 0.0;
         config.observer.distance = 4.0;
         const auto distance_errors = ConfigLoader::Validate(config);
+        const std::string_view expected_distance_text = name == "Morris-Thorne" ? "5*b0"
+                                                        : name == "Alcubierre"
+                                                            ? "5*L"
+                                                            : "geometric coordinate units";
         EXPECT_NE(std::find_if(distance_errors.begin(), distance_errors.end(),
-                               [](const std::string& error) {
-                                   return error.find("geometric coordinate units") !=
-                                          std::string::npos;
+                               [expected_distance_text](const std::string& error) {
+                                   return error.find(expected_distance_text) != std::string::npos;
                                }),
                   distance_errors.end())
             << name;
@@ -320,6 +323,17 @@ TEST(ConfigValidation, MetricMassAndObserverCoordinateRadiusAreIdentityAware) {
     metric_specific.metric.throat_radius = 2.0;
     metric_specific.disk_enabled = false;
     EXPECT_TRUE(ConfigLoader::Validate(metric_specific).empty());
+    metric_specific.metric.throat_radius = 20.0;
+    metric_specific.observer.distance = 99.0;
+    EXPECT_FALSE(ConfigLoader::Validate(metric_specific).empty());
+    metric_specific.observer.distance = 100.0;
+    EXPECT_TRUE(ConfigLoader::Validate(metric_specific).empty());
+    metric_specific.observer.distance = 20000.0;
+    EXPECT_TRUE(ConfigLoader::Validate(metric_specific).empty());
+    metric_specific.observer.distance = 20001.0;
+    EXPECT_FALSE(ConfigLoader::Validate(metric_specific).empty());
+    metric_specific.metric.throat_radius = 2.0;
+    metric_specific.observer.distance = 50.0;
     metric_specific.metric.warp_velocity = 1.0;
     specific_errors = ConfigLoader::Validate(metric_specific);
     EXPECT_NE(std::find_if(specific_errors.begin(), specific_errors.end(),
@@ -335,6 +349,27 @@ TEST(ConfigValidation, MetricMassAndObserverCoordinateRadiusAreIdentityAware) {
     metric_specific.metric.bubble_radius = 2.0;
     metric_specific.disk_enabled = false;
     EXPECT_TRUE(ConfigLoader::Validate(metric_specific).empty());
+    metric_specific.metric.bubble_sigma = 0.05;  // sigma*R=0.1, L=20.
+    metric_specific.observer.distance = 99.0;
+    EXPECT_FALSE(ConfigLoader::Validate(metric_specific).empty());
+    metric_specific.observer.distance = 100.0;
+    EXPECT_TRUE(ConfigLoader::Validate(metric_specific).empty());
+    metric_specific.metric.bubble_sigma = 0.04;
+    auto scale_errors = ConfigLoader::Validate(metric_specific);
+    EXPECT_NE(std::find_if(scale_errors.begin(), scale_errors.end(),
+                           [](const std::string& error) {
+                               return error.find("bubble_sigma*bubble_radius") != std::string::npos;
+                           }),
+              scale_errors.end());
+    metric_specific.metric.bubble_sigma = 51.0;
+    scale_errors = ConfigLoader::Validate(metric_specific);
+    EXPECT_NE(std::find_if(scale_errors.begin(), scale_errors.end(),
+                           [](const std::string& error) {
+                               return error.find("bubble_sigma*bubble_radius") != std::string::npos;
+                           }),
+              scale_errors.end());
+    metric_specific.metric.bubble_sigma = 0.5;
+    metric_specific.observer.distance = 50.0;
     metric_specific.metric.throat_radius = 2.0;
     EXPECT_FALSE(ConfigLoader::Validate(metric_specific).empty());
 }

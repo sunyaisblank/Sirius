@@ -37,7 +37,7 @@ struct MetricConfig {
     std::string wormhole_topology = "OneSheetCapture";
     double warp_velocity = core::kDefaultAlcubierreWarpVelocity;
     double bubble_radius = core::kDefaultAlcubierreBubbleRadius;
-    double bubble_sigma = core::kDefaultAlcubierreBubbleSigma;
+    double bubble_sigma = core::kDefaultAlcubierreBubbleSigma;  // Inverse coordinate length.
 };
 
 struct ObserverConfig {

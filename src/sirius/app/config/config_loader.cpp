@@ -442,7 +442,8 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
             "rayBundles require Minkowski, Schwarzschild, or Kerr: covariant curvature "
             "transport is not represented for the selected metric");
     }
-    if (finite(config.metric.throat_radius, "metric.throat_radius") &&
+    const bool throat_radius_finite = finite(config.metric.throat_radius, "metric.throat_radius");
+    if (throat_radius_finite &&
         (config.metric.throat_radius <= 0.0 || config.metric.throat_radius > 1000.0)) {
         errors.push_back("metric.throat_radius must be greater than 0 and at most 1000");
     }
@@ -459,11 +460,13 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
         std::abs(config.metric.warp_velocity) > 10.0) {
         errors.push_back("metric.warp_velocity magnitude must be at most 10");
     }
-    if (finite(config.metric.bubble_radius, "metric.bubble_radius") &&
+    const bool bubble_radius_finite = finite(config.metric.bubble_radius, "metric.bubble_radius");
+    if (bubble_radius_finite &&
         (config.metric.bubble_radius <= 0.0 || config.metric.bubble_radius > 1000.0)) {
         errors.push_back("metric.bubble_radius must be greater than 0 and at most 1000");
     }
-    if (finite(config.metric.bubble_sigma, "metric.bubble_sigma") &&
+    const bool bubble_sigma_finite = finite(config.metric.bubble_sigma, "metric.bubble_sigma");
+    if (bubble_sigma_finite &&
         (config.metric.bubble_sigma <= 0.0 || config.metric.bubble_sigma > 1000.0)) {
         errors.push_back("metric.bubble_sigma must be greater than 0 and at most 1000");
     }
@@ -475,20 +478,35 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
             issue.has_value()) {
             errors.emplace_back(*issue);
         }
+        if (*metric_id == core::MetricId::Alcubierre && bubble_radius_finite &&
+            bubble_sigma_finite && config.metric.bubble_radius > 0.0 &&
+            config.metric.bubble_radius <= 1000.0 && config.metric.bubble_sigma > 0.0 &&
+            config.metric.bubble_sigma <= 1000.0) {
+            if (const auto issue = core::AlcubierreScaleIssue(config.metric.bubble_radius,
+                                                              config.metric.bubble_sigma);
+                issue.has_value()) {
+                errors.emplace_back(*issue);
+            }
+        }
     }
 
     // --- Observer validation ------------------------------------------------
     constexpr double kMinDistanceFactor = 5.0;
     constexpr double kMaxDistanceFactor = 1000.0;
 
-    // observer.distance is the coordinate radius r, not the dimensionless
-    // ratio r/M. Mass-bearing scenes admit 5M <= r <= 1000M; metrics without M
-    // retain the established [5, 1000] geometric-coordinate interval.
-    const double distance_scale = uses_mass ? config.metric.mass : 1.0;
+    // observer.distance is the coordinate radius r, not a dimensionless ratio.
+    // The launch observer remains exterior to the governed central scene and
+    // the finite trace budget scales with the same authority.
+    const double distance_scale =
+        metric_id.has_value() ? core::MetricSceneLengthScale(
+                                    *metric_id, config.metric.mass, config.metric.throat_radius,
+                                    config.metric.bubble_radius, config.metric.bubble_sigma)
+                              : 1.0;
     const double min_distance = kMinDistanceFactor * distance_scale;
     const double max_distance = kMaxDistanceFactor * distance_scale;
 
-    if (finite(config.observer.distance, "observer.distance") &&
+    if (finite(config.observer.distance, "observer.distance") && std::isfinite(distance_scale) &&
+        distance_scale > 0.0 &&
         (config.observer.distance < min_distance || config.observer.distance > max_distance)) {
         if (uses_mass) {
             errors.push_back(
@@ -496,6 +514,18 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
                 "(r=" +
                 std::to_string(config.observer.distance) +
                 ", M=" + std::to_string(config.metric.mass) + ")");
+        } else if (metric_id == core::MetricId::MorrisThorne) {
+            errors.push_back(
+                "Morris-Thorne observer.distance must satisfy 5*b0 <= r <= 1000*b0 "
+                "for an exterior one-sheet observer (r=" +
+                std::to_string(config.observer.distance) +
+                ", b0=" + std::to_string(config.metric.throat_radius) + ")");
+        } else if (metric_id == core::MetricId::Alcubierre) {
+            errors.push_back(
+                "Alcubierre observer.distance must satisfy 5*L <= r <= 1000*L, "
+                "L=max(R,1/sigma), for an exterior observer (r=" +
+                std::to_string(config.observer.distance) + ", L=" + std::to_string(distance_scale) +
+                ")");
         } else {
             errors.push_back(
                 "observer.distance coordinate radius must be between 5 and 1000 geometric "

@@ -12,8 +12,10 @@
 
 #include "sirius/base/contracts.h"
 
+#include <algorithm>
 #include <array>
 #include <cctype>
+#include <cmath>
 #include <optional>
 #include <string>
 #include <string_view>
@@ -37,6 +39,8 @@ inline constexpr double kDefaultMorrisThorneThroatRadius = 1.0;
 inline constexpr double kDefaultAlcubierreWarpVelocity = 0.5;
 inline constexpr double kDefaultAlcubierreBubbleRadius = 1.0;
 inline constexpr double kDefaultAlcubierreBubbleSigma = 0.5;
+inline constexpr double kMinAlcubierreSigmaRadius = 0.1;
+inline constexpr double kMaxAlcubierreSigmaRadius = 100.0;
 
 // Registry row: identity, spellings, parameters, backend support.
 struct MetricInfo {
@@ -95,6 +99,56 @@ enum class DiskSupport {
     }
     SIRIUS_ASSERT(false);
     return false;
+}
+
+// Characteristic coordinate scales shared by observer validation and numerical
+// tracing. For the tanh Alcubierre profile, sigma has inverse-length units: the
+// represented scene extends over max(R, 1/sigma), while its narrowest feature is
+// min(R, 1/sigma). Callers validate the selected parameters before relying on
+// these values.
+[[nodiscard]] constexpr double MetricSceneLengthScale(MetricId id, double mass,
+                                                      double throat_radius, double bubble_radius,
+                                                      double bubble_sigma) noexcept {
+    if (MetricUsesMass(id)) return mass;
+    switch (id) {
+        case MetricId::MorrisThorne:
+            return throat_radius;
+        case MetricId::Alcubierre:
+            return std::max(bubble_radius, 1.0 / bubble_sigma);
+        case MetricId::Minkowski:
+        case MetricId::DeSitter:
+            return 1.0;
+        case MetricId::Schwarzschild:
+        case MetricId::Kerr:
+        case MetricId::ReissnerNordstrom:
+        case MetricId::KerrNewman:
+        case MetricId::SchwarzschildDeSitter:
+            break;
+    }
+    SIRIUS_ASSERT(false);
+    return 1.0;
+}
+
+[[nodiscard]] constexpr double MetricFeatureLengthScale(MetricId id, double mass,
+                                                        double throat_radius, double bubble_radius,
+                                                        double bubble_sigma) noexcept {
+    if (id == MetricId::Alcubierre) {
+        return std::min(bubble_radius, 1.0 / bubble_sigma);
+    }
+    return MetricSceneLengthScale(id, mass, throat_radius, bubble_radius, bubble_sigma);
+}
+
+// A very diffuse profile has not decayed at the governed outer boundary; a very
+// sharp profile is not reliably resolved by the fp32 state shared with the
+// device path. This dimensionless bound keeps both claims explicit.
+[[nodiscard]] constexpr std::optional<std::string_view> AlcubierreScaleIssue(
+    double bubble_radius, double bubble_sigma) noexcept {
+    const double sigma_radius = bubble_sigma * bubble_radius;
+    if (!(sigma_radius >= kMinAlcubierreSigmaRadius && sigma_radius <= kMaxAlcubierreSigmaRadius)) {
+        return "Alcubierre requires 0.1 <= bubble_sigma*bubble_radius <= 100 so the wall is "
+               "resolved and the outer boundary is asymptotic";
+    }
+    return std::nullopt;
 }
 
 // Identity compatibility for parameters whose schema defaults must remain
@@ -275,7 +329,7 @@ inline const std::array<MetricInfo, 9>& MetricRegistry() {
         {MetricId::Alcubierre,
          "Alcubierre",
          {"WarpDrive", "Alcubierre Warp Drive", nullptr, nullptr, nullptr},
-         "warp velocity, bubble radius, wall thickness",
+         "warp velocity, bubble radius, inverse wall scale sigma",
          true,
          true},
     }};

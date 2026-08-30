@@ -21,7 +21,7 @@ namespace sirius::core {
 // Warp drive family parameters.
 struct WarpDriveParams {
     double vs = 1.0;     // Bubble velocity (may exceed 1 for superluminal).
-    double sigma = 8.0;  // Wall thickness parameter (larger = sharper).
+    double sigma = 8.0;  // Inverse wall length (larger = sharper/thinner).
     double R = 1.0;      // Bubble radius.
     double xs = 0.0;     // Current x position of the bubble centre.
     double ys = 0.0;     // Current y position.

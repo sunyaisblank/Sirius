@@ -766,8 +766,14 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         }
         if (rBig >= escapeRadius) { escaped = true; break; }
 
+        // Preserve scale covariance for the exotic metrics. Alcubierre's sigma
+        // is an inverse length, so a diffuse wall is governed by 1/sigma while
+        // a compact wall is governed by R; the wormhole is governed by b0.
+        Real exoticScale = isWarp
+            ? max(Real(warpR), Real(1.0f / warpSigma))
+            : Real(throatB0);
         Real rStep = (isWarp || isWormhole)
-            ? max(rBig, Real(1.0f))
+            ? max(rBig, exoticScale)
             : ComputeKerrRadiusCart(px, py, pz, Real(a));
         Real geometricStep = clamp(stepScale * rStep, Real(minStep), Real(maxStep));
         Real dt = min(geometricStep, adaptiveStep);

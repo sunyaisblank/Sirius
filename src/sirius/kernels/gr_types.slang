@@ -126,7 +126,7 @@ public struct MetricParamsGPU {
     public float M;       // mass, or Ellis m
     public float a;       // spin, or Ellis n
     public float Q;       // charge, or wormhole redshift Phi0
-    public float Lambda;  // cosmological constant, or warp wall thickness sigma
+    public float Lambda;  // cosmological constant, or inverse warp-wall length sigma
     public float p5;      // warp radius R
     public float p6;      // warp velocity vs
     public float p7;      // spare

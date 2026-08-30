@@ -154,8 +154,8 @@ Each review pass asks:
 | Two-sheet wormholes were described only in comments | the operator could request a Morris-Thorne scene but could not state the required topology, allowing one-sheet output to be misunderstood | Fixed: `OneSheetCapture` and `TwoSheet` are explicit schema/CLI/typed identities; the former is represented, while the latter declines before render |
 | GLFW repeat actions were interpreted as key releases and non-finite pointer input could poison camera state | the handler treated only action 1 as pressed and accepted NaN/Inf | Fixed: press/repeat/release semantics, finite pointer/scroll guards, camera update, and refinement restart are Mandatory-gated; native event delivery remains a separate attestation |
 | Viewer state exposed an unwritten restart flag, unused camera velocities, and an attached GLFW window pointer that the CLI—not the viewer—owned | downstream callers could infer observable refinement/window capabilities from dead fields | Fixed: the actual atomic restart lifecycle now publishes and consumes the synchronised restart state under the input gate; dead velocity and window attachment surfaces are removed |
-| P2900/P2996, P1–P6/E1–E4, and external-profile boundaries were prose-only at runtime | C++26 mode could be mistaken for native contracts/reflection and installed volumes carried no complete acceptance ledger | Fixed: compile-time language facts distinguish native features from checked-macro/explicit-schema substitutes; all ten P/E criteria, 24 dimensions, and 28 capability contracts are build-gated, installed, readiness-required, and exposed by `info capabilities` |
-| CPU/Vulkan trace termination and step lengths were fixed in absolute coordinates while the public black-hole mass ranged from 0.1 to 100 | at large M the 200-unit escape sphere could coincide with the horizon, and the Vulkan kernel classified observers beyond it as escaped before taking one step; fixed two-unit steps also exhausted the budget before reaching a large-M lens | Fixed: one shared trace-domain authority scales CPU/Vulkan step bounds and the far boundary with M, makes the escape sphere enclose the observer, preserves the M=1 baseline exactly, and retains a unit numerical scale for metrics without a mass parameter |
+| P2900/P2996, P1–P6/E1–E4, and external-profile boundaries were prose-only at runtime | C++26 mode could be mistaken for native contracts/reflection and installed volumes carried no complete acceptance ledger | Fixed: compile-time language facts distinguish native features from checked-macro/explicit-schema substitutes; all ten P/E criteria, 24 dimensions, and 29 capability contracts are build-gated, installed, readiness-required, and exposed by `info capabilities` |
+| CPU/Vulkan trace termination and step lengths were fixed in absolute coordinates while public black-hole and exotic geometry scales varied by orders of magnitude | at large M the 200-unit escape sphere could coincide with the horizon, while Morris-Thorne `b0` and Alcubierre `R`/`1/sigma` were ignored entirely; observers could start inside the one-sheet capture throat, the kernel could classify distant observers as escaped before one step, and unresolved walls could be advertised as rendered | Fixed: one registry authority governs observer bounds and both trace paths with `M`, `b0`, or Alcubierre `max/min(R,1/sigma)`; the escape sphere encloses the exterior observer, device stepping is scale-covariant, and `0.1 <= sigma*R <= 100` rejects non-asymptotic or fp32-unresolved warp profiles |
 | A valid Mandatory test could be substituted for an unrelated P/E or operating-model witness | evidence shape and existence checks did not preserve the reviewed semantic mapping | Fixed: the ten P/E evidence sets are explicit verifier policy, and canonical digests pin the complete acceptance, dimension, and capability sections; negative controls mutate both evidence identity and section semantics and require rejection |
 | Release packaging could retain a complete attestation receipt while weakening the product built from that revision | `BUILD_TESTS`, the Mandatory gate, warnings-as-errors, contract enforcement, Vulkan/Slang, SPIR-V validation, and the native viewer remained independently optional | Fixed: a two-phase build-policy verifier makes all of them non-negotiable, permits only the Release configuration, checks both configured flags and realised target/tool topology, and supplies a Mandatory negative-control CTest that rejects every weakened variant |
 | Qualification CI could execute different build inputs for the same source revision | remote Actions and FetchContent used movable tags, the Linux Slang archive had no checked digest, and Windows selected the latest third-party SwiftShader at runtime | Fixed: every Action and fetched source has an immutable commit identity, direct Slang/SwiftShader archives have versioned URLs and checked-in SHA-256 values, native Vulkan toolchain/device preflights fail early, and repository governance rejects movable actions/dependencies, latest rasterizer selection, and unchecked direct downloads |
@@ -212,7 +212,7 @@ non-skipping and registration-complete evidence, input/config,
 install/relocation, operator-script status, runtime resources, CPU rendering,
 session lifecycle/cancellation, required Vulkan dispatch, exact sampling,
 device/allocation identity, near-extremal/oracle physics and burn-in,
-mass-scaled trace-domain geometry, polarised
+natural-scale trace-domain geometry, polarised
 transport through film, Page-Thorne/volumetric transfer, ray bundles/filtered
 stars, camera/lens/film, interactive-viewer projection, output encoding,
 memory/dispatch, kernel portability, and metric/decline behaviour.
@@ -522,6 +522,18 @@ corresponding profile. They are not projected from registration counts.
   executed its embedded 8x8 in-memory CPU preview once per compiler; that
   preview is now split under the explicit rendering name
   `InMemoryPreviewCompletesWithoutWritingOutput` and was not executed again.
+- 2026-08-30 exotic natural-scale correction: Morris-Thorne observer and trace
+  bounds now scale with `b0`; Alcubierre uses `max(R,1/sigma)` for scene extent
+  and `min(R,1/sigma)` for the smallest integration feature. The public and
+  typed boundaries require an exterior observer and reject `sigma*R` outside
+  `[0.1,100]`, while the device step schedule no longer hard-codes one
+  coordinate unit. CLI, registry, schema comments, and session diagnostics now
+  identify `sigma` as an inverse wall length. GCC 14 and Clang 21 each compiled
+  the complete explicit product and six-test-executable topology plus every
+  Slang precision/portability output; the three pure scale/config/CLI probes and
+  all 24 registry/Alcubierre mathematical probes pass on both. The estate now
+  contains 744 governed source GoogleTests, 753 development CTests, 24 operating
+  dimensions, and 29 capability contracts. No rendering test was executed.
 - GCC 14 strict required-Vulkan profile: the pre-alignment snapshot passed the complete
   907/907 estate on the Radeon 780M through Dozen in 210.36 seconds. A separate
   required-only run passed 697/697 on the Radeon in 281.34 seconds and the same
@@ -561,7 +573,7 @@ corresponding profile. They are not projected from registration counts.
   compiled and installed, reported the capability absent, remained CPU/Vulkan
   ready, and rejected `view`. Reduced real operator runs produced 2/2 smoke and
   13/13 demonstration artefacts. The installed operating model reports all ten
-  P/E criteria, 24 review dimensions, and 28 capability contracts. The final
+  P/E criteria, 24 review dimensions, and 29 capability contracts. The final
   clean-revision physical record must bind the selected 780M/Dozen identity,
   three precision rungs, and exact decoded 1920x1080 and 5616x4096 P3/P5
   outputs under the 2048 MiB cap; the next native viewer record must bind a

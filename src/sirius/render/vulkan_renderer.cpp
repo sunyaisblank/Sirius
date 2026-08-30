@@ -286,8 +286,14 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
     params[19] = static_cast<float>(config.camera_fov * math::kPi / 180.0);  // full-angle radians
     params[20] = static_cast<float>(config.width) / static_cast<float>(config.height);
 
-    const TraceDomainParameters trace_domain = BuildTraceDomainParameters(
-        config.metric_id, config.black_hole_mass, config.observer_distance);
+    const TraceDomainParameters trace_domain = BuildTraceDomainParameters({
+        .metric_id = config.metric_id,
+        .metric_mass = config.black_hole_mass,
+        .observer_radius = config.observer_distance,
+        .throat_radius = config.throat_radius,
+        .bubble_radius = config.bubble_radius,
+        .bubble_sigma = config.bubble_sigma,
+    });
     params[21] = kTraceMaxSteps;
     params[22] = kTraceStepScale;
     params[23] = trace_domain.vulkan_min_step;

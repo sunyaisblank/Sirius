@@ -28,7 +28,7 @@ REQUIRED_DIMENSIONS = {
     "sampling_semantics",
     "device_identity_and_allocation_domain",
     "physics_oracles_and_near_extremal_boundary",
-    "mass_scaled_trace_domain",
+    "natural_scaled_trace_domain",
     "polarised_transport_to_film",
     "page_thorne_and_volumetric_transfer",
     "ray_bundles_and_filtered_point_catalogue",
@@ -58,6 +58,7 @@ REQUIRED_CAPABILITIES = {
     "disk_emission_outside_schwarzschild_kerr",
     "morris_thorne_one_sheet",
     "morris_thorne_two_sheet",
+    "alcubierre_exterior_resolved_profile",
     "vulkan_volumetric_sample_bound",
     "viewer_input_state_logic",
     "viewer_native_window_input",
@@ -207,9 +208,9 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "c304fec87cdffe8c92e6d921311b9202c5739e5e989431e39e5d037393b06d20",
-    "required_dimensions": "8a7596496dde0d3fb7311e9fbbe44f8375170e6eb1756181024facddcb2593de",
-    "capability_contracts": "43a3cf7bac0e0f27cb735a589004a2139e900a514b9df8d2cd539a730f34562e",
+    "acceptance_criteria": "107344269503cbb7ac98ed55ca096c7b8a10b6ba66768076fbb88712dea4b808",
+    "required_dimensions": "84206d7f730ec28f2206ce63296ffcee81eb6ed5ad083814fbf8d6bb05a87687",
+    "capability_contracts": "d1c20748d46039bfea4d1f05624cf2edfd27299e4fe977f579157dac777ace49",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
 

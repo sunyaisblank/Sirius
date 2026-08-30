@@ -137,6 +137,21 @@ TEST(RenderCommandParse, MotionBlurAndWormholeTopologyReachTheValidatedSchema) {
     EXPECT_EQ(config.metric.wormhole_topology, "TwoSheet");
 }
 
+TEST(RenderCommandParse, ExoticMetricScalesReachTheValidatedSchema) {
+    RenderCommand cmd;
+    GlobalOptions globals;
+    SiriusConfig config = SiriusConfig::Defaults();
+
+    EXPECT_EQ(cmd.Execute({"--throat-radius", "4", "--warp-velocity", "2", "--bubble-radius", "3",
+                           "--bubble-sigma", "5", kStopSentinel},
+                          globals, config),
+              1);
+    EXPECT_DOUBLE_EQ(config.metric.throat_radius, 4.0);
+    EXPECT_DOUBLE_EQ(config.metric.warp_velocity, 2.0);
+    EXPECT_DOUBLE_EQ(config.metric.bubble_radius, 3.0);
+    EXPECT_DOUBLE_EQ(config.metric.bubble_sigma, 5.0);
+}
+
 TEST(RenderCommandParse, ExplicitGpuRequestRunsVulkanWhenDevicePresent) {
     RenderCommand cmd;
     GlobalOptions globals;

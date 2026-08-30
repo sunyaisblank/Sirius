@@ -120,7 +120,7 @@
       "required": true,
       "verification": "build_gated",
       "profiles": ["cpu", "vulkan"],
-      "requirement": "The single registry exposes nine CPU-renderable spacetime families, advertises only implemented backend support, rejects parameters absent from a metric, preserves observer distance as a geometric coordinate radius with identity-aware mass scaling, and rejects disk semantics absent from a metric.",
+      "requirement": "The single registry exposes nine CPU-renderable spacetime families, advertises only implemented backend support, rejects parameters absent from a metric, preserves observer distance as a geometric coordinate radius with metric-natural scaling, resolves the bounded Alcubierre wall profile, and rejects disk semantics absent from a metric.",
       "capability_dependencies": [],
       "evidence": [
         {"kind": "gtest", "name": "MetricRegistryTests.EveryCanonicalNameParsesToItsOwnId"},
@@ -220,6 +220,7 @@
         {"kind": "gtest", "name": "ConfigLoading.UnknownNestedFieldDeclines"},
         {"kind": "gtest", "name": "ConfigValidation.MetricMassAndObserverCoordinateRadiusAreIdentityAware"},
         {"kind": "gtest", "name": "ConfigValidation.FeatureSpecificControlsRequireTheirOwningModels"},
+        {"kind": "gtest", "name": "RenderCommandParse.ExoticMetricScalesReachTheValidatedSchema"},
         {"kind": "gtest", "name": "RenderCommandParse.FeatureParametersSelectTheirOwningModels"},
         {"kind": "gtest", "name": "RenderCommandParse.TrailingNumericGarbageRejected"},
         {"kind": "gtest", "name": "CommandRouter.UnknownCommandReturnsFailure"},
@@ -298,8 +299,9 @@
       ]
     },
     {
-      "id": "mass_scaled_trace_domain",
+      "id": "natural_scaled_trace_domain",
       "evidence": [
+        {"kind": "gtest", "name": "ConfigValidation.MetricMassAndObserverCoordinateRadiusAreIdentityAware"},
         {"kind": "gtest", "name": "RenderSessionProbe.TraceDomainScalesWithMassAndEnclosesTheObserver"}
       ]
     },
@@ -595,8 +597,10 @@
       "state": "supported",
       "profiles": ["cpu", "vulkan"],
       "request": "Morris-Thorne OneSheetCapture topology",
-      "behavior": "Render one exterior sheet and classify the throat as a dark capture surface.",
+      "behavior": "Require 5*b0 <= r_observer <= 1000*b0, scale both live trace domains with b0, render one exterior sheet, and classify the throat as a dark capture surface.",
       "evidence": [
+        {"kind": "gtest", "name": "ConfigValidation.MetricMassAndObserverCoordinateRadiusAreIdentityAware"},
+        {"kind": "gtest", "name": "RenderSessionProbe.TraceDomainScalesWithMassAndEnclosesTheObserver"},
         {"kind": "gtest", "name": "RenderSessionProbe.CpuMorrisThorneRenderCompletes"},
         {"kind": "gtest", "name": "VulkanRenderSession.CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalBounds"}
       ]
@@ -610,6 +614,18 @@
       "evidence": [
         {"kind": "gtest", "name": "ConfigValidation.MotionBlurAndWormholeTopologyHaveExplicitOperatorBoundaries"},
         {"kind": "gtest", "name": "RenderSessionProbe.PolarisedAndTwoSheetRequestsDeclineAtTheTypedBoundary"}
+      ]
+    },
+    {
+      "id": "alcubierre_exterior_resolved_profile",
+      "state": "bounded",
+      "profiles": ["cpu", "vulkan"],
+      "request": "Alcubierre exterior-observer rendering with tanh wall parameters R and sigma",
+      "behavior": "Treat sigma as an inverse coordinate length; require 0.1 <= sigma*R <= 100 and 5L <= r_observer <= 1000L for L=max(R,1/sigma); scale the outer trace domain with L and the minimum integration step with min(R,1/sigma).",
+      "evidence": [
+        {"kind": "gtest", "name": "ConfigValidation.MetricMassAndObserverCoordinateRadiusAreIdentityAware"},
+        {"kind": "gtest", "name": "RenderCommandParse.ExoticMetricScalesReachTheValidatedSchema"},
+        {"kind": "gtest", "name": "RenderSessionProbe.TraceDomainScalesWithMassAndEnclosesTheObserver"}
       ]
     },
     {

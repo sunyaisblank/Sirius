@@ -54,7 +54,7 @@ constexpr std::array<std::string_view, 24> kRequiredDimensionIds = {
     "sampling_semantics",
     "device_identity_and_allocation_domain",
     "physics_oracles_and_near_extremal_boundary",
-    "mass_scaled_trace_domain",
+    "natural_scaled_trace_domain",
     "polarised_transport_to_film",
     "page_thorne_and_volumetric_transfer",
     "ray_bundles_and_filtered_point_catalogue",
@@ -66,7 +66,7 @@ constexpr std::array<std::string_view, 24> kRequiredDimensionIds = {
     "metric_catalogue_and_declines",
 };
 
-constexpr std::array<std::string_view, 28> kRequiredCapabilityIds = {
+constexpr std::array<std::string_view, 29> kRequiredCapabilityIds = {
     "revision_bound_release_alignment",
     "polarised_thin_disk_cpu",
     "polarised_volumetric_transfer",
@@ -85,6 +85,7 @@ constexpr std::array<std::string_view, 28> kRequiredCapabilityIds = {
     "disk_emission_outside_schwarzschild_kerr",
     "morris_thorne_one_sheet",
     "morris_thorne_two_sheet",
+    "alcubierre_exterior_resolved_profile",
     "vulkan_volumetric_sample_bound",
     "viewer_input_state_logic",
     "viewer_native_window_input",

@@ -310,7 +310,44 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         return std::string(*issue);
     }
 
-    const double distance_scale = uses_mass ? config.black_hole_mass : 1.0;
+    if (!finite(config.throat_radius) || config.throat_radius <= 0.0 ||
+        config.throat_radius > 1000.0 || !finite(config.warp_velocity) ||
+        std::abs(config.warp_velocity) > 10.0 || !finite(config.bubble_radius) ||
+        config.bubble_radius <= 0.0 || config.bubble_radius > 1000.0 ||
+        !finite(config.bubble_sigma) || config.bubble_sigma <= 0.0 ||
+        config.bubble_sigma > 1000.0) {
+        return "wormhole or warp-drive parameters are outside the represented domain";
+    }
+    bool one_sheet_topology = false;
+    switch (config.wormhole_topology) {
+        case WormholeTopology::OneSheetCapture:
+            one_sheet_topology = true;
+            break;
+        case WormholeTopology::TwoSheet:
+            break;
+        default:
+            return "invalid wormhole topology";
+    }
+    if (const auto issue = core::MetricSpecificParameterIssue(
+            config.metric_id, config.throat_radius, one_sheet_topology, config.warp_velocity,
+            config.bubble_radius, config.bubble_sigma);
+        issue.has_value()) {
+        return std::string(*issue);
+    }
+    if (config.metric_id == MetricId::MorrisThorne && !one_sheet_topology) {
+        return "two-sheet wormhole continuation and a second environment are not represented";
+    }
+    if (config.metric_id == MetricId::Alcubierre) {
+        if (const auto issue =
+                core::AlcubierreScaleIssue(config.bubble_radius, config.bubble_sigma);
+            issue.has_value()) {
+            return std::string(*issue);
+        }
+    }
+
+    const double distance_scale =
+        core::MetricSceneLengthScale(config.metric_id, config.black_hole_mass, config.throat_radius,
+                                     config.bubble_radius, config.bubble_sigma);
     if (!finite(config.observer_distance) || config.observer_distance < 5.0 * distance_scale ||
         config.observer_distance > 1000.0 * distance_scale ||
         !finite(config.observer_inclination) ||
@@ -511,33 +548,6 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
     } else if (config.film_config != defaults.film_config) {
         return "film-simulation parameters require film simulation";
     }
-    if (!finite(config.throat_radius) || config.throat_radius <= 0.0 ||
-        config.throat_radius > 1000.0 || !finite(config.warp_velocity) ||
-        std::abs(config.warp_velocity) > 10.0 || !finite(config.bubble_radius) ||
-        config.bubble_radius <= 0.0 || config.bubble_radius > 1000.0 ||
-        !finite(config.bubble_sigma) || config.bubble_sigma <= 0.0 ||
-        config.bubble_sigma > 1000.0) {
-        return "wormhole or warp-drive parameters are outside the represented domain";
-    }
-    bool one_sheet_topology = false;
-    switch (config.wormhole_topology) {
-        case WormholeTopology::OneSheetCapture:
-            one_sheet_topology = true;
-            break;
-        case WormholeTopology::TwoSheet:
-            break;
-        default:
-            return "invalid wormhole topology";
-    }
-    if (const auto issue = core::MetricSpecificParameterIssue(
-            config.metric_id, config.throat_radius, one_sheet_topology, config.warp_velocity,
-            config.bubble_radius, config.bubble_sigma);
-        issue.has_value()) {
-        return std::string(*issue);
-    }
-    if (config.metric_id == MetricId::MorrisThorne && !one_sheet_topology) {
-        return "two-sheet wormhole continuation and a second environment are not represented";
-    }
     if (config.enable_jets) {
         return "relativistic jets require covariant geodesic radiative transfer, which is not "
                "represented";
@@ -707,13 +717,29 @@ base::Expected<void> RenderSession::Initialise() {
     camera_config.aperture = config_.camera_aperture;
     camera_config.focus_distance = config_.camera_focus_distance;
     camera_ = core::CreateCamera(config_.lens_type, camera_config);
-    std::cout << "  Observer:   r=" << camera_config.r
-              << "M, theta=" << (camera_config.theta * 180.0 / math::kPi) << " deg" << std::endl;
+    std::cout << "  Observer:   r=" << camera_config.r << " coordinate units";
+    if (core::MetricUsesMass(config_.metric_id)) {
+        std::cout << " (r/M=" << camera_config.r / config_.black_hole_mass << ')';
+    } else if (config_.metric_id == MetricId::MorrisThorne) {
+        std::cout << " (r/b0=" << camera_config.r / config_.throat_radius << ')';
+    } else if (config_.metric_id == MetricId::Alcubierre) {
+        const double scale = core::MetricSceneLengthScale(
+            config_.metric_id, config_.black_hole_mass, config_.throat_radius,
+            config_.bubble_radius, config_.bubble_sigma);
+        std::cout << " (r/L=" << camera_config.r / scale << ", L=max(R,1/sigma))";
+    }
+    std::cout << ", theta=" << (camera_config.theta * 180.0 / math::kPi) << " deg" << std::endl;
 
     // Geodesic tracer.
     TracerConfig tracer_config;
-    const TraceDomainParameters trace_domain = BuildTraceDomainParameters(
-        config_.metric_id, config_.black_hole_mass, config_.observer_distance);
+    const TraceDomainParameters trace_domain = BuildTraceDomainParameters({
+        .metric_id = config_.metric_id,
+        .metric_mass = config_.black_hole_mass,
+        .observer_radius = config_.observer_distance,
+        .throat_radius = config_.throat_radius,
+        .bubble_radius = config_.bubble_radius,
+        .bubble_sigma = config_.bubble_sigma,
+    });
     tracer_config.escape_radius = trace_domain.escape_radius;
     // Kerr-Schild coordinates are horizon-penetrating, so the exact capture
     // surface is numerically safe. Enlarging it inflates the near-extremal

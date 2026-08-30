@@ -815,6 +815,7 @@ set_tests_properties(
     RenderCommandParse.RepresentedVolumetricAndFilmFlagsSetEnables
     RenderCommandParse.FeatureParametersSelectTheirOwningModels
     RenderCommandParse.MotionBlurAndWormholeTopologyReachTheValidatedSchema
+    RenderCommandParse.ExoticMetricScalesReachTheValidatedSchema
     RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent
     RenderCommandParse.BackendVulkanDeclinesMetricOffTheRenderPath
     RenderCommandParse.ReusedCommandDoesNotRetainAnEarlierGpuRequest
