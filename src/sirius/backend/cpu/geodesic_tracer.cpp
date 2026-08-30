@@ -454,6 +454,7 @@ void GeodesicTracer::SetDiskPolarisation(const PolarisationFrame& frame,
 // Main trace.
 // =============================================================================
 TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
+    SIRIUS_PRE(IsRepresentedCameraRay(camera_ray) && camera_ray.active);
     TraceResult result;
     result.steps_taken = 0;
     result.numerical_failure = false;
@@ -516,6 +517,7 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
         if (config_.strong_field_radius > 0.0f && config_.strong_field_max_step > 0.0f &&
             pre_step_radius < config_.strong_field_radius) {
             step_config.max_step = std::min(step_config.max_step, config_.strong_field_max_step);
+            ray.step_size = std::min(ray.step_size, step_config.max_step);
         }
         bool success = Geodesic::IntegrateStepRk45(ray, metric_, step_config);
         result.steps_taken++;
@@ -560,64 +562,7 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
             min_r = static_cast<float>(r);
         }
 
-        // 1. Horizon capture: the metric decides in its own coordinates, so the
-        // oblate Kerr horizon is placed exactly even at high spin.
-        if (metric_->InsideCaptureSurface(ray.position, config_.horizon_factor - 1.0)) {
-            result.outcome = TraceResult::Outcome::Horizon;
-            result.final_position(0) = ray.position(0);
-            result.final_position(1) = ray.position(1);
-            result.final_position(2) = ray.position(2);
-            result.final_position(3) = ray.position(3);
-            result.min_radius = min_r;
-            break;
-        }
-
-        // 2. Escape to the configured outer boundary. Positive-Lambda scenes
-        // impose a finite causal-patch boundary condition, so localise their
-        // terminal state on the accepted segment rather than sampling beyond it.
-        if (r > config_.escape_radius) {
-            double vx = ray.velocity(1);
-            double vy = ray.velocity(2);
-            double vz = ray.velocity(3);
-            double v_radial = (x * vx + y * vy + z * vz) / r;
-
-            if (v_radial > 0 || config_.finite_causal_boundary) {
-                // A disk hit found earlier keeps priority for rendering.
-                if (result.num_disk_crossings == 0) {
-                    result.outcome = TraceResult::Outcome::Escaped;
-                }
-
-                Vec4 boundary_position = ray.position;
-                Vec4 boundary_tangent = ray.velocity;
-                if (config_.finite_causal_boundary) {
-                    const auto boundary = FindCausalBoundaryEvent(
-                        prev_pos, prev_vel, ray.position, ray.velocity, d_lambda,
-                        static_cast<double>(config_.escape_radius));
-                    if (!boundary.has_value()) {
-                        result.outcome = TraceResult::Outcome::MaxSteps;
-                        result.numerical_failure = true;
-                        break;
-                    }
-                    boundary_position = boundary->position;
-                    boundary_tangent = boundary->tangent;
-                }
-                for (int component = 0; component < 4; ++component) {
-                    result.final_position(component) = boundary_position(component);
-                }
-                const auto sky = SampleEulerianSky(*metric_, boundary_position, boundary_tangent);
-                SIRIUS_ASSERT(sky.has_value());
-                if (!sky.has_value()) {
-                    result.outcome = TraceResult::Outcome::MaxSteps;
-                    result.numerical_failure = true;
-                    break;
-                }
-                result.final_direction = sky->world_direction;
-                result.min_radius = min_r;
-                break;
-            }
-        }
-
-        // 3. Volumetric disk (ray marching through a 3D disk volume).
+        // 1. Volumetric disk (ray marching through a 3D disk volume).
         if (config_.enable_disk && config_.enable_volumetric) {
             const double absolute_spin = cached_a_ * cached_m_;
             const coordinates::Vec4Cart previous_cart{prev_pos(0), prev_pos(1), prev_pos(2),
@@ -645,7 +590,7 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
             }
         }
 
-        // 4. Thin disk: terminate at the observer-nearest opaque-surface event.
+        // 2. Thin disk: terminate at the observer-nearest opaque-surface event.
         if (config_.enable_disk && !config_.enable_volumetric) {
             Vec4 curr_pos;
             curr_pos(0) = ray.position(0);
@@ -726,6 +671,61 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
                 break;
             }
         }
+
+        // 3. Horizon capture. A represented opaque-disk crossing on this
+        // accepted observer-to-scene segment has already terminated above; it
+        // must not be hidden merely because the step endpoint lies inside the
+        // capture surface. This is the same event precedence used by Slang.
+        if (metric_->InsideCaptureSurface(ray.position, config_.horizon_factor - 1.0)) {
+            result.outcome = TraceResult::Outcome::Horizon;
+            result.final_position(0) = ray.position(0);
+            result.final_position(1) = ray.position(1);
+            result.final_position(2) = ray.position(2);
+            result.final_position(3) = ray.position(3);
+            result.min_radius = min_r;
+            break;
+        }
+
+        // 4. Escape to the configured outer boundary. Segment emission has
+        // observer-first precedence, matching the device path. Positive-Lambda
+        // scenes localise the accepted endpoint onto their causal boundary.
+        if (r > config_.escape_radius) {
+            const double vx = ray.velocity(1);
+            const double vy = ray.velocity(2);
+            const double vz = ray.velocity(3);
+            const double v_radial = (x * vx + y * vy + z * vz) / r;
+
+            if (v_radial > 0 || config_.finite_causal_boundary) {
+                result.outcome = TraceResult::Outcome::Escaped;
+
+                Vec4 boundary_position = ray.position;
+                Vec4 boundary_tangent = ray.velocity;
+                if (config_.finite_causal_boundary) {
+                    const auto boundary = FindCausalBoundaryEvent(
+                        prev_pos, prev_vel, ray.position, ray.velocity, d_lambda,
+                        static_cast<double>(config_.escape_radius));
+                    if (!boundary.has_value()) {
+                        result.outcome = TraceResult::Outcome::MaxSteps;
+                        result.numerical_failure = true;
+                        break;
+                    }
+                    boundary_position = boundary->position;
+                    boundary_tangent = boundary->tangent;
+                }
+                const auto sky = SampleEulerianSky(*metric_, boundary_position, boundary_tangent);
+                SIRIUS_ASSERT(sky.has_value());
+                if (!sky.has_value()) {
+                    result.outcome = TraceResult::Outcome::MaxSteps;
+                    result.numerical_failure = true;
+                    break;
+                }
+                ray.position = boundary_position;
+                ray.velocity = boundary_tangent;
+                result.final_direction = sky->world_direction;
+                result.min_radius = min_r;
+                break;
+            }
+        }
     }
 
     // Publish the actual terminal central-ray event for every outcome. For an
@@ -744,21 +744,6 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
 
     // No termination reached: result stays MaxSteps (default).
     return result;
-}
-
-// =============================================================================
-// Trace with per-call metric parameters.
-// =============================================================================
-TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray, double mass, double spin) {
-    metric_->SetParameter("mass", mass);
-    metric_->SetParameter("spin", spin / mass);  // Store as a/M.
-    CacheMetricParameters();
-
-    // Update the disk inner edge to the ISCO for the new spin; the Bardeen
-    // formula lives in one place (AccretionDiskD::ComputeIsco, units of M).
-    config_.disk_inner = static_cast<float>(AccretionDiskD::ComputeIsco(spin / mass) * mass);
-
-    return Trace(camera_ray);
 }
 
 // =============================================================================

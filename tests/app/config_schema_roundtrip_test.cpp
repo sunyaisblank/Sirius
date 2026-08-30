@@ -87,6 +87,12 @@ TEST(ConfigSchema, LegacyFieldSpellingsParse) {
     EXPECT_TRUE(config.motion_blur.enabled);
     EXPECT_EQ(config.motion_blur.samples, 9);
     EXPECT_EQ(config.film.preset, "SpaceOdyssey2001");
+    ASSERT_TRUE(config.film.grain_intensity.has_value());
+    ASSERT_TRUE(config.film.halation_strength.has_value());
+    ASSERT_TRUE(config.film.vignette_strength.has_value());
+    EXPECT_FLOAT_EQ(*config.film.grain_intensity, 0.2f);
+    EXPECT_FLOAT_EQ(*config.film.halation_strength, 0.1f);
+    EXPECT_FLOAT_EQ(*config.film.vignette_strength, 0.4f);
     EXPECT_EQ(config.backend.preferred, "cpu");
 }
 

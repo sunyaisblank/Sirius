@@ -6,6 +6,7 @@
 // apparent m = M + 5 log10(d/10pc); effective temperature uses the Ballesteros
 // (2012) B-V blackbody estimate. Ported from PHSF001A.h.
 
+#include "sirius/base/contracts.h"
 #include "sirius/core/spectral/blackbody.h"
 
 #include <algorithm>
@@ -16,6 +17,7 @@
 #include <numbers>
 #include <random>
 #include <span>
+#include <utility>
 #include <vector>
 
 namespace sirius::core {
@@ -34,17 +36,32 @@ struct StarEntry {
     // RGB colour from the same Planck/CIE/linear-sRGB authority used by disk
     // emission, normalised so the brightest channel is 1.
     void ComputeColor(float& r, float& g, float& b) const {
-        float T = temperature_K;
-        if (!std::isfinite(T) || T <= 0.0f) T = 5778.0f;  // Default to solar
-        const spectral::Rgb color = spectral::BlackbodyToRgb(T);
+        SIRIUS_PRE(std::isfinite(temperature_K) && temperature_K > 0.0f);
+        const spectral::Rgb color = spectral::BlackbodyToRgb(temperature_K);
         r = color.r;
         g = color.g;
         b = color.b;
     }
 
     // Relative flux from magnitude: F propto 10^(-0.4 m).
-    float Intensity() const { return std::pow(10.0f, -0.4f * magnitude); }
+    float Intensity() const {
+        // At m < -96 the exact relative flux exceeds binary32's finite range.
+        SIRIUS_PRE(std::isfinite(magnitude) && magnitude >= -96.0f);
+        return std::pow(10.0f, -0.4f * magnitude);
+    }
 };
+
+[[nodiscard]] inline bool IsRepresentedStarEntry(const StarEntry& star) noexcept {
+    const float direction_norm_squared = star.direction_x * star.direction_x +
+                                         star.direction_y * star.direction_y +
+                                         star.direction_z * star.direction_z;
+    return std::isfinite(star.direction_x) && std::isfinite(star.direction_y) &&
+           std::isfinite(star.direction_z) && std::isfinite(direction_norm_squared) &&
+           std::abs(direction_norm_squared - 1.0f) <= 2.0e-4f && std::isfinite(star.distance_pc) &&
+           star.distance_pc > 0.0f && std::isfinite(star.magnitude) && star.magnitude >= -96.0f &&
+           std::isfinite(star.color_bv) && std::isfinite(star.temperature_K) &&
+           star.temperature_K >= 100.0f && star.temperature_K <= 1.0e6f && star.padding == 0.0f;
+}
 
 static_assert(sizeof(StarEntry) == 8 * sizeof(float),
               "StarEntry must remain eight packed floats for the Slang upload ABI");
@@ -67,34 +84,66 @@ struct StarfieldConfig {
     bool enabled = true;
     bool enable_parallax = true;  // Enable parallax for camera motion
     bool enable_dof = true;       // Enable depth of field blur
-
-    // Invariants (enforced by clamping, not assertion):
-    //   star_count in [1, 10^7]
-    //   min_distance_pc > 0
-    //   aperture_mm in [0, 1000] (0 = infinite DoF)
-    void Validate() {
-        star_count = std::clamp(star_count, 1u, 10000000u);
-        if (!std::isfinite(min_distance_pc)) min_distance_pc = 1.0f;
-        if (!std::isfinite(max_distance_pc)) max_distance_pc = 10000.0f;
-        if (!std::isfinite(magnitude_limit)) magnitude_limit = 12.0f;
-        if (!std::isfinite(aperture_mm)) aperture_mm = 50.0f;
-        if (!std::isfinite(focus_distance_pc)) focus_distance_pc = 100.0f;
-        if (!std::isfinite(brightness_scale)) brightness_scale = 100.0f;
-        min_distance_pc = std::max(min_distance_pc, 0.1f);
-        if (!(max_distance_pc > min_distance_pc)) {
-            max_distance_pc =
-                std::nextafter(min_distance_pc, std::numeric_limits<float>::infinity());
-            if (!std::isfinite(max_distance_pc)) {
-                min_distance_pc = 1.0f;
-                max_distance_pc = 10000.0f;
-            }
-        }
-        magnitude_limit = std::clamp(magnitude_limit, 0.0f, 20.0f);
-        aperture_mm = std::clamp(aperture_mm, 0.0f, 1000.0f);
-        focus_distance_pc = std::clamp(focus_distance_pc, min_distance_pc, max_distance_pc);
-        brightness_scale = std::clamp(brightness_scale, 0.0f, 1000000.0f);
-    }
 };
+
+// The catalogue and typed-session paths share one represented numerical
+// domain. Invalid requests are rejected by their consuming boundary; this
+// predicate never mutates a request into a different catalogue.
+[[nodiscard]] inline bool IsRepresentedStarfieldConfig(const StarfieldConfig& config) noexcept {
+    return config.star_count >= 1 && config.star_count <= 10000000u &&
+           std::isfinite(config.min_distance_pc) && config.min_distance_pc >= 0.1f &&
+           std::isfinite(config.max_distance_pc) &&
+           config.max_distance_pc > config.min_distance_pc &&
+           std::isfinite(config.magnitude_limit) && config.magnitude_limit >= 0.0f &&
+           config.magnitude_limit <= 20.0f && std::isfinite(config.aperture_mm) &&
+           config.aperture_mm >= 0.0f && config.aperture_mm <= 1000.0f &&
+           std::isfinite(config.focus_distance_pc) &&
+           config.focus_distance_pc >= config.min_distance_pc &&
+           config.focus_distance_pc <= config.max_distance_pc &&
+           std::isfinite(config.brightness_scale) && config.brightness_scale >= 0.0f &&
+           config.brightness_scale <= 1000000.0f;
+}
+
+// Exact request consumed by the session's indexed DNGR point catalogue. The
+// broader StarfieldConfig also carries magnitude-cull, parallax, and synthetic
+// depth-of-field controls used by other sampling APIs; exposing them here would
+// accept controls that this path cannot consume.
+struct PointStarfieldConfig {
+    friend bool operator==(const PointStarfieldConfig&, const PointStarfieldConfig&) = default;
+
+    std::uint32_t star_count = 100000;
+    float min_distance_pc = 1.0f;
+    float max_distance_pc = 10000.0f;
+    float brightness_scale = 100.0f;
+    std::uint32_t seed = 42;
+};
+
+[[nodiscard]] inline bool IsRepresentedPointStarfieldConfig(
+    const PointStarfieldConfig& config) noexcept {
+    return config.star_count >= 1 && config.star_count <= 10000000u &&
+           std::isfinite(config.min_distance_pc) && config.min_distance_pc >= 0.1f &&
+           std::isfinite(config.max_distance_pc) &&
+           config.max_distance_pc > config.min_distance_pc &&
+           std::isfinite(config.brightness_scale) && config.brightness_scale >= 0.0f &&
+           config.brightness_scale <= 1000000.0f;
+}
+
+[[nodiscard]] inline StarfieldConfig ExpandPointStarfieldConfig(
+    const PointStarfieldConfig& config) {
+    SIRIUS_PRE(IsRepresentedPointStarfieldConfig(config));
+    StarfieldConfig expanded;
+    expanded.star_count = config.star_count;
+    expanded.min_distance_pc = config.min_distance_pc;
+    expanded.max_distance_pc = config.max_distance_pc;
+    // Generic depth-of-field sampling is not part of the point-catalogue
+    // request, but the shared generator object still requires a represented
+    // internal focus value. The nearest catalogue distance is exact and valid
+    // for every admitted ordered domain.
+    expanded.focus_distance_pc = config.min_distance_pc;
+    expanded.brightness_scale = config.brightness_scale;
+    expanded.seed = config.seed;
+    return expanded;
+}
 
 // Deterministic latitude/longitude acceleration structure for beam queries.
 // The exact Gaussian and angular cutoff remain in StarfieldGenerator; this
@@ -106,14 +155,23 @@ class StarfieldSpatialIndex {
     static constexpr int kThetaBins = 256;
     static constexpr int kPhiBins = 512;
 
-    explicit StarfieldSpatialIndex(const std::vector<StarEntry>& stars) { Build(stars); }
+    explicit StarfieldSpatialIndex(std::vector<StarEntry> stars) : stars_(std::move(stars)) {
+        SIRIUS_PRE(stars_.size() <= std::numeric_limits<std::uint32_t>::max());
+        SIRIUS_PRE(std::all_of(stars_.begin(), stars_.end(), IsRepresentedStarEntry));
+        Build();
+    }
+
+    [[nodiscard]] std::size_t Size() const noexcept { return stars_.size(); }
+    [[nodiscard]] std::span<const StarEntry> Stars() const noexcept { return stars_; }
 
     template <typename Callback>
     void ForEachCandidate(float dir_x, float dir_y, float dir_z, float sigma,
                           Callback&& callback) const {
-        if (indices_.empty() || sigma <= 0.0f) return;
+        SIRIUS_PRE(std::isfinite(dir_x) && std::isfinite(dir_y) && std::isfinite(dir_z));
+        SIRIUS_PRE(std::isfinite(sigma) && sigma > 0.0f);
+        if (indices_.empty()) return;
         const float length = std::sqrt(dir_x * dir_x + dir_y * dir_y + dir_z * dir_z);
-        if (length < 1.0e-20f) return;
+        SIRIUS_PRE(std::isfinite(length) && length >= 1.0e-20f);
         dir_x /= length;
         dir_y /= length;
         dir_z /= length;
@@ -168,6 +226,7 @@ class StarfieldSpatialIndex {
     [[nodiscard]] std::span<const std::uint32_t> Indices() const noexcept { return indices_; }
 
   private:
+    std::vector<StarEntry> stars_;
     std::vector<std::uint32_t> offsets_;
     std::vector<std::uint32_t> indices_;
 
@@ -175,14 +234,14 @@ class StarfieldSpatialIndex {
         return static_cast<std::size_t>(theta_bin) * kPhiBins + phi_bin;
     }
 
-    void Build(const std::vector<StarEntry>& stars) {
+    void Build() {
         constexpr float kStarfieldPi = 3.14159265358979323846f;
         constexpr float kStarfieldTwoPi = 2.0f * kStarfieldPi;
         constexpr std::size_t kCells = static_cast<std::size_t>(kThetaBins) * kPhiBins;
         offsets_.assign(kCells + 1, 0);
-        std::vector<std::size_t> cells(stars.size());
-        for (std::size_t i = 0; i < stars.size(); ++i) {
-            const auto& star = stars[i];
+        std::vector<std::size_t> cells(stars_.size());
+        for (std::size_t i = 0; i < stars_.size(); ++i) {
+            const auto& star = stars_[i];
             const float theta = std::acos(std::clamp(star.direction_z, -1.0f, 1.0f));
             float phi = std::atan2(star.direction_y, star.direction_x);
             if (phi < 0.0f) phi += kStarfieldTwoPi;
@@ -196,7 +255,7 @@ class StarfieldSpatialIndex {
         for (std::size_t cell = 1; cell < offsets_.size(); ++cell) {
             offsets_[cell] += offsets_[cell - 1];
         }
-        indices_.resize(stars.size());
+        indices_.resize(stars_.size());
         std::vector<std::uint32_t> cursor(offsets_.begin(), offsets_.end() - 1);
         for (std::size_t i = 0; i < cells.size(); ++i) {
             indices_[cursor[cells[i]]++] = static_cast<std::uint32_t>(i);
@@ -217,7 +276,7 @@ class StarfieldGenerator {
   public:
     explicit StarfieldGenerator(const StarfieldConfig& config = StarfieldConfig())
         : config_(config) {
-        config_.Validate();
+        SIRIUS_PRE(IsRepresentedStarfieldConfig(config));
     }
 
     // Generate the procedural star catalog (stars brighter than magnitude_limit).
@@ -266,10 +325,13 @@ class StarfieldGenerator {
                                const std::vector<StarEntry>& stars, float& r, float& g,
                                float& b) const {
         r = g = b = 0.0f;
-        if (stars.empty() || sigma <= 0.0f) return;
+        SIRIUS_PRE(std::isfinite(dir_x) && std::isfinite(dir_y) && std::isfinite(dir_z));
+        SIRIUS_PRE(std::isfinite(sigma) && sigma > 0.0f);
+        SIRIUS_PRE(std::all_of(stars.begin(), stars.end(), IsRepresentedStarEntry));
+        if (stars.empty()) return;
 
         float dlen = std::sqrt(dir_x * dir_x + dir_y * dir_y + dir_z * dir_z);
-        if (dlen < 1e-20f) return;
+        SIRIUS_PRE(std::isfinite(dlen) && dlen >= 1.0e-20f);
         dir_x /= dlen;
         dir_y /= dlen;
         dir_z /= dlen;
@@ -297,13 +359,15 @@ class StarfieldGenerator {
     // conservative angular candidate superset; the same dot-product cutoff and
     // Gaussian decide every contribution.
     void AccumulateThroughBeam(float dir_x, float dir_y, float dir_z, float sigma,
-                               const std::vector<StarEntry>& stars,
                                const StarfieldSpatialIndex& index, float& r, float& g,
                                float& b) const {
         r = g = b = 0.0f;
-        if (stars.empty() || sigma <= 0.0f) return;
+        SIRIUS_PRE(std::isfinite(dir_x) && std::isfinite(dir_y) && std::isfinite(dir_z));
+        SIRIUS_PRE(std::isfinite(sigma) && sigma > 0.0f);
+        const std::span<const StarEntry> stars = index.Stars();
+        if (stars.empty()) return;
         const float dlen = std::sqrt(dir_x * dir_x + dir_y * dir_y + dir_z * dir_z);
-        if (dlen < 1.0e-20f) return;
+        SIRIUS_PRE(std::isfinite(dlen) && dlen >= 1.0e-20f);
         dir_x /= dlen;
         dir_y /= dlen;
         dir_z /= dlen;
@@ -336,13 +400,17 @@ class StarfieldGenerator {
     // contribution decision.
     void AccumulateThroughBeam(float dir_x, float dir_y, float dir_z, float sigma_major,
                                float sigma_minor, float orientation,
-                               const std::vector<StarEntry>& stars,
                                const StarfieldSpatialIndex& index, float& r, float& g,
                                float& b) const {
         r = g = b = 0.0f;
-        if (stars.empty() || sigma_major <= 0.0f || sigma_minor <= 0.0f) return;
+        SIRIUS_PRE(std::isfinite(dir_x) && std::isfinite(dir_y) && std::isfinite(dir_z));
+        SIRIUS_PRE(std::isfinite(sigma_major) && sigma_major > 0.0f);
+        SIRIUS_PRE(std::isfinite(sigma_minor) && sigma_minor > 0.0f);
+        SIRIUS_PRE(std::isfinite(orientation));
+        const std::span<const StarEntry> stars = index.Stars();
+        if (stars.empty()) return;
         const float dlen = std::sqrt(dir_x * dir_x + dir_y * dir_y + dir_z * dir_z);
-        if (dlen < 1.0e-20f) return;
+        SIRIUS_PRE(std::isfinite(dlen) && dlen >= 1.0e-20f);
         dir_x /= dlen;
         dir_y /= dlen;
         dir_z /= dlen;
@@ -456,8 +524,8 @@ class StarfieldGenerator {
 
     const StarfieldConfig& config() const { return config_; }
     void SetConfig(const StarfieldConfig& config) {
+        SIRIUS_PRE(IsRepresentedStarfieldConfig(config));
         config_ = config;
-        config_.Validate();
     }
 
   private:
@@ -474,12 +542,12 @@ class StarfieldGenerator {
         star.direction_z = std::cos(theta);
 
         // Distance: power-law weighted towards nearby
-        float u = uniform(rng);
-        float d_min = config_.min_distance_pc;
-        float d_max = config_.max_distance_pc;
+        const double u = uniform(rng);
+        const double d_min = config_.min_distance_pc;
+        const double d_max = config_.max_distance_pc;
         // r^2 dr weighting (uniform in volume)
-        star.distance_pc =
-            std::cbrt(u * (d_max * d_max * d_max) + (1.0f - u) * (d_min * d_min * d_min));
+        star.distance_pc = static_cast<float>(
+            std::cbrt(u * (d_max * d_max * d_max) + (1.0 - u) * (d_min * d_min * d_min)));
 
         // Absolute magnitude: Salpeter IMF approximation
         // More low-luminosity stars

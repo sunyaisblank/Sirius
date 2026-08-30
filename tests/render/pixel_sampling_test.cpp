@@ -25,11 +25,8 @@ TEST(PixelSampling, EmitsExactlyEveryRequestedNonSquareCount) {
     }
 }
 
-TEST(PixelSampling, NonPositiveInputStillEmitsOneDefensiveSample) {
-    int callbacks = 0;
-    const int emitted = ForEachPixelSample(0, [&](float, float) { ++callbacks; });
-    EXPECT_EQ(emitted, 1);
-    EXPECT_EQ(callbacks, 1);
+TEST(PixelSampling, NonPositiveInputFailsClosed) {
+    EXPECT_DEATH(ForEachPixelSample(0, [](float, float) {}), "precondition.*enforced, terminating");
 }
 
 TEST(PixelSampling, NonSquareCountsCoverBothAxesWithoutRemainderBias) {

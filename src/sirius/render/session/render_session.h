@@ -195,20 +195,18 @@ struct SessionConfig {
     // transfer is represented.
     bool enable_corona = false;
 
-    // Depth-resolved starfield catalogue parameters.
-    core::StarfieldConfig starfield_config;
-
     // Filtered point-source star field (P3): render catalogue stars through the
     // beam footprint instead of the equirectangular texture. Default false keeps
     // the texture path and the pinned render.
     bool point_starfield = false;
+    core::PointStarfieldConfig point_starfield_config;
 
     // Ray bundles (P2): propagate geodesic deviation on the live path and derive
     // per-pixel beam footprints. Default false keeps the point-sampled path.
     bool ray_bundles = false;
 
-    // IMAX 70mm film simulation.
-    bool enable_film_simulation = false;
+    // Optional bounded grain/halation/grade/vignette/bloom display finish.
+    bool enable_film_finish = false;
     FilmConfig film_config = FilmConfig::Interstellar();
 };
 
@@ -327,7 +325,6 @@ class RenderSession {
     // Filtered point-source star field (P3): accumulate catalogue stars through
     // the per-ray beam footprint (ray bundles on) or a pinhole sigma (bundles
     // off, the flicker baseline).
-    std::vector<core::StarEntry> star_catalogue_;
     std::unique_ptr<core::StarfieldGenerator> star_generator_;
     std::unique_ptr<core::StarfieldSpatialIndex> star_index_;
     double pixel_angular_size_ = 0.0;  // fov / height, radians.

@@ -1,5 +1,6 @@
 #include "sirius/app/config/session_config_adapter.h"
 
+#include "sirius/backend/cpu/geodesic_tracer.h"
 #include "sirius/core/trace_boundary.h"
 #include "sirius/render/exr_writer.h"
 #include "sirius/render/session/render_session.h"
@@ -248,13 +249,58 @@ TEST(RenderSessionProbe, FeatureSpecificControlsRequireOwnersAtTypedBoundary) {
 
     config = SessionConfig{};
     config.film_config.grain_intensity = 0.4f;
-    EXPECT_EQ(render::SessionConfigIssue(config),
-              "film-simulation parameters require film simulation");
+    EXPECT_EQ(render::SessionConfigIssue(config), "film-finish parameters require the film finish");
 
     config = SessionConfig{};
-    config.starfield_config.brightness_scale = 200.0f;
+    config.point_starfield_config.brightness_scale = 200.0f;
     EXPECT_EQ(render::SessionConfigIssue(config),
               "point-starfield parameters require point-starfield mode");
+
+    config = SessionConfig{};
+    config.height = 1;
+    config.ray_bundles = true;
+    EXPECT_EQ(render::SessionConfigIssue(config),
+              "ray-bundle angular extent exceeds the represented linear-deviation domain");
+}
+
+TEST(RenderSessionProbe, LowLevelTracerRejectsUnownedOrPartialFeatureControls) {
+    backend::TracerConfig config;
+    EXPECT_TRUE(backend::IsRepresentedTracerConfig(config));
+
+    config.strong_field_radius = 5.0f;
+    EXPECT_FALSE(backend::IsRepresentedTracerConfig(config));
+
+    config = {};
+    config.bundle_point_source = true;
+    EXPECT_FALSE(backend::IsRepresentedTracerConfig(config));
+
+    config = {};
+    config.volumetric_tau_max = 0.5f;
+    EXPECT_FALSE(backend::IsRepresentedTracerConfig(config));
+
+    config = {};
+    config.enable_disk = false;
+    config.disk_outer = 21.0f;
+    EXPECT_FALSE(backend::IsRepresentedTracerConfig(config));
+}
+
+TEST(RenderSessionProbe, FilmFinishPresetsRetainUnspecifiedPresetControls) {
+    FilmFinishConfig request;
+    request.enabled = true;
+    request.preset = "SpaceOdyssey2001";
+
+    const auto preset = ProjectFilmFinishConfig(request);
+    ASSERT_TRUE(preset.has_value()) << preset.error().Description();
+    EXPECT_EQ(*preset, render::FilmConfig::SpaceOdyssey2001());
+
+    request.grain_intensity = 0.2f;
+    const auto overridden = ProjectFilmFinishConfig(request);
+    ASSERT_TRUE(overridden.has_value()) << overridden.error().Description();
+    EXPECT_FLOAT_EQ(overridden->grain_intensity, 0.2f);
+    EXPECT_FLOAT_EQ(overridden->halation_strength,
+                    render::FilmConfig::SpaceOdyssey2001().halation_strength);
+    EXPECT_FLOAT_EQ(overridden->vignette_strength,
+                    render::FilmConfig::SpaceOdyssey2001().vignette_strength);
 }
 
 TEST(RenderSessionProbe, BackendAutoResolvesByDeviceRegistryAndCapabilities) {
@@ -339,6 +385,7 @@ TEST(RenderSessionProbe, ConfigurationConversionPreservesObserverAndDiskControls
     malformed.tile_size = 1;
     malformed.samples_per_pixel = 1;
     malformed.enable_parallel_rendering = false;
+    malformed.thread_count = 0;
     malformed.temperature_model = static_cast<render::DiskTemperatureModel>(255);
     RenderSession cpu_session;
     const auto invalid_temperature = cpu_session.Configure(malformed);
@@ -397,7 +444,7 @@ TEST(RenderSessionProbe, ConfigurationConversionPreservesObserverAndDiskControls
     EXPECT_FALSE(invalid_dimensions_session.Configure(malformed));
 }
 
-TEST(RenderSessionProbe, InMemoryPreviewCompletesWithoutWritingOutput) {
+TEST(RenderSessionProbe, InMemoryPreviewRejectsInactiveOutputPath) {
     const auto preview_path =
         std::filesystem::temp_directory_path() / "sirius_in_memory_preview_must_not_exist.ppm";
     std::filesystem::remove(preview_path);
@@ -413,8 +460,7 @@ TEST(RenderSessionProbe, InMemoryPreviewCompletesWithoutWritingOutput) {
     preview.write_output = false;
     preview.output_path = preview_path.string();
     RenderSession preview_session;
-    ASSERT_TRUE(preview_session.Configure(preview));
-    EXPECT_EQ(preview_session.Execute(), SessionState::Complete);
+    EXPECT_FALSE(preview_session.Configure(preview));
     EXPECT_FALSE(std::filesystem::exists(preview_path));
 }
 

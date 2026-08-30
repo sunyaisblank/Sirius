@@ -78,7 +78,6 @@ class SymplecticIntegratorD {
         double initial_step_size = 0.1;
         double min_step_size = 1e-8;
         double max_step_size = 1.0;
-        double tolerance = 1e-10;
         int max_steps_per_call = 10000;
         double horizon_buffer = 1.01;
         IntegratorOrder order = IntegratorOrder::kYoshida6;  // Default: 6th-order
@@ -91,6 +90,20 @@ class SymplecticIntegratorD {
         Config() = default;  // Explicit default constructor
     };
 
+    [[nodiscard]] static bool IsRepresentedConfig(const Config& config) noexcept {
+        const bool known_order = config.order == IntegratorOrder::kYoshida4 ||
+                                 config.order == IntegratorOrder::kYoshida6 ||
+                                 config.order == IntegratorOrder::kYoshida8;
+        return std::isfinite(config.initial_step_size) && std::isfinite(config.min_step_size) &&
+               config.min_step_size > 0.0 && std::isfinite(config.max_step_size) &&
+               config.max_step_size >= config.min_step_size &&
+               config.initial_step_size >= config.min_step_size &&
+               config.initial_step_size <= config.max_step_size && config.max_steps_per_call > 0 &&
+               std::isfinite(config.horizon_buffer) && config.horizon_buffer > 1.0 && known_order &&
+               std::isfinite(config.null_condition_tolerance) &&
+               config.null_condition_tolerance > 0.0 && config.renormalize_every_n_steps >= 0;
+    }
+
     struct StepResult {
         HamiltonianStateD state;
         double lambda_advance;
@@ -100,13 +113,13 @@ class SymplecticIntegratorD {
         int substeps;
     };
 
-    explicit SymplecticIntegratorD(const IMetricD* metric) : metric_(metric), config_() {
-        SIRIUS_PRE(metric != nullptr);
-    }
+    explicit SymplecticIntegratorD(const IMetricD* metric)
+        : SymplecticIntegratorD(metric, Config()) {}
 
     SymplecticIntegratorD(const IMetricD* metric, const Config& config)
         : metric_(metric), config_(config) {
         SIRIUS_PRE(metric != nullptr);
+        SIRIUS_PRE(IsRepresentedConfig(config));
     }
 
     //--------------------------------------------------------------------------
@@ -114,6 +127,7 @@ class SymplecticIntegratorD {
     //--------------------------------------------------------------------------
 
     StepResult Step(const HamiltonianStateD& state, double h) const {
+        SIRIUS_PRE(std::isfinite(h) && h != 0.0);
         StepResult result;
         result.substeps = 0;
         result.terminated = false;
@@ -212,6 +226,8 @@ class SymplecticIntegratorD {
 
     IntegrationResult Integrate(const GeodesicStateD& initial, double lambdaMax,
                                 double escape_radius = 1e6) const {
+        SIRIUS_PRE(std::isfinite(lambdaMax) && lambdaMax >= 0.0);
+        SIRIUS_PRE(std::isfinite(escape_radius) && escape_radius > 0.0);
         IntegrationResult result;
         result.total_lambda = 0;
         result.max_hamiltonian_error = 0;

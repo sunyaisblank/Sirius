@@ -180,6 +180,10 @@ TEST(MetricRegistryTests, FamilyDisplayNamesRoundTrip) {
     EXPECT_DEATH(schw.SetParameter("mas", 1.0), "violated");
     EXPECT_DEATH(wormhole.SetParameter("throat", 1.0), "violated");
     EXPECT_DEATH(warp.SetParameter("speed", 1.0), "violated");
+    EXPECT_DEATH(schw.SetParameter("mass", std::numeric_limits<double>::quiet_NaN()), "violated");
+    EXPECT_DEATH(schw.SetParameter("mass", 1000001.0), "violated");
+    EXPECT_DEATH(wormhole.SetParameter("throat_radius", 1001.0), "violated");
+    EXPECT_DEATH(warp.SetParameter("velocity", 11.0), "violated");
 }
 
 // Backend support flags document reality; these pin the deliberate ones so a

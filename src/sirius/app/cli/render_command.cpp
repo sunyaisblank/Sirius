@@ -134,13 +134,13 @@ Temporal Disk:
   --shutter-time <t>        Exposure interval in geometric time units (default: 0.1)
   --motion-samples <n>      Temporal samples (default: 3)
 
-Film Simulation (IMAX 70mm cinematic look):
-  --film                    Enable film simulation
-  --film-preset <name>      Preset: Interstellar, SpaceOdyssey2001, DigitalClean
+Film-Inspired Display Finish:
+  --film                    Enable the bounded display finish
+  --film-preset <name>      Preset: Interstellar, SpaceOdyssey2001
                             (default: Interstellar)
-  --grain <intensity>       Film grain intensity; enables film (default: 0.15)
-  --halation <strength>     Halation glow strength; enables film (default: 0.15)
-  --vignette <strength>     Vignette strength; enables film (default: 0.3)
+  --grain <intensity>       Override preset grain intensity; enables finish
+  --halation <strength>     Override preset halation strength; enables finish
+  --vignette <strength>     Override preset vignette strength; enables finish
 
 DNGR Physics (default off; the pinned render is unchanged):
   --beams                   Propagate ray bundles (geodesic deviation) on the live path (P2)
@@ -521,12 +521,14 @@ void RenderCommand::PrintConfig(const SiriusConfig& config, bool verbose) {
     }
 
     if (config.film.enabled) {
-        std::cout << "Film Simulation:" << std::endl;
+        const auto finish = ProjectFilmFinishConfig(config.film);
+        if (!finish) return;
+        std::cout << "Film-Inspired Display Finish:" << std::endl;
         std::cout << "  Preset:      " << config.film.preset << std::endl;
         std::cout << "  Grain:       " << std::fixed << std::setprecision(2)
-                  << config.film.grain_intensity << std::endl;
-        std::cout << "  Halation:    " << config.film.halation_strength << std::endl;
-        std::cout << "  Vignette:    " << config.film.vignette_strength << std::endl;
+                  << finish->grain_intensity << std::endl;
+        std::cout << "  Halation:    " << finish->halation_strength << std::endl;
+        std::cout << "  Vignette:    " << finish->vignette_strength << std::endl;
         std::cout << std::endl;
     }
 

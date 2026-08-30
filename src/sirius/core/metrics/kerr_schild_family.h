@@ -156,8 +156,13 @@ inline void KerrSchildFamily::SetParameter(const std::string& key, double value)
     SIRIUS_PRE(found != config_.end());
     if (found == config_.end()) return;
 
+    const bool in_range =
+        std::isfinite(value) && value >= found->second.min && value <= found->second.max;
+    SIRIUS_PRE(in_range);
+    if (!in_range) return;
+
     const double previous = found->second.value;
-    found->second.value = std::clamp(value, found->second.min, found->second.max);
+    found->second.value = value;
     KerrSchildParams next;
     next.M = config_["mass"].value;
     next.a = config_["spin"].value * next.M;

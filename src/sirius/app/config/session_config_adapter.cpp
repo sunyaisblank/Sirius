@@ -48,26 +48,23 @@ std::optional<render::WormholeTopology> ParseWormholeTopology(const std::string&
     return std::nullopt;
 }
 
-std::optional<render::FilmConfig> MakeFilmConfig(const FilmSimulationConfig& config) {
+}  // namespace
+
+base::Expected<render::FilmConfig> ProjectFilmFinishConfig(const FilmFinishConfig& config) {
     render::FilmConfig film;
     if (config.preset == "Interstellar") {
         film = render::FilmConfig::Interstellar();
     } else if (config.preset == "SpaceOdyssey2001") {
         film = render::FilmConfig::SpaceOdyssey2001();
-    } else if (config.preset == "DigitalClean") {
-        film = render::FilmConfig::DigitalClean();
     } else {
-        return std::nullopt;
+        return base::Fail(base::ErrorDomain::kConfiguration, "project film finish",
+                          "unknown film finish preset '" + config.preset + "'");
     }
-    if (config.enabled) {
-        film.grain_intensity = config.grain_intensity;
-        film.halation_strength = config.halation_strength;
-        film.vignette_strength = config.vignette_strength;
-    }
+    if (config.grain_intensity.has_value()) film.grain_intensity = *config.grain_intensity;
+    if (config.halation_strength.has_value()) film.halation_strength = *config.halation_strength;
+    if (config.vignette_strength.has_value()) film.vignette_strength = *config.vignette_strength;
     return film;
 }
-
-}  // namespace
 
 base::Expected<render::SessionConfig> MakeSessionConfig(const SiriusConfig& config) {
     if (const auto errors = ConfigLoader::Validate(config); !errors.empty()) {
@@ -154,11 +151,10 @@ base::Expected<render::SessionConfig> MakeSessionConfig(const SiriusConfig& conf
     session.shutter_time = config.motion_blur.shutter_time;
     session.motion_blur_samples = config.motion_blur.samples;
 
-    session.enable_film_simulation = config.film.enabled;
-    const auto film_config = MakeFilmConfig(config.film);
+    session.enable_film_finish = config.film.enabled;
+    const auto film_config = ProjectFilmFinishConfig(config.film);
     if (!film_config) {
-        return base::Fail(base::ErrorDomain::kConfiguration, "create render session",
-                          "unknown film preset '" + config.film.preset + "'");
+        return std::unexpected(film_config.error());
     }
     session.film_config = *film_config;
     session.doppler_beaming = config.doppler_beaming;

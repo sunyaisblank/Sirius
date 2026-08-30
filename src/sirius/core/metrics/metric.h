@@ -40,8 +40,9 @@ class IMetric {
     // Current parameter configuration.
     virtual const Config& GetParameters() const = 0;
 
-    // Set a known parameter, clamped to its declared [min, max] range. Unknown
-    // keys violate the concrete family's contract rather than disappearing.
+    // Set a known finite parameter in its declared [min, max] range. Unknown or
+    // out-of-domain requests violate the concrete family's contract rather than
+    // being ignored or rewritten as a different spacetime.
     virtual void SetParameter(const std::string& key, double value) = 0;
 
     // Human-readable metric name.

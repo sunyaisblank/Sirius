@@ -75,7 +75,6 @@ class ConservationLawTests : public ::testing::Test {
         rk45_config.min_step = 1e-8f;
         rk45_config.max_step = 0.05f;
         rk45_config.initial_step = 0.005f;
-        rk45_config.use_rk45 = true;
     }
     void TearDown() override {}
 

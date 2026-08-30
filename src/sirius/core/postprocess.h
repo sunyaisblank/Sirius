@@ -41,6 +41,28 @@ struct PostProcessConfig {
     float gain = 1.0f;  // Highlight gain
 };
 
+[[nodiscard]] inline bool IsRepresentedPostProcessConfig(const PostProcessConfig& config) noexcept {
+    const bool known_tonemapper =
+        config.tonemapper == TonemapType::None || config.tonemapper == TonemapType::Reinhard ||
+        config.tonemapper == TonemapType::Aces || config.tonemapper == TonemapType::Filmic ||
+        config.tonemapper == TonemapType::Exposure;
+    if (!known_tonemapper || !std::isfinite(config.exposure) || config.exposure <= 0.0f ||
+        config.exposure > 100.0f || !std::isfinite(config.gamma) || config.gamma <= 0.0f ||
+        config.gamma > 10.0f || !std::isfinite(config.bloom_intensity) ||
+        config.bloom_intensity < 0.0f || config.bloom_intensity > 5.0f ||
+        !std::isfinite(config.bloom_threshold) || config.bloom_threshold < 0.0f ||
+        config.bloom_threshold > 100.0f || config.bloom_radius < 0 || config.bloom_radius > 256 ||
+        !std::isfinite(config.saturation) || config.saturation < 0.0f || config.saturation > 4.0f ||
+        !std::isfinite(config.contrast) || config.contrast < 0.0f || config.contrast > 4.0f ||
+        !std::isfinite(config.lift) || config.lift < -100.0f || config.lift > 100.0f ||
+        !std::isfinite(config.gain) || config.gain < 0.0f || config.gain > 100.0f) {
+        return false;
+    }
+    return config.enable_bloom || (config.bloom_intensity == PostProcessConfig{}.bloom_intensity &&
+                                   config.bloom_threshold == PostProcessConfig{}.bloom_threshold &&
+                                   config.bloom_radius == PostProcessConfig{}.bloom_radius);
+}
+
 // Scalar tonemapping curves and per-pixel dispatch.
 namespace tonemap {
 
@@ -74,6 +96,11 @@ inline float Filmic(float x) {
 
 // Apply exposure then the selected tonemapping curve to an RGB triple.
 inline void Apply(float& r, float& g, float& b, TonemapType type, float exposure) {
+    SIRIUS_PRE(std::isfinite(r) && std::isfinite(g) && std::isfinite(b));
+    SIRIUS_PRE(std::isfinite(exposure) && exposure > 0.0f && exposure <= 100.0f);
+    SIRIUS_PRE(type == TonemapType::None || type == TonemapType::Reinhard ||
+               type == TonemapType::Aces || type == TonemapType::Filmic ||
+               type == TonemapType::Exposure);
     r *= exposure;
     g *= exposure;
     b *= exposure;
@@ -105,10 +132,6 @@ inline void Apply(float& r, float& g, float& b, TonemapType type, float exposure
             b = std::clamp(b, 0.0f, 1.0f);
             break;
         default:
-            SIRIUS_PRE(false);
-            r = 1.0f;
-            g = 0.0f;
-            b = 1.0f;
             break;
     }
 }
@@ -121,6 +144,10 @@ class BloomFilter {
     // Add a bloom halo to an RGBA float buffer (4 floats per pixel) in place.
     static void Apply(std::vector<float>& buffer, int width, int height,
                       const PostProcessConfig& config) {
+        SIRIUS_PRE(IsRepresentedPostProcessConfig(config));
+        SIRIUS_PRE(width > 0 && height > 0);
+        SIRIUS_PRE(buffer.size() ==
+                   static_cast<std::size_t>(width) * static_cast<std::size_t>(height) * 4u);
         if (!config.enable_bloom || config.bloom_intensity <= 0.0f) {
             return;
         }
@@ -201,6 +228,8 @@ class ColourGrading {
   public:
     // Grade an RGB triple (linear, 0-1) in place, clamped to [0, 1].
     static void Apply(float& r, float& g, float& b, const PostProcessConfig& config) {
+        SIRIUS_PRE(IsRepresentedPostProcessConfig(config));
+        SIRIUS_PRE(std::isfinite(r) && std::isfinite(g) && std::isfinite(b));
         // Lift (shadows)
         r += config.lift;
         g += config.lift;
@@ -235,6 +264,10 @@ class PostProcessor {
     // Run the pipeline over an RGBA HDR-linear buffer in place.
     static void Process(std::vector<float>& buffer, int width, int height,
                         const PostProcessConfig& config) {
+        SIRIUS_PRE(IsRepresentedPostProcessConfig(config));
+        SIRIUS_PRE(width > 0 && height > 0);
+        SIRIUS_PRE(buffer.size() ==
+                   static_cast<std::size_t>(width) * static_cast<std::size_t>(height) * 4u);
         // 1. Bloom (operates on HDR values)
         BloomFilter::Apply(buffer, width, height, config);
 

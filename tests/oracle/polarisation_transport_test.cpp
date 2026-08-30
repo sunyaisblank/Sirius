@@ -25,6 +25,7 @@
 
 #include <cmath>
 #include <complex>
+#include <limits>
 #include <numbers>
 #include <vector>
 
@@ -33,6 +34,15 @@ using namespace sirius::oracle;
 namespace k = sirius::core::constants;
 
 namespace {
+
+TEST(WalkerPenrose, MalformedIntegratorStepDomainFailsClosed) {
+    KerrMetricD metric(1.0, 0.0);
+    PolarisedGeodesicIntegratorD::Config config;
+    config.base_step = std::numeric_limits<double>::quiet_NaN();
+    EXPECT_FALSE(PolarisedGeodesicIntegratorD::IsRepresentedConfig(config));
+    EXPECT_DEATH((void)PolarisedGeodesicIntegratorD(&metric, config),
+                 "precondition.*enforced, terminating");
+}
 
 // E = -k_t = -(g_t nu k^nu); conserved by the t Killing vector.
 double Energy(const KerrMetricD& m, const PolarisedStateD& s) {

@@ -20,7 +20,7 @@ TEST(AccretionDiskTest, ISCO_Schwarzschild) {
     EXPECT_NEAR(r_isco, 6.0, 1e-10) << "Schwarzschild ISCO should be 6M";
 }
 
-TEST(AccretionDiskTest, ConfigurationSanitizesEveryNonFiniteScalar) {
+TEST(AccretionDiskTest, NonFiniteConfigurationFailsClosedWithoutRewritingTheRequest) {
     AccretionDiskD::Config config;
     const double nan = std::numeric_limits<double>::quiet_NaN();
     const double infinity = std::numeric_limits<double>::infinity();
@@ -31,37 +31,24 @@ TEST(AccretionDiskTest, ConfigurationSanitizesEveryNonFiniteScalar) {
     config.r_outer = nan;
     config.inclination = infinity;
 
-    const AccretionDiskD disk(config);
-    const auto& result = disk.GetConfig();
-    EXPECT_TRUE(std::isfinite(result.M));
-    EXPECT_TRUE(std::isfinite(result.a_star));
-    EXPECT_TRUE(std::isfinite(result.Mdot));
-    EXPECT_TRUE(std::isfinite(result.r_inner));
-    EXPECT_TRUE(std::isfinite(result.r_outer));
-    EXPECT_TRUE(std::isfinite(result.inclination));
-    EXPECT_GT(result.M, 0.0);
-    EXPECT_GT(result.Mdot, 0.0);
-    EXPECT_GT(result.r_outer, result.r_inner);
-    EXPECT_TRUE(std::isfinite(disk.EffectiveTemperature(disk.IscoRadius() * 2.0)));
-
-    config.r_inner = std::numeric_limits<double>::max();
-    config.r_outer = -std::numeric_limits<double>::max();
-    const AccretionDiskD extreme(config);
-    EXPECT_TRUE(std::isfinite(extreme.GetConfig().r_inner));
-    EXPECT_TRUE(std::isfinite(extreme.GetConfig().r_outer));
-    EXPECT_GT(extreme.GetConfig().r_outer, extreme.GetConfig().r_inner);
+    EXPECT_FALSE(AccretionDiskD::IsRepresentedConfig(config));
+    EXPECT_DEATH((void)AccretionDiskD(config), "precondition.*enforced, terminating");
+    EXPECT_TRUE(std::isnan(config.M));
+    EXPECT_TRUE(std::isinf(config.a_star));
 }
 
-TEST(AccretionDiskTest, AutoIscoIsValidatedAgainstTheDerivedOuterEdge) {
+TEST(AccretionDiskTest, OuterEdgeInsideDerivedIscoFailsClosed) {
     AccretionDiskD::Config config;
     config.a_star = 0.0;
     config.r_inner = 0.0;
     config.r_outer = 1.0;
-    const AccretionDiskD disk(config);
+    EXPECT_FALSE(AccretionDiskD::IsRepresentedConfig(config));
+    EXPECT_DEATH((void)AccretionDiskD(config), "precondition.*enforced, terminating");
 
-    EXPECT_DOUBLE_EQ(disk.InnerRadius(), 6.0);
-    EXPECT_GT(disk.OuterRadius(), disk.InnerRadius());
-    EXPECT_GT(disk.GetConfig().r_outer, disk.InnerRadius());
+    config = {};
+    config.M = std::numeric_limits<double>::max();
+    EXPECT_FALSE(AccretionDiskD::IsRepresentedConfig(config));
+    EXPECT_DEATH((void)AccretionDiskD(config), "precondition.*enforced, terminating");
 }
 
 TEST(AccretionDiskTest, ShakuraSunyaevProfileHasZeroTorqueEdgeAndDeclaredScale) {

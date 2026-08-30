@@ -1,7 +1,7 @@
-// Film simulation unit tests. Ported from TSFL001A.cpp.
+// Film-inspired display-finish unit tests. Ported from TSFL001A.cpp.
 //
-// Tests IMAX 70mm film simulation (format, stock, grain, halation, vignette,
-// colour grade, presets, full pipeline). Film is intentionally host-side for
+// Tests the bounded film-inspired finish (grain, halation, vignette, colour
+// grade, presets, full pipeline). It is intentionally host-side for
 // both render backends, after linear readback and before display encoding.
 
 #include "sirius/render/film_pipeline.h"
@@ -9,6 +9,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <limits>
 #include <memory>
 #include <vector>
 
@@ -39,55 +40,54 @@ class FilmSimulationTest : public ::testing::Test {
     }
 };
 
-TEST_F(FilmSimulationTest, IMAX_AspectRatio_143) {
-    FilmConfig cfg;
-    cfg.ApplyFormat(FilmFormat::IMAX70mm_15perf);
-    EXPECT_NEAR(cfg.aspect_ratio, 1.43f, 0.01f);
-    EXPECT_DEATH(cfg.ApplyFormat(static_cast<FilmFormat>(255)), "violated");
+TEST_F(FilmSimulationTest, DefaultAndPresetConfigsUseOnlyRepresentedControls) {
+    EXPECT_TRUE(IsRepresentedFilmConfig(FilmConfig{}));
+    EXPECT_TRUE(IsRepresentedFilmConfig(FilmConfig::Interstellar()));
+    EXPECT_TRUE(IsRepresentedFilmConfig(FilmConfig::SpaceOdyssey2001()));
 }
 
-TEST_F(FilmSimulationTest, IMAX5perf_AspectRatio_220) {
-    FilmConfig cfg;
-    cfg.ApplyFormat(FilmFormat::IMAX70mm_5perf);
-    EXPECT_NEAR(cfg.aspect_ratio, 2.20f, 0.01f);
+TEST_F(FilmSimulationTest, MalformedControlFailsClosedAtPipelineBoundary) {
+    FilmConfig cfg = FilmConfig::Interstellar();
+    cfg.exposure = std::numeric_limits<float>::quiet_NaN();
+    EXPECT_FALSE(IsRepresentedFilmConfig(cfg));
+    EXPECT_DEATH((void)FilmPipeline(cfg), "precondition.*enforced, terminating");
 }
 
-TEST_F(FilmSimulationTest, ComputeHeight_Correct) {
-    FilmConfig cfg;
-    cfg.width = 4096;
-    cfg.aspect_ratio = 1.43f;
-    cfg.ComputeHeight();
-
-    int expected_height = static_cast<int>(std::round(4096.0f / 1.43f));
-    expected_height = (expected_height / 2) * 2;  // Even.
-    EXPECT_EQ(cfg.height, static_cast<std::uint32_t>(expected_height));
+TEST_F(FilmSimulationTest, DisabledGrainRequiresNeutralControls) {
+    FilmConfig cfg = FilmConfig::Interstellar();
+    cfg.grain_enabled = false;
+    EXPECT_FALSE(IsRepresentedFilmConfig(cfg));
+    cfg.grain_intensity = 0.0f;
+    cfg.grain_uniformity = 0.0f;
+    EXPECT_TRUE(IsRepresentedFilmConfig(cfg));
 }
 
-TEST_F(FilmSimulationTest, ComputeHeight_EvenDimension) {
-    FilmConfig cfg;
-    cfg.width = 1920;
-    cfg.aspect_ratio = 1.43f;
-    cfg.ComputeHeight();
-
-    EXPECT_EQ(cfg.height % 2, 0u);
+TEST_F(FilmSimulationTest, DisabledHalationRequiresNeutralControls) {
+    FilmConfig cfg = FilmConfig::Interstellar();
+    cfg.halation_enabled = false;
+    EXPECT_FALSE(IsRepresentedFilmConfig(cfg));
+    cfg.halation_radius = 0.0f;
+    cfg.halation_strength = 0.0f;
+    cfg.halation_threshold = 0.0f;
+    cfg.halation_color_r = 0.0f;
+    cfg.halation_color_g = 0.0f;
+    cfg.halation_color_b = 0.0f;
+    EXPECT_TRUE(IsRepresentedFilmConfig(cfg));
 }
 
-TEST_F(FilmSimulationTest, KodakVision3_500T_Settings) {
-    FilmConfig cfg;
-    cfg.ApplyStock(FilmStock::KodakVision3_500T);
-
-    EXPECT_FLOAT_EQ(cfg.iso, 500.0f);
+TEST_F(FilmSimulationTest, InterstellarPresetSetsImplementedLookControls) {
+    FilmConfig cfg = FilmConfig::Interstellar();
     EXPECT_GT(cfg.grain_intensity, 0.0f);
-    EXPECT_NEAR(cfg.color_temperature_kelvin, 3200.0f, 100.0f);  // Tungsten.
-    EXPECT_DEATH(cfg.ApplyStock(static_cast<FilmStock>(255)), "violated");
+    EXPECT_FLOAT_EQ(cfg.saturation, 0.95f);
+    EXPECT_FLOAT_EQ(cfg.contrast, 1.05f);
+    EXPECT_FLOAT_EQ(cfg.halation_strength, 0.15f);
 }
 
-TEST_F(FilmSimulationTest, KodakVision3_50D_LowerGrain) {
-    FilmConfig cfg_500T, cfg_50D;
-    cfg_500T.ApplyStock(FilmStock::KodakVision3_500T);
-    cfg_50D.ApplyStock(FilmStock::KodakVision3_50D);
-
-    EXPECT_LT(cfg_50D.grain_intensity, cfg_500T.grain_intensity);
+TEST_F(FilmSimulationTest, SpaceOdysseyPresetUsesLowerGrain) {
+    const FilmConfig interstellar = FilmConfig::Interstellar();
+    const FilmConfig space_odyssey = FilmConfig::SpaceOdyssey2001();
+    EXPECT_LT(space_odyssey.grain_intensity, interstellar.grain_intensity);
+    EXPECT_LT(space_odyssey.saturation, interstellar.saturation);
 }
 
 TEST_F(FilmSimulationTest, Grain_AddsNoise) {
@@ -279,19 +279,25 @@ TEST_F(FilmSimulationTest, OutputClamped_0_1) {
 TEST_F(FilmSimulationTest, Interstellar_Preset) {
     FilmConfig cfg = FilmConfig::Interstellar();
 
-    EXPECT_EQ(cfg.format, FilmFormat::IMAX70mm_15perf);
-    EXPECT_NEAR(cfg.aspect_ratio, 1.43f, 0.01f);
+    EXPECT_TRUE(IsRepresentedFilmConfig(cfg));
+    EXPECT_TRUE(cfg.grain_enabled);
+    EXPECT_TRUE(cfg.halation_enabled);
     EXPECT_TRUE(cfg.bloom_enabled);
     EXPECT_TRUE(cfg.vignette_enabled);
 }
 
-TEST_F(FilmSimulationTest, DigitalClean_NoEffects) {
-    FilmConfig cfg = FilmConfig::DigitalClean();
-
-    EXPECT_FALSE(cfg.enabled);
-    EXPECT_FALSE(cfg.grain_enabled);
-    EXPECT_FALSE(cfg.halation_enabled);
-    EXPECT_FALSE(cfg.vignette_enabled);
+TEST_F(FilmSimulationTest, DisabledVignetteAndBloomRequireNeutralControls) {
+    FilmConfig cfg = FilmConfig::Interstellar();
+    cfg.vignette_enabled = false;
+    cfg.bloom_enabled = false;
+    EXPECT_FALSE(IsRepresentedFilmConfig(cfg));
+    cfg.vignette_strength = 0.0f;
+    cfg.vignette_radius = 0.0f;
+    cfg.vignette_softness = 0.0f;
+    cfg.bloom_intensity = 0.0f;
+    cfg.bloom_threshold = 0.0f;
+    cfg.bloom_radius = 0.0f;
+    EXPECT_TRUE(IsRepresentedFilmConfig(cfg));
 }
 
 TEST_F(FilmSimulationTest, FullPipeline_DoesNotCrash) {
@@ -302,7 +308,6 @@ TEST_F(FilmSimulationTest, FullPipeline_DoesNotCrash) {
     config.halation_enabled = true;
     config.vignette_enabled = true;
     config.bloom_enabled = true;
-    config.enabled = true;
     pipeline->SetConfig(config);
 
     EXPECT_NO_THROW(pipeline->Apply(buffer.data(), width, height, 0));

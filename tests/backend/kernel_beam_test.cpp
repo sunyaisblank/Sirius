@@ -1,7 +1,7 @@
 // Ray-bundle wiring in the trace kernel (specification P2, Vulkan side).
 //
 // trace.slang propagates two geodesic-deviation vectors through its render loop
-// when the beam flag (params[43]) is set, using gr_deviation's full-Riemann
+// when the beam flag (params[41]) is set, using gr_deviation's full-Riemann
 // Jacobi acceleration (DNGR eq A.19), and carries the beam's transverse
 // expansion in the radiance alpha channel. This suite runs on Lavapipe and pins:
 //   - beams off leaves alpha == 1 everywhere (the default render is unmoved);
@@ -50,10 +50,10 @@ std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
 
 // Kerr a=0.9 down the spin axis from 40M, single tile, gradient background.
 std::vector<float> BaseParams(std::uint32_t w, std::uint32_t h) {
-    std::vector<float> params(72, 0.0f);
-    params[46] = 0.5f;
-    params[47] = 0.5f;
-    params[53] = 1.0f;
+    std::vector<float> params(65, 0.0f);
+    params[44] = 0.5f;
+    params[45] = 0.5f;
+    params[51] = 1.0f;
     params[0] = float(w);
     params[1] = float(h);
     params[2] = 0.0f;  // Kerr-Schild family.
@@ -80,10 +80,10 @@ std::vector<float> BaseParams(std::uint32_t w, std::uint32_t h) {
     params[25] = 100.0f;    // escape_radius
     params[26] = 1.12f;     // captureFactor
     params[27] = 0.0f;      // disk disabled
-    params[34] = float(w);  // tileWidth
-    params[35] = float(h);  // tileHeight
-    params[37] = 1.0f;      // dummy starfield dims
-    params[38] = 1.0f;
+    params[33] = float(w);  // tileWidth
+    params[34] = float(h);  // tileHeight
+    params[36] = 1.0f;      // dummy starfield dims
+    params[37] = 1.0f;
     return params;
 }
 

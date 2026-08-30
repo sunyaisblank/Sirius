@@ -159,7 +159,6 @@ TEST_F(RenderPipelineTests, RK45StepSucceeds) {
     Lightray ray = createRay(0.0, 15.0, PI / 2.0, PI / 4.0, 1.0, 0.3, 0.1, -0.1, &schwarzschild);
 
     IntegratorConfig config = Geodesic::GetDefaultConfig();
-    config.use_rk45 = true;
 
     bool success = false;
     for (int attempt = 0; attempt < 32 && !success && !ray.terminated; ++attempt) {

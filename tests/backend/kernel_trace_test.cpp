@@ -67,10 +67,10 @@ TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
     // chosen so the capture cross-section covers a modest image fraction. The
     // full image is a single tile here (tileOrigin 0, tile == image). Background
     // is the analytic gradient (starfield disabled), so no texture is needed.
-    std::vector<float> params(72, 0.0f);
-    params[46] = 0.5f;
-    params[47] = 0.5f;
-    params[53] = 1.0f;
+    std::vector<float> params(65, 0.0f);
+    params[44] = 0.5f;
+    params[45] = 0.5f;
+    params[51] = 1.0f;
     params[0] = kWidth;   // imageWidth
     params[1] = kHeight;  // imageHeight
     params[2] = 0.0f;     // metricId (Kerr-Schild family)
@@ -99,13 +99,13 @@ TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
     params[25] = 100.0f;          // escape_radius
     params[26] = 1.12f;           // captureFactor
     params[27] = 0.0f;            // disk disabled
-    params[32] = 0.0f;            // tileOriginX
-    params[33] = 0.0f;            // tileOriginY
-    params[34] = float(kWidth);   // tileWidth
-    params[35] = float(kHeight);  // tileHeight
-    params[36] = 0.0f;            // starfield disabled (gradient background)
-    params[37] = 1.0f;            // starfieldWidth (dummy)
-    params[38] = 1.0f;            // starfieldHeight (dummy)
+    params[31] = 0.0f;            // tileOriginX
+    params[32] = 0.0f;            // tileOriginY
+    params[33] = float(kWidth);   // tileWidth
+    params[34] = float(kHeight);  // tileHeight
+    params[35] = 0.0f;            // starfield disabled (gradient background)
+    params[36] = 1.0f;            // starfieldWidth (dummy)
+    params[37] = 1.0f;            // starfieldHeight (dummy)
 
     std::vector<float> radiance(kWidth * kHeight * 4, 0.0f);
     const std::vector<std::uint32_t> starfield_dummy = {0u};
@@ -175,10 +175,10 @@ std::vector<float> RunKerrScene(ComputeDevice& device, const std::vector<std::ui
     constexpr std::uint32_t kWidth = 64;
     constexpr std::uint32_t kHeight = 64;
 
-    std::vector<float> params(72, 0.0f);
-    params[46] = 0.5f;
-    params[47] = 0.5f;
-    params[53] = 1.0f;
+    std::vector<float> params(65, 0.0f);
+    params[44] = 0.5f;
+    params[45] = 0.5f;
+    params[51] = 1.0f;
     params[0] = kWidth;
     params[1] = kHeight;
     params[2] = 0.0f;
@@ -204,10 +204,10 @@ std::vector<float> RunKerrScene(ComputeDevice& device, const std::vector<std::ui
     params[24] = 2.0f;
     params[25] = 100.0f;
     params[26] = 1.12f;
-    params[34] = float(kWidth);
-    params[35] = float(kHeight);
+    params[33] = float(kWidth);
+    params[34] = float(kHeight);
+    params[36] = 1.0f;
     params[37] = 1.0f;
-    params[38] = 1.0f;
 
     std::vector<float> radiance(kWidth * kHeight * 4, 0.0f);
     const std::vector<std::uint32_t> starfield_dummy = {0u};

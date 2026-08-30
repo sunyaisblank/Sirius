@@ -132,7 +132,9 @@ class StateMachine {
     }
 
   private:
-    const Config& config_;
+    // Own the transition table so a generic machine constructed from a
+    // temporary/local configuration cannot retain a dangling reference.
+    Config config_;
     State current_state_;
     // Recursive so an entry/transition action may itself call Process().
     mutable std::recursive_mutex mutex_;

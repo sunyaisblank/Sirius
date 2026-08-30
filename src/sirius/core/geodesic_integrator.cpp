@@ -326,12 +326,15 @@ IntegratorConfig Geodesic::GetDefaultConfig() {
     config.safety_factor = 0.9f;
     config.step_grow_max = 2.0f;
     config.step_shrink_min = 0.1f;
-    config.use_rk45 = true;
     return config;
 }
 
 float Geodesic::ComputeOptimalStep(float h, float error, float tolerance,
                                    const IntegratorConfig& config) {
+    SIRIUS_PRE(IsRepresentedIntegratorStepControl(config));
+    SIRIUS_PRE(std::isfinite(h) && h >= config.min_step && h <= config.max_step);
+    SIRIUS_PRE(std::isfinite(error) && error >= 0.0f);
+    SIRIUS_PRE(std::isfinite(tolerance) && tolerance > 0.0f);
     if (error < 1e-15f) {
         return std::min(h * config.step_grow_max, config.max_step);
     }
@@ -419,6 +422,11 @@ static double RelativeNullResidual(const Vec4& velocity, const Metric4d& metric)
 
 bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const IntegratorConfig& config) {
     using namespace dp45;
+
+    SIRIUS_PRE(metric != nullptr);
+    SIRIUS_PRE(IsRepresentedIntegratorStepControl(config));
+    SIRIUS_PRE(std::isfinite(ray.step_size) && ray.step_size >= config.min_step &&
+               ray.step_size <= config.max_step);
 
     Vec4 x0 = ray.position;
     float h = ray.step_size;

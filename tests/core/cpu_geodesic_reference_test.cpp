@@ -53,7 +53,6 @@ class CpuGeodesicReferenceTests : public ::testing::Test {
         cpu_config.min_step = 1e-8f;
         cpu_config.max_step = 0.1f;
         cpu_config.initial_step = 0.01f;
-        cpu_config.use_rk45 = true;
 
         generateReferenceRays();
     }

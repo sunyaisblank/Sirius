@@ -134,8 +134,8 @@ TEST(StarfieldPointTest, SpatialIndexMatchesExhaustiveBeamOracle) {
         float indexed_b = 0.0f;
         generator.AccumulateThroughBeam(query.x, query.y, query.z, query.sigma, stars, oracle_r,
                                         oracle_g, oracle_b);
-        generator.AccumulateThroughBeam(query.x, query.y, query.z, query.sigma, stars, index,
-                                        indexed_r, indexed_g, indexed_b);
+        generator.AccumulateThroughBeam(query.x, query.y, query.z, query.sigma, index, indexed_r,
+                                        indexed_g, indexed_b);
         const float scale =
             std::max({std::abs(oracle_r), std::abs(oracle_g), std::abs(oracle_b), 1.0e-8f});
         EXPECT_NEAR(indexed_r, oracle_r, 2.0e-5f * scale);
@@ -162,13 +162,13 @@ TEST(StarfieldPointTest, EllipticalFootprintUsesBothAxesAndOrientation) {
     float vertical_r = 0.0f;
     float vertical_g = 0.0f;
     float vertical_b = 0.0f;
-    generator.AccumulateThroughBeam(1.0f, 0.0f, 0.0f, 0.03f, 0.03f, 0.0f, stars, index, circular_r,
+    generator.AccumulateThroughBeam(1.0f, 0.0f, 0.0f, 0.03f, 0.03f, 0.0f, index, circular_r,
                                     circular_g, circular_b);
-    generator.AccumulateThroughBeam(1.0f, 0.0f, 0.0f, 0.03f, 0.003f, 0.0f, stars, index,
-                                    horizontal_r, horizontal_g, horizontal_b);
+    generator.AccumulateThroughBeam(1.0f, 0.0f, 0.0f, 0.03f, 0.003f, 0.0f, index, horizontal_r,
+                                    horizontal_g, horizontal_b);
     generator.AccumulateThroughBeam(1.0f, 0.0f, 0.0f, 0.03f, 0.003f,
-                                    static_cast<float>(std::numbers::pi / 2.0), stars, index,
-                                    vertical_r, vertical_g, vertical_b);
+                                    static_cast<float>(std::numbers::pi / 2.0), index, vertical_r,
+                                    vertical_g, vertical_b);
 
     const float circular = circular_r + circular_g + circular_b;
     const float horizontal = horizontal_r + horizontal_g + horizontal_b;
@@ -186,7 +186,7 @@ TEST(StarfieldPointTest, ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope) 
     StarfieldGenerator generator(cfg);
     const auto stars = generator.GenerateCatalogue();
     const StarfieldSpatialIndex index(stars);
-    const std::size_t fixed_residency = stars.size() * sizeof(StarEntry) + index.MemoryBytes();
+    const std::size_t fixed_residency = index.Size() * sizeof(StarEntry) + index.MemoryBytes();
 
     EXPECT_LT(index.MemoryBytes(), 2u * 1024u * 1024u);
     EXPECT_LT(fixed_residency, 8u * 1024u * 1024u)
@@ -197,7 +197,7 @@ TEST(StarfieldPointTest, ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope) 
         (60.0f * static_cast<float>(std::numbers::pi) / 180.0f) / 4096.0f;
     index.ForEachCandidate(1.0f, 0.0f, 0.0f, imax_pixel_sigma,
                            [&](std::uint32_t) { ++candidates; });
-    EXPECT_LT(candidates, stars.size() / 100)
+    EXPECT_LT(candidates, index.Size() / 100)
         << "IMAX-sized beams fell back to an effectively exhaustive catalogue scan";
 }
 

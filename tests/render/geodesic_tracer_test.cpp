@@ -378,7 +378,6 @@ TEST(GeodesicTracerVolumetric, ProceduralTurbulenceAltersLiveTransferDeterminist
 
     TracerConfig enhanced_config = baseline_config;
     enhanced_config.enable_turbulence = true;
-    enhanced_config.turbulence.enabled = true;
     GeodesicTracer enhanced_tracer(&flat, enhanced_config);
 
     const TraceResult first = enhanced_tracer.Trace(ray);

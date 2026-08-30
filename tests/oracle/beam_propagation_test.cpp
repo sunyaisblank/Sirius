@@ -10,11 +10,20 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <limits>
 #include <numbers>
 
 using namespace sirius::oracle;
 
 namespace {
+
+TEST(AnalyticValidationTest, MalformedBeamEscapeDomainFailsClosed) {
+    KerrMetricD metric(1.0, 0.0);
+    BeamIntegratorD::Config config;
+    config.escape_radius = std::numeric_limits<double>::infinity();
+    EXPECT_FALSE(BeamIntegratorD::IsRepresentedConfig(config));
+    EXPECT_DEATH((void)BeamIntegratorD(&metric, config), "precondition.*enforced, terminating");
+}
 
 // Fixture for beam propagation tests
 class BeamPropagationTest : public ::testing::Test {
@@ -24,7 +33,6 @@ class BeamPropagationTest : public ::testing::Test {
         kerr = std::make_unique<KerrMetricD>(1.0, 0.5);
 
         BeamIntegratorD::Config config;
-        config.step_size = 0.1;
         config.escape_radius = 1000.0;
 
         integrator_sch = std::make_unique<BeamIntegratorD>(schwarzschild.get(), config);

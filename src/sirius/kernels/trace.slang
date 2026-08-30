@@ -245,7 +245,6 @@ float3 SampleStarfield(float3 dir, int width, int height) {
 float3 PointStarColor(uint starIndex) {
     uint base = starIndex * 8u;
     float temperature = pointStars[base + 6u];
-    if (temperature <= 0.0f) temperature = 5778.0f;
     return BlackbodyColor(temperature);
 }
 
@@ -533,21 +532,33 @@ void AccumulateVolumeSegment(Vec4Cart start, Vec4Cart finish,
                           pow(diskR / innerRadius, -1.5f) *
                           exp(-0.5f * zOverH * zOverH);
             if (turbulenceEnabled) {
-                diskOpacity *= TurbulenceDensityFactor(point);
+                // Match the CPU authority: its procedural field is defined in
+                // (Kerr radial coordinate, azimuth, z), not the oblate
+                // Kerr-Schild Cartesian transverse radius.
+                float diskPhi = atan2(point.y, point.x);
+                float3 turbulencePoint =
+                    float3(diskR * cos(diskPhi), diskR * sin(diskPhi), point.z);
+                diskOpacity *= TurbulenceDensityFactor(turbulencePoint);
             }
             float temperature =
                 VolumeDiskTemperature(diskR, point.z, innerRadius,
                                       innerTemperature, temperatureModel, rIsco,
                                       M, aStar, hOverR, hPower);
-            if (diskOpacity > 0.0f && temperature > 0.0f) {
+            if (isfinite(diskOpacity) && diskOpacity > 0.0f &&
+                isfinite(temperature) && temperature > 0.0f) {
                 float sqrtM = sqrt(M);
                 float omega = sqrtM / (pow(diskR, 1.5f) + a * sqrtM);
                 Vec4Cart emitter = MakeVec4Cart(Real(1.0f), Real(-omega * point.y),
                                                 Real(omega * point.x), Real(0.0f));
                 Real emitterNorm = MetricDotCart(localMetric, emitter, emitter);
+                if (!isfinite(emitterNorm) || !(emitterNorm < Real(0.0f))) continue;
                 emitter = ScaleVec4Cart(emitter, Real(1.0f) / sqrt(-emitterNorm));
                 float emittedFrequency =
                     float(MetricDotCart(localMetric, photonVelocity, emitter));
+                if (!isfinite(emittedFrequency) || !(emittedFrequency > 0.0f) ||
+                    !isfinite(eulerianFrequency) || !(eulerianFrequency > 0.0f)) {
+                    continue;
+                }
                 diskDeltaTau = diskOpacity * emittedFrequency * deltaLambda;
                 float emittedSource = pow(temperature / innerTemperature, 4.0f);
                 float sourceFrequency = dopplerBeaming ? emittedFrequency : eulerianFrequency;
@@ -575,10 +586,10 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     int imageHeight = int(params[1]);
     uint metricId = uint(params[2]);
 
-    int tileOriginX = int(params[32]);
-    int tileOriginY = int(params[33]);
-    int tileWidth = int(params[34]);
-    int tileHeight = int(params[35]);
+    int tileOriginX = int(params[31]);
+    int tileOriginY = int(params[32]);
+    int tileWidth = int(params[33]);
+    int tileHeight = int(params[34]);
 
     int tx = int(tid.x);
     int ty = int(tid.y);
@@ -611,49 +622,46 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     float innerRadius = params[28];
     float outerRadius = params[29];
     float innerTemperature = params[30];
-    // params[31] is reserved; the physical emission scale is (T/T_inner)^4.
 
-    bool starfieldEnabled = params[36] > 0.5f;
-    int starfieldWidth = int(params[37]);
-    int starfieldHeight = int(params[38]);
-    // params[39] reserved.
+    bool starfieldEnabled = params[35] > 0.5f;
+    int starfieldWidth = int(params[36]);
+    int starfieldHeight = int(params[37]);
 
-    float warpVs = params[40];
-    float warpSigma = params[41];
-    float warpR = params[42];
+    float warpVs = params[38];
+    float warpSigma = params[39];
+    float warpR = params[40];
 
     // Morris-Thorne (dispatch id 3): throat radius and shape selector
     // (0 Ellis, 1 zero-tidal, 2 absurdly benign); Phi0 = 0 is the zero-tidal
     // subclass the CPU authority carries.
-    float throatB0 = params[44];
-    int wormShape = int(params[45]);
-    float sampleU = params[46];
-    float sampleV = params[47];
-    float sampleIndex = params[48];
-    float3 cameraBeta = P3(49);
-    int temperatureModel = int(params[52]);  // 0 Page/Novikov-Thorne, 1 Shakura-Sunyaev.
-    bool dopplerBeaming = params[53] > 0.5f;
-    int lensModel = int(params[54]);  // 0 pinhole, 1 deterministic thin lens.
-    float focalLength = params[55];
-    float aperture = params[56];
-    float focusDistance = params[57];
-    bool pointStarfieldEnabled = params[58] > 0.5f;
-    float pixelAngularSize = params[59];
-    float pointBrightnessScale = params[60];
-    bool volumeEnabled = params[61] > 0.5f;
-    float volumeHOverR = params[62];
-    float volumeHPower = params[63];
-    float volumeTauMidplane = params[64];
-    int volumeSamples = int(params[65]);
-    bool turbulenceEnabled = params[66] > 0.5f;
-    // params[67] is reserved for a future represented spectral corona.
+    float throatB0 = params[42];
+    int wormShape = int(params[43]);
+    float sampleU = params[44];
+    float sampleV = params[45];
+    float sampleIndex = params[46];
+    float3 cameraBeta = P3(47);
+    int temperatureModel = int(params[50]);  // 0 Page/Novikov-Thorne, 1 Shakura-Sunyaev.
+    bool dopplerBeaming = params[51] > 0.5f;
+    int lensModel = int(params[52]);  // 0 pinhole, 1 deterministic thin lens.
+    float focalLength = params[53];
+    float aperture = params[54];
+    float focusDistance = params[55];
+    bool pointStarfieldEnabled = params[56] > 0.5f;
+    float pixelAngularSize = params[57];
+    float pointBrightnessScale = params[58];
+    bool volumeEnabled = params[59] > 0.5f;
+    float volumeHOverR = params[60];
+    float volumeHPower = params[61];
+    float volumeTauMidplane = params[62];
+    int volumeSamples = int(params[63]);
+    bool turbulenceEnabled = params[64] > 0.5f;
 
     // Ray bundles (P2): propagate two geodesic-deviation vectors through the render
-    // loop and report the beam's transverse ellipse. Default off (params[43]==0)
+    // loop and report the beam's transverse ellipse. Default off (params[41]==0)
     // leaves the RGBA output untouched, so the parity and pinned renders do not
     // move. Uses gr_deviation's full-Riemann acceleration (DNGR eq A.19) in the
     // same Cartesian chart the integrator runs in.
-    bool beamsEnabled = params[43] > 0.5f;
+    bool beamsEnabled = params[41] > 0.5f;
 
     // Camera ray in world Cartesian. NDC follows the CPU pinhole camera geometry
     // (the renderer builds camDir/camRight/camUp so the two paths trace the same
@@ -716,6 +724,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     float volumeOpticalDepth = 0.0f;
     float3 volumeEmission = float3(0.0f);
     bool escaped = false;
+    bool captured = false;
 
     // Two deviation vectors span the ray bundle (P2). A point-source/pupil bundle
     // is used when the point-star field consumes the ellipse; the diagnostic beam
@@ -759,10 +768,16 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         Real rBig = sqrt(px * px + py * py + pz * pz);
 
         if (isWormhole) {
-            if (rBig <= horizonRadius) { break; }  // reached the throat: dark
+            if (rBig <= horizonRadius) {
+                captured = true;
+                break;
+            }  // reached the throat: dark
         } else if (!isWarp) {
             Real rKerr = ComputeKerrRadiusCart(px, py, pz, Real(a));
-            if (rKerr <= horizonRadius) { break; }  // captured: shadow
+            if (rKerr <= horizonRadius) {
+                captured = true;
+                break;
+            }  // captured: shadow
         }
         if (rBig >= escapeRadius) { escaped = true; break; }
 
@@ -1089,47 +1104,87 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
 
         state = next;
         if (terminalDiskHit) break;
+
+        // Classify the accepted endpoint in this iteration. Delaying this until
+        // the next loop made a final-attempt capture look like an ordinary
+        // max-attempt endpoint and allowed terminal-frame construction inside
+        // the capture surface. Segment disk events retain observer-first
+        // precedence because they were processed above.
+        Real nextRadius = sqrt(state.x.x * state.x.x + state.x.y * state.x.y +
+                               state.x.z * state.x.z);
+        if (isWormhole) {
+            if (nextRadius <= horizonRadius) {
+                captured = true;
+                break;
+            }
+        } else if (!isWarp) {
+            Real nextKerrRadius =
+                ComputeKerrRadiusCart(state.x.x, state.x.y, state.x.z, Real(a));
+            if (nextKerrRadius <= horizonRadius) {
+                captured = true;
+                break;
+            }
+        }
+        if (nextRadius >= escapeRadius) {
+            escaped = true;
+            break;
+        }
     }
 
-    Real terminalMetric[4][4];
-    Real terminalInverse[4][4];
-    if (isWarp) {
-        GetWarpDriveMetric(state.x, warpVs, warpSigma, warpR, 0.0f, 0.0f, 0.0f,
-                           terminalMetric, terminalInverse);
-    } else if (isWormhole) {
-        GetMorrisThorneCartesianMetric(state.x, throatB0, 0.0f, wormShape,
-                                       terminalMetric, terminalInverse);
-    } else {
-        GetKerrSchildFamilyMetric(state.x, M, a, Q, Lambda, terminalMetric, terminalInverse);
+    float3 terminalDirection = float3(0.0f, 0.0f, 1.0f);
+    float beamOrientation = 0.0f;
+    float beamMajorExpansion = 1.0f;
+    float beamMinorExpansion = 1.0f;
+    float beamExpansion = 1.0f;
+    // A captured endpoint has no physical stationary Eulerian observer frame.
+    // Escaped rays require the sky direction; other non-captured endpoints need
+    // terminal geometry only when beam diagnostics were requested.
+    if (escaped || (beamsEnabled && !captured)) {
+        Real terminalMetric[4][4];
+        Real terminalInverse[4][4];
+        if (isWarp) {
+            GetWarpDriveMetric(state.x, warpVs, warpSigma, warpR, 0.0f, 0.0f, 0.0f,
+                               terminalMetric, terminalInverse);
+        } else if (isWormhole) {
+            GetMorrisThorneCartesianMetric(state.x, throatB0, 0.0f, wormShape,
+                                           terminalMetric, terminalInverse);
+        } else {
+            GetKerrSchildFamilyMetric(state.x, M, a, Q, Lambda, terminalMetric, terminalInverse);
+        }
+        CameraObserverFrame terminalFrame = BuildCameraObserverFrame(
+            terminalMetric, terminalInverse, float3(1.0f, 0.0f, 0.0f),
+            float3(0.0f, -1.0f, 0.0f), float3(0.0f, 0.0f, 1.0f), float3(0.0f));
+        Real terminalFrequency = MetricDotCart(terminalMetric, state.u, terminalFrame.time);
+        terminalDirection = normalize(float3(
+            float(MetricDotCart(terminalMetric, state.u, terminalFrame.forward) /
+                  terminalFrequency),
+            float(MetricDotCart(terminalMetric, state.u, terminalFrame.up) / terminalFrequency),
+            float(MetricDotCart(terminalMetric, state.u, terminalFrame.right) /
+                  terminalFrequency)));
+        Vec4Cart terminalScreenA;
+        Vec4Cart terminalScreenB;
+        SachsScreenBasis(terminalFrame, terminalDirection, terminalScreenA, terminalScreenB);
+        Vec4Cart xiACart = MakeVec4Cart(xiA.x, xiA.y, xiA.z, xiA.w);
+        Vec4Cart xiBCart = MakeVec4Cart(xiB.x, xiB.y, xiB.z, xiB.w);
+        float beamA = float(MetricDotCart(terminalMetric, xiACart, terminalScreenA));
+        float beamB = float(MetricDotCart(terminalMetric, xiBCart, terminalScreenA));
+        float beamC = float(MetricDotCart(terminalMetric, xiACart, terminalScreenB));
+        float beamD = float(MetricDotCart(terminalMetric, xiBCart, terminalScreenB));
+        float beamSemiMajor;
+        float beamSemiMinor;
+        float beamDeterminant;
+        BeamEllipseFromTransverseMap(beamA, beamB, beamC, beamD,
+                                     beamSemiMajor, beamSemiMinor, beamOrientation,
+                                     beamDeterminant);
+        float terminalRadius =
+            length(float3(float(state.x.x), float(state.x.y), float(state.x.z)));
+        float beamNormalization = pupilBundle
+            ? max(terminalRadius * kBeamSeed, 1.0e-12f)
+            : kBeamSeed;
+        beamMajorExpansion = beamSemiMajor / beamNormalization;
+        beamMinorExpansion = beamSemiMinor / beamNormalization;
+        beamExpansion = sqrt(max(beamMajorExpansion * beamMinorExpansion, 0.0f));
     }
-    CameraObserverFrame terminalFrame = BuildCameraObserverFrame(
-        terminalMetric, terminalInverse, float3(1.0f, 0.0f, 0.0f),
-        float3(0.0f, -1.0f, 0.0f), float3(0.0f, 0.0f, 1.0f), float3(0.0f));
-    Real terminalFrequency = MetricDotCart(terminalMetric, state.u, terminalFrame.time);
-    float3 terminalDirection = normalize(float3(
-        float(MetricDotCart(terminalMetric, state.u, terminalFrame.forward) / terminalFrequency),
-        float(MetricDotCart(terminalMetric, state.u, terminalFrame.up) / terminalFrequency),
-        float(MetricDotCart(terminalMetric, state.u, terminalFrame.right) / terminalFrequency)));
-    Vec4Cart terminalScreenA;
-    Vec4Cart terminalScreenB;
-    SachsScreenBasis(terminalFrame, terminalDirection, terminalScreenA, terminalScreenB);
-    Vec4Cart xiACart = MakeVec4Cart(xiA.x, xiA.y, xiA.z, xiA.w);
-    Vec4Cart xiBCart = MakeVec4Cart(xiB.x, xiB.y, xiB.z, xiB.w);
-    float beamA = float(MetricDotCart(terminalMetric, xiACart, terminalScreenA));
-    float beamB = float(MetricDotCart(terminalMetric, xiBCart, terminalScreenA));
-    float beamC = float(MetricDotCart(terminalMetric, xiACart, terminalScreenB));
-    float beamD = float(MetricDotCart(terminalMetric, xiBCart, terminalScreenB));
-    float beamSemiMajor, beamSemiMinor, beamOrientation, beamDeterminant;
-    BeamEllipseFromTransverseMap(beamA, beamB, beamC, beamD,
-                                 beamSemiMajor, beamSemiMinor, beamOrientation,
-                                 beamDeterminant);
-    float terminalRadius = length(float3(float(state.x.x), float(state.x.y), float(state.x.z)));
-    float beamNormalization = pupilBundle
-        ? max(terminalRadius * kBeamSeed, 1.0e-12f)
-        : kBeamSeed;
-    float beamMajorExpansion = beamSemiMajor / beamNormalization;
-    float beamMinorExpansion = beamSemiMinor / beamNormalization;
-    float beamExpansion = sqrt(max(beamMajorExpansion * beamMinorExpansion, 0.0f));
 
     // Captured (shadow) pixels keep only whatever disk emission accumulated
     // (black when none), exactly as the CPU horizon outcome does.
@@ -1158,7 +1213,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     // alpha channel carries it when ray bundles are on (a parity handle against
     // the CPU bundle); otherwise alpha stays 1, so the default render is unchanged.
     float alpha = 1.0f;
-    if (beamsEnabled) {
+    if (beamsEnabled && !captured) {
         alpha = beamExpansion;
     }
 

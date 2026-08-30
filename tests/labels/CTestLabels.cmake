@@ -4,8 +4,8 @@
 
 set_tests_properties(
     AccretionDiskTest.ISCO_Schwarzschild
-    AccretionDiskTest.ConfigurationSanitizesEveryNonFiniteScalar
-    AccretionDiskTest.AutoIscoIsValidatedAgainstTheDerivedOuterEdge
+    AccretionDiskTest.NonFiniteConfigurationFailsClosedWithoutRewritingTheRequest
+    AccretionDiskTest.OuterEdgeInsideDerivedIscoFailsClosed
     AccretionDiskTest.ShakuraSunyaevProfileHasZeroTorqueEdgeAndDeclaredScale
     AccretionDiskTest.ISCO_ExtremalKerr_Prograde
     AccretionDiskTest.ISCO_ExtremalKerr_Retrograde
@@ -53,6 +53,8 @@ set_tests_properties(
     AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature
     AnalyticValidationTest.PageThorneTemperatureHasZeroTorqueInnerEdge
     AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff
+    AnalyticValidationTest.MalformedBeamEscapeDomainFailsClosed
+    AnalyticValidationTest.MalformedIntegratorControlsFailClosedBeforeIntegration
     AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter
     PROPERTIES LABELS "Mandatory;Correctness"
 )
@@ -307,7 +309,7 @@ set_tests_properties(
 
 set_tests_properties(
     DisplayBuffer.NonFiniteRadianceIsIdentifiedBeforeEncoding
-    DisplayBuffer.MalformedDimensionsTilesAndGammaFailClosed
+    DisplayBuffer.MalformedDimensionsAndTilesFailClosed
     PROPERTIES LABELS "Mandatory;Operational"
 )
 
@@ -356,12 +358,12 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    FilmSimulationTest.IMAX_AspectRatio_143
-    FilmSimulationTest.IMAX5perf_AspectRatio_220
-    FilmSimulationTest.ComputeHeight_Correct
-    FilmSimulationTest.ComputeHeight_EvenDimension
-    FilmSimulationTest.KodakVision3_500T_Settings
-    FilmSimulationTest.KodakVision3_50D_LowerGrain
+    FilmSimulationTest.DefaultAndPresetConfigsUseOnlyRepresentedControls
+    FilmSimulationTest.MalformedControlFailsClosedAtPipelineBoundary
+    FilmSimulationTest.DisabledGrainRequiresNeutralControls
+    FilmSimulationTest.DisabledHalationRequiresNeutralControls
+    FilmSimulationTest.InterstellarPresetSetsImplementedLookControls
+    FilmSimulationTest.SpaceOdysseyPresetUsesLowerGrain
     FilmSimulationTest.Grain_AddsNoise
     FilmSimulationTest.Grain_DifferentFrames_DifferentNoise
     FilmSimulationTest.Grain_NonNegativeResult
@@ -374,7 +376,7 @@ set_tests_properties(
     FilmSimulationTest.Saturation_Zero_Grayscale
     FilmSimulationTest.OutputClamped_0_1
     FilmSimulationTest.Interstellar_Preset
-    FilmSimulationTest.DigitalClean_NoEffects
+    FilmSimulationTest.DisabledVignetteAndBloomRequireNeutralControls
     FilmSimulationTest.FullPipeline_DoesNotCrash
     PROPERTIES LABELS "Mandatory;Correctness"
 )
@@ -382,7 +384,7 @@ set_tests_properties(
 set_tests_properties(
     FisheyeCameraTest.CentreRayPointsInward
     FisheyeCameraTest.EdgeRayPerpendicularAt180Fov
-    FisheyeCameraTest.OutOfBoundsRayHasZeroWeight
+    FisheyeCameraTest.ProjectionMaskedRayIsInactiveAndRepresented
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -745,14 +747,14 @@ set_tests_properties(
     PinholeCameraTest.OriginMatchesConfig
     PinholeCameraTest.RightPixelIncreasesAzimuth
     PinholeCameraTest.UpPixelDecreasesTheta
-    PinholeCameraTest.WeightIsOne
+    PinholeCameraTest.RayIsActiveAndRepresented
     PinholeCameraTest.TimeComponentIsZero
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
     PixelSampling.EmitsExactlyEveryRequestedNonSquareCount
-    PixelSampling.NonPositiveInputStillEmitsOneDefensiveSample
+    PixelSampling.NonPositiveInputFailsClosed
     PixelSampling.NonSquareCountsCoverBothAxesWithoutRemainderBias
     PixelSampling.PatternIsDeterministic
     PROPERTIES LABELS "Mandatory;Operational"
@@ -853,9 +855,11 @@ set_tests_properties(
     RenderSessionProbe.TraceDomainScalesWithMassAndEnclosesTheObserver
     RenderSessionProbe.GeometricMetadataNeverInventsPhysicalLengthUnits
     RenderSessionProbe.FeatureSpecificControlsRequireOwnersAtTypedBoundary
+    RenderSessionProbe.LowLevelTracerRejectsUnownedOrPartialFeatureControls
+    RenderSessionProbe.FilmFinishPresetsRetainUnspecifiedPresetControls
     RenderSessionProbe.BackendAutoResolvesByDeviceRegistryAndCapabilities
     RenderSessionProbe.ConfigurationConversionPreservesObserverAndDiskControls
-    RenderSessionProbe.InMemoryPreviewCompletesWithoutWritingOutput
+    RenderSessionProbe.InMemoryPreviewRejectsInactiveOutputPath
     RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr
     RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter
     RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr
@@ -958,24 +962,27 @@ set_tests_properties(
     StarEntryTests.ComputeColorProducesValidRGB
     StarEntryTests.ComputeColorUsesTheIntegratedBlackbodyAuthority
     StarEntryTests.HotStarIsBluer
-    StarEntryTests.ZeroTemperatureDefaultsToSolar
+    StarEntryTests.InvalidTemperatureFailsClosedInsteadOfDefaultingToSolar
     StarEntryTests.IntensityFromMagnitude
     StarEntryTests.IntensityMagnitudeRelation
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
-    StarfieldConfigTests.ValidateClampsStarCount
-    StarfieldConfigTests.ValidateClampsMinDistance
-    StarfieldConfigTests.ValidateEnsuresMaxGreaterThanMin
-    StarfieldConfigTests.ValidateClampsMagnitudeLimit
-    StarfieldConfigTests.ValidateClampsAperture
-    StarfieldConfigTests.ValidateReplacesEveryNonFiniteScalar
+    StarfieldConfigTests.PointCatalogueProjectionHasNoUnconsumedSamplingControls
+    StarfieldConfigTests.OutOfRangeStarCountFailsClosed
+    StarfieldConfigTests.NonPositiveMinimumDistanceFailsClosed
+    StarfieldConfigTests.UnorderedDistanceDomainFailsClosed
+    StarfieldConfigTests.NarrowOrderedDistanceDomainIsPreservedExactly
+    StarfieldConfigTests.OutOfRangeMagnitudeLimitFailsClosed
+    StarfieldConfigTests.OutOfRangeApertureFailsClosed
+    StarfieldConfigTests.NonFiniteScalarFailsClosedWithoutRewritingTheRequest
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
     StarfieldGeneratorTests.GeneratesNonEmptyCatalog
+    StarfieldGeneratorTests.SpatialIndexOwnsValidatedCatalogueSnapshot
     StarfieldGeneratorTests.CatalogSizeBounded
     StarfieldGeneratorTests.DirectionVectorsNormalised
     StarfieldGeneratorTests.AllTemperaturesPositive
@@ -1084,7 +1091,7 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    TurbulenceTest.ValidateRestoresFiniteProceduralDomain
+    TurbulenceTest.MalformedProceduralDomainFailsClosedWithoutRewritingTheRequest
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -1148,6 +1155,7 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    WalkerPenrose.MalformedIntegratorStepDomainFailsClosed
     WalkerPenrose.ImaginaryPartEqualsKillingYanoContraction
     WalkerPenrose.PolarisationStaysOrthogonalAndNormalisedUnderTransport
     WalkerPenrose.ConstantConservedAlongKerrGeodesics

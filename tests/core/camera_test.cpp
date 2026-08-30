@@ -122,10 +122,11 @@ TEST(PinholeCameraTest, UpPixelDecreasesTheta) {
         << "Moving up should decrease θ component (toward pole)";
 }
 
-TEST(PinholeCameraTest, WeightIsOne) {
+TEST(PinholeCameraTest, RayIsActiveAndRepresented) {
     PinholeCamera camera;
     CameraRay ray = camera.GenerateRay(0, 0);
-    EXPECT_FLOAT_EQ(ray.weight, 1.0f);
+    EXPECT_TRUE(ray.active);
+    EXPECT_TRUE(IsRepresentedCameraRay(ray));
 }
 
 TEST(PinholeCameraTest, TimeComponentIsZero) {
@@ -193,7 +194,9 @@ TEST(ThinLensCameraTest, CentreApertureSharesPinholeProjectionAndFieldOfView) {
     config.aperture = 2.8f;
     config.focus_distance = 30.0f;
 
-    PinholeCamera pinhole(config);
+    CameraConfig pinhole_config = config;
+    pinhole_config.focus_distance = kDefaultCameraFocusDistance;
+    PinholeCamera pinhole(pinhole_config);
     ThinLensCamera thin_lens(config);
 
     // v=0 places the sample at the aperture centre. At that point the finite
@@ -250,27 +253,17 @@ TEST(FisheyeCameraTest, EdgeRayPerpendicularAt180Fov) {
         << "Edge ray at 180° FOV should be roughly perpendicular";
 }
 
-TEST(FisheyeCameraTest, OutOfBoundsRayHasZeroWeight) {
+TEST(FisheyeCameraTest, ProjectionMaskedRayIsInactiveAndRepresented) {
     CameraConfig config;
-    config.width = 100;
+    config.width = 300;
     config.height = 100;
-    config.fov = 90.0f;  // 90° FOV
+    config.fov = 170.0f;
 
     FisheyeCamera camera(config);
 
-    // Corner pixel: far from centre with limited FOV
-    // For 100×100 image with aspect 1: px ≈ 1, py ≈ 1, r_img ≈ √2
-    // theta_ray = √2 × 45° = 63.6° → within π, so still valid
-    // Need extreme corner with very narrow FOV to exceed π
-    config.fov = 10.0f;  // Very narrow FOV
-    camera.SetConfig(config);
-
     CameraRay ray = camera.GenerateRay(0, 0, 0.5f, 0.5f);
-    // r_img ≈ √2, theta_ray = √2 × 5° ≈ 7° → within π, still valid
-    // FisheyeCamera only zeroes weight when theta_ray > π
-    // That requires r_img × (fov/2) > π → r_img > 2π/fov (in radians)
-    // For this config: threshold = 2π / (10π/180) = 36, r_img ≈ 1.4 → valid
-    EXPECT_FLOAT_EQ(ray.weight, 1.0f) << "Within FOV should have weight 1";
+    EXPECT_FALSE(ray.active);
+    EXPECT_TRUE(IsRepresentedCameraRay(ray));
 }
 
 //==============================================================================
@@ -310,6 +303,16 @@ TEST(CameraFactoryTest, MalformedLensValueFailsClosed) {
     EXPECT_TRUE(LensSpecificParameterIssue(static_cast<LensType>(999), kDefaultCameraFocalLength,
                                            kDefaultCameraAperture, kDefaultCameraFocusDistance)
                     .has_value());
+
+    CameraConfig ignored_parameter;
+    ignored_parameter.focal_length = 85.0f;
+    EXPECT_TRUE(CameraConfigIssue(LensType::Pinhole, ignored_parameter).has_value());
+    EXPECT_DEATH((void)PinholeCamera(ignored_parameter), "precondition.*enforced, terminating");
+
+    CameraConfig invalid_dimensions;
+    invalid_dimensions.width = 0;
+    EXPECT_TRUE(CameraConfigIssue(LensType::Pinhole, invalid_dimensions).has_value());
+    EXPECT_DEATH((void)PinholeCamera(invalid_dimensions), "precondition.*enforced, terminating");
     EXPECT_DEATH(
         {
             const auto camera = CreateCamera(static_cast<LensType>(999));

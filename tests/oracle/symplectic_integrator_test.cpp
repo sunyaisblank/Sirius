@@ -15,11 +15,28 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <limits>
 #include <numbers>
 
 using namespace sirius::oracle;
 
 namespace {
+
+TEST(AnalyticValidationTest, MalformedIntegratorControlsFailClosedBeforeIntegration) {
+    KerrMetricD metric(1.0, 0.0);
+
+    AdaptiveHamiltonianIntegratorD::Config adaptive;
+    adaptive.absolute_tolerance = std::numeric_limits<double>::quiet_NaN();
+    EXPECT_FALSE(AdaptiveHamiltonianIntegratorD::IsRepresentedConfig(adaptive));
+    EXPECT_DEATH((void)AdaptiveHamiltonianIntegratorD(&metric, adaptive),
+                 "precondition.*enforced, terminating");
+
+    SymplecticIntegratorD::Config symplectic;
+    symplectic.order = static_cast<IntegratorOrder>(999);
+    EXPECT_FALSE(SymplecticIntegratorD::IsRepresentedConfig(symplectic));
+    EXPECT_DEATH((void)SymplecticIntegratorD(&metric, symplectic),
+                 "precondition.*enforced, terminating");
+}
 
 // Fixture for symplectic integrator tests
 class SymplecticIntegratorTest : public ::testing::Test {
@@ -30,7 +47,6 @@ class SymplecticIntegratorTest : public ::testing::Test {
 
         SymplecticIntegratorD::Config config;
         config.initial_step_size = 0.05;
-        config.tolerance = 1e-10;
 
         integrator_sch = std::make_unique<SymplecticIntegratorD>(schwarzschild.get(), config);
         integrator_kerr = std::make_unique<SymplecticIntegratorD>(kerr.get(), config);
@@ -396,6 +412,7 @@ TEST_F(SymplecticIntegratorTest, IntegratorOrderComparison) {
     AdaptiveHamiltonianIntegratorD::Config reference_config;
     reference_config.absolute_tolerance = 1.0e-14;
     reference_config.relative_tolerance = 1.0e-14;
+    reference_config.initial_step = 1.0e-3;
     reference_config.maximum_step = 1.0e-3;
     AdaptiveHamiltonianIntegratorD reference_integrator(kerr.get(), reference_config);
     const auto reference = reference_integrator.Integrate(initial, affine_span);

@@ -10,6 +10,8 @@
 #include "sirius/core/metrics/metric.h"
 #include "sirius/core/tensor.h"
 
+#include <cmath>
+
 namespace sirius::core {
 
 // State vector for a null geodesic.
@@ -44,8 +46,27 @@ struct IntegratorConfig {
     float safety_factor = 0.9f;  // Step adaptation safety factor (0.8-0.95).
     float step_grow_max = 2.0f;
     float step_shrink_min = 0.1f;
-    bool use_rk45 = true;  // Use RK45 (true) or RK4 (false).
 };
+
+// Parameters consumed by every RK45 step. initial_step is deliberately absent:
+// the caller consumes it once when constructing the ray's current step.
+[[nodiscard]] inline bool IsRepresentedIntegratorStepControl(
+    const IntegratorConfig& config) noexcept {
+    return std::isfinite(config.abs_tolerance) && config.abs_tolerance > 0.0f &&
+           std::isfinite(config.rel_tolerance) && config.rel_tolerance > 0.0f &&
+           std::isfinite(config.min_step) && config.min_step > 0.0f &&
+           std::isfinite(config.max_step) && config.max_step >= config.min_step &&
+           std::isfinite(config.safety_factor) && config.safety_factor >= 0.8f &&
+           config.safety_factor <= 0.95f && std::isfinite(config.step_grow_max) &&
+           config.step_grow_max >= 1.0f && std::isfinite(config.step_shrink_min) &&
+           config.step_shrink_min > 0.0f && config.step_shrink_min <= 1.0f &&
+           config.step_shrink_min <= config.step_grow_max;
+}
+
+[[nodiscard]] inline bool IsRepresentedIntegratorConfig(const IntegratorConfig& config) noexcept {
+    return IsRepresentedIntegratorStepControl(config) && std::isfinite(config.initial_step) &&
+           config.initial_step >= config.min_step && config.initial_step <= config.max_step;
+}
 
 // Internal state for the RK45 integrator.
 struct Rk45State {

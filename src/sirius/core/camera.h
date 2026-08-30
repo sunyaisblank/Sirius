@@ -60,10 +60,32 @@ struct CameraRay {
     double beta_forward = 0.0;  // Observer v/c in the screen-forward direction
     double beta_up = 0.0;       // Observer v/c in the screen-up direction
     double beta_right = 0.0;    // Observer v/c in the screen-right direction
-    float weight;               // Ray weight (for importance sampling)
-
-    CameraRay() : weight(1.0f) {}
+    // False identifies a projection-masked sample (for example, outside the
+    // circular fisheye image). Such a sample contributes black and must not be
+    // passed to the geodesic tracer with its deliberately zero direction.
+    bool active = true;
 };
+
+[[nodiscard]] inline bool IsRepresentedCameraRay(const CameraRay& ray) noexcept {
+    for (int component = 0; component < 4; ++component) {
+        if (!std::isfinite(ray.origin(component)) || !std::isfinite(ray.direction(component))) {
+            return false;
+        }
+    }
+    if (!(ray.origin(1) > 0.0) || !(ray.origin(2) > 0.0) || !(ray.origin(2) < std::numbers::pi) ||
+        ray.direction(0) != 0.0) {
+        return false;
+    }
+    const double beta_squared = ray.beta_forward * ray.beta_forward + ray.beta_up * ray.beta_up +
+                                ray.beta_right * ray.beta_right;
+    if (!std::isfinite(beta_squared) || beta_squared >= 1.0) return false;
+    const double direction_norm_squared = ray.direction(1) * ray.direction(1) +
+                                          ray.direction(2) * ray.direction(2) +
+                                          ray.direction(3) * ray.direction(3);
+    if (!std::isfinite(direction_norm_squared)) return false;
+    return ray.active ? std::abs(direction_norm_squared - 1.0) <= 2.0e-5
+                      : direction_norm_squared == 0.0;
+}
 
 // Observer placement, orientation, and lens/image properties.
 struct CameraConfig {
@@ -97,6 +119,45 @@ struct CameraConfig {
     int width = 1920;
     int height = 1080;
 };
+
+// Intrinsic camera-domain authority. Metric-specific observer placement remains
+// owned by the session boundary; these are the minimum conditions under which
+// a concrete lens represents the supplied typed request without undefined or
+// ignored arithmetic.
+[[nodiscard]] inline std::optional<std::string_view> CameraConfigIssue(
+    LensType lens, const CameraConfig& config) noexcept {
+    switch (lens) {
+        case LensType::Pinhole:
+        case LensType::ThinLens:
+        case LensType::Fisheye:
+            break;
+        default:
+            return "unknown lens identity";
+    }
+    if (!std::isfinite(config.t) || !std::isfinite(config.r) || config.r <= 0.0 ||
+        !std::isfinite(config.theta) || config.theta <= 0.0 || config.theta >= std::numbers::pi ||
+        !std::isfinite(config.phi) || !std::isfinite(config.yaw) || !std::isfinite(config.pitch) ||
+        !std::isfinite(config.roll)) {
+        return "camera placement or orientation is outside the intrinsic domain";
+    }
+    const double beta_squared = config.beta_x * config.beta_x + config.beta_y * config.beta_y +
+                                config.beta_z * config.beta_z;
+    if (!std::isfinite(beta_squared) || beta_squared >= 1.0) {
+        return "camera beta magnitude must be finite and below one";
+    }
+    const float maximum_fov = lens == LensType::Fisheye ? 360.0f : 179.0f;
+    if (!std::isfinite(config.fov) || config.fov <= 0.0f || config.fov > maximum_fov ||
+        config.width <= 0 || config.height <= 0) {
+        return "field of view and image dimensions are outside the lens domain";
+    }
+    if (!std::isfinite(config.focal_length) || config.focal_length <= 0.0f ||
+        !std::isfinite(config.aperture) || config.aperture <= 0.0f ||
+        !std::isfinite(config.focus_distance) || config.focus_distance <= 0.0f) {
+        return "thin-lens parameters must be finite and positive";
+    }
+    return LensSpecificParameterIssue(lens, config.focal_length, config.aperture,
+                                      config.focus_distance);
+}
 
 // Abstract camera: generates a ray per pixel sample.
 class ICamera {
@@ -135,16 +196,26 @@ class ICamera {
         pos(3) = cfg.phi;
         return pos;
     }
+
+  protected:
+    void RequirePixelSample(int x, int y, float u, float v) const {
+        const auto& config = GetConfig();
+        SIRIUS_PRE(x >= 0 && x < config.width && y >= 0 && y < config.height);
+        SIRIUS_PRE(std::isfinite(u) && u >= 0.0f && u < 1.0f);
+        SIRIUS_PRE(std::isfinite(v) && v >= 0.0f && v < 1.0f);
+    }
 };
 
 // Ideal perspective projection (infinite depth of field).
 class PinholeCamera : public ICamera {
   public:
     explicit PinholeCamera(const CameraConfig& config = CameraConfig()) : config_(config) {
+        SIRIUS_PRE(!CameraConfigIssue(LensType::Pinhole, config).has_value());
         UpdateInternals();
     }
 
     CameraRay GenerateRay(int x, int y, float u = 0.5f, float v = 0.5f) const override {
+        RequirePixelSample(x, y, u, v);
         CameraRay ray;
 
         // Set origin
@@ -207,7 +278,6 @@ class PinholeCamera : public ICamera {
         ray.direction(2) = -ry2 / len;  // r*vtheta = -vz_global (minus sign: +Y -> -theta)
         ray.direction(3) = rx2 / len;   // r*sin theta*vphi = vy_global
 
-        ray.weight = 1.0f;
         return ray;
     }
 
@@ -216,6 +286,7 @@ class PinholeCamera : public ICamera {
     const CameraConfig& GetConfig() const override { return config_; }
 
     void SetConfig(const CameraConfig& config) override {
+        SIRIUS_PRE(!CameraConfigIssue(LensType::Pinhole, config).has_value());
         config_ = config;
         UpdateInternals();
     }
@@ -235,10 +306,12 @@ class PinholeCamera : public ICamera {
 class ThinLensCamera : public ICamera {
   public:
     explicit ThinLensCamera(const CameraConfig& config = CameraConfig()) : config_(config) {
+        SIRIUS_PRE(!CameraConfigIssue(LensType::ThinLens, config).has_value());
         UpdateInternals();
     }
 
     CameraRay GenerateRay(int x, int y, float u = 0.5f, float v = 0.5f) const override {
+        RequirePixelSample(x, y, u, v);
         CameraRay ray;
 
         ray.origin(0) = config_.t;
@@ -285,7 +358,6 @@ class ThinLensCamera : public ICamera {
         ray.direction(2) = -dy / len;  // r*vtheta (minus sign: +Y -> -theta)
         ray.direction(3) = dx / len;   // r*sin theta*vphi
 
-        ray.weight = 1.0f;
         return ray;
     }
 
@@ -294,6 +366,7 @@ class ThinLensCamera : public ICamera {
     const CameraConfig& GetConfig() const override { return config_; }
 
     void SetConfig(const CameraConfig& config) override {
+        SIRIUS_PRE(!CameraConfigIssue(LensType::ThinLens, config).has_value());
         config_ = config;
         UpdateInternals();
     }
@@ -313,10 +386,12 @@ class ThinLensCamera : public ICamera {
 class FisheyeCamera : public ICamera {
   public:
     explicit FisheyeCamera(const CameraConfig& config = CameraConfig()) : config_(config) {
+        SIRIUS_PRE(!CameraConfigIssue(LensType::Fisheye, config).has_value());
         UpdateInternals();
     }
 
     CameraRay GenerateRay(int x, int y, float u = 0.5f, float v = 0.5f) const override {
+        RequirePixelSample(x, y, u, v);
         CameraRay ray;
 
         ray.origin(0) = config_.t;
@@ -337,7 +412,7 @@ class FisheyeCamera : public ICamera {
 
         // Clamp to hemisphere
         if (theta_ray > static_cast<float>(std::numbers::pi)) {
-            ray.weight = 0.0f;
+            ray.active = false;
             return ray;
         }
 
@@ -355,7 +430,6 @@ class FisheyeCamera : public ICamera {
         ray.direction(2) = -dy;  // r*vtheta (minus sign: +Y -> -theta)
         ray.direction(3) = dx;   // r*sin theta*vphi
 
-        ray.weight = 1.0f;
         return ray;
     }
 
@@ -364,6 +438,7 @@ class FisheyeCamera : public ICamera {
     const CameraConfig& GetConfig() const override { return config_; }
 
     void SetConfig(const CameraConfig& config) override {
+        SIRIUS_PRE(!CameraConfigIssue(LensType::Fisheye, config).has_value());
         config_ = config;
         UpdateInternals();
     }

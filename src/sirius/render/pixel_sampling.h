@@ -1,5 +1,7 @@
 #pragma once
 
+#include "sirius/base/contracts.h"
+
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
@@ -11,7 +13,8 @@ namespace sirius::render {
 // are emitted even when the requested count is not a perfect square.
 template <typename Callback>
 int ForEachPixelSample(int samples_per_pixel, Callback&& callback) {
-    const int count = std::max(1, samples_per_pixel);
+    SIRIUS_PRE(samples_per_pixel >= 1 && samples_per_pixel <= 4096);
+    const int count = samples_per_pixel;
     const int grid = static_cast<int>(std::ceil(std::sqrt(static_cast<double>(count))));
     if (grid * grid != count) {
         // A truncated square grid clusters the remainder in its first rows.

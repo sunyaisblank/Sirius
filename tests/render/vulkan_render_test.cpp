@@ -119,10 +119,10 @@ std::vector<float> BuildTraceParams(const Scene& scene) {
     const double sp = std::sin(cartesian_phi);
     const double cp = std::cos(cartesian_phi);
 
-    std::vector<float> p(72, 0.0f);
-    p[46] = 0.5f;
-    p[47] = 0.5f;
-    p[53] = 1.0f;
+    std::vector<float> p(65, 0.0f);
+    p[44] = 0.5f;
+    p[45] = 0.5f;
+    p[51] = 1.0f;
     p[0] = static_cast<float>(scene.width);
     p[1] = static_cast<float>(scene.height);
     p[2] = 0.0f;  // Kerr-Schild dispatch
@@ -149,13 +149,13 @@ std::vector<float> BuildTraceParams(const Scene& scene) {
     p[25] = 200.0f;   // escape_radius
     p[26] = 1.0f;     // exact Kerr-Schild horizon capture surface
     p[27] = 0.0f;     // disk disabled
-    p[32] = 0.0f;     // tileOriginX
-    p[33] = 0.0f;     // tileOriginY
-    p[34] = static_cast<float>(scene.width);
-    p[35] = static_cast<float>(scene.height);
-    p[36] = 0.0f;  // starfield disabled -> gradient background
+    p[31] = 0.0f;     // tileOriginX
+    p[32] = 0.0f;     // tileOriginY
+    p[33] = static_cast<float>(scene.width);
+    p[34] = static_cast<float>(scene.height);
+    p[35] = 0.0f;  // starfield disabled -> gradient background
+    p[36] = 1.0f;
     p[37] = 1.0f;
-    p[38] = 1.0f;
     return p;
 }
 
@@ -224,7 +224,6 @@ std::vector<float> RenderSessionVulkan(
     config.height = height;
     config.samples_per_pixel = 1;
     config.tile_size = 64;
-    config.enable_parallel_rendering = false;
     config.backend = sirius::render::RenderBackend::Vulkan;
     config.metric_id = sirius::core::MetricId::Kerr;
     config.black_hole_mass = 1.0;
@@ -245,8 +244,7 @@ std::vector<float> RenderSessionVulkan(
     if (state != sirius::render::SessionState::Complete) return {};
 
     sirius::render::DisplayBuffer& display = session.GetDisplayBuffer();
-    const float* data = display.GetFloatData();
-    return std::vector<float>(data, data + static_cast<std::size_t>(width) * height * 4);
+    return display.SnapshotFloatData();
 }
 
 void ExpectFiniteNonConstantWithShadow(const std::vector<float>& rgba, int width, int height,
@@ -458,14 +456,14 @@ TEST(VulkanRenderSession, IndexedPointCatalogueReachesLiveKernel) {
     const auto texture = RenderSessionVulkan(
         48, 32, root + "/sirius_vk_texture_stars.exr",
         [](sirius::render::SessionConfig& config) { config.enable_disk = false; });
-    const auto points = RenderSessionVulkan(48, 32, root + "/sirius_vk_point_stars.exr",
-                                            [](sirius::render::SessionConfig& config) {
-                                                config.point_starfield = true;
-                                                config.ray_bundles = true;
-                                                config.enable_disk = false;
-                                                config.starfield_config.star_count = 100000;
-                                                config.starfield_config.brightness_scale = 100.0f;
-                                            });
+    const auto points = RenderSessionVulkan(
+        48, 32, root + "/sirius_vk_point_stars.exr", [](sirius::render::SessionConfig& config) {
+            config.point_starfield = true;
+            config.ray_bundles = true;
+            config.enable_disk = false;
+            config.point_starfield_config.star_count = 100000;
+            config.point_starfield_config.brightness_scale = 100.0f;
+        });
     ASSERT_FALSE(texture.empty());
     ASSERT_EQ(points.size(), texture.size());
     double point_energy = 0.0;
@@ -512,7 +510,7 @@ TEST(VulkanRenderSession, CombinedParitySceneRetainsResolvedImageStructure) {
                                 config.point_starfield = true;
                                 config.ray_bundles = true;
                                 config.enable_disk = false;
-                                config.starfield_config.star_count = 100000;
+                                config.point_starfield_config.star_count = 100000;
                             });
     ASSERT_FALSE(represented.empty());
     ExpectFiniteResolvedPointField(represented, kWidth, kHeight, "combined P3/P5 scene");
@@ -533,8 +531,8 @@ TEST(VulkanRenderSession, CpuVulkanPointCatalogueAgreeOnFlatScene) {
         config.camera_fov = 30.0f;
         config.point_starfield = true;
         config.ray_bundles = false;
-        config.starfield_config.star_count = 100000;
-        config.starfield_config.brightness_scale = 1.0f;
+        config.point_starfield_config.star_count = 100000;
+        config.point_starfield_config.brightness_scale = 1.0f;
     };
     const auto gpu =
         RenderSessionVulkan(32, 20, root + "/sirius_vk_point_flat.exr", configure_points);
@@ -784,8 +782,8 @@ TEST(VulkanRenderSession, KerrNearExtremalBardeenBoundaryAt1080p) {
     params[21] = 30000.0f;
     params[22] = 0.02f;
     params[24] = 0.25f;
+    params[33] = 1.0f;
     params[34] = 1.0f;
-    params[35] = 1.0f;
 
     std::array<float, 4> radiance{};
     const std::array<std::uint32_t, 1> star_dummy{0u};
@@ -821,10 +819,10 @@ TEST(VulkanRenderSession, KerrNearExtremalBardeenBoundaryAt1080p) {
             0.5 * scene.height * (1.0 - point.beta / (scene.distance * tan_half_fov));
         const int pixel_x = static_cast<int>(std::floor(image_x));
         const int pixel_y = static_cast<int>(std::floor(image_y));
-        params[32] = static_cast<float>(pixel_x);
-        params[33] = static_cast<float>(pixel_y);
-        params[46] = static_cast<float>(image_x - pixel_x);
-        params[47] = static_cast<float>(image_y - pixel_y);
+        params[31] = static_cast<float>(pixel_x);
+        params[32] = static_cast<float>(pixel_y);
+        params[44] = static_cast<float>(image_x - pixel_x);
+        params[45] = static_cast<float>(image_y - pixel_y);
         radiance.fill(0.0f);
         EXPECT_TRUE(fixture.device->WriteBuffer(*radiance_buffer,
                                                 std::as_bytes(std::span<const float>(radiance))));
@@ -890,10 +888,10 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalB
     const double theta = kInclinationDeg * kPi / 180.0;
     const double st = std::sin(theta);
     const double ct = std::cos(theta);
-    std::vector<float> params(72, 0.0f);
-    params[46] = 0.5f;
-    params[47] = 0.5f;
-    params[53] = 1.0f;
+    std::vector<float> params(65, 0.0f);
+    params[44] = 0.5f;
+    params[45] = 0.5f;
+    params[51] = 1.0f;
     params[0] = w;
     params[1] = h;
     params[2] = 3.0f;  // Morris-Thorne dispatch
@@ -912,12 +910,12 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalB
     params[24] = 2.0f;
     params[25] = 200.0f;
     params[26] = 1.05f;
-    params[34] = w;
-    params[35] = h;
+    params[33] = w;
+    params[34] = h;
+    params[36] = 1.0f;
     params[37] = 1.0f;
-    params[38] = 1.0f;
-    params[44] = kThroat;
-    params[45] = 0.0f;  // Ellis
+    params[42] = kThroat;
+    params[43] = 0.0f;  // Ellis
 
     std::vector<float> vk(static_cast<std::size_t>(w) * h * 4, 0.0f);
     const std::vector<std::uint32_t> star_dummy = {0u};

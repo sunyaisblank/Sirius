@@ -12,6 +12,7 @@
 #include <nlohmann/json.hpp>
 
 #include <numbers>
+#include <optional>
 #include <string>
 
 namespace sirius::app {
@@ -82,12 +83,15 @@ struct MotionBlurConfig {
     int samples = core::kDefaultMotionBlurSamples;
 };
 
-struct FilmSimulationConfig {
+struct FilmFinishConfig {
     bool enabled = false;
     std::string preset = "Interstellar";
-    float grain_intensity = 0.15f;
-    float halation_strength = 0.15f;
-    float vignette_strength = 0.3f;
+    // Absent means inherit the selected preset. This distinction is required:
+    // a concrete default here would overwrite every non-default preset even
+    // when the operator supplied no override.
+    std::optional<float> grain_intensity;
+    std::optional<float> halation_strength;
+    std::optional<float> vignette_strength;
 };
 
 struct BackendConfig {
@@ -104,7 +108,7 @@ struct SiriusConfig {
     BackendConfig backend;
     VolumetricConfig volumetric;
     MotionBlurConfig motion_blur;
-    FilmSimulationConfig film;
+    FilmFinishConfig film;
     bool disk_enabled = true;
     bool doppler_beaming = true;
     bool point_starfield = false;
@@ -268,21 +272,23 @@ inline void from_json(const nlohmann::json& json, MotionBlurConfig& config) {
     detail::Read(json, "samples", config.samples);
 }
 
-inline void to_json(nlohmann::json& json, const FilmSimulationConfig& config) {
-    json = {{"enabled", config.enabled},
-            {"preset", config.preset},
-            {"grainIntensity", config.grain_intensity},
-            {"halationStrength", config.halation_strength},
-            {"vignetteStrength", config.vignette_strength}};
+inline void to_json(nlohmann::json& json, const FilmFinishConfig& config) {
+    json = {{"enabled", config.enabled}, {"preset", config.preset}};
+    if (config.grain_intensity.has_value()) json["grainIntensity"] = *config.grain_intensity;
+    if (config.halation_strength.has_value()) json["halationStrength"] = *config.halation_strength;
+    if (config.vignette_strength.has_value()) json["vignetteStrength"] = *config.vignette_strength;
 }
 
-inline void from_json(const nlohmann::json& json, FilmSimulationConfig& config) {
+inline void from_json(const nlohmann::json& json, FilmFinishConfig& config) {
     config = {};
     detail::Read(json, "enabled", config.enabled);
     detail::Read(json, "preset", config.preset);
-    detail::Read(json, "grainIntensity", config.grain_intensity);
-    detail::Read(json, "halationStrength", config.halation_strength);
-    detail::Read(json, "vignetteStrength", config.vignette_strength);
+    if (const auto value = json.find("grainIntensity"); value != json.end())
+        config.grain_intensity = value->get<float>();
+    if (const auto value = json.find("halationStrength"); value != json.end())
+        config.halation_strength = value->get<float>();
+    if (const auto value = json.find("vignetteStrength"); value != json.end())
+        config.vignette_strength = value->get<float>();
 }
 
 inline void to_json(nlohmann::json& json, const BackendConfig& config) {

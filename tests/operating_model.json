@@ -226,7 +226,8 @@
         {"kind": "gtest", "name": "RenderCommandParse.TrailingNumericGarbageRejected"},
         {"kind": "gtest", "name": "CommandRouter.UnknownCommandReturnsFailure"},
         {"kind": "gtest", "name": "RenderSessionProbe.ConfigurationConversionPreservesObserverAndDiskControls"},
-        {"kind": "gtest", "name": "RenderSessionProbe.FeatureSpecificControlsRequireOwnersAtTypedBoundary"}
+        {"kind": "gtest", "name": "RenderSessionProbe.FeatureSpecificControlsRequireOwnersAtTypedBoundary"},
+        {"kind": "gtest", "name": "RenderSessionProbe.InMemoryPreviewRejectsInactiveOutputPath"}
       ]
     },
     {
@@ -255,8 +256,7 @@
     {
       "id": "cpu_render_path",
       "evidence": [
-        {"kind": "gtest", "name": "RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr"},
-        {"kind": "gtest", "name": "RenderSessionProbe.InMemoryPreviewCompletesWithoutWritingOutput"}
+        {"kind": "gtest", "name": "RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr"}
       ]
     },
     {

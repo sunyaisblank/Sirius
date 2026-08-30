@@ -52,19 +52,16 @@ namespace math = core::constants::math;
 // capture_factor mirrors the CPU session's exact Kerr-Schild capture surface.
 // so the shadow and background geometry coincide; the step schedule is the
 // kernel's own (the integrator differs from the CPU RK45 by design).
-constexpr float kTraceMaxSteps = 3000.0f;
 constexpr float kTraceStepScale = 0.08f;
-constexpr float kTraceCaptureFactor = 1.0f;
 
 // Thin-disk extent in units of M. The outer edge matches the CPU session's
 // disk_outer = 20 M and the inner edge is the ISCO. Emission and transfer are
 // owned by the shared Page-Thorne/blackbody/invariant-transfer kernel path.
 constexpr float kDiskOuterFactor = 20.0f;
 
-// params buffer ABI (indices documented in trace.slang). Keep power-of-two
-// capacity so represented camera/disk/sampling semantics remain one stable
-// host/kernel contract.
-constexpr std::uint32_t kParamCount = 72;
+// Exact dense params-buffer ABI through the last consumed slot (64).
+// Host and kernel indices are kept explicit so a new control must extend both.
+constexpr std::uint32_t kParamCount = 65;
 constexpr int kMaxVulkanVolumeSamples = 128;
 
 // Kernel dispatch ids (must match trace.slang / gr_types.slang).
@@ -295,12 +292,12 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
         .bubble_radius = config.bubble_radius,
         .bubble_sigma = config.bubble_sigma,
     });
-    params[21] = kTraceMaxSteps;
+    params[21] = static_cast<float>(kRenderTraceMaximumAttempts);
     params[22] = kTraceStepScale;
     params[23] = trace_domain.vulkan_min_step;
     params[24] = trace_domain.max_step;
     params[25] = trace_domain.escape_radius;
-    params[26] = kTraceCaptureFactor;
+    params[26] = kRenderTraceCaptureFactor;
 
     const double spin = (config.black_hole_mass > 0.0) ? config.black_hole_spin : 0.0;
     const double isco = core::AccretionDiskD::ComputeIsco(spin);
@@ -308,48 +305,45 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
     params[28] = static_cast<float>(isco * config.black_hole_mass);
     params[29] = static_cast<float>(kDiskOuterFactor * config.black_hole_mass);
     params[30] = config.disk_temperature_scale;
-    params[31] = 0.0f;  // Reserved; kernel derives T^4 from the Page-Thorne profile.
 
-    // [32..35] tile origin/size: written per tile.
-    params[36] = starfield_enabled ? 1.0f : 0.0f;
-    params[37] = static_cast<float>(starfield_width);
-    params[38] = static_cast<float>(starfield_height);
-    params[39] = 0.0f;  // Reserved.
-    params[40] = scene.warp_vs;
-    params[41] = scene.warp_sigma;
-    params[42] = scene.warp_R;
+    // [31..34] tile origin/size: written per tile.
+    params[35] = starfield_enabled ? 1.0f : 0.0f;
+    params[36] = static_cast<float>(starfield_width);
+    params[37] = static_cast<float>(starfield_height);
+    params[38] = scene.warp_vs;
+    params[39] = scene.warp_sigma;
+    params[40] = scene.warp_R;
 
     // Ray bundles (P2): propagate two deviation vectors in the trace kernel and
     // carry the geometric-mean expansion in radiance alpha. Off by default so the
     // parity and pinned renders are unchanged.
-    params[43] = config.ray_bundles ? 1.0f : 0.0f;
+    params[41] = config.ray_bundles ? 1.0f : 0.0f;
 
     // Morris-Thorne (dispatch id 3): throat radius and shape selector.
-    params[44] = scene.throat_b0;
-    params[45] = scene.worm_shape;
-    params[46] = 0.5f;  // Per-dispatch sub-pixel sample u.
-    params[47] = 0.5f;  // Per-dispatch sub-pixel sample v.
-    params[48] = 0.0f;  // Running-average sample index.
-    params[49] = static_cast<float>(config.camera_beta_forward);
-    params[50] = static_cast<float>(config.camera_beta_up);
-    params[51] = static_cast<float>(config.camera_beta_right);
-    params[52] = config.temperature_model == DiskTemperatureModel::ShakuraSunyaev ? 1.0f : 0.0f;
-    params[53] = config.doppler_beaming ? 1.0f : 0.0f;
-    params[54] = config.lens_type == core::LensType::ThinLens ? 1.0f : 0.0f;
-    params[55] = config.camera_focal_length;
-    params[56] = config.camera_aperture;
-    params[57] = config.camera_focus_distance;
-    params[58] = config.point_starfield ? 1.0f : 0.0f;
-    params[59] =
+    params[42] = scene.throat_b0;
+    params[43] = scene.worm_shape;
+    params[44] = 0.5f;  // Per-dispatch sub-pixel sample u.
+    params[45] = 0.5f;  // Per-dispatch sub-pixel sample v.
+    params[46] = 0.0f;  // Running-average sample index.
+    params[47] = static_cast<float>(config.camera_beta_forward);
+    params[48] = static_cast<float>(config.camera_beta_up);
+    params[49] = static_cast<float>(config.camera_beta_right);
+    params[50] = config.temperature_model == DiskTemperatureModel::ShakuraSunyaev ? 1.0f : 0.0f;
+    params[51] = config.doppler_beaming ? 1.0f : 0.0f;
+    params[52] = config.lens_type == core::LensType::ThinLens ? 1.0f : 0.0f;
+    params[53] = config.camera_focal_length;
+    params[54] = config.camera_aperture;
+    params[55] = config.camera_focus_distance;
+    params[56] = config.point_starfield ? 1.0f : 0.0f;
+    params[57] =
         static_cast<float>((config.camera_fov * math::kPi / 180.0) / std::max(1, config.height));
-    params[60] = config.starfield_config.brightness_scale;
-    params[61] = config.enable_volumetric_disk ? 1.0f : 0.0f;
-    params[62] = config.volumetric_h_over_r;
-    params[63] = config.volumetric_h_power;
-    params[64] = config.volumetric_tau_midplane;
-    params[65] = static_cast<float>(config.volumetric_samples);
-    params[66] = config.enable_turbulence ? 1.0f : 0.0f;
-    params[67] = 0.0f;  // Reserved for a future represented spectral corona.
+    params[58] = config.point_starfield_config.brightness_scale;
+    params[59] = config.enable_volumetric_disk ? 1.0f : 0.0f;
+    params[60] = config.volumetric_h_over_r;
+    params[61] = config.volumetric_h_power;
+    params[62] = config.volumetric_tau_midplane;
+    params[63] = static_cast<float>(config.volumetric_samples);
+    params[64] = config.enable_turbulence ? 1.0f : 0.0f;
 }
 
 }  // namespace
@@ -357,6 +351,13 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
 Expected<void> ValidateVulkanRenderConfig(const SessionConfig& config) {
     if (const auto issue = SessionConfigIssue(config); issue.has_value()) {
         return Fail(ErrorDomain::kConfiguration, "validate Vulkan render configuration", *issue);
+    }
+    const SessionConfig defaults;
+    if (config.tile_size != defaults.tile_size || config.thread_count != defaults.thread_count ||
+        config.enable_parallel_rendering != defaults.enable_parallel_rendering) {
+        return Fail(ErrorDomain::kConfiguration, "validate Vulkan render configuration",
+                    "CPU tile and thread controls are not represented by the device-governed "
+                    "Vulkan backend");
     }
     if (!config.enable_disk && (config.enable_volumetric_disk || config.enable_turbulence)) {
         return Fail(ErrorDomain::kConfiguration, "validate Vulkan render configuration",
@@ -465,28 +466,32 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
         return std::unexpected(kernel.error());
     }
 
-    // Starfield is a scene input. Missing it or omitting it under pressure would
-    // change every escaped ray, so both conditions decline instead of rendering
-    // a different background.
+    // Exactly one escaped-ray scene source is active. Texture mode requires the
+    // packaged equirectangular asset; point mode owns its generated catalogue and
+    // must not load or require an unused texture.
     int sf_w = 0;
     int sf_h = 0;
-    std::vector<std::uint32_t> starfield = LoadStarfield(sf_w, sf_h);
-    if (starfield.empty()) {
-        return Fail(ErrorDomain::kIo, "load Vulkan starfield",
-                    "required runtime resource assets/Starfield.png is missing or unreadable");
+    std::vector<std::uint32_t> starfield;
+    const bool use_starfield = !config.point_starfield;
+    if (use_starfield) {
+        starfield = LoadStarfield(sf_w, sf_h);
+        if (starfield.empty()) {
+            return Fail(ErrorDomain::kIo, "load Vulkan starfield",
+                        "required runtime resource assets/Starfield.png is missing or unreadable");
+        }
     }
     const std::uint64_t params_overhead = kParamCount * sizeof(float);
     const std::uint64_t starfield_bytes = starfield.size() * sizeof(std::uint32_t);
-    std::vector<core::StarEntry> point_stars;
     std::unique_ptr<core::StarfieldSpatialIndex> point_index;
     if (config.point_starfield) {
-        core::StarfieldConfig catalogue_config = config.starfield_config;
+        const core::StarfieldConfig catalogue_config =
+            core::ExpandPointStarfieldConfig(config.point_starfield_config);
         core::StarfieldGenerator generator(catalogue_config);
-        point_stars = generator.GenerateCatalogue();
-        point_index = std::make_unique<core::StarfieldSpatialIndex>(point_stars);
+        point_index = std::make_unique<core::StarfieldSpatialIndex>(generator.GenerateCatalogue());
     }
-    const std::uint64_t point_bytes = point_stars.size() * sizeof(core::StarEntry) +
-                                      (point_index ? point_index->MemoryBytes() : 0);
+    const std::uint64_t point_bytes =
+        (point_index ? point_index->Size() : 0) * sizeof(core::StarEntry) +
+        (point_index ? point_index->MemoryBytes() : 0);
     const auto resolved_budget = ResolveBudgetBytes(info.render_memory_bytes);
     if (!resolved_budget) {
         return std::unexpected(resolved_budget.error());
@@ -498,7 +503,6 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
                     "SIRIUS_MEMORY_BUDGET_MB override");
     }
 
-    const bool use_starfield = !config.point_starfield;
     auto plan =
         DeriveTilePlan(budget, config.width, config.height,
                        params_overhead + (use_starfield ? starfield_bytes : 0) + point_bytes);
@@ -513,7 +517,7 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
               << (plan->tile_working_set_bytes / 1024) << " KiB)\n";
     std::cout << "[Vulkan] precision: " << RungName(*rung) << " rung\n";
     if (config.point_starfield) {
-        std::cout << "[Vulkan] point-source star field: " << point_stars.size() << " stars, "
+        std::cout << "[Vulkan] point-source star field: " << point_index->Size() << " stars, "
                   << (point_index->MemoryBytes() / 1024) << " KiB index\n";
     }
 
@@ -545,7 +549,8 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
     const std::array<float, 8> dummy_point_star{};
     const std::array<std::uint32_t, 2> dummy_offsets{};
     const std::array<std::uint32_t, 1> dummy_indices{};
-    const std::span<const core::StarEntry> point_star_span = point_stars;
+    const std::span<const core::StarEntry> point_star_span =
+        point_index ? point_index->Stars() : std::span<const core::StarEntry>();
     const std::span<const std::uint32_t> point_offset_span =
         point_index ? point_index->Offsets() : std::span<const std::uint32_t>(dummy_offsets);
     const std::span<const std::uint32_t> point_index_span =
@@ -604,8 +609,8 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
             const int tw = std::min(edge, config.width - ox);
             const int th = std::min(edge, config.height - oy);
 
-            params[32] = static_cast<float>(ox);
-            params[34] = static_cast<float>(tw);
+            params[31] = static_cast<float>(ox);
+            params[33] = static_cast<float>(tw);
 
             // The kernel addresses pixels absolutely (tile origin + thread id),
             // so submitting the tile as row bands changes submission
@@ -615,8 +620,8 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
                     return Fail(ErrorDomain::kInternal, "render Vulkan frame", "cancelled");
                 }
                 const int bh = bands.NextRows(th - by, tw);
-                params[33] = static_cast<float>(oy + by);
-                params[35] = static_cast<float>(bh);
+                params[32] = static_cast<float>(oy + by);
+                params[34] = static_cast<float>(bh);
                 const auto gx = static_cast<std::uint32_t>((tw + 7) / 8);
                 const auto gy = static_cast<std::uint32_t>((bh + 7) / 8);
                 int sample_index = 0;
@@ -628,9 +633,9 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
                             base::Error{ErrorDomain::kInternal, "render Vulkan frame", "cancelled"};
                         return;
                     }
-                    params[46] = sample_u;
-                    params[47] = sample_v;
-                    params[48] = static_cast<float>(sample_index);
+                    params[44] = sample_u;
+                    params[45] = sample_v;
+                    params[46] = static_cast<float>(sample_index);
                     if (auto w = device.WriteBuffer(*params_buf,
                                                     std::as_bytes(std::span<const float>(params)));
                         !w) {

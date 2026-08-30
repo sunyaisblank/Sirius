@@ -724,31 +724,31 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
         }
     }
 
-    static const std::vector<std::string> valid_film_presets = {"Interstellar", "SpaceOdyssey2001",
-                                                                "DigitalClean"};
+    static const std::vector<std::string> valid_film_presets = {"Interstellar", "SpaceOdyssey2001"};
     if (std::find(valid_film_presets.begin(), valid_film_presets.end(), config.film.preset) ==
         valid_film_presets.end()) {
-        errors.push_back(
-            "film.preset must be one of: Interstellar, SpaceOdyssey2001, DigitalClean");
+        errors.push_back("film.preset must be one of: Interstellar, SpaceOdyssey2001");
     }
-    if (finite(config.film.grain_intensity, "film.grain_intensity") &&
-        (config.film.grain_intensity < 0 || config.film.grain_intensity > 1)) {
+    if (config.film.grain_intensity.has_value() &&
+        finite(*config.film.grain_intensity, "film.grain_intensity") &&
+        (*config.film.grain_intensity < 0 || *config.film.grain_intensity > 1)) {
         errors.push_back("film.grain_intensity must be between 0 and 1");
     }
-    if (finite(config.film.halation_strength, "film.halation_strength") &&
-        (config.film.halation_strength < 0 || config.film.halation_strength > 5)) {
+    if (config.film.halation_strength.has_value() &&
+        finite(*config.film.halation_strength, "film.halation_strength") &&
+        (*config.film.halation_strength < 0 || *config.film.halation_strength > 5)) {
         errors.push_back("film.halation_strength must be between 0 and 5");
     }
-    if (finite(config.film.vignette_strength, "film.vignette_strength") &&
-        (config.film.vignette_strength < 0 || config.film.vignette_strength > 2)) {
+    if (config.film.vignette_strength.has_value() &&
+        finite(*config.film.vignette_strength, "film.vignette_strength") &&
+        (*config.film.vignette_strength < 0 || *config.film.vignette_strength > 2)) {
         errors.push_back("film.vignette_strength must be between 0 and 2");
     }
-    const FilmSimulationConfig default_film;
-    if (!config.film.enabled && (config.film.preset != default_film.preset ||
-                                 config.film.grain_intensity != default_film.grain_intensity ||
-                                 config.film.halation_strength != default_film.halation_strength ||
-                                 config.film.vignette_strength != default_film.vignette_strength)) {
-        errors.push_back("film parameters require film.enabled=true");
+    const FilmFinishConfig default_film;
+    if (!config.film.enabled &&
+        (config.film.preset != default_film.preset || config.film.grain_intensity.has_value() ||
+         config.film.halation_strength.has_value() || config.film.vignette_strength.has_value())) {
+        errors.push_back("film-finish parameters require film.enabled=true");
     }
 
     // --- Backend validation -------------------------------------------------

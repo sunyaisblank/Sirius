@@ -331,9 +331,9 @@ TEST(ViewCommandOperational, StrictParsingAndSessionProjection) {
     EXPECT_TRUE(projected.enable_volumetric_disk);
     EXPECT_FALSE(projected.enable_jets);
     EXPECT_FALSE(projected.write_output);
-    EXPECT_EQ(projected.tile_size, 8);
-    EXPECT_EQ(projected.thread_count, 7);
-    EXPECT_FALSE(projected.enable_parallel_rendering);
+    EXPECT_EQ(projected.tile_size, render::SessionConfig{}.tile_size);
+    EXPECT_EQ(projected.thread_count, 0);
+    EXPECT_TRUE(projected.enable_parallel_rendering);
     EXPECT_FALSE(projected.enable_bloom);
     EXPECT_FLOAT_EQ(projected.exposure, 1.25f);
 

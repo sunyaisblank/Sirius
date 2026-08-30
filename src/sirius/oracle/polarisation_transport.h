@@ -290,6 +290,7 @@ struct PolarisedDerivD {
 // et al. (2015), Appendix; matches the RK4 style of beam_integrator.h.
 [[nodiscard]] inline PolarisedStateD ParallelTransportStep(const KerrMetricD& metric,
                                                            const PolarisedStateD& s, double h) {
+    SIRIUS_PRE(std::isfinite(h) && h != 0.0);
     const detail::PolarisedDerivD k1 = detail::PolarisedRhs(metric, s);
     const detail::PolarisedDerivD k2 =
         detail::PolarisedRhs(metric, detail::Advance(s, k1, 0.5 * h));
@@ -325,6 +326,15 @@ class PolarisedGeodesicIntegratorD {
         int max_steps = 400000;
     };
 
+    [[nodiscard]] static bool IsRepresentedConfig(const Config& config) noexcept {
+        return std::isfinite(config.base_step) && std::isfinite(config.min_step) &&
+               config.min_step > 0.0 && std::isfinite(config.max_step) &&
+               config.max_step >= config.min_step && config.base_step >= config.min_step &&
+               config.base_step <= config.max_step && std::isfinite(config.escape_radius) &&
+               config.escape_radius > 0.0 && std::isfinite(config.horizon_buffer) &&
+               config.horizon_buffer > 1.0 && config.max_steps > 0;
+    }
+
     struct Result {
         PolarisedStateD state;
         int steps = 0;
@@ -332,19 +342,20 @@ class PolarisedGeodesicIntegratorD {
         bool captured = false;
     };
 
-    explicit PolarisedGeodesicIntegratorD(const KerrMetricD* metric) : metric_(metric), config_() {
-        SIRIUS_PRE(metric != nullptr);
-    }
+    explicit PolarisedGeodesicIntegratorD(const KerrMetricD* metric)
+        : PolarisedGeodesicIntegratorD(metric, Config()) {}
 
     PolarisedGeodesicIntegratorD(const KerrMetricD* metric, const Config& config)
         : metric_(metric), config_(config) {
         SIRIUS_PRE(metric != nullptr);
+        SIRIUS_PRE(IsRepresentedConfig(config));
     }
 
     // Step shrinks quadratically as the geodesic approaches the horizon,
     // concentrating resolution where the connection is strongest (near the
     // photon sphere). This state-dependent controller is not a symplectic claim.
     [[nodiscard]] double AdaptiveStepSize(double r) const {
+        SIRIUS_PRE(std::isfinite(r));
         const double r_h = metric_->HorizonRadius();
         const double ratio = (r - r_h) / r_h;
         const double h = config_.base_step * std::min(1.0, ratio * ratio);

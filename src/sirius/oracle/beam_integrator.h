@@ -175,21 +175,19 @@ struct BeamStateD {
 class BeamIntegratorD {
   public:
     struct Config {
-        double step_size = 0.1;
-        double min_step_size = 1e-6;
-        double max_step_size = 1.0;
-        int max_steps = 100000;
         double escape_radius = 1e6;
-        double caustic_threshold = 1e-12;
     };
 
-    explicit BeamIntegratorD(const IMetricD* metric) : metric_(metric), config_() {
-        SIRIUS_PRE(metric != nullptr);
+    [[nodiscard]] static bool IsRepresentedConfig(const Config& config) noexcept {
+        return std::isfinite(config.escape_radius) && config.escape_radius > 0.0;
     }
+
+    explicit BeamIntegratorD(const IMetricD* metric) : BeamIntegratorD(metric, Config()) {}
 
     BeamIntegratorD(const IMetricD* metric, const Config& config)
         : metric_(metric), config_(config) {
         SIRIUS_PRE(metric != nullptr);
+        SIRIUS_PRE(IsRepresentedConfig(config));
     }
 
     //--------------------------------------------------------------------------
@@ -197,6 +195,7 @@ class BeamIntegratorD {
     //--------------------------------------------------------------------------
 
     SIRIUS_HOST_DEVICE bool Step(BeamStateD& beam, double h) const {
+        SIRIUS_PRE(std::isfinite(h) && h > 0.0);
         if (beam.terminated) return false;
 
         // Check if outside valid region

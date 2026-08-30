@@ -5,6 +5,7 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
 #include <cmath>
 #include <limits>
 
@@ -19,43 +20,77 @@ constexpr float kEps = 1e-5f;
 
 class StarfieldConfigTests : public ::testing::Test {};
 
-TEST_F(StarfieldConfigTests, ValidateClampsStarCount) {
+TEST_F(StarfieldConfigTests, PointCatalogueProjectionHasNoUnconsumedSamplingControls) {
+    PointStarfieldConfig point;
+    point.star_count = 17;
+    point.min_distance_pc = 2.0f;
+    point.max_distance_pc = 200.0f;
+    point.brightness_scale = 75.0f;
+    point.seed = 9;
+    ASSERT_TRUE(IsRepresentedPointStarfieldConfig(point));
+
+    const StarfieldConfig expanded = ExpandPointStarfieldConfig(point);
+    EXPECT_EQ(expanded.star_count, point.star_count);
+    EXPECT_FLOAT_EQ(expanded.min_distance_pc, point.min_distance_pc);
+    EXPECT_FLOAT_EQ(expanded.max_distance_pc, point.max_distance_pc);
+    EXPECT_FLOAT_EQ(expanded.brightness_scale, point.brightness_scale);
+    EXPECT_EQ(expanded.seed, point.seed);
+
+    point.min_distance_pc = std::numeric_limits<float>::quiet_NaN();
+    EXPECT_FALSE(IsRepresentedPointStarfieldConfig(point));
+    EXPECT_DEATH((void)ExpandPointStarfieldConfig(point), "precondition.*enforced, terminating");
+}
+
+TEST_F(StarfieldConfigTests, OutOfRangeStarCountFailsClosed) {
     sirius::core::StarfieldConfig c;
     c.star_count = 20000000u;  // above 10^7 limit
-    c.Validate();
-    EXPECT_LE(c.star_count, 10000000u);
+    EXPECT_FALSE(IsRepresentedStarfieldConfig(c));
+    EXPECT_DEATH((void)StarfieldGenerator(c), "precondition.*enforced, terminating");
 }
 
-TEST_F(StarfieldConfigTests, ValidateClampsMinDistance) {
+TEST_F(StarfieldConfigTests, NonPositiveMinimumDistanceFailsClosed) {
     sirius::core::StarfieldConfig c;
     c.min_distance_pc = -5.0f;
-    c.Validate();
-    EXPECT_GT(c.min_distance_pc, 0.0f);
+    EXPECT_FALSE(IsRepresentedStarfieldConfig(c));
+    EXPECT_DEATH((void)StarfieldGenerator(c), "precondition.*enforced, terminating");
 }
 
-TEST_F(StarfieldConfigTests, ValidateEnsuresMaxGreaterThanMin) {
+TEST_F(StarfieldConfigTests, UnorderedDistanceDomainFailsClosed) {
     sirius::core::StarfieldConfig c;
     c.min_distance_pc = 100.0f;
     c.max_distance_pc = 50.0f;
-    c.Validate();
-    EXPECT_GT(c.max_distance_pc, c.min_distance_pc);
+    EXPECT_FALSE(IsRepresentedStarfieldConfig(c));
+    EXPECT_DEATH((void)StarfieldGenerator(c), "precondition.*enforced, terminating");
 }
 
-TEST_F(StarfieldConfigTests, ValidateClampsMagnitudeLimit) {
+TEST_F(StarfieldConfigTests, NarrowOrderedDistanceDomainIsPreservedExactly) {
+    PointStarfieldConfig point;
+    point.star_count = 1;
+    point.min_distance_pc = 1.0f;
+    point.max_distance_pc = 1.5f;
+    ASSERT_TRUE(IsRepresentedPointStarfieldConfig(point));
+
+    const StarfieldConfig expanded = ExpandPointStarfieldConfig(point);
+    EXPECT_FLOAT_EQ(expanded.min_distance_pc, point.min_distance_pc);
+    EXPECT_FLOAT_EQ(expanded.max_distance_pc, point.max_distance_pc);
+    EXPECT_TRUE(IsRepresentedStarfieldConfig(expanded));
+}
+
+TEST_F(StarfieldConfigTests, OutOfRangeMagnitudeLimitFailsClosed) {
     sirius::core::StarfieldConfig c;
     c.magnitude_limit = 25.0f;
-    c.Validate();
-    EXPECT_LE(c.magnitude_limit, 20.0f);
+    EXPECT_FALSE(IsRepresentedStarfieldConfig(c));
+    EXPECT_DEATH((void)StarfieldGenerator(c), "precondition.*enforced, terminating");
 }
 
-TEST_F(StarfieldConfigTests, ValidateClampsAperture) {
+TEST_F(StarfieldConfigTests, OutOfRangeApertureFailsClosed) {
     sirius::core::StarfieldConfig c;
     c.aperture_mm = 5000.0f;
-    c.Validate();
-    EXPECT_LE(c.aperture_mm, 1000.0f);
+    EXPECT_FALSE(IsRepresentedStarfieldConfig(c));
+    EXPECT_DEATH((void)StarfieldGenerator(c), "precondition.*enforced, terminating");
 }
 
-TEST_F(StarfieldConfigTests, ValidateReplacesEveryNonFiniteScalar) {
+TEST_F(StarfieldConfigTests, NonFiniteScalarFailsClosedWithoutRewritingTheRequest) {
     sirius::core::StarfieldConfig c;
     const float nan = std::numeric_limits<float>::quiet_NaN();
     const float infinity = std::numeric_limits<float>::infinity();
@@ -65,24 +100,10 @@ TEST_F(StarfieldConfigTests, ValidateReplacesEveryNonFiniteScalar) {
     c.aperture_mm = infinity;
     c.focus_distance_pc = nan;
     c.brightness_scale = infinity;
-    c.Validate();
-
-    EXPECT_TRUE(std::isfinite(c.min_distance_pc));
-    EXPECT_TRUE(std::isfinite(c.max_distance_pc));
-    EXPECT_TRUE(std::isfinite(c.magnitude_limit));
-    EXPECT_TRUE(std::isfinite(c.aperture_mm));
-    EXPECT_TRUE(std::isfinite(c.focus_distance_pc));
-    EXPECT_TRUE(std::isfinite(c.brightness_scale));
-    EXPECT_GE(c.max_distance_pc, c.min_distance_pc + 1.0f);
-    EXPECT_GE(c.focus_distance_pc, c.min_distance_pc);
-    EXPECT_LE(c.focus_distance_pc, c.max_distance_pc);
-
-    c.min_distance_pc = std::numeric_limits<float>::max();
-    c.max_distance_pc = -std::numeric_limits<float>::max();
-    c.Validate();
-    EXPECT_TRUE(std::isfinite(c.min_distance_pc));
-    EXPECT_TRUE(std::isfinite(c.max_distance_pc));
-    EXPECT_GT(c.max_distance_pc, c.min_distance_pc);
+    EXPECT_FALSE(IsRepresentedStarfieldConfig(c));
+    EXPECT_DEATH((void)StarfieldGenerator(c), "precondition.*enforced, terminating");
+    EXPECT_TRUE(std::isnan(c.min_distance_pc));
+    EXPECT_TRUE(std::isinf(c.max_distance_pc));
 }
 
 // =============================================================================
@@ -138,24 +159,16 @@ TEST_F(StarEntryTests, HotStarIsBluer) {
     EXPECT_FLOAT_EQ(rc, 1.0f);
 }
 
-TEST_F(StarEntryTests, ZeroTemperatureDefaultsToSolar) {
+TEST_F(StarEntryTests, InvalidTemperatureFailsClosedInsteadOfDefaultingToSolar) {
     sirius::core::StarEntry invalid{};
     invalid.temperature_K = 0.0f;
-    sirius::core::StarEntry solar{};
-    solar.temperature_K = 5778.0f;
     float invalid_r, invalid_g, invalid_b;
-    float solar_r, solar_g, solar_b;
-    invalid.ComputeColor(invalid_r, invalid_g, invalid_b);
-    solar.ComputeColor(solar_r, solar_g, solar_b);
-    EXPECT_FLOAT_EQ(invalid_r, solar_r);
-    EXPECT_FLOAT_EQ(invalid_g, solar_g);
-    EXPECT_FLOAT_EQ(invalid_b, solar_b);
+    EXPECT_DEATH(invalid.ComputeColor(invalid_r, invalid_g, invalid_b),
+                 "precondition.*enforced, terminating");
 
     invalid.temperature_K = std::numeric_limits<float>::quiet_NaN();
-    invalid.ComputeColor(invalid_r, invalid_g, invalid_b);
-    EXPECT_FLOAT_EQ(invalid_r, solar_r);
-    EXPECT_FLOAT_EQ(invalid_g, solar_g);
-    EXPECT_FLOAT_EQ(invalid_b, solar_b);
+    EXPECT_DEATH(invalid.ComputeColor(invalid_r, invalid_g, invalid_b),
+                 "precondition.*enforced, terminating");
 }
 
 TEST_F(StarEntryTests, IntensityFromMagnitude) {
@@ -179,6 +192,11 @@ TEST_F(StarEntryTests, IntensityMagnitudeRelation) {
     s2.magnitude = 5.0f;
     float ratio = s1.Intensity() / s2.Intensity();
     EXPECT_NEAR(ratio, 100.0f, 0.1f);
+
+    s1.magnitude = -100.0f;
+    EXPECT_DEATH((void)s1.Intensity(), "precondition.*enforced, terminating");
+    s1.magnitude = std::numeric_limits<float>::quiet_NaN();
+    EXPECT_DEATH((void)s1.Intensity(), "precondition.*enforced, terminating");
 }
 
 // =============================================================================
@@ -200,6 +218,39 @@ TEST_F(StarfieldGeneratorTests, GeneratesNonEmptyCatalog) {
     sirius::core::StarfieldGenerator gen(config);
     auto stars = gen.Generate();
     EXPECT_GT(stars.size(), 0u);
+}
+
+TEST_F(StarfieldGeneratorTests, SpatialIndexOwnsValidatedCatalogueSnapshot) {
+    config.star_count = 5;
+    sirius::core::StarfieldGenerator gen(config);
+    auto stars = gen.GenerateCatalogue();
+    ASSERT_EQ(stars.size(), 5u);
+    ASSERT_TRUE(std::all_of(stars.begin(), stars.end(), IsRepresentedStarEntry));
+    const StarfieldSpatialIndex index(stars);
+    ASSERT_EQ(index.Size(), stars.size());
+
+    float exhaustive_r = 0.0f;
+    float exhaustive_g = 0.0f;
+    float exhaustive_b = 0.0f;
+    float indexed_r = 0.0f;
+    float indexed_g = 0.0f;
+    float indexed_b = 0.0f;
+    gen.AccumulateThroughBeam(1.0f, 0.0f, 0.0f, 0.5f, stars, exhaustive_r, exhaustive_g,
+                              exhaustive_b);
+    gen.AccumulateThroughBeam(1.0f, 0.0f, 0.0f, 0.5f, index, indexed_r, indexed_g, indexed_b);
+    const float scale =
+        std::max({std::abs(exhaustive_r), std::abs(exhaustive_g), std::abs(exhaustive_b), 1.0f});
+    EXPECT_NEAR(indexed_r, exhaustive_r, 1.0e-6f * scale);
+    EXPECT_NEAR(indexed_g, exhaustive_g, 1.0e-6f * scale);
+    EXPECT_NEAR(indexed_b, exhaustive_b, 1.0e-6f * scale);
+
+    const float indexed_direction_x = index.Stars()[0].direction_x;
+    stars[0].direction_x = 0.0f;
+    EXPECT_FLOAT_EQ(index.Stars()[0].direction_x, indexed_direction_x);
+
+    stars[0].direction_x = std::numeric_limits<float>::quiet_NaN();
+    EXPECT_FALSE(IsRepresentedStarEntry(stars[0]));
+    EXPECT_DEATH((void)StarfieldSpatialIndex(stars), "precondition.*enforced, terminating");
 }
 
 TEST_F(StarfieldGeneratorTests, CatalogSizeBounded) {

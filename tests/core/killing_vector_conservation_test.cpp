@@ -55,7 +55,6 @@ class MandatoryKillingTests : public ::testing::Test {
         config.min_step = 1e-8f;
         config.max_step = 0.05f;
         config.initial_step = 0.005f;
-        config.use_rk45 = true;
     }
 
     // Compute Killing energy: E = -g_tμ k^μ

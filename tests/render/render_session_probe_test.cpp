@@ -153,14 +153,13 @@ TEST(RenderSessionProbe, FilmAffectsDisplayOutputButNeverLinearExr) {
         cfg.black_hole_mass = 0.0;
         cfg.enable_disk = false;
         cfg.enable_bloom = false;
-        cfg.enable_film_simulation = film;
+        cfg.enable_film_finish = film;
         cfg.film_config = sirius::render::FilmConfig::Interstellar();
         cfg.output_path = (dir / ("film_probe_" + std::to_string(film) + extension)).string();
         RenderSession session;
         EXPECT_TRUE(session.Configure(cfg));
         EXPECT_EQ(session.Execute(), SessionState::Complete);
-        const float* pixels = session.GetDisplayBuffer().GetFloatData();
-        std::vector<float> copy(pixels, pixels + cfg.width * cfg.height * 4);
+        std::vector<float> copy = session.GetDisplayBuffer().SnapshotFloatData();
         fs::remove(cfg.output_path);
         return copy;
     };
@@ -178,7 +177,7 @@ TEST(RenderSessionProbe, FilmAffectsDisplayOutputButNeverLinearExr) {
     const auto exr_film = render(true, ".exr");
     ASSERT_EQ(exr_plain.size(), exr_film.size());
     EXPECT_EQ(exr_plain, exr_film)
-        << "film simulation contaminated the untouched linear-HDR EXR branch";
+        << "film finish contaminated the untouched linear-HDR EXR branch";
 }
 
 TEST(RenderSessionProbe, StartIsAsynchronousAndCancellationIsTerminalWithoutOutput) {
@@ -239,13 +238,13 @@ TEST(RenderSessionProbe, CompletionCallbackCanReenterLifecycleWithoutDeadlock) {
 TEST(RenderSessionProbe, PointStarfieldRejectsValuesItsGeneratorWouldClamp) {
     SessionConfig config;
     config.point_starfield = true;
-    config.starfield_config.star_count = std::numeric_limits<std::uint32_t>::max();
+    config.point_starfield_config.star_count = std::numeric_limits<std::uint32_t>::max();
     const auto issue = sirius::render::SessionConfigIssue(config);
     ASSERT_TRUE(issue.has_value());
     EXPECT_NE(issue->find("point-starfield"), std::string::npos);
 
-    config.starfield_config = sirius::core::StarfieldConfig{};
-    config.starfield_config.min_distance_pc = std::numeric_limits<float>::quiet_NaN();
+    config.point_starfield_config = sirius::core::PointStarfieldConfig{};
+    config.point_starfield_config.min_distance_pc = std::numeric_limits<float>::quiet_NaN();
     EXPECT_TRUE(sirius::render::SessionConfigIssue(config).has_value());
 }
 
@@ -320,13 +319,13 @@ TEST(RenderSessionProbe, TypedNumericBoundariesMatchTheExternalConfigurationBoun
     config.enable_motion_blur = false;
     config.shutter_time = sirius::core::kDefaultMotionBlurShutterTime;
 
-    config.enable_film_simulation = true;
+    config.enable_film_finish = true;
     config.film_config.halation_radius = std::numeric_limits<float>::infinity();
     EXPECT_EQ(sirius::render::SessionConfigIssue(config),
-              "film-simulation parameters are outside the represented domain");
+              "film-finish parameters are outside the represented domain");
     config.film_config.halation_radius = 257.0f;
     EXPECT_EQ(sirius::render::SessionConfigIssue(config),
-              "film-simulation parameters are outside the represented domain");
+              "film-finish parameters are outside the represented domain");
     config.film_config.halation_radius = 8.0f;
     EXPECT_FALSE(sirius::render::SessionConfigIssue(config).has_value());
 
@@ -410,18 +409,15 @@ TEST(DisplayBuffer, NonFiniteRadianceIsIdentifiedBeforeEncoding) {
     EXPECT_EQ(*bad, 1u);
 }
 
-TEST(DisplayBuffer, MalformedDimensionsTilesAndGammaFailClosed) {
+TEST(DisplayBuffer, MalformedDimensionsAndTilesFailClosed) {
     sirius::render::DisplayBuffer display;
-    display.Initialise(-1, 1);
-    EXPECT_TRUE(display.SnapshotFloatData().empty());
-    EXPECT_EQ(display.GetWidth(), 0);
-    EXPECT_EQ(display.GetHeight(), 0);
+    EXPECT_DEATH(display.Initialise(-1, 1), "precondition.*enforced, terminating");
 
     display.Initialise(1, 1);
-    display.UpdateTile(0, 0, 1, 1, nullptr);
+    EXPECT_DEATH(display.UpdateTile(0, 0, 1, 1, nullptr), "precondition.*enforced, terminating");
+    const float pixel[] = {0.0f, 0.0f, 0.0f, 1.0f};
+    EXPECT_DEATH(display.UpdateTile(1, 0, 1, 1, pixel), "precondition.*enforced, terminating");
     EXPECT_EQ(display.GetUpdateCounter(), 0u);
-    EXPECT_EQ(display.GetByteData(0.0f), nullptr);
-    EXPECT_EQ(display.GetByteData(std::numeric_limits<float>::quiet_NaN()), nullptr);
 }
 
 TEST(RenderSessionProbe, CpuPolarisationModeConsumesTransportedDiskStokes) {
@@ -448,8 +444,7 @@ TEST(RenderSessionProbe, CpuPolarisationModeConsumesTransportedDiskStokes) {
         RenderSession session;
         EXPECT_TRUE(session.Configure(cfg));
         EXPECT_EQ(session.Execute(), SessionState::Complete);
-        const float* pixels = session.GetDisplayBuffer().GetFloatData();
-        return std::vector<float>(pixels, pixels + cfg.width * cfg.height * 4);
+        return session.GetDisplayBuffer().SnapshotFloatData();
     };
 
     const auto true_color = render(sirius::core::color_modes::Mode::TrueColor);

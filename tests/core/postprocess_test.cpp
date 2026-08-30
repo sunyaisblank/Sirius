@@ -121,6 +121,11 @@ TEST_F(BloomFilterTests, DisabledBloomLeavesBufferUnchanged) {
 
     sirius::core::BloomFilter::Apply(buffer, w, h, config);
     EXPECT_EQ(buffer, original);
+
+    config.bloom_threshold = 0.7f;
+    EXPECT_FALSE(IsRepresentedPostProcessConfig(config));
+    EXPECT_DEATH(sirius::core::BloomFilter::Apply(buffer, w, h, config),
+                 "precondition.*enforced, terminating");
 }
 
 TEST_F(BloomFilterTests, ZeroIntensityBloomLeavesUnchanged) {

@@ -32,6 +32,16 @@ class AdaptiveHamiltonianIntegratorD {
         int maximum_steps = 1000000;
     };
 
+    [[nodiscard]] static bool IsRepresentedConfig(const Config& config) noexcept {
+        return std::isfinite(config.absolute_tolerance) && config.absolute_tolerance > 0.0 &&
+               std::isfinite(config.relative_tolerance) && config.relative_tolerance > 0.0 &&
+               std::isfinite(config.initial_step) && std::isfinite(config.minimum_step) &&
+               config.minimum_step > 0.0 && std::isfinite(config.maximum_step) &&
+               config.maximum_step >= config.minimum_step &&
+               config.initial_step >= config.minimum_step &&
+               config.initial_step <= config.maximum_step && config.maximum_steps > 0;
+    }
+
     struct IntegrationResult {
         HamiltonianStateD state;
         double affine_advance = 0.0;
@@ -47,17 +57,12 @@ class AdaptiveHamiltonianIntegratorD {
     AdaptiveHamiltonianIntegratorD(const IMetricD* metric, Config config)
         : metric_(metric), config_(config) {
         SIRIUS_PRE(metric != nullptr);
-        SIRIUS_PRE(config.absolute_tolerance > 0.0);
-        SIRIUS_PRE(config.relative_tolerance > 0.0);
-        SIRIUS_PRE(config.minimum_step > 0.0);
-        SIRIUS_PRE(config.maximum_step >= config.minimum_step);
-        SIRIUS_PRE(config.initial_step >= config.minimum_step);
-        SIRIUS_PRE(config.maximum_steps > 0);
+        SIRIUS_PRE(IsRepresentedConfig(config));
     }
 
     [[nodiscard]] IntegrationResult Integrate(const HamiltonianStateD& initial,
                                               double affine_span) const {
-        SIRIUS_PRE(affine_span >= 0.0);
+        SIRIUS_PRE(std::isfinite(affine_span) && affine_span >= 0.0);
         IntegrationResult result;
         result.state = initial;
         if (affine_span == 0.0) {

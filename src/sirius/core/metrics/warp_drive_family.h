@@ -93,9 +93,12 @@ inline WarpDriveParams WarpDriveFamily::GetParams() const { return params_; }
 inline void WarpDriveFamily::SetParameter(const std::string& key, double value) {
     const auto found = config_.find(key);
     SIRIUS_PRE(found != config_.end());
-    SIRIUS_PRE(std::isfinite(value));
-    if (found == config_.end() || !std::isfinite(value)) return;
-    found->second.value = std::clamp(value, found->second.min, found->second.max);
+    if (found == config_.end()) return;
+    const bool in_range =
+        std::isfinite(value) && value >= found->second.min && value <= found->second.max;
+    SIRIUS_PRE(in_range);
+    if (!in_range) return;
+    found->second.value = value;
     params_.vs = config_["velocity"].value;
     params_.sigma = config_["sigma"].value;
     params_.R = config_["radius"].value;

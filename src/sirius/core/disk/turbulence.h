@@ -4,38 +4,35 @@
 // visualisation via fractional Brownian motion over 3D Perlin gradient noise.
 // This is not a Kolmogorov, MRI, or GRMHD solution. Ported from PHTR001A.h.
 
+#include "sirius/base/contracts.h"
+
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
+#include <limits>
 
 namespace sirius::core {
 
 // Procedural density-noise configuration.
 struct TurbulenceConfig {
+    friend bool operator==(const TurbulenceConfig&, const TurbulenceConfig&) = default;
+
     float outer_scale_M = 5.0f;  // Largest noise scale [M].
     float amplitude = 0.3f;      // Density fluctuation amplitude in [0, 1].
     std::uint32_t octaves = 6;   // Noise octaves (fractal detail levels).
     std::uint32_t seed = 12345;  // Random seed for reproducibility.
     float lacunarity = 2.0f;     // Frequency multiplier per octave.
     float persistence = 0.5f;    // Amplitude decay per octave.
-    bool enabled = true;
-
-    // Numerical validity ranges (enforced by clamping in Validate):
-    // outer_scale_M > 0, amplitude in [0, 1], octaves in [1, 8].
-
-    // Clamp parameters into their valid ranges.
-    void Validate() {
-        if (!std::isfinite(outer_scale_M)) outer_scale_M = 5.0f;
-        if (!std::isfinite(amplitude)) amplitude = 0.3f;
-        if (!std::isfinite(lacunarity)) lacunarity = 2.0f;
-        if (!std::isfinite(persistence)) persistence = 0.5f;
-        outer_scale_M = std::max(outer_scale_M, 0.01f);
-        amplitude = std::clamp(amplitude, 0.0f, 1.0f);
-        octaves = std::clamp(octaves, 1u, 8u);
-        lacunarity = std::max(lacunarity, 1.1f);
-        persistence = std::clamp(persistence, 0.1f, 0.9f);
-    }
 };
+
+[[nodiscard]] inline bool IsRepresentedTurbulenceConfig(const TurbulenceConfig& config) noexcept {
+    return std::isfinite(config.outer_scale_M) && config.outer_scale_M >= 0.01f &&
+           config.outer_scale_M <= 1.0e6f && std::isfinite(config.amplitude) &&
+           config.amplitude >= 0.0f && config.amplitude <= 1.0f && config.octaves >= 1u &&
+           config.octaves <= 8u && std::isfinite(config.lacunarity) && config.lacunarity >= 1.1f &&
+           config.lacunarity <= 16.0f && std::isfinite(config.persistence) &&
+           config.persistence >= 0.1f && config.persistence <= 0.9f;
+}
 
 // Perlin gradient noise for turbulence generation (CPU).
 namespace turbulence_noise {
@@ -70,6 +67,12 @@ inline float Lerp(float a, float b, float t) { return a + t * (b - a); }
 
 // 3D Perlin noise in [-1, 1].
 inline float Perlin3D(float x, float y, float z, std::uint32_t seed) {
+    constexpr float kMinimumCell = static_cast<float>(std::numeric_limits<int>::lowest() + 1);
+    constexpr float kMaximumCell = static_cast<float>(std::numeric_limits<int>::max() - 1);
+    SIRIUS_PRE(std::isfinite(x) && x >= kMinimumCell && x <= kMaximumCell);
+    SIRIUS_PRE(std::isfinite(y) && y >= kMinimumCell && y <= kMaximumCell);
+    SIRIUS_PRE(std::isfinite(z) && z >= kMinimumCell && z <= kMaximumCell);
+
     // Integer cell coordinates.
     int xi = static_cast<int>(std::floor(x));
     int yi = static_cast<int>(std::floor(y));
@@ -118,6 +121,8 @@ inline float Perlin3D(float x, float y, float z, std::uint32_t seed) {
 // Fractional Brownian motion: octaves of Perlin noise with decreasing amplitude
 // and increasing frequency, normalised to [-1, 1].
 inline float Fbm3D(float x, float y, float z, const TurbulenceConfig& config) {
+    SIRIUS_PRE(IsRepresentedTurbulenceConfig(config));
+    SIRIUS_PRE(std::isfinite(x) && std::isfinite(y) && std::isfinite(z));
     float value = 0.0f;
     float amplitude = 1.0f;
     float frequency = 1.0f / config.outer_scale_M;
@@ -137,7 +142,12 @@ inline float Fbm3D(float x, float y, float z, const TurbulenceConfig& config) {
 // clamped to stay positive. Returns 1.0 for no perturbation.
 inline float SampleDensityPerturbation(float r, float theta, float phi,
                                        const TurbulenceConfig& config) {
-    if (!config.enabled || config.amplitude < 1e-6f) {
+    SIRIUS_PRE(IsRepresentedTurbulenceConfig(config));
+    SIRIUS_PRE(std::isfinite(r) && r >= 0.0f);
+    SIRIUS_PRE(std::isfinite(theta) && theta >= 0.0f &&
+               theta <= static_cast<float>(std::numbers::pi));
+    SIRIUS_PRE(std::isfinite(phi));
+    if (config.amplitude < 1e-6f) {
         return 1.0f;
     }
 

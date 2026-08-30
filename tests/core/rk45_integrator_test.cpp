@@ -13,6 +13,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 #include <vector>
 
 namespace sirius::test {
@@ -90,6 +91,12 @@ TEST_F(RK45IntegratorTests, DefaultConfigReasonable) {
     EXPECT_GT(cfg.step_grow_max, 1.0f);
     EXPECT_GT(cfg.step_shrink_min, 0.0f);
     EXPECT_LT(cfg.step_shrink_min, 1.0f);
+    EXPECT_TRUE(IsRepresentedIntegratorConfig(cfg));
+
+    cfg.safety_factor = std::numeric_limits<float>::quiet_NaN();
+    EXPECT_FALSE(IsRepresentedIntegratorConfig(cfg));
+    EXPECT_DEATH((void)Geodesic::ComputeOptimalStep(0.01f, 0.1f, 1.0f, cfg),
+                 "precondition.*enforced, terminating");
 }
 
 // =============================================================================

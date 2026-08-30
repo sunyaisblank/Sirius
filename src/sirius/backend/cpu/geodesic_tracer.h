@@ -150,6 +150,8 @@ struct TracerConfig {
     // disk_temperature_scale_kelvin carries the corresponding physical scale.
     // A zero-torque edge itself has zero temperature.
     float disk_temperature_inner = 1.0f;
+    // Physical scale used only by volumetric colour synthesis. Thin-disk
+    // display colouring is owned by the render session after the trace.
     float disk_temperature_scale_kelvin = 30000.0f;
     sirius::core::color_modes::Mode color_mode = sirius::core::color_modes::Mode::TrueColor;
     DiskTemperatureModel disk_temperature_model = DiskTemperatureModel::NovikovThorne;
@@ -210,9 +212,108 @@ struct TracerConfig {
         integrator.min_step = 1e-6f;
         integrator.max_step = 0.1f;
         integrator.initial_step = 0.01f;
-        integrator.use_rk45 = true;
     }
 };
+
+// Complete domain of the low-level CPU tracer request. The session boundary
+// validates its higher-level scene independently; direct typed callers must
+// receive the same fail-closed treatment instead of relying on that adapter.
+[[nodiscard]] inline bool IsRepresentedTracerConfig(const TracerConfig& config) noexcept {
+    const auto finite = [](float value) { return std::isfinite(value); };
+    const TracerConfig defaults;
+
+    if (!finite(config.escape_radius) || config.escape_radius <= 0.0f ||
+        config.escape_radius > 1.0e9f || !finite(config.horizon_factor) ||
+        config.horizon_factor < 1.0f || config.horizon_factor > 2.0f || config.max_steps < 1 ||
+        config.max_steps > 10000000 ||
+        !sirius::core::IsRepresentedIntegratorConfig(config.integrator) ||
+        !sirius::core::IsRepresentedTurbulenceConfig(config.turbulence)) {
+        return false;
+    }
+
+    switch (config.disk_temperature_model) {
+        case DiskTemperatureModel::NovikovThorne:
+        case DiskTemperatureModel::ShakuraSunyaev:
+            break;
+        default:
+            return false;
+    }
+    switch (config.color_mode) {
+        case sirius::core::color_modes::Mode::TrueColor:
+        case sirius::core::color_modes::Mode::TemperatureMap:
+        case sirius::core::color_modes::Mode::RedshiftMap:
+        case sirius::core::color_modes::Mode::Polarisation:
+            break;
+        default:
+            return false;
+    }
+
+    if (!finite(config.disk_inner) || config.disk_inner <= 0.0f || !finite(config.disk_outer) ||
+        config.disk_outer <= config.disk_inner || !finite(config.disk_temperature_inner) ||
+        config.disk_temperature_inner <= 0.0f || config.disk_temperature_inner > 1.0e8f ||
+        !finite(config.disk_temperature_scale_kelvin) ||
+        config.disk_temperature_scale_kelvin < 100.0f ||
+        config.disk_temperature_scale_kelvin > 1.0e8f) {
+        return false;
+    }
+    if (!config.enable_disk &&
+        (config.disk_inner != defaults.disk_inner || config.disk_outer != defaults.disk_outer ||
+         config.disk_temperature_inner != defaults.disk_temperature_inner ||
+         config.disk_temperature_scale_kelvin != defaults.disk_temperature_scale_kelvin ||
+         config.disk_temperature_model != defaults.disk_temperature_model ||
+         config.color_mode != defaults.color_mode || !config.doppler_beaming ||
+         config.enable_polarisation || config.enable_volumetric)) {
+        return false;
+    }
+
+    const bool no_strong_field_cap =
+        config.strong_field_radius == 0.0f && config.strong_field_max_step == 0.0f;
+    const bool represented_strong_field_cap =
+        finite(config.strong_field_radius) && config.strong_field_radius > 0.0f &&
+        config.strong_field_radius < config.escape_radius && finite(config.strong_field_max_step) &&
+        config.strong_field_max_step >= config.integrator.min_step &&
+        config.strong_field_max_step <= config.integrator.max_step;
+    if (!no_strong_field_cap && !represented_strong_field_cap) return false;
+
+    if (!finite(config.bundle_angular_size) || config.bundle_angular_size <= 0.0f ||
+        config.bundle_angular_size > 0.1f) {
+        return false;
+    }
+    if (!config.enable_ray_bundles && (config.bundle_angular_size != defaults.bundle_angular_size ||
+                                       config.bundle_point_source)) {
+        return false;
+    }
+
+    if (!finite(config.volumetric_scale_height_ratio) ||
+        config.volumetric_scale_height_ratio < 0.01f ||
+        config.volumetric_scale_height_ratio > 0.5f || !finite(config.volumetric_flare_power) ||
+        config.volumetric_flare_power < -2.0f || config.volumetric_flare_power > 4.0f ||
+        !finite(config.volumetric_tau_midplane) || config.volumetric_tau_midplane < 0.0f ||
+        config.volumetric_tau_midplane > 1.0e6f || config.volumetric_samples < 1 ||
+        config.volumetric_samples > 4096 || !finite(config.volumetric_tau_max) ||
+        config.volumetric_tau_max <= 0.0f || config.volumetric_tau_max > 1.0e6f) {
+        return false;
+    }
+    if (!config.enable_volumetric &&
+        (config.volumetric_scale_height_ratio != defaults.volumetric_scale_height_ratio ||
+         config.volumetric_flare_power != defaults.volumetric_flare_power ||
+         config.volumetric_tau_midplane != defaults.volumetric_tau_midplane ||
+         config.volumetric_samples != defaults.volumetric_samples ||
+         config.volumetric_tau_max != defaults.volumetric_tau_max ||
+         config.disk_temperature_scale_kelvin != defaults.disk_temperature_scale_kelvin ||
+         config.color_mode != defaults.color_mode || config.enable_turbulence)) {
+        return false;
+    }
+    if (config.enable_turbulence && !config.enable_volumetric) return false;
+    if (!config.enable_turbulence && config.turbulence != defaults.turbulence) return false;
+    if (config.enable_polarisation && (!config.enable_disk || config.enable_volumetric))
+        return false;
+    if (config.enable_volumetric &&
+        config.color_mode == sirius::core::color_modes::Mode::Polarisation) {
+        return false;
+    }
+    return true;
+}
 
 // Traces camera rays through a spacetime and reports each ray's fate.
 class GeodesicTracer {
@@ -226,17 +327,15 @@ class GeodesicTracer {
     // result.outcome describes the termination condition.
     TraceResult Trace(const sirius::core::CameraRay& camera_ray);
 
-    // Trace with per-call metric parameters (mass M, spin a, with spin passed as
-    // an absolute a = spin so that a/M = spin/mass); updates the disk inner edge
-    // to the ISCO for the new spin.
-    TraceResult Trace(const sirius::core::CameraRay& camera_ray, double mass, double spin);
-
     void SetConfig(const TracerConfig& config) {
+        SIRIUS_PRE(IsRepresentedTracerConfig(config));
         config_ = config;
-        config_.turbulence.Validate();
     }
     const TracerConfig& GetConfig() const { return config_; }
-    void SetMetric(sirius::core::IMetric* metric) { metric_ = metric; }
+    void SetMetric(sirius::core::IMetric* metric) {
+        SIRIUS_PRE(metric != nullptr);
+        metric_ = metric;
+    }
 
     // Geodesic-deviation (tidal) acceleration a^mu = -R^mu_nu_rho_sigma k^nu
     // xi^rho k^sigma in the tracer's Kerr-Schild Cartesian chart (P2). Exposed so
@@ -376,7 +475,8 @@ class GeodesicTracer {
 
 inline GeodesicTracer::GeodesicTracer(sirius::core::IMetric* metric, const TracerConfig& config)
     : metric_(metric), config_(config) {
-    config_.turbulence.Validate();
+    SIRIUS_PRE(metric != nullptr);
+    SIRIUS_PRE(IsRepresentedTracerConfig(config));
 }
 
 inline void GeodesicTracer::CacheMetricParameters() {

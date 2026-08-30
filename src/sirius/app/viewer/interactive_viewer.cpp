@@ -23,6 +23,7 @@ render::SessionConfig ProjectSessionConfig(const ViewerConfig& viewer, const Cam
     config.height = height;
     config.samples_per_pixel = samples_per_pixel;
     config.write_output = false;
+    config.output_path = render::SessionConfig{}.output_path;
 
     config.metric_id = viewer.metric_id;
     config.black_hole_mass = viewer.black_hole_mass;
@@ -34,6 +35,14 @@ render::SessionConfig ProjectSessionConfig(const ViewerConfig& viewer, const Cam
     config.enable_disk = viewer.enable_disk;
     config.enable_volumetric_disk = viewer.enable_volumetric;
     config.backend = viewer.backend;
+    if (config.backend == render::RenderBackend::Vulkan) {
+        const render::SessionConfig defaults;
+        config.tile_size = defaults.tile_size;
+        config.thread_count = defaults.thread_count;
+        config.enable_parallel_rendering = defaults.enable_parallel_rendering;
+    } else if (!config.enable_parallel_rendering) {
+        config.thread_count = 0;
+    }
 
     return config;
 }

@@ -206,7 +206,7 @@ std::string SessionSceneEvidenceJson(const SessionConfig& config, std::size_t po
              << ",\"ray_bundles\":" << (config.ray_bundles ? "true" : "false")
              << ",\"point_starfield\":" << (config.point_starfield ? "true" : "false")
              << ",\"point_star_count\":" << point_star_count << ",\"point_brightness_scale\":"
-             << static_cast<double>(config.starfield_config.brightness_scale)
+             << static_cast<double>(config.point_starfield_config.brightness_scale)
              << ",\"camera_beta\":[" << config.camera_beta_forward << ',' << config.camera_beta_up
              << ',' << config.camera_beta_right << "]" << ",\"lens\":\"" << lens << "\""
              << ",\"focal_length\":" << static_cast<double>(config.camera_focal_length)
@@ -240,21 +240,14 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
     if (config.thread_count < 0 || config.thread_count > 1024) {
         return "thread count must be between 0 and 1024";
     }
+    if (!config.enable_parallel_rendering && config.thread_count != 0) {
+        return "thread count requires parallel CPU rendering";
+    }
     if (config.point_starfield) {
-        const core::StarfieldConfig& stars = config.starfield_config;
-        if (!stars.enabled || stars.star_count < 1 || stars.star_count > 10000000u ||
-            !finite(stars.min_distance_pc) || stars.min_distance_pc < 0.1f ||
-            !finite(stars.max_distance_pc) ||
-            stars.max_distance_pc < stars.min_distance_pc + 1.0f ||
-            !finite(stars.magnitude_limit) || stars.magnitude_limit < 0.0f ||
-            stars.magnitude_limit > 20.0f || !finite(stars.aperture_mm) ||
-            stars.aperture_mm < 0.0f || stars.aperture_mm > 1000.0f ||
-            !finite(stars.focus_distance_pc) || stars.focus_distance_pc < stars.min_distance_pc ||
-            stars.focus_distance_pc > stars.max_distance_pc || !finite(stars.brightness_scale) ||
-            stars.brightness_scale < 0.0f || stars.brightness_scale > 1000000.0f) {
+        if (!core::IsRepresentedPointStarfieldConfig(config.point_starfield_config)) {
             return "point-starfield parameters are outside the represented domain";
         }
-    } else if (config.starfield_config != defaults.starfield_config) {
+    } else if (config.point_starfield_config != defaults.point_starfield_config) {
         return "point-starfield parameters require point-starfield mode";
     }
     if (config.write_output) {
@@ -270,6 +263,8 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         if (extension != ".ppm" && extension != ".png" && extension != ".exr") {
             return "output path extension must be .ppm, .png, or .exr";
         }
+    } else if (config.output_path != defaults.output_path) {
+        return "output path requires file output";
     }
 
     switch (config.backend) {
@@ -278,6 +273,12 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
             break;
         default:
             return "invalid render backend";
+    }
+    if (config.backend == RenderBackend::Vulkan &&
+        (config.tile_size != defaults.tile_size || config.thread_count != defaults.thread_count ||
+         config.enable_parallel_rendering != defaults.enable_parallel_rendering)) {
+        return "CPU tile and thread controls are not represented by the device-governed Vulkan "
+               "backend";
     }
     if (const auto issue =
             core::MetricParameterIssue(config.metric_id, config.black_hole_spin,
@@ -360,6 +361,12 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         !finite(config.observer_azimuth) || std::abs(config.observer_azimuth) > 2.0 * math::kPi ||
         !finite(config.camera_fov) || config.camera_fov < 1.0f || config.camera_fov > 170.0f) {
         return "observer distance, angles, or field of view is outside the represented domain";
+    }
+    const double bundle_angular_size =
+        (static_cast<double>(config.camera_fov) * math::kPi / 180.0) /
+        static_cast<double>(config.height);
+    if (config.ray_bundles && bundle_angular_size > 0.1) {
+        return "ray-bundle angular extent exceeds the represented linear-deviation domain";
     }
     const double beta_squared = config.camera_beta_forward * config.camera_beta_forward +
                                 config.camera_beta_up * config.camera_beta_up +
@@ -498,59 +505,12 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         }
         return "temporal disk motion blur requires a represented time-dependent emissivity model";
     }
-    if (config.enable_film_simulation) {
-        const FilmConfig& film = config.film_config;
-        switch (film.format) {
-            case FilmFormat::IMAX70mm_15perf:
-            case FilmFormat::IMAX70mm_5perf:
-            case FilmFormat::Panavision70mm:
-            case FilmFormat::VistaVision:
-            case FilmFormat::Academy35mm:
-            case FilmFormat::Anamorphic235:
-            case FilmFormat::Digital:
-                break;
-            default:
-                return "invalid film format";
-        }
-        switch (film.stock) {
-            case FilmStock::KodakVision3_500T:
-            case FilmStock::KodakVision3_250D:
-            case FilmStock::KodakVision3_50D:
-            case FilmStock::KodakEktachrome:
-            case FilmStock::FujiEterna:
-            case FilmStock::Custom:
-                break;
-            default:
-                return "invalid film stock";
-        }
-        if (!in_range(film.aspect_ratio, 0.1, 10.0) || film.width < 1 || film.width > 8192 ||
-            film.height < 1 || film.height > 8192 || !in_range(film.iso, 1.0, 100000.0) ||
-            !in_range(film.grain_intensity, 0.0, 1.0) || !in_range(film.grain_size, 0.0, 256.0) ||
-            !in_range(film.grain_uniformity, 0.0, 1.0) ||
-            !in_range(film.halation_radius, 0.0, 256.0) ||
-            !in_range(film.halation_strength, 0.0, 5.0) ||
-            !in_range(film.halation_threshold, 0.0, 100.0) ||
-            !in_range(film.halation_color_r, 0.0, 10.0) ||
-            !in_range(film.halation_color_g, 0.0, 10.0) ||
-            !in_range(film.halation_color_b, 0.0, 10.0) || !in_range(film.saturation, 0.0, 4.0) ||
-            !in_range(film.contrast, 0.0, 4.0) || !in_range(film.exposure, -100.0, 100.0) ||
-            !in_range(film.color_temperature_kelvin, 100.0, 100000.0) ||
-            !in_range(film.tint, -10.0, 10.0) || !in_range(film.toe_strength, 0.0, 10.0) ||
-            !in_range(film.shoulder_strength, 0.0, 10.0) ||
-            !in_range(film.midtone_point, 0.01, 0.99) ||
-            !in_range(film.weave_amplitude_x, 0.0, 256.0) ||
-            !in_range(film.weave_amplitude_y, 0.0, 256.0) ||
-            !in_range(film.weave_frequency, 0.0, 1000.0) ||
-            !in_range(film.vignette_strength, 0.0, 2.0) ||
-            !in_range(film.vignette_radius, 0.0, 10.0) ||
-            !in_range(film.vignette_softness, std::numeric_limits<float>::min(), 10.0) ||
-            !in_range(film.bloom_intensity, 0.0, 5.0) ||
-            !in_range(film.bloom_threshold, 0.0, 100.0) ||
-            !in_range(film.bloom_radius, 0.0, 256.0)) {
-            return "film-simulation parameters are outside the represented domain";
+    if (config.enable_film_finish) {
+        if (!IsRepresentedFilmConfig(config.film_config)) {
+            return "film-finish parameters are outside the represented domain";
         }
     } else if (config.film_config != defaults.film_config) {
-        return "film-simulation parameters require film simulation";
+        return "film-finish parameters require the film finish";
     }
     if (config.enable_jets) {
         return "relativistic jets require covariant geodesic radiative transfer, which is not "
@@ -619,19 +579,46 @@ base::Expected<void> RenderSession::Initialise() {
     }
     std::cout << "[Session] Initialising render..." << std::endl;
     std::cout << "  Resolution: " << config_.width << " x " << config_.height << std::endl;
-    std::cout << "  Tile size:  " << config_.tile_size << std::endl;
+    if (config_.backend == RenderBackend::Cpu) {
+        std::cout << "  Tile size:  " << config_.tile_size << std::endl;
+    }
     std::cout << "  Samples:    " << config_.samples_per_pixel << std::endl;
 
-    // Tiles.
-    tiles_.Initialise(config_.width, config_.height, config_.tile_size);
-    std::cout << "  Tiles:      " << tiles_.GetTileCount() << " (spiral order)" << std::endl;
+    // CPU tiles are operator-sized and spiral ordered. Vulkan derives a separate
+    // device-budgeted tile plan and reports its actual total at dispatch time.
+    if (config_.backend == RenderBackend::Cpu) {
+        tiles_.Initialise(config_.width, config_.height, config_.tile_size);
+        std::cout << "  Tiles:      " << tiles_.GetTileCount() << " (spiral order)" << std::endl;
+    } else {
+        std::cout << "  Tiles:      device-budget governed (Vulkan)" << std::endl;
+    }
 
     // Display buffer.
     display_.Initialise(config_.width, config_.height);
 
     // Progress tracker (Start() before SetTotals to avoid a reset).
     progress_.Start();
-    progress_.SetTotals(tiles_.GetTileCount(), config_.samples_per_pixel);
+    if (config_.backend == RenderBackend::Cpu) {
+        progress_.SetTotals(tiles_.GetTileCount(), config_.samples_per_pixel);
+    } else {
+        progress_.SetTotals(1, 1);
+    }
+
+    // The Vulkan renderer owns device scene construction, resource loading,
+    // catalogue upload, and dispatch. Do not construct an unused CPU metric,
+    // camera, tracer pool, texture, or duplicate point catalogue first.
+    if (config_.backend == RenderBackend::Vulkan) {
+        const std::size_t point_star_count =
+            config_.point_starfield ? config_.point_starfield_config.star_count : 0;
+        std::cout << "[Session] Scene evidence: "
+                  << SessionSceneEvidenceJson(config_, point_star_count) << std::endl;
+        if (progress_.GetCancellationToken().IsCancelled()) {
+            fsm_.Process(SessionEvent::Cancel);
+            return {};
+        }
+        fsm_.Process(SessionEvent::Ready);
+        return {};
+    }
 
     // Construct the spacetime from its registry identity. Charge and the
     // cosmological constant flow through; a metric the CPU tracer cannot
@@ -751,7 +738,7 @@ base::Expected<void> RenderSession::Initialise() {
     // surface is numerically safe. Enlarging it inflates the near-extremal
     // shadow.
     tracer_config.horizon_factor = 1.0f;
-    tracer_config.max_steps = 20000;
+    tracer_config.max_steps = kRenderTraceMaximumAttempts;
 
     // Large steps far from the hole, small near the horizon.
     tracer_config.integrator.initial_step = trace_domain.cpu_initial_step;
@@ -768,12 +755,12 @@ base::Expected<void> RenderSession::Initialise() {
     SIRIUS_ASSERT(config_.enable_disk ||
                   (!config_.enable_volumetric_disk && !config_.enable_turbulence));
     auto isco_radius = AccretionDiskD::ComputeIsco(config_.black_hole_spin);
-    tracer_config.disk_inner = static_cast<float>(isco_radius * config_.black_hole_mass);
-    tracer_config.disk_outer = static_cast<float>(20.0 * config_.black_hole_mass);
     tracer_config.enable_disk = config_.enable_disk && disk_capable;
-    tracer_config.enable_polarisation = config_.enable_polarisation;
-    tracer_config.disk_temperature_scale_kelvin = config_.disk_temperature_scale;
-    tracer_config.color_mode = config_.color_mode;
+    if (tracer_config.enable_disk) {
+        tracer_config.disk_inner = static_cast<float>(isco_radius * config_.black_hole_mass);
+        tracer_config.disk_outer = static_cast<float>(20.0 * config_.black_hole_mass);
+        tracer_config.enable_polarisation = config_.enable_polarisation;
+    }
 
     // Doppler beaming toggle (P4); true keeps the full physics and the
     // pinned render byte-for-byte.
@@ -796,8 +783,10 @@ base::Expected<void> RenderSession::Initialise() {
     // render untouched.
     pixel_angular_size_ = (config_.camera_fov * math::kPi / 180.0) / std::max(1, config_.height);
     tracer_config.enable_ray_bundles = config_.ray_bundles;
-    tracer_config.bundle_point_source = true;
-    tracer_config.bundle_angular_size = static_cast<float>(pixel_angular_size_);
+    if (tracer_config.enable_ray_bundles) {
+        tracer_config.bundle_point_source = true;
+        tracer_config.bundle_angular_size = static_cast<float>(pixel_angular_size_);
+    }
 
     // Volumetric disk configuration.
     tracer_config.enable_volumetric = config_.enable_volumetric_disk;
@@ -806,7 +795,10 @@ base::Expected<void> RenderSession::Initialise() {
     tracer_config.volumetric_tau_midplane = config_.volumetric_tau_midplane;
     tracer_config.volumetric_samples = config_.volumetric_samples;
     tracer_config.enable_turbulence = config_.enable_turbulence;
-    tracer_config.turbulence.enabled = config_.enable_turbulence;
+    if (tracer_config.enable_volumetric) {
+        tracer_config.disk_temperature_scale_kelvin = config_.disk_temperature_scale;
+        tracer_config.color_mode = config_.color_mode;
+    }
     if (metric_) {
         tracer_ = std::make_unique<GeodesicTracer>(metric_.get(), tracer_config);
         if (tracer_config.enable_disk) {
@@ -884,16 +876,18 @@ base::Expected<void> RenderSession::Initialise() {
     // once. The beam footprint (ray bundles on) or a pinhole sigma (bundles
     // off) filters it per escaping ray.
     if (config_.point_starfield) {
-        core::StarfieldConfig scfg = config_.starfield_config;
+        const core::StarfieldConfig scfg =
+            core::ExpandPointStarfieldConfig(config_.point_starfield_config);
         star_generator_ = std::make_unique<core::StarfieldGenerator>(scfg);
-        star_catalogue_ = star_generator_->GenerateCatalogue();
-        star_index_ = std::make_unique<core::StarfieldSpatialIndex>(star_catalogue_);
-        std::cout << "[Session] Point-source star field: " << star_catalogue_.size() << " stars, "
+        star_index_ =
+            std::make_unique<core::StarfieldSpatialIndex>(star_generator_->GenerateCatalogue());
+        std::cout << "[Session] Point-source star field: " << star_index_->Size() << " stars, "
                   << (star_index_->MemoryBytes() / 1024) << " KiB index, beams "
                   << (config_.ray_bundles ? "on" : "off") << std::endl;
     }
     std::cout << "[Session] Scene evidence: "
-              << SessionSceneEvidenceJson(config_, star_catalogue_.size()) << std::endl;
+              << SessionSceneEvidenceJson(config_, star_index_ ? star_index_->Size() : 0)
+              << std::endl;
 
     // GPU acceleration removed: the legacy OptiX backend init and starfield
     // upload lived here. OptiX is retired; the Vulkan compute path arrives
@@ -1042,7 +1036,7 @@ RenderSession::PixelResult RenderSession::ShadeDiskHit(const TraceResult& result
 
 RenderSession::PixelResult RenderSession::ShadeEscaped(const TraceResult& result) const {
     PixelResult px;
-    if (config_.point_starfield && !star_catalogue_.empty()) {
+    if (config_.point_starfield && star_index_ && star_index_->Size() > 0) {
         SampleStarfieldPoints(result, px.r, px.g, px.b);
     } else {
         SampleStarfield(result.final_direction, px.r, px.g, px.b);
@@ -1058,6 +1052,8 @@ RenderSession::PixelResult RenderSession::ShadePixel(int px_coord, int py_coord,
 
     const int samples_taken = ForEachPixelSample(config_.samples_per_pixel, [&](float u, float v) {
         CameraRay camera_ray = camera_->GenerateRayForObserver(px_coord, py_coord, u, v);
+        SIRIUS_ASSERT(core::IsRepresentedCameraRay(camera_ray));
+        if (!camera_ray.active) return;
         TraceResult trace_result = tracer->Trace(camera_ray);
 
         float sr = 0.0f, sg = 0.0f, sb = 0.0f;
@@ -1318,7 +1314,7 @@ void RenderSession::SampleStarfieldPoints(const TraceResult& result, float& r, f
     const auto& d = result.final_direction;
     star_generator_->AccumulateThroughBeam(static_cast<float>(d(1)), static_cast<float>(d(2)),
                                            static_cast<float>(d(3)), sigma_major, sigma_minor,
-                                           orientation, star_catalogue_, *star_index_, r, g, b);
+                                           orientation, *star_index_, r, g, b);
 }
 
 // =============================================================================
@@ -1329,7 +1325,6 @@ base::Expected<void> RenderSession::WriteOutput() {
 
     const int width = config_.width;
     const int height = config_.height;
-    const std::size_t pixel_count = static_cast<std::size_t>(width) * height;
 
     if (const auto bad = display_.FirstNonFiniteIndex(); bad.has_value()) {
         return base::Fail(
@@ -1351,7 +1346,7 @@ base::Expected<void> RenderSession::WriteOutput() {
         // written untouched. Tonemapping, grading, and transfer encoding are
         // display concerns and deliberately do not apply here.
         ImageBufferRGBA hdr(width, height);
-        std::memcpy(hdr.pixels.data(), display_.GetFloatData(), pixel_count * 4 * sizeof(float));
+        hdr.pixels = display_.SnapshotFloatData();
 
         EXRMetadata meta;
         meta.metric_type = core::MetricInfoFor(config_.metric_id).canonical_name;
@@ -1376,29 +1371,32 @@ base::Expected<void> RenderSession::WriteOutput() {
         postprocess_config.enable_bloom = config_.enable_bloom;
         postprocess_config.bloom_intensity = config_.bloom_intensity;
         postprocess_config.bloom_threshold = config_.bloom_threshold;
-        postprocess_config.bloom_radius = kBloomRadius;
+        if (config_.enable_bloom) postprocess_config.bloom_radius = kBloomRadius;
 
         postprocess_config.saturation = config_.saturation;
         postprocess_config.contrast = config_.contrast;
         postprocess_config.lift = kShadowLift;
         postprocess_config.gain = 1.0f;
 
-        core::PostProcessor::Process(display_.GetFloatBuffer(), width, height, postprocess_config);
+        display_.MutateFloatData([&](std::vector<float>& pixels) {
+            core::PostProcessor::Process(pixels, width, height, postprocess_config);
 
-        // Film is a display-referred finishing pipeline. It is intentionally
-        // absent from the EXR branch above, which must retain untouched
-        // linear HDR radiance.
-        if (config_.enable_film_simulation) {
-            FilmPipeline film(config_.film_config);
-            film.Apply(display_.GetFloatBuffer().data(), width, height, 0);
-        }
+            // Film is a display-referred finishing pipeline. It is intentionally
+            // absent from the EXR branch above, which must retain untouched
+            // linear HDR radiance.
+            if (config_.enable_film_finish) {
+                FilmPipeline film(config_.film_config);
+                film.Apply(pixels.data(), width, height, 0);
+            }
+        });
 
         if (const auto bad = display_.FirstNonFiniteIndex(); bad.has_value()) {
             return base::Fail(base::ErrorDomain::kInternal, "apply display pipeline",
                               "produced a non-finite sample at channel " + std::to_string(*bad));
         }
 
-        const float* data = display_.GetFloatData();
+        const std::vector<float> output = display_.SnapshotFloatData();
+        const float* data = output.data();
 
         if (!config_.write_output) {
             // In-memory progressive previews consume the display-linear

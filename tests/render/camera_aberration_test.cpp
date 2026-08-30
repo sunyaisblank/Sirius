@@ -53,12 +53,12 @@ TEST(CameraWorldlineTest, ZeroVelocityIsExactlyRepresented) {
 TEST(CameraWorldlineTest, InvalidInternalWorldlineFailsClosed) {
     CameraConfig invalid;
     invalid.beta_x = 1.0;
-    PinholeCamera camera(invalid);
-    EXPECT_DEATH((void)camera.GenerateRayForObserver(1, 1), "precondition.*enforced, terminating");
+    EXPECT_TRUE(CameraConfigIssue(LensType::Pinhole, invalid).has_value());
+    EXPECT_DEATH((void)PinholeCamera(invalid), "precondition.*enforced, terminating");
 
     invalid.beta_x = std::numeric_limits<double>::quiet_NaN();
-    camera.SetConfig(invalid);
-    EXPECT_DEATH((void)camera.GenerateRayForObserver(1, 1), "precondition.*enforced, terminating");
+    EXPECT_TRUE(CameraConfigIssue(LensType::Pinhole, invalid).has_value());
+    EXPECT_DEATH((void)PinholeCamera(invalid), "precondition.*enforced, terminating");
 }
 
 }  // namespace

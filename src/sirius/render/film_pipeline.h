@@ -1,6 +1,6 @@
 #pragma once
 
-// IMAX 70mm film post-processing pipeline (CPU). Ported from RDFL001A.h.
+// Bounded film-inspired display-finishing pipeline (CPU). Ported from RDFL001A.h.
 //
 // Stages, in order: grain -> halation -> colour grade -> vignette -> bloom.
 // Each stage operates on an RGBA float framebuffer in place. FilmConfig now
@@ -9,8 +9,10 @@
 // dropped here (OptiX is retired; the GPU film path returns via the Vulkan
 // backend seam later).
 //
-// References: Kodak Vision3 technical data; IMAX film standards.
+// The represented operators are procedural display effects, not a calibrated
+// stock, development, scanner, projector, or film-gate model.
 
+#include "sirius/base/contracts.h"
 #include "sirius/render/film_config.h"
 
 #include <algorithm>
@@ -20,15 +22,16 @@
 
 namespace sirius::render {
 
-// Applies authentic film characteristics to a rendered RGBA framebuffer.
+// Applies the explicitly represented film-inspired display finish to RGBA.
 class FilmPipeline {
   public:
-    explicit FilmPipeline(const FilmConfig& config = FilmConfig::Interstellar())
-        : config_(config) {}
+    explicit FilmPipeline(const FilmConfig& config = FilmConfig::Interstellar()) : config_(config) {
+        SIRIUS_PRE(IsRepresentedFilmConfig(config));
+    }
 
     // Apply the full pipeline. frame_index seeds temporal effects (grain).
     void Apply(float* pixels, int width, int height, std::uint32_t frame_index) {
-        if (!config_.enabled) return;
+        RequireFrame(pixels, width, height);
 
         if (config_.grain_enabled) {
             ApplyGrain(pixels, width, height, frame_index);
@@ -51,6 +54,7 @@ class FilmPipeline {
 
     // Film grain: signal-dependent noise, sigma^2 proportional to luminance.
     void ApplyGrain(float* pixels, int width, int height, std::uint32_t frame_seed) {
+        RequireFrame(pixels, width, height);
         std::uint32_t seed = frame_seed * 1664525u + 1013904223u;
 
         for (int y = 0; y < height; ++y) {
@@ -86,6 +90,7 @@ class FilmPipeline {
 
     // Halation: light scatter from the film base, red-biased highlight bloom.
     void ApplyHalation(float* pixels, int width, int height) {
+        RequireFrame(pixels, width, height);
         std::vector<float> highlight(width * height * 3, 0.0f);
 
         for (int y = 0; y < height; ++y) {
@@ -121,6 +126,7 @@ class FilmPipeline {
 
     // Colour grade: exposure, saturation, filmic S-curve, contrast.
     void ApplyColorGrade(float* pixels, int width, int height) {
+        RequireFrame(pixels, width, height);
         float exposure_mult = std::pow(2.0f, config_.exposure);
 
         for (int y = 0; y < height; ++y) {
@@ -157,6 +163,7 @@ class FilmPipeline {
 
     // Vignette: corner darkening via a smoothstep falloff.
     void ApplyVignette(float* pixels, int width, int height) {
+        RequireFrame(pixels, width, height);
         float cx = width * 0.5f;
         float cy = height * 0.5f;
 
@@ -182,6 +189,7 @@ class FilmPipeline {
 
     // Bloom: soft glow extracted from bright areas, multi-pass blurred.
     void ApplyBloom(float* pixels, int width, int height) {
+        RequireFrame(pixels, width, height);
         std::vector<float> bright(width * height * 3, 0.0f);
 
         for (int y = 0; y < height; ++y) {
@@ -222,9 +230,17 @@ class FilmPipeline {
     }
 
     const FilmConfig& Config() const { return config_; }
-    void SetConfig(const FilmConfig& config) { config_ = config; }
+    void SetConfig(const FilmConfig& config) {
+        SIRIUS_PRE(IsRepresentedFilmConfig(config));
+        config_ = config;
+    }
 
   private:
+    static void RequireFrame(const float* pixels, int width, int height) {
+        SIRIUS_PRE(pixels != nullptr);
+        SIRIUS_PRE(width > 0 && width <= 8192 && height > 0 && height <= 8192);
+    }
+
     // Gaussian sample from a uniform seed (Box-Muller); u1 floored off 0 and 1.
     float GaussianNoise(std::uint32_t seed) const {
         float u1 = (seed & 0xFFFF) / 65536.0f + 1e-6f;
@@ -240,7 +256,7 @@ class FilmPipeline {
 
         float toe = config_.toe_strength;
         float shoulder = config_.shoulder_strength;
-        float mid = std::clamp(config_.midtone_point, 0.01f, 0.99f);
+        float mid = config_.midtone_point;
 
         if (x < mid) {
             float t = x / mid;

@@ -15,6 +15,12 @@
 
 namespace sirius::render {
 
+// One bounded attempt envelope for both production backends. Rejected
+// adaptive attempts count on each path, so this is a work and termination
+// semantic rather than an integrator-specific tuning constant.
+inline constexpr int kRenderTraceMaximumAttempts = 20000;
+inline constexpr float kRenderTraceCaptureFactor = 1.0f;
+
 struct TraceDomainParameters {
     float escape_radius;
     float cpu_initial_step;

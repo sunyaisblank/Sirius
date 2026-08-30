@@ -63,6 +63,8 @@ namespace sirius::core {
 // Novikov-Thorne thin disk model, implementing IDiskModel.
 class AccretionDiskD : public IDiskModel {
   public:
+    static constexpr double kSecondsPerJulianYear = 365.25 * 24.0 * 3600.0;
+
     struct Config {
         double M = 1.0;                             // Black hole mass [M_sun].
         double a_star = 0.0;                        // Dimensionless spin a/M in [-1, 1].
@@ -70,25 +72,29 @@ class AccretionDiskD : public IDiskModel {
         double r_inner = 0;                         // Inner edge (0 = ISCO, auto-computed).
         double r_outer = 500;                       // Outer edge [GM/c^2].
         double inclination = std::numbers::pi / 4;  // Disk inclination to the observer [rad].
-
-        void Validate() {
-            if (!std::isfinite(M) || M <= 0) M = 1.0;
-            if (!std::isfinite(a_star)) a_star = 0.0;
-            a_star = std::clamp(a_star, -1.0, 1.0);
-            if (!std::isfinite(Mdot) || Mdot <= 0) Mdot = 1e-8;
-            if (!std::isfinite(r_inner) || r_inner < 0) r_inner = 0.0;
-            if (!std::isfinite(r_outer)) r_outer = 500.0;
-            if (!(r_outer > r_inner)) {
-                r_outer = std::nextafter(r_inner, std::numeric_limits<double>::infinity());
-                if (!std::isfinite(r_outer)) {
-                    r_inner = 0.0;
-                    r_outer = 500.0;
-                }
-            }
-            if (!std::isfinite(inclination)) inclination = std::numbers::pi / 4;
-            inclination = std::clamp(inclination, 0.0, std::numbers::pi);
-        }
     };
+
+    [[nodiscard]] static bool IsRepresentedConfig(const Config& config) {
+        if (!std::isfinite(config.M) || config.M <= 0.0 || !std::isfinite(config.a_star) ||
+            std::abs(config.a_star) > 1.0 || !std::isfinite(config.Mdot) || config.Mdot <= 0.0 ||
+            !std::isfinite(config.r_inner) || config.r_inner < 0.0 ||
+            !std::isfinite(config.r_outer) || !std::isfinite(config.inclination) ||
+            config.inclination < 0.0 || config.inclination > std::numbers::pi) {
+            return false;
+        }
+        const double represented_inner =
+            config.r_inner > 0.0 ? config.r_inner : ComputeIsco(config.a_star);
+        const double mass_kg = config.M * constants::physical::kSolarMass;
+        const double gravitational_parameter = constants::physical::kGravitation * mass_kg;
+        const double gravitational_radius =
+            gravitational_parameter /
+            (constants::physical::kSpeedOfLight * constants::physical::kSpeedOfLight);
+        const double accretion_rate =
+            config.Mdot * constants::physical::kSolarMass / kSecondsPerJulianYear;
+        return config.r_outer > represented_inner && std::isfinite(mass_kg) &&
+               std::isfinite(gravitational_parameter) && std::isfinite(gravitational_radius) &&
+               gravitational_radius > 0.0 && std::isfinite(accretion_rate) && accretion_rate > 0.0;
+    }
 
     AccretionDiskD() : config_() { Init(); }
 
@@ -96,7 +102,7 @@ class AccretionDiskD : public IDiskModel {
 
   private:
     void Init() {
-        config_.Validate();
+        SIRIUS_PRE(IsRepresentedConfig(config_));
         // Derived quantities.
         m_kg_ = config_.M * constants::physical::kSolarMass;
         gm_ = constants::physical::kGravitation * m_kg_;
@@ -106,25 +112,18 @@ class AccretionDiskD : public IDiskModel {
         r_isco_ = ComputeIsco(a_);
 
         r_inner_ = (config_.r_inner > 0) ? config_.r_inner : r_isco_;
-        // Validation must apply to the derived domain, not only the raw
-        // sentinel. With r_inner=0 (auto ISCO), an operator r_outer below ISCO
-        // previously produced an empty/inverted disk after validation passed.
-        if (!(config_.r_outer > r_inner_)) {
-            config_.r_outer =
-                std::max(500.0, std::nextafter(r_inner_, std::numeric_limits<double>::infinity()));
-        }
         r_outer_ = config_.r_outer;
 
         // Accretion rate M_sun/yr -> kg/s.
-        mdot_si_ = config_.Mdot * constants::physical::kSolarMass / (365.25 * 24 * 3600);
+        mdot_si_ = config_.Mdot * constants::physical::kSolarMass / kSecondsPerJulianYear;
     }
 
   public:
     // ISCO radius in units of M:
     // r_ISCO = M {3 + Z2 -/+ sqrt[(3 - Z1)(3 + Z1 + 2 Z2)]}, -/+ prograde/retrograde.
     static double ComputeIsco(double a_star) {
+        SIRIUS_PRE(std::isfinite(a_star) && std::abs(a_star) <= 1.0);
         double a = std::abs(a_star);
-        if (a > 1) a = 1;  // Clamp to extremal.
 
         double Z1 = 1 + std::cbrt(1 - a * a) * (std::cbrt(1 + a) + std::cbrt(1 - a));
         double Z2 = std::sqrt(3 * a * a + Z1 * Z1);
