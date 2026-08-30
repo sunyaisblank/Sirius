@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import re
+import subprocess
 import sys
 from collections import Counter
 from pathlib import Path
@@ -11,6 +12,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_ROOT = ROOT / "src" / "sirius"
+OPERATING_MODEL = ROOT / "tests" / "operating_model.json"
+GIT_ATTRIBUTES = ROOT / ".gitattributes"
 
 LAYER_DEPENDENCIES = {
     "base": {"base"},
@@ -99,6 +102,55 @@ INTEGRATION_TARGETS = (
 
 def relative(path: Path) -> str:
     return path.relative_to(ROOT).as_posix()
+
+
+def authority_checkout_errors(
+    payload: bytes, attributes: str, attribute_source: str,
+) -> list[str]:
+    """Require one checkout-byte identity for the compiled model authority."""
+    errors: list[str] = []
+    parsed: dict[str, str] = {}
+    for line in attributes.splitlines():
+        parts = line.rsplit(": ", 2)
+        if len(parts) == 3:
+            parsed[parts[1]] = parts[2]
+    if parsed.get("text") != "set" or parsed.get("eol") != "lf":
+        errors.append("operating model checkout is not pinned to text eol=lf")
+    if re.search(
+        r"^/tests/operating_model\.json[ \t]+text[ \t]+eol=lf[ \t]*$",
+        attribute_source,
+        re.MULTILINE,
+    ) is None:
+        errors.append("repository does not own the operating-model LF attribute")
+    if not payload.endswith(b"\n") or b"\r" in payload:
+        errors.append("operating model is not canonical LF-terminated bytes")
+    try:
+        payload.decode("utf-8")
+    except UnicodeDecodeError:
+        errors.append("operating model is not canonical UTF-8")
+    return errors
+
+
+def verify_authority_checkout_policy() -> None:
+    valid = (
+        "tests/operating_model.json: text: set\n"
+        "tests/operating_model.json: eol: lf\n"
+    )
+    source = "/tests/operating_model.json text eol=lf\n"
+    if authority_checkout_errors(b"{}\n", valid, source):
+        raise RuntimeError("authority checkout policy rejected canonical model bytes")
+    if not authority_checkout_errors(b"{}\r\n", valid, source):
+        raise RuntimeError("authority checkout policy accepted CRLF model bytes")
+    if not authority_checkout_errors(b"{}", valid, source):
+        raise RuntimeError("authority checkout policy accepted unterminated model bytes")
+    if not authority_checkout_errors(b"\xff\n", valid, source):
+        raise RuntimeError("authority checkout policy accepted non-UTF-8 model bytes")
+    if not authority_checkout_errors(
+        b"{}\n", valid.replace("lf", "unspecified"), source
+    ):
+        raise RuntimeError("authority checkout policy accepted unspecified line endings")
+    if not authority_checkout_errors(b"{}\n", valid, ""):
+        raise RuntimeError("authority checkout policy accepted an external-only attribute")
 
 
 def cmake_source_owners() -> Counter[Path]:
@@ -522,6 +574,24 @@ def verify() -> list[str]:
     verify_immutable_input_policy()
     verify_strict_test_volume_policy()
     verify_integration_boundary_policy()
+    verify_authority_checkout_policy()
+    try:
+        attribute_source = GIT_ATTRIBUTES.read_text(encoding="utf-8")
+        attributes = subprocess.run(
+            ["git", "check-attr", "text", "eol", "--", relative(OPERATING_MODEL)],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout
+    except (OSError, subprocess.CalledProcessError, UnicodeDecodeError) as error:
+        errors.append(f"could not inspect operating-model checkout attributes: {error}")
+    else:
+        errors.extend(
+            authority_checkout_errors(
+                OPERATING_MODEL.read_bytes(), attributes, attribute_source
+            )
+        )
     workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
     dependencies = (ROOT / "cmake" / "sirius_dependencies.cmake").read_text(
         encoding="utf-8"
