@@ -21,6 +21,7 @@
 #include "sirius/render/pixel_sampling.h"
 #include "sirius/render/session/display_buffer.h"
 #include "sirius/render/session/render_session.h"
+#include "sirius/render/trace_domain.h"
 
 #include "stb_image.h"
 
@@ -53,9 +54,6 @@ namespace math = core::constants::math;
 // kernel's own (the integrator differs from the CPU RK45 by design).
 constexpr float kTraceMaxSteps = 3000.0f;
 constexpr float kTraceStepScale = 0.08f;
-constexpr float kTraceMinStep = 0.02f;
-constexpr float kTraceMaxStep = 2.0f;
-constexpr float kTraceEscapeRadius = 200.0f;
 constexpr float kTraceCaptureFactor = 1.0f;
 
 // Thin-disk extent in units of M. The outer edge matches the CPU session's
@@ -288,11 +286,13 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
     params[19] = static_cast<float>(config.camera_fov * math::kPi / 180.0);  // full-angle radians
     params[20] = static_cast<float>(config.width) / static_cast<float>(config.height);
 
+    const TraceDomainParameters trace_domain = BuildTraceDomainParameters(
+        config.metric_id, config.black_hole_mass, config.observer_distance);
     params[21] = kTraceMaxSteps;
     params[22] = kTraceStepScale;
-    params[23] = kTraceMinStep;
-    params[24] = kTraceMaxStep;
-    params[25] = kTraceEscapeRadius;
+    params[23] = trace_domain.vulkan_min_step;
+    params[24] = trace_domain.max_step;
+    params[25] = trace_domain.escape_radius;
     params[26] = kTraceCaptureFactor;
 
     const double spin = (config.black_hole_mass > 0.0) ? config.black_hole_spin : 0.0;

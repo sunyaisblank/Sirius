@@ -14,6 +14,7 @@
 #include "sirius/render/image_buffer.h"
 #include "sirius/render/pixel_sampling.h"
 #include "sirius/render/png_writer.h"
+#include "sirius/render/trace_domain.h"
 
 #ifdef SIRIUS_HAS_VULKAN_BACKEND
 #include "sirius/backend/device.h"  // Device enumeration for backend auto-resolution.
@@ -663,7 +664,9 @@ base::Expected<void> RenderSession::Initialise() {
 
     // Geodesic tracer.
     TracerConfig tracer_config;
-    tracer_config.escape_radius = 200.0f;
+    const TraceDomainParameters trace_domain = BuildTraceDomainParameters(
+        config_.metric_id, config_.black_hole_mass, config_.observer_distance);
+    tracer_config.escape_radius = trace_domain.escape_radius;
     // Kerr-Schild coordinates are horizon-penetrating, so the exact capture
     // surface is numerically safe. Enlarging it inflates the near-extremal
     // shadow.
@@ -671,9 +674,9 @@ base::Expected<void> RenderSession::Initialise() {
     tracer_config.max_steps = 20000;
 
     // Large steps far from the hole, small near the horizon.
-    tracer_config.integrator.initial_step = 0.1f;
-    tracer_config.integrator.max_step = 2.0f;
-    tracer_config.integrator.min_step = 1e-5f;
+    tracer_config.integrator.initial_step = trace_domain.cpu_initial_step;
+    tracer_config.integrator.max_step = trace_domain.max_step;
+    tracer_config.integrator.min_step = trace_domain.cpu_min_step;
     tracer_config.integrator.abs_tolerance = 5e-6f;
     tracer_config.integrator.rel_tolerance = 5e-6f;
 

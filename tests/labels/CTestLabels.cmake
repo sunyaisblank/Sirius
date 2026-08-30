@@ -846,6 +846,7 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    RenderSessionProbe.TraceDomainScalesWithMassAndEnclosesTheObserver
     RenderSessionProbe.BackendAutoResolvesByDeviceRegistryAndCapabilities
     RenderSessionProbe.ConfigurationConversionPreservesObserverAndDiskControls
     RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr

@@ -28,6 +28,7 @@ REQUIRED_DIMENSIONS = {
     "sampling_semantics",
     "device_identity_and_allocation_domain",
     "physics_oracles_and_near_extremal_boundary",
+    "mass_scaled_trace_domain",
     "polarised_transport_to_film",
     "page_thorne_and_volumetric_transfer",
     "ray_bundles_and_filtered_point_catalogue",
@@ -206,7 +207,7 @@ REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
     "acceptance_criteria": "104aa322e48c7ba24bd5a234e090c584d1a70436c282ba5b489bcb5b12f3b361",
-    "required_dimensions": "b120eef299d295cce0c0b5af78a80bd07b4dd1932132ddb483bdb74e6a87d0a5",
+    "required_dimensions": "7e141b19d0f91b356415fdf07899ffca3fd4d5f47f5d478ae05d12be454ad3e1",
     "capability_contracts": "414821dc75cfd02b01ac055522c21975ea9d77efd889880744a9af7ed4d37e8f",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}

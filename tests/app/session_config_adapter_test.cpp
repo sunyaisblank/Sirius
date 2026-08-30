@@ -1,6 +1,7 @@
 #include "sirius/app/config/session_config_adapter.h"
 
 #include "sirius/render/session/render_session.h"
+#include "sirius/render/trace_domain.h"
 
 #ifdef SIRIUS_HAS_VULKAN_BACKEND
 #include "sirius/backend/device.h"
@@ -16,6 +17,41 @@ namespace sirius::app::test {
 using render::RenderSession;
 using render::SessionConfig;
 using render::SessionState;
+
+TEST(RenderSessionProbe, TraceDomainScalesWithMassAndEnclosesTheObserver) {
+    const render::TraceDomainParameters baseline =
+        render::BuildTraceDomainParameters(core::MetricId::Kerr, 1.0, 50.0);
+    EXPECT_FLOAT_EQ(baseline.escape_radius, 200.0f);
+    EXPECT_FLOAT_EQ(baseline.cpu_initial_step, 0.1f);
+    EXPECT_FLOAT_EQ(baseline.cpu_min_step, 1.0e-5f);
+    EXPECT_FLOAT_EQ(baseline.vulkan_min_step, 0.02f);
+    EXPECT_FLOAT_EQ(baseline.max_step, 2.0f);
+
+    const render::TraceDomainParameters small =
+        render::BuildTraceDomainParameters(core::MetricId::Kerr, 0.1, 100.0);
+    EXPECT_GT(small.escape_radius, 100.0f);
+    EXPECT_FLOAT_EQ(small.escape_radius, 125.0f);
+    EXPECT_FLOAT_EQ(small.max_step, 0.2f);
+
+    const render::TraceDomainParameters large =
+        render::BuildTraceDomainParameters(core::MetricId::Kerr, 100.0, 100000.0);
+    EXPECT_GT(large.escape_radius, 100000.0f);
+    EXPECT_FLOAT_EQ(large.escape_radius, 125000.0f);
+    EXPECT_FLOAT_EQ(large.cpu_initial_step, 10.0f);
+    EXPECT_FLOAT_EQ(large.cpu_min_step, 1.0e-3f);
+    EXPECT_FLOAT_EQ(large.vulkan_min_step, 2.0f);
+    EXPECT_FLOAT_EQ(large.max_step, 200.0f);
+
+    const render::TraceDomainParameters massless =
+        render::BuildTraceDomainParameters(core::MetricId::DeSitter, 0.0, 1000.0);
+    EXPECT_GT(massless.escape_radius, 1000.0f);
+    EXPECT_FLOAT_EQ(massless.max_step, 2.0f);
+
+    const render::TraceDomainParameters non_mass_geometry =
+        render::BuildTraceDomainParameters(core::MetricId::MorrisThorne, 100.0, 50.0);
+    EXPECT_FLOAT_EQ(non_mass_geometry.escape_radius, 200.0f);
+    EXPECT_FLOAT_EQ(non_mass_geometry.max_step, 2.0f);
+}
 
 TEST(RenderSessionProbe, BackendAutoResolvesByDeviceRegistryAndCapabilities) {
     SiriusConfig config = SiriusConfig::Defaults();

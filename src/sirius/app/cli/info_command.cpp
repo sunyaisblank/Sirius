@@ -39,7 +39,7 @@ namespace cli = cli_output;
 
 namespace {
 
-constexpr std::array<std::string_view, 23> kRequiredDimensionIds = {
+constexpr std::array<std::string_view, 24> kRequiredDimensionIds = {
     "attestation_admission_and_release_alignment",
     "compile_time_contracts",
     "test_evidence_integrity",
@@ -54,6 +54,7 @@ constexpr std::array<std::string_view, 23> kRequiredDimensionIds = {
     "sampling_semantics",
     "device_identity_and_allocation_domain",
     "physics_oracles_and_near_extremal_boundary",
+    "mass_scaled_trace_domain",
     "polarised_transport_to_film",
     "page_thorne_and_volumetric_transfer",
     "ray_bundles_and_filtered_point_catalogue",
