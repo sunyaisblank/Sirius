@@ -254,7 +254,11 @@ public Real AdaptiveIntegrationTolerance() {
 
 public Real AdaptiveNullTolerance() {
 #ifdef SIRIUS_FP64
-    return Real(1.0e-9);
+    // Keep a small guard band above the 1e-9 integration target.  Requiring
+    // the independently accumulated null contraction to equal that target at
+    // the last bit can reject an otherwise converged minimum step (observed
+    // residual 1.00002e-9) and strand the trajectory before termination.
+    return Real(5.0e-9);
 #else
     return Real(5.0e-4f);
 #endif

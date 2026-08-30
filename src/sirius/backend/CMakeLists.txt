@@ -89,6 +89,55 @@ foreach(kernel ${SIRIUS_KERNEL_SOURCES})
     list(APPEND SIRIUS_KERNEL_OUTPUTS "${kernel_out}")
 endforeach()
 
+# Precision probes exercise the same Cartesian trajectory and adaptive-step
+# authorities as trace.slang without producing an image.  They are test-only
+# artefacts: storage-buffer records remain fp32 at the boundary while Real is
+# selected session-wide inside the probe.
+if(BUILD_TESTS)
+    set(kernel_probe_fp64_out "${SIRIUS_KERNEL_BINARY_DIR}/parity_probe_fp64.spv")
+    if(SIRIUS_SPIRV_VAL)
+        set(kernel_probe_fp64_validate COMMAND "${SIRIUS_SPIRV_VAL}" "${kernel_probe_fp64_out}")
+    else()
+        set(kernel_probe_fp64_validate "")
+    endif()
+    add_custom_command(
+        OUTPUT "${kernel_probe_fp64_out}"
+        COMMAND ${SIRIUS_SLANGC} "${SIRIUS_KERNEL_DIR}/parity_probe.slang"
+            -DSIRIUS_FP64
+            -target spirv -profile spirv_1_5
+            -entry ComputeMain -stage compute
+            -I "${SIRIUS_KERNEL_DIR}"
+            -warnings-disable 30082
+            -o "${kernel_probe_fp64_out}"
+        ${kernel_probe_fp64_validate}
+        DEPENDS "${SIRIUS_KERNEL_DIR}/parity_probe.slang" ${SIRIUS_KERNEL_LIBS}
+        COMMENT "Compiling parity_probe.slang (fp64 trajectory probe) -> SPIR-V (+spirv-val)"
+        VERBATIM
+    )
+    list(APPEND SIRIUS_KERNEL_OUTPUTS "${kernel_probe_fp64_out}")
+
+    set(kernel_probe_comp_out "${SIRIUS_KERNEL_BINARY_DIR}/parity_probe_fp32comp.spv")
+    if(SIRIUS_SPIRV_VAL)
+        set(kernel_probe_comp_validate COMMAND "${SIRIUS_SPIRV_VAL}" "${kernel_probe_comp_out}")
+    else()
+        set(kernel_probe_comp_validate "")
+    endif()
+    add_custom_command(
+        OUTPUT "${kernel_probe_comp_out}"
+        COMMAND ${SIRIUS_SLANGC} "${SIRIUS_KERNEL_DIR}/parity_probe.slang"
+            -DSIRIUS_FP32_COMP
+            -target spirv -profile spirv_1_5
+            -entry ComputeMain -stage compute
+            -I "${SIRIUS_KERNEL_DIR}"
+            -o "${kernel_probe_comp_out}"
+        ${kernel_probe_comp_validate}
+        DEPENDS "${SIRIUS_KERNEL_DIR}/parity_probe.slang" ${SIRIUS_KERNEL_LIBS}
+        COMMENT "Compiling parity_probe.slang (compensated fp32 trajectory probe) -> SPIR-V (+spirv-val)"
+        VERBATIM
+    )
+    list(APPEND SIRIUS_KERNEL_OUTPUTS "${kernel_probe_comp_out}")
+endif()
+
 # The fp64 rung: the same trace source compiled with SIRIUS_FP64, which widens
 # the Cartesian trajectory core (gr_types Real) to double. One source, two
 # artefacts; the renderer selects trace_fp64.spv when SIRIUS_PRECISION=fp64 and

@@ -87,6 +87,8 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "ctest:OperationalP1.NearExtremalBurnIn",
         "gtest:AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter",
         "gtest:KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter",
+        "gtest:KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability",
+        "gtest:KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison",
         "gtest:LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter",
         "gtest:ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p",
         "gtest:VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p",
@@ -116,6 +118,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:DopplerToggleTest.SuppressionCollapsesDiskAsymmetry",
         "gtest:GeodesicTracerRedshift.NearExtremalInnerDiskEmissionRemainsFinite",
         "gtest:GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile",
+        "gtest:KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco",
         "gtest:AccretionDiskTest.ShakuraSunyaevProfileHasZeroTorqueEdgeAndDeclaredScale",
         "gtest:GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile",
         "gtest:KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel",
@@ -210,8 +213,8 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "b44afee2e5a5453686e4bdd66c0f73795b402b109bfbb7c5ce171e0441711790",
-    "required_dimensions": "0be5dc0f2b55656a0b0d843352e285e2f7222354a52f9a50b50c9feed2d361f0",
+    "acceptance_criteria": "bc3cd8f2724c8611eb9cb94a5b30c7fdd37fb2cad3582dd4f7d065bfef164c93",
+    "required_dimensions": "026f7471f0f91348a6f16f7763c867e05750e5e4e385b5d342f40dfcac89b8cb",
     "capability_contracts": "c89066d2769561c45ccf5eaed3c9ebcdf161a3e3c83c1954f51561054c5e52bc",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}

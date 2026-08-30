@@ -212,6 +212,36 @@ TEST_F(KerrMetricDTest, ExactExtremalParametersAreNotSilentlyRewritten) {
                  "precondition.*enforced, terminating");
 }
 
+TEST_F(KerrMetricDTest, BoyerLindquistAxisAndNonFinitePhaseSpaceDeclineWithoutClamping) {
+    const Vec4d valid(0.0, 10.0, 2.0 * kBoyerLindquistPoleMargin, 0.0);
+    const Vec4d north_axis(0.0, 10.0, 0.0, 0.0);
+    const Vec4d inside_pole_margin(0.0, 10.0, 0.5 * kBoyerLindquistPoleMargin, 0.0);
+    const Vec4d non_finite_event(std::numeric_limits<double>::quiet_NaN(), 10.0,
+                                 std::numbers::pi / 2.0, 0.0);
+
+    EXPECT_TRUE(IsRepresentedKerrBoyerLindquistEvent(1.0, 0.0, valid));
+    EXPECT_TRUE(schwarzschild->IsValid(valid));
+    EXPECT_FALSE(IsRepresentedKerrBoyerLindquistEvent(1.0, 0.0, north_axis));
+    EXPECT_FALSE(IsRepresentedKerrBoyerLindquistEvent(1.0, 0.0, inside_pole_margin));
+    EXPECT_FALSE(IsRepresentedKerrBoyerLindquistEvent(1.0, 0.0, non_finite_event));
+    EXPECT_FALSE(schwarzschild->IsValid(north_axis));
+    EXPECT_FALSE(schwarzschild->IsValid(non_finite_event));
+
+    EXPECT_DEATH(schwarzschild->Evaluate(north_axis, nullptr, nullptr),
+                 "precondition.*enforced, terminating");
+    EXPECT_DEATH(KerrMetricDerivatives(1.0, 0.0, north_axis, nullptr),
+                 "precondition.*enforced, terminating");
+    EXPECT_DEATH((void)schwarzschild->Kretschmann(inside_pole_margin),
+                 "precondition.*enforced, terminating");
+
+    Vec4d non_finite_momentum(-1.0, 0.0, 0.0, 0.0);
+    non_finite_momentum.r = std::numeric_limits<double>::infinity();
+    EXPECT_DEATH((void)schwarzschild->Hamiltonian(valid, non_finite_momentum),
+                 "precondition.*enforced, terminating");
+    EXPECT_DEATH((void)schwarzschild->dHdq(valid, non_finite_momentum),
+                 "precondition.*enforced, terminating");
+}
+
 //==============================================================================
 // Test: ISCO Radius
 // Verifies: Schwarzschild ISCO = 6M, decreases with spin

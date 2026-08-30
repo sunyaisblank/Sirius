@@ -249,8 +249,9 @@ std::vector<float> RunKerrScene(ComputeDevice& device, const std::vector<std::ui
 
 // The fp64 rung (trace_fp64.spv, same source with the Cartesian trajectory
 // core widened to double) renders the same Kerr scene as the fp32 kernel and
-// agrees with it closely: identical geometry, so per-pixel differences are
-// pure precision effects, largest along the shadow edge where capture flips.
+// agrees with it closely away from discontinuous capture flips. The geometry
+// is identical, while each precision policy owns its adaptive step schedule;
+// invariant accuracy and physical termination are qualified by KernelParity.
 // Verifies the rung is a real double-precision trajectory, not a relabelled
 // fp32 module, by requiring the artefact to load, dispatch, and stay finite
 // on a shaderFloat64 device (Lavapipe reports it).
@@ -299,9 +300,10 @@ TEST(KernelTrace, Fp64RungAgreesWithFp32OnKerrScene) {
               << " range64=[" << min64 << ", " << max64 << "]\n";
 
     EXPECT_GT(max64 - min64, 1e-3f) << "fp64 radiance field is constant";
-    // Same scene, same step schedule: the fields must agree closely in the
-    // mean. Individual pixels may flip across the capture edge, so the max is
-    // bounded loosely by the background dynamic range rather than tightly.
+    // Same scene, independently controlled precision schedules: the fields
+    // must agree closely in the mean. Individual pixels may flip across the
+    // capture edge, so the max is bounded loosely by the background dynamic
+    // range rather than tightly.
     EXPECT_LT(mean_abs_diff, 1e-2) << "fp64 rung diverges from fp32 in the mean";
     EXPECT_LT(max_abs_diff, 2.0) << "fp64 rung wildly diverges at a pixel";
 #endif

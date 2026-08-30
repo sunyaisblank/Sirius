@@ -117,15 +117,31 @@ void KerrCartConservedQuantities(GeodesicStateCart state, float M, float a,
 
 void MetricById(uint metricId, float p1, float p2, float p3, float p4,
                 float c0, float c1, float c2,
-                out float g[4][4], out float g_inv[4][4]) {
+                out Real g[4][4], out Real g_inv[4][4]) {
     if (metricId == kMetricEllis) {
-        GetEllisDrainholeMetric(MakeVec4(0.0f, c0, c1, c2), p1, p2, g, g_inv);
+        float sphericalG[4][4];
+        float sphericalInverse[4][4];
+        GetEllisDrainholeMetric(MakeVec4(0.0f, c0, c1, c2), p1, p2,
+                                sphericalG, sphericalInverse);
+        [unroll] for (int m = 0; m < 4; ++m)
+            [unroll] for (int n = 0; n < 4; ++n) {
+                g[m][n] = Real(sphericalG[m][n]);
+                g_inv[m][n] = Real(sphericalInverse[m][n]);
+            }
     } else if (metricId == kMetricWarpDrive) {
         // family params: p1=vs, p2=sigma, p3=R; bubble at origin.
         GetWarpDriveMetric(MakeVec4Cart(0.0f, c0, c1, c2), p1, p2, p3, 0.0f, 0.0f, 0.0f, g, g_inv);
     } else if (metricId == kMetricMorrisThorne) {
         // family params: p1=b0, p2=Phi0, p3=shapeType.
-        GetMorrisThorneMetric(MakeVec4(0.0f, c0, c1, c2), p1, p2, int(p3), g, g_inv);
+        float sphericalG[4][4];
+        float sphericalInverse[4][4];
+        GetMorrisThorneMetric(MakeVec4(0.0f, c0, c1, c2), p1, p2, int(p3),
+                              sphericalG, sphericalInverse);
+        [unroll] for (int m = 0; m < 4; ++m)
+            [unroll] for (int n = 0; n < 4; ++n) {
+                g[m][n] = Real(sphericalG[m][n]);
+                g_inv[m][n] = Real(sphericalInverse[m][n]);
+            }
     } else {
         GetKerrSchildFamilyMetric(MakeVec4Cart(0.0f, c0, c1, c2), p1, p2, p3, p4, g, g_inv);
     }
@@ -133,11 +149,17 @@ void MetricById(uint metricId, float p1, float p2, float p3, float p4,
 
 void ChristoffelById(uint metricId, float p1, float p2, float p3, float p4,
                      float c0, float c1, float c2,
-                     out float Gamma[4][4][4]) {
+                     out Real Gamma[4][4][4]) {
     if (metricId == kMetricWarpDrive) {
         GetWarpDriveChristoffel(MakeVec4Cart(0.0f, c0, c1, c2), p1, p2, p3, 0.0f, 0.0f, 0.0f, Gamma);
     } else if (metricId == kMetricMorrisThorne) {
-        GetMorrisThorneChristoffel(MakeVec4(0.0f, c0, c1, c2), p1, p2, int(p3), Gamma);
+        float sphericalGamma[4][4][4];
+        GetMorrisThorneChristoffel(MakeVec4(0.0f, c0, c1, c2), p1, p2, int(p3),
+                                   sphericalGamma);
+        [unroll] for (int m = 0; m < 4; ++m)
+            [unroll] for (int n = 0; n < 4; ++n)
+                [unroll] for (int k = 0; k < 4; ++k)
+                    Gamma[m][n][k] = Real(sphericalGamma[m][n][k]);
     } else {
         GetKerrSchildFamilyChristoffel(MakeVec4Cart(0.0f, c0, c1, c2), p1, p2, p3, p4, Gamma);
     }
@@ -166,31 +188,31 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     float c2 = samples[sb + 7];
 
     if (opcode == OP_METRIC) {
-        float g[4][4];
-        float g_inv[4][4];
+        Real g[4][4];
+        Real g_inv[4][4];
         MetricById(metricId, p1, p2, p3, p4, c0, c1, c2, g, g_inv);
         [unroll] for (int m = 0; m < 4; m++)
             [unroll] for (int n = 0; n < 4; n++) {
-                results[rb + uint(m * 4 + n)] = g[m][n];
-                results[rb + uint(16 + m * 4 + n)] = g_inv[m][n];
+                results[rb + uint(m * 4 + n)] = float(g[m][n]);
+                results[rb + uint(16 + m * 4 + n)] = float(g_inv[m][n]);
             }
         // Inverse-metric identity error: max |g^{mk} g_{kn} - delta^m_n|.
-        float maxErr = 0.0f;
+        Real maxErr = Real(0.0f);
         for (int m = 0; m < 4; m++)
             for (int n = 0; n < 4; n++) {
-                float prod = 0.0f;
+                Real prod = Real(0.0f);
                 for (int k = 0; k < 4; k++) prod += g[m][k] * g_inv[k][n];
-                float target = (m == n) ? 1.0f : 0.0f;
+                Real target = (m == n) ? Real(1.0f) : Real(0.0f);
                 maxErr = max(maxErr, abs(prod - target));
             }
-        results[rb + 32] = maxErr;
+        results[rb + 32] = float(maxErr);
     } else if (opcode == OP_CHRISTOFFEL) {
-        float Gamma[4][4][4];
+        Real Gamma[4][4][4];
         ChristoffelById(metricId, p1, p2, p3, p4, c0, c1, c2, Gamma);
         [unroll] for (int m = 0; m < 4; m++)
             [unroll] for (int n = 0; n < 4; n++)
                 [unroll] for (int k = 0; k < 4; k++)
-                    results[rb + uint(m * 16 + n * 4 + k)] = Gamma[m][n][k];
+                    results[rb + uint(m * 16 + n * 4 + k)] = float(Gamma[m][n][k]);
     } else if (opcode == OP_DISK_TEMP) {
         // p1=M, p2=a_star; c0=r; aux0=r_isco, aux1=innerTemperature.
         float r = c0;
@@ -247,6 +269,12 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         Real horizon = Real(p1 + sqrt(max(p1 * p1 - p2 * p2, 0.0f)));
         const Real escapeRadius = Real(200.0f);
         int termination = 0;
+        Real lastRejectedError = Real(0.0f);
+        Real lastRejectedNull = Real(0.0f);
+#ifdef SIRIUS_FP32_COMP
+        Vec4Cart compX = MakeVec4Cart(0.0f, 0.0f, 0.0f, 0.0f);
+        Vec4Cart compU = MakeVec4Cart(0.0f, 0.0f, 0.0f, 0.0f);
+#endif
 
         for (int step = 0; step < maxSteps; step++) {
             Real rKerr = ComputeKerrRadiusCart(state.x.x, state.x.y, state.x.z, Real(p2));
@@ -267,6 +295,8 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                 0.0f, 0.0f, 0.0f, 0.0f, 0,
                 AdaptiveIntegrationTolerance(), AdaptiveNullTolerance());
             if (!attempted.accepted) {
+                lastRejectedError = attempted.errorRatio;
+                lastRejectedNull = attempted.nullResidual;
                 if (dt <= minStep * Real(1.0001f)) {
                     termination = 3;
                     break;
@@ -275,7 +305,16 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                 continue;
             }
             adaptiveStep = clamp(dt * attempted.stepFactor, minStep, maxStep);
-            state = attempted.candidate;
+            GeodesicStateCart accepted = attempted.candidate;
+#ifdef SIRIUS_FP32_COMP
+            Vec4Cart acceptedDX = AddVec4Cart(
+                accepted.x, ScaleVec4Cart(state.x, Real(-1.0f)));
+            Vec4Cart acceptedDU = AddVec4Cart(
+                accepted.u, ScaleVec4Cart(state.u, Real(-1.0f)));
+            accepted.x = KahanAddVec4Cart(state.x, compX, acceptedDX);
+            accepted.u = KahanAddVec4Cart(state.u, compU, acceptedDU);
+#endif
+            state = accepted;
             completedSteps++;
 
             Real energy, angularMomentum, carter, nullResidual;
@@ -302,6 +341,8 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         results[rb + 7] = float(angularMomentum0);
         results[rb + 8] = float(carter0);
         results[rb + 9] = float(termination);
+        results[rb + 10] = float(lastRejectedError);
+        results[rb + 11] = float(lastRejectedNull);
     } else if (opcode == OP_BEAM_ELLIPSE) {
         // c0,c1,c2,u0 are the row-major transverse Jacobi map.
         float semiMajor, semiMinor, orientation, determinant;
@@ -318,7 +359,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         Vec4Cart pos = MakeVec4Cart(0.0f, c0, c1, c2);
         Vec4Cart k = MakeVec4Cart(samples[sb + 8], samples[sb + 9], samples[sb + 10], samples[sb + 11]);
         float4 xi = float4(0.0f, 1.0f, 0.0f, 0.0f);
-        float4 full = GeodesicDeviationAccelFullRiemann(pos, k, xi, p1, p2, p3, p4);
+        float4 full = float4(GeodesicDeviationAccelFullRiemann(pos, k, xi, p1, p2, p3, p4));
         results[rb + 0] = full.x; results[rb + 1] = full.y;
         results[rb + 2] = full.z; results[rb + 3] = full.w;
         results[rb + 4] = 0.0f; results[rb + 5] = 0.0f;

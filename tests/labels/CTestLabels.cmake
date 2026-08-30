@@ -475,10 +475,13 @@ set_tests_properties(
     KernelParity.WormholeAndWarpMetricMatchLegacy
     KernelParity.KerrSchildChristoffelMatchesLegacyToOnePartInMillion
     KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel
+    KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco
     KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel
     KernelParity.BlackbodyMatchesIntegratedCoreSpectrum
     KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor
     KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter
+    KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability
+    KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison
     KernelParity.BeamEllipseRetainsBothAxesAndOutputOrientation
     KernelParity.GeodesicDeviationIsFiniteAndCurvedNearBlackHole
     PROPERTIES LABELS "Mandatory;Correctness"
@@ -504,6 +507,7 @@ set_tests_properties(
     KerrMetricDTest.HamiltonianNullGeodesic
     KerrMetricDTest.HorizonRadius
     KerrMetricDTest.ExactExtremalParametersAreNotSilentlyRewritten
+    KerrMetricDTest.BoyerLindquistAxisAndNonFinitePhaseSpaceDeclineWithoutClamping
     KerrMetricDTest.ISCORadius
     KerrMetricDTest.PhotonSphereRadius
     KerrMetricDTest.ChristoffelMatchesFiniteDifferencesOfMetric

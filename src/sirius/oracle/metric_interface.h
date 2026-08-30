@@ -27,7 +27,8 @@ class IMetricD {
     /// @param x Position in Boyer-Lindquist coordinates (t, r, θ, φ)
     /// @param g Output: covariant metric tensor g[μ][ν]
     /// @param g_inv Output: contravariant metric tensor g^μ^ν
-    /// @pre x must be in valid coordinate range (r > r_horizon, 0 < θ < π)
+    /// @pre x must be in the implementation's finite owned chart outside its
+    ///      horizon and numerical polar margin
     /// @post g and g_inv are symmetric
     /// @post g^μα g_αν = δ^μ_ν within tolerance 10^-14
     virtual void Evaluate(const Vec4d& x, double g[4][4], double g_inv[4][4]) const = 0;
@@ -117,21 +118,6 @@ class IMetricD {
 
     /// Charge parameter Q (returns 0 for uncharged)
     virtual double charge() const = 0;
-
-    //--------------------------------------------------------------------------
-    // Utility Functions
-    //--------------------------------------------------------------------------
-
-    /// Time-transformation function g(q) for TTESI regularisation
-    /// Default: g(q) = Σ = r² + a² cos²θ (Kerr)
-    /// Used to regularise integration near horizon
-    virtual double TimeTransformationFunction(const Vec4d& q) const = 0;
-
-    /// Compute g-factor (frequency ratio) for a photon with momentum k
-    /// observed by a static observer at position x
-    /// g = (k · u_obs) / (k · u_emit)
-    /// For disk emission: g encodes gravitational + Doppler shift
-    virtual double GFactor(const Vec4d& x, const Vec4d& k, const Vec4d& u_emitter) const = 0;
 };
 
 //==============================================================================

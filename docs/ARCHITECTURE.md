@@ -154,8 +154,10 @@ boundary.
 
 The relativistic thin-disk default and physical parity authority remains the
 zero-torque Page-Thorne profile integrated from the declared stable-orbit
-inner edge, which must be at or outside the ISCO. `ShakuraSunyaev` is an explicit, narrower
-substitution: CPU and Slang evaluate the Newtonian zero-torque shape
+inner edge, which must be at or outside the ISCO. CPU and Slang evaluate every
+represented nonzero spin rather than substituting the Schwarzschild ISCO over
+a low-spin interval. `ShakuraSunyaev` is an explicit, narrower substitution:
+CPU and Slang evaluate the Newtonian zero-torque shape
 $F(r)\propto r^{-3}[1-\sqrt{r_\mathrm{in}/r}]$ and define the operator
 temperature at $1.5r_\mathrm{in}$. The shared normalisation and CPU/Slang
 parity prevent the former bare power law from reappearing; this mode does not
@@ -167,7 +169,7 @@ structure.
 The governor exists because the 780M-class target has a 2 GB budget that a naive full-frame HDR pipeline exhausts (a 5616 by 4096 IMAX frame at RGBA32F is 368 MB per buffer before ray state, which at 96 bytes per ray for position, momentum, deviation vectors, and accumulators is another 2.2 GB full-frame). The design bounds device residency by construction rather than by hope.
 
 - At Vulkan startup the backend reports usable budget (`VK_EXT_memory_budget` where present, else a conservative fraction of device-local memory, else a user cap) and independently derives the largest device tile whose complete working set (ray state, accumulation, readback staging) fits a fixed fraction of that budget. CPU tile/thread controls neither govern nor initialise this path. Full-frame buffers live host-side only.
-- The precision ladder has three rungs, selected per device and recorded in the render metadata: fp64 kernels where the device offers usable `shaderFloat64`; fp32 with Kahan compensation on Cartesian position and velocity state accumulation elsewhere; and plain fp32 for preview quality. Full-ray diagnostics derive Hamiltonian/null residual, E, L_z, and Carter-Q drift from those states. The oracle's job is to quantify what each rung costs: per-rung error against the double-precision reference is a recorded test artefact, not a guess.
+- The precision ladder has three rungs, selected per device and recorded in the render metadata: fp64 kernels where the device offers usable `shaderFloat64`; fp32 with Kahan compensation on Cartesian position and velocity state accumulation elsewhere; and plain fp32 for preview quality. Full-ray diagnostics derive Hamiltonian/null residual, E, L_z, and Carter-Q drift from those states. Separate storage-buffer probe artefacts compile the same trajectory and controller authorities for all three rungs, prove the fp64 module actually declares SPIR-V `Float64`, and require physical capture or escape plus the stated invariant envelope without shading an image. Image comparisons remain render-behaviour evidence, not the precision authority: capture boundaries are discontinuous and each precision policy owns a distinct adaptive schedule.
 - Progressive refinement is the interactivity strategy on weak devices: samples per pixel grow monotonically across passes, every pass is a complete image, and the viewer stays responsive at one pass per tile budget regardless of device speed.
 - The dispatch governor (`render/dispatch_governor.h`) is the memory governor's time-domain companion, added when physical-GPU validation showed the two constraints are independent: a tile can fit the memory budget and still exceed the operating system's GPU watchdog in a single dispatch (Windows TDR removes the device after ~2 s; software Vulkan has no watchdog, so only silicon exposed this). Tiles are submitted as adaptive row bands targeting a wall-time budget per dispatch (default 250 ms, `SIRIUS_DISPATCH_TARGET_MS` overrides, 0 disables). The trace kernel addresses pixels absolutely, so banding is value-transparent by construction; the controller's growth is damped and its shrink unbounded because overshooting risks device removal while undershooting only costs submission overhead.
 

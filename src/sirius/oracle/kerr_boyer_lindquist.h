@@ -20,6 +20,40 @@
 
 namespace sirius::oracle {
 
+// The analytic Boyer-Lindquist oracle owns a numerical chart excluding the
+// polar coordinate singularities. Tensor, connection, curvature, Hamiltonian,
+// and integration-validity APIs all derive from this single event predicate;
+// no caller can obtain evidence from a pole-clamped substitute metric.
+inline constexpr double kBoyerLindquistPoleMargin = 1.0e-6;
+
+[[nodiscard]] inline bool IsFiniteOracleVector(const Vec4d& vector) {
+    return std::isfinite(vector.t) && std::isfinite(vector.r) && std::isfinite(vector.theta) &&
+           std::isfinite(vector.phi);
+}
+
+[[nodiscard]] inline double KerrHorizonOffset(double mass, double spin) {
+    if (mass == 0.0) return 0.0;
+    const double ratio = std::abs(spin) / mass;
+    return mass * std::sqrt(std::max((1.0 - ratio) * (1.0 + ratio), 0.0));
+}
+
+[[nodiscard]] inline bool IsRepresentedKerrScalars(double mass, double spin) {
+    if (!std::isfinite(mass) || mass < 0.0 || !std::isfinite(spin) || std::abs(spin) > mass) {
+        return false;
+    }
+    return std::isfinite(mass + KerrHorizonOffset(mass, spin));
+}
+
+[[nodiscard]] inline bool IsRepresentedKerrBoyerLindquistEvent(double mass, double spin,
+                                                               const Vec4d& x) {
+    if (!IsRepresentedKerrScalars(mass, spin) || !IsFiniteOracleVector(x)) {
+        return false;
+    }
+    const double outer_horizon = mass + KerrHorizonOffset(mass, spin);
+    return x.r > outer_horizon && x.theta > kBoyerLindquistPoleMargin &&
+           x.theta < std::numbers::pi - kBoyerLindquistPoleMargin;
+}
+
 //==============================================================================
 // Analytic Boyer-Lindquist metric derivatives
 //==============================================================================
@@ -30,6 +64,16 @@ namespace sirius::oracle {
 // are independent of either consumer. Reference: Misner, Thorne & Wheeler
 // (1973), chapter 33.
 inline void KerrMetricDerivatives(double M, double a, const Vec4d& x, double dg[4][4][4]) {
+    const bool represented = IsRepresentedKerrBoyerLindquistEvent(M, a, x);
+    SIRIUS_PRE(represented);
+    if (!represented) {
+        const double nan = std::numeric_limits<double>::quiet_NaN();
+        for (int s = 0; s < 4; ++s)
+            for (int mu = 0; mu < 4; ++mu)
+                for (int nu = 0; nu < 4; ++nu) dg[s][mu][nu] = nan;
+        return;
+    }
+
     for (int s = 0; s < 4; ++s)
         for (int mu = 0; mu < 4; ++mu)
             for (int nu = 0; nu < 4; ++nu) dg[s][mu][nu] = 0.0;
@@ -38,7 +82,6 @@ inline void KerrMetricDerivatives(double M, double a, const Vec4d& x, double dg[
     double theta = x.theta;
     double sinth = std::sin(theta);
     double costh = std::cos(theta);
-    if (std::abs(sinth) < 1e-10) sinth = std::copysign(1e-10, sinth);
     double sin2th = sinth * sinth;
     double cos2th = costh * costh;
     double sin2theta = 2.0 * sinth * costh;  // sin(2 theta)
@@ -77,10 +120,21 @@ inline void KerrMetricDerivatives(double M, double a, const Vec4d& x, double dg[
 // the first derivatives above and pinned against central differences of
 // KerrMetricDerivatives by KerrMetricDTest.SecondDerivativesMatchFiniteDifference;
 // together with the first derivatives this is the complete analytic input the
-// Riemann assembly below contracts. Pole clamping matches KerrMetricDerivatives
-// so the two stay consistent term by term.
+// Riemann assembly below contracts. Both derivative orders share the exact
+// represented event domain above, so they stay consistent term by term.
 inline void KerrMetricSecondDerivatives(double M, double a, const Vec4d& x,
                                         double ddg[4][4][4][4]) {
+    const bool represented = IsRepresentedKerrBoyerLindquistEvent(M, a, x);
+    SIRIUS_PRE(represented);
+    if (!represented) {
+        const double nan = std::numeric_limits<double>::quiet_NaN();
+        for (int s1 = 0; s1 < 4; ++s1)
+            for (int s2 = 0; s2 < 4; ++s2)
+                for (int mu = 0; mu < 4; ++mu)
+                    for (int nu = 0; nu < 4; ++nu) ddg[s1][s2][mu][nu] = nan;
+        return;
+    }
+
     for (int s1 = 0; s1 < 4; ++s1)
         for (int s2 = 0; s2 < 4; ++s2)
             for (int mu = 0; mu < 4; ++mu)
@@ -90,7 +144,6 @@ inline void KerrMetricSecondDerivatives(double M, double a, const Vec4d& x,
     double theta = x.theta;
     double sinth = std::sin(theta);
     double costh = std::cos(theta);
-    if (std::abs(sinth) < 1e-10) sinth = std::copysign(1e-10, sinth);
     double sin2th = sinth * sinth;
     double cos2th = costh * costh;
     double sin2theta = 2.0 * sinth * costh;  // sin(2 theta)
@@ -170,9 +223,8 @@ inline void KerrMetricSecondDerivatives(double M, double a, const Vec4d& x,
 //==============================================================================
 
 [[nodiscard]] inline bool IsRepresentedKerrMetricParameters(const MetricParamsD& params) {
-    return std::isfinite(params.M) && params.M >= 0.0 && std::isfinite(params.a) &&
-           std::abs(params.a) <= params.M && std::isfinite(params.Q) && params.Q == 0.0 &&
-           std::isfinite(params.Lambda) && params.Lambda == 0.0;
+    return IsRepresentedKerrScalars(params.M, params.a) && std::isfinite(params.Q) &&
+           params.Q == 0.0 && std::isfinite(params.Lambda) && params.Lambda == 0.0;
 }
 
 class KerrMetricD : public IMetricD {
@@ -191,8 +243,7 @@ class KerrMetricD : public IMetricD {
         const bool represented = IsRepresentedKerrMetricParameters(params);
         SIRIUS_PRE(represented);
         if (!represented) return;
-        const double discriminant = mass_ * mass_ - spin_ * spin_;
-        const double horizon_offset = std::sqrt(std::max(discriminant, 0.0));
+        const double horizon_offset = KerrHorizonOffset(mass_, spin_);
         r_plus_ = mass_ + horizon_offset;
         r_minus_ = mass_ - horizon_offset;
     }
@@ -205,19 +256,19 @@ class KerrMetricD : public IMetricD {
     //--------------------------------------------------------------------------
 
     void Evaluate(const Vec4d& x, double g[4][4], double g_inv[4][4]) const override {
+        const bool represented = IsRepresentedKerrBoyerLindquistEvent(mass_, spin_, x);
+        SIRIUS_PRE(represented);
+        if (!represented) {
+            const double nan = std::numeric_limits<double>::quiet_NaN();
+            for (int i = 0; i < 4; ++i)
+                for (int j = 0; j < 4; ++j) g[i][j] = g_inv[i][j] = nan;
+            return;
+        }
+
         double r = x.r;
         double theta = x.theta;
-
-        // Boyer-Lindquist is singular at the horizon. The oracle caller must
-        // remain in its valid domain; it may not acquire flat-space evidence.
-        SIRIUS_PRE(r > r_plus_);
-
-        // Handle pole singularities
         double sinth = std::sin(theta);
         double costh = std::cos(theta);
-        if (std::abs(sinth) < 1e-10) {
-            sinth = std::copysign(1e-10, sinth);
-        }
         double sin2th = sinth * sinth;
         double cos2th = costh * costh;
 
@@ -242,7 +293,6 @@ class KerrMetricD : public IMetricD {
         // For block-diagonal structure, invert 2x2 (t,φ) and 1x1 (r), (θ) blocks separately
         // det(2x2 t-φ block) = g_tt * g_φφ - g_tφ²
         double det_tphi = g[0][0] * g[3][3] - g[0][3] * g[0][3];
-        if (std::abs(det_tphi) < 1e-20) det_tphi = std::copysign(1e-20, det_tphi);
 
         // 2x2 inverse: [[a,b],[b,c]]^-1 = (1/det) * [[c,-b],[-b,a]]
         g_inv[0][0] = g[3][3] / det_tphi;
@@ -380,6 +430,10 @@ class KerrMetricD : public IMetricD {
     /// Reference: Henry, R.C. (2000), "Kretschmann Scalar for a Kerr-Newman Black Hole"
     ///            Astrophys. J. 535:350-353, equation (18) at Q = 0.
     double Kretschmann(const Vec4d& x) const {
+        const bool represented = IsRepresentedKerrBoyerLindquistEvent(mass_, spin_, x);
+        SIRIUS_PRE(represented);
+        if (!represented) return std::numeric_limits<double>::quiet_NaN();
+
         double r = x.r;
         double theta = x.theta;
         double M = mass_;
@@ -428,6 +482,10 @@ class KerrMetricD : public IMetricD {
     }
 
     double Hamiltonian(const Vec4d& q, const Vec4d& p) const override {
+        const bool represented = IsFiniteOracleVector(p);
+        SIRIUS_PRE(represented);
+        if (!represented) return std::numeric_limits<double>::quiet_NaN();
+
         double g_inv[4][4], g[4][4];
         Evaluate(q, g, g_inv);
 
@@ -439,6 +497,13 @@ class KerrMetricD : public IMetricD {
     }
 
     Vec4d dHdp(const Vec4d& q, const Vec4d& p) const override {
+        const bool represented = IsFiniteOracleVector(p);
+        SIRIUS_PRE(represented);
+        if (!represented) {
+            const double nan = std::numeric_limits<double>::quiet_NaN();
+            return Vec4d(nan, nan, nan, nan);
+        }
+
         // ∂H/∂p_μ = g^μν p_ν
         double g_inv[4][4], g[4][4];
         Evaluate(q, g, g_inv);
@@ -461,6 +526,14 @@ class KerrMetricD : public IMetricD {
         //
         // Reference: Chandrasekhar "Mathematical Theory of Black Holes"
 
+        const bool represented =
+            IsRepresentedKerrBoyerLindquistEvent(mass_, spin_, q) && IsFiniteOracleVector(p);
+        SIRIUS_PRE(represented);
+        if (!represented) {
+            const double nan = std::numeric_limits<double>::quiet_NaN();
+            return Vec4d(nan, nan, nan, nan);
+        }
+
         double r = q.r;
         double theta = q.theta;
         double M = mass_;
@@ -470,7 +543,6 @@ class KerrMetricD : public IMetricD {
 
         double sinth = std::sin(theta);
         double costh = std::cos(theta);
-        if (std::abs(sinth) < 1e-10) sinth = std::copysign(1e-10, sinth);
         double sin2th = sinth * sinth;
         double cos2th = costh * costh;
         double sin2theta = 2 * sinth * costh;  // sin(2θ)
@@ -573,17 +645,11 @@ class KerrMetricD : public IMetricD {
     }
 
     bool IsValid(const Vec4d& x) const override {
-        if (!std::isfinite(x.t) || !std::isfinite(x.r) || !std::isfinite(x.theta) ||
-            !std::isfinite(x.phi)) {
-            return false;
-        }
+        if (!IsRepresentedKerrBoyerLindquistEvent(mass_, spin_, x)) return false;
 
         // Check radial coordinate
         if (x.r <= r_plus_ * 1.001) return false;            // Inside or at horizon
         if (mass_ > 0.0 && x.r > 1e6 * mass_) return false;  // Too far (numerical issues)
-
-        // Check angular coordinate
-        if (x.theta <= 1e-6 || x.theta >= std::numbers::pi - 1e-6) return false;  // At poles
 
         return true;
     }
@@ -630,39 +696,6 @@ class KerrMetricD : public IMetricD {
     double mass() const override { return mass_; }
     double spin() const override { return spin_; }
     double charge() const override { return charge_; }
-
-    double TimeTransformationFunction(const Vec4d& q) const override {
-        // g(q) = Σ for TTESI regularisation
-        double cos2th = std::cos(q.theta) * std::cos(q.theta);
-        return q.r * q.r + spin_ * spin_ * cos2th;
-    }
-
-    double GFactor(const Vec4d& x, const Vec4d& k, const Vec4d& u_emitter) const override {
-        // g = (k · u_obs) / (k · u_emit)
-        // For static observer: u_obs = (1/α, 0, 0, ω/α) where α = lapse, ω = frame-dragging
-
-        double g[4][4], g_inv[4][4];
-        Evaluate(x, g, g_inv);
-
-        // Static observer 4-velocity
-        double alpha2 = -1.0 / g_inv[0][0];
-        double alpha = std::sqrt(std::max(alpha2, 1e-10));
-        double omega = -g_inv[0][3] / g_inv[0][0];
-
-        Vec4d u_obs;
-        u_obs.t = 1.0 / alpha;
-        u_obs.r = 0;
-        u_obs.theta = 0;
-        u_obs.phi = omega / alpha;
-
-        // Contract with covariant k
-        double k_dot_u_obs = k.t * u_obs.t + k.phi * u_obs.phi;  // Only t, φ non-Zero
-        double k_dot_u_emit = 0;
-        for (int i = 0; i < 4; ++i) k_dot_u_emit += k[i] * u_emitter[i];
-
-        if (std::abs(k_dot_u_emit) < 1e-20) return 1.0;
-        return k_dot_u_obs / k_dot_u_emit;
-    }
 
   private:
     double mass_;     // Mass

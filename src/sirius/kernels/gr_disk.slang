@@ -63,8 +63,11 @@ public float3 BlackbodyColor(float T) {
 
 // --- Kerr ISCO (Bardeen et al. 1972), signed dimensionless spin ---------------
 public float ComputeKerrISCO(float M, float aStar) {
-    float spin = clamp(abs(aStar), 0.0f, 0.998f);
-    if (spin < 0.001f) {
+    // The typed session owns the represented |a/M| <= 0.998 live domain.
+    // Evaluate every admitted non-zero spin instead of substituting the
+    // Schwarzschild radius throughout an arbitrary low-spin interval.
+    float spin = abs(aStar);
+    if (spin == 0.0f) {
         return 6.0f * M;
     }
     float a2 = spin * spin;

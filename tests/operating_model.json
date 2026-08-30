@@ -8,12 +8,14 @@
       "required": true,
       "verification": "build_gated",
       "profiles": ["cpu", "vulkan"],
-      "requirement": "Near-extremal Kerr geodesics satisfy the stated oracle and live conservation tolerances, and the 1080p shadow boundary agrees with Bardeen to below one pixel on both live backends.",
+      "requirement": "Near-extremal Kerr geodesics satisfy the stated oracle and live conservation tolerances, every declared device precision rung completes the same non-image invariant probe without a controller-induced false termination, and the 1080p shadow boundary agrees with Bardeen to below one pixel on both live backends.",
       "capability_dependencies": [],
       "evidence": [
         {"kind": "gtest", "name": "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter"},
         {"kind": "gtest", "name": "LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter"},
         {"kind": "gtest", "name": "KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter"},
+        {"kind": "gtest", "name": "KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability"},
+        {"kind": "gtest", "name": "KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison"},
         {"kind": "gtest", "name": "ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p"},
         {"kind": "gtest", "name": "VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p"},
         {"kind": "ctest", "name": "OperationalP1.NearExtremalBurnIn"}
@@ -58,7 +60,7 @@
       "required": true,
       "verification": "build_gated",
       "profiles": ["cpu", "vulkan"],
-      "requirement": "The physical relativistic thin-disk default uses the zero-torque Page-Thorne flux integrated from a declared stable-orbit inner edge at or outside the ISCO, with invariant circular-emitter frequency transfer exactly once. An explicit ShakuraSunyaev request instead uses the Newtonian zero-torque flux shape r^-3[1-sqrt(r_in/r)], normalised at 1.5 r_in, without claiming relativistic or alpha-disk vertical structure. The bounded grey volume uses the selected declared radial profile under its phenomenological closure, and Doppler suppression is identified and measured as a ZAMO diagnostic substitution rather than physical disk emission.",
+      "requirement": "The physical relativistic thin-disk default uses the zero-torque Page-Thorne flux integrated from a declared stable-orbit inner edge at or outside the ISCO, with every represented nonzero spin evaluated rather than aliased to Schwarzschild, and invariant circular-emitter frequency transfer exactly once. An explicit ShakuraSunyaev request instead uses the Newtonian zero-torque flux shape r^-3[1-sqrt(r_in/r)], normalised at 1.5 r_in, without claiming relativistic or alpha-disk vertical structure. The bounded grey volume uses the selected declared radial profile under its phenomenological closure, and Doppler suppression is identified and measured as a ZAMO diagnostic substitution rather than physical disk emission.",
       "capability_dependencies": [],
       "evidence": [
         {"kind": "gtest", "name": "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature"},
@@ -67,6 +69,7 @@
         {"kind": "gtest", "name": "SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction"},
         {"kind": "gtest", "name": "SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere"},
         {"kind": "gtest", "name": "KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel"},
+        {"kind": "gtest", "name": "KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco"},
         {"kind": "gtest", "name": "GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile"},
         {"kind": "gtest", "name": "AccretionDiskTest.ShakuraSunyaevProfileHasZeroTorqueEdgeAndDeclaredScale"},
         {"kind": "gtest", "name": "GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile"},
@@ -294,12 +297,16 @@
       "evidence": [
         {"kind": "gtest", "name": "KerrTests.ExactExtremalIscoIsNotClampedAndUndefinedDomainsDecline"},
         {"kind": "gtest", "name": "KerrMetricDTest.ExactExtremalParametersAreNotSilentlyRewritten"},
+        {"kind": "gtest", "name": "KerrMetricDTest.BoyerLindquistAxisAndNonFinitePhaseSpaceDeclineWithoutClamping"},
+        {"kind": "gtest", "name": "KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco"},
         {"kind": "gtest", "name": "ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p"},
         {"kind": "gtest", "name": "VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p"},
         {"kind": "ctest", "name": "OperationalP1.NearExtremalBurnIn"},
         {"kind": "gtest", "name": "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter"},
         {"kind": "gtest", "name": "LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter"},
-        {"kind": "gtest", "name": "KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter"}
+        {"kind": "gtest", "name": "KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter"},
+        {"kind": "gtest", "name": "KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability"},
+        {"kind": "gtest", "name": "KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison"}
       ]
     },
     {
@@ -328,6 +335,7 @@
         {"kind": "gtest", "name": "DiskCoordinateTest.CylindricalHeightAndPolarAngleRoundTripOnTheirOwnedDomain"},
         {"kind": "gtest", "name": "CoordinateTransformTests.KerrDiskRadiusIsSpheroidalNotCylindrical"},
         {"kind": "gtest", "name": "KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel"},
+        {"kind": "gtest", "name": "KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco"},
         {"kind": "gtest", "name": "GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile"},
         {"kind": "gtest", "name": "AccretionDiskTest.ShakuraSunyaevProfileHasZeroTorqueEdgeAndDeclaredScale"},
         {"kind": "gtest", "name": "GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile"},

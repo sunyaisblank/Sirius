@@ -71,6 +71,24 @@ std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     return words;
 }
 
+bool HasSpirvCapability(const std::vector<std::uint32_t>& words, std::uint32_t capability) {
+    // SPIR-V header is five words. OpCapability is opcode 17 and carries one
+    // capability operand; Float64 is capability 10.
+    for (std::size_t at = 5; at < words.size();) {
+        const std::uint32_t instruction = words[at];
+        const std::uint32_t word_count = instruction >> 16;
+        const std::uint32_t opcode = instruction & 0xffffu;
+        if (word_count == 0 || at + word_count > words.size()) {
+            return false;
+        }
+        if (opcode == 17u && word_count >= 2u && words[at + 1] == capability) {
+            return true;
+        }
+        at += word_count;
+    }
+    return false;
+}
+
 // One sample record, laid out per the parity_probe ABI.
 struct Sample {
     float metric_id = 0.0f;
@@ -135,7 +153,7 @@ struct Fixture {
     bool ready = false;
 };
 
-Fixture OpenProbe() {
+Fixture OpenProbe(const std::string& artefact = "parity_probe.spv") {
     Fixture f;
 #ifndef SIRIUS_KERNEL_DIR
     return f;
@@ -152,7 +170,7 @@ Fixture OpenProbe() {
     if (!device.has_value()) {
         return f;
     }
-    const auto spirv = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/parity_probe.spv");
+    const auto spirv = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/" + artefact);
     if (spirv.empty()) {
         return f;
     }
@@ -421,6 +439,24 @@ TEST(KernelParity, FullPageThorneDiskTemperatureMatchesIndependentCoreModel) {
     EXPECT_TRUE(Close(r[2 * kResultStride + 2], 2.0f * retrograde_isco, 1e-4f, 1e-6f, "S10 isco"));
 }
 
+TEST(KernelParity, RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    constexpr float spin = 9.0e-4f;
+    Sample sample;
+    sample.p1 = 1.0f;
+    sample.p2 = spin;
+    sample.c0 = 10.0f;
+    sample.aux0 = static_cast<float>(sirius::core::AccretionDiskD::ComputeIsco(spin));
+    sample.aux1 = 10000.0f;
+
+    const auto result = RunProbe(*f.device, f.kernel, kOpDiskTemp, {sample});
+    const float device_isco = result[2];
+    EXPECT_LT(device_isco, 6.0f);
+    EXPECT_TRUE(Close(device_isco, sample.aux0, 1.0e-4f, 1.0e-6f, "small-spin ISCO"));
+}
+
 TEST(KernelParity, ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel) {
     Fixture f = OpenProbe();
     if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
@@ -537,6 +573,85 @@ TEST(KernelParity, NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMom
     EXPECT_LT(results[1], 1.0e-4f) << "axial angular-momentum drift";
     EXPECT_LT(results[2], 1.0e-4f) << "Carter-constant drift";
     EXPECT_LT(results[3], 5.0e-4f) << "relative null residual";
+}
+
+TEST(KernelParity, PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability) {
+#ifndef SIRIUS_KERNEL_DIR
+    GTEST_SKIP() << "kernels not compiled (slangc absent at configure time)";
+#else
+    const auto fp32 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/parity_probe.spv");
+    const auto compensated =
+        LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/parity_probe_fp32comp.spv");
+    const auto fp64 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/parity_probe_fp64.spv");
+    ASSERT_FALSE(fp32.empty());
+    ASSERT_FALSE(compensated.empty());
+    ASSERT_FALSE(fp64.empty());
+    EXPECT_FALSE(HasSpirvCapability(fp32, 10u));
+    EXPECT_FALSE(HasSpirvCapability(compensated, 10u));
+    EXPECT_TRUE(HasSpirvCapability(fp64, 10u));
+#endif
+}
+
+TEST(KernelParity, PrecisionRungsConserveNearExtremalKerrWithoutImageComparison) {
+    Fixture fp32 = OpenProbe();
+    if (!fp32.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+    if (!fp32.device->Info().supports_fp64) {
+        GTEST_SKIP() << "device lacks shaderFloat64";
+    }
+    Fixture compensated = OpenProbe("parity_probe_fp32comp.spv");
+    Fixture fp64 = OpenProbe("parity_probe_fp64.spv");
+    ASSERT_TRUE(compensated.ready) << "compensated precision probe unavailable";
+    ASSERT_TRUE(fp64.ready) << "fp64 precision probe unavailable";
+
+    Sample near_extremal;
+    near_extremal.metric_id = kKerrSchild;
+    near_extremal.p1 = 1.0f;
+    near_extremal.p2 = 0.998f;
+    near_extremal.c0 = 12.0f;
+    near_extremal.c1 = 0.0f;
+    near_extremal.c2 = 3.0f;
+    near_extremal.u1 = 0.08f;
+    near_extremal.u2 = 1.0f;
+    near_extremal.u3 = -0.03f;
+    near_extremal.h = 0.08f;
+    near_extremal.aux0 = 3000.0f;
+    near_extremal.aux1 = 0.02f;
+    near_extremal.aux2 = 2.0f;
+
+    const auto result32 =
+        RunProbe(*fp32.device, fp32.kernel, kOpLiveCartConservation, {near_extremal});
+    const auto result_compensated =
+        RunProbe(*compensated.device, compensated.kernel, kOpLiveCartConservation, {near_extremal});
+    const auto result64 =
+        RunProbe(*fp64.device, fp64.kernel, kOpLiveCartConservation, {near_extremal});
+
+    const auto validate_progress = [](const std::vector<float>& result, const char* rung) {
+        for (int component = 0; component < 12; ++component) {
+            EXPECT_TRUE(std::isfinite(result[component]))
+                << rung << " result component " << component << " is non-finite";
+        }
+        EXPECT_GT(result[4], 100.0f) << rung << " made too little progress";
+        EXPECT_FLOAT_EQ(result[9], 2.0f)
+            << rung << " did not escape; last rejected error ratio=" << result[10]
+            << ", null residual=" << result[11];
+        EXPECT_GE(result[5], 200.0f) << rung << " did not reach the escape surface";
+    };
+    validate_progress(result32, "fp32");
+    validate_progress(result_compensated, "fp32-comp");
+    validate_progress(result64, "fp64");
+
+    EXPECT_LT(result64[0], 1.0e-6f) << "fp64 energy drift";
+    EXPECT_LT(result64[1], 1.0e-6f) << "fp64 angular-momentum drift";
+    EXPECT_LT(result64[2], 1.0e-6f) << "fp64 Carter drift";
+    EXPECT_LT(result64[3], 1.0e-8f) << "fp64 relative null residual";
+
+    const float drift32 = result32[0] + result32[1] + result32[2] + result32[3];
+    const float drift_compensated = result_compensated[0] + result_compensated[1] +
+                                    result_compensated[2] + result_compensated[3];
+    const float drift64 = result64[0] + result64[1] + result64[2] + result64[3];
+    EXPECT_LE(drift_compensated, drift32 * 1.25f + 1.0e-7f)
+        << "compensated accumulation regressed the invariant envelope";
+    EXPECT_LE(drift64, drift32 + 1.0e-8f) << "fp64 failed to improve the invariant envelope";
 }
 
 TEST(KernelParity, BeamEllipseRetainsBothAxesAndOutputOrientation) {
