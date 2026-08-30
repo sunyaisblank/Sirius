@@ -481,8 +481,9 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
     SIRIUS_ASSERT(launch_screen.has_value());
 
     // Ray-bundle state (P2); propagated only when enabled, so the point-sampled
-    // path is untouched. prev_vel and prev_pt carry the pre-step velocity and
-    // affine parameter the deviation step needs.
+    // path is untouched. prev_vel and prev_pt define every accepted segment,
+    // including disk and causal-boundary events when no transported feature is
+    // enabled.
     RayBundle bundle;
     RayBundle previous_bundle;
     Vec4 prev_vel;
@@ -499,9 +500,7 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
     for (int step = 0; step < config_.max_steps; ++step) {
         for (int i = 0; i < 4; ++i) prev_pos(i) = ray.position(i);
         prev_vel = ray.velocity;
-        if (config_.enable_ray_bundles || config_.enable_polarisation) {
-            prev_pt = static_cast<double>(ray.proper_time);
-        }
+        prev_pt = static_cast<double>(ray.proper_time);
         if (config_.enable_polarisation) {
             previous_polarisation_frame = polarisation_frame;
         }
@@ -538,8 +537,41 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
             continue;
         }
 
-        const double d_lambda = static_cast<double>(ray.proper_time) - prev_pt;
+        double d_lambda = static_cast<double>(ray.proper_time) - prev_pt;
         const float min_radius_before_step = min_r;
+        bool terminal_causal_boundary = false;
+
+        // A finite causal boundary clips the accepted central-ray segment
+        // before any coupled state or segment source advances. This makes the
+        // central ray, Jacobi bundle, polarisation frame, volume transfer, and
+        // disk search consume one event-synchronised affine interval.
+        if (config_.finite_causal_boundary) {
+            const double accepted_x = ray.position(1);
+            const double accepted_y = ray.position(2);
+            const double accepted_z = ray.position(3);
+            const double accepted_radius = std::sqrt(
+                accepted_x * accepted_x + accepted_y * accepted_y + accepted_z * accepted_z);
+            if (accepted_radius > static_cast<double>(config_.escape_radius)) {
+                const auto boundary =
+                    FindCausalBoundaryEvent(prev_pos, prev_vel, ray.position, ray.velocity,
+                                            d_lambda, static_cast<double>(config_.escape_radius));
+                if (!boundary.has_value()) {
+                    ray.position = prev_pos;
+                    ray.velocity = prev_vel;
+                    ray.proper_time = static_cast<float>(prev_pt);
+                    ray.coordinate_time = static_cast<float>(prev_pos(0));
+                    result.outcome = TraceResult::Outcome::MaxSteps;
+                    result.numerical_failure = true;
+                    break;
+                }
+                d_lambda *= boundary->fraction;
+                ray.position = boundary->position;
+                ray.velocity = boundary->tangent;
+                ray.proper_time = static_cast<float>(prev_pt + d_lambda);
+                ray.coordinate_time = static_cast<float>(boundary->position(0));
+                terminal_causal_boundary = true;
+            }
+        }
 
         // Advance the ray bundle over the accepted affine step, sampling the
         // connection and curvature at the bundle integrator's own stages.
@@ -686,41 +718,38 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
             break;
         }
 
+        if (terminal_causal_boundary) {
+            result.outcome = TraceResult::Outcome::Escaped;
+            const auto sky = SampleEulerianSky(*metric_, ray.position, ray.velocity);
+            SIRIUS_ASSERT(sky.has_value());
+            if (!sky.has_value()) {
+                result.outcome = TraceResult::Outcome::MaxSteps;
+                result.numerical_failure = true;
+                break;
+            }
+            result.final_direction = sky->world_direction;
+            result.min_radius = min_r;
+            break;
+        }
+
         // 4. Escape to the configured outer boundary. Segment emission has
-        // observer-first precedence, matching the device path. Positive-Lambda
-        // scenes localise the accepted endpoint onto their causal boundary.
+        // observer-first precedence, matching the device path. Finite causal
+        // boundaries were already clipped and classified above.
         if (r > config_.escape_radius) {
             const double vx = ray.velocity(1);
             const double vy = ray.velocity(2);
             const double vz = ray.velocity(3);
             const double v_radial = (x * vx + y * vy + z * vz) / r;
 
-            if (v_radial > 0 || config_.finite_causal_boundary) {
+            if (v_radial > 0) {
                 result.outcome = TraceResult::Outcome::Escaped;
-
-                Vec4 boundary_position = ray.position;
-                Vec4 boundary_tangent = ray.velocity;
-                if (config_.finite_causal_boundary) {
-                    const auto boundary = FindCausalBoundaryEvent(
-                        prev_pos, prev_vel, ray.position, ray.velocity, d_lambda,
-                        static_cast<double>(config_.escape_radius));
-                    if (!boundary.has_value()) {
-                        result.outcome = TraceResult::Outcome::MaxSteps;
-                        result.numerical_failure = true;
-                        break;
-                    }
-                    boundary_position = boundary->position;
-                    boundary_tangent = boundary->tangent;
-                }
-                const auto sky = SampleEulerianSky(*metric_, boundary_position, boundary_tangent);
+                const auto sky = SampleEulerianSky(*metric_, ray.position, ray.velocity);
                 SIRIUS_ASSERT(sky.has_value());
                 if (!sky.has_value()) {
                     result.outcome = TraceResult::Outcome::MaxSteps;
                     result.numerical_failure = true;
                     break;
                 }
-                ray.position = boundary_position;
-                ray.velocity = boundary_tangent;
                 result.final_direction = sky->world_direction;
                 result.min_radius = min_r;
                 break;

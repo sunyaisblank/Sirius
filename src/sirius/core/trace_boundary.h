@@ -16,6 +16,7 @@ namespace sirius::core {
 struct AcceptedTraceSegmentSample {
     Vec4 position;
     Vec4 tangent;
+    double fraction;
 };
 
 [[nodiscard]] inline AcceptedTraceSegmentSample SampleAcceptedTraceSegment(
@@ -39,6 +40,7 @@ struct AcceptedTraceSegmentSample {
             end_tangent * (affine_length * h11),
         start_position * (dh00 / affine_length) + start_tangent * dh10 +
             end_position * (dh01 / affine_length) + end_tangent * dh11,
+        fraction,
     };
 }
 

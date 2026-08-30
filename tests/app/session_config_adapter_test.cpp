@@ -96,6 +96,10 @@ TEST(RenderSessionProbe, TraceDomainScalesWithMassAndEnclosesTheObserver) {
         core::FindCausalBoundaryEvent(boundary_start, boundary_tangent, boundary_end,
                                       boundary_tangent, 1.0, massless.escape_radius);
     ASSERT_TRUE(boundary.has_value());
+    EXPECT_GT(boundary->fraction, 0.0);
+    EXPECT_LT(boundary->fraction, 1.0);
+    EXPECT_NEAR(boundary->fraction, (static_cast<double>(massless.escape_radius) - 50.0) / 6.0,
+                1.0e-12);
     EXPECT_LE(std::hypot(boundary->position(1), boundary->position(2), boundary->position(3)),
               static_cast<double>(massless.escape_radius));
     EXPECT_NEAR(boundary->position(1), massless.escape_radius, 1.0e-12);
