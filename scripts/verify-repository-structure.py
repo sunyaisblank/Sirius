@@ -78,7 +78,7 @@ INTEGRATION_CONTROLS = (
     "OperationalBuildPolicy.ReleaseCannotWeakenGates",
     "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate",
     "OperationalAttestation.FalseExternalEvidenceIsRejected",
-    "OperationalAttestation.NativeRuntimeProducerRejectsWrongHostAndDevice",
+    "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
     "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected",
     "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness",
     "AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority",
@@ -422,6 +422,100 @@ def verify_strict_test_volume_policy() -> None:
         raise RuntimeError("strict test-volume policy accepted a substituted volume")
 
 
+def attestation_preflight_errors(
+    preflight: str,
+    reuse: str,
+    native_producer: str,
+    viewer_producer: str,
+    tests: str,
+    documentation: str,
+) -> list[str]:
+    errors: list[str] = []
+    permitted = re.search(
+        r"PERMITTED_CANDIDATE_QUERIES\s*=\s*\{(?P<body>.*?)\n\}",
+        preflight,
+        re.DOTALL,
+    )
+    if permitted is None:
+        errors.append("attestation preflight has no closed candidate-query set")
+    else:
+        body = permitted.group("body")
+        for query in ('("--json", "info", "system")',
+                      '("--json", "info", "readiness")'):
+            if query not in body:
+                errors.append(f"attestation preflight omits permitted query {query}")
+        if any(token in body for token in ('"render"', '"view"', '"test"')):
+            errors.append("attestation preflight permits an execution command")
+
+    runner = re.search(
+        r"def run_candidate_json\(.*?(?=\ndef clean_source_revision\()",
+        preflight,
+        re.DOTALL,
+    )
+    if runner is None or runner.group(0).count("subprocess.run(") != 1:
+        errors.append("attestation preflight candidate execution has no single authority")
+    elif (
+        "arguments in PERMITTED_CANDIDATE_QUERIES" not in runner.group(0)
+        or "[str(candidate), *arguments]" not in runner.group(0)
+    ):
+        errors.append("attestation preflight candidate execution can bypass its query set")
+    without_runner = preflight if runner is None else preflight.replace(runner.group(0), "")
+    if without_runner.count("subprocess.run(") != 2:
+        errors.append("attestation preflight contains a non-git subprocess route")
+
+    for marker in (
+        '"kind": "sirius-attestation-preflight"',
+        '"status": "ready-for-external-execution"',
+        '"promotable": False',
+        '"external_execution_completed": False',
+        '"domains" not in report',
+        '"artifacts" not in report',
+        "output_path_is_safe",
+        'run_candidate_json(Path("unused"), ("render",), {})',
+    ):
+        if marker not in preflight:
+            errors.append(f"attestation preflight omits fail-closed marker {marker}")
+    if "from attestation_preflight import self_test as preflight_self_test" not in native_producer:
+        errors.append("native producer self-test does not exercise attestation preflight")
+    if "preflight_self_test()" not in native_producer:
+        errors.append("native producer does not run the imported preflight controls")
+    if "subprocess.run(" in reuse:
+        errors.append("qualification reuse introduced an execution subprocess")
+    for marker in (
+        "verifier.verify_document(document, record_path)",
+        '"physical-radeon-780m" in domains',
+        '"viewer-native-window-input" not in domains',
+        'document.get("device") == selected',
+        "verify_current_volume(candidate, document, reusable, record_path)",
+        '"reused-qualification-transcript.log"',
+        '"promotable": False',
+    ):
+        if marker not in reuse:
+            errors.append(f"qualification reuse omits authority marker {marker}")
+    if (
+        "from reuse_qualification_evidence import self_test "
+        "as qualification_reuse_self_test" not in native_producer
+        or "qualification_reuse_self_test()" not in native_producer
+    ):
+        errors.append("native producer self-test does not exercise qualification reuse")
+    for marker in (
+        "SIRIUS_REUSE_QUALIFICATION_ATTESTATION",
+        "scripts/reuse_qualification_evidence.py",
+        'cat "$OUT/reused-qualification-transcript.log"',
+        'exact full estate reused from verified hardware authority',
+    ):
+        if marker not in viewer_producer:
+            errors.append(f"viewer producer omits qualification-reuse marker {marker}")
+    control = "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice"
+    if tests.count(control) != 2:
+        errors.append("attestation preflight control is not one exact configured CTest")
+    if "scripts/attestation_preflight.py" not in documentation:
+        errors.append("attestation preflight has no operator documentation")
+    if "SIRIUS_REUSE_QUALIFICATION_ATTESTATION" not in documentation:
+        errors.append("qualification reuse has no operator documentation")
+    return errors
+
+
 def verify() -> list[str]:
     errors: list[str] = []
 
@@ -439,6 +533,23 @@ def verify() -> list[str]:
         for path, target in STRICT_TEST_VOLUME_TARGETS.items()
     }
     errors.extend(strict_test_volume_errors(strict_test_documents))
+    preflight_path = ROOT / "scripts" / "attestation_preflight.py"
+    reuse_path = ROOT / "scripts" / "reuse_qualification_evidence.py"
+    if not preflight_path.is_file():
+        errors.append("attestation preflight producer is missing")
+    elif not reuse_path.is_file():
+        errors.append("qualification evidence reuse producer is missing")
+    else:
+        errors.extend(attestation_preflight_errors(
+            preflight_path.read_text(encoding="utf-8"),
+            reuse_path.read_text(encoding="utf-8"),
+            (ROOT / "scripts" / "validate-native-runtime.py").read_text(
+                encoding="utf-8"
+            ),
+            (ROOT / "scripts" / "validate-viewer.sh").read_text(encoding="utf-8"),
+            (ROOT / "tests" / "CMakeLists.txt").read_text(encoding="utf-8"),
+            (ROOT / "docs" / "ATTESTATION.md").read_text(encoding="utf-8"),
+        ))
 
     for path in RETIRED_PATHS:
         if path.exists():

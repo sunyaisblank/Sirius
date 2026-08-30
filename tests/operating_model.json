@@ -49,7 +49,8 @@
         {"kind": "gtest", "name": "VulkanRenderSession.IndexedPointCatalogueReachesLiveKernel"},
         {"kind": "gtest", "name": "VulkanRenderSession.CombinedParitySceneRetainsResolvedImageStructure"},
         {"kind": "gtest", "name": "RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration"},
-        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
+        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"},
+        {"kind": "ctest", "name": "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice"}
       ]
     },
     {
@@ -92,7 +93,8 @@
         {"kind": "gtest", "name": "VulkanRenderSession.CombinedParitySceneRetainsResolvedImageStructure"},
         {"kind": "gtest", "name": "RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration"},
         {"kind": "gtest", "name": "MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile"},
-        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
+        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"},
+        {"kind": "ctest", "name": "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice"}
       ]
     },
     {
@@ -155,7 +157,8 @@
         {"kind": "gtest", "name": "MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile"},
         {"kind": "gtest", "name": "VulkanRenderSession.Kerr160x120CompletesAcrossMultipleGovernedTiles"},
         {"kind": "gtest", "name": "ViewCommandOperational.VulkanRefinementPublishesProgressiveFrames"},
-        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
+        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"},
+        {"kind": "ctest", "name": "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice"}
       ]
     },
     {
@@ -182,7 +185,7 @@
       "evidence": [
         {"kind": "ctest", "name": "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected"},
         {"kind": "ctest", "name": "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness"},
-        {"kind": "ctest", "name": "OperationalAttestation.NativeRuntimeProducerRejectsWrongHostAndDevice"},
+        {"kind": "ctest", "name": "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice"},
         {"kind": "gtest", "name": "AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority"}
       ]
     },
@@ -580,9 +583,10 @@
       "state": "attestation_required",
       "profiles": ["viewer-native-window-input"],
       "request": "Native GLFW/OpenGL window with a physical-Radeon Vulkan refinement frame and host-delivered keyboard/pointer events",
-      "behavior": "Admit only a strict-qualification viewer-native-window-input attestation that binds the copied candidate executable and its build gate to a published progressive Vulkan frame, the selected physical Radeon, full non-skipping tests, and observed keyboard and pointer callbacks in hashed evidence.",
+      "behavior": "Before expensive execution, a non-promoting exact-candidate preflight must reject false hosts, software or ambiguous devices, missing WSL2/display/input prerequisites, and every command except machine-readable info queries. On the consolidated WSL2 route, the viewer producer may reuse the full test/gate/candidate/product authority only from an independently verified same-revision physical-Radeon hardware record whose platform and complete device identity equal the live viewer selection; stale, circular, cross-host, or cross-device reuse fails before window creation. Admission still requires a strict-qualification viewer-native-window-input attestation that binds that authority to a newly published progressive Vulkan frame and newly observed keyboard and pointer callbacks in hashed evidence.",
       "evidence": [
-        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
+        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"},
+        {"kind": "ctest", "name": "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice"}
       ]
     },
     {
@@ -612,9 +616,10 @@
       "state": "attestation_required",
       "profiles": ["physical-radeon-780m"],
       "request": "Physical Radeon 780M Vulkan runtime support",
-      "behavior": "Admit only strict-qualification evidence binding the copied candidate executable and its build gate to selected non-software Radeon 780M readiness, full tests, artefact hashes, and driver identity.",
+      "behavior": "A non-promoting exact-candidate preflight must first reject software, ambiguous, non-Radeon, non-Dozen, or under-budget WSL2 selections without running tests or rendering. Admission still requires strict-qualification evidence binding the copied candidate executable and its build gate to selected non-software Radeon 780M readiness, full tests, artefact hashes, and driver identity.",
       "evidence": [
-        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
+        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"},
+        {"kind": "ctest", "name": "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice"}
       ]
     },
     {
@@ -622,9 +627,10 @@
       "state": "attestation_required",
       "profiles": ["wsl2-dozen"],
       "request": "WSL2 Vulkan through Mesa Dozen/dzn",
-      "behavior": "Admit only a WSL2 attestation whose selected physical device reports Dozen/dzn driver identity.",
+      "behavior": "A non-promoting exact-candidate preflight must reject non-WSL2 hosts, absent /dev/dxg, and devices without Dozen/dzn identity before expensive execution. Admit only a WSL2 attestation whose selected physical device reports Dozen/dzn driver identity.",
       "evidence": [
-        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
+        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"},
+        {"kind": "ctest", "name": "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice"}
       ]
     },
     {
@@ -632,10 +638,10 @@
       "state": "attestation_required",
       "profiles": ["windows-native-build", "windows-native-vulkan"],
       "request": "Native Windows compilation/tests and native Vulkan runtime",
-      "behavior": "An explicit native CI dispatch emits a clean strict-qualification build attestation whose non-promoting gate binds the complete registered test topology, exact nine-case non-render authority estate, all compiled test executables, all thirteen products, alignment receipt, and copied candidate bytes. It claims compilation only; native Vulkan remains a distinct full-estate physical-device attestation and may not use Dozen.",
+      "behavior": "An explicit native CI dispatch emits a clean strict-qualification build attestation whose non-promoting gate binds the complete registered test topology, exact nine-case non-render authority estate, all compiled test executables, all thirteen products, alignment receipt, and copied candidate bytes. Before native runtime execution, a non-promoting exact-candidate preflight rejects wrong hosts, software or ambiguous devices, Dozen, missing resources, and every command except machine-readable info queries. Compilation and preflight claim no runtime; native Vulkan remains a distinct full-estate physical-device attestation.",
       "evidence": [
         {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"},
-        {"kind": "ctest", "name": "OperationalAttestation.NativeRuntimeProducerRejectsWrongHostAndDevice"}
+        {"kind": "ctest", "name": "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice"}
       ]
     },
     {
@@ -643,10 +649,10 @@
       "state": "attestation_required",
       "profiles": ["macos-native-build", "macos-moltenvk"],
       "request": "Native macOS compilation/tests and MoltenVK runtime",
-      "behavior": "An explicit native CI dispatch emits a clean strict-qualification build attestation whose non-promoting gate binds the complete registered test topology, exact nine-case non-render authority estate, all compiled test executables, all thirteen products, alignment receipt, and copied candidate bytes. It claims compilation only; runtime closure separately requires a full-estate physical MoltenVK attestation.",
+      "behavior": "An explicit native CI dispatch emits a clean strict-qualification build attestation whose non-promoting gate binds the complete registered test topology, exact nine-case non-render authority estate, all compiled test executables, all thirteen products, alignment receipt, and copied candidate bytes. Before native runtime execution, a non-promoting exact-candidate preflight rejects wrong hosts, software or ambiguous devices, non-MoltenVK drivers, missing resources, and every command except machine-readable info queries. Compilation and preflight claim no runtime; closure separately requires a full-estate physical MoltenVK attestation.",
       "evidence": [
         {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"},
-        {"kind": "ctest", "name": "OperationalAttestation.NativeRuntimeProducerRejectsWrongHostAndDevice"}
+        {"kind": "ctest", "name": "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice"}
       ]
     },
     {
@@ -654,13 +660,14 @@
       "state": "attestation_required",
       "profiles": ["physical-imax-5616x4096"],
       "request": "Full 5616x4096 physical-device P3/P5 render under a 2048 MiB governed budget",
-      "behavior": "Static memory planning is necessary but insufficient; closure requires exact decoded PNG dimensions and point-star structure in a disk-free frame, measured wall time, physical device identity, hashed artefacts, and one completed typed-session transcript event binding the display-calibrated beam-filtered 100000-star catalogue to Vulkan dispatch with a moving finite-aperture camera in the same governed scene.",
+      "behavior": "A non-promoting exact-candidate preflight must reject a selected physical device exposing less than the governed 2048 MiB render budget without running tests or rendering. Static memory planning and preflight are necessary but insufficient; closure requires exact decoded PNG dimensions and point-star structure in a disk-free frame, measured wall time, physical device identity, hashed artefacts, and one completed typed-session transcript event binding the display-calibrated beam-filtered 100000-star catalogue to Vulkan dispatch with a moving finite-aperture camera in the same governed scene.",
       "evidence": [
         {"kind": "gtest", "name": "MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile"},
         {"kind": "gtest", "name": "StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope"},
         {"kind": "gtest", "name": "VulkanRenderSession.CombinedParitySceneRetainsResolvedImageStructure"},
         {"kind": "gtest", "name": "RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration"},
-        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"}
+        {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"},
+        {"kind": "ctest", "name": "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice"}
       ]
     }
   ]

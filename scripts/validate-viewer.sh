@@ -8,6 +8,7 @@ set -euo pipefail
 PRESET="${SIRIUS_PRESET:-linux-ci}"
 EXPECTED_DEVICE="${SIRIUS_EXPECT_DEVICE_PATTERN:-Radeon 780M}"
 OUT_ROOT="${SIRIUS_VIEWER_OUTPUT_DIR:-renders/viewer-validation}"
+REUSE_QUALIFICATION_ATTESTATION="${SIRIUS_REUSE_QUALIFICATION_ATTESTATION:-}"
 RUN_ID="$(date +%Y%m%d-%H%M%S)"
 
 if [[ -n "$(git status --porcelain --untracked-files=normal)" ]]; then
@@ -56,67 +57,82 @@ trap stop_viewer EXIT
 
 say "Sirius native viewer-input validation ($(date -u +%FT%TZ))"
 say "host: $(uname -a)"
-say "source revision: $SOURCE_REVISION"
-
-say "[1/6] configure + strict qualification build ($PRESET)"
-cmake --preset "$PRESET" \
-    -DSIRIUS_ALIGNMENT_MODE=qualification \
-    -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON 2>&1 | tee -a "$LOG"
-cmake --build --preset "$PRESET" -j"$(nproc)" 2>&1 | tee -a "$LOG"
+if [[ -z "$REUSE_QUALIFICATION_ATTESTATION" ]]; then
+    say "source revision: $SOURCE_REVISION"
+else
+    say "viewer source revision: $SOURCE_REVISION"
+fi
 
 SIRIUS="./bin/$PRESET/src/sirius/app/sirius"
-[[ -x "$SIRIUS" ]] || { say "sirius binary missing at $SIRIUS"; exit 1; }
 QUALIFICATION_EXECUTABLE="$OUT/qualification-sirius.bin"
-cp "$SIRIUS" "$QUALIFICATION_EXECUTABLE"
-ALIGNMENT_RECEIPT_SOURCE="bin/$PRESET/generated/sirius/alignment_receipt.json"
-[[ -s "$ALIGNMENT_RECEIPT_SOURCE" ]] || {
-    say "compiled-authority alignment receipt missing at $ALIGNMENT_RECEIPT_SOURCE"
-    exit 1
-}
 ALIGNMENT_RECEIPT="$OUT/alignment_receipt.json"
-cp "$ALIGNMENT_RECEIPT_SOURCE" "$ALIGNMENT_RECEIPT"
-MANDATORY_GATE_SOURCE="bin/$PRESET/generated/sirius/mandatory_gate.json"
-[[ -s "$MANDATORY_GATE_SOURCE" ]] || {
-    say "qualification build-gate receipt missing at $MANDATORY_GATE_SOURCE"
-    exit 1
-}
 MANDATORY_GATE="$OUT/mandatory_gate.json"
-cp "$MANDATORY_GATE_SOURCE" "$MANDATORY_GATE"
-for gate_artifact in mandatory_gate_junit.xml mandatory_gate_ctest.log; do
-    source_path="bin/$PRESET/generated/sirius/$gate_artifact"
-    [[ -s "$source_path" ]] || {
-        say "qualification gate artifact missing at $source_path"
+if [[ -z "$REUSE_QUALIFICATION_ATTESTATION" ]]; then
+    say "[1/6] configure + build ($PRESET)"
+    cmake --preset "$PRESET" \
+        -DSIRIUS_ALIGNMENT_MODE=qualification \
+        -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON 2>&1 | tee -a "$LOG"
+    cmake --build --preset "$PRESET" -j"$(nproc)" 2>&1 | tee -a "$LOG"
+    [[ -x "$SIRIUS" ]] || { say "sirius binary missing at $SIRIUS"; exit 1; }
+    cp "$SIRIUS" "$QUALIFICATION_EXECUTABLE"
+    ALIGNMENT_RECEIPT_SOURCE="bin/$PRESET/generated/sirius/alignment_receipt.json"
+    [[ -s "$ALIGNMENT_RECEIPT_SOURCE" ]] || {
+        say "compiled-authority alignment receipt missing at $ALIGNMENT_RECEIPT_SOURCE"
         exit 1
     }
-done
-cp "bin/$PRESET/generated/sirius/mandatory_gate_junit.xml" \
-    "$OUT/qualification-gate-junit"
-cp "bin/$PRESET/generated/sirius/mandatory_gate_ctest.log" \
-    "$OUT/qualification-gate-log"
-QUALIFICATION_RESOURCE_ROOT="$(dirname "$SIRIUS")/resources"
-QUALIFICATION_PRODUCTS=(
-    "operating_model=model/operating_model.json"
-    "starfield=assets/Starfield.png"
-    "trace_fp32comp_spv=kernels/trace_fp32comp.spv"
-    "trace_fp64_spv=kernels/trace_fp64.spv"
-    "trace_spv=kernels/trace.spv"
-    "viewer_rdsd003a_fragment=shaders/RDSD003A.frag"
-    "viewer_rdsd003a_vertex=shaders/RDSD003A.vert"
-    "viewer_rdsd004a_fragment=shaders/RDSD004A.frag"
-    "viewer_rdsd004a_vertex=shaders/RDSD004A.vert"
-    "viewer_rdsd005a_fragment=shaders/RDSD005A.frag"
-    "viewer_rdsd005a_vertex=shaders/RDSD005A.vert"
-)
-for product in "${QUALIFICATION_PRODUCTS[@]}"; do
-    logical_name="${product%%=*}"
-    relative_path="${product#*=}"
-    source_path="$QUALIFICATION_RESOURCE_ROOT/$relative_path"
-    [[ -s "$source_path" ]] || {
-        say "qualification product missing at $source_path"
+    cp "$ALIGNMENT_RECEIPT_SOURCE" "$ALIGNMENT_RECEIPT"
+    MANDATORY_GATE_SOURCE="bin/$PRESET/generated/sirius/mandatory_gate.json"
+    [[ -s "$MANDATORY_GATE_SOURCE" ]] || {
+        say "qualification build-gate receipt missing at $MANDATORY_GATE_SOURCE"
         exit 1
     }
-    cp "$source_path" "$OUT/qualification-product-$logical_name"
-done
+    cp "$MANDATORY_GATE_SOURCE" "$MANDATORY_GATE"
+    for gate_artifact in mandatory_gate_junit.xml mandatory_gate_ctest.log; do
+        source_path="bin/$PRESET/generated/sirius/$gate_artifact"
+        [[ -s "$source_path" ]] || {
+            say "qualification gate artifact missing at $source_path"
+            exit 1
+        }
+    done
+    cp "bin/$PRESET/generated/sirius/mandatory_gate_junit.xml" \
+        "$OUT/qualification-gate-junit"
+    cp "bin/$PRESET/generated/sirius/mandatory_gate_ctest.log" \
+        "$OUT/qualification-gate-log"
+    QUALIFICATION_RESOURCE_ROOT="$(dirname "$SIRIUS")/resources"
+    QUALIFICATION_PRODUCTS=(
+        "operating_model=model/operating_model.json"
+        "starfield=assets/Starfield.png"
+        "trace_fp32comp_spv=kernels/trace_fp32comp.spv"
+        "trace_fp64_spv=kernels/trace_fp64.spv"
+        "trace_spv=kernels/trace.spv"
+        "viewer_rdsd003a_fragment=shaders/RDSD003A.frag"
+        "viewer_rdsd003a_vertex=shaders/RDSD003A.vert"
+        "viewer_rdsd004a_fragment=shaders/RDSD004A.frag"
+        "viewer_rdsd004a_vertex=shaders/RDSD004A.vert"
+        "viewer_rdsd005a_fragment=shaders/RDSD005A.frag"
+        "viewer_rdsd005a_vertex=shaders/RDSD005A.vert"
+    )
+    for product in "${QUALIFICATION_PRODUCTS[@]}"; do
+        logical_name="${product%%=*}"
+        relative_path="${product#*=}"
+        source_path="$QUALIFICATION_RESOURCE_ROOT/$relative_path"
+        [[ -s "$source_path" ]] || {
+            say "qualification product missing at $source_path"
+            exit 1
+        }
+        cp "$source_path" "$OUT/qualification-product-$logical_name"
+    done
+else
+    say "[1/6] verify and reuse exact hardware qualification authority ($PRESET)"
+    [[ -x "$SIRIUS" ]] || { say "reusable sirius binary missing at $SIRIUS"; exit 1; }
+    python3 scripts/reuse_qualification_evidence.py \
+        --record "$REUSE_QUALIFICATION_ATTESTATION" \
+        --candidate "$SIRIUS" \
+        --output-dir "$OUT" \
+        --expected-revision "$SOURCE_REVISION" \
+        --device-pattern "$EXPECTED_DEVICE" 2>&1 | tee -a "$LOG"
+    cat "$OUT/reused-qualification-transcript.log" >>"$LOG"
+fi
 
 say "[2/6] physical-device and readiness precondition"
 SYSTEM_JSON=$("$SIRIUS" --json info system)
@@ -133,10 +149,11 @@ matched = [
     item for item in physical
     if expected in str(item.get("name", "")).casefold()
 ]
-if not matched:
+if len(matched) != 1:
     names = ", ".join(str(item.get("name", "<unnamed>")) for item in physical)
     raise SystemExit(
-        f"no physical viewer device matches {os.environ['EXPECTED_DEVICE']!r}; found: {names}"
+        "physical viewer selection must resolve exactly one device matching "
+        f"{os.environ['EXPECTED_DEVICE']!r}; found: {names}"
     )
 selected = matched[0]
 print(f"{selected['index']}\t{selected['name']}")
@@ -168,12 +185,20 @@ if not data.get("evidence_generation_ready") or not vulkan.get("ready"):
 if vulkan.get("selected_device_index") != int(os.environ["SELECTED_INDEX"]):
     raise SystemExit("viewer readiness selected a different Vulkan device")
 PY
-say "readiness: evidence_generation=true vulkan=true selected_device_index=$SELECTED_INDEX"
+if [[ -z "$REUSE_QUALIFICATION_ATTESTATION" ]]; then
+    say "readiness: evidence_generation=true vulkan=true selected_device_index=$SELECTED_INDEX"
+else
+    say "viewer live readiness: evidence_generation=true vulkan=true selected_device_index=$SELECTED_INDEX"
+fi
 
-say "[3/6] full source-available test estate on selected driver"
-ctest --test-dir "bin/$PRESET" --show-only=json-v1 >"$CTEST_INVENTORY"
-(cd "bin/$PRESET" && ctest -j"$(nproc)" --output-on-failure \
-    --output-junit "$TEST_REPORT") 2>&1 | tee -a "$LOG"
+if [[ -z "$REUSE_QUALIFICATION_ATTESTATION" ]]; then
+    say "[3/6] full source-available test estate on selected driver"
+    ctest --test-dir "bin/$PRESET" --show-only=json-v1 >"$CTEST_INVENTORY"
+    (cd "bin/$PRESET" && ctest -j"$(nproc)" --output-on-failure \
+        --output-junit "$TEST_REPORT") 2>&1 | tee -a "$LOG"
+else
+    say "[3/6] exact full estate reused from verified hardware authority"
+fi
 
 say "[4/6] create a native Vulkan window, publish a frame, and inject host input events"
 # GLFW otherwise prefers native Wayland under WSLg. This evidence producer

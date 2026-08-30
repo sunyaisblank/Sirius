@@ -44,12 +44,48 @@ software devices, missing hardware identity or upstream evidence, false test
 state, wrong 1080p or IMAX dimensions, ambiguous or unbound revisions, aliased
 artifacts, and tampered hashes are rejected.
 
+## Zero-render preflight
+
+Before any expensive test estate, renderer, or native viewer is started,
+`scripts/attestation_preflight.py` can prove that the exact qualification
+candidate, compiled alignment receipt, governed resources, executing host,
+selected physical Vulkan device, driver route, free output space, and required
+operator tools agree. The script is non-promoting by construction: it executes
+only `info system` and `info readiness`, emits `planned_domains` rather than
+`domains`, carries no admissible artifact set, states `promotable=false` and
+`external_execution_completed=false`, and refuses to write inside the clean
+source worktree. A successful preflight is necessary preparation, never runtime
+or image evidence.
+
+For the consolidated WSL2/Radeon/Dozen/IMAX/viewer route, compile the candidate
+without invoking the Mandatory target and keep the report outside the source:
+
+```bash
+cmake --preset linux-ci \
+  -DSIRIUS_ALIGNMENT_MODE=qualification \
+  -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON
+cmake --build --preset linux-ci --target SiriusAlignmentGate sirius
+VK_DRIVER_FILES=/absolute/path/to/dzn_icd.x86_64.json \
+  python3 scripts/attestation_preflight.py \
+    --profile wsl2-radeon-viewer \
+    --candidate bin/linux-ci/src/sirius/app/sirius \
+    --expected-revision "$(git rev-parse HEAD)" \
+    --output /tmp/sirius-wsl2-preflight.json
+```
+
+The profile requires the real executing host to be WSL2 with `/dev/dxg`, an
+unambiguous integrated/discrete Radeon 780M reporting Dozen/dzn, at least the
+governed 2048 MiB render budget, a compiled viewer, `DISPLAY`, `timeout`, and
+`xdotool`. Native hosts use `--profile windows-native-vulkan` or
+`--profile macos-moltenvk`; they respectively reject Dozen and require
+MoltenVK. Omitting `--output` prints the same report to standard output.
+
 ## Physical Radeon and WSL2/Dozen
 
 `scripts/validate-hardware.sh` selects one exact non-software Vulkan device and
 uses that selection for inventory, readiness, the complete test estate, the
 1920x1080 and 5616x4096 governed renders, and every precision rung. Both scenes
-disables disk emission so its structure must come from the ray-bundle-filtered,
+disable disk emission so their structure must come from the ray-bundle-filtered,
 display-calibrated 100,000-star point catalogue; it combines that catalogue with
 a nonzero timelike camera velocity and the finite-aperture thin lens. The verifier
 requires those P3/P5 semantics in the record, fully decodes both governed PNGs,
@@ -151,8 +187,28 @@ On an X11 or XWayland desktop, install `xdotool` and run:
 scripts/validate-viewer.sh
 ```
 
+When the same clean WSL2 checkout has just completed the consolidated Radeon,
+Dozen, and IMAX hardware run, avoid rebuilding and rerunning the full estate:
+
+```bash
+SIRIUS_REUSE_QUALIFICATION_ATTESTATION=/absolute/path/to/hardware-attestation.json \
+  scripts/validate-viewer.sh
+```
+
+`reuse_qualification_evidence.py` first runs the normal attestation verifier on
+that hardware record, then requires its exact source revision, WSL2 platform,
+complete Radeon 780M/Dozen device object, qualification candidate bytes,
+alignment/Mandatory receipts, CTest registration/JUnit, and all governed product
+hashes to equal the live viewer volume. Only those authority artifacts and the
+verified upstream transcript are copied; stale, circular viewer, native-Linux,
+wrong-driver, cross-device, or altered-resource reuse fails before a window is
+created. The viewer still must publish a new Vulkan frame and receive new native
+keyboard and pointer callbacks. Thus one physical qualification estate can
+support both records without reusing either domain's physical observation.
+
 The runbook refuses a dirty source tree, selects and verifies the named physical
-Vulkan device, builds and runs the complete test estate, opens the real viewer,
+Vulkan device, builds and runs the complete test estate or reuses the exact
+verified WSL2 hardware authority described above, opens the real viewer,
 waits for a published Vulkan refinement frame, delivers keyboard, pointer-drag,
 and scroll events through the host window system, then exits through an Escape
 event. The viewer writes the transcript only when

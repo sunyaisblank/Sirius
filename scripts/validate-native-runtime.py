@@ -20,6 +20,9 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
+from attestation_preflight import self_test as preflight_self_test
+from reuse_qualification_evidence import self_test as qualification_reuse_self_test
+
 
 ROOT = Path(__file__).resolve().parent.parent
 VERIFIER_PATH = ROOT / "scripts" / "verify-attestation.py"
@@ -398,6 +401,8 @@ def write_runtime_attestation(args: argparse.Namespace) -> Path:
 
 
 def self_test() -> None:
+    preflight_self_test()
+    qualification_reuse_self_test()
     windows = profile_for_host("win32")
     macos = profile_for_host("darwin")
     base_device = {
@@ -488,7 +493,10 @@ def main() -> None:
     try:
         if args.self_test:
             self_test()
-            print("native runtime producer rejected wrong-host and false-device controls")
+            print(
+                "attestation preflight and native runtime producer rejected "
+                "wrong-host, false-device, stale-reuse, and promotion controls"
+            )
             return
         attestation = write_runtime_attestation(args)
         print(f"native runtime attestation recorded and verified: {attestation}")

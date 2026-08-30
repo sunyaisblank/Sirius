@@ -24,7 +24,7 @@ NATIVE_BUILD_EVIDENCE_TESTS = (
     "OperationalBuildPolicy.ReleaseCannotWeakenGates",
     "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate",
     "OperationalAttestation.FalseExternalEvidenceIsRejected",
-    "OperationalAttestation.NativeRuntimeProducerRejectsWrongHostAndDevice",
+    "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
     "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected",
     "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness",
     "AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority",

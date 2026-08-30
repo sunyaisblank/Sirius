@@ -108,11 +108,11 @@ set_tests_properties(
 # fail-closed host/device policy. Its local self-test is metadata-only: actual
 # Windows Vulkan and MoltenVK completion remains external evidence.
 add_test(
-    NAME OperationalAttestation.NativeRuntimeProducerRejectsWrongHostAndDevice
+    NAME OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice
     COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_SOURCE_DIR}/scripts/validate-native-runtime.py" --self-test)
 set_tests_properties(
-    OperationalAttestation.NativeRuntimeProducerRejectsWrongHostAndDevice
+    OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice
     PROPERTIES
         LABELS "Mandatory;Operational"
         TIMEOUT 30)

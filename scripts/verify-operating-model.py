@@ -97,6 +97,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
     },
     "P3": {
         "ctest:OperationalAttestation.FalseExternalEvidenceIsRejected",
+        "ctest:OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
         "gtest:RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration",
         "gtest:StarfieldPointTest.CatalogueMeetsSizeFloorAndIsFinite",
         "gtest:StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope",
@@ -122,6 +123,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
     },
     "P5": {
         "ctest:OperationalAttestation.FalseExternalEvidenceIsRejected",
+        "ctest:OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
         "gtest:CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels",
         "gtest:MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile",
         "gtest:ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne",
@@ -157,6 +159,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
     },
     "E3": {
         "ctest:OperationalAttestation.FalseExternalEvidenceIsRejected",
+        "ctest:OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
         "gtest:MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile",
         "gtest:RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr",
         "gtest:ViewCommandOperational.VulkanRefinementPublishesProgressiveFrames",
@@ -197,9 +200,9 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "5f11fb88292964612498adf0937ae28b6d05456518289c7533631d1515b8c0fa",
-    "required_dimensions": "df0cdbaeeb68ec9b5eb74eb6ef4c66c76e355f7a7cacb291ee85ddba91e3f22d",
-    "capability_contracts": "83c3271d5859bb64dff2b5e14cef96748617cd8c63e94b788ba5c749288acbca",
+    "acceptance_criteria": "a2cd06bdec4fc142227359cb89dd120e165f9d6d6b0a015f43bccfb82e8fe38c",
+    "required_dimensions": "2ab185869bf31f4085cd9fd6298151b7978af0babc610d5cd56a7002e03e43c7",
+    "capability_contracts": "213d95a3b7cb29bf56eeba1ed4825fa78332782762c620fbfb69fda4d86a6d7b",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
 

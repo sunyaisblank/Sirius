@@ -69,7 +69,7 @@ say "source revision: $SOURCE_REVISION"
 say "expected physical device pattern: $EXPECTED_DEVICE"
 say "attestation domains: $ATTESTATION_DOMAINS"
 
-say "[1/6] configure + strict qualification build ($PRESET)"
+say "[1/6] configure + build ($PRESET)"
 cmake --preset "$PRESET" \
     -DSIRIUS_ALIGNMENT_MODE=qualification \
     -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON 2>&1 | tee -a "$LOG"
@@ -142,9 +142,12 @@ expected = os.environ["EXPECTED_DEVICE"].casefold()
 matched = [d for d in physical if expected in str(d.get("name", "")).casefold()]
 if not physical:
     sys.exit("no physical Vulkan device was reported; software validation is not an attestation")
-if not matched:
+if len(matched) != 1:
     names = ", ".join(str(d.get("name", "<unnamed>")) for d in physical)
-    sys.exit(f"no physical device matches {os.environ['EXPECTED_DEVICE']!r}; found: {names}")
+    sys.exit(
+        "physical hardware selection must resolve exactly one device matching "
+        f"{os.environ['EXPECTED_DEVICE']!r}; found: {names}"
+    )
 selected = matched[0]
 print(f"{selected['index']}\t{selected['name']}\t{int(bool(selected.get('supports_fp64')))}")
 PY

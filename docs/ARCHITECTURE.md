@@ -57,7 +57,12 @@ JUnit/log, independently rerun JUnit/live inventory, and configure-time
 alignment receipt form one cross-checked byte and test-identity chain.
 Development artifacts cannot enter that chain, while qualification may retain
 pending domains so evidence production does not circularly require the release
-it is intended to enable. CMake
+it is intended to enable. Before that expensive authority executes,
+`attestation_preflight.py` queries only the exact candidate's system and
+readiness interfaces, cross-checks its compiled receipt/resources against the
+clean worktree and physical host/device route, and emits a deliberately
+non-promoting plan outside the source tree. It cannot replace any runtime,
+image, or input witness. CMake
 rechecks and embeds that receipt, while
 `app/alignment_authority` compares the installed copy with the compiled bytes
 before operational initialisation and exposes the exact admitted/pending/required
