@@ -27,6 +27,33 @@ constexpr double M = 1.0;  // Mass in geometric units
 constexpr double PI = 3.14159265358979323846;
 [[maybe_unused]] constexpr double kEpsilon = 1e-6;
 
+class HalfSpaceMinkowskiMetric final : public IMetric {
+  public:
+    bool IsValidEvent(const Tensor<double, 4>& position) const override {
+        return IMetric::IsValidEvent(position) && position(1) >= 0.0;
+    }
+
+    void Evaluate(const Tensor<double, 4>& position, Metric4d& metric,
+                  Tensor<Dual<double>, 4, 4, 4>& derivatives) override {
+        if (!IsValidEvent(position)) ++invalid_evaluations;
+        metric.Zero();
+        metric(0, 0) = Dual<double>(-1.0);
+        metric(1, 1) = Dual<double>(1.0);
+        metric(2, 2) = Dual<double>(1.0);
+        metric(3, 3) = Dual<double>(1.0);
+        derivatives.Zero();
+    }
+
+    const Config& GetParameters() const override { return config; }
+    void SetParameter(const std::string&, double) override {}
+    const char* GetName() const override { return "Half-space Minkowski test metric"; }
+
+    int invalid_evaluations = 0;
+
+  private:
+    Config config;
+};
+
 // =============================================================================
 // Test Fixture
 // =============================================================================
@@ -385,6 +412,35 @@ TEST_F(RK45IntegratorTests, StepRejectionWorks) {
     // Should have some rejected steps initially due to tight tolerance
     // (Not guaranteed, depends on initial step vs required accuracy)
     EXPECT_GT(accepted_steps, 0) << "Should eventually accept some steps";
+}
+
+TEST_F(RK45IntegratorTests, UnrepresentedStageShrinksBeforeMetricEvaluation) {
+    HalfSpaceMinkowskiMetric metric;
+    Lightray ray{};
+    ray.position(1) = 0.01;
+    ray.velocity(0) = 1.0;
+    ray.velocity(1) = -1.0;
+    ray.step_size = 0.1f;
+
+    IntegratorConfig stage_config = config;
+    stage_config.min_step = 1.0e-4f;
+    stage_config.max_step = 0.1f;
+    stage_config.initial_step = 0.1f;
+    const Vec4 initial_position = ray.position;
+
+    EXPECT_FALSE(Geodesic::IntegrateStepRk45(ray, &metric, stage_config));
+    EXPECT_EQ(ray.terminated, 0);
+    EXPECT_FLOAT_EQ(ray.step_size, 0.05f);
+    EXPECT_EQ(metric.invalid_evaluations, 0);
+    for (int component = 0; component < 4; ++component) {
+        EXPECT_DOUBLE_EQ(ray.position(component), initial_position(component));
+    }
+
+    ray.step_size = stage_config.min_step;
+    ray.position(1) = 1.0e-6;
+    EXPECT_FALSE(Geodesic::IntegrateStepRk45(ray, &metric, stage_config));
+    EXPECT_EQ(ray.terminated, 3);
+    EXPECT_EQ(metric.invalid_evaluations, 0);
 }
 
 // Test: No NaN or Inf in results

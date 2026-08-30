@@ -10,8 +10,10 @@ import gr_metrics;
 
 // du^mu/dlambda = -Gamma^mu_nu_rho u^nu u^rho, Kerr-Schild Cartesian
 // Christoffels. (M, a, Q, Lambda) carry the represented family parameters.
-public Vec4Cart GeodesicAccelerationCart(GeodesicStateCart state, float M, float a,
-                                         float Q, float Lambda) {
+public bool TryGeodesicAccelerationCart(GeodesicStateCart state, float M, float a,
+                                        float Q, float Lambda, out Vec4Cart acceleration) {
+    acceleration = MakeVec4Cart(Real(0.0f), Real(0.0f), Real(0.0f), Real(0.0f));
+    if (!IsKerrSchildFamilyEventRepresented(state.x, M, a, Q, Lambda)) return false;
     Real Gamma[4][4][4];
     GetKerrSchildFamilyChristoffel(state.x, M, a, Q, Lambda, Gamma);
     Real u[4] = { state.u.t, state.u.x, state.u.y, state.u.z };
@@ -20,49 +22,60 @@ public Vec4Cart GeodesicAccelerationCart(GeodesicStateCart state, float M, float
         [unroll] for (int nu = 0; nu < 4; nu++)
             [unroll] for (int rho = 0; rho < 4; rho++)
                 acc[mu] -= Gamma[mu][nu][rho] * u[nu] * u[rho];
-    return MakeVec4Cart(acc[0], acc[1], acc[2], acc[3]);
+    acceleration = MakeVec4Cart(acc[0], acc[1], acc[2], acc[3]);
+    return true;
 }
 
 // Increment form leaves acceptance and precision-rung commit to trace.slang.
-public void IntegrateGeodesicRK4CartDelta(GeodesicStateCart state, Real dt,
+public bool IntegrateGeodesicRK4CartDelta(GeodesicStateCart state, Real dt,
                                           float M, float a, float Q, float Lambda,
                                           out Vec4Cart dx, out Vec4Cart du) {
+    dx = MakeVec4Cart(Real(0.0f), Real(0.0f), Real(0.0f), Real(0.0f));
+    du = MakeVec4Cart(Real(0.0f), Real(0.0f), Real(0.0f), Real(0.0f));
+    Vec4Cart acceleration;
+    if (!TryGeodesicAccelerationCart(state, M, a, Q, Lambda, acceleration)) return false;
     Vec4Cart dx1 = ScaleVec4Cart(state.u, dt);
-    Vec4Cart du1 = ScaleVec4Cart(GeodesicAccelerationCart(state, M, a, Q, Lambda), dt);
+    Vec4Cart du1 = ScaleVec4Cart(acceleration, dt);
 
     GeodesicStateCart s2;
     s2.x = AddVec4Cart(state.x, ScaleVec4Cart(dx1, 0.5f));
     s2.u = AddVec4Cart(state.u, ScaleVec4Cart(du1, 0.5f));
+    if (!TryGeodesicAccelerationCart(s2, M, a, Q, Lambda, acceleration)) return false;
     Vec4Cart dx2 = ScaleVec4Cart(s2.u, dt);
-    Vec4Cart du2 = ScaleVec4Cart(GeodesicAccelerationCart(s2, M, a, Q, Lambda), dt);
+    Vec4Cart du2 = ScaleVec4Cart(acceleration, dt);
 
     GeodesicStateCart s3;
     s3.x = AddVec4Cart(state.x, ScaleVec4Cart(dx2, 0.5f));
     s3.u = AddVec4Cart(state.u, ScaleVec4Cart(du2, 0.5f));
+    if (!TryGeodesicAccelerationCart(s3, M, a, Q, Lambda, acceleration)) return false;
     Vec4Cart dx3 = ScaleVec4Cart(s3.u, dt);
-    Vec4Cart du3 = ScaleVec4Cart(GeodesicAccelerationCart(s3, M, a, Q, Lambda), dt);
+    Vec4Cart du3 = ScaleVec4Cart(acceleration, dt);
 
     GeodesicStateCart s4;
     s4.x = AddVec4Cart(state.x, dx3);
     s4.u = AddVec4Cart(state.u, du3);
+    if (!TryGeodesicAccelerationCart(s4, M, a, Q, Lambda, acceleration)) return false;
     Vec4Cart dx4 = ScaleVec4Cart(s4.u, dt);
-    Vec4Cart du4 = ScaleVec4Cart(GeodesicAccelerationCart(s4, M, a, Q, Lambda), dt);
+    Vec4Cart du4 = ScaleVec4Cart(acceleration, dt);
 
     Real sixth = 1.0f / 6.0f;
     dx = ScaleVec4Cart(AddVec4Cart(AddVec4Cart(dx1, ScaleVec4Cart(dx2, 2.0f)),
                                    AddVec4Cart(ScaleVec4Cart(dx3, 2.0f), dx4)), sixth);
     du = ScaleVec4Cart(AddVec4Cart(AddVec4Cart(du1, ScaleVec4Cart(du2, 2.0f)),
                                    AddVec4Cart(ScaleVec4Cart(du3, 2.0f), du4)), sixth);
+    Vec4Cart candidate = AddVec4Cart(state.x, dx);
+    return IsKerrSchildFamilyEventRepresented(candidate, M, a, Q, Lambda);
 }
 
-public GeodesicStateCart IntegrateGeodesicRK4Cart(GeodesicStateCart state, Real dt,
-                                                  float M, float a, float Q, float Lambda) {
+public bool IntegrateGeodesicRK4Cart(GeodesicStateCart state, Real dt,
+                                     float M, float a, float Q, float Lambda,
+                                     out GeodesicStateCart result) {
+    result = state;
     Vec4Cart dx, du;
-    IntegrateGeodesicRK4CartDelta(state, dt, M, a, Q, Lambda, dx, du);
-    GeodesicStateCart result;
+    if (!IntegrateGeodesicRK4CartDelta(state, dt, M, a, Q, Lambda, dx, du)) return false;
     result.x = AddVec4Cart(state.x, dx);
     result.u = AddVec4Cart(state.u, du);
-    return result;
+    return true;
 }
 
 // Morris-Thorne uses the Cartesian flat-plus-rank-one embedding shared with
@@ -192,20 +205,23 @@ public struct AdaptiveGeodesicStep {
     public bool accepted;
 }
 
-GeodesicStateCart AdvanceGeodesicRK4(GeodesicStateCart state, Real step,
-                                     bool isWarp, bool isWormhole,
-                                     float M, float a, float Q, float Lambda,
-                                     float warpVs, float warpSigma, float warpR,
-                                     float throatB0, int wormShape) {
+bool AdvanceGeodesicRK4(GeodesicStateCart state, Real step,
+                        bool isWarp, bool isWormhole,
+                        float M, float a, float Q, float Lambda,
+                        float warpVs, float warpSigma, float warpR,
+                        float throatB0, int wormShape,
+                        out GeodesicStateCart result) {
     if (isWarp) {
-        return IntegrateGeodesicRK4WarpCart(state, step, warpVs, warpSigma, warpR,
-                                            0.0f, 0.0f, 0.0f);
+        result = IntegrateGeodesicRK4WarpCart(state, step, warpVs, warpSigma, warpR,
+                                              0.0f, 0.0f, 0.0f);
+        return true;
     }
     if (isWormhole) {
-        return IntegrateGeodesicRK4MorrisThorneCart(state, step, throatB0, 0.0f,
-                                                    wormShape);
+        result = IntegrateGeodesicRK4MorrisThorneCart(state, step, throatB0, 0.0f,
+                                                      wormShape);
+        return true;
     }
-    return IntegrateGeodesicRK4Cart(state, step, M, a, Q, Lambda);
+    return IntegrateGeodesicRK4Cart(state, step, M, a, Q, Lambda, result);
 }
 
 Real RelativeStepDifference(GeodesicStateCart start, GeodesicStateCart first,
@@ -273,15 +289,26 @@ public AdaptiveGeodesicStep AttemptAdaptiveGeodesicStep(
     float warpVs, float warpSigma, float warpR,
     float throatB0, int wormShape, Real integrationTolerance, Real nullTolerance) {
     AdaptiveGeodesicStep result;
-    GeodesicStateCart fullStep = AdvanceGeodesicRK4(
+    result.candidate = state;
+    GeodesicStateCart fullStep = state;
+    bool fullRepresented = AdvanceGeodesicRK4(
         state, step, isWarp, isWormhole, M, a, Q, Lambda,
-        warpVs, warpSigma, warpR, throatB0, wormShape);
-    GeodesicStateCart firstHalf = AdvanceGeodesicRK4(
+        warpVs, warpSigma, warpR, throatB0, wormShape, fullStep);
+    GeodesicStateCart firstHalf = state;
+    bool firstHalfRepresented = AdvanceGeodesicRK4(
         state, step * Real(0.5f), isWarp, isWormhole, M, a, Q, Lambda,
-        warpVs, warpSigma, warpR, throatB0, wormShape);
-    result.candidate = AdvanceGeodesicRK4(
+        warpVs, warpSigma, warpR, throatB0, wormShape, firstHalf);
+    bool candidateRepresented = firstHalfRepresented && AdvanceGeodesicRK4(
         firstHalf, step * Real(0.5f), isWarp, isWormhole, M, a, Q, Lambda,
-        warpVs, warpSigma, warpR, throatB0, wormShape);
+        warpVs, warpSigma, warpR, throatB0, wormShape, result.candidate);
+    if (!fullRepresented || !firstHalfRepresented || !candidateRepresented) {
+        result.candidate = state;
+        result.errorRatio = Real(1.0e30f);
+        result.nullResidual = Real(1.0e30f);
+        result.stepFactor = Real(0.5f);
+        result.accepted = false;
+        return result;
+    }
     result.errorRatio = RelativeStepDifference(state, fullStep, result.candidate) /
                         integrationTolerance;
 

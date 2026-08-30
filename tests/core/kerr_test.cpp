@@ -81,6 +81,55 @@ TEST(KerrTests, ComputedRadiusSatisfiesTheDefiningOblateQuartic) {
     }
 }
 
+TEST(KerrTests, CartesianMetricIsScaleCovariantBelowTheFormerSpinFloor) {
+    constexpr double scale = 1.0e-12;
+    KerrSchildFamily unit(KerrSchildParams::Kerr(1.0, 0.5));
+    KerrSchildFamily tiny(KerrSchildParams::Kerr(scale, 0.5 * scale));
+    const Vec4 unit_position = Position(2.0, 1.0, 0.5);
+    const Vec4 tiny_position = Position(2.0 * scale, scale, 0.5 * scale);
+
+    Metric4d unit_metric, tiny_metric;
+    Tensor<Dual<double>, 4, 4, 4> unit_derivatives, tiny_derivatives;
+    unit.Evaluate(unit_position, unit_metric, unit_derivatives);
+    tiny.Evaluate(tiny_position, tiny_metric, tiny_derivatives);
+
+    EXPECT_DOUBLE_EQ(tiny.GetParameters().at("spin").value, 0.5);
+    EXPECT_DOUBLE_EQ(tiny.GetParameters().at("charge").value, 0.0);
+    for (int mu = 0; mu < 4; ++mu) {
+        for (int nu = 0; nu < 4; ++nu) {
+            EXPECT_NEAR(tiny_metric(mu, nu).real, unit_metric(mu, nu).real, 3.0e-15)
+                << "metric component (" << mu << "," << nu << ")";
+            for (int axis = 0; axis < 4; ++axis) {
+                EXPECT_NEAR(scale * tiny_derivatives(axis, mu, nu).real,
+                            unit_derivatives(axis, mu, nu).real, 2.0e-13)
+                    << "derivative (" << axis << "," << mu << "," << nu << ")";
+            }
+        }
+    }
+}
+
+TEST(KerrTests, SingularKerrDiskDeclinesInsteadOfReceivingAnEpsilonRadius) {
+    KerrSchildFamily metric(KerrSchildParams::Kerr(kMass, kSpin));
+    const Vec4 disk_interior = Position(0.5 * kSpin, 0.0, 0.0);
+    const Vec4 ring = Position(kSpin, 0.0, 0.0);
+    const Vec4 off_disk = Position(0.5 * kSpin, 0.0, 1.0e-12);
+
+    EXPECT_DOUBLE_EQ(metric.ComputeKerrRadius(disk_interior(1), disk_interior(2), disk_interior(3)),
+                     0.0);
+    EXPECT_DOUBLE_EQ(metric.ComputeKerrRadius(ring(1), ring(2), ring(3)), 0.0);
+    EXPECT_FALSE(metric.IsValidEvent(disk_interior));
+    EXPECT_FALSE(metric.IsValidEvent(ring));
+    EXPECT_TRUE(metric.IsValidEvent(off_disk));
+
+    EXPECT_DEATH((void)Evaluate(metric, disk_interior), "precondition.*enforced, terminating");
+    EXPECT_DEATH(
+        {
+            Metric4d inverse;
+            (void)metric.InverseMetric(ring, inverse);
+        },
+        "precondition.*enforced, terminating");
+}
+
 TEST(KerrTests, HorizonsAndCaptureFollowTheIndependentKerrPolynomial) {
     KerrSchildFamily metric(KerrSchildParams::Kerr(kMass, kSpin));
     ASSERT_TRUE(metric.HasHorizon());

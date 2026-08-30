@@ -143,6 +143,34 @@ TEST(KottlerHorizonTests, PureDeSitterHasOnlyACosmologicalHorizon) {
     EXPECT_FALSE(metric.InsideCaptureSurface(Position(0.001, 0.0, 0.0), 0.0));
 }
 
+TEST(KottlerHorizonTests, RegularDeSitterOriginUsesTheExactAnalyticLimit) {
+    KerrSchildFamily de_sitter(KerrSchildParams::DeSitter(0.01));
+    KerrSchildFamily minkowski(KerrSchildParams::Minkowski());
+    KerrSchildFamily schwarzschild(KerrSchildParams::Schwarzschild(kMass));
+    const Vec4 origin = Position(0.0, 0.0, 0.0);
+
+    EXPECT_TRUE(de_sitter.IsValidEvent(origin));
+    EXPECT_TRUE(minkowski.IsValidEvent(origin));
+    EXPECT_FALSE(schwarzschild.IsValidEvent(origin));
+
+    Metric4d value, inverse;
+    Tensor<Dual<double>, 4, 4, 4> derivatives;
+    de_sitter.Evaluate(origin, value, derivatives);
+    ASSERT_TRUE(de_sitter.InverseMetric(origin, inverse));
+    for (int mu = 0; mu < 4; ++mu) {
+        for (int nu = 0; nu < 4; ++nu) {
+            const double eta = mu == nu ? (mu == 0 ? -1.0 : 1.0) : 0.0;
+            EXPECT_DOUBLE_EQ(value(mu, nu).real, eta);
+            EXPECT_DOUBLE_EQ(inverse(mu, nu).real, eta);
+            for (int axis = 0; axis < 4; ++axis) {
+                EXPECT_DOUBLE_EQ(derivatives(axis, mu, nu).real, 0.0);
+            }
+        }
+    }
+
+    EXPECT_DEATH((void)Evaluate(schwarzschild, origin), "precondition.*enforced, terminating");
+}
+
 TEST(SchwarzschildTests, FarFieldPerturbationHasExactInverseRadiusScaling) {
     KerrSchildFamily metric(KerrSchildParams::Schwarzschild(kMass));
     const double near_difference = MaxMinkowskiDifference(Evaluate(metric, Position(100.0, 0, 0)));

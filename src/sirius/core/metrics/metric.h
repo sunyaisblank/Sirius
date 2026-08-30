@@ -48,6 +48,18 @@ class IMetric {
     // Human-readable metric name.
     virtual const char* GetName() const = 0;
 
+    // Whether a finite chart event belongs to the concrete metric's numerical
+    // domain.  All-chart families inherit the finite-coordinate predicate;
+    // families with singular sheets or chart boundaries tighten it.  Adaptive
+    // integrators consult this before evaluating any Runge-Kutta stage so an
+    // unrepresented event is rejected, never replaced by a nearby metric.
+    virtual bool IsValidEvent(const Tensor<double, 4>& pos) const {
+        for (int component = 0; component < 4; ++component) {
+            if (!std::isfinite(pos(component))) return false;
+        }
+        return true;
+    }
+
     // Analytic inverse metric where the family has a closed form. Writes g_inv
     // and returns true only then; false directs the caller to invert the
     // evaluated metric via TensorOps::Inverse.
