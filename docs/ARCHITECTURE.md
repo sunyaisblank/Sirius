@@ -147,7 +147,15 @@ Chandrasekhar-Sobolev semi-infinite pure electron-scattering atmosphere; it
 does not claim absorption, finite optical depth, returning radiation, or
 magnetic/Faraday effects.
 The live Kerr-Schild implementation conserves the Walker-Penrose constant and
-agrees across charts with the independent Boyer-Lindquist oracle. Stokes
+agrees across charts with the independent Boyer-Lindquist oracle. That oracle
+owns one finite off-axis chart domain end to end: null and screen initial-data
+construction return absence for impossible or ambiguous requests, every
+polarised RK stage is checked without angular clamping, and integration retains
+the last represented state while distinguishing capture, escape, chart exit,
+constraint failure, and exhaustion. The canonical oracle likewise validates
+its chart before admitting a radial capture event, is history-free under an
+explicit renormalization cadence, and reports midpoint nonconvergence or an
+impossible null projection instead of accepting an unchanged non-null state. Stokes
 crossings are accumulated before the bounded film-inspired display finish. Vulkan,
 volumetric transfer, and temporal disk blur do not cross this capability
 boundary.

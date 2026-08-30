@@ -234,7 +234,8 @@ TEST(WalkerPenroseLivePath, AgreesWithOracleAcrossCharts) {
         sirius::oracle::PolarisedGeodesicIntegratorD integrator(&oracle);
         const sirius::oracle::PolarisedGeodesicIntegratorD::Result oracle_result =
             integrator.Integrate(oracle_state);
-        ASSERT_TRUE(oracle_result.escaped);
+        ASSERT_EQ(oracle_result.outcome,
+                  sirius::oracle::PolarisedGeodesicIntegratorD::Result::Outcome::kEscaped);
         const std::complex<double> kappa_oracle_final =
             sirius::oracle::WalkerPenroseConstant(oracle_result.state, oracle);
         EXPECT_LT(std::abs(kappa_oracle_final - kappa_oracle0) / std::abs(kappa_oracle0),

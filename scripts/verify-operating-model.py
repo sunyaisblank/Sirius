@@ -86,6 +86,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
     "P1": {
         "ctest:OperationalP1.NearExtremalBurnIn",
         "gtest:AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter",
+        "gtest:AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct",
         "gtest:KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter",
         "gtest:KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability",
         "gtest:KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison",
@@ -166,6 +167,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:GeodesicTracerTest.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation",
         "gtest:RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes",
         "gtest:RenderSessionProbe.PolarisedAndTwoSheetRequestsDeclineAtTheTypedBoundary",
+        "gtest:WalkerPenrose.BoyerLindquistInitialDataAndAxisExitDeclineWithoutSubstitution",
         "gtest:WalkerPenrose.SchwarzschildEquatorialPerpendicularTransportsRigidly",
         "gtest:WalkerPenroseLivePath.AgreesWithOracleAcrossCharts",
         "gtest:WalkerPenroseLivePath.ConservesConstantAndOrthonormality",
@@ -213,8 +215,8 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "bc3cd8f2724c8611eb9cb94a5b30c7fdd37fb2cad3582dd4f7d065bfef164c93",
-    "required_dimensions": "026f7471f0f91348a6f16f7763c867e05750e5e4e385b5d342f40dfcac89b8cb",
+    "acceptance_criteria": "7a377fab24e3f98d3be4067df81f9eff34d9551f8bdc2bfacff824fdefc2df19",
+    "required_dimensions": "1b78449912216a61dccfcb0a02dea822027e5e360408f7484e30f60f19d91c6d",
     "capability_contracts": "c89066d2769561c45ccf5eaed3c9ebcdf161a3e3c83c1954f51561054c5e52bc",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}

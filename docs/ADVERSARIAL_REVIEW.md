@@ -130,6 +130,7 @@ Each review pass asks:
 | Thin-disk coordinate helpers mapped an invalid radius or polar-axis singularity to plausible equatorial coordinates | invalid geometry could become `theta=pi/2` or `z=0` and impersonate a disk intersection | Fixed: both transforms now expose an optional owned domain, reject non-finite/axis inputs, and pass bidirectional round-trip witnesses across positive radii and signed heights |
 | The Boyer-Lindquist Kerr oracle clamped spin after copying horizons derived from the unclamped request, and accepted charge although its equations contain no charge terms | exact-extremal and charged requests could combine one metric tensor with another spacetime's identity or horizons; the production ISCO authority separately clamped exact extremality to `0.9999` | Fixed: duplicated derived horizon fields are removed; the oracle accepts only finite uncharged Kerr with `M>0` and `|a|<=M` plus the exact `M=a=0` Minkowski limit, computes its own exact horizons without rewriting, and keeps black-hole-only radii unavailable on the flat limit; the production Kerr ISCO evaluates both exact extremal orientations while charged, massless, cosmological, and super-extremal ISCO requests decline |
 | Direct Boyer-Lindquist tensor and Hamiltonian calls could enter the polar singularity and replace `sin(theta)` plus the metric determinant with finite floors | the oracle could return a plausible tensor for an event that its own `IsValid` rejected | Fixed: one finite-event predicate owns the numerical chart for metric, analytic derivatives, curvature, Hamiltonian phase space, and integration validity; polar-margin and non-finite events contract-fail, with no pole-clamped substitute |
+| Polarised and canonical Boyer-Lindquist integrators still clamped axis-crossing states, classified every invalid symplectic substep as a horizon hit, silently retained a state when null projection had no real solution, and carried a mutable renormalization counter across independent calls | oracle evidence could mutate an unrepresented trajectory, report a coordinate failure as physical capture, claim an enforced null constraint that was not enforced, or make an identical step depend on call history | Fixed: null/polarisation initial-data constructors are fallible total functions, every RK stage and final state shares the metric's chart predicate, the last valid state is retained, mutually exclusive outcomes distinguish escape/capture/chart exit/constraint failure/exhaustion, implicit nonconvergence and failed null projection are explicit constraint failures, and renormalization cadence is an explicit step argument; the stationary-limit linear null equation is covered directly |
 | The oracle interface advertised unused TTESI and frequency-transfer hooks; the latter described a ZAMO as static and returned an invented redshift of one on a zero emitter contraction | dead APIs could be mistaken for evidence of a live regularisation or transfer capability | Fixed: both zero-consumer hooks are removed; live frequency transfer remains owned and independently gated by the actual CPU/Slang Killing-field authority |
 | The Slang Kerr ISCO mapped every represented `0 < |a/M| < 0.001` request to exactly `6M` | the device Page-Thorne path silently became Schwarzschild over an arbitrary admitted interval while the CPU evaluated Kerr | Fixed: zero spin is the only Schwarzschild branch, every other admitted spin evaluates the Bardeen formula, and a live SPIR-V parity witness at `a/M=0.0009` rejects interval aliasing |
 | Obsolete Novikov-Thorne unit tests mirrored an unused Slang approximation | five green tests exercised only a test-local copy of dead kernel functions and never judged the production Page-Thorne path | Fixed: the unused approximation and its mirror are removed; the independent Page-Thorne comparison lives in the non-render oracle suite and is direct P4 evidence |
@@ -593,6 +594,18 @@ corresponding profile. They are not projected from registration counts.
   governance accept 753 governed source GoogleTests and 762 development CTests,
   with 24 operating dimensions and 29 capability contracts. No rendering test
   was executed.
+- 2026-08-31 Boyer-Lindquist integration-domain correction: polarised null and
+  screen initial-data construction now returns absence for invalid, impossible,
+  or ambiguous requests, including an exact linear solve on the Kerr
+  stationary-limit surface. Every polarised RK stage uses the metric's finite
+  off-axis chart predicate and preserves the last valid state on exit. The
+  canonical integrator no longer clamps `theta`, no longer calls every chart
+  exit a horizon hit, and reports an impossible null projection separately
+  instead of accepting the unchanged state. GCC 14 and Clang 21 each pass both
+  new non-render witnesses and all 129 oracle tests. Source, label, semantic
+  policy, repository, and operating-model governance accept 765 governed source
+  GoogleTests, 24 operating dimensions, and 29 capability contracts. No
+  rendering test was executed.
 - GCC 14 strict required-Vulkan profile: the pre-alignment snapshot passed the complete
   907/907 estate on the Radeon 780M through Dozen in 210.36 seconds. A separate
   required-only run passed 697/697 on the Radeon in 281.34 seconds and the same

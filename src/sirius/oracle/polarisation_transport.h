@@ -55,7 +55,9 @@
 #include <algorithm>
 #include <cmath>
 #include <complex>
+#include <limits>
 #include <numbers>
+#include <optional>
 
 namespace sirius::oracle {
 
@@ -78,11 +80,6 @@ inline constexpr double kWalkerPenroseConservationTol = 1e-10;
 // further where the geodesic bends most (see AdaptiveStepSize).
 inline constexpr double kPolarisedTransportStep = 0.01;
 
-// Theta clamp away from the polar axis singularity of the Boyer-Lindquist
-// chart; 1e-6 == core/constants.h coordinates::kPoleEpsilon, inlined to keep
-// the oracle self-contained (STYLE.md self-containment over shared const).
-inline constexpr double kPolarisedPoleClamp = 1e-6;
-
 //==============================================================================
 // PolarisedStateD: geodesic tangent plus a transported polarisation vector
 //==============================================================================
@@ -101,6 +98,16 @@ struct PolarisedStateD {
     PolarisedStateD() = default;
     PolarisedStateD(const Vec4d& x_, const Vec4d& k_, const Vec4d& f_) : x(x_), k(k_), f(f_) {}
 };
+
+[[nodiscard]] inline bool IsFinitePolarisedState(const PolarisedStateD& state) noexcept {
+    return IsFiniteOracleVector(state.x) && IsFiniteOracleVector(state.k) &&
+           IsFiniteOracleVector(state.f) && std::isfinite(state.lambda);
+}
+
+[[nodiscard]] inline bool IsRepresentedPolarisedState(const KerrMetricD& metric,
+                                                      const PolarisedStateD& state) noexcept {
+    return IsFinitePolarisedState(state) && metric.IsValid(state.x);
+}
 
 //==============================================================================
 // Metric-contraction helpers (double, index order t, r, theta, phi)
@@ -162,6 +169,14 @@ inline void KerrChristoffel(const KerrMetricD& metric, const Vec4d& x, double Ga
 // Reference: Walker & Penrose (1970); Chandrasekhar (1983), section 60.
 [[nodiscard]] inline std::complex<double> WalkerPenroseConstant(const PolarisedStateD& s,
                                                                 double a) {
+    const bool represented = std::isfinite(a) && IsFinitePolarisedState(s) &&
+                             s.x.theta > kBoyerLindquistPoleMargin &&
+                             s.x.theta < std::numbers::pi - kBoyerLindquistPoleMargin;
+    SIRIUS_PRE(represented);
+    if (!represented) {
+        const double nan = std::numeric_limits<double>::quiet_NaN();
+        return std::complex<double>(nan, nan);
+    }
     const double r = s.x.r;
     const double theta = s.x.theta;
     const double sinth = std::sin(theta);
@@ -181,6 +196,12 @@ inline void KerrChristoffel(const KerrMetricD& metric, const Vec4d& x, double Ga
 // Overload pulling the spin from the metric.
 [[nodiscard]] inline std::complex<double> WalkerPenroseConstant(const PolarisedStateD& s,
                                                                 const KerrMetricD& metric) {
+    const bool represented = IsRepresentedPolarisedState(metric, s);
+    SIRIUS_PRE(represented);
+    if (!represented) {
+        const double nan = std::numeric_limits<double>::quiet_NaN();
+        return std::complex<double>(nan, nan);
+    }
     return WalkerPenroseConstant(s, metric.spin());
 }
 
@@ -191,8 +212,12 @@ inline void KerrChristoffel(const KerrMetricD& metric, const Vec4d& x, double Ga
 // Solve g_uv k^u k^v = 0 for the future-directed k^t given spatial contravariant
 // components (k^r, k^theta, k^phi). In Boyer-Lindquist the only t off-diagonal is
 // g_t phi, so the quadratic is g_tt (k^t)^2 + 2 g_t phi k^phi k^t + (spatial) = 0.
-[[nodiscard]] inline Vec4d MakeNullTangent(const KerrMetricD& metric, const Vec4d& x, double kr,
-                                           double kth, double kph) {
+[[nodiscard]] inline std::optional<Vec4d> TryMakeNullTangent(const KerrMetricD& metric,
+                                                             const Vec4d& x, double kr, double kth,
+                                                             double kph) {
+    if (!metric.IsValid(x) || !std::isfinite(kr) || !std::isfinite(kth) || !std::isfinite(kph)) {
+        return std::nullopt;
+    }
     double g[4][4], g_inv[4][4];
     metric.Evaluate(x, g, g_inv);
 
@@ -200,18 +225,56 @@ inline void KerrChristoffel(const KerrMetricD& metric, const Vec4d& x, double Ga
     const double b_coef = 2.0 * g[0][3] * kph;  // g_tr = g_ttheta = 0 in Kerr BL.
     const double c_coef = g[1][1] * kr * kr + g[2][2] * kth * kth + g[3][3] * kph * kph;
 
-    const double disc = b_coef * b_coef - 4.0 * a_coef * c_coef;
-    SIRIUS_PRE(disc >= 0.0);  // A physical null direction exists.
-    const double sqrt_disc = std::sqrt(std::max(disc, 0.0));
+    if (!std::isfinite(a_coef) || !std::isfinite(b_coef) || !std::isfinite(c_coef)) {
+        return std::nullopt;
+    }
 
-    // g_tt < 0 outside the ergosphere: the future-directed (k^t > 0) root is
-    // (-b - sqrt_disc)/(2 a_coef); pick whichever root is positive to stay
-    // future-directed inside the ergosphere as well.
-    const double root_plus = (-b_coef + sqrt_disc) / (2.0 * a_coef);
-    const double root_minus = (-b_coef - sqrt_disc) / (2.0 * a_coef);
-    const double kt = (root_plus > 0.0) ? root_plus : root_minus;
+    double kt = std::numeric_limits<double>::quiet_NaN();
+    if (a_coef == 0.0) {
+        // On the stationary-limit surface the temporal quadratic is genuinely
+        // linear. Dividing by 2*g_tt here used to manufacture infinities.
+        if (b_coef == 0.0) return std::nullopt;
+        const double linear_root = -c_coef / b_coef;
+        if (std::isfinite(linear_root) && linear_root > 0.0) kt = linear_root;
+    } else {
+        const double discriminant = b_coef * b_coef - 4.0 * a_coef * c_coef;
+        if (!std::isfinite(discriminant) || discriminant < 0.0) return std::nullopt;
+        const double root_term = std::sqrt(discriminant);
+        const double q = -0.5 * (b_coef + std::copysign(root_term, b_coef));
+        double first = std::numeric_limits<double>::quiet_NaN();
+        double second = std::numeric_limits<double>::quiet_NaN();
+        if (q != 0.0) {
+            first = q / a_coef;
+            second = c_coef / q;
+        } else {
+            first = -b_coef / (2.0 * a_coef);
+            second = first;
+        }
+        const bool first_future = std::isfinite(first) && first > 0.0;
+        const bool second_future = std::isfinite(second) && second > 0.0;
+        // Fixed spatial coordinate components do not select a unique future
+        // null direction when both roots are future-directed in the ergoregion.
+        // That ambiguous request declines instead of choosing a hidden branch.
+        if (first_future != second_future) kt = first_future ? first : second;
+        if (first_future && second_future && first == second) kt = first;
+    }
+    if (!std::isfinite(kt)) return std::nullopt;
 
-    return Vec4d(kt, kr, kth, kph);
+    const Vec4d tangent(kt, kr, kth, kph);
+    double null_residual = 0.0;
+    double scale = 1.0;
+    for (int mu = 0; mu < 4; ++mu) {
+        for (int nu = 0; nu < 4; ++nu) {
+            const double term = g[mu][nu] * tangent[mu] * tangent[nu];
+            null_residual += term;
+            scale = std::max(scale, std::abs(term));
+        }
+    }
+    if (!std::isfinite(null_residual) ||
+        std::abs(null_residual) > 128.0 * std::numeric_limits<double>::epsilon() * scale) {
+        return std::nullopt;
+    }
+    return tangent;
 }
 
 // Project a trial vector into the Eulerian observer's physical screen.  The
@@ -220,36 +283,86 @@ inline void KerrChristoffel(const KerrMetricD& metric, const Vec4d& x, double Ga
 // future slice normal u^mu=-alpha g^{mu t}, alpha=(-g^{tt})^-1/2, remains
 // timelike outside the horizon.  Removing u and the observer-spatial ray
 // direction produces f.u=f.k=0 and f.f=1 for either orientation of k.
-[[nodiscard]] inline Vec4d MakeOrthonormalPolarisation(const KerrMetricD& metric, const Vec4d& x,
-                                                       const Vec4d& k, const Vec4d& trial) {
+[[nodiscard]] inline std::optional<Vec4d> TryMakeOrthonormalPolarisation(const KerrMetricD& metric,
+                                                                         const Vec4d& x,
+                                                                         const Vec4d& k,
+                                                                         const Vec4d& trial) {
+    if (!metric.IsValid(x) || !IsFiniteOracleVector(k) || !IsFiniteOracleVector(trial)) {
+        return std::nullopt;
+    }
     double g[4][4], g_inv[4][4];
     metric.Evaluate(x, g, g_inv);
 
-    SIRIUS_PRE(std::isfinite(g_inv[0][0]) && g_inv[0][0] < 0.0);
+    double null_residual = 0.0;
+    double tangent_scale = 1.0;
+    for (int mu = 0; mu < 4; ++mu) {
+        for (int nu = 0; nu < 4; ++nu) {
+            const double term = g[mu][nu] * k[mu] * k[nu];
+            null_residual += term;
+            tangent_scale = std::max(tangent_scale, std::abs(term));
+        }
+    }
+    if (!std::isfinite(null_residual) ||
+        std::abs(null_residual) > 128.0 * std::numeric_limits<double>::epsilon() * tangent_scale) {
+        return std::nullopt;
+    }
+
+    if (!std::isfinite(g_inv[0][0]) || g_inv[0][0] >= 0.0) return std::nullopt;
     const double lapse = 1.0 / std::sqrt(-g_inv[0][0]);
     Vec4d observer;
     for (int component = 0; component < 4; ++component) {
         observer[component] = -lapse * g_inv[component][0];
     }
-    SIRIUS_PRE(std::abs(InnerProductD(g, observer, observer) + 1.0) < 1.0e-10);
+    if (!IsFiniteOracleVector(observer) ||
+        std::abs(InnerProductD(g, observer, observer) + 1.0) >= 1.0e-10) {
+        return std::nullopt;
+    }
 
     Vec4d propagation = k + observer * InnerProductD(g, k, observer);
     const double propagation_norm = InnerProductD(g, propagation, propagation);
-    SIRIUS_PRE(propagation_norm > 0.0);
+    if (!std::isfinite(propagation_norm) || propagation_norm <= 0.0) return std::nullopt;
     propagation = propagation / std::sqrt(propagation_norm);
 
     Vec4d f = trial + observer * InnerProductD(g, trial, observer);
     f -= propagation * InnerProductD(g, f, propagation);
     const double norm2 = InnerProductD(g, f, f);
-    SIRIUS_PRE(norm2 > 0.0);  // Spacelike polarisation.
-    return f / std::sqrt(norm2);
+    double trial_scale = 1.0;
+    for (int component = 0; component < 4; ++component) {
+        trial_scale = std::max(trial_scale, trial[component] * trial[component]);
+    }
+    if (!std::isfinite(norm2) ||
+        norm2 <= 128.0 * std::numeric_limits<double>::epsilon() * trial_scale) {
+        return std::nullopt;
+    }
+    f = f / std::sqrt(norm2);
+    if (!IsFiniteOracleVector(f)) return std::nullopt;
+    return f;
 }
 
 //==============================================================================
-// ParallelTransportStep: one RK4 step of (x, k, f)
+// TryParallelTransportStep: one fail-closed RK4 step of (x, k, f)
 //==============================================================================
 
 namespace detail {
+
+enum class PolarisedStepOutcome { kAccepted, kChartDomainExit, kConstraintFailure };
+
+struct PolarisedStepResult {
+    PolarisedStateD state;
+    PolarisedStepOutcome outcome;
+};
+
+[[nodiscard]] inline PolarisedStepOutcome ClassifyPolarisedState(
+    const KerrMetricD& metric, const PolarisedStateD& state) noexcept {
+    if (!IsFiniteOracleVector(state.x) || !metric.IsValid(state.x)) {
+        return PolarisedStepOutcome::kChartDomainExit;
+    }
+    if (!IsFiniteOracleVector(state.k) || !IsFiniteOracleVector(state.f) ||
+        !std::isfinite(state.lambda)) {
+        return PolarisedStepOutcome::kConstraintFailure;
+    }
+    return PolarisedStepOutcome::kAccepted;
+}
 
 struct PolarisedDerivD {
     Vec4d dx, dk, df;
@@ -258,14 +371,18 @@ struct PolarisedDerivD {
 // Right-hand side of the coupled transport system at state s. One connection
 // evaluation drives both the geodesic (dk) and the polarisation (df), so k and
 // f see an identical connection and their inner products transport together.
-[[nodiscard]] inline PolarisedDerivD PolarisedRhs(const KerrMetricD& metric,
-                                                  const PolarisedStateD& s) {
+[[nodiscard]] inline std::optional<PolarisedDerivD> TryPolarisedRhs(const KerrMetricD& metric,
+                                                                    const PolarisedStateD& s) {
+    if (!IsRepresentedPolarisedState(metric, s)) return std::nullopt;
     double Gamma[4][4][4];
     KerrChristoffel(metric, s.x, Gamma);
     PolarisedDerivD d;
     d.dx = s.k;
     d.dk = NegConnectionContraction(Gamma, s.k, s.k);
     d.df = NegConnectionContraction(Gamma, s.k, s.f);
+    if (!IsFiniteOracleVector(d.dx) || !IsFiniteOracleVector(d.dk) || !IsFiniteOracleVector(d.df)) {
+        return std::nullopt;
+    }
     return d;
 }
 
@@ -288,27 +405,67 @@ struct PolarisedDerivD {
 // keeps k and f consistent, which is what conserves the Walker-Penrose
 // constant. Reference: geodesic and Jacobi transport of Kerr null rays, James
 // et al. (2015), Appendix; matches the RK4 style of beam_integrator.h.
-[[nodiscard]] inline PolarisedStateD ParallelTransportStep(const KerrMetricD& metric,
-                                                           const PolarisedStateD& s, double h) {
-    SIRIUS_PRE(std::isfinite(h) && h != 0.0);
-    const detail::PolarisedDerivD k1 = detail::PolarisedRhs(metric, s);
-    const detail::PolarisedDerivD k2 =
-        detail::PolarisedRhs(metric, detail::Advance(s, k1, 0.5 * h));
-    const detail::PolarisedDerivD k3 =
-        detail::PolarisedRhs(metric, detail::Advance(s, k2, 0.5 * h));
-    const detail::PolarisedDerivD k4 = detail::PolarisedRhs(metric, detail::Advance(s, k3, h));
+[[nodiscard]] inline detail::PolarisedStepResult EvaluateParallelTransportStep(
+    const KerrMetricD& metric, const PolarisedStateD& s, double h) {
+    const auto failure = [&s](detail::PolarisedStepOutcome outcome) {
+        return detail::PolarisedStepResult{s, outcome};
+    };
+    const detail::PolarisedStepOutcome initial_classification =
+        detail::ClassifyPolarisedState(metric, s);
+    if (initial_classification != detail::PolarisedStepOutcome::kAccepted) {
+        return failure(initial_classification);
+    }
+    if (!std::isfinite(h) || h == 0.0) {
+        return failure(detail::PolarisedStepOutcome::kConstraintFailure);
+    }
+    const std::optional<detail::PolarisedDerivD> k1 = detail::TryPolarisedRhs(metric, s);
+    if (!k1) return failure(detail::PolarisedStepOutcome::kConstraintFailure);
+
+    const PolarisedStateD stage2 = detail::Advance(s, *k1, 0.5 * h);
+    const detail::PolarisedStepOutcome stage2_classification =
+        detail::ClassifyPolarisedState(metric, stage2);
+    if (stage2_classification != detail::PolarisedStepOutcome::kAccepted) {
+        return failure(stage2_classification);
+    }
+    const std::optional<detail::PolarisedDerivD> k2 = detail::TryPolarisedRhs(metric, stage2);
+    if (!k2) return failure(detail::PolarisedStepOutcome::kConstraintFailure);
+
+    const PolarisedStateD stage3 = detail::Advance(s, *k2, 0.5 * h);
+    const detail::PolarisedStepOutcome stage3_classification =
+        detail::ClassifyPolarisedState(metric, stage3);
+    if (stage3_classification != detail::PolarisedStepOutcome::kAccepted) {
+        return failure(stage3_classification);
+    }
+    const std::optional<detail::PolarisedDerivD> k3 = detail::TryPolarisedRhs(metric, stage3);
+    if (!k3) return failure(detail::PolarisedStepOutcome::kConstraintFailure);
+
+    const PolarisedStateD stage4 = detail::Advance(s, *k3, h);
+    const detail::PolarisedStepOutcome stage4_classification =
+        detail::ClassifyPolarisedState(metric, stage4);
+    if (stage4_classification != detail::PolarisedStepOutcome::kAccepted) {
+        return failure(stage4_classification);
+    }
+    const std::optional<detail::PolarisedDerivD> k4 = detail::TryPolarisedRhs(metric, stage4);
+    if (!k4) return failure(detail::PolarisedStepOutcome::kConstraintFailure);
 
     PolarisedStateD out;
-    out.x = s.x + (k1.dx + k2.dx * 2.0 + k3.dx * 2.0 + k4.dx) * (h / 6.0);
-    out.k = s.k + (k1.dk + k2.dk * 2.0 + k3.dk * 2.0 + k4.dk) * (h / 6.0);
-    out.f = s.f + (k1.df + k2.df * 2.0 + k3.df * 2.0 + k4.df) * (h / 6.0);
+    out.x = s.x + (k1->dx + k2->dx * 2.0 + k3->dx * 2.0 + k4->dx) * (h / 6.0);
+    out.k = s.k + (k1->dk + k2->dk * 2.0 + k3->dk * 2.0 + k4->dk) * (h / 6.0);
+    out.f = s.f + (k1->df + k2->df * 2.0 + k3->df * 2.0 + k4->df) * (h / 6.0);
     out.lambda = s.lambda + h;
+    const detail::PolarisedStepOutcome final_classification =
+        detail::ClassifyPolarisedState(metric, out);
+    if (final_classification != detail::PolarisedStepOutcome::kAccepted) {
+        return failure(final_classification);
+    }
+    return detail::PolarisedStepResult{out, detail::PolarisedStepOutcome::kAccepted};
+}
 
-    // Keep the next Christoffel evaluation away from the axis singularity; rays
-    // integrated here stay well clear of it, so the clamp is inert in practice.
-    out.x.theta =
-        std::clamp(out.x.theta, kPolarisedPoleClamp, std::numbers::pi - kPolarisedPoleClamp);
-    return out;
+[[nodiscard]] inline std::optional<PolarisedStateD> TryParallelTransportStep(
+    const KerrMetricD& metric, const PolarisedStateD& s, double h) {
+    const detail::PolarisedStepResult result = EvaluateParallelTransportStep(metric, s, h);
+    if (result.outcome != detail::PolarisedStepOutcome::kAccepted) return std::nullopt;
+    return result.state;
 }
 
 //==============================================================================
@@ -336,10 +493,17 @@ class PolarisedGeodesicIntegratorD {
     }
 
     struct Result {
+        enum class Outcome {
+            kStepLimit,
+            kEscaped,
+            kCaptured,
+            kChartDomainExit,
+            kConstraintFailure
+        };
+
         PolarisedStateD state;
         int steps = 0;
-        bool escaped = false;
-        bool captured = false;
+        Outcome outcome = Outcome::kStepLimit;
     };
 
     explicit PolarisedGeodesicIntegratorD(const KerrMetricD* metric)
@@ -357,6 +521,7 @@ class PolarisedGeodesicIntegratorD {
     [[nodiscard]] double AdaptiveStepSize(double r) const {
         SIRIUS_PRE(std::isfinite(r));
         const double r_h = metric_->HorizonRadius();
+        if (r_h <= 0.0) return config_.base_step;
         const double ratio = (r - r_h) / r_h;
         const double h = config_.base_step * std::min(1.0, ratio * ratio);
         return std::clamp(h, config_.min_step, config_.max_step);
@@ -368,15 +533,32 @@ class PolarisedGeodesicIntegratorD {
         const double r_h = metric_->HorizonRadius();
 
         for (int i = 0; i < config_.max_steps; ++i) {
+            if (!IsFiniteOracleVector(s.x) || !metric_->IsValid(s.x)) {
+                result.outcome = Result::Outcome::kChartDomainExit;
+                break;
+            }
+            if (!IsFiniteOracleVector(s.k) || !IsFiniteOracleVector(s.f) ||
+                !std::isfinite(s.lambda)) {
+                result.outcome = Result::Outcome::kConstraintFailure;
+                break;
+            }
             if (s.x.r <= r_h * config_.horizon_buffer) {
-                result.captured = true;
+                result.outcome = Result::Outcome::kCaptured;
                 break;
             }
             if (s.x.r > config_.escape_radius) {
-                result.escaped = true;
+                result.outcome = Result::Outcome::kEscaped;
                 break;
             }
-            s = ParallelTransportStep(*metric_, s, AdaptiveStepSize(s.x.r));
+            const detail::PolarisedStepResult next =
+                EvaluateParallelTransportStep(*metric_, s, AdaptiveStepSize(s.x.r));
+            if (next.outcome != detail::PolarisedStepOutcome::kAccepted) {
+                result.outcome = next.outcome == detail::PolarisedStepOutcome::kChartDomainExit
+                                     ? Result::Outcome::kChartDomainExit
+                                     : Result::Outcome::kConstraintFailure;
+                break;
+            }
+            s = next.state;
             ++result.steps;
         }
         result.state = s;

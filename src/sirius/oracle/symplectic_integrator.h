@@ -6,10 +6,6 @@
 // stabilisers outside the strict fixed-step symplectic claim. Off the render
 // path.
 // Reference: Yoshida (1990); implicit midpoint as a symplectic Runge-Kutta map.
-// The single
-// core-constants reference (ANGULAR_CLAMP_EPS) is inlined as its literal
-// 1e-6 to keep the oracle self-contained; see core/constants.h
-// (kAngularClampEps).
 
 #pragma once
 
@@ -20,6 +16,7 @@
 #include <cmath>
 #include <limits>
 #include <numbers>
+#include <optional>
 
 namespace sirius::oracle {
 
@@ -74,6 +71,8 @@ enum class IntegratorOrder {
 
 class SymplecticIntegratorD {
   public:
+    enum class StepOutcome { kAccepted, kChartDomainExit, kConstraintFailure };
+
     struct Config {
         double initial_step_size = 0.1;
         double min_step_size = 1e-8;
@@ -109,7 +108,7 @@ class SymplecticIntegratorD {
         double lambda_advance;
         double hamiltonian_error;
         double null_condition_error;  // |g_μν k^μ k^ν|
-        bool terminated;
+        StepOutcome outcome;
         int substeps;
     };
 
@@ -126,11 +125,25 @@ class SymplecticIntegratorD {
     // Single Integration Step (Selectable Order)
     //--------------------------------------------------------------------------
 
-    StepResult Step(const HamiltonianStateD& state, double h) const {
+    // accepted_steps_before makes the optional periodic null projection a
+    // property of the represented trajectory, not mutable integrator history.
+    StepResult Step(const HamiltonianStateD& state, double h, int accepted_steps_before = 0) const {
         SIRIUS_PRE(std::isfinite(h) && h != 0.0);
+        SIRIUS_PRE(accepted_steps_before >= 0);
+        const auto failure = [](const HamiltonianStateD& failed_state, StepOutcome outcome,
+                                double lambda_advance, int substeps) {
+            const double infinity = std::numeric_limits<double>::infinity();
+            return StepResult{failed_state, lambda_advance, infinity, infinity, outcome, substeps};
+        };
+        if (!IsFiniteVector(state.q) || !metric_->IsValid(state.q)) {
+            return failure(state, StepOutcome::kChartDomainExit, 0.0, 0);
+        }
+        if (!IsFiniteVector(state.p)) {
+            return failure(state, StepOutcome::kConstraintFailure, 0.0, 0);
+        }
         StepResult result;
         result.substeps = 0;
-        result.terminated = false;
+        result.outcome = StepOutcome::kAccepted;
         result.null_condition_error = 0;
 
         HamiltonianStateD s = state;
@@ -159,17 +172,18 @@ class SymplecticIntegratorD {
         double lambda_accumulator = 0;
         for (int i = 0; i < substep_count; ++i) {
             double wi = weights[i];
-            s = ImplicitMidpointStep(s, wi * h);
+            const MidpointResult midpoint = TryImplicitMidpointStep(s, wi * h);
+            if (midpoint.outcome != StepOutcome::kAccepted) {
+                return failure(midpoint.state, midpoint.outcome, lambda_accumulator,
+                               result.substeps);
+            }
+            s = midpoint.state;
 
-            if (!metric_->IsValid(s.q)) {
-                result.terminated = true;
-                result.state = s;
-                result.lambda_advance = lambda_accumulator;
+            if (!metric_->IsValid(s.q) || !IsFiniteVector(s.p)) {
                 // Boyer-Lindquist is outside its chart domain here. Do not
                 // evaluate the metric merely to decorate a termination result.
-                result.hamiltonian_error = std::numeric_limits<double>::infinity();
-                result.null_condition_error = std::numeric_limits<double>::infinity();
-                return result;
+                return failure(s, StepOutcome::kChartDomainExit, lambda_accumulator,
+                               result.substeps);
             }
 
             lambda_accumulator += wi * h;
@@ -178,33 +192,41 @@ class SymplecticIntegratorD {
 
         // Compute null condition error before potential renormalization
         result.null_condition_error = ComputeNullError(s);
+        if (!std::isfinite(result.null_condition_error)) {
+            return failure(s, StepOutcome::kConstraintFailure, lambda_accumulator, result.substeps);
+        }
 
         // Apply null condition renormalization if enabled and needed
         if (config_.enforce_null_condition) {
-            steps_since_renorm_++;
-
-            bool should_renormalize = false;
-            if (config_.renormalize_every_n_steps == 0) {
-                // Renormalize every Step
-                should_renormalize = true;
-            } else if (steps_since_renorm_ >= config_.renormalize_every_n_steps) {
-                should_renormalize = true;
-            } else if (result.null_condition_error > config_.null_condition_tolerance) {
-                // Renormalize if error exceeds tolerance
-                should_renormalize = true;
-            }
+            const bool scheduled = config_.renormalize_every_n_steps == 0 ||
+                                   accepted_steps_before % config_.renormalize_every_n_steps ==
+                                       config_.renormalize_every_n_steps - 1;
+            const bool should_renormalize =
+                scheduled || result.null_condition_error > config_.null_condition_tolerance;
 
             if (should_renormalize) {
-                s = RenormalizeNull(s);
-                steps_since_renorm_ = 0;
+                const std::optional<HamiltonianStateD> renormalized = TryRenormalizeNull(s);
+                if (!renormalized) {
+                    return failure(s, StepOutcome::kConstraintFailure, lambda_accumulator,
+                                   result.substeps);
+                }
+                s = *renormalized;
                 // Recompute error after renormalization
                 result.null_condition_error = ComputeNullError(s);
+                if (!std::isfinite(result.null_condition_error) ||
+                    result.null_condition_error > config_.null_condition_tolerance) {
+                    return failure(s, StepOutcome::kConstraintFailure, lambda_accumulator,
+                                   result.substeps);
+                }
             }
         }
 
         // Compute Hamiltonian error
         result.state = s;
         result.state.H = metric_->Hamiltonian(s.q, s.p);
+        if (!std::isfinite(result.state.H)) {
+            return failure(s, StepOutcome::kConstraintFailure, lambda_accumulator, result.substeps);
+        }
         result.hamiltonian_error = std::abs(result.state.H);
         result.lambda_advance = h;  // Total Step is always h (weights sum to 1)
 
@@ -215,13 +237,21 @@ class SymplecticIntegratorD {
     // Integrate to Target Lambda or Termination
     //--------------------------------------------------------------------------
 
+    enum class IntegrationOutcome {
+        kAffineLimit,
+        kStepLimit,
+        kCaptured,
+        kEscaped,
+        kChartDomainExit,
+        kConstraintFailure
+    };
+
     struct IntegrationResult {
         GeodesicStateD final_state;
         double total_lambda;
         double max_hamiltonian_error;
         int total_steps;
-        bool hit_horizon;
-        bool escaped;
+        IntegrationOutcome outcome;
     };
 
     IntegrationResult Integrate(const GeodesicStateD& initial, double lambdaMax,
@@ -232,8 +262,7 @@ class SymplecticIntegratorD {
         result.total_lambda = 0;
         result.max_hamiltonian_error = 0;
         result.total_steps = 0;
-        result.hit_horizon = false;
-        result.escaped = false;
+        result.outcome = IntegrationOutcome::kStepLimit;
 
         HamiltonianStateD hs(initial);
         double h = config_.initial_step_size;
@@ -243,19 +272,36 @@ class SymplecticIntegratorD {
             double r = hs.q.r;
             double r_horizon = metric_->HorizonRadius();
 
-            if (r < r_horizon * config_.horizon_buffer) {
-                result.hit_horizon = true;
+            if (!IsFiniteVector(hs.q)) {
+                result.outcome = IntegrationOutcome::kChartDomainExit;
+                break;
+            }
+            if (!IsFiniteVector(hs.p)) {
+                result.outcome = IntegrationOutcome::kConstraintFailure;
+                break;
+            }
+            if (!metric_->IsValid(hs.q)) {
+                result.outcome = IntegrationOutcome::kChartDomainExit;
+                break;
+            }
+
+            if (r <= r_horizon * config_.horizon_buffer) {
+                result.outcome = IntegrationOutcome::kCaptured;
                 break;
             }
 
             if (r > escape_radius) {
-                result.escaped = true;
+                result.outcome = IntegrationOutcome::kEscaped;
                 break;
             }
 
             // Adapt Step size: smaller near horizon, larger when far away
-            double r_ratio = (r - r_horizon) / r_horizon;
-            h = config_.initial_step_size * std::min(1.0, r_ratio * r_ratio);
+            if (r_horizon > 0.0) {
+                const double r_ratio = (r - r_horizon) / r_horizon;
+                h = config_.initial_step_size * std::min(1.0, r_ratio * r_ratio);
+            } else {
+                h = config_.initial_step_size;
+            }
             h = std::clamp(h, config_.min_step_size, config_.max_step_size);
 
             // Don't overshoot lambdaMax
@@ -264,10 +310,18 @@ class SymplecticIntegratorD {
             }
 
             // Take Step
-            StepResult sr = Step(hs, h);
+            StepResult sr = Step(hs, h, result.total_steps);
 
-            if (sr.terminated) {
-                result.hit_horizon = true;
+            if (sr.outcome != StepOutcome::kAccepted) {
+                if (sr.outcome == StepOutcome::kConstraintFailure) {
+                    result.outcome = IntegrationOutcome::kConstraintFailure;
+                } else {
+                    // Capture is admitted only by the represented pre-step
+                    // radial event above. An invalid substep is not localised,
+                    // so its radius alone cannot prove which chart boundary
+                    // was crossed first.
+                    result.outcome = IntegrationOutcome::kChartDomainExit;
+                }
                 break;
             }
 
@@ -277,6 +331,8 @@ class SymplecticIntegratorD {
                 std::max(result.max_hamiltonian_error, sr.hamiltonian_error);
             result.total_steps++;
         }
+
+        if (result.total_lambda >= lambdaMax) result.outcome = IntegrationOutcome::kAffineLimit;
 
         // Convert back to GeodesicStateD
         result.final_state = hs.ToGeodesicState(result.total_lambda);
@@ -317,8 +373,8 @@ class SymplecticIntegratorD {
 
         // Integrate
         for (int i = 0; i < numSteps; ++i) {
-            StepResult sr = Step(hs, step_size);
-            if (sr.terminated) break;
+            StepResult sr = Step(hs, step_size, i);
+            if (sr.outcome != StepOutcome::kAccepted) break;
 
             hs = sr.state;
             stats.max_h_error = std::max(stats.max_h_error, sr.hamiltonian_error);
@@ -336,7 +392,10 @@ class SymplecticIntegratorD {
   private:
     const IMetricD* metric_;
     Config config_;
-    mutable int steps_since_renorm_ = 0;  // Track steps since last renormalization
+    [[nodiscard]] static bool IsFiniteVector(const Vec4d& vector) noexcept {
+        return std::isfinite(vector.t) && std::isfinite(vector.r) && std::isfinite(vector.theta) &&
+               std::isfinite(vector.phi);
+    }
 
     //--------------------------------------------------------------------------
     // Null Condition Renormalization (Energy-Preserving)
@@ -357,7 +416,8 @@ class SymplecticIntegratorD {
     // Reference: core/constants.h "Null Constraint Preservation"
     //--------------------------------------------------------------------------
 
-    HamiltonianStateD RenormalizeNull(const HamiltonianStateD& state) const {
+    [[nodiscard]] std::optional<HamiltonianStateD> TryRenormalizeNull(
+        const HamiltonianStateD& state) const {
         HamiltonianStateD s = state;
 
         // Get inverse metric at current position
@@ -390,10 +450,9 @@ class SymplecticIntegratorD {
         // Solve quadratic: A*p_r² + B*p_r + C = 0
         double disc = B * B - 4 * A * C;
 
-        if (disc < 0 || std::abs(A) < 1e-15) {
-            // No real solution or degenerate - return unchanged
-            // This can happen near coordinate singularities
-            return s;
+        if (!std::isfinite(A) || !std::isfinite(B) || !std::isfinite(C) || !std::isfinite(disc) ||
+            disc < 0.0 || A == 0.0) {
+            return std::nullopt;
         }
 
         double sqrtDisc = std::sqrt(disc);
@@ -408,6 +467,7 @@ class SymplecticIntegratorD {
             p_r_new = p_r_minus;
         }
 
+        if (!std::isfinite(p_r_new)) return std::nullopt;
         s.p.r = p_r_new;
         return s;
     }
@@ -422,7 +482,12 @@ class SymplecticIntegratorD {
     // Symmetric implicit-midpoint substep
     //--------------------------------------------------------------------------
 
-    HamiltonianStateD ImplicitMidpointStep(const HamiltonianStateD& state, double h) const {
+    struct MidpointResult {
+        HamiltonianStateD state;
+        StepOutcome outcome;
+    };
+
+    MidpointResult TryImplicitMidpointStep(const HamiltonianStateD& state, double h) const {
         // z_(n+1) = z_n + h J grad H((z_n + z_(n+1))/2). Fixed-point
         // iteration solves the nonlinear midpoint equations to near machine
         // precision. Every iterate is derived from the original state so the
@@ -439,11 +504,19 @@ class SymplecticIntegratorD {
             HamiltonianStateD midpoint;
             midpoint.q = (state.q + next.q) * 0.5;
             midpoint.p = (state.p + next.p) * 0.5;
-            if (!metric_->IsValid(midpoint.q)) return next;
+            if (!IsFiniteVector(midpoint.q) || !metric_->IsValid(midpoint.q)) {
+                return MidpointResult{next, StepOutcome::kChartDomainExit};
+            }
+            if (!IsFiniteVector(midpoint.p)) {
+                return MidpointResult{next, StepOutcome::kConstraintFailure};
+            }
 
             HamiltonianStateD candidate = state;
             candidate.q = state.q + metric_->dHdp(midpoint.q, midpoint.p) * h;
             candidate.p = state.p + metric_->dHdq(midpoint.q, midpoint.p) * h;
+            if (!IsFiniteVector(candidate.q) || !IsFiniteVector(candidate.p)) {
+                return MidpointResult{candidate, StepOutcome::kConstraintFailure};
+            }
 
             double error = 0.0;
             double scale = 1.0;
@@ -459,14 +532,11 @@ class SymplecticIntegratorD {
                 break;
             }
         }
-        SIRIUS_ASSERT(converged);
+        if (!converged) return MidpointResult{next, StepOutcome::kConstraintFailure};
 
         next.q.phi = std::fmod(next.q.phi, 2 * std::numbers::pi);
         if (next.q.phi < 0) next.q.phi += 2 * std::numbers::pi;
-        // 1e-6 == core/constants.h kAngularClampEps; inlined to keep the
-        // oracle self-contained (STYLE.md self-containment over shared const).
-        next.q.theta = std::clamp(next.q.theta, 1e-6, std::numbers::pi - 1e-6);
-        return next;
+        return MidpointResult{next, StepOutcome::kAccepted};
     }
 };
 

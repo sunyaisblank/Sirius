@@ -57,6 +57,7 @@ set_tests_properties(
     AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff
     AnalyticValidationTest.MalformedBeamEscapeDomainFailsClosed
     AnalyticValidationTest.MalformedIntegratorControlsFailClosedBeforeIntegration
+    AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct
     AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter
     PROPERTIES LABELS "Mandatory;Correctness"
 )
@@ -1170,6 +1171,7 @@ set_tests_properties(
 
 set_tests_properties(
     WalkerPenrose.MalformedIntegratorStepDomainFailsClosed
+    WalkerPenrose.BoyerLindquistInitialDataAndAxisExitDeclineWithoutSubstitution
     WalkerPenrose.ImaginaryPartEqualsKillingYanoContraction
     WalkerPenrose.PolarisationStaysOrthogonalAndNormalisedUnderTransport
     WalkerPenrose.ConstantConservedAlongKerrGeodesics

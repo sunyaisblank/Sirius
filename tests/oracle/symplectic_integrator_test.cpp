@@ -38,6 +38,78 @@ TEST(AnalyticValidationTest, MalformedIntegratorControlsFailClosedBeforeIntegrat
                  "precondition.*enforced, terminating");
 }
 
+TEST(AnalyticValidationTest, SymplecticChartExitAndNullProjectionFailureRemainDistinct) {
+    KerrMetricD flat(0.0, 0.0);
+    SymplecticIntegratorD::Config chart_config;
+    chart_config.order = IntegratorOrder::kYoshida4;
+    chart_config.initial_step_size = 1.0e-3;
+    chart_config.enforce_null_condition = false;
+    SymplecticIntegratorD chart_integrator(&flat, chart_config);
+
+    HamiltonianStateD near_axis(Vec4d(0.0, 10.0, 2.0 * kBoyerLindquistPoleMargin, 0.0),
+                                Vec4d(-1.0, 0.0, -100.0, 0.0));
+    const SymplecticIntegratorD::StepResult chart_step =
+        chart_integrator.Step(near_axis, chart_config.initial_step_size);
+    EXPECT_EQ(chart_step.outcome, SymplecticIntegratorD::StepOutcome::kChartDomainExit);
+    EXPECT_NE(chart_step.state.q.theta, kBoyerLindquistPoleMargin)
+        << "an axis crossing must not be rewritten onto the chart margin";
+
+    const GeodesicStateD chart_initial(near_axis.q, near_axis.p);
+    const SymplecticIntegratorD::IntegrationResult chart_result =
+        chart_integrator.Integrate(chart_initial, 0.1);
+    EXPECT_EQ(chart_result.outcome, SymplecticIntegratorD::IntegrationOutcome::kChartDomainExit);
+    EXPECT_EQ(chart_result.total_steps, 0);
+    EXPECT_EQ(chart_result.final_state.x.theta, near_axis.q.theta)
+        << "integration must retain its last represented phase-space state";
+
+    KerrMetricD schwarzschild(1.0, 0.0);
+    SymplecticIntegratorD::Config constraint_config;
+    constraint_config.order = IntegratorOrder::kYoshida4;
+    constraint_config.initial_step_size = 1.0e-3;
+    constraint_config.renormalize_every_n_steps = 0;
+    SymplecticIntegratorD constraint_integrator(&schwarzschild, constraint_config);
+    const HamiltonianStateD no_null_radial_root(Vec4d(0.0, 10.0, std::numbers::pi / 2.0, 0.0),
+                                                Vec4d(0.0, 0.0, 1.0, 0.0));
+    const SymplecticIntegratorD::StepResult constraint_step =
+        constraint_integrator.Step(no_null_radial_root, constraint_config.initial_step_size);
+    EXPECT_EQ(constraint_step.outcome, SymplecticIntegratorD::StepOutcome::kConstraintFailure)
+        << "an impossible null projection must not return an unchanged accepted state";
+
+    HamiltonianStateD invalid_momentum = no_null_radial_root;
+    invalid_momentum.p.r = std::numeric_limits<double>::infinity();
+    EXPECT_EQ(
+        constraint_integrator.Step(invalid_momentum, constraint_config.initial_step_size).outcome,
+        SymplecticIntegratorD::StepOutcome::kConstraintFailure);
+
+    HamiltonianStateD invalid_axis_near_horizon = no_null_radial_root;
+    invalid_axis_near_horizon.q.r = schwarzschild.HorizonRadius() * 1.005;
+    invalid_axis_near_horizon.q.theta = kBoyerLindquistPoleMargin;
+    const GeodesicStateD invalid_axis_initial(invalid_axis_near_horizon.q,
+                                              invalid_axis_near_horizon.p);
+    EXPECT_EQ(constraint_integrator.Integrate(invalid_axis_initial, 0.1).outcome,
+              SymplecticIntegratorD::IntegrationOutcome::kChartDomainExit)
+        << "an unrepresented event cannot be promoted to physical capture by its radius";
+
+    SymplecticIntegratorD::Config scheduled_config = constraint_config;
+    scheduled_config.null_condition_tolerance = 1.0;
+    scheduled_config.renormalize_every_n_steps = 2;
+    SymplecticIntegratorD scheduled_integrator(&schwarzschild, scheduled_config);
+    const SymplecticIntegratorD::StepResult first =
+        scheduled_integrator.Step(no_null_radial_root, scheduled_config.initial_step_size);
+    const SymplecticIntegratorD::StepResult repeated =
+        scheduled_integrator.Step(no_null_radial_root, scheduled_config.initial_step_size);
+    ASSERT_EQ(first.outcome, SymplecticIntegratorD::StepOutcome::kAccepted);
+    ASSERT_EQ(repeated.outcome, SymplecticIntegratorD::StepOutcome::kAccepted);
+    for (int component = 0; component < 4; ++component) {
+        EXPECT_DOUBLE_EQ(first.state.q[component], repeated.state.q[component]);
+        EXPECT_DOUBLE_EQ(first.state.p[component], repeated.state.p[component]);
+    }
+    EXPECT_EQ(scheduled_integrator.Step(no_null_radial_root, scheduled_config.initial_step_size, 1)
+                  .outcome,
+              SymplecticIntegratorD::StepOutcome::kConstraintFailure)
+        << "the renormalization schedule must be explicit rather than hidden mutable history";
+}
+
 // Fixture for symplectic integrator tests
 class SymplecticIntegratorTest : public ::testing::Test {
   protected:
@@ -243,9 +315,9 @@ TEST_F(SymplecticIntegratorTest, HorizonTermination) {
 
     auto result = integrator_sch->Integrate(initial, 100.0);
 
-    // Should hit horizon or move inward
-    EXPECT_TRUE(result.hit_horizon || result.final_state.x.r < 3.0)
-        << "Should have hit horizon or moved inward, r=" << result.final_state.x.r;
+    EXPECT_EQ(result.outcome, SymplecticIntegratorD::IntegrationOutcome::kCaptured)
+        << "the accepted ray must enter the explicit radial capture buffer, r="
+        << result.final_state.x.r;
 }
 
 //==============================================================================
@@ -276,8 +348,8 @@ TEST_F(SymplecticIntegratorTest, EscapeDetection) {
 
     auto result = integrator_sch->Integrate(initial, 10000.0, 100.0);
 
-    EXPECT_TRUE(result.escaped || result.final_state.x.r > 50.0)
-        << "Should have escaped or moved outward, r=" << result.final_state.x.r;
+    EXPECT_EQ(result.outcome, SymplecticIntegratorD::IntegrationOutcome::kEscaped)
+        << "the accepted ray must cross the explicit escape surface, r=" << result.final_state.x.r;
 }
 
 //==============================================================================

@@ -87,7 +87,8 @@ class IMetricD {
     //--------------------------------------------------------------------------
 
     /// Check if coordinates are in valid range
-    /// @return false for: inside horizon, at coordinate singularity, θ = 0 or π
+    /// @return false for: outside the implementation's finite integration chart,
+    /// including its horizon buffer and numerical polar margin
     virtual bool IsValid(const Vec4d& x) const = 0;
 
     /// Return event horizon radius (outer horizon r+ for Kerr)

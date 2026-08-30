@@ -27,6 +27,7 @@
 #include <complex>
 #include <limits>
 #include <numbers>
+#include <optional>
 #include <vector>
 
 namespace sirius::test {
@@ -42,6 +43,88 @@ TEST(WalkerPenrose, MalformedIntegratorStepDomainFailsClosed) {
     EXPECT_FALSE(PolarisedGeodesicIntegratorD::IsRepresentedConfig(config));
     EXPECT_DEATH((void)PolarisedGeodesicIntegratorD(&metric, config),
                  "precondition.*enforced, terminating");
+}
+
+TEST(WalkerPenrose, BoyerLindquistInitialDataAndAxisExitDeclineWithoutSubstitution) {
+    KerrMetricD metric(1.0, 0.5);
+
+    // At the equatorial stationary-limit surface g_tt=0, so the null equation
+    // is linear in k^t. The constructor must solve that represented case rather
+    // than divide a quadratic formula by zero.
+    const Vec4d stationary_limit(0.0, 2.0, std::numbers::pi / 2.0, 0.0);
+    ASSERT_TRUE(metric.IsValid(stationary_limit));
+    const std::optional<Vec4d> linear_tangent =
+        TryMakeNullTangent(metric, stationary_limit, 0.0, 0.0, 0.05);
+    ASSERT_TRUE(linear_tangent);
+    EXPECT_GT(linear_tangent->t, 0.0);
+    double g[4][4], g_inv[4][4];
+    metric.Evaluate(stationary_limit, g, g_inv);
+    EXPECT_NEAR(InnerProductD(g, *linear_tangent, *linear_tangent), 0.0, 1.0e-13);
+
+    // A direction with neither a quadratic nor linear temporal solution, and a
+    // non-finite direction, are absent requests rather than clamped roots.
+    EXPECT_FALSE(TryMakeNullTangent(metric, stationary_limit, 1.0, 0.0, 0.0));
+    EXPECT_FALSE(TryMakeNullTangent(metric, stationary_limit,
+                                    std::numeric_limits<double>::infinity(), 0.0, 0.05));
+
+    // Inside the ergoregion the same fixed spatial coordinate direction can
+    // produce two distinct positive k^t roots. Both are future-directed, so
+    // choosing either would be an unrequested branch selection.
+    const Vec4d ambiguous_event(0.0, 1.9, std::numbers::pi / 2.0, 0.0);
+    ASSERT_TRUE(metric.IsValid(ambiguous_event));
+    metric.Evaluate(ambiguous_event, g, g_inv);
+    constexpr double ambiguous_k_phi = 0.05;
+    const double quadratic_a = g[0][0];
+    const double quadratic_b = 2.0 * g[0][3] * ambiguous_k_phi;
+    const double quadratic_c = g[3][3] * ambiguous_k_phi * ambiguous_k_phi;
+    const double discriminant = quadratic_b * quadratic_b - 4.0 * quadratic_a * quadratic_c;
+    ASSERT_GT(discriminant, 0.0);
+    EXPECT_GT((-quadratic_b + std::sqrt(discriminant)) / (2.0 * quadratic_a), 0.0);
+    EXPECT_GT((-quadratic_b - std::sqrt(discriminant)) / (2.0 * quadratic_a), 0.0);
+    EXPECT_FALSE(TryMakeNullTangent(metric, ambiguous_event, 0.0, 0.0, ambiguous_k_phi));
+
+    const Vec4d near_axis(0.0, 10.0, 2.0 * kBoyerLindquistPoleMargin, 0.0);
+    const std::optional<Vec4d> tangent = TryMakeNullTangent(metric, near_axis, 0.0, -0.01, 0.0);
+    ASSERT_TRUE(tangent);
+    const std::optional<Vec4d> polarisation =
+        TryMakeOrthonormalPolarisation(metric, near_axis, *tangent, Vec4d(0.0, 1.0, 0.0, 0.0));
+    ASSERT_TRUE(polarisation);
+    EXPECT_FALSE(TryMakeOrthonormalPolarisation(metric, near_axis, Vec4d(1.0, 0.0, 0.0, 0.0),
+                                                Vec4d(0.0, 1.0, 0.0, 0.0)));
+    EXPECT_FALSE(TryMakeOrthonormalPolarisation(metric, near_axis, *tangent, *tangent));
+
+    const PolarisedStateD initial(near_axis, *tangent, *polarisation);
+    EXPECT_FALSE(TryParallelTransportStep(metric, initial, 1.0e-3));
+
+    PolarisedGeodesicIntegratorD integrator(&metric);
+    const PolarisedGeodesicIntegratorD::Result result = integrator.Integrate(initial);
+    EXPECT_EQ(result.outcome, PolarisedGeodesicIntegratorD::Result::Outcome::kChartDomainExit);
+    EXPECT_EQ(result.steps, 0);
+    EXPECT_EQ(result.state.x.theta, initial.x.theta)
+        << "a failed chart step must preserve the last represented state";
+
+    PolarisedStateD invalid = initial;
+    invalid.x.theta = kBoyerLindquistPoleMargin;
+    const PolarisedGeodesicIntegratorD::Result invalid_result = integrator.Integrate(invalid);
+    EXPECT_EQ(invalid_result.outcome,
+              PolarisedGeodesicIntegratorD::Result::Outcome::kChartDomainExit);
+    EXPECT_EQ(invalid_result.steps, 0);
+
+    PolarisedStateD invalid_near_horizon = initial;
+    invalid_near_horizon.x.r = metric.HorizonRadius() * 1.01;
+    invalid_near_horizon.x.theta = kBoyerLindquistPoleMargin;
+    const PolarisedGeodesicIntegratorD::Result invalid_near_horizon_result =
+        integrator.Integrate(invalid_near_horizon);
+    EXPECT_EQ(invalid_near_horizon_result.outcome,
+              PolarisedGeodesicIntegratorD::Result::Outcome::kChartDomainExit)
+        << "an unrepresented event cannot be promoted to physical capture by its radius";
+
+    PolarisedStateD invalid_transport = initial;
+    invalid_transport.k.r = std::numeric_limits<double>::infinity();
+    const PolarisedGeodesicIntegratorD::Result invalid_transport_result =
+        integrator.Integrate(invalid_transport);
+    EXPECT_EQ(invalid_transport_result.outcome,
+              PolarisedGeodesicIntegratorD::Result::Outcome::kConstraintFailure);
 }
 
 // E = -k_t = -(g_t nu k^nu); conserved by the t Killing vector.
@@ -154,8 +237,13 @@ TEST(WalkerPenrose, ImaginaryPartEqualsKillingYanoContraction) {
     const double a = 0.9;
     KerrMetricD metric(1.0, a);
     Vec4d x(0.0, 9.0, 1.1, 0.4);
-    Vec4d kk = MakeNullTangent(metric, x, -1.0, 0.02, 0.05);
-    Vec4d ff = MakeOrthonormalPolarisation(metric, x, kk, Vec4d(0.0, 0.0, 1.0, 0.0));
+    const std::optional<Vec4d> tangent = TryMakeNullTangent(metric, x, -1.0, 0.02, 0.05);
+    ASSERT_TRUE(tangent);
+    const Vec4d kk = *tangent;
+    const std::optional<Vec4d> polarisation =
+        TryMakeOrthonormalPolarisation(metric, x, kk, Vec4d(0.0, 0.0, 1.0, 0.0));
+    ASSERT_TRUE(polarisation);
+    const Vec4d ff = *polarisation;
     PolarisedStateD s(x, kk, ff);
 
     const double r = x.r, theta = x.theta;
@@ -186,8 +274,13 @@ TEST(WalkerPenrose, ImaginaryPartEqualsKillingYanoContraction) {
 TEST(WalkerPenrose, PolarisationStaysOrthogonalAndNormalisedUnderTransport) {
     KerrMetricD metric(1.0, 0.998);
     Vec4d x0(0.0, 18.0, std::numbers::pi / 2 - 0.15, 0.0);
-    Vec4d kk = MakeNullTangent(metric, x0, -1.0, 0.02, 0.04);
-    Vec4d ff = MakeOrthonormalPolarisation(metric, x0, kk, Vec4d(0.0, 0.0, 1.0, 0.0));
+    const std::optional<Vec4d> tangent = TryMakeNullTangent(metric, x0, -1.0, 0.02, 0.04);
+    ASSERT_TRUE(tangent);
+    const Vec4d kk = *tangent;
+    const std::optional<Vec4d> polarisation =
+        TryMakeOrthonormalPolarisation(metric, x0, kk, Vec4d(0.0, 0.0, 1.0, 0.0));
+    ASSERT_TRUE(polarisation);
+    const Vec4d ff = *polarisation;
     PolarisedStateD s(x0, kk, ff);
 
     ASSERT_NEAR(InnerProductAt(metric, x0, ff, kk), 0.0, 1e-14);
@@ -202,7 +295,10 @@ TEST(WalkerPenrose, PolarisationStaysOrthogonalAndNormalisedUnderTransport) {
     PolarisedStateD cur = s;
     for (int i = 0; i < 400000; ++i) {
         if (cur.x.r <= metric.HorizonRadius() * 1.02 || cur.x.r > 60.0) break;
-        cur = ParallelTransportStep(metric, cur, integrator.AdaptiveStepSize(cur.x.r));
+        const std::optional<PolarisedStateD> next =
+            TryParallelTransportStep(metric, cur, integrator.AdaptiveStepSize(cur.x.r));
+        ASSERT_TRUE(next);
+        cur = *next;
         max_fk = std::max(max_fk, std::abs(InnerProductAt(metric, cur.x, cur.f, cur.k)));
         max_ff = std::max(max_ff, std::abs(InnerProductAt(metric, cur.x, cur.f, cur.f) - 1.0));
         max_null = std::max(max_null, std::abs(NullCondition(metric, cur)));
@@ -247,8 +343,13 @@ TEST(WalkerPenrose, ConstantConservedAlongKerrGeodesics) {
 
     for (const Ray& r : rays) {
         Vec4d x0(0.0, r.r0, r.theta0, 0.0);
-        Vec4d kk = MakeNullTangent(metric, x0, r.kr, r.ktheta, r.kphi);
-        Vec4d ff = MakeOrthonormalPolarisation(metric, x0, kk, Vec4d(0.0, 0.0, 1.0, 0.0));
+        const std::optional<Vec4d> tangent = TryMakeNullTangent(metric, x0, r.kr, r.ktheta, r.kphi);
+        ASSERT_TRUE(tangent) << r.name;
+        const Vec4d kk = *tangent;
+        const std::optional<Vec4d> polarisation =
+            TryMakeOrthonormalPolarisation(metric, x0, kk, Vec4d(0.0, 0.0, 1.0, 0.0));
+        ASSERT_TRUE(polarisation) << r.name;
+        const Vec4d ff = *polarisation;
         PolarisedStateD s(x0, kk, ff);
         const std::complex<double> kappa0 = WalkerPenroseConstant(s, metric);
         ASSERT_GT(std::abs(kappa0), 1e-6) << r.name;
@@ -256,14 +357,17 @@ TEST(WalkerPenrose, ConstantConservedAlongKerrGeodesics) {
         PolarisedGeodesicIntegratorD integrator(&metric);
         const PolarisedGeodesicIntegratorD::Result result = integrator.Integrate(s);
         // A conserved constant is only meaningful over a completed geodesic.
-        ASSERT_TRUE(result.escaped)
-            << r.name << " did not escape (captured=" << result.captured << ")";
+        ASSERT_EQ(result.outcome, PolarisedGeodesicIntegratorD::Result::Outcome::kEscaped)
+            << r.name << " did not complete at the escape surface";
 
         double max_drift = 0.0;
         PolarisedStateD cur = s;
         for (int i = 0; i < 400000; ++i) {
             if (cur.x.r <= metric.HorizonRadius() * 1.02 || cur.x.r > 60.0) break;
-            cur = ParallelTransportStep(metric, cur, integrator.AdaptiveStepSize(cur.x.r));
+            const std::optional<PolarisedStateD> next =
+                TryParallelTransportStep(metric, cur, integrator.AdaptiveStepSize(cur.x.r));
+            ASSERT_TRUE(next) << r.name;
+            cur = *next;
             const std::complex<double> kappa = WalkerPenroseConstant(cur, metric);
             max_drift = std::max(max_drift, std::abs(kappa - kappa0) / std::abs(kappa0));
         }
@@ -288,8 +392,11 @@ TEST(WalkerPenrose, ConstantConservedAlongKerrGeodesics) {
 TEST(WalkerPenrose, SchwarzschildEquatorialPerpendicularTransportsRigidly) {
     KerrMetricD metric(1.0, 0.0);
     Vec4d x0(0.0, 15.0, std::numbers::pi / 2, 0.0);
-    Vec4d kk = MakeNullTangent(metric, x0, -1.0, 0.0, 0.03);  // Equatorial: k^theta = 0.
-    Vec4d ff(0.0, 0.0, 1.0 / x0.r, 0.0);                      // Unit: r^2 (1/r)^2 = 1.
+    const std::optional<Vec4d> tangent =
+        TryMakeNullTangent(metric, x0, -1.0, 0.0, 0.03);  // Equatorial: k^theta = 0.
+    ASSERT_TRUE(tangent);
+    const Vec4d kk = *tangent;
+    Vec4d ff(0.0, 0.0, 1.0 / x0.r, 0.0);  // Unit: r^2 (1/r)^2 = 1.
 
     ASSERT_NEAR(InnerProductAt(metric, x0, ff, kk), 0.0, 1e-14);
     ASSERT_NEAR(InnerProductAt(metric, x0, ff, ff), 1.0, 1e-14);
@@ -299,7 +406,9 @@ TEST(WalkerPenrose, SchwarzschildEquatorialPerpendicularTransportsRigidly) {
     double max_in_plane = 0.0, max_ftheta_r = 0.0;
     for (int i = 0; i < 400000; ++i) {
         if (cur.x.r <= metric.HorizonRadius() * 1.05 || cur.x.r > 50.0) break;
-        cur = ParallelTransportStep(metric, cur, 0.01);
+        const std::optional<PolarisedStateD> next = TryParallelTransportStep(metric, cur, 0.01);
+        ASSERT_TRUE(next);
+        cur = *next;
         max_in_plane =
             std::max({max_in_plane, std::abs(cur.f.t), std::abs(cur.f.r), std::abs(cur.f.phi)});
         max_ftheta_r = std::max(max_ftheta_r, std::abs(cur.f.theta * cur.x.r - f_theta_r0));
@@ -320,8 +429,13 @@ TEST(WalkerPenrose, SchwarzschildEquatorialPerpendicularTransportsRigidly) {
 TEST(WalkerPenrose, FlatSpacePolarisationIsConstantInCartesian) {
     KerrMetricD metric(0.0, 0.0);
     Vec4d x0(0.0, 10.0, 1.1, 0.3);
-    Vec4d kk = MakeNullTangent(metric, x0, -1.0, 0.02, 0.03);
-    Vec4d ff = MakeOrthonormalPolarisation(metric, x0, kk, Vec4d(0.0, 1.0, 0.0, 0.0));
+    const std::optional<Vec4d> tangent = TryMakeNullTangent(metric, x0, -1.0, 0.02, 0.03);
+    ASSERT_TRUE(tangent);
+    const Vec4d kk = *tangent;
+    const std::optional<Vec4d> polarisation =
+        TryMakeOrthonormalPolarisation(metric, x0, kk, Vec4d(0.0, 1.0, 0.0, 0.0));
+    ASSERT_TRUE(polarisation);
+    const Vec4d ff = *polarisation;
 
     // Contravariant spherical -> Cartesian: v^i = (dx^i/dx^alpha_sph) v^alpha.
     auto to_cartesian = [](const Vec4d& X, const Vec4d& V) {
@@ -338,7 +452,9 @@ TEST(WalkerPenrose, FlatSpacePolarisationIsConstantInCartesian) {
     double max_dev = 0.0;
     for (int i = 0; i < 400000; ++i) {
         if (cur.x.r > 50.0 || cur.x.r < 0.5) break;
-        cur = ParallelTransportStep(metric, cur, 0.01);
+        const std::optional<PolarisedStateD> next = TryParallelTransportStep(metric, cur, 0.01);
+        ASSERT_TRUE(next);
+        cur = *next;
         const Vec4d f_cart = to_cartesian(cur.x, cur.f);
         for (int j = 0; j < 4; ++j) max_dev = std::max(max_dev, std::abs(f_cart[j] - f_cart0[j]));
     }
