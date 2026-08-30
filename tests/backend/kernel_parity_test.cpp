@@ -17,6 +17,7 @@
 
 #include "sirius/backend/device.h"
 #include "sirius/core/disk/novikov_thorne_disk.h"
+#include "sirius/core/disk/volumetric_disk.h"
 #include "sirius/core/spectral/blackbody.h"
 #include "sirius/core/spectral/colour_modes.h"
 
@@ -59,6 +60,7 @@ constexpr std::uint32_t kOpDiskRedshift = 5;
 constexpr std::uint32_t kOpLiveCartConservation = 6;
 constexpr std::uint32_t kOpBeamEllipse = 7;
 constexpr std::uint32_t kOpAdaptiveEventDomain = 8;
+constexpr std::uint32_t kOpVolumeOpacity = 9;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -541,6 +543,39 @@ TEST(KernelParity, ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel) {
     EXPECT_GT(results[0 * kResultStride + 3], 0.0f);
     EXPECT_LT(results[2 * kResultStride + 3], reference.aux1);
     EXPECT_FLOAT_EQ(results[3 * kResultStride + 3], 0.0f);
+}
+
+TEST(KernelParity, TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    const auto sample = [](float radius, float height, float reference_radius, float scale_height,
+                           float tau_ref) {
+        Sample value;
+        value.p1 = reference_radius;
+        value.p2 = scale_height;
+        value.p3 = tau_ref;
+        value.c0 = radius;
+        value.c1 = height;
+        return value;
+    };
+    const std::vector<Sample> samples = {
+        sample(6.0f, 0.0f, 6.0f, 0.6f, 2.0f),
+        sample(12.0f, 1.2f, 6.0f, 1.2f, 2.0f),
+        sample(12.0f, 3.01f * 1.2f, 6.0f, 1.2f, 2.0f),
+    };
+    const auto results = RunProbe(*f.device, f.kernel, kOpVolumeOpacity, samples);
+    for (std::size_t index = 0; index < samples.size(); ++index) {
+        const auto& value = samples[index];
+        const float expected =
+            static_cast<float>(sirius::core::volumetric_disk::TruncatedGaussianOpacityDensity(
+                value.p3, value.c0, value.p1, value.p2, value.c1));
+        EXPECT_TRUE(Close(results[index * kResultStride], expected, 3.0e-6f, 1.0e-7f,
+                          "truncated Gaussian opacity"));
+    }
+    EXPECT_GT(results[0], 0.0f);
+    EXPECT_GT(results[kResultStride], 0.0f);
+    EXPECT_FLOAT_EQ(results[2 * kResultStride], 0.0f);
 }
 
 TEST(KernelParity, BlackbodyMatchesIntegratedCoreSpectrum) {

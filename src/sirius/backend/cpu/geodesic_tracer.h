@@ -16,6 +16,7 @@
 #include "sirius/core/coordinates.h"
 #include "sirius/core/disk/novikov_thorne_disk.h"
 #include "sirius/core/disk/turbulence.h"
+#include "sirius/core/disk/volumetric_disk.h"
 #include "sirius/core/geodesic_integrator.h"
 #include "sirius/core/metrics/metric.h"
 #include "sirius/core/observer_frame.h"

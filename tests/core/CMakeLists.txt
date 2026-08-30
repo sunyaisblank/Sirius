@@ -32,6 +32,7 @@ add_executable(sirius_core_tests
     tensor_inverse_test.cpp
     novikov_thorne_disk_test.cpp
     turbulence_test.cpp
+    volumetric_disk_test.cpp
     postprocess_test.cpp
     spectral_radiance_test.cpp
     starfield_test.cpp

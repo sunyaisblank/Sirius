@@ -527,10 +527,8 @@ void AccumulateVolumeSegment(Vec4Cart start, Vec4Cart finish,
             IsInsideVolumeDisk(diskR, point.z, innerRadius, outerRadius,
                                hOverR, hPower)) {
             float H = VolumeScaleHeight(diskR, innerRadius, hOverR, hPower);
-            float zOverH = point.z / H;
-            float diskOpacity = tauMidplane / (sqrt(TWO_PI) * H) *
-                          pow(diskR / innerRadius, -1.5f) *
-                          exp(-0.5f * zOverH * zOverH);
+            float diskOpacity = TruncatedGaussianOpacityDensity(
+                tauMidplane, diskR, innerRadius, H, point.z);
             if (turbulenceEnabled) {
                 // Match the CPU authority: its procedural field is defined in
                 // (Kerr radial coordinate, azimuth, z), not the oblate

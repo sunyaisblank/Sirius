@@ -90,6 +90,7 @@ SUITE_LABELS = {
     "BeamPropagationTest": MANDATORY,
     "AccretionDiskTest": MANDATORY,
     "DiskCoordinateTest": MANDATORY,
+    "VolumetricDiskClosure": MANDATORY,
     "TurbulenceTest": CORRECTNESS,
     "CoronaConfigTests": CORRECTNESS,
     "CoronaEmissivityTests": CORRECTNESS,

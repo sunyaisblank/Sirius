@@ -67,7 +67,7 @@
       "required": true,
       "verification": "build_gated",
       "profiles": ["cpu", "vulkan"],
-      "requirement": "The physical relativistic thin-disk default uses the zero-torque Page-Thorne flux integrated from a declared stable-orbit inner edge at or outside the ISCO, with every represented nonzero spin evaluated rather than aliased to Schwarzschild, and invariant circular-emitter frequency transfer exactly once. An explicit ShakuraSunyaev request instead uses the Newtonian zero-torque flux shape r^-3[1-sqrt(r_in/r)], normalised at 1.5 r_in, without claiming relativistic or alpha-disk vertical structure. The bounded grey volume uses the selected declared radial profile under its phenomenological closure, and Doppler suppression is identified and measured as a ZAMO diagnostic substitution rather than physical disk emission.",
+      "requirement": "The physical relativistic thin-disk default uses the zero-torque Page-Thorne flux integrated from a declared stable-orbit inner edge at or outside the ISCO, with every represented nonzero spin evaluated rather than aliased to Schwarzschild, and invariant circular-emitter frequency transfer exactly once. An explicit ShakuraSunyaev request instead uses the Newtonian zero-torque flux shape r^-3[1-sqrt(r_in/r)], normalised at 1.5 r_in, without claiming relativistic or alpha-disk vertical structure. The bounded grey volume uses the selected declared radial profile under its phenomenological closure and normalises its Gaussian opacity over the represented finite vertical support, and Doppler suppression is identified and measured as a ZAMO diagnostic substitution rather than physical disk emission.",
       "capability_dependencies": [],
       "evidence": [
         {"kind": "gtest", "name": "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature"},
@@ -86,6 +86,8 @@
         {"kind": "gtest", "name": "GeodesicTracerRedshift.NearExtremalInnerDiskEmissionRemainsFinite"},
         {"kind": "gtest", "name": "GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment"},
         {"kind": "gtest", "name": "GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource"},
+        {"kind": "gtest", "name": "VolumetricDiskClosure.TruncatedGaussianColumnEqualsDeclaredOpticalDepth"},
+        {"kind": "gtest", "name": "KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure"},
         {"kind": "gtest", "name": "VulkanRenderSession.ThinAndVolumetricDopplerSuppressionAffectLiveEmission"},
         {"kind": "gtest", "name": "VulkanRenderSession.ProceduralVolumetricTurbulenceReachesLiveKernel"},
         {"kind": "gtest", "name": "DopplerToggleTest.SuppressionCollapsesDiskAsymmetry"}
@@ -360,6 +362,8 @@
         {"kind": "gtest", "name": "KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel"},
         {"kind": "gtest", "name": "GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment"},
         {"kind": "gtest", "name": "GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource"},
+        {"kind": "gtest", "name": "VolumetricDiskClosure.TruncatedGaussianColumnEqualsDeclaredOpticalDepth"},
+        {"kind": "gtest", "name": "KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure"},
         {"kind": "gtest", "name": "VulkanRenderSession.ThinAndVolumetricDopplerSuppressionAffectLiveEmission"},
         {"kind": "gtest", "name": "GeodesicTracerVolumetric.ProceduralTurbulenceAltersLiveTransferDeterministically"},
         {"kind": "gtest", "name": "VulkanRenderSession.ProceduralVolumetricTurbulenceReachesLiveKernel"}
@@ -594,11 +598,13 @@
       "state": "bounded",
       "profiles": ["cpu", "vulkan"],
       "request": "Grey volumetric accretion-disk transfer",
-      "behavior": "Represent a stationary, vertically isothermal, Gaussian atmosphere truncated at three scale heights with H/r clamped to [0.01,0.5], inner-edge vertical optical depth tau_ref, tau(r)=tau_ref(r/r_ref)^(-3/2), circular Kerr flow, invariant comoving path length, the explicitly selected Page-Thorne or bounded Newtonian zero-torque Shakura-Sunyaev radial temperature, and optional explicitly procedural density modulation; make no GRMHD, alpha-disk vertical-structure, ionisation, or frequency-dependent opacity claim.",
+      "behavior": "Represent a stationary, vertically isothermal, Gaussian atmosphere truncated at three scale heights and normalised over that finite support with H/r clamped to [0.01,0.5], unmodulated inner-edge vertical optical depth tau_ref, tau(r)=tau_ref(r/r_ref)^(-3/2), circular Kerr flow, invariant comoving path length, the explicitly selected Page-Thorne or bounded Newtonian zero-torque Shakura-Sunyaev radial temperature, and optional explicitly procedural density modulation that perturbs the baseline column; make no GRMHD, alpha-disk vertical-structure, ionisation, or frequency-dependent opacity claim.",
       "evidence": [
         {"kind": "gtest", "name": "ConfigValidation.FeatureSpecificControlsRequireTheirOwningModels"},
         {"kind": "gtest", "name": "GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment"},
         {"kind": "gtest", "name": "GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource"},
+        {"kind": "gtest", "name": "VolumetricDiskClosure.TruncatedGaussianColumnEqualsDeclaredOpticalDepth"},
+        {"kind": "gtest", "name": "KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure"},
         {"kind": "gtest", "name": "ConfigValidation.TurbulenceRequiresVolumeAndSpectralCoronaDeclines"},
         {"kind": "gtest", "name": "RenderCommandParse.FeatureParametersSelectTheirOwningModels"},
         {"kind": "gtest", "name": "RenderSessionProbe.FeatureSpecificControlsRequireOwnersAtTypedBoundary"}
