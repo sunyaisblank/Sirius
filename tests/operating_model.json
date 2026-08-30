@@ -219,9 +219,12 @@
       "evidence": [
         {"kind": "gtest", "name": "ConfigLoading.UnknownNestedFieldDeclines"},
         {"kind": "gtest", "name": "ConfigValidation.MetricMassAndObserverCoordinateRadiusAreIdentityAware"},
+        {"kind": "gtest", "name": "ConfigValidation.FeatureSpecificControlsRequireTheirOwningModels"},
+        {"kind": "gtest", "name": "RenderCommandParse.FeatureParametersSelectTheirOwningModels"},
         {"kind": "gtest", "name": "RenderCommandParse.TrailingNumericGarbageRejected"},
         {"kind": "gtest", "name": "CommandRouter.UnknownCommandReturnsFailure"},
-        {"kind": "gtest", "name": "RenderSessionProbe.ConfigurationConversionPreservesObserverAndDiskControls"}
+        {"kind": "gtest", "name": "RenderSessionProbe.ConfigurationConversionPreservesObserverAndDiskControls"},
+        {"kind": "gtest", "name": "RenderSessionProbe.FeatureSpecificControlsRequireOwnersAtTypedBoundary"}
       ]
     },
     {
@@ -250,7 +253,8 @@
     {
       "id": "cpu_render_path",
       "evidence": [
-        {"kind": "gtest", "name": "RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr"}
+        {"kind": "gtest", "name": "RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr"},
+        {"kind": "gtest", "name": "RenderSessionProbe.InMemoryPreviewCompletesWithoutWritingOutput"}
       ]
     },
     {
@@ -345,6 +349,9 @@
       "evidence": [
         {"kind": "gtest", "name": "CameraFactoryTest.MalformedLensValueFailsClosed"},
         {"kind": "gtest", "name": "ConfigValidation.CameraWorldlineAndLensAreValidated"},
+        {"kind": "gtest", "name": "ConfigValidation.FeatureSpecificControlsRequireTheirOwningModels"},
+        {"kind": "gtest", "name": "RenderCommandParse.FeatureParametersSelectTheirOwningModels"},
+        {"kind": "gtest", "name": "RenderSessionProbe.FeatureSpecificControlsRequireOwnersAtTypedBoundary"},
         {"kind": "gtest", "name": "ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform"},
         {"kind": "gtest", "name": "ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne"},
         {"kind": "gtest", "name": "CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels"},
@@ -539,7 +546,10 @@
       "request": "Disable orbital Doppler shift while retaining gravitational transfer",
       "behavior": "Use the exact locally non-rotating Eulerian/ZAMO frequency branch as an explicitly nonphysical diagnostic substitution; the default remains the circular-emitter invariant frequency transfer.",
       "evidence": [
+        {"kind": "gtest", "name": "ConfigValidation.FeatureSpecificControlsRequireTheirOwningModels"},
         {"kind": "gtest", "name": "DopplerToggleTest.SuppressionCollapsesDiskAsymmetry"},
+        {"kind": "gtest", "name": "RenderCommandParse.FeatureParametersSelectTheirOwningModels"},
+        {"kind": "gtest", "name": "RenderSessionProbe.FeatureSpecificControlsRequireOwnersAtTypedBoundary"},
         {"kind": "gtest", "name": "SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere"}
       ]
     },
@@ -550,9 +560,12 @@
       "request": "Grey volumetric accretion-disk transfer",
       "behavior": "Represent a stationary, vertically isothermal, Gaussian atmosphere truncated at three scale heights with H/r clamped to [0.01,0.5], inner-edge vertical optical depth tau_ref, tau(r)=tau_ref(r/r_ref)^(-3/2), circular Kerr flow, invariant comoving path length, the explicitly selected Page-Thorne or bounded Newtonian zero-torque Shakura-Sunyaev radial temperature, and optional explicitly procedural density modulation; make no GRMHD, alpha-disk vertical-structure, ionisation, or frequency-dependent opacity claim.",
       "evidence": [
+        {"kind": "gtest", "name": "ConfigValidation.FeatureSpecificControlsRequireTheirOwningModels"},
         {"kind": "gtest", "name": "GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment"},
         {"kind": "gtest", "name": "GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource"},
-        {"kind": "gtest", "name": "ConfigValidation.TurbulenceRequiresVolumeAndSpectralCoronaDeclines"}
+        {"kind": "gtest", "name": "ConfigValidation.TurbulenceRequiresVolumeAndSpectralCoronaDeclines"},
+        {"kind": "gtest", "name": "RenderCommandParse.FeatureParametersSelectTheirOwningModels"},
+        {"kind": "gtest", "name": "RenderSessionProbe.FeatureSpecificControlsRequireOwnersAtTypedBoundary"}
       ]
     },
     {

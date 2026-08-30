@@ -38,6 +38,8 @@ enum class FilmStock : std::uint32_t {
 
 // IMAX 70mm film-simulation parameters (grain, halation, grade, vignette, bloom).
 struct FilmConfig {
+    friend bool operator==(const FilmConfig&, const FilmConfig&) = default;
+
     // Format.
     FilmFormat format = FilmFormat::IMAX70mm_15perf;
     float aspect_ratio = 1.43f;

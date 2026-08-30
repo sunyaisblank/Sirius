@@ -59,6 +59,14 @@ float ParseFloat(const std::string& text) {
     return static_cast<float>(value);
 }
 
+void ApplyCompatibleLensDefaults(ObserverConfig& observer) {
+    const auto lens = core::ParseLensType(observer.lens_model);
+    if (!lens.has_value() || *lens == core::LensType::ThinLens) return;
+    observer.focal_length = core::kDefaultCameraFocalLength;
+    observer.aperture = core::kDefaultCameraAperture;
+    observer.focus_distance = core::kDefaultCameraFocusDistance;
+}
+
 }  // namespace
 
 std::string RenderCommand::Usage() const {
@@ -84,10 +92,10 @@ Basic Options:
   --fov <deg>               Camera field of view (default: 60)
   --lens <name>             Lens: Pinhole, ThinLens, or Fisheye (fisheye CPU-only;
                             default: Pinhole)
-  --focal-length <mm-eq>    Thin-lens focal length, 50 mm-equivalent = 1 lens unit
-  --aperture <f-number>     Thin-lens aperture (default: 2.8)
+  --focal-length <mm-eq>    Thin-lens focal length; selects ThinLens (50 mm-eq = 1 lens unit)
+  --aperture <f-number>     Thin-lens aperture; selects ThinLens (default: 2.8)
   --focus-distance <length> Thin-lens focus distance in geometric coordinate units
-                            (default: 50)
+                            and selects ThinLens (default: 50)
   --temperature-model <m>   Disk temperature model: NovikovThorne (NT) or
                             ShakuraSunyaev (SS) (default: NovikovThorne)
   --disk-temperature <T>    Disk temperature at 1.5 times the inner edge in Kelvin
@@ -102,7 +110,7 @@ Basic Options:
 Post-Processing:
   --exposure <e>            Exposure value (default: 1.0)
   --bloom <intensity>       Bloom intensity 0-1 (default: 0.3)
-  --bloom-threshold <t>     Bloom brightness threshold (default: 0.3)
+  --bloom-threshold <t>     Bloom brightness threshold; enables bloom (default: 0.3)
   --contrast <c>            Contrast adjustment (default: 1.0)
   --saturation <s>          Saturation adjustment (default: 1.0)
   --tonemapper <name>       Tonemapper: ACES, Reinhard, Filmic, Uncharted2,
@@ -111,10 +119,10 @@ Post-Processing:
 
 Volumetric Disk (3D accretion disk with thickness):
   --volumetric              Enable volumetric disk rendering
-  --h-over-r <ratio>        Inner-edge H/r in [0.01,0.5] (default: 0.1)
-  --h-power <exp>           Flaring exponent (default: 0.25)
-  --tau <depth>             Inner-edge vertical optical depth (default: 10.0)
-  --vol-samples <n>         Ray marching samples (default: 64)
+  --h-over-r <ratio>        Inner-edge H/r in [0.01,0.5]; enables volume (default: 0.1)
+  --h-power <exp>           Flaring exponent; enables volume (default: 0.25)
+  --tau <depth>             Inner-edge vertical optical depth; enables volume (default: 10.0)
+  --vol-samples <n>         Ray marching samples; enables volume (default: 64)
   --turbulence              Enable deterministic procedural density perturbations (not GRMHD)
   --corona                  Decline: spectral covariant Compton transfer is not represented
   --no-disk                 Disable accretion-disk emission (required for charged/Λ metrics)
@@ -128,9 +136,9 @@ Film Simulation (IMAX 70mm cinematic look):
   --film                    Enable film simulation
   --film-preset <name>      Preset: Interstellar, SpaceOdyssey2001, DigitalClean
                             (default: Interstellar)
-  --grain <intensity>       Film grain intensity (default: 0.15)
-  --halation <strength>     Halation glow strength (default: 0.15)
-  --vignette <strength>     Vignette strength (default: 0.3)
+  --grain <intensity>       Film grain intensity; enables film (default: 0.15)
+  --halation <strength>     Halation glow strength; enables film (default: 0.15)
+  --vignette <strength>     Vignette strength; enables film (default: 0.3)
 
 DNGR Physics (default off; the pinned render is unchanged):
   --beams                   Propagate ray bundles (geodesic deviation) on the live path (P2)
@@ -246,18 +254,25 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
                 config.observer.fov = ParseDouble(args[++i]);
             } else if (arg == "--lens" && i + 1 < args.size()) {
                 config.observer.lens_model = args[++i];
+                ApplyCompatibleLensDefaults(config.observer);
             } else if (arg == "--focal-length" && i + 1 < args.size()) {
                 config.observer.focal_length = ParseFloat(args[++i]);
+                config.observer.lens_model = "ThinLens";
             } else if (arg == "--aperture" && i + 1 < args.size()) {
                 config.observer.aperture = ParseFloat(args[++i]);
+                config.observer.lens_model = "ThinLens";
             } else if (arg == "--focus-distance" && i + 1 < args.size()) {
                 config.observer.focus_distance = ParseFloat(args[++i]);
+                config.observer.lens_model = "ThinLens";
             } else if (arg == "--temperature-model" && i + 1 < args.size()) {
                 config.metric.temperature_model = args[++i];
+                config.disk_enabled = true;
             } else if (arg == "--disk-temperature" && i + 1 < args.size()) {
                 config.metric.disk_temperature = ParseFloat(args[++i]);
+                config.disk_enabled = true;
             } else if (arg == "--color-mode" && i + 1 < args.size()) {
                 config.color_mode = args[++i];
+                if (config.color_mode != "TrueColor") config.disk_enabled = true;
             } else if (arg == "--throat-radius" && i + 1 < args.size()) {
                 config.metric.throat_radius = ParseDouble(args[++i]);
             } else if (arg == "--wormhole-topology" && i + 1 < args.size()) {
@@ -283,6 +298,7 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
                 config.postprocess.bloom_intensity = ParseFloat(args[++i]);
             } else if (arg == "--bloom-threshold" && i + 1 < args.size()) {
                 config.postprocess.bloom_threshold = ParseFloat(args[++i]);
+                config.postprocess.enable_bloom = true;
             } else if (arg == "--contrast" && i + 1 < args.size()) {
                 config.postprocess.contrast = ParseFloat(args[++i]);
             } else if (arg == "--saturation" && i + 1 < args.size()) {
@@ -293,31 +309,44 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
                 config.postprocess.enable_bloom = false;
             } else if (arg == "--volumetric") {
                 config.volumetric.enabled = true;
+                config.disk_enabled = true;
             } else if (arg == "--h-over-r" && i + 1 < args.size()) {
                 config.volumetric.h_over_r = ParseFloat(args[++i]);
                 config.volumetric.enabled = true;
+                config.disk_enabled = true;
             } else if (arg == "--h-power" && i + 1 < args.size()) {
                 config.volumetric.h_power = ParseFloat(args[++i]);
+                config.volumetric.enabled = true;
+                config.disk_enabled = true;
             } else if (arg == "--tau" && i + 1 < args.size()) {
                 config.volumetric.tau_midplane = ParseFloat(args[++i]);
+                config.volumetric.enabled = true;
+                config.disk_enabled = true;
             } else if (arg == "--vol-samples" && i + 1 < args.size()) {
                 config.volumetric.samples = ParseInteger(args[++i]);
+                config.volumetric.enabled = true;
+                config.disk_enabled = true;
             } else if (arg == "--turbulence") {
                 config.volumetric.enabled = true;
                 config.volumetric.enable_turbulence = true;
+                config.disk_enabled = true;
             } else if (arg == "--corona") {
                 config.volumetric.enabled = true;
                 config.volumetric.enable_corona = true;
+                config.disk_enabled = true;
             } else if (arg == "--no-disk") {
                 config.disk_enabled = false;
             } else if (arg == "--motion-blur") {
                 config.motion_blur.enabled = true;
+                config.disk_enabled = true;
             } else if (arg == "--shutter-time" && i + 1 < args.size()) {
                 config.motion_blur.shutter_time = ParseFloat(args[++i]);
                 config.motion_blur.enabled = true;
+                config.disk_enabled = true;
             } else if (arg == "--motion-samples" && i + 1 < args.size()) {
                 config.motion_blur.samples = ParseInteger(args[++i]);
                 config.motion_blur.enabled = true;
+                config.disk_enabled = true;
             } else if (arg == "--film") {
                 config.film.enabled = true;
             } else if (arg == "--film-preset" && i + 1 < args.size()) {
@@ -325,12 +354,16 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
                 config.film.enabled = true;
             } else if (arg == "--grain" && i + 1 < args.size()) {
                 config.film.grain_intensity = ParseFloat(args[++i]);
+                config.film.enabled = true;
             } else if (arg == "--halation" && i + 1 < args.size()) {
                 config.film.halation_strength = ParseFloat(args[++i]);
+                config.film.enabled = true;
             } else if (arg == "--vignette" && i + 1 < args.size()) {
                 config.film.vignette_strength = ParseFloat(args[++i]);
+                config.film.enabled = true;
             } else if (arg == "--cinematic") {
                 config.volumetric.enabled = true;
+                config.disk_enabled = true;
                 config.volumetric.h_over_r = 0.12f;
                 config.volumetric.samples = 64;
                 config.postprocess.enable_bloom = true;
@@ -365,6 +398,7 @@ bool RenderCommand::ParseArgs(const std::vector<std::string>& args,
                     cli::Error("--doppler-beaming expects 'on' or 'off'");
                     return false;
                 }
+                config.disk_enabled = true;
             } else if (arg == "--camera-beta" && i + 1 < args.size()) {
                 // P5: camera four-velocity beta as forward[,up,right] in [0, 1).
                 const std::string spec = args[++i];

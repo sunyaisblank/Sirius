@@ -51,6 +51,8 @@ static_assert(sizeof(StarEntry) == 8 * sizeof(float),
 
 // Catalog generation and sampling parameters.
 struct StarfieldConfig {
+    friend bool operator==(const StarfieldConfig&, const StarfieldConfig&) = default;
+
     std::uint32_t star_count = 100000;  // Number of stars in catalog
     float min_distance_pc = 1.0f;       // Nearest star distance [pc]
     float max_distance_pc = 10000.0f;   // Farthest star distance [pc]

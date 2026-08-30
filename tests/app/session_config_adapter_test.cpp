@@ -91,6 +91,76 @@ TEST(RenderSessionProbe, GeometricMetadataNeverInventsPhysicalLengthUnits) {
     EXPECT_EQ(header.find("M_sun"), std::string::npos);
 }
 
+TEST(RenderSessionProbe, FeatureSpecificControlsRequireOwnersAtTypedBoundary) {
+    SiriusConfig app_defaults = SiriusConfig::Defaults();
+    app_defaults.backend.preferred = "cpu";
+    const auto projected_defaults = MakeSessionConfig(app_defaults);
+    ASSERT_TRUE(projected_defaults.has_value()) << projected_defaults.error().Description();
+    const SessionConfig typed_defaults;
+    EXPECT_FLOAT_EQ(projected_defaults->bloom_intensity, typed_defaults.bloom_intensity);
+    EXPECT_FLOAT_EQ(projected_defaults->bloom_threshold, typed_defaults.bloom_threshold);
+    EXPECT_FLOAT_EQ(projected_defaults->volumetric_h_over_r, typed_defaults.volumetric_h_over_r);
+    EXPECT_FLOAT_EQ(projected_defaults->volumetric_h_power, typed_defaults.volumetric_h_power);
+    EXPECT_FLOAT_EQ(projected_defaults->volumetric_tau_midplane,
+                    typed_defaults.volumetric_tau_midplane);
+    EXPECT_EQ(projected_defaults->volumetric_samples, typed_defaults.volumetric_samples);
+    EXPECT_EQ(projected_defaults->film_config, typed_defaults.film_config);
+
+    SessionConfig config;
+    config.lens_type = core::LensType::Pinhole;
+    config.camera_focal_length = 85.0f;
+    EXPECT_EQ(render::SessionConfigIssue(config),
+              "focal length, aperture, and focus distance apply only to ThinLens");
+
+    config.lens_type = core::LensType::ThinLens;
+    EXPECT_FALSE(render::SessionConfigIssue(config).has_value());
+
+    config = SessionConfig{};
+    config.enable_disk = false;
+    EXPECT_FALSE(render::SessionConfigIssue(config).has_value());
+    config.temperature_model = render::DiskTemperatureModel::ShakuraSunyaev;
+    EXPECT_EQ(render::SessionConfigIssue(config),
+              "disk temperature model and scale require disk emission");
+
+    config.temperature_model = render::DiskTemperatureModel::NovikovThorne;
+    config.disk_temperature_scale = 42000.0f;
+    EXPECT_EQ(render::SessionConfigIssue(config),
+              "disk temperature model and scale require disk emission");
+
+    config.disk_temperature_scale = core::kDefaultDiskTemperatureKelvin;
+    config.doppler_beaming = false;
+    EXPECT_EQ(render::SessionConfigIssue(config), "Doppler-beaming control requires disk emission");
+
+    config.doppler_beaming = true;
+    config.color_mode = core::color_modes::Mode::RedshiftMap;
+    EXPECT_EQ(render::SessionConfigIssue(config), "diagnostic colour modes require disk emission");
+
+    config = SessionConfig{};
+    config.enable_bloom = false;
+    config.bloom_threshold = 0.8f;
+    EXPECT_EQ(render::SessionConfigIssue(config), "bloom intensity and threshold require bloom");
+
+    config = SessionConfig{};
+    config.volumetric_h_power = 0.5f;
+    EXPECT_EQ(render::SessionConfigIssue(config),
+              "volumetric parameters require volumetric transfer");
+
+    config = SessionConfig{};
+    config.shutter_time = 0.25f;
+    EXPECT_EQ(render::SessionConfigIssue(config),
+              "motion-blur parameters require temporal integration");
+
+    config = SessionConfig{};
+    config.film_config.grain_intensity = 0.4f;
+    EXPECT_EQ(render::SessionConfigIssue(config),
+              "film-simulation parameters require film simulation");
+
+    config = SessionConfig{};
+    config.starfield_config.brightness_scale = 200.0f;
+    EXPECT_EQ(render::SessionConfigIssue(config),
+              "point-starfield parameters require point-starfield mode");
+}
+
 TEST(RenderSessionProbe, BackendAutoResolvesByDeviceRegistryAndCapabilities) {
     SiriusConfig config = SiriusConfig::Defaults();
     config.metric.name = "Kerr";
@@ -114,6 +184,7 @@ TEST(RenderSessionProbe, BackendAutoResolvesByDeviceRegistryAndCapabilities) {
     config.volumetric.samples = 64;
 
     config.metric.name = "Reissner-Nordstrom";
+    config.disk_enabled = false;
     EXPECT_EQ(MakeSessionConfig(config)->backend, render::RenderBackend::Cpu)
         << "auto must resolve CPU for a metric the registry marks CPU-only";
 #else
@@ -135,9 +206,6 @@ TEST(RenderSessionProbe, ConfigurationConversionPreservesObserverAndDiskControls
     config.observer.aperture = 1.4f;
     config.observer.focus_distance = 40.0f;
     config.color_mode = "Polarisation";
-    config.motion_blur.enabled = false;
-    config.motion_blur.shutter_time = 0.25f;
-    config.motion_blur.samples = 7;
 
     const auto adapted = MakeSessionConfig(config);
     ASSERT_TRUE(adapted.has_value()) << adapted.error().Description();
@@ -150,8 +218,6 @@ TEST(RenderSessionProbe, ConfigurationConversionPreservesObserverAndDiskControls
     EXPECT_EQ(session.lens_type, core::LensType::ThinLens);
     EXPECT_FLOAT_EQ(session.camera_focal_length, 85.0f);
     EXPECT_FLOAT_EQ(session.camera_aperture, 1.4f);
-    EXPECT_FLOAT_EQ(session.shutter_time, 0.25f);
-    EXPECT_EQ(session.motion_blur_samples, 7);
     EXPECT_FLOAT_EQ(session.camera_focus_distance, 40.0f);
     EXPECT_EQ(session.color_mode, core::color_modes::Mode::Polarisation);
     EXPECT_TRUE(session.enable_polarisation);
@@ -166,6 +232,9 @@ TEST(RenderSessionProbe, ConfigurationConversionPreservesObserverAndDiskControls
     EXPECT_FALSE(MakeSessionConfig(config).has_value());
     config.film.preset = "Interstellar";
     config.observer.lens_model = "Fisheye";
+    config.observer.focal_length = core::kDefaultCameraFocalLength;
+    config.observer.aperture = core::kDefaultCameraAperture;
+    config.observer.focus_distance = core::kDefaultCameraFocusDistance;
     EXPECT_EQ(MakeSessionConfig(config)->lens_type, core::LensType::Fisheye);
 
     SessionConfig malformed = session;
@@ -230,7 +299,9 @@ TEST(RenderSessionProbe, ConfigurationConversionPreservesObserverAndDiskControls
     malformed.width = 0;
     RenderSession invalid_dimensions_session;
     EXPECT_FALSE(invalid_dimensions_session.Configure(malformed));
+}
 
+TEST(RenderSessionProbe, InMemoryPreviewCompletesWithoutWritingOutput) {
     const auto preview_path =
         std::filesystem::temp_directory_path() / "sirius_in_memory_preview_must_not_exist.ppm";
     std::filesystem::remove(preview_path);

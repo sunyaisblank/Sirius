@@ -10,8 +10,48 @@
 #include <cmath>
 #include <memory>
 #include <numbers>
+#include <optional>
+#include <string_view>
 
 namespace sirius::core {
+
+// Lens projection models and their operator-visible defaults. Configuration,
+// typed-session validation, and camera construction share this authority so a
+// focal parameter cannot be accepted by a projection that never consumes it.
+enum class LensType {
+    Pinhole,   // Ideal pinhole (infinite depth of field)
+    ThinLens,  // Thin lens model with depth of field
+    Fisheye    // Equidistant fisheye projection
+};
+
+inline constexpr float kDefaultCameraFocalLength = 50.0f;
+inline constexpr float kDefaultCameraAperture = 2.8f;
+inline constexpr float kDefaultCameraFocusDistance = 50.0f;
+
+[[nodiscard]] constexpr std::optional<LensType> ParseLensType(std::string_view name) noexcept {
+    if (name == "Pinhole") return LensType::Pinhole;
+    if (name == "ThinLens") return LensType::ThinLens;
+    if (name == "Fisheye") return LensType::Fisheye;
+    return std::nullopt;
+}
+
+[[nodiscard]] constexpr std::optional<std::string_view> LensSpecificParameterIssue(
+    LensType lens, float focal_length, float aperture, float focus_distance) noexcept {
+    switch (lens) {
+        case LensType::Pinhole:
+        case LensType::ThinLens:
+        case LensType::Fisheye:
+            break;
+        default:
+            return "unknown lens identity";
+    }
+    if (lens != LensType::ThinLens &&
+        (focal_length != kDefaultCameraFocalLength || aperture != kDefaultCameraAperture ||
+         focus_distance != kDefaultCameraFocusDistance)) {
+        return "focal length, aperture, and focus distance apply only to ThinLens";
+    }
+    return std::nullopt;
+}
 
 // Ray emitted by a camera: observer position and unit 4-direction.
 struct CameraRay {
@@ -29,7 +69,7 @@ struct CameraRay {
 struct CameraConfig {
     // Position (Boyer-Lindquist coordinates: t, r, theta, phi)
     double t = 0.0;
-    double r = 50.0;                        // Distance from centre (in M)
+    double r = 50.0;                        // Geometric coordinate radius from the centre.
     double theta = std::numbers::pi / 2.0;  // Polar angle (pi/2 = equatorial)
     double phi = 0.0;                       // Azimuthal angle
 
@@ -47,21 +87,15 @@ struct CameraConfig {
     double beta_z = 0.0;
 
     // Lens properties
-    float fov = 60.0f;             // Field of view (degrees)
-    float focal_length = 50.0f;    // Focal length (mm-equivalent, for ThinLens)
-    float aperture = 2.8f;         // f-number (for depth of field)
-    float focus_distance = 50.0f;  // Focus distance in geometric coordinate units.
+    float fov = 60.0f;                               // Field of view (degrees)
+    float focal_length = kDefaultCameraFocalLength;  // mm-equivalent, for ThinLens.
+    float aperture = kDefaultCameraAperture;         // f-number, for ThinLens.
+    float focus_distance =
+        kDefaultCameraFocusDistance;  // Geometric coordinate length, for ThinLens.
 
     // Image properties
     int width = 1920;
     int height = 1080;
-};
-
-// Lens projection models.
-enum class LensType {
-    Pinhole,   // Ideal pinhole (infinite depth of field)
-    ThinLens,  // Thin lens model with depth of field
-    Fisheye    // Equidistant fisheye projection
 };
 
 // Abstract camera: generates a ray per pixel sample.

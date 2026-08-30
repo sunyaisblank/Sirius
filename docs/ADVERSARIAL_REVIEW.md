@@ -93,6 +93,7 @@ Each review pass asks:
 | Typed camera API advertised unimplemented lens modes and silently made them pinhole; invalid worldlines were clamped | `Orthographic`/`Panoramic` enum values and the aberration clamp | Fixed: only represented lens types exist, malformed enum values contract-fail, and non-finite/superluminal internal worldlines contract-fail after operator validation |
 | Session conversion inferred pinhole, digital film, or Novikov–Thorne from unknown values; Vulkan inferred pinhole/Novikov–Thorne from malformed typed values | conversion ternaries/default branch and Vulkan parameter packing | Fixed: disk temperature is a typed post-boundary enum; conversion explicitly parses every lens, film, and temperature value; CPU and Vulkan reject malformed typed values |
 | Typed session callers could reach allocation or Vulkan capability selection with invalid dimensions, output types, metric identity, dependent features, or malformed enums | validation existed only in the JSON/CLI layer and output fell through to PPM | Fixed: one `SessionConfigIssue` authority validates the complete typed boundary before allocation, backend selection, or dispatch |
+| Lens, disk, bloom, volumetric, motion, and film parameters could be accepted while their consuming feature was different or disabled | parameter validation checked numeric ranges but not ownership, and several CLI parameter flags never selected their consumer | Fixed: shared camera/disk/feature defaults define the only neutral inactive state; parameter flags select their owner, projection names are parsed once, and config plus typed-session boundaries reject every non-default latent control before work |
 | Session `Start()` was synchronous and cancellation could publish partial tiles/output while progress and callbacks raced | work ran on the caller; shared counters/callbacks were unsynchronised; Vulkan committed bands directly | Fixed: asynchronous terminal lifecycle, cancellation checkpoints, transactional commits, mutex-safe snapshots/callbacks, and cancellation-without-output evidence |
 | Reinitialising a tile scheduler retained its old completion count | `completed_count_` was not reset | Fixed with reset at initialisation and a repeated-use ledger witness |
 | Typed point-star configuration accepted values that its generator silently clamped | validation stopped at the JSON boundary | Fixed: the session boundary rejects every non-finite/out-of-domain field; parallax is wired and unused model fields were removed |
@@ -507,6 +508,20 @@ corresponding profile. They are not projected from registration counts.
   metadata witness brings the current estate to 739 governed source GoogleTests
   and 748 development CTests including nine operational controls. No rendering
   test was executed.
+- 2026-08-30 feature-ownership correction: lens, disk-temperature, Doppler,
+  diagnostic-colour, bloom, volumetric, temporal, film, and typed point-star
+  parameters now require their consuming identity or feature at both public
+  configuration and typed-session boundaries. CLI parameter flags select the
+  owner they configure, and `MakeSessionConfig` can no longer be used to bypass
+  schema validation. Shared defaults remove the former app/session bloom and
+  volume drift. GCC 14 and Clang 21 each compile the complete explicit product
+  and six-test-executable topology; the focused pure config/projection controls
+  pass on both. The estate now contains 743 governed source GoogleTests and 752
+  development CTests. During initial witness selection the then-combined
+  `ConfigurationConversionPreservesObserverAndDiskControls` test unexpectedly
+  executed its embedded 8x8 in-memory CPU preview once per compiler; that
+  preview is now split under the explicit rendering name
+  `InMemoryPreviewCompletesWithoutWritingOutput` and was not executed again.
 - GCC 14 strict required-Vulkan profile: the pre-alignment snapshot passed the complete
   907/907 estate on the Radeon 780M through Dozen in 210.36 seconds. A separate
   required-only run passed 697/697 on the Radeon in 281.34 seconds and the same

@@ -318,6 +318,7 @@ TEST(RenderSessionProbe, TypedNumericBoundariesMatchTheExternalConfigurationBoun
     config.shutter_time = 1000.1f;
     EXPECT_TRUE(sirius::render::SessionConfigIssue(config).has_value());
     config.enable_motion_blur = false;
+    config.shutter_time = sirius::core::kDefaultMotionBlurShutterTime;
 
     config.enable_film_simulation = true;
     config.film_config.halation_radius = std::numeric_limits<float>::infinity();

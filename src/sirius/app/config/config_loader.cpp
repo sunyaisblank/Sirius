@@ -5,6 +5,9 @@
 #include "sirius/app/config/config_loader.h"
 
 #include "sirius/app/platform_paths.h"
+#include "sirius/core/camera.h"
+#include "sirius/core/disk/disk_defaults.h"
+#include "sirius/core/feature_defaults.h"
 #include "sirius/core/metrics/registry.h"
 
 #include <algorithm>
@@ -424,6 +427,15 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
             "diskEnabled must be false when the selected metric has no represented "
             "Page-Thorne accretion-disk emission model");
     }
+    const bool default_temperature_model = config.metric.temperature_model == "NovikovThorne";
+    if (!config.disk_enabled &&
+        (!default_temperature_model ||
+         config.metric.disk_temperature != core::kDefaultDiskTemperatureKelvin)) {
+        errors.push_back("metric temperature model and disk temperature require diskEnabled=true");
+    }
+    if (!config.disk_enabled && !config.doppler_beaming) {
+        errors.push_back("dopplerBeaming is a disk-emission control and requires diskEnabled=true");
+    }
     if (config.ray_bundles && metric_id.has_value() && *metric_id != core::MetricId::Minkowski &&
         *metric_id != core::MetricId::Schwarzschild && *metric_id != core::MetricId::Kerr) {
         errors.push_back(
@@ -522,9 +534,8 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
         (!std::isfinite(beta_squared) || beta_squared >= 1.0)) {
         errors.push_back("observer camera beta magnitude must be less than 1");
     }
-    static const std::vector<std::string> valid_lens_models = {"Pinhole", "ThinLens", "Fisheye"};
-    if (std::find(valid_lens_models.begin(), valid_lens_models.end(), config.observer.lens_model) ==
-        valid_lens_models.end()) {
+    const auto lens_type = core::ParseLensType(config.observer.lens_model);
+    if (!lens_type.has_value()) {
         errors.push_back("observer.lens_model must be one of: Pinhole, ThinLens, Fisheye");
     }
     if (finite(config.observer.focal_length, "observer.focal_length") &&
@@ -539,6 +550,14 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
         (config.observer.focus_distance <= 0.0f || config.observer.focus_distance > 1.0e6f)) {
         errors.push_back("observer.focus_distance must be greater than 0 and at most 1000000");
     }
+    if (lens_type.has_value()) {
+        if (const auto issue = core::LensSpecificParameterIssue(
+                *lens_type, config.observer.focal_length, config.observer.aperture,
+                config.observer.focus_distance);
+            issue.has_value()) {
+            errors.emplace_back(*issue);
+        }
+    }
 
     // --- Post-process validation --------------------------------------------
     if (finite(config.postprocess.exposure, "postprocess.exposure") &&
@@ -552,6 +571,11 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
     if (finite(config.postprocess.bloom_threshold, "postprocess.bloom_threshold") &&
         (config.postprocess.bloom_threshold < 0 || config.postprocess.bloom_threshold > 100)) {
         errors.push_back("postprocess.bloom_threshold must be between 0 and 100");
+    }
+    if (!config.postprocess.enable_bloom &&
+        (config.postprocess.bloom_intensity != core::kDefaultBloomIntensity ||
+         config.postprocess.bloom_threshold != core::kDefaultBloomThreshold)) {
+        errors.push_back("postprocess bloom intensity and threshold require enableBloom=true");
     }
     if (finite(config.postprocess.contrast, "postprocess.contrast") &&
         (config.postprocess.contrast < 0 || config.postprocess.contrast > 4)) {
@@ -586,6 +610,13 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
     if (config.volumetric.samples < 1 || config.volumetric.samples > 4096) {
         errors.push_back("volumetric.samples must be between 1 and 4096");
     }
+    if (!config.volumetric.enabled &&
+        (config.volumetric.h_over_r != core::kDefaultVolumetricHOverR ||
+         config.volumetric.h_power != core::kDefaultVolumetricHPower ||
+         config.volumetric.tau_midplane != core::kDefaultVolumetricTauMidplane ||
+         config.volumetric.samples != core::kDefaultVolumetricSamples)) {
+        errors.push_back("volumetric parameters require volumetric.enabled=true");
+    }
     if (config.volumetric.enable_corona) {
         errors.push_back(
             "volumetric.enable_corona is not represented: frequency-dependent covariant "
@@ -603,6 +634,11 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
     }
     if (config.motion_blur.samples < 1 || config.motion_blur.samples > 4096) {
         errors.push_back("motionBlur.samples must be between 1 and 4096");
+    }
+    if (!config.motion_blur.enabled &&
+        (config.motion_blur.shutter_time != core::kDefaultMotionBlurShutterTime ||
+         config.motion_blur.samples != core::kDefaultMotionBlurSamples)) {
+        errors.push_back("motionBlur parameters require motionBlur.enabled=true");
     }
     if (config.motion_blur.enabled && !config.disk_enabled) {
         errors.push_back("diskEnabled must be true when motion blur is enabled");
@@ -626,6 +662,9 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
             "colorMode Narrowband is not represented: line emission requires ionisation, "
             "abundance, density, and frequency-dependent transfer rather than a temperature "
             "palette");
+    }
+    if (!config.disk_enabled && config.color_mode != "TrueColor") {
+        errors.push_back("diagnostic color modes require diskEnabled=true");
     }
     if (config.color_mode == "Polarisation") {
         if (!config.disk_enabled) {
@@ -664,6 +703,13 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
     if (finite(config.film.vignette_strength, "film.vignette_strength") &&
         (config.film.vignette_strength < 0 || config.film.vignette_strength > 2)) {
         errors.push_back("film.vignette_strength must be between 0 and 2");
+    }
+    const FilmSimulationConfig default_film;
+    if (!config.film.enabled && (config.film.preset != default_film.preset ||
+                                 config.film.grain_intensity != default_film.grain_intensity ||
+                                 config.film.halation_strength != default_film.halation_strength ||
+                                 config.film.vignette_strength != default_film.vignette_strength)) {
+        errors.push_back("film parameters require film.enabled=true");
     }
 
     // --- Backend validation -------------------------------------------------

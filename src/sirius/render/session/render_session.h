@@ -20,7 +20,9 @@
 // Physics integration.
 #include "sirius/backend/cpu/geodesic_tracer.h"
 #include "sirius/core/camera.h"
-#include "sirius/core/disk/novikov_thorne_disk.h"    // ISCO computation.
+#include "sirius/core/disk/disk_defaults.h"
+#include "sirius/core/disk/novikov_thorne_disk.h"  // ISCO computation.
+#include "sirius/core/feature_defaults.h"
 #include "sirius/core/metrics/kerr_schild_family.h"  // Kerr-Schild metric family.
 #include "sirius/core/metrics/registry.h"            // Metric identity registry.
 #include "sirius/core/metrics/warp_drive_family.h"   // Alcubierre warp drive family.
@@ -131,14 +133,15 @@ struct SessionConfig {
     double camera_beta_up = 0.0;
     double camera_beta_right = 0.0;
     core::LensType lens_type = core::LensType::Pinhole;
-    float camera_focal_length = 50.0f;
-    float camera_aperture = 2.8f;
-    float camera_focus_distance = 50.0f;  // Geometric coordinate length from the camera.
+    float camera_focal_length = core::kDefaultCameraFocalLength;
+    float camera_aperture = core::kDefaultCameraAperture;
+    float camera_focus_distance =
+        core::kDefaultCameraFocusDistance;  // Geometric coordinate length from the camera.
 
     // Disk temperature model.
     DiskTemperatureModel temperature_model = DiskTemperatureModel::NovikovThorne;
     // Effective temperature at 1.5 times the disk inner edge [K].
-    float disk_temperature_scale = 50000.0f;
+    float disk_temperature_scale = core::kDefaultDiskTemperatureKelvin;
     bool enable_disk = true;
 
     // Doppler beaming toggle (P4). True (default) keeps the full disk physics and
@@ -155,23 +158,23 @@ struct SessionConfig {
     // Post-processing (cinematic defaults).
     core::TonemapType tonemapper = core::TonemapType::Aces;  // Display transform (PPM/PNG).
     bool enable_bloom = true;
-    float bloom_intensity = 0.5f;
-    float bloom_threshold = 0.3f;
+    float bloom_intensity = core::kDefaultBloomIntensity;
+    float bloom_threshold = core::kDefaultBloomThreshold;
     float exposure = 3.0f;
     float contrast = 1.1f;
     float saturation = 1.15f;
 
     // Motion blur (disk rotation).
     bool enable_motion_blur = false;
-    float shutter_time = 0.1f;
-    int motion_blur_samples = 3;
+    float shutter_time = core::kDefaultMotionBlurShutterTime;
+    int motion_blur_samples = core::kDefaultMotionBlurSamples;
 
     // Volumetric disk.
     bool enable_volumetric_disk = false;
-    float volumetric_h_over_r = 0.1f;
-    float volumetric_h_power = 0.25f;
-    float volumetric_tau_midplane = 10.0f;
-    int volumetric_samples = 32;
+    float volumetric_h_over_r = core::kDefaultVolumetricHOverR;
+    float volumetric_h_power = core::kDefaultVolumetricHPower;
+    float volumetric_tau_midplane = core::kDefaultVolumetricTauMidplane;
+    int volumetric_samples = core::kDefaultVolumetricSamples;
 
     // Reserved typed request. The session rejects it until a covariant
     // geodesic radiative-transfer model is represented.
@@ -206,7 +209,7 @@ struct SessionConfig {
 
     // IMAX 70mm film simulation.
     bool enable_film_simulation = false;
-    FilmConfig film_config;
+    FilmConfig film_config = FilmConfig::Interstellar();
 };
 
 // Canonical, machine-readable witness emitted from the typed configuration

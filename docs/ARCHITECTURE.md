@@ -83,6 +83,7 @@ The July remediation's central lesson was that every duplicated authority eventu
 | Concern | Authority | Change from July |
 |---|---|---|
 | Metric identity | `core/metrics/registry.h`, closed `MetricId` enum | Carried. The GPU kernel's former physics catalogue (including dead Gödel, Taub-NUT, and `Custom` branches) is deleted. A compact device-family ABI remains, but `MapMetric` exhaustively translates every registry identity to a represented family or an explicit decline, and parity probes pin those ABI values. |
+| Optional-feature parameter ownership | `core/camera.h`, `core/disk/disk_defaults.h`, `core/feature_defaults.h`, `app/config/config_schema.h`, and `render::SessionConfigIssue` | Lens, disk-emission, bloom, volumetric, temporal, and film parameters have one neutral inactive state. CLI parameter flags select their owning feature; JSON and typed-session callers that retain non-default parameters under a different or disabled owner decline before work. |
 | Host tolerances and constants | `core/constants.h` | Carried. Device-only fp32/fp64 controller tolerances have different accumulation semantics and therefore live once in `gr_integrator.slang`; production and the live P1 parity probe call the same policy functions, while the probe binds that accepted envelope to CPU/oracle invariants. |
 | ISCO | `AccretionDisk::ComputeIsco` | Carried. |
 | Capture surfaces | `IMetric::InsideCaptureSurface`, analytic Kerr-Schild inverses, exact Kottler black-hole/cosmological roots | Carried and corrected for the spherical positive-Lambda sector. |

@@ -216,6 +216,7 @@ std::string SessionSceneEvidenceJson(const SessionConfig& config, std::size_t po
 }
 
 std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
+    const SessionConfig defaults;
     const auto finite = [](double value) { return std::isfinite(value); };
     const auto in_range = [&finite](double value, double minimum, double maximum) {
         return finite(value) && value >= minimum && value <= maximum;
@@ -253,6 +254,8 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
             stars.brightness_scale < 0.0f || stars.brightness_scale > 1000000.0f) {
             return "point-starfield parameters are outside the represented domain";
         }
+    } else if (config.starfield_config != defaults.starfield_config) {
+        return "point-starfield parameters require point-starfield mode";
     }
     if (config.write_output) {
         if (config.output_path.empty() || config.output_path.find('\0') != std::string::npos) {
@@ -336,6 +339,12 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         !in_range(config.camera_focus_distance, std::numeric_limits<float>::min(), 1.0e6)) {
         return "camera focal length, aperture, or focus distance is outside the represented domain";
     }
+    if (const auto issue =
+            core::LensSpecificParameterIssue(config.lens_type, config.camera_focal_length,
+                                             config.camera_aperture, config.camera_focus_distance);
+        issue.has_value()) {
+        return std::string(*issue);
+    }
 
     switch (config.temperature_model) {
         case DiskTemperatureModel::NovikovThorne:
@@ -351,6 +360,14 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
     if (config.enable_disk &&
         core::DiskSupportFor(config.metric_id) != core::DiskSupport::PageThorne) {
         return "the selected metric has no represented accretion-disk emission model";
+    }
+    if (!config.enable_disk &&
+        (config.temperature_model != DiskTemperatureModel::NovikovThorne ||
+         config.disk_temperature_scale != core::kDefaultDiskTemperatureKelvin)) {
+        return "disk temperature model and scale require disk emission";
+    }
+    if (!config.enable_disk && !config.doppler_beaming) {
+        return "Doppler-beaming control requires disk emission";
     }
     if (config.enable_corona) {
         return "corona emission requires frequency-dependent covariant Compton transfer, which "
@@ -370,6 +387,13 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         config.volumetric_tau_midplane > 1.0e6f) {
         return "volumetric transfer parameters are outside the represented domain";
     }
+    if (!config.enable_volumetric_disk &&
+        (config.volumetric_h_over_r != defaults.volumetric_h_over_r ||
+         config.volumetric_h_power != defaults.volumetric_h_power ||
+         config.volumetric_tau_midplane != defaults.volumetric_tau_midplane ||
+         config.volumetric_samples != defaults.volumetric_samples)) {
+        return "volumetric parameters require volumetric transfer";
+    }
 
     switch (config.color_mode) {
         case core::color_modes::Mode::TrueColor:
@@ -381,6 +405,9 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
             return "invalid colour mode";
     }
     const bool polarisation_mode = config.color_mode == core::color_modes::Mode::Polarisation;
+    if (!config.enable_disk && config.color_mode != core::color_modes::Mode::TrueColor) {
+        return "diagnostic colour modes require disk emission";
+    }
     if (config.enable_polarisation != polarisation_mode) {
         return "polarisation transport and colour mode must be enabled together";
     }
@@ -413,6 +440,15 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         !in_range(config.bloom_threshold, 0.0, 100.0) || !in_range(config.contrast, 0.0, 4.0) ||
         !in_range(config.saturation, 0.0, 4.0)) {
         return "display-pipeline parameters are outside the represented domain";
+    }
+    if (!config.enable_bloom && (config.bloom_intensity != defaults.bloom_intensity ||
+                                 config.bloom_threshold != defaults.bloom_threshold)) {
+        return "bloom intensity and threshold require bloom";
+    }
+    if (!config.enable_motion_blur &&
+        (config.shutter_time != defaults.shutter_time ||
+         config.motion_blur_samples != defaults.motion_blur_samples)) {
+        return "motion-blur parameters require temporal integration";
     }
     if (config.enable_motion_blur) {
         if (!in_range(config.shutter_time, 0.0, 1000.0) || config.motion_blur_samples < 1 ||
@@ -472,6 +508,8 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
             !in_range(film.bloom_radius, 0.0, 256.0)) {
             return "film-simulation parameters are outside the represented domain";
         }
+    } else if (config.film_config != defaults.film_config) {
+        return "film-simulation parameters require film simulation";
     }
     if (!finite(config.throat_radius) || config.throat_radius <= 0.0 ||
         config.throat_radius > 1000.0 || !finite(config.warp_velocity) ||

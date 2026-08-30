@@ -208,8 +208,8 @@ REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
     "acceptance_criteria": "c304fec87cdffe8c92e6d921311b9202c5739e5e989431e39e5d037393b06d20",
-    "required_dimensions": "72ae3c5dba028b7808f98bb874621ae5e35a192925b5de8e3e04ee81cf5ae7ab",
-    "capability_contracts": "414821dc75cfd02b01ac055522c21975ea9d77efd889880744a9af7ed4d37e8f",
+    "required_dimensions": "8a7596496dde0d3fb7311e9fbbe44f8375170e6eb1756181024facddcb2593de",
+    "capability_contracts": "43a3cf7bac0e0f27cb735a589004a2139e900a514b9df8d2cd539a730f34562e",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
 

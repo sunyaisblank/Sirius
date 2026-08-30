@@ -1,5 +1,6 @@
 #include "sirius/app/config/session_config_adapter.h"
 
+#include "sirius/app/config/config_loader.h"
 #include "sirius/core/constants.h"
 #include "sirius/core/metrics/registry.h"
 #include "sirius/render/vulkan_renderer.h"
@@ -41,13 +42,6 @@ std::optional<core::color_modes::Mode> ParseColorMode(const std::string& value) 
     return std::nullopt;
 }
 
-std::optional<core::LensType> ParseLensModel(const std::string& value) {
-    if (value == "Pinhole") return core::LensType::Pinhole;
-    if (value == "ThinLens") return core::LensType::ThinLens;
-    if (value == "Fisheye") return core::LensType::Fisheye;
-    return std::nullopt;
-}
-
 std::optional<render::WormholeTopology> ParseWormholeTopology(const std::string& value) {
     if (value == "OneSheetCapture") return render::WormholeTopology::OneSheetCapture;
     if (value == "TwoSheet") return render::WormholeTopology::TwoSheet;
@@ -76,6 +70,11 @@ std::optional<render::FilmConfig> MakeFilmConfig(const FilmSimulationConfig& con
 }  // namespace
 
 base::Expected<render::SessionConfig> MakeSessionConfig(const SiriusConfig& config) {
+    if (const auto errors = ConfigLoader::Validate(config); !errors.empty()) {
+        return base::Fail(base::ErrorDomain::kConfiguration, "create render session",
+                          errors.front());
+    }
+
     render::SessionConfig session;
     session.width = config.render.width;
     session.height = config.render.height;
@@ -121,7 +120,7 @@ base::Expected<render::SessionConfig> MakeSessionConfig(const SiriusConfig& conf
     session.camera_beta_forward = config.observer.camera_beta_forward;
     session.camera_beta_up = config.observer.camera_beta_up;
     session.camera_beta_right = config.observer.camera_beta_right;
-    const auto lens_type = ParseLensModel(config.observer.lens_model);
+    const auto lens_type = core::ParseLensType(config.observer.lens_model);
     if (!lens_type) {
         return base::Fail(base::ErrorDomain::kConfiguration, "create render session",
                           "unknown lens model '" + config.observer.lens_model + "'");

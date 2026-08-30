@@ -4,6 +4,9 @@
 // the Sirius style guide; the explicit JSON codec preserves the established
 // camelCase file format without leaking those legacy spellings downstream.
 
+#include "sirius/core/camera.h"
+#include "sirius/core/disk/disk_defaults.h"
+#include "sirius/core/feature_defaults.h"
 #include "sirius/core/metrics/registry.h"
 
 #include <nlohmann/json.hpp>
@@ -29,7 +32,7 @@ struct MetricConfig {
     double charge = 0.0;
     double cosmological_constant = 0.0;
     std::string temperature_model = "NovikovThorne";
-    float disk_temperature = 50000.0f;
+    float disk_temperature = core::kDefaultDiskTemperatureKelvin;
     double throat_radius = core::kDefaultMorrisThorneThroatRadius;
     std::string wormhole_topology = "OneSheetCapture";
     double warp_velocity = core::kDefaultAlcubierreWarpVelocity;
@@ -46,15 +49,16 @@ struct ObserverConfig {
     double camera_beta_up = 0.0;
     double camera_beta_right = 0.0;
     std::string lens_model = "Pinhole";
-    float focal_length = 50.0f;
-    float aperture = 2.8f;
-    float focus_distance = 50.0f;  // Geometric coordinate length from the camera.
+    float focal_length = core::kDefaultCameraFocalLength;
+    float aperture = core::kDefaultCameraAperture;
+    float focus_distance =
+        core::kDefaultCameraFocusDistance;  // Geometric coordinate length from the camera.
 };
 
 struct PostProcessConfig {
     bool enable_bloom = true;
-    float bloom_intensity = 0.3f;
-    float bloom_threshold = 0.3f;
+    float bloom_intensity = core::kDefaultBloomIntensity;
+    float bloom_threshold = core::kDefaultBloomThreshold;
     float exposure = 1.0f;
     float contrast = 1.0f;
     float saturation = 1.0f;
@@ -63,18 +67,19 @@ struct PostProcessConfig {
 
 struct VolumetricConfig {
     bool enabled = false;
-    float h_over_r = 0.1f;       // Reference H/r at the disk inner edge.
-    float h_power = 0.25f;       // Radial exponent before the [0.01,0.5] saturation.
-    float tau_midplane = 10.0f;  // Full vertical optical depth at the inner edge.
-    int samples = 64;
+    float h_over_r = core::kDefaultVolumetricHOverR;  // H/r at the disk inner edge.
+    float h_power = core::kDefaultVolumetricHPower;   // Radial exponent before saturation.
+    float tau_midplane =
+        core::kDefaultVolumetricTauMidplane;  // Full vertical depth at the inner edge.
+    int samples = core::kDefaultVolumetricSamples;
     bool enable_turbulence = false;
     bool enable_corona = false;
 };
 
 struct MotionBlurConfig {
     bool enabled = false;
-    float shutter_time = 0.1f;
-    int samples = 3;
+    float shutter_time = core::kDefaultMotionBlurShutterTime;
+    int samples = core::kDefaultMotionBlurSamples;
 };
 
 struct FilmSimulationConfig {

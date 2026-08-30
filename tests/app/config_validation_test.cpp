@@ -174,6 +174,8 @@ TEST(ConfigValidation, CameraWorldlineAndLensAreValidated) {
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
 
     config.observer.lens_model = "Fisheye";
+    EXPECT_FALSE(ConfigLoader::Validate(config).empty());
+    config.observer.aperture = core::kDefaultCameraAperture;
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
 
     config = SiriusConfig::Defaults();
@@ -188,6 +190,72 @@ TEST(ConfigValidation, CameraWorldlineAndLensAreValidated) {
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
     config.disk_enabled = false;
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
+}
+
+TEST(ConfigValidation, FeatureSpecificControlsRequireTheirOwningModels) {
+    SiriusConfig config = SiriusConfig::Defaults();
+    config.observer.focal_length = 85.0f;
+    auto errors = ConfigLoader::Validate(config);
+    EXPECT_NE(std::find_if(errors.begin(), errors.end(),
+                           [](const std::string& error) {
+                               return error.find("only to ThinLens") != std::string::npos;
+                           }),
+              errors.end());
+
+    config.observer.lens_model = "ThinLens";
+    EXPECT_TRUE(ConfigLoader::Validate(config).empty());
+
+    config = SiriusConfig::Defaults();
+    config.disk_enabled = false;
+    EXPECT_TRUE(ConfigLoader::Validate(config).empty());
+
+    config.metric.temperature_model = "ShakuraSunyaev";
+    errors = ConfigLoader::Validate(config);
+    EXPECT_NE(std::find_if(errors.begin(), errors.end(),
+                           [](const std::string& error) {
+                               return error.find("temperature model") != std::string::npos;
+                           }),
+              errors.end());
+
+    config.metric.temperature_model = "NovikovThorne";
+    config.metric.disk_temperature = 42000.0f;
+    EXPECT_FALSE(ConfigLoader::Validate(config).empty());
+
+    config.metric.disk_temperature = core::kDefaultDiskTemperatureKelvin;
+    config.doppler_beaming = false;
+    errors = ConfigLoader::Validate(config);
+    EXPECT_NE(std::find_if(errors.begin(), errors.end(),
+                           [](const std::string& error) {
+                               return error.find("Doppler") != std::string::npos ||
+                                      error.find("doppler") != std::string::npos;
+                           }),
+              errors.end());
+
+    config.doppler_beaming = true;
+    config.color_mode = "RedshiftMap";
+    errors = ConfigLoader::Validate(config);
+    EXPECT_NE(std::find_if(errors.begin(), errors.end(),
+                           [](const std::string& error) {
+                               return error.find("diagnostic color modes") != std::string::npos;
+                           }),
+              errors.end());
+
+    config = SiriusConfig::Defaults();
+    config.postprocess.enable_bloom = false;
+    config.postprocess.bloom_threshold = 0.8f;
+    EXPECT_FALSE(ConfigLoader::Validate(config).empty());
+
+    config = SiriusConfig::Defaults();
+    config.volumetric.h_power = 0.5f;
+    EXPECT_FALSE(ConfigLoader::Validate(config).empty());
+
+    config = SiriusConfig::Defaults();
+    config.motion_blur.shutter_time = 0.25f;
+    EXPECT_FALSE(ConfigLoader::Validate(config).empty());
+
+    config = SiriusConfig::Defaults();
+    config.film.grain_intensity = 0.4f;
+    EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
 
 TEST(ConfigValidation, MetricMassAndObserverCoordinateRadiusAreIdentityAware) {

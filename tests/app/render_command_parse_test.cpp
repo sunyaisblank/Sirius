@@ -74,6 +74,54 @@ TEST(RenderCommandParse, RepresentedVolumetricAndFilmFlagsSetEnables) {
     EXPECT_FALSE(config.disk_enabled);
 }
 
+TEST(RenderCommandParse, FeatureParametersSelectTheirOwningModels) {
+    RenderCommand cmd;
+    GlobalOptions globals;
+    SiriusConfig config = SiriusConfig::Defaults();
+    config.disk_enabled = false;
+    config.postprocess.enable_bloom = false;
+
+    EXPECT_EQ(cmd.Execute({"--focal-length",
+                           "85",
+                           "--h-power",
+                           "0.3",
+                           "--tau",
+                           "12",
+                           "--vol-samples",
+                           "8",
+                           "--grain",
+                           "0.2",
+                           "--halation",
+                           "0.1",
+                           "--vignette",
+                           "0.4",
+                           "--bloom-threshold",
+                           "0.2",
+                           "--disk-temperature",
+                           "42000",
+                           "--doppler-beaming",
+                           "off",
+                           "--color-mode",
+                           "RedshiftMap",
+                           kStopSentinel},
+                          globals, config),
+              1);
+    EXPECT_EQ(config.observer.lens_model, "ThinLens");
+    EXPECT_TRUE(config.volumetric.enabled);
+    EXPECT_TRUE(config.film.enabled);
+    EXPECT_TRUE(config.postprocess.enable_bloom);
+    EXPECT_TRUE(config.disk_enabled);
+
+    config.observer.focal_length = 85.0f;
+    config.observer.aperture = 1.4f;
+    config.observer.focus_distance = 40.0f;
+    EXPECT_EQ(cmd.Execute({"--lens", "Fisheye", kStopSentinel}, globals, config), 1);
+    EXPECT_EQ(config.observer.lens_model, "Fisheye");
+    EXPECT_FLOAT_EQ(config.observer.focal_length, core::kDefaultCameraFocalLength);
+    EXPECT_FLOAT_EQ(config.observer.aperture, core::kDefaultCameraAperture);
+    EXPECT_FLOAT_EQ(config.observer.focus_distance, core::kDefaultCameraFocusDistance);
+}
+
 TEST(RenderCommandParse, MotionBlurAndWormholeTopologyReachTheValidatedSchema) {
     RenderCommand cmd;
     GlobalOptions globals;

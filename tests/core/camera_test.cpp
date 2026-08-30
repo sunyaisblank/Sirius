@@ -299,6 +299,17 @@ TEST(CameraFactoryTest, CreateFisheye) {
 }
 
 TEST(CameraFactoryTest, MalformedLensValueFailsClosed) {
+    EXPECT_EQ(ParseLensType("Pinhole"), LensType::Pinhole);
+    EXPECT_EQ(ParseLensType("ThinLens"), LensType::ThinLens);
+    EXPECT_EQ(ParseLensType("Fisheye"), LensType::Fisheye);
+    EXPECT_FALSE(ParseLensType("Perspective").has_value());
+    EXPECT_FALSE(LensSpecificParameterIssue(LensType::ThinLens, 85.0f, 1.4f, 40.0f).has_value());
+    EXPECT_TRUE(LensSpecificParameterIssue(LensType::Pinhole, 85.0f, kDefaultCameraAperture,
+                                           kDefaultCameraFocusDistance)
+                    .has_value());
+    EXPECT_TRUE(LensSpecificParameterIssue(static_cast<LensType>(999), kDefaultCameraFocalLength,
+                                           kDefaultCameraAperture, kDefaultCameraFocusDistance)
+                    .has_value());
     EXPECT_DEATH(
         {
             const auto camera = CreateCamera(static_cast<LensType>(999));

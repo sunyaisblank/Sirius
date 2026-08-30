@@ -201,6 +201,7 @@ set_tests_properties(
     ConfigValidation.UnimplementedDenoiserRequestIsRejected
     ConfigValidation.ObserverAzimuthRangeIsValidated
     ConfigValidation.CameraWorldlineAndLensAreValidated
+    ConfigValidation.FeatureSpecificControlsRequireTheirOwningModels
     ConfigValidation.MetricMassAndObserverCoordinateRadiusAreIdentityAware
     ConfigValidation.DeSitterRequestsEnforcePositiveLambdaAndSubNariaiBlackHole
     ConfigValidation.PolarisationRequiresRepresentedThinBlackHoleDisk
@@ -812,6 +813,7 @@ set_tests_properties(
 set_tests_properties(
     RenderCommandParse.BasicFlagsMapToConfig
     RenderCommandParse.RepresentedVolumetricAndFilmFlagsSetEnables
+    RenderCommandParse.FeatureParametersSelectTheirOwningModels
     RenderCommandParse.MotionBlurAndWormholeTopologyReachTheValidatedSchema
     RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent
     RenderCommandParse.BackendVulkanDeclinesMetricOffTheRenderPath
@@ -848,8 +850,10 @@ set_tests_properties(
 set_tests_properties(
     RenderSessionProbe.TraceDomainScalesWithMassAndEnclosesTheObserver
     RenderSessionProbe.GeometricMetadataNeverInventsPhysicalLengthUnits
+    RenderSessionProbe.FeatureSpecificControlsRequireOwnersAtTypedBoundary
     RenderSessionProbe.BackendAutoResolvesByDeviceRegistryAndCapabilities
     RenderSessionProbe.ConfigurationConversionPreservesObserverAndDiskControls
+    RenderSessionProbe.InMemoryPreviewCompletesWithoutWritingOutput
     RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr
     RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter
     RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr
