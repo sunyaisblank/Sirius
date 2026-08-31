@@ -22,7 +22,7 @@
 #endif
 
 #include "sirius/core/constants.h"
-#include "sirius/core/metrics/morris_thorne_family.h"
+#include "sirius/core/metrics/cpu_metric_factory.h"
 #include "sirius/core/spectral/blackbody.h"  // Spectral blackbody colour.
 
 // stb_image decoder for the starfield texture; the implementation lives once in
@@ -52,18 +52,28 @@ using backend::TraceResult;
 using core::AccretionDiskD;
 using core::CameraConfig;
 using core::CameraRay;
-using core::KerrSchildFamily;
-using core::KerrSchildParams;
 using core::MetricId;
 using core::Vec4;
-using core::WarpDriveFamily;
-using core::WarpDriveParams;
 
 namespace math = core::constants::math;
 
 namespace {
 constexpr int kBloomRadius = 12;
 constexpr float kShadowLift = 0.02f;
+
+core::MetricConstructionParameters MetricConstructionParametersFor(const SessionConfig& config) {
+    core::MetricConstructionParameters parameters;
+    parameters.mass = config.black_hole_mass;
+    parameters.dimensionless_spin = config.black_hole_spin;
+    parameters.dimensionless_charge = config.black_hole_charge;
+    parameters.cosmological_constant = config.cosmological_constant;
+    parameters.throat_radius = config.throat_radius;
+    parameters.one_sheet_topology = config.wormhole_topology == WormholeTopology::OneSheetCapture;
+    parameters.warp_velocity = config.warp_velocity;
+    parameters.bubble_radius = config.bubble_radius;
+    parameters.bubble_sigma = config.bubble_sigma;
+    return parameters;
+}
 }  // namespace
 
 RenderSession::~RenderSession() {
@@ -280,70 +290,19 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         return "CPU tile and thread controls are not represented by the device-governed Vulkan "
                "backend";
     }
-    if (const auto issue =
-            core::MetricParameterIssue(config.metric_id, config.black_hole_spin,
-                                       config.black_hole_charge, config.cosmological_constant);
-        issue.has_value()) {
-        return std::string(*issue);
-    }
-    const bool uses_mass = core::MetricUsesMass(config.metric_id);
-    if (!finite(config.black_hole_mass) || config.black_hole_mass < 0.0 ||
-        config.black_hole_mass > 100.0 || !finite(config.black_hole_spin) ||
-        config.black_hole_spin < 0.0 || config.black_hole_spin > 0.998 ||
-        !finite(config.black_hole_charge) || config.black_hole_charge < 0.0 ||
-        config.black_hole_charge > 0.999 || !finite(config.cosmological_constant) ||
-        std::abs(config.cosmological_constant) > 0.1) {
-        return "metric mass, spin, charge, or lambda is outside the represented domain";
-    }
-    if (config.black_hole_spin * config.black_hole_spin +
-            config.black_hole_charge * config.black_hole_charge >=
-        0.999) {
-        return "combined spin squared plus charge squared must be below 0.999";
-    }
-    if ((!uses_mass && config.black_hole_mass != 0.0) ||
-        (uses_mass && config.black_hole_mass < 0.1)) {
-        return uses_mass ? "mass must be between 0.1 and 100 for this metric"
-                         : "metrics without a mass parameter require mass to be zero";
-    }
-    if (const auto issue = core::MetricHorizonIssue(config.metric_id, config.black_hole_mass,
-                                                    config.cosmological_constant);
-        issue.has_value()) {
-        return std::string(*issue);
-    }
-
-    if (!finite(config.throat_radius) || config.throat_radius <= 0.0 ||
-        config.throat_radius > 1000.0 || !finite(config.warp_velocity) ||
-        std::abs(config.warp_velocity) > 10.0 || !finite(config.bubble_radius) ||
-        config.bubble_radius <= 0.0 || config.bubble_radius > 1000.0 ||
-        !finite(config.bubble_sigma) || config.bubble_sigma <= 0.0 ||
-        config.bubble_sigma > 1000.0) {
-        return "wormhole or warp-drive parameters are outside the represented domain";
-    }
-    bool one_sheet_topology = false;
     switch (config.wormhole_topology) {
         case WormholeTopology::OneSheetCapture:
-            one_sheet_topology = true;
-            break;
         case WormholeTopology::TwoSheet:
             break;
         default:
             return "invalid wormhole topology";
     }
-    if (const auto issue = core::MetricSpecificParameterIssue(
-            config.metric_id, config.throat_radius, one_sheet_topology, config.warp_velocity,
-            config.bubble_radius, config.bubble_sigma);
+    const core::MetricConstructionParameters metric_parameters =
+        MetricConstructionParametersFor(config);
+    if (const auto issue =
+            core::MetricConstructionParameterIssue(config.metric_id, metric_parameters);
         issue.has_value()) {
         return std::string(*issue);
-    }
-    if (config.metric_id == MetricId::MorrisThorne && !one_sheet_topology) {
-        return "two-sheet wormhole continuation and a second environment are not represented";
-    }
-    if (config.metric_id == MetricId::Alcubierre) {
-        if (const auto issue =
-                core::AlcubierreScaleIssue(config.bubble_radius, config.bubble_sigma);
-            issue.has_value()) {
-            return std::string(*issue);
-        }
     }
 
     const core::MetricObserverRadiusIssue observer_radius_issue =
@@ -620,70 +579,12 @@ base::Expected<void> RenderSession::Initialise() {
         return {};
     }
 
-    // Construct the spacetime from its registry identity. Charge and the
-    // cosmological constant flow through; a metric the CPU tracer cannot
-    // represent leaves metric_ null, and the scheduler then refuses the CPU
-    // path instead of substituting a different spacetime.
-    switch (config_.metric_id) {
-        case MetricId::Minkowski:
-            metric_ = std::make_unique<KerrSchildFamily>(KerrSchildParams::Minkowski());
-            break;
-        case MetricId::Schwarzschild:
-            SIRIUS_ASSERT(config_.black_hole_spin == 0.0);
-            SIRIUS_ASSERT(config_.black_hole_charge == 0.0);
-            SIRIUS_ASSERT(config_.cosmological_constant == 0.0);
-            metric_ = std::make_unique<KerrSchildFamily>(
-                KerrSchildParams::Schwarzschild(config_.black_hole_mass));
-            break;
-        case MetricId::Kerr:
-            SIRIUS_ASSERT(config_.black_hole_charge == 0.0);
-            SIRIUS_ASSERT(config_.cosmological_constant == 0.0);
-            metric_ = std::make_unique<KerrSchildFamily>(KerrSchildParams::Kerr(
-                config_.black_hole_mass, config_.black_hole_spin * config_.black_hole_mass));
-            break;
-        case MetricId::ReissnerNordstrom:
-            SIRIUS_ASSERT(config_.black_hole_spin == 0.0);
-            SIRIUS_ASSERT(config_.cosmological_constant == 0.0);
-            metric_ = std::make_unique<KerrSchildFamily>(KerrSchildParams::ReissnerNordstrom(
-                config_.black_hole_mass, config_.black_hole_charge * config_.black_hole_mass));
-            break;
-        case MetricId::KerrNewman:
-            SIRIUS_ASSERT(config_.cosmological_constant == 0.0);
-            metric_ = std::make_unique<KerrSchildFamily>(KerrSchildParams::KerrNewman(
-                config_.black_hole_mass, config_.black_hole_spin * config_.black_hole_mass,
-                config_.black_hole_charge * config_.black_hole_mass));
-            break;
-        case MetricId::DeSitter: {
-            SIRIUS_ASSERT(config_.black_hole_spin == 0.0);
-            SIRIUS_ASSERT(config_.black_hole_charge == 0.0);
-            metric_ = std::make_unique<KerrSchildFamily>(
-                KerrSchildParams::DeSitter(config_.cosmological_constant));
-            break;
-        }
-        case MetricId::SchwarzschildDeSitter: {
-            SIRIUS_ASSERT(config_.black_hole_spin == 0.0);
-            SIRIUS_ASSERT(config_.black_hole_charge == 0.0);
-            KerrSchildParams params = KerrSchildParams::Schwarzschild(config_.black_hole_mass);
-            params.Lambda = config_.cosmological_constant;
-            metric_ = std::make_unique<KerrSchildFamily>(params);
-            break;
-        }
-        case MetricId::Alcubierre: {
-            WarpDriveParams wp;
-            wp.vs = config_.warp_velocity;
-            wp.R = config_.bubble_radius;
-            wp.sigma = config_.bubble_sigma;
-            metric_ = std::make_unique<WarpDriveFamily>(wp);
-            break;
-        }
-        case MetricId::MorrisThorne: {
-            // The Cartesian embedding of the spherical family; one sheet,
-            // throat as the capture surface (see morris_thorne_family.h).
-            metric_ = std::make_unique<core::MorrisThorneCartesian>(
-                core::MorrisThorneParams::Ellis(config_.throat_radius));
-            break;
-        }
-    }
+    // Construct through the same authority probed by the non-render backend
+    // estate. Charge and spin remain dimensionless at this boundary; the
+    // factory performs their one owned conversion to geometric lengths.
+    const core::MetricConstructionParameters metric_parameters =
+        MetricConstructionParametersFor(config_);
+    metric_ = core::CreateCpuMetric(config_.metric_id, metric_parameters);
     if (metric_) {
         std::cout << "  Metric:     " << metric_->GetName() << std::endl;
     } else {

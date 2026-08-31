@@ -287,6 +287,7 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    CpuTraceBoundary.EveryAdvertisedCpuMetricConstructsAndTracesOneRay
     CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle
     CpuTraceBoundary.JacobiBundleTerminatesAtTheSameCausalEvent
     PROPERTIES LABELS "Mandatory;Correctness"

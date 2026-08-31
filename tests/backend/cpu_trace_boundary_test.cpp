@@ -3,6 +3,7 @@
 
 #include "sirius/backend/cpu/geodesic_tracer.h"
 #include "sirius/core/camera.h"
+#include "sirius/core/metrics/cpu_metric_factory.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/core/metrics/registry.h"
 
@@ -102,6 +103,146 @@ double TerminalRadius(const TraceResult& trace) {
     return std::sqrt(trace.final_position(1) * trace.final_position(1) +
                      trace.final_position(2) * trace.final_position(2) +
                      trace.final_position(3) * trace.final_position(3));
+}
+
+sirius::core::MetricConstructionParameters RepresentedParametersFor(MetricId id) {
+    sirius::core::MetricConstructionParameters parameters;
+    switch (id) {
+        case MetricId::Minkowski:
+        case MetricId::DeSitter:
+        case MetricId::MorrisThorne:
+        case MetricId::Alcubierre:
+            parameters.mass = 0.0;
+            break;
+        case MetricId::Kerr:
+            parameters.mass = 2.0;
+            parameters.dimensionless_spin = 0.5;
+            break;
+        case MetricId::ReissnerNordstrom:
+            parameters.mass = 2.0;
+            parameters.dimensionless_charge = 0.3;
+            break;
+        case MetricId::KerrNewman:
+            parameters.mass = 2.0;
+            parameters.dimensionless_spin = 0.3;
+            parameters.dimensionless_charge = 0.3;
+            break;
+        case MetricId::Schwarzschild:
+        case MetricId::SchwarzschildDeSitter:
+            parameters.mass = 2.0;
+            break;
+    }
+    if (id == MetricId::DeSitter || id == MetricId::SchwarzschildDeSitter) {
+        parameters.cosmological_constant = 1.0e-3;
+    }
+    return parameters;
+}
+
+void ExpectConstructedParameters(MetricId id,
+                                 const sirius::core::MetricConstructionParameters& expected,
+                                 sirius::core::IMetric* metric) {
+    switch (id) {
+        case MetricId::Minkowski:
+        case MetricId::Schwarzschild:
+        case MetricId::Kerr:
+        case MetricId::ReissnerNordstrom:
+        case MetricId::KerrNewman:
+        case MetricId::DeSitter:
+        case MetricId::SchwarzschildDeSitter: {
+            const auto* family = dynamic_cast<const KerrSchildFamily*>(metric);
+            ASSERT_NE(family, nullptr);
+            const KerrSchildParams actual = family->GetParams();
+            EXPECT_DOUBLE_EQ(actual.M, expected.mass);
+            EXPECT_DOUBLE_EQ(actual.a, expected.dimensionless_spin * expected.mass);
+            EXPECT_DOUBLE_EQ(actual.Q, expected.dimensionless_charge * expected.mass);
+            EXPECT_DOUBLE_EQ(actual.Lambda, expected.cosmological_constant);
+            break;
+        }
+        case MetricId::MorrisThorne: {
+            const auto* family = dynamic_cast<const sirius::core::MorrisThorneCartesian*>(metric);
+            ASSERT_NE(family, nullptr);
+            EXPECT_DOUBLE_EQ(family->SphericalFamily().GetParams().b0, expected.throat_radius);
+            break;
+        }
+        case MetricId::Alcubierre: {
+            const auto* family = dynamic_cast<const sirius::core::WarpDriveFamily*>(metric);
+            ASSERT_NE(family, nullptr);
+            const sirius::core::WarpDriveParams actual = family->GetParams();
+            EXPECT_DOUBLE_EQ(actual.vs, expected.warp_velocity);
+            EXPECT_DOUBLE_EQ(actual.R, expected.bubble_radius);
+            EXPECT_DOUBLE_EQ(actual.sigma, expected.bubble_sigma);
+            break;
+        }
+    }
+}
+
+TEST(CpuTraceBoundary, EveryAdvertisedCpuMetricConstructsAndTracesOneRay) {
+    auto absent_parameter = RepresentedParametersFor(MetricId::Minkowski);
+    absent_parameter.dimensionless_spin = 0.5;
+    EXPECT_EQ(sirius::core::CreateCpuMetric(MetricId::Minkowski, absent_parameter), nullptr);
+
+    auto unrepresented_topology = RepresentedParametersFor(MetricId::MorrisThorne);
+    unrepresented_topology.one_sheet_topology = false;
+    EXPECT_EQ(sirius::core::CreateCpuMetric(MetricId::MorrisThorne, unrepresented_topology),
+              nullptr);
+
+    std::size_t advertised_cpu_metrics = 0;
+    for (const auto& info : sirius::core::MetricRegistry()) {
+        if (!info.cpu_supported) continue;
+        ++advertised_cpu_metrics;
+        SCOPED_TRACE(info.canonical_name);
+
+        const auto parameters = RepresentedParametersFor(info.id);
+        auto metric = sirius::core::CreateCpuMetric(info.id, parameters);
+        ASSERT_NE(metric, nullptr);
+        EXPECT_EQ(sirius::core::ParseMetricName(metric->GetName()), info.id);
+        ExpectConstructedParameters(info.id, parameters, metric.get());
+
+        const double scale =
+            sirius::core::MetricSceneLengthScale(info.id, parameters.mass, parameters.throat_radius,
+                                                 parameters.bubble_radius, parameters.bubble_sigma);
+        CameraConfig camera_config;
+        camera_config.r = 10.0 * scale;
+        camera_config.theta = std::numbers::pi / 2.0;
+        camera_config.phi = 0.0;
+        camera_config.fov = 60.0f;
+        camera_config.width = 3;
+        camera_config.height = 3;
+        PinholeCamera camera(camera_config);
+
+        TracerConfig config;
+        config.enable_disk = false;
+        config.escape_radius = static_cast<float>(100.0 * scale);
+        config.max_steps = 5000;
+        config.integrator.initial_step = 0.1f;
+        config.integrator.max_step = 0.25f;
+        if (const auto horizon = sirius::core::MetricCosmologicalHorizonRadius(
+                info.id, parameters.mass, parameters.cosmological_constant);
+            horizon.has_value()) {
+            const double interior_boundary =
+                sirius::core::kMaxCosmologicalObserverFraction * *horizon;
+            config.escape_radius = static_cast<float>(interior_boundary);
+            if (static_cast<double>(config.escape_radius) > interior_boundary) {
+                config.escape_radius = std::nextafter(config.escape_radius, 0.0f);
+            }
+            config.finite_causal_boundary = true;
+        }
+
+        GeodesicTracer tracer(metric.get(), config);
+        CameraRay ray = camera.GenerateRay(1, 1, 0.5f, 0.5f);
+        ray.direction(1) = 1.0;
+        ray.direction(2) = 0.0;
+        ray.direction(3) = 0.0;
+        const TraceResult result = tracer.Trace(ray);
+        EXPECT_FALSE(result.numerical_failure);
+        EXPECT_NE(result.outcome, TraceResult::Outcome::MaxSteps);
+        EXPECT_GT(result.steps_taken, 0);
+        EXPECT_GT(result.affine_length, 0.0f);
+        for (int component = 0; component < 4; ++component) {
+            EXPECT_TRUE(std::isfinite(result.final_position(component)));
+        }
+    }
+    EXPECT_EQ(advertised_cpu_metrics, 9u);
 }
 
 TEST(CpuTraceBoundary, CentralEventIsInvariantUnderBundleFeatureToggle) {

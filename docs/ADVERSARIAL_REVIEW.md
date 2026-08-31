@@ -650,6 +650,23 @@ corresponding profile. They are not projected from registration counts.
   GoogleTests, 786 development CTests, and 789 strict-qualification CTests over
   24 operating dimensions and 29 capability contracts. No rendering test was
   executed.
+- 2026-08-31 CPU metric construction-authority correction: the registry's CPU
+  support declarations and the render session's concrete metric switch were
+  independent authorities, so a future catalogue edit could advertise a family
+  the live tracer did not construct. One fail-closed factory now owns identity,
+  parameter-domain validation, dimensionless spin/charge conversion, and
+  concrete Cartesian family construction; one session adapter feeds both
+  validation and initialisation. A Mandatory non-render witness iterates all
+  nine advertised CPU families, checks the exact constructed parameters, and
+  traces an outward ray to a finite terminal event using a cosmological-patch
+  boundary where required. It also rejects a Minkowski spin and the absent
+  two-sheet Morris-Thorne continuation before construction. GCC 14 and Clang 21
+  each compiled the complete product and all six test executables, with the
+  render executable compiled but not run; all 13 base, 383 core, 129 oracle,
+  three CPU boundary, and 26 configuration-boundary tests passed on each.
+  Governance accepts 786 source GoogleTests and 798 development CTests over 24
+  operating dimensions and 29 capability contracts. No rendering test was
+  executed.
 - GCC 14 strict required-Vulkan profile: the pre-alignment snapshot passed the complete
   907/907 estate on the Radeon 780M through Dozen in 210.36 seconds. A separate
   required-only run passed 697/697 on the Radeon in 281.34 seconds and the same
