@@ -136,7 +136,10 @@ struct SpectralRadiance {
         double X, Y, Z;
     };
 
-    // Spectrum to CIE XYZ.
+    // Spectrum to unnormalised CIE XYZ tristimulus radiance. L is a density per
+    // nanometre and kLambdaStep is in nanometres, so the result retains the
+    // radiometric scale W/(m^2 sr). No illuminant, white, or relative-exposure
+    // normalisation is introduced at this boundary.
     Xyz ToXyz() const {
         Xyz xyz = {0, 0, 0};
 
@@ -148,22 +151,6 @@ struct SpectralRadiance {
         }
 
         return xyz;
-    }
-
-    struct Aces {
-        double r, g, b;
-    };
-
-    // XYZ to ACES AP0 (D60 white point).
-    Aces ToAces() const {
-        Xyz xyz = ToXyz();
-
-        Aces aces;
-        aces.r = 1.0498110175 * xyz.X + 0.0000000000 * xyz.Y - 0.0000974845 * xyz.Z;
-        aces.g = -0.4959030231 * xyz.X + 1.3733130458 * xyz.Y + 0.0982400361 * xyz.Z;
-        aces.b = 0.0000000000 * xyz.X + 0.0000000000 * xyz.Y + 0.9912520182 * xyz.Z;
-
-        return aces;
     }
 
     struct Rgb {

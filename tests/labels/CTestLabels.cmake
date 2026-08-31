@@ -975,7 +975,6 @@ set_tests_properties(
     SpectralRadianceTest.RedshiftRebinsILambdaWithGFiveAndGFourBolometricScaling
     SpectralRadianceTest.RedshiftWavelengthShift
     SpectralRadianceTest.SRGBConversionRange
-    SpectralRadianceTest.ACESConversion
     SpectralRadianceTest.SpectralArithmetic
     SpectralRadianceTest.WavelengthBinIndexing
     PROPERTIES LABELS "Mandatory;Correctness"
