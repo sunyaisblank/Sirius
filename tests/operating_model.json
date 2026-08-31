@@ -132,9 +132,12 @@
       "required": true,
       "verification": "build_gated",
       "profiles": ["cpu", "vulkan"],
-      "requirement": "EXR preserves finite fp32 linear HDR radiance outside the display pipeline, while PNG and PPM receive one owned display transfer encode.",
+      "requirement": "EXR preserves finite fp32 linear HDR radiance outside the display pipeline. Spectral previews, explicit 8-bit views, PNG, and PPM share one IEC 61966-2-1 host transfer-curve and 8-bit quantisation authority; each display writer invokes it exactly once at its owned output boundary, and non-finite inputs decline.",
       "capability_dependencies": [],
       "evidence": [
+        {"kind": "gtest", "name": "SrgbTransferAuthority.CurveMatchesIndependentIecOracleAcrossBothBranches"},
+        {"kind": "gtest", "name": "SrgbTransferAuthority.EightBitQuantisationClipsAndDeclinesNonfiniteInputs"},
+        {"kind": "gtest", "name": "SrgbTransferAuthority.SpectralFacadeDelegatesWithoutChangingClippingSemantics"},
         {"kind": "gtest", "name": "RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr"},
         {"kind": "gtest", "name": "RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter"},
         {"kind": "gtest", "name": "PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding"},
@@ -435,6 +438,9 @@
     {
       "id": "output_encoding",
       "evidence": [
+        {"kind": "gtest", "name": "SrgbTransferAuthority.CurveMatchesIndependentIecOracleAcrossBothBranches"},
+        {"kind": "gtest", "name": "SrgbTransferAuthority.EightBitQuantisationClipsAndDeclinesNonfiniteInputs"},
+        {"kind": "gtest", "name": "SrgbTransferAuthority.SpectralFacadeDelegatesWithoutChangingClippingSemantics"},
         {"kind": "gtest", "name": "RenderSessionProbe.GeometricMetadataNeverInventsPhysicalLengthUnits"},
         {"kind": "gtest", "name": "PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding"},
         {"kind": "gtest", "name": "PNGWriterTest.NonFiniteRadianceIsRejected"},

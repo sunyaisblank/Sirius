@@ -65,6 +65,19 @@ STRICT_TEST_VOLUME_TARGETS = {
     ROOT / "tests" / "app" / "CMakeLists.txt": "sirius_app_tests",
     ROOT / "tests" / "render" / "CMakeLists.txt": "sirius_render_tests",
 }
+SRGB_TRANSFER_AUTHORITY = SOURCE_ROOT / "core" / "srgb_transfer.h"
+SRGB_TRANSFER_CONSUMERS = {
+    SOURCE_ROOT / "core" / "spectral" / "blackbody.h": "colour::EncodeSrgbChannel",
+    (
+        SOURCE_ROOT / "core" / "spectral" / "spectral_radiance.h"
+    ): "colour::EncodeClippedSrgbChannel",
+    SOURCE_ROOT / "render" / "image_buffer.h": "core::colour::TryEncodeSrgb8",
+    SOURCE_ROOT / "render" / "png_writer.h": "core::colour::TryEncodeSrgb8",
+    SOURCE_ROOT / "render" / "exr_writer.h": "core::colour::TryEncodeSrgb8",
+}
+SRGB_LINEAR_BREAKPOINT = re.compile(
+    r"(?<![A-Za-z0-9_.])0\.0031308(?:[fFlL])?(?![A-Za-z0-9_.])"
+)
 FULL_QUALIFICATION_JOBS = (
     "linux-gate",
     "linux-sanitizers",
@@ -474,6 +487,65 @@ def verify_strict_test_volume_policy() -> None:
         raise RuntimeError("strict test-volume policy accepted a substituted volume")
 
 
+def srgb_transfer_authority_errors(documents: dict[Path, str]) -> list[str]:
+    errors: list[str] = []
+    authority = documents.get(SRGB_TRANSFER_AUTHORITY)
+    if authority is None:
+        return ["the host sRGB transfer authority is missing"]
+
+    authority_code = CPP_NON_CODE.sub(" ", authority)
+    for marker in (
+        "EncodeSrgbChannel",
+        "EncodeClippedSrgbChannel",
+        "TryEncodeSrgb8",
+    ):
+        if marker not in authority_code:
+            errors.append(f"the host sRGB transfer authority omits {marker}")
+    if len(SRGB_LINEAR_BREAKPOINT.findall(authority_code)) != 1:
+        errors.append("the host sRGB transfer authority must own one IEC linear breakpoint")
+
+    required_include = '#include "sirius/core/srgb_transfer.h"'
+    for path, marker in SRGB_TRANSFER_CONSUMERS.items():
+        document = documents.get(path)
+        if document is None:
+            errors.append(f"sRGB transfer consumer is missing: {relative(path)}")
+            continue
+        if required_include not in document or marker not in CPP_NON_CODE.sub(" ", document):
+            errors.append(
+                f"{relative(path)} does not delegate to the host sRGB transfer authority"
+            )
+
+    for path, document in documents.items():
+        if path == SRGB_TRANSFER_AUTHORITY:
+            continue
+        if SRGB_LINEAR_BREAKPOINT.search(CPP_NON_CODE.sub(" ", document)):
+            errors.append(f"{relative(path)} reimplements the IEC sRGB transfer breakpoint")
+    return errors
+
+
+def verify_srgb_transfer_authority_policy() -> None:
+    valid = {
+        SRGB_TRANSFER_AUTHORITY: (
+            "EncodeSrgbChannel EncodeClippedSrgbChannel TryEncodeSrgb8 0.0031308"
+        ),
+        **{
+            path: '#include "sirius/core/srgb_transfer.h"\n' + marker
+            for path, marker in SRGB_TRANSFER_CONSUMERS.items()
+        },
+    }
+    if srgb_transfer_authority_errors(valid):
+        raise RuntimeError("sRGB transfer policy rejected the single host authority")
+    duplicated = dict(valid)
+    consumer = next(iter(SRGB_TRANSFER_CONSUMERS))
+    duplicated[consumer] += "\n0.0031308"
+    if not srgb_transfer_authority_errors(duplicated):
+        raise RuntimeError("sRGB transfer policy accepted a production reimplementation")
+    detached = dict(valid)
+    detached[consumer] = "independent_transfer();"
+    if not srgb_transfer_authority_errors(detached):
+        raise RuntimeError("sRGB transfer policy accepted a detached production consumer")
+
+
 def attestation_preflight_errors(
     preflight: str,
     reuse: str,
@@ -575,6 +647,7 @@ def verify() -> list[str]:
     verify_strict_test_volume_policy()
     verify_integration_boundary_policy()
     verify_authority_checkout_policy()
+    verify_srgb_transfer_authority_policy()
     try:
         attribute_source = GIT_ATTRIBUTES.read_text(encoding="utf-8")
         attributes = subprocess.run(
@@ -603,6 +676,12 @@ def verify() -> list[str]:
         for path, target in STRICT_TEST_VOLUME_TARGETS.items()
     }
     errors.extend(strict_test_volume_errors(strict_test_documents))
+    governed_sources = {
+        path: path.read_text(encoding="utf-8")
+        for path in SOURCE_ROOT.rglob("*")
+        if path.suffix in {".h", ".cpp", ".slang"}
+    }
+    errors.extend(srgb_transfer_authority_errors(governed_sources))
     preflight_path = ROOT / "scripts" / "attestation_preflight.py"
     reuse_path = ROOT / "scripts" / "reuse_qualification_evidence.py"
     if not preflight_path.is_file():

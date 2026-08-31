@@ -173,6 +173,9 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding",
         "gtest:RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter",
         "gtest:RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr",
+        "gtest:SrgbTransferAuthority.CurveMatchesIndependentIecOracleAcrossBothBranches",
+        "gtest:SrgbTransferAuthority.EightBitQuantisationClipsAndDeclinesNonfiniteInputs",
+        "gtest:SrgbTransferAuthority.SpectralFacadeDelegatesWithoutChangingClippingSemantics",
     },
     "E1": {
         "gtest:ConfigValidation.MetricMassAndObserverCoordinateRadiusAreIdentityAware",
@@ -239,8 +242,8 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "b4f966eca2add5c5e7b5944f38a965993a920635480fbae5fd729f3acaf55778",
-    "required_dimensions": "1fa9f1ed05bc1ab6344113e454fff74138a6f9aeff431281c930520dbd279ce7",
+    "acceptance_criteria": "1409089dcfa02872aff570db47ef783f09866f985f37e834f41e924acded8b0a",
+    "required_dimensions": "68ac022fea6524316826eeece5ddc6c38f134c15bcb5bb5eabcb2c67fccd2ce5",
     "capability_contracts": "9bab37294cff0e24143efafcf7f83dfc00e2b22c08697086717e8816b475cd87",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
