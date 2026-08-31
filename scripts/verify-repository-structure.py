@@ -68,9 +68,6 @@ STRICT_TEST_VOLUME_TARGETS = {
 SRGB_TRANSFER_AUTHORITY = SOURCE_ROOT / "core" / "srgb_transfer.h"
 SRGB_TRANSFER_CONSUMERS = {
     SOURCE_ROOT / "core" / "spectral" / "blackbody.h": "colour::EncodeSrgbChannel",
-    (
-        SOURCE_ROOT / "core" / "spectral" / "spectral_radiance.h"
-    ): "colour::EncodeClippedSrgbChannel",
     SOURCE_ROOT / "render" / "image_buffer.h": "core::colour::TryEncodeSrgb8",
     SOURCE_ROOT / "render" / "png_writer.h": "core::colour::TryEncodeSrgb8",
     SOURCE_ROOT / "render" / "exr_writer.h": "core::colour::TryEncodeSrgb8",
@@ -81,7 +78,6 @@ SRGB_LINEAR_BREAKPOINT = re.compile(
 XYZ_SRGB_AUTHORITY = SOURCE_ROOT / "core" / "xyz_srgb.h"
 XYZ_SRGB_HOST_CONSUMERS = (
     SOURCE_ROOT / "core" / "spectral" / "blackbody.h",
-    SOURCE_ROOT / "core" / "spectral" / "spectral_radiance.h",
 )
 XYZ_SRGB_DEVICE_AUTHORITY = SOURCE_ROOT / "kernels" / "gr_disk.slang"
 XYZ_SRGB_PARITY_PROBE = SOURCE_ROOT / "kernels" / "parity_probe.slang"
@@ -150,6 +146,10 @@ LEGACY_ACES_TONEMAP_IDENTIFIER = re.compile(
     r"\bTonemapType::Aces\b|\btonemap::Aces\s*\("
 )
 FALSE_SPECTRAL_ACES_API = re.compile(r"\bstruct\s+Aces\b|\bToAces\s*\(")
+FALSE_ABSOLUTE_SPECTRAL_SRGB_API = re.compile(r"\bToSrgb\s*\(")
+ABSOLUTE_SPECTRAL_DISPLAY_ENCODING = re.compile(
+    r"\b(?:XyzD65ToLinearSrgb|EncodeSrgbChannel|EncodeClippedSrgbChannel|TryEncodeSrgb8)\s*\("
+)
 DETACHED_XYZ_AP0_MATRIX = re.compile(
     r"1\.0498110175.{0,240}-0\.4959030231.{0,240}"
     r"1\.3733130458.{0,240}0\.9912520182",
@@ -593,6 +593,20 @@ def srgb_transfer_authority_errors(documents: dict[Path, str]) -> list[str]:
                 f"{relative(path)} does not delegate to the host sRGB transfer authority"
             )
 
+    spectral_radiance = documents.get(SPECTRAL_RADIANCE_FACADE)
+    if spectral_radiance is None:
+        errors.append("the binned physical spectral-radiance facade is missing")
+    else:
+        spectral_code = CPP_NON_CODE.sub(" ", spectral_radiance)
+        if FALSE_ABSOLUTE_SPECTRAL_SRGB_API.search(spectral_code):
+            errors.append(
+                "the binned physical spectral-radiance facade exposes an sRGB display API"
+            )
+        if ABSOLUTE_SPECTRAL_DISPLAY_ENCODING.search(spectral_code):
+            errors.append(
+                "the binned physical spectral-radiance facade directly performs display encoding"
+            )
+
     for path, document in documents.items():
         if path == SRGB_TRANSFER_AUTHORITY:
             continue
@@ -610,6 +624,7 @@ def verify_srgb_transfer_authority_policy() -> None:
             path: '#include "sirius/core/srgb_transfer.h"\n' + marker
             for path, marker in SRGB_TRANSFER_CONSUMERS.items()
         },
+        SPECTRAL_RADIANCE_FACADE: "struct SpectralRadiance { Xyz ToXyz() const; };",
     }
     if srgb_transfer_authority_errors(valid):
         raise RuntimeError("sRGB transfer policy rejected the single host authority")
@@ -622,6 +637,18 @@ def verify_srgb_transfer_authority_policy() -> None:
     detached[consumer] = "independent_transfer();"
     if not srgb_transfer_authority_errors(detached):
         raise RuntimeError("sRGB transfer policy accepted a detached production consumer")
+
+    false_spectral_api = dict(valid)
+    false_spectral_api[SPECTRAL_RADIANCE_FACADE] += "\nRgb ToSrgb() const;"
+    if not srgb_transfer_authority_errors(false_spectral_api):
+        raise RuntimeError("sRGB policy accepted an absolute-radiance display facade")
+
+    direct_spectral_encoding = dict(valid)
+    direct_spectral_encoding[SPECTRAL_RADIANCE_FACADE] += (
+        "\ncolour::XyzD65ToLinearSrgb(x, y, z); colour::EncodeSrgbChannel(r);"
+    )
+    if not srgb_transfer_authority_errors(direct_spectral_encoding):
+        raise RuntimeError("sRGB policy accepted direct encoding of absolute spectral radiance")
 
 
 def xyz_srgb_ratio(numerator: str, denominator: str) -> re.Pattern[str]:

@@ -974,7 +974,6 @@ set_tests_properties(
     SpectralRadianceTest.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature
     SpectralRadianceTest.RedshiftRebinsILambdaWithGFiveAndGFourBolometricScaling
     SpectralRadianceTest.RedshiftWavelengthShift
-    SpectralRadianceTest.SRGBConversionRange
     SpectralRadianceTest.SpectralArithmetic
     SpectralRadianceTest.WavelengthBinIndexing
     PROPERTIES LABELS "Mandatory;Correctness"
@@ -1249,7 +1248,7 @@ set_tests_properties(
 set_tests_properties(
     XyzSrgbAuthority.MatchesIndependentPrimaryWhiteDerivation
     XyzSrgbAuthority.PreservesExtendedGamutAndPropagatesNonfiniteInputs
-    XyzSrgbAuthority.HostSpectralFacadesDelegateToTheExactTransform
+    XyzSrgbAuthority.BlackbodyColourFacadeDelegatesToTheExactTransform
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 

@@ -1,6 +1,5 @@
 #include "sirius/core/constants.h"
 #include "sirius/core/spectral/blackbody.h"
-#include "sirius/core/spectral/spectral_radiance.h"
 #include "sirius/core/srgb_transfer.h"
 #include "sirius/core/xyz_srgb.h"
 
@@ -110,25 +109,13 @@ TEST(XyzSrgbAuthority, PreservesExtendedGamutAndPropagatesNonfiniteInputs) {
     EXPECT_FALSE(std::isfinite(unbounded.b));
 }
 
-TEST(XyzSrgbAuthority, HostSpectralFacadesDelegateToTheExactTransform) {
+TEST(XyzSrgbAuthority, BlackbodyColourFacadeDelegatesToTheExactTransform) {
     const spectral::Xyz xyz{0.25f, 0.4f, 0.1f};
     const spectral::Rgb facade = spectral::XyzToLinearRgb(xyz);
     const colour::LinearSrgb direct = colour::XyzD65ToLinearSrgb(xyz.X, xyz.Y, xyz.Z);
     EXPECT_FLOAT_EQ(facade.r, direct.r);
     EXPECT_FLOAT_EQ(facade.g, direct.g);
     EXPECT_FLOAT_EQ(facade.b, direct.b);
-
-    SpectralRadiance spectrum = SpectralRadiance::Zero();
-    spectrum.L[4] = 0.002;
-    spectrum.L[12] = 0.004;
-    spectrum.L[23] = 0.001;
-    const SpectralRadiance::Xyz spectrum_xyz = spectrum.ToXyz();
-    const colour::LinearSrgb spectrum_linear =
-        colour::XyzD65ToLinearSrgb(spectrum_xyz.X, spectrum_xyz.Y, spectrum_xyz.Z);
-    const SpectralRadiance::Rgb encoded = spectrum.ToSrgb();
-    EXPECT_DOUBLE_EQ(encoded.r, colour::EncodeClippedSrgbChannel(spectrum_linear.r));
-    EXPECT_DOUBLE_EQ(encoded.g, colour::EncodeClippedSrgbChannel(spectrum_linear.g));
-    EXPECT_DOUBLE_EQ(encoded.b, colour::EncodeClippedSrgbChannel(spectrum_linear.b));
 }
 
 }  // namespace

@@ -2,14 +2,12 @@
 
 // 32-bin spectral radiance across the visible band (380-780 nm, 12.5 nm/bin) for
 // colour-accurate rendering, with Planck emission, invariant redshift rebinning, and CIE
-// colour conversion. Ported from MTSB001A.h.
+// tristimulus integration. Ported from MTSB001A.h.
 // Reference: James et al. (2015), "DNGR", Section 3.4.
 
 #include "sirius/core/cie1931_observer.h"
 #include "sirius/core/constants.h"
 #include "sirius/core/spectral/blackbody_laws.h"
-#include "sirius/core/srgb_transfer.h"
-#include "sirius/core/xyz_srgb.h"
 
 #include <algorithm>
 #include <cmath>
@@ -151,23 +149,6 @@ struct SpectralRadiance {
         }
 
         return xyz;
-    }
-
-    struct Rgb {
-        double r, g, b;
-    };
-
-    // XYZ to gamma-corrected sRGB (D65), for preview.
-    Rgb ToSrgb() const {
-        const Xyz xyz = ToXyz();
-        const colour::LinearSrgb linear = colour::XyzD65ToLinearSrgb(xyz.X, xyz.Y, xyz.Z);
-
-        Rgb rgb;
-        rgb.r = colour::EncodeClippedSrgbChannel(linear.r);
-        rgb.g = colour::EncodeClippedSrgbChannel(linear.g);
-        rgb.b = colour::EncodeClippedSrgbChannel(linear.b);
-
-        return rgb;
     }
 };
 

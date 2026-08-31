@@ -95,22 +95,6 @@ TEST(SpectralRadianceTest, RedshiftWavelengthShift) {
     EXPECT_GT(shifted.L[expectedBin], 0) << "Redshifted energy should appear at longer wavelength";
 }
 
-// sRGB output is clamped to [0, 1].
-TEST(SpectralRadianceTest, SRGBConversionRange) {
-    SpectralRadiance bb = SpectralRadiance::Blackbody(5500);
-
-    bb *= 1e-12;  // Scale down to a reasonable display range.
-
-    auto rgb = bb.ToSrgb();
-
-    EXPECT_GE(rgb.r, 0) << "sRGB red should be >= 0";
-    EXPECT_LE(rgb.r, 1) << "sRGB red should be <= 1";
-    EXPECT_GE(rgb.g, 0) << "sRGB green should be >= 0";
-    EXPECT_LE(rgb.g, 1) << "sRGB green should be <= 1";
-    EXPECT_GE(rgb.b, 0) << "sRGB blue should be >= 0";
-    EXPECT_LE(rgb.b, 1) << "sRGB blue should be <= 1";
-}
-
 // Addition and scalar multiplication behave componentwise.
 TEST(SpectralRadianceTest, SpectralArithmetic) {
     SpectralRadiance a = SpectralRadiance::Zero();
