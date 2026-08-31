@@ -115,8 +115,8 @@ Post-Processing:
   --bloom-threshold <t>     Bloom brightness threshold; enables bloom (default: 0.3)
   --contrast <c>            Contrast adjustment (default: 1.0)
   --saturation <s>          Saturation adjustment (default: 1.0)
-  --tonemapper <name>       Tonemapper: ACES, Reinhard, Filmic, Uncharted2,
-                            None, Linear (default: ACES)
+  --tonemapper <name>       Tonemapper: ACESFit, Reinhard, Filmic, Uncharted2,
+                            None, Linear (default: ACESFit; not an ACES Output Transform)
   --no-bloom                Disable bloom post-processing
 
 Volumetric Disk (3D accretion disk with thickness):

@@ -135,6 +135,20 @@ WIEN_CONSTANT_LITERAL = re.compile(
     r"(?<![A-Za-z0-9_.])2\.897771955e-3(?:[fFlL])?(?![A-Za-z0-9_.])",
     re.IGNORECASE,
 )
+ACES_FIT_AUTHORITY = SOURCE_ROOT / "core" / "postprocess.h"
+ACES_FIT_CONSUMERS = {
+    SOURCE_ROOT / "app" / "config" / "config_schema.h": "kDefaultTonemapperName",
+    SOURCE_ROOT / "app" / "config" / "config_loader.cpp": "ParseTonemapType",
+    SOURCE_ROOT / "app" / "config" / "session_config_adapter.cpp": "ParseTonemapType",
+    SOURCE_ROOT / "render" / "session" / "render_session.h": "TonemapType::AcesFit",
+    SOURCE_ROOT / "render" / "session" / "render_session.cpp": "TonemapType::AcesFit",
+}
+ACES_FIT_CLI = SOURCE_ROOT / "app" / "cli" / "render_command.cpp"
+ACES_FIT_COEFFICIENTS = ("2.51", "0.03", "2.43", "0.59", "0.14")
+LEGACY_ACES_TONEMAP_IDENTIFIER = re.compile(
+    r"\bTonemapType::Aces\b|\btonemap::Aces\s*\("
+)
+BARE_ACES_CONFIG_LITERAL = re.compile(r'"ACES"')
 FULL_QUALIFICATION_JOBS = (
     "linux-gate",
     "linux-sanitizers",
@@ -841,6 +855,111 @@ def verify_cie1931_observer_authority_policy() -> None:
         raise RuntimeError("CIE observer policy accepted a missing direct device parity route")
 
 
+def aces_fit_sequence() -> re.Pattern[str]:
+    literals = [
+        rf"(?<![A-Za-z0-9_.]){re.escape(value)}(?:[fFlL])?(?![A-Za-z0-9_.])"
+        for value in ACES_FIT_COEFFICIENTS
+    ]
+    return re.compile(r".{0,180}".join(literals), re.DOTALL)
+
+
+def aces_fit_authority_errors(documents: dict[Path, str]) -> list[str]:
+    errors: list[str] = []
+    authority = documents.get(ACES_FIT_AUTHORITY)
+    if authority is None:
+        return ["the host ACES-fit tone-map authority is missing"]
+
+    authority_code = CPP_NON_CODE.sub(" ", authority)
+    for marker in (
+        "AcesFit",
+        "ParseTonemapType",
+        "kDefaultTonemapperName",
+        "kTonemapNames",
+        "SupportedTonemapperNames",
+        "std::isfinite",
+    ):
+        if marker not in authority_code:
+            errors.append(f"the host ACES-fit tone-map authority omits {marker}")
+    if len(aces_fit_sequence().findall(authority_code)) != 1:
+        errors.append("the host ACES-fit authority must own the five fit coefficients once")
+    if "knarkowicz.wordpress.com/2016/01/06/aces-filmic-tone-mapping-curve" not in authority:
+        errors.append("the ACES-fit authority does not identify the original fit source")
+
+    for path, marker in ACES_FIT_CONSUMERS.items():
+        document = documents.get(path)
+        if document is None:
+            errors.append(f"ACES-fit consumer is missing: {relative(path)}")
+            continue
+        if marker not in CPP_NON_CODE.sub(" ", document):
+            errors.append(f"{relative(path)} does not consume the explicit ACES-fit authority")
+
+    cli = documents.get(ACES_FIT_CLI)
+    if cli is None:
+        errors.append("the render CLI tone-map help is missing")
+    elif "Tonemapper: ACESFit" not in cli or "not an ACES Output Transform" not in cli:
+        errors.append("the render CLI does not distinguish ACESFit from an ACES Output Transform")
+
+    bare_name_paths = {
+        ACES_FIT_AUTHORITY,
+        SOURCE_ROOT / "app" / "config" / "config_schema.h",
+        SOURCE_ROOT / "app" / "config" / "config_loader.cpp",
+        SOURCE_ROOT / "app" / "config" / "session_config_adapter.cpp",
+    }
+    coefficient_pattern = aces_fit_sequence()
+    for path, document in documents.items():
+        code = CPP_NON_CODE.sub(" ", document)
+        if LEGACY_ACES_TONEMAP_IDENTIFIER.search(code):
+            errors.append(f"{relative(path)} retains the falsely named ACES tonemapper")
+        if path in bare_name_paths and BARE_ACES_CONFIG_LITERAL.search(document):
+            errors.append(f"{relative(path)} accepts or defaults the unrepresented bare ACES name")
+        if path != ACES_FIT_AUTHORITY and coefficient_pattern.search(code):
+            errors.append(f"{relative(path)} reimplements the ACES-fit coefficient set")
+    return errors
+
+
+def verify_aces_fit_authority_policy() -> None:
+    coefficients = " ".join(value + "f" for value in ACES_FIT_COEFFICIENTS)
+    valid = {
+        ACES_FIT_AUTHORITY: (
+            "AcesFit ParseTonemapType kDefaultTonemapperName kTonemapNames "
+            "SupportedTonemapperNames "
+            "std::isfinite "
+            + coefficients
+            + " // knarkowicz.wordpress.com/2016/01/06/aces-filmic-tone-mapping-curve"
+        ),
+        **{path: marker for path, marker in ACES_FIT_CONSUMERS.items()},
+        ACES_FIT_CLI: "Tonemapper: ACESFit; not an ACES Output Transform",
+    }
+    if aces_fit_authority_errors(valid):
+        raise RuntimeError("ACES-fit policy rejected the explicit fitted-curve contract")
+
+    duplicated = dict(valid)
+    consumer = next(iter(ACES_FIT_CONSUMERS))
+    duplicated[consumer] += "\n" + coefficients
+    if not aces_fit_authority_errors(duplicated):
+        raise RuntimeError("ACES-fit policy accepted a production coefficient copy")
+
+    detached = dict(valid)
+    detached[consumer] = "independent_tonemap();"
+    if not aces_fit_authority_errors(detached):
+        raise RuntimeError("ACES-fit policy accepted a detached production consumer")
+
+    legacy = dict(valid)
+    legacy[ACES_FIT_AUTHORITY] += "\nTonemapType::Aces"
+    if not aces_fit_authority_errors(legacy):
+        raise RuntimeError("ACES-fit policy accepted the falsely named internal selector")
+
+    bare_alias = dict(valid)
+    bare_alias[ACES_FIT_AUTHORITY] += '\nif (name == "ACES") return AcesFit;'
+    if not aces_fit_authority_errors(bare_alias):
+        raise RuntimeError("ACES-fit policy accepted bare ACES as a represented config name")
+
+    false_help = dict(valid)
+    false_help[ACES_FIT_CLI] = "Tonemapper: ACES, Reinhard"
+    if not aces_fit_authority_errors(false_help):
+        raise RuntimeError("ACES-fit policy accepted CLI advertising of an ACES transform")
+
+
 def blackbody_laws_authority_errors(documents: dict[Path, str]) -> list[str]:
     errors: list[str] = []
     authority = documents.get(BLACKBODY_LAWS_AUTHORITY)
@@ -1048,6 +1167,7 @@ def verify() -> list[str]:
     verify_srgb_transfer_authority_policy()
     verify_xyz_srgb_authority_policy()
     verify_cie1931_observer_authority_policy()
+    verify_aces_fit_authority_policy()
     verify_blackbody_laws_authority_policy()
     try:
         attribute_source = GIT_ATTRIBUTES.read_text(encoding="utf-8")
@@ -1085,6 +1205,7 @@ def verify() -> list[str]:
     errors.extend(srgb_transfer_authority_errors(governed_sources))
     errors.extend(xyz_srgb_authority_errors(governed_sources))
     errors.extend(cie1931_observer_authority_errors(governed_sources))
+    errors.extend(aces_fit_authority_errors(governed_sources))
     errors.extend(blackbody_laws_authority_errors(governed_sources))
     preflight_path = ROOT / "scripts" / "attestation_preflight.py"
     reuse_path = ROOT / "scripts" / "reuse_qualification_evidence.py"

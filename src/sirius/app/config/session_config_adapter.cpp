@@ -3,6 +3,7 @@
 #include "sirius/app/config/config_loader.h"
 #include "sirius/core/constants.h"
 #include "sirius/core/metrics/registry.h"
+#include "sirius/core/postprocess.h"
 #include "sirius/render/vulkan_renderer.h"
 
 #ifdef SIRIUS_HAS_VULKAN_BACKEND
@@ -23,14 +24,6 @@ std::optional<render::DiskTemperatureModel> ParseTemperatureModel(const std::str
     if (value == "ShakuraSunyaev" || value == "SS") {
         return render::DiskTemperatureModel::ShakuraSunyaev;
     }
-    return std::nullopt;
-}
-
-std::optional<core::TonemapType> ParseTonemapper(const std::string& value) {
-    if (value == "ACES") return core::TonemapType::Aces;
-    if (value == "Reinhard") return core::TonemapType::Reinhard;
-    if (value == "Filmic" || value == "Uncharted2") return core::TonemapType::Filmic;
-    if (value == "None" || value == "Linear") return core::TonemapType::None;
     return std::nullopt;
 }
 
@@ -127,7 +120,7 @@ base::Expected<render::SessionConfig> MakeSessionConfig(const SiriusConfig& conf
     session.camera_aperture = config.observer.aperture;
     session.camera_focus_distance = config.observer.focus_distance;
 
-    const auto tonemapper = ParseTonemapper(config.postprocess.tonemapper);
+    const auto tonemapper = core::ParseTonemapType(config.postprocess.tonemapper);
     if (!tonemapper) {
         return base::Fail(base::ErrorDomain::kConfiguration, "create render session",
                           "unknown tonemapper '" + config.postprocess.tonemapper + "'");

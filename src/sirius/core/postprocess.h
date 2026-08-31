@@ -1,13 +1,18 @@
 #pragma once
 
 // Post-processing operators for HDR image buffers: tonemapping, bloom, and
-// colour grading, all on linear float RGBA. Reference: Academy Color Encoding
-// System (ACES), Reinhard et al. (2002). Ported from PPOP001A.h.
+// colour grading, all on linear float RGBA. The default curve is the explicitly
+// approximate Narkowicz fit described below, not an ACES Output Transform.
 
 #include "sirius/base/contracts.h"
 
 #include <algorithm>
+#include <array>
 #include <cmath>
+#include <limits>
+#include <optional>
+#include <string>
+#include <string_view>
 #include <vector>
 
 namespace sirius::core {
@@ -16,15 +21,49 @@ namespace sirius::core {
 enum class TonemapType {
     None,      // No tonemapping (clamp only)
     Reinhard,  // Reinhard global operator
-    Aces,      // ACES filmic curve (display-linear output; writer owns transfer)
+    AcesFit,   // Narkowicz scalar fit to sampled ACES 1 output
     Filmic,    // Hable/Uncharted 2 filmic curve
     Exposure   // Simple exposure + gamma
 };
 
+struct TonemapName {
+    std::string_view spelling;
+    TonemapType type;
+};
+
+inline constexpr std::array<TonemapName, 6> kTonemapNames{{
+    {"ACESFit", TonemapType::AcesFit},
+    {"Reinhard", TonemapType::Reinhard},
+    {"Filmic", TonemapType::Filmic},
+    {"Uncharted2", TonemapType::Filmic},
+    {"None", TonemapType::None},
+    {"Linear", TonemapType::None},
+}};
+inline constexpr std::string_view kDefaultTonemapperName = kTonemapNames.front().spelling;
+
+// Operator-facing names terminate at this authority. Bare `ACES` deliberately
+// declines: the represented scalar fit has no ACES interchange, working-space,
+// chroma/gamut mapping, display-primary, white-point, or encoding semantics.
+[[nodiscard]] inline std::optional<TonemapType> ParseTonemapType(std::string_view name) noexcept {
+    for (const auto& entry : kTonemapNames) {
+        if (name == entry.spelling) return entry.type;
+    }
+    return std::nullopt;
+}
+
+[[nodiscard]] inline std::string SupportedTonemapperNames() {
+    std::string names;
+    for (const auto& entry : kTonemapNames) {
+        if (!names.empty()) names += ", ";
+        names += entry.spelling;
+    }
+    return names;
+}
+
 // Tonemapping, bloom, and colour-grading parameters.
 struct PostProcessConfig {
     // Tonemapping
-    TonemapType tonemapper = TonemapType::Aces;
+    TonemapType tonemapper = TonemapType::AcesFit;
     float exposure = 1.0f;  // Exposure multiplier
     float gamma = 2.2f;     // Display gamma
 
@@ -44,7 +83,7 @@ struct PostProcessConfig {
 [[nodiscard]] inline bool IsRepresentedPostProcessConfig(const PostProcessConfig& config) noexcept {
     const bool known_tonemapper =
         config.tonemapper == TonemapType::None || config.tonemapper == TonemapType::Reinhard ||
-        config.tonemapper == TonemapType::Aces || config.tonemapper == TonemapType::Filmic ||
+        config.tonemapper == TonemapType::AcesFit || config.tonemapper == TonemapType::Filmic ||
         config.tonemapper == TonemapType::Exposure;
     if (!known_tonemapper || !std::isfinite(config.exposure) || config.exposure <= 0.0f ||
         config.exposure > 100.0f || !std::isfinite(config.gamma) || config.gamma <= 0.0f ||
@@ -66,8 +105,21 @@ struct PostProcessConfig {
 // Scalar tonemapping curves and per-pixel dispatch.
 namespace tonemap {
 
-// ACES filmic curve (rational approximation), clamped to [0, 1].
-inline float Aces(float x) {
+// Krzysztof Narkowicz's 2016 scalar rational fit to samples of the ACES 1
+// RRT + Rec.709 D65 ODT after removing its 2.4 encoding power. The published
+// fit has maximum scalar error 0.0138 and a baked exposure chosen so input 1
+// maps near 0.8. It is applied independently per working-RGB channel and is
+// therefore not an Academy ACES Output Transform or colour-management path.
+// Source: https://knarkowicz.wordpress.com/2016/01/06/aces-filmic-tone-mapping-curve/
+inline float AcesFit(float x) {
+    SIRIUS_PRE(std::isfinite(x) && x >= 0.0f);
+    // The unclipped rational first reaches one at the positive root of
+    // (a-c)x^2 + (b-d)x - e = 0. Returning the clamped value above that root
+    // is algebraically exact and prevents x^2 overflow for finite HDR input.
+    // 0x1.cf7752p+2 is the least fp32 value above the real root
+    // 7.24165738677394..., so the early clamp never precedes the real crossing.
+    constexpr float kSaturationInput = 0x1.cf7752p+2f;
+    if (x >= kSaturationInput) return 1.0f;
     const float a = 2.51f;
     const float b = 0.03f;
     const float c = 2.43f;
@@ -99,17 +151,24 @@ inline void Apply(float& r, float& g, float& b, TonemapType type, float exposure
     SIRIUS_PRE(std::isfinite(r) && std::isfinite(g) && std::isfinite(b));
     SIRIUS_PRE(std::isfinite(exposure) && exposure > 0.0f && exposure <= 100.0f);
     SIRIUS_PRE(type == TonemapType::None || type == TonemapType::Reinhard ||
-               type == TonemapType::Aces || type == TonemapType::Filmic ||
+               type == TonemapType::AcesFit || type == TonemapType::Filmic ||
                type == TonemapType::Exposure);
-    r *= exposure;
-    g *= exposure;
-    b *= exposure;
+    const auto expose_nonnegative = [exposure](float channel) {
+        if (channel <= 0.0f) return 0.0f;
+        if (channel >= std::numeric_limits<float>::max() / exposure) {
+            return std::numeric_limits<float>::max();
+        }
+        return channel * exposure;
+    };
+    r = expose_nonnegative(r);
+    g = expose_nonnegative(g);
+    b = expose_nonnegative(b);
 
     switch (type) {
-        case TonemapType::Aces:
-            r = Aces(r);
-            g = Aces(g);
-            b = Aces(b);
+        case TonemapType::AcesFit:
+            r = AcesFit(r);
+            g = AcesFit(g);
+            b = AcesFit(b);
             break;
         case TonemapType::Reinhard:
             r = Reinhard(r);
