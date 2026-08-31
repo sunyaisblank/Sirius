@@ -462,6 +462,12 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell
+    KerrSchildFieldEquations.KerrNewmanPotentialIsSourceFreeOutsideTheRing
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     KerrTests.MetricMatchesIndependentCartesianKerrSchildForm
     KerrTests.ComputedRadiusSatisfiesTheDefiningOblateQuartic
     KerrTests.CartesianMetricIsScaleCovariantBelowTheFormerSpinFloor

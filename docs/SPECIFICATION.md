@@ -60,6 +60,23 @@ DNGR (James, von Tunzelmann, Franklin and Thorne 2015, Classical and Quantum Gra
 
 The capabilities that constitute DNGR, extracted from the paper, are: Kerr spacetime with spin to the Thorne limit; camera on an arbitrary timelike worldline with relativistic aberration; ray-bundle propagation by geodesic deviation; a lensed accretion disk in both infinitely thin and volumetric forms; gravitational and Doppler frequency shifts applied to disk emission, with the Doppler brightness asymmetry artistically suppressible (the film suppressed it; the physics mode keeps it); a star field sampled through the beam footprint; and high-dynamic-range output into a film compositing pipeline.
 
+The production Cartesian Kerr--Schild family is also constrained by its
+defining field equations rather than by component identity alone. For
+$Q=\Lambda=0$, its live metric must recover $R_{\mu\nu}=0$. For the
+asymptotically flat charged sectors it must recover
+$G_{\mu\nu}=8\pi T^{\rm EM}_{\mu\nu}$ from the independently implemented
+potential $A_\mu=-Qr l_\mu/\Sigma$, while that potential obeys
+$\nabla_\mu F^{\mu\nu}=0$ outside the ring. The spherical cosmological sector
+must recover $R_{\mu\nu}=\Lambda g_{\mu\nu}$ and $R=4\Lambda$. The gate
+differentiates the live analytic connection with a fourth-order stencil,
+inverts the sampled covariant metric through the generic tensor authority, and
+derives the Maxwell field from the independent potential; it never calls the
+metric-specific analytic inverse or production $H$ as an oracle. Both signs of
+spin and charge, a second geometric scale, flat and spherical limits, de
+Sitter, and Kottler are represented. The electromagnetic and cosmological
+source magnitudes must exceed the numerical envelope sufficiently to prove
+that omitting either source would fail the test.
+
 Metrics outside that DNGR parity core remain explicit bounded capabilities. The CPU cosmological sector is the exact spherical positive-$\Lambda$ Kottler metric in horizon-penetrating Cartesian Kerr-Schild coordinates. Its smaller positive root is the black-hole capture surface and its larger root is the cosmological causal-patch boundary; pure de Sitter has only the latter. Named Schwarzschild-de Sitter requests require $9\Lambda M^2<1$. The ADM/Eulerian launch radius must remain at or below $0.99r_c$, and the ordinary finite directional-sky boundary is clamped to $r_c$ rather than being traced through the cosmological horizon as though the spacetime were asymptotically flat. Every accepted CPU segment is parameterised by its actual per-step affine interval. A segment that crosses the finite bound is clipped back onto it before its Jacobi map, polarisation frame, volume transfer, or disk-event search advances, and the sky direction is sampled at that same event. Negative $\Lambda$, rotating/charged cosmological sectors, Nariai/super-Nariai requests, and observers outside the governed patch decline. The camera is not an implied static observer and the celestial texture remains a finite directional boundary condition, not a cosmological radiative-transfer claim.
 
 The rendered Morris--Thorne capability is the asymptotically normalised

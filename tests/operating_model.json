@@ -172,12 +172,14 @@
       "required": true,
       "verification": "build_gated",
       "profiles": ["cpu", "vulkan"],
-      "requirement": "The single registry exposes nine CPU-renderable spacetime families, advertises only implemented backend support, rejects parameters absent from a metric, preserves observer distance as a geometric coordinate radius with metric-natural scaling, keeps every positive-Lambda observer and directional background boundary inside its cosmological causal patch, parameterises every CPU accepted-segment consumer by the true per-step affine interval, clips a finite causal crossing before coupled state advances, represents the asymptotically normalised zero-tidal Ellis metric independently of its one-sheet or two-sheet output boundary, matches its exact Ricci scalar and radial null-energy-condition violation on both ends, enforces the resolved Alcubierre wall domain at every live host/device metric and RK-stage boundary, preserves its exact unit-determinant inverse, and matches the negative Eulerian warp-wall energy density required by Einstein's equation, while rejecting disk semantics absent from a metric.",
+      "requirement": "The single registry exposes nine CPU-renderable spacetime families, advertises only implemented backend support, rejects parameters absent from a metric, preserves observer distance as a geometric coordinate radius with metric-natural scaling, keeps every positive-Lambda observer and directional background boundary inside its cosmological causal patch, parameterises every CPU accepted-segment consumer by the true per-step affine interval, and clips a finite causal crossing before coupled state advances. The live Cartesian Kerr-Schild family satisfies the vacuum, Einstein-Maxwell, and spherical cosmological Einstein equations with an independently differentiated Kerr-Newman potential that is source-free outside the ring; source magnitudes must be large enough to reject omitted electromagnetic or cosmological terms. The model represents the asymptotically normalised zero-tidal Ellis metric independently of its one-sheet or two-sheet output boundary and matches its exact Ricci scalar and radial null-energy-condition violation on both ends. It enforces the resolved Alcubierre wall domain at every live host/device metric and RK-stage boundary, preserves its exact unit-determinant inverse, and matches the negative Eulerian warp-wall energy density required by Einstein's equation, while rejecting disk semantics absent from a metric.",
       "capability_dependencies": [],
       "evidence": [
         {"kind": "gtest", "name": "MetricRegistryTests.EveryCanonicalNameParsesToItsOwnId"},
         {"kind": "gtest", "name": "MetricRegistryTests.BackendSupportMatchesImplementations"},
         {"kind": "gtest", "name": "MetricRegistryTests.PositiveLambdaObserverAndHorizonShareOneCausalDomain"},
+        {"kind": "gtest", "name": "KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell"},
+        {"kind": "gtest", "name": "KerrSchildFieldEquations.KerrNewmanPotentialIsSourceFreeOutsideTheRing"},
         {"kind": "gtest", "name": "CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle"},
         {"kind": "gtest", "name": "CpuTraceBoundary.EveryAdvertisedCpuMetricConstructsAndTracesOneRay"},
         {"kind": "gtest", "name": "CpuTraceBoundary.TwoSheetEllisCrossesThroatAndReachesInversionMatchedInfinity"},
@@ -526,6 +528,8 @@
         {"kind": "gtest", "name": "KottlerHorizonTests.ExactRootsSeparateBlackHoleCaptureFromCosmologicalHorizon"},
         {"kind": "gtest", "name": "KottlerHorizonTests.PureDeSitterHasOnlyACosmologicalHorizon"},
         {"kind": "gtest", "name": "KottlerHorizonTests.RegularDeSitterOriginUsesTheExactAnalyticLimit"},
+        {"kind": "gtest", "name": "KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell"},
+        {"kind": "gtest", "name": "KerrSchildFieldEquations.KerrNewmanPotentialIsSourceFreeOutsideTheRing"},
         {"kind": "gtest", "name": "ConfigValidation.DeSitterRequestsEnforcePositiveLambdaAndSubNariaiBlackHole"},
         {"kind": "gtest", "name": "CpuTraceBoundary.EveryAdvertisedCpuMetricConstructsAndTracesOneRay"},
         {"kind": "gtest", "name": "RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame"},
@@ -703,15 +707,31 @@
       ]
     },
     {
+      "id": "kerr_schild_einstein_maxwell_family",
+      "state": "bounded",
+      "profiles": ["cpu", "vulkan"],
+      "request": "Minkowski, Schwarzschild, Kerr, Reissner-Nordstrom, or Kerr-Newman spacetime rendering",
+      "behavior": "Represent the asymptotically flat family in horizon-penetrating Cartesian Kerr-Schild coordinates with the exact oblate radial root and determinant minus one. The live covariant metric and analytic first derivatives must independently recover R_mu_nu=0 in vacuum and G_mu_nu=8 pi T_mu_nu for the electromagnetic potential A_mu=-Q r l_mu/Sigma; the same potential must satisfy the source-free Maxwell equation outside the ring. Cover both spin and charge signs, scale covariance, extremal and horizonless represented continuations, and the exact flat, Schwarzschild, and zero-charge limits. Rotating or charged nonzero-Lambda combinations remain outside this ansatz and decline.",
+      "evidence": [
+        {"kind": "gtest", "name": "KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell"},
+        {"kind": "gtest", "name": "KerrSchildFieldEquations.KerrNewmanPotentialIsSourceFreeOutsideTheRing"},
+        {"kind": "gtest", "name": "KerrTests.MetricMatchesIndependentCartesianKerrSchildForm"},
+        {"kind": "gtest", "name": "ReissnerNordstromTests.MetricMatchesIndependentCartesianKerrSchildForm"},
+        {"kind": "gtest", "name": "ConfigValidation.RotatingLambdaRejected"},
+        {"kind": "gtest", "name": "KernelParity.KerrSchildMetricMatchesLegacyToOnePartInMillion"}
+      ]
+    },
+    {
       "id": "spherical_kottler_cosmological_sector",
       "state": "bounded",
       "profiles": ["cpu"],
       "request": "de-Sitter or Schwarzschild-de-Sitter metric rendering",
-      "behavior": "Represent the exact spherical positive-Lambda Kottler metric in horizon-penetrating Cartesian Kerr-Schild coordinates; classify black-hole capture with the smaller positive root and use the distinct cosmological root as the outer causal-patch bound. Pure de Sitter has no black-hole capture surface and uses the exact regular analytic metric and derivative limit at the Cartesian origin; a nonzero-mass spherical origin remains singular and declines. Schwarzschild-de-Sitter requests require 9 Lambda M^2 < 1. Require the launch radius to remain at or below 0.99 of the cosmological horizon, round the fp32 directional celestial boundary inward from that horizon, and localise an accepted crossing segment back onto the bound before any Jacobi, polarisation, volume, or disk segment consumer advances; all consumers use the unconditional per-step affine interval and sky sampling observes that same terminal event. Reuse one scale-safe root authority across the metric, public and typed validation, and CPU tracing. The launch observer is the renderer's ADM/Eulerian worldline, not an implicitly static observer; the celestial texture is a finite directional boundary condition, not cosmological radiative transfer. Negative Lambda, rotating/charged Lambda sectors, Nariai, super-Nariai, and observers outside the governed causal patch decline.",
+      "behavior": "Represent the exact spherical positive-Lambda Kottler metric in horizon-penetrating Cartesian Kerr-Schild coordinates and independently recover R_mu_nu=Lambda g_mu_nu and R=4 Lambda from the live metric. Classify black-hole capture with the smaller positive root and use the distinct cosmological root as the outer causal-patch bound. Pure de Sitter has no black-hole capture surface and uses the exact regular analytic metric and derivative limit at the Cartesian origin; a nonzero-mass spherical origin remains singular and declines. Schwarzschild-de-Sitter requests require 9 Lambda M^2 < 1. Require the launch radius to remain at or below 0.99 of the cosmological horizon, round the fp32 directional celestial boundary inward from that horizon, and localise an accepted crossing segment back onto the bound before any Jacobi, polarisation, volume, or disk segment consumer advances; all consumers use the unconditional per-step affine interval and sky sampling observes that same terminal event. Reuse one scale-safe root authority across the metric, public and typed validation, and CPU tracing. The launch observer is the renderer's ADM/Eulerian worldline, not an implicitly static observer; the celestial texture is a finite directional boundary condition, not cosmological radiative transfer. Negative Lambda, rotating/charged Lambda sectors, Nariai, super-Nariai, and observers outside the governed causal patch decline.",
       "evidence": [
         {"kind": "gtest", "name": "KottlerHorizonTests.ExactRootsSeparateBlackHoleCaptureFromCosmologicalHorizon"},
         {"kind": "gtest", "name": "KottlerHorizonTests.PureDeSitterHasOnlyACosmologicalHorizon"},
         {"kind": "gtest", "name": "KottlerHorizonTests.RegularDeSitterOriginUsesTheExactAnalyticLimit"},
+        {"kind": "gtest", "name": "KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell"},
         {"kind": "gtest", "name": "MetricRegistryTests.PositiveLambdaObserverAndHorizonShareOneCausalDomain"},
         {"kind": "gtest", "name": "CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle"},
         {"kind": "gtest", "name": "CpuTraceBoundary.JacobiBundleTerminatesAtTheSameCausalEvent"},

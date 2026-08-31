@@ -66,7 +66,7 @@ constexpr std::array<std::string_view, 24> kRequiredDimensionIds = {
     "metric_catalogue_and_declines",
 };
 
-constexpr std::array<std::string_view, 29> kRequiredCapabilityIds = {
+constexpr std::array<std::string_view, 30> kRequiredCapabilityIds = {
     "revision_bound_release_alignment",
     "polarised_thin_disk_cpu",
     "polarised_volumetric_transfer",
@@ -79,6 +79,7 @@ constexpr std::array<std::string_view, 29> kRequiredCapabilityIds = {
     "inverse_compton_corona_transfer",
     "narrowband_line_transfer",
     "newtonian_shakura_sunyaev_temperature_profile",
+    "kerr_schild_einstein_maxwell_family",
     "spherical_kottler_cosmological_sector",
     "doppler_suppression_diagnostic",
     "phenomenological_volumetric_disk",
