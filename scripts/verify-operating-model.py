@@ -205,6 +205,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle",
         "gtest:CpuTraceBoundary.EveryAdvertisedCpuMetricConstructsAndTracesOneRay",
         "gtest:CpuTraceBoundary.TwoSheetEllisCrossesThroatAndReachesInversionMatchedInfinity",
+        "gtest:MorrisThorneCartesianTests.CurvatureAndRadialNullEnergyConditionMatchExactEllis",
         "gtest:MetricRegistryTests.BackendSupportMatchesImplementations",
         "gtest:MetricRegistryTests.EveryCanonicalNameParsesToItsOwnId",
         "gtest:MetricRegistryTests.PositiveLambdaObserverAndHorizonShareOneCausalDomain",
@@ -265,9 +266,9 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "d1267141a3a2c2fe61310daa8cf244fee224f5b3b33f543ae1e86b713339df57",
+    "acceptance_criteria": "9cb976aaa8eb5d23186d88702d40da1d5b5da0c89749f8670c09ebed92ad09e3",
     "required_dimensions": "ca9364d1caace7fa97ab5960394c4fa1256ca3523dd79cbca6952292b1561444",
-    "capability_contracts": "520b17192df241cc5a1429e208c0be5bb62cdeeb9326a8134c3f23232f525170",
+    "capability_contracts": "b550b5ee5a2f85df86d38fb4fd4ac2154fbb284e20ea7dda6718fd6a8b12b40f",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
 

@@ -349,7 +349,7 @@ public void GetEllisDrainholeMetric(
 // Sirius, mirroring MorrisThorneCartesian.  With rho=|x|,
 //
 //   r_areal = rho + b0^2/(4 rho),
-//   g_tt = -e^{2 Phi0},
+//   g_tt = -1,
 //   g_ij = A^2 delta_ij,                 A = 1 + b0^2/(4 rho^2).
 //
 // The throat is regular at rho=b0/2.  Positive rho below it is the exact
@@ -361,7 +361,11 @@ public void GetEllisDrainholeMetric(
 public bool IsMorrisThorneCartesianEventRepresented(
     Vec4Cart pos, float b0, float Phi0, int shapeType)
 {
-    if (shapeType != 0 || !isfinite(b0) || !(b0 > 0.0f) || !isfinite(Phi0) ||
+    // Phi0=0 is part of the live asymptotic normalisation, not merely the
+    // current caller default.  A finite nonzero constant could be removed by a
+    // time-coordinate rescaling, but admitting it here without rescaling the
+    // observer and boundary authorities would expose a different convention.
+    if (shapeType != 0 || !isfinite(b0) || !(b0 > 0.0f) || Phi0 != 0.0f ||
         !isfinite(pos.t) || !isfinite(pos.x) || !isfinite(pos.y) || !isfinite(pos.z)) {
         return false;
     }
@@ -383,10 +387,8 @@ public void GetMorrisThorneCartesianMetric(
     Real conformalBase = Real(1.0f) + q;
     Real conformal = conformalBase * conformalBase;
     Real inverseConformal = Real(1.0f) / conformal;
-    float exp2Phi = exp(2.0f * Phi0);
-
-    g[0][0] = -exp2Phi;
-    g_inv[0][0] = -1.0f / exp2Phi;
+    g[0][0] = -1.0f;
+    g_inv[0][0] = -1.0f;
     for (int i = 0; i < 3; i++) {
         g[i + 1][i + 1] = conformal;
         g_inv[i + 1][i + 1] = inverseConformal;

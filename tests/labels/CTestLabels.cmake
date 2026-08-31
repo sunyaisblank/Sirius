@@ -403,6 +403,7 @@ set_tests_properties(
     KernelParity.NullProjectionPreservesConeBranchAndFailsClosed
     KernelParity.WormholeAndWarpMetricMatchLegacy
     KernelParity.IsotropicEllisMetricAndConnectionMatchCoreOnBothSheets
+    KernelParity.UnnormalisedOrNonEllisDeviceProfilesFailClosed
     KernelParity.SphericalCaptureEventFindsHiddenAndTangentContacts
     KernelParity.EllisTwoSheetTraceCrossesThroatAndMapsTheOppositeSky
     KernelParity.KerrSchildChristoffelMatchesLegacyToOnePartInMillion
@@ -603,6 +604,7 @@ set_tests_properties(
     MorrisThorneCartesianTests.ChartAgreementWithSphericalFamily
     MorrisThorneCartesianTests.DerivativesMatchFiniteDifferencesOfMetric
     MorrisThorneCartesianTests.AnalyticInverseIsExact
+    MorrisThorneCartesianTests.CurvatureAndRadialNullEnergyConditionMatchExactEllis
     MorrisThorneCartesianTests.ThroatIsARegularTopologyBoundaryNotACaptureSurface
     MorrisThorneCartesianTests.InversionExchangesEndsAndPreservesArealRadius
     MorrisThorneCartesianTests.SecondSheetSkyUsesTheExactInversionJacobian
@@ -611,6 +613,7 @@ set_tests_properties(
     MorrisThorneCartesianTests.AcceptedSegmentFindsHiddenAndTangentThroatContacts
     MorrisThorneCartesianTests.DirectionalBoundaryIgnoresTangentAndSelectsInwardCrossing
     MorrisThorneCartesianTests.NonEllisCartesianRequestsFailClosed
+    MorrisThorneCartesianTests.LiveEllisRejectsUnnormalisedLapseAndIrrelevantShapeData
     MorrisThorneCartesianTests.ParameterBoundsMatchConfigAuthority
     PROPERTIES LABELS "Mandatory;Correctness"
 )

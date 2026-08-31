@@ -62,14 +62,23 @@ The capabilities that constitute DNGR, extracted from the paper, are: Kerr space
 
 Metrics outside that DNGR parity core remain explicit bounded capabilities. The CPU cosmological sector is the exact spherical positive-$\Lambda$ Kottler metric in horizon-penetrating Cartesian Kerr-Schild coordinates. Its smaller positive root is the black-hole capture surface and its larger root is the cosmological causal-patch boundary; pure de Sitter has only the latter. Named Schwarzschild-de Sitter requests require $9\Lambda M^2<1$. The ADM/Eulerian launch radius must remain at or below $0.99r_c$, and the ordinary finite directional-sky boundary is clamped to $r_c$ rather than being traced through the cosmological horizon as though the spacetime were asymptotically flat. Every accepted CPU segment is parameterised by its actual per-step affine interval. A segment that crosses the finite bound is clipped back onto it before its Jacobi map, polarisation frame, volume transfer, or disk-event search advances, and the sky direction is sampled at that same event. Negative $\Lambda$, rotating/charged cosmological sectors, Nariai/super-Nariai requests, and observers outside the governed patch decline. The camera is not an implied static observer and the celestial texture remains a finite directional boundary condition, not a cosmological radiative-transfer claim.
 
-The rendered Morris--Thorne capability is the zero-tidal Ellis member in its
-exact isotropic Cartesian chart. With isotropic radius $\rho$, its areal radius
+The rendered Morris--Thorne capability is the asymptotically normalised
+zero-tidal Ellis member, $g_{tt}=-1$, in its exact isotropic Cartesian chart.
+With isotropic radius $\rho$, its areal radius
 and spatial conformal factor are
 $r=\rho+b_0^2/(4\rho)$ and
 $A=1+b_0^2/(4\rho^2)$, so
 $g_{ij}=A^2\delta_{ij}$. The shared CPU/Vulkan scale domain is
 $0.1\le b_0\le1000$. The throat is the regular sphere $\rho=b_0/2$ and
 $0<\rho<b_0/2$ is the exact second asymptotic end. The declared
+curvature is independently recovered from finite differences of the analytic
+connection: $R=-2b_0^2/r^4$, and a unit-frequency radial null vector obeys
+$R_{\mu\nu}k^\mu k^\nu=-2b_0^2/r^4<0$ on both ends. Thus the represented
+traversable geometry explicitly carries the radial null-energy-condition
+violation required by Einstein's equation rather than merely reproducing its
+coordinate shape. Nonzero constant lapse, non-Ellis shape, and irrelevant
+shape-callback requests are outside the live parameter surface and decline.
+The declared
 `OneSheetCapture` topology finds the observer-nearest root of the accepted
 cubic-Hermite segment against the throat, including enter/exit and tangent
 contacts whose endpoints remain outside, clips every downstream consumer to

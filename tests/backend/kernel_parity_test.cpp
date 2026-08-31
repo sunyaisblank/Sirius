@@ -631,6 +631,35 @@ TEST(KernelParity, IsotropicEllisMetricAndConnectionMatchCoreOnBothSheets) {
     }
 }
 
+TEST(KernelParity, UnnormalisedOrNonEllisDeviceProfilesFailClosed) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    Sample represented;
+    represented.metric_id = kMorrisThorne;
+    represented.p1 = 1.0f;
+    represented.p2 = 0.0f;
+    represented.p3 = 0.0f;
+    represented.c0 = 1.0f;
+
+    Sample unnormalised = represented;
+    unnormalised.p2 = 0.25f;
+    Sample non_ellis = represented;
+    non_ellis.p3 = 1.0f;
+
+    const auto result =
+        RunProbe(*f.device, f.kernel, kOpMetric, {represented, unnormalised, non_ellis});
+    EXPECT_FLOAT_EQ(result[0], -1.0f);
+    EXPECT_GT(result[5], 0.0f);
+    for (std::size_t sample = 1; sample < 3; ++sample) {
+        const std::size_t base = sample * kResultStride;
+        for (std::size_t component = 0; component < 32; ++component) {
+            EXPECT_FLOAT_EQ(result[base + component], 0.0f)
+                << "sample=" << sample << " component=" << component;
+        }
+    }
+}
+
 TEST(KernelParity, SphericalCaptureEventFindsHiddenAndTangentContacts) {
     Fixture f = OpenProbe();
     if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
