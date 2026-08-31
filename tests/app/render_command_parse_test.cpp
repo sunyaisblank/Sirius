@@ -28,6 +28,13 @@ TEST(RenderCommandParse, UsageNamesTheFitWithoutAdvertisingAnAcesTransform) {
     EXPECT_EQ(usage.find("Tonemapper: ACES,"), std::string::npos);
 }
 
+TEST(RenderCommandParse, UsageDeclaresTemporalTransferFailClosed) {
+    const std::string usage = RenderCommand{}.Usage();
+    EXPECT_NE(usage.find("Temporal Disk (declared but fail-closed)"), std::string::npos);
+    EXPECT_NE(usage.find("not represented; rejected"), std::string::npos);
+    EXPECT_EQ(usage.find("Enable CPU temporal integration"), std::string::npos);
+}
+
 TEST(RenderCommandParse, BasicFlagsMapToConfig) {
     RenderCommand cmd;
     GlobalOptions globals;

@@ -173,6 +173,11 @@ DETACHED_XYZ_AP0_MATRIX = re.compile(
     re.DOTALL,
 )
 BARE_ACES_CONFIG_LITERAL = re.compile(r'"ACES"')
+KERR_TRANSFER_AUTHORITY = SOURCE_ROOT / "core" / "relativistic_transfer.h"
+KERR_TRANSFER_CPU_CONSUMER = SOURCE_ROOT / "backend" / "cpu" / "geodesic_tracer.cpp"
+KERR_TRANSFER_DEVICE_AUTHORITY = SOURCE_ROOT / "kernels" / "gr_disk.slang"
+KERR_TRANSFER_DEVICE_CONSUMER = SOURCE_ROOT / "kernels" / "trace.slang"
+KERR_TRANSFER_PARITY_PROBE = SOURCE_ROOT / "kernels" / "parity_probe.slang"
 FULL_QUALIFICATION_JOBS = (
     "linux-gate",
     "linux-sanitizers",
@@ -1216,6 +1221,89 @@ def verify_blackbody_laws_authority_policy() -> None:
         raise RuntimeError("blackbody-laws policy accepted a mislabeled physical quantity")
 
 
+def kerr_zamo_transfer_authority_errors(documents: dict[Path, str]) -> list[str]:
+    errors: list[str] = []
+    required = {
+        KERR_TRANSFER_AUTHORITY: (
+            "TryKerrStationaryFrameFrequencyTransfer",
+            "KerrZamoFrequencyTransfer",
+            "KerrDiskTransfer",
+        ),
+        KERR_TRANSFER_CPU_CONSUMER: (
+            "relativity::TryKerrStationaryFrameFrequencyTransfer",
+            "relativity::KerrZamoFrequencyTransfer",
+            "zamo_transfer->frame_frequency",
+        ),
+        KERR_TRANSFER_DEVICE_AUTHORITY: (
+            "TryKerrStationaryFrameFrequencyTransfer",
+            "KerrZamoFrequencyTransfer",
+            "KerrPhotonKillingQuantitiesCart",
+        ),
+        KERR_TRANSFER_DEVICE_CONSUMER: (
+            "TryKerrStationaryFrameFrequencyTransfer",
+            "KerrZamoFrequencyTransfer",
+            "zamoTransfer.y",
+        ),
+        KERR_TRANSFER_PARITY_PROBE: (
+            "OP_KERR_ZAMO_TRANSFER",
+            "OP_KERR_DISK_TRANSFER",
+            "KerrZamoFrequencyTransfer",
+            "ComputeKerrDiskTransferCart",
+        ),
+    }
+    for path, markers in required.items():
+        document = documents.get(path)
+        if document is None:
+            errors.append(f"Kerr ZAMO transfer participant is missing: {relative(path)}")
+            continue
+        code = CPP_NON_CODE.sub(" ", document)
+        for marker in markers:
+            if marker not in code:
+                errors.append(f"{relative(path)} omits Kerr ZAMO marker {marker}")
+
+    cpu = CPP_NON_CODE.sub(" ", documents.get(KERR_TRANSFER_CPU_CONSUMER, ""))
+    if "eulerian_frequency" in cpu:
+        errors.append("the CPU volume path restored a Kerr-Schild Eulerian frequency substitute")
+    device = CPP_NON_CODE.sub(" ", documents.get(KERR_TRANSFER_DEVICE_CONSUMER, ""))
+    if "eulerianFrequency" in device:
+        errors.append("the Slang volume path restored a Kerr-Schild Eulerian frequency substitute")
+    return errors
+
+
+def verify_kerr_zamo_transfer_authority_policy() -> None:
+    valid = {
+        KERR_TRANSFER_AUTHORITY: (
+            "TryKerrStationaryFrameFrequencyTransfer KerrZamoFrequencyTransfer "
+            "KerrDiskTransfer"
+        ),
+        KERR_TRANSFER_CPU_CONSUMER: (
+            "relativity::TryKerrStationaryFrameFrequencyTransfer "
+            "relativity::KerrZamoFrequencyTransfer zamo_transfer->frame_frequency"
+        ),
+        KERR_TRANSFER_DEVICE_AUTHORITY: (
+            "TryKerrStationaryFrameFrequencyTransfer KerrZamoFrequencyTransfer "
+            "KerrPhotonKillingQuantitiesCart"
+        ),
+        KERR_TRANSFER_DEVICE_CONSUMER: (
+            "TryKerrStationaryFrameFrequencyTransfer KerrZamoFrequencyTransfer zamoTransfer.y"
+        ),
+        KERR_TRANSFER_PARITY_PROBE: (
+            "OP_KERR_ZAMO_TRANSFER OP_KERR_DISK_TRANSFER "
+            "KerrZamoFrequencyTransfer ComputeKerrDiskTransferCart"
+        ),
+    }
+    if kerr_zamo_transfer_authority_errors(valid):
+        raise RuntimeError("Kerr ZAMO policy rejected the governed host/device authority")
+    detached = dict(valid)
+    detached[KERR_TRANSFER_CPU_CONSUMER] = "independent_volume_frequency();"
+    if not kerr_zamo_transfer_authority_errors(detached):
+        raise RuntimeError("Kerr ZAMO policy accepted a detached CPU volume consumer")
+    slicing_normal = dict(valid)
+    slicing_normal[KERR_TRANSFER_DEVICE_CONSUMER] += " eulerianFrequency"
+    if not kerr_zamo_transfer_authority_errors(slicing_normal):
+        raise RuntimeError("Kerr ZAMO policy accepted a Kerr-Schild slicing-normal substitute")
+
+
 def attestation_preflight_errors(
     preflight: str,
     reuse: str,
@@ -1322,6 +1410,7 @@ def verify() -> list[str]:
     verify_cie1931_observer_authority_policy()
     verify_aces_contract_policy()
     verify_blackbody_laws_authority_policy()
+    verify_kerr_zamo_transfer_authority_policy()
     try:
         attribute_source = GIT_ATTRIBUTES.read_text(encoding="utf-8")
         attributes = subprocess.run(
@@ -1360,6 +1449,7 @@ def verify() -> list[str]:
     errors.extend(cie1931_observer_authority_errors(governed_sources))
     errors.extend(aces_contract_errors(governed_sources))
     errors.extend(blackbody_laws_authority_errors(governed_sources))
+    errors.extend(kerr_zamo_transfer_authority_errors(governed_sources))
     shader_root = SOURCE_ROOT / "app" / "viewer" / "shaders"
     actual_viewer_shaders = {
         path for path in shader_root.iterdir() if path.suffix in {".frag", ".vert"}

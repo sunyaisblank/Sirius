@@ -129,10 +129,10 @@ Volumetric Disk (3D accretion disk with thickness):
   --corona                  Decline: spectral covariant Compton transfer is not represented
   --no-disk                 Disable accretion-disk emission (required for charged/Λ metrics)
 
-Temporal Disk:
-  --motion-blur             Enable CPU temporal integration of thin-disk rotation
-  --shutter-time <t>        Exposure interval in geometric time units (default: 0.1)
-  --motion-samples <n>      Temporal samples (default: 3)
+Temporal Disk (declared but fail-closed):
+  --motion-blur             Request covariant temporal transfer (not represented; rejected)
+  --shutter-time <t>        Requested exposure interval in geometric units (default: 0.1)
+  --motion-samples <n>      Requested temporal samples (default: 3)
 
 Film-Inspired Display Finish:
   --film                    Enable the bounded display finish

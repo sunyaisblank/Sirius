@@ -21,6 +21,8 @@
 #include "sirius/core/coordinates.h"
 #include "sirius/core/disk/novikov_thorne_disk.h"
 #include "sirius/core/disk/volumetric_disk.h"
+#include "sirius/core/metrics/kerr_schild_family.h"
+#include "sirius/core/relativistic_transfer.h"
 #include "sirius/core/spectral/blackbody.h"
 #include "sirius/core/spectral/colour_modes.h"
 #include "sirius/core/xyz_srgb.h"
@@ -72,6 +74,8 @@ constexpr std::uint32_t kOpCelestialTangentBasis = 11;
 constexpr std::uint32_t kOpJacobiRadialCongruence = 12;
 constexpr std::uint32_t kOpXyzD65ToLinearSrgb = 13;
 constexpr std::uint32_t kOpCie1931TwoDegreeFit = 14;
+constexpr std::uint32_t kOpKerrZamoTransfer = 15;
+constexpr std::uint32_t kOpKerrDiskTransfer = 16;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -711,6 +715,100 @@ TEST(KernelParity, TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure) {
     EXPECT_GT(results[0], 0.0f);
     EXPECT_GT(results[kResultStride], 0.0f);
     EXPECT_FLOAT_EQ(results[2 * kResultStride], 0.0f);
+}
+
+TEST(KernelParity, ArbitraryLatitudeKerrZamoMatchesHostAuthority) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    const auto sample = [](float mass, float spin, float radius, float cos_theta,
+                           float observer_frequency, float energy, float angular_momentum) {
+        Sample value;
+        value.p1 = mass;
+        value.p2 = spin;
+        value.c0 = radius;
+        value.c1 = cos_theta;
+        value.c2 = observer_frequency;
+        value.u0 = energy;
+        value.u1 = angular_momentum;
+        return value;
+    };
+    const std::vector<Sample> samples = {
+        sample(1.0f, 0.7f, 6.0f, 0.35f, 0.93f, 1.0f, 1.4f),
+        sample(2.0f, -1.2f, 12.0f, -0.25f, 1.1f, 1.2f, -2.0f),
+        sample(1.0f, 0.998f, 1.7f, 0.2f, 1.0f, 1.0f, 0.2f),
+        sample(1.0f, 0.7f, 6.0f, 1.0f, 0.93f, 1.0f, 1.4f),
+    };
+    const auto results = RunProbe(*f.device, f.kernel, kOpKerrZamoTransfer, samples);
+    for (std::size_t index = 0; index < samples.size(); ++index) {
+        const auto& value = samples[index];
+        const auto expected = sirius::core::relativity::KerrZamoFrequencyTransfer(
+            value.c2, value.u0, value.u1, value.p1, value.p2, value.c0, value.c1);
+        const std::size_t base = index * kResultStride;
+        EXPECT_EQ(results[base] != 0.0f, expected.has_value());
+        if (!expected) continue;
+        EXPECT_TRUE(Close(results[base + 1], static_cast<float>(expected->g), 4.0e-6f, 2.0e-7f,
+                          "arbitrary-latitude ZAMO g"));
+        EXPECT_TRUE(Close(results[base + 2], static_cast<float>(expected->frame_frequency), 4.0e-6f,
+                          2.0e-7f, "arbitrary-latitude ZAMO frequency"));
+        EXPECT_TRUE(Close(results[base + 3], static_cast<float>(expected->frame.angular_velocity),
+                          4.0e-6f, 2.0e-7f, "arbitrary-latitude ZAMO omega"));
+        EXPECT_TRUE(Close(results[base + 4], static_cast<float>(expected->frame.time_component),
+                          4.0e-6f, 2.0e-7f, "arbitrary-latitude ZAMO u^t"));
+    }
+}
+
+TEST(KernelParity, EquatorialKerrDiskTransferMatchesHostAuthority) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    const auto sample = [](float mass, float spin, float radius, float phi,
+                           float observer_frequency, std::array<float, 4> past_velocity) {
+        Sample value;
+        value.p1 = mass;
+        value.p2 = spin;
+        value.c0 = radius;
+        value.c1 = phi;
+        value.c2 = observer_frequency;
+        value.u0 = past_velocity[0];
+        value.u1 = past_velocity[1];
+        value.u2 = past_velocity[2];
+        value.u3 = past_velocity[3];
+        return value;
+    };
+    const std::vector<Sample> samples = {
+        sample(1.0f, 0.7f, 6.0f, 0.4f, 0.93f, {-1.2f, 0.3f, -0.1f, 0.05f}),
+        sample(2.0f, -1.2f, 12.0f, -0.8f, 1.1f, {-1.1f, -0.15f, 0.24f, -0.03f}),
+    };
+    const auto results = RunProbe(*f.device, f.kernel, kOpKerrDiskTransfer, samples);
+    for (std::size_t index = 0; index < samples.size(); ++index) {
+        const auto& value = samples[index];
+        const double rho = std::hypot(static_cast<double>(value.c0), static_cast<double>(value.p2));
+        sirius::core::Vec4 position;
+        position(1) = rho * std::cos(value.c1);
+        position(2) = rho * std::sin(value.c1);
+        sirius::core::KerrSchildFamily metric(
+            sirius::core::KerrSchildParams::Kerr(value.p1, value.p2));
+        sirius::core::Metric4d local_metric;
+        sirius::core::Tensor<sirius::core::Dual<double>, 4, 4, 4> derivatives;
+        metric.Evaluate(position, local_metric, derivatives);
+        sirius::core::Vec4 physical_photon;
+        physical_photon(0) = -value.u0;
+        physical_photon(1) = -value.u1;
+        physical_photon(2) = -value.u2;
+        physical_photon(3) = -value.u3;
+        const auto covector = sirius::core::TensorOps::LowerIndex(physical_photon, local_metric);
+        const double energy = -covector(0);
+        const double angular_momentum = -position(2) * covector(1) + position(1) * covector(2);
+        const auto expected = sirius::core::relativity::KerrDiskTransfer(
+            value.c2, energy, angular_momentum, value.p1, value.p2, value.c0);
+        ASSERT_TRUE(expected.has_value());
+        const std::size_t base = index * kResultStride;
+        EXPECT_TRUE(Close(results[base], static_cast<float>(expected->full_g), 5.0e-6f, 2.0e-7f,
+                          "equatorial emitter g"));
+        EXPECT_TRUE(Close(results[base + 1], static_cast<float>(expected->zamo_g), 5.0e-6f, 2.0e-7f,
+                          "equatorial ZAMO g"));
+    }
 }
 
 TEST(KernelParity, BlackbodyMatchesIntegratedCoreSpectrum) {

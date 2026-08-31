@@ -60,6 +60,7 @@ SUITE_LABELS = {
     "MandatoryKillingTests": MANDATORY,
     "SymplecticIntegratorTest": MANDATORY,
     "KerrMetricDTest": MANDATORY,
+    "KerrZamoTransfer": MANDATORY,
     "Vec4dTests": MANDATORY,
     "Mat4dTests": MANDATORY,
     "Vec4dTest": MANDATORY,

@@ -40,6 +40,8 @@ static const uint OP_CELESTIAL_TANGENT_BASIS = 11;
 static const uint OP_JACOBI_RADIAL_CONGRUENCE = 12;
 static const uint OP_XYZ_D65_TO_LINEAR_SRGB = 13;
 static const uint OP_CIE_1931_TWO_DEGREE_FIT = 14;
+static const uint OP_KERR_ZAMO_TRANSFER = 15;
+static const uint OP_KERR_DISK_TRANSFER = 16;
 
 // Future-directed null root used by the render kernel, repeated here only for
 // the diagnostic launch boundary. The integration below calls the production
@@ -242,6 +244,28 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         results[rb + 0] = xyz.x;
         results[rb + 1] = xyz.y;
         results[rb + 2] = xyz.z;
+    } else if (opcode == OP_KERR_ZAMO_TRANSFER) {
+        // p1=M, p2=a; c0=r, c1=cos(theta), c2=observer frequency;
+        // u0=E, u1=L_z. Exercise the production arbitrary-latitude authority
+        // without tracing or producing an image.
+        float4 transfer;
+        bool represented = KerrZamoFrequencyTransfer(
+            c2, samples[sb + 8], samples[sb + 9], p1, p2, c0, c1, transfer);
+        results[rb + 0] = represented ? 1.0f : 0.0f;
+        results[rb + 1] = transfer.x;
+        results[rb + 2] = transfer.y;
+        results[rb + 3] = transfer.z;
+        results[rb + 4] = transfer.w;
+    } else if (opcode == OP_KERR_DISK_TRANSFER) {
+        // p1=M, p2=a; c0=r, c1=Kerr-Schild Cartesian azimuth,
+        // c2=observer frequency; u0..u3=past-directed photon tangent.
+        Vec4Cart photonVelocity = MakeVec4Cart(
+            Real(samples[sb + 8]), Real(samples[sb + 9]),
+            Real(samples[sb + 10]), Real(samples[sb + 11]));
+        float2 transfer = ComputeKerrDiskTransferCart(
+            c0, c1, photonVelocity, c2, p1, p2);
+        results[rb + 0] = transfer.x;
+        results[rb + 1] = transfer.y;
     } else if (opcode == OP_DISK_REDSHIFT) {
         // c0 = emitted bolometric source, c1 = redshift g.
         results[rb + 0] = ObservedDiskBolometricSource(c0, c1);

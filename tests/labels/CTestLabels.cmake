@@ -410,6 +410,8 @@ set_tests_properties(
     KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco
     KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel
     KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure
+    KernelParity.ArbitraryLatitudeKerrZamoMatchesHostAuthority
+    KernelParity.EquatorialKerrDiskTransferMatchesHostAuthority
     KernelParity.BlackbodyMatchesIntegratedCoreSpectrum
     KernelParity.XyzD65ToLinearSrgbMatchesHostAuthority
     KernelParity.Cie1931TwoDegreeFitMatchesHostAuthority
@@ -470,6 +472,12 @@ set_tests_properties(
     KerrTests.StaticLimitAuthorityIsAZeroOfProductionGtt
     KerrTests.ZeroSpinEqualsProductionSchwarzschild
     KerrTests.ClosedFormInverseMultipliesToIdentity
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    KerrZamoTransfer.ArbitraryLatitudeMatchesIndependentBoyerLindquistContraction
+    KerrZamoTransfer.KerrSchildSlicingNormalIsNotTheOffEquatorialZamo
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -727,6 +735,7 @@ set_tests_properties(
 
 set_tests_properties(
     RenderCommandParse.UsageNamesTheFitWithoutAdvertisingAnAcesTransform
+    RenderCommandParse.UsageDeclaresTemporalTransferFailClosed
     RenderCommandParse.BasicFlagsMapToConfig
     RenderCommandParse.RepresentedVolumetricAndFilmFlagsSetEnables
     RenderCommandParse.FeatureParametersSelectTheirOwningModels

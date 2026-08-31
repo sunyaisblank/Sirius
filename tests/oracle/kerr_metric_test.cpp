@@ -2,6 +2,9 @@
 // symmetry, Hamiltonian null condition, horizon/ISCO/photon-sphere radii.
 // Ported from TSPH014A.cpp; assertions and tolerances unchanged.
 
+#include "sirius/core/coordinates.h"
+#include "sirius/core/metrics/kerr_schild_family.h"
+#include "sirius/core/relativistic_transfer.h"
 #include "sirius/oracle/kerr_boyer_lindquist.h"
 #include "sirius/oracle/metric_interface.h"
 #include "sirius/oracle/transport_types.h"
@@ -15,6 +18,79 @@
 using namespace sirius::oracle;
 
 namespace {
+
+TEST(KerrZamoTransfer, ArbitraryLatitudeMatchesIndependentBoyerLindquistContraction) {
+    constexpr double kMass = 1.0;
+    constexpr double kSpin = 0.7;
+    constexpr double kRadius = 6.0;
+    constexpr double kCosTheta = 0.35;
+    constexpr double kEnergy = 1.0;
+    constexpr double kAngularMomentum = 1.4;
+    constexpr double kObserverFrequency = 0.93;
+    const Vec4d event(0.0, kRadius, std::acos(kCosTheta), 0.4);
+    KerrMetricD oracle(kMass, kSpin);
+    double metric[4][4];
+    double inverse[4][4];
+    oracle.Evaluate(event, metric, inverse);
+
+    // Derive the locally non-rotating observer only from the independent
+    // oracle metric: u_phi=0 gives Omega=-g_tphi/g_phiphi, and u.u=-1 fixes u^t.
+    const double omega = -metric[0][3] / metric[3][3];
+    const double norm = metric[0][0] + 2.0 * omega * metric[0][3] + omega * omega * metric[3][3];
+    ASSERT_LT(norm, 0.0);
+    const double time_component = 1.0 / std::sqrt(-norm);
+    const double expected_frequency = time_component * (kEnergy - omega * kAngularMomentum);
+
+    const auto transfer = sirius::core::relativity::KerrZamoFrequencyTransfer(
+        kObserverFrequency, kEnergy, kAngularMomentum, kMass, kSpin, kRadius, kCosTheta);
+    ASSERT_TRUE(transfer.has_value());
+    EXPECT_NEAR(transfer->frame.angular_velocity, omega, 2.0e-15);
+    EXPECT_NEAR(transfer->frame.time_component, time_component, 2.0e-15);
+    EXPECT_NEAR(transfer->frame_frequency, expected_frequency, 2.0e-15);
+    EXPECT_NEAR(transfer->g, kObserverFrequency / expected_frequency, 2.0e-15);
+
+    const auto equatorial = sirius::core::relativity::KerrZamoFrequencyTransfer(
+        kObserverFrequency, kEnergy, kAngularMomentum, kMass, kSpin, kRadius, 0.0);
+    const auto disk = sirius::core::relativity::KerrDiskTransfer(
+        kObserverFrequency, kEnergy, kAngularMomentum, kMass, kSpin, kRadius);
+    ASSERT_TRUE(equatorial.has_value());
+    ASSERT_TRUE(disk.has_value());
+    EXPECT_DOUBLE_EQ(equatorial->frame_frequency, disk->zamo_frequency);
+    EXPECT_DOUBLE_EQ(equatorial->g, disk->zamo_g);
+}
+
+TEST(KerrZamoTransfer, KerrSchildSlicingNormalIsNotTheOffEquatorialZamo) {
+    constexpr double kMass = 1.0;
+    constexpr double kSpin = 0.7;
+    constexpr double kRadius = 6.0;
+    constexpr double kCosTheta = 0.35;
+    const sirius::core::coordinates::Vec4Bl event{0.0, kRadius, std::acos(kCosTheta), 0.4};
+    const auto cart = sirius::core::coordinates::BlToKerrSchildCart(event, kSpin);
+
+    sirius::core::KerrSchildFamily live_metric(sirius::core::KerrSchildParams::Kerr(kMass, kSpin));
+    sirius::core::Vec4 position;
+    position(0) = cart.t;
+    position(1) = cart.x;
+    position(2) = cart.y;
+    position(3) = cart.z;
+    sirius::core::Metric4d inverse;
+    ASSERT_TRUE(live_metric.InverseMetric(position, inverse));
+    const double lapse = 1.0 / std::sqrt(-inverse(0, 0).real);
+    sirius::core::coordinates::Vec4Cart slicing_normal;
+    slicing_normal.t = -lapse * inverse(0, 0).real;
+    slicing_normal.x = -lapse * inverse(1, 0).real;
+    slicing_normal.y = -lapse * inverse(2, 0).real;
+    slicing_normal.z = -lapse * inverse(3, 0).real;
+    const auto slicing_normal_bl = sirius::core::coordinates::TransformVectorKerrSchildCartToBl(
+        slicing_normal, cart, kMass, kSpin);
+
+    const auto zamo = sirius::core::relativity::KerrZamoFrequencyTransfer(
+        1.0, 1.0, 0.0, kMass, kSpin, kRadius, kCosTheta);
+    ASSERT_TRUE(zamo.has_value());
+    EXPECT_GT(std::abs(slicing_normal_bl.r), 1.0e-3)
+        << "the former volume diagnostic imported radial slicing motion";
+    EXPECT_NE(slicing_normal_bl.phi / slicing_normal_bl.t, zamo->frame.angular_velocity);
+}
 
 // Test fixture for double-precision Kerr metric
 class KerrMetricDTest : public ::testing::Test {
