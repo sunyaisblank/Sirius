@@ -17,6 +17,7 @@
 
 #include "sirius/backend/device.h"
 #include "sirius/core/celestial_tangent_basis.h"
+#include "sirius/core/coordinates.h"
 #include "sirius/core/disk/novikov_thorne_disk.h"
 #include "sirius/core/disk/volumetric_disk.h"
 #include "sirius/core/spectral/blackbody.h"
@@ -1043,6 +1044,121 @@ TEST(KernelParity, DeviceTidalContractionMatchesAnalyticSchwarzschildAtMatchedEv
         // below 5e-4 here, versus a measured 1.37e-2 for the former stencil.
         EXPECT_LT(maximum_error / std::max(scale, 1.0e-30), 5.0e-4)
             << "device matched-event tidal contraction at r=" << events[sample].r;
+    }
+}
+
+TEST(KernelParity, DeviceTidalContractionMatchesAnalyticKerrAtMatchedEvents) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    constexpr double mass = 1.0;
+    constexpr double phi = 0.37;
+
+    std::vector<Sample> samples;
+    std::vector<sirius::core::coordinates::Vec4Cart> positions;
+    std::vector<double> spins;
+    std::vector<sirius::oracle::Vec4d> events;
+    std::vector<sirius::oracle::Vec4d> expected_accelerations;
+    // Exercise both orientations of the rotating geometry, off the equator,
+    // with two independent tangent/deviation pairs. The production coordinate
+    // authority maps each Cartesian vector to the matched Boyer-Lindquist
+    // event; only the independent analytic oracle supplies the expected
+    // Riemann contraction. This is a scalar/tiny-compute probe, not a render.
+    for (const float device_spin : {-0.9f, 0.9f}) {
+        const double spin = static_cast<double>(device_spin);
+        sirius::oracle::KerrMetricD oracle(mass, spin);
+        for (const float radius : {3.0f, 6.0f, 20.0f}) {
+            for (const float theta : {0.6f, 1.1f}) {
+                const sirius::core::coordinates::Vec4Bl requested_event{0.0, radius, theta, phi};
+                const auto requested_position =
+                    sirius::core::coordinates::BlToKerrSchildCart(requested_event, spin);
+                // Round the event to the exact fp32 storage-buffer bytes, then
+                // recover the matched oracle event from those bytes. The
+                // oracle may not silently receive a nearby double-only event.
+                const sirius::core::coordinates::Vec4Cart position{
+                    0.0, static_cast<double>(static_cast<float>(requested_position.x)),
+                    static_cast<double>(static_cast<float>(requested_position.y)),
+                    static_cast<double>(static_cast<float>(requested_position.z))};
+                const auto matched_event =
+                    sirius::core::coordinates::KerrSchildCartToBl(position, spin);
+                const sirius::oracle::Vec4d event(matched_event.t, matched_event.r,
+                                                  matched_event.theta, matched_event.phi);
+                const std::array<float, 4> tangent_components =
+                    theta < 1.0f ? std::array{1.0f, -0.71f, 0.23f, -0.17f}
+                                 : std::array{0.82f, 0.31f, -0.57f, 0.26f};
+                const std::array<float, 4> deviation_components =
+                    theta < 1.0f ? std::array{0.13f, 0.19f, -0.11f, 0.07f}
+                                 : std::array{-0.09f, 0.07f, 0.17f, -0.13f};
+                const sirius::core::coordinates::Vec4Cart cart_tangent = {
+                    tangent_components[0], tangent_components[1], tangent_components[2],
+                    tangent_components[3]};
+                const sirius::core::coordinates::Vec4Cart cart_deviation = {
+                    deviation_components[0], deviation_components[1], deviation_components[2],
+                    deviation_components[3]};
+                const auto tangent_bl =
+                    sirius::core::coordinates::TransformVectorKerrSchildCartToBl(
+                        cart_tangent, position, mass, spin);
+                const auto deviation_bl =
+                    sirius::core::coordinates::TransformVectorKerrSchildCartToBl(
+                        cart_deviation, position, mass, spin);
+
+                Sample sample;
+                sample.metric_id = kKerrSchild;
+                sample.p1 = static_cast<float>(mass);
+                sample.p2 = device_spin;
+                sample.c0 = static_cast<float>(position.x);
+                sample.c1 = static_cast<float>(position.y);
+                sample.c2 = static_cast<float>(position.z);
+                sample.u0 = tangent_components[0];
+                sample.u1 = tangent_components[1];
+                sample.u2 = tangent_components[2];
+                sample.u3 = tangent_components[3];
+                sample.h = deviation_components[0];
+                sample.aux0 = deviation_components[1];
+                sample.aux1 = deviation_components[2];
+                sample.aux2 = deviation_components[3];
+                samples.push_back(sample);
+                positions.push_back(position);
+                spins.push_back(spin);
+                events.push_back(event);
+                const sirius::oracle::Vec4d tangent(tangent_bl.t, tangent_bl.r, tangent_bl.theta,
+                                                    tangent_bl.phi);
+                const sirius::oracle::Vec4d deviation(deviation_bl.t, deviation_bl.r,
+                                                      deviation_bl.theta, deviation_bl.phi);
+                expected_accelerations.push_back(
+                    AnalyticTidalAcceleration(oracle, event, tangent, deviation));
+            }
+        }
+    }
+
+    const auto results = RunProbe(*f.device, f.kernel, kOpDeviation, samples);
+    for (std::size_t sample = 0; sample < samples.size(); ++sample) {
+        const std::size_t offset = sample * kResultStride;
+        const sirius::core::coordinates::Vec4Cart device_acceleration{
+            results[offset], results[offset + 1], results[offset + 2], results[offset + 3]};
+        const auto actual_bl = sirius::core::coordinates::TransformVectorKerrSchildCartToBl(
+            device_acceleration, positions[sample], mass, spins[sample]);
+        const sirius::oracle::Vec4d actual(actual_bl.t, actual_bl.r, actual_bl.theta,
+                                           actual_bl.phi);
+        const auto& expected = expected_accelerations[sample];
+
+        double scale = 0.0;
+        double maximum_error = 0.0;
+        for (int component = 0; component < 4; ++component) {
+            ASSERT_TRUE(std::isfinite(actual[component]));
+            ASSERT_TRUE(std::isfinite(expected[component]));
+            scale = std::max(scale, std::abs(expected[component]));
+            maximum_error =
+                std::max(maximum_error, std::abs(actual[component] - expected[component]));
+        }
+        const double relative_error = maximum_error / std::max(scale, 1.0e-30);
+        // The worst exploratory fp32 result was 7.02e-5. Keep a governed
+        // 2e-4 ceiling for cross-driver arithmetic variance while remaining a
+        // quantitative rotating-Kerr tensor gate.
+        EXPECT_LT(relative_error, 2.0e-4)
+            << "device Kerr matched-event contraction at a=" << spins[sample]
+            << " r=" << events[sample].r << " theta=" << events[sample].theta
+            << " relative_error=" << relative_error;
     }
 }
 
