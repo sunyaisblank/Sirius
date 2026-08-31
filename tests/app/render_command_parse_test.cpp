@@ -32,6 +32,13 @@ namespace sirius::app::test {
 // then declines before validation or rendering.
 constexpr const char* kStopSentinel = "--stop-before-render";
 
+TEST(RenderCommandParse, UsageNamesTheFitWithoutAdvertisingAnAcesTransform) {
+    const std::string usage = RenderCommand{}.Usage();
+    EXPECT_NE(usage.find("Tonemapper: ACESFit"), std::string::npos);
+    EXPECT_NE(usage.find("not an ACES Output Transform"), std::string::npos);
+    EXPECT_EQ(usage.find("Tonemapper: ACES,"), std::string::npos);
+}
+
 TEST(RenderCommandParse, BasicFlagsMapToConfig) {
     RenderCommand cmd;
     GlobalOptions globals;

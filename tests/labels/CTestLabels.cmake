@@ -203,6 +203,7 @@ set_tests_properties(
     ConfigValidation.RotatingLambdaRejected
     ConfigValidation.ObserverInsidePoleBufferRejected
     ConfigValidation.UnknownTonemapperRejected
+    ConfigValidation.AcesFitIsExplicitAndBareAcesIsRejected
     ConfigValidation.VulkanBackendNameAccepted
     ConfigValidation.UnknownBackendNameRejected
     ConfigValidation.CpuBackendAccepted
@@ -871,6 +872,7 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    RenderCommandParse.UsageNamesTheFitWithoutAdvertisingAnAcesTransform
     RenderCommandParse.BasicFlagsMapToConfig
     RenderCommandParse.RepresentedVolumetricAndFilmFlagsSetEnables
     RenderCommandParse.FeatureParametersSelectTheirOwningModels
@@ -1143,15 +1145,17 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    TonemapTests.ACESAtZero
-    TonemapTests.ACESMonotone
-    TonemapTests.ACESBounded
+    TonemapTests.AcesFitMatchesPublishedRationalSamples
+    TonemapTests.AcesFitAnalyticDomainAndSaturationBoundaryArePinned
+    TonemapTests.AcesFitIsMonotoneOnNonNegativeRadiance
+    TonemapTests.AcesFitIsClippedToDisplayLinearUnitInterval
+    TonemapTests.AcesFitNameIsExplicitAndBareAcesDeclines
     TonemapTests.ReinhardAnalytic
     TonemapTests.FilmicAtZero
     TonemapTests.FilmicMonotone
     TonemapTests.FilmicBounded
     TonemapTests.ApplyExposureScaling
-    TonemapTests.ApplyACESDispatch
+    TonemapTests.ApplyAcesFitDispatch
     TonemapTests.ApplyReinhardDispatch
     PROPERTIES LABELS "Mandatory;Correctness"
 )

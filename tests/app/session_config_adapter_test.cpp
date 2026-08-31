@@ -365,6 +365,7 @@ TEST(RenderSessionProbe, ConfigurationConversionPreservesObserverAndDiskControls
     EXPECT_FLOAT_EQ(session.camera_focal_length, 85.0f);
     EXPECT_FLOAT_EQ(session.camera_aperture, 1.4f);
     EXPECT_FLOAT_EQ(session.camera_focus_distance, 40.0f);
+    EXPECT_EQ(session.tonemapper, core::TonemapType::AcesFit);
     EXPECT_EQ(session.color_mode, core::color_modes::Mode::Polarisation);
     EXPECT_TRUE(session.enable_polarisation);
 
@@ -417,7 +418,7 @@ TEST(RenderSessionProbe, ConfigurationConversionPreservesObserverAndDiskControls
     RenderSession invalid_tonemapper_session;
     EXPECT_FALSE(invalid_tonemapper_session.Configure(malformed));
 
-    malformed.tonemapper = core::TonemapType::Aces;
+    malformed.tonemapper = core::TonemapType::AcesFit;
     malformed.metric_id = core::MetricId::Schwarzschild;
     malformed.black_hole_spin = 0.4;
     RenderSession mismatched_metric_session;

@@ -435,7 +435,7 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
     switch (config.tonemapper) {
         case core::TonemapType::None:
         case core::TonemapType::Reinhard:
-        case core::TonemapType::Aces:
+        case core::TonemapType::AcesFit:
         case core::TonemapType::Filmic:
         case core::TonemapType::Exposure:
             break;

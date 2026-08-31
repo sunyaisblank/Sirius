@@ -156,7 +156,7 @@ struct SessionConfig {
     double bubble_sigma = core::kDefaultAlcubierreBubbleSigma;    // Inverse wall length sigma.
 
     // Post-processing (cinematic defaults).
-    core::TonemapType tonemapper = core::TonemapType::Aces;  // Display transform (PPM/PNG).
+    core::TonemapType tonemapper = core::TonemapType::AcesFit;  // Display fit (PPM/PNG).
     bool enable_bloom = true;
     float bloom_intensity = core::kDefaultBloomIntensity;
     float bloom_threshold = core::kDefaultBloomThreshold;

@@ -6,6 +6,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <limits>
 #include <vector>
 
 namespace sirius::test {
@@ -19,23 +20,69 @@ constexpr float kEps = 1e-5f;
 
 class TonemapTests : public ::testing::Test {};
 
-TEST_F(TonemapTests, ACESAtZero) { EXPECT_NEAR(sirius::core::tonemap::Aces(0.0f), 0.0f, kEps); }
+TEST_F(TonemapTests, AcesFitMatchesPublishedRationalSamples) {
+    EXPECT_NEAR(sirius::core::tonemap::AcesFit(0.0f), 0.0f, kEps);
+    EXPECT_NEAR(sirius::core::tonemap::AcesFit(0.18f), 0.26689892f, 2.0e-7f);
+    EXPECT_NEAR(sirius::core::tonemap::AcesFit(1.0f), 0.80379747f, 2.0e-7f);
+    EXPECT_NEAR(sirius::core::tonemap::AcesFit(4.0f), 0.97341711f, 2.0e-7f);
+}
 
-TEST_F(TonemapTests, ACESMonotone) {
-    float prev = sirius::core::tonemap::Aces(0.0f);
+TEST_F(TonemapTests, AcesFitAnalyticDomainAndSaturationBoundaryArePinned) {
+    constexpr double a = 2.51;
+    constexpr double b = 0.03;
+    constexpr double c = 2.43;
+    constexpr double d = 0.59;
+    constexpr double e = 0.14;
+
+    // c*x^2+d*x+e is positive for every real x because c>0 and its
+    // discriminant is negative. On x>=0 the derivative numerator has three
+    // positive coefficients, so the unclipped fit is strictly increasing.
+    EXPECT_GT(c, 0.0);
+    EXPECT_LT(d * d - 4.0 * c * e, 0.0);
+    EXPECT_GT(a * d - b * c, 0.0);
+    EXPECT_GT(2.0 * a * e, 0.0);
+    EXPECT_GT(b * e, 0.0);
+
+    const double root =
+        (d - b + std::sqrt((b - d) * (b - d) + 4.0 * (a - c) * e)) / (2.0 * (a - c));
+    constexpr float first_fp32_above_root = 0x1.cf7752p+2f;
+    EXPECT_LT(static_cast<double>(std::nextafter(first_fp32_above_root, 0.0f)), root);
+    EXPECT_GT(static_cast<double>(first_fp32_above_root), root);
+    EXPECT_FLOAT_EQ(sirius::core::tonemap::AcesFit(first_fp32_above_root), 1.0f);
+}
+
+TEST_F(TonemapTests, AcesFitIsMonotoneOnNonNegativeRadiance) {
+    // Before output saturation, the derivative numerator is
+    // (a*d-b*c)x^2 + 2*a*e*x + b*e. All three coefficients are positive for
+    // the published fit, so a sampled regression complements that proof.
+    float prev = sirius::core::tonemap::AcesFit(0.0f);
     for (float x = 0.1f; x <= 10.0f; x += 0.1f) {
-        float val = sirius::core::tonemap::Aces(x);
-        EXPECT_GE(val, prev - kEps) << "ACES not monotone at x = " << x;
+        float val = sirius::core::tonemap::AcesFit(x);
+        EXPECT_GE(val, prev - kEps) << "ACES fit not monotone at x = " << x;
         prev = val;
     }
 }
 
-TEST_F(TonemapTests, ACESBounded) {
+TEST_F(TonemapTests, AcesFitIsClippedToDisplayLinearUnitInterval) {
     for (float x = 0.0f; x <= 100.0f; x += 0.5f) {
-        float val = sirius::core::tonemap::Aces(x);
+        float val = sirius::core::tonemap::AcesFit(x);
         EXPECT_GE(val, 0.0f);
         EXPECT_LE(val, 1.0f);
     }
+    EXPECT_FLOAT_EQ(sirius::core::tonemap::AcesFit(std::numeric_limits<float>::max()), 1.0f);
+    EXPECT_DEATH((void)sirius::core::tonemap::AcesFit(-0.01f),
+                 "precondition.*enforced, terminating");
+    EXPECT_DEATH((void)sirius::core::tonemap::AcesFit(std::numeric_limits<float>::infinity()),
+                 "precondition.*enforced, terminating");
+}
+
+TEST_F(TonemapTests, AcesFitNameIsExplicitAndBareAcesDeclines) {
+    EXPECT_EQ(sirius::core::ParseTonemapType(sirius::core::kDefaultTonemapperName),
+              sirius::core::TonemapType::AcesFit);
+    EXPECT_EQ(sirius::core::ParseTonemapType("Uncharted2"), sirius::core::TonemapType::Filmic);
+    EXPECT_FALSE(sirius::core::ParseTonemapType("ACES").has_value());
+    EXPECT_EQ(sirius::core::SupportedTonemapperNames(),
+              "ACESFit, Reinhard, Filmic, Uncharted2, None, Linear");
 }
 
 TEST_F(TonemapTests, ReinhardAnalytic) {
@@ -83,14 +130,22 @@ TEST_F(TonemapTests, ApplyExposureScaling) {
     sirius::core::tonemap::Apply(r, g, b, sirius::core::TonemapType::None, exposure);
     EXPECT_NEAR(r, 1.0f, kEps);  // 0.5 * 2.0 = 1.0
 
+    r = -1.0f;
+    g = std::numeric_limits<float>::max();
+    b = 0.25f;
+    sirius::core::tonemap::Apply(r, g, b, sirius::core::TonemapType::AcesFit, 100.0f);
+    EXPECT_FLOAT_EQ(r, 0.0f);
+    EXPECT_FLOAT_EQ(g, 1.0f);
+    EXPECT_TRUE(std::isfinite(b));
+
     EXPECT_DEATH(
         sirius::core::tonemap::Apply(r, g, b, static_cast<sirius::core::TonemapType>(255), 1.0f),
         "violated");
 }
 
-TEST_F(TonemapTests, ApplyACESDispatch) {
+TEST_F(TonemapTests, ApplyAcesFitDispatch) {
     float r = 1.0f, g = 1.0f, b = 1.0f;
-    sirius::core::tonemap::Apply(r, g, b, sirius::core::TonemapType::Aces, 1.0f);
+    sirius::core::tonemap::Apply(r, g, b, sirius::core::TonemapType::AcesFit, 1.0f);
     // All channels should be tonemapped identically for equal input
     EXPECT_NEAR(r, g, kEps);
     EXPECT_NEAR(g, b, kEps);

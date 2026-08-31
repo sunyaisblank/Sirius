@@ -9,6 +9,7 @@
 #include "sirius/core/disk/disk_defaults.h"
 #include "sirius/core/feature_defaults.h"
 #include "sirius/core/metrics/registry.h"
+#include "sirius/core/postprocess.h"
 
 #include <algorithm>
 #include <cctype>
@@ -624,13 +625,9 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
         (config.postprocess.saturation < 0 || config.postprocess.saturation > 4)) {
         errors.push_back("postprocess.saturation must be between 0 and 4");
     }
-    static const std::vector<std::string> valid_tonemappers = {"ACES",       "Reinhard", "Filmic",
-                                                               "Uncharted2", "None",     "Linear"};
-    if (std::find(valid_tonemappers.begin(), valid_tonemappers.end(),
-                  config.postprocess.tonemapper) == valid_tonemappers.end()) {
-        errors.push_back(
-            "postprocess.tonemapper must be one of: ACES, Reinhard, Filmic, Uncharted2, None, "
-            "Linear");
+    if (!core::ParseTonemapType(config.postprocess.tonemapper).has_value()) {
+        errors.push_back("postprocess.tonemapper must be one of: " +
+                         core::SupportedTonemapperNames());
     }
 
     // --- Volumetric and film validation ------------------------------------

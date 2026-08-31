@@ -8,6 +8,7 @@
 #include "sirius/core/disk/disk_defaults.h"
 #include "sirius/core/feature_defaults.h"
 #include "sirius/core/metrics/registry.h"
+#include "sirius/core/postprocess.h"
 
 #include <nlohmann/json.hpp>
 
@@ -63,7 +64,7 @@ struct PostProcessConfig {
     float exposure = 1.0f;
     float contrast = 1.0f;
     float saturation = 1.0f;
-    std::string tonemapper = "ACES";
+    std::string tonemapper = std::string{core::kDefaultTonemapperName};
 };
 
 struct VolumetricConfig {

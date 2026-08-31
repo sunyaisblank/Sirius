@@ -74,6 +74,17 @@ TEST(ConfigValidation, UnknownTonemapperRejected) {
     EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
 
+TEST(ConfigValidation, AcesFitIsExplicitAndBareAcesIsRejected) {
+    SiriusConfig config = SiriusConfig::Defaults();
+    EXPECT_EQ(config.postprocess.tonemapper, "ACESFit");
+    EXPECT_TRUE(ConfigLoader::Validate(config).empty());
+
+    config.postprocess.tonemapper = "ACES";
+    const auto errors = ConfigLoader::Validate(config);
+    ASSERT_FALSE(errors.empty());
+    EXPECT_NE(errors.front().find("ACESFit"), std::string::npos);
+}
+
 TEST(ConfigValidation, VulkanBackendNameAccepted) {
     // Go-live (2026-07-18): vulkan joined the accepted set; device absence is
     // the render's decline, not a config-name error.
