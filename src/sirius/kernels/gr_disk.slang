@@ -233,18 +233,84 @@ public float ShakuraSunyaevTemperature(float temperatureScale, float r,
     return temperatureScale * pow(flux / reference, 0.25f);
 }
 
-// Exact stationary/axisymmetric transfer shared with
-// core/relativistic_transfer.h.  The renderer integrates in Kerr-Schild
-// Cartesian coordinates, so the photon covector is formed there.  The Killing
-// quantities E=-p_t and L_z=p_phi=x p_y-y p_x are unchanged by the
-// Boyer-Lindquist/Kerr-Schild chart transformation.  For every circular frame
-// u=u^t(partial_t+Omega partial_phi), nu=-p.u=u^t(E-Omega L_z).
-//
-// x/y are reconstructed on the equatorial surface with
-// rho=sqrt(r^2+a^2).  This also defines the explicit midplane projection used
-// by the current axisymmetric volumetric disk model.  The return value is
-// (full circular-emitter g, ZAMO g); zero means the requested frame or photon
-// frequency lies outside the physical domain.  No display-oriented clamp is
+// The live path advances a past-directed Kerr-Schild Cartesian tangent. Form
+// the future photon covector there and extract the chart-invariant stationary
+// and axial Killing quantities E=-p_t and L_z=p_phi=x p_y-y p_x.
+public bool KerrPhotonKillingQuantitiesCart(Vec4Cart position, Vec4Cart pastVelocity,
+                                            Real metric[4][4], out float energy,
+                                            out float angularMomentum) {
+    Real k[4] = {
+        -pastVelocity.t, -pastVelocity.x, -pastVelocity.y, -pastVelocity.z
+    };
+    Real p[4] = { Real(0.0f), Real(0.0f), Real(0.0f), Real(0.0f) };
+    [unroll] for (int mu = 0; mu < 4; ++mu) {
+        [unroll] for (int nu = 0; nu < 4; ++nu) {
+            p[mu] += metric[mu][nu] * k[nu];
+        }
+    }
+    energy = -float(p[0]);
+    angularMomentum = -float(position.y) * float(p[1]) + float(position.x) * float(p[2]);
+    return isfinite(energy) && energy > 0.0f && isfinite(angularMomentum);
+}
+
+// Arbitrary-latitude Kerr stationary-frame transfer shared mathematically
+// with core/relativistic_transfer.h.  cosTheta is the Boyer-Lindquist polar
+// cosine, exactly z/r in Kerr-Schild Cartesian coordinates. The returned
+// tuple is (g, measured frequency, Omega, u^t). Zero/false means the requested
+// frame lies outside the represented timelike domain.
+public bool TryKerrStationaryFrameFrequencyTransfer(
+    float observerFrequency, float energy, float angularMomentum, float M, float a,
+    float r, float cosTheta, float angularVelocity, out float4 transfer) {
+    transfer = float4(0.0f);
+    if (!isfinite(observerFrequency) || observerFrequency <= 0.0f ||
+        !isfinite(energy) || energy <= 0.0f || !isfinite(angularMomentum) ||
+        !isfinite(M) || M <= 0.0f || !isfinite(a) || abs(a) > M ||
+        !isfinite(r) || r <= 0.0f || !isfinite(cosTheta) || abs(cosTheta) >= 1.0f ||
+        !isfinite(angularVelocity)) {
+        return false;
+    }
+    float sinThetaSquared = (1.0f - cosTheta) * (1.0f + cosTheta);
+    float sigma = r * r + a * a * cosTheta * cosTheta;
+    if (!isfinite(sigma) || sigma <= 0.0f || sinThetaSquared <= 0.0f) return false;
+    float gtt = -(1.0f - 2.0f * M * r / sigma);
+    float gtphi = -2.0f * M * a * r * sinThetaSquared / sigma;
+    float gphiphi = sinThetaSquared *
+        (r * r + a * a + 2.0f * M * a * a * r * sinThetaSquared / sigma);
+    float norm = gtt + 2.0f * angularVelocity * gtphi +
+                 angularVelocity * angularVelocity * gphiphi;
+    if (!isfinite(norm) || norm >= 0.0f) return false;
+    float timeComponent = 1.0f / sqrt(-norm);
+    float frameFrequency = timeComponent * (energy - angularVelocity * angularMomentum);
+    if (!isfinite(frameFrequency) || frameFrequency <= 0.0f) return false;
+    transfer = float4(observerFrequency / frameFrequency, frameFrequency,
+                      angularVelocity, timeComponent);
+    return true;
+}
+
+// Exact locally non-rotating Kerr frame. This is intentionally distinct from
+// the normal to a horizon-penetrating Kerr-Schild time slice, whose radial
+// motion would contaminate a circular-Doppler suppression diagnostic.
+public bool KerrZamoFrequencyTransfer(float observerFrequency, float energy,
+                                      float angularMomentum, float M, float a, float r,
+                                      float cosTheta, out float4 transfer) {
+    transfer = float4(0.0f);
+    if (!isfinite(M) || M <= 0.0f || !isfinite(a) || abs(a) > M ||
+        !isfinite(r) || r <= 0.0f || !isfinite(cosTheta) || abs(cosTheta) >= 1.0f) {
+        return false;
+    }
+    float sinThetaSquared = (1.0f - cosTheta) * (1.0f + cosTheta);
+    float sigma = r * r + a * a * cosTheta * cosTheta;
+    float gtphi = -2.0f * M * a * r * sinThetaSquared / sigma;
+    float gphiphi = sinThetaSquared *
+        (r * r + a * a + 2.0f * M * a * a * r * sinThetaSquared / sigma);
+    if (!isfinite(gphiphi) || gphiphi <= 0.0f) return false;
+    return TryKerrStationaryFrameFrequencyTransfer(
+        observerFrequency, energy, angularMomentum, M, a, r, cosTheta,
+        -gtphi / gphiphi, transfer);
+}
+
+// Exact equatorial circular-emitter and ZAMO transfer. x/y are reconstructed
+// on the equatorial surface with rho=sqrt(r^2+a^2). No display clamp is
 // permitted in this frequency authority.
 public float2 ComputeKerrDiskTransferCart(float r, float phi, Vec4Cart photonVelocity,
                                           float observerFrequency, float M, float a) {
@@ -259,38 +325,22 @@ public float2 ComputeKerrDiskTransferCart(float r, float phi, Vec4Cart photonVel
     Real metricInverse[4][4];
     GetKerrSchildFamilyMetric(position, M, a, 0.0f, 0.0f, metric, metricInverse);
 
-    // The live tracer advances the past-directed camera-to-source tangent.
-    // Transfer uses the corresponding physical future photon, -k_past.
-    Real k[4] = {
-        -photonVelocity.t, -photonVelocity.x, -photonVelocity.y, -photonVelocity.z
-    };
-    Real p[4] = { Real(0.0f), Real(0.0f), Real(0.0f), Real(0.0f) };
-    [unroll] for (int mu = 0; mu < 4; ++mu) {
-        [unroll] for (int nu = 0; nu < 4; ++nu) {
-            p[mu] += metric[mu][nu] * k[nu];
-        }
+    float energy;
+    float angularMomentum;
+    if (!KerrPhotonKillingQuantitiesCart(position, photonVelocity, metric,
+                                         energy, angularMomentum)) {
+        return float2(0.0f);
     }
-
-    float energy = -float(p[0]);
-    float angularMomentum =
-        -float(position.y) * float(p[1]) + float(position.x) * float(p[2]);
-    if (energy <= 0.0f) return float2(0.0f);
-
-    float gtt = -(1.0f - 2.0f * M / r);
-    float gtphi = -2.0f * M * a / r;
-    float gphiphi = r * r + a * a + 2.0f * M * a * a / r;
     float sqrtM = sqrt(M);
     float emitterOmega = sqrtM / (pow(r, 1.5f) + a * sqrtM);
-    float zamoOmega = -gtphi / gphiphi;
-    float emitterNorm =
-        gtt + 2.0f * emitterOmega * gtphi + emitterOmega * emitterOmega * gphiphi;
-    float zamoNorm = gtt + 2.0f * zamoOmega * gtphi + zamoOmega * zamoOmega * gphiphi;
-    if (emitterNorm >= 0.0f || zamoNorm >= 0.0f) return float2(0.0f);
-
-    float emitterFrequency =
-        (energy - emitterOmega * angularMomentum) / sqrt(-emitterNorm);
-    float zamoFrequency = (energy - zamoOmega * angularMomentum) / sqrt(-zamoNorm);
-    if (emitterFrequency <= 0.0f || zamoFrequency <= 0.0f) return float2(0.0f);
-    return float2(observerFrequency / emitterFrequency,
-                  observerFrequency / zamoFrequency);
+    float4 emitterTransfer;
+    float4 zamoTransfer;
+    if (!TryKerrStationaryFrameFrequencyTransfer(
+            observerFrequency, energy, angularMomentum, M, a, r, 0.0f,
+            emitterOmega, emitterTransfer) ||
+        !KerrZamoFrequencyTransfer(observerFrequency, energy, angularMomentum,
+                                   M, a, r, 0.0f, zamoTransfer)) {
+        return float2(0.0f);
+    }
+    return float2(emitterTransfer.x, zamoTransfer.x);
 }

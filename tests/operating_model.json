@@ -79,7 +79,7 @@
       "required": true,
       "verification": "build_gated",
       "profiles": ["cpu", "vulkan"],
-      "requirement": "The physical relativistic thin-disk default uses the zero-torque Page-Thorne flux integrated from a declared stable-orbit inner edge at or outside the ISCO, with every represented nonzero spin evaluated rather than aliased to Schwarzschild, and invariant circular-emitter frequency transfer exactly once. CPU metric, disk, invariant-transfer, and tracer consumers share one exact signed-spin ISCO and circular-emitter angular-velocity authority, while the Boyer-Lindquist oracle and Slang implementation remain independent comparators. Thermally emitted host colour and binned spectra consume one Planck spectral-radiance-per-metre authority, with bins applying only the exact per-metre to per-nanometre density conversion; Wien peak wavelength and Stefan-Boltzmann hemispheric radiant exitance have unit-explicit names, consume the physical-constants authority, and decline unrepresented domains, while the normalised Slang blackbody remains an independent comparator. An explicit ShakuraSunyaev request instead uses the Newtonian zero-torque flux shape r^-3[1-sqrt(r_in/r)], normalised at 1.5 r_in, without claiming relativistic or alpha-disk vertical structure. The bounded grey volume uses the selected declared radial profile under its phenomenological closure and normalises its Gaussian opacity over the represented finite vertical support, and Doppler suppression is identified and measured as a ZAMO diagnostic substitution rather than physical disk emission.",
+      "requirement": "The physical relativistic thin-disk default uses the zero-torque Page-Thorne flux integrated from a declared stable-orbit inner edge at or outside the ISCO, with every represented nonzero spin evaluated rather than aliased to Schwarzschild, and invariant circular-emitter frequency transfer exactly once. CPU metric, disk, invariant-transfer, and tracer consumers share one exact signed-spin ISCO and circular-emitter angular-velocity authority, while the Boyer-Lindquist oracle and Slang implementation remain independent comparators. Thermally emitted host colour and binned spectra consume one Planck spectral-radiance-per-metre authority, with bins applying only the exact per-metre to per-nanometre density conversion; Wien peak wavelength and Stefan-Boltzmann hemispheric radiant exitance have unit-explicit names, consume the physical-constants authority, and decline unrepresented domains, while the normalised Slang blackbody remains an independent comparator. An explicit ShakuraSunyaev request instead uses the Newtonian zero-torque flux shape r^-3[1-sqrt(r_in/r)], normalised at 1.5 r_in, without claiming relativistic or alpha-disk vertical structure. The bounded grey volume uses the selected declared radial profile under its phenomenological closure and normalises its Gaussian opacity over the represented finite vertical support. Its physical circular-emitter and diagnostic ZAMO frequencies are evaluated at the actual Boyer-Lindquist latitude from the invariant E and L_z; Doppler suppression is identified and measured as a ZAMO substitution rather than physical disk emission, and never substitutes the radially moving Kerr-Schild slicing normal.",
       "capability_dependencies": [],
       "evidence": [
         {"kind": "gtest", "name": "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature"},
@@ -89,6 +89,10 @@
         {"kind": "gtest", "name": "KerrOrbitAuthority.UnrepresentedInputsDeclineInsteadOfChangingTheOrbit"},
         {"kind": "gtest", "name": "SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction"},
         {"kind": "gtest", "name": "SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere"},
+        {"kind": "gtest", "name": "KerrZamoTransfer.ArbitraryLatitudeMatchesIndependentBoyerLindquistContraction"},
+        {"kind": "gtest", "name": "KerrZamoTransfer.KerrSchildSlicingNormalIsNotTheOffEquatorialZamo"},
+        {"kind": "gtest", "name": "KernelParity.ArbitraryLatitudeKerrZamoMatchesHostAuthority"},
+        {"kind": "gtest", "name": "KernelParity.EquatorialKerrDiskTransferMatchesHostAuthority"},
         {"kind": "gtest", "name": "SpectralValidationTests.PlanckSpectralRadianceMatchesIndependentCodataEquation"},
         {"kind": "gtest", "name": "SpectralValidationTests.WienPeakMatchesIndependentNumericalPlanckMaximum"},
         {"kind": "gtest", "name": "SpectralValidationTests.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral"},
@@ -402,6 +406,10 @@
         {"kind": "gtest", "name": "AccretionDiskTest.ShakuraSunyaevProfileHasZeroTorqueEdgeAndDeclaredScale"},
         {"kind": "gtest", "name": "GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile"},
         {"kind": "gtest", "name": "KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel"},
+        {"kind": "gtest", "name": "KerrZamoTransfer.ArbitraryLatitudeMatchesIndependentBoyerLindquistContraction"},
+        {"kind": "gtest", "name": "KerrZamoTransfer.KerrSchildSlicingNormalIsNotTheOffEquatorialZamo"},
+        {"kind": "gtest", "name": "KernelParity.ArbitraryLatitudeKerrZamoMatchesHostAuthority"},
+        {"kind": "gtest", "name": "KernelParity.EquatorialKerrDiskTransferMatchesHostAuthority"},
         {"kind": "gtest", "name": "GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment"},
         {"kind": "gtest", "name": "GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource"},
         {"kind": "gtest", "name": "VolumetricDiskClosure.TruncatedGaussianColumnEqualsDeclaredOpticalDepth"},
@@ -576,7 +584,8 @@
       "behavior": "Decline before rendering: an axisymmetric stationary disk cannot acquire physical blur by rotating one crossing's Euclidean line-of-sight factor; support requires an explicit time-dependent emissivity and covariant shutter integral.",
       "evidence": [
         {"kind": "gtest", "name": "ConfigValidation.MotionBlurAndWormholeTopologyHaveExplicitOperatorBoundaries"},
-        {"kind": "gtest", "name": "RenderCommandParse.MotionBlurAndWormholeTopologyReachTheValidatedSchema"}
+        {"kind": "gtest", "name": "RenderCommandParse.MotionBlurAndWormholeTopologyReachTheValidatedSchema"},
+        {"kind": "gtest", "name": "RenderCommandParse.UsageDeclaresTemporalTransferFailClosed"}
       ]
     },
     {
@@ -586,6 +595,7 @@
       "request": "Scalar thin-disk temporal motion blur on Vulkan",
       "behavior": "Decline before device dispatch; temporal sampling is not silently reduced or replaced by a static Vulkan frame.",
       "evidence": [
+        {"kind": "gtest", "name": "RenderCommandParse.UsageDeclaresTemporalTransferFailClosed"},
         {"kind": "gtest", "name": "VulkanRenderSession.CapabilityBoundaryRejectsUnrepresentedSceneSemantics"}
       ]
     },

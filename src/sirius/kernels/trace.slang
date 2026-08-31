@@ -505,12 +505,6 @@ void AccumulateVolumeSegment(Vec4Cart start, Vec4Cart finish,
         Real localMetric[4][4];
         Real localInverse[4][4];
         GetKerrSchildFamilyMetric(position, M, a, 0.0f, 0.0f, localMetric, localInverse);
-        Real lapse = Real(1.0f) / sqrt(-localInverse[0][0]);
-        Vec4Cart eulerian = MakeVec4Cart(-lapse * localInverse[0][0],
-                                         -lapse * localInverse[1][0],
-                                         -lapse * localInverse[2][0],
-                                         -lapse * localInverse[3][0]);
-        float eulerianFrequency = float(MetricDotCart(localMetric, photonVelocity, eulerian));
 
         float diskDeltaTau = 0.0f;
         float3 diskSource = float3(0.0f);
@@ -536,22 +530,33 @@ void AccumulateVolumeSegment(Vec4Cart start, Vec4Cart finish,
                                       M, aStar, hOverR, hPower);
             if (isfinite(diskOpacity) && diskOpacity > 0.0f &&
                 isfinite(temperature) && temperature > 0.0f) {
-                float sqrtM = sqrt(M);
-                float omega = sqrtM / (pow(diskR, 1.5f) + a * sqrtM);
-                Vec4Cart emitter = MakeVec4Cart(Real(1.0f), Real(-omega * point.y),
-                                                Real(omega * point.x), Real(0.0f));
-                Real emitterNorm = MetricDotCart(localMetric, emitter, emitter);
-                if (!isfinite(emitterNorm) || !(emitterNorm < Real(0.0f))) continue;
-                emitter = ScaleVec4Cart(emitter, Real(1.0f) / sqrt(-emitterNorm));
-                float emittedFrequency =
-                    float(MetricDotCart(localMetric, photonVelocity, emitter));
-                if (!isfinite(emittedFrequency) || !(emittedFrequency > 0.0f) ||
-                    !isfinite(eulerianFrequency) || !(eulerianFrequency > 0.0f)) {
+                float energy;
+                float angularMomentum;
+                if (!KerrPhotonKillingQuantitiesCart(
+                        position, photonVelocity, localMetric, energy, angularMomentum)) {
                     continue;
                 }
+                float sqrtM = sqrt(M);
+                float omega = sqrtM / (pow(diskR, 1.5f) + a * sqrtM);
+                float cosTheta = point.z / diskR;
+                float4 emitterTransfer;
+                float4 zamoTransfer;
+                if (!TryKerrStationaryFrameFrequencyTransfer(
+                        observerFrequency, energy, angularMomentum, M, a, diskR,
+                        cosTheta, omega, emitterTransfer) ||
+                    !KerrZamoFrequencyTransfer(
+                        observerFrequency, energy, angularMomentum, M, a, diskR,
+                        cosTheta, zamoTransfer)) {
+                    continue;
+                }
+                Vec4Cart emitter = MakeVec4Cart(
+                    Real(emitterTransfer.w),
+                    Real(-emitterTransfer.w * omega * point.y),
+                    Real(emitterTransfer.w * omega * point.x), Real(0.0f));
+                float emittedFrequency = emitterTransfer.y;
                 diskDeltaTau = diskOpacity * emittedFrequency * deltaLambda;
                 float emittedSource = pow(temperature / innerTemperature, 4.0f);
-                float sourceFrequency = dopplerBeaming ? emittedFrequency : eulerianFrequency;
+                float sourceFrequency = dopplerBeaming ? emittedFrequency : zamoTransfer.y;
                 float gFactor = observerFrequency / sourceFrequency;
                 float observedSource = ObservedDiskBolometricSource(emittedSource, gFactor);
                 diskSource = BlackbodyColor(temperature * gFactor) * observedSource;

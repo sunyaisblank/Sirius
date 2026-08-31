@@ -935,18 +935,6 @@ void GeodesicTracer::AccumulateVolumetricEmission(const Vec4& entry_velocity,
         Metric4d metric;
         Tensor<Dual<double>, 4, 4, 4> derivatives;
         metric_->Evaluate(position, metric, derivatives);
-        Metric4d inverse_metric;
-        if (!metric_->InverseMetric(position, inverse_metric)) {
-            inverse_metric = TensorOps::Inverse(metric);
-        }
-        const double inverse_g_tt = inverse_metric(0, 0).real;
-        if (!std::isfinite(inverse_g_tt) || !(inverse_g_tt < 0.0)) continue;
-        const double lapse = 1.0 / std::sqrt(-inverse_g_tt);
-        Vec4 eulerian;
-        for (int component = 0; component < 4; ++component) {
-            eulerian(component) = -lapse * inverse_metric(component, 0).real;
-        }
-        const double eulerian_frequency = TensorOps::InnerProduct(past_velocity, eulerian, metric);
 
         double disk_dtau = 0.0;
         core::spectral::Rgb disk_source;
@@ -957,28 +945,39 @@ void GeodesicTracer::AccumulateVolumetricEmission(const Vec4& entry_velocity,
             const float temperature =
                 ComputeVolumetricTemperature(static_cast<float>(disk_r), static_cast<float>(z));
             if (disk_opacity > 0.0f && temperature > 0.0f) {
+                // Use the stationary and axial Killing quantities to bridge
+                // this Kerr-Schild state to the declared Boyer-Lindquist
+                // circular-emitter/ZAMO frames.  A Kerr-Schild slicing normal
+                // has radial motion and is not the Doppler-suppressed ZAMO.
+                const Vec4 physical_photon = past_velocity * -1.0;
+                const Vec4 covector = TensorOps::LowerIndex(physical_photon, metric);
+                const double energy = -covector(0);
+                const double angular_momentum = -y * covector(1) + x * covector(2);
+                const double mass = cached_m_;
+                const double spin = cached_a_ * mass;
+                const double cos_theta = z / disk_r;
                 const double omega = ComputeOrbitalVelocity(static_cast<float>(disk_r));
+                const auto emitter_transfer = relativity::TryKerrStationaryFrameFrequencyTransfer(
+                    observer_frequency, energy, angular_momentum, mass, spin, disk_r, cos_theta,
+                    omega);
+                const auto zamo_transfer = relativity::KerrZamoFrequencyTransfer(
+                    observer_frequency, energy, angular_momentum, mass, spin, disk_r, cos_theta);
+                if (!emitter_transfer || !zamo_transfer) continue;
+
                 Vec4 emitter;
-                emitter(0) = 1.0;
-                emitter(1) = -omega * y;
-                emitter(2) = omega * x;
-                const double emitter_norm = TensorOps::InnerProduct(emitter, emitter, metric);
-                if (!std::isfinite(emitter_norm) || !(emitter_norm < 0.0)) continue;
-                emitter = emitter / std::sqrt(-emitter_norm);
-                const double emitted_frequency =
-                    TensorOps::InnerProduct(past_velocity, emitter, metric);
-                if (!std::isfinite(emitted_frequency) || !(emitted_frequency > 0.0) ||
-                    !std::isfinite(eulerian_frequency) || !(eulerian_frequency > 0.0)) {
-                    continue;
-                }
+                emitter(0) = emitter_transfer->frame.time_component;
+                emitter(1) = -emitter_transfer->frame.time_component * omega * y;
+                emitter(2) = emitter_transfer->frame.time_component * omega * x;
+                emitter(3) = 0.0;
                 const auto disk_path =
                     relativity::ComovingPathLength(past_velocity, emitter, metric, d_lambda);
                 if (!disk_path.has_value()) continue;
                 disk_dtau = static_cast<double>(disk_opacity) * *disk_path;
                 const float emitted_source =
                     std::pow(temperature / config_.disk_temperature_inner, 4.0f);
-                const double source_frequency =
-                    config_.doppler_beaming ? emitted_frequency : eulerian_frequency;
+                const double source_frequency = config_.doppler_beaming
+                                                    ? emitter_transfer->frame_frequency
+                                                    : zamo_transfer->frame_frequency;
                 const float g = static_cast<float>(observer_frequency / source_frequency);
                 disk_source = core::color_modes::ApplyColorMode(
                     config_.color_mode, temperature, g, emitted_source, nullptr,

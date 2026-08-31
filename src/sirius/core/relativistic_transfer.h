@@ -7,8 +7,8 @@
 // L_z=p_phi are invariant under the stationary/axisymmetric chart change, so
 // they form the exact bridge without introducing a Euclidean orbital speed.
 //
-// For an equatorial circular observer u = u^t(\partial_t + Omega \partial_phi),
-// the emitted photon frequency is
+// For any stationary axisymmetric frame
+// u = u^t(\partial_t + Omega \partial_phi), the measured photon frequency is
 //
 //   nu = -p.u = u^t(E - Omega L_z),
 //
@@ -29,9 +29,15 @@
 
 namespace sirius::core::relativity {
 
-struct EquatorialCircularFrame {
+struct StationaryAxisymmetricFrame {
     double angular_velocity = 0.0;
     double time_component = 0.0;
+};
+
+struct KerrFrameFrequencyTransfer {
+    double g = 0.0;
+    double frame_frequency = 0.0;
+    StationaryAxisymmetricFrame frame;
 };
 
 struct KerrDiskFrequencyTransfer {
@@ -39,8 +45,8 @@ struct KerrDiskFrequencyTransfer {
     double zamo_g = 0.0;
     double emitter_frequency = 0.0;
     double zamo_frequency = 0.0;
-    EquatorialCircularFrame emitter;
-    EquatorialCircularFrame zamo;
+    StationaryAxisymmetricFrame emitter;
+    StationaryAxisymmetricFrame zamo;
 };
 
 struct GreyTransferState {
@@ -89,7 +95,7 @@ struct GreyTransferState {
     return accepted_fraction;
 }
 
-[[nodiscard]] inline std::optional<EquatorialCircularFrame> EquatorialFrame(
+[[nodiscard]] inline std::optional<StationaryAxisymmetricFrame> StationaryAxisymmetricFrameAt(
     double g_tt, double g_t_phi, double g_phi_phi, double angular_velocity) {
     if (!std::isfinite(g_tt) || !std::isfinite(g_t_phi) || !std::isfinite(g_phi_phi) ||
         !std::isfinite(angular_velocity) || !(g_phi_phi > 0.0)) {
@@ -98,7 +104,69 @@ struct GreyTransferState {
     const double norm =
         g_tt + 2.0 * angular_velocity * g_t_phi + angular_velocity * angular_velocity * g_phi_phi;
     if (!std::isfinite(norm) || !(norm < 0.0)) return std::nullopt;
-    return EquatorialCircularFrame{angular_velocity, 1.0 / std::sqrt(-norm)};
+    return StationaryAxisymmetricFrame{angular_velocity, 1.0 / std::sqrt(-norm)};
+}
+
+// Frequency transfer for an arbitrary-latitude stationary azimuthal frame in
+// Kerr.  cos_theta is the Boyer-Lindquist polar cosine; in Kerr-Schild
+// Cartesian coordinates it is exactly z/r.  The Killing quantities bridge the
+// charts without importing the radial motion of a coordinate-slicing normal.
+[[nodiscard]] inline std::optional<KerrFrameFrequencyTransfer>
+TryKerrStationaryFrameFrequencyTransfer(double observer_frequency, double photon_energy,
+                                        double photon_angular_momentum, double mass, double spin,
+                                        double radius, double cos_theta, double angular_velocity) {
+    if (!std::isfinite(observer_frequency) || !(observer_frequency > 0.0) ||
+        !std::isfinite(photon_energy) || !(photon_energy > 0.0) ||
+        !std::isfinite(photon_angular_momentum) || !std::isfinite(mass) || !(mass > 0.0) ||
+        !std::isfinite(spin) || std::abs(spin) > mass || !std::isfinite(radius) ||
+        !(radius > 0.0) || !std::isfinite(cos_theta) || std::abs(cos_theta) >= 1.0 ||
+        !std::isfinite(angular_velocity)) {
+        return std::nullopt;
+    }
+
+    const double sin_theta_squared = (1.0 - cos_theta) * (1.0 + cos_theta);
+    const double sigma = radius * radius + spin * spin * cos_theta * cos_theta;
+    if (!std::isfinite(sigma) || !(sigma > 0.0) || !(sin_theta_squared > 0.0)) {
+        return std::nullopt;
+    }
+    const double g_tt = -(1.0 - 2.0 * mass * radius / sigma);
+    const double g_t_phi = -2.0 * mass * spin * radius * sin_theta_squared / sigma;
+    const double g_phi_phi =
+        sin_theta_squared * (radius * radius + spin * spin +
+                             2.0 * mass * spin * spin * radius * sin_theta_squared / sigma);
+    const auto frame = StationaryAxisymmetricFrameAt(g_tt, g_t_phi, g_phi_phi, angular_velocity);
+    if (!frame) return std::nullopt;
+
+    const double frame_frequency =
+        frame->time_component * (photon_energy - frame->angular_velocity * photon_angular_momentum);
+    if (!std::isfinite(frame_frequency) || !(frame_frequency > 0.0)) {
+        return std::nullopt;
+    }
+    return KerrFrameFrequencyTransfer{observer_frequency / frame_frequency, frame_frequency,
+                                      *frame};
+}
+
+// Locally non-rotating Kerr frame at arbitrary latitude.  Unlike the normal
+// to a horizon-penetrating Kerr-Schild time slice, this ZAMO has no radial
+// Boyer-Lindquist component and therefore removes only circular-emitter motion.
+[[nodiscard]] inline std::optional<KerrFrameFrequencyTransfer> KerrZamoFrequencyTransfer(
+    double observer_frequency, double photon_energy, double photon_angular_momentum, double mass,
+    double spin, double radius, double cos_theta) {
+    if (!std::isfinite(mass) || !(mass > 0.0) || !std::isfinite(spin) || std::abs(spin) > mass ||
+        !std::isfinite(radius) || !(radius > 0.0) || !std::isfinite(cos_theta) ||
+        std::abs(cos_theta) >= 1.0) {
+        return std::nullopt;
+    }
+    const double sin_theta_squared = (1.0 - cos_theta) * (1.0 + cos_theta);
+    const double sigma = radius * radius + spin * spin * cos_theta * cos_theta;
+    const double g_t_phi = -2.0 * mass * spin * radius * sin_theta_squared / sigma;
+    const double g_phi_phi =
+        sin_theta_squared * (radius * radius + spin * spin +
+                             2.0 * mass * spin * spin * radius * sin_theta_squared / sigma);
+    if (!std::isfinite(g_phi_phi) || !(g_phi_phi > 0.0)) return std::nullopt;
+    return TryKerrStationaryFrameFrequencyTransfer(observer_frequency, photon_energy,
+                                                   photon_angular_momentum, mass, spin, radius,
+                                                   cos_theta, -g_t_phi / g_phi_phi);
 }
 
 // Exact equatorial Kerr transfer for a circular geodesic emitter and a ZAMO.
@@ -116,32 +184,18 @@ struct GreyTransferState {
         return std::nullopt;
     }
 
-    const double g_tt = -(1.0 - 2.0 * mass / radius);
-    const double g_t_phi = -2.0 * mass * spin / radius;
-    const double g_phi_phi = radius * radius + spin * spin + 2.0 * mass * spin * spin / radius;
     const auto emitter_omega = TryKerrCircularOrbitAngularVelocity(mass, spin, radius);
     if (!emitter_omega) return std::nullopt;
-    const double zamo_omega = -g_t_phi / g_phi_phi;
-    const auto emitter = EquatorialFrame(g_tt, g_t_phi, g_phi_phi, *emitter_omega);
-    const auto zamo = EquatorialFrame(g_tt, g_t_phi, g_phi_phi, zamo_omega);
+    const auto emitter = TryKerrStationaryFrameFrequencyTransfer(observer_frequency, photon_energy,
+                                                                 photon_angular_momentum, mass,
+                                                                 spin, radius, 0.0, *emitter_omega);
+    const auto zamo = KerrZamoFrequencyTransfer(observer_frequency, photon_energy,
+                                                photon_angular_momentum, mass, spin, radius, 0.0);
     if (!emitter || !zamo) return std::nullopt;
 
-    const double emitter_frequency =
-        emitter->time_component *
-        (photon_energy - emitter->angular_velocity * photon_angular_momentum);
-    const double zamo_frequency =
-        zamo->time_component * (photon_energy - zamo->angular_velocity * photon_angular_momentum);
-    if (!std::isfinite(emitter_frequency) || !(emitter_frequency > 0.0) ||
-        !std::isfinite(zamo_frequency) || !(zamo_frequency > 0.0)) {
-        return std::nullopt;
-    }
-
-    return KerrDiskFrequencyTransfer{observer_frequency / emitter_frequency,
-                                     observer_frequency / zamo_frequency,
-                                     emitter_frequency,
-                                     zamo_frequency,
-                                     *emitter,
-                                     *zamo};
+    return KerrDiskFrequencyTransfer{
+        emitter->g,     zamo->g,    emitter->frame_frequency, zamo->frame_frequency,
+        emitter->frame, zamo->frame};
 }
 
 // Static-observer special case. Both g_tt values must lie in the timelike
