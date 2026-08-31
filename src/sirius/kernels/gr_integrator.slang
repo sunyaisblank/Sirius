@@ -155,9 +155,15 @@ public bool IntegrateGeodesicRK4MorrisThorneCart(
     return true;
 }
 
-// Alcubierre uses its analytic Cartesian Christoffels and is lensing-only.
-public Vec4Cart GeodesicAccelerationWarpCart(GeodesicStateCart state, float vs, float sigma,
-                                             float R, float xs, float ys, float zs) {
+// Alcubierre uses its analytic Cartesian Christoffels and is lensing-only. As
+// with every other live family, every RK stage must remain inside the complete
+// represented parameter/event domain; an invalid profile cannot degrade to
+// zero connection and masquerade as flat space.
+public bool TryGeodesicAccelerationWarpCart(
+    GeodesicStateCart state, float vs, float sigma, float R,
+    float xs, float ys, float zs, out Vec4Cart acceleration) {
+    acceleration = MakeVec4Cart(Real(0.0f), Real(0.0f), Real(0.0f), Real(0.0f));
+    if (!IsWarpDriveEventRepresented(state.x, vs, sigma, R, xs, ys, zs)) return false;
     Real Gamma[4][4][4];
     GetWarpDriveChristoffel(state.x, vs, sigma, R, xs, ys, zs, Gamma);
     Real u[4] = { state.u.t, state.u.x, state.u.y, state.u.z };
@@ -166,51 +172,68 @@ public Vec4Cart GeodesicAccelerationWarpCart(GeodesicStateCart state, float vs, 
         [unroll] for (int nu = 0; nu < 4; nu++)
             [unroll] for (int rho = 0; rho < 4; rho++)
                 acc[mu] -= Gamma[mu][nu][rho] * u[nu] * u[rho];
-    return MakeVec4Cart(acc[0], acc[1], acc[2], acc[3]);
+    acceleration = MakeVec4Cart(acc[0], acc[1], acc[2], acc[3]);
+    return isfinite(acceleration.t) && isfinite(acceleration.x) &&
+           isfinite(acceleration.y) && isfinite(acceleration.z);
 }
 
-public void IntegrateGeodesicRK4WarpCartDelta(GeodesicStateCart state, Real dt,
-                                              float vs, float sigma, float R,
-                                              float xs, float ys, float zs,
-                                              out Vec4Cart dx, out Vec4Cart du) {
+public bool IntegrateGeodesicRK4WarpCartDelta(
+    GeodesicStateCart state, Real dt, float vs, float sigma, float R,
+    float xs, float ys, float zs, out Vec4Cart dx, out Vec4Cart du) {
+    dx = MakeVec4Cart(Real(0.0f), Real(0.0f), Real(0.0f), Real(0.0f));
+    du = MakeVec4Cart(Real(0.0f), Real(0.0f), Real(0.0f), Real(0.0f));
+    Vec4Cart acceleration;
+    if (!TryGeodesicAccelerationWarpCart(state, vs, sigma, R, xs, ys, zs,
+                                         acceleration)) return false;
     Vec4Cart dx1 = ScaleVec4Cart(state.u, dt);
-    Vec4Cart du1 =
-        ScaleVec4Cart(GeodesicAccelerationWarpCart(state, vs, sigma, R, xs, ys, zs), dt);
+    Vec4Cart du1 = ScaleVec4Cart(acceleration, dt);
 
     GeodesicStateCart s2;
     s2.x = AddVec4Cart(state.x, ScaleVec4Cart(dx1, 0.5f));
     s2.u = AddVec4Cart(state.u, ScaleVec4Cart(du1, 0.5f));
+    if (!TryGeodesicAccelerationWarpCart(s2, vs, sigma, R, xs, ys, zs,
+                                         acceleration)) return false;
     Vec4Cart dx2 = ScaleVec4Cart(s2.u, dt);
-    Vec4Cart du2 = ScaleVec4Cart(GeodesicAccelerationWarpCart(s2, vs, sigma, R, xs, ys, zs), dt);
+    Vec4Cart du2 = ScaleVec4Cart(acceleration, dt);
 
     GeodesicStateCart s3;
     s3.x = AddVec4Cart(state.x, ScaleVec4Cart(dx2, 0.5f));
     s3.u = AddVec4Cart(state.u, ScaleVec4Cart(du2, 0.5f));
+    if (!TryGeodesicAccelerationWarpCart(s3, vs, sigma, R, xs, ys, zs,
+                                         acceleration)) return false;
     Vec4Cart dx3 = ScaleVec4Cart(s3.u, dt);
-    Vec4Cart du3 = ScaleVec4Cart(GeodesicAccelerationWarpCart(s3, vs, sigma, R, xs, ys, zs), dt);
+    Vec4Cart du3 = ScaleVec4Cart(acceleration, dt);
 
     GeodesicStateCart s4;
     s4.x = AddVec4Cart(state.x, dx3);
     s4.u = AddVec4Cart(state.u, du3);
+    if (!TryGeodesicAccelerationWarpCart(s4, vs, sigma, R, xs, ys, zs,
+                                         acceleration)) return false;
     Vec4Cart dx4 = ScaleVec4Cart(s4.u, dt);
-    Vec4Cart du4 = ScaleVec4Cart(GeodesicAccelerationWarpCart(s4, vs, sigma, R, xs, ys, zs), dt);
+    Vec4Cart du4 = ScaleVec4Cart(acceleration, dt);
 
     Real sixth = 1.0f / 6.0f;
     dx = ScaleVec4Cart(AddVec4Cart(AddVec4Cart(dx1, ScaleVec4Cart(dx2, 2.0f)),
                                    AddVec4Cart(ScaleVec4Cart(dx3, 2.0f), dx4)), sixth);
     du = ScaleVec4Cart(AddVec4Cart(AddVec4Cart(du1, ScaleVec4Cart(du2, 2.0f)),
                                    AddVec4Cart(ScaleVec4Cart(du3, 2.0f), du4)), sixth);
+    Vec4Cart candidate = AddVec4Cart(state.x, dx);
+    Vec4Cart candidateTangent = AddVec4Cart(state.u, du);
+    return IsWarpDriveEventRepresented(candidate, vs, sigma, R, xs, ys, zs) &&
+           isfinite(candidateTangent.t) && isfinite(candidateTangent.x) &&
+           isfinite(candidateTangent.y) && isfinite(candidateTangent.z);
 }
 
-public GeodesicStateCart IntegrateGeodesicRK4WarpCart(GeodesicStateCart state, Real dt,
-                                                      float vs, float sigma, float R,
-                                                      float xs, float ys, float zs) {
+public bool IntegrateGeodesicRK4WarpCart(
+    GeodesicStateCart state, Real dt, float vs, float sigma, float R,
+    float xs, float ys, float zs, out GeodesicStateCart result) {
+    result = state;
     Vec4Cart dx, du;
-    IntegrateGeodesicRK4WarpCartDelta(state, dt, vs, sigma, R, xs, ys, zs, dx, du);
-    GeodesicStateCart result;
+    if (!IntegrateGeodesicRK4WarpCartDelta(
+            state, dt, vs, sigma, R, xs, ys, zs, dx, du)) return false;
     result.x = AddVec4Cart(state.x, dx);
     result.u = AddVec4Cart(state.u, du);
-    return result;
+    return true;
 }
 
 public struct AdaptiveGeodesicStep {
@@ -232,9 +255,8 @@ bool AdvanceGeodesicRK4(GeodesicStateCart state, Real step,
                         float throatB0, int wormShape,
                         out GeodesicStateCart result) {
     if (isWarp) {
-        result = IntegrateGeodesicRK4WarpCart(state, step, warpVs, warpSigma, warpR,
-                                              0.0f, 0.0f, 0.0f);
-        return true;
+        return IntegrateGeodesicRK4WarpCart(state, step, warpVs, warpSigma, warpR,
+                                            0.0f, 0.0f, 0.0f, result);
     }
     if (isWormhole) {
         return IntegrateGeodesicRK4MorrisThorneCart(

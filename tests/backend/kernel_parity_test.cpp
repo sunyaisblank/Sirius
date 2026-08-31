@@ -82,6 +82,7 @@ constexpr std::uint32_t kOpKerrDiskTransfer = 16;
 constexpr std::uint32_t kOpGreyLayerAbsorption = 17;
 constexpr std::uint32_t kOpSphericalCaptureEvent = 18;
 constexpr std::uint32_t kOpEllisTwoSheetTrace = 19;
+constexpr std::uint32_t kOpWarpRk4Decline = 20;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -657,6 +658,67 @@ TEST(KernelParity, UnnormalisedOrNonEllisDeviceProfilesFailClosed) {
             EXPECT_FLOAT_EQ(result[base + component], 0.0f)
                 << "sample=" << sample << " component=" << component;
         }
+    }
+}
+
+TEST(KernelParity, UnresolvedWarpProfilesFailClosedOnDevice) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    Sample represented;
+    represented.metric_id = kWarp;
+    represented.p1 = 1.0f;  // v_s
+    represented.p2 = 0.5f;  // sigma
+    represented.p3 = 1.0f;  // R
+    represented.c0 = 1.0f;
+
+    Sample diffuse = represented;
+    diffuse.p2 = 0.05f;  // sigma*R below 0.1
+    Sample unresolved_wall = represented;
+    unresolved_wall.p2 = 101.0f;  // sigma*R above 100
+    Sample excessive_velocity = represented;
+    excessive_velocity.p1 = 10.5f;
+    Sample absent_radius = represented;
+    absent_radius.p3 = 0.0f;
+    Sample invalid_stage = represented;
+    invalid_stage.h = std::numeric_limits<float>::quiet_NaN();
+    const std::vector<Sample> samples = {represented,        diffuse,       unresolved_wall,
+                                         excessive_velocity, absent_radius, invalid_stage};
+
+    const auto metric_result = RunProbe(*f.device, f.kernel, kOpMetric, samples);
+    const auto connection_result = RunProbe(*f.device, f.kernel, kOpChristoffel, samples);
+    EXPECT_NE(metric_result[0], 0.0f);
+    EXPECT_NE(metric_result[5], 0.0f);
+    for (std::size_t sample = 1; sample < samples.size(); ++sample) {
+        const std::size_t base = sample * kResultStride;
+        if (sample != samples.size() - 1) {
+            for (std::size_t component = 0; component < 32; ++component) {
+                EXPECT_FLOAT_EQ(metric_result[base + component], 0.0f)
+                    << "metric sample=" << sample << " component=" << component;
+            }
+            for (std::size_t component = 0; component < kResultStride; ++component) {
+                EXPECT_FLOAT_EQ(connection_result[base + component], 0.0f)
+                    << "connection sample=" << sample << " component=" << component;
+            }
+        }
+    }
+
+    // A zero step exercises all four represented stages. Invalid parameters
+    // decline at the first stage; NaN h reaches and declines at stage two.
+    // Every decline returns the exact launch state instead of a partial update.
+    const auto rk_result = RunProbe(*f.device, f.kernel, kOpWarpRk4Decline, samples);
+    EXPECT_FLOAT_EQ(rk_result[0], 1.0f);
+    for (std::size_t sample = 1; sample < samples.size(); ++sample) {
+        const std::size_t base = sample * kResultStride;
+        EXPECT_FLOAT_EQ(rk_result[base], 0.0f) << "RK sample=" << sample;
+        EXPECT_FLOAT_EQ(rk_result[base + 1], 0.0f);
+        EXPECT_FLOAT_EQ(rk_result[base + 2], samples[sample].c0);
+        EXPECT_FLOAT_EQ(rk_result[base + 3], samples[sample].c1);
+        EXPECT_FLOAT_EQ(rk_result[base + 4], samples[sample].c2);
+        EXPECT_FLOAT_EQ(rk_result[base + 5], samples[sample].u0);
+        EXPECT_FLOAT_EQ(rk_result[base + 6], samples[sample].u1);
+        EXPECT_FLOAT_EQ(rk_result[base + 7], samples[sample].u2);
+        EXPECT_FLOAT_EQ(rk_result[base + 8], samples[sample].u3);
     }
 }
 

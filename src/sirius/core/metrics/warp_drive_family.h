@@ -11,6 +11,7 @@
 
 #include "sirius/base/contracts.h"
 #include "sirius/core/metrics/metric.h"
+#include "sirius/core/metrics/registry.h"
 
 #include <algorithm>
 #include <cmath>
@@ -20,18 +21,23 @@ namespace sirius::core {
 
 // Warp drive family parameters.
 struct WarpDriveParams {
-    double vs = 1.0;     // Bubble velocity (may exceed 1 for superluminal).
-    double sigma = 8.0;  // Inverse wall length (larger = sharper/thinner).
-    double R = 1.0;      // Bubble radius.
-    double xs = 0.0;     // Current x position of the bubble centre.
-    double ys = 0.0;     // Current y position.
-    double zs = 0.0;     // Current z position.
+    double vs = kDefaultAlcubierreWarpVelocity;    // May exceed 1 for superluminal.
+    double sigma = kDefaultAlcubierreBubbleSigma;  // Larger = sharper/thinner.
+    double R = kDefaultAlcubierreBubbleRadius;     // Bubble radius.
+    double xs = 0.0;                               // Current x position of the bubble centre.
+    double ys = 0.0;                               // Current y position.
+    double zs = 0.0;                               // Current z position.
 
-    static WarpDriveParams Alcubierre(double vs, double R, double sigma = 8.0) {
+    static WarpDriveParams Alcubierre(double vs, double R,
+                                      double sigma = kDefaultAlcubierreBubbleSigma) {
         return {vs, sigma, R, 0.0, 0.0, 0.0};
     }
-    static WarpDriveParams Subluminal(double R) { return {0.5, 8.0, R, 0.0, 0.0, 0.0}; }
-    static WarpDriveParams Superluminal(double vs, double R) { return {vs, 8.0, R, 0.0, 0.0, 0.0}; }
+    static WarpDriveParams Subluminal(double R) {
+        return {0.5, kDefaultAlcubierreBubbleSigma, R, 0.0, 0.0, 0.0};
+    }
+    static WarpDriveParams Superluminal(double vs, double R) {
+        return {vs, kDefaultAlcubierreBubbleSigma, R, 0.0, 0.0, 0.0};
+    }
 };
 
 // Warp drive family metric.
@@ -46,6 +52,7 @@ class WarpDriveFamily : public IMetric {
     const Config& GetParameters() const override { return config_; }
     void SetParameter(const std::string& key, double value) override;
     const char* GetName() const override { return "Alcubierre Warp Drive"; }
+    bool InverseMetric(const Tensor<double, 4>& pos, Metric4d& g_inv) const override;
 
     void SetParams(const WarpDriveParams& params);
     WarpDriveParams GetParams() const;
@@ -63,10 +70,13 @@ class WarpDriveFamily : public IMetric {
 };
 
 inline WarpDriveFamily::WarpDriveFamily() {
-    config_["velocity"] = {1.0, -10.0, 10.0};
-    config_["sigma"] = {8.0, std::numeric_limits<double>::min(), 1000.0};
-    config_["radius"] = {1.0, std::numeric_limits<double>::min(), 1000.0};
-    params_ = WarpDriveParams::Alcubierre(1.0, 1.0);
+    config_["velocity"] = {kDefaultAlcubierreWarpVelocity, -10.0, 10.0};
+    config_["sigma"] = {kDefaultAlcubierreBubbleSigma, std::numeric_limits<double>::min(), 1000.0};
+    config_["radius"] = {kDefaultAlcubierreBubbleRadius, std::numeric_limits<double>::min(),
+                         1000.0};
+    params_ =
+        WarpDriveParams::Alcubierre(kDefaultAlcubierreWarpVelocity, kDefaultAlcubierreBubbleRadius,
+                                    kDefaultAlcubierreBubbleSigma);
 }
 
 inline WarpDriveFamily::WarpDriveFamily(const WarpDriveParams& params) : WarpDriveFamily() {
@@ -74,10 +84,8 @@ inline WarpDriveFamily::WarpDriveFamily(const WarpDriveParams& params) : WarpDri
 }
 
 inline void WarpDriveFamily::SetParams(const WarpDriveParams& params) {
-    const bool valid = std::isfinite(params.vs) && std::abs(params.vs) <= 10.0 &&
-                       std::isfinite(params.sigma) && params.sigma > 0.0 &&
-                       params.sigma <= 1000.0 && std::isfinite(params.R) && params.R > 0.0 &&
-                       params.R <= 1000.0 && std::isfinite(params.xs) && std::isfinite(params.ys) &&
+    const bool valid = !AlcubierreParameterIssue(params.vs, params.R, params.sigma).has_value() &&
+                       std::isfinite(params.xs) && std::isfinite(params.ys) &&
                        std::isfinite(params.zs);
     SIRIUS_PRE(valid);
     if (!valid) return;
@@ -98,10 +106,16 @@ inline void WarpDriveFamily::SetParameter(const std::string& key, double value) 
         std::isfinite(value) && value >= found->second.min && value <= found->second.max;
     SIRIUS_PRE(in_range);
     if (!in_range) return;
+    WarpDriveParams proposed = params_;
+    if (key == "velocity") proposed.vs = value;
+    if (key == "sigma") proposed.sigma = value;
+    if (key == "radius") proposed.R = value;
+    const bool represented =
+        !AlcubierreParameterIssue(proposed.vs, proposed.R, proposed.sigma).has_value();
+    SIRIUS_PRE(represented);
+    if (!represented) return;
+    params_ = proposed;
     found->second.value = value;
-    params_.vs = config_["velocity"].value;
-    params_.sigma = config_["sigma"].value;
-    params_.R = config_["radius"].value;
 }
 
 inline double WarpDriveFamily::ShapeFunction(double rs) const {
@@ -133,7 +147,30 @@ inline void WarpDriveFamily::UpdateBubblePosition(double t) {
     // Sets the reference (t = 0) bubble position. Evaluate() adds vs*t on top of
     // this reference, so calling it per integration step would double-count the
     // motion; it exists for repositioning the bubble between renders.
-    params_.xs = params_.vs * t;
+    const double position = params_.vs * t;
+    const bool finite = std::isfinite(t) && std::isfinite(position);
+    SIRIUS_PRE(finite);
+    if (!finite) return;
+    params_.xs = position;
+}
+
+inline bool WarpDriveFamily::InverseMetric(const Tensor<double, 4>& pos, Metric4d& g_inv) const {
+    if (!IsValidEvent(pos)) return false;
+    const double dx = pos(1) - (params_.xs + params_.vs * pos(0));
+    const double dy = pos(2) - params_.ys;
+    const double dz = pos(3) - params_.zs;
+    const double f = ShapeFunction(std::sqrt(dx * dx + dy * dy + dz * dz));
+    const double vsf = params_.vs * f;
+
+    g_inv.Zero();
+    // The t-x block has exact determinant -1 for every represented profile.
+    g_inv(0, 0) = Dual<double>(-1.0);
+    g_inv(0, 1) = Dual<double>(-vsf);
+    g_inv(1, 0) = Dual<double>(-vsf);
+    g_inv(1, 1) = Dual<double>(1.0 - vsf * vsf);
+    g_inv(2, 2) = Dual<double>(1.0);
+    g_inv(3, 3) = Dual<double>(1.0);
+    return true;
 }
 
 inline void WarpDriveFamily::Evaluate(const Tensor<double, 4>& pos, Metric4d& g,

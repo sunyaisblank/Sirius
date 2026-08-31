@@ -172,7 +172,7 @@
       "required": true,
       "verification": "build_gated",
       "profiles": ["cpu", "vulkan"],
-      "requirement": "The single registry exposes nine CPU-renderable spacetime families, advertises only implemented backend support, rejects parameters absent from a metric, preserves observer distance as a geometric coordinate radius with metric-natural scaling, keeps every positive-Lambda observer and directional background boundary inside its cosmological causal patch, parameterises every CPU accepted-segment consumer by the true per-step affine interval, clips a finite causal crossing before coupled state advances, represents the asymptotically normalised zero-tidal Ellis metric independently of its one-sheet or two-sheet output boundary, matches its exact Ricci scalar and radial null-energy-condition violation on both ends, resolves the bounded Alcubierre wall profile, and rejects disk semantics absent from a metric.",
+      "requirement": "The single registry exposes nine CPU-renderable spacetime families, advertises only implemented backend support, rejects parameters absent from a metric, preserves observer distance as a geometric coordinate radius with metric-natural scaling, keeps every positive-Lambda observer and directional background boundary inside its cosmological causal patch, parameterises every CPU accepted-segment consumer by the true per-step affine interval, clips a finite causal crossing before coupled state advances, represents the asymptotically normalised zero-tidal Ellis metric independently of its one-sheet or two-sheet output boundary, matches its exact Ricci scalar and radial null-energy-condition violation on both ends, enforces the resolved Alcubierre wall domain at every live host/device metric and RK-stage boundary, preserves its exact unit-determinant inverse, and matches the negative Eulerian warp-wall energy density required by Einstein's equation, while rejecting disk semantics absent from a metric.",
       "capability_dependencies": [],
       "evidence": [
         {"kind": "gtest", "name": "MetricRegistryTests.EveryCanonicalNameParsesToItsOwnId"},
@@ -182,6 +182,10 @@
         {"kind": "gtest", "name": "CpuTraceBoundary.EveryAdvertisedCpuMetricConstructsAndTracesOneRay"},
         {"kind": "gtest", "name": "CpuTraceBoundary.TwoSheetEllisCrossesThroatAndReachesInversionMatchedInfinity"},
         {"kind": "gtest", "name": "MorrisThorneCartesianTests.CurvatureAndRadialNullEnergyConditionMatchExactEllis"},
+        {"kind": "gtest", "name": "AlcubierreMetricTests.AnalyticInverseMatchesExactUnitDeterminantBlock"},
+        {"kind": "gtest", "name": "AlcubierreMetricTests.EulerianWarpWallEnergyMatchesEinsteinConstraint"},
+        {"kind": "gtest", "name": "AlcubierreMetricTests.DirectMetricRejectsUnresolvedProfiles"},
+        {"kind": "gtest", "name": "KernelParity.UnresolvedWarpProfilesFailClosedOnDevice"},
         {"kind": "gtest", "name": "ConfigValidation.MetricMassAndObserverCoordinateRadiusAreIdentityAware"},
         {"kind": "gtest", "name": "RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame"},
         {"kind": "gtest", "name": "ConfigValidation.DiskRequestDeclinesForEveryMetricWithoutAnEmissionModel"},
@@ -774,11 +778,15 @@
       "state": "bounded",
       "profiles": ["cpu", "vulkan"],
       "request": "Alcubierre exterior-observer rendering with tanh wall parameters R and sigma",
-      "behavior": "Treat sigma as an inverse coordinate length; require 0.1 <= sigma*R <= 100 and 5L <= r_observer <= 1000L for L=max(R,1/sigma); scale the outer trace domain with L and the minimum integration step with min(R,1/sigma).",
+      "behavior": "Treat sigma as an inverse coordinate length; require finite |v_s| <= 10, positive R and sigma no greater than 1000, 0.1 <= sigma*R <= 100, and 5L <= r_observer <= 1000L for L=max(R,1/sigma). The registry, concrete CPU metric, device metric/connection, and every device RK stage fail closed on that same domain. The exact t-x determinant remains -1 with one analytic host/device inverse. An independent fourth-order connection-difference Ricci oracle must recover the Eulerian energy density -v_s^2[(partial_y f)^2+(partial_z f)^2]/(32 pi), including its strict off-axis negativity, while trace-domain extent scales with L and the minimum step with min(R,1/sigma).",
       "evidence": [
         {"kind": "gtest", "name": "ConfigValidation.MetricMassAndObserverCoordinateRadiusAreIdentityAware"},
         {"kind": "gtest", "name": "RenderCommandParse.ExoticMetricScalesReachTheValidatedSchema"},
-        {"kind": "gtest", "name": "RenderSessionProbe.TraceDomainScalesWithMassAndEnclosesTheObserver"}
+        {"kind": "gtest", "name": "RenderSessionProbe.TraceDomainScalesWithMassAndEnclosesTheObserver"},
+        {"kind": "gtest", "name": "AlcubierreMetricTests.AnalyticInverseMatchesExactUnitDeterminantBlock"},
+        {"kind": "gtest", "name": "AlcubierreMetricTests.EulerianWarpWallEnergyMatchesEinsteinConstraint"},
+        {"kind": "gtest", "name": "AlcubierreMetricTests.DirectMetricRejectsUnresolvedProfiles"},
+        {"kind": "gtest", "name": "KernelParity.UnresolvedWarpProfilesFailClosedOnDevice"}
       ]
     },
     {

@@ -200,6 +200,9 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:KernelParity.Cie1931TwoDegreeFitMatchesHostAuthority",
     },
     "E1": {
+        "gtest:AlcubierreMetricTests.AnalyticInverseMatchesExactUnitDeterminantBlock",
+        "gtest:AlcubierreMetricTests.DirectMetricRejectsUnresolvedProfiles",
+        "gtest:AlcubierreMetricTests.EulerianWarpWallEnergyMatchesEinsteinConstraint",
         "gtest:ConfigValidation.MetricMassAndObserverCoordinateRadiusAreIdentityAware",
         "gtest:ConfigValidation.DiskRequestDeclinesForEveryMetricWithoutAnEmissionModel",
         "gtest:CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle",
@@ -209,6 +212,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:MetricRegistryTests.BackendSupportMatchesImplementations",
         "gtest:MetricRegistryTests.EveryCanonicalNameParsesToItsOwnId",
         "gtest:MetricRegistryTests.PositiveLambdaObserverAndHorizonShareOneCausalDomain",
+        "gtest:KernelParity.UnresolvedWarpProfilesFailClosedOnDevice",
         "gtest:RenderSessionProbe.CpuMorrisThorneRenderCompletes",
         "gtest:RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame",
         "gtest:VulkanRenderSession.CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalBounds",
@@ -266,9 +270,9 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "9cb976aaa8eb5d23186d88702d40da1d5b5da0c89749f8670c09ebed92ad09e3",
+    "acceptance_criteria": "5defd19670d57420b1fa4767b549950284e436ae82e79c3a46bd98ceb09c15f8",
     "required_dimensions": "ca9364d1caace7fa97ab5960394c4fa1256ca3523dd79cbca6952292b1561444",
-    "capability_contracts": "b550b5ee5a2f85df86d38fb4fd4ac2154fbb284e20ea7dda6718fd6a8b12b40f",
+    "capability_contracts": "3536357c7a8cd874b01271d52f8838ab4b863336e49b4cd448d3188e1fd7c3ad",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
 

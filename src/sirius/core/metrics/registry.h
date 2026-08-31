@@ -277,6 +277,20 @@ enum class MetricObserverRadiusIssue {
     return std::nullopt;
 }
 
+// Complete live Alcubierre parameter domain. Configuration, construction, the
+// concrete CPU metric, and the device mirror all implement this same bound so
+// direct metric callers cannot bypass the operator-facing gate.
+[[nodiscard]] inline std::optional<std::string_view> AlcubierreParameterIssue(
+    double warp_velocity, double bubble_radius, double bubble_sigma) noexcept {
+    if (!std::isfinite(warp_velocity) || std::abs(warp_velocity) > 10.0 ||
+        !std::isfinite(bubble_radius) || !(bubble_radius > 0.0) || bubble_radius > 1000.0 ||
+        !std::isfinite(bubble_sigma) || !(bubble_sigma > 0.0) || bubble_sigma > 1000.0) {
+        return "Alcubierre velocity, radius, or inverse wall scale is outside the represented "
+               "domain";
+    }
+    return AlcubierreScaleIssue(bubble_radius, bubble_sigma);
+}
+
 // Identity compatibility for parameters whose schema defaults must remain
 // populated even when their owning exotic metric is inactive. A canonical
 // inactive default is harmless; changing an irrelevant value is an operator

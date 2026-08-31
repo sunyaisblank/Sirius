@@ -47,6 +47,7 @@ static const uint OP_KERR_DISK_TRANSFER = 16;
 static const uint OP_GREY_LAYER_ABSORPTION = 17;
 static const uint OP_SPHERICAL_CAPTURE_EVENT = 18;
 static const uint OP_ELLIS_TWO_SHEET_TRACE = 19;
+static const uint OP_WARP_RK4_DECLINE = 20;
 
 // Future-directed null root used by the render kernel, repeated here only for
 // the diagnostic launch boundary. The integration below calls the production
@@ -339,6 +340,28 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         results[rb + 7] = mapped ? skyDirection.x : 0.0f;
         results[rb + 8] = mapped ? skyDirection.y : 0.0f;
         results[rb + 9] = mapped ? skyDirection.z : 0.0f;
+    } else if (opcode == OP_WARP_RK4_DECLINE) {
+        // Compute-only execution of the production Alcubierre RK4 path.
+        // p1=vs, p2=sigma, p3=R; c=launch xyz; u=launch tangent; h=step.
+        // A declined stage must leave the returned state exactly at launch.
+        GeodesicStateCart launch;
+        launch.x = MakeVec4Cart(Real(0.0f), Real(c0), Real(c1), Real(c2));
+        launch.u = MakeVec4Cart(
+            Real(samples[sb + 8]), Real(samples[sb + 9]),
+            Real(samples[sb + 10]), Real(samples[sb + 11]));
+        GeodesicStateCart candidate;
+        bool represented = IntegrateGeodesicRK4WarpCart(
+            launch, Real(samples[sb + 12]), p1, p2, p3,
+            0.0f, 0.0f, 0.0f, candidate);
+        results[rb + 0] = represented ? 1.0f : 0.0f;
+        results[rb + 1] = float(candidate.x.t);
+        results[rb + 2] = float(candidate.x.x);
+        results[rb + 3] = float(candidate.x.y);
+        results[rb + 4] = float(candidate.x.z);
+        results[rb + 5] = float(candidate.u.t);
+        results[rb + 6] = float(candidate.u.x);
+        results[rb + 7] = float(candidate.u.y);
+        results[rb + 8] = float(candidate.u.z);
     } else if (opcode == OP_NULL_PROJECTION) {
         // Direct witness for the production accepted-state constraint method.
         // The sample supplies a metric family/event and u=(t,x,y,z).

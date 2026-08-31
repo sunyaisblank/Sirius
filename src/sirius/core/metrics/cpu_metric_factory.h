@@ -67,11 +67,7 @@ struct MetricConstructionParameters {
     }
     if (!std::isfinite(parameters.throat_radius) ||
         parameters.throat_radius < kMinMorrisThorneThroatRadius ||
-        parameters.throat_radius > kMaxMorrisThorneThroatRadius ||
-        !std::isfinite(parameters.warp_velocity) || std::abs(parameters.warp_velocity) > 10.0 ||
-        !std::isfinite(parameters.bubble_radius) || parameters.bubble_radius <= 0.0 ||
-        parameters.bubble_radius > 1000.0 || !std::isfinite(parameters.bubble_sigma) ||
-        parameters.bubble_sigma <= 0.0 || parameters.bubble_sigma > 1000.0) {
+        parameters.throat_radius > kMaxMorrisThorneThroatRadius) {
         return "wormhole or warp-drive parameters are outside the represented domain";
     }
     if (const auto issue = MetricSpecificParameterIssue(
@@ -81,7 +77,8 @@ struct MetricConstructionParameters {
         return issue;
     }
     if (id == MetricId::Alcubierre) {
-        return AlcubierreScaleIssue(parameters.bubble_radius, parameters.bubble_sigma);
+        return AlcubierreParameterIssue(parameters.warp_velocity, parameters.bubble_radius,
+                                        parameters.bubble_sigma);
     }
     return std::nullopt;
 }

@@ -435,6 +435,19 @@ public void GetMorrisThorneCartesianChristoffel(
 // ds^2 = -dt^2 + (dx - vs f(rs) dt)^2 + dy^2 + dz^2, Cartesian chart.
 // f(rs) = [tanh(sigma(rs+R)) - tanh(sigma(rs-R))] / [2 tanh(sigma R)].
 // =============================================================================
+public bool IsWarpDriveEventRepresented(
+    Vec4Cart pos, float vs, float sigma, float R, float xs, float ys, float zs)
+{
+    if (!isfinite(pos.t) || !isfinite(pos.x) || !isfinite(pos.y) || !isfinite(pos.z) ||
+        !isfinite(vs) || abs(vs) > 10.0f || !isfinite(sigma) || !(sigma > 0.0f) ||
+        sigma > 1000.0f || !isfinite(R) || !(R > 0.0f) || R > 1000.0f ||
+        !isfinite(xs) || !isfinite(ys) || !isfinite(zs)) {
+        return false;
+    }
+    float sigmaR = sigma * R;
+    return sigmaR >= 0.1f && sigmaR <= 100.0f;
+}
+
 public float AlcubierreShapeFunction(float rs, float sigma, float R) {
     float tanh_plus = tanh(sigma * (rs + R));
     float tanh_minus = tanh(sigma * (rs - R));
@@ -456,6 +469,10 @@ public void GetWarpDriveMetric(
     float xs, float ys, float zs,
     out Real g[4][4], out Real g_inv[4][4])
 {
+    [unroll] for (int i = 0; i < 4; i++)
+        [unroll] for (int j = 0; j < 4; j++) { g[i][j] = 0.0f; g_inv[i][j] = 0.0f; }
+    if (!IsWarpDriveEventRepresented(pos, vs, sigma, R, xs, ys, zs)) return;
+
     Real x = pos.x;
     Real y = pos.y;
     Real z = pos.z;
@@ -476,9 +493,6 @@ public void GetWarpDriveMetric(
     Real vsf = vs * f;
     Real vsf2 = vsf * vsf;
 
-    [unroll] for (int i = 0; i < 4; i++)
-        [unroll] for (int j = 0; j < 4; j++) { g[i][j] = 0.0f; g_inv[i][j] = 0.0f; }
-
     g[0][0] = -(1.0f - vsf2);
     g[0][1] = -vsf;
     g[1][0] = -vsf;
@@ -486,13 +500,11 @@ public void GetWarpDriveMetric(
     g[2][2] = 1.0f;
     g[3][3] = 1.0f;
 
-    Real det_tx = g[0][0] * g[1][1] - g[0][1] * g[1][0];
-    det_tx = max(abs(det_tx), Real(1e-10f)) * (det_tx >= 0.0f ? Real(1.0f) : Real(-1.0f));
-
-    g_inv[0][0] = g[1][1] / det_tx;
-    g_inv[0][1] = -g[0][1] / det_tx;
-    g_inv[1][0] = -g[1][0] / det_tx;
-    g_inv[1][1] = g[0][0] / det_tx;
+    // The represented t-x block has exact determinant -1.
+    g_inv[0][0] = -1.0f;
+    g_inv[0][1] = -vsf;
+    g_inv[1][0] = -vsf;
+    g_inv[1][1] = 1.0f - vsf2;
     g_inv[2][2] = 1.0f;
     g_inv[3][3] = 1.0f;
 }
@@ -506,6 +518,7 @@ public void GetWarpDriveChristoffel(
         [unroll] for (int j = 0; j < 4; j++)
             [unroll] for (int k = 0; k < 4; k++)
                 Gamma[i][j][k] = 0.0f;
+    if (!IsWarpDriveEventRepresented(pos, vs, sigma, R, xs, ys, zs)) return;
 
     Real x = pos.x;
     Real y = pos.y;

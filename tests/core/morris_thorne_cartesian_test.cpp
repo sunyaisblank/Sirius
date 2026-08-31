@@ -13,6 +13,8 @@
 
 #include <gtest/gtest.h>
 
+#include "metric_curvature_oracle.h"
+
 #include <cmath>
 #include <limits>
 #include <numbers>
@@ -70,85 +72,6 @@ std::vector<MorrisThorneParams> SampleShapes() {
         MorrisThorneParams::Ellis(1.0),
         MorrisThorneParams::Ellis(2.5),
     };
-}
-
-struct RicciSample {
-    double covariant[4][4] = {};
-    double scalar = 0.0;
-};
-
-ChristoffelSymbols ConnectionAt(MorrisThorneCartesian& metric, const Vec4& position) {
-    Metric4d g;
-    Tensor<Dual<double>, 4, 4, 4> dg;
-    metric.Evaluate(position, g, dg);
-    return TensorOps::Christoffel(g, dg);
-}
-
-// Independent numerical curvature oracle.  It differentiates the production
-// analytic connection with a fourth-order centred stencil and assembles
-//
-//   R^rho_{ sigma mu nu} = d_mu Gamma^rho_{nu sigma}
-//                         - d_nu Gamma^rho_{mu sigma}
-//                         + Gamma^rho_{mu lambda} Gamma^lambda_{nu sigma}
-//                         - Gamma^rho_{nu lambda} Gamma^lambda_{mu sigma}.
-//
-// This does not reuse the closed-form Ellis Ricci scalar or stress tensor that
-// the test compares against, so a mutually wrong chart/connection pair cannot
-// satisfy the oracle by construction.
-RicciSample RicciFromConnectionFiniteDifference(MorrisThorneCartesian& metric, const Vec4& position,
-                                                double h) {
-    const ChristoffelSymbols gamma = ConnectionAt(metric, position);
-    double d_gamma[4][4][4][4] = {};
-    for (int derivative = 0; derivative < 4; ++derivative) {
-        Vec4 plus_one = position;
-        Vec4 minus_one = position;
-        Vec4 plus_two = position;
-        Vec4 minus_two = position;
-        plus_one(derivative) += h;
-        minus_one(derivative) -= h;
-        plus_two(derivative) += 2.0 * h;
-        minus_two(derivative) -= 2.0 * h;
-        const ChristoffelSymbols gp1 = ConnectionAt(metric, plus_one);
-        const ChristoffelSymbols gm1 = ConnectionAt(metric, minus_one);
-        const ChristoffelSymbols gp2 = ConnectionAt(metric, plus_two);
-        const ChristoffelSymbols gm2 = ConnectionAt(metric, minus_two);
-        for (int upper = 0; upper < 4; ++upper) {
-            for (int lower_one = 0; lower_one < 4; ++lower_one) {
-                for (int lower_two = 0; lower_two < 4; ++lower_two) {
-                    d_gamma[derivative][upper][lower_one][lower_two] =
-                        (-gp2.gamma(upper, lower_one, lower_two).real +
-                         8.0 * gp1.gamma(upper, lower_one, lower_two).real -
-                         8.0 * gm1.gamma(upper, lower_one, lower_two).real +
-                         gm2.gamma(upper, lower_one, lower_two).real) /
-                        (12.0 * h);
-                }
-            }
-        }
-    }
-
-    RicciSample result;
-    for (int sigma = 0; sigma < 4; ++sigma) {
-        for (int nu = 0; nu < 4; ++nu) {
-            for (int rho = 0; rho < 4; ++rho) {
-                double component = d_gamma[rho][rho][nu][sigma] - d_gamma[nu][rho][rho][sigma];
-                for (int lambda = 0; lambda < 4; ++lambda) {
-                    component +=
-                        gamma.gamma(rho, rho, lambda).real * gamma.gamma(lambda, nu, sigma).real -
-                        gamma.gamma(rho, nu, lambda).real * gamma.gamma(lambda, rho, sigma).real;
-                }
-                result.covariant[sigma][nu] += component;
-            }
-        }
-    }
-
-    Metric4d inverse;
-    EXPECT_TRUE(metric.InverseMetric(position, inverse));
-    for (int mu = 0; mu < 4; ++mu) {
-        for (int nu = 0; nu < 4; ++nu) {
-            result.scalar += inverse(mu, nu).real * result.covariant[mu][nu];
-        }
-    }
-    return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -311,8 +234,9 @@ TEST(MorrisThorneCartesianTests, CurvatureAndRadialNullEnergyConditionMatchExact
         for (const double rho_factor : {0.25, 0.5, 1.0, 3.0, 10.0}) {
             const double rho = rho_factor * b0;
             const Vec4 position = CartPos(rho, radial);
-            const RicciSample ricci =
-                RicciFromConnectionFiniteDifference(metric, position, 5.0e-5 * b0);
+            const sirius::test_support::RicciSample ricci =
+                sirius::test_support::RicciFromConnectionFiniteDifference(metric, position,
+                                                                          5.0e-5 * b0);
             const double areal_radius = EllisArealRadiusFromIsotropic(b0, rho);
             const double expected = -2.0 * b0 * b0 / std::pow(areal_radius, 4.0);
             const double absolute_floor = 2.0e-8 / (b0 * b0);
