@@ -1000,6 +1000,12 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    ViewerDisplayContract.LiveShaderAppliesOnlyExactSrgbTransfer
+    ViewerDisplayContract.FilmFinishClosesDisplayLinearRange
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     VolumetricDiskClosure.TruncatedGaussianColumnEqualsDeclaredOpticalDepth
     PROPERTIES LABELS "Mandatory;Correctness"
 )

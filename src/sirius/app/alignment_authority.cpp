@@ -50,7 +50,7 @@ constexpr std::array<std::string_view, 7> kTestedArtifactNames = {
     "sirius_render_tests",
 };
 
-constexpr std::array<std::pair<std::string_view, std::string_view>, 12> kResourceProducts = {{
+constexpr std::array<std::pair<std::string_view, std::string_view>, 8> kResourceProducts = {{
     {"alignment_receipt", "model/alignment_receipt.json"},
     {"operating_model", "model/operating_model.json"},
     {"starfield", "assets/Starfield.png"},
@@ -59,26 +59,12 @@ constexpr std::array<std::pair<std::string_view, std::string_view>, 12> kResourc
     {"trace_spv", "kernels/trace.spv"},
     {"viewer_rdsd003a_fragment", "shaders/RDSD003A.frag"},
     {"viewer_rdsd003a_vertex", "shaders/RDSD003A.vert"},
-    {"viewer_rdsd004a_fragment", "shaders/RDSD004A.frag"},
-    {"viewer_rdsd004a_vertex", "shaders/RDSD004A.vert"},
-    {"viewer_rdsd005a_fragment", "shaders/RDSD005A.frag"},
-    {"viewer_rdsd005a_vertex", "shaders/RDSD005A.vert"},
 }};
 
-constexpr std::array<std::string_view, 13> kProductArtifactNames = {
-    "alignment_receipt",
-    "operating_model",
-    "sirius",
-    "starfield",
-    "trace_fp32comp_spv",
-    "trace_fp64_spv",
-    "trace_spv",
-    "viewer_rdsd003a_fragment",
-    "viewer_rdsd003a_vertex",
-    "viewer_rdsd004a_fragment",
-    "viewer_rdsd004a_vertex",
-    "viewer_rdsd005a_fragment",
-    "viewer_rdsd005a_vertex",
+constexpr std::array<std::string_view, 9> kProductArtifactNames = {
+    "alignment_receipt", "operating_model",          "sirius",
+    "starfield",         "trace_fp32comp_spv",       "trace_fp64_spv",
+    "trace_spv",         "viewer_rdsd003a_fragment", "viewer_rdsd003a_vertex",
 };
 
 bool HasExactFields(const nlohmann::json& object, std::initializer_list<std::string_view> fields) {

@@ -11,11 +11,7 @@ set(_sirius_required
 if("@SIRIUS_INSTALL_HAS_VIEWER@" STREQUAL "TRUE")
     list(APPEND _sirius_required
         "${_sirius_install_root}/share/sirius/shaders/RDSD003A.vert"
-        "${_sirius_install_root}/share/sirius/shaders/RDSD003A.frag"
-        "${_sirius_install_root}/share/sirius/shaders/RDSD004A.vert"
-        "${_sirius_install_root}/share/sirius/shaders/RDSD004A.frag"
-        "${_sirius_install_root}/share/sirius/shaders/RDSD005A.vert"
-        "${_sirius_install_root}/share/sirius/shaders/RDSD005A.frag")
+        "${_sirius_install_root}/share/sirius/shaders/RDSD003A.frag")
 endif()
 
 if("@SIRIUS_INSTALL_HAS_VULKAN@" STREQUAL "TRUE")

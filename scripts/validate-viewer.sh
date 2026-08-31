@@ -107,10 +107,6 @@ if [[ -z "$REUSE_QUALIFICATION_ATTESTATION" ]]; then
         "trace_spv=kernels/trace.spv"
         "viewer_rdsd003a_fragment=shaders/RDSD003A.frag"
         "viewer_rdsd003a_vertex=shaders/RDSD003A.vert"
-        "viewer_rdsd004a_fragment=shaders/RDSD004A.frag"
-        "viewer_rdsd004a_vertex=shaders/RDSD004A.vert"
-        "viewer_rdsd005a_fragment=shaders/RDSD005A.frag"
-        "viewer_rdsd005a_vertex=shaders/RDSD005A.vert"
     )
     for product in "${QUALIFICATION_PRODUCTS[@]}"; do
         logical_name="${product%%=*}"
@@ -328,10 +324,6 @@ for source_text in (
     str(root / "qualification-product-trace_spv"),
     str(root / "qualification-product-viewer_rdsd003a_fragment"),
     str(root / "qualification-product-viewer_rdsd003a_vertex"),
-    str(root / "qualification-product-viewer_rdsd004a_fragment"),
-    str(root / "qualification-product-viewer_rdsd004a_vertex"),
-    str(root / "qualification-product-viewer_rdsd005a_fragment"),
-    str(root / "qualification-product-viewer_rdsd005a_vertex"),
 ):
     source = pathlib.Path(source_text)
     payload = source.read_bytes()

@@ -143,6 +143,7 @@ SUITE_LABELS = {
     "ConfigSchema": MANDATORY,
     "RenderCommandParse": OPERATIONAL,
     "ViewCommandOperational": OPERATIONAL,
+    "ViewerDisplayContract": MANDATORY,
     "CommandRouter": OPERATIONAL,
     "PlatformPaths": OPERATIONAL,
     "AlignmentAuthority": OPERATIONAL,

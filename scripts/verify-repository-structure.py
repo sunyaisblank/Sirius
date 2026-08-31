@@ -40,6 +40,10 @@ RETIRED_PATHS = (
     ROOT / "lib" / "glfw" / "deps" / "tinycthread.c",
     ROOT / "lib" / "glfw" / "deps" / "tinycthread.h",
     SOURCE_ROOT / "render" / "render_config.h",
+    SOURCE_ROOT / "app" / "viewer" / "shaders" / "RDSD004A.frag",
+    SOURCE_ROOT / "app" / "viewer" / "shaders" / "RDSD004A.vert",
+    SOURCE_ROOT / "app" / "viewer" / "shaders" / "RDSD005A.frag",
+    SOURCE_ROOT / "app" / "viewer" / "shaders" / "RDSD005A.vert",
 )
 
 CPP_TOKEN = re.compile(r'(?<![A-Za-z0-9_${])([A-Za-z0-9_./-]+\.cpp)')
@@ -66,6 +70,14 @@ STRICT_TEST_VOLUME_TARGETS = {
     ROOT / "tests" / "render" / "CMakeLists.txt": "sirius_render_tests",
 }
 SRGB_TRANSFER_AUTHORITY = SOURCE_ROOT / "core" / "srgb_transfer.h"
+SRGB_TRANSFER_VIEWER_MIRROR = (
+    SOURCE_ROOT / "app" / "viewer" / "shaders" / "RDSD003A.frag"
+)
+VIEWER_COMMAND = SOURCE_ROOT / "app" / "cli" / "view_command.cpp"
+LIVE_VIEWER_SHADERS = {
+    SOURCE_ROOT / "app" / "viewer" / "shaders" / "RDSD003A.frag",
+    SOURCE_ROOT / "app" / "viewer" / "shaders" / "RDSD003A.vert",
+}
 SRGB_TRANSFER_CONSUMERS = {
     SOURCE_ROOT / "core" / "spectral" / "blackbody.h": "colour::EncodeSrgbChannel",
     SOURCE_ROOT / "render" / "image_buffer.h": "core::colour::TryEncodeSrgb8",
@@ -74,6 +86,11 @@ SRGB_TRANSFER_CONSUMERS = {
 }
 SRGB_LINEAR_BREAKPOINT = re.compile(
     r"(?<![A-Za-z0-9_.])0\.0031308(?:[fFlL])?(?![A-Za-z0-9_.])"
+)
+APPROXIMATE_GAMMA_22 = re.compile(r"\bpow\s*\([^;]*1\.0\s*/\s*2\.2")
+FIXED_REINHARD_ASSIGNMENT = re.compile(
+    r"\b(?P<value>[A-Za-z_]\w*)\s*=\s*(?P=value)\s*/\s*"
+    r"\(\s*(?P=value)\s*\+\s*vec3\s*\(\s*1\.0\s*\)\s*\)"
 )
 XYZ_SRGB_AUTHORITY = SOURCE_ROOT / "core" / "xyz_srgb.h"
 XYZ_SRGB_HOST_CONSUMERS = (
@@ -582,6 +599,52 @@ def srgb_transfer_authority_errors(documents: dict[Path, str]) -> list[str]:
     if len(SRGB_LINEAR_BREAKPOINT.findall(authority_code)) != 1:
         errors.append("the host sRGB transfer authority must own one IEC linear breakpoint")
 
+    viewer = documents.get(SRGB_TRANSFER_VIEWER_MIRROR)
+    if viewer is None:
+        errors.append("the live viewer sRGB transfer mirror is missing")
+    else:
+        viewer_code = CPP_NON_CODE.sub(" ", viewer)
+        for marker in (
+            "const float kSrgbLinearBreakpoint = 0.0031308;",
+            "const float kSrgbLinearSlope = 12.92;",
+            "const float kSrgbPowerScale = 1.055;",
+            "const float kSrgbPowerOffset = 0.055;",
+            "const float kSrgbPowerExponent = 1.0 / 2.4;",
+            "EncodeSrgbChannel",
+            "linear = clamp(linear, 0.0, 1.0);",
+            "if (linear <= kSrgbLinearBreakpoint)",
+            "return kSrgbLinearSlope * linear;",
+            "kSrgbPowerScale * pow(linear, kSrgbPowerExponent) - kSrgbPowerOffset",
+            "vec3 displayLinear = texture(screenTexture, TexCoord).rgb;",
+            "FragColor = vec4(encoded, 1.0);",
+        ):
+            if marker not in viewer_code:
+                errors.append(f"the live viewer transfer mirror omits {marker}")
+        if len(SRGB_LINEAR_BREAKPOINT.findall(viewer_code)) != 1:
+            errors.append("the live viewer mirror must own one IEC linear breakpoint")
+        if viewer_code.count("EncodeSrgbChannel(displayLinear.") != 3:
+            errors.append("the live viewer must transfer-encode exactly three RGB channels")
+        if viewer_code.count("texture(") != 1:
+            errors.append("the live viewer transfer shader must sample exactly one texture value")
+        if viewer_code.count("pow(") != 1:
+            errors.append("the live viewer transfer shader must own one IEC power branch")
+        if APPROXIMATE_GAMMA_22.search(viewer_code):
+            errors.append("the live viewer restored an approximate gamma-2.2 encode")
+        if FIXED_REINHARD_ASSIGNMENT.search(viewer_code):
+            errors.append("the live viewer restored an unconfigured secondary tone map")
+
+    view_command = documents.get(VIEWER_COMMAND)
+    if view_command is None:
+        errors.append("the live viewer command is missing")
+    else:
+        command_code = CPP_NON_CODE.sub(" ", view_command)
+        if command_code.count("glDisable(GL_FRAMEBUFFER_SRGB)") != 1:
+            errors.append("the live viewer must explicitly disable hardware sRGB re-encoding")
+        if "glEnable(GL_FRAMEBUFFER_SRGB)" in command_code:
+            errors.append("the live viewer enables a second hardware sRGB encode")
+        if command_code.count("GL_RGBA32F") != 1:
+            errors.append("the live viewer must preserve display-linear values in one fp32 texture")
+
     required_include = '#include "sirius/core/srgb_transfer.h"'
     for path, marker in SRGB_TRANSFER_CONSUMERS.items():
         document = documents.get(path)
@@ -608,7 +671,7 @@ def srgb_transfer_authority_errors(documents: dict[Path, str]) -> list[str]:
             )
 
     for path, document in documents.items():
-        if path == SRGB_TRANSFER_AUTHORITY:
+        if path in {SRGB_TRANSFER_AUTHORITY, SRGB_TRANSFER_VIEWER_MIRROR}:
             continue
         if SRGB_LINEAR_BREAKPOINT.search(CPP_NON_CODE.sub(" ", document)):
             errors.append(f"{relative(path)} reimplements the IEC sRGB transfer breakpoint")
@@ -625,6 +688,24 @@ def verify_srgb_transfer_authority_policy() -> None:
             for path, marker in SRGB_TRANSFER_CONSUMERS.items()
         },
         SPECTRAL_RADIANCE_FACADE: "struct SpectralRadiance { Xyz ToXyz() const; };",
+        SRGB_TRANSFER_VIEWER_MIRROR: (
+            "const float kSrgbLinearBreakpoint = 0.0031308;\n"
+            "const float kSrgbLinearSlope = 12.92;\n"
+            "const float kSrgbPowerScale = 1.055;\n"
+            "const float kSrgbPowerOffset = 0.055;\n"
+            "const float kSrgbPowerExponent = 1.0 / 2.4;\n"
+            "float EncodeSrgbChannel(float linear) {\n"
+            " linear = clamp(linear, 0.0, 1.0);\n"
+            " if (linear <= kSrgbLinearBreakpoint)\n"
+            "  return kSrgbLinearSlope * linear;\n"
+            " return kSrgbPowerScale * pow(linear, kSrgbPowerExponent) - "
+            "kSrgbPowerOffset;\n}\n"
+            "void main() { vec3 displayLinear = texture(screenTexture, TexCoord).rgb;\n"
+            " vec3 encoded = vec3(EncodeSrgbChannel(displayLinear.r), "
+            "EncodeSrgbChannel(displayLinear.g), EncodeSrgbChannel(displayLinear.b));\n"
+            " FragColor = vec4(encoded, 1.0); }\n"
+        ),
+        VIEWER_COMMAND: "glDisable(GL_FRAMEBUFFER_SRGB); GL_RGBA32F",
     }
     if srgb_transfer_authority_errors(valid):
         raise RuntimeError("sRGB transfer policy rejected the single host authority")
@@ -649,6 +730,23 @@ def verify_srgb_transfer_authority_policy() -> None:
     )
     if not srgb_transfer_authority_errors(direct_spectral_encoding):
         raise RuntimeError("sRGB policy accepted direct encoding of absolute spectral radiance")
+
+    double_tonemap = dict(valid)
+    double_tonemap[SRGB_TRANSFER_VIEWER_MIRROR] += (
+        "\ncolor = color / (color + vec3(1.0));\n"
+    )
+    if not srgb_transfer_authority_errors(double_tonemap):
+        raise RuntimeError("sRGB policy accepted a secondary viewer tone map")
+
+    double_encode = dict(valid)
+    double_encode[VIEWER_COMMAND] += "\nglEnable(GL_FRAMEBUFFER_SRGB);\n"
+    if not srgb_transfer_authority_errors(double_encode):
+        raise RuntimeError("sRGB policy accepted double viewer transfer encoding")
+
+    if set(LIVE_VIEWER_SHADERS) != {
+            SRGB_TRANSFER_VIEWER_MIRROR,
+            SOURCE_ROOT / "app" / "viewer" / "shaders" / "RDSD003A.vert"}:
+        raise RuntimeError("live viewer shader inventory policy is internally inconsistent")
 
 
 def xyz_srgb_ratio(numerator: str, denominator: str) -> re.Pattern[str]:
@@ -1255,13 +1353,21 @@ def verify() -> list[str]:
     governed_sources = {
         path: path.read_text(encoding="utf-8")
         for path in SOURCE_ROOT.rglob("*")
-        if path.suffix in {".h", ".cpp", ".slang"}
+        if path.suffix in {".h", ".cpp", ".slang", ".frag", ".vert"}
     }
     errors.extend(srgb_transfer_authority_errors(governed_sources))
     errors.extend(xyz_srgb_authority_errors(governed_sources))
     errors.extend(cie1931_observer_authority_errors(governed_sources))
     errors.extend(aces_contract_errors(governed_sources))
     errors.extend(blackbody_laws_authority_errors(governed_sources))
+    shader_root = SOURCE_ROOT / "app" / "viewer" / "shaders"
+    actual_viewer_shaders = {
+        path for path in shader_root.iterdir() if path.suffix in {".frag", ".vert"}
+    }
+    if actual_viewer_shaders != LIVE_VIEWER_SHADERS:
+        errors.append(
+            "live viewer shader inventory differs from the exact RDSD003A transfer pair"
+        )
     preflight_path = ROOT / "scripts" / "attestation_preflight.py"
     reuse_path = ROOT / "scripts" / "reuse_qualification_evidence.py"
     if not preflight_path.is_file():

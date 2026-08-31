@@ -38,8 +38,6 @@ QUALIFICATION_PRODUCT_ARTIFACTS = {
     "alignment_receipt", "operating_model", "sirius", "starfield",
     "trace_fp32comp_spv", "trace_fp64_spv", "trace_spv",
     "viewer_rdsd003a_fragment", "viewer_rdsd003a_vertex",
-    "viewer_rdsd004a_fragment", "viewer_rdsd004a_vertex",
-    "viewer_rdsd005a_fragment", "viewer_rdsd005a_vertex",
 }
 QUALIFICATION_PRODUCT_EVIDENCE = {
     "operating_model": "qualification-product-operating_model",
@@ -49,10 +47,6 @@ QUALIFICATION_PRODUCT_EVIDENCE = {
     "trace_spv": "qualification-product-trace_spv",
     "viewer_rdsd003a_fragment": "qualification-product-viewer_rdsd003a_fragment",
     "viewer_rdsd003a_vertex": "qualification-product-viewer_rdsd003a_vertex",
-    "viewer_rdsd004a_fragment": "qualification-product-viewer_rdsd004a_fragment",
-    "viewer_rdsd004a_vertex": "qualification-product-viewer_rdsd004a_vertex",
-    "viewer_rdsd005a_fragment": "qualification-product-viewer_rdsd005a_fragment",
-    "viewer_rdsd005a_vertex": "qualification-product-viewer_rdsd005a_vertex",
 }
 QUALIFICATION_TEST_EVIDENCE = {
     "sirius_app_tests": "native-build-tested-sirius_app_tests",
@@ -70,10 +64,6 @@ QUALIFICATION_RUNTIME_RESOURCE_PATHS = {
     "trace_spv": Path("kernels/trace.spv"),
     "viewer_rdsd003a_fragment": Path("shaders/RDSD003A.frag"),
     "viewer_rdsd003a_vertex": Path("shaders/RDSD003A.vert"),
-    "viewer_rdsd004a_fragment": Path("shaders/RDSD004A.frag"),
-    "viewer_rdsd004a_vertex": Path("shaders/RDSD004A.vert"),
-    "viewer_rdsd005a_fragment": Path("shaders/RDSD005A.frag"),
-    "viewer_rdsd005a_vertex": Path("shaders/RDSD005A.vert"),
 }
 
 

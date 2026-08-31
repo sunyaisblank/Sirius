@@ -356,6 +356,11 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
         return 1;
     }
 
+    // The uploaded fp32 texture is display-linear. RDSD003A.frag applies the
+    // one live IEC sRGB encode, so a capable default framebuffer must not apply
+    // a second hardware encode.
+    glDisable(GL_FRAMEBUFFER_SRGB);
+
     const GLubyte* gl_version = glGetString(GL_VERSION);
     if (gl_version == nullptr) {
         cli::Error("OpenGL context did not report a version string");
@@ -509,6 +514,8 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
             std::lock_guard<std::mutex> lock(display_frame.mutex);
             if (display_frame.needs_upload && !display_frame.pixels.empty()) {
                 glBindTexture(GL_TEXTURE_2D, texture);
+                // RenderSession publishes display-linear RGBA. Preserve those
+                // values in a float texture until the fragment transfer encode.
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, display_frame.width,
                              display_frame.height, 0, GL_RGBA, GL_FLOAT,
                              display_frame.pixels.data());

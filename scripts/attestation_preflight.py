@@ -38,10 +38,6 @@ QUALIFICATION_RESOURCES = (
     "model/operating_model.json",
     "shaders/RDSD003A.frag",
     "shaders/RDSD003A.vert",
-    "shaders/RDSD004A.frag",
-    "shaders/RDSD004A.vert",
-    "shaders/RDSD005A.frag",
-    "shaders/RDSD005A.vert",
 )
 READINESS_RESOURCES = (
     "assets/Starfield.png",

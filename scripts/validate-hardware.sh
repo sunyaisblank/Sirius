@@ -111,10 +111,6 @@ QUALIFICATION_PRODUCTS=(
     "trace_spv=kernels/trace.spv"
     "viewer_rdsd003a_fragment=shaders/RDSD003A.frag"
     "viewer_rdsd003a_vertex=shaders/RDSD003A.vert"
-    "viewer_rdsd004a_fragment=shaders/RDSD004A.frag"
-    "viewer_rdsd004a_vertex=shaders/RDSD004A.vert"
-    "viewer_rdsd005a_fragment=shaders/RDSD005A.frag"
-    "viewer_rdsd005a_vertex=shaders/RDSD005A.vert"
 )
 for product in "${QUALIFICATION_PRODUCTS[@]}"; do
     logical_name="${product%%=*}"
@@ -297,10 +293,6 @@ names.extend([
     "qualification-product-trace_spv",
     "qualification-product-viewer_rdsd003a_fragment",
     "qualification-product-viewer_rdsd003a_vertex",
-    "qualification-product-viewer_rdsd004a_fragment",
-    "qualification-product-viewer_rdsd004a_vertex",
-    "qualification-product-viewer_rdsd005a_fragment",
-    "qualification-product-viewer_rdsd005a_vertex",
 ])
 inventory = json.loads(pathlib.Path(device_path).read_text())
 devices = inventory["backends"]["vulkan"]["devices"]

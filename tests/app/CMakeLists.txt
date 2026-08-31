@@ -1,6 +1,6 @@
 # App suite: non-rendering CLI argument parsing, configuration
-# loading/validation, JSON schema compatibility, session projection, input
-# state, and platform paths. Render-session, dispatch, and frame-publication
+# loading/validation, JSON schema compatibility, session projection, display
+# transfer contracts, input state, and platform paths. Render-session, dispatch, and frame-publication
 # cases are owned by sirius_render_tests; shared source governance rejects their
 # return.
 # Links sirius_app_lib so the CLI/config objects are exercised directly (July
@@ -16,6 +16,7 @@ add_executable(sirius_app_tests
     platform_paths_test.cpp
     config_loading_test.cpp
     command_router_test.cpp
+    viewer_display_contract_test.cpp
 )
 
 target_link_libraries(sirius_app_tests PRIVATE sirius_app_lib GTest::gtest_main)
