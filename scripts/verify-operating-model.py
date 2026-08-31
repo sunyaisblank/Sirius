@@ -185,7 +185,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:SrgbTransferAuthority.CurveMatchesIndependentIecOracleAcrossBothBranches",
         "gtest:SrgbTransferAuthority.EightBitQuantisationClipsAndDeclinesNonfiniteInputs",
         "gtest:SrgbTransferAuthority.SpectralFacadeDelegatesWithoutChangingClippingSemantics",
-        "gtest:XyzSrgbAuthority.HostSpectralFacadesDelegateToTheExactTransform",
+        "gtest:XyzSrgbAuthority.BlackbodyColourFacadeDelegatesToTheExactTransform",
         "gtest:XyzSrgbAuthority.MatchesIndependentPrimaryWhiteDerivation",
         "gtest:XyzSrgbAuthority.PreservesExtendedGamutAndPropagatesNonfiniteInputs",
         "gtest:KernelParity.XyzD65ToLinearSrgbMatchesHostAuthority",
@@ -256,8 +256,8 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "555876a9c3be53282402ff6f7a0441905cf5ed6543f2015d087c9ebbba040e13",
-    "required_dimensions": "20e54b2ff2e125bcd162a7b2b87b859411e2488f0c113b73e5714f69a0c2a747",
+    "acceptance_criteria": "5ccd2939f7e812d87a22f652cf46385a3ef0a98495fc56804716900b650e0fe3",
+    "required_dimensions": "6411e0a306f5ada8c0085c7872e480dce6e36c4d08b59cd314d4e23c163d8bab",
     "capability_contracts": "9bab37294cff0e24143efafcf7f83dfc00e2b22c08697086717e8816b475cd87",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
