@@ -3,7 +3,7 @@
 
 #include "sirius/backend/cpu/geodesic_tracer.h"
 
-#include "sirius/core/disk/novikov_thorne_disk.h"  // AccretionDiskD::ComputeIsco (ISCO authority).
+#include "sirius/core/disk/novikov_thorne_disk.h"
 #include "sirius/core/observer_frame.h"
 #include "sirius/core/spectral/colour_modes.h"
 #include "sirius/core/trace_boundary.h"
@@ -780,16 +780,10 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
 // Keplerian orbital velocity.
 // =============================================================================
 float GeodesicTracer::ComputeOrbitalVelocity(float r) {
-    double M = cached_m_;
-    double a = cached_a_ * M;
-
-    // Prograde Kerr angular velocity Omega = sqrt(M) / (r^(3/2) + a sqrt(M)).
-    double r32 = std::pow(static_cast<double>(r), 1.5);
-    double sqrtM = std::sqrt(M);
-
-    double Omega = sqrtM / (r32 + a * sqrtM);
-
-    return static_cast<float>(Omega);
+    const auto angular_velocity = relativity::TryKerrCircularOrbitAngularVelocity(
+        cached_m_, cached_a_ * cached_m_, static_cast<double>(r));
+    SIRIUS_ASSERT(angular_velocity.has_value());
+    return static_cast<float>(*angular_velocity);
 }
 
 // =============================================================================

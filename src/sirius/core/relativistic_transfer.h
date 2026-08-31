@@ -19,6 +19,7 @@
 // ergosphere.
 
 #include "sirius/base/contracts.h"
+#include "sirius/core/kerr_orbits.h"
 #include "sirius/core/tensor.h"
 
 #include <algorithm>
@@ -118,10 +119,10 @@ struct GreyTransferState {
     const double g_tt = -(1.0 - 2.0 * mass / radius);
     const double g_t_phi = -2.0 * mass * spin / radius;
     const double g_phi_phi = radius * radius + spin * spin + 2.0 * mass * spin * spin / radius;
-    const double sqrt_mass = std::sqrt(mass);
-    const double emitter_omega = sqrt_mass / (std::pow(radius, 1.5) + spin * sqrt_mass);
+    const auto emitter_omega = TryKerrCircularOrbitAngularVelocity(mass, spin, radius);
+    if (!emitter_omega) return std::nullopt;
     const double zamo_omega = -g_t_phi / g_phi_phi;
-    const auto emitter = EquatorialFrame(g_tt, g_t_phi, g_phi_phi, emitter_omega);
+    const auto emitter = EquatorialFrame(g_tt, g_t_phi, g_phi_phi, *emitter_omega);
     const auto zamo = EquatorialFrame(g_tt, g_t_phi, g_phi_phi, zamo_omega);
     if (!emitter || !zamo) return std::nullopt;
 

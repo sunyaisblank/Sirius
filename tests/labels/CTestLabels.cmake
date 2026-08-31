@@ -540,6 +540,12 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    KerrOrbitAuthority.EveryCpuConsumerSharesSignedIscoAndCircularEmitterLaw
+    KerrOrbitAuthority.UnrepresentedInputsDeclineInsteadOfChangingTheOrbit
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     KerrTests.MetricMatchesIndependentCartesianKerrSchildForm
     KerrTests.ComputedRadiusSatisfiesTheDefiningOblateQuartic
     KerrTests.CartesianMetricIsScaleCovariantBelowTheFormerSpinFloor
