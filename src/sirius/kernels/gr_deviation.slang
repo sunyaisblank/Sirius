@@ -13,7 +13,8 @@
 // (gr_integrator IntegrateGeodesicRK4Cart), so k, xi, and R share one chart.
 // The Riemann formula is retained, while its connection derivative uses a
 // precision-matched five-point stencil pinned against an independent analytic
-// Schwarzschild tensor by the non-image Vulkan parity probe.
+// Schwarzschild tensor and closed-form radial congruence by non-image Vulkan
+// parity probes.
 module gr_deviation;
 
 import gr_types;
@@ -159,6 +160,65 @@ public void GeodesicDeviationRhs(
     }
     dXi = Real4(d_xi[0], d_xi[1], d_xi[2], d_xi[3]);
     dV = Real4(d_v[0], d_v[1], d_v[2], d_v[3]);
+}
+
+// Advance both columns of a ray bundle across one accepted central-ray
+// segment. Connection and curvature are evaluated at the start, cubic-Hermite
+// midpoint, and end so this is the single device authority used by the trace
+// kernel and the non-image analytic congruence probe.
+public void AdvanceJacobiPairAcceptedSegment(
+    Vec4Cart startPosition, Vec4Cart startTangent,
+    Vec4Cart endPosition, Vec4Cart endTangent, Real dLambda,
+    float M, float a, float Q, float Lambda,
+    inout Real4 xiA, inout Real4 VA, inout Real4 xiB, inout Real4 VB) {
+    Real R[4][4][4][4];
+    Real Gamma[4][4][4];
+    Real4 k1XiA, k1VA, k2XiA, k2VA, k3XiA, k3VA, k4XiA, k4VA;
+    Real4 k1XiB, k1VB, k2XiB, k2VB, k3XiB, k3VB, k4XiB, k4VB;
+
+    GetRiemannTensorCart(startPosition, M, a, Q, Lambda, R);
+    GetKerrSchildFamilyChristoffel(startPosition, M, a, Q, Lambda, Gamma);
+    GeodesicDeviationRhs(Gamma, R, startTangent, xiA, VA, k1XiA, k1VA);
+    GeodesicDeviationRhs(Gamma, R, startTangent, xiB, VB, k1XiB, k1VB);
+
+    Vec4Cart midpointPosition = AddVec4Cart(
+        ScaleVec4Cart(AddVec4Cart(startPosition, endPosition), Real(0.5)),
+        ScaleVec4Cart(
+            AddVec4Cart(startTangent, ScaleVec4Cart(endTangent, Real(-1.0))),
+            dLambda / Real(8.0)));
+    Vec4Cart midpointTangent = AddVec4Cart(
+        ScaleVec4Cart(
+            AddVec4Cart(endPosition, ScaleVec4Cart(startPosition, Real(-1.0))),
+            Real(1.5) / dLambda),
+        ScaleVec4Cart(AddVec4Cart(startTangent, endTangent), Real(-0.25)));
+    GetRiemannTensorCart(midpointPosition, M, a, Q, Lambda, R);
+    GetKerrSchildFamilyChristoffel(midpointPosition, M, a, Q, Lambda, Gamma);
+
+    GeodesicDeviationRhs(Gamma, R, midpointTangent,
+                         xiA + k1XiA * (Real(0.5) * dLambda),
+                         VA + k1VA * (Real(0.5) * dLambda), k2XiA, k2VA);
+    GeodesicDeviationRhs(Gamma, R, midpointTangent,
+                         xiA + k2XiA * (Real(0.5) * dLambda),
+                         VA + k2VA * (Real(0.5) * dLambda), k3XiA, k3VA);
+    GeodesicDeviationRhs(Gamma, R, midpointTangent,
+                         xiB + k1XiB * (Real(0.5) * dLambda),
+                         VB + k1VB * (Real(0.5) * dLambda), k2XiB, k2VB);
+    GeodesicDeviationRhs(Gamma, R, midpointTangent,
+                         xiB + k2XiB * (Real(0.5) * dLambda),
+                         VB + k2VB * (Real(0.5) * dLambda), k3XiB, k3VB);
+
+    GetRiemannTensorCart(endPosition, M, a, Q, Lambda, R);
+    GetKerrSchildFamilyChristoffel(endPosition, M, a, Q, Lambda, Gamma);
+    GeodesicDeviationRhs(Gamma, R, endTangent,
+                         xiA + k3XiA * dLambda, VA + k3VA * dLambda, k4XiA, k4VA);
+    GeodesicDeviationRhs(Gamma, R, endTangent,
+                         xiB + k3XiB * dLambda, VB + k3VB * dLambda, k4XiB, k4VB);
+
+    const Real sixthStep = dLambda / Real(6.0);
+    xiA += (k1XiA + k2XiA * Real(2.0) + k3XiA * Real(2.0) + k4XiA) * sixthStep;
+    VA += (k1VA + k2VA * Real(2.0) + k3VA * Real(2.0) + k4VA) * sixthStep;
+    xiB += (k1XiB + k2XiB * Real(2.0) + k3XiB * Real(2.0) + k4XiB) * sixthStep;
+    VB += (k1VB + k2VB * Real(2.0) + k3VB * Real(2.0) + k4VB) * sixthStep;
 }
 
 // Full-Riemann deviation acceleration D^2 xi^mu/dl^2 (DNGR eq A.19).
