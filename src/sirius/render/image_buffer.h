@@ -6,6 +6,8 @@
 // owning writer (PNG applies sRGB, EXR stays linear), never here; ToSrgb8 exists
 // for callers that ask for an 8-bit view explicitly.
 
+#include "sirius/core/srgb_transfer.h"
+
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
@@ -65,22 +67,15 @@ class ImageBuffer {
 
     // Convert to 8-bit sRGB (gamma corrected); the display transfer applied once.
     std::vector<std::uint8_t> ToSrgb8() const {
-        if (!HasValidShape()) return {};
+        if (!HasValidShape() || !std::all_of(pixels.begin(), pixels.end(),
+                                             [](float value) { return std::isfinite(value); })) {
+            return {};
+        }
         std::vector<std::uint8_t> result(PixelCount() * 3);
 
         for (std::size_t i = 0; i < PixelCount(); ++i) {
             for (int c = 0; c < 3; ++c) {
-                float linear = pixels[i * 3 + c];
-                float clamped = std::clamp(linear, 0.0f, 1.0f);
-
-                float srgb;
-                if (clamped <= 0.0031308f) {
-                    srgb = 12.92f * clamped;
-                } else {
-                    srgb = 1.055f * std::pow(clamped, 1.0f / 2.4f) - 0.055f;
-                }
-
-                result[i * 3 + c] = static_cast<std::uint8_t>(srgb * 255.0f + 0.5f);
+                result[i * 3 + c] = *core::colour::TryEncodeSrgb8(pixels[i * 3 + c]);
             }
         }
 

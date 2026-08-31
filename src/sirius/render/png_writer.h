@@ -6,10 +6,9 @@
 // applies it exactly once (linear radiance in, sRGB 8-bit out). Alpha is passed
 // through linearly (it carries no gamma).
 
+#include "sirius/core/srgb_transfer.h"
 #include "sirius/render/image_buffer.h"
 
-#include <algorithm>
-#include <cmath>
 #include <cstdint>
 #include <string>
 
@@ -32,16 +31,7 @@ class PNGWriter {
 
   private:
     // Linear channel to 8-bit sRGB.
-    static std::uint8_t ToSrgb8(float linear) {
-        float clamped = std::clamp(linear, 0.0f, 1.0f);
-        float srgb;
-        if (clamped <= 0.0031308f) {
-            srgb = 12.92f * clamped;
-        } else {
-            srgb = 1.055f * std::pow(clamped, 1.0f / 2.4f) - 0.055f;
-        }
-        return static_cast<std::uint8_t>(std::clamp(srgb * 255.0f + 0.5f, 0.0f, 255.0f));
-    }
+    static std::uint8_t ToSrgb8(float linear) { return *core::colour::TryEncodeSrgb8(linear); }
 };
 
 }  // namespace sirius::render

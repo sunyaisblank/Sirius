@@ -6,6 +6,7 @@
 // Reference: James et al. (2015), "DNGR", Section 3.4.
 
 #include "sirius/core/constants.h"
+#include "sirius/core/srgb_transfer.h"
 
 #include <algorithm>
 #include <cmath>
@@ -206,15 +207,10 @@ struct SpectralRadiance {
         double g_lin = -0.9692660 * xyz.X + 1.8760108 * xyz.Y + 0.0415560 * xyz.Z;
         double b_lin = 0.0556434 * xyz.X - 0.2040259 * xyz.Y + 1.0572252 * xyz.Z;
 
-        auto gamma = [](double u) {
-            if (u <= 0.0031308) return 12.92 * u;
-            return 1.055 * std::pow(u, 1.0 / 2.4) - 0.055;
-        };
-
         Rgb rgb;
-        rgb.r = std::clamp(gamma(r_lin), 0.0, 1.0);
-        rgb.g = std::clamp(gamma(g_lin), 0.0, 1.0);
-        rgb.b = std::clamp(gamma(b_lin), 0.0, 1.0);
+        rgb.r = colour::EncodeClippedSrgbChannel(r_lin);
+        rgb.g = colour::EncodeClippedSrgbChannel(g_lin);
+        rgb.b = colour::EncodeClippedSrgbChannel(b_lin);
 
         return rgb;
     }

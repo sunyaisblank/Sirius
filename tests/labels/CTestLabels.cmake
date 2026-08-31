@@ -1007,6 +1007,13 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    SrgbTransferAuthority.CurveMatchesIndependentIecOracleAcrossBothBranches
+    SrgbTransferAuthority.EightBitQuantisationClipsAndDeclinesNonfiniteInputs
+    SrgbTransferAuthority.SpectralFacadeDelegatesWithoutChangingClippingSemantics
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     StarEntryTests.ComputeColorProducesValidRGB
     StarEntryTests.ComputeColorUsesTheIntegratedBlackbodyAuthority
     StarEntryTests.HotStarIsBluer

@@ -7,6 +7,7 @@
 // tonemap, or grade; those are display concerns owned by the PNG/PPM writers.
 // This is the transfer-encode single authority the specification preserves.
 
+#include "sirius/core/srgb_transfer.h"
 #include "sirius/render/image_buffer.h"
 
 #include <algorithm>
@@ -160,12 +161,7 @@ class EXRWriter {
     }
 
   private:
-    static std::uint8_t EncodeSrgb8(float linear) {
-        const float clamped = std::clamp(linear, 0.0f, 1.0f);
-        const float srgb = clamped <= 0.0031308f ? 12.92f * clamped
-                                                 : 1.055f * std::pow(clamped, 1.0f / 2.4f) - 0.055f;
-        return static_cast<std::uint8_t>(std::clamp(srgb * 255.0f + 0.5f, 0.0f, 255.0f));
-    }
+    static std::uint8_t EncodeSrgb8(float linear) { return *core::colour::TryEncodeSrgb8(linear); }
 };
 
 }  // namespace sirius::render

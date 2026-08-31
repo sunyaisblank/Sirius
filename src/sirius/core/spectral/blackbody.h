@@ -7,6 +7,7 @@
 // Reference: Planck (1901); CIE 1931 observer; sRGB IEC 61966-2-1:1999.
 
 #include "sirius/core/constants.h"
+#include "sirius/core/srgb_transfer.h"
 
 #include <algorithm>
 #include <cmath>
@@ -116,18 +117,13 @@ inline Rgb XyzToLinearRgb(const Xyz& xyz) {
 }
 
 // sRGB gamma correction of a single linear channel.
-inline float SrgbGamma(float linear) {
-    if (linear <= 0.0031308f) {
-        return 12.92f * linear;
-    }
-    return 1.055f * std::pow(linear, 1.0f / 2.4f) - 0.055f;
-}
+inline float SrgbGamma(float linear) { return colour::EncodeSrgbChannel(linear); }
 
 // Linear RGB to gamma-corrected sRGB.
 inline Rgb LinearToSrgb(const Rgb& linear) {
-    return Rgb(SrgbGamma(std::clamp(linear.r, 0.0f, 1.0f)),
-               SrgbGamma(std::clamp(linear.g, 0.0f, 1.0f)),
-               SrgbGamma(std::clamp(linear.b, 0.0f, 1.0f)));
+    return Rgb(colour::EncodeClippedSrgbChannel(linear.r),
+               colour::EncodeClippedSrgbChannel(linear.g),
+               colour::EncodeClippedSrgbChannel(linear.b));
 }
 
 // Blackbody temperature T (K) to normalised, display-gamut linear RGB
