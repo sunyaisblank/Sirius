@@ -52,7 +52,12 @@ float CieGaussian(float wavelengthNm, float centre, float leftWidth,
     return amplitude * exp(-0.5f * offset * offset);
 }
 
-float3 CieXyz(float wavelengthNm) {
+// Device mirror of core::colour::Cie1931TwoDegreeFit. This is an analytic
+// approximation to the CIE 1931 2-degree observer, not the CIE tabulation.
+public float3 Cie1931TwoDegreeFit(float wavelengthNm) {
+    if (!isfinite(wavelengthNm) || wavelengthNm < 380.0f || wavelengthNm > 780.0f) {
+        return float3(0.0f);
+    }
     float X = CieGaussian(wavelengthNm, 442.0f, 0.0624f, 0.0374f, 0.362f) +
               CieGaussian(wavelengthNm, 599.8f, 0.0264f, 0.0323f, 1.056f) -
               CieGaussian(wavelengthNm, 501.1f, 0.0490f, 0.0382f, 0.065f);
@@ -91,7 +96,7 @@ public float3 BlackbodyColor(float T) {
         float exponent = kPlanckC2NmK / (wavelengthNm * T);
         float relativeRadiance =
             1.0f / (pow(wavelengthNm, 5.0f) * (exp(exponent) - 1.0f));
-        xyz += CieXyz(wavelengthNm) * relativeRadiance;
+        xyz += Cie1931TwoDegreeFit(wavelengthNm) * relativeRadiance;
     }
 
     float3 rgb = XyzD65ToLinearSrgb(xyz);

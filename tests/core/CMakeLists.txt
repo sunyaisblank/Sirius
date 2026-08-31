@@ -8,6 +8,7 @@ add_executable(sirius_core_tests
     render_pipeline_integration_test.cpp
     blackbody_test.cpp
     camera_test.cpp
+    cie1931_observer_authority_test.cpp
     coordinates_test.cpp
     geodesic_conservation_test.cpp
     geodesic_determinism_test.cpp

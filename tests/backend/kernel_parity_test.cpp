@@ -17,6 +17,7 @@
 
 #include "sirius/backend/device.h"
 #include "sirius/core/celestial_tangent_basis.h"
+#include "sirius/core/cie1931_observer.h"
 #include "sirius/core/coordinates.h"
 #include "sirius/core/disk/novikov_thorne_disk.h"
 #include "sirius/core/disk/volumetric_disk.h"
@@ -70,6 +71,7 @@ constexpr std::uint32_t kOpNullProjection = 10;
 constexpr std::uint32_t kOpCelestialTangentBasis = 11;
 constexpr std::uint32_t kOpJacobiRadialCongruence = 12;
 constexpr std::uint32_t kOpXyzD65ToLinearSrgb = 13;
+constexpr std::uint32_t kOpCie1931TwoDegreeFit = 14;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -765,6 +767,29 @@ TEST(KernelParity, XyzD65ToLinearSrgbMatchesHostAuthority) {
         for (std::size_t channel = 0; channel < reference.size(); ++channel) {
             EXPECT_TRUE(Close(results[index * kResultStride + channel], reference[channel], 3.0e-6f,
                               2.0e-7f, "XYZ D65 to linear sRGB"));
+        }
+    }
+}
+
+TEST(KernelParity, Cie1931TwoDegreeFitMatchesHostAuthority) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    std::vector<Sample> samples;
+    for (const float wavelength :
+         {379.0f, 380.0f, 400.0f, 440.0f, 500.0f, 555.0f, 630.0f, 700.0f, 780.0f, 781.0f}) {
+        Sample sample;
+        sample.c0 = wavelength;
+        samples.push_back(sample);
+    }
+    const auto results = RunProbe(*f.device, f.kernel, kOpCie1931TwoDegreeFit, samples);
+    for (std::size_t index = 0; index < samples.size(); ++index) {
+        const auto expected = sirius::core::colour::Cie1931TwoDegreeFit(samples[index].c0);
+        const std::array reference = {expected.x_bar, expected.y_bar, expected.z_bar};
+        for (std::size_t channel = 0; channel < reference.size(); ++channel) {
+            EXPECT_TRUE(Close(results[index * kResultStride + channel],
+                              static_cast<float>(reference[channel]), 3.0e-6f, 2.0e-7f,
+                              "CIE 1931 2-degree observer fit"));
         }
     }
 }

@@ -174,6 +174,9 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:VulkanRenderSession.NonSquareMultisamplingCameraAndLensReachLiveKernel",
     },
     "P6": {
+        "gtest:Cie1931ObserverAuthority.FitIsBoundedAgainstOfficialCieDatasetAcrossRepresentedBand",
+        "gtest:Cie1931ObserverAuthority.HostSpectralFacadesEvaluateTheirActualWavelengths",
+        "gtest:Cie1931ObserverAuthority.UnrepresentedWavelengthsFailClosed",
         "gtest:EXRRoundTripTests.HDRGradientSurvivesWriteAndRead",
         "gtest:EXRRoundTripTests.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode",
         "gtest:PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding",
@@ -186,6 +189,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:XyzSrgbAuthority.MatchesIndependentPrimaryWhiteDerivation",
         "gtest:XyzSrgbAuthority.PreservesExtendedGamutAndPropagatesNonfiniteInputs",
         "gtest:KernelParity.XyzD65ToLinearSrgbMatchesHostAuthority",
+        "gtest:KernelParity.Cie1931TwoDegreeFitMatchesHostAuthority",
     },
     "E1": {
         "gtest:ConfigValidation.MetricMassAndObserverCoordinateRadiusAreIdentityAware",
@@ -252,8 +256,8 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "c3752010fbfb99bcf13ee9cefd61ce8bc412fa4f6e75172b7f94b0621a5e0f0e",
-    "required_dimensions": "0227e0061d3521201d9edc94980ee0c51d947bafe9126df2d739c9e1fa69eb47",
+    "acceptance_criteria": "555876a9c3be53282402ff6f7a0441905cf5ed6543f2015d087c9ebbba040e13",
+    "required_dimensions": "20e54b2ff2e125bcd162a7b2b87b859411e2488f0c113b73e5714f69a0c2a747",
     "capability_contracts": "9bab37294cff0e24143efafcf7f83dfc00e2b22c08697086717e8816b475cd87",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
