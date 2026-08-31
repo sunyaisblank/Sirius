@@ -144,9 +144,16 @@ ACES_FIT_CONSUMERS = {
     SOURCE_ROOT / "render" / "session" / "render_session.cpp": "TonemapType::AcesFit",
 }
 ACES_FIT_CLI = SOURCE_ROOT / "app" / "cli" / "render_command.cpp"
+SPECTRAL_RADIANCE_FACADE = SOURCE_ROOT / "core" / "spectral" / "spectral_radiance.h"
 ACES_FIT_COEFFICIENTS = ("2.51", "0.03", "2.43", "0.59", "0.14")
 LEGACY_ACES_TONEMAP_IDENTIFIER = re.compile(
     r"\bTonemapType::Aces\b|\btonemap::Aces\s*\("
+)
+FALSE_SPECTRAL_ACES_API = re.compile(r"\bstruct\s+Aces\b|\bToAces\s*\(")
+DETACHED_XYZ_AP0_MATRIX = re.compile(
+    r"1\.0498110175.{0,240}-0\.4959030231.{0,240}"
+    r"1\.3733130458.{0,240}0\.9912520182",
+    re.DOTALL,
 )
 BARE_ACES_CONFIG_LITERAL = re.compile(r'"ACES"')
 FULL_QUALIFICATION_JOBS = (
@@ -863,7 +870,7 @@ def aces_fit_sequence() -> re.Pattern[str]:
     return re.compile(r".{0,180}".join(literals), re.DOTALL)
 
 
-def aces_fit_authority_errors(documents: dict[Path, str]) -> list[str]:
+def aces_contract_errors(documents: dict[Path, str]) -> list[str]:
     errors: list[str] = []
     authority = documents.get(ACES_FIT_AUTHORITY)
     if authority is None:
@@ -910,6 +917,14 @@ def aces_fit_authority_errors(documents: dict[Path, str]) -> list[str]:
         code = CPP_NON_CODE.sub(" ", document)
         if LEGACY_ACES_TONEMAP_IDENTIFIER.search(code):
             errors.append(f"{relative(path)} retains the falsely named ACES tonemapper")
+        if FALSE_SPECTRAL_ACES_API.search(code):
+            errors.append(
+                f"{relative(path)} relabels absolute spectral tristimulus values as ACES"
+            )
+        if DETACHED_XYZ_AP0_MATRIX.search(code):
+            errors.append(
+                f"{relative(path)} retains an ungoverned XYZ-to-AP0 matrix"
+            )
         if path in bare_name_paths and BARE_ACES_CONFIG_LITERAL.search(document):
             errors.append(f"{relative(path)} accepts or defaults the unrepresented bare ACES name")
         if path != ACES_FIT_AUTHORITY and coefficient_pattern.search(code):
@@ -917,7 +932,7 @@ def aces_fit_authority_errors(documents: dict[Path, str]) -> list[str]:
     return errors
 
 
-def verify_aces_fit_authority_policy() -> None:
+def verify_aces_contract_policy() -> None:
     coefficients = " ".join(value + "f" for value in ACES_FIT_COEFFICIENTS)
     valid = {
         ACES_FIT_AUTHORITY: (
@@ -929,35 +944,48 @@ def verify_aces_fit_authority_policy() -> None:
         ),
         **{path: marker for path, marker in ACES_FIT_CONSUMERS.items()},
         ACES_FIT_CLI: "Tonemapper: ACESFit; not an ACES Output Transform",
+        SPECTRAL_RADIANCE_FACADE: "struct SpectralRadiance {};",
     }
-    if aces_fit_authority_errors(valid):
-        raise RuntimeError("ACES-fit policy rejected the explicit fitted-curve contract")
+    if aces_contract_errors(valid):
+        raise RuntimeError("ACES policy rejected the explicit represented/absent contracts")
 
     duplicated = dict(valid)
     consumer = next(iter(ACES_FIT_CONSUMERS))
     duplicated[consumer] += "\n" + coefficients
-    if not aces_fit_authority_errors(duplicated):
+    if not aces_contract_errors(duplicated):
         raise RuntimeError("ACES-fit policy accepted a production coefficient copy")
 
     detached = dict(valid)
     detached[consumer] = "independent_tonemap();"
-    if not aces_fit_authority_errors(detached):
+    if not aces_contract_errors(detached):
         raise RuntimeError("ACES-fit policy accepted a detached production consumer")
 
     legacy = dict(valid)
     legacy[ACES_FIT_AUTHORITY] += "\nTonemapType::Aces"
-    if not aces_fit_authority_errors(legacy):
+    if not aces_contract_errors(legacy):
         raise RuntimeError("ACES-fit policy accepted the falsely named internal selector")
 
     bare_alias = dict(valid)
     bare_alias[ACES_FIT_AUTHORITY] += '\nif (name == "ACES") return AcesFit;'
-    if not aces_fit_authority_errors(bare_alias):
+    if not aces_contract_errors(bare_alias):
         raise RuntimeError("ACES-fit policy accepted bare ACES as a represented config name")
 
     false_help = dict(valid)
     false_help[ACES_FIT_CLI] = "Tonemapper: ACES, Reinhard"
-    if not aces_fit_authority_errors(false_help):
+    if not aces_contract_errors(false_help):
         raise RuntimeError("ACES-fit policy accepted CLI advertising of an ACES transform")
+
+    false_spectral_api = dict(valid)
+    false_spectral_api[SPECTRAL_RADIANCE_FACADE] += "\nstruct Aces {}; Aces ToAces() const;"
+    if not aces_contract_errors(false_spectral_api):
+        raise RuntimeError("ACES policy accepted absolute spectral values labeled as ACES")
+
+    detached_ap0 = dict(valid)
+    detached_ap0[SPECTRAL_RADIANCE_FACADE] += (
+        "\n1.0498110175; -0.4959030231; 1.3733130458; 0.9912520182;"
+    )
+    if not aces_contract_errors(detached_ap0):
+        raise RuntimeError("ACES policy accepted the detached XYZ-to-AP0 matrix")
 
 
 def blackbody_laws_authority_errors(documents: dict[Path, str]) -> list[str]:
@@ -1167,7 +1195,7 @@ def verify() -> list[str]:
     verify_srgb_transfer_authority_policy()
     verify_xyz_srgb_authority_policy()
     verify_cie1931_observer_authority_policy()
-    verify_aces_fit_authority_policy()
+    verify_aces_contract_policy()
     verify_blackbody_laws_authority_policy()
     try:
         attribute_source = GIT_ATTRIBUTES.read_text(encoding="utf-8")
@@ -1205,7 +1233,7 @@ def verify() -> list[str]:
     errors.extend(srgb_transfer_authority_errors(governed_sources))
     errors.extend(xyz_srgb_authority_errors(governed_sources))
     errors.extend(cie1931_observer_authority_errors(governed_sources))
-    errors.extend(aces_fit_authority_errors(governed_sources))
+    errors.extend(aces_contract_errors(governed_sources))
     errors.extend(blackbody_laws_authority_errors(governed_sources))
     preflight_path = ROOT / "scripts" / "attestation_preflight.py"
     reuse_path = ROOT / "scripts" / "reuse_qualification_evidence.py"

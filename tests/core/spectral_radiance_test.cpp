@@ -111,17 +111,6 @@ TEST(SpectralRadianceTest, SRGBConversionRange) {
     EXPECT_LE(rgb.b, 1) << "sRGB blue should be <= 1";
 }
 
-// ACES output is positive for a natural (blackbody) source.
-TEST(SpectralRadianceTest, ACESConversion) {
-    SpectralRadiance bb = SpectralRadiance::Blackbody(5500);
-
-    auto aces = bb.ToAces();
-
-    EXPECT_GT(aces.r, 0) << "ACES red should be positive for blackbody";
-    EXPECT_GT(aces.g, 0) << "ACES green should be positive for blackbody";
-    EXPECT_GT(aces.b, 0) << "ACES blue should be positive for blackbody";
-}
-
 // Addition and scalar multiplication behave componentwise.
 TEST(SpectralRadianceTest, SpectralArithmetic) {
     SpectralRadiance a = SpectralRadiance::Zero();
