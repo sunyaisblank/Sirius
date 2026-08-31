@@ -101,6 +101,18 @@ XYZ_SRGB_LEGACY_COEFFICIENT = re.compile(
     r"1\.8760108|0\.0415560|0\.0556434|0\.2040259|1\.0572252)"
     r"(?:[fFlL])?(?![A-Za-z0-9_.])"
 )
+BLACKBODY_LAWS_AUTHORITY = SOURCE_ROOT / "core" / "spectral" / "blackbody_laws.h"
+BLACKBODY_LAWS_CONSUMERS = (
+    SOURCE_ROOT / "core" / "spectral" / "blackbody.h",
+    SOURCE_ROOT / "core" / "spectral" / "spectral_radiance.h",
+)
+PHYSICAL_CONSTANTS_AUTHORITY = SOURCE_ROOT / "core" / "constants.h"
+PLANCK_EXPM1 = re.compile(r"\bstd::expm1\s*\(")
+PLANCK_CONSTANT_IDENTIFIER = re.compile(r"\bk(?:Planck(?:C[12])?|Boltzmann)\b")
+WIEN_CONSTANT_LITERAL = re.compile(
+    r"(?<![A-Za-z0-9_.])2\.897771955e-3(?:[fFlL])?(?![A-Za-z0-9_.])",
+    re.IGNORECASE,
+)
 FULL_QUALIFICATION_JOBS = (
     "linux-gate",
     "linux-sanitizers",
@@ -682,6 +694,109 @@ def verify_xyz_srgb_authority_policy() -> None:
         raise RuntimeError("XYZ-to-sRGB policy accepted a detached host consumer")
 
 
+def blackbody_laws_authority_errors(documents: dict[Path, str]) -> list[str]:
+    errors: list[str] = []
+    authority = documents.get(BLACKBODY_LAWS_AUTHORITY)
+    if authority is None:
+        return ["the host blackbody-laws authority is missing"]
+
+    authority_code = CPP_NON_CODE.sub(" ", authority)
+    for marker in (
+        "TryPlanckSpectralRadiancePerMetre",
+        "TryWienPeakWavelength",
+        "TryStefanBoltzmannExitance",
+        "kPlanckC1",
+        "kPlanckC2",
+        "kWienB",
+        "kStefanBoltzmann",
+    ):
+        if marker not in authority_code:
+            errors.append(f"the host blackbody-laws authority omits {marker}")
+    if len(PLANCK_EXPM1.findall(authority_code)) != 1:
+        errors.append("the host blackbody-laws authority must own one Planck expm1")
+
+    required_include = '#include "sirius/core/spectral/blackbody_laws.h"'
+    for path in BLACKBODY_LAWS_CONSUMERS:
+        document = documents.get(path)
+        if document is None:
+            errors.append(f"blackbody-law consumer is missing: {relative(path)}")
+            continue
+        if (
+            required_include not in document
+            or "TryPlanckSpectralRadiancePerMetre"
+            not in CPP_NON_CODE.sub(" ", document)
+        ):
+            errors.append(
+                f"{relative(path)} does not delegate to the host Planck-law authority"
+            )
+
+    constants = documents.get(PHYSICAL_CONSTANTS_AUTHORITY)
+    if constants is None or len(
+        WIEN_CONSTANT_LITERAL.findall(CPP_NON_CODE.sub(" ", constants))
+    ) != 1:
+        errors.append("the physical-constants authority must own the Wien constant once")
+
+    for path, document in documents.items():
+        code = CPP_NON_CODE.sub(" ", document)
+        if path != BLACKBODY_LAWS_AUTHORITY and PLANCK_EXPM1.search(code):
+            errors.append(f"{relative(path)} reimplements the host Planck law")
+        if (
+            path not in {BLACKBODY_LAWS_AUTHORITY, PHYSICAL_CONSTANTS_AUTHORITY}
+            and PLANCK_CONSTANT_IDENTIFIER.search(code)
+        ):
+            errors.append(f"{relative(path)} consumes Planck constants outside their authority")
+        if path != PHYSICAL_CONSTANTS_AUTHORITY and WIEN_CONSTANT_LITERAL.search(code):
+            errors.append(f"{relative(path)} copies the Wien displacement constant")
+        if "StefanBoltzmannRadiance" in code:
+            errors.append(f"{relative(path)} retains the mislabeled Stefan-Boltzmann quantity")
+    return errors
+
+
+def verify_blackbody_laws_authority_policy() -> None:
+    valid = {
+        BLACKBODY_LAWS_AUTHORITY: (
+            "TryPlanckSpectralRadiancePerMetre std::expm1( kPlanckC1 kPlanckC2 "
+            "TryWienPeakWavelength kWienB TryStefanBoltzmannExitance kStefanBoltzmann"
+        ),
+        **{
+            path: (
+                '#include "sirius/core/spectral/blackbody_laws.h"\n'
+                "TryPlanckSpectralRadiancePerMetre"
+            )
+            for path in BLACKBODY_LAWS_CONSUMERS
+        },
+        PHYSICAL_CONSTANTS_AUTHORITY: "kWienB = 2.897771955e-3",
+    }
+    if blackbody_laws_authority_errors(valid):
+        raise RuntimeError("blackbody-laws policy rejected the single host authority")
+
+    consumer = BLACKBODY_LAWS_CONSUMERS[0]
+    duplicated = dict(valid)
+    duplicated[consumer] += "\nstd::expm1(exponent)"
+    if not blackbody_laws_authority_errors(duplicated):
+        raise RuntimeError("blackbody-laws policy accepted a production Planck duplicate")
+
+    reconstructed = dict(valid)
+    reconstructed[consumer] += "\nkPlanck * kSpeedOfLight / kBoltzmann"
+    if not blackbody_laws_authority_errors(reconstructed):
+        raise RuntimeError("blackbody-laws policy accepted reconstructed Planck constants")
+
+    detached = dict(valid)
+    detached[consumer] = "independent_planck_law();"
+    if not blackbody_laws_authority_errors(detached):
+        raise RuntimeError("blackbody-laws policy accepted a detached production consumer")
+
+    copied_wien = dict(valid)
+    copied_wien[consumer] += "\n2.897771955e-3"
+    if not blackbody_laws_authority_errors(copied_wien):
+        raise RuntimeError("blackbody-laws policy accepted a copied Wien constant")
+
+    mislabeled = dict(valid)
+    mislabeled[consumer] += "\nStefanBoltzmannRadiance(temperature)"
+    if not blackbody_laws_authority_errors(mislabeled):
+        raise RuntimeError("blackbody-laws policy accepted a mislabeled physical quantity")
+
+
 def attestation_preflight_errors(
     preflight: str,
     reuse: str,
@@ -785,6 +900,7 @@ def verify() -> list[str]:
     verify_authority_checkout_policy()
     verify_srgb_transfer_authority_policy()
     verify_xyz_srgb_authority_policy()
+    verify_blackbody_laws_authority_policy()
     try:
         attribute_source = GIT_ATTRIBUTES.read_text(encoding="utf-8")
         attributes = subprocess.run(
@@ -820,6 +936,7 @@ def verify() -> list[str]:
     }
     errors.extend(srgb_transfer_authority_errors(governed_sources))
     errors.extend(xyz_srgb_authority_errors(governed_sources))
+    errors.extend(blackbody_laws_authority_errors(governed_sources))
     preflight_path = ROOT / "scripts" / "attestation_preflight.py"
     reuse_path = ROOT / "scripts" / "reuse_qualification_evidence.py"
     if not preflight_path.is_file():

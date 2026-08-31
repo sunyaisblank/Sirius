@@ -6,6 +6,7 @@
 // Reference: James et al. (2015), "DNGR", Section 3.4.
 
 #include "sirius/core/constants.h"
+#include "sirius/core/spectral/blackbody_laws.h"
 #include "sirius/core/srgb_transfer.h"
 #include "sirius/core/xyz_srgb.h"
 
@@ -96,22 +97,15 @@ struct SpectralRadiance {
     // Planck blackbody spectrum B(lambda, T) = (2hc^2/lambda^5)/(exp(hc/lambda k T) - 1).
     static SpectralRadiance Blackbody(double temperature) {
         if (!std::isfinite(temperature) || temperature <= 0.0) return Zero();
-        constexpr double hc = constants::physical::kPlanck * constants::physical::kSpeedOfLight;
-        constexpr double hc2 = constants::physical::kPlanck * constants::physical::kSpeedOfLight *
-                               constants::physical::kSpeedOfLight;
 
         SpectralRadiance result;
 
         for (int i = 0; i < kNumWavelengthBins; ++i) {
-            double lambda = Wavelength(i) * 1e-9;  // nm to m.
-            double x = hc / (lambda * constants::physical::kBoltzmann * temperature);
-
-            if (x > 700) {
-                result.L[i] = 0;  // Avoid overflow.
-            } else {
-                double B = (2 * hc2 / std::pow(lambda, 5)) / std::expm1(x);
-                result.L[i] = B * 1e-9;  // Convert to per-nm.
-            }
+            const double wavelength_metres = Wavelength(i) * 1.0e-9;
+            const std::optional<double> radiance =
+                spectral::TryPlanckSpectralRadiancePerMetre(wavelength_metres, temperature);
+            if (!radiance.has_value()) return Zero();
+            result.L[i] = *radiance * 1.0e-9;  // Convert density from per-metre to per-nm.
         }
 
         return result;

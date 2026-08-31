@@ -3,7 +3,7 @@
 
 #include "sirius/core/spectral/spectral_radiance.h"
 
-#include "sirius/core/spectral/blackbody.h"
+#include "sirius/core/spectral/blackbody_laws.h"
 
 #include <gtest/gtest.h>
 
@@ -48,12 +48,14 @@ TEST(SpectralRadianceTest, BlackbodyWhitePoint) {
     EXPECT_LT(zRatio, 1.20) << "Z/Y ratio too high for white";
 }
 
-TEST(SpectralRadianceTest, BlackbodyBinsMatchPlanckAuthorityAndRejectInvalidTemperature) {
+TEST(SpectralRadianceTest, BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature) {
     const SpectralRadiance spectrum = SpectralRadiance::Blackbody(5778.0);
     for (int bin = 0; bin < kNumWavelengthBins; ++bin) {
         const double wavelength = SpectralRadiance::Wavelength(bin) * 1.0e-9;
-        const double expected_per_nanometre = spectral::PlanckRadiance(wavelength, 5778.0) * 1.0e-9;
-        EXPECT_LT(std::abs(spectrum.L[bin] - expected_per_nanometre) / spectrum.L[bin], 2.0e-14);
+        const auto expected_per_metre =
+            spectral::TryPlanckSpectralRadiancePerMetre(wavelength, 5778.0);
+        ASSERT_TRUE(expected_per_metre.has_value());
+        EXPECT_DOUBLE_EQ(spectrum.L[bin], *expected_per_metre * 1.0e-9);
     }
     for (const double invalid : {0.0, -1.0, std::numeric_limits<double>::infinity(),
                                  std::numeric_limits<double>::quiet_NaN()}) {

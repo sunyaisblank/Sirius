@@ -7,6 +7,7 @@
 // Reference: Planck (1901); CIE 1931 observer; sRGB IEC 61966-2-1:1999.
 
 #include "sirius/core/constants.h"
+#include "sirius/core/spectral/blackbody_laws.h"
 #include "sirius/core/srgb_transfer.h"
 #include "sirius/core/xyz_srgb.h"
 
@@ -15,10 +16,6 @@
 #include <limits>
 
 namespace sirius::core::spectral {
-
-// Planck radiation constants sourced from the constants authority.
-constexpr double kPlanckC1 = constants::physical::kPlanckC1;
-constexpr double kPlanckC2 = constants::physical::kPlanckC2;
 
 // Linear RGB colour, 0-1 range.
 struct Rgb {
@@ -53,29 +50,6 @@ struct Xyz {
         return *this;
     }
 };
-
-// Planck blackbody radiance B(lambda, T) = (2hc^2/lambda^5)/(exp(hc/lambda k T) - 1),
-// lambda in metres, T in Kelvin; returns W sr^-1 m^-3.
-inline double PlanckRadiance(double lambda, double T) {
-    if (T <= 0 || lambda <= 0) return 0.0;
-
-    double x = kPlanckC2 / (lambda * T);
-    if (x > 700) return 0.0;  // Prevent overflow.
-
-    return kPlanckC1 / (std::pow(lambda, 5) * std::expm1(x));
-}
-
-// Wien's displacement law: peak wavelength (m) for temperature T (K).
-inline double WienPeakWavelength(double T) {
-    constexpr double kWienConstant = 2.897771955e-3;  // m K.
-    return kWienConstant / T;
-}
-
-// Stefan-Boltzmann total radiance sigma T^4 (W/m^2).
-inline double StefanBoltzmannRadiance(double T) {
-    constexpr double kSigma = constants::physical::kStefanBoltzmann;
-    return kSigma * std::pow(T, 4);
-}
 
 // CIE 1931 X colour matching function (Gaussian fit), lambda in nm.
 inline double CieX(double lambda_nm) {
@@ -141,10 +115,11 @@ inline Rgb BlackbodyToRgb(double T) {
         double lambda = constants::spectral::kLambdaMin + (i + 0.5) * kDLambda;
         double lambda_nm = lambda * 1e9;
 
-        double radiance = PlanckRadiance(lambda, T);
+        const std::optional<double> radiance = TryPlanckSpectralRadiancePerMetre(lambda, T);
+        if (!radiance.has_value()) return Rgb(0, 0, 0);
         Xyz sample = WavelengthToXyz(lambda_nm);
 
-        xyz += sample * static_cast<float>(radiance * kDLambda);
+        xyz += sample * static_cast<float>(*radiance * kDLambda);
     }
 
     // Convert to RGB.

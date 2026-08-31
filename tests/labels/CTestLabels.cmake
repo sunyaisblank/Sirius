@@ -961,7 +961,7 @@ set_tests_properties(
 set_tests_properties(
     SpectralRadianceTest.BlackbodyPeakWavelength
     SpectralRadianceTest.BlackbodyWhitePoint
-    SpectralRadianceTest.BlackbodyBinsMatchPlanckAuthorityAndRejectInvalidTemperature
+    SpectralRadianceTest.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature
     SpectralRadianceTest.RedshiftRebinsILambdaWithGFiveAndGFourBolometricScaling
     SpectralRadianceTest.RedshiftWavelengthShift
     SpectralRadianceTest.SRGBConversionRange
@@ -993,9 +993,10 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    SpectralValidationTests.PlanckRadianceMatchesIndependentCodataEquation
-    SpectralValidationTests.WienAuthorityMatchesNumericalPlanckMaximum
-    SpectralValidationTests.StefanBoltzmannAuthorityMatchesIntegratedPlanckSpectrum
+    SpectralValidationTests.PlanckSpectralRadianceMatchesIndependentCodataEquation
+    SpectralValidationTests.WienPeakMatchesIndependentNumericalPlanckMaximum
+    SpectralValidationTests.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral
+    SpectralValidationTests.BlackbodyLawsRejectUnrepresentedDomains
     SpectralValidationTests.DopplerFactorMatchesIndependentLorentzFormula
     SpectralValidationTests.TotalRedshiftComposesGravitationalAndDopplerFactors
     SpectralValidationTests.StaticMetricRedshiftHasThePhysicalDirection
