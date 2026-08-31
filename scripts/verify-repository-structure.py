@@ -193,6 +193,11 @@ MORRIS_DEVICE_EVENT_AUTHORITY = SOURCE_ROOT / "kernels" / "gr_trace_event.slang"
 MORRIS_DEVICE_TOPOLOGY_AUTHORITY = SOURCE_ROOT / "kernels" / "gr_ellis_topology.slang"
 MORRIS_DEVICE_CONSUMER = KERR_TRANSFER_DEVICE_CONSUMER
 MORRIS_PARITY_PROBE = KERR_TRANSFER_PARITY_PROBE
+ALCUBIERRE_REGISTRY_AUTHORITY = SOURCE_ROOT / "core" / "metrics" / "registry.h"
+ALCUBIERRE_HOST_AUTHORITY = SOURCE_ROOT / "core" / "metrics" / "warp_drive_family.h"
+ALCUBIERRE_DEVICE_AUTHORITY = SOURCE_ROOT / "kernels" / "gr_metrics.slang"
+ALCUBIERRE_DEVICE_INTEGRATOR = SOURCE_ROOT / "kernels" / "gr_integrator.slang"
+ALCUBIERRE_PARITY_PROBE = KERR_TRANSFER_PARITY_PROBE
 FULL_QUALIFICATION_JOBS = (
     "linux-gate",
     "linux-sanitizers",
@@ -1624,6 +1629,124 @@ def verify_morris_thorne_authority_policy() -> None:
         raise RuntimeError("Morris-Thorne policy accepted an independent parity trajectory")
 
 
+def alcubierre_authority_errors(documents: dict[Path, str]) -> list[str]:
+    errors: list[str] = []
+    required = {
+        ALCUBIERRE_REGISTRY_AUTHORITY: (
+            "AlcubierreScaleIssue",
+            "AlcubierreParameterIssue",
+            "kMinAlcubierreSigmaRadius",
+            "kMaxAlcubierreSigmaRadius",
+        ),
+        ALCUBIERRE_HOST_AUTHORITY: (
+            "AlcubierreParameterIssue(params.vs, params.R, params.sigma)",
+            "AlcubierreParameterIssue(proposed.vs, proposed.R, proposed.sigma)",
+            "WarpDriveFamily::InverseMetric",
+            "g_inv(0, 0) = Dual<double>(-1.0)",
+            "g_inv(1, 1) = Dual<double>(1.0 - vsf * vsf)",
+        ),
+        ALCUBIERRE_DEVICE_AUTHORITY: (
+            "IsWarpDriveEventRepresented",
+            "sigmaR >= 0.1f && sigmaR <= 100.0f",
+            "GetWarpDriveMetric",
+            "GetWarpDriveChristoffel",
+            "g_inv[0][0] = -1.0f",
+            "g_inv[1][1] = 1.0f - vsf2",
+        ),
+        ALCUBIERRE_DEVICE_INTEGRATOR: (
+            "TryGeodesicAccelerationWarpCart",
+            "IsWarpDriveEventRepresented(state.x",
+            "IntegrateGeodesicRK4WarpCartDelta",
+            "return IsWarpDriveEventRepresented(candidate",
+        ),
+        ALCUBIERRE_PARITY_PROBE: (
+            "GetWarpDriveMetric",
+            "GetWarpDriveChristoffel",
+            "IntegrateGeodesicRK4WarpCart",
+        ),
+    }
+    code_by_path: dict[Path, str] = {}
+    for path, markers in required.items():
+        document = documents.get(path)
+        if document is None:
+            errors.append(f"Alcubierre authority participant is missing: {relative(path)}")
+            continue
+        code = CPP_NON_CODE.sub(" ", document)
+        code_by_path[path] = code
+        for marker in markers:
+            if marker not in code:
+                errors.append(f"{relative(path)} omits Alcubierre marker {marker}")
+
+    device = code_by_path.get(ALCUBIERRE_DEVICE_AUTHORITY, "")
+    if "det_tx" in device:
+        errors.append("the exact Alcubierre inverse was replaced by a repaired determinant")
+    if device.count("IsWarpDriveEventRepresented(") != 3:
+        errors.append("the device Alcubierre metric/connection do not share one domain predicate")
+    integrator = code_by_path.get(ALCUBIERRE_DEVICE_INTEGRATOR, "")
+    if integrator.count("TryGeodesicAccelerationWarpCart(") != 5:
+        errors.append("not every Alcubierre RK4 stage consumes the fallible acceleration")
+    return errors
+
+
+def verify_alcubierre_authority_policy() -> None:
+    valid = {
+        ALCUBIERRE_REGISTRY_AUTHORITY: (
+            "AlcubierreScaleIssue AlcubierreParameterIssue "
+            "kMinAlcubierreSigmaRadius kMaxAlcubierreSigmaRadius"
+        ),
+        ALCUBIERRE_HOST_AUTHORITY: (
+            "AlcubierreParameterIssue(params.vs, params.R, params.sigma) "
+            "AlcubierreParameterIssue(proposed.vs, proposed.R, proposed.sigma) "
+            "WarpDriveFamily::InverseMetric g_inv(0, 0) = Dual<double>(-1.0) "
+            "g_inv(1, 1) = Dual<double>(1.0 - vsf * vsf)"
+        ),
+        ALCUBIERRE_DEVICE_AUTHORITY: (
+            "IsWarpDriveEventRepresented( IsWarpDriveEventRepresented( "
+            "IsWarpDriveEventRepresented( sigmaR >= 0.1f && sigmaR <= 100.0f "
+            "GetWarpDriveMetric GetWarpDriveChristoffel g_inv[0][0] = -1.0f "
+            "g_inv[1][1] = 1.0f - vsf2"
+        ),
+        ALCUBIERRE_DEVICE_INTEGRATOR: (
+            "TryGeodesicAccelerationWarpCart( TryGeodesicAccelerationWarpCart( "
+            "TryGeodesicAccelerationWarpCart( TryGeodesicAccelerationWarpCart( "
+            "TryGeodesicAccelerationWarpCart( IsWarpDriveEventRepresented(state.x "
+            "IntegrateGeodesicRK4WarpCartDelta return IsWarpDriveEventRepresented(candidate"
+        ),
+        ALCUBIERRE_PARITY_PROBE: (
+            "GetWarpDriveMetric GetWarpDriveChristoffel IntegrateGeodesicRK4WarpCart"
+        ),
+    }
+    if alcubierre_authority_errors(valid):
+        raise RuntimeError("Alcubierre policy rejected the exact fail-closed seam")
+
+    host_bypass = dict(valid)
+    host_bypass[ALCUBIERRE_HOST_AUTHORITY] = host_bypass[ALCUBIERRE_HOST_AUTHORITY].replace(
+        "AlcubierreParameterIssue(params.vs, params.R, params.sigma)",
+        "std::isfinite(params.vs)",
+    )
+    if not alcubierre_authority_errors(host_bypass):
+        raise RuntimeError("Alcubierre policy accepted a direct host-domain bypass")
+
+    unresolved_device = dict(valid)
+    unresolved_device[ALCUBIERRE_DEVICE_AUTHORITY] = unresolved_device[
+        ALCUBIERRE_DEVICE_AUTHORITY
+    ].replace("sigmaR >= 0.1f && sigmaR <= 100.0f", "sigmaR > 0.0f")
+    if not alcubierre_authority_errors(unresolved_device):
+        raise RuntimeError("Alcubierre policy accepted an unresolved device wall")
+
+    repaired_inverse = dict(valid)
+    repaired_inverse[ALCUBIERRE_DEVICE_AUTHORITY] += " Real det_tx = max(abs(det), 1e-10f);"
+    if not alcubierre_authority_errors(repaired_inverse):
+        raise RuntimeError("Alcubierre policy accepted a repaired non-exact inverse")
+
+    infallible_stage = dict(valid)
+    infallible_stage[ALCUBIERRE_DEVICE_INTEGRATOR] = infallible_stage[
+        ALCUBIERRE_DEVICE_INTEGRATOR
+    ].replace("TryGeodesicAccelerationWarpCart(", "GeodesicAccelerationWarpCart(", 1)
+    if not alcubierre_authority_errors(infallible_stage):
+        raise RuntimeError("Alcubierre policy accepted an infallible RK stage")
+
+
 def attestation_preflight_errors(
     preflight: str,
     reuse: str,
@@ -1733,6 +1856,7 @@ def verify() -> list[str]:
     verify_kerr_zamo_transfer_authority_policy()
     verify_volumetric_transfer_authority_policy()
     verify_morris_thorne_authority_policy()
+    verify_alcubierre_authority_policy()
     try:
         attribute_source = GIT_ATTRIBUTES.read_text(encoding="utf-8")
         attributes = subprocess.run(
@@ -1774,6 +1898,7 @@ def verify() -> list[str]:
     errors.extend(kerr_zamo_transfer_authority_errors(governed_sources))
     errors.extend(volumetric_transfer_authority_errors(governed_sources))
     errors.extend(morris_thorne_authority_errors(governed_sources))
+    errors.extend(alcubierre_authority_errors(governed_sources))
     shader_root = SOURCE_ROOT / "app" / "viewer" / "shaders"
     actual_viewer_shaders = {
         path for path in shader_root.iterdir() if path.suffix in {".frag", ".vert"}

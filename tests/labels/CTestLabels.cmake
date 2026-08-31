@@ -26,6 +26,8 @@ set_tests_properties(
     AlcubierreMetricTests.ShiftVectorAtCentre
     AlcubierreMetricTests.GttAtCentre
     AlcubierreMetricTests.SpatialComponentsFlat
+    AlcubierreMetricTests.AnalyticInverseMatchesExactUnitDeterminantBlock
+    AlcubierreMetricTests.EulerianWarpWallEnergyMatchesEinsteinConstraint
     AlcubierreMetricTests.ShapeFunctionAtCentre
     AlcubierreMetricTests.ShapeFunctionFarField
     AlcubierreMetricTests.ShapeFunctionMonotoneDecrease
@@ -33,6 +35,7 @@ set_tests_properties(
     AlcubierreMetricTests.SubluminalConstruction
     AlcubierreMetricTests.SuperluminalConstruction
     AlcubierreMetricTests.SetParameterMatchesTheOperatorVelocityDomain
+    AlcubierreMetricTests.DirectMetricRejectsUnresolvedProfiles
     AlcubierreMetricTests.NoNaNAtBubbleWall
     AlcubierreMetricTests.NoNaNAtOrigin
     AlcubierreMetricTests.BubblePositionUpdate
@@ -404,6 +407,7 @@ set_tests_properties(
     KernelParity.WormholeAndWarpMetricMatchLegacy
     KernelParity.IsotropicEllisMetricAndConnectionMatchCoreOnBothSheets
     KernelParity.UnnormalisedOrNonEllisDeviceProfilesFailClosed
+    KernelParity.UnresolvedWarpProfilesFailClosedOnDevice
     KernelParity.SphericalCaptureEventFindsHiddenAndTangentContacts
     KernelParity.EllisTwoSheetTraceCrossesThroatAndMapsTheOppositeSky
     KernelParity.KerrSchildChristoffelMatchesLegacyToOnePartInMillion

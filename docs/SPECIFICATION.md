@@ -92,6 +92,23 @@ symmetric boundary condition. Distinct second-universe content remains
 unrepresented. The singular spherical areal chart and $\rho=0$ are never
 repaired by coordinate clamps.
 
+The represented Alcubierre capability is
+$ds^2=-dt^2+[dx-v_s f(r_s)dt]^2+dy^2+dz^2$, with the bubble centre following
+$x_s(t)=x_{s0}+v_st$ and the declared smooth tanh top-hat $f$. Its spatial
+slices are flat, its lapse is one, and its $t$--$x$ block has exact determinant
+$-1$ with a closed-form inverse. The registry, direct CPU metric, device
+metric/connection, and every device RK stage share the complete domain
+$|v_s|\le10$, $0<R,\sigma\le1000$, and $0.1\le\sigma R\le100$; malformed or
+unresolved profiles decline rather than receiving a repaired denominator or a
+zero connection. In geometrised units, the ADM Hamiltonian constraint fixes
+the Eulerian energy density to
+$T_{\mu\nu}n^\mu n^\nu=-v_s^2[(\partial_yf)^2+(\partial_zf)^2]/(32\pi)$.
+An independent fourth-order finite-difference derivative of the analytic
+connection reconstructs the Ricci and Einstein tensors and matches that law
+for scaled, subluminal, superluminal, and reversed-velocity walls. Thus the
+advertised warp geometry explicitly carries its required off-axis negative
+energy; no propulsion feasibility or matter-construction claim is inferred.
+
 ## 3. Parity criteria
 
 Each criterion is a testable postcondition. Build-gated parity evidence must pass

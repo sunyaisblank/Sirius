@@ -225,6 +225,7 @@ Each review pass asks:
 | Kerr ISCO and circular-emitter angular velocity were independently reimplemented by the metric, Page-Thorne disk, invariant transfer, and CPU tracer | equal formulas at one revision provided no structural guarantee that disk edges, redshift, polarisation, and emitter motion would remain the same physical orbit | Fixed: `core/kerr_orbits.h` is the sole CPU production authority for the exact signed-spin laws; all four consumers delegate, invalid and undefined domains decline, cross-consumer controls span mass scaling and both spin orientations, and the independent Boyer-Lindquist oracle plus Slang parity path remain separate judges |
 | External runbooks discovered a wrong host, software/ambiguous device, missing GUI/input route, or stale candidate only after starting expensive qualification | environmental mistakes could waste the very rendering/test resources needed for physical evidence, and an informal preflight could itself be mistaken for attestation | Fixed: one exact-candidate preflight permits only `info system`/`info readiness`, cross-checks the compiled receipt/resources/host/device/driver/memory/tools, rejects render/view/test commands, writes only outside the clean tree, and emits an explicitly non-promoting report with no admissible domains or artifacts |
 | The WSL2 hardware and native-viewer producers rebuilt and reran the same complete qualification estate on the same candidate and Radeon/Dozen device | the second estate added resource cost but no independent source, product, registration, or physical-device authority; skipping it informally would permit stale or cross-device substitution | Fixed: viewer reuse accepts only an independently verified same-revision physical-Radeon record, rehashes its candidate/receipts/gate/JUnit/registration/products against the live volume, requires exact WSL2 device identity, and carries the upstream transcript; only the newly published viewer frame and native callbacks are executed separately |
+| Alcubierre construction enforced the resolved $\sigma R$ wall only above the concrete metric, while device metric helpers and RK stages were infallible | a direct CPU caller could instantiate an unresolved wall and an invalid device profile could return zero connection, silently tracing flat motion; component tests did not prove the exotic stress-energy that defines the advertised spacetime | Fixed: one complete registry predicate now governs direct CPU construction/setters, the Slang metric/connection mirrors the same finite domain, every device RK stage is fallible, and both backends use the exact unit-determinant inverse. A reusable fourth-order connection-difference oracle independently reconstructs $G_{\mu\nu}$ and matches the strictly negative off-axis Eulerian warp-wall density; repository negative controls reject all four regressions |
 | Native viewer input had a verifier contract but no evidence producer | headless state-machine tests could pass, but no runbook could prove GLFW callback delivery | Fixed: an opt-in callback transcript and clean-tree X11/XWayland runbook deliver keyboard, drag, scroll, and Escape through the host window system and hash the resulting record |
 | E3 viewer attestation could bind callbacks to a CPU frame or unrelated device without a complete estate | the record lacked a published Vulkan-frame event, selected physical inventory/readiness, and non-skipping JUnit artifact | Fixed: the runbook selects the named Radeon, gates the full estate, waits for a native-window Vulkan refinement frame before injecting host input, and the verifier binds frame, callbacks, readiness, inventory, JUnit, log, and revision by hash |
 | The compiled capability authority exceeded MSVC's narrow string-literal limit | the 18,303-byte operating model was emitted as one raw literal and failed with C2026 | Fixed: CMake emits independently bounded 8,000-byte chunks; runtime validation reconstructs and semantically compares the complete authority |
@@ -340,6 +341,12 @@ boundaries instead.
   asymptotic sheet with a dark throat; `TwoSheet` traverses to the opposite
   asymptotic cutoff and uses the same catalogue through the inversion-related
   sky frame. Distinct content assigned to the second universe is absent.
+- Alcubierre is an exact bounded kinematic metric family, not a matter-field,
+  formation, stability, causality, or propulsion model. Its independently
+  reconstructed Einstein tensor now proves the required negative Eulerian
+  energy on the off-axis wall. That closes the prior geometry-versus-source
+  ambiguity without claiming that a physical stress-energy construction is
+  represented.
 - The exact 5616x4096 memory plan, catalogue/index residency, and sublinear
   candidate query are Mandatory-gated. The physical runbook now requires the
   same scene at both 1920x1080 and 5616x4096 to combine beam-filtered
@@ -741,6 +748,23 @@ corresponding profile. They are not projected from registration counts.
   compute-only Lavapipe checks passed the metric/connection, device decline,
   and two-sheet trajectory seams. Governance accepts 828 source GoogleTests
   and 840 development CTests, all Mandatory, across 24 dimensions and 29
+  capability contracts. `sirius_render_tests` was linked but never executed.
+- 2026-09-01 Alcubierre curvature and live-domain closure: direct CPU metric
+  construction and mutation now share the registry's complete finite parameter
+  predicate, including the resolved `0.1 <= sigma*R <= 100` wall. Device metric,
+  connection, and every RK stage fail closed on the same domain instead of
+  substituting zero connection, and the exact unit-determinant inverse replaces
+  numerical determinant repair. A reusable fourth-order connection-difference
+  oracle independently reconstructs the Einstein tensor and matches the exact
+  negative off-axis Eulerian wall density over both velocity orientations,
+  subluminal and superluminal cases, three scale/profile combinations, and three
+  off-axis directions. GCC 14 and Clang 21 compiled the application, all six
+  test executables, all SPIR-V precision rungs, and CUDA/Metal emissions with
+  warnings as errors. On each compiler, all 13 base, 409 core, 131 oracle, 90
+  application, and eight CPU-backend cases passed; the exact nine non-render
+  authority controls also passed on both. The new compute-only device-decline
+  probe passed on isolated Lavapipe for both compilers. Governance accepts 832
+  source GoogleTests and 841 development CTests across 24 dimensions and 29
   capability contracts. `sirius_render_tests` was linked but never executed.
 - GCC 14 strict required-Vulkan profile: the pre-alignment snapshot passed the complete
   907/907 estate on the Radeon 780M through Dozen in 210.36 seconds. A separate
