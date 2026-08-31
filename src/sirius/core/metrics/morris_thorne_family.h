@@ -292,12 +292,63 @@ inline double MorrisThorneFamily::RedshiftFunctionDerivative([[maybe_unused]] do
 //   g_ij = A(rho)^2 delta_ij,     A = 1 + b0^2/(4 rho^2).
 //
 // Unlike areal radius, rho is a regular chart coordinate at the throat
-// rho=b0/2.  The chart continues mathematically onto the second sheet for
-// 0<rho<b0/2, so every Runge-Kutta stage remains represented.  The product
-// still exposes only the declared one-sheet topology: the accepted central-ray
-// segment is clipped at rho=b0/2 and classified as dark capture before any
-// coupled consumer advances.  A second environment and two-sheet output remain
-// explicitly unrepresented.
+// rho=b0/2.  The punctured isotropic chart is global across both asymptotic
+// ends: 0<rho<b0/2 is the second sheet and rho->0 is its spatial infinity.
+// Geometry exposes the throat identity but does not classify it as a horizon;
+// OneSheetCapture versus TwoSheet is a tracer boundary condition.
+[[nodiscard]] inline double EllisArealRadiusFromIsotropic(double b0, double rho) {
+    const bool represented = std::isfinite(b0) && b0 > 0.0 && std::isfinite(rho) && rho > 0.0;
+    SIRIUS_PRE(represented);
+    if (!represented) return std::numeric_limits<double>::quiet_NaN();
+    return rho + b0 * b0 / (4.0 * rho);
+}
+
+[[nodiscard]] inline double EllisProperRadialDistanceFromIsotropic(double b0, double rho) {
+    const bool represented = std::isfinite(b0) && b0 > 0.0 && std::isfinite(rho) && rho > 0.0;
+    SIRIUS_PRE(represented);
+    if (!represented) return std::numeric_limits<double>::quiet_NaN();
+    return rho - b0 * b0 / (4.0 * rho);
+}
+
+// The inversion rho'=(b0/2)^2/rho exchanges the two asymptotic ends while
+// preserving areal radius and reversing signed proper radial distance.
+[[nodiscard]] inline double EllisInvertedIsotropicRadius(double b0, double rho) {
+    const bool represented = std::isfinite(b0) && b0 > 0.0 && std::isfinite(rho) && rho > 0.0;
+    SIRIUS_PRE(represented);
+    if (!represented) return std::numeric_limits<double>::quiet_NaN();
+    return b0 * b0 / (4.0 * rho);
+}
+
+// Convert a local sky direction expressed in the isotropic x-chart at the
+// second end into the inversion-related asymptotically Cartesian chart.  The
+// inversion Jacobian is a radial Householder reflection; its conformal scale
+// cancels from orthonormal direction components.
+[[nodiscard]] inline std::optional<Vec4> MapEllisSecondSheetSkyDirection(
+    const Vec4& position, const Vec4& chart_direction) {
+    const double radius = std::hypot(position(1), position(2), position(3));
+    const double direction_norm =
+        std::hypot(chart_direction(1), chart_direction(2), chart_direction(3));
+    if (!(std::isfinite(radius) && radius > 0.0 && std::isfinite(direction_norm) &&
+          direction_norm > 0.0)) {
+        return std::nullopt;
+    }
+    for (int component = 0; component < 4; ++component) {
+        if (!std::isfinite(position(component)) || !std::isfinite(chart_direction(component))) {
+            return std::nullopt;
+        }
+    }
+    const double nx = position(1) / radius;
+    const double ny = position(2) / radius;
+    const double nz = position(3) / radius;
+    const double radial =
+        nx * chart_direction(1) + ny * chart_direction(2) + nz * chart_direction(3);
+    Vec4 mapped = chart_direction;
+    mapped(1) -= 2.0 * radial * nx;
+    mapped(2) -= 2.0 * radial * ny;
+    mapped(3) -= 2.0 * radial * nz;
+    return mapped;
+}
+
 class MorrisThorneCartesian : public IMetric {
   public:
     MorrisThorneCartesian() : family_() {}
@@ -316,8 +367,7 @@ class MorrisThorneCartesian : public IMetric {
 
     bool IsValidEvent(const Tensor<double, 4>& pos) const override;
     bool InverseMetric(const Tensor<double, 4>& pos, Metric4d& g_inv) const override;
-    bool InsideCaptureSurface(const Tensor<double, 4>& pos, double margin) const override;
-    std::optional<double> SphericalCaptureRadius() const override {
+    std::optional<double> IsotropicEllisThroatRadius() const override {
         return IsotropicThroatRadius();
     }
     [[nodiscard]] double IsotropicThroatRadius() const { return 0.5 * family_.GetParams().b0; }
@@ -405,15 +455,6 @@ inline bool MorrisThorneCartesian::InverseMetric(const Tensor<double, 4>& pos,
         g_inv(i + 1, i + 1) = Dual<double>(inverse_conformal);
     }
     return true;
-}
-
-inline bool MorrisThorneCartesian::InsideCaptureSurface(const Tensor<double, 4>& pos,
-                                                        double margin) const {
-    if (family_.GetParams().shape_type != WormholeShapeType::Ellis) return false;
-    double x = pos(1), y = pos(2), z = pos(3);
-    const double rho = std::sqrt(x * x + y * y + z * z);
-    return std::isfinite(rho) && std::isfinite(margin) && margin >= 0.0 &&
-           rho <= IsotropicThroatRadius() * (1.0 + margin);
 }
 
 inline void MorrisThorneFamily::Evaluate(const Tensor<double, 4>& pos, Metric4d& g,

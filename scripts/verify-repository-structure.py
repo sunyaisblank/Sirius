@@ -190,6 +190,7 @@ MORRIS_HOST_EVENT_AUTHORITY = SOURCE_ROOT / "core" / "trace_boundary.h"
 MORRIS_CPU_CONSUMER = KERR_TRANSFER_CPU_CONSUMER
 MORRIS_DEVICE_AUTHORITY = SOURCE_ROOT / "kernels" / "gr_metrics.slang"
 MORRIS_DEVICE_EVENT_AUTHORITY = SOURCE_ROOT / "kernels" / "gr_trace_event.slang"
+MORRIS_DEVICE_TOPOLOGY_AUTHORITY = SOURCE_ROOT / "kernels" / "gr_ellis_topology.slang"
 MORRIS_DEVICE_CONSUMER = KERR_TRANSFER_DEVICE_CONSUMER
 MORRIS_PARITY_PROBE = KERR_TRANSFER_PARITY_PROBE
 FULL_QUALIFICATION_JOBS = (
@@ -1414,18 +1415,29 @@ def morris_thorne_authority_errors(documents: dict[Path, str]) -> list[str]:
         MORRIS_HOST_AUTHORITY: (
             "MorrisThorneCartesian",
             "IsotropicThroatRadius",
-            "SphericalCaptureRadius",
+            "IsotropicEllisThroatRadius",
+            "EllisInvertedIsotropicRadius",
+            "MapEllisSecondSheetSkyDirection",
             "conformal_base",
         ),
         MORRIS_HOST_EVENT_AUTHORITY: (
             "FindPolynomialRootsOnUnitInterval",
             "SphericalSegmentPolynomial",
+            "FindSphericalBoundaryEvent",
+            "SphericalBoundarySense",
             "FindSphericalCaptureEvent",
         ),
         MORRIS_CPU_CONSUMER: (
-            "SphericalCaptureRadius",
+            "IsotropicEllisThroatRadius",
+            "WormholeTopology::TwoSheet",
             "FindSphericalCaptureEvent",
-            "terminal_capture_surface",
+            "FindSphericalBoundaryEvent",
+            "SphericalBoundarySense::DecreasingRadius",
+            "terminal_throat_boundary",
+            "terminal_opposite_infinity",
+            "TraceResult::Outcome::Throat",
+            "TraceResult::AsymptoticSheet::Opposite",
+            "MapEllisSecondSheetSkyDirection",
         ),
         MORRIS_DEVICE_AUTHORITY: (
             "IsMorrisThorneCartesianEventRepresented",
@@ -1437,15 +1449,30 @@ def morris_thorne_authority_errors(documents: dict[Path, str]) -> list[str]:
             "IsFiniteAcceptedSegmentValue",
             "FindSexticRoots",
             "SphericalSegmentPolynomial",
+            "FindSphericalBoundaryEvent",
+            "kSphericalBoundaryDecreasingRadius",
             "FindSphericalCaptureEvent",
+        ),
+        MORRIS_DEVICE_TOPOLOGY_AUTHORITY: (
+            "EllisOppositeEscapeRadius",
+            "MapEllisSecondSheetSkyDirection",
+            "TraceEllisTwoSheet",
+            "kEllisTraceOppositeInfinity",
+            "FindSphericalBoundaryEvent",
         ),
         MORRIS_DEVICE_CONSUMER: (
             "FindSphericalCaptureEvent",
             "terminalCaptureSurface",
+            "TraceEllisTwoSheet",
+            "oppositeSheet",
+            "MapEllisSecondSheetSkyDirection",
         ),
         MORRIS_PARITY_PROBE: (
             "OP_SPHERICAL_CAPTURE_EVENT",
             "FindSphericalCaptureEvent",
+            "OP_ELLIS_TWO_SHEET_TRACE",
+            "TraceEllisTwoSheet",
+            "MapEllisSecondSheetSkyDirection",
             "GetMorrisThorneCartesianMetric",
             "GetMorrisThorneCartesianChristoffel",
         ),
@@ -1468,11 +1495,27 @@ def morris_thorne_authority_errors(documents: dict[Path, str]) -> list[str]:
         r"b0\s*\*\s*1\.001|\bb\s*/\s*\(\s*r\s*-\s*b\s*\)"
     )
     for path, document in documents.items():
-        match = stale.search(CPP_NON_CODE.sub(" ", document))
+        code = CPP_NON_CODE.sub(" ", document)
+        match = stale.search(code)
         if match:
             errors.append(
                 f"{relative(path)} restores a clamped/areal Cartesian Morris-Thorne path: "
                 f"{match.group(0)}"
+            )
+        if "one_sheet_topology" in code:
+            errors.append(f"{relative(path)} restores the lossy wormhole topology boolean")
+
+    host_metric = code_by_path.get(MORRIS_HOST_AUTHORITY, "")
+    if "InsideCaptureSurface" in host_metric or "SphericalCaptureRadius" in host_metric:
+        errors.append("the regular Ellis throat is exposed as an intrinsic capture surface")
+
+    topology = code_by_path.get(MORRIS_DEVICE_TOPOLOGY_AUTHORITY, "")
+    if topology.count("TraceEllisTwoSheet(") != 1:
+        errors.append("the device Ellis topology module has no single trace authority")
+    for consumer in (MORRIS_DEVICE_CONSUMER, MORRIS_PARITY_PROBE):
+        if code_by_path.get(consumer, "").count("TraceEllisTwoSheet(") != 1:
+            errors.append(
+                f"{relative(consumer)} does not consume the single device two-sheet authority"
             )
 
     for path, consumers in (
@@ -1497,15 +1540,19 @@ def morris_thorne_authority_errors(documents: dict[Path, str]) -> list[str]:
 def verify_morris_thorne_authority_policy() -> None:
     valid = {
         MORRIS_HOST_AUTHORITY: (
-            "MorrisThorneCartesian IsotropicThroatRadius SphericalCaptureRadius conformal_base"
+            "MorrisThorneCartesian IsotropicThroatRadius IsotropicEllisThroatRadius "
+            "EllisInvertedIsotropicRadius MapEllisSecondSheetSkyDirection conformal_base"
         ),
         MORRIS_HOST_EVENT_AUTHORITY: (
             "FindPolynomialRootsOnUnitInterval SphericalSegmentPolynomial "
-            "FindSphericalCaptureEvent"
+            "FindSphericalBoundaryEvent SphericalBoundarySense FindSphericalCaptureEvent"
         ),
         MORRIS_CPU_CONSUMER: (
-            "TraceResult GeodesicTracer::Trace SphericalCaptureRadius "
-            "FindSphericalCaptureEvent terminal_capture_surface StepBundle( "
+            "TraceResult GeodesicTracer::Trace IsotropicEllisThroatRadius "
+            "WormholeTopology::TwoSheet FindSphericalCaptureEvent "
+            "FindSphericalBoundaryEvent SphericalBoundarySense::DecreasingRadius "
+            "terminal_throat_boundary terminal_opposite_infinity TraceResult::Outcome::Throat "
+            "TraceResult::AsymptoticSheet::Opposite MapEllisSecondSheetSkyDirection StepBundle( "
             "AdvancePolarisationFrame( AccumulateVolumetricEmission( FindDiskIntersection("
         ),
         MORRIS_DEVICE_AUTHORITY: (
@@ -1514,13 +1561,20 @@ def verify_morris_thorne_authority_policy() -> None:
         ),
         MORRIS_DEVICE_EVENT_AUTHORITY: (
             "IsFiniteAcceptedSegmentValue FindSexticRoots SphericalSegmentPolynomial "
+            "FindSphericalBoundaryEvent kSphericalBoundaryDecreasingRadius "
             "FindSphericalCaptureEvent"
         ),
+        MORRIS_DEVICE_TOPOLOGY_AUTHORITY: (
+            "EllisOppositeEscapeRadius MapEllisSecondSheetSkyDirection "
+            "TraceEllisTwoSheet( kEllisTraceOppositeInfinity FindSphericalBoundaryEvent"
+        ),
         MORRIS_DEVICE_CONSUMER: (
-            "FindSphericalCaptureEvent terminalCaptureSurface AccumulateVolumeSegment("
+            "FindSphericalCaptureEvent terminalCaptureSurface TraceEllisTwoSheet( "
+            "oppositeSheet MapEllisSecondSheetSkyDirection AccumulateVolumeSegment("
         ),
         MORRIS_PARITY_PROBE: (
             "OP_SPHERICAL_CAPTURE_EVENT FindSphericalCaptureEvent "
+            "OP_ELLIS_TWO_SHEET_TRACE TraceEllisTwoSheet( MapEllisSecondSheetSkyDirection "
             "GetMorrisThorneCartesianMetric GetMorrisThorneCartesianChristoffel"
         ),
     }
@@ -1538,6 +1592,18 @@ def verify_morris_thorne_authority_policy() -> None:
     )
     if not morris_thorne_authority_errors(endpoint_only):
         raise RuntimeError("Morris-Thorne policy accepted endpoint-only throat capture")
+
+    intrinsic_capture = dict(valid)
+    intrinsic_capture[MORRIS_HOST_AUTHORITY] += " InsideCaptureSurface"
+    if not morris_thorne_authority_errors(intrinsic_capture):
+        raise RuntimeError("Morris-Thorne policy accepted an intrinsic throat capture surface")
+
+    independent_device_trace = dict(valid)
+    independent_device_trace[MORRIS_PARITY_PROBE] = independent_device_trace[
+        MORRIS_PARITY_PROBE
+    ].replace("TraceEllisTwoSheet(", "IndependentEllisTrace(")
+    if not morris_thorne_authority_errors(independent_device_trace):
+        raise RuntimeError("Morris-Thorne policy accepted an independent parity trajectory")
 
 
 def attestation_preflight_errors(

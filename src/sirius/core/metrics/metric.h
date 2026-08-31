@@ -79,12 +79,11 @@ class IMetric {
         return false;
     }
 
-    // Exact Euclidean-coordinate radius for families whose capture boundary is
-    // a sphere in their live Cartesian chart.  The tracer uses this optional
-    // geometry to locate a finite crossing on the accepted segment before any
-    // coupled state advances.  Oblate or otherwise non-spherical families keep
-    // the default absence and use their family-specific endpoint predicate.
-    virtual std::optional<double> SphericalCaptureRadius() const { return std::nullopt; }
+    // Exact isotropic throat radius for the two-ended Ellis geometry.  This is
+    // deliberately not a capture-surface API: whether the regular throat is a
+    // dark one-sheet boundary or a traversed two-sheet event is an output
+    // topology decision owned by the tracer request.
+    virtual std::optional<double> IsotropicEllisThroatRadius() const { return std::nullopt; }
 };
 
 // Runtime checks for the metric tensor properties that must hold exactly; used

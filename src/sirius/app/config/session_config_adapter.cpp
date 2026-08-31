@@ -35,9 +35,9 @@ std::optional<core::color_modes::Mode> ParseColorMode(const std::string& value) 
     return std::nullopt;
 }
 
-std::optional<render::WormholeTopology> ParseWormholeTopology(const std::string& value) {
-    if (value == "OneSheetCapture") return render::WormholeTopology::OneSheetCapture;
-    if (value == "TwoSheet") return render::WormholeTopology::TwoSheet;
+std::optional<core::WormholeTopology> ParseWormholeTopology(const std::string& value) {
+    if (value == "OneSheetCapture") return core::WormholeTopology::OneSheetCapture;
+    if (value == "TwoSheet") return core::WormholeTopology::TwoSheet;
     return std::nullopt;
 }
 

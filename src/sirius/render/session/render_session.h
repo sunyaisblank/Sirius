@@ -88,10 +88,7 @@ enum class RenderBackend {
     Vulkan,  // the Slang compute kernel on a ComputeDevice
 };
 
-enum class WormholeTopology {
-    OneSheetCapture,
-    TwoSheet,
-};
+using WormholeTopology = core::WormholeTopology;
 
 enum class DiskTemperatureModel : std::uint8_t {
     NovikovThorne,

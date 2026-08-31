@@ -68,16 +68,20 @@ and spatial conformal factor are
 $r=\rho+b_0^2/(4\rho)$ and
 $A=1+b_0^2/(4\rho^2)$, so
 $g_{ij}=A^2\delta_{ij}$. The shared CPU/Vulkan scale domain is
-$0.1\le b_0\le1000$. The throat is the regular sphere $\rho=b_0/2$;
-$0<\rho<b_0/2$ is the exact second-sheet chart continuation needed to keep
-every integration stage represented, not an exposed second output universe.
-The declared `OneSheetCapture` topology finds the observer-nearest root of the
-accepted cubic-Hermite segment against that sphere, including enter/exit and
-tangent contacts whose endpoints remain outside, and clips every downstream
-consumer to the same event. It then classifies the throat as dark. `TwoSheet`
-continues to decline because a second environment and output topology are not
-represented. The singular spherical areal chart and $\rho=0$ are never repaired
-by coordinate clamps.
+$0.1\le b_0\le1000$. The throat is the regular sphere $\rho=b_0/2$ and
+$0<\rho<b_0/2$ is the exact second asymptotic end. The declared
+`OneSheetCapture` topology finds the observer-nearest root of the accepted
+cubic-Hermite segment against the throat, including enter/exit and tangent
+contacts whose endpoints remain outside, clips every downstream consumer to
+that event, and publishes the distinct dark `Throat` outcome rather than an
+intrinsic horizon. `TwoSheet` crosses the regular throat and terminates at
+$\rho_-=b_0^2/(4\rho_+)$, the inversion-matched second-end cutoff with the same
+areal radius as the observer-side boundary $\rho_+$. Its terminal direction is
+mapped into the opposite asymptotically Cartesian frame by the inversion
+Jacobian $I-2nn^T$, and the same catalogue is used on both ends as an explicit
+symmetric boundary condition. Distinct second-universe content remains
+unrepresented. The singular spherical areal chart and $\rho=0$ are never
+repaired by coordinate clamps.
 
 ## 3. Parity criteria
 

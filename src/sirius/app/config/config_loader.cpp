@@ -452,11 +452,6 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
     if (config.metric.wormhole_topology != "OneSheetCapture" &&
         config.metric.wormhole_topology != "TwoSheet") {
         errors.push_back("metric.wormhole_topology must be one of: OneSheetCapture, TwoSheet");
-    } else if (config.metric.wormhole_topology == "TwoSheet" && metric_id.has_value() &&
-               *metric_id == core::MetricId::MorrisThorne) {
-        errors.push_back(
-            "metric.wormhole_topology TwoSheet is not represented: Sirius currently renders "
-            "one isotropic Ellis output sheet with the throat as a dark capture surface");
     }
     if (finite(config.metric.warp_velocity, "metric.warp_velocity") &&
         std::abs(config.metric.warp_velocity) > 10.0) {
@@ -475,8 +470,11 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
     if (metric_id.has_value()) {
         if (const auto issue = core::MetricSpecificParameterIssue(
                 *metric_id, config.metric.throat_radius,
-                config.metric.wormhole_topology == "OneSheetCapture", config.metric.warp_velocity,
-                config.metric.bubble_radius, config.metric.bubble_sigma);
+                config.metric.wormhole_topology == "TwoSheet"
+                    ? core::WormholeTopology::TwoSheet
+                    : core::WormholeTopology::OneSheetCapture,
+                config.metric.warp_velocity, config.metric.bubble_radius,
+                config.metric.bubble_sigma);
             issue.has_value()) {
             errors.emplace_back(*issue);
         }

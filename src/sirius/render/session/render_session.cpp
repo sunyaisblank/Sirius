@@ -68,7 +68,7 @@ core::MetricConstructionParameters MetricConstructionParametersFor(const Session
     parameters.dimensionless_charge = config.black_hole_charge;
     parameters.cosmological_constant = config.cosmological_constant;
     parameters.throat_radius = config.throat_radius;
-    parameters.one_sheet_topology = config.wormhole_topology == WormholeTopology::OneSheetCapture;
+    parameters.wormhole_topology = config.wormhole_topology;
     parameters.warp_velocity = config.warp_velocity;
     parameters.bubble_radius = config.bubble_radius;
     parameters.bubble_sigma = config.bubble_sigma;
@@ -640,6 +640,7 @@ base::Expected<void> RenderSession::Initialise() {
     // shadow.
     tracer_config.horizon_factor = 1.0f;
     tracer_config.max_steps = kRenderTraceMaximumAttempts;
+    tracer_config.wormhole_topology = config_.wormhole_topology;
 
     // Large steps far from the hole, small near the horizon.
     tracer_config.integrator.initial_step = trace_domain.cpu_initial_step;
@@ -961,6 +962,7 @@ RenderSession::PixelResult RenderSession::ShadePixel(int px_coord, int py_coord,
 
         switch (trace_result.outcome) {
             case TraceResult::Outcome::Horizon:
+            case TraceResult::Outcome::Throat:
                 break;
 
             case TraceResult::Outcome::DiskHit: {

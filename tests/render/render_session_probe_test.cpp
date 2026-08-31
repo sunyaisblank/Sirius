@@ -351,7 +351,7 @@ TEST(RenderSessionProbe, TypedNumericBoundariesMatchTheExternalConfigurationBoun
               "Schwarzschild-de-Sitter requires 9*lambda*mass^2 < 1 (sub-Nariai sector)");
 }
 
-TEST(RenderSessionProbe, PolarisedAndTwoSheetRequestsDeclineAtTheTypedBoundary) {
+TEST(RenderSessionProbe, PolarisedRequestsDeclineAndTwoSheetIsRepresented) {
     SessionConfig config;
     config.metric_id = sirius::core::MetricId::Kerr;
     config.black_hole_spin = 0.7;
@@ -380,8 +380,7 @@ TEST(RenderSessionProbe, PolarisedAndTwoSheetRequestsDeclineAtTheTypedBoundary) 
 
     config.black_hole_mass = 0.0;
     config.wormhole_topology = sirius::render::WormholeTopology::TwoSheet;
-    EXPECT_EQ(sirius::render::SessionConfigIssue(config),
-              "two-sheet wormhole continuation and a second environment are not represented");
+    EXPECT_FALSE(sirius::render::SessionConfigIssue(config).has_value());
 }
 
 TEST(TileScheduler, ReinitialiseResetsCompletionLedger) {

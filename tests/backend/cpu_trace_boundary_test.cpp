@@ -5,6 +5,7 @@
 #include "sirius/core/camera.h"
 #include "sirius/core/metrics/cpu_metric_factory.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
+#include "sirius/core/metrics/morris_thorne_family.h"
 #include "sirius/core/metrics/registry.h"
 
 #include <gtest/gtest.h>
@@ -99,6 +100,34 @@ BoundaryTrace TraceFlatBoundaryBundle() {
     return {tracer.Trace(camera.GenerateRay(1, 1, 0.5f, 0.5f)), kBoundaryRadius};
 }
 
+TraceResult TraceCentralEllisRay(sirius::core::WormholeTopology topology, double b0,
+                                 double observer_radius, double escape_radius, float maximum_step) {
+    sirius::core::MorrisThorneCartesian metric(sirius::core::MorrisThorneParams::Ellis(b0));
+
+    TracerConfig config;
+    config.escape_radius = static_cast<float>(escape_radius);
+    config.max_steps = 20000;
+    config.wormhole_topology = topology;
+    config.enable_disk = false;
+    config.integrator.initial_step = maximum_step;
+    config.integrator.max_step = maximum_step;
+    config.integrator.min_step = static_cast<float>(1.0e-6 * b0);
+    config.integrator.abs_tolerance = 1.0e-7f;
+    config.integrator.rel_tolerance = 1.0e-7f;
+
+    CameraConfig camera_config;
+    camera_config.r = observer_radius;
+    camera_config.theta = std::numbers::pi / 2.0;
+    camera_config.phi = 0.0;
+    camera_config.fov = 60.0f;
+    camera_config.width = 3;
+    camera_config.height = 3;
+    PinholeCamera camera(camera_config);
+
+    GeodesicTracer tracer(&metric, config);
+    return tracer.Trace(camera.GenerateRay(1, 1, 0.5f, 0.5f));
+}
+
 double TerminalRadius(const TraceResult& trace) {
     return std::sqrt(trace.final_position(1) * trace.final_position(1) +
                      trace.final_position(2) * trace.final_position(2) +
@@ -181,10 +210,9 @@ TEST(CpuTraceBoundary, EveryAdvertisedCpuMetricConstructsAndTracesOneRay) {
     absent_parameter.dimensionless_spin = 0.5;
     EXPECT_EQ(sirius::core::CreateCpuMetric(MetricId::Minkowski, absent_parameter), nullptr);
 
-    auto unrepresented_topology = RepresentedParametersFor(MetricId::MorrisThorne);
-    unrepresented_topology.one_sheet_topology = false;
-    EXPECT_EQ(sirius::core::CreateCpuMetric(MetricId::MorrisThorne, unrepresented_topology),
-              nullptr);
+    auto two_sheet_topology = RepresentedParametersFor(MetricId::MorrisThorne);
+    two_sheet_topology.wormhole_topology = sirius::core::WormholeTopology::TwoSheet;
+    EXPECT_NE(sirius::core::CreateCpuMetric(MetricId::MorrisThorne, two_sheet_topology), nullptr);
 
     std::size_t advertised_cpu_metrics = 0;
     for (const auto& info : sirius::core::MetricRegistry()) {
@@ -282,6 +310,44 @@ TEST(CpuTraceBoundary, JacobiBundleTerminatesAtTheSameCausalEvent) {
     EXPECT_NEAR(trace.result.beam.semi_minor, kExpectedSemiAxis, 2.0e-7);
     EXPECT_NEAR(trace.result.beam.footprint_major, kExpectedFootprint, 2.0e-8);
     EXPECT_NEAR(trace.result.beam.footprint_minor, kExpectedFootprint, 2.0e-8);
+}
+
+TEST(CpuTraceBoundary, OneSheetEllisNamesTheRegularThroatBoundary) {
+    constexpr double kB0 = 1.0;
+    const TraceResult trace = TraceCentralEllisRay(sirius::core::WormholeTopology::OneSheetCapture,
+                                                   kB0, 10.0, 20.0, 0.25f);
+
+    ASSERT_EQ(trace.outcome, TraceResult::Outcome::Throat);
+    ASSERT_FALSE(trace.numerical_failure);
+    EXPECT_EQ(trace.asymptotic_sheet, TraceResult::AsymptoticSheet::Observer);
+    EXPECT_NEAR(TerminalRadius(trace), 0.5 * kB0, 2.0e-5);
+}
+
+TEST(CpuTraceBoundary, TwoSheetEllisCrossesThroatAndReachesInversionMatchedInfinity) {
+    for (const double b0 : {0.25, 1.0, 10.0}) {
+        const double observer_radius = 10.0 * b0;
+        const double escape_radius = 20.0 * b0;
+        const double opposite_radius = b0 * b0 / (4.0 * escape_radius);
+        const TraceResult trace =
+            TraceCentralEllisRay(sirius::core::WormholeTopology::TwoSheet, b0, observer_radius,
+                                 escape_radius, static_cast<float>(0.25 * b0));
+
+        SCOPED_TRACE(b0);
+        ASSERT_EQ(trace.outcome, TraceResult::Outcome::Escaped);
+        ASSERT_FALSE(trace.numerical_failure);
+        EXPECT_EQ(trace.asymptotic_sheet, TraceResult::AsymptoticSheet::Opposite);
+        EXPECT_LT(trace.min_radius, 0.5 * b0);
+        EXPECT_NEAR(TerminalRadius(trace), opposite_radius, 5.0e-5 * b0);
+        EXPECT_GT(trace.final_direction(1), 0.999);
+        EXPECT_NEAR(trace.final_direction(2), 0.0, 2.0e-5);
+        EXPECT_NEAR(trace.final_direction(3), 0.0, 2.0e-5);
+
+        const double launch_l =
+            sirius::core::EllisProperRadialDistanceFromIsotropic(b0, observer_radius);
+        const double terminal_l =
+            sirius::core::EllisProperRadialDistanceFromIsotropic(b0, opposite_radius);
+        EXPECT_NEAR(trace.affine_length, launch_l - terminal_l, 3.0e-3 * b0);
+    }
 }
 
 }  // namespace

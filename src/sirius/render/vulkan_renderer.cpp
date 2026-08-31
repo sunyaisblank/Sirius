@@ -59,9 +59,9 @@ constexpr float kTraceStepScale = 0.08f;
 // owned by the shared Page-Thorne/blackbody/invariant-transfer kernel path.
 constexpr float kDiskOuterFactor = 20.0f;
 
-// Exact dense params-buffer ABI through the last consumed slot (64).
+// Exact dense params-buffer ABI through the last consumed slot (65).
 // Host and kernel indices are kept explicit so a new control must extend both.
-constexpr std::uint32_t kParamCount = 65;
+constexpr std::uint32_t kParamCount = 66;
 constexpr int kMaxVulkanVolumeSamples = 128;
 
 // Kernel dispatch ids (must match trace.slang / gr_types.slang).
@@ -88,9 +88,9 @@ struct KernelScene {
 // Maps a session metric onto the trace kernel, or declines. The gpu-renderable
 // set is exactly the registry's gpu_supported metrics the Cartesian render path
 // carries: Minkowski/Schwarzschild/Kerr (Kerr-Schild family), Alcubierre, and
-// Morris-Thorne through its exact isotropic Ellis chart (one output sheet,
-// accepted-segment throat capture, mirroring the CPU authority). Charge/lambda metrics (registry
-// gpu_supported=false) decline loudly.
+// Morris-Thorne through its exact isotropic Ellis chart (explicit dark
+// one-sheet or traversing two-sheet topology, mirroring the CPU authority).
+// Charge/lambda metrics (registry gpu_supported=false) decline loudly.
 [[nodiscard]] Expected<KernelScene> MapMetric(const SessionConfig& config) {
     KernelScene scene;
     const auto info = core::MetricInfoFor(config.metric_id);
@@ -344,6 +344,7 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
     params[62] = config.volumetric_tau_midplane;
     params[63] = static_cast<float>(config.volumetric_samples);
     params[64] = config.enable_turbulence ? 1.0f : 0.0f;
+    params[65] = config.wormhole_topology == WormholeTopology::TwoSheet ? 1.0f : 0.0f;
 }
 
 }  // namespace

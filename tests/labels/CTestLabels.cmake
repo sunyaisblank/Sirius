@@ -291,6 +291,8 @@ set_tests_properties(
     CpuTraceBoundary.EveryAdvertisedCpuMetricConstructsAndTracesOneRay
     CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle
     CpuTraceBoundary.JacobiBundleTerminatesAtTheSameCausalEvent
+    CpuTraceBoundary.OneSheetEllisNamesTheRegularThroatBoundary
+    CpuTraceBoundary.TwoSheetEllisCrossesThroatAndReachesInversionMatchedInfinity
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -402,6 +404,7 @@ set_tests_properties(
     KernelParity.WormholeAndWarpMetricMatchLegacy
     KernelParity.IsotropicEllisMetricAndConnectionMatchCoreOnBothSheets
     KernelParity.SphericalCaptureEventFindsHiddenAndTangentContacts
+    KernelParity.EllisTwoSheetTraceCrossesThroatAndMapsTheOppositeSky
     KernelParity.KerrSchildChristoffelMatchesLegacyToOnePartInMillion
     KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel
     KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco
@@ -600,10 +603,13 @@ set_tests_properties(
     MorrisThorneCartesianTests.ChartAgreementWithSphericalFamily
     MorrisThorneCartesianTests.DerivativesMatchFiniteDifferencesOfMetric
     MorrisThorneCartesianTests.AnalyticInverseIsExact
-    MorrisThorneCartesianTests.ThroatIsTheCaptureSurface
+    MorrisThorneCartesianTests.ThroatIsARegularTopologyBoundaryNotACaptureSurface
+    MorrisThorneCartesianTests.InversionExchangesEndsAndPreservesArealRadius
+    MorrisThorneCartesianTests.SecondSheetSkyUsesTheExactInversionJacobian
     MorrisThorneCartesianTests.ThroatAndPositiveRadiusSecondSheetAreFiniteAndUnclamped
     MorrisThorneCartesianTests.SphericalArealChartDeclinesItsCoordinateSingularities
     MorrisThorneCartesianTests.AcceptedSegmentFindsHiddenAndTangentThroatContacts
+    MorrisThorneCartesianTests.DirectionalBoundaryIgnoresTangentAndSelectsInwardCrossing
     MorrisThorneCartesianTests.NonEllisCartesianRequestsFailClosed
     MorrisThorneCartesianTests.ParameterBoundsMatchConfigAuthority
     PROPERTIES LABELS "Mandatory;Correctness"
@@ -1074,7 +1080,7 @@ set_tests_properties(
     FilmSimulationTest.Vignette_CenterUnchanged
     FilmSimulationTest.Vignette_DarkensCorners
     KernelBeam.BeamFlagWiresDeviationWithoutMovingDefault
-    MorrisThorneTracerTest.CentralRayCapturedAtThroat
+    MorrisThorneTracerTest.CentralRayTerminatesAtExplicitThroatBoundary
     MorrisThorneTracerTest.DeflectionFallsQuadraticallyWithImpactParameter
     MorrisThorneTracerTest.EdgeRayEscapes
     RayBundleTest.BundleFiniteAndDeterministicKerr
@@ -1169,7 +1175,7 @@ set_tests_properties(
     RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame
     RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr
     RenderSessionProbe.PointStarfieldRejectsValuesItsGeneratorWouldClamp
-    RenderSessionProbe.PolarisedAndTwoSheetRequestsDeclineAtTheTypedBoundary
+    RenderSessionProbe.PolarisedRequestsDeclineAndTwoSheetIsRepresented
     RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration
     RenderSessionProbe.StartIsAsynchronousAndCancellationIsTerminalWithoutOutput
     RenderSessionProbe.TypedNumericBoundariesMatchTheExternalConfigurationBoundary

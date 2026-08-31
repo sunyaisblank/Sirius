@@ -19,6 +19,7 @@
 #include "sirius/core/disk/volumetric_disk.h"
 #include "sirius/core/geodesic_integrator.h"
 #include "sirius/core/metrics/metric.h"
+#include "sirius/core/metrics/registry.h"
 #include "sirius/core/observer_frame.h"
 #include "sirius/core/polarisation/walker_penrose.h"
 #include "sirius/core/relativistic_transfer.h"
@@ -43,11 +44,20 @@ struct TraceResult {
     enum class Outcome {
         Escaped,  // Escaped to infinity (sample background).
         Horizon,  // Captured by the black hole.
+        Throat,   // Reached the explicit dark one-sheet Ellis boundary.
         DiskHit,  // Intersected the accretion disk.
         MaxSteps  // Terminated at the step limit.
     };
 
+    enum class AsymptoticSheet {
+        Observer,
+        Opposite,
+    };
+
     Outcome outcome = Outcome::MaxSteps;
+    // Valid for Escaped. Non-wormhole and one-sheet escapes remain on the
+    // observer end; a traversing Ellis ray names the opposite end explicitly.
+    AsymptoticSheet asymptotic_sheet = AsymptoticSheet::Observer;
 
     // Terminal event/state position for every outcome. final_direction is the
     // Eulerian sky direction and is valid only for Escaped.
@@ -146,6 +156,8 @@ struct TracerConfig {
     // capture boundary. Tests may opt into a larger diagnostic surface.
     float horizon_factor = 1.0f;
     int max_steps = 5000;
+    sirius::core::WormholeTopology wormhole_topology =
+        sirius::core::WormholeTopology::OneSheetCapture;
 
     // Thin accretion disk.
     bool enable_disk = true;
@@ -252,6 +264,13 @@ struct TracerConfig {
         default:
             return false;
     }
+    switch (config.wormhole_topology) {
+        case sirius::core::WormholeTopology::OneSheetCapture:
+        case sirius::core::WormholeTopology::TwoSheet:
+            break;
+        default:
+            return false;
+    }
 
     if (!finite(config.disk_inner) || config.disk_inner <= 0.0f || !finite(config.disk_outer) ||
         config.disk_outer <= config.disk_inner || !finite(config.disk_temperature_inner) ||
@@ -334,11 +353,15 @@ class GeodesicTracer {
 
     void SetConfig(const TracerConfig& config) {
         SIRIUS_PRE(IsRepresentedTracerConfig(config));
+        SIRIUS_PRE(config.wormhole_topology != sirius::core::WormholeTopology::TwoSheet ||
+                   metric_->IsotropicEllisThroatRadius().has_value());
         config_ = config;
     }
     const TracerConfig& GetConfig() const { return config_; }
     void SetMetric(sirius::core::IMetric* metric) {
         SIRIUS_PRE(metric != nullptr);
+        SIRIUS_PRE(config_.wormhole_topology != sirius::core::WormholeTopology::TwoSheet ||
+                   metric->IsotropicEllisThroatRadius().has_value());
         metric_ = metric;
     }
 
@@ -483,6 +506,8 @@ inline GeodesicTracer::GeodesicTracer(sirius::core::IMetric* metric, const Trace
     : metric_(metric), config_(config) {
     SIRIUS_PRE(metric != nullptr);
     SIRIUS_PRE(IsRepresentedTracerConfig(config));
+    SIRIUS_PRE(config.wormhole_topology != sirius::core::WormholeTopology::TwoSheet ||
+               metric->IsotropicEllisThroatRadius().has_value());
 }
 
 inline void GeodesicTracer::CacheMetricParameters() {

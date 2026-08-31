@@ -67,7 +67,7 @@ TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
     // chosen so the capture cross-section covers a modest image fraction. The
     // full image is a single tile here (tileOrigin 0, tile == image). Background
     // is the analytic gradient (starfield disabled), so no texture is needed.
-    std::vector<float> params(65, 0.0f);
+    std::vector<float> params(66, 0.0f);
     params[44] = 0.5f;
     params[45] = 0.5f;
     params[51] = 1.0f;
@@ -175,7 +175,7 @@ std::vector<float> RunKerrScene(ComputeDevice& device, const std::vector<std::ui
     constexpr std::uint32_t kWidth = 64;
     constexpr std::uint32_t kHeight = 64;
 
-    std::vector<float> params(65, 0.0f);
+    std::vector<float> params(66, 0.0f);
     params[44] = 0.5f;
     params[45] = 0.5f;
     params[51] = 1.0f;
