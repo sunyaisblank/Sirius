@@ -15,7 +15,7 @@ The verifier requires a passing domain-appropriate test estate, source revision,
 UTC completion time, exact domain identity, and byte count plus SHA-256 for every
 artifact. Native-build records bind the full governed CTest registration, the
 exact nine-case non-render authority estate, every compiled test executable, all
-thirteen products, the alignment receipt, and the copied candidate. Runtime
+nine products, the alignment receipt, and the copied candidate. Runtime
 records must additionally identify the physical device, driver, Vulkan API,
 memory budget, and fp64 capability, and must hash the rendered PNG, execution
 transcript, device inventory, configure-time alignment receipt, qualification
@@ -35,7 +35,7 @@ contain the compiled-receipt authority witness;
 the receipt must name the same clean revision and exact model-derived domains.
 The gate-generated and rerun JUnit case-name sets and summaries must agree; the
 gate must bind the submitted alignment receipt, operating-model digest, all
-seven tested executables, all thirteen candidate products, and the actual copied
+seven tested executables, all nine candidate products, and the actual copied
 candidate bytes admitted as `qualification-sirius.bin`.
 The report, inventory, revision, selected-device readiness, and required profile
 are cross-checked rather than trusted from result booleans. Artifact paths must be
@@ -131,7 +131,7 @@ from the tested Git checkout, requires that checkout to remain clean after the
 tests, and cross-checks it against the workflow revision; caller-provided text
 cannot name a different source. Each record also carries the configure-time
 alignment receipt, non-promoting native-build gate, gate JUnit/log, all seven
-compiled executables, all thirteen products, copied candidate, and current CTest
+compiled executables, all nine products, copied candidate, and current CTest
 registration. The verifier requires at least 700 governed registered tests and
 the exact nine zero-skip authority cases; it rejects any claim that this proves
 runtime or the unexecuted estate. These records do not close native Vulkan.

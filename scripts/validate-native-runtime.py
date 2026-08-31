@@ -34,10 +34,6 @@ QUALIFICATION_RUNTIME_PRODUCTS = {
     "trace_spv": Path("kernels/trace.spv"),
     "viewer_rdsd003a_fragment": Path("shaders/RDSD003A.frag"),
     "viewer_rdsd003a_vertex": Path("shaders/RDSD003A.vert"),
-    "viewer_rdsd004a_fragment": Path("shaders/RDSD004A.frag"),
-    "viewer_rdsd004a_vertex": Path("shaders/RDSD004A.vert"),
-    "viewer_rdsd005a_fragment": Path("shaders/RDSD005A.frag"),
-    "viewer_rdsd005a_vertex": Path("shaders/RDSD005A.vert"),
 }
 
 

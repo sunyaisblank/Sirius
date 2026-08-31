@@ -35,10 +35,6 @@ PRODUCT_ARTIFACTS = {
     "qualification-product-trace_spv": "kernels/trace.spv",
     "qualification-product-viewer_rdsd003a_fragment": "shaders/RDSD003A.frag",
     "qualification-product-viewer_rdsd003a_vertex": "shaders/RDSD003A.vert",
-    "qualification-product-viewer_rdsd004a_fragment": "shaders/RDSD004A.frag",
-    "qualification-product-viewer_rdsd004a_vertex": "shaders/RDSD004A.vert",
-    "qualification-product-viewer_rdsd005a_fragment": "shaders/RDSD005A.frag",
-    "qualification-product-viewer_rdsd005a_vertex": "shaders/RDSD005A.vert",
 }
 FIXED_ARTIFACTS = {
     "hardware-tests.xml": "viewer-tests.xml",

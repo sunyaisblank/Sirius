@@ -51,10 +51,6 @@ RELEASE_PRODUCTS = BASE_PRODUCTS | {
     "trace_spv",
     "viewer_rdsd003a_fragment",
     "viewer_rdsd003a_vertex",
-    "viewer_rdsd004a_fragment",
-    "viewer_rdsd004a_vertex",
-    "viewer_rdsd005a_fragment",
-    "viewer_rdsd005a_vertex",
 }
 INSTALLED_PRODUCTS = {
     "alignment_receipt": "share/sirius/model/alignment_receipt.json",
@@ -65,10 +61,6 @@ INSTALLED_PRODUCTS = {
     "trace_spv": "share/sirius/kernels/trace.spv",
     "viewer_rdsd003a_fragment": "share/sirius/shaders/RDSD003A.frag",
     "viewer_rdsd003a_vertex": "share/sirius/shaders/RDSD003A.vert",
-    "viewer_rdsd004a_fragment": "share/sirius/shaders/RDSD004A.frag",
-    "viewer_rdsd004a_vertex": "share/sirius/shaders/RDSD004A.vert",
-    "viewer_rdsd005a_fragment": "share/sirius/shaders/RDSD005A.frag",
-    "viewer_rdsd005a_vertex": "share/sirius/shaders/RDSD005A.vert",
 }
 LOGICAL_NAME = re.compile(r"^[a-z][a-z0-9_]*$")
 REVISION = re.compile(r"^[0-9a-f]{40}$")

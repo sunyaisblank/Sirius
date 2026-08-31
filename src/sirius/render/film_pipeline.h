@@ -50,6 +50,13 @@ class FilmPipeline {
         if (config_.bloom_enabled) {
             ApplyBloom(pixels, width, height);
         }
+
+        // Every film stage is display-referred. Additive halation and bloom
+        // may exceed the unit interval, so close the public contract after the
+        // final stage instead of relying on a downstream, unconfigured tone
+        // map. A non-finite result remains untouched for the session's
+        // fail-closed diagnostic.
+        ClampDisplayLinear(pixels, width, height);
     }
 
     // Film grain: signal-dependent noise, sigma^2 proportional to luminance.
@@ -236,6 +243,16 @@ class FilmPipeline {
     }
 
   private:
+    static void ClampDisplayLinear(float* pixels, int width, int height) {
+        for (int pixel = 0; pixel < width * height; ++pixel) {
+            const int index = pixel * 4;
+            for (int channel = 0; channel < 3; ++channel) {
+                float& value = pixels[index + channel];
+                if (std::isfinite(value)) value = std::clamp(value, 0.0f, 1.0f);
+            }
+        }
+    }
+
     static void RequireFrame(const float* pixels, int width, int height) {
         SIRIUS_PRE(pixels != nullptr);
         SIRIUS_PRE(width > 0 && width <= 8192 && height > 0 && height <= 8192);

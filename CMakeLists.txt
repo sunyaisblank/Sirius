@@ -269,15 +269,7 @@ if(BUILD_TESTS AND SIRIUS_MANDATORY_TESTS)
             --product-artifact
                 "viewer_rdsd003a_vertex=${CMAKE_SOURCE_DIR}/src/sirius/app/viewer/shaders/RDSD003A.vert"
             --product-artifact
-                "viewer_rdsd003a_fragment=${CMAKE_SOURCE_DIR}/src/sirius/app/viewer/shaders/RDSD003A.frag"
-            --product-artifact
-                "viewer_rdsd004a_vertex=${CMAKE_SOURCE_DIR}/src/sirius/app/viewer/shaders/RDSD004A.vert"
-            --product-artifact
-                "viewer_rdsd004a_fragment=${CMAKE_SOURCE_DIR}/src/sirius/app/viewer/shaders/RDSD004A.frag"
-            --product-artifact
-                "viewer_rdsd005a_vertex=${CMAKE_SOURCE_DIR}/src/sirius/app/viewer/shaders/RDSD005A.vert"
-            --product-artifact
-                "viewer_rdsd005a_fragment=${CMAKE_SOURCE_DIR}/src/sirius/app/viewer/shaders/RDSD005A.frag")
+                "viewer_rdsd003a_fragment=${CMAKE_SOURCE_DIR}/src/sirius/app/viewer/shaders/RDSD003A.frag")
     endif()
     if(TARGET sirius_kernels)
         list(APPEND sirius_gate_product_artifacts
@@ -371,9 +363,10 @@ if(TARGET sirius)
             DESTINATION share/sirius/model)
     endif()
     if(SIRIUS_INSTALL_HAS_VIEWER)
-        install(DIRECTORY src/sirius/app/viewer/shaders/
-            DESTINATION share/sirius/shaders
-            FILES_MATCHING PATTERN "*.vert" PATTERN "*.frag")
+        install(FILES
+            src/sirius/app/viewer/shaders/RDSD003A.vert
+            src/sirius/app/viewer/shaders/RDSD003A.frag
+            DESTINATION share/sirius/shaders)
     endif()
     if(TARGET sirius_kernels)
         install(FILES

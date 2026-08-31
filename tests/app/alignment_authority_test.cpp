@@ -92,7 +92,7 @@ TEST(BuildGateAuthority, ReleaseReceiptBindsEveryInstalledProductAtInitialisatio
 
     sirius::test::ScopedTemporaryDirectory temporary("sirius-build-gate-runtime");
     const auto root = temporary.path();
-    const std::array<std::pair<std::string_view, std::string_view>, 12> products = {{
+    const std::array<std::pair<std::string_view, std::string_view>, 8> products = {{
         {"alignment_receipt", "model/alignment_receipt.json"},
         {"operating_model", "model/operating_model.json"},
         {"starfield", "assets/Starfield.png"},
@@ -101,10 +101,6 @@ TEST(BuildGateAuthority, ReleaseReceiptBindsEveryInstalledProductAtInitialisatio
         {"trace_spv", "kernels/trace.spv"},
         {"viewer_rdsd003a_fragment", "shaders/RDSD003A.frag"},
         {"viewer_rdsd003a_vertex", "shaders/RDSD003A.vert"},
-        {"viewer_rdsd004a_fragment", "shaders/RDSD004A.frag"},
-        {"viewer_rdsd004a_vertex", "shaders/RDSD004A.vert"},
-        {"viewer_rdsd005a_fragment", "shaders/RDSD005A.frag"},
-        {"viewer_rdsd005a_vertex", "shaders/RDSD005A.vert"},
     }};
     for (const auto& [logical_name, relative_path] : products) {
         WriteFile(root / relative_path,
@@ -164,7 +160,7 @@ TEST(BuildGateAuthority, ReleaseReceiptBindsEveryInstalledProductAtInitialisatio
     EXPECT_EQ(authority->source_revision, alignment.source_revision);
     EXPECT_EQ(authority->registered_tests, 700U);
     EXPECT_EQ(authority->executed_tests, 700U);
-    EXPECT_EQ(authority->verified_product_artifacts, 13U);
+    EXPECT_EQ(authority->verified_product_artifacts, 9U);
 
     WriteFile(root / "assets/Starfield.png", "starfielD");
     authority = ValidateBuildGateAuthorityForVolume(alignment, base::ExecutablePath(), root);
