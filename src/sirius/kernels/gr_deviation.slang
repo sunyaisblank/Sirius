@@ -11,14 +11,15 @@
 // integrated in one chart, mixing charts within a step. This port evaluates
 // deviation in the same Kerr-Schild Cartesian chart the render integrator uses
 // (gr_integrator IntegrateGeodesicRK4Cart), so k, xi, and R share one chart.
-// The finite-difference step and the Riemann formula are otherwise copied
-// verbatim.
+// The Riemann formula is retained, while its connection derivative uses a
+// precision-matched five-point stencil pinned against an independent analytic
+// Schwarzschild tensor by the non-image Vulkan parity probe.
 module gr_deviation;
 
 import gr_types;
 import gr_metrics;
 
-// Riemann tensor from central differences of the Kerr-Schild Christoffels.
+// Riemann tensor from fourth-order differences of the Kerr-Schild Christoffels.
 // R[mu][nu][rho][sigma]. Time derivatives vanish (stationary spacetime),
 // matching the .cu.
 public void GetRiemannTensorCart(
@@ -35,7 +36,14 @@ public void GetRiemannTensorCart(
     GetKerrSchildFamilyChristoffel(x, M, a, Q, Lambda, Gamma);
 
     Real r = ComputeKerrRadiusCart(x.x, x.y, x.z, Real(a));
-    const Real eps = 0.001f * max(Real(1.0f), r);
+    // A fourth-order five-point stencil uses a precision-matched step. At
+    // fp32, the former 0.1% two-point subtraction lost up to 1.4% of an
+    // analytic Schwarzschild tidal contraction to cancellation.
+#ifdef SIRIUS_FP64
+    const Real eps = Real(0.001) * max(Real(1.0), r);
+#else
+    const Real eps = Real(0.02) * max(Real(1.0), r);
+#endif
 
     // dGamma[rho][mu][nu][sigma] = d_rho Gamma^mu_nu_sigma.
     Real dGamma[4][4][4][4];
@@ -47,9 +55,24 @@ public void GetRiemannTensorCart(
     for (int rho = 1; rho < 4; rho++) {
         Vec4Cart xp = x;
         Vec4Cart xm = x;
-        if (rho == 1) { xp.x += eps; xm.x -= eps; }
-        else if (rho == 2) { xp.y += eps; xm.y -= eps; }
-        else { xp.z += eps; xm.z -= eps; }
+        Vec4Cart xpp = x;
+        Vec4Cart xmm = x;
+        if (rho == 1) {
+            xp.x += eps;
+            xm.x -= eps;
+            xpp.x += 2.0f * eps;
+            xmm.x -= 2.0f * eps;
+        } else if (rho == 2) {
+            xp.y += eps;
+            xm.y -= eps;
+            xpp.y += 2.0f * eps;
+            xmm.y -= 2.0f * eps;
+        } else {
+            xp.z += eps;
+            xm.z -= eps;
+            xpp.z += 2.0f * eps;
+            xmm.z -= 2.0f * eps;
+        }
 
         Real Gamma_plus[4][4][4];
         Real Gamma_minus[4][4][4];
@@ -60,7 +83,19 @@ public void GetRiemannTensorCart(
             for (int nu = 0; nu < 4; nu++)
                 for (int sig = 0; sig < 4; sig++)
                     dGamma[rho][mu][nu][sig] =
-                        (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig]) / (2.0f * eps);
+                        8.0f * (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig]);
+
+        // Reuse the two Christoffel work arrays so the higher-order stencil
+        // does not double the shader's live local-array footprint.
+        GetKerrSchildFamilyChristoffel(xpp, M, a, Q, Lambda, Gamma_plus);
+        GetKerrSchildFamilyChristoffel(xmm, M, a, Q, Lambda, Gamma_minus);
+        for (int mu = 0; mu < 4; mu++)
+            for (int nu = 0; nu < 4; nu++)
+                for (int sig = 0; sig < 4; sig++)
+                    dGamma[rho][mu][nu][sig] =
+                        (dGamma[rho][mu][nu][sig] -
+                         (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig])) /
+                        (12.0f * eps);
     }
 
     // R^mu_nu_rho_sigma = d_rho Gamma^mu_nu_sigma - d_sigma Gamma^mu_nu_rho
