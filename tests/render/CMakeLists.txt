@@ -1,10 +1,12 @@
-# Render suite: CPU tracer, output writers, film pipeline, spectral emission,
-# and the session-level end-to-end probe. Links sirius_render (which brings
-# sirius_core and the vendored stb/tinyexr symbols transitively). The vendored
-# headers are included by the round-trip decode side of the writer tests and the
-# probe, so this target carries the lib/stb and lib/tinyexr include paths.
+# Render suite: every render-capable CLI/viewer case, CPU tracer, output writers,
+# film pipeline, spectral emission, and the session-level end-to-end probe.
+# Links sirius_app_lib for command/viewer execution and sirius_render for the
+# lower render boundaries. The vendored headers are included by the round-trip
+# decode side of the writer tests and the probe, so this target carries the
+# lib/stb and lib/tinyexr include paths.
 
 add_executable(sirius_render_tests
+    app_render_execution_test.cpp
     geodesic_tracer_test.cpp
     exr_writer_test.cpp
     png_writer_test.cpp
@@ -22,7 +24,7 @@ add_executable(sirius_render_tests
     shadow_boundary_test.cpp
 )
 
-target_link_libraries(sirius_render_tests PRIVATE sirius_render GTest::gtest_main)
+target_link_libraries(sirius_render_tests PRIVATE sirius_render sirius_app_lib GTest::gtest_main)
 
 # Decode-side headers (stbi_load, LoadEXR); the implementations are provided by
 # sirius_render, so the tests need declarations only.

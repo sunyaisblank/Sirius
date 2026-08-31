@@ -17,7 +17,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-from test_source_governance import collect_source_tests
+from test_source_governance import APP_RENDERING_TESTS, collect_source_tests
 
 ROOT = Path(__file__).resolve().parent.parent
 NEW_TEST_DIR = ROOT / "tests"
@@ -165,12 +165,19 @@ SUITE_LABELS = {
 
 def collect_new_tree_tests(test_dir=NEW_TEST_DIR):
     tests = {}
+    rendering = set()
     for record in collect_source_tests(test_dir, ROOT).values():
         tests.setdefault(record.suite, []).append(record.case)
-    return tests
+        try:
+            relative = record.path.relative_to(ROOT)
+        except ValueError:
+            relative = record.path
+        if len(relative.parts) >= 2 and relative.parts[0:2] == ("tests", "render"):
+            rendering.add(record.name)
+    return tests, rendering
 
 
-def render_new_tree(tests):
+def render_new_tree(tests, rendering_tests):
     # The new tree registers tests at build time (gtest_discover_tests), so
     # this file is loaded by ctest AFTER each module's discovery include, via
     # TEST_INCLUDE_FILES per module directory (the legacy mechanism). Entries
@@ -192,7 +199,7 @@ def render_new_tree(tests):
         names = [
             f"    {suite}.{name}"
             for name in tests[suite]
-            if not name.startswith("DISABLED_")
+            if not name.startswith("DISABLED_") and f"{suite}.{name}" not in rendering_tests
         ]
         if not names:
             continue
@@ -201,12 +208,110 @@ def render_new_tree(tests):
         lines.append(f'    PROPERTIES LABELS "{labels}"')
         lines.append(")")
         lines.append("")
-    return "\n".join(lines) + "\n", unknown
+
+    rendering_by_labels = {}
+    for name in sorted(rendering_tests):
+        suite, _, _ = name.partition(".")
+        labels = SUITE_LABELS.get(suite)
+        if labels is None:
+            continue
+        rendering_by_labels.setdefault(f"{labels};Rendering", []).append(name)
+    for labels, names in sorted(rendering_by_labels.items()):
+        lines.append("set_tests_properties(")
+        lines.extend(f"    {name}" for name in names)
+        lines.append(f'    PROPERTIES LABELS "{labels}"')
+        lines.append(")")
+        lines.append("")
+    return "\n".join(lines) + "\n", unknown, sorted(APP_RENDERING_TESTS - rendering_tests)
 
 
 def main():
     if "--self-test" in sys.argv:
         with tempfile.TemporaryDirectory(prefix="sirius-label-governance-") as directory:
+            label_fixture, unknown_fixture, _ = render_new_tree(
+                {"RenderPipelineTests": ["PureBoundary", "RenderedBoundary"]},
+                {"RenderPipelineTests.RenderedBoundary"},
+            )
+            if (unknown_fixture or
+                    "RenderPipelineTests.PureBoundary\n"
+                    "    PROPERTIES LABELS \"Mandatory;Correctness\"" not in label_fixture or
+                    "RenderPipelineTests.RenderedBoundary\n"
+                    "    PROPERTIES LABELS \"Mandatory;Correctness;Rendering\""
+                    not in label_fixture):
+                print("error: rendering-directory label inheritance is not structural",
+                      file=sys.stderr)
+                return 1
+
+            boundary_root = Path(directory)
+            app_fixture = boundary_root / "tests" / "app" / "render_escape_test.cpp"
+            app_fixture.parent.mkdir(parents=True)
+            app_fixture.write_text(
+                "TEST(ViewCommandOperational, HeadlessRefinementProducesASynchronisedFrame) {\n"
+                "  InteractiveViewer viewer; ASSERT_TRUE(viewer.Start());\n}\n",
+                encoding="utf-8",
+            )
+            try:
+                collect_source_tests(boundary_root / "tests", boundary_root)
+            except ValueError as error:
+                if "outside tests/render" not in str(error):
+                    print(f"error: unexpected render-boundary rejection: {error}",
+                          file=sys.stderr)
+                    return 1
+            else:
+                print("error: source governance accepted a rendering test in tests/app",
+                      file=sys.stderr)
+                return 1
+
+            render_fixture = boundary_root / "tests" / "render" / app_fixture.name
+            render_fixture.parent.mkdir(parents=True)
+            app_fixture.replace(render_fixture)
+            records = collect_source_tests(boundary_root / "tests", boundary_root)
+            if set(records) != {
+                    "ViewCommandOperational.HeadlessRefinementProducesASynchronisedFrame"}:
+                print("error: source governance rejected the rendering test in tests/render",
+                      file=sys.stderr)
+                return 1
+            render_fixture.unlink()
+
+            app_fixture.write_text(
+                "TEST(RenderCommandParse, NewlyAddedExecution) {\n"
+                "  RenderCommand command; GlobalOptions globals; SiriusConfig config;\n"
+                "  EXPECT_EQ(command.Execute({}, globals, config), 0);\n}\n",
+                encoding="utf-8",
+            )
+            try:
+                collect_source_tests(boundary_root / "tests", boundary_root)
+            except ValueError as error:
+                if "unclassified RenderCommand execution" not in str(error):
+                    print(f"error: unexpected command-boundary rejection: {error}",
+                          file=sys.stderr)
+                    return 1
+            else:
+                print("error: source governance accepted unclassified app-side execution",
+                      file=sys.stderr)
+                return 1
+            app_fixture.unlink()
+
+            app_fixture.write_text(
+                "int HiddenRender() {\n"
+                "  RenderCommand command; GlobalOptions globals; SiriusConfig config;\n"
+                "  return command.Execute({}, globals, config);\n}\n"
+                "TEST(RenderCommandParse, HelperEscape) { EXPECT_EQ(HiddenRender(), 0); }\n",
+                encoding="utf-8",
+            )
+            try:
+                collect_source_tests(boundary_root / "tests", boundary_root)
+            except ValueError as error:
+                if "hides app-side Start/Execute" not in str(error):
+                    print(f"error: unexpected helper-boundary rejection: {error}",
+                          file=sys.stderr)
+                    return 1
+            else:
+                print("error: source governance accepted a hidden app-side execution helper",
+                      file=sys.stderr)
+                return 1
+            app_fixture.unlink()
+
             fixture = Path(directory) / "escape_test.cpp"
             fixture.write_text(
                 "TEST_P(EscapeSuite, Ungoverned) {}\\n",
@@ -290,14 +395,18 @@ def main():
             return 1
 
     try:
-        new_tests = collect_new_tree_tests()
+        new_tests, rendering_tests = collect_new_tree_tests()
     except ValueError as error:
         print(f"error: {error}", file=sys.stderr)
         return 1
-    new_content, new_unknown = render_new_tree(new_tests)
+    new_content, new_unknown, missing_rendering = render_new_tree(new_tests, rendering_tests)
     for suite in new_unknown:
         print(f"error: suite '{suite}' has no explicit label policy", file=sys.stderr)
     if new_unknown:
+        return 1
+    for name in missing_rendering:
+        print(f"error: governed rendering test is missing: {name}", file=sys.stderr)
+    if missing_rendering:
         return 1
 
     if "--check" in sys.argv:
