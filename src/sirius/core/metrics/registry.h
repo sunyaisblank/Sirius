@@ -37,6 +37,8 @@ enum class MetricId {
 };
 
 inline constexpr double kDefaultMorrisThorneThroatRadius = 1.0;
+inline constexpr double kMinMorrisThorneThroatRadius = 0.1;
+inline constexpr double kMaxMorrisThorneThroatRadius = 1000.0;
 inline constexpr double kDefaultAlcubierreWarpVelocity = 0.5;
 inline constexpr double kDefaultAlcubierreBubbleRadius = 1.0;
 inline constexpr double kDefaultAlcubierreBubbleSigma = 0.5;
@@ -430,10 +432,10 @@ inline const std::array<MetricInfo, 9>& MetricRegistry() {
          "mass, positive lambda; 9 lambda mass^2 < 1",
          true,
          false},
-        // CPU support arrives through MorrisThorneCartesian, the flat-plus-
-        // rank-one embedding of the spherical family (one sheet, throat as the
-        // capture surface); the spherical family remains the kernel-parity
-        // reference and is never driven by the Cartesian tracer directly.
+        // CPU support arrives through the exact isotropic Cartesian chart of
+        // the zero-tidal Ellis member (one output sheet, throat as the capture
+        // surface); the areal-radius family remains an independent authority
+        // and is never driven by the Cartesian tracer directly.
         {MetricId::MorrisThorne,
          "Morris-Thorne",
          {"MorrisThorne", "Wormhole", "Morris-Thorne Wormhole", "Ellis Drainhole",

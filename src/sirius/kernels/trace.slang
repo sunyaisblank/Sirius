@@ -18,10 +18,9 @@
 //
 // Metric dispatch (params[2]) matches the registry gpu_supported set the render
 // session wires: Kerr-Schild family (Minkowski/Schwarzschild/Kerr), the
-// Alcubierre warp family, and the Morris-Thorne wormhole through its Cartesian
-// embedding (gr_metrics GetMorrisThorneCartesian*, mirroring the CPU render
-// authority; one sheet, throat capture). The spherical-chart Ellis/Morris-
-// Thorne routines remain parity-probe references, not render dispatches.
+// Alcubierre warp family, and the zero-tidal Ellis wormhole through its exact
+// isotropic Cartesian chart (gr_metrics GetMorrisThorneCartesian*, mirroring
+// the CPU render authority; one output sheet, accepted-segment throat capture).
 //
 // Buffer ABI (bound 0..5 in declaration order):
 //   0 radiance   : RWStructuredBuffer<float>, tileWidth*tileHeight*4 (RGBA/px).
@@ -38,6 +37,7 @@ import gr_metrics;
 import gr_integrator;
 import gr_disk;
 import gr_deviation;
+import gr_trace_event;
 
 RWStructuredBuffer<float> radiance;  // binding 0
 StructuredBuffer<float> params;      // binding 1
@@ -437,40 +437,6 @@ float VolumeDiskTemperature(float cylindricalR, float z, float innerRadius,
     return max(midplane, 0.0f);
 }
 
-// Cubic Hermite sample of one accepted central-ray segment. The position and
-// affine tangent match both endpoints, unlike a chord interpolation through a
-// curved geodesic.
-Vec4Cart AcceptedSegmentPosition(Vec4Cart start, Vec4Cart startVelocity,
-                                 Vec4Cart finish, Vec4Cart finishVelocity,
-                                 Real affineLength, Real fraction) {
-    Real s2 = fraction * fraction;
-    Real s3 = s2 * fraction;
-    Real h00 = Real(2.0f) * s3 - Real(3.0f) * s2 + Real(1.0f);
-    Real h10 = s3 - Real(2.0f) * s2 + fraction;
-    Real h01 = Real(-2.0f) * s3 + Real(3.0f) * s2;
-    Real h11 = s3 - s2;
-    return AddVec4Cart(
-        AddVec4Cart(ScaleVec4Cart(start, h00),
-                    ScaleVec4Cart(startVelocity, affineLength * h10)),
-        AddVec4Cart(ScaleVec4Cart(finish, h01),
-                    ScaleVec4Cart(finishVelocity, affineLength * h11)));
-}
-
-Vec4Cart AcceptedSegmentTangent(Vec4Cart start, Vec4Cart startVelocity,
-                                Vec4Cart finish, Vec4Cart finishVelocity,
-                                Real affineLength, Real fraction) {
-    Real s2 = fraction * fraction;
-    Real dh00 = Real(6.0f) * s2 - Real(6.0f) * fraction;
-    Real dh10 = Real(3.0f) * s2 - Real(4.0f) * fraction + Real(1.0f);
-    Real dh01 = Real(-6.0f) * s2 + Real(6.0f) * fraction;
-    Real dh11 = Real(3.0f) * s2 - Real(2.0f) * fraction;
-    return AddVec4Cart(
-        AddVec4Cart(ScaleVec4Cart(start, dh00 / affineLength),
-                    ScaleVec4Cart(startVelocity, dh10)),
-        AddVec4Cart(ScaleVec4Cart(finish, dh01 / affineLength),
-                    ScaleVec4Cart(finishVelocity, dh11)));
-}
-
 Real EvaluateCubic(Real coefficientA, Real coefficientB, Real coefficientC,
                    Real coefficientD, Real fraction) {
     return ((coefficientA * fraction + coefficientB) * fraction + coefficientC) *
@@ -700,13 +666,14 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         GetKerrSchildFamilyMetric(pos0, M, a, Q, Lambda, g, g_inv);
     }
     // Capture radius: the buffered Kerr-Schild outer horizon r_+ = M +
-    // sqrt(M^2 - a^2 - Q^2) for the black-hole family; the throat radius for
-    // the one-sheet wormhole (its far mouth is unmodelled, so rays reaching
-    // the throat terminate as captured, matching the CPU path). The warp
+    // sqrt(M^2 - a^2 - Q^2) for the black-hole family; the isotropic throat
+    // rho=b0/2 for the one-sheet Ellis wormhole (its far mouth is unmodelled,
+    // so rays reaching the throat terminate as captured, matching the CPU
+    // path). The warp
     // bubble is horizonless: capture is disabled.
     float disc = M * M - a * a - Q * Q;
     float horizonRadius = (disc > 0.0f) ? (M + sqrt(disc)) : M;
-    if (isWormhole) horizonRadius = throatB0;
+    if (isWormhole) horizonRadius = 0.5f * throatB0;
     horizonRadius *= captureFactor;
 
     GeodesicStateCart state;
@@ -803,12 +770,32 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
 
         GeodesicStateCart next = attempted.candidate;
         bool terminalDiskHit = false;
+        bool terminalCaptureSurface = false;
 #ifdef SIRIUS_FP32_COMP
         Vec4Cart acceptedDX = AddVec4Cart(next.x, ScaleVec4Cart(state.x, Real(-1.0f)));
         Vec4Cart acceptedDU = AddVec4Cart(next.u, ScaleVec4Cart(state.u, Real(-1.0f)));
         next.x = KahanAddVec4Cart(state.x, compX, acceptedDX);
         next.u = KahanAddVec4Cart(state.u, compU, acceptedDU);
 #endif
+
+        // The isotropic throat is a finite event of the accepted Hermite
+        // segment.  A sextic root isolation catches both ordinary entries and
+        // a narrow enter/exit or tangent contact whose endpoints are outside.
+        // Clip before any segment consumer; wormhole disk and beam features
+        // are already outside the represented capability boundary.
+        if (isWormhole) {
+            Real captureFraction;
+            Vec4Cart capturePosition;
+            Vec4Cart captureTangent;
+            if (FindSphericalCaptureEvent(
+                    state.x, state.u, next.x, next.u, dt, Real(horizonRadius),
+                    captureFraction, capturePosition, captureTangent)) {
+                next.x = capturePosition;
+                next.u = captureTangent;
+                dt *= captureFraction;
+                terminalCaptureSurface = true;
+            }
+        }
 
         // Optional volumetric disk (Kerr-Schild black holes only).
         if (volumeEnabled && !isWarp && !isWormhole) {
@@ -1051,6 +1038,10 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
 
         state = next;
         if (terminalDiskHit) break;
+        if (terminalCaptureSurface) {
+            captured = true;
+            break;
+        }
 
         // Classify the accepted endpoint in this iteration. Delaying this until
         // the next loop made a final-attempt capture look like an ordinary

@@ -124,6 +124,22 @@ class MetricLoaderChainTests : public ::testing::Test {
         return pos;
     }
 
+    Vec4 getPositionForMetric(const IMetric* metric, double radius = 10.0, double theta = PI / 2.0,
+                              double phi = 0.0) {
+        Vec4 pos;
+        pos(0) = 0.0;
+        if (dynamic_cast<const MorrisThorneFamily*>(metric) != nullptr) {
+            pos(1) = radius;
+            pos(2) = theta;
+            pos(3) = phi;
+        } else {
+            pos(1) = radius * std::sin(theta) * std::cos(phi);
+            pos(2) = radius * std::sin(theta) * std::sin(phi);
+            pos(3) = radius * std::cos(theta);
+        }
+        return pos;
+    }
+
     // Evaluate metric and verify no NaN/Inf in output
     bool evaluateMetricSafe(IMetric* metric, const Vec4& pos, Metric4d& g,
                             Tensor<Dual<double>, 4, 4, 4>& dg) {
@@ -165,9 +181,8 @@ TEST_F(MetricLoaderChainTests, AllMetricsHaveParameters) {
 
 // Verify all metrics evaluate successfully at standard position
 TEST_F(MetricLoaderChainTests, AllMetricsEvaluateAtStandardPosition) {
-    Vec4 pos = getStandardPosition();
-
     for (const auto& metric : metrics) {
+        const Vec4 pos = getPositionForMetric(metric.get());
         Metric4d g;
         Tensor<Dual<double>, 4, 4, 4> dg;
 
@@ -182,7 +197,7 @@ TEST_F(MetricLoaderChainTests, AllMetricsEvaluateAtStandardPosition) {
 // Verify all metrics have Lorentzian signature (-,+,+,+)
 TEST_F(MetricLoaderChainTests, AllMetricsHaveLorentzianSignature) {
     for (const auto& metric : metrics) {
-        Vec4 pos = getStandardPosition();
+        Vec4 pos = getPositionForMetric(metric.get());
         const bool spherical_morris =
             dynamic_cast<const MorrisThorneFamily*>(metric.get()) != nullptr;
         if (spherical_morris) {
@@ -232,9 +247,8 @@ TEST_F(MetricLoaderChainTests, AllMetricsHaveLorentzianSignature) {
 
 // Verify all metrics are symmetric: g_μν = g_νμ
 TEST_F(MetricLoaderChainTests, AllMetricsAreSymmetric) {
-    Vec4 pos = getStandardPosition();
-
     for (const auto& metric : metrics) {
+        const Vec4 pos = getPositionForMetric(metric.get());
         Metric4d g;
         Tensor<Dual<double>, 4, 4, 4> dg;
         metric->Evaluate(pos, g, dg);
@@ -363,13 +377,8 @@ TEST_F(MetricLoaderChainTests, RNReducesToSchwarzschild) {
 
 // Verify all metrics approach Minkowski at large radius
 TEST_F(MetricLoaderChainTests, FarFieldAsymptoticFlatness) {
-    Vec4 far_pos;
-    far_pos(0) = 0.0;
-    far_pos(1) = 1000.0;  // Far from source (x=1000)
-    far_pos(2) = 0.0;
-    far_pos(3) = 0.0;
-
     for (const auto& metric : metrics) {
+        const Vec4 far_pos = getPositionForMetric(metric.get(), 1000.0);
         Metric4d g;
         Tensor<Dual<double>, 4, 4, 4> dg;
         metric->Evaluate(far_pos, g, dg);
@@ -442,14 +451,7 @@ TEST_F(MetricLoaderChainTests, HandlesNearPoles) {
 
     for (const auto& metric : metrics) {
         for (double theta : pole_thetas) {
-            Vec4 pos;
-            // Near pole: theta small. Convert to Cartesian
-            double r = 10.0;
-            double phi = 0.0;
-            pos(0) = 0.0;
-            pos(1) = r * std::sin(theta) * std::cos(phi);
-            pos(2) = r * std::sin(theta) * std::sin(phi);
-            pos(3) = r * std::cos(theta);  // z ~ +/- r
+            const Vec4 pos = getPositionForMetric(metric.get(), 10.0, theta);
 
             Metric4d g;
             Tensor<Dual<double>, 4, 4, 4> dg;
@@ -500,9 +502,8 @@ TEST_F(MetricLoaderChainTests, HandlesNearHorizon) {
 
 // Verify all metric derivatives are finite (no NaN/Inf)
 TEST_F(MetricLoaderChainTests, MetricDerivativesFinite) {
-    Vec4 pos = getStandardPosition();
-
     for (const auto& metric : metrics) {
+        const Vec4 pos = getPositionForMetric(metric.get());
         Metric4d g;
         Tensor<Dual<double>, 4, 4, 4> dg;
         metric->Evaluate(pos, g, dg);

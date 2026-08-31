@@ -1,19 +1,19 @@
-// MorrisThorneCartesian: the flat-plus-rank-one Cartesian embedding of the
-// spherical Morris-Thorne family, the chart the CPU tracer drives.
+// MorrisThorneCartesian: the exact isotropic Cartesian chart of the zero-tidal
+// Ellis member, the chart the CPU tracer drives.
 //
-// Gates: agreement with the spherical authority component by component
-// (radial, tangential, cross, time), analytic derivatives against finite
-// differences of the metric itself, exactness of the Sherman-Morrison inverse,
-// and the throat capture surface. Together these are the preconditions the
-// tracer's geodesic step relies on; the spherical family stays the
-// shape-function authority so a defect here cannot silently fork the physics.
+// Gates: coordinate-transformed agreement with the spherical areal-radius
+// authority on both sheets, a finite exact throat, analytic derivatives,
+// inverse identity, chart domain, and complete accepted-segment capture
+// events.  The latter includes equal-sign endpoints and a tangent contact.
 
 #include "sirius/core/metrics/morris_thorne_family.h"
 #include "sirius/core/tensor.h"
+#include "sirius/core/trace_boundary.h"
 
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <limits>
 #include <numbers>
 #include <vector>
 
@@ -68,15 +68,14 @@ std::vector<MorrisThorneParams> SampleShapes() {
     return {
         MorrisThorneParams::Ellis(1.0),
         MorrisThorneParams::Ellis(2.5),
-        MorrisThorneParams::ZeroTidal(1.0),
-        {1.0, 0.0, WormholeShapeType::AbsurdlyBenign, nullptr, nullptr},
     };
 }
 
 // -----------------------------------------------------------------------------
-// The embedding reproduces the spherical chart's line element: the radial
-// sectional component is 1/(1 - b/r), any tangential unit direction has unit
-// length, radial and tangential directions are orthogonal, and g_tt matches.
+// Under r=rho+b0^2/(4rho), the areal-radius radial coefficient transforms with
+// (dr/drho)^2 and an isotropic-coordinate unit tangent spans angle 1/rho. Both
+// must equal A^2 for A=1+b0^2/(4rho^2), including the mathematically continued
+// second sheet rho<b0/2.
 // -----------------------------------------------------------------------------
 TEST(MorrisThorneCartesianTests, ChartAgreementWithSphericalFamily) {
     for (const auto& params : SampleShapes()) {
@@ -84,17 +83,21 @@ TEST(MorrisThorneCartesianTests, ChartAgreementWithSphericalFamily) {
         MorrisThorneFamily sph(params);
         double b0 = params.b0;
 
-        for (double rf : {1.5, 2.0, 5.0, 20.0}) {
-            double r = rf * b0;
+        for (double rho_factor : {0.25, 0.55, 0.75, 1.0, 2.0, 10.0}) {
+            const double rho = rho_factor * b0;
+            const double q = (b0 * b0) / (4.0 * rho * rho);
+            const double areal_radius = rho * (1.0 + q);
+            const double dr_drho = 1.0 - q;
+            const double expected_conformal = (1.0 + q) * (1.0 + q);
             for (const auto& n : SampleDirections()) {
                 Metric4d g;
                 Tensor<Dual<double>, 4, 4, 4> dg;
-                cart.Evaluate(CartPos(r, n), g, dg);
+                cart.Evaluate(CartPos(rho, n), g, dg);
 
                 Metric4d gs;
                 Tensor<Dual<double>, 4, 4, 4> dgs;
                 Vec4 spos;
-                spos(1) = r;
+                spos(1) = areal_radius;
                 spos(2) = std::numbers::pi / 2.0;
                 sph.Evaluate(spos, gs, dgs);
 
@@ -112,10 +115,15 @@ TEST(MorrisThorneCartesianTests, ChartAgreementWithSphericalFamily) {
                     }
                 }
 
-                EXPECT_NEAR(radial, gs(1, 1).real, 1e-12 * std::abs(gs(1, 1).real))
-                    << "radial component, b0=" << b0 << " r=" << r;
-                EXPECT_NEAR(tangential, 1.0, 1e-12)
-                    << "tangential component, b0=" << b0 << " r=" << r;
+                const double transformed_radial = gs(1, 1).real * dr_drho * dr_drho;
+                const double transformed_tangential = gs(2, 2).real / (rho * rho);
+                EXPECT_NEAR(radial, transformed_radial, 2e-11 * std::abs(transformed_radial))
+                    << "radial component, b0=" << b0 << " rho=" << rho;
+                EXPECT_NEAR(tangential, transformed_tangential,
+                            2e-12 * std::abs(transformed_tangential))
+                    << "tangential component, b0=" << b0 << " rho=" << rho;
+                EXPECT_NEAR(radial, expected_conformal, 2e-11 * expected_conformal);
+                EXPECT_NEAR(tangential, expected_conformal, 2e-12 * expected_conformal);
                 EXPECT_NEAR(cross, 0.0, 1e-12) << "radial-tangential cross term";
                 EXPECT_NEAR(g(0, 0).real, gs(0, 0).real, 1e-14) << "g_tt";
                 // Time-space block is exactly zero (static metric).
@@ -131,7 +139,7 @@ TEST(MorrisThorneCartesianTests, ChartAgreementWithSphericalFamily) {
 // -----------------------------------------------------------------------------
 // The analytic derivative block matches central finite differences of
 // Evaluate at generic points. This is the completeness gate for the chain
-// rule through f(r) and the radial frame.
+// rule through the isotropic conformal factor.
 // -----------------------------------------------------------------------------
 TEST(MorrisThorneCartesianTests, DerivativesMatchFiniteDifferencesOfMetric) {
     const double h = 1e-6;
@@ -139,7 +147,7 @@ TEST(MorrisThorneCartesianTests, DerivativesMatchFiniteDifferencesOfMetric) {
         MorrisThorneCartesian cart(params);
         double b0 = params.b0;
 
-        for (double rf : {1.5, 3.0, 10.0}) {
+        for (double rf : {0.25, 0.5, 0.75, 1.5, 3.0, 10.0}) {
             for (const auto& n : SampleDirections()) {
                 Vec4 x = CartPos(rf * b0, n);
 
@@ -171,15 +179,15 @@ TEST(MorrisThorneCartesianTests, DerivativesMatchFiniteDifferencesOfMetric) {
 }
 
 // -----------------------------------------------------------------------------
-// The closed-form inverse satisfies g^mu_alpha g_alpha_nu = delta^mu_nu to
-// near machine precision; Sherman-Morrison is exact, so the bar is rounding.
+// The closed-form diagonal inverse satisfies g^mu_alpha g_alpha_nu = delta^mu_nu
+// to near machine precision, so the bar below is rounding.
 // -----------------------------------------------------------------------------
 TEST(MorrisThorneCartesianTests, AnalyticInverseIsExact) {
     for (const auto& params : SampleShapes()) {
         MorrisThorneCartesian cart(params);
         double b0 = params.b0;
 
-        for (double rf : {1.2, 1.5, 3.0, 50.0}) {
+        for (double rf : {0.25, 0.5, 0.75, 1.5, 3.0, 50.0}) {
             for (const auto& n : SampleDirections()) {
                 Vec4 x = CartPos(rf * b0, n);
 
@@ -205,20 +213,133 @@ TEST(MorrisThorneCartesianTests, AnalyticInverseIsExact) {
 }
 
 // -----------------------------------------------------------------------------
-// The throat is the capture surface: inside at r <= b0 (1 + margin), outside
-// beyond it. The tracer's horizon_factor drives margin exactly as for black
-// holes, so the same termination path serves the one-sheet wormhole.
+// The physical areal throat r=b0 is rho=b0/2 in the isotropic chart.
 // -----------------------------------------------------------------------------
 TEST(MorrisThorneCartesianTests, ThroatIsTheCaptureSurface) {
     for (double b0 : {1.0, 2.5}) {
         MorrisThorneCartesian cart(MorrisThorneParams::Ellis(b0));
         const double margin = 0.05;
 
-        EXPECT_TRUE(cart.InsideCaptureSurface(CartPos(1.049 * b0, {1, 0, 0}), margin));
-        EXPECT_TRUE(cart.InsideCaptureSurface(CartPos(0.5 * b0, {0, 0, 1}), margin));
-        EXPECT_FALSE(cart.InsideCaptureSurface(CartPos(1.051 * b0, {0.6, 0.8, 0}), margin));
+        EXPECT_DOUBLE_EQ(cart.IsotropicThroatRadius(), 0.5 * b0);
+        ASSERT_TRUE(cart.SphericalCaptureRadius().has_value());
+        EXPECT_DOUBLE_EQ(*cart.SphericalCaptureRadius(), 0.5 * b0);
+        EXPECT_TRUE(cart.InsideCaptureSurface(CartPos(0.5249 * b0, {1, 0, 0}), margin));
+        EXPECT_TRUE(cart.InsideCaptureSurface(CartPos(0.25 * b0, {0, 0, 1}), margin));
+        EXPECT_FALSE(cart.InsideCaptureSurface(CartPos(0.5251 * b0, {0.6, 0.8, 0}), margin));
         EXPECT_FALSE(cart.InsideCaptureSurface(CartPos(10.0 * b0, {1, 0, 0}), margin));
     }
+}
+
+TEST(MorrisThorneCartesianTests, ThroatAndPositiveRadiusSecondSheetAreFiniteAndUnclamped) {
+    MorrisThorneCartesian cart(MorrisThorneParams::Ellis(2.0));
+    for (double rho : {0.25, 0.5, 1.0, 2.0}) {
+        Vec4 position = CartPos(rho, {0.6, 0.8, 0.0});
+        EXPECT_TRUE(cart.IsValidEvent(position));
+        Metric4d metric;
+        Tensor<Dual<double>, 4, 4, 4> derivative;
+        cart.Evaluate(position, metric, derivative);
+        const double q = 1.0 / (rho * rho);  // b0^2/(4 rho^2), b0=2.
+        const double expected = (1.0 + q) * (1.0 + q);
+        for (int axis = 1; axis < 4; ++axis) {
+            EXPECT_NEAR(metric(axis, axis).real, expected, 1e-13 * expected);
+        }
+        EXPECT_TRUE(metric_validation::CheckLorentzianSignature(metric));
+    }
+
+    Vec4 origin;
+    EXPECT_FALSE(cart.IsValidEvent(origin));
+    Vec4 nonfinite = CartPos(1.0, {1, 0, 0});
+    nonfinite(2) = std::numeric_limits<double>::infinity();
+    EXPECT_FALSE(cart.IsValidEvent(nonfinite));
+}
+
+TEST(MorrisThorneCartesianTests, SphericalArealChartDeclinesItsCoordinateSingularities) {
+    MorrisThorneFamily spherical(MorrisThorneParams::Ellis(1.0));
+    Vec4 exterior;
+    exterior(1) = 1.01;
+    exterior(2) = std::numbers::pi / 2.0;
+    EXPECT_TRUE(spherical.IsValidEvent(exterior));
+
+    Vec4 throat = exterior;
+    throat(1) = 1.0;
+    EXPECT_FALSE(spherical.IsValidEvent(throat));
+    Vec4 below = exterior;
+    below(1) = 0.99;
+    EXPECT_FALSE(spherical.IsValidEvent(below));
+    Vec4 pole = exterior;
+    pole(2) = 0.0;
+    EXPECT_FALSE(spherical.IsValidEvent(pole));
+}
+
+TEST(MorrisThorneCartesianTests, AcceptedSegmentFindsHiddenAndTangentThroatContacts) {
+    Vec4 start, finish, start_tangent, finish_tangent;
+    start(1) = 1.1;
+    finish(0) = 1.0;
+    finish(1) = 1.1;
+    start_tangent(0) = 1.0;
+    finish_tangent(0) = 1.0;
+    start_tangent(1) = -0.8;
+    finish_tangent(1) = 0.8;
+
+    const auto hidden =
+        FindSphericalCaptureEvent(start, start_tangent, finish, finish_tangent, 1.0, 1.0);
+    ASSERT_TRUE(hidden.has_value());
+    const double expected_fraction = (0.8 - std::sqrt(0.32)) / 1.6;
+    EXPECT_NEAR(hidden->fraction, expected_fraction, 2e-14);
+    EXPECT_NEAR(hidden->position(1), 1.0, 2e-14);
+    EXPECT_NEAR(hidden->tangent(1), -std::sqrt(0.32), 2e-13);
+    EXPECT_GT(std::abs(start(1)), 1.0);
+    EXPECT_GT(std::abs(finish(1)), 1.0);
+    const auto midpoint =
+        SampleAcceptedTraceSegment(start, start_tangent, finish, finish_tangent, 1.0, 0.5);
+    EXPECT_NEAR(midpoint.position(1), 0.9, 1e-15);
+
+    start_tangent(1) = -0.4;
+    finish_tangent(1) = 0.4;
+    const auto tangent =
+        FindSphericalCaptureEvent(start, start_tangent, finish, finish_tangent, 1.0, 1.0);
+    ASSERT_TRUE(tangent.has_value());
+    EXPECT_NEAR(tangent->fraction, 0.5, 2e-12);
+    EXPECT_NEAR(tangent->position(1), 1.0, 2e-13);
+    EXPECT_NEAR(tangent->tangent(1), 0.0, 2e-12);
+
+    start_tangent(1) = -0.3;
+    finish_tangent(1) = 0.3;
+    EXPECT_FALSE(FindSphericalCaptureEvent(start, start_tangent, finish, finish_tangent, 1.0, 1.0)
+                     .has_value());
+}
+
+TEST(MorrisThorneCartesianTests, NonEllisCartesianRequestsFailClosed) {
+    EXPECT_DEATH(
+        {
+            MorrisThorneCartesian rejected(MorrisThorneParams::ZeroTidal(1.0));
+            (void)rejected;
+        },
+        "violated");
+}
+
+TEST(MorrisThorneCartesianTests, ParameterBoundsMatchConfigAuthority) {
+    auto boundary = MorrisThorneParams::Ellis(kMinMorrisThorneThroatRadius);
+    boundary.Phi0 = 10.0;
+    MorrisThorneFamily accepted(boundary);
+    EXPECT_DOUBLE_EQ(accepted.GetParams().b0, kMinMorrisThorneThroatRadius);
+    EXPECT_DOUBLE_EQ(accepted.GetParams().Phi0, 10.0);
+
+    EXPECT_DEATH(
+        {
+            auto outside = MorrisThorneParams::Ellis(1.0);
+            outside.Phi0 = 10.01;
+            MorrisThorneFamily rejected(outside);
+            (void)rejected;
+        },
+        "violated");
+    EXPECT_DEATH(
+        {
+            MorrisThorneFamily rejected(
+                MorrisThorneParams::Ellis(kMinMorrisThorneThroatRadius - 0.01));
+            (void)rejected;
+        },
+        "violated");
 }
 
 }  // namespace

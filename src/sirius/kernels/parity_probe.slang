@@ -20,6 +20,7 @@ import gr_metrics;
 import gr_integrator;
 import gr_disk;
 import gr_deviation;
+import gr_trace_event;
 
 StructuredBuffer<float> samples;     // binding 0
 RWStructuredBuffer<float> results;   // binding 1
@@ -43,6 +44,7 @@ static const uint OP_CIE_1931_TWO_DEGREE_FIT = 14;
 static const uint OP_KERR_ZAMO_TRANSFER = 15;
 static const uint OP_KERR_DISK_TRANSFER = 16;
 static const uint OP_GREY_LAYER_ABSORPTION = 17;
+static const uint OP_SPHERICAL_CAPTURE_EVENT = 18;
 
 // Future-directed null root used by the render kernel, repeated here only for
 // the diagnostic launch boundary. The integration below calls the production
@@ -137,16 +139,9 @@ void MetricById(uint metricId, float p1, float p2, float p3, float p4,
         // family params: p1=vs, p2=sigma, p3=R; bubble at origin.
         GetWarpDriveMetric(MakeVec4Cart(0.0f, c0, c1, c2), p1, p2, p3, 0.0f, 0.0f, 0.0f, g, g_inv);
     } else if (metricId == kMetricMorrisThorne) {
-        // family params: p1=b0, p2=Phi0, p3=shapeType.
-        float sphericalG[4][4];
-        float sphericalInverse[4][4];
-        GetMorrisThorneMetric(MakeVec4(0.0f, c0, c1, c2), p1, p2, int(p3),
-                              sphericalG, sphericalInverse);
-        [unroll] for (int m = 0; m < 4; ++m)
-            [unroll] for (int n = 0; n < 4; ++n) {
-                g[m][n] = Real(sphericalG[m][n]);
-                g_inv[m][n] = Real(sphericalInverse[m][n]);
-            }
+        // Live isotropic Ellis chart: p1=b0, p2=Phi0, p3=shapeType.
+        GetMorrisThorneCartesianMetric(MakeVec4Cart(0.0f, c0, c1, c2),
+                                        p1, p2, int(p3), g, g_inv);
     } else {
         GetKerrSchildFamilyMetric(MakeVec4Cart(0.0f, c0, c1, c2), p1, p2, p3, p4, g, g_inv);
     }
@@ -158,13 +153,8 @@ void ChristoffelById(uint metricId, float p1, float p2, float p3, float p4,
     if (metricId == kMetricWarpDrive) {
         GetWarpDriveChristoffel(MakeVec4Cart(0.0f, c0, c1, c2), p1, p2, p3, 0.0f, 0.0f, 0.0f, Gamma);
     } else if (metricId == kMetricMorrisThorne) {
-        float sphericalGamma[4][4][4];
-        GetMorrisThorneChristoffel(MakeVec4(0.0f, c0, c1, c2), p1, p2, int(p3),
-                                   sphericalGamma);
-        [unroll] for (int m = 0; m < 4; ++m)
-            [unroll] for (int n = 0; n < 4; ++n)
-                [unroll] for (int k = 0; k < 4; ++k)
-                    Gamma[m][n][k] = Real(sphericalGamma[m][n][k]);
+        GetMorrisThorneCartesianChristoffel(
+            MakeVec4Cart(0.0f, c0, c1, c2), p1, p2, int(p3), Gamma);
     } else {
         GetKerrSchildFamilyChristoffel(MakeVec4Cart(0.0f, c0, c1, c2), p1, p2, p3, p4, Gamma);
     }
@@ -278,6 +268,36 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         // c0=non-negative layer optical depth. This is a scalar compute probe;
         // it performs no ray dispatch and produces no image.
         results[rb + 0] = GreyLayerAbsorbedFraction(c0);
+    } else if (opcode == OP_SPHERICAL_CAPTURE_EVENT) {
+        // Compute-only witness for the exact accepted-segment event authority.
+        // p1=surface radius; c=start xyz; u=start tangent txyz; h=affine
+        // length; aux=end xyz; p2..p4=end tangent xyz.
+        Vec4Cart start = MakeVec4Cart(Real(0.0f), Real(c0), Real(c1), Real(c2));
+        Vec4Cart startTangent = MakeVec4Cart(
+            Real(samples[sb + 8]), Real(samples[sb + 9]),
+            Real(samples[sb + 10]), Real(samples[sb + 11]));
+        Vec4Cart finish = MakeVec4Cart(
+            Real(samples[sb + 12]), Real(samples[sb + 13]),
+            Real(samples[sb + 14]), Real(samples[sb + 15]));
+        Vec4Cart finishTangent = MakeVec4Cart(
+            Real(samples[sb + 8]), Real(p2), Real(p3), Real(p4));
+        Real fraction;
+        Vec4Cart position;
+        Vec4Cart tangent;
+        bool represented = FindSphericalCaptureEvent(
+            start, startTangent, finish, finishTangent,
+            Real(samples[sb + 12]), Real(p1), fraction, position, tangent);
+        results[rb + 0] = represented ? 1.0f : 0.0f;
+        results[rb + 1] = float(fraction);
+        results[rb + 2] = float(position.x);
+        results[rb + 3] = float(position.y);
+        results[rb + 4] = float(position.z);
+        results[rb + 5] = float(tangent.x);
+        results[rb + 6] = float(tangent.y);
+        results[rb + 7] = float(tangent.z);
+        results[rb + 8] = float(sqrt(position.x * position.x +
+                                     position.y * position.y +
+                                     position.z * position.z));
     } else if (opcode == OP_NULL_PROJECTION) {
         // Direct witness for the production accepted-state constraint method.
         // The sample supplies a metric family/event and u=(t,x,y,z).

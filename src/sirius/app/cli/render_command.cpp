@@ -102,7 +102,7 @@ Basic Options:
                             (default: 50000)
   --color-mode <name>       TrueColor, TemperatureMap, RedshiftMap, or
                             Polarisation (Narrowband is reserved and declines)
-  --throat-radius <b0>      Morris-Thorne-only throat radius (default: 1.0)
+  --throat-radius <b0>      Morris-Thorne Ellis throat radius, 0.1..1000 (default: 1.0)
   --wormhole-topology <t>   OneSheetCapture (supported) or TwoSheet (declines explicitly)
   --warp-velocity <vs>      Alcubierre-only warp velocity (default: 0.5)
   --bubble-radius <R>       Alcubierre-only bubble radius (default: 1.0)

@@ -180,6 +180,7 @@ Each review pass asks:
 | CPU motion-blur evidence reimplemented a synthetic temporal formula disconnected from physical emissivity | source inspection and exact sample counts could not make the Euclidean phase rotation covariant | Fixed: the sampler and its mirror tests are deleted; schema, CLI, configuration, and typed-session witnesses require every temporal-blur request to decline before tracing |
 | Render-command help still said `--motion-blur` enabled CPU temporal integration after that model was retired | the parser preserved a fail-closed operator identity, but its human-facing contract advertised execution that validation always rejected | Fixed: usage names temporal transfer as declared but fail-closed, says the request is unrepresented and rejected, and a no-render CLI contract test forbids the former enablement claim |
 | Two-sheet wormholes were described only in comments | the operator could request a Morris-Thorne scene but could not state the required topology, allowing one-sheet output to be misunderstood | Fixed: `OneSheetCapture` and `TwoSheet` are explicit schema/CLI/typed identities; the former is represented, while the latter declines before render |
+| The live Morris-Thorne “Cartesian embedding” treated Euclidean radius as spherical areal radius, clamped every interior event to `1.001*b0`, classified capture only at an accepted endpoint, and admitted arbitrarily small double-valued scales through an fp32 device ABI | areal radius is nonmonotonic and its spherical metric coefficient diverges at the Ellis throat; the fabricated shell was not a coordinate transformation, hid the regular throat, discarded valid second-sheet RK stages, and a cubic-Hermite step could enter and leave the capture sphere with both endpoints outside. Tiny accepted operator values could cast or square to zero on Vulkan | Fixed: host and device now implement the exact zero-tidal isotropic Ellis chart, $r=\rho+b_0^2/(4\rho)$ and $g_{ij}=[1+b_0^2/(4\rho^2)]^2\delta_{ij}$, with finite throat $\rho=b_0/2$ and represented $0<\rho<b_0/2$ stages. Both paths isolate all roots of the accepted segment's degree-six squared-radius polynomial, including tangent contacts, and clip the observer-nearest event before any downstream consumer. The spherical areal chart and $\rho=0$ decline instead of being clamped; the shared CPU/Vulkan radius domain is the explicit fp32-resolved interval $0.1\le b_0\le1000$; non-Ellis Cartesian requests and out-of-authority redshift parameters fail closed; source governance rejects restoration of either the fabricated metric or endpoint-only capture |
 | GLFW repeat actions were interpreted as key releases and non-finite pointer input could poison camera state | the handler treated only action 1 as pressed and accepted NaN/Inf | Fixed: press/repeat/release semantics, finite pointer/scroll guards, camera update, and refinement restart are Mandatory-gated; native event delivery remains a separate attestation |
 | Viewer state exposed an unwritten restart flag, unused camera velocities, and an attached GLFW window pointer that the CLI—not the viewer—owned | downstream callers could infer observable refinement/window capabilities from dead fields | Fixed: the actual atomic restart lifecycle now publishes and consumes the synchronised restart state under the input gate; dead velocity and window attachment surfaces are removed |
 | P2900/P2996, P1–P6/E1–E4, and external-profile boundaries were prose-only at runtime | C++26 mode could be mistaken for native contracts/reflection and installed volumes carried no complete acceptance ledger | Fixed: compile-time language facts distinguish native features from checked-macro/explicit-schema substitutes; all ten P/E criteria, 24 dimensions, and 29 capability contracts are build-gated, installed, readiness-required, and exposed by `info capabilities` |
@@ -681,6 +682,27 @@ corresponding profile. They are not projected from registration counts.
   Governance accepts 786 source GoogleTests and 798 development CTests over 24
   operating dimensions and 29 capability contracts. No rendering test was
   executed.
+- 2026-09-01 isotropic Ellis and accepted-throat-event correction: the former
+  areal-radius Cartesian construction and its `1.001*b0` clamp are removed from
+  host and device. The live path now uses the exact conformally flat isotropic
+  chart, retains finite throat and second-sheet integration stages, and finds
+  the first accepted cubic-Hermite contact with the throat by complete
+  derivative-partitioned sextic root isolation, including hidden enter/exit and
+  tangent cases. The spherical areal chart, Cartesian origin, non-Ellis shape,
+  non-finite event, and parameters outside the shared `0.1 <= b0 <= 1000` and
+  `-10 <= Phi0 <= 10` authorities decline. Repository negative controls reject
+  restoration of the fabricated chart or endpoint-only capture. GCC 14 and
+  Clang 21 each compiled the complete product, all six test executables, all
+  three SPIR-V precision rungs, and CUDA/Metal emissions with warnings as
+  errors; `sirius_render_tests` was linked but not run. GCC passed all 401 core
+  cases, 90 application cases, the CPU registry factory trace, and both
+  compute-only Lavapipe parity probes. Clang passed all 13 base, 401 core, 131
+  oracle, and 90 application cases plus the same factory/parity probes. The
+  exact nine non-render integration controls passed on both compilers. Source,
+  label, live-inventory, semantic-policy, and repository governance accept 819
+  governed GoogleTests and 831 development CTests, all Mandatory, across 24
+  operating dimensions and 29 capability contracts. No rendering test was
+  executed; 144 compiled cases remain explicitly labelled `Rendering`.
 - GCC 14 strict required-Vulkan profile: the pre-alignment snapshot passed the complete
   907/907 estate on the Radeon 780M through Dozen in 210.36 seconds. A separate
   required-only run passed 697/697 on the Radeon in 281.34 seconds and the same

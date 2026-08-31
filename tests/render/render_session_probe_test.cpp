@@ -464,8 +464,8 @@ TEST(RenderSessionProbe, CpuPolarisationModeConsumesTransportedDiskStokes) {
         << "transported disk Stokes data did not reach the rendered colour branch";
 }
 
-// The Morris-Thorne wormhole renders on the CPU path through the Cartesian
-// embedding: the session must complete (not decline), and the frame must show
+// The Morris-Thorne wormhole renders on the CPU path through the exact isotropic
+// Cartesian Ellis chart: the session must complete (not decline), and the frame must show
 // the one-sheet wormhole structure - some rays captured at the throat (the
 // dark centre) and some escaping past it (the lensed background), so the
 // image is non-constant with genuinely dark pixels present.

@@ -729,9 +729,17 @@
       "state": "supported",
       "profiles": ["cpu", "vulkan"],
       "request": "Morris-Thorne OneSheetCapture topology",
-      "behavior": "Require 5*b0 <= r_observer <= 1000*b0, scale both live trace domains with b0, render one exterior sheet, and classify the throat as a dark capture surface.",
+      "behavior": "Render the exact zero-tidal Ellis metric in isotropic Cartesian radius rho, with areal radius r=rho+b0^2/(4*rho) and conformal spatial metric [1+b0^2/(4*rho^2)]^2 delta_ij. Require the shared CPU/Vulkan radius domain 0.1 <= b0 <= 1000, 5*b0 <= rho_observer <= 1000*b0, and scale both live trace domains with b0. Keep the regular 0<rho<b0/2 continuation represented for integration stages, but expose only OneSheetCapture: isolate the observer-nearest accepted-segment contact with the throat sphere rho=b0/2, including hidden enter/exit and tangent contacts, clip downstream consumers to that event, and classify it as dark capture.",
       "evidence": [
         {"kind": "gtest", "name": "ConfigValidation.MetricMassAndObserverCoordinateRadiusAreIdentityAware"},
+        {"kind": "gtest", "name": "MorrisThorneCartesianTests.ChartAgreementWithSphericalFamily"},
+        {"kind": "gtest", "name": "MorrisThorneCartesianTests.ThroatAndPositiveRadiusSecondSheetAreFiniteAndUnclamped"},
+        {"kind": "gtest", "name": "MorrisThorneCartesianTests.SphericalArealChartDeclinesItsCoordinateSingularities"},
+        {"kind": "gtest", "name": "MorrisThorneCartesianTests.AcceptedSegmentFindsHiddenAndTangentThroatContacts"},
+        {"kind": "gtest", "name": "MorrisThorneCartesianTests.NonEllisCartesianRequestsFailClosed"},
+        {"kind": "gtest", "name": "MorrisThorneCartesianTests.ParameterBoundsMatchConfigAuthority"},
+        {"kind": "gtest", "name": "KernelParity.IsotropicEllisMetricAndConnectionMatchCoreOnBothSheets"},
+        {"kind": "gtest", "name": "KernelParity.SphericalCaptureEventFindsHiddenAndTangentContacts"},
         {"kind": "gtest", "name": "RenderSessionProbe.TraceDomainScalesWithMassAndEnclosesTheObserver"},
         {"kind": "gtest", "name": "RenderSessionProbe.CpuMorrisThorneRenderCompletes"},
         {"kind": "gtest", "name": "VulkanRenderSession.CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalBounds"}
