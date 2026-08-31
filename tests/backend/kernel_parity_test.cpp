@@ -66,6 +66,7 @@ constexpr std::uint32_t kOpAdaptiveEventDomain = 8;
 constexpr std::uint32_t kOpVolumeOpacity = 9;
 constexpr std::uint32_t kOpNullProjection = 10;
 constexpr std::uint32_t kOpCelestialTangentBasis = 11;
+constexpr std::uint32_t kOpJacobiRadialCongruence = 12;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -1042,6 +1043,49 @@ TEST(KernelParity, DeviceTidalContractionMatchesAnalyticSchwarzschildAtMatchedEv
         // below 5e-4 here, versus a measured 1.37e-2 for the former stencil.
         EXPECT_LT(maximum_error / std::max(scale, 1.0e-30), 5.0e-4)
             << "device matched-event tidal contraction at r=" << events[sample].r;
+    }
+}
+
+TEST(KernelParity, DeviceRadialPointSourceCongruenceMatchesClosedForm) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    constexpr float mass = 1.0f;
+    constexpr float seed = 1.0e-3f;
+    std::vector<Sample> samples;
+    for (const auto [start_radius, end_radius, max_step] :
+         {std::array{12.0f, 10.0f, 0.2f}, std::array{20.0f, 16.0f, 0.2f},
+          std::array{8.0f, 6.0f, 0.1f}, std::array{6.0f, 4.0f, 0.1f}}) {
+        Sample sample;
+        sample.p1 = mass;
+        sample.c0 = start_radius;
+        sample.c1 = end_radius;
+        sample.c2 = max_step;
+        sample.h = seed;
+        samples.push_back(sample);
+    }
+
+    const auto results = RunProbe(*f.device, f.kernel, kOpJacobiRadialCongruence, samples);
+    for (std::size_t sample = 0; sample < samples.size(); ++sample) {
+        const std::size_t offset = sample * kResultStride;
+        const double affine_length = samples[sample].c0 - samples[sample].c1;
+        const double expected_axis = seed * affine_length;
+        SCOPED_TRACE(::testing::Message() << "r=" << samples[sample].c0 << "->"
+                                          << samples[sample].c1 << " h=" << samples[sample].c2);
+        for (std::size_t component = 0; component < 10; ++component) {
+            ASSERT_TRUE(std::isfinite(results[offset + component]))
+                << "non-finite device congruence component " << component;
+        }
+        EXPECT_NEAR(results[offset], expected_axis, 5.0e-6 * expected_axis);
+        EXPECT_NEAR(results[offset + 1], expected_axis, 5.0e-6 * expected_axis);
+        for (std::size_t component = 2; component < 6; ++component) {
+            EXPECT_NEAR(results[offset + component], 0.0f, 1.0e-6f * expected_axis);
+        }
+        EXPECT_NEAR(results[offset + 6], seed, 1.0e-6f * seed);
+        EXPECT_NEAR(results[offset + 7], seed, 1.0e-6f * seed);
+        EXPECT_NEAR(results[offset + 8], affine_length, 2.0e-5 * affine_length);
+        EXPECT_GT(results[offset + 9], 0.0f);
+        EXPECT_LT(results[offset + 9], 128.0f);
     }
 }
 

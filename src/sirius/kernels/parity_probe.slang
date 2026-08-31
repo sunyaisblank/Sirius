@@ -37,6 +37,7 @@ static const uint OP_ADAPTIVE_EVENT_DOMAIN = 8;
 static const uint OP_VOLUME_OPACITY = 9;
 static const uint OP_NULL_PROJECTION = 10;
 static const uint OP_CELESTIAL_TANGENT_BASIS = 11;
+static const uint OP_JACOBI_RADIAL_CONGRUENCE = 12;
 
 // Future-directed null root used by the render kernel, repeated here only for
 // the diagnostic launch boundary. The integration below calls the production
@@ -407,6 +408,49 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         results[rb + 3] = second.x;
         results[rb + 4] = second.y;
         results[rb + 5] = second.z;
+    } else if (opcode == OP_JACOBI_RADIAL_CONGRUENCE) {
+        // Integrate a two-axis point-source bundle along the exact affinely
+        // parameterised ingoing Schwarzschild principal null ray
+        // (T,x)=(lambda,r0-lambda), k=(1,-1,0,0). The analytic Sachs axes are
+        // both seed*lambda. p1=M; c0=start radius, c1=end radius, c2=max step;
+        // h=seed. This is scalar/tiny-compute evidence and creates no image.
+        Real startRadius = Real(c0);
+        Real endRadius = Real(c1);
+        Real maxSegment = Real(c2);
+        Real seed = Real(samples[sb + 12]);
+        Real4 xiA = Real4(0.0f);
+        Real4 xiB = Real4(0.0f);
+        Real4 VA = Real4(Real(0.0), Real(0.0), seed, Real(0.0));
+        Real4 VB = Real4(Real(0.0), Real(0.0), Real(0.0), seed);
+        Real radius = startRadius;
+        Real affine = Real(0.0);
+        int steps = 0;
+        if (p1 > 0.0f && endRadius > Real(2.0f * p1) &&
+            startRadius > endRadius && maxSegment > Real(0.0)) {
+            for (int segment = 0; segment < 128 && radius > endRadius; ++segment) {
+                Real dLambda = min(maxSegment, radius - endRadius);
+                Vec4Cart startPosition = MakeVec4Cart(affine, radius, Real(0.0), Real(0.0));
+                Vec4Cart endPosition = MakeVec4Cart(
+                    affine + dLambda, radius - dLambda, Real(0.0), Real(0.0));
+                Vec4Cart tangent = MakeVec4Cart(Real(1.0), Real(-1.0), Real(0.0), Real(0.0));
+                AdvanceJacobiPairAcceptedSegment(
+                    startPosition, tangent, endPosition, tangent, dLambda,
+                    p1, 0.0f, 0.0f, 0.0f, xiA, VA, xiB, VB);
+                affine += dLambda;
+                radius -= dLambda;
+                steps += 1;
+            }
+        }
+        results[rb + 0] = float(xiA.z);
+        results[rb + 1] = float(xiB.w);
+        results[rb + 2] = float(xiA.x);
+        results[rb + 3] = float(xiA.y);
+        results[rb + 4] = float(xiB.x);
+        results[rb + 5] = float(xiB.y);
+        results[rb + 6] = float(VA.z);
+        results[rb + 7] = float(VB.w);
+        results[rb + 8] = float(affine);
+        results[rb + 9] = float(steps);
     } else if (opcode == OP_DEVIATION) {
         // Full-Riemann ray-bundle deviation at a Cartesian point.
         // p1=M, p2=a, p3=Q, p4=Lambda; c=(x,y,z);

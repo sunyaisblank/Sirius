@@ -34,7 +34,7 @@
       "required": true,
       "verification": "build_gated",
       "profiles": ["cpu", "vulkan"],
-      "requirement": "Both live backends propagate two geodesic-deviation vectors into an oriented beam ellipse and interpret that orientation in the same deterministic celestial tangent basis during point-catalogue filtering; the CPU central ray and Jacobi map terminate on the same accepted-segment event at a finite causal boundary; the independent Schwarzschild congruence oracle agrees to one part per million, the live CPU Cartesian tidal contraction agrees with the analytic Boyer-Lindquist tensor below five parts in ten million at matched events, its Kerr curvature scalar agrees off-equator below one part per million, and its production radial point-source congruence obeys the exact affine-axis solution; the production fp32 Vulkan tidal contraction agrees with the same analytic Schwarzschild tensor below five parts in ten thousand at matched off-equatorial non-radial events; the footprint measurably suppresses star flicker.",
+      "requirement": "Both live backends propagate two geodesic-deviation vectors into an oriented beam ellipse and interpret that orientation in the same deterministic celestial tangent basis during point-catalogue filtering; the CPU central ray and Jacobi map terminate on the same accepted-segment event at a finite causal boundary; the independent Schwarzschild congruence oracle agrees to one part per million, the live CPU Cartesian tidal contraction agrees with the analytic Boyer-Lindquist tensor below five parts in ten million at matched events, its Kerr curvature scalar agrees off-equator below one part per million, and its production radial point-source congruence obeys the exact affine-axis solution; the production fp32 Vulkan tidal contraction agrees with the same analytic Schwarzschild tensor below five parts in ten thousand at matched off-equatorial non-radial events, and its shared accepted-segment paired Jacobi update obeys the exact radial point-source affine-axis solution below five parts per million; the footprint measurably suppresses star flicker.",
       "capability_dependencies": [],
       "evidence": [
         {"kind": "gtest", "name": "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion"},
@@ -48,6 +48,7 @@
         {"kind": "gtest", "name": "KernelParity.BeamEllipseRetainsBothAxesAndOutputOrientation"},
         {"kind": "gtest", "name": "KernelParity.CelestialTangentBasisIsSharedByBeamAndPointFilter"},
         {"kind": "gtest", "name": "KernelParity.DeviceTidalContractionMatchesAnalyticSchwarzschildAtMatchedEvents"},
+        {"kind": "gtest", "name": "KernelParity.DeviceRadialPointSourceCongruenceMatchesClosedForm"},
         {"kind": "gtest", "name": "StarfieldGeneratorTests.EllipticalFilterUsesTheBeamSachsBasis"},
         {"kind": "gtest", "name": "StarfieldPointTest.BeamFootprintSuppressesStarFlicker"}
       ]
@@ -394,6 +395,7 @@
         {"kind": "gtest", "name": "KernelParity.BeamEllipseRetainsBothAxesAndOutputOrientation"},
         {"kind": "gtest", "name": "KernelParity.CelestialTangentBasisIsSharedByBeamAndPointFilter"},
         {"kind": "gtest", "name": "KernelParity.DeviceTidalContractionMatchesAnalyticSchwarzschildAtMatchedEvents"},
+        {"kind": "gtest", "name": "KernelParity.DeviceRadialPointSourceCongruenceMatchesClosedForm"},
         {"kind": "gtest", "name": "StarfieldGeneratorTests.EllipticalFilterUsesTheBeamSachsBasis"},
         {"kind": "gtest", "name": "StarfieldPointTest.EllipticalFootprintUsesBothAxesAndOrientation"},
         {"kind": "gtest", "name": "StarfieldPointTest.SpatialIndexMatchesExhaustiveBeamOracle"},

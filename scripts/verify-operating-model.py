@@ -111,6 +111,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:KernelBeam.BeamFlagWiresDeviationWithoutMovingDefault",
         "gtest:KernelParity.BeamEllipseRetainsBothAxesAndOutputOrientation",
         "gtest:KernelParity.CelestialTangentBasisIsSharedByBeamAndPointFilter",
+        "gtest:KernelParity.DeviceRadialPointSourceCongruenceMatchesClosedForm",
         "gtest:KernelParity.DeviceTidalContractionMatchesAnalyticSchwarzschildAtMatchedEvents",
         "gtest:RayBundleTest.MagnificationComesOnlyFromJacobiMap",
         "gtest:StarfieldGeneratorTests.EllipticalFilterUsesTheBeamSachsBasis",
@@ -234,8 +235,8 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "9b23ff8e3c69c88f93f94e9ab2441dea593ead7f56bbbcc64fec1ab1f655eabb",
-    "required_dimensions": "e4a032ec91fe1724803056eb7ba752d0dd5cbfeb4c4c8d881739b972760c4f49",
+    "acceptance_criteria": "b15c7fd3167da1a83945baa34ca579ee0bb2349f03dcad28e3e36a9066a63be1",
+    "required_dimensions": "75fd49668d5b7ee7ea149fd44f3f397f06181a3dd99bb7fb0e44fc3c498d83d0",
     "capability_contracts": "9bab37294cff0e24143efafcf7f83dfc00e2b22c08697086717e8816b475cd87",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}

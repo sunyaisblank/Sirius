@@ -505,6 +505,7 @@ set_tests_properties(
     KernelParity.CelestialTangentBasisIsSharedByBeamAndPointFilter
     KernelParity.GeodesicDeviationIsFiniteAndCurvedNearBlackHole
     KernelParity.DeviceTidalContractionMatchesAnalyticSchwarzschildAtMatchedEvents
+    KernelParity.DeviceRadialPointSourceCongruenceMatchesClosedForm
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 

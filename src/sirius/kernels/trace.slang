@@ -1036,60 +1036,10 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                     terminalDiskHit = true;
             }
         }
-        // RK4 on the covariant first-order Jacobi system. Connection and
-        // curvature are evaluated at the start, Hermite midpoint, and end of
-        // the accepted central-ray step; freezing them at the start lowers the
-        // bundle update to first order in a varying tidal field.
         if (beamsEnabled && !isWarp && !isWormhole) {
-            Real beamRiemann[4][4][4][4];
-            Real beamGamma[4][4][4];
-            Real4 k1XiA, k1VA, k2XiA, k2VA, k3XiA, k3VA, k4XiA, k4VA;
-            Real4 k1XiB, k1VB, k2XiB, k2VB, k3XiB, k3VB, k4XiB, k4VB;
-
-            GetRiemannTensorCart(state.x, M, a, Q, Lambda, beamRiemann);
-            GetKerrSchildFamilyChristoffel(state.x, M, a, Q, Lambda, beamGamma);
-            GeodesicDeviationRhs(beamGamma, beamRiemann, state.u, xiA, xiDotA, k1XiA, k1VA);
-            GeodesicDeviationRhs(beamGamma, beamRiemann, state.u, xiB, xiDotB, k1XiB, k1VB);
-
-            // Cubic Hermite midpoint of the accepted central ray. It matches
-            // both endpoint events and tangents and supplies the same stage
-            // geometry used by the CPU bundle path.
-            Vec4Cart beamMidPosition = AddVec4Cart(
-                ScaleVec4Cart(AddVec4Cart(state.x, next.x), Real(0.5f)),
-                ScaleVec4Cart(AddVec4Cart(state.u, ScaleVec4Cart(next.u, Real(-1.0f))),
-                              dt / Real(8.0f)));
-            Vec4Cart beamMidTangent = AddVec4Cart(
-                ScaleVec4Cart(AddVec4Cart(next.x, ScaleVec4Cart(state.x, Real(-1.0f))),
-                              Real(1.5f) / dt),
-                ScaleVec4Cart(AddVec4Cart(state.u, next.u), Real(-0.25f)));
-            GetRiemannTensorCart(beamMidPosition, M, a, Q, Lambda, beamRiemann);
-            GetKerrSchildFamilyChristoffel(beamMidPosition, M, a, Q, Lambda, beamGamma);
-
-            GeodesicDeviationRhs(beamGamma, beamRiemann, beamMidTangent,
-                                 xiA + k1XiA * (Real(0.5f) * dt),
-                                 xiDotA + k1VA * (Real(0.5f) * dt), k2XiA, k2VA);
-            GeodesicDeviationRhs(beamGamma, beamRiemann, beamMidTangent,
-                                 xiA + k2XiA * (Real(0.5f) * dt),
-                                 xiDotA + k2VA * (Real(0.5f) * dt), k3XiA, k3VA);
-            GeodesicDeviationRhs(beamGamma, beamRiemann, beamMidTangent,
-                                 xiB + k1XiB * (Real(0.5f) * dt),
-                                 xiDotB + k1VB * (Real(0.5f) * dt), k2XiB, k2VB);
-            GeodesicDeviationRhs(beamGamma, beamRiemann, beamMidTangent,
-                                 xiB + k2XiB * (Real(0.5f) * dt),
-                                 xiDotB + k2VB * (Real(0.5f) * dt), k3XiB, k3VB);
-
-            GetRiemannTensorCart(next.x, M, a, Q, Lambda, beamRiemann);
-            GetKerrSchildFamilyChristoffel(next.x, M, a, Q, Lambda, beamGamma);
-            GeodesicDeviationRhs(beamGamma, beamRiemann, next.u,
-                                 xiA + k3XiA * dt, xiDotA + k3VA * dt, k4XiA, k4VA);
-            GeodesicDeviationRhs(beamGamma, beamRiemann, next.u,
-                                 xiB + k3XiB * dt, xiDotB + k3VB * dt, k4XiB, k4VB);
-
-            const Real sixthStep = dt / Real(6.0f);
-            xiA += (k1XiA + k2XiA * Real(2.0f) + k3XiA * Real(2.0f) + k4XiA) * sixthStep;
-            xiDotA += (k1VA + k2VA * Real(2.0f) + k3VA * Real(2.0f) + k4VA) * sixthStep;
-            xiB += (k1XiB + k2XiB * Real(2.0f) + k3XiB * Real(2.0f) + k4XiB) * sixthStep;
-            xiDotB += (k1VB + k2VB * Real(2.0f) + k3VB * Real(2.0f) + k4VB) * sixthStep;
+            AdvanceJacobiPairAcceptedSegment(
+                state.x, state.u, next.x, next.u, dt, M, a, Q, Lambda,
+                xiA, xiDotA, xiB, xiDotB);
         }
 
         state = next;
