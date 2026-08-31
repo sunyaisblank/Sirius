@@ -21,6 +21,7 @@ import gr_integrator;
 import gr_disk;
 import gr_deviation;
 import gr_trace_event;
+import gr_ellis_topology;
 
 StructuredBuffer<float> samples;     // binding 0
 RWStructuredBuffer<float> results;   // binding 1
@@ -45,6 +46,7 @@ static const uint OP_KERR_ZAMO_TRANSFER = 15;
 static const uint OP_KERR_DISK_TRANSFER = 16;
 static const uint OP_GREY_LAYER_ABSORPTION = 17;
 static const uint OP_SPHERICAL_CAPTURE_EVENT = 18;
+static const uint OP_ELLIS_TWO_SHEET_TRACE = 19;
 
 // Future-directed null root used by the render kernel, repeated here only for
 // the diagnostic launch boundary. The integration below calls the production
@@ -298,6 +300,45 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         results[rb + 8] = float(sqrt(position.x * position.x +
                                      position.y * position.y +
                                      position.z * position.z));
+    } else if (opcode == OP_ELLIS_TWO_SHEET_TRACE) {
+        // Compute-only execution of the exact production two-sheet trajectory.
+        // p1=b0, p2=observer-side escape radius; c=launch xyz;
+        // u1..u3=spatial null tangent; h=stepScale, aux0=max attempts,
+        // aux1=min step, aux2=max step.
+        GeodesicStateCart launch;
+        launch.x = MakeVec4Cart(Real(0.0f), Real(c0), Real(c1), Real(c2));
+        launch.u = MakeVec4Cart(Real(0.0f), Real(samples[sb + 9]),
+                                Real(samples[sb + 10]), Real(samples[sb + 11]));
+        Real launchMetric[4][4];
+        Real launchInverse[4][4];
+        GetMorrisThorneCartesianMetric(launch.x, p1, 0.0f, 0,
+                                       launchMetric, launchInverse);
+        launch.u.t = ProbeNullTimeComponent(
+            launchMetric, launch.u.x, launch.u.y, launch.u.z);
+        EllisTopologyTraceResult trace = TraceEllisTwoSheet(
+            launch, int(samples[sb + 13]), Real(samples[sb + 12]),
+            Real(samples[sb + 14]), Real(samples[sb + 15]), Real(p2), Real(p1), 0);
+        Real terminalRadius = sqrt(trace.state.x.x * trace.state.x.x +
+                                   trace.state.x.y * trace.state.x.y +
+                                   trace.state.x.z * trace.state.x.z);
+        float3 chartDirection = normalize(float3(
+            float(trace.state.u.x), float(trace.state.u.y), float(trace.state.u.z)));
+        float3 skyDirection = chartDirection;
+        bool mapped = true;
+        if (trace.termination == kEllisTraceOppositeInfinity) {
+            mapped = MapEllisSecondSheetSkyDirection(
+                trace.state.x, chartDirection, skyDirection);
+        }
+        results[rb + 0] = float(trace.termination);
+        results[rb + 1] = float(terminalRadius);
+        results[rb + 2] = float(trace.affineLength);
+        results[rb + 3] = float(trace.attempts);
+        results[rb + 4] = float(trace.state.x.x);
+        results[rb + 5] = float(trace.state.x.y);
+        results[rb + 6] = float(trace.state.x.z);
+        results[rb + 7] = mapped ? skyDirection.x : 0.0f;
+        results[rb + 8] = mapped ? skyDirection.y : 0.0f;
+        results[rb + 9] = mapped ? skyDirection.z : 0.0f;
     } else if (opcode == OP_NULL_PROJECTION) {
         // Direct witness for the production accepted-state constraint method.
         // The sample supplies a metric family/event and u=(t,x,y,z).

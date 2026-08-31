@@ -119,7 +119,7 @@ std::vector<float> BuildTraceParams(const Scene& scene) {
     const double sp = std::sin(cartesian_phi);
     const double cp = std::cos(cartesian_phi);
 
-    std::vector<float> p(65, 0.0f);
+    std::vector<float> p(66, 0.0f);
     p[44] = 0.5f;
     p[45] = 0.5f;
     p[51] = 1.0f;
@@ -889,7 +889,7 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalB
     const double theta = kInclinationDeg * kPi / 180.0;
     const double st = std::sin(theta);
     const double ct = std::cos(theta);
-    std::vector<float> params(65, 0.0f);
+    std::vector<float> params(66, 0.0f);
     params[44] = 0.5f;
     params[45] = 0.5f;
     params[51] = 1.0f;
@@ -968,7 +968,7 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalB
             if (res.outcome == TraceResult::Outcome::Escaped) {
                 GradientBackground(res.final_direction(1), res.final_direction(2),
                                    res.final_direction(3), r, g, b);
-            }  // Horizon (throat) or numerical work-bound outcome -> black
+            }  // Explicit throat boundary or numerical work-bound outcome -> black
             const int idx = (y * w + x) * 4;
             cpu[idx + 0] = r;
             cpu[idx + 1] = g;

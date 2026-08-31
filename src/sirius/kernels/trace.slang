@@ -20,7 +20,8 @@
 // session wires: Kerr-Schild family (Minkowski/Schwarzschild/Kerr), the
 // Alcubierre warp family, and the zero-tidal Ellis wormhole through its exact
 // isotropic Cartesian chart (gr_metrics GetMorrisThorneCartesian*, mirroring
-// the CPU render authority; one output sheet, accepted-segment throat capture).
+// the CPU render authority; explicit dark one-sheet or traversing two-sheet
+// topology).
 //
 // Buffer ABI (bound 0..5 in declaration order):
 //   0 radiance   : RWStructuredBuffer<float>, tileWidth*tileHeight*4 (RGBA/px).
@@ -38,6 +39,7 @@ import gr_integrator;
 import gr_disk;
 import gr_deviation;
 import gr_trace_event;
+import gr_ellis_topology;
 
 RWStructuredBuffer<float> radiance;  // binding 0
 StructuredBuffer<float> params;      // binding 1
@@ -618,6 +620,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     float volumeTauMidplane = params[62];
     int volumeSamples = int(params[63]);
     bool turbulenceEnabled = params[64] > 0.5f;
+    bool twoSheetWormhole = params[65] > 0.5f;
 
     // Ray bundles (P2): propagate two geodesic-deviation vectors through the render
     // loop and report the beam's transverse ellipse. Default off (params[41]==0)
@@ -666,11 +669,9 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         GetKerrSchildFamilyMetric(pos0, M, a, Q, Lambda, g, g_inv);
     }
     // Capture radius: the buffered Kerr-Schild outer horizon r_+ = M +
-    // sqrt(M^2 - a^2 - Q^2) for the black-hole family; the isotropic throat
-    // rho=b0/2 for the one-sheet Ellis wormhole (its far mouth is unmodelled,
-    // so rays reaching the throat terminate as captured, matching the CPU
-    // path). The warp
-    // bubble is horizonless: capture is disabled.
+    // sqrt(M^2 - a^2 - Q^2) for the black-hole family. OneSheetCapture owns a
+    // separate dark Ellis throat boundary. TwoSheet traverses that regular
+    // sphere and terminates at the inversion-matched opposite infinity.
     float disc = M * M - a * a - Q * Q;
     float horizonRadius = (disc > 0.0f) ? (M + sqrt(disc)) : M;
     if (isWormhole) horizonRadius = 0.5f * throatB0;
@@ -689,6 +690,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     float3 volumeEmission = float3(0.0f);
     bool escaped = false;
     bool captured = false;
+    bool oppositeSheet = false;
 
     // Two deviation vectors span the ray bundle (P2). A point-source/pupil bundle
     // is used when the point-star field consumes the ellipse; the diagnostic beam
@@ -725,7 +727,22 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
 
     Real adaptiveStep = Real(maxStep);
 
-    for (int step = 0; step < maxSteps; step++) {
+    // The exact shared topology function is also called by parity_probe.slang.
+    // No disk, volume, beam, or polarisation state is permitted for Morris-
+    // Thorne, so a two-sheet request can complete its central trajectory here
+    // without bypassing a represented segment consumer.
+    bool pretracedTwoSheet = isWormhole && twoSheetWormhole;
+    if (pretracedTwoSheet) {
+        EllisTopologyTraceResult ellis = TraceEllisTwoSheet(
+            state, maxSteps, Real(stepScale), Real(minStep), Real(maxStep),
+            Real(escapeRadius), Real(throatB0), wormShape);
+        state = ellis.state;
+        escaped = ellis.termination == kEllisTraceObserverInfinity ||
+                  ellis.termination == kEllisTraceOppositeInfinity;
+        oppositeSheet = ellis.termination == kEllisTraceOppositeInfinity;
+    }
+
+    for (int step = 0; step < maxSteps && !pretracedTwoSheet; step++) {
         Real px = state.x.x;
         Real py = state.x.y;
         Real pz = state.x.z;
@@ -1099,6 +1116,15 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
             float(MetricDotCart(terminalMetric, state.u, terminalFrame.up) / terminalFrequency),
             float(MetricDotCart(terminalMetric, state.u, terminalFrame.right) /
                   terminalFrequency)));
+        if (oppositeSheet) {
+            float3 mappedDirection;
+            if (MapEllisSecondSheetSkyDirection(
+                    state.x, terminalDirection, mappedDirection)) {
+                terminalDirection = normalize(mappedDirection);
+            } else {
+                escaped = false;
+            }
+        }
         Vec4Cart terminalScreenA;
         Vec4Cart terminalScreenB;
         SachsScreenBasis(terminalFrame, terminalDirection, terminalScreenA, terminalScreenB);

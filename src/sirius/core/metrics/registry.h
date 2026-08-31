@@ -36,6 +36,15 @@ enum class MetricId {
     Alcubierre,
 };
 
+// The Ellis geometry is independent of the output boundary condition.  This
+// typed identity is shared by configuration, metric construction, and both
+// live tracers so a regular throat cannot be turned into an intrinsic horizon
+// merely by losing a boolean at a layer boundary.
+enum class WormholeTopology {
+    OneSheetCapture,
+    TwoSheet,
+};
+
 inline constexpr double kDefaultMorrisThorneThroatRadius = 1.0;
 inline constexpr double kMinMorrisThorneThroatRadius = 0.1;
 inline constexpr double kMaxMorrisThorneThroatRadius = 1000.0;
@@ -273,7 +282,7 @@ enum class MetricObserverRadiusIssue {
 // inactive default is harmless; changing an irrelevant value is an operator
 // error rather than a silently ignored request.
 [[nodiscard]] constexpr std::optional<std::string_view> MetricSpecificParameterIssue(
-    MetricId id, double throat_radius, bool one_sheet_topology, double warp_velocity,
+    MetricId id, double throat_radius, WormholeTopology wormhole_topology, double warp_velocity,
     double bubble_radius, double bubble_sigma) noexcept {
     switch (id) {
         case MetricId::Minkowski:
@@ -289,8 +298,15 @@ enum class MetricObserverRadiusIssue {
         default:
             return "unknown metric identity";
     }
-    if (id != MetricId::MorrisThorne &&
-        (throat_radius != kDefaultMorrisThorneThroatRadius || !one_sheet_topology)) {
+    switch (wormhole_topology) {
+        case WormholeTopology::OneSheetCapture:
+        case WormholeTopology::TwoSheet:
+            break;
+        default:
+            return "unknown wormhole topology";
+    }
+    if (id != MetricId::MorrisThorne && (throat_radius != kDefaultMorrisThorneThroatRadius ||
+                                         wormhole_topology != WormholeTopology::OneSheetCapture)) {
         return "throat radius and wormhole topology apply only to Morris-Thorne";
     }
     if (id != MetricId::Alcubierre && (warp_velocity != kDefaultAlcubierreWarpVelocity ||
@@ -432,10 +448,11 @@ inline const std::array<MetricInfo, 9>& MetricRegistry() {
          "mass, positive lambda; 9 lambda mass^2 < 1",
          true,
          false},
-        // CPU support arrives through the exact isotropic Cartesian chart of
-        // the zero-tidal Ellis member (one output sheet, throat as the capture
-        // surface); the areal-radius family remains an independent authority
-        // and is never driven by the Cartesian tracer directly.
+        // Live support arrives through the exact two-ended isotropic Cartesian
+        // chart of the zero-tidal Ellis member. One-sheet versus two-sheet is a
+        // typed tracer boundary policy; the regular throat is not a horizon.
+        // The areal-radius family remains an independent authority and is never
+        // driven by the Cartesian tracer directly.
         {MetricId::MorrisThorne,
          "Morris-Thorne",
          {"MorrisThorne", "Wormhole", "Morris-Thorne Wormhole", "Ellis Drainhole",

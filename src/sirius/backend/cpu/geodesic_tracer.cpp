@@ -4,6 +4,7 @@
 #include "sirius/backend/cpu/geodesic_tracer.h"
 
 #include "sirius/core/disk/novikov_thorne_disk.h"
+#include "sirius/core/metrics/morris_thorne_family.h"
 #include "sirius/core/observer_frame.h"
 #include "sirius/core/spectral/colour_modes.h"
 #include "sirius/core/trace_boundary.h"
@@ -461,6 +462,17 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
 
     CacheMetricParameters();
 
+    const auto ellis_throat_radius = metric_->IsotropicEllisThroatRadius();
+    const bool two_sheet_ellis =
+        ellis_throat_radius.has_value() && config_.wormhole_topology == WormholeTopology::TwoSheet;
+    const double opposite_escape_radius = two_sheet_ellis
+                                              ? (*ellis_throat_radius * *ellis_throat_radius) /
+                                                    static_cast<double>(config_.escape_radius)
+                                              : 0.0;
+    SIRIUS_ASSERT(!two_sheet_ellis ||
+                  (std::isfinite(opposite_escape_radius) && opposite_escape_radius > 0.0 &&
+                   opposite_escape_radius < *ellis_throat_radius));
+
     relativity::ObserverFrame launch_frame;
     Lightray ray = InitializeLightray(camera_ray, &launch_frame);
 
@@ -540,7 +552,8 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
         double d_lambda = static_cast<double>(ray.proper_time) - prev_pt;
         const float min_radius_before_step = min_r;
         bool terminal_causal_boundary = false;
-        bool terminal_capture_surface = false;
+        bool terminal_throat_boundary = false;
+        bool terminal_opposite_infinity = false;
 
         // A finite causal boundary clips the accepted central-ray segment
         // before any coupled state or segment source advances. This makes the
@@ -574,25 +587,35 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
             }
         }
 
-        // A spherical capture boundary is an accepted-segment event, not an
-        // endpoint classification.  In particular, an Ellis trajectory can
-        // enter and leave the isotropic throat sphere with both Hermite
-        // endpoints outside it.  Clip the observer-nearest contact before the
-        // bundle, polarisation, volume, or disk consumes the segment.  Any
-        // opaque-disk event is then searched only on the physically preceding
-        // subsegment and retains its existing observer-first precedence.
-        if (const auto capture_radius = metric_->SphericalCaptureRadius();
-            capture_radius.has_value()) {
+        // OneSheetCapture is an explicit output boundary, not an intrinsic
+        // property of the horizonless Ellis metric. It treats even a tangent
+        // contact as terminal. TwoSheet instead crosses the regular throat and
+        // terminates only where the inversion-related second asymptotic end
+        // reaches the same areal cutoff as the observer-side escape sphere.
+        if (ellis_throat_radius.has_value() && !two_sheet_ellis) {
             const auto capture = FindSphericalCaptureEvent(
                 prev_pos, prev_vel, ray.position, ray.velocity, d_lambda,
-                *capture_radius * static_cast<double>(config_.horizon_factor));
+                *ellis_throat_radius * static_cast<double>(config_.horizon_factor));
             if (capture.has_value()) {
                 d_lambda *= capture->fraction;
                 ray.position = capture->position;
                 ray.velocity = capture->tangent;
                 ray.proper_time = static_cast<float>(prev_pt + d_lambda);
                 ray.coordinate_time = static_cast<float>(capture->position(0));
-                terminal_capture_surface = true;
+                terminal_throat_boundary = true;
+                terminal_causal_boundary = false;
+            }
+        } else if (two_sheet_ellis) {
+            const auto opposite_infinity = FindSphericalBoundaryEvent(
+                prev_pos, prev_vel, ray.position, ray.velocity, d_lambda, opposite_escape_radius,
+                SphericalBoundarySense::DecreasingRadius);
+            if (opposite_infinity.has_value()) {
+                d_lambda *= opposite_infinity->fraction;
+                ray.position = opposite_infinity->position;
+                ray.velocity = opposite_infinity->tangent;
+                ray.proper_time = static_cast<float>(prev_pt + d_lambda);
+                ray.coordinate_time = static_cast<float>(opposite_infinity->position(0));
+                terminal_opposite_infinity = true;
                 terminal_causal_boundary = false;
             }
         }
@@ -715,12 +738,20 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
             }
         }
 
-        // 3. Horizon capture. A represented opaque-disk crossing on this
-        // accepted observer-to-scene segment has already terminated above; it
-        // must not be hidden merely because the step endpoint lies inside the
-        // capture surface. This is the same event precedence used by Slang.
-        if (terminal_capture_surface ||
-            metric_->InsideCaptureSurface(ray.position, config_.horizon_factor - 1.0)) {
+        // 3. Explicit one-sheet throat or black-hole horizon. A represented opaque-disk crossing on
+        // this accepted observer-to-scene segment has already terminated above; it must not be
+        // hidden merely because the step endpoint lies inside the capture surface. This is the same
+        // event precedence used by Slang.
+        if (terminal_throat_boundary) {
+            result.outcome = TraceResult::Outcome::Throat;
+            result.final_position(0) = ray.position(0);
+            result.final_position(1) = ray.position(1);
+            result.final_position(2) = ray.position(2);
+            result.final_position(3) = ray.position(3);
+            result.min_radius = min_r;
+            break;
+        }
+        if (metric_->InsideCaptureSurface(ray.position, config_.horizon_factor - 1.0)) {
             result.outcome = TraceResult::Outcome::Horizon;
             result.final_position(0) = ray.position(0);
             result.final_position(1) = ray.position(1);
@@ -730,8 +761,29 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
             break;
         }
 
+        if (terminal_opposite_infinity) {
+            result.outcome = TraceResult::Outcome::Escaped;
+            result.asymptotic_sheet = TraceResult::AsymptoticSheet::Opposite;
+            const auto sky = SampleEulerianSky(*metric_, ray.position, ray.velocity);
+            if (!sky.has_value()) {
+                result.outcome = TraceResult::Outcome::MaxSteps;
+                result.numerical_failure = true;
+                break;
+            }
+            const auto mapped = MapEllisSecondSheetSkyDirection(ray.position, sky->world_direction);
+            if (!mapped.has_value()) {
+                result.outcome = TraceResult::Outcome::MaxSteps;
+                result.numerical_failure = true;
+                break;
+            }
+            result.final_direction = *mapped;
+            result.min_radius = min_r;
+            break;
+        }
+
         if (terminal_causal_boundary) {
             result.outcome = TraceResult::Outcome::Escaped;
+            result.asymptotic_sheet = TraceResult::AsymptoticSheet::Observer;
             const auto sky = SampleEulerianSky(*metric_, ray.position, ray.velocity);
             SIRIUS_ASSERT(sky.has_value());
             if (!sky.has_value()) {
@@ -755,6 +807,7 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
 
             if (v_radial > 0) {
                 result.outcome = TraceResult::Outcome::Escaped;
+                result.asymptotic_sheet = TraceResult::AsymptoticSheet::Observer;
                 const auto sky = SampleEulerianSky(*metric_, ray.position, ray.velocity);
                 SIRIUS_ASSERT(sky.has_value());
                 if (!sky.has_value()) {

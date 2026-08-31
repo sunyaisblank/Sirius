@@ -91,6 +91,7 @@ TEST_F(GeodesicTracerTest, BasicTracing) {
 
     EXPECT_TRUE(result.outcome == TraceResult::Outcome::Escaped ||
                 result.outcome == TraceResult::Outcome::Horizon ||
+                result.outcome == TraceResult::Outcome::Throat ||
                 result.outcome == TraceResult::Outcome::DiskHit ||
                 result.outcome == TraceResult::Outcome::MaxSteps);
 }
@@ -106,6 +107,7 @@ TEST_F(GeodesicTracerTest, HorizonCapture) {
             total++;
 
             if (result.outcome == TraceResult::Outcome::Horizon ||
+                result.outcome == TraceResult::Outcome::Throat ||
                 result.outcome == TraceResult::Outcome::DiskHit) {
                 horizon_or_disk++;
             }
@@ -587,9 +589,9 @@ TEST_F(GeodesicTracerTest, TracingPerformance) {
 
 // =============================================================================
 // Morris-Thorne (Ellis) wormhole through the same Cartesian tracer, via the
-// exact MorrisThorneCartesian isotropic chart. One output sheet; the throat is the capture
-// surface, so a central ray terminates as Horizon (the tracer's capture
-// outcome) and offset rays escape with gravitational deflection.
+// exact MorrisThorneCartesian isotropic chart. This fixture selects the
+// explicit dark one-sheet output boundary; a central ray terminates as Throat
+// while offset rays escape with gravitational deflection.
 // =============================================================================
 
 class MorrisThorneTracerTest : public ::testing::Test {
@@ -645,11 +647,11 @@ class MorrisThorneTracerTest : public ::testing::Test {
     std::unique_ptr<PinholeCamera> m_Camera;
 };
 
-TEST_F(MorrisThorneTracerTest, CentralRayCapturedAtThroat) {
+TEST_F(MorrisThorneTracerTest, CentralRayTerminatesAtExplicitThroatBoundary) {
     CameraRay ray = m_Camera->GenerateRay(32, 32, 0.5f, 0.5f);
     TraceResult result = m_Tracer->Trace(ray);
-    EXPECT_EQ(result.outcome, TraceResult::Outcome::Horizon)
-        << "A radially ingoing ray must terminate at the throat capture surface"
+    EXPECT_EQ(result.outcome, TraceResult::Outcome::Throat)
+        << "A radially ingoing one-sheet ray must terminate at the explicit throat boundary"
         << " (outcome=" << static_cast<int>(result.outcome) << ", min_radius=" << result.min_radius
         << ", steps=" << result.steps_taken << ", numerical_failure=" << result.numerical_failure
         << ")";

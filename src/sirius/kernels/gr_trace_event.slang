@@ -232,19 +232,26 @@ void SphericalSegmentPolynomial(Vec4Cart start, Vec4Cart startVelocity,
     }
 }
 
-// Returns the first entry, exit, or tangent contact with |x|=captureRadius in
-// observer-to-scene order.  Squared radius minus R^2 is a sextic; derivative
+public static const int kSphericalBoundaryAnyContact = 0;
+public static const int kSphericalBoundaryIncreasingRadius = 1;
+public static const int kSphericalBoundaryDecreasingRadius = -1;
+
+// Returns the first selected contact with |x|=boundaryRadius in
+// observer-to-scene order. Squared radius minus R^2 is a sextic; derivative
 // roots partition it into monotone intervals, so equal-sign endpoints cannot
-// conceal an interior contact.
-public bool FindSphericalCaptureEvent(
+// conceal an interior contact. Directional modes exclude tangencies.
+public bool FindSphericalBoundaryEvent(
     Vec4Cart start, Vec4Cart startVelocity, Vec4Cart finish, Vec4Cart finishVelocity,
-    Real affineLength, Real captureRadius, out Real fraction,
+    Real affineLength, Real boundaryRadius, int radialSense, out Real fraction,
     out Vec4Cart eventPosition, out Vec4Cart eventTangent) {
     fraction = Real(0.0f);
     eventPosition = start;
     eventTangent = startVelocity;
     if (!(isfinite(affineLength) && affineLength > Real(0.0f) &&
-          isfinite(captureRadius) && captureRadius > Real(0.0f) &&
+          isfinite(boundaryRadius) && boundaryRadius > Real(0.0f) &&
+          (radialSense == kSphericalBoundaryAnyContact ||
+           radialSense == kSphericalBoundaryIncreasingRadius ||
+           radialSense == kSphericalBoundaryDecreasingRadius) &&
           IsFiniteAcceptedSegmentValue(start) &&
           IsFiniteAcceptedSegmentValue(startVelocity) &&
           IsFiniteAcceptedSegmentValue(finish) &&
@@ -252,23 +259,49 @@ public bool FindSphericalCaptureEvent(
 
     Real coefficients[7];
     SphericalSegmentPolynomial(start, startVelocity, finish, finishVelocity,
-                               affineLength, captureRadius, coefficients);
+                               affineLength, boundaryRadius, coefficients);
     Real roots[6];
     int rootCount = FindSexticRoots(coefficients, roots);
     if (rootCount == 0) return false;
 
-    fraction = roots[0];
-    eventPosition = AcceptedSegmentPosition(start, startVelocity, finish, finishVelocity,
-                                             affineLength, fraction);
-    eventTangent = AcceptedSegmentTangent(start, startVelocity, finish, finishVelocity,
-                                          affineLength, fraction);
-    Real sampledRadius = sqrt(eventPosition.x * eventPosition.x +
-                              eventPosition.y * eventPosition.y +
-                              eventPosition.z * eventPosition.z);
-    if (!(isfinite(sampledRadius) && sampledRadius > Real(0.0f))) return false;
-    Real surfaceScale = captureRadius / sampledRadius;
-    eventPosition.x *= surfaceScale;
-    eventPosition.y *= surfaceScale;
-    eventPosition.z *= surfaceScale;
-    return true;
+    for (int root = 0; root < rootCount; ++root) {
+        Real candidateFraction = roots[root];
+        Vec4Cart candidatePosition = AcceptedSegmentPosition(
+            start, startVelocity, finish, finishVelocity, affineLength,
+            candidateFraction);
+        Vec4Cart candidateTangent = AcceptedSegmentTangent(
+            start, startVelocity, finish, finishVelocity, affineLength,
+            candidateFraction);
+        Real sampledRadius = sqrt(candidatePosition.x * candidatePosition.x +
+                                  candidatePosition.y * candidatePosition.y +
+                                  candidatePosition.z * candidatePosition.z);
+        if (!(isfinite(sampledRadius) && sampledRadius > Real(0.0f))) continue;
+        Real radialNumerator = candidatePosition.x * candidateTangent.x +
+                               candidatePosition.y * candidateTangent.y +
+                               candidatePosition.z * candidateTangent.z;
+        if (!isfinite(radialNumerator)) continue;
+        if (radialSense == kSphericalBoundaryIncreasingRadius &&
+            !(radialNumerator > Real(0.0f))) continue;
+        if (radialSense == kSphericalBoundaryDecreasingRadius &&
+            !(radialNumerator < Real(0.0f))) continue;
+        fraction = candidateFraction;
+        eventPosition = candidatePosition;
+        eventTangent = candidateTangent;
+        Real surfaceScale = boundaryRadius / sampledRadius;
+        eventPosition.x *= surfaceScale;
+        eventPosition.y *= surfaceScale;
+        eventPosition.z *= surfaceScale;
+        return true;
+    }
+    return false;
+}
+
+// OneSheetCapture treats entry, exit, and tangent throat contacts alike.
+public bool FindSphericalCaptureEvent(
+    Vec4Cart start, Vec4Cart startVelocity, Vec4Cart finish, Vec4Cart finishVelocity,
+    Real affineLength, Real captureRadius, out Real fraction,
+    out Vec4Cart eventPosition, out Vec4Cart eventTangent) {
+    return FindSphericalBoundaryEvent(
+        start, startVelocity, finish, finishVelocity, affineLength, captureRadius,
+        kSphericalBoundaryAnyContact, fraction, eventPosition, eventTangent);
 }

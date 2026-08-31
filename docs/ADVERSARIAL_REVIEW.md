@@ -174,13 +174,13 @@ Each review pass asks:
 | “Full test estate” meant only a green boolean and case count | a partial JUnit file could omit registered obligations while retaining plausible metadata; a declared floor could drift below the real source estate unnoticed | Fixed: producers hash CTest's JSON registration inventory; the local build independently parses 732 source GoogleTests and refuses to fall below the policy floor, while external admission requires that same floor and exact equality between every enabled registered test name and the non-skipping JUnit case set |
 | Full-frame scene claims were trusted from runbook metadata rather than bound to the executed session | structured unrelated PNGs and claimed P3/P5 scenes could satisfy the record without proving that bundles, stars, motion, and ThinLens reached dispatch | Fixed: the typed session emits canonical JSON; the verifier requires one exact event at 1920x1080 and one at 5616x4096, cross-checks every scene field, proves the actual 100,000-star catalogue reached Vulkan with beams enabled, and binds device, budget, dispatch completion, wall time, output name, and terminal state in each hashed transcript segment |
 | E1 claimed all nine CPU-renderable metrics from registry metadata while live render evidence exercised only Morris-Thorne | registry completeness did not prove every advertised CPU factory/session path completed | Fixed: a registration-driven product witness constructs legal parameters and completes a frame for every CPU-supported registry row without a hand-maintained metric list |
-| E2's machine ledger omitted its explicit decline witnesses | unsupported polarised volume/temporal/Vulkan and two-sheet requests were tested but not required evidence for the criterion | Fixed: configuration and typed-session decline witnesses are direct E2 evidence, alongside live Kerr, Schwarzschild-limit oracle, physical Stokes, and film-output gates |
+| E2's machine ledger omitted its explicit decline witnesses | unsupported polarised volume/temporal/Vulkan requests were tested but not required evidence for the criterion | Fixed: configuration and typed-session decline witnesses are direct E2 evidence, alongside live Kerr, Schwarzschild-limit oracle, physical Stokes, and film-output gates; the same typed boundary separately proves that represented two-sheet Ellis configuration is admitted |
 | E2's cross-chart live/oracle witness exercised Kerr while the Schwarzschild rigid-transport witness remained oracle-only | the live thin-disk Stokes path did run Schwarzschild, but did not carry the same invariant comparison through a physically completed ray | Fixed: the existing cross-chart gate now completes escaping Schwarzschild and Kerr rays and compares their initial/final Walker-Penrose invariants between live Kerr-Schild Cartesian and independent Boyer-Lindquist paths |
 | CPU disk motion blur rotated an axisymmetric stationary crossing through a Euclidean line-of-sight factor | the synthetic phase change was not a covariant time-dependent emissivity or shutter integral | Fixed: the operator identity remains parseable but all CPU/Vulkan motion-blur requests decline until a time-dependent emissivity and covariant temporal transfer are represented |
 | CPU motion-blur evidence reimplemented a synthetic temporal formula disconnected from physical emissivity | source inspection and exact sample counts could not make the Euclidean phase rotation covariant | Fixed: the sampler and its mirror tests are deleted; schema, CLI, configuration, and typed-session witnesses require every temporal-blur request to decline before tracing |
 | Render-command help still said `--motion-blur` enabled CPU temporal integration after that model was retired | the parser preserved a fail-closed operator identity, but its human-facing contract advertised execution that validation always rejected | Fixed: usage names temporal transfer as declared but fail-closed, says the request is unrepresented and rejected, and a no-render CLI contract test forbids the former enablement claim |
-| Two-sheet wormholes were described only in comments | the operator could request a Morris-Thorne scene but could not state the required topology, allowing one-sheet output to be misunderstood | Fixed: `OneSheetCapture` and `TwoSheet` are explicit schema/CLI/typed identities; the former is represented, while the latter declines before render |
-| The live Morris-Thorne “Cartesian embedding” treated Euclidean radius as spherical areal radius, clamped every interior event to `1.001*b0`, classified capture only at an accepted endpoint, and admitted arbitrarily small double-valued scales through an fp32 device ABI | areal radius is nonmonotonic and its spherical metric coefficient diverges at the Ellis throat; the fabricated shell was not a coordinate transformation, hid the regular throat, discarded valid second-sheet RK stages, and a cubic-Hermite step could enter and leave the capture sphere with both endpoints outside. Tiny accepted operator values could cast or square to zero on Vulkan | Fixed: host and device now implement the exact zero-tidal isotropic Ellis chart, $r=\rho+b_0^2/(4\rho)$ and $g_{ij}=[1+b_0^2/(4\rho^2)]^2\delta_{ij}$, with finite throat $\rho=b_0/2$ and represented $0<\rho<b_0/2$ stages. Both paths isolate all roots of the accepted segment's degree-six squared-radius polynomial, including tangent contacts, and clip the observer-nearest event before any downstream consumer. The spherical areal chart and $\rho=0$ decline instead of being clamped; the shared CPU/Vulkan radius domain is the explicit fp32-resolved interval $0.1\le b_0\le1000$; non-Ellis Cartesian requests and out-of-authority redshift parameters fail closed; source governance rejects restoration of either the fabricated metric or endpoint-only capture |
+| Two-sheet wormholes were described only in comments | the operator could request a Morris-Thorne scene but could not state the required topology, allowing one-sheet output to be misunderstood | Fixed: `OneSheetCapture` and `TwoSheet` are explicit schema/CLI/typed identities. The former publishes a distinct dark throat event; the latter crosses the regular throat, reaches the inversion-matched opposite infinity, records the sheet, and maps the sky through the exact inversion Jacobian |
+| The live Morris-Thorne “Cartesian embedding” treated Euclidean radius as spherical areal radius, clamped every interior event to `1.001*b0`, classified capture only at an accepted endpoint, and admitted arbitrarily small double-valued scales through an fp32 device ABI | areal radius is nonmonotonic and its spherical metric coefficient diverges at the Ellis throat; the fabricated shell was not a coordinate transformation, hid the regular throat, discarded valid second-sheet RK stages, and a cubic-Hermite step could enter and leave the throat sphere with both endpoints outside. Tiny accepted operator values could cast or square to zero on Vulkan | Fixed: host and device now implement the exact zero-tidal isotropic Ellis chart, $r=\rho+b_0^2/(4\rho)$ and $g_{ij}=[1+b_0^2/(4\rho^2)]^2\delta_{ij}$, with finite throat $\rho=b_0/2$ and represented $0<\rho<b_0/2$. The metric does not advertise the regular throat as capture. One-sheet policy isolates all accepted-segment roots, including tangency, before consumers and publishes `Throat`; two-sheet policy instead reaches $\rho_-=b_0^2/(4\rho_+)$ with explicit sheet identity and inversion-related sky direction. The spherical areal chart and $\rho=0$ decline instead of being clamped; the shared CPU/Vulkan radius domain is the explicit fp32-resolved interval $0.1\le b_0\le1000$; non-Ellis Cartesian requests and out-of-authority redshift parameters fail closed; source governance rejects the fabricated metric, endpoint-only contact, intrinsic-throat capture, or an independent parity trajectory |
 | GLFW repeat actions were interpreted as key releases and non-finite pointer input could poison camera state | the handler treated only action 1 as pressed and accepted NaN/Inf | Fixed: press/repeat/release semantics, finite pointer/scroll guards, camera update, and refinement restart are Mandatory-gated; native event delivery remains a separate attestation |
 | Viewer state exposed an unwritten restart flag, unused camera velocities, and an attached GLFW window pointer that the CLI—not the viewer—owned | downstream callers could infer observable refinement/window capabilities from dead fields | Fixed: the actual atomic restart lifecycle now publishes and consumes the synchronised restart state under the input gate; dead velocity and window attachment surfaces are removed |
 | P2900/P2996, P1–P6/E1–E4, and external-profile boundaries were prose-only at runtime | C++26 mode could be mistaken for native contracts/reflection and installed volumes carried no complete acceptance ledger | Fixed: compile-time language facts distinguish native features from checked-macro/explicit-schema substitutes; all ten P/E criteria, 24 dimensions, and 29 capability contracts are build-gated, installed, readiness-required, and exposed by `info capabilities` |
@@ -269,7 +269,7 @@ state: `supported`, `bounded`, `fail_closed`, `substituted`, or
 | Spherical de Sitter/Kottler sector | `bounded`; exact positive-Lambda metric and both Kottler roots, with pure de Sitter horizonless for capture, Schwarzschild-de Sitter restricted below Nariai, observer at or below `0.99*r_c`, and directional boundary no later than `r_c` |
 | Disk emission outside Schwarzschild/Kerr | `fail_closed`; requires `--no-disk` |
 | Morris-Thorne one-sheet dark-throat scene | `supported` on CPU/Vulkan |
-| Morris-Thorne two-sheet continuation | `fail_closed` through `TwoSheet` request identity |
+| Morris-Thorne two-sheet continuation | `supported` on CPU/Vulkan with an inversion-matched opposite boundary and symmetric catalogue |
 | Vulkan volumetric samples | `bounded` to 1..128; auto selects CPU above the bound |
 | Viewer input-state logic | `supported`; native window delivery is `attestation_required` |
 | P2900/P2996 | `substituted` by checked macros/explicit schemas and reported non-native |
@@ -336,7 +336,9 @@ boundaries instead.
   Every other metric requires `--no-disk`; charged/cosmological disk models are
   absent, while Minkowski, de Sitter, Morris–Thorne, and Alcubierre have no
   accretion-disk semantics. Morris–Thorne `OneSheetCapture` renders one
-  asymptotic sheet with a dark throat; an explicit `TwoSheet` request declines.
+  asymptotic sheet with a dark throat; `TwoSheet` traverses to the opposite
+  asymptotic cutoff and uses the same catalogue through the inversion-related
+  sky frame. Distinct content assigned to the second universe is absent.
 - The exact 5616x4096 memory plan, catalogue/index residency, and sublinear
   candidate query are Mandatory-gated. The physical runbook now requires the
   same scene at both 1920x1080 and 5616x4096 to combine beam-filtered
@@ -604,8 +606,9 @@ corresponding profile. They are not projected from registration counts.
   unused CPU scene state or requires the texture asset in point-catalogue mode.
   CPU and Slang share the 20,000-attempt ceiling, disk-segment/terminal-event
   precedence, reconstructed turbulence coordinates, and safe captured-endpoint
-  handling. The explicit device ABI is dense at 65 consumed float slots with no
-  future-corona padding. GCC 14 and Clang 21 each compiled the application, all
+  handling. That historical revision's device ABI was dense at 65 consumed
+  float slots with no future-corona padding; the explicit two-sheet topology
+  control now occupies slot 65, making 66. GCC 14 and Clang 21 each compiled the application, all
   six test executables, and fp32/fp32-comp/fp64 SPIR-V plus CUDA and Metal
   emissions under contracts and warnings-as-errors; the render executable was
   compiled but not run. On each compiler, 20 focused core boundary cases, three
@@ -703,6 +706,24 @@ corresponding profile. They are not projected from registration counts.
   governed GoogleTests and 831 development CTests, all Mandatory, across 24
   operating dimensions and 29 capability contracts. No rendering test was
   executed; 144 compiled cases remain explicitly labelled `Rendering`.
+- 2026-09-01 two-ended Ellis topology completion: metric construction no longer
+  embeds a lossy one-sheet boolean or treats the regular throat as an intrinsic
+  capture surface. `OneSheetCapture` now publishes a distinct dark `Throat`
+  event. `TwoSheet` crosses the throat, stops at the inversion-matched second
+  cutoff $\rho_-=b_0^2/(4\rho_+)$, records the opposite sheet, and maps the
+  terminal sky direction by $I-2nn^T$; both ends deliberately share one
+  catalogue. CPU RK45 and device rendering consume the typed topology, while
+  the render kernel and compute-only parity probe call one shared Slang
+  two-sheet trajectory authority. GCC 14 and Clang 21 compiled the application,
+  all six test executables, all three SPIR-V precision rungs, and CUDA/Metal
+  emissions with warnings as errors. On each compiler, all 13 base, 404 core,
+  131 oracle, 90 application, and eight CPU-backend cases passed. The focused
+  shared-production Slang trajectory passed on isolated Lavapipe. Governance
+  accepts 825 source GoogleTests and 837 development CTests, all Mandatory.
+  `sirius_render_tests` was linked but never run. An initially broad build
+  target was interrupted after it completed only CTest entries 1--23 (base and
+  operational governance); it had not reached the first Vulkan runtime case or
+  any `Rendering`-labelled test.
 - GCC 14 strict required-Vulkan profile: the pre-alignment snapshot passed the complete
   907/907 estate on the Radeon 780M through Dozen in 210.36 seconds. A separate
   required-only run passed 697/697 on the Radeon in 281.34 seconds and the same

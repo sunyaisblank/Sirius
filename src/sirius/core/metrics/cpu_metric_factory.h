@@ -24,7 +24,7 @@ struct MetricConstructionParameters {
     double dimensionless_charge = 0.0;
     double cosmological_constant = 0.0;
     double throat_radius = kDefaultMorrisThorneThroatRadius;
-    bool one_sheet_topology = true;
+    WormholeTopology wormhole_topology = WormholeTopology::OneSheetCapture;
     double warp_velocity = kDefaultAlcubierreWarpVelocity;
     double bubble_radius = kDefaultAlcubierreBubbleRadius;
     double bubble_sigma = kDefaultAlcubierreBubbleSigma;
@@ -75,13 +75,10 @@ struct MetricConstructionParameters {
         return "wormhole or warp-drive parameters are outside the represented domain";
     }
     if (const auto issue = MetricSpecificParameterIssue(
-            id, parameters.throat_radius, parameters.one_sheet_topology, parameters.warp_velocity,
+            id, parameters.throat_radius, parameters.wormhole_topology, parameters.warp_velocity,
             parameters.bubble_radius, parameters.bubble_sigma);
         issue.has_value()) {
         return issue;
-    }
-    if (id == MetricId::MorrisThorne && !parameters.one_sheet_topology) {
-        return "two-sheet wormhole continuation and a second environment are not represented";
     }
     if (id == MetricId::Alcubierre) {
         return AlcubierreScaleIssue(parameters.bubble_radius, parameters.bubble_sigma);
@@ -127,7 +124,6 @@ struct MetricConstructionParameters {
             return std::make_unique<KerrSchildFamily>(kottler);
         }
         case MetricId::MorrisThorne:
-            if (!parameters.one_sheet_topology) return nullptr;
             return std::make_unique<MorrisThorneCartesian>(
                 MorrisThorneParams::Ellis(parameters.throat_radius));
         case MetricId::Alcubierre: {

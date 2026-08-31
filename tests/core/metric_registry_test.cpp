@@ -70,26 +70,35 @@ TEST(MetricRegistryTests, MetricInfoRoundTripsById) {
     EXPECT_FALSE(MetricUsesMass(MetricId::MorrisThorne));
     EXPECT_FALSE(MetricUsesMass(MetricId::Alcubierre));
 
-    EXPECT_FALSE(MetricSpecificParameterIssue(
-                     MetricId::MorrisThorne, 2.0, true, kDefaultAlcubierreWarpVelocity,
-                     kDefaultAlcubierreBubbleRadius, kDefaultAlcubierreBubbleSigma)
-                     .has_value());
+    EXPECT_FALSE(
+        MetricSpecificParameterIssue(MetricId::MorrisThorne, 2.0, WormholeTopology::TwoSheet,
+                                     kDefaultAlcubierreWarpVelocity, kDefaultAlcubierreBubbleRadius,
+                                     kDefaultAlcubierreBubbleSigma)
+            .has_value());
     EXPECT_TRUE(MetricSpecificParameterIssue(
-                    MetricId::Schwarzschild, 2.0, true, kDefaultAlcubierreWarpVelocity,
-                    kDefaultAlcubierreBubbleRadius, kDefaultAlcubierreBubbleSigma)
+                    MetricId::Schwarzschild, 2.0, WormholeTopology::OneSheetCapture,
+                    kDefaultAlcubierreWarpVelocity, kDefaultAlcubierreBubbleRadius,
+                    kDefaultAlcubierreBubbleSigma)
                     .has_value());
-    EXPECT_TRUE(MetricSpecificParameterIssue(
-                    MetricId::MorrisThorne, kDefaultMorrisThorneThroatRadius, true, 1.0,
-                    kDefaultAlcubierreBubbleRadius, kDefaultAlcubierreBubbleSigma)
-                    .has_value());
-    EXPECT_FALSE(MetricSpecificParameterIssue(
-                     MetricId::Alcubierre, kDefaultMorrisThorneThroatRadius, true, 1.0, 2.0, 0.25)
-                     .has_value());
     EXPECT_TRUE(
-        MetricSpecificParameterIssue(static_cast<MetricId>(255), kDefaultMorrisThorneThroatRadius,
-                                     true, kDefaultAlcubierreWarpVelocity,
+        MetricSpecificParameterIssue(MetricId::MorrisThorne, kDefaultMorrisThorneThroatRadius,
+                                     WormholeTopology::OneSheetCapture, 1.0,
                                      kDefaultAlcubierreBubbleRadius, kDefaultAlcubierreBubbleSigma)
             .has_value());
+    EXPECT_FALSE(MetricSpecificParameterIssue(MetricId::Alcubierre,
+                                              kDefaultMorrisThorneThroatRadius,
+                                              WormholeTopology::OneSheetCapture, 1.0, 2.0, 0.25)
+                     .has_value());
+    EXPECT_TRUE(MetricSpecificParameterIssue(
+                    static_cast<MetricId>(255), kDefaultMorrisThorneThroatRadius,
+                    WormholeTopology::OneSheetCapture, kDefaultAlcubierreWarpVelocity,
+                    kDefaultAlcubierreBubbleRadius, kDefaultAlcubierreBubbleSigma)
+                    .has_value());
+    EXPECT_TRUE(MetricSpecificParameterIssue(
+                    MetricId::MorrisThorne, kDefaultMorrisThorneThroatRadius,
+                    static_cast<WormholeTopology>(255), kDefaultAlcubierreWarpVelocity,
+                    kDefaultAlcubierreBubbleRadius, kDefaultAlcubierreBubbleSigma)
+                    .has_value());
 
     EXPECT_FALSE(MetricParameterIssue(MetricId::Kerr, 0.9, 0.0, 0.0).has_value());
     EXPECT_TRUE(MetricParameterIssue(MetricId::Kerr, 0.9, 0.1, 0.0).has_value());

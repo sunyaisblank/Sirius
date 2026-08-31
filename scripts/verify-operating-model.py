@@ -204,6 +204,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:ConfigValidation.DiskRequestDeclinesForEveryMetricWithoutAnEmissionModel",
         "gtest:CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle",
         "gtest:CpuTraceBoundary.EveryAdvertisedCpuMetricConstructsAndTracesOneRay",
+        "gtest:CpuTraceBoundary.TwoSheetEllisCrossesThroatAndReachesInversionMatchedInfinity",
         "gtest:MetricRegistryTests.BackendSupportMatchesImplementations",
         "gtest:MetricRegistryTests.EveryCanonicalNameParsesToItsOwnId",
         "gtest:MetricRegistryTests.PositiveLambdaObserverAndHorizonShareOneCausalDomain",
@@ -215,7 +216,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:ConfigValidation.PolarisationRequiresRepresentedThinBlackHoleDisk",
         "gtest:GeodesicTracerTest.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation",
         "gtest:RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes",
-        "gtest:RenderSessionProbe.PolarisedAndTwoSheetRequestsDeclineAtTheTypedBoundary",
+        "gtest:RenderSessionProbe.PolarisedRequestsDeclineAndTwoSheetIsRepresented",
         "gtest:WalkerPenrose.BoyerLindquistInitialDataAndAxisExitDeclineWithoutSubstitution",
         "gtest:WalkerPenrose.SchwarzschildEquatorialPerpendicularTransportsRigidly",
         "gtest:WalkerPenroseLivePath.AgreesWithOracleAcrossCharts",
@@ -264,9 +265,9 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "3b0e38f0ef01ddaa94f6357ec03be166701e6d9b6139998ce03f473840dbc3f1",
+    "acceptance_criteria": "d1267141a3a2c2fe61310daa8cf244fee224f5b3b33f543ae1e86b713339df57",
     "required_dimensions": "ca9364d1caace7fa97ab5960394c4fa1256ca3523dd79cbca6952292b1561444",
-    "capability_contracts": "de9c1d9dabb38698572812b451c63053977aa15b0f6e380844225d32c4e98aff",
+    "capability_contracts": "520b17192df241cc5a1429e208c0be5bb62cdeeb9326a8134c3f23232f525170",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
 

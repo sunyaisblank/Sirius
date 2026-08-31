@@ -185,16 +185,33 @@ inline void AppendUnitRoot(UnitIntervalPolynomialRoots& roots, double root,
     };
 }
 
-// Locate the observer-nearest contact with a spherical capture surface on one
-// accepted cubic-Hermite segment.  Squared radius minus R^2 is a sextic.  Its
-// complete derivative-root partition above detects entries, exits, and tangent
-// contacts even when both segment endpoints lie outside the sphere.
-[[nodiscard]] inline std::optional<AcceptedTraceSegmentSample> FindSphericalCaptureEvent(
+enum class SphericalBoundarySense {
+    AnyContact,
+    IncreasingRadius,
+    DecreasingRadius,
+};
+
+// Locate the observer-nearest selected contact with a spherical boundary on
+// one accepted cubic-Hermite segment. Squared radius minus R^2 is a sextic. Its
+// complete derivative-root partition detects entries, exits, and tangent
+// contacts even when both endpoints lie on the same side. Directional modes
+// exclude tangencies and select the first root whose radial derivative has the
+// requested sign.
+[[nodiscard]] inline std::optional<AcceptedTraceSegmentSample> FindSphericalBoundaryEvent(
     const Vec4& start_position, const Vec4& start_tangent, const Vec4& end_position,
-    const Vec4& end_tangent, double affine_length, double capture_radius) {
-    if (!(std::isfinite(affine_length) && affine_length > 0.0 && std::isfinite(capture_radius) &&
-          capture_radius > 0.0)) {
+    const Vec4& end_tangent, double affine_length, double boundary_radius,
+    SphericalBoundarySense sense) {
+    if (!(std::isfinite(affine_length) && affine_length > 0.0 && std::isfinite(boundary_radius) &&
+          boundary_radius > 0.0)) {
         return std::nullopt;
+    }
+    switch (sense) {
+        case SphericalBoundarySense::AnyContact:
+        case SphericalBoundarySense::IncreasingRadius:
+        case SphericalBoundarySense::DecreasingRadius:
+            break;
+        default:
+            return std::nullopt;
     }
     for (int component = 0; component < 4; ++component) {
         if (!std::isfinite(start_position(component)) || !std::isfinite(start_tangent(component)) ||
@@ -204,21 +221,44 @@ inline void AppendUnitRoot(UnitIntervalPolynomialRoots& roots, double root,
     }
 
     const auto coefficients = detail::SphericalSegmentPolynomial(
-        start_position, start_tangent, end_position, end_tangent, affine_length, capture_radius);
+        start_position, start_tangent, end_position, end_tangent, affine_length, boundary_radius);
     const auto roots = detail::FindPolynomialRootsOnUnitInterval(coefficients, 6);
     if (roots.count == 0) return std::nullopt;
 
-    const double fraction = roots.values[0];
-    auto event = SampleAcceptedTraceSegment(start_position, start_tangent, end_position,
-                                            end_tangent, affine_length, fraction);
-    const double sampled_radius =
-        std::hypot(event.position(1), event.position(2), event.position(3));
-    if (!(std::isfinite(sampled_radius) && sampled_radius > 0.0)) return std::nullopt;
-    const double surface_scale = capture_radius / sampled_radius;
-    for (int component = 1; component < 4; ++component) {
-        event.position(component) *= surface_scale;
+    for (int root = 0; root < roots.count; ++root) {
+        const double fraction = roots.values[static_cast<std::size_t>(root)];
+        auto event = SampleAcceptedTraceSegment(start_position, start_tangent, end_position,
+                                                end_tangent, affine_length, fraction);
+        const double sampled_radius =
+            std::hypot(event.position(1), event.position(2), event.position(3));
+        if (!(std::isfinite(sampled_radius) && sampled_radius > 0.0)) continue;
+        const double radial_numerator = event.position(1) * event.tangent(1) +
+                                        event.position(2) * event.tangent(2) +
+                                        event.position(3) * event.tangent(3);
+        if (!std::isfinite(radial_numerator)) continue;
+        if (sense == SphericalBoundarySense::IncreasingRadius && !(radial_numerator > 0.0)) {
+            continue;
+        }
+        if (sense == SphericalBoundarySense::DecreasingRadius && !(radial_numerator < 0.0)) {
+            continue;
+        }
+        const double surface_scale = boundary_radius / sampled_radius;
+        for (int component = 1; component < 4; ++component) {
+            event.position(component) *= surface_scale;
+        }
+        return event;
     }
-    return event;
+    return std::nullopt;
+}
+
+// The one-sheet Ellis policy intentionally treats even a tangent throat
+// contact as a dark terminal event.
+[[nodiscard]] inline std::optional<AcceptedTraceSegmentSample> FindSphericalCaptureEvent(
+    const Vec4& start_position, const Vec4& start_tangent, const Vec4& end_position,
+    const Vec4& end_tangent, double affine_length, double capture_radius) {
+    return FindSphericalBoundaryEvent(start_position, start_tangent, end_position, end_tangent,
+                                      affine_length, capture_radius,
+                                      SphericalBoundarySense::AnyContact);
 }
 
 // Locate the first sampled crossing of a finite outer causal boundary on an

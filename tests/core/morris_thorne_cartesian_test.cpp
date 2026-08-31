@@ -213,21 +213,52 @@ TEST(MorrisThorneCartesianTests, AnalyticInverseIsExact) {
 }
 
 // -----------------------------------------------------------------------------
-// The physical areal throat r=b0 is rho=b0/2 in the isotropic chart.
+// The physical areal throat r=b0 is rho=b0/2 in the isotropic chart. It is a
+// regular topology event, not an intrinsic horizon or capture surface.
 // -----------------------------------------------------------------------------
-TEST(MorrisThorneCartesianTests, ThroatIsTheCaptureSurface) {
+TEST(MorrisThorneCartesianTests, ThroatIsARegularTopologyBoundaryNotACaptureSurface) {
     for (double b0 : {1.0, 2.5}) {
         MorrisThorneCartesian cart(MorrisThorneParams::Ellis(b0));
-        const double margin = 0.05;
 
         EXPECT_DOUBLE_EQ(cart.IsotropicThroatRadius(), 0.5 * b0);
-        ASSERT_TRUE(cart.SphericalCaptureRadius().has_value());
-        EXPECT_DOUBLE_EQ(*cart.SphericalCaptureRadius(), 0.5 * b0);
-        EXPECT_TRUE(cart.InsideCaptureSurface(CartPos(0.5249 * b0, {1, 0, 0}), margin));
-        EXPECT_TRUE(cart.InsideCaptureSurface(CartPos(0.25 * b0, {0, 0, 1}), margin));
-        EXPECT_FALSE(cart.InsideCaptureSurface(CartPos(0.5251 * b0, {0.6, 0.8, 0}), margin));
-        EXPECT_FALSE(cart.InsideCaptureSurface(CartPos(10.0 * b0, {1, 0, 0}), margin));
+        ASSERT_TRUE(cart.IsotropicEllisThroatRadius().has_value());
+        EXPECT_DOUBLE_EQ(*cart.IsotropicEllisThroatRadius(), 0.5 * b0);
+        EXPECT_FALSE(cart.InsideCaptureSurface(CartPos(0.5 * b0, {1, 0, 0}), 0.0));
+        EXPECT_FALSE(cart.InsideCaptureSurface(CartPos(0.25 * b0, {0, 0, 1}), 0.05));
     }
+}
+
+TEST(MorrisThorneCartesianTests, InversionExchangesEndsAndPreservesArealRadius) {
+    for (double b0 : {0.1, 1.0, 1000.0}) {
+        for (double rho : {0.125 * b0, 0.5 * b0, 8.0 * b0, 200.0 * b0}) {
+            const double inverted = EllisInvertedIsotropicRadius(b0, rho);
+            EXPECT_NEAR(EllisInvertedIsotropicRadius(b0, inverted), rho, 2e-13 * rho);
+            EXPECT_NEAR(EllisArealRadiusFromIsotropic(b0, inverted),
+                        EllisArealRadiusFromIsotropic(b0, rho),
+                        2e-13 * EllisArealRadiusFromIsotropic(b0, rho));
+            EXPECT_NEAR(EllisProperRadialDistanceFromIsotropic(b0, inverted),
+                        -EllisProperRadialDistanceFromIsotropic(b0, rho), 2e-13 * b0);
+        }
+    }
+}
+
+TEST(MorrisThorneCartesianTests, SecondSheetSkyUsesTheExactInversionJacobian) {
+    Vec4 position = CartPos(0.25, {1.0, 0.0, 0.0});
+    Vec4 radial;
+    radial(1) = -1.0;
+    const auto mapped_radial = MapEllisSecondSheetSkyDirection(position, radial);
+    ASSERT_TRUE(mapped_radial.has_value());
+    EXPECT_DOUBLE_EQ((*mapped_radial)(1), 1.0);
+
+    Vec4 tangent;
+    tangent(2) = 1.0;
+    const auto mapped_tangent = MapEllisSecondSheetSkyDirection(position, tangent);
+    ASSERT_TRUE(mapped_tangent.has_value());
+    EXPECT_DOUBLE_EQ((*mapped_tangent)(1), 0.0);
+    EXPECT_DOUBLE_EQ((*mapped_tangent)(2), 1.0);
+
+    Vec4 origin;
+    EXPECT_FALSE(MapEllisSecondSheetSkyDirection(origin, tangent).has_value());
 }
 
 TEST(MorrisThorneCartesianTests, ThroatAndPositiveRadiusSecondSheetAreFiniteAndUnclamped) {
@@ -307,6 +338,30 @@ TEST(MorrisThorneCartesianTests, AcceptedSegmentFindsHiddenAndTangentThroatConta
     finish_tangent(1) = 0.3;
     EXPECT_FALSE(FindSphericalCaptureEvent(start, start_tangent, finish, finish_tangent, 1.0, 1.0)
                      .has_value());
+}
+
+TEST(MorrisThorneCartesianTests, DirectionalBoundaryIgnoresTangentAndSelectsInwardCrossing) {
+    Vec4 start, finish, start_tangent, finish_tangent;
+    start(1) = 1.1;
+    finish(0) = 1.0;
+    finish(1) = 1.1;
+    start_tangent(0) = 1.0;
+    finish_tangent(0) = 1.0;
+    start_tangent(1) = -0.8;
+    finish_tangent(1) = 0.8;
+    const auto inward =
+        FindSphericalBoundaryEvent(start, start_tangent, finish, finish_tangent, 1.0, 1.0,
+                                   SphericalBoundarySense::DecreasingRadius);
+    ASSERT_TRUE(inward.has_value());
+    EXPECT_LT(inward->tangent(1), 0.0);
+
+    start_tangent(1) = -0.4;
+    finish_tangent(1) = 0.4;
+    EXPECT_FALSE(FindSphericalBoundaryEvent(start, start_tangent, finish, finish_tangent, 1.0, 1.0,
+                                            SphericalBoundarySense::DecreasingRadius)
+                     .has_value());
+    EXPECT_TRUE(FindSphericalCaptureEvent(start, start_tangent, finish, finish_tangent, 1.0, 1.0)
+                    .has_value());
 }
 
 TEST(MorrisThorneCartesianTests, NonEllisCartesianRequestsFailClosed) {

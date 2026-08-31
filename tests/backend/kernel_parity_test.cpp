@@ -81,6 +81,7 @@ constexpr std::uint32_t kOpKerrZamoTransfer = 15;
 constexpr std::uint32_t kOpKerrDiskTransfer = 16;
 constexpr std::uint32_t kOpGreyLayerAbsorption = 17;
 constexpr std::uint32_t kOpSphericalCaptureEvent = 18;
+constexpr std::uint32_t kOpEllisTwoSheetTrace = 19;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -671,6 +672,52 @@ TEST(KernelParity, SphericalCaptureEventFindsHiddenAndTangentContacts) {
 
     const std::size_t malformed = 3 * kResultStride;
     EXPECT_FLOAT_EQ(result[malformed], 0.0f);
+}
+
+TEST(KernelParity, EllisTwoSheetTraceCrossesThroatAndMapsTheOppositeSky) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    const auto central_ray = [](float b0) {
+        Sample sample;
+        sample.metric_id = kMorrisThorne;
+        sample.p1 = b0;
+        sample.p2 = 20.0f * b0;
+        sample.c0 = 10.0f * b0;
+        // A=1+b0^2/(4 rho^2)=1.0025 at rho=10*b0. Choosing
+        // drho/dlambda=-1/A makes the past-ray frequency exactly one, so the
+        // analytic proper-distance difference is also its affine length.
+        sample.u1 = -1.0f / 1.0025f;
+        sample.h = 0.08f;
+        sample.aux0 = 20000.0f;
+        sample.aux1 = 1.0e-5f * b0;
+        sample.aux2 = 2.0f * b0;
+        return sample;
+    };
+    // Cross-scale inversion identities are proved directly by the host tests;
+    // one live device trajectory is sufficient to bind the shared production
+    // function without tripling the software-Vulkan compute cost.
+    const std::vector<Sample> samples = {central_ray(1.0f)};
+    const auto result = RunProbe(*f.device, f.kernel, kOpEllisTwoSheetTrace, samples);
+
+    for (std::size_t sample = 0; sample < samples.size(); ++sample) {
+        const std::size_t base = sample * kResultStride;
+        const float b0 = samples[sample].p1;
+        const float opposite_radius = b0 / 80.0f;
+        SCOPED_TRACE(b0);
+        EXPECT_FLOAT_EQ(result[base], 2.0f);
+        EXPECT_NEAR(result[base + 1], opposite_radius, 2.0e-4f * b0);
+        const float expected_affine = 29.9625f * b0;
+        EXPECT_NEAR(result[base + 2], expected_affine, 2.0e-2f * b0);
+        EXPECT_GT(result[base + 3], 0.0f);
+        EXPECT_LT(result[base + 3], samples[sample].aux0);
+        EXPECT_GT(result[base + 4], 0.0f);
+        EXPECT_NEAR(result[base + 5], 0.0f, 2.0e-5f * b0);
+        EXPECT_NEAR(result[base + 6], 0.0f, 2.0e-5f * b0);
+        EXPECT_GT(result[base + 7], 0.999f);
+        EXPECT_NEAR(result[base + 8], 0.0f, 2.0e-5f);
+        EXPECT_NEAR(result[base + 9], 0.0f, 2.0e-5f);
+    }
 }
 
 TEST(KernelParity, KerrSchildChristoffelMatchesLegacyToOnePartInMillion) {

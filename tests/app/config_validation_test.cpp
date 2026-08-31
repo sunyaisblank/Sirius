@@ -489,14 +489,10 @@ TEST(ConfigValidation, MotionBlurAndWormholeTopologyHaveExplicitOperatorBoundari
     config.metric.wormhole_topology = "OneSheetCapture";
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
     config.metric.wormhole_topology = "TwoSheet";
-    const auto topology_errors = ConfigLoader::Validate(config);
-    ASSERT_FALSE(topology_errors.empty());
-    EXPECT_NE(std::find_if(topology_errors.begin(), topology_errors.end(),
-                           [](const std::string& error) {
-                               return error.find("TwoSheet is not represented") !=
-                                      std::string::npos;
-                           }),
-              topology_errors.end());
+    EXPECT_TRUE(ConfigLoader::Validate(config).empty());
+
+    config.metric.name = "Minkowski";
+    EXPECT_FALSE(ConfigLoader::Validate(config).empty());
 }
 
 TEST(ConfigValidation, DiskRequestDeclinesForEveryMetricWithoutAnEmissionModel) {
