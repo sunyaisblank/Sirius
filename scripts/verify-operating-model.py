@@ -131,6 +131,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:VulkanRenderSession.IndexedPointCatalogueReachesLiveKernel",
     },
     "P4": {
+        "ctest:OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims",
         "gtest:AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff",
         "gtest:AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature",
         "gtest:AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge",
@@ -145,6 +146,9 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel",
         "gtest:GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource",
         "gtest:GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment",
+        "gtest:GeodesicTracerVolumetric.OpticallyThinTransferIsNotDiscardedAtCompositionBoundary",
+        "gtest:SpectralValidationTests.OpticallyThinGreyLayerPreservesFirstOrderEmission",
+        "gtest:KernelParity.OpticallyThinGreyLayerAbsorptionMatchesHostAuthority",
         "gtest:VolumetricDiskClosure.TruncatedGaussianColumnEqualsDeclaredOpticalDepth",
         "gtest:KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure",
         "gtest:KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor",
@@ -260,9 +264,9 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "a53f823c327c4975c9cef01a8fbd580d18145d1104e8043ad78d57a5befaa57e",
-    "required_dimensions": "353ac2ff8044c80634ed6616f4230d99355dc3206abd5e32352b7a3112c41fe6",
-    "capability_contracts": "cd2fa2a9ab5133e8ae786e90026d6b361c08344fd491a16af02d00b16b75a032",
+    "acceptance_criteria": "3b0e38f0ef01ddaa94f6357ec03be166701e6d9b6139998ce03f473840dbc3f1",
+    "required_dimensions": "ca9364d1caace7fa97ab5960394c4fa1256ca3523dd79cbca6952292b1561444",
+    "capability_contracts": "18146eb6db0c936ff1812ce5613448ec73e07548eea3dd5032b70040702e8177",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
 

@@ -502,10 +502,6 @@ void AccumulateVolumeSegment(Vec4Cart start, Vec4Cart finish,
         float diskR =
             float(ComputeKerrRadiusCart(point.x, point.y, point.z, Real(a)));
 
-        Real localMetric[4][4];
-        Real localInverse[4][4];
-        GetKerrSchildFamilyMetric(position, M, a, 0.0f, 0.0f, localMetric, localInverse);
-
         float diskDeltaTau = 0.0f;
         float3 diskSource = float3(0.0f);
 
@@ -530,6 +526,12 @@ void AccumulateVolumeSegment(Vec4Cart start, Vec4Cart finish,
                                       M, aStar, hOverR, hPower);
             if (isfinite(diskOpacity) && diskOpacity > 0.0f &&
                 isfinite(temperature) && temperature > 0.0f) {
+                // Avoid a metric evaluation for empty samples. Every accepted
+                // segment is still midpoint-sampled, matching the CPU path.
+                Real localMetric[4][4];
+                Real localInverse[4][4];
+                GetKerrSchildFamilyMetric(
+                    position, M, a, 0.0f, 0.0f, localMetric, localInverse);
                 float energy;
                 float angularMomentum;
                 if (!KerrPhotonKillingQuantitiesCart(
@@ -567,8 +569,8 @@ void AccumulateVolumeSegment(Vec4Cart start, Vec4Cart finish,
         if (uncappedDeltaTau <= 0.0f) continue;
         float deltaTau = min(uncappedDeltaTau, 10.0f - opticalDepth);
         float3 source = diskSource;
-        float transmission = exp(-deltaTau);
-        emission += exp(-opticalDepth) * source * (1.0f - transmission);
+        float absorbedFraction = GreyLayerAbsorbedFraction(deltaTau);
+        emission += exp(-opticalDepth) * source * absorbedFraction;
         opticalDepth += deltaTau;
         if (opticalDepth >= 10.0f) break;
     }
@@ -1150,7 +1152,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                 : SampleBackgroundGradient(dir));
         result += transmittance * bg;
     }
-    if (volumeOpticalDepth > 0.01f) {
+    if (volumeOpticalDepth > 0.0f) {
         result = result * exp(-volumeOpticalDepth) + volumeEmission;
     }
 

@@ -395,11 +395,6 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    KernelBeam.BeamFlagWiresDeviationWithoutMovingDefault
-    PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
     KernelParity.KerrSchildMetricMatchesLegacyToOnePartInMillion
     KernelParity.RepresentedSubThresholdKerrMetricIsScaleCovariant
     KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation
@@ -410,6 +405,7 @@ set_tests_properties(
     KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco
     KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel
     KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure
+    KernelParity.OpticallyThinGreyLayerAbsorptionMatchesHostAuthority
     KernelParity.ArbitraryLatitudeKerrZamoMatchesHostAuthority
     KernelParity.EquatorialKerrDiskTransferMatchesHostAuthority
     KernelParity.BlackbodyMatchesIntegratedCoreSpectrum
@@ -431,13 +427,6 @@ set_tests_properties(
 set_tests_properties(
     KernelPortability.CudaEmissionCarriesTheNativeComputeEntryPoint
     KernelPortability.MetalEmissionCarriesTheNativeComputeEntryPoint
-    PROPERTIES LABELS "Mandatory;Operational"
-)
-
-set_tests_properties(
-    KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow
-    KernelTrace.Fp64RungAgreesWithFp32OnKerrScene
-    KernelTrace.CompensatedRungTracksFp64AtLeastAsWellAsFp32
     PROPERTIES LABELS "Mandatory;Operational"
 )
 
@@ -843,6 +832,7 @@ set_tests_properties(
     SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere
     SpectralValidationTests.ComovingOpacityUsesInvariantAffinePathLength
     SpectralValidationTests.ObserverToSourceTransferPreservesForegroundEmissionOrder
+    SpectralValidationTests.OpticallyThinGreyLayerPreservesFirstOrderEmission
     SpectralValidationTests.BlackbodyColourProgressionConsumesIntegratedSpectrum
     PROPERTIES LABELS "Mandatory;Correctness"
 )
@@ -1076,6 +1066,7 @@ set_tests_properties(
     FilmSimulationTest.SpaceOdysseyPresetUsesLowerGrain
     FilmSimulationTest.Vignette_CenterUnchanged
     FilmSimulationTest.Vignette_DarkensCorners
+    KernelBeam.BeamFlagWiresDeviationWithoutMovingDefault
     MorrisThorneTracerTest.CentralRayCapturedAtThroat
     MorrisThorneTracerTest.DeflectionFallsQuadraticallyWithImpactParameter
     MorrisThorneTracerTest.EdgeRayEscapes
@@ -1130,9 +1121,13 @@ set_tests_properties(
     GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile
     GeodesicTracerTest.NoNumericalFailures
     GeodesicTracerTest.TracingPerformance
+    GeodesicTracerVolumetric.OpticallyThinTransferIsNotDiscardedAtCompositionBoundary
     GeodesicTracerVolumetric.ProceduralTurbulenceAltersLiveTransferDeterministically
     GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource
     GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment
+    KernelTrace.CompensatedRungTracksFp64AtLeastAsWellAsFp32
+    KernelTrace.Fp64RungAgreesWithFp32OnKerrScene
+    KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow
     MemoryGovernor.EnvironmentOverrideResolvesBudget
     MemoryGovernor.MalformedOverrideDeclinesInsteadOfBorrowingTheDeviceBudget
     MemoryGovernor.OverheadLargerThanUsableBudgetDeclines

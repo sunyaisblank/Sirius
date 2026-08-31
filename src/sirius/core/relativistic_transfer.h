@@ -54,6 +54,15 @@ struct GreyTransferState {
     double optical_depth = 0.0;
 };
 
+// Stable evaluation of the fraction absorbed/emitted by one homogeneous grey
+// layer.  The direct 1-exp(-delta_tau) form loses the entire first-order term
+// for sufficiently optically thin layers, even though those layers are inside
+// the represented non-negative optical-depth domain.
+[[nodiscard]] inline std::optional<double> GreyLayerAbsorbedFraction(double delta_tau) {
+    if (!std::isfinite(delta_tau) || delta_tau < 0.0) return std::nullopt;
+    return -std::expm1(-delta_tau);
+}
+
 // For a past-directed ray k and a future-directed fluid worldline u, k.u is
 // the positive comoving photon frequency. With observer-normalised affine
 // parameter, the proper path traversed in that fluid frame is (k.u) dlambda.
@@ -87,7 +96,9 @@ struct GreyTransferState {
     }
     const double accepted_tau = std::min(delta_tau, max_tau - state.optical_depth);
     const double accepted_fraction = accepted_tau / delta_tau;
-    const double layer_weight = std::exp(-state.optical_depth) * (1.0 - std::exp(-accepted_tau));
+    const auto absorbed_fraction = GreyLayerAbsorbedFraction(accepted_tau);
+    if (!absorbed_fraction.has_value()) return std::nullopt;
+    const double layer_weight = std::exp(-state.optical_depth) * *absorbed_fraction;
     for (std::size_t channel = 0; channel < state.observed_emission.size(); ++channel) {
         state.observed_emission[channel] += observed_source[channel] * layer_weight;
     }

@@ -42,6 +42,7 @@ static const uint OP_XYZ_D65_TO_LINEAR_SRGB = 13;
 static const uint OP_CIE_1931_TWO_DEGREE_FIT = 14;
 static const uint OP_KERR_ZAMO_TRANSFER = 15;
 static const uint OP_KERR_DISK_TRANSFER = 16;
+static const uint OP_GREY_LAYER_ABSORPTION = 17;
 
 // Future-directed null root used by the render kernel, repeated here only for
 // the diagnostic launch boundary. The integration below calls the production
@@ -273,6 +274,10 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         // p1=reference radius, p2=H, p3=tau_ref; c0=radius, c1=z.
         results[rb + 0] =
             TruncatedGaussianOpacityDensity(p3, c0, p1, p2, c1);
+    } else if (opcode == OP_GREY_LAYER_ABSORPTION) {
+        // c0=non-negative layer optical depth. This is a scalar compute probe;
+        // it performs no ray dispatch and produces no image.
+        results[rb + 0] = GreyLayerAbsorbedFraction(c0);
     } else if (opcode == OP_NULL_PROJECTION) {
         // Direct witness for the production accepted-state constraint method.
         // The sample supplies a metric family/event and u=(t,x,y,z).

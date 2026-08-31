@@ -16,6 +16,17 @@ public float ObservedDiskBolometricSource(float emittedSource, float redshift) {
     return emittedSource * g2 * g2;
 }
 
+// Stable 1-exp(-deltaTau) for the complete represented non-negative fp32
+// optical-depth domain.  The series branch preserves optically thin layers
+// that direct subtraction rounds to zero.
+public float GreyLayerAbsorbedFraction(float deltaTau) {
+    if (!isfinite(deltaTau) || deltaTau < 0.0f) return 0.0f;
+    if (deltaTau <= 1.0e-2f) {
+        return deltaTau * (1.0f - deltaTau * (0.5f - deltaTau / 6.0f));
+    }
+    return 1.0f - exp(-deltaTau);
+}
+
 // Finite-support vertical opacity for the declared phenomenological volume.
 // integral[-3H,+3H] exp(-z^2/(2H^2)) dz
 //   = sqrt(2 pi) erf(3/sqrt(2)) H

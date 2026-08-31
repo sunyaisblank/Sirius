@@ -596,30 +596,17 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
 
         // 1. Volumetric disk (ray marching through a 3D disk volume).
         if (config_.enable_disk && config_.enable_volumetric) {
-            const double absolute_spin = cached_a_ * cached_m_;
-            const coordinates::Vec4Cart previous_cart{prev_pos(0), prev_pos(1), prev_pos(2),
-                                                      prev_pos(3)};
-            const coordinates::Vec4Cart current_cart{ray.position(0), x, y, z};
-            float prev_r =
-                static_cast<float>(coordinates::KerrSchildRadius(previous_cart, absolute_spin));
-            float prev_z_cyl = static_cast<float>(prev_pos(3));
-            float curr_r =
-                static_cast<float>(coordinates::KerrSchildRadius(current_cart, absolute_spin));
-            float curr_z_cyl = static_cast<float>(z);
-
-            bool was_inside = IsInVolumetricDisk(prev_r, prev_z_cyl);
-            bool is_inside = IsInVolumetricDisk(curr_r, curr_z_cyl);
-
-            if (was_inside || is_inside) {
-                Vec4 segment_start, segment_end;
-                for (int i = 0; i < 4; ++i) {
-                    segment_start(i) = prev_pos(i);
-                    segment_end(i) = ray.position(i);
-                }
-
-                AccumulateVolumetricEmission(prev_vel, ray.velocity, d_lambda, ray.ku_uobsu,
-                                             segment_start, segment_end, result);
+            // Sample every accepted segment.  Endpoint membership is not a
+            // conservative intersection test: a segment can enter and leave
+            // the finite atmosphere with both endpoints outside it.
+            Vec4 segment_start, segment_end;
+            for (int i = 0; i < 4; ++i) {
+                segment_start(i) = prev_pos(i);
+                segment_end(i) = ray.position(i);
             }
+
+            AccumulateVolumetricEmission(prev_vel, ray.velocity, d_lambda, ray.ku_uobsu,
+                                         segment_start, segment_end, result);
         }
 
         // 2. Thin disk: terminate at the observer-nearest opaque-surface event.
@@ -932,10 +919,6 @@ void GeodesicTracer::AccumulateVolumetricEmission(const Vec4& entry_velocity,
         const double disk_r = coordinates::KerrSchildRadius(sample_cart, cached_a_ * cached_m_);
         const float phi = static_cast<float>(std::atan2(y, x));
 
-        Metric4d metric;
-        Tensor<Dual<double>, 4, 4, 4> derivatives;
-        metric_->Evaluate(position, metric, derivatives);
-
         double disk_dtau = 0.0;
         core::spectral::Rgb disk_source;
         if (config_.enable_volumetric &&
@@ -945,6 +928,12 @@ void GeodesicTracer::AccumulateVolumetricEmission(const Vec4& entry_velocity,
             const float temperature =
                 ComputeVolumetricTemperature(static_cast<float>(disk_r), static_cast<float>(z));
             if (disk_opacity > 0.0f && temperature > 0.0f) {
+                // Metric evaluation is needed only at an accepted volume
+                // sample.  This keeps the now-unconditional segment sampler
+                // cheap in the overwhelmingly empty part of a ray.
+                Metric4d metric;
+                Tensor<Dual<double>, 4, 4, 4> derivatives;
+                metric_->Evaluate(position, metric, derivatives);
                 // Use the stationary and axial Killing quantities to bridge
                 // this Kerr-Schild state to the declared Boyer-Lindquist
                 // circular-emitter/ZAMO frames.  A Kerr-Schild slicing normal
@@ -1002,7 +991,9 @@ void GeodesicTracer::AccumulateVolumetricEmission(const Vec4& entry_velocity,
     result.volumetric_emission[2] = static_cast<float>(transfer.observed_emission[2]);
     result.optical_depth = static_cast<float>(transfer.optical_depth);
     result.volumetric_affine_length += static_cast<float>(active_affine_length);
-    result.volumetric_hit = result.volumetric_hit || (transfer.optical_depth > 0.01);
+    // Any represented positive layer contributes emission and attenuation.
+    // A display-oriented 0.01 cutoff discarded valid optically thin transfer.
+    result.volumetric_hit = result.volumetric_hit || (transfer.optical_depth > 0.0);
 }
 
 // =============================================================================
