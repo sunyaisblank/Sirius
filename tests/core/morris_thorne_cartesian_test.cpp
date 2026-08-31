@@ -3,8 +3,9 @@
 //
 // Gates: coordinate-transformed agreement with the spherical areal-radius
 // authority on both sheets, a finite exact throat, analytic derivatives,
-// inverse identity, chart domain, and complete accepted-segment capture
-// events.  The latter includes equal-sign endpoints and a tangent contact.
+// inverse identity, independent Ricci/energy-condition invariants, chart
+// domain, and complete accepted-segment capture events.  The latter includes
+// equal-sign endpoints and a tangent contact.
 
 #include "sirius/core/metrics/morris_thorne_family.h"
 #include "sirius/core/tensor.h"
@@ -69,6 +70,85 @@ std::vector<MorrisThorneParams> SampleShapes() {
         MorrisThorneParams::Ellis(1.0),
         MorrisThorneParams::Ellis(2.5),
     };
+}
+
+struct RicciSample {
+    double covariant[4][4] = {};
+    double scalar = 0.0;
+};
+
+ChristoffelSymbols ConnectionAt(MorrisThorneCartesian& metric, const Vec4& position) {
+    Metric4d g;
+    Tensor<Dual<double>, 4, 4, 4> dg;
+    metric.Evaluate(position, g, dg);
+    return TensorOps::Christoffel(g, dg);
+}
+
+// Independent numerical curvature oracle.  It differentiates the production
+// analytic connection with a fourth-order centred stencil and assembles
+//
+//   R^rho_{ sigma mu nu} = d_mu Gamma^rho_{nu sigma}
+//                         - d_nu Gamma^rho_{mu sigma}
+//                         + Gamma^rho_{mu lambda} Gamma^lambda_{nu sigma}
+//                         - Gamma^rho_{nu lambda} Gamma^lambda_{mu sigma}.
+//
+// This does not reuse the closed-form Ellis Ricci scalar or stress tensor that
+// the test compares against, so a mutually wrong chart/connection pair cannot
+// satisfy the oracle by construction.
+RicciSample RicciFromConnectionFiniteDifference(MorrisThorneCartesian& metric, const Vec4& position,
+                                                double h) {
+    const ChristoffelSymbols gamma = ConnectionAt(metric, position);
+    double d_gamma[4][4][4][4] = {};
+    for (int derivative = 0; derivative < 4; ++derivative) {
+        Vec4 plus_one = position;
+        Vec4 minus_one = position;
+        Vec4 plus_two = position;
+        Vec4 minus_two = position;
+        plus_one(derivative) += h;
+        minus_one(derivative) -= h;
+        plus_two(derivative) += 2.0 * h;
+        minus_two(derivative) -= 2.0 * h;
+        const ChristoffelSymbols gp1 = ConnectionAt(metric, plus_one);
+        const ChristoffelSymbols gm1 = ConnectionAt(metric, minus_one);
+        const ChristoffelSymbols gp2 = ConnectionAt(metric, plus_two);
+        const ChristoffelSymbols gm2 = ConnectionAt(metric, minus_two);
+        for (int upper = 0; upper < 4; ++upper) {
+            for (int lower_one = 0; lower_one < 4; ++lower_one) {
+                for (int lower_two = 0; lower_two < 4; ++lower_two) {
+                    d_gamma[derivative][upper][lower_one][lower_two] =
+                        (-gp2.gamma(upper, lower_one, lower_two).real +
+                         8.0 * gp1.gamma(upper, lower_one, lower_two).real -
+                         8.0 * gm1.gamma(upper, lower_one, lower_two).real +
+                         gm2.gamma(upper, lower_one, lower_two).real) /
+                        (12.0 * h);
+                }
+            }
+        }
+    }
+
+    RicciSample result;
+    for (int sigma = 0; sigma < 4; ++sigma) {
+        for (int nu = 0; nu < 4; ++nu) {
+            for (int rho = 0; rho < 4; ++rho) {
+                double component = d_gamma[rho][rho][nu][sigma] - d_gamma[nu][rho][rho][sigma];
+                for (int lambda = 0; lambda < 4; ++lambda) {
+                    component +=
+                        gamma.gamma(rho, rho, lambda).real * gamma.gamma(lambda, nu, sigma).real -
+                        gamma.gamma(rho, nu, lambda).real * gamma.gamma(lambda, rho, sigma).real;
+                }
+                result.covariant[sigma][nu] += component;
+            }
+        }
+    }
+
+    Metric4d inverse;
+    EXPECT_TRUE(metric.InverseMetric(position, inverse));
+    for (int mu = 0; mu < 4; ++mu) {
+        for (int nu = 0; nu < 4; ++nu) {
+            result.scalar += inverse(mu, nu).real * result.covariant[mu][nu];
+        }
+    }
+    return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -208,6 +288,85 @@ TEST(MorrisThorneCartesianTests, AnalyticInverseIsExact) {
                     }
                 }
             }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// In proper radial distance l the exact Ellis metric is
+//
+//   ds^2 = -dt^2 + dl^2 + (l^2+b0^2) dOmega^2.
+//
+// Therefore R = -2 b0^2/r_areal^4.  The same value is R_mu_nu k^mu k^nu for
+// either future radial null vector normalised to k^t=1, proving strict radial
+// null-energy-condition violation through Einstein's equation.  The identity
+// is invariant under the isotropic chart and under exchange of its two ends.
+// -----------------------------------------------------------------------------
+TEST(MorrisThorneCartesianTests, CurvatureAndRadialNullEnergyConditionMatchExactEllis) {
+    constexpr Direction radial{0.267261241912424, -0.534522483824849, 0.801783725737273};
+    const Direction angular = Orthogonal(radial);
+
+    for (const double b0 : {0.25, 1.0, 10.0}) {
+        MorrisThorneCartesian metric(MorrisThorneParams::Ellis(b0));
+        for (const double rho_factor : {0.25, 0.5, 1.0, 3.0, 10.0}) {
+            const double rho = rho_factor * b0;
+            const Vec4 position = CartPos(rho, radial);
+            const RicciSample ricci =
+                RicciFromConnectionFiniteDifference(metric, position, 5.0e-5 * b0);
+            const double areal_radius = EllisArealRadiusFromIsotropic(b0, rho);
+            const double expected = -2.0 * b0 * b0 / std::pow(areal_radius, 4.0);
+            const double absolute_floor = 2.0e-8 / (b0 * b0);
+            const double tolerance = std::max(absolute_floor, 2.0e-5 * std::abs(expected));
+
+            EXPECT_NEAR(ricci.scalar, expected, tolerance)
+                << "Ricci scalar, b0=" << b0 << " rho=" << rho;
+
+            const double q = b0 * b0 / (4.0 * rho * rho);
+            const double inverse_conformal_root = 1.0 / (1.0 + q);
+            const double radial_null[4] = {
+                1.0,
+                radial.x * inverse_conformal_root,
+                radial.y * inverse_conformal_root,
+                radial.z * inverse_conformal_root,
+            };
+            Metric4d metric_tensor;
+            Tensor<Dual<double>, 4, 4, 4> metric_derivative;
+            metric.Evaluate(position, metric_tensor, metric_derivative);
+            double null_norm = 0.0;
+            for (int mu = 0; mu < 4; ++mu) {
+                for (int nu = 0; nu < 4; ++nu) {
+                    null_norm += metric_tensor(mu, nu).real * radial_null[mu] * radial_null[nu];
+                }
+            }
+            EXPECT_NEAR(null_norm, 0.0, 2.0e-14)
+                << "radial vector must be null, b0=" << b0 << " rho=" << rho;
+
+            double radial_null_ricci = 0.0;
+            for (int mu = 0; mu < 4; ++mu) {
+                for (int nu = 0; nu < 4; ++nu) {
+                    radial_null_ricci +=
+                        ricci.covariant[mu][nu] * radial_null[mu] * radial_null[nu];
+                }
+            }
+            EXPECT_NEAR(radial_null_ricci, expected, tolerance)
+                << "radial null Ricci contraction, b0=" << b0 << " rho=" << rho;
+            EXPECT_LT(radial_null_ricci, 0.0)
+                << "the represented traversable throat must require radial NEC violation";
+
+            double angular_ricci = 0.0;
+            const double angular_unit[3] = {
+                angular.x * inverse_conformal_root,
+                angular.y * inverse_conformal_root,
+                angular.z * inverse_conformal_root,
+            };
+            for (int i = 0; i < 3; ++i) {
+                for (int j = 0; j < 3; ++j) {
+                    angular_ricci +=
+                        ricci.covariant[i + 1][j + 1] * angular_unit[i] * angular_unit[j];
+                }
+            }
+            EXPECT_NEAR(angular_ricci, 0.0, tolerance)
+                << "angular Ricci eigenvalue, b0=" << b0 << " rho=" << rho;
         }
     }
 }
@@ -371,6 +530,32 @@ TEST(MorrisThorneCartesianTests, NonEllisCartesianRequestsFailClosed) {
             (void)rejected;
         },
         "violated");
+}
+
+TEST(MorrisThorneCartesianTests, LiveEllisRejectsUnnormalisedLapseAndIrrelevantShapeData) {
+    EXPECT_DEATH(
+        {
+            auto unnormalised = MorrisThorneParams::Ellis(1.0);
+            unnormalised.Phi0 = 0.25;
+            MorrisThorneCartesian rejected(unnormalised);
+            (void)rejected;
+        },
+        "violated");
+
+    EXPECT_DEATH(
+        {
+            auto irrelevant_callback = MorrisThorneParams::Ellis(1.0);
+            irrelevant_callback.custom_shape_func = [](double radius) { return radius; };
+            MorrisThorneCartesian rejected(irrelevant_callback);
+            (void)rejected;
+        },
+        "violated");
+
+    MorrisThorneCartesian represented;
+    EXPECT_EQ(represented.GetParameters().size(), 1U);
+    EXPECT_TRUE(represented.GetParameters().contains("throat_radius"));
+    EXPECT_FALSE(represented.GetParameters().contains("redshift"));
+    EXPECT_DEATH(represented.SetParameter("redshift", 0.0), "violated");
 }
 
 TEST(MorrisThorneCartesianTests, ParameterBoundsMatchConfigAuthority) {

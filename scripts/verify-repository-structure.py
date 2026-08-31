@@ -1414,6 +1414,9 @@ def morris_thorne_authority_errors(documents: dict[Path, str]) -> list[str]:
     required = {
         MORRIS_HOST_AUTHORITY: (
             "MorrisThorneCartesian",
+            "params.Phi0 == 0.0",
+            "represented_parameter",
+            "g(0, 0) = Dual<double>(-1.0)",
             "IsotropicThroatRadius",
             "IsotropicEllisThroatRadius",
             "EllisInvertedIsotropicRadius",
@@ -1441,8 +1444,10 @@ def morris_thorne_authority_errors(documents: dict[Path, str]) -> list[str]:
         ),
         MORRIS_DEVICE_AUTHORITY: (
             "IsMorrisThorneCartesianEventRepresented",
+            "Phi0 != 0.0f",
             "GetMorrisThorneCartesianMetric",
             "GetMorrisThorneCartesianChristoffel",
+            "g[0][0] = -1.0f",
             "conformalBase",
         ),
         MORRIS_DEVICE_EVENT_AUTHORITY: (
@@ -1540,7 +1545,9 @@ def morris_thorne_authority_errors(documents: dict[Path, str]) -> list[str]:
 def verify_morris_thorne_authority_policy() -> None:
     valid = {
         MORRIS_HOST_AUTHORITY: (
-            "MorrisThorneCartesian IsotropicThroatRadius IsotropicEllisThroatRadius "
+            "MorrisThorneCartesian params.Phi0 == 0.0 represented_parameter "
+            "g(0, 0) = Dual<double>(-1.0) "
+            "IsotropicThroatRadius IsotropicEllisThroatRadius "
             "EllisInvertedIsotropicRadius MapEllisSecondSheetSkyDirection conformal_base"
         ),
         MORRIS_HOST_EVENT_AUTHORITY: (
@@ -1556,8 +1563,9 @@ def verify_morris_thorne_authority_policy() -> None:
             "AdvancePolarisationFrame( AccumulateVolumetricEmission( FindDiskIntersection("
         ),
         MORRIS_DEVICE_AUTHORITY: (
-            "IsMorrisThorneCartesianEventRepresented GetMorrisThorneCartesianMetric "
-            "GetMorrisThorneCartesianChristoffel conformalBase"
+            "IsMorrisThorneCartesianEventRepresented Phi0 != 0.0f "
+            "GetMorrisThorneCartesianMetric GetMorrisThorneCartesianChristoffel "
+            "g[0][0] = -1.0f conformalBase"
         ),
         MORRIS_DEVICE_EVENT_AUTHORITY: (
             "IsFiniteAcceptedSegmentValue FindSexticRoots SphericalSegmentPolynomial "
@@ -1597,6 +1605,16 @@ def verify_morris_thorne_authority_policy() -> None:
     intrinsic_capture[MORRIS_HOST_AUTHORITY] += " InsideCaptureSurface"
     if not morris_thorne_authority_errors(intrinsic_capture):
         raise RuntimeError("Morris-Thorne policy accepted an intrinsic throat capture surface")
+
+    unnormalised_lapse = dict(valid)
+    unnormalised_lapse[MORRIS_HOST_AUTHORITY] = unnormalised_lapse[
+        MORRIS_HOST_AUTHORITY
+    ].replace("params.Phi0 == 0.0", "std::isfinite(params.Phi0)")
+    unnormalised_lapse[MORRIS_DEVICE_AUTHORITY] = unnormalised_lapse[
+        MORRIS_DEVICE_AUTHORITY
+    ].replace("Phi0 != 0.0f", "!isfinite(Phi0)")
+    if len(morris_thorne_authority_errors(unnormalised_lapse)) < 2:
+        raise RuntimeError("Morris-Thorne policy accepted an unnormalised live lapse")
 
     independent_device_trace = dict(valid)
     independent_device_trace[MORRIS_PARITY_PROBE] = independent_device_trace[

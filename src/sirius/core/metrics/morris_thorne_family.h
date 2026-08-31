@@ -351,17 +351,28 @@ inline double MorrisThorneFamily::RedshiftFunctionDerivative([[maybe_unused]] do
 
 class MorrisThorneCartesian : public IMetric {
   public:
-    MorrisThorneCartesian() : family_() {}
+    MorrisThorneCartesian() : family_() {
+        config_["throat_radius"] = family_.GetParameters().at("throat_radius");
+    }
     explicit MorrisThorneCartesian(const MorrisThorneParams& params) : family_(params) {
-        SIRIUS_PRE(params.shape_type == WormholeShapeType::Ellis);
+        const bool exact_live_ellis = params.shape_type == WormholeShapeType::Ellis &&
+                                      params.Phi0 == 0.0 && !params.custom_shape_func &&
+                                      !params.custom_shape_deriv_func;
+        SIRIUS_PRE(exact_live_ellis);
+        if (!exact_live_ellis) return;
+        config_["throat_radius"] = family_.GetParameters().at("throat_radius");
     }
 
     void Evaluate(const Tensor<double, 4>& pos, Metric4d& g,
                   Tensor<Dual<double>, 4, 4, 4>& dg) override;
 
-    const Config& GetParameters() const override { return family_.GetParameters(); }
+    const Config& GetParameters() const override { return config_; }
     void SetParameter(const std::string& key, double value) override {
+        const bool represented_parameter = key == "throat_radius";
+        SIRIUS_PRE(represented_parameter);
+        if (!represented_parameter) return;
         family_.SetParameter(key, value);
+        config_["throat_radius"] = family_.GetParameters().at("throat_radius");
     }
     const char* GetName() const override { return family_.GetName(); }
 
@@ -375,6 +386,11 @@ class MorrisThorneCartesian : public IMetric {
     const MorrisThorneFamily& SphericalFamily() const { return family_; }
 
   private:
+    // The renderer represents the asymptotically normalised zero-tidal Ellis
+    // member, not the wider spherical comparison family.  Keeping a separate
+    // configuration surface prevents the spherical family's coordinate-time
+    // rescaling and non-Ellis shape parameters from becoming live capabilities.
+    Config config_;
     MorrisThorneFamily family_;
 };
 
@@ -411,10 +427,8 @@ inline void MorrisThorneCartesian::Evaluate(const Tensor<double, 4>& pos, Metric
     const double q = (b0 * b0) / (4.0 * rho2);
     const double conformal_base = 1.0 + q;
     const double conformal = conformal_base * conformal_base;
-    const double exp2Phi = std::exp(2.0 * family_.RedshiftFunction(rho));
-
     g.Zero();
-    g(0, 0) = Dual<double>(-exp2Phi);
+    g(0, 0) = Dual<double>(-1.0);
     for (int i = 0; i < 3; ++i) {
         g(i + 1, i + 1) = Dual<double>(conformal);
     }
@@ -447,10 +461,8 @@ inline bool MorrisThorneCartesian::InverseMetric(const Tensor<double, 4>& pos,
     const double b0 = family_.GetParams().b0;
     const double conformal_base = 1.0 + (b0 * b0) / (4.0 * rho2);
     const double inverse_conformal = 1.0 / (conformal_base * conformal_base);
-    const double Phi = family_.RedshiftFunction(std::sqrt(rho2));
-
     g_inv.Zero();
-    g_inv(0, 0) = Dual<double>(-std::exp(-2.0 * Phi));
+    g_inv(0, 0) = Dual<double>(-1.0);
     for (int i = 0; i < 3; ++i) {
         g_inv(i + 1, i + 1) = Dual<double>(inverse_conformal);
     }

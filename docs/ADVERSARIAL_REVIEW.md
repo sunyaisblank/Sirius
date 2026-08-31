@@ -232,6 +232,7 @@ Each review pass asks:
 | Compiler estates interfered through fixed `/tmp` render filenames | concurrent GCC and Clang runs could remove the other process's completed EXR between write and assertion | Fixed: render-session probes own collision-resistant RAII temporary directories; simultaneous GCC/Clang reproduction now passes |
 | Historical byte-identity claims had no executable consumer | no test referenced the baseline directory | Claim withdrawn; tapes remain forensic evidence only |
 | The upstream specification still required an unimplemented tape-identity gate, called macOS CI-only, and tied correctness to a stale branch name | current runtime admission, statistical/oracle evidence, and repository state followed different authorities | Fixed: the target now requires executable semantic/oracle/output evidence, external MoltenVK admission, and one exact clean revision; branch integration remains an owner workflow rather than correctness evidence |
+| The exact Ellis chart was checked only against its spherical coordinate transform and a copied device connection, while the lower host/device interfaces still admitted an unnormalised constant lapse | a mutually wrong metric/connection pair could pass parity and geometry tests without representing the claimed stress-energy; direct callers could also select a time convention absent from observer and boundary authorities | Fixed: a fourth-order independent connection-difference oracle recovers $R=-2b_0^2/r^4$, the zero angular Ricci eigenvalue, and $R_{\mu\nu}k^\mu k^\nu=-2b_0^2/r^4<0$ across the throat, both ends, and three scales. The live host and device surfaces now require $g_{tt}=-1$, exact Ellis shape, no irrelevant callbacks, and expose only throat radius; repository and compute negative controls reject lapse/shape regression |
 
 ## 4. Enforced operating model
 
@@ -269,7 +270,7 @@ state: `supported`, `bounded`, `fail_closed`, `substituted`, or
 | Spherical de Sitter/Kottler sector | `bounded`; exact positive-Lambda metric and both Kottler roots, with pure de Sitter horizonless for capture, Schwarzschild-de Sitter restricted below Nariai, observer at or below `0.99*r_c`, and directional boundary no later than `r_c` |
 | Disk emission outside Schwarzschild/Kerr | `fail_closed`; requires `--no-disk` |
 | Morris-Thorne one-sheet dark-throat scene | `supported` on CPU/Vulkan |
-| Morris-Thorne two-sheet continuation | `supported` on CPU/Vulkan with an inversion-matched opposite boundary and symmetric catalogue |
+| Morris-Thorne two-sheet continuation | `supported` on CPU/Vulkan with an asymptotically normalised lapse, independently checked exact curvature/NEC violation, inversion-matched opposite boundary, and symmetric catalogue |
 | Vulkan volumetric samples | `bounded` to 1..128; auto selects CPU above the bound |
 | Viewer input-state logic | `supported`; native window delivery is `attestation_required` |
 | P2900/P2996 | `substituted` by checked macros/explicit schemas and reported non-native |
@@ -724,6 +725,23 @@ corresponding profile. They are not projected from registration counts.
   target was interrupted after it completed only CTest entries 1--23 (base and
   operational governance); it had not reached the first Vulkan runtime case or
   any `Rendering`-labelled test.
+- 2026-09-01 Ellis curvature and live-domain closure: back-propagating the
+  represented isotropic chart through Einstein curvature exposed that its
+  existing evidence proved only coordinate and host/device agreement. A new
+  fourth-order connection-difference oracle independently recovers
+  $R=-2b_0^2/r^4$, the zero angular Ricci eigenvalue, and
+  $R_{\mu\nu}k^\mu k^\nu=-2b_0^2/r^4<0$ at the throat and on both sheets for
+  $b_0\in\{0.25,1,10\}$. The live host and Slang boundaries now admit only the
+  asymptotically normalised $g_{tt}=-1$ Ellis member and reject nonzero lapse,
+  non-Ellis shape, and irrelevant callback data. GCC 14 and Clang 21 compiled
+  the application, all six test executables, all SPIR-V precision rungs, and
+  CUDA/Metal emissions with warnings as errors. On each compiler, all 13 base,
+  406 core, 131 oracle, 90 application, and eight CPU-backend cases passed; the
+  exact nine non-render authority controls also passed on both. Focused
+  compute-only Lavapipe checks passed the metric/connection, device decline,
+  and two-sheet trajectory seams. Governance accepts 828 source GoogleTests
+  and 840 development CTests, all Mandatory, across 24 dimensions and 29
+  capability contracts. `sirius_render_tests` was linked but never executed.
 - GCC 14 strict required-Vulkan profile: the pre-alignment snapshot passed the complete
   907/907 estate on the Radeon 780M through Dozen in 210.36 seconds. A separate
   required-only run passed 697/697 on the Radeon in 281.34 seconds and the same
