@@ -21,6 +21,7 @@
 #include "sirius/core/disk/volumetric_disk.h"
 #include "sirius/core/spectral/blackbody.h"
 #include "sirius/core/spectral/colour_modes.h"
+#include "sirius/oracle/kerr_boyer_lindquist.h"
 
 #include <gtest/gtest.h>
 
@@ -104,6 +105,58 @@ struct Sample {
     float u0 = 0.0f, u1 = 0.0f, u2 = 0.0f, u3 = 0.0f;  // 4-velocity
     float h = 0.0f, aux0 = 0.0f, aux1 = 0.0f, aux2 = 0.0f;
 };
+
+std::array<double, 4> SchwarzschildBlToKerrSchildVector(const sirius::oracle::Vec4d& vector,
+                                                        const sirius::oracle::Vec4d& event,
+                                                        double mass) {
+    const double sin_theta = std::sin(event.theta);
+    const double cos_theta = std::cos(event.theta);
+    const double sin_phi = std::sin(event.phi);
+    const double cos_phi = std::cos(event.phi);
+    return {
+        vector.t + (2.0 * mass / (event.r - 2.0 * mass)) * vector.r,
+        sin_theta * cos_phi * vector.r + event.r * cos_theta * cos_phi * vector.theta -
+            event.r * sin_theta * sin_phi * vector.phi,
+        sin_theta * sin_phi * vector.r + event.r * cos_theta * sin_phi * vector.theta +
+            event.r * sin_theta * cos_phi * vector.phi,
+        cos_theta * vector.r - event.r * sin_theta * vector.theta,
+    };
+}
+
+sirius::oracle::Vec4d KerrSchildToSchwarzschildBlVector(const std::array<float, 4>& vector,
+                                                        const sirius::oracle::Vec4d& event,
+                                                        double mass) {
+    const double sin_theta = std::sin(event.theta);
+    const double cos_theta = std::cos(event.theta);
+    const double sin_phi = std::sin(event.phi);
+    const double cos_phi = std::cos(event.phi);
+    const double radial =
+        sin_theta * cos_phi * vector[1] + sin_theta * sin_phi * vector[2] + cos_theta * vector[3];
+    const double polar = (cos_theta * cos_phi * vector[1] + cos_theta * sin_phi * vector[2] -
+                          sin_theta * vector[3]) /
+                         event.r;
+    const double azimuthal = (-sin_phi * vector[1] + cos_phi * vector[2]) / (event.r * sin_theta);
+    return {vector[0] - (2.0 * mass / (event.r - 2.0 * mass)) * radial, radial, polar, azimuthal};
+}
+
+sirius::oracle::Vec4d AnalyticTidalAcceleration(sirius::oracle::KerrMetricD& metric,
+                                                const sirius::oracle::Vec4d& event,
+                                                const sirius::oracle::Vec4d& tangent,
+                                                const sirius::oracle::Vec4d& deviation) {
+    double riemann[4][4][4][4];
+    metric.Riemann(event, riemann);
+    sirius::oracle::Vec4d acceleration;
+    for (int mu = 0; mu < 4; ++mu) {
+        double contraction = 0.0;
+        for (int nu = 0; nu < 4; ++nu)
+            for (int rho = 0; rho < 4; ++rho)
+                for (int sigma = 0; sigma < 4; ++sigma)
+                    contraction +=
+                        riemann[mu][nu][rho][sigma] * tangent[nu] * deviation[rho] * tangent[sigma];
+        acceleration[mu] = -contraction;
+    }
+    return acceleration;
+}
 
 std::vector<float> Flatten(const std::vector<Sample>& samples) {
     std::vector<float> flat;
@@ -898,7 +951,7 @@ TEST(KernelParity, GeodesicDeviationIsFiniteAndCurvedNearBlackHole) {
     s.u1 = -1.0f;
     s.u2 = 0.0f;
     s.u3 = 0.0f;
-    s.aux0 = 0.05f;
+    s.aux0 = 1.0f;  // xi^x; h,aux0..2 carry the four deviation components.
 
     const std::vector<Sample> samples = {s};
     const auto r = RunProbe(*f.device, f.kernel, kOpDeviation, samples);
@@ -906,6 +959,90 @@ TEST(KernelParity, GeodesicDeviationIsFiniteAndCurvedNearBlackHole) {
         EXPECT_TRUE(std::isfinite(r[k])) << "deviation component " << k << " non-finite";
     }
     EXPECT_GT(r[8], 1e-6f) << "full-Riemann tidal acceleration vanishes near the hole";
+}
+
+TEST(KernelParity, DeviceTidalContractionMatchesAnalyticSchwarzschildAtMatchedEvents) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    constexpr double mass = 1.0;
+    constexpr double theta = 1.1;
+    constexpr double phi = 0.37;
+    constexpr double energy = 1.0;
+    constexpr double polar_momentum = 1.3;
+    constexpr double angular_momentum = 2.0;
+    sirius::oracle::KerrMetricD oracle(mass, 0.0);
+
+    std::vector<Sample> samples;
+    std::vector<sirius::oracle::Vec4d> events;
+    std::vector<sirius::oracle::Vec4d> tangents;
+    std::vector<sirius::oracle::Vec4d> deviations;
+    for (const double radius : {4.0, 6.0, 10.0, 20.0}) {
+        const sirius::oracle::Vec4d event(0.0, radius, theta, phi);
+        const double lapse = 1.0 - 2.0 * mass / radius;
+        const double sin_theta = std::sin(theta);
+        const double angular_norm =
+            (polar_momentum * polar_momentum +
+             angular_momentum * angular_momentum / (sin_theta * sin_theta)) /
+            (radius * radius);
+        const double radial = std::sqrt(energy * energy - lapse * angular_norm);
+        const sirius::oracle::Vec4d tangent(
+            energy / lapse, radial, polar_momentum / (radius * radius),
+            angular_momentum / (radius * radius * sin_theta * sin_theta));
+        const sirius::oracle::Vec4d deviation(0.2, 0.15, 0.07 / radius,
+                                              -0.11 / (radius * sin_theta));
+        const auto live_tangent = SchwarzschildBlToKerrSchildVector(tangent, event, mass);
+        const auto live_deviation = SchwarzschildBlToKerrSchildVector(deviation, event, mass);
+
+        Sample sample;
+        sample.metric_id = kKerrSchild;
+        sample.p1 = static_cast<float>(mass);
+        sample.c0 = static_cast<float>(radius * sin_theta * std::cos(phi));
+        sample.c1 = static_cast<float>(radius * sin_theta * std::sin(phi));
+        sample.c2 = static_cast<float>(radius * std::cos(theta));
+        sample.u0 = static_cast<float>(live_tangent[0]);
+        sample.u1 = static_cast<float>(live_tangent[1]);
+        sample.u2 = static_cast<float>(live_tangent[2]);
+        sample.u3 = static_cast<float>(live_tangent[3]);
+        sample.h = static_cast<float>(live_deviation[0]);
+        sample.aux0 = static_cast<float>(live_deviation[1]);
+        sample.aux1 = static_cast<float>(live_deviation[2]);
+        sample.aux2 = static_cast<float>(live_deviation[3]);
+        samples.push_back(sample);
+        events.push_back(event);
+        tangents.push_back(tangent);
+        deviations.push_back(deviation);
+    }
+
+    const auto results = RunProbe(*f.device, f.kernel, kOpDeviation, samples);
+    for (std::size_t sample = 0; sample < samples.size(); ++sample) {
+        const std::size_t offset = sample * kResultStride;
+        const std::array<float, 4> device_acceleration = {results[offset], results[offset + 1],
+                                                          results[offset + 2], results[offset + 3]};
+        const auto actual =
+            KerrSchildToSchwarzschildBlVector(device_acceleration, events[sample], mass);
+        const auto expected =
+            AnalyticTidalAcceleration(oracle, events[sample], tangents[sample], deviations[sample]);
+
+        double scale = 0.0;
+        double maximum_error = 0.0;
+        for (int component = 0; component < 4; ++component) {
+            ASSERT_TRUE(std::isfinite(actual[component]))
+                << "non-finite device contraction component " << component
+                << " at r=" << events[sample].r;
+            ASSERT_TRUE(std::isfinite(expected[component]))
+                << "non-finite analytic contraction component " << component
+                << " at r=" << events[sample].r;
+            scale = std::max(scale, std::abs(expected[component]));
+            maximum_error =
+                std::max(maximum_error, std::abs(actual[component] - expected[component]));
+        }
+        // The production path is fp32 and finite-differences an analytic
+        // Christoffel tensor. Its precision-matched five-point stencil stays
+        // below 5e-4 here, versus a measured 1.37e-2 for the former stencil.
+        EXPECT_LT(maximum_error / std::max(scale, 1.0e-30), 5.0e-4)
+            << "device matched-event tidal contraction at r=" << events[sample].r;
+    }
 }
 
 }  // namespace

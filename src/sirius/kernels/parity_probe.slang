@@ -408,17 +408,18 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         results[rb + 4] = second.y;
         results[rb + 5] = second.z;
     } else if (opcode == OP_DEVIATION) {
-        // Full-Riemann ray-bundle deviation at a Cartesian point on a unit
-        // deviation vector. p1=M, p2=a, p3=Q, p4=Lambda; c=(x,y,z);
-        // u=(k^t,k^x,k^y,k^z).
+        // Full-Riemann ray-bundle deviation at a Cartesian point.
+        // p1=M, p2=a, p3=Q, p4=Lambda; c=(x,y,z);
+        // u=(k^t,k^x,k^y,k^z); h,aux0..2=(xi^t,xi^x,xi^y,xi^z).
         Vec4Cart pos = MakeVec4Cart(0.0f, c0, c1, c2);
         Vec4Cart k = MakeVec4Cart(samples[sb + 8], samples[sb + 9], samples[sb + 10], samples[sb + 11]);
-        float4 xi = float4(0.0f, 1.0f, 0.0f, 0.0f);
-        float4 full = float4(GeodesicDeviationAccelFullRiemann(pos, k, xi, p1, p2, p3, p4));
-        results[rb + 0] = full.x; results[rb + 1] = full.y;
-        results[rb + 2] = full.z; results[rb + 3] = full.w;
+        Real4 xi = Real4(Real(samples[sb + 12]), Real(samples[sb + 13]),
+                          Real(samples[sb + 14]), Real(samples[sb + 15]));
+        Real4 full = GeodesicDeviationAccelFullRiemann(pos, k, xi, p1, p2, p3, p4);
+        results[rb + 0] = float(full.x); results[rb + 1] = float(full.y);
+        results[rb + 2] = float(full.z); results[rb + 3] = float(full.w);
         results[rb + 4] = 0.0f; results[rb + 5] = 0.0f;
         results[rb + 6] = 0.0f; results[rb + 7] = 0.0f;
-        results[rb + 8] = length(float3(full.y, full.z, full.w));
+        results[rb + 8] = length(float3(float(full.y), float(full.z), float(full.w)));
     }
 }
