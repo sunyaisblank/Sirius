@@ -16,6 +16,37 @@ INACTIVE_PREPROCESSOR_PATTERN = re.compile(r"(?m)^\s*#\s*if\s+0(?:\D|$)")
 DIRECT_POSTCONDITION_PATTERN = re.compile(r"\b(?:EXPECT|ASSERT)_[A-Z0-9_]+\s*\(")
 SKIP_PATTERN = re.compile(r"\bGTEST_SKIP\s*\(")
 
+# These cases can dispatch CPU/Vulkan work or publish a completed frame. Their
+# exact identity is shared with the CTest label generator, and source governance
+# requires them to live under tests/render so the no-render application target
+# cannot acquire them through a source-list edit.
+APP_RENDERING_TESTS = frozenset({
+    "RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent",
+    "RenderCommandParse.BackendVulkanDeclinesMetricOffTheRenderPath",
+    "RenderCommandParse.ReusedCommandDoesNotRetainAnEarlierGpuRequest",
+    "RenderCommandParse.CliCpuOverridesLowerLayerVulkanBackend",
+    "ViewCommandOperational.HeadlessRefinementProducesASynchronisedFrame",
+    "ViewCommandOperational.VulkanRefinementPublishesProgressiveFrames",
+})
+
+# These public Execute calls deliberately exercise a parse or validation
+# rejection. Any new unguarded command execution in tests/app requires an
+# explicit policy decision instead of silently becoming a render-capable test.
+APP_NON_RENDER_RENDER_COMMAND_EXECUTIONS = frozenset({
+    "RenderCommandParse.UnknownMetricFailsValidation",
+    "RenderCommandParse.UnknownOptionRejected",
+    "RenderCommandParse.TrailingNumericGarbageRejected",
+    "RenderCommandParse.NonFiniteNumericValueRejected",
+    "RenderCommandParse.UnexpectedPositionalArgumentRejected",
+    "RenderCommandParse.MetricOverrideDefaultsMassWithoutDiscardingExplicitInput",
+    "RenderCommandParse.RetiredBackendNamesAreNotRemapped",
+    "RenderCommandParse.MalformedCameraBetaRejected",
+})
+APP_NON_RENDER_VIEW_COMMAND_EXECUTIONS = frozenset({
+    "ViewCommandOperational.StrictParsingAndSessionProjection",
+    "ViewCommandOperational.RelativisticJetsDeclineBeforeViewerInitialisation",
+})
+
 _OBVIOUS_NO_OP_PATTERNS = (
     re.compile(
         r"\b(?:EXPECT|ASSERT)_TRUE\s*\(\s*(?:true|1)\s*\)"
@@ -129,6 +160,63 @@ def _display_path(path, root):
         return path
 
 
+def _enforce_execution_boundary(record, display_path):
+    """Keep render-capable execution out of the application test target."""
+    parts = display_path.parts
+    under_app = len(parts) >= 2 and parts[0:2] == ("tests", "app")
+    under_render = len(parts) >= 2 and parts[0:2] == ("tests", "render")
+
+    if record.name in APP_RENDERING_TESTS and not under_render:
+        raise ValueError(
+            f"{display_path} places rendering test {record.name} outside tests/render"
+        )
+    if not under_app:
+        return
+
+    body = record.body_code
+    if (re.search(r"\bInteractiveViewer\b", body) and
+            re.search(r"\.\s*Start\s*\(", body)):
+        raise ValueError(
+            f"{display_path} lets application test {record.name} start a rendering viewer"
+        )
+    if (re.search(r"\bRenderSession\b", body) and
+            re.search(r"\.\s*Execute\s*\(", body)):
+        raise ValueError(
+            f"{display_path} lets application test {record.name} execute a render session"
+        )
+
+    invokes_execute = re.search(r"\.\s*Execute\s*\(", body) is not None
+    if re.search(r"\bRenderCommand\b", body) and invokes_execute:
+        parse_only = "kStopSentinel" in body
+        if not parse_only and record.name not in APP_NON_RENDER_RENDER_COMMAND_EXECUTIONS:
+            raise ValueError(
+                f"{display_path} has unclassified RenderCommand execution in {record.name}"
+            )
+    if (re.search(r"\bViewCommand\b", body) and invokes_execute and
+            record.name not in APP_NON_RENDER_VIEW_COMMAND_EXECUTIONS):
+        raise ValueError(
+            f"{display_path} has unclassified ViewCommand execution in {record.name}"
+        )
+
+
+def _enforce_no_app_execution_helper(masked, content, display_path, test_spans):
+    """Reject an app-side helper that hides Start/Execute outside a test body."""
+    parts = display_path.parts
+    if len(parts) < 2 or parts[0:2] != ("tests", "app"):
+        return
+    outside_tests = list(masked)
+    for start, end in test_spans:
+        for offset in range(start, end):
+            if outside_tests[offset] not in "\r\n":
+                outside_tests[offset] = " "
+    hidden = re.search(r"\.\s*(?:Start|Execute)\s*\(", "".join(outside_tests))
+    if hidden:
+        line = content.count("\n", 0, hidden.start()) + 1
+        raise ValueError(
+            f"{display_path}:{line} hides app-side Start/Execute in a test helper"
+        )
+
+
 def collect_source_tests(test_dir, root):
     """Return exact test records and reject source shapes outside policy."""
     records = {}
@@ -136,6 +224,7 @@ def collect_source_tests(test_dir, root):
         content = path.read_text(encoding="utf-8")
         masked = _mask_cpp_non_code(content)
         display_path = _display_path(path, root)
+        test_spans = []
 
         unsupported = UNSUPPORTED_PATTERN.search(masked)
         if unsupported:
@@ -186,5 +275,8 @@ def collect_source_tests(test_dir, root):
                     f"{display_path}:{line} test {record.name} has no direct "
                     "EXPECT_/ASSERT_ postcondition"
                 )
+            _enforce_execution_boundary(record, display_path)
             records[record.name] = record
+            test_spans.append((opening, closing + 1))
+        _enforce_no_app_execution_helper(masked, content, display_path, test_spans)
     return records

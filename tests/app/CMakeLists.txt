@@ -1,7 +1,10 @@
-# App suite: CLI argument parsing, configuration loading/validation, JSON schema
-# compatibility, and platform paths. Links sirius_app_lib so the CLI/config
-# objects are exercised directly (July ledger item 8: the CLI parsing tests were
-# never linked to the CLI objects; they are linked here).
+# App suite: non-rendering CLI argument parsing, configuration
+# loading/validation, JSON schema compatibility, session projection, input
+# state, and platform paths. Render-session, dispatch, and frame-publication
+# cases are owned by sirius_render_tests; shared source governance rejects their
+# return.
+# Links sirius_app_lib so the CLI/config objects are exercised directly (July
+# ledger item 8: the CLI parsing tests were never linked to the CLI objects).
 
 add_executable(sirius_app_tests
     alignment_authority_test.cpp

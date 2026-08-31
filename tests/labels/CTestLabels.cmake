@@ -114,13 +114,6 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels
-    CameraWorldlineTest.ZeroVelocityIsExactlyRepresented
-    CameraWorldlineTest.InvalidInternalWorldlineFailsClosed
-    PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
     CaptureSurfaceTests.SchwarzschildHorizonIsCaptured
     CaptureSurfaceTests.KerrOblateHorizonUsesKerrRadius
     CaptureSurfaceTests.HorizonlessSpacetimesNeverCapture
@@ -325,32 +318,6 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    DispatchGovernor.FirstBandIsTheInitialHeightClampedToTheTile
-    DispatchGovernor.BandsNeverExceedRemainingRowsNorDropBelowOne
-    DispatchGovernor.GrowthPerStepIsBoundedByTheCap
-    DispatchGovernor.ZeroMeasurementTakesTheCappedGrowthStep
-    DispatchGovernor.OvershootShrinksProportionallyInOneStep
-    DispatchGovernor.TruncatedTailBandFeedsBackOnlyItsOwnWork
-    DispatchGovernor.LearnedAreaNormalisesAcrossBandWidths
-    DispatchGovernor.DisabledControllerDispatchesWholeTilesAndIgnoresFeedback
-    DispatchGovernor.TargetDefaultsWhenTheEnvironmentIsUnset
-    DispatchGovernor.TargetHonoursTheOverrideIncludingZero
-    DispatchGovernor.TargetFailsLoudOnGarbageNegativesAndNonFinite
-    PROPERTIES LABELS "Mandatory;Operational"
-)
-
-set_tests_properties(
-    DisplayBuffer.NonFiniteRadianceIsIdentifiedBeforeEncoding
-    DisplayBuffer.MalformedDimensionsAndTilesFailClosed
-    PROPERTIES LABELS "Mandatory;Operational"
-)
-
-set_tests_properties(
-    DopplerToggleTest.SuppressionCollapsesDiskAsymmetry
-    PROPERTIES LABELS "Mandatory;Operational"
-)
-
-set_tests_properties(
     DualNumberTests.AdditiveIdentity
     DualNumberTests.MultiplicativeIdentity
     DualNumberTests.AdditiveInverse
@@ -374,42 +341,9 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    EXRRoundTripTests.HDRGradientSurvivesWriteAndRead
-    EXRRoundTripTests.WriteFailsCleanlyOnBadPath
-    EXRRoundTripTests.NonFiniteRadianceIsRejected
-    EXRRoundTripTests.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode
-    EXRRoundTripTests.MalformedBufferShapesAreRejectedByEveryPublicWriter
-    PROPERTIES LABELS "Mandatory;Operational"
-)
-
-set_tests_properties(
     Error.ExpectedPropagatesValue
     Error.FailCarriesDomainOperationAndDetail
     Error.DescriptionNamesDomainOperationAndDetail
-    PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
-    FilmSimulationTest.DefaultAndPresetConfigsUseOnlyRepresentedControls
-    FilmSimulationTest.MalformedControlFailsClosedAtPipelineBoundary
-    FilmSimulationTest.DisabledGrainRequiresNeutralControls
-    FilmSimulationTest.DisabledHalationRequiresNeutralControls
-    FilmSimulationTest.InterstellarPresetSetsImplementedLookControls
-    FilmSimulationTest.SpaceOdysseyPresetUsesLowerGrain
-    FilmSimulationTest.Grain_AddsNoise
-    FilmSimulationTest.Grain_DifferentFrames_DifferentNoise
-    FilmSimulationTest.Grain_NonNegativeResult
-    FilmSimulationTest.Halation_AffectsBrightAreas
-    FilmSimulationTest.Halation_RedBias
-    FilmSimulationTest.Vignette_DarkensCorners
-    FilmSimulationTest.Vignette_CenterUnchanged
-    FilmSimulationTest.Exposure_Positive_Brightens
-    FilmSimulationTest.Exposure_Negative_Darkens
-    FilmSimulationTest.Saturation_Zero_Grayscale
-    FilmSimulationTest.OutputClamped_0_1
-    FilmSimulationTest.Interstellar_Preset
-    FilmSimulationTest.DisabledVignetteAndBloomRequireNeutralControls
-    FilmSimulationTest.FullPipeline_DoesNotCrash
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -445,35 +379,6 @@ set_tests_properties(
     GeodesicTests.TimelikeVectorNormalization
     GeodesicTests.LorentzBoostedObserver
     PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
-    GeodesicTracerRedshift.NearExtremalInnerDiskEmissionRemainsFinite
-    PROPERTIES LABELS "Mandatory;Operational"
-)
-
-set_tests_properties(
-    GeodesicTracerTest.Construction
-    GeodesicTracerTest.CameraRayGeneration
-    GeodesicTracerTest.BasicTracing
-    GeodesicTracerTest.HorizonCapture
-    GeodesicTracerTest.EscapeToInfinity
-    GeodesicTracerTest.DiskIntersection
-    GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile
-    GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile
-    GeodesicTracerTest.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation
-    GeodesicTracerTest.NoNumericalFailures
-    GeodesicTracerTest.KerrMetricTracing
-    GeodesicTracerTest.InvariantFrequencyTransferSelectsTheCircularEmitterBranch
-    GeodesicTracerTest.TracingPerformance
-    PROPERTIES LABELS "Mandatory;Operational"
-)
-
-set_tests_properties(
-    GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment
-    GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource
-    GeodesicTracerVolumetric.ProceduralTurbulenceAltersLiveTransferDeterministically
-    PROPERTIES LABELS "Mandatory;Operational"
 )
 
 set_tests_properties(
@@ -612,18 +517,6 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile
-    MemoryGovernor.SmallerBudgetYieldsSmallerTile
-    MemoryGovernor.TinyBudgetDeclinesLoudly
-    MemoryGovernor.OverheadLargerThanUsableBudgetDeclines
-    MemoryGovernor.TileNeverExceedsImageExtent
-    MemoryGovernor.WorkingSetMatchesTheDerivedTile
-    MemoryGovernor.EnvironmentOverrideResolvesBudget
-    MemoryGovernor.MalformedOverrideDeclinesInsteadOfBorrowingTheDeviceBudget
-    PROPERTIES LABELS "Mandatory;Operational"
-)
-
-set_tests_properties(
     MetricDerivativeTests.KerrSchildDerivativeSymmetry
     MetricDerivativeTests.KerrSchildFiniteDifferenceAgreement
     MetricDerivativeTests.KerrSchildNonZeroDerivatives
@@ -713,13 +606,6 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    MorrisThorneTracerTest.CentralRayCapturedAtThroat
-    MorrisThorneTracerTest.EdgeRayEscapes
-    MorrisThorneTracerTest.DeflectionFallsQuadraticallyWithImpactParameter
-    PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
     MuellerMatrixTests.IdentityPreservesStokes
     MuellerMatrixTests.HorizontalPolariserOnUnpolarised
     MuellerMatrixTests.VerticalPolariserOnUnpolarised
@@ -780,20 +666,6 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    PNGWriterTest.WriteImageBuffer
-    PNGWriterTest.WriteImageBufferRGBA
-    PNGWriterTest.GammaCorrection
-    PNGWriterTest.LargeImage
-    PNGWriterTest.EmptyBuffer
-    PNGWriterTest.ZeroSizeBuffer
-    PNGWriterTest.NullPixels
-    PNGWriterTest.NonFiniteRadianceIsRejected
-    PNGWriterTest.MalformedBufferShapesAreRejected
-    PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding
-    PROPERTIES LABELS "Mandatory;Operational"
-)
-
-set_tests_properties(
     ParallelTransportTests.ApplyPreservesIntensity
     PROPERTIES LABELS "Mandatory;Correctness"
 )
@@ -807,14 +679,6 @@ set_tests_properties(
     PinholeCameraTest.RayIsActiveAndRepresented
     PinholeCameraTest.TimeComponentIsZero
     PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
-    PixelSampling.EmitsExactlyEveryRequestedNonSquareCount
-    PixelSampling.NonPositiveInputFailsClosed
-    PixelSampling.NonSquareCountsCoverBothAxesWithoutRemainderBias
-    PixelSampling.PatternIsDeterministic
-    PROPERTIES LABELS "Mandatory;Operational"
 )
 
 set_tests_properties(
@@ -852,16 +716,6 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    RayBundleTest.FlatSpaceBundleMagnificationIsUnity
-    RayBundleTest.KretschmannMatchesOracleSchwarzschild
-    RayBundleTest.KretschmannMatchesOracleKerrEquatorial
-    RayBundleTest.KretschmannMatchesOracleKerrOffEquatorial
-    RayBundleTest.BundleFiniteAndDeterministicKerr
-    RayBundleTest.MagnificationComesOnlyFromJacobiMap
-    PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
     ReissnerNordstromTests.MetricMatchesIndependentCartesianKerrSchildForm
     ReissnerNordstromTests.AnalyticDerivativesMatchIndependentFiniteDifferences
     ReissnerNordstromTests.ZeroChargeEqualsProductionSchwarzschild
@@ -878,10 +732,6 @@ set_tests_properties(
     RenderCommandParse.FeatureParametersSelectTheirOwningModels
     RenderCommandParse.MotionBlurAndWormholeTopologyReachTheValidatedSchema
     RenderCommandParse.ExoticMetricScalesReachTheValidatedSchema
-    RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent
-    RenderCommandParse.BackendVulkanDeclinesMetricOffTheRenderPath
-    RenderCommandParse.ReusedCommandDoesNotRetainAnEarlierGpuRequest
-    RenderCommandParse.CliCpuOverridesLowerLayerVulkanBackend
     RenderCommandParse.UnknownMetricFailsValidation
     RenderCommandParse.UnknownOptionRejected
     RenderCommandParse.TrailingNumericGarbageRejected
@@ -919,18 +769,6 @@ set_tests_properties(
     RenderSessionProbe.BackendAutoResolvesByDeviceRegistryAndCapabilities
     RenderSessionProbe.ConfigurationConversionPreservesObserverAndDiskControls
     RenderSessionProbe.InMemoryPreviewRejectsInactiveOutputPath
-    RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr
-    RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter
-    RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr
-    RenderSessionProbe.StartIsAsynchronousAndCancellationIsTerminalWithoutOutput
-    RenderSessionProbe.CompletionCallbackCanReenterLifecycleWithoutDeadlock
-    RenderSessionProbe.PointStarfieldRejectsValuesItsGeneratorWouldClamp
-    RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration
-    RenderSessionProbe.TypedNumericBoundariesMatchTheExternalConfigurationBoundary
-    RenderSessionProbe.PolarisedAndTwoSheetRequestsDeclineAtTheTypedBoundary
-    RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes
-    RenderSessionProbe.CpuMorrisThorneRenderCompletes
-    RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame
     PROPERTIES LABELS "Mandatory;Operational"
 )
 
@@ -949,22 +787,6 @@ set_tests_properties(
     Sha256Tests.MultiBlockPaddingMatchesNistKnownAnswer
     Sha256Tests.FileStreamingMatchesTheSameKnownAnswer
     Sha256Tests.MillionByteFileMatchesNistKnownAnswerAcrossReadChunks
-    PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
-    ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p
-    ShadowBoundary.SchwarzschildCriticalImpactParameterMatchesAnalyticAt1080p
-    PROPERTIES LABELS "Mandatory;Correctness"
-)
-
-set_tests_properties(
-    SpectralEmissionTest.BlackbodyColourDirection
-    SpectralEmissionTest.DopplerShiftDirection
-    SpectralEmissionTest.TrueColorAppliesExactlyOneGFourthIntensityFactor
-    SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor
-    SpectralEmissionTest.MotionBlurAveragesNonlinearTemporalRadiance
-    SpectralEmissionTest.SpinDisplayFormat
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -1060,17 +882,6 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    StarfieldPointTest.CatalogueMeetsSizeFloorAndIsFinite
-    StarfieldPointTest.CataloguePreservesTheRequestedCount
-    StarfieldPointTest.BeamAccumulationFiniteAndNonConstant
-    StarfieldPointTest.SpatialIndexMatchesExhaustiveBeamOracle
-    StarfieldPointTest.EllipticalFootprintUsesBothAxesAndOrientation
-    StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope
-    StarfieldPointTest.BeamFootprintSuppressesStarFlicker
-    PROPERTIES LABELS "Mandatory;Operational"
-)
-
-set_tests_properties(
     StokesVectorTests.UnpolarisedConstruction
     StokesVectorTests.HorizontalPolarisation
     StokesVectorTests.VerticalPolarisation
@@ -1138,11 +949,6 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    TileScheduler.ReinitialiseResetsCompletionLedger
-    PROPERTIES LABELS "Mandatory;Operational"
-)
-
-set_tests_properties(
     TonemapTests.AcesFitMatchesPublishedRationalSamples
     TonemapTests.AcesFitAnalyticDomainAndSaturationBoundaryArePinned
     TonemapTests.AcesFitIsMonotoneOnNonNegativeRadiance
@@ -1189,8 +995,6 @@ set_tests_properties(
 set_tests_properties(
     ViewCommandOperational.StrictParsingAndSessionProjection
     ViewCommandOperational.RelativisticJetsDeclineBeforeViewerInitialisation
-    ViewCommandOperational.HeadlessRefinementProducesASynchronisedFrame
-    ViewCommandOperational.VulkanRefinementPublishesProgressiveFrames
     ViewCommandOperational.InputStateHandlesPressRepeatReleaseMouseAndScroll
     PROPERTIES LABELS "Mandatory;Operational"
 )
@@ -1205,25 +1009,6 @@ set_tests_properties(
     VulkanBackend.SlangKernelMatchesCpuReference
     VulkanBackend.WorkerThreadDispatchTearsDownSafely
     VulkanBackend.DeviceSelectionIsStrictAndRangeChecked
-    PROPERTIES LABELS "Mandatory;Operational"
-)
-
-set_tests_properties(
-    VulkanRenderSession.CapabilityBoundaryAcceptsRepresentedSceneSemantics
-    VulkanRenderSession.CapabilityBoundaryRejectsUnrepresentedSceneSemantics
-    VulkanRenderSession.ProceduralVolumetricTurbulenceReachesLiveKernel
-    VulkanRenderSession.ThinAndVolumetricDopplerSuppressionAffectLiveEmission
-    VulkanRenderSession.NonSquareMultisamplingCameraAndLensReachLiveKernel
-    VulkanRenderSession.IndexedPointCatalogueReachesLiveKernel
-    VulkanRenderSession.CombinedParitySceneRetainsResolvedImageStructure
-    VulkanRenderSession.CpuVulkanPointCatalogueAgreeOnFlatScene
-    VulkanRenderSession.ConstrainedBudgetDeclinesRatherThanChangingBackground
-    VulkanRenderSession.Fp64RungRendersOrDeclinesLoudly
-    VulkanRenderSession.CompensatedRungRendersOnAnyDevice
-    VulkanRenderSession.Kerr160x120CompletesAcrossMultipleGovernedTiles
-    VulkanRenderSession.CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds
-    VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p
-    VulkanRenderSession.CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalBounds
     PROPERTIES LABELS "Mandatory;Operational"
 )
 
@@ -1250,5 +1035,152 @@ set_tests_properties(
     XyzSrgbAuthority.PreservesExtendedGamutAndPropagatesNonfiniteInputs
     XyzSrgbAuthority.BlackbodyColourFacadeDelegatesToTheExactTransform
     PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    CameraWorldlineTest.InvalidInternalWorldlineFailsClosed
+    CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels
+    CameraWorldlineTest.ZeroVelocityIsExactlyRepresented
+    FilmSimulationTest.DefaultAndPresetConfigsUseOnlyRepresentedControls
+    FilmSimulationTest.DisabledGrainRequiresNeutralControls
+    FilmSimulationTest.DisabledHalationRequiresNeutralControls
+    FilmSimulationTest.DisabledVignetteAndBloomRequireNeutralControls
+    FilmSimulationTest.Exposure_Negative_Darkens
+    FilmSimulationTest.Exposure_Positive_Brightens
+    FilmSimulationTest.FullPipeline_DoesNotCrash
+    FilmSimulationTest.Grain_AddsNoise
+    FilmSimulationTest.Grain_DifferentFrames_DifferentNoise
+    FilmSimulationTest.Grain_NonNegativeResult
+    FilmSimulationTest.Halation_AffectsBrightAreas
+    FilmSimulationTest.Halation_RedBias
+    FilmSimulationTest.InterstellarPresetSetsImplementedLookControls
+    FilmSimulationTest.Interstellar_Preset
+    FilmSimulationTest.MalformedControlFailsClosedAtPipelineBoundary
+    FilmSimulationTest.OutputClamped_0_1
+    FilmSimulationTest.Saturation_Zero_Grayscale
+    FilmSimulationTest.SpaceOdysseyPresetUsesLowerGrain
+    FilmSimulationTest.Vignette_CenterUnchanged
+    FilmSimulationTest.Vignette_DarkensCorners
+    MorrisThorneTracerTest.CentralRayCapturedAtThroat
+    MorrisThorneTracerTest.DeflectionFallsQuadraticallyWithImpactParameter
+    MorrisThorneTracerTest.EdgeRayEscapes
+    RayBundleTest.BundleFiniteAndDeterministicKerr
+    RayBundleTest.FlatSpaceBundleMagnificationIsUnity
+    RayBundleTest.KretschmannMatchesOracleKerrEquatorial
+    RayBundleTest.KretschmannMatchesOracleKerrOffEquatorial
+    RayBundleTest.KretschmannMatchesOracleSchwarzschild
+    RayBundleTest.MagnificationComesOnlyFromJacobiMap
+    ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p
+    ShadowBoundary.SchwarzschildCriticalImpactParameterMatchesAnalyticAt1080p
+    SpectralEmissionTest.BlackbodyColourDirection
+    SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor
+    SpectralEmissionTest.DopplerShiftDirection
+    SpectralEmissionTest.MotionBlurAveragesNonlinearTemporalRadiance
+    SpectralEmissionTest.SpinDisplayFormat
+    SpectralEmissionTest.TrueColorAppliesExactlyOneGFourthIntensityFactor
+    PROPERTIES LABELS "Mandatory;Correctness;Rendering"
+)
+
+set_tests_properties(
+    DispatchGovernor.BandsNeverExceedRemainingRowsNorDropBelowOne
+    DispatchGovernor.DisabledControllerDispatchesWholeTilesAndIgnoresFeedback
+    DispatchGovernor.FirstBandIsTheInitialHeightClampedToTheTile
+    DispatchGovernor.GrowthPerStepIsBoundedByTheCap
+    DispatchGovernor.LearnedAreaNormalisesAcrossBandWidths
+    DispatchGovernor.OvershootShrinksProportionallyInOneStep
+    DispatchGovernor.TargetDefaultsWhenTheEnvironmentIsUnset
+    DispatchGovernor.TargetFailsLoudOnGarbageNegativesAndNonFinite
+    DispatchGovernor.TargetHonoursTheOverrideIncludingZero
+    DispatchGovernor.TruncatedTailBandFeedsBackOnlyItsOwnWork
+    DispatchGovernor.ZeroMeasurementTakesTheCappedGrowthStep
+    DisplayBuffer.MalformedDimensionsAndTilesFailClosed
+    DisplayBuffer.NonFiniteRadianceIsIdentifiedBeforeEncoding
+    DopplerToggleTest.SuppressionCollapsesDiskAsymmetry
+    EXRRoundTripTests.HDRGradientSurvivesWriteAndRead
+    EXRRoundTripTests.MalformedBufferShapesAreRejectedByEveryPublicWriter
+    EXRRoundTripTests.NonFiniteRadianceIsRejected
+    EXRRoundTripTests.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode
+    EXRRoundTripTests.WriteFailsCleanlyOnBadPath
+    GeodesicTracerRedshift.NearExtremalInnerDiskEmissionRemainsFinite
+    GeodesicTracerTest.BasicTracing
+    GeodesicTracerTest.CameraRayGeneration
+    GeodesicTracerTest.Construction
+    GeodesicTracerTest.DiskIntersection
+    GeodesicTracerTest.EscapeToInfinity
+    GeodesicTracerTest.HorizonCapture
+    GeodesicTracerTest.InvariantFrequencyTransferSelectsTheCircularEmitterBranch
+    GeodesicTracerTest.KerrMetricTracing
+    GeodesicTracerTest.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation
+    GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile
+    GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile
+    GeodesicTracerTest.NoNumericalFailures
+    GeodesicTracerTest.TracingPerformance
+    GeodesicTracerVolumetric.ProceduralTurbulenceAltersLiveTransferDeterministically
+    GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource
+    GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment
+    MemoryGovernor.EnvironmentOverrideResolvesBudget
+    MemoryGovernor.MalformedOverrideDeclinesInsteadOfBorrowingTheDeviceBudget
+    MemoryGovernor.OverheadLargerThanUsableBudgetDeclines
+    MemoryGovernor.SmallerBudgetYieldsSmallerTile
+    MemoryGovernor.TileNeverExceedsImageExtent
+    MemoryGovernor.TinyBudgetDeclinesLoudly
+    MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile
+    MemoryGovernor.WorkingSetMatchesTheDerivedTile
+    PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding
+    PNGWriterTest.EmptyBuffer
+    PNGWriterTest.GammaCorrection
+    PNGWriterTest.LargeImage
+    PNGWriterTest.MalformedBufferShapesAreRejected
+    PNGWriterTest.NonFiniteRadianceIsRejected
+    PNGWriterTest.NullPixels
+    PNGWriterTest.WriteImageBuffer
+    PNGWriterTest.WriteImageBufferRGBA
+    PNGWriterTest.ZeroSizeBuffer
+    PixelSampling.EmitsExactlyEveryRequestedNonSquareCount
+    PixelSampling.NonPositiveInputFailsClosed
+    PixelSampling.NonSquareCountsCoverBothAxesWithoutRemainderBias
+    PixelSampling.PatternIsDeterministic
+    RenderCommandParse.BackendVulkanDeclinesMetricOffTheRenderPath
+    RenderCommandParse.CliCpuOverridesLowerLayerVulkanBackend
+    RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent
+    RenderCommandParse.ReusedCommandDoesNotRetainAnEarlierGpuRequest
+    RenderSessionProbe.CompletionCallbackCanReenterLifecycleWithoutDeadlock
+    RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr
+    RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter
+    RenderSessionProbe.CpuMorrisThorneRenderCompletes
+    RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes
+    RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame
+    RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr
+    RenderSessionProbe.PointStarfieldRejectsValuesItsGeneratorWouldClamp
+    RenderSessionProbe.PolarisedAndTwoSheetRequestsDeclineAtTheTypedBoundary
+    RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration
+    RenderSessionProbe.StartIsAsynchronousAndCancellationIsTerminalWithoutOutput
+    RenderSessionProbe.TypedNumericBoundariesMatchTheExternalConfigurationBoundary
+    StarfieldPointTest.BeamAccumulationFiniteAndNonConstant
+    StarfieldPointTest.BeamFootprintSuppressesStarFlicker
+    StarfieldPointTest.CatalogueMeetsSizeFloorAndIsFinite
+    StarfieldPointTest.CataloguePreservesTheRequestedCount
+    StarfieldPointTest.EllipticalFootprintUsesBothAxesAndOrientation
+    StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope
+    StarfieldPointTest.SpatialIndexMatchesExhaustiveBeamOracle
+    TileScheduler.ReinitialiseResetsCompletionLedger
+    ViewCommandOperational.HeadlessRefinementProducesASynchronisedFrame
+    ViewCommandOperational.VulkanRefinementPublishesProgressiveFrames
+    VulkanRenderSession.CapabilityBoundaryAcceptsRepresentedSceneSemantics
+    VulkanRenderSession.CapabilityBoundaryRejectsUnrepresentedSceneSemantics
+    VulkanRenderSession.CombinedParitySceneRetainsResolvedImageStructure
+    VulkanRenderSession.CompensatedRungRendersOnAnyDevice
+    VulkanRenderSession.ConstrainedBudgetDeclinesRatherThanChangingBackground
+    VulkanRenderSession.CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds
+    VulkanRenderSession.CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalBounds
+    VulkanRenderSession.CpuVulkanPointCatalogueAgreeOnFlatScene
+    VulkanRenderSession.Fp64RungRendersOrDeclinesLoudly
+    VulkanRenderSession.IndexedPointCatalogueReachesLiveKernel
+    VulkanRenderSession.Kerr160x120CompletesAcrossMultipleGovernedTiles
+    VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p
+    VulkanRenderSession.NonSquareMultisamplingCameraAndLensReachLiveKernel
+    VulkanRenderSession.ProceduralVolumetricTurbulenceReachesLiveKernel
+    VulkanRenderSession.ThinAndVolumetricDopplerSuppressionAffectLiveEmission
+    PROPERTIES LABELS "Mandatory;Operational;Rendering"
 )
 
