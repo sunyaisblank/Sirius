@@ -1,11 +1,12 @@
 #pragma once
 
 // Physically-based spectral rendering primitives: Planck blackbody radiance,
-// Wien and Stefan-Boltzmann laws, CIE 1931 colour matching (Gaussian fits),
+// Wien and Stefan-Boltzmann laws, an analytic CIE 1931 observer fit,
 // wavelength/XYZ/sRGB conversion and redshift.
 // Ported from PHSP001A.h.
 // Reference: Planck (1901); CIE 1931 observer; sRGB IEC 61966-2-1:1999.
 
+#include "sirius/core/cie1931_observer.h"
 #include "sirius/core/constants.h"
 #include "sirius/core/spectral/blackbody_laws.h"
 #include "sirius/core/srgb_transfer.h"
@@ -51,36 +52,11 @@ struct Xyz {
     }
 };
 
-// CIE 1931 X colour matching function (Gaussian fit), lambda in nm.
-inline double CieX(double lambda_nm) {
-    double t1 = (lambda_nm - 442.0) * ((lambda_nm < 442.0) ? 0.0624 : 0.0374);
-    double t2 = (lambda_nm - 599.8) * ((lambda_nm < 599.8) ? 0.0264 : 0.0323);
-    double t3 = (lambda_nm - 501.1) * ((lambda_nm < 501.1) ? 0.0490 : 0.0382);
-    return 0.362 * std::exp(-0.5 * t1 * t1) + 1.056 * std::exp(-0.5 * t2 * t2) -
-           0.065 * std::exp(-0.5 * t3 * t3);
-}
-
-// CIE 1931 Y colour matching function (Gaussian fit), lambda in nm.
-inline double CieY(double lambda_nm) {
-    double t1 = (lambda_nm - 568.8) * ((lambda_nm < 568.8) ? 0.0213 : 0.0247);
-    double t2 = (lambda_nm - 530.9) * ((lambda_nm < 530.9) ? 0.0613 : 0.0322);
-    return 0.821 * std::exp(-0.5 * t1 * t1) + 0.286 * std::exp(-0.5 * t2 * t2);
-}
-
-// CIE 1931 Z colour matching function (Gaussian fit), lambda in nm.
-inline double CieZ(double lambda_nm) {
-    double t1 = (lambda_nm - 437.0) * ((lambda_nm < 437.0) ? 0.0845 : 0.0278);
-    double t2 = (lambda_nm - 459.0) * ((lambda_nm < 459.0) ? 0.0385 : 0.0725);
-    return 1.217 * std::exp(-0.5 * t1 * t1) + 0.681 * std::exp(-0.5 * t2 * t2);
-}
-
 // Wavelength (nm) to CIE XYZ; zero outside the 380-780 nm visible range.
 inline Xyz WavelengthToXyz(double lambda_nm) {
-    if (lambda_nm < 380.0 || lambda_nm > 780.0) {
-        return Xyz(0, 0, 0);
-    }
-    return Xyz(static_cast<float>(CieX(lambda_nm)), static_cast<float>(CieY(lambda_nm)),
-               static_cast<float>(CieZ(lambda_nm)));
+    const colour::CieXyzMatching matching = colour::Cie1931TwoDegreeFit(lambda_nm);
+    return Xyz(static_cast<float>(matching.x_bar), static_cast<float>(matching.y_bar),
+               static_cast<float>(matching.z_bar));
 }
 
 // XYZ to linear RGB via the sRGB D65 primaries.

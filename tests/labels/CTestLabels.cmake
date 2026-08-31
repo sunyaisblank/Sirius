@@ -137,6 +137,13 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    Cie1931ObserverAuthority.FitIsBoundedAgainstOfficialCieDatasetAcrossRepresentedBand
+    Cie1931ObserverAuthority.HostSpectralFacadesEvaluateTheirActualWavelengths
+    Cie1931ObserverAuthority.UnrepresentedWavelengthsFailClosed
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     ColourGradingTests.IdentityParametersPreserveValues
     ColourGradingTests.ZeroSaturationProducesGrey
     ColourGradingTests.OutputClamped
@@ -499,6 +506,7 @@ set_tests_properties(
     KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure
     KernelParity.BlackbodyMatchesIntegratedCoreSpectrum
     KernelParity.XyzD65ToLinearSrgbMatchesHostAuthority
+    KernelParity.Cie1931TwoDegreeFitMatchesHostAuthority
     KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor
     KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter
     KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability

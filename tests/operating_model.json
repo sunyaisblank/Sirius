@@ -138,12 +138,16 @@
       "required": true,
       "verification": "build_gated",
       "profiles": ["cpu", "vulkan"],
-      "requirement": "EXR preserves finite fp32 linear HDR radiance outside the display pipeline. CIE XYZ relative to D65 reaches linear-light sRGB through one exact rational host matrix derived from the declared sRGB primaries and white point, with one directly parity-gated Slang mirror. Spectral previews, explicit 8-bit views, PNG, and PPM then share one IEC 61966-2-1 host transfer-curve and 8-bit quantisation authority; each display writer invokes it exactly once at its owned output boundary, and non-finite inputs decline.",
+      "requirement": "EXR preserves finite fp32 linear HDR radiance outside the display pipeline. Both host spectral facades evaluate one explicitly approximate Wyman-Sloan-Shirley CIE 1931 2-degree observer fit at their actual represented wavelengths; the fit is bounded against checksum-identified official CIE 018:2019 samples across 380-780 nm, declines wavelengths outside that band, and has one directly parity-gated Slang mirror. CIE XYZ relative to D65 reaches linear-light sRGB through one exact rational host matrix derived from the declared sRGB primaries and white point, with one directly parity-gated Slang mirror. Spectral previews, explicit 8-bit views, PNG, and PPM then share one IEC 61966-2-1 host transfer-curve and 8-bit quantisation authority; each display writer invokes it exactly once at its owned output boundary, and non-finite inputs decline.",
       "capability_dependencies": [],
       "evidence": [
         {"kind": "gtest", "name": "SrgbTransferAuthority.CurveMatchesIndependentIecOracleAcrossBothBranches"},
         {"kind": "gtest", "name": "SrgbTransferAuthority.EightBitQuantisationClipsAndDeclinesNonfiniteInputs"},
         {"kind": "gtest", "name": "SrgbTransferAuthority.SpectralFacadeDelegatesWithoutChangingClippingSemantics"},
+        {"kind": "gtest", "name": "Cie1931ObserverAuthority.FitIsBoundedAgainstOfficialCieDatasetAcrossRepresentedBand"},
+        {"kind": "gtest", "name": "Cie1931ObserverAuthority.HostSpectralFacadesEvaluateTheirActualWavelengths"},
+        {"kind": "gtest", "name": "Cie1931ObserverAuthority.UnrepresentedWavelengthsFailClosed"},
+        {"kind": "gtest", "name": "KernelParity.Cie1931TwoDegreeFitMatchesHostAuthority"},
         {"kind": "gtest", "name": "XyzSrgbAuthority.MatchesIndependentPrimaryWhiteDerivation"},
         {"kind": "gtest", "name": "XyzSrgbAuthority.PreservesExtendedGamutAndPropagatesNonfiniteInputs"},
         {"kind": "gtest", "name": "XyzSrgbAuthority.HostSpectralFacadesDelegateToTheExactTransform"},
@@ -454,6 +458,10 @@
     {
       "id": "output_encoding",
       "evidence": [
+        {"kind": "gtest", "name": "Cie1931ObserverAuthority.FitIsBoundedAgainstOfficialCieDatasetAcrossRepresentedBand"},
+        {"kind": "gtest", "name": "Cie1931ObserverAuthority.HostSpectralFacadesEvaluateTheirActualWavelengths"},
+        {"kind": "gtest", "name": "Cie1931ObserverAuthority.UnrepresentedWavelengthsFailClosed"},
+        {"kind": "gtest", "name": "KernelParity.Cie1931TwoDegreeFitMatchesHostAuthority"},
         {"kind": "gtest", "name": "SrgbTransferAuthority.CurveMatchesIndependentIecOracleAcrossBothBranches"},
         {"kind": "gtest", "name": "SrgbTransferAuthority.EightBitQuantisationClipsAndDeclinesNonfiniteInputs"},
         {"kind": "gtest", "name": "SrgbTransferAuthority.SpectralFacadeDelegatesWithoutChangingClippingSemantics"},

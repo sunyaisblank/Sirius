@@ -101,6 +101,28 @@ XYZ_SRGB_LEGACY_COEFFICIENT = re.compile(
     r"1\.8760108|0\.0415560|0\.0556434|0\.2040259|1\.0572252)"
     r"(?:[fFlL])?(?![A-Za-z0-9_.])"
 )
+CIE1931_OBSERVER_AUTHORITY = SOURCE_ROOT / "core" / "cie1931_observer.h"
+CIE1931_OBSERVER_HOST_CONSUMERS = (
+    SOURCE_ROOT / "core" / "spectral" / "blackbody.h",
+    SOURCE_ROOT / "core" / "spectral" / "spectral_radiance.h",
+)
+CIE1931_OBSERVER_DEVICE_AUTHORITY = SOURCE_ROOT / "kernels" / "gr_disk.slang"
+CIE1931_OBSERVER_PARITY_PROBE = SOURCE_ROOT / "kernels" / "parity_probe.slang"
+CIE1931_GAUSSIAN_LOBES = (
+    ("442.0", "0.0624", "0.0374", "0.362"),
+    ("599.8", "0.0264", "0.0323", "1.056"),
+    ("501.1", "0.0490", "0.0382", "0.065"),
+    ("568.8", "0.0213", "0.0247", "0.821"),
+    ("530.9", "0.0613", "0.0322", "0.286"),
+    ("437.0", "0.0845", "0.0278", "1.217"),
+    ("459.0", "0.0385", "0.0725", "0.681"),
+)
+CIE1931_LEGACY_FACADE = re.compile(r"\bCie[XYZ]\s*\(")
+CIE1931_STALE_TABLE = re.compile(
+    r"(?<![A-Za-z0-9_.])0\.014310(?:[fFlL])?.{0,160}"
+    r"0\.043510(?:[fFlL])?.{0,160}0\.134380(?:[fFlL])?",
+    re.DOTALL,
+)
 BLACKBODY_LAWS_AUTHORITY = SOURCE_ROOT / "core" / "spectral" / "blackbody_laws.h"
 BLACKBODY_LAWS_CONSUMERS = (
     SOURCE_ROOT / "core" / "spectral" / "blackbody.h",
@@ -694,6 +716,131 @@ def verify_xyz_srgb_authority_policy() -> None:
         raise RuntimeError("XYZ-to-sRGB policy accepted a detached host consumer")
 
 
+def cie1931_lobe(values: tuple[str, str, str, str]) -> re.Pattern[str]:
+    def literal(value: str) -> str:
+        whole, dot, fraction = value.partition(".")
+        decimal = rf"{whole}\.{fraction}" if dot else whole
+        return rf"(?<![A-Za-z0-9_.]){decimal}(?:[fFlL])?(?![A-Za-z0-9_.])"
+
+    return re.compile(r"\s*,\s*".join(literal(value) for value in values))
+
+
+def cie1931_observer_authority_errors(documents: dict[Path, str]) -> list[str]:
+    errors: list[str] = []
+    authority = documents.get(CIE1931_OBSERVER_AUTHORITY)
+    if authority is None:
+        return ["the host CIE 1931 observer-fit authority is missing"]
+
+    authority_code = CPP_NON_CODE.sub(" ", authority)
+    for marker in ("CieXyzMatching", "Cie1931TwoDegreeFit", "std::isfinite"):
+        if marker not in authority_code:
+            errors.append(f"the host CIE 1931 observer-fit authority omits {marker}")
+    for lobe in CIE1931_GAUSSIAN_LOBES:
+        if len(cie1931_lobe(lobe).findall(authority_code)) != 1:
+            errors.append(
+                "the host CIE 1931 observer-fit authority must own Gaussian lobe "
+                + "/".join(lobe)
+                + " once"
+            )
+
+    required_include = '#include "sirius/core/cie1931_observer.h"'
+    for path in CIE1931_OBSERVER_HOST_CONSUMERS:
+        document = documents.get(path)
+        if document is None:
+            errors.append(f"CIE 1931 observer-fit host consumer is missing: {relative(path)}")
+            continue
+        code = CPP_NON_CODE.sub(" ", document)
+        if required_include not in document or "colour::Cie1931TwoDegreeFit" not in code:
+            errors.append(
+                f"{relative(path)} does not delegate to the host CIE 1931 observer-fit authority"
+            )
+
+    device = documents.get(CIE1931_OBSERVER_DEVICE_AUTHORITY)
+    if device is None:
+        errors.append("the Slang CIE 1931 observer-fit mirror is missing")
+    else:
+        device_code = CPP_NON_CODE.sub(" ", device)
+        if device_code.count("Cie1931TwoDegreeFit") < 2:
+            errors.append("the Slang blackbody path does not consume its CIE observer-fit mirror")
+        for lobe in CIE1931_GAUSSIAN_LOBES:
+            if len(cie1931_lobe(lobe).findall(device_code)) != 1:
+                errors.append(
+                    "the Slang CIE 1931 observer-fit mirror must own Gaussian lobe "
+                    + "/".join(lobe)
+                    + " once"
+                )
+
+    parity = documents.get(CIE1931_OBSERVER_PARITY_PROBE)
+    if parity is None or "OP_CIE_1931_TWO_DEGREE_FIT" not in parity or (
+        "Cie1931TwoDegreeFit" not in CPP_NON_CODE.sub(" ", parity)
+    ):
+        errors.append("the direct CIE 1931 observer-fit device parity route is missing")
+
+    allowed_lobe_paths = {
+        CIE1931_OBSERVER_AUTHORITY,
+        CIE1931_OBSERVER_DEVICE_AUTHORITY,
+    }
+    for path, document in documents.items():
+        code = CPP_NON_CODE.sub(" ", document)
+        if CIE1931_LEGACY_FACADE.search(code):
+            errors.append(f"{relative(path)} retains a detached CIE colour-matching facade")
+        if CIE1931_STALE_TABLE.search(code) or re.search(r"\bk[XYZ]Bar\b", code):
+            errors.append(f"{relative(path)} retains the stale wavelength-mislabeled CIE table")
+        if path in allowed_lobe_paths:
+            continue
+        for lobe in CIE1931_GAUSSIAN_LOBES:
+            if cie1931_lobe(lobe).search(code):
+                errors.append(
+                    f"{relative(path)} reimplements CIE observer-fit Gaussian lobe "
+                    + "/".join(lobe)
+                )
+    return errors
+
+
+def verify_cie1931_observer_authority_policy() -> None:
+    coefficients = " ".join(", ".join(lobe) for lobe in CIE1931_GAUSSIAN_LOBES)
+    valid = {
+        CIE1931_OBSERVER_AUTHORITY: (
+            "CieXyzMatching Cie1931TwoDegreeFit std::isfinite " + coefficients
+        ),
+        **{
+            path: '#include "sirius/core/cie1931_observer.h"\ncolour::Cie1931TwoDegreeFit'
+            for path in CIE1931_OBSERVER_HOST_CONSUMERS
+        },
+        CIE1931_OBSERVER_DEVICE_AUTHORITY: (
+            "public float3 Cie1931TwoDegreeFit "
+            + coefficients
+            + " BlackbodyColor Cie1931TwoDegreeFit"
+        ),
+        CIE1931_OBSERVER_PARITY_PROBE: (
+            "OP_CIE_1931_TWO_DEGREE_FIT Cie1931TwoDegreeFit"
+        ),
+    }
+    if cie1931_observer_authority_errors(valid):
+        raise RuntimeError("CIE observer policy rejected the governed host/device authority")
+
+    consumer = CIE1931_OBSERVER_HOST_CONSUMERS[0]
+    duplicated = dict(valid)
+    duplicated[consumer] += "\n442.0, 0.0624, 0.0374, 0.362"
+    if not cie1931_observer_authority_errors(duplicated):
+        raise RuntimeError("CIE observer policy accepted a production coefficient copy")
+
+    detached = dict(valid)
+    detached[consumer] = "independent_cie_observer();"
+    if not cie1931_observer_authority_errors(detached):
+        raise RuntimeError("CIE observer policy accepted a detached host consumer")
+
+    stale_table = dict(valid)
+    stale_table[consumer] += "\n0.014310, 0.043510, 0.134380"
+    if not cie1931_observer_authority_errors(stale_table):
+        raise RuntimeError("CIE observer policy accepted the wavelength-mislabeled table")
+
+    missing_parity = dict(valid)
+    missing_parity[CIE1931_OBSERVER_PARITY_PROBE] = "unrelated_probe();"
+    if not cie1931_observer_authority_errors(missing_parity):
+        raise RuntimeError("CIE observer policy accepted a missing direct device parity route")
+
+
 def blackbody_laws_authority_errors(documents: dict[Path, str]) -> list[str]:
     errors: list[str] = []
     authority = documents.get(BLACKBODY_LAWS_AUTHORITY)
@@ -900,6 +1047,7 @@ def verify() -> list[str]:
     verify_authority_checkout_policy()
     verify_srgb_transfer_authority_policy()
     verify_xyz_srgb_authority_policy()
+    verify_cie1931_observer_authority_policy()
     verify_blackbody_laws_authority_policy()
     try:
         attribute_source = GIT_ATTRIBUTES.read_text(encoding="utf-8")
@@ -936,6 +1084,7 @@ def verify() -> list[str]:
     }
     errors.extend(srgb_transfer_authority_errors(governed_sources))
     errors.extend(xyz_srgb_authority_errors(governed_sources))
+    errors.extend(cie1931_observer_authority_errors(governed_sources))
     errors.extend(blackbody_laws_authority_errors(governed_sources))
     preflight_path = ROOT / "scripts" / "attestation_preflight.py"
     reuse_path = ROOT / "scripts" / "reuse_qualification_evidence.py"

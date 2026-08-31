@@ -97,16 +97,16 @@ TEST(SpectralUtilsTests, ColorMatchingPositiveInVisible) {
     double wavelengths[] = {450, 500, 550, 600, 650};
 
     for (double lambda : wavelengths) {
-        double y = CieY(lambda);
+        const double y = colour::Cie1931TwoDegreeFit(lambda).y_bar;
         EXPECT_GE(y, 0) << "Y should be non-negative at " << lambda << "nm";
     }
 }
 
 // Test: Y peaks around 555nm (human eye sensitivity)
 TEST(SpectralUtilsTests, YPeaksNearGreen) {
-    double y_500 = CieY(500);
-    double y_555 = CieY(555);
-    double y_600 = CieY(600);
+    const double y_500 = colour::Cie1931TwoDegreeFit(500).y_bar;
+    const double y_555 = colour::Cie1931TwoDegreeFit(555).y_bar;
+    const double y_600 = colour::Cie1931TwoDegreeFit(600).y_bar;
 
     EXPECT_GT(y_555, y_500) << "Y at 555nm should exceed Y at 500nm";
     EXPECT_GT(y_555, y_600) << "Y at 555nm should exceed Y at 600nm";
