@@ -73,10 +73,11 @@ inline RicciSample RicciFromConnectionFiniteDifference(sirius::core::IMetric& me
     sirius::core::Metric4d g;
     sirius::core::Tensor<sirius::core::Dual<double>, 4, 4, 4> dg;
     metric.Evaluate(position, g, dg);
-    sirius::core::Metric4d inverse;
-    if (!metric.InverseMetric(position, inverse)) {
-        inverse = sirius::core::TensorOps::Inverse(g);
-    }
+    // Deliberately invert the sampled covariant metric through the generic
+    // tensor authority.  Calling a metric's specialised analytic inverse here
+    // would couple the curvature oracle to another formula owned by the object
+    // under test and could let matching metric/inverse defects cancel.
+    const sirius::core::Metric4d inverse = sirius::core::TensorOps::Inverse(g);
     for (int mu = 0; mu < 4; ++mu) {
         for (int nu = 0; nu < 4; ++nu) {
             result.scalar += inverse(mu, nu).real * result.covariant[mu][nu];

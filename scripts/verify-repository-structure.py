@@ -198,6 +198,13 @@ ALCUBIERRE_HOST_AUTHORITY = SOURCE_ROOT / "core" / "metrics" / "warp_drive_famil
 ALCUBIERRE_DEVICE_AUTHORITY = SOURCE_ROOT / "kernels" / "gr_metrics.slang"
 ALCUBIERRE_DEVICE_INTEGRATOR = SOURCE_ROOT / "kernels" / "gr_integrator.slang"
 ALCUBIERRE_PARITY_PROBE = KERR_TRANSFER_PARITY_PROBE
+KERR_SCHILD_HOST_AUTHORITY = SOURCE_ROOT / "core" / "metrics" / "kerr_schild_family.h"
+KERR_SCHILD_CURVATURE_ORACLE = ROOT / "tests" / "core" / "metric_curvature_oracle.h"
+KERR_SCHILD_FIELD_EQUATION_GATE = (
+    ROOT / "tests" / "core" / "kerr_schild_field_equation_test.cpp"
+)
+KERR_SCHILD_TEST_CMAKE = ROOT / "tests" / "core" / "CMakeLists.txt"
+KERR_SCHILD_OPERATING_MODEL = OPERATING_MODEL
 FULL_QUALIFICATION_JOBS = (
     "linux-gate",
     "linux-sanitizers",
@@ -1747,6 +1754,153 @@ def verify_alcubierre_authority_policy() -> None:
         raise RuntimeError("Alcubierre policy accepted an infallible RK stage")
 
 
+def kerr_schild_field_equation_errors(documents: dict[Path, str]) -> list[str]:
+    """Keep the live metric and its independent field-equation gate inseparable."""
+    errors: list[str] = []
+    required_code = {
+        KERR_SCHILD_HOST_AUTHORITY: (
+            "IsRepresentedKerrSchildParameters",
+            "ComputeNullVector",
+            "H = (2.0 * M * r - Q * Q) / sigma",
+            "H += Lambda * r2 / 3.0",
+        ),
+        KERR_SCHILD_CURVATURE_ORACLE: (
+            "RicciFromConnectionFiniteDifference",
+            "TensorOps::Christoffel(g, dg)",
+            "TensorOps::Inverse(g)",
+            "d_gamma",
+        ),
+        KERR_SCHILD_FIELD_EQUATION_GATE: (
+            "KerrSchildFamily metric",
+            "KerrSchildParams::Minkowski()",
+            "KerrSchildParams::Schwarzschild(",
+            "KerrSchildParams::Kerr(",
+            "KerrSchildParams::ReissnerNordstrom(",
+            "KerrSchildParams::KerrNewman(",
+            "KerrSchildParams::DeSitter(",
+            "KerrSchildParams{1.0, 0.0, 0.0, 0.01}",
+            "require_extremal",
+            "require_horizonless",
+            "KerrNewmanPotential(",
+            "PotentialDerivative(",
+            "EightPiMaxwellStress(",
+            "RicciFromConnectionFiniteDifference(metric",
+            "EXPECT_NEAR(ricci.scalar, 4.0 * sample.parameters.Lambda",
+            "EXPECT_NEAR(left, matter",
+            "EXPECT_GT(matter_scale, 10.0 * tolerance)",
+            "EXPECT_GT(cosmological_scale, 10.0 * tolerance)",
+            "KerrNewmanPotentialIsSourceFreeOutsideTheRing",
+            "TensorOps::Determinant",
+            "volume_density",
+        ),
+    }
+    code_by_path: dict[Path, str] = {}
+    for path, markers in required_code.items():
+        document = documents.get(path)
+        if document is None:
+            errors.append(f"Kerr-Schild field-equation participant is missing: {relative(path)}")
+            continue
+        code = CPP_NON_CODE.sub(" ", document)
+        code_by_path[path] = code
+        for marker in markers:
+            if marker not in code:
+                errors.append(f"{relative(path)} omits Kerr-Schild field-equation marker {marker}")
+
+    oracle = code_by_path.get(KERR_SCHILD_CURVATURE_ORACLE, "")
+    gate = code_by_path.get(KERR_SCHILD_FIELD_EQUATION_GATE, "")
+    if "metric.InverseMetric(" in oracle:
+        errors.append("the curvature oracle reuses the specialised inverse under test")
+    if "ComputeH(" in gate:
+        errors.append("the independent Maxwell matter oracle reuses production H")
+
+    cmake = documents.get(KERR_SCHILD_TEST_CMAKE, "")
+    if "kerr_schild_field_equation_test.cpp" not in cmake:
+        errors.append("the Kerr-Schild field-equation gate is not compiled")
+    model = documents.get(KERR_SCHILD_OPERATING_MODEL, "")
+    for witness in (
+        "KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell",
+        "KerrSchildFieldEquations.KerrNewmanPotentialIsSourceFreeOutsideTheRing",
+    ):
+        if witness not in model:
+            errors.append(f"the operating model omits Kerr-Schild witness {witness}")
+    return errors
+
+
+def verify_kerr_schild_field_equation_policy() -> None:
+    valid = {
+        KERR_SCHILD_HOST_AUTHORITY: (
+            "IsRepresentedKerrSchildParameters ComputeNullVector "
+            "H = (2.0 * M * r - Q * Q) / sigma H += Lambda * r2 / 3.0"
+        ),
+        KERR_SCHILD_CURVATURE_ORACLE: (
+            "RicciFromConnectionFiniteDifference TensorOps::Christoffel(g, dg) "
+            "TensorOps::Inverse(g) d_gamma"
+        ),
+        KERR_SCHILD_FIELD_EQUATION_GATE: (
+            "KerrSchildFamily metric KerrSchildParams::Minkowski() "
+            "KerrSchildParams::Schwarzschild( KerrSchildParams::Kerr( "
+            "KerrSchildParams::ReissnerNordstrom( KerrSchildParams::KerrNewman( "
+            "KerrSchildParams::DeSitter( KerrSchildParams{1.0, 0.0, 0.0, 0.01} "
+            "require_extremal require_horizonless KerrNewmanPotential( PotentialDerivative( "
+            "EightPiMaxwellStress( RicciFromConnectionFiniteDifference(metric "
+            "EXPECT_NEAR(ricci.scalar, 4.0 * sample.parameters.Lambda "
+            "EXPECT_NEAR(left, matter EXPECT_GT(matter_scale, 10.0 * tolerance) "
+            "EXPECT_GT(cosmological_scale, 10.0 * tolerance) "
+            "KerrNewmanPotentialIsSourceFreeOutsideTheRing "
+            "TensorOps::Determinant volume_density"
+        ),
+        KERR_SCHILD_TEST_CMAKE: "kerr_schild_field_equation_test.cpp",
+        KERR_SCHILD_OPERATING_MODEL: (
+            "KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell "
+            "KerrSchildFieldEquations.KerrNewmanPotentialIsSourceFreeOutsideTheRing"
+        ),
+    }
+    if kerr_schild_field_equation_errors(valid):
+        raise RuntimeError("Kerr-Schild policy rejected the independent field-equation seam")
+
+    specialised_inverse = dict(valid)
+    specialised_inverse[KERR_SCHILD_CURVATURE_ORACLE] = specialised_inverse[
+        KERR_SCHILD_CURVATURE_ORACLE
+    ].replace("TensorOps::Inverse(g)", "metric.InverseMetric(position, inverse)")
+    if not kerr_schild_field_equation_errors(specialised_inverse):
+        raise RuntimeError("Kerr-Schild policy accepted a coupled specialised inverse")
+
+    reused_h = dict(valid)
+    reused_h[KERR_SCHILD_FIELD_EQUATION_GATE] += " metric.ComputeH("
+    if not kerr_schild_field_equation_errors(reused_h):
+        raise RuntimeError("Kerr-Schild policy accepted production H as a matter oracle")
+
+    oracle_substitution = dict(valid)
+    oracle_substitution[KERR_SCHILD_FIELD_EQUATION_GATE] = oracle_substitution[
+        KERR_SCHILD_FIELD_EQUATION_GATE
+    ].replace("KerrSchildFamily metric", "KerrBoyerLindquist metric")
+    if not kerr_schild_field_equation_errors(oracle_substitution):
+        raise RuntimeError("Kerr-Schild policy accepted an oracle-only metric substitution")
+
+    missing_cosmological_source = dict(valid)
+    missing_cosmological_source[KERR_SCHILD_FIELD_EQUATION_GATE] = (
+        missing_cosmological_source[KERR_SCHILD_FIELD_EQUATION_GATE].replace(
+            "EXPECT_NEAR(ricci.scalar, 4.0 * sample.parameters.Lambda", ""
+        )
+    )
+    if not kerr_schild_field_equation_errors(missing_cosmological_source):
+        raise RuntimeError("Kerr-Schild policy accepted an omitted cosmological equation")
+
+    missing_maxwell_equation = dict(valid)
+    missing_maxwell_equation[KERR_SCHILD_FIELD_EQUATION_GATE] = missing_maxwell_equation[
+        KERR_SCHILD_FIELD_EQUATION_GATE
+    ].replace("KerrNewmanPotentialIsSourceFreeOutsideTheRing", "")
+    if not kerr_schild_field_equation_errors(missing_maxwell_equation):
+        raise RuntimeError("Kerr-Schild policy accepted an omitted source-free Maxwell gate")
+
+    missing_model_evidence = dict(valid)
+    missing_model_evidence[KERR_SCHILD_OPERATING_MODEL] = missing_model_evidence[
+        KERR_SCHILD_OPERATING_MODEL
+    ].replace("KerrSchildFieldEquations.LiveCartesianFamilySatisfiesEinsteinMaxwell", "")
+    if not kerr_schild_field_equation_errors(missing_model_evidence):
+        raise RuntimeError("Kerr-Schild policy accepted missing operating-model evidence")
+
+
 def attestation_preflight_errors(
     preflight: str,
     reuse: str,
@@ -1857,6 +2011,7 @@ def verify() -> list[str]:
     verify_volumetric_transfer_authority_policy()
     verify_morris_thorne_authority_policy()
     verify_alcubierre_authority_policy()
+    verify_kerr_schild_field_equation_policy()
     try:
         attribute_source = GIT_ATTRIBUTES.read_text(encoding="utf-8")
         attributes = subprocess.run(
@@ -1899,6 +2054,16 @@ def verify() -> list[str]:
     errors.extend(volumetric_transfer_authority_errors(governed_sources))
     errors.extend(morris_thorne_authority_errors(governed_sources))
     errors.extend(alcubierre_authority_errors(governed_sources))
+    kerr_schild_documents = dict(governed_sources)
+    for path in (
+        KERR_SCHILD_CURVATURE_ORACLE,
+        KERR_SCHILD_FIELD_EQUATION_GATE,
+        KERR_SCHILD_TEST_CMAKE,
+        KERR_SCHILD_OPERATING_MODEL,
+    ):
+        if path.is_file():
+            kerr_schild_documents[path] = path.read_text(encoding="utf-8")
+    errors.extend(kerr_schild_field_equation_errors(kerr_schild_documents))
     shader_root = SOURCE_ROOT / "app" / "viewer" / "shaders"
     actual_viewer_shaders = {
         path for path in shader_root.iterdir() if path.suffix in {".frag", ".vert"}

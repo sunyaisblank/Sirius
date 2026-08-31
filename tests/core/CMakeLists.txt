@@ -20,6 +20,7 @@ add_executable(sirius_core_tests
     killing_vector_conservation_test.cpp
     christoffel_test.cpp
     kerr_orbit_authority_test.cpp
+    kerr_schild_field_equation_test.cpp
     kerr_test.cpp
     metric_derivative_test.cpp
     metric_loader_test.cpp

@@ -46,6 +46,7 @@ SUITE_LABELS = {
     "KerrTests": MANDATORY,
     "KerrOrbitAuthority": MANDATORY,
     "KerrSchildTests": MANDATORY,
+    "KerrSchildFieldEquations": MANDATORY,
     "ReissnerNordstromTests": MANDATORY,
     "EllisDrainholeTests": MANDATORY,
     "MorrisThorneCartesianTests": MANDATORY,
