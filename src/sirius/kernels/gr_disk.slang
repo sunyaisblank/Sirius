@@ -63,6 +63,20 @@ float3 CieXyz(float wavelengthNm) {
     return float3(X, Y, Z);
 }
 
+// Device mirror of core::colour::XyzD65ToLinearSrgb. The ratios are the exact
+// matrix implied by the sRGB primary chromaticities and D65 white point; the
+// direct parity probe and repository governance prevent either mirror drifting.
+public float3 XyzD65ToLinearSrgb(float3 xyz) {
+    float3 rgb;
+    rgb.x = (12831.0f / 3959.0f) * xyz.x - (329.0f / 214.0f) * xyz.y -
+            (1974.0f / 3959.0f) * xyz.z;
+    rgb.y = -(851781.0f / 878810.0f) * xyz.x + (1648619.0f / 878810.0f) * xyz.y +
+            (36519.0f / 878810.0f) * xyz.z;
+    rgb.z = (705.0f / 12673.0f) * xyz.x - (2585.0f / 12673.0f) * xyz.y +
+            (705.0f / 667.0f) * xyz.z;
+    return rgb;
+}
+
 // The wavelength-independent Planck prefactor and integration interval cancel
 // during chromaticity normalisation. Wavelength is in nm and c2 in nm K.
 public float3 BlackbodyColor(float T) {
@@ -80,10 +94,7 @@ public float3 BlackbodyColor(float T) {
         xyz += CieXyz(wavelengthNm) * relativeRadiance;
     }
 
-    float3 rgb;
-    rgb.x =  3.2404542f * xyz.x - 1.5371385f * xyz.y - 0.4985314f * xyz.z;
-    rgb.y = -0.9692660f * xyz.x + 1.8760108f * xyz.y + 0.0415560f * xyz.z;
-    rgb.z =  0.0556434f * xyz.x - 0.2040259f * xyz.y + 1.0572252f * xyz.z;
+    float3 rgb = XyzD65ToLinearSrgb(xyz);
     rgb = max(rgb, float3(0.0f));
     return rgb / max(max(rgb.x, rgb.y), max(rgb.z, 1.0e-20f));
 }

@@ -7,6 +7,7 @@
 
 #include "sirius/core/constants.h"
 #include "sirius/core/srgb_transfer.h"
+#include "sirius/core/xyz_srgb.h"
 
 #include <algorithm>
 #include <cmath>
@@ -201,16 +202,13 @@ struct SpectralRadiance {
 
     // XYZ to gamma-corrected sRGB (D65), for preview.
     Rgb ToSrgb() const {
-        Xyz xyz = ToXyz();
-
-        double r_lin = 3.2404542 * xyz.X - 1.5371385 * xyz.Y - 0.4985314 * xyz.Z;
-        double g_lin = -0.9692660 * xyz.X + 1.8760108 * xyz.Y + 0.0415560 * xyz.Z;
-        double b_lin = 0.0556434 * xyz.X - 0.2040259 * xyz.Y + 1.0572252 * xyz.Z;
+        const Xyz xyz = ToXyz();
+        const colour::LinearSrgb linear = colour::XyzD65ToLinearSrgb(xyz.X, xyz.Y, xyz.Z);
 
         Rgb rgb;
-        rgb.r = colour::EncodeClippedSrgbChannel(r_lin);
-        rgb.g = colour::EncodeClippedSrgbChannel(g_lin);
-        rgb.b = colour::EncodeClippedSrgbChannel(b_lin);
+        rgb.r = colour::EncodeClippedSrgbChannel(linear.r);
+        rgb.g = colour::EncodeClippedSrgbChannel(linear.g);
+        rgb.b = colour::EncodeClippedSrgbChannel(linear.b);
 
         return rgb;
     }

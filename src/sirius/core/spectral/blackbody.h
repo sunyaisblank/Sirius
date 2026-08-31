@@ -8,6 +8,7 @@
 
 #include "sirius/core/constants.h"
 #include "sirius/core/srgb_transfer.h"
+#include "sirius/core/xyz_srgb.h"
 
 #include <algorithm>
 #include <cmath>
@@ -110,10 +111,8 @@ inline Xyz WavelengthToXyz(double lambda_nm) {
 
 // XYZ to linear RGB via the sRGB D65 primaries.
 inline Rgb XyzToLinearRgb(const Xyz& xyz) {
-    float r = 3.2404542f * xyz.X - 1.5371385f * xyz.Y - 0.4985314f * xyz.Z;
-    float g = -0.9692660f * xyz.X + 1.8760108f * xyz.Y + 0.0415560f * xyz.Z;
-    float b = 0.0556434f * xyz.X - 0.2040259f * xyz.Y + 1.0572252f * xyz.Z;
-    return Rgb(r, g, b);
+    const colour::LinearSrgb rgb = colour::XyzD65ToLinearSrgb(xyz.X, xyz.Y, xyz.Z);
+    return Rgb(rgb.r, rgb.g, rgb.b);
 }
 
 // sRGB gamma correction of a single linear channel.

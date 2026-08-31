@@ -78,6 +78,29 @@ SRGB_TRANSFER_CONSUMERS = {
 SRGB_LINEAR_BREAKPOINT = re.compile(
     r"(?<![A-Za-z0-9_.])0\.0031308(?:[fFlL])?(?![A-Za-z0-9_.])"
 )
+XYZ_SRGB_AUTHORITY = SOURCE_ROOT / "core" / "xyz_srgb.h"
+XYZ_SRGB_HOST_CONSUMERS = (
+    SOURCE_ROOT / "core" / "spectral" / "blackbody.h",
+    SOURCE_ROOT / "core" / "spectral" / "spectral_radiance.h",
+)
+XYZ_SRGB_DEVICE_AUTHORITY = SOURCE_ROOT / "kernels" / "gr_disk.slang"
+XYZ_SRGB_PARITY_PROBE = SOURCE_ROOT / "kernels" / "parity_probe.slang"
+XYZ_SRGB_COEFFICIENT_PAIRS = (
+    ("12831", "3959"),
+    ("329", "214"),
+    ("1974", "3959"),
+    ("851781", "878810"),
+    ("1648619", "878810"),
+    ("36519", "878810"),
+    ("705", "12673"),
+    ("2585", "12673"),
+    ("705", "667"),
+)
+XYZ_SRGB_LEGACY_COEFFICIENT = re.compile(
+    r"(?<![A-Za-z0-9_.])(?:3\.2404542|1\.5371385|0\.4985314|0\.9692660|"
+    r"1\.8760108|0\.0415560|0\.0556434|0\.2040259|1\.0572252)"
+    r"(?:[fFlL])?(?![A-Za-z0-9_.])"
+)
 FULL_QUALIFICATION_JOBS = (
     "linux-gate",
     "linux-sanitizers",
@@ -546,6 +569,119 @@ def verify_srgb_transfer_authority_policy() -> None:
         raise RuntimeError("sRGB transfer policy accepted a detached production consumer")
 
 
+def xyz_srgb_ratio(numerator: str, denominator: str) -> re.Pattern[str]:
+    return re.compile(
+        rf"(?<![A-Za-z0-9_.]){numerator}(?:\.0)?(?:[fFlL])?\s*/\s*"
+        rf"{denominator}(?:\.0)?(?:[fFlL])?(?![A-Za-z0-9_.])"
+    )
+
+
+def xyz_srgb_authority_errors(documents: dict[Path, str]) -> list[str]:
+    errors: list[str] = []
+    authority = documents.get(XYZ_SRGB_AUTHORITY)
+    if authority is None:
+        return ["the host XYZ-D65 to linear-sRGB authority is missing"]
+
+    authority_code = CPP_NON_CODE.sub(" ", authority)
+    if "XyzD65ToLinearSrgb" not in authority_code:
+        errors.append("the host XYZ-D65 to linear-sRGB authority omits its transform")
+    for numerator, denominator in XYZ_SRGB_COEFFICIENT_PAIRS:
+        if len(xyz_srgb_ratio(numerator, denominator).findall(authority_code)) != 1:
+            errors.append(
+                "the host XYZ-D65 to linear-sRGB authority must own exact coefficient "
+                f"{numerator}/{denominator} once"
+            )
+
+    required_include = '#include "sirius/core/xyz_srgb.h"'
+    for path in XYZ_SRGB_HOST_CONSUMERS:
+        document = documents.get(path)
+        if document is None:
+            errors.append(f"XYZ-to-sRGB host consumer is missing: {relative(path)}")
+            continue
+        code = CPP_NON_CODE.sub(" ", document)
+        if required_include not in document or "colour::XyzD65ToLinearSrgb" not in code:
+            errors.append(
+                f"{relative(path)} does not delegate to the host XYZ-to-sRGB authority"
+            )
+
+    device = documents.get(XYZ_SRGB_DEVICE_AUTHORITY)
+    if device is None:
+        errors.append("the Slang XYZ-D65 to linear-sRGB mirror is missing")
+    else:
+        device_code = CPP_NON_CODE.sub(" ", device)
+        if device_code.count("XyzD65ToLinearSrgb") < 2:
+            errors.append("the Slang blackbody path does not consume its XYZ-to-sRGB mirror")
+        for numerator, denominator in XYZ_SRGB_COEFFICIENT_PAIRS:
+            if len(xyz_srgb_ratio(numerator, denominator).findall(device_code)) != 1:
+                errors.append(
+                    "the Slang XYZ-D65 to linear-sRGB mirror must own exact coefficient "
+                    f"{numerator}/{denominator} once"
+                )
+
+    parity = documents.get(XYZ_SRGB_PARITY_PROBE)
+    if parity is None or "OP_XYZ_D65_TO_LINEAR_SRGB" not in parity or (
+        "XyzD65ToLinearSrgb" not in CPP_NON_CODE.sub(" ", parity)
+    ):
+        errors.append("the direct XYZ-D65 to linear-sRGB device parity route is missing")
+
+    allowed_ratio_paths = {XYZ_SRGB_AUTHORITY, XYZ_SRGB_DEVICE_AUTHORITY}
+    for path, document in documents.items():
+        code = CPP_NON_CODE.sub(" ", document)
+        if XYZ_SRGB_LEGACY_COEFFICIENT.search(code):
+            errors.append(f"{relative(path)} retains a rounded legacy XYZ-to-sRGB coefficient")
+        if path in allowed_ratio_paths:
+            continue
+        for numerator, denominator in XYZ_SRGB_COEFFICIENT_PAIRS:
+            if xyz_srgb_ratio(numerator, denominator).search(code):
+                errors.append(
+                    f"{relative(path)} reimplements exact XYZ-to-sRGB coefficient "
+                    f"{numerator}/{denominator}"
+                )
+    return errors
+
+
+def verify_xyz_srgb_authority_policy() -> None:
+    host_coefficients = " ".join(
+        f"{numerator}.0L / {denominator}.0L"
+        for numerator, denominator in XYZ_SRGB_COEFFICIENT_PAIRS
+    )
+    device_coefficients = " ".join(
+        f"{numerator}.0f / {denominator}.0f"
+        for numerator, denominator in XYZ_SRGB_COEFFICIENT_PAIRS
+    )
+    valid = {
+        XYZ_SRGB_AUTHORITY: "XyzD65ToLinearSrgb " + host_coefficients,
+        **{
+            path: '#include "sirius/core/xyz_srgb.h"\ncolour::XyzD65ToLinearSrgb'
+            for path in XYZ_SRGB_HOST_CONSUMERS
+        },
+        XYZ_SRGB_DEVICE_AUTHORITY: (
+            "public float3 XyzD65ToLinearSrgb "
+            + device_coefficients
+            + " BlackbodyColor XyzD65ToLinearSrgb"
+        ),
+        XYZ_SRGB_PARITY_PROBE: "OP_XYZ_D65_TO_LINEAR_SRGB XyzD65ToLinearSrgb",
+    }
+    if xyz_srgb_authority_errors(valid):
+        raise RuntimeError("XYZ-to-sRGB policy rejected the governed host/device authority")
+
+    duplicated = dict(valid)
+    consumer = XYZ_SRGB_HOST_CONSUMERS[0]
+    duplicated[consumer] += "\n12831.0 / 3959.0"
+    if not xyz_srgb_authority_errors(duplicated):
+        raise RuntimeError("XYZ-to-sRGB policy accepted a production coefficient copy")
+
+    legacy = dict(valid)
+    legacy[consumer] += "\n3.2404542f"
+    if not xyz_srgb_authority_errors(legacy):
+        raise RuntimeError("XYZ-to-sRGB policy accepted a rounded legacy matrix")
+
+    detached = dict(valid)
+    detached[consumer] = "independent_xyz_to_rgb();"
+    if not xyz_srgb_authority_errors(detached):
+        raise RuntimeError("XYZ-to-sRGB policy accepted a detached host consumer")
+
+
 def attestation_preflight_errors(
     preflight: str,
     reuse: str,
@@ -648,6 +784,7 @@ def verify() -> list[str]:
     verify_integration_boundary_policy()
     verify_authority_checkout_policy()
     verify_srgb_transfer_authority_policy()
+    verify_xyz_srgb_authority_policy()
     try:
         attribute_source = GIT_ATTRIBUTES.read_text(encoding="utf-8")
         attributes = subprocess.run(
@@ -682,6 +819,7 @@ def verify() -> list[str]:
         if path.suffix in {".h", ".cpp", ".slang"}
     }
     errors.extend(srgb_transfer_authority_errors(governed_sources))
+    errors.extend(xyz_srgb_authority_errors(governed_sources))
     preflight_path = ROOT / "scripts" / "attestation_preflight.py"
     reuse_path = ROOT / "scripts" / "reuse_qualification_evidence.py"
     if not preflight_path.is_file():
