@@ -445,8 +445,9 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
     }
     const bool throat_radius_finite = finite(config.metric.throat_radius, "metric.throat_radius");
     if (throat_radius_finite &&
-        (config.metric.throat_radius <= 0.0 || config.metric.throat_radius > 1000.0)) {
-        errors.push_back("metric.throat_radius must be greater than 0 and at most 1000");
+        (config.metric.throat_radius < core::kMinMorrisThorneThroatRadius ||
+         config.metric.throat_radius > core::kMaxMorrisThorneThroatRadius)) {
+        errors.push_back("metric.throat_radius must be between 0.1 and 1000");
     }
     if (config.metric.wormhole_topology != "OneSheetCapture" &&
         config.metric.wormhole_topology != "TwoSheet") {
@@ -455,7 +456,7 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
                *metric_id == core::MetricId::MorrisThorne) {
         errors.push_back(
             "metric.wormhole_topology TwoSheet is not represented: Sirius currently renders "
-            "one exterior sheet with the throat as a dark capture surface");
+            "one isotropic Ellis output sheet with the throat as a dark capture surface");
     }
     if (finite(config.metric.warp_velocity, "metric.warp_velocity") &&
         std::abs(config.metric.warp_velocity) > 10.0) {
@@ -526,8 +527,8 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
                 ", M=" + std::to_string(config.metric.mass) + ")");
         } else if (metric_id == core::MetricId::MorrisThorne) {
             errors.push_back(
-                "Morris-Thorne observer.distance must satisfy 5*b0 <= r <= 1000*b0 "
-                "for an exterior one-sheet observer (r=" +
+                "Morris-Thorne observer.distance must satisfy 5*b0 <= rho <= 1000*b0 "
+                "for an exterior isotropic one-sheet observer (rho=" +
                 std::to_string(config.observer.distance) +
                 ", b0=" + std::to_string(config.metric.throat_radius) + ")");
         } else if (metric_id == core::MetricId::Alcubierre) {

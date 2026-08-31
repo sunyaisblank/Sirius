@@ -183,14 +183,15 @@ TEST(MetricRegistryTests, FamilyDisplayNamesRoundTrip) {
     EXPECT_DEATH(schw.SetParameter("mass", std::numeric_limits<double>::quiet_NaN()), "violated");
     EXPECT_DEATH(schw.SetParameter("mass", 1000001.0), "violated");
     EXPECT_DEATH(wormhole.SetParameter("throat_radius", 1001.0), "violated");
+    EXPECT_DEATH(wormhole.SetParameter("throat_radius", 0.09), "violated");
     EXPECT_DEATH(warp.SetParameter("velocity", 11.0), "violated");
 }
 
 // Backend support flags document reality; these pin the deliberate ones so a
 // flag change is a conscious decision, not a drive-by edit.
 TEST(MetricRegistryTests, BackendSupportMatchesImplementations) {
-    // Morris-Thorne renders on the CPU through MorrisThorneCartesian, the
-    // flat-plus-rank-one embedding of the spherical family.
+    // Morris-Thorne renders on the CPU through the exact isotropic Cartesian
+    // chart of the zero-tidal Ellis member.
     EXPECT_TRUE(MetricInfoFor(MetricId::MorrisThorne).cpu_supported);
     EXPECT_TRUE(MetricInfoFor(MetricId::MorrisThorne).gpu_supported);
 

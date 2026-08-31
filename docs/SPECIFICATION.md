@@ -62,6 +62,23 @@ The capabilities that constitute DNGR, extracted from the paper, are: Kerr space
 
 Metrics outside that DNGR parity core remain explicit bounded capabilities. The CPU cosmological sector is the exact spherical positive-$\Lambda$ Kottler metric in horizon-penetrating Cartesian Kerr-Schild coordinates. Its smaller positive root is the black-hole capture surface and its larger root is the cosmological causal-patch boundary; pure de Sitter has only the latter. Named Schwarzschild-de Sitter requests require $9\Lambda M^2<1$. The ADM/Eulerian launch radius must remain at or below $0.99r_c$, and the ordinary finite directional-sky boundary is clamped to $r_c$ rather than being traced through the cosmological horizon as though the spacetime were asymptotically flat. Every accepted CPU segment is parameterised by its actual per-step affine interval. A segment that crosses the finite bound is clipped back onto it before its Jacobi map, polarisation frame, volume transfer, or disk-event search advances, and the sky direction is sampled at that same event. Negative $\Lambda$, rotating/charged cosmological sectors, Nariai/super-Nariai requests, and observers outside the governed patch decline. The camera is not an implied static observer and the celestial texture remains a finite directional boundary condition, not a cosmological radiative-transfer claim.
 
+The rendered Morris--Thorne capability is the zero-tidal Ellis member in its
+exact isotropic Cartesian chart. With isotropic radius $\rho$, its areal radius
+and spatial conformal factor are
+$r=\rho+b_0^2/(4\rho)$ and
+$A=1+b_0^2/(4\rho^2)$, so
+$g_{ij}=A^2\delta_{ij}$. The shared CPU/Vulkan scale domain is
+$0.1\le b_0\le1000$. The throat is the regular sphere $\rho=b_0/2$;
+$0<\rho<b_0/2$ is the exact second-sheet chart continuation needed to keep
+every integration stage represented, not an exposed second output universe.
+The declared `OneSheetCapture` topology finds the observer-nearest root of the
+accepted cubic-Hermite segment against that sphere, including enter/exit and
+tangent contacts whose endpoints remain outside, and clips every downstream
+consumer to the same event. It then classifies the throat as dark. `TwoSheet`
+continues to decline because a second environment and output topology are not
+represented. The singular spherical areal chart and $\rho=0$ are never repaired
+by coordinate clamps.
+
 ## 3. Parity criteria
 
 Each criterion is a testable postcondition. Build-gated parity evidence must pass
@@ -81,7 +98,7 @@ never promoted into that result.
 
 DNGR was a Kerr-family instrument on a render farm. Sirius exceeds it on four axes, each already partially banked by the existing system and each verifiable without DNEG's hardware.
 
-- E1, spacetime catalogue. Nine metric families against DNGR's Kerr (plus the wormhole DNEG built separately for the film): the full existing registry, with the Morris-Thorne Cartesian embedding completing CPU support (July follow-up item 2).
+- E1, spacetime catalogue. Nine metric families against DNGR's Kerr (plus the wormhole DNEG built separately for the film): the full existing registry, with the exact isotropic Cartesian Ellis chart completing Morris-Thorne CPU support.
 - E2, polarised transport. Physical propagation of polarisation along geodesics (Walker-Penrose transport in the Kerr family), which DNGR did not publish. Gate: the live Kerr-Schild path transports an observer-screen basis on each accepted central-ray segment, conserves the Walker-Penrose complex constant to the live tolerance, and agrees across charts with the independent Boyer-Lindquist oracle. That oracle constructs null/screen initial data as fallible values, checks every RK stage against its finite off-axis chart, retains the last valid state on exit, and never clamps a coordinate failure back into evidence. Thin-disk Stokes emission applies the flux-normalised Chandrasekhar-Sobolev semi-infinite pure electron-scattering atmosphere, explicitly excluding absorption, finite optical depth, returning radiation, and magnetic/Faraday effects. Any backend or transfer model without that full chain declines.
 - E3, hardware reach. Interactive progressive preview on a 2 GB integrated GPU and a functional CPU-only path on machines with no GPU at all, where DNGR required a farm.
 - E4, verification. A physics test estate with build-failing Mandatory gates and a published oracle stack. DNGR published papers; it did not publish tests.

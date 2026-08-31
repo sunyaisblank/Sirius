@@ -78,10 +78,15 @@ public bool IntegrateGeodesicRK4Cart(GeodesicStateCart state, Real dt,
     return true;
 }
 
-// Morris-Thorne uses the Cartesian flat-plus-rank-one embedding shared with
-// the CPU authority. It is lensing-only and terminates at the one-sheet throat.
-public Vec4Cart GeodesicAccelerationMorrisThorneCart(GeodesicStateCart state, float b0,
-                                                     float Phi0, int shapeType) {
+// The live Morris-Thorne dispatch is the exact isotropic Ellis chart shared
+// with the CPU authority.  Positive-rho second-sheet stages are represented so
+// the accepted segment can be clipped at the regular one-sheet throat; rho=0
+// and non-Ellis shape selectors fail before metric evaluation.
+public bool TryGeodesicAccelerationMorrisThorneCart(
+    GeodesicStateCart state, float b0, float Phi0, int shapeType,
+    out Vec4Cart acceleration) {
+    acceleration = MakeVec4Cart(Real(0.0f), Real(0.0f), Real(0.0f), Real(0.0f));
+    if (!IsMorrisThorneCartesianEventRepresented(state.x, b0, Phi0, shapeType)) return false;
     Real Gamma[4][4][4];
     GetMorrisThorneCartesianChristoffel(state.x, b0, Phi0, shapeType, Gamma);
     Real u[4] = { state.u.t, state.u.x, state.u.y, state.u.z };
@@ -90,53 +95,64 @@ public Vec4Cart GeodesicAccelerationMorrisThorneCart(GeodesicStateCart state, fl
         [unroll] for (int nu = 0; nu < 4; nu++)
             [unroll] for (int rho = 0; rho < 4; rho++)
                 acc[mu] -= Gamma[mu][nu][rho] * u[nu] * u[rho];
-    return MakeVec4Cart(acc[0], acc[1], acc[2], acc[3]);
+    acceleration = MakeVec4Cart(acc[0], acc[1], acc[2], acc[3]);
+    return true;
 }
 
-public void IntegrateGeodesicRK4MorrisThorneCartDelta(GeodesicStateCart state, Real dt,
-                                                      float b0, float Phi0, int shapeType,
-                                                      out Vec4Cart dx, out Vec4Cart du) {
+public bool IntegrateGeodesicRK4MorrisThorneCartDelta(
+    GeodesicStateCart state, Real dt, float b0, float Phi0, int shapeType,
+    out Vec4Cart dx, out Vec4Cart du) {
+    dx = MakeVec4Cart(Real(0.0f), Real(0.0f), Real(0.0f), Real(0.0f));
+    du = MakeVec4Cart(Real(0.0f), Real(0.0f), Real(0.0f), Real(0.0f));
+    Vec4Cart acceleration;
+    if (!TryGeodesicAccelerationMorrisThorneCart(state, b0, Phi0, shapeType,
+                                                 acceleration)) return false;
     Vec4Cart dx1 = ScaleVec4Cart(state.u, dt);
-    Vec4Cart du1 =
-        ScaleVec4Cart(GeodesicAccelerationMorrisThorneCart(state, b0, Phi0, shapeType), dt);
+    Vec4Cart du1 = ScaleVec4Cart(acceleration, dt);
 
     GeodesicStateCart s2;
     s2.x = AddVec4Cart(state.x, ScaleVec4Cart(dx1, 0.5f));
     s2.u = AddVec4Cart(state.u, ScaleVec4Cart(du1, 0.5f));
+    if (!TryGeodesicAccelerationMorrisThorneCart(s2, b0, Phi0, shapeType,
+                                                 acceleration)) return false;
     Vec4Cart dx2 = ScaleVec4Cart(s2.u, dt);
-    Vec4Cart du2 =
-        ScaleVec4Cart(GeodesicAccelerationMorrisThorneCart(s2, b0, Phi0, shapeType), dt);
+    Vec4Cart du2 = ScaleVec4Cart(acceleration, dt);
 
     GeodesicStateCart s3;
     s3.x = AddVec4Cart(state.x, ScaleVec4Cart(dx2, 0.5f));
     s3.u = AddVec4Cart(state.u, ScaleVec4Cart(du2, 0.5f));
+    if (!TryGeodesicAccelerationMorrisThorneCart(s3, b0, Phi0, shapeType,
+                                                 acceleration)) return false;
     Vec4Cart dx3 = ScaleVec4Cart(s3.u, dt);
-    Vec4Cart du3 =
-        ScaleVec4Cart(GeodesicAccelerationMorrisThorneCart(s3, b0, Phi0, shapeType), dt);
+    Vec4Cart du3 = ScaleVec4Cart(acceleration, dt);
 
     GeodesicStateCart s4;
     s4.x = AddVec4Cart(state.x, dx3);
     s4.u = AddVec4Cart(state.u, du3);
+    if (!TryGeodesicAccelerationMorrisThorneCart(s4, b0, Phi0, shapeType,
+                                                 acceleration)) return false;
     Vec4Cart dx4 = ScaleVec4Cart(s4.u, dt);
-    Vec4Cart du4 =
-        ScaleVec4Cart(GeodesicAccelerationMorrisThorneCart(s4, b0, Phi0, shapeType), dt);
+    Vec4Cart du4 = ScaleVec4Cart(acceleration, dt);
 
     Real sixth = 1.0f / 6.0f;
     dx = ScaleVec4Cart(AddVec4Cart(AddVec4Cart(dx1, ScaleVec4Cart(dx2, 2.0f)),
                                    AddVec4Cart(ScaleVec4Cart(dx3, 2.0f), dx4)), sixth);
     du = ScaleVec4Cart(AddVec4Cart(AddVec4Cart(du1, ScaleVec4Cart(du2, 2.0f)),
                                    AddVec4Cart(ScaleVec4Cart(du3, 2.0f), du4)), sixth);
+    Vec4Cart candidate = AddVec4Cart(state.x, dx);
+    return IsMorrisThorneCartesianEventRepresented(candidate, b0, Phi0, shapeType);
 }
 
-public GeodesicStateCart IntegrateGeodesicRK4MorrisThorneCart(GeodesicStateCart state, Real dt,
-                                                              float b0, float Phi0,
-                                                              int shapeType) {
+public bool IntegrateGeodesicRK4MorrisThorneCart(
+    GeodesicStateCart state, Real dt, float b0, float Phi0, int shapeType,
+    out GeodesicStateCart result) {
+    result = state;
     Vec4Cart dx, du;
-    IntegrateGeodesicRK4MorrisThorneCartDelta(state, dt, b0, Phi0, shapeType, dx, du);
-    GeodesicStateCart result;
+    if (!IntegrateGeodesicRK4MorrisThorneCartDelta(
+            state, dt, b0, Phi0, shapeType, dx, du)) return false;
     result.x = AddVec4Cart(state.x, dx);
     result.u = AddVec4Cart(state.u, du);
-    return result;
+    return true;
 }
 
 // Alcubierre uses its analytic Cartesian Christoffels and is lensing-only.
@@ -221,9 +237,8 @@ bool AdvanceGeodesicRK4(GeodesicStateCart state, Real step,
         return true;
     }
     if (isWormhole) {
-        result = IntegrateGeodesicRK4MorrisThorneCart(state, step, throatB0, 0.0f,
-                                                      wormShape);
-        return true;
+        return IntegrateGeodesicRK4MorrisThorneCart(
+            state, step, throatB0, 0.0f, wormShape, result);
     }
     return IntegrateGeodesicRK4Cart(state, step, M, a, Q, Lambda, result);
 }

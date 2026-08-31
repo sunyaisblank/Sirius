@@ -10,11 +10,13 @@
 
 #include "sirius/base/contracts.h"
 #include "sirius/core/metrics/metric.h"
+#include "sirius/core/metrics/registry.h"
 
 #include <algorithm>
 #include <cmath>
 #include <functional>
 #include <limits>
+#include <numbers>
 
 namespace sirius::core {
 
@@ -75,6 +77,7 @@ class MorrisThorneFamily : public IMetric {
     const Config& GetParameters() const override { return config_; }
     void SetParameter(const std::string& key, double value) override;
     const char* GetName() const override;
+    bool IsValidEvent(const Tensor<double, 4>& pos) const override;
 
     void SetParams(const MorrisThorneParams& params);
     MorrisThorneParams GetParams() const;
@@ -100,7 +103,8 @@ class MorrisThorneFamily : public IMetric {
 };
 
 inline MorrisThorneFamily::MorrisThorneFamily() {
-    config_["throat_radius"] = {1.0, std::numeric_limits<double>::min(), 1000.0};
+    config_["throat_radius"] = {kDefaultMorrisThorneThroatRadius, kMinMorrisThorneThroatRadius,
+                                kMaxMorrisThorneThroatRadius};
     config_["redshift"] = {0.0, -10.0, 10.0};
     params_ = MorrisThorneParams::Ellis(1.0);
 }
@@ -115,8 +119,10 @@ inline void MorrisThorneFamily::SetParams(const MorrisThorneParams& params) {
                              params.shape_type == WormholeShapeType::ZeroTidal ||
                              params.shape_type == WormholeShapeType::AbsurdlyBenign ||
                              params.shape_type == WormholeShapeType::Custom;
-    const bool valid = known_shape && std::isfinite(params.b0) && params.b0 > 0.0 &&
-                       params.b0 <= 1000.0 && std::isfinite(params.Phi0) &&
+    const bool valid = known_shape && std::isfinite(params.b0) &&
+                       params.b0 >= kMinMorrisThorneThroatRadius &&
+                       params.b0 <= kMaxMorrisThorneThroatRadius && std::isfinite(params.Phi0) &&
+                       params.Phi0 >= -10.0 && params.Phi0 <= 10.0 &&
                        (params.shape_type != WormholeShapeType::Custom ||
                         static_cast<bool>(params.custom_shape_func));
     SIRIUS_PRE(valid);
@@ -128,6 +134,17 @@ inline void MorrisThorneFamily::SetParams(const MorrisThorneParams& params) {
 }
 
 inline MorrisThorneParams MorrisThorneFamily::GetParams() const { return params_; }
+
+inline bool MorrisThorneFamily::IsValidEvent(const Tensor<double, 4>& pos) const {
+    for (int component = 0; component < 4; ++component) {
+        if (!std::isfinite(pos(component))) return false;
+    }
+    const double r = pos(1);
+    const double theta = pos(2);
+    if (!(r > params_.b0 && theta > 0.0 && theta < std::numbers::pi)) return false;
+    const double b = ShapeFunction(r);
+    return std::isfinite(b) && 1.0 - b / r > 0.0;
+}
 
 inline void MorrisThorneFamily::SetParameter(const std::string& key, double value) {
     const auto found = config_.find(key);
@@ -159,8 +176,10 @@ inline const char* MorrisThorneFamily::GetName() const {
 }
 
 inline double MorrisThorneFamily::ShapeFunction(double r) const {
-    double b0 = params_.b0;
-    r = std::max(r, b0);  // Ensure r >= b0.
+    const double b0 = params_.b0;
+    const bool represented = std::isfinite(r) && r >= b0;
+    SIRIUS_PRE(represented);
+    if (!represented) return std::numeric_limits<double>::quiet_NaN();
 
     switch (params_.shape_type) {
         case WormholeShapeType::Ellis:
@@ -182,8 +201,10 @@ inline double MorrisThorneFamily::ShapeFunction(double r) const {
 }
 
 inline double MorrisThorneFamily::ShapeFunctionDerivative(double r) const {
-    double b0 = params_.b0;
-    r = std::max(r, b0);
+    const double b0 = params_.b0;
+    const bool represented = std::isfinite(r) && r >= b0;
+    SIRIUS_PRE(represented);
+    if (!represented) return std::numeric_limits<double>::quiet_NaN();
 
     switch (params_.shape_type) {
         case WormholeShapeType::Ellis:
@@ -199,8 +220,14 @@ inline double MorrisThorneFamily::ShapeFunctionDerivative(double r) const {
             // Otherwise compute numerically via central differences.
             if (params_.custom_shape_func) {
                 const double h = 1e-6 * r;
-                double b_plus = params_.custom_shape_func(r + h);
-                double b_minus = params_.custom_shape_func(r - h);
+                if (r - h < b0) {
+                    const double b_here = params_.custom_shape_func(r);
+                    const double b_plus = params_.custom_shape_func(r + h);
+                    const double b_twice_plus = params_.custom_shape_func(r + 2.0 * h);
+                    return (-3.0 * b_here + 4.0 * b_plus - b_twice_plus) / (2.0 * h);
+                }
+                const double b_plus = params_.custom_shape_func(r + h);
+                const double b_minus = params_.custom_shape_func(r - h);
                 return (b_plus - b_minus) / (2.0 * h);
             }
             SIRIUS_ASSERT(false);
@@ -251,31 +278,32 @@ inline double MorrisThorneFamily::RedshiftFunctionDerivative([[maybe_unused]] do
     return 0.0;
 }
 
-// Cartesian-chart embedding of the Morris-Thorne family, for the CPU tracer
-// (which drives Cartesian positions throughout). The spherical family above
-// remains the shape-function authority and the kernel-parity reference; this
-// class composes it rather than duplicating the wormhole physics.
+// Exact isotropic Cartesian chart of the zero-tidal Ellis member rendered by
+// Sirius.  The spherical family above remains the areal-radius authority:
 //
-// With r = |x|, n = x/r, the static spherically symmetric line element
-//   ds^2 = -e^{2 Phi} dt^2 + dr^2/(1 - b/r) + r^2 dOmega^2
-// becomes flat-plus-rank-one in Cartesian components:
-//   g_tt = -e^{2 Phi},   g_ij = delta_ij + f(r) n_i n_j,
-//   f = (b/r)/(1 - b/r) = b/(r - b),
-// because dr = n.dx and r^2 dOmega^2 = |dx|^2 - dr^2. The rank-one structure
-// gives the closed-form inverse by Sherman-Morrison:
-//   g^tt = -e^{-2 Phi},  g^ij = delta_ij - (f/(1+f)) n_i n_j.
+//   ds^2 = -e^{2 Phi0} dt^2 + dr^2/(1 - b0^2/r^2) + r^2 dOmega^2.
 //
-// Chart domain: one sheet, r > b0, matching the spherical family's own clamp.
-// The throat is the capture surface: a ray reaching r <= b0 (1 + margin)
-// terminates as captured. RECORDED DECISION: the second sheet (the far mouth's
-// universe) is not modelled; rendering it needs two-sheet continuation through
-// the throat and a second environment map, out of scope until a scene asks
-// for it. The throat therefore renders dark, which is the honest one-sheet
-// image, not an approximation of the two-sheet one.
+// With proper radial distance l and isotropic radius rho,
+//
+//   r = rho + b0^2/(4 rho),       l = rho - b0^2/(4 rho),
+//
+// the exact spatial metric is conformally flat:
+//
+//   g_ij = A(rho)^2 delta_ij,     A = 1 + b0^2/(4 rho^2).
+//
+// Unlike areal radius, rho is a regular chart coordinate at the throat
+// rho=b0/2.  The chart continues mathematically onto the second sheet for
+// 0<rho<b0/2, so every Runge-Kutta stage remains represented.  The product
+// still exposes only the declared one-sheet topology: the accepted central-ray
+// segment is clipped at rho=b0/2 and classified as dark capture before any
+// coupled consumer advances.  A second environment and two-sheet output remain
+// explicitly unrepresented.
 class MorrisThorneCartesian : public IMetric {
   public:
     MorrisThorneCartesian() : family_() {}
-    explicit MorrisThorneCartesian(const MorrisThorneParams& params) : family_(params) {}
+    explicit MorrisThorneCartesian(const MorrisThorneParams& params) : family_(params) {
+        SIRIUS_PRE(params.shape_type == WormholeShapeType::Ellis);
+    }
 
     void Evaluate(const Tensor<double, 4>& pos, Metric4d& g,
                   Tensor<Dual<double>, 4, 4, 4>& dg) override;
@@ -286,128 +314,125 @@ class MorrisThorneCartesian : public IMetric {
     }
     const char* GetName() const override { return family_.GetName(); }
 
+    bool IsValidEvent(const Tensor<double, 4>& pos) const override;
     bool InverseMetric(const Tensor<double, 4>& pos, Metric4d& g_inv) const override;
     bool InsideCaptureSurface(const Tensor<double, 4>& pos, double margin) const override;
+    std::optional<double> SphericalCaptureRadius() const override {
+        return IsotropicThroatRadius();
+    }
+    [[nodiscard]] double IsotropicThroatRadius() const { return 0.5 * family_.GetParams().b0; }
 
     const MorrisThorneFamily& SphericalFamily() const { return family_; }
 
   private:
-    // Radius clamped to the family's one-sheet domain, and the unit radial
-    // direction; the pole-free Cartesian chart needs no angular regularisation.
-    struct RadialFrame {
-        double r;
-        double n[3];
-    };
-    RadialFrame Frame(const Tensor<double, 4>& pos) const {
-        double x = pos(1), y = pos(2), z = pos(3);
-        double r = std::sqrt(x * x + y * y + z * z);
-        double b0 = family_.GetParams().b0;
-        double r_min = b0 * 1.001;  // The spherical family's own domain clamp.
-        if (r < r_min) {
-            // Inside the throat clamp the direction is still well defined
-            // unless the point is the exact origin; default to +z there.
-            if (r < 1e-300) return {r_min, {0.0, 0.0, 1.0}};
-            double s = 1.0 / r;
-            return {r_min, {x * s, y * s, z * s}};
-        }
-        double s = 1.0 / r;
-        return {r, {x * s, y * s, z * s}};
-    }
-
     MorrisThorneFamily family_;
 };
 
+inline bool MorrisThorneCartesian::IsValidEvent(const Tensor<double, 4>& pos) const {
+    if (family_.GetParams().shape_type != WormholeShapeType::Ellis) return false;
+    for (int component = 0; component < 4; ++component) {
+        if (!std::isfinite(pos(component))) return false;
+    }
+    const double x = pos(1), y = pos(2), z = pos(3);
+    // rho=0 is the other asymptotic infinity of the isotropic chart, not a
+    // finite event.  The regular throat and all positive-rho second-sheet
+    // stages are represented exactly.
+    return x * x + y * y + z * z > 0.0;
+}
+
 inline void MorrisThorneCartesian::Evaluate(const Tensor<double, 4>& pos, Metric4d& g,
                                             Tensor<Dual<double>, 4, 4, 4>& dg) {
-    RadialFrame fr = Frame(pos);
-    double r = fr.r;
-    const double* n = fr.n;
+    const bool represented = IsValidEvent(pos);
+    SIRIUS_PRE(represented);
+    if (!represented) {
+        const Dual<double> nan(std::numeric_limits<double>::quiet_NaN());
+        for (int mu = 0; mu < 4; ++mu)
+            for (int nu = 0; nu < 4; ++nu) g(mu, nu) = nan;
+        for (int axis = 0; axis < 4; ++axis)
+            for (int mu = 0; mu < 4; ++mu)
+                for (int nu = 0; nu < 4; ++nu) dg(axis, mu, nu) = nan;
+        return;
+    }
 
-    double b = family_.ShapeFunction(r);
-    double db_dr = family_.ShapeFunctionDerivative(r);
-    double Phi = family_.RedshiftFunction(r);
-    double exp2Phi = std::exp(2.0 * Phi);
-
-    // f = b/(r - b); the denominator is bounded away from zero by the domain
-    // clamp (Ellis at the clamp: r - b = (r^2 - b0^2)/r ~ 2e-3 b0).
-    double r_minus_b = std::max(r - b, 1e-10);
-    double f = b / r_minus_b;
-    // df/dr = (b' r - b)/(r - b)^2.
-    double df_dr = (db_dr * r - b) / (r_minus_b * r_minus_b);
+    const double x = pos(1), y = pos(2), z = pos(3);
+    const double rho2 = x * x + y * y + z * z;
+    const double rho = std::sqrt(rho2);
+    const double b0 = family_.GetParams().b0;
+    const double q = (b0 * b0) / (4.0 * rho2);
+    const double conformal_base = 1.0 + q;
+    const double conformal = conformal_base * conformal_base;
+    const double exp2Phi = std::exp(2.0 * family_.RedshiftFunction(rho));
 
     g.Zero();
     g(0, 0) = Dual<double>(-exp2Phi);
     for (int i = 0; i < 3; ++i) {
-        for (int j = 0; j < 3; ++j) {
-            double gij = ((i == j) ? 1.0 : 0.0) + f * n[i] * n[j];
-            g(i + 1, j + 1) = Dual<double>(gij);
-        }
+        g(i + 1, i + 1) = Dual<double>(conformal);
     }
 
     dg.Zero();
-    // d_t and d_phi vanish (static, and the chart is Cartesian so there is no
-    // phi slot); g_tt is constant because the family is zero-tidal
-    // (RedshiftFunctionDerivative is identically zero), so only the spatial
-    // block varies:
-    //   d_k g_ij = f' n_k n_i n_j + (f/r)(delta_ki n_j + delta_kj n_i
-    //                                     - 2 n_k n_i n_j),
-    // from d_k n_i = (delta_ki - n_k n_i)/r.
-    double f_over_r = f / r;
+    // dC/drho = -4 q (1+q)/rho for C=(1+q)^2 and
+    // d_k C = (dC/drho) x_k/rho.
+    const double d_conformal_drho = -4.0 * q * conformal_base / rho;
+    const double coordinates[3] = {x, y, z};
     for (int k = 0; k < 3; ++k) {
         for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 3; ++j) {
-                double dki = (k == i) ? 1.0 : 0.0;
-                double dkj = (k == j) ? 1.0 : 0.0;
-                double v = df_dr * n[k] * n[i] * n[j] +
-                           f_over_r * (dki * n[j] + dkj * n[i] - 2.0 * n[k] * n[i] * n[j]);
-                dg(k + 1, i + 1, j + 1) = Dual<double>(v);
-            }
+            dg(k + 1, i + 1, i + 1) = Dual<double>(d_conformal_drho * coordinates[k] / rho);
         }
     }
 }
 
 inline bool MorrisThorneCartesian::InverseMetric(const Tensor<double, 4>& pos,
                                                  Metric4d& g_inv) const {
-    RadialFrame fr = Frame(pos);
-    double r = fr.r;
-    const double* n = fr.n;
+    const bool represented = IsValidEvent(pos);
+    SIRIUS_PRE(represented);
+    if (!represented) {
+        const Dual<double> nan(std::numeric_limits<double>::quiet_NaN());
+        for (int mu = 0; mu < 4; ++mu)
+            for (int nu = 0; nu < 4; ++nu) g_inv(mu, nu) = nan;
+        return false;
+    }
 
-    double b = family_.ShapeFunction(r);
-    double Phi = family_.RedshiftFunction(r);
-    double r_minus_b = std::max(r - b, 1e-10);
-    double f = b / r_minus_b;
-    // Sherman-Morrison for delta + f n n^T; 1 + f = r/(r - b) > 0 on the
-    // domain, so the update never degenerates.
-    double c = f / (1.0 + f);
+    const double x = pos(1), y = pos(2), z = pos(3);
+    const double rho2 = x * x + y * y + z * z;
+    const double b0 = family_.GetParams().b0;
+    const double conformal_base = 1.0 + (b0 * b0) / (4.0 * rho2);
+    const double inverse_conformal = 1.0 / (conformal_base * conformal_base);
+    const double Phi = family_.RedshiftFunction(std::sqrt(rho2));
 
     g_inv.Zero();
     g_inv(0, 0) = Dual<double>(-std::exp(-2.0 * Phi));
     for (int i = 0; i < 3; ++i) {
-        for (int j = 0; j < 3; ++j) {
-            double v = ((i == j) ? 1.0 : 0.0) - c * n[i] * n[j];
-            g_inv(i + 1, j + 1) = Dual<double>(v);
-        }
+        g_inv(i + 1, i + 1) = Dual<double>(inverse_conformal);
     }
     return true;
 }
 
 inline bool MorrisThorneCartesian::InsideCaptureSurface(const Tensor<double, 4>& pos,
                                                         double margin) const {
+    if (family_.GetParams().shape_type != WormholeShapeType::Ellis) return false;
     double x = pos(1), y = pos(2), z = pos(3);
-    double r = std::sqrt(x * x + y * y + z * z);
-    double b0 = family_.GetParams().b0;
-    return r <= b0 * (1.0 + margin);
+    const double rho = std::sqrt(x * x + y * y + z * z);
+    return std::isfinite(rho) && std::isfinite(margin) && margin >= 0.0 &&
+           rho <= IsotropicThroatRadius() * (1.0 + margin);
 }
 
 inline void MorrisThorneFamily::Evaluate(const Tensor<double, 4>& pos, Metric4d& g,
                                          Tensor<Dual<double>, 4, 4, 4>& dg) {
+    const bool represented = IsValidEvent(pos);
+    SIRIUS_PRE(represented);
+    if (!represented) {
+        const Dual<double> nan(std::numeric_limits<double>::quiet_NaN());
+        for (int mu = 0; mu < 4; ++mu)
+            for (int nu = 0; nu < 4; ++nu) g(mu, nu) = nan;
+        for (int axis = 0; axis < 4; ++axis)
+            for (int mu = 0; mu < 4; ++mu)
+                for (int nu = 0; nu < 4; ++nu) dg(axis, mu, nu) = nan;
+        return;
+    }
     [[maybe_unused]] double t = pos(0);  // Time coordinate (unused in a static metric).
     double r = pos(1);
     double theta = pos(2);
     // The phi coordinate is not needed for a spherically symmetric evaluation.
-
-    double b0 = params_.b0;
-    r = std::max(r, b0 * 1.001);  // Stay just outside the throat.
 
     double sin_theta = std::sin(theta);
     double sin2 = sin_theta * sin_theta;
@@ -420,7 +445,6 @@ inline void MorrisThorneFamily::Evaluate(const Tensor<double, 4>& pos, Metric4d&
 
     double exp2Phi = std::exp(2.0 * Phi);
     double one_minus_b_over_r = 1.0 - b / r;
-    one_minus_b_over_r = std::max(one_minus_b_over_r, 1e-10);  // Regularise at the throat.
 
     g.Zero();
 

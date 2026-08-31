@@ -868,11 +868,12 @@ TEST(VulkanRenderSession, KerrNearExtremalBardeenBoundaryAt1080p) {
 }
 
 // --- CPU-versus-Vulkan Morris-Thorne parity ----------------------------------
-// The wormhole's Cartesian embedding runs on both backends (MorrisThorneCartesian
+// The exact isotropic Ellis chart runs on both backends (MorrisThorneCartesian
 // on the CPU, gr_metrics GetMorrisThorneCartesian* under dispatch id 3 on the
-// device); same one-sheet chart, same throat capture convention, same analytic
-// gradient background. The gate mirrors the Kerr parity test: background
-// luminance agreement plus throat-shadow fractions within the tightened band.
+// device); same one-output-sheet chart, accepted-segment throat event, and
+// analytic gradient background. The gate mirrors the Kerr parity test:
+// background luminance agreement plus throat-shadow fractions within the
+// tightened band.
 TEST(VulkanRenderSession, CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalBounds) {
     KernelFixture f = OpenKernel();
     if (!f.ready) GTEST_SKIP() << "no Vulkan device or trace kernel absent";

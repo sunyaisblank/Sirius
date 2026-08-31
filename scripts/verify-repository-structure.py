@@ -185,6 +185,13 @@ VOLUME_TRANSFER_CPU_CONSUMER = KERR_TRANSFER_CPU_CONSUMER
 VOLUME_TRANSFER_DEVICE_AUTHORITY = KERR_TRANSFER_DEVICE_AUTHORITY
 VOLUME_TRANSFER_DEVICE_CONSUMER = KERR_TRANSFER_DEVICE_CONSUMER
 VOLUME_TRANSFER_PARITY_PROBE = KERR_TRANSFER_PARITY_PROBE
+MORRIS_HOST_AUTHORITY = SOURCE_ROOT / "core" / "metrics" / "morris_thorne_family.h"
+MORRIS_HOST_EVENT_AUTHORITY = SOURCE_ROOT / "core" / "trace_boundary.h"
+MORRIS_CPU_CONSUMER = KERR_TRANSFER_CPU_CONSUMER
+MORRIS_DEVICE_AUTHORITY = SOURCE_ROOT / "kernels" / "gr_metrics.slang"
+MORRIS_DEVICE_EVENT_AUTHORITY = SOURCE_ROOT / "kernels" / "gr_trace_event.slang"
+MORRIS_DEVICE_CONSUMER = KERR_TRANSFER_DEVICE_CONSUMER
+MORRIS_PARITY_PROBE = KERR_TRANSFER_PARITY_PROBE
 FULL_QUALIFICATION_JOBS = (
     "linux-gate",
     "linux-sanitizers",
@@ -1401,6 +1408,138 @@ def verify_volumetric_transfer_authority_policy() -> None:
         raise RuntimeError("volumetric-transfer policy accepted an optically thin cutoff")
 
 
+def morris_thorne_authority_errors(documents: dict[Path, str]) -> list[str]:
+    errors: list[str] = []
+    required = {
+        MORRIS_HOST_AUTHORITY: (
+            "MorrisThorneCartesian",
+            "IsotropicThroatRadius",
+            "SphericalCaptureRadius",
+            "conformal_base",
+        ),
+        MORRIS_HOST_EVENT_AUTHORITY: (
+            "FindPolynomialRootsOnUnitInterval",
+            "SphericalSegmentPolynomial",
+            "FindSphericalCaptureEvent",
+        ),
+        MORRIS_CPU_CONSUMER: (
+            "SphericalCaptureRadius",
+            "FindSphericalCaptureEvent",
+            "terminal_capture_surface",
+        ),
+        MORRIS_DEVICE_AUTHORITY: (
+            "IsMorrisThorneCartesianEventRepresented",
+            "GetMorrisThorneCartesianMetric",
+            "GetMorrisThorneCartesianChristoffel",
+            "conformalBase",
+        ),
+        MORRIS_DEVICE_EVENT_AUTHORITY: (
+            "IsFiniteAcceptedSegmentValue",
+            "FindSexticRoots",
+            "SphericalSegmentPolynomial",
+            "FindSphericalCaptureEvent",
+        ),
+        MORRIS_DEVICE_CONSUMER: (
+            "FindSphericalCaptureEvent",
+            "terminalCaptureSurface",
+        ),
+        MORRIS_PARITY_PROBE: (
+            "OP_SPHERICAL_CAPTURE_EVENT",
+            "FindSphericalCaptureEvent",
+            "GetMorrisThorneCartesianMetric",
+            "GetMorrisThorneCartesianChristoffel",
+        ),
+    }
+    code_by_path: dict[Path, str] = {}
+    for path, markers in required.items():
+        document = documents.get(path)
+        if document is None:
+            errors.append(f"Morris-Thorne authority participant is missing: {relative(path)}")
+            continue
+        code = CPP_NON_CODE.sub(" ", document)
+        code_by_path[path] = code
+        for marker in markers:
+            if marker not in code:
+                errors.append(f"{relative(path)} omits Morris-Thorne marker {marker}")
+
+    stale = re.compile(
+        r"\b(?:GetMorrisThorneMetric|GetMorrisThorneChristoffel|"
+        r"WormholeShapeFunction|WormholeShapeDerivative)\b|"
+        r"b0\s*\*\s*1\.001|\bb\s*/\s*\(\s*r\s*-\s*b\s*\)"
+    )
+    for path, document in documents.items():
+        match = stale.search(CPP_NON_CODE.sub(" ", document))
+        if match:
+            errors.append(
+                f"{relative(path)} restores a clamped/areal Cartesian Morris-Thorne path: "
+                f"{match.group(0)}"
+            )
+
+    for path, consumers in (
+        (MORRIS_CPU_CONSUMER, ("StepBundle(", "AdvancePolarisationFrame(",
+                               "AccumulateVolumetricEmission(", "FindDiskIntersection(")),
+        (MORRIS_DEVICE_CONSUMER, ("AccumulateVolumeSegment(",)),
+    ):
+        code = code_by_path.get(path, "")
+        trace_start = code.find("TraceResult GeodesicTracer::Trace") if path == MORRIS_CPU_CONSUMER else 0
+        capture = code.find("FindSphericalCaptureEvent(", max(trace_start, 0))
+        if capture < 0:
+            continue
+        for consumer in consumers:
+            consumer_call = code.find(consumer, capture)
+            if consumer_call < 0:
+                errors.append(
+                    f"{relative(path)} does not expose {consumer} after throat localisation"
+                )
+    return errors
+
+
+def verify_morris_thorne_authority_policy() -> None:
+    valid = {
+        MORRIS_HOST_AUTHORITY: (
+            "MorrisThorneCartesian IsotropicThroatRadius SphericalCaptureRadius conformal_base"
+        ),
+        MORRIS_HOST_EVENT_AUTHORITY: (
+            "FindPolynomialRootsOnUnitInterval SphericalSegmentPolynomial "
+            "FindSphericalCaptureEvent"
+        ),
+        MORRIS_CPU_CONSUMER: (
+            "TraceResult GeodesicTracer::Trace SphericalCaptureRadius "
+            "FindSphericalCaptureEvent terminal_capture_surface StepBundle( "
+            "AdvancePolarisationFrame( AccumulateVolumetricEmission( FindDiskIntersection("
+        ),
+        MORRIS_DEVICE_AUTHORITY: (
+            "IsMorrisThorneCartesianEventRepresented GetMorrisThorneCartesianMetric "
+            "GetMorrisThorneCartesianChristoffel conformalBase"
+        ),
+        MORRIS_DEVICE_EVENT_AUTHORITY: (
+            "IsFiniteAcceptedSegmentValue FindSexticRoots SphericalSegmentPolynomial "
+            "FindSphericalCaptureEvent"
+        ),
+        MORRIS_DEVICE_CONSUMER: (
+            "FindSphericalCaptureEvent terminalCaptureSurface AccumulateVolumeSegment("
+        ),
+        MORRIS_PARITY_PROBE: (
+            "OP_SPHERICAL_CAPTURE_EVENT FindSphericalCaptureEvent "
+            "GetMorrisThorneCartesianMetric GetMorrisThorneCartesianChristoffel"
+        ),
+    }
+    if morris_thorne_authority_errors(valid):
+        raise RuntimeError("Morris-Thorne policy rejected the exact event-synchronised seam")
+
+    clamped = dict(valid)
+    clamped[MORRIS_DEVICE_AUTHORITY] += " float r = max(pos.r, b0 * 1.001f);"
+    if not morris_thorne_authority_errors(clamped):
+        raise RuntimeError("Morris-Thorne policy accepted a fabricated throat clamp")
+
+    endpoint_only = dict(valid)
+    endpoint_only[MORRIS_CPU_CONSUMER] = endpoint_only[MORRIS_CPU_CONSUMER].replace(
+        "FindSphericalCaptureEvent", "InsideCaptureSurface"
+    )
+    if not morris_thorne_authority_errors(endpoint_only):
+        raise RuntimeError("Morris-Thorne policy accepted endpoint-only throat capture")
+
+
 def attestation_preflight_errors(
     preflight: str,
     reuse: str,
@@ -1509,6 +1648,7 @@ def verify() -> list[str]:
     verify_blackbody_laws_authority_policy()
     verify_kerr_zamo_transfer_authority_policy()
     verify_volumetric_transfer_authority_policy()
+    verify_morris_thorne_authority_policy()
     try:
         attribute_source = GIT_ATTRIBUTES.read_text(encoding="utf-8")
         attributes = subprocess.run(
@@ -1549,6 +1689,7 @@ def verify() -> list[str]:
     errors.extend(blackbody_laws_authority_errors(governed_sources))
     errors.extend(kerr_zamo_transfer_authority_errors(governed_sources))
     errors.extend(volumetric_transfer_authority_errors(governed_sources))
+    errors.extend(morris_thorne_authority_errors(governed_sources))
     shader_root = SOURCE_ROOT / "app" / "viewer" / "shaders"
     actual_viewer_shaders = {
         path for path in shader_root.iterdir() if path.suffix in {".frag", ".vert"}

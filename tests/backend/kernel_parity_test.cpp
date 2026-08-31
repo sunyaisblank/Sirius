@@ -22,6 +22,7 @@
 #include "sirius/core/disk/novikov_thorne_disk.h"
 #include "sirius/core/disk/volumetric_disk.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
+#include "sirius/core/metrics/morris_thorne_family.h"
 #include "sirius/core/relativistic_transfer.h"
 #include "sirius/core/spectral/blackbody.h"
 #include "sirius/core/spectral/colour_modes.h"
@@ -36,6 +37,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <fstream>
+#include <limits>
 #include <span>
 #include <string>
 #include <vector>
@@ -57,6 +59,7 @@ constexpr std::uint32_t kResultStride = 64;
 constexpr float kKerrSchild = 0.0f;
 constexpr float kEllis = 1.0f;
 constexpr float kWarp = 2.0f;
+constexpr float kMorrisThorne = 3.0f;
 
 // Opcodes (must match parity_probe.slang).
 constexpr std::uint32_t kOpMetric = 0;
@@ -77,6 +80,7 @@ constexpr std::uint32_t kOpCie1931TwoDegreeFit = 14;
 constexpr std::uint32_t kOpKerrZamoTransfer = 15;
 constexpr std::uint32_t kOpKerrDiskTransfer = 16;
 constexpr std::uint32_t kOpGreyLayerAbsorption = 17;
+constexpr std::uint32_t kOpSphericalCaptureEvent = 18;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -561,6 +565,112 @@ TEST(KernelParity, WormholeAndWarpMetricMatchLegacy) {
                               "ginv[" + std::to_string(s) + "][" + std::to_string(k) + "]"));
         }
     }
+}
+
+TEST(KernelParity, IsotropicEllisMetricAndConnectionMatchCoreOnBothSheets) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    const auto sample_at = [](float b0, float x, float y, float z) {
+        Sample sample;
+        sample.metric_id = kMorrisThorne;
+        sample.p1 = b0;
+        sample.p2 = 0.0f;
+        sample.p3 = 0.0f;  // exact Ellis selector
+        sample.c0 = x;
+        sample.c1 = y;
+        sample.c2 = z;
+        return sample;
+    };
+    const std::vector<Sample> samples = {
+        sample_at(0.1f, 0.03f, 0.04f, 0.0f),  // public lower scale, exact throat
+        sample_at(2.0f, 0.3f, 0.4f, 0.0f),    // second sheet, rho=b0/4
+        sample_at(2.0f, 0.6f, 0.8f, 0.0f),    // exact throat, rho=b0/2
+        sample_at(2.0f, 1.2f, 1.6f, 0.0f),    // exterior, rho=b0
+        sample_at(1.0f, -2.0f, 1.0f, 3.0f),
+        sample_at(1000.0f, 300.0f, 400.0f, 0.0f),  // public upper scale, exact throat
+    };
+
+    const auto metric_results = RunProbe(*f.device, f.kernel, kOpMetric, samples);
+    const auto connection_results = RunProbe(*f.device, f.kernel, kOpChristoffel, samples);
+    for (std::size_t sample_index = 0; sample_index < samples.size(); ++sample_index) {
+        const auto& sample = samples[sample_index];
+        sirius::core::MorrisThorneCartesian host(
+            sirius::core::MorrisThorneParams::Ellis(sample.p1));
+        sirius::core::Vec4 position;
+        position(1) = sample.c0;
+        position(2) = sample.c1;
+        position(3) = sample.c2;
+        sirius::core::Metric4d metric;
+        sirius::core::Tensor<sirius::core::Dual<double>, 4, 4, 4> derivative;
+        host.Evaluate(position, metric, derivative);
+        sirius::core::Metric4d inverse;
+        ASSERT_TRUE(host.InverseMetric(position, inverse));
+        const auto connection = sirius::core::TensorOps::Christoffel(metric, derivative);
+        const std::size_t base = sample_index * kResultStride;
+
+        for (int row = 0; row < 4; ++row) {
+            for (int column = 0; column < 4; ++column) {
+                const int component = row * 4 + column;
+                EXPECT_TRUE(Close(metric_results[base + component],
+                                  static_cast<float>(metric(row, column).real), 8.0e-6f, 2.0e-6f,
+                                  "isotropic Ellis metric"));
+                EXPECT_TRUE(Close(metric_results[base + 16 + component],
+                                  static_cast<float>(inverse(row, column).real), 8.0e-6f, 2.0e-6f,
+                                  "isotropic Ellis inverse"));
+                for (int lower = 0; lower < 4; ++lower) {
+                    const int gamma_component = row * 16 + column * 4 + lower;
+                    EXPECT_TRUE(Close(connection_results[base + gamma_component],
+                                      static_cast<float>(connection.gamma(row, column, lower).real),
+                                      2.0e-5f, 3.0e-6f, "isotropic Ellis connection"));
+                }
+            }
+        }
+        EXPECT_LT(metric_results[base + 32], 5.0e-6f);
+    }
+}
+
+TEST(KernelParity, SphericalCaptureEventFindsHiddenAndTangentContacts) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    const auto event_sample = [](float tangent_magnitude) {
+        Sample sample;
+        sample.p1 = 1.0f;                // capture radius
+        sample.p2 = tangent_magnitude;   // end dx/dlambda
+        sample.c0 = 1.1f;                // start x
+        sample.u0 = 1.0f;                // start dt/dlambda
+        sample.u1 = -tangent_magnitude;  // start dx/dlambda
+        sample.h = 1.0f;                 // affine length and end t
+        sample.aux0 = 1.1f;              // end x
+        return sample;
+    };
+    const std::vector<Sample> samples = {
+        event_sample(0.8f),  // enter and exit with both endpoints outside
+        event_sample(0.4f),  // tangent contact at the midpoint
+        event_sample(0.3f),  // entirely outside
+        event_sample(std::numeric_limits<float>::quiet_NaN()),  // malformed segment
+    };
+    const auto result = RunProbe(*f.device, f.kernel, kOpSphericalCaptureEvent, samples);
+
+    const float hidden_fraction = (0.8f - std::sqrt(0.32f)) / 1.6f;
+    EXPECT_FLOAT_EQ(result[0], 1.0f);
+    EXPECT_NEAR(result[1], hidden_fraction, 2.0e-5f);
+    EXPECT_NEAR(result[2], 1.0f, 3.0e-6f);
+    EXPECT_NEAR(result[5], -std::sqrt(0.32f), 3.0e-5f);
+    EXPECT_NEAR(result[8], 1.0f, 3.0e-6f);
+
+    const std::size_t tangent = kResultStride;
+    EXPECT_FLOAT_EQ(result[tangent], 1.0f);
+    EXPECT_NEAR(result[tangent + 1], 0.5f, 2.0e-5f);
+    EXPECT_NEAR(result[tangent + 2], 1.0f, 3.0e-6f);
+    EXPECT_NEAR(result[tangent + 5], 0.0f, 3.0e-5f);
+
+    const std::size_t outside = 2 * kResultStride;
+    EXPECT_FLOAT_EQ(result[outside], 0.0f);
+
+    const std::size_t malformed = 3 * kResultStride;
+    EXPECT_FLOAT_EQ(result[malformed], 0.0f);
 }
 
 TEST(KernelParity, KerrSchildChristoffelMatchesLegacyToOnePartInMillion) {

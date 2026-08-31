@@ -88,8 +88,8 @@ struct KernelScene {
 // Maps a session metric onto the trace kernel, or declines. The gpu-renderable
 // set is exactly the registry's gpu_supported metrics the Cartesian render path
 // carries: Minkowski/Schwarzschild/Kerr (Kerr-Schild family), Alcubierre, and
-// Morris-Thorne through its Cartesian embedding (one sheet, throat capture,
-// mirroring the CPU authority). Charge/lambda metrics (registry
+// Morris-Thorne through its exact isotropic Ellis chart (one output sheet,
+// accepted-segment throat capture, mirroring the CPU authority). Charge/lambda metrics (registry
 // gpu_supported=false) decline loudly.
 [[nodiscard]] Expected<KernelScene> MapMetric(const SessionConfig& config) {
     KernelScene scene;

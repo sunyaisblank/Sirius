@@ -540,6 +540,7 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
         double d_lambda = static_cast<double>(ray.proper_time) - prev_pt;
         const float min_radius_before_step = min_r;
         bool terminal_causal_boundary = false;
+        bool terminal_capture_surface = false;
 
         // A finite causal boundary clips the accepted central-ray segment
         // before any coupled state or segment source advances. This makes the
@@ -570,6 +571,29 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
                 ray.proper_time = static_cast<float>(prev_pt + d_lambda);
                 ray.coordinate_time = static_cast<float>(boundary->position(0));
                 terminal_causal_boundary = true;
+            }
+        }
+
+        // A spherical capture boundary is an accepted-segment event, not an
+        // endpoint classification.  In particular, an Ellis trajectory can
+        // enter and leave the isotropic throat sphere with both Hermite
+        // endpoints outside it.  Clip the observer-nearest contact before the
+        // bundle, polarisation, volume, or disk consumes the segment.  Any
+        // opaque-disk event is then searched only on the physically preceding
+        // subsegment and retains its existing observer-first precedence.
+        if (const auto capture_radius = metric_->SphericalCaptureRadius();
+            capture_radius.has_value()) {
+            const auto capture = FindSphericalCaptureEvent(
+                prev_pos, prev_vel, ray.position, ray.velocity, d_lambda,
+                *capture_radius * static_cast<double>(config_.horizon_factor));
+            if (capture.has_value()) {
+                d_lambda *= capture->fraction;
+                ray.position = capture->position;
+                ray.velocity = capture->tangent;
+                ray.proper_time = static_cast<float>(prev_pt + d_lambda);
+                ray.coordinate_time = static_cast<float>(capture->position(0));
+                terminal_capture_surface = true;
+                terminal_causal_boundary = false;
             }
         }
 
@@ -695,7 +719,8 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
         // accepted observer-to-scene segment has already terminated above; it
         // must not be hidden merely because the step endpoint lies inside the
         // capture surface. This is the same event precedence used by Slang.
-        if (metric_->InsideCaptureSurface(ray.position, config_.horizon_factor - 1.0)) {
+        if (terminal_capture_surface ||
+            metric_->InsideCaptureSurface(ray.position, config_.horizon_factor - 1.0)) {
             result.outcome = TraceResult::Outcome::Horizon;
             result.final_position(0) = ray.position(0);
             result.final_position(1) = ray.position(1);

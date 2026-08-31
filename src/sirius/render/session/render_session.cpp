@@ -613,7 +613,7 @@ base::Expected<void> RenderSession::Initialise() {
     if (core::MetricUsesMass(config_.metric_id)) {
         std::cout << " (r/M=" << camera_config.r / config_.black_hole_mass << ')';
     } else if (config_.metric_id == MetricId::MorrisThorne) {
-        std::cout << " (r/b0=" << camera_config.r / config_.throat_radius << ')';
+        std::cout << " (rho/b0=" << camera_config.r / config_.throat_radius << ')';
     } else if (config_.metric_id == MetricId::Alcubierre) {
         const double scale = core::MetricSceneLengthScale(
             config_.metric_id, config_.black_hole_mass, config_.throat_radius,

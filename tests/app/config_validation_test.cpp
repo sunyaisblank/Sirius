@@ -334,6 +334,8 @@ TEST(ConfigValidation, MetricMassAndObserverCoordinateRadiusAreIdentityAware) {
     metric_specific.metric.throat_radius = 2.0;
     metric_specific.disk_enabled = false;
     EXPECT_TRUE(ConfigLoader::Validate(metric_specific).empty());
+    metric_specific.metric.throat_radius = 0.09;
+    EXPECT_FALSE(ConfigLoader::Validate(metric_specific).empty());
     metric_specific.metric.throat_radius = 20.0;
     metric_specific.observer.distance = 99.0;
     EXPECT_FALSE(ConfigLoader::Validate(metric_specific).empty());

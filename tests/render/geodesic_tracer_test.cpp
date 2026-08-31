@@ -587,7 +587,7 @@ TEST_F(GeodesicTracerTest, TracingPerformance) {
 
 // =============================================================================
 // Morris-Thorne (Ellis) wormhole through the same Cartesian tracer, via the
-// MorrisThorneCartesian embedding. One sheet; the throat is the capture
+// exact MorrisThorneCartesian isotropic chart. One output sheet; the throat is the capture
 // surface, so a central ray terminates as Horizon (the tracer's capture
 // outcome) and offset rays escape with gravitational deflection.
 // =============================================================================
@@ -599,7 +599,7 @@ class MorrisThorneTracerTest : public ::testing::Test {
 
         TracerConfig config;
         config.escape_radius = 200.0f;
-        config.horizon_factor = 1.05f;
+        config.horizon_factor = 1.0f;
         config.max_steps = 20000;
         config.enable_disk = false;  // The thin disk is a black-hole construct.
         config.integrator.abs_tolerance = 1e-7f;

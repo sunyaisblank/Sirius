@@ -400,6 +400,8 @@ set_tests_properties(
     KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation
     KernelParity.NullProjectionPreservesConeBranchAndFailsClosed
     KernelParity.WormholeAndWarpMetricMatchLegacy
+    KernelParity.IsotropicEllisMetricAndConnectionMatchCoreOnBothSheets
+    KernelParity.SphericalCaptureEventFindsHiddenAndTangentContacts
     KernelParity.KerrSchildChristoffelMatchesLegacyToOnePartInMillion
     KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel
     KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco
@@ -599,6 +601,11 @@ set_tests_properties(
     MorrisThorneCartesianTests.DerivativesMatchFiniteDifferencesOfMetric
     MorrisThorneCartesianTests.AnalyticInverseIsExact
     MorrisThorneCartesianTests.ThroatIsTheCaptureSurface
+    MorrisThorneCartesianTests.ThroatAndPositiveRadiusSecondSheetAreFiniteAndUnclamped
+    MorrisThorneCartesianTests.SphericalArealChartDeclinesItsCoordinateSingularities
+    MorrisThorneCartesianTests.AcceptedSegmentFindsHiddenAndTangentThroatContacts
+    MorrisThorneCartesianTests.NonEllisCartesianRequestsFailClosed
+    MorrisThorneCartesianTests.ParameterBoundsMatchConfigAuthority
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 

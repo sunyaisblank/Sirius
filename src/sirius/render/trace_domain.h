@@ -46,7 +46,9 @@ struct TraceDomainRequest {
     SIRIUS_PRE(std::isfinite(request.cosmological_constant) &&
                request.cosmological_constant >= 0.0);
     SIRIUS_PRE(std::isfinite(request.observer_radius) && request.observer_radius > 0.0);
-    SIRIUS_PRE(std::isfinite(request.throat_radius) && request.throat_radius > 0.0);
+    SIRIUS_PRE(std::isfinite(request.throat_radius) &&
+               request.throat_radius >= core::kMinMorrisThorneThroatRadius &&
+               request.throat_radius <= core::kMaxMorrisThorneThroatRadius);
     SIRIUS_PRE(std::isfinite(request.bubble_radius) && request.bubble_radius > 0.0);
     SIRIUS_PRE(std::isfinite(request.bubble_sigma) && request.bubble_sigma > 0.0);
     SIRIUS_PRE(core::MetricUsesMass(request.metric_id) ? request.metric_mass > 0.0

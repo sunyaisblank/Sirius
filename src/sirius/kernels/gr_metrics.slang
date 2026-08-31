@@ -345,111 +345,57 @@ public void GetEllisDrainholeMetric(
 }
 
 // =============================================================================
-// Morris-Thorne wormhole family (RDOP002A.cu getMorrisThorne*).
-// ds^2 = -e^{2 Phi} dt^2 + dr^2/(1 - b(r)/r) + r^2 (dth^2 + sin^2 th dph^2).
-// shapeType 0 = Ellis b(r) = b0^2/r ; 1 = ZeroTidal ; 2 = AbsurdlyBenign.
+// Exact isotropic Cartesian chart for the zero-tidal Ellis member rendered by
+// Sirius, mirroring MorrisThorneCartesian.  With rho=|x|,
+//
+//   r_areal = rho + b0^2/(4 rho),
+//   g_tt = -e^{2 Phi0},
+//   g_ij = A^2 delta_ij,                 A = 1 + b0^2/(4 rho^2).
+//
+// The throat is regular at rho=b0/2.  Positive rho below it is the exact
+// second-sheet continuation needed to keep every RK stage represented; the
+// trace clips the accepted segment at the throat and never exposes that sheet
+// as an output topology.  rho=0 is the other asymptotic infinity and is not a
+// finite chart event.
 // =============================================================================
-public Real WormholeShapeFunction(Real r, float b0, int shapeType) {
-    r = max(r, Real(b0));
-    if (shapeType == 1) return b0;
-    if (shapeType == 2) return b0 * (2.0f - b0 / r);
-    return b0 * b0 / r;  // Ellis (default)
-}
-
-public Real WormholeShapeDerivative(Real r, float b0, int shapeType) {
-    r = max(r, Real(b0));
-    Real r2 = r * r;
-    if (shapeType == 1) return 0.0f;
-    if (shapeType == 2) return b0 * b0 / r2;
-    return -b0 * b0 / r2;  // Ellis (default)
-}
-
-public void GetMorrisThorneMetric(
-    Vec4 pos, float b0, float Phi0, int shapeType,
-    out float g[4][4], out float g_inv[4][4])
+public bool IsMorrisThorneCartesianEventRepresented(
+    Vec4Cart pos, float b0, float Phi0, int shapeType)
 {
-    float r = max(pos.r, b0 * 1.001f);
-    float theta = pos.theta;
-
-    float sin_theta = sin(theta);
-    float sin2 = sin_theta * sin_theta;
-    float r2 = r * r;
-
-    float b = float(WormholeShapeFunction(Real(r), b0, shapeType));
-    float one_minus_b_over_r = 1.0f - b / r;
-    one_minus_b_over_r = max(one_minus_b_over_r, 0.001f);
-
-    float exp2Phi = exp(2.0f * Phi0);
-
-    [unroll] for (int i = 0; i < 4; i++)
-        [unroll] for (int j = 0; j < 4; j++) { g[i][j] = 0.0f; g_inv[i][j] = 0.0f; }
-
-    g[0][0] = -exp2Phi;
-    g[1][1] = 1.0f / one_minus_b_over_r;
-    g[2][2] = r2;
-    g[3][3] = r2 * sin2;
-
-    g_inv[0][0] = -1.0f / exp2Phi;
-    g_inv[1][1] = one_minus_b_over_r;
-    g_inv[2][2] = 1.0f / r2;
-    g_inv[3][3] = 1.0f / max(r2 * sin2, 1e-10f);
+    if (shapeType != 0 || !isfinite(b0) || !(b0 > 0.0f) || !isfinite(Phi0) ||
+        !isfinite(pos.t) || !isfinite(pos.x) || !isfinite(pos.y) || !isfinite(pos.z)) {
+        return false;
+    }
+    Real rho2 = pos.x * pos.x + pos.y * pos.y + pos.z * pos.z;
+    return isfinite(rho2) && rho2 > Real(0.0f);
 }
 
-// =============================================================================
-// Morris-Thorne Cartesian embedding, mirroring the CPU render authority
-// (core/metrics/morris_thorne_family.h MorrisThorneCartesian). With r = |x|,
-// n = x/r the spatial metric is flat plus rank one:
-//   g_tt = -e^{2 Phi0},  g_ij = delta_ij + f n_i n_j,  f = b/(r - b),
-//   g^ij = delta_ij - (f/(1+f)) n_i n_j          (Sherman-Morrison).
-// One sheet, r clamped to b0 * 1.001 exactly as the CPU class clamps; the
-// throat is the capture surface and trace.slang tests it on |x| directly.
-// Rational arithmetic plus sqrt only, so the fp64 rung covers it unchanged.
-// =============================================================================
 public void GetMorrisThorneCartesianMetric(
     Vec4Cart pos, float b0, float Phi0, int shapeType,
     out Real g[4][4], out Real g_inv[4][4])
 {
-    Real x = pos.x;
-    Real y = pos.y;
-    Real z = pos.z;
-    Real r = sqrt(x * x + y * y + z * z);
-    Real r_min = b0 * 1.001f;
-    Real n1, n2, n3;
-    if (r < Real(1e-30f)) {
-        n1 = 0.0f; n2 = 0.0f; n3 = 1.0f;
-        r = r_min;
-    } else {
-        Real inv = 1.0f / r;
-        n1 = x * inv; n2 = y * inv; n3 = z * inv;
-        r = max(r, r_min);
-    }
-
-    Real b = WormholeShapeFunction(r, b0, shapeType);
-    Real r_minus_b = max(r - b, Real(1e-10f));
-    Real f = b / r_minus_b;
-    Real c = f / (1.0f + f);
-    float exp2Phi = exp(2.0f * Phi0);
-
-    Real n[3] = { n1, n2, n3 };
     [unroll] for (int i = 0; i < 4; i++)
         [unroll] for (int j = 0; j < 4; j++) { g[i][j] = 0.0f; g_inv[i][j] = 0.0f; }
+    if (!IsMorrisThorneCartesianEventRepresented(pos, b0, Phi0, shapeType)) return;
+
+    Real rho2 = pos.x * pos.x + pos.y * pos.y + pos.z * pos.z;
+    Real halfB0OverRho = Real(0.5f * b0) / sqrt(rho2);
+    Real q = halfB0OverRho * halfB0OverRho;
+    Real conformalBase = Real(1.0f) + q;
+    Real conformal = conformalBase * conformalBase;
+    Real inverseConformal = Real(1.0f) / conformal;
+    float exp2Phi = exp(2.0f * Phi0);
 
     g[0][0] = -exp2Phi;
     g_inv[0][0] = -1.0f / exp2Phi;
     for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            Real dij = (i == j) ? Real(1.0f) : Real(0.0f);
-            g[i + 1][j + 1] = dij + f * n[i] * n[j];
-            g_inv[i + 1][j + 1] = dij - c * n[i] * n[j];
-        }
+        g[i + 1][i + 1] = conformal;
+        g_inv[i + 1][i + 1] = inverseConformal;
     }
 }
 
-// Christoffels of the embedding, contracted from the analytic derivative
-//   d_k g_ij = f' n_k n_i n_j + (f/r)(d_ki n_j + d_kj n_i - 2 n_k n_i n_j),
-//   f' = (b' r - b)/(r - b)^2,
-// and the closed-form inverse; the time row and column vanish (static,
-// zero-tidal Phi0). Same source formulas as MorrisThorneCartesian::Evaluate.
+// For g_ij=A^2 delta_ij, define w_i=d_i ln A.  The only nonzero connection is
+//   Gamma^l_ij = delta^l_j w_i + delta^l_i w_j - delta_ij w_l,
+//   w_i = -2 q x_i / (A rho^2).
 public void GetMorrisThorneCartesianChristoffel(
     Vec4Cart pos, float b0, float Phi0, int shapeType,
     out Real Gamma[4][4][4])
@@ -458,114 +404,28 @@ public void GetMorrisThorneCartesianChristoffel(
         [unroll] for (int j = 0; j < 4; j++)
             [unroll] for (int k = 0; k < 4; k++)
                 Gamma[i][j][k] = 0.0f;
+    if (!IsMorrisThorneCartesianEventRepresented(pos, b0, Phi0, shapeType)) return;
 
-    Real x = pos.x;
-    Real y = pos.y;
-    Real z = pos.z;
-    Real r = sqrt(x * x + y * y + z * z);
-    Real r_min = b0 * 1.001f;
-    Real n1, n2, n3;
-    if (r < Real(1e-30f)) {
-        n1 = 0.0f; n2 = 0.0f; n3 = 1.0f;
-        r = r_min;
-    } else {
-        Real inv = 1.0f / r;
-        n1 = x * inv; n2 = y * inv; n3 = z * inv;
-        r = max(r, r_min);
+    Real rho2 = pos.x * pos.x + pos.y * pos.y + pos.z * pos.z;
+    Real halfB0OverRho = Real(0.5f * b0) / sqrt(rho2);
+    Real q = halfB0OverRho * halfB0OverRho;
+    Real conformalBase = Real(1.0f) + q;
+    Real coordinates[3] = { pos.x, pos.y, pos.z };
+    Real w[3];
+    for (int axis = 0; axis < 3; ++axis) {
+        w[axis] = Real(-2.0f) * q * coordinates[axis] / (conformalBase * rho2);
     }
 
-    Real b = WormholeShapeFunction(r, b0, shapeType);
-    Real db_dr = WormholeShapeDerivative(r, b0, shapeType);
-    Real r_minus_b = max(r - b, Real(1e-10f));
-    Real f = b / r_minus_b;
-    Real df_dr = (db_dr * r - b) / (r_minus_b * r_minus_b);
-    Real c = f / (1.0f + f);
-    Real f_over_r = f / r;
-
-    Real n[3] = { n1, n2, n3 };
-
-    // dg[k][i][j] = d_k g_ij, spatial block only.
-    Real dg[3][3][3];
-    for (int k = 0; k < 3; k++) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                Real dki = (k == i) ? Real(1.0f) : Real(0.0f);
-                Real dkj = (k == j) ? Real(1.0f) : Real(0.0f);
-                dg[k][i][j] = df_dr * n[k] * n[i] * n[j]
-                            + f_over_r * (dki * n[j] + dkj * n[i]
-                                          - 2.0f * n[k] * n[i] * n[j]);
-            }
-        }
-    }
-
-    // Gamma^l_ij = 1/2 g^lm (d_i g_mj + d_j g_mi - d_m g_ij), spatial indices.
     for (int l = 0; l < 3; l++) {
         for (int i = 0; i < 3; i++) {
-            for (int j = i; j < 3; j++) {
-                Real sum = 0.0f;
-                for (int m = 0; m < 3; m++) {
-                    Real g_inv_lm = ((l == m) ? Real(1.0f) : Real(0.0f)) - c * n[l] * n[m];
-                    sum += g_inv_lm * (dg[i][m][j] + dg[j][m][i] - dg[m][i][j]);
-                }
-                Gamma[l + 1][i + 1][j + 1] = 0.5f * sum;
-                Gamma[l + 1][j + 1][i + 1] = Gamma[l + 1][i + 1][j + 1];
+            for (int j = 0; j < 3; j++) {
+                Real value = ((l == j) ? w[i] : Real(0.0f))
+                           + ((l == i) ? w[j] : Real(0.0f))
+                           - ((i == j) ? w[l] : Real(0.0f));
+                Gamma[l + 1][i + 1][j + 1] = value;
             }
         }
     }
-}
-
-// safe_cot: regularised cotangent, finite at the poles (RDOP002A.cu safe_cot).
-float SafeCot(float theta) {
-    float sin_theta = sin(theta);
-    float cos_theta = cos(theta);
-    const float POLE_THRESHOLD = 0.0001f;
-    if (abs(sin_theta) < POLE_THRESHOLD) {
-        float dist_from_pole = (theta < PI * 0.5f) ? theta : (PI - theta);
-        dist_from_pole = max(dist_from_pole, 1e-6f);
-        float sign = (theta < PI * 0.5f) ? 1.0f : -1.0f;
-        return sign / dist_from_pole;
-    }
-    return cos_theta / sin_theta;
-}
-
-public void GetMorrisThorneChristoffel(
-    Vec4 pos, float b0, float Phi0, int shapeType,
-    out float Gamma[4][4][4])
-{
-    [unroll] for (int i = 0; i < 4; i++)
-        [unroll] for (int j = 0; j < 4; j++)
-            [unroll] for (int k = 0; k < 4; k++)
-                Gamma[i][j][k] = 0.0f;
-
-    float r = max(pos.r, b0 * 1.001f);
-    float theta = pos.theta;
-
-    float sin_theta = sin(theta);
-    float cos_theta = cos(theta);
-    float sin2 = sin_theta * sin_theta;
-    float r2 = r * r;
-
-    float b = float(WormholeShapeFunction(Real(r), b0, shapeType));
-    float db_dr = float(WormholeShapeDerivative(Real(r), b0, shapeType));
-
-    float one_minus_b_over_r = 1.0f - b / r;
-    one_minus_b_over_r = max(one_minus_b_over_r, 0.001f);
-
-    float d_b_over_r = db_dr / r - b / r2;
-
-    Gamma[1][1][1] = -d_b_over_r / (2.0f * one_minus_b_over_r);
-    Gamma[1][2][2] = -(r - b);
-    Gamma[1][3][3] = -(r - b) * sin2;
-    Gamma[2][1][2] = 1.0f / r;
-    Gamma[2][2][1] = 1.0f / r;
-    Gamma[2][3][3] = -sin_theta * cos_theta;
-    Gamma[3][1][3] = 1.0f / r;
-    Gamma[3][3][1] = 1.0f / r;
-
-    float cot_theta = SafeCot(theta);
-    Gamma[3][2][3] = cot_theta;
-    Gamma[3][3][2] = cot_theta;
-    // Phi0 constant -> no time-related Christoffels (matches the .cu).
 }
 
 // =============================================================================
