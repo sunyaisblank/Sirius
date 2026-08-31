@@ -18,6 +18,7 @@
 #include "sirius/core/constants.h"
 #include "sirius/core/coordinates.h"
 #include "sirius/core/disk/disk_model.h"
+#include "sirius/core/kerr_orbits.h"
 #include "sirius/core/spectral/spectral_radiance.h"
 
 #include <algorithm>
@@ -123,20 +124,9 @@ class AccretionDiskD : public IDiskModel {
     // ISCO radius in units of M:
     // r_ISCO = M {3 + Z2 -/+ sqrt[(3 - Z1)(3 + Z1 + 2 Z2)]}, -/+ prograde/retrograde.
     static double ComputeIsco(double a_star) {
-        SIRIUS_PRE(std::isfinite(a_star) && std::abs(a_star) <= 1.0);
-        double a = std::abs(a_star);
-
-        double Z1 = 1 + std::cbrt(1 - a * a) * (std::cbrt(1 + a) + std::cbrt(1 - a));
-        double Z2 = std::sqrt(3 * a * a + Z1 * Z1);
-
-        double r_isco;
-        if (a_star >= 0) {
-            r_isco = 3 + Z2 - std::sqrt((3 - Z1) * (3 + Z1 + 2 * Z2));
-        } else {
-            r_isco = 3 + Z2 + std::sqrt((3 - Z1) * (3 + Z1 + 2 * Z2));
-        }
-
-        return r_isco;  // In units of M.
+        const auto radius = relativity::TryKerrIscoRadius(1.0, a_star);
+        SIRIUS_PRE(radius.has_value());
+        return *radius;  // In units of M.
     }
 
     // Specific energy for a circular orbit (Page & Thorne 1974, Eq. 15.11):
@@ -164,8 +154,9 @@ class AccretionDiskD : public IDiskModel {
     // Angular velocity for a circular orbit (Bardeen 1970):
     // Omega(r) = sqrt(M) / (r^(3/2) + a sqrt(M)).
     static double AngularVelocity(double r, double M, double a) {
-        double sqrtM = std::sqrt(M);
-        return sqrtM / (std::pow(r, 1.5) + a * sqrtM);
+        const auto angular_velocity = relativity::TryKerrCircularOrbitAngularVelocity(M, a, r);
+        SIRIUS_PRE(angular_velocity.has_value());
+        return *angular_velocity;
     }
 
     // dL/dr, the analytic derivative of the specific angular momentum required by

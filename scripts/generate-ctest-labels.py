@@ -40,6 +40,7 @@ SUITE_LABELS = {
     "KottlerHorizonTests": MANDATORY,
     "ChristoffelTests": MANDATORY,
     "KerrTests": MANDATORY,
+    "KerrOrbitAuthority": MANDATORY,
     "KerrSchildTests": MANDATORY,
     "ReissnerNordstromTests": MANDATORY,
     "EllisDrainholeTests": MANDATORY,

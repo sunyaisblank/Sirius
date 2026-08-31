@@ -16,6 +16,7 @@
 
 #include "sirius/base/contracts.h"
 #include "sirius/core/coordinates.h"
+#include "sirius/core/kerr_orbits.h"
 #include "sirius/core/metrics/metric.h"
 #include "sirius/core/metrics/registry.h"
 
@@ -559,27 +560,9 @@ inline double KerrSchildFamily::IscoRadius() const {
                              std::isfinite(a) && std::abs(a) <= M;
     SIRIUS_PRE(represented);
     if (!represented) return std::numeric_limits<double>::quiet_NaN();
-
-    // Schwarzschild (a = 0, Q = 0): r_ISCO = 6M.
-    if (a == 0.0) {
-        return 6.0 * M;
-    }
-
-    // Kerr (Q = 0): Bardeen-Press-Teukolsky closed form, exact.
-    double a_star = std::abs(a / M);
-
-    double Z1 =
-        1 + std::cbrt(1 - a_star * a_star) * (std::cbrt(1 + a_star) + std::cbrt(1 - a_star));
-    double Z2 = std::sqrt(3 * a_star * a_star + Z1 * Z1);
-
-    double r_isco;
-    if (a >= 0) {
-        r_isco = 3 + Z2 - std::sqrt((3 - Z1) * (3 + Z1 + 2 * Z2));
-    } else {
-        r_isco = 3 + Z2 + std::sqrt((3 - Z1) * (3 + Z1 + 2 * Z2));
-    }
-
-    return M * r_isco;
+    const auto radius = relativity::TryKerrIscoRadius(M, a);
+    SIRIUS_ASSERT(radius.has_value());
+    return *radius;
 }
 
 inline double KerrSchildFamily::ExtremalityParameter() const {

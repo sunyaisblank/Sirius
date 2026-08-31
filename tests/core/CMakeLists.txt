@@ -18,6 +18,7 @@ add_executable(sirius_core_tests
     geodesic_stability_test.cpp
     killing_vector_conservation_test.cpp
     christoffel_test.cpp
+    kerr_orbit_authority_test.cpp
     kerr_test.cpp
     metric_derivative_test.cpp
     metric_loader_test.cpp
