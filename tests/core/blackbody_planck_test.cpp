@@ -253,6 +253,24 @@ TEST(SpectralValidationTests, ObserverToSourceTransferPreservesForegroundEmissio
     EXPECT_NEAR(std::exp(-state.optical_depth), 0.25, 2.0e-15);
 }
 
+TEST(SpectralValidationTests, OpticallyThinGreyLayerPreservesFirstOrderEmission) {
+    constexpr double delta_tau = 1.0e-14;
+    const auto absorbed = sirius::core::relativity::GreyLayerAbsorbedFraction(delta_tau);
+    ASSERT_TRUE(absorbed.has_value());
+    EXPECT_GT(*absorbed, 0.0);
+    EXPECT_NEAR(*absorbed / delta_tau, 1.0, 1.0e-14);
+    EXPECT_FALSE(sirius::core::relativity::GreyLayerAbsorbedFraction(-delta_tau).has_value());
+
+    sirius::core::relativity::GreyTransferState state;
+    ASSERT_TRUE(sirius::core::relativity::AccumulateObserverToSourceLayer(state, {1.0, 0.5, 0.25},
+                                                                          delta_tau, 10.0)
+                    .has_value());
+    EXPECT_GT(state.observed_emission[0], 0.0);
+    EXPECT_NEAR(state.observed_emission[0] / delta_tau, 1.0, 1.0e-14);
+    EXPECT_NEAR(state.observed_emission[1] / delta_tau, 0.5, 1.0e-14);
+    EXPECT_NEAR(state.observed_emission[2] / delta_tau, 0.25, 1.0e-14);
+}
+
 TEST(SpectralValidationTests, BlackbodyColourProgressionConsumesIntegratedSpectrum) {
     const Rgb very_cold = BlackbodyToRgb(500.0);
     const Rgb former_cold_boundary = BlackbodyToRgb(1000.0);

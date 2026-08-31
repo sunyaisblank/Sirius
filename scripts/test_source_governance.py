@@ -29,6 +29,14 @@ APP_RENDERING_TESTS = frozenset({
     "ViewCommandOperational.VulkanRefinementPublishesProgressiveFrames",
 })
 
+# These backend suites dispatch the full trace kernel over an image field.
+# They remain in the backend executable for compile topology, but must inherit
+# the Rendering label so a no-render CTest selection cannot execute them.
+FULL_IMAGE_KERNEL_SUITES = frozenset({"KernelBeam", "KernelTrace"})
+TRACE_RENDER_KERNEL_LITERAL = re.compile(
+    r"[\"'][^\"']*trace(?:_fp64|_fp32comp)?\.spv[\"']"
+)
+
 # These public Execute calls deliberately exercise a parse or validation
 # rejection. Any new unguarded command execution in tests/app requires an
 # explicit policy decision instead of silently becoming a render-capable test.
@@ -225,6 +233,7 @@ def collect_source_tests(test_dir, root):
         masked = _mask_cpp_non_code(content)
         display_path = _display_path(path, root)
         test_spans = []
+        path_records = []
 
         unsupported = UNSUPPORTED_PATTERN.search(masked)
         if unsupported:
@@ -277,6 +286,24 @@ def collect_source_tests(test_dir, root):
                 )
             _enforce_execution_boundary(record, display_path)
             records[record.name] = record
+            path_records.append(record)
             test_spans.append((opening, closing + 1))
+        parts = display_path.parts
+        under_render = len(parts) >= 2 and parts[0:2] == ("tests", "render")
+        loads_trace_kernel = (
+            TRACE_RENDER_KERNEL_LITERAL.search(content)
+            and re.search(r"\bLoadSpirv\s*\(", masked)
+        )
+        if loads_trace_kernel and not under_render:
+            unclassified = sorted(
+                record.name
+                for record in path_records
+                if record.suite not in FULL_IMAGE_KERNEL_SUITES
+            )
+            if unclassified:
+                raise ValueError(
+                    f"{display_path} dispatches the trace render kernel from "
+                    f"unclassified suites: {', '.join(unclassified)}"
+                )
         _enforce_no_app_execution_helper(masked, content, display_path, test_spans)
     return records

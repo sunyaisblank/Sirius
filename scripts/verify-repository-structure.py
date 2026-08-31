@@ -142,7 +142,9 @@ BLACKBODY_LAWS_CONSUMERS = (
     SOURCE_ROOT / "core" / "spectral" / "spectral_radiance.h",
 )
 PHYSICAL_CONSTANTS_AUTHORITY = SOURCE_ROOT / "core" / "constants.h"
-PLANCK_EXPM1 = re.compile(r"\bstd::expm1\s*\(")
+# Match the Planck implementation's owned denominator operation, rather than
+# treating every mathematically unrelated use of expm1 as a Planck-law copy.
+PLANCK_EXPM1 = re.compile(r"\bstd::expm1\s*\(\s*exponent\s*\)")
 PLANCK_CONSTANT_IDENTIFIER = re.compile(r"\bk(?:Planck(?:C[12])?|Boltzmann)\b")
 WIEN_CONSTANT_LITERAL = re.compile(
     r"(?<![A-Za-z0-9_.])2\.897771955e-3(?:[fFlL])?(?![A-Za-z0-9_.])",
@@ -178,6 +180,11 @@ KERR_TRANSFER_CPU_CONSUMER = SOURCE_ROOT / "backend" / "cpu" / "geodesic_tracer.
 KERR_TRANSFER_DEVICE_AUTHORITY = SOURCE_ROOT / "kernels" / "gr_disk.slang"
 KERR_TRANSFER_DEVICE_CONSUMER = SOURCE_ROOT / "kernels" / "trace.slang"
 KERR_TRANSFER_PARITY_PROBE = SOURCE_ROOT / "kernels" / "parity_probe.slang"
+VOLUME_TRANSFER_HOST_AUTHORITY = KERR_TRANSFER_AUTHORITY
+VOLUME_TRANSFER_CPU_CONSUMER = KERR_TRANSFER_CPU_CONSUMER
+VOLUME_TRANSFER_DEVICE_AUTHORITY = KERR_TRANSFER_DEVICE_AUTHORITY
+VOLUME_TRANSFER_DEVICE_CONSUMER = KERR_TRANSFER_DEVICE_CONSUMER
+VOLUME_TRANSFER_PARITY_PROBE = KERR_TRANSFER_PARITY_PROBE
 FULL_QUALIFICATION_JOBS = (
     "linux-gate",
     "linux-sanitizers",
@@ -1179,7 +1186,7 @@ def blackbody_laws_authority_errors(documents: dict[Path, str]) -> list[str]:
 def verify_blackbody_laws_authority_policy() -> None:
     valid = {
         BLACKBODY_LAWS_AUTHORITY: (
-            "TryPlanckSpectralRadiancePerMetre std::expm1( kPlanckC1 kPlanckC2 "
+            "TryPlanckSpectralRadiancePerMetre std::expm1(exponent) kPlanckC1 kPlanckC2 "
             "TryWienPeakWavelength kWienB TryStefanBoltzmannExitance kStefanBoltzmann"
         ),
         **{
@@ -1304,6 +1311,96 @@ def verify_kerr_zamo_transfer_authority_policy() -> None:
         raise RuntimeError("Kerr ZAMO policy accepted a Kerr-Schild slicing-normal substitute")
 
 
+def volumetric_transfer_authority_errors(documents: dict[Path, str]) -> list[str]:
+    errors: list[str] = []
+    required = {
+        VOLUME_TRANSFER_HOST_AUTHORITY: (
+            "GreyLayerAbsorbedFraction",
+            "std::expm1",
+            "AccumulateObserverToSourceLayer",
+        ),
+        VOLUME_TRANSFER_CPU_CONSUMER: (
+            "AccumulateVolumetricEmission",
+            "transfer.optical_depth > 0.0",
+        ),
+        VOLUME_TRANSFER_DEVICE_AUTHORITY: ("GreyLayerAbsorbedFraction",),
+        VOLUME_TRANSFER_DEVICE_CONSUMER: (
+            "AccumulateVolumeSegment",
+            "GreyLayerAbsorbedFraction",
+            "volumeOpticalDepth > 0.0f",
+        ),
+        VOLUME_TRANSFER_PARITY_PROBE: (
+            "OP_GREY_LAYER_ABSORPTION",
+            "GreyLayerAbsorbedFraction",
+        ),
+    }
+    for path, markers in required.items():
+        document = documents.get(path)
+        if document is None:
+            errors.append(f"volumetric transfer participant is missing: {relative(path)}")
+            continue
+        code = CPP_NON_CODE.sub(" ", document)
+        for marker in markers:
+            if marker not in code:
+                errors.append(f"{relative(path)} omits volumetric transfer marker {marker}")
+
+    cpu = CPP_NON_CODE.sub(" ", documents.get(VOLUME_TRANSFER_CPU_CONSUMER, ""))
+    first_accumulation = cpu.find("AccumulateVolumetricEmission(")
+    if first_accumulation < 0:
+        errors.append("the CPU path has no accepted-segment volume accumulator call")
+    elif "IsInVolumetricDisk" in cpu[:first_accumulation]:
+        errors.append(
+            "the CPU volume path prefilters accepted segments by endpoint membership"
+        )
+    if re.search(r"optical_depth\s*>\s*0\.01", cpu):
+        errors.append("the CPU volume path discards represented optically thin transfer")
+
+    device = CPP_NON_CODE.sub(" ", documents.get(VOLUME_TRANSFER_DEVICE_CONSUMER, ""))
+    if re.search(r"volumeOpticalDepth\s*>\s*0\.01", device):
+        errors.append("the Slang volume path discards represented optically thin transfer")
+    return errors
+
+
+def verify_volumetric_transfer_authority_policy() -> None:
+    valid = {
+        VOLUME_TRANSFER_HOST_AUTHORITY: (
+            "GreyLayerAbsorbedFraction std::expm1 AccumulateObserverToSourceLayer"
+        ),
+        VOLUME_TRANSFER_CPU_CONSUMER: (
+            "AccumulateVolumetricEmission( transfer.optical_depth > 0.0"
+        ),
+        VOLUME_TRANSFER_DEVICE_AUTHORITY: "GreyLayerAbsorbedFraction",
+        VOLUME_TRANSFER_DEVICE_CONSUMER: (
+            "AccumulateVolumeSegment GreyLayerAbsorbedFraction "
+            "volumeOpticalDepth > 0.0f"
+        ),
+        VOLUME_TRANSFER_PARITY_PROBE: (
+            "OP_GREY_LAYER_ABSORPTION GreyLayerAbsorbedFraction"
+        ),
+    }
+    if volumetric_transfer_authority_errors(valid):
+        raise RuntimeError("volumetric-transfer policy rejected the complete transfer seam")
+
+    endpoint_prefilter = dict(valid)
+    endpoint_prefilter[VOLUME_TRANSFER_CPU_CONSUMER] = (
+        "if (IsInVolumetricDisk(previous_r, previous_z)) "
+        "AccumulateVolumetricEmission( transfer.optical_depth > 0.0"
+    )
+    if not volumetric_transfer_authority_errors(endpoint_prefilter):
+        raise RuntimeError("volumetric-transfer policy accepted an endpoint prefilter")
+
+    thin_cutoff = dict(valid)
+    thin_cutoff[VOLUME_TRANSFER_CPU_CONSUMER] = (
+        "AccumulateVolumetricEmission( transfer.optical_depth > 0.01"
+    )
+    thin_cutoff[VOLUME_TRANSFER_DEVICE_CONSUMER] = (
+        "AccumulateVolumeSegment GreyLayerAbsorbedFraction "
+        "volumeOpticalDepth > 0.01f"
+    )
+    if len(volumetric_transfer_authority_errors(thin_cutoff)) < 2:
+        raise RuntimeError("volumetric-transfer policy accepted an optically thin cutoff")
+
+
 def attestation_preflight_errors(
     preflight: str,
     reuse: str,
@@ -1411,6 +1508,7 @@ def verify() -> list[str]:
     verify_aces_contract_policy()
     verify_blackbody_laws_authority_policy()
     verify_kerr_zamo_transfer_authority_policy()
+    verify_volumetric_transfer_authority_policy()
     try:
         attribute_source = GIT_ATTRIBUTES.read_text(encoding="utf-8")
         attributes = subprocess.run(
@@ -1450,6 +1548,7 @@ def verify() -> list[str]:
     errors.extend(aces_contract_errors(governed_sources))
     errors.extend(blackbody_laws_authority_errors(governed_sources))
     errors.extend(kerr_zamo_transfer_authority_errors(governed_sources))
+    errors.extend(volumetric_transfer_authority_errors(governed_sources))
     shader_root = SOURCE_ROOT / "app" / "viewer" / "shaders"
     actual_viewer_shaders = {
         path for path in shader_root.iterdir() if path.suffix in {".frag", ".vert"}

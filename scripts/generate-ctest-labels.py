@@ -17,7 +17,11 @@ import sys
 import tempfile
 from pathlib import Path
 
-from test_source_governance import APP_RENDERING_TESTS, collect_source_tests
+from test_source_governance import (
+    APP_RENDERING_TESTS,
+    FULL_IMAGE_KERNEL_SUITES,
+    collect_source_tests,
+)
 
 ROOT = Path(__file__).resolve().parent.parent
 NEW_TEST_DIR = ROOT / "tests"
@@ -174,7 +178,8 @@ def collect_new_tree_tests(test_dir=NEW_TEST_DIR):
             relative = record.path.relative_to(ROOT)
         except ValueError:
             relative = record.path
-        if len(relative.parts) >= 2 and relative.parts[0:2] == ("tests", "render"):
+        if ((len(relative.parts) >= 2 and relative.parts[0:2] == ("tests", "render"))
+                or record.suite in FULL_IMAGE_KERNEL_SUITES):
             rendering.add(record.name)
     return tests, rendering
 
@@ -274,6 +279,35 @@ def main():
                       file=sys.stderr)
                 return 1
             render_fixture.unlink()
+
+            backend_fixture = boundary_root / "tests" / "backend" / "kernel_trace_test.cpp"
+            backend_fixture.parent.mkdir(parents=True)
+            backend_fixture.write_text(
+                "TEST(KernelTrace, FullImage) { EXPECT_TRUE(ok); }\n",
+                encoding="utf-8",
+            )
+            _, backend_rendering = collect_new_tree_tests(boundary_root / "tests")
+            if "KernelTrace.FullImage" not in backend_rendering:
+                print("error: full-image backend suite escaped the Rendering label",
+                      file=sys.stderr)
+                return 1
+            backend_fixture.write_text(
+                "TEST(UnclassifiedKernelRender, FullImage) {\n"
+                "  LoadSpirv(\"trace.spv\"); EXPECT_TRUE(ok);\n}\n",
+                encoding="utf-8",
+            )
+            try:
+                collect_source_tests(boundary_root / "tests", boundary_root)
+            except ValueError as error:
+                if "unclassified suites" not in str(error):
+                    print(f"error: unexpected kernel-render rejection: {error}",
+                          file=sys.stderr)
+                    return 1
+            else:
+                print("error: unclassified trace-kernel render escaped governance",
+                      file=sys.stderr)
+                return 1
+            backend_fixture.unlink()
 
             app_fixture.write_text(
                 "TEST(RenderCommandParse, NewlyAddedExecution) {\n"

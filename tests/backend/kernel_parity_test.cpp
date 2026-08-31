@@ -76,6 +76,7 @@ constexpr std::uint32_t kOpXyzD65ToLinearSrgb = 13;
 constexpr std::uint32_t kOpCie1931TwoDegreeFit = 14;
 constexpr std::uint32_t kOpKerrZamoTransfer = 15;
 constexpr std::uint32_t kOpKerrDiskTransfer = 16;
+constexpr std::uint32_t kOpGreyLayerAbsorption = 17;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -715,6 +716,31 @@ TEST(KernelParity, TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure) {
     EXPECT_GT(results[0], 0.0f);
     EXPECT_GT(results[kResultStride], 0.0f);
     EXPECT_FLOAT_EQ(results[2 * kResultStride], 0.0f);
+}
+
+TEST(KernelParity, OpticallyThinGreyLayerAbsorptionMatchesHostAuthority) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    Sample zero, very_thin, thin, transition, thick;
+    zero.c0 = 0.0f;
+    very_thin.c0 = 1.0e-8f;
+    thin.c0 = 1.0e-5f;
+    transition.c0 = 1.0e-3f;
+    thick.c0 = static_cast<float>(std::log(2.0));
+    const std::vector<Sample> samples = {zero, very_thin, thin, transition, thick};
+    const auto results = RunProbe(*f.device, f.kernel, kOpGreyLayerAbsorption, samples);
+
+    for (std::size_t index = 0; index < samples.size(); ++index) {
+        const auto expected = sirius::core::relativity::GreyLayerAbsorbedFraction(
+            static_cast<double>(samples[index].c0));
+        ASSERT_TRUE(expected.has_value());
+        EXPECT_TRUE(Close(results[index * kResultStride], static_cast<float>(*expected), 3.0e-6f,
+                          2.0e-12f, "grey layer absorbed fraction"));
+    }
+    EXPECT_GT(results[kResultStride], 0.0f)
+        << "the fp32 transfer mirror discarded a represented optically thin layer";
+    EXPECT_NEAR(results[4 * kResultStride], 0.5f, 1.0e-6f);
 }
 
 TEST(KernelParity, ArbitraryLatitudeKerrZamoMatchesHostAuthority) {

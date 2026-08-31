@@ -301,6 +301,42 @@ TEST(GeodesicTracerVolumetric, TransferAccumulatesAcrossEveryTraversedSegment) {
         << "the final transfer sample overshot the configured optical-depth ceiling";
 }
 
+TEST(GeodesicTracerVolumetric, OpticallyThinTransferIsNotDiscardedAtCompositionBoundary) {
+    KerrSchildParams params;
+    params.M = 0.0;
+    KerrSchildFamily flat(params);
+
+    TracerConfig config;
+    config.escape_radius = 80.0f;
+    config.max_steps = 2000;
+    config.enable_disk = true;
+    config.enable_volumetric = true;
+    config.disk_inner = 6.0f;
+    config.disk_outer = 20.0f;
+    config.disk_temperature_inner = 1.0f;
+    config.disk_temperature_model = DiskTemperatureModel::ShakuraSunyaev;
+    config.volumetric_scale_height_ratio = 0.1f;
+    config.volumetric_tau_midplane = 1.0e-5f;
+    config.volumetric_samples = 4;
+    config.integrator.initial_step = 0.5f;
+    config.integrator.max_step = 1.0f;
+    GeodesicTracer tracer(&flat, config);
+
+    CameraConfig camera_config;
+    camera_config.r = 50.0;
+    camera_config.theta = std::numbers::pi / 2.0;
+    camera_config.width = 3;
+    camera_config.height = 3;
+    PinholeCamera camera(camera_config);
+
+    const TraceResult result = tracer.Trace(camera.GenerateRay(1, 1, 0.5f, 0.5f));
+    ASSERT_GT(result.optical_depth, 0.0f);
+    ASSERT_LT(result.optical_depth, 0.01f)
+        << "the fixture must remain below the former display-oriented cutoff";
+    EXPECT_TRUE(result.volumetric_hit);
+    EXPECT_GT(result.volumetric_emission[0], 0.0f);
+}
+
 TEST(GeodesicTracerVolumetric, RedshiftAndDopplerReachTheLiveVolumeSource) {
     KerrSchildParams params;
     params.M = 1.0;
