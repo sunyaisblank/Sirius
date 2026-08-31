@@ -1,5 +1,6 @@
 // Independent spectral-physics oracles for the production blackbody authority.
 
+#include "sirius/core/constants.h"
 #include "sirius/core/relativistic_transfer.h"
 #include "sirius/core/spectral/blackbody.h"
 
@@ -8,6 +9,7 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <limits>
 #include <numbers>
 
 namespace sirius::test {
@@ -15,11 +17,11 @@ namespace {
 
 using sirius::core::spectral::BlackbodyToRgb;
 using sirius::core::spectral::DopplerFactor;
-using sirius::core::spectral::PlanckRadiance;
 using sirius::core::spectral::Rgb;
-using sirius::core::spectral::StefanBoltzmannRadiance;
 using sirius::core::spectral::TotalRedshift;
-using sirius::core::spectral::WienPeakWavelength;
+using sirius::core::spectral::TryPlanckSpectralRadiancePerMetre;
+using sirius::core::spectral::TryStefanBoltzmannExitance;
+using sirius::core::spectral::TryWienPeakWavelength;
 
 constexpr double kReferencePlanck = 6.62607015e-34;
 constexpr double kReferenceLightSpeed = 299792458.0;
@@ -60,7 +62,8 @@ double NumericalPeakWavelength(double temperature) {
     double left = upper - (upper - lower) / kPhi;
     double right = lower + (upper - lower) / kPhi;
     for (int iteration = 0; iteration < 120; ++iteration) {
-        if (PlanckRadiance(left, temperature) < PlanckRadiance(right, temperature)) {
+        if (IndependentPlanckRadiance(left, temperature) <
+            IndependentPlanckRadiance(right, temperature)) {
             lower = left;
             left = right;
             right = lower + (upper - lower) / kPhi;
@@ -75,32 +78,66 @@ double NumericalPeakWavelength(double temperature) {
 
 }  // namespace
 
-TEST(SpectralValidationTests, PlanckRadianceMatchesIndependentCodataEquation) {
+TEST(SpectralValidationTests, PlanckSpectralRadianceMatchesIndependentCodataEquation) {
     for (const double temperature : {1200.0, 3000.0, 5778.0, 10000.0, 1.0e7}) {
         for (const double wavelength : {100.0e-9, 380.0e-9, 550.0e-9, 780.0e-9, 10.0e-6}) {
             SCOPED_TRACE(::testing::Message() << "T=" << temperature << " lambda=" << wavelength);
             const double expected = IndependentPlanckRadiance(wavelength, temperature);
-            EXPECT_LT(RelativeError(PlanckRadiance(wavelength, temperature), expected), 2.0e-14);
+            const auto actual = TryPlanckSpectralRadiancePerMetre(wavelength, temperature);
+            ASSERT_TRUE(actual.has_value());
+            EXPECT_LT(RelativeError(*actual, expected), 2.0e-14);
         }
     }
 }
 
-TEST(SpectralValidationTests, WienAuthorityMatchesNumericalPlanckMaximum) {
+TEST(SpectralValidationTests, WienPeakMatchesIndependentNumericalPlanckMaximum) {
     for (const double temperature : {1200.0, 3000.0, 5778.0, 10000.0}) {
         SCOPED_TRACE(temperature);
-        const double analytic = WienPeakWavelength(temperature);
+        const auto analytic = TryWienPeakWavelength(temperature);
+        ASSERT_TRUE(analytic.has_value());
         const double numerical = NumericalPeakWavelength(temperature);
-        EXPECT_LT(RelativeError(analytic, numerical), 2.0e-8);
+        EXPECT_LT(RelativeError(*analytic, numerical), 2.0e-8);
     }
 }
 
-TEST(SpectralValidationTests, StefanBoltzmannAuthorityMatchesIntegratedPlanckSpectrum) {
+TEST(SpectralValidationTests, StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral) {
     for (const double temperature : {1200.0, 3000.0, 5778.0, 10000.0}) {
         SCOPED_TRACE(temperature);
-        const double analytic = StefanBoltzmannRadiance(temperature);
+        const auto analytic = TryStefanBoltzmannExitance(temperature);
+        ASSERT_TRUE(analytic.has_value());
         const double quadrature = IntegratedExitance(temperature);
-        EXPECT_LT(RelativeError(analytic, quadrature), 2.0e-7);
+        EXPECT_LT(RelativeError(*analytic, quadrature), 2.0e-7);
     }
+}
+
+TEST(SpectralValidationTests, BlackbodyLawsRejectUnrepresentedDomains) {
+    const double infinity = std::numeric_limits<double>::infinity();
+    const double nan = std::numeric_limits<double>::quiet_NaN();
+    for (const double invalid : {0.0, -1.0, infinity, nan}) {
+        SCOPED_TRACE(invalid);
+        EXPECT_FALSE(TryPlanckSpectralRadiancePerMetre(invalid, 5778.0).has_value());
+        EXPECT_FALSE(TryPlanckSpectralRadiancePerMetre(550.0e-9, invalid).has_value());
+        EXPECT_FALSE(TryWienPeakWavelength(invalid).has_value());
+        EXPECT_FALSE(TryStefanBoltzmannExitance(invalid).has_value());
+    }
+
+    const auto deep_wien_tail = TryPlanckSpectralRadiancePerMetre(1.0e-20, 1.0);
+    ASSERT_TRUE(deep_wien_tail.has_value());
+    EXPECT_DOUBLE_EQ(*deep_wien_tail, 0.0);
+
+    // The defining expression has an infinity-times-zero intermediate here,
+    // but its Rayleigh-Jeans limit is finite and represented.
+    const auto extreme_rayleigh_jeans = TryPlanckSpectralRadiancePerMetre(1.0e100, 1.0e300);
+    ASSERT_TRUE(extreme_rayleigh_jeans.has_value());
+    const double rayleigh_jeans = sirius::core::constants::physical::kPlanckC1 /
+                                  sirius::core::constants::physical::kPlanckC2 * 1.0e-100;
+    EXPECT_LT(RelativeError(*extreme_rayleigh_jeans, rayleigh_jeans), 2.0e-13);
+
+    // This positive finite input has a mathematical radiance above DBL_MAX;
+    // zero would confuse overflow with a physically underflowed Wien tail.
+    const double overflow_temperature = sirius::core::constants::physical::kPlanckC2 / 1.0e-297;
+    EXPECT_FALSE(TryPlanckSpectralRadiancePerMetre(1.0e-300, overflow_temperature).has_value());
+    EXPECT_FALSE(TryStefanBoltzmannExitance(std::numeric_limits<double>::max()).has_value());
 }
 
 TEST(SpectralValidationTests, DopplerFactorMatchesIndependentLorentzFormula) {

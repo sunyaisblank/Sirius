@@ -42,43 +42,49 @@ TEST(SpectralUtilsTests, PlanckRadiancePositive) {
     double lambda = 550e-9;  // Green light
     double T = 5778;         // Sun's surface temperature
 
-    double radiance = PlanckRadiance(lambda, T);
+    const auto radiance = TryPlanckSpectralRadiancePerMetre(lambda, T);
 
-    EXPECT_GT(radiance, 0) << "Blackbody radiance should be positive";
+    ASSERT_TRUE(radiance.has_value());
+    EXPECT_GT(*radiance, 0) << "Blackbody radiance should be positive";
 }
 
 // Test: Planck radiance increases with temperature (at fixed wavelength)
 TEST(SpectralUtilsTests, PlanckRadianceIncreasesWithTemp) {
     double lambda = 500e-9;
 
-    double rad_3000K = PlanckRadiance(lambda, 3000);
-    double rad_6000K = PlanckRadiance(lambda, 6000);
+    const auto rad_3000K = TryPlanckSpectralRadiancePerMetre(lambda, 3000);
+    const auto rad_6000K = TryPlanckSpectralRadiancePerMetre(lambda, 6000);
 
-    EXPECT_GT(rad_6000K, rad_3000K) << "Higher temperature should give higher radiance";
+    ASSERT_TRUE(rad_3000K.has_value());
+    ASSERT_TRUE(rad_6000K.has_value());
+    EXPECT_GT(*rad_6000K, *rad_3000K) << "Higher temperature should give higher radiance";
 }
 
-// Test: Planck radiance returns 0 for invalid inputs
+// Test: Planck radiance declines invalid inputs
 TEST(SpectralUtilsTests, PlanckRadianceHandlesInvalid) {
-    EXPECT_EQ(PlanckRadiance(0, 5000), 0);
-    EXPECT_EQ(PlanckRadiance(-1e-9, 5000), 0);
-    EXPECT_EQ(PlanckRadiance(500e-9, 0), 0);
-    EXPECT_EQ(PlanckRadiance(500e-9, -100), 0);
+    EXPECT_FALSE(TryPlanckSpectralRadiancePerMetre(0, 5000).has_value());
+    EXPECT_FALSE(TryPlanckSpectralRadiancePerMetre(-1e-9, 5000).has_value());
+    EXPECT_FALSE(TryPlanckSpectralRadiancePerMetre(500e-9, 0).has_value());
+    EXPECT_FALSE(TryPlanckSpectralRadiancePerMetre(500e-9, -100).has_value());
 }
 
 // Test: Wien's law gives reasonable peak wavelengths
 TEST(SpectralUtilsTests, WienPeakWavelengthReasonable) {
     // Sun (~5778K) peaks around 500nm
-    double sun_peak = WienPeakWavelength(5778);
-    EXPECT_GT(sun_peak, 400e-9);
-    EXPECT_LT(sun_peak, 600e-9);
+    const auto sun_peak = TryWienPeakWavelength(5778);
+    ASSERT_TRUE(sun_peak.has_value());
+    EXPECT_GT(*sun_peak, 400e-9);
+    EXPECT_LT(*sun_peak, 600e-9);
 
     // Hot disk (~10000K) peaks in UV
-    double hot_peak = WienPeakWavelength(10000);
-    EXPECT_LT(hot_peak, 400e-9);
+    const auto hot_peak = TryWienPeakWavelength(10000);
+    ASSERT_TRUE(hot_peak.has_value());
+    EXPECT_LT(*hot_peak, 400e-9);
 
     // Cool disk (~3000K) peaks in IR
-    double cool_peak = WienPeakWavelength(3000);
-    EXPECT_GT(cool_peak, 700e-9);
+    const auto cool_peak = TryWienPeakWavelength(3000);
+    ASSERT_TRUE(cool_peak.has_value());
+    EXPECT_GT(*cool_peak, 700e-9);
 }
 
 // =============================================================================
