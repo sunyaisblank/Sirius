@@ -38,6 +38,7 @@ static const uint OP_VOLUME_OPACITY = 9;
 static const uint OP_NULL_PROJECTION = 10;
 static const uint OP_CELESTIAL_TANGENT_BASIS = 11;
 static const uint OP_JACOBI_RADIAL_CONGRUENCE = 12;
+static const uint OP_XYZ_D65_TO_LINEAR_SRGB = 13;
 
 // Future-directed null root used by the render kernel, repeated here only for
 // the diagnostic launch boundary. The integration below calls the production
@@ -227,6 +228,11 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     } else if (opcode == OP_BLACKBODY) {
         // c0 = temperature (K).
         float3 rgb = BlackbodyColor(c0);
+        results[rb + 0] = rgb.x;
+        results[rb + 1] = rgb.y;
+        results[rb + 2] = rgb.z;
+    } else if (opcode == OP_XYZ_D65_TO_LINEAR_SRGB) {
+        float3 rgb = XyzD65ToLinearSrgb(float3(c0, c1, c2));
         results[rb + 0] = rgb.x;
         results[rb + 1] = rgb.y;
         results[rb + 2] = rgb.z;

@@ -22,6 +22,7 @@
 #include "sirius/core/disk/volumetric_disk.h"
 #include "sirius/core/spectral/blackbody.h"
 #include "sirius/core/spectral/colour_modes.h"
+#include "sirius/core/xyz_srgb.h"
 #include "sirius/oracle/kerr_boyer_lindquist.h"
 
 #include <gtest/gtest.h>
@@ -68,6 +69,7 @@ constexpr std::uint32_t kOpVolumeOpacity = 9;
 constexpr std::uint32_t kOpNullProjection = 10;
 constexpr std::uint32_t kOpCelestialTangentBasis = 11;
 constexpr std::uint32_t kOpJacobiRadialCongruence = 12;
+constexpr std::uint32_t kOpXyzD65ToLinearSrgb = 13;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -730,6 +732,39 @@ TEST(KernelParity, BlackbodyMatchesIntegratedCoreSpectrum) {
         for (int k = 0; k < 3; ++k) {
             EXPECT_TRUE(Close(r[base + k], ref[k], 2e-3f, 2e-4f,
                               "bb[" + std::to_string(s) + "][" + std::to_string(k) + "]"));
+        }
+    }
+}
+
+TEST(KernelParity, XyzD65ToLinearSrgbMatchesHostAuthority) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    Sample d65;
+    d65.c0 = 0.9504559f;
+    d65.c1 = 1.0f;
+    d65.c2 = 1.0890578f;
+    Sample x_basis;
+    x_basis.c0 = 1.0f;
+    Sample y_basis;
+    y_basis.c1 = 1.0f;
+    Sample z_basis;
+    z_basis.c2 = 1.0f;
+    Sample outside_gamut;
+    outside_gamut.c0 = 0.25f;
+    outside_gamut.c1 = 0.4f;
+    outside_gamut.c2 = 0.1f;
+
+    const std::vector<Sample> samples = {d65, x_basis, y_basis, z_basis, outside_gamut};
+    const auto results = RunProbe(*f.device, f.kernel, kOpXyzD65ToLinearSrgb, samples);
+    for (std::size_t index = 0; index < samples.size(); ++index) {
+        const auto& sample_value = samples[index];
+        const auto expected = sirius::core::colour::XyzD65ToLinearSrgb(
+            sample_value.c0, sample_value.c1, sample_value.c2);
+        const std::array reference = {expected.r, expected.g, expected.b};
+        for (std::size_t channel = 0; channel < reference.size(); ++channel) {
+            EXPECT_TRUE(Close(results[index * kResultStride + channel], reference[channel], 3.0e-6f,
+                              2.0e-7f, "XYZ D65 to linear sRGB"));
         }
     }
 }

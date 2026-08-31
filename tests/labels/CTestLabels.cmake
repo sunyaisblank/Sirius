@@ -498,6 +498,7 @@ set_tests_properties(
     KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel
     KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure
     KernelParity.BlackbodyMatchesIntegratedCoreSpectrum
+    KernelParity.XyzD65ToLinearSrgbMatchesHostAuthority
     KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor
     KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter
     KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability
@@ -1230,6 +1231,13 @@ set_tests_properties(
     WalkerPenroseLivePath.ConservesConstantAndOrthonormality
     WalkerPenroseLivePath.AgreesWithOracleAcrossCharts
     WalkerPenroseLivePath.TransportedVectorRotatesStokesByEvpa
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    XyzSrgbAuthority.MatchesIndependentPrimaryWhiteDerivation
+    XyzSrgbAuthority.PreservesExtendedGamutAndPropagatesNonfiniteInputs
+    XyzSrgbAuthority.HostSpectralFacadesDelegateToTheExactTransform
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 

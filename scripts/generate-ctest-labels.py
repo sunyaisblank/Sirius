@@ -101,6 +101,7 @@ SUITE_LABELS = {
     "JetDopplerTests": CORRECTNESS,
     "SpectralRadianceTest": CORRECTNESS,
     "SrgbTransferAuthority": CORRECTNESS,
+    "XyzSrgbAuthority": CORRECTNESS,
     "SpectralValidationTests": CORRECTNESS,
     "SpectralUtilsTests": CORRECTNESS,
     "PolarisedEmissionTests": CORRECTNESS,
