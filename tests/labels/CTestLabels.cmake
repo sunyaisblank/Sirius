@@ -292,6 +292,7 @@ set_tests_properties(
 
 set_tests_properties(
     CpuTraceBoundary.EveryAdvertisedCpuMetricConstructsAndTracesOneRay
+    CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge
     CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle
     CpuTraceBoundary.JacobiBundleTerminatesAtTheSameCausalEvent
     CpuTraceBoundary.OneSheetEllisNamesTheRegularThroatBoundary

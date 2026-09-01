@@ -356,6 +356,9 @@ class GeodesicTracer {
         SIRIUS_PRE(config.wormhole_topology != sirius::core::WormholeTopology::TwoSheet ||
                    metric_->IsotropicEllisThroatRadius().has_value());
         config_ = config;
+        // The Page-Thorne authority owns the configured radial support and
+        // zero-torque edge, so no cached profile may survive a new request.
+        page_thorne_disk_.reset();
     }
     const TracerConfig& GetConfig() const { return config_; }
     void SetMetric(sirius::core::IMetric* metric) {
@@ -514,6 +517,14 @@ inline void GeodesicTracer::CacheMetricParameters() {
     const auto& params = metric_->GetParameters();
     cached_m_ = params.count("mass") ? params.at("mass").value : 1.0;
     cached_a_ = params.count("spin") ? params.at("spin").value : 0.0;
+    if (!config_.enable_disk ||
+        config_.disk_temperature_model != DiskTemperatureModel::NovikovThorne || cached_m_ <= 0.0) {
+        page_thorne_disk_.reset();
+        page_thorne_reference_temperature_ = 0.0;
+        page_thorne_cached_m_ = cached_m_;
+        page_thorne_cached_a_ = cached_a_;
+        return;
+    }
     if (page_thorne_disk_ == nullptr || cached_m_ != page_thorne_cached_m_ ||
         cached_a_ != page_thorne_cached_a_) {
         sirius::core::AccretionDiskD::Config disk_config;
@@ -523,12 +534,13 @@ inline void GeodesicTracer::CacheMetricParameters() {
         // geometric mass scale from masquerading as a solar-mass input.
         disk_config.M = 1.0;
         disk_config.a_star = cached_a_;
+        disk_config.r_inner = static_cast<double>(config_.disk_inner) / cached_m_;
         disk_config.r_outer =
             std::max(500.0, static_cast<double>(config_.disk_outer) / std::max(cached_m_, 0.1));
         page_thorne_disk_ = std::make_unique<sirius::core::AccretionDiskD>(disk_config);
         const double reference_radius =
             sirius::core::constants::disk::kTemperatureReferenceRadiusRatio *
-            page_thorne_disk_->IscoRadius();
+            page_thorne_disk_->InnerRadius();
         page_thorne_reference_temperature_ = page_thorne_disk_->Temperature(reference_radius);
         page_thorne_cached_m_ = cached_m_;
         page_thorne_cached_a_ = cached_a_;
@@ -543,7 +555,8 @@ inline float GeodesicTracer::ComputeDiskTemperature(float r) {
             sirius::core::ShakuraSunyaevTemperature(temperature_scale, r, inner_radius));
     }
 
-    // Full Page-Thorne flux authority, normalised at 1.5 r_ISCO so
+    // Full Page-Thorne flux authority, normalised at 1.5 times the declared
+    // zero-torque inner edge so
     // disk_temperature_inner remains the tracer's dimensionless profile scale
     // rather than silently becoming an accretion-rate input.
     if (page_thorne_disk_ == nullptr || page_thorne_reference_temperature_ <= 0.0 ||

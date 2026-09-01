@@ -212,16 +212,17 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                 [unroll] for (int k = 0; k < 4; k++)
                     results[rb + uint(m * 16 + n * 4 + k)] = float(Gamma[m][n][k]);
     } else if (opcode == OP_DISK_TEMP) {
-        // p1=M, p2=a_star; c0=r; aux0=r_isco, aux1=innerTemperature.
+        // p1=M, p2=a_star; c0=r; aux0=declared inner edge,
+        // aux1=innerTemperature.
         float r = c0;
-        float r_isco = samples[sb + 13];
+        float innerRadius = samples[sb + 13];
         float innerT = samples[sb + 14];
-        float fluxShape = FullPageThorneFluxShape(r / p1, r_isco / p1, p2);
-        float T = FullPageThorneTemperature(innerT, r, r_isco, p1, p2);
+        float fluxShape = FullPageThorneFluxShape(r / p1, innerRadius / p1, p2);
+        float T = FullPageThorneTemperature(innerT, r, innerRadius, p1, p2);
         results[rb + 0] = T;
         results[rb + 1] = fluxShape;
         results[rb + 2] = ComputeKerrISCO(p1, p2);
-        results[rb + 3] = ShakuraSunyaevTemperature(innerT, r, r_isco);
+        results[rb + 3] = ShakuraSunyaevTemperature(innerT, r, innerRadius);
     } else if (opcode == OP_BLACKBODY) {
         // c0 = temperature (K).
         float3 rgb = BlackbodyColor(c0);

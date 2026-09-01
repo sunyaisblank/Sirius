@@ -176,7 +176,13 @@ The relativistic thin-disk default and physical parity authority remains the
 zero-torque Page-Thorne profile integrated from the declared stable-orbit
 inner edge, which must be at or outside the ISCO. CPU and Slang evaluate every
 represented nonzero spin rather than substituting the Schwarzschild ISCO over
-a low-spin interval. `ShakuraSunyaev` is an explicit, narrower substitution:
+a low-spin interval. The CPU tracer constructs and invalidates its cached disk
+profile from that declared edge, and both thin and volumetric Slang consumers
+pass the same edge into their independent quadrature rather than recomputing an
+ISCO at the shading boundary. A non-render live CPU trace witness covers a
+larger truncated edge after `SetConfig`; source governance rejects either host
+cache retention or a host/device ISCO substitution. `ShakuraSunyaev` is an
+explicit, narrower substitution:
 CPU and Slang evaluate the Newtonian zero-torque shape
 $F(r)\propto r^{-3}[1-\sqrt{r_\mathrm{in}/r}]$ and define the operator
 temperature at $1.5r_\mathrm{in}$. The shared normalisation and CPU/Slang

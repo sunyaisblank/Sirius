@@ -429,11 +429,10 @@ bool IsInsideVolumeDisk(float cylindricalR, float z, float innerRadius,
 
 float VolumeDiskTemperature(float cylindricalR, float z, float innerRadius,
                             float innerTemperature, int temperatureModel,
-                            float rIsco, float M, float aStar,
-                            float hOverR, float hPower) {
+                            float M, float aStar, float hOverR, float hPower) {
     float midplane = temperatureModel == 1
         ? ShakuraSunyaevTemperature(innerTemperature, cylindricalR, innerRadius)
-        : FullPageThorneTemperature(innerTemperature, cylindricalR, rIsco, M, aStar);
+        : FullPageThorneTemperature(innerTemperature, cylindricalR, innerRadius, M, aStar);
     // Vertically isothermal closure. z, hOverR, and hPower define membership
     // and opacity only; no synthetic atmosphere-temperature law is implied.
     return max(midplane, 0.0f);
@@ -454,8 +453,8 @@ void AccumulateVolumeSegment(Vec4Cart start, Vec4Cart finish,
                              bool volumeEnabled, bool turbulenceEnabled,
                              bool dopplerBeaming, float innerRadius,
                              float outerRadius, float innerTemperature,
-                             int temperatureModel, float rIsco, float M,
-                             float a, float aStar, float hOverR, float hPower,
+                             int temperatureModel, float M, float a,
+                             float aStar, float hOverR, float hPower,
                              float tauMidplane, float observerFrequency, inout float opticalDepth,
                              inout float3 emission) {
     if (affineLength <= 0.0f || opticalDepth >= 10.0f) return;
@@ -490,8 +489,8 @@ void AccumulateVolumeSegment(Vec4Cart start, Vec4Cart finish,
             }
             float temperature =
                 VolumeDiskTemperature(diskR, point.z, innerRadius,
-                                      innerTemperature, temperatureModel, rIsco,
-                                      M, aStar, hOverR, hPower);
+                                      innerTemperature, temperatureModel, M,
+                                      aStar, hOverR, hPower);
             if (isfinite(diskOpacity) && diskOpacity > 0.0f &&
                 isfinite(temperature) && temperature > 0.0f) {
                 // Avoid a metric evaluation for empty samples. Every accepted
@@ -817,12 +816,11 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         // Optional volumetric disk (Kerr-Schild black holes only).
         if (volumeEnabled && !isWarp && !isWormhole) {
             float aStar = (M > 1e-6f) ? (a / M) : a;
-            float rIsco = ComputeKerrISCO(M, aStar);
             AccumulateVolumeSegment(
                 state.x, next.x, state.u, next.u, dt, volumeSamples,
                 volumeEnabled, turbulenceEnabled, dopplerBeaming,
                 innerRadius, outerRadius, innerTemperature, temperatureModel,
-                rIsco, M, a, aStar, volumeHOverR, volumeHPower,
+                M, a, aStar, volumeHOverR, volumeHPower,
                 volumeTauMidplane, observerFrequency,
                 volumeOpticalDepth, volumeEmission);
         }
@@ -1022,12 +1020,12 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                     float cx = float(crossingPosition.x);
                     float cy = float(crossingPosition.y);
                     float aStar = (M > 1e-6f) ? (a / M) : a;
-                    float rIsco = ComputeKerrISCO(M, aStar);
                     float T;
                     if (temperatureModel == 1) {
                         T = ShakuraSunyaevTemperature(innerTemperature, cr, innerRadius);
                     } else {
-                        T = FullPageThorneTemperature(innerTemperature, cr, rIsco, M, aStar);
+                        T = FullPageThorneTemperature(
+                            innerTemperature, cr, innerRadius, M, aStar);
                     }
                     float cphi = atan2(cy, cx);
                     float2 transfer = ComputeKerrDiskTransferCart(

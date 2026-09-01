@@ -180,6 +180,11 @@ KERR_TRANSFER_CPU_CONSUMER = SOURCE_ROOT / "backend" / "cpu" / "geodesic_tracer.
 KERR_TRANSFER_DEVICE_AUTHORITY = SOURCE_ROOT / "kernels" / "gr_disk.slang"
 KERR_TRANSFER_DEVICE_CONSUMER = SOURCE_ROOT / "kernels" / "trace.slang"
 KERR_TRANSFER_PARITY_PROBE = SOURCE_ROOT / "kernels" / "parity_probe.slang"
+PAGE_THORNE_HOST_AUTHORITY = SOURCE_ROOT / "core" / "disk" / "novikov_thorne_disk.h"
+PAGE_THORNE_CPU_CONSUMER = SOURCE_ROOT / "backend" / "cpu" / "geodesic_tracer.h"
+PAGE_THORNE_DEVICE_AUTHORITY = KERR_TRANSFER_DEVICE_AUTHORITY
+PAGE_THORNE_DEVICE_CONSUMER = KERR_TRANSFER_DEVICE_CONSUMER
+PAGE_THORNE_PARITY_PROBE = KERR_TRANSFER_PARITY_PROBE
 VOLUME_TRANSFER_HOST_AUTHORITY = KERR_TRANSFER_AUTHORITY
 VOLUME_TRANSFER_CPU_CONSUMER = KERR_TRANSFER_CPU_CONSUMER
 VOLUME_TRANSFER_DEVICE_AUTHORITY = KERR_TRANSFER_DEVICE_AUTHORITY
@@ -1248,6 +1253,134 @@ def verify_blackbody_laws_authority_policy() -> None:
         raise RuntimeError("blackbody-laws policy accepted a mislabeled physical quantity")
 
 
+def page_thorne_edge_authority_errors(documents: dict[Path, str]) -> list[str]:
+    errors: list[str] = []
+    required = {
+        PAGE_THORNE_HOST_AUTHORITY: (
+            "config_.r_inner",
+            "r_inner_ = (config_.r_inner > 0)",
+            "FullPageThorneFlux",
+            "kInnerEdgeBuffer",
+        ),
+        PAGE_THORNE_CPU_CONSUMER: (
+            "page_thorne_disk_->Temperature",
+            "page_thorne_disk_->InnerRadius",
+        ),
+        PAGE_THORNE_DEVICE_AUTHORITY: (
+            "FullPageThorneFluxShape",
+            "FullPageThorneTemperature",
+            "rInner",
+            "innerInM",
+        ),
+        PAGE_THORNE_DEVICE_CONSUMER: (
+            "VolumeDiskTemperature",
+            "FullPageThorneTemperature",
+            "innerRadius",
+        ),
+        PAGE_THORNE_PARITY_PROBE: (
+            "FullPageThorneFluxShape(r / p1, innerRadius / p1, p2)",
+            "FullPageThorneTemperature(innerT, r, innerRadius, p1, p2)",
+        ),
+    }
+    code_by_path: dict[Path, str] = {}
+    for path, markers in required.items():
+        document = documents.get(path)
+        if document is None:
+            errors.append(f"Page-Thorne participant is missing: {relative(path)}")
+            continue
+        code = CPP_NON_CODE.sub(" ", document)
+        code_by_path[path] = code
+        for marker in markers:
+            if marker not in code:
+                errors.append(f"{relative(path)} omits Page-Thorne edge marker {marker}")
+
+    cpu = code_by_path.get(PAGE_THORNE_CPU_CONSUMER, "")
+    if re.search(
+        r"disk_config\.r_inner\s*=\s*static_cast<double>\s*"
+        r"\(\s*config_\.disk_inner\s*\)\s*/\s*cached_m_\s*;",
+        cpu,
+    ) is None:
+        errors.append("the CPU Page-Thorne profile is not constructed from the declared edge")
+    if re.search(
+        r"kTemperatureReferenceRadiusRatio\s*\*\s*"
+        r"page_thorne_disk_->InnerRadius\s*\(\s*\)",
+        cpu,
+    ) is None:
+        errors.append("the CPU Page-Thorne scale is not normalised at the declared edge")
+    if re.search(
+        r"void\s+SetConfig\s*\([^)]*\)\s*\{.*?config_\s*=\s*config\s*;.*?"
+        r"page_thorne_disk_\.reset\s*\(\s*\)\s*;.*?\}",
+        cpu,
+        re.DOTALL,
+    ) is None:
+        errors.append("the CPU Page-Thorne cache can survive a changed declared edge")
+
+    device = code_by_path.get(PAGE_THORNE_DEVICE_CONSUMER, "")
+    for radius in ("cylindricalR", "cr"):
+        if re.search(
+            rf"FullPageThorneTemperature\s*\(\s*innerTemperature\s*,\s*"
+            rf"{radius}\s*,\s*innerRadius\s*,\s*M\s*,\s*aStar\s*\)",
+            device,
+        ) is None:
+            errors.append(
+                f"the Slang Page-Thorne {radius} path does not consume the declared edge"
+            )
+    if re.search(r"\brIsco\b|\bComputeKerrISCO\s*\(", device):
+        errors.append("the Slang trace path recomputes ISCO instead of consuming its declared edge")
+    return errors
+
+
+def verify_page_thorne_edge_authority_policy() -> None:
+    valid = {
+        PAGE_THORNE_HOST_AUTHORITY: (
+            "config_.r_inner r_inner_ = (config_.r_inner > 0) "
+            "FullPageThorneFlux kInnerEdgeBuffer"
+        ),
+        PAGE_THORNE_CPU_CONSUMER: (
+            "void SetConfig(const TracerConfig& config) { config_ = config; "
+            "page_thorne_disk_.reset(); } "
+            "disk_config.r_inner = static_cast<double>(config_.disk_inner) / cached_m_; "
+            "kTemperatureReferenceRadiusRatio * page_thorne_disk_->InnerRadius(); "
+            "page_thorne_disk_->Temperature"
+        ),
+        PAGE_THORNE_DEVICE_AUTHORITY: (
+            "FullPageThorneFluxShape FullPageThorneTemperature rInner innerInM"
+        ),
+        PAGE_THORNE_DEVICE_CONSUMER: (
+            "VolumeDiskTemperature "
+            "FullPageThorneTemperature(innerTemperature, cylindricalR, innerRadius, M, aStar); "
+            "FullPageThorneTemperature(innerTemperature, cr, innerRadius, M, aStar);"
+        ),
+        PAGE_THORNE_PARITY_PROBE: (
+            "FullPageThorneFluxShape(r / p1, innerRadius / p1, p2); "
+            "FullPageThorneTemperature(innerT, r, innerRadius, p1, p2);"
+        ),
+    }
+    if page_thorne_edge_authority_errors(valid):
+        raise RuntimeError("Page-Thorne edge policy rejected the declared-edge wiring")
+
+    isco_cpu = dict(valid)
+    isco_cpu[PAGE_THORNE_CPU_CONSUMER] = isco_cpu[PAGE_THORNE_CPU_CONSUMER].replace(
+        "static_cast<double>(config_.disk_inner) / cached_m_", "disk.IscoRadius()"
+    )
+    if not page_thorne_edge_authority_errors(isco_cpu):
+        raise RuntimeError("Page-Thorne edge policy accepted a CPU ISCO substitution")
+
+    stale_cache = dict(valid)
+    stale_cache[PAGE_THORNE_CPU_CONSUMER] = stale_cache[
+        PAGE_THORNE_CPU_CONSUMER
+    ].replace("page_thorne_disk_.reset();", "retain_cached_profile();")
+    if not page_thorne_edge_authority_errors(stale_cache):
+        raise RuntimeError("Page-Thorne edge policy accepted a stale CPU profile")
+
+    isco_device = dict(valid)
+    isco_device[PAGE_THORNE_DEVICE_CONSUMER] = isco_device[
+        PAGE_THORNE_DEVICE_CONSUMER
+    ].replace("innerRadius, M, aStar", "rIsco, M, aStar")
+    if not page_thorne_edge_authority_errors(isco_device):
+        raise RuntimeError("Page-Thorne edge policy accepted a Slang ISCO substitution")
+
+
 def kerr_zamo_transfer_authority_errors(documents: dict[Path, str]) -> list[str]:
     errors: list[str] = []
     required = {
@@ -2007,6 +2140,7 @@ def verify() -> list[str]:
     verify_cie1931_observer_authority_policy()
     verify_aces_contract_policy()
     verify_blackbody_laws_authority_policy()
+    verify_page_thorne_edge_authority_policy()
     verify_kerr_zamo_transfer_authority_policy()
     verify_volumetric_transfer_authority_policy()
     verify_morris_thorne_authority_policy()
@@ -2050,6 +2184,7 @@ def verify() -> list[str]:
     errors.extend(cie1931_observer_authority_errors(governed_sources))
     errors.extend(aces_contract_errors(governed_sources))
     errors.extend(blackbody_laws_authority_errors(governed_sources))
+    errors.extend(page_thorne_edge_authority_errors(governed_sources))
     errors.extend(kerr_zamo_transfer_authority_errors(governed_sources))
     errors.extend(volumetric_transfer_authority_errors(governed_sources))
     errors.extend(morris_thorne_authority_errors(governed_sources))

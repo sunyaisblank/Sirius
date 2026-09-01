@@ -273,6 +273,66 @@ TEST(CpuTraceBoundary, EveryAdvertisedCpuMetricConstructsAndTracesOneRay) {
     EXPECT_EQ(advertised_cpu_metrics, 9u);
 }
 
+TEST(CpuTraceBoundary, TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge) {
+    KerrSchildFamily metric(KerrSchildParams::Schwarzschild(1.0));
+
+    TracerConfig config;
+    config.escape_radius = 100.0f;
+    config.horizon_factor = 1.05f;
+    config.max_steps = 5000;
+    config.enable_disk = true;
+    config.disk_inner = 6.0f;
+    config.disk_outer = 20.0f;
+    config.disk_temperature_inner = 10000.0f;
+    config.integrator.abs_tolerance = 1.0e-6f;
+    config.integrator.rel_tolerance = 1.0e-6f;
+    GeodesicTracer tracer(&metric, config);
+
+    CameraConfig camera_config;
+    camera_config.r = 50.0;
+    camera_config.theta = std::numbers::pi / 2.0;
+    camera_config.phi = 0.0;
+    camera_config.fov = 60.0f;
+    camera_config.width = 64;
+    camera_config.height = 64;
+    PinholeCamera camera(camera_config);
+
+    // Populate the live tracer's cached Page-Thorne authority before changing
+    // the declared edge. SetConfig must not retain the former ISCO profile.
+    (void)tracer.Trace(camera.GenerateRay(32, 32, 0.5f, 0.5f));
+    config.disk_inner = 10.0f;
+    tracer.SetConfig(config);
+
+    sirius::core::AccretionDiskD::Config oracle_config;
+    oracle_config.M = 1.0;
+    oracle_config.a_star = 0.0;
+    oracle_config.r_inner = config.disk_inner;
+    oracle_config.r_outer = 100.0;
+    sirius::core::AccretionDiskD oracle(oracle_config);
+    const double reference = oracle.Temperature(
+        sirius::core::constants::disk::kTemperatureReferenceRadiusRatio * oracle.InnerRadius());
+    ASSERT_GT(reference, 0.0);
+
+    int compared = 0;
+    for (int y = 8; y < 56 && compared < 12; y += 2) {
+        for (int x = 8; x < 56 && compared < 12; x += 2) {
+            const TraceResult result = tracer.Trace(camera.GenerateRay(x, y, 0.5f, 0.5f));
+            for (int crossing_index = 0; crossing_index < result.num_disk_crossings;
+                 ++crossing_index) {
+                const auto& crossing = result.disk_crossings[crossing_index];
+                if (!crossing.valid) continue;
+                const double expected =
+                    config.disk_temperature_inner * oracle.Temperature(crossing.r) / reference;
+                EXPECT_NEAR(crossing.temperature, expected, 2.0e-3)
+                    << "live crossing at r=" << crossing.r
+                    << " did not consume the declared truncated Page-Thorne edge";
+                ++compared;
+            }
+        }
+    }
+    EXPECT_GE(compared, 6) << "insufficient live disk crossings for the truncated Page-Thorne gate";
+}
+
 TEST(CpuTraceBoundary, CentralEventIsInvariantUnderBundleFeatureToggle) {
     const BoundaryTrace without_bundle = TraceDeSitterBoundary(false, 4.0f);
     const BoundaryTrace with_bundle = TraceDeSitterBoundary(true, 4.0f);
