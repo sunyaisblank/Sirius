@@ -240,11 +240,6 @@ Lightray GeodesicTracer::InitializeLightray(const CameraRay& camera_ray,
     const double absolute_spin = cached_a_ * cached_m_;
     coordinates::Vec4Cart pos_cart = coordinates::BlToKerrSchildCart(pos_bl, absolute_spin);
 
-    ray.position(0) = static_cast<float>(pos_cart.t);
-    ray.position(1) = static_cast<float>(pos_cart.x);
-    ray.position(2) = static_cast<float>(pos_cart.y);
-    ray.position(3) = static_cast<float>(pos_cart.z);
-
     const double sin_th = std::sin(th);
     // CameraRay::direction is the screen ray in the camera rest frame, resolved
     // on the local (radial, +theta, +phi) axes.  Build those axes as coordinate
@@ -253,18 +248,6 @@ Lightray GeodesicTracer::InitializeLightray(const CameraRay& camera_ray,
     const double cartesian_phi = std::atan2(pos_cart.y, pos_cart.x);
     const double sin_ph = std::sin(cartesian_phi);
     const double cos_ph = std::cos(cartesian_phi);
-    Metric4d g;
-    Tensor<Dual<double>, 4, 4, 4> dg;
-
-    Vec4 pos_double;
-    for (int i = 0; i < 4; ++i) pos_double(i) = ray.position(i);
-
-    metric_->Evaluate(pos_double, g, dg);
-    Metric4d inverse_metric;
-    if (!metric_->InverseMetric(pos_double, inverse_metric)) {
-        inverse_metric = TensorOps::Inverse(g);
-    }
-
     std::array<Vec4, 3> spatial_seeds;
     spatial_seeds[0](1) = sin_th * cos_ph;
     spatial_seeds[0](2) = sin_th * sin_ph;
@@ -275,15 +258,52 @@ Lightray GeodesicTracer::InitializeLightray(const CameraRay& camera_ray,
     spatial_seeds[2](1) = -sin_ph;
     spatial_seeds[2](2) = cos_ph;
 
-    const auto reference_frame =
-        relativity::EulerianObserverFrame(g, inverse_metric, spatial_seeds);
-    SIRIUS_ASSERT(reference_frame.has_value());
     // Operator beta is screen-forward/up/right.  The CameraRay component basis
     // is radial/+theta/+phi, hence forward=-radial and up=-theta.
     const std::array<double, 3> local_beta{-camera_ray.beta_forward, -camera_ray.beta_up,
                                            camera_ray.beta_right};
-    const auto camera_frame = relativity::BoostObserverFrame(*reference_frame, local_beta);
+
+    const auto frame_at = [&](const Vec4& position) {
+        Metric4d metric;
+        Tensor<Dual<double>, 4, 4, 4> derivatives;
+        metric_->Evaluate(position, metric, derivatives);
+        Metric4d inverse_metric;
+        if (!metric_->InverseMetric(position, inverse_metric)) {
+            inverse_metric = TensorOps::Inverse(metric);
+        }
+        const auto reference_frame =
+            relativity::EulerianObserverFrame(metric, inverse_metric, spatial_seeds);
+        if (!reference_frame.has_value()) {
+            return std::optional<relativity::ObserverFrame>{};
+        }
+        return relativity::BoostObserverFrame(*reference_frame, local_beta);
+    };
+
+    Vec4 pos_double;
+    pos_double(0) = pos_cart.t;
+    pos_double(1) = pos_cart.x;
+    pos_double(2) = pos_cart.y;
+    pos_double(3) = pos_cart.z;
+    auto camera_frame = frame_at(pos_double);
     SIRIUS_ASSERT(camera_frame.has_value());
+
+    // A finite-aperture ray starts across the camera's instantaneous rest
+    // pupil. Apply its right/up displacement to the launch event before
+    // rebuilding the metric-orthonormal frame there. Direction-only jitter
+    // would still launch every sample through one pinhole event.
+    if (camera_ray.aperture_up != 0.0 || camera_ray.aperture_right != 0.0) {
+        for (int component = 0; component < 4; ++component) {
+            pos_double(component) +=
+                -camera_frame->spatial[1](component) * camera_ray.aperture_up +
+                camera_frame->spatial[2](component) * camera_ray.aperture_right;
+        }
+        camera_frame = frame_at(pos_double);
+        SIRIUS_ASSERT(camera_frame.has_value());
+    }
+
+    for (int component = 0; component < 4; ++component) {
+        ray.position(component) = static_cast<float>(pos_double(component));
+    }
     if (launch_frame != nullptr) *launch_frame = *camera_frame;
     const std::array<double, 3> rest_direction{camera_ray.direction(1), camera_ray.direction(2),
                                                camera_ray.direction(3)};

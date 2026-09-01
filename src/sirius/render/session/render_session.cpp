@@ -352,6 +352,12 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         issue.has_value()) {
         return std::string(*issue);
     }
+    if (const auto issue = core::ThinLensGeometryIssue(
+            config.lens_type, config.observer_distance, config.camera_focal_length,
+            config.camera_aperture, config.camera_focus_distance);
+        issue.has_value()) {
+        return std::string(*issue);
+    }
 
     switch (config.temperature_model) {
         case DiskTemperatureModel::NovikovThorne:

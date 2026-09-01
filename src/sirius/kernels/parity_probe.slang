@@ -18,6 +18,7 @@
 import gr_types;
 import gr_metrics;
 import gr_integrator;
+import gr_camera;
 import gr_disk;
 import gr_deviation;
 import gr_trace_event;
@@ -48,6 +49,7 @@ static const uint OP_GREY_LAYER_ABSORPTION = 17;
 static const uint OP_SPHERICAL_CAPTURE_EVENT = 18;
 static const uint OP_ELLIS_TWO_SHEET_TRACE = 19;
 static const uint OP_WARP_RK4_DECLINE = 20;
+static const uint OP_THIN_LENS_PROJECTION = 21;
 
 // Future-directed null root used by the render kernel, repeated here only for
 // the diagnostic launch boundary. The integration below calls the production
@@ -272,6 +274,21 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         // c0=non-negative layer optical depth. This is a scalar compute probe;
         // it performs no ray dispatch and produces no image.
         results[rb + 0] = GreyLayerAbsorbedFraction(c0);
+    } else if (opcode == OP_THIN_LENS_PROJECTION) {
+        // Compute-only finite-pupil projection. p1=focal length, p2=aperture,
+        // p3=focus distance; c0=image right, c1=image up, c2=tan(FOV/2);
+        // u0=sample u, u1=sample v.
+        ThinLensProjectionSample pupil = ProjectThinLensSample(
+            c0, c1, c2, p1, p2, p3,
+            samples[sb + 8], samples[sb + 9]);
+        results[rb + 0] = pupil.pupilRight;
+        results[rb + 1] = pupil.pupilUp;
+        results[rb + 2] = pupil.direction.x;
+        results[rb + 3] = pupil.direction.y;
+        results[rb + 4] = pupil.direction.z;
+        float affineToFocus = p3 / pupil.direction.x;
+        results[rb + 5] = pupil.pupilUp + affineToFocus * pupil.direction.y;
+        results[rb + 6] = pupil.pupilRight + affineToFocus * pupil.direction.z;
     } else if (opcode == OP_SPHERICAL_CAPTURE_EVENT) {
         // Compute-only witness for the exact accepted-segment event authority.
         // p1=surface radius; c=start xyz; u=start tangent txyz; h=affine

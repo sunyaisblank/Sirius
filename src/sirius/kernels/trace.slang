@@ -36,6 +36,7 @@
 import gr_types;
 import gr_metrics;
 import gr_integrator;
+import gr_camera;
 import gr_disk;
 import gr_deviation;
 import gr_trace_event;
@@ -634,29 +635,25 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     float imageX = (2.0f * (float(ix) + sampleU) / float(imageWidth) - 1.0f) * aspect;
     float imageY = 1.0f - 2.0f * (float(iy) + sampleV) / float(imageHeight);
     float tanHalfFov = tan(fov * 0.5f);
-    float3 localDir;
+    float3 screenDirection;
+    float pupilRight = 0.0f;
+    float pupilUp = 0.0f;
     if (lensModel == 1) {
-        // The centre-aperture projection is exactly the pinhole projection.
-        // 50 mm-equivalent defines one virtual lens unit because the geometric
-        // spacetime has no physical M-to-millimetre scale (core/camera.h).
-        float focusX = imageX * tanHalfFov * focusDistance;
-        float focusY = imageY * tanHalfFov * focusDistance;
-        float apertureRadius = (focalLength / 50.0f) / (2.0f * aperture);
-        float lensTheta = TWO_PI * sampleU;
-        float lensRadius = apertureRadius * sqrt(sampleV);
-        float lensX = lensRadius * cos(lensTheta);
-        float lensY = lensRadius * sin(lensTheta);
-        localDir = normalize(float3(-focusDistance, -(focusY - lensY), focusX - lensX));
+        ThinLensProjectionSample pupil = ProjectThinLensSample(
+            imageX, imageY, tanHalfFov, focalLength, aperture,
+            focusDistance, sampleU, sampleV);
+        screenDirection = pupil.direction;
+        pupilRight = pupil.pupilRight;
+        pupilUp = pupil.pupilUp;
     } else {
-        localDir = normalize(float3(-1.0f, -imageY * tanHalfFov, imageX * tanHalfFov));
+        screenDirection = normalize(float3(1.0f, imageY * tanHalfFov,
+                                                  imageX * tanHalfFov));
     }
-    float3 screenDirection = float3(-localDir.x, -localDir.y, localDir.z);
 
     bool isWarp = (metricId == kDispatchWarpDrive);
     bool isWormhole = (metricId == kDispatchMorrisThorne);
 
-    // Initial 4-velocity from the null condition at the camera position, using
-    // the dispatched metric.
+    // Initial metric and camera frame at the central observer event.
     Real g[4][4];
     Real g_inv[4][4];
     Vec4Cart pos0 = MakeVec4Cart(0.0f, camPos.x, camPos.y, camPos.z);
@@ -666,6 +663,25 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         GetMorrisThorneCartesianMetric(pos0, throatB0, 0.0f, wormShape, g, g_inv);
     } else {
         GetKerrSchildFamilyMetric(pos0, M, a, Q, Lambda, g, g_inv);
+    }
+    CameraObserverFrame cameraFrame =
+        BuildCameraObserverFrame(g, g_inv, camDir, camUp, camRight, cameraBeta);
+    if (lensModel == 1) {
+        // Move each finite-aperture sample across the instantaneous rest pupil,
+        // then rebuild the launch authority at that event. Direction-only
+        // jitter would leave every sample at the pinhole origin.
+        pos0 = AddVec4Cart(
+            AddVec4Cart(pos0, ScaleVec4Cart(cameraFrame.up, Real(pupilUp))),
+            ScaleVec4Cart(cameraFrame.right, Real(pupilRight)));
+        if (isWarp) {
+            GetWarpDriveMetric(pos0, warpVs, warpSigma, warpR, 0.0f, 0.0f, 0.0f, g, g_inv);
+        } else if (isWormhole) {
+            GetMorrisThorneCartesianMetric(pos0, throatB0, 0.0f, wormShape, g, g_inv);
+        } else {
+            GetKerrSchildFamilyMetric(pos0, M, a, Q, Lambda, g, g_inv);
+        }
+        cameraFrame =
+            BuildCameraObserverFrame(g, g_inv, camDir, camUp, camRight, cameraBeta);
     }
     // Capture radius: the buffered Kerr-Schild outer horizon r_+ = M +
     // sqrt(M^2 - a^2 - Q^2) for the black-hole family. OneSheetCapture owns a
@@ -678,8 +694,6 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
 
     GeodesicStateCart state;
     state.x = pos0;
-    CameraObserverFrame cameraFrame =
-        BuildCameraObserverFrame(g, g_inv, camDir, camUp, camRight, cameraBeta);
     state.u = PastDirectedCameraRay(cameraFrame, screenDirection);
     float observerFrequency = 1.0f;
 

@@ -166,6 +166,7 @@ Each review pass asks:
 | Point-star mode was numerically nonzero but display-invisible at its operator default | scale 1 produced a disk-free Radeon PNG with channel ranges 1/1/0 and only three colours; the Vulkan test passed because near-black point mode differed from the texture | Fixed: the relative-flux zero point is display-calibrated at the anti-flicker-tested scale 100, disk-free live gates require a bounded sparse lit-pixel fraction, and the IMAX verifier enforces sparse dark-field morphology rather than accepting disk structure |
 | P3 attestation admitted only the IMAX frame although the criterion quantifies both 1080p and 5616x4096 | no independent 1920x1080 artifact, transcript segment, wall time, dimensions, or morphology was required | Fixed: the physical runbook renders the identical governed sparse-star scene at both exact resolutions and the verifier independently binds, decodes, and morphology-checks each artifact and typed-session event |
 | P5 aberration evidence covered only motion along the view axis | the analytic witness reduced the Lorentz transform to one dimension | Fixed: an independent photon-four-vector Lorentz oracle covers mixed-sign three-axis velocities, varied ray directions, and near-luminal finite worldlines in addition to both lens models and the governed physical scene |
+| ThinLens aperture samples changed direction but every CPU and Slang ray still launched from the central pinhole event | an angular perturbation can affect an image while representing no finite pupil, so the P5 scene and prior live-effect tests could not establish the advertised finite-aperture geometry | Fixed: samples carry explicit pupil-up/right displacement, both live launch paths move the event across the moving camera's rest-frame axes and rebuild their metric frame, oversized tangent-plane pupils decline, host rays independently reconverge at the requested focus point, a direct Slang probe matches, and repository controls reject either direction-only substitution |
 | Doppler toggle test attributed Kerr lensing/frame-dragging asymmetry to emitter motion | image-half ratio was the sole oracle | Fixed: the gate separately measures observed asymmetry and the isolated `(g/g_grav)^4` emitter factor; off is exactly zero in the isolated measure |
 | Leak checking had no reproducible operational profile | ad-hoc ASan runs disabled leak detection around Vulkan | Fixed: GCC ASan/UBSan/LSan preset and CI job; one narrow, printed suppression names the repeatable 128-byte Vulkan-loader/driver process-lifetime allocation |
 | Hardware script accepted software devices and called 4096x2864 “IMAX-class” | no physical-device precondition or attestation | Fixed: exact device matching, software rejection, readiness check, full log/hash/JSON attestation, and the specification's exact 5616x4096 frame |
@@ -370,7 +371,9 @@ boundaries instead.
   every RGB channel spans 216 code values and 66 distinct colours survive.
   Visual review resolves the central shadow, asymmetric lensing, photon-ring
   structure, and warped emission surface rather than the rejected bands, so it
-  closes the ThinLens projection diagnosis. It does not close P3: disk emission
+  closes only the earlier field-of-view/collapse diagnosis. It predates the
+  finite-pupil launch correction and cannot establish current-revision P5. It
+  also does not close P3: disk emission
   supplies the image structure, with 45.5 per cent bright channels and only
   54.0 per cent dark channels. A disk-free Radeon probe then exposed that the
   point catalogue's scale-1 default quantised to channel ranges 1/1/0 and three

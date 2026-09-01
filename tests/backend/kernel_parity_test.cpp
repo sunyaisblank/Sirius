@@ -16,6 +16,7 @@
 // coverage and two disk/blackbody temperatures.
 
 #include "sirius/backend/device.h"
+#include "sirius/core/camera.h"
 #include "sirius/core/celestial_tangent_basis.h"
 #include "sirius/core/cie1931_observer.h"
 #include "sirius/core/coordinates.h"
@@ -38,6 +39,7 @@
 #include <cstdint>
 #include <fstream>
 #include <limits>
+#include <numbers>
 #include <span>
 #include <string>
 #include <vector>
@@ -83,6 +85,7 @@ constexpr std::uint32_t kOpGreyLayerAbsorption = 17;
 constexpr std::uint32_t kOpSphericalCaptureEvent = 18;
 constexpr std::uint32_t kOpEllisTwoSheetTrace = 19;
 constexpr std::uint32_t kOpWarpRk4Decline = 20;
+constexpr std::uint32_t kOpThinLensProjection = 21;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -379,6 +382,34 @@ const std::array<float, 64> kS3_christoffel = {
     -0.0132742766f,   -0.0556216836f, -0.0223035496f, 0.0946279168f};
 
 // -----------------------------------------------------------------------------
+
+TEST(KernelParity, ThinLensPupilProjectionAndFocusMatchIndependentCoreModel) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    Sample sample;
+    sample.p1 = 50.0f;   // focal length
+    sample.p2 = 2.0f;    // f-number
+    sample.p3 = 30.0f;   // focus distance
+    sample.c0 = 0.37f;   // image right
+    sample.c1 = -0.21f;  // image up
+    sample.c2 = std::tan(52.0f * std::numbers::pi_v<float> / 360.0f);
+    sample.u0 = 0.27f;
+    sample.u1 = 0.64f;
+
+    const auto result = RunProbe(*f.device, f.kernel, kOpThinLensProjection, {sample});
+    const auto core = sirius::core::ProjectThinLensSample(
+        sample.c0, sample.c1, sample.c2, sample.p1, sample.p2, sample.p3, sample.u0, sample.u1);
+    EXPECT_NEAR(result[0], core.pupil_right, 2.0e-6f);
+    EXPECT_NEAR(result[1], core.pupil_up, 2.0e-6f);
+    EXPECT_NEAR(result[2], core.direction_forward, 2.0e-6f);
+    EXPECT_NEAR(result[3], core.direction_up, 2.0e-6f);
+    EXPECT_NEAR(result[4], core.direction_right, 2.0e-6f);
+    EXPECT_GT(std::hypot(result[0], result[1]), 0.0f)
+        << "device finite-aperture sample retained the pinhole event";
+    EXPECT_NEAR(result[5], sample.c1 * sample.c2 * sample.p3, 3.0e-6f);
+    EXPECT_NEAR(result[6], sample.c0 * sample.c2 * sample.p3, 3.0e-6f);
+}
 
 TEST(KernelParity, KerrSchildMetricMatchesLegacyToOnePartInMillion) {
     Fixture f = OpenProbe();

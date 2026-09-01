@@ -292,6 +292,7 @@ set_tests_properties(
 
 set_tests_properties(
     CpuTraceBoundary.EveryAdvertisedCpuMetricConstructsAndTracesOneRay
+    CpuTraceBoundary.FinitePupilOffsetMovesTheLiveCpuLaunchEvent
     CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge
     CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle
     CpuTraceBoundary.JacobiBundleTerminatesAtTheSameCausalEvent
@@ -401,6 +402,7 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    KernelParity.ThinLensPupilProjectionAndFocusMatchIndependentCoreModel
     KernelParity.KerrSchildMetricMatchesLegacyToOnePartInMillion
     KernelParity.RepresentedSubThresholdKerrMetricIsScaleCovariant
     KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation
@@ -971,6 +973,8 @@ set_tests_properties(
     ThinLensCameraTest.CentreRayWithDefaultSampling
     ThinLensCameraTest.DifferentSamplesGiveDifferentRays
     ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView
+    ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus
+    ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 

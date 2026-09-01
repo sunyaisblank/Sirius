@@ -273,6 +273,48 @@ TEST(CpuTraceBoundary, EveryAdvertisedCpuMetricConstructsAndTracesOneRay) {
     EXPECT_EQ(advertised_cpu_metrics, 9u);
 }
 
+TEST(CpuTraceBoundary, FinitePupilOffsetMovesTheLiveCpuLaunchEvent) {
+    KerrSchildFamily metric(KerrSchildParams::Minkowski());
+
+    TracerConfig config;
+    config.escape_radius = 12.0f;
+    config.finite_causal_boundary = true;
+    config.max_steps = 20;
+    config.enable_disk = false;
+    config.integrator.initial_step = 7.0f;
+    config.integrator.max_step = 7.0f;
+    config.integrator.min_step = 1.0e-5f;
+    config.integrator.abs_tolerance = 1.0e-7f;
+    config.integrator.rel_tolerance = 1.0e-7f;
+
+    CameraConfig camera_config;
+    camera_config.r = 5.0;
+    camera_config.theta = std::numbers::pi / 2.0;
+    camera_config.phi = 0.0;
+    camera_config.width = 3;
+    camera_config.height = 3;
+    PinholeCamera camera(camera_config);
+
+    CameraRay central = camera.GenerateRay(1, 1, 0.5f, 0.5f);
+    central.direction(1) = 1.0;
+    central.direction(2) = 0.0;
+    central.direction(3) = 0.0;
+    CameraRay pupil = central;
+    pupil.aperture_right = 0.25;
+
+    GeodesicTracer tracer(&metric, config);
+    const TraceResult central_trace = tracer.Trace(central);
+    const TraceResult pupil_trace = tracer.Trace(pupil);
+
+    ASSERT_EQ(central_trace.outcome, TraceResult::Outcome::Escaped);
+    ASSERT_EQ(pupil_trace.outcome, TraceResult::Outcome::Escaped);
+    EXPECT_NEAR(central_trace.final_position(2), 0.0, 2.0e-5);
+    EXPECT_NEAR(pupil_trace.final_position(2), pupil.aperture_right, 2.0e-5);
+    EXPECT_NEAR(pupil_trace.final_position(2) - central_trace.final_position(2),
+                pupil.aperture_right, 2.0e-5)
+        << "the live tracer ignored the finite-pupil launch-event displacement";
+}
+
 TEST(CpuTraceBoundary, TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge) {
     KerrSchildFamily metric(KerrSchildParams::Schwarzschild(1.0));
 

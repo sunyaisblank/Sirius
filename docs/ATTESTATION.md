@@ -100,7 +100,10 @@ uses that selection for inventory, readiness, the complete test estate, the
 1920x1080 and 5616x4096 governed renders, and every precision rung. Both scenes
 disable disk emission so their structure must come from the ray-bundle-filtered,
 display-calibrated 100,000-star point catalogue; it combines that catalogue with
-a nonzero timelike camera velocity and the finite-aperture thin lens. The verifier
+a nonzero timelike camera velocity and the finite-aperture thin lens. Mandatory
+host/device projection controls first require that this lens moves the metric
+launch event across its bounded rest-frame pupil and reconverges at the focus
+plane; they do not replace the physical frame. The verifier
 requires those P3/P5 semantics in the record, fully decodes both governed PNGs,
 and admits only structured RGB images at 1920 by 1080 and 5616 by 4096 under a
 2048 MiB budget. It also requires one unambiguous hashed typed-session scene

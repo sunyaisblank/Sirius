@@ -185,6 +185,13 @@ PAGE_THORNE_CPU_CONSUMER = SOURCE_ROOT / "backend" / "cpu" / "geodesic_tracer.h"
 PAGE_THORNE_DEVICE_AUTHORITY = KERR_TRANSFER_DEVICE_AUTHORITY
 PAGE_THORNE_DEVICE_CONSUMER = KERR_TRANSFER_DEVICE_CONSUMER
 PAGE_THORNE_PARITY_PROBE = KERR_TRANSFER_PARITY_PROBE
+THIN_LENS_HOST_AUTHORITY = SOURCE_ROOT / "core" / "camera.h"
+THIN_LENS_CPU_CONSUMER = SOURCE_ROOT / "backend" / "cpu" / "geodesic_tracer.cpp"
+THIN_LENS_DEVICE_AUTHORITY = SOURCE_ROOT / "kernels" / "gr_camera.slang"
+THIN_LENS_DEVICE_CONSUMER = SOURCE_ROOT / "kernels" / "trace.slang"
+THIN_LENS_PARITY_PROBE = SOURCE_ROOT / "kernels" / "parity_probe.slang"
+THIN_LENS_APP_BOUNDARY = SOURCE_ROOT / "app" / "config" / "config_loader.cpp"
+THIN_LENS_SESSION_BOUNDARY = SOURCE_ROOT / "render" / "session" / "render_session.cpp"
 VOLUME_TRANSFER_HOST_AUTHORITY = KERR_TRANSFER_AUTHORITY
 VOLUME_TRANSFER_CPU_CONSUMER = KERR_TRANSFER_CPU_CONSUMER
 VOLUME_TRANSFER_DEVICE_AUTHORITY = KERR_TRANSFER_DEVICE_AUTHORITY
@@ -1422,6 +1429,136 @@ def verify_page_thorne_edge_authority_policy() -> None:
         raise RuntimeError("Page-Thorne edge policy accepted a Slang ISCO substitution")
 
 
+def thin_lens_authority_errors(documents: dict[Path, str]) -> list[str]:
+    errors: list[str] = []
+    required = {
+        THIN_LENS_HOST_AUTHORITY: (
+            "ProjectThinLensSample",
+            "ThinLensGeometryIssue",
+            "ray.aperture_up = sample.pupil_up",
+            "ray.aperture_right = sample.pupil_right",
+        ),
+        THIN_LENS_CPU_CONSUMER: (
+            "camera_ray.aperture_up",
+            "camera_ray.aperture_right",
+            "camera_frame->spatial[1]",
+            "camera_frame->spatial[2]",
+            "camera_frame = frame_at(pos_double)",
+        ),
+        THIN_LENS_DEVICE_AUTHORITY: (
+            "ThinLensProjectionSample",
+            "ProjectThinLensSample",
+            "pupilRight",
+            "pupilUp",
+        ),
+        THIN_LENS_DEVICE_CONSUMER: (
+            "ProjectThinLensSample",
+            "ScaleVec4Cart(cameraFrame.up, Real(pupilUp))",
+            "ScaleVec4Cart(cameraFrame.right, Real(pupilRight))",
+            "state.x = pos0",
+        ),
+        THIN_LENS_PARITY_PROBE: (
+            "OP_THIN_LENS_PROJECTION",
+            "ProjectThinLensSample",
+            "pupil.pupilRight",
+            "pupil.pupilUp",
+        ),
+        THIN_LENS_APP_BOUNDARY: ("ThinLensGeometryIssue",),
+        THIN_LENS_SESSION_BOUNDARY: ("ThinLensGeometryIssue",),
+    }
+    code_by_path: dict[Path, str] = {}
+    for path, markers in required.items():
+        document = documents.get(path)
+        if document is None:
+            errors.append(f"thin-lens participant is missing: {relative(path)}")
+            continue
+        code = CPP_NON_CODE.sub(" ", document)
+        code_by_path[path] = code
+        for marker in markers:
+            if marker not in code:
+                errors.append(f"{relative(path)} omits finite-pupil marker {marker}")
+
+    host = code_by_path.get(THIN_LENS_HOST_AUTHORITY, "")
+    if "pupil_radius > kMaximumThinLensPupilFraction * local_scale" not in host:
+        errors.append("the host thin-lens authority omits its local tangent-plane bound")
+
+    cpu = code_by_path.get(THIN_LENS_CPU_CONSUMER, "")
+    if re.search(
+        r"pos_double\s*\(\s*component\s*\)\s*\+=.*?"
+        r"camera_frame->spatial\[1\].*?camera_ray\.aperture_up.*?"
+        r"camera_frame->spatial\[2\].*?camera_ray\.aperture_right.*?"
+        r"ray\.position\s*\(\s*component\s*\)\s*=",
+        cpu,
+        re.DOTALL,
+    ) is None:
+        errors.append("the CPU tracer does not move the live launch event across the pupil")
+
+    device = code_by_path.get(THIN_LENS_DEVICE_CONSUMER, "")
+    if re.search(
+        r"pos0\s*=\s*AddVec4Cart\s*\(.*?cameraFrame\.up.*?pupilUp.*?"
+        r"cameraFrame\.right.*?pupilRight.*?state\.x\s*=\s*pos0",
+        device,
+        re.DOTALL,
+    ) is None:
+        errors.append("the Slang tracer does not move the live launch event across the pupil")
+    return errors
+
+
+def verify_thin_lens_authority_policy() -> None:
+    valid = {
+        THIN_LENS_HOST_AUTHORITY: (
+            "ProjectThinLensSample ThinLensGeometryIssue "
+            "ray.aperture_up = sample.pupil_up; "
+            "ray.aperture_right = sample.pupil_right; "
+            "pupil_radius > kMaximumThinLensPupilFraction * local_scale"
+        ),
+        THIN_LENS_CPU_CONSUMER: (
+            "camera_ray.aperture_up camera_ray.aperture_right "
+            "pos_double(component) += -camera_frame->spatial[1](component) * "
+            "camera_ray.aperture_up + camera_frame->spatial[2](component) * "
+            "camera_ray.aperture_right; camera_frame = frame_at(pos_double); "
+            "ray.position(component) = value;"
+        ),
+        THIN_LENS_DEVICE_AUTHORITY: (
+            "ThinLensProjectionSample ProjectThinLensSample pupilRight pupilUp"
+        ),
+        THIN_LENS_DEVICE_CONSUMER: (
+            "ProjectThinLensSample pos0 = AddVec4Cart("
+            "ScaleVec4Cart(cameraFrame.up, Real(pupilUp)), "
+            "ScaleVec4Cart(cameraFrame.right, Real(pupilRight))); state.x = pos0;"
+        ),
+        THIN_LENS_PARITY_PROBE: (
+            "OP_THIN_LENS_PROJECTION ProjectThinLensSample "
+            "pupil.pupilRight pupil.pupilUp"
+        ),
+        THIN_LENS_APP_BOUNDARY: "ThinLensGeometryIssue",
+        THIN_LENS_SESSION_BOUNDARY: "ThinLensGeometryIssue",
+    }
+    if thin_lens_authority_errors(valid):
+        raise RuntimeError("thin-lens policy rejected the finite-pupil wiring")
+
+    pinhole_cpu = dict(valid)
+    pinhole_cpu[THIN_LENS_CPU_CONSUMER] = pinhole_cpu[THIN_LENS_CPU_CONSUMER].replace(
+        "pos_double(component) +=", "discarded_position +="
+    )
+    if not thin_lens_authority_errors(pinhole_cpu):
+        raise RuntimeError("thin-lens policy accepted a CPU direction-only pupil")
+
+    pinhole_device = dict(valid)
+    pinhole_device[THIN_LENS_DEVICE_CONSUMER] = pinhole_device[
+        THIN_LENS_DEVICE_CONSUMER
+    ].replace("pos0 = AddVec4Cart(", "discardedPosition = AddVec4Cart(")
+    if not thin_lens_authority_errors(pinhole_device):
+        raise RuntimeError("thin-lens policy accepted a Slang direction-only pupil")
+
+    unbounded = dict(valid)
+    unbounded[THIN_LENS_HOST_AUTHORITY] = unbounded[THIN_LENS_HOST_AUTHORITY].replace(
+        "pupil_radius > kMaximumThinLensPupilFraction * local_scale", "false"
+    )
+    if not thin_lens_authority_errors(unbounded):
+        raise RuntimeError("thin-lens policy accepted an unbounded local pupil")
+
+
 def kerr_zamo_transfer_authority_errors(documents: dict[Path, str]) -> list[str]:
     errors: list[str] = []
     required = {
@@ -2183,6 +2320,7 @@ def verify() -> list[str]:
     verify_aces_contract_policy()
     verify_blackbody_laws_authority_policy()
     verify_page_thorne_edge_authority_policy()
+    verify_thin_lens_authority_policy()
     verify_kerr_zamo_transfer_authority_policy()
     verify_volumetric_transfer_authority_policy()
     verify_morris_thorne_authority_policy()
@@ -2232,6 +2370,7 @@ def verify() -> list[str]:
     errors.extend(aces_contract_errors(governed_sources))
     errors.extend(blackbody_laws_authority_errors(governed_sources))
     errors.extend(page_thorne_edge_authority_errors(governed_sources))
+    errors.extend(thin_lens_authority_errors(governed_sources))
     errors.extend(kerr_zamo_transfer_authority_errors(governed_sources))
     errors.extend(volumetric_transfer_authority_errors(governed_sources))
     errors.extend(morris_thorne_authority_errors(governed_sources))
