@@ -275,7 +275,7 @@ INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
     "acceptance_criteria": "4ddb7a12207fd7c3ef4d8c18f732b4fcd8104a8eb5a9f5c3592849f9d1a1fba2",
     "required_dimensions": "74a22fa25f1bf80180e89efea98acf454cc1b0dab6447149fcbffc113626bb15",
-    "capability_contracts": "5205bede85abb0127da446773ddf4028e04431a0c527bca177e47277e722813a",
+    "capability_contracts": "c85e2d2606563826f087ce1e62ca1dcb88640d38f21b0ecc4184510d0098a2e2",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
 

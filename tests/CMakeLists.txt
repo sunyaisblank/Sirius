@@ -93,7 +93,8 @@ set_tests_properties(
 
 # External platform/device evidence is admitted only through a strict schema.
 # This local negative control does not attest hardware; it proves fabricated,
-# software-device, wrong-resolution, and tampered-artifact records are rejected.
+# software-device, wrong-resolution, substituted-model, and tampered-artifact
+# records are rejected.
 add_test(
     NAME OperationalAttestation.FalseExternalEvidenceIsRejected
     COMMAND "${Python3_EXECUTABLE}"

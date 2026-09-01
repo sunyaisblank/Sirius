@@ -13,7 +13,14 @@ python3 scripts/verify-attestation.py path/to/attestation.json
 
 The verifier requires a passing domain-appropriate test estate, source revision,
 UTC completion time, exact domain identity, and byte count plus SHA-256 for every
-artifact. Native-build records bind the full governed CTest registration, the
+artifact. It independently hashes this checkout's canonical
+`tests/operating_model.json` and rejects a bundle whose gated operating-model
+product differs, even when the bundle's receipt and gate are internally
+self-consistent. Aggregate admission passes that independently derived digest
+into every record verification before admitting its domains; qualification and
+release admission also require `--source-root` and refuse a selected model that
+differs from that exact Git worktree. Native-build records bind the full
+governed CTest registration, the
 exact nine-case non-render authority estate, every compiled test executable, all
 nine products, the alignment receipt, and the copied candidate. Runtime
 records must additionally identify the physical device, driver, Vulkan API,

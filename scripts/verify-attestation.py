@@ -18,6 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 
+ROOT = Path(__file__).resolve().parent.parent
 KNOWN_DOMAINS = {
     "physical-radeon-780m",
     "wsl2-dozen",
@@ -70,6 +71,24 @@ QUALIFICATION_RUNTIME_RESOURCE_PATHS = {
 def require(condition, message):
     if not condition:
         raise ValueError(message)
+
+
+def source_operating_model_sha256() -> str:
+    """Return the canonical model identity owned by this verifier's source."""
+    path = ROOT / "tests" / "operating_model.json"
+    require(path.is_file(), f"source operating model is missing: {path}")
+    payload = path.read_bytes()
+    require(payload.endswith(b"\n") and b"\r" not in payload,
+            "source operating model must use canonical LF-terminated bytes")
+    try:
+        model = json.loads(payload.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise ValueError(f"source operating model is unreadable: {error}") from error
+    require(isinstance(model, dict)
+            and model.get("schema_version") == 3
+            and model.get("method") == "adversarial-claim-ledger",
+            "source operating model has an unsupported schema or method")
+    return hashlib.sha256(payload).hexdigest()
 
 
 def load_build_gate_verifier():
@@ -732,7 +751,13 @@ def inspect_native_build_gate(
     return gate
 
 
-def verify_document(data, location):
+def verify_document(data, location, expected_operating_model_sha256=None):
+    if expected_operating_model_sha256 is None:
+        expected_operating_model_sha256 = source_operating_model_sha256()
+    require(isinstance(expected_operating_model_sha256, str)
+            and re.fullmatch(r"[0-9a-f]{64}", expected_operating_model_sha256)
+            is not None,
+            "expected operating-model SHA-256 is malformed")
     require(data.get("schema_version") == 1, "schema_version must be 1")
     require(data.get("status") == "pass", "status must be pass")
     domains = data.get("domains")
@@ -865,6 +890,14 @@ def verify_document(data, location):
         require(digest == recorded_digest, f"artifact {name} hash mismatch")
         artifact_paths.append(path)
         artifact_files[name] = path
+
+    operating_model_path = artifact_files.get(
+        QUALIFICATION_PRODUCT_EVIDENCE["operating_model"]
+    )
+    require(operating_model_path is not None
+            and hashlib.sha256(operating_model_path.read_bytes()).hexdigest()
+            == expected_operating_model_sha256,
+            "attested operating model differs from the exact source model")
 
     build_domains = {"windows-native-build", "macos-native-build"}
     if build_domains.intersection(domains):
@@ -1238,7 +1271,14 @@ def self_test():
         self_test_products = {}
         for logical_name, artifact_name in QUALIFICATION_PRODUCT_EVIDENCE.items():
             product_path = root / artifact_name
-            product_path.write_bytes(f"qualification product: {logical_name}\n".encode())
+            if logical_name == "operating_model":
+                product_path.write_bytes(
+                    (ROOT / "tests" / "operating_model.json").read_bytes()
+                )
+            else:
+                product_path.write_bytes(
+                    f"qualification product: {logical_name}\n".encode()
+                )
             self_test_products[logical_name] = product_path
         self_test_model_digest = hashlib.sha256(
             self_test_products["operating_model"].read_bytes()
@@ -1588,7 +1628,15 @@ def self_test():
                 },
             },
         }
-        verify_document(valid, root / "attestation.json")
+        verify_document(valid, root / "attestation.json", self_test_model_digest)
+        try:
+            verify_document(valid, root / "attestation.json", "f" * 64)
+        except ValueError:
+            pass
+        else:
+            raise ValueError(
+                "negative control accepted: substituted operating-model identity"
+            )
 
         qualification_controls = []
         missing_gate = json.loads(json.dumps(valid))
