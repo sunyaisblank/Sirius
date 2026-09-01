@@ -298,6 +298,47 @@ def verify_authority_checkout_policy() -> None:
         raise RuntimeError("authority checkout policy accepted an external-only attribute")
 
 
+def attestation_source_authority_errors(source: str) -> list[str]:
+    """Keep standalone and producer verification bound to one selected checkout."""
+    errors: list[str] = []
+    required_markers = {
+        "selected-root model hashing":
+            "def source_operating_model_sha256(source_root=ROOT)",
+        "clean Git source inspection":
+            "expected_source_revision = inspect_build_source(source_root)",
+        "selected-root model forwarding":
+            "source_operating_model_sha256(source_root)",
+        "stable source reinspection":
+            "inspect_build_source(source_root, expected_source_revision)",
+        "standalone CLI source forwarding":
+            "verify_path(args.attestation, args.source_root or ROOT)",
+        "native producer source forwarding":
+            "verify_document_against_source(document, args.output, args.source_root)",
+    }
+    for label, marker in required_markers.items():
+        if marker not in source:
+            errors.append(f"attestation verifier omits {label}")
+    return errors
+
+
+def verify_attestation_source_authority_policy() -> None:
+    source = (ROOT / "scripts" / "verify-attestation.py").read_text(encoding="utf-8")
+    if attestation_source_authority_errors(source):
+        raise RuntimeError("attestation source-authority policy rejected the live verifier")
+    detached_cli = source.replace(
+        "verify_path(args.attestation, args.source_root or ROOT)",
+        "verify_path(args.attestation)",
+    )
+    if not attestation_source_authority_errors(detached_cli):
+        raise RuntimeError("attestation policy accepted an inert --source-root argument")
+    detached_model = source.replace(
+        "source_operating_model_sha256(source_root)",
+        "source_operating_model_sha256()",
+    )
+    if not attestation_source_authority_errors(detached_model):
+        raise RuntimeError("attestation policy accepted verifier-checkout model substitution")
+
+
 def cmake_source_owners() -> Counter[Path]:
     owners: Counter[Path] = Counter()
     for cmake_file in SOURCE_ROOT.rglob("CMakeLists.txt"):
@@ -2135,6 +2176,7 @@ def verify() -> list[str]:
     verify_strict_test_volume_policy()
     verify_integration_boundary_policy()
     verify_authority_checkout_policy()
+    verify_attestation_source_authority_policy()
     verify_srgb_transfer_authority_policy()
     verify_xyz_srgb_authority_policy()
     verify_cie1931_observer_authority_policy()
@@ -2163,6 +2205,11 @@ def verify() -> list[str]:
                 OPERATING_MODEL.read_bytes(), attributes, attribute_source
             )
         )
+    errors.extend(
+        attestation_source_authority_errors(
+            (ROOT / "scripts" / "verify-attestation.py").read_text(encoding="utf-8")
+        )
+    )
     workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
     dependencies = (ROOT / "cmake" / "sirius_dependencies.cmake").read_text(
         encoding="utf-8"

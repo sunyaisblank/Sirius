@@ -8,12 +8,17 @@ are `attestation_required` in `tests/operating_model.json`; an absent record is
 Every admitted record uses schema version 1 and passes:
 
 ```bash
-python3 scripts/verify-attestation.py path/to/attestation.json
+python3 scripts/verify-attestation.py \
+  --source-root /path/to/clean/exact-revision-checkout \
+  path/to/attestation.json
 ```
 
 The verifier requires a passing domain-appropriate test estate, source revision,
 UTC completion time, exact domain identity, and byte count plus SHA-256 for every
-artifact. It independently hashes this checkout's canonical
+artifact. Standalone verification derives both the clean Git revision and model
+identity from `--source-root`; omitting the option selects the verifier's own
+checkout. It rejects an attested revision that differs from that selected
+worktree. It independently hashes the selected checkout's canonical
 `tests/operating_model.json` and rejects a bundle whose gated operating-model
 product differs, even when the bundle's receipt and gate are internally
 self-consistent. Aggregate admission passes that independently derived digest
@@ -49,7 +54,8 @@ are cross-checked rather than trusted from result booleans. Artifact paths must 
 unique and remain inside the record bundle. Its Mandatory self-test proves that
 software devices, missing hardware identity or upstream evidence, false test
 state, wrong 1080p or IMAX dimensions, ambiguous or unbound revisions, aliased
-artifacts, and tampered hashes are rejected.
+artifacts, tampered hashes, and substituted models or revisions are rejected.
+Repository source governance separately rejects a detached source-root CLI.
 
 ## Zero-render preflight
 

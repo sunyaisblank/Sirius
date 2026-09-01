@@ -53,7 +53,11 @@ witness for each model-derived required domain at one clean revision and emits
 the sole alignment receipt, including the exact operating-model digest. An
 individual bundle's gated operating-model product must first byte-match that
 independently hashed source model; agreement among a substituted bundle's own
-receipt, gate, and product is insufficient. An external witness is admissible
+receipt, gate, and product is insufficient. Standalone verification and native
+evidence issuance derive both that model digest and the expected revision from
+one selected clean Git source root; the CLI cannot silently fall back to the
+verifier checkout after an operator supplies another exact-revision checkout.
+An external witness is admissible
 only from a strict, non-packageable qualification
 build: its copied candidate executable, qualification gate, gate-generated
 JUnit/log, independently rerun JUnit/live inventory, and configure-time

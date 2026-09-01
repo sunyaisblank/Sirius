@@ -73,9 +73,9 @@ def require(condition, message):
         raise ValueError(message)
 
 
-def source_operating_model_sha256() -> str:
-    """Return the canonical model identity owned by this verifier's source."""
-    path = ROOT / "tests" / "operating_model.json"
+def source_operating_model_sha256(source_root=ROOT) -> str:
+    """Return the canonical model identity owned by the selected source root."""
+    path = source_root / "tests" / "operating_model.json"
     require(path.is_file(), f"source operating model is missing: {path}")
     payload = path.read_bytes()
     require(payload.endswith(b"\n") and b"\r" not in payload,
@@ -1155,9 +1155,30 @@ def verify_document(data, location, expected_operating_model_sha256=None):
         )
 
 
-def verify_path(path):
+def verify_document_against_authority(
+    data, location, expected_source_revision, expected_operating_model_sha256,
+):
+    verify_document(data, location, expected_operating_model_sha256)
+    require(data.get("source_revision") == expected_source_revision,
+            "attested source revision differs from the selected Git worktree")
+
+
+def verify_document_against_source(data, location, source_root):
+    expected_source_revision = inspect_build_source(source_root)
+    verify_document_against_authority(
+        data,
+        location,
+        expected_source_revision,
+        source_operating_model_sha256(source_root),
+    )
+    require(inspect_build_source(source_root, expected_source_revision)
+            == expected_source_revision,
+            "source identity changed while verifying attestation")
+
+
+def verify_path(path, source_root=ROOT):
     data = json.loads(path.read_text(encoding="utf-8"))
-    verify_document(data, path)
+    verify_document_against_source(data, path, source_root)
 
 
 def load_json_artifacts(paths):
@@ -1629,6 +1650,12 @@ def self_test():
             },
         }
         verify_document(valid, root / "attestation.json", self_test_model_digest)
+        verify_document_against_authority(
+            valid,
+            root / "attestation.json",
+            source_revision,
+            self_test_model_digest,
+        )
         try:
             verify_document(valid, root / "attestation.json", "f" * 64)
         except ValueError:
@@ -1636,6 +1663,19 @@ def self_test():
         else:
             raise ValueError(
                 "negative control accepted: substituted operating-model identity"
+            )
+        try:
+            verify_document_against_authority(
+                valid,
+                root / "attestation.json",
+                "f" * 40,
+                self_test_model_digest,
+            )
+        except ValueError:
+            pass
+        else:
+            raise ValueError(
+                "negative control accepted: substituted source revision authority"
             )
 
         qualification_controls = []
@@ -2288,7 +2328,7 @@ def self_test():
 def validate_build_source_identity(revision, status, expected_revision=None):
     require(re.fullmatch(r"[0-9a-f]{40,64}", revision) is not None,
             "build source revision is not a full lowercase hexadecimal revision")
-    require(status == "", "native build attestation requires a clean source tree")
+    require(status == "", "attestation verification requires a clean source tree")
     if expected_revision is not None:
         require(expected_revision == revision,
                 "expected source revision differs from the tested Git worktree")
@@ -2305,7 +2345,7 @@ def validate_build_host(reported_platform, host_platform=None):
 
 def inspect_build_source(source_root, expected_revision=None):
     require(source_root is not None and source_root.is_dir(),
-            "record-build requires a Git source root")
+            "attestation verification requires a Git source root")
     try:
         revision = subprocess.run(
             ["git", "rev-parse", "HEAD"],
@@ -2516,7 +2556,7 @@ def record_build(args):
         },
     }
     args.output.write_text(json.dumps(document, indent=2) + "\n", encoding="utf-8")
-    verify_document(document, args.output)
+    verify_document_against_source(document, args.output, args.source_root)
     require(inspect_build_source(args.source_root, args.source_revision) == revision,
             "source identity changed while issuing native build evidence")
 
@@ -2558,7 +2598,7 @@ def main():
             record_build(args)
             print(f"build attestation recorded and verified: {args.output}")
         elif args.attestation is not None:
-            verify_path(args.attestation)
+            verify_path(args.attestation, args.source_root or ROOT)
             print(f"attestation verified: {args.attestation}")
         else:
             parser.error("provide an attestation path or --self-test")
