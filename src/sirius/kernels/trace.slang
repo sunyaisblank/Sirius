@@ -639,9 +639,11 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     float pupilRight = 0.0f;
     float pupilUp = 0.0f;
     if (lensModel == 1) {
+        float pupilSampleU = params[66];
+        float pupilSampleV = params[67];
         ThinLensProjectionSample pupil = ProjectThinLensSample(
             imageX, imageY, tanHalfFov, focalLength, aperture,
-            focusDistance, sampleU, sampleV);
+            focusDistance, pupilSampleU, pupilSampleV);
         screenDirection = pupil.direction;
         pupilRight = pupil.pupilRight;
         pupilUp = pupil.pupilUp;

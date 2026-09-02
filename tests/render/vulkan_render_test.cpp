@@ -119,9 +119,11 @@ std::vector<float> BuildTraceParams(const Scene& scene) {
     const double sp = std::sin(cartesian_phi);
     const double cp = std::cos(cartesian_phi);
 
-    std::vector<float> p(66, 0.0f);
+    std::vector<float> p(68, 0.0f);
     p[44] = 0.5f;
     p[45] = 0.5f;
+    p[66] = 0.5f;
+    p[67] = 0.5f;
     p[51] = 1.0f;
     p[0] = static_cast<float>(scene.width);
     p[1] = static_cast<float>(scene.height);
@@ -889,9 +891,11 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalB
     const double theta = kInclinationDeg * kPi / 180.0;
     const double st = std::sin(theta);
     const double ct = std::cos(theta);
-    std::vector<float> params(66, 0.0f);
+    std::vector<float> params(68, 0.0f);
     params[44] = 0.5f;
     params[45] = 0.5f;
+    params[66] = 0.5f;
+    params[67] = 0.5f;
     params[51] = 1.0f;
     params[0] = w;
     params[1] = h;

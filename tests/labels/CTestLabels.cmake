@@ -117,6 +117,11 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     CaptureSurfaceTests.SchwarzschildHorizonIsCaptured
     CaptureSurfaceTests.KerrOblateHorizonUsesKerrRadius
     CaptureSurfaceTests.HorizonlessSpacetimesNeverCapture

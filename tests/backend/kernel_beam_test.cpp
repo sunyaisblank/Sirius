@@ -50,9 +50,11 @@ std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
 
 // Kerr a=0.9 down the spin axis from 40M, single tile, gradient background.
 std::vector<float> BaseParams(std::uint32_t w, std::uint32_t h) {
-    std::vector<float> params(66, 0.0f);
+    std::vector<float> params(68, 0.0f);
     params[44] = 0.5f;
     params[45] = 0.5f;
+    params[66] = 0.5f;
+    params[67] = 0.5f;
     params[51] = 1.0f;
     params[0] = float(w);
     params[1] = float(h);

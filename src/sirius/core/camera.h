@@ -232,12 +232,15 @@ class ICamera {
     virtual ~ICamera() = default;
 
     // Generate a ray for pixel (x, y) with sample offset (u, v) in [0, 1).
-    virtual CameraRay GenerateRay(int x, int y, float u = 0.5f, float v = 0.5f) const = 0;
+    // Omitting the independent pupil pair selects the aperture centre.
+    virtual CameraRay GenerateRay(int x, int y, float image_u = 0.5f, float image_v = 0.5f,
+                                  float pupil_u = 0.5f, float pupil_v = 0.0f) const = 0;
 
     // Generate the rest-frame screen ray and bind its observer worldline. The
     // metric-aware tracer performs the tetrad boost at the launch event.
-    CameraRay GenerateRayForObserver(int x, int y, float u = 0.5f, float v = 0.5f) const {
-        CameraRay ray = GenerateRay(x, y, u, v);
+    CameraRay GenerateRayForObserver(int x, int y, float image_u = 0.5f, float image_v = 0.5f,
+                                     float pupil_u = 0.5f, float pupil_v = 0.0f) const {
+        CameraRay ray = GenerateRay(x, y, image_u, image_v, pupil_u, pupil_v);
         const auto& cfg = GetConfig();
         const double beta_squared =
             cfg.beta_x * cfg.beta_x + cfg.beta_y * cfg.beta_y + cfg.beta_z * cfg.beta_z;
@@ -265,11 +268,14 @@ class ICamera {
     }
 
   protected:
-    void RequirePixelSample(int x, int y, float u, float v) const {
+    void RequirePixelSample(int x, int y, float image_u, float image_v, float pupil_u,
+                            float pupil_v) const {
         const auto& config = GetConfig();
         SIRIUS_PRE(x >= 0 && x < config.width && y >= 0 && y < config.height);
-        SIRIUS_PRE(std::isfinite(u) && u >= 0.0f && u < 1.0f);
-        SIRIUS_PRE(std::isfinite(v) && v >= 0.0f && v < 1.0f);
+        SIRIUS_PRE(std::isfinite(image_u) && image_u >= 0.0f && image_u < 1.0f);
+        SIRIUS_PRE(std::isfinite(image_v) && image_v >= 0.0f && image_v < 1.0f);
+        SIRIUS_PRE(std::isfinite(pupil_u) && pupil_u >= 0.0f && pupil_u < 1.0f);
+        SIRIUS_PRE(std::isfinite(pupil_v) && pupil_v >= 0.0f && pupil_v < 1.0f);
     }
 };
 
@@ -281,8 +287,10 @@ class PinholeCamera : public ICamera {
         UpdateInternals();
     }
 
-    CameraRay GenerateRay(int x, int y, float u = 0.5f, float v = 0.5f) const override {
-        RequirePixelSample(x, y, u, v);
+    CameraRay GenerateRay(int x, int y, float image_u = 0.5f, float image_v = 0.5f,
+                          [[maybe_unused]] float pupil_u = 0.5f,
+                          [[maybe_unused]] float pupil_v = 0.0f) const override {
+        RequirePixelSample(x, y, image_u, image_v, pupil_u, pupil_v);
         CameraRay ray;
 
         // Set origin
@@ -292,8 +300,8 @@ class PinholeCamera : public ICamera {
         ray.origin(3) = config_.phi;
 
         // Normalised device coordinates (-1 to 1)
-        float px = (2.0f * (x + u) / config_.width - 1.0f) * aspect_ratio_;
-        float py = 1.0f - 2.0f * (y + v) / config_.height;
+        float px = (2.0f * (x + image_u) / config_.width - 1.0f) * aspect_ratio_;
+        float py = 1.0f - 2.0f * (y + image_v) / config_.height;
 
         // Direction in camera space (looking along -Z)
         float dx = px * tan_half_fov_;
@@ -377,8 +385,9 @@ class ThinLensCamera : public ICamera {
         UpdateInternals();
     }
 
-    CameraRay GenerateRay(int x, int y, float u = 0.5f, float v = 0.5f) const override {
-        RequirePixelSample(x, y, u, v);
+    CameraRay GenerateRay(int x, int y, float image_u = 0.5f, float image_v = 0.5f,
+                          float pupil_u = 0.5f, float pupil_v = 0.0f) const override {
+        RequirePixelSample(x, y, image_u, image_v, pupil_u, pupil_v);
         CameraRay ray;
 
         ray.origin(0) = config_.t;
@@ -387,8 +396,8 @@ class ThinLensCamera : public ICamera {
         ray.origin(3) = config_.phi;
 
         // Point on image plane
-        float px = (2.0f * (x + u) / config_.width - 1.0f) * aspect_ratio_;
-        float py = 1.0f - 2.0f * (y + v) / config_.height;
+        float px = (2.0f * (x + image_u) / config_.width - 1.0f) * aspect_ratio_;
+        float py = 1.0f - 2.0f * (y + image_v) / config_.height;
 
         // The spacetime uses geometric coordinate units and has no physical
         // mass-to-millimetre scale, so 50 mm-equivalent defines one virtual
@@ -396,7 +405,7 @@ class ThinLensCamera : public ICamera {
         // displacement in its metric-orthonormal camera frame.
         const ThinLensProjectionSample sample =
             ProjectThinLensSample(px, py, tan_half_fov_, config_.focal_length, config_.aperture,
-                                  config_.focus_distance, u, v);
+                                  config_.focus_distance, pupil_u, pupil_v);
         ray.aperture_up = sample.pupil_up;
         ray.aperture_right = sample.pupil_right;
 
@@ -438,8 +447,10 @@ class FisheyeCamera : public ICamera {
         UpdateInternals();
     }
 
-    CameraRay GenerateRay(int x, int y, float u = 0.5f, float v = 0.5f) const override {
-        RequirePixelSample(x, y, u, v);
+    CameraRay GenerateRay(int x, int y, float image_u = 0.5f, float image_v = 0.5f,
+                          [[maybe_unused]] float pupil_u = 0.5f,
+                          [[maybe_unused]] float pupil_v = 0.0f) const override {
+        RequirePixelSample(x, y, image_u, image_v, pupil_u, pupil_v);
         CameraRay ray;
 
         ray.origin(0) = config_.t;
@@ -448,8 +459,8 @@ class FisheyeCamera : public ICamera {
         ray.origin(3) = config_.phi;
 
         // Normalised coordinates from centre
-        float px = (2.0f * (x + u) / config_.width - 1.0f) * aspect_ratio_;
-        float py = 1.0f - 2.0f * (y + v) / config_.height;
+        float px = (2.0f * (x + image_u) / config_.width - 1.0f) * aspect_ratio_;
+        float py = 1.0f - 2.0f * (y + image_v) / config_.height;
 
         // Radial distance from centre
         float r_img = std::sqrt(px * px + py * py);

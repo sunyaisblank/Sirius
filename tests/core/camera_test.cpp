@@ -172,8 +172,8 @@ TEST(ThinLensCameraTest, DifferentSamplesGiveDifferentRays) {
 
     ThinLensCamera camera(config);
 
-    CameraRay ray1 = camera.GenerateRay(50, 50, 0.1f, 0.1f);
-    CameraRay ray2 = camera.GenerateRay(50, 50, 0.9f, 0.9f);
+    CameraRay ray1 = camera.GenerateRay(50, 50, 0.5f, 0.5f, 0.1f, 0.1f);
+    CameraRay ray2 = camera.GenerateRay(50, 50, 0.5f, 0.5f, 0.9f, 0.9f);
 
     // Different (u,v) samples should produce different ray directions
     bool different = false;
@@ -229,7 +229,7 @@ TEST(ThinLensCameraTest, PupilSamplesSpanFiniteLaunchAndConvergeAtFocus) {
     for (const auto& [u, v] : {std::pair{0.25f, 0.64f}, std::pair{0.70f, 0.36f}}) {
         const int x = 237;
         const int y = 71;
-        const CameraRay ray = camera.GenerateRay(x, y, u, v);
+        const CameraRay ray = camera.GenerateRay(x, y, 0.35f, 0.65f, u, v);
         const double pupil_radius = std::hypot(ray.aperture_up, ray.aperture_right);
         EXPECT_GT(pupil_radius, 0.0) << "finite-aperture sample retained the pinhole event";
         EXPECT_LE(pupil_radius, static_cast<double>(
@@ -243,9 +243,9 @@ TEST(ThinLensCameraTest, PupilSamplesSpanFiniteLaunchAndConvergeAtFocus) {
         const double focus_up = ray.aperture_up + affine_to_focus * direction_up;
         const double focus_right = ray.aperture_right + affine_to_focus * direction_right;
 
-        const double image_right = (2.0 * (static_cast<double>(x) + u) / config.width - 1.0) *
+        const double image_right = (2.0 * (static_cast<double>(x) + 0.35) / config.width - 1.0) *
                                    (static_cast<double>(config.width) / config.height);
-        const double image_up = 1.0 - 2.0 * (static_cast<double>(y) + v) / config.height;
+        const double image_up = 1.0 - 2.0 * (static_cast<double>(y) + 0.65) / config.height;
         const double tan_half_fov = std::tan(config.fov * std::numbers::pi / 360.0);
         EXPECT_NEAR(focus_up, image_up * tan_half_fov * config.focus_distance, 5.0e-6);
         EXPECT_NEAR(focus_right, image_right * tan_half_fov * config.focus_distance, 5.0e-6);

@@ -190,8 +190,10 @@ THIN_LENS_CPU_CONSUMER = SOURCE_ROOT / "backend" / "cpu" / "geodesic_tracer.cpp"
 THIN_LENS_DEVICE_AUTHORITY = SOURCE_ROOT / "kernels" / "gr_camera.slang"
 THIN_LENS_DEVICE_CONSUMER = SOURCE_ROOT / "kernels" / "trace.slang"
 THIN_LENS_PARITY_PROBE = SOURCE_ROOT / "kernels" / "parity_probe.slang"
+THIN_LENS_SAMPLE_AUTHORITY = SOURCE_ROOT / "core" / "camera_sampling.h"
 THIN_LENS_APP_BOUNDARY = SOURCE_ROOT / "app" / "config" / "config_loader.cpp"
 THIN_LENS_SESSION_BOUNDARY = SOURCE_ROOT / "render" / "session" / "render_session.cpp"
+THIN_LENS_VULKAN_BOUNDARY = SOURCE_ROOT / "render" / "vulkan_renderer.cpp"
 VOLUME_TRANSFER_HOST_AUTHORITY = KERR_TRANSFER_AUTHORITY
 VOLUME_TRANSFER_CPU_CONSUMER = KERR_TRANSFER_CPU_CONSUMER
 VOLUME_TRANSFER_DEVICE_AUTHORITY = KERR_TRANSFER_DEVICE_AUTHORITY
@@ -1437,6 +1439,7 @@ def thin_lens_authority_errors(documents: dict[Path, str]) -> list[str]:
             "ThinLensGeometryIssue",
             "ray.aperture_up = sample.pupil_up",
             "ray.aperture_right = sample.pupil_right",
+            "config_.focus_distance, pupil_u, pupil_v",
         ),
         THIN_LENS_CPU_CONSUMER: (
             "camera_ray.aperture_up",
@@ -1456,6 +1459,8 @@ def thin_lens_authority_errors(documents: dict[Path, str]) -> list[str]:
             "ScaleVec4Cart(cameraFrame.up, Real(pupilUp))",
             "ScaleVec4Cart(cameraFrame.right, Real(pupilRight))",
             "state.x = pos0",
+            "float pupilSampleU = params[66]",
+            "float pupilSampleV = params[67]",
         ),
         THIN_LENS_PARITY_PROBE: (
             "OP_THIN_LENS_PROJECTION",
@@ -1463,8 +1468,27 @@ def thin_lens_authority_errors(documents: dict[Path, str]) -> list[str]:
             "pupil.pupilRight",
             "pupil.pupilUp",
         ),
+        THIN_LENS_SAMPLE_AUTHORITY: (
+            "ForEachCameraSample",
+            "RadicalInverse(ordinal, 5)",
+            "RadicalInverse(ordinal, 7)",
+        ),
         THIN_LENS_APP_BOUNDARY: ("ThinLensGeometryIssue",),
-        THIN_LENS_SESSION_BOUNDARY: ("ThinLensGeometryIssue",),
+        THIN_LENS_SESSION_BOUNDARY: (
+            "ThinLensGeometryIssue",
+            "ForEachCameraSample",
+            "sample.image_u",
+            "sample.image_v",
+            "sample.pupil_u",
+            "sample.pupil_v",
+        ),
+        THIN_LENS_VULKAN_BOUNDARY: (
+            "ForEachCameraSample",
+            "params[44] = sample.image_u",
+            "params[45] = sample.image_v",
+            "params[66] = sample.pupil_u",
+            "params[67] = sample.pupil_v",
+        ),
     }
     code_by_path: dict[Path, str] = {}
     for path, markers in required.items():
@@ -1495,6 +1519,12 @@ def thin_lens_authority_errors(documents: dict[Path, str]) -> list[str]:
 
     device = code_by_path.get(THIN_LENS_DEVICE_CONSUMER, "")
     if re.search(
+        r"ProjectThinLensSample\s*\([^;]*?pupilSampleU\s*,\s*pupilSampleV\s*\)",
+        device,
+        re.DOTALL,
+    ) is None:
+        errors.append("the Slang thin lens reuses film coordinates for its pupil")
+    if re.search(
         r"pos0\s*=\s*AddVec4Cart\s*\(.*?cameraFrame\.up.*?pupilUp.*?"
         r"cameraFrame\.right.*?pupilRight.*?state\.x\s*=\s*pos0",
         device,
@@ -1510,6 +1540,7 @@ def verify_thin_lens_authority_policy() -> None:
             "ProjectThinLensSample ThinLensGeometryIssue "
             "ray.aperture_up = sample.pupil_up; "
             "ray.aperture_right = sample.pupil_right; "
+            "config_.focus_distance, pupil_u, pupil_v; "
             "pupil_radius > kMaximumThinLensPupilFraction * local_scale"
         ),
         THIN_LENS_CPU_CONSUMER: (
@@ -1523,7 +1554,9 @@ def verify_thin_lens_authority_policy() -> None:
             "ThinLensProjectionSample ProjectThinLensSample pupilRight pupilUp"
         ),
         THIN_LENS_DEVICE_CONSUMER: (
-            "ProjectThinLensSample pos0 = AddVec4Cart("
+            "float pupilSampleU = params[66]; float pupilSampleV = params[67]; "
+            "ProjectThinLensSample(imageX, imageY, tanHalfFov, focalLength, aperture, "
+            "focusDistance, pupilSampleU, pupilSampleV); pos0 = AddVec4Cart("
             "ScaleVec4Cart(cameraFrame.up, Real(pupilUp)), "
             "ScaleVec4Cart(cameraFrame.right, Real(pupilRight))); state.x = pos0;"
         ),
@@ -1531,8 +1564,19 @@ def verify_thin_lens_authority_policy() -> None:
             "OP_THIN_LENS_PROJECTION ProjectThinLensSample "
             "pupil.pupilRight pupil.pupilUp"
         ),
+        THIN_LENS_SAMPLE_AUTHORITY: (
+            "ForEachCameraSample RadicalInverse(ordinal, 5) RadicalInverse(ordinal, 7)"
+        ),
         THIN_LENS_APP_BOUNDARY: "ThinLensGeometryIssue",
-        THIN_LENS_SESSION_BOUNDARY: "ThinLensGeometryIssue",
+        THIN_LENS_SESSION_BOUNDARY: (
+            "ThinLensGeometryIssue ForEachCameraSample sample.image_u sample.image_v "
+            "sample.pupil_u sample.pupil_v"
+        ),
+        THIN_LENS_VULKAN_BOUNDARY: (
+            "ForEachCameraSample params[44] = sample.image_u; "
+            "params[45] = sample.image_v; params[66] = sample.pupil_u; "
+            "params[67] = sample.pupil_v;"
+        ),
     }
     if thin_lens_authority_errors(valid):
         raise RuntimeError("thin-lens policy rejected the finite-pupil wiring")
@@ -1557,6 +1601,20 @@ def verify_thin_lens_authority_policy() -> None:
     )
     if not thin_lens_authority_errors(unbounded):
         raise RuntimeError("thin-lens policy accepted an unbounded local pupil")
+
+    diagonal_host = dict(valid)
+    diagonal_host[THIN_LENS_SESSION_BOUNDARY] = diagonal_host[
+        THIN_LENS_SESSION_BOUNDARY
+    ].replace("sample.pupil_u sample.pupil_v", "sample.image_u sample.image_v")
+    if not thin_lens_authority_errors(diagonal_host):
+        raise RuntimeError("thin-lens policy accepted collapsed CPU film/pupil dimensions")
+
+    diagonal_device = dict(valid)
+    diagonal_device[THIN_LENS_DEVICE_CONSUMER] = diagonal_device[
+        THIN_LENS_DEVICE_CONSUMER
+    ].replace("pupilSampleU, pupilSampleV", "sampleU, sampleV")
+    if not thin_lens_authority_errors(diagonal_device):
+        raise RuntimeError("thin-lens policy accepted collapsed Slang film/pupil dimensions")
 
 
 def kerr_zamo_transfer_authority_errors(documents: dict[Path, str]) -> list[str]:

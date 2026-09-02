@@ -127,7 +127,7 @@
       "required": true,
       "verification": "attestation_required",
       "profiles": ["cpu", "vulkan", "physical-imax-5616x4096"],
-      "requirement": "Arbitrary finite timelike camera velocity and aberration compose with pinhole and finite-aperture lenses. A finite-aperture sample must launch across the camera-rest-frame pupil rather than changing direction at one pinhole event, converge on its requested focus-plane point, and remain within the bounded local tangent-plane domain r_pupil <= 0.1 min(r_observer, d_focus); the independent Slang projection must match that geometry. The 5616x4096 scene then resolves within the governed hardware envelope.",
+      "requirement": "Arbitrary finite timelike camera velocity and aberration compose with pinhole and finite-aperture lenses. Film position and pupil position must occupy separate dimensions of the exact-count deterministic camera sequence rather than collapsing the four-dimensional lens integral onto a two-dimensional diagonal. A finite-aperture sample must launch across the camera-rest-frame pupil rather than changing direction at one pinhole event, converge on its requested focus-plane point, and remain within the bounded local tangent-plane domain r_pupil <= 0.1 min(r_observer, d_focus); the independent Slang projection must match that geometry. The 5616x4096 scene then resolves within the governed hardware envelope.",
       "capability_dependencies": ["physical_imax_5616x4096"],
       "evidence": [
         {"kind": "gtest", "name": "ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform"},
@@ -136,6 +136,7 @@
         {"kind": "gtest", "name": "ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView"},
         {"kind": "gtest", "name": "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus"},
         {"kind": "gtest", "name": "ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane"},
+        {"kind": "gtest", "name": "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions"},
         {"kind": "gtest", "name": "CpuTraceBoundary.FinitePupilOffsetMovesTheLiveCpuLaunchEvent"},
         {"kind": "gtest", "name": "KernelParity.ThinLensPupilProjectionAndFocusMatchIndependentCoreModel"},
         {"kind": "gtest", "name": "VulkanRenderSession.NonSquareMultisamplingCameraAndLensReachLiveKernel"},
@@ -345,7 +346,8 @@
     {
       "id": "sampling_semantics",
       "evidence": [
-        {"kind": "gtest", "name": "PixelSampling.EmitsExactlyEveryRequestedNonSquareCount"}
+        {"kind": "gtest", "name": "PixelSampling.EmitsExactlyEveryRequestedNonSquareCount"},
+        {"kind": "gtest", "name": "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions"}
       ]
     },
     {
@@ -475,6 +477,7 @@
         {"kind": "gtest", "name": "ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne"},
         {"kind": "gtest", "name": "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus"},
         {"kind": "gtest", "name": "ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane"},
+        {"kind": "gtest", "name": "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions"},
         {"kind": "gtest", "name": "CpuTraceBoundary.FinitePupilOffsetMovesTheLiveCpuLaunchEvent"},
         {"kind": "gtest", "name": "KernelParity.ThinLensPupilProjectionAndFocusMatchIndependentCoreModel"},
         {"kind": "gtest", "name": "CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels"},
