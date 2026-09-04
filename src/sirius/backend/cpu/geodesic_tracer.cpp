@@ -1086,7 +1086,7 @@ float GeodesicTracer::ComputeScaleHeight(float r) {
     // H(r)/r = clamp[(H/r)_ref (r/r_ref)^h_power, 0.01, 0.5].
     // The saturation bounds are part of the represented model; the operator's
     // reference value is validated inside the same interval.
-    float r_ref = config_.disk_inner;
+    const float r_ref = static_cast<float>(config_.disk_inner);
     float r_ratio = r / r_ref;
     float H_over_r =
         config_.volumetric_scale_height_ratio * std::pow(r_ratio, config_.volumetric_flare_power);
