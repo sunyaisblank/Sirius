@@ -84,6 +84,7 @@ SUITE_LABELS = {
     "FisheyeCameraTest": MANDATORY,
     "ICameraTest": MANDATORY,
     "CameraFactoryTest": MANDATORY,
+    "CameraSampling": MANDATORY,
     "SpectralEmissionTest": MANDATORY,
     # Numerical stability (build gate)
     "NumericalStabilityTests": STABILITY,

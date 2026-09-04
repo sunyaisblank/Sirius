@@ -97,6 +97,16 @@ def inspect_operating_model(path: Path) -> tuple[str, tuple[str, ...]]:
     return hashlib.sha256(payload).hexdigest(), derived
 
 
+def require_source_operating_model(
+    source_root: Path, expected_sha256: str
+) -> None:
+    source_sha256, _ = inspect_operating_model(
+        source_root / "tests" / "operating_model.json"
+    )
+    require(source_sha256 == expected_sha256,
+            "selected operating model differs from the exact source model")
+
+
 def discover_attestations(root: Path | None) -> list[Path]:
     if root is None:
         return []
@@ -117,12 +127,14 @@ def discover_attestations(root: Path | None) -> list[Path]:
     return attestations
 
 
-def verified_records(paths: list[Path], source_revision: str) -> list[dict]:
+def verified_records(
+    paths: list[Path], source_revision: str, operating_model_sha256: str
+) -> list[dict]:
     verifier = load_attestation_verifier()
     records = []
     for path in paths:
         document = json.loads(path.read_text(encoding="utf-8"))
-        verifier.verify_document(document, path)
+        verifier.verify_document(document, path, operating_model_sha256)
         require(
             document["source_revision"] == source_revision,
             f"attestation {path} names revision {document['source_revision']}, "
@@ -259,6 +271,13 @@ def self_test() -> None:
     )
     require(model_domains == REQUIRED_DOMAINS,
             "operating-model domain authority was not derived exactly")
+    require_source_operating_model(ROOT, model_digest)
+    try:
+        require_source_operating_model(ROOT, "f" * 64)
+    except ValueError:
+        pass
+    else:
+        raise ValueError("alignment accepted a substituted source model")
     complete = [
         {
             "domains": list(REQUIRED_DOMAINS),
@@ -389,7 +408,11 @@ def main() -> None:
         require(args.operating_model is not None, "--operating-model is required")
         require(args.output is not None, "--output is required")
         model_digest, _ = inspect_operating_model(args.operating_model)
+        if args.mode in {"qualification", "release"}:
+            require(args.source_root is not None,
+                    f"{args.mode} alignment requires --source-root")
         if args.source_root is not None:
+            require_source_operating_model(args.source_root, model_digest)
             actual_revision, actual_clean = inspect_git_source(args.source_root)
             require(
                 actual_revision == args.source_revision,
@@ -400,7 +423,7 @@ def main() -> None:
                 "source tree cleanliness changed after configuration; reconfigure the build",
             )
         paths = discover_attestations(args.attestation_root)
-        records = verified_records(paths, args.source_revision)
+        records = verified_records(paths, args.source_revision, model_digest)
         receipt = build_receipt(
             records,
             args.source_revision,

@@ -8,12 +8,24 @@ are `attestation_required` in `tests/operating_model.json`; an absent record is
 Every admitted record uses schema version 1 and passes:
 
 ```bash
-python3 scripts/verify-attestation.py path/to/attestation.json
+python3 scripts/verify-attestation.py \
+  --source-root /path/to/clean/exact-revision-checkout \
+  path/to/attestation.json
 ```
 
 The verifier requires a passing domain-appropriate test estate, source revision,
 UTC completion time, exact domain identity, and byte count plus SHA-256 for every
-artifact. Native-build records bind the full governed CTest registration, the
+artifact. Standalone verification derives both the clean Git revision and model
+identity from `--source-root`; omitting the option selects the verifier's own
+checkout. It rejects an attested revision that differs from that selected
+worktree. It independently hashes the selected checkout's canonical
+`tests/operating_model.json` and rejects a bundle whose gated operating-model
+product differs, even when the bundle's receipt and gate are internally
+self-consistent. Aggregate admission passes that independently derived digest
+into every record verification before admitting its domains; qualification and
+release admission also require `--source-root` and refuse a selected model that
+differs from that exact Git worktree. Native-build records bind the full
+governed CTest registration, the
 exact nine-case non-render authority estate, every compiled test executable, all
 nine products, the alignment receipt, and the copied candidate. Runtime
 records must additionally identify the physical device, driver, Vulkan API,
@@ -42,7 +54,8 @@ are cross-checked rather than trusted from result booleans. Artifact paths must 
 unique and remain inside the record bundle. Its Mandatory self-test proves that
 software devices, missing hardware identity or upstream evidence, false test
 state, wrong 1080p or IMAX dimensions, ambiguous or unbound revisions, aliased
-artifacts, and tampered hashes are rejected.
+artifacts, tampered hashes, and substituted models or revisions are rejected.
+Repository source governance separately rejects a detached source-root CLI.
 
 ## Zero-render preflight
 
@@ -87,7 +100,12 @@ uses that selection for inventory, readiness, the complete test estate, the
 1920x1080 and 5616x4096 governed renders, and every precision rung. Both scenes
 disable disk emission so their structure must come from the ray-bundle-filtered,
 display-calibrated 100,000-star point catalogue; it combines that catalogue with
-a nonzero timelike camera velocity and the finite-aperture thin lens. The verifier
+a nonzero timelike camera velocity and the finite-aperture thin lens. Film
+jitter and pupil position come from separate deterministic camera-sample
+dimensions; reusing the film pair for the pupil cannot satisfy the build gate.
+Mandatory host/device projection controls first require that this lens moves the metric
+launch event across its bounded rest-frame pupil and reconverges at the focus
+plane; they do not replace the physical frame. The verifier
 requires those P3/P5 semantics in the record, fully decodes both governed PNGs,
 and admits only structured RGB images at 1920 by 1080 and 5616 by 4096 under a
 2048 MiB budget. It also requires one unambiguous hashed typed-session scene

@@ -59,9 +59,9 @@ constexpr float kTraceStepScale = 0.08f;
 // owned by the shared Page-Thorne/blackbody/invariant-transfer kernel path.
 constexpr float kDiskOuterFactor = 20.0f;
 
-// Exact dense params-buffer ABI through the last consumed slot (65).
+// Exact dense params-buffer ABI through the last consumed slot (67).
 // Host and kernel indices are kept explicit so a new control must extend both.
-constexpr std::uint32_t kParamCount = 66;
+constexpr std::uint32_t kParamCount = 68;
 constexpr int kMaxVulkanVolumeSamples = 128;
 
 // Kernel dispatch ids (must match trace.slang / gr_types.slang).
@@ -345,6 +345,8 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
     params[63] = static_cast<float>(config.volumetric_samples);
     params[64] = config.enable_turbulence ? 1.0f : 0.0f;
     params[65] = config.wormhole_topology == WormholeTopology::TwoSheet ? 1.0f : 0.0f;
+    params[66] = 0.5f;  // Per-dispatch finite-pupil sample u.
+    params[67] = 0.5f;  // Per-dispatch finite-pupil sample v.
 }
 
 }  // namespace
@@ -627,16 +629,18 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
                 const auto gy = static_cast<std::uint32_t>((bh + 7) / 8);
                 int sample_index = 0;
                 std::optional<base::Error> sample_error;
-                ForEachPixelSample(config.samples_per_pixel, [&](float sample_u, float sample_v) {
+                ForEachCameraSample(config.samples_per_pixel, [&](const CameraSample& sample) {
                     if (sample_error.has_value()) return;
                     if (should_cancel && should_cancel()) {
                         sample_error =
                             base::Error{ErrorDomain::kInternal, "render Vulkan frame", "cancelled"};
                         return;
                     }
-                    params[44] = sample_u;
-                    params[45] = sample_v;
+                    params[44] = sample.image_u;
+                    params[45] = sample.image_v;
                     params[46] = static_cast<float>(sample_index);
+                    params[66] = sample.pupil_u;
+                    params[67] = sample.pupil_v;
                     if (auto w = device.WriteBuffer(*params_buf,
                                                     std::as_bytes(std::span<const float>(params)));
                         !w) {

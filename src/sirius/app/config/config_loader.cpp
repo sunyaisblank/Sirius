@@ -596,6 +596,12 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
             issue.has_value()) {
             errors.emplace_back(*issue);
         }
+        if (const auto issue = core::ThinLensGeometryIssue(
+                *lens_type, config.observer.distance, config.observer.focal_length,
+                config.observer.aperture, config.observer.focus_distance);
+            issue.has_value()) {
+            errors.emplace_back(*issue);
+        }
     }
 
     // --- Post-process validation --------------------------------------------

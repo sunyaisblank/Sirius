@@ -189,13 +189,13 @@ float PtAngularVelocityDerivative(float r, float a) {
     return -3.0f * sqrt(r) / (2.0f * denominator * denominator);
 }
 
-public float FullPageThorneFluxShape(float r, float rIsco, float aStar) {
-    if (r <= rIsco * 1.001f) return 0.0f;
+public float FullPageThorneFluxShape(float r, float rInner, float aStar) {
+    if (r <= rInner * 1.001f) return 0.0f;
     float energy = PtSpecificEnergy(r, aStar);
     float angularMomentum = PtSpecificAngularMomentum(r, aStar);
     float omega = PtAngularVelocity(r, aStar);
-    float halfWidth = 0.5f * (r - rIsco);
-    float midpoint = 0.5f * (r + rIsco);
+    float halfWidth = 0.5f * (r - rInner);
+    float midpoint = 0.5f * (r + rInner);
     float integral = 0.0f;
     for (int i = 0; i < 16; ++i) {
         float ri = midpoint + halfWidth * PT_GL_NODES[i];
@@ -213,13 +213,13 @@ public float FullPageThorneFluxShape(float r, float rIsco, float aStar) {
     return max(correction / r, 0.0f);
 }
 
-public float FullPageThorneTemperature(float temperatureScale, float r, float rIsco,
+public float FullPageThorneTemperature(float temperatureScale, float r, float rInner,
                                        float M, float aStar) {
     float radiusInM = r / M;
-    float iscoInM = rIsco / M;
-    float flux = FullPageThorneFluxShape(radiusInM, iscoInM, aStar);
+    float innerInM = rInner / M;
+    float flux = FullPageThorneFluxShape(radiusInM, innerInM, aStar);
     float reference = FullPageThorneFluxShape(
-        DISK_TEMPERATURE_REFERENCE_RADIUS_RATIO * iscoInM, iscoInM, aStar);
+        DISK_TEMPERATURE_REFERENCE_RADIUS_RATIO * innerInM, innerInM, aStar);
     if (flux <= 0.0f || reference <= 0.0f) return 0.0f;
     return temperatureScale * pow(flux / reference, 0.25f);
 }

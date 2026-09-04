@@ -16,6 +16,7 @@
 // coverage and two disk/blackbody temperatures.
 
 #include "sirius/backend/device.h"
+#include "sirius/core/camera.h"
 #include "sirius/core/celestial_tangent_basis.h"
 #include "sirius/core/cie1931_observer.h"
 #include "sirius/core/coordinates.h"
@@ -38,6 +39,7 @@
 #include <cstdint>
 #include <fstream>
 #include <limits>
+#include <numbers>
 #include <span>
 #include <string>
 #include <vector>
@@ -83,6 +85,7 @@ constexpr std::uint32_t kOpGreyLayerAbsorption = 17;
 constexpr std::uint32_t kOpSphericalCaptureEvent = 18;
 constexpr std::uint32_t kOpEllisTwoSheetTrace = 19;
 constexpr std::uint32_t kOpWarpRk4Decline = 20;
+constexpr std::uint32_t kOpThinLensProjection = 21;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -379,6 +382,34 @@ const std::array<float, 64> kS3_christoffel = {
     -0.0132742766f,   -0.0556216836f, -0.0223035496f, 0.0946279168f};
 
 // -----------------------------------------------------------------------------
+
+TEST(KernelParity, ThinLensPupilProjectionAndFocusMatchIndependentCoreModel) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    Sample sample;
+    sample.p1 = 50.0f;   // focal length
+    sample.p2 = 2.0f;    // f-number
+    sample.p3 = 30.0f;   // focus distance
+    sample.c0 = 0.37f;   // image right
+    sample.c1 = -0.21f;  // image up
+    sample.c2 = std::tan(52.0f * std::numbers::pi_v<float> / 360.0f);
+    sample.u0 = 0.27f;
+    sample.u1 = 0.64f;
+
+    const auto result = RunProbe(*f.device, f.kernel, kOpThinLensProjection, {sample});
+    const auto core = sirius::core::ProjectThinLensSample(
+        sample.c0, sample.c1, sample.c2, sample.p1, sample.p2, sample.p3, sample.u0, sample.u1);
+    EXPECT_NEAR(result[0], core.pupil_right, 2.0e-6f);
+    EXPECT_NEAR(result[1], core.pupil_up, 2.0e-6f);
+    EXPECT_NEAR(result[2], core.direction_forward, 2.0e-6f);
+    EXPECT_NEAR(result[3], core.direction_up, 2.0e-6f);
+    EXPECT_NEAR(result[4], core.direction_right, 2.0e-6f);
+    EXPECT_GT(std::hypot(result[0], result[1]), 0.0f)
+        << "device finite-aperture sample retained the pinhole event";
+    EXPECT_NEAR(result[5], sample.c1 * sample.c2 * sample.p3, 3.0e-6f);
+    EXPECT_NEAR(result[6], sample.c0 * sample.c2 * sample.p3, 3.0e-6f);
+}
 
 TEST(KernelParity, KerrSchildMetricMatchesLegacyToOnePartInMillion) {
     Fixture f = OpenProbe();
@@ -833,7 +864,7 @@ TEST(KernelParity, FullPageThorneDiskTemperatureMatchesIndependentCoreModel) {
     Fixture f = OpenProbe();
     if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
 
-    Sample s8;  // Kerr a=0.9 at r=8; r_isco and inner temperature in aux slots
+    Sample s8;  // Kerr a=0.9 at r=8; declared edge and temperature in aux slots
     s8.p1 = 1.0f;
     s8.p2 = 0.9f;
     s8.c0 = 8.0f;
@@ -856,15 +887,23 @@ TEST(KernelParity, FullPageThorneDiskTemperatureMatchesIndependentCoreModel) {
     s10.aux0 = 2.0f * retrograde_isco;
     s10.aux1 = 10000.0f;
 
-    const std::vector<Sample> samples = {s8, s9, s10};
+    Sample s11;  // Schwarzschild disk truncated at r=10, sampled at r=12
+    s11.p1 = 1.0f;
+    s11.p2 = 0.0f;
+    s11.c0 = 12.0f;
+    s11.aux0 = 10.0f;
+    s11.aux1 = 10000.0f;
+
+    const std::vector<Sample> samples = {s8, s9, s10, s11};
     const auto r = RunProbe(*f.device, f.kernel, kOpDiskTemp, samples);
 
-    const auto expected_temperature = [](double spin, double radius) {
+    const auto expected_temperature = [](double spin, double radius, double inner_radius = 0.0) {
         sirius::core::AccretionDiskD::Config config;
         config.M = 1.0;
         config.a_star = spin;
+        config.r_inner = inner_radius;
         sirius::core::AccretionDiskD disk(config);
-        return 10000.0 * disk.Temperature(radius) / disk.Temperature(1.5 * disk.IscoRadius());
+        return 10000.0 * disk.Temperature(radius) / disk.Temperature(1.5 * disk.InnerRadius());
     };
 
     // The kernel is fp32 quadrature while the independent Core model is double.
@@ -880,6 +919,12 @@ TEST(KernelParity, FullPageThorneDiskTemperatureMatchesIndependentCoreModel) {
                       static_cast<float>(expected_temperature(-0.7, 10.0)), 2e-4f, 2e-3f, "S10 T"));
     EXPECT_GT(r[2 * kResultStride + 1], 0.0f);
     EXPECT_TRUE(Close(r[2 * kResultStride + 2], 2.0f * retrograde_isco, 1e-4f, 1e-6f, "S10 isco"));
+    EXPECT_TRUE(Close(r[3 * kResultStride + 0],
+                      static_cast<float>(expected_temperature(0.0, 12.0, 10.0)), 2e-4f, 2e-3f,
+                      "S11 truncated T"));
+    EXPECT_GT(r[3 * kResultStride + 1], 0.0f);
+    EXPECT_FLOAT_EQ(r[3 * kResultStride + 2], 6.0f)
+        << "the orbit diagnostic must remain ISCO while the profile uses the declared edge";
 }
 
 TEST(KernelParity, RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco) {

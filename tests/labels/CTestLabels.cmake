@@ -117,6 +117,11 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     CaptureSurfaceTests.SchwarzschildHorizonIsCaptured
     CaptureSurfaceTests.KerrOblateHorizonUsesKerrRadius
     CaptureSurfaceTests.HorizonlessSpacetimesNeverCapture
@@ -292,6 +297,8 @@ set_tests_properties(
 
 set_tests_properties(
     CpuTraceBoundary.EveryAdvertisedCpuMetricConstructsAndTracesOneRay
+    CpuTraceBoundary.FinitePupilOffsetMovesTheLiveCpuLaunchEvent
+    CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge
     CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle
     CpuTraceBoundary.JacobiBundleTerminatesAtTheSameCausalEvent
     CpuTraceBoundary.OneSheetEllisNamesTheRegularThroatBoundary
@@ -400,6 +407,7 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    KernelParity.ThinLensPupilProjectionAndFocusMatchIndependentCoreModel
     KernelParity.KerrSchildMetricMatchesLegacyToOnePartInMillion
     KernelParity.RepresentedSubThresholdKerrMetricIsScaleCovariant
     KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation
@@ -970,6 +978,8 @@ set_tests_properties(
     ThinLensCameraTest.CentreRayWithDefaultSampling
     ThinLensCameraTest.DifferentSamplesGiveDifferentRays
     ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView
+    ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus
+    ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 

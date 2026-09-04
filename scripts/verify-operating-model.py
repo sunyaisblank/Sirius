@@ -137,6 +137,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature",
         "gtest:AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge",
         "gtest:DopplerToggleTest.SuppressionCollapsesDiskAsymmetry",
+        "gtest:CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge",
         "gtest:GeodesicTracerRedshift.NearExtremalInnerDiskEmissionRemainsFinite",
         "gtest:GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile",
         "gtest:KerrOrbitAuthority.EveryCpuConsumerSharesSignedIscoAndCircularEmitterLaw",
@@ -179,6 +180,11 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform",
         "gtest:RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration",
         "gtest:ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView",
+        "gtest:ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus",
+        "gtest:ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane",
+        "gtest:CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions",
+        "gtest:CpuTraceBoundary.FinitePupilOffsetMovesTheLiveCpuLaunchEvent",
+        "gtest:KernelParity.ThinLensPupilProjectionAndFocusMatchIndependentCoreModel",
         "gtest:VulkanRenderSession.CombinedParitySceneRetainsResolvedImageStructure",
         "gtest:VulkanRenderSession.NonSquareMultisamplingCameraAndLensReachLiveKernel",
     },
@@ -273,9 +279,9 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "4ddb7a12207fd7c3ef4d8c18f732b4fcd8104a8eb5a9f5c3592849f9d1a1fba2",
-    "required_dimensions": "74a22fa25f1bf80180e89efea98acf454cc1b0dab6447149fcbffc113626bb15",
-    "capability_contracts": "5205bede85abb0127da446773ddf4028e04431a0c527bca177e47277e722813a",
+    "acceptance_criteria": "71b381823888159237bb3cd5a1a7635fa0f6ae571f4f2e4b172b9c8c581ab9a2",
+    "required_dimensions": "569190fc1e4596340bd899b7a9076d99f4bb2054bfe0d9dadbb6598f4ff382d9",
+    "capability_contracts": "59c9fc728ede9a900467cc173f18b60087dca06b0877af9011902c3002e15bcb",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
 

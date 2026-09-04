@@ -7,6 +7,7 @@
 #include "sirius/base/contracts.h"
 #include "sirius/core/tensor.h"
 
+#include <algorithm>
 #include <cmath>
 #include <memory>
 #include <numbers>
@@ -27,6 +28,46 @@ enum class LensType {
 inline constexpr float kDefaultCameraFocalLength = 50.0f;
 inline constexpr float kDefaultCameraAperture = 2.8f;
 inline constexpr float kDefaultCameraFocusDistance = 50.0f;
+inline constexpr float kReferenceFocalLengthMillimetres = 50.0f;
+inline constexpr double kMaximumThinLensPupilFraction = 0.1;
+
+struct ThinLensProjectionSample {
+    float pupil_right = 0.0f;
+    float pupil_up = 0.0f;
+    float direction_forward = 1.0f;
+    float direction_up = 0.0f;
+    float direction_right = 0.0f;
+};
+
+[[nodiscard]] inline float ThinLensApertureRadius(float focal_length, float aperture) noexcept {
+    return (focal_length / kReferenceFocalLengthMillimetres) / (2.0f * aperture);
+}
+
+// Deterministic finite-pupil sample in the camera rest frame. image_right and
+// image_up are normalised image-plane coordinates before the FOV scale. The
+// returned ray starts at (0, pupil_up, pupil_right) on the aperture plane and
+// points to the requested point on the focus plane.
+[[nodiscard]] inline ThinLensProjectionSample ProjectThinLensSample(
+    float image_right, float image_up, float tan_half_fov, float focal_length, float aperture,
+    float focus_distance, float sample_u, float sample_v) noexcept {
+    const float focus_right = image_right * tan_half_fov * focus_distance;
+    const float focus_up = image_up * tan_half_fov * focus_distance;
+    const float aperture_radius = ThinLensApertureRadius(focal_length, aperture);
+    const float pupil_angle = 2.0f * static_cast<float>(std::numbers::pi) * sample_u;
+    const float pupil_radius = aperture_radius * std::sqrt(sample_v);
+
+    ThinLensProjectionSample sample;
+    sample.pupil_right = pupil_radius * std::cos(pupil_angle);
+    sample.pupil_up = pupil_radius * std::sin(pupil_angle);
+    const float forward = focus_distance;
+    const float up = focus_up - sample.pupil_up;
+    const float right = focus_right - sample.pupil_right;
+    const float inverse_length = 1.0f / std::sqrt(forward * forward + up * up + right * right);
+    sample.direction_forward = forward * inverse_length;
+    sample.direction_up = up * inverse_length;
+    sample.direction_right = right * inverse_length;
+    return sample;
+}
 
 [[nodiscard]] constexpr std::optional<LensType> ParseLensType(std::string_view name) noexcept {
     if (name == "Pinhole") return LensType::Pinhole;
@@ -53,6 +94,19 @@ inline constexpr float kDefaultCameraFocusDistance = 50.0f;
     return std::nullopt;
 }
 
+[[nodiscard]] inline std::optional<std::string_view> ThinLensGeometryIssue(
+    LensType lens, double observer_radius, float focal_length, float aperture,
+    float focus_distance) noexcept {
+    if (lens != LensType::ThinLens) return std::nullopt;
+    const double pupil_radius = ThinLensApertureRadius(focal_length, aperture);
+    const double local_scale = std::min(observer_radius, static_cast<double>(focus_distance));
+    if (!std::isfinite(pupil_radius) || !(pupil_radius > 0.0) || !std::isfinite(local_scale) ||
+        !(local_scale > 0.0) || pupil_radius > kMaximumThinLensPupilFraction * local_scale) {
+        return "thin-lens pupil exceeds the represented local tangent-plane domain";
+    }
+    return std::nullopt;
+}
+
 // Ray emitted by a camera: observer position and unit 4-direction.
 struct CameraRay {
     Vec4 origin;                // Ray origin (observer position)
@@ -60,6 +114,11 @@ struct CameraRay {
     double beta_forward = 0.0;  // Observer v/c in the screen-forward direction
     double beta_up = 0.0;       // Observer v/c in the screen-up direction
     double beta_right = 0.0;    // Observer v/c in the screen-right direction
+    // Finite-aperture displacement in the camera's instantaneous rest screen.
+    // The metric-aware CPU/device launch boundary applies it to the ray event;
+    // changing direction alone would still be a pinhole.
+    double aperture_up = 0.0;
+    double aperture_right = 0.0;
     // False identifies a projection-masked sample (for example, outside the
     // circular fisheye image). Such a sample contributes black and must not be
     // passed to the geodesic tracer with its deliberately zero direction.
@@ -78,7 +137,10 @@ struct CameraRay {
     }
     const double beta_squared = ray.beta_forward * ray.beta_forward + ray.beta_up * ray.beta_up +
                                 ray.beta_right * ray.beta_right;
-    if (!std::isfinite(beta_squared) || beta_squared >= 1.0) return false;
+    if (!std::isfinite(beta_squared) || beta_squared >= 1.0 || !std::isfinite(ray.aperture_up) ||
+        !std::isfinite(ray.aperture_right)) {
+        return false;
+    }
     const double direction_norm_squared = ray.direction(1) * ray.direction(1) +
                                           ray.direction(2) * ray.direction(2) +
                                           ray.direction(3) * ray.direction(3);
@@ -155,8 +217,13 @@ struct CameraConfig {
         !std::isfinite(config.focus_distance) || config.focus_distance <= 0.0f) {
         return "thin-lens parameters must be finite and positive";
     }
-    return LensSpecificParameterIssue(lens, config.focal_length, config.aperture,
-                                      config.focus_distance);
+    if (const auto issue = LensSpecificParameterIssue(lens, config.focal_length, config.aperture,
+                                                      config.focus_distance);
+        issue.has_value()) {
+        return issue;
+    }
+    return ThinLensGeometryIssue(lens, config.r, config.focal_length, config.aperture,
+                                 config.focus_distance);
 }
 
 // Abstract camera: generates a ray per pixel sample.
@@ -165,12 +232,15 @@ class ICamera {
     virtual ~ICamera() = default;
 
     // Generate a ray for pixel (x, y) with sample offset (u, v) in [0, 1).
-    virtual CameraRay GenerateRay(int x, int y, float u = 0.5f, float v = 0.5f) const = 0;
+    // Omitting the independent pupil pair selects the aperture centre.
+    virtual CameraRay GenerateRay(int x, int y, float image_u = 0.5f, float image_v = 0.5f,
+                                  float pupil_u = 0.5f, float pupil_v = 0.0f) const = 0;
 
     // Generate the rest-frame screen ray and bind its observer worldline. The
     // metric-aware tracer performs the tetrad boost at the launch event.
-    CameraRay GenerateRayForObserver(int x, int y, float u = 0.5f, float v = 0.5f) const {
-        CameraRay ray = GenerateRay(x, y, u, v);
+    CameraRay GenerateRayForObserver(int x, int y, float image_u = 0.5f, float image_v = 0.5f,
+                                     float pupil_u = 0.5f, float pupil_v = 0.0f) const {
+        CameraRay ray = GenerateRay(x, y, image_u, image_v, pupil_u, pupil_v);
         const auto& cfg = GetConfig();
         const double beta_squared =
             cfg.beta_x * cfg.beta_x + cfg.beta_y * cfg.beta_y + cfg.beta_z * cfg.beta_z;
@@ -198,11 +268,14 @@ class ICamera {
     }
 
   protected:
-    void RequirePixelSample(int x, int y, float u, float v) const {
+    void RequirePixelSample(int x, int y, float image_u, float image_v, float pupil_u,
+                            float pupil_v) const {
         const auto& config = GetConfig();
         SIRIUS_PRE(x >= 0 && x < config.width && y >= 0 && y < config.height);
-        SIRIUS_PRE(std::isfinite(u) && u >= 0.0f && u < 1.0f);
-        SIRIUS_PRE(std::isfinite(v) && v >= 0.0f && v < 1.0f);
+        SIRIUS_PRE(std::isfinite(image_u) && image_u >= 0.0f && image_u < 1.0f);
+        SIRIUS_PRE(std::isfinite(image_v) && image_v >= 0.0f && image_v < 1.0f);
+        SIRIUS_PRE(std::isfinite(pupil_u) && pupil_u >= 0.0f && pupil_u < 1.0f);
+        SIRIUS_PRE(std::isfinite(pupil_v) && pupil_v >= 0.0f && pupil_v < 1.0f);
     }
 };
 
@@ -214,8 +287,10 @@ class PinholeCamera : public ICamera {
         UpdateInternals();
     }
 
-    CameraRay GenerateRay(int x, int y, float u = 0.5f, float v = 0.5f) const override {
-        RequirePixelSample(x, y, u, v);
+    CameraRay GenerateRay(int x, int y, float image_u = 0.5f, float image_v = 0.5f,
+                          [[maybe_unused]] float pupil_u = 0.5f,
+                          [[maybe_unused]] float pupil_v = 0.0f) const override {
+        RequirePixelSample(x, y, image_u, image_v, pupil_u, pupil_v);
         CameraRay ray;
 
         // Set origin
@@ -225,8 +300,8 @@ class PinholeCamera : public ICamera {
         ray.origin(3) = config_.phi;
 
         // Normalised device coordinates (-1 to 1)
-        float px = (2.0f * (x + u) / config_.width - 1.0f) * aspect_ratio_;
-        float py = 1.0f - 2.0f * (y + v) / config_.height;
+        float px = (2.0f * (x + image_u) / config_.width - 1.0f) * aspect_ratio_;
+        float py = 1.0f - 2.0f * (y + image_v) / config_.height;
 
         // Direction in camera space (looking along -Z)
         float dx = px * tan_half_fov_;
@@ -310,8 +385,9 @@ class ThinLensCamera : public ICamera {
         UpdateInternals();
     }
 
-    CameraRay GenerateRay(int x, int y, float u = 0.5f, float v = 0.5f) const override {
-        RequirePixelSample(x, y, u, v);
+    CameraRay GenerateRay(int x, int y, float image_u = 0.5f, float image_v = 0.5f,
+                          float pupil_u = 0.5f, float pupil_v = 0.0f) const override {
+        RequirePixelSample(x, y, image_u, image_v, pupil_u, pupil_v);
         CameraRay ray;
 
         ray.origin(0) = config_.t;
@@ -320,43 +396,24 @@ class ThinLensCamera : public ICamera {
         ray.origin(3) = config_.phi;
 
         // Point on image plane
-        float px = (2.0f * (x + u) / config_.width - 1.0f) * aspect_ratio_;
-        float py = 1.0f - 2.0f * (y + v) / config_.height;
+        float px = (2.0f * (x + image_u) / config_.width - 1.0f) * aspect_ratio_;
+        float py = 1.0f - 2.0f * (y + image_v) / config_.height;
 
-        // Point on the focus plane. A ray through the centre of the aperture
-        // must have exactly the same perspective projection as the pinhole
-        // camera; the previous focal-length division silently collapsed a 60
-        // degree request to roughly two degrees at the default 50 mm setting.
-        float focus_x = px * tan_half_fov_ * config_.focus_distance;
-        float focus_y = py * tan_half_fov_ * config_.focus_distance;
-        float focus_z = -config_.focus_distance;
-
-        // Random point on the aperture (for depth of field). The spacetime uses
-        // geometric M units and has no physical mass-to-millimetre scale, so a
-        // 50 mm-equivalent lens defines one virtual lens unit. This preserves
-        // the f-number and focal-length controls without mixing raw millimetres
-        // directly with a focus distance measured in geometric coordinates.
-        constexpr float kReferenceFocalLengthMillimetres = 50.0f;
-        float aperture_radius =
-            (config_.focal_length / kReferenceFocalLengthMillimetres) / (2.0f * config_.aperture);
-        // Use deterministic jitter based on u, v
-        float theta = 2.0f * static_cast<float>(std::numbers::pi) * u;
-        float r_lens = aperture_radius * std::sqrt(v);
-        float lens_x = r_lens * std::cos(theta);
-        float lens_y = r_lens * std::sin(theta);
-
-        // Direction from lens point to focus point
-        float dx = focus_x - lens_x;
-        float dy = focus_y - lens_y;
-        float dz = focus_z;
-
-        float len = std::sqrt(dx * dx + dy * dy + dz * dz);
+        // The spacetime uses geometric coordinate units and has no physical
+        // mass-to-millimetre scale, so 50 mm-equivalent defines one virtual
+        // lens unit. The launch boundary applies the returned finite pupil
+        // displacement in its metric-orthonormal camera frame.
+        const ThinLensProjectionSample sample =
+            ProjectThinLensSample(px, py, tan_half_fov_, config_.focal_length, config_.aperture,
+                                  config_.focus_distance, pupil_u, pupil_v);
+        ray.aperture_up = sample.pupil_up;
+        ray.aperture_right = sample.pupil_right;
 
         // Same coordinate mapping as PinholeCamera (see detailed comments there)
         ray.direction(0) = 0.0f;
-        ray.direction(1) = dz / len;   // vr
-        ray.direction(2) = -dy / len;  // r*vtheta (minus sign: +Y -> -theta)
-        ray.direction(3) = dx / len;   // r*sin theta*vphi
+        ray.direction(1) = -sample.direction_forward;  // screen forward = radial inward
+        ray.direction(2) = -sample.direction_up;       // screen up = decreasing theta
+        ray.direction(3) = sample.direction_right;     // screen right = increasing phi
 
         return ray;
     }
@@ -390,8 +447,10 @@ class FisheyeCamera : public ICamera {
         UpdateInternals();
     }
 
-    CameraRay GenerateRay(int x, int y, float u = 0.5f, float v = 0.5f) const override {
-        RequirePixelSample(x, y, u, v);
+    CameraRay GenerateRay(int x, int y, float image_u = 0.5f, float image_v = 0.5f,
+                          [[maybe_unused]] float pupil_u = 0.5f,
+                          [[maybe_unused]] float pupil_v = 0.0f) const override {
+        RequirePixelSample(x, y, image_u, image_v, pupil_u, pupil_v);
         CameraRay ray;
 
         ray.origin(0) = config_.t;
@@ -400,8 +459,8 @@ class FisheyeCamera : public ICamera {
         ray.origin(3) = config_.phi;
 
         // Normalised coordinates from centre
-        float px = (2.0f * (x + u) / config_.width - 1.0f) * aspect_ratio_;
-        float py = 1.0f - 2.0f * (y + v) / config_.height;
+        float px = (2.0f * (x + image_u) / config_.width - 1.0f) * aspect_ratio_;
+        float py = 1.0f - 2.0f * (y + image_v) / config_.height;
 
         // Radial distance from centre
         float r_img = std::sqrt(px * px + py * py);

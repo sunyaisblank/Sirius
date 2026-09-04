@@ -352,6 +352,12 @@ std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
         issue.has_value()) {
         return std::string(*issue);
     }
+    if (const auto issue = core::ThinLensGeometryIssue(
+            config.lens_type, config.observer_distance, config.camera_focal_length,
+            config.camera_aperture, config.camera_focus_distance);
+        issue.has_value()) {
+        return std::string(*issue);
+    }
 
     switch (config.temperature_model) {
         case DiskTemperatureModel::NovikovThorne:
@@ -952,61 +958,63 @@ RenderSession::PixelResult RenderSession::ShadePixel(int px_coord, int py_coord,
     PixelResult result;
     float r_acc = 0.0f, g_acc = 0.0f, b_acc = 0.0f;
 
-    const int samples_taken = ForEachPixelSample(config_.samples_per_pixel, [&](float u, float v) {
-        CameraRay camera_ray = camera_->GenerateRayForObserver(px_coord, py_coord, u, v);
-        SIRIUS_ASSERT(core::IsRepresentedCameraRay(camera_ray));
-        if (!camera_ray.active) return;
-        TraceResult trace_result = tracer->Trace(camera_ray);
+    const int samples_taken =
+        ForEachCameraSample(config_.samples_per_pixel, [&](const CameraSample& sample) {
+            CameraRay camera_ray = camera_->GenerateRayForObserver(
+                px_coord, py_coord, sample.image_u, sample.image_v, sample.pupil_u, sample.pupil_v);
+            SIRIUS_ASSERT(core::IsRepresentedCameraRay(camera_ray));
+            if (!camera_ray.active) return;
+            TraceResult trace_result = tracer->Trace(camera_ray);
 
-        float sr = 0.0f, sg = 0.0f, sb = 0.0f;
+            float sr = 0.0f, sg = 0.0f, sb = 0.0f;
 
-        switch (trace_result.outcome) {
-            case TraceResult::Outcome::Horizon:
-            case TraceResult::Outcome::Throat:
-                break;
+            switch (trace_result.outcome) {
+                case TraceResult::Outcome::Horizon:
+                case TraceResult::Outcome::Throat:
+                    break;
 
-            case TraceResult::Outcome::DiskHit: {
-                PixelResult disk = ShadeDiskHit(trace_result);
-                sr = disk.r;
-                sg = disk.g;
-                sb = disk.b;
-                break;
+                case TraceResult::Outcome::DiskHit: {
+                    PixelResult disk = ShadeDiskHit(trace_result);
+                    sr = disk.r;
+                    sg = disk.g;
+                    sb = disk.b;
+                    break;
+                }
+
+                case TraceResult::Outcome::Escaped: {
+                    PixelResult esc = ShadeEscaped(trace_result);
+                    sr = esc.r;
+                    sg = esc.g;
+                    sb = esc.b;
+                    break;
+                }
+
+                case TraceResult::Outcome::MaxSteps:
+                    sr = sg = sb = 0.0f;
+                    break;
+                default:
+                    SIRIUS_ASSERT(false);
+                    sr = 1.0f;
+                    sg = 0.0f;
+                    sb = 1.0f;
+                    break;
             }
 
-            case TraceResult::Outcome::Escaped: {
-                PixelResult esc = ShadeEscaped(trace_result);
-                sr = esc.r;
-                sg = esc.g;
-                sb = esc.b;
-                break;
+            // Volumetric transfer composes with the terminal surface/background;
+            // it is not a terminal ray outcome. Apply I = I_bg exp(-tau) + I_vol
+            // after shading the actual fate of the central ray.
+            if (trace_result.volumetric_hit) {
+                PixelResult volume = ShadeDiskHit(trace_result);
+                const float transmission = std::exp(-std::max(trace_result.optical_depth, 0.0f));
+                sr = sr * transmission + volume.r;
+                sg = sg * transmission + volume.g;
+                sb = sb * transmission + volume.b;
             }
 
-            case TraceResult::Outcome::MaxSteps:
-                sr = sg = sb = 0.0f;
-                break;
-            default:
-                SIRIUS_ASSERT(false);
-                sr = 1.0f;
-                sg = 0.0f;
-                sb = 1.0f;
-                break;
-        }
-
-        // Volumetric transfer composes with the terminal surface/background;
-        // it is not a terminal ray outcome. Apply I = I_bg exp(-tau) + I_vol
-        // after shading the actual fate of the central ray.
-        if (trace_result.volumetric_hit) {
-            PixelResult volume = ShadeDiskHit(trace_result);
-            const float transmission = std::exp(-std::max(trace_result.optical_depth, 0.0f));
-            sr = sr * transmission + volume.r;
-            sg = sg * transmission + volume.g;
-            sb = sb * transmission + volume.b;
-        }
-
-        r_acc += sr;
-        g_acc += sg;
-        b_acc += sb;
-    });
+            r_acc += sr;
+            g_acc += sg;
+            b_acc += sb;
+        });
 
     float inv_samples = 1.0f / static_cast<float>(samples_taken);
     result.r = r_acc * inv_samples;

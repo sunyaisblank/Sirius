@@ -18,6 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 
+ROOT = Path(__file__).resolve().parent.parent
 KNOWN_DOMAINS = {
     "physical-radeon-780m",
     "wsl2-dozen",
@@ -70,6 +71,24 @@ QUALIFICATION_RUNTIME_RESOURCE_PATHS = {
 def require(condition, message):
     if not condition:
         raise ValueError(message)
+
+
+def source_operating_model_sha256(source_root=ROOT) -> str:
+    """Return the canonical model identity owned by the selected source root."""
+    path = source_root / "tests" / "operating_model.json"
+    require(path.is_file(), f"source operating model is missing: {path}")
+    payload = path.read_bytes()
+    require(payload.endswith(b"\n") and b"\r" not in payload,
+            "source operating model must use canonical LF-terminated bytes")
+    try:
+        model = json.loads(payload.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise ValueError(f"source operating model is unreadable: {error}") from error
+    require(isinstance(model, dict)
+            and model.get("schema_version") == 3
+            and model.get("method") == "adversarial-claim-ledger",
+            "source operating model has an unsupported schema or method")
+    return hashlib.sha256(payload).hexdigest()
 
 
 def load_build_gate_verifier():
@@ -732,7 +751,13 @@ def inspect_native_build_gate(
     return gate
 
 
-def verify_document(data, location):
+def verify_document(data, location, expected_operating_model_sha256=None):
+    if expected_operating_model_sha256 is None:
+        expected_operating_model_sha256 = source_operating_model_sha256()
+    require(isinstance(expected_operating_model_sha256, str)
+            and re.fullmatch(r"[0-9a-f]{64}", expected_operating_model_sha256)
+            is not None,
+            "expected operating-model SHA-256 is malformed")
     require(data.get("schema_version") == 1, "schema_version must be 1")
     require(data.get("status") == "pass", "status must be pass")
     domains = data.get("domains")
@@ -865,6 +890,14 @@ def verify_document(data, location):
         require(digest == recorded_digest, f"artifact {name} hash mismatch")
         artifact_paths.append(path)
         artifact_files[name] = path
+
+    operating_model_path = artifact_files.get(
+        QUALIFICATION_PRODUCT_EVIDENCE["operating_model"]
+    )
+    require(operating_model_path is not None
+            and hashlib.sha256(operating_model_path.read_bytes()).hexdigest()
+            == expected_operating_model_sha256,
+            "attested operating model differs from the exact source model")
 
     build_domains = {"windows-native-build", "macos-native-build"}
     if build_domains.intersection(domains):
@@ -1122,9 +1155,30 @@ def verify_document(data, location):
         )
 
 
-def verify_path(path):
+def verify_document_against_authority(
+    data, location, expected_source_revision, expected_operating_model_sha256,
+):
+    verify_document(data, location, expected_operating_model_sha256)
+    require(data.get("source_revision") == expected_source_revision,
+            "attested source revision differs from the selected Git worktree")
+
+
+def verify_document_against_source(data, location, source_root):
+    expected_source_revision = inspect_build_source(source_root)
+    verify_document_against_authority(
+        data,
+        location,
+        expected_source_revision,
+        source_operating_model_sha256(source_root),
+    )
+    require(inspect_build_source(source_root, expected_source_revision)
+            == expected_source_revision,
+            "source identity changed while verifying attestation")
+
+
+def verify_path(path, source_root=ROOT):
     data = json.loads(path.read_text(encoding="utf-8"))
-    verify_document(data, path)
+    verify_document_against_source(data, path, source_root)
 
 
 def load_json_artifacts(paths):
@@ -1238,7 +1292,14 @@ def self_test():
         self_test_products = {}
         for logical_name, artifact_name in QUALIFICATION_PRODUCT_EVIDENCE.items():
             product_path = root / artifact_name
-            product_path.write_bytes(f"qualification product: {logical_name}\n".encode())
+            if logical_name == "operating_model":
+                product_path.write_bytes(
+                    (ROOT / "tests" / "operating_model.json").read_bytes()
+                )
+            else:
+                product_path.write_bytes(
+                    f"qualification product: {logical_name}\n".encode()
+                )
             self_test_products[logical_name] = product_path
         self_test_model_digest = hashlib.sha256(
             self_test_products["operating_model"].read_bytes()
@@ -1588,7 +1649,34 @@ def self_test():
                 },
             },
         }
-        verify_document(valid, root / "attestation.json")
+        verify_document(valid, root / "attestation.json", self_test_model_digest)
+        verify_document_against_authority(
+            valid,
+            root / "attestation.json",
+            source_revision,
+            self_test_model_digest,
+        )
+        try:
+            verify_document(valid, root / "attestation.json", "f" * 64)
+        except ValueError:
+            pass
+        else:
+            raise ValueError(
+                "negative control accepted: substituted operating-model identity"
+            )
+        try:
+            verify_document_against_authority(
+                valid,
+                root / "attestation.json",
+                "f" * 40,
+                self_test_model_digest,
+            )
+        except ValueError:
+            pass
+        else:
+            raise ValueError(
+                "negative control accepted: substituted source revision authority"
+            )
 
         qualification_controls = []
         missing_gate = json.loads(json.dumps(valid))
@@ -2240,7 +2328,7 @@ def self_test():
 def validate_build_source_identity(revision, status, expected_revision=None):
     require(re.fullmatch(r"[0-9a-f]{40,64}", revision) is not None,
             "build source revision is not a full lowercase hexadecimal revision")
-    require(status == "", "native build attestation requires a clean source tree")
+    require(status == "", "attestation verification requires a clean source tree")
     if expected_revision is not None:
         require(expected_revision == revision,
                 "expected source revision differs from the tested Git worktree")
@@ -2257,7 +2345,7 @@ def validate_build_host(reported_platform, host_platform=None):
 
 def inspect_build_source(source_root, expected_revision=None):
     require(source_root is not None and source_root.is_dir(),
-            "record-build requires a Git source root")
+            "attestation verification requires a Git source root")
     try:
         revision = subprocess.run(
             ["git", "rev-parse", "HEAD"],
@@ -2468,7 +2556,7 @@ def record_build(args):
         },
     }
     args.output.write_text(json.dumps(document, indent=2) + "\n", encoding="utf-8")
-    verify_document(document, args.output)
+    verify_document_against_source(document, args.output, args.source_root)
     require(inspect_build_source(args.source_root, args.source_revision) == revision,
             "source identity changed while issuing native build evidence")
 
@@ -2510,7 +2598,7 @@ def main():
             record_build(args)
             print(f"build attestation recorded and verified: {args.output}")
         elif args.attestation is not None:
-            verify_path(args.attestation)
+            verify_path(args.attestation, args.source_root or ROOT)
             print(f"attestation verified: {args.attestation}")
         else:
             parser.error("provide an attestation path or --self-test")

@@ -101,6 +101,7 @@
         {"kind": "gtest", "name": "KernelParity.BlackbodyMatchesIntegratedCoreSpectrum"},
         {"kind": "gtest", "name": "KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel"},
         {"kind": "gtest", "name": "KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco"},
+        {"kind": "gtest", "name": "CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge"},
         {"kind": "gtest", "name": "GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile"},
         {"kind": "gtest", "name": "AccretionDiskTest.ShakuraSunyaevProfileHasZeroTorqueEdgeAndDeclaredScale"},
         {"kind": "gtest", "name": "GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile"},
@@ -126,13 +127,18 @@
       "required": true,
       "verification": "attestation_required",
       "profiles": ["cpu", "vulkan", "physical-imax-5616x4096"],
-      "requirement": "Arbitrary finite timelike camera velocity and aberration compose with pinhole and finite-aperture lenses, and 5616x4096 resolves within the governed hardware envelope.",
+      "requirement": "Arbitrary finite timelike camera velocity and aberration compose with pinhole and finite-aperture lenses. Film position and pupil position must occupy separate dimensions of the exact-count deterministic camera sequence rather than collapsing the four-dimensional lens integral onto a two-dimensional diagonal. A finite-aperture sample must launch across the camera-rest-frame pupil rather than changing direction at one pinhole event, converge on its requested focus-plane point, and remain within the bounded local tangent-plane domain r_pupil <= 0.1 min(r_observer, d_focus); the independent Slang projection must match that geometry. The 5616x4096 scene then resolves within the governed hardware envelope.",
       "capability_dependencies": ["physical_imax_5616x4096"],
       "evidence": [
         {"kind": "gtest", "name": "ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform"},
         {"kind": "gtest", "name": "ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne"},
         {"kind": "gtest", "name": "CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels"},
         {"kind": "gtest", "name": "ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView"},
+        {"kind": "gtest", "name": "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus"},
+        {"kind": "gtest", "name": "ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane"},
+        {"kind": "gtest", "name": "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions"},
+        {"kind": "gtest", "name": "CpuTraceBoundary.FinitePupilOffsetMovesTheLiveCpuLaunchEvent"},
+        {"kind": "gtest", "name": "KernelParity.ThinLensPupilProjectionAndFocusMatchIndependentCoreModel"},
         {"kind": "gtest", "name": "VulkanRenderSession.NonSquareMultisamplingCameraAndLensReachLiveKernel"},
         {"kind": "gtest", "name": "VulkanRenderSession.CombinedParitySceneRetainsResolvedImageStructure"},
         {"kind": "gtest", "name": "RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration"},
@@ -340,7 +346,8 @@
     {
       "id": "sampling_semantics",
       "evidence": [
-        {"kind": "gtest", "name": "PixelSampling.EmitsExactlyEveryRequestedNonSquareCount"}
+        {"kind": "gtest", "name": "PixelSampling.EmitsExactlyEveryRequestedNonSquareCount"},
+        {"kind": "gtest", "name": "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions"}
       ]
     },
     {
@@ -414,6 +421,7 @@
         {"kind": "gtest", "name": "KernelParity.BlackbodyMatchesIntegratedCoreSpectrum"},
         {"kind": "gtest", "name": "KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel"},
         {"kind": "gtest", "name": "KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco"},
+        {"kind": "gtest", "name": "CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge"},
         {"kind": "gtest", "name": "GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile"},
         {"kind": "gtest", "name": "AccretionDiskTest.ShakuraSunyaevProfileHasZeroTorqueEdgeAndDeclaredScale"},
         {"kind": "gtest", "name": "GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile"},
@@ -467,6 +475,11 @@
         {"kind": "gtest", "name": "RenderSessionProbe.FeatureSpecificControlsRequireOwnersAtTypedBoundary"},
         {"kind": "gtest", "name": "ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform"},
         {"kind": "gtest", "name": "ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne"},
+        {"kind": "gtest", "name": "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus"},
+        {"kind": "gtest", "name": "ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane"},
+        {"kind": "gtest", "name": "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions"},
+        {"kind": "gtest", "name": "CpuTraceBoundary.FinitePupilOffsetMovesTheLiveCpuLaunchEvent"},
+        {"kind": "gtest", "name": "KernelParity.ThinLensPupilProjectionAndFocusMatchIndependentCoreModel"},
         {"kind": "gtest", "name": "CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels"},
         {"kind": "gtest", "name": "RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr"}
       ]
@@ -544,7 +557,7 @@
       "state": "supported",
       "profiles": ["compile", "build", "initialisation"],
       "request": "Produce a release build whose ultimate ideal is internally aligned",
-      "behavior": "Require every external record to come from a clean strict qualification build with immutable governed inputs. The operating model must have canonical LF-terminated UTF-8 checkout bytes on every host, and generated receipts must have one explicit UTF-8/LF byte identity, so one Git revision cannot acquire platform-local compiled authorities. Native-build records must bind the full governed registration, exact nine-case non-render authority estate, every compiled test executable, all nine live products, alignment receipt, and copied candidate bytes; runtime, image, and viewer records must additionally carry the complete zero-skip Mandatory estate and physical evidence under one cross-checked hash chain. Then require one authority for every model-derived domain, a deterministic model-bound release receipt, a fresh artifact-bound zero-skip release gate, installed-product rehashing before render or viewer initialisation, and top-level readiness that remains false outside an aligned release.",
+      "behavior": "Require every external record to come from a clean strict qualification build with immutable governed inputs. The operating model must have canonical LF-terminated UTF-8 checkout bytes on every host, every bundle's gated operating-model product must byte-match the independently selected source model before its domains are admitted, and generated receipts must have one explicit UTF-8/LF byte identity, so one Git revision cannot acquire platform-local or self-consistently substituted compiled authorities. Standalone verification and native evidence issuance must derive both the expected revision and model identity from one selected clean Git source root; an explicitly selected older checkout must never fall back to the verifier branch's model. Native-build records must bind the full governed registration, exact nine-case non-render authority estate, every compiled test executable, all nine live products, alignment receipt, and copied candidate bytes; runtime, image, and viewer records must additionally carry the complete zero-skip Mandatory estate and physical evidence under one cross-checked hash chain. Then require one authority for every model-derived domain, a deterministic model-bound release receipt, a fresh artifact-bound zero-skip release gate, installed-product rehashing before render or viewer initialisation, and top-level readiness that remains false outside an aligned release.",
       "evidence": [
         {"kind": "ctest", "name": "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected"},
         {"kind": "ctest", "name": "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness"},

@@ -180,6 +180,20 @@ KERR_TRANSFER_CPU_CONSUMER = SOURCE_ROOT / "backend" / "cpu" / "geodesic_tracer.
 KERR_TRANSFER_DEVICE_AUTHORITY = SOURCE_ROOT / "kernels" / "gr_disk.slang"
 KERR_TRANSFER_DEVICE_CONSUMER = SOURCE_ROOT / "kernels" / "trace.slang"
 KERR_TRANSFER_PARITY_PROBE = SOURCE_ROOT / "kernels" / "parity_probe.slang"
+PAGE_THORNE_HOST_AUTHORITY = SOURCE_ROOT / "core" / "disk" / "novikov_thorne_disk.h"
+PAGE_THORNE_CPU_CONSUMER = SOURCE_ROOT / "backend" / "cpu" / "geodesic_tracer.h"
+PAGE_THORNE_DEVICE_AUTHORITY = KERR_TRANSFER_DEVICE_AUTHORITY
+PAGE_THORNE_DEVICE_CONSUMER = KERR_TRANSFER_DEVICE_CONSUMER
+PAGE_THORNE_PARITY_PROBE = KERR_TRANSFER_PARITY_PROBE
+THIN_LENS_HOST_AUTHORITY = SOURCE_ROOT / "core" / "camera.h"
+THIN_LENS_CPU_CONSUMER = SOURCE_ROOT / "backend" / "cpu" / "geodesic_tracer.cpp"
+THIN_LENS_DEVICE_AUTHORITY = SOURCE_ROOT / "kernels" / "gr_camera.slang"
+THIN_LENS_DEVICE_CONSUMER = SOURCE_ROOT / "kernels" / "trace.slang"
+THIN_LENS_PARITY_PROBE = SOURCE_ROOT / "kernels" / "parity_probe.slang"
+THIN_LENS_SAMPLE_AUTHORITY = SOURCE_ROOT / "core" / "camera_sampling.h"
+THIN_LENS_APP_BOUNDARY = SOURCE_ROOT / "app" / "config" / "config_loader.cpp"
+THIN_LENS_SESSION_BOUNDARY = SOURCE_ROOT / "render" / "session" / "render_session.cpp"
+THIN_LENS_VULKAN_BOUNDARY = SOURCE_ROOT / "render" / "vulkan_renderer.cpp"
 VOLUME_TRANSFER_HOST_AUTHORITY = KERR_TRANSFER_AUTHORITY
 VOLUME_TRANSFER_CPU_CONSUMER = KERR_TRANSFER_CPU_CONSUMER
 VOLUME_TRANSFER_DEVICE_AUTHORITY = KERR_TRANSFER_DEVICE_AUTHORITY
@@ -291,6 +305,47 @@ def verify_authority_checkout_policy() -> None:
         raise RuntimeError("authority checkout policy accepted unspecified line endings")
     if not authority_checkout_errors(b"{}\n", valid, ""):
         raise RuntimeError("authority checkout policy accepted an external-only attribute")
+
+
+def attestation_source_authority_errors(source: str) -> list[str]:
+    """Keep standalone and producer verification bound to one selected checkout."""
+    errors: list[str] = []
+    required_markers = {
+        "selected-root model hashing":
+            "def source_operating_model_sha256(source_root=ROOT)",
+        "clean Git source inspection":
+            "expected_source_revision = inspect_build_source(source_root)",
+        "selected-root model forwarding":
+            "source_operating_model_sha256(source_root)",
+        "stable source reinspection":
+            "inspect_build_source(source_root, expected_source_revision)",
+        "standalone CLI source forwarding":
+            "verify_path(args.attestation, args.source_root or ROOT)",
+        "native producer source forwarding":
+            "verify_document_against_source(document, args.output, args.source_root)",
+    }
+    for label, marker in required_markers.items():
+        if marker not in source:
+            errors.append(f"attestation verifier omits {label}")
+    return errors
+
+
+def verify_attestation_source_authority_policy() -> None:
+    source = (ROOT / "scripts" / "verify-attestation.py").read_text(encoding="utf-8")
+    if attestation_source_authority_errors(source):
+        raise RuntimeError("attestation source-authority policy rejected the live verifier")
+    detached_cli = source.replace(
+        "verify_path(args.attestation, args.source_root or ROOT)",
+        "verify_path(args.attestation)",
+    )
+    if not attestation_source_authority_errors(detached_cli):
+        raise RuntimeError("attestation policy accepted an inert --source-root argument")
+    detached_model = source.replace(
+        "source_operating_model_sha256(source_root)",
+        "source_operating_model_sha256()",
+    )
+    if not attestation_source_authority_errors(detached_model):
+        raise RuntimeError("attestation policy accepted verifier-checkout model substitution")
 
 
 def cmake_source_owners() -> Counter[Path]:
@@ -1248,6 +1303,320 @@ def verify_blackbody_laws_authority_policy() -> None:
         raise RuntimeError("blackbody-laws policy accepted a mislabeled physical quantity")
 
 
+def page_thorne_edge_authority_errors(documents: dict[Path, str]) -> list[str]:
+    errors: list[str] = []
+    required = {
+        PAGE_THORNE_HOST_AUTHORITY: (
+            "config_.r_inner",
+            "r_inner_ = (config_.r_inner > 0)",
+            "FullPageThorneFlux",
+            "kInnerEdgeBuffer",
+        ),
+        PAGE_THORNE_CPU_CONSUMER: (
+            "page_thorne_disk_->Temperature",
+            "page_thorne_disk_->InnerRadius",
+        ),
+        PAGE_THORNE_DEVICE_AUTHORITY: (
+            "FullPageThorneFluxShape",
+            "FullPageThorneTemperature",
+            "rInner",
+            "innerInM",
+        ),
+        PAGE_THORNE_DEVICE_CONSUMER: (
+            "VolumeDiskTemperature",
+            "FullPageThorneTemperature",
+            "innerRadius",
+        ),
+        PAGE_THORNE_PARITY_PROBE: (
+            "FullPageThorneFluxShape(r / p1, innerRadius / p1, p2)",
+            "FullPageThorneTemperature(innerT, r, innerRadius, p1, p2)",
+        ),
+    }
+    code_by_path: dict[Path, str] = {}
+    for path, markers in required.items():
+        document = documents.get(path)
+        if document is None:
+            errors.append(f"Page-Thorne participant is missing: {relative(path)}")
+            continue
+        code = CPP_NON_CODE.sub(" ", document)
+        code_by_path[path] = code
+        for marker in markers:
+            if marker not in code:
+                errors.append(f"{relative(path)} omits Page-Thorne edge marker {marker}")
+
+    cpu = code_by_path.get(PAGE_THORNE_CPU_CONSUMER, "")
+    if re.search(
+        r"disk_config\.r_inner\s*=\s*static_cast<double>\s*"
+        r"\(\s*config_\.disk_inner\s*\)\s*/\s*cached_m_\s*;",
+        cpu,
+    ) is None:
+        errors.append("the CPU Page-Thorne profile is not constructed from the declared edge")
+    if re.search(
+        r"kTemperatureReferenceRadiusRatio\s*\*\s*"
+        r"page_thorne_disk_->InnerRadius\s*\(\s*\)",
+        cpu,
+    ) is None:
+        errors.append("the CPU Page-Thorne scale is not normalised at the declared edge")
+    if re.search(
+        r"void\s+SetConfig\s*\([^)]*\)\s*\{.*?config_\s*=\s*config\s*;.*?"
+        r"page_thorne_disk_\.reset\s*\(\s*\)\s*;.*?\}",
+        cpu,
+        re.DOTALL,
+    ) is None:
+        errors.append("the CPU Page-Thorne cache can survive a changed declared edge")
+
+    device = code_by_path.get(PAGE_THORNE_DEVICE_CONSUMER, "")
+    for radius in ("cylindricalR", "cr"):
+        if re.search(
+            rf"FullPageThorneTemperature\s*\(\s*innerTemperature\s*,\s*"
+            rf"{radius}\s*,\s*innerRadius\s*,\s*M\s*,\s*aStar\s*\)",
+            device,
+        ) is None:
+            errors.append(
+                f"the Slang Page-Thorne {radius} path does not consume the declared edge"
+            )
+    if re.search(r"\brIsco\b|\bComputeKerrISCO\s*\(", device):
+        errors.append("the Slang trace path recomputes ISCO instead of consuming its declared edge")
+    return errors
+
+
+def verify_page_thorne_edge_authority_policy() -> None:
+    valid = {
+        PAGE_THORNE_HOST_AUTHORITY: (
+            "config_.r_inner r_inner_ = (config_.r_inner > 0) "
+            "FullPageThorneFlux kInnerEdgeBuffer"
+        ),
+        PAGE_THORNE_CPU_CONSUMER: (
+            "void SetConfig(const TracerConfig& config) { config_ = config; "
+            "page_thorne_disk_.reset(); } "
+            "disk_config.r_inner = static_cast<double>(config_.disk_inner) / cached_m_; "
+            "kTemperatureReferenceRadiusRatio * page_thorne_disk_->InnerRadius(); "
+            "page_thorne_disk_->Temperature"
+        ),
+        PAGE_THORNE_DEVICE_AUTHORITY: (
+            "FullPageThorneFluxShape FullPageThorneTemperature rInner innerInM"
+        ),
+        PAGE_THORNE_DEVICE_CONSUMER: (
+            "VolumeDiskTemperature "
+            "FullPageThorneTemperature(innerTemperature, cylindricalR, innerRadius, M, aStar); "
+            "FullPageThorneTemperature(innerTemperature, cr, innerRadius, M, aStar);"
+        ),
+        PAGE_THORNE_PARITY_PROBE: (
+            "FullPageThorneFluxShape(r / p1, innerRadius / p1, p2); "
+            "FullPageThorneTemperature(innerT, r, innerRadius, p1, p2);"
+        ),
+    }
+    if page_thorne_edge_authority_errors(valid):
+        raise RuntimeError("Page-Thorne edge policy rejected the declared-edge wiring")
+
+    isco_cpu = dict(valid)
+    isco_cpu[PAGE_THORNE_CPU_CONSUMER] = isco_cpu[PAGE_THORNE_CPU_CONSUMER].replace(
+        "static_cast<double>(config_.disk_inner) / cached_m_", "disk.IscoRadius()"
+    )
+    if not page_thorne_edge_authority_errors(isco_cpu):
+        raise RuntimeError("Page-Thorne edge policy accepted a CPU ISCO substitution")
+
+    stale_cache = dict(valid)
+    stale_cache[PAGE_THORNE_CPU_CONSUMER] = stale_cache[
+        PAGE_THORNE_CPU_CONSUMER
+    ].replace("page_thorne_disk_.reset();", "retain_cached_profile();")
+    if not page_thorne_edge_authority_errors(stale_cache):
+        raise RuntimeError("Page-Thorne edge policy accepted a stale CPU profile")
+
+    isco_device = dict(valid)
+    isco_device[PAGE_THORNE_DEVICE_CONSUMER] = isco_device[
+        PAGE_THORNE_DEVICE_CONSUMER
+    ].replace("innerRadius, M, aStar", "rIsco, M, aStar")
+    if not page_thorne_edge_authority_errors(isco_device):
+        raise RuntimeError("Page-Thorne edge policy accepted a Slang ISCO substitution")
+
+
+def thin_lens_authority_errors(documents: dict[Path, str]) -> list[str]:
+    errors: list[str] = []
+    required = {
+        THIN_LENS_HOST_AUTHORITY: (
+            "ProjectThinLensSample",
+            "ThinLensGeometryIssue",
+            "ray.aperture_up = sample.pupil_up",
+            "ray.aperture_right = sample.pupil_right",
+            "config_.focus_distance, pupil_u, pupil_v",
+        ),
+        THIN_LENS_CPU_CONSUMER: (
+            "camera_ray.aperture_up",
+            "camera_ray.aperture_right",
+            "camera_frame->spatial[1]",
+            "camera_frame->spatial[2]",
+            "camera_frame = frame_at(pos_double)",
+        ),
+        THIN_LENS_DEVICE_AUTHORITY: (
+            "ThinLensProjectionSample",
+            "ProjectThinLensSample",
+            "pupilRight",
+            "pupilUp",
+        ),
+        THIN_LENS_DEVICE_CONSUMER: (
+            "ProjectThinLensSample",
+            "ScaleVec4Cart(cameraFrame.up, Real(pupilUp))",
+            "ScaleVec4Cart(cameraFrame.right, Real(pupilRight))",
+            "state.x = pos0",
+            "float pupilSampleU = params[66]",
+            "float pupilSampleV = params[67]",
+        ),
+        THIN_LENS_PARITY_PROBE: (
+            "OP_THIN_LENS_PROJECTION",
+            "ProjectThinLensSample",
+            "pupil.pupilRight",
+            "pupil.pupilUp",
+        ),
+        THIN_LENS_SAMPLE_AUTHORITY: (
+            "ForEachCameraSample",
+            "RadicalInverse(ordinal, 5)",
+            "RadicalInverse(ordinal, 7)",
+        ),
+        THIN_LENS_APP_BOUNDARY: ("ThinLensGeometryIssue",),
+        THIN_LENS_SESSION_BOUNDARY: (
+            "ThinLensGeometryIssue",
+            "ForEachCameraSample",
+            "sample.image_u",
+            "sample.image_v",
+            "sample.pupil_u",
+            "sample.pupil_v",
+        ),
+        THIN_LENS_VULKAN_BOUNDARY: (
+            "ForEachCameraSample",
+            "params[44] = sample.image_u",
+            "params[45] = sample.image_v",
+            "params[66] = sample.pupil_u",
+            "params[67] = sample.pupil_v",
+        ),
+    }
+    code_by_path: dict[Path, str] = {}
+    for path, markers in required.items():
+        document = documents.get(path)
+        if document is None:
+            errors.append(f"thin-lens participant is missing: {relative(path)}")
+            continue
+        code = CPP_NON_CODE.sub(" ", document)
+        code_by_path[path] = code
+        for marker in markers:
+            if marker not in code:
+                errors.append(f"{relative(path)} omits finite-pupil marker {marker}")
+
+    host = code_by_path.get(THIN_LENS_HOST_AUTHORITY, "")
+    if "pupil_radius > kMaximumThinLensPupilFraction * local_scale" not in host:
+        errors.append("the host thin-lens authority omits its local tangent-plane bound")
+
+    cpu = code_by_path.get(THIN_LENS_CPU_CONSUMER, "")
+    if re.search(
+        r"pos_double\s*\(\s*component\s*\)\s*\+=.*?"
+        r"camera_frame->spatial\[1\].*?camera_ray\.aperture_up.*?"
+        r"camera_frame->spatial\[2\].*?camera_ray\.aperture_right.*?"
+        r"ray\.position\s*\(\s*component\s*\)\s*=",
+        cpu,
+        re.DOTALL,
+    ) is None:
+        errors.append("the CPU tracer does not move the live launch event across the pupil")
+
+    device = code_by_path.get(THIN_LENS_DEVICE_CONSUMER, "")
+    if re.search(
+        r"ProjectThinLensSample\s*\([^;]*?pupilSampleU\s*,\s*pupilSampleV\s*\)",
+        device,
+        re.DOTALL,
+    ) is None:
+        errors.append("the Slang thin lens reuses film coordinates for its pupil")
+    if re.search(
+        r"pos0\s*=\s*AddVec4Cart\s*\(.*?cameraFrame\.up.*?pupilUp.*?"
+        r"cameraFrame\.right.*?pupilRight.*?state\.x\s*=\s*pos0",
+        device,
+        re.DOTALL,
+    ) is None:
+        errors.append("the Slang tracer does not move the live launch event across the pupil")
+    return errors
+
+
+def verify_thin_lens_authority_policy() -> None:
+    valid = {
+        THIN_LENS_HOST_AUTHORITY: (
+            "ProjectThinLensSample ThinLensGeometryIssue "
+            "ray.aperture_up = sample.pupil_up; "
+            "ray.aperture_right = sample.pupil_right; "
+            "config_.focus_distance, pupil_u, pupil_v; "
+            "pupil_radius > kMaximumThinLensPupilFraction * local_scale"
+        ),
+        THIN_LENS_CPU_CONSUMER: (
+            "camera_ray.aperture_up camera_ray.aperture_right "
+            "pos_double(component) += -camera_frame->spatial[1](component) * "
+            "camera_ray.aperture_up + camera_frame->spatial[2](component) * "
+            "camera_ray.aperture_right; camera_frame = frame_at(pos_double); "
+            "ray.position(component) = value;"
+        ),
+        THIN_LENS_DEVICE_AUTHORITY: (
+            "ThinLensProjectionSample ProjectThinLensSample pupilRight pupilUp"
+        ),
+        THIN_LENS_DEVICE_CONSUMER: (
+            "float pupilSampleU = params[66]; float pupilSampleV = params[67]; "
+            "ProjectThinLensSample(imageX, imageY, tanHalfFov, focalLength, aperture, "
+            "focusDistance, pupilSampleU, pupilSampleV); pos0 = AddVec4Cart("
+            "ScaleVec4Cart(cameraFrame.up, Real(pupilUp)), "
+            "ScaleVec4Cart(cameraFrame.right, Real(pupilRight))); state.x = pos0;"
+        ),
+        THIN_LENS_PARITY_PROBE: (
+            "OP_THIN_LENS_PROJECTION ProjectThinLensSample "
+            "pupil.pupilRight pupil.pupilUp"
+        ),
+        THIN_LENS_SAMPLE_AUTHORITY: (
+            "ForEachCameraSample RadicalInverse(ordinal, 5) RadicalInverse(ordinal, 7)"
+        ),
+        THIN_LENS_APP_BOUNDARY: "ThinLensGeometryIssue",
+        THIN_LENS_SESSION_BOUNDARY: (
+            "ThinLensGeometryIssue ForEachCameraSample sample.image_u sample.image_v "
+            "sample.pupil_u sample.pupil_v"
+        ),
+        THIN_LENS_VULKAN_BOUNDARY: (
+            "ForEachCameraSample params[44] = sample.image_u; "
+            "params[45] = sample.image_v; params[66] = sample.pupil_u; "
+            "params[67] = sample.pupil_v;"
+        ),
+    }
+    if thin_lens_authority_errors(valid):
+        raise RuntimeError("thin-lens policy rejected the finite-pupil wiring")
+
+    pinhole_cpu = dict(valid)
+    pinhole_cpu[THIN_LENS_CPU_CONSUMER] = pinhole_cpu[THIN_LENS_CPU_CONSUMER].replace(
+        "pos_double(component) +=", "discarded_position +="
+    )
+    if not thin_lens_authority_errors(pinhole_cpu):
+        raise RuntimeError("thin-lens policy accepted a CPU direction-only pupil")
+
+    pinhole_device = dict(valid)
+    pinhole_device[THIN_LENS_DEVICE_CONSUMER] = pinhole_device[
+        THIN_LENS_DEVICE_CONSUMER
+    ].replace("pos0 = AddVec4Cart(", "discardedPosition = AddVec4Cart(")
+    if not thin_lens_authority_errors(pinhole_device):
+        raise RuntimeError("thin-lens policy accepted a Slang direction-only pupil")
+
+    unbounded = dict(valid)
+    unbounded[THIN_LENS_HOST_AUTHORITY] = unbounded[THIN_LENS_HOST_AUTHORITY].replace(
+        "pupil_radius > kMaximumThinLensPupilFraction * local_scale", "false"
+    )
+    if not thin_lens_authority_errors(unbounded):
+        raise RuntimeError("thin-lens policy accepted an unbounded local pupil")
+
+    diagonal_host = dict(valid)
+    diagonal_host[THIN_LENS_SESSION_BOUNDARY] = diagonal_host[
+        THIN_LENS_SESSION_BOUNDARY
+    ].replace("sample.pupil_u sample.pupil_v", "sample.image_u sample.image_v")
+    if not thin_lens_authority_errors(diagonal_host):
+        raise RuntimeError("thin-lens policy accepted collapsed CPU film/pupil dimensions")
+
+    diagonal_device = dict(valid)
+    diagonal_device[THIN_LENS_DEVICE_CONSUMER] = diagonal_device[
+        THIN_LENS_DEVICE_CONSUMER
+    ].replace("pupilSampleU, pupilSampleV", "sampleU, sampleV")
+    if not thin_lens_authority_errors(diagonal_device):
+        raise RuntimeError("thin-lens policy accepted collapsed Slang film/pupil dimensions")
+
+
 def kerr_zamo_transfer_authority_errors(documents: dict[Path, str]) -> list[str]:
     errors: list[str] = []
     required = {
@@ -2002,11 +2371,14 @@ def verify() -> list[str]:
     verify_strict_test_volume_policy()
     verify_integration_boundary_policy()
     verify_authority_checkout_policy()
+    verify_attestation_source_authority_policy()
     verify_srgb_transfer_authority_policy()
     verify_xyz_srgb_authority_policy()
     verify_cie1931_observer_authority_policy()
     verify_aces_contract_policy()
     verify_blackbody_laws_authority_policy()
+    verify_page_thorne_edge_authority_policy()
+    verify_thin_lens_authority_policy()
     verify_kerr_zamo_transfer_authority_policy()
     verify_volumetric_transfer_authority_policy()
     verify_morris_thorne_authority_policy()
@@ -2029,6 +2401,11 @@ def verify() -> list[str]:
                 OPERATING_MODEL.read_bytes(), attributes, attribute_source
             )
         )
+    errors.extend(
+        attestation_source_authority_errors(
+            (ROOT / "scripts" / "verify-attestation.py").read_text(encoding="utf-8")
+        )
+    )
     workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
     dependencies = (ROOT / "cmake" / "sirius_dependencies.cmake").read_text(
         encoding="utf-8"
@@ -2050,6 +2427,8 @@ def verify() -> list[str]:
     errors.extend(cie1931_observer_authority_errors(governed_sources))
     errors.extend(aces_contract_errors(governed_sources))
     errors.extend(blackbody_laws_authority_errors(governed_sources))
+    errors.extend(page_thorne_edge_authority_errors(governed_sources))
+    errors.extend(thin_lens_authority_errors(governed_sources))
     errors.extend(kerr_zamo_transfer_authority_errors(governed_sources))
     errors.extend(volumetric_transfer_authority_errors(governed_sources))
     errors.extend(morris_thorne_authority_errors(governed_sources))
