@@ -742,6 +742,8 @@ set_tests_properties(
     RK45IntegratorTests.RK45MatchesRK4Approximately
     RK45IntegratorTests.StepRejectionWorks
     RK45IntegratorTests.UnrepresentedStageShrinksBeforeMetricEvaluation
+    RK45IntegratorTests.RejectionMaySelectTheMinimumStepBeforeTerminating
+    RK45IntegratorTests.NullProjectionPreservesTheIncomingLightConeBranch
     RK45IntegratorTests.NoNaNInResults
     PROPERTIES LABELS "Mandatory;Correctness"
 )

@@ -665,8 +665,8 @@ base::Expected<void> RenderSession::Initialise() {
     auto isco_radius = AccretionDiskD::ComputeIsco(config_.black_hole_spin);
     tracer_config.enable_disk = config_.enable_disk && disk_capable;
     if (tracer_config.enable_disk) {
-        tracer_config.disk_inner = static_cast<float>(isco_radius * config_.black_hole_mass);
-        tracer_config.disk_outer = static_cast<float>(20.0 * config_.black_hole_mass);
+        tracer_config.disk_inner = isco_radius * config_.black_hole_mass;
+        tracer_config.disk_outer = 20.0 * config_.black_hole_mass;
         tracer_config.enable_polarisation = config_.enable_polarisation;
     }
 
@@ -698,12 +698,12 @@ base::Expected<void> RenderSession::Initialise() {
 
     // Volumetric disk configuration.
     tracer_config.enable_volumetric = config_.enable_volumetric_disk;
-    tracer_config.volumetric_scale_height_ratio = config_.volumetric_h_over_r;
-    tracer_config.volumetric_flare_power = config_.volumetric_h_power;
-    tracer_config.volumetric_tau_midplane = config_.volumetric_tau_midplane;
-    tracer_config.volumetric_samples = config_.volumetric_samples;
-    tracer_config.enable_turbulence = config_.enable_turbulence;
     if (tracer_config.enable_volumetric) {
+        tracer_config.volumetric_scale_height_ratio = config_.volumetric_h_over_r;
+        tracer_config.volumetric_flare_power = config_.volumetric_h_power;
+        tracer_config.volumetric_tau_midplane = config_.volumetric_tau_midplane;
+        tracer_config.volumetric_samples = config_.volumetric_samples;
+        tracer_config.enable_turbulence = config_.enable_turbulence;
         tracer_config.disk_temperature_scale_kelvin = config_.disk_temperature_scale;
         tracer_config.color_mode = config_.color_mode;
     }
@@ -1280,9 +1280,11 @@ base::Expected<void> RenderSession::WriteOutput() {
         postprocess_config.gamma = 1.0f;  // Writers encode.
 
         postprocess_config.enable_bloom = config_.enable_bloom;
-        postprocess_config.bloom_intensity = config_.bloom_intensity;
-        postprocess_config.bloom_threshold = config_.bloom_threshold;
-        if (config_.enable_bloom) postprocess_config.bloom_radius = kBloomRadius;
+        if (config_.enable_bloom) {
+            postprocess_config.bloom_intensity = config_.bloom_intensity;
+            postprocess_config.bloom_threshold = config_.bloom_threshold;
+            postprocess_config.bloom_radius = kBloomRadius;
+        }
 
         postprocess_config.saturation = config_.saturation;
         postprocess_config.contrast = config_.contrast;

@@ -443,6 +443,83 @@ TEST_F(RK45IntegratorTests, UnrepresentedStageShrinksBeforeMetricEvaluation) {
     EXPECT_EQ(metric.invalid_evaluations, 0);
 }
 
+TEST_F(RK45IntegratorTests, RejectionMaySelectTheMinimumStepBeforeTerminating) {
+    IntegratorConfig floor_config = config;
+    floor_config.abs_tolerance = 1.0e-14f;
+    floor_config.rel_tolerance = 1.0e-14f;
+    floor_config.min_step = 0.05f;
+    floor_config.max_step = 0.1f;
+    floor_config.initial_step = 0.1f;
+
+    Vec4 position;
+    position(1) = 5.0;
+    position(2) = PI / 2.0;
+    Vec4 direction;
+    direction(0) = 1.0;
+    direction(3) = 1.0;
+    Lightray ray = createTestRay(position, direction, &schwarzschild);
+    ray.step_size = floor_config.initial_step;
+
+    ASSERT_FALSE(Geodesic::IntegrateStepRk45(ray, &schwarzschild, floor_config));
+    EXPECT_EQ(ray.terminated, 0)
+        << "selecting the minimum retry step is not a terminal integration failure";
+    EXPECT_FLOAT_EQ(ray.step_size, floor_config.min_step);
+}
+
+TEST_F(RK45IntegratorTests, NullProjectionPreservesTheIncomingLightConeBranch) {
+    Metric4d minkowski;
+    minkowski(0, 0) = -1.0;
+    minkowski(1, 1) = 1.0;
+    minkowski(2, 2) = 1.0;
+    minkowski(3, 3) = 1.0;
+
+    Vec4 past_directed;
+    past_directed(0) = -1.000001;
+    past_directed(1) = 1.0;
+    const auto projected = Geodesic::ProjectNullTangentPreservingBranch(past_directed, minkowski);
+    ASSERT_TRUE(projected.has_value());
+    EXPECT_DOUBLE_EQ((*projected)(0), -1.0);
+    EXPECT_DOUBLE_EQ((*projected)(1), 1.0);
+    EXPECT_DOUBLE_EQ(TensorOps::InnerProduct(*projected, *projected, minkowski), 0.0);
+
+    // At a stationary-limit-like event the temporal equation is linear.  The
+    // represented root remains finite and does not invent the other cone.
+    Metric4d linear;
+    linear(0, 1) = 1.0;
+    linear(1, 0) = 1.0;
+    linear(1, 1) = 1.0;
+    Vec4 tangent;
+    tangent(0) = -0.6;
+    tangent(1) = 1.0;
+    const auto linear_projected = Geodesic::ProjectNullTangentPreservingBranch(tangent, linear);
+    ASSERT_TRUE(linear_projected.has_value());
+    EXPECT_DOUBLE_EQ((*linear_projected)(0), -0.5);
+    EXPECT_DOUBLE_EQ(TensorOps::InnerProduct(*linear_projected, *linear_projected, linear), 0.0);
+
+    // This Lorentzian metric has g_00 > 0. For the supplied near-null tangent,
+    // holding all spatial components fixed gives a negative temporal
+    // discriminant, as can occur inside the Kerr stationary limit. A nearby
+    // spatial root remains represented and must preserve the incoming k^0.
+    Metric4d ergoregion;
+    ergoregion(0, 0) = 1.0;
+    ergoregion(0, 1) = 2.0;
+    ergoregion(1, 0) = 2.0;
+    ergoregion(1, 1) = 1.0;
+    ergoregion(2, 2) = 1.0;
+    ergoregion(3, 3) = 1.0;
+    Vec4 ergoregion_tangent;
+    ergoregion_tangent(0) = -1.0;
+    ergoregion_tangent(1) = 0.57;
+    ergoregion_tangent(2) = 1.0;
+    const auto ergoregion_projected =
+        Geodesic::ProjectNullTangentPreservingBranch(ergoregion_tangent, ergoregion);
+    ASSERT_TRUE(ergoregion_projected.has_value());
+    EXPECT_DOUBLE_EQ((*ergoregion_projected)(0), ergoregion_tangent(0));
+    EXPECT_NEAR((*ergoregion_projected)(1), 2.0 - std::sqrt(2.0), 1.0e-15);
+    EXPECT_NEAR(TensorOps::InnerProduct(*ergoregion_projected, *ergoregion_projected, ergoregion),
+                0.0, 1.0e-15);
+}
+
 // Test: No NaN or Inf in results
 TEST_F(RK45IntegratorTests, NoNaNInResults) {
     Vec4 pos;

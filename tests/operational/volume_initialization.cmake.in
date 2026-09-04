@@ -84,7 +84,7 @@ string(JSON _dimension_count ERROR_VARIABLE _dimension_count_error
     LENGTH "${_capability_stdout}" required_dimensions)
 if(NOT _capability_result EQUAL 0 OR
    NOT _dimension_count_error STREQUAL "NOTFOUND" OR
-   NOT _dimension_count EQUAL 23 OR
+   NOT _dimension_count EQUAL 24 OR
    NOT _capability_stdout MATCHES "\"criteria_total\": 10" OR
    NOT _capability_stdout MATCHES "\"criteria_build_gated\": 7" OR
    NOT _capability_stdout MATCHES "\"criteria_attestation_required\": 3" OR
@@ -103,8 +103,8 @@ endif()
 set(_model "${_resource_root}/model/operating_model.json")
 file(READ "${_model}" _model_contents)
 string(REPLACE
-    "Near-extremal Kerr geodesics satisfy the stated oracle and live conservation tolerances, and the 1080p shadow boundary agrees with Bardeen to below one pixel on both live backends."
-    "Near-extremal Kerr output may be accepted without the Bardeen boundary witness."
+    "the finite-observer 1080p shadow boundary agrees with Bardeen to below one pixel on both live backends"
+    "the finite-observer 1080p shadow boundary may be accepted without the Bardeen witness"
     _tampered_model "${_model_contents}")
 if(_tampered_model STREQUAL _model_contents)
     message(FATAL_ERROR "volume obstruction could not locate the P1 criterion to mutate")

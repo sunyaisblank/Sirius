@@ -3,6 +3,7 @@
 
 #include "sirius/backend/cpu/geodesic_tracer.h"
 
+#include "sirius/core/constants.h"
 #include "sirius/core/disk/novikov_thorne_disk.h"
 #include "sirius/core/metrics/morris_thorne_family.h"
 #include "sirius/core/observer_frame.h"
@@ -27,6 +28,125 @@ struct ObserverSkySample {
     std::array<Vec4, 2> screen;
     Vec4 world_direction;
 };
+
+struct CaptureLimitEvent {
+    Vec4 position;
+    double affine_offset;
+};
+
+std::optional<AcceptedTraceSegmentSample> FindMetricCaptureEvent(
+    const Vec4& start_position, const Vec4& start_tangent, const Vec4& end_position,
+    const Vec4& end_tangent, double affine_length, IMetric& metric, double capture_margin) {
+    if (!(std::isfinite(affine_length) && affine_length > 0.0) ||
+        metric.InsideCaptureSurface(start_position, capture_margin) ||
+        !metric.InsideCaptureSurface(end_position, capture_margin)) {
+        return std::nullopt;
+    }
+    double outside = 0.0;
+    double inside = 1.0;
+    for (int iteration = 0; iteration < 64; ++iteration) {
+        const double middle = 0.5 * (outside + inside);
+        const auto candidate = SampleAcceptedTraceSegment(
+            start_position, start_tangent, end_position, end_tangent, affine_length, middle);
+        if (metric.InsideCaptureSurface(candidate.position, capture_margin)) {
+            inside = middle;
+        } else {
+            outside = middle;
+        }
+    }
+    return SampleAcceptedTraceSegment(start_position, start_tangent, end_position, end_tangent,
+                                      affine_length, inside);
+}
+
+// A past-directed black-hole ray can become coordinate-stiff immediately
+// outside the horizon and exhaust the configured minimum RK step before an
+// accepted endpoint crosses the surface. Recover only that terminal case: the
+// current event must already be inside the central numerical horizon buffer.
+// A direct forward-tangent bracket is preferred. At a rotating horizon the
+// chart tangent can become asymptotic to the generator; then reverse-tangent
+// departure from the buffer proves inward approach and a nested radial
+// bisection publishes the exact surface limit instead of a numerical shadow.
+std::optional<CaptureLimitEvent> FindCaptureLimitEvent(const Lightray& ray, IMetric& metric,
+                                                       double capture_margin) {
+    constexpr double kNumericalMargin = constants::coordinates::kHorizonBuffer - 1.0;
+    const double numerical_margin = capture_margin + kNumericalMargin;
+    if (!metric.InsideCaptureSurface(ray.position, numerical_margin)) {
+        return std::nullopt;
+    }
+    if (metric.InsideCaptureSurface(ray.position, capture_margin)) {
+        return CaptureLimitEvent{ray.position, 0.0};
+    }
+
+    auto extrapolate = [&](double affine) {
+        Vec4 position = ray.position;
+        for (int component = 0; component < 4; ++component) {
+            position(component) += affine * ray.velocity(component);
+        }
+        return position;
+    };
+
+    double lower = 0.0;
+    double upper = static_cast<double>(ray.step_size);
+    Vec4 upper_position;
+    bool bracketed = false;
+    for (int expansion = 0; expansion < 32; ++expansion) {
+        upper_position = extrapolate(upper);
+        if (metric.InsideCaptureSurface(upper_position, capture_margin)) {
+            bracketed = true;
+            break;
+        }
+        upper *= 2.0;
+    }
+    if (bracketed) {
+        for (int iteration = 0; iteration < 64; ++iteration) {
+            const double middle = 0.5 * (lower + upper);
+            if (metric.InsideCaptureSurface(extrapolate(middle), capture_margin)) {
+                upper = middle;
+            } else {
+                lower = middle;
+            }
+        }
+        upper_position = extrapolate(upper);
+        return CaptureLimitEvent{upper_position, upper};
+    }
+
+    // In ingoing Kerr-Schild coordinates a past-directed captured ray can
+    // approach the rotating horizon generator tangentially. Establish its
+    // approach by finding an earlier tangent extrapolate outside the numerical
+    // buffer; an outgoing or merely nearby failed ray does not satisfy this.
+    double backward = static_cast<double>(ray.step_size);
+    bool approached = false;
+    for (int expansion = 0; expansion < 32; ++expansion) {
+        if (!metric.InsideCaptureSurface(extrapolate(-backward), numerical_margin)) {
+            approached = true;
+            break;
+        }
+        backward *= 2.0;
+    }
+    if (!approached) return std::nullopt;
+
+    Vec4 radial_inside = ray.position;
+    radial_inside(1) = 0.0;
+    radial_inside(2) = 0.0;
+    radial_inside(3) = 0.0;
+    if (!metric.InsideCaptureSurface(radial_inside, capture_margin)) return std::nullopt;
+    double inside_scale = 0.0;
+    double outside_scale = 1.0;
+    for (int iteration = 0; iteration < 64; ++iteration) {
+        const double scale = 0.5 * (inside_scale + outside_scale);
+        Vec4 candidate = ray.position;
+        for (int component = 1; component < 4; ++component) {
+            candidate(component) *= scale;
+        }
+        if (metric.InsideCaptureSurface(candidate, capture_margin)) {
+            inside_scale = scale;
+            radial_inside = candidate;
+        } else {
+            outside_scale = scale;
+        }
+    }
+    return CaptureLimitEvent{radial_inside, 0.0};
+}
 
 std::optional<ObserverSkySample> SampleEulerianSky(IMetric& metric_authority, const Vec4& position,
                                                    const Vec4& past_ray) {
@@ -553,9 +673,24 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
         bool success = Geodesic::IntegrateStepRk45(ray, metric_, step_config);
         result.steps_taken++;
 
+        if (ray.terminated == 5 && !HasInvalidState(ray)) {
+            const auto capture = FindCaptureLimitEvent(
+                ray, *metric_, static_cast<double>(config_.horizon_factor) - 1.0);
+            if (capture.has_value()) {
+                ray.position = capture->position;
+                ray.proper_time += static_cast<float>(capture->affine_offset);
+                ray.coordinate_time = static_cast<float>(capture->position(0));
+                ray.terminated = 0;
+                result.outcome = TraceResult::Outcome::Horizon;
+                result.integrator_termination = 0;
+                result.numerical_failure = false;
+                break;
+            }
+        }
         if (ray.terminated || HasInvalidState(ray)) {
             result.outcome = TraceResult::Outcome::MaxSteps;
-            result.numerical_failure = HasInvalidState(ray);
+            result.integrator_termination = ray.terminated;
+            result.numerical_failure = ray.terminated != 0 || HasInvalidState(ray);
             break;
         }
         if (!success) {
@@ -573,6 +708,7 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
         const float min_radius_before_step = min_r;
         bool terminal_causal_boundary = false;
         bool terminal_throat_boundary = false;
+        bool terminal_horizon_boundary = false;
         bool terminal_opposite_infinity = false;
 
         // A finite causal boundary clips the accepted central-ray segment
@@ -638,6 +774,27 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
                 terminal_opposite_infinity = true;
                 terminal_causal_boundary = false;
             }
+        } else if (metric_->InsideCaptureSurface(
+                       ray.position, static_cast<double>(config_.horizon_factor) - 1.0)) {
+            const auto capture =
+                FindMetricCaptureEvent(prev_pos, prev_vel, ray.position, ray.velocity, d_lambda,
+                                       *metric_, static_cast<double>(config_.horizon_factor) - 1.0);
+            if (!capture.has_value()) {
+                ray.position = prev_pos;
+                ray.velocity = prev_vel;
+                ray.proper_time = static_cast<float>(prev_pt);
+                ray.coordinate_time = static_cast<float>(prev_pos(0));
+                result.outcome = TraceResult::Outcome::MaxSteps;
+                result.numerical_failure = true;
+                break;
+            }
+            d_lambda *= capture->fraction;
+            ray.position = capture->position;
+            ray.velocity = capture->tangent;
+            ray.proper_time = static_cast<float>(prev_pt + d_lambda);
+            ray.coordinate_time = static_cast<float>(capture->position(0));
+            terminal_horizon_boundary = true;
+            terminal_causal_boundary = false;
         }
 
         // Advance the ray bundle over the accepted affine step, sampling the
@@ -771,7 +928,7 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
             result.min_radius = min_r;
             break;
         }
-        if (metric_->InsideCaptureSurface(ray.position, config_.horizon_factor - 1.0)) {
+        if (terminal_horizon_boundary) {
             result.outcome = TraceResult::Outcome::Horizon;
             result.final_position(0) = ray.position(0);
             result.final_position(1) = ray.position(1);

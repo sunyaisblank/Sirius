@@ -1346,8 +1346,7 @@ def page_thorne_edge_authority_errors(documents: dict[Path, str]) -> list[str]:
 
     cpu = code_by_path.get(PAGE_THORNE_CPU_CONSUMER, "")
     if re.search(
-        r"disk_config\.r_inner\s*=\s*static_cast<double>\s*"
-        r"\(\s*config_\.disk_inner\s*\)\s*/\s*cached_m_\s*;",
+        r"disk_config\.r_inner\s*=\s*config_\.disk_inner\s*/\s*cached_m_\s*;",
         cpu,
     ) is None:
         errors.append("the CPU Page-Thorne profile is not constructed from the declared edge")
@@ -1389,7 +1388,7 @@ def verify_page_thorne_edge_authority_policy() -> None:
         PAGE_THORNE_CPU_CONSUMER: (
             "void SetConfig(const TracerConfig& config) { config_ = config; "
             "page_thorne_disk_.reset(); } "
-            "disk_config.r_inner = static_cast<double>(config_.disk_inner) / cached_m_; "
+            "disk_config.r_inner = config_.disk_inner / cached_m_; "
             "kTemperatureReferenceRadiusRatio * page_thorne_disk_->InnerRadius(); "
             "page_thorne_disk_->Temperature"
         ),
@@ -1411,7 +1410,7 @@ def verify_page_thorne_edge_authority_policy() -> None:
 
     isco_cpu = dict(valid)
     isco_cpu[PAGE_THORNE_CPU_CONSUMER] = isco_cpu[PAGE_THORNE_CPU_CONSUMER].replace(
-        "static_cast<double>(config_.disk_inner) / cached_m_", "disk.IscoRadius()"
+        "config_.disk_inner / cached_m_", "disk.IscoRadius()"
     )
     if not page_thorne_edge_authority_errors(isco_cpu):
         raise RuntimeError("Page-Thorne edge policy accepted a CPU ISCO substitution")
