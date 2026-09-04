@@ -180,10 +180,15 @@ if(_missing_result EQUAL 0)
         "Sirius rendered after its volume resource was removed by borrowing the hostile decoy")
 endif()
 set(_missing_log "${_missing_stdout}\n${_missing_stderr}")
-if(NOT _missing_log MATCHES "io: load render resource:" OR
-   NOT _missing_log MATCHES "assets/Starfield.png is missing or unreadable")
+if("@SIRIUS_ALIGNMENT_MODE@" STREQUAL "development")
+    if(NOT _missing_log MATCHES "io: load render resource:" OR
+       NOT _missing_log MATCHES "assets/Starfield.png is missing or unreadable")
+        message(FATAL_ERROR
+            "missing-resource decline did not identify the failed invariant\n${_missing_log}")
+    endif()
+elseif(NOT _missing_log MATCHES "build-gate product is missing: starfield")
     message(FATAL_ERROR
-        "missing-resource decline did not identify the failed invariant\n${_missing_log}")
+        "strict missing-resource decline bypassed product integrity\n${_missing_log}")
 endif()
 
 file(REMOVE_RECURSE "${_audit_parent}")
