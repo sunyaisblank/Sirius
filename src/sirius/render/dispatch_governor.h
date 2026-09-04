@@ -53,6 +53,12 @@ inline constexpr double kDefaultDispatchTargetMs = 250.0;
 // throughput within a few bands.
 inline constexpr int kInitialBandRows = 1;
 
+// The row-band governor cannot submit less than one full tile row. Keep that
+// irreducible fp64 dispatch at or below the 64-pixel width already exercised by
+// the physical fp64 runtime gate; wider tiles can still exceed the WSL2/D3D12
+// watchdog even at one row after the widened trajectory kernel's cost grows.
+inline constexpr int kFp64MaxTileEdge = 64;
+
 // Per-step growth bound. Growth is damped so one spuriously fast measurement
 // (a band of sky, a warm cache) cannot balloon the next dispatch past the
 // watchdog; shrinking is deliberately unbounded because overshooting the

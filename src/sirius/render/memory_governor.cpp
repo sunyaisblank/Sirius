@@ -20,8 +20,9 @@ using base::Expected;
 using base::Fail;
 
 Expected<TilePlan> DeriveTilePlan(std::uint64_t budget_bytes, int image_width, int image_height,
-                                  std::uint64_t fixed_overhead_bytes) {
+                                  std::uint64_t fixed_overhead_bytes, int tile_edge_cap) {
     SIRIUS_PRE(image_width > 0 && image_height > 0);
+    SIRIUS_PRE(tile_edge_cap >= kMinTileEdge);
 
     const auto usable =
         static_cast<std::uint64_t>(static_cast<double>(budget_bytes) * kResidencyFraction);
@@ -40,7 +41,7 @@ Expected<TilePlan> DeriveTilePlan(std::uint64_t budget_bytes, int image_width, i
     // sanity cap. floor(sqrt) never over-commits because the square only shrinks.
     auto edge = static_cast<int>(std::floor(std::sqrt(static_cast<double>(max_area))));
     edge = std::min(edge, std::min(image_width, image_height));
-    edge = std::min(edge, kMaxTileEdge);
+    edge = std::min(edge, std::min(kMaxTileEdge, tile_edge_cap));
 
     if (edge < kMinTileEdge) {
         return Fail(ErrorDomain::kDevice, "derive tile plan",

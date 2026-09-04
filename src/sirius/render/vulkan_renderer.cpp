@@ -506,9 +506,10 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
                     "SIRIUS_MEMORY_BUDGET_MB override");
     }
 
-    auto plan =
-        DeriveTilePlan(budget, config.width, config.height,
-                       params_overhead + (use_starfield ? starfield_bytes : 0) + point_bytes);
+    const int tile_edge_cap = *rung == PrecisionRung::Fp64 ? kFp64MaxTileEdge : kMaxTileEdge;
+    auto plan = DeriveTilePlan(
+        budget, config.width, config.height,
+        params_overhead + (use_starfield ? starfield_bytes : 0) + point_bytes, tile_edge_cap);
     if (!plan) {
         return std::unexpected(plan.error());
     }
