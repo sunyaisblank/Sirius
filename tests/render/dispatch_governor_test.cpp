@@ -19,6 +19,7 @@ namespace {
 using sirius::render::BandController;
 using sirius::render::kBandGrowthCap;
 using sirius::render::kDefaultDispatchTargetMs;
+using sirius::render::kFp64MaxBandRows;
 using sirius::render::kInitialBandRows;
 using sirius::render::ResolveDispatchTargetMs;
 using sirius::test::ScopedEnvironmentVariable;
@@ -35,6 +36,12 @@ TEST(DispatchGovernor, FirstBandUsesTheMinimumFullWidthRowBeforeMeasurement) {
 
     BandController narrow(4, 250.0);
     EXPECT_EQ(narrow.NextRows(4, 4), kInitialBandRows);
+
+    static_assert(kFp64MaxBandRows == 1);
+    BandController fp64_limited(64, 250.0, kFp64MaxBandRows);
+    fp64_limited.Record(Area(1, 64), 0.001);
+    EXPECT_EQ(fp64_limited.NextRows(64, 64), 1)
+        << "a fast fp64 band must not grow beyond its watchdog-safe row limit";
 }
 
 TEST(DispatchGovernor, BandsNeverExceedRemainingRowsNorDropBelowOne) {

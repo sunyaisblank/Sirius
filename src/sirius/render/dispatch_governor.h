@@ -58,6 +58,7 @@ inline constexpr int kInitialBandRows = 1;
 // the physical fp64 runtime gate; wider tiles can still exceed the WSL2/D3D12
 // watchdog even at one row after the widened trajectory kernel's cost grows.
 inline constexpr int kFp64MaxTileEdge = 64;
+inline constexpr int kFp64MaxBandRows = 1;
 
 // Per-step growth bound. Growth is damped so one spuriously fast measurement
 // (a band of sky, a warm cache) cannot balloon the next dispatch past the
@@ -78,10 +79,16 @@ inline constexpr double kBandGrowthCap = 2.0;
 class BandController {
   public:
     // tile_edge bounds the learned area at one governed tile (the radiance
-    // buffer's capacity); target_ms <= 0 disables banding (the escape hatch
-    // SIRIUS_DISPATCH_TARGET_MS=0 documents).
+    // buffer's capacity). max_band_rows may impose a stricter workload limit;
+    // the fp64 path uses one row because its cost cliffs can exceed the device
+    // watchdog before feedback can shrink a larger band. target_ms <= 0
+    // disables banding (the escape hatch SIRIUS_DISPATCH_TARGET_MS=0 documents).
     BandController(int tile_edge, double target_ms)
-        : max_pixels_(static_cast<std::int64_t>(std::max(1, tile_edge)) * std::max(1, tile_edge)),
+        : BandController(tile_edge, target_ms, tile_edge) {}
+
+    BandController(int tile_edge, double target_ms, int max_band_rows)
+        : max_pixels_(static_cast<std::int64_t>(std::max(1, tile_edge)) *
+                      std::clamp(max_band_rows, 1, std::max(1, tile_edge))),
           target_ms_(target_ms),
           pixels_(std::min<std::int64_t>(
               static_cast<std::int64_t>(kInitialBandRows) * std::max(1, tile_edge), max_pixels_)) {}

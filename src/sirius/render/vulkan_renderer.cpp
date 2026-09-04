@@ -611,7 +611,8 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
             const int oy = tj * edge;
             const int tw = std::min(edge, config.width - ox);
             const int th = std::min(edge, config.height - oy);
-            BandController bands(edge, *target_ms);
+            const int max_band_rows = *rung == PrecisionRung::Fp64 ? kFp64MaxBandRows : edge;
+            BandController bands(edge, *target_ms, max_band_rows);
 
             params[31] = static_cast<float>(ox);
             params[33] = static_cast<float>(tw);

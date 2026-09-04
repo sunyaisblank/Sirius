@@ -103,7 +103,10 @@ set_tests_properties(
     OperationalAttestation.FalseExternalEvidenceIsRejected
     PROPERTIES
         LABELS "Mandatory;Operational"
-        TIMEOUT 30)
+        # The self-test hashes the full governed product repeatedly. Hosted
+        # macOS runners have exceeded 30 seconds under load; retain margin
+        # without weakening any verifier assertion.
+        TIMEOUT 120)
 
 # The two native runtime domains have one cross-platform producer with a
 # fail-closed host/device policy. Its local self-test is metadata-only: actual
