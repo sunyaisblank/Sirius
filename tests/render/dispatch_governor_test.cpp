@@ -28,12 +28,13 @@ using sirius::test::ScopedEnvironmentVariable;
     return static_cast<std::int64_t>(rows) * width;
 }
 
-TEST(DispatchGovernor, FirstBandIsTheInitialHeightClampedToTheTile) {
+TEST(DispatchGovernor, FirstBandUsesTheMinimumFullWidthRowBeforeMeasurement) {
+    static_assert(kInitialBandRows == 1);
     BandController wide(4096, 250.0);
     EXPECT_EQ(wide.NextRows(4096, 4096), kInitialBandRows);
 
     BandController narrow(4, 250.0);
-    EXPECT_EQ(narrow.NextRows(4, 4), 4);
+    EXPECT_EQ(narrow.NextRows(4, 4), kInitialBandRows);
 }
 
 TEST(DispatchGovernor, BandsNeverExceedRemainingRowsNorDropBelowOne) {
@@ -70,7 +71,7 @@ TEST(DispatchGovernor, ZeroMeasurementTakesTheCappedGrowthStep) {
 TEST(DispatchGovernor, OvershootShrinksProportionallyInOneStep) {
     BandController bands(4096, 250.0);
     bands.Record(Area(kInitialBandRows, 4096), 1000.0);  // 4x the target
-    EXPECT_EQ(bands.NextRows(4096, 4096), kInitialBandRows / 4);
+    EXPECT_EQ(bands.NextRows(4096, 4096), 1);
 }
 
 // Regression (adversarial review 2026-07-28, confirmed major): a tile's

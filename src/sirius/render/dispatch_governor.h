@@ -45,10 +45,13 @@ namespace sirius::render {
 inline constexpr double kDefaultDispatchTargetMs = 250.0;
 
 // Rows in the first band, at governed-tile width, before any measurement
-// exists. Small enough that even the fp64 rung on integrated silicon finishes
-// well inside the target's order of magnitude; the controller grows from here
-// within a few bands.
-inline constexpr int kInitialBandRows = 8;
+// exists. One row is the smallest dispatch this banding scheme can represent
+// and is therefore the only safe cold start for an unknown workload. The
+// physical fp64 path demonstrated that an eight-row estimate which was safe
+// before a kernel-cost increase can cross the operating-system watchdog before
+// the controller receives its first measurement. Capped growth recovers useful
+// throughput within a few bands.
+inline constexpr int kInitialBandRows = 1;
 
 // Per-step growth bound. Growth is damped so one spuriously fast measurement
 // (a band of sky, a warm cache) cannot balloon the next dispatch past the
