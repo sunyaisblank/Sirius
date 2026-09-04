@@ -531,8 +531,7 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
     if (!target_ms) {
         return std::unexpected(target_ms.error());
     }
-    BandController bands(plan->tile_edge, *target_ms);
-    if (bands.Enabled()) {
+    if (*target_ms > 0.0) {
         std::cout << "[Vulkan] dispatch governor: " << *target_ms << " ms/band target\n";
     } else {
         std::cout << "[Vulkan] dispatch governor disabled: one dispatch per tile\n";
@@ -612,6 +611,7 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
             const int oy = tj * edge;
             const int tw = std::min(edge, config.width - ox);
             const int th = std::min(edge, config.height - oy);
+            BandController bands(edge, *target_ms);
 
             params[31] = static_cast<float>(ox);
             params[33] = static_cast<float>(tw);

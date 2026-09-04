@@ -65,11 +65,12 @@ inline constexpr int kFp64MaxTileEdge = 64;
 // target risks device removal while undershooting only costs overhead.
 inline constexpr double kBandGrowthCap = 2.0;
 
-// Adaptive band-area controller. One instance persists across a render so the
-// learned throughput carries from tile to tile; NextRows converts the learned
-// area to rows at the width of the band being planned, which is what makes
-// the carried state width-safe. Pure arithmetic; no device handles cross this
-// boundary, so it is unit-testable without Vulkan.
+// Adaptive band-area controller. One instance covers the bands within a single
+// tile; the renderer starts a fresh controller at every tile so a band learned
+// on a cheap sky region cannot cross a spatial cost cliff at the next tile.
+// NextRows converts the learned area to rows at the width of the band being
+// planned, keeping partial-width tiles safe. Pure arithmetic; no device handles
+// cross this boundary, so it is unit-testable without Vulkan.
 //
 // Invariants: NextRows always returns a value in [1, remaining_rows]; with the
 // governor disabled (target_ms <= 0) it returns remaining_rows unchanged, which
