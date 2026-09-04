@@ -467,20 +467,21 @@ TEST_F(RK45IntegratorTests, RejectionMaySelectTheMinimumStepBeforeTerminating) {
 }
 
 TEST_F(RK45IntegratorTests, NullProjectionPreservesTheIncomingLightConeBranch) {
-    Metric4d minkowski;
-    minkowski(0, 0) = -1.0;
-    minkowski(1, 1) = 1.0;
-    minkowski(2, 2) = 1.0;
-    minkowski(3, 3) = 1.0;
+    Metric4d minkowski_metric;
+    minkowski_metric(0, 0) = -1.0;
+    minkowski_metric(1, 1) = 1.0;
+    minkowski_metric(2, 2) = 1.0;
+    minkowski_metric(3, 3) = 1.0;
 
     Vec4 past_directed;
     past_directed(0) = -1.000001;
     past_directed(1) = 1.0;
-    const auto projected = Geodesic::ProjectNullTangentPreservingBranch(past_directed, minkowski);
+    const auto projected =
+        Geodesic::ProjectNullTangentPreservingBranch(past_directed, minkowski_metric);
     ASSERT_TRUE(projected.has_value());
     EXPECT_DOUBLE_EQ((*projected)(0), -1.0);
     EXPECT_DOUBLE_EQ((*projected)(1), 1.0);
-    EXPECT_DOUBLE_EQ(TensorOps::InnerProduct(*projected, *projected, minkowski), 0.0);
+    EXPECT_DOUBLE_EQ(TensorOps::InnerProduct(*projected, *projected, minkowski_metric), 0.0);
 
     // At a stationary-limit-like event the temporal equation is linear.  The
     // represented root remains finite and does not invent the other cone.
