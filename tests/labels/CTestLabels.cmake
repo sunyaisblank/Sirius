@@ -1128,6 +1128,7 @@ set_tests_properties(
 set_tests_properties(
     DispatchGovernor.BandsNeverExceedRemainingRowsNorDropBelowOne
     DispatchGovernor.DisabledControllerDispatchesWholeTilesAndIgnoresFeedback
+    DispatchGovernor.ExpensivePrecisionAndBundleWorkloadsUseTheStrictPhysicalFootprint
     DispatchGovernor.FirstBandUsesTheMinimumFullWidthRowBeforeMeasurement
     DispatchGovernor.GrowthPerStepIsBoundedByTheCap
     DispatchGovernor.LearnedAreaNormalisesAcrossBandWidths

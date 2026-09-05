@@ -53,12 +53,15 @@ inline constexpr double kDefaultDispatchTargetMs = 250.0;
 // throughput within a few bands.
 inline constexpr int kInitialBandRows = 1;
 
-// The row-band governor cannot submit less than one full tile row. Keep that
-// irreducible fp64 dispatch at or below the 64-pixel width already exercised by
-// the physical fp64 runtime gate; wider tiles can still exceed the WSL2/D3D12
-// watchdog even at one row after the widened trajectory kernel's cost grows.
-inline constexpr int kFp64MaxTileEdge = 64;
-inline constexpr int kFp64MaxBandRows = 1;
+// The row-band governor cannot submit less than one full tile row. Keep every
+// workload whose irreducible row is known to be expensive at or below the
+// 64-pixel width already exercised by the physical fp64 runtime gate, and never
+// grow it beyond one row. This applies both to fp64 and to the ray-bundle/point-
+// catalogue path: physical WSL2/Dozen qualification measured a 128-pixel row
+// of that fp32 workload above the 250 ms target, then lost the device when the
+// memory governor widened the same irreducible row to 1080 pixels.
+inline constexpr int kWatchdogSafeMaxTileEdge = 64;
+inline constexpr int kWatchdogSafeMaxBandRows = 1;
 
 // Per-step growth bound. Growth is damped so one spuriously fast measurement
 // (a band of sky, a warm cache) cannot balloon the next dispatch past the
@@ -80,9 +83,10 @@ class BandController {
   public:
     // tile_edge bounds the learned area at one governed tile (the radiance
     // buffer's capacity). max_band_rows may impose a stricter workload limit;
-    // the fp64 path uses one row because its cost cliffs can exceed the device
-    // watchdog before feedback can shrink a larger band. target_ms <= 0
-    // disables banding (the escape hatch SIRIUS_DISPATCH_TARGET_MS=0 documents).
+    // strict fp64 and ray-bundle paths use one row because their cost cliffs can
+    // exceed the device watchdog before feedback can shrink a larger band.
+    // target_ms <= 0 disables banding (the escape hatch
+    // SIRIUS_DISPATCH_TARGET_MS=0 documents).
     BandController(int tile_edge, double target_ms)
         : BandController(tile_edge, target_ms, tile_edge) {}
 

@@ -8,6 +8,8 @@
 
 #include "sirius/render/dispatch_governor.h"
 
+#include "sirius/render/vulkan_renderer.h"
+
 #include <gtest/gtest.h>
 
 #include "support/scoped_environment.h"
@@ -19,9 +21,13 @@ namespace {
 using sirius::render::BandController;
 using sirius::render::kBandGrowthCap;
 using sirius::render::kDefaultDispatchTargetMs;
-using sirius::render::kFp64MaxBandRows;
 using sirius::render::kInitialBandRows;
+using sirius::render::kMaxTileEdge;
+using sirius::render::kWatchdogSafeMaxBandRows;
+using sirius::render::kWatchdogSafeMaxTileEdge;
+using sirius::render::PrecisionRung;
 using sirius::render::ResolveDispatchTargetMs;
+using sirius::render::ResolveVulkanDispatchLimits;
 using sirius::test::ScopedEnvironmentVariable;
 
 // Area of a full-width band `rows` high on a `width`-wide tile.
@@ -37,11 +43,26 @@ TEST(DispatchGovernor, FirstBandUsesTheMinimumFullWidthRowBeforeMeasurement) {
     BandController narrow(4, 250.0);
     EXPECT_EQ(narrow.NextRows(4, 4), kInitialBandRows);
 
-    static_assert(kFp64MaxBandRows == 1);
-    BandController fp64_limited(64, 250.0, kFp64MaxBandRows);
+    static_assert(kWatchdogSafeMaxBandRows == 1);
+    BandController fp64_limited(64, 250.0, kWatchdogSafeMaxBandRows);
     fp64_limited.Record(Area(1, 64), 0.001);
     EXPECT_EQ(fp64_limited.NextRows(64, 64), 1)
         << "a fast fp64 band must not grow beyond its watchdog-safe row limit";
+}
+
+TEST(DispatchGovernor, ExpensivePrecisionAndBundleWorkloadsUseTheStrictPhysicalFootprint) {
+    const auto ordinary = ResolveVulkanDispatchLimits(PrecisionRung::Fp32, false, false);
+    EXPECT_EQ(ordinary.tile_edge_cap, kMaxTileEdge);
+    EXPECT_EQ(ordinary.max_band_rows, kMaxTileEdge);
+
+    for (const auto limits : {
+             ResolveVulkanDispatchLimits(PrecisionRung::Fp64, false, false),
+             ResolveVulkanDispatchLimits(PrecisionRung::Fp32, true, false),
+             ResolveVulkanDispatchLimits(PrecisionRung::Fp32Comp, false, true),
+         }) {
+        EXPECT_EQ(limits.tile_edge_cap, kWatchdogSafeMaxTileEdge);
+        EXPECT_EQ(limits.max_band_rows, kWatchdogSafeMaxBandRows);
+    }
 }
 
 TEST(DispatchGovernor, BandsNeverExceedRemainingRowsNorDropBelowOne) {
