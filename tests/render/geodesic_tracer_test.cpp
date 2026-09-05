@@ -257,12 +257,13 @@ TEST_F(GeodesicTracerTest, LiveDiskCrossingCarriesTransportedPhysicalStokesOrien
 
 TEST(GeodesicTracerVolumetric, TransferAccumulatesAcrossEveryTraversedSegment) {
     KerrSchildParams params;
-    params.M = 0.0;
-    KerrSchildFamily flat(params);
+    params.M = 1.0;
+    KerrSchildFamily metric(params);
 
     TracerConfig config;
     config.escape_radius = 80.0f;
-    config.max_steps = 2000;
+    config.max_steps = 20000;
+    config.horizon_factor = 1.05f;
     config.enable_disk = true;
     config.enable_volumetric = true;
     config.disk_inner = 6.0f;
@@ -274,7 +275,7 @@ TEST(GeodesicTracerVolumetric, TransferAccumulatesAcrossEveryTraversedSegment) {
     config.volumetric_samples = 4;
     config.integrator.initial_step = 0.5f;
     config.integrator.max_step = 1.0f;
-    GeodesicTracer tracer(&flat, config);
+    GeodesicTracer tracer(&metric, config);
 
     CameraConfig camera_config;
     camera_config.r = 50.0;
@@ -284,7 +285,7 @@ TEST(GeodesicTracerVolumetric, TransferAccumulatesAcrossEveryTraversedSegment) {
     PinholeCamera camera(camera_config);
 
     const TraceResult result = tracer.Trace(camera.GenerateRay(1, 1, 0.5f, 0.5f));
-    EXPECT_EQ(result.outcome, TraceResult::Outcome::Escaped)
+    EXPECT_EQ(result.outcome, TraceResult::Outcome::Horizon)
         << "volumetric transfer must not replace the ray's terminal outcome";
     EXPECT_TRUE(result.volumetric_hit);
     EXPECT_GT(result.volumetric_affine_length, 10.0f)
@@ -295,7 +296,7 @@ TEST(GeodesicTracerVolumetric, TransferAccumulatesAcrossEveryTraversedSegment) {
 
     TracerConfig capped_config = config;
     capped_config.volumetric_tau_max = 0.25f;
-    GeodesicTracer capped_tracer(&flat, capped_config);
+    GeodesicTracer capped_tracer(&metric, capped_config);
     const TraceResult capped = capped_tracer.Trace(camera.GenerateRay(1, 1, 0.5f, 0.5f));
     EXPECT_TRUE(capped.volumetric_hit);
     EXPECT_NEAR(capped.optical_depth, capped_config.volumetric_tau_max, 1.0e-6f);
@@ -305,8 +306,8 @@ TEST(GeodesicTracerVolumetric, TransferAccumulatesAcrossEveryTraversedSegment) {
 
 TEST(GeodesicTracerVolumetric, OpticallyThinTransferIsNotDiscardedAtCompositionBoundary) {
     KerrSchildParams params;
-    params.M = 0.0;
-    KerrSchildFamily flat(params);
+    params.M = 1.0;
+    KerrSchildFamily metric(params);
 
     TracerConfig config;
     config.escape_radius = 80.0f;
@@ -322,7 +323,7 @@ TEST(GeodesicTracerVolumetric, OpticallyThinTransferIsNotDiscardedAtCompositionB
     config.volumetric_samples = 4;
     config.integrator.initial_step = 0.5f;
     config.integrator.max_step = 1.0f;
-    GeodesicTracer tracer(&flat, config);
+    GeodesicTracer tracer(&metric, config);
 
     CameraConfig camera_config;
     camera_config.r = 50.0;
@@ -385,8 +386,8 @@ TEST(GeodesicTracerVolumetric, RedshiftAndDopplerReachTheLiveVolumeSource) {
 
 TEST(GeodesicTracerVolumetric, ProceduralTurbulenceAltersLiveTransferDeterministically) {
     KerrSchildParams params;
-    params.M = 0.0;
-    KerrSchildFamily flat(params);
+    params.M = 1.0;
+    KerrSchildFamily metric(params);
 
     TracerConfig baseline_config;
     baseline_config.escape_radius = 80.0f;
@@ -411,12 +412,12 @@ TEST(GeodesicTracerVolumetric, ProceduralTurbulenceAltersLiveTransferDeterminist
     PinholeCamera camera(camera_config);
     const CameraRay ray = camera.GenerateRay(1, 1, 0.5f, 0.5f);
 
-    GeodesicTracer baseline_tracer(&flat, baseline_config);
+    GeodesicTracer baseline_tracer(&metric, baseline_config);
     const TraceResult baseline = baseline_tracer.Trace(ray);
 
     TracerConfig enhanced_config = baseline_config;
     enhanced_config.enable_turbulence = true;
-    GeodesicTracer enhanced_tracer(&flat, enhanced_config);
+    GeodesicTracer enhanced_tracer(&metric, enhanced_config);
 
     const TraceResult first = enhanced_tracer.Trace(ray);
     const TraceResult repeat = enhanced_tracer.Trace(ray);
@@ -471,7 +472,7 @@ TEST_F(GeodesicTracerTest, KerrMetricTracing) {
     config.horizon_factor = 1.1f;
     config.max_steps = 10000;
     config.enable_disk = true;
-    config.disk_inner = static_cast<float>(AccretionDiskD::ComputeIsco(0.9));
+    config.disk_inner = AccretionDiskD::ComputeIsco(0.9);
     config.disk_outer = 20.0f;
 
     auto kerrTracer = std::make_unique<GeodesicTracer>(kerrMetric.get(), config);
@@ -521,7 +522,7 @@ TEST(GeodesicTracerRedshift, NearExtremalInnerDiskEmissionRemainsFinite) {
     config.horizon_factor = 1.0f;
     config.max_steps = 20000;
     config.enable_disk = true;
-    config.disk_inner = static_cast<float>(AccretionDiskD::ComputeIsco(0.998));
+    config.disk_inner = AccretionDiskD::ComputeIsco(0.998);
     config.disk_outer = 20.0f;
     config.integrator.initial_step = 0.1f;
     config.integrator.max_step = 1.0f;

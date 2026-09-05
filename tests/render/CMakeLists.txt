@@ -26,6 +26,11 @@ add_executable(sirius_render_tests
 
 target_link_libraries(sirius_render_tests PRIVATE sirius_render sirius_app_lib GTest::gtest_main)
 
+if(SIRIUS_REQUIRE_VULKAN_RUNTIME)
+    target_compile_definitions(sirius_render_tests
+        PRIVATE SIRIUS_TEST_REQUIRE_VULKAN_RUNTIME=1)
+endif()
+
 # Decode-side headers (stbi_load, LoadEXR); the implementations are provided by
 # sirius_render, so the tests need declarations only.
 target_include_directories(sirius_render_tests PRIVATE

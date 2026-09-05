@@ -223,7 +223,10 @@ jobs:
   linux-sanitizers:
     if: github.event_name == 'push'
     runs-on: ubuntu-24.04
-    timeout-minutes: 75
+    # The registration-complete Mandatory estate exceeded 71 minutes under
+    # three sanitizers on ubuntu-24.04 before the previous job-level timeout
+    # cancelled it. Preserve the complete gate and allow hosted-runner variance.
+    timeout-minutes: 180
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Toolchain
@@ -276,12 +279,24 @@ jobs:
           $destination | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           "VK_DRIVER_FILES=$destination\vk_swiftshader_icd.json" `
             | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-      - name: Prove qualification Vulkan toolchain
+      - name: Prove qualification Vulkan inputs
         shell: pwsh
         run: |
           Get-Command slangc -ErrorAction Stop
           Get-Command spirv-val -ErrorAction Stop
-          & "$env:VULKAN_SDK\bin\vulkaninfoSDK.exe" --summary
+          $destination = "C:\swiftshader"
+          $icd = Join-Path $destination "vk_swiftshader_icd.json"
+          $driver = Join-Path $destination "vk_swiftshader.dll"
+          $loader = Join-Path $destination "vulkan-1.dll"
+          foreach ($path in @($icd, $driver, $loader)) {
+            if (-not (Test-Path -PathType Leaf $path)) {
+              throw "pinned SwiftShader qualification input is absent: $path"
+            }
+          }
+          $manifest = Get-Content -Raw $icd | ConvertFrom-Json
+          if ($manifest.ICD.library_path -ne ".\vk_swiftshader.dll") {
+            throw "pinned SwiftShader ICD selects an unexpected driver"
+          }
       - name: Configure
         run: >-
           cmake --preset windows-msvc

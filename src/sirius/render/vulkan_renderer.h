@@ -34,6 +34,19 @@ enum class PrecisionRung {
                // SIRIUS_PRECISION=fp64 on devices reporting shaderFloat64
 };
 
+// Maximum memory-tile edge and row-band height for one Vulkan workload. fp64
+// trajectories and the wider ray-bundle/point-catalogue kernel use the strict
+// physical-watchdog footprint; ordinary fp32 paths retain the memory governor's
+// normal tile cap and adaptive row growth.
+struct VulkanDispatchLimits {
+    int tile_edge_cap = kMaxTileEdge;
+    int max_band_rows = kMaxTileEdge;
+};
+
+[[nodiscard]] VulkanDispatchLimits ResolveVulkanDispatchLimits(PrecisionRung precision,
+                                                               bool ray_bundles,
+                                                               bool point_starfield);
+
 // What the Vulkan render produced, for logging and the parity/governor tests.
 struct VulkanRenderStats {
     std::string device_name;

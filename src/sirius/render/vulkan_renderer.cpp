@@ -351,6 +351,18 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
 
 }  // namespace
 
+VulkanDispatchLimits ResolveVulkanDispatchLimits(PrecisionRung precision, bool ray_bundles,
+                                                 bool point_starfield) {
+    const bool strict = precision == PrecisionRung::Fp64 || ray_bundles || point_starfield;
+    if (strict) {
+        return VulkanDispatchLimits{
+            .tile_edge_cap = kWatchdogSafeMaxTileEdge,
+            .max_band_rows = kWatchdogSafeMaxBandRows,
+        };
+    }
+    return {};
+}
+
 Expected<void> ValidateVulkanRenderConfig(const SessionConfig& config) {
     if (const auto issue = SessionConfigIssue(config); issue.has_value()) {
         return Fail(ErrorDomain::kConfiguration, "validate Vulkan render configuration", *issue);
@@ -506,9 +518,12 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
                     "SIRIUS_MEMORY_BUDGET_MB override");
     }
 
+    const auto dispatch_limits =
+        ResolveVulkanDispatchLimits(*rung, config.ray_bundles, config.point_starfield);
     auto plan =
         DeriveTilePlan(budget, config.width, config.height,
-                       params_overhead + (use_starfield ? starfield_bytes : 0) + point_bytes);
+                       params_overhead + (use_starfield ? starfield_bytes : 0) + point_bytes,
+                       dispatch_limits.tile_edge_cap);
     if (!plan) {
         return std::unexpected(plan.error());
     }
@@ -530,9 +545,13 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
     if (!target_ms) {
         return std::unexpected(target_ms.error());
     }
-    BandController bands(plan->tile_edge, *target_ms);
-    if (bands.Enabled()) {
+    if (*target_ms > 0.0) {
         std::cout << "[Vulkan] dispatch governor: " << *target_ms << " ms/band target\n";
+        if (dispatch_limits.max_band_rows == kWatchdogSafeMaxBandRows) {
+            std::cout << "[Vulkan] watchdog-safe dispatch footprint: at most "
+                      << dispatch_limits.tile_edge_cap << " pixels x "
+                      << dispatch_limits.max_band_rows << " row\n";
+        }
     } else {
         std::cout << "[Vulkan] dispatch governor disabled: one dispatch per tile\n";
     }
@@ -611,6 +630,7 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
             const int oy = tj * edge;
             const int tw = std::min(edge, config.width - ox);
             const int th = std::min(edge, config.height - oy);
+            BandController bands(edge, *target_ms, dispatch_limits.max_band_rows);
 
             params[31] = static_cast<float>(ox);
             params[33] = static_cast<float>(tw);

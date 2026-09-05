@@ -166,7 +166,9 @@ TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
 
 #ifdef SIRIUS_KERNEL_DIR
 // Dispatch one 64x64 Kerr scene (the same scene as the smoke gate above)
-// through the given SPIR-V module and return the RGBA radiance field.
+// through the given SPIR-V module and return the RGBA radiance field. Keep the
+// direct probe under the same watchdog-safe tiling contract as the product:
+// one monolithic fp64 dispatch can trigger a D3D12 device removal on Dozen.
 std::vector<float> RunKerrScene(ComputeDevice& device, const std::vector<std::uint32_t>& spirv) {
     const auto kernel = device.LoadKernel(spirv);
     if (!kernel) {
@@ -176,6 +178,7 @@ std::vector<float> RunKerrScene(ComputeDevice& device, const std::vector<std::ui
 
     constexpr std::uint32_t kWidth = 64;
     constexpr std::uint32_t kHeight = 64;
+    constexpr std::uint32_t kTileHeight = 8;
 
     std::vector<float> params(68, 0.0f);
     params[44] = 0.5f;
@@ -214,9 +217,11 @@ std::vector<float> RunKerrScene(ComputeDevice& device, const std::vector<std::ui
     params[37] = 1.0f;
 
     std::vector<float> radiance(kWidth * kHeight * 4, 0.0f);
+    std::vector<float> tile_radiance(kWidth * kTileHeight * 4, 0.0f);
     const std::vector<std::uint32_t> starfield_dummy = {0u};
 
-    const auto rbuf = device.CreateBuffer(radiance.size() * sizeof(float), BufferUsage::kStorage);
+    const auto rbuf =
+        device.CreateBuffer(tile_radiance.size() * sizeof(float), BufferUsage::kStorage);
     const auto pbuf = device.CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
     const auto sbuf =
         device.CreateBuffer(starfield_dummy.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
@@ -227,25 +232,38 @@ std::vector<float> RunKerrScene(ComputeDevice& device, const std::vector<std::ui
         ADD_FAILURE() << "buffer creation failed";
         return {};
     }
-    const bool wrote =
-        device.WriteBuffer(*rbuf, std::as_bytes(std::span<const float>(radiance))) &&
-        device.WriteBuffer(*pbuf, std::as_bytes(std::span<const float>(params))) &&
-        device.WriteBuffer(*sbuf, std::as_bytes(std::span<const std::uint32_t>(starfield_dummy)));
-    if (!wrote) {
+    if (!device.WriteBuffer(*sbuf,
+                            std::as_bytes(std::span<const std::uint32_t>(starfield_dummy)))) {
         ADD_FAILURE() << "buffer upload failed";
         return {};
     }
 
     const BufferHandle binding[] = {*rbuf, *pbuf, *sbuf, *psbuf, *pobuf, *pibuf};
-    const auto dispatched =
-        device.Dispatch(*kernel, binding, (kWidth + 7) / 8, (kHeight + 7) / 8, 1);
-    if (!dispatched) {
-        ADD_FAILURE() << dispatched.error().Description();
-        return {};
-    }
-    if (!device.ReadBuffer(*rbuf, std::as_writable_bytes(std::span<float>(radiance)))) {
-        ADD_FAILURE() << "radiance readback failed";
-        return {};
+    for (std::uint32_t origin_y = 0; origin_y < kHeight; origin_y += kTileHeight) {
+        const std::uint32_t band_height = std::min(kTileHeight, kHeight - origin_y);
+        params[31] = 0.0f;
+        params[32] = static_cast<float>(origin_y);
+        params[33] = static_cast<float>(kWidth);
+        params[34] = static_cast<float>(band_height);
+        std::fill(tile_radiance.begin(), tile_radiance.end(), 0.0f);
+        if (!device.WriteBuffer(*rbuf, std::as_bytes(std::span<const float>(tile_radiance))) ||
+            !device.WriteBuffer(*pbuf, std::as_bytes(std::span<const float>(params)))) {
+            ADD_FAILURE() << "tile upload failed at row " << origin_y;
+            return {};
+        }
+        const auto dispatched =
+            device.Dispatch(*kernel, binding, (kWidth + 7) / 8, (band_height + 7) / 8, 1);
+        if (!dispatched) {
+            ADD_FAILURE() << "tile row " << origin_y << ": " << dispatched.error().Description();
+            return {};
+        }
+        if (!device.ReadBuffer(*rbuf, std::as_writable_bytes(std::span<float>(tile_radiance)))) {
+            ADD_FAILURE() << "tile readback failed at row " << origin_y;
+            return {};
+        }
+        const std::size_t band_values = static_cast<std::size_t>(kWidth) * band_height * 4;
+        const std::size_t output_offset = static_cast<std::size_t>(origin_y) * kWidth * 4;
+        std::copy_n(tile_radiance.begin(), band_values, radiance.begin() + output_offset);
     }
     return radiance;
 }

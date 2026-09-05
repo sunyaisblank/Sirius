@@ -306,12 +306,10 @@ Real DeviceRealEpsilon() {
 #endif
 }
 
-// Project one contravariant tangent onto the metric null cone while preserving
-// its spatial components.  The incoming temporal component identifies the
-// continuous light-cone branch, including where both coordinate-time roots
-// have the same sign.  The stable quadratic form avoids cancellation in the
-// smaller root; genuinely linear g_00=0 events are handled without division by
-// a vanishing coefficient.  An unrepresented root fails closed.
+// Project one contravariant tangent onto the metric null cone using the nearest
+// temporal root when represented. A coordinate-time root need not exist inside
+// a stationary limit; in that case the smallest normalized spatial correction
+// leaves k^0 unchanged and preserves the incoming cone orientation.
 public bool ProjectNullTangentPreservingBranch(Real metric[4][4], Vec4Cart tangent,
                                                out Vec4Cart projected) {
     projected = tangent;
@@ -330,57 +328,70 @@ public bool ProjectNullTangentPreservingBranch(Real metric[4][4], Vec4Cart tange
     }
     if (!(metricScale > Real(0.0f))) return false;
 
-    Real A = metric[0][0];
-    Real B = Real(0.0f);
-    Real C = Real(0.0f);
-    [unroll] for (int i = 1; i < 4; ++i) {
-        B += Real(2.0f) * metric[0][i] * components[i];
-        [unroll] for (int j = 1; j < 4; ++j) {
-            C += metric[i][j] * components[i] * components[j];
-        }
-    }
-    if (!isfinite(A) || !isfinite(B) || !isfinite(C)) return false;
-
     Real roundoff = Real(64.0f) * DeviceRealEpsilon();
-    Real root = tangent.t;
-    if (A == Real(0.0f)) {
-        if (B == Real(0.0f)) return false;
-        root = -C / B;
-    } else {
-        Real fourAC = Real(4.0f) * A * C;
-        Real discriminant = B * B - fourAC;
-        Real discriminantScale = B * B + abs(fourAC);
-        if (!isfinite(discriminant) ||
-            discriminant < -roundoff * discriminantScale) {
-            return false;
+    Real bestComponents[4] = { components[0], components[1], components[2], components[3] };
+    Real bestCorrection = Real(1.0e30f);
+    bool bestRepresented = false;
+    bool temporalRepresented = false;
+    [unroll] for (int component = 0; component < 4; ++component) {
+        if (component > 0 && temporalRepresented) continue;
+        Real A = metric[component][component];
+        Real B = Real(0.0f);
+        Real C = Real(0.0f);
+        [unroll] for (int i = 0; i < 4; ++i) {
+            if (i == component) continue;
+            B += (metric[component][i] + metric[i][component]) * components[i];
+            [unroll] for (int j = 0; j < 4; ++j) {
+                if (j == component) continue;
+                C += metric[i][j] * components[i] * components[j];
+            }
         }
-        discriminant = max(discriminant, Real(0.0f));
-        Real sqrtDiscriminant = sqrt(discriminant);
-        Real q = Real(-0.5f) *
-                 (B + (B >= Real(0.0f) ? sqrtDiscriminant : -sqrtDiscriminant));
-        Real firstRoot;
-        Real secondRoot;
-        if (q == Real(0.0f)) {
-            firstRoot = -B / (Real(2.0f) * A);
-            secondRoot = firstRoot;
+        if (!isfinite(A) || !isfinite(B) || !isfinite(C)) continue;
+
+        Real roots[2] = { Real(0.0f), Real(0.0f) };
+        int rootCount = 0;
+        if (A == Real(0.0f)) {
+            if (B == Real(0.0f)) continue;
+            roots[rootCount++] = -C / B;
         } else {
-            firstRoot = q / A;
-            secondRoot = C / q;
+            Real fourAC = Real(4.0f) * A * C;
+            Real discriminant = B * B - fourAC;
+            Real discriminantScale = B * B + abs(fourAC);
+            if (!isfinite(discriminant) ||
+                discriminant < -roundoff * discriminantScale) {
+                continue;
+            }
+            discriminant = max(discriminant, Real(0.0f));
+            Real sqrtDiscriminant = sqrt(discriminant);
+            Real q = Real(-0.5f) *
+                     (B + (B >= Real(0.0f) ? sqrtDiscriminant : -sqrtDiscriminant));
+            if (q == Real(0.0f)) {
+                roots[rootCount++] = -B / (Real(2.0f) * A);
+                roots[rootCount++] = roots[0];
+            } else {
+                roots[rootCount++] = q / A;
+                roots[rootCount++] = C / q;
+            }
         }
-        bool firstRepresented = isfinite(firstRoot);
-        bool secondRepresented = isfinite(secondRoot);
-        if (!firstRepresented && !secondRepresented) return false;
-        if (firstRepresented && secondRepresented) {
-            root = abs(firstRoot - tangent.t) <= abs(secondRoot - tangent.t)
-                       ? firstRoot
-                       : secondRoot;
-        } else {
-            root = firstRepresented ? firstRoot : secondRoot;
+
+        [unroll] for (int rootIndex = 0; rootIndex < 2; ++rootIndex) {
+            if (rootIndex >= rootCount) continue;
+            Real root = roots[rootIndex];
+            if (!isfinite(root)) continue;
+            Real correction =
+                abs(root - components[component]) /
+                (Real(1.0f) + abs(components[component]));
+            if (correction >= bestCorrection) continue;
+            [unroll] for (int i = 0; i < 4; ++i) bestComponents[i] = components[i];
+            bestComponents[component] = root;
+            bestCorrection = correction;
+            bestRepresented = true;
+            if (component == 0) temporalRepresented = true;
         }
     }
-
-    if (!isfinite(root)) return false;
-    projected.t = root;
+    if (!bestRepresented) return false;
+    projected = MakeVec4Cart(bestComponents[0], bestComponents[1],
+                             bestComponents[2], bestComponents[3]);
     return true;
 }
 

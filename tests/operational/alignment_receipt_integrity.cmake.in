@@ -24,6 +24,15 @@ if(NOT "@SIRIUS_ALIGNMENT_MODE@" STREQUAL "development")
     endif()
     file(WRITE "${_copied_receipt}" "${_copied_tamper}")
 
+    set(_expect_gate_valid FALSE)
+    if(EXISTS "${SIRIUS_RESOURCE_SOURCE}/model/mandatory_gate.json")
+        set(_expect_gate_valid TRUE)
+    endif()
+    set(_expect_readiness_success FALSE)
+    if("@SIRIUS_ALIGNMENT_MODE@" STREQUAL "release" AND _expect_gate_valid)
+        set(_expect_readiness_success TRUE)
+    endif()
+
     execute_process(
         COMMAND "@CMAKE_COMMAND@" -E env
             "SIRIUS_RESOURCE_DIR=${_resources}"
@@ -42,17 +51,28 @@ if(NOT "@SIRIUS_ALIGNMENT_MODE@" STREQUAL "development")
     string(JSON _release_gate_valid ERROR_VARIABLE _release_gate_valid_error
         GET "${_release_stdout}" mandatory_build_gate valid)
     string(FIND "${_release_stdout}" "${_resources}" _release_override_reference)
-    if(_release_result EQUAL 0 OR
-       NOT _release_satisfied_error STREQUAL "NOTFOUND" OR
+    set(_release_contract_valid TRUE)
+    if(NOT _release_satisfied_error STREQUAL "NOTFOUND" OR
        NOT _release_admitted_error STREQUAL "NOTFOUND" OR
        NOT _release_required_error STREQUAL "NOTFOUND" OR
        NOT _release_gate_required_error STREQUAL "NOTFOUND" OR
        NOT _release_gate_valid_error STREQUAL "NOTFOUND" OR
        NOT _release_required EQUAL 8 OR
-       NOT _release_gate_required OR _release_gate_valid OR
+       NOT _release_gate_required OR
        NOT _release_override_reference EQUAL -1)
+        set(_release_contract_valid FALSE)
+    endif()
+    if((_expect_gate_valid AND NOT _release_gate_valid) OR
+       (NOT _expect_gate_valid AND _release_gate_valid))
+        set(_release_contract_valid FALSE)
+    endif()
+    if((_expect_readiness_success AND NOT _release_result EQUAL 0) OR
+       (NOT _expect_readiness_success AND _release_result EQUAL 0))
+        set(_release_contract_valid FALSE)
+    endif()
+    if(NOT _release_contract_valid)
         message(FATAL_ERROR
-            "strict pre-gate readiness did not remain bound to the executable volume "
+            "strict readiness did not remain bound to the executable volume "
             "(${_release_result})\n${_release_stdout}\n${_release_stderr}")
     endif()
     if("@SIRIUS_ALIGNMENT_MODE@" STREQUAL "release" AND
@@ -70,8 +90,15 @@ if(NOT "@SIRIUS_ALIGNMENT_MODE@" STREQUAL "development")
         ERROR_VARIABLE _release_capability_stderr)
     set(_release_capability_log
         "${_release_capability_stdout}\n${_release_capability_stderr}")
-    if(_release_capability_result EQUAL 0 OR
-       NOT _release_capability_log MATCHES "build-gate receipt is missing")
+    if(_expect_gate_valid)
+        if(NOT _release_capability_result EQUAL 0 OR
+           _release_capability_log MATCHES "build-gate receipt is missing")
+            message(FATAL_ERROR
+                "strict post-gate capability reporting rejected the executable volume "
+                "(${_release_capability_result})\n${_release_capability_log}")
+        endif()
+    elseif(_release_capability_result EQUAL 0 OR
+           NOT _release_capability_log MATCHES "build-gate receipt is missing")
         message(FATAL_ERROR
             "strict pre-gate capability reporting did not fail closed "
             "(${_release_capability_result})\n${_release_capability_log}")

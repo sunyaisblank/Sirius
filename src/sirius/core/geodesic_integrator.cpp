@@ -4,7 +4,7 @@
 // Hamiltonian formulation with covariant momenta makes the continuum null
 // constraint H = (1/2) g^mu_nu p_mu p_nu = 0 a conserved quantity. Numerical
 // steps are accepted only when both truncation error and relative constraint
-// residual are within tolerance; the state is never projected onto H=0.
+// residual are within tolerance; admitted roundoff is projected back onto H=0.
 // Hamilton's equations:
 //   dx^mu/dlambda = g^mu_nu p_nu,   dp_mu/dlambda = (1/2)(d g_alpha_beta/dx^mu) k^alpha k^beta.
 
@@ -445,6 +445,82 @@ static double RelativeNullResidual(const Vec4& velocity, const Metric4d& metric)
     return std::abs(contraction) / absolute_scale;
 }
 
+std::optional<Vec4> Geodesic::ProjectNullTangentPreservingBranch(const Vec4& tangent,
+                                                                 const Metric4d& metric) {
+    for (int component = 0; component < 4; ++component) {
+        if (!std::isfinite(tangent(component))) return std::nullopt;
+    }
+
+    double metric_scale = 0.0;
+    for (int mu = 0; mu < 4; ++mu) {
+        for (int nu = 0; nu < 4; ++nu) {
+            const double value = metric(mu, nu).real;
+            if (!std::isfinite(value)) return std::nullopt;
+            metric_scale = std::max(metric_scale, std::abs(value));
+        }
+    }
+    if (!(metric_scale > 0.0)) return std::nullopt;
+
+    std::optional<Vec4> best;
+    double best_correction = std::numeric_limits<double>::infinity();
+    const double roundoff = 64.0 * std::numeric_limits<double>::epsilon();
+    bool temporal_represented = false;
+
+    // A coordinate-time root need not exist inside a stationary limit. Solve
+    // it first to retain the established spatial ray direction; only when it
+    // has no represented root, solve the three spatial quadratics and retain
+    // their smallest normalized correction. That fallback leaves k^0 unchanged
+    // and therefore cannot switch the time orientation of the cone.
+    for (int component = 0; component < 4; ++component) {
+        if (component > 0 && temporal_represented) break;
+        const double a = metric(component, component).real;
+        double b = 0.0;
+        double c = 0.0;
+        for (int i = 0; i < 4; ++i) {
+            if (i == component) continue;
+            b += (metric(component, i).real + metric(i, component).real) * tangent(i);
+            for (int j = 0; j < 4; ++j) {
+                if (j == component) continue;
+                c += metric(i, j).real * tangent(i) * tangent(j);
+            }
+        }
+        if (!std::isfinite(a) || !std::isfinite(b) || !std::isfinite(c)) continue;
+
+        double roots[2]{};
+        int root_count = 0;
+        if (a == 0.0) {
+            if (b == 0.0) continue;
+            roots[root_count++] = -c / b;
+        } else {
+            const double four_ac = 4.0 * a * c;
+            double discriminant = b * b - four_ac;
+            const double discriminant_scale = b * b + std::abs(four_ac);
+            if (!std::isfinite(discriminant) || discriminant < -roundoff * discriminant_scale) {
+                continue;
+            }
+            discriminant = std::max(discriminant, 0.0);
+            const double square_root = std::sqrt(discriminant);
+            const double q = -0.5 * (b + (b >= 0.0 ? square_root : -square_root));
+            roots[root_count++] = q == 0.0 ? -b / (2.0 * a) : q / a;
+            roots[root_count++] = q == 0.0 ? roots[0] : c / q;
+        }
+
+        for (int root_index = 0; root_index < root_count; ++root_index) {
+            const double root = roots[root_index];
+            if (!std::isfinite(root)) continue;
+            const double correction =
+                std::abs(root - tangent(component)) / (1.0 + std::abs(tangent(component)));
+            if (correction >= best_correction) continue;
+            Vec4 candidate = tangent;
+            candidate(component) = root;
+            best = candidate;
+            best_correction = correction;
+            if (component == 0) temporal_represented = true;
+        }
+    }
+    return best;
+}
+
 bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const IntegratorConfig& config) {
     using namespace dp45;
 
@@ -467,7 +543,12 @@ bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const Integrato
     metric->Evaluate(x0, g0, dg0);
     Vec4 p0 = ComputeMomentum(ray.velocity, g0);
     Vec4 k0 = ray.velocity;
-    constexpr double kMaximumRelativeNullResidual = 1e-6;
+    // Keep a narrow guard band above the physical 1e-6 bound.  Long
+    // near-critical trajectories can land a few parts in 10^6 above the
+    // decimal threshold at the configured float step floor (observed maximum
+    // 1.0000022e-6); treating that representation noise as a different light
+    // cone strands an otherwise converged ray.
+    constexpr double kMaximumRelativeNullResidual = 1.01e-6;
     if (RelativeNullResidual(k0, g0) > kMaximumRelativeNullResidual) {
         ray.terminated = 6;
         return false;
@@ -536,10 +617,15 @@ bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const Integrato
 
     // Step acceptance.
     if (error_norm > 1.0f) {
-        ray.step_size = ComputeOptimalStep(h, error_norm, 1.0f, config);
-        if (ray.step_size <= config.min_step) {
+        // Reaching the configured floor is not itself a failure: the caller
+        // must be allowed to retry once at that floor.  Only a candidate that
+        // was already evaluated at min_step may terminate.  The former order
+        // classified any rejection that *selected* min_step as terminal and
+        // created a large false shadow around near-critical Kerr rays.
+        if (h <= config.min_step) {
             ray.terminated = 5;
-            return false;
+        } else {
+            ray.step_size = ComputeOptimalStep(h, error_norm, 1.0f, config);
         }
         return false;
     }
@@ -549,20 +635,29 @@ bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const Integrato
         return false;
     }
 
-    // The Hamiltonian flow must remain on the null constraint surface. Reject a
-    // step that leaves it; projecting only k^0 changes the conserved momentum
-    // and can select the opposite light cone.
+    // The Hamiltonian flow must remain on the null constraint surface. Bound
+    // the unprojected defect first, then remove its accumulated roundoff with
+    // the nearest represented temporal root. When no temporal root exists, the
+    // smallest normalized spatial correction leaves k^0 unchanged. An
+    // unrepresented projection still fails closed.
     {
         Metric4d g_check;
         Tensor<Dual<double>, 4, 4, 4> dg_check;
         metric->Evaluate(new_position, g_check, dg_check);
-        if (RelativeNullResidual(new_velocity, g_check) > kMaximumRelativeNullResidual) {
-            ray.step_size = std::max(config.min_step, h * 0.5f);
-            if (ray.step_size <= config.min_step) {
+        const double unprojected_residual = RelativeNullResidual(new_velocity, g_check);
+        const auto projected = ProjectNullTangentPreservingBranch(new_velocity, g_check);
+        const bool represented_projection =
+            projected.has_value() && RelativeNullResidual(*projected, g_check) <=
+                                         256.0 * std::numeric_limits<double>::epsilon();
+        if (unprojected_residual > kMaximumRelativeNullResidual || !represented_projection) {
+            if (h <= config.min_step) {
                 ray.terminated = 6;
+            } else {
+                ray.step_size = std::max(config.min_step, h * 0.5f);
             }
             return false;
         }
+        new_velocity = *projected;
     }
 
     // Commit only after both embedded error and the physical constraint admit

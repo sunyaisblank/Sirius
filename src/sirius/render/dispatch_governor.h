@@ -45,10 +45,23 @@ namespace sirius::render {
 inline constexpr double kDefaultDispatchTargetMs = 250.0;
 
 // Rows in the first band, at governed-tile width, before any measurement
-// exists. Small enough that even the fp64 rung on integrated silicon finishes
-// well inside the target's order of magnitude; the controller grows from here
-// within a few bands.
-inline constexpr int kInitialBandRows = 8;
+// exists. One row is the smallest dispatch this banding scheme can represent
+// and is therefore the only safe cold start for an unknown workload. The
+// physical fp64 path demonstrated that an eight-row estimate which was safe
+// before a kernel-cost increase can cross the operating-system watchdog before
+// the controller receives its first measurement. Capped growth recovers useful
+// throughput within a few bands.
+inline constexpr int kInitialBandRows = 1;
+
+// The row-band governor cannot submit less than one full tile row. Keep every
+// workload whose irreducible row is known to be expensive at or below the
+// 64-pixel width already exercised by the physical fp64 runtime gate, and never
+// grow it beyond one row. This applies both to fp64 and to the ray-bundle/point-
+// catalogue path: physical WSL2/Dozen qualification measured a 128-pixel row
+// of that fp32 workload above the 250 ms target, then lost the device when the
+// memory governor widened the same irreducible row to 1080 pixels.
+inline constexpr int kWatchdogSafeMaxTileEdge = 64;
+inline constexpr int kWatchdogSafeMaxBandRows = 1;
 
 // Per-step growth bound. Growth is damped so one spuriously fast measurement
 // (a band of sky, a warm cache) cannot balloon the next dispatch past the
@@ -56,11 +69,12 @@ inline constexpr int kInitialBandRows = 8;
 // target risks device removal while undershooting only costs overhead.
 inline constexpr double kBandGrowthCap = 2.0;
 
-// Adaptive band-area controller. One instance persists across a render so the
-// learned throughput carries from tile to tile; NextRows converts the learned
-// area to rows at the width of the band being planned, which is what makes
-// the carried state width-safe. Pure arithmetic; no device handles cross this
-// boundary, so it is unit-testable without Vulkan.
+// Adaptive band-area controller. One instance covers the bands within a single
+// tile; the renderer starts a fresh controller at every tile so a band learned
+// on a cheap sky region cannot cross a spatial cost cliff at the next tile.
+// NextRows converts the learned area to rows at the width of the band being
+// planned, keeping partial-width tiles safe. Pure arithmetic; no device handles
+// cross this boundary, so it is unit-testable without Vulkan.
 //
 // Invariants: NextRows always returns a value in [1, remaining_rows]; with the
 // governor disabled (target_ms <= 0) it returns remaining_rows unchanged, which
@@ -68,10 +82,17 @@ inline constexpr double kBandGrowthCap = 2.0;
 class BandController {
   public:
     // tile_edge bounds the learned area at one governed tile (the radiance
-    // buffer's capacity); target_ms <= 0 disables banding (the escape hatch
+    // buffer's capacity). max_band_rows may impose a stricter workload limit;
+    // strict fp64 and ray-bundle paths use one row because their cost cliffs can
+    // exceed the device watchdog before feedback can shrink a larger band.
+    // target_ms <= 0 disables banding (the escape hatch
     // SIRIUS_DISPATCH_TARGET_MS=0 documents).
     BandController(int tile_edge, double target_ms)
-        : max_pixels_(static_cast<std::int64_t>(std::max(1, tile_edge)) * std::max(1, tile_edge)),
+        : BandController(tile_edge, target_ms, tile_edge) {}
+
+    BandController(int tile_edge, double target_ms, int max_band_rows)
+        : max_pixels_(static_cast<std::int64_t>(std::max(1, tile_edge)) *
+                      std::clamp(max_band_rows, 1, std::max(1, tile_edge))),
           target_ms_(target_ms),
           pixels_(std::min<std::int64_t>(
               static_cast<std::int64_t>(kInitialBandRows) * std::max(1, tile_edge), max_pixels_)) {}

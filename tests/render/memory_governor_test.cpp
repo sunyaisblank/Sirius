@@ -67,6 +67,16 @@ TEST(MemoryGovernor, TileNeverExceedsImageExtent) {
     const auto plan = DeriveTilePlan(2 * kGiB, 128, 96, 0);
     ASSERT_TRUE(plan.has_value());
     EXPECT_EQ(plan->tile_edge, 96) << "tile edge is min(image dims) when budget is ample";
+
+    // A workload-specific watchdog cap is an independent upper bound even
+    // when both the image extent and residency budget permit a larger tile.
+    constexpr int kWorkloadCap = 64;
+    const auto capped = DeriveTilePlan(2 * kGiB, 512, 512, 0, kWorkloadCap);
+    ASSERT_TRUE(capped.has_value());
+    EXPECT_EQ(capped->tile_edge, kWorkloadCap);
+    EXPECT_EQ(
+        capped->tile_working_set_bytes,
+        static_cast<std::uint64_t>(kWorkloadCap * kWorkloadCap) * kTileWorkingSetBytesPerPixel);
 }
 
 TEST(MemoryGovernor, WorkingSetMatchesTheDerivedTile) {

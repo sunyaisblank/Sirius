@@ -47,17 +47,25 @@ TEST(AlignmentAuthority, CompiledReceiptMatchesTheStagedRuntimeAuthority) {
     if (authority->release_enforced) {
         EXPECT_TRUE(authority->satisfied);
     }
-    const auto build_gate = LoadInstalledBuildGateAuthority(*authority);
     if (!authority->release_enforced && !authority->qualification_enforced) {
+        const auto build_gate = LoadInstalledBuildGateAuthority(*authority);
         ASSERT_TRUE(build_gate.has_value()) << build_gate.error();
         EXPECT_FALSE(build_gate->required);
         EXPECT_EQ(build_gate->source_revision, authority->source_revision);
         EXPECT_EQ(build_gate->registered_tests, 0U);
         EXPECT_EQ(build_gate->verified_product_artifacts, 0U);
-    } else if (base::ResolveResource("model/mandatory_gate.json").has_value()) {
+    } else if (const auto gate_path = base::ResolveResource("model/mandatory_gate.json");
+               gate_path.has_value()) {
+        auto product_executable = base::ExecutablePath().parent_path() / "sirius";
+#if defined(_WIN32)
+        product_executable += ".exe";
+#endif
+        const auto build_gate = ValidateBuildGateAuthorityForVolume(
+            *authority, product_executable, gate_path->parent_path().parent_path());
         ASSERT_TRUE(build_gate.has_value()) << build_gate.error();
         EXPECT_TRUE(build_gate->required);
     } else {
+        const auto build_gate = LoadInstalledBuildGateAuthority(*authority);
         ASSERT_FALSE(build_gate.has_value());
         EXPECT_NE(build_gate.error().find("missing"), std::string::npos);
     }

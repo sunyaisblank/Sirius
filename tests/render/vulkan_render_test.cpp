@@ -19,6 +19,7 @@
 
 #include <gtest/gtest.h>
 
+#include "kerr_shadow_oracle.h"
 #include "support/scoped_environment.h"
 
 #include <algorithm>
@@ -64,6 +65,10 @@ using sirius::core::CameraRay;
 using sirius::core::KerrSchildFamily;
 using sirius::core::KerrSchildParams;
 using sirius::core::PinholeCamera;
+using sirius::render::test::BardeenShadowPoint;
+using sirius::render::test::KerrShadowScreenPoint;
+using sirius::render::test::MakeStationaryKerrObserver;
+using sirius::render::test::ProjectBardeenAtFiniteObserver;
 
 constexpr double kPi = std::numbers::pi;
 
@@ -189,26 +194,7 @@ KernelFixture OpenKernel() {
     return f;
 }
 
-struct VulkanScreenPoint {
-    double alpha;
-    double beta;
-};
-
-std::optional<VulkanScreenPoint> BardeenScreenPoint(double photon_radius, double spin,
-                                                    double inclination) {
-    const double r = photon_radius;
-    const double a2 = spin * spin;
-    const double xi = (r * r * (r - 3.0) + a2 * (r + 1.0)) / (spin * (1.0 - r));
-    const double eta =
-        r * r * r * (4.0 * a2 - r * (r - 3.0) * (r - 3.0)) / (a2 * (1.0 - r) * (1.0 - r));
-    const double sin_i = std::sin(inclination);
-    const double cos_i = std::cos(inclination);
-    const double alpha = -xi / sin_i;
-    const double beta_squared =
-        eta + a2 * cos_i * cos_i - xi * xi * cos_i * cos_i / (sin_i * sin_i);
-    if (beta_squared < 0.0) return std::nullopt;
-    return VulkanScreenPoint{alpha, std::sqrt(beta_squared)};
-}
+using VulkanScreenPoint = KerrShadowScreenPoint;
 
 // --- Session Vulkan path smoke ----------------------------------------------
 
@@ -394,7 +380,7 @@ TEST(VulkanRenderSession, ThinAndVolumetricDopplerSuppressionAffectLiveEmission)
         return RenderSessionVulkan(40, 24, root + "/sirius_vk_doppler_" + suffix + ".exr",
                                    [=](sirius::render::SessionConfig& config) {
                                        config.enable_volumetric_disk = volumetric;
-                                       config.volumetric_samples = 4;
+                                       if (volumetric) config.volumetric_samples = 4;
                                        config.doppler_beaming = doppler;
                                    });
     };
@@ -787,6 +773,18 @@ TEST(VulkanRenderSession, KerrNearExtremalBardeenBoundaryAt1080p) {
     params[33] = 1.0f;
     params[34] = 1.0f;
 
+    KerrSchildParams metric_parameters;
+    metric_parameters.M = scene.M;
+    metric_parameters.a = scene.spin * scene.M;
+    KerrSchildFamily oracle_metric(metric_parameters);
+    constexpr double kInclination = 60.0 * kPi / 180.0;
+    const auto stationary_observer = MakeStationaryKerrObserver(oracle_metric, scene.spin * scene.M,
+                                                                scene.distance, kInclination);
+    ASSERT_TRUE(stationary_observer.has_value());
+    params[47] = static_cast<float>(stationary_observer->screen_beta[0]);
+    params[48] = static_cast<float>(stationary_observer->screen_beta[1]);
+    params[49] = static_cast<float>(stationary_observer->screen_beta[2]);
+
     std::array<float, 4> radiance{};
     const std::array<std::uint32_t, 1> star_dummy{0u};
     const auto radiance_buffer =
@@ -808,8 +806,7 @@ TEST(VulkanRenderSession, KerrNearExtremalBardeenBoundaryAt1080p) {
     const BufferHandle bindings[] = {*radiance_buffer,   *params_buffer,       *star_buffer,
                                      *point_star_buffer, *point_offset_buffer, *point_index_buffer};
 
-    constexpr double kInclination = 60.0 * kPi / 180.0;
-    constexpr VulkanScreenPoint kAnalyticCentre{-2.1573218480479185, 0.0};
+    constexpr VulkanScreenPoint kAnalyticCentre{2.1573218480479185, 0.0};
     const double tan_half_fov = std::tan(scene.fov_deg * kPi / 360.0);
     const double aspect = static_cast<double>(scene.width) / scene.height;
     const double pixels_per_screen_unit = 0.5 * scene.height / (scene.distance * tan_half_fov);
@@ -838,9 +835,13 @@ TEST(VulkanRenderSession, KerrNearExtremalBardeenBoundaryAt1080p) {
 
     // Same full-curve sample set as the independent CPU classifier.
     for (const double photon_radius : {1.12, 1.2, 1.35, 1.5, 1.8, 2.1, 2.5, 3.0, 3.5, 3.7}) {
-        const auto analytic = BardeenScreenPoint(photon_radius, scene.spin, kInclination);
+        const auto analytic = BardeenShadowPoint(photon_radius, scene.spin, kInclination);
         ASSERT_TRUE(analytic.has_value());
-        const VulkanScreenPoint camera_convention{-analytic->alpha, analytic->beta};
+        const auto finite_observer =
+            ProjectBardeenAtFiniteObserver(*analytic, *stationary_observer, scene.M,
+                                           scene.spin * scene.M, scene.distance, kInclination);
+        ASSERT_TRUE(finite_observer.has_value());
+        const VulkanScreenPoint camera_convention = *finite_observer;
         const VulkanScreenPoint delta{camera_convention.alpha - kAnalyticCentre.alpha,
                                       camera_convention.beta - kAnalyticCentre.beta};
         auto scaled = [&](double scale) {
