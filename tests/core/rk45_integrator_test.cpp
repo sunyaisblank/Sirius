@@ -482,6 +482,7 @@ TEST_F(RK45IntegratorTests, DoublePrecisionStagesMatchAnAnalyticRindlerNullRay) 
         const Config& GetParameters() const override { return parameters_; }
         void SetParameter(const std::string&, double) override {}
         const char* GetName() const override { return "Rindler"; }
+
       private:
         Config parameters_;
     } metric;
@@ -502,18 +503,21 @@ TEST_F(RK45IntegratorTests, DoublePrecisionStagesMatchAnAnalyticRindlerNullRay) 
 }
 
 TEST_F(RK45IntegratorTests, OutgoingChartPreservesMetricKillingQuantitiesAndInverseMap) {
-    const std::array<KerrSchildParams, 6> parameters{{
-        {1.0, 0.0, 0.0, 0.0}, {1.0, 0.998, 0.0, 0.0},
-        {1.0, 0.6, 0.5, 0.0}, {1.0, 0.0, 0.8, 0.0},
-        {1.0, 1.0, 0.0, 0.0}, {1.0, 0.0, 0.0, 0.01}}};
+    const std::array<KerrSchildParams, 6> parameters{{{1.0, 0.0, 0.0, 0.0},
+                                                      {1.0, 0.998, 0.0, 0.0},
+                                                      {1.0, 0.6, 0.5, 0.0},
+                                                      {1.0, 0.0, 0.8, 0.0},
+                                                      {1.0, 1.0, 0.0, 0.0},
+                                                      {1.0, 0.0, 0.0, 0.01}}};
     for (const auto& parameters_at_event : parameters) {
         KerrSchildFamily incoming(parameters_at_event);
         OutgoingKerrSchild outgoing(incoming);
         for (double radius : {3.0, 8.0}) {
-            const auto cart = coordinates::BlToKerrSchildCart(
-                {0.7, radius, 1.0, 0.6}, parameters_at_event.a);
+            const auto cart =
+                coordinates::BlToKerrSchildCart({0.7, radius, 1.0, 0.6}, parameters_at_event.a);
             Vec4 position;
-            for (int component = 0; component < 4; ++component) position(component) = cart[component];
+            for (int component = 0; component < 4; ++component)
+                position(component) = cart[component];
             const auto forward = outgoing.FromIngoing(position);
             ASSERT_TRUE(forward.has_value());
             const auto reverse = outgoing.ToIngoing(forward->position);
@@ -533,7 +537,8 @@ TEST_F(RK45IntegratorTests, OutgoingChartPreservesMetricKillingQuantitiesAndInve
             EXPECT_NEAR(mapped_momentum(0), original_momentum(0), 2e-12);
             EXPECT_NEAR(-position(2) * original_momentum(1) + position(1) * original_momentum(2),
                         -forward->position(2) * mapped_momentum(1) +
-                            forward->position(1) * mapped_momentum(2), 2e-12);
+                            forward->position(1) * mapped_momentum(2),
+                        2e-12);
             for (int mu = 0; mu < 4; ++mu) {
                 EXPECT_NEAR(reverse->position(mu), position(mu), 2e-12);
                 EXPECT_NEAR(reverse->Apply(mapped_vector)(mu), vector(mu), 2e-12);
@@ -555,8 +560,9 @@ TEST_F(RK45IntegratorTests, OutgoingChartPreservesMetricKillingQuantitiesAndInve
                 ASSERT_TRUE(forward_plus.has_value());
                 ASSERT_TRUE(forward_minus.has_value());
                 for (int nu = 0; nu < 4; ++nu)
-                    EXPECT_NEAR((forward_plus->position(nu) - forward_minus->position(nu)) / (2*h),
-                                forward->jacobian[nu][mu], 2e-8);
+                    EXPECT_NEAR(
+                        (forward_plus->position(nu) - forward_minus->position(nu)) / (2 * h),
+                        forward->jacobian[nu][mu], 2e-8);
             }
         }
         Vec4 horizon;

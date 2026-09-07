@@ -567,27 +567,21 @@ bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const Integrato
         return RejectUnrepresentedStage(ray, config.min_step);
     }
 
-    Vec4 x4 = x0 + k1_x * (a41 * h) + k2_x * (a42 * h) +
-              k3_x * (a43 * h);
-    Vec4 p4 = p0 + k1_p * (a41 * h) + k2_p * (a42 * h) +
-              k3_p * (a43 * h);
+    Vec4 x4 = x0 + k1_x * (a41 * h) + k2_x * (a42 * h) + k3_x * (a43 * h);
+    Vec4 p4 = p0 + k1_p * (a41 * h) + k2_p * (a42 * h) + k3_p * (a43 * h);
     if (!EvaluateRk45Stage(x4, p4, metric, k4_x, k4_p)) {
         return RejectUnrepresentedStage(ray, config.min_step);
     }
 
-    Vec4 x5 = x0 + k1_x * (a51 * h) + k2_x * (a52 * h) +
-              k3_x * (a53 * h) + k4_x * (a54 * h);
-    Vec4 p5 = p0 + k1_p * (a51 * h) + k2_p * (a52 * h) +
-              k3_p * (a53 * h) + k4_p * (a54 * h);
+    Vec4 x5 = x0 + k1_x * (a51 * h) + k2_x * (a52 * h) + k3_x * (a53 * h) + k4_x * (a54 * h);
+    Vec4 p5 = p0 + k1_p * (a51 * h) + k2_p * (a52 * h) + k3_p * (a53 * h) + k4_p * (a54 * h);
     if (!EvaluateRk45Stage(x5, p5, metric, k5_x, k5_p)) {
         return RejectUnrepresentedStage(ray, config.min_step);
     }
 
-    Vec4 x6 = x0 + k1_x * (a61 * h) + k2_x * (a62 * h) +
-              k3_x * (a63 * h) + k4_x * (a64 * h) +
+    Vec4 x6 = x0 + k1_x * (a61 * h) + k2_x * (a62 * h) + k3_x * (a63 * h) + k4_x * (a64 * h) +
               k5_x * (a65 * h);
-    Vec4 p6 = p0 + k1_p * (a61 * h) + k2_p * (a62 * h) +
-              k3_p * (a63 * h) + k4_p * (a64 * h) +
+    Vec4 p6 = p0 + k1_p * (a61 * h) + k2_p * (a62 * h) + k3_p * (a63 * h) + k4_p * (a64 * h) +
               k5_p * (a65 * h);
     if (!EvaluateRk45Stage(x6, p6, metric, k6_x, k6_p)) {
         return RejectUnrepresentedStage(ray, config.min_step);

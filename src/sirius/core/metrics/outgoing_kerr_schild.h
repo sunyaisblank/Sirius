@@ -21,8 +21,7 @@ class OutgoingKerrSchild final : public IMetric {
         [[nodiscard]] Vec4 Apply(const Vec4& vector) const {
             Vec4 result;
             for (int mu = 0; mu < 4; ++mu)
-                for (int nu = 0; nu < 4; ++nu)
-                    result(mu) += jacobian[mu][nu] * vector(nu);
+                for (int nu = 0; nu < 4; ++nu) result(mu) += jacobian[mu][nu] * vector(nu);
             return result;
         }
     };
@@ -36,8 +35,7 @@ class OutgoingKerrSchild final : public IMetric {
             for (int nu = 0; nu < 4; ++nu) {
                 metric(mu, nu) *= kReflection[mu] * kReflection[nu];
                 for (int rho = 0; rho < 4; ++rho)
-                    derivative(mu, nu, rho) *=
-                        kReflection[mu] * kReflection[nu] * kReflection[rho];
+                    derivative(mu, nu, rho) *= kReflection[mu] * kReflection[nu] * kReflection[rho];
             }
         }
     }
@@ -45,8 +43,7 @@ class OutgoingKerrSchild final : public IMetric {
     bool InverseMetric(const Vec4& position, Metric4d& inverse) const override {
         if (!source_.InverseMetric(Reflect(position), inverse)) return false;
         for (int mu = 0; mu < 4; ++mu)
-            for (int nu = 0; nu < 4; ++nu)
-                inverse(mu, nu) *= kReflection[mu] * kReflection[nu];
+            for (int nu = 0; nu < 4; ++nu) inverse(mu, nu) *= kReflection[mu] * kReflection[nu];
         return true;
     }
 
@@ -119,7 +116,8 @@ class OutgoingKerrSchild final : public IMetric {
                 const double outer_log = std::log((radius - horizon) / (reference - horizon));
                 const double inner_log = std::log((radius - inner) / (reference - inner));
                 time_integral = ((2.0 * p.M * horizon - p.Q * p.Q) * outer_log -
-                                 (2.0 * p.M * inner - p.Q * p.Q) * inner_log) / separation;
+                                 (2.0 * p.M * inner - p.Q * p.Q) * inner_log) /
+                                separation;
                 inverse_delta_integral = (outer_log - inner_log) / separation;
             }
             if (p.a != 0.0) {
@@ -139,8 +137,8 @@ class OutgoingKerrSchild final : public IMetric {
         const double r = geometry->radius;
         const auto shift = RadialShift(r);
         if (!shift) return std::nullopt;
-        const double delta = r * r - 2.0 * p.M * r + p.a * p.a + p.Q * p.Q -
-                             p.Lambda * r * r * r * r / 3.0;
+        const double delta =
+            r * r - 2.0 * p.M * r + p.a * p.a + p.Q * p.Q - p.Lambda * r * r * r * r / 3.0;
         const double d = (r * r + p.a * p.a) / delta - 1.0;
         const double time_derivative = -2.0 * orientation * d;
         const double angle_derivative = -2.0 * orientation * p.a * d / (r * r + p.a * p.a);

@@ -26,8 +26,8 @@ using namespace sirius::core;
 using namespace sirius::backend;
 
 TEST(CpuTraceBoundary, HorizonlessKerrSchildFamiliesKeepTheirNativeTraceChart) {
-    for (const auto parameters : {KerrSchildParams::Minkowski(),
-                                  KerrSchildParams::DeSitter(0.01)}) {
+    for (const auto parameters :
+         {KerrSchildParams::Minkowski(), KerrSchildParams::DeSitter(0.01)}) {
         KerrSchildFamily metric(parameters);
         ASSERT_FALSE(metric.HasHorizon());
         TracerConfig config;
@@ -110,8 +110,7 @@ TEST(CpuTraceBoundary, PastRadialHorizonIsAnAcceptedFiniteOutgoingEvent) {
 TEST(CpuTraceBoundary, LateMinimumStepsPreserveAnalyticAffineAndJacobiLength) {
     KerrSchildFamily metric(KerrSchildParams::Schwarzschild(1.0));
     constexpr double observer_radius = 50.0;
-    const double energy = (1.0 - 2.0 / observer_radius) /
-                          std::sqrt(1.0 + 2.0 / observer_radius);
+    const double energy = (1.0 - 2.0 / observer_radius) / std::sqrt(1.0 + 2.0 / observer_radius);
     TracerConfig config;
     config.enable_disk = false;
     config.enable_ray_bundles = true;

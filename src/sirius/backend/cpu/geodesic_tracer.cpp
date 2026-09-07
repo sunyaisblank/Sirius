@@ -812,9 +812,10 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray) {
                 if (result.num_disk_crossings < TraceResult::kMaxDiskCrossings) {
                     auto& crossing = result.disk_crossings[result.num_disk_crossings];
                     crossing.r = disk_r;
-                    const float source_phi = outgoing_chart_
-                        ? static_cast<float>(outgoing_chart_->IngoingAzimuth(disk_r, disk_phi))
-                        : disk_phi;
+                    const float source_phi =
+                        outgoing_chart_
+                            ? static_cast<float>(outgoing_chart_->IngoingAzimuth(disk_r, disk_phi))
+                            : disk_phi;
                     crossing.phi = source_phi;
                     crossing.temperature = ComputeDiskTemperature(disk_r);
                     crossing.crossing_index = result.num_disk_crossings;
@@ -949,7 +950,8 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray) {
             if (v_radial > 0) {
                 result.outcome = TraceResult::Outcome::Escaped;
                 result.asymptotic_sheet = TraceResult::AsymptoticSheet::Observer;
-                const auto sky = SampleSourceSky(*metric_, ray.position, ray.velocity, outgoing_chart_);
+                const auto sky =
+                    SampleSourceSky(*metric_, ray.position, ray.velocity, outgoing_chart_);
                 SIRIUS_ASSERT(sky.has_value());
                 if (!sky.has_value()) {
                     result.outcome = TraceResult::Outcome::MaxSteps;
@@ -1145,8 +1147,8 @@ void GeodesicTracer::AccumulateVolumetricEmission(const Vec4& entry_velocity,
         const coordinates::Vec4Cart sample_cart{position(0), x, y, z};
         const double disk_r = coordinates::KerrSchildRadius(sample_cart, cached_a_ * cached_m_);
         const double chart_phi = std::atan2(y, x);
-        const float phi = static_cast<float>(outgoing_chart_
-            ? outgoing_chart_->IngoingAzimuth(disk_r, chart_phi) : chart_phi);
+        const float phi = static_cast<float>(
+            outgoing_chart_ ? outgoing_chart_->IngoingAzimuth(disk_r, chart_phi) : chart_phi);
 
         double disk_dtau = 0.0;
         core::spectral::Rgb disk_source;
