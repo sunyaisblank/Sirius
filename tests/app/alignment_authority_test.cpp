@@ -133,9 +133,28 @@ TEST(BuildGateAuthority, ReleaseReceiptBindsEveryInstalledProductAtInitialisatio
     for (const std::string_view name : tested_names) {
         tested_records[name] = ArtifactRecord(base::ExecutablePath());
     }
+    constexpr std::array<std::pair<std::string_view, std::string_view>, 6> test_inputs = {{
+        {"smoke_spv", "kernels/smoke.spv"},
+        {"parity_probe_spv", "kernels/parity_probe.spv"},
+        {"parity_probe_fp32comp_spv", "kernels/parity_probe_fp32comp.spv"},
+        {"parity_probe_fp64_spv", "kernels/parity_probe_fp64.spv"},
+        {"trace_cuda", "kernels/portability/trace.cu"},
+        {"trace_metal", "kernels/portability/trace.metal"},
+    }};
+    nlohmann::json test_input_records = nlohmann::json::object();
+    const auto test_input_root = root / "not-installed-test-inputs";
+    for (const auto& [name, relative_path] : test_inputs) {
+        const auto path = test_input_root / relative_path;
+        WriteFile(path, name);
+        test_input_records[name] = ArtifactRecord(path);
+        test_input_records[name]["path"] = relative_path;
+    }
+    // Installed readiness validates the gate's test-input identities; these
+    // build-only files do not become deployed runtime dependencies.
+    std::filesystem::remove_all(test_input_root);
     const nlohmann::json evidence_record = ArtifactRecord(root / "assets/Starfield.png");
     nlohmann::json receipt = {
-        {"schema_version", 1},
+        {"schema_version", 2},
         {"status", "passed"},
         {"alignment_mode", "release"},
         {"source", {{"revision", std::string(40U, 'a')}, {"clean", true}}},
@@ -153,6 +172,7 @@ TEST(BuildGateAuthority, ReleaseReceiptBindsEveryInstalledProductAtInitialisatio
           {"alignment_receipt_sha256", product_records["alignment_receipt"]["sha256"]}}},
         {"tested_artifacts", tested_records},
         {"product_artifacts", product_records},
+        {"test_input_artifacts", test_input_records},
     };
     const auto gate_path = root / "model/mandatory_gate.json";
     WriteFile(gate_path, receipt.dump(2));
@@ -169,6 +189,42 @@ TEST(BuildGateAuthority, ReleaseReceiptBindsEveryInstalledProductAtInitialisatio
     EXPECT_EQ(authority->registered_tests, 700U);
     EXPECT_EQ(authority->executed_tests, 700U);
     EXPECT_EQ(authority->verified_product_artifacts, 9U);
+
+    const auto reject_test_input_receipt = [&](const nlohmann::json& mutated) {
+        WriteFile(gate_path, mutated.dump(2));
+        const auto rejected =
+            ValidateBuildGateAuthorityForVolume(alignment, base::ExecutablePath(), root);
+        EXPECT_FALSE(rejected.has_value());
+    };
+    for (const auto& [name, relative_path] : test_inputs) {
+        SCOPED_TRACE(name);
+        auto missing = receipt;
+        missing["test_input_artifacts"].erase(std::string(name));
+        reject_test_input_receipt(missing);
+        auto wrong_path = receipt;
+        wrong_path["test_input_artifacts"][name]["path"] = "unrelated-stable-file";
+        reject_test_input_receipt(wrong_path);
+        auto wrong_root = receipt;
+        wrong_root["test_input_artifacts"][name]["root"] = "source";
+        reject_test_input_receipt(wrong_root);
+        auto invalid_hash = receipt;
+        invalid_hash["test_input_artifacts"][name]["sha256"] = "invalid";
+        reject_test_input_receipt(invalid_hash);
+    }
+    auto legacy = receipt;
+    legacy["schema_version"] = 1;
+    legacy.erase("test_input_artifacts");
+    reject_test_input_receipt(legacy);
+    for (const auto& invalid_schema :
+         std::array<nlohmann::json, 7>{1, 2.0, 2.5, 4294967298ULL, -4294967294LL, true, "2"}) {
+        auto invalid_version = receipt;
+        invalid_version["schema_version"] = invalid_schema;
+        reject_test_input_receipt(invalid_version);
+    }
+    auto extra = receipt;
+    extra["test_input_artifacts"]["extra"] = evidence_record;
+    reject_test_input_receipt(extra);
+    WriteFile(gate_path, receipt.dump(2));
 
     WriteFile(root / "assets/Starfield.png", "starfielD");
     authority = ValidateBuildGateAuthorityForVolume(alignment, base::ExecutablePath(), root);

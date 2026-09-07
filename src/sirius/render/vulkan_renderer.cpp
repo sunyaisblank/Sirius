@@ -33,7 +33,6 @@
 #include <format>
 #include <fstream>
 #include <iostream>
-#include <optional>
 #include <span>
 #include <string>
 #include <vector>
@@ -638,6 +637,44 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
     int dispatch_fallbacks = 0;
     const backend::BufferHandle bindings[] = {*radiance_buf,   *params_buf,       *star_buf,
                                               *point_star_buf, *point_offset_buf, *point_index_buf};
+    int initialization_dispatches = 0;
+    double initialization_seconds = 0.0;
+    double initialization_submit_wait_ms = 0.0;
+    if (info.kind == backend::DeviceKind::kSoftware) {
+        if (should_cancel && should_cancel()) {
+            return Fail(ErrorDomain::kInternal, "render Vulkan frame", "cancelled");
+        }
+        // Software drivers can defer compilation until the first submission.
+        // One real workgroup with zero active dimensions takes trace's bounds
+        // return before camera, trajectory or radiance work. Use the actual
+        // kernel and bindings; a zero group count need not initialise a driver.
+        // This is not a ray band and must not train or bypass its governor.
+        params[33] = 0.0f;
+        params[34] = 0.0f;
+        if (auto w = device.WriteBuffer(*params_buf, std::as_bytes(std::span<const float>(params)));
+            !w) {
+            return std::unexpected(w.error());
+        }
+        std::cout << "[Vulkan] initialising software trace kernel with zero active rays"
+                  << std::endl;
+        const auto initialization_start = std::chrono::steady_clock::now();
+        backend::DispatchTiming timing;
+        if (auto d = device.Dispatch(*kernel, bindings, 1, 1, 1, &timing); !d) {
+            return std::unexpected(d.error());
+        }
+        if (!std::isfinite(timing.submit_wait_ms) || timing.submit_wait_ms < 0.0) {
+            return Fail(ErrorDomain::kDevice, "initialise software trace kernel",
+                        "invalid submit/wait timing");
+        }
+        initialization_dispatches = 1;
+        initialization_seconds =
+            std::chrono::duration<double>(std::chrono::steady_clock::now() - initialization_start)
+                .count();
+        initialization_submit_wait_ms = timing.submit_wait_ms;
+        std::cout << "[Vulkan] software trace initialization: " << initialization_seconds
+                  << "s wall, " << initialization_submit_wait_ms
+                  << "ms submit/wait, 1 dispatch, 0 active rays" << std::endl;
+    }
     for (int tj = 0; tj < tiles_y; ++tj) {
         for (int ti = 0; ti < tiles_x; ++ti) {
             if (should_cancel && should_cancel()) {
@@ -654,8 +691,6 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
                 BandController bands(
                     bw, *target_ms, std::min(th, dispatch_limits.max_band_rows),
                     std::min(static_cast<std::int64_t>(edge) * edge, dispatch_limits.max_pixels));
-                params[31] = static_cast<float>(ox + bx);
-                params[33] = static_cast<float>(bw);
 
                 // The kernel addresses pixels absolutely (tile origin + thread id),
                 // so submitting the tile as row bands changes submission
@@ -665,87 +700,68 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
                         return Fail(ErrorDomain::kInternal, "render Vulkan frame", "cancelled");
                     }
                     const int bh = bands.NextRows(th - by, bw);
-                    params[32] = static_cast<float>(oy + by);
-                    params[34] = static_cast<float>(bh);
-                    const auto gx = static_cast<std::uint32_t>((bw + 7) / 8);
-                    const auto gy = static_cast<std::uint32_t>((bh + 7) / 8);
-                    int sample_index = 0;
-                    bool retry_at_minimum = false;
-                    std::optional<base::Error> sample_error;
-                    ForEachCameraSample(config.samples_per_pixel, [&](const CameraSample& sample) {
-                        if (sample_error.has_value() || retry_at_minimum) return;
-                        if (should_cancel && should_cancel()) {
-                            sample_error = base::Error{ErrorDomain::kInternal,
-                                                       "render Vulkan frame", "cancelled"};
-                            return;
-                        }
-                        params[44] = sample.image_u;
-                        params[45] = sample.image_v;
-                        params[46] = static_cast<float>(sample_index);
-                        params[66] = sample.pupil_u;
-                        params[67] = sample.pupil_v;
-                        if (auto w = device.WriteBuffer(
-                                *params_buf, std::as_bytes(std::span<const float>(params)));
-                            !w) {
-                            sample_error = w.error();
-                            return;
-                        }
-
-                        backend::DispatchTiming timing;
-                        if (auto d = device.Dispatch(*kernel, bindings, gx, gy, 1, &timing); !d) {
-                            sample_error = d.error();
-                            return;
-                        }
-                        const auto active_pixels = static_cast<std::int64_t>(bw) * bh;
-                        const bool was_fallback = bands.MinimumFallback();
-                        if (!bands.Record(active_pixels, timing.submit_wait_ms)) {
-                            sample_error = base::Error{
-                                ErrorDomain::kDevice, "govern Vulkan dispatch",
-                                std::format(
-                                    "refusing further submissions after {} ms for {} pixels "
-                                    "(invalid timing or minimum band exceeded {} ms)",
-                                    timing.submit_wait_ms, active_pixels, kDispatchStopMs)};
-                            return;
-                        }
-                        dispatch_seconds += timing.submit_wait_ms / 1000.0;
-                        maximum_dispatch_ms = std::max(maximum_dispatch_ms, timing.submit_wait_ms);
-                        maximum_dispatch_pixels = std::max(maximum_dispatch_pixels, active_pixels);
-                        if (*target_ms > 0.0 && timing.submit_wait_ms > *target_ms) {
-                            ++dispatch_target_overshoots;
-                        }
-                        ++band_dispatches;
-                        if (!was_fallback && bands.MinimumFallback()) ++dispatch_fallbacks;
-                        if (bands.MinimumFallback() && bh > 1) {
-                            // The band is still private device state. Restart its
-                            // samples on smaller strips before publishing any of it.
-                            retry_at_minimum = true;
-                            return;
-                        }
-                        ++sample_index;
-                    });
-                    if (sample_error.has_value()) {
-                        return std::unexpected(std::move(*sample_error));
-                    }
-
-                    if (retry_at_minimum) continue;
-
-                    const std::size_t band_floats = static_cast<std::size_t>(bw) * bh * 4;
-                    if (auto rd = device.ReadBuffer(
-                            *radiance_buf, std::as_writable_bytes(
-                                               std::span<float>(tile_pixels.data(), band_floats)));
-                        !rd) {
-                        return std::unexpected(rd.error());
-                    }
-
-                    for (int row = 0; row < bh; ++row) {
-                        const auto source =
-                            tile_pixels.begin() + static_cast<std::ptrdiff_t>(row * bw * 4);
-                        const auto destination =
-                            frame_pixels.begin() +
-                            static_cast<std::ptrdiff_t>(((oy + by + row) * config.width + ox + bx) *
-                                                        4);
-                        std::copy_n(source, static_cast<std::size_t>(bw) * 4, destination);
-                    }
+                    const bool was_fallback = bands.SafetyFallback();
+                    auto dispatched = ExecuteDispatchRegions(
+                        {ox + bx, oy + by, bw, bh}, config.samples_per_pixel, bands,
+                        [&](const DispatchRegion& region, const CameraSample& sample,
+                            int sample_index) -> Expected<double> {
+                            params[31] = static_cast<float>(region.x);
+                            params[32] = static_cast<float>(region.y);
+                            params[33] = static_cast<float>(region.width);
+                            params[34] = static_cast<float>(region.height);
+                            params[44] = sample.image_u;
+                            params[45] = sample.image_v;
+                            params[46] = static_cast<float>(sample_index);
+                            params[66] = sample.pupil_u;
+                            params[67] = sample.pupil_v;
+                            if (auto w = device.WriteBuffer(
+                                    *params_buf, std::as_bytes(std::span<const float>(params)));
+                                !w) {
+                                return std::unexpected(w.error());
+                            }
+                            const auto gx = static_cast<std::uint32_t>((region.width + 7) / 8);
+                            const auto gy = static_cast<std::uint32_t>((region.height + 7) / 8);
+                            backend::DispatchTiming timing;
+                            if (auto d = device.Dispatch(*kernel, bindings, gx, gy, 1, &timing);
+                                !d) {
+                                return std::unexpected(d.error());
+                            }
+                            dispatch_seconds += timing.submit_wait_ms / 1000.0;
+                            maximum_dispatch_ms =
+                                std::max(maximum_dispatch_ms, timing.submit_wait_ms);
+                            maximum_dispatch_pixels =
+                                std::max(maximum_dispatch_pixels, region.Pixels());
+                            if (*target_ms > 0.0 && timing.submit_wait_ms > *target_ms) {
+                                ++dispatch_target_overshoots;
+                            }
+                            ++band_dispatches;
+                            return timing.submit_wait_ms;
+                        },
+                        [&](const DispatchRegion& region) -> Expected<void> {
+                            const std::size_t region_floats =
+                                static_cast<std::size_t>(region.Pixels()) * 4;
+                            if (auto rd = device.ReadBuffer(
+                                    *radiance_buf, std::as_writable_bytes(std::span<float>(
+                                                       tile_pixels.data(), region_floats)));
+                                !rd) {
+                                return std::unexpected(rd.error());
+                            }
+                            for (int row = 0; row < region.height; ++row) {
+                                const auto source =
+                                    tile_pixels.begin() +
+                                    static_cast<std::ptrdiff_t>(row * region.width * 4);
+                                const auto destination =
+                                    frame_pixels.begin() +
+                                    static_cast<std::ptrdiff_t>(
+                                        ((region.y + row) * config.width + region.x) * 4);
+                                std::copy_n(source, static_cast<std::size_t>(region.width) * 4,
+                                            destination);
+                            }
+                            return {};
+                        },
+                        should_cancel);
+                    if (!dispatched) return std::unexpected(dispatched.error());
+                    if (!was_fallback && bands.SafetyFallback()) ++dispatch_fallbacks;
                     by += bh;
                 }
             }
@@ -783,6 +799,9 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
     stats.maximum_dispatch_pixels = maximum_dispatch_pixels;
     stats.dispatch_target_overshoots = dispatch_target_overshoots;
     stats.dispatch_fallbacks = dispatch_fallbacks;
+    stats.initialization_dispatches = initialization_dispatches;
+    stats.initialization_seconds = initialization_seconds;
+    stats.initialization_submit_wait_ms = initialization_submit_wait_ms;
     stats.seconds = std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
     return stats;
 }

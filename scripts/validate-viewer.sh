@@ -188,10 +188,28 @@ else
 fi
 
 if [[ -z "$REUSE_QUALIFICATION_ATTESTATION" ]]; then
+    python3 - "$OUT/mandatory_gate.json" "bin/$PRESET" "$OUT" <<'PYTESTINPUTS'
+import importlib.util
+import pathlib
+import sys
+spec = importlib.util.spec_from_file_location("attestation", "scripts/verify-attestation.py")
+verifier = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(verifier)
+verifier.copy_qualification_test_inputs(*(pathlib.Path(value) for value in sys.argv[1:]))
+PYTESTINPUTS
     say "[3/6] full source-available test estate on selected driver"
     ctest --test-dir "bin/$PRESET" --show-only=json-v1 >"$CTEST_INVENTORY"
     (cd "bin/$PRESET" && ctest -j"$(nproc)" --output-on-failure \
         --output-junit "$TEST_REPORT") 2>&1 | tee -a "$LOG"
+    python3 - "$OUT/mandatory_gate.json" "bin/$PRESET" <<'PYTESTINPUTS'
+import importlib.util
+import pathlib
+import sys
+spec = importlib.util.spec_from_file_location("attestation", "scripts/verify-attestation.py")
+verifier = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(verifier)
+verifier.copy_qualification_test_inputs(*(pathlib.Path(value) for value in sys.argv[1:]))
+PYTESTINPUTS
 else
     say "[3/6] exact full estate reused from verified hardware authority"
 fi
@@ -320,6 +338,12 @@ for source_text in (
     str(root / "qualification-sirius.bin"),
     str(root / "qualification-gate-junit"),
     str(root / "qualification-gate-log"),
+    str(root / "test-input-smoke_spv"),
+    str(root / "test-input-parity_probe_spv"),
+    str(root / "test-input-parity_probe_fp32comp_spv"),
+    str(root / "test-input-parity_probe_fp64_spv"),
+    str(root / "test-input-trace_cuda"),
+    str(root / "test-input-trace_metal"),
     str(root / "qualification-product-operating_model"),
     str(root / "qualification-product-starfield"),
     str(root / "qualification-product-trace_fp32comp_spv"),

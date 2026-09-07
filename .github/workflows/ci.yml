@@ -8,13 +8,18 @@ on:
     branches: [main, rebuild/dngr-parity]
   pull_request:
   workflow_dispatch:
+    inputs:
+      full_qualification:
+        description: Run the complete runtime and sanitizer jobs
+        type: boolean
+        default: false
 
 jobs:
   # Pull requests prove that the complete strict topology compiles and that the
-  # governance/release authorities fail closed. Explicit dispatch may also
-  # publish the precisely scoped native-build domains. Neither runs the
-  # Mandatory estate or claims runtime; physical qualification remains a
-  # protected-branch/external-host concern.
+  # governance/release authorities fail closed. Default explicit dispatch also
+  # publishes the precisely scoped native-build domains. Opting into
+  # full_qualification additionally runs the complete runtime and sanitizer
+  # jobs; native-build attestations still do not claim native runtime readiness.
   integration-no-render:
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
@@ -126,6 +131,21 @@ jobs:
         with:
           name: sirius-windows-native-attestation
           path: attestations
+      - name: Preserve gate diagnostics
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: sirius-gate-diagnostics-${{ github.job }}
+          path: |
+            bin/**/generated/sirius/*gate*.json
+            bin/**/generated/sirius/*gate*.xml
+            bin/**/generated/sirius/*gate*.log
+            bin/**/Testing/Temporary/LastTest.log
+            bin/**/Testing/Temporary/LastTestsFailed.log
+            linux-tests.xml
+            windows-tests.xml
+            macos-tests.xml
+          if-no-files-found: ignore
 
   integration-macos-no-render:
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
@@ -184,9 +204,24 @@ jobs:
         with:
           name: sirius-macos-native-attestation
           path: attestations
+      - name: Preserve gate diagnostics
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: sirius-gate-diagnostics-${{ github.job }}
+          path: |
+            bin/**/generated/sirius/*gate*.json
+            bin/**/generated/sirius/*gate*.xml
+            bin/**/generated/sirius/*gate*.log
+            bin/**/Testing/Temporary/LastTest.log
+            bin/**/Testing/Temporary/LastTestsFailed.log
+            linux-tests.xml
+            windows-tests.xml
+            macos-tests.xml
+          if-no-files-found: ignore
 
   linux-gate:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true)
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -219,9 +254,24 @@ jobs:
         run: ctest --preset linux-ci -j"$(nproc)"
       - name: Label file freshness
         run: python3 scripts/generate-ctest-labels.py --check
+      - name: Preserve gate diagnostics
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: sirius-gate-diagnostics-${{ github.job }}
+          path: |
+            bin/**/generated/sirius/*gate*.json
+            bin/**/generated/sirius/*gate*.xml
+            bin/**/generated/sirius/*gate*.log
+            bin/**/Testing/Temporary/LastTest.log
+            bin/**/Testing/Temporary/LastTestsFailed.log
+            linux-tests.xml
+            windows-tests.xml
+            macos-tests.xml
+          if-no-files-found: ignore
 
   linux-sanitizers:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true)
     runs-on: ubuntu-24.04
     # The registration-complete Mandatory estate exceeded 71 minutes under
     # three sanitizers on ubuntu-24.04 before the previous job-level timeout
@@ -250,9 +300,24 @@ jobs:
         run: cmake --preset linux-gcc-sanitize
       - name: Build and mandatory ASan/UBSan/LSan gate
         run: cmake --build --preset linux-gcc-sanitize -j"$(nproc)"
+      - name: Preserve gate diagnostics
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: sirius-gate-diagnostics-${{ github.job }}
+          path: |
+            bin/**/generated/sirius/*gate*.json
+            bin/**/generated/sirius/*gate*.xml
+            bin/**/generated/sirius/*gate*.log
+            bin/**/Testing/Temporary/LastTest.log
+            bin/**/Testing/Temporary/LastTestsFailed.log
+            linux-tests.xml
+            windows-tests.xml
+            macos-tests.xml
+          if-no-files-found: ignore
 
   windows-build:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true)
     runs-on: windows-2022
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -326,11 +391,26 @@ jobs:
           --output attestations/windows-build.json
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
-          name: sirius-windows-native-attestation
+          name: sirius-windows-full-native-attestation
           path: attestations
+      - name: Preserve gate diagnostics
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: sirius-gate-diagnostics-${{ github.job }}
+          path: |
+            bin/**/generated/sirius/*gate*.json
+            bin/**/generated/sirius/*gate*.xml
+            bin/**/generated/sirius/*gate*.log
+            bin/**/Testing/Temporary/LastTest.log
+            bin/**/Testing/Temporary/LastTestsFailed.log
+            linux-tests.xml
+            windows-tests.xml
+            macos-tests.xml
+          if-no-files-found: ignore
 
   macos-build:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true)
     runs-on: macos-15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -350,15 +430,30 @@ jobs:
           echo "VK_DRIVER_FILES=$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json" >> "$GITHUB_ENV"
           export VK_DRIVER_FILES="$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json"
           vulkaninfo --summary
-      - name: Configure
-        run: >-
-          cmake --preset macos
-          -DSIRIUS_ALIGNMENT_MODE=qualification
-          -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON
-      - name: Build
-        run: cmake --build --preset macos -j3
-      - name: Full source-available test estate
-        run: ctest --test-dir bin/macos --output-on-failure --output-junit macos-tests.xml
+      - name: Record macOS graphics route
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/sirius-macos-runtime"
+          sw_vers | tee "$RUNNER_TEMP/sirius-macos-runtime/os-version.txt"
+          system_profiler SPDisplaysDataType -json | tee "$RUNNER_TEMP/sirius-macos-runtime/metal-displays.json"
+          printf 'repository=%s\nrevision=%s\nrun_id=%s\nrun_attempt=%s\njob=%s\nrunner=%s\nos=%s\narch=%s\n' "$GITHUB_REPOSITORY" "$GITHUB_SHA" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" "$GITHUB_JOB" "$RUNNER_NAME" "$RUNNER_OS" "$RUNNER_ARCH" | tee "$RUNNER_TEMP/sirius-macos-runtime/provider-route.txt"
+      - name: Exact native MoltenVK runtime evidence
+        if: success()
+        shell: bash
+        env:
+          CMAKE_BUILD_PARALLEL_LEVEL: 3
+        run: |
+          set -euo pipefail
+          python3 scripts/validate-native-runtime.py --expected-revision "${{ github.sha }}" --output-root "$RUNNER_TEMP/sirius-macos-runtime" 2>&1 | tee "$RUNNER_TEMP/sirius-macos-runtime/producer.log"
+      - name: Preserve verified MoltenVK runtime evidence
+        if: success()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: sirius-macos-moltenvk-attestation
+          path: ${{ runner.temp }}/sirius-macos-runtime
+          if-no-files-found: error
       - name: Exact native-build evidence gate
         run: cmake --build --preset macos --target RunNativeBuildEvidence -j3
       - name: Native build attestation
@@ -376,5 +471,26 @@ jobs:
           --output attestations/macos-build.json
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
-          name: sirius-macos-native-attestation
+          name: sirius-macos-full-native-attestation
           path: attestations
+      - name: Preserve gate diagnostics
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: sirius-gate-diagnostics-${{ github.job }}
+          path: |
+            bin/**/generated/sirius/*gate*.json
+            bin/**/generated/sirius/*gate*.xml
+            bin/**/generated/sirius/*gate*.log
+            bin/**/Testing/Temporary/LastTest.log
+            bin/**/Testing/Temporary/LastTestsFailed.log
+            linux-tests.xml
+            windows-tests.xml
+            macos-tests.xml
+            ${{ runner.temp }}/sirius-macos-runtime/*/native-runtime-tests.xml
+            ${{ runner.temp }}/sirius-macos-runtime/*/native-runtime-transcript.log
+            ${{ runner.temp }}/sirius-macos-runtime/producer.log
+            ${{ runner.temp }}/sirius-macos-runtime/os-version.txt
+            ${{ runner.temp }}/sirius-macos-runtime/metal-displays.json
+            ${{ runner.temp }}/sirius-macos-runtime/provider-route.txt
+          if-no-files-found: ignore

@@ -1051,6 +1051,10 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    VulkanBackend.PortabilityInstanceOptInRequiresAdvertisedExtension
+    VulkanBackend.PortabilityDeviceEnablesSubsetWithoutChangingPrecisionOrQueues
+    VulkanBackend.PortabilityEnumerationErrorsDeclineBeforeCreation
+    VulkanBackend.PortabilityCreationFailuresRemainExplicit
     VulkanBackend.KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions
     VulkanBackend.EnumerationReportsInsteadOfThrowing
     VulkanBackend.SlangKernelMatchesCpuReference
@@ -1142,8 +1146,12 @@ set_tests_properties(
     DispatchGovernor.GrowthPerStepIsBoundedByTheCap
     DispatchGovernor.InvalidTimingAndIrreducibleOvershootDecline
     DispatchGovernor.LearnedAreaNormalisesAcrossBandWidths
+    DispatchGovernor.MeasuredSafetyCapRetainsUsefulWorkAndBoundsRepeatedOvershoots
     DispatchGovernor.NearTargetLatencyStillGrowsWholeBands
+    DispatchGovernor.OnePixelSafetyBoundaryRemainsFatalWithStickyFallback
     DispatchGovernor.OvershootHalvesTheObservedWork
+    DispatchGovernor.RegionExecutionPropagatesCancellationAndBoundaryErrors
+    DispatchGovernor.SafetyFallbackRestartsAllSamplesWithExactPixelCoverage
     DispatchGovernor.StrictCapsApplyToEveryTailEvenWithoutAdaptation
     DispatchGovernor.TargetDefaultsWhenTheEnvironmentIsUnset
     DispatchGovernor.TargetFailsLoudOnGarbageNegativesAndNonFinite
@@ -1243,6 +1251,7 @@ set_tests_properties(
     VulkanRenderSession.NonSquareMultisamplingCameraAndLensReachLiveKernel
     VulkanRenderSession.ProceduralVolumetricTurbulenceReachesLiveKernel
     VulkanRenderSession.ThinAndVolumetricDopplerSuppressionAffectLiveEmission
+    VulkanRenderSession.ZeroActiveTracePreservesRadianceAcrossPrecisionRungs
     PROPERTIES LABELS "Mandatory;Operational;Rendering"
 )
 

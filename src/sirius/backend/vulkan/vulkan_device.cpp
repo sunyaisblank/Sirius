@@ -1,7 +1,9 @@
 #include "sirius/backend/vulkan/vulkan_device.h"
 
+#include "sirius/backend/vulkan/vulkan_portability.h"
 #include "sirius/base/contracts.h"
 
+#include <algorithm>
 #include <charconv>
 #include <chrono>
 #include <cstdlib>
@@ -148,11 +150,7 @@ constexpr std::uint32_t kApiVersion = VK_MAKE_API_VERSION(0, 1, 3, 0);
         .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
         .pApplicationInfo = &app_info,
     };
-    VkInstance instance = VK_NULL_HANDLE;
-    if (const VkResult r = vkCreateInstance(&create_info, nullptr, &instance); r != VK_SUCCESS) {
-        return Fail(ErrorDomain::kDevice, "create Vulkan instance", VkResultText(r));
-    }
-    return instance;
+    return detail::CreateInstanceWithPortability(create_info);
 }
 
 [[nodiscard]] Expected<std::vector<VkPhysicalDevice>> ListPhysicalDevices(VkInstance instance) {
@@ -171,6 +169,86 @@ constexpr std::uint32_t kApiVersion = VK_MAKE_API_VERSION(0, 1, 3, 0);
 }
 
 }  // namespace
+
+namespace detail {
+
+Expected<VkInstance> CreateInstanceWithPortability(
+    VkInstanceCreateInfo create_info, PFN_vkEnumerateInstanceExtensionProperties enumerate,
+    PFN_vkCreateInstance create) {
+    std::uint32_t count = 0;
+    if (const VkResult r = enumerate(nullptr, &count, nullptr); r != VK_SUCCESS) {
+        return Fail(ErrorDomain::kDevice, "enumerate Vulkan instance extensions", VkResultText(r));
+    }
+    std::vector<VkExtensionProperties> advertised(count);
+    if (count > 0) {
+        if (const VkResult r = enumerate(nullptr, &count, advertised.data()); r != VK_SUCCESS) {
+            // A changing list (VK_INCOMPLETE) is not evidence of absence. Decline
+            // instead of silently losing the portability opt-in.
+            return Fail(ErrorDomain::kDevice, "enumerate Vulkan instance extensions",
+                        VkResultText(r));
+        }
+        advertised.resize(count);
+    }
+    std::vector<const char*> enabled;
+    for (std::uint32_t i = 0; i < create_info.enabledExtensionCount; ++i) {
+        enabled.push_back(create_info.ppEnabledExtensionNames[i]);
+    }
+    if (std::any_of(advertised.begin(), advertised.end(), [](const auto& extension) {
+            return std::strcmp(extension.extensionName,
+                               VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME) == 0;
+        })) {
+        enabled.push_back(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
+        create_info.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
+    }
+    create_info.enabledExtensionCount = static_cast<std::uint32_t>(enabled.size());
+    create_info.ppEnabledExtensionNames = enabled.empty() ? nullptr : enabled.data();
+    VkInstance instance = VK_NULL_HANDLE;
+    if (const VkResult r = create(&create_info, nullptr, &instance); r != VK_SUCCESS) {
+        return Fail(ErrorDomain::kDevice, "create Vulkan instance", VkResultText(r));
+    }
+    return instance;
+}
+
+Expected<VkDevice> CreateDeviceWithPortability(VkPhysicalDevice physical,
+                                               VkDeviceCreateInfo create_info,
+                                               PFN_vkEnumerateDeviceExtensionProperties enumerate,
+                                               PFN_vkCreateDevice create) {
+    std::uint32_t count = 0;
+    if (const VkResult r = enumerate(physical, nullptr, &count, nullptr); r != VK_SUCCESS) {
+        return Fail(ErrorDomain::kDevice, "enumerate Vulkan device extensions", VkResultText(r));
+    }
+    std::vector<VkExtensionProperties> advertised(count);
+    if (count > 0) {
+        if (const VkResult r = enumerate(physical, nullptr, &count, advertised.data());
+            r != VK_SUCCESS) {
+            return Fail(ErrorDomain::kDevice, "enumerate Vulkan device extensions",
+                        VkResultText(r));
+        }
+        advertised.resize(count);
+    }
+    std::vector<const char*> enabled;
+    for (std::uint32_t i = 0; i < create_info.enabledExtensionCount; ++i) {
+        enabled.push_back(create_info.ppEnabledExtensionNames[i]);
+    }
+    // The name is stable even in SDKs where the provisional subset structures
+    // are hidden behind VK_ENABLE_BETA_EXTENSIONS. No subset features are used
+    // by this storage-buffer compute adapter; Vulkan 1.3 meets its 1.1 dependency.
+    constexpr const char* kPortabilitySubset = "VK_KHR_portability_subset";
+    if (std::any_of(advertised.begin(), advertised.end(), [](const auto& extension) {
+            return std::strcmp(extension.extensionName, kPortabilitySubset) == 0;
+        })) {
+        enabled.push_back(kPortabilitySubset);
+    }
+    create_info.enabledExtensionCount = static_cast<std::uint32_t>(enabled.size());
+    create_info.ppEnabledExtensionNames = enabled.empty() ? nullptr : enabled.data();
+    VkDevice device = VK_NULL_HANDLE;
+    if (const VkResult r = create(physical, &create_info, nullptr, &device); r != VK_SUCCESS) {
+        return Fail(ErrorDomain::kDevice, "create Vulkan logical device", VkResultText(r));
+    }
+    return device;
+}
+
+}  // namespace detail
 
 Expected<std::vector<DeviceInfo>> EnumerateVulkanDevices() {
     auto instance = CreateInstance();
@@ -274,11 +352,11 @@ Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {
         .pQueueCreateInfos = &queue_info,
         .pEnabledFeatures = &enabled,
     };
-    if (const VkResult r =
-            vkCreateDevice(device->physical_, &device_info, nullptr, &device->device_);
-        r != VK_SUCCESS) {
-        return Fail(ErrorDomain::kDevice, "create Vulkan logical device", VkResultText(r));
+    auto logical = detail::CreateDeviceWithPortability(device->physical_, device_info);
+    if (!logical) {
+        return std::unexpected(logical.error());
     }
+    device->device_ = *logical;
     vkGetDeviceQueue(device->device_, family, 0, &device->queue_);
 
     const VkCommandPoolCreateInfo pool_info{

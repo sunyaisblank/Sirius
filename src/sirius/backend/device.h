@@ -74,7 +74,8 @@ enum class BufferUsage {
 };
 
 // Host wall time covering only queue submission and synchronous completion.
-// Excludes pipeline creation and descriptor/command setup; not a GPU timestamp.
+// Excludes explicit pipeline creation and descriptor/command setup; driver work
+// deferred until submission is included. This is not a GPU timestamp.
 struct DispatchTiming {
     double submit_wait_ms = 0.0;
 };

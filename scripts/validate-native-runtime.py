@@ -237,6 +237,10 @@ def write_runtime_attestation(args: argparse.Namespace) -> Path:
     require(configured_gate.is_file(),
             f"qualification build-gate receipt is missing: {configured_gate}")
     shutil.copy2(configured_gate, mandatory_gate_path)
+    verifier = load_verifier()
+    qualification_test_inputs = verifier.copy_qualification_test_inputs(
+        mandatory_gate_path, ROOT / "bin" / profile.preset, output
+    )
     configured_gate_junit = configured_gate.with_name("mandatory_gate_junit.xml")
     configured_gate_log = configured_gate.with_name("mandatory_gate_ctest.log")
     require(configured_gate_junit.is_file() and configured_gate_log.is_file(),
@@ -300,7 +304,9 @@ def write_runtime_attestation(args: argparse.Namespace) -> Path:
         encoding="utf-8",
     )
     run(ctest_command, environment=environment)
-    verifier = load_verifier()
+    verifier.copy_qualification_test_inputs(
+        mandatory_gate_path, ROOT / "bin" / profile.preset
+    )
     report = verifier.inspect_junit(report_path)
     require(report["skipped"] == 0,
             "native runtime evidence requires a non-skipping test estate")
@@ -364,6 +370,7 @@ def write_runtime_attestation(args: argparse.Namespace) -> Path:
             qualification_gate_junit_path,
             qualification_gate_log_path,
             *qualification_products,
+            *qualification_test_inputs,
         )
     }
     document = {

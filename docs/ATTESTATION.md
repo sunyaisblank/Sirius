@@ -292,3 +292,5 @@ It exposes `evidence_generation_ready` while top-level `ready` remains false and
 returns non-zero until the strict ideal is aligned; evidence generation is
 therefore possible without either a circular release build or a development
 artifact being promoted as release evidence.
+
+Mandatory and native-build gate receipts use schema version 2. Their separate `test_input_artifacts` map binds the smoke kernel, three precision variants of the parity probe, and generated CUDA/Metal trace sources at canonical build paths. Gate execution and readback hash these inputs as well as test executables and products; external bundles preserve and independently verify the same hashes. Missing, substituted, changed or legacy input evidence cannot qualify. These test inputs are not installed runtime dependencies, and native-build evidence still makes no native runtime claim.

@@ -1095,11 +1095,14 @@ void RenderSession::RenderVulkanPath() {
     std::cout << "[Session] Vulkan render complete: " << stats->metric_name << " on "
               << stats->device_name << ", " << stats->tiles_rendered << " tile(s) of "
               << stats->tile_plan.tile_edge << "px in " << stats->band_dispatches
-              << " governed dispatch(es), " << stats->seconds << "s; submit/wait "
+              << " governed dispatch(es), " << stats->seconds << "s; governed ray submit/wait "
               << stats->dispatch_seconds << "s total, " << stats->maximum_dispatch_ms
               << "ms maximum, " << stats->maximum_dispatch_pixels << " active pixels maximum, "
               << stats->dispatch_target_overshoots << " target overshoot(s), "
-              << stats->dispatch_fallbacks << " minimum-work fallback(s)" << std::endl;
+              << stats->dispatch_fallbacks << " safety fallback(s); initialization "
+              << stats->initialization_dispatches << " dispatch(es), "
+              << stats->initialization_seconds << "s wall, " << stats->initialization_submit_wait_ms
+              << "ms submit/wait" << std::endl;
     fsm_.Process(SessionEvent::AllTilesComplete);
 #else
     error_message_ = "Vulkan backend not compiled in (build without Vulkan development files)";

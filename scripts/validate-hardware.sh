@@ -123,6 +123,16 @@ for product in "${QUALIFICATION_PRODUCTS[@]}"; do
     cp "$source_path" "$OUT/qualification-product-$logical_name"
 done
 
+python3 - "$OUT/mandatory_gate.json" "bin/$PRESET" "$OUT" <<'PYTESTINPUTS'
+import importlib.util
+import pathlib
+import sys
+spec = importlib.util.spec_from_file_location("attestation", "scripts/verify-attestation.py")
+verifier = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(verifier)
+verifier.copy_qualification_test_inputs(*(pathlib.Path(value) for value in sys.argv[1:]))
+PYTESTINPUTS
+
 say "[2/6] physical-device and readiness precondition"
 DEVICE_INFO=$("$SIRIUS" --json info system)
 SELECTION=$(
@@ -183,6 +193,16 @@ say "[3/6] full test estate on selected driver"
 ctest --test-dir "bin/$PRESET" --show-only=json-v1 >"$CTEST_INVENTORY"
 (cd "bin/$PRESET" && ctest -j"$(nproc)" --output-on-failure \
     --output-junit "$TEST_REPORT") 2>&1 | tee -a "$LOG"
+
+python3 - "$OUT/mandatory_gate.json" "bin/$PRESET" <<'PYTESTINPUTS'
+import importlib.util
+import pathlib
+import sys
+spec = importlib.util.spec_from_file_location("attestation", "scripts/verify-attestation.py")
+verifier = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(verifier)
+verifier.copy_qualification_test_inputs(*(pathlib.Path(value) for value in sys.argv[1:]))
+PYTESTINPUTS
 
 say "[4/6] precision ladder on the device"
 for rung in fp32 fp32-comp fp64; do
@@ -286,6 +306,12 @@ names.extend([
     "qualification-gate-log",
 ])
 names.extend([
+    "test-input-smoke_spv",
+    "test-input-parity_probe_spv",
+    "test-input-parity_probe_fp32comp_spv",
+    "test-input-parity_probe_fp64_spv",
+    "test-input-trace_cuda",
+    "test-input-trace_metal",
     "qualification-product-operating_model",
     "qualification-product-starfield",
     "qualification-product-trace_fp32comp_spv",

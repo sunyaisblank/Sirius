@@ -13,8 +13,11 @@
 
 #include "support/scoped_environment.h"
 
+#include <array>
 #include <cstdint>
 #include <limits>
+#include <string>
+#include <vector>
 
 namespace {
 
@@ -229,7 +232,331 @@ TEST(DispatchGovernor, InvalidTimingAndIrreducibleOvershootDecline) {
         EXPECT_TRUE(bands.Record(64, 1100.0));
         EXPECT_EQ(bands.NextRows(64, 8), 1)
             << "an excessive observation forces minimum work even with adaptation disabled";
-        EXPECT_FALSE(bands.Record(8, 1100.0));
+        EXPECT_TRUE(bands.Record(8, 1100.0)) << "a full row is still reducible";
+        EXPECT_FALSE(bands.Record(1, 1100.0));
+    }
+}
+
+TEST(DispatchGovernor, SafetyFallbackRestartsAllSamplesWithExactPixelCoverage) {
+    using sirius::base::Expected;
+    using sirius::render::CameraSample;
+    using sirius::render::DispatchRegion;
+    using sirius::render::ExecuteDispatchRegions;
+    std::vector<CameraSample> samples;
+    sirius::render::ForEachCameraSample(3, [&](const auto& sample) { samples.push_back(sample); });
+    ASSERT_EQ(samples.size(), 3U);
+
+    for (const auto shape : {std::array{1, 3}, std::array{3, 1}, std::array{7, 3}, std::array{9, 5},
+                             std::array{17, 11}, std::array{64, 1}}) {
+        for (const double target : {0.0, 250.0, 750.0}) {
+            for (const double fallback_ms : {0.0, 1013.575332}) {
+                for (const int late_sample : {1, 2}) {
+                    SCOPED_TRACE(::testing::Message()
+                                 << shape[0] << 'x' << shape[1] << " target=" << target
+                                 << " timing=" << fallback_ms << " sample=" << late_sample);
+                    const DispatchRegion original{5, 7, shape[0], shape[1]};
+                    BandController bands(original.width, target, original.height,
+                                         original.Pixels());
+                    const auto size = static_cast<std::size_t>(original.Pixels());
+                    std::vector<std::array<float, 4>> packed(size, {-999, -999, -999, -999});
+                    auto frame = packed;
+                    std::vector<int> coverage(size, 0);
+                    std::vector<std::int64_t> expected_areas;
+                    if (fallback_ms == 0.0 || size == 3) {
+                        expected_areas.assign(size, 1);
+                    } else if (shape[0] == 7) {
+                        expected_areas = {7, 7, 7};
+                    } else if (shape[0] == 9) {
+                        expected_areas = {18, 9, 18};
+                    } else if (shape[0] == 17) {
+                        expected_areas = {85, 51, 51};
+                    } else {
+                        expected_areas = {32, 32};
+                    }
+                    const auto expected_cap = fallback_ms == 0.0 ? 1 : original.Pixels() / 2;
+                    std::vector<std::int64_t> completed_areas;
+                    bool injected = false;
+                    int attempts = 0;
+                    auto submitted = [&](const DispatchRegion& region, const CameraSample& sample,
+                                         int index) -> Expected<double> {
+                        ++attempts;
+                        EXPECT_GE(index, 0);
+                        EXPECT_LT(index, 3);
+                        if (index < 0 || index >= 3) {
+                            return sirius::base::Fail(sirius::base::ErrorDomain::kInternal,
+                                                      "test dispatch", "invalid sample index");
+                        }
+                        EXPECT_EQ(sample.image_u, samples[index].image_u);
+                        EXPECT_EQ(sample.image_v, samples[index].image_v);
+                        EXPECT_EQ(sample.pupil_u, samples[index].pupil_u);
+                        EXPECT_EQ(sample.pupil_v, samples[index].pupil_v);
+                        if (injected) {
+                            EXPECT_LE(region.Pixels(), expected_cap);
+                            EXPECT_EQ(index, (attempts - late_sample - 2) % 3);
+                        }
+                        for (int row = 0; row < region.height; ++row) {
+                            for (int column = 0; column < region.width; ++column) {
+                                const int absolute = (region.y + row) * 128 + region.x + column;
+                                auto& pixel =
+                                    packed[static_cast<std::size_t>(row * region.width + column)];
+                                for (int channel = 0; channel < 4; ++channel) {
+                                    const float value =
+                                        static_cast<float>(absolute * 32 + channel * 4 + index);
+                                    pixel[channel] =
+                                        index == 0 ? value
+                                                   : (pixel[channel] * index + value) / (index + 1);
+                                }
+                            }
+                        }
+                        if (!injected && index == late_sample) {
+                            injected = true;
+                            return fallback_ms;
+                        }
+                        return 1.0;
+                    };
+                    auto completed = [&](const DispatchRegion& region) -> Expected<void> {
+                        EXPECT_TRUE(injected);
+                        completed_areas.push_back(region.Pixels());
+                        EXPECT_LE(region.Pixels(), expected_cap);
+                        EXPECT_GE(region.x, original.x);
+                        EXPECT_GE(region.y, original.y);
+                        EXPECT_LE(region.x + region.width, original.x + original.width);
+                        EXPECT_LE(region.y + region.height, original.y + original.height);
+                        if (region.x < original.x || region.y < original.y ||
+                            region.x + region.width > original.x + original.width ||
+                            region.y + region.height > original.y + original.height) {
+                            return sirius::base::Fail(sirius::base::ErrorDomain::kInternal,
+                                                      "test completion", "outside region");
+                        }
+                        for (int row = 0; row < region.height; ++row) {
+                            for (int column = 0; column < region.width; ++column) {
+                                const auto destination = static_cast<std::size_t>(
+                                    (region.y + row - original.y) * original.width + region.x +
+                                    column - original.x);
+                                ++coverage[destination];
+                                frame[destination] =
+                                    packed[static_cast<std::size_t>(row * region.width + column)];
+                            }
+                        }
+                        return {};
+                    };
+                    const auto result =
+                        ExecuteDispatchRegions(original, 3, bands, submitted, completed);
+                    ASSERT_TRUE(result.has_value()) << result.error().Description();
+                    EXPECT_EQ(attempts, late_sample + 1 + expected_areas.size() * 3);
+                    EXPECT_EQ(completed_areas, expected_areas);
+                    EXPECT_TRUE(bands.SafetyFallback());
+                    EXPECT_EQ(bands.SafetyPixelCap(), expected_cap);
+                    for (int row = 0; row < original.height; ++row) {
+                        for (int column = 0; column < original.width; ++column) {
+                            const auto position =
+                                static_cast<std::size_t>(row * original.width + column);
+                            EXPECT_EQ(coverage[position], 1);
+                            const int absolute = (original.y + row) * 128 + original.x + column;
+                            for (int channel = 0; channel < 4; ++channel) {
+                                // The independent mean of sample ordinals {0,1,2} is exactly 1.
+                                EXPECT_EQ(frame[position][channel],
+                                          static_cast<float>(absolute * 32 + channel * 4 + 1));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+TEST(DispatchGovernor, MeasuredSafetyCapRetainsUsefulWorkAndBoundsRepeatedOvershoots) {
+    using sirius::base::Expected;
+    using sirius::render::CameraSample;
+    using sirius::render::DispatchRegion;
+    using sirius::render::ExecuteDispatchRegions;
+    for (const double target : {0.0, 250.0, 750.0}) {
+        for (const bool repeated : {false, true}) {
+            SCOPED_TRACE(::testing::Message() << target << " repeated=" << repeated);
+            BandController bands(64, target, 4, 256);
+            std::vector<std::array<int, 4>> actual;
+            std::vector<std::array<int, 3>> completed;
+            auto submit = [&](const DispatchRegion& region, const CameraSample&,
+                              int index) -> Expected<double> {
+                actual.push_back({region.x, region.y, region.width, index});
+                EXPECT_EQ(region.height, 1);
+                EXPECT_LE(region.Pixels(), bands.SafetyPixelCap());
+                if (region.width == 64 && index == 1) return 1013.575332;
+                if (repeated && region.width == 32 && index == 2) return 1000.01;
+                return 1.0;
+            };
+            auto complete = [&](const DispatchRegion& region) -> Expected<void> {
+                completed.push_back({region.x, region.y, region.width});
+                return {};
+            };
+            const auto first = ExecuteDispatchRegions({2, 3, 64, 1}, 3, bands, submit, complete);
+            ASSERT_TRUE(first.has_value()) << first.error().Description();
+            EXPECT_EQ(actual.size(), repeated ? 17U : 8U);
+            EXPECT_EQ(bands.SafetyPixelCap(), repeated ? 16 : 32);
+            // A new logical row must retain the measured cap after fast samples.
+            const auto next = ExecuteDispatchRegions({2, 4, 64, 1}, 3, bands, submit, complete);
+            ASSERT_TRUE(next.has_value()) << next.error().Description();
+            EXPECT_EQ(bands.SafetyPixelCap(), repeated ? 16 : 32);
+            EXPECT_EQ(bands.NextRows(64, 64), 1);
+            std::vector<std::array<int, 4>> expected;
+            auto samples = [&](int x, int y, int width, int count) {
+                for (int index = 0; index < count; ++index) {
+                    expected.push_back({x, y, width, index});
+                }
+            };
+            samples(2, 3, 64, 2);
+            if (repeated) samples(2, 3, 32, 3);
+            std::vector<std::array<int, 3>> expected_completed;
+            const int width = repeated ? 16 : 32;
+            for (const int y : {3, 4}) {
+                for (int x = 2; x < 66; x += width) {
+                    samples(x, y, width, 3);
+                    expected_completed.push_back({x, y, width});
+                }
+            }
+            EXPECT_EQ(actual, expected);
+            EXPECT_EQ(completed, expected_completed);
+        }
+        BandController bands(64, target, 4, 256);
+        std::vector<std::int64_t> areas;
+        int completions = 0;
+        const auto refused = ExecuteDispatchRegions(
+            {2, 3, 64, 1}, 3, bands,
+            [&](const DispatchRegion& region, const CameraSample&, int index) -> Expected<double> {
+                areas.push_back(region.Pixels());
+                EXPECT_EQ(index, 0);
+                return 1000.01;
+            },
+            [&](const DispatchRegion&) -> Expected<void> {
+                ++completions;
+                return {};
+            });
+        ASSERT_FALSE(refused.has_value());
+        EXPECT_EQ(areas, (std::vector<std::int64_t>{64, 32, 16, 8, 4, 2, 1}));
+        EXPECT_EQ(completions, 0);
+        EXPECT_EQ(bands.SafetyPixelCap(), 1);
+        BandController boundary(1, target, 1, 1);
+        EXPECT_TRUE(boundary.Record(1, 1000.0));
+        EXPECT_FALSE(boundary.SafetyFallback());
+    }
+}
+
+TEST(DispatchGovernor, OnePixelSafetyBoundaryRemainsFatalWithStickyFallback) {
+    using sirius::base::Expected;
+    using sirius::render::CameraSample;
+    using sirius::render::DispatchRegion;
+    using sirius::render::ExecuteDispatchRegions;
+    for (const double target : {0.0, 250.0, 750.0}) {
+        for (const double bad : {1000.01, -1.0, std::numeric_limits<double>::infinity(),
+                                 std::numeric_limits<double>::quiet_NaN()}) {
+            BandController bands(64, target, 4, 256);
+            int attempts = 0;
+            int completions = 0;
+            const auto result = ExecuteDispatchRegions(
+                {2, 3, 64, 1}, 3, bands,
+                [&](const DispatchRegion& region, const CameraSample&,
+                    int index) -> Expected<double> {
+                    ++attempts;
+                    EXPECT_EQ(index, 0);
+                    if (attempts == 1) return 0.0;
+                    EXPECT_EQ(region.Pixels(), 1);
+                    return bad;
+                },
+                [&](const DispatchRegion&) -> Expected<void> {
+                    ++completions;
+                    return {};
+                });
+            EXPECT_FALSE(result.has_value());
+            EXPECT_EQ(attempts, 2);
+            EXPECT_EQ(completions, 0);
+        }
+        BandController bands(1, target, 1, 1);
+        int attempts = 0;
+        int completions = 0;
+        const auto zero = ExecuteDispatchRegions(
+            {0, 0, 1, 1}, 3, bands,
+            [&](const DispatchRegion&, const CameraSample&, int) -> Expected<double> {
+                ++attempts;
+                return 0.0;
+            },
+            [&](const DispatchRegion&) -> Expected<void> {
+                ++completions;
+                return {};
+            });
+        EXPECT_TRUE(zero.has_value()) << "zero timing at minimum work must not retry forever";
+        EXPECT_EQ(attempts, 3);
+        EXPECT_EQ(completions, 1);
+    }
+}
+
+TEST(DispatchGovernor, RegionExecutionPropagatesCancellationAndBoundaryErrors) {
+    using sirius::base::Expected;
+    using sirius::render::CameraSample;
+    using sirius::render::DispatchRegion;
+    using sirius::render::ExecuteDispatchRegions;
+    for (int failure_stage : {0, 1, 2}) {
+        SCOPED_TRACE(failure_stage);
+        BandController bands(9, 750.0, 3, 27);
+        int attempts = 0;
+        int completions = 0;
+        const auto result = ExecuteDispatchRegions(
+            {5, 7, 9, 3}, 3, bands,
+            [&](const DispatchRegion&, const CameraSample&, int) -> Expected<double> {
+                ++attempts;
+                if (failure_stage == 1 && attempts == 2) {
+                    return sirius::base::Fail(sirius::base::ErrorDomain::kDevice, "test submit",
+                                              "submission failed");
+                }
+                return 1.0;
+            },
+            [&](const DispatchRegion&) -> Expected<void> {
+                ++completions;
+                return sirius::base::Fail(sirius::base::ErrorDomain::kDevice, "test readback",
+                                          "readback failed");
+            },
+            [&] { return failure_stage == 0 && attempts == 1; });
+        ASSERT_FALSE(result.has_value());
+        EXPECT_EQ(attempts, failure_stage + 1);
+        EXPECT_EQ(completions, failure_stage == 2 ? 1 : 0);
+        const std::string expected = failure_stage == 0   ? "cancelled"
+                                     : failure_stage == 1 ? "submission failed"
+                                                          : "readback failed";
+        EXPECT_NE(result.error().Description().find(expected), std::string::npos);
+    }
+    for (int failure_stage : {0, 1, 2}) {
+        SCOPED_TRACE(::testing::Message() << "pending siblings, stage " << failure_stage);
+        BandController bands(3, 750.0, 3, 9);
+        int attempts = 0;
+        int completions = 0;
+        const auto result = ExecuteDispatchRegions(
+            {5, 7, 3, 3}, 3, bands,
+            [&](const DispatchRegion& region, const CameraSample&, int) -> Expected<double> {
+                ++attempts;
+                if (attempts == 1) return 1013.575332;
+                EXPECT_EQ(region.Pixels(), 3);
+                if (failure_stage == 1 && completions == 1) {
+                    return sirius::base::Fail(sirius::base::ErrorDomain::kDevice, "test submit",
+                                              "pending submission failed");
+                }
+                return 1.0;
+            },
+            [&](const DispatchRegion&) -> Expected<void> {
+                ++completions;
+                if (failure_stage == 2 && completions == 2) {
+                    return sirius::base::Fail(sirius::base::ErrorDomain::kDevice, "test readback",
+                                              "pending readback failed");
+                }
+                return {};
+            },
+            [&] { return failure_stage == 0 && completions == 1; });
+        ASSERT_FALSE(result.has_value());
+        EXPECT_EQ(attempts, (std::array{4, 5, 7})[failure_stage]);
+        EXPECT_EQ(completions, failure_stage == 2 ? 2 : 1);
+        const std::string expected = failure_stage == 0   ? "cancelled"
+                                     : failure_stage == 1 ? "pending submission failed"
+                                                          : "pending readback failed";
+        EXPECT_NE(result.error().Description().find(expected), std::string::npos);
     }
 }
 

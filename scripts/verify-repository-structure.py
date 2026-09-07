@@ -194,6 +194,7 @@ THIN_LENS_SAMPLE_AUTHORITY = SOURCE_ROOT / "core" / "camera_sampling.h"
 THIN_LENS_APP_BOUNDARY = SOURCE_ROOT / "app" / "config" / "config_loader.cpp"
 THIN_LENS_SESSION_BOUNDARY = SOURCE_ROOT / "render" / "session" / "render_session.cpp"
 THIN_LENS_VULKAN_BOUNDARY = SOURCE_ROOT / "render" / "vulkan_renderer.cpp"
+THIN_LENS_DISPATCH_BOUNDARY = SOURCE_ROOT / "render" / "dispatch_governor.cpp"
 VOLUME_TRANSFER_HOST_AUTHORITY = KERR_TRANSFER_AUTHORITY
 VOLUME_TRANSFER_CPU_CONSUMER = KERR_TRANSFER_CPU_CONSUMER
 VOLUME_TRANSFER_DEVICE_AUTHORITY = KERR_TRANSFER_DEVICE_AUTHORITY
@@ -399,13 +400,120 @@ def workflow_job(workflow: str, name: str) -> str | None:
     return None if match is None else match.group(1)
 
 
+FULL_QUALIFICATION_CONDITION = (
+    "github.event_name == 'push' || "
+    "(github.event_name == 'workflow_dispatch' && inputs.full_qualification == true)"
+)
+GATE_DIAGNOSTIC_PATHS = (
+    "bin/**/generated/sirius/*gate*.json",
+    "bin/**/generated/sirius/*gate*.xml",
+    "bin/**/generated/sirius/*gate*.log",
+    "bin/**/Testing/Temporary/LastTest.log",
+    "bin/**/Testing/Temporary/LastTestsFailed.log",
+    "linux-tests.xml",
+    "windows-tests.xml",
+    "macos-tests.xml",
+)
+
+MACOS_RUNTIME_DIAGNOSTIC_PATHS = (
+    '${{ runner.temp }}/sirius-macos-runtime/*/native-runtime-tests.xml',
+    '${{ runner.temp }}/sirius-macos-runtime/*/native-runtime-transcript.log',
+    '${{ runner.temp }}/sirius-macos-runtime/producer.log',
+    '${{ runner.temp }}/sirius-macos-runtime/os-version.txt',
+    '${{ runner.temp }}/sirius-macos-runtime/metal-displays.json',
+    '${{ runner.temp }}/sirius-macos-runtime/provider-route.txt',
+)
+MACOS_RUNTIME_PRODUCER_STEP = r"""      - name: Exact native MoltenVK runtime evidence
+        if: success()
+        shell: bash
+        env:
+          CMAKE_BUILD_PARALLEL_LEVEL: 3
+        run: |
+          set -euo pipefail
+          python3 scripts/validate-native-runtime.py --expected-revision "${{ github.sha }}" --output-root "$RUNNER_TEMP/sirius-macos-runtime" 2>&1 | tee "$RUNNER_TEMP/sirius-macos-runtime/producer.log"
+"""
+MACOS_RUNTIME_PROVENANCE_STEP = r"""      - name: Record macOS graphics route
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/sirius-macos-runtime"
+          sw_vers | tee "$RUNNER_TEMP/sirius-macos-runtime/os-version.txt"
+          system_profiler SPDisplaysDataType -json | tee "$RUNNER_TEMP/sirius-macos-runtime/metal-displays.json"
+          printf 'repository=%s\nrevision=%s\nrun_id=%s\nrun_attempt=%s\njob=%s\nrunner=%s\nos=%s\narch=%s\n' "$GITHUB_REPOSITORY" "$GITHUB_SHA" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" "$GITHUB_JOB" "$RUNNER_NAME" "$RUNNER_OS" "$RUNNER_ARCH" | tee "$RUNNER_TEMP/sirius-macos-runtime/provider-route.txt"
+"""
+
+
+def workflow_steps(job: str) -> list[str]:
+    """Read the repository's fixed block-step layout without accepting aliases."""
+    return re.findall(r"^      - .*?(?=^      - |\Z)", job, re.MULTILINE | re.DOTALL)
+
+
+def workflow_step_field(step: str, field: str) -> list[str]:
+    # The first mapping field can appear beside the sequence marker.
+    normalized = re.sub(r"^      - ", "        ", step, count=1)
+    return re.findall(rf"^        {re.escape(field)}:\s*([^\n]*)$",
+                      normalized, re.MULTILINE)
+
+
+def gate_diagnostic_upload_valid(step: str, *, macos_runtime: bool = False) -> bool:
+    # Keep diagnostics unable to publish an attestation or broaden their file
+    # scope. Unknown fields/layouts fail closed rather than becoming exceptions.
+    paths = GATE_DIAGNOSTIC_PATHS + (MACOS_RUNTIME_DIAGNOSTIC_PATHS if macos_runtime else ())
+    pattern = (
+        r"\A      - name: Preserve gate diagnostics\n"
+        r"        if: always\(\)\n"
+        r"        uses: actions/upload-artifact@[0-9a-f]{40}(?: +#[^\n]*)?\n"
+        r"        with:\n"
+        r"          name: sirius-gate-diagnostics-\$\{\{ github\.job \}\}\n"
+        r"          path: \|\n"
+        + "".join(re.escape(f"            {path}\n") for path in paths)
+        + r"          if-no-files-found: ignore\n\s*\Z"
+    )
+    return re.fullmatch(pattern, step) is not None
+
+
+def macos_runtime_upload_valid(step: str) -> bool:
+    pattern = (
+        r"\A      - name: Preserve verified MoltenVK runtime evidence\n"
+        r"        if: success\(\)\n"
+        r"        uses: actions/upload-artifact@[0-9a-f]{40}(?: +#[^\n]*)?\n"
+        r"        with:\n"
+        r"          name: sirius-macos-moltenvk-attestation\n"
+        r"          path: \$\{\{ runner\.temp \}\}/sirius-macos-runtime\n"
+        r"          if-no-files-found: error\n\s*\Z"
+    )
+    return re.fullmatch(pattern, step) is not None
+
+
+def full_qualification_input_valid(workflow: str) -> bool:
+    header = workflow.split("\njobs:", 1)[0]
+    dispatches = re.findall(
+        r"^  workflow_dispatch:\n(.*?)(?=^  [A-Za-z0-9_-]+:|\Z)",
+        header, re.MULTILINE | re.DOTALL,
+    )
+    if len(dispatches) != 1:
+        return False
+    inputs = re.findall(
+        r"^      full_qualification:\n(.*?)(?=^      [A-Za-z0-9_-]+:|\Z)",
+        dispatches[0], re.MULTILINE | re.DOTALL,
+    )
+    return (len(inputs) == 1
+            and re.findall(r"^        type: ([^\n]+)$", inputs[0], re.MULTILINE)
+            == ["boolean"]
+            and re.findall(r"^        default: ([^\n]+)$", inputs[0], re.MULTILINE)
+            == ["false"]
+            and re.findall(r"^    inputs:\s*$", dispatches[0], re.MULTILINE)
+            == ["    inputs:"])
+
+
 def integration_boundary_errors(workflow: str) -> list[str]:
     """Keep cheap integration proof distinct from promotable qualification."""
     errors: list[str] = []
-    if "workflow_dispatch:" not in workflow:
-        errors.append("CI has no explicit non-render integration dispatch")
+    if not full_qualification_input_valid(workflow):
+        errors.append("CI full qualification dispatch must use a default-off boolean input")
     integration_condition = (
-        "if: github.event_name == 'pull_request' || "
+        "github.event_name == 'pull_request' || "
         "github.event_name == 'workflow_dispatch'"
     )
     for name in NON_RENDER_INTEGRATION_JOBS:
@@ -413,7 +521,9 @@ def integration_boundary_errors(workflow: str) -> list[str]:
         if integration is None:
             errors.append(f"CI has no non-render integration job: {name}")
             continue
-        if integration_condition not in integration:
+        if re.findall(r"^    if: ([^\n]+)$", integration, re.MULTILINE) != [
+            integration_condition
+        ]:
             errors.append(f"non-render integration has an unsafe event boundary: {name}")
         if "-DSIRIUS_ALIGNMENT_MODE=qualification" not in integration:
             errors.append(f"non-render integration does not use strict topology: {name}")
@@ -439,12 +549,35 @@ def integration_boundary_errors(workflow: str) -> list[str]:
                 if name == "integration-windows-no-render"
                 else "macos-native-build"
             )
-            if records_build != 1 or uploads != 1:
+            steps = workflow_steps(integration)
+            diagnostic_steps = [step for step in steps
+                                if workflow_step_field(step, "name")
+                                == ["Preserve gate diagnostics"]]
+            evidence_uploads = [step for step in steps
+                                if "upload-artifact@" in step and step not in diagnostic_steps]
+            if (records_build != 1 or uploads != 2 or len(evidence_uploads) != 1
+                    or len(diagnostic_steps) != 1
+                    or not gate_diagnostic_upload_valid(diagnostic_steps[0])):
                 errors.append(f"native integration lacks one build evidence producer: {name}")
-            if integration.count("if: github.event_name == 'workflow_dispatch'") != 3:
+            promoters = [step for step in steps
+                         if ("cmake --build" in step and "RunNativeBuildEvidence" in step)
+                         or "verify-attestation.py --record-build" in step]
+            promoters += evidence_uploads
+            if (len(promoters) != 3 or any(
+                workflow_step_field(step, "if")
+                != ["github.event_name == 'workflow_dispatch'"] for step in promoters
+            )):
                 errors.append(
                     f"native build evidence is not dispatch-only inside integration: {name}"
                 )
+            platform = "windows" if expected_domain == "windows-native-build" else "macos"
+            if (len(evidence_uploads) != 1
+                    or re.findall(r"^          name: ([^\n]+)$", evidence_uploads[0],
+                                  re.MULTILINE)
+                    != [f"sirius-{platform}-native-attestation"]
+                    or re.findall(r"^          path: ([^\n]+)$", evidence_uploads[0],
+                                  re.MULTILINE) != ["attestations"]):
+                errors.append(f"native build attestation upload has an unsafe scope: {name}")
             for marker in (
                 "RunNativeBuildEvidence",
                 "native_build_gate_junit.xml",
@@ -497,10 +630,47 @@ def integration_boundary_errors(workflow: str) -> list[str]:
         job = workflow_job(workflow, name)
         if job is None:
             errors.append(f"CI full qualification job is missing: {name}")
-        elif "if: github.event_name == 'push'" not in job:
+            continue
+        if re.findall(r"^    if: ([^\n]+)$", job, re.MULTILINE) != [
+            FULL_QUALIFICATION_CONDITION
+        ]:
             errors.append(
-                f"CI full qualification job can execute outside protected pushes: {name}"
+                f"CI full qualification requires a push or explicit opted-in dispatch: {name}"
             )
+        diagnostics = [step for step in workflow_steps(job)
+                       if workflow_step_field(step, "name") == ["Preserve gate diagnostics"]]
+        if len(diagnostics) != 1 or not gate_diagnostic_upload_valid(
+            diagnostics[0], macos_runtime=name == "macos-build"
+        ):
+            errors.append(f"CI full qualification does not retain bounded gate diagnostics: {name}")
+        if name in {"windows-build", "macos-build"}:
+            platform = name.removesuffix("-build")
+            uploads = [step for step in workflow_steps(job)
+                       if "upload-artifact@" in step and step not in diagnostics]
+            runtime_uploads = [step for step in uploads if macos_runtime_upload_valid(step)]
+            native_uploads = [step for step in uploads if step not in runtime_uploads]
+            if (len(uploads) != (2 if name == "macos-build" else 1)
+                    or len(runtime_uploads) != (1 if name == "macos-build" else 0)
+                    or len(native_uploads) != 1
+                    or re.findall(r"^          name: ([^\n]+)$", native_uploads[0], re.MULTILINE)
+                    != [f"sirius-{platform}-full-native-attestation"]
+                    or re.findall(r"^          path: ([^\n]+)$", native_uploads[0], re.MULTILINE)
+                    != ["attestations"]):
+                errors.append(f"CI full native upload must have a distinct bounded artifact: {name}")
+        if name == "macos-build":
+            steps = workflow_steps(job)
+            producers = [step for step in steps if "validate-native-runtime.py" in step]
+            provenance = [step for step in steps
+                          if workflow_step_field(step, "name") == ["Record macOS graphics route"]]
+            if (len(producers) != 1
+                    or producers[0].rstrip() != MACOS_RUNTIME_PRODUCER_STEP.rstrip()
+                    or len(provenance) != 1
+                    or provenance[0].rstrip() != MACOS_RUNTIME_PROVENANCE_STEP.rstrip()
+                    or steps.index(provenance[0]) >= steps.index(producers[0])):
+                errors.append("macOS full qualification must run the exact runtime producer after route capture")
+            if (len(producers) == 1 and len(runtime_uploads) == 1
+                    and steps.index(runtime_uploads[0]) <= steps.index(producers[0])):
+                errors.append("macOS runtime upload precedes its verified producer")
     return errors
 
 
@@ -513,29 +683,61 @@ def verify_integration_boundary_policy() -> None:
     )
     integration_body = (
         integration_condition
-        + "    run: cmake -DSIRIUS_ALIGNMENT_MODE=qualification\n"
-        + "    run: cmake --build --target "
+        + "    steps:\n"
+        + "      - run: cmake -DSIRIUS_ALIGNMENT_MODE=qualification\n"
+        + "      - run: cmake --build --target "
         + targets
         + "\n"
-        + "    run: ctest --test-dir bin/integration --no-tests=error -R '^("
+        + "      - run: ctest --test-dir bin/integration --no-tests=error -R '^("
         + controls
         + ")$'\n"
-        + "    run: test ! -e mandatory_gate.json\n"
-        + "    run: test ! -e mandatory_gate.json\n"
+        + "      - run: test ! -e mandatory_gate.json\n"
+        + "      - run: test ! -e mandatory_gate.json\n"
     )
     native_evidence_body = (
-        "    if: github.event_name == 'workflow_dispatch'\n"
-        "    run: cmake --build --target RunNativeBuildEvidence\n"
-        "    if: github.event_name == 'workflow_dispatch'\n"
-        "    run: python scripts/verify-attestation.py --record-build "
+        "      - if: github.event_name == 'workflow_dispatch'\n"
+        "        run: cmake --build --target RunNativeBuildEvidence\n"
+        "      - if: github.event_name == 'workflow_dispatch'\n"
+        "        run: python scripts/verify-attestation.py --record-build "
         "--native-build-gate native_build_gate.json "
         "--native-build-gate-log native_build_gate_ctest.log "
         "--artifact native_build_gate_junit.xml --domain {domain}\n"
-        "    if: github.event_name == 'workflow_dispatch'\n"
-        "    uses: actions/upload-artifact@0123456789012345678901234567890123456789\n"
+        "      - if: github.event_name == 'workflow_dispatch'\n"
+        "        uses: actions/upload-artifact@0123456789012345678901234567890123456789\n"
+        "        with:\n"
+        "          name: sirius-{platform}-native-attestation\n"
+        "          path: attestations\n"
+    )
+    diagnostics = (
+        "      - name: Preserve gate diagnostics\n"
+        "        if: always()\n"
+        "        uses: actions/upload-artifact@0123456789012345678901234567890123456789\n"
+        "        with:\n"
+        "          name: sirius-gate-diagnostics-${{ github.job }}\n"
+        "          path: |\n"
+        + "".join(f"            {path}\n" for path in GATE_DIAGNOSTIC_PATHS)
+        + "          if-no-files-found: ignore\n"
+    )
+    macos_runtime_upload = """      - name: Preserve verified MoltenVK runtime evidence
+        if: success()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: sirius-macos-moltenvk-attestation
+          path: ${{ runner.temp }}/sirius-macos-runtime
+          if-no-files-found: error
+"""
+    macos_diagnostics = diagnostics.replace(
+        "          if-no-files-found: ignore\n",
+        "".join(f"            {path}\n" for path in MACOS_RUNTIME_DIAGNOSTIC_PATHS)
+        + "          if-no-files-found: ignore\n",
     )
     valid = (
-        "workflow_dispatch:\n"
+        "on:\n"
+        "  workflow_dispatch:\n"
+        "    inputs:\n"
+        "      full_qualification:\n"
+        "        type: boolean\n"
+        "        default: false\n"
         "jobs:\n"
         + "".join(
             f"  {name}:\n"
@@ -555,15 +757,27 @@ def verify_integration_boundary_policy() -> None:
                         "windows-native-build"
                         if name == "integration-windows-no-render"
                         else "macos-native-build"
-                    )
+                    ),
+                    platform="windows" if name == "integration-windows-no-render" else "macos",
                 )
+                + diagnostics
                 if name != "integration-no-render"
                 else ""
             )
             for name in NON_RENDER_INTEGRATION_JOBS
         )
         + "".join(
-            f"  {name}:\n    if: github.event_name == 'push'\n"
+            f"  {name}:\n    if: {FULL_QUALIFICATION_CONDITION}\n    steps:\n"
+            + (MACOS_RUNTIME_PROVENANCE_STEP + MACOS_RUNTIME_PRODUCER_STEP
+               + macos_runtime_upload if name == "macos-build" else "")
+            + (
+                "      - uses: actions/upload-artifact@0123456789012345678901234567890123456789\n"
+                "        with:\n"
+                f"          name: sirius-{name.removesuffix('-build')}-full-native-attestation\n"
+                "          path: attestations\n"
+                if name in {"windows-build", "macos-build"} else ""
+            )
+            + (macos_diagnostics if name == "macos-build" else diagnostics)
             for name in FULL_QUALIFICATION_JOBS
         )
     )
@@ -581,9 +795,9 @@ def verify_integration_boundary_policy() -> None:
     if not integration_boundary_errors(cached_without_loader):
         raise RuntimeError("integration-boundary policy accepted the runtime-blind SDK cache")
     promotable_pull_request = valid.replace(
-        "    if: github.event_name == 'workflow_dispatch'\n"
-        "    run: cmake --build --target RunNativeBuildEvidence\n",
-        "    run: cmake --build --target RunNativeBuildEvidence\n",
+        "      - if: github.event_name == 'workflow_dispatch'\n"
+        "        run: cmake --build --target RunNativeBuildEvidence\n",
+        "      - run: cmake --build --target RunNativeBuildEvidence\n",
         1,
     )
     if not integration_boundary_errors(promotable_pull_request):
@@ -595,6 +809,72 @@ def verify_integration_boundary_policy() -> None:
     )
     if not integration_boundary_errors(driver_enabled):
         raise RuntimeError("integration-boundary policy accepted Windows driver execution")
+
+    mutations = {
+        "diagnostic attestation name": valid.replace(
+            "name: sirius-gate-diagnostics-${{ github.job }}",
+            "name: sirius-windows-native-attestation", 1),
+        "diagnostic attestation scope": valid.replace(
+            "            bin/**/generated/sirius/*gate*.json\n",
+            "            attestations/**\n", 1),
+        "diagnostic unbounded scope": valid.replace(
+            "            bin/**/generated/sirius/*gate*.json\n", "            **/*\n", 1),
+        "diagnostic missing failure guard": valid.replace(
+            "        if: always()\n", "        if: success()\n", 1),
+        "diagnostic extra execution": valid.replace(
+            "      - name: Preserve gate diagnostics\n",
+            "      - name: Preserve gate diagnostics\n        run: ctest --preset macos\n", 1),
+        "attestation always guard": valid.replace(
+            "      - if: github.event_name == 'workflow_dispatch'\n"
+            "        uses: actions/upload-artifact@",
+            "      - if: always()\n        uses: actions/upload-artifact@", 1),
+        "default-on runtime": valid.replace("        default: false", "        default: true", 1),
+        "string runtime input": valid.replace("        type: boolean", "        type: string", 1),
+        "missing runtime default": valid.replace("        default: false\n", "", 1),
+        "duplicated runtime default": valid.replace(
+            "        default: false\n", "        default: false\n        default: true\n", 1),
+    }
+    for condition in (
+        "true",
+        "github.event_name == 'push' || true",
+        "github.event_name == 'push' || inputs.full_qualification == true",
+        "github.event_name == 'push' || github.event_name == 'pull_request'",
+        "github.event_name == 'push' || github.event_name == 'workflow_dispatch'",
+    ):
+        mutations[condition] = valid.replace(FULL_QUALIFICATION_CONDITION, condition, 1)
+    for platform in ("windows", "macos"):
+        mutations[f"{platform} full/integration artifact collision"] = valid.replace(
+            f"name: sirius-{platform}-full-native-attestation",
+            f"name: sirius-{platform}-native-attestation", 1)
+    runtime_mutations = {
+        "missing explicit producer pipefail": (
+            MACOS_RUNTIME_PRODUCER_STEP,
+            MACOS_RUNTIME_PRODUCER_STEP.replace("          set -euo pipefail\n", "", 1)),
+        "producer disabled guard": ("      - name: Exact native MoltenVK runtime evidence\n        if: success()", "      - name: Exact native MoltenVK runtime evidence\n        if: false"),
+        "missing producer": (MACOS_RUNTIME_PRODUCER_STEP, ""),
+        "producer self-test": ("validate-native-runtime.py --expected-revision", "validate-native-runtime.py --self-test --expected-revision"),
+        "wrong expected revision": ('--expected-revision "${{ github.sha }}"', '--expected-revision "stale"'),
+        "missing expected revision": (' --expected-revision "${{ github.sha }}"', ""),
+        "wrong output root": ('--output-root "$RUNNER_TEMP/sirius-macos-runtime"', '--output-root "$RUNNER_TEMP"'),
+        "unbounded parallel build": ("CMAKE_BUILD_PARALLEL_LEVEL: 3", "CMAKE_BUILD_PARALLEL_LEVEL: 8"),
+        "suppressed producer failure": ('2>&1 | tee "$RUNNER_TEMP/sirius-macos-runtime/producer.log"', '2>&1 | tee "$RUNNER_TEMP/sirius-macos-runtime/producer.log" || true'),
+        "producer without pipefail shell": ("        shell: bash\n        env:", "        shell: sh\n        env:"),
+        "missing route capture": (MACOS_RUNTIME_PROVENANCE_STEP, ""),
+        "missing runtime upload": (macos_runtime_upload, ""),
+        "runtime publication on failure": ("      - name: Preserve verified MoltenVK runtime evidence\n        if: success()", "      - name: Preserve verified MoltenVK runtime evidence\n        if: always()"),
+        "runtime artifact collision": ("name: sirius-macos-moltenvk-attestation", "name: sirius-macos-full-native-attestation"),
+        "unbounded runtime upload": ("          path: ${{ runner.temp }}/sirius-macos-runtime", "          path: ${{ runner.temp }}"),
+        "missing runtime failure JUnit": ("            " + MACOS_RUNTIME_DIAGNOSTIC_PATHS[0] + "\n", ""),
+        "missing producer console log": ("            " + MACOS_RUNTIME_DIAGNOSTIC_PATHS[2] + "\n", ""),
+    }
+    for description, (before, after) in runtime_mutations.items():
+        mutations["macOS " + description] = valid.replace(before, after, 1)
+    mutations["macOS upload before producer"] = valid.replace(
+        MACOS_RUNTIME_PRODUCER_STEP + macos_runtime_upload,
+        macos_runtime_upload + MACOS_RUNTIME_PRODUCER_STEP, 1)
+    for description, mutated in mutations.items():
+        if mutated == valid or not integration_boundary_errors(mutated):
+            raise RuntimeError(f"integration-boundary policy accepted {description}")
 
 
 def verify_immutable_input_policy() -> None:
@@ -1482,11 +1762,17 @@ def thin_lens_authority_errors(documents: dict[Path, str]) -> list[str]:
             "sample.pupil_v",
         ),
         THIN_LENS_VULKAN_BOUNDARY: (
-            "ForEachCameraSample",
+            "ExecuteDispatchRegions",
+            "config.samples_per_pixel",
             "params[44] = sample.image_u",
             "params[45] = sample.image_v",
             "params[66] = sample.pupil_u",
             "params[67] = sample.pupil_v",
+        ),
+        THIN_LENS_DISPATCH_BOUNDARY: (
+            "ExecuteDispatchRegions",
+            "ForEachCameraSample(samples_per_pixel",
+            "submit(region, sample, sample_index)",
         ),
     }
     code_by_path: dict[Path, str] = {}
@@ -1621,13 +1907,30 @@ def verify_thin_lens_authority_policy() -> None:
             "sample.pupil_u sample.pupil_v"
         ),
         THIN_LENS_VULKAN_BOUNDARY: (
-            "ForEachCameraSample params[44] = sample.image_u; "
+            "ExecuteDispatchRegions config.samples_per_pixel params[44] = sample.image_u; "
             "params[45] = sample.image_v; params[66] = sample.pupil_u; "
             "params[67] = sample.pupil_v;"
+        ),
+        THIN_LENS_DISPATCH_BOUNDARY: (
+            "ExecuteDispatchRegions ForEachCameraSample(samples_per_pixel, callback); "
+            "submit(region, sample, sample_index);"
         ),
     }
     if thin_lens_authority_errors(valid):
         raise RuntimeError("thin-lens policy rejected the finite-pupil wiring")
+
+    for path, original, replacement in (
+        (THIN_LENS_DISPATCH_BOUNDARY, "ForEachCameraSample", "ForEachImageSample"),
+        (THIN_LENS_DISPATCH_BOUNDARY, "submit(region, sample, sample_index)",
+         "submit(region, CameraSample{}, sample_index)"),
+        (THIN_LENS_VULKAN_BOUNDARY, "ExecuteDispatchRegions", "SubmitUnsampledRegion"),
+        (THIN_LENS_VULKAN_BOUNDARY, "params[66] = sample.pupil_u",
+         "params[66] = sample.image_u"),
+    ):
+        changed = dict(valid)
+        changed[path] = changed[path].replace(original, replacement)
+        if not thin_lens_authority_errors(changed):
+            raise RuntimeError(f"thin-lens policy accepted broken dispatch sampling: {original}")
 
     pinhole_cpu = dict(valid)
     pinhole_cpu[THIN_LENS_CPU_CONSUMER] = pinhole_cpu[THIN_LENS_CPU_CONSUMER].replace(

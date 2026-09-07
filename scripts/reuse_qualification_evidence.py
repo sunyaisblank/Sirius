@@ -44,6 +44,12 @@ FIXED_ARTIFACTS = {
     "qualification-sirius.bin": "qualification-sirius.bin",
     "qualification-gate-junit": "qualification-gate-junit",
     "qualification-gate-log": "qualification-gate-log",
+    "test-input-smoke_spv": "test-input-smoke_spv",
+    "test-input-parity_probe_spv": "test-input-parity_probe_spv",
+    "test-input-parity_probe_fp32comp_spv": "test-input-parity_probe_fp32comp_spv",
+    "test-input-parity_probe_fp64_spv": "test-input-parity_probe_fp64_spv",
+    "test-input-trace_cuda": "test-input-trace_cuda",
+    "test-input-trace_metal": "test-input-trace_metal",
 }
 
 
@@ -328,6 +334,16 @@ def self_test() -> None:
         except ValueError:
             continue
         raise ValueError(f"qualification reuse accepted false control: {label}")
+
+    for missing_input in load_verifier().QUALIFICATION_TEST_INPUT_EVIDENCE.values():
+        incomplete = {**valid, "artifacts": {
+            name: record for name, record in artifacts.items() if name != missing_input
+        }}
+        try:
+            classify_reusable_record(incomplete)
+        except ValueError:
+            continue
+        raise ValueError(f"qualification reuse accepted missing generated input: {missing_input}")
 
     identity_controls = (
         ("stale revision", valid, "b" * 40, live_inventory, device),
