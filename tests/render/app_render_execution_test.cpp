@@ -130,6 +130,8 @@ TEST(ViewCommandOperational, HeadlessRefinementProducesASynchronisedFrame) {
     config.backend = render::RenderBackend::Cpu;
     config.metric_id = core::MetricId::Schwarzschild;
     config.black_hole_spin = 0.0;
+    // Four tiles exercise parallel frame assembly at the minimum viewer resolution.
+    config.session_template.tile_size = 32;
 
     InteractiveViewer viewer;
     ASSERT_TRUE(viewer.Initialise(config));
