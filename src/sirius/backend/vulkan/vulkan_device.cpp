@@ -3,6 +3,7 @@
 #include "sirius/backend/vulkan/vulkan_portability.h"
 #include "sirius/base/contracts.h"
 
+#include <algorithm>
 #include <charconv>
 #include <chrono>
 #include <cstdlib>
