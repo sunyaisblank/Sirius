@@ -194,6 +194,7 @@ THIN_LENS_SAMPLE_AUTHORITY = SOURCE_ROOT / "core" / "camera_sampling.h"
 THIN_LENS_APP_BOUNDARY = SOURCE_ROOT / "app" / "config" / "config_loader.cpp"
 THIN_LENS_SESSION_BOUNDARY = SOURCE_ROOT / "render" / "session" / "render_session.cpp"
 THIN_LENS_VULKAN_BOUNDARY = SOURCE_ROOT / "render" / "vulkan_renderer.cpp"
+THIN_LENS_DISPATCH_BOUNDARY = SOURCE_ROOT / "render" / "dispatch_governor.cpp"
 VOLUME_TRANSFER_HOST_AUTHORITY = KERR_TRANSFER_AUTHORITY
 VOLUME_TRANSFER_CPU_CONSUMER = KERR_TRANSFER_CPU_CONSUMER
 VOLUME_TRANSFER_DEVICE_AUTHORITY = KERR_TRANSFER_DEVICE_AUTHORITY
@@ -1761,11 +1762,17 @@ def thin_lens_authority_errors(documents: dict[Path, str]) -> list[str]:
             "sample.pupil_v",
         ),
         THIN_LENS_VULKAN_BOUNDARY: (
-            "ForEachCameraSample",
+            "ExecuteDispatchRegions",
+            "config.samples_per_pixel",
             "params[44] = sample.image_u",
             "params[45] = sample.image_v",
             "params[66] = sample.pupil_u",
             "params[67] = sample.pupil_v",
+        ),
+        THIN_LENS_DISPATCH_BOUNDARY: (
+            "ExecuteDispatchRegions",
+            "ForEachCameraSample(samples_per_pixel",
+            "submit(region, sample, sample_index)",
         ),
     }
     code_by_path: dict[Path, str] = {}
@@ -1900,13 +1907,30 @@ def verify_thin_lens_authority_policy() -> None:
             "sample.pupil_u sample.pupil_v"
         ),
         THIN_LENS_VULKAN_BOUNDARY: (
-            "ForEachCameraSample params[44] = sample.image_u; "
+            "ExecuteDispatchRegions config.samples_per_pixel params[44] = sample.image_u; "
             "params[45] = sample.image_v; params[66] = sample.pupil_u; "
             "params[67] = sample.pupil_v;"
+        ),
+        THIN_LENS_DISPATCH_BOUNDARY: (
+            "ExecuteDispatchRegions ForEachCameraSample(samples_per_pixel, callback); "
+            "submit(region, sample, sample_index);"
         ),
     }
     if thin_lens_authority_errors(valid):
         raise RuntimeError("thin-lens policy rejected the finite-pupil wiring")
+
+    for path, original, replacement in (
+        (THIN_LENS_DISPATCH_BOUNDARY, "ForEachCameraSample", "ForEachImageSample"),
+        (THIN_LENS_DISPATCH_BOUNDARY, "submit(region, sample, sample_index)",
+         "submit(region, CameraSample{}, sample_index)"),
+        (THIN_LENS_VULKAN_BOUNDARY, "ExecuteDispatchRegions", "SubmitUnsampledRegion"),
+        (THIN_LENS_VULKAN_BOUNDARY, "params[66] = sample.pupil_u",
+         "params[66] = sample.image_u"),
+    ):
+        changed = dict(valid)
+        changed[path] = changed[path].replace(original, replacement)
+        if not thin_lens_authority_errors(changed):
+            raise RuntimeError(f"thin-lens policy accepted broken dispatch sampling: {original}")
 
     pinhole_cpu = dict(valid)
     pinhole_cpu[THIN_LENS_CPU_CONSUMER] = pinhole_cpu[THIN_LENS_CPU_CONSUMER].replace(

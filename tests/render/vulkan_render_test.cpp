@@ -724,7 +724,7 @@ TEST(VulkanRenderSession, ZeroActiveTracePreservesRadianceAcrossPrecisionRungs) 
     if (!fixture.ready) GTEST_SKIP() << "Vulkan device or trace kernel unavailable";
     auto& device = *fixture.device;
     auto params = BuildTraceParams(Scene{});
-    std::array<float, 64 * 4> sentinel{};
+    std::array<float, 128 * 4> sentinel{};
     for (std::size_t i = 0; i < sentinel.size(); ++i) {
         sentinel[i] = -123.25f - static_cast<float>(i);
     }
@@ -763,7 +763,7 @@ TEST(VulkanRenderSession, ZeroActiveTracePreservesRadianceAcrossPrecisionRungs) 
         EXPECT_EQ(std::memcmp(sentinel.data(), result.data(), sizeof(sentinel)), 0);
 
         // Prove the kernel ran: enabling one pixel must change exactly that
-        // pixel to finite radiance, leaving the other 63 sentinels intact.
+        // pixel to finite radiance, leaving the other 127 sentinels intact.
         params[33] = 1.0f;
         params[34] = 1.0f;
         ASSERT_TRUE(device.WriteBuffer(*parameters, std::as_bytes(std::span(params))));
@@ -775,6 +775,42 @@ TEST(VulkanRenderSession, ZeroActiveTracePreservesRadianceAcrossPrecisionRungs) 
         EXPECT_EQ(std::memcmp(sentinel.data() + 4, result.data() + 4,
                               sizeof(sentinel) - 4 * sizeof(float)),
                   0);
+
+        // Odd active widths use a different packed output stride while padded
+        // workgroup lanes must leave every inactive sentinel untouched.
+        params[31] = 2.0f;
+        params[32] = 3.0f;
+        params[33] = 9.0f;
+        params[34] = 3.0f;
+        ASSERT_TRUE(device.WriteBuffer(*radiance, std::as_bytes(std::span(sentinel))));
+        ASSERT_TRUE(device.WriteBuffer(*parameters, std::as_bytes(std::span(params))));
+        ASSERT_TRUE(device.Dispatch(*kernel, bindings, 2, 1, 1));
+        auto reference = sentinel;
+        ASSERT_TRUE(device.ReadBuffer(*radiance, std::as_writable_bytes(std::span(reference))));
+        for (int width : {1, 3, 7, 9}) {
+            SCOPED_TRACE(width);
+            params[33] = static_cast<float>(width);
+            ASSERT_TRUE(device.WriteBuffer(*radiance, std::as_bytes(std::span(sentinel))));
+            ASSERT_TRUE(device.WriteBuffer(*parameters, std::as_bytes(std::span(params))));
+            ASSERT_TRUE(device.Dispatch(*kernel, bindings, (width + 7) / 8, 1, 1));
+            ASSERT_TRUE(device.ReadBuffer(*radiance, std::as_writable_bytes(std::span(result))));
+            for (int row = 0; row < 3; ++row) {
+                EXPECT_EQ(
+                    std::memcmp(result.data() + row * width * 4, reference.data() + row * 9 * 4,
+                                static_cast<std::size_t>(width) * 4 * sizeof(float)),
+                    0);
+            }
+            const auto active_floats = static_cast<std::size_t>(width * 3 * 4);
+            EXPECT_TRUE(std::all_of(result.begin(), result.begin() + active_floats,
+                                    [](float value) { return std::isfinite(value); }));
+            EXPECT_NE(std::memcmp(result.data(), sentinel.data(), active_floats * sizeof(float)),
+                      0);
+            EXPECT_EQ(std::memcmp(result.data() + active_floats, sentinel.data() + active_floats,
+                                  sizeof(sentinel) - active_floats * sizeof(float)),
+                      0);
+        }
+        params[31] = 0.0f;
+        params[32] = 0.0f;
     }
 #else
     GTEST_SKIP() << "trace kernels unavailable";

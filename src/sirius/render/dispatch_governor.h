@@ -6,9 +6,12 @@
 // trajectory or guarantee duration on an unmeasured device/scene.
 
 #include "sirius/base/error.h"
+#include "sirius/render/pixel_sampling.h"
 
 #include <algorithm>
+#include <array>
 #include <cstdint>
+#include <functional>
 
 namespace sirius::render {
 
@@ -36,6 +39,21 @@ inline constexpr std::int64_t kConservativeMaxPixels = 64;
 inline constexpr double kDispatchStopMs = 1000.0;
 inline constexpr double kBandGrowthCap = 2.0;
 
+// Absolute image rectangle. Subdivision changes only private dispatch packing;
+// each child must restart its samples before its pixels can be published.
+struct DispatchRegion {
+    int x;
+    int y;
+    int width;
+    int height;
+
+    [[nodiscard]] std::int64_t Pixels() const { return static_cast<std::int64_t>(width) * height; }
+};
+
+// Preconditions: positive dimensions and more than one pixel. Split rows first,
+// then columns, preserving the exact disjoint union even for odd-sized tails.
+[[nodiscard]] std::array<DispatchRegion, 2> SplitDispatchRegion(const DispatchRegion& region);
+
 class BandController {
   public:
     BandController(int tile_edge, double target_ms)
@@ -47,33 +65,49 @@ class BandController {
     BandController(int band_width, double target_ms, int max_band_rows, std::int64_t max_pixels)
         : max_pixels_(std::max<std::int64_t>(1, max_pixels)),
           max_rows_(std::max(1, max_band_rows)),
-          minimum_pixels_(std::max(1, band_width)),
           target_ms_(target_ms),
-          pixels_(std::min<std::int64_t>(std::max(1, band_width), max_pixels_)) {}
+          pixels_(std::min<std::int64_t>(std::max(1, band_width), max_pixels_)),
+          safety_pixel_cap_(max_pixels_) {}
 
     // Preconditions: positive dimensions and band_width <= the hard area cap.
-    // Both area and row bounds apply even when adaptation is disabled.
+    // Both area and row bounds apply even when adaptation is disabled. Safety
+    // fallback keeps one row and requires subdivision within the sticky safety area cap.
     [[nodiscard]] int NextRows(int remaining_rows, int band_width) const;
 
-    // False means invalid timing or an irreducible band exceeded kDispatchStopMs: the caller must
-    // decline further submissions. Zero duration has no rate information and shrinks to minimum
-    // work. Under-target observations double actual area; over-target ones halve
-    // it. This reaches useful whole bands despite a fixed submission-time floor.
+    // False means invalid timing or one pixel exceeded kDispatchStopMs: the caller
+    // must decline further submissions. Zero duration activates one-pixel subdivision;
+    // a reducible overshoot halves the actual area into a sticky, non-growing safety
+    // cap. Ordinary under-target observations
+    // double actual area; over-target ones halve it. This reaches useful whole
+    // bands despite a fixed submission-time floor.
     // Tail feedback uses only the area actually dispatched.
     bool Record(std::int64_t dispatched_pixels, double measured_ms);
 
     [[nodiscard]] bool Enabled() const { return target_ms_ > 0.0; }
     [[nodiscard]] double TargetMs() const { return target_ms_; }
-    [[nodiscard]] bool MinimumFallback() const { return minimum_fallback_; }
+    [[nodiscard]] bool SafetyFallback() const { return safety_fallback_; }
+    [[nodiscard]] std::int64_t SafetyPixelCap() const { return safety_pixel_cap_; }
 
   private:
     std::int64_t max_pixels_;
     int max_rows_;
-    int minimum_pixels_;
     double target_ms_;
     std::int64_t pixels_;
-    bool minimum_fallback_ = false;
+    std::int64_t safety_pixel_cap_;
+    bool safety_fallback_ = false;
 };
+
+// Execute one private logical band within the caller's hard shape/area caps.
+// Subdivision only shrinks this region. Submission observes the original camera
+// sample order; completion is called only after every sample of a final region.
+// A reducible safety fallback discards that region's partial accumulation and
+// replays each disjoint child from sample zero. No device timing is synthesized.
+[[nodiscard]] base::Expected<void> ExecuteDispatchRegions(
+    const DispatchRegion& region, int samples_per_pixel, BandController& bands,
+    const std::function<base::Expected<double>(const DispatchRegion&, const CameraSample&, int)>&
+        submit,
+    const std::function<base::Expected<void>(const DispatchRegion&)>& completed,
+    const std::function<bool()>& should_cancel = {});
 
 // Resolves the per-dispatch wall-time target: the supplied profile default unless
 // SIRIUS_DISPATCH_TARGET_MS overrides it. Zero disables adaptation but retains hard caps; a

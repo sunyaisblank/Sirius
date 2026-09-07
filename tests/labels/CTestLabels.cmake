@@ -1146,8 +1146,12 @@ set_tests_properties(
     DispatchGovernor.GrowthPerStepIsBoundedByTheCap
     DispatchGovernor.InvalidTimingAndIrreducibleOvershootDecline
     DispatchGovernor.LearnedAreaNormalisesAcrossBandWidths
+    DispatchGovernor.MeasuredSafetyCapRetainsUsefulWorkAndBoundsRepeatedOvershoots
     DispatchGovernor.NearTargetLatencyStillGrowsWholeBands
+    DispatchGovernor.OnePixelSafetyBoundaryRemainsFatalWithStickyFallback
     DispatchGovernor.OvershootHalvesTheObservedWork
+    DispatchGovernor.RegionExecutionPropagatesCancellationAndBoundaryErrors
+    DispatchGovernor.SafetyFallbackRestartsAllSamplesWithExactPixelCoverage
     DispatchGovernor.StrictCapsApplyToEveryTailEvenWithoutAdaptation
     DispatchGovernor.TargetDefaultsWhenTheEnvironmentIsUnset
     DispatchGovernor.TargetFailsLoudOnGarbageNegativesAndNonFinite

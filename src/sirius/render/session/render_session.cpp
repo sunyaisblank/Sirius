@@ -1099,7 +1099,7 @@ void RenderSession::RenderVulkanPath() {
               << stats->dispatch_seconds << "s total, " << stats->maximum_dispatch_ms
               << "ms maximum, " << stats->maximum_dispatch_pixels << " active pixels maximum, "
               << stats->dispatch_target_overshoots << " target overshoot(s), "
-              << stats->dispatch_fallbacks << " minimum-work fallback(s); initialization "
+              << stats->dispatch_fallbacks << " safety fallback(s); initialization "
               << stats->initialization_dispatches << " dispatch(es), "
               << stats->initialization_seconds << "s wall, " << stats->initialization_submit_wait_ms
               << "ms submit/wait" << std::endl;
