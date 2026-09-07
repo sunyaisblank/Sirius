@@ -53,12 +53,14 @@ struct TilePlan {
 
 // Derives the largest tile that fits kResidencyFraction of `budget_bytes` after
 // reserving `fixed_overhead_bytes` of persistent device residency, capped at the
-// image extent and kMaxTileEdge. Preconditions: image dimensions positive.
+// image extent, kMaxTileEdge, and a caller-supplied workload cap.
+// Preconditions: image dimensions positive and tile_edge_cap >= kMinTileEdge.
 // Declines (kDevice error) when the budget cannot seat the fixed overhead plus a
 // kMinTileEdge tile.
 [[nodiscard]] base::Expected<TilePlan> DeriveTilePlan(std::uint64_t budget_bytes, int image_width,
                                                       int image_height,
-                                                      std::uint64_t fixed_overhead_bytes);
+                                                      std::uint64_t fixed_overhead_bytes,
+                                                      int tile_edge_cap = kMaxTileEdge);
 
 // Resolves the budget to plan against: the SIRIUS_MEMORY_BUDGET_MB override when
 // set (for constrained-budget testing), else the host-visible render-memory

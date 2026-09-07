@@ -12,7 +12,7 @@
 // deviation in the same Kerr-Schild Cartesian chart the render integrator uses
 // (gr_integrator IntegrateGeodesicRK4Cart), so k, xi, and R share one chart.
 // The Riemann formula is retained, while its connection derivative uses a
-// precision-matched five-point stencil pinned against an independent analytic
+// precision-matched central stencil pinned against an independent analytic
 // Schwarzschild tensor and closed-form radial congruence by non-image Vulkan
 // parity probes.
 module gr_deviation;
@@ -20,7 +20,8 @@ module gr_deviation;
 import gr_types;
 import gr_metrics;
 
-// Riemann tensor from fourth-order differences of the Kerr-Schild Christoffels.
+// Riemann tensor from precision-matched central differences of the
+// Kerr-Schild Christoffels.
 // R[mu][nu][rho][sigma]. Time derivatives vanish (stationary spacetime),
 // matching the .cu.
 public void GetRiemannTensorCart(
@@ -37,13 +38,17 @@ public void GetRiemannTensorCart(
     GetKerrSchildFamilyChristoffel(x, M, a, Q, Lambda, Gamma);
 
     Real r = ComputeKerrRadiusCart(x.x, x.y, x.z, Real(a));
-    // A fourth-order five-point stencil uses a precision-matched step. At
-    // fp32, the former 0.1% two-point subtraction lost up to 1.4% of an
-    // analytic Schwarzschild tidal contraction to cancellation.
+    // The fp64 rung uses a fourth-order five-point stencil. The fp32 rung uses
+    // a sixth-order seven-point stencil and its roundoff-balanced step; the
+    // former 0.1% two-point subtraction lost up to 1.4% of an analytic
+    // Schwarzschild tidal contraction to cancellation.
 #ifdef SIRIUS_FP64
     const Real eps = Real(0.001) * max(Real(1.0), r);
 #else
-    const Real eps = Real(0.02) * max(Real(1.0), r);
+    // The seventh-root balance between O(h^6) truncation and O(epsilon/h)
+    // cancellation is about 0.1 in isolation. Use the more conservative 0.04
+    // scale to retain margin for strong-field metric variation.
+    const Real eps = Real(0.04) * max(Real(1.0), r);
 #endif
 
     // dGamma[rho][mu][nu][sigma] = d_rho Gamma^mu_nu_sigma.
@@ -58,21 +63,37 @@ public void GetRiemannTensorCart(
         Vec4Cart xm = x;
         Vec4Cart xpp = x;
         Vec4Cart xmm = x;
+#ifndef SIRIUS_FP64
+        Vec4Cart xppp = x;
+        Vec4Cart xmmm = x;
+#endif
         if (rho == 1) {
             xp.x += eps;
             xm.x -= eps;
             xpp.x += 2.0f * eps;
             xmm.x -= 2.0f * eps;
+#ifndef SIRIUS_FP64
+            xppp.x += 3.0f * eps;
+            xmmm.x -= 3.0f * eps;
+#endif
         } else if (rho == 2) {
             xp.y += eps;
             xm.y -= eps;
             xpp.y += 2.0f * eps;
             xmm.y -= 2.0f * eps;
+#ifndef SIRIUS_FP64
+            xppp.y += 3.0f * eps;
+            xmmm.y -= 3.0f * eps;
+#endif
         } else {
             xp.z += eps;
             xm.z -= eps;
             xpp.z += 2.0f * eps;
             xmm.z -= 2.0f * eps;
+#ifndef SIRIUS_FP64
+            xppp.z += 3.0f * eps;
+            xmmm.z -= 3.0f * eps;
+#endif
         }
 
         Real Gamma_plus[4][4][4];
@@ -84,7 +105,11 @@ public void GetRiemannTensorCart(
             for (int nu = 0; nu < 4; nu++)
                 for (int sig = 0; sig < 4; sig++)
                     dGamma[rho][mu][nu][sig] =
+#ifdef SIRIUS_FP64
                         8.0f * (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig]);
+#else
+                        45.0f * (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig]);
+#endif
 
         // Reuse the two Christoffel work arrays so the higher-order stencil
         // does not double the shader's live local-array footprint.
@@ -93,10 +118,25 @@ public void GetRiemannTensorCart(
         for (int mu = 0; mu < 4; mu++)
             for (int nu = 0; nu < 4; nu++)
                 for (int sig = 0; sig < 4; sig++)
+#ifdef SIRIUS_FP64
                     dGamma[rho][mu][nu][sig] =
                         (dGamma[rho][mu][nu][sig] -
                          (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig])) /
                         (12.0f * eps);
+#else
+                    dGamma[rho][mu][nu][sig] -=
+                        9.0f * (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig]);
+
+        GetKerrSchildFamilyChristoffel(xppp, M, a, Q, Lambda, Gamma_plus);
+        GetKerrSchildFamilyChristoffel(xmmm, M, a, Q, Lambda, Gamma_minus);
+        for (int mu = 0; mu < 4; mu++)
+            for (int nu = 0; nu < 4; nu++)
+                for (int sig = 0; sig < 4; sig++)
+                    dGamma[rho][mu][nu][sig] =
+                        (dGamma[rho][mu][nu][sig] +
+                         (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig])) /
+                        (60.0f * eps);
+#endif
     }
 
     // R^mu_nu_rho_sigma = d_rho Gamma^mu_nu_sigma - d_sigma Gamma^mu_nu_rho

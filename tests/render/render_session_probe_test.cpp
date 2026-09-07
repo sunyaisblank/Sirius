@@ -218,8 +218,11 @@ TEST(RenderSessionProbe, CompletionCallbackCanReenterLifecycleWithoutDeadlock) {
     config.black_hole_spin = 0.0;
     config.enable_disk = false;
     config.write_output = false;
+    config.output_path = SessionConfig{}.output_path;
 
     RenderSession session;
+    const auto issue = sirius::render::SessionConfigIssue(config);
+    ASSERT_FALSE(issue.has_value()) << *issue;
     ASSERT_TRUE(session.Configure(config));
     bool callback_completed = false;
     bool callback_configured = true;
@@ -306,7 +309,7 @@ TEST(RenderSessionProbe, TypedNumericBoundariesMatchTheExternalConfigurationBoun
 
     config.enable_turbulence = true;
     EXPECT_EQ(sirius::render::SessionConfigIssue(config),
-              "turbulence and corona require volumetric transfer");
+              "turbulence requires volumetric transfer");
     config.enable_turbulence = false;
 
     config.exposure = 100.1f;

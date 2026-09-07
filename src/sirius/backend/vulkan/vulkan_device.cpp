@@ -3,6 +3,7 @@
 #include "sirius/base/contracts.h"
 
 #include <charconv>
+#include <chrono>
 #include <cstdlib>
 #include <cstring>
 #include <format>
@@ -337,8 +338,45 @@ VulkanDevice::~VulkanDevice() {
     }
 }
 
+Expected<void> ValidateVulkanKernelPrecision(std::span<const std::uint32_t> spirv,
+                                             bool supports_fp64) {
+    // SPIR-V binary encoding: five-word header, high 16 bits instruction word
+    // count, low 16 bits opcode; OpCapability=17 and Float64=10. Khronos authority:
+    // https://github.com/KhronosGroup/SPIRV-Headers/blob/main/include/spirv/unified1/spirv.hpp11
+    constexpr std::uint32_t kMagic = 0x07230203u;
+    constexpr std::uint32_t kOpCapability = 17u;
+    constexpr std::uint32_t kFloat64 = 10u;
+    if (spirv.size() <= 5 || spirv[0] != kMagic || spirv[4] != 0) {
+        return Fail(ErrorDomain::kKernel, "validate shader module", "malformed SPIR-V header");
+    }
+    bool needs_fp64 = false;
+    for (std::size_t offset = 5; offset < spirv.size();) {
+        const std::uint32_t word_count = spirv[offset] >> 16;
+        const std::uint32_t opcode = spirv[offset] & 0xffffu;
+        if (word_count == 0 || word_count > spirv.size() - offset) {
+            return Fail(ErrorDomain::kKernel, "validate shader module",
+                        "malformed SPIR-V instruction extent");
+        }
+        if (opcode == kOpCapability) {
+            if (word_count != 2) {
+                return Fail(ErrorDomain::kKernel, "validate shader module",
+                            "malformed SPIR-V OpCapability");
+            }
+            needs_fp64 = needs_fp64 || spirv[offset + 1] == kFloat64;
+        }
+        offset += word_count;
+    }
+    if (needs_fp64 && !supports_fp64) {
+        return Fail(ErrorDomain::kKernel, "load shader precision",
+                    "SPIR-V Float64 requested but the device lacks shaderFloat64");
+    }
+    return {};
+}
+
 Expected<KernelHandle> VulkanDevice::LoadKernel(std::span<const std::uint32_t> spirv) {
-    SIRIUS_PRE(!spirv.empty());
+    if (auto precision = ValidateVulkanKernelPrecision(spirv, info_.supports_fp64); !precision) {
+        return std::unexpected(precision.error());
+    }
     const VkShaderModuleCreateInfo create_info{
         .sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
         .codeSize = spirv.size_bytes(),
@@ -518,7 +556,7 @@ Expected<VulkanDevice::Pipeline*> VulkanDevice::GetOrCreatePipeline(
 
 Expected<void> VulkanDevice::Dispatch(KernelHandle kernel, std::span<const BufferHandle> buffers,
                                       std::uint32_t groups_x, std::uint32_t groups_y,
-                                      std::uint32_t groups_z) {
+                                      std::uint32_t groups_z, DispatchTiming* timing) {
     SIRIUS_PRE(kernel.value < kernels_.size());
     SIRIUS_PRE(groups_x > 0 && groups_y > 0 && groups_z > 0);
     for (const BufferHandle handle : buffers) {
@@ -593,11 +631,17 @@ Expected<void> VulkanDevice::Dispatch(KernelHandle kernel, std::span<const Buffe
         .commandBufferCount = 1,
         .pCommandBuffers = &command,
     };
+    const auto submit_start = std::chrono::steady_clock::now();
     VkResult submit_result = vkQueueSubmit(queue_, 1, &submit_info, VK_NULL_HANDLE);
     if (submit_result == VK_SUCCESS) {
         submit_result = vkQueueWaitIdle(queue_);
     }
 
+    if (timing != nullptr) {
+        timing->submit_wait_ms = std::chrono::duration<double, std::milli>(
+                                     std::chrono::steady_clock::now() - submit_start)
+                                     .count();
+    }
     vkFreeCommandBuffers(device_, command_pool_, 1, &command);
     vkFreeDescriptorSets(device_, descriptor_pool_, 1, &set);
 

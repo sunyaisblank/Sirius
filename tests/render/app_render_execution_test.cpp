@@ -38,6 +38,9 @@ TEST(RenderCommandParse, ExplicitGpuRequestRunsVulkanWhenDevicePresent) {
         device_present = true;
     }
 #endif
+#ifdef SIRIUS_TEST_REQUIRE_VULKAN_RUNTIME
+    ASSERT_TRUE(device_present) << "the required runtime profile has no Vulkan device";
+#endif
     const auto output = std::filesystem::temp_directory_path() / "sirius_gpu_parse.ppm";
     std::filesystem::remove(output);
     const int rc = cmd.Execute(
@@ -45,6 +48,12 @@ TEST(RenderCommandParse, ExplicitGpuRequestRunsVulkanWhenDevicePresent) {
         globals, config);
     EXPECT_EQ(rc, device_present ? 0 : 1);
     EXPECT_EQ(config.backend.preferred, "vulkan");
+    if (device_present) {
+        ASSERT_TRUE(std::filesystem::exists(output));
+        EXPECT_GT(std::filesystem::file_size(output), 1024u);
+    } else {
+        EXPECT_FALSE(std::filesystem::exists(output));
+    }
     std::filesystem::remove(output);
 }
 
@@ -180,7 +189,11 @@ TEST(ViewCommandOperational, VulkanRefinementPublishesProgressiveFrames) {
     });
     ASSERT_TRUE(viewer.Start());
 
-    const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(60);
+    // Dozen performs substantial shader translation before each refinement
+    // frame: the physical Radeon route currently needs about 140 seconds for
+    // 64x64 and proportionally longer for 96x64. This is a liveness bound, not
+    // a performance gate, so retain enough margin for both real publications.
+    const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(600);
     while (!viewer.GetRefinementState().complete && viewer.GetLastError().empty() &&
            std::chrono::steady_clock::now() < deadline) {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));

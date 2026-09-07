@@ -103,7 +103,10 @@ set_tests_properties(
     OperationalAttestation.FalseExternalEvidenceIsRejected
     PROPERTIES
         LABELS "Mandatory;Operational"
-        TIMEOUT 30)
+        # The self-test hashes the full governed product repeatedly. Hosted
+        # macOS runners have exceeded 30 seconds under load; retain margin
+        # without weakening any verifier assertion.
+        TIMEOUT 120)
 
 # The two native runtime domains have one cross-platform producer with a
 # fail-closed host/device policy. Its local self-test is metadata-only: actual
@@ -206,15 +209,16 @@ if(SIRIUS_REQUIRE_VULKAN_RUNTIME)
     add_test(
         NAME OperationalVulkan.RequiredRuntimeDispatch
         COMMAND "${CMAKE_COMMAND}"
-            -DSIRIUS_BINARY=$<TARGET_FILE:sirius>
-            -DSIRIUS_OUTPUT=${CMAKE_CURRENT_BINARY_DIR}/required-vulkan-runtime.ppm
+            -DSIRIUS_RENDER_TESTS=$<TARGET_FILE:sirius_render_tests>
             -P "${CMAKE_CURRENT_SOURCE_DIR}/operational/vulkan_runtime_profile.cmake")
     set_tests_properties(
         OperationalVulkan.RequiredRuntimeDispatch
         PROPERTIES
             LABELS "Mandatory;Operational"
             RUN_SERIAL TRUE
-            TIMEOUT 120)
+            # Cold Dozen translation plus a governed 128x128 physical render
+            # is measured at about 164 seconds on the target Radeon route.
+            TIMEOUT 300)
 
     add_test(
         NAME OperationalP1.NearExtremalBurnIn
@@ -226,5 +230,9 @@ if(SIRIUS_REQUIRE_VULKAN_RUNTIME)
         PROPERTIES
             LABELS "Mandatory;Operational;Stability"
             RUN_SERIAL TRUE
-            TIMEOUT 180)
+            # Three independent ten-point boundary searches take about five
+            # minutes on the target Dozen route. This is a stability witness,
+            # not a throughput assertion, so retain substantial liveness
+            # margin for cold shader translation and driver variation.
+            TIMEOUT 1200)
 endif()

@@ -73,6 +73,12 @@ enum class BufferUsage {
     kUniform,  // small read-only parameter blocks
 };
 
+// Host wall time covering only queue submission and synchronous completion.
+// Excludes pipeline creation and descriptor/command setup; not a GPU timestamp.
+struct DispatchTiming {
+    double submit_wait_ms = 0.0;
+};
+
 // One compute device. Synchronous by design at this seam: a Dispatch
 // returns when results are readable. Tile-level parallelism lives above
 // (the scheduler overlaps tiles, not intra-tile commands), which keeps
@@ -99,11 +105,9 @@ class ComputeDevice {
 
     // Binds `buffers` to descriptor set 0, bindings 0..N-1 in order, and
     // dispatches the given workgroup counts.
-    [[nodiscard]] virtual base::Expected<void> Dispatch(KernelHandle kernel,
-                                                        std::span<const BufferHandle> buffers,
-                                                        std::uint32_t groups_x,
-                                                        std::uint32_t groups_y,
-                                                        std::uint32_t groups_z) = 0;
+    [[nodiscard]] virtual base::Expected<void> Dispatch(
+        KernelHandle kernel, std::span<const BufferHandle> buffers, std::uint32_t groups_x,
+        std::uint32_t groups_y, std::uint32_t groups_z, DispatchTiming* timing = nullptr) = 0;
 };
 
 // Enumerates Vulkan-visible devices (empty vector when no loader or ICD is

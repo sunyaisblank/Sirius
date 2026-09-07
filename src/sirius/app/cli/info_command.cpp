@@ -852,6 +852,12 @@ int InfoCommand::ShowReadiness(const GlobalOptions& globals) {
     const bool evidence_generation_ready = resources_ready;
     const bool aligned = alignment_authority.has_value() && alignment_authority->satisfied;
     const bool ready = evidence_generation_ready && aligned && base::kReleaseAlignmentEnforced;
+#ifdef SIRIUS_HAS_INTERACTIVE_VIEWER
+    const bool viewer_admitted =
+        alignment_authority.has_value() &&
+        std::ranges::find(alignment_authority->admitted_domain_ids, "viewer-native-window-input") !=
+            alignment_authority->admitted_domain_ids.end();
+#endif
     if (globals.json_output) {
         nlohmann::json j;
         j["ready"] = ready;
@@ -880,10 +886,14 @@ int InfoCommand::ShowReadiness(const GlobalOptions& globals) {
             {"compiled", true},
             {"logic_ready", evidence_generation_ready},
             {"ready", false},
-            {"state", "attestation_required"},
+            {"evidence_admitted", viewer_admitted},
+            {"state", viewer_admitted ? "current_host_unverified" : "attestation_required"},
             {"reason",
-             "native GLFW window creation and keyboard/pointer delivery require a "
-             "viewer-native-window-input attestation"},
+             viewer_admitted
+                 ? "exact-revision native viewer evidence is admitted; this info query does "
+                   "not create a window or verify current-host input delivery"
+                 : "native GLFW window creation and keyboard/cursor/scroll delivery require a "
+                   "viewer-native-window-input attestation"},
         };
 #else
         j["interactive_viewer"] = {
@@ -925,11 +935,13 @@ int InfoCommand::ShowReadiness(const GlobalOptions& globals) {
             rows.push_back({"Ultimate ideal", "Blocked by invalid operating model", false});
         }
 #ifdef SIRIUS_HAS_INTERACTIVE_VIEWER
-        rows.push_back({"Interactive viewer",
-                        resources_ready
-                            ? "Headless logic ready; native window/input requires attestation"
-                            : "Blocked by resources; native window/input requires attestation",
-                        false});
+        rows.push_back(
+            {"Interactive viewer",
+             !resources_ready ? "Blocked by resources"
+             : viewer_admitted
+                 ? "Exact-revision evidence admitted; current-host window/input unverified"
+                 : "Headless logic ready; native window/input requires attestation",
+             false});
 #else
         rows.push_back(
             {"Interactive viewer", "Not compiled (CPU/Vulkan CLI remains complete)", false});

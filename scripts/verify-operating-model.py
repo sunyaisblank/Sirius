@@ -93,10 +93,19 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:KerrTests.SingularKerrDiskDeclinesInsteadOfReceivingAnEpsilonRadius",
         "gtest:CoordinateTransformTests.KerrRadiusPreservesExactZeroAndScaleCovariance",
         "gtest:RK45IntegratorTests.UnrepresentedStageShrinksBeforeMetricEvaluation",
+        "gtest:RK45IntegratorTests.RejectionMaySelectTheMinimumStepBeforeTerminating",
+        "gtest:RK45IntegratorTests.NullProjectionPreservesTheIncomingLightConeBranch",
+        "gtest:RK45IntegratorTests.NullDefectAboveTheDeclaredBoundIsRejectedBeforeProjection",
+        "gtest:RK45IntegratorTests.DoublePrecisionStagesMatchAnAnalyticRindlerNullRay",
+        "gtest:RK45IntegratorTests.OutgoingChartPreservesMetricKillingQuantitiesAndInverseMap",
+        "gtest:CpuTraceBoundary.PastRadialHorizonIsAnAcceptedFiniteOutgoingEvent",
+        "gtest:CpuTraceBoundary.LateMinimumStepsPreserveAnalyticAffineAndJacobiLength",
+        "gtest:CpuTraceBoundary.RejectedOutwardRayNearHorizonDoesNotInventCapture",
         "gtest:KernelParity.RepresentedSubThresholdKerrMetricIsScaleCovariant",
         "gtest:KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation",
         "gtest:KernelParity.NullProjectionPreservesConeBranchAndFailsClosed",
         "gtest:KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability",
+        "gtest:VulkanBackend.KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions",
         "gtest:KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison",
         "gtest:LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter",
         "gtest:ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p",
@@ -279,9 +288,9 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "71b381823888159237bb3cd5a1a7635fa0f6ae571f4f2e4b172b9c8c581ab9a2",
-    "required_dimensions": "569190fc1e4596340bd899b7a9076d99f4bb2054bfe0d9dadbb6598f4ff382d9",
-    "capability_contracts": "59c9fc728ede9a900467cc173f18b60087dca06b0877af9011902c3002e15bcb",
+    "acceptance_criteria": "b146c797fffe0ca6dfa0a83e7ea6748ef559ae4cfcd7701a8a996a56b919a5ef",
+    "required_dimensions": "ee7ec2c58cf70d62f5f8bdb3137b2dfdd38b8496dde85c83cb29aed41261bcfc",
+    "capability_contracts": "48c5b338c14c11e2ad7275322cd72f4bd014df621ca69e65e119621066fd5c6c",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
 

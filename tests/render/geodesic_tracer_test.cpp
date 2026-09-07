@@ -25,6 +25,159 @@ namespace {
 using namespace sirius::core;
 using namespace sirius::backend;
 
+TEST(CpuTraceBoundary, HorizonlessKerrSchildFamiliesKeepTheirNativeTraceChart) {
+    for (const auto parameters :
+         {KerrSchildParams::Minkowski(), KerrSchildParams::DeSitter(0.01)}) {
+        KerrSchildFamily metric(parameters);
+        ASSERT_FALSE(metric.HasHorizon());
+        TracerConfig config;
+        config.enable_disk = false;
+        config.finite_causal_boundary = true;
+        config.escape_radius = 2.0f;
+        config.max_steps = 1000;
+        GeodesicTracer tracer(&metric, config);
+        CameraRay camera_ray;
+        camera_ray.origin(1) = 1.0;
+        camera_ray.origin(2) = std::numbers::pi / 2.0;
+        camera_ray.direction(1) = 1.0;
+        const auto result = tracer.Trace(camera_ray);
+        EXPECT_EQ(result.outcome, TraceResult::Outcome::Escaped);
+        EXPECT_FALSE(result.numerical_failure);
+        EXPECT_EQ(result.terminal_chart, TraceResult::TerminalChart::MetricNative);
+        EXPECT_NEAR(result.final_position(1), 2.0, 2e-12);
+        EXPECT_GT(result.affine_length, 0.0);
+        EXPECT_EQ(result.integrator_termination, 0);
+
+        OutgoingKerrSchild black_hole_chart(metric);
+        EXPECT_FALSE(black_hole_chart.FromIngoing(result.final_position).has_value());
+        EXPECT_FALSE(black_hole_chart.ToIngoing(result.final_position).has_value());
+    }
+}
+
+TEST(CpuTraceBoundary, UnrepresentedPastHorizonLaunchDeclinesBeforeIntegration) {
+    KerrSchildFamily metric(KerrSchildParams::Schwarzschild(1.0));
+    TracerConfig config;
+    config.enable_disk = false;
+    GeodesicTracer tracer(&metric, config);
+    CameraRay camera_ray;
+    camera_ray.origin(1) = 1.9;
+    camera_ray.origin(2) = std::numbers::pi / 2.0;
+    camera_ray.direction(1) = -1.0;
+    const auto result = tracer.Trace(camera_ray);
+    EXPECT_EQ(result.outcome, TraceResult::Outcome::MaxSteps);
+    EXPECT_TRUE(result.numerical_failure);
+    EXPECT_EQ(result.integrator_termination, 3);
+    EXPECT_EQ(result.steps_taken, 0);
+    EXPECT_DOUBLE_EQ(result.affine_length, 0.0);
+    EXPECT_EQ(result.terminal_chart, TraceResult::TerminalChart::MetricNative);
+}
+
+TEST(CpuTraceBoundary, PastRadialHorizonIsAnAcceptedFiniteOutgoingEvent) {
+    KerrSchildFamily metric(KerrSchildParams::Schwarzschild(1.0));
+    TracerConfig config;
+    config.enable_disk = false;
+    config.enable_ray_bundles = true;
+    config.bundle_point_source = true;
+    config.horizon_factor = 1.0f;
+    config.max_steps = 100;
+    config.strong_field_radius = 0.0f;
+    config.integrator.initial_step = 0.1f;
+    config.integrator.max_step = 0.2f;
+    GeodesicTracer tracer(&metric, config);
+    CameraRay camera_ray;
+    camera_ray.origin(1) = 3.0;
+    camera_ray.origin(2) = std::numbers::pi / 2.0;
+    camera_ray.direction(1) = -1.0;
+    const auto result = tracer.Trace(camera_ray);
+
+    ASSERT_EQ(result.outcome, TraceResult::Outcome::Horizon);
+    EXPECT_FALSE(result.numerical_failure);
+    EXPECT_EQ(result.terminal_chart, TraceResult::TerminalChart::OutgoingKerrSchild);
+    EXPECT_NEAR(result.final_position(1), 2.0, 2e-12);
+    // For this observer, E=(1-2M/r0)/sqrt(1+2M/r0). The outgoing
+    // principal ray is exactly x=r0-E*lambda, t=t0-E*lambda.
+    const double energy = (1.0 - 2.0 / 3.0) / std::sqrt(1.0 + 2.0 / 3.0);
+    EXPECT_NEAR(result.affine_length, 1.0 / energy, 2e-10);
+    EXPECT_NEAR(result.final_position(0), 4.0 * std::log(2.0) - 1.0, 2e-10);
+    ASSERT_TRUE(result.beam.valid);
+    // The optical tidal matrix vanishes for a radial Schwarzschild null
+    // congruence: a point pencil has D_A=lambda in the launch normalization.
+    const double expected_semi_axis = config.bundle_angular_size / energy;
+    EXPECT_NEAR(result.beam.semi_major, expected_semi_axis, expected_semi_axis * 2e-6);
+    EXPECT_NEAR(result.beam.semi_minor, expected_semi_axis, expected_semi_axis * 2e-6);
+}
+
+TEST(CpuTraceBoundary, LateMinimumStepsPreserveAnalyticAffineAndJacobiLength) {
+    KerrSchildFamily metric(KerrSchildParams::Schwarzschild(1.0));
+    constexpr double observer_radius = 50.0;
+    const double energy = (1.0 - 2.0 / observer_radius) / std::sqrt(1.0 + 2.0 / observer_radius);
+    TracerConfig config;
+    config.enable_disk = false;
+    config.enable_ray_bundles = true;
+    config.bundle_point_source = true;
+    config.horizon_factor = 1.0f;
+    config.max_steps = 5000;
+    // The radial principal ray obeys r=r0-E*lambda exactly. Land just
+    // outside the horizon after 512 coarse steps, then require sub-ULP steps
+    // at accumulated lambda>50: binary32's spacing there exceeds 1e-6.
+    config.integrator.initial_step =
+        static_cast<float>((observer_radius - 2.0005) / (512.0 * energy));
+    config.integrator.max_step = config.integrator.initial_step;
+    config.integrator.min_step = 1e-6f;
+    config.strong_field_radius = 2.00075f;
+    config.strong_field_max_step = config.integrator.min_step;
+    GeodesicTracer tracer(&metric, config);
+    CameraRay camera_ray;
+    camera_ray.origin(1) = observer_radius;
+    camera_ray.origin(2) = std::numbers::pi / 2.0;
+    camera_ray.direction(1) = -1.0;
+    const auto result = tracer.Trace(camera_ray);
+
+    ASSERT_EQ(result.outcome, TraceResult::Outcome::Horizon);
+    EXPECT_FALSE(result.numerical_failure);
+    EXPECT_GT(result.steps_taken, 800) << "the late minimum-step interval must execute";
+    const double expected_affine = (observer_radius - 2.0) / energy;
+    EXPECT_GT(expected_affine, 50.0);
+    EXPECT_NEAR(result.affine_length, expected_affine, 2e-9);
+    EXPECT_NEAR(result.final_position(1), 2.0, 2e-12);
+    ASSERT_TRUE(result.beam.valid);
+    // Radial Schwarzschild optical tides vanish, so the point pencil's
+    // screen distance is epsilon*lambda through the final accepted segment.
+    const double expected_semi_axis = config.bundle_angular_size * expected_affine;
+    EXPECT_NEAR(result.beam.semi_major, expected_semi_axis, expected_semi_axis * 2e-6);
+    EXPECT_NEAR(result.beam.semi_minor, expected_semi_axis, expected_semi_axis * 2e-6);
+}
+
+TEST(CpuTraceBoundary, RejectedOutwardRayNearHorizonDoesNotInventCapture) {
+    KerrSchildFamily metric(KerrSchildParams::Schwarzschild(1.0));
+    TracerConfig config;
+    config.enable_disk = false;
+    config.enable_ray_bundles = true;
+    config.horizon_factor = 1.0f;
+    config.max_steps = 1;
+    config.strong_field_radius = 0.0f;
+    config.integrator.initial_step = 0.1f;
+    config.integrator.min_step = 0.1f;
+    config.integrator.max_step = 0.1f;
+    config.integrator.abs_tolerance = 1e-15f;
+    config.integrator.rel_tolerance = 1e-15f;
+    GeodesicTracer tracer(&metric, config);
+
+    CameraRay camera_ray;
+    camera_ray.origin(1) = 2.001;
+    camera_ray.origin(2) = std::numbers::pi / 2.0;
+    camera_ray.direction(1) = 1.0 / std::sqrt(1.01);
+    camera_ray.direction(2) = 0.1 / std::sqrt(1.01);
+    const auto result = tracer.Trace(camera_ray);
+
+    EXPECT_EQ(result.outcome, TraceResult::Outcome::MaxSteps);
+    EXPECT_TRUE(result.numerical_failure);
+    EXPECT_EQ(result.integrator_termination, 5);
+    EXPECT_DOUBLE_EQ(result.affine_length, 0.0);
+    EXPECT_NEAR(result.final_position(1), camera_ray.origin(1), 1e-7);
+    EXPECT_GT(result.final_position(1), metric.OuterHorizonRadius());
+}
+
 class GeodesicTracerTest : public ::testing::Test {
   protected:
     void SetUp() override {
@@ -257,12 +410,13 @@ TEST_F(GeodesicTracerTest, LiveDiskCrossingCarriesTransportedPhysicalStokesOrien
 
 TEST(GeodesicTracerVolumetric, TransferAccumulatesAcrossEveryTraversedSegment) {
     KerrSchildParams params;
-    params.M = 0.0;
-    KerrSchildFamily flat(params);
+    params.M = 1.0;
+    KerrSchildFamily metric(params);
 
     TracerConfig config;
     config.escape_radius = 80.0f;
-    config.max_steps = 2000;
+    config.max_steps = 20000;
+    config.horizon_factor = 1.05f;
     config.enable_disk = true;
     config.enable_volumetric = true;
     config.disk_inner = 6.0f;
@@ -274,7 +428,7 @@ TEST(GeodesicTracerVolumetric, TransferAccumulatesAcrossEveryTraversedSegment) {
     config.volumetric_samples = 4;
     config.integrator.initial_step = 0.5f;
     config.integrator.max_step = 1.0f;
-    GeodesicTracer tracer(&flat, config);
+    GeodesicTracer tracer(&metric, config);
 
     CameraConfig camera_config;
     camera_config.r = 50.0;
@@ -284,7 +438,7 @@ TEST(GeodesicTracerVolumetric, TransferAccumulatesAcrossEveryTraversedSegment) {
     PinholeCamera camera(camera_config);
 
     const TraceResult result = tracer.Trace(camera.GenerateRay(1, 1, 0.5f, 0.5f));
-    EXPECT_EQ(result.outcome, TraceResult::Outcome::Escaped)
+    EXPECT_EQ(result.outcome, TraceResult::Outcome::Horizon)
         << "volumetric transfer must not replace the ray's terminal outcome";
     EXPECT_TRUE(result.volumetric_hit);
     EXPECT_GT(result.volumetric_affine_length, 10.0f)
@@ -295,7 +449,7 @@ TEST(GeodesicTracerVolumetric, TransferAccumulatesAcrossEveryTraversedSegment) {
 
     TracerConfig capped_config = config;
     capped_config.volumetric_tau_max = 0.25f;
-    GeodesicTracer capped_tracer(&flat, capped_config);
+    GeodesicTracer capped_tracer(&metric, capped_config);
     const TraceResult capped = capped_tracer.Trace(camera.GenerateRay(1, 1, 0.5f, 0.5f));
     EXPECT_TRUE(capped.volumetric_hit);
     EXPECT_NEAR(capped.optical_depth, capped_config.volumetric_tau_max, 1.0e-6f);
@@ -305,8 +459,8 @@ TEST(GeodesicTracerVolumetric, TransferAccumulatesAcrossEveryTraversedSegment) {
 
 TEST(GeodesicTracerVolumetric, OpticallyThinTransferIsNotDiscardedAtCompositionBoundary) {
     KerrSchildParams params;
-    params.M = 0.0;
-    KerrSchildFamily flat(params);
+    params.M = 1.0;
+    KerrSchildFamily metric(params);
 
     TracerConfig config;
     config.escape_radius = 80.0f;
@@ -322,7 +476,7 @@ TEST(GeodesicTracerVolumetric, OpticallyThinTransferIsNotDiscardedAtCompositionB
     config.volumetric_samples = 4;
     config.integrator.initial_step = 0.5f;
     config.integrator.max_step = 1.0f;
-    GeodesicTracer tracer(&flat, config);
+    GeodesicTracer tracer(&metric, config);
 
     CameraConfig camera_config;
     camera_config.r = 50.0;
@@ -385,8 +539,8 @@ TEST(GeodesicTracerVolumetric, RedshiftAndDopplerReachTheLiveVolumeSource) {
 
 TEST(GeodesicTracerVolumetric, ProceduralTurbulenceAltersLiveTransferDeterministically) {
     KerrSchildParams params;
-    params.M = 0.0;
-    KerrSchildFamily flat(params);
+    params.M = 1.0;
+    KerrSchildFamily metric(params);
 
     TracerConfig baseline_config;
     baseline_config.escape_radius = 80.0f;
@@ -411,12 +565,12 @@ TEST(GeodesicTracerVolumetric, ProceduralTurbulenceAltersLiveTransferDeterminist
     PinholeCamera camera(camera_config);
     const CameraRay ray = camera.GenerateRay(1, 1, 0.5f, 0.5f);
 
-    GeodesicTracer baseline_tracer(&flat, baseline_config);
+    GeodesicTracer baseline_tracer(&metric, baseline_config);
     const TraceResult baseline = baseline_tracer.Trace(ray);
 
     TracerConfig enhanced_config = baseline_config;
     enhanced_config.enable_turbulence = true;
-    GeodesicTracer enhanced_tracer(&flat, enhanced_config);
+    GeodesicTracer enhanced_tracer(&metric, enhanced_config);
 
     const TraceResult first = enhanced_tracer.Trace(ray);
     const TraceResult repeat = enhanced_tracer.Trace(ray);
@@ -471,7 +625,7 @@ TEST_F(GeodesicTracerTest, KerrMetricTracing) {
     config.horizon_factor = 1.1f;
     config.max_steps = 10000;
     config.enable_disk = true;
-    config.disk_inner = static_cast<float>(AccretionDiskD::ComputeIsco(0.9));
+    config.disk_inner = AccretionDiskD::ComputeIsco(0.9);
     config.disk_outer = 20.0f;
 
     auto kerrTracer = std::make_unique<GeodesicTracer>(kerrMetric.get(), config);
@@ -521,7 +675,7 @@ TEST(GeodesicTracerRedshift, NearExtremalInnerDiskEmissionRemainsFinite) {
     config.horizon_factor = 1.0f;
     config.max_steps = 20000;
     config.enable_disk = true;
-    config.disk_inner = static_cast<float>(AccretionDiskD::ComputeIsco(0.998));
+    config.disk_inner = AccretionDiskD::ComputeIsco(0.998);
     config.disk_outer = 20.0f;
     config.integrator.initial_step = 0.1f;
     config.integrator.max_step = 1.0f;

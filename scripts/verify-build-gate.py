@@ -411,6 +411,29 @@ def atomic_write_json(path: Path, document: dict) -> None:
             os.unlink(temporary)
 
 
+def verify_execution_inputs(
+    args: argparse.Namespace, source_identity: tuple[str, bool], inventory_digest: str,
+    tested_records: dict, product_records: dict,
+) -> None:
+    """Reject persistent changes across CTest, allowing restored obstruction fixtures."""
+    source_root = args.source_root.resolve()
+    build_dir = args.build_dir.resolve()
+    # Resolve the supplied paths again as well as hashing their contents: replacing
+    # a symlink must not leave the check pinned to its former target.
+    for values, option, expected in (
+        (args.tested_artifact, "--tested-artifact", tested_records),
+        (args.product_artifact, "--product-artifact", product_records),
+    ):
+        actual = artifact_records(parse_artifacts(values, option), source_root, build_dir)
+        require(actual == expected,
+                f"{option} artifacts changed while CTest ran; no receipt was written")
+    _, _, current_inventory_digest = read_inventory(args.ctest, build_dir, args.config)
+    require(current_inventory_digest == inventory_digest,
+            "CTest registration changed while CTest ran; no receipt was written")
+    require(git_identity(source_root) == source_identity,
+            "source identity changed while CTest ran; no receipt was written")
+
+
 def run_gate(args: argparse.Namespace) -> None:
     source_root = args.source_root.resolve()
     build_dir = args.build_dir.resolve()
@@ -427,6 +450,19 @@ def run_gate(args: argparse.Namespace) -> None:
             "source identity changed after Sirius configuration")
     if args.alignment_mode in {"qualification", "release"}:
         require(clean, f"{args.alignment_mode} Mandatory gate requires a clean source tree")
+
+    tested = parse_artifacts(args.tested_artifact, "--tested-artifact")
+    products = parse_artifacts(args.product_artifact, "--product-artifact")
+    require(set(tested) == TESTED_ARTIFACTS,
+            "Mandatory gate invocation omitted a test executable")
+    require(BASE_PRODUCTS <= set(products) <= RELEASE_PRODUCTS,
+            "Mandatory gate invocation has an invalid product set")
+    if args.alignment_mode in {"qualification", "release"}:
+        require(set(products) == RELEASE_PRODUCTS,
+                f"{args.alignment_mode} Mandatory gate invocation omitted a product artifact")
+
+    tested_records = artifact_records(tested, source_root, build_dir)
+    product_records = artifact_records(products, source_root, build_dir)
 
     _, registered_names, inventory_digest = read_inventory(args.ctest, build_dir, args.config)
     command = [
@@ -449,18 +485,8 @@ def run_gate(args: argparse.Namespace) -> None:
     require(executed_names == registered_names,
             "Mandatory JUnit identities do not equal live CTest registration")
 
-    tested = parse_artifacts(args.tested_artifact, "--tested-artifact")
-    products = parse_artifacts(args.product_artifact, "--product-artifact")
-    require(set(tested) == TESTED_ARTIFACTS,
-            "Mandatory gate invocation omitted a test executable")
-    require(BASE_PRODUCTS <= set(products) <= RELEASE_PRODUCTS,
-            "Mandatory gate invocation has an invalid product set")
-    if args.alignment_mode in {"qualification", "release"}:
-        require(set(products) == RELEASE_PRODUCTS,
-                f"{args.alignment_mode} Mandatory gate invocation omitted a product artifact")
-
-    tested_records = artifact_records(tested, source_root, build_dir)
-    product_records = artifact_records(products, source_root, build_dir)
+    verify_execution_inputs(args, (revision, clean), inventory_digest,
+                            tested_records, product_records)
     junit_record = artifact_records({"junit": junit}, source_root, build_dir)["junit"]
     log_record = artifact_records({"log": log}, source_root, build_dir)["log"]
     document = {
@@ -505,6 +531,15 @@ def run_native_build_gate(args: argparse.Namespace) -> None:
     require(revision == args.source_revision and clean == configured_clean and clean,
             "native build source identity is dirty, changed, or not exact")
 
+    tested = parse_artifacts(args.tested_artifact, "--tested-artifact")
+    products = parse_artifacts(args.product_artifact, "--product-artifact")
+    require(set(tested) == TESTED_ARTIFACTS,
+            "native build gate invocation omitted a compiled test executable")
+    require(set(products) == RELEASE_PRODUCTS,
+            "native build gate invocation omitted a strict product artifact")
+    tested_records = artifact_records(tested, source_root, build_dir)
+    product_records = artifact_records(products, source_root, build_dir)
+
     _, registered_names, inventory_digest = read_inventory(args.ctest, build_dir, args.config)
     selected_names = set(NATIVE_BUILD_EVIDENCE_TESTS)
     require(selected_names <= registered_names,
@@ -532,14 +567,8 @@ def run_native_build_gate(args: argparse.Namespace) -> None:
     require(executed_names == selected_names,
             "native build JUnit differs from the exact non-render authority selection")
 
-    tested = parse_artifacts(args.tested_artifact, "--tested-artifact")
-    products = parse_artifacts(args.product_artifact, "--product-artifact")
-    require(set(tested) == TESTED_ARTIFACTS,
-            "native build gate invocation omitted a compiled test executable")
-    require(set(products) == RELEASE_PRODUCTS,
-            "native build gate invocation omitted a strict product artifact")
-    tested_records = artifact_records(tested, source_root, build_dir)
-    product_records = artifact_records(products, source_root, build_dir)
+    verify_execution_inputs(args, (revision, clean), inventory_digest,
+                            tested_records, product_records)
     document = {
         "schema_version": SCHEMA_VERSION,
         "kind": NATIVE_BUILD_GATE_KIND,
@@ -638,6 +667,92 @@ def expect_rejection(callback, description: str) -> None:
     except ValueError:
         return
     raise ValueError(f"negative control accepted {description}")
+
+
+def self_test_execution_inputs(source: Path, build: Path, tested: dict, products: dict,
+                               inventory: dict) -> None:
+    from contextlib import redirect_stdout
+    from io import StringIO
+    from unittest.mock import patch
+
+    revision = "a" * 40
+    originals = {path: path.read_bytes() for path in (*tested.values(), *products.values())}
+    for native, runner in ((False, run_gate), (True, run_native_build_gate)):
+        for mutation in ("none", "restored", "tested", "product", "missing",
+                         "revision", "dirty", "registration"):
+            stamp = build / "execution-controls" / "gate.json"
+            stamp.parent.mkdir(exist_ok=True)
+            stamp.write_text("stale receipt\n", encoding="utf-8")
+            live_inventory = copy.deepcopy(inventory)
+            live_revision = revision
+            live_status = ""
+            executed = False
+            args = argparse.Namespace(
+                source_root=source, build_dir=build, stamp=stamp,
+                source_revision=revision, source_tree_clean="true",
+                alignment_mode="qualification", ctest=Path("fixture-ctest"),
+                config="Release",
+                tested_artifact=[f"{name}={path}" for name, path in tested.items()],
+                product_artifact=[f"{name}={path}" for name, path in products.items()],
+            )
+
+            def external_command(command, **kwargs):
+                nonlocal live_revision, live_status, executed
+                if command[:3] == ["git", "rev-parse", "HEAD"]:
+                    output = live_revision
+                elif command[:2] == ["git", "status"]:
+                    output = live_status
+                elif "--show-only=json-v1" in command:
+                    output = json.dumps(live_inventory)
+                else:
+                    require("--output-junit" in command,
+                            "unexpected self-test external command")
+                    executed = True
+                    names = (set(NATIVE_BUILD_EVIDENCE_TESTS) if native else
+                             {test["name"] for test in inventory["tests"]})
+                    junit_path = Path(command[command.index("--output-junit") + 1])
+                    junit_path.write_text(
+                        "<testsuite>" + "".join(
+                            f'<testcase name="{name}"/>' for name in sorted(names)
+                        ) + "</testsuite>\n", encoding="utf-8")
+                    if mutation == "tested":
+                        path = tested["sirius_core_tests"]
+                        path.write_bytes(b"x" * len(originals[path]))
+                    elif mutation == "product":
+                        path = products["trace_spv"]
+                        path.write_bytes(b"x" * len(originals[path]))
+                    elif mutation in {"missing", "restored"}:
+                        path = products["starfield"]
+                        path.unlink()
+                        if mutation == "restored":
+                            path.write_bytes(originals[path])
+                    elif mutation == "revision":
+                        live_revision = "b" * 40
+                    elif mutation == "dirty":
+                        live_status = " M source.cpp"
+                    elif mutation == "registration":
+                        # Preserve names and labels while changing what CTest runs.
+                        live_inventory["tests"][0]["command"] = ["replacement-test"]
+                    output = "fixture CTest passed\n"
+                return subprocess.CompletedProcess(command, 0, stdout=output, stderr="")
+
+            try:
+                with patch.object(subprocess, "run", side_effect=external_command), \
+                     redirect_stdout(StringIO()):
+                    if mutation in {"none", "restored"}:
+                        runner(args)
+                        receipt = json.loads(stamp.read_text(encoding="utf-8"))
+                        require(receipt["status"] == "passed",
+                                "unchanged gate execution did not issue a receipt")
+                    else:
+                        expect_rejection(lambda: runner(args),
+                                         f"{runner.__name__} execution changed {mutation}")
+                        require(not stamp.exists(),
+                                "changed execution retained a promotable receipt")
+                require(executed, "execution mutation control never reached CTest")
+            finally:
+                for path, payload in originals.items():
+                    path.write_bytes(payload)
 
 
 def self_test() -> None:
@@ -819,6 +934,8 @@ def self_test() -> None:
         (installed / "share/sirius/kernels/trace.spv").write_bytes(b"stale\n")
         expect_rejection(lambda: verify_installed(document, installed, stamp, ""),
                          "stale installed product")
+
+        self_test_execution_inputs(source, build, tested_paths, product_paths, inventory)
 
 
 def main() -> int:

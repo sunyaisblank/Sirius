@@ -520,18 +520,20 @@ TEST(KernelParity, NullProjectionPreservesConeBranchAndFailsClosed) {
         static_cast<float>(std::abs(first_root) > std::abs(second_root) ? first_root : second_root);
     near_stationary.u0 = large_root + 1000.0f;
 
-    // At r=2M, g_00 is exactly zero.  A radial tangent has a linear temporal
-    // root; a purely transverse tangent has neither a quadratic nor a linear
-    // solution and must be rejected.
+    // At r=2M, g_00 is exactly zero. A radial tangent has a linear temporal
+    // root. A purely transverse tangent has no temporal root but does have the
+    // stationary-limit generator as a spatial fallback with unchanged k^0.
     Sample linear = KerrSchildAt(1.0f, 0.0f, 0.0f, 2.0f, 0.0f, 0.0f);
     linear.u0 = 0.8f;
     linear.u1 = -1.0f;
-    Sample absent = linear;
-    absent.u1 = 0.0f;
-    absent.u2 = 1.0f;
+    Sample spatial_fallback = linear;
+    spatial_fallback.u1 = 0.0f;
+    spatial_fallback.u2 = 1.0f;
+    Sample invalid = linear;
+    invalid.u0 = std::numeric_limits<float>::quiet_NaN();
 
-    const std::vector<Sample> samples = {flat_past,       flat_future, inner_near, inner_far,
-                                         near_stationary, linear,      absent};
+    const std::vector<Sample> samples = {flat_past,       flat_future, inner_near,       inner_far,
+                                         near_stationary, linear,      spatial_fallback, invalid};
     const auto result = RunProbe(*f.device, f.kernel, kOpNullProjection, samples);
     const std::array<float, 6> expected_temporal = {-1.0f, 1.0f, -1.0f, -3.0f, large_root, 1.0f};
 
@@ -549,12 +551,16 @@ TEST(KernelParity, NullProjectionPreservesConeBranchAndFailsClosed) {
         EXPECT_LT(result[base + 6], 2.0e-6f) << "projected null residual, sample " << index;
     }
 
-    const std::size_t absent_base = expected_temporal.size() * kResultStride;
-    EXPECT_FLOAT_EQ(result[absent_base], 0.0f);
-    EXPECT_FLOAT_EQ(result[absent_base + 1], absent.u0);
-    EXPECT_FLOAT_EQ(result[absent_base + 2], absent.u1);
-    EXPECT_FLOAT_EQ(result[absent_base + 3], absent.u2);
-    EXPECT_FLOAT_EQ(result[absent_base + 4], absent.u3);
+    const std::size_t fallback_base = expected_temporal.size() * kResultStride;
+    EXPECT_FLOAT_EQ(result[fallback_base], 1.0f);
+    EXPECT_FLOAT_EQ(result[fallback_base + 1], spatial_fallback.u0);
+    EXPECT_FLOAT_EQ(result[fallback_base + 2], spatial_fallback.u1);
+    EXPECT_FLOAT_EQ(result[fallback_base + 3], 0.0f);
+    EXPECT_FLOAT_EQ(result[fallback_base + 4], spatial_fallback.u3);
+    EXPECT_LT(result[fallback_base + 6], 2.0e-6f);
+
+    const std::size_t invalid_base = fallback_base + kResultStride;
+    EXPECT_FLOAT_EQ(result[invalid_base], 0.0f);
 }
 
 TEST(KernelParity, WormholeAndWarpMetricMatchLegacy) {
@@ -1291,13 +1297,8 @@ TEST(KernelParity, PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capabilit
 TEST(KernelParity, PrecisionRungsConserveNearExtremalKerrWithoutImageComparison) {
     Fixture fp32 = OpenProbe();
     if (!fp32.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
-    if (!fp32.device->Info().supports_fp64) {
-        GTEST_SKIP() << "device lacks shaderFloat64";
-    }
     Fixture compensated = OpenProbe("parity_probe_fp32comp.spv");
-    Fixture fp64 = OpenProbe("parity_probe_fp64.spv");
     ASSERT_TRUE(compensated.ready) << "compensated precision probe unavailable";
-    ASSERT_TRUE(fp64.ready) << "fp64 precision probe unavailable";
 
     Sample near_extremal;
     near_extremal.metric_id = kKerrSchild;
@@ -1318,8 +1319,6 @@ TEST(KernelParity, PrecisionRungsConserveNearExtremalKerrWithoutImageComparison)
         RunProbe(*fp32.device, fp32.kernel, kOpLiveCartConservation, {near_extremal});
     const auto result_compensated =
         RunProbe(*compensated.device, compensated.kernel, kOpLiveCartConservation, {near_extremal});
-    const auto result64 =
-        RunProbe(*fp64.device, fp64.kernel, kOpLiveCartConservation, {near_extremal});
 
     const auto validate_progress = [](const std::vector<float>& result, const char* rung) {
         for (int component = 0; component < 12; ++component) {
@@ -1334,6 +1333,28 @@ TEST(KernelParity, PrecisionRungsConserveNearExtremalKerrWithoutImageComparison)
     };
     validate_progress(result32, "fp32");
     validate_progress(result_compensated, "fp32-comp");
+    const float drift32 = result32[0] + result32[1] + result32[2] + result32[3];
+    const float drift_compensated = result_compensated[0] + result_compensated[1] +
+                                    result_compensated[2] + result_compensated[3];
+    EXPECT_LE(drift_compensated, drift32 * 1.25f + 1.0e-7f)
+        << "compensated accumulation regressed the invariant envelope";
+    if (!fp32.device->Info().supports_fp64) {
+#ifdef SIRIUS_KERNEL_DIR
+        const auto spirv64 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/parity_probe_fp64.spv");
+        ASSERT_FALSE(spirv64.empty());
+        const auto refused = fp32.device->LoadKernel(spirv64);
+        ASSERT_FALSE(refused.has_value());
+        EXPECT_EQ(refused.error().domain(), sirius::base::ErrorDomain::kKernel);
+        EXPECT_NE(refused.error().detail().find("shaderFloat64"), std::string::npos);
+        RecordProperty("fp64_evidence", "unsupported_kernel_declined");
+#endif
+        return;
+    }
+    RecordProperty("fp64_evidence", "native_invariants_executed");
+    Fixture fp64 = OpenProbe("parity_probe_fp64.spv");
+    ASSERT_TRUE(fp64.ready) << "fp64 precision probe unavailable";
+    const auto result64 =
+        RunProbe(*fp64.device, fp64.kernel, kOpLiveCartConservation, {near_extremal});
     validate_progress(result64, "fp64");
 
     EXPECT_LT(result64[0], 1.0e-6f) << "fp64 energy drift";
@@ -1341,12 +1362,7 @@ TEST(KernelParity, PrecisionRungsConserveNearExtremalKerrWithoutImageComparison)
     EXPECT_LT(result64[2], 1.0e-6f) << "fp64 Carter drift";
     EXPECT_LT(result64[3], 1.0e-8f) << "fp64 relative null residual";
 
-    const float drift32 = result32[0] + result32[1] + result32[2] + result32[3];
-    const float drift_compensated = result_compensated[0] + result_compensated[1] +
-                                    result_compensated[2] + result_compensated[3];
     const float drift64 = result64[0] + result64[1] + result64[2] + result64[3];
-    EXPECT_LE(drift_compensated, drift32 * 1.25f + 1.0e-7f)
-        << "compensated accumulation regressed the invariant envelope";
     EXPECT_LE(drift64, drift32 + 1.0e-8f) << "fp64 failed to improve the invariant envelope";
 }
 
@@ -1517,7 +1533,7 @@ TEST(KernelParity, DeviceTidalContractionMatchesAnalyticSchwarzschildAtMatchedEv
                 std::max(maximum_error, std::abs(actual[component] - expected[component]));
         }
         // The production path is fp32 and finite-differences an analytic
-        // Christoffel tensor. Its precision-matched five-point stencil stays
+        // Christoffel tensor. Its precision-matched seven-point stencil stays
         // below 5e-4 here, versus a measured 1.37e-2 for the former stencil.
         EXPECT_LT(maximum_error / std::max(scale, 1.0e-30), 5.0e-4)
             << "device matched-event tidal contraction at r=" << events[sample].r;

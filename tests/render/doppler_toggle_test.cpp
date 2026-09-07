@@ -43,7 +43,7 @@ AsymmetryMeasurement DiskAsymmetry(bool doppler_beaming) {
     tc.horizon_factor = 1.05f;
     tc.max_steps = 20000;
     tc.enable_disk = true;
-    tc.disk_inner = 2.32f;  // Prograde ISCO for a = 0.9.
+    tc.disk_inner = AccretionDiskD::ComputeIsco(0.9);
     tc.disk_outer = 20.0f;
     tc.disk_temperature_inner = 1.0f;
     tc.doppler_beaming = doppler_beaming;
@@ -77,8 +77,10 @@ AsymmetryMeasurement DiskAsymmetry(bool doppler_beaming) {
             double g = r.redshift;
             double t_emit = r.disk_temperature;
             double lum = std::pow(g, 4.0) * std::pow(t_emit, 4.0);  // Observed beamed flux.
-            const double doppler_factor =
-                std::pow(r.full_disk_redshift / r.zamo_disk_redshift, 4.0);
+            // Measure the branch selected by the toggle.  The trace result
+            // intentionally retains both physical transfer witnesses even
+            // when shading selects the ZAMO diagnostic branch.
+            const double doppler_factor = std::pow(r.redshift / r.zamo_disk_redshift, 4.0);
             if (left) {
                 lum_left += lum;
                 factor_left += doppler_factor;

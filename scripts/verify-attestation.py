@@ -1102,7 +1102,8 @@ def verify_document(data, location, expected_operating_model_sha256=None):
             if (
                 any(line.startswith("window-created ") for line in lines)
                 and any(line.startswith("keyboard-callback ") for line in lines)
-                and any(line.startswith("pointer-callback ") for line in lines)
+                and any(line.startswith("pointer-callback kind=cursor ") for line in lines)
+                and any(line.startswith("pointer-callback kind=scroll ") for line in lines)
             ):
                 frames = [
                     line for line in lines
@@ -1758,7 +1759,8 @@ def self_test():
             "window-created opengl-version=self-test\n"
             "frame-published backend=Vulkan width=64 height=64\n"
             "keyboard-callback key=87 action=press\n"
-            "pointer-callback kind=cursor x=1 y=1 dragging=false\n",
+            "pointer-callback kind=cursor x=1 y=1 dragging=false\n"
+            "pointer-callback kind=scroll x=0 y=1\n",
             encoding="utf-8",
         )
         viewer_payload = viewer_transcript.read_bytes()
@@ -1800,6 +1802,26 @@ def self_test():
             "transcript.log": valid["artifacts"]["transcript.log"],
         }
         verify_document(viewer, root / "attestation.json")
+        # A pointer boolean or cursor motion cannot stand in for observed wheel
+        # delivery. Rehash each otherwise valid transcript to test semantics.
+        for missing_kind in ("cursor", "scroll"):
+            viewer_transcript.write_bytes(b"".join(
+                line for line in viewer_payload.splitlines(keepends=True)
+                if not line.startswith(f"pointer-callback kind={missing_kind} ".encode())
+            ))
+            incomplete_payload = viewer_transcript.read_bytes()
+            incomplete_viewer = json.loads(json.dumps(viewer))
+            incomplete_viewer["artifacts"]["viewer-transcript.log"].update(
+                bytes=len(incomplete_payload),
+                sha256=hashlib.sha256(incomplete_payload).hexdigest(),
+            )
+            try:
+                verify_document(incomplete_viewer, root / "attestation.json")
+            except ValueError:
+                pass
+            else:
+                raise ValueError(f"negative control accepted: viewer missing {missing_kind}")
+        viewer_transcript.write_bytes(viewer_payload)
         for field in (
             "window_created",
             "frame_observed",

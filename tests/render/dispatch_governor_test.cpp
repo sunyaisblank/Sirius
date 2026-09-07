@@ -1,26 +1,34 @@
 // Dispatch governor gate (dispatch_governor.h): band heights honour their
-// [1, remaining] bound, growth is damped, overshoot shrinks proportionally,
+// [1, remaining] bound, growth doubles and overshoot halves actual work,
 // feedback is attributed to the work actually dispatched, learned area
-// normalises across band widths, disabling restores one-dispatch-per-tile,
-// and the environment override is loud on garbage. The two regression tests
-// pin the confirmed findings of the 2026-07-28 adversarial review.
+// normalises across band widths, hard caps survive disabled adaptation,
+// and the environment override is loud on garbage.
 // Pure-arithmetic suite; no Vulkan device is touched.
 
 #include "sirius/render/dispatch_governor.h"
+
+#include "sirius/render/vulkan_renderer.h"
 
 #include <gtest/gtest.h>
 
 #include "support/scoped_environment.h"
 
 #include <cstdint>
+#include <limits>
 
 namespace {
 
 using sirius::render::BandController;
 using sirius::render::kBandGrowthCap;
 using sirius::render::kDefaultDispatchTargetMs;
+using sirius::render::kHeavyFp32DispatchTargetMs;
 using sirius::render::kInitialBandRows;
+using sirius::render::kMaxTileEdge;
+using sirius::render::kWatchdogSafeMaxBandRows;
+using sirius::render::kWatchdogSafeMaxTileEdge;
+using sirius::render::PrecisionRung;
 using sirius::render::ResolveDispatchTargetMs;
+using sirius::render::ResolveVulkanDispatchLimits;
 using sirius::test::ScopedEnvironmentVariable;
 
 // Area of a full-width band `rows` high on a `width`-wide tile.
@@ -28,12 +36,60 @@ using sirius::test::ScopedEnvironmentVariable;
     return static_cast<std::int64_t>(rows) * width;
 }
 
-TEST(DispatchGovernor, FirstBandIsTheInitialHeightClampedToTheTile) {
+TEST(DispatchGovernor, FirstBandUsesTheMinimumFullWidthRowBeforeMeasurement) {
+    static_assert(kInitialBandRows == 1);
     BandController wide(4096, 250.0);
     EXPECT_EQ(wide.NextRows(4096, 4096), kInitialBandRows);
 
     BandController narrow(4, 250.0);
-    EXPECT_EQ(narrow.NextRows(4, 4), 4);
+    EXPECT_EQ(narrow.NextRows(4, 4), kInitialBandRows);
+
+    BandController fp64_limited(64, 500.0, 1, 64);
+    for (int i = 0; i < 8; ++i) fp64_limited.Record(64, 0.001);
+    EXPECT_EQ(fp64_limited.NextRows(64, 64), 1);
+}
+
+TEST(DispatchGovernor, ExpensivePrecisionAndBundleWorkloadsUseTheStrictPhysicalFootprint) {
+    const auto ordinary = ResolveVulkanDispatchLimits(PrecisionRung::Fp32, false, false);
+    EXPECT_EQ(ordinary.tile_edge_cap, kMaxTileEdge);
+    EXPECT_EQ(ordinary.max_band_rows, kMaxTileEdge);
+    EXPECT_DOUBLE_EQ(ordinary.default_target_ms, 250.0);
+
+    const auto ordinary_comp = ResolveVulkanDispatchLimits(PrecisionRung::Fp32Comp, false, false);
+    EXPECT_EQ(ordinary_comp.tile_edge_cap, ordinary.tile_edge_cap);
+    EXPECT_EQ(ordinary_comp.max_band_width, ordinary.max_band_width);
+    EXPECT_EQ(ordinary_comp.max_band_rows, ordinary.max_band_rows);
+    EXPECT_EQ(ordinary_comp.max_pixels, ordinary.max_pixels);
+    EXPECT_DOUBLE_EQ(ordinary_comp.default_target_ms, 250.0);
+    const auto ordinary_fp64 = ResolveVulkanDispatchLimits(PrecisionRung::Fp64, false, false);
+    EXPECT_EQ(ordinary_fp64.max_band_rows, 1);
+    EXPECT_EQ(ordinary_fp64.max_pixels, 64);
+    EXPECT_DOUBLE_EQ(ordinary_fp64.default_target_ms, 250.0);
+
+    for (const auto precision : {PrecisionRung::Fp64, PrecisionRung::Fp32Comp}) {
+        for (const auto limits : {
+                 ResolveVulkanDispatchLimits(precision, true, false),
+                 ResolveVulkanDispatchLimits(precision, false, true),
+                 ResolveVulkanDispatchLimits(precision, true, true),
+             }) {
+            EXPECT_EQ(limits.tile_edge_cap, kWatchdogSafeMaxTileEdge);
+            EXPECT_EQ(limits.max_band_width, 64);
+            EXPECT_EQ(limits.max_band_rows, 1);
+            EXPECT_EQ(limits.max_pixels, 64);
+            EXPECT_DOUBLE_EQ(limits.default_target_ms, 250.0);
+        }
+    }
+    for (const auto limits : {
+             ResolveVulkanDispatchLimits(PrecisionRung::Fp32, true, false),
+             ResolveVulkanDispatchLimits(PrecisionRung::Fp32, false, true),
+             ResolveVulkanDispatchLimits(PrecisionRung::Fp32, true, true),
+         }) {
+        EXPECT_EQ(limits.tile_edge_cap, kWatchdogSafeMaxTileEdge);
+        EXPECT_EQ(limits.max_band_width, 64);
+        EXPECT_EQ(limits.max_band_rows, kWatchdogSafeMaxBandRows);
+        EXPECT_EQ(limits.max_pixels, 256);
+        EXPECT_DOUBLE_EQ(limits.default_target_ms, 750.0);
+    }
 }
 
 TEST(DispatchGovernor, BandsNeverExceedRemainingRowsNorDropBelowOne) {
@@ -60,17 +116,17 @@ TEST(DispatchGovernor, GrowthPerStepIsBoundedByTheCap) {
     EXPECT_GT(after, before);
 }
 
-TEST(DispatchGovernor, ZeroMeasurementTakesTheCappedGrowthStep) {
+TEST(DispatchGovernor, ZeroMeasurementFallsBackToMinimumWork) {
     BandController bands(4096, 250.0);
     const int before = bands.NextRows(4096, 4096);
-    bands.Record(Area(before, 4096), 0.0);  // below clock resolution
-    EXPECT_EQ(bands.NextRows(4096, 4096), static_cast<int>(before * kBandGrowthCap));
+    bands.Record(Area(before, 4096), 0.0);  // no trustworthy throughput estimate
+    EXPECT_EQ(bands.NextRows(4096, 4096), 1);
 }
 
-TEST(DispatchGovernor, OvershootShrinksProportionallyInOneStep) {
+TEST(DispatchGovernor, OvershootHalvesTheObservedWork) {
     BandController bands(4096, 250.0);
-    bands.Record(Area(kInitialBandRows, 4096), 1000.0);  // 4x the target
-    EXPECT_EQ(bands.NextRows(4096, 4096), kInitialBandRows / 4);
+    ASSERT_TRUE(bands.Record(Area(8, 4096), 500.0));
+    EXPECT_EQ(bands.NextRows(4096, 4096), 4);
 }
 
 // Regression (adversarial review 2026-07-28, confirmed major): a tile's
@@ -113,31 +169,92 @@ TEST(DispatchGovernor, LearnedAreaNormalisesAcrossBandWidths) {
     EXPECT_EQ(bands.NextRows(kEdge, kEdge), (Area(2000, kNarrow)) / kEdge);
 }
 
-TEST(DispatchGovernor, DisabledControllerDispatchesWholeTilesAndIgnoresFeedback) {
+TEST(DispatchGovernor, DisabledAdaptationPreservesCapsAndIgnoresOrdinaryFeedback) {
     BandController bands(4096, 0.0);
     EXPECT_FALSE(bands.Enabled());
     EXPECT_EQ(bands.NextRows(2864, 2864), 2864);
-    bands.Record(Area(2864, 2864), 1e9);
+    bands.Record(Area(2864, 2864), 500.0);
     EXPECT_EQ(bands.NextRows(2864, 2864), 2864);
+    EXPECT_TRUE(bands.Record(Area(2864, 2864), 1100.0));
+    EXPECT_EQ(bands.NextRows(2864, 2864), 1)
+        << "safety fallback remains active when adaptation is disabled";
+}
+
+TEST(DispatchGovernor, StrictCapsApplyToEveryTailEvenWithoutAdaptation) {
+    for (const double target : {0.0, kDefaultDispatchTargetMs, kHeavyFp32DispatchTargetMs}) {
+        for (int max_rows : {1, 4}) {
+            for (int width = 1; width <= 64; ++width) {
+                for (int remaining = 1; remaining <= 64; ++remaining) {
+                    BandController bands(width, target, max_rows, 64 * max_rows);
+                    for (int observation = 0; observation < 8; ++observation) {
+                        const int rows = bands.NextRows(remaining, width);
+                        ASSERT_GE(rows, 1);
+                        ASSERT_LE(rows, remaining);
+                        ASSERT_LE(rows, max_rows);
+                        ASSERT_LE(rows * width, 64 * max_rows);
+                        ASSERT_TRUE(bands.Record(rows * width, 0.001));
+                    }
+                }
+            }
+        }
+    }
+    // A row limit remains independent of an area cap on narrow tails.
+    BandController one_row(64, 0.0, 1);
+    EXPECT_EQ(one_row.NextRows(64, 1), 1);
+}
+
+TEST(DispatchGovernor, NearTargetLatencyStillGrowsWholeBands) {
+    BandController bands(64, kHeavyFp32DispatchTargetMs, 4, 256);
+    EXPECT_EQ(bands.NextRows(64, 64), 1);
+    ASSERT_TRUE(bands.Record(64, 700.0));
+    EXPECT_EQ(bands.NextRows(64, 64), 2)
+        << "fractional proportional growth would remain trapped at one row";
+    ASSERT_TRUE(bands.Record(128, 720.0));
+    EXPECT_EQ(bands.NextRows(64, 64), 4);
+    ASSERT_TRUE(bands.Record(256, 800.0));
+    EXPECT_EQ(bands.NextRows(64, 64), 2);
+    ASSERT_TRUE(bands.Record(128, 900.0));
+    EXPECT_EQ(bands.NextRows(64, 64), 1);
+}
+
+TEST(DispatchGovernor, InvalidTimingAndIrreducibleOvershootDecline) {
+    for (double bad : {-1.0, std::numeric_limits<double>::infinity(),
+                       std::numeric_limits<double>::quiet_NaN()}) {
+        BandController bands(8, 250.0, 8, 64);
+        EXPECT_FALSE(bands.Record(8, bad));
+        EXPECT_EQ(bands.NextRows(64, 8), 1);
+    }
+    for (double target : {0.0, kDefaultDispatchTargetMs, kHeavyFp32DispatchTargetMs}) {
+        BandController bands(8, target, 8, 64);
+        EXPECT_TRUE(bands.Record(64, 1100.0));
+        EXPECT_EQ(bands.NextRows(64, 8), 1)
+            << "an excessive observation forces minimum work even with adaptation disabled";
+        EXPECT_FALSE(bands.Record(8, 1100.0));
+    }
 }
 
 TEST(DispatchGovernor, TargetDefaultsWhenTheEnvironmentIsUnset) {
-    ScopedEnvironmentVariable clear("SIRIUS_DISPATCH_TARGET_MS", nullptr);
-    const auto target = ResolveDispatchTargetMs();
-    ASSERT_TRUE(target.has_value());
-    EXPECT_DOUBLE_EQ(*target, kDefaultDispatchTargetMs);
+    for (const char* unset : {static_cast<const char*>(nullptr), ""}) {
+        ScopedEnvironmentVariable clear("SIRIUS_DISPATCH_TARGET_MS", unset);
+        const auto target = ResolveDispatchTargetMs();
+        ASSERT_TRUE(target.has_value());
+        EXPECT_DOUBLE_EQ(*target, kDefaultDispatchTargetMs);
+        const auto heavy_target = ResolveDispatchTargetMs(kHeavyFp32DispatchTargetMs);
+        ASSERT_TRUE(heavy_target.has_value());
+        EXPECT_DOUBLE_EQ(*heavy_target, kHeavyFp32DispatchTargetMs);
+    }
 }
 
 TEST(DispatchGovernor, TargetHonoursTheOverrideIncludingZero) {
-    {
+    for (double profile_default : {kDefaultDispatchTargetMs, kHeavyFp32DispatchTargetMs}) {
         ScopedEnvironmentVariable set("SIRIUS_DISPATCH_TARGET_MS", "125.5");
-        const auto target = ResolveDispatchTargetMs();
+        const auto target = ResolveDispatchTargetMs(profile_default);
         ASSERT_TRUE(target.has_value());
         EXPECT_DOUBLE_EQ(*target, 125.5);
     }
-    {
+    for (double profile_default : {kDefaultDispatchTargetMs, kHeavyFp32DispatchTargetMs}) {
         ScopedEnvironmentVariable zero("SIRIUS_DISPATCH_TARGET_MS", "0");
-        const auto target = ResolveDispatchTargetMs();
+        const auto target = ResolveDispatchTargetMs(profile_default);
         ASSERT_TRUE(target.has_value());
         EXPECT_DOUBLE_EQ(*target, 0.0);
         EXPECT_FALSE(BandController(64, *target).Enabled());
@@ -151,6 +268,7 @@ TEST(DispatchGovernor, TargetFailsLoudOnGarbageNegativesAndNonFinite) {
     for (const char* bad : {"fast", "-1", "250ms", "nan", "inf", "INFINITY", "1e400", "-1e400"}) {
         ScopedEnvironmentVariable set("SIRIUS_DISPATCH_TARGET_MS", bad);
         EXPECT_FALSE(ResolveDispatchTargetMs().has_value()) << bad;
+        EXPECT_FALSE(ResolveDispatchTargetMs(kHeavyFp32DispatchTargetMs).has_value()) << bad;
     }
 }
 

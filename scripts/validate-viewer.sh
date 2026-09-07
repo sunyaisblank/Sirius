@@ -212,8 +212,10 @@ WINDOW_IDS="$(timeout 30s xdotool search --sync --onlyvisible --pid "$VIEWER_PID
 read -r WINDOW_ID _ <<<"$WINDOW_IDS"
 [[ "$WINDOW_ID" =~ ^[0-9]+$ ]] || { say "xdotool returned no numeric window id"; exit 1; }
 
+# Match the cold-pipeline allowance used by the progressive Vulkan gate.
 FRAME_READY=0
-for ((attempt = 0; attempt < 600; ++attempt)); do
+FRAME_DEADLINE=$((SECONDS + 600))
+while ((SECONDS < FRAME_DEADLINE)); do
     if grep -q '^frame-published backend=Vulkan ' "$TRANSCRIPT" 2>/dev/null; then
         FRAME_READY=1
         break
@@ -222,7 +224,7 @@ for ((attempt = 0; attempt < 600; ++attempt)); do
     sleep 0.1
 done
 [[ "$FRAME_READY" -eq 1 ]] || {
-    say "the native Vulkan viewer published no frame within 60 seconds"
+    say "the native Vulkan viewer published no frame within 600 seconds"
     exit 1
 }
 
@@ -251,7 +253,8 @@ grep -q '^frame-published backend=Vulkan ' "$TRANSCRIPT" || {
     exit 1
 }
 grep -q '^keyboard-callback ' "$TRANSCRIPT" || { say "no keyboard callback was recorded"; exit 1; }
-grep -q '^pointer-callback ' "$TRANSCRIPT" || { say "no pointer callback was recorded"; exit 1; }
+grep -q '^pointer-callback kind=cursor ' "$TRANSCRIPT" || { say "no cursor callback was recorded"; exit 1; }
+grep -q '^pointer-callback kind=scroll ' "$TRANSCRIPT" || { say "no scroll callback was recorded"; exit 1; }
 tee -a "$LOG" <"$TRANSCRIPT"
 assert_source_identity
 

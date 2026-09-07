@@ -11,6 +11,7 @@
 #include "sirius/core/tensor.h"
 
 #include <cmath>
+#include <optional>
 
 namespace sirius::core {
 
@@ -113,6 +114,13 @@ class Geodesic {
     // pair; the step is adapted from ||y5 - y4||. A false result with
     // terminated == 0 is a recoverable rejection and must be retried.
     static bool IntegrateStepRk45(Lightray& ray, IMetric* metric, const IntegratorConfig& config);
+
+    // Project a finite contravariant tangent onto the metric null cone using the
+    // nearest temporal root when represented. In an ergoregion where no such
+    // root exists, use the smallest normalized spatial correction so k^0 and
+    // the incoming cone orientation remain unchanged.
+    static std::optional<Vec4> ProjectNullTangentPreservingBranch(const Vec4& tangent,
+                                                                  const Metric4d& metric);
 
     // Optimal step from the error estimate: h_new = h safety (tol/err)^(1/5).
     static float ComputeOptimalStep(float h, float error, float tolerance,

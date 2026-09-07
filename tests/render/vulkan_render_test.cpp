@@ -19,12 +19,14 @@
 
 #include <gtest/gtest.h>
 
+#include "kerr_shadow_oracle.h"
 #include "support/scoped_environment.h"
 
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>
+#include <cstring>
 #include <fstream>
 #include <functional>
 #include <limits>
@@ -64,6 +66,10 @@ using sirius::core::CameraRay;
 using sirius::core::KerrSchildFamily;
 using sirius::core::KerrSchildParams;
 using sirius::core::PinholeCamera;
+using sirius::render::test::BardeenShadowPoint;
+using sirius::render::test::KerrShadowScreenPoint;
+using sirius::render::test::MakeStationaryKerrObserver;
+using sirius::render::test::ProjectBardeenAtFiniteObserver;
 
 constexpr double kPi = std::numbers::pi;
 
@@ -189,26 +195,7 @@ KernelFixture OpenKernel() {
     return f;
 }
 
-struct VulkanScreenPoint {
-    double alpha;
-    double beta;
-};
-
-std::optional<VulkanScreenPoint> BardeenScreenPoint(double photon_radius, double spin,
-                                                    double inclination) {
-    const double r = photon_radius;
-    const double a2 = spin * spin;
-    const double xi = (r * r * (r - 3.0) + a2 * (r + 1.0)) / (spin * (1.0 - r));
-    const double eta =
-        r * r * r * (4.0 * a2 - r * (r - 3.0) * (r - 3.0)) / (a2 * (1.0 - r) * (1.0 - r));
-    const double sin_i = std::sin(inclination);
-    const double cos_i = std::cos(inclination);
-    const double alpha = -xi / sin_i;
-    const double beta_squared =
-        eta + a2 * cos_i * cos_i - xi * xi * cos_i * cos_i / (sin_i * sin_i);
-    if (beta_squared < 0.0) return std::nullopt;
-    return VulkanScreenPoint{alpha, std::sqrt(beta_squared)};
-}
+using VulkanScreenPoint = KerrShadowScreenPoint;
 
 // --- Session Vulkan path smoke ----------------------------------------------
 
@@ -394,7 +381,7 @@ TEST(VulkanRenderSession, ThinAndVolumetricDopplerSuppressionAffectLiveEmission)
         return RenderSessionVulkan(40, 24, root + "/sirius_vk_doppler_" + suffix + ".exr",
                                    [=](sirius::render::SessionConfig& config) {
                                        config.enable_volumetric_disk = volumetric;
-                                       config.volumetric_samples = 4;
+                                       if (volumetric) config.volumetric_samples = 4;
                                        config.doppler_beaming = doppler;
                                    });
     };
@@ -606,6 +593,18 @@ TEST(VulkanRenderSession, Fp64RungRendersOrDeclinesLoudly) {
         ExpectFiniteNonConstantWithShadow(rgba, 64, 64, "vk-session-fp64");
     } else {
         EXPECT_TRUE(rgba.empty()) << "fp64 request must decline on a device without shaderFloat64";
+        sirius::render::SessionConfig config;
+        config.width = 64;
+        config.height = 64;
+        config.backend = sirius::render::RenderBackend::Vulkan;
+        sirius::render::DisplayBuffer display;
+        display.Initialise(config.width, config.height);
+        const auto refused = sirius::render::RenderVulkanToDisplay(config, display);
+        ASSERT_FALSE(refused.has_value());
+        EXPECT_EQ(refused.error().domain(), sirius::base::ErrorDomain::kDevice);
+        EXPECT_EQ(refused.error().operation(), "select precision rung");
+        EXPECT_NE(refused.error().detail().find("shaderFloat64"), std::string::npos);
+        RecordProperty("fp64_evidence", "unsupported_render_declined");
     }
 }
 
@@ -633,6 +632,71 @@ TEST(VulkanRenderSession, Kerr160x120CompletesAcrossMultipleGovernedTiles) {
     const auto rgba = RenderSessionVulkan(160, 120, out);
     ASSERT_FALSE(rgba.empty()) << "session Vulkan render did not complete";
     ExpectFiniteNonConstantWithShadow(rgba, 160, 120, "vk-session-160");
+}
+
+// Exercise the product scheduler with two different partitions, including both
+// horizontal and vertical tails. The exact comparison includes the beam alpha
+// channel and every film/pupil sample's accumulation order.
+TEST(VulkanRenderSession, DispatchSubdivisionPreservesExactCameraAndCatalogueOutput) {
+    const auto devices = EnumerateVulkanDevices();
+    if (!devices || devices->empty()) GTEST_SKIP() << "no Vulkan device present";
+    ScopedEnvironmentVariable precision("SIRIUS_PRECISION", "fp32");
+    sirius::render::SessionConfig config;
+    config.width = 17;
+    config.height = 11;
+    config.samples_per_pixel = 3;
+    config.backend = sirius::render::RenderBackend::Vulkan;
+    config.metric_id = sirius::core::MetricId::Kerr;
+    config.black_hole_spin = 0.9;
+    config.enable_disk = false;
+    config.ray_bundles = true;
+    config.point_starfield = true;
+    config.point_starfield_config.star_count = 100000;
+    config.camera_beta_forward = 0.08;
+    config.camera_beta_up = 0.02;
+    config.camera_beta_right = 0.01;
+    config.lens_type = sirius::core::LensType::ThinLens;
+    config.camera_focal_length = 50.0f;
+    config.camera_aperture = 2.8f;
+    config.camera_focus_distance = 30.0f;
+
+    sirius::render::DisplayBuffer minimum;
+    minimum.Initialise(config.width, config.height);
+    sirius::render::DisplayBuffer blocks;
+    blocks.Initialise(config.width, config.height);
+    int minimum_dispatches = 0;
+    {
+        ScopedEnvironmentVariable target("SIRIUS_DISPATCH_TARGET_MS", "0.000000001");
+        const auto result = sirius::render::RenderVulkanToDisplay(config, minimum);
+        ASSERT_TRUE(result.has_value()) << result.error().Description();
+        EXPECT_LE(result->maximum_dispatch_pixels, config.width);
+        minimum_dispatches = result->band_dispatches;
+    }
+    {
+        ScopedEnvironmentVariable target("SIRIUS_DISPATCH_TARGET_MS", "0");
+        const auto result = sirius::render::RenderVulkanToDisplay(config, blocks);
+        ASSERT_TRUE(result.has_value()) << result.error().Description();
+        EXPECT_LE(result->maximum_dispatch_pixels, config.width * 4);
+        EXPECT_GT(result->maximum_dispatch_pixels, config.width);
+        EXPECT_LT(result->band_dispatches, minimum_dispatches);
+    }
+    const auto first = minimum.SnapshotFloatData();
+    const auto second = blocks.SnapshotFloatData();
+    ASSERT_EQ(first.size(), static_cast<std::size_t>(config.width * config.height * 4));
+    ASSERT_EQ(second.size(), first.size());
+    EXPECT_EQ(std::memcmp(first.data(), second.data(), first.size() * sizeof(float)), 0);
+    EXPECT_TRUE(std::all_of(first.begin(), first.end(), [](float x) { return std::isfinite(x); }));
+    float minimum_rgb = std::numeric_limits<float>::max();
+    float maximum_rgb = 0.0f;
+    for (std::size_t pixel = 0; pixel < first.size(); pixel += 4) {
+        for (std::size_t channel = 0; channel < 3; ++channel) {
+            minimum_rgb = std::min(minimum_rgb, first[pixel + channel]);
+            maximum_rgb = std::max(maximum_rgb, first[pixel + channel]);
+        }
+    }
+    EXPECT_GT(maximum_rgb, 0.0f);
+    EXPECT_GT(maximum_rgb, minimum_rgb)
+        << "two blank or constant frames are not an invariance witness";
 }
 
 // --- CPU-versus-Vulkan parity -----------------------------------------------
@@ -787,6 +851,18 @@ TEST(VulkanRenderSession, KerrNearExtremalBardeenBoundaryAt1080p) {
     params[33] = 1.0f;
     params[34] = 1.0f;
 
+    KerrSchildParams metric_parameters;
+    metric_parameters.M = scene.M;
+    metric_parameters.a = scene.spin * scene.M;
+    KerrSchildFamily oracle_metric(metric_parameters);
+    constexpr double kInclination = 60.0 * kPi / 180.0;
+    const auto stationary_observer = MakeStationaryKerrObserver(oracle_metric, scene.spin * scene.M,
+                                                                scene.distance, kInclination);
+    ASSERT_TRUE(stationary_observer.has_value());
+    params[47] = static_cast<float>(stationary_observer->screen_beta[0]);
+    params[48] = static_cast<float>(stationary_observer->screen_beta[1]);
+    params[49] = static_cast<float>(stationary_observer->screen_beta[2]);
+
     std::array<float, 4> radiance{};
     const std::array<std::uint32_t, 1> star_dummy{0u};
     const auto radiance_buffer =
@@ -808,8 +884,7 @@ TEST(VulkanRenderSession, KerrNearExtremalBardeenBoundaryAt1080p) {
     const BufferHandle bindings[] = {*radiance_buffer,   *params_buffer,       *star_buffer,
                                      *point_star_buffer, *point_offset_buffer, *point_index_buffer};
 
-    constexpr double kInclination = 60.0 * kPi / 180.0;
-    constexpr VulkanScreenPoint kAnalyticCentre{-2.1573218480479185, 0.0};
+    constexpr VulkanScreenPoint kAnalyticCentre{2.1573218480479185, 0.0};
     const double tan_half_fov = std::tan(scene.fov_deg * kPi / 360.0);
     const double aspect = static_cast<double>(scene.width) / scene.height;
     const double pixels_per_screen_unit = 0.5 * scene.height / (scene.distance * tan_half_fov);
@@ -838,9 +913,13 @@ TEST(VulkanRenderSession, KerrNearExtremalBardeenBoundaryAt1080p) {
 
     // Same full-curve sample set as the independent CPU classifier.
     for (const double photon_radius : {1.12, 1.2, 1.35, 1.5, 1.8, 2.1, 2.5, 3.0, 3.5, 3.7}) {
-        const auto analytic = BardeenScreenPoint(photon_radius, scene.spin, kInclination);
+        const auto analytic = BardeenShadowPoint(photon_radius, scene.spin, kInclination);
         ASSERT_TRUE(analytic.has_value());
-        const VulkanScreenPoint camera_convention{-analytic->alpha, analytic->beta};
+        const auto finite_observer =
+            ProjectBardeenAtFiniteObserver(*analytic, *stationary_observer, scene.M,
+                                           scene.spin * scene.M, scene.distance, kInclination);
+        ASSERT_TRUE(finite_observer.has_value());
+        const VulkanScreenPoint camera_convention = *finite_observer;
         const VulkanScreenPoint delta{camera_convention.alpha - kAnalyticCentre.alpha,
                                       camera_convention.beta - kAnalyticCentre.beta};
         auto scaled = [&](double scale) {

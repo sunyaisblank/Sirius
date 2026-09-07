@@ -1,10 +1,39 @@
 # Sirius adversarial operational review
 
-Date: 2026-08-31 (Australia/Sydney)
+Current corrective review: 2026-09-07 (Australia/Sydney)
 
-This document is the current ground truth for Sirius. `SPECIFICATION.md` remains
-the target-state mandate; `ENGAGEMENT_REPORT.md` is historical evidence, not an
-authority for current counts or closure.
+This is a review record, not a qualification receipt. The September corrective
+work below supersedes conflicting historical dispositions. The retained earlier
+ledger describes its own source snapshots; its counts, timings, “Fixed” entries
+and physical outputs do not establish the state of a later revision.
+`SPECIFICATION.md` and `tests/operating_model.json` define the obligations; the
+clean source, executed artifacts and independently verified same-revision
+receipts establish completion. `ENGAGEMENT_REPORT.md` remains historical.
+
+## September corrective work
+
+At this review checkpoint, focused diagnostics establish only the boundaries
+they exercise. They are not complete Mandatory qualification, native-platform
+admission, full-resolution physical evidence or installed-release readiness.
+Later completion must be established by the exact revision's verified receipts.
+
+| Finding | Current correction and evidence boundary |
+|---|---|
+| F03: a gate hashed candidate products only after testing | Both full and native build gates snapshot tested/product bytes before CTest, then reject differences in those bytes, source identity or full registration before issuing a receipt. Focused mutation controls pass, including restored obstruction fixtures. These boundary comparisons do not detect arbitrary transient tampering restored between observations. |
+| F04: a generic pointer event could substitute for required input delivery | Viewer production and independent admission now require cursor and scroll observations alongside keyboard callbacks and a newly published Vulkan frame. Negative controls reject incomplete callback transcripts. Actual host delivery still requires a new native viewer campaign. |
+| F06: viewer evidence was permanently reported as pending | Readiness distinguishes admitted exact-revision viewer evidence from current-host window/input availability. Admission does not assert that a window has been created on the querying host. Final installed-release reporting remains an execution obligation. |
+| F08: a rejected CPU step could invent horizon capture by backward extrapolation and radial snapping | The CPU black-hole path now transforms the original observer, tangent and screens into a regular outgoing Kerr-Schild chart and localises capture on accepted finite segments. Exterior results return to the public chart; horizon results identify the outgoing chart. Focused outward-ray and shadow diagnostics support the correction; chart, coupled-transport and complete scientific acceptance remain subject to final verification. |
+| F10: subtracting accumulated float affine times could erase or distort a short accepted step | Coupled CPU consumers use the accepted step's actual interval, with trace-local double accumulation and published affine length. Horizon and other terminal clips shorten that same interval. A live radial-ray witness checks the analytic horizon interval and Jacobi size after steps smaller than the accumulated float spacing; restoring the old subtraction fails that witness. |
+| F09: strict fp64-specific skips rejected supported precision-limited routes | The Vulkan kernel boundary rejects unsupported Float64 modules and malformed instruction framing. Existing precision tests execute supported fp32/compensated science and require actual fp64 refusal when unsupported; capable devices retain their fp64 numerical comparisons. The render refusal checks its precise diagnostic. No-device boundary execution and compilation checks pass; native precision-limited execution and Radeon fp64 qualification remain outstanding. |
+| F12: parallel CTest could overlap independent Vulkan consumers | Backend and render discovery now share the `sirius_vulkan_device` resource lock, including portability, render-capable CLI/viewer and end-to-end cases. Existing operational Vulkan and burn-in wrappers retain `RUN_SERIAL`; base, core, oracle and non-rendering app discovery remain parallel. This establishes device ownership within one CTest invocation, not exclusion against a separate CTest process or external GPU workload. Generated inventory checks establish registration coverage; physical execution remains a separate obligation. |
+| F01/F02: caps could be bypassed and the cold controller could discard useful work without reducing latency | Independent width, row and area caps remain active with adaptation disabled. Heavy fp32 uses a measured 64×4 maximum and 750 ms soft target; other profiles retain their original target and conservative precision limits. Discrete growth avoids the cold one-row trap. The full governed-scene 128×128 diagnostic remains byte-identical, completing in 288 submissions with a 778 ms observed maximum and no safety fallback. A 512-pixel probe exceeded the stop threshold and was rejected. Full-resolution runtime and stability remain separate qualification obligations; a work cap cannot guarantee wall time. |
+
+The final gate must run on the accepted clean revision. Eight exact-revision
+domains, both governed physical image sizes, and explicit post-gate installation,
+relocation and render/view initialisation remain separate requirements. The
+strict install test's pre-gate rejection branch does not prove the later
+installed workflow. Any further source or documentation correction precedes
+freeze and requires new revision-bound evidence afterward.
 
 ## 1. Method
 
@@ -66,7 +95,12 @@ Each review pass asks:
 | Imported results | Are papers, historical logs, and reference tapes independently connected to a live gate? |
 | Non-circularity | Is the oracle independent of the implementation it judges? |
 
-## 3. Confirmed defects and dispositions
+## 3. Historical defects and recorded dispositions
+
+The following rows retain earlier investigations and their recorded corrections.
+They are useful regression context, not a fresh verification of every assertion.
+In particular, the September chart, interval, precision and evidence corrections
+above supersede any incompatible earlier “Fixed” claim.
 
 | Finding | Ground-truth witness | Disposition |
 |---|---|---|
@@ -241,7 +275,7 @@ Each review pass asks:
 | An internally self-consistent attestation bundle could substitute different operating-model bytes while retaining the claimed exact source revision | the bundle verifier cross-checked its receipt, gate, and copied product, but neither it nor aggregate admission compared that product digest with the independently selected source model | Fixed: every record verification now requires the copied product to byte-match the canonical source operating model, aggregate admission passes its independently derived digest into the verifier, and a substituted-model negative control preserves the boundary |
 | Standalone attestation verification parsed `--source-root` but ignored it | an operator independently checking an older exact-revision bundle with a clean checkout was instead compared with the verifier branch's model; aggregate admission happened to use a separate correct digest path, concealing the detached CLI | Fixed: standalone verification and native evidence issuance derive the clean Git revision and canonical model digest from the selected source root, reject revision/model substitution, and repository governance makes source-root forwarding executable policy |
 
-## 4. Enforced operating model
+## 4. Historical operating-model snapshot
 
 `tests/operating_model.json` is the machine-readable claim ledger.
 `scripts/verify-operating-model.py` proves that all ten P1–P6/E1–E4 acceptance
@@ -311,7 +345,7 @@ boundaries instead.
 
 | Profile | Status | Evidence boundary |
 |---|---|---|
-| Revision-bound release alignment | EXTERNAL LEDGER AUTHORITATIVE | A source-only qualification configure intentionally admits no external domains. Development artifacts remain inadmissible; release configure reports every domain absent from the supplied same-revision ledger, and packaging/initialisation remain fail-closed until all eight verified records exist. |
+| Revision-bound release alignment | EXTERNAL LEDGER AUTHORITATIVE | A source-only qualification configure intentionally admits no external domains. Development artifacts remain inadmissible; release configure reports every domain absent from the supplied same-revision ledger, and packaging/initialisation remain fail-closed until all eight domains have verified evidence. |
 | Pull-request/integration boundary | GOVERNED NON-RENDER PATH PRESENT | Linux, Windows, and macOS compile the complete strict topology and execute exactly nine authority controls without creating a Mandatory receipt. Pull requests cannot publish evidence; explicit dispatch may issue only the precisely scoped Windows/macOS compilation domains. |
 | Configure/compile/build, GCC 14 | STRICT NON-RENDER PATH PRESENT | Qualification binds all seven test executables and nine live products under warnings as errors, then runs the exact nine authority controls without issuing a Mandatory receipt. Execution outcomes belong to the workflow record for the tested revision. |
 | Configure/compile/build, Clang 21 | STRICT NON-RENDER PATH PRESENT | Qualification also emits and validates every Slang kernel, binds all seven test executables and nine live products under warnings as errors, and runs the exact nine authority controls without issuing a Mandatory receipt. Execution outcomes belong to the workflow record for the tested revision. |
@@ -325,7 +359,11 @@ boundaries instead.
 | Native Windows build/runtime | BUILD PRODUCER PRESENT; LIVE RECORD EXTERNAL | Explicit Windows dispatch can emit a clean-Git compilation record binding the full registration, exact non-render authority estate, all executables/products, and receipt. Native Vulkan remains a separate full-estate physical-host domain and rejects Dozen. The alignment receipt, not this table, states whether either record exists for a revision. |
 | macOS build/MoltenVK runtime | BUILD PRODUCER PRESENT; LIVE RECORD EXTERNAL | Explicit macOS dispatch can emit a clean-Git compilation record binding the full registration, exact non-render authority estate, all executables/products, and receipt. MoltenVK remains a separate full-estate physical-host domain. The alignment receipt, not this table, states whether either record exists for a revision. |
 
-## 6. Remaining limitations (not hidden as “green”)
+## 6. Previously recorded limitations
+
+These dispositions belong to the historical snapshots below. Reassess their
+implementation and evidence against the selected release revision; the current
+corrective review above does not promote them to completed qualification.
 
 - P2 now has the specification's exact radial and circular Schwarzschild
   congruence pair at 1e-6, in addition to literal dual-vector ellipses,
@@ -418,10 +456,12 @@ boundaries instead.
 - Historical reference images have no current byte-identity test. Any new
   identity claim requires a checked-in manifest and an executable comparator.
 
-## 7. Validation record
+## 7. Historical validation record
 
-The counts below are refreshed only after the final source state completes the
-corresponding profile. They are not projected from registration counts.
+The dates and snapshot labels below delimit the original reports. Their counts
+and timings have not been rerun or transferred to the September correction
+branch. Undated pre-alignment entries remain historical claims, not current
+qualification evidence; registration counts are never execution results.
 
 - 2026-08-27 alignment delta: GCC 14 and Clang 21 compiled the new
   receipt/admission/runtime-authority path under warnings-as-errors. All three
@@ -821,14 +861,14 @@ corresponding profile. They are not projected from registration counts.
   seconds with no Sirius defect and the one
   documented, printed external Vulkan-loader/driver suppression. Vulkan tests
   were pinned to Lavapipe so the physical Radeon render remained isolated.
-- Physical current-worktree P3/P5 preflight: the exact 1920x1080 scene completed
+- Historical physical-worktree P3/P5 preflight: the exact 1920x1080 scene completed
   in 1575.7 seconds (SHA-256 `72d079f7dfa1f637e15e4773114fa91ed1256d093d4d96f4fa117f82824eaa8c`)
   and the exact 5616x4096 scene completed in 17105.1 seconds (SHA-256
   `094ae5b1379d39d9c6dfdddc7199f9d14d09f50c674505decd0bb364b0d768e6`).
   Both decoded at the exact dimensions and passed the sparse dynamic-range,
   resolved-source, row-distribution, and two-dimensional-structure gate. They
   remain non-admissible until reproduced by the clean-revision runbook.
-- Native viewer current-worktree preflight: a real XWayland/GLFW window used the
+- Historical native-viewer worktree preflight: a real XWayland/GLFW window used the
   Radeon Vulkan backend, published a 256x192 progressive frame, and recorded
   host-delivered keyboard press/release, pointer drag, scroll, and Escape
   callbacks. The transcript and viewer log were hashed, but remain

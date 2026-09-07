@@ -4,6 +4,7 @@
 // On machines with no Vulkan ICD both tests skip, cleanly and loudly.
 
 #include "sirius/backend/device.h"
+#include "sirius/backend/vulkan/vulkan_device.h"
 
 #include <gtest/gtest.h>
 
@@ -37,6 +38,51 @@ std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     file.seekg(0);
     file.read(reinterpret_cast<char*>(words.data()), static_cast<std::streamsize>(size));
     return words;
+}
+
+TEST(VulkanBackend, KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions) {
+    using sirius::backend::ValidateVulkanKernelPrecision;
+    // Independent SPIR-V wire fixtures: Shader capability followed by Float64.
+    const std::vector<std::uint32_t> fp32 = {0x07230203u, 0x00010500u, 0u, 1u, 0u, 0x00020011u, 1u};
+    auto fp64 = fp32;
+    fp64.insert(fp64.end(), {0x00020011u, 10u});
+    EXPECT_TRUE(ValidateVulkanKernelPrecision(fp32, false));
+    EXPECT_TRUE(ValidateVulkanKernelPrecision(fp32, true));
+    EXPECT_TRUE(ValidateVulkanKernelPrecision(fp64, true));
+    const auto refused = ValidateVulkanKernelPrecision(fp64, false);
+    ASSERT_FALSE(refused.has_value());
+    EXPECT_EQ(refused.error().domain(), sirius::base::ErrorDomain::kKernel);
+    EXPECT_NE(refused.error().detail().find("shaderFloat64"), std::string::npos);
+
+    // The real adapter must decline before touching an uninitialised Vulkan
+    // handle. This makes removal of the production call a failing control.
+    sirius::backend::VulkanDevice unopened;
+    const auto unbound = unopened.LoadKernel(fp64);
+    ASSERT_FALSE(unbound.has_value());
+    EXPECT_EQ(unbound.error().detail(), refused.error().detail());
+    for (std::size_t length = 0; length <= 5; ++length) {
+        EXPECT_FALSE(unopened.LoadKernel(std::span(fp32).first(length)).has_value());
+    }
+    auto bad_magic = fp32;
+    bad_magic[0] = 0;
+    auto bad_schema = fp32;
+    bad_schema[4] = 1;
+    auto zero_extent = fp32;
+    zero_extent[5] = 17u;
+    auto overflowing_extent = fp32;
+    overflowing_extent[5] = 0xffff0011u;
+    auto missing_capability = fp32;
+    missing_capability.resize(6);
+    missing_capability[5] = 0x00010011u;
+    auto extra_capability_operand = fp64;
+    extra_capability_operand[7] = 0x00030011u;
+    extra_capability_operand.push_back(0u);
+    for (const auto& malformed : {bad_magic, bad_schema, zero_extent, overflowing_extent,
+                                  missing_capability, extra_capability_operand}) {
+        const auto result = unopened.LoadKernel(malformed);
+        ASSERT_FALSE(result.has_value());
+        EXPECT_EQ(result.error().operation(), "validate shader module");
+    }
 }
 
 sirius::base::Expected<float> DispatchSmokeKernel(std::size_t device_index,
