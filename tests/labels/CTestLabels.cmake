@@ -1247,6 +1247,7 @@ set_tests_properties(
     VulkanRenderSession.NonSquareMultisamplingCameraAndLensReachLiveKernel
     VulkanRenderSession.ProceduralVolumetricTurbulenceReachesLiveKernel
     VulkanRenderSession.ThinAndVolumetricDopplerSuppressionAffectLiveEmission
+    VulkanRenderSession.ZeroActiveTracePreservesRadianceAcrossPrecisionRungs
     PROPERTIES LABELS "Mandatory;Operational;Rendering"
 )
 

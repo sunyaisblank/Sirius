@@ -60,13 +60,16 @@ struct VulkanRenderStats {
     bool starfield_uploaded = false;
     bool point_catalogue_uploaded = false;
     int tiles_rendered = 0;
-    int band_dispatches = 0;  // compute submissions; >= tiles_rendered under banding
+    int band_dispatches = 0;  // governed ray submissions, excluding initialization
     double dispatch_seconds = 0.0;
     double maximum_dispatch_ms = 0.0;
     std::int64_t maximum_dispatch_pixels = 0;
     int dispatch_target_overshoots = 0;
     int dispatch_fallbacks = 0;
-    double seconds = 0.0;
+    int initialization_dispatches = 0;  // software only, zero active rays
+    double initialization_seconds = 0.0;
+    double initialization_submit_wait_ms = 0.0;
+    double seconds = 0.0;  // complete render wall time, including initialization
 };
 
 // Checks the scene features the current one-sample Vulkan kernel represents.

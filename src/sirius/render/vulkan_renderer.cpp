@@ -638,6 +638,44 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
     int dispatch_fallbacks = 0;
     const backend::BufferHandle bindings[] = {*radiance_buf,   *params_buf,       *star_buf,
                                               *point_star_buf, *point_offset_buf, *point_index_buf};
+    int initialization_dispatches = 0;
+    double initialization_seconds = 0.0;
+    double initialization_submit_wait_ms = 0.0;
+    if (info.kind == backend::DeviceKind::kSoftware) {
+        if (should_cancel && should_cancel()) {
+            return Fail(ErrorDomain::kInternal, "render Vulkan frame", "cancelled");
+        }
+        // Software drivers can defer compilation until the first submission.
+        // One real workgroup with zero active dimensions takes trace's bounds
+        // return before camera, trajectory or radiance work. Use the actual
+        // kernel and bindings; a zero group count need not initialise a driver.
+        // This is not a ray band and must not train or bypass its governor.
+        params[33] = 0.0f;
+        params[34] = 0.0f;
+        if (auto w = device.WriteBuffer(*params_buf, std::as_bytes(std::span<const float>(params)));
+            !w) {
+            return std::unexpected(w.error());
+        }
+        std::cout << "[Vulkan] initialising software trace kernel with zero active rays"
+                  << std::endl;
+        const auto initialization_start = std::chrono::steady_clock::now();
+        backend::DispatchTiming timing;
+        if (auto d = device.Dispatch(*kernel, bindings, 1, 1, 1, &timing); !d) {
+            return std::unexpected(d.error());
+        }
+        if (!std::isfinite(timing.submit_wait_ms) || timing.submit_wait_ms < 0.0) {
+            return Fail(ErrorDomain::kDevice, "initialise software trace kernel",
+                        "invalid submit/wait timing");
+        }
+        initialization_dispatches = 1;
+        initialization_seconds =
+            std::chrono::duration<double>(std::chrono::steady_clock::now() - initialization_start)
+                .count();
+        initialization_submit_wait_ms = timing.submit_wait_ms;
+        std::cout << "[Vulkan] software trace initialization: " << initialization_seconds
+                  << "s wall, " << initialization_submit_wait_ms
+                  << "ms submit/wait, 1 dispatch, 0 active rays" << std::endl;
+    }
     for (int tj = 0; tj < tiles_y; ++tj) {
         for (int ti = 0; ti < tiles_x; ++ti) {
             if (should_cancel && should_cancel()) {
@@ -783,6 +821,9 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
     stats.maximum_dispatch_pixels = maximum_dispatch_pixels;
     stats.dispatch_target_overshoots = dispatch_target_overshoots;
     stats.dispatch_fallbacks = dispatch_fallbacks;
+    stats.initialization_dispatches = initialization_dispatches;
+    stats.initialization_seconds = initialization_seconds;
+    stats.initialization_submit_wait_ms = initialization_submit_wait_ms;
     stats.seconds = std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
     return stats;
 }
