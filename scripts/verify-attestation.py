@@ -2410,7 +2410,7 @@ def self_test():
         verify_document(native_build_document, root / "attestation.json")
         reject_test_input_mutations(native_build_document, native_build_gate, "native build")
         # Exercise the actual producer helper and its post-CTest live check.
-        input_build = root / "input-build"
+        input_build = (root / "input-build").resolve()
         input_bundle = root / "input-bundle"
         input_bundle.mkdir()
         for name, relative_path in test_input_paths.items():

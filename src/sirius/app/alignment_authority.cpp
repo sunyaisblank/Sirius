@@ -345,7 +345,7 @@ std::expected<BuildGateAuthority, std::string> ValidateBuildGateReceipt(
             const auto& [name, path] = input;
             const auto record = test_inputs.find(name);
             return record != test_inputs.end() && IsArtifactRecord(*record) &&
-                   (*record)["root"] == "build" && (*record)["path"] == path;
+                   (*record)["root"] == "build" && (*record)["path"] == std::string(path);
         })) {
         return std::unexpected(
             "Mandatory build-gate receipt does not bind the complete generated test inputs");
