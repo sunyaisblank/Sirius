@@ -102,8 +102,8 @@ class ShadowClassifier {
         config.integrator.initial_step = 0.02f;
         config.integrator.max_step = 0.25f;
         config.integrator.min_step = 1e-6f;
-        config.integrator.abs_tolerance = 1e-7f;
-        config.integrator.rel_tolerance = 1e-7f;
+        config.integrator.abs_tolerance = 1e-9f;
+        config.integrator.rel_tolerance = 1e-9f;
         config.strong_field_radius = 5.0f;
         config.strong_field_max_step = 0.002f;
         return config;

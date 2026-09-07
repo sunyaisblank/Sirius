@@ -16,6 +16,11 @@
 
 namespace sirius::backend {
 
+// Check instruction framing and the device-dependent Float64 requirement before
+// asking the driver to create a module. Full SPIR-V validity remains spirv-val's gate.
+[[nodiscard]] base::Expected<void> ValidateVulkanKernelPrecision(
+    std::span<const std::uint32_t> spirv, bool supports_fp64);
+
 class VulkanDevice final : public ComputeDevice {
   public:
     // Use CreateVulkanDevice(); this is public only for std::make_unique.
@@ -44,7 +49,8 @@ class VulkanDevice final : public ComputeDevice {
     [[nodiscard]] base::Expected<void> Dispatch(KernelHandle kernel,
                                                 std::span<const BufferHandle> buffers,
                                                 std::uint32_t groups_x, std::uint32_t groups_y,
-                                                std::uint32_t groups_z) override;
+                                                std::uint32_t groups_z,
+                                                DispatchTiming* timing = nullptr) override;
 
   private:
     friend base::Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index);

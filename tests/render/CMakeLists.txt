@@ -63,4 +63,7 @@ endif()
 gtest_discover_tests(
     sirius_render_tests
     PROPERTIES
+        # This includes render-capable CLI/viewer and end-to-end cases. Use the
+        # backend suite's lock; unrelated CPU/application suites stay parallel.
+        RESOURCE_LOCK sirius_vulkan_device
         LABELS "Correctness")

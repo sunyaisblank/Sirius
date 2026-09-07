@@ -1297,13 +1297,8 @@ TEST(KernelParity, PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capabilit
 TEST(KernelParity, PrecisionRungsConserveNearExtremalKerrWithoutImageComparison) {
     Fixture fp32 = OpenProbe();
     if (!fp32.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
-    if (!fp32.device->Info().supports_fp64) {
-        GTEST_SKIP() << "device lacks shaderFloat64";
-    }
     Fixture compensated = OpenProbe("parity_probe_fp32comp.spv");
-    Fixture fp64 = OpenProbe("parity_probe_fp64.spv");
     ASSERT_TRUE(compensated.ready) << "compensated precision probe unavailable";
-    ASSERT_TRUE(fp64.ready) << "fp64 precision probe unavailable";
 
     Sample near_extremal;
     near_extremal.metric_id = kKerrSchild;
@@ -1324,8 +1319,6 @@ TEST(KernelParity, PrecisionRungsConserveNearExtremalKerrWithoutImageComparison)
         RunProbe(*fp32.device, fp32.kernel, kOpLiveCartConservation, {near_extremal});
     const auto result_compensated =
         RunProbe(*compensated.device, compensated.kernel, kOpLiveCartConservation, {near_extremal});
-    const auto result64 =
-        RunProbe(*fp64.device, fp64.kernel, kOpLiveCartConservation, {near_extremal});
 
     const auto validate_progress = [](const std::vector<float>& result, const char* rung) {
         for (int component = 0; component < 12; ++component) {
@@ -1340,6 +1333,28 @@ TEST(KernelParity, PrecisionRungsConserveNearExtremalKerrWithoutImageComparison)
     };
     validate_progress(result32, "fp32");
     validate_progress(result_compensated, "fp32-comp");
+    const float drift32 = result32[0] + result32[1] + result32[2] + result32[3];
+    const float drift_compensated = result_compensated[0] + result_compensated[1] +
+                                    result_compensated[2] + result_compensated[3];
+    EXPECT_LE(drift_compensated, drift32 * 1.25f + 1.0e-7f)
+        << "compensated accumulation regressed the invariant envelope";
+    if (!fp32.device->Info().supports_fp64) {
+#ifdef SIRIUS_KERNEL_DIR
+        const auto spirv64 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/parity_probe_fp64.spv");
+        ASSERT_FALSE(spirv64.empty());
+        const auto refused = fp32.device->LoadKernel(spirv64);
+        ASSERT_FALSE(refused.has_value());
+        EXPECT_EQ(refused.error().domain(), sirius::base::ErrorDomain::kKernel);
+        EXPECT_NE(refused.error().detail().find("shaderFloat64"), std::string::npos);
+        RecordProperty("fp64_evidence", "unsupported_kernel_declined");
+#endif
+        return;
+    }
+    RecordProperty("fp64_evidence", "native_invariants_executed");
+    Fixture fp64 = OpenProbe("parity_probe_fp64.spv");
+    ASSERT_TRUE(fp64.ready) << "fp64 precision probe unavailable";
+    const auto result64 =
+        RunProbe(*fp64.device, fp64.kernel, kOpLiveCartConservation, {near_extremal});
     validate_progress(result64, "fp64");
 
     EXPECT_LT(result64[0], 1.0e-6f) << "fp64 energy drift";
@@ -1347,12 +1362,7 @@ TEST(KernelParity, PrecisionRungsConserveNearExtremalKerrWithoutImageComparison)
     EXPECT_LT(result64[2], 1.0e-6f) << "fp64 Carter drift";
     EXPECT_LT(result64[3], 1.0e-8f) << "fp64 relative null residual";
 
-    const float drift32 = result32[0] + result32[1] + result32[2] + result32[3];
-    const float drift_compensated = result_compensated[0] + result_compensated[1] +
-                                    result_compensated[2] + result_compensated[3];
     const float drift64 = result64[0] + result64[1] + result64[2] + result64[3];
-    EXPECT_LE(drift_compensated, drift32 * 1.25f + 1.0e-7f)
-        << "compensated accumulation regressed the invariant envelope";
     EXPECT_LE(drift64, drift32 + 1.0e-8f) << "fp64 failed to improve the invariant envelope";
 }
 

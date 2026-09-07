@@ -18,35 +18,39 @@ using base::Fail;
 int BandController::NextRows(int remaining_rows, int band_width) const {
     SIRIUS_PRE(remaining_rows > 0);
     SIRIUS_PRE(band_width > 0);
-    if (!Enabled()) {
-        return remaining_rows;
-    }
-    const auto rows =
-        static_cast<int>(std::min<std::int64_t>(pixels_ / band_width, remaining_rows));
-    return std::max(rows, 1);
+    SIRIUS_PRE(band_width <= max_pixels_);
+    const auto allowed = minimum_fallback_ ? std::int64_t{1} : (Enabled() ? pixels_ : max_pixels_);
+    const auto rows = std::min<std::int64_t>(std::max<std::int64_t>(1, allowed / band_width),
+                                             std::min(remaining_rows, max_rows_));
+    return static_cast<int>(rows);
 }
 
-void BandController::Record(std::int64_t dispatched_pixels, double measured_ms) {
+bool BandController::Record(std::int64_t dispatched_pixels, double measured_ms) {
     SIRIUS_PRE(dispatched_pixels > 0);
-    if (!Enabled()) {
-        return;
+    if (!std::isfinite(measured_ms) || measured_ms < 0.0 || dispatched_pixels > max_pixels_ ||
+        (measured_ms > kDispatchStopMs && dispatched_pixels <= minimum_pixels_)) {
+        pixels_ = 1;
+        return false;
     }
-    // A measurement below clock resolution carries no rate information; take
-    // the capped growth step rather than dividing by (near) zero.
-    double ratio = kBandGrowthCap;
-    if (measured_ms > 0.0) {
-        ratio = std::min(target_ms_ / measured_ms, kBandGrowthCap);
+    if (measured_ms == 0.0 || measured_ms > kDispatchStopMs) {
+        minimum_fallback_ = true;
+        pixels_ = 1;
+        return true;
     }
-    // The base is the work actually dispatched, never the area the controller
-    // wanted: a truncated tail band must only speak for itself.
+    if (!Enabled()) return true;
+    const double ratio = measured_ms < target_ms_   ? kBandGrowthCap
+                         : measured_ms > target_ms_ ? 0.5
+                                                    : 1.0;
     const double scaled = std::floor(static_cast<double>(dispatched_pixels) * ratio);
-    pixels_ = std::clamp(static_cast<std::int64_t>(scaled), std::int64_t{1}, max_pixels_);
+    // Clamp before conversion; the next band also honours row and area caps.
+    pixels_ = static_cast<std::int64_t>(std::clamp(scaled, 1.0, static_cast<double>(max_pixels_)));
+    return true;
 }
 
-Expected<double> ResolveDispatchTargetMs() {
+Expected<double> ResolveDispatchTargetMs(double default_target_ms) {
     const char* override_ms = std::getenv("SIRIUS_DISPATCH_TARGET_MS");
     if (override_ms == nullptr || override_ms[0] == '\0') {
-        return kDefaultDispatchTargetMs;
+        return default_target_ms;
     }
     char* end = nullptr;
     errno = 0;
@@ -54,7 +58,7 @@ Expected<double> ResolveDispatchTargetMs() {
     if (end == override_ms || *end != '\0' || errno == ERANGE || !std::isfinite(ms) || ms < 0.0) {
         return Fail(ErrorDomain::kDevice, "resolve dispatch target",
                     "SIRIUS_DISPATCH_TARGET_MS='" + std::string(override_ms) +
-                        "' is not a finite non-negative millisecond count (0 disables banding)");
+                        "' is not a finite non-negative millisecond count (0 disables adaptation)");
     }
     return ms;
 }

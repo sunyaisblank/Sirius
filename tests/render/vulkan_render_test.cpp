@@ -26,6 +26,7 @@
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>
+#include <cstring>
 #include <fstream>
 #include <functional>
 #include <limits>
@@ -592,6 +593,18 @@ TEST(VulkanRenderSession, Fp64RungRendersOrDeclinesLoudly) {
         ExpectFiniteNonConstantWithShadow(rgba, 64, 64, "vk-session-fp64");
     } else {
         EXPECT_TRUE(rgba.empty()) << "fp64 request must decline on a device without shaderFloat64";
+        sirius::render::SessionConfig config;
+        config.width = 64;
+        config.height = 64;
+        config.backend = sirius::render::RenderBackend::Vulkan;
+        sirius::render::DisplayBuffer display;
+        display.Initialise(config.width, config.height);
+        const auto refused = sirius::render::RenderVulkanToDisplay(config, display);
+        ASSERT_FALSE(refused.has_value());
+        EXPECT_EQ(refused.error().domain(), sirius::base::ErrorDomain::kDevice);
+        EXPECT_EQ(refused.error().operation(), "select precision rung");
+        EXPECT_NE(refused.error().detail().find("shaderFloat64"), std::string::npos);
+        RecordProperty("fp64_evidence", "unsupported_render_declined");
     }
 }
 
@@ -619,6 +632,71 @@ TEST(VulkanRenderSession, Kerr160x120CompletesAcrossMultipleGovernedTiles) {
     const auto rgba = RenderSessionVulkan(160, 120, out);
     ASSERT_FALSE(rgba.empty()) << "session Vulkan render did not complete";
     ExpectFiniteNonConstantWithShadow(rgba, 160, 120, "vk-session-160");
+}
+
+// Exercise the product scheduler with two different partitions, including both
+// horizontal and vertical tails. The exact comparison includes the beam alpha
+// channel and every film/pupil sample's accumulation order.
+TEST(VulkanRenderSession, DispatchSubdivisionPreservesExactCameraAndCatalogueOutput) {
+    const auto devices = EnumerateVulkanDevices();
+    if (!devices || devices->empty()) GTEST_SKIP() << "no Vulkan device present";
+    ScopedEnvironmentVariable precision("SIRIUS_PRECISION", "fp32");
+    sirius::render::SessionConfig config;
+    config.width = 17;
+    config.height = 11;
+    config.samples_per_pixel = 3;
+    config.backend = sirius::render::RenderBackend::Vulkan;
+    config.metric_id = sirius::core::MetricId::Kerr;
+    config.black_hole_spin = 0.9;
+    config.enable_disk = false;
+    config.ray_bundles = true;
+    config.point_starfield = true;
+    config.point_starfield_config.star_count = 100000;
+    config.camera_beta_forward = 0.08;
+    config.camera_beta_up = 0.02;
+    config.camera_beta_right = 0.01;
+    config.lens_type = sirius::core::LensType::ThinLens;
+    config.camera_focal_length = 50.0f;
+    config.camera_aperture = 2.8f;
+    config.camera_focus_distance = 30.0f;
+
+    sirius::render::DisplayBuffer minimum;
+    minimum.Initialise(config.width, config.height);
+    sirius::render::DisplayBuffer blocks;
+    blocks.Initialise(config.width, config.height);
+    int minimum_dispatches = 0;
+    {
+        ScopedEnvironmentVariable target("SIRIUS_DISPATCH_TARGET_MS", "0.000000001");
+        const auto result = sirius::render::RenderVulkanToDisplay(config, minimum);
+        ASSERT_TRUE(result.has_value()) << result.error().Description();
+        EXPECT_LE(result->maximum_dispatch_pixels, config.width);
+        minimum_dispatches = result->band_dispatches;
+    }
+    {
+        ScopedEnvironmentVariable target("SIRIUS_DISPATCH_TARGET_MS", "0");
+        const auto result = sirius::render::RenderVulkanToDisplay(config, blocks);
+        ASSERT_TRUE(result.has_value()) << result.error().Description();
+        EXPECT_LE(result->maximum_dispatch_pixels, config.width * 4);
+        EXPECT_GT(result->maximum_dispatch_pixels, config.width);
+        EXPECT_LT(result->band_dispatches, minimum_dispatches);
+    }
+    const auto first = minimum.SnapshotFloatData();
+    const auto second = blocks.SnapshotFloatData();
+    ASSERT_EQ(first.size(), static_cast<std::size_t>(config.width * config.height * 4));
+    ASSERT_EQ(second.size(), first.size());
+    EXPECT_EQ(std::memcmp(first.data(), second.data(), first.size() * sizeof(float)), 0);
+    EXPECT_TRUE(std::all_of(first.begin(), first.end(), [](float x) { return std::isfinite(x); }));
+    float minimum_rgb = std::numeric_limits<float>::max();
+    float maximum_rgb = 0.0f;
+    for (std::size_t pixel = 0; pixel < first.size(); pixel += 4) {
+        for (std::size_t channel = 0; channel < 3; ++channel) {
+            minimum_rgb = std::min(minimum_rgb, first[pixel + channel]);
+            maximum_rgb = std::max(maximum_rgb, first[pixel + channel]);
+        }
+    }
+    EXPECT_GT(maximum_rgb, 0.0f);
+    EXPECT_GT(maximum_rgb, minimum_rgb)
+        << "two blank or constant frames are not an invariance witness";
 }
 
 // --- CPU-versus-Vulkan parity -----------------------------------------------

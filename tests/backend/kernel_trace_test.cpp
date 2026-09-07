@@ -167,8 +167,8 @@ TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
 #ifdef SIRIUS_KERNEL_DIR
 // Dispatch one 64x64 Kerr scene (the same scene as the smoke gate above)
 // through the given SPIR-V module and return the RGBA radiance field. Keep the
-// direct probe under the same watchdog-safe tiling contract as the product:
-// one monolithic fp64 dispatch can trigger a D3D12 device removal on Dozen.
+// direct probe under the product's 64-active-pixel work bound. This helper
+// retains conservative row strips; the product packs blocks into 8x8 groups.
 std::vector<float> RunKerrScene(ComputeDevice& device, const std::vector<std::uint32_t>& spirv) {
     const auto kernel = device.LoadKernel(spirv);
     if (!kernel) {
@@ -178,7 +178,7 @@ std::vector<float> RunKerrScene(ComputeDevice& device, const std::vector<std::ui
 
     constexpr std::uint32_t kWidth = 64;
     constexpr std::uint32_t kHeight = 64;
-    constexpr std::uint32_t kTileHeight = 8;
+    constexpr std::uint32_t kTileHeight = 1;
 
     std::vector<float> params(68, 0.0f);
     params[44] = 0.5f;
@@ -290,16 +290,25 @@ TEST(KernelTrace, Fp64RungAgreesWithFp32OnKerrScene) {
     ASSERT_TRUE(selected.has_value()) << selected.error().Description();
     auto device = CreateVulkanDevice(*selected);
     ASSERT_TRUE(device.has_value()) << device.error().Description();
-    if (!(*device)->Info().supports_fp64) {
-        GTEST_SKIP() << "device lacks shaderFloat64";
-    }
-
     const auto spirv32 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace.spv");
     const auto spirv64 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace_fp64.spv");
     ASSERT_FALSE(spirv32.empty()) << "trace.spv missing";
     ASSERT_FALSE(spirv64.empty()) << "trace_fp64.spv missing";
 
     const auto r32 = RunKerrScene(**device, spirv32);
+    ASSERT_FALSE(r32.empty());
+    if (!(*device)->Info().supports_fp64) {
+        const auto refused = (*device)->LoadKernel(spirv64);
+        ASSERT_FALSE(refused.has_value());
+        EXPECT_EQ(refused.error().domain(), sirius::base::ErrorDomain::kKernel);
+        EXPECT_NE(refused.error().detail().find("shaderFloat64"), std::string::npos);
+        for (const float value : r32) EXPECT_TRUE(std::isfinite(value));
+        const auto [low, high] = std::minmax_element(r32.begin(), r32.end());
+        EXPECT_GT(*high - *low, 1e-3f);
+        RecordProperty("fp64_evidence", "unsupported_kernel_declined");
+        return;
+    }
+    RecordProperty("fp64_evidence", "native_comparison_executed");
     const auto r64 = RunKerrScene(**device, spirv64);
     ASSERT_EQ(r32.size(), r64.size());
     ASSERT_FALSE(r64.empty());
@@ -367,10 +376,6 @@ TEST(KernelTrace, CompensatedRungTracksFp64AtLeastAsWellAsFp32) {
     ASSERT_TRUE(selected.has_value()) << selected.error().Description();
     auto device = CreateVulkanDevice(*selected);
     ASSERT_TRUE(device.has_value()) << device.error().Description();
-    if (!(*device)->Info().supports_fp64) {
-        GTEST_SKIP() << "device lacks shaderFloat64 (needed for the reference field)";
-    }
-
     const auto spirv32 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace.spv");
     const auto spirvC = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace_fp32comp.spv");
     const auto spirv64 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace_fp64.spv");
@@ -380,31 +385,44 @@ TEST(KernelTrace, CompensatedRungTracksFp64AtLeastAsWellAsFp32) {
 
     const auto r32 = RunKerrScene(**device, spirv32);
     const auto rC = RunKerrScene(**device, spirvC);
-    const auto r64 = RunKerrScene(**device, spirv64);
     ASSERT_EQ(rC.size(), r32.size());
-    ASSERT_EQ(rC.size(), r64.size());
     ASSERT_FALSE(rC.empty());
 
-    double sum_c64 = 0.0, sum_3264 = 0.0, sum_c32 = 0.0;
+    double sum_c32 = 0.0;
     float minc = std::numeric_limits<float>::max();
     float maxc = 0.0f;
     for (std::size_t i = 0; i < rC.size(); ++i) {
         ASSERT_TRUE(std::isfinite(rC[i])) << "non-finite compensated-rung radiance";
-        sum_c64 += std::abs(double(rC[i]) - double(r64[i]));
-        sum_3264 += std::abs(double(r32[i]) - double(r64[i]));
+        ASSERT_TRUE(std::isfinite(r32[i])) << "non-finite fp32-rung radiance";
         sum_c32 += std::abs(double(rC[i]) - double(r32[i]));
         minc = std::min(minc, rC[i]);
         maxc = std::max(maxc, rC[i]);
     }
     const double n = double(rC.size());
-    const double mean_c64 = sum_c64 / n;
-    const double mean_3264 = sum_3264 / n;
     const double mean_c32 = sum_c32 / n;
-    std::cout << "[ traceC   ] mean|comp-fp64|=" << mean_c64 << " mean|fp32-fp64|=" << mean_3264
-              << " mean|comp-fp32|=" << mean_c32 << "\n";
-
     EXPECT_GT(maxc - minc, 1e-3f) << "compensated radiance field is constant";
     EXPECT_LT(mean_c32, 1e-2) << "compensated rung diverges from fp32 in the mean";
+    if (!(*device)->Info().supports_fp64) {
+        const auto refused = (*device)->LoadKernel(spirv64);
+        ASSERT_FALSE(refused.has_value());
+        EXPECT_EQ(refused.error().domain(), sirius::base::ErrorDomain::kKernel);
+        EXPECT_NE(refused.error().detail().find("shaderFloat64"), std::string::npos);
+        RecordProperty("fp64_evidence", "unsupported_kernel_declined");
+        return;
+    }
+    RecordProperty("fp64_evidence", "native_comparison_executed");
+    const auto r64 = RunKerrScene(**device, spirv64);
+    ASSERT_EQ(rC.size(), r64.size());
+    double sum_c64 = 0.0, sum_3264 = 0.0;
+    for (std::size_t i = 0; i < rC.size(); ++i) {
+        ASSERT_TRUE(std::isfinite(r64[i])) << "non-finite fp64-rung radiance";
+        sum_c64 += std::abs(double(rC[i]) - double(r64[i]));
+        sum_3264 += std::abs(double(r32[i]) - double(r64[i]));
+    }
+    const double mean_c64 = sum_c64 / n;
+    const double mean_3264 = sum_3264 / n;
+    std::cout << "[ traceC   ] mean|comp-fp64|=" << mean_c64 << " mean|fp32-fp64|=" << mean_3264
+              << " mean|comp-fp32|=" << mean_c32 << "\n";
     EXPECT_LE(mean_c64, mean_3264 * 1.5 + 1e-9)
         << "compensation made the fp64 tracking worse, which defeats the rung";
 #endif

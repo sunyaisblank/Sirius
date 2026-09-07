@@ -543,12 +543,7 @@ bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const Integrato
     metric->Evaluate(x0, g0, dg0);
     Vec4 p0 = ComputeMomentum(ray.velocity, g0);
     Vec4 k0 = ray.velocity;
-    // Keep a narrow guard band above the physical 1e-6 bound.  Long
-    // near-critical trajectories can land a few parts in 10^6 above the
-    // decimal threshold at the configured float step floor (observed maximum
-    // 1.0000022e-6); treating that representation noise as a different light
-    // cone strands an otherwise converged ray.
-    constexpr double kMaximumRelativeNullResidual = 1.01e-6;
+    constexpr double kMaximumRelativeNullResidual = 1e-6;
     if (RelativeNullResidual(k0, g0) > kMaximumRelativeNullResidual) {
         ray.terminated = 6;
         return false;
@@ -566,34 +561,34 @@ bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const Integrato
         return RejectUnrepresentedStage(ray, config.min_step);
     }
 
-    Vec4 x3 = x0 + k1_x * static_cast<float>(a31 * h) + k2_x * static_cast<float>(a32 * h);
-    Vec4 p3 = p0 + k1_p * static_cast<float>(a31 * h) + k2_p * static_cast<float>(a32 * h);
+    Vec4 x3 = x0 + k1_x * (a31 * h) + k2_x * (a32 * h);
+    Vec4 p3 = p0 + k1_p * (a31 * h) + k2_p * (a32 * h);
     if (!EvaluateRk45Stage(x3, p3, metric, k3_x, k3_p)) {
         return RejectUnrepresentedStage(ray, config.min_step);
     }
 
-    Vec4 x4 = x0 + k1_x * static_cast<float>(a41 * h) + k2_x * static_cast<float>(a42 * h) +
-              k3_x * static_cast<float>(a43 * h);
-    Vec4 p4 = p0 + k1_p * static_cast<float>(a41 * h) + k2_p * static_cast<float>(a42 * h) +
-              k3_p * static_cast<float>(a43 * h);
+    Vec4 x4 = x0 + k1_x * (a41 * h) + k2_x * (a42 * h) +
+              k3_x * (a43 * h);
+    Vec4 p4 = p0 + k1_p * (a41 * h) + k2_p * (a42 * h) +
+              k3_p * (a43 * h);
     if (!EvaluateRk45Stage(x4, p4, metric, k4_x, k4_p)) {
         return RejectUnrepresentedStage(ray, config.min_step);
     }
 
-    Vec4 x5 = x0 + k1_x * static_cast<float>(a51 * h) + k2_x * static_cast<float>(a52 * h) +
-              k3_x * static_cast<float>(a53 * h) + k4_x * static_cast<float>(a54 * h);
-    Vec4 p5 = p0 + k1_p * static_cast<float>(a51 * h) + k2_p * static_cast<float>(a52 * h) +
-              k3_p * static_cast<float>(a53 * h) + k4_p * static_cast<float>(a54 * h);
+    Vec4 x5 = x0 + k1_x * (a51 * h) + k2_x * (a52 * h) +
+              k3_x * (a53 * h) + k4_x * (a54 * h);
+    Vec4 p5 = p0 + k1_p * (a51 * h) + k2_p * (a52 * h) +
+              k3_p * (a53 * h) + k4_p * (a54 * h);
     if (!EvaluateRk45Stage(x5, p5, metric, k5_x, k5_p)) {
         return RejectUnrepresentedStage(ray, config.min_step);
     }
 
-    Vec4 x6 = x0 + k1_x * static_cast<float>(a61 * h) + k2_x * static_cast<float>(a62 * h) +
-              k3_x * static_cast<float>(a63 * h) + k4_x * static_cast<float>(a64 * h) +
-              k5_x * static_cast<float>(a65 * h);
-    Vec4 p6 = p0 + k1_p * static_cast<float>(a61 * h) + k2_p * static_cast<float>(a62 * h) +
-              k3_p * static_cast<float>(a63 * h) + k4_p * static_cast<float>(a64 * h) +
-              k5_p * static_cast<float>(a65 * h);
+    Vec4 x6 = x0 + k1_x * (a61 * h) + k2_x * (a62 * h) +
+              k3_x * (a63 * h) + k4_x * (a64 * h) +
+              k5_x * (a65 * h);
+    Vec4 p6 = p0 + k1_p * (a61 * h) + k2_p * (a62 * h) +
+              k3_p * (a63 * h) + k4_p * (a64 * h) +
+              k5_p * (a65 * h);
     if (!EvaluateRk45Stage(x6, p6, metric, k6_x, k6_p)) {
         return RejectUnrepresentedStage(ray, config.min_step);
     }

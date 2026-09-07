@@ -743,6 +743,9 @@ set_tests_properties(
     RK45IntegratorTests.StepRejectionWorks
     RK45IntegratorTests.UnrepresentedStageShrinksBeforeMetricEvaluation
     RK45IntegratorTests.RejectionMaySelectTheMinimumStepBeforeTerminating
+    RK45IntegratorTests.DoublePrecisionStagesMatchAnAnalyticRindlerNullRay
+    RK45IntegratorTests.OutgoingChartPreservesMetricKillingQuantitiesAndInverseMap
+    RK45IntegratorTests.NullDefectAboveTheDeclaredBoundIsRejectedBeforeProjection
     RK45IntegratorTests.NullProjectionPreservesTheIncomingLightConeBranch
     RK45IntegratorTests.NoNaNInResults
     PROPERTIES LABELS "Mandatory;Correctness"
@@ -1048,6 +1051,7 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    VulkanBackend.KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions
     VulkanBackend.EnumerationReportsInsteadOfThrowing
     VulkanBackend.SlangKernelMatchesCpuReference
     VulkanBackend.WorkerThreadDispatchTearsDownSafely
@@ -1084,6 +1088,11 @@ set_tests_properties(
     CameraWorldlineTest.InvalidInternalWorldlineFailsClosed
     CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels
     CameraWorldlineTest.ZeroVelocityIsExactlyRepresented
+    CpuTraceBoundary.HorizonlessKerrSchildFamiliesKeepTheirNativeTraceChart
+    CpuTraceBoundary.LateMinimumStepsPreserveAnalyticAffineAndJacobiLength
+    CpuTraceBoundary.PastRadialHorizonIsAnAcceptedFiniteOutgoingEvent
+    CpuTraceBoundary.RejectedOutwardRayNearHorizonDoesNotInventCapture
+    CpuTraceBoundary.UnrepresentedPastHorizonLaunchDeclinesBeforeIntegration
     FilmSimulationTest.DefaultAndPresetConfigsUseOnlyRepresentedControls
     FilmSimulationTest.DisabledGrainRequiresNeutralControls
     FilmSimulationTest.DisabledHalationRequiresNeutralControls
@@ -1127,17 +1136,20 @@ set_tests_properties(
 
 set_tests_properties(
     DispatchGovernor.BandsNeverExceedRemainingRowsNorDropBelowOne
-    DispatchGovernor.DisabledControllerDispatchesWholeTilesAndIgnoresFeedback
+    DispatchGovernor.DisabledAdaptationPreservesCapsAndIgnoresOrdinaryFeedback
     DispatchGovernor.ExpensivePrecisionAndBundleWorkloadsUseTheStrictPhysicalFootprint
     DispatchGovernor.FirstBandUsesTheMinimumFullWidthRowBeforeMeasurement
     DispatchGovernor.GrowthPerStepIsBoundedByTheCap
+    DispatchGovernor.InvalidTimingAndIrreducibleOvershootDecline
     DispatchGovernor.LearnedAreaNormalisesAcrossBandWidths
-    DispatchGovernor.OvershootShrinksProportionallyInOneStep
+    DispatchGovernor.NearTargetLatencyStillGrowsWholeBands
+    DispatchGovernor.OvershootHalvesTheObservedWork
+    DispatchGovernor.StrictCapsApplyToEveryTailEvenWithoutAdaptation
     DispatchGovernor.TargetDefaultsWhenTheEnvironmentIsUnset
     DispatchGovernor.TargetFailsLoudOnGarbageNegativesAndNonFinite
     DispatchGovernor.TargetHonoursTheOverrideIncludingZero
     DispatchGovernor.TruncatedTailBandFeedsBackOnlyItsOwnWork
-    DispatchGovernor.ZeroMeasurementTakesTheCappedGrowthStep
+    DispatchGovernor.ZeroMeasurementFallsBackToMinimumWork
     DisplayBuffer.MalformedDimensionsAndTilesFailClosed
     DisplayBuffer.NonFiniteRadianceIsIdentifiedBeforeEncoding
     DopplerToggleTest.SuppressionCollapsesDiskAsymmetry
@@ -1223,6 +1235,7 @@ set_tests_properties(
     VulkanRenderSession.CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds
     VulkanRenderSession.CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalBounds
     VulkanRenderSession.CpuVulkanPointCatalogueAgreeOnFlatScene
+    VulkanRenderSession.DispatchSubdivisionPreservesExactCameraAndCatalogueOutput
     VulkanRenderSession.Fp64RungRendersOrDeclinesLoudly
     VulkanRenderSession.IndexedPointCatalogueReachesLiveKernel
     VulkanRenderSession.Kerr160x120CompletesAcrossMultipleGovernedTiles

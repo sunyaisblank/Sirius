@@ -7,6 +7,7 @@
 #include "sirius/core/geodesic_integrator.h"
 #include "sirius/core/metrics/kerr_schild_family.h"  // Unified Kerr-Schild family
 #include "sirius/core/metrics/metric.h"
+#include "sirius/core/metrics/outgoing_kerr_schild.h"
 #include "sirius/core/tensor.h"
 
 #include <gtest/gtest.h>
@@ -464,6 +465,123 @@ TEST_F(RK45IntegratorTests, RejectionMaySelectTheMinimumStepBeforeTerminating) {
     EXPECT_EQ(ray.terminated, 0)
         << "selecting the minimum retry step is not a terminal integration failure";
     EXPECT_FLOAT_EQ(ray.step_size, floor_config.min_step);
+}
+
+TEST_F(RK45IntegratorTests, DoublePrecisionStagesMatchAnAnalyticRindlerNullRay) {
+    class RindlerMetric final : public IMetric {
+      public:
+        void Evaluate(const Vec4& position, Metric4d& metric,
+                      Tensor<Dual<double>, 4, 4, 4>& derivatives) override {
+            metric.Zero();
+            derivatives.Zero();
+            metric(0, 0) = -position(1) * position(1);
+            metric(1, 1) = metric(2, 2) = metric(3, 3) = 1.0;
+            derivatives(1, 0, 0) = -2.0 * position(1);
+        }
+        bool IsValidEvent(const Vec4& position) const override { return position(1) > 0.0; }
+        const Config& GetParameters() const override { return parameters_; }
+        void SetParameter(const std::string&, double) override {}
+        const char* GetName() const override { return "Rindler"; }
+      private:
+        Config parameters_;
+    } metric;
+    Lightray ray{};
+    ray.position(1) = 1.0;
+    ray.velocity(0) = ray.velocity(1) = 1.0;
+    ray.step_size = 0.01f;
+    auto exact_config = config;
+    exact_config.abs_tolerance = exact_config.rel_tolerance = 1e-10f;
+    const double h = ray.step_size;
+    ASSERT_TRUE(Geodesic::IntegrateStepRk45(ray, &metric, exact_config));
+    // ds²=-x²dt²+dx²+dy²+dz² is flat spacetime in an accelerated
+    // chart. E=1 gives x²=1+2lambda and t=log(x), independently of RK.
+    // Casting the double Butcher stage weights through float introduces an
+    // O(epsilon_float*h) defect and misses these bounds by over an order.
+    EXPECT_NEAR(ray.position(1), std::sqrt(1.0 + 2.0 * h), 5e-13);
+    EXPECT_NEAR(ray.position(0), 0.5 * std::log1p(2.0 * h), 5e-13);
+}
+
+TEST_F(RK45IntegratorTests, OutgoingChartPreservesMetricKillingQuantitiesAndInverseMap) {
+    const std::array<KerrSchildParams, 6> parameters{{
+        {1.0, 0.0, 0.0, 0.0}, {1.0, 0.998, 0.0, 0.0},
+        {1.0, 0.6, 0.5, 0.0}, {1.0, 0.0, 0.8, 0.0},
+        {1.0, 1.0, 0.0, 0.0}, {1.0, 0.0, 0.0, 0.01}}};
+    for (const auto& parameters_at_event : parameters) {
+        KerrSchildFamily incoming(parameters_at_event);
+        OutgoingKerrSchild outgoing(incoming);
+        for (double radius : {3.0, 8.0}) {
+            const auto cart = coordinates::BlToKerrSchildCart(
+                {0.7, radius, 1.0, 0.6}, parameters_at_event.a);
+            Vec4 position;
+            for (int component = 0; component < 4; ++component) position(component) = cart[component];
+            const auto forward = outgoing.FromIngoing(position);
+            ASSERT_TRUE(forward.has_value());
+            const auto reverse = outgoing.ToIngoing(forward->position);
+            ASSERT_TRUE(reverse.has_value());
+            Metric4d original_metric, outgoing_metric;
+            Tensor<Dual<double>, 4, 4, 4> derivatives;
+            incoming.Evaluate(position, original_metric, derivatives);
+            outgoing.Evaluate(forward->position, outgoing_metric, derivatives);
+            Vec4 vector;
+            vector(0) = -1.4;
+            vector(1) = 0.2;
+            vector(2) = -0.3;
+            vector(3) = 0.5;
+            const auto mapped_vector = forward->Apply(vector);
+            const auto original_momentum = TensorOps::LowerIndex(vector, original_metric);
+            const auto mapped_momentum = TensorOps::LowerIndex(mapped_vector, outgoing_metric);
+            EXPECT_NEAR(mapped_momentum(0), original_momentum(0), 2e-12);
+            EXPECT_NEAR(-position(2) * original_momentum(1) + position(1) * original_momentum(2),
+                        -forward->position(2) * mapped_momentum(1) +
+                            forward->position(1) * mapped_momentum(2), 2e-12);
+            for (int mu = 0; mu < 4; ++mu) {
+                EXPECT_NEAR(reverse->position(mu), position(mu), 2e-12);
+                EXPECT_NEAR(reverse->Apply(mapped_vector)(mu), vector(mu), 2e-12);
+                for (int nu = 0; nu < 4; ++nu) {
+                    double pullback = 0.0;
+                    for (int alpha = 0; alpha < 4; ++alpha)
+                        for (int beta = 0; beta < 4; ++beta)
+                            pullback += forward->jacobian[alpha][mu] *
+                                        outgoing_metric(alpha, beta).real *
+                                        forward->jacobian[beta][nu];
+                    EXPECT_NEAR(pullback, original_metric(mu, nu).real, 2e-12);
+                }
+                Vec4 plus = position, minus = position;
+                constexpr double h = 1e-5;
+                plus(mu) += h;
+                minus(mu) -= h;
+                const auto forward_plus = outgoing.FromIngoing(plus);
+                const auto forward_minus = outgoing.FromIngoing(minus);
+                ASSERT_TRUE(forward_plus.has_value());
+                ASSERT_TRUE(forward_minus.has_value());
+                for (int nu = 0; nu < 4; ++nu)
+                    EXPECT_NEAR((forward_plus->position(nu) - forward_minus->position(nu)) / (2*h),
+                                forward->jacobian[nu][mu], 2e-8);
+            }
+        }
+        Vec4 horizon;
+        horizon(1) = std::hypot(incoming.OuterHorizonRadius(), parameters_at_event.a);
+        EXPECT_FALSE(outgoing.ToIngoing(horizon).has_value());
+    }
+}
+
+TEST_F(RK45IntegratorTests, NullDefectAboveTheDeclaredBoundIsRejectedBeforeProjection) {
+    KerrSchildFamily flat(KerrSchildParams::Minkowski());
+    Lightray ray{};
+    ray.position(1) = 10.0;
+    constexpr double residual = 1.005e-6;
+    ray.velocity(0) = -std::sqrt((1.0 + residual) / (1.0 - residual));
+    ray.velocity(1) = 1.0;
+    ray.step_size = config.initial_step;
+    const auto before = ray;
+
+    EXPECT_FALSE(Geodesic::IntegrateStepRk45(ray, &flat, config));
+    EXPECT_EQ(ray.terminated, 6);
+    for (int component = 0; component < 4; ++component) {
+        EXPECT_DOUBLE_EQ(ray.position(component), before.position(component));
+        EXPECT_DOUBLE_EQ(ray.velocity(component), before.velocity(component));
+    }
+    EXPECT_FLOAT_EQ(ray.proper_time, before.proper_time);
 }
 
 TEST_F(RK45IntegratorTests, NullProjectionPreservesTheIncomingLightConeBranch) {

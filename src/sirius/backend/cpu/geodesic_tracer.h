@@ -19,6 +19,7 @@
 #include "sirius/core/disk/volumetric_disk.h"
 #include "sirius/core/geodesic_integrator.h"
 #include "sirius/core/metrics/metric.h"
+#include "sirius/core/metrics/outgoing_kerr_schild.h"
 #include "sirius/core/metrics/registry.h"
 #include "sirius/core/observer_frame.h"
 #include "sirius/core/polarisation/walker_penrose.h"
@@ -79,13 +80,18 @@ struct TraceResult {
     int steps_taken = 0;
     float redshift = 1.0f;
     bool numerical_failure = false;
+    // Exterior terminal events retain the public ingoing chart. A past-horizon
+    // event has no finite ingoing coordinates and is published in the outgoing
+    // chart in which its accepted trajectory and coupled state were advanced.
+    enum class TerminalChart { MetricNative, OutgoingKerrSchild };
+    TerminalChart terminal_chart = TerminalChart::MetricNative;
     // Non-zero when the core integrator declined a trajectory before a
     // physical trace boundary was reached.
     int integrator_termination = 0;
     // Affine distance from the launch event to the published terminal event in
     // the camera-frequency normalisation used by the live integrator. Coupled
     // transport (Jacobi, polarisation, and volume) consumes this same interval.
-    float affine_length = 0.0f;
+    double affine_length = 0.0;
 
     // Exact minimum Kerr-Schild chart radius reached by the accepted samples.
     float min_radius = 1e10f;
@@ -392,11 +398,13 @@ class GeodesicTracer {
   private:
     sirius::core::IMetric* metric_;
     TracerConfig config_;
+    const sirius::core::OutgoingKerrSchild* outgoing_chart_ = nullptr;
+    TraceResult TraceInCurrentChart(const sirius::core::CameraRay& camera_ray);
 
     // Metric parameters cached once per trace.
     double cached_m_ = 1.0;
     double cached_a_ = 0.0;  // a/M.
-    std::unique_ptr<sirius::core::AccretionDiskD> page_thorne_disk_;
+    std::shared_ptr<sirius::core::AccretionDiskD> page_thorne_disk_;
     double page_thorne_reference_temperature_ = 0.0;
     double page_thorne_cached_m_ = -1.0;
     double page_thorne_cached_a_ = -2.0;
@@ -544,7 +552,7 @@ inline void GeodesicTracer::CacheMetricParameters() {
         disk_config.r_inner = config_.disk_inner / cached_m_;
         disk_config.r_outer =
             std::max(500.0, static_cast<double>(config_.disk_outer) / std::max(cached_m_, 0.1));
-        page_thorne_disk_ = std::make_unique<sirius::core::AccretionDiskD>(disk_config);
+        page_thorne_disk_ = std::make_shared<sirius::core::AccretionDiskD>(disk_config);
         const double reference_radius =
             sirius::core::constants::disk::kTemperatureReferenceRadiusRatio *
             page_thorne_disk_->InnerRadius();

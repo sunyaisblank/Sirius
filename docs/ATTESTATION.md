@@ -192,7 +192,7 @@ Handler semantics for press, repeat, release, mouse drag, scroll, finite input,
 and progressive restart are Mandatory-gated without a window. The
 `viewer-native-window-input` domain remains separate: a record must show that a
 GLFW/OpenGL window was created on the named physical Radeon target, that a
-progressive Vulkan frame was published, and that native keyboard and pointer
+progressive Vulkan frame was published, and that native keyboard, cursor and scroll
 callbacks were both observed. The verifier independently binds the selected
 device, readiness marker, complete non-skipping JUnit report, inventory,
 execution log, and callback/frame transcript by hash. Direct calls to handlers,
@@ -221,7 +221,7 @@ hashes to equal the live viewer volume. Only those authority artifacts and the
 verified upstream transcript are copied; stale, circular viewer, native-Linux,
 wrong-driver, cross-device, or altered-resource reuse fails before a window is
 created. The viewer still must publish a new Vulkan frame and receive new native
-keyboard and pointer callbacks. Thus one physical qualification estate can
+keyboard, cursor and scroll callbacks. Thus one physical qualification estate can
 support both records without reusing either domain's physical observation.
 
 The runbook refuses a dirty source tree, selects and verifies the named physical

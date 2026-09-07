@@ -66,12 +66,18 @@ if(NOT _readiness_contract_valid)
         "(${_readiness_result})\n"
         "${_readiness_stdout}\n${_readiness_stderr}")
 endif()
-if("@SIRIUS_INSTALL_HAS_VIEWER@" STREQUAL "TRUE" AND
-   (NOT _readiness_stdout MATCHES "\"interactive_viewer\"" OR
-    NOT _readiness_stdout MATCHES "\"state\": \"attestation_required\""))
-    message(FATAL_ERROR
-        "compiled viewer logic was silently promoted to native-window readiness\n"
-        "${_readiness_stdout}\n${_readiness_stderr}")
+if("@SIRIUS_INSTALL_HAS_VIEWER@" STREQUAL "TRUE")
+    string(JSON _viewer_ready GET "${_readiness_stdout}" interactive_viewer ready)
+    string(JSON _viewer_admitted GET "${_readiness_stdout}" interactive_viewer evidence_admitted)
+    string(JSON _viewer_state GET "${_readiness_stdout}" interactive_viewer state)
+    if(_viewer_ready OR
+       (_viewer_admitted AND NOT _viewer_state STREQUAL "current_host_unverified") OR
+       (NOT _viewer_admitted AND NOT _viewer_state STREQUAL "attestation_required") OR
+       ("@SIRIUS_ALIGNMENT_MODE@" STREQUAL "release" AND NOT _viewer_admitted))
+        message(FATAL_ERROR
+            "viewer readiness conflates admitted evidence with current-host window/input proof\n"
+            "${_readiness_stdout}\n${_readiness_stderr}")
+    endif()
 endif()
 
 execute_process(

@@ -14,6 +14,7 @@
 // precision rung is unsupported, never substituting a different render.
 
 #include "sirius/base/error.h"
+#include "sirius/render/dispatch_governor.h"
 #include "sirius/render/memory_governor.h"
 
 #include <cstdint>
@@ -34,13 +35,16 @@ enum class PrecisionRung {
                // SIRIUS_PRECISION=fp64 on devices reporting shaderFloat64
 };
 
-// Maximum memory-tile edge and row-band height for one Vulkan workload. fp64
-// trajectories and the wider ray-bundle/point-catalogue kernel use the strict
-// physical-watchdog footprint; ordinary fp32 paths retain the memory governor's
-// normal tile cap and adaptive row growth.
+// Independent residency and submission caps. Expensive workloads admit at most
+// 256 active fp32 beam/catalogue trajectories in 64x4 bands; fp64 and heavy
+// compensated fp32 retain 64x1 pending wider physical evidence. These are hard work bounds,
+// not duration guarantees; feedback cannot preempt an individual trajectory.
 struct VulkanDispatchLimits {
     int tile_edge_cap = kMaxTileEdge;
+    int max_band_width = kMaxTileEdge;
     int max_band_rows = kMaxTileEdge;
+    std::int64_t max_pixels = static_cast<std::int64_t>(kMaxTileEdge) * kMaxTileEdge;
+    double default_target_ms = kDefaultDispatchTargetMs;
 };
 
 [[nodiscard]] VulkanDispatchLimits ResolveVulkanDispatchLimits(PrecisionRung precision,
@@ -57,6 +61,11 @@ struct VulkanRenderStats {
     bool point_catalogue_uploaded = false;
     int tiles_rendered = 0;
     int band_dispatches = 0;  // compute submissions; >= tiles_rendered under banding
+    double dispatch_seconds = 0.0;
+    double maximum_dispatch_ms = 0.0;
+    std::int64_t maximum_dispatch_pixels = 0;
+    int dispatch_target_overshoots = 0;
+    int dispatch_fallbacks = 0;
     double seconds = 0.0;
 };
 

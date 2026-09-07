@@ -1506,15 +1506,56 @@ def thin_lens_authority_errors(documents: dict[Path, str]) -> list[str]:
         errors.append("the host thin-lens authority omits its local tangent-plane bound")
 
     cpu = code_by_path.get(THIN_LENS_CPU_CONSUMER, "")
-    if re.search(
-        r"pos_double\s*\(\s*component\s*\)\s*\+=.*?"
-        r"camera_frame->spatial\[1\].*?camera_ray\.aperture_up.*?"
-        r"camera_frame->spatial\[2\].*?camera_ray\.aperture_right.*?"
-        r"ray\.position\s*\(\s*component\s*\)\s*=",
+    # Follow the actual launch function, including its outgoing-chart change.
+    # A store in an early failure branch, or matching dead code elsewhere in
+    # the translation unit, cannot establish the successful launch dataflow.
+    launch = ""
+    signature = re.search(
+        r"\bLightray\s+GeodesicTracer::InitializeLightray\s*\([^{}]*\)\s*\{",
         cpu,
         re.DOTALL,
-    ) is None:
+    )
+    if signature:
+        depth = 1
+        for index in range(signature.end(), len(cpu)):
+            depth += (cpu[index] == "{") - (cpu[index] == "}")
+            if depth == 0:
+                launch = cpu[signature.end():index]
+                break
+    launch_flow = re.search(
+        r"(?P<pupil>pos_double\s*\(\s*component\s*\)\s*\+="
+        r"\s*-camera_frame->spatial\[1\]\(component\)\s*\*\s*camera_ray\.aperture_up"
+        r"\s*\+\s*camera_frame->spatial\[2\]\(component\)\s*\*"
+        r"\s*camera_ray\.aperture_right\s*;)"
+        r"(?P<before_mapping>.*?)camera_frame\s*=\s*frame_at\(pos_double\)\s*;"
+        r"(?P<before_chart>.*?)const\s+auto\s+mapping\s*="
+        r"\s*outgoing_chart_->FromIngoing\(pos_double\)\s*;"
+        r"(?P<before_commit>.*?)pos_double\s*=\s*mapping->position\s*;"
+        r"(?P<after_commit>.*?)camera_frame->time\s*="
+        r"\s*mapping->Apply\(camera_frame->time\)\s*;"
+        r"\s*for\s*\(auto&\s+axis\s*:\s*camera_frame->spatial\)"
+        r"\s*axis\s*=\s*mapping->Apply\(axis\)\s*;"
+        r"\s*}\s*ray\.position\s*=\s*pos_double\s*;"
+        r"(?P<before_tangent>.*?)const\s+auto\s+past_ray\s*="
+        r"\s*relativity::PastDirectedCameraRay\(\*camera_frame,\s*rest_direction\)\s*;"
+        r"(?P<before_velocity>.*?)ray\.velocity\s*=\s*\*past_ray\s*;",
+        launch,
+        re.DOTALL,
+    )
+    if launch_flow is None:
         errors.append("the CPU tracer does not move the live launch event across the pupil")
+    else:
+        # Pupil position must survive until it is mapped, and the mapped
+        # position must reach the live ray without a reset to the pinhole.
+        position_assignment = r"\bpos_double(?:\s*\([^)]*\))?\s*=(?!=)"
+        before_commit = " ".join(launch_flow.group(name) for name in (
+            "before_mapping", "before_chart", "before_commit", "after_commit"
+        ))
+        if re.search(position_assignment, before_commit):
+            errors.append("the CPU tracer discards the displaced or mapped pupil position")
+        tangent_gap = launch_flow.group("before_tangent") + launch_flow.group("before_velocity")
+        if re.search(r"\bray\.position(?:\s*\([^)]*\))?\s*=(?!=)", tangent_gap):
+            errors.append("the CPU tracer overwrites the mapped live pupil position")
 
     device = code_by_path.get(THIN_LENS_DEVICE_CONSUMER, "")
     if re.search(
@@ -1543,11 +1584,19 @@ def verify_thin_lens_authority_policy() -> None:
             "pupil_radius > kMaximumThinLensPupilFraction * local_scale"
         ),
         THIN_LENS_CPU_CONSUMER: (
-            "camera_ray.aperture_up camera_ray.aperture_right "
+            "Lightray GeodesicTracer::InitializeLightray(const CameraRay& camera_ray) { "
             "pos_double(component) += -camera_frame->spatial[1](component) * "
             "camera_ray.aperture_up + camera_frame->spatial[2](component) * "
             "camera_ray.aperture_right; camera_frame = frame_at(pos_double); "
-            "ray.position(component) = value;"
+            "if (outgoing_chart_) { "
+            "const auto mapping = outgoing_chart_->FromIngoing(pos_double); "
+            "if (!mapping) { ray.position = pos_double; return ray; } "
+            "pos_double = mapping->position; "
+            "camera_frame->time = mapping->Apply(camera_frame->time); "
+            "for (auto& axis : camera_frame->spatial) axis = mapping->Apply(axis); } "
+            "ray.position = pos_double; "
+            "const auto past_ray = relativity::PastDirectedCameraRay(*camera_frame, rest_direction); "
+            "ray.velocity = *past_ray; return ray; }"
         ),
         THIN_LENS_DEVICE_AUTHORITY: (
             "ThinLensProjectionSample ProjectThinLensSample pupilRight pupilUp"
@@ -1586,6 +1635,48 @@ def verify_thin_lens_authority_policy() -> None:
     )
     if not thin_lens_authority_errors(pinhole_cpu):
         raise RuntimeError("thin-lens policy accepted a CPU direction-only pupil")
+
+    cpu_mutations = {
+        "an unshifted outgoing-chart input": (
+            "const auto mapping = outgoing_chart_->FromIngoing(pos_double)",
+            "const auto mapping = outgoing_chart_->FromIngoing(pinhole_position)",
+        ),
+        "a discarded outgoing-chart position": (
+            "pos_double = mapping->position;", "discarded_position = mapping->position;",
+        ),
+        "an untransformed observer time axis": (
+            "camera_frame->time = mapping->Apply(camera_frame->time);", "retain_time_axis();",
+        ),
+        "untransformed observer spatial axes": (
+            "axis = mapping->Apply(axis);", "retain_spatial_axis();",
+        ),
+        "a pupil reset before the chart transform": (
+            "camera_frame = frame_at(pos_double);",
+            "pos_double = pinhole_position; camera_frame = frame_at(pos_double);",
+        ),
+        "a pupil reset after the chart transform": (
+            "pos_double = mapping->position;",
+            "pos_double = mapping->position; pos_double = pinhole_position;",
+        ),
+        "a live position overwritten before tangent construction": (
+            "const auto past_ray =", "ray.position = pinhole_position; const auto past_ray =",
+        ),
+        "only an early failure-branch position store": (
+            "} ray.position = pos_double;", "} discarded_position = pos_double;",
+        ),
+        "discarded live tangent construction": (
+            "ray.velocity = *past_ray;", "discarded_velocity = *past_ray;",
+        ),
+        "a matching helper outside the live launch function": (
+            "GeodesicTracer::InitializeLightray", "GeodesicTracer::UnusedLaunchExample",
+        ),
+    }
+    for description, (before, after) in cpu_mutations.items():
+        changed = dict(valid)
+        assert before in changed[THIN_LENS_CPU_CONSUMER]
+        changed[THIN_LENS_CPU_CONSUMER] = changed[THIN_LENS_CPU_CONSUMER].replace(before, after)
+        if not thin_lens_authority_errors(changed):
+            raise RuntimeError(f"thin-lens policy accepted {description}")
 
     pinhole_device = dict(valid)
     pinhole_device[THIN_LENS_DEVICE_CONSUMER] = pinhole_device[

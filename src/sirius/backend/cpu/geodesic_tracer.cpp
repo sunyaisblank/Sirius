@@ -29,11 +29,6 @@ struct ObserverSkySample {
     Vec4 world_direction;
 };
 
-struct CaptureLimitEvent {
-    Vec4 position;
-    double affine_offset;
-};
-
 std::optional<AcceptedTraceSegmentSample> FindMetricCaptureEvent(
     const Vec4& start_position, const Vec4& start_tangent, const Vec4& end_position,
     const Vec4& end_tangent, double affine_length, IMetric& metric, double capture_margin) {
@@ -56,96 +51,6 @@ std::optional<AcceptedTraceSegmentSample> FindMetricCaptureEvent(
     }
     return SampleAcceptedTraceSegment(start_position, start_tangent, end_position, end_tangent,
                                       affine_length, inside);
-}
-
-// A past-directed black-hole ray can become coordinate-stiff immediately
-// outside the horizon and exhaust the configured minimum RK step before an
-// accepted endpoint crosses the surface. Recover only that terminal case: the
-// current event must already be inside the central numerical horizon buffer.
-// A direct forward-tangent bracket is preferred. At a rotating horizon the
-// chart tangent can become asymptotic to the generator; then reverse-tangent
-// departure from the buffer proves inward approach and a nested radial
-// bisection publishes the exact surface limit instead of a numerical shadow.
-std::optional<CaptureLimitEvent> FindCaptureLimitEvent(const Lightray& ray, IMetric& metric,
-                                                       double capture_margin) {
-    constexpr double kNumericalMargin = constants::coordinates::kHorizonBuffer - 1.0;
-    const double numerical_margin = capture_margin + kNumericalMargin;
-    if (!metric.InsideCaptureSurface(ray.position, numerical_margin)) {
-        return std::nullopt;
-    }
-    if (metric.InsideCaptureSurface(ray.position, capture_margin)) {
-        return CaptureLimitEvent{ray.position, 0.0};
-    }
-
-    auto extrapolate = [&](double affine) {
-        Vec4 position = ray.position;
-        for (int component = 0; component < 4; ++component) {
-            position(component) += affine * ray.velocity(component);
-        }
-        return position;
-    };
-
-    double lower = 0.0;
-    double upper = static_cast<double>(ray.step_size);
-    Vec4 upper_position;
-    bool bracketed = false;
-    for (int expansion = 0; expansion < 32; ++expansion) {
-        upper_position = extrapolate(upper);
-        if (metric.InsideCaptureSurface(upper_position, capture_margin)) {
-            bracketed = true;
-            break;
-        }
-        upper *= 2.0;
-    }
-    if (bracketed) {
-        for (int iteration = 0; iteration < 64; ++iteration) {
-            const double middle = 0.5 * (lower + upper);
-            if (metric.InsideCaptureSurface(extrapolate(middle), capture_margin)) {
-                upper = middle;
-            } else {
-                lower = middle;
-            }
-        }
-        upper_position = extrapolate(upper);
-        return CaptureLimitEvent{upper_position, upper};
-    }
-
-    // In ingoing Kerr-Schild coordinates a past-directed captured ray can
-    // approach the rotating horizon generator tangentially. Establish its
-    // approach by finding an earlier tangent extrapolate outside the numerical
-    // buffer; an outgoing or merely nearby failed ray does not satisfy this.
-    double backward = static_cast<double>(ray.step_size);
-    bool approached = false;
-    for (int expansion = 0; expansion < 32; ++expansion) {
-        if (!metric.InsideCaptureSurface(extrapolate(-backward), numerical_margin)) {
-            approached = true;
-            break;
-        }
-        backward *= 2.0;
-    }
-    if (!approached) return std::nullopt;
-
-    Vec4 radial_inside = ray.position;
-    radial_inside(1) = 0.0;
-    radial_inside(2) = 0.0;
-    radial_inside(3) = 0.0;
-    if (!metric.InsideCaptureSurface(radial_inside, capture_margin)) return std::nullopt;
-    double inside_scale = 0.0;
-    double outside_scale = 1.0;
-    for (int iteration = 0; iteration < 64; ++iteration) {
-        const double scale = 0.5 * (inside_scale + outside_scale);
-        Vec4 candidate = ray.position;
-        for (int component = 1; component < 4; ++component) {
-            candidate(component) *= scale;
-        }
-        if (metric.InsideCaptureSurface(candidate, capture_margin)) {
-            inside_scale = scale;
-            radial_inside = candidate;
-        } else {
-            outside_scale = scale;
-        }
-    }
-    return CaptureLimitEvent{radial_inside, 0.0};
 }
 
 std::optional<ObserverSkySample> SampleEulerianSky(IMetric& metric_authority, const Vec4& position,
@@ -182,6 +87,32 @@ std::optional<ObserverSkySample> SampleEulerianSky(IMetric& metric_authority, co
     sample.world_direction(1) = local_direction[0];
     sample.world_direction(2) = local_direction[1];
     sample.world_direction(3) = local_direction[2];
+    return sample;
+}
+
+// Retain the public ingoing-Eulerian catalogue and observer screen outside
+// the horizon while the central ray and transported vectors use outgoing
+// coordinates. The horizon itself uses its explicitly declared regular chart.
+std::optional<ObserverSkySample> SampleSourceSky(IMetric& metric, const Vec4& position,
+                                                 const Vec4& tangent,
+                                                 const OutgoingKerrSchild* chart) {
+    if (!chart) return SampleEulerianSky(metric, position, tangent);
+    const auto incoming = chart->ToIngoing(position);
+    if (!incoming) {
+        // Only the physical horizon has a required regular terminal screen
+        // outside the exterior chart overlap. Other mapping failures decline.
+        if (!chart->InsideCaptureSurface(position, 0.0)) return std::nullopt;
+        return SampleEulerianSky(metric, position, tangent);
+    }
+    auto sample = SampleEulerianSky(chart->Source(), incoming->position, incoming->Apply(tangent));
+    if (!sample) return std::nullopt;
+    const auto outgoing = chart->FromIngoing(incoming->position);
+    if (!outgoing) return std::nullopt;
+    sample->observer.time = outgoing->Apply(sample->observer.time);
+    for (auto& axis : sample->observer.spatial) axis = outgoing->Apply(axis);
+    for (auto& axis : sample->screen) axis = outgoing->Apply(axis);
+    Tensor<Dual<double>, 4, 4, 4> derivatives;
+    metric.Evaluate(position, sample->metric, derivatives);
     return sample;
 }
 
@@ -383,12 +314,13 @@ Lightray GeodesicTracer::InitializeLightray(const CameraRay& camera_ray,
     const std::array<double, 3> local_beta{-camera_ray.beta_forward, -camera_ray.beta_up,
                                            camera_ray.beta_right};
 
+    IMetric* observer_metric = outgoing_chart_ ? &outgoing_chart_->Source() : metric_;
     const auto frame_at = [&](const Vec4& position) {
         Metric4d metric;
         Tensor<Dual<double>, 4, 4, 4> derivatives;
-        metric_->Evaluate(position, metric, derivatives);
+        observer_metric->Evaluate(position, metric, derivatives);
         Metric4d inverse_metric;
-        if (!metric_->InverseMetric(position, inverse_metric)) {
+        if (!observer_metric->InverseMetric(position, inverse_metric)) {
             inverse_metric = TensorOps::Inverse(metric);
         }
         const auto reference_frame =
@@ -404,6 +336,11 @@ Lightray GeodesicTracer::InitializeLightray(const CameraRay& camera_ray,
     pos_double(1) = pos_cart.x;
     pos_double(2) = pos_cart.y;
     pos_double(3) = pos_cart.z;
+    if (outgoing_chart_ && !outgoing_chart_->FromIngoing(pos_double)) {
+        ray.position = pos_double;
+        ray.terminated = 3;
+        return ray;
+    }
     auto camera_frame = frame_at(pos_double);
     SIRIUS_ASSERT(camera_frame.has_value());
 
@@ -417,22 +354,34 @@ Lightray GeodesicTracer::InitializeLightray(const CameraRay& camera_ray,
                 -camera_frame->spatial[1](component) * camera_ray.aperture_up +
                 camera_frame->spatial[2](component) * camera_ray.aperture_right;
         }
+        if (outgoing_chart_ && !outgoing_chart_->FromIngoing(pos_double)) {
+            ray.position = pos_double;
+            ray.terminated = 3;
+            return ray;
+        }
         camera_frame = frame_at(pos_double);
         SIRIUS_ASSERT(camera_frame.has_value());
     }
 
-    for (int component = 0; component < 4; ++component) {
-        ray.position(component) = static_cast<float>(pos_double(component));
+    if (outgoing_chart_) {
+        const auto mapping = outgoing_chart_->FromIngoing(pos_double);
+        if (!mapping) {
+            ray.position = pos_double;
+            ray.terminated = 3;
+            return ray;
+        }
+        pos_double = mapping->position;
+        camera_frame->time = mapping->Apply(camera_frame->time);
+        for (auto& axis : camera_frame->spatial) axis = mapping->Apply(axis);
     }
+    ray.position = pos_double;
     if (launch_frame != nullptr) *launch_frame = *camera_frame;
     const std::array<double, 3> rest_direction{camera_ray.direction(1), camera_ray.direction(2),
                                                camera_ray.direction(3)};
     const auto past_ray = relativity::PastDirectedCameraRay(*camera_frame, rest_direction);
     SIRIUS_ASSERT(past_ray.has_value());
     SIRIUS_ASSERT((*past_ray)(0) < 0.0);
-    for (int component = 0; component < 4; ++component) {
-        ray.velocity(component) = static_cast<float>((*past_ray)(component));
-    }
+    ray.velocity = *past_ray;
 
     // Initialise the remaining fields.
     Vec4 vel_for_accel;
@@ -504,7 +453,7 @@ void GeodesicTracer::ReconditionPolarisationFrame(PolarisationFrame& frame, cons
     // numerical transport drift back into the Eulerian observer's physical
     // Sachs screen. A coordinate-time basis vector is not generally timelike
     // (notably inside the Kerr ergosphere), so it cannot define this screen.
-    const auto sky = SampleEulerianSky(*metric_, position, velocity);
+    const auto sky = SampleSourceSky(*metric_, position, velocity, outgoing_chart_);
     SIRIUS_PRE(sky.has_value());
 
     frame.reference.position = position;
@@ -595,6 +544,24 @@ void GeodesicTracer::SetDiskPolarisation(const PolarisationFrame& frame,
 // Main trace.
 // =============================================================================
 TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
+    auto* family = dynamic_cast<KerrSchildFamily*>(metric_);
+    if (family && family->HasHorizon()) {
+        CacheMetricParameters();
+        OutgoingKerrSchild outgoing(*family);
+        GeodesicTracer worker(&outgoing, config_);
+        worker.outgoing_chart_ = &outgoing;
+        // The radial disk profile is immutable during one trace. Reuse the
+        // cached profile without moving or mutating the public tracer's state.
+        worker.page_thorne_disk_ = page_thorne_disk_;
+        worker.page_thorne_reference_temperature_ = page_thorne_reference_temperature_;
+        worker.page_thorne_cached_m_ = page_thorne_cached_m_;
+        worker.page_thorne_cached_a_ = page_thorne_cached_a_;
+        return worker.TraceInCurrentChart(camera_ray);
+    }
+    return TraceInCurrentChart(camera_ray);
+}
+
+TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray) {
     SIRIUS_PRE(IsRepresentedCameraRay(camera_ray) && camera_ray.active);
     TraceResult result;
     result.steps_taken = 0;
@@ -616,7 +583,9 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
     relativity::ObserverFrame launch_frame;
     Lightray ray = InitializeLightray(camera_ray, &launch_frame);
 
-    if (HasInvalidState(ray)) {
+    if (ray.terminated != 0 || HasInvalidState(ray)) {
+        result.final_position = ray.position;
+        result.integrator_termination = ray.terminated;
         result.outcome = TraceResult::Outcome::MaxSteps;
         result.numerical_failure = true;
         return result;
@@ -640,6 +609,7 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
     RayBundle previous_bundle;
     Vec4 prev_vel;
     double prev_pt = 0.0;
+    double affine_length = 0.0;
     if (config_.enable_ray_bundles) {
         InitBundle(*launch_screen, bundle);
     }
@@ -652,7 +622,7 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
     for (int step = 0; step < config_.max_steps; ++step) {
         for (int i = 0; i < 4; ++i) prev_pos(i) = ray.position(i);
         prev_vel = ray.velocity;
-        prev_pt = static_cast<double>(ray.proper_time);
+        prev_pt = affine_length;
         if (config_.enable_polarisation) {
             previous_polarisation_frame = polarisation_frame;
         }
@@ -670,23 +640,10 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
             step_config.max_step = std::min(step_config.max_step, config_.strong_field_max_step);
             ray.step_size = std::min(ray.step_size, step_config.max_step);
         }
+        const double attempted_step = ray.step_size;
         bool success = Geodesic::IntegrateStepRk45(ray, metric_, step_config);
         result.steps_taken++;
 
-        if (ray.terminated == 5 && !HasInvalidState(ray)) {
-            const auto capture = FindCaptureLimitEvent(
-                ray, *metric_, static_cast<double>(config_.horizon_factor) - 1.0);
-            if (capture.has_value()) {
-                ray.position = capture->position;
-                ray.proper_time += static_cast<float>(capture->affine_offset);
-                ray.coordinate_time = static_cast<float>(capture->position(0));
-                ray.terminated = 0;
-                result.outcome = TraceResult::Outcome::Horizon;
-                result.integrator_termination = 0;
-                result.numerical_failure = false;
-                break;
-            }
-        }
         if (ray.terminated || HasInvalidState(ray)) {
             result.outcome = TraceResult::Outcome::MaxSteps;
             result.integrator_termination = ray.terminated;
@@ -704,7 +661,7 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
             continue;
         }
 
-        double d_lambda = static_cast<double>(ray.proper_time) - prev_pt;
+        double d_lambda = attempted_step;
         const float min_radius_before_step = min_r;
         bool terminal_causal_boundary = false;
         bool terminal_throat_boundary = false;
@@ -797,6 +754,9 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
             terminal_causal_boundary = false;
         }
 
+        affine_length = prev_pt + d_lambda;
+        ray.proper_time = static_cast<float>(affine_length);
+
         // Advance the ray bundle over the accepted affine step, sampling the
         // connection and curvature at the bundle integrator's own stages.
         if (config_.enable_ray_bundles) {
@@ -852,7 +812,10 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
                 if (result.num_disk_crossings < TraceResult::kMaxDiskCrossings) {
                     auto& crossing = result.disk_crossings[result.num_disk_crossings];
                     crossing.r = disk_r;
-                    crossing.phi = disk_phi;
+                    const float source_phi = outgoing_chart_
+                        ? static_cast<float>(outgoing_chart_->IngoingAzimuth(disk_r, disk_phi))
+                        : disk_phi;
+                    crossing.phi = source_phi;
                     crossing.temperature = ComputeDiskTemperature(disk_r);
                     crossing.crossing_index = result.num_disk_crossings;
                     crossing.valid = true;
@@ -864,7 +827,7 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
 
                         result.outcome = TraceResult::Outcome::DiskHit;
                         result.disk_radius = disk_r;
-                        result.disk_phi = disk_phi;
+                        result.disk_phi = source_phi;
                         result.disk_temperature = crossing.temperature;
                     } else {
                         const DiskFrequencySample transfer =
@@ -902,7 +865,8 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
                 // screen rays, not by adding surfaces hidden behind this one.
                 ray.position = crossing_position;
                 ray.velocity = ray_vel;
-                ray.proper_time = static_cast<float>(prev_pt + crossing_fraction * d_lambda);
+                affine_length = prev_pt + crossing_fraction * d_lambda;
+                ray.proper_time = static_cast<float>(affine_length);
                 ray.coordinate_time = static_cast<float>(crossing_position(0));
                 const double crossing_cartesian_radius =
                     std::sqrt(crossing_position(1) * crossing_position(1) +
@@ -941,7 +905,7 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
         if (terminal_opposite_infinity) {
             result.outcome = TraceResult::Outcome::Escaped;
             result.asymptotic_sheet = TraceResult::AsymptoticSheet::Opposite;
-            const auto sky = SampleEulerianSky(*metric_, ray.position, ray.velocity);
+            const auto sky = SampleSourceSky(*metric_, ray.position, ray.velocity, outgoing_chart_);
             if (!sky.has_value()) {
                 result.outcome = TraceResult::Outcome::MaxSteps;
                 result.numerical_failure = true;
@@ -961,7 +925,7 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
         if (terminal_causal_boundary) {
             result.outcome = TraceResult::Outcome::Escaped;
             result.asymptotic_sheet = TraceResult::AsymptoticSheet::Observer;
-            const auto sky = SampleEulerianSky(*metric_, ray.position, ray.velocity);
+            const auto sky = SampleSourceSky(*metric_, ray.position, ray.velocity, outgoing_chart_);
             SIRIUS_ASSERT(sky.has_value());
             if (!sky.has_value()) {
                 result.outcome = TraceResult::Outcome::MaxSteps;
@@ -985,7 +949,7 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
             if (v_radial > 0) {
                 result.outcome = TraceResult::Outcome::Escaped;
                 result.asymptotic_sheet = TraceResult::AsymptoticSheet::Observer;
-                const auto sky = SampleEulerianSky(*metric_, ray.position, ray.velocity);
+                const auto sky = SampleSourceSky(*metric_, ray.position, ray.velocity, outgoing_chart_);
                 SIRIUS_ASSERT(sky.has_value());
                 if (!sky.has_value()) {
                     result.outcome = TraceResult::Outcome::MaxSteps;
@@ -1005,7 +969,15 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
     for (int component = 0; component < 4; ++component) {
         result.final_position(component) = ray.position(component);
     }
-    result.affine_length = ray.proper_time;
+    result.affine_length = affine_length;
+    if (outgoing_chart_) {
+        const auto incoming = outgoing_chart_->ToIngoing(ray.position);
+        if (result.outcome != TraceResult::Outcome::Horizon && incoming) {
+            result.final_position = incoming->position;
+        } else {
+            result.terminal_chart = TraceResult::TerminalChart::OutgoingKerrSchild;
+        }
+    }
     result.min_radius = std::min(result.min_radius, min_r);
 
     // Beam ellipse from the propagated bundle (P2), evaluated against the ray's
@@ -1172,7 +1144,9 @@ void GeodesicTracer::AccumulateVolumetricEmission(const Vec4& entry_velocity,
 
         const coordinates::Vec4Cart sample_cart{position(0), x, y, z};
         const double disk_r = coordinates::KerrSchildRadius(sample_cart, cached_a_ * cached_m_);
-        const float phi = static_cast<float>(std::atan2(y, x));
+        const double chart_phi = std::atan2(y, x);
+        const float phi = static_cast<float>(outgoing_chart_
+            ? outgoing_chart_->IngoingAzimuth(disk_r, chart_phi) : chart_phi);
 
         double disk_dtau = 0.0;
         core::spectral::Rgb disk_source;
@@ -1471,7 +1445,7 @@ double GeodesicTracer::KretschmannScalar(const Vec4& pos) {
 
 void GeodesicTracer::FinaliseBundle(const RayBundle& bundle, const Vec4& position, const Vec4& k,
                                     TraceResult::Beam& out) const {
-    const auto sky = SampleEulerianSky(*metric_, position, k);
+    const auto sky = SampleSourceSky(*metric_, position, k, outgoing_chart_);
     if (!sky.has_value()) return;
 
     // Project with the spacetime metric onto the terminal observer's Sachs

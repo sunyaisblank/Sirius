@@ -30,4 +30,7 @@ endif()
 gtest_discover_tests(
     sirius_backend_tests
     PROPERTIES
+        # Backend and render cases share one physical device. Parallel CTest
+        # must not overlap their submissions or resident device allocations.
+        RESOURCE_LOCK sirius_vulkan_device
         LABELS "Correctness")

@@ -8,7 +8,7 @@
       "required": true,
       "verification": "build_gated",
       "profiles": ["cpu", "vulkan"],
-      "requirement": "Near-extremal Kerr geodesics satisfy the stated oracle and live conservation tolerances; the canonical oracle admits capture only from a represented Boyer-Lindquist state and exposes chart, null-projection, and integration failures without hidden mutable history; the live Cartesian Kerr-Schild authority preserves every numerically represented nonzero spin without an epsilon interval, remains scale covariant below the former branch, declines the non-unique r=0 rotating sheet instead of fabricating a finite radius, and rejects an unrepresented adaptive stage before metric evaluation; every accepted CPU RK45 and device RK4 state first bounds its unprojected local null defect and is then projected onto the nearest temporal root where represented, retaining its spatial tangent and chosen light-cone branch, including exact linear g_00=0 events; inside a stationary limit where no temporal root is represented, the smallest normalized spatial correction leaves k^0 unchanged, and an entirely unrepresented projection declines; a rejection that first selects the minimum step receives that represented retry before terminating; every declared device precision rung completes the same non-image invariant probe without a controller-induced false termination; and the finite-observer 1080p shadow boundary agrees with Bardeen to below one pixel on both live backends, with captured CPU trajectories localised on the exact metric horizon.",
+      "requirement": "Near-extremal Kerr geodesics satisfy the stated oracle and live conservation tolerances; the canonical oracle admits capture only from a represented Boyer-Lindquist state and exposes chart, null-projection, and integration failures without hidden mutable history; the live Cartesian Kerr-Schild authority preserves every numerically represented nonzero spin without an epsilon interval, remains scale covariant below the former branch, declines the non-unique r=0 rotating sheet instead of fabricating a finite radius, and rejects an unrepresented adaptive stage before metric evaluation; every accepted CPU RK45 and device RK4 state first bounds its unprojected local null defect and is then projected onto the nearest temporal root where represented, retaining its spatial tangent and chosen light-cone branch, including exact linear g_00=0 events; inside a stationary limit where no temporal root is represented, the smallest normalized spatial correction leaves k^0 unchanged, and an entirely unrepresented projection declines; a rejection that first selects the minimum step receives that represented retry before terminating; every device-supported precision rung completes the same non-image invariant probe without a controller-induced false termination, while a device lacking shaderFloat64 explicitly rejects the fp64 module and the supported fp32 and compensated probes still execute; and the finite-observer 1080p shadow boundary agrees with Bardeen to below one pixel on both live backends, with captured CPU trajectories localised on the exact metric horizon through accepted outgoing Kerr-Schild segments; the exact exterior coordinate Jacobian preserves the original observer, Killing quantities and screens, exterior outputs return to the public chart, horizon endpoints explicitly retain their regular outgoing chart, and rejected steps never invent capture or affine progress.",
       "capability_dependencies": [],
       "evidence": [
         {"kind": "gtest", "name": "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter"},
@@ -21,10 +21,17 @@
         {"kind": "gtest", "name": "RK45IntegratorTests.UnrepresentedStageShrinksBeforeMetricEvaluation"},
         {"kind": "gtest", "name": "RK45IntegratorTests.RejectionMaySelectTheMinimumStepBeforeTerminating"},
         {"kind": "gtest", "name": "RK45IntegratorTests.NullProjectionPreservesTheIncomingLightConeBranch"},
+        {"kind": "gtest", "name": "RK45IntegratorTests.NullDefectAboveTheDeclaredBoundIsRejectedBeforeProjection"},
+        {"kind": "gtest", "name": "RK45IntegratorTests.DoublePrecisionStagesMatchAnAnalyticRindlerNullRay"},
+        {"kind": "gtest", "name": "RK45IntegratorTests.OutgoingChartPreservesMetricKillingQuantitiesAndInverseMap"},
+        {"kind": "gtest", "name": "CpuTraceBoundary.PastRadialHorizonIsAnAcceptedFiniteOutgoingEvent"},
+        {"kind": "gtest", "name": "CpuTraceBoundary.LateMinimumStepsPreserveAnalyticAffineAndJacobiLength"},
+        {"kind": "gtest", "name": "CpuTraceBoundary.RejectedOutwardRayNearHorizonDoesNotInventCapture"},
         {"kind": "gtest", "name": "KernelParity.RepresentedSubThresholdKerrMetricIsScaleCovariant"},
         {"kind": "gtest", "name": "KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation"},
         {"kind": "gtest", "name": "KernelParity.NullProjectionPreservesConeBranchAndFailsClosed"},
         {"kind": "gtest", "name": "KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability"},
+        {"kind": "gtest", "name": "VulkanBackend.KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions"},
         {"kind": "gtest", "name": "KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison"},
         {"kind": "gtest", "name": "ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p"},
         {"kind": "gtest", "name": "VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p"},
@@ -526,7 +533,11 @@
         {"kind": "gtest", "name": "MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile"},
         {"kind": "gtest", "name": "MemoryGovernor.MalformedOverrideDeclinesInsteadOfBorrowingTheDeviceBudget"},
         {"kind": "gtest", "name": "DispatchGovernor.ExpensivePrecisionAndBundleWorkloadsUseTheStrictPhysicalFootprint"},
-        {"kind": "gtest", "name": "DispatchGovernor.TargetFailsLoudOnGarbageNegativesAndNonFinite"}
+        {"kind": "gtest", "name": "DispatchGovernor.TargetFailsLoudOnGarbageNegativesAndNonFinite"},
+        {"kind": "gtest", "name": "DispatchGovernor.StrictCapsApplyToEveryTailEvenWithoutAdaptation"},
+        {"kind": "gtest", "name": "DispatchGovernor.InvalidTimingAndIrreducibleOvershootDecline"},
+        {"kind": "gtest", "name": "DispatchGovernor.NearTargetLatencyStillGrowsWholeBands"},
+        {"kind": "gtest", "name": "VulkanRenderSession.DispatchSubdivisionPreservesExactCameraAndCatalogueOutput"}
       ]
     },
     {
@@ -851,8 +862,8 @@
       "id": "viewer_native_window_input",
       "state": "attestation_required",
       "profiles": ["viewer-native-window-input"],
-      "request": "Native GLFW/OpenGL window with a physical-Radeon Vulkan refinement frame and host-delivered keyboard/pointer events",
-      "behavior": "Before expensive execution, a non-promoting exact-candidate preflight must reject false hosts, software or ambiguous devices, missing WSL2/display/input prerequisites, and every command except machine-readable info queries. On the consolidated WSL2 route, the viewer producer may reuse the full test/gate/candidate/product authority only from an independently verified same-revision physical-Radeon hardware record whose platform and complete device identity equal the live viewer selection; stale, circular, cross-host, or cross-device reuse fails before window creation. Admission still requires a strict-qualification viewer-native-window-input attestation that binds that authority to a newly published progressive Vulkan frame and newly observed keyboard and pointer callbacks in hashed evidence.",
+      "request": "Native GLFW/OpenGL window with a physical-Radeon Vulkan refinement frame and host-delivered keyboard, cursor and scroll events",
+      "behavior": "Before expensive execution, a non-promoting exact-candidate preflight must reject false hosts, software or ambiguous devices, missing WSL2/display/input prerequisites, and every command except machine-readable info queries. On the consolidated WSL2 route, the viewer producer may reuse the full test/gate/candidate/product authority only from an independently verified same-revision physical-Radeon hardware record whose platform and complete device identity equal the live viewer selection; stale, circular, cross-host, or cross-device reuse fails before window creation. Admission still requires a strict-qualification viewer-native-window-input attestation that binds that authority to a newly published progressive Vulkan frame and newly observed keyboard, cursor and scroll callbacks in hashed evidence.",
       "evidence": [
         {"kind": "ctest", "name": "OperationalAttestation.FalseExternalEvidenceIsRejected"},
         {"kind": "ctest", "name": "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice"}
