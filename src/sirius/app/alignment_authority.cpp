@@ -67,6 +67,15 @@ constexpr std::array<std::string_view, 9> kProductArtifactNames = {
     "trace_spv",         "viewer_rdsd003a_fragment", "viewer_rdsd003a_vertex",
 };
 
+constexpr std::array<std::pair<std::string_view, std::string_view>, 6> kTestInputArtifacts = {{
+    {"smoke_spv", "kernels/smoke.spv"},
+    {"parity_probe_spv", "kernels/parity_probe.spv"},
+    {"parity_probe_fp32comp_spv", "kernels/parity_probe_fp32comp.spv"},
+    {"parity_probe_fp64_spv", "kernels/parity_probe_fp64.spv"},
+    {"trace_cuda", "kernels/portability/trace.cu"},
+    {"trace_metal", "kernels/portability/trace.metal"},
+}};
+
 bool HasExactFields(const nlohmann::json& object, std::initializer_list<std::string_view> fields) {
     if (!object.is_object() || object.size() != fields.size()) return false;
     return std::ranges::all_of(
@@ -278,9 +287,11 @@ std::expected<AlignmentAuthority, std::string> ValidateReceipt(const nlohmann::j
 std::expected<BuildGateAuthority, std::string> ValidateBuildGateReceipt(
     const nlohmann::json& receipt, const AlignmentAuthority& alignment,
     const std::filesystem::path& executable, const std::filesystem::path& resource_root) {
-    if (!HasExactFields(receipt, {"schema_version", "status", "alignment_mode", "source", "ctest",
-                                  "inputs", "tested_artifacts", "product_artifacts"}) ||
-        receipt.value("schema_version", 0) != 1 || receipt.value("status", "") != "passed" ||
+    if (!HasExactFields(receipt,
+                        {"schema_version", "status", "alignment_mode", "source", "ctest", "inputs",
+                         "tested_artifacts", "product_artifacts", "test_input_artifacts"}) ||
+        !receipt["schema_version"].is_number_integer() || receipt["schema_version"] != 2 ||
+        receipt.value("status", "") != "passed" ||
         receipt.value("alignment_mode", "") !=
             (alignment.release_enforced ? "release" : "qualification")) {
         return std::unexpected("Mandatory build-gate receipt has an unsupported schema or state");
@@ -323,6 +334,21 @@ std::expected<BuildGateAuthority, std::string> ValidateBuildGateReceipt(
         !HasExactArtifactNames(products, kProductArtifactNames)) {
         return std::unexpected(
             "Mandatory build-gate receipt does not bind the complete test/product topology");
+    }
+    // Test inputs remain part of the gate's execution identity. They are not
+    // installed resources; the gate and external evidence verifier hash them,
+    // while runtime initialization validates the recorded identity and rehashes
+    // only the products actually deployed in this volume.
+    const auto& test_inputs = receipt["test_input_artifacts"];
+    if (!test_inputs.is_object() || test_inputs.size() != kTestInputArtifacts.size() ||
+        !std::ranges::all_of(kTestInputArtifacts, [&test_inputs](const auto& input) {
+            const auto& [name, path] = input;
+            const auto record = test_inputs.find(name);
+            return record != test_inputs.end() && IsArtifactRecord(*record) &&
+                   (*record)["root"] == "build" && (*record)["path"] == path;
+        })) {
+        return std::unexpected(
+            "Mandatory build-gate receipt does not bind the complete generated test inputs");
     }
     const auto& inputs = receipt["inputs"];
     if (!HasExactFields(inputs, {"operating_model_sha256", "alignment_receipt_sha256"}) ||

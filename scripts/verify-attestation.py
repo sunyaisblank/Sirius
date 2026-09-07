@@ -49,6 +49,12 @@ QUALIFICATION_PRODUCT_EVIDENCE = {
     "viewer_rdsd003a_fragment": "qualification-product-viewer_rdsd003a_fragment",
     "viewer_rdsd003a_vertex": "qualification-product-viewer_rdsd003a_vertex",
 }
+QUALIFICATION_TEST_INPUT_EVIDENCE = {
+    name: f"test-input-{name}" for name in (
+        "smoke_spv", "parity_probe_spv", "parity_probe_fp32comp_spv",
+        "parity_probe_fp64_spv", "trace_cuda", "trace_metal",
+    )
+}
 QUALIFICATION_TEST_EVIDENCE = {
     "sirius_app_tests": "native-build-tested-sirius_app_tests",
     "sirius_backend_tests": "native-build-tested-sirius_backend_tests",
@@ -99,6 +105,54 @@ def load_build_gate_verifier():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def inspect_test_input_evidence(gate, artifacts):
+    """Bind generated test inputs independently of installed runtime products."""
+    verifier = load_build_gate_verifier()
+    records = gate.get("test_input_artifacts")
+    verifier.validate_test_input_records(
+        records, "qualification", gate.get("product_artifacts", {})
+    )
+    for logical_name, evidence_name in QUALIFICATION_TEST_INPUT_EVIDENCE.items():
+        path = artifacts.get(evidence_name)
+        payload = path.read_bytes() if path is not None else b""
+        record = records[logical_name]
+        require(path is not None and len(payload) == record["bytes"] and
+                hashlib.sha256(payload).hexdigest() == record["sha256"],
+                f"generated test input is absent or differs from its gate: {logical_name}")
+
+
+def copy_qualification_test_inputs(gate_path, build_root, output=None):
+    """Check live build inputs against the gate; optionally copy their bound bytes."""
+    gate = json.loads(gate_path.read_text(encoding="utf-8"))
+    verifier = load_build_gate_verifier()
+    require(isinstance(gate, dict), "test input gate must be a JSON object")
+    if gate.get("kind") == verifier.NATIVE_BUILD_GATE_KIND:
+        verifier.validate_native_build_document(gate)
+    else:
+        verifier.validate_document(gate)
+    require(gate.get("alignment_mode") == "qualification",
+            "test input evidence requires a qualification gate")
+    root = build_root.resolve()
+    sources = {}
+    for logical_name, evidence_name in QUALIFICATION_TEST_INPUT_EVIDENCE.items():
+        record = gate["test_input_artifacts"][logical_name]
+        canonical = root / verifier.TEST_INPUT_PATHS[logical_name]
+        source = (root / record["path"]).resolve()
+        require(source == canonical and source.is_file(),
+                f"generated test input is absent or resolves to a substituted path: {logical_name}")
+        sources[evidence_name] = source
+    inspect_test_input_evidence(gate, sources)
+    if output is None:
+        return list(sources.values())
+    copied = {}
+    for evidence_name, source in sources.items():
+        destination = output / evidence_name
+        shutil.copy2(source, destination)
+        copied[evidence_name] = destination
+    inspect_test_input_evidence(gate, copied)
+    return list(copied.values())
 
 
 def text_contains(device, *needles):
@@ -526,9 +580,10 @@ def inspect_qualification_build_gate(
         isinstance(gate, dict)
         and set(gate) == {
             "schema_version", "status", "alignment_mode", "source", "ctest",
-            "inputs", "tested_artifacts", "product_artifacts",
+            "inputs", "tested_artifacts", "product_artifacts", "test_input_artifacts",
         }
-        and gate.get("schema_version") == 1
+        and type(gate.get("schema_version")) is int
+        and gate.get("schema_version") == 2
         and gate.get("status") == "passed"
         and gate.get("alignment_mode") == "qualification",
         "qualification build gate has an unsupported schema, state, or mode",
@@ -556,6 +611,7 @@ def inspect_qualification_build_gate(
             and all(artifact_record(record) for record in products.values()),
             "qualification build gate does not bind the complete candidate product")
 
+    inspect_test_input_evidence(gate, artifacts)
     alignment_payload = alignment_path.read_bytes()
     alignment_digest = hashlib.sha256(alignment_payload).hexdigest()
     alignment_record = products["alignment_receipt"]
@@ -681,6 +737,7 @@ def inspect_native_build_gate(
     require(all(artifact_record(record) for record in tested.values()) and
             all(artifact_record(record) for record in products.values()),
             "native build gate contains a malformed artifact record")
+    inspect_test_input_evidence(gate, artifacts)
     alignment_payload = alignment_path.read_bytes()
     alignment_digest = hashlib.sha256(alignment_payload).hexdigest()
     inputs = gate["inputs"]
@@ -1302,6 +1359,12 @@ def self_test():
                     f"qualification product: {logical_name}\n".encode()
                 )
             self_test_products[logical_name] = product_path
+        self_test_inputs = {}
+        test_input_paths = load_build_gate_verifier().TEST_INPUT_PATHS
+        for logical_name, evidence_name in QUALIFICATION_TEST_INPUT_EVIDENCE.items():
+            path = root / evidence_name
+            path.write_bytes(f"generated test input: {logical_name}\n".encode())
+            self_test_inputs[logical_name] = path
         self_test_model_digest = hashlib.sha256(
             self_test_products["operating_model"].read_bytes()
         ).hexdigest()
@@ -1427,7 +1490,7 @@ def self_test():
             ).encode("utf-8")
             case_count = inspect_junit(report_path)["cases"]
             gate = {
-                "schema_version": 1,
+                "schema_version": 2,
                 "status": "passed",
                 "alignment_mode": "qualification",
                 "source": {"revision": source_revision, "clean": True},
@@ -1455,6 +1518,10 @@ def self_test():
                 },
                 "tested_artifacts": tested,
                 "product_artifacts": products,
+                "test_input_artifacts": {
+                    name: gate_record(test_input_paths[name], payload=path.read_bytes())
+                    for name, path in self_test_inputs.items()
+                },
             }
             gate_path.write_text(json.dumps(gate), encoding="utf-8")
 
@@ -1646,11 +1713,76 @@ def self_test():
                         "bytes": path.stat().st_size,
                         "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
                     }
-                    for path in self_test_products.values()
+                    for path in (*self_test_products.values(), *self_test_inputs.values())
                 },
             },
         }
+        def reject_test_input_mutations(document, gate_path, route):
+            # Rehash the outer record after substitutions: only the inner gate
+            # binding, rather than the generic bundle checksum, may reject them.
+            original_gate = gate_path.read_bytes()
+
+            def refreshed_record(path):
+                payload = path.read_bytes()
+                return {"path": path.name, "bytes": len(payload),
+                        "sha256": hashlib.sha256(payload).hexdigest()}
+
+            def reject(candidate, label):
+                try:
+                    verify_document(candidate, root / "attestation.json")
+                except ValueError:
+                    return
+                raise ValueError(f"negative control accepted: {route} {label}")
+
+            for name, evidence_name in QUALIFICATION_TEST_INPUT_EVIDENCE.items():
+                candidate = json.loads(json.dumps(document))
+                candidate["artifacts"].pop(evidence_name)
+                reject(candidate, f"missing generated input {name}")
+                path = self_test_inputs[name]
+                original = path.read_bytes()
+                try:
+                    path.write_bytes(original + b"substituted\n")
+                    candidate = json.loads(json.dumps(document))
+                    candidate["artifacts"][evidence_name] = refreshed_record(path)
+                    reject(candidate, f"rehashed generated input substitution {name}")
+                finally:
+                    path.write_bytes(original)
+                for field, value in (("path", "kernels/unrelated-input"),
+                                     ("root", "source"), ("sha256", "f" * 64)):
+                    try:
+                        changed_gate = json.loads(original_gate)
+                        changed_gate["test_input_artifacts"][name][field] = value
+                        gate_path.write_text(json.dumps(changed_gate), encoding="utf-8")
+                        candidate = json.loads(json.dumps(document))
+                        candidate["artifacts"][gate_path.name] = refreshed_record(gate_path)
+                        reject(candidate, f"substituted generated input {name} {field}")
+                    finally:
+                        gate_path.write_bytes(original_gate)
+            for wrong_schema in (2.0, 2.5, "2", True):
+                try:
+                    changed_gate = json.loads(original_gate)
+                    changed_gate["schema_version"] = wrong_schema
+                    gate_path.write_text(json.dumps(changed_gate), encoding="utf-8")
+                    candidate = json.loads(json.dumps(document))
+                    candidate["artifacts"][gate_path.name] = refreshed_record(gate_path)
+                    reject(candidate, f"non-integer gate schema {wrong_schema!r}")
+                finally:
+                    gate_path.write_bytes(original_gate)
+            for legacy in (True, False):
+                try:
+                    changed_gate = json.loads(original_gate)
+                    changed_gate.pop("test_input_artifacts")
+                    if legacy:
+                        changed_gate["schema_version"] = 1
+                    gate_path.write_text(json.dumps(changed_gate), encoding="utf-8")
+                    candidate = json.loads(json.dumps(document))
+                    candidate["artifacts"][gate_path.name] = refreshed_record(gate_path)
+                    reject(candidate, "legacy gate" if legacy else "missing input map")
+                finally:
+                    gate_path.write_bytes(original_gate)
+
         verify_document(valid, root / "attestation.json", self_test_model_digest)
+        reject_test_input_mutations(valid, mandatory_gate, "hardware")
         verify_document_against_authority(
             valid,
             root / "attestation.json",
@@ -1797,11 +1929,12 @@ def self_test():
             "qualification-gate-log": valid["artifacts"]["qualification-gate-log"],
             **{
                 path.name: valid["artifacts"][path.name]
-                for path in self_test_products.values()
+                for path in (*self_test_products.values(), *self_test_inputs.values())
             },
             "transcript.log": valid["artifacts"]["transcript.log"],
         }
         verify_document(viewer, root / "attestation.json")
+        reject_test_input_mutations(viewer, mandatory_gate, "viewer reused authority")
         # A pointer boolean or cursor motion cannot stand in for observed wheel
         # delivery. Rehash each otherwise valid transcript to test semantics.
         for missing_kind in ("cursor", "scroll"):
@@ -1938,7 +2071,7 @@ def self_test():
                     "qualification-gate-log": valid["artifacts"]["qualification-gate-log"],
                     **{
                         path.name: valid["artifacts"][path.name]
-                        for path in self_test_products.values()
+                        for path in (*self_test_products.values(), *self_test_inputs.values())
                     },
                     native_inventory.name: {
                         "path": native_inventory.name,
@@ -1953,6 +2086,7 @@ def self_test():
                 },
             }
             verify_document(native_document, root / "attestation.json")
+            reject_test_input_mutations(native_document, mandatory_gate, domain)
             for missing_artifact in (
                 "hardware-tests.xml",
                 "alignment_receipt.json",
@@ -1961,7 +2095,7 @@ def self_test():
                 "qualification-sirius.bin",
                 "qualification-gate-junit",
                 "qualification-gate-log",
-                *(path.name for path in self_test_products.values()),
+                *(path.name for path in (*self_test_products.values(), *self_test_inputs.values())),
                 native_inventory.name,
                 native_transcript.name,
             ):
@@ -2189,7 +2323,7 @@ def self_test():
         ).encode("utf-8")).hexdigest()
         native_build_gate = root / "native_build_gate.json"
         native_build_gate.write_text(json.dumps({
-            "schema_version": 1,
+            "schema_version": 2,
             "kind": build_gate_verifier.NATIVE_BUILD_GATE_KIND,
             "status": "passed",
             "alignment_mode": "qualification",
@@ -2218,6 +2352,10 @@ def self_test():
             },
             "tested_artifacts": native_tested,
             "product_artifacts": native_products,
+            "test_input_artifacts": {
+                name: native_gate_record(test_input_paths[name], path.read_bytes())
+                for name, path in self_test_inputs.items()
+            },
         }), encoding="utf-8")
         def self_test_artifact(path):
             payload = path.read_bytes()
@@ -2261,7 +2399,7 @@ def self_test():
                 ),
                 **{
                     path.name: self_test_artifact(path)
-                    for path in self_test_products.values()
+                    for path in (*self_test_products.values(), *self_test_inputs.values())
                 },
                 **{
                     path.name: self_test_artifact(path)
@@ -2270,13 +2408,61 @@ def self_test():
             },
         }
         verify_document(native_build_document, root / "attestation.json")
+        reject_test_input_mutations(native_build_document, native_build_gate, "native build")
+        # Exercise the actual producer helper and its post-CTest live check.
+        input_build = root / "input-build"
+        input_bundle = root / "input-bundle"
+        input_bundle.mkdir()
+        for name, relative_path in test_input_paths.items():
+            path = input_build / relative_path
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(self_test_inputs[name].read_bytes())
+        copied_inputs = copy_qualification_test_inputs(
+            native_build_gate, input_build, input_bundle
+        )
+        require({path.name for path in copied_inputs}
+                == set(QUALIFICATION_TEST_INPUT_EVIDENCE.values()),
+                "generated test input producer failed its positive control")
+        for name, relative_path in test_input_paths.items():
+            path = input_build / relative_path
+            original = path.read_bytes()
+            try:
+                path.write_bytes(original + b"changed after CTest\n")
+                try:
+                    copy_qualification_test_inputs(native_build_gate, input_build)
+                except ValueError:
+                    pass
+                else:
+                    raise ValueError(f"producer accepted mutated live test input: {name}")
+            finally:
+                path.write_bytes(original)
+        # Model a same-byte symlink target through the actual resolver boundary.
+        # This also runs on Windows hosts without symbolic-link privileges.
+        from unittest.mock import patch
+        original_resolve = Path.resolve
+        for name, relative_path in test_input_paths.items():
+            canonical = input_build / relative_path
+            substitute = input_build / f"same-byte-substitute-{name}"
+            substitute.write_bytes(canonical.read_bytes())
+
+            def substituted_resolve(path, *args, **kwargs):
+                resolved = original_resolve(path, *args, **kwargs)
+                return substitute if resolved == canonical else resolved
+
+            with patch.object(Path, "resolve", substituted_resolve):
+                try:
+                    copy_qualification_test_inputs(native_build_gate, input_build)
+                except ValueError:
+                    pass
+                else:
+                    raise ValueError(f"producer accepted same-byte symlink substitution: {name}")
         for missing_artifact in (
             native_build_receipt.name,
             native_build_inventory.name,
             native_build_gate.name,
             qualification_executable.name,
             native_build_gate_log.name,
-            *(path.name for path in self_test_products.values()),
+            *(path.name for path in (*self_test_products.values(), *self_test_inputs.values())),
             *(path.name for path in native_test_products.values()),
         ):
             incomplete_build = json.loads(json.dumps(native_build_document))
@@ -2467,6 +2653,9 @@ def record_build(args):
         destination = args.output.parent / evidence_name
         shutil.copy2(source, destination)
         bundled_tests[logical_name] = destination
+    bundled_test_inputs = copy_qualification_test_inputs(
+        args.native_build_gate, args.test_dir, args.output.parent
+    )
     gated_candidate = resolve_gate_artifact(gate["tested_artifacts"]["sirius"])
     require(gated_candidate.read_bytes() == args.qualification_executable.read_bytes(),
             "qualification candidate differs from the native build gate")
@@ -2566,6 +2755,14 @@ def record_build(args):
                     ).hexdigest(),
                 }
                 for logical_name, path in bundled_products.items()
+            },
+            **{
+                path.name: {
+                    "path": path.name,
+                    "bytes": path.stat().st_size,
+                    "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                }
+                for path in bundled_test_inputs
             },
             **{
                 path.name: {

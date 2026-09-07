@@ -271,12 +271,24 @@ if(BUILD_TESTS AND SIRIUS_MANDATORY_TESTS)
             --product-artifact
                 "viewer_rdsd003a_fragment=${CMAKE_SOURCE_DIR}/src/sirius/app/viewer/shaders/RDSD003A.frag")
     endif()
+    set(sirius_gate_test_input_artifacts)
     if(TARGET sirius_kernels)
         list(APPEND sirius_gate_product_artifacts
             --product-artifact "trace_spv=${SIRIUS_KERNEL_BINARY_DIR}/trace.spv"
             --product-artifact
                 "trace_fp32comp_spv=${SIRIUS_KERNEL_BINARY_DIR}/trace_fp32comp.spv"
             --product-artifact "trace_fp64_spv=${SIRIUS_KERNEL_BINARY_DIR}/trace_fp64.spv")
+        # These generated inputs are consumed by Mandatory tests but are not
+        # installed runtime products. Bind their actual test paths separately.
+        list(APPEND sirius_gate_test_input_artifacts
+            --test-input-artifact "smoke_spv=${SIRIUS_KERNEL_BINARY_DIR}/smoke.spv"
+            --test-input-artifact "parity_probe_spv=${SIRIUS_KERNEL_BINARY_DIR}/parity_probe.spv"
+            --test-input-artifact
+                "parity_probe_fp32comp_spv=${SIRIUS_KERNEL_BINARY_DIR}/parity_probe_fp32comp.spv"
+            --test-input-artifact
+                "parity_probe_fp64_spv=${SIRIUS_KERNEL_BINARY_DIR}/parity_probe_fp64.spv"
+            --test-input-artifact "trace_cuda=${SIRIUS_KERNEL_BINARY_DIR}/portability/trace.cu"
+            --test-input-artifact "trace_metal=${SIRIUS_KERNEL_BINARY_DIR}/portability/trace.metal")
     endif()
 
     set(sirius_mandatory_gate_command
@@ -291,7 +303,8 @@ if(BUILD_TESTS AND SIRIUS_MANDATORY_TESTS)
         --ctest "${CMAKE_CTEST_COMMAND}"
         --config "$<CONFIG>"
         ${sirius_gate_test_artifacts}
-        ${sirius_gate_product_artifacts})
+        ${sirius_gate_product_artifacts}
+        ${sirius_gate_test_input_artifacts})
     if(NOT SIRIUS_SANITIZERS STREQUAL "none")
         set(sirius_mandatory_gate_command
             "${CMAKE_COMMAND}" -E env
@@ -340,6 +353,7 @@ if(BUILD_TESTS AND SIRIUS_MANDATORY_TESTS)
             --config "$<CONFIG>"
             ${sirius_gate_test_artifacts}
             ${sirius_gate_product_artifacts}
+            ${sirius_gate_test_input_artifacts}
         DEPENDS sirius ${sirius_mandatory_test_targets}
             SiriusAlignmentGate SiriusSourceGovernance
         BYPRODUCTS

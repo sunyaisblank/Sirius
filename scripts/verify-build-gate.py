@@ -16,7 +16,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 TEST_FLOOR = 700
 NATIVE_BUILD_GATE_KIND = "sirius-native-build-gate"
 NATIVE_BUILD_EVIDENCE_TESTS = (
@@ -39,6 +39,18 @@ TESTED_ARTIFACTS = {
     "sirius_oracle_tests",
     "sirius_render_tests",
 }
+# These paths are the generated files read by the Mandatory kernel tests.
+# Bind selectors to that location as well as bytes: unrelated stable files
+# cannot stand in for the kernels the compiled test executables actually load.
+TEST_INPUT_PATHS = {
+    "smoke_spv": "kernels/smoke.spv",
+    "parity_probe_spv": "kernels/parity_probe.spv",
+    "parity_probe_fp32comp_spv": "kernels/parity_probe_fp32comp.spv",
+    "parity_probe_fp64_spv": "kernels/parity_probe_fp64.spv",
+    "trace_cuda": "kernels/portability/trace.cu",
+    "trace_metal": "kernels/portability/trace.metal",
+}
+TEST_INPUT_ARTIFACTS = set(TEST_INPUT_PATHS)
 BASE_PRODUCTS = {
     "alignment_receipt",
     "operating_model",
@@ -243,13 +255,34 @@ def git_identity(source_root: Path) -> tuple[str, bool]:
     return revision, not status
 
 
+def require_test_input_set(test_inputs: object, mode: str, products: dict) -> None:
+    has_trace = bool({"trace_spv", "trace_fp32comp_spv", "trace_fp64_spv"} & set(products))
+    expected = TEST_INPUT_ARTIFACTS if mode != "development" or has_trace else set()
+    require(isinstance(test_inputs, dict) and set(test_inputs) == expected,
+            "build gate does not bind the exact generated test input set")
+
+
+def validate_test_input_records(test_inputs: object, mode: str, products: dict) -> None:
+    require_test_input_set(test_inputs, mode, products)
+    for name, record in test_inputs.items():
+        require(isinstance(record, dict) and
+                set(record) == {"root", "path", "bytes", "sha256"} and
+                record.get("root") == "build" and
+                record.get("path") == TEST_INPUT_PATHS[name] and
+                type(record.get("bytes")) is int and record["bytes"] > 0 and
+                isinstance(record.get("sha256"), str) and
+                re.fullmatch(r"[0-9a-f]{64}", record["sha256"]) is not None,
+                f"build gate test input {name} does not bind its generated kernel path and bytes")
+
+
 def validate_document(document: object) -> dict:
     require(isinstance(document, dict) and set(document) == {
         "schema_version", "status", "alignment_mode", "source", "ctest",
-        "inputs", "tested_artifacts", "product_artifacts",
+        "inputs", "tested_artifacts", "product_artifacts", "test_input_artifacts",
     }, "Mandatory gate receipt has an unsupported shape")
-    require(document["schema_version"] == SCHEMA_VERSION and document["status"] == "passed",
-            "Mandatory gate receipt is not a passing schema-v1 record")
+    require(type(document["schema_version"]) is int and
+            document["schema_version"] == SCHEMA_VERSION and document["status"] == "passed",
+            "Mandatory gate receipt is not a passing schema-v2 record")
     mode = document["alignment_mode"]
     require(mode in {"development", "qualification", "release"},
             "Mandatory gate receipt has an invalid mode")
@@ -292,6 +325,7 @@ def validate_document(document: object) -> dict:
     if mode in {"qualification", "release"}:
         require(set(products) == RELEASE_PRODUCTS,
                 f"{mode} Mandatory gate receipt does not bind the complete product")
+    validate_test_input_records(document["test_input_artifacts"], mode, products)
     return document
 
 
@@ -304,12 +338,13 @@ def validate_native_build_document(document: object) -> dict:
     """
     require(isinstance(document, dict) and set(document) == {
         "schema_version", "kind", "status", "alignment_mode", "source", "ctest",
-        "inputs", "tested_artifacts", "product_artifacts",
+        "inputs", "tested_artifacts", "product_artifacts", "test_input_artifacts",
     }, "native build gate receipt has an unsupported shape")
-    require(document["schema_version"] == SCHEMA_VERSION and
+    require(type(document["schema_version"]) is int and
+            document["schema_version"] == SCHEMA_VERSION and
             document["kind"] == NATIVE_BUILD_GATE_KIND and
             document["status"] == "passed",
-            "native build gate receipt is not a passing schema-v1 record")
+            "native build gate receipt is not a passing schema-v2 record")
     require(document["alignment_mode"] == "qualification",
             "native build evidence must come from qualification mode")
     source = document["source"]
@@ -354,15 +389,19 @@ def validate_native_build_document(document: object) -> dict:
             "native build gate does not bind every compiled test executable")
     require(isinstance(products, dict) and set(products) == RELEASE_PRODUCTS,
             "native build gate does not bind the complete strict product")
+    validate_test_input_records(document["test_input_artifacts"], "qualification", products)
     return document
 
 
 def verify_recorded_files(document: dict, source_root: Path, build_dir: Path) -> None:
-    for collection_name in ("tested_artifacts", "product_artifacts"):
+    for collection_name in ("tested_artifacts", "product_artifacts", "test_input_artifacts"):
         collection = document[collection_name]
-        for record in collection.values():
+        for name, record in collection.items():
             require(isinstance(record, dict), "artifact receipt entry is not an object")
-            resolve_record(record, source_root, build_dir)
+            resolved = resolve_record(record, source_root, build_dir)
+            if collection_name == "test_input_artifacts":
+                require(resolved == build_dir.resolve() / TEST_INPUT_PATHS[name],
+                        f"recorded test input {name} resolves to a substituted kernel path")
     products = document["product_artifacts"]
     require(document["inputs"]["operating_model_sha256"] ==
             products["operating_model"]["sha256"],
@@ -413,7 +452,7 @@ def atomic_write_json(path: Path, document: dict) -> None:
 
 def verify_execution_inputs(
     args: argparse.Namespace, source_identity: tuple[str, bool], inventory_digest: str,
-    tested_records: dict, product_records: dict,
+    tested_records: dict, product_records: dict, test_input_records: dict,
 ) -> None:
     """Reject persistent changes across CTest, allowing restored obstruction fixtures."""
     source_root = args.source_root.resolve()
@@ -423,6 +462,7 @@ def verify_execution_inputs(
     for values, option, expected in (
         (args.tested_artifact, "--tested-artifact", tested_records),
         (args.product_artifact, "--product-artifact", product_records),
+        (args.test_input_artifact, "--test-input-artifact", test_input_records),
     ):
         actual = artifact_records(parse_artifacts(values, option), source_root, build_dir)
         require(actual == expected,
@@ -467,6 +507,8 @@ def run_gate(args: argparse.Namespace) -> None:
 
     tested = parse_artifacts(args.tested_artifact, "--tested-artifact")
     products = parse_artifacts(args.product_artifact, "--product-artifact")
+    test_inputs = parse_artifacts(args.test_input_artifact, "--test-input-artifact")
+    require_test_input_set(test_inputs, args.alignment_mode, products)
     require(set(tested) == TESTED_ARTIFACTS,
             "Mandatory gate invocation omitted a test executable")
     require(BASE_PRODUCTS <= set(products) <= RELEASE_PRODUCTS,
@@ -477,6 +519,8 @@ def run_gate(args: argparse.Namespace) -> None:
 
     tested_records = artifact_records(tested, source_root, build_dir)
     product_records = artifact_records(products, source_root, build_dir)
+    test_input_records = artifact_records(test_inputs, source_root, build_dir)
+    validate_test_input_records(test_input_records, args.alignment_mode, products)
 
     _, registered_names, inventory_digest = read_inventory(args.ctest, build_dir, args.config)
     command = [
@@ -496,7 +540,7 @@ def run_gate(args: argparse.Namespace) -> None:
             "Mandatory JUnit identities do not equal live CTest registration")
 
     verify_execution_inputs(args, (revision, clean), inventory_digest,
-                            tested_records, product_records)
+                            tested_records, product_records, test_input_records)
     junit_record = artifact_records({"junit": junit}, source_root, build_dir)["junit"]
     log_record = artifact_records({"log": log}, source_root, build_dir)["log"]
     document = {
@@ -517,11 +561,12 @@ def run_gate(args: argparse.Namespace) -> None:
         },
         "tested_artifacts": tested_records,
         "product_artifacts": product_records,
+        "test_input_artifacts": test_input_records,
     }
     validate_document(document)
     atomic_write_json(stamp, document)
     print(f"Mandatory gate receipt bound {len(registered_names)} zero-skip tests to "
-          f"{len(products)} product artifacts")
+          f"{len(products)} product artifacts and {len(test_inputs)} generated test inputs")
 
 
 def run_native_build_gate(args: argparse.Namespace) -> None:
@@ -543,12 +588,16 @@ def run_native_build_gate(args: argparse.Namespace) -> None:
 
     tested = parse_artifacts(args.tested_artifact, "--tested-artifact")
     products = parse_artifacts(args.product_artifact, "--product-artifact")
+    test_inputs = parse_artifacts(args.test_input_artifact, "--test-input-artifact")
+    require_test_input_set(test_inputs, args.alignment_mode, products)
     require(set(tested) == TESTED_ARTIFACTS,
             "native build gate invocation omitted a compiled test executable")
     require(set(products) == RELEASE_PRODUCTS,
             "native build gate invocation omitted a strict product artifact")
     tested_records = artifact_records(tested, source_root, build_dir)
     product_records = artifact_records(products, source_root, build_dir)
+    test_input_records = artifact_records(test_inputs, source_root, build_dir)
+    validate_test_input_records(test_input_records, args.alignment_mode, products)
 
     _, registered_names, inventory_digest = read_inventory(args.ctest, build_dir, args.config)
     selected_names = set(NATIVE_BUILD_EVIDENCE_TESTS)
@@ -573,7 +622,7 @@ def run_native_build_gate(args: argparse.Namespace) -> None:
             "native build JUnit differs from the exact non-render authority selection")
 
     verify_execution_inputs(args, (revision, clean), inventory_digest,
-                            tested_records, product_records)
+                            tested_records, product_records, test_input_records)
     document = {
         "schema_version": SCHEMA_VERSION,
         "kind": NATIVE_BUILD_GATE_KIND,
@@ -595,11 +644,13 @@ def run_native_build_gate(args: argparse.Namespace) -> None:
         },
         "tested_artifacts": tested_records,
         "product_artifacts": product_records,
+        "test_input_artifacts": test_input_records,
     }
     validate_native_build_document(document)
     atomic_write_json(stamp, document)
     print(f"native build gate bound {len(tested_records)} compiled executables and "
-          f"{len(product_records)} products to {len(selected_names)} non-render controls")
+          f"{len(product_records)} products and {len(test_input_records)} generated test inputs "
+          f"to {len(selected_names)} non-render controls")
 
 
 def check_gate(args: argparse.Namespace) -> None:
@@ -675,16 +726,23 @@ def expect_rejection(callback, description: str) -> None:
 
 
 def self_test_execution_inputs(source: Path, build: Path, tested: dict, products: dict,
-                               inventory: dict) -> None:
+                               test_inputs: dict, inventory: dict) -> None:
     from contextlib import redirect_stderr, redirect_stdout
     from io import StringIO
     from unittest.mock import patch
 
     revision = "a" * 40
-    originals = {path: path.read_bytes() for path in (*tested.values(), *products.values())}
+    originals = {
+        path: path.read_bytes()
+        for path in (*tested.values(), *products.values(), *test_inputs.values())
+    }
+    mutations = ["none", "restored", "tested", "product", "missing",
+                 "revision", "dirty", "registration", "ctest_failure",
+                 "input_missing", "input_restored", "input_selector",
+                 "input_omitted", "input_extra", "input_wrong_selector"]
+    mutations.extend(f"input_changed:{name}" for name in sorted(TEST_INPUT_ARTIFACTS))
     for native, runner in ((False, run_gate), (True, run_native_build_gate)):
-        for mutation in ("none", "restored", "tested", "product", "missing",
-                         "revision", "dirty", "registration", "ctest_failure"):
+        for mutation in mutations:
             stamp = build / "execution-controls" / "gate.json"
             stamp.parent.mkdir(exist_ok=True)
             stamp.write_text("stale receipt\n", encoding="utf-8")
@@ -699,7 +757,21 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                 config="Release",
                 tested_artifact=[f"{name}={path}" for name, path in tested.items()],
                 product_artifact=[f"{name}={path}" for name, path in products.items()],
+                test_input_artifact=[f"{name}={path}" for name, path in test_inputs.items()],
             )
+
+            # Invocation failures must be rejected before any CTest execution.
+            if mutation == "input_omitted":
+                args.test_input_artifact.pop()
+            elif mutation == "input_extra":
+                args.test_input_artifact.append(f"unexpected={test_inputs['smoke_spv']}")
+            elif mutation == "input_wrong_selector":
+                substitute = build / "unrelated-stable-kernel"
+                substitute.write_bytes(originals[test_inputs["smoke_spv"]])
+                args.test_input_artifact = [
+                    f"{name}={substitute if name == 'smoke_spv' else path}"
+                    for name, path in test_inputs.items()
+                ]
 
             def external_command(command, **kwargs):
                 nonlocal live_revision, live_status, executed
@@ -736,6 +808,26 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                         path.unlink()
                         if mutation == "restored":
                             path.write_bytes(originals[path])
+                    elif mutation.startswith("input_changed:"):
+                        name = mutation.partition(":")[2]
+                        path = test_inputs[name]
+                        payload = bytearray(originals[path])
+                        payload[-1] ^= 1
+                        path.write_bytes(payload)
+                    elif mutation in {"input_missing", "input_restored"}:
+                        path = test_inputs["parity_probe_spv"]
+                        path.unlink()
+                        if mutation == "input_restored":
+                            path.write_bytes(originals[path])
+                    elif mutation == "input_selector":
+                        # Identical bytes at a different resolved input selector
+                        # must not be accepted as the original consumed path.
+                        substitute = build / "substituted-kernel"
+                        substitute.write_bytes(originals[test_inputs["smoke_spv"]])
+                        args.test_input_artifact = [
+                            f"{name}={substitute if name == 'smoke_spv' else path}"
+                            for name, path in test_inputs.items()
+                        ]
                     elif mutation == "revision":
                         live_revision = "b" * 40
                     elif mutation == "dirty":
@@ -750,11 +842,13 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                 captured_stderr = StringIO()
                 with patch.object(subprocess, "run", side_effect=external_command), \
                      redirect_stdout(StringIO()), redirect_stderr(captured_stderr):
-                    if mutation in {"none", "restored"}:
+                    if mutation in {"none", "restored", "input_restored"}:
                         runner(args)
                         receipt = json.loads(stamp.read_text(encoding="utf-8"))
-                        require(receipt["status"] == "passed",
-                                "unchanged gate execution did not issue a receipt")
+                        require(receipt["status"] == "passed" and
+                                receipt["test_input_artifacts"] ==
+                                artifact_records(test_inputs, source, build),
+                                "unchanged gate execution did not bind its generated test inputs")
                     else:
                         expect_rejection(lambda: runner(args),
                                          f"{runner.__name__} execution changed {mutation}")
@@ -769,7 +863,11 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                             require(diagnostic in captured_stderr.getvalue() and
                                     diagnostic in retained,
                                     "failed CTest diagnostics were lost from console or log")
-                require(executed, "execution mutation control never reached CTest")
+                preflight_failure = mutation in {
+                    "input_omitted", "input_extra", "input_wrong_selector",
+                }
+                require(executed != preflight_failure,
+                        "input control did not enforce the CTest execution boundary")
             finally:
                 for path, payload in originals.items():
                     path.write_bytes(payload)
@@ -798,6 +896,13 @@ def self_test() -> None:
             path.write_bytes(f"product:{name}\n".encode())
             product_paths[name] = path
 
+        test_input_paths = {}
+        for name in TEST_INPUT_ARTIFACTS:
+            path = build / TEST_INPUT_PATHS[name]
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(f"test-input:{name}\n".encode())
+            test_input_paths[name] = path
+
         names = set(NATIVE_BUILD_EVIDENCE_TESTS)
         names.update(
             f"GateFixture.Case{index}"
@@ -822,6 +927,7 @@ def self_test() -> None:
         require(junit_names == inventory_names, "self-test JUnit/inventory control diverged")
         tested = artifact_records(tested_paths, source, build)
         products = artifact_records(product_paths, source, build)
+        test_inputs = artifact_records(test_input_paths, source, build)
         document = {
             "schema_version": SCHEMA_VERSION,
             "status": "passed",
@@ -840,6 +946,7 @@ def self_test() -> None:
             },
             "tested_artifacts": tested,
             "product_artifacts": products,
+            "test_input_artifacts": test_inputs,
         }
         validate_document(document)
         verify_recorded_files(document, source, build)
@@ -883,9 +990,64 @@ def self_test() -> None:
             },
             "tested_artifacts": tested,
             "product_artifacts": products,
+            "test_input_artifacts": test_inputs,
         }
         validate_native_build_document(native)
         verify_recorded_files(native, source, build)
+        for authority, validator in ((document, validate_document),
+                                     (native, validate_native_build_document)):
+            for version in (1, 2.0, 2.5, "2", True, 2**64 + 2):
+                invalid_version = copy.deepcopy(authority)
+                invalid_version["schema_version"] = version
+                expect_rejection(lambda: validator(invalid_version),
+                                 f"non-v2-integer gate version {version!r}")
+            absent = copy.deepcopy(authority)
+            absent.pop("test_input_artifacts")
+            expect_rejection(lambda: validator(absent), "absent test input map")
+            extra = copy.deepcopy(authority)
+            extra["test_input_artifacts"]["unexpected"] = test_inputs["smoke_spv"]
+            expect_rejection(lambda: validator(extra), "extra test input")
+            for name, path in test_input_paths.items():
+                missing = copy.deepcopy(authority)
+                missing["test_input_artifacts"].pop(name)
+                expect_rejection(lambda: validator(missing), f"missing test input {name}")
+                for field, value in (("root", "source"), ("path", "unrelated/kernel"),
+                                     ("bytes", 0), ("sha256", "invalid")):
+                    malformed = copy.deepcopy(authority)
+                    malformed["test_input_artifacts"][name][field] = value
+                    expect_rejection(lambda: validator(malformed),
+                                     f"invalid {name} record {field}")
+                altered = copy.deepcopy(authority)
+                altered["test_input_artifacts"][name]["sha256"] = "0" * 64
+                expect_rejection(lambda: verify_recorded_files(altered, source, build),
+                                 f"altered test input digest {name}")
+                original_input = path.read_bytes()
+                path.unlink()
+                expect_rejection(lambda: verify_recorded_files(authority, source, build),
+                                 f"missing recorded test input file {name}")
+                replacement = bytearray(original_input)
+                replacement[-1] ^= 1
+                path.write_bytes(replacement)
+                expect_rejection(lambda: verify_recorded_files(authority, source, build),
+                                 f"substituted recorded test input file {name}")
+                path.write_bytes(original_input)
+            verify_recorded_files(authority, source, build)
+
+        development = copy.deepcopy(document)
+        development["alignment_mode"] = "development"
+        development["source"]["clean"] = False
+        validate_document(development)
+        development["test_input_artifacts"] = {}
+        expect_rejection(lambda: validate_document(development),
+                         "kernel-enabled development gate omitted test inputs")
+        for name in ("trace_spv", "trace_fp32comp_spv", "trace_fp64_spv"):
+            development["product_artifacts"].pop(name)
+        validate_document(development)
+        verify_recorded_files(development, source, build)
+        development["test_input_artifacts"] = test_inputs
+        expect_rejection(lambda: validate_document(development),
+                         "kernel-free development gate has unexpected test inputs")
+
         weakened_native = copy.deepcopy(native)
         weakened_native["ctest"]["selection"].pop()
         weakened_native["ctest"]["selected"] -= 1
@@ -906,7 +1068,7 @@ def self_test() -> None:
                          "incomplete qualification product")
 
         for key, value in (
-            ("schema_version", 2),
+            ("schema_version", 1),
             ("status", "claimed"),
             ("alignment_mode", "development"),
         ):
@@ -955,7 +1117,8 @@ def self_test() -> None:
         expect_rejection(lambda: verify_installed(document, installed, stamp, ""),
                          "stale installed product")
 
-        self_test_execution_inputs(source, build, tested_paths, product_paths, inventory)
+        self_test_execution_inputs(source, build, tested_paths, product_paths,
+                                   test_input_paths, inventory)
 
 
 def main() -> int:
@@ -975,6 +1138,7 @@ def main() -> int:
     parser.add_argument("--config", default="")
     parser.add_argument("--tested-artifact", action="append", default=[])
     parser.add_argument("--product-artifact", action="append", default=[])
+    parser.add_argument("--test-input-artifact", action="append", default=[])
     parser.add_argument("--installed-root", type=Path)
     parser.add_argument("--executable-suffix", default="")
     args = parser.parse_args()
