@@ -1051,6 +1051,10 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    VulkanBackend.PortabilityInstanceOptInRequiresAdvertisedExtension
+    VulkanBackend.PortabilityDeviceEnablesSubsetWithoutChangingPrecisionOrQueues
+    VulkanBackend.PortabilityEnumerationErrorsDeclineBeforeCreation
+    VulkanBackend.PortabilityCreationFailuresRemainExplicit
     VulkanBackend.KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions
     VulkanBackend.EnumerationReportsInsteadOfThrowing
     VulkanBackend.SlangKernelMatchesCpuReference

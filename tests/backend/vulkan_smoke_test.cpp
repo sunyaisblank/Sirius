@@ -1,10 +1,10 @@
-// Postconditions verified here: device enumeration reports rather than
-// throws; a Slang-compiled kernel dispatched through the Vulkan adapter
-// reproduces the CPU computation of f(r) = 1 - 2M/r within fp32 rounding.
-// On machines with no Vulkan ICD both tests skip, cleanly and loudly.
+// CPU controls cover portability negotiation and precision refusal. Device
+// checks cover enumeration, shader parity and worker-thread teardown. Missing
+// devices skip the device checks; strict qualification rejects those skips.
 
 #include "sirius/backend/device.h"
 #include "sirius/backend/vulkan/vulkan_device.h"
+#include "sirius/backend/vulkan/vulkan_portability.h"
 
 #include <gtest/gtest.h>
 
@@ -13,6 +13,7 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
+#include <cstring>
 #include <fstream>
 #include <optional>
 #include <span>
@@ -38,6 +39,185 @@ std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     file.seekg(0);
     file.read(reinterpret_cast<char*>(words.data()), static_cast<std::streamsize>(size));
     return words;
+}
+
+// CPU-only loader boundary. The production creation functions call these
+// entry points; extension names are copied while their create-info is alive.
+struct PortabilityProbe {
+    inline static thread_local PortabilityProbe* current = nullptr;
+    std::vector<const char*> advertised;
+    std::vector<std::string> enabled;
+    VkResult count_result = VK_SUCCESS;
+    VkResult list_result = VK_SUCCESS;
+    VkResult create_result = VK_SUCCESS;
+    int creates = 0;
+    VkInstanceCreateFlags flags = 0;
+    const VkApplicationInfo* application = nullptr;
+    const VkPhysicalDeviceFeatures* features = nullptr;
+    const VkDeviceQueueCreateInfo* queues = nullptr;
+    std::uint32_t queue_count = 0;
+    VkPhysicalDevice physical = VK_NULL_HANDLE;
+
+    PortabilityProbe() { current = this; }
+    ~PortabilityProbe() { current = nullptr; }
+
+    static VkResult Enumerate(std::uint32_t* count, VkExtensionProperties* properties) {
+        if (properties == nullptr) {
+            *count = static_cast<std::uint32_t>(current->advertised.size());
+            return current->count_result;
+        }
+        const auto written =
+            std::min(*count, static_cast<std::uint32_t>(current->advertised.size()));
+        for (std::uint32_t i = 0; i < written; ++i) {
+            properties[i] = {};
+            std::strncpy(properties[i].extensionName, current->advertised[i],
+                         VK_MAX_EXTENSION_NAME_SIZE - 1);
+        }
+        *count = written;
+        return current->list_result;
+    }
+    static VKAPI_ATTR VkResult VKAPI_CALL InstanceExtensions(const char* layer,
+                                                             std::uint32_t* count,
+                                                             VkExtensionProperties* properties) {
+        EXPECT_EQ(layer, nullptr);
+        return Enumerate(count, properties);
+    }
+    static VKAPI_ATTR VkResult VKAPI_CALL DeviceExtensions(VkPhysicalDevice physical,
+                                                           const char* layer, std::uint32_t* count,
+                                                           VkExtensionProperties* properties) {
+        EXPECT_EQ(layer, nullptr);
+        current->physical = physical;
+        return Enumerate(count, properties);
+    }
+    static VKAPI_ATTR VkResult VKAPI_CALL Instance(const VkInstanceCreateInfo* info,
+                                                   const VkAllocationCallbacks* allocator,
+                                                   VkInstance* result) {
+        EXPECT_EQ(allocator, nullptr);
+        ++current->creates;
+        current->flags = info->flags;
+        current->application = info->pApplicationInfo;
+        for (std::uint32_t i = 0; i < info->enabledExtensionCount; ++i) {
+            current->enabled.emplace_back(info->ppEnabledExtensionNames[i]);
+        }
+        *result = VK_NULL_HANDLE;  // No actual loader/device is touched by these tests.
+        return current->create_result;
+    }
+    static VKAPI_ATTR VkResult VKAPI_CALL Device(VkPhysicalDevice physical,
+                                                 const VkDeviceCreateInfo* info,
+                                                 const VkAllocationCallbacks* allocator,
+                                                 VkDevice* result) {
+        EXPECT_EQ(allocator, nullptr);
+        EXPECT_EQ(physical, current->physical);
+        ++current->creates;
+        current->features = info->pEnabledFeatures;
+        current->queues = info->pQueueCreateInfos;
+        current->queue_count = info->queueCreateInfoCount;
+        for (std::uint32_t i = 0; i < info->enabledExtensionCount; ++i) {
+            current->enabled.emplace_back(info->ppEnabledExtensionNames[i]);
+        }
+        *result = VK_NULL_HANDLE;
+        return current->create_result;
+    }
+};
+
+TEST(VulkanBackend, PortabilityInstanceOptInRequiresAdvertisedExtension) {
+    for (const bool advertised : {false, true}) {
+        PortabilityProbe probe;
+        probe.advertised = {"VK_EXT_debug_utils"};
+        if (advertised) probe.advertised.push_back("VK_KHR_portability_enumeration");
+        const VkApplicationInfo application{.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO};
+        const char* existing[] = {"VK_EXT_debug_utils"};
+        const VkInstanceCreateInfo info{
+            .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
+            .pApplicationInfo = &application,
+            .enabledExtensionCount = 1,
+            .ppEnabledExtensionNames = existing,
+        };
+        const auto result = sirius::backend::detail::CreateInstanceWithPortability(
+            info, PortabilityProbe::InstanceExtensions, PortabilityProbe::Instance);
+        ASSERT_TRUE(result.has_value()) << result.error().Description();
+        EXPECT_EQ(probe.creates, 1);
+        EXPECT_EQ(probe.application, &application);
+        EXPECT_EQ(probe.flags,
+                  advertised
+                      ? VkInstanceCreateFlags{VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR}
+                      : 0u);
+        const std::vector<std::string> expected =
+            advertised
+                ? std::vector<std::string>{"VK_EXT_debug_utils", "VK_KHR_portability_enumeration"}
+                : std::vector<std::string>{"VK_EXT_debug_utils"};
+        EXPECT_EQ(probe.enabled, expected);
+    }
+}
+
+TEST(VulkanBackend, PortabilityDeviceEnablesSubsetWithoutChangingPrecisionOrQueues) {
+    for (const bool advertised : {false, true}) {
+        for (const VkBool32 fp64 : {VK_FALSE, VK_TRUE}) {
+            PortabilityProbe probe;
+            if (advertised) probe.advertised = {"VK_KHR_portability_subset"};
+            const VkPhysicalDeviceFeatures features{.shaderFloat64 = fp64};
+            const VkDeviceQueueCreateInfo queue{
+                .sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
+                .queueFamilyIndex = 3,
+                .queueCount = 1,
+            };
+            const VkDeviceCreateInfo info{
+                .sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
+                .queueCreateInfoCount = 1,
+                .pQueueCreateInfos = &queue,
+                .pEnabledFeatures = &features,
+            };
+            const auto result = sirius::backend::detail::CreateDeviceWithPortability(
+                VK_NULL_HANDLE, info, PortabilityProbe::DeviceExtensions, PortabilityProbe::Device);
+            ASSERT_TRUE(result.has_value()) << result.error().Description();
+            EXPECT_EQ(probe.creates, 1);
+            EXPECT_EQ(probe.features, &features);
+            EXPECT_EQ(probe.features->shaderFloat64, fp64);
+            EXPECT_EQ(probe.queues, &queue);
+            EXPECT_EQ(probe.queue_count, 1u);
+            const std::vector<std::string> expected =
+                advertised ? std::vector<std::string>{"VK_KHR_portability_subset"}
+                           : std::vector<std::string>{};
+            EXPECT_EQ(probe.enabled, expected);
+        }
+    }
+}
+
+TEST(VulkanBackend, PortabilityEnumerationErrorsDeclineBeforeCreation) {
+    for (const bool count_failure : {false, true}) {
+        for (const VkResult failure : {VK_ERROR_INITIALIZATION_FAILED, VK_INCOMPLETE}) {
+            PortabilityProbe probe;
+            probe.advertised = {"VK_KHR_portability_enumeration", "VK_KHR_portability_subset"};
+            (count_failure ? probe.count_result : probe.list_result) = failure;
+            const auto instance = sirius::backend::detail::CreateInstanceWithPortability(
+                {.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO},
+                PortabilityProbe::InstanceExtensions, PortabilityProbe::Instance);
+            ASSERT_FALSE(instance.has_value());
+            EXPECT_EQ(instance.error().operation(), "enumerate Vulkan instance extensions");
+            const auto device = sirius::backend::detail::CreateDeviceWithPortability(
+                VK_NULL_HANDLE, {.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO},
+                PortabilityProbe::DeviceExtensions, PortabilityProbe::Device);
+            ASSERT_FALSE(device.has_value());
+            EXPECT_EQ(device.error().operation(), "enumerate Vulkan device extensions");
+            EXPECT_EQ(probe.creates, 0);
+        }
+    }
+}
+
+TEST(VulkanBackend, PortabilityCreationFailuresRemainExplicit) {
+    PortabilityProbe probe;
+    probe.create_result = VK_ERROR_EXTENSION_NOT_PRESENT;
+    const auto instance = sirius::backend::detail::CreateInstanceWithPortability(
+        {.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO}, PortabilityProbe::InstanceExtensions,
+        PortabilityProbe::Instance);
+    ASSERT_FALSE(instance.has_value());
+    EXPECT_EQ(instance.error().operation(), "create Vulkan instance");
+    const auto device = sirius::backend::detail::CreateDeviceWithPortability(
+        VK_NULL_HANDLE, {.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO},
+        PortabilityProbe::DeviceExtensions, PortabilityProbe::Device);
+    ASSERT_FALSE(device.has_value());
+    EXPECT_EQ(device.error().operation(), "create Vulkan logical device");
+    EXPECT_EQ(probe.creates, 2);
 }
 
 TEST(VulkanBackend, KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions) {

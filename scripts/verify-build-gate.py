@@ -434,6 +434,20 @@ def verify_execution_inputs(
             "source identity changed while CTest ran; no receipt was written")
 
 
+def retain_ctest_result(command: list[str], result: subprocess.CompletedProcess,
+                        log: Path, failure_message: str) -> None:
+    transcript = (
+        f"command: {' '.join(command)}\nreturn_code: {result.returncode}\n"
+        f"stdout:\n{result.stdout}\nstderr:\n{result.stderr}"
+    )
+    log.write_text(transcript, encoding="utf-8")
+    if result.returncode != 0:
+        # CI may discard the build directory after failure. Keep the actual
+        # failed-test output visible even when no receipt can be issued.
+        sys.stderr.write(transcript)
+        raise ValueError(f"{failure_message}; diagnostics retained at {log}")
+
+
 def run_gate(args: argparse.Namespace) -> None:
     source_root = args.source_root.resolve()
     build_dir = args.build_dir.resolve()
@@ -475,12 +489,8 @@ def run_gate(args: argparse.Namespace) -> None:
         result = subprocess.run(command, capture_output=True, text=True)
     except OSError as error:
         raise ValueError(f"could not execute the Mandatory CTest gate: {error}") from error
-    log.write_text(
-        f"command: {' '.join(command)}\nreturn_code: {result.returncode}\n"
-        f"stdout:\n{result.stdout}\nstderr:\n{result.stderr}",
-        encoding="utf-8",
-    )
-    require(result.returncode == 0, "Mandatory CTest gate failed; no receipt was written")
+    retain_ctest_result(command, result, log,
+                        "Mandatory CTest gate failed; no receipt was written")
     executed_names, summary = inspect_junit(junit)
     require(executed_names == registered_names,
             "Mandatory JUnit identities do not equal live CTest registration")
@@ -556,13 +566,8 @@ def run_native_build_gate(args: argparse.Namespace) -> None:
         result = subprocess.run(command, capture_output=True, text=True)
     except OSError as error:
         raise ValueError(f"could not execute the native build CTest gate: {error}") from error
-    log.write_text(
-        f"command: {' '.join(command)}\nreturn_code: {result.returncode}\n"
-        f"stdout:\n{result.stdout}\nstderr:\n{result.stderr}",
-        encoding="utf-8",
-    )
-    require(result.returncode == 0,
-            "native build authority gate failed; no receipt was written")
+    retain_ctest_result(command, result, log,
+                        "native build authority gate failed; no receipt was written")
     executed_names, summary = inspect_junit(junit)
     require(executed_names == selected_names,
             "native build JUnit differs from the exact non-render authority selection")
@@ -671,7 +676,7 @@ def expect_rejection(callback, description: str) -> None:
 
 def self_test_execution_inputs(source: Path, build: Path, tested: dict, products: dict,
                                inventory: dict) -> None:
-    from contextlib import redirect_stdout
+    from contextlib import redirect_stderr, redirect_stdout
     from io import StringIO
     from unittest.mock import patch
 
@@ -679,7 +684,7 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
     originals = {path: path.read_bytes() for path in (*tested.values(), *products.values())}
     for native, runner in ((False, run_gate), (True, run_native_build_gate)):
         for mutation in ("none", "restored", "tested", "product", "missing",
-                         "revision", "dirty", "registration"):
+                         "revision", "dirty", "registration", "ctest_failure"):
             stamp = build / "execution-controls" / "gate.json"
             stamp.parent.mkdir(exist_ok=True)
             stamp.write_text("stale receipt\n", encoding="utf-8")
@@ -715,6 +720,11 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                         "<testsuite>" + "".join(
                             f'<testcase name="{name}"/>' for name in sorted(names)
                         ) + "</testsuite>\n", encoding="utf-8")
+                    if mutation == "ctest_failure":
+                        return subprocess.CompletedProcess(
+                            command, 8,
+                            stdout="GateFixture.DiagnosticFailure ***Failed\n",
+                            stderr="fixture CTest stderr diagnostic\n")
                     if mutation == "tested":
                         path = tested["sirius_core_tests"]
                         path.write_bytes(b"x" * len(originals[path]))
@@ -737,8 +747,9 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                 return subprocess.CompletedProcess(command, 0, stdout=output, stderr="")
 
             try:
+                captured_stderr = StringIO()
                 with patch.object(subprocess, "run", side_effect=external_command), \
-                     redirect_stdout(StringIO()):
+                     redirect_stdout(StringIO()), redirect_stderr(captured_stderr):
                     if mutation in {"none", "restored"}:
                         runner(args)
                         receipt = json.loads(stamp.read_text(encoding="utf-8"))
@@ -749,6 +760,15 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                                          f"{runner.__name__} execution changed {mutation}")
                         require(not stamp.exists(),
                                 "changed execution retained a promotable receipt")
+                    if mutation == "ctest_failure":
+                        log_name = ("native_build_gate_ctest.log" if native else
+                                    "mandatory_gate_ctest.log")
+                        retained = stamp.with_name(log_name).read_text(encoding="utf-8")
+                        for diagnostic in ("GateFixture.DiagnosticFailure ***Failed",
+                                           "fixture CTest stderr diagnostic"):
+                            require(diagnostic in captured_stderr.getvalue() and
+                                    diagnostic in retained,
+                                    "failed CTest diagnostics were lost from console or log")
                 require(executed, "execution mutation control never reached CTest")
             finally:
                 for path, payload in originals.items():
