@@ -430,15 +430,30 @@ jobs:
           echo "VK_DRIVER_FILES=$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json" >> "$GITHUB_ENV"
           export VK_DRIVER_FILES="$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json"
           vulkaninfo --summary
-      - name: Configure
-        run: >-
-          cmake --preset macos
-          -DSIRIUS_ALIGNMENT_MODE=qualification
-          -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON
-      - name: Build
-        run: cmake --build --preset macos -j3
-      - name: Full source-available test estate
-        run: ctest --test-dir bin/macos --output-on-failure --output-junit macos-tests.xml
+      - name: Record macOS graphics route
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/sirius-macos-runtime"
+          sw_vers | tee "$RUNNER_TEMP/sirius-macos-runtime/os-version.txt"
+          system_profiler SPDisplaysDataType -json | tee "$RUNNER_TEMP/sirius-macos-runtime/metal-displays.json"
+          printf 'repository=%s\nrevision=%s\nrun_id=%s\nrun_attempt=%s\njob=%s\nrunner=%s\nos=%s\narch=%s\n' "$GITHUB_REPOSITORY" "$GITHUB_SHA" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" "$GITHUB_JOB" "$RUNNER_NAME" "$RUNNER_OS" "$RUNNER_ARCH" | tee "$RUNNER_TEMP/sirius-macos-runtime/provider-route.txt"
+      - name: Exact native MoltenVK runtime evidence
+        if: success()
+        shell: bash
+        env:
+          CMAKE_BUILD_PARALLEL_LEVEL: 3
+        run: |
+          set -euo pipefail
+          python3 scripts/validate-native-runtime.py --expected-revision "${{ github.sha }}" --output-root "$RUNNER_TEMP/sirius-macos-runtime" 2>&1 | tee "$RUNNER_TEMP/sirius-macos-runtime/producer.log"
+      - name: Preserve verified MoltenVK runtime evidence
+        if: success()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: sirius-macos-moltenvk-attestation
+          path: ${{ runner.temp }}/sirius-macos-runtime
+          if-no-files-found: error
       - name: Exact native-build evidence gate
         run: cmake --build --preset macos --target RunNativeBuildEvidence -j3
       - name: Native build attestation
@@ -472,4 +487,10 @@ jobs:
             linux-tests.xml
             windows-tests.xml
             macos-tests.xml
+            ${{ runner.temp }}/sirius-macos-runtime/*/native-runtime-tests.xml
+            ${{ runner.temp }}/sirius-macos-runtime/*/native-runtime-transcript.log
+            ${{ runner.temp }}/sirius-macos-runtime/producer.log
+            ${{ runner.temp }}/sirius-macos-runtime/os-version.txt
+            ${{ runner.temp }}/sirius-macos-runtime/metal-displays.json
+            ${{ runner.temp }}/sirius-macos-runtime/provider-route.txt
           if-no-files-found: ignore

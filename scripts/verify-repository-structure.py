@@ -414,6 +414,34 @@ GATE_DIAGNOSTIC_PATHS = (
     "macos-tests.xml",
 )
 
+MACOS_RUNTIME_DIAGNOSTIC_PATHS = (
+    '${{ runner.temp }}/sirius-macos-runtime/*/native-runtime-tests.xml',
+    '${{ runner.temp }}/sirius-macos-runtime/*/native-runtime-transcript.log',
+    '${{ runner.temp }}/sirius-macos-runtime/producer.log',
+    '${{ runner.temp }}/sirius-macos-runtime/os-version.txt',
+    '${{ runner.temp }}/sirius-macos-runtime/metal-displays.json',
+    '${{ runner.temp }}/sirius-macos-runtime/provider-route.txt',
+)
+MACOS_RUNTIME_PRODUCER_STEP = r"""      - name: Exact native MoltenVK runtime evidence
+        if: success()
+        shell: bash
+        env:
+          CMAKE_BUILD_PARALLEL_LEVEL: 3
+        run: |
+          set -euo pipefail
+          python3 scripts/validate-native-runtime.py --expected-revision "${{ github.sha }}" --output-root "$RUNNER_TEMP/sirius-macos-runtime" 2>&1 | tee "$RUNNER_TEMP/sirius-macos-runtime/producer.log"
+"""
+MACOS_RUNTIME_PROVENANCE_STEP = r"""      - name: Record macOS graphics route
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/sirius-macos-runtime"
+          sw_vers | tee "$RUNNER_TEMP/sirius-macos-runtime/os-version.txt"
+          system_profiler SPDisplaysDataType -json | tee "$RUNNER_TEMP/sirius-macos-runtime/metal-displays.json"
+          printf 'repository=%s\nrevision=%s\nrun_id=%s\nrun_attempt=%s\njob=%s\nrunner=%s\nos=%s\narch=%s\n' "$GITHUB_REPOSITORY" "$GITHUB_SHA" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" "$GITHUB_JOB" "$RUNNER_NAME" "$RUNNER_OS" "$RUNNER_ARCH" | tee "$RUNNER_TEMP/sirius-macos-runtime/provider-route.txt"
+"""
+
 
 def workflow_steps(job: str) -> list[str]:
     """Read the repository's fixed block-step layout without accepting aliases."""
@@ -427,9 +455,10 @@ def workflow_step_field(step: str, field: str) -> list[str]:
                       normalized, re.MULTILINE)
 
 
-def gate_diagnostic_upload_valid(step: str) -> bool:
+def gate_diagnostic_upload_valid(step: str, *, macos_runtime: bool = False) -> bool:
     # Keep diagnostics unable to publish an attestation or broaden their file
     # scope. Unknown fields/layouts fail closed rather than becoming exceptions.
+    paths = GATE_DIAGNOSTIC_PATHS + (MACOS_RUNTIME_DIAGNOSTIC_PATHS if macos_runtime else ())
     pattern = (
         r"\A      - name: Preserve gate diagnostics\n"
         r"        if: always\(\)\n"
@@ -437,8 +466,21 @@ def gate_diagnostic_upload_valid(step: str) -> bool:
         r"        with:\n"
         r"          name: sirius-gate-diagnostics-\$\{\{ github\.job \}\}\n"
         r"          path: \|\n"
-        + "".join(re.escape(f"            {path}\n") for path in GATE_DIAGNOSTIC_PATHS)
+        + "".join(re.escape(f"            {path}\n") for path in paths)
         + r"          if-no-files-found: ignore\n\s*\Z"
+    )
+    return re.fullmatch(pattern, step) is not None
+
+
+def macos_runtime_upload_valid(step: str) -> bool:
+    pattern = (
+        r"\A      - name: Preserve verified MoltenVK runtime evidence\n"
+        r"        if: success\(\)\n"
+        r"        uses: actions/upload-artifact@[0-9a-f]{40}(?: +#[^\n]*)?\n"
+        r"        with:\n"
+        r"          name: sirius-macos-moltenvk-attestation\n"
+        r"          path: \$\{\{ runner\.temp \}\}/sirius-macos-runtime\n"
+        r"          if-no-files-found: error\n\s*\Z"
     )
     return re.fullmatch(pattern, step) is not None
 
@@ -596,18 +638,38 @@ def integration_boundary_errors(workflow: str) -> list[str]:
             )
         diagnostics = [step for step in workflow_steps(job)
                        if workflow_step_field(step, "name") == ["Preserve gate diagnostics"]]
-        if len(diagnostics) != 1 or not gate_diagnostic_upload_valid(diagnostics[0]):
+        if len(diagnostics) != 1 or not gate_diagnostic_upload_valid(
+            diagnostics[0], macos_runtime=name == "macos-build"
+        ):
             errors.append(f"CI full qualification does not retain bounded gate diagnostics: {name}")
         if name in {"windows-build", "macos-build"}:
             platform = name.removesuffix("-build")
             uploads = [step for step in workflow_steps(job)
                        if "upload-artifact@" in step and step not in diagnostics]
-            if (len(uploads) != 1
-                    or re.findall(r"^          name: ([^\n]+)$", uploads[0], re.MULTILINE)
+            runtime_uploads = [step for step in uploads if macos_runtime_upload_valid(step)]
+            native_uploads = [step for step in uploads if step not in runtime_uploads]
+            if (len(uploads) != (2 if name == "macos-build" else 1)
+                    or len(runtime_uploads) != (1 if name == "macos-build" else 0)
+                    or len(native_uploads) != 1
+                    or re.findall(r"^          name: ([^\n]+)$", native_uploads[0], re.MULTILINE)
                     != [f"sirius-{platform}-full-native-attestation"]
-                    or re.findall(r"^          path: ([^\n]+)$", uploads[0], re.MULTILINE)
+                    or re.findall(r"^          path: ([^\n]+)$", native_uploads[0], re.MULTILINE)
                     != ["attestations"]):
                 errors.append(f"CI full native upload must have a distinct bounded artifact: {name}")
+        if name == "macos-build":
+            steps = workflow_steps(job)
+            producers = [step for step in steps if "validate-native-runtime.py" in step]
+            provenance = [step for step in steps
+                          if workflow_step_field(step, "name") == ["Record macOS graphics route"]]
+            if (len(producers) != 1
+                    or producers[0].rstrip() != MACOS_RUNTIME_PRODUCER_STEP.rstrip()
+                    or len(provenance) != 1
+                    or provenance[0].rstrip() != MACOS_RUNTIME_PROVENANCE_STEP.rstrip()
+                    or steps.index(provenance[0]) >= steps.index(producers[0])):
+                errors.append("macOS full qualification must run the exact runtime producer after route capture")
+            if (len(producers) == 1 and len(runtime_uploads) == 1
+                    and steps.index(runtime_uploads[0]) <= steps.index(producers[0])):
+                errors.append("macOS runtime upload precedes its verified producer")
     return errors
 
 
@@ -655,6 +717,19 @@ def verify_integration_boundary_policy() -> None:
         + "".join(f"            {path}\n" for path in GATE_DIAGNOSTIC_PATHS)
         + "          if-no-files-found: ignore\n"
     )
+    macos_runtime_upload = """      - name: Preserve verified MoltenVK runtime evidence
+        if: success()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: sirius-macos-moltenvk-attestation
+          path: ${{ runner.temp }}/sirius-macos-runtime
+          if-no-files-found: error
+"""
+    macos_diagnostics = diagnostics.replace(
+        "          if-no-files-found: ignore\n",
+        "".join(f"            {path}\n" for path in MACOS_RUNTIME_DIAGNOSTIC_PATHS)
+        + "          if-no-files-found: ignore\n",
+    )
     valid = (
         "on:\n"
         "  workflow_dispatch:\n"
@@ -692,6 +767,8 @@ def verify_integration_boundary_policy() -> None:
         )
         + "".join(
             f"  {name}:\n    if: {FULL_QUALIFICATION_CONDITION}\n    steps:\n"
+            + (MACOS_RUNTIME_PROVENANCE_STEP + MACOS_RUNTIME_PRODUCER_STEP
+               + macos_runtime_upload if name == "macos-build" else "")
             + (
                 "      - uses: actions/upload-artifact@0123456789012345678901234567890123456789\n"
                 "        with:\n"
@@ -699,7 +776,7 @@ def verify_integration_boundary_policy() -> None:
                 "          path: attestations\n"
                 if name in {"windows-build", "macos-build"} else ""
             )
-            + diagnostics
+            + (macos_diagnostics if name == "macos-build" else diagnostics)
             for name in FULL_QUALIFICATION_JOBS
         )
     )
@@ -768,6 +845,32 @@ def verify_integration_boundary_policy() -> None:
         mutations[f"{platform} full/integration artifact collision"] = valid.replace(
             f"name: sirius-{platform}-full-native-attestation",
             f"name: sirius-{platform}-native-attestation", 1)
+    runtime_mutations = {
+        "missing explicit producer pipefail": (
+            MACOS_RUNTIME_PRODUCER_STEP,
+            MACOS_RUNTIME_PRODUCER_STEP.replace("          set -euo pipefail\n", "", 1)),
+        "producer disabled guard": ("      - name: Exact native MoltenVK runtime evidence\n        if: success()", "      - name: Exact native MoltenVK runtime evidence\n        if: false"),
+        "missing producer": (MACOS_RUNTIME_PRODUCER_STEP, ""),
+        "producer self-test": ("validate-native-runtime.py --expected-revision", "validate-native-runtime.py --self-test --expected-revision"),
+        "wrong expected revision": ('--expected-revision "${{ github.sha }}"', '--expected-revision "stale"'),
+        "missing expected revision": (' --expected-revision "${{ github.sha }}"', ""),
+        "wrong output root": ('--output-root "$RUNNER_TEMP/sirius-macos-runtime"', '--output-root "$RUNNER_TEMP"'),
+        "unbounded parallel build": ("CMAKE_BUILD_PARALLEL_LEVEL: 3", "CMAKE_BUILD_PARALLEL_LEVEL: 8"),
+        "suppressed producer failure": ('2>&1 | tee "$RUNNER_TEMP/sirius-macos-runtime/producer.log"', '2>&1 | tee "$RUNNER_TEMP/sirius-macos-runtime/producer.log" || true'),
+        "producer without pipefail shell": ("        shell: bash\n        env:", "        shell: sh\n        env:"),
+        "missing route capture": (MACOS_RUNTIME_PROVENANCE_STEP, ""),
+        "missing runtime upload": (macos_runtime_upload, ""),
+        "runtime publication on failure": ("      - name: Preserve verified MoltenVK runtime evidence\n        if: success()", "      - name: Preserve verified MoltenVK runtime evidence\n        if: always()"),
+        "runtime artifact collision": ("name: sirius-macos-moltenvk-attestation", "name: sirius-macos-full-native-attestation"),
+        "unbounded runtime upload": ("          path: ${{ runner.temp }}/sirius-macos-runtime", "          path: ${{ runner.temp }}"),
+        "missing runtime failure JUnit": ("            " + MACOS_RUNTIME_DIAGNOSTIC_PATHS[0] + "\n", ""),
+        "missing producer console log": ("            " + MACOS_RUNTIME_DIAGNOSTIC_PATHS[2] + "\n", ""),
+    }
+    for description, (before, after) in runtime_mutations.items():
+        mutations["macOS " + description] = valid.replace(before, after, 1)
+    mutations["macOS upload before producer"] = valid.replace(
+        MACOS_RUNTIME_PRODUCER_STEP + macos_runtime_upload,
+        macos_runtime_upload + MACOS_RUNTIME_PRODUCER_STEP, 1)
     for description, mutated in mutations.items():
         if mutated == valid or not integration_boundary_errors(mutated):
             raise RuntimeError(f"integration-boundary policy accepted {description}")
