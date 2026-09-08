@@ -435,6 +435,7 @@ set_tests_properties(
     KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison
     KernelParity.BeamEllipseRetainsBothAxesAndOutputOrientation
     KernelParity.CelestialTangentBasisIsSharedByBeamAndPointFilter
+    KernelParity.PointStarAngularWeightMatchesIndependentOracle
     KernelParity.GeodesicDeviationIsFiniteAndCurvedNearBlackHole
     KernelParity.DeviceTidalContractionMatchesAnalyticSchwarzschildAtMatchedEvents
     KernelParity.DeviceTidalContractionMatchesAnalyticKerrAtMatchedEvents
@@ -909,6 +910,9 @@ set_tests_properties(
     StarfieldGeneratorTests.GeneratesNonEmptyCatalog
     StarfieldGeneratorTests.SpatialIndexOwnsValidatedCatalogueSnapshot
     StarfieldGeneratorTests.EllipticalFilterUsesTheBeamSachsBasis
+    StarfieldGeneratorTests.PointFilterRetainsImaxSubpixelOffsets
+    StarfieldGeneratorTests.PointFilterMatchesIndependentAngularOracle
+    StarfieldGeneratorTests.SpatialIndexIncludesStarsAcrossAngularCellBoundaries
     StarfieldGeneratorTests.CatalogSizeBounded
     StarfieldGeneratorTests.DirectionVectorsNormalised
     StarfieldGeneratorTests.AllTemperaturesPositive

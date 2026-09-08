@@ -12,6 +12,38 @@
 
 namespace sirius::core::relativity {
 
+struct CelestialSeparation {
+    float angle;
+    float sine;
+    std::array<float, 3> normal;
+};
+
+// Unlike acos(dot), this retains first-order angular information when the
+// float dot product rounds to one. Subtracting the nearly parallel vectors
+// before the cross product also avoids cancellation between order-one terms.
+// The atan2 ratio is invariant to the catalogue's permitted norm error.
+[[nodiscard]] inline CelestialSeparation MeasureCelestialSeparation(
+    std::array<float, 3> direction, const std::array<float, 3>& star) {
+    const float norm_squared =
+        direction[0] * direction[0] + direction[1] * direction[1] + direction[2] * direction[2];
+    // Public callers may supply any represented nonzero direction magnitude.
+    // Keep subtraction on comparable scales without renormalizing the already
+    // near-unit renderer inputs (which would perturb their subpixel direction).
+    if (norm_squared < 0.25f || norm_squared > 4.0f) {
+        const float norm = std::sqrt(norm_squared);
+        for (float& component : direction) component /= norm;
+    }
+    const std::array<float, 3> delta{star[0] - direction[0], star[1] - direction[1],
+                                     star[2] - direction[2]};
+    const std::array<float, 3> normal{direction[1] * delta[2] - direction[2] * delta[1],
+                                      direction[2] * delta[0] - direction[0] * delta[2],
+                                      direction[0] * delta[1] - direction[1] * delta[0]};
+    const float sine =
+        std::sqrt(normal[0] * normal[0] + normal[1] * normal[1] + normal[2] * normal[2]);
+    const float cosine = direction[0] * star[0] + direction[1] * star[1] + direction[2] * star[2];
+    return {std::atan2(sine, cosine), sine, normal};
+}
+
 template <std::floating_point Scalar>
 struct CelestialTangentBasis {
     std::array<Scalar, 3> first;

@@ -23,6 +23,7 @@ import gr_disk;
 import gr_deviation;
 import gr_trace_event;
 import gr_ellis_topology;
+import gr_point_star;
 
 StructuredBuffer<float> samples;     // binding 0
 RWStructuredBuffer<float> results;   // binding 1
@@ -50,6 +51,7 @@ static const uint OP_SPHERICAL_CAPTURE_EVENT = 18;
 static const uint OP_ELLIS_TWO_SHEET_TRACE = 19;
 static const uint OP_WARP_RK4_DECLINE = 20;
 static const uint OP_THIN_LENS_PROJECTION = 21;
+static const uint OP_POINT_STAR_ANGULAR_WEIGHT = 22;
 
 // Future-directed null root used by the render kernel, repeated here only for
 // the diagnostic launch boundary. The integration below calls the production
@@ -551,6 +553,16 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         results[rb + 3] = second.x;
         results[rb + 4] = second.y;
         results[rb + 5] = second.z;
+    } else if (opcode == OP_POINT_STAR_ANGULAR_WEIGHT) {
+        // p1,p2=major/minor angular widths, p3=orientation; c=direction,
+        // u0..u2=star direction. Exercise the actual live filter authority.
+        float3 direction = float3(c0, c1, c2);
+        float3 star = float3(samples[sb + 8], samples[sb + 9], samples[sb + 10]);
+        float3 first, second;
+        MakeCelestialTangentBasis(direction, first, second);
+        results[rb] = PointStarAngularWeight(
+            direction, star, first, second, min(4.0f * p1, PI), cos(p3), sin(p3),
+            1.0f / (p1 * p1), 1.0f / (p2 * p2));
     } else if (opcode == OP_JACOBI_RADIAL_CONGRUENCE) {
         // Integrate a two-axis point-source bundle along the exact affinely
         // parameterised ingoing Schwarzschild principal null ray

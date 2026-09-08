@@ -41,6 +41,7 @@ import gr_disk;
 import gr_deviation;
 import gr_trace_event;
 import gr_ellis_topology;
+import gr_point_star;
 
 RWStructuredBuffer<float> radiance;  // binding 0
 StructuredBuffer<float> params;      // binding 1
@@ -246,7 +247,7 @@ float3 PointStarColor(uint starIndex) {
 }
 
 void AccumulatePointStarCell(int thetaBin, int phiBin, float3 dir,
-                             float3 tangentA, float3 tangentB, float cosCut,
+                             float3 tangentA, float3 tangentB, float cutoff,
                              float cosOrientation, float sinOrientation,
                              float invMajorSquared, float invMinorSquared,
                              float brightnessScale, inout float3 color) {
@@ -255,28 +256,12 @@ void AccumulatePointStarCell(int thetaBin, int phiBin, float3 dir,
     for (uint at = pointOffsets[cell]; at < pointOffsets[cell + 1u]; ++at) {
         uint starIndex = pointIndices[at];
         uint base = starIndex * 8u;
-        float cosine = dot(dir, float3(pointStars[base], pointStars[base + 1u],
-                                      pointStars[base + 2u]));
-        if (cosine < cosCut) continue;
-        float angle = acos(clamp(cosine, -1.0f, 1.0f));
-        float tangentX = 0.0f;
-        float tangentY = 0.0f;
-        float sinAngle = sin(angle);
-        if (sinAngle > 1.0e-8f) {
-            float3 starDirection =
-                float3(pointStars[base], pointStars[base + 1u],
-                       pointStars[base + 2u]);
-            float3 tangentDirection = (starDirection - cosine * dir) / sinAngle;
-            tangentX = angle * dot(tangentDirection, tangentA);
-            tangentY = angle * dot(tangentDirection, tangentB);
-        }
-        float alongMajor =
-            cosOrientation * tangentX + sinOrientation * tangentY;
-        float alongMinor =
-            -sinOrientation * tangentX + cosOrientation * tangentY;
-        float weight = exp(-0.5f * (
-            alongMajor * alongMajor * invMajorSquared +
-            alongMinor * alongMinor * invMinorSquared));
+        float3 starDirection = float3(pointStars[base], pointStars[base + 1u],
+                                     pointStars[base + 2u]);
+        float weight = PointStarAngularWeight(
+            dir, starDirection, tangentA, tangentB, cutoff, cosOrientation,
+            sinOrientation, invMajorSquared, invMinorSquared);
+        if (weight == 0.0f) continue;
         float intensity = pow(10.0f, -0.4f * pointStars[base + 4u]) *
                           weight * brightnessScale;
         color += PointStarColor(starIndex) * intensity;
@@ -298,15 +283,15 @@ float3 SamplePointStarfield(float3 direction, float sigmaMajor, float sigmaMinor
     float3 tangentA;
     float3 tangentB;
     MakeCelestialTangentBasis(dir, tangentA, tangentB);
-    float theta = acos(clamp(dir.z, -1.0f, 1.0f));
+    float theta = atan2(length(dir.xy), dir.z);
     float phi = atan2(dir.y, dir.x);
     if (phi < 0.0f) phi += TWO_PI;
     float major = max(sigmaMajor, sigmaMinor);
     float minor = min(sigmaMajor, sigmaMinor);
     float cutoff = min(4.0f * major, PI);
-    int firstTheta = clamp(int(floor(max(theta - cutoff, 0.0f) / PI * kThetaBins)),
+    int firstTheta = clamp(int(floor(max(theta - cutoff, 0.0f) / PI * kThetaBins)) - 1,
                            0, kThetaBins - 1);
-    int lastTheta = clamp(int(floor(min(theta + cutoff, PI) / PI * kThetaBins)),
+    int lastTheta = clamp(int(floor(min(theta + cutoff, PI) / PI * kThetaBins)) + 1,
                           0, kThetaBins - 1);
 
     float phiHalfWidth = PI;
@@ -318,7 +303,6 @@ float3 SamplePointStarfield(float3 direction, float sigmaMajor, float sigmaMinor
     int centrePhi = min(int(floor(phi / TWO_PI * kPhiBins)), kPhiBins - 1);
     int phiRadius = min(int(ceil(phiHalfWidth / phiBinWidth)) + 1, kPhiBins);
     bool allPhi = 2 * phiRadius + 1 >= kPhiBins;
-    float cosCut = cos(cutoff);
     float invMajorSquared = 1.0f / (major * major);
     float invMinorSquared = 1.0f / (minor * minor);
     float cosOrientation = cos(orientation);
@@ -329,7 +313,7 @@ float3 SamplePointStarfield(float3 direction, float sigmaMajor, float sigmaMinor
         if (allPhi) {
             for (int phiBin = 0; phiBin < kPhiBins; ++phiBin) {
                 AccumulatePointStarCell(
-                    thetaBin, phiBin, dir, tangentA, tangentB, cosCut,
+                    thetaBin, phiBin, direction, tangentA, tangentB, cutoff,
                     cosOrientation, sinOrientation, invMajorSquared,
                     invMinorSquared, brightnessScale, color);
             }
@@ -338,7 +322,7 @@ float3 SamplePointStarfield(float3 direction, float sigmaMajor, float sigmaMinor
                 int phiBin = (centrePhi + delta) % kPhiBins;
                 if (phiBin < 0) phiBin += kPhiBins;
                 AccumulatePointStarCell(
-                    thetaBin, phiBin, dir, tangentA, tangentB, cosCut,
+                    thetaBin, phiBin, direction, tangentA, tangentB, cutoff,
                     cosOrientation, sinOrientation, invMajorSquared,
                     invMinorSquared, brightnessScale, color);
             }

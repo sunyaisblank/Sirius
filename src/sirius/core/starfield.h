@@ -179,18 +179,22 @@ class StarfieldSpatialIndex {
 
         constexpr float kStarfieldPi = 3.14159265358979323846f;
         constexpr float kStarfieldTwoPi = 2.0f * kStarfieldPi;
-        const float theta = std::acos(std::clamp(dir_z, -1.0f, 1.0f));
+        const float theta = std::atan2(std::hypot(dir_x, dir_y), dir_z);
         float phi = std::atan2(dir_y, dir_x);
         if (phi < 0.0f) phi += kStarfieldTwoPi;
         const float cutoff = std::min(4.0f * sigma, kStarfieldPi);
 
+        // Guard each boundary cell against float polar-angle/bin rounding.
+        // The stable angular filter makes the final contribution decision.
         const int first_theta =
             std::clamp(static_cast<int>(
-                           std::floor(std::max(theta - cutoff, 0.0f) / kStarfieldPi * kThetaBins)),
+                           std::floor(std::max(theta - cutoff, 0.0f) / kStarfieldPi * kThetaBins)) -
+                           1,
                        0, kThetaBins - 1);
         const int last_theta =
             std::clamp(static_cast<int>(std::floor(std::min(theta + cutoff, kStarfieldPi) /
-                                                   kStarfieldPi * kThetaBins)),
+                                                   kStarfieldPi * kThetaBins)) +
+                           1,
                        0, kThetaBins - 1);
 
         float phi_half_width = kStarfieldPi;
@@ -243,7 +247,8 @@ class StarfieldSpatialIndex {
         std::vector<std::size_t> cells(stars_.size());
         for (std::size_t i = 0; i < stars_.size(); ++i) {
             const auto& star = stars_[i];
-            const float theta = std::acos(std::clamp(star.direction_z, -1.0f, 1.0f));
+            const float theta =
+                std::atan2(std::hypot(star.direction_x, star.direction_y), star.direction_z);
             float phi = std::atan2(star.direction_y, star.direction_x);
             if (phi < 0.0f) phi += kStarfieldTwoPi;
             const int theta_bin = std::clamp(
@@ -326,6 +331,7 @@ class StarfieldGenerator {
                                const std::vector<StarEntry>& stars, float& r, float& g,
                                float& b) const {
         r = g = b = 0.0f;
+        const std::array<float, 3> input_direction{dir_x, dir_y, dir_z};
         SIRIUS_PRE(std::isfinite(dir_x) && std::isfinite(dir_y) && std::isfinite(dir_z));
         SIRIUS_PRE(std::isfinite(sigma) && sigma > 0.0f);
         SIRIUS_PRE(std::all_of(stars.begin(), stars.end(), IsRepresentedStarEntry));
@@ -337,15 +343,15 @@ class StarfieldGenerator {
         dir_y /= dlen;
         dir_z /= dlen;
 
-        // Stars beyond four sigma contribute nothing; the cosine test skips them
-        // before the transcendental acos.
-        float cos_cut = std::cos(std::min(4.0f * sigma, static_cast<float>(std::numbers::pi)));
+        // Reject by the stable angle, not a rounded, possibly nonunit dot.
+        const float cutoff = std::min(4.0f * sigma, static_cast<float>(std::numbers::pi));
         float inv_two_sigma2 = 1.0f / (2.0f * sigma * sigma);
 
         for (const auto& s : stars) {
-            float ca = dir_x * s.direction_x + dir_y * s.direction_y + dir_z * s.direction_z;
-            if (ca < cos_cut) continue;
-            float angle = std::acos(std::clamp(ca, -1.0f, 1.0f));
+            const float angle = relativity::MeasureCelestialSeparation(
+                                    input_direction, {s.direction_x, s.direction_y, s.direction_z})
+                                    .angle;
+            if (angle > cutoff) continue;
             float w = std::exp(-angle * angle * inv_two_sigma2);
             float intensity = s.Intensity() * w * config_.brightness_scale;
             float sr, sg, sb;
@@ -357,12 +363,13 @@ class StarfieldGenerator {
     }
 
     // Indexed form of the exact beam accumulation above. The index returns a
-    // conservative angular candidate superset; the same dot-product cutoff and
+    // conservative angular candidate superset; the same stable angular cutoff and
     // Gaussian decide every contribution.
     void AccumulateThroughBeam(float dir_x, float dir_y, float dir_z, float sigma,
                                const StarfieldSpatialIndex& index, float& r, float& g,
                                float& b) const {
         r = g = b = 0.0f;
+        const std::array<float, 3> input_direction{dir_x, dir_y, dir_z};
         SIRIUS_PRE(std::isfinite(dir_x) && std::isfinite(dir_y) && std::isfinite(dir_z));
         SIRIUS_PRE(std::isfinite(sigma) && sigma > 0.0f);
         const std::span<const StarEntry> stars = index.Stars();
@@ -372,16 +379,16 @@ class StarfieldGenerator {
         dir_x /= dlen;
         dir_y /= dlen;
         dir_z /= dlen;
-        const float cos_cut =
-            std::cos(std::min(4.0f * sigma, static_cast<float>(std::numbers::pi)));
+        const float cutoff = std::min(4.0f * sigma, static_cast<float>(std::numbers::pi));
         const float inv_two_sigma2 = 1.0f / (2.0f * sigma * sigma);
 
         index.ForEachCandidate(dir_x, dir_y, dir_z, sigma, [&](std::uint32_t star_index) {
             const auto& star = stars[star_index];
-            const float cosine =
-                dir_x * star.direction_x + dir_y * star.direction_y + dir_z * star.direction_z;
-            if (cosine < cos_cut) return;
-            const float angle = std::acos(std::clamp(cosine, -1.0f, 1.0f));
+            const float angle =
+                relativity::MeasureCelestialSeparation(
+                    input_direction, {star.direction_x, star.direction_y, star.direction_z})
+                    .angle;
+            if (angle > cutoff) return;
             const float weight = std::exp(-angle * angle * inv_two_sigma2);
             const float intensity = star.Intensity() * weight * config_.brightness_scale;
             float sr = 0.0f;
@@ -404,6 +411,7 @@ class StarfieldGenerator {
                                const StarfieldSpatialIndex& index, float& r, float& g,
                                float& b) const {
         r = g = b = 0.0f;
+        const std::array<float, 3> input_direction{dir_x, dir_y, dir_z};
         SIRIUS_PRE(std::isfinite(dir_x) && std::isfinite(dir_y) && std::isfinite(dir_z));
         SIRIUS_PRE(std::isfinite(sigma_major) && sigma_major > 0.0f);
         SIRIUS_PRE(std::isfinite(sigma_minor) && sigma_minor > 0.0f);
@@ -433,26 +441,31 @@ class StarfieldGenerator {
         const float minor = std::min(sigma_major, sigma_minor);
         const float cos_orientation = std::cos(orientation);
         const float sin_orientation = std::sin(orientation);
-        const float cos_cut =
-            std::cos(std::min(4.0f * major, static_cast<float>(std::numbers::pi)));
+        const float cutoff = std::min(4.0f * major, static_cast<float>(std::numbers::pi));
         const float inv_major_squared = 1.0f / (major * major);
         const float inv_minor_squared = 1.0f / (minor * minor);
 
         index.ForEachCandidate(dir_x, dir_y, dir_z, major, [&](std::uint32_t star_index) {
             const auto& star = stars[star_index];
-            const float cosine =
-                dir_x * star.direction_x + dir_y * star.direction_y + dir_z * star.direction_z;
-            if (cosine < cos_cut) return;
-            const float angle = std::acos(std::clamp(cosine, -1.0f, 1.0f));
+            const auto separation = relativity::MeasureCelestialSeparation(
+                input_direction, {star.direction_x, star.direction_y, star.direction_z});
+            const float angle = separation.angle;
+            if (angle > cutoff) return;
             float tangent_x = 0.0f;
             float tangent_y = 0.0f;
-            const float sin_angle = std::sin(angle);
-            if (sin_angle > 1.0e-8f) {
-                const float tx = (star.direction_x - cosine * dir_x) / sin_angle;
-                const float ty = (star.direction_y - cosine * dir_y) / sin_angle;
-                const float tz = (star.direction_z - cosine * dir_z) / sin_angle;
+            if (separation.sine > 0.0f) {
+                const auto& normal = separation.normal;
+                const float tx = (normal[1] * dir_z - normal[2] * dir_y) / separation.sine;
+                const float ty = (normal[2] * dir_x - normal[0] * dir_z) / separation.sine;
+                const float tz = (normal[0] * dir_y - normal[1] * dir_x) / separation.sine;
                 tangent_x = angle * (tx * ex + ty * ey + tz * ez);
                 tangent_y = angle * (tx * fx + ty * fy + tz * fz);
+            } else if (angle > 0.0f) {
+                // At the antipode the anisotropic logarithmic map has no
+                // unique tangent. Exclude that boundary, retaining the
+                // well-defined circular limit when both axes coincide.
+                if (major != minor) return;
+                tangent_x = angle;
             }
             const float along_major = cos_orientation * tangent_x + sin_orientation * tangent_y;
             const float along_minor = -sin_orientation * tangent_x + cos_orientation * tangent_y;

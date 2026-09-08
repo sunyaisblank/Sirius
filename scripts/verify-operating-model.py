@@ -126,6 +126,10 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:KernelParity.DeviceTidalContractionMatchesAnalyticSchwarzschildAtMatchedEvents",
         "gtest:RayBundleTest.MagnificationComesOnlyFromJacobiMap",
         "gtest:StarfieldGeneratorTests.EllipticalFilterUsesTheBeamSachsBasis",
+        "gtest:StarfieldGeneratorTests.PointFilterRetainsImaxSubpixelOffsets",
+        "gtest:StarfieldGeneratorTests.PointFilterMatchesIndependentAngularOracle",
+        "gtest:StarfieldGeneratorTests.SpatialIndexIncludesStarsAcrossAngularCellBoundaries",
+        "gtest:KernelParity.PointStarAngularWeightMatchesIndependentOracle",
         "gtest:StarfieldPointTest.BeamFootprintSuppressesStarFlicker",
     },
     "P3": {
@@ -136,6 +140,10 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope",
         "gtest:StarfieldPointTest.SpatialIndexMatchesExhaustiveBeamOracle",
         "gtest:StarfieldGeneratorTests.EllipticalFilterUsesTheBeamSachsBasis",
+        "gtest:StarfieldGeneratorTests.PointFilterRetainsImaxSubpixelOffsets",
+        "gtest:StarfieldGeneratorTests.PointFilterMatchesIndependentAngularOracle",
+        "gtest:StarfieldGeneratorTests.SpatialIndexIncludesStarsAcrossAngularCellBoundaries",
+        "gtest:KernelParity.PointStarAngularWeightMatchesIndependentOracle",
         "gtest:KernelParity.CelestialTangentBasisIsSharedByBeamAndPointFilter",
         "gtest:VulkanRenderSession.CombinedParitySceneRetainsResolvedImageStructure",
         "gtest:VulkanRenderSession.IndexedPointCatalogueReachesLiveKernel",
@@ -288,8 +296,8 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "b146c797fffe0ca6dfa0a83e7ea6748ef559ae4cfcd7701a8a996a56b919a5ef",
-    "required_dimensions": "da59f40256ff1b2241c56c7b04f6e50aed0e9ce163bc600bc8870756fe8db84e",
+    "acceptance_criteria": "c9b22543581b1dcda937ec0e418540b6498e434dbacf121e05e7b582f6f3d298",
+    "required_dimensions": "86a11c0ff48698afebc98c6d362989336d0071d47a28fd1aa67a909c2343971e",
     "capability_contracts": "48c5b338c14c11e2ad7275322cd72f4bd014df621ca69e65e119621066fd5c6c",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}

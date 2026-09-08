@@ -32,6 +32,8 @@
 
 #include <gtest/gtest.h>
 
+#include "../support/point_star_angular_oracle.h"
+
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -86,6 +88,7 @@ constexpr std::uint32_t kOpSphericalCaptureEvent = 18;
 constexpr std::uint32_t kOpEllisTwoSheetTrace = 19;
 constexpr std::uint32_t kOpWarpRk4Decline = 20;
 constexpr std::uint32_t kOpThinLensProjection = 21;
+constexpr std::uint32_t kOpPointStarAngularWeight = 22;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -1390,6 +1393,36 @@ TEST(KernelParity, BeamEllipseRetainsBothAxesAndOutputOrientation) {
     EXPECT_NEAR(std::cos(2.0f * results[2]), std::cos(2.0f * output_angle), 2.0e-6f);
     EXPECT_NEAR(std::sin(2.0f * results[2]), std::sin(2.0f * output_angle), 2.0e-6f);
     EXPECT_NEAR(results[3], 3.0f, 2.0e-6f);
+}
+
+TEST(KernelParity, PointStarAngularWeightMatchesIndependentOracle) {
+    Fixture f = OpenProbe();
+    if (!f.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+
+    std::vector<Sample> samples;
+    std::vector<double> expected;
+    for (const auto& c : sirius::test::point_star_oracle::Cases()) {
+        for (float norm_scale : {0.99995f, 1.0f, 1.00005f}) {
+            auto scaled = c;
+            for (float& x : scaled.star) x *= norm_scale;
+            Sample sample;
+            sample.p1 = c.major;
+            sample.p2 = c.minor;
+            sample.p3 = c.orientation;
+            sample.c0 = c.direction[0];
+            sample.c1 = c.direction[1];
+            sample.c2 = c.direction[2];
+            sample.u0 = scaled.star[0];
+            sample.u1 = scaled.star[1];
+            sample.u2 = scaled.star[2];
+            samples.push_back(sample);
+            expected.push_back(sirius::test::point_star_oracle::Weight(scaled));
+        }
+    }
+    const auto results = RunProbe(*f.device, f.kernel, kOpPointStarAngularWeight, samples);
+    for (std::size_t i = 0; i < samples.size(); ++i) {
+        EXPECT_NEAR(results[i * kResultStride], expected[i], 2.0e-4) << "case " << i;
+    }
 }
 
 TEST(KernelParity, CelestialTangentBasisIsSharedByBeamAndPointFilter) {

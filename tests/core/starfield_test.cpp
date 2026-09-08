@@ -5,6 +5,8 @@
 
 #include <gtest/gtest.h>
 
+#include "../support/point_star_angular_oracle.h"
+
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -405,6 +407,120 @@ TEST_F(StarfieldGeneratorTests, NoNaNInCatalog) {
         EXPECT_FALSE(std::isnan(s.distance_pc));
         EXPECT_FALSE(std::isnan(s.magnitude));
         EXPECT_FALSE(std::isnan(s.temperature_K));
+    }
+}
+
+TEST_F(StarfieldGeneratorTests, PointFilterRetainsImaxSubpixelOffsets) {
+    const auto c = point_star_oracle::RecordedImaxFailure();
+    const StarEntry star{c.star[0], c.star[1], c.star[2], 10.0f, 0.0f, 0.65f, 5778.0f, 0.0f};
+    config.star_count = 1;
+    config.brightness_scale = 1.0f;
+    const StarfieldGenerator generator(config);
+    const std::vector<StarEntry> stars{star};
+    const StarfieldSpatialIndex index(stars);
+    float sr, sg, sb;
+    star.ComputeColor(sr, sg, sb);
+    const double expected = point_star_oracle::Weight(c);
+    ASSERT_NEAR(expected, std::exp(-0.5), 1.0e-5);
+    float r, g, b;
+    generator.AccumulateThroughBeam(c.direction[0], c.direction[1], c.direction[2], c.major, stars,
+                                    r, g, b);
+    EXPECT_NEAR(r / sr, expected, 2.0e-4);
+    generator.AccumulateThroughBeam(c.direction[0], c.direction[1], c.direction[2], c.major, index,
+                                    r, g, b);
+    EXPECT_NEAR(r / sr, expected, 2.0e-4);
+    generator.AccumulateThroughBeam(c.direction[0], c.direction[1], c.direction[2], c.major,
+                                    c.minor, c.orientation, index, r, g, b);
+    EXPECT_NEAR(r / sr, expected, 2.0e-4);
+}
+
+TEST_F(StarfieldGeneratorTests, PointFilterMatchesIndependentAngularOracle) {
+    config.star_count = 1;
+    config.brightness_scale = 1.0f;
+    const StarfieldGenerator generator(config);
+    std::size_t case_number = 0;
+    for (const auto& c : point_star_oracle::Cases()) {
+        SCOPED_TRACE(case_number++);
+        // The represented catalogue admits small norm error. Angular filtering
+        // must depend on direction, not mistake that error for angular offset.
+        for (float norm_scale : {0.99995f, 1.0f, 1.00005f}) {
+            auto scaled = c;
+            for (float& x : scaled.star) x *= norm_scale;
+            const StarEntry star{scaled.star[0], scaled.star[1], scaled.star[2], 10.0f,
+                                 0.0f,           0.65f,          5778.0f,        0.0f};
+            ASSERT_TRUE(IsRepresentedStarEntry(star));
+            const std::vector<StarEntry> stars{star};
+            const StarfieldSpatialIndex index(stars);
+            float sr, sg, sb;
+            star.ComputeColor(sr, sg, sb);
+            const double expected = point_star_oracle::Weight(scaled);
+            const double circular = point_star_oracle::Weight(scaled, true);
+            float r, g, b;
+            generator.AccumulateThroughBeam(c.direction[0], c.direction[1], c.direction[2], c.major,
+                                            c.minor, c.orientation, index, r, g, b);
+            EXPECT_NEAR(r / sr, expected, 2.0e-4);
+            EXPECT_NEAR(g / sg, expected, 2.0e-4);
+            EXPECT_NEAR(b / sb, expected, 2.0e-4);
+            generator.AccumulateThroughBeam(c.direction[0], c.direction[1], c.direction[2], c.major,
+                                            stars, r, g, b);
+            EXPECT_NEAR(r / sr, circular, 2.0e-4);
+            generator.AccumulateThroughBeam(c.direction[0], c.direction[1], c.direction[2], c.major,
+                                            index, r, g, b);
+            EXPECT_NEAR(r / sr, circular, 2.0e-4);
+        }
+    }
+}
+
+TEST_F(StarfieldGeneratorTests, SpatialIndexIncludesStarsAcrossAngularCellBoundaries) {
+    std::vector<StarEntry> stars;
+    struct Query {
+        std::array<float, 3> direction;
+        float sigma;
+        std::uint32_t star_index;
+    };
+    std::vector<Query> queries;
+    const float sigma = static_cast<float>(std::numbers::pi / 3 / 4096) * 0.3f;
+    for (int latitude : {0, 1, 31, 128, 255, 256}) {
+        for (int longitude : {0, 1, 255, 511}) {
+            const double theta = latitude * std::numbers::pi / 256;
+            const double phi = longitude * 2 * std::numbers::pi / 512;
+            for (double side : {-1.0, 1.0}) {
+                const double star_theta = std::clamp(theta + side * 1e-7, 0.0, std::numbers::pi);
+                const double query_theta = std::clamp(theta - side * sigma, 0.0, std::numbers::pi);
+                const double star_phi = phi + side * 1e-7;
+                const double query_phi = phi - side * sigma;
+                StarEntry star{static_cast<float>(std::sin(star_theta) * std::cos(star_phi)),
+                               static_cast<float>(std::sin(star_theta) * std::sin(star_phi)),
+                               static_cast<float>(std::cos(star_theta)),
+                               10.0f,
+                               0.0f,
+                               0.65f,
+                               5778.0f,
+                               0.0f};
+                for (float norm_scale : {0.99995f, 1.00005f}) {
+                    auto scaled = star;
+                    scaled.direction_x *= norm_scale;
+                    scaled.direction_y *= norm_scale;
+                    scaled.direction_z *= norm_scale;
+                    queries.push_back(
+                        {{static_cast<float>(std::sin(query_theta) * std::cos(query_phi)),
+                          static_cast<float>(std::sin(query_theta) * std::sin(query_phi)),
+                          static_cast<float>(std::cos(query_theta))},
+                         sigma,
+                         static_cast<std::uint32_t>(stars.size())});
+                    stars.push_back(scaled);
+                }
+            }
+        }
+    }
+    const StarfieldSpatialIndex index(stars);
+    for (const auto& query : queries) {
+        bool found = false;
+        index.ForEachCandidate(query.direction[0], query.direction[1], query.direction[2],
+                               query.sigma, [&](std::uint32_t at) {
+                                   if (at == query.star_index) found = true;
+                               });
+        EXPECT_TRUE(found) << "star " << query.star_index;
     }
 }
 
