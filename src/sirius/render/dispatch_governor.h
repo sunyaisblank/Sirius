@@ -23,6 +23,14 @@ inline constexpr double kDefaultDispatchTargetMs = 250.0;
 inline constexpr double kHeavyFp32DispatchTargetMs = 750.0;
 
 inline constexpr int kInitialBandRows = 1;
+// Ordinary fp32/compensated Kerr disk renders also need submission bounds:
+// residency-derived growth reached 512x128 and 1948.7 ms on Radeon/Dozen.
+// Full 512x512, four-sample probes at 512x16 stayed below 379 ms on both
+// rungs; fp32 preserved the original PNG bytes. This is measured work sizing,
+// not a duration guarantee for other scenes or devices. Residency stays separate.
+inline constexpr int kOrdinaryMaxBandWidth = 512;
+inline constexpr int kOrdinaryMaxBandRows = 16;
+inline constexpr std::int64_t kOrdinaryMaxPixels = 8192;
 inline constexpr int kWatchdogSafeMaxTileEdge = 64;
 inline constexpr int kWatchdogSafeMaxBandWidth = 64;
 // On the physical Radeon/Dozen fp32 beam/catalogue probe, 64x4 completed and
