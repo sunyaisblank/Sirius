@@ -333,13 +333,11 @@ def verify_governed_scene_transcript(
             if (evidence.get("width"), evidence.get("height")) == dimensions:
                 end = evidence_indices[position + 1] if position + 1 < len(evidence_indices) \
                     else len(lines)
-                session_star_line = lines[index - 1] if index > 0 else ""
-                candidates.append((path, evidence, session_star_line,
-                                   lines[index + 1:end]))
+                candidates.append((path, evidence, lines[index + 1:end]))
 
     require(len(candidates) == 1,
             f"{label} requires exactly one hashed typed-session scene event")
-    path, evidence, session_star_line, segment = candidates[0]
+    path, evidence, segment = candidates[0]
     require(evidence.get("schema") == "sirius-render-scene-v1",
             f"{label} scene transcript has an unknown schema")
     require(evidence.get("backend") == "Vulkan",
@@ -378,14 +376,9 @@ def verify_governed_scene_transcript(
     for field in ("focal_length", "aperture", "focus_distance"):
         require_matching_number(evidence.get(field), scene.get(field), field)
 
-    session_star_match = re.fullmatch(
-        r"\[Session\] Point-source star field: (\d+) stars, \d+ KiB index, beams on",
-        session_star_line,
-    )
-    require(session_star_match is not None
-            and int(session_star_match.group(1)) == star_count,
-            f"{label} transcript does not bind the session point-star catalogue "
-            "to the scene event")
+    # Vulkan owns catalogue construction and upload; the session does not
+    # construct a duplicate CPU catalogue. Bind its typed configuration to the
+    # actual Vulkan catalogue within this same scene's completion segment.
     vulkan_stars = []
     for line in segment:
         match = re.fullmatch(
@@ -409,6 +402,11 @@ def verify_governed_scene_transcript(
     completion_pattern = re.compile(
         r"\[Session\] Vulkan render complete: Kerr on (.+), (\d+) tile\(s\) of "
         r"(\d+)px in (\d+) governed dispatch\(es\), ([0-9]+(?:\.[0-9]+)?)s"
+        r"; governed ray submit/wait [0-9]+(?:\.[0-9]+)?s total, "
+        r"[0-9]+(?:\.[0-9]+)?ms maximum, [0-9]+ active pixels maximum, "
+        r"[0-9]+ target overshoot\(s\), [0-9]+ safety fallback\(s\)"
+        r"; initialization [0-9]+ dispatch\(es\), "
+        r"[0-9]+(?:\.[0-9]+)?s wall, [0-9]+(?:\.[0-9]+)?ms submit/wait"
     )
     completions = []
     for index, line in enumerate(segment):
@@ -1554,7 +1552,7 @@ def self_test():
             "== [1/6] configure + build (linux-ci)\n"
             "== readiness: evidence_generation=true vulkan=true selected_device_index=0\n"
             f"100% tests passed, 0 tests failed out of {MINIMUM_SOURCE_AVAILABLE_TESTS}\n"
-            '[Session] Point-source star field: 100000 stars, 902 KiB index, beams on\n'
+            '  Tiles:      device-budget governed (Vulkan)\n'
             '[Session] Scene evidence: {"schema":"sirius-render-scene-v1",'
             '"backend":"Vulkan","metric":"Kerr","spin":0.9,"width":1920,'
             '"height":1080,"samples_per_pixel":4,"field_of_view":60.0,'
@@ -1567,10 +1565,13 @@ def self_test():
             '[Vulkan] precision: fp32 rung\n'
             '[Vulkan] point-source star field: 100000 stars, 902 KiB index\n'
             '[Session] Vulkan render complete: Kerr on AMD Radeon 780M, 1 tile(s) of '
-            '1920px in 3000 governed dispatch(es), 20.5s\n'
+            '1920px in 3000 governed dispatch(es), 20.5s; governed ray submit/wait '
+            '15.0s total, 50.0ms maximum, 8192 active pixels maximum, '
+            '2 target overshoot(s), 0 safety fallback(s); initialization '
+            '0 dispatch(es), 0.0s wall, 0.0ms submit/wait\n'
             '[Session] Wrote: frame-1080.png\n'
             '[Session] Finished with state: Complete\n'
-            '[Session] Point-source star field: 100000 stars, 902 KiB index, beams on\n'
+            '  Tiles:      device-budget governed (Vulkan)\n'
             '[Session] Scene evidence: {"schema":"sirius-render-scene-v1",'
             '"backend":"Vulkan","metric":"Kerr","spin":0.9,"width":5616,'
             '"height":4096,"samples_per_pixel":4,"field_of_view":60.0,'
@@ -1583,7 +1584,10 @@ def self_test():
             '[Vulkan] precision: fp32 rung\n'
             '[Vulkan] point-source star field: 100000 stars, 902 KiB index\n'
             '[Session] Vulkan render complete: Kerr on AMD Radeon 780M, 2 tile(s) of '
-            '4096px in 32736 governed dispatch(es), 100.5s\n'
+            '4096px in 32736 governed dispatch(es), 100.5s; governed ray submit/wait '
+            '90.0s total, 75.0ms maximum, 8192 active pixels maximum, '
+            '3 target overshoot(s), 0 safety fallback(s); initialization '
+            '1 dispatch(es), 0.3s wall, 200.0ms submit/wait\n'
             '[Session] Wrote: frame.png\n'
             '[Session] Finished with state: Complete\n',
             encoding="utf-8",
@@ -1867,6 +1871,100 @@ def self_test():
             raise ValueError("negative control accepted: no progressive Vulkan viewer evidence")
 
         original_transcript = transcript.read_text(encoding="utf-8")
+        completion_lines = [line for line in original_transcript.splitlines()
+                            if line.startswith("[Session] Vulkan render complete:")]
+        require(len(completion_lines) == 2, "completion fixtures must cover both governed sizes")
+        for completion, claim_key, png_name in zip(
+                completion_lines, ("p3_render_1080p", "imax_render"),
+                ("frame-1080.png", "frame.png")):
+            render_claim = valid["claims"][claim_key]
+            dimensions = (render_claim["width"], render_claim["height"])
+
+            def check_completion():
+                verify_governed_scene_transcript(
+                    [transcript], scene_claim, render_claim, png_name,
+                    self_test_device, dimensions, "completion self-test")
+
+            check_completion()
+            completion_mutations = [
+                ("old truncated completion", completion.split("; governed")[0]),
+                ("missing initialization", completion.split("; initialization")[0]),
+                ("missing final units", completion.removesuffix("ms submit/wait")),
+                ("trailing completion junk", completion + " unexpected"),
+                ("duplicate completion", completion + "\n" + completion),
+                ("wrong completion device", completion.replace("AMD Radeon 780M", "other GPU")),
+                ("empty tile ledger", re.sub(r", \d+ tile", ", 0 tile", completion)),
+                ("empty dispatch ledger", re.sub(r"in \d+ governed", "in 0 governed", completion)),
+                ("inconsistent completion time", re.sub(
+                    r", [0-9.]+s; governed", ", 99999.0s; governed", completion)),
+                ("missing active-pixel field", re.sub(
+                    r"[0-9]+ active pixels maximum, ", "", completion)),
+                ("reordered telemetry", completion.replace(
+                    "target overshoot(s)", "safety fallback(s)").replace(
+                    "safety fallback(s);", "target overshoot(s);")),
+            ]
+            for invalid_number in ("-1.0", "nan", "inf", "1.2.3"):
+                completion_mutations.append((f"invalid telemetry {invalid_number}", re.sub(
+                    r"submit/wait [0-9.]+s total", f"submit/wait {invalid_number}s total",
+                    completion)))
+            transcript_mutations = [
+                (description, original_transcript.replace(completion, replacement))
+                for description, replacement in completion_mutations
+            ]
+            transcript_mutations.extend([
+                ("missing completion", original_transcript.replace(completion + "\n", "")),
+                ("wrong output image", original_transcript.replace(
+                    f"[Session] Wrote: {png_name}", "[Session] Wrote: unrelated.png")),
+                ("completion after image", original_transcript.replace(
+                    completion + f"\n[Session] Wrote: {png_name}",
+                    f"[Session] Wrote: {png_name}\n" + completion)),
+                ("missing Complete state", original_transcript.replace(
+                    f"[Session] Wrote: {png_name}\n[Session] Finished with state: Complete",
+                    f"[Session] Wrote: {png_name}")),
+                ("Complete state before image", original_transcript.replace(
+                    f"[Session] Wrote: {png_name}\n[Session] Finished with state: Complete",
+                    f"[Session] Finished with state: Complete\n[Session] Wrote: {png_name}")),
+            ])
+            scene_line = next(
+                line for line in original_transcript.splitlines()
+                if line.startswith(SCENE_EVIDENCE_PREFIX)
+                and json.loads(line[len(SCENE_EVIDENCE_PREFIX):])["width"] == dimensions[0])
+            scene_start = original_transcript.index(scene_line)
+            next_scene = original_transcript.find(SCENE_EVIDENCE_PREFIX, scene_start + 1)
+            scene_end = next_scene if next_scene >= 0 else len(original_transcript)
+            scene_segment = original_transcript[scene_start:scene_end]
+            gpu_stars = '[Vulkan] point-source star field: 100000 stars, 902 KiB index\n'
+            for description, replacement in [
+                    ("missing Vulkan catalogue", ""),
+                    ("mismatched Vulkan catalogue", gpu_stars.replace("100000", "99999")),
+                    ("duplicate Vulkan catalogue", gpu_stars + gpu_stars),
+                    ("CPU catalogue substituted for Vulkan", gpu_stars.replace(
+                        "[Vulkan] point-source", "[Session] Point-source")),
+                    ("malformed Vulkan catalogue", gpu_stars.rstrip() + " junk\n")]:
+                changed_segment = scene_segment.replace(gpu_stars, replacement)
+                transcript_mutations.append((description, original_transcript[:scene_start]
+                                             + changed_segment + original_transcript[scene_end:]))
+            # A matching count outside the typed event cannot stand in for the
+            # scene's actual catalogue, nor can a configured count alone do so.
+            transcript_mutations.append(("catalogue outside typed scene",
+                gpu_stars + original_transcript[:scene_start]
+                + scene_segment.replace(gpu_stars, "") + original_transcript[scene_end:]))
+            for field, before, after in (("point_star_count", "100000", "100001"),
+                                         ("ray_bundles", "true", "false"),
+                                         ("point_starfield", "true", "false")):
+                transcript_mutations.append((f"typed scene {field} mismatch",
+                    original_transcript.replace(scene_line, scene_line.replace(
+                        f'"{field}":{before}', f'"{field}":{after}'))))
+            for description, mutated_text in transcript_mutations:
+                transcript.write_text(mutated_text, encoding="utf-8")
+                try:
+                    check_completion()
+                except ValueError:
+                    pass
+                else:
+                    raise ValueError(f"negative control accepted: {description}")
+                finally:
+                    transcript.write_text(original_transcript, encoding="utf-8")
         transcript.write_text(
             original_transcript.replace('"point_star_count":100000',
                                         '"point_star_count":99999'),
