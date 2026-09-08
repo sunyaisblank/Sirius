@@ -37,13 +37,15 @@ enum class PrecisionRung {
 
 // Independent residency and submission caps. Expensive workloads admit at most
 // 256 active fp32 beam/catalogue trajectories in 64x4 bands; fp64 and heavy
-// compensated fp32 retain 64x1 pending wider physical evidence. These are hard work bounds,
+// compensated fp32 retain 64x1 pending wider physical evidence. Ordinary fp32
+// and compensated fp32 use 512x16 independently of their residency tile.
+// These are hard work bounds,
 // not duration guarantees; feedback cannot preempt an individual trajectory.
 struct VulkanDispatchLimits {
     int tile_edge_cap = kMaxTileEdge;
-    int max_band_width = kMaxTileEdge;
-    int max_band_rows = kMaxTileEdge;
-    std::int64_t max_pixels = static_cast<std::int64_t>(kMaxTileEdge) * kMaxTileEdge;
+    int max_band_width = kOrdinaryMaxBandWidth;
+    int max_band_rows = kOrdinaryMaxBandRows;
+    std::int64_t max_pixels = kOrdinaryMaxPixels;
     double default_target_ms = kDefaultDispatchTargetMs;
 };
 

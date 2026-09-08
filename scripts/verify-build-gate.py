@@ -474,17 +474,20 @@ def verify_execution_inputs(
             "source identity changed while CTest ran; no receipt was written")
 
 
-def retain_ctest_result(command: list[str], result: subprocess.CompletedProcess,
-                        log: Path, failure_message: str) -> None:
-    transcript = (
-        f"command: {' '.join(command)}\nreturn_code: {result.returncode}\n"
-        f"stdout:\n{result.stdout}\nstderr:\n{result.stderr}"
-    )
-    log.write_text(transcript, encoding="utf-8")
+def run_ctest_logged(command: list[str], log: Path, failure_message: str) -> None:
+    # Write child output directly to the regular file: interruption must not
+    # discard a pipe captured only in the gate process's memory. Binary mode
+    # preserves both streams' bytes, including undecodable or partial lines.
+    with log.open("wb") as output:
+        output.write((f"command: {' '.join(command)}\n"
+                      "output: combined stdout/stderr (running)\n").encode("utf-8"))
+        output.flush()
+        result = subprocess.run(command, stdout=output, stderr=subprocess.STDOUT,
+                                check=False)
+        output.write(f"\nreturn_code: {result.returncode}\n".encode("utf-8"))
     if result.returncode != 0:
-        # CI may discard the build directory after failure. Keep the actual
-        # failed-test output visible even when no receipt can be issued.
-        sys.stderr.write(transcript)
+        # Ordinary failures retain F13's console diagnostics as well as the log.
+        sys.stderr.write(log.read_bytes().decode("utf-8", errors="replace"))
         raise ValueError(f"{failure_message}; diagnostics retained at {log}")
 
 
@@ -530,11 +533,10 @@ def run_gate(args: argparse.Namespace) -> None:
     if args.config:
         command.extend(("-C", args.config))
     try:
-        result = subprocess.run(command, capture_output=True, text=True)
+        run_ctest_logged(command, log,
+                         "Mandatory CTest gate failed; no receipt was written")
     except OSError as error:
         raise ValueError(f"could not execute the Mandatory CTest gate: {error}") from error
-    retain_ctest_result(command, result, log,
-                        "Mandatory CTest gate failed; no receipt was written")
     executed_names, summary = inspect_junit(junit)
     require(executed_names == registered_names,
             "Mandatory JUnit identities do not equal live CTest registration")
@@ -612,11 +614,10 @@ def run_native_build_gate(args: argparse.Namespace) -> None:
     if args.config:
         command.extend(("-C", args.config))
     try:
-        result = subprocess.run(command, capture_output=True, text=True)
+        run_ctest_logged(command, log,
+                         "native build authority gate failed; no receipt was written")
     except OSError as error:
         raise ValueError(f"could not execute the native build CTest gate: {error}") from error
-    retain_ctest_result(command, result, log,
-                        "native build authority gate failed; no receipt was written")
     executed_names, summary = inspect_junit(junit)
     require(executed_names == selected_names,
             "native build JUnit differs from the exact non-render authority selection")
@@ -793,10 +794,10 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                             f'<testcase name="{name}"/>' for name in sorted(names)
                         ) + "</testsuite>\n", encoding="utf-8")
                     if mutation == "ctest_failure":
-                        return subprocess.CompletedProcess(
-                            command, 8,
-                            stdout="GateFixture.DiagnosticFailure ***Failed\n",
-                            stderr="fixture CTest stderr diagnostic\n")
+                        kwargs["stdout"].write(
+                            b"GateFixture.DiagnosticFailure ***Failed\n"
+                            b"fixture CTest stderr diagnostic\n")
+                        return subprocess.CompletedProcess(command, 8)
                     if mutation == "tested":
                         path = tested["sirius_core_tests"]
                         path.write_bytes(b"x" * len(originals[path]))
@@ -835,7 +836,8 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                     elif mutation == "registration":
                         # Preserve names and labels while changing what CTest runs.
                         live_inventory["tests"][0]["command"] = ["replacement-test"]
-                    output = "fixture CTest passed\n"
+                    kwargs["stdout"].write(b"fixture CTest passed\n")
+                    return subprocess.CompletedProcess(command, 0)
                 return subprocess.CompletedProcess(command, 0, stdout=output, stderr="")
 
             try:
@@ -871,6 +873,126 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
             finally:
                 for path, payload in originals.items():
                     path.write_bytes(payload)
+
+
+def self_test_persistent_output(source: Path, build: Path, tested: dict,
+                                products: dict, test_inputs: dict, inventory: dict) -> None:
+    import time
+    from contextlib import redirect_stderr
+    from io import StringIO
+
+    for return_code in (0, 7):
+        command = [sys.executable, "-c",
+                   "import os, sys; os.write(1, b'first-\\xff\\r\\n'); "
+                   f"os.write(2, b'second-\\xfe'); sys.exit({return_code})"]
+        log = build / f"completed-output-{return_code}.log"
+        console = StringIO()
+        with redirect_stderr(console):
+            if return_code:
+                expect_rejection(lambda: run_ctest_logged(command, log, "fixture failed"),
+                                 "real child nonzero exit")
+            else:
+                run_ctest_logged(command, log, "fixture failed")
+        payload = log.read_bytes()
+        require(payload.endswith(b"first-\xff\r\nsecond-\xfe" +
+                                 f"\nreturn_code: {return_code}\n".encode("utf-8")),
+                "completed CTest output bytes or return code changed")
+        require(not return_code or ("first-" in console.getvalue() and
+                                    "second-" in console.getvalue()),
+                "ordinary failure lost console diagnostics")
+
+    # Exercise the actual full/native gate until its real child is running.
+    # Only source/inventory discovery and the CTest executable are substituted.
+    worker = r"""
+import argparse, importlib.util, json, subprocess, sys
+from pathlib import Path
+spec = importlib.util.spec_from_file_location("gate", sys.argv[1])
+gate = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(gate)
+fixture = json.loads(Path(sys.argv[2]).read_text())
+args = argparse.Namespace(**fixture["args"])
+for key in ("source_root", "build_dir", "stamp", "ctest"):
+    setattr(args, key, Path(getattr(args, key)))
+gate.git_identity = lambda root: (args.source_revision, True)
+names, digest = gate.inspect_inventory(fixture["inventory"])
+gate.read_inventory = lambda *unused: (fixture["inventory"], names, digest)
+original_run = subprocess.run
+child = r'''
+import os, sys, time
+from pathlib import Path
+root = Path(sys.argv[1])
+os.write(1, b"live stdout\r\npartial-stdout-\xff")
+os.write(2, b"live stderr\r\npartial-stderr-\xfe")
+(root / "ready").write_text(str(os.getpid()))
+deadline = time.monotonic() + 15
+while not (root / "release").exists() and time.monotonic() < deadline:
+    time.sleep(0.01)
+# Close inherited log handles before publishing completion, including on Windows.
+sys.stdout.close()
+sys.stderr.close()
+os.close(1)
+os.close(2)
+(root / "finished.tmp").write_text("child released")
+(root / "finished.tmp").replace(root / "finished")
+'''
+def real_child(command, **kwargs):
+    return original_run([sys.executable, "-u", "-c", child, fixture["control"]], **kwargs)
+subprocess.run = real_child
+runner = gate.run_native_build_gate if fixture["native"] else gate.run_gate
+runner(args)
+"""
+    for native in (False, True):
+        control = build / ("persistent-native" if native else "persistent-full")
+        control.mkdir()
+        stamp = control / "gate.json"
+        stamp.write_text("stale receipt\n", encoding="utf-8")
+        args = {
+            "source_root": str(source), "build_dir": str(build), "stamp": str(stamp),
+            "source_revision": "a" * 40, "source_tree_clean": "true",
+            "alignment_mode": "qualification", "ctest": "fixture-ctest", "config": "Release",
+            "tested_artifact": [f"{name}={path}" for name, path in tested.items()],
+            "product_artifact": [f"{name}={path}" for name, path in products.items()],
+            "test_input_artifact": [f"{name}={path}" for name, path in test_inputs.items()],
+        }
+        fixture = control / "fixture.json"
+        fixture.write_text(json.dumps({"args": args, "inventory": inventory,
+                                       "native": native, "control": str(control)}),
+                           encoding="utf-8")
+        log = control / ("native_build_gate_ctest.log" if native else
+                         "mandatory_gate_ctest.log")
+        with (control / "worker.log").open("wb") as worker_log:
+            process = subprocess.Popen([sys.executable, "-u", "-c", worker,
+                                        str(Path(__file__).resolve()), str(fixture)],
+                                       stdout=worker_log, stderr=subprocess.STDOUT)
+            try:
+                deadline = time.monotonic() + 10
+                while not (control / "ready").exists() and process.poll() is None:
+                    require(time.monotonic() < deadline, "live CTest fixture did not start")
+                    time.sleep(0.01)
+                require(process.poll() is None and (control / "ready").exists(),
+                        "gate exited before the live-output assertion")
+                payload = log.read_bytes() if log.exists() else b""
+                for marker in (b"live stdout\r\npartial-stdout-\xff",
+                               b"live stderr\r\npartial-stderr-\xfe"):
+                    require(marker in payload, "running child output was not persisted byte-for-byte")
+                require(b"return_code:" not in payload and not stamp.exists(),
+                        "running child produced completion evidence")
+                process.terminate()
+                require(process.wait(timeout=10) != 0, "terminated gate reported success")
+                require(log.read_bytes() == payload and not stamp.exists(),
+                        "gate interruption lost diagnostics or retained a receipt")
+            finally:
+                if process.poll() is None:
+                    process.terminate()
+                    process.wait(timeout=10)
+                # Release the owned child even when an assertion fails. The
+                # child's own deadline also bounds an interrupted self-test.
+                (control / "release").write_text("release", encoding="utf-8")
+                if (control / "ready").exists():
+                    deadline = time.monotonic() + 10
+                    while not (control / "finished").exists():
+                        require(time.monotonic() < deadline, "live CTest fixture did not finish")
+                        time.sleep(0.01)
 
 
 def self_test() -> None:
@@ -1119,6 +1241,8 @@ def self_test() -> None:
 
         self_test_execution_inputs(source, build, tested_paths, product_paths,
                                    test_input_paths, inventory)
+        self_test_persistent_output(source, build, tested_paths, product_paths,
+                                    test_input_paths, inventory)
 
 
 def main() -> int:

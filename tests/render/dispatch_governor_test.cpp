@@ -55,7 +55,9 @@ TEST(DispatchGovernor, FirstBandUsesTheMinimumFullWidthRowBeforeMeasurement) {
 TEST(DispatchGovernor, ExpensivePrecisionAndBundleWorkloadsUseTheStrictPhysicalFootprint) {
     const auto ordinary = ResolveVulkanDispatchLimits(PrecisionRung::Fp32, false, false);
     EXPECT_EQ(ordinary.tile_edge_cap, kMaxTileEdge);
-    EXPECT_EQ(ordinary.max_band_rows, kMaxTileEdge);
+    EXPECT_EQ(ordinary.max_band_width, 512);
+    EXPECT_EQ(ordinary.max_band_rows, 16);
+    EXPECT_EQ(ordinary.max_pixels, 8192);
     EXPECT_DOUBLE_EQ(ordinary.default_target_ms, 250.0);
 
     const auto ordinary_comp = ResolveVulkanDispatchLimits(PrecisionRung::Fp32Comp, false, false);
@@ -92,6 +94,31 @@ TEST(DispatchGovernor, ExpensivePrecisionAndBundleWorkloadsUseTheStrictPhysicalF
         EXPECT_EQ(limits.max_band_rows, kWatchdogSafeMaxBandRows);
         EXPECT_EQ(limits.max_pixels, 256);
         EXPECT_DOUBLE_EQ(limits.default_target_ms, 750.0);
+    }
+}
+
+TEST(DispatchGovernor, OrdinaryPrecisionBoundsSurviveGrowthAndDisabledAdaptation) {
+    for (const auto precision : {PrecisionRung::Fp32, PrecisionRung::Fp32Comp}) {
+        const auto limits = ResolveVulkanDispatchLimits(precision, false, false);
+        // A larger memory tile must not enlarge either an initial submission or
+        // a band grown after cheap sky rays into a more expensive disk region.
+        for (const int tile_width : {1, 17, 512, 513, 4096}) {
+            for (const double target : {0.0, 250.0, 750.0}) {
+                for (int x = 0; x < tile_width; x += limits.max_band_width) {
+                    const int width = std::min(limits.max_band_width, tile_width - x);
+                    EXPECT_LE(width, 512);
+                    BandController bands(width, target, limits.max_band_rows, limits.max_pixels);
+                    for (int observation = 0; observation < 20; ++observation) {
+                        const int rows = bands.NextRows(4096, width);
+                        EXPECT_GE(rows, 1);
+                        EXPECT_LE(rows, 16);
+                        EXPECT_LE(Area(rows, width), 8192);
+                        ASSERT_TRUE(bands.Record(Area(rows, width), 0.001));
+                    }
+                    EXPECT_EQ(bands.NextRows(3, width), 3);
+                }
+            }
+        }
     }
 }
 
