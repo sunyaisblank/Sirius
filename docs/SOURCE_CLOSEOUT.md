@@ -1,9 +1,14 @@
-# Source closeout — 13 September 2026
+# Source closeout — 14 September 2026
 
 The canonical workspace is `Sirius/`. The accumulated development is preserved
 on `development/source-closeout-2026-09-13`, based on upstream main at
 `8c7ba5a`. This closeout consolidates source, renderer integration and recovery
 history. Release packaging remains disabled pending operating-domain admission.
+
+The renderer integration and focused regression work described below are
+committed. Full renderer acceptance remains unresolved: no complete Mandatory
+receipt has been produced. The current WSL2/Dozen route cannot practically
+complete the large physical point-detector scene at its measured throughput.
 
 The recovered history includes `2f7189b` (governed evidence and Vulkan session
 output), `4a685bb` (subpixel point-source filtering), and `b5ef145` (the surviving
@@ -24,6 +29,12 @@ All 42 sibling Sirius/test-toolchain directories were removed after checking
 that their Sirius commits and uncommitted source had been preserved. Obsolete
 builds and render outputs were removed. New build output stays in
 `bin/linux-gcc`; other projects were left untouched.
+Four redundant local topic branches were checked for patch equivalence against
+the development branch, archived under
+`refs/archive/completed-topics-2026-09-14/`, and removed. The original stash was
+already preserved exactly by its archive ref and recovery bundle, so its
+redundant stash entry was removed. Only main and the development branch remain
+as local branches; remote topic branches were left intact.
 
 ## Implementation completed during closeout
 
@@ -255,6 +266,33 @@ The rehearsal at `59934bf` passed 735 tests without failures, including all four
 workflow. It was stopped while the 192x128 moving ThinLens point-catalogue scene
 was still tracing its first pixels, to resume performance work. This partial run
 is preserved separately and does not establish a complete Mandatory pass.
+
+The clean, pushed implementation at `c0634c7` built all explicit application and
+test targets, then passed 735 Mandatory tests without failures before its run
+was deliberately interrupted. The four 40x24 Doppler frames passed in 3,551.19
+seconds and the installed-volume workflow passed in 216.91 seconds. The
+192x128, three-sample moving ThinLens catalogue scene had completed no pixels
+after approximately 113 minutes, despite 2,808,742 accepted device intervals,
+7,443 phase initializations, and no rejected intervals or safety reductions.
+This interrupted run is not a pass or a final-revision qualification receipt.
+
+The detector's regular-cell sampling pattern alone evaluates 601 distinct
+coordinates per packet. Applying that pattern to all 73,728 camera samples in
+the combined scene corresponds to about 44.3 million probes, before extra
+nonlinear refinement and catalogue-root searches. This is a workload estimate,
+not a measured full-frame count. Small arithmetic savings do not resolve that
+cost on this host. Completing the large-frame and viewer acceptance checks
+requires a practical validation route; their image assertions, physical samples,
+numerical allowances, and work caps remain unchanged.
+
+An independent CPU diagnostic passed all 48 central rays at 16 locations in
+that scene, including capture and escape. Two full detector-pixel diagnostics
+were interrupted while still on their first samples, after at least 1,728 and
+992 probes respectively, with no trace failures observed. Neither diagnostic
+qualifies a complete detector image. All diagnostic processes were stopped and
+their disposable executables, objects, source helpers, render outputs, and
+first-party Python caches were removed. Concise partial results remain with the
+recovery records in `.git/closeout/`.
 
 The configured volume's `mandatory_gate.json` is the authority for the final
 revision's complete zero-failure, zero-skip test estate. It binds the exact
