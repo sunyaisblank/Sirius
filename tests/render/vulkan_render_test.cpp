@@ -679,13 +679,13 @@ TEST(VulkanRenderSession, DispatchSubdivisionPreservesExactCameraAndCatalogueOut
     ASSERT_TRUE(selected.has_value());
     const bool software = (*devices)[*selected].kind == sirius::backend::DeviceKind::kSoftware;
     const auto check_initialization = [software](const auto& stats) {
-        EXPECT_EQ(stats.initialization_dispatches, software ? 1 : 0);
+        EXPECT_EQ(stats.initialization_dispatches, software && !stats.retained_intervals ? 1 : 0);
         EXPECT_TRUE(std::isfinite(stats.initialization_seconds));
         EXPECT_TRUE(std::isfinite(stats.initialization_submit_wait_ms));
         EXPECT_GE(stats.initialization_seconds, 0.0);
         EXPECT_GE(stats.initialization_submit_wait_ms, 0.0);
         EXPECT_GE(stats.seconds, stats.initialization_seconds);
-        if (!software) {
+        if (!software && !stats.retained_intervals) {
             EXPECT_EQ(stats.initialization_seconds, 0.0);
             EXPECT_EQ(stats.initialization_submit_wait_ms, 0.0);
         }
@@ -720,7 +720,12 @@ TEST(VulkanRenderSession, DispatchSubdivisionPreservesExactCameraAndCatalogueOut
         const auto result = sirius::render::RenderVulkanToDisplay(config, minimum);
         ASSERT_TRUE(result.has_value()) << result.error().Description();
         check_initialization(*result);
-        EXPECT_LE(result->maximum_dispatch_pixels, config.width);
+        if (result->retained_intervals) {
+            EXPECT_LE(result->maximum_dispatch_pixels, result->continuation_capacity);
+            EXPECT_GT(result->dispatch_subdivisions, 0);
+        } else {
+            EXPECT_LE(result->maximum_dispatch_pixels, config.width);
+        }
         minimum_dispatches = result->band_dispatches;
     }
     {
@@ -728,8 +733,13 @@ TEST(VulkanRenderSession, DispatchSubdivisionPreservesExactCameraAndCatalogueOut
         const auto result = sirius::render::RenderVulkanToDisplay(config, blocks);
         ASSERT_TRUE(result.has_value()) << result.error().Description();
         check_initialization(*result);
-        EXPECT_LE(result->maximum_dispatch_pixels, config.width * 4);
-        EXPECT_GT(result->maximum_dispatch_pixels, config.width);
+        if (result->retained_intervals) {
+            EXPECT_LE(result->maximum_dispatch_pixels, result->continuation_capacity);
+            EXPECT_GT(result->maximum_dispatch_pixels, 1);
+        } else {
+            EXPECT_LE(result->maximum_dispatch_pixels, config.width * 4);
+            EXPECT_GT(result->maximum_dispatch_pixels, config.width);
+        }
         EXPECT_LT(result->band_dispatches, minimum_dispatches);
     }
     const auto first = minimum.SnapshotFloatData();
@@ -1365,7 +1375,7 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
     RecordProperty("maximum_submit_ms", std::to_string(rendered->maximum_dispatch_ms));
     RecordProperty("explicit_allocation_bytes",
                    std::to_string(rendered->explicit_buffer_allocation_bytes));
-    // Cancel after entering the continuation loop. The previously published
+    // Cancel during frame preparation or tracing. The previously published
     // image and its publication counter must remain unchanged.
     int polls = 0;
     const auto cancelled = RenderVulkanToDisplay(config, display, {}, [&] { return ++polls > 20; });

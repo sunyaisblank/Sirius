@@ -95,6 +95,7 @@ if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS)
                 "${SIRIUS_KERNEL_DIR}/retained_program.py"
                 "${SIRIUS_KERNEL_DIR}/retained_pair.slang"
                 "${SIRIUS_KERNEL_DIR}/retained_triple.slang"
+                "${SIRIUS_KERNEL_DIR}/retained_scratch.slang"
                 "${SIRIUS_KERNEL_DIR}/retained_camera.slang"
                 "${SIRIUS_KERNEL_DIR}/retained_transport.slang"
                 "${SIRIUS_KERNEL_DIR}/retained_endpoint.slang"

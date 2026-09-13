@@ -11,10 +11,19 @@ import struct
 import subprocess
 
 
-def compile_shader(source, destination, compiler, assembler, disassembler, validator, fp64=False):
+WORKGROUP_ROWS = 2
+
+
+def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, prefix=0, fp64=False):
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
+    if registers * terms * WORKGROUP_ROWS * 4 > 16384:
+        raise ValueError("retained program exceeds the portable shared-memory bound")
+    definitions += [f"-DSIRIUS_RETAINED_REGISTERS={registers}",
+                    f"-DSIRIUS_RETAINED_TERMS={terms}",
+                    f"-DSIRIUS_RETAINED_LANES={WORKGROUP_ROWS}",
+                    f"-DSIRIUS_RETAINED_PREFIX={prefix}"]
     subprocess.run([compiler, str(source), *definitions, "-I", str(source.parent), "-O0",
                     "-target", "spirv", "-profile", "spirv_1_5", "-entry", "ComputeMain",
                     "-stage", "compute", "-denorm-mode-fp32", "preserve", "-o", str(raw)],
@@ -61,6 +70,7 @@ def main():
     lines = ["// Generated retained programs and validated shaders; do not edit.",
              "#pragma once", "#include <array>", "#include <cstdint>",
              "namespace sirius::backend::retained_program {"]
+    lines.append(f"inline constexpr std::size_t kRetainedGroupRows = {WORKGROUP_ROWS};")
 
     def array(name, values):
         lines.append(f"inline constexpr std::array<std::uint32_t, {len(values)}> {name}{{{{")
@@ -80,13 +90,16 @@ def main():
             prefix.append(len(program["outputs"]))
         array("k" + kind + "Program", prefix + program["outputs"] + program["operations"])
         stem = "retained_" + ("ray_camera" if kind == "RayCamera" else kind.lower())
+        terms = 4 if kind in ("Camera", "RayCamera") else 5
         code = compile_shader(source / (stem + ".slang"),
                               args.output.parent / (stem + ".spv"),
-                              args.compiler, args.assembler, args.disassembler, args.validator)
+                              args.compiler, args.assembler, args.disassembler, args.validator,
+                              program["registers"], terms, program.get("prefix_instructions", 0))
         array("k" + kind + "Shader", code)
         wide_code = compile_shader(source / (stem + ".slang"),
                                    args.output.parent / (stem + "_fp64.spv"),
                                    args.compiler, args.assembler, args.disassembler, args.validator,
+                                   program["registers"], terms, program.get("prefix_instructions", 0),
                                    fp64=True)
         array("k" + kind + "Fp64Shader", wide_code)
         words = ((512 if kind == "Camera" else 576) + 4 * program["registers"] if kind in ("Camera", "RayCamera")

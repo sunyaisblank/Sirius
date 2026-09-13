@@ -1,3 +1,4 @@
+import retained_scratch;
 import retained_triple;
 import retained_pair;
 [[vk::binding(0, 0)]] StructuredBuffer<uint> inputs;
@@ -19,22 +20,20 @@ RetainedTriple ReadInput(uint index,uint row,uint rowBase) {
     return index>=4 && index<44 ? ReadStored(rowBase+804+5*(index-4)) : ReadOriginal(index,row);
 }
 RetainedTriple ReadValue(uint index, uint rowBase) {
-    uint base = rowBase + 2404 + 5 * index;
     RetainedTriple r;
-    r.hi = asfloat(outputs[base]);
-    r.lo = asfloat(outputs[base + 1]);
-    r.tail = asfloat(outputs[base + 2]);
-    r.error = asfloat(outputs[base + 3]);
-    r.valid = outputs[base + 4];
+    r.hi = asfloat(ScratchRead(index, 0, rowBase, 2404));
+    r.lo = asfloat(ScratchRead(index, 1, rowBase, 2404));
+    r.tail = asfloat(ScratchRead(index, 2, rowBase, 2404));
+    r.error = asfloat(ScratchRead(index, 3, rowBase, 2404));
+    r.valid = ScratchRead(index, 4, rowBase, 2404);
     return r;
 }
 void WriteValue(uint index, RetainedTriple r, uint rowBase) {
-    uint base = rowBase + 2404 + 5 * index;
-    outputs[base] = asuint(r.hi);
-    outputs[base + 1] = asuint(r.lo);
-    outputs[base + 2] = asuint(r.tail);
-    outputs[base + 3] = asuint(r.error);
-    outputs[base + 4] = r.valid;
+    ScratchWrite(index, 0, rowBase, 2404, asuint(r.hi));
+    ScratchWrite(index, 1, rowBase, 2404, asuint(r.lo));
+    ScratchWrite(index, 2, rowBase, 2404, asuint(r.tail));
+    ScratchWrite(index, 3, rowBase, 2404, asuint(r.error));
+    ScratchWrite(index, 4, rowBase, 2404, r.valid);
 }
 
 
@@ -112,7 +111,7 @@ static const int ad[7][7]={
     {3168,33,5247,176,18656,1,1},{384,1,1113,192,6784,84,1}};
 static const int en[7]={71,0,-71,71,-17253,22,-1};
 static const int ed[7]={57600,1,16695,1920,339200,525,40};
-[shader("compute")][numthreads(64,1,1)]
+[shader("compute")][numthreads(SIRIUS_RETAINED_LANES,1,1)]
 void ComputeMain(uint3 id : SV_DispatchThreadID) {
     uint ni,si,no,so; inputs.GetDimensions(ni,si); outputs.GetDimensions(no,so);
     if(ni<1 || id.y!=0 || id.z!=0) return;
@@ -122,7 +121,7 @@ void ComputeMain(uint3 id : SV_DispatchThreadID) {
     uint rowWords=no/rows,rowBase=row*rowWords;
     if(rowWords<2404) return;
     for(uint i=0;i<rowWords;++i) outputs[rowBase+i]=0;
-    if(inputs[programBase+2]!=40 || count>65536 || registers>8192 ||
+    if(inputs[programBase+2]!=40 || count>65536 || registers != SIRIUS_RETAINED_REGISTERS ||
        ni!=programBase+43+5*count || rowWords!=2404+5*registers) return;
     for(uint i=0;i<46;++i) if(ReadOriginal(i,row).valid==0) return;
     RetainedTriple chart=ReadOriginal(44,row);

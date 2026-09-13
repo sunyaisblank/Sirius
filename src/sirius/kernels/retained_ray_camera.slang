@@ -1,3 +1,4 @@
+import retained_scratch;
 // Batched retained camera launch. All rows share an immutable arithmetic program.
 import retained_pair;
 [[vk::binding(0, 0)]] StructuredBuffer<uint> inputs;
@@ -16,22 +17,20 @@ bool Exact(RetainedPair value,float x) {
     return value.valid!=0 && value.hi==x && value.lo==0 && value.error==0;
 }
 RetainedPair ReadValue(uint index, uint rowBase) {
-    uint base = 576 + 4 * index;
     RetainedPair r;
-    r.hi = asfloat(outputs[rowBase + base]);
-    r.lo = asfloat(outputs[rowBase + base + 1]);
-    r.error = asfloat(outputs[rowBase + base + 2]);
-    r.valid = outputs[rowBase + base + 3];
+    r.hi = asfloat(ScratchRead(index, 0, rowBase, 576));
+    r.lo = asfloat(ScratchRead(index, 1, rowBase, 576));
+    r.error = asfloat(ScratchRead(index, 2, rowBase, 576));
+    r.valid = ScratchRead(index, 3, rowBase, 576);
     return r;
 }
 void WriteValue(uint index, RetainedPair r, uint rowBase) {
-    uint base = 576 + 4 * index;
-    outputs[rowBase + base] = asuint(r.hi);
-    outputs[rowBase + base + 1] = asuint(r.lo);
-    outputs[rowBase + base + 2] = asuint(r.error);
-    outputs[rowBase + base + 3] = r.valid;
+    ScratchWrite(index, 0, rowBase, 576, asuint(r.hi));
+    ScratchWrite(index, 1, rowBase, 576, asuint(r.lo));
+    ScratchWrite(index, 2, rowBase, 576, asuint(r.error));
+    ScratchWrite(index, 3, rowBase, 576, r.valid);
 }
-[shader("compute")][numthreads(64, 1, 1)] void ComputeMain(uint3 id
+[shader("compute")][numthreads(SIRIUS_RETAINED_LANES,1,1)] void ComputeMain(uint3 id
                                                           : SV_DispatchThreadID) {
     if(id.y != 0 || id.z != 0) return;
     uint rawNi, si, rawNo, so;
@@ -45,7 +44,7 @@ void WriteValue(uint index, RetainedPair r, uint rowBase) {
     for (uint i = 0; i < no; ++i) outputs[rowBase + i] = 0;
     if (ni < 151) return;
     uint count = ReadInput(45,row,rows), registers = ReadInput(46,row,rows);
-    if (count > 65536 || registers > 8192 || ni != 151 + 5 * count || no != 576 + 4 * registers)
+    if (count > 65536 || registers != SIRIUS_RETAINED_REGISTERS || ni != 151 + 5 * count || no != 576 + 4 * registers)
         return;
     outputs[rowBase + 0] = asuint(271832.0f);
     outputs[rowBase + 1] = asuint(45.0f);

@@ -384,7 +384,12 @@ def build_endpoint_program():
         physical.extend(X + V)
     outputs = [v.v for line in g for v in line] + tangent + phase + physical
     assert len(outputs) == 100
-    return compile_program([v.i for v in outputs])
+    program = compile_program([v.i for v in outputs])
+    # Output registers are pinned through the whole program. Their final writes
+    # delimit the metric/tangent prefix needed before selecting the null root.
+    last_write = {program['operations'][5*i+1]: i for i in range(program['instructions'])}
+    program['prefix_instructions'] = max(last_write[o] for o in program['outputs'][:20]) + 1
+    return program
 
 
 def chart_geometry(position, row, chart):

@@ -1,3 +1,4 @@
+import retained_scratch;
 import retained_triple;
 import retained_pair;
 [[vk::binding(0, 0)]] StructuredBuffer<uint> inputs;
@@ -10,10 +11,26 @@ void WriteStored(uint base, RetainedTriple r) {
     outputs[base]=asuint(r.hi); outputs[base+1]=asuint(r.lo);
     outputs[base+2]=asuint(r.tail); outputs[base+3]=asuint(r.error); outputs[base+4]=r.valid;
 }
-RetainedTriple ReadValue(uint index,uint rowBase) {return ReadStored(rowBase+769+5*index);}
-void WriteValue(uint index,RetainedTriple value,uint rowBase) {WriteStored(rowBase+769+5*index,value);}
+RetainedTriple ReadValue(uint index, uint rowBase) {
+    RetainedTriple r;
+    r.hi = asfloat(ScratchRead(index, 0, rowBase, 769));
+    r.lo = asfloat(ScratchRead(index, 1, rowBase, 769));
+    r.tail = asfloat(ScratchRead(index, 2, rowBase, 769));
+    r.error = asfloat(ScratchRead(index, 3, rowBase, 769));
+    r.valid = ScratchRead(index, 4, rowBase, 769);
+    return r;
+}
+void WriteValue(uint index, RetainedTriple r, uint rowBase) {
+    ScratchWrite(index, 0, rowBase, 769, asuint(r.hi));
+    ScratchWrite(index, 1, rowBase, 769, asuint(r.lo));
+    ScratchWrite(index, 2, rowBase, 769, asuint(r.tail));
+    ScratchWrite(index, 3, rowBase, 769, asuint(r.error));
+    ScratchWrite(index, 4, rowBase, 769, r.valid);
+}
 bool EvaluateProgram(uint row,uint rowBase,uint programBase,uint count,uint registers,uint required) {
-    for (uint index = 0; index < count; ++index) {
+    uint needed = required == 20 ? SIRIUS_RETAINED_PREFIX : count;
+    if (needed == 0 || needed > count) return false;
+    for (uint index = 0; index < needed; ++index) {
         uint address = programBase + 103 + 5 * index, op = inputs[address], destination = inputs[address + 1],
              a = inputs[address + 2], b = inputs[address + 3], c = inputs[address + 4];
         if (destination >= registers || op > 11) return false;
@@ -67,7 +84,7 @@ bool EvaluateProgram(uint row,uint rowBase,uint programBase,uint count,uint regi
         uint index=inputs[programBase+3+i];
         if(index>=registers || ReadValue(index,rowBase).valid==0) return false;
     }
-    for(uint i=0;i<100;++i)
+    for(uint i=0;i<required;++i)
         WriteStored(rowBase+4+i*5,ReadValue(inputs[programBase+3+i],rowBase));
     return true;
 }
@@ -127,7 +144,7 @@ bool Project(uint rowBase,out uint component,out RetainedTriple root) {
     return component<4 && root.valid!=0;
 }
 
-[shader("compute")][numthreads(64,1,1)]
+[shader("compute")][numthreads(SIRIUS_RETAINED_LANES,1,1)]
 void ComputeMain(uint3 id:SV_DispatchThreadID) {
     uint ni,si,no,so;inputs.GetDimensions(ni,si);outputs.GetDimensions(no,so);
     if(ni<1||id.y!=0||id.z!=0) return;
@@ -137,7 +154,7 @@ void ComputeMain(uint3 id:SV_DispatchThreadID) {
     uint rowWords=no/rows,rowBase=row*rowWords;
     if(rowWords<769) return;
     for(uint i=0;i<rowWords;++i) outputs[rowBase+i]=0;
-    if(inputs[programBase+2]!=100||count>65536||registers>8192||
+    if(inputs[programBase+2]!=100||count>65536||registers != SIRIUS_RETAINED_REGISTERS||
        ni!=programBase+103+5*count||rowWords!=769+5*registers) return;
     for(uint i=0;i<45;++i) {
         uint address=1+225*row+5*i;

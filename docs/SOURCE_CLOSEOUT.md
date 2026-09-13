@@ -114,6 +114,14 @@ samples complete, preserving its previous image on cancellation or failure.
 Tiny images reserve the minimum scratch tile without requiring eight actual
 image pixels along each axis.
 
+The generated interpreter uses disjoint workgroup-memory lanes within the
+portable 16 KiB bound. Null projection evaluates only its metric/tangent prefix
+before selecting a root, then evaluates the complete physical output. All eleven
+retained backend/value tests pass after these changes, including FP64. The
+eight-row moving detector run processes about 29 accepted ray intervals per
+second after setup, compared with about 24 before this change. This is an
+intermediate throughput observation, not a completed image or workload result.
+
 Exact Minkowski formulas avoid curved-metric evaluation while preserving the
 DP tableau, differentiated null projection and general Hermite polynomial.
 Independent nonlinear flat dense fixtures prevent treating an arbitrary flat

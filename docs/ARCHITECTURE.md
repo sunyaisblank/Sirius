@@ -256,7 +256,11 @@ It does not change retained states, absolute camera coordinates or sample order.
 A zero soft target disables
 adaptation; the shared safety duration still limits later work and a single-ray
 overshoot declines. Statistics separate all six stage submissions, preparation,
-actual allocated bytes, overshoots and subdivisions. These controls bound work;
+actual allocated bytes, overshoots and subdivisions. Generated interpreter registers
+use disjoint workgroup-memory lanes, bounded at build time by Vulkan's
+[16 KiB required minimum](https://docs.vulkan.org/refpages/latest/refpages/source/Required_Limits.html).
+Projection evaluates only the metric/tangent prefix before selecting a null root;
+its second pass evaluates all physical columns. These controls bound work;
 they cannot preempt a submitted interval or establish native-driver qualification.
 
 The governor exists because the 780M-class target has a 2 GB budget that a naive full-frame HDR pipeline exhausts (a 5616 by 4096 IMAX frame at RGBA32F is 368 MB per buffer before ray state, which at 96 bytes per ray for position, momentum, deviation vectors, and accumulators is another 2.2 GB full-frame). The design bounds device residency by construction rather than by hope.

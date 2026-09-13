@@ -125,8 +125,10 @@ base::Expected<void> RetainedCompute::Dispatch(Stage& stage, DispatchTiming* tim
     if (!status) return status;
     DispatchTiming measured;
     auto* observed = timing ? timing : &measured;
-    status = device_.Dispatch(stage.kernel, stage.buffers,
-                              static_cast<std::uint32_t>((capacity_ + 63) / 64), 1, 1, observed);
+    status = device_.Dispatch(
+        stage.kernel, stage.buffers,
+        static_cast<std::uint32_t>((capacity_ + kRetainedGroupRows - 1) / kRetainedGroupRows), 1, 1,
+        observed);
     if (!status) return status;
     if (!std::isfinite(observed->submit_wait_ms) || observed->submit_wait_ms < 0)
         return Fail(ErrorDomain::kDevice, "dispatch retained stage", "invalid submission timing");
