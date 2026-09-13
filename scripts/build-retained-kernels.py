@@ -11,18 +11,20 @@ import struct
 import subprocess
 
 
-WORKGROUP_ROWS = 2
+WORKGROUP_ROWS = 1
+WORKGROUP_LANES = 64
 
 
-def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, prefix=0, fp64=False):
+def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False):
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
-    if registers * terms * WORKGROUP_ROWS * 4 > 16384:
+    if registers * terms * 4 + 8 > 16384:
         raise ValueError("retained program exceeds the portable shared-memory bound")
     definitions += [f"-DSIRIUS_RETAINED_REGISTERS={registers}",
                     f"-DSIRIUS_RETAINED_TERMS={terms}",
-                    f"-DSIRIUS_RETAINED_LANES={WORKGROUP_ROWS}",
+                    f"-DSIRIUS_RETAINED_LANES={WORKGROUP_LANES}",
+                    f"-DSIRIUS_RETAINED_LAYERS={layers}",
                     f"-DSIRIUS_RETAINED_PREFIX={prefix}"]
     subprocess.run([compiler, str(source), *definitions, "-I", str(source.parent), "-O0",
                     "-target", "spirv", "-profile", "spirv_1_5", "-entry", "ComputeMain",
@@ -84,22 +86,22 @@ def main():
                          ("Dense", module.build_dense_program),
                          ("Initialize", module.build_initialize_program),
                          ("RayCamera", module.build_ray_camera_program)):
-        program = build()
+        program = build(parallel=True)
         prefix = [program["instructions"], program["registers"]]
         if kind not in ("Camera", "RayCamera"):
             prefix.append(len(program["outputs"]))
-        array("k" + kind + "Program", prefix + program["outputs"] + program["operations"])
+        array("k" + kind + "Program", prefix + program["outputs"] + program["operations"] + program["layer_offsets"])
         stem = "retained_" + ("ray_camera" if kind == "RayCamera" else kind.lower())
         terms = 4 if kind in ("Camera", "RayCamera") else 5
         code = compile_shader(source / (stem + ".slang"),
                               args.output.parent / (stem + ".spv"),
                               args.compiler, args.assembler, args.disassembler, args.validator,
-                              program["registers"], terms, program.get("prefix_instructions", 0))
+                              program["registers"], terms, len(program["layer_offsets"])-1, program.get("prefix_instructions", 0))
         array("k" + kind + "Shader", code)
         wide_code = compile_shader(source / (stem + ".slang"),
                                    args.output.parent / (stem + "_fp64.spv"),
                                    args.compiler, args.assembler, args.disassembler, args.validator,
-                                   program["registers"], terms, program.get("prefix_instructions", 0),
+                                   program["registers"], terms, len(program["layer_offsets"])-1, program.get("prefix_instructions", 0),
                                    fp64=True)
         array("k" + kind + "Fp64Shader", wide_code)
         words = ((512 if kind == "Camera" else 576) + 4 * program["registers"] if kind in ("Camera", "RayCamera")

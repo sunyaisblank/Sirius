@@ -904,6 +904,12 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray) {
                                     const GeodesicVariations& initial, const Lightray& endpoint,
                                     const GeodesicVariations& variations, double interval,
                                     const CoupledSegmentIncrement& increment) {
+                if (step_executor_ && terminal.event == Event::None && terminal.fraction == 1.0) {
+                    // The executor already owns a projected physical endpoint.
+                    // Reconstructing X from rounded beginning/increment views
+                    // would replace its retained phase on the next interval.
+                    return std::optional{CoupledSegmentSample{endpoint, variations}};
+                }
                 const Vec4* normal = terminal.event == Event::None ? nullptr : &terminal.normal;
                 // Capture publishes the physical Sachs-screen Jacobi ellipse
                 // at this localized affine parameter, not a horizon-arrival

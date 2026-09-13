@@ -102,7 +102,21 @@ uses the same retained records with exact binary64 products; the high part is
 rounded by an explicit ordered binary32 multiplication. A native conversion
 from the wide product failed the complete camera's residual checks on the
 Radeon/Dozen route. The explicit split passes the independent references.
-Arithmetic radii are not global ODE certificates.
+Arithmetic radii are not global ODE certificates or truncation estimators.
+Embedded and independent-refinement comparisons of complete expansion centers
+retain the existing local component budgets. After admission, the unchanged
+three-term expansion defines the next local numerical initial value. Cached
+candidate records keep their bounds and every private substage propagates them;
+the next local problem starts a fresh arithmetic enclosure. This avoids treating
+repeated coordinate-transform interval wrapping as global trajectory uncertainty
+without rounding away retained limbs.
+
+A strengthened continuation regression exposed two host handoff defects:
+reconstruction of displacement columns from rounded increments and inclusion of
+the rounded affine clock in the phase cache key. Accepted full endpoints now
+remain authoritative, and the autonomous phase cache excludes that clock. Four
+concurrent flat/Kerr traces pass with exactly one initialization per trace;
+rollback and cancellation retain the correct phase.
 
 The generated programs and validated SPIR-V are embedded in the product. All
 six stages reuse fixed buffers. The renderer checks its allocation plan against
@@ -114,13 +128,18 @@ samples complete, preserving its previous image on cancellation or failure.
 Tiny images reserve the minimum scratch tile without requiring eight actual
 image pixels along each axis.
 
-The generated interpreter uses disjoint workgroup-memory lanes within the
-portable 16 KiB bound. Null projection evaluates only its metric/tangent prefix
-before selecting a root, then evaluates the complete physical output. All eleven
-retained backend/value tests pass after these changes, including FP64. The
-eight-row moving detector run processes about 29 accepted ray intervals per
-second after setup, compared with about 24 before this change. This is an
-intermediate throughput observation, not a completed image or workload result.
+Each ray now owns a cooperative workgroup. The generated arithmetic DAG
+schedules up to 64 independent expressions per layer without changing their
+operands or summation order. Its allocator checks input and output ownership
+across barriers; shared registers and status stay below the portable 16 KiB
+limit. Independent RK state components run in parallel as well. Null projection
+executes only its metric/tangent prefix before selecting a root, then evaluates
+the complete physical output. Fixed buffer strides stay unchanged while only
+requested rows are dispatched. All eleven retained backend/value tests pass
+with cooperative arithmetic, RK component evaluation and corrected continuation,
+including FP64 (160.743 seconds). The 491 core tests also pass. The moving
+ThinLens Kerr CPU reference completes with exact serial/two-worker equality
+(4,768.036 seconds). Complete image comparison and frame timing remain under validation.
 
 Exact Minkowski formulas avoid curved-metric evaluation while preserving the
 DP tableau, differentiated null projection and general Hermite polynomial.

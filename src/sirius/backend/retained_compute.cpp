@@ -13,7 +13,8 @@ namespace {
 using base::ErrorDomain;
 using base::Fail;
 using namespace retained_program;
-constexpr std::size_t kMaximumCapacity = 65536;
+// One ray owns one workgroup; stay within Vulkan's portable X dispatch bound.
+constexpr std::size_t kMaximumCapacity = 65535;
 
 RetainedValue Decode(const std::uint32_t* words) {
     return std::bit_cast<RetainedValue>(
@@ -120,15 +121,18 @@ std::array<RetainedCompute::StageStats, 6> RetainedCompute::Statistics() const {
             dense_.stats,  initialize_.stats, ray_camera_.stats};
 }
 
-base::Expected<void> RetainedCompute::Dispatch(Stage& stage, DispatchTiming* timing) {
+base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_rows,
+                                               DispatchTiming* timing) {
     auto status = device_.WriteBuffer(stage.buffers[0], std::as_bytes(std::span(stage.input)));
     if (!status) return status;
     DispatchTiming measured;
     auto* observed = timing ? timing : &measured;
+    // Buffer strides and the immutable program retain their capacity layout.
+    // Only requested rows execute; a later larger batch clears its own rows.
     status = device_.Dispatch(
         stage.kernel, stage.buffers,
-        static_cast<std::uint32_t>((capacity_ + kRetainedGroupRows - 1) / kRetainedGroupRows), 1, 1,
-        observed);
+        static_cast<std::uint32_t>((active_rows + kRetainedGroupRows - 1) / kRetainedGroupRows), 1,
+        1, observed);
     if (!status) return status;
     if (!std::isfinite(observed->submit_wait_ms) || observed->submit_wait_ms < 0)
         return Fail(ErrorDomain::kDevice, "dispatch retained stage", "invalid submission timing");
@@ -156,7 +160,7 @@ base::Expected<std::vector<RetainedCameraOutput>> RetainedCompute::Camera(
     static_assert(sizeof(RetainedCameraInput) == 160 * sizeof(std::uint32_t));
     std::fill_n(camera_.input.begin() + 1, capacity_ * 160, 0U);
     std::memcpy(camera_.input.data() + 1, inputs.data(), inputs.size_bytes());
-    auto status = Dispatch(camera_, timing);
+    auto status = Dispatch(camera_, inputs.size(), timing);
     if (!status) return std::unexpected(status.error());
     std::vector<RetainedCameraOutput> result(inputs.size());
     for (std::size_t row = 0; row < inputs.size(); ++row) {
@@ -185,7 +189,7 @@ base::Expected<std::vector<RetainedStepOutput>> RetainedCompute::Step(
     static_assert(sizeof(RetainedStepInput) == 230 * sizeof(std::uint32_t));
     std::fill_n(transport_.input.begin() + 1, capacity_ * 230, 0U);
     std::memcpy(transport_.input.data() + 1, inputs.data(), inputs.size_bytes());
-    auto status = Dispatch(transport_, timing);
+    auto status = Dispatch(transport_, inputs.size(), timing);
     if (!status) return std::unexpected(status.error());
     std::vector<RetainedStepOutput> result(inputs.size());
     for (std::size_t row = 0; row < inputs.size(); ++row) {
@@ -219,7 +223,7 @@ base::Expected<std::vector<RetainedEndpointOutput>> RetainedCompute::Endpoint(
     static_assert(sizeof(RetainedEndpointInput) == 225 * sizeof(std::uint32_t));
     std::fill_n(endpoint_.input.begin() + 1, capacity_ * 225, 0U);
     std::memcpy(endpoint_.input.data() + 1, inputs.data(), inputs.size_bytes());
-    auto status = Dispatch(endpoint_, timing);
+    auto status = Dispatch(endpoint_, inputs.size(), timing);
     if (!status) return std::unexpected(status.error());
     std::vector<RetainedEndpointOutput> result(inputs.size());
     for (std::size_t row = 0; row < inputs.size(); ++row) {
@@ -248,7 +252,7 @@ base::Expected<std::vector<RetainedDenseOutput>> RetainedCompute::Dense(
     static_assert(sizeof(RetainedDenseInput) == 560 * sizeof(std::uint32_t));
     std::fill_n(dense_.input.begin() + 1, capacity_ * 560, 0U);
     std::memcpy(dense_.input.data() + 1, inputs.data(), inputs.size_bytes());
-    auto status = Dispatch(dense_, timing);
+    auto status = Dispatch(dense_, inputs.size(), timing);
     if (!status) return std::unexpected(status.error());
     std::vector<RetainedDenseOutput> result(inputs.size());
     for (std::size_t row = 0; row < inputs.size(); ++row) {
@@ -275,7 +279,7 @@ base::Expected<std::vector<RetainedInitializeOutput>> RetainedCompute::Initializ
     static_assert(sizeof(RetainedInitializeInput) == 225 * sizeof(std::uint32_t));
     std::fill_n(initialize_.input.begin() + 1, capacity_ * 225, 0U);
     std::memcpy(initialize_.input.data() + 1, inputs.data(), inputs.size_bytes());
-    auto status = Dispatch(initialize_, timing);
+    auto status = Dispatch(initialize_, inputs.size(), timing);
     if (!status) return std::unexpected(status.error());
     std::vector<RetainedInitializeOutput> result(inputs.size());
     for (std::size_t row = 0; row < inputs.size(); ++row) {
@@ -302,7 +306,7 @@ base::Expected<std::vector<RetainedCameraOutput>> RetainedCompute::RayCamera(
     static_assert(sizeof(RetainedRayCameraInput) == 225 * sizeof(std::uint32_t));
     std::fill_n(ray_camera_.input.begin() + 1, capacity_ * 225, 0U);
     std::memcpy(ray_camera_.input.data() + 1, inputs.data(), inputs.size_bytes());
-    auto status = Dispatch(ray_camera_, timing);
+    auto status = Dispatch(ray_camera_, inputs.size(), timing);
     if (!status) return std::unexpected(status.error());
     std::vector<RetainedCameraOutput> result(inputs.size());
     for (std::size_t row = 0; row < inputs.size(); ++row) {

@@ -36,8 +36,11 @@ struct RetainedIntervalOutput {
 // One bounded batch of private coupled attempts. RK, projection and dense
 // evaluation run on the device. The host forms retained lower increments and
 // compares centers with the existing component budgets; no CPU ray is substituted.
-// Arithmetic radii remain attached to every state. The embedded estimates
-// are local numerical error controls, not global interval certification.
+// Arithmetic radii remain attached to each result and private substage. The
+// embedded/refinement center comparisons are local numerical error controls,
+// not interval certification. An admitted expansion may define the exact
+// numerical initial value of a new local problem without carrying the prior
+// problem's arithmetic box as an independent global uncertainty.
 [[nodiscard]] base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
     RetainedCompute& compute, std::span<const RetainedIntervalInput> inputs);
 

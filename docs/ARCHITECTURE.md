@@ -126,7 +126,12 @@ two terms. An explicit arithmetic radius accompanies each component. Both
 `fp32` options select this path; `fp64` uses the same retained representation
 with exact binary64 products and an independently rounded binary32 high part.
 Devices must expose the required subnormal and rounding controls. Arithmetic
-radii bound arithmetic operations, not global ODE truncation error.
+radii bound arithmetic operations, not global ODE truncation error. Embedded
+and independent-refinement comparisons of the complete expansion centers own
+local step admission. After admission, those unchanged limbs define the next
+local numerical initial value with a fresh arithmetic enclosure. Candidate
+records retain their radii; private substages propagate them without a reset.
+The enclosures are not substituted for the local truncation estimator.
 
 The device computes camera frames, physical-to-Hamiltonian initialization,
 private RK candidates, null projection and dense admission samples. A candidate
@@ -135,7 +140,9 @@ half-step midpoint and a refined endpoint. Projection first bounds the
 unprojected null defect and differentiates the represented root. The host
 tracer owns accepted-segment event localization, source sampling and the
 physical detector. Its worker-local retained phase survives accepted intervals
-and explicit rollback; rounded public trace views never replace that phase.
+and explicit rollback. Accepted full endpoints are used directly instead of
+reconstructing displacement columns from rounded increments. The host's affine
+time ledger does not invalidate the autonomous phase cache.
 Failed candidates and failed detector packets cannot publish partial radiance.
 Exact Minkowski formulas avoid evaluating curved-metric expressions without
 changing the tableau, dense polynomial or admission budgets.
@@ -256,11 +263,15 @@ It does not change retained states, absolute camera coordinates or sample order.
 A zero soft target disables
 adaptation; the shared safety duration still limits later work and a single-ray
 overshoot declines. Statistics separate all six stage submissions, preparation,
-actual allocated bytes, overshoots and subdivisions. Generated interpreter registers
-use disjoint workgroup-memory lanes, bounded at build time by Vulkan's
-[16 KiB required minimum](https://docs.vulkan.org/refpages/latest/refpages/source/Required_Limits.html).
-Projection evaluates only the metric/tangent prefix before selecting a null root;
-its second pass evaluates all physical columns. These controls bound work;
+actual allocated bytes, overshoots and subdivisions. Each active ray owns a workgroup. The generated arithmetic DAG groups up to 64
+independent expressions behind each barrier, retaining every expression's original
+operands and arithmetic order. Its allocator verifies that simultaneous results
+cannot overwrite their inputs or each other. Shared registers and status fit
+Vulkan's [16 KiB required minimum](https://docs.vulkan.org/refpages/latest/refpages/source/Required_Limits.html).
+RK state components also run independently within the group. Only requested rows
+are dispatched; fixed buffer strides and immutable programs retain their capacity
+layout. Projection evaluates only the metric/tangent prefix before selecting a
+null root; its second pass evaluates all physical columns. These controls bound work;
 they cannot preempt a submitted interval or establish native-driver qualification.
 
 The governor exists because the 780M-class target has a 2 GB budget that a naive full-frame HDR pipeline exhausts (a 5616 by 4096 IMAX frame at RGBA32F is 368 MB per buffer before ray state, which at 96 bytes per ray for position, momentum, deviation vectors, and accumulators is another 2.2 GB full-frame). The design bounds device residency by construction rather than by hope.

@@ -134,6 +134,9 @@ template <typename Fixture>
 TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInvalidRows) {
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
     const auto allocation = device->BufferAllocationBytes();
+    EXPECT_FALSE(RetainedCompute::Create(*device, 0));
+    EXPECT_FALSE(RetainedCompute::Create(*device, 65536));
+    EXPECT_EQ(device->BufferAllocationBytes(), allocation);
     std::vector<RetainedCameraInput> inputs;
     for (const auto& fixture : sirius::test::retained_camera::kCases) {
         RetainedCameraInput input;
@@ -579,6 +582,7 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
     EXPECT_GT(executor.Statistics().interval_batches, 0U);
     EXPECT_GT(executor.Statistics().camera_batches, 0U);
     EXPECT_GT(executor.Statistics().reused_phases, 0U);
+    EXPECT_EQ(executor.Statistics().initialized_phases, 4U);
 
     sirius::core::KerrSchildFamily flat(sirius::core::KerrSchildParams::Minkowski());
     sirius::core::Lightray ray{};
@@ -615,6 +619,10 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
         EXPECT_EQ(ray.position(axis), midpoint.position(axis));
         EXPECT_EQ(ray.velocity(axis), midpoint.velocity(axis));
     }
+    const auto phase_reuses = executor.Statistics().reused_phases;
+    ray.proper_time = std::nextafter(ray.proper_time, std::numeric_limits<float>::infinity());
+    ASSERT_TRUE(executor.Step(ray, flat, config, coupled, comparison));
+    EXPECT_GT(executor.Statistics().reused_phases, phase_reuses);
     const auto accepted = ray;
     const auto submissions = executor.Statistics().interval_batches;
     cancelled = true;

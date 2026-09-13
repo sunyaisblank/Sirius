@@ -422,8 +422,10 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
                       << progress.camera_batches << " camera batches, "
                       << progress.accepted_intervals << " accepted intervals, "
                       << progress.rejected_intervals << " rejected intervals, "
-                      << progress.batch_subdivisions << " batch subdivisions, "
-                      << progress.safety_fallbacks << " safety reductions\n";
+                      << progress.initialized_phases << " phase initializations, "
+                      << progress.reused_phases << " phase reuses, " << progress.batch_subdivisions
+                      << " batch subdivisions, " << progress.safety_fallbacks
+                      << " safety reductions\n";
             next_progress = std::chrono::steady_clock::now() + std::chrono::seconds(30);
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(10));

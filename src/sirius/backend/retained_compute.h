@@ -132,7 +132,8 @@ class RetainedCompute {
         std::vector<std::uint32_t> input, output;
         StageStats stats;
     };
-    [[nodiscard]] base::Expected<void> Dispatch(Stage& stage, DispatchTiming* timing);
+    [[nodiscard]] base::Expected<void> Dispatch(Stage& stage, std::size_t active_rows,
+                                                DispatchTiming* timing);
     ComputeDevice& device_;
     std::size_t capacity_;
     double dispatch_target_ms_ = 250;

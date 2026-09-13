@@ -207,7 +207,70 @@ def build():
     assert len(scientific) == 104
     return [v.i for v in scientific]
 
-def compile_program(outputs):
+def compile_parallel_program(outputs, live):
+    """Schedule independent DAG nodes together, without changing any expression.
+
+    A layer never reuses its inputs' registers. They become available only after
+    the whole layer completes, matching the device workgroup barrier.
+    """
+    def dependencies(old):
+        op, a, b, c = ops[old]
+        return [] if op in (0, 1) else [a] + ([] if op in (6, 7, 8) else [b]) + ([c] if op in (10, 11) else [])
+
+    levels = {}
+    for old in sorted(live):
+        levels[old] = 1 + max((levels[d] for d in dependencies(old)), default=-1)
+    layers = [[] for _ in range(max(levels.values()) + 1)]
+    for old in sorted(live):
+        layers[levels[old]].append(old)
+    layers = [sorted(layer, key=lambda i: (ops[i][0], i))[start:start+64]
+              for layer in layers for start in range(0, len(layer), 64)]
+    levels = {old: level for level, layer in enumerate(layers) for old in layer}
+    last_use = levels.copy()
+    for old in sorted(live):
+        for dependency in dependencies(old):
+            last_use[dependency] = max(last_use[dependency], levels[old])
+    for output in outputs:
+        last_use[output] = len(layers)
+    released = [[] for _ in layers]
+    for old, level in last_use.items():
+        if level < len(layers):
+            released[level].append(old)
+    slots, free, program, offsets = {}, [], [], [0]
+    owners = {}
+    registers = 0
+    for level, layer in enumerate(layers):
+        inputs = {slots[d] for old in layer for d in dependencies(old)}
+        for old in layer:
+            for dependency in dependencies(old):
+                assert owners[slots[dependency]] == dependency
+        destinations = set()
+        # Similar opcodes share a wave where possible, reducing branch divergence.
+        for old in sorted(layer, key=lambda i: (ops[i][0], i)):
+            op, a, b, c = ops[old]
+            if op not in (0, 1):
+                a = slots[a]
+                b = slots[b] if op not in (6, 7, 8) else 0
+                c = slots[c] if op in (10, 11) else 0
+            if free:
+                destination = free.pop()
+            else:
+                destination = registers
+                registers += 1
+            assert destination not in inputs and destination not in destinations
+            destinations.add(destination)
+            slots[old] = destination
+            owners[destination] = old
+            program.extend((op, destination, a, b, c))
+        offsets.append(len(program) // 5)
+        free.extend(slots[old] for old in released[level])
+    assert all(owners[slots[old]] == old for old in outputs)
+    return {'instructions': len(live), 'registers': registers,
+            'outputs': [slots[i] for i in outputs], 'operations': program,
+            'layer_offsets': offsets}
+
+
+def compile_program(outputs, parallel=False):
     live = set()
 
     def visit(i):
@@ -223,6 +286,8 @@ def compile_program(outputs):
                 visit(c)
     for i in outputs:
         visit(i)
+    if parallel:
+        return compile_parallel_program(outputs, live)
     sequence = sorted(live)
     last_use = {i: i for i in sequence}
     for old in sequence:
@@ -258,8 +323,8 @@ def compile_program(outputs):
 
 
 
-def build_camera_program():
-    program = compile_program(build())
+def build_camera_program(parallel=False):
+    program = compile_program(build(), parallel)
     program['input_words'] = 138 + len(program['operations'])
     program['output_words'] = 384 + 4 * program['registers']
     return program
@@ -336,11 +401,11 @@ def build_hamiltonian_rhs():
 
 
 
-def build_transport_program():
-    return compile_program(build_hamiltonian_rhs())
+def build_transport_program(parallel=False):
+    return compile_program(build_hamiltonian_rhs(), parallel)
 
 
-def build_endpoint_program():
+def build_endpoint_program(parallel=False):
     """Metric and projected physical columns from the complete phase expansion.
 
     The endpoint kernel first consumes the metric/tangent outputs to select a
@@ -384,11 +449,13 @@ def build_endpoint_program():
         physical.extend(X + V)
     outputs = [v.v for line in g for v in line] + tangent + phase + physical
     assert len(outputs) == 100
-    program = compile_program([v.i for v in outputs])
+    program = compile_program([v.i for v in outputs], parallel)
     # Output registers are pinned through the whole program. Their final writes
     # delimit the metric/tangent prefix needed before selecting the null root.
     last_write = {program['operations'][5*i+1]: i for i in range(program['instructions'])}
     program['prefix_instructions'] = max(last_write[o] for o in program['outputs'][:20]) + 1
+    if parallel:
+        program['prefix_instructions'] = next(end for end in program['layer_offsets'] if end >= program['prefix_instructions'])
     return program
 
 
@@ -404,7 +471,7 @@ def chart_geometry(position, row, chart):
     return g, inverse
 
 
-def build_dense_program():
+def build_dense_program(parallel=False):
     """Retained Hermite flow and physical arrival derivatives on one segment."""
     ops.clear()
     cache.clear()
@@ -451,10 +518,10 @@ def build_dense_program():
         # Dk/dlambda=0 cancels the geodesic-flow acceleration and connection
         # terms exactly. Arrival changes X by k*shift and leaves covariant V.
         outputs.extend([X[i]+tangent[i]*shift for i in range(4)] + V)
-    return compile_program([v.i for v in outputs])
+    return compile_program([v.i for v in outputs], parallel)
 
 
-def build_initialize_program():
+def build_initialize_program(parallel=False):
     """Convert physical camera/trace columns to retained Hamiltonian phase."""
     ops.clear()
     cache.clear()
@@ -469,10 +536,10 @@ def build_initialize_program():
              sum((g[a][b].d[mu]+g[a][mu].d[b]-g[mu][b].d[a])*tangent[a]*X[b]
                  for a in range(4) for b in range(4))/2 for mu in range(4)]
         outputs.extend(X+P)
-    return compile_program([v.i for v in outputs])
+    return compile_program([v.i for v in outputs], parallel)
 
 
-def build_ray_camera_program():
+def build_ray_camera_program(parallel=False):
     """Metric launch from the smooth lens's physical direction and four seeds."""
     ops.clear()
     cache.clear()
@@ -500,4 +567,4 @@ def build_ray_camera_program():
     du = [[f[0][mu].d[c] for mu in range(4)] for c in range(4)]
     framevalues = [v.v for axis in f for v in axis]
     outputs = position+[v.v for v in k]+framevalues+[v for group in [X,K,V,du] for column in group for v in column]+framevalues
-    return compile_program([v.i for v in outputs])
+    return compile_program([v.i for v in outputs], parallel)

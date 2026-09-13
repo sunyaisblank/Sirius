@@ -36,6 +36,7 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
         std::uint64_t safety_fallbacks = 0;
         std::size_t maximum_batch_rows = 0;
         std::uint64_t reused_phases = 0;
+        std::uint64_t initialized_phases = 0;
         std::uint64_t accepted_intervals = 0;
         std::uint64_t rejected_intervals = 0;
     };
@@ -46,7 +47,6 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
         std::array<double, 40> physical{};
         std::array<double, 4> metric{};
         double chart = 0;
-        float affine = 0;
         bool operator==(const Snapshot&) const = default;
     };
     struct Continuation {

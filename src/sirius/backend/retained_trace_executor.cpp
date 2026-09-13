@@ -312,7 +312,8 @@ bool RetainedTraceExecutor::Step(core::Lightray& ray, core::IMetric& metric,
     Snapshot snapshot;
     snapshot.metric = {parameters.M, parameters.a, parameters.Q, parameters.Lambda};
     snapshot.chart = outgoing ? -1 : 1;
-    snapshot.affine = ray.proper_time;
+    // The coordinator owns its rounded affine-time ledger. It is not part of
+    // the autonomous Hamiltonian phase and must not invalidate retained limbs.
     const auto snapshot_physical = [&](Snapshot& target) {
         for (std::size_t i = 0; i < 4; ++i) {
             target.physical[i] = ray.position(static_cast<int>(i));
@@ -347,12 +348,23 @@ bool RetainedTraceExecutor::Step(core::Lightray& ray, core::IMetric& metric,
         }
         const auto cached = continuations_.find(thread);
         if (cached != continuations_.end()) {
-            if (snapshot == cached->second.after && cached->second.finish.valid)
+            if (snapshot == cached->second.after && cached->second.finish.valid) {
                 request.interval.start = cached->second.finish;
-            else if (snapshot == cached->second.before)
+                // The accepted expansion defines the next local numerical
+                // initial value exactly. Preserve every limb; its predecessor's
+                // enclosure remains in the cached result, while this new local
+                // expression starts fresh. These arithmetic boxes are not a
+                // global trajectory certificate or the truncation estimator.
+                for (auto* values :
+                     {&request.interval.start.phase, &request.interval.start.physical})
+                    for (auto& value : *values) value.radius = 0;
+            } else if (snapshot == cached->second.before)
                 request.interval.start = cached->second.start;
-            if (request.interval.start.valid) ++stats_.reused_phases;
         }
+        if (request.interval.start.valid)
+            ++stats_.reused_phases;
+        else
+            ++stats_.initialized_phases;
         requests_.push_back(&request);
         available_.notify_one();
         completed_.wait(lock, [&] { return request.completed; });
@@ -399,7 +411,6 @@ bool RetainedTraceExecutor::Step(core::Lightray& ray, core::IMetric& metric,
     ray.step_size = core::Geodesic::ComputeOptimalStep(
         interval, static_cast<float>(result.error_ratio), 1, config);
     continuation.after = snapshot;
-    continuation.after.affine = ray.proper_time;
     snapshot_physical(continuation.after);
     continuation.finish = result.full;
     {
