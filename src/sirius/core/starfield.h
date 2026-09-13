@@ -8,7 +8,9 @@
 
 #include "sirius/base/contracts.h"
 #include "sirius/core/celestial_tangent_basis.h"
+#include "sirius/core/point_source_response.h"
 #include "sirius/core/spectral/blackbody.h"
+#include "sirius/core/spectral/point_source_transfer.h"
 
 #include <algorithm>
 #include <cmath>
@@ -16,6 +18,7 @@
 #include <cstdint>
 #include <limits>
 #include <numbers>
+#include <optional>
 #include <random>
 #include <span>
 #include <utility>
@@ -427,7 +430,7 @@ class StarfieldGenerator {
         // The ellipse angle was measured in this exact Sachs basis at the
         // terminal ray. Reusing it here preserves the footprint orientation.
         const auto tangent_basis =
-            relativity::MakeCelestialTangentBasis(std::array{dir_x, dir_y, dir_z});
+            relativity::MakeCelestialTangentBasis(input_direction);
         SIRIUS_ASSERT(tangent_basis.has_value());
         if (!tangent_basis.has_value()) return;
         const float ex = tangent_basis->first[0];
@@ -481,6 +484,85 @@ class StarfieldGenerator {
             g += sg * intensity;
             b += sb * intensity;
         });
+    }
+
+    // Integrated catalogue flux through a locally affine detector response.
+    // The response owns its angular-area normalization; the spatial index only
+    // selects candidates. g=nu_camera/nu_source is explicit, including g=1 for
+    // reference-frequency callers. The caller must independently establish map,
+    // frequency and visibility validity over the support. No additional pixel
+    // area, beam magnification or bolometric g^4 factor applies.
+    [[nodiscard]] std::expected<std::array<double, 3>, PointResponseFailure>
+    AccumulateThroughResponse(const std::array<double, 3>& direction,
+                              const AffinePointResponse& response,
+                              const StarfieldSpatialIndex& index,
+                              double camera_over_source_frequency) const {
+        if (!std::isfinite(camera_over_source_frequency) || !(camera_over_source_frequency > 0.0))
+            return std::unexpected(PointResponseFailure::InvalidInput);
+        const auto basis = relativity::MakeCelestialTangentBasis(direction);
+        if (!basis) return std::unexpected(PointResponseFailure::InvalidInput);
+        const double norm = std::hypot(direction[0], direction[1], direction[2]);
+        std::array<double, 3> unit{};
+        for (int axis = 0; axis < 3; ++axis) unit[axis] = direction[axis] / norm;
+        // The existing index operates in float. Enlarge only its conservative
+        // query for direction conversion and rounding; never enlarge the PSF.
+        const float query_sigma = std::nextafter(
+            static_cast<float>(response.major_sigma + 8 * std::numeric_limits<float>::epsilon()),
+            std::numeric_limits<float>::infinity());
+        std::array<double, 3> total{};
+        std::optional<PointResponseFailure> failure;
+        const auto stars = index.Stars();
+        index.ForEachCandidate(
+            static_cast<float>(unit[0]), static_cast<float>(unit[1]), static_cast<float>(unit[2]),
+            query_sigma, [&](std::uint32_t star_index) {
+                if (failure) return;
+                const auto& star = stars[star_index];
+                const auto separation = relativity::MeasureCelestialSeparation(
+                    unit,
+                    std::array<double, 3>{star.direction_x, star.direction_y, star.direction_z});
+                if (separation.angle > response.support_radius) return;
+                std::array<double, 2> offset{};
+                if (separation.sine > 0) {
+                    const auto& n = separation.normal;
+                    const std::array<double, 3> tangent{
+                        (n[1] * unit[2] - n[2] * unit[1]) / separation.sine,
+                        (n[2] * unit[0] - n[0] * unit[2]) / separation.sine,
+                        (n[0] * unit[1] - n[1] * unit[0]) / separation.sine};
+                    for (int axis = 0; axis < 3; ++axis) {
+                        offset[0] += separation.angle * tangent[axis] * basis->first[axis];
+                        offset[1] += separation.angle * tangent[axis] * basis->second[axis];
+                    }
+                } else if (separation.angle > 0) {
+                    failure = PointResponseFailure::Arithmetic;
+                    return;
+                }
+                const auto density = response.Density(offset);
+                if (!density) {
+                    failure = density.error();
+                    return;
+                }
+                // A conservative query can include stars outside the exact
+                // ellipse. Their spectrum is not part of this contribution.
+                if (*density == 0.0) return;
+                const double flux =
+                    static_cast<double>(star.Intensity()) * config_.brightness_scale;
+                const auto transferred = spectral::TransferPointSourceBand(
+                    star.temperature_K, camera_over_source_frequency, flux, *density);
+                if (!transferred) {
+                    failure =
+                        transferred.error() == spectral::PointSourceTransferFailure::InvalidInput
+                            ? PointResponseFailure::InvalidInput
+                            : PointResponseFailure::Arithmetic;
+                    return;
+                }
+                for (std::size_t channel = 0; channel < total.size(); ++channel)
+                    total[channel] += (*transferred)[channel];
+            });
+        if (failure) return std::unexpected(*failure);
+        if (!std::all_of(total.begin(), total.end(), [](double v) { return std::isfinite(v); })) {
+            return std::unexpected(PointResponseFailure::Arithmetic);
+        }
+        return total;
     }
 
     // Accumulate starfield colour along view direction (dir_*) with a parallax

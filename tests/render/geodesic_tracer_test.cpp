@@ -17,6 +17,7 @@
 #include <chrono>
 #include <cmath>
 #include <iostream>
+#include <limits>
 #include <memory>
 #include <numbers>
 
@@ -55,21 +56,40 @@ TEST(CpuTraceBoundary, HorizonlessKerrSchildFamiliesKeepTheirNativeTraceChart) {
 }
 
 TEST(CpuTraceBoundary, UnrepresentedPastHorizonLaunchDeclinesBeforeIntegration) {
-    KerrSchildFamily metric(KerrSchildParams::Schwarzschild(1.0));
-    TracerConfig config;
-    config.enable_disk = false;
-    GeodesicTracer tracer(&metric, config);
-    CameraRay camera_ray;
-    camera_ray.origin(1) = 1.9;
-    camera_ray.origin(2) = std::numbers::pi / 2.0;
-    camera_ray.direction(1) = -1.0;
-    const auto result = tracer.Trace(camera_ray);
-    EXPECT_EQ(result.outcome, TraceResult::Outcome::MaxSteps);
-    EXPECT_TRUE(result.numerical_failure);
-    EXPECT_EQ(result.integrator_termination, 3);
-    EXPECT_EQ(result.steps_taken, 0);
-    EXPECT_DOUBLE_EQ(result.affine_length, 0.0);
-    EXPECT_EQ(result.terminal_chart, TraceResult::TerminalChart::MetricNative);
+    struct LaunchCase {
+        KerrSchildParams parameters;
+        double radius;
+        bool roots_available;
+    };
+    const std::array<LaunchCase, 2> cases{{
+        {KerrSchildParams::Schwarzschild(1.0), 1.9, true},
+        // The positive inner root underflows. Horizon existence must still
+        // select the chart route, which declines before tracing this event.
+        {{1.0, 0.0, std::numeric_limits<double>::denorm_min(), 0.0}, 10.0, false}
+    }};
+    for (const auto& launch : cases) {
+        SCOPED_TRACE(launch.radius);
+        KerrSchildFamily metric(launch.parameters);
+        ASSERT_TRUE(metric.HasHorizon());
+        if (!launch.roots_available) {
+            EXPECT_EQ(metric.OuterHorizonRadius(), -1.0);
+            EXPECT_EQ(metric.InnerHorizonRadius(), -1.0);
+        }
+        TracerConfig config;
+        config.enable_disk = false;
+        GeodesicTracer tracer(&metric, config);
+        CameraRay camera_ray;
+        camera_ray.origin(1) = launch.radius;
+        camera_ray.origin(2) = std::numbers::pi / 2.0;
+        camera_ray.direction(1) = -1.0;
+        const auto result = tracer.Trace(camera_ray);
+        EXPECT_EQ(result.outcome, TraceResult::Outcome::MaxSteps);
+        EXPECT_TRUE(result.numerical_failure);
+        EXPECT_EQ(result.integrator_termination, 3);
+        EXPECT_EQ(result.steps_taken, 0);
+        EXPECT_DOUBLE_EQ(result.affine_length, 0.0);
+        EXPECT_EQ(result.terminal_chart, TraceResult::TerminalChart::MetricNative);
+    }
 }
 
 TEST(CpuTraceBoundary, PastRadialHorizonIsAnAcceptedFiniteOutgoingEvent) {

@@ -17,6 +17,7 @@
 #include "sirius/render/dispatch_governor.h"
 #include "sirius/render/memory_governor.h"
 
+#include <array>
 #include <cstdint>
 #include <functional>
 #include <string>
@@ -58,15 +59,20 @@ struct VulkanRenderStats {
     std::string device_name;
     std::string metric_name;
     TilePlan tile_plan;
+    std::uint64_t explicit_buffer_allocation_bytes = 0;
+    std::uint64_t continuation_capacity = 0;
+    // Actual Init/Advance/Finalize submissions; separate from zero-ray driver initialization.
+    std::array<std::int64_t, 3> continuation_dispatches{};
+    std::array<double, 3> maximum_continuation_ms{};
     PrecisionRung precision = PrecisionRung::Fp32;
     bool starfield_uploaded = false;
     bool point_catalogue_uploaded = false;
     int tiles_rendered = 0;
-    int band_dispatches = 0;  // governed ray submissions, excluding initialization
+    std::int64_t band_dispatches = 0;  // governed ray submissions, excluding initialization
     double dispatch_seconds = 0.0;
     double maximum_dispatch_ms = 0.0;
     std::int64_t maximum_dispatch_pixels = 0;
-    int dispatch_target_overshoots = 0;
+    std::int64_t dispatch_target_overshoots = 0;
     int dispatch_fallbacks = 0;
     int initialization_dispatches = 0;  // software only, zero active rays
     double initialization_seconds = 0.0;

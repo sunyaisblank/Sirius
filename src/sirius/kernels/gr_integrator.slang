@@ -58,7 +58,7 @@ public bool IntegrateGeodesicRK4CartDelta(GeodesicStateCart state, Real dt,
     Vec4Cart dx4 = ScaleVec4Cart(s4.u, dt);
     Vec4Cart du4 = ScaleVec4Cart(acceleration, dt);
 
-    Real sixth = 1.0f / 6.0f;
+    Real sixth = Real(1.0) / Real(6.0);
     dx = ScaleVec4Cart(AddVec4Cart(AddVec4Cart(dx1, ScaleVec4Cart(dx2, 2.0f)),
                                    AddVec4Cart(ScaleVec4Cart(dx3, 2.0f), dx4)), sixth);
     du = ScaleVec4Cart(AddVec4Cart(AddVec4Cart(du1, ScaleVec4Cart(du2, 2.0f)),
@@ -134,7 +134,7 @@ public bool IntegrateGeodesicRK4MorrisThorneCartDelta(
     Vec4Cart dx4 = ScaleVec4Cart(s4.u, dt);
     Vec4Cart du4 = ScaleVec4Cart(acceleration, dt);
 
-    Real sixth = 1.0f / 6.0f;
+    Real sixth = Real(1.0) / Real(6.0);
     dx = ScaleVec4Cart(AddVec4Cart(AddVec4Cart(dx1, ScaleVec4Cart(dx2, 2.0f)),
                                    AddVec4Cart(ScaleVec4Cart(dx3, 2.0f), dx4)), sixth);
     du = ScaleVec4Cart(AddVec4Cart(AddVec4Cart(du1, ScaleVec4Cart(du2, 2.0f)),
@@ -212,7 +212,7 @@ public bool IntegrateGeodesicRK4WarpCartDelta(
     Vec4Cart dx4 = ScaleVec4Cart(s4.u, dt);
     Vec4Cart du4 = ScaleVec4Cart(acceleration, dt);
 
-    Real sixth = 1.0f / 6.0f;
+    Real sixth = Real(1.0) / Real(6.0);
     dx = ScaleVec4Cart(AddVec4Cart(AddVec4Cart(dx1, ScaleVec4Cart(dx2, 2.0f)),
                                    AddVec4Cart(ScaleVec4Cart(dx3, 2.0f), dx4)), sixth);
     du = ScaleVec4Cart(AddVec4Cart(AddVec4Cart(du1, ScaleVec4Cart(du2, 2.0f)),
@@ -265,7 +265,7 @@ bool AdvanceGeodesicRK4(GeodesicStateCart state, Real step,
     return IntegrateGeodesicRK4Cart(state, step, M, a, Q, Lambda, result);
 }
 
-Real RelativeStepDifference(GeodesicStateCart start, GeodesicStateCart first,
+public Real RelativeStepDifference(GeodesicStateCart start, GeodesicStateCart first,
                             GeodesicStateCart second) {
     Real startValues[8] = { start.x.t, start.x.x, start.x.y, start.x.z,
                             start.u.t, start.u.x, start.u.y, start.u.z };
@@ -310,9 +310,10 @@ Real DeviceRealEpsilon() {
 // temporal root when represented. A coordinate-time root need not exist inside
 // a stationary limit; in that case the smallest normalized spatial correction
 // leaves k^0 unchanged and preserves the incoming cone orientation.
-public bool ProjectNullTangentPreservingBranch(Real metric[4][4], Vec4Cart tangent,
-                                               out Vec4Cart projected) {
+public bool ProjectNullTangentWithSelection(Real metric[4][4], Vec4Cart tangent,
+                                               out Vec4Cart projected, out int selectedComponent) {
     projected = tangent;
+    selectedComponent = -1;
     if (!isfinite(tangent.t) || !isfinite(tangent.x) ||
         !isfinite(tangent.y) || !isfinite(tangent.z)) {
         return false;
@@ -385,6 +386,7 @@ public bool ProjectNullTangentPreservingBranch(Real metric[4][4], Vec4Cart tange
             [unroll] for (int i = 0; i < 4; ++i) bestComponents[i] = components[i];
             bestComponents[component] = root;
             bestCorrection = correction;
+            selectedComponent = component;
             bestRepresented = true;
             if (component == 0) temporalRepresented = true;
         }
@@ -393,6 +395,12 @@ public bool ProjectNullTangentPreservingBranch(Real metric[4][4], Vec4Cart tange
     projected = MakeVec4Cart(bestComponents[0], bestComponents[1],
                              bestComponents[2], bestComponents[3]);
     return true;
+}
+
+public bool ProjectNullTangentPreservingBranch(Real metric[4][4], Vec4Cart tangent,
+                                               out Vec4Cart projected) {
+    int selectedComponent;
+    return ProjectNullTangentWithSelection(metric,tangent,projected,selectedComponent);
 }
 
 // One device-precision policy consumed by both the production trace and its P1

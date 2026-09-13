@@ -21,18 +21,22 @@
 #include "sirius/render/pixel_sampling.h"
 #include "sirius/render/session/display_buffer.h"
 #include "sirius/render/session/render_session.h"
+#include "sirius/render/trace_continuation.h"
 #include "sirius/render/trace_domain.h"
 
 #include "stb_image.h"
 
 #include <algorithm>
+#include <bit>
 #include <chrono>
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>
+#include <cstring>
 #include <format>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <span>
 #include <string>
 #include <vector>
@@ -58,9 +62,8 @@ constexpr float kTraceStepScale = 0.08f;
 // owned by the shared Page-Thorne/blackbody/invariant-transfer kernel path.
 constexpr float kDiskOuterFactor = 20.0f;
 
-// Exact dense params-buffer ABI through the last consumed slot (67).
-// Host and kernel indices are kept explicit so a new control must extend both.
-constexpr std::uint32_t kParamCount = 68;
+// Original scene packet plus continuation action and bit-preserving epoch.
+constexpr std::uint32_t kParamCount = kTraceParameterCount;
 constexpr int kMaxVulkanVolumeSamples = 128;
 
 // Kernel dispatch ids (must match trace.slang / gr_types.slang).
@@ -528,12 +531,37 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
                     "SIRIUS_MEMORY_BUDGET_MB override");
     }
 
-    const auto dispatch_limits =
+    auto dispatch_limits =
         ResolveVulkanDispatchLimits(*rung, config.ray_bundles, config.point_starfield);
-    auto plan =
-        DeriveTilePlan(budget, config.width, config.height,
-                       params_overhead + (use_starfield ? starfield_bytes : 0) + point_bytes,
-                       dispatch_limits.tile_edge_cap);
+    const std::uint64_t record_stride = *rung == PrecisionRung::Fp64
+                                            ? sizeof(DoubleTraceContinuation)
+                                            : sizeof(FloatTraceContinuation);
+    // Include every allocated dummy binding as well as the selected source.
+    const std::uint64_t fixed_bytes =
+        params_overhead + (use_starfield ? starfield_bytes : sizeof(std::uint32_t)) +
+        (point_index ? point_bytes : sizeof(float) * 8 + sizeof(std::uint32_t) * 3);
+    const auto usable_bytes =
+        static_cast<std::uint64_t>(static_cast<double>(budget) * kResidencyFraction);
+    constexpr std::uint64_t minimum_radiance =
+        kMinTileEdge * kMinTileEdge * kTileWorkingSetBytesPerPixel;
+    if (usable_bytes <= fixed_bytes ||
+        usable_bytes - fixed_bytes < minimum_radiance + record_stride) {
+        return Fail(ErrorDomain::kDevice, "allocate trace continuation",
+                    "budget cannot seat source buffers, minimum radiance tile and one ray state");
+    }
+    const auto state_capacity = std::min(
+        {static_cast<std::uint64_t>(dispatch_limits.max_pixels),
+         static_cast<std::uint64_t>(config.width) * config.height,
+         static_cast<std::uint64_t>(dispatch_limits.tile_edge_cap) * dispatch_limits.tile_edge_cap,
+         (usable_bytes - fixed_bytes - minimum_radiance) / record_stride});
+    dispatch_limits.max_pixels = static_cast<std::int64_t>(state_capacity);
+    dispatch_limits.max_band_width =
+        std::min(dispatch_limits.max_band_width, static_cast<int>(state_capacity));
+    dispatch_limits.max_band_rows =
+        std::min(dispatch_limits.max_band_rows, static_cast<int>(state_capacity));
+    const std::uint64_t continuation_bytes = state_capacity * record_stride;
+    auto plan = DeriveTilePlan(budget, config.width, config.height,
+                               fixed_bytes + continuation_bytes, dispatch_limits.tile_edge_cap);
     if (!plan) {
         return std::unexpected(plan.error());
     }
@@ -571,6 +599,10 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
     const std::uint64_t radiance_capacity =
         static_cast<std::uint64_t>(edge) * edge * 4 * sizeof(float);
 
+    if (auto limit = device.SetBufferAllocationLimit(plan->usable_bytes); !limit) {
+        return std::unexpected(limit.error());
+    }
+    auto continuation_buf = device.CreateBuffer(continuation_bytes, backend::BufferUsage::kStorage);
     auto radiance_buf = device.CreateBuffer(radiance_capacity, backend::BufferUsage::kStorage);
     auto params_buf =
         device.CreateBuffer(kParamCount * sizeof(float), backend::BufferUsage::kStorage);
@@ -596,9 +628,9 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
     auto point_index_buf =
         device.CreateBuffer(point_index_span.size_bytes(), backend::BufferUsage::kStorage);
     if (!radiance_buf || !params_buf || !star_buf || !point_star_buf || !point_offset_buf ||
-        !point_index_buf) {
+        !point_index_buf || !continuation_buf) {
         return Fail(ErrorDomain::kDevice, "allocate render buffers",
-                    "tile radiance, params, or starfield buffer allocation failed");
+                    "radiance, continuation, params, or starfield buffer allocation failed");
     }
     if (auto w = device.WriteBuffer(*star_buf, std::as_bytes(star_span)); !w) {
         return std::unexpected(w.error());
@@ -616,6 +648,13 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
         return std::unexpected(w.error());
     }
 
+    std::cout << "[Vulkan] explicit buffer allocations: " << device.BufferAllocationBytes()
+              << " bytes, limit " << plan->usable_bytes << " bytes, continuation capacity "
+              << state_capacity << " rays\n";
+    std::vector<std::byte> previous_states(static_cast<std::size_t>(continuation_bytes));
+    std::vector<std::byte> current_states(static_cast<std::size_t>(continuation_bytes));
+    std::uint32_t epoch = 0;
+    TraceAction next_action = TraceAction::Initialise;
     std::vector<float> params(kParamCount, 0.0f);
     FillSceneParams(params, config, *scene, use_starfield, sf_w, sf_h);
 
@@ -629,14 +668,17 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
                                     0.0f);
 
     int tiles_done = 0;
-    int band_dispatches = 0;
+    std::int64_t band_dispatches = 0;
+    std::array<std::int64_t, 3> continuation_dispatches{};
+    std::array<double, 3> maximum_continuation_ms{};
     double dispatch_seconds = 0.0;
     double maximum_dispatch_ms = 0.0;
     std::int64_t maximum_dispatch_pixels = 0;
-    int dispatch_target_overshoots = 0;
+    std::int64_t dispatch_target_overshoots = 0;
     int dispatch_fallbacks = 0;
-    const backend::BufferHandle bindings[] = {*radiance_buf,   *params_buf,       *star_buf,
-                                              *point_star_buf, *point_offset_buf, *point_index_buf};
+    const backend::BufferHandle bindings[] = {*radiance_buf,    *params_buf,       *star_buf,
+                                              *point_star_buf,  *point_offset_buf, *point_index_buf,
+                                              *continuation_buf};
     int initialization_dispatches = 0;
     double initialization_seconds = 0.0;
     double initialization_submit_wait_ms = 0.0;
@@ -703,8 +745,21 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
                     const bool was_fallback = bands.SafetyFallback();
                     auto dispatched = ExecuteDispatchRegions(
                         {ox + bx, oy + by, bw, bh}, config.samples_per_pixel, bands,
+                        kRenderTraceMaximumAttempts + 2,
                         [&](const DispatchRegion& region, const CameraSample& sample,
-                            int sample_index) -> Expected<double> {
+                            int sample_index,
+                            std::uint32_t ordinal) -> Expected<DispatchContinuationResult> {
+                            if (ordinal == 0) {
+                                if (epoch == std::numeric_limits<std::uint32_t>::max()) {
+                                    return Fail(ErrorDomain::kKernel, "initialize trace batch",
+                                                "continuation epoch exhausted");
+                                }
+                                ++epoch;
+                                next_action = TraceAction::Initialise;
+                            }
+                            const TraceAction action = next_action;
+                            params[kTraceActionParameter] = static_cast<float>(action);
+                            params[kTraceEpochParameter] = std::bit_cast<float>(epoch);
                             params[31] = static_cast<float>(region.x);
                             params[32] = static_cast<float>(region.y);
                             params[33] = static_cast<float>(region.width);
@@ -735,7 +790,60 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
                                 ++dispatch_target_overshoots;
                             }
                             ++band_dispatches;
-                            return timing.submit_wait_ms;
+                            const auto action_index = static_cast<std::size_t>(action);
+                            ++continuation_dispatches[action_index];
+                            maximum_continuation_ms[action_index] = std::max(
+                                maximum_continuation_ms[action_index], timing.submit_wait_ms);
+                            const auto state_bytes =
+                                static_cast<std::size_t>(region.Pixels()) * record_stride;
+                            if (auto read = device.ReadBuffer(
+                                    *continuation_buf,
+                                    std::span<std::byte>(current_states.data(), state_bytes));
+                                !read) {
+                                // The outer governor sees only successful callback results.
+                                // Account for this completed submission before its readback
+                                // error aborts the transaction; no later work is submitted.
+                                bands.Record(region.Pixels(), timing.submit_wait_ms);
+                                return std::unexpected(read.error());
+                            }
+                            bool all_terminal = true;
+                            for (int row = 0; row < region.height; ++row) {
+                                for (int column = 0; column < region.width; ++column) {
+                                    const auto offset =
+                                        static_cast<std::size_t>(row * region.width + column) *
+                                        record_stride;
+                                    const std::array<std::uint32_t, 4> identity{
+                                        static_cast<std::uint32_t>(region.x + column),
+                                        static_cast<std::uint32_t>(region.y + row),
+                                        static_cast<std::uint32_t>(sample_index), epoch};
+                                    const auto validate = [&]<typename Real>() -> Expected<bool> {
+                                        TraceContinuationRecord<Real> current{}, previous{};
+                                        std::memcpy(&current, current_states.data() + offset,
+                                                    sizeof(current));
+                                        if (action != TraceAction::Initialise) {
+                                            std::memcpy(&previous, previous_states.data() + offset,
+                                                        sizeof(previous));
+                                        }
+                                        return ValidateTraceContinuation(
+                                            current,
+                                            action == TraceAction::Initialise ? nullptr : &previous,
+                                            action, identity, kRenderTraceMaximumAttempts);
+                                    };
+                                    const auto valid = *rung == PrecisionRung::Fp64
+                                                           ? validate.template operator()<double>()
+                                                           : validate.template operator()<float>();
+                                    if (!valid) {
+                                        bands.Record(region.Pixels(), timing.submit_wait_ms);
+                                        return std::unexpected(valid.error());
+                                    }
+                                    all_terminal = all_terminal && *valid;
+                                }
+                            }
+                            previous_states.swap(current_states);
+                            const bool complete = action == TraceAction::Finalize;
+                            next_action =
+                                all_terminal ? TraceAction::Finalize : TraceAction::Advance;
+                            return DispatchContinuationResult{timing.submit_wait_ms, complete};
                         },
                         [&](const DispatchRegion& region) -> Expected<void> {
                             const std::size_t region_floats =
@@ -789,11 +897,15 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
     stats.device_name = info.name;
     stats.metric_name = scene->metric_name;
     stats.tile_plan = *plan;
+    stats.explicit_buffer_allocation_bytes = device.BufferAllocationBytes();
+    stats.continuation_capacity = state_capacity;
     stats.precision = *rung;
     stats.starfield_uploaded = use_starfield;
     stats.point_catalogue_uploaded = config.point_starfield;
     stats.tiles_rendered = tiles_total;
     stats.band_dispatches = band_dispatches;
+    stats.continuation_dispatches = continuation_dispatches;
+    stats.maximum_continuation_ms = maximum_continuation_ms;
     stats.dispatch_seconds = dispatch_seconds;
     stats.maximum_dispatch_ms = maximum_dispatch_ms;
     stats.maximum_dispatch_pixels = maximum_dispatch_pixels;

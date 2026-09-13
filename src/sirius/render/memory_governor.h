@@ -6,9 +6,9 @@
 // governor derives the largest square tile whose device-resident working set
 // fits a fixed fraction of the reported budget, and the Vulkan render path
 // dispatches at that tile size. Full-frame buffers stay host-side; the only
-// per-tile device buffer the trace kernel allocates is the RGBA32F radiance
-// readback (ray state lives in registers), so the per-pixel working set is
-// 16 bytes and any persistent device buffers (params, an uploaded starfield)
+// per-tile device buffer is the RGBA32F radiance readback, so its per-pixel
+// working set is 16 bytes. Active-ray continuation state is bounded separately
+// by submission capacity. All persistent buffers (state, params, starfield)
 // are passed as a fixed overhead. A budget too small to hold the fixed overhead
 // plus a minimal tile declines loudly rather than over-committing the device.
 
@@ -25,10 +25,8 @@ namespace sirius::render {
 inline constexpr double kResidencyFraction = 0.5;
 
 // Per-tile device working set, bytes per pixel: one RGBA32F radiance readback
-// texel. The trace kernel keeps geodesic state (position, momentum, deviation
-// vectors, accumulators) in registers, so it is not device-resident and does
-// not enter this figure; when the ray-bundle path (programme 5) makes that
-// state a buffer, the constant grows and every consumer follows.
+// texel. Continuation records are charged as fixed overhead at active-batch
+// capacity, rather than allocating one record for every resident tile pixel.
 inline constexpr std::uint64_t kTileWorkingSetBytesPerPixel = 16;
 
 // Smallest tile edge worth dispatching. Below the 8x8 workgroup a tile wastes

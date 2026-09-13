@@ -65,11 +65,13 @@ class ShadowClassifier {
         const auto result = tracer_.Trace(ray);
         EXPECT_FALSE(result.numerical_failure);
         EXPECT_NE(result.outcome, backend::TraceResult::Outcome::MaxSteps)
-            << "P1 classifier reached its work bound instead of a physical outcome; steps="
+            << "P1 classifier did not reach a physical outcome; attempts="
             << result.steps_taken << ", min_r=" << result.min_radius << ", final=("
             << result.final_position(1) << ", " << result.final_position(2) << ", "
             << result.final_position(3)
-            << "), integrator_termination=" << result.integrator_termination;
+            << "), integrator_termination=" << result.integrator_termination
+            << ", coupled_failure=" << core::CoupledStepFailureName(result.coupled_failure)
+            << ", accepted_affine_distance=" << result.affine_length;
         if (result.outcome == backend::TraceResult::Outcome::Horizon) {
             const double terminal_radius = metric_.ComputeKerrRadius(
                 result.final_position(1), result.final_position(2), result.final_position(3));

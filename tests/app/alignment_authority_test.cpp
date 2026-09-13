@@ -133,11 +133,21 @@ TEST(BuildGateAuthority, ReleaseReceiptBindsEveryInstalledProductAtInitialisatio
     for (const std::string_view name : tested_names) {
         tested_records[name] = ArtifactRecord(base::ExecutablePath());
     }
-    constexpr std::array<std::pair<std::string_view, std::string_view>, 6> test_inputs = {{
+    constexpr std::array<std::pair<std::string_view, std::string_view>, 16> test_inputs = {{
         {"smoke_spv", "kernels/smoke.spv"},
         {"parity_probe_spv", "kernels/parity_probe.spv"},
         {"parity_probe_fp32comp_spv", "kernels/parity_probe_fp32comp.spv"},
         {"parity_probe_fp64_spv", "kernels/parity_probe_fp64.spv"},
+        {"infinity_probe_spv", "kernels/infinity_probe.spv"},
+        {"infinity_probe_fp32comp_spv", "kernels/infinity_probe_fp32comp.spv"},
+        {"infinity_probe_fp64_spv", "kernels/infinity_probe_fp64.spv"},
+        {"metric_consistency_probe_spv", "kernels/metric_consistency_probe.spv"},
+        {"metric_consistency_probe_fp32comp_spv", "kernels/metric_consistency_probe_fp32comp.spv"},
+        {"metric_consistency_probe_fp64_spv", "kernels/metric_consistency_probe_fp64.spv"},
+        {"camera_frame_probe_spv", "kernels/camera_frame_probe.spv"},
+        {"camera_frame_probe_fp32comp_spv", "kernels/camera_frame_probe_fp32comp.spv"},
+        {"camera_frame_probe_fp64_spv", "kernels/camera_frame_probe_fp64.spv"},
+        {"coupled_probe_fp64_spv", "kernels/coupled_probe_fp64.spv"},
         {"trace_cuda", "kernels/portability/trace.cu"},
         {"trace_metal", "kernels/portability/trace.metal"},
     }};

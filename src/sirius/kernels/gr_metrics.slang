@@ -103,8 +103,10 @@ public void GetKerrSchildFamilyMetric(
     Real y = pos.y;
     Real z = pos.z;
 
-    Real a2 = a * a;
-    Real Q2 = Q * Q;
+    // Parameters keep their float ABI, but the radius, metric and connection
+    // must use the same products at the active arithmetic precision.
+    Real a2 = Real(a) * Real(a);
+    Real Q2 = Real(Q) * Real(Q);
 
     [unroll] for (int i = 0; i < 4; i++)
         [unroll] for (int j = 0; j < 4; j++) { g[i][j] = 0.0f; g_inv[i][j] = 0.0f; }
@@ -129,7 +131,7 @@ public void GetKerrSchildFamilyMetric(
     if (M != 0.0f || Q != 0.0f) {
         Real cosine = z / r;
         Real sigma = r2 + a2 * cosine * cosine;
-        H = (2.0f * M * r - Q2) / sigma;
+        H = (Real(2) * Real(M) * r - Q2) / sigma;
     }
     if (a == 0.0f && Lambda != 0.0f) {
         H += Lambda * r2 / 3.0f;
@@ -174,8 +176,8 @@ public void GetKerrSchildFamilyChristoffel(
     Real y = pos.y;
     Real z = pos.z;
 
-    Real a2 = a * a;
-    Real Q2 = Q * Q;
+    Real a2 = Real(a) * Real(a);
+    Real Q2 = Real(Q) * Real(Q);
     Real R2 = x * x + y * y + z * z;
 
     Real r = ComputeKerrRadiusCart(x, y, z, Real(a));
@@ -238,7 +240,7 @@ public void GetKerrSchildFamilyChristoffel(
     Real H = Real(0.0f);
     Real asymptoticH = Real(0.0f);
     if (M != 0.0f || Q != 0.0f) {
-        asymptoticH = (2.0f * M * r - Q2) / sigma;
+        asymptoticH = (Real(2) * Real(M) * r - Q2) / sigma;
         H = asymptoticH;
     }
     if (a == 0.0f && Lambda != 0.0f) {
@@ -251,11 +253,11 @@ public void GetKerrSchildFamilyChristoffel(
             Real dCosine = (lam == 3 ? Real(1.0f) / r : Real(0.0f)) -
                            z * dr[lam] / r2;
             Real dSigma = 2.0f * r * dr[lam] + 2.0f * a2 * cosine * dCosine;
-            Real dNumerator = 2.0f * M * dr[lam];
+            Real dNumerator = Real(2) * Real(M) * dr[lam];
             dH[lam] = (dNumerator - asymptoticH * dSigma) / sigma;
         }
         if (a == 0.0f && Lambda != 0.0f) {
-            dH[lam] += (2.0f * Lambda / 3.0f) * r * dr[lam];
+            dH[lam] += (Real(2) * Real(Lambda) / Real(3)) * r * dr[lam];
         }
     }
 
@@ -567,4 +569,162 @@ public void GetWarpDriveChristoffel(
             }
         }
     }
+}
+
+
+// Four directional derivatives of the analytic connection. The scalar metric
+// domain remains unchanged. In particular
+// pure-de-Sitter KS connection has no two-sided linear JVP at r=0.
+public struct CoupledJet4 { public Real value; public Real4 derivative; }
+public CoupledJet4 CJSeed(Real value, Real4 derivative) {
+    CoupledJet4 result; result.value=value; result.derivative=derivative; return result;
+}
+public CoupledJet4 CJConstant(Real value) { return CJSeed(value, Real4(Real(0))); }
+public CoupledJet4 CJAdd(CoupledJet4 a, CoupledJet4 b) {
+    return CJSeed(a.value+b.value,a.derivative+b.derivative);
+}
+public CoupledJet4 CJSubtract(CoupledJet4 a, CoupledJet4 b) {
+    return CJSeed(a.value-b.value,a.derivative-b.derivative);
+}
+public CoupledJet4 CJNegate(CoupledJet4 a) { return CJSeed(-a.value,-a.derivative); }
+public CoupledJet4 CJMultiply(CoupledJet4 a, CoupledJet4 b) {
+    return CJSeed(a.value*b.value,a.derivative*b.value+a.value*b.derivative);
+}
+public CoupledJet4 CJDivide(CoupledJet4 a, CoupledJet4 b) {
+    Real value=a.value/b.value;
+    return CJSeed(value,(a.derivative-value*b.derivative)/b.value);
+}
+public CoupledJet4 CJSqrt(CoupledJet4 a) {
+    Real value=sqrt(a.value);
+    return CJSeed(value,a.derivative/(Real(2)*value));
+}
+public bool CJFinite(CoupledJet4 a) {
+    return isfinite(a.value)&&all(isfinite(a.derivative));
+}
+// Gamma's nominal values use the scalar connection's active-precision products.
+// g and dg-directional values are evaluated at this same event for projection.
+public bool TryKerrSchildConnectionJet(Vec4Cart position, Real4 X[4],
+    float M, float a, float Q, float Lambda,
+    out CoupledJet4 metric[4][4], out CoupledJet4 Gamma[4][4][4]) {
+    for(int mu=0;mu<4;++mu) {
+        if(!all(isfinite(X[mu]))) return false;
+        for(int nu=0;nu<4;++nu) {
+            metric[mu][nu]=CJConstant(mu==nu?(mu==0?Real(-1):Real(1)):Real(0));
+            for(int rho=0;rho<4;++rho) Gamma[mu][nu][rho]=CJConstant(Real(0));
+        }
+    }
+    if(!IsKerrSchildFamilyEventRepresented(position,M,a,Q,Lambda)) return false;
+    if(M==0.0f && a==0.0f && Q==0.0f && Lambda==0.0f) return true;
+    Real radius=ComputeKerrRadiusCart(position.x,position.y,position.z,Real(a));
+    if(!(radius>Real(0))||!isfinite(radius)) return false;
+    CoupledJet4 x=CJSeed(position.x,Real4(X[0].y,X[1].y,X[2].y,X[3].y));
+    CoupledJet4 y=CJSeed(position.y,Real4(X[0].z,X[1].z,X[2].z,X[3].z));
+    CoupledJet4 z=CJSeed(position.z,Real4(X[0].w,X[1].w,X[2].w,X[3].w));
+    CoupledJet4 spin=CJConstant(Real(a));
+    CoupledJet4 mass=CJConstant(Real(M));
+    CoupledJet4 cosmological=CJConstant(Real(Lambda));
+    CoupledJet4 a2=CJConstant(Real(a)*Real(a));
+    CoupledJet4 Q2=CJConstant(Real(Q)*Real(Q));
+
+    CoupledJet4 R2 = CJAdd(CJAdd(CJMultiply(x, x), CJMultiply(y, y)), CJMultiply(z, z));
+    CoupledJet4 Rm2 = CJSubtract(R2, a2);
+    CoupledJet4 disc = CJAdd(CJMultiply(Rm2, Rm2), CJMultiply(CJMultiply(CJMultiply(CJConstant(Real(4)), a2), z), z));
+    CoupledJet4 sqrt_disc = CJSqrt(disc);
+    if(!CJFinite(sqrt_disc)||!(sqrt_disc.value>Real(0))) return false;
+    // Implicit derivative of the positive, represented Kerr radius. The
+    // nominal radius itself remains the stable scaled production evaluation.
+    Real denominator=Real(2)*radius*radius-(position.x*position.x+
+        position.y*position.y+position.z*position.z-Real(a)*Real(a));
+    if(!isfinite(denominator)||!(denominator>Real(0))) return false;
+    Real4 radiusDerivative=(position.x*radius*x.derivative+
+        position.y*radius*y.derivative+
+        position.z*(radius*radius+Real(a)*Real(a))/radius*z.derivative)/denominator;
+    CoupledJet4 r=CJSeed(radius,radiusDerivative);
+    if(!CJFinite(r)) return false;
+
+    CoupledJet4 r2 = CJMultiply(r, r);
+    CoupledJet4 d_disc_dx = CJMultiply(CJMultiply(CJConstant(Real(4)), x), Rm2);
+    CoupledJet4 d_disc_dy = CJMultiply(CJMultiply(CJConstant(Real(4)), y), Rm2);
+    CoupledJet4 d_disc_dz = CJMultiply(CJMultiply(CJConstant(Real(4)), z), CJAdd(R2, a2));
+    CoupledJet4 d_r2_dx = CJAdd(x, CJDivide(d_disc_dx, CJMultiply(CJConstant(Real(4)), sqrt_disc)));
+    CoupledJet4 d_r2_dy = CJAdd(y, CJDivide(d_disc_dy, CJMultiply(CJConstant(Real(4)), sqrt_disc)));
+    CoupledJet4 d_r2_dz = CJAdd(z, CJDivide(d_disc_dz, CJMultiply(CJConstant(Real(4)), sqrt_disc)));
+    CoupledJet4 dr[4];
+    dr[0] = CJConstant(Real(0));
+    dr[1] = CJDivide(d_r2_dx, CJMultiply(CJConstant(Real(2)), r));
+    dr[2] = CJDivide(d_r2_dy, CJMultiply(CJConstant(Real(2)), r));
+    dr[3] = CJDivide(d_r2_dz, CJMultiply(CJConstant(Real(2)), r));
+    CoupledJet4 denom = CJAdd(r2, a2);
+    CoupledJet4 denom2 = CJMultiply(denom, denom);
+    CoupledJet4 l[4];
+    l[0] = CJConstant(Real(1));
+    l[1] = CJDivide(CJAdd(CJMultiply(r, x), CJMultiply(spin, y)), denom);
+    l[2] = CJDivide(CJSubtract(CJMultiply(r, y), CJMultiply(spin, x)), denom);
+    l[3] = CJDivide(z, r);
+    CoupledJet4 lup[4];
+    lup[0] = CJConstant(Real(1));
+    lup[1] = CJNegate(l[1]);
+    lup[2] = CJNegate(l[2]);
+    lup[3] = CJNegate(l[3]);
+    CoupledJet4 dl[4][4];
+    for(int i=0;i<4;++i) for(int j=0;j<4;++j) dl[i][j]=CJConstant(Real(0));
+    CoupledJet4 f1 = CJAdd(CJMultiply(r, x), CJMultiply(spin, y));
+    CoupledJet4 f2 = denom;
+    dl[1][1] = CJSubtract(CJDivide(CJAdd(r, CJMultiply(x, dr[1])), f2), CJDivide(CJMultiply(f1, CJMultiply(CJMultiply(CJConstant(Real(2)), r), dr[1])), denom2));
+    dl[2][1] = CJSubtract(CJDivide(CJAdd(CJMultiply(x, dr[2]), spin), f2), CJDivide(CJMultiply(f1, CJMultiply(CJMultiply(CJConstant(Real(2)), r), dr[2])), denom2));
+    dl[3][1] = CJSubtract(CJDivide(CJMultiply(x, dr[3]), f2), CJDivide(CJMultiply(f1, CJMultiply(CJMultiply(CJConstant(Real(2)), r), dr[3])), denom2));
+    CoupledJet4 g1 = CJSubtract(CJMultiply(r, y), CJMultiply(spin, x));
+    dl[1][2] = CJSubtract(CJDivide(CJSubtract(CJMultiply(y, dr[1]), spin), f2), CJDivide(CJMultiply(g1, CJMultiply(CJMultiply(CJConstant(Real(2)), r), dr[1])), denom2));
+    dl[2][2] = CJSubtract(CJDivide(CJAdd(r, CJMultiply(y, dr[2])), f2), CJDivide(CJMultiply(g1, CJMultiply(CJMultiply(CJConstant(Real(2)), r), dr[2])), denom2));
+    dl[3][2] = CJSubtract(CJDivide(CJMultiply(y, dr[3]), f2), CJDivide(CJMultiply(g1, CJMultiply(CJMultiply(CJConstant(Real(2)), r), dr[3])), denom2));
+    dl[1][3] = CJDivide(CJMultiply(CJNegate(z), dr[1]), r2);
+    dl[2][3] = CJDivide(CJMultiply(CJNegate(z), dr[2]), r2);
+    dl[3][3] = CJSubtract(CJDivide(CJConstant(Real(1)), r), CJDivide(CJMultiply(z, dr[3]), r2));
+    CoupledJet4 cosine = CJDivide(z, r);
+    CoupledJet4 sigma = CJAdd(r2, CJMultiply(CJMultiply(a2, cosine), cosine));
+    CoupledJet4 H = CJConstant(Real(0));
+    CoupledJet4 asymptoticH = CJConstant(Real(0));
+    if(M!=0.0f || Q!=0.0f) {
+    asymptoticH = CJDivide(CJSubtract(CJMultiply(CJMultiply(CJConstant(Real(2)), mass), r), Q2), sigma);
+    H = asymptoticH;
+    }
+    if(a==0.0f && Lambda!=0.0f) {
+    H = CJAdd(H, CJDivide(CJMultiply(cosmological, r2), CJConstant(Real(3))));
+    }
+    CoupledJet4 dH[4];
+    for(int i=0;i<4;++i) dH[i]=CJConstant(Real(0));
+    for(int lam=1;lam<=3;++lam) {
+        if(M!=0.0f || Q!=0.0f) {
+            CoupledJet4 delta=(lam==3)?CJDivide(CJConstant(Real(1)),r):CJConstant(Real(0));
+    CoupledJet4 dCosine = CJSubtract(delta, CJDivide(CJMultiply(z, dr[lam]), r2));
+    CoupledJet4 dSigma = CJAdd(CJMultiply(CJMultiply(CJConstant(Real(2)), r), dr[lam]), CJMultiply(CJMultiply(CJMultiply(CJConstant(Real(2)), a2), cosine), dCosine));
+    CoupledJet4 dNumerator = CJMultiply(CJMultiply(CJConstant(Real(2)), mass), dr[lam]);
+    dH[lam] = CJDivide(CJSubtract(dNumerator, CJMultiply(asymptoticH, dSigma)), sigma);
+        }
+        if(a==0.0f && Lambda!=0.0f) {
+            CoupledJet4 coefficient=CJConstant(Real(2)*Real(Lambda)/Real(3));
+    dH[lam] = CJAdd(dH[lam], CJMultiply(CJMultiply(coefficient, r), dr[lam]));
+        }
+    }
+    CoupledJet4 dg[4][4][4];
+    for(int lam=0;lam<4;++lam) for(int mu=0;mu<4;++mu) for(int nu=0;nu<4;++nu) {
+    dg[lam][mu][nu] = CJAdd(CJAdd(CJMultiply(CJMultiply(dH[lam], l[mu]), l[nu]), CJMultiply(CJMultiply(H, dl[lam][mu]), l[nu])), CJMultiply(CJMultiply(H, l[mu]), dl[lam][nu]));
+    }
+    for(int mu=0;mu<4;++mu) for(int nu=0;nu<4;++nu) {
+    metric[mu][nu] = CJAdd(metric[mu][nu], CJMultiply(CJMultiply(H, l[mu]), l[nu]));
+        if(!CJFinite(metric[mu][nu])) return false;
+    }
+    for(int lam=0;lam<4;++lam) for(int mu=0;mu<4;++mu) for(int nu=mu;nu<4;++nu) {
+        CoupledJet4 sum=CJConstant(Real(0));
+        for(int s=0;s<4;++s) {
+            CoupledJet4 eta=CJConstant(lam==s?(lam==0?Real(-1):Real(1)):Real(0));
+    CoupledJet4 inverse = CJSubtract(eta, CJMultiply(CJMultiply(H, lup[lam]), lup[s]));
+    CoupledJet4 bracket = CJSubtract(CJAdd(dg[mu][s][nu], dg[nu][s][mu]), dg[s][mu][nu]);
+    sum = CJAdd(sum, CJMultiply(inverse, bracket));
+        }
+    Gamma[lam][mu][nu] = CJMultiply(CJConstant(Real(0.5)), sum);
+    Gamma[lam][nu][mu] = Gamma[lam][mu][nu];
+        if(!CJFinite(Gamma[lam][mu][nu])) return false;
+    }
+    return true;
 }

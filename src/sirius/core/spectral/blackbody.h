@@ -75,11 +75,12 @@ inline Rgb LinearToSrgb(const Rgb& linear) {
                colour::EncodeClippedSrgbChannel(linear.b));
 }
 
-// Blackbody temperature T (K) to normalised, display-gamut linear RGB
-// (brightest channel = 1). Negative out-of-gamut primary values are clipped;
-// they are not negative radiance.
-inline Rgb BlackbodyToRgb(double T) {
-    if (!std::isfinite(T) || T <= 0) return Rgb(0, 0, 0);
+// Unnormalized visible-band integral in the existing catalogue's float
+// arithmetic and physical Planck scale. A finite-input overflow in this legacy
+// float colour representation may still produce nonfinite channels: consumers
+// requiring finite radiance must check them before normalization/publication.
+inline std::optional<Rgb> BlackbodyBandRgb(double T) {
+    if (!std::isfinite(T) || T <= 0) return std::nullopt;
 
     // Integrate over the visible spectrum.
     Xyz xyz;
@@ -92,7 +93,7 @@ inline Rgb BlackbodyToRgb(double T) {
         double lambda_nm = lambda * 1e9;
 
         const std::optional<double> radiance = TryPlanckSpectralRadiancePerMetre(lambda, T);
-        if (!radiance.has_value()) return Rgb(0, 0, 0);
+        if (!radiance.has_value()) return std::nullopt;
         Xyz sample = WavelengthToXyz(lambda_nm);
 
         xyz += sample * static_cast<float>(*radiance * kDLambda);
@@ -103,6 +104,17 @@ inline Rgb BlackbodyToRgb(double T) {
     rgb.r = std::max(rgb.r, 0.0f);
     rgb.g = std::max(rgb.g, 0.0f);
     rgb.b = std::max(rgb.b, 0.0f);
+
+    return rgb;
+}
+
+// Blackbody temperature T (K) to normalised, display-gamut linear RGB
+// (brightest channel = 1). Negative out-of-gamut primary values are clipped;
+// they are not negative radiance.
+inline Rgb BlackbodyToRgb(double T) {
+    const auto band = BlackbodyBandRgb(T);
+    if (!band) return Rgb(0, 0, 0);
+    const Rgb rgb = *band;
 
     // Normalise to max = 1.
     float maxVal = std::max({rgb.r, rgb.g, rgb.b, 0.001f});

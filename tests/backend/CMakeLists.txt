@@ -9,14 +9,24 @@ endif()
 add_executable(sirius_backend_tests
     cpu_jacobi_oracle_test.cpp
     cpu_trace_boundary_test.cpp
+    coupled_transport_test.cpp
+    source_sky_map_trace_test.cpp
+    source_sky_infinity_trace_test.cpp
     vulkan_smoke_test.cpp
     kernel_parity_test.cpp
+    kernel_metric_consistency_test.cpp
+    kernel_camera_frame_test.cpp
+    kernel_infinity_test.cpp
     kernel_trace_test.cpp
     kernel_beam_test.cpp
     kernel_portability_test.cpp
 )
 
-target_link_libraries(sirius_backend_tests PRIVATE sirius_backend sirius_backend_cpu GTest::gtest_main)
+# Direct trace/beam probes consume the production per-submission governor.
+# This is a test executable dependency; the backend library remains independent
+# of render orchestration. Actual renderer/session tests belong to tests/render.
+target_link_libraries(sirius_backend_tests PRIVATE
+    sirius_backend sirius_backend_cpu sirius_render GTest::gtest_main)
 target_include_directories(sirius_backend_tests PRIVATE "${CMAKE_SOURCE_DIR}/tests")
 
 sirius_configure_target(sirius_backend_tests CONTRACT_MODE 2)

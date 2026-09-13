@@ -2236,13 +2236,16 @@ def morris_thorne_authority_errors(documents: dict[Path, str]) -> list[str]:
             "EllisOppositeEscapeRadius",
             "MapEllisSecondSheetSkyDirection",
             "TraceEllisTwoSheet",
+            "InitEllisTwoSheet",
+            "AdvanceEllisTwoSheet",
             "kEllisTraceOppositeInfinity",
             "FindSphericalBoundaryEvent",
         ),
         MORRIS_DEVICE_CONSUMER: (
             "FindSphericalCaptureEvent",
             "terminalCaptureSurface",
-            "TraceEllisTwoSheet",
+            "InitEllisTwoSheet",
+            "AdvanceEllisTwoSheet",
             "oppositeSheet",
             "MapEllisSecondSheetSkyDirection",
         ),
@@ -2291,11 +2294,33 @@ def morris_thorne_authority_errors(documents: dict[Path, str]) -> list[str]:
     topology = code_by_path.get(MORRIS_DEVICE_TOPOLOGY_AUTHORITY, "")
     if topology.count("TraceEllisTwoSheet(") != 1:
         errors.append("the device Ellis topology module has no single trace authority")
-    for consumer in (MORRIS_DEVICE_CONSUMER, MORRIS_PARITY_PROBE):
-        if code_by_path.get(consumer, "").count("TraceEllisTwoSheet(") != 1:
+    for name, return_type in (
+        ("InitEllisTwoSheet", "EllisTopologyContinuation"),
+        ("AdvanceEllisTwoSheet", "void"),
+    ):
+        definition = rf"\bpublic\s+{return_type}\s+{name}\s*\("
+        if (
+            len(re.findall(definition, topology)) != 1
+            or len(re.findall(rf"\b{name}\s*\(", topology)) != 2
+        ):
+            errors.append(f"the device Ellis topology module has no single shared {name} authority")
+        if len(re.findall(rf"\b{name}\s*\(", code_by_path.get(MORRIS_DEVICE_CONSUMER, ""))) != 1:
             errors.append(
-                f"{relative(consumer)} does not consume the single device two-sheet authority"
+                f"{relative(MORRIS_DEVICE_CONSUMER)} does not consume shared {name} exactly once"
             )
+    wrapper = re.search(
+        r"\bpublic\s+EllisTopologyTraceResult\s+TraceEllisTwoSheet\s*\([^)]*\)\s*"
+        r"\{(?P<body>.*?)return\s+continuation\.trace\s*;\s*\}",
+        topology,
+        re.DOTALL,
+    )
+    if wrapper is None or any(
+        len(re.findall(rf"\b{name}\s*\(", wrapper.group("body"))) != 1
+        for name in ("InitEllisTwoSheet", "AdvanceEllisTwoSheet")
+    ):
+        errors.append("the device Ellis parity wrapper bypasses shared initialization/advancement")
+    if code_by_path.get(MORRIS_PARITY_PROBE, "").count("TraceEllisTwoSheet(") != 1:
+        errors.append("the device Ellis parity probe does not consume the shared trace wrapper")
 
     for path, consumers in (
         (MORRIS_CPU_CONSUMER, ("StepBundle(", "AdvancePolarisationFrame(",
@@ -2348,10 +2373,16 @@ def verify_morris_thorne_authority_policy() -> None:
         ),
         MORRIS_DEVICE_TOPOLOGY_AUTHORITY: (
             "EllisOppositeEscapeRadius MapEllisSecondSheetSkyDirection "
-            "TraceEllisTwoSheet( kEllisTraceOppositeInfinity FindSphericalBoundaryEvent"
+            "kEllisTraceOppositeInfinity FindSphericalBoundaryEvent "
+            "public EllisTopologyContinuation InitEllisTwoSheet() {} "
+            "public void AdvanceEllisTwoSheet() {} "
+            "public EllisTopologyTraceResult TraceEllisTwoSheet() { "
+            "continuation = InitEllisTwoSheet(); AdvanceEllisTwoSheet(); "
+            "return continuation.trace; }"
         ),
         MORRIS_DEVICE_CONSUMER: (
-            "FindSphericalCaptureEvent terminalCaptureSurface TraceEllisTwoSheet( "
+            "FindSphericalCaptureEvent terminalCaptureSurface "
+            "InitEllisTwoSheet( AdvanceEllisTwoSheet( "
             "oppositeSheet MapEllisSecondSheetSkyDirection AccumulateVolumeSegment("
         ),
         MORRIS_PARITY_PROBE: (
@@ -2396,6 +2427,22 @@ def verify_morris_thorne_authority_policy() -> None:
     ].replace("TraceEllisTwoSheet(", "IndependentEllisTrace(")
     if not morris_thorne_authority_errors(independent_device_trace):
         raise RuntimeError("Morris-Thorne policy accepted an independent parity trajectory")
+
+    for name in ("InitEllisTwoSheet", "AdvanceEllisTwoSheet"):
+        bypassed = dict(valid)
+        bypassed[MORRIS_DEVICE_CONSUMER] = bypassed[MORRIS_DEVICE_CONSUMER].replace(
+            name + "(", "Independent" + name + "("
+        )
+        if not morris_thorne_authority_errors(bypassed):
+            raise RuntimeError(f"Morris-Thorne policy accepted production bypass of {name}")
+        bypassed_wrapper = dict(valid)
+        authority = bypassed_wrapper[MORRIS_DEVICE_TOPOLOGY_AUTHORITY]
+        split = authority.index("public EllisTopologyTraceResult TraceEllisTwoSheet")
+        bypassed_wrapper[MORRIS_DEVICE_TOPOLOGY_AUTHORITY] = (
+            authority[:split] + authority[split:].replace(name + "(", "Independent" + name + "(")
+        )
+        if not morris_thorne_authority_errors(bypassed_wrapper):
+            raise RuntimeError(f"Morris-Thorne policy accepted parity-wrapper bypass of {name}")
 
 
 def alcubierre_authority_errors(documents: dict[Path, str]) -> list[str]:

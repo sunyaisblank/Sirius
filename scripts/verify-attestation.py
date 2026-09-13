@@ -52,7 +52,11 @@ QUALIFICATION_PRODUCT_EVIDENCE = {
 QUALIFICATION_TEST_INPUT_EVIDENCE = {
     name: f"test-input-{name}" for name in (
         "smoke_spv", "parity_probe_spv", "parity_probe_fp32comp_spv",
-        "parity_probe_fp64_spv", "trace_cuda", "trace_metal",
+        "parity_probe_fp64_spv", "infinity_probe_spv", "infinity_probe_fp32comp_spv",
+        "infinity_probe_fp64_spv", "metric_consistency_probe_spv",
+        "metric_consistency_probe_fp32comp_spv", "metric_consistency_probe_fp64_spv",
+        "camera_frame_probe_spv", "camera_frame_probe_fp32comp_spv",
+        "camera_frame_probe_fp64_spv", "coupled_probe_fp64_spv", "trace_cuda", "trace_metal",
     )
 }
 QUALIFICATION_TEST_EVIDENCE = {

@@ -55,7 +55,7 @@ set(SIRIUS_KERNEL_SOURCES
 
 # Shared physics modules imported (via `import`, -I include path) by the
 # entry-point kernels; any edit re-triggers the affected kernel compiles.
-file(GLOB SIRIUS_KERNEL_LIBS "${SIRIUS_KERNEL_DIR}/gr_*.slang")
+file(GLOB SIRIUS_KERNEL_LIBS CONFIGURE_DEPENDS "${SIRIUS_KERNEL_DIR}/gr_*.slang")
 
 # spirv-val gates every emitted module when present (verification gate,
 # docs/SPECIFICATION.md section 7); when absent the build proceeds and the note
@@ -91,9 +91,67 @@ endforeach()
 
 # Precision probes exercise the same Cartesian trajectory and adaptive-step
 # authorities as trace.slang without producing an image.  They are test-only
-# artefacts: storage-buffer records remain fp32 at the boundary while Real is
-# selected session-wide inside the probe.
+# artefacts. Real is selected session-wide; the original parity probe retains
+# float I/O while the dedicated probes below preserve Real-width records.
 if(BUILD_TESTS)
+    # These probes preserve Real-width inputs and outputs at the test boundary.
+    foreach(real_probe IN ITEMS infinity_probe metric_consistency_probe camera_frame_probe)
+        foreach(probe_rung IN ITEMS fp32 fp32comp fp64)
+            set(probe_flags "")
+            set(probe_suffix "")
+            if(probe_rung STREQUAL "fp32comp")
+                set(probe_flags -DSIRIUS_FP32_COMP)
+                set(probe_suffix "_fp32comp")
+            elseif(probe_rung STREQUAL "fp64")
+                set(probe_flags -DSIRIUS_FP64 -warnings-disable 30082)
+                set(probe_suffix "_fp64")
+            endif()
+            set(probe_out "${SIRIUS_KERNEL_BINARY_DIR}/${real_probe}${probe_suffix}.spv")
+            if(SIRIUS_SPIRV_VAL)
+                set(probe_validate COMMAND "${SIRIUS_SPIRV_VAL}" "${probe_out}")
+            else()
+                set(probe_validate "")
+            endif()
+            add_custom_command(
+                OUTPUT "${probe_out}"
+                COMMAND ${SIRIUS_SLANGC} "${SIRIUS_KERNEL_DIR}/${real_probe}.slang"
+                    ${probe_flags}
+                    -target spirv -profile spirv_1_5
+                    -entry ComputeMain -stage compute
+                    -I "${SIRIUS_KERNEL_DIR}"
+                    -o "${probe_out}"
+                ${probe_validate}
+                DEPENDS "${SIRIUS_KERNEL_DIR}/${real_probe}.slang" ${SIRIUS_KERNEL_LIBS}
+                COMMENT "Compiling ${real_probe}.slang (${probe_rung}) -> SPIR-V (+spirv-val)"
+                VERBATIM
+            )
+            list(APPEND SIRIUS_KERNEL_OUTPUTS "${probe_out}")
+        endforeach()
+    endforeach()
+    # The existing coupled regression consumes only fp64 and retains float I/O.
+    # Isolate its large call graph from the ordinary three-rung parity probe.
+    set(coupled_probe_fp64_out "${SIRIUS_KERNEL_BINARY_DIR}/coupled_probe_fp64.spv")
+    if(SIRIUS_SPIRV_VAL)
+        set(coupled_probe_fp64_validate COMMAND "${SIRIUS_SPIRV_VAL}" "${coupled_probe_fp64_out}")
+    else()
+        set(coupled_probe_fp64_validate "")
+    endif()
+    add_custom_command(
+        OUTPUT "${coupled_probe_fp64_out}"
+        COMMAND ${SIRIUS_SLANGC} "${SIRIUS_KERNEL_DIR}/coupled_probe.slang"
+            -DSIRIUS_FP64
+            -target spirv -profile spirv_1_5
+            -entry ComputeMain -stage compute
+            -I "${SIRIUS_KERNEL_DIR}"
+            -warnings-disable 30082
+            -o "${coupled_probe_fp64_out}"
+        ${coupled_probe_fp64_validate}
+        DEPENDS "${SIRIUS_KERNEL_DIR}/coupled_probe.slang" ${SIRIUS_KERNEL_LIBS}
+        COMMENT "Compiling coupled_probe.slang (fp64) -> SPIR-V (+spirv-val)"
+        VERBATIM
+    )
+    list(APPEND SIRIUS_KERNEL_OUTPUTS "${coupled_probe_fp64_out}")
+
     set(kernel_probe_fp64_out "${SIRIUS_KERNEL_BINARY_DIR}/parity_probe_fp64.spv")
     if(SIRIUS_SPIRV_VAL)
         set(kernel_probe_fp64_validate COMMAND "${SIRIUS_SPIRV_VAL}" "${kernel_probe_fp64_out}")

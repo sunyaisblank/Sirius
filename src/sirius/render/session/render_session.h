@@ -288,7 +288,8 @@ class RenderSession {
         float r = 0.0f, g = 0.0f, b = 0.0f;
     };
 
-    PixelResult ShadePixel(int px, int py, backend::GeodesicTracer* tracer) const;
+    [[nodiscard]] base::Expected<PixelResult> ShadePixel(int px, int py,
+                                                         backend::GeodesicTracer* tracer) const;
     PixelResult ShadeDiskHit(const backend::TraceResult& result) const;
     PixelResult ShadeEscaped(const backend::TraceResult& result) const;
 
@@ -332,9 +333,12 @@ class RenderSession {
     // metric, so no synchronisation is needed on the physics path.
     void RenderTilesParallel();
     void WorkerThread(int thread_id);
-    [[nodiscard]] bool RenderTileThreaded(Tile* tile, int thread_id);
+    [[nodiscard]] base::Expected<bool> RenderTileThreaded(Tile* tile, int thread_id);
 
     std::vector<std::thread> worker_threads_;
+    // Each worker owns one slot; the render thread reads them only after join.
+    // error_message_ and FSM transitions remain owned by the render thread.
+    std::vector<std::optional<base::Error>> worker_errors_;
     std::vector<std::unique_ptr<backend::GeodesicTracer>> thread_tracers_;  // Per-thread tracers.
     std::mutex tile_mutex_;                  // Protects tile acquisition.
     std::mutex display_mutex_;               // Protects display buffer updates.

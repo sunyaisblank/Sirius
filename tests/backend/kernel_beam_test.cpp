@@ -17,6 +17,8 @@
 
 #include <gtest/gtest.h>
 
+#include "../support/trace_continuation_probe.h"
+
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
@@ -50,7 +52,7 @@ std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
 
 // Kerr a=0.9 down the spin axis from 40M, single tile, gradient background.
 std::vector<float> BaseParams(std::uint32_t w, std::uint32_t h) {
-    std::vector<float> params(68, 0.0f);
+    std::vector<float> params(sirius::render::kTraceParameterCount, 0.0f);
     params[44] = 0.5f;
     params[45] = 0.5f;
     params[66] = 0.5f;
@@ -91,27 +93,12 @@ std::vector<float> BaseParams(std::uint32_t w, std::uint32_t h) {
 
 std::vector<float> Dispatch(ComputeDevice& device, KernelHandle kernel,
                             const std::vector<float>& params, std::uint32_t w, std::uint32_t h) {
-    std::vector<float> radiance(w * h * 4, 0.0f);
-    const std::vector<std::uint32_t> star_dummy = {0u};
-    const auto rbuf = device.CreateBuffer(radiance.size() * sizeof(float), BufferUsage::kStorage);
-    const auto pbuf = device.CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
-    const auto sbuf =
-        device.CreateBuffer(star_dummy.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
-    const auto psbuf =
-        device.CreateBuffer(star_dummy.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
-    const auto pobuf =
-        device.CreateBuffer(star_dummy.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
-    const auto pibuf =
-        device.CreateBuffer(star_dummy.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
-    EXPECT_TRUE(rbuf && pbuf && sbuf && psbuf && pobuf && pibuf);
-    EXPECT_TRUE(device.WriteBuffer(*rbuf, std::as_bytes(std::span<const float>(radiance))));
-    EXPECT_TRUE(device.WriteBuffer(*pbuf, std::as_bytes(std::span<const float>(params))));
-    EXPECT_TRUE(
-        device.WriteBuffer(*sbuf, std::as_bytes(std::span<const std::uint32_t>(star_dummy))));
-    const BufferHandle binding[] = {*rbuf, *pbuf, *sbuf, *psbuf, *pobuf, *pibuf};
-    EXPECT_TRUE(device.Dispatch(kernel, binding, (w + 7) / 8, (h + 7) / 8, 1).has_value());
-    EXPECT_TRUE(device.ReadBuffer(*rbuf, std::as_writable_bytes(std::span<float>(radiance))));
-    return radiance;
+    const auto result = sirius::test::TraceContinuationImage<float>(device, kernel, params, w, h);
+    if (!result) {
+        ADD_FAILURE() << result.error().Description();
+        return {};
+    }
+    return *result;
 }
 
 TEST(KernelBeam, BeamFlagWiresDeviationWithoutMovingDefault) {
@@ -134,6 +121,7 @@ TEST(KernelBeam, BeamFlagWiresDeviationWithoutMovingDefault) {
 
     // Beams off: the default render, alpha must be exactly 1 everywhere.
     std::vector<float> off = Dispatch(**device, *kernel, BaseParams(kW, kH), kW, kH);
+    ASSERT_EQ(off.size(), static_cast<std::size_t>(kW) * kH * 4);
     std::vector<float> off_rgb = off;
     for (std::uint32_t p = 0; p < kW * kH; ++p) {
         ASSERT_FLOAT_EQ(off[p * 4 + 3], 1.0f) << "beams-off alpha moved at pixel " << p;
@@ -143,6 +131,7 @@ TEST(KernelBeam, BeamFlagWiresDeviationWithoutMovingDefault) {
     std::vector<float> p_on = BaseParams(kW, kH);
     p_on[41] = 1.0f;
     std::vector<float> on = Dispatch(**device, *kernel, p_on, kW, kH);
+    ASSERT_EQ(on.size(), off.size());
 
     // RGB is untouched by the beam wiring; only alpha changes.
     for (std::uint32_t p = 0; p < kW * kH; ++p) {

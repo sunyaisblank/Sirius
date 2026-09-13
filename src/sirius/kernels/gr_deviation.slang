@@ -274,16 +274,18 @@ public Real4 GeodesicDeviationAccelFullRiemann(
 // angle is measured in this basis and point-catalogue filtering consumes that
 // same angle, so the least-aligned reference-axis decision must have one device
 // authority. This mirrors core/celestial_tangent_basis.h.
-public void MakeCelestialTangentBasis(float3 inputDirection,
-                                      out float3 first, out float3 second) {
-    float3 direction = normalize(inputDirection);
-    float3 reference;
-    if (abs(direction.x) <= abs(direction.y) && abs(direction.x) <= abs(direction.z)) {
-        reference = float3(1.0f, 0.0f, 0.0f);
-    } else if (abs(direction.y) <= abs(direction.z)) {
-        reference = float3(0.0f, 1.0f, 0.0f);
+public void MakeCelestialTangentBasis<T:__BuiltinFloatingPointType>(vector<T,3> inputDirection,
+                                      out vector<T,3> first, out vector<T,3> second) {
+    vector<T,3> direction = normalize(inputDirection);
+    // Positive normalization preserves ordering; rounded normalization can
+    // invent a tie and rotate wide screens relative to the float catalogue.
+    vector<T,3> reference;
+    if (abs(inputDirection.x) <= abs(inputDirection.y) && abs(inputDirection.x) <= abs(inputDirection.z)) {
+        reference = vector<T,3>(T(1), T(0), T(0));
+    } else if (abs(inputDirection.y) <= abs(inputDirection.z)) {
+        reference = vector<T,3>(T(0), T(1), T(0));
     } else {
-        reference = float3(0.0f, 0.0f, 1.0f);
+        reference = vector<T,3>(T(0), T(0), T(1));
     }
     first = normalize(reference - dot(reference, direction) * direction);
     second = cross(direction, first);

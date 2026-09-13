@@ -287,6 +287,25 @@ if(BUILD_TESTS AND SIRIUS_MANDATORY_TESTS)
                 "parity_probe_fp32comp_spv=${SIRIUS_KERNEL_BINARY_DIR}/parity_probe_fp32comp.spv"
             --test-input-artifact
                 "parity_probe_fp64_spv=${SIRIUS_KERNEL_BINARY_DIR}/parity_probe_fp64.spv"
+            --test-input-artifact "infinity_probe_spv=${SIRIUS_KERNEL_BINARY_DIR}/infinity_probe.spv"
+            --test-input-artifact
+                "infinity_probe_fp32comp_spv=${SIRIUS_KERNEL_BINARY_DIR}/infinity_probe_fp32comp.spv"
+            --test-input-artifact
+                "infinity_probe_fp64_spv=${SIRIUS_KERNEL_BINARY_DIR}/infinity_probe_fp64.spv"
+            --test-input-artifact
+                "metric_consistency_probe_spv=${SIRIUS_KERNEL_BINARY_DIR}/metric_consistency_probe.spv"
+            --test-input-artifact
+                "metric_consistency_probe_fp32comp_spv=${SIRIUS_KERNEL_BINARY_DIR}/metric_consistency_probe_fp32comp.spv"
+            --test-input-artifact
+                "metric_consistency_probe_fp64_spv=${SIRIUS_KERNEL_BINARY_DIR}/metric_consistency_probe_fp64.spv"
+            --test-input-artifact
+                "camera_frame_probe_spv=${SIRIUS_KERNEL_BINARY_DIR}/camera_frame_probe.spv"
+            --test-input-artifact
+                "camera_frame_probe_fp32comp_spv=${SIRIUS_KERNEL_BINARY_DIR}/camera_frame_probe_fp32comp.spv"
+            --test-input-artifact
+                "camera_frame_probe_fp64_spv=${SIRIUS_KERNEL_BINARY_DIR}/camera_frame_probe_fp64.spv"
+            --test-input-artifact
+                "coupled_probe_fp64_spv=${SIRIUS_KERNEL_BINARY_DIR}/coupled_probe_fp64.spv"
             --test-input-artifact "trace_cuda=${SIRIUS_KERNEL_BINARY_DIR}/portability/trace.cu"
             --test-input-artifact "trace_metal=${SIRIUS_KERNEL_BINARY_DIR}/portability/trace.metal")
     endif()

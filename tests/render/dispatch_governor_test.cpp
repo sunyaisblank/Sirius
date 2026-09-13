@@ -1,3 +1,4 @@
+#include "sirius/render/trace_continuation.h"
 // Dispatch governor gate (dispatch_governor.h): band heights honour their
 // [1, remaining] bound, growth doubles and overshoot halves actual work,
 // feedback is attributed to the work actually dispatched, learned area
@@ -6,7 +7,6 @@
 // Pure-arithmetic suite; no Vulkan device is touched.
 
 #include "sirius/render/dispatch_governor.h"
-
 #include "sirius/render/vulkan_renderer.h"
 
 #include <gtest/gtest.h>
@@ -587,6 +587,215 @@ TEST(DispatchGovernor, RegionExecutionPropagatesCancellationAndBoundaryErrors) {
     }
 }
 
+TEST(DispatchGovernor, ContinuationsPreserveFourCameraSamplesAndPublishOnce) {
+    using namespace sirius::render;
+    using sirius::base::Expected;
+    std::vector<CameraSample> expected;
+    ForEachCameraSample(4, [&](const CameraSample& sample) { expected.push_back(sample); });
+    BandController bands(4, 250.0, 4, 16);
+    int submits = 0;
+    int completions = 0;
+    const auto result = ExecuteDispatchRegions(
+        {5, 7, 4, 1}, 4, bands, 3,
+        [&](const DispatchRegion&, const CameraSample& sample, int index,
+            std::uint32_t ordinal) -> Expected<DispatchContinuationResult> {
+            EXPECT_EQ(index, submits / 3);
+            EXPECT_EQ(ordinal, static_cast<std::uint32_t>(submits % 3));
+            EXPECT_EQ(sample.image_u, expected.at(index).image_u);
+            EXPECT_EQ(sample.image_v, expected.at(index).image_v);
+            EXPECT_EQ(sample.pupil_u, expected.at(index).pupil_u);
+            EXPECT_EQ(sample.pupil_v, expected.at(index).pupil_v);
+            ++submits;
+            EXPECT_EQ(completions, 0);
+            return DispatchContinuationResult{10.0, ordinal == 2};
+        },
+        [&](const DispatchRegion&) -> Expected<void> {
+            EXPECT_EQ(submits, 12);
+            ++completions;
+            return {};
+        });
+    ASSERT_TRUE(result.has_value()) << result.error().Description();
+    EXPECT_EQ(submits, 12);
+    EXPECT_EQ(completions, 1);
+}
+
+TEST(DispatchGovernor, LateContinuationOvershootReplaysChildrenFromBothZeroOrdinals) {
+    using namespace sirius::render;
+    using sirius::base::Expected;
+    for (double overshoot : {1001.0, 0.0}) {
+        SCOPED_TRACE(overshoot);
+        BandController bands(4, 250.0, 1, 4);
+        int parent_submits = 0;
+        int child_submits = 0;
+        int child_samples = 0;
+        int completions = 0;
+        std::array<int, 4> coverage{};
+        std::vector<CameraSample> expected;
+        ForEachCameraSample(4, [&](const CameraSample& sample) { expected.push_back(sample); });
+        const int child_width = overshoot == 0.0 ? 1 : 2;
+        const auto result = ExecuteDispatchRegions(
+            {5, 7, 4, 1}, 4, bands, 3,
+            [&](const DispatchRegion& region, const CameraSample& sample, int index,
+                std::uint32_t ordinal) -> Expected<DispatchContinuationResult> {
+                EXPECT_EQ(sample.image_u, expected.at(index).image_u);
+                EXPECT_EQ(sample.image_v, expected.at(index).image_v);
+                EXPECT_EQ(sample.pupil_u, expected.at(index).pupil_u);
+                EXPECT_EQ(sample.pupil_v, expected.at(index).pupil_v);
+                if (region.width == 4) {
+                    EXPECT_EQ(index, parent_submits / 3);
+                    EXPECT_EQ(ordinal, static_cast<std::uint32_t>(parent_submits % 3));
+                    ++parent_submits;
+                    return DispatchContinuationResult{parent_submits == 9 ? overshoot : 10.0,
+                                                      ordinal == 2};
+                }
+                EXPECT_EQ(parent_submits, 9);
+                EXPECT_EQ(region.width, child_width);
+                EXPECT_EQ(index, (child_submits / 3) % 4);
+                EXPECT_EQ(ordinal, static_cast<std::uint32_t>(child_submits % 3));
+                ++child_submits;
+                if (ordinal == 2) ++child_samples;
+                return DispatchContinuationResult{10.0, ordinal == 2};
+            },
+            [&](const DispatchRegion& region) -> Expected<void> {
+                EXPECT_EQ(region.width, child_width);
+                EXPECT_EQ(child_samples, 4 * (completions + 1));
+                for (int x = region.x; x < region.x + region.width; ++x) ++coverage.at(x - 5);
+                ++completions;
+                return {};
+            });
+        ASSERT_TRUE(result.has_value()) << result.error().Description();
+        EXPECT_EQ(parent_submits, 9);
+        EXPECT_EQ(child_submits, 12 * (4 / child_width));
+        EXPECT_EQ(completions, 4 / child_width);
+        EXPECT_EQ(coverage, (std::array{1, 1, 1, 1}));
+        EXPECT_TRUE(bands.SafetyFallback());
+    }
+}
+
+TEST(DispatchGovernor, EveryContinuationTimingEnforcesThePhysicalSafetyBoundary) {
+    using namespace sirius::render;
+    using sirius::base::Expected;
+    for (std::uint32_t bad_ordinal : {0u, 1u, 2u}) {
+        for (double bad_ms : {1001.0, -1.0, std::numeric_limits<double>::infinity(),
+                              std::numeric_limits<double>::quiet_NaN()}) {
+            SCOPED_TRACE(::testing::Message() << bad_ordinal << " / " << bad_ms);
+            BandController bands(1, 0.0, 1, 1);
+            int submits = 0;
+            int completions = 0;
+            const auto result = ExecuteDispatchRegions(
+                {5, 7, 1, 1}, 4, bands, 3,
+                [&](const DispatchRegion&, const CameraSample&, int index,
+                    std::uint32_t ordinal) -> Expected<DispatchContinuationResult> {
+                    EXPECT_EQ(index, 0);
+                    ++submits;
+                    return DispatchContinuationResult{ordinal == bad_ordinal ? bad_ms : 10.0,
+                                                      ordinal == 2};
+                },
+                [&](const DispatchRegion&) -> Expected<void> {
+                    ++completions;
+                    return {};
+                });
+            ASSERT_FALSE(result.has_value());
+            EXPECT_EQ(result.error().domain(), sirius::base::ErrorDomain::kDevice);
+            EXPECT_EQ(submits, static_cast<int>(bad_ordinal) + 1);
+            EXPECT_EQ(completions, 0);
+            EXPECT_NE(result.error().Description().find("refusing further submissions"),
+                      std::string::npos);
+        }
+    }
+}
+
+TEST(DispatchGovernor, CancellationStopsBetweenContinuationsAndBeforePublication) {
+    using namespace sirius::render;
+    using sirius::base::Expected;
+    for (int cancel_after : {1, 2, 3, 12}) {
+        SCOPED_TRACE(cancel_after);
+        BandController bands(1, 250.0, 1, 1);
+        int submits = 0;
+        int completions = 0;
+        const auto result = ExecuteDispatchRegions(
+            {0, 0, 1, 1}, 4, bands, 3,
+            [&](const DispatchRegion&, const CameraSample&, int index,
+                std::uint32_t ordinal) -> Expected<DispatchContinuationResult> {
+                EXPECT_EQ(index, submits / 3);
+                EXPECT_EQ(ordinal, static_cast<std::uint32_t>(submits % 3));
+                ++submits;
+                return DispatchContinuationResult{10.0, ordinal == 2};
+            },
+            [&](const DispatchRegion&) -> Expected<void> {
+                ++completions;
+                return {};
+            },
+            [&] { return submits >= cancel_after; });
+        ASSERT_FALSE(result.has_value());
+        EXPECT_EQ(submits, cancel_after);
+        EXPECT_EQ(completions, 0);
+        EXPECT_NE(result.error().Description().find("cancelled"), std::string::npos);
+    }
+}
+
+TEST(DispatchGovernor, CheapContinuationPhasesCannotHideThePeakSoftSizingFeedback) {
+    using namespace sirius::render;
+    using sirius::base::Expected;
+    for (bool legacy : {false, true}) {
+        SCOPED_TRACE(legacy);
+        BandController bands(4, 250.0, 4, 16);
+        const std::array timings{1.0, 400.0, 1.0};
+        int completions = 0;
+        const auto completed = [&](const DispatchRegion&) -> Expected<void> {
+            ++completions;
+            return {};
+        };
+        const auto result =
+            legacy ? ExecuteDispatchRegions(
+                         {0, 0, 4, 2}, 3, bands,
+                         [&](const DispatchRegion&, const CameraSample&,
+                             int index) -> Expected<double> { return timings.at(index); },
+                         completed)
+                   : ExecuteDispatchRegions(
+                         {0, 0, 4, 2}, 4, bands, 3,
+                         [&](const DispatchRegion&, const CameraSample&, int,
+                             std::uint32_t ordinal) -> Expected<DispatchContinuationResult> {
+                             return DispatchContinuationResult{timings.at(ordinal), ordinal == 2};
+                         },
+                         completed);
+        ASSERT_TRUE(result.has_value()) << result.error().Description();
+        EXPECT_EQ(completions, 1);
+        EXPECT_EQ(bands.NextRows(4, 4), 1);  // Peak 400 ms halves eight pixels to four.
+        EXPECT_FALSE(bands.SafetyFallback());
+    }
+}
+
+TEST(DispatchGovernor, ContinuationExhaustionNeverImplicitlyCompletesOrAdvancesSample) {
+    using namespace sirius::render;
+    using sirius::base::Expected;
+    for (std::uint32_t bound : {0u, 1u, 3u}) {
+        SCOPED_TRACE(bound);
+        BandController bands(1, 250.0, 1, 1);
+        int submits = 0;
+        int completions = 0;
+        const auto result = ExecuteDispatchRegions(
+            {0, 0, 1, 1}, 4, bands, bound,
+            [&](const DispatchRegion&, const CameraSample&, int index,
+                std::uint32_t ordinal) -> Expected<DispatchContinuationResult> {
+                EXPECT_EQ(index, 0);
+                EXPECT_EQ(ordinal, static_cast<std::uint32_t>(submits));
+                ++submits;
+                return DispatchContinuationResult{10.0, false};
+            },
+            [&](const DispatchRegion&) -> Expected<void> {
+                ++completions;
+                return {};
+            });
+        ASSERT_FALSE(result.has_value());
+        EXPECT_EQ(result.error().domain(), sirius::base::ErrorDomain::kDevice);
+        EXPECT_EQ(submits, static_cast<int>(bound));
+        EXPECT_EQ(completions, 0);
+        EXPECT_NE(result.error().Description().find(bound == 0 ? "must be positive" : "exhausted"),
+                  std::string::npos);
+    }
+}
+
 TEST(DispatchGovernor, TargetDefaultsWhenTheEnvironmentIsUnset) {
     for (const char* unset : {static_cast<const char*>(nullptr), ""}) {
         ScopedEnvironmentVariable clear("SIRIUS_DISPATCH_TARGET_MS", unset);
@@ -627,3 +836,108 @@ TEST(DispatchGovernor, TargetFailsLoudOnGarbageNegativesAndNonFinite) {
 }
 
 }  // namespace
+
+TEST(DispatchGovernor, ContinuationReadbackRejectsStaleOrUncommittedState) {
+    using namespace sirius::render;
+    const auto check = []<typename Real>() {
+        const std::array<std::uint32_t, 4> identity{17, 29, 3, 0x7fc00000u};
+        TraceContinuationRecord<Real> previous{};
+        previous.control = {1, 0, 7, 4};
+        previous.identity = identity;
+        auto rejected = previous;
+        rejected.control[2] = 8;
+        rejected.physical[TraceContinuationRecord<Real>::kIntegration][0] = Real(0.25);  // Only the next trial step may change.
+        EXPECT_TRUE(
+            ValidateTraceContinuation(rejected, &previous, TraceAction::Advance, identity, 20)
+                .has_value());
+        for (int field = 0; field < 4; ++field) {
+            auto stale = rejected;
+            ++stale.identity[field];
+            EXPECT_FALSE(
+                ValidateTraceContinuation(stale, &previous, TraceAction::Advance, identity, 20)
+                    .has_value());
+        }
+        auto invalid = rejected;
+        invalid.physical[0][1] = Real(1);
+        EXPECT_FALSE(
+            ValidateTraceContinuation(invalid, &previous, TraceAction::Advance, identity, 20)
+                .has_value());
+        for (std::size_t column = 0; column < 4; ++column) {
+            for (const auto offset : {TraceContinuationRecord<Real>::kPositionColumns,
+                                      TraceContinuationRecord<Real>::kCovariantColumns}) {
+                for (std::size_t component = 0; component < 4; ++component) {
+                    auto changed = rejected;
+                    changed.physical[offset + column][component] = Real(1);
+                    EXPECT_FALSE(ValidateTraceContinuation(changed, &previous,
+                        TraceAction::Advance, identity, 20).has_value()) << column << component;
+                    auto nonfinite = previous;
+                    nonfinite.control[2] = 8; nonfinite.control[3] = 5;
+                    nonfinite.physical[offset + column][component] =
+                        std::numeric_limits<Real>::quiet_NaN();
+                    EXPECT_FALSE(ValidateTraceContinuation(nonfinite, &previous,
+                        TraceAction::Advance, identity, 20).has_value()) << column << component;
+                }
+            }
+        }
+        invalid = rejected;
+        invalid.volume[0] = 1.0f;
+        EXPECT_FALSE(
+            ValidateTraceContinuation(invalid, &previous, TraceAction::Advance, identity, 20)
+                .has_value());
+        invalid = rejected;
+        invalid.control[2] = 9;
+        EXPECT_FALSE(
+            ValidateTraceContinuation(invalid, &previous, TraceAction::Advance, identity, 20)
+                .has_value());
+        invalid = rejected;
+        invalid.source[0] = std::numeric_limits<float>::quiet_NaN();
+        EXPECT_FALSE(
+            ValidateTraceContinuation(invalid, &previous, TraceAction::Advance, identity, 20)
+                .has_value());
+    };
+    check.operator()<float>();
+    check.operator()<double>();
+}
+
+TEST(DispatchGovernor, OnlyPhysicalTerminalReadbackCanFinalizeWithoutChangingTrajectory) {
+    using namespace sirius::render;
+    const std::array<std::uint32_t, 4> identity{17, 29, 0, 1};
+    FloatTraceContinuation previous{};
+    previous.identity = identity;
+    for (std::uint32_t reason = 0; reason <= 11; ++reason) {
+        previous.control = {2, reason, 3, 2};
+        auto finalized = previous;
+        finalized.control[0] = 3;
+        const auto accepted =
+            ValidateTraceContinuation(finalized, &previous, TraceAction::Finalize, identity, 20);
+        const bool physical = reason == 1 || reason == 2 || reason == 3 || reason == 10;
+        EXPECT_EQ(accepted.has_value(), physical) << reason;
+        if (accepted) {
+            EXPECT_TRUE(*accepted);
+        }
+    }
+    previous.control = {2, 3, 3, 2};
+    auto bad = previous;
+    bad.control[0] = 3;
+    bad.physical[0][0] = 1.0f;
+    EXPECT_FALSE(
+        ValidateTraceContinuation(bad, &previous, TraceAction::Finalize, identity, 20).has_value());
+    bad = previous;
+    bad.control[0] = 1;
+    EXPECT_FALSE(
+        ValidateTraceContinuation(bad, &previous, TraceAction::Advance, identity, 20).has_value());
+    bad = previous;
+    EXPECT_FALSE(
+        ValidateTraceContinuation(bad, &previous, TraceAction::Finalize, identity, 20).has_value());
+    bad = {};
+    bad.identity = identity;
+    bad.control = {1, 0, 0, 0};
+    const auto initialized =
+        ValidateTraceContinuation<float>(bad, nullptr, TraceAction::Initialise, identity, 20);
+    ASSERT_TRUE(initialized.has_value());
+    EXPECT_FALSE(*initialized);
+    bad.control[2] = 1;
+    EXPECT_FALSE(
+        ValidateTraceContinuation<float>(bad, nullptr, TraceAction::Initialise, identity, 20)
+            .has_value());
+}

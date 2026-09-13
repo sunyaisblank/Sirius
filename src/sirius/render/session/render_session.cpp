@@ -953,18 +953,52 @@ RenderSession::PixelResult RenderSession::ShadeEscaped(const TraceResult& result
     return px;
 }
 
-RenderSession::PixelResult RenderSession::ShadePixel(int px_coord, int py_coord,
-                                                     GeodesicTracer* tracer) const {
+base::Expected<RenderSession::PixelResult> RenderSession::ShadePixel(int px_coord, int py_coord,
+                                                                     GeodesicTracer* tracer) const {
     PixelResult result;
     float r_acc = 0.0f, g_acc = 0.0f, b_acc = 0.0f;
+    std::optional<base::Error> sample_error;
+    int sample_index = 0;
 
     const int samples_taken =
         ForEachCameraSample(config_.samples_per_pixel, [&](const CameraSample& sample) {
+            const int current_sample = sample_index++;
+            if (sample_error) return;
+            const auto fail_sample = [&](const std::string& reason) {
+                sample_error.emplace(base::ErrorDomain::kPhysics, "shade CPU pixel",
+                                     std::format("pixel ({}, {}), sample {}: {}", px_coord,
+                                                 py_coord, current_sample, reason));
+            };
             CameraRay camera_ray = camera_->GenerateRayForObserver(
                 px_coord, py_coord, sample.image_u, sample.image_v, sample.pupil_u, sample.pupil_v);
             SIRIUS_ASSERT(core::IsRepresentedCameraRay(camera_ray));
             if (!camera_ray.active) return;
             TraceResult trace_result = tracer->Trace(camera_ray);
+            if (trace_result.numerical_failure) {
+                const char* reason =
+                    trace_result.coupled_failure == core::CoupledStepFailure::WorkLimit
+                        ? "ray work limit exhausted"
+                        : "numerical ray failure";
+                fail_sample(std::format(
+                    "{} (coupled failure: {}, integrator termination: {}, attempts: {}, "
+                    "accepted affine distance: {})",
+                    reason, core::CoupledStepFailureName(trace_result.coupled_failure),
+                    trace_result.integrator_termination, trace_result.steps_taken,
+                    trace_result.affine_length));
+                return;
+            }
+            if (trace_result.outcome == TraceResult::Outcome::Escaped) {
+                for (int component = 0; component < 4; ++component) {
+                    if (!std::isfinite(trace_result.final_direction(component))) {
+                        fail_sample("non-finite escaped direction");
+                        return;
+                    }
+                }
+            }
+            if (trace_result.volumetric_hit && !std::isfinite(trace_result.optical_depth)) {
+                fail_sample("non-finite optical depth");
+                return;
+            }
 
             float sr = 0.0f, sg = 0.0f, sb = 0.0f;
 
@@ -990,8 +1024,11 @@ RenderSession::PixelResult RenderSession::ShadePixel(int px_coord, int py_coord,
                 }
 
                 case TraceResult::Outcome::MaxSteps:
-                    sr = sg = sb = 0.0f;
-                    break;
+                    // An unfinished ray has no terminal background to compose
+                    // with accumulated volume emission, even if its producer
+                    // omitted the numerical-failure flag.
+                    fail_sample("ray work limit exhausted");
+                    return;
                 default:
                     SIRIUS_ASSERT(false);
                     sr = 1.0f;
@@ -1011,10 +1048,18 @@ RenderSession::PixelResult RenderSession::ShadePixel(int px_coord, int py_coord,
                 sb = sb * transmission + volume.b;
             }
 
+            if (!std::isfinite(sr) || !std::isfinite(sg) || !std::isfinite(sb)) {
+                fail_sample("non-finite sample radiance");
+                return;
+            }
             r_acc += sr;
             g_acc += sg;
             b_acc += sb;
+            if (!std::isfinite(r_acc) || !std::isfinite(g_acc) || !std::isfinite(b_acc)) {
+                fail_sample("non-finite accumulated radiance");
+            }
         });
+    if (sample_error) return std::unexpected(std::move(*sample_error));
 
     float inv_samples = 1.0f / static_cast<float>(samples_taken);
     result.r = r_acc * inv_samples;
@@ -1041,16 +1086,29 @@ void RenderSession::RenderTile(Tile* tile) {
             int px = tile->x + tx;
             int py = tile->y + ty;
 
-            PixelResult pixel = ShadePixel(px, py, tracer_.get());
+            auto pixel = ShadePixel(px, py, tracer_.get());
+            if (!pixel) {
+                if (progress_.GetCancellationToken().IsCancelled()) {
+                    fsm_.Process(SessionEvent::Cancel);
+                } else {
+                    error_message_ = pixel.error().Description();
+                    fsm_.Process(SessionEvent::Error);
+                }
+                return;
+            }
 
             int idx = (ty * tile->width + tx) * 4;
-            tileBuffer[idx + 0] = pixel.r;
-            tileBuffer[idx + 1] = pixel.g;
-            tileBuffer[idx + 2] = pixel.b;
+            tileBuffer[idx + 0] = pixel->r;
+            tileBuffer[idx + 1] = pixel->g;
+            tileBuffer[idx + 2] = pixel->b;
             tileBuffer[idx + 3] = 1.0f;
         }
     }
 
+    if (progress_.GetCancellationToken().IsCancelled()) {
+        fsm_.Process(SessionEvent::Cancel);
+        return;
+    }
     display_.UpdateTile(tile->x, tile->y, tile->width, tile->height, tileBuffer.data());
 
     tiles_.CompleteTile(tile->id);
@@ -1357,6 +1415,7 @@ void RenderSession::OnSessionEnd(SessionState state) {
             break;
         case SessionState::Failed:
             message = error_message_;
+            std::cerr << "[Session] " << message << std::endl;
             break;
         case SessionState::Cancelled:
             message = "Render cancelled by user";
@@ -1395,6 +1454,7 @@ void RenderSession::OnSessionEnd(SessionState state) {
 void RenderSession::RenderTilesParallel() {
     stop_workers_ = false;
     active_workers_ = 0;
+    worker_errors_.assign(static_cast<std::size_t>(num_threads_), std::nullopt);
 
     worker_threads_.clear();
     worker_threads_.reserve(num_threads_);
@@ -1417,7 +1477,14 @@ void RenderSession::RenderTilesParallel() {
     if (progress_.GetCancellationToken().IsCancelled()) {
         fsm_.Process(SessionEvent::Cancel);
     } else {
-        fsm_.Process(SessionEvent::AllTilesComplete);
+        const auto failed = std::find_if(worker_errors_.begin(), worker_errors_.end(),
+                                         [](const auto& error) { return error.has_value(); });
+        if (failed != worker_errors_.end()) {
+            error_message_ = (*failed)->Description();
+            fsm_.Process(SessionEvent::Error);
+        } else {
+            fsm_.Process(SessionEvent::AllTilesComplete);
+        }
     }
 }
 
@@ -1440,10 +1507,13 @@ void RenderSession::WorkerThread(int thread_id) {
             break;
         }
 
-        if (!RenderTileThreaded(tile, thread_id)) {
+        const auto rendered = RenderTileThreaded(tile, thread_id);
+        if (!rendered) {
+            worker_errors_[static_cast<std::size_t>(thread_id)] = rendered.error();
             stop_workers_ = true;
             break;
         }
+        if (!*rendered) break;
 
         {
             std::lock_guard<std::mutex> lock(tile_mutex_);
@@ -1456,7 +1526,7 @@ void RenderSession::WorkerThread(int thread_id) {
     active_workers_--;
 }
 
-bool RenderSession::RenderTileThreaded(Tile* tile, int thread_id) {
+base::Expected<bool> RenderSession::RenderTileThreaded(Tile* tile, int thread_id) {
     if (!tile) return false;
 
     GeodesicTracer* tracer = nullptr;
@@ -1477,18 +1547,20 @@ bool RenderSession::RenderTileThreaded(Tile* tile, int thread_id) {
             int px = tile->x + tx;
             int py = tile->y + ty;
 
-            PixelResult pixel = ShadePixel(px, py, tracer);
+            auto pixel = ShadePixel(px, py, tracer);
+            if (!pixel) return std::unexpected(pixel.error());
 
             int idx = (ty * tile->width + tx) * 4;
-            tileBuffer[idx + 0] = pixel.r;
-            tileBuffer[idx + 1] = pixel.g;
-            tileBuffer[idx + 2] = pixel.b;
+            tileBuffer[idx + 0] = pixel->r;
+            tileBuffer[idx + 1] = pixel->g;
+            tileBuffer[idx + 2] = pixel->b;
             tileBuffer[idx + 3] = 1.0f;
         }
     }
 
     {
         std::lock_guard<std::mutex> lock(display_mutex_);
+        if (stop_workers_ || progress_.GetCancellationToken().IsCancelled()) return false;
         display_.UpdateTile(tile->x, tile->y, tile->width, tile->height, tileBuffer.data());
     }
     return true;

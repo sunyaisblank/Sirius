@@ -79,15 +79,18 @@ class KerrSchildFamily : public IMetric {
 
     // Outer black-hole horizon. This is r+ for the asymptotically flat
     // Kerr-Newman sector and the smaller positive Kottler root for Lambda > 0;
-    // returns -1 when no black-hole horizon exists.
+    // returns -1 when no black-hole horizon exists or its root pair cannot
+    // be represented by finite doubles. HasHorizon still reports existence.
     double OuterHorizonRadius() const;
 
     // Inner (Cauchy) horizon r- in the asymptotically flat Kerr-Newman sector.
     // The spherical uncharged sector retains the Schwarzschild limit r-=0;
-    // returns -1 when no black-hole horizon exists.
+    // returns -1 when no black-hole horizon exists or its root pair cannot
+    // be represented by finite doubles. HasHorizon still reports existence.
     double InnerHorizonRadius() const;
 
-    // True when the represented parameters contain a black-hole horizon.
+    // True when the represented parameters contain a black-hole horizon,
+    // independently of whether finite double root values are available.
     bool HasHorizon() const;
 
     // Larger positive Kottler root for Lambda > 0, including sqrt(3/Lambda)
@@ -114,6 +117,10 @@ class KerrSchildFamily : public IMetric {
     double ExtremalityParameter() const;
 
   private:
+    enum class FlatHorizonStatus { Absent, Available, Unrepresentable };
+    struct FlatHorizonResult { FlatHorizonStatus status; double outer; double inner; };
+    FlatHorizonResult FlatHorizons() const;
+
     Config config_;
     KerrSchildParams params_;
 };
@@ -484,46 +491,101 @@ inline double KerrSchildFamily::KottlerStaticLapse(double radius) const {
     return sirius::core::KottlerStaticLapse(params_.M, params_.Lambda, radius);
 }
 
-inline double KerrSchildFamily::OuterHorizonRadius() const {
-    if (!HasHorizon()) return -1.0;
-
-    double M = params_.M;
-    double a = params_.a;
-    double Q = params_.Q;
-
-    if (params_.Lambda > 0.0) {
-        return KottlerBlackHoleHorizonRadius(M, params_.Lambda);
+inline KerrSchildFamily::FlatHorizonResult KerrSchildFamily::FlatHorizons() const {
+    const FlatHorizonResult absent{FlatHorizonStatus::Absent, -1.0, -1.0};
+    const FlatHorizonResult unavailable{FlatHorizonStatus::Unrepresentable, -1.0, -1.0};
+    const double M = params_.M;
+    const double high = std::max(std::abs(params_.a), std::abs(params_.Q));
+    const double low = std::min(std::abs(params_.a), std::abs(params_.Q));
+    if (!(M > 0.0) || !std::isfinite(M) || !std::isfinite(high) ||
+        !std::isfinite(low) || params_.Lambda != 0.0 || high > M) return absent;
+    if (high == M) {
+        // Equality of represented inputs is exact; a nonzero other component
+        // makes the exact discriminant negative, however tiny its square.
+        if (low != 0.0) return absent;
+        return {FlatHorizonStatus::Available, M, M};
     }
 
-    double discriminant = M * M - a * a - Q * Q;
-    return M + std::sqrt(discriminant);
+    int exponent = 0;
+    const double mass = std::frexp(M, &exponent);
+    const double major = std::scalbn(high, -exponent);
+    const double minor = std::scalbn(low, -exponent);
+    double discriminant = 0.0;
+    if (minor < std::ldexp(mass, -28)) {
+        // M>high implies a represented gap of at least about 2^-53 M.
+        // minor^2 < 2^-56 mass^2 cannot reverse the positive sign. Factoring
+        // preserves the small gap; underflow of a negligible square is benign.
+        discriminant = (mass - major) * (mass + major) - minor * minor;
+    } else {
+        // Here all scaled products and residuals are normal. Six exact terms
+        // represent mass^2-major^2-minor^2; no rounded equality is extremality.
+        // Grow a nonoverlapping expansion using error-free TwoSum. This needs
+        // IEEE binary64 round-to-nearest, genuine fma and no reassociation.
+        double expansion[6] = {};
+        int count = 0;
+        const auto append = [&expansion, &count](double term) {
+            int next = 0;
+            for (int i = 0; i < count; ++i) {
+                const double sum = term + expansion[i];
+                const double virtual_other = sum - term;
+                const double error = (term - (sum - virtual_other)) +
+                                     (expansion[i] - virtual_other);
+                if (error != 0.0) expansion[next++] = error;
+                term = sum;
+            }
+            if (term != 0.0) expansion[next++] = term;
+            count = next;
+        };
+        const double values[3] = {mass, major, minor};
+        for (int i = 0; i < 3; ++i) {
+            const double product = values[i] * values[i];
+            const double residual = std::fma(values[i], values[i], -product);
+            const double sign = i == 0 ? 1.0 : -1.0;
+            append(sign * residual);
+            append(sign * product);
+        }
+        if (count == 0) {
+            return {FlatHorizonStatus::Available, M, M};
+        }
+        if (expansion[count - 1] < 0.0) return absent;
+        for (int i = 0; i < count; ++i) discriminant += expansion[i];
+    }
+    if (!(discriminant > 0.0) || !std::isfinite(discriminant)) return unavailable;
+    const double separation = std::scalbn(std::sqrt(discriminant), exponent);
+    const double plus = M + separation;
+    if (!std::isfinite(plus)) return unavailable;
+    // Product identity r+ r-=a^2+Q^2 avoids cancellation in M-sqrt(D).
+    // Divide before multiplying to avoid overflow of the unscaled squares.
+    const double minus = (high / plus) * high + (low / plus) * low;
+    if (!std::isfinite(minus) || minus < 0.0 || !(minus < plus) ||
+        (high != 0.0 && minus == 0.0)) return unavailable;
+    return {FlatHorizonStatus::Available, plus, minus};
+}
+
+inline double KerrSchildFamily::OuterHorizonRadius() const {
+    if (params_.Lambda > 0.0) {
+        if (!HasHorizon()) return -1.0;
+        return KottlerBlackHoleHorizonRadius(params_.M, params_.Lambda);
+    }
+    const auto roots = FlatHorizons();
+    return roots.status == FlatHorizonStatus::Available ? roots.outer : -1.0;
 }
 
 inline double KerrSchildFamily::InnerHorizonRadius() const {
-    if (!HasHorizon()) return -1.0;
-
-    double M = params_.M;
-    double a = params_.a;
-    double Q = params_.Q;
-
-    if (params_.Lambda > 0.0) return 0.0;
-
-    double discriminant = M * M - a * a - Q * Q;
-    return M - std::sqrt(discriminant);
+    if (params_.Lambda > 0.0) return HasHorizon() ? 0.0 : -1.0;
+    const auto roots = FlatHorizons();
+    return roots.status == FlatHorizonStatus::Available ? roots.inner : -1.0;
 }
 
 inline bool KerrSchildFamily::HasHorizon() const {
-    double M = params_.M;
-    double a = params_.a;
-    double Q = params_.Q;
-
-    if (!(M > 0.0)) return false;
+    if (!(params_.M > 0.0)) return false;
     if (params_.Lambda > 0.0) {
-        SIRIUS_ASSERT(a == 0.0 && Q == 0.0);
-        return 9.0 * params_.Lambda * M * M <= 1.0;
+        SIRIUS_ASSERT(params_.a == 0.0 && params_.Q == 0.0);
+        return 9.0 * params_.Lambda * params_.M * params_.M <= 1.0;
     }
-    return (M * M >= a * a + Q * Q);
+    return FlatHorizons().status != FlatHorizonStatus::Absent;
 }
+
 
 inline double KerrSchildFamily::CosmologicalHorizonRadius() const {
     if (!(params_.Lambda > 0.0) || params_.a != 0.0 || params_.Q != 0.0) return -1.0;

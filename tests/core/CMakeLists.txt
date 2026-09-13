@@ -8,6 +8,8 @@ add_executable(sirius_core_tests
     render_pipeline_integration_test.cpp
     blackbody_test.cpp
     camera_sampling_test.cpp
+    camera_film_differential_test.cpp
+    camera_continuous_projection_test.cpp
     camera_test.cpp
     cie1931_observer_authority_test.cpp
     coordinates_test.cpp
@@ -22,6 +24,7 @@ add_executable(sirius_core_tests
     christoffel_test.cpp
     kerr_orbit_authority_test.cpp
     kerr_schild_field_equation_test.cpp
+    horizon_authority_test.cpp
     kerr_test.cpp
     metric_derivative_test.cpp
     metric_loader_test.cpp
@@ -42,6 +45,11 @@ add_executable(sirius_core_tests
     xyz_srgb_authority_test.cpp
     spectral_radiance_test.cpp
     starfield_test.cpp
+    point_source_response_test.cpp
+    point_source_transfer_test.cpp
+    source_sky_differential_test.cpp
+    source_sky_map_test.cpp
+    kerr_infinity_test.cpp
     tensor_test.cpp
 )
 

@@ -10,6 +10,7 @@
 
 #include "support/scoped_environment.h"
 
+#include <array>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
@@ -304,22 +305,65 @@ sirius::base::Expected<float> DispatchSmokeKernel(std::size_t device_index,
 
     const sirius::backend::BufferHandle bindings[] = {*radii_buffer, *factors_buffer,
                                                       *params_buffer};
-    if (auto dispatched = (*device)->Dispatch(*kernel, bindings, (kCount + 63) / 64, 1, 1);
-        !dispatched) {
-        return std::unexpected(dispatched.error());
-    }
-
-    std::vector<float> factors(kCount);
-    if (auto read =
-            (*device)->ReadBuffer(*factors_buffer, std::as_writable_bytes(std::span(factors)));
-        !read) {
-        return std::unexpected(read.error());
-    }
-
+    // Both dispatches execute the same idempotent shader. A second call must
+    // reuse this device's pipeline while still measuring actual queue work.
+    sirius::backend::DispatchTiming timing;
     float max_difference = 0.0f;
-    for (std::uint32_t i = 0; i < kCount; ++i) {
-        const float reference = 1.0f - 2.0f * kMass / radii[i];
-        max_difference = std::max(max_difference, std::abs(factors[i] - reference));
+    for (int invocation = 0; invocation < 2; ++invocation) {
+        // A cached call that omits execution must not inherit the first result.
+        const std::vector<float> unwritten(kCount, -42.0f);
+        if (auto written = (*device)->WriteBuffer(
+                *factors_buffer, std::as_bytes(std::span<const float>(unwritten)));
+            !written) {
+            return std::unexpected(written.error());
+        }
+        if (auto dispatched =
+                (*device)->Dispatch(*kernel, bindings, (kCount + 63) / 64, 1, 1, &timing);
+            !dispatched) {
+            return std::unexpected(dispatched.error());
+        }
+        if (!std::isfinite(timing.submit_wait_ms) || timing.submit_wait_ms <= 0.0 ||
+            timing.submit_wait_ms > 1000.0) {
+            return sirius::base::Fail(sirius::base::ErrorDomain::kDevice,
+                                      "measure smoke dispatch",
+                                      "actual submission timing is invalid or exceeds the stop");
+        }
+        const std::string prefix = invocation == 0 ? "dispatch_created_" : "dispatch_cached_";
+        ::testing::Test::RecordProperty(prefix + "pipeline_setup_ms",
+                                        std::to_string(timing.pipeline_setup_ms));
+        ::testing::Test::RecordProperty(prefix + "command_setup_ms",
+                                        std::to_string(timing.command_setup_ms));
+        ::testing::Test::RecordProperty(prefix + "submit_wait_ms",
+                                        std::to_string(timing.submit_wait_ms));
+        ::testing::Test::RecordProperty(prefix + "cleanup_ms", std::to_string(timing.cleanup_ms));
+        ::testing::Test::RecordProperty(prefix + "total_ms", std::to_string(timing.total_ms));
+        EXPECT_EQ(timing.pipeline_created, invocation == 0);
+        EXPECT_TRUE(std::isfinite(timing.pipeline_setup_ms));
+        EXPECT_TRUE(std::isfinite(timing.command_setup_ms));
+        EXPECT_TRUE(std::isfinite(timing.submit_wait_ms));
+        EXPECT_TRUE(std::isfinite(timing.cleanup_ms));
+        EXPECT_TRUE(std::isfinite(timing.total_ms));
+        EXPECT_GE(timing.pipeline_setup_ms, 0.0);
+        EXPECT_GE(timing.command_setup_ms, 0.0);
+        EXPECT_GT(timing.submit_wait_ms, 0.0);
+        EXPECT_GE(timing.cleanup_ms, 0.0);
+        EXPECT_NEAR(timing.total_ms, timing.pipeline_setup_ms + timing.command_setup_ms +
+                        timing.submit_wait_ms + timing.cleanup_ms,
+                    1e-9 * std::max(1.0, timing.total_ms));
+        std::vector<float> factors(kCount);
+        if (auto read =
+                (*device)->ReadBuffer(*factors_buffer, std::as_writable_bytes(std::span(factors)));
+            !read) {
+            return std::unexpected(read.error());
+        }
+        for (std::uint32_t i = 0; i < kCount; ++i) {
+            if (!std::isfinite(factors[i])) {
+                return sirius::base::Fail(sirius::base::ErrorDomain::kDevice,
+                                          "read smoke dispatch", "nonfinite shader output");
+            }
+            const float reference = 1.0f - 2.0f * kMass / radii[i];
+            max_difference = std::max(max_difference, std::abs(factors[i] - reference));
+        }
     }
     return max_difference;
 }
@@ -339,6 +383,61 @@ TEST(VulkanBackend, EnumerationReportsInsteadOfThrowing) {
         EXPECT_GT(info.render_memory_bytes, 0u)
             << "the adapter cannot govern buffers without an allocatable render heap";
     }
+}
+
+TEST(VulkanBackend, BufferAllocationLimitCountsActualResidencyAndPreservesExistingBuffers) {
+    const auto devices = EnumerateVulkanDevices();
+    ASSERT_TRUE(devices.has_value()) << devices.error().Description();
+    if (devices->empty()) GTEST_SKIP() << "no Vulkan device present";
+    const auto selected = ResolveVulkanDeviceIndex(*devices);
+    ASSERT_TRUE(selected.has_value()) << selected.error().Description();
+    auto opened = CreateVulkanDevice(*selected);
+    ASSERT_TRUE(opened.has_value()) << opened.error().Description();
+    auto& device = **opened;
+    EXPECT_EQ(device.BufferAllocationBytes(), 0u);
+    ASSERT_TRUE(device.SetBufferAllocationLimit(0).has_value());
+    EXPECT_FALSE(device.CreateBuffer(1, BufferUsage::kStorage).has_value());
+    EXPECT_EQ(device.BufferAllocationBytes(), 0u);
+    ASSERT_TRUE(device.SetBufferAllocationLimit(1024 * 1024).has_value());
+    const auto buffer = device.CreateBuffer(1024, BufferUsage::kStorage);
+    ASSERT_TRUE(buffer.has_value()) << buffer.error().Description();
+    auto resident = device.BufferAllocationBytes();
+    EXPECT_GE(resident, 1024u);
+    const std::array<std::uint32_t, 4> sent{0x12345678u, 0xffffffffu, 0u, 0xabcdef01u};
+    ASSERT_TRUE(device.WriteBuffer(*buffer, std::as_bytes(std::span(sent))).has_value());
+    ASSERT_TRUE(device.SetBufferAllocationLimit(resident + 1).has_value());
+    EXPECT_FALSE(device.CreateBuffer(2, BufferUsage::kStorage).has_value());
+    EXPECT_EQ(device.BufferAllocationBytes(), resident);
+    EXPECT_FALSE(device.SetBufferAllocationLimit(resident - 1).has_value());
+    EXPECT_FALSE(device.CreateBuffer(2, BufferUsage::kStorage).has_value());
+    EXPECT_EQ(device.BufferAllocationBytes(), resident);
+    std::array<std::uint32_t, 4> received{};
+    ASSERT_TRUE(
+        device.ReadBuffer(*buffer, std::as_writable_bytes(std::span(received))).has_value());
+    EXPECT_EQ(received, sent);
+    // Observe this driver's allocation requirement for a one-byte buffer, then
+    // make the same request with one fewer byte of actual residency available.
+    ASSERT_TRUE(device.SetBufferAllocationLimit(1024 * 1024).has_value());
+    const auto tiny = device.CreateBuffer(1, BufferUsage::kStorage);
+    ASSERT_TRUE(tiny.has_value());
+    const auto tiny_allocation = device.BufferAllocationBytes() - resident;
+    EXPECT_GE(tiny_allocation, 1u);
+    RecordProperty("one_byte_buffer_actual_allocation", std::to_string(tiny_allocation));
+    resident = device.BufferAllocationBytes();
+    ASSERT_TRUE(device.SetBufferAllocationLimit(resident + tiny_allocation - 1).has_value());
+    const auto padded = device.CreateBuffer(1, BufferUsage::kStorage);
+    EXPECT_FALSE(padded.has_value());
+    if (!padded && tiny_allocation > 1) {
+        EXPECT_NE(padded.error().detail().find("actual Vulkan allocation"), std::string::npos);
+    }
+    EXPECT_EQ(device.BufferAllocationBytes(), resident);
+    ASSERT_TRUE(
+        device.ReadBuffer(*buffer, std::as_writable_bytes(std::span(received))).has_value());
+    EXPECT_EQ(received, sent);
+    // The exact full residency cap rejects another allocation without damage.
+    ASSERT_TRUE(device.SetBufferAllocationLimit(resident).has_value());
+    EXPECT_FALSE(device.CreateBuffer(1, BufferUsage::kStorage).has_value());
+    EXPECT_EQ(device.BufferAllocationBytes(), resident);
 }
 
 TEST(VulkanBackend, SlangKernelMatchesCpuReference) {

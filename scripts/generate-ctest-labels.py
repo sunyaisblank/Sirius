@@ -36,6 +36,19 @@ OPERATIONAL = "Mandatory;Operational"
 # would let a new operating surface silently escape the build gate.
 SUITE_LABELS = {
     # Mathematical foundations (build gate)
+    "CameraFilmDifferential": MANDATORY,
+    "CelestialTangentBasis": MANDATORY,
+    "HorizonAuthority": MANDATORY,
+    "CameraContinuousProjection": MANDATORY,
+    "CoupledTransport": MANDATORY,
+    "KernelInfinityDevice": MANDATORY,
+    "KerrInfinity": MANDATORY,
+    "PointSourceResponseTest": MANDATORY,
+    "PointSourceTransfer": MANDATORY,
+    "SourceSkyDifferential": MANDATORY,
+    "SourceSkyInfinityTrace": MANDATORY,
+    "SourceSkyMap": MANDATORY,
+    "SourceSkyMapTrace": MANDATORY,
     "DualNumberTests": MANDATORY,
     "TensorTests": MANDATORY,
     "TensorInverseTests": MANDATORY,
