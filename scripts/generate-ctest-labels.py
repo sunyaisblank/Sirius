@@ -46,6 +46,7 @@ SUITE_LABELS = {
     "KerrInfinity": MANDATORY,
     "PointSourceResponseTest": MANDATORY,
     "PointSourceDetector": MANDATORY,
+    "RetainedCameraProgram": MANDATORY,
     "PointSourceTransfer": MANDATORY,
     "SourceSkyDifferential": MANDATORY,
     "SourceSkyInfinityTrace": MANDATORY,

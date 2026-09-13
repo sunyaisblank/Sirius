@@ -21,7 +21,7 @@ absolute error and validity. The complete probe accepts 32 input words and
 returns 384 words with metadata, input echoes and 104 retained triples.
 
 Run `python3 tests/support/retained_camera/check_shaders.py` from the checkout
-to compile all three probes in both narrow modes. This requires Slang and
+to compile the retained arithmetic/camera probes in both narrow modes. This requires Slang and
 SPIR-V Tools. It validates SPIR-V and checks ordered arithmetic, no Float64 or
 Int64 arithmetic, denormal preservation and round-to-nearest-even mode. Outputs
 stay under `out/retained-camera-build/` and are disposable. This command does
@@ -52,3 +52,37 @@ is a preparation failure, with no scientific readback. A bounded staged
 implementation is required before further physical qualification; changing
 compiler flags alone did not resolve it.
 Never discard low parts or error radii to fit the scalar continuation record.
+
+## Bounded camera program
+
+`program.py` emits the complete metric, frame, launch and four-column derivative
+calculation as 5,292 arithmetic instructions using 227 live retained registers.
+`program_camera_probe.slang` evaluates this stream on the device using the same
+retained arithmetic primitives. The host emits operations and register indices;
+it does not substitute CPU values for the camera computation. This avoids the
+monolithic driver's compiler expansion while preserving low parts, error radii
+and validity across every intermediate. It remains a development camera stage,
+separate from production transport and source publication.
+
+The two `RetainedCameraProgram` backend tests build and execute this stage in
+both narrow modes. Each checks all 104 scientific values of 20 independent
+fixtures, refuses eight invalid requests, rejects 2,080 component mutations and
+20 whole-packet low-part deletions, and checks that refusals publish no partial
+scientific payload. On the pinned Radeon/Dozen route the combined tests pass in
+about three seconds, with 111,560 explicitly allocated buffer bytes and pipeline
+preparation below one second. These timings describe the small stage tests.
+
+`observed_inputs.json` contains new helper-context observations from the exact
+original packets, made by `packet_coefficients_probe.slang`. It explicitly does
+not claim equality with an unobserved historical production compiler context.
+`reference_cases.json` freezes independent 100/180-digit reference calculations
+and their observed precision gaps. Run `reference.py --freeze-cases` explicitly
+to regenerate these witnesses; ordinary builds never regenerate the oracle.
+The host test includes conversion rounding when comparing the retained error
+radius with a finite reference and separately requires relative error below
+`1e-11` for each scientific group. A wide radius cannot excuse inaccurate values.
+
+To compile just the bounded stage, run `check_shaders.py --probe
+program_camera_probe`. Ordinary CMake backend-test builds generate the program,
+fixture header and both shader variants under their build directory and bind
+these test inputs into the revision-specific Mandatory receipt.

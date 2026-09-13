@@ -4,6 +4,7 @@ This checks emitted SPIR-V, not device arithmetic or production integration.
 All outputs stay under the checkout's ignored out/ directory.
 """
 
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -22,19 +23,29 @@ def digest(path):
 
 
 def main():
-    compiler = shutil.which("slangc") or "/opt/slang/bin/slangc"
+    global OUTPUT
+    probes = ("pair_operations_probe", "pair_camera_probe", "full_camera_probe", "program_camera_probe")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--probe", action="append", choices=probes)
+    parser.add_argument("--output", type=Path, default=OUTPUT)
+    parser.add_argument("--compiler")
+    args = parser.parse_args()
+    OUTPUT = args.output
+    compiler = args.compiler or shutil.which("slangc") or "/opt/slang/bin/slangc"
     OUTPUT.mkdir(parents=True, exist_ok=True)
     receipt = OUTPUT / "checks.json"
     receipt.unlink(missing_ok=True)
     sources = {path.name: digest(path) for path in sorted(SOURCE.glob("*.slang"))}
     results = []
-    for probe in ("pair_operations_probe", "pair_camera_probe", "full_camera_probe"):
+    for probe in args.probe or probes:
         for compensated in (False, True):
             name = probe + ("-fp32comp" if compensated else "-fp32")
             raw = OUTPUT / (name + ".compiler.spv")
             assembly = OUTPUT / (name + ".spvasm")
             product = OUTPUT / (name + ".spv")
             flags = ["-DSIRIUS_FP32_COMP"] if compensated else []
+            if probe == "program_camera_probe":
+                flags.append("-O0")
             command = [compiler, str(SOURCE / (probe + ".slang")), "-I", str(SOURCE),
                        *flags, "-target", "spirv", "-profile", "spirv_1_5", "-entry",
                        "ComputeMain", "-stage", "compute", "-denorm-mode-fp32", "preserve",

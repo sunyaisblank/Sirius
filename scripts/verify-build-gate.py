@@ -43,6 +43,9 @@ TESTED_ARTIFACTS = {
 # Bind selectors to that location as well as bytes: unrelated stable files
 # cannot stand in for the kernels the compiled test executables actually load.
 TEST_INPUT_PATHS = {
+    "retained_camera_fixture": "tests/backend/retained_camera/program_fixture.h",
+    "retained_camera_fp32_spv": "tests/backend/retained_camera/program_camera_probe-fp32.spv",
+    "retained_camera_fp32comp_spv": "tests/backend/retained_camera/program_camera_probe-fp32comp.spv",
     "smoke_spv": "kernels/smoke.spv",
     "parity_probe_spv": "kernels/parity_probe.spv",
     "parity_probe_fp32comp_spv": "kernels/parity_probe_fp32comp.spv",

@@ -939,6 +939,12 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    RetainedCameraProgram.Fp32CompletePhysicalLaunchAndRefusals
+    RetainedCameraProgram.CompensatedCompletePhysicalLaunchAndRefusals
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     SchwarzschildTests.MetricMatchesIndependentCartesianKerrSchildForm
     SchwarzschildTests.AnalyticDerivativesMatchIndependentFiniteDifferences
     SchwarzschildTests.HorizonAndCaptureUseTheExactArealRadius

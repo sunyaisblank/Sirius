@@ -82,9 +82,21 @@ prototype and recorded arithmetic repairs, were subsequently recovered from
 session tool output into `tests/support/retained_camera`. All three probes
 compile in both narrow modes and pass SPIR-V and arithmetic-control checks.
 The recovered independent eight-case reference also passes its high-precision
-stability and null/frequency identity checks. Physical execution and production
-integration are separate outstanding checks. Historical success counts are
-not current validation.
+stability and null/frequency identity checks. The twelve original input packets
+were subsequently recovered exactly and their helper-context coefficients were
+observed on the pinned device. The monolithic complete camera exceeded 21 GiB
+of host memory during pipeline preparation and was stopped before dispatch.
+
+A bounded replacement camera stage now executes 5,292 retained arithmetic
+instructions using 227 live registers. Both narrow-mode backend tests pass all
+20 complete 104-value camera fixtures, 16 total invalid-request refusals,
+4,160 component mutation controls and 40 whole-packet low-part deletion controls.
+Its 100/180-digit independent fixture regeneration is byte-for-byte reproducible.
+The observed stage needs 111,560 explicit buffer bytes and prepares in under
+one second on the pinned Radeon/Dozen route. This resolves the camera prototype's
+compiler expansion for these tests. Production transport, dense events,
+continuation and detector integration still require their own implementation
+and validation; historical success counts are not current evidence.
 
 No external operating domain was admitted at configure time (0/8). Physical
 Radeon, WSL2/Dozen, native Windows/macOS build and runtime, native viewer input,
