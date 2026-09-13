@@ -118,6 +118,15 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p",
     },
     "P2": {
+        "gtest:PointSourceDetector.OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport",
+        "gtest:PointSourceDetector.ImageFrequencyAndTransmissionAreAppliedOnce",
+        "gtest:PointSourceDetector.FoldKeepsBothImagesOfTheSameCatalogueEntry",
+        "gtest:PointSourceDetector.FoldOwnershipSurvivesRotationTranslationAndTighterRefinement",
+        "gtest:PointSourceDetector.ExhaustionCancellationAndFailedTracesHaveNoPartialRadiance",
+        "gtest:PointSourceDetector.PolynomialFoldResolvesCloseImagesBetweenTheCoarseNodes",
+        "gtest:PointSourceDetector.DisconnectedVisibilityIslandAndStripeUseActualImageVisibility",
+        "gtest:RenderSessionProbe.PhysicalPointDetectorCompletesAMovingThinLensKerrFrame",
+        "gtest:CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets",
         "gtest:KernelParity.MetricConnectionAndJetShareRepresentedParametersFp32",
         "gtest:KernelParity.MetricConnectionAndJetShareRepresentedParametersCompensatedFp32",
         "gtest:KernelParity.MetricConnectionAndJetShareRepresentedParametersFp64",
@@ -201,6 +210,15 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:StarfieldPointTest.BeamFootprintSuppressesStarFlicker",
     },
     "P3": {
+        "gtest:PointSourceDetector.OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport",
+        "gtest:PointSourceDetector.ImageFrequencyAndTransmissionAreAppliedOnce",
+        "gtest:PointSourceDetector.FoldKeepsBothImagesOfTheSameCatalogueEntry",
+        "gtest:PointSourceDetector.FoldOwnershipSurvivesRotationTranslationAndTighterRefinement",
+        "gtest:PointSourceDetector.ExhaustionCancellationAndFailedTracesHaveNoPartialRadiance",
+        "gtest:PointSourceDetector.PolynomialFoldResolvesCloseImagesBetweenTheCoarseNodes",
+        "gtest:PointSourceDetector.DisconnectedVisibilityIslandAndStripeUseActualImageVisibility",
+        "gtest:RenderSessionProbe.PhysicalPointDetectorCompletesAMovingThinLensKerrFrame",
+        "gtest:CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets",
         "gtest:PointSourceResponseTest.RestrictedCellsPreserveOriginalGaussianAndNormalization",
         "gtest:PointSourceResponseTest.RestrictedCellsOwnSharedEdgesAndKeepParentCutoff",
         "gtest:PointSourceResponseTest.RestrictedCellsDeclineInvalidOrUnrepresentedGeometry",
@@ -418,8 +436,8 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "3d93af94b65ce77858721d1c41cdd7e28c519995bf041729ccaa31087ca12f94",
-    "required_dimensions": "2e0663d93520443f6505e5db08ef82eb4d45d303c15d8421cb10fb6994bc0fc2",
+    "acceptance_criteria": "dd4b216213e9d030ea306d5d1aae577fba0a03dd10fc3006f20d8e0aec264a14",
+    "required_dimensions": "356fa43b7a823a2fbaa5001a21b3676cdaed1e516e9b1a944a716389fbabc299",
     "capability_contracts": "48c5b338c14c11e2ad7275322cd72f4bd014df621ca69e65e119621066fd5c6c",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}

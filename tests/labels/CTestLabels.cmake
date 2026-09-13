@@ -112,6 +112,7 @@ set_tests_properties(
     CameraContinuousProjection.FixedPupilAndObserverArePreserved
     CameraContinuousProjection.FisheyeCropMaskCentreAndAntipodalRim
     CameraContinuousProjection.RefinementDeclinesLostCoordinatesAndDirections
+    CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets
     CameraContinuousProjection.CropTranslationDoesNotRenormalizeOrMaskProjection
     CameraContinuousProjection.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff
     CameraContinuousProjection.InvalidAndUnsupportedProjectionPublishesNoRay
@@ -1286,6 +1287,13 @@ set_tests_properties(
     MorrisThorneTracerTest.CentralRayTerminatesAtExplicitThroatBoundary
     MorrisThorneTracerTest.DeflectionFallsQuadraticallyWithImpactParameter
     MorrisThorneTracerTest.EdgeRayEscapes
+    PointSourceDetector.DisconnectedVisibilityIslandAndStripeUseActualImageVisibility
+    PointSourceDetector.ExhaustionCancellationAndFailedTracesHaveNoPartialRadiance
+    PointSourceDetector.FoldKeepsBothImagesOfTheSameCatalogueEntry
+    PointSourceDetector.FoldOwnershipSurvivesRotationTranslationAndTighterRefinement
+    PointSourceDetector.ImageFrequencyAndTransmissionAreAppliedOnce
+    PointSourceDetector.OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport
+    PointSourceDetector.PolynomialFoldResolvesCloseImagesBetweenTheCoarseNodes
     RayBundleTest.BundleFiniteAndDeterministicKerr
     RayBundleTest.CurvatureStencilPreservesMassScaleAndBothSpinSigns
     RayBundleTest.CurvatureStencilStaysInsideTheActualKerrChartDomain
@@ -1402,6 +1410,7 @@ set_tests_properties(
     RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr
     RenderSessionProbe.LaterGoodCameraSampleCannotEraseCpuNumericalFailure
     RenderSessionProbe.NumericalRayFailureKeepsCpuTilesPrivateAndPreventsOutput
+    RenderSessionProbe.PhysicalPointDetectorCompletesAMovingThinLensKerrFrame
     RenderSessionProbe.PointStarfieldRejectsValuesItsGeneratorWouldClamp
     RenderSessionProbe.PolarisedRequestsDeclineAndTwoSheetIsRepresented
     RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration

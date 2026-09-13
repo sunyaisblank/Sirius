@@ -142,6 +142,61 @@ TEST(RenderSessionProbe, CpuKerrRenderProducesValidPpmThroughTheOwnedWriter) {
     EXPECT_TRUE(varies) << "PPM image is constant (nothing rendered)";
 }
 
+TEST(RenderSessionProbe, PhysicalPointDetectorCompletesAMovingThinLensKerrFrame) {
+    const ScopedTemporaryDirectory temporary_directory("sirius-point-detector-probe");
+    SessionConfig config;
+    config.width = 4;
+    config.height = 2;
+    config.samples_per_pixel = 1;
+    config.tile_size = 4;
+    config.enable_parallel_rendering = false;
+    // Inspect linear radiance: display grading can legitimately suppress this
+    // deliberately faint catalogue. EXR also exercises the connected writer.
+    config.output_path = (temporary_directory.path() / "detector.exr").string();
+    config.metric_id = sirius::core::MetricId::Kerr;
+    // A weak-field frame isolates detector connection from critical-ray
+    // qualification. Curved critical images have separate transport oracles.
+    config.black_hole_mass = 1;
+    config.black_hole_spin = .7;
+    config.observer_distance = 50;
+    config.camera_fov = 2;
+    config.camera_beta_forward = .1;
+    config.camera_beta_up = .8;
+    config.lens_type = sirius::core::LensType::ThinLens;
+    config.camera_focus_distance = 50;
+    config.enable_disk = false;
+    config.enable_bloom = false;
+    config.point_starfield = true;
+    config.point_starfield_config.star_count = 100000;
+    config.point_starfield_config.brightness_scale = 1e-5f;
+    RenderSession session;
+    const auto configured = session.Configure(config);
+    ASSERT_TRUE(configured) << configured.error().Description();
+    ASSERT_EQ(session.Execute(), SessionState::Complete);
+    const auto pixels = session.GetDisplayBuffer().SnapshotFloatData();
+    ASSERT_EQ(pixels.size(), 4u * 2u * 4u);
+    double total = 0;
+    bool varies = false;
+    for (std::size_t i = 0; i < pixels.size(); ++i) {
+        ASSERT_TRUE(std::isfinite(pixels[i]));
+        if (i % 4 == 3) continue;
+        total += pixels[i];
+        varies = varies || pixels[i] != pixels[0];
+    }
+    EXPECT_GT(total, 0);
+    EXPECT_TRUE(varies);
+
+    // The sampler must use each worker's tracer and keep packet caches local.
+    config.enable_parallel_rendering = true;
+    config.thread_count = 2;
+    config.tile_size = 2;
+    config.output_path = (temporary_directory.path() / "detector-parallel.exr").string();
+    RenderSession parallel;
+    ASSERT_TRUE(parallel.Configure(config));
+    ASSERT_EQ(parallel.Execute(), SessionState::Complete);
+    EXPECT_EQ(parallel.GetDisplayBuffer().SnapshotFloatData(), pixels);
+}
+
 TEST(RenderSessionProbe, FilmAffectsDisplayOutputButNeverLinearExr) {
     namespace fs = std::filesystem;
     const ScopedTemporaryDirectory temporary_directory("sirius-film-probe");

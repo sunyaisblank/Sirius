@@ -24,22 +24,67 @@ that their Sirius commits and uncommitted source had been preserved. Obsolete
 builds and render outputs were removed. New build output stays in
 `bin/linux-gcc`; other projects were left untouched.
 
+## Implementation completed during closeout
+
+The CPU launch now differentiates the actual smooth film and Cartesian pupil
+coordinates, including the metric frame rebuilt at the displaced pupil event.
+All four physical columns enter joint transport with their units preserved.
+Kerr-family metric Hessians now come from the same geometric authorities as
+the nominal metric, replacing repeated numerical derivative sampling where
+the analytic Hessian is represented. Endpoint sampling preserves small
+covariant variations directly, and the shared Hamiltonian contractions reduce
+repeated work across the four columns.
+
+Polarisation reconditioning now uses the regular live chart's Eulerian gauge.
+This resolves the reproduced past-horizon capture failure without changing the
+central trajectory. The live camera family is also used by the numerical
+failure diagnostic reference.
+
+The complete 487-test core executable passed. Focused transport/source tests
+passed, as did the original CPU PPM, PNG/EXR and polarisation output workflows.
+The PNG/EXR run tested `0b2520e`; the PPM run tested `4514adb`. These results do
+not constitute a full Mandatory pass on the eventual final revision.
+
+The CPU point-source detector is now connected to the actual continuous camera
+and worker-local tracer for uncharged, zero-cosmological-constant Kerr-family
+metrics. It preserves the original Gaussian packet and pupil through adaptive
+subdivision, retraces candidate image roots, retains multiple images, and applies
+their individual frequency and transmission. Failed or exhausted packets cannot
+publish partial radiance. Other metric families retain their existing route.
+Forward source-coordinate bounds avoid unnecessary refinement around empty fold
+regions without increasing the work cap or relaxing the radiance tolerance.
+
+Seven detector tests pass, including rotated folds, a close polynomial image
+pair, disconnected visibility, shared ownership and cancellation/exhaustion.
+A moving ThinLens Kerr frame with 100,000 stars produces finite, nonconstant
+linear EXR output, identical with one and two rendering workers. Display grading
+suppressed this deliberately faint fixture; its linear radiance is nonzero.
+All 488 core tests pass after the camera tangent-basis correction that preserves
+exact geometric zeros in continuous detector offsets. ThinLens and celestial
+basis probes also pass on the pinned Radeon/Dozen route. These checks establish
+the tested CPU connection, not full-scene convergence or throughput.
+
 ## Remaining implementation
 
 The September 10 handoff reported incomplete retained-precision observer-frame
 and camera transport, joint admission of the central ray and four physical
 film/pupil derivatives, dense event handling, and physical detector integration.
-It also reported unresolved CPU critical refusals and output workflows,
-full-workload image quality/performance, and native platform qualification.
-Those obligations remain open; this closeout does not claim to resolve them.
+The GPU production migration, GPU detector integration, remaining saved CPU
+critical-ray cases, full-workload image quality/performance, and native platform
+qualification remain open. The CPU corrections above close specific reproduced
+failures; they do not establish that every historical critical case is resolved.
 
 The handoff referenced staged retained-pair arithmetic and camera-direction
 modules under the former `.sirius-release-work/evidence/` directory. That
 directory and those modules were already absent when this closeout began.
-Their reported numerical results cannot be reproduced from the surviving
-checkout alone. Recover the original artifacts, or reimplement and independently
-validate that stage, before relying on it. Historical success counts are not
-current validation.
+Nine retained camera shaders, including the later complete metric/frame/launch
+prototype and recorded arithmetic repairs, were subsequently recovered from
+session tool output into `tests/support/retained_camera`. All three probes
+compile in both narrow modes and pass SPIR-V and arithmetic-control checks.
+The recovered independent eight-case reference also passes its high-precision
+stability and null/frequency identity checks. Physical execution and production
+integration are separate outstanding checks. Historical success counts are
+not current validation.
 
 No external operating domain was admitted at configure time (0/8). Physical
 Radeon, WSL2/Dozen, native Windows/macOS build and runtime, native viewer input,
@@ -54,7 +99,9 @@ Repository structure, operating-model validation and negative controls, build-po
 negative controls, and generated CTest labels passed. The baseline Mandatory run
 passed its first 678 tests; it was stopped during the Vulkan parity tests before
 resuming implementation. This is not a complete Mandatory pass. CI formatting
-was then applied to 22 first-party files. Logs remain in `.git/closeout/`.
+was then applied to 22 first-party files. A later Mandatory run at `f76db09`
+passed its first 687 tests, including physical Radeon camera and metric probes,
+before being stopped to resume development. Logs remain in `.git/closeout/`.
 
 The owner expanded the task to complete the remaining renderer development.
 The gaps above are the starting point for that continuing work, not a final

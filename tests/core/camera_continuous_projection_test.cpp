@@ -194,6 +194,30 @@ TEST(CameraContinuousProjection, RefinementDeclinesLostCoordinatesAndDirections)
     EXPECT_EQ(lost_direction.error(), CameraProjectionFailure::Unrepresentable);
 }
 
+TEST(CameraContinuousProjection, AngularProjectionPreservesGeometricZerosForDetectorOffsets) {
+    CameraConfig config;
+    config.width = 4;
+    config.height = 2;
+    config.fov = 2;
+    config.focus_distance = 50;
+    const auto camera = CreateCamera(LensType::ThinLens, config);
+    const auto projection = camera->ProjectFilmForObserver(.5, .5, .2f, .7f);
+    ASSERT_TRUE(projection);
+    ASSERT_TRUE(projection->differential);
+    const auto& p = projection->differential->angular_jacobian;
+    // Here y is the least-aligned reference. The second celestial axis is
+    // proportional to n cross y, while vertical film displacement changes q_y.
+    EXPECT_EQ(p[1][1], 0);
+    const double determinant = std::fma(p[0][0], p[1][1], -p[0][1] * p[1][0]);
+    ASSERT_NE(determinant, 0);
+    const double sigma = (2 * std::numbers::pi / 180) / 2 * .3;
+    for (const std::array<double, 2> z : {std::array<double, 2>{4, 0}, {0, 4}}) {
+        const double dx = sigma * (p[1][1] * z[0] - p[0][1] * z[1]) / determinant;
+        const double dy = sigma * (-p[1][0] * z[0] + p[0][0] * z[1]) / determinant;
+        EXPECT_TRUE(camera->ProjectFilmOffsetForObserver(.5, .5, dx, dy, .2f, .7f));
+    }
+}
+
 TEST(CameraContinuousProjection, CropTranslationDoesNotRenormalizeOrMaskProjection) {
     CameraConfig c;
     c.width = 1280;

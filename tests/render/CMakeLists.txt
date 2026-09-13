@@ -18,6 +18,7 @@ add_executable(sirius_render_tests
     vulkan_render_test.cpp
     ray_bundle_test.cpp
     starfield_point_test.cpp
+    point_source_detector_test.cpp
     doppler_toggle_test.cpp
     camera_aberration_test.cpp
     pixel_sampling_test.cpp

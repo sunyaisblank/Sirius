@@ -98,9 +98,15 @@ template <std::floating_point Scalar>
     const Scalar first_inverse_norm = Scalar(1) / std::sqrt(first_norm_squared);
     for (Scalar& component : basis.first) component *= first_inverse_norm;
 
-    basis.second = {direction[1] * basis.first[2] - direction[2] * basis.first[1],
-                    direction[2] * basis.first[0] - direction[0] * basis.first[2],
-                    direction[0] * basis.first[1] - direction[1] * basis.first[0]};
+    // n x (reference - n_ref n) = n x reference. Evaluate that reduced
+    // expression so the component along the reference axis is exactly zero,
+    // rather than the residue of two rounded longitudinal products.
+    const std::array<Scalar, 3> reference{
+        Scalar(reference_index == 0), Scalar(reference_index == 1), Scalar(reference_index == 2)};
+    basis.second = {
+        (direction[1] * reference[2] - direction[2] * reference[1]) * first_inverse_norm,
+        (direction[2] * reference[0] - direction[0] * reference[2]) * first_inverse_norm,
+        (direction[0] * reference[1] - direction[1] * reference[0]) * first_inverse_norm};
     for (const Scalar component : basis.second) {
         if (!std::isfinite(component)) return std::nullopt;
     }

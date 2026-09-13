@@ -287,8 +287,11 @@ public void MakeCelestialTangentBasis<T:__BuiltinFloatingPointType>(vector<T,3> 
     } else {
         reference = vector<T,3>(T(0), T(0), T(1));
     }
-    first = normalize(reference - dot(reference, direction) * direction);
-    second = cross(direction, first);
+    vector<T,3> projected = reference - dot(reference, direction) * direction;
+    T inverseNorm = T(1) / sqrt(dot(projected, projected));
+    first = projected * inverseNorm;
+    // Remove the identically zero longitudinal cross product before rounding.
+    second = cross(direction, reference) * inverseNorm;
 }
 
 // Singular-value geometry of the propagated transverse 2x2 Jacobi map. The

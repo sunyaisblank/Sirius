@@ -45,6 +45,7 @@ SUITE_LABELS = {
     "KernelInfinityDevice": MANDATORY,
     "KerrInfinity": MANDATORY,
     "PointSourceResponseTest": MANDATORY,
+    "PointSourceDetector": MANDATORY,
     "PointSourceTransfer": MANDATORY,
     "SourceSkyDifferential": MANDATORY,
     "SourceSkyInfinityTrace": MANDATORY,

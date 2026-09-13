@@ -717,8 +717,12 @@ ProjectContinuousFilm(const CameraConfig& config, LensType lens, double film_x, 
             phase_space.direction[i][column] = d;
             if (column < 2) {
                 map.direction_derivative[i][column] = d;
-                map.angular_jacobian[0][column] += basis->first[i] * d;
-                map.angular_jacobian[1][column] += basis->second[i] * d;
+                // The celestial axes are orthogonal to n. Project dq directly:
+                // subtracting its longitudinal part first introduces spurious
+                // coupling when two rounded longitudinal terms cancel. Exact
+                // geometric zeros must survive the inverse film map.
+                map.angular_jacobian[0][column] += basis->first[i] * dq[column][i] / length;
+                map.angular_jacobian[1][column] += basis->second[i] * dq[column][i] / length;
             }
         }
     }

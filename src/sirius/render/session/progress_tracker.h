@@ -159,6 +159,7 @@ class ProgressTracker {
         return tiles_total_;
     }
     CancellationToken& GetCancellationToken() { return cancel_token_; }
+    const CancellationToken& GetCancellationToken() const { return cancel_token_; }
 
     void SetCallback(ProgressCallback callback) {
         std::lock_guard<std::mutex> lock(mutex_);
