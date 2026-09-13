@@ -461,6 +461,8 @@ bool ValidCoupledControl(const Rk45CoupledState& state) {
         return false;
     for (const auto& column : state.variations)
         if (!FiniteVector(column.displacement) || !FiniteVector(column.derivative)) return false;
+    for (const double scale : state.column_scale)
+        if (!std::isfinite(scale) || !(scale > 0.0)) return false;
     return true;
 }
 
@@ -804,13 +806,13 @@ double Geodesic::CoupledStateError(const Lightray& first,
             const auto& first_column = first_variations[column];
             const auto& second_column = second_variations[column];
             const double x_scale =
-                control.tolerance *
-                (control.length_scale + std::max(std::abs(first_column.displacement(component)),
-                                                 std::abs(second_column.displacement(component))));
+                control.tolerance * (control.length_scale * control.column_scale[column] +
+                                     std::max(std::abs(first_column.displacement(component)),
+                                              std::abs(second_column.displacement(component))));
             const double v_scale =
-                control.tolerance *
-                (control.frequency_scale + std::max(std::abs(first_column.derivative(component)),
-                                                    std::abs(second_column.derivative(component))));
+                control.tolerance * (control.frequency_scale * control.column_scale[column] +
+                                     std::max(std::abs(first_column.derivative(component)),
+                                              std::abs(second_column.derivative(component))));
             const double x_error = std::abs(first_column.displacement(component) -
                                             second_column.displacement(component)) /
                                    x_scale;

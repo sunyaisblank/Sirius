@@ -356,118 +356,35 @@ bool GeodesicTracer::FindDiskIntersection(const Vec4& start_position, const Vec4
 // Initialise a Lightray from a camera ray.
 // =============================================================================
 Lightray GeodesicTracer::InitializeLightray(const CameraRay& camera_ray,
-                                            relativity::ObserverFrame* launch_frame) {
-    // Value-initialize the full device-facing record so screen coordinates and
-    // alignment padding never carry indeterminate bytes into copies or hashes.
+                                            relativity::ObserverFrame* launch_frame,
+                                            GeodesicVariations* launch_variations) {
     Lightray ray{};
-
-    // Camera ray origin is Boyer-Lindquist (t, r, theta, phi).
-    double t = camera_ray.origin(0);
-    double r = camera_ray.origin(1);
-    double th = camera_ray.origin(2);
-    double ph = camera_ray.origin(3);
-
-    // Kerr-Schild Cartesian integration is regular on the axis. Preserve the
-    // requested observer event instead of silently moving near-polar cameras.
-    SIRIUS_PRE(std::isfinite(th) && th >= 0.0 && th <= std::numbers::pi);
-
-    // Position: Boyer-Lindquist -> Kerr-Schild Cartesian using the spin-aware
-    // oblate transform.
-    coordinates::Vec4Bl pos_bl(t, r, th, ph);
-    const double absolute_spin = cached_a_ * cached_m_;
-    coordinates::Vec4Cart pos_cart = coordinates::BlToKerrSchildCart(pos_bl, absolute_spin);
-
-    const double sin_th = std::sin(th);
-    // CameraRay::direction is the screen ray in the camera rest frame, resolved
-    // on the local (radial, +theta, +phi) axes.  Build those axes as coordinate
-    // seeds at the actual oblate position; the metric-aware frame construction
-    // below orthonormalises them before applying the observer boost.
-    const double cartesian_phi = std::atan2(pos_cart.y, pos_cart.x);
-    const double sin_ph = std::sin(cartesian_phi);
-    const double cos_ph = std::cos(cartesian_phi);
-    std::array<Vec4, 3> spatial_seeds;
-    spatial_seeds[0](1) = sin_th * cos_ph;
-    spatial_seeds[0](2) = sin_th * sin_ph;
-    spatial_seeds[0](3) = std::cos(th);
-    spatial_seeds[1](1) = std::cos(th) * cos_ph;
-    spatial_seeds[1](2) = std::cos(th) * sin_ph;
-    spatial_seeds[1](3) = -sin_th;
-    spatial_seeds[2](1) = -sin_ph;
-    spatial_seeds[2](2) = cos_ph;
-
-    // Operator beta is screen-forward/up/right.  The CameraRay component basis
-    // is radial/+theta/+phi, hence forward=-radial and up=-theta.
-    const std::array<double, 3> local_beta{-camera_ray.beta_forward, -camera_ray.beta_up,
-                                           camera_ray.beta_right};
-
-    IMetric* observer_metric = outgoing_chart_ ? &outgoing_chart_->Source() : metric_;
-    const auto frame_at = [&](const Vec4& position) {
-        Metric4d metric;
-        Tensor<Dual<double>, 4, 4, 4> derivatives;
-        observer_metric->Evaluate(position, metric, derivatives);
-        Metric4d inverse_metric;
-        if (!observer_metric->InverseMetric(position, inverse_metric)) {
-            inverse_metric = TensorOps::Inverse(metric);
-        }
-        const auto reference_frame =
-            relativity::EulerianObserverFrame(metric, inverse_metric, spatial_seeds);
-        if (!reference_frame.has_value()) {
-            return std::optional<relativity::ObserverFrame>{};
-        }
-        return relativity::BoostObserverFrame(*reference_frame, local_beta);
-    };
-
-    Vec4 pos_double;
-    pos_double(0) = pos_cart.t;
-    pos_double(1) = pos_cart.x;
-    pos_double(2) = pos_cart.y;
-    pos_double(3) = pos_cart.z;
-    if (outgoing_chart_ && !outgoing_chart_->FromIngoing(pos_double)) {
-        ray.position = pos_double;
+    IMetric& observer_metric = outgoing_chart_ ? outgoing_chart_->Source() : *metric_;
+    auto launch = LaunchCameraRay(observer_metric, cached_a_ * cached_m_, camera_ray);
+    if (!launch) {
         ray.terminated = 3;
         return ray;
     }
-    auto camera_frame = frame_at(pos_double);
-    SIRIUS_ASSERT(camera_frame.has_value());
-
-    // A finite-aperture ray starts across the camera's instantaneous rest
-    // pupil. Apply its right/up displacement to the launch event before
-    // rebuilding the metric-orthonormal frame there. Direction-only jitter
-    // would still launch every sample through one pinhole event.
-    if (camera_ray.aperture_up != 0.0 || camera_ray.aperture_right != 0.0) {
-        for (int component = 0; component < 4; ++component) {
-            pos_double(component) +=
-                -camera_frame->spatial[1](component) * camera_ray.aperture_up +
-                camera_frame->spatial[2](component) * camera_ray.aperture_right;
-        }
-        if (outgoing_chart_ && !outgoing_chart_->FromIngoing(pos_double)) {
-            ray.position = pos_double;
-            ray.terminated = 3;
-            return ray;
-        }
-        camera_frame = frame_at(pos_double);
-        SIRIUS_ASSERT(camera_frame.has_value());
-    }
-
     if (outgoing_chart_) {
-        const auto mapping = outgoing_chart_->FromIngoing(pos_double);
+        const auto mapping = outgoing_chart_->FromIngoing(launch->position);
         if (!mapping) {
-            ray.position = pos_double;
+            ray.position = launch->position;
             ray.terminated = 3;
             return ray;
         }
-        pos_double = mapping->position;
-        camera_frame->time = mapping->Apply(camera_frame->time);
-        for (auto& axis : camera_frame->spatial) axis = mapping->Apply(axis);
+        launch->position = mapping->position;
+        launch->tangent = mapping->Apply(launch->tangent);
+        launch->observer.time = mapping->Apply(launch->observer.time);
+        for (auto& axis : launch->observer.spatial) axis = mapping->Apply(axis);
+        for (auto& column : launch->variations) {
+            column.displacement = mapping->Apply(column.displacement);
+            column.derivative = mapping->Apply(column.derivative);
+        }
     }
-    ray.position = pos_double;
-    if (launch_frame != nullptr) *launch_frame = *camera_frame;
-    const std::array<double, 3> rest_direction{camera_ray.direction(1), camera_ray.direction(2),
-                                               camera_ray.direction(3)};
-    const auto past_ray = relativity::PastDirectedCameraRay(*camera_frame, rest_direction);
-    SIRIUS_ASSERT(past_ray.has_value());
-    SIRIUS_ASSERT((*past_ray)(0) < 0.0);
-    ray.velocity = *past_ray;
+    ray.position = launch->position;
+    ray.velocity = launch->tangent;
+    if (launch_frame) *launch_frame = launch->observer;
+    if (launch_variations) *launch_variations = launch->variations;
 
     // Initialise the remaining fields.
     Vec4 vel_for_accel;
@@ -670,7 +587,8 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray) {
                    opposite_escape_radius < *ellis_throat_radius));
 
     relativity::ObserverFrame launch_frame;
-    Lightray ray = InitializeLightray(camera_ray, &launch_frame);
+    GeodesicVariations launch_variations;
+    Lightray ray = InitializeLightray(camera_ray, &launch_frame, &launch_variations);
 
     if (ray.terminated != 0 || HasInvalidState(ray)) {
         result.final_position = ray.position;
@@ -708,11 +626,27 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray) {
         // this is an estimator policy, not a global observable-error proof.
         coupled.tolerance = 1.0e-4 / (4.0 * config_.max_steps);
         coupled.stationary = true;
-        for (int column = 0; column < 2; ++column) {
-            coupled.variations[column].derivative =
-                (*launch_screen)[column] * coupled.frequency_scale;
-            coupled.variations[column + 2].displacement =
-                (*launch_screen)[column] * coupled.length_scale;
+        if (camera_ray.phase_space) {
+            coupled.variations = launch_variations;
+            for (int column = 0; column < 2; ++column) {
+                coupled.column_scale[column] =
+                    std::hypot(camera_ray.phase_space->direction[0][column],
+                               camera_ray.phase_space->direction[1][column],
+                               camera_ray.phase_space->direction[2][column]);
+            }
+            for (int column = 2; column < 4; ++column) {
+                const double pupil_scale = std::hypot(camera_ray.phase_space->pupil_right[column],
+                                                      camera_ray.phase_space->pupil_up[column]);
+                if (pupil_scale > 0.0)
+                    coupled.column_scale[column] = pupil_scale / coupled.length_scale;
+            }
+        } else {
+            for (int column = 0; column < 2; ++column) {
+                coupled.variations[column].derivative =
+                    (*launch_screen)[column] * coupled.frequency_scale;
+                coupled.variations[column + 2].displacement =
+                    (*launch_screen)[column] * coupled.length_scale;
+            }
         }
     }
 
@@ -1019,12 +953,13 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray) {
             std::optional<TraceResult::Beam> trial_source_maps;
             if (accepted && (fine.event == Event::Outer || fine.event == Event::Causal)) {
                 TraceResult::Beam source;
-                accepted = SampleSourceSkyMaps(
-                    *metric_, fine.ray.position, fine_sample->ray.velocity,
-                    {fine_sample->variations[0].displacement,
-                     fine_sample->variations[1].displacement},
-                    {fine_sample->variations[0].derivative, fine_sample->variations[1].derivative},
-                    1.0, outgoing_chart_, source);
+                const auto angular =
+                    CameraAngularVariations(fine_sample->variations, camera_ray.phase_space);
+                accepted = angular && SampleSourceSkyMaps(
+                                          *metric_, fine.ray.position, fine_sample->ray.velocity,
+                                          {(*angular)[0].displacement, (*angular)[1].displacement},
+                                          {(*angular)[0].derivative, (*angular)[1].derivative}, 1.0,
+                                          outgoing_chart_, source);
                 if (source.infinity_source_failure) {
                     accepted = false;
                     retryable = *source.infinity_source_failure ==
@@ -1205,6 +1140,20 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray) {
                 for (int column = 0; column < 2; ++column) {
                     bundle.xi[column] = coupled.variations[first + column].displacement * scale;
                     bundle.V[column] = coupled.variations[first + column].derivative * scale;
+                }
+                if (camera_ray.phase_space && config_.bundle_point_source) {
+                    const auto angular =
+                        CameraAngularVariations(coupled.variations, camera_ray.phase_space);
+                    if (!angular) {
+                        result.numerical_failure = true;
+                        break;
+                    }
+                    for (int column = 0; column < 2; ++column) {
+                        bundle.xi[column] =
+                            (*angular)[column].displacement * config_.bundle_angular_size;
+                        bundle.V[column] =
+                            (*angular)[column].derivative * config_.bundle_angular_size;
+                    }
                 }
             } else if (d_lambda > 0.0 && !StepBundle(prev_pos, prev_vel, ray.position, ray.velocity,
                                                      d_lambda, bundle)) {

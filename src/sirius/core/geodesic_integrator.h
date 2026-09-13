@@ -118,13 +118,15 @@ enum class CoupledStepFailure {
     return "unknown";
 }
 
-// The first pair is angular, the second parallel-spatial. Monitoring both
-// makes central acceptance independent of which physical bundle is published.
+// Four independently seeded variations share one acceptance decision. Unit
+// scales retain the same error budget when camera columns use pixels and
+// geometric pupil lengths instead of unit angular/position perturbations.
 struct Rk45CoupledState {
     GeodesicVariations variations;
     double length_scale = 0.0;
     double frequency_scale = 0.0;
     double tolerance = 0.0;
+    std::array<double, 4> column_scale{1.0, 1.0, 1.0, 1.0};
     bool stationary = false;
     std::uint64_t central_stages = 0;
     std::uint64_t variation_stages = 0;

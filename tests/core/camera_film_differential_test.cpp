@@ -1,5 +1,7 @@
 #include "sirius/core/camera.h"
+#include "sirius/core/camera_launch.h"
 #include "sirius/core/camera_sampling.h"
+#include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/core/observer_frame.h"
 
 #include <gtest/gtest.h>
@@ -370,5 +372,141 @@ TEST(CameraFilmDifferential, CustomCameraDeclinesUnavailableDifferential) {
     } camera;
     EXPECT_TRUE(camera.GenerateRayForObserver(50, 60).active);
     EXPECT_FALSE(camera.FilmDifferentialForObserver(50, 60));
+}
+TEST(CameraFilmDifferential, FullLaunchDifferentiatesDisplacedMovingKerrObserver) {
+    for (const double spin : {-0.9, 0.0, 0.9}) {
+        KerrSchildFamily metric(KerrSchildParams::Kerr(1.0, spin));
+        CameraConfig c;
+        c.r = 12;
+        c.theta = 1.1;
+        c.phi = 0.7;
+        c.beta_x = 0.31;
+        c.beta_y = -0.17;
+        c.beta_z = 0.21;
+        c.width = 1920;
+        c.height = 1080;
+        c.focus_distance = 20;
+        ThinLensCamera camera(c);
+        constexpr double film_x = 704.25, film_y = 367.75;
+        const auto projection = camera.ProjectFilmForObserver(film_x, film_y, 0.73f, 0.29f);
+        ASSERT_TRUE(projection);
+        ASSERT_TRUE(projection->ray.phase_space);
+        const auto launch = LaunchCameraRay(metric, spin, projection->ray);
+        ASSERT_TRUE(launch);
+        Metric4d g;
+        Tensor<Dual<double>, 4, 4, 4> dg;
+        metric.Evaluate(launch->position, g, dg);
+        const auto connection = TensorOps::Christoffel(g, dg);
+        EXPECT_NEAR(TensorOps::InnerProduct(launch->tangent, launch->tangent, g), 0, 2e-14);
+        EXPECT_NEAR(TensorOps::InnerProduct(launch->tangent, launch->observer.time, g), 1, 2e-14);
+        double frame_contribution = 0;
+        for (int column = 0; column < 4; ++column) {
+            // Five-point differences of the complete launch: film coordinates
+            // or physical Cartesian pupil coordinates are varied independently.
+            // This reference does not consume the analytic derivative fields.
+            constexpr double h = 0.002;
+            std::array<CameraLaunch, 4> samples;
+            int index = 0;
+            for (const double offset : {-2 * h, -h, h, 2 * h}) {
+                auto varied = camera.ProjectFilmForObserver(film_x + (column == 0 ? offset : 0),
+                                                            film_y + (column == 1 ? offset : 0),
+                                                            0.73f, 0.29f);
+                ASSERT_TRUE(varied);
+                CameraRay ray = varied->ray;
+                if (column >= 2) {
+                    if (column == 2)
+                        ray.aperture_right += offset;
+                    else
+                        ray.aperture_up += offset;
+                    // Recover the fixed focus-plane point from the central
+                    // ray. Re-evaluating tanf in a separately optimized context
+                    // can change a stored lens coefficient by one float ULP.
+                    const double distance =
+                        -static_cast<double>(c.focus_distance) / projection->ray.direction(1);
+                    std::array<double, 3> q{};
+                    for (int axis = 0; axis < 3; ++axis)
+                        q[axis] = projection->ray.direction(axis + 1) * distance;
+                    if (column == 2)
+                        q[2] -= offset;
+                    else
+                        q[1] += offset;
+                    const double norm = std::hypot(q[0], q[1], q[2]);
+                    for (int axis = 0; axis < 3; ++axis) ray.direction(axis + 1) = q[axis] / norm;
+                }
+                ray.phase_space.reset();
+                const auto sample = LaunchCameraRay(metric, spin, ray);
+                ASSERT_TRUE(sample);
+                samples[index++] = *sample;
+            }
+            Vec4 coordinate = launch->variations[column].derivative;
+            for (int mu = 0; mu < 4; ++mu)
+                for (int nu = 0; nu < 4; ++nu)
+                    for (int axis = 0; axis < 4; ++axis)
+                        coordinate(mu) -= connection.gamma(mu, nu, axis).real *
+                                          launch->tangent(nu) *
+                                          launch->variations[column].displacement(axis);
+            double differentiated_null = 0;
+            for (int mu = 0; mu < 4; ++mu) {
+                const double dx = (samples[0].position(mu) - 8 * samples[1].position(mu) +
+                                   8 * samples[2].position(mu) - samples[3].position(mu)) /
+                                  (12 * h);
+                const double dk = (samples[0].tangent(mu) - 8 * samples[1].tangent(mu) +
+                                   8 * samples[2].tangent(mu) - samples[3].tangent(mu)) /
+                                  (12 * h);
+                EXPECT_NEAR(launch->variations[column].displacement(mu), dx, 2e-10);
+                EXPECT_NEAR(coordinate(mu), dk, 2e-10);
+                double frozen = 0;
+                for (int axis = 0; axis < 3; ++axis)
+                    frozen += launch->observer.spatial[axis](mu) *
+                              projection->ray.phase_space->direction[axis][column];
+                if (column >= 2) frame_contribution += std::abs(coordinate(mu) - frozen);
+                for (int nu = 0; nu < 4; ++nu) {
+                    differentiated_null +=
+                        2 * g(mu, nu).real * launch->tangent(mu) * coordinate(nu);
+                    for (int axis = 0; axis < 4; ++axis)
+                        differentiated_null += dg(axis, mu, nu).real *
+                                               launch->variations[column].displacement(axis) *
+                                               launch->tangent(mu) * launch->tangent(nu);
+                }
+            }
+            EXPECT_NEAR(differentiated_null, 0, 2e-13);
+        }
+        EXPECT_GT(frame_contribution, 1e-4);
+    }
+}
+
+TEST(CameraFilmDifferential, FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns) {
+    KerrSchildFamily metric(KerrSchildParams::Kerr(1.0, 0.6));
+    CameraConfig c;
+    c.beta_x = 0.2;
+    c.beta_y = -0.1;
+    c.beta_z = 0.3;
+    c.yaw = 0.3f;
+    c.pitch = 0.2f;
+    c.roll = -0.4f;
+    PinholeCamera camera(c);
+    const auto projection = camera.ProjectFilmForObserver(437.25, 720.125);
+    ASSERT_TRUE(projection);
+    const auto launch = LaunchCameraRay(metric, 0.6, projection->ray);
+    ASSERT_TRUE(launch);
+    const auto angular = CameraAngularVariations(launch->variations, projection->ray.phase_space);
+    ASSERT_TRUE(angular);
+    const auto screen = relativity::ObserverScreenBasis(
+        launch->observer,
+        {projection->ray.direction(1), projection->ray.direction(2), projection->ray.direction(3)});
+    ASSERT_TRUE(screen);
+    for (int column = 0; column < 2; ++column)
+        for (int mu = 0; mu < 4; ++mu) {
+            EXPECT_DOUBLE_EQ((*angular)[column].displacement(mu), 0);
+            EXPECT_NEAR((*angular)[column].derivative(mu), (*screen)[column](mu), 2e-14);
+            EXPECT_DOUBLE_EQ(launch->variations[column + 2].displacement(mu), 0);
+            EXPECT_DOUBLE_EQ(launch->variations[column + 2].derivative(mu), 0);
+        }
+    auto invalid = projection->ray;
+    invalid.phase_space->direction[0][2] = std::numeric_limits<double>::quiet_NaN();
+    EXPECT_FALSE(LaunchCameraRay(metric, 0.6, invalid));
+    invalid = projection->ray;
+    invalid.phase_space->film_to_angle = {};
+    EXPECT_FALSE(CameraAngularVariations(launch->variations, invalid.phase_space));
 }
 }  // namespace sirius::core::test

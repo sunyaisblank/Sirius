@@ -13,6 +13,7 @@
 // Marrone (2020).
 
 #include "sirius/core/camera.h"
+#include "sirius/core/camera_launch.h"
 #include "sirius/core/coordinates.h"
 #include "sirius/core/disk/novikov_thorne_disk.h"
 #include "sirius/core/disk/turbulence.h"
@@ -437,9 +438,9 @@ class GeodesicTracer {
 
     // Convert a camera ray (BL) into a Cartesian Lightray, normalised to null,
     // and return the same metric-orthonormal camera frame used for launch.
-    sirius::core::Lightray InitializeLightray(
-        const sirius::core::CameraRay& camera_ray,
-        sirius::core::relativity::ObserverFrame* launch_frame);
+    sirius::core::Lightray InitializeLightray(const sirius::core::CameraRay& camera_ray,
+                                              sirius::core::relativity::ObserverFrame* launch_frame,
+                                              sirius::core::GeodesicVariations* launch_variations);
 
     // Whether an accepted central-ray segment crosses the equatorial disk.
     // Solves z(lambda)=0 on the cubic Hermite segment and returns the crossing

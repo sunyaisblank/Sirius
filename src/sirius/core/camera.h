@@ -110,6 +110,15 @@ struct ThinLensProjectionSample {
     return std::nullopt;
 }
 
+// Columns are continuous film x/y in pixels and Cartesian pupil right/up in
+// geometric length units. The stochastic disk map itself is not differentiated.
+struct CameraPhaseSpaceDifferential {
+    std::array<std::array<double, 4>, 3> direction{};
+    std::array<double, 4> pupil_right{};
+    std::array<double, 4> pupil_up{};
+    std::array<std::array<double, 2>, 2> film_to_angle{};
+};
+
 // Ray emitted by a camera: observer position and unit 4-direction.
 struct CameraRay {
     Vec4 origin;                // Ray origin (observer position)
@@ -126,6 +135,7 @@ struct CameraRay {
     // circular fisheye image). Such a sample contributes black and must not be
     // passed to the geodesic tracer with its deliberately zero direction.
     bool active = true;
+    std::optional<CameraPhaseSpaceDifferential> phase_space;
 };
 
 [[nodiscard]] inline bool IsRepresentedCameraRay(const CameraRay& ray) noexcept {
@@ -630,7 +640,8 @@ ProjectContinuousFilm(const CameraConfig& config, LensType lens, double film_x, 
     const double sx = 2.0 * aspect / config.width, sy = -2.0 / config.height;
     if (!std::isfinite(px) || !std::isfinite(py)) return std::unexpected(Failure::Arithmetic);
     Vector q{};
-    std::array<Vector, 2> dq{};
+    std::array<Vector, 4> dq{};
+    CameraPhaseSpaceDifferential phase_space;
     bool regular = true;
     if (lens == LensType::Pinhole || lens == LensType::ThinLens) {
         const double t = std::tan(config.fov * static_cast<float>(std::numbers::pi) / 360.0f);
@@ -646,6 +657,10 @@ ProjectContinuousFilm(const CameraConfig& config, LensType lens, double film_x, 
                  px * t * config.focus_distance - ray.aperture_right};
             dq = {Vector{0, 0, sx * t * config.focus_distance},
                   Vector{0, -sy * t * config.focus_distance, 0}};
+            dq[2] = {0, 0, -1};
+            dq[3] = {0, 1, 0};
+            phase_space.pupil_right[2] = 1;
+            phase_space.pupil_up[3] = 1;
         } else {
             const double cy = std::cos(config.yaw), syaw = std::sin(config.yaw);
             const double cp = std::cos(config.pitch), sp = std::sin(config.pitch);
@@ -693,15 +708,18 @@ ProjectContinuousFilm(const CameraConfig& config, LensType lens, double film_x, 
     const auto basis = relativity::MakeCelestialTangentBasis(n);
     if (!basis) return std::unexpected(Failure::Arithmetic);
     CameraFilmDifferential map{};
-    for (unsigned column = 0; column < 2; ++column) {
+    for (unsigned column = 0; column < 4; ++column) {
         double longitudinal = 0;
         for (unsigned i = 0; i < 3; ++i) longitudinal += n[i] * dq[column][i];
         for (unsigned i = 0; i < 3; ++i) {
             const double d = (dq[column][i] - n[i] * longitudinal) / length;
             if (!std::isfinite(d)) return std::unexpected(Failure::Arithmetic);
-            map.direction_derivative[i][column] = d;
-            map.angular_jacobian[0][column] += basis->first[i] * d;
-            map.angular_jacobian[1][column] += basis->second[i] * d;
+            phase_space.direction[i][column] = d;
+            if (column < 2) {
+                map.direction_derivative[i][column] = d;
+                map.angular_jacobian[0][column] += basis->first[i] * d;
+                map.angular_jacobian[1][column] += basis->second[i] * d;
+            }
         }
     }
     map.signed_solid_angle_density =
@@ -711,6 +729,8 @@ ProjectContinuousFilm(const CameraConfig& config, LensType lens, double film_x, 
     if (!std::isfinite(map.solid_angle_density)) return std::unexpected(Failure::Arithmetic);
     if (!(map.solid_angle_density > 0)) return std::unexpected(Failure::Unrepresentable);
     result.differential = map;
+    phase_space.film_to_angle = map.angular_jacobian;
+    ray.phase_space = phase_space;
     return result;
 }
 

@@ -135,6 +135,8 @@ set_tests_properties(
     CameraFilmDifferential.PreservesNominalRaysAndExistingOrientationSemantics
     CameraFilmDifferential.GovernedFourSampleLaunchAndSingleObserverBoost
     CameraFilmDifferential.CustomCameraDeclinesUnavailableDifferential
+    CameraFilmDifferential.FullLaunchDifferentiatesDisplacedMovingKerrObserver
+    CameraFilmDifferential.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -307,6 +309,8 @@ set_tests_properties(
 
 set_tests_properties(
     CoupledTransport.FlatFourColumnsUseActualProjectedAndInteriorTrials
+    CoupledTransport.CameraColumnUnitsPreserveTheJointErrorDecision
+    CoupledTransport.PhysicalCameraColumnsReachTheLiveCpuSourceMap
     CoupledTransport.NonfiniteColumnsAndUnrepresentedInteriorDeclineWithoutCommit
     CoupledTransport.EndpointAndZeroFractionIncludeEventTimeVariation
     CoupledTransport.EveryCanonicalColumnCanRejectProjectedAndInteriorCurvedError

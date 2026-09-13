@@ -969,8 +969,14 @@ base::Expected<RenderSession::PixelResult> RenderSession::ShadePixel(int px_coor
                                      std::format("pixel ({}, {}), sample {}: {}", px_coord,
                                                  py_coord, current_sample, reason));
             };
-            CameraRay camera_ray = camera_->GenerateRayForObserver(
-                px_coord, py_coord, sample.image_u, sample.image_v, sample.pupil_u, sample.pupil_v);
+            const auto projection = camera_->ProjectFilmForObserver(
+                static_cast<double>(px_coord) + sample.image_u,
+                static_cast<double>(py_coord) + sample.image_v, sample.pupil_u, sample.pupil_v);
+            if (!projection) {
+                fail_sample("camera projection is not represented");
+                return;
+            }
+            const CameraRay& camera_ray = projection->ray;
             SIRIUS_ASSERT(core::IsRepresentedCameraRay(camera_ray));
             if (!camera_ray.active) return;
             TraceResult trace_result = tracer->Trace(camera_ray);

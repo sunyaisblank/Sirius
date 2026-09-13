@@ -63,6 +63,71 @@ TEST(CoupledTransport, FlatFourColumnsUseActualProjectedAndInteriorTrials) {
     EXPECT_LE(comparison.error_ratio, 1.0);
 }
 
+TEST(CoupledTransport, CameraColumnUnitsPreserveTheJointErrorDecision) {
+    const auto ray = FlatRay();
+    auto control = Columns();
+    const auto original = control.variations;
+    auto perturbed = original;
+    perturbed[0].displacement(2) += 2e-8;
+    perturbed[3].derivative(3) -= 4e-9;
+    const double reference =
+        Geodesic::CoupledStateError(ray, original, ray, perturbed, Control(), control);
+    ASSERT_GT(reference, 1);
+    const std::array<double, 4> units{0.0007, 0.002, 0.2, 0.2};
+    auto scaled_original = original;
+    auto scaled_perturbed = perturbed;
+    for (int column = 0; column < 4; ++column) {
+        scaled_original[column].displacement *= units[column];
+        scaled_original[column].derivative *= units[column];
+        scaled_perturbed[column].displacement *= units[column];
+        scaled_perturbed[column].derivative *= units[column];
+    }
+    control.column_scale = units;
+    const double scaled = Geodesic::CoupledStateError(ray, scaled_original, ray, scaled_perturbed,
+                                                      Control(), control);
+    EXPECT_NEAR(scaled, reference, 1e-12);
+    control.column_scale = {1, 1, 1, 1};
+    EXPECT_LT(Geodesic::CoupledStateError(ray, scaled_original, ray, scaled_perturbed, Control(),
+                                          control),
+              1);
+}
+
+TEST(CoupledTransport, PhysicalCameraColumnsReachTheLiveCpuSourceMap) {
+    KerrSchildFamily metric(KerrSchildParams::Minkowski());
+    CameraConfig config;
+    config.width = 191;
+    config.height = 107;
+    config.beta_x = 0.2;
+    config.beta_y = -0.1;
+    config.beta_z = 0.3;
+    ThinLensCamera camera(config);
+    const auto projection = camera.ProjectFilmForObserver(75.25, 62.75, 0.71f, 0.23f);
+    ASSERT_TRUE(projection);
+    ASSERT_TRUE(projection->ray.phase_space);
+    TracerConfig controls;
+    controls.enable_disk = false;
+    controls.escape_radius = 100;
+    controls.max_steps = 1000;
+    controls.integrator = Control();
+    GeodesicTracer tracer(&metric, controls);
+    const auto physical = tracer.Trace(projection->ray);
+    ASSERT_FALSE(physical.numerical_failure);
+    ASSERT_EQ(physical.outcome, TraceResult::Outcome::Escaped);
+    ASSERT_TRUE(physical.beam.finite_source_map);
+    auto angular_ray = projection->ray;
+    angular_ray.phase_space.reset();
+    const auto angular = tracer.Trace(angular_ray);
+    ASSERT_FALSE(angular.numerical_failure);
+    ASSERT_TRUE(angular.beam.finite_source_map);
+    for (int row = 0; row < 2; ++row)
+        for (int column = 0; column < 2; ++column)
+            EXPECT_NEAR(physical.beam.finite_source_map->jacobian[row][column],
+                        angular.beam.finite_source_map->jacobian[row][column], 1e-11);
+    for (int axis = 0; axis < 3; ++axis)
+        EXPECT_NEAR(physical.beam.finite_source_map->direction[axis],
+                    angular.beam.finite_source_map->direction[axis], 1e-12);
+}
+
 TEST(CoupledTransport, NonfiniteColumnsAndUnrepresentedInteriorDeclineWithoutCommit) {
     KerrSchildFamily metric(KerrSchildParams::Minkowski());
     for (const double invalid :
