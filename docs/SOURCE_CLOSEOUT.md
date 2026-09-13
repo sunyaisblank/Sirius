@@ -201,7 +201,9 @@ CPU boundary tests pass, including live disk-profile, bundle, and horizon checks
 
 The attestation exporter now takes its generated-input inventory from the build
 gate authority, so retained-camera fixtures accompany every qualification
-bundle. Its complete false-evidence controls pass. CPU arithmetic avoids an FMA
+bundle. Hardware/viewer manifest producers and qualification reuse consume that
+same inventory, including the retained-camera fixtures. Their false-evidence and
+missing-input controls pass. CPU arithmetic avoids an FMA
 only for an exact zero factor, preserving signed zero and invalid-input behavior;
 all 491 core tests pass, including the independent retained metric witnesses.
 The installed 128x128 CPU smoke image keeps its original numerical settings and
