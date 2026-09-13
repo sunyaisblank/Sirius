@@ -131,6 +131,8 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:CoupledTransport.AcceptedIncrementsKeepRefinedEventDerivativesTranslationInvariant",
         "gtest:CoupledTransport.EndpointAndZeroFractionIncludeEventTimeVariation",
         "gtest:CoupledTransport.FlatFourColumnsUseActualProjectedAndInteriorTrials",
+        "gtest:CoupledTransport.CameraColumnUnitsPreserveTheJointErrorDecision",
+        "gtest:CoupledTransport.PhysicalCameraColumnsReachTheLiveCpuSourceMap",
         "gtest:CoupledTransport.NonfiniteColumnsAndUnrepresentedInteriorDeclineWithoutCommit",
         "gtest:CoupledTransport.SkyMapIsIndependentOfPhysicalBundleOutputAndWorkLimitDeclines",
         "gtest:RenderSessionProbe.ExhaustedNonKerrRayCannotPublishACompletedBlackFrame",
@@ -288,6 +290,8 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:PointSourceResponseTest.CatalogueBandTransferComposesDensityAndMovingFrequency",
         "gtest:PointSourceTransfer.MovingObserverUsesBandGainAndAngularAreaExactlyOnce",
         "gtest:CameraFilmDifferential.IndependentGeometryAndActualRayStencils",
+        "gtest:CameraFilmDifferential.FullLaunchDifferentiatesDisplacedMovingKerrObserver",
+        "gtest:CameraFilmDifferential.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns",
         "gtest:CameraFilmDifferential.PerspectiveAndFixedPupilSolidAngleLaws",
         "gtest:CameraFilmDifferential.EquidistantCentreLimitAndAntipodalMask",
         "gtest:CameraFilmDifferential.PixelUnitsAndIntegratedRectangleSolidAngle",
@@ -413,8 +417,8 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "4a38643baf451f954a495124d9474c3fe25488e9f25cb55ca897be5adaf0eaaf",
-    "required_dimensions": "cafd33b7c2e65283a497a8ba7b7e485052715075a18e95e3d5de2519e6c9dec4",
+    "acceptance_criteria": "4cd77164dd2fbcebf080c79dc0077349fa4f65a43f6f8f3e7e867584295bd5fb",
+    "required_dimensions": "bbea663f8749fe890065b5785c5f6dd741bc0d86d643ba5237a39064b1c21719",
     "capability_contracts": "48c5b338c14c11e2ad7275322cd72f4bd014df621ca69e65e119621066fd5c6c",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
