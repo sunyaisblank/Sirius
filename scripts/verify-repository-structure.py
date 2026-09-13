@@ -2559,8 +2559,8 @@ def kerr_schild_field_equation_errors(documents: dict[Path, str]) -> list[str]:
         KERR_SCHILD_HOST_AUTHORITY: (
             "IsRepresentedKerrSchildParameters",
             "ComputeNullVector",
-            "H = (2.0 * M * r - Q * Q) / sigma",
-            "H += Lambda * r2 / 3.0",
+            "result = (Scalar(2.0 * p.M) * radius - Scalar(p.Q * p.Q)) / sigma",
+            "result = result + Scalar(p.Lambda) * r2 / Scalar(3.0)",
         ),
         KERR_SCHILD_CURVATURE_ORACLE: (
             "RicciFromConnectionFiniteDifference",
@@ -2628,7 +2628,7 @@ def verify_kerr_schild_field_equation_policy() -> None:
     valid = {
         KERR_SCHILD_HOST_AUTHORITY: (
             "IsRepresentedKerrSchildParameters ComputeNullVector "
-            "H = (2.0 * M * r - Q * Q) / sigma H += Lambda * r2 / 3.0"
+            "result = (Scalar(2.0 * p.M) * radius - Scalar(p.Q * p.Q)) / sigma result = result + Scalar(p.Lambda) * r2 / Scalar(3.0)"
         ),
         KERR_SCHILD_CURVATURE_ORACLE: (
             "RicciFromConnectionFiniteDifference TensorOps::Christoffel(g, dg) "

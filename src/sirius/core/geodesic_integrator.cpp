@@ -484,8 +484,9 @@ Vec4 CoordinateVariation(const GeodesicVariation& variation, const Vec4& tangent
 }
 
 // Differentiate the same Hamiltonian stage as the central integrator. The
-// Hessian is a fourth-order derivative of the metric's own first derivatives.
-// Samples must be finite, distinct and in the concrete metric chart.
+// Hessian comes from the metric's exact derivative hook where available. The
+// fallback differentiates its first derivatives with a fourth-order stencil;
+// those samples must be finite, distinct and in the concrete metric chart.
 bool EvaluateVariationStage(IMetric& metric, const Vec4& position, const Vec4& momentum,
                             const PhaseVariations& columns, PhaseVariations& rhs,
                             Rk45CoupledState& control) {
@@ -498,11 +499,15 @@ bool EvaluateVariationStage(IMetric& metric, const Vec4& position, const Vec4& m
     const auto inverse = InverseAt(&metric, position, g);
     const Vec4 tangent = TensorOps::RaiseIndex(momentum, inverse);
     if (!FiniteVector(tangent)) return false;
-    double second[4][4][4][4]{};
+    MetricHessian hessian;
+    const bool analytic_hessian = metric.EvaluateHessian(position, hessian);
+    if (analytic_hessian) ++control.variation_metric_evaluations;
+    auto& second = hessian.values;
     constexpr std::array<int, 4> offsets{-2, -1, 1, 2};
     const double radius = std::hypot(position(1), position(2), position(3));
     const double local_scale = radius > 0.0 ? radius : control.length_scale;
     for (int axis = control.stationary ? 1 : 0; axis < 4; ++axis) {
+        if (analytic_hessian) break;
         double spacing = 2.5e-4 * local_scale;
         std::array<Vec4, 4> nodes;
         bool represented = false;

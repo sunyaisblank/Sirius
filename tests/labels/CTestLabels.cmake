@@ -632,6 +632,11 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    MetricDerivativeHessian.AnalyticKerrFamilyMatchesIndependentFourthOrderMetricStencil
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     MetricDerivativeTests.KerrSchildDerivativeSymmetry
     MetricDerivativeTests.KerrSchildFiniteDifferenceAgreement
     MetricDerivativeTests.KerrSchildNonZeroDerivatives

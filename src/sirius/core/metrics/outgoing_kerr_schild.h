@@ -40,6 +40,17 @@ class OutgoingKerrSchild final : public IMetric {
         }
     }
 
+    bool EvaluateHessian(const Vec4& position, MetricHessian& hessian) const override {
+        if (!source_.EvaluateHessian(Reflect(position), hessian)) return false;
+        for (int i = 0; i < 4; ++i)
+            for (int j = 0; j < 4; ++j)
+                for (int mu = 0; mu < 4; ++mu)
+                    for (int nu = 0; nu < 4; ++nu)
+                        hessian.values[i][j][mu][nu] *=
+                            kReflection[i] * kReflection[j] * kReflection[mu] * kReflection[nu];
+        return true;
+    }
+
     bool InverseMetric(const Vec4& position, Metric4d& inverse) const override {
         if (!source_.InverseMetric(Reflect(position), inverse)) return false;
         for (int mu = 0; mu < 4; ++mu)

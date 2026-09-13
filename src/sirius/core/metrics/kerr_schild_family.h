@@ -19,6 +19,7 @@
 #include "sirius/core/kerr_orbits.h"
 #include "sirius/core/metrics/metric.h"
 #include "sirius/core/metrics/registry.h"
+#include "sirius/core/second_order_number.h"
 
 #include <algorithm>
 #include <cmath>
@@ -41,10 +42,34 @@ struct KerrSchildParams {
     static KerrSchildParams DeSitter(double Lambda) { return {0, 0, 0, Lambda}; }
 };
 
+namespace metric_detail {
+template <typename Scalar>
+Scalar KerrSchildFactor(const Scalar& radius, const Scalar& z, const KerrSchildParams& p) {
+    Scalar result(0.0);
+    const Scalar r2 = radius * radius;
+    if (p.M != 0.0 || p.Q != 0.0) {
+        const Scalar cosine = z / radius;
+        const Scalar sigma = r2 + Scalar(p.a * p.a) * cosine * cosine;
+        result = (Scalar(2.0 * p.M) * radius - Scalar(p.Q * p.Q)) / sigma;
+    }
+    if (p.a == 0.0 && p.Lambda != 0.0) result = result + Scalar(p.Lambda) * r2 / Scalar(3.0);
+    return result;
+}
+
+template <typename Scalar>
+std::array<Scalar, 4> KerrSchildNullCovector(const Scalar& x, const Scalar& y, const Scalar& z,
+                                             const Scalar& radius, double spin) {
+    const Scalar denominator = radius * radius + Scalar(spin * spin);
+    return {Scalar(1.0), (radius * x + Scalar(spin) * y) / denominator,
+            (radius * y - Scalar(spin) * x) / denominator, z / radius};
+}
+}  // namespace metric_detail
+
 // Kerr-Schild family metric.
 class KerrSchildFamily : public IMetric {
   public:
     KerrSchildFamily();
+    bool EvaluateHessian(const Vec4& position, MetricHessian& hessian) const override;
     explicit KerrSchildFamily(const KerrSchildParams& params);
 
     void Evaluate(const Tensor<double, 4>& pos, Metric4d& g,
@@ -233,57 +258,24 @@ inline void KerrSchildFamily::ComputeNullVector(double x, double y, double z, do
                              std::isfinite(r) && r > 0.0 && l != nullptr;
     SIRIUS_PRE(represented);
     if (!represented) return;
-    double a = params_.a;
-    double a2 = a * a;
-    double r2 = r * r;
-    double denom = r2 + a2;
-
-    // l^mu = (1, (rx + ay)/(r^2 + a^2), (ry - ax)/(r^2 + a^2), z/r).
-    l[0] = 1.0;
-    l[1] = (r * x + a * y) / denom;
-    l[2] = (r * y - a * x) / denom;
-    l[3] = z / r;
+    const auto covector = metric_detail::KerrSchildNullCovector(x, y, z, r, params_.a);
+    for (int component = 0; component < 4; ++component) l[component] = covector[component];
 }
 
 inline double KerrSchildFamily::ComputeH(double r, double z) const {
-    double M = params_.M;
-    double a = params_.a;
-    double Q = params_.Q;
-    double Lambda = params_.Lambda;
-
     const bool finite = std::isfinite(r) && r >= 0.0 && std::isfinite(z);
     SIRIUS_PRE(finite);
     if (!finite) return std::numeric_limits<double>::quiet_NaN();
-
-    const double r2 = r * r;
-    const double a2 = a * a;
-
-    // Divide numerator and denominator by r^2:
-    //   H = (2 M r - Q^2) / (r^2 + a^2 (z/r)^2).
-    // This is algebraically identical to the Kerr-Schild form but does not
-    // square an O(r^2) denominator when the whole represented scene is small.
-    double H = 0.0;
-    if (M != 0.0 || Q != 0.0) {
-        const bool positive_radius = r > 0.0;
-        SIRIUS_PRE(positive_radius);
-        if (!positive_radius) return std::numeric_limits<double>::quiet_NaN();
+    if (params_.M != 0.0 || params_.Q != 0.0) {
+        SIRIUS_PRE(r > 0.0);
+        if (!(r > 0.0)) return std::numeric_limits<double>::quiet_NaN();
         const double cosine = z / r;
-        const double sigma = r2 + a2 * cosine * cosine;
-        const bool represented = std::isfinite(sigma) && sigma > 0.0;
-        SIRIUS_PRE(represented);
-        if (!represented) return std::numeric_limits<double>::quiet_NaN();
-        H = (2.0 * M * r - Q * Q) / sigma;
+        const double sigma = r * r + params_.a * params_.a * cosine * cosine;
+        SIRIUS_PRE(std::isfinite(sigma) && sigma > 0.0);
+        if (!std::isfinite(sigma) || !(sigma > 0.0))
+            return std::numeric_limits<double>::quiet_NaN();
     }
-
-    // Schwarzschild-de Sitter is exactly Kerr-Schild with H += Lambda r^2/3 at
-    // a = 0. The rotating de Sitter forms need a different ansatz, so Lambda with
-    // a != 0 is not represented here; the configuration boundary rejects that
-    // combination rather than letting an approximation stand in.
-    if (a == 0.0 && Lambda != 0.0) {
-        H += Lambda * r2 / 3.0;
-    }
-
-    return H;
+    return metric_detail::KerrSchildFactor(r, z, params_);
 }
 
 inline void KerrSchildFamily::Evaluate(const Tensor<double, 4>& pos, Metric4d& g,
@@ -362,7 +354,7 @@ inline void KerrSchildFamily::Evaluate(const Tensor<double, 4>& pos, Metric4d& g
     // Null vector l^mu and its derivatives.
     double denom = r2 + a2;
     double denom2 = denom * denom;
-    double l[4] = {1.0, (r * x + a * y) / denom, (r * y - a * x) / denom, z / r};
+    const auto l = metric_detail::KerrSchildNullCovector(x, y, z, r, a);
 
     // dl[lam][mu] = d l^mu / d x^lam.
     double dl[4][4] = {{0}};
@@ -426,6 +418,57 @@ inline void KerrSchildFamily::Evaluate(const Tensor<double, 4>& pos, Metric4d& g
             }
         }
     }
+}
+
+inline bool KerrSchildFamily::EvaluateHessian(const Vec4& position, MetricHessian& hessian) const {
+    if (!IsValidEvent(position)) return false;
+    MetricHessian result;
+    if (params_.M == 0 && params_.Q == 0 && params_.Lambda == 0) {
+        hessian = result;
+        return true;
+    }
+    const coordinates::Vec4Cart cart{position(0), position(1), position(2), position(3)};
+    const auto geometry = coordinates::TryKerrSchildRadiusDifferential(cart, params_.a);
+    const auto scaled = coordinates::detail::TrySolveKerrSchildRadius(cart, params_.a);
+    if (!geometry || !scaled || !(scaled->scaled_radius > 0) ||
+        !(scaled->scaled_discriminant_root > 0))
+        return false;
+    SecondOrder3 radius(geometry->radius);
+    radius.gradient = {geometry->dx, geometry->dy, geometry->dz};
+    const std::array<double, 3> point{scaled->scaled_x, scaled->scaled_y, scaled->scaled_z};
+    const double r = scaled->scaled_radius, a = scaled->scaled_a;
+    const double reduced = point[0] * point[0] + point[1] * point[1] + point[2] * point[2] - a * a;
+    const double f_rr = 12 * r * r - 2 * reduced;
+    const double f_r = 2 * r * scaled->scaled_discriminant_root;
+    const double inverse_scale = r / geometry->radius;
+    // Twice differentiate r^4-(x.x-a^2)r^2-a^2 z^2=0, using the
+    // same represented root/gradient as Evaluate. Normalized coordinates
+    // avoid fourth powers of the scene scale in the implicit Hessian.
+    for (int i = 0; i < 3; ++i)
+        for (int j = 0; j < 3; ++j) {
+            const double numerator =
+                (i == j ? 2 * r * r : 0) + (i == 2 && j == 2 ? 2 * a * a : 0) +
+                4 * r * (point[i] * radius.gradient[j] + point[j] * radius.gradient[i]) -
+                f_rr * radius.gradient[i] * radius.gradient[j];
+            radius.hessian[i][j] = (numerator / f_r) * inverse_scale;
+            if (!std::isfinite(radius.hessian[i][j])) return false;
+        }
+    const auto x = SecondOrder3::Variable(position(1), 0);
+    const auto y = SecondOrder3::Variable(position(2), 1);
+    const auto z = SecondOrder3::Variable(position(3), 2);
+    const auto factor = metric_detail::KerrSchildFactor(radius, z, params_);
+    const auto l = metric_detail::KerrSchildNullCovector(x, y, z, radius, params_.a);
+    for (int mu = 0; mu < 4; ++mu)
+        for (int nu = 0; nu < 4; ++nu) {
+            const auto value = factor * l[mu] * l[nu];
+            for (int i = 0; i < 3; ++i)
+                for (int j = 0; j < 3; ++j) {
+                    if (!std::isfinite(value.hessian[i][j])) return false;
+                    result.values[i + 1][j + 1][mu][nu] = value.hessian[i][j];
+                }
+        }
+    hessian = result;
+    return true;
 }
 
 inline bool KerrSchildFamily::InverseMetric(const Tensor<double, 4>& pos, Metric4d& g_inv) const {

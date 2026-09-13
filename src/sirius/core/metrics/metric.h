@@ -27,6 +27,11 @@ struct MetricParameter {
 
 using Config = std::map<std::string, MetricParameter>;
 
+struct MetricHessian {
+    // d_axis d_derivative g_mu_nu, in the same chart as Evaluate.
+    double values[4][4][4][4]{};
+};
+
 // Abstract interface for a spacetime metric.
 class IMetric {
   public:
@@ -67,6 +72,14 @@ class IMetric {
     virtual bool InverseMetric(const Tensor<double, 4>& pos, Metric4d& g_inv) const {
         (void)pos;
         (void)g_inv;
+        return false;
+    }
+
+    // Exact second derivatives where the metric provides them. A false result
+    // leaves the existing independent finite-difference route available.
+    virtual bool EvaluateHessian(const Tensor<double, 4>& pos, MetricHessian& hessian) const {
+        (void)pos;
+        (void)hessian;
         return false;
     }
 

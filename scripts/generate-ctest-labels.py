@@ -37,6 +37,7 @@ OPERATIONAL = "Mandatory;Operational"
 SUITE_LABELS = {
     # Mathematical foundations (build gate)
     "CameraFilmDifferential": MANDATORY,
+    "MetricDerivativeHessian": MANDATORY,
     "CelestialTangentBasis": MANDATORY,
     "HorizonAuthority": MANDATORY,
     "CameraContinuousProjection": MANDATORY,
