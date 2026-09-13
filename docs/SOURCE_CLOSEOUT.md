@@ -6,9 +6,22 @@ on `development/source-closeout-2026-09-13`, based on upstream main at
 history. Release packaging remains disabled pending operating-domain admission.
 
 The renderer integration and focused regression work described below are
-committed. Full renderer acceptance remains unresolved: no complete Mandatory
-receipt has been produced. The current WSL2/Dozen route cannot practically
-complete the large physical point-detector scene at its measured throughput.
+committed. At the user's request, closeout acceptance now covers validation on
+this machine without Vulkan hardware validation. The local selection includes
+CPU rendering, scientific calculations, image writers, the CPU viewer,
+application behavior, and source/build authorities. Vulkan runtime and image
+qualification are outside this closeout; the complete Mandatory release gate
+and external operating-domain requirements remain unchanged.
+
+The local CTest selection excludes the `VulkanBackend`, `KernelParity`,
+`RetainedCameraProgram`, `RetainedComputeTest`, `KernelInfinityDevice`,
+`KernelTrace`, `KernelBeam`, and `VulkanRenderSession` suites, plus
+`RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent` and
+`ViewCommandOperational.VulkanRefinementPublishesProgressiveFrames`.
+The current inventory selects 934 of 1,031 tests. CPU-only retained arithmetic,
+kernel portability emission, Vulkan configuration parsing, and mocked
+cancellation checks remain included. Local results are recorded separately
+from the full Mandatory receipt and cannot enable release packaging.
 
 The recovered history includes `2f7189b` (governed evidence and Vulkan session
 output), `4a685bb` (subpixel point-source filtering), and `b5ef145` (the surviving
