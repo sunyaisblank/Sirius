@@ -29,11 +29,10 @@ class DisplayBuffer;
 
 // The precision-ladder rung the render ran on (recorded in metadata/logs).
 enum class PrecisionRung {
-    Fp32,      // plain single precision, the default (trace.spv)
-    Fp32Comp,  // fp32 with Kahan-compensated state accumulation
-               // (trace_fp32comp.spv); SIRIUS_PRECISION=fp32-comp, any device
-    Fp64,      // double-precision trajectory core (trace_fp64.spv); selected by
-               // SIRIUS_PRECISION=fp64 on devices reporting shaderFloat64
+    Fp32,      // Retained binary32 Kerr-family transport; scalar legacy metrics.
+    Fp32Comp,  // Same retained Kerr-family path; compensated legacy metrics.
+    Fp64,      // Retained Kerr-family transport with exact binary64 products;
+               // binary64 legacy metrics. Requires shaderFloat64.
 };
 
 // Independent residency and submission caps. Expensive workloads admit at most
@@ -64,6 +63,9 @@ struct VulkanRenderStats {
     // Actual Init/Advance/Finalize submissions; separate from zero-ray driver initialization.
     std::array<std::int64_t, 3> continuation_dispatches{};
     std::array<double, 3> maximum_continuation_ms{};
+    bool retained_intervals = false;
+    // Film camera, joint RK, projection, dense sampling, initialization, smooth ray camera.
+    std::array<std::int64_t, 6> retained_stage_dispatches{};
     PrecisionRung precision = PrecisionRung::Fp32;
     bool starfield_uploaded = false;
     bool point_catalogue_uploaded = false;
@@ -73,6 +75,7 @@ struct VulkanRenderStats {
     double maximum_dispatch_ms = 0.0;
     std::int64_t maximum_dispatch_pixels = 0;
     std::int64_t dispatch_target_overshoots = 0;
+    std::int64_t dispatch_subdivisions = 0;
     int dispatch_fallbacks = 0;
     int initialization_dispatches = 0;  // software only, zero active rays
     double initialization_seconds = 0.0;

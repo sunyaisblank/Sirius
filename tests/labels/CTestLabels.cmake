@@ -955,10 +955,15 @@ set_tests_properties(
 
 set_tests_properties(
     RetainedComputeTest.BatchedCameraPreservesPhysicalColumnsAndRejectsInvalidRows
+    RetainedComputeTest.SmoothRayCameraPreservesPhysicalLensDerivatives
     RetainedComputeTest.JointRkStagesRetainCriticalIncrementsAndEmbeddedError
     RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation
     RetainedComputeTest.DenseSegmentsPreserveSmallCovariantArrivalDerivatives
+    RetainedComputeTest.PhysicalInitializationRetainsTheHamiltonianResidual
+    RetainedComputeTest.CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement
+    RetainedComputeTest.SharedTracerCompletesDeviceIntervalsAndRetainsRollbackState
     RetainedComputeTest.RejectedStepRowsCannotExposeOldOrPartialCandidates
+    RetainedComputeTest.Fp64ProductsPreserveIndependentScienceOrDeclineUnsupportedDevices
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -1471,6 +1476,7 @@ set_tests_properties(
     VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p
     VulkanRenderSession.NonSquareMultisamplingCameraAndLensReachLiveKernel
     VulkanRenderSession.ProceduralVolumetricTurbulenceReachesLiveKernel
+    VulkanRenderSession.RetainedMovingThinLensKerrDetectorMatchesCpuLinearRadiance
     VulkanRenderSession.ThinAndVolumetricDopplerSuppressionAffectLiveEmission
     VulkanRenderSession.ZeroActiveTracePreservesRadianceAcrossPrecisionRungs
     PROPERTIES LABELS "Mandatory;Operational;Rendering"

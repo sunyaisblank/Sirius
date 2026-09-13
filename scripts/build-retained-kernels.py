@@ -11,16 +11,17 @@ import struct
 import subprocess
 
 
-def compile_shader(source, destination, compiler, assembler, disassembler, validator):
+def compile_shader(source, destination, compiler, assembler, disassembler, validator, fp64=False):
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
-    subprocess.run([compiler, str(source), "-I", str(source.parent), "-O0",
+    definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
+    subprocess.run([compiler, str(source), *definitions, "-I", str(source.parent), "-O0",
                     "-target", "spirv", "-profile", "spirv_1_5", "-entry", "ComputeMain",
                     "-stage", "compute", "-denorm-mode-fp32", "preserve", "-o", str(raw)],
                    check=True)
     subprocess.run([disassembler, str(raw), "-o", str(assembly)], check=True)
     text = assembly.read_text()
-    if "OpCapability Float64" in text or "OpTypeInt 64" in text or " Fma " in text:
+    if ("OpCapability Float64" in text) != fp64 or "OpTypeInt 64" in text or " Fma " in text:
         raise ValueError("retained stage introduced wide arithmetic or contraction")
     operations = re.findall(r"(%\S+) = OpF(?:Add|Sub|Mul) ", text)
     decorated = set(re.findall(r"OpDecorate (%\S+) NoContraction", text))
@@ -34,7 +35,8 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     local_size = re.search(r"^.*OpExecutionMode " + re.escape(entry) + r" LocalSize.*$",
                            text, re.M)[0]
     text = text.replace(local_size, local_size + "\n               OpExecutionMode " +
-                        entry + " RoundingModeRTE 32", 1)
+                        entry + " RoundingModeRTE 32" +
+                        ("\n               OpExecutionMode " + entry + " RoundingModeRTE 64" if fp64 else ""), 1)
     assembly.write_text(text)
     subprocess.run([assembler, "--target-env", "spv1.5", str(assembly), "-o", str(destination)],
                    check=True)
@@ -69,19 +71,26 @@ def main():
     for kind, build in (("Camera", module.build_camera_program),
                          ("Transport", module.build_transport_program),
                          ("Endpoint", module.build_endpoint_program),
-                         ("Dense", module.build_dense_program)):
+                         ("Dense", module.build_dense_program),
+                         ("Initialize", module.build_initialize_program),
+                         ("RayCamera", module.build_ray_camera_program)):
         program = build()
         prefix = [program["instructions"], program["registers"]]
-        if kind != "Camera":
+        if kind not in ("Camera", "RayCamera"):
             prefix.append(len(program["outputs"]))
         array("k" + kind + "Program", prefix + program["outputs"] + program["operations"])
-        stem = "retained_" + kind.lower()
+        stem = "retained_" + ("ray_camera" if kind == "RayCamera" else kind.lower())
         code = compile_shader(source / (stem + ".slang"),
                               args.output.parent / (stem + ".spv"),
                               args.compiler, args.assembler, args.disassembler, args.validator)
         array("k" + kind + "Shader", code)
-        words = (512 + 4 * program["registers"] if kind == "Camera"
-                 else {"Transport":2404, "Endpoint":769, "Dense":204}[kind] + 5 * program["registers"])
+        wide_code = compile_shader(source / (stem + ".slang"),
+                                   args.output.parent / (stem + "_fp64.spv"),
+                                   args.compiler, args.assembler, args.disassembler, args.validator,
+                                   fp64=True)
+        array("k" + kind + "Fp64Shader", wide_code)
+        words = ((512 if kind == "Camera" else 576) + 4 * program["registers"] if kind in ("Camera", "RayCamera")
+                 else {"Transport":2404, "Endpoint":769, "Dense":204, "Initialize":204}[kind] + 5 * program["registers"])
         lines.append(f"inline constexpr std::size_t k{kind}RowWords = {words};")
         print(kind, program["instructions"], "instructions;", program["registers"],
               "registers;", len(code) * 4, "shader bytes")

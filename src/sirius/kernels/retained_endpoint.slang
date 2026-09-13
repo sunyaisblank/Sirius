@@ -151,6 +151,33 @@ void ComputeMain(uint3 id:SV_DispatchThreadID) {
     if(RTAbsoluteUpper(ReadStored(rowBase+504+5))!=0&&
        RTAbsoluteUpper(ReadStored(rowBase+504+15))!=0) return;
     for(uint i=45;i<53;++i) WriteStored(rowBase+504+5*i,RTConstant(i==49?1:0));
+    if(RTExact(ReadStored(rowBase+504),0)&&RTExact(ReadStored(rowBase+514),0)&&
+       RTExact(ReadStored(rowBase+519),0)) {
+        for(uint i=0;i<4;++i) {
+            for(uint j=0;j<4;++j)
+                WriteStored(rowBase+4+5*(i*4+j),RTConstant(i==j?(i==0?-1:1):0));
+            RetainedTriple p=ReadStored(rowBase+504+5*(8+i));
+            WriteStored(rowBase+4+5*(16+i),i==0?RTNegate(p):p);
+        }
+        uint selected;RetainedTriple temporal;
+        if(!Project(rowBase,selected,temporal)||selected!=0) return;
+        for(uint i=0;i<40;++i) {
+            RetainedTriple phase=ReadStored(rowBase+504+5*(4+i));
+            RetainedTriple physical=i%8==4?RTNegate(phase):phase;
+            if(i==4) {physical=temporal;phase=RTNegate(temporal);}
+            if(i>=8&&i%8==4) {
+                RetainedTriple constraint=RTConstant(0);
+                for(uint axis=1;axis<4;++axis)
+                    constraint=RTAdd(constraint,RTMultiply(Tangent(rowBase,axis),
+                        ReadStored(rowBase+504+5*(4+i+axis))));
+                physical=RTDivide(constraint,temporal);phase=RTNegate(physical);
+            }
+            if(phase.valid==0||physical.valid==0) return;
+            WriteStored(rowBase+104+i*5,phase);
+            WriteStored(rowBase+304+i*5,physical);
+        }
+        outputs[rowBase]=1;outputs[rowBase+1]=0;return;
+    }
     if(!EvaluateProgram(row,rowBase,programBase,count,registers,20)) return;
     uint component;RetainedTriple root;
     if(!Project(rowBase,component,root)) return;

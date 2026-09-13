@@ -4,13 +4,17 @@
 // reproduce the CPU pinhole geometry exactly, so both backends trace the same
 // scene. The CPU tracer places the observer at BlToCartesian(r, inclination,
 // phi=0) and maps image +x -> +phi, image +y (top) -> -theta; the kernel's NDC
-// runs v top-to-bottom, so camUp is +theta_hat. The two integrators differ by
-// design (RK45 Hamiltonian on the CPU, Cartesian RK4 on the kernel), so parity
-// is statistical, not bitwise (docs/ARCHITECTURE.md section 3).
+// runs v top-to-bottom, so camUp is +theta_hat. Retained Kerr-family stages
+// share the Hamiltonian RK45 method and host event/source owner with the CPU.
+// Other device metric shaders retain Cartesian RK4. Precision and arithmetic
+// routes differ, so parity is numerical (docs/ARCHITECTURE.md section 3).
 
 #include "sirius/render/vulkan_renderer.h"
 
 #include "sirius/backend/device.h"
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+#include "sirius/backend/retained_trace_executor.h"
+#endif
 #include "sirius/base/resource_locator.h"
 #include "sirius/core/constants.h"
 #include "sirius/core/coordinates.h"
@@ -351,6 +355,122 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
     params[67] = 0.5f;  // Per-dispatch finite-pupil sample v.
 }
 
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayBuffer& display,
+                                           backend::ComputeDevice& device, PrecisionRung rung,
+                                           const std::function<void(int, int)>& on_tile,
+                                           const std::function<bool()>& should_cancel) {
+    const auto started = std::chrono::steady_clock::now();
+    const auto budget = ResolveBudgetBytes(device.Info().render_memory_bytes);
+    if (!budget) return std::unexpected(budget.error());
+    const auto usable = static_cast<std::uint64_t>(double(*budget) * kResidencyFraction);
+    const auto target = ResolveDispatchTargetMs(kDefaultDispatchTargetMs);
+    if (!target) return std::unexpected(target.error());
+    std::size_t capacity =
+        std::min<std::size_t>(64, static_cast<std::size_t>(config.width) * config.height);
+    while (capacity > 0 && backend::RetainedCompute::RequiredBufferBytes(capacity) +
+                                   kMinTileEdge * kMinTileEdge * kTileWorkingSetBytesPerPixel >
+                               usable)
+        --capacity;
+    if (capacity == 0)
+        return Fail(ErrorDomain::kDevice, "allocate retained renderer",
+                    "budget cannot seat one bounded ray batch");
+    const auto planned = backend::RetainedCompute::RequiredBufferBytes(capacity);
+    // Device scratch reserves a minimum tile independently of the number of
+    // host pixels. A tiny image still fits within that existing reservation.
+    const auto plan = DeriveTilePlan(*budget, std::max(config.width, kMinTileEdge),
+                                     std::max(config.height, kMinTileEdge), planned, kMinTileEdge);
+    if (!plan) return std::unexpected(plan.error());
+    auto limit = device.SetBufferAllocationLimit(usable);
+    if (!limit) return std::unexpected(limit.error());
+    auto compute =
+        backend::RetainedCompute::Create(device, capacity, rung == PrecisionRung::Fp64, *target);
+    if (!compute) return std::unexpected(compute.error());
+    if (device.BufferAllocationBytes() != planned)
+        return Fail(ErrorDomain::kInternal, "allocate retained renderer",
+                    "buffer plan differs from actual allocation");
+    // Poll the owner on this thread; device workers consume only the atomic
+    // result, so an ordinary stateful cancellation callback is never raced.
+    std::atomic<bool> cancelled{false};
+    backend::RetainedTraceExecutor executor(
+        **compute, [&] { return cancelled.load(); }, kDispatchStopMs);
+    // Host work items are individual pixels, independent of device residency.
+    // Each worker has at most one pending ray interval in the bounded batch.
+    RenderSession session(executor, static_cast<int>(capacity), 1);
+    auto worker_config = config;
+    worker_config.write_output = false;
+    worker_config.output_path = SessionConfig{}.output_path;
+    const auto configured = session.Configure(worker_config);
+    if (!configured) return std::unexpected(configured.error());
+    if (on_tile)
+        session.SetProgressCallback(
+            [&](float, int done, int total, double) { on_tile(done, total); });
+    if (!session.Start())
+        return Fail(ErrorDomain::kInternal, "start retained renderer",
+                    "worker session did not start");
+    auto next_progress = std::chrono::steady_clock::now() + std::chrono::seconds(30);
+    while (!session.IsComplete()) {
+        if (session.IsStopping()) cancelled = true;
+        if (should_cancel && should_cancel()) {
+            cancelled = true;
+            (void)session.Cancel();
+        }
+        if (std::chrono::steady_clock::now() >= next_progress) {
+            const auto progress = executor.Statistics();
+            std::clog << "[Vulkan] Retained progress: "
+                      << session.GetTileScheduler().GetCompletedCount() << " pixels, "
+                      << progress.camera_batches << " camera batches, "
+                      << progress.accepted_intervals << " accepted intervals, "
+                      << progress.rejected_intervals << " rejected intervals, "
+                      << progress.batch_subdivisions << " batch subdivisions, "
+                      << progress.safety_fallbacks << " safety reductions\n";
+            next_progress = std::chrono::steady_clock::now() + std::chrono::seconds(30);
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+    session.WaitForCompletion();
+    if (const auto error = executor.Error()) return std::unexpected(*error);
+    if (session.GetState() != SessionState::Complete)
+        return Fail(ErrorDomain::kPhysics, "render retained frame",
+                    session.GetState() == SessionState::Cancelled ? "render cancelled"
+                                                                  : session.GetErrorMessage());
+    if (should_cancel && should_cancel())
+        return Fail(ErrorDomain::kPhysics, "publish retained frame", "render cancelled");
+    const auto pixels = session.GetDisplayBuffer().SnapshotFloatData();
+    if (!std::all_of(pixels.begin(), pixels.end(),
+                     [](float value) { return std::isfinite(value); }))
+        return Fail(ErrorDomain::kPhysics, "publish retained frame", "non-finite linear radiance");
+    display.UpdateTile(0, 0, config.width, config.height, pixels.data());
+    VulkanRenderStats stats;
+    stats.device_name = device.Info().name;
+    stats.metric_name = core::MetricInfoFor(config.metric_id).canonical_name;
+    stats.precision = rung;
+    stats.tile_plan = *plan;
+    stats.explicit_buffer_allocation_bytes = device.BufferAllocationBytes();
+    stats.continuation_capacity = capacity;
+    stats.retained_intervals = true;
+    stats.dispatch_fallbacks = static_cast<int>(executor.Statistics().safety_fallbacks);
+    stats.dispatch_subdivisions =
+        static_cast<std::int64_t>(executor.Statistics().batch_subdivisions);
+    stats.tiles_rendered = session.GetTileScheduler().GetCompletedCount();
+    stats.maximum_dispatch_pixels =
+        static_cast<std::int64_t>(executor.Statistics().maximum_batch_rows);
+    const auto stages = (*compute)->Statistics();
+    for (std::size_t i = 0; i < stages.size(); ++i) {
+        stats.retained_stage_dispatches[i] = static_cast<std::int64_t>(stages[i].submissions);
+        stats.band_dispatches += stats.retained_stage_dispatches[i];
+        stats.dispatch_seconds += stages[i].submit_wait_ms / 1000;
+        stats.maximum_dispatch_ms =
+            std::max(stats.maximum_dispatch_ms, stages[i].maximum_submit_wait_ms);
+        stats.initialization_seconds += stages[i].pipeline_setup_ms / 1000;
+        stats.dispatch_target_overshoots += static_cast<std::int64_t>(stages[i].target_overshoots);
+    }
+    stats.seconds =
+        std::chrono::duration<double>(std::chrono::steady_clock::now() - started).count();
+    return stats;
+}
+#endif
+
 }  // namespace
 
 VulkanDispatchLimits ResolveVulkanDispatchLimits(PrecisionRung precision, bool ray_bundles,
@@ -475,6 +595,15 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
     auto rung = SelectPrecisionRung(info.supports_fp64);
     if (!rung) {
         return std::unexpected(rung.error());
+    }
+
+    if (scene->metric_id == kDispatchKerrSchild) {
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+        return RenderRetained(config, display, device, *rung, on_tile, should_cancel);
+#else
+        return Fail(ErrorDomain::kKernel, "load retained renderer",
+                    "bounded retained kernels were not compiled");
+#endif
     }
 
     const auto spirv = LoadSpirv(*rung);

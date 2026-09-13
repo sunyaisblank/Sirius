@@ -96,6 +96,7 @@ constexpr std::uint32_t kApiVersion = VK_MAKE_API_VERSION(0, 1, 3, 0);
         .supports_fp64 = features.shaderFloat64 == VK_TRUE,
         .preserves_fp32_denormals = float_controls.shaderDenormPreserveFloat32 == VK_TRUE,
         .rounds_fp32_to_nearest = float_controls.shaderRoundingModeRTEFloat32 == VK_TRUE,
+        .rounds_fp64_to_nearest = float_controls.shaderRoundingModeRTEFloat64 == VK_TRUE,
     };
 }
 

@@ -131,6 +131,25 @@ void ComputeMain(uint3 id : SV_DispatchThreadID) {
     if(RTAbsoluteUpper(spin)!=0 && RTAbsoluteUpper(lambda)!=0) return;
     RetainedTriple h=ReadOriginal(45,row);
     if(h.hi<=0 || RTAbsoluteLower(h)<=0) return;
+    if(RTExact(ReadOriginal(0,row),0)&&RTExact(ReadOriginal(2,row),0)&&RTExact(lambda,0)) {
+        // All seven Hamiltonian RHS stages are the same constant eta*p and
+        // eta*P. The defining tableau row sums are exactly one and zero.
+        for(uint i=0;i<40;++i) {
+            RetainedTriple delta=RTConstant(0);
+            if(i%8<4) {
+                RetainedTriple slope=ReadOriginal(8+i,row);
+                if(i%8==0) slope=RTNegate(slope);
+                delta=RTMultiply(h,slope);
+            }
+            RetainedTriple full=RTAdd(ReadOriginal(4+i,row),delta);
+            if(full.valid==0||delta.valid==0) return;
+            WriteStored(rowBase+4+i*5,full);
+            WriteStored(rowBase+204+i*5,full);
+            WriteStored(rowBase+404+i*5,delta);
+            WriteStored(rowBase+604+i*5,RTConstant(0));
+        }
+        outputs[rowBase]=1;outputs[rowBase+1]=7;return;
+    }
     for(uint stage=0;stage<7;++stage) {
         for(uint i=0;i<40;++i) {
             RetainedTriple value=ReadOriginal(4+i,row);

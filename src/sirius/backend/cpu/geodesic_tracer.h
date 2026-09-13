@@ -12,6 +12,7 @@
 // image-order machinery: Bardeen, Press & Teukolsky (1972); Gralla, Lupsasca &
 // Marrone (2020).
 
+#include "sirius/backend/trace_step_executor.h"
 #include "sirius/core/camera.h"
 #include "sirius/core/camera_launch.h"
 #include "sirius/core/coordinates.h"
@@ -389,6 +390,9 @@ class GeodesicTracer {
     // result.outcome describes the termination condition.
     TraceResult Trace(const sirius::core::CameraRay& camera_ray);
 
+    // Non-owning; the executor must outlive this tracer and any active trace.
+    void SetStepExecutor(TraceStepExecutor* executor) { step_executor_ = executor; }
+
     void SetConfig(const TracerConfig& config) {
         SIRIUS_PRE(IsRepresentedTracerConfig(config));
         SIRIUS_PRE(config.wormhole_topology != sirius::core::WormholeTopology::TwoSheet ||
@@ -423,6 +427,7 @@ class GeodesicTracer {
   private:
     sirius::core::IMetric* metric_;
     TracerConfig config_;
+    TraceStepExecutor* step_executor_ = nullptr;
     const sirius::core::OutgoingKerrSchild* outgoing_chart_ = nullptr;
     TraceResult TraceInCurrentChart(const sirius::core::CameraRay& camera_ray);
 

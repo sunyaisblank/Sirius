@@ -91,6 +91,11 @@ base::Expected<void> RenderSession::Configure(const SessionConfig& config) {
     if (const auto issue = SessionConfigIssue(config); issue.has_value()) {
         return base::Fail(base::ErrorDomain::kConfiguration, "configure render session", *issue);
     }
+    if (external_step_executor_ &&
+        (config.backend != RenderBackend::Vulkan || device_workers_ < 1 || device_workers_ > 256 ||
+         device_tile_edge_ < 1 || device_tile_edge_ > 4096))
+        return base::Fail(base::ErrorDomain::kConfiguration, "configure device workers",
+                          "invalid execution backend or worker bounds");
     config_ = config;
     return {};
 }
@@ -552,8 +557,9 @@ base::Expected<void> RenderSession::Initialise() {
 
     // CPU tiles are operator-sized and spiral ordered. Vulkan derives a separate
     // device-budgeted tile plan and reports its actual total at dispatch time.
-    if (config_.backend == RenderBackend::Cpu) {
-        tiles_.Initialise(config_.width, config_.height, config_.tile_size);
+    if (config_.backend == RenderBackend::Cpu || external_step_executor_) {
+        tiles_.Initialise(config_.width, config_.height,
+                          external_step_executor_ ? device_tile_edge_ : config_.tile_size);
         std::cout << "  Tiles:      " << tiles_.GetTileCount() << " (spiral order)" << std::endl;
     } else {
         std::cout << "  Tiles:      device-budget governed (Vulkan)" << std::endl;
@@ -564,7 +570,7 @@ base::Expected<void> RenderSession::Initialise() {
 
     // Progress tracker (Start() before SetTotals to avoid a reset).
     progress_.Start();
-    if (config_.backend == RenderBackend::Cpu) {
+    if (config_.backend == RenderBackend::Cpu || external_step_executor_) {
         progress_.SetTotals(tiles_.GetTileCount(), config_.samples_per_pixel);
     } else {
         progress_.SetTotals(1, 1);
@@ -573,7 +579,7 @@ base::Expected<void> RenderSession::Initialise() {
     // The Vulkan renderer owns device scene construction, resource loading,
     // catalogue upload, and dispatch. Do not construct an unused CPU metric,
     // camera, tracer pool, texture, or duplicate point catalogue first.
-    if (config_.backend == RenderBackend::Vulkan) {
+    if (config_.backend == RenderBackend::Vulkan && !external_step_executor_) {
         const std::size_t point_star_count =
             config_.point_starfield ? config_.point_starfield_config.star_count : 0;
         std::cout << "[Session] Scene evidence: "
@@ -710,6 +716,7 @@ base::Expected<void> RenderSession::Initialise() {
     }
     if (metric_) {
         tracer_ = std::make_unique<GeodesicTracer>(metric_.get(), tracer_config);
+        tracer_->SetStepExecutor(external_step_executor_);
         if (tracer_config.enable_disk) {
             std::cout << "  Disk:       r_in=" << tracer_config.disk_inner
                       << "M, r_out=" << tracer_config.disk_outer << "M" << std::endl;
@@ -740,8 +747,8 @@ base::Expected<void> RenderSession::Initialise() {
     std::cout << "[Session] Color mode: " << mode_name << std::endl;
 
     // Multi-threaded rendering setup.
-    if (config_.enable_parallel_rendering) {
-        num_threads_ = config_.thread_count;
+    if (config_.enable_parallel_rendering || external_step_executor_) {
+        num_threads_ = external_step_executor_ ? device_workers_ : config_.thread_count;
         if (num_threads_ <= 0) {
             // Auto-detect: hardware concurrency, leaving one core for the system.
             num_threads_ = static_cast<int>(std::thread::hardware_concurrency());
@@ -756,6 +763,7 @@ base::Expected<void> RenderSession::Initialise() {
             for (int i = 0; i < num_threads_; ++i) {
                 thread_tracers_.push_back(
                     std::make_unique<GeodesicTracer>(metric_.get(), tracer_config));
+                thread_tracers_.back()->SetStepExecutor(external_step_executor_);
             }
         }
 
@@ -769,8 +777,9 @@ base::Expected<void> RenderSession::Initialise() {
     // The background texture is a physics input, not decorative packaging:
     // substituting grey changes every escaped ray. Missing resources
     // therefore fail initialisation instead of quietly changing the scene.
-    const auto starfield = base::ResolveResource("assets/Starfield.png");
-    if (!starfield || !LoadStarfieldTexture(starfield->string())) {
+    const auto starfield =
+        config_.point_starfield ? std::nullopt : base::ResolveResource("assets/Starfield.png");
+    if (!config_.point_starfield && (!starfield || !LoadStarfieldTexture(starfield->string()))) {
         return base::Fail(
             base::ErrorDomain::kIo, "load render resource",
 #if SIRIUS_RELEASE_RESOURCE_LOCKED
@@ -825,7 +834,7 @@ void RenderSession::ScheduleNextTile() {
     // seam (replacing the retired OptiX single-launch that once lived here). It
     // fills the display buffer directly and fires AllTilesComplete so WriteOutput
     // applies the host display pipeline, exactly as the CPU path does.
-    if (config_.backend == RenderBackend::Vulkan) {
+    if (config_.backend == RenderBackend::Vulkan && !external_step_executor_) {
         RenderVulkanPath();
         return;
     }
@@ -842,7 +851,7 @@ void RenderSession::ScheduleNextTile() {
     }
 
     // Parallel rendering when enabled and multiple threads are available.
-    if (config_.enable_parallel_rendering && num_threads_ > 1) {
+    if ((config_.enable_parallel_rendering || external_step_executor_) && num_threads_ > 1) {
         RenderTilesParallel();
         return;
     }
@@ -970,7 +979,7 @@ base::Expected<RenderSession::PixelResult> RenderSession::ShadePixel(int px_coor
         const int current_sample = sample_index++;
         if (sample_error) return;
         const auto fail_sample = [&](const std::string& reason) {
-            sample_error.emplace(base::ErrorDomain::kPhysics, "shade CPU pixel",
+            sample_error.emplace(base::ErrorDomain::kPhysics, "shade pixel",
                                  std::format("pixel ({}, {}), sample {}: {}", px_coord, py_coord,
                                              current_sample, reason));
         };
@@ -1117,9 +1126,9 @@ base::Expected<RenderSession::PixelResult> RenderSession::ShadePixel(int px_coor
                 if (!film->ray.active) return PointDetectorProbe{};
                 return measure(*film, tracer->Trace(film->ray));
             };
-            const auto detector = EvaluatePointDetector(
-                *star_index_, config_.point_starfield_config.brightness_scale, probe,
-                [&] { return progress_.GetCancellationToken().IsCancelled(); });
+            const auto detector =
+                EvaluatePointDetector(*star_index_, config_.point_starfield_config.brightness_scale,
+                                      probe, [&] { return IsStopping(); });
             if (!detector) {
                 fail_sample(std::format(
                     "point detector failure {} after {} probes, {} cells and {} candidate visits",
@@ -1239,15 +1248,16 @@ void RenderSession::RenderVulkanPath() {
 
     std::cout << "[Session] Vulkan render complete: " << stats->metric_name << " on "
               << stats->device_name << ", " << stats->tiles_rendered << " tile(s) of "
-              << stats->tile_plan.tile_edge << "px in " << stats->band_dispatches
-              << " governed dispatch(es), " << stats->seconds << "s; governed ray submit/wait "
-              << stats->dispatch_seconds << "s total, " << stats->maximum_dispatch_ms
-              << "ms maximum, " << stats->maximum_dispatch_pixels << " active pixels maximum, "
-              << stats->dispatch_target_overshoots << " target overshoot(s), "
-              << stats->dispatch_fallbacks << " safety fallback(s); initialization "
-              << stats->initialization_dispatches << " dispatch(es), "
-              << stats->initialization_seconds << "s wall, " << stats->initialization_submit_wait_ms
-              << "ms submit/wait" << std::endl;
+              << (stats->retained_intervals ? 1 : stats->tile_plan.tile_edge) << "px in "
+              << stats->band_dispatches << " governed dispatch(es), " << stats->seconds
+              << "s; governed ray submit/wait " << stats->dispatch_seconds << "s total, "
+              << stats->maximum_dispatch_ms << "ms maximum, " << stats->maximum_dispatch_pixels
+              << " active pixels maximum, " << stats->dispatch_target_overshoots
+              << " target overshoot(s), " << stats->dispatch_subdivisions
+              << " batch subdivision(s), " << stats->dispatch_fallbacks
+              << " safety fallback(s); initialization " << stats->initialization_dispatches
+              << " dispatch(es), " << stats->initialization_seconds << "s wall, "
+              << stats->initialization_submit_wait_ms << "ms submit/wait" << std::endl;
     fsm_.Process(SessionEvent::AllTilesComplete);
 #else
     error_message_ = "Vulkan backend not compiled in (build without Vulkan development files)";
@@ -1393,6 +1403,10 @@ base::Expected<void> RenderSession::WriteOutput() {
         return base::Fail(
             base::ErrorDomain::kPhysics, "write render output",
             "linear radiance contains a non-finite sample at channel " + std::to_string(*bad));
+    }
+    if (external_step_executor_) {
+        fsm_.Process(SessionEvent::OutputWritten);
+        return {};
     }
 
     // Format follows the output extension: .exr | .png | .ppm (default).
@@ -1596,8 +1610,9 @@ void RenderSession::WorkerThread(int thread_id) {
 
         const auto rendered = RenderTileThreaded(tile, thread_id);
         if (!rendered) {
-            worker_errors_[static_cast<std::size_t>(thread_id)] = rendered.error();
-            stop_workers_ = true;
+            // Preserve the original failure while the remaining workers stop.
+            if (!stop_workers_.exchange(true))
+                worker_errors_[static_cast<std::size_t>(thread_id)] = rendered.error();
             break;
         }
         if (!*rendered) break;

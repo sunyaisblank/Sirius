@@ -1814,7 +1814,9 @@ def thin_lens_authority_errors(documents: dict[Path, str]) -> list[str]:
                 launch = cpu[signature.end():index]
                 break
     launch_flow = re.search(
-        r"auto\s+launch\s*=\s*LaunchCameraRay\(observer_metric,\s*"
+        r"auto\s+launch\s*=\s*(?:step_executor_\s*\?\s*"
+        r"step_executor_->Launch\(observer_metric,\s*cached_a_\s*\*\s*cached_m_,\s*camera_ray\)\s*:\s*)?"
+        r"LaunchCameraRay\(observer_metric,\s*"
         r"cached_a_\s*\*\s*cached_m_,\s*camera_ray\)\s*;"
         r".*?const\s+auto\s+mapping\s*=\s*"
         r"outgoing_chart_->FromIngoing\(launch->position\)\s*;"

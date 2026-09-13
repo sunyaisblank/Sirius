@@ -447,3 +447,52 @@ def build_dense_program():
         # terms exactly. Arrival changes X by k*shift and leaves covariant V.
         outputs.extend([X[i]+tangent[i]*shift for i in range(4)] + V)
     return compile_program([v.i for v in outputs])
+
+
+def build_initialize_program():
+    """Convert physical camera/trace columns to retained Hamiltonian phase."""
+    ops.clear()
+    cache.clear()
+    row = [inp(i) for i in range(45)]
+    position, tangent = row[4:8], row[8:12]
+    g, _ = chart_geometry(position, row, row[44])
+    momentum = [sum(g[mu][nu].v*tangent[nu] for nu in range(4)) for mu in range(4)]
+    outputs = position + momentum
+    for column in range(4):
+        X, V = row[12+8*column:16+8*column], row[16+8*column:20+8*column]
+        P = [sum(g[mu][nu].v*V[nu] for nu in range(4)) +
+             sum((g[a][b].d[mu]+g[a][mu].d[b]-g[mu][b].d[a])*tangent[a]*X[b]
+                 for a in range(4) for b in range(4))/2 for mu in range(4)]
+        outputs.extend(X+P)
+    return compile_program([v.i for v in outputs])
+
+
+def build_ray_camera_program():
+    """Metric launch from the smooth lens's physical direction and four seeds."""
+    ops.clear()
+    cache.clear()
+    row = [inp(i) for i in range(45)]
+    position = row[4:8]
+    X = [[p(0) for _ in range(4)] for _ in range(4)]
+    for phase in range(2):
+        cg, ci = metric(position,row)
+        def contract(g):
+            return [[J(v.v,[sum(v.d[mu]*X[c][mu] for mu in range(4)) for c in range(4)])
+                     for v in line] for line in g]
+        f = frame(contract(cg),contract(ci),row)
+        if phase == 0:
+            X = [[f[3][mu].v*row[37+c]+f[2][mu].v*row[41+c] for mu in range(4)] for c in range(4)]
+            position = [x+f[3][mu].v*row[20]+f[2][mu].v*row[21] for mu,x in enumerate(position)]
+    n = [J(row[22+a],row[25+4*a:29+4*a]) for a in range(3)]
+    norm = sum(v*v for v in n).sqrt()
+    n = [v/norm for v in n]
+    k = [-f[0][mu]+sum(f[a+1][mu]*n[a] for a in range(3)) for mu in range(4)]
+    G = [[[sum(ci[mu][s].v*(cg[s][b].d[a]+cg[s][a].d[b]-cg[a][b].d[s])
+                for s in range(4))/2 for b in range(4)] for a in range(4)] for mu in range(4)]
+    K = [[k[mu].d[c] for mu in range(4)] for c in range(4)]
+    V = [[K[c][mu]+sum(G[mu][a][b]*k[a].v*X[c][b] for a in range(4) for b in range(4))
+          for mu in range(4)] for c in range(4)]
+    du = [[f[0][mu].d[c] for mu in range(4)] for c in range(4)]
+    framevalues = [v.v for axis in f for v in axis]
+    outputs = position+[v.v for v in k]+framevalues+[v for group in [X,K,V,du] for column in group for v in column]+framevalues
+    return compile_program([v.i for v in outputs])

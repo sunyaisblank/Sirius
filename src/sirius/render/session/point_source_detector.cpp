@@ -340,7 +340,13 @@ class Detector {
         }
         // Visibility discontinuities require extra spatial sampling. Actual
         // image rays decide transmission; the centre cannot mask the support.
-        if (mixed && cell.depth < policy_.minimum_depth + 2) result.regular = false;
+        if (mixed && cell.depth < policy_.minimum_depth + 2) {
+            // This cell cannot be admitted regardless of its catalogue sum.
+            // Refine visibility before spending visits on its broad query;
+            // only represented descendant estimates can own radiance.
+            result.regular = false;
+            return result;
+        }
         double reach = 0;
         for (auto i : nodes) {
             if (!probes_[i].value.visible) continue;
@@ -362,14 +368,23 @@ class Detector {
         for (int axis = 0; axis < 2; ++axis)
             source_reach[axis] += 2 * source_residual[axis] +
                                   policy_.root_error * std::hypot(matrix[axis][0], matrix[axis][1]);
-        const double query_radius = reach * (2 * cell.Width() + residual_bound);
+        double query_radius = reach * (2 * cell.Width() + residual_bound);
+        if (!mixed) {
+            // The exact same rectangular forward-range predicate below
+            // already rejects everything outside this circumscribed disk.
+            // Apply that bound to the index query as well, without dropping
+            // a candidate which could pass the existing predicate.
+            query_radius =
+                std::min(query_radius, std::nextafter(std::hypot(source_reach[0], source_reach[1]),
+                                                      std::numeric_limits<double>::infinity()));
+        }
         const float query_sigma = std::nextafter(
             static_cast<float>(query_radius * .25 + 8 * std::numeric_limits<float>::epsilon()),
             std::numeric_limits<float>::infinity());
         bool unresolved = false;
         bool has_candidate = false;
         const auto& n = anchor.value.direction;
-        catalogue_.ForEachCandidate(
+        catalogue_.ForEachCandidateWhile(
             static_cast<float>(n[0]), static_cast<float>(n[1]), static_cast<float>(n[2]),
             query_sigma, [&](std::uint32_t star) {
                 if (++statistics_.candidate_visits > policy_.maximum_candidate_visits)
@@ -379,7 +394,7 @@ class Detector {
                 const auto separation = core::relativity::MeasureCelestialSeparation(
                     n,
                     Direction{candidate.direction_x, candidate.direction_y, candidate.direction_z});
-                if (separation.angle > query_radius) return;
+                if (separation.angle > query_radius) return true;
                 const auto offset = SkyOffset(
                     n,
                     Direction{candidate.direction_x, candidate.direction_y, candidate.direction_z});
@@ -387,31 +402,33 @@ class Detector {
                 if (!mixed && offset &&
                     (std::abs((*offset)[0]) > source_reach[0] ||
                      std::abs((*offset)[1]) > source_reach[1]))
-                    return;
+                    return true;
                 if (predicted) {
                     for (int axis = 0; axis < 2; ++axis) {
                         const double value = anchor.z[axis] + (*predicted)[axis];
                         const double margin = 2 * residual_by_axis[axis] + policy_.root_error;
                         if (value < cell.lower[axis] - margin || value > cell.upper[axis] + margin)
-                            return;
+                            return true;
                     }
                 }
                 has_candidate = true;
-                if (!result.regular) return;
+                // An irregular cell only needs an existence witness before
+                // subdivision; further catalogue visits cannot change its estimate.
+                if (!result.regular) return false;
                 const auto image = FindImage(star, cell, *seed, true,
                                              2 * residual_bound + policy_.root_error, unresolved);
-                if (!image) return;
+                if (!image) return true;
                 const auto& root = roots_[*image];
                 const auto& point = probes_[root.probe].value;
                 const auto response = core::MakeRestrictedAffinePointResponse(
                     point.source_derivative, cell.lower, cell.upper, policy_.geometry_error);
                 if (!response) {
                     unresolved = true;
-                    return;
+                    return true;
                 }
                 const auto density = response->DensityAtOriginalRoot(root.z);
                 if (!density) Fail(PointDetectorFailure::Arithmetic);
-                if (*density == 0) return;
+                if (*density == 0) return true;
                 const auto& entry = catalogue_.Stars()[star];
                 const auto rgb = core::spectral::TransferPointSourceBand(
                     entry.temperature_K, point.camera_over_source_frequency,
@@ -427,7 +444,7 @@ class Detector {
                         policy_.geometry_error);
                     if (!prior_response) {
                         unresolved = true;
-                        return;
+                        return true;
                     }
                     const auto prior_density = prior_response->DensityAtOriginalRoot(root.z);
                     if (!prior_density) Fail(PointDetectorFailure::Arithmetic);
@@ -458,6 +475,7 @@ class Detector {
                         !std::isfinite(result.error[channel]))
                         Fail(PointDetectorFailure::Arithmetic);
                 }
+                return true;
             });
         result.regular = !unresolved && (result.regular || !has_candidate);
         std::sort(result.images.begin(), result.images.end());

@@ -58,6 +58,7 @@ struct DeviceInfo {
     bool supports_fp64 = false;
     bool preserves_fp32_denormals = false;
     bool rounds_fp32_to_nearest = false;
+    bool rounds_fp64_to_nearest = false;
 };
 
 // Opaque per-device handles; values are indices into the owning device's

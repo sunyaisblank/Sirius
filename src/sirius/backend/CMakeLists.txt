@@ -79,6 +79,14 @@ if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS)
                    "${retained_build}/retained_transport.spv"
                    "${retained_build}/retained_endpoint.spv"
                    "${retained_build}/retained_dense.spv"
+                   "${retained_build}/retained_initialize.spv"
+                   "${retained_build}/retained_ray_camera.spv"
+                   "${retained_build}/retained_camera_fp64.spv"
+                   "${retained_build}/retained_transport_fp64.spv"
+                   "${retained_build}/retained_endpoint_fp64.spv"
+                   "${retained_build}/retained_dense_fp64.spv"
+                   "${retained_build}/retained_initialize_fp64.spv"
+                   "${retained_build}/retained_ray_camera_fp64.spv"
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/scripts/build-retained-kernels.py"
             --output "${retained_header}" --compiler "${SIRIUS_SLANGC}"
             --assembler "${SIRIUS_SPIRV_AS}" --disassembler "${SIRIUS_SPIRV_DIS}"
@@ -91,9 +99,13 @@ if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS)
                 "${SIRIUS_KERNEL_DIR}/retained_transport.slang"
                 "${SIRIUS_KERNEL_DIR}/retained_endpoint.slang"
                 "${SIRIUS_KERNEL_DIR}/retained_dense.slang"
+                "${SIRIUS_KERNEL_DIR}/retained_initialize.slang"
+                "${SIRIUS_KERNEL_DIR}/retained_ray_camera.slang"
         COMMENT "Building bounded retained camera and joint transport stages"
         VERBATIM)
-    target_sources(sirius_backend PRIVATE retained_compute.cpp "${retained_header}")
+    target_sources(sirius_backend PRIVATE retained_compute.cpp retained_integrator.cpp
+        retained_trace_executor.cpp "${retained_header}")
+    target_link_libraries(sirius_backend PUBLIC sirius_core)
     target_include_directories(sirius_backend PRIVATE "${retained_build}")
     target_compile_definitions(sirius_backend PUBLIC SIRIUS_HAS_RETAINED_COMPUTE=1)
 endif()

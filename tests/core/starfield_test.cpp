@@ -234,6 +234,15 @@ TEST_F(StarfieldGeneratorTests, SpatialIndexOwnsValidatedCatalogueSnapshot) {
     ASSERT_TRUE(std::all_of(stars.begin(), stars.end(), IsRepresentedStarEntry));
     const StarfieldSpatialIndex index(stars);
     ASSERT_EQ(index.Size(), stars.size());
+    std::vector<std::uint32_t> complete, prefix;
+    index.ForEachCandidate(1, 0, 0, 1, [&](std::uint32_t entry) { complete.push_back(entry); });
+    index.ForEachCandidateWhile(1, 0, 0, 1, [&](std::uint32_t entry) {
+        prefix.push_back(entry);
+        return prefix.size() < 2;
+    });
+    ASSERT_EQ(complete.size(), stars.size());
+    ASSERT_EQ(prefix.size(), 2U);
+    EXPECT_TRUE(std::equal(prefix.begin(), prefix.end(), complete.begin()));
 
     float exhaustive_r = 0.0f;
     float exhaustive_g = 0.0f;

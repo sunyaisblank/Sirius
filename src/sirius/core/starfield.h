@@ -171,6 +171,17 @@ class StarfieldSpatialIndex {
     template <typename Callback>
     void ForEachCandidate(float dir_x, float dir_y, float dir_z, float sigma,
                           Callback&& callback) const {
+        ForEachCandidateWhile(dir_x, dir_y, dir_z, sigma, [&](std::uint32_t index) {
+            callback(index);
+            return true;
+        });
+    }
+
+    // The same deterministic conservative traversal, with early termination
+    // once a caller has established its predicate (for example non-emptiness).
+    template <typename Callback>
+    void ForEachCandidateWhile(float dir_x, float dir_y, float dir_z, float sigma,
+                               Callback&& callback) const {
         SIRIUS_PRE(std::isfinite(dir_x) && std::isfinite(dir_y) && std::isfinite(dir_z));
         SIRIUS_PRE(std::isfinite(sigma) && sigma > 0.0f);
         if (indices_.empty()) return;
@@ -215,14 +226,14 @@ class StarfieldSpatialIndex {
         for (int theta_bin = first_theta; theta_bin <= last_theta; ++theta_bin) {
             if (all_phi) {
                 for (int phi_bin = 0; phi_bin < kPhiBins; ++phi_bin) {
-                    VisitCell(theta_bin, phi_bin, callback);
+                    if (!VisitCell(theta_bin, phi_bin, callback)) return;
                 }
                 continue;
             }
             for (int delta = -phi_radius; delta <= phi_radius; ++delta) {
                 int phi_bin = (centre_phi + delta) % kPhiBins;
                 if (phi_bin < 0) phi_bin += kPhiBins;
-                VisitCell(theta_bin, phi_bin, callback);
+                if (!VisitCell(theta_bin, phi_bin, callback)) return;
             }
         }
     }
@@ -272,11 +283,12 @@ class StarfieldSpatialIndex {
     }
 
     template <typename Callback>
-    void VisitCell(int theta_bin, int phi_bin, Callback& callback) const {
+    bool VisitCell(int theta_bin, int phi_bin, Callback& callback) const {
         const std::size_t cell = Cell(theta_bin, phi_bin);
         for (std::uint32_t at = offsets_[cell]; at < offsets_[cell + 1]; ++at) {
-            callback(indices_[at]);
+            if (!callback(indices_[at])) return false;
         }
+        return true;
     }
 };
 

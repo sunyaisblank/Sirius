@@ -85,81 +85,53 @@ including physical neighbouring-ray, event and refinement controls. The full
 coupled suite takes about eight minutes on the current machine. These checks do
 not constitute a complete Mandatory or full-workload qualification.
 
-## Remaining implementation
+## Renderer integration
 
-The September 10 handoff reported incomplete retained-precision observer-frame
-and camera transport, joint admission of the central ray and four physical
-film/pupil derivatives, dense event handling, and physical detector integration.
-The GPU production migration, GPU detector integration, full-workload image
-quality/performance and native platform qualification remain open. The CPU
-corrections above resolve the reproduced interpolation failures in the saved
-launch regression; two original packets still require more work than their
-unchanged attempt limit allows.
+Kerr-family Vulkan frames now use bounded retained stages for camera launch,
+physical phase initialization, joint seven-stage Hamiltonian transport, null
+projection and dense admission. All four physical film/pupil derivatives share
+the central stages. Full, embedded, midpoint and refined candidates remain
+private until the common component budgets admit them. The shared host tracer
+then localizes events and owns source and physical detector evaluation. Each
+worker's retained phase survives accepted intervals and explicit rollback;
+public binary64 fields remain views of that phase.
 
-The handoff referenced staged retained-pair arithmetic and camera-direction
-modules under the former `.sirius-release-work/evidence/` directory. That
-directory and those modules were already absent when this closeout began.
-Nine retained camera shaders, including the later complete metric/frame/launch
-prototype and recorded arithmetic repairs, were subsequently recovered from
-session tool output into `tests/support/retained_camera`. All three probes
-compile in both narrow modes and pass SPIR-V and arithmetic-control checks.
-The recovered independent eight-case reference also passes its high-precision
-stability and null/frequency identity checks. The twelve original input packets
-were subsequently recovered exactly and their helper-context coefficients were
-observed on the pinned device. The monolithic complete camera exceeded 21 GiB
-of host memory during pipeline preparation and was stopped before dispatch.
+Both narrow precision selections use three binary32 transport terms and a
+separate arithmetic radius. The camera uses two working terms. FP64 selection
+uses the same retained records with exact binary64 products; the high part is
+rounded by an explicit ordered binary32 multiplication. A native conversion
+from the wide product failed the complete camera's residual checks on the
+Radeon/Dozen route. The explicit split passes the independent references.
+Arithmetic radii are not global ODE certificates.
 
-A bounded replacement camera stage now executes 5,292 retained arithmetic
-instructions using 227 live registers. Both narrow-mode backend tests pass all
-20 complete 104-value camera fixtures, 16 total invalid-request refusals,
-4,160 component mutation controls and 40 whole-packet low-part deletion controls.
-Its 100/180-digit independent fixture regeneration is byte-for-byte reproducible.
-The observed stage needs 111,560 explicit buffer bytes and prepares in under
-one second on the pinned Radeon/Dozen route. This resolves the camera prototype's
-compiler expansion for these tests. Production transport, dense events,
-continuation and detector integration still require their own implementation
-and validation; historical success counts are not current evidence.
+The generated programs and validated SPIR-V are embedded in the product. All
+six stages reuse fixed buffers. The renderer checks its allocation plan against
+actual device buffer bytes and coalesces at most 64 worker requests. Timing
+feedback adjusts subsequent batches within any safety ceiling; the existing safety duration remains in
+force when the soft target is disabled. Source textures and catalogues stay
+with the shared host source owner. The external frame publishes only after all
+samples complete, preserving its previous image on cancellation or failure.
+Tiny images reserve the minimum scratch tile without requiring eight actual
+image pixels along each axis.
 
-The camera and joint seven-stage Hamiltonian DP pair now have fixed-capacity
-batched device interfaces and build-embedded programs. The transport program
-uses 2,587 instructions and 177 registers; all four physical columns use their
-actual central stage. Camera upload retains continuous film and pupil offsets,
-including independently checked offsets below one binary32 spacing. Invalid
-rows cannot publish previous or partial candidates, and repeated submissions
-reuse their governed device buffers.
+Exact Minkowski formulas avoid curved-metric evaluation while preserving the
+DP tableau, differentiated null projection and general Hermite polynomial.
+Independent nonlinear flat dense fixtures prevent treating an arbitrary flat
+segment as a straight line. The detector applies its existing forward-range
+bound to catalogue queries and refines coarse mixed-visibility cells before
+spending catalogue visits. Neither change increases a work cap or relaxes a
+radiance tolerance.
 
-Transport uses three binary32 terms and a separate arithmetic radius. The
-two-term prototype exceeded the original projected critical-ray budgets by
-factors of 1.5 to 9.44. The three-term results agree with the independent
-projected refinement to at most 1.3e-7 of those unchanged budgets. Optimized
-three-term submission/readback takes 163 ms for 2,048 private candidates on the
-pinned Radeon/Dozen route after pipeline preparation. This is a stage timing,
-not complete renderer throughput. The camera uses two working terms; no input
-correction is silently dropped on conversion.
-
-All six retained backend tests pass, covering the recovered camera cases,
-continuous inputs, twelve independent phase-space fixtures, low/tail deletion,
-arithmetic enclosures and invalid-row reuse. Both new frozen reference sets
-regenerate byte for byte. All application and test targets build with warnings
-as errors. Their arithmetic radii do not claim global ODE enclosures.
-
-The retained endpoint stage now projects the null tangent and all four physical
-derivatives on the device, returning both physical columns and the retained
-phase continuation. Fourteen independent fixtures include the exact linear
-horizon and an ergoregion case whose competing spatial corrections differ
-below one float spacing. Retaining that comparison fixes a reproduced wrong
-branch/derivative selection; roots with unrepresented differentiated constraints
-decline. Repeated projection preserves the retained physical state.
-
-The retained dense stage samples the central Hermite curve and its four
-derivatives with retained increments. Moving-event derivatives use the same
-sampled interval and geodesic-flow arrival correction. Thirty-six independent
-cubic-basis fixtures pass, including tilted planes, small critical-ray columns
-and fixed endpoints. Endpoint and dense programs use 3,115/6,345 instructions
-and 246/368 live registers respectively. Their 75/105-digit frozen fixtures
-regenerate byte for byte. Coupled trajectory admission, event-root localization,
-live continuation and detector connection remain to be integrated before these
-stages replace the production GPU trace path.
+The device reference sets include 23 complete smooth-camera cases, twelve
+Hamiltonian phase fixtures, fourteen endpoint/projection cases and 39 dense
+samples. Camera and dense fixture regeneration is byte-for-byte reproducible.
+The FP64 stage/controller test passes, as do the narrow joint-controller and
+shared-tracer continuation/rollback checks. All seven detector regressions
+pass. A complete moving ThinLens flat frame passes finite radiance, actual
+allocation, single publication, cancellation and insufficient-budget checks.
+The moving ThinLens Kerr/100,000-star CPU–device image comparison is undergoing
+validation; this document does not yet declare that test or full Mandatory
+complete.
 
 No external operating domain was admitted at configure time (0/8). Physical
 Radeon, WSL2/Dozen, native Windows/macOS build and runtime, native viewer input,

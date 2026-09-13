@@ -12,11 +12,25 @@ void Split32(float a,out float hi,out float lo){
  float c=OrderedMultiply32(4097.0f,a);hi=OrderedSubtract32(c,OrderedSubtract32(c,a));lo=OrderedSubtract32(a,hi);
 }
 void RetainedProduct32(float a,float b,out float hi,out float lo){
+#ifdef SIRIUS_RETAINED_FP64
+ // A binary32 product has at most 48 significant bits and is normal in
+ // binary64 even for two binary32 subnormals. Keep its rounded high part
+ // and exact residual separately; the caller bounds binary32 underflow.
+ double da=double(a),db=double(b);
+ double product=spirv_asm{OpFMul $$double %v $da $db;OpDecorate %v NoContraction;OpCopyObject $$double result %v;};
+ // Establish the high part through the ordered binary32 operation itself.
+ // A native wide-to-narrow conversion did not preserve this residual split
+ // in the complete Radeon/Dozen camera program.
+ hi=OrderedMultiply32(a,b);double dh=double(hi);
+ double residual=spirv_asm{OpFSub $$double %v $product $dh;OpDecorate %v NoContraction;OpCopyObject $$double result %v;};
+ lo=float(residual);
+#else
  float ah,al,bh,bl;Split32(a,ah,al);Split32(b,bh,bl);hi=OrderedMultiply32(a,b);
  float e1=OrderedSubtract32(hi,OrderedMultiply32(ah,bh));
  float e2=OrderedSubtract32(e1,OrderedMultiply32(al,bh));
  float e3=OrderedSubtract32(e2,OrderedMultiply32(ah,bl));
  lo=OrderedSubtract32(OrderedMultiply32(al,bl),e3);
+#endif
 }
 
 // Every successful value encloses the real input in hi+lo +/- error.

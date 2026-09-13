@@ -20,6 +20,7 @@
 #include <gtest/gtest.h>
 
 #include "kerr_shadow_oracle.h"
+#include "support/moving_kerr_detector_scene.h"
 #include "support/scoped_environment.h"
 
 #include <algorithm>
@@ -557,6 +558,35 @@ TEST(VulkanRenderSession, CpuVulkanPointCatalogueAgreeOnFlatScene) {
     EXPECT_GT(signal_sum, 1.0e-5);
     EXPECT_LT(mean, 2.0e-5);
     EXPECT_LT(absolute_sum / signal_sum, 0.02);
+}
+
+TEST(VulkanRenderSession, RetainedMovingThinLensKerrDetectorMatchesCpuLinearRadiance) {
+    const auto devices = EnumerateVulkanDevices();
+    ASSERT_TRUE(devices) << devices.error().Description();
+    if (devices->empty()) GTEST_SKIP() << "no Vulkan device present";
+    ScopedEnvironmentVariable precision("SIRIUS_PRECISION", "fp32-comp");
+    const std::string root = std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp";
+    const auto configure = sirius::test::ConfigureMovingKerrDetector;
+    const auto gpu =
+        RenderSessionVulkan(4, 2, root + "/sirius_retained_moving_kerr.exr", configure);
+    const auto cpu = RenderSessionVulkan(4, 2, root + "/sirius_cpu_moving_kerr.exr",
+                                         [&](sirius::render::SessionConfig& config) {
+                                             configure(config);
+                                             config.backend = sirius::render::RenderBackend::Cpu;
+                                         });
+    ASSERT_EQ(gpu.size(), 32U);
+    ASSERT_EQ(cpu.size(), gpu.size());
+    double signal = 0, error = 0;
+    for (std::size_t i = 0; i < gpu.size(); ++i) {
+        ASSERT_TRUE(std::isfinite(gpu[i]));
+        ASSERT_TRUE(std::isfinite(cpu[i]));
+        if (i % 4 == 3) continue;
+        signal += std::abs(cpu[i]);
+        error += std::abs(double(gpu[i]) - cpu[i]);
+    }
+    EXPECT_GT(signal, 0);
+    EXPECT_LT(error / signal, .02);
+    RecordProperty("relative_linear_radiance_error", std::to_string(error / signal));
 }
 
 TEST(VulkanRenderSession, ConstrainedBudgetDeclinesRatherThanChangingBackground) {
@@ -1274,8 +1304,8 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
     ASSERT_TRUE(devices.has_value()) << devices.error().Description();
     if (devices->empty()) GTEST_SKIP() << "no Vulkan device present";
     ScopedEnvironmentVariable precision("SIRIUS_PRECISION", "fp32");
-    // Packaged 6000x3000 RGBA texture needs 72 MB before state/radiance.
-    // Half of the declared budget is usable; 192 MiB seats that actual asset.
+    // Legacy source shaders upload the texture; the retained renderer's
+    // shared host source owner keeps it outside device residency.
     ScopedEnvironmentVariable budget("SIRIUS_MEMORY_BUDGET_MB", "192");
     ScopedEnvironmentVariable target("SIRIUS_DISPATCH_TARGET_MS", "250");
     SessionConfig config;
@@ -1301,12 +1331,20 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
     EXPECT_EQ(tiles, rendered->tiles_rendered);
     EXPECT_EQ(display.GetUpdateCounter(), 1u);
     EXPECT_GT(rendered->band_dispatches, config.samples_per_pixel * 2);
-    EXPECT_GT(rendered->continuation_dispatches[0], 0);
-    EXPECT_GT(rendered->continuation_dispatches[1], 0);
-    EXPECT_GT(rendered->continuation_dispatches[2], 0);
-    EXPECT_EQ(rendered->band_dispatches, rendered->continuation_dispatches[0] +
-                                             rendered->continuation_dispatches[1] +
-                                             rendered->continuation_dispatches[2]);
+    if (rendered->retained_intervals) {
+        for (std::size_t stage = 1; stage < 6; ++stage)
+            EXPECT_GT(rendered->retained_stage_dispatches[stage], 0);
+        std::int64_t submissions = 0;
+        for (const auto count : rendered->retained_stage_dispatches) submissions += count;
+        EXPECT_EQ(rendered->band_dispatches, submissions);
+    } else {
+        EXPECT_GT(rendered->continuation_dispatches[0], 0);
+        EXPECT_GT(rendered->continuation_dispatches[1], 0);
+        EXPECT_GT(rendered->continuation_dispatches[2], 0);
+        EXPECT_EQ(rendered->band_dispatches, rendered->continuation_dispatches[0] +
+                                                 rendered->continuation_dispatches[1] +
+                                                 rendered->continuation_dispatches[2]);
+    }
     EXPECT_GT(rendered->explicit_buffer_allocation_bytes, 0u);
     EXPECT_LE(rendered->explicit_buffer_allocation_bytes, rendered->tile_plan.usable_bytes);
     EXPECT_GT(rendered->continuation_capacity, 0u);
@@ -1335,7 +1373,7 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
     EXPECT_GT(polls, 20);
     EXPECT_EQ(display.GetUpdateCounter(), 1u);
     EXPECT_EQ(display.SnapshotFloatData(), complete);
-    {
+    if (!rendered->retained_intervals) {
         ScopedEnvironmentVariable source_too_large("SIRIUS_MEMORY_BUDGET_MB", "64");
         const auto refused = RenderVulkanToDisplay(config, display);
         ASSERT_FALSE(refused.has_value());

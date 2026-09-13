@@ -360,7 +360,9 @@ Lightray GeodesicTracer::InitializeLightray(const CameraRay& camera_ray,
                                             GeodesicVariations* launch_variations) {
     Lightray ray{};
     IMetric& observer_metric = outgoing_chart_ ? outgoing_chart_->Source() : *metric_;
-    auto launch = LaunchCameraRay(observer_metric, cached_a_ * cached_m_, camera_ray);
+    auto launch = step_executor_
+                      ? step_executor_->Launch(observer_metric, cached_a_ * cached_m_, camera_ray)
+                      : LaunchCameraRay(observer_metric, cached_a_ * cached_m_, camera_ray);
     if (!launch) {
         ray.terminated = 3;
         return ray;
@@ -554,12 +556,20 @@ void GeodesicTracer::SetDiskPolarisation(const PolarisationFrame& frame,
 // Main trace.
 // =============================================================================
 TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
+    struct ExecutionScope {
+        TraceStepExecutor* executor;
+        ~ExecutionScope() {
+            if (executor) executor->EndTrace();
+        }
+    } scope{step_executor_};
+    if (step_executor_) step_executor_->BeginTrace();
     auto* family = dynamic_cast<KerrSchildFamily*>(metric_);
     if (family && family->HasHorizon()) {
         CacheMetricParameters();
         OutgoingKerrSchild outgoing(*family);
         GeodesicTracer worker(&outgoing, config_);
         worker.outgoing_chart_ = &outgoing;
+        worker.step_executor_ = step_executor_;
         // The radial disk profile is immutable during one trace. Reuse the
         // cached profile without moving or mutating the public tracer's state.
         worker.page_thorne_disk_ = page_thorne_disk_;
@@ -751,9 +761,17 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray) {
         const Lightray previous_ray = ray;
         const auto previous_variations = coupled.variations;
         Rk45CoupledComparison comparison;
-        bool success =
-            Geodesic::IntegrateStepRk45(ray, metric_, step_config, use_coupled ? &coupled : nullptr,
-                                        use_coupled ? &comparison : nullptr);
+        bool success = false;
+        if (step_executor_) {
+            if (use_coupled)
+                success = step_executor_->Step(ray, *metric_, step_config, coupled, comparison);
+            else
+                ray.terminated = 3;
+        } else {
+            success = Geodesic::IntegrateStepRk45(ray, metric_, step_config,
+                                                  use_coupled ? &coupled : nullptr,
+                                                  use_coupled ? &comparison : nullptr);
+        }
         result.steps_taken++;
 
         if (ray.terminated || HasInvalidState(ray)) {
@@ -763,6 +781,7 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray) {
             break;
         }
         if (!success) {
+            if (step_executor_) step_executor_->RejectLastInterval();
             // Error control rejected the step: the state is unchanged and
             // step_size was reduced, so retry. The attempt still counts
             // against max_steps, which bounds the work a stiff region can
@@ -972,6 +991,7 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray) {
                 if (accepted) trial_source_maps = source;
             }
             if (!accepted) {
+                if (step_executor_) step_executor_->RejectLastInterval();
                 ray = previous_ray;
                 coupled.variations = previous_variations;
                 coupled.failure = CoupledStepFailure::Event;

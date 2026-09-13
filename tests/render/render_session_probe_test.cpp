@@ -1,3 +1,4 @@
+#include "support/moving_kerr_detector_scene.h"
 // End-to-end CPU render-session probe (session-level gate).
 //
 // Drives RenderSession CPU-only at 64x64, 4 spp, Kerr a=0.9, writing a PNG and
@@ -153,22 +154,7 @@ TEST(RenderSessionProbe, PhysicalPointDetectorCompletesAMovingThinLensKerrFrame)
     // Inspect linear radiance: display grading can legitimately suppress this
     // deliberately faint catalogue. EXR also exercises the connected writer.
     config.output_path = (temporary_directory.path() / "detector.exr").string();
-    config.metric_id = sirius::core::MetricId::Kerr;
-    // A weak-field frame isolates detector connection from critical-ray
-    // qualification. Curved critical images have separate transport oracles.
-    config.black_hole_mass = 1;
-    config.black_hole_spin = .7;
-    config.observer_distance = 50;
-    config.camera_fov = 2;
-    config.camera_beta_forward = .1;
-    config.camera_beta_up = .8;
-    config.lens_type = sirius::core::LensType::ThinLens;
-    config.camera_focus_distance = 50;
-    config.enable_disk = false;
-    config.enable_bloom = false;
-    config.point_starfield = true;
-    config.point_starfield_config.star_count = 100000;
-    config.point_starfield_config.brightness_scale = 1e-5f;
+    sirius::test::ConfigureMovingKerrDetector(config);
     RenderSession session;
     const auto configured = session.Configure(config);
     ASSERT_TRUE(configured) << configured.error().Description();

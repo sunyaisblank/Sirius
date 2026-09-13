@@ -69,16 +69,27 @@ def main():
             # A tilted plane avoids assuming radial or axis-aligned events.
             normal=list(map(mp.mpf,[0,1,mp.mpf('0.25'),mp.mpf('-0.125')])) if moving else [mp.mpf(0)]*4
             row=[*decoded[:4],*start,*end,*increments,decoded[45],fraction,*normal,mp.mpf(moving),chart]
-            samples=[]
-            for precision in [75,105]:
-                mp.mp.dps=precision
-                samples.append(sample(row))
-            gaps=[abs(a-b) for a,b in zip(*samples)]
-            assert max(gaps)<mp.mpf('1e-50')
-            cases.append({'name':original['name']+'-'+('arrival' if moving else str(fraction)),
-                          'input':[word for v in row for word in transport.pair(v)],
-                          'reference':[str(v) for v in samples[1]], 'precision_gap':[str(v) for v in gaps]})
-            print(cases[-1]['name'],'gap',max(gaps),flush=True)
+            variants=[('',row)]
+            if original['name']=='analytic-flat':
+                curved=list(row)
+                # Independent flat-space cubic with nonconstant central and
+                # derivative slopes; this must not collapse to linear flow.
+                for group in range(5):
+                    for axis in range(4):
+                        curved[48+group*8+axis] += mp.mpf(group+axis+1)/64
+                        curved[84+group*4+axis] += mp.mpf((group+1)*(axis+1))/128
+                variants.append(('-nonlinear',curved))
+            for suffix,row in variants:
+                samples=[]
+                for precision in [75,105]:
+                    mp.mp.dps=precision
+                    samples.append(sample(row))
+                gaps=[abs(a-b) for a,b in zip(*samples)]
+                assert max(gaps)<mp.mpf('1e-50')
+                cases.append({'name':original['name']+'-'+('arrival' if moving else str(fraction))+suffix,
+                              'input':[word for v in row for word in transport.pair(v)],
+                              'reference':[str(v) for v in samples[1]], 'precision_gap':[str(v) for v in gaps]})
+                print(cases[-1]['name'],'gap',max(gaps),flush=True)
     (folder/'dense_reference.json').write_text(json.dumps({'precision':[75,105],'cases':cases},indent=2)+'\n')
     lines=['// Independent cubic Hermite and coordinate arrival derivatives.', '// clang-format off',
            '#pragma once','#include <array>','#include <cstdint>','namespace sirius::test::retained_dense {',

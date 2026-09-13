@@ -218,7 +218,7 @@ struct SessionConfig {
 // and every enum/feature dependency are enforced before allocation or dispatch.
 [[nodiscard]] std::optional<std::string> SessionConfigIssue(const SessionConfig& config);
 
-// Orchestrates a CPU render from configuration to written output.
+// Orchestrates shared camera, trace, detector and output work.
 class RenderSession {
   public:
     using FSM = StateMachine<SessionState, SessionEvent, 14>;
@@ -226,6 +226,15 @@ class RenderSession {
         std::function<void(SessionState final_state, const std::string& message)>;
 
     RenderSession() : fsm_(kSessionConfig) { SetupActions(); }
+    // Internal device-worker session. It retains Vulkan scene identity and
+    // returns linear radiance to the owning renderer's publication boundary.
+    RenderSession(backend::TraceStepExecutor& executor, int workers, int tile_edge)
+        : fsm_(kSessionConfig),
+          external_step_executor_(&executor),
+          device_workers_(workers),
+          device_tile_edge_(tile_edge) {
+        SetupActions();
+    }
     ~RenderSession();
 
     RenderSession(const RenderSession&) = delete;
@@ -260,6 +269,10 @@ class RenderSession {
     double GetEta() const { return progress_.GetEta(); }
     const TileScheduler& GetTileScheduler() const { return tiles_; }
     DisplayBuffer& GetDisplayBuffer() { return display_; }
+    const std::string& GetErrorMessage() const { return error_message_; }
+    bool IsStopping() const {
+        return stop_workers_.load() || progress_.GetCancellationToken().IsCancelled();
+    }
 
     void SetCompletionCallback(CompletionCallback cb) {
         std::lock_guard<std::mutex> lock(callback_mutex_);
@@ -294,6 +307,9 @@ class RenderSession {
     PixelResult ShadeEscaped(const backend::TraceResult& result) const;
 
     FSM fsm_;
+    backend::TraceStepExecutor* external_step_executor_ = nullptr;
+    int device_workers_ = 0;
+    int device_tile_edge_ = 0;
     SessionConfig config_;
     TileScheduler tiles_;
     ProgressTracker progress_;

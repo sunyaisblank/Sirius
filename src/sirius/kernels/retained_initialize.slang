@@ -13,7 +13,7 @@ void WriteStored(uint base, RetainedTriple r) {
 RetainedTriple ReadValue(uint index,uint rowBase) {return ReadStored(rowBase+204+5*index);}
 void WriteValue(uint index,RetainedTriple value,uint rowBase) {WriteStored(rowBase+204+5*index,value);}
 RetainedTriple ReadOriginal(uint index,uint row) {
-    uint base=1+560*row+5*index;
+    uint base=1+225*row+5*index;
     RetainedTriple value=RTPack(asfloat(inputs[base]),asfloat(inputs[base+1]),
                               asfloat(inputs[base+2]),asfloat(inputs[base+3]));
     if(inputs[base+4]!=1) value.valid=0;
@@ -28,7 +28,7 @@ bool EvaluateProgram(uint row,uint rowBase,uint programBase,uint count,uint regi
         if (op == 0)
             r = RTConstant(asfloat(a));
         else if (op == 1) {
-            if (a >= 112) return false;
+            if (a >= 45) return false;
             r = ReadOriginal(a,row);
         } else {
             if (a >= registers) return false;
@@ -79,78 +79,29 @@ bool EvaluateProgram(uint row,uint rowBase,uint programBase,uint count,uint regi
     return true;
 }
 
-bool FlatDense(uint row,uint rowBase,RetainedTriple h,RetainedTriple s,RetainedTriple moving) {
-    // The same factored Hermite polynomial with exactly zero connection.
-    // Arbitrary endpoint slopes are retained; flat geometry does not imply
-    // that a supplied test segment is linear.
-    for(uint group=0;group<5;++group) for(uint axis=0;axis<4;++axis) {
-        uint index=group*8+axis;
-        RetainedTriple first=ReadOriginal(4+index,row),
-            slope0=ReadOriginal(8+index,row),slope1=ReadOriginal(48+index,row),
-            delta=ReadOriginal(84+group*4+axis,row);
-        RetainedTriple a=RTSubtract(RTDivide(delta,h),slope0),b=RTSubtract(slope1,slope0);
-        RetainedTriple quadratic=RTSubtract(RTMultiply(RTConstant(3),a),b);
-        RetainedTriple cubic=RTSubtract(b,RTMultiply(RTConstant(2),a));
-        RetainedTriple value=RTAdd(first,RTMultiply(RTAdd(slope0,
-            RTMultiply(RTAdd(quadratic,RTMultiply(cubic,s)),s)),RTMultiply(h,s)));
-        RetainedTriple slope=RTAdd(slope0,RTMultiply(RTAdd(RTMultiply(RTConstant(2),quadratic),
-            RTMultiply(RTMultiply(RTConstant(3),cubic),s)),s));
-        if(RTExact(s,0)) {value=first;slope=slope0;}
-        if(RTExact(s,1)) {value=RTAdd(first,delta);slope=slope1;}
-        if(value.valid==0||slope.valid==0) return false;
-        WriteStored(rowBase+4+index*5,value);
-        WriteStored(rowBase+4+(index+4)*5,slope);
-    }
-    if(RTExact(moving,1)) {
-        RetainedTriple denominator=RTConstant(0);
-        for(uint axis=0;axis<4;++axis)
-            denominator=RTAdd(denominator,RTMultiply(ReadOriginal(106+axis,row),
-                ReadStored(rowBase+4+(4+axis)*5)));
-        for(uint column=0;column<4;++column) {
-            RetainedTriple numerator=RTConstant(0);
-            for(uint axis=0;axis<4;++axis)
-                numerator=RTAdd(numerator,RTMultiply(ReadOriginal(106+axis,row),
-                    ReadStored(rowBase+4+(8+8*column+axis)*5)));
-            RetainedTriple shift=RTDivide(RTNegate(numerator),denominator);
-            for(uint axis=0;axis<4;++axis) {
-                uint address=rowBase+4+(8+8*column+axis)*5;
-                RetainedTriple value=RTAdd(ReadStored(address),
-                    RTMultiply(ReadStored(rowBase+4+(4+axis)*5),shift));
-                if(value.valid==0) return false;
-                WriteStored(address,value);
-            }
-        }
-    }
-    return true;
-}
-
 [shader("compute")][numthreads(64,1,1)]
 void ComputeMain(uint3 id:SV_DispatchThreadID) {
     uint ni,si,no,so;inputs.GetDimensions(ni,si);outputs.GetDimensions(no,so);
     if(ni<1||id.y!=0||id.z!=0) return;
     uint rows=inputs[0],row=id.x;
-    if(rows==0||rows>65536||row>=rows||ni<1+560*rows+43||no%rows!=0) return;
-    uint programBase=1+560*rows,count=inputs[programBase],registers=inputs[programBase+1];
+    if(rows==0||rows>65536||row>=rows||ni<1+225*rows+43||no%rows!=0) return;
+    uint programBase=1+225*rows,count=inputs[programBase],registers=inputs[programBase+1];
     uint rowWords=no/rows,rowBase=row*rowWords;
     if(rowWords<204) return;
     for(uint i=0;i<rowWords;++i) outputs[rowBase+i]=0;
     if(inputs[programBase+2]!=40||count>65536||registers>8192||
        ni!=programBase+43+5*count||rowWords!=204+5*registers) return;
-    for(uint i=0;i<112;++i) if(ReadOriginal(i,row).valid==0) return;
-    RetainedTriple chart=ReadOriginal(111,row);
+    for(uint i=0;i<45;++i) if(ReadOriginal(i,row).valid==0) return;
+    RetainedTriple chart=ReadOriginal(44,row);
     if(!RTExact(chart,1)&&!RTExact(chart,-1)) return;
     if(RTAbsoluteUpper(ReadOriginal(1,row))!=0&&RTAbsoluteUpper(ReadOriginal(3,row))!=0) return;
-    RetainedTriple h=ReadOriginal(104,row),fraction=ReadOriginal(105,row),moving=ReadOriginal(110,row);
-    if(h.hi<=0||RTAbsoluteLower(h)<=0) return;
-    if(!RTExact(fraction,0)&&!RTExact(fraction,1)) {
-        RetainedTriple remaining=RTSubtract(RTConstant(1),fraction);
-        if(fraction.hi<=0||RTAbsoluteLower(fraction)<=0||remaining.hi<=0||RTAbsoluteLower(remaining)<=0) return;
-    }
-    if(!RTExact(moving,0)&&!RTExact(moving,1)) return;
-    if(RTExact(moving,0)) for(uint i=106;i<110;++i) if(!RTExact(ReadOriginal(i,row),0)) return;
     if(RTExact(ReadOriginal(0,row),0)&&RTExact(ReadOriginal(2,row),0)&&RTExact(ReadOriginal(3,row),0)) {
-        if(FlatDense(row,rowBase,h,fraction,moving)) outputs[rowBase]=1;
-        return;
+        // Exact Minkowski lowering, including at the regular Cartesian origin.
+        for(uint i=0;i<40;++i) {
+            RetainedTriple value=ReadOriginal(4+i,row);
+            WriteStored(rowBase+4+i*5,i%8==4?RTNegate(value):value);
+        }
+        outputs[rowBase]=1;return;
     }
     if(!EvaluateProgram(row,rowBase,programBase,count,registers,40)) return;
     outputs[rowBase]=1;
