@@ -15,6 +15,59 @@ core::Twofold Center(const RetainedValue& value) {
     return core::Twofold(value.high) + core::Twofold(value.low) + core::Twofold(value.tail);
 }
 
+// Retained limbs can be widely separated in exponent. Accumulate their
+// difference exactly before rounding, including when common leading terms
+// cancel. Two doubles cannot preserve every such sparse expansion.
+class CenterDifference {
+  public:
+    CenterDifference(const RetainedValue& first, const RetainedValue& second) {
+        for (double value : {double(first.high), double(first.low), double(first.tail),
+                             -double(second.high), -double(second.low), -double(second.tail)})
+            Add(value);
+    }
+
+    void Add(double value) {
+        std::size_t written = 0;
+        for (std::size_t i = 0; i < size_; ++i) {
+            const double term = terms_[i];
+            const double sum = value + term;
+            const double recovered = sum - value;
+            const double residual = (value - (sum - recovered)) + (term - recovered);
+            if (residual != 0) terms_[written++] = residual;
+            value = sum;
+        }
+        if (value != 0) terms_[written++] = value;
+        size_ = written;
+    }
+
+    double Rounded() const {
+        double result = 0;
+        for (std::size_t i = 0; i < size_; ++i) result += terms_[i];
+        return result;
+    }
+
+    float Extract() {
+        const float value = static_cast<float>(Rounded());
+        Add(-double(value));
+        return value;
+    }
+
+    double Radius(double first, double second) const {
+        double result = first;
+        const auto include = [&result](double value) {
+            if (value > 0) result = std::nextafter(result + value, kInvalid);
+        };
+        include(second);
+        for (std::size_t i = 0; i < size_; ++i) include(std::abs(terms_[i]));
+        return result;
+    }
+
+  private:
+    // Six input limbs and at most three extraction subtractions.
+    std::array<double, 9> terms_{};
+    std::size_t size_ = 0;
+};
+
 bool ValidControl(const RetainedIntervalControl& control) {
     if (!core::IsRepresentedIntegratorStepControl(control.integrator)) return false;
     for (double value : {control.length_scale, control.frequency_scale, control.tolerance})
@@ -58,16 +111,11 @@ std::array<RetainedValue, 20> Increments(const RetainedStepOutput& output, bool 
                 result[group * 4 + axis] = full;
                 continue;
             }
-            // Twofold host addition preserves all 72 device bits. Split its
-            // result directly; a binary64 round trip would lose the tail.
-            const auto difference = Center(full) - Center(output.error[index]);
-            const float high = static_cast<float>(difference.Rounded());
-            const auto rest = difference - core::Twofold(high);
-            const float low = static_cast<float>(rest.Rounded());
-            const auto tail_rest = rest - core::Twofold(low);
-            const float tail = static_cast<float>(tail_rest.Rounded());
-            const double radius = double(full.radius) + output.error[index].radius +
-                                  std::abs((tail_rest - core::Twofold(tail)).Rounded());
+            CenterDifference difference(full, output.error[index]);
+            const float high = difference.Extract();
+            const float low = difference.Extract();
+            const float tail = difference.Extract();
+            const double radius = difference.Radius(full.radius, output.error[index].radius);
             const float upper = radius == 0
                                     ? 0
                                     : std::nextafter(static_cast<float>(radius),
@@ -93,7 +141,7 @@ double RetainedPhysicalError(const std::array<RetainedValue, 40>& first,
             i < 8 ? control.integrator.abs_tolerance * unit +
                         control.integrator.rel_tolerance * magnitude
                   : control.tolerance * (unit * control.column_scale[(i - 8) / 8] + magnitude);
-        const double error = std::abs((a - b).Rounded()) / scale;
+        const double error = std::abs(CenterDifference(first[i], second[i]).Rounded()) / scale;
         if (!std::isfinite(scale) || scale <= 0 || !std::isfinite(error)) return kInvalid;
         if (i < 8)
             sum += error * error;

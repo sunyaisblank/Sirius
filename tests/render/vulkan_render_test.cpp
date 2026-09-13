@@ -573,6 +573,8 @@ TEST(VulkanRenderSession, RetainedMovingThinLensKerrDetectorMatchesCpuLinearRadi
                                          [&](sirius::render::SessionConfig& config) {
                                              configure(config);
                                              config.backend = sirius::render::RenderBackend::Cpu;
+                                             config.tile_size = 1;
+                                             config.thread_count = 8;
                                          });
     ASSERT_EQ(gpu.size(), 32U);
     ASSERT_EQ(cpu.size(), gpu.size());

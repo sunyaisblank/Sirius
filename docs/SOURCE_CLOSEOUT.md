@@ -111,6 +111,12 @@ the next local problem starts a fresh arithmetic enclosure. This avoids treating
 repeated coordinate-transform interval wrapping as global trajectory uncertainty
 without rounding away retained limbs.
 
+Host comparisons subtract all six input limbs before reducing the difference
+to binary64. Lower-order increments use the same exact expansion accumulator
+and include discarded terms in an outward arithmetic radius. This preserves
+sparse tails even when their exponent span exceeds two doubles; a regression
+checks a represented difference of 2^-120 beside common leading terms.
+
 A strengthened continuation regression exposed two host handoff defects:
 reconstruction of displacement columns from rounded increments and inclusion of
 the rounded affine clock in the phase cache key. Accepted full endpoints now
@@ -149,9 +155,12 @@ bound to catalogue queries and refines coarse mixed-visibility cells before
 spending catalogue visits. Neither change increases a work cap or relaxes a
 radiance tolerance.
 
-The device reference sets include 23 complete smooth-camera cases, twelve
-Hamiltonian phase fixtures, fourteen endpoint/projection cases and 39 dense
-samples. Camera and dense fixture regeneration is byte-for-byte reproducible.
+The device reference sets include 23 complete smooth-camera cases, fifteen
+Hamiltonian phase fixtures, seventeen endpoint/projection cases and 48 dense
+samples. Three independent nonradial weak-field cases add half-unit and unit
+steps in both regular charts, with angular and pupil columns. The original
+critical and flat witnesses remain unchanged. Fixture regeneration is
+byte-for-byte reproducible.
 The FP64 stage/controller test passes, as do the narrow joint-controller and
 shared-tracer continuation/rollback checks. All seven detector regressions
 pass. A complete moving ThinLens flat frame passes finite radiance, actual

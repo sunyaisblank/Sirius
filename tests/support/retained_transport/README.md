@@ -4,8 +4,11 @@ These fixtures compare the bounded device Hamiltonian RK stage with independent
 75/105-digit geometry, generic metric inversion and numerical differentiation.
 Ten inputs are the separately derived minimum-step CPU states preserved in
 `../cpu_critical/projected_inputs.json`. An eleventh applies the exact chart
-reflection and a twelfth is an analytic flat-space trajectory with dyadic data.
-They are not replacements for the original launch packets or a full trace test.
+reflection. Three nonradial weak-field Kerr cases exercise half-unit and unit
+steps in both regular charts, with independently projected angular and pupil
+columns. An analytic flat-space trajectory supplies the dyadic control.
+These fifteen witnesses are not replacements for the original launch packets
+or a full trace test.
 
 Every fixture retains the exact binary32 input high/low/tail/radius/status words and
 all 160 scientific outputs: fifth-order phase state, fourth-order phase state,
@@ -34,16 +37,17 @@ The device code does not import these fixtures or the reference implementation.
 
 `endpoint_reference.py` independently differentiates the coordinate null
 quadratic, then converts its coordinate variations to physical covariant
-variations and retained phase continuation. Its fourteen cases include the
+variations and retained phase continuation. Its seventeen cases include the
 exact linear horizon and an ergoregion with two spatial corrections separated
 below one binary32 spacing. Comparing these corrections in scalar float picks
 the wrong physical derivative. The device retains the comparison and declines
 roots whose differentiated constraint is unrepresented.
 
 `dense_reference.py` uses the defining cubic Hermite basis and independent
-coordinate differentiation for thirty-six fixed-affine and moving-plane
-samples. It compares the device's factored secant polynomial, including small
-covariant variations and exact endpoint ownership. For an arrival event,
+coordinate differentiation for forty-eight fixed-affine and moving-plane
+samples, including the nonlinear flat controls. It compares the device's
+factored secant polynomial, including small covariant variations and exact
+endpoint ownership. For an arrival event,
 geodesic flow changes X by k times the arrival shift; the corresponding
 acceleration and connection terms cancel in V. The device preserves this
 covariant identity without subtracting large rounded terms.

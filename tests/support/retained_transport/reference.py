@@ -60,6 +60,7 @@ def integrate(phase, h):
 
 
 def calculate(row, incoming=False):
+    ref.params = list(map(mp.mpf, [1, .998, 0, 0]))
     ref.reflection = [-1, 1, -1, 1]
     phase = ref.initialize(row["previous"])
     if incoming:
@@ -69,6 +70,23 @@ def calculate(row, incoming=False):
     h = mp.mpf(row["h"])
     inputs = [*ref.params, *phase, 1 if incoming else -1, h]
     return [word for value in inputs for word in pair(value)], integrate(phase, h)
+
+
+def ordinary_case(h, incoming):
+    # A separately defined, nonradial weak-field ray with angular and pupil
+    # columns. Project the defining metric's null constraint at high precision;
+    # no product camera, symbolic derivative graph, or device result is used.
+    ref.params = list(map(mp.mpf, ["1", ".7", "0", "0"]))
+    ref.reflection = [1, 1, 1, 1] if incoming else [-1, 1, -1, 1]
+    row = {"x": ["0", "50", "2", "10"], "k": ["-1", ".2", ".3", "-.7"],
+           "columns": [
+               {"X": [0, 0, 0, 0], "V": [0, ".003", 0, 0]},
+               {"X": [0, 0, 0, 0], "V": [0, 0, ".004", 0]},
+               {"X": [0, 1, 0, 0], "V": [0, 0, 0, 0]},
+               {"X": [0, 0, 1, 0], "V": [0, 0, 0, 0]}]}
+    phase = ref.initialize(ref.project(ref.initialize(row)))
+    inputs = [*ref.params, *phase, 1 if incoming else -1, mp.mpf(h)]
+    return [word for value in inputs for word in pair(value)], integrate(phase, mp.mpf(h))
 
 
 def main():
@@ -86,6 +104,20 @@ def main():
         gaps = [abs(low - high) for low, high in zip(*samples)]
         assert max(gaps) < mp.mpf("1e-55")
         cases.append({"name": "incoming-reflection" if incoming else "critical-" + str(index),
+                      "input": packets[1], "reference": [str(v) for v in samples[1]],
+                      "precision_gap": [str(v) for v in gaps]})
+        print(cases[-1]["name"], "precision gap", max(gaps), flush=True)
+    for h, incoming in [(".5", False), ("1", False), ("1", True)]:
+        packets, samples = [], []
+        for precision in [75, 105]:
+            mp.mp.dps = precision
+            packet, values = ordinary_case(h, incoming)
+            packets.append(packet)
+            samples.append(values)
+        assert packets[0] == packets[1]
+        gaps = [abs(low - high) for low, high in zip(*samples)]
+        assert max(gaps) < mp.mpf("1e-55")
+        cases.append({"name": f"ordinary-{'incoming' if incoming else 'outgoing'}-{h}",
                       "input": packets[1], "reference": [str(v) for v in samples[1]],
                       "precision_gap": [str(v) for v in gaps]})
         print(cases[-1]["name"], "precision gap", max(gaps), flush=True)

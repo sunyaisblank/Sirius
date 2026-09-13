@@ -472,6 +472,20 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
     EXPECT_EQ(flat.midpoint.physical[0].Center(), .875);
     EXPECT_EQ(flat.refined.physical[3].Center(), 4.25);
 
+    // Sparse retained tails must survive the lower-order increment split even
+    // when the embedded error is exactly zero in flat space.
+    auto sparse = inputs.back();
+    sparse.start.phase[13] = sparse.start.physical[13] = {1, 0x1.000002p-35f, 0x1p-120f, 0, 1};
+    const auto sparse_output = AttemptRetainedIntervals(*compute, {&sparse, 1});
+    ASSERT_TRUE(sparse_output) << sparse_output.error().Description();
+    ASSERT_TRUE(sparse_output->front().admissible);
+    const auto& full_increment = sparse_output->front().full_increment[5];
+    const auto& lower_increment = sparse_output->front().lower_increment[5];
+    EXPECT_EQ(full_increment.tail, 0x1p-122f);
+    EXPECT_EQ(lower_increment.high, full_increment.high);
+    EXPECT_EQ(lower_increment.low, full_increment.low);
+    EXPECT_EQ(lower_increment.tail, full_increment.tail);
+
     inputs.resize(2);
     inputs[0].control.tolerance = 1e-30;
     inputs[1].start.phase[5].valid = 0;
@@ -757,6 +771,20 @@ TEST(RetainedValue, Binary64InputsKeepTheirRepresentationResidual) {
         RetainedValue::FromDouble(std::numeric_limits<double>::infinity()).IsRepresented());
     EXPECT_FALSE(RetainedValue::FromDouble(0x1p121).IsRepresented());
     EXPECT_FALSE((RetainedValue{1, 1, 0, 0, 1}.IsRepresented()));
+
+    std::array<RetainedValue, 40> first;
+    first.fill(RetainedValue::FromDouble(0));
+    first[8] = {1, 0x1.000002p-35f, 0x1p-120f, 0, 1};
+    ASSERT_TRUE(first[8].IsRepresented());
+    auto second = first;
+    second[8].tail = 0;
+    RetainedIntervalControl control;
+    control.length_scale = control.frequency_scale = 1;
+    control.tolerance = 1e-40;
+    const double expected = 0x1p-120 / (control.tolerance * (1 + first[8].Center()));
+    EXPECT_DOUBLE_EQ(RetainedPhysicalError(first, second, control), expected);
+    EXPECT_DOUBLE_EQ(RetainedPhysicalError(second, first, control), expected);
+    EXPECT_EQ(RetainedPhysicalError(first, first, control), 0);
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif
