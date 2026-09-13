@@ -6,10 +6,11 @@ struct RetainedTriple { float hi; float lo; float tail; float error; uint valid;
 RetainedTriple RTInvalid() {
     RetainedTriple r; r.hi=0; r.lo=0; r.tail=0; r.error=0; r.valid=0; return r;
 }
-RetainedTriple RTPack(float hi,float lo,float tail,float error) {
-    if(!RPBounded(hi,0x7b800000u)||!RPBounded(lo,0x7b800000u)||
-       !RPBounded(tail,0x7b800000u)||!RPBounded(error,0x7b800000u)||
-       (asuint(error)&0x80000000u)!=0u) return RTInvalid();
+// Callers bound all three private limbs by 2^124 before normalization, so
+// every intermediate sum is finite. The returned value retains the public
+// 2^120 component/radius limits, including after large-term cancellation.
+RetainedTriple RTFinishAccumulation(float hi,float lo,float tail,float error) {
+    if(!RPBounded(error,0x7b800000u)||(asuint(error)&0x80000000u)!=0u) return RTInvalid();
     float a,b,c,d,e,f,g;
     RetainedSum32(lo,tail,a,b);
     RetainedSum32(hi,a,c,d);
@@ -19,6 +20,11 @@ RetainedTriple RTPack(float hi,float lo,float tail,float error) {
     RetainedSum32(g,f,r.lo,r.tail);r.error=error;r.valid=1;
     if(!RPBounded(r.hi,0x7b800000u)) return RTInvalid();
     return r;
+}
+RetainedTriple RTPack(float hi,float lo,float tail,float error) {
+    if(!RPBounded(hi,0x7b800000u)||!RPBounded(lo,0x7b800000u)||
+       !RPBounded(tail,0x7b800000u)) return RTInvalid();
+    return RTFinishAccumulation(hi,lo,tail,error);
 }
 RetainedTriple RTConstant(float x) {return RTPack(x,0,0,0);}
 bool RTExact(RetainedTriple a,float x) {
@@ -41,27 +47,39 @@ float RTAbsoluteLower(RetainedTriple a) {
     uint bits=asuint(difference);
     return correction>=0?difference:(bits==0?0:asfloat(bits-1));
 }
-RetainedTriple RTAppend(RetainedTriple a,float x) {
+// A private sum need not normalize after every scalar term. Magnitude-ordered
+// TwoSum preserves overlapping limbs; each discarded fourth term is enclosed
+// immediately. Normalize once before magnitude estimates consume the limbs.
+RetainedTriple RTAccumulateTerm(RetainedTriple a,float x) {
     if(a.valid==0||!RPBounded(x,0x7b800000u)) return RTInvalid();
     float hi,lo,tail,first,second,last;
     RetainedSum32(a.hi,x,hi,first);
     RetainedSum32(a.lo,first,lo,second);
     RetainedSum32(a.tail,second,tail,last);
-    return RTPack(hi,lo,tail,RPUpAdd(a.error,RPAbs(last)));
+    float error=RPUpAdd(a.error,RPAbs(last));
+    // At most nine bounded terms enter a product. This private 2^124 bound
+    // leaves room for cancellation while keeping every sum finite. Finishing
+    // the accumulation reapplies the unchanged 2^120 public bound.
+    if(!RPBounded(hi,0x7d800000u)||!RPBounded(lo,0x7d800000u)||
+       !RPBounded(tail,0x7d800000u)||!RPBounded(error,0x7d800000u)) return RTInvalid();
+    RetainedTriple r;r.hi=hi;r.lo=lo;r.tail=tail;r.error=error;r.valid=1;return r;
 }
 RetainedTriple RTAdd(RetainedTriple a,RetainedTriple b) {
     if(a.valid==0||b.valid==0) return RTInvalid();
     if(RTExact(a,0)) return b;
     if(RTExact(b,0)) return a;
-    RetainedTriple r=RTAppend(RTAppend(RTAppend(a,b.hi),b.lo),b.tail);
-    return r.valid==0?r:RTPack(r.hi,r.lo,r.tail,RPUpAdd(r.error,b.error));
+    RetainedTriple r=RTAccumulateTerm(RTAccumulateTerm(RTAccumulateTerm(a,b.hi),b.lo),b.tail);
+    return r.valid==0?r:RTFinishAccumulation(r.hi,r.lo,r.tail,RPUpAdd(r.error,b.error));
 }
 RetainedTriple RTSubtract(RetainedTriple a,RetainedTriple b) {return RTAdd(a,RTNegate(b));}
 RetainedTriple RTAccumulateProduct(RetainedTriple sum,float a,float b) {
-    RetainedPair product=RPScalarProduct(a,b);
-    if(product.valid==0) return RTInvalid();
-    RetainedTriple r=RTAppend(RTAppend(sum,product.hi),product.lo);
-    if(r.valid!=0) r.error=RPUpAdd(r.error,product.error);
+    if(sum.valid==0||!RPBounded(a,0x5d800000u)||!RPBounded(b,0x5d800000u)) return RTInvalid();
+    if(a==0||b==0) return sum;
+    float hi,lo;RetainedProduct32(a,b,hi,lo);
+    RetainedTriple r=RTAccumulateTerm(RTAccumulateTerm(sum,hi),lo);
+    // Same product transform and underflow enclosure as RPScalarProduct;
+    // the private accumulator does not require a normalized scalar pair.
+    if(r.valid!=0) r.error=RPUpAdd(r.error,asfloat(5u));
     return r;
 }
 RetainedTriple RTAccumulateRoundedProduct(RetainedTriple sum,float a,float b) {
@@ -71,7 +89,7 @@ RetainedTriple RTAccumulateRoundedProduct(RetainedTriple sum,float a,float b) {
     // A full binary32 ulp plus the underflow allowance bounds this rounded
     // low-order product. Its omitted residual stays in the arithmetic radius.
     float error=RPUpAdd(RPUpMultiply(RPAbs(product),1.1920928955078125e-7f),asfloat(5u));
-    RetainedTriple r=RTAppend(sum,product);
+    RetainedTriple r=RTAccumulateTerm(sum,product);
     if(r.valid!=0) r.error=RPUpAdd(r.error,error);
     return r;
 }
@@ -93,7 +111,7 @@ RetainedTriple RTMultiply(RetainedTriple a,RetainedTriple b) {
         RPUpMultiply(RPAbs(a.tail),RPAbs(b.lo))),RPUpMultiply(RPAbs(a.tail),RPAbs(b.tail)));
     float uncertainty=RPUpAdd(RPUpAdd(RPUpMultiply(a.error,RTCenterUpper(b)),
         RPUpMultiply(b.error,RTCenterUpper(a))),RPUpMultiply(a.error,b.error));
-    return RTPack(r.hi,r.lo,r.tail,RPUpAdd(RPUpAdd(r.error,omitted),uncertainty));
+    return RTFinishAccumulation(r.hi,r.lo,r.tail,RPUpAdd(RPUpAdd(r.error,omitted),uncertainty));
 }
 RetainedTriple RTDivide(RetainedTriple a,RetainedTriple b) {
     if(a.valid==0||b.valid==0) return RTInvalid();

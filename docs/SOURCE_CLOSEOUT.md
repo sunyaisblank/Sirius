@@ -191,6 +191,23 @@ Radeon, WSL2/Dozen, native Windows/macOS build and runtime, native viewer input,
 and the exact IMAX workload still require independent qualification on a single
 final revision. Release packaging remains disabled.
 
+The retained transport arithmetic now accumulates scalar contributions privately
+and normalizes once per addition or multiplication. Each discarded fourth term
+enters an outward radius immediately; the public component and radius limits
+remain unchanged. Device regressions cover exact cancellation down to 2^-120,
+large-term cancellation, and a three-term Hermite product. An independent
+binary32/Fraction diagnostic checked 20,000 sums and 20,000 products, including
+output limb ordering and enclosure. The final arithmetic-only run passes all eleven retained backend/value tests,
+including the additional device witnesses and FP64 (141.593 seconds, no failures
+or skips). An earlier transient Dozen device-creation failure is retained in the
+diagnostic logs; the affected check and complete suite pass on rerun.
+
+A warmed 64-row weak-field interval benchmark measured 381 intervals/second
+before this arithmetic change and 452 afterward; two subsequent arithmetic-only
+runs measured 487 and 478. A shared-tableau experiment passed all ten device
+regressions but reduced throughput to 398 and 395 in alternating runs, so it was
+removed. These are component measurements, not completed-frame qualification.
+
 ## Closeout validation
 
 The complete-gate rehearsal exposed an exact finite-causal endpoint that was
@@ -232,6 +249,12 @@ resuming implementation. This is not a complete Mandatory pass. CI formatting
 was then applied to 22 first-party files. A later Mandatory run at `f76db09`
 passed its first 687 tests, including physical Radeon camera and metric probes,
 before being stopped to resume development. Logs remain in `.git/closeout/`.
+
+The rehearsal at `59934bf` passed 735 tests without failures, including all four
+40x24 thin/volumetric Doppler frames (4,346.61 seconds) and the installed-volume
+workflow. It was stopped while the 192x128 moving ThinLens point-catalogue scene
+was still tracing its first pixels, to resume performance work. This partial run
+is preserved separately and does not establish a complete Mandatory pass.
 
 The configured volume's `mandatory_gate.json` is the authority for the final
 revision's complete zero-failure, zero-skip test estate. It binds the exact

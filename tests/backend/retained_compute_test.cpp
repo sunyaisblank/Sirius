@@ -362,6 +362,57 @@ TEST_F(RetainedComputeTest, DenseSegmentsPreserveSmallCovariantArrivalDerivative
             }
         }
     }
+    // Endpoint ownership evaluates the retained sum directly. Cancellation
+    // must promote the surviving sparse term into the leading output limb.
+    const std::array<RetainedValue, 3> first{{
+        {1, 0x1.000002p-35f, 0x1p-120f, 0, 1},
+        {0x1p60f, 1, 0x1p-90f, 0, 1},
+        {0x1p120f, -0x1p95f, -0x1p70f, 0, 1},
+    }};
+    const std::array<RetainedValue, 3> delta{{
+        {-1, -0x1.000002p-35f, 0, 0, 1},
+        {-0x1p60f, -1, 0x1p-100f, 0, 1},
+        {-0x1p120f, 0x1p95f, 0x1p69f, 0, 1},
+    }};
+    const std::array<float, 3> sums{0x1p-120f, 0x1.004p-90f, -0x1p69f};
+    std::vector<RetainedDenseInput> cancellation(4);
+    for (auto& row : cancellation) {
+        row.values.fill(RetainedValue::FromDouble(0));
+        row.values[104] = row.values[105] = row.values[111] = RetainedValue::FromDouble(1);
+    }
+    for (std::size_t row = 0; row < first.size(); ++row) {
+        cancellation[row].values[5] = first[row];
+        cancellation[row].values[45] = RetainedValue::FromDouble(sums[row]);
+        cancellation[row].values[85] = delta[row];
+    }
+    // With zero displacement and opposite endpoint slopes, the midpoint is
+    // h*v/4. For e=2^-24, (1+e+e^2)*(1-e+e^2)/4 = (1+e^2+e^4)/4.
+    auto& product = cancellation.back();
+    product.values[9] = {1, 0x1p-24f, 0x1p-48f, 0, 1};
+    product.values[49] = {-1, -0x1p-24f, -0x1p-48f, 0, 1};
+    product.values[104] = {1, -0x1p-24f, 0x1p-48f, 0, 1};
+    product.values[105] = RetainedValue::FromDouble(.5);
+    const auto cancelled = compute->Dense(cancellation);
+    ASSERT_TRUE(cancelled) << cancelled.error().Description();
+    for (std::size_t row = 0; row < first.size(); ++row) {
+        SCOPED_TRACE(row);
+        ASSERT_TRUE((*cancelled)[row].valid);
+        const auto& value = (*cancelled)[row].physical[1];
+        EXPECT_EQ(value.high, sums[row]);
+        EXPECT_EQ(value.low, 0);
+        EXPECT_EQ(value.tail, 0);
+        EXPECT_EQ(value.radius, 0);
+    }
+    ASSERT_TRUE(cancelled->back().valid);
+    const auto& value = cancelled->back().physical[1];
+    const auto center = sirius::core::Twofold(value.high) + sirius::core::Twofold(value.low) +
+                        sirius::core::Twofold(value.tail);
+    const auto exact = sirius::core::Twofold(.25) + sirius::core::Twofold(0x1p-50) +
+                       sirius::core::Twofold(0x1p-98);
+    EXPECT_LE(std::abs((center - exact).Rounded()), value.radius);
+    EXPECT_LT(value.radius, 0x1p-60);
+    EXPECT_NE(value.low, 0);
+
     auto input = std::bit_cast<RetainedDenseInput>(cases[1].input);
     for (std::size_t i = 106; i < 110; ++i) input.values[i] = RetainedValue::FromDouble(0);
     auto invalid = compute->Dense(std::span(&input, 1));
