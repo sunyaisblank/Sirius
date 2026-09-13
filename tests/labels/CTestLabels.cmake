@@ -313,6 +313,7 @@ set_tests_properties(
     CoupledTransport.PhysicalCameraColumnsReachTheLiveCpuSourceMap
     CoupledTransport.NonfiniteColumnsAndUnrepresentedInteriorDeclineWithoutCommit
     CoupledTransport.EndpointAndZeroFractionIncludeEventTimeVariation
+    CoupledTransport.FixedAffineEndpointsPreserveSmallCovariantColumns
     CoupledTransport.EveryCanonicalColumnCanRejectProjectedAndInteriorCurvedError
     CoupledTransport.AcceptedIncrementsKeepRefinedEventDerivativesTranslationInvariant
     CoupledTransport.SkyMapIsIndependentOfPhysicalBundleOutputAndWorkLimitDeclines

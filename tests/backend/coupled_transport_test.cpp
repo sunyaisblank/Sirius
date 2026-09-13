@@ -179,6 +179,39 @@ TEST(CoupledTransport, EndpointAndZeroFractionIncludeEventTimeVariation) {
         Geodesic::SampleCoupledSegment(&metric, start, initial, end, final, 2.0, 1.0, &normal));
 }
 
+TEST(CoupledTransport, FixedAffineEndpointsPreserveSmallCovariantColumns) {
+    KerrSchildFamily metric(KerrSchildParams::Kerr(1.0, 0.9));
+    auto start = FlatRay();
+    start.position(2) = 2.0;
+    auto end = start;
+    end.position += start.velocity * 0.01;
+    auto initial = Columns().variations;
+    auto final = initial;
+    for (int column = 0; column < 4; ++column) {
+        initial[column].displacement(1) = 1e8;
+        initial[column].derivative(1) = 1e-12;
+        final[column].displacement(1) = 1e8 + 1;
+        final[column].derivative(1) = -1e-12;
+    }
+    for (const double fraction : {0.0, 1.0}) {
+        const auto sample =
+            Geodesic::SampleCoupledSegment(&metric, start, initial, end, final, 0.01, fraction);
+        ASSERT_TRUE(sample);
+        const auto& expected = fraction == 0 ? initial : final;
+        for (int column = 0; column < 4; ++column)
+            for (int component = 0; component < 4; ++component) {
+                EXPECT_EQ(sample->variations[column].displacement(component),
+                          expected[column].displacement(component));
+                EXPECT_EQ(sample->variations[column].derivative(component),
+                          expected[column].derivative(component));
+            }
+        auto invalid = initial;
+        invalid[2].derivative(3) = std::numeric_limits<double>::quiet_NaN();
+        EXPECT_FALSE(
+            Geodesic::SampleCoupledSegment(&metric, start, invalid, end, final, 0.01, fraction));
+    }
+}
+
 TEST(CoupledTransport, EveryCanonicalColumnCanRejectProjectedAndInteriorCurvedError) {
     KerrSchildFamily metric(KerrSchildParams::Schwarzschild(1.0));
     auto initial = FlatRay();

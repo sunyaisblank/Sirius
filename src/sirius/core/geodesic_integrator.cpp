@@ -542,22 +542,30 @@ bool EvaluateVariationStage(IMetric& metric, const Vec4& position, const Vec4& m
                     if (!std::isfinite(second[axis][mu][a][b])) return false;
                 }
     }
+    // Contract geometry with the central tangent once. These are the same
+    // Hamiltonian Jacobian blocks for every column; repeating the contractions
+    // for each film/pupil direction does not add an independent error estimate.
+    double first_contraction[4][4]{};
+    double second_contraction[4][4]{};
+    for (int axis = 0; axis < 4; ++axis)
+        for (int a = 0; a < 4; ++a)
+            for (int b = 0; b < 4; ++b) {
+                first_contraction[axis][a] += dg(axis, a, b).real * tangent(b);
+                for (int mu = 0; mu < 4; ++mu)
+                    second_contraction[mu][axis] +=
+                        0.5 * second[axis][mu][a][b] * tangent(a) * tangent(b);
+            }
     for (std::size_t column = 0; column < columns.size(); ++column) {
         Vec4 covector = columns[column].p;
         for (int a = 0; a < 4; ++a)
-            for (int b = 0; b < 4; ++b)
-                for (int axis = 0; axis < 4; ++axis)
-                    covector(a) -= dg(axis, a, b).real * columns[column].x(axis) * tangent(b);
+            for (int axis = 0; axis < 4; ++axis)
+                covector(a) -= first_contraction[axis][a] * columns[column].x(axis);
         rhs[column].x = TensorOps::RaiseIndex(covector, inverse);
         for (int mu = 0; mu < 4; ++mu) {
             double value = 0.0;
-            for (int a = 0; a < 4; ++a)
-                for (int b = 0; b < 4; ++b) {
-                    value += dg(mu, a, b).real * tangent(a) * rhs[column].x(b);
-                    for (int axis = 0; axis < 4; ++axis)
-                        value += 0.5 * second[axis][mu][a][b] * columns[column].x(axis) *
-                                 tangent(a) * tangent(b);
-                }
+            for (int axis = 0; axis < 4; ++axis)
+                value += first_contraction[mu][axis] * rhs[column].x(axis) +
+                         second_contraction[mu][axis] * columns[column].x(axis);
             rhs[column].p(mu) = value;
         }
         if (!FiniteVector(rhs[column].x) || !FiniteVector(rhs[column].p)) return false;
@@ -853,6 +861,26 @@ std::optional<CoupledSegmentSample> Geodesic::SampleCoupledSegment(
     if (!FiniteVector(result.ray.position) || !FiniteVector(result.ray.velocity) ||
         !FiniteVector(result.ray.acceleration) || !metric->IsValidEvent(result.ray.position))
         return std::nullopt;
+    // A fixed-affine endpoint already owns its covariant columns. Rebuilding
+    // three connections and converting V -> K -> V introduces cancellation
+    // without supplying another derivative estimate. Keep the independently
+    // retained displacement at the endpoint, just as the central interpolant
+    // does; interior samples and moving events still take the full path below.
+    if (!event_normal && (s == 0.0 || s == 1.0)) {
+        result.variations = s == 0.0 ? start_variations : end_variations;
+        for (std::size_t column = 0; column < result.variations.size(); ++column) {
+            for (const auto* endpoint : {&start_variations[column], &end_variations[column]})
+                if (!FiniteVector(endpoint->displacement) || !FiniteVector(endpoint->derivative))
+                    return std::nullopt;
+            if (s == 1.0 && increment)
+                result.variations[column].displacement =
+                    start_variations[column].displacement + increment->displacement[column];
+            if (!FiniteVector(result.variations[column].displacement) ||
+                !FiniteVector(result.variations[column].derivative))
+                return std::nullopt;
+        }
+        return result;
+    }
     Metric4d g;
     Tensor<Dual<double>, 4, 4, 4> dg;
     metric->Evaluate(start.position, g, dg);
