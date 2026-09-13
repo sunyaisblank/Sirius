@@ -141,6 +141,11 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:CoupledTransport.EveryCanonicalColumnCanRejectProjectedAndInteriorCurvedError",
         "gtest:CoupledTransport.AcceptedIncrementsKeepRefinedEventDerivativesTranslationInvariant",
         "gtest:CoupledTransport.EndpointAndZeroFractionIncludeEventTimeVariation",
+        "gtest:RetainedArithmetic.SmallTermsSurviveLargeSumsProductsAndDivision",
+        "gtest:RetainedArithmetic.CartesianGradientMatchesIndependentRationalValues",
+        "gtest:RetainedArithmetic.CompleteCriticalMetricMatchesIndependentPrecisionWitnesses",
+        "gtest:CoupledTransport.MinimumStepCriticalColumnsMatchIndependentRefinedFlow",
+        "gtest:CoupledTransport.OriginalCriticalLaunchesHavePhysicalFatesOrExplicitWorkExhaustion",
         "gtest:CoupledTransport.FlatFourColumnsUseActualProjectedAndInteriorTrials",
         "gtest:CoupledTransport.CameraColumnUnitsPreserveTheJointErrorDecision",
         "gtest:CoupledTransport.PhysicalCameraColumnsReachTheLiveCpuSourceMap",
@@ -440,8 +445,8 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "6937170bfb2922283ba87a0e478c3a29760ed01d31b886daf0d551b990ba725c",
-    "required_dimensions": "fcd626295cd1926f0ec89664017e0cdf1b3ac117751664205186ec70c99aaf39",
+    "acceptance_criteria": "208db809d6db6e2605fc142219b97483bd4d6edfdd01329be29fb47481e3d37d",
+    "required_dimensions": "a13e6e3034c962578fb0ea934790503edb24130bc8361c68519fe9f60b37fc2a",
     "capability_contracts": "48c5b338c14c11e2ad7275322cd72f4bd014df621ca69e65e119621066fd5c6c",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}

@@ -51,6 +51,22 @@ class OutgoingKerrSchild final : public IMetric {
         return true;
     }
 
+    bool EvaluateRetained(const Vec4& position, RetainedMetricSample& sample) const override {
+        RetainedMetricSample result;
+        if (!source_.EvaluateRetained(Reflect(position), result)) return false;
+        for (int mu = 0; mu < 4; ++mu)
+            for (int nu = 0; nu < 4; ++nu) {
+                const double sign = kReflection[mu] * kReflection[nu];
+                result.metric(mu, nu) = result.metric(mu, nu) * sign;
+                result.inverse(mu, nu) = result.inverse(mu, nu) * sign;
+                for (int axis = 0; axis < 4; ++axis)
+                    result.derivative(axis, mu, nu) =
+                        result.derivative(axis, mu, nu) * (sign * kReflection[axis]);
+            }
+        sample = result;
+        return true;
+    }
+
     bool InverseMetric(const Vec4& position, Metric4d& inverse) const override {
         if (!source_.InverseMetric(Reflect(position), inverse)) return false;
         for (int mu = 0; mu < 4; ++mu)

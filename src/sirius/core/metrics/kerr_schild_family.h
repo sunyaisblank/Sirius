@@ -16,10 +16,12 @@
 
 #include "sirius/base/contracts.h"
 #include "sirius/core/coordinates.h"
+#include "sirius/core/first_order_number.h"
 #include "sirius/core/kerr_orbits.h"
 #include "sirius/core/metrics/metric.h"
 #include "sirius/core/metrics/registry.h"
 #include "sirius/core/second_order_number.h"
+#include "sirius/core/twofold.h"
 
 #include <algorithm>
 #include <cmath>
@@ -49,8 +51,8 @@ Scalar KerrSchildFactor(const Scalar& radius, const Scalar& z, const KerrSchildP
     const Scalar r2 = radius * radius;
     if (p.M != 0.0 || p.Q != 0.0) {
         const Scalar cosine = z / radius;
-        const Scalar sigma = r2 + Scalar(p.a * p.a) * cosine * cosine;
-        result = (Scalar(2.0 * p.M) * radius - Scalar(p.Q * p.Q)) / sigma;
+        const Scalar sigma = r2 + Scalar(p.a) * Scalar(p.a) * cosine * cosine;
+        result = (Scalar(2.0) * Scalar(p.M) * radius - Scalar(p.Q) * Scalar(p.Q)) / sigma;
     }
     if (p.a == 0.0 && p.Lambda != 0.0) result = result + Scalar(p.Lambda) * r2 / Scalar(3.0);
     return result;
@@ -59,7 +61,7 @@ Scalar KerrSchildFactor(const Scalar& radius, const Scalar& z, const KerrSchildP
 template <typename Scalar>
 std::array<Scalar, 4> KerrSchildNullCovector(const Scalar& x, const Scalar& y, const Scalar& z,
                                              const Scalar& radius, double spin) {
-    const Scalar denominator = radius * radius + Scalar(spin * spin);
+    const Scalar denominator = radius * radius + Scalar(spin) * Scalar(spin);
     return {Scalar(1.0), (radius * x + Scalar(spin) * y) / denominator,
             (radius * y - Scalar(spin) * x) / denominator, z / radius};
 }
@@ -70,6 +72,7 @@ class KerrSchildFamily : public IMetric {
   public:
     KerrSchildFamily();
     bool EvaluateHessian(const Vec4& position, MetricHessian& hessian) const override;
+    bool EvaluateRetained(const Vec4& position, RetainedMetricSample& sample) const override;
     explicit KerrSchildFamily(const KerrSchildParams& params);
 
     void Evaluate(const Tensor<double, 4>& pos, Metric4d& g,
@@ -142,6 +145,11 @@ class KerrSchildFamily : public IMetric {
     double ExtremalityParameter() const;
 
   private:
+    // Extra arithmetic precision before materializing the public binary64
+    // metric/gradient. Extreme ranges continue through the scale-safe path.
+    bool TryEvaluateRetained(const Vec4& position, Metric4d& metric,
+                             Tensor<Dual<double>, 4, 4, 4>& derivative, Metric4d* inverse = nullptr,
+                             RetainedMetricSample* retained = nullptr) const;
     enum class FlatHorizonStatus { Absent, Available, Unrepresentable };
     struct FlatHorizonResult {
         FlatHorizonStatus status;
@@ -278,6 +286,71 @@ inline double KerrSchildFamily::ComputeH(double r, double z) const {
     return metric_detail::KerrSchildFactor(r, z, params_);
 }
 
+inline bool KerrSchildFamily::TryEvaluateRetained(const Vec4& position, Metric4d& metric,
+                                                  Tensor<Dual<double>, 4, 4, 4>& derivative,
+                                                  Metric4d* inverse,
+                                                  RetainedMetricSample* retained) const {
+    if (params_.M == 0.0 && params_.Q == 0.0 && params_.Lambda == 0.0) return false;
+    const double scale = std::max(
+        {std::abs(position(1)), std::abs(position(2)), std::abs(position(3)), std::abs(params_.a)});
+    // This direct retained evaluation has fourth powers. Do not replace the
+    // existing scaled radial authority when those intermediates leave its
+    // working range. No event or physical parameter is clamped at this boundary.
+    if (!(scale >= 1e-50 && scale <= 1e50) || params_.M > 1e50 || std::abs(params_.Q) > 1e50 ||
+        params_.Lambda > 1e50)
+        return false;
+    using Jet = FirstOrder3<Twofold>;
+    const auto x = Jet::Variable(position(1), 0);
+    const auto y = Jet::Variable(position(2), 1);
+    const auto z = Jet::Variable(position(3), 2);
+    const Jet spin(params_.a);
+    const auto reduced = x * x + y * y + z * z - spin * spin;
+    const auto discriminant = sqrt(reduced * reduced + Jet(4) * spin * spin * z * z);
+    const auto radius = sqrt(reduced.value.Rounded() >= 0.0
+                                 ? (reduced + discriminant) / Jet(2)
+                                 : Jet(2) * spin * spin * z * z / (discriminant - reduced));
+    if (!std::isfinite(radius.value.Rounded()) || !(radius.value.Rounded() > 0.0)) return false;
+    const auto factor = metric_detail::KerrSchildFactor(radius, z, params_);
+    const auto ell = metric_detail::KerrSchildNullCovector(x, y, z, radius, params_.a);
+    Metric4d values, inverse_values;
+    RetainedMetricSample precise;
+    Tensor<Dual<double>, 4, 4, 4> gradients;
+    for (int mu = 0; mu < 4; ++mu)
+        for (int nu = 0; nu < 4; ++nu) {
+            const auto correction = factor * ell[mu] * ell[nu];
+            const Twofold flat(mu == nu ? (mu == 0 ? -1.0 : 1.0) : 0.0);
+            const double value = (flat + correction.value).Rounded();
+            const double inverse_value =
+                (flat - correction.value * ((mu == 0 ? -1.0 : 1.0) * (nu == 0 ? -1.0 : 1.0)))
+                    .Rounded();
+            if (!std::isfinite(value) || !std::isfinite(inverse_value)) return false;
+            values(mu, nu) = value;
+            inverse_values(mu, nu) = inverse_value;
+            precise.metric(mu, nu) = flat + correction.value;
+            precise.inverse(mu, nu) =
+                flat - correction.value * ((mu == 0 ? -1.0 : 1.0) * (nu == 0 ? -1.0 : 1.0));
+            for (int axis = 0; axis < 3; ++axis) {
+                const double gradient = correction.gradient[axis].Rounded();
+                if (!std::isfinite(gradient)) return false;
+                gradients(axis + 1, mu, nu) = gradient;
+                precise.derivative(axis + 1, mu, nu) = correction.gradient[axis];
+            }
+        }
+    metric = values;
+    derivative = gradients;
+    if (inverse) *inverse = inverse_values;
+    if (retained) *retained = precise;
+    return true;
+}
+
+inline bool KerrSchildFamily::EvaluateRetained(const Vec4& position,
+                                               RetainedMetricSample& sample) const {
+    if (!IsValidEvent(position)) return false;
+    Metric4d metric;
+    Tensor<Dual<double>, 4, 4, 4> derivative;
+    return TryEvaluateRetained(position, metric, derivative, nullptr, &sample);
+}
+
 inline void KerrSchildFamily::Evaluate(const Tensor<double, 4>& pos, Metric4d& g,
                                        Tensor<Dual<double>, 4, 4, 4>& dg) {
     const bool represented = IsValidEvent(pos);
@@ -291,6 +364,8 @@ inline void KerrSchildFamily::Evaluate(const Tensor<double, 4>& pos, Metric4d& g
                 for (int nu = 0; nu < 4; ++nu) dg(axis, mu, nu) = nan;
         return;
     }
+
+    if (TryEvaluateRetained(pos, g, dg)) return;
 
     [[maybe_unused]] double t = pos(0);  // Time coordinate (unused in a static metric).
     double x = pos(1);
@@ -485,6 +560,10 @@ inline bool KerrSchildFamily::InverseMetric(const Tensor<double, 4>& pos, Metric
             for (int nu = 0; nu < 4; ++nu) g_inv(mu, nu) = nan;
         return false;
     }
+
+    Metric4d retained_metric;
+    Tensor<Dual<double>, 4, 4, 4> retained_derivative;
+    if (TryEvaluateRetained(pos, retained_metric, retained_derivative, &g_inv)) return true;
 
     double x = pos(1), y = pos(2), z = pos(3);
 

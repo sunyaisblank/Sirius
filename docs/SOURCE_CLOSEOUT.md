@@ -64,15 +64,37 @@ exact geometric zeros in continuous detector offsets. ThinLens and celestial
 basis probes also pass on the pinned Radeon/Dozen route. These checks establish
 the tested CPU connection, not full-scene convergence or throughput.
 
+The saved CPU critical-ray failures now have a governed regression. Portable
+twofold working arithmetic retains central momentum, the four Hamiltonian
+variations, metric/gradient values and covariant conversions. Each derivative
+uses its actual central stage tangent and shares that stage's private geometry.
+The defining DP tableau's constant-field row sums are preserved explicitly.
+The public state types and the original error budgets remain unchanged.
+
+All fourteen original launch packets are preserved and replayed without changing
+their directions, observer boosts, tolerances or 30,000-attempt limit. Twelve
+reach physical outcomes; the other two explicitly exhaust that limit. None
+terminates with the reproduced interpolation failure. Ten separately derived
+minimum-step states agree with independent 75-digit RK4 refinement, and 960
+retained metric/inverse/gradient fields agree with independent 75/110-digit
+witnesses. The latter also detect scalar-only substitutions. These are finite
+numerical witnesses, not certified interval enclosures.
+
+All 491 core tests and all fourteen coupled-transport tests pass on this source,
+including physical neighbouring-ray, event and refinement controls. The full
+coupled suite takes about eight minutes on the current machine. These checks do
+not constitute a complete Mandatory or full-workload qualification.
+
 ## Remaining implementation
 
 The September 10 handoff reported incomplete retained-precision observer-frame
 and camera transport, joint admission of the central ray and four physical
 film/pupil derivatives, dense event handling, and physical detector integration.
-The GPU production migration, GPU detector integration, remaining saved CPU
-critical-ray cases, full-workload image quality/performance, and native platform
-qualification remain open. The CPU corrections above close specific reproduced
-failures; they do not establish that every historical critical case is resolved.
+The GPU production migration, GPU detector integration, full-workload image
+quality/performance and native platform qualification remain open. The CPU
+corrections above resolve the reproduced interpolation failures in the saved
+launch regression; two original packets still require more work than their
+unchanged attempt limit allows.
 
 The handoff referenced staged retained-pair arithmetic and camera-direction
 modules under the former `.sirius-release-work/evidence/` directory. That

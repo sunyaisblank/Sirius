@@ -1,5 +1,5 @@
 // Implementation of the geodesic integrator declared in geodesic_integrator.h.
-// Ported from PHGD001A.cpp; arithmetic order, casts, and literals bit-identical.
+// Hamiltonian stages and their four directional derivatives share one admission.
 //
 // Hamiltonian formulation with covariant momenta makes the continuum null
 // constraint H = (1/2) g^mu_nu p_mu p_nu = 0 a conserved quantity. Numerical
@@ -13,6 +13,7 @@
 #include "sirius/base/contracts.h"
 #include "sirius/core/constants.h"
 #include "sirius/core/trace_boundary.h"
+#include "sirius/core/twofold.h"
 
 #include <algorithm>
 #include <cmath>
@@ -142,7 +143,9 @@ bool Geodesic::IntegrateStep(Lightray& ray, IMetric* metric, float min_step, flo
         return false;
     }
 
-    // Metric and initial momentum.
+    // Keep central momentum in the same arithmetic as its four variations.
+    // Rounding g*k between stages perturbs the small covariant columns after
+    // the inverse transformation, even when the nominal ray looks unchanged.
     Metric4d g0;
     Tensor<Dual<double>, 4, 4, 4> dg0;
     metric->Evaluate(x0, g0, dg0);
@@ -448,6 +451,52 @@ static double RelativeNullResidual(const Vec4& velocity, const Metric4d& metric)
 
 namespace {
 
+RetainedMetricSample RetainedGeometry(IMetric& metric, const Vec4& position,
+                                      std::uint64_t* evaluations = nullptr) {
+    RetainedMetricSample result;
+    if (metric.EvaluateRetained(position, result)) {
+        if (evaluations) ++*evaluations;
+        return result;
+    }
+    Metric4d g;
+    Tensor<Dual<double>, 4, 4, 4> dg;
+    metric.Evaluate(position, g, dg);
+    if (evaluations) ++*evaluations;
+    const auto inverse = InverseAt(&metric, position, g);
+    for (int mu = 0; mu < 4; ++mu)
+        for (int nu = 0; nu < 4; ++nu) {
+            result.metric(mu, nu) = g(mu, nu).real;
+            result.inverse(mu, nu) = inverse(mu, nu).real;
+            for (int axis = 0; axis < 4; ++axis)
+                result.derivative(axis, mu, nu) = dg(axis, mu, nu).real;
+        }
+    return result;
+}
+Metric4d RoundedMetric(const RetainedMetricSample& sample) {
+    Metric4d result;
+    for (int mu = 0; mu < 4; ++mu)
+        for (int nu = 0; nu < 4; ++nu) result(mu, nu) = sample.metric(mu, nu).Rounded();
+    return result;
+}
+
+using WideConnection = std::array<std::array<std::array<Twofold, 4>, 4>, 4>;
+static WideConnection WideChristoffel(const Tensor<Twofold, 4, 4>& inverse,
+                                      const Tensor<Twofold, 4, 4, 4>& dg) {
+    WideConnection G;
+    for (int mu = 0; mu < 4; ++mu)
+        for (int a = 0; a < 4; ++a)
+            for (int b = 0; b < 4; ++b) {
+                Twofold sum;
+                for (int v = 0; v < 4; ++v)
+                    sum += inverse(mu, v) * (dg(a, v, b) + dg(b, v, a) - dg(v, a, b));
+                G[mu][a][b] = sum * .5;
+            }
+    return G;
+}
+static Twofold FirstKind(const Tensor<Twofold, 4, 4, 4>& dg, int first, int a, int b) {
+    return (dg(a, first, b) + dg(b, first, a) - dg(first, a, b)) * .5;
+}
+
 bool FiniteVector(const Vec4& value) {
     for (int component = 0; component < 4; ++component)
         if (!std::isfinite(value(component))) return false;
@@ -466,38 +515,91 @@ bool ValidCoupledControl(const Rk45CoupledState& state) {
     return true;
 }
 
-struct PhaseVariation {
-    Vec4 x;
-    Vec4 p;
+struct WideVector {
+    std::array<Twofold, 4> values{};
+    WideVector() = default;
+    WideVector(const Vec4& value) {
+        for (int i = 0; i < 4; ++i) values[i] = value(i);
+    }
+    Twofold& operator()(int i) { return values[i]; }
+    const Twofold& operator()(int i) const { return values[i]; }
+    Vec4 Rounded() const {
+        Vec4 result;
+        for (int i = 0; i < 4; ++i) result(i) = values[i].Rounded();
+        return result;
+    }
+    WideVector& operator+=(const WideVector& other) {
+        for (int i = 0; i < 4; ++i) values[i] += other(i);
+        return *this;
+    }
+    WideVector& operator-=(const WideVector& other) {
+        for (int i = 0; i < 4; ++i) values[i] -= other(i);
+        return *this;
+    }
+    friend WideVector operator+(WideVector a, const WideVector& b) { return a += b; }
+    friend WideVector operator-(WideVector a, const WideVector& b) { return a -= b; }
+    friend WideVector operator*(WideVector a, double b) {
+        for (auto& value : a.values) value = value * b;
+        return a;
+    }
 };
-using PhaseVariations = std::array<PhaseVariation, 4>;
+static bool FiniteVector(const WideVector& value) {
+    for (const auto& component : value.values)
+        if (!std::isfinite(component.hi) || !std::isfinite(component.lo)) return false;
+    return true;
+}
+static WideVector WideRaiseIndex(const WideVector& value, const Tensor<Twofold, 4, 4>& inverse) {
+    WideVector result;
+    for (int i = 0; i < 4; ++i)
+        for (int j = 0; j < 4; ++j) result(i) += inverse(i, j) * value(j);
+    return result;
+}
 
-Vec4 CoordinateVariation(const GeodesicVariation& variation, const Vec4& tangent,
-                         const ChristoffelSymbols& connection) {
-    Vec4 coordinate = variation.derivative;
+// Preserve the exact constant-field row sums of the defining DP tableau.
+static WideVector StableIncrement(const WideVector& first, double row_sum, double interval,
+                                  std::initializer_list<std::pair<double, WideVector>> later) {
+    WideVector result = first * row_sum;
+    for (const auto& [weight, value] : later) result += (value - first) * weight;
+    return result * interval;
+}
+static WideVector WideMomentumDerivative(const WideVector& tangent,
+                                         const Tensor<Twofold, 4, 4, 4>& dg) {
+    WideVector result;
     for (int mu = 0; mu < 4; ++mu)
         for (int a = 0; a < 4; ++a)
-            for (int b = 0; b < 4; ++b)
-                coordinate(mu) -=
-                    connection.gamma(mu, a, b).real * tangent(a) * variation.displacement(b);
-    return coordinate;
+            for (int b = 0; b < 4; ++b) result(mu) += dg(mu, a, b) * tangent(a) * tangent(b) * .5;
+    return result;
 }
+static bool EvaluateWideRk45Stage(const Vec4& x, const WideVector& p, IMetric* metric,
+                                  WideVector& k_x, WideVector& k_p, RetainedMetricSample& geometry,
+                                  std::uint64_t* evaluations) {
+    if (!metric->IsValidEvent(x) || !FiniteVector(p)) return false;
+    geometry = RetainedGeometry(*metric, x, evaluations);
+    k_x = WideRaiseIndex(p, geometry.inverse);
+    k_p = WideMomentumDerivative(k_x, geometry.derivative);
+    return FiniteVector(k_x) && FiniteVector(k_p);
+}
+
+struct PhaseVariation {
+    WideVector x;
+    WideVector p;
+};
+using PhaseVariations = std::array<PhaseVariation, 4>;
 
 // Differentiate the same Hamiltonian stage as the central integrator. The
 // Hessian comes from the metric's exact derivative hook where available. The
 // fallback differentiates its first derivatives with a fourth-order stencil;
 // those samples must be finite, distinct and in the concrete metric chart.
-bool EvaluateVariationStage(IMetric& metric, const Vec4& position, const Vec4& momentum,
+bool EvaluateVariationStage(IMetric& metric, const Vec4& position, const WideVector& tangent,
                             const PhaseVariations& columns, PhaseVariations& rhs,
-                            Rk45CoupledState& control) {
+                            Rk45CoupledState& control, const RetainedMetricSample& geometry) {
     ++control.variation_stages;
     if (!metric.IsValidEvent(position)) return false;
-    Metric4d g;
-    Tensor<Dual<double>, 4, 4, 4> dg;
-    metric.Evaluate(position, g, dg);
-    ++control.variation_metric_evaluations;
-    const auto inverse = InverseAt(&metric, position, g);
-    const Vec4 tangent = TensorOps::RaiseIndex(momentum, inverse);
+    const auto& dg = geometry.derivative;
+    const auto& inverse = geometry.inverse;
+    // Linearize the actual central stage tangent. Reconstructing it from a
+    // rounded covector changes the first stage (which uses the launch tangent
+    // directly), and that discrepancy is amplified by large columns.
     if (!FiniteVector(tangent)) return false;
     MetricHessian hessian;
     const bool analytic_hessian = metric.EvaluateHessian(position, hessian);
@@ -545,24 +647,24 @@ bool EvaluateVariationStage(IMetric& metric, const Vec4& position, const Vec4& m
     // Contract geometry with the central tangent once. These are the same
     // Hamiltonian Jacobian blocks for every column; repeating the contractions
     // for each film/pupil direction does not add an independent error estimate.
-    double first_contraction[4][4]{};
-    double second_contraction[4][4]{};
+    Twofold first_contraction[4][4]{};
+    Twofold second_contraction[4][4]{};
     for (int axis = 0; axis < 4; ++axis)
         for (int a = 0; a < 4; ++a)
             for (int b = 0; b < 4; ++b) {
-                first_contraction[axis][a] += dg(axis, a, b).real * tangent(b);
+                first_contraction[axis][a] += dg(axis, a, b) * tangent(b);
                 for (int mu = 0; mu < 4; ++mu)
                     second_contraction[mu][axis] +=
-                        0.5 * second[axis][mu][a][b] * tangent(a) * tangent(b);
+                        Twofold(second[axis][mu][a][b]) * 0.5 * tangent(a) * tangent(b);
             }
     for (std::size_t column = 0; column < columns.size(); ++column) {
-        Vec4 covector = columns[column].p;
+        WideVector covector = columns[column].p;
         for (int a = 0; a < 4; ++a)
             for (int axis = 0; axis < 4; ++axis)
                 covector(a) -= first_contraction[axis][a] * columns[column].x(axis);
-        rhs[column].x = TensorOps::RaiseIndex(covector, inverse);
+        rhs[column].x = WideRaiseIndex(covector, inverse);
         for (int mu = 0; mu < 4; ++mu) {
-            double value = 0.0;
+            Twofold value;
             for (int axis = 0; axis < 4; ++axis)
                 value += first_contraction[mu][axis] * rhs[column].x(axis) +
                          second_contraction[mu][axis] * columns[column].x(axis);
@@ -574,7 +676,8 @@ bool EvaluateVariationStage(IMetric& metric, const Vec4& position, const Vec4& m
 }
 
 bool VariationPair(IMetric& metric, const std::array<Vec4, 7>& positions,
-                   const std::array<Vec4, 7>& momenta, const Vec4& initial_tangent, double interval,
+                   const std::array<WideVector, 7>& tangents, const WideVector& initial_tangent,
+                   const std::array<RetainedMetricSample, 7>& geometries, double interval,
                    Rk45CoupledState& control, PhaseVariations& fifth, PhaseVariations& fourth,
                    CoupledSegmentIncrement& fifth_increment,
                    CoupledSegmentIncrement& fourth_increment) {
@@ -587,54 +690,60 @@ bool VariationPair(IMetric& metric, const std::array<Vec4, 7>& positions,
                                       {a61, a62, a63, a64, a65},
                                       {b1, 0.0, b3, b4, b5, b6}};
     constexpr std::array<double, 7> errors{e1, 0.0, e3, e4, e5, e6, e7};
-    Metric4d g;
-    Tensor<Dual<double>, 4, 4, 4> dg;
-    metric.Evaluate(positions[0], g, dg);
-    ++control.variation_metric_evaluations;
-    const auto connection = TensorOps::Christoffel(g, dg);
+    const auto& g = geometries[0].metric;
+    const auto& dg = geometries[0].derivative;
     PhaseVariations initial;
     for (std::size_t column = 0; column < initial.size(); ++column) {
         initial[column].x = control.variations[column].displacement;
-        const Vec4 coordinate =
-            CoordinateVariation(control.variations[column], initial_tangent, connection);
-        for (int a = 0; a < 4; ++a) {
-            initial[column].p(a) = 0.0;
-            for (int b = 0; b < 4; ++b) {
-                initial[column].p(a) += g(a, b).real * coordinate(b);
-                for (int axis = 0; axis < 4; ++axis)
-                    initial[column].p(a) +=
-                        dg(axis, a, b).real * initial[column].x(axis) * initial_tangent(b);
-            }
+        for (int mu = 0; mu < 4; ++mu) {
+            Twofold value;
+            for (int nu = 0; nu < 4; ++nu)
+                value += g(mu, nu) * control.variations[column].derivative(nu);
+            for (int a = 0; a < 4; ++a)
+                for (int b = 0; b < 4; ++b)
+                    value += FirstKind(dg, a, mu, b) * initial_tangent(a) * initial[column].x(b);
+            initial[column].p(mu) = value;
         }
     }
     std::array<PhaseVariations, 7> derivatives;
     PhaseVariations stage;
+    constexpr std::array<double, 7> nodes{0, c2, c3, c4, c5, c6, c7};
     for (std::size_t index = 0; index < derivatives.size(); ++index) {
         stage = initial;
-        for (std::size_t column = 0; column < stage.size(); ++column)
-            for (std::size_t previous = 0; previous < index; ++previous) {
-                stage[column].x +=
-                    derivatives[previous][column].x * (interval * weights[index][previous]);
-                stage[column].p +=
-                    derivatives[previous][column].p * (interval * weights[index][previous]);
+        if (index > 0) {
+            for (std::size_t column = 0; column < stage.size(); ++column) {
+                WideVector dx = derivatives[0][column].x * nodes[index];
+                WideVector dp = derivatives[0][column].p * nodes[index];
+                for (std::size_t previous = 1; previous < index; ++previous) {
+                    dx += (derivatives[previous][column].x - derivatives[0][column].x) *
+                          weights[index][previous];
+                    dp += (derivatives[previous][column].p - derivatives[0][column].p) *
+                          weights[index][previous];
+                }
+                stage[column].x += dx * interval;
+                stage[column].p += dp * interval;
             }
-        if (!EvaluateVariationStage(metric, positions[index], momenta[index], stage,
-                                    derivatives[index], control))
+        }
+        if (!EvaluateVariationStage(metric, positions[index], tangents[index], stage,
+                                    derivatives[index], control, geometries[index]))
             return false;
     }
     fifth = stage;
     fourth = fifth;
     for (std::size_t column = 0; column < fourth.size(); ++column) {
-        for (std::size_t index = 0; index < derivatives.size(); ++index) {
-            fifth_increment.displacement[column] +=
-                derivatives[index][column].x * (interval * weights[6][index]);
-            fourth[column].x -= derivatives[index][column].x * (interval * errors[index]);
-            fourth[column].p -= derivatives[index][column].p * (interval * errors[index]);
+        WideVector increment = derivatives[0][column].x;
+        WideVector error_x, error_p;
+        for (std::size_t index = 1; index < derivatives.size(); ++index) {
+            const auto dx = derivatives[index][column].x - derivatives[0][column].x;
+            const auto dp = derivatives[index][column].p - derivatives[0][column].p;
+            increment += dx * weights[6][index];
+            error_x += dx * errors[index];
+            error_p += dp * errors[index];
         }
-        fourth_increment.displacement[column] = fifth_increment.displacement[column];
-        for (std::size_t index = 0; index < derivatives.size(); ++index)
-            fourth_increment.displacement[column] -=
-                derivatives[index][column].x * (interval * errors[index]);
+        fifth_increment.displacement[column] = (increment * interval).Rounded();
+        fourth[column].x -= error_x * interval;
+        fourth[column].p -= error_p * interval;
+        fourth_increment.displacement[column] = ((increment - error_x) * interval).Rounded();
     }
     return true;
 }
@@ -724,53 +833,61 @@ static std::optional<NullProjection> ProjectNullTangentWithBranch(const Vec4& ta
 
 namespace {
 
-std::optional<GeodesicVariations> ProjectVariations(
-    const Metric4d& metric, const Metric4d& inverse,
-    const Tensor<Dual<double>, 4, 4, 4>& derivatives, const Vec4& unprojected,
-    const NullProjection& projection, const PhaseVariations& phase) {
-    const auto connection = TensorOps::Christoffel(metric, derivatives);
+std::optional<GeodesicVariations> ProjectVariations(const RetainedMetricSample& geometry,
+                                                    const WideVector& unprojected,
+                                                    const NullProjection& projection,
+                                                    const PhaseVariations& phase) {
+    const auto& metric = geometry.metric;
+    const auto& inverse = geometry.inverse;
+    const auto& derivatives = geometry.derivative;
+    // Metric compatibility gives delta p_mu = g_mu_nu V^nu +
+    // Gamma_{a mu b} k^a X^b. Contract this first-kind expression directly:
+    // lowering a rounded connection first would lose the small V terms.
+    const auto connection = WideChristoffel(inverse, derivatives);
     const int component = projection.component;
-    double denominator = 0.0;
-    double denominator_scale = 0.0;
-    for (int a = 0; a < 4; ++a) {
-        const double term =
-            (metric(component, a).real + metric(a, component).real) * projection.tangent(a);
-        denominator += term;
-        denominator_scale += std::abs(term);
-    }
-    if (!std::isfinite(denominator) || !std::isfinite(denominator_scale) ||
-        std::abs(denominator) <= 256.0 * std::numeric_limits<double>::epsilon() * denominator_scale)
+    std::array<Twofold, 4> projected_covector;
+    double denominator_scale = 0;
+    for (int mu = 0; mu < 4; ++mu)
+        for (int nu = 0; nu < 4; ++nu) {
+            const Twofold term = metric(mu, nu) * projection.tangent(nu);
+            projected_covector[mu] += term;
+            if (mu == component) denominator_scale += std::abs(term.Rounded());
+        }
+    if (!std::isfinite(projected_covector[component].Rounded()) ||
+        !std::isfinite(denominator_scale) ||
+        std::abs(projected_covector[component].Rounded()) <=
+            256 * std::numeric_limits<double>::epsilon() * denominator_scale)
         return std::nullopt;
     GeodesicVariations result;
     for (std::size_t column = 0; column < result.size(); ++column) {
-        Vec4 covector = phase[column].p;
-        for (int a = 0; a < 4; ++a)
-            for (int b = 0; b < 4; ++b)
-                for (int axis = 0; axis < 4; ++axis)
-                    covector(a) -=
-                        derivatives(axis, a, b).real * phase[column].x(axis) * unprojected(b);
-        Vec4 coordinate = TensorOps::RaiseIndex(covector, inverse);
-        double numerator = 0.0;
-        for (int a = 0; a < 4; ++a)
-            for (int b = 0; b < 4; ++b) {
-                for (int axis = 0; axis < 4; ++axis)
-                    numerator += derivatives(axis, a, b).real * phase[column].x(axis) *
-                                 projection.tangent(a) * projection.tangent(b);
-                if (b != component)
-                    numerator += (metric(a, b).real + metric(b, a).real) * projection.tangent(a) *
-                                 coordinate(b);
-            }
-        coordinate(component) = -numerator / denominator;
-        result[column].displacement = phase[column].x;
-        result[column].derivative = coordinate;
-        for (int mu = 0; mu < 4; ++mu)
+        std::array<Twofold, 4> covector, V;
+        for (int mu = 0; mu < 4; ++mu) {
+            covector[mu] = phase[column].p(mu);
             for (int a = 0; a < 4; ++a)
                 for (int b = 0; b < 4; ++b)
-                    result[column].derivative(mu) += connection.gamma(mu, a, b).real *
-                                                     projection.tangent(a) * phase[column].x(b);
+                    covector[mu] -=
+                        FirstKind(derivatives, a, mu, b) * unprojected(a) * phase[column].x(b);
+        }
+        for (int mu = 0; mu < 4; ++mu) {
+            for (int nu = 0; nu < 4; ++nu) V[mu] += inverse(mu, nu) * covector[nu];
+            for (int a = 0; a < 4; ++a)
+                for (int b = 0; b < 4; ++b)
+                    V[mu] += connection[mu][a][b] *
+                             (Twofold(projection.tangent(a)) - unprojected(a)) * phase[column].x(b);
+        }
+        Twofold numerator;
+        for (int mu = 0; mu < 4; ++mu)
+            if (mu != component) numerator += projected_covector[mu] * V[mu];
+        // The coordinate projection changes only its selected component.
+        // Other covariant components receive Gamma(delta k, X), then the
+        // differentiated null constraint determines the selected component.
+        V[component] = -numerator / projected_covector[component];
+        result[column].displacement = phase[column].x.Rounded();
+        for (int mu = 0; mu < 4; ++mu) result[column].derivative(mu) = V[mu].Rounded();
         if (!FiniteVector(result[column].displacement) || !FiniteVector(result[column].derivative))
             return std::nullopt;
     }
+
     return result;
 }
 
@@ -881,17 +998,15 @@ std::optional<CoupledSegmentSample> Geodesic::SampleCoupledSegment(
         }
         return result;
     }
-    Metric4d g;
-    Tensor<Dual<double>, 4, 4, 4> dg;
-    metric->Evaluate(start.position, g, dg);
-    if (metric_evaluations) ++*metric_evaluations;
-    const auto initial_connection = TensorOps::Christoffel(g, dg);
-    metric->Evaluate(end.position, g, dg);
-    if (metric_evaluations) ++*metric_evaluations;
-    const auto final_connection = TensorOps::Christoffel(g, dg);
-    metric->Evaluate(result.ray.position, g, dg);
-    if (metric_evaluations) ++*metric_evaluations;
-    const auto event_connection = TensorOps::Christoffel(g, dg);
+    const auto initial_geometry = RetainedGeometry(*metric, start.position, metric_evaluations);
+    const auto final_geometry = RetainedGeometry(*metric, end.position, metric_evaluations);
+    const auto event_geometry = RetainedGeometry(*metric, result.ray.position, metric_evaluations);
+    const auto initial_connection =
+        WideChristoffel(initial_geometry.inverse, initial_geometry.derivative);
+    const auto final_connection =
+        WideChristoffel(final_geometry.inverse, final_geometry.derivative);
+    const auto event_connection =
+        WideChristoffel(event_geometry.inverse, event_geometry.derivative);
     double denominator = 0.0, denominator_scale = 0.0;
     if (event_normal) {
         if (!FiniteVector(*event_normal)) return std::nullopt;
@@ -914,42 +1029,56 @@ std::optional<CoupledSegmentSample> Geodesic::SampleCoupledSegment(
         for (int mu = 0; mu < 4; ++mu)
             for (int a = 0; a < 4; ++a)
                 for (int b = 0; b < 4; ++b)
-                    event_acceleration(mu) -= event_connection.gamma(mu, a, b).real *
-                                              result.ray.velocity(a) * result.ray.velocity(b);
+                    event_acceleration(mu) -= (event_connection[mu][a][b] * result.ray.velocity(a) *
+                                               result.ray.velocity(b))
+                                                  .Rounded();
         if (!FiniteVector(event_acceleration)) return std::nullopt;
     }
     for (std::size_t column = 0; column < result.variations.size(); ++column) {
-        const Vec4 initial_coordinate =
-            CoordinateVariation(start_variations[column], start.velocity, initial_connection);
-        const Vec4 final_coordinate =
-            CoordinateVariation(end_variations[column], end.velocity, final_connection);
-        const Vec4 variation_increment =
-            increment ? increment->displacement[column]
-                      : end_variations[column].displacement - start_variations[column].displacement;
-        const auto variation_polynomial =
-            detail::MakeIncrementHermite(start_variations[column].displacement, initial_coordinate,
-                                         final_coordinate, interval, variation_increment);
-        const auto variation_sample = variation_polynomial.Sample(s);
-        Vec4 displacement = variation_sample.position;
-        Vec4 coordinate = variation_sample.tangent;
-        if (event_normal) {
-            double numerator = 0.0;
-            for (int component = 0; component < 4; ++component)
-                numerator += (*event_normal)(component)*displacement(component);
-            const double shift = -numerator / denominator;
-            displacement += result.ray.velocity * shift;
-            coordinate += event_acceleration * shift;
+        std::array<Twofold, 4> X, K;
+        for (int mu = 0; mu < 4; ++mu) {
+            Twofold k0 = start_variations[column].derivative(mu),
+                    k1 = end_variations[column].derivative(mu);
+            for (int a = 0; a < 4; ++a)
+                for (int b = 0; b < 4; ++b) {
+                    k0 -= initial_connection[mu][a][b] * start.velocity(a) *
+                          start_variations[column].displacement(b);
+                    k1 -= final_connection[mu][a][b] * end.velocity(a) *
+                          end_variations[column].displacement(b);
+                }
+            const Twofold increment_value = increment
+                                                ? Twofold(increment->displacement[column](mu))
+                                                : Twofold(end_variations[column].displacement(mu)) -
+                                                      start_variations[column].displacement(mu);
+            const auto secant = increment_value / interval;
+            const auto quadratic = (secant - k0) * 3 - (k1 - k0),
+                       cubic = (k1 - k0) - (secant - k0) * 2;
+            X[mu] = Twofold(start_variations[column].displacement(mu)) +
+                    (k0 + (quadratic + cubic * s) * s) * (Twofold(interval) * s);
+            K[mu] = k0 + (quadratic * 2 + cubic * (3 * s)) * s;
         }
-        result.variations[column] = {displacement, coordinate};
-        for (int mu = 0; mu < 4; ++mu)
+        if (event_normal) {
+            Twofold numerator;
+            for (int mu = 0; mu < 4; ++mu) numerator += Twofold((*event_normal)(mu)) * X[mu];
+            const auto shift = -numerator / denominator;
+            for (int mu = 0; mu < 4; ++mu) {
+                X[mu] += Twofold(result.ray.velocity(mu)) * shift;
+                K[mu] += Twofold(event_acceleration(mu)) * shift;
+            }
+        }
+        for (int mu = 0; mu < 4; ++mu) {
+            Twofold v = K[mu];
             for (int a = 0; a < 4; ++a)
                 for (int b = 0; b < 4; ++b)
-                    result.variations[column].derivative(mu) +=
-                        event_connection.gamma(mu, a, b).real * result.ray.velocity(a) *
-                        displacement(b);
-        if (!FiniteVector(displacement) || !FiniteVector(result.variations[column].derivative))
+                    v += event_connection[mu][a][b] * result.ray.velocity(a) * X[b];
+            result.variations[column].displacement(mu) = X[mu].Rounded();
+            result.variations[column].derivative(mu) = v.Rounded();
+        }
+        if (!FiniteVector(result.variations[column].displacement) ||
+            !FiniteVector(result.variations[column].derivative))
             return std::nullopt;
     }
+
     return result;
 }
 
@@ -971,14 +1100,20 @@ static bool IntegrateStepRk45Candidate(Lightray& ray, IMetric* metric,
         return false;
     }
 
-    // Metric and initial momentum.
-    Metric4d g0;
-    Tensor<Dual<double>, 4, 4, 4> dg0;
-    metric->Evaluate(x0, g0, dg0);
-    Vec4 p0 = ComputeMomentum(ray.velocity, g0);
-    Vec4 k0 = ray.velocity;
+    // Keep central momentum in the same arithmetic as its four variations.
+    // Rounding g*k between stages perturbs the small covariant columns after
+    // the inverse transformation, even when the nominal ray looks unchanged.
+    // Geometry belongs to each actual central stage and is reused by its
+    // four derivatives. This cache is private to the attempted interval.
+    std::array<RetainedMetricSample, 7> geometries;
+    auto* evaluations = coupled ? &coupled->variation_metric_evaluations : nullptr;
+    geometries[0] = RetainedGeometry(*metric, x0, evaluations);
+    const auto& initial_geometry = geometries[0];
+    const auto g0 = RoundedMetric(initial_geometry);
+    WideVector p0 = WideRaiseIndex(WideVector(ray.velocity), initial_geometry.metric);
+    WideVector k0 = ray.velocity;
     constexpr double kMaximumRelativeNullResidual = 1e-6;
-    if (RelativeNullResidual(k0, g0) > kMaximumRelativeNullResidual) {
+    if (RelativeNullResidual(k0.Rounded(), g0) > kMaximumRelativeNullResidual) {
         ray.terminated = 6;
         return false;
     }
@@ -986,77 +1121,87 @@ static bool IntegrateStepRk45Candidate(Lightray& ray, IMetric* metric,
     if (coupled) ++coupled->central_stages;
 
     // Stage 1.
-    Vec4 k1_x = k0, k1_p = MomentumDerivative(p0, k0, dg0);
+    WideVector k1_x = k0, k1_p = WideMomentumDerivative(k0, initial_geometry.derivative);
 
     // Stages 2-6.
-    Vec4 k2_x, k2_p, k3_x, k3_p, k4_x, k4_p, k5_x, k5_p, k6_x, k6_p;
+    WideVector k2_x, k2_p, k3_x, k3_p, k4_x, k4_p, k5_x, k5_p, k6_x, k6_p;
 
-    Vec4 x2 = x0 + k1_x * (a21 * h);
-    Vec4 p2 = p0 + k1_p * (a21 * h);
+    Vec4 x2 = (WideVector(x0) + StableIncrement(k1_x, c2, h, {})).Rounded();
+    WideVector p2 = p0 + StableIncrement(k1_p, c2, h, {});
     if (coupled) ++coupled->central_stages;
-    if (!EvaluateRk45Stage(x2, p2, metric, k2_x, k2_p)) {
+    if (!EvaluateWideRk45Stage(x2, p2, metric, k2_x, k2_p, geometries[1], evaluations)) {
         return RejectUnrepresentedStage(ray, config.min_step);
     }
 
-    Vec4 x3 = x0 + k1_x * (a31 * h) + k2_x * (a32 * h);
-    Vec4 p3 = p0 + k1_p * (a31 * h) + k2_p * (a32 * h);
+    Vec4 x3 = (WideVector(x0) + StableIncrement(k1_x, c3, h, {{a32, k2_x}})).Rounded();
+    WideVector p3 = p0 + StableIncrement(k1_p, c3, h, {{a32, k2_p}});
     if (coupled) ++coupled->central_stages;
-    if (!EvaluateRk45Stage(x3, p3, metric, k3_x, k3_p)) {
+    if (!EvaluateWideRk45Stage(x3, p3, metric, k3_x, k3_p, geometries[2], evaluations)) {
         return RejectUnrepresentedStage(ray, config.min_step);
     }
 
-    Vec4 x4 = x0 + k1_x * (a41 * h) + k2_x * (a42 * h) + k3_x * (a43 * h);
-    Vec4 p4 = p0 + k1_p * (a41 * h) + k2_p * (a42 * h) + k3_p * (a43 * h);
+    Vec4 x4 = (WideVector(x0) + StableIncrement(k1_x, c4, h, {{a42, k2_x}, {a43, k3_x}})).Rounded();
+    WideVector p4 = p0 + StableIncrement(k1_p, c4, h, {{a42, k2_p}, {a43, k3_p}});
     if (coupled) ++coupled->central_stages;
-    if (!EvaluateRk45Stage(x4, p4, metric, k4_x, k4_p)) {
+    if (!EvaluateWideRk45Stage(x4, p4, metric, k4_x, k4_p, geometries[3], evaluations)) {
         return RejectUnrepresentedStage(ray, config.min_step);
     }
 
-    Vec4 x5 = x0 + k1_x * (a51 * h) + k2_x * (a52 * h) + k3_x * (a53 * h) + k4_x * (a54 * h);
-    Vec4 p5 = p0 + k1_p * (a51 * h) + k2_p * (a52 * h) + k3_p * (a53 * h) + k4_p * (a54 * h);
+    Vec4 x5 =
+        (WideVector(x0) + StableIncrement(k1_x, c5, h, {{a52, k2_x}, {a53, k3_x}, {a54, k4_x}}))
+            .Rounded();
+    WideVector p5 = p0 + StableIncrement(k1_p, c5, h, {{a52, k2_p}, {a53, k3_p}, {a54, k4_p}});
     if (coupled) ++coupled->central_stages;
-    if (!EvaluateRk45Stage(x5, p5, metric, k5_x, k5_p)) {
+    if (!EvaluateWideRk45Stage(x5, p5, metric, k5_x, k5_p, geometries[4], evaluations)) {
         return RejectUnrepresentedStage(ray, config.min_step);
     }
 
-    Vec4 x6 = x0 + k1_x * (a61 * h) + k2_x * (a62 * h) + k3_x * (a63 * h) + k4_x * (a64 * h) +
-              k5_x * (a65 * h);
-    Vec4 p6 = p0 + k1_p * (a61 * h) + k2_p * (a62 * h) + k3_p * (a63 * h) + k4_p * (a64 * h) +
-              k5_p * (a65 * h);
+    Vec4 x6 = (WideVector(x0) +
+               StableIncrement(k1_x, c6, h, {{a62, k2_x}, {a63, k3_x}, {a64, k4_x}, {a65, k5_x}}))
+                  .Rounded();
+    WideVector p6 =
+        p0 + StableIncrement(k1_p, c6, h, {{a62, k2_p}, {a63, k3_p}, {a64, k4_p}, {a65, k5_p}});
     if (coupled) ++coupled->central_stages;
-    if (!EvaluateRk45Stage(x6, p6, metric, k6_x, k6_p)) {
+    if (!EvaluateWideRk45Stage(x6, p6, metric, k6_x, k6_p, geometries[5], evaluations)) {
         return RejectUnrepresentedStage(ray, config.min_step);
     }
 
     // 5th order solution.
-    const Vec4 position_increment = (k1_x * b1 + k3_x * b3 + k4_x * b4 + k5_x * b5 + k6_x * b6) * h;
-    Vec4 new_position = x0 + position_increment;
-    Vec4 new_momentum = p0 + (k1_p * b1 + k3_p * b3 + k4_p * b4 + k5_p * b5 + k6_p * b6) * h;
+    const WideVector retained_increment =
+        StableIncrement(k1_x, 1, h, {{b3, k3_x}, {b4, k4_x}, {b5, k5_x}, {b6, k6_x}});
+    const Vec4 position_increment = retained_increment.Rounded();
+    Vec4 new_position = (WideVector(x0) + retained_increment).Rounded();
+    WideVector new_momentum =
+        p0 + StableIncrement(k1_p, 1, h, {{b3, k3_p}, {b4, k4_p}, {b5, k5_p}, {b6, k6_p}});
 
     // Stage 7 (FSAL).
-    Vec4 k7_x, k7_p;
+    WideVector k7_x, k7_p;
     if (coupled) ++coupled->central_stages;
-    if (!EvaluateRk45Stage(new_position, new_momentum, metric, k7_x, k7_p)) {
+    if (!EvaluateWideRk45Stage(new_position, new_momentum, metric, k7_x, k7_p, geometries[6],
+                               evaluations)) {
         return RejectUnrepresentedStage(ray, config.min_step);
     }
-    Vec4 new_velocity = k7_x;
+    Vec4 new_velocity = k7_x.Rounded();
 
     PhaseVariations fifth_variations, fourth_variations;
     CoupledSegmentIncrement fifth_increment, fourth_increment;
     fifth_increment.position = position_increment;
     if (coupled &&
         !VariationPair(*metric, {x0, x2, x3, x4, x5, x6, new_position},
-                       {p0, p2, p3, p4, p5, p6, new_momentum}, k0, h, *coupled, fifth_variations,
-                       fourth_variations, fifth_increment, fourth_increment)) {
+                       {k0, k2_x, k3_x, k4_x, k5_x, k6_x, k7_x}, k0, geometries, h, *coupled,
+                       fifth_variations, fourth_variations, fifth_increment, fourth_increment)) {
         coupled->failure = CoupledStepFailure::DerivativeDomain;
         return RejectUnrepresentedStage(ray, config.min_step);
     }
 
     // Error estimation.
-    Vec4 error_x = (k1_x * e1 + k3_x * e3 + k4_x * e4 + k5_x * e5 + k6_x * e6 + k7_x * e7) * h;
-    Vec4 error_p = (k1_p * e1 + k3_p * e3 + k4_p * e4 + k5_p * e5 + k6_p * e6 + k7_p * e7) * h;
-    float error_norm =
-        ComputeRk45ErrorNorm(error_x, error_p, x0, p0, new_position, new_momentum, config);
+    Vec4 error_x =
+        StableIncrement(k1_x, 0, h, {{e3, k3_x}, {e4, k4_x}, {e5, k5_x}, {e6, k6_x}, {e7, k7_x}})
+            .Rounded();
+    WideVector error_p =
+        StableIncrement(k1_p, 0, h, {{e3, k3_p}, {e4, k4_p}, {e5, k5_p}, {e6, k6_p}, {e7, k7_p}});
+    float error_norm = ComputeRk45ErrorNorm(error_x, error_p.Rounded(), x0, p0.Rounded(),
+                                            new_position, new_momentum.Rounded(), config);
 
     // Step acceptance.
     if (error_norm > 1.0f) {
@@ -1084,9 +1229,7 @@ static bool IntegrateStepRk45Candidate(Lightray& ray, IMetric* metric,
     // smallest normalized spatial correction leaves k^0 unchanged. An
     // unrepresented projection still fails closed.
     {
-        Metric4d g_check;
-        Tensor<Dual<double>, 4, 4, 4> dg_check;
-        metric->Evaluate(new_position, g_check, dg_check);
+        const auto g_check = RoundedMetric(geometries[6]);
         const double unprojected_residual = RelativeNullResidual(new_velocity, g_check);
         const auto projected = ProjectNullTangentWithBranch(new_velocity, g_check);
         const bool represented_projection =
@@ -1101,29 +1244,27 @@ static bool IntegrateStepRk45Candidate(Lightray& ray, IMetric* metric,
             return false;
         }
         if (coupled) {
-            const auto inverse = InverseAt(metric, new_position, g_check);
-            const auto fifth = ProjectVariations(g_check, inverse, dg_check, new_velocity,
-                                                 *projected, fifth_variations);
+            const auto& final_geometry = geometries[6];
+            const auto fifth =
+                ProjectVariations(final_geometry, k7_x, *projected, fifth_variations);
             Lightray lower = ray;
             lower.position = new_position - error_x;
-            const Vec4 lower_momentum = new_momentum - error_p;
+            const WideVector lower_momentum = new_momentum - error_p;
             if (!metric->IsValidEvent(lower.position)) {
                 coupled->failure = CoupledStepFailure::DerivativeDomain;
                 return RejectUnrepresentedStage(ray, config.min_step);
             }
-            Metric4d lower_metric;
-            Tensor<Dual<double>, 4, 4, 4> lower_derivatives;
-            metric->Evaluate(lower.position, lower_metric, lower_derivatives);
-            ++coupled->variation_metric_evaluations;
-            const auto lower_inverse = InverseAt(metric, lower.position, lower_metric);
-            const Vec4 lower_unprojected = TensorOps::RaiseIndex(lower_momentum, lower_inverse);
+            const auto lower_geometry =
+                RetainedGeometry(*metric, lower.position, &coupled->variation_metric_evaluations);
+            const auto lower_metric = RoundedMetric(lower_geometry);
+            const WideVector lower_unprojected =
+                WideRaiseIndex(lower_momentum, lower_geometry.inverse);
             const auto lower_projection =
-                ProjectNullTangentWithBranch(lower_unprojected, lower_metric);
-            const auto fourth =
-                lower_projection
-                    ? ProjectVariations(lower_metric, lower_inverse, lower_derivatives,
-                                        lower_unprojected, *lower_projection, fourth_variations)
-                    : std::nullopt;
+                ProjectNullTangentWithBranch(lower_unprojected.Rounded(), lower_metric);
+            const auto fourth = lower_projection
+                                    ? ProjectVariations(lower_geometry, lower_unprojected,
+                                                        *lower_projection, fourth_variations)
+                                    : std::nullopt;
             if (!fifth || !fourth || projected->component != lower_projection->component) {
                 coupled->failure = CoupledStepFailure::Projection;
                 if (h <= config.min_step)

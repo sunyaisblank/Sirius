@@ -309,6 +309,8 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    CoupledTransport.MinimumStepCriticalColumnsMatchIndependentRefinedFlow
+    CoupledTransport.OriginalCriticalLaunchesHavePhysicalFatesOrExplicitWorkExhaustion
     CoupledTransport.FlatFourColumnsUseActualProjectedAndInteriorTrials
     CoupledTransport.CameraColumnUnitsPreserveTheJointErrorDecision
     CoupledTransport.PhysicalCameraColumnsReachTheLiveCpuSourceMap
@@ -936,6 +938,13 @@ set_tests_properties(
     RenderSessionProbe.ConfigurationConversionPreservesObserverAndDiskControls
     RenderSessionProbe.InMemoryPreviewRejectsInactiveOutputPath
     PROPERTIES LABELS "Mandatory;Operational"
+)
+
+set_tests_properties(
+    RetainedArithmetic.SmallTermsSurviveLargeSumsProductsAndDivision
+    RetainedArithmetic.CartesianGradientMatchesIndependentRationalValues
+    RetainedArithmetic.CompleteCriticalMetricMatchesIndependentPrecisionWitnesses
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(

@@ -3,6 +3,7 @@
 
 add_executable(sirius_core_tests
     autodiff_dual_test.cpp
+    retained_arithmetic_test.cpp
     blackbody_planck_test.cpp
     cpu_geodesic_reference_test.cpp
     render_pipeline_integration_test.cpp
@@ -54,6 +55,7 @@ add_executable(sirius_core_tests
 )
 
 target_link_libraries(sirius_core_tests PRIVATE sirius_core GTest::gtest_main)
+target_include_directories(sirius_core_tests PRIVATE "${PROJECT_SOURCE_DIR}/tests")
 
 sirius_configure_target(sirius_core_tests CONTRACT_MODE 2)
 

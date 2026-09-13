@@ -8,6 +8,9 @@
 
 #include <gtest/gtest.h>
 
+#include "support/cpu_critical/original_launches.h"
+#include "support/cpu_critical/transport_reference.h"
+
 #include <iomanip>
 #include <limits>
 #include <numbers>
@@ -42,6 +45,102 @@ IntegratorConfig Control() {
     IntegratorConfig config;
     config.max_step = config.initial_step = 2.0f;
     return config;
+}
+
+TEST(CoupledTransport, MinimumStepCriticalColumnsMatchIndependentRefinedFlow) {
+    KerrSchildFamily ingoing(KerrSchildParams::Kerr(1.0, 0.998));
+    OutgoingKerrSchild metric(ingoing);
+    for (const auto& fixture : sirius::test::critical_fixture::transport_cases) {
+        Lightray ray{};
+        Rk45CoupledState columns;
+        columns.length_scale = columns.frequency_scale = 1;
+        columns.tolerance = 1e-8 / 12;
+        columns.stationary = true;
+        for (int component = 0; component < 4; ++component) {
+            ray.position(component) = fixture.initial[component];
+            ray.velocity(component) = fixture.initial[4 + component];
+            for (int column = 0; column < 4; ++column) {
+                columns.variations[column].displacement(component) =
+                    fixture.initial[8 + 8 * column + component];
+                columns.variations[column].derivative(component) =
+                    fixture.initial[12 + 8 * column + component];
+            }
+        }
+        auto control = Control();
+        control.min_step = ray.step_size = static_cast<float>(fixture.h);
+        control.max_step = 0.25f;
+        control.abs_tolerance = control.rel_tolerance = 1e-9f;
+        Rk45CoupledComparison comparison;
+        ASSERT_TRUE(Geodesic::IntegrateStepRk45(ray, &metric, control, &columns, &comparison));
+        EXPECT_EQ(ray.terminated, 0);
+        EXPECT_LE(comparison.error_ratio, 1);
+        ASSERT_LT(fixture.refinement_gap, 1e-18);
+        for (int component = 0; component < 4; ++component) {
+            const double x = fixture.expected[component];
+            const double k = fixture.expected[4 + component];
+            EXPECT_NEAR(ray.position(component), x, 1e-9 * (1 + std::abs(x)));
+            EXPECT_NEAR(ray.velocity(component), k, 1e-9 * (1 + std::abs(k)));
+            for (int column = 0; column < 4; ++column) {
+                const double displacement = fixture.expected[8 + 8 * column + component];
+                const double derivative = fixture.expected[12 + 8 * column + component];
+                EXPECT_NEAR(columns.variations[column].displacement(component), displacement,
+                            columns.tolerance * (1 + std::abs(displacement)));
+                EXPECT_NEAR(columns.variations[column].derivative(component), derivative,
+                            columns.tolerance * (1 + std::abs(derivative)));
+            }
+        }
+    }
+}
+
+TEST(CoupledTransport, OriginalCriticalLaunchesHavePhysicalFatesOrExplicitWorkExhaustion) {
+    KerrSchildFamily metric(KerrSchildParams::Kerr(1.0, 0.998));
+    TracerConfig control;
+    control.enable_disk = false;
+    control.escape_radius = 200;
+    control.horizon_factor = 1;
+    control.max_steps = 30000;
+    control.integrator.initial_step = 0.02f;
+    control.integrator.max_step = 0.25f;
+    control.integrator.min_step = 1e-6f;
+    control.integrator.abs_tolerance = control.integrator.rel_tolerance = 1e-9f;
+    control.strong_field_radius = 5;
+    control.strong_field_max_step = 0.002f;
+    GeodesicTracer tracer(&metric, control);
+    CameraConfig camera_control;
+    camera_control.r = 50;
+    camera_control.theta = 60 * std::numbers::pi / 180;
+    camera_control.phi = 0;
+    camera_control.fov = 100;
+    camera_control.width = 1920;
+    camera_control.height = 1080;
+    PinholeCamera camera(camera_control);
+    int index = 0;
+    for (const auto& fixture : sirius::test::critical_fixture::original_launches) {
+        SCOPED_TRACE(index);
+        auto ray = camera.GenerateRay(fixture.x, fixture.y, static_cast<float>(fixture.u),
+                                      static_cast<float>(fixture.v));
+        for (int component = 0; component < 4; ++component)
+            ASSERT_EQ(ray.direction(component), fixture.direction[component]);
+        ray.beta_forward = fixture.boost[0];
+        ray.beta_up = fixture.boost[1];
+        ray.beta_right = fixture.boost[2];
+        const auto result = tracer.Trace(ray);
+        if ((index == 0 || index == 2) && result.numerical_failure) {
+            EXPECT_EQ(result.coupled_failure, CoupledStepFailure::WorkLimit);
+            EXPECT_EQ(result.steps_taken, control.max_steps);
+            EXPECT_FALSE(result.beam.infinity_source_map);
+        } else {
+            ASSERT_FALSE(result.numerical_failure);
+            EXPECT_EQ(result.coupled_failure, CoupledStepFailure::None);
+            if (index != 0 && index != 2)
+                EXPECT_EQ(result.outcome, index == 6 ? TraceResult::Outcome::Escaped
+                                                     : TraceResult::Outcome::Horizon);
+            else
+                EXPECT_TRUE(result.outcome == TraceResult::Outcome::Escaped ||
+                            result.outcome == TraceResult::Outcome::Horizon);
+        }
+        ++index;
+    }
 }
 
 TEST(CoupledTransport, FlatFourColumnsUseActualProjectedAndInteriorTrials) {
