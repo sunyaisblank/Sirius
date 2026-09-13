@@ -131,7 +131,8 @@ template <typename Real>
             }
             if (accepts == old_accepts &&
                 (std::memcmp(current.physical.data(), previous->physical.data(),
-                             TraceContinuationRecord<Real>::kIntegration * sizeof(current.physical[0])) != 0 ||
+                             TraceContinuationRecord<Real>::kIntegration *
+                                 sizeof(current.physical[0])) != 0 ||
                  std::memcmp(&current.physical[TraceContinuationRecord<Real>::kIntegration][1],
                              &previous->physical[TraceContinuationRecord<Real>::kIntegration][1],
                              3 * sizeof(Real)) != 0 ||

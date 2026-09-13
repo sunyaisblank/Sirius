@@ -312,8 +312,8 @@ sirius::base::Expected<float> DispatchSmokeKernel(std::size_t device_index,
     for (int invocation = 0; invocation < 2; ++invocation) {
         // A cached call that omits execution must not inherit the first result.
         const std::vector<float> unwritten(kCount, -42.0f);
-        if (auto written = (*device)->WriteBuffer(
-                *factors_buffer, std::as_bytes(std::span<const float>(unwritten)));
+        if (auto written = (*device)->WriteBuffer(*factors_buffer,
+                                                  std::as_bytes(std::span<const float>(unwritten)));
             !written) {
             return std::unexpected(written.error());
         }
@@ -324,8 +324,7 @@ sirius::base::Expected<float> DispatchSmokeKernel(std::size_t device_index,
         }
         if (!std::isfinite(timing.submit_wait_ms) || timing.submit_wait_ms <= 0.0 ||
             timing.submit_wait_ms > 1000.0) {
-            return sirius::base::Fail(sirius::base::ErrorDomain::kDevice,
-                                      "measure smoke dispatch",
+            return sirius::base::Fail(sirius::base::ErrorDomain::kDevice, "measure smoke dispatch",
                                       "actual submission timing is invalid or exceeds the stop");
         }
         const std::string prefix = invocation == 0 ? "dispatch_created_" : "dispatch_cached_";
@@ -347,8 +346,9 @@ sirius::base::Expected<float> DispatchSmokeKernel(std::size_t device_index,
         EXPECT_GE(timing.command_setup_ms, 0.0);
         EXPECT_GT(timing.submit_wait_ms, 0.0);
         EXPECT_GE(timing.cleanup_ms, 0.0);
-        EXPECT_NEAR(timing.total_ms, timing.pipeline_setup_ms + timing.command_setup_ms +
-                        timing.submit_wait_ms + timing.cleanup_ms,
+        EXPECT_NEAR(timing.total_ms,
+                    timing.pipeline_setup_ms + timing.command_setup_ms + timing.submit_wait_ms +
+                        timing.cleanup_ms,
                     1e-9 * std::max(1.0, timing.total_ms));
         std::vector<float> factors(kCount);
         if (auto read =
@@ -358,8 +358,8 @@ sirius::base::Expected<float> DispatchSmokeKernel(std::size_t device_index,
         }
         for (std::uint32_t i = 0; i < kCount; ++i) {
             if (!std::isfinite(factors[i])) {
-                return sirius::base::Fail(sirius::base::ErrorDomain::kDevice,
-                                          "read smoke dispatch", "nonfinite shader output");
+                return sirius::base::Fail(sirius::base::ErrorDomain::kDevice, "read smoke dispatch",
+                                          "nonfinite shader output");
             }
             const float reference = 1.0f - 2.0f * kMass / radii[i];
             max_difference = std::max(max_difference, std::abs(factors[i] - reference));

@@ -1,9 +1,8 @@
 #include "sirius/backend/device.h"
+#include "sirius/core/observer_frame.h"
 #include "sirius/render/dispatch_governor.h"
 
 #include <gtest/gtest.h>
-
-#include "sirius/core/observer_frame.h"
 
 #include <algorithm>
 #include <array>
@@ -40,7 +39,6 @@ std::vector<std::uint32_t> ReadCameraProbe(const std::string& path) {
     return input ? words : std::vector<std::uint32_t>{};
 }
 
-
 // Defining Kerr-Schild metric and inverse, evaluated independently on the host.
 // Long-double accumulation reduces contraction error; correctness does not
 // depend on long double being wider than double on every supported platform.
@@ -51,38 +49,61 @@ std::pair<Matrix, Matrix> ReferenceMetric(const std::array<double, 24>& input) {
     const long double mass = input[0], spin = input[1];
     if (mass == 0 && spin == 0) return {g, inverse};
     const long double x = input[5], y = input[6], z = input[7];
-    const long double reduced = x*x + y*y + z*z - spin*spin;
-    const long double r2 = (reduced + std::sqrt(reduced*reduced + 4*spin*spin*z*z)) / 2;
+    const long double reduced = x * x + y * y + z * z - spin * spin;
+    const long double r2 = (reduced + std::sqrt(reduced * reduced + 4 * spin * spin * z * z)) / 2;
     const long double r = std::sqrt(r2);
-    const long double h = 2*mass*r / (r2 + spin*spin*z*z/r2);
-    const std::array<long double, 4> ell{1, (r*x + spin*y)/(r2 + spin*spin),
-                                           (r*y - spin*x)/(r2 + spin*spin), z/r};
-    for (int i = 0; i < 4; ++i) for (int j = 0; j < 4; ++j) {
-        g[i][j] += h*ell[i]*ell[j];
-        inverse[i][j] -= h*ell[i]*ell[j]*(i == 0 ? -1 : 1)*(j == 0 ? -1 : 1);
-    }
+    const long double h = 2 * mass * r / (r2 + spin * spin * z * z / r2);
+    const std::array<long double, 4> ell{1, (r * x + spin * y) / (r2 + spin * spin),
+                                         (r * y - spin * x) / (r2 + spin * spin), z / r};
+    for (int i = 0; i < 4; ++i)
+        for (int j = 0; j < 4; ++j) {
+            g[i][j] += h * ell[i] * ell[j];
+            inverse[i][j] -= h * ell[i] * ell[j] * (i == 0 ? -1 : 1) * (j == 0 ? -1 : 1);
+        }
     return {g, inverse};
 }
 
 std::vector<std::array<double, 24>> CameraCases() {
     // Non-axis directions exercise all least-aligned choices, then the x-first
     // tie. Float ABI values are promoted exactly before the host calculation.
-    constexpr std::array<std::array<float, 3>, 7> directions{{
-        {0.1f, 0.7f, 0.7f}, {0.8f, 0.1f, 0.59f},
-        {0.6f, 0.7f, 0.05f}, {1.0f, 1.0f, 1.0f},
-        {std::bit_cast<float>(0x3e600009U), std::bit_cast<float>(0x3e600008U), std::bit_cast<float>(0x3f894e83U)},
-        {std::bit_cast<float>(0x3f894e83U), std::bit_cast<float>(0x3e600009U), std::bit_cast<float>(0x3e600008U)},
-        {std::bit_cast<float>(0x3e600008U), std::bit_cast<float>(0x3f894e83U), std::bit_cast<float>(0x3e600009U)}}};
+    constexpr std::array<std::array<float, 3>, 7> directions{
+        {{0.1f, 0.7f, 0.7f},
+         {0.8f, 0.1f, 0.59f},
+         {0.6f, 0.7f, 0.05f},
+         {1.0f, 1.0f, 1.0f},
+         {std::bit_cast<float>(0x3e600009U), std::bit_cast<float>(0x3e600008U),
+          std::bit_cast<float>(0x3f894e83U)},
+         {std::bit_cast<float>(0x3f894e83U), std::bit_cast<float>(0x3e600009U),
+          std::bit_cast<float>(0x3e600008U)},
+         {std::bit_cast<float>(0x3e600008U), std::bit_cast<float>(0x3f894e83U),
+          std::bit_cast<float>(0x3e600009U)}}};
     std::vector<std::array<double, 24>> cases;
     for (int family = 0; family < 3; ++family) {
         for (const auto& direction : directions) {
-            std::array<double, 24> input{
-                family == 0 ? 0.0 : 1.0, family == 2 ? double(0.9f) : 0.0,
-                0, 0, 0, 4, 1, 0.5,
-                -1, double(0.05f), double(0.02f),
-                double(0.01f), 0, -1, 0, 1, double(0.03f),
-                double(0.1f), double(0.02f), double(-0.01f),
-                direction[0], direction[1], direction[2], 0};
+            std::array<double, 24> input{family == 0 ? 0.0 : 1.0,
+                                         family == 2 ? double(0.9f) : 0.0,
+                                         0,
+                                         0,
+                                         0,
+                                         4,
+                                         1,
+                                         0.5,
+                                         -1,
+                                         double(0.05f),
+                                         double(0.02f),
+                                         double(0.01f),
+                                         0,
+                                         -1,
+                                         0,
+                                         1,
+                                         double(0.03f),
+                                         double(0.1f),
+                                         double(0.02f),
+                                         double(-0.01f),
+                                         direction[0],
+                                         direction[1],
+                                         direction[2],
+                                         0};
             cases.push_back(input);
         }
         auto stationary = cases.back();
@@ -145,9 +166,11 @@ void CheckCameraFrame(const std::string& artifact) {
     ASSERT_TRUE(input_buffer.has_value());
     ASSERT_TRUE(output_buffer.has_value());
     const std::array<BufferHandle, 2> bindings{*input_buffer, *output_buffer};
-    ::testing::Test::RecordProperty("camera_allocated_bytes", std::to_string(device->BufferAllocationBytes()));
+    ::testing::Test::RecordProperty("camera_allocated_bytes",
+                                    std::to_string(device->BufferAllocationBytes()));
     ::testing::Test::RecordProperty("camera_requested_bytes", std::to_string(requested_bytes));
-    ::testing::Test::RecordProperty("camera_allocation_limit_bytes", std::to_string(allocation_limit));
+    ::testing::Test::RecordProperty("camera_allocation_limit_bytes",
+                                    std::to_string(allocation_limit));
     ASSERT_GE(device->BufferAllocationBytes(), requested_bytes);
     ASSERT_LE(device->BufferAllocationBytes(), allocation_limit);
     std::size_t ordinal = 0;
@@ -158,19 +181,24 @@ void CheckCameraFrame(const std::string& artifact) {
                        [](double x) { return Real(x); });
         std::array<Real, 39> output;
         output.fill(std::numeric_limits<Real>::quiet_NaN());
-        ASSERT_TRUE(device->WriteBuffer(*input_buffer, std::as_bytes(std::span(input))).has_value());
-        ASSERT_TRUE(device->WriteBuffer(*output_buffer, std::as_bytes(std::span(output))).has_value());
+        ASSERT_TRUE(
+            device->WriteBuffer(*input_buffer, std::as_bytes(std::span(input))).has_value());
+        ASSERT_TRUE(
+            device->WriteBuffer(*output_buffer, std::as_bytes(std::span(output))).has_value());
         DispatchTiming timing;
         const auto dispatched = device->Dispatch(*kernel, bindings, 1, 1, 1, &timing);
         ASSERT_TRUE(dispatched.has_value()) << dispatched.error().Description();
         const std::string key = "camera_" + std::to_string(ordinal++);
-        ::testing::Test::RecordProperty(key + "_submit_wait_ms", CameraNumber(timing.submit_wait_ms));
-        ::testing::Test::RecordProperty(key + "_pipeline_setup_ms", CameraNumber(timing.pipeline_setup_ms));
+        ::testing::Test::RecordProperty(key + "_submit_wait_ms",
+                                        CameraNumber(timing.submit_wait_ms));
+        ::testing::Test::RecordProperty(key + "_pipeline_setup_ms",
+                                        CameraNumber(timing.pipeline_setup_ms));
         ::testing::Test::RecordProperty(key + "_total_ms", CameraNumber(timing.total_ms));
         ASSERT_TRUE(std::isfinite(timing.submit_wait_ms));
         ASSERT_GT(timing.submit_wait_ms, 0.0);
         ASSERT_LE(timing.submit_wait_ms, sirius::render::kDispatchStopMs);
-        ASSERT_TRUE(device->ReadBuffer(*output_buffer, std::as_writable_bytes(std::span(output))).has_value());
+        ASSERT_TRUE(device->ReadBuffer(*output_buffer, std::as_writable_bytes(std::span(output)))
+                        .has_value());
         for (std::size_t j = 0; j < output.size(); ++j)
             ASSERT_TRUE(std::isfinite(output[j])) << "unwritten/nonfinite scalar " << j;
         ASSERT_EQ(output[32], Real(1));
@@ -181,8 +209,9 @@ void CheckCameraFrame(const std::string& artifact) {
         const auto [g, inverse] = ReferenceMetric(actual_input);
         const auto dot = [&](int a, int b) {
             long double value = 0;
-            for (int i = 0; i < 4; ++i) for (int j = 0; j < 4; ++j)
-                value += g[i][j]*static_cast<long double>(output[a+i])*output[b+j];
+            for (int i = 0; i < 4; ++i)
+                for (int j = 0; j < 4; ++j)
+                    value += g[i][j] * static_cast<long double>(output[a + i]) * output[b + j];
             return value;
         };
         long double maximum_invariant = 0;
@@ -191,8 +220,9 @@ void CheckCameraFrame(const std::string& artifact) {
             maximum_invariant = std::max(maximum_invariant, error);
             EXPECT_LE(error, budget);
         };
-        for (int a = 0; a < 4; ++a) for (int b = 0; b < 4; ++b)
-            check(dot(4 + 4*a, 4 + 4*b), a == b ? (a == 0 ? -1 : 1) : 0);
+        for (int a = 0; a < 4; ++a)
+            for (int b = 0; b < 4; ++b)
+                check(dot(4 + 4 * a, 4 + 4 * b), a == b ? (a == 0 ? -1 : 1) : 0);
         check(dot(20, 20), 0);
         check(dot(20, 4), 1);  // Physical future photon is minus this past ray.
         for (int screen : {24, 28}) {
@@ -207,48 +237,54 @@ void CheckCameraFrame(const std::string& artifact) {
         // Compare the actual labelled vectors with the independent CPU route.
         using namespace sirius::core;
         Metric4d cpu_metric, cpu_inverse;
-        for (int i = 0; i < 4; ++i) for (int j = 0; j < 4; ++j) {
-            cpu_metric(i,j) = Dual<double>(double(g[i][j]));
-            cpu_inverse(i,j) = Dual<double>(double(inverse[i][j]));
-        }
+        for (int i = 0; i < 4; ++i)
+            for (int j = 0; j < 4; ++j) {
+                cpu_metric(i, j) = Dual<double>(double(g[i][j]));
+                cpu_inverse(i, j) = Dual<double>(double(inverse[i][j]));
+            }
         std::array<Vec4, 3> seeds{};
-        for (int axis = 0; axis < 3; ++axis) for (int j = 0; j < 3; ++j)
-            seeds[axis](j+1) = reference_input[8+3*axis+j]*(axis == 1 ? -1 : 1);
+        for (int axis = 0; axis < 3; ++axis)
+            for (int j = 0; j < 3; ++j)
+                seeds[axis](j + 1) = reference_input[8 + 3 * axis + j] * (axis == 1 ? -1 : 1);
         const auto frame = relativity::EulerianObserverFrame(cpu_metric, cpu_inverse, seeds);
         ASSERT_TRUE(frame.has_value());
         const auto boosted = relativity::BoostObserverFrame(
             *frame, {reference_input[17], reference_input[18], reference_input[19]});
         ASSERT_TRUE(boosted.has_value());
-        const std::array<double, 3> direction{
-            reference_input[20], reference_input[21], reference_input[22]};
+        const std::array<double, 3> direction{reference_input[20], reference_input[21],
+                                              reference_input[22]};
         const auto catalogue = relativity::MakeCelestialTangentBasis<float>(
             {float(direction[0]), float(direction[1]), float(direction[2])});
         ASSERT_TRUE(catalogue.has_value());
         for (int j = 0; j < 3; ++j) {
-            EXPECT_NEAR(output[33+j], catalogue->first[j], 2e-6);
-            EXPECT_NEAR(output[36+j], catalogue->second[j], 2e-6);
+            EXPECT_NEAR(output[33 + j], catalogue->first[j], 2e-6);
+            EXPECT_NEAR(output[36 + j], catalogue->second[j], 2e-6);
             // Project the observed physical screens back into their own frame;
             // a wrong yet orthonormal reference axis must fail this comparison.
-            EXPECT_NEAR(dot(24, 8+4*j), output[33+j], 4e-6);
-            EXPECT_NEAR(dot(28, 8+4*j), output[36+j], 4e-6);
+            EXPECT_NEAR(dot(24, 8 + 4 * j), output[33 + j], 4e-6);
+            EXPECT_NEAR(dot(28, 8 + 4 * j), output[36 + j], 4e-6);
         }
         const auto ray = relativity::PastDirectedCameraRay(*boosted, direction);
         const auto screen = relativity::ObserverScreenBasis(*boosted, direction);
         ASSERT_TRUE(ray.has_value());
         ASSERT_TRUE(screen.has_value());
-        const std::array<Vec4, 7> expected{boosted->time, boosted->spatial[0],
-            boosted->spatial[1], boosted->spatial[2], *ray, (*screen)[0], (*screen)[1]};
+        const std::array<Vec4, 7> expected{
+            boosted->time, boosted->spatial[0], boosted->spatial[1], boosted->spatial[2],
+            *ray,          (*screen)[0],        (*screen)[1]};
         double maximum_component = 0;
-        for (int v = 0; v < 7; ++v) for (int j = 0; j < 4; ++j) {
-            const double error = std::abs(double(output[4+4*v+j]) - expected[v](j));
-            maximum_component = std::max(maximum_component, error);
-            EXPECT_LE(error, budget) << "labelled vector " << v << " component " << j;
-        }
-        ::testing::Test::RecordProperty(key + "_maximum_invariant_error", CameraNumber(double(maximum_invariant)));
-        ::testing::Test::RecordProperty(key + "_maximum_component_error", CameraNumber(maximum_component));
+        for (int v = 0; v < 7; ++v)
+            for (int j = 0; j < 4; ++j) {
+                const double error = std::abs(double(output[4 + 4 * v + j]) - expected[v](j));
+                maximum_component = std::max(maximum_component, error);
+                EXPECT_LE(error, budget) << "labelled vector " << v << " component " << j;
+            }
+        ::testing::Test::RecordProperty(key + "_maximum_invariant_error",
+                                        CameraNumber(double(maximum_invariant)));
+        ::testing::Test::RecordProperty(key + "_maximum_component_error",
+                                        CameraNumber(maximum_component));
         std::cout << "[CameraFrame] " << key << " invariant=" << double(maximum_invariant)
-                  << " component=" << maximum_component << " submit_wait_ms="
-                  << timing.submit_wait_ms << std::endl;
+                  << " component=" << maximum_component
+                  << " submit_wait_ms=" << timing.submit_wait_ms << std::endl;
     }
     ASSERT_EQ(ordinal, 24U);
     ::testing::Test::RecordProperty("camera_actual_submissions", std::to_string(ordinal));

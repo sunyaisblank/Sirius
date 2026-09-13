@@ -456,8 +456,7 @@ TEST(KernelTrace, ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs) {
                 const Real seed = Real(0.001f);
                 const double tolerance = sizeof(Real) == 8 ? 1e-12 : 1e-8;
                 const std::array<std::array<Real, 4>, 2> screens{
-                    std::array<Real, 4>{0, 0, 0, -seed},
-                    std::array<Real, 4>{0, 0, seed, 0}};
+                    std::array<Real, 4>{0, 0, 0, -seed}, std::array<Real, 4>{0, 0, seed, 0}};
                 EXPECT_NEAR(record.physical[Record::kIntegration][1], affine, tolerance);
                 for (std::size_t column = 0; column < 4; ++column) {
                     for (std::size_t component = 0; component < 4; ++component) {
@@ -465,9 +464,11 @@ TEST(KernelTrace, ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs) {
                         const Real x = column < 2 ? affine * screen : screen;
                         const Real velocity = column < 2 ? screen : Real(0);
                         EXPECT_NEAR(record.physical[Record::kPositionColumns + column][component],
-                                    x, tolerance) << column << component;
+                                    x, tolerance)
+                            << column << component;
                         EXPECT_NEAR(record.physical[Record::kCovariantColumns + column][component],
-                                    velocity, tolerance) << column << component;
+                                    velocity, tolerance)
+                            << column << component;
                     }
                 }
             };

@@ -20,11 +20,11 @@
 #include <cmath>
 #include <cstdlib>
 #include <filesystem>
-#include <fstream>
 #include <format>
-#include <optional>
+#include <fstream>
 #include <limits>
 #include <numbers>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -583,94 +583,100 @@ TEST(RenderSessionProbe, EveryRegisteredCpuMetricCompletesAFrame) {
 TEST(RenderSessionProbe, NumericalRayFailureKeepsCpuTilesPrivateAndPreventsOutput) {
     const ScopedTemporaryDirectory temporary_directory("sirius-cpu-ray-failure");
     for (bool parallel : {false, true}) {
-      for (bool with_callback : {false, true}) {
-        SCOPED_TRACE(with_callback);
-        SCOPED_TRACE(parallel);
-        auto config = ProbeConfig(
-            (temporary_directory.path() / (parallel ? "parallel.ppm" : "sequential.ppm")).string());
-        config.width = 1;
-        config.height = 1;
-        config.tile_size = 1;
-        config.enable_parallel_rendering = parallel;
-        config.thread_count = parallel ? 2 : 0;
-        config.observer_distance = 30.0;
-        config.observer_inclination = 80.0 * std::numbers::pi / 180.0;
-        config.enable_disk = false;
-        // A represented timelike observer whose highly boosted rays reach the
-        // integrator's minimum step. This exercises the real tracer failure,
-        // rather than substituting a failed shading callback.
-        config.camera_beta_forward = -0.9999999999;
-        // Obtain the diagnostic values from the real tracer independently of
-        // the session's error formatting and callback routing.
-        sirius::core::KerrSchildFamily metric(
-            sirius::core::KerrSchildParams::Kerr(config.black_hole_mass, config.black_hole_spin));
-        const auto domain = sirius::render::BuildTraceDomainParameters({
-            .metric_id = config.metric_id, .metric_mass = config.black_hole_mass,
-            .cosmological_constant = 0.0, .observer_radius = config.observer_distance,
-            .throat_radius = 1.0, .bubble_radius = 1.0, .bubble_sigma = 1.0});
-        sirius::backend::TracerConfig trace;
-        trace.enable_disk = false;
-        trace.escape_radius = domain.escape_radius;
-        trace.horizon_factor = 1.0f;
-        trace.max_steps = sirius::render::kRenderTraceMaximumAttempts;
-        trace.integrator.initial_step = domain.cpu_initial_step;
-        trace.integrator.max_step = domain.max_step;
-        trace.integrator.min_step = domain.cpu_min_step;
-        trace.integrator.abs_tolerance = 5e-6f;
-        trace.integrator.rel_tolerance = 5e-6f;
-        sirius::backend::GeodesicTracer tracer(&metric, trace);
-        sirius::core::CameraConfig camera_config;
-        camera_config.r = config.observer_distance;
-        camera_config.theta = config.observer_inclination;
-        camera_config.fov = config.camera_fov;
-        camera_config.width = config.width;
-        camera_config.height = config.height;
-        camera_config.beta_x = config.camera_beta_forward;
-        sirius::core::PinholeCamera camera(camera_config);
-        std::optional<sirius::backend::TraceResult> first;
-        sirius::core::ForEachCameraSample(config.samples_per_pixel, [&](const auto& sample) {
-            if (first) return;
-            first = tracer.Trace(camera.GenerateRayForObserver(
-                0, 0, sample.image_u, sample.image_v, sample.pupil_u, sample.pupil_v));
-        });
-        ASSERT_TRUE(first.has_value());
-        ASSERT_TRUE(first->numerical_failure);
-        ASSERT_NE(first->coupled_failure, sirius::core::CoupledStepFailure::WorkLimit);
-        const auto diagnostic = std::format(
-            "numerical ray failure (coupled failure: {}, integrator termination: {}, attempts: {}, "
-            "accepted affine distance: {})",
-            sirius::core::CoupledStepFailureName(first->coupled_failure),
-            first->integrator_termination, first->steps_taken, first->affine_length);
-        RenderSession session;
-        SessionState callback_state = SessionState::Idle;
-        std::string message;
-        if (with_callback) {
-            session.SetCompletionCallback([&](SessionState state, const std::string& detail) {
-                callback_state = state;
-                message = detail;
+        for (bool with_callback : {false, true}) {
+            SCOPED_TRACE(with_callback);
+            SCOPED_TRACE(parallel);
+            auto config = ProbeConfig(
+                (temporary_directory.path() / (parallel ? "parallel.ppm" : "sequential.ppm"))
+                    .string());
+            config.width = 1;
+            config.height = 1;
+            config.tile_size = 1;
+            config.enable_parallel_rendering = parallel;
+            config.thread_count = parallel ? 2 : 0;
+            config.observer_distance = 30.0;
+            config.observer_inclination = 80.0 * std::numbers::pi / 180.0;
+            config.enable_disk = false;
+            // A represented timelike observer whose highly boosted rays reach the
+            // integrator's minimum step. This exercises the real tracer failure,
+            // rather than substituting a failed shading callback.
+            config.camera_beta_forward = -0.9999999999;
+            // Obtain the diagnostic values from the real tracer independently of
+            // the session's error formatting and callback routing.
+            sirius::core::KerrSchildFamily metric(sirius::core::KerrSchildParams::Kerr(
+                config.black_hole_mass, config.black_hole_spin));
+            const auto domain = sirius::render::BuildTraceDomainParameters(
+                {.metric_id = config.metric_id,
+                 .metric_mass = config.black_hole_mass,
+                 .cosmological_constant = 0.0,
+                 .observer_radius = config.observer_distance,
+                 .throat_radius = 1.0,
+                 .bubble_radius = 1.0,
+                 .bubble_sigma = 1.0});
+            sirius::backend::TracerConfig trace;
+            trace.enable_disk = false;
+            trace.escape_radius = domain.escape_radius;
+            trace.horizon_factor = 1.0f;
+            trace.max_steps = sirius::render::kRenderTraceMaximumAttempts;
+            trace.integrator.initial_step = domain.cpu_initial_step;
+            trace.integrator.max_step = domain.max_step;
+            trace.integrator.min_step = domain.cpu_min_step;
+            trace.integrator.abs_tolerance = 5e-6f;
+            trace.integrator.rel_tolerance = 5e-6f;
+            sirius::backend::GeodesicTracer tracer(&metric, trace);
+            sirius::core::CameraConfig camera_config;
+            camera_config.r = config.observer_distance;
+            camera_config.theta = config.observer_inclination;
+            camera_config.fov = config.camera_fov;
+            camera_config.width = config.width;
+            camera_config.height = config.height;
+            camera_config.beta_x = config.camera_beta_forward;
+            sirius::core::PinholeCamera camera(camera_config);
+            std::optional<sirius::backend::TraceResult> first;
+            sirius::core::ForEachCameraSample(config.samples_per_pixel, [&](const auto& sample) {
+                if (first) return;
+                first = tracer.Trace(camera.GenerateRayForObserver(
+                    0, 0, sample.image_u, sample.image_v, sample.pupil_u, sample.pupil_v));
             });
+            ASSERT_TRUE(first.has_value());
+            ASSERT_TRUE(first->numerical_failure);
+            ASSERT_NE(first->coupled_failure, sirius::core::CoupledStepFailure::WorkLimit);
+            const auto diagnostic = std::format(
+                "numerical ray failure (coupled failure: {}, integrator termination: {}, attempts: "
+                "{}, "
+                "accepted affine distance: {})",
+                sirius::core::CoupledStepFailureName(first->coupled_failure),
+                first->integrator_termination, first->steps_taken, first->affine_length);
+            RenderSession session;
+            SessionState callback_state = SessionState::Idle;
+            std::string message;
+            if (with_callback) {
+                session.SetCompletionCallback([&](SessionState state, const std::string& detail) {
+                    callback_state = state;
+                    message = detail;
+                });
+            }
+            ASSERT_TRUE(session.Configure(config));
+            testing::internal::CaptureStderr();
+            const auto terminal = session.Execute();
+            const auto stderr_output = testing::internal::GetCapturedStderr();
+            EXPECT_EQ(terminal, SessionState::Failed);
+            EXPECT_NE(stderr_output.find(diagnostic), std::string::npos) << stderr_output;
+            EXPECT_NE(stderr_output.find("sample 0"), std::string::npos) << stderr_output;
+            if (with_callback) {
+                EXPECT_EQ(callback_state, SessionState::Failed);
+                EXPECT_NE(message.find(diagnostic), std::string::npos) << message;
+                EXPECT_NE(stderr_output.find(message), std::string::npos) << stderr_output;
+            } else {
+                EXPECT_EQ(callback_state, SessionState::Idle);
+                EXPECT_TRUE(message.empty());
+            }
+            EXPECT_EQ(session.GetTileScheduler().GetCompletedCount(), 0);
+            EXPECT_FALSE(std::filesystem::exists(config.output_path));
+            const auto frame = session.GetDisplayBuffer().SnapshotFloatData();
+            ASSERT_EQ(frame.size(), 4u);
+            EXPECT_EQ(frame, std::vector<float>(4, 0.0f));
         }
-        ASSERT_TRUE(session.Configure(config));
-        testing::internal::CaptureStderr();
-        const auto terminal = session.Execute();
-        const auto stderr_output = testing::internal::GetCapturedStderr();
-        EXPECT_EQ(terminal, SessionState::Failed);
-        EXPECT_NE(stderr_output.find(diagnostic), std::string::npos) << stderr_output;
-        EXPECT_NE(stderr_output.find("sample 0"), std::string::npos) << stderr_output;
-        if (with_callback) {
-            EXPECT_EQ(callback_state, SessionState::Failed);
-            EXPECT_NE(message.find(diagnostic), std::string::npos) << message;
-            EXPECT_NE(stderr_output.find(message), std::string::npos) << stderr_output;
-        } else {
-            EXPECT_EQ(callback_state, SessionState::Idle);
-            EXPECT_TRUE(message.empty());
-        }
-        EXPECT_EQ(session.GetTileScheduler().GetCompletedCount(), 0);
-        EXPECT_FALSE(std::filesystem::exists(config.output_path));
-        const auto frame = session.GetDisplayBuffer().SnapshotFloatData();
-        ASSERT_EQ(frame.size(), 4u);
-        EXPECT_EQ(frame, std::vector<float>(4, 0.0f));
-      }
     }
 }
 
@@ -783,7 +789,8 @@ TEST(RenderSessionProbe, LaterGoodCameraSampleCannotEraseCpuNumericalFailure) {
     });
     ASSERT_EQ(failures, (std::vector<bool>{false, true, false}));
     using Outcome = sirius::backend::TraceResult::Outcome;
-    ASSERT_EQ(outcomes, (std::vector<Outcome>{Outcome::Escaped, Outcome::MaxSteps, Outcome::Escaped}));
+    ASSERT_EQ(outcomes,
+              (std::vector<Outcome>{Outcome::Escaped, Outcome::MaxSteps, Outcome::Escaped}));
     ASSERT_EQ(reasons[1], sirius::core::CoupledStepFailure::WorkLimit);
 
     for (bool parallel : {false, true}) {

@@ -298,8 +298,8 @@ class ICamera {
     // Refinement must not silently reuse a rounded-away coordinate or active
     // direction. Zero offset remains a valid request for the original geometry.
     [[nodiscard]] std::expected<CameraFilmProjection, CameraProjectionFailure>
-    ProjectFilmOffsetForObserver(double x, double y, double dx, double dy,
-                                float pupil_u = 0.5f, float pupil_v = 0.0f) const {
+    ProjectFilmOffsetForObserver(double x, double y, double dx, double dy, float pupil_u = 0.5f,
+                                 float pupil_v = 0.0f) const {
         if (!std::isfinite(x) || !std::isfinite(y) || !std::isfinite(dx) || !std::isfinite(dy))
             return std::unexpected(CameraProjectionFailure::InvalidInput);
         const double shifted_x = x + dx, shifted_y = y + dy;
@@ -311,8 +311,7 @@ class ICamera {
         if (!result || !result->ray.active || (dx == 0.0 && dy == 0.0)) return result;
         const auto original = ProjectFilmForObserver(x, y, pupil_u, pupil_v);
         if (!original) return std::unexpected(original.error());
-        if (original->ray.active &&
-            original->ray.direction(1) == result->ray.direction(1) &&
+        if (original->ray.active && original->ray.direction(1) == result->ray.direction(1) &&
             original->ray.direction(2) == result->ray.direction(2) &&
             original->ray.direction(3) == result->ray.direction(3))
             return std::unexpected(CameraProjectionFailure::Unrepresentable);

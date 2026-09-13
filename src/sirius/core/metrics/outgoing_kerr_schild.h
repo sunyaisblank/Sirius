@@ -89,8 +89,7 @@ class OutgoingKerrSchild final : public IMetric {
         if (!source_.HasHorizon()) return std::nullopt;
         const auto p = source_.GetParams();
         const double horizon = source_.OuterHorizonRadius();
-        if (!(horizon > 0.0) || !std::isfinite(horizon) ||
-            !(radius > horizon)) return std::nullopt;
+        if (!(horizon > 0.0) || !std::isfinite(horizon) || !(radius > horizon)) return std::nullopt;
         double reference = 2.0 * horizon;
         double time_integral = 0.0;
         double angle_integral = 0.0;

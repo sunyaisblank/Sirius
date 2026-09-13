@@ -83,7 +83,7 @@ struct DispatchTiming {
     double pipeline_setup_ms = 0.0;  // Cache lookup and any pipeline/layout creation.
     double command_setup_ms = 0.0;   // Descriptors and command recording.
     double cleanup_ms = 0.0;         // Command/descriptor release after completion.
-    double total_ms = 0.0;  // Pipeline lookup through command/descriptor release.
+    double total_ms = 0.0;           // Pipeline lookup through command/descriptor release.
     bool pipeline_created = false;
 };
 

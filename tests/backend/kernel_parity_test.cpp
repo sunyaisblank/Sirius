@@ -208,31 +208,30 @@ void RunProbe(ComputeDevice& device, KernelHandle kernel, std::uint32_t opcode,
     std::vector<float> completed(samples.size() * kResultStride, 0.0f);
     std::vector<float> chunk(capacity * kResultStride, 0.0f);
     std::array<float, 4> params = {static_cast<float>(opcode), 0.0f,
-                                  static_cast<float>(kSampleStride),
-                                  static_cast<float>(kResultStride)};
+                                   static_cast<float>(kSampleStride),
+                                   static_cast<float>(kResultStride)};
     ASSERT_TRUE(device.SetBufferAllocationLimit(allocation_limit).has_value());
     const std::uint64_t resident_before = device.BufferAllocationBytes();
-    const auto sbuf = device.CreateBuffer(capacity * kSampleStride * sizeof(float),
-                                          BufferUsage::kStorage);
+    const auto sbuf =
+        device.CreateBuffer(capacity * kSampleStride * sizeof(float), BufferUsage::kStorage);
     ASSERT_TRUE(sbuf.has_value()) << sbuf.error().Description();
     const auto rbuf = device.CreateBuffer(chunk.size() * sizeof(float), BufferUsage::kStorage);
     ASSERT_TRUE(rbuf.has_value()) << rbuf.error().Description();
     const auto pbuf = device.CreateBuffer(sizeof(params), BufferUsage::kStorage);
     ASSERT_TRUE(pbuf.has_value()) << pbuf.error().Description();
-    const std::uint64_t requested = capacity * (kSampleStride + kResultStride) * sizeof(float) +
-                                    sizeof(params);
+    const std::uint64_t requested =
+        capacity * (kSampleStride + kResultStride) * sizeof(float) + sizeof(params);
     ASSERT_GE(device.BufferAllocationBytes(), resident_before + requested);
     ASSERT_LE(device.BufferAllocationBytes(), allocation_limit);
     const BufferHandle bindings[] = {*sbuf, *rbuf, *pbuf};
     const auto dispatch = [&](const char* phase, std::size_t offset, std::size_t count,
                               sirius::backend::DispatchTiming& timing) {
         const auto outcome = device.Dispatch(kernel, bindings, 1, 1, 1, &timing);
-        std::cout << "[ParityProbe] phase=" << phase << " opcode=" << opcode
-                  << " offset=" << offset << " count=" << count
-                  << " submit_wait_ms=" << timing.submit_wait_ms
+        std::cout << "[ParityProbe] phase=" << phase << " opcode=" << opcode << " offset=" << offset
+                  << " count=" << count << " submit_wait_ms=" << timing.submit_wait_ms
                   << " pipeline_setup_ms=" << timing.pipeline_setup_ms
-                  << " total_ms=" << timing.total_ms
-                  << " success=" << outcome.has_value() << std::endl;
+                  << " total_ms=" << timing.total_ms << " success=" << outcome.has_value()
+                  << std::endl;
         ASSERT_TRUE(outcome.has_value()) << outcome.error().Description();
         ASSERT_TRUE(std::isfinite(timing.submit_wait_ms));
         ASSERT_GT(timing.submit_wait_ms, 0.0);
@@ -245,17 +244,18 @@ void RunProbe(ComputeDevice& device, KernelHandle kernel, std::uint32_t opcode,
         sirius::backend::DispatchTiming initialization;
         ASSERT_NO_FATAL_FAILURE(dispatch("initialization", 0, 0, initialization));
         ASSERT_TRUE(device.ReadBuffer(*rbuf, std::as_writable_bytes(std::span<float>(chunk))));
-        ASSERT_TRUE(std::all_of(chunk.begin(), chunk.end(), [](float value) { return value == 0.0f; }));
+        ASSERT_TRUE(
+            std::all_of(chunk.begin(), chunk.end(), [](float value) { return value == 0.0f; }));
     }
     std::size_t submissions = 0;
     double maximum_submit_ms = 0.0;
     for (std::size_t offset = 0; offset < samples.size(); offset += capacity) {
         const std::size_t count = std::min(capacity, samples.size() - offset);
-        SCOPED_TRACE(::testing::Message() << "opcode=" << opcode << " offset=" << offset
-                                          << " count=" << count);
+        SCOPED_TRACE(::testing::Message()
+                     << "opcode=" << opcode << " offset=" << offset << " count=" << count);
         params[1] = static_cast<float>(count);
-        const auto input = std::span<const float>(flat).subspan(offset * kSampleStride,
-                                                               count * kSampleStride);
+        const auto input =
+            std::span<const float>(flat).subspan(offset * kSampleStride, count * kSampleStride);
         ASSERT_TRUE(device.WriteBuffer(*sbuf, std::as_bytes(input)));
         std::fill(chunk.begin(), chunk.end(), 0.0f);
         ASSERT_TRUE(device.WriteBuffer(*rbuf, std::as_bytes(std::span<const float>(chunk))));
@@ -277,8 +277,8 @@ void RunProbe(ComputeDevice& device, KernelHandle kernel, std::uint32_t opcode,
     ::testing::Test::RecordProperty(key + "_allocated_bytes",
                                     std::to_string(device.BufferAllocationBytes()));
     std::cout << "[ParityProbe] completed opcode=" << opcode << " records=" << samples.size()
-              << " submissions=" << submissions << " allocated_bytes="
-              << device.BufferAllocationBytes() << std::endl;
+              << " submissions=" << submissions
+              << " allocated_bytes=" << device.BufferAllocationBytes() << std::endl;
 }
 
 // Timing contract for the nine actual affine-clock samples only. Existing
@@ -579,7 +579,8 @@ TEST(KernelParity, RepresentedSubThresholdKerrMetricIsScaleCovariant) {
     EXPECT_LT(result[kResultStride + 32], 5.0e-6f);
 
     std::vector<float> connection;
-    ASSERT_NO_FATAL_FAILURE(RunProbe(*f.device, f.kernel, kOpChristoffel, {unit, tiny}, connection));
+    ASSERT_NO_FATAL_FAILURE(
+        RunProbe(*f.device, f.kernel, kOpChristoffel, {unit, tiny}, connection));
     for (int component = 0; component < 64; ++component) {
         EXPECT_TRUE(Close(scale * connection[kResultStride + component], connection[component],
                           2.0e-4f, 3.0e-5f,
@@ -603,7 +604,8 @@ TEST(KernelParity, UnrepresentedKerrStageShrinksBeforeMetricEvaluation) {
     crossing.u1 = -1.0f;
     crossing.h = 2.0f;
     std::vector<float> result;
-    ASSERT_NO_FATAL_FAILURE(RunProbe(*f.device, f.kernel, kOpAdaptiveEventDomain, {crossing}, result));
+    ASSERT_NO_FATAL_FAILURE(
+        RunProbe(*f.device, f.kernel, kOpAdaptiveEventDomain, {crossing}, result));
 
     EXPECT_FLOAT_EQ(result[0], 1.0f) << "initial event was not represented";
     EXPECT_FLOAT_EQ(result[1], 0.0f) << "singular-sheet midpoint was admitted";
@@ -765,7 +767,8 @@ TEST(KernelParity, IsotropicEllisMetricAndConnectionMatchCoreOnBothSheets) {
     std::vector<float> metric_results;
     ASSERT_NO_FATAL_FAILURE(RunProbe(*f.device, f.kernel, kOpMetric, samples, metric_results));
     std::vector<float> connection_results;
-    ASSERT_NO_FATAL_FAILURE(RunProbe(*f.device, f.kernel, kOpChristoffel, samples, connection_results));
+    ASSERT_NO_FATAL_FAILURE(
+        RunProbe(*f.device, f.kernel, kOpChristoffel, samples, connection_results));
     for (std::size_t sample_index = 0; sample_index < samples.size(); ++sample_index) {
         const auto& sample = samples[sample_index];
         sirius::core::MorrisThorneCartesian host(
@@ -820,7 +823,8 @@ TEST(KernelParity, UnnormalisedOrNonEllisDeviceProfilesFailClosed) {
     non_ellis.p3 = 1.0f;
 
     std::vector<float> result;
-    ASSERT_NO_FATAL_FAILURE(RunProbe(*f.device, f.kernel, kOpMetric, {represented, unnormalised, non_ellis}, result));
+    ASSERT_NO_FATAL_FAILURE(
+        RunProbe(*f.device, f.kernel, kOpMetric, {represented, unnormalised, non_ellis}, result));
     EXPECT_FLOAT_EQ(result[0], -1.0f);
     EXPECT_GT(result[5], 0.0f);
     for (std::size_t sample = 1; sample < 3; ++sample) {
@@ -859,7 +863,8 @@ TEST(KernelParity, UnresolvedWarpProfilesFailClosedOnDevice) {
     std::vector<float> metric_result;
     ASSERT_NO_FATAL_FAILURE(RunProbe(*f.device, f.kernel, kOpMetric, samples, metric_result));
     std::vector<float> connection_result;
-    ASSERT_NO_FATAL_FAILURE(RunProbe(*f.device, f.kernel, kOpChristoffel, samples, connection_result));
+    ASSERT_NO_FATAL_FAILURE(
+        RunProbe(*f.device, f.kernel, kOpChristoffel, samples, connection_result));
     EXPECT_NE(metric_result[0], 0.0f);
     EXPECT_NE(metric_result[5], 0.0f);
     for (std::size_t sample = 1; sample < samples.size(); ++sample) {
@@ -918,7 +923,8 @@ TEST(KernelParity, SphericalCaptureEventFindsHiddenAndTangentContacts) {
         event_sample(std::numeric_limits<float>::quiet_NaN()),  // malformed segment
     };
     std::vector<float> result;
-    ASSERT_NO_FATAL_FAILURE(RunProbe(*f.device, f.kernel, kOpSphericalCaptureEvent, samples, result));
+    ASSERT_NO_FATAL_FAILURE(
+        RunProbe(*f.device, f.kernel, kOpSphericalCaptureEvent, samples, result));
 
     const float hidden_fraction = (0.8f - std::sqrt(0.32f)) / 1.6f;
     EXPECT_FLOAT_EQ(result[0], 1.0f);
@@ -1071,7 +1077,8 @@ TEST(KernelParity, FiniteEscapeUsesFirstOutwardEventAndClippedIntervalAcrossRung
     };
     const auto check = [&](Fixture& fixture) {
         std::vector<float> values;
-        ASSERT_NO_FATAL_FAILURE(RunProbe(*fixture.device, fixture.kernel, kOpSphericalEscapeEvent, samples, values));
+        ASSERT_NO_FATAL_FAILURE(
+            RunProbe(*fixture.device, fixture.kernel, kOpSphericalEscapeEvent, samples, values));
         ASSERT_EQ(values.size(), samples.size() * kResultStride);
         for (const std::size_t index : {0U, 1U, 2U, 5U, 6U}) {
             const std::size_t base = index * kResultStride;
@@ -1355,7 +1362,8 @@ TEST(KernelParity, OpticallyThinGreyLayerAbsorptionMatchesHostAuthority) {
     thick.c0 = static_cast<float>(std::log(2.0));
     const std::vector<Sample> samples = {zero, very_thin, thin, transition, thick};
     std::vector<float> results;
-    ASSERT_NO_FATAL_FAILURE(RunProbe(*f.device, f.kernel, kOpGreyLayerAbsorption, samples, results));
+    ASSERT_NO_FATAL_FAILURE(
+        RunProbe(*f.device, f.kernel, kOpGreyLayerAbsorption, samples, results));
 
     for (std::size_t index = 0; index < samples.size(); ++index) {
         const auto expected = sirius::core::relativity::GreyLayerAbsorbedFraction(
@@ -1537,7 +1545,8 @@ TEST(KernelParity, Cie1931TwoDegreeFitMatchesHostAuthority) {
         samples.push_back(sample);
     }
     std::vector<float> results;
-    ASSERT_NO_FATAL_FAILURE(RunProbe(*f.device, f.kernel, kOpCie1931TwoDegreeFit, samples, results));
+    ASSERT_NO_FATAL_FAILURE(
+        RunProbe(*f.device, f.kernel, kOpCie1931TwoDegreeFit, samples, results));
     for (std::size_t index = 0; index < samples.size(); ++index) {
         const auto expected = sirius::core::colour::Cie1931TwoDegreeFit(samples[index].c0);
         const std::array reference = {expected.x_bar, expected.y_bar, expected.z_bar};
@@ -1593,7 +1602,8 @@ TEST(KernelParity, NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMom
     near_extremal.aux2 = 2.0f;     // production maxStep
 
     std::vector<float> results;
-    ASSERT_NO_FATAL_FAILURE(RunProbe(*f.device, f.kernel, kOpLiveCartConservation, {near_extremal}, results));
+    ASSERT_NO_FATAL_FAILURE(
+        RunProbe(*f.device, f.kernel, kOpLiveCartConservation, {near_extremal}, results));
     for (int component = 0; component < 10; ++component) {
         EXPECT_TRUE(std::isfinite(results[component]))
             << "conservation result component " << component << " is non-finite";
@@ -1650,9 +1660,11 @@ TEST(KernelParity, PrecisionRungsConserveNearExtremalKerrWithoutImageComparison)
     near_extremal.aux2 = 2.0f;
 
     std::vector<float> result32;
-    ASSERT_NO_FATAL_FAILURE(RunProbe(*fp32.device, fp32.kernel, kOpLiveCartConservation, {near_extremal}, result32));
+    ASSERT_NO_FATAL_FAILURE(
+        RunProbe(*fp32.device, fp32.kernel, kOpLiveCartConservation, {near_extremal}, result32));
     std::vector<float> result_compensated;
-    ASSERT_NO_FATAL_FAILURE(RunProbe(*compensated.device, compensated.kernel, kOpLiveCartConservation, {near_extremal}, result_compensated));
+    ASSERT_NO_FATAL_FAILURE(RunProbe(*compensated.device, compensated.kernel,
+                                     kOpLiveCartConservation, {near_extremal}, result_compensated));
 
     const auto validate_progress = [](const std::vector<float>& result, const char* rung) {
         for (int component = 0; component < 12; ++component) {
@@ -1688,7 +1700,8 @@ TEST(KernelParity, PrecisionRungsConserveNearExtremalKerrWithoutImageComparison)
     Fixture fp64 = OpenProbe("parity_probe_fp64.spv");
     ASSERT_TRUE(fp64.ready) << "fp64 precision probe unavailable";
     std::vector<float> result64;
-    ASSERT_NO_FATAL_FAILURE(RunProbe(*fp64.device, fp64.kernel, kOpLiveCartConservation, {near_extremal}, result64));
+    ASSERT_NO_FATAL_FAILURE(
+        RunProbe(*fp64.device, fp64.kernel, kOpLiveCartConservation, {near_extremal}, result64));
     validate_progress(result64, "fp64");
 
     EXPECT_LT(result64[0], 1.0e-6f) << "fp64 energy drift";
@@ -1752,7 +1765,8 @@ TEST(KernelParity, PointStarAngularWeightMatchesIndependentOracle) {
         }
     }
     std::vector<float> results;
-    ASSERT_NO_FATAL_FAILURE(RunProbe(*f.device, f.kernel, kOpPointStarAngularWeight, samples, results));
+    ASSERT_NO_FATAL_FAILURE(
+        RunProbe(*f.device, f.kernel, kOpPointStarAngularWeight, samples, results));
     for (std::size_t i = 0; i < samples.size(); ++i) {
         EXPECT_NEAR(results[i * kResultStride], expected[i], 2.0e-4) << "case " << i;
     }
@@ -1777,7 +1791,8 @@ TEST(KernelParity, CelestialTangentBasisIsSharedByBeamAndPointFilter) {
     samples[2].c2 = 0.05f;
 
     std::vector<float> results;
-    ASSERT_NO_FATAL_FAILURE(RunProbe(*f.device, f.kernel, kOpCelestialTangentBasis, samples, results));
+    ASSERT_NO_FATAL_FAILURE(
+        RunProbe(*f.device, f.kernel, kOpCelestialTangentBasis, samples, results));
     for (std::size_t sample = 0; sample < samples.size(); ++sample) {
         const std::array<float, 3> direction{samples[sample].c0, samples[sample].c1,
                                              samples[sample].c2};
@@ -2045,7 +2060,8 @@ TEST(KernelParity, DeviceRadialPointSourceCongruenceMatchesClosedForm) {
     }
 
     std::vector<float> results;
-    ASSERT_NO_FATAL_FAILURE(RunProbe(*f.device, f.kernel, kOpJacobiRadialCongruence, samples, results));
+    ASSERT_NO_FATAL_FAILURE(
+        RunProbe(*f.device, f.kernel, kOpJacobiRadialCongruence, samples, results));
     for (std::size_t sample = 0; sample < samples.size(); ++sample) {
         const std::size_t offset = sample * kResultStride;
         const double affine_length = samples[sample].c0 - samples[sample].c1;
@@ -2081,11 +2097,11 @@ void RunTimedCoupledProbe(ComputeDevice& device, KernelHandle kernel, const Samp
                                    static_cast<float>(kResultStride)};
     result.assign(kResultStride, -12345.0f);
     const std::string case_key = "coupled_" + std::to_string(ordinal);
-    const std::uint64_t requested = flat.size() * sizeof(float) +
-        result.size() * sizeof(float) + sizeof(params);
+    const std::uint64_t requested =
+        flat.size() * sizeof(float) + result.size() * sizeof(float) + sizeof(params);
     ::testing::Test::RecordProperty(case_key + "_requested_bytes", std::to_string(requested));
     ::testing::Test::RecordProperty(case_key + "_requested_cumulative_bytes",
-        std::to_string((ordinal + 1) * requested));
+                                    std::to_string((ordinal + 1) * requested));
     std::uint64_t charged_peak = device.BufferAllocationBytes();
     const auto check_allocation = [&]() {
         const std::uint64_t charged = device.BufferAllocationBytes();
@@ -2103,29 +2119,33 @@ void RunTimedCoupledProbe(ComputeDevice& device, KernelHandle kernel, const Samp
     ASSERT_TRUE(pbuf);
     ASSERT_NO_FATAL_FAILURE(check_allocation());
     ::testing::Test::RecordProperty(case_key + "_allocated_bytes",
-        std::to_string(device.BufferAllocationBytes()));
+                                    std::to_string(device.BufferAllocationBytes()));
     ASSERT_TRUE(device.WriteBuffer(*sbuf, std::as_bytes(std::span<const float>(flat))));
     ASSERT_TRUE(device.WriteBuffer(*rbuf, std::as_bytes(std::span<const float>(result))));
     const BufferHandle bindings[] = {*sbuf, *rbuf, *pbuf};
     const auto dispatch = [&](const char* phase, sirius::backend::DispatchTiming& timing) {
         const auto start = std::chrono::steady_clock::now();
         const auto dispatched = device.Dispatch(kernel, bindings, 1, 1, 1, &timing);
-        const double wall = std::chrono::duration<double, std::milli>(
-            std::chrono::steady_clock::now() - start).count();
+        const double wall =
+            std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - start)
+                .count();
         const auto name = std::string("coupled_") + std::to_string(ordinal) + "_" + phase;
-        ::testing::Test::RecordProperty(name + "_submit_wait_ms",std::to_string(timing.submit_wait_ms));
-        ::testing::Test::RecordProperty(name + "_dispatch_wall_ms",std::to_string(wall));
-        ::testing::Test::RecordProperty(name + "_pipeline_setup_ms",std::to_string(timing.pipeline_setup_ms));
-        ::testing::Test::RecordProperty(name + "_command_setup_ms",std::to_string(timing.command_setup_ms));
-        ::testing::Test::RecordProperty(name + "_cleanup_ms",std::to_string(timing.cleanup_ms));
-        ::testing::Test::RecordProperty(name + "_total_ms",std::to_string(timing.total_ms));
-        ::testing::Test::RecordProperty(name + "_pipeline_created",timing.pipeline_created ? "true" : "false");
+        ::testing::Test::RecordProperty(name + "_submit_wait_ms",
+                                        std::to_string(timing.submit_wait_ms));
+        ::testing::Test::RecordProperty(name + "_dispatch_wall_ms", std::to_string(wall));
+        ::testing::Test::RecordProperty(name + "_pipeline_setup_ms",
+                                        std::to_string(timing.pipeline_setup_ms));
+        ::testing::Test::RecordProperty(name + "_command_setup_ms",
+                                        std::to_string(timing.command_setup_ms));
+        ::testing::Test::RecordProperty(name + "_cleanup_ms", std::to_string(timing.cleanup_ms));
+        ::testing::Test::RecordProperty(name + "_total_ms", std::to_string(timing.total_ms));
+        ::testing::Test::RecordProperty(name + "_pipeline_created",
+                                        timing.pipeline_created ? "true" : "false");
         std::cout << "[DispatchPhases] " << name
                   << " pipeline_setup_ms=" << timing.pipeline_setup_ms
                   << " command_setup_ms=" << timing.command_setup_ms
                   << " submit_wait_ms=" << timing.submit_wait_ms
-                  << " cleanup_ms=" << timing.cleanup_ms
-                  << " total_ms=" << timing.total_ms
+                  << " cleanup_ms=" << timing.cleanup_ms << " total_ms=" << timing.total_ms
                   << " pipeline_created=" << timing.pipeline_created << std::endl;
         std::cout << "[CoupledStep] " << name << " submit_wait_ms=" << timing.submit_wait_ms
                   << " dispatch_wall_ms=" << wall << std::endl;
@@ -2134,33 +2154,34 @@ void RunTimedCoupledProbe(ComputeDevice& device, KernelHandle kernel, const Samp
         ASSERT_GT(timing.submit_wait_ms, 0.0);
         ASSERT_NO_FATAL_FAILURE(check_allocation());
     };
-    if(ordinal==0 && device.Info().kind==sirius::backend::DeviceKind::kSoftware) {
-        params[1]=0.0f;
-        ASSERT_TRUE(device.WriteBuffer(*pbuf,std::as_bytes(std::span<const float>(params))));
+    if (ordinal == 0 && device.Info().kind == sirius::backend::DeviceKind::kSoftware) {
+        params[1] = 0.0f;
+        ASSERT_TRUE(device.WriteBuffer(*pbuf, std::as_bytes(std::span<const float>(params))));
         sirius::backend::DispatchTiming timing;
-        ASSERT_NO_FATAL_FAILURE(dispatch("initialization",timing));
+        ASSERT_NO_FATAL_FAILURE(dispatch("initialization", timing));
         std::vector<float> readback(result.size());
-        ASSERT_TRUE(device.ReadBuffer(*rbuf,std::as_writable_bytes(std::span<float>(readback))));
-        ASSERT_EQ(readback,result);
+        ASSERT_TRUE(device.ReadBuffer(*rbuf, std::as_writable_bytes(std::span<float>(readback))));
+        ASSERT_EQ(readback, result);
     }
-    params[1]=1.0f;
-    ASSERT_TRUE(device.WriteBuffer(*pbuf,std::as_bytes(std::span<const float>(params))));
+    params[1] = 1.0f;
+    ASSERT_TRUE(device.WriteBuffer(*pbuf, std::as_bytes(std::span<const float>(params))));
     sirius::backend::DispatchTiming timing;
-    ASSERT_NO_FATAL_FAILURE(dispatch("actual",timing));
-    ASSERT_LE(timing.submit_wait_ms,1000.0);
-    ASSERT_TRUE(device.ReadBuffer(*rbuf,std::as_writable_bytes(std::span<float>(result))));
+    ASSERT_NO_FATAL_FAILURE(dispatch("actual", timing));
+    ASSERT_LE(timing.submit_wait_ms, 1000.0);
+    ASSERT_TRUE(device.ReadBuffer(*rbuf, std::as_writable_bytes(std::span<float>(result))));
     ASSERT_NO_FATAL_FAILURE(check_allocation());
-    ::testing::Test::RecordProperty(case_key + "_peak_allocated_bytes", std::to_string(charged_peak));
+    ::testing::Test::RecordProperty(case_key + "_peak_allocated_bytes",
+                                    std::to_string(charged_peak));
     ::testing::Test::RecordProperty(case_key + "_readback_resident_bytes",
-        std::to_string(device.BufferAllocationBytes()));
+                                    std::to_string(device.BufferAllocationBytes()));
     std::cout << "[CoupledAllocation] " << case_key << " requested_bytes=" << requested
               << " peak_allocated_bytes=" << charged_peak
               << " readback_resident_bytes=" << device.BufferAllocationBytes() << std::endl;
 }
 
 TEST(KernelParity, FourColumnRK4MapMatchesIndependentNeighboursFp64) {
-    Fixture fixture=OpenProbe();
-    if(!fixture.ready) GTEST_SKIP()<<"no Vulkan device or kernels absent";
+    Fixture fixture = OpenProbe();
+    if (!fixture.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
 #ifdef SIRIUS_KERNEL_DIR
     // Identity belongs to the actual returned device. The recorded index is
     // the exact factory argument retained by Fixture, not a second inventory.
@@ -2176,81 +2197,118 @@ TEST(KernelParity, FourColumnRK4MapMatchesIndependentNeighboursFp64) {
     RecordProperty("coupled_driver_info", info.driver_info);
     RecordProperty("coupled_supports_fp64", info.supports_fp64 ? "true" : "false");
     std::cout << "[CoupledDevice] index=" << fixture.selected_index << " name=" << info.name
-              << " kind=" << sirius::backend::ToString(info.kind)
-              << " vendor_id=" << info.vendor_id << " device_id=" << info.device_id
-              << " driver_id=" << info.driver_id << " driver_name=" << info.driver_name
-              << " driver_info=" << info.driver_info << " supports_fp64=" << info.supports_fp64
-              << std::endl;
+              << " kind=" << sirius::backend::ToString(info.kind) << " vendor_id=" << info.vendor_id
+              << " device_id=" << info.device_id << " driver_id=" << info.driver_id
+              << " driver_name=" << info.driver_name << " driver_info=" << info.driver_info
+              << " supports_fp64=" << info.supports_fp64 << std::endl;
     ASSERT_TRUE(fixture.device->SetBufferAllocationLimit(kCoupledDiagnosticAllocationLimit));
-    RecordProperty("coupled_allocation_limit_bytes", std::to_string(kCoupledDiagnosticAllocationLimit));
-    RecordProperty("coupled_initial_allocated_bytes", std::to_string(fixture.device->BufferAllocationBytes()));
+    RecordProperty("coupled_allocation_limit_bytes",
+                   std::to_string(kCoupledDiagnosticAllocationLimit));
+    RecordProperty("coupled_initial_allocated_bytes",
+                   std::to_string(fixture.device->BufferAllocationBytes()));
     ASSERT_LE(fixture.device->BufferAllocationBytes(), kCoupledDiagnosticAllocationLimit);
-    const auto words=LoadSpirv(std::string(SIRIUS_KERNEL_DIR)+"/coupled_probe_fp64.spv");
+    const auto words = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/coupled_probe_fp64.spv");
     ASSERT_FALSE(words.empty());
-    const auto loaded=fixture.device->LoadKernel(words);
-    if(!fixture.device->Info().supports_fp64) {
+    const auto loaded = fixture.device->LoadKernel(words);
+    if (!fixture.device->Info().supports_fp64) {
         ASSERT_FALSE(loaded.has_value());
-        EXPECT_EQ(loaded.error().domain(),sirius::base::ErrorDomain::kKernel);
-        EXPECT_NE(loaded.error().detail().find("shaderFloat64"),std::string::npos);
-        RecordProperty("fp64_evidence","unsupported_kernel_declined");return;
+        EXPECT_EQ(loaded.error().domain(), sirius::base::ErrorDomain::kKernel);
+        EXPECT_NE(loaded.error().detail().find("shaderFloat64"), std::string::npos);
+        RecordProperty("fp64_evidence", "unsupported_kernel_declined");
+        return;
     }
-    ASSERT_TRUE(loaded.has_value())<<loaded.error().Description();
-    fixture.kernel=*loaded;
-    Sample flat=KerrSchildAt(0,0,0,4,0,0);
-    flat.u0=1;flat.u1=1;flat.h=0.5f;flat.aux0=std::ldexp(1.0f,-16);
-    Sample positive=KerrSchildAt(1,0.9f,0,6,2,3);
-    positive.u0=1;positive.u1=0.8f;positive.u2=0.4f;positive.u3=-0.2f;
-    positive.h=0.015625f;positive.aux0=flat.aux0;
-    Sample negative=positive;negative.p2=-0.9f;
-    Sample charged=positive;charged.p3=0.2f;
-    Sample de_sitter=flat;de_sitter.c0=0.0625f;de_sitter.c1=0.03125f;
-    de_sitter.p4=0.001f;de_sitter.h=0.0009765625f;
-    Sample linear=KerrSchildAt(1,0,0,2,0,0);
-    linear.u0=1;linear.u1=-0.8f;linear.u2=0.2f;linear.u3=-0.1f;
-    linear.h=0.000244140625f;linear.aux0=flat.aux0;
-    Sample spatial=KerrSchildAt(1,0.9f,0,1.8f,0,0);
-    spatial.u0=1;spatial.u3=0.01f;spatial.h=linear.h;spatial.aux0=flat.aux0;
-    const std::array<Sample,7> samples={flat,positive,negative,charged,de_sitter,linear,spatial};
-    for(std::size_t index=0;index<samples.size();++index) {
-        SCOPED_TRACE(::testing::Message()<<"sample="<<index);
+    ASSERT_TRUE(loaded.has_value()) << loaded.error().Description();
+    fixture.kernel = *loaded;
+    Sample flat = KerrSchildAt(0, 0, 0, 4, 0, 0);
+    flat.u0 = 1;
+    flat.u1 = 1;
+    flat.h = 0.5f;
+    flat.aux0 = std::ldexp(1.0f, -16);
+    Sample positive = KerrSchildAt(1, 0.9f, 0, 6, 2, 3);
+    positive.u0 = 1;
+    positive.u1 = 0.8f;
+    positive.u2 = 0.4f;
+    positive.u3 = -0.2f;
+    positive.h = 0.015625f;
+    positive.aux0 = flat.aux0;
+    Sample negative = positive;
+    negative.p2 = -0.9f;
+    Sample charged = positive;
+    charged.p3 = 0.2f;
+    Sample de_sitter = flat;
+    de_sitter.c0 = 0.0625f;
+    de_sitter.c1 = 0.03125f;
+    de_sitter.p4 = 0.001f;
+    de_sitter.h = 0.0009765625f;
+    Sample linear = KerrSchildAt(1, 0, 0, 2, 0, 0);
+    linear.u0 = 1;
+    linear.u1 = -0.8f;
+    linear.u2 = 0.2f;
+    linear.u3 = -0.1f;
+    linear.h = 0.000244140625f;
+    linear.aux0 = flat.aux0;
+    Sample spatial = KerrSchildAt(1, 0.9f, 0, 1.8f, 0, 0);
+    spatial.u0 = 1;
+    spatial.u3 = 0.01f;
+    spatial.h = linear.h;
+    spatial.aux0 = flat.aux0;
+    const std::array<Sample, 7> samples = {flat,      positive, negative, charged,
+                                           de_sitter, linear,   spatial};
+    for (std::size_t index = 0; index < samples.size(); ++index) {
+        SCOPED_TRACE(::testing::Message() << "sample=" << index);
         std::vector<float> result;
-        ASSERT_NO_FATAL_FAILURE(RunTimedCoupledProbe(*fixture.device,fixture.kernel,samples[index],index,result));
-        ASSERT_EQ(result[7],1.0f);
-        ASSERT_EQ(result[0],0.0f)<<"joint trial must actually meet its unchanged allocated budget";
-        EXPECT_EQ(result[1],12.0f);
-        EXPECT_LE(result[2],1.0f);
-        EXPECT_EQ(result[48],1.0f);
-        EXPECT_EQ(result[53],1.0f);
-        if(index==5) { EXPECT_EQ(result[54],0.0f)<<"linear temporal root not exercised"; }
-        if(index==6) { EXPECT_GE(result[54],1.0f)<<"ergoregion spatial projection not exercised"; }
-        EXPECT_LE(result[6],1.0e-12f)<<"joint nominal stages differ from scalar authority";
-        for(std::size_t component=8;component<40;++component) {
+        ASSERT_NO_FATAL_FAILURE(
+            RunTimedCoupledProbe(*fixture.device, fixture.kernel, samples[index], index, result));
+        ASSERT_EQ(result[7], 1.0f);
+        ASSERT_EQ(result[0], 0.0f)
+            << "joint trial must actually meet its unchanged allocated budget";
+        EXPECT_EQ(result[1], 12.0f);
+        EXPECT_LE(result[2], 1.0f);
+        EXPECT_EQ(result[48], 1.0f);
+        EXPECT_EQ(result[53], 1.0f);
+        if (index == 5) {
+            EXPECT_EQ(result[54], 0.0f) << "linear temporal root not exercised";
+        }
+        if (index == 6) {
+            EXPECT_GE(result[54], 1.0f) << "ergoregion spatial projection not exercised";
+        }
+        EXPECT_LE(result[6], 1.0e-12f) << "joint nominal stages differ from scalar authority";
+        for (std::size_t component = 8; component < 40; ++component) {
             ASSERT_TRUE(std::isfinite(result[component]));
-            EXPECT_NEAR(result[component],0.0f,index==0?1.0e-10f:3.0e-8f)
-                <<"independent neighbour component "<<component;
+            EXPECT_NEAR(result[component], 0.0f, index == 0 ? 1.0e-10f : 3.0e-8f)
+                << "independent neighbour component " << component;
         }
-        for(std::size_t column=0;column<4;++column) {
-            EXPECT_GT(result[40+2*column]+result[41+2*column],0.0f);
-            EXPECT_LE(result[49+column],1.0e-12f);
+        for (std::size_t column = 0; column < 4; ++column) {
+            EXPECT_GT(result[40 + 2 * column] + result[41 + 2 * column], 0.0f);
+            EXPECT_LE(result[49 + column], 1.0e-12f);
         }
-        if(index==0) {
-            EXPECT_NEAR(result[40],flat.h,1.0e-12f);
-            EXPECT_NEAR(result[42],flat.h,1.0e-12f);
-            EXPECT_NEAR(result[41],1.0f,1.0e-12f);
-            EXPECT_NEAR(result[43],1.0f,1.0e-12f);
-            EXPECT_NEAR(result[44],1.0f,1.0e-12f);
-            EXPECT_NEAR(result[46],1.0f,1.0e-12f);
-            EXPECT_EQ(result[45],0.0f);EXPECT_EQ(result[47],0.0f);
+        if (index == 0) {
+            EXPECT_NEAR(result[40], flat.h, 1.0e-12f);
+            EXPECT_NEAR(result[42], flat.h, 1.0e-12f);
+            EXPECT_NEAR(result[41], 1.0f, 1.0e-12f);
+            EXPECT_NEAR(result[43], 1.0f, 1.0e-12f);
+            EXPECT_NEAR(result[44], 1.0f, 1.0e-12f);
+            EXPECT_NEAR(result[46], 1.0f, 1.0e-12f);
+            EXPECT_EQ(result[45], 0.0f);
+            EXPECT_EQ(result[47], 0.0f);
         }
     }
-    Sample unrepresented=de_sitter;unrepresented.c0=unrepresented.c1=unrepresented.c2=0;
+    Sample unrepresented = de_sitter;
+    unrepresented.c0 = unrepresented.c1 = unrepresented.c2 = 0;
     std::vector<float> declined;
-    ASSERT_NO_FATAL_FAILURE(RunTimedCoupledProbe(*fixture.device,fixture.kernel,unrepresented,samples.size(),declined));
-    EXPECT_EQ(declined[0],2.0f);EXPECT_EQ(declined[7],0.0f);EXPECT_EQ(declined[48],0.0f);
-    Sample over_budget=positive;over_budget.h=4.0f;
-    ASSERT_NO_FATAL_FAILURE(RunTimedCoupledProbe(*fixture.device,fixture.kernel,over_budget,samples.size()+1,declined));
-    EXPECT_EQ(declined[0],4.0f);EXPECT_GT(declined[2],1.0f);
-    RecordProperty("fp64_evidence","actual_four_column_joint_rk4_and_independent_scalar_neighbours");
+    ASSERT_NO_FATAL_FAILURE(RunTimedCoupledProbe(*fixture.device, fixture.kernel, unrepresented,
+                                                 samples.size(), declined));
+    EXPECT_EQ(declined[0], 2.0f);
+    EXPECT_EQ(declined[7], 0.0f);
+    EXPECT_EQ(declined[48], 0.0f);
+    Sample over_budget = positive;
+    over_budget.h = 4.0f;
+    ASSERT_NO_FATAL_FAILURE(RunTimedCoupledProbe(*fixture.device, fixture.kernel, over_budget,
+                                                 samples.size() + 1, declined));
+    EXPECT_EQ(declined[0], 4.0f);
+    EXPECT_GT(declined[2], 1.0f);
+    RecordProperty("fp64_evidence",
+                   "actual_four_column_joint_rk4_and_independent_scalar_neighbours");
 #endif
 }
 

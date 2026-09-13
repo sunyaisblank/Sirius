@@ -846,7 +846,8 @@ TEST(DispatchGovernor, ContinuationReadbackRejectsStaleOrUncommittedState) {
         previous.identity = identity;
         auto rejected = previous;
         rejected.control[2] = 8;
-        rejected.physical[TraceContinuationRecord<Real>::kIntegration][0] = Real(0.25);  // Only the next trial step may change.
+        rejected.physical[TraceContinuationRecord<Real>::kIntegration][0] =
+            Real(0.25);  // Only the next trial step may change.
         EXPECT_TRUE(
             ValidateTraceContinuation(rejected, &previous, TraceAction::Advance, identity, 20)
                 .has_value());
@@ -868,14 +869,19 @@ TEST(DispatchGovernor, ContinuationReadbackRejectsStaleOrUncommittedState) {
                 for (std::size_t component = 0; component < 4; ++component) {
                     auto changed = rejected;
                     changed.physical[offset + column][component] = Real(1);
-                    EXPECT_FALSE(ValidateTraceContinuation(changed, &previous,
-                        TraceAction::Advance, identity, 20).has_value()) << column << component;
+                    EXPECT_FALSE(ValidateTraceContinuation(changed, &previous, TraceAction::Advance,
+                                                           identity, 20)
+                                     .has_value())
+                        << column << component;
                     auto nonfinite = previous;
-                    nonfinite.control[2] = 8; nonfinite.control[3] = 5;
+                    nonfinite.control[2] = 8;
+                    nonfinite.control[3] = 5;
                     nonfinite.physical[offset + column][component] =
                         std::numeric_limits<Real>::quiet_NaN();
                     EXPECT_FALSE(ValidateTraceContinuation(nonfinite, &previous,
-                        TraceAction::Advance, identity, 20).has_value()) << column << component;
+                                                           TraceAction::Advance, identity, 20)
+                                     .has_value())
+                        << column << component;
                 }
             }
         }

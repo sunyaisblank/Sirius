@@ -95,7 +95,8 @@ void CheckMetricConsistency(const std::string& artifact) {
     ::testing::Test::RecordProperty("metric_allocated_bytes",
                                     std::to_string(device->BufferAllocationBytes()));
     ::testing::Test::RecordProperty("metric_requested_bytes", std::to_string(requested_bytes));
-    ::testing::Test::RecordProperty("metric_allocation_limit_bytes", std::to_string(allocation_limit));
+    ::testing::Test::RecordProperty("metric_allocation_limit_bytes",
+                                    std::to_string(allocation_limit));
     // Native adapters may require padding beyond the buffer payload.
     ASSERT_GE(device->BufferAllocationBytes(), requested_bytes);
     ASSERT_LE(device->BufferAllocationBytes(), allocation_limit);
@@ -107,19 +108,24 @@ void CheckMetricConsistency(const std::string& artifact) {
                        [](double x) { return Real(x); });
         std::array<Real, 420> output;
         output.fill(std::numeric_limits<Real>::quiet_NaN());
-        ASSERT_TRUE(device->WriteBuffer(*input_buffer, std::as_bytes(std::span(input))).has_value());
-        ASSERT_TRUE(device->WriteBuffer(*output_buffer, std::as_bytes(std::span(output))).has_value());
+        ASSERT_TRUE(
+            device->WriteBuffer(*input_buffer, std::as_bytes(std::span(input))).has_value());
+        ASSERT_TRUE(
+            device->WriteBuffer(*output_buffer, std::as_bytes(std::span(output))).has_value());
         DispatchTiming timing;
         const auto dispatched = device->Dispatch(*kernel, bindings, 1, 1, 1, &timing);
         ASSERT_TRUE(dispatched.has_value()) << dispatched.error().Description();
         const std::string key = "metric_" + std::to_string(ordinal++);
-        ::testing::Test::RecordProperty(key + "_submit_wait_ms", MetricNumber(timing.submit_wait_ms));
-        ::testing::Test::RecordProperty(key + "_pipeline_setup_ms", MetricNumber(timing.pipeline_setup_ms));
+        ::testing::Test::RecordProperty(key + "_submit_wait_ms",
+                                        MetricNumber(timing.submit_wait_ms));
+        ::testing::Test::RecordProperty(key + "_pipeline_setup_ms",
+                                        MetricNumber(timing.pipeline_setup_ms));
         ::testing::Test::RecordProperty(key + "_total_ms", MetricNumber(timing.total_ms));
         ASSERT_TRUE(std::isfinite(timing.submit_wait_ms));
         ASSERT_GT(timing.submit_wait_ms, 0.0);
         ASSERT_LE(timing.submit_wait_ms, sirius::render::kDispatchStopMs);
-        ASSERT_TRUE(device->ReadBuffer(*output_buffer, std::as_writable_bytes(std::span(output))).has_value());
+        ASSERT_TRUE(device->ReadBuffer(*output_buffer, std::as_writable_bytes(std::span(output)))
+                        .has_value());
         for (std::size_t j = 0; j < output.size(); ++j)
             ASSERT_TRUE(std::isfinite(output[j])) << "unwritten/nonfinite scalar " << j;
         ASSERT_EQ(output[0], Real(1));
@@ -127,48 +133,58 @@ void CheckMetricConsistency(const std::string& artifact) {
         for (std::size_t j = 0; j < reference.values.size(); ++j) {
             const double budget = j < 32 ? metric_budget : (j < 160 ? first_budget : second_budget);
             const double expected = reference.values[j];
-            const double normalized = std::abs(double(output[j + 1]) - expected) / (1.0 + std::abs(expected));
+            const double normalized =
+                std::abs(double(output[j + 1]) - expected) / (1.0 + std::abs(expected));
             const std::size_t category = j < 32 ? 0 : (j < 160 ? 1 : 2);
             maximum_error[category] = std::max(maximum_error[category], normalized);
             EXPECT_LE(normalized, budget) << "reference scalar " << j;
         }
         // Algebraic identities use the actual returned operands; a host
         // long-double accumulator limits extra rounding in these checks.
-        for (int mu = 0; mu < 4; ++mu) for (int nu = 0; nu < 4; ++nu) {
-            long double product = 0, scale = 1;
-            for (int rho = 0; rho < 4; ++rho) {
-                const long double term = static_cast<long double>(output[1 + 4*mu + rho]) *
-                                         output[17 + 4*rho + nu];
-                product += term;
-                scale += std::abs(term);
-            }
-            EXPECT_LE(std::abs(product - (mu == nu ? 1 : 0)),
-                      64 * std::numeric_limits<Real>::epsilon() * scale) << "inverse " << mu << "," << nu;
-            for (int column = 0; column < 4; ++column) {
-                long double compatible = 0, derivative_scale = 1;
+        for (int mu = 0; mu < 4; ++mu)
+            for (int nu = 0; nu < 4; ++nu) {
+                long double product = 0, scale = 1;
                 for (int rho = 0; rho < 4; ++rho) {
-                    const long double first = static_cast<long double>(output[33 + 16*rho + 4*column + mu]) * output[1 + 4*rho + nu];
-                    const long double second = static_cast<long double>(output[33 + 16*rho + 4*column + nu]) * output[1 + 4*mu + rho];
-                    compatible += first + second;
-                    derivative_scale += std::abs(first) + std::abs(second);
+                    const long double term = static_cast<long double>(output[1 + 4 * mu + rho]) *
+                                             output[17 + 4 * rho + nu];
+                    product += term;
+                    scale += std::abs(term);
                 }
-                const long double derivative = output[97 + 16*column + 4*mu + nu];
-                EXPECT_LE(std::abs(derivative-compatible), first_budget * (derivative_scale+std::abs(derivative)))
-                    << "metric compatibility " << column << "," << mu << "," << nu;
+                EXPECT_LE(std::abs(product - (mu == nu ? 1 : 0)),
+                          64 * std::numeric_limits<Real>::epsilon() * scale)
+                    << "inverse " << mu << "," << nu;
+                for (int column = 0; column < 4; ++column) {
+                    long double compatible = 0, derivative_scale = 1;
+                    for (int rho = 0; rho < 4; ++rho) {
+                        const long double first =
+                            static_cast<long double>(output[33 + 16 * rho + 4 * column + mu]) *
+                            output[1 + 4 * rho + nu];
+                        const long double second =
+                            static_cast<long double>(output[33 + 16 * rho + 4 * column + nu]) *
+                            output[1 + 4 * mu + rho];
+                        compatible += first + second;
+                        derivative_scale += std::abs(first) + std::abs(second);
+                    }
+                    const long double derivative = output[97 + 16 * column + 4 * mu + nu];
+                    EXPECT_LE(std::abs(derivative - compatible),
+                              first_budget * (derivative_scale + std::abs(derivative)))
+                        << "metric compatibility " << column << "," << mu << "," << nu;
+                }
             }
-        }
         EXPECT_LE(output[417], metric_budget);
         EXPECT_LE(output[418], first_budget);
         for (std::size_t j = 0; j < maximum_error.size(); ++j)
             ::testing::Test::RecordProperty(key + "_maximum_normalized_error_" + std::to_string(j),
                                             MetricNumber(maximum_error[j]));
-        std::cout << "[MetricConsistency] " << reference.name << " submit_wait_ms="
-                  << timing.submit_wait_ms << " pipeline_setup_ms=" << timing.pipeline_setup_ms
+        std::cout << "[MetricConsistency] " << reference.name
+                  << " submit_wait_ms=" << timing.submit_wait_ms
+                  << " pipeline_setup_ms=" << timing.pipeline_setup_ms
                   << " max_metric=" << maximum_error[0] << " max_first=" << maximum_error[1]
                   << " max_second=" << maximum_error[2] << std::endl;
     }
     ::testing::Test::RecordProperty("metric_actual_submissions", std::to_string(ordinal));
-    ::testing::Test::RecordProperty("metric_evidence", "actual_metric_inverse_connection_and_four_partials");
+    ::testing::Test::RecordProperty("metric_evidence",
+                                    "actual_metric_inverse_connection_and_four_partials");
 }
 
 TEST(KernelParity, MetricConnectionAndJetShareRepresentedParametersFp32) {

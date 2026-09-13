@@ -118,7 +118,11 @@ class KerrSchildFamily : public IMetric {
 
   private:
     enum class FlatHorizonStatus { Absent, Available, Unrepresentable };
-    struct FlatHorizonResult { FlatHorizonStatus status; double outer; double inner; };
+    struct FlatHorizonResult {
+        FlatHorizonStatus status;
+        double outer;
+        double inner;
+    };
     FlatHorizonResult FlatHorizons() const;
 
     Config config_;
@@ -497,8 +501,9 @@ inline KerrSchildFamily::FlatHorizonResult KerrSchildFamily::FlatHorizons() cons
     const double M = params_.M;
     const double high = std::max(std::abs(params_.a), std::abs(params_.Q));
     const double low = std::min(std::abs(params_.a), std::abs(params_.Q));
-    if (!(M > 0.0) || !std::isfinite(M) || !std::isfinite(high) ||
-        !std::isfinite(low) || params_.Lambda != 0.0 || high > M) return absent;
+    if (!(M > 0.0) || !std::isfinite(M) || !std::isfinite(high) || !std::isfinite(low) ||
+        params_.Lambda != 0.0 || high > M)
+        return absent;
     if (high == M) {
         // Equality of represented inputs is exact; a nonzero other component
         // makes the exact discriminant negative, however tiny its square.
@@ -528,8 +533,8 @@ inline KerrSchildFamily::FlatHorizonResult KerrSchildFamily::FlatHorizons() cons
             for (int i = 0; i < count; ++i) {
                 const double sum = term + expansion[i];
                 const double virtual_other = sum - term;
-                const double error = (term - (sum - virtual_other)) +
-                                     (expansion[i] - virtual_other);
+                const double error =
+                    (term - (sum - virtual_other)) + (expansion[i] - virtual_other);
                 if (error != 0.0) expansion[next++] = error;
                 term = sum;
             }
@@ -557,8 +562,8 @@ inline KerrSchildFamily::FlatHorizonResult KerrSchildFamily::FlatHorizons() cons
     // Product identity r+ r-=a^2+Q^2 avoids cancellation in M-sqrt(D).
     // Divide before multiplying to avoid overflow of the unscaled squares.
     const double minus = (high / plus) * high + (low / plus) * low;
-    if (!std::isfinite(minus) || minus < 0.0 || !(minus < plus) ||
-        (high != 0.0 && minus == 0.0)) return unavailable;
+    if (!std::isfinite(minus) || minus < 0.0 || !(minus < plus) || (high != 0.0 && minus == 0.0))
+        return unavailable;
     return {FlatHorizonStatus::Available, plus, minus};
 }
 
@@ -585,7 +590,6 @@ inline bool KerrSchildFamily::HasHorizon() const {
     }
     return FlatHorizons().status != FlatHorizonStatus::Absent;
 }
-
 
 inline double KerrSchildFamily::CosmologicalHorizonRadius() const {
     if (!(params_.Lambda > 0.0) || params_.a != 0.0 || params_.Q != 0.0) return -1.0;

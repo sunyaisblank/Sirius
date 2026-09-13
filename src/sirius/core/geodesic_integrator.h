@@ -100,13 +100,20 @@ enum class CoupledStepFailure {
 
 [[nodiscard]] constexpr const char* CoupledStepFailureName(CoupledStepFailure failure) {
     switch (failure) {
-        case CoupledStepFailure::None: return "none";
-        case CoupledStepFailure::InvalidState: return "invalid state";
-        case CoupledStepFailure::DerivativeDomain: return "derivative domain";
-        case CoupledStepFailure::Projection: return "projection";
-        case CoupledStepFailure::Interpolation: return "interpolation";
-        case CoupledStepFailure::Event: return "event";
-        case CoupledStepFailure::WorkLimit: return "work limit";
+        case CoupledStepFailure::None:
+            return "none";
+        case CoupledStepFailure::InvalidState:
+            return "invalid state";
+        case CoupledStepFailure::DerivativeDomain:
+            return "derivative domain";
+        case CoupledStepFailure::Projection:
+            return "projection";
+        case CoupledStepFailure::Interpolation:
+            return "interpolation";
+        case CoupledStepFailure::Event:
+            return "event";
+        case CoupledStepFailure::WorkLimit:
+            return "work limit";
     }
     return "unknown";
 }

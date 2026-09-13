@@ -263,10 +263,10 @@ TEST_F(StarfieldGeneratorTests, EllipticalFilterUsesTheBeamSachsBasis) {
     // This direction's least-aligned coordinate axis is y. The former point
     // filter projected z here, so it interpreted a beam angle in a different
     // tangent basis and rotated an anisotropic footprint.
-    const std::array<std::array<float, 3>, 2> inputs{{
-        {0.8f, 0.1f, 0.59f},
-        {std::bit_cast<float>(0x3e600009U), std::bit_cast<float>(0x3e600008U),
-         std::bit_cast<float>(0x3f894e83U)}}};
+    const std::array<std::array<float, 3>, 2> inputs{
+        {{0.8f, 0.1f, 0.59f},
+         {std::bit_cast<float>(0x3e600009U), std::bit_cast<float>(0x3e600008U),
+          std::bit_cast<float>(0x3f894e83U)}}};
     for (const auto& input : inputs) {
         auto direction = input;
         float norm = std::sqrt(direction[0] * direction[0] + direction[1] * direction[1] +
@@ -311,8 +311,8 @@ TEST_F(StarfieldGeneratorTests, EllipticalFilterUsesTheBeamSachsBasis) {
         float major_r = 0.0f;
         float major_g = 0.0f;
         float major_b = 0.0f;
-        generator.AccumulateThroughBeam(input[0], input[1], input[2], sigma_major,
-                                        sigma_minor, 0.0f, index, major_r, major_g, major_b);
+        generator.AccumulateThroughBeam(input[0], input[1], input[2], sigma_major, sigma_minor,
+                                        0.0f, index, major_r, major_g, major_b);
         EXPECT_NEAR(major_r, color_r * expected_major_weight, 2.0e-5f);
         EXPECT_NEAR(major_g, color_g * expected_major_weight, 2.0e-5f);
         EXPECT_NEAR(major_b, color_b * expected_major_weight, 2.0e-5f);
@@ -320,9 +320,9 @@ TEST_F(StarfieldGeneratorTests, EllipticalFilterUsesTheBeamSachsBasis) {
         float minor_r = 0.0f;
         float minor_g = 0.0f;
         float minor_b = 0.0f;
-        generator.AccumulateThroughBeam(input[0], input[1], input[2], sigma_major,
-                                        sigma_minor, static_cast<float>(std::numbers::pi / 2.0), index,
-                                        minor_r, minor_g, minor_b);
+        generator.AccumulateThroughBeam(input[0], input[1], input[2], sigma_major, sigma_minor,
+                                        static_cast<float>(std::numbers::pi / 2.0), index, minor_r,
+                                        minor_g, minor_b);
         EXPECT_NEAR(minor_r, color_r * expected_minor_weight, 2.0e-5f);
         EXPECT_NEAR(minor_g, color_g * expected_minor_weight, 2.0e-5f);
         EXPECT_NEAR(minor_b, color_b * expected_minor_weight, 2.0e-5f);
@@ -536,23 +536,24 @@ TEST_F(StarfieldGeneratorTests, SpatialIndexIncludesStarsAcrossAngularCellBounda
 TEST(CelestialTangentBasis, RepresentedOrderingSurvivesNormalisationAcrossPrecisions) {
     using sirius::core::relativity::MakeCelestialTangentBasis;
     const std::array<float, 3> witness{std::bit_cast<float>(0x3e600009U),
-        std::bit_cast<float>(0x3e600008U), std::bit_cast<float>(0x3f894e83U)};
+                                       std::bit_cast<float>(0x3e600008U),
+                                       std::bit_cast<float>(0x3f894e83U)};
     ASSERT_LT(witness[1], witness[0]);
     for (std::size_t shift = 0; shift < 3; ++shift) {
         for (float sign : {-1.0f, 1.0f}) {
             std::array<float, 3> narrow{};
             std::array<double, 3> wide{};
             for (std::size_t j = 0; j < 3; ++j) {
-                narrow[(j+shift)%3] = sign*witness[j];
-                wide[(j+shift)%3] = narrow[(j+shift)%3];
+                narrow[(j + shift) % 3] = sign * witness[j];
+                wide[(j + shift) % 3] = narrow[(j + shift) % 3];
             }
             const auto a = MakeCelestialTangentBasis(narrow);
             const auto b = MakeCelestialTangentBasis(wide);
             ASSERT_TRUE(a.has_value());
             ASSERT_TRUE(b.has_value());
             // The positive projection of the actual smallest axis fixes labels.
-            EXPECT_GT(a->first[(1+shift)%3], 0.9f);
-            EXPECT_GT(b->first[(1+shift)%3], 0.9);
+            EXPECT_GT(a->first[(1 + shift) % 3], 0.9f);
+            EXPECT_GT(b->first[(1 + shift) % 3], 0.9);
             for (std::size_t j = 0; j < 3; ++j) {
                 EXPECT_NEAR(a->first[j], b->first[j], 2e-6);
                 EXPECT_NEAR(a->second[j], b->second[j], 2e-6);

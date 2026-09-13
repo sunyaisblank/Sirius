@@ -429,8 +429,7 @@ class StarfieldGenerator {
 
         // The ellipse angle was measured in this exact Sachs basis at the
         // terminal ray. Reusing it here preserves the footprint orientation.
-        const auto tangent_basis =
-            relativity::MakeCelestialTangentBasis(input_direction);
+        const auto tangent_basis = relativity::MakeCelestialTangentBasis(input_direction);
         SIRIUS_ASSERT(tangent_basis.has_value());
         if (!tangent_basis.has_value()) return;
         const float ex = tangent_basis->first[0];

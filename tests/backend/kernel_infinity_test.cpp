@@ -55,7 +55,8 @@ void RecordInfinityDevice(const ComputeDevice& device, std::size_t index,
     ::testing::Test::RecordProperty(prefix + "_driver_id", std::to_string(info.driver_id));
     ::testing::Test::RecordProperty(prefix + "_driver_name", info.driver_name);
     ::testing::Test::RecordProperty(prefix + "_driver_info", info.driver_info);
-    ::testing::Test::RecordProperty(prefix + "_supports_fp64", info.supports_fp64 ? "true" : "false");
+    ::testing::Test::RecordProperty(prefix + "_supports_fp64",
+                                    info.supports_fp64 ? "true" : "false");
 }
 
 void RecordInfinityAllocation(const ComputeDevice& device, const std::string& prefix,
@@ -79,7 +80,8 @@ void DispatchInfinityProbe(ComputeDevice& device, KernelHandle kernel,
     const std::string key = prefix + "_dispatch_" + std::to_string(submissions++);
     ::testing::Test::RecordProperty(prefix + "_actual_submissions", std::to_string(submissions));
     ::testing::Test::RecordProperty(key + "_submit_wait_ms", InfinityNumber(timing.submit_wait_ms));
-    ::testing::Test::RecordProperty(key + "_pipeline_setup_ms", InfinityNumber(timing.pipeline_setup_ms));
+    ::testing::Test::RecordProperty(key + "_pipeline_setup_ms",
+                                    InfinityNumber(timing.pipeline_setup_ms));
     ::testing::Test::RecordProperty(key + "_total_ms", InfinityNumber(timing.total_ms));
     ASSERT_TRUE(std::isfinite(timing.submit_wait_ms));
     ASSERT_GT(timing.submit_wait_ms, 0.0);
@@ -171,7 +173,8 @@ void RunInfinityProbe(const std::string& artifact) {
         ASSERT_TRUE(created.has_value()) << created.error().Description();
         buffers[j] = *created;
     }
-    ASSERT_NO_FATAL_FAILURE(RecordInfinityAllocation(*device, prefix, sizes[0] + sizes[1] + sizes[2]));
+    ASSERT_NO_FATAL_FAILURE(
+        RecordInfinityAllocation(*device, prefix, sizes[0] + sizes[1] + sizes[2]));
     auto written = device->WriteBuffer(buffers[0], std::as_bytes(std::span(input)));
     ASSERT_TRUE(written.has_value()) << written.error().Description();
     written = device->WriteBuffer(buffers[1], opaque);
@@ -180,8 +183,9 @@ void RunInfinityProbe(const std::string& artifact) {
     for (const auto& c : cases) max_attempts = std::max(max_attempts, c.maximum_attempts);
     bool finished = false;
     for (unsigned dispatch = 0; dispatch <= max_attempts + 1; ++dispatch) {
-        ASSERT_NO_FATAL_FAILURE(DispatchInfinityProbe(
-            *device, *kernel, buffers, static_cast<std::uint32_t>(cases.size()), prefix, submissions));
+        ASSERT_NO_FATAL_FAILURE(DispatchInfinityProbe(*device, *kernel, buffers,
+                                                      static_cast<std::uint32_t>(cases.size()),
+                                                      prefix, submissions));
         const auto read = device->ReadBuffer(buffers[2], std::as_writable_bytes(std::span(output)));
         ASSERT_TRUE(read.has_value()) << read.error().Description();
         finished = true;
@@ -355,15 +359,16 @@ void RunFinishProbe(const std::string& artifact) {
         ASSERT_TRUE(created.has_value()) << created.error().Description();
         buffers[j] = *created;
     }
-    ASSERT_NO_FATAL_FAILURE(RecordInfinityAllocation(*device, prefix, sizes[0] + sizes[1] + sizes[2]));
+    ASSERT_NO_FATAL_FAILURE(
+        RecordInfinityAllocation(*device, prefix, sizes[0] + sizes[1] + sizes[2]));
     auto written = device->WriteBuffer(buffers[0], std::as_bytes(std::span(input)));
     ASSERT_TRUE(written.has_value()) << written.error().Description();
     written = device->WriteBuffer(buffers[1], opaque);
     ASSERT_TRUE(written.has_value()) << written.error().Description();
     written = device->WriteBuffer(buffers[2], std::as_bytes(std::span(output)));
     ASSERT_TRUE(written.has_value()) << written.error().Description();
-    ASSERT_NO_FATAL_FAILURE(DispatchInfinityProbe(
-        *device, *kernel, buffers, count, prefix, submissions));
+    ASSERT_NO_FATAL_FAILURE(
+        DispatchInfinityProbe(*device, *kernel, buffers, count, prefix, submissions));
     const auto read = device->ReadBuffer(buffers[2], std::as_writable_bytes(std::span(output)));
     ASSERT_TRUE(read.has_value()) << read.error().Description();
     for (std::size_t i = 0; i < count; ++i) {

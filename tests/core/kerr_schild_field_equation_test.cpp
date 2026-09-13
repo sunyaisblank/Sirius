@@ -171,12 +171,12 @@ const std::array<FieldEquationCase, 14>& FieldEquationCases() {
         {"Kerr-Newman -a,-Q", KerrSchildParams::KerrNewman(1.0, -0.5, -0.4), 4.0, 1.0, -0.5},
         // The exact stored binary64 0.8²+0.6² exceeds 1; rounded decimal
         // equality is not extremality. Preserve this geometry as horizonless.
-        {"near-extremal horizonless Kerr-Newman", KerrSchildParams::KerrNewman(1.0, 0.8, 0.6),
-         4.0, 0.7, -0.6, false, true},
+        {"near-extremal horizonless Kerr-Newman", KerrSchildParams::KerrNewman(1.0, 0.8, 0.6), 4.0,
+         0.7, -0.6, false, true},
         // Exact 5²=4²+3², with the same dimensionless event as the intended
         // decimal extremal case above.
-        {"exact extremal Kerr-Newman", KerrSchildParams::KerrNewman(5.0, 4.0, 3.0),
-         20.0, 0.7, -0.6, true, false},
+        {"exact extremal Kerr-Newman", KerrSchildParams::KerrNewman(5.0, 4.0, 3.0), 20.0, 0.7, -0.6,
+         true, false},
         {"horizonless Kerr-Newman", KerrSchildParams::KerrNewman(1.0, 0.9, -0.7), 4.0, 1.2, 0.2,
          false, true},
         {"scaled Kerr-Newman", KerrSchildParams::KerrNewman(0.25, 0.15, 0.1), 1.5, 0.6, 0.8},

@@ -1,6 +1,8 @@
 #include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/core/metrics/outgoing_kerr_schild.h"
+
 #include <gtest/gtest.h>
+
 #include <array>
 #include <cmath>
 #include <limits>
@@ -18,13 +20,12 @@ void ExpectAbsent(const KerrSchildParams& p) {
 TEST(HorizonAuthority, TinyChargeAtEqualMassAndSpinIsExactlySuperextremal) {
     const double charge = static_cast<double>(1.0e-20f);
     // Exact represented relation: M²-a²-Q²=-Q²<0, regardless of rounded sums.
-    const std::array<KerrSchildParams, 5> cases{{
-        {1.0, -1.0, charge, 0.0},
-        {1.0, charge, -1.0, 0.0},
-        {1.0, 1.0, charge, 0.0},
-        {1.0, charge, 1.0, 0.0},
-        {1.0, 1.0, std::numeric_limits<double>::denorm_min(), 0.0}
-    }};
+    const std::array<KerrSchildParams, 5> cases{
+        {{1.0, -1.0, charge, 0.0},
+         {1.0, charge, -1.0, 0.0},
+         {1.0, 1.0, charge, 0.0},
+         {1.0, charge, 1.0, 0.0},
+         {1.0, 1.0, std::numeric_limits<double>::denorm_min(), 0.0}}};
     for (const auto& parameters : cases) {
         KerrSchildFamily metric(parameters);
         EXPECT_FALSE(metric.HasHorizon());
@@ -81,16 +82,19 @@ TEST(HorizonAuthority, SmallPositiveInnerRootSurvivesCancellation) {
 }
 
 TEST(HorizonAuthority, UnrepresentableRootPairDoesNotSelectHorizonFreeRoute) {
-    for (const KerrSchildParams p : {
-             KerrSchildParams{std::numeric_limits<double>::max(), 0.0, 0.0, 0.0},
-             KerrSchildParams{1.0, 0.0, std::numeric_limits<double>::denorm_min(), 0.0}}) {
+    for (const KerrSchildParams p :
+         {KerrSchildParams{std::numeric_limits<double>::max(), 0.0, 0.0, 0.0},
+          KerrSchildParams{1.0, 0.0, std::numeric_limits<double>::denorm_min(), 0.0}}) {
         KerrSchildFamily metric(p);
         ASSERT_TRUE(metric.HasHorizon());
         EXPECT_EQ(metric.OuterHorizonRadius(), -1.0);
         EXPECT_EQ(metric.InnerHorizonRadius(), -1.0);
         OutgoingKerrSchild outgoing(metric);
         Tensor<double, 4> event;
-        event(0) = 0.0; event(1) = 10.0; event(2) = 0.0; event(3) = 0.0;
+        event(0) = 0.0;
+        event(1) = 10.0;
+        event(2) = 0.0;
+        event(3) = 0.0;
         EXPECT_FALSE(outgoing.FromIngoing(event).has_value());
     }
 }

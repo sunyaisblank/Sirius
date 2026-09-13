@@ -61,12 +61,11 @@ TEST(CpuTraceBoundary, UnrepresentedPastHorizonLaunchDeclinesBeforeIntegration) 
         double radius;
         bool roots_available;
     };
-    const std::array<LaunchCase, 2> cases{{
-        {KerrSchildParams::Schwarzschild(1.0), 1.9, true},
-        // The positive inner root underflows. Horizon existence must still
-        // select the chart route, which declines before tracing this event.
-        {{1.0, 0.0, std::numeric_limits<double>::denorm_min(), 0.0}, 10.0, false}
-    }};
+    const std::array<LaunchCase, 2> cases{
+        {{KerrSchildParams::Schwarzschild(1.0), 1.9, true},
+         // The positive inner root underflows. Horizon existence must still
+         // select the chart route, which declines before tracing this event.
+         {{1.0, 0.0, std::numeric_limits<double>::denorm_min(), 0.0}, 10.0, false}}};
     for (const auto& launch : cases) {
         SCOPED_TRACE(launch.radius);
         KerrSchildFamily metric(launch.parameters);

@@ -1,17 +1,17 @@
 // Direct coupled interval controls and actual CPU tracing. No render/device path.
 #include "sirius/backend/cpu/geodesic_tracer.h"
-#include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/core/disk/novikov_thorne_disk.h"
+#include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/core/metrics/outgoing_kerr_schild.h"
 #include "sirius/core/observer_frame.h"
 #include "sirius/core/trace_boundary.h"
 
 #include <gtest/gtest.h>
 
-#include <limits>
-#include <sstream>
 #include <iomanip>
+#include <limits>
 #include <numbers>
+#include <sstream>
 
 namespace {
 using namespace sirius::core;
@@ -528,7 +528,7 @@ TEST(CoupledTransport, OriginalKerrDiskEventMatchesIndependentNeighboursAndRefin
         // The polynomial locator returns a represented root, not a snapped
         // coordinate. Bound its double arithmetic at the local chart scale.
         return 256.0 * std::numeric_limits<double>::epsilon() *
-            (1.0 + std::hypot(position(1), position(2), position(3)));
+               (1.0 + std::hypot(position(1), position(2), position(3)));
     };
     EXPECT_LE(std::abs(central.final_position(3)), event_roundoff(central.final_position));
     EXPECT_EQ(central.num_disk_crossings, 1);
@@ -562,16 +562,20 @@ TEST(CoupledTransport, OriginalKerrDiskEventMatchesIndependentNeighboursAndRefin
     ASSERT_GT(frequency, 0.0);
     std::array<double, 3> direction{};
     for (int axis = 0; axis < 3; ++axis)
-        direction[axis] = TensorOps::InnerProduct(tangent, observer->spatial[axis], values) / frequency;
+        direction[axis] =
+            TensorOps::InnerProduct(tangent, observer->spatial[axis], values) / frequency;
     const auto screen = relativity::ObserverScreenBasis(*observer, direction);
     ASSERT_TRUE(screen);
-    const double major = beam.beam.semi_major / static_cast<double>(beam_config.bundle_angular_size);
-    const double minor = beam.beam.semi_minor / static_cast<double>(beam_config.bundle_angular_size);
+    const double major =
+        beam.beam.semi_major / static_cast<double>(beam_config.bundle_angular_size);
+    const double minor =
+        beam.beam.semi_minor / static_cast<double>(beam_config.bundle_angular_size);
     const double c = std::cos(beam.beam.orientation), s = std::sin(beam.beam.orientation);
     const std::array<double, 3> covariance{major * major * c * c + minor * minor * s * s,
-        (major * major - minor * minor) * c * s, major * major * s * s + minor * minor * c * c};
-    const double scale = std::max({1.0, std::abs(covariance[0]), std::abs(covariance[1]),
-                                   std::abs(covariance[2])});
+                                           (major * major - minor * minor) * c * s,
+                                           major * major * s * s + minor * minor * c * c};
+    const double scale =
+        std::max({1.0, std::abs(covariance[0]), std::abs(covariance[1]), std::abs(covariance[2])});
     // Choose an independent input basis. Its rotation does not affect the
     // output covariance; no production Jacobi values seed the neighboring rays.
     Vec4 n = launch.direction;
@@ -592,13 +596,15 @@ TEST(CoupledTransport, OriginalKerrDiskEventMatchesIndependentNeighboursAndRefin
             Vec4 endpoints[2];
             for (int side = 0; side < 2; ++side) {
                 auto neighbour = launch;
-                neighbour.direction = n * std::cos(delta) + (column == 0 ? first : second) *
-                    ((side == 0 ? -1.0 : 1.0) * std::sin(delta));
+                neighbour.direction =
+                    n * std::cos(delta) +
+                    (column == 0 ? first : second) * ((side == 0 ? -1.0 : 1.0) * std::sin(delta));
                 const auto result = trace(neighbour, config);
                 ASSERT_FALSE(result.numerical_failure);
                 ASSERT_EQ(result.outcome, TraceResult::Outcome::DiskHit);
                 ASSERT_TRUE(result.final_tangent);
-                EXPECT_LE(std::abs(result.final_position(3)), event_roundoff(result.final_position));
+                EXPECT_LE(std::abs(result.final_position(3)),
+                          event_roundoff(result.final_position));
                 endpoints[side] = result.final_position;
             }
             const Vec4 derivative = (endpoints[1] - endpoints[0]) / (2.0 * delta);
@@ -611,14 +617,15 @@ TEST(CoupledTransport, OriginalKerrDiskEventMatchesIndependentNeighboursAndRefin
             matrix[1][0] * matrix[1][0] + matrix[1][1] * matrix[1][1]};
         double covariance_error = 0.0;
         for (int component = 0; component < 3; ++component)
-            covariance_error = std::max(covariance_error,
-                std::abs(measured[component] - covariance[component]) / scale);
+            covariance_error = std::max(
+                covariance_error, std::abs(measured[component] - covariance[component]) / scale);
         // Same declared physical-beam accuracy as the captured-neighbor test.
         EXPECT_LT(covariance_error, 1.0e-4);
         std::ostringstream measured_error;
         measured_error << std::setprecision(17) << covariance_error;
-        RecordProperty(delta == 1.0e-4 ? "coarse_covariance_relative_error"
-                                      : "fine_covariance_relative_error", measured_error.str());
+        RecordProperty(
+            delta == 1.0e-4 ? "coarse_covariance_relative_error" : "fine_covariance_relative_error",
+            measured_error.str());
         // Axes/orientation are published as float. Require actual refinement
         // improvement when the previous error exceeds their roundoff floor.
         if (previous_covariance_error > 8.0 * std::numeric_limits<float>::epsilon()) {
@@ -634,7 +641,8 @@ TEST(CoupledTransport, OriginalKerrDiskEventMatchesIndependentNeighboursAndRefin
         ASSERT_EQ(refined.outcome, TraceResult::Outcome::DiskHit);
         ASSERT_TRUE(refined.final_tangent);
         for (int component = 0; component < 4; ++component) {
-            EXPECT_NEAR(refined.final_position(component), central.final_position(component), 1.0e-10);
+            EXPECT_NEAR(refined.final_position(component), central.final_position(component),
+                        1.0e-10);
             EXPECT_NEAR((*refined.final_tangent)(component), tangent(component), 1.0e-10);
         }
     }
