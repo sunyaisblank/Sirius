@@ -46,8 +46,12 @@ constexpr std::uint32_t kApiVersion = VK_MAKE_API_VERSION(0, 1, 3, 0);
 }
 
 [[nodiscard]] DeviceInfo DescribeDevice(VkPhysicalDevice physical) {
+    VkPhysicalDeviceFloatControlsProperties float_controls{
+        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FLOAT_CONTROLS_PROPERTIES,
+    };
     VkPhysicalDeviceDriverProperties driver{
         .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES,
+        .pNext = &float_controls,
     };
     VkPhysicalDeviceProperties2 properties2{
         .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2,
@@ -90,6 +94,8 @@ constexpr std::uint32_t kApiVersion = VK_MAKE_API_VERSION(0, 1, 3, 0);
         .device_local_bytes = device_local,
         .render_memory_bytes = render_memory,
         .supports_fp64 = features.shaderFloat64 == VK_TRUE,
+        .preserves_fp32_denormals = float_controls.shaderDenormPreserveFloat32 == VK_TRUE,
+        .rounds_fp32_to_nearest = float_controls.shaderRoundingModeRTEFloat32 == VK_TRUE,
     };
 }
 

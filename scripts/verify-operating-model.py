@@ -118,6 +118,10 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p",
     },
     "P2": {
+        "gtest:RetainedComputeTest.BatchedCameraPreservesPhysicalColumnsAndRejectsInvalidRows",
+        "gtest:RetainedComputeTest.JointRkStagesRetainCriticalIncrementsAndEmbeddedError",
+        "gtest:RetainedComputeTest.RejectedStepRowsCannotExposeOldOrPartialCandidates",
+        "gtest:RetainedValue.Binary64InputsKeepTheirRepresentationResidual",
         "gtest:RetainedCameraProgram.Fp32CompletePhysicalLaunchAndRefusals",
         "gtest:RetainedCameraProgram.CompensatedCompletePhysicalLaunchAndRefusals",
         "gtest:PointSourceDetector.OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport",
@@ -445,8 +449,8 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "208db809d6db6e2605fc142219b97483bd4d6edfdd01329be29fb47481e3d37d",
-    "required_dimensions": "a13e6e3034c962578fb0ea934790503edb24130bc8361c68519fe9f60b37fc2a",
+    "acceptance_criteria": "73d7f2339680c60e016cc6394ff09ef342380df29363c414f538e7af554789c0",
+    "required_dimensions": "9afea230e95fc6313dd261ca5a414fe2a8f2ccfac2ba2fcebf354ec03020b594",
     "capability_contracts": "48c5b338c14c11e2ad7275322cd72f4bd014df621ca69e65e119621066fd5c6c",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}

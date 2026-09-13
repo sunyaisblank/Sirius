@@ -1,5 +1,8 @@
 """Emit the fixed arithmetic program and independently computed camera witnesses."""
 
+import sys
+sys.dont_write_bytecode = True
+
 import argparse
 import json
 from pathlib import Path

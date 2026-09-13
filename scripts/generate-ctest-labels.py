@@ -48,6 +48,8 @@ SUITE_LABELS = {
     "PointSourceDetector": MANDATORY,
     "RetainedCameraProgram": MANDATORY,
     "RetainedArithmetic": MANDATORY,
+    "RetainedComputeTest": MANDATORY,
+    "RetainedValue": MANDATORY,
     "PointSourceTransfer": MANDATORY,
     "SourceSkyDifferential": MANDATORY,
     "SourceSkyInfinityTrace": MANDATORY,

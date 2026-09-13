@@ -55,7 +55,8 @@ Never discard low parts or error radii to fit the scalar continuation record.
 
 ## Bounded camera program
 
-`program.py` emits the complete metric, frame, launch and four-column derivative
+`program.py` now imports the shared emitter in
+`src/sirius/kernels/retained_program.py`, which emits the complete metric, frame, launch and four-column derivative
 calculation as 5,292 arithmetic instructions using 227 live retained registers.
 `program_camera_probe.slang` evaluates this stream on the device using the same
 retained arithmetic primitives. The host emits operations and register indices;
@@ -63,6 +64,12 @@ it does not substitute CPU values for the camera computation. This avoids the
 monolithic driver's compiler expansion while preserving low parts, error radii
 and validity across every intermediate. It remains a development camera stage,
 separate from production transport and source publication.
+
+The backend's `RetainedCompute` interface also executes a batched version of this
+same program. It preserves all 104 scientific values and validates row ownership
+without allocating during dispatch. Its shaders and immutable arithmetic programs
+are embedded in the backend; runtime evaluation does not depend on this fixture
+directory. Admission and source publication remain separate live integration work.
 
 The two `RetainedCameraProgram` backend tests build and execute this stage in
 both narrow modes. Each checks all 104 scientific values of 20 independent

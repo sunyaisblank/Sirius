@@ -65,6 +65,35 @@ if(NOT SIRIUS_SPIRV_VAL)
     message(STATUS "Sirius backend: spirv-val not found; emitted kernels will not be validated at build time")
 endif()
 
+# Bounded retained programs are embedded with their validated shaders. Their
+# bytes are consequently covered by the normal product/receipt hashes and do
+# not depend on a test fixture or an extra installed runtime file.
+find_program(SIRIUS_SPIRV_AS spirv-as)
+find_program(SIRIUS_SPIRV_DIS spirv-dis)
+if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS)
+    set(retained_build "${CMAKE_CURRENT_BINARY_DIR}/retained")
+    set(retained_header "${retained_build}/retained_kernels.h")
+    add_custom_command(
+        OUTPUT "${retained_header}"
+        BYPRODUCTS "${retained_build}/retained_camera.spv"
+                   "${retained_build}/retained_transport.spv"
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/scripts/build-retained-kernels.py"
+            --output "${retained_header}" --compiler "${SIRIUS_SLANGC}"
+            --assembler "${SIRIUS_SPIRV_AS}" --disassembler "${SIRIUS_SPIRV_DIS}"
+            --validator "${SIRIUS_SPIRV_VAL}"
+        DEPENDS "${CMAKE_SOURCE_DIR}/scripts/build-retained-kernels.py"
+                "${SIRIUS_KERNEL_DIR}/retained_program.py"
+                "${SIRIUS_KERNEL_DIR}/retained_pair.slang"
+                "${SIRIUS_KERNEL_DIR}/retained_triple.slang"
+                "${SIRIUS_KERNEL_DIR}/retained_camera.slang"
+                "${SIRIUS_KERNEL_DIR}/retained_transport.slang"
+        COMMENT "Building bounded retained camera and joint transport stages"
+        VERBATIM)
+    target_sources(sirius_backend PRIVATE retained_compute.cpp "${retained_header}")
+    target_include_directories(sirius_backend PRIVATE "${retained_build}")
+    target_compile_definitions(sirius_backend PUBLIC SIRIUS_HAS_RETAINED_COMPUTE=1)
+endif()
+
 set(SIRIUS_KERNEL_OUTPUTS "")
 foreach(kernel ${SIRIUS_KERNEL_SOURCES})
     set(kernel_src "${SIRIUS_KERNEL_DIR}/${kernel}.slang")

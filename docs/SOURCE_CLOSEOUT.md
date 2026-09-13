@@ -120,6 +120,31 @@ compiler expansion for these tests. Production transport, dense events,
 continuation and detector integration still require their own implementation
 and validation; historical success counts are not current evidence.
 
+The camera and joint seven-stage Hamiltonian DP pair now have fixed-capacity
+batched device interfaces and build-embedded programs. The transport program
+uses 2,587 instructions and 177 registers; all four physical columns use their
+actual central stage. Camera upload retains continuous film and pupil offsets,
+including independently checked offsets below one binary32 spacing. Invalid
+rows cannot publish previous or partial candidates, and repeated submissions
+reuse their governed device buffers.
+
+Transport uses three binary32 terms and a separate arithmetic radius. The
+two-term prototype exceeded the original projected critical-ray budgets by
+factors of 1.5 to 9.44. The three-term results agree with the independent
+projected refinement to at most 1.3e-7 of those unchanged budgets. Optimized
+three-term submission/readback takes 163 ms for 2,048 private candidates on the
+pinned Radeon/Dozen route after pipeline preparation. This is a stage timing,
+not complete renderer throughput. The camera uses two working terms; no input
+correction is silently dropped on conversion.
+
+All six retained backend tests pass, covering the recovered camera cases,
+continuous inputs, twelve independent phase-space fixtures, low/tail deletion,
+arithmetic enclosures and invalid-row reuse. Both new frozen reference sets
+regenerate byte for byte. All application and test targets build with warnings
+as errors. These device stages still require endpoint projection, accepted
+continuation, dense events and detector connection before replacing the live
+GPU trace path. Their arithmetic radii do not claim global ODE enclosures.
+
 No external operating domain was admitted at configure time (0/8). Physical
 Radeon, WSL2/Dozen, native Windows/macOS build and runtime, native viewer input,
 and the exact IMAX workload still require independent qualification on a single

@@ -56,6 +56,8 @@ struct DeviceInfo {
     std::uint64_t render_memory_bytes = 0;
     // Whether fp64 kernels are available (precision ladder rung one).
     bool supports_fp64 = false;
+    bool preserves_fp32_denormals = false;
+    bool rounds_fp32_to_nearest = false;
 };
 
 // Opaque per-device handles; values are indices into the owning device's

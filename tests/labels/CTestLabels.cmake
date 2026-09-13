@@ -954,6 +954,18 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    RetainedComputeTest.BatchedCameraPreservesPhysicalColumnsAndRejectsInvalidRows
+    RetainedComputeTest.JointRkStagesRetainCriticalIncrementsAndEmbeddedError
+    RetainedComputeTest.RejectedStepRowsCannotExposeOldOrPartialCandidates
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    RetainedValue.Binary64InputsKeepTheirRepresentationResidual
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     SchwarzschildTests.MetricMatchesIndependentCartesianKerrSchildForm
     SchwarzschildTests.AnalyticDerivativesMatchIndependentFiniteDifferences
     SchwarzschildTests.HorizonAndCaptureUseTheExactArealRadius

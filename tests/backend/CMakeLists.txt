@@ -17,6 +17,7 @@ add_executable(sirius_backend_tests
     kernel_metric_consistency_test.cpp
     kernel_camera_frame_test.cpp
     retained_camera_program_test.cpp
+    retained_compute_test.cpp
     kernel_infinity_test.cpp
     kernel_trace_test.cpp
     kernel_beam_test.cpp
@@ -56,6 +57,7 @@ if(TARGET sirius_kernels)
             DEPENDS
                 "${retained_source}/build_fixture.py"
                 "${retained_source}/program.py"
+                "${CMAKE_SOURCE_DIR}/src/sirius/kernels/retained_program.py"
                 "${retained_source}/reference_cases.json"
                 "${retained_source}/check_shaders.py"
                 "${retained_source}/program_camera_probe.slang"
