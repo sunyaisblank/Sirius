@@ -67,11 +67,13 @@ def main():
         lines.append("}};")
 
     for kind, build in (("Camera", module.build_camera_program),
-                         ("Transport", module.build_transport_program)):
+                         ("Transport", module.build_transport_program),
+                         ("Endpoint", module.build_endpoint_program),
+                         ("Dense", module.build_dense_program)):
         program = build()
         prefix = [program["instructions"], program["registers"]]
-        if kind == "Transport":
-            prefix.append(40)
+        if kind != "Camera":
+            prefix.append(len(program["outputs"]))
         array("k" + kind + "Program", prefix + program["outputs"] + program["operations"])
         stem = "retained_" + kind.lower()
         code = compile_shader(source / (stem + ".slang"),
@@ -79,7 +81,7 @@ def main():
                               args.compiler, args.assembler, args.disassembler, args.validator)
         array("k" + kind + "Shader", code)
         words = (512 + 4 * program["registers"] if kind == "Camera"
-                 else 2404 + 5 * program["registers"])
+                 else {"Transport":2404, "Endpoint":769, "Dense":204}[kind] + 5 * program["registers"])
         lines.append(f"inline constexpr std::size_t k{kind}RowWords = {words};")
         print(kind, program["instructions"], "instructions;", program["registers"],
               "registers;", len(code) * 4, "shader bytes")

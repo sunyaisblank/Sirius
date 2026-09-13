@@ -31,3 +31,24 @@ python tests/support/retained_transport/reference.py
 
 Normal builds consume `reference_cases.h` without evaluating the reference.
 The device code does not import these fixtures or the reference implementation.
+
+`endpoint_reference.py` independently differentiates the coordinate null
+quadratic, then converts its coordinate variations to physical covariant
+variations and retained phase continuation. Its fourteen cases include the
+exact linear horizon and an ergoregion with two spatial corrections separated
+below one binary32 spacing. Comparing these corrections in scalar float picks
+the wrong physical derivative. The device retains the comparison and declines
+roots whose differentiated constraint is unrepresented.
+
+`dense_reference.py` uses the defining cubic Hermite basis and independent
+coordinate differentiation for thirty-six fixed-affine and moving-plane
+samples. It compares the device's factored secant polynomial, including small
+covariant variations and exact endpoint ownership. For an arrival event,
+geodesic flow changes X by k times the arrival shift; the corresponding
+acceleration and connection terms cancel in V. The device preserves this
+covariant identity without subtracting large rounded terms.
+
+Both references use 75/105-digit stability checks and frozen binary64 pairs.
+They are interpolation/projection witnesses, not full trajectory admission or
+event-root localization tests. Regenerate them explicitly with the same mpmath
+interpreter used above; normal builds consume the checked-in headers.

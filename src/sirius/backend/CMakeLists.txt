@@ -77,6 +77,8 @@ if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS)
         OUTPUT "${retained_header}"
         BYPRODUCTS "${retained_build}/retained_camera.spv"
                    "${retained_build}/retained_transport.spv"
+                   "${retained_build}/retained_endpoint.spv"
+                   "${retained_build}/retained_dense.spv"
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/scripts/build-retained-kernels.py"
             --output "${retained_header}" --compiler "${SIRIUS_SLANGC}"
             --assembler "${SIRIUS_SPIRV_AS}" --disassembler "${SIRIUS_SPIRV_DIS}"
@@ -87,6 +89,8 @@ if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS)
                 "${SIRIUS_KERNEL_DIR}/retained_triple.slang"
                 "${SIRIUS_KERNEL_DIR}/retained_camera.slang"
                 "${SIRIUS_KERNEL_DIR}/retained_transport.slang"
+                "${SIRIUS_KERNEL_DIR}/retained_endpoint.slang"
+                "${SIRIUS_KERNEL_DIR}/retained_dense.slang"
         COMMENT "Building bounded retained camera and joint transport stages"
         VERBATIM)
     target_sources(sirius_backend PRIVATE retained_compute.cpp "${retained_header}")

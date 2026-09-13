@@ -79,6 +79,10 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(Compute
     status =
         create(result->transport_, kTransportShader, kTransportProgram, 230, kTransportRowWords);
     if (!status) return std::unexpected(status.error());
+    status = create(result->endpoint_, kEndpointShader, kEndpointProgram, 225, kEndpointRowWords);
+    if (!status) return std::unexpected(status.error());
+    status = create(result->dense_, kDenseShader, kDenseProgram, 560, kDenseRowWords);
+    if (!status) return std::unexpected(status.error());
     return result;
 }
 
@@ -150,6 +154,62 @@ base::Expected<std::vector<RetainedStepOutput>> RetainedCompute::Step(
                                 "invalid retained value");
             }
         output.valid = true;
+    }
+    return result;
+}
+
+base::Expected<std::vector<RetainedEndpointOutput>> RetainedCompute::Endpoint(
+    std::span<const RetainedEndpointInput> inputs, DispatchTiming* timing) {
+    if (inputs.empty() || inputs.size() > capacity_)
+        return Fail(ErrorDomain::kDevice, "dispatch retained endpoint", "invalid batch size");
+    static_assert(sizeof(RetainedEndpointInput) == 225 * sizeof(std::uint32_t));
+    std::fill_n(endpoint_.input.begin() + 1, capacity_ * 225, 0U);
+    std::memcpy(endpoint_.input.data() + 1, inputs.data(), inputs.size_bytes());
+    auto status = Dispatch(endpoint_, timing);
+    if (!status) return std::unexpected(status.error());
+    std::vector<RetainedEndpointOutput> result(inputs.size());
+    for (std::size_t row = 0; row < inputs.size(); ++row) {
+        const auto* words = endpoint_.output.data() + row * kEndpointRowWords;
+        if (words[0] == 0) continue;
+        if (words[0] != 1 || words[1] > 3)
+            return Fail(ErrorDomain::kKernel, "read retained endpoint", "invalid projection state");
+        auto& output = result[row];
+        for (std::size_t i = 0; i < 40; ++i) {
+            output.phase[i] = Decode(words + 104 + i * 5);
+            output.physical[i] = Decode(words + 304 + i * 5);
+            if (!output.phase[i].IsRepresented() || !output.physical[i].IsRepresented())
+                return Fail(ErrorDomain::kKernel, "read retained endpoint",
+                            "invalid retained value");
+        }
+        output.component = words[1];
+        output.valid = true;
+    }
+    return result;
+}
+
+base::Expected<std::vector<RetainedDenseOutput>> RetainedCompute::Dense(
+    std::span<const RetainedDenseInput> inputs, DispatchTiming* timing) {
+    if (inputs.empty() || inputs.size() > capacity_)
+        return Fail(ErrorDomain::kDevice, "dispatch retained dense segment", "invalid batch size");
+    static_assert(sizeof(RetainedDenseInput) == 560 * sizeof(std::uint32_t));
+    std::fill_n(dense_.input.begin() + 1, capacity_ * 560, 0U);
+    std::memcpy(dense_.input.data() + 1, inputs.data(), inputs.size_bytes());
+    auto status = Dispatch(dense_, timing);
+    if (!status) return std::unexpected(status.error());
+    std::vector<RetainedDenseOutput> result(inputs.size());
+    for (std::size_t row = 0; row < inputs.size(); ++row) {
+        const auto* words = dense_.output.data() + row * kDenseRowWords;
+        if (words[0] == 0) continue;
+        if (words[0] != 1)
+            return Fail(ErrorDomain::kKernel, "read retained dense segment",
+                        "invalid completion state");
+        for (std::size_t i = 0; i < 40; ++i) {
+            result[row].physical[i] = Decode(words + 4 + i * 5);
+            if (!result[row].physical[i].IsRepresented())
+                return Fail(ErrorDomain::kKernel, "read retained dense segment",
+                            "invalid retained value");
+        }
+        result[row].valid = true;
     }
     return result;
 }

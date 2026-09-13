@@ -956,6 +956,8 @@ set_tests_properties(
 set_tests_properties(
     RetainedComputeTest.BatchedCameraPreservesPhysicalColumnsAndRejectsInvalidRows
     RetainedComputeTest.JointRkStagesRetainCriticalIncrementsAndEmbeddedError
+    RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation
+    RetainedComputeTest.DenseSegmentsPreserveSmallCovariantArrivalDerivatives
     RetainedComputeTest.RejectedStepRowsCannotExposeOldOrPartialCandidates
     PROPERTIES LABELS "Mandatory;Correctness"
 )

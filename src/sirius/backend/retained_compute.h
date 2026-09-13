@@ -50,6 +50,28 @@ struct RetainedStepOutput {
     bool valid = false;
 };
 
+struct RetainedEndpointInput {
+    // Metric parameters, complete phase record, and exact chart reflection.
+    std::array<RetainedValue, 45> values{};
+};
+struct RetainedEndpointOutput {
+    // Projected phase (x,p,X,P) stays retained for subsequent device stages.
+    // Physical (x,k,X,V) is the coupled acceptance/dense-event representation.
+    std::array<RetainedValue, 40> phase{}, physical{};
+    std::uint32_t component = 4;
+    bool valid = false;
+};
+
+struct RetainedDenseInput {
+    // M,a,Q,L; two physical (x,k,X,V) endpoints; retained x and four X
+    // increments; affine interval, fraction, normal[4], moving flag, chart.
+    std::array<RetainedValue, 112> values{};
+};
+struct RetainedDenseOutput {
+    std::array<RetainedValue, 40> physical{};
+    bool valid = false;
+};
+
 // Fixed-capacity device stages. The caller owns admission, continuation and
 // source publication; a private RK candidate is never an accepted trajectory.
 // No device allocation occurs during Camera or Step. Device must outlive this
@@ -62,6 +84,10 @@ class RetainedCompute {
         std::span<const RetainedCameraInput> inputs, DispatchTiming* timing = nullptr);
     [[nodiscard]] base::Expected<std::vector<RetainedStepOutput>> Step(
         std::span<const RetainedStepInput> inputs, DispatchTiming* timing = nullptr);
+    [[nodiscard]] base::Expected<std::vector<RetainedEndpointOutput>> Endpoint(
+        std::span<const RetainedEndpointInput> inputs, DispatchTiming* timing = nullptr);
+    [[nodiscard]] base::Expected<std::vector<RetainedDenseOutput>> Dense(
+        std::span<const RetainedDenseInput> inputs, DispatchTiming* timing = nullptr);
     [[nodiscard]] std::size_t Capacity() const { return capacity_; }
 
   private:
@@ -75,7 +101,7 @@ class RetainedCompute {
     [[nodiscard]] base::Expected<void> Dispatch(Stage& stage, DispatchTiming* timing);
     ComputeDevice& device_;
     std::size_t capacity_;
-    Stage camera_, transport_;
+    Stage camera_, transport_, endpoint_, dense_;
 };
 
 }  // namespace sirius::backend

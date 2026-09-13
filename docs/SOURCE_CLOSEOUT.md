@@ -141,9 +141,25 @@ All six retained backend tests pass, covering the recovered camera cases,
 continuous inputs, twelve independent phase-space fixtures, low/tail deletion,
 arithmetic enclosures and invalid-row reuse. Both new frozen reference sets
 regenerate byte for byte. All application and test targets build with warnings
-as errors. These device stages still require endpoint projection, accepted
-continuation, dense events and detector connection before replacing the live
-GPU trace path. Their arithmetic radii do not claim global ODE enclosures.
+as errors. Their arithmetic radii do not claim global ODE enclosures.
+
+The retained endpoint stage now projects the null tangent and all four physical
+derivatives on the device, returning both physical columns and the retained
+phase continuation. Fourteen independent fixtures include the exact linear
+horizon and an ergoregion case whose competing spatial corrections differ
+below one float spacing. Retaining that comparison fixes a reproduced wrong
+branch/derivative selection; roots with unrepresented differentiated constraints
+decline. Repeated projection preserves the retained physical state.
+
+The retained dense stage samples the central Hermite curve and its four
+derivatives with retained increments. Moving-event derivatives use the same
+sampled interval and geodesic-flow arrival correction. Thirty-six independent
+cubic-basis fixtures pass, including tilted planes, small critical-ray columns
+and fixed endpoints. Endpoint and dense programs use 3,115/6,345 instructions
+and 246/368 live registers respectively. Their 75/105-digit frozen fixtures
+regenerate byte for byte. Coupled trajectory admission, event-root localization,
+live continuation and detector connection remain to be integrated before these
+stages replace the production GPU trace path.
 
 No external operating domain was admitted at configure time (0/8). Physical
 Radeon, WSL2/Dozen, native Windows/macOS build and runtime, native viewer input,

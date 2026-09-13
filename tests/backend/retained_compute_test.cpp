@@ -15,6 +15,8 @@
 #define SIRIUS_RETAINED_TESTS_AVAILABLE 1
 #include "program_fixture.h"
 #include "support/retained_camera/continuous_reference.h"
+#include "support/retained_transport/dense_reference.h"
+#include "support/retained_transport/endpoint_reference.h"
 #include "support/retained_transport/reference_cases.h"
 #endif
 
@@ -215,6 +217,107 @@ TEST_F(RetainedComputeTest, JointRkStagesRetainCriticalIncrementsAndEmbeddedErro
         EXPECT_EQ(flat.error[i].Center(), 0);
         EXPECT_EQ(flat.fifth[i].Center(), flat.fourth[i].Center());
     }
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
+TEST_F(RetainedComputeTest, ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation) {
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    const auto allocation = device->BufferAllocationBytes();
+    std::vector<RetainedEndpointInput> inputs;
+    for (const auto& fixture : sirius::test::retained_endpoint::cases)
+        inputs.push_back(std::bit_cast<RetainedEndpointInput>(fixture.input));
+    const auto outputs = compute->Endpoint(inputs);
+    ASSERT_TRUE(outputs) << outputs.error().Description();
+    for (std::size_t row = 0; row < inputs.size(); ++row) {
+        const auto& fixture = sirius::test::retained_endpoint::cases[row];
+        SCOPED_TRACE(fixture.name);
+        const auto& output = (*outputs)[row];
+        ASSERT_TRUE(output.valid);
+        EXPECT_EQ(output.component, fixture.component);
+        for (std::size_t i = 0; i < 80; ++i) {
+            SCOPED_TRACE(i);
+            const auto& value = i < 40 ? output.phase[i] : output.physical[i - 40];
+            const auto oracle = fixture.reference[i];
+            const sirius::core::Twofold exact(oracle.high, oracle.low);
+            const auto center = sirius::core::Twofold(value.high) +
+                                sirius::core::Twofold(value.low) +
+                                sirius::core::Twofold(value.tail);
+            const double difference = std::abs((center - exact).Rounded());
+            EXPECT_LE(difference, value.radius + 1e-29 * (1 + std::abs(oracle.high)));
+            EXPECT_LE(difference, 1e-11 * (1 + std::abs(oracle.high)));
+        }
+    }
+    // Reuse the accepted phase without converting through the physical output
+    // or a binary64 sum. Projection must not move an already projected state.
+    for (std::size_t row = 0; row < inputs.size(); ++row)
+        std::copy((*outputs)[row].phase.begin(), (*outputs)[row].phase.end(),
+                  inputs[row].values.begin() + 4);
+    const auto repeated = compute->Endpoint(inputs);
+    ASSERT_TRUE(repeated) << repeated.error().Description();
+    for (std::size_t row = 0; row < inputs.size(); ++row) {
+        ASSERT_TRUE((*repeated)[row].valid) << row;
+        for (std::size_t i = 0; i < 40; ++i)
+            EXPECT_NEAR((*repeated)[row].physical[i].Center(), (*outputs)[row].physical[i].Center(),
+                        1e-11 * (1 + std::abs((*outputs)[row].physical[i].Center())));
+    }
+    inputs[0].values[4].valid = 0;
+    inputs[1].values[8] = RetainedValue::FromDouble(100);
+    const auto invalid = compute->Endpoint(inputs);
+    ASSERT_TRUE(invalid) << invalid.error().Description();
+    for (std::size_t row = 0; row < 2; ++row) {
+        EXPECT_FALSE((*invalid)[row].valid);
+        for (const auto& value : (*invalid)[row].physical) EXPECT_EQ(value.valid, 0U);
+        for (const auto& value : (*invalid)[row].phase) EXPECT_EQ(value.valid, 0U);
+    }
+    EXPECT_EQ(device->BufferAllocationBytes(), allocation);
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
+TEST_F(RetainedComputeTest, DenseSegmentsPreserveSmallCovariantArrivalDerivatives) {
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    const auto allocation = device->BufferAllocationBytes();
+    const auto& cases = sirius::test::retained_dense::cases;
+    for (std::size_t begin = 0; begin < cases.size(); begin += compute->Capacity()) {
+        const auto count = std::min(compute->Capacity(), cases.size() - begin);
+        std::vector<RetainedDenseInput> inputs;
+        for (std::size_t i = 0; i < count; ++i)
+            inputs.push_back(std::bit_cast<RetainedDenseInput>(cases[begin + i].input));
+        const auto outputs = compute->Dense(inputs);
+        ASSERT_TRUE(outputs) << outputs.error().Description();
+        for (std::size_t row = 0; row < count; ++row) {
+            const auto& fixture = cases[begin + row];
+            SCOPED_TRACE(fixture.name);
+            ASSERT_TRUE((*outputs)[row].valid);
+            for (std::size_t i = 0; i < 40; ++i) {
+                SCOPED_TRACE(i);
+                const auto& value = (*outputs)[row].physical[i];
+                const auto oracle = fixture.reference[i];
+                const auto center = sirius::core::Twofold(value.high) +
+                                    sirius::core::Twofold(value.low) +
+                                    sirius::core::Twofold(value.tail);
+                const double difference =
+                    std::abs((center - sirius::core::Twofold(oracle.high, oracle.low)).Rounded());
+                EXPECT_LE(difference, value.radius + 1e-28 * (1 + std::abs(oracle.high)));
+                EXPECT_LE(difference, 1e-10 * (1 + std::abs(oracle.high)));
+            }
+        }
+    }
+    auto input = std::bit_cast<RetainedDenseInput>(cases[1].input);
+    for (std::size_t i = 106; i < 110; ++i) input.values[i] = RetainedValue::FromDouble(0);
+    auto invalid = compute->Dense(std::span(&input, 1));
+    ASSERT_TRUE(invalid) << invalid.error().Description();
+    EXPECT_FALSE(invalid->front().valid);
+    for (const auto& value : invalid->front().physical) EXPECT_EQ(value.valid, 0U);
+    input = std::bit_cast<RetainedDenseInput>(cases[0].input);
+    input.values[105] = RetainedValue::FromDouble(1.01);
+    invalid = compute->Dense(std::span(&input, 1));
+    ASSERT_TRUE(invalid) << invalid.error().Description();
+    EXPECT_FALSE(invalid->front().valid);
+    EXPECT_EQ(device->BufferAllocationBytes(), allocation);
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif
