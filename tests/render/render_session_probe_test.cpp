@@ -53,8 +53,13 @@ SessionConfig ProbeConfig(const std::string& output_path) {
 
 // Run one CPU render to output_path; returns the terminal session state.
 SessionState RenderTo(const std::string& output_path) {
+    auto config = ProbeConfig(output_path);
+    // Writer coverage uses the complete physical frame. Independent tiles can
+    // use the normal worker pool; serial/parallel equality has its own probe.
+    config.tile_size = 8;
+    config.enable_parallel_rendering = true;
     RenderSession session;
-    if (!session.Configure(ProbeConfig(output_path))) {
+    if (!session.Configure(config)) {
         return SessionState::Failed;
     }
     return session.Execute();

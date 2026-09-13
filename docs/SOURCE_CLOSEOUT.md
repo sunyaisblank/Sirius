@@ -23,6 +23,14 @@ kernel portability emission, Vulkan configuration parsing, and mocked
 cancellation checks remain included. Local results are recorded separately
 from the full Mandatory receipt and cannot enable release packaging.
 
+The PPM, PNG, and EXR end-to-end writer checks use eight-pixel tiles and the
+normal CPU worker pool. Their complete 64x64 Kerr frames, four samples per
+pixel, numerical settings, and output assertions are unchanged. The dedicated
+moving ThinLens point-detector test still compares serial and parallel linear
+radiance exactly. The initial local run at `92efa9b` passed 735 tests with no
+failures before being interrupted to remove the writer probes' unnecessary
+single-worker bottleneck; its partial log is not a completed local result.
+
 The recovered history includes `2f7189b` (governed evidence and Vulkan session
 output), `4a685bb` (subpixel point-source filtering), and `b5ef145` (the surviving
 uncommitted coupled-transport and source-sky implementation). The latter
