@@ -357,6 +357,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
     "E2": {
         "gtest:ConfigValidation.PolarisationRequiresRepresentedThinBlackHoleDisk",
         "gtest:GeodesicTracerTest.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation",
+        "gtest:GeodesicTracerTest.PolarisationGaugeRemainsRegularAtPastHorizonCapture",
         "gtest:RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes",
         "gtest:RenderSessionProbe.PolarisedRequestsDeclineAndTwoSheetIsRepresented",
         "gtest:WalkerPenrose.BoyerLindquistInitialDataAndAxisExitDeclineWithoutSubstitution",
@@ -417,8 +418,8 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "4cd77164dd2fbcebf080c79dc0077349fa4f65a43f6f8f3e7e867584295bd5fb",
-    "required_dimensions": "bbea663f8749fe890065b5785c5f6dd741bc0d86d643ba5237a39064b1c21719",
+    "acceptance_criteria": "3d93af94b65ce77858721d1c41cdd7e28c519995bf041729ccaa31087ca12f94",
+    "required_dimensions": "2e0663d93520443f6505e5db08ef82eb4d45d303c15d8421cb10fb6994bc0fc2",
     "capability_contracts": "48c5b338c14c11e2ad7275322cd72f4bd014df621ca69e65e119621066fd5c6c",
 }
 CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}

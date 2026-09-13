@@ -635,8 +635,10 @@ TEST(RenderSessionProbe, NumericalRayFailureKeepsCpuTilesPrivateAndPreventsOutpu
             std::optional<sirius::backend::TraceResult> first;
             sirius::core::ForEachCameraSample(config.samples_per_pixel, [&](const auto& sample) {
                 if (first) return;
-                first = tracer.Trace(camera.GenerateRayForObserver(
-                    0, 0, sample.image_u, sample.image_v, sample.pupil_u, sample.pupil_v));
+                const auto projection = camera.ProjectFilmForObserver(
+                    sample.image_u, sample.image_v, sample.pupil_u, sample.pupil_v);
+                ASSERT_TRUE(projection);
+                first = tracer.Trace(projection->ray);
             });
             ASSERT_TRUE(first.has_value());
             ASSERT_TRUE(first->numerical_failure);

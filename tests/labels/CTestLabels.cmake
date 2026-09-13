@@ -1355,6 +1355,7 @@ set_tests_properties(
     GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile
     GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile
     GeodesicTracerTest.NoNumericalFailures
+    GeodesicTracerTest.PolarisationGaugeRemainsRegularAtPastHorizonCapture
     GeodesicTracerTest.TracingPerformance
     GeodesicTracerVolumetric.OpticallyThinTransferIsNotDiscardedAtCompositionBoundary
     GeodesicTracerVolumetric.ProceduralTurbulenceAltersLiveTransferDeterministically

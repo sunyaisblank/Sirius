@@ -9,6 +9,7 @@
 #include "sirius/core/camera.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/core/metrics/morris_thorne_family.h"
+#include "sirius/render/trace_domain.h"
 
 #include <gtest/gtest.h>
 
@@ -425,6 +426,46 @@ TEST_F(GeodesicTracerTest, LiveDiskCrossingCarriesTransportedPhysicalStokesOrien
 
     const TraceResult unpolarised = m_Tracer->Trace(disk_ray);
     EXPECT_FALSE(unpolarised.disk_crossings[0].polarisation_valid);
+}
+
+TEST_F(GeodesicTracerTest, PolarisationGaugeRemainsRegularAtPastHorizonCapture) {
+    KerrSchildFamily metric(KerrSchildParams::Kerr(1.0, 0.7));
+    CameraConfig camera_config;
+    camera_config.width = camera_config.height = 24;
+    camera_config.r = 50.0;
+    camera_config.theta = 75.0 * std::numbers::pi / 180.0;
+    PinholeCamera camera(camera_config);
+    const auto projection = camera.ProjectFilmForObserver(11.5, 10.5);
+    ASSERT_TRUE(projection);
+    const auto domain = sirius::render::BuildTraceDomainParameters({.metric_id = MetricId::Kerr,
+                                                                    .metric_mass = 1.0,
+                                                                    .observer_radius = 50.0,
+                                                                    .throat_radius = 1.0,
+                                                                    .bubble_radius = 1.0,
+                                                                    .bubble_sigma = 1.0});
+    TracerConfig control;
+    control.escape_radius = domain.escape_radius;
+    control.horizon_factor = 1.0f;
+    control.max_steps = sirius::render::kRenderTraceMaximumAttempts;
+    control.disk_inner = metric.IscoRadius();
+    control.disk_outer = 20.0;
+    control.integrator.initial_step = domain.cpu_initial_step;
+    control.integrator.max_step = domain.max_step;
+    control.integrator.min_step = domain.cpu_min_step;
+    control.integrator.abs_tolerance = control.integrator.rel_tolerance = 5e-6f;
+    GeodesicTracer reference(&metric, control);
+    const auto plain = reference.Trace(projection->ray);
+    ASSERT_FALSE(plain.numerical_failure);
+    ASSERT_EQ(plain.outcome, TraceResult::Outcome::Horizon);
+    control.enable_polarisation = true;
+    GeodesicTracer polarised(&metric, control);
+    const auto transported = polarised.Trace(projection->ray);
+    ASSERT_FALSE(transported.numerical_failure);
+    EXPECT_EQ(transported.outcome, plain.outcome);
+    EXPECT_EQ(transported.steps_taken, plain.steps_taken);
+    EXPECT_EQ(transported.affine_length, plain.affine_length);
+    for (int component = 0; component < 4; ++component)
+        EXPECT_EQ(transported.final_position(component), plain.final_position(component));
 }
 
 TEST(GeodesicTracerVolumetric, TransferAccumulatesAcrossEveryTraversedSegment) {

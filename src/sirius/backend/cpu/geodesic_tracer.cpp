@@ -456,7 +456,11 @@ bool GeodesicTracer::ReconditionPolarisationFrame(PolarisationFrame& frame, cons
     // numerical transport drift back into the Eulerian observer's physical
     // Sachs screen. A coordinate-time basis vector is not generally timelike
     // (notably inside the Kerr ergosphere), so it cannot define this screen.
-    const auto sky = SampleSourceSky(*metric_, position, velocity, outgoing_chart_);
+    // This is a transport gauge, not the public catalogue's observer. Use the
+    // regular live chart's Eulerian observer: mapping the ingoing observer into
+    // the outgoing chart becomes ill-conditioned at the past horizon. Gauge
+    // additions parallel to k do not change the measured disk polarisation.
+    const auto sky = SampleEulerianSky(*metric_, position, velocity);
     if (!sky || !FiniteVector(frame.reference.polarisation) ||
         !FiniteVector(frame.perpendicular.polarisation))
         return false;
