@@ -346,6 +346,7 @@ set_tests_properties(
 set_tests_properties(
     CpuTraceBoundary.EveryAdvertisedCpuMetricConstructsAndTracesOneRay
     CpuTraceBoundary.FinitePupilOffsetMovesTheLiveCpuLaunchEvent
+    CpuTraceBoundary.CancellationDiscardsPrivateRayDataAndAllowsTracerReuse
     CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge
     CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle
     CpuTraceBoundary.JacobiBundleTerminatesAtTheSameCausalEvent
@@ -1434,6 +1435,7 @@ set_tests_properties(
     RenderCommandParse.CliCpuOverridesLowerLayerVulkanBackend
     RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent
     RenderCommandParse.ReusedCommandDoesNotRetainAnEarlierGpuRequest
+    RenderSessionProbe.CancellationInterruptsAnActivePrivateRayBeforePublication
     RenderSessionProbe.CompletionCallbackCanReenterLifecycleWithoutDeadlock
     RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr
     RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter

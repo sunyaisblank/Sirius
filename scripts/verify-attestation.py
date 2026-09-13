@@ -49,16 +49,6 @@ QUALIFICATION_PRODUCT_EVIDENCE = {
     "viewer_rdsd003a_fragment": "qualification-product-viewer_rdsd003a_fragment",
     "viewer_rdsd003a_vertex": "qualification-product-viewer_rdsd003a_vertex",
 }
-QUALIFICATION_TEST_INPUT_EVIDENCE = {
-    name: f"test-input-{name}" for name in (
-        "smoke_spv", "parity_probe_spv", "parity_probe_fp32comp_spv",
-        "parity_probe_fp64_spv", "infinity_probe_spv", "infinity_probe_fp32comp_spv",
-        "infinity_probe_fp64_spv", "metric_consistency_probe_spv",
-        "metric_consistency_probe_fp32comp_spv", "metric_consistency_probe_fp64_spv",
-        "camera_frame_probe_spv", "camera_frame_probe_fp32comp_spv",
-        "camera_frame_probe_fp64_spv", "coupled_probe_fp64_spv", "trace_cuda", "trace_metal",
-    )
-}
 QUALIFICATION_TEST_EVIDENCE = {
     "sirius_app_tests": "native-build-tested-sirius_app_tests",
     "sirius_backend_tests": "native-build-tested-sirius_backend_tests",
@@ -109,6 +99,13 @@ def load_build_gate_verifier():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+# The build gate owns the complete generated-input inventory. Every one of
+# those inputs must also travel with an external qualification bundle.
+QUALIFICATION_TEST_INPUT_EVIDENCE = {
+    name: f"test-input-{name}" for name in load_build_gate_verifier().TEST_INPUT_PATHS
+}
 
 
 def inspect_test_input_evidence(gate, artifacts):

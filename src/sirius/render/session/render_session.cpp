@@ -717,6 +717,7 @@ base::Expected<void> RenderSession::Initialise() {
     if (metric_) {
         tracer_ = std::make_unique<GeodesicTracer>(metric_.get(), tracer_config);
         tracer_->SetStepExecutor(external_step_executor_);
+        tracer_->SetCancellationCallback([this] { return IsStopping(); });
         if (tracer_config.enable_disk) {
             std::cout << "  Disk:       r_in=" << tracer_config.disk_inner
                       << "M, r_out=" << tracer_config.disk_outer << "M" << std::endl;
@@ -764,6 +765,7 @@ base::Expected<void> RenderSession::Initialise() {
                 thread_tracers_.push_back(
                     std::make_unique<GeodesicTracer>(metric_.get(), tracer_config));
                 thread_tracers_.back()->SetStepExecutor(external_step_executor_);
+                thread_tracers_.back()->SetCancellationCallback([this] { return IsStopping(); });
             }
         }
 
@@ -983,6 +985,10 @@ base::Expected<RenderSession::PixelResult> RenderSession::ShadePixel(int px_coor
                                  std::format("pixel ({}, {}), sample {}: {}", px_coord, py_coord,
                                              current_sample, reason));
         };
+        if (IsStopping()) {
+            fail_sample("render cancelled");
+            return;
+        }
         const auto projection = camera_->ProjectFilmForObserver(
             static_cast<double>(px_coord) + sample.image_u,
             static_cast<double>(py_coord) + sample.image_v, sample.pupil_u, sample.pupil_v);
@@ -994,6 +1000,10 @@ base::Expected<RenderSession::PixelResult> RenderSession::ShadePixel(int px_coor
         SIRIUS_ASSERT(core::IsRepresentedCameraRay(camera_ray));
         if (!camera_ray.active) return;
         TraceResult trace_result = tracer->Trace(camera_ray);
+        if (trace_result.cancelled) {
+            fail_sample("ray cancelled");
+            return;
+        }
         if (trace_result.numerical_failure) {
             const char* reason = trace_result.coupled_failure == core::CoupledStepFailure::WorkLimit
                                      ? "ray work limit exhausted"
@@ -1089,6 +1099,7 @@ base::Expected<RenderSession::PixelResult> RenderSession::ShadePixel(int px_coor
             const auto measure = [&](const core::CameraFilmProjection& film,
                                      const TraceResult& traced)
                 -> std::expected<PointDetectorProbe, PointDetectorFailure> {
+                if (traced.cancelled) return std::unexpected(PointDetectorFailure::Cancelled);
                 if (traced.numerical_failure || traced.outcome == TraceResult::Outcome::MaxSteps)
                     return std::unexpected(PointDetectorFailure::TraceFailed);
                 PointDetectorProbe value;
@@ -1179,6 +1190,10 @@ void RenderSession::RenderTile(Tile* tile) {
             return;
         }
         for (int tx = 0; tx < tile->width; ++tx) {
+            if (IsStopping()) {
+                fsm_.Process(SessionEvent::Cancel);
+                return;
+            }
             int px = tile->x + tx;
             int py = tile->y + ty;
 
@@ -1641,11 +1656,8 @@ base::Expected<bool> RenderSession::RenderTileThreaded(Tile* tile, int thread_id
     std::vector<float> tileBuffer(tile->width * tile->height * 4, 0.0f);
 
     for (int ty = 0; ty < tile->height; ++ty) {
-        if (ty % 8 == 0 && (stop_workers_ || progress_.GetCancellationToken().IsCancelled())) {
-            return false;
-        }
-
         for (int tx = 0; tx < tile->width; ++tx) {
+            if (IsStopping()) return false;
             int px = tile->x + tx;
             int py = tile->y + ty;
 

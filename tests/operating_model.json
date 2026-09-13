@@ -510,6 +510,8 @@
       "id": "session_lifecycle_and_cancellation",
       "evidence": [
         {"kind": "gtest", "name": "RenderSessionProbe.StartIsAsynchronousAndCancellationIsTerminalWithoutOutput"},
+        {"kind": "gtest", "name": "RenderSessionProbe.CancellationInterruptsAnActivePrivateRayBeforePublication"},
+        {"kind": "gtest", "name": "CpuTraceBoundary.CancellationDiscardsPrivateRayDataAndAllowsTracerReuse"},
         {"kind": "gtest", "name": "RenderSessionProbe.CompletionCallbackCanReenterLifecycleWithoutDeadlock"},
         {"kind": "gtest", "name": "TileScheduler.ReinitialiseResetsCompletionLedger"}
       ]

@@ -7,6 +7,7 @@
 #include "support/cpu_critical/metric_reference.h"
 
 #include <cmath>
+#include <limits>
 
 namespace sirius::test {
 using namespace sirius::core;
@@ -26,6 +27,18 @@ TEST(RetainedArithmetic, SmallTermsSurviveLargeSumsProductsAndDivision) {
     EXPECT_EQ(third.lo, 0x1.5555555555555p-56);
     const auto residual = third * 3.0 - Twofold(1);
     EXPECT_LT(std::abs(residual.hi) + std::abs(residual.lo), 0x1p-104);
+    for (double zero : {0.0, -0.0})
+        for (double factor : {0.0, -0.0, 1.0, -1.0, 1e300, -1e300})
+            for (const auto exact :
+                 {Twofold::Product(zero, factor), Twofold::Product(factor, zero)}) {
+                EXPECT_EQ(exact.hi, 0);
+                EXPECT_EQ(std::signbit(exact.hi), std::signbit(zero) != std::signbit(factor));
+                EXPECT_EQ(exact.lo, 0);
+                EXPECT_FALSE(std::signbit(exact.lo));
+            }
+    const auto invalid = Twofold::Product(0, std::numeric_limits<double>::infinity());
+    EXPECT_TRUE(std::isnan(invalid.hi));
+    EXPECT_TRUE(std::isnan(invalid.lo));
 }
 
 TEST(RetainedArithmetic, CartesianGradientMatchesIndependentRationalValues) {

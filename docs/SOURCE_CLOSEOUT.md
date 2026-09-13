@@ -158,6 +158,8 @@ This focused measurement uses the renderer source committed in `bf30294` and
 the preceding development build configuration; it is not a final-revision
 Mandatory receipt. Throughput on this route is limited, and this small image
 does not establish full-workload performance.
+The original image comparison test also completed its own CPU reference and
+passed in 14,574.406 seconds; the GPU measurement above is its device phase.
 
 Exact Minkowski formulas avoid curved-metric evaluation while preserving the
 DP tableau, differentiated null projection and general Hermite polynomial.
@@ -190,6 +192,34 @@ and the exact IMAX workload still require independent qualification on a single
 final revision. Release packaging remains disabled.
 
 ## Closeout validation
+
+The complete-gate rehearsal exposed an exact finite-causal endpoint that was
+left unowned by a strict outside-only predicate. The tracer now admits contact
+at the accepted endpoint; the finite-pupil regression escapes in one interval.
+The causal locator and its caller use the same radius evaluation. All thirteen
+CPU boundary tests pass, including live disk-profile, bundle, and horizon checks.
+
+The attestation exporter now takes its generated-input inventory from the build
+gate authority, so retained-camera fixtures accompany every qualification
+bundle. Its complete false-evidence controls pass. CPU arithmetic avoids an FMA
+only for an exact zero factor, preserving signed zero and invalid-input behavior;
+all 491 core tests pass, including the independent retained metric witnesses.
+The installed 128x128 CPU smoke image keeps its original numerical settings and
+600-second timeout. Smaller CPU tiles expose enough independent work to the
+available threads, reducing this check from 598.19 to 230.12 seconds on the
+current machine. Installation, relocation and missing-resource refusal all pass.
+
+CPU session cancellation now reaches each pixel, camera sample and trace
+interval. The outgoing horizon-chart worker receives the same cancellation
+predicate. An interrupted trace discards its private physical result and
+rejects its pending device interval before releasing trace ownership. Regressions
+cancel an accepted private interval in flat and Schwarzschild charts, reuse the
+tracer successfully, and interrupt an active render before any tile publication.
+The active-session check passes in 0.401 seconds including scene initialization.
+The headless CPU viewer completes and publishes its full 64x64 Schwarzschild
+frame in 536.487 seconds. It uses smaller tiles to distribute the unchanged
+physical samples among workers. Its completion deadline is separate from the
+interval-level cancellation regressions.
 
 The recovered checkpoint compiled every application, shader (with SPIR-V validation),
 and test target with the Linux GCC preset and warnings treated as errors.

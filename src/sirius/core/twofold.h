@@ -17,6 +17,11 @@ struct Twofold {
     }
     static Twofold Product(double a, double b) {
         const double p = a * b;
+        // Exact zero factors have no residual. Keep the signed high zero and
+        // avoid an FMA call for the many zero metric/variation coefficients.
+        // Nonzero factors that underflow, and nonfinite products, still use
+        // the error-free transform below.
+        if (p == 0 && (a == 0 || b == 0)) return {p, 0};
         return {p, std::fma(a, b, -p)};
     }
     friend Twofold operator+(Twofold a, Twofold b) {

@@ -563,6 +563,11 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
         }
     } scope{step_executor_};
     if (step_executor_) step_executor_->BeginTrace();
+    if (should_cancel_ && should_cancel_()) {
+        TraceResult cancelled;
+        cancelled.cancelled = true;
+        return cancelled;
+    }
     auto* family = dynamic_cast<KerrSchildFamily*>(metric_);
     if (family && family->HasHorizon()) {
         CacheMetricParameters();
@@ -570,6 +575,7 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
         GeodesicTracer worker(&outgoing, config_);
         worker.outgoing_chart_ = &outgoing;
         worker.step_executor_ = step_executor_;
+        worker.should_cancel_ = should_cancel_;
         // The radial disk profile is immutable during one trace. Reuse the
         // cached profile without moving or mutating the public tracer's state.
         worker.page_thorne_disk_ = page_thorne_disk_;
@@ -586,6 +592,13 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray) {
     TraceResult result;
     result.steps_taken = 0;
     result.numerical_failure = false;
+    const auto cancelled_result = [&] {
+        TraceResult cancelled;
+        cancelled.cancelled = true;
+        cancelled.steps_taken = result.steps_taken;
+        return cancelled;
+    };
+    if (should_cancel_ && should_cancel_()) return cancelled_result();
 
     CacheMetricParameters();
 
@@ -695,6 +708,7 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray) {
     }
 
     for (int step = 0; step < config_.max_steps; ++step) {
+        if (should_cancel_ && should_cancel_()) return cancelled_result();
         if (chart_switch_radius > 0.0) {
             const bool use_outgoing =
                 std::hypot(ray.position(1), ray.position(2), ray.position(3)) < chart_switch_radius;
@@ -773,6 +787,10 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray) {
                                                   use_coupled ? &comparison : nullptr);
         }
         result.steps_taken++;
+        if (should_cancel_ && should_cancel_()) {
+            if (step_executor_) step_executor_->RejectLastInterval();
+            return cancelled_result();
+        }
 
         if (ray.terminated || HasInvalidState(ray)) {
             result.outcome = TraceResult::Outcome::MaxSteps;
@@ -829,7 +847,7 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray) {
                     terminal.event = kind;
                 };
                 if (config_.finite_causal_boundary &&
-                    std::hypot(endpoint.position(1), endpoint.position(2), endpoint.position(3)) >
+                    std::hypot(endpoint.position(1), endpoint.position(2), endpoint.position(3)) >=
                         config_.escape_radius) {
                     const auto event = FindCausalBoundaryEvent(
                         beginning.position, beginning.velocity, terminal.ray.position,
@@ -1034,9 +1052,8 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray) {
                 const double accepted_x = ray.position(1);
                 const double accepted_y = ray.position(2);
                 const double accepted_z = ray.position(3);
-                const double accepted_radius = std::sqrt(
-                    accepted_x * accepted_x + accepted_y * accepted_y + accepted_z * accepted_z);
-                if (accepted_radius > static_cast<double>(config_.escape_radius)) {
+                const double accepted_radius = std::hypot(accepted_x, accepted_y, accepted_z);
+                if (accepted_radius >= static_cast<double>(config_.escape_radius)) {
                     const auto boundary = FindCausalBoundaryEvent(
                         prev_pos, prev_vel, ray.position, ray.velocity, d_lambda,
                         static_cast<double>(config_.escape_radius));

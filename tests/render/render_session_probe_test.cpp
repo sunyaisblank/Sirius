@@ -23,6 +23,7 @@
 #include <filesystem>
 #include <format>
 #include <fstream>
+#include <future>
 #include <limits>
 #include <numbers>
 #include <optional>
@@ -251,6 +252,52 @@ TEST(RenderSessionProbe, StartIsAsynchronousAndCancellationIsTerminalWithoutOutp
     EXPECT_EQ(session.GetState(), SessionState::Cancelled);
     EXPECT_FALSE(fs::exists(output));
     EXPECT_FALSE(session.Start()) << "a terminal session must not be silently restarted";
+}
+
+TEST(RenderSessionProbe, CancellationInterruptsAnActivePrivateRayBeforePublication) {
+    struct BlockingExecutor final : sirius::backend::TraceStepExecutor {
+        std::promise<void> entered, resume;
+        std::shared_future<void> resumed = resume.get_future().share();
+        int steps = 0, rejected = 0;
+        std::optional<sirius::core::CameraLaunch> Launch(
+            sirius::core::IMetric& metric, double spin,
+            const sirius::core::CameraRay& camera) override {
+            return sirius::core::LaunchCameraRay(metric, spin, camera);
+        }
+        bool Step(sirius::core::Lightray& ray, sirius::core::IMetric& metric,
+                  const sirius::core::IntegratorConfig& config,
+                  sirius::core::Rk45CoupledState& coupled,
+                  sirius::core::Rk45CoupledComparison& comparison) override {
+            if (++steps == 1) entered.set_value();
+            resumed.wait();
+            return sirius::core::Geodesic::IntegrateStepRk45(ray, &metric, config, &coupled,
+                                                             &comparison);
+        }
+        void RejectLastInterval() override { ++rejected; }
+    } executor;
+    auto entered = executor.entered.get_future();
+    SessionConfig config;
+    config.width = config.height = 4;
+    config.samples_per_pixel = 1;
+    config.metric_id = sirius::core::MetricId::Minkowski;
+    config.black_hole_mass = config.black_hole_spin = 0;
+    config.enable_disk = false;
+    config.write_output = false;
+    RenderSession session(executor, 1, 1);
+    config.backend = sirius::render::RenderBackend::Vulkan;
+    const auto configured = session.Configure(config);
+    ASSERT_TRUE(configured) << configured.error().Description();
+    ASSERT_TRUE(session.Start());
+    const bool active = entered.wait_for(std::chrono::seconds(5)) == std::future_status::ready;
+    const bool cancelled = session.Cancel();
+    executor.resume.set_value();
+    session.WaitForCompletion();
+    ASSERT_TRUE(active) << "the private ray did not start";
+    EXPECT_TRUE(cancelled);
+    EXPECT_EQ(session.GetState(), SessionState::Cancelled);
+    EXPECT_EQ(executor.steps, 1);
+    EXPECT_EQ(executor.rejected, 1);
+    EXPECT_EQ(session.GetTileScheduler().GetCompletedCount(), 0);
 }
 
 TEST(RenderSessionProbe, CompletionCallbackCanReenterLifecycleWithoutDeadlock) {

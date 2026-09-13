@@ -329,13 +329,88 @@ TEST(CpuTraceBoundary, FinitePupilOffsetMovesTheLiveCpuLaunchEvent) {
     const TraceResult central_trace = tracer.Trace(central);
     const TraceResult pupil_trace = tracer.Trace(pupil);
 
-    ASSERT_EQ(central_trace.outcome, TraceResult::Outcome::Escaped);
-    ASSERT_EQ(pupil_trace.outcome, TraceResult::Outcome::Escaped);
+    ASSERT_EQ(central_trace.outcome, TraceResult::Outcome::Escaped)
+        << "steps=" << central_trace.steps_taken << " numerical=" << central_trace.numerical_failure
+        << " coupled=" << static_cast<int>(central_trace.coupled_failure)
+        << " x=" << central_trace.final_position(1);
+    ASSERT_EQ(pupil_trace.outcome, TraceResult::Outcome::Escaped)
+        << "steps=" << pupil_trace.steps_taken << " numerical=" << pupil_trace.numerical_failure
+        << " coupled=" << static_cast<int>(pupil_trace.coupled_failure)
+        << " x=" << pupil_trace.final_position(1);
+    // The central interval ends exactly on the sphere. That endpoint owns the
+    // escape; advancing another interval would start outside the locator's domain.
+    EXPECT_EQ(central_trace.steps_taken, 1);
+    EXPECT_FALSE(central_trace.numerical_failure);
+    EXPECT_FALSE(pupil_trace.numerical_failure);
     EXPECT_NEAR(central_trace.final_position(2), 0.0, 2.0e-5);
     EXPECT_NEAR(pupil_trace.final_position(2), pupil.aperture_right, 2.0e-5);
     EXPECT_NEAR(pupil_trace.final_position(2) - central_trace.final_position(2),
                 pupil.aperture_right, 2.0e-5)
         << "the live tracer ignored the finite-pupil launch-event displacement";
+}
+
+TEST(CpuTraceBoundary, CancellationDiscardsPrivateRayDataAndAllowsTracerReuse) {
+    struct CancellingExecutor final : sirius::backend::TraceStepExecutor {
+        bool cancel_after_step = true, cancelled = false;
+        int accepted = 0, rejected = 0, ended = 0;
+        std::optional<sirius::core::CameraLaunch> Launch(sirius::core::IMetric& metric, double spin,
+                                                         const CameraRay& camera) override {
+            return sirius::core::LaunchCameraRay(metric, spin, camera);
+        }
+        bool Step(sirius::core::Lightray& ray, sirius::core::IMetric& metric,
+                  const sirius::core::IntegratorConfig& config,
+                  sirius::core::Rk45CoupledState& coupled,
+                  sirius::core::Rk45CoupledComparison& comparison) override {
+            const bool success = sirius::core::Geodesic::IntegrateStepRk45(ray, &metric, config,
+                                                                           &coupled, &comparison);
+            if (success) {
+                ++accepted;
+                if (cancel_after_step) cancelled = true;
+            }
+            return success;
+        }
+        void RejectLastInterval() override { ++rejected; }
+        void EndTrace() override { ++ended; }
+    };
+    TracerConfig config;
+    config.escape_radius = 7;
+    config.finite_causal_boundary = true;
+    config.max_steps = 20;
+    config.enable_disk = false;
+    config.integrator.initial_step = config.integrator.max_step = 1;
+    CameraConfig camera_config;
+    camera_config.r = 5;
+    camera_config.theta = std::numbers::pi / 2;
+    camera_config.width = camera_config.height = 3;
+    PinholeCamera camera(camera_config);
+    auto ray = camera.GenerateRay(1, 1, .5f, .5f);
+    ray.direction(1) = 1;
+    ray.direction(2) = ray.direction(3) = 0;
+    for (const auto parameters :
+         {KerrSchildParams::Minkowski(), KerrSchildParams::Schwarzschild(1)}) {
+        SCOPED_TRACE(parameters.M);
+        KerrSchildFamily metric(parameters);
+        CancellingExecutor executor;
+        GeodesicTracer tracer(&metric, config);
+        tracer.SetStepExecutor(&executor);
+        tracer.SetCancellationCallback([&] { return executor.cancelled; });
+        const auto stopped = tracer.Trace(ray);
+        EXPECT_TRUE(stopped.cancelled);
+        EXPECT_EQ(executor.accepted, 1);
+        EXPECT_GE(executor.rejected, 1);
+        EXPECT_EQ(executor.ended, 1);
+        EXPECT_FALSE(stopped.numerical_failure);
+        EXPECT_FALSE(stopped.final_tangent);
+        EXPECT_FALSE(stopped.beam.valid);
+        EXPECT_EQ(stopped.num_disk_crossings, 0);
+
+        executor.cancel_after_step = executor.cancelled = false;
+        const auto complete = tracer.Trace(ray);
+        EXPECT_FALSE(complete.cancelled);
+        EXPECT_FALSE(complete.numerical_failure);
+        EXPECT_EQ(complete.outcome, TraceResult::Outcome::Escaped);
+        EXPECT_EQ(executor.ended, 2);
+    }
 }
 
 TEST(CpuTraceBoundary, TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge) {

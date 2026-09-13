@@ -33,8 +33,10 @@
 
 #include <array>
 #include <cmath>
+#include <functional>
 #include <memory>
 #include <numbers>
+#include <utility>
 
 namespace sirius::backend {
 
@@ -93,6 +95,8 @@ struct TraceResult {
     sirius::core::CoupledStepFailure coupled_failure = sirius::core::CoupledStepFailure::None;
     float redshift = 1.0f;
     bool numerical_failure = false;
+    // Cancellation has no physical outcome and publishes no partial ray data.
+    bool cancelled = false;
     // Exterior terminal events retain the public ingoing chart. A past-horizon
     // event has no finite ingoing coordinates and is published in the outgoing
     // chart in which its accepted trajectory and coupled state were advanced.
@@ -392,6 +396,10 @@ class GeodesicTracer {
 
     // Non-owning; the executor must outlive this tracer and any active trace.
     void SetStepExecutor(TraceStepExecutor* executor) { step_executor_ = executor; }
+    // Configure before tracing. The owner supplies a thread-safe predicate.
+    void SetCancellationCallback(std::function<bool()> callback) {
+        should_cancel_ = std::move(callback);
+    }
 
     void SetConfig(const TracerConfig& config) {
         SIRIUS_PRE(IsRepresentedTracerConfig(config));
@@ -428,6 +436,7 @@ class GeodesicTracer {
     sirius::core::IMetric* metric_;
     TracerConfig config_;
     TraceStepExecutor* step_executor_ = nullptr;
+    std::function<bool()> should_cancel_;
     const sirius::core::OutgoingKerrSchild* outgoing_chart_ = nullptr;
     TraceResult TraceInCurrentChart(const sirius::core::CameraRay& camera_ray);
 
