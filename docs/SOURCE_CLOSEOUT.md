@@ -2,7 +2,8 @@
 
 The canonical workspace is `Sirius/`. The accumulated development is preserved
 on `development/source-closeout-2026-09-13`, based on upstream main at
-`8c7ba5a`. This is an unfinished development checkpoint, not a release.
+`8c7ba5a`. This closeout consolidates source, renderer integration and recovery
+history. Release packaging remains disabled pending operating-domain admission.
 
 The recovered history includes `2f7189b` (governed evidence and Vulkan session
 output), `4a685bb` (subpixel point-source filtering), and `b5ef145` (the surviving
@@ -145,7 +146,18 @@ requested rows are dispatched. All eleven retained backend/value tests pass
 with cooperative arithmetic, RK component evaluation and corrected continuation,
 including FP64 (160.743 seconds). The 491 core tests also pass. The moving
 ThinLens Kerr CPU reference completes with exact serial/two-worker equality
-(4,768.036 seconds). Complete image comparison and frame timing remain under validation.
+(4,768.036 seconds).
+
+The complete moving ThinLens Kerr frame agrees with the independently completed
+CPU reference at a relative linear-RGB L1 error of 8.5437703874154113e-9, against
+the unchanged .02 limit. All 32 RGBA values are finite and the reference signal
+is nonzero. On the Radeon 780M through WSL2/Dozen, its eight pixels take
+11,228.8 seconds across 1,338,417 retained dispatches. The maximum measured
+submission is 469.421 ms, with seven soft subdivisions and zero safety fallbacks.
+This focused measurement uses the renderer source committed in `bf30294` and
+the preceding development build configuration; it is not a final-revision
+Mandatory receipt. Throughput on this route is limited, and this small image
+does not establish full-workload performance.
 
 Exact Minkowski formulas avoid curved-metric evaluation while preserving the
 DP tableau, differentiated null projection and general Hermite polynomial.
@@ -161,13 +173,16 @@ samples. Three independent nonradial weak-field cases add half-unit and unit
 steps in both regular charts, with angular and pupil columns. The original
 critical and flat witnesses remain unchanged. Fixture regeneration is
 byte-for-byte reproducible.
+All eleven retained backend/value tests pass with these expanded fixtures and
+the sparse-tail correction (164.613 seconds), including FP64, independent
+midpoint/refinement admission and the exact flat lower-increment regression.
 The FP64 stage/controller test passes, as do the narrow joint-controller and
 shared-tracer continuation/rollback checks. All seven detector regressions
 pass. A complete moving ThinLens flat frame passes finite radiance, actual
 allocation, single publication, cancellation and insufficient-budget checks.
-The moving ThinLens Kerr/100,000-star CPU–device image comparison is undergoing
-validation; this document does not yet declare that test or full Mandatory
-complete.
+The moving ThinLens Kerr/100,000-star CPU–device image comparison described
+above measures the complete physical detector path. These focused results do
+not substitute for the complete revision-bound Mandatory gate.
 
 No external operating domain was admitted at configure time (0/8). Physical
 Radeon, WSL2/Dozen, native Windows/macOS build and runtime, native viewer input,
@@ -186,6 +201,7 @@ was then applied to 22 first-party files. A later Mandatory run at `f76db09`
 passed its first 687 tests, including physical Radeon camera and metric probes,
 before being stopped to resume development. Logs remain in `.git/closeout/`.
 
-The owner expanded the task to complete the remaining renderer development.
-The gaps above are the starting point for that continuing work, not a final
-delivery declaration.
+The configured volume's `mandatory_gate.json` is the authority for the final
+revision's complete zero-failure, zero-skip test estate. It binds the exact
+source identity and product/test artifacts. Historical and focused test logs
+must not be substituted for that receipt or for independent release evidence.
