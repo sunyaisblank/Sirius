@@ -5,6 +5,21 @@ on `development/source-closeout-2026-09-13`, based on upstream main at
 `8c7ba5a`. This closeout consolidates source, renderer integration and recovery
 history. Release packaging remains disabled pending operating-domain admission.
 
+Local acceptance is complete at renderer revision `cdcc254`: all 934 selected
+tests passed with zero failures or skips in 5,923.72 seconds. The exact selected
+test identities, clean source revision and seven executable hashes were checked
+before and after the run. All explicit application and test targets built
+successfully. The 97 Vulkan-related cases were excluded at the user's request.
+
+The final run includes complete Kerr PPM, PNG and EXR frames, Doppler and
+polarisation comparisons, the CPU viewer, both analytic shadow references,
+coupled transport, and installation/relocation. The moving ThinLens Kerr point
+detector produced identical linear radiance with one and two workers; that
+complete comparison passed in 1,210.11 seconds. The original 256-ray throughput
+test passed in 46.52 seconds against its unchanged 60-second limit. Source
+development and the requested local validation are complete; these results do
+not establish Vulkan qualification or the complete Mandatory release receipt.
+
 The renderer integration and focused regression work described below are
 committed. At the user's request, closeout acceptance now covers validation on
 this machine without Vulkan hardware validation. The local selection includes
@@ -41,8 +56,8 @@ camera, ten analytic curve points, numerical tolerances and per-ray work cap
 are unchanged. Independent candidate checks passed both shadow references;
 a forced-unresolved negative control correctly refused a wide bracket.
 The full 120x68 Doppler images now trace independent rows with at most sixteen
-worker-owned tracers and reduce results in the original raster order. Local
-continuation will cover the changed tests, outstanding cases and source/build
+worker-owned tracers and reduce results in the original raster order. The local
+continuation covered the changed tests, outstanding cases and source/build
 authorities; results from separate revisions remain identified separately.
 
 The continuation at `b25c3d8` passed the corrected Kerr and Schwarzschild
@@ -66,8 +81,9 @@ independent retained-metric references. An exact-rational diagnostic checked
 80,000 sums, products, scalar products and quotients. These are focused working-
 precision witnesses, not interval certificates. The compensated-sum background
 is described in [Joldes, Muller and Popescu's double-word arithmetic presentation](https://jncf2017.conf.lip6.fr/files/slides/popescu.pdf).
-The complete local selection is rerun because this change affects production
-arithmetic; earlier image passes do not substitute for that final-source run.
+The complete local selection was rerun because this change affects production
+arithmetic; its final-source pass is recorded above, separately from earlier
+image results.
 
 The recovered history includes `2f7189b` (governed evidence and Vulkan session
 output), `4a685bb` (subpixel point-source filtering), and `b5ef145` (the surviving
