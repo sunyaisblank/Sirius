@@ -36,6 +36,30 @@ TEST(RetainedArithmetic, SmallTermsSurviveLargeSumsProductsAndDivision) {
                 EXPECT_EQ(exact.lo, 0);
                 EXPECT_FALSE(std::signbit(exact.lo));
             }
+    // The representation is normalized at construction, including a leading
+    // zero. Sparse low limbs remain significant even far below 106 contiguous
+    // bits when the other product terms cancel exactly.
+    const Twofold normalized(1, 1);
+    EXPECT_EQ(normalized.hi, 2);
+    EXPECT_EQ(normalized.lo, 0);
+    const Twofold leading_zero(0, tiny);
+    EXPECT_EQ(leading_zero.hi, tiny);
+    EXPECT_EQ(leading_zero.lo, 0);
+    const Twofold cancelled(1e200, -1e200);
+    EXPECT_EQ(cancelled.hi, 0);
+    EXPECT_EQ(cancelled.lo, 0);
+    for (const int exponent : {54, 120, 400}) {
+        const double tail = std::ldexp(1.0, -exponent);
+        const auto sparse_product = Twofold(1, tail) * Twofold(1, -tail);
+        EXPECT_EQ(sparse_product.hi, 1);
+        EXPECT_EQ(sparse_product.lo, -std::ldexp(1.0, -2 * exponent));
+        EXPECT_EQ((sparse_product - Twofold(1)).Rounded(), sparse_product.lo);
+        for (const double scale : {-2.0, -1.0, -0.5, 0.5, 1.0, 2.0}) {
+            const auto scaled = Twofold(1, tail) * scale;
+            EXPECT_EQ(scaled.hi, scale);
+            EXPECT_EQ(scaled.lo, tail * scale);
+        }
+    }
     const auto invalid = Twofold::Product(0, std::numeric_limits<double>::infinity());
     EXPECT_TRUE(std::isnan(invalid.hi));
     EXPECT_TRUE(std::isnan(invalid.lo));

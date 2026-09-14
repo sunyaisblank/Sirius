@@ -45,6 +45,30 @@ worker-owned tracers and reduce results in the original raster order. Local
 continuation will cover the changed tests, outstanding cases and source/build
 authorities; results from separate revisions remain identified separately.
 
+The continuation at `b25c3d8` passed the corrected Kerr and Schwarzschild
+shadow checks, both complete Doppler images, CPU polarisation, CPU viewer,
+command precedence, disk profiles and coupled-transport regressions. It exposed
+a CPU throughput regression: the unchanged 256-ray probe took 192.592 seconds
+against its 60-second limit. The run was interrupted to correct that cost;
+its completed results remain separately identified.
+
+CPU twofold values now normalise their two-component constructor, use shorter
+compensated operations, and inline the small arithmetic helpers. Exact zeros
+and represented binary scalings avoid redundant work. Multiplication retains
+the low-component product when the cross terms cancel; regressions recover
+sparse terms down to 2^-800. Extreme products retain the general route, and
+nonfinite values still decline. Public physical tolerances, ray counts, work
+caps and the performance test's 60-second limit are unchanged.
+
+The final isolated diagnostic completed the 256-ray test in 48.905 seconds.
+The same arithmetic passed all fourteen coupled-transport checks and the
+independent retained-metric references. An exact-rational diagnostic checked
+80,000 sums, products, scalar products and quotients. These are focused working-
+precision witnesses, not interval certificates. The compensated-sum background
+is described in [Joldes, Muller and Popescu's double-word arithmetic presentation](https://jncf2017.conf.lip6.fr/files/slides/popescu.pdf).
+The complete local selection is rerun because this change affects production
+arithmetic; earlier image passes do not substitute for that final-source run.
+
 The recovered history includes `2f7189b` (governed evidence and Vulkan session
 output), `4a685bb` (subpixel point-source filtering), and `b5ef145` (the surviving
 uncommitted coupled-transport and source-sky implementation). The latter
