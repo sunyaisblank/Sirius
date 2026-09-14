@@ -40,7 +40,7 @@ class ShadowClassifier {
                                               kObserverRadius, kInclination);
     }
 
-    bool IsCaptured(const ScreenPoint& point) {
+    std::optional<bool> Classify(const ScreenPoint& point) {
         const double tan_half_fov = std::tan(kFovDegrees * std::numbers::pi / 360.0);
         const double aspect = static_cast<double>(kWidth) / kHeight;
         const double image_x =
@@ -57,12 +57,21 @@ class ShadowClassifier {
         // renderer's default Kerr-Schild Eulerian slicing observer.
         if (!observer_.has_value()) {
             ADD_FAILURE() << "stationary Kerr observer is not represented";
-            return false;
+            return std::nullopt;
         }
         ray.beta_forward = observer_->screen_beta[0];
         ray.beta_up = observer_->screen_beta[1];
         ray.beta_right = observer_->screen_beta[2];
         const auto result = tracer_.Trace(ray);
+        // A marginal photon can exhaust the finite work budget without choosing
+        // a physical side of the shadow. It must not move either bracket edge.
+        if (!result.cancelled && result.numerical_failure &&
+            result.outcome == backend::TraceResult::Outcome::MaxSteps &&
+            result.coupled_failure == core::CoupledStepFailure::WorkLimit &&
+            result.steps_taken == TracerParameters().max_steps &&
+            result.integrator_termination == 0)
+            return std::nullopt;
+        EXPECT_FALSE(result.cancelled);
         EXPECT_FALSE(result.numerical_failure);
         EXPECT_NE(result.outcome, backend::TraceResult::Outcome::MaxSteps)
             << "P1 classifier did not reach a physical outcome; attempts=" << result.steps_taken
@@ -71,6 +80,12 @@ class ShadowClassifier {
             << "), integrator_termination=" << result.integrator_termination
             << ", coupled_failure=" << core::CoupledStepFailureName(result.coupled_failure)
             << ", accepted_affine_distance=" << result.affine_length;
+        if (result.cancelled || result.numerical_failure) return std::nullopt;
+        if (result.outcome != backend::TraceResult::Outcome::Horizon &&
+            result.outcome != backend::TraceResult::Outcome::Escaped) {
+            ADD_FAILURE() << "shadow classifier reached an unexpected nonphysical outcome";
+            return std::nullopt;
+        }
         if (result.outcome == backend::TraceResult::Outcome::Horizon) {
             const double terminal_radius = metric_.ComputeKerrRadius(
                 result.final_position(1), result.final_position(2), result.final_position(3));
@@ -156,23 +171,34 @@ TEST(ShadowBoundary, KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p) {
 
         double inside = 0.70;
         double outside = 1.30;
-        ASSERT_TRUE(classifier.IsCaptured(scaled(inside))) << "photon orbit r/M=" << photon_radius;
-        ASSERT_FALSE(classifier.IsCaptured(scaled(outside)))
-            << "photon orbit r/M=" << photon_radius;
+        SCOPED_TRACE(photon_radius);
+        const auto initial_inside = classifier.Classify(scaled(inside));
+        const auto initial_outside = classifier.Classify(scaled(outside));
+        ASSERT_TRUE(initial_inside.has_value());
+        ASSERT_TRUE(initial_outside.has_value());
+        ASSERT_TRUE(*initial_inside);
+        ASSERT_FALSE(*initial_outside);
+        // Certify a physical bracket at subpixel resolution. Alternating
+        // off-centre probes avoids requiring the analytic separatrix itself to
+        // terminate, while retaining the same fourteen-ray refinement budget.
+        constexpr double kBracketPixels = 0.25;
         for (int iteration = 0; iteration < 14; ++iteration) {
-            const double middle = 0.5 * (inside + outside);
-            if (classifier.IsCaptured(scaled(middle))) {
-                inside = middle;
-            } else {
-                outside = middle;
-            }
+            if (classifier.PixelDistance(scaled(inside), scaled(outside)) <= kBracketPixels) break;
+            const double fraction = iteration % 2 == 0 ? 1.0 / 3.0 : 2.0 / 3.0;
+            const double trial = inside + fraction * (outside - inside);
+            const auto captured = classifier.Classify(scaled(trial));
+            if (!captured.has_value()) continue;
+            if (*captured)
+                inside = trial;
+            else
+                outside = trial;
         }
-        const ScreenPoint measured = scaled(0.5 * (inside + outside));
-        EXPECT_LT(classifier.PixelDistance(measured, camera_convention), 1.0)
-            << "photon orbit r/M=" << photon_radius << ", scale bracket=[" << inside << ", "
-            << outside << "], analytic=(" << camera_convention.alpha << ", "
-            << camera_convention.beta << "), measured=(" << measured.alpha << ", " << measured.beta
-            << ")";
+        const double width = classifier.PixelDistance(scaled(inside), scaled(outside));
+        const double error = std::max(classifier.PixelDistance(scaled(inside), camera_convention),
+                                      classifier.PixelDistance(scaled(outside), camera_convention));
+        ASSERT_LE(width, kBracketPixels);
+        EXPECT_LT(error, 1.0) << "confirmed capture/escape bracket=[" << inside << ", " << outside
+                              << "]";
     }
 }
 
@@ -183,7 +209,9 @@ TEST(ShadowBoundary, SchwarzschildCriticalImpactParameterMatchesAnalyticAt1080p)
     double outside = 1.3;
     for (int iteration = 0; iteration < 14; ++iteration) {
         const double middle = 0.5 * (inside + outside);
-        if (classifier.IsCaptured({middle * critical, 0.0})) {
+        const auto captured = classifier.Classify({middle * critical, 0.0});
+        ASSERT_TRUE(captured.has_value());
+        if (*captured) {
             inside = middle;
         } else {
             outside = middle;

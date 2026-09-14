@@ -31,6 +31,20 @@ radiance exactly. The initial local run at `92efa9b` passed 735 tests with no
 failures before being interrupted to remove the writer probes' unnecessary
 single-worker bottleneck; its partial log is not a completed local result.
 
+The local run at `101ca70` completed 738 passing tests and exposed one
+shadow-reference failure before interruption during the serial Doppler probe.
+The complete PPM, PNG and EXR frames and install/relocation workflow passed.
+The shadow test now retains unresolved work-limited rays as unknown and only
+certifies confirmed capture/escape brackets narrower than a quarter pixel,
+with both endpoints inside the original one-pixel reference allowance. Its
+camera, ten analytic curve points, numerical tolerances and per-ray work cap
+are unchanged. Independent candidate checks passed both shadow references;
+a forced-unresolved negative control correctly refused a wide bracket.
+The full 120x68 Doppler images now trace independent rows with at most sixteen
+worker-owned tracers and reduce results in the original raster order. Local
+continuation will cover the changed tests, outstanding cases and source/build
+authorities; results from separate revisions remain identified separately.
+
 The recovered history includes `2f7189b` (governed evidence and Vulkan session
 output), `4a685bb` (subpixel point-source filtering), and `b5ef145` (the surviving
 uncommitted coupled-transport and source-sky implementation). The latter

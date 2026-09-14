@@ -13,9 +13,13 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
+#include <atomic>
 #include <cmath>
 #include <iostream>
 #include <numbers>
+#include <thread>
+#include <vector>
 
 namespace {
 
@@ -36,7 +40,6 @@ AsymmetryMeasurement DiskAsymmetry(bool doppler_beaming) {
     KerrSchildParams p;
     p.M = 1.0;
     p.a = 0.9;
-    KerrSchildFamily metric(p);
 
     TracerConfig tc;
     tc.escape_radius = 100.0f;
@@ -49,7 +52,6 @@ AsymmetryMeasurement DiskAsymmetry(bool doppler_beaming) {
     tc.doppler_beaming = doppler_beaming;
     tc.integrator.initial_step = 0.1f;
     tc.integrator.max_step = 2.0f;
-    GeodesicTracer tracer(&metric, tc);
 
     const int width = 120, height = 68;
     CameraConfig cam;
@@ -59,15 +61,34 @@ AsymmetryMeasurement DiskAsymmetry(bool doppler_beaming) {
     cam.fov = 55.0f;
     cam.width = width;
     cam.height = height;
-    PinholeCamera camera(cam);
+    // Each worker owns its mutable tracer. Store results by pixel, then reduce
+    // in the original raster order so scheduling cannot change the measurement.
+    std::vector<TraceResult> results(width * height);
+    std::atomic<int> next_row{0};
+    const unsigned worker_count = std::clamp(std::thread::hardware_concurrency(), 1u, 16u);
+    {
+        std::vector<std::jthread> workers;
+        workers.reserve(worker_count);
+        for (unsigned worker = 0; worker < worker_count; ++worker) {
+            workers.emplace_back([&] {
+                KerrSchildFamily metric(p);
+                GeodesicTracer tracer(&metric, tc);
+                PinholeCamera camera(cam);
+                for (int y = next_row.fetch_add(1); y < height; y = next_row.fetch_add(1)) {
+                    for (int x = 0; x < width; ++x) {
+                        results[y * width + x] = tracer.Trace(camera.GenerateRay(x, y, 0.5f, 0.5f));
+                    }
+                }
+            });
+        }
+    }
 
     double lum_left = 0.0, lum_right = 0.0;
     double factor_left = 0.0, factor_right = 0.0;
     int hits_left = 0, hits_right = 0;
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
-            CameraRay ray = camera.GenerateRay(x, y, 0.5f, 0.5f);
-            TraceResult r = tracer.Trace(ray);
+            const TraceResult& r = results[y * width + x];
             if (r.outcome != TraceResult::Outcome::DiskHit) continue;
             const bool left = x < width / 2;
             if (left)
