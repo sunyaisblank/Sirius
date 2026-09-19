@@ -1,6 +1,6 @@
 # Sirius Architecture
 
-This document is the design authority for the rebuilt system. It records the layer structure, the single-authority seams, the kernel and backend strategy, the memory and precision design that reaches 2 GB integrated GPUs, the dependency decisions, and the complete mapping from the retired codename files to their successors. The specification (`docs/SPECIFICATION.md`) says what must be true; this document says how the system makes it true.
+This document is the design authority for the rebuilt system. It records the layer structure, the single-authority seams, the kernel and backend strategy, the memory and precision design that reaches 2 GB integrated GPUs, the dependency decisions. The specification (`docs/SPECIFICATION.md`) says what must be true; this document says how the system makes it true.
 
 ## 1. Layers
 
@@ -36,12 +36,16 @@ The source repository contains only these durable top-level concerns:
 | Path | Ownership |
 |---|---|
 | `src/sirius/` | First-party C++ and Slang, split by the layers above |
-| `tests/` | Unit, oracle, backend, render, application, and operational gates |
-| `scripts/` | Test-label, operating-model, structure, attestation governance, and native evidence producers |
-| `cmake/` | Toolchain, dependency, embedded-model, and install-volume logic |
+| `tests/` | Unit, oracle, backend, render, application, operational gates, and sanitizer suppression |
+| `scripts/` | Source governance, generated-kernel tooling, render examples, and qualification producers |
+| `cmake/` | Toolchain, dependencies, build policy, alignment, test gates, and installation |
 | `assets/` | Required runtime assets installed with the executable |
-| `lib/` | Only the four live header/source vendors enumerated in section 8 |
-| `docs/` | Specification, architecture, style, current review, and history |
+| `lib/` | Only the four live header/source vendors enumerated in section 7 |
+| `docs/` | Specification, architecture, style, development, qualification, and concise validation findings |
+
+Generated files live in `bin/<preset>/`, disposable diagnostics in `out/`,
+rendered images in `renders/`, and qualification bundles in `attestations/`.
+[DEVELOPMENT.md](DEVELOPMENT.md) defines their workflow and retention.
 
 `scripts/verify-repository-structure.py` makes this more than a diagram: normal
 builds fail if a translation unit gains two owners, a lower layer reaches up, a
@@ -281,59 +285,7 @@ The governor exists because the 780M-class target has a 2 GB budget that a naive
 - Progressive refinement increases samples per pixel across complete-image passes. Rendering runs separately from host input handling; frame publication waits for a complete pass, whose latency depends on the scene and device.
 - Legacy metric shaders use the dispatch governor (`render/dispatch_governor.h`) to separate submission size from residency. The fp32 ray-bundle and point-catalogue paths use bands no larger than 64×4 (256 active pixels): physical Radeon/Dozen probes preserved exact output at that size, while a 512-pixel sample exceeded 1800 ms and stopped the probe. fp64 and the compensated-fp32 ray-bundle/catalogue paths retain the conservative 64×1 cap pending wider physical evidence; ordinary fp32 and compensated fp32 use a separate 512×16, 8192-active-pixel cap while retaining independently sized residency tiles. Unbounded ordinary-profile growth reached a 512×128 submission lasting 1948.7 ms on the physical route. Full 512×512 four-sample Kerr disk probes with the bounded profile peaked below 379 ms on both ordinary rungs, and fp32 retained identical PNG bytes. These scene-specific observations do not guarantee timing at larger resolutions or in other physical regimes. These hard caps remain active when `SIRIUS_DISPATCH_TARGET_MS=0` disables adaptation. When adaptation is enabled, every controller starts with one row; observations below the soft target double actual work, and observations above it halve work, subject to the independent shape and area caps. The fp32 ray-bundle/catalogue profile defaults to 750 ms: a complete physical 128×128 render preserved exact output with 288 submissions, a 777.5 ms maximum and no fallback. Other profiles retain the original 250 ms default; an explicit environment override takes precedence for every profile. Discrete growth avoids becoming trapped at one row when fixed submission cost prevents a useful fractional increase. Measurements cover Vulkan submit/wait wall time, excluding explicit pipeline setup but including any driver work deferred until submission. Software devices first initialise the actual trace kernel and bindings with one workgroup and zero active dimensions: every lane returns before camera, trajectory or radiance work. This isolates deferred compilation observed on cold llvmpipe from actual ray-band feedback. Initialization has separate count, wall-time and submit/wait fields, and remains included in complete render wall time; it never trains the governor. Physical and unknown devices receive no initialization dispatch. All actual ray submissions retain the same limits, including on software devices; compilation deferred beyond initialization can still cause a refusal. An observation above 1000 ms halves the actual submitted area into a safety ceiling that cannot grow again during that controller's lifetime; zero duration forces a one-pixel ceiling because it provides no usable timing. The controller covers one column of a residency tile and retains one-row logical bands after fallback. The unfinished band's private rectangle is split along rows and then columns until each child fits the current ceiling; every child restarts all film/pupil samples at index zero before its packed output is copied using that child's width. A later overshoot lowers the ceiling again, including for pending siblings. A single-pixel observation above 1000 ms declines further rendering, and invalid timing remains fatal. Halving reduces work, but can encounter additional over-limit submissions before reaching one pixel; it does not prove that the next submission will meet a duration bound. Ordinary soft-target feedback continues to adapt row count within the measured profile caps, preserving useful full-width work when fixed submission cost exceeds the soft target. Absolute coordinates, complete pixel coverage and per-pixel camera-sample order remain unchanged. Logs expose governed-ray count, total/max submission time, active-pixel maximum, target overshoots and fallbacks, separately from initialization. This bounds work and reacts to observed cost; it cannot preempt a trajectory or guarantee an unmeasured scene/device's watchdog safety. Final physical qualification must establish route timing and stability.
 
-## 7. The port: codename to descriptive mapping
-
-The port renames every file per the style guide. The table is the traceability record from July's evidence ledger and project memory to the new tree; the A/B variant split (production versus double-precision oracle twin) survives as the `core`/`oracle` layer split.
-
-| Old (src/…) | New (src/sirius/…) |
-|---|---|
-| Sirius.Core/Constants/PHCN001A.h | core/constants.h |
-| Sirius.Core/Tensor/MTTN001A.{h,cpp} | core/tensor.{h,cpp} |
-| Sirius.Core/Autodiff/MTDL001A.h | core/dual_number.h |
-| Sirius.Core/Coordinate/PHCT002A.h | core/coordinates.h |
-| Sirius.Core/Metric/PHMT000A.h | core/metrics/metric.h |
-| Sirius.Core/Metric/PHMT100A.h | core/metrics/kerr_schild_family.h |
-| Sirius.Core/Metric/PHMT101A.h | core/metrics/morris_thorne_family.h |
-| Sirius.Core/Metric/PHMT102A.h | core/metrics/warp_drive_family.h |
-| Sirius.Core/Metric/PHMT200A.h | core/metrics/registry.h |
-| Sirius.Core/Metric/PHSM001A.h | retired: unused preset-only SI scaling; constants remain central in core/constants.h |
-| Sirius.Core/Geodesic/PHGD001A.{h,cpp} | core/geodesic_integrator.{h,cpp} |
-| Sirius.Core/Camera/CMBS001A.h | core/camera.h |
-| Sirius.Core/Disk/PHAD000A.h | core/disk/disk_model.h |
-| Sirius.Core/Disk/PHAD001A.h | core/disk/novikov_thorne_disk.h |
-| Sirius.Core/Disk/PHTR001A.h | core/disk/turbulence.h |
-| Sirius.Core/Environment/PHSF001A.h | core/starfield.h |
-| Sirius.Core/Spectral/PHSP001A.h | core/spectral/blackbody.h |
-| Sirius.Core/Spectral/MTSB001A.h | core/spectral/spectral_radiance.h |
-| Sirius.Core/Spectral/PHSC001A.h | core/spectral/colour_modes.h |
-| Sirius.Core/Polarisation/PHPL001A.h | core/polarisation/stokes.h |
-| Sirius.Core/PostProcess/PPOP001A.h | core/postprocess.h |
-| Sirius.Core/Metric/PHMT000B.h | oracle/metric_interface.h |
-| Sirius.Core/Metric/PHMT100B.h | oracle/kerr_boyer_lindquist.h |
-| Sirius.Core/Symplectic/PHSI001A.h | oracle/symplectic_integrator.h |
-| Sirius.Core/Transport/MTTP001A.h | oracle/transport_types.h |
-| Sirius.Render/Integration/INBI001A.h | oracle/beam_integrator.h |
-| Sirius.Render/Integration/GTRC001A.{h,cpp} | backend/cpu/geodesic_tracer.{h,cpp} |
-| Sirius.Render/Acceleration/Backend/ACIB001A.h, ACBM001A.h, ACBF001A.cpp | backend/device.h, backend/device_selector.{h,cpp} |
-| Sirius.Render/Acceleration/OptiX/* (RDOP/RDOX/RDPTX) | retired; physics reauthored in kernels/*.slang, host in backend/vulkan/ |
-| Sirius.Render/Output/OUIB001A.h | render/image_buffer.h |
-| Sirius.Render/Output/OUEW001A.{h,cpp} | render/exr_writer.{h,cpp} |
-| Sirius.Render/Output/OUPN001A.{h,cpp} | render/png_writer.{h,cpp} |
-| Sirius.Render/Output/RDFL001A.h | render/film_pipeline.h |
-| Sirius.Render/Pipeline/RDRT001A.{h,cpp} | render/renderer.{h,cpp} |
-| Sirius.Render/Shader/RDSD003A.{vert,frag} | app/viewer/shaders/RDSD003A.{vert,frag}; later unreachable RDSD004A/RDSD005A effects retired |
-| Sirius.Infrastructure/Application/CREP001A.cpp | app/main.cpp |
-| Sirius.Infrastructure/Cli/CRCL001A–006A | app/cli/{command_router,render_command,info_command,config_command,cli_output,view_command}.{h,cpp} |
-| Sirius.Infrastructure/Configuration/CRCF002A, CRCF003A | app/config/{config_loader,config_schema,session_config_adapter}.{h,cpp} |
-| Sirius.Infrastructure/Configuration/CRFM001A | render/film_config.h |
-| Sirius.Infrastructure/Platform/CRPF001A.{h,cpp} | app/platform_paths.{h,cpp} |
-| Sirius.Infrastructure/Session/SMSM001A, SNST001A, SNEV001A, SNPR001A, SNDP001A, SNTL001A, SNRS001A | render/session/{state_machine,session_states,session_events,progress_tracker,display_buffer,tile_scheduler,render_session}.h/.cpp |
-| Sirius.Infrastructure/Viewer/UIVW001A.h | app/viewer/interactive_viewer.{h,cpp} |
-| Sirius.Test/TS*.cpp | tests/, one file per subject, names per style guide |
-
-New files with no predecessor: `base/contracts.h`, `base/error.h`, `base/threading.h`, `kernels/*.slang`, `backend/vulkan/*`, `render/memory_governor.{h,cpp}`, `core/polarisation/walker_penrose.h` (specification E2), and the beam propagation additions to the CPU tracer (P2).
-
-## 8. Dependencies
+## 7. Dependencies
 
 The vendored source set is deliberately small and closed: GLFW and glad serve
 the optional OpenGL viewer, while stb and tinyexr/miniz serve image IO. FTXUI,
@@ -348,7 +300,7 @@ self-tests, and demo-only dependency copies are also omitted; its runtime,
 platform, Wayland, and MinGW compatibility sources remain intact. No scene graph, ECS, renderer
 framework, or unused prebuilt library is carried in the repository.
 
-## 9. Validation architecture
+## 8. Validation architecture
 
 Application and rendering tests run beside the strict candidate and inspect the same staged resources and receipt lifecycle, never an environment-selected substitute. Their execution boundary is structural: `sirius_app_tests` owns only parsing, validation, configuration/session projection, and input-state checks; every case that can enter a render session, dispatch CPU/Vulkan work, write a rendered output, or publish a completed frame is compiled only into `sirius_render_tests` and labelled `Rendering`. Shared source governance rejects the six governed rendering identities outside `tests/render`, any app-side viewer/session start, and every new unclassified `RenderCommand` or `ViewCommand` execution. This makes an unfiltered application-suite invocation non-rendering while preserving the complete rendering-inclusive Mandatory estate for external qualification and release.
 

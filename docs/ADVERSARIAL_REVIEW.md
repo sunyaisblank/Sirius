@@ -1,6 +1,6 @@
 # Sirius adversarial operational review
 
-Current corrective review: 2026-09-07 (Australia/Sydney)
+Corrective review: 2026-09-07; consolidated 2026-09-19 (Australia/Sydney)
 
 This is a review record, not a qualification receipt. The September corrective
 work below supersedes conflicting historical dispositions. The retained earlier
@@ -8,7 +8,10 @@ ledger describes its own source snapshots; its counts, timings, “Fixed” entr
 and physical outputs do not establish the state of a later revision.
 `SPECIFICATION.md` and `tests/operating_model.json` define the obligations; the
 clean source, executed artifacts and independently verified same-revision
-receipts establish completion. `ENGAGEMENT_REPORT.md` remains historical.
+receipts establish completion. The later local renderer result and remaining
+performance limits are recorded in `SOURCE_CLOSEOUT.md`. Detailed historical
+defects, session logs and the retired engagement report are preserved at
+commit `9e20150`; use `git show 9e20150:docs/ADVERSARIAL_REVIEW.md` for that ledger.
 
 ## September corrective work
 
@@ -95,187 +98,7 @@ Each review pass asks:
 | Imported results | Are papers, historical logs, and reference tapes independently connected to a live gate? |
 | Non-circularity | Is the oracle independent of the implementation it judges? |
 
-## 3. Historical defects and recorded dispositions
-
-The following rows retain earlier investigations and their recorded corrections.
-They are useful regression context, not a fresh verification of every assertion.
-In particular, the September chart, interval, precision and evidence corrections
-above supersede any incompatible earlier “Fixed” claim.
-
-| Finding | Ground-truth witness | Disposition |
-|---|---|---|
-| One exact revision produced different operating-model and receipt identities on Windows and macOS | Exact-main native-build artifacts hashed automatic CRLF checkout/output bytes on Windows and LF bytes on macOS | Fixed: Git pins the governed model to LF, configuration rejects noncanonical model bytes, receipt emission uses explicit UTF-8/LF bytes, and repository/alignment negative controls reject missing attributes and CRLF authority inputs |
-| Installed binary omitted SPIR-V and viewer shaders and embedded a build kernel path | Staged install contained only the binary and starfield | Fixed: one resource locator, staged build tree, complete install tree, install-time invariant |
-| Source/build tree or an escaping symlink could mask an incomplete volume | Runtime searched working-directory parents and accepted canonical files outside the selected root | Fixed: only executable-volume roots are searched; absolute/traversing names and escaping symlinks decline; relocation removes an asset beside a valid working-directory decoy |
-| Vulkan renderer could compile without Slang kernels | Backend target existed before `slangc` detection | Fixed: live Vulkan render is compiled only when backend and kernels both exist |
-| CPU-only build hosts still required OpenGL development files | app configuration used unconditional `find_package(OpenGL REQUIRED)` | Fixed: a viewer-disabled profile compiles and installs the complete CPU/Vulkan CLI, reports the absent capability, and makes `view` fail closed |
-| Normal builds did not run Mandatory tests | Gate default was off and had a skip option | Fixed: gate defaults on; test omission conflicts with an operational build |
-| A reused ordinary-preset cache could retain the Mandatory gate as off, with the same exposure for warning/contract policy | shared preset relied on option defaults rather than setting policy | Fixed: every supported preset pins Mandatory tests on, warnings as errors, and enforce-mode contracts; explicit overrides remain cache-visible non-operational choices |
-| Release contracts only observed violations and continued | default followed `NDEBUG` rather than the operational policy | Fixed: first-party targets compile with enforce mode in every build type by default; weaker modes are explicit cache-visible non-operational choices |
-| Unknown test suites silently became non-gating Correctness suites | Label generator default branch | Fixed: unknown suites are hard errors |
-| Parameterised/typed GoogleTests could escape the static name-to-label authority | `TEST_P` discovery creates names the generator never parsed | Fixed: unsupported dynamic registration macros are governance errors, with a build-gated negative control |
-| Explicit missing/malformed config fell back to defaults | Loader caught errors and continued | Fixed: explicit files, JSON shape, validation, and set environment values fail closed |
-| JSON typos and trailing/non-finite numbers were accepted or ignored | Unknown keys merged; `stod("1junk")` consumed a prefix | Fixed with strict shape and complete finite parsers |
-| Unknown top-level command returned help with exit 0 | unrecognised command collapsed to an empty token | Fixed and Mandatory-gated |
-| `optix`/`cuda` backend names silently selected Vulkan | GPU-name alias predicate | Fixed: retired names fail validation |
-| Non-square sample counts rendered fewer samples | floor(sqrt(spp)) squared | Fixed by the exact-count `ForEachPixelSample` authority |
-| Vulkan rendered one sample while reporting arbitrary requested SPP | no SPP kernel parameter | Fixed: every requested sample is dispatched and accumulated, including non-square counts |
-| Hardware attestation, readiness, and rendering could name different Vulkan devices | renderer created device zero while the runbook matched only a device name | Fixed: strict zero-based selection is shared by inventory, readiness, dispatch, memory governance, and attestation |
-| Vulkan memory governance used a device-local heap while buffers require host-visible coherent memory | budget and allocation domains differed | Fixed: enumeration reports the renderable heap, memory types are ranked by compatible-heap capacity, and the governor uses that exact domain |
-| Vulkan ignored camera aberration, finite aperture, point stars, temperature-model choice, and Doppler suppression | fields absent from kernel parameter mapping | Fixed: all controls reach the Slang kernel and have live effect witnesses |
-| Vulkan had no volumetric disk, turbulence, or corona | explicit capability rejection | The declared phenomenological grey volume and optional procedural density modulation are represented for up to 128 midpoint samples per segment; larger volume requests and every corona request decline before dispatch |
-| Observer azimuth and CPU disk controls were accepted but ignored/hard-coded | session used `phi=0`; CPU colour used 30000 K | Fixed: azimuth, temperature scale, and model reach the live CPU path; Vulkan azimuth basis is wired |
-| Typed camera API advertised unimplemented lens modes and silently made them pinhole; invalid worldlines were clamped | `Orthographic`/`Panoramic` enum values and the aberration clamp | Fixed: only represented lens types exist, malformed enum values contract-fail, and non-finite/superluminal internal worldlines contract-fail after operator validation |
-| Session conversion inferred pinhole, digital film, or Novikov–Thorne from unknown values; Vulkan inferred pinhole/Novikov–Thorne from malformed typed values | conversion ternaries/default branch and Vulkan parameter packing | Fixed: disk temperature is a typed post-boundary enum; conversion explicitly parses every lens, film, and temperature value; CPU and Vulkan reject malformed typed values |
-| Typed session callers could reach allocation or Vulkan capability selection with invalid dimensions, output types, metric identity, dependent features, or malformed enums | validation existed only in the JSON/CLI layer and output fell through to PPM | Fixed: one `SessionConfigIssue` authority validates the complete typed boundary before allocation, backend selection, or dispatch |
-| Lens, disk, bloom, volumetric, motion, output, backend-specific CPU scheduling, and film parameters could be accepted while their consuming feature was different or disabled | parameter validation checked numeric ranges but not ownership, and several CLI parameter flags never selected their consumer | Fixed: shared camera/disk/feature defaults define the only neutral inactive state; parameter flags select their owner, absent film overrides inherit their selected preset, projection names are parsed once, and config plus typed-session boundaries reject every non-default latent control before work. Vulkan also rejects CPU tile/thread/parallel controls instead of accepting work it does not schedule |
-| Session `Start()` was synchronous and cancellation could publish partial tiles/output while progress and callbacks raced | work ran on the caller; shared counters/callbacks were unsynchronised; Vulkan committed bands directly | Fixed: asynchronous terminal lifecycle, cancellation checkpoints, transactional commits, mutex-safe snapshots/callbacks, and cancellation-without-output evidence |
-| Reinitialising a tile scheduler retained its old completion count | `completed_count_` was not reset | Fixed with reset at initialisation and a repeated-use ledger witness |
-| Typed point-star configuration accepted a broader starfield model, including controls that the point renderer did not consume, while its generator silently clamped malformed values | validation stopped at the JSON boundary and the session type overstated the request | Fixed: `PointStarfieldConfig` contains only the five consumed catalogue controls; the session boundary rejects every non-finite/out-of-domain value and both backends expand the admitted request through one deterministic generator authority |
-| Core metric, camera, disk, turbulence, integrator, oracle, post-process, and film setters rewrote malformed typed input or retained phantom controls | lower-level callers could bypass operator validation and obtain a different represented request through clamps, fallbacks, ignored fields, or unused toggles | Fixed: each retained typed boundary now has a total represented-domain predicate and contract-fails malformed input without mutation; unused overloads and fields were deleted instead of documented as capabilities |
-| The point-star spatial index borrowed a caller vector while advertising reusable topology | caller destruction or mutation could invalidate entries or make topology disagree with the catalogue | Fixed: the index owns a validated immutable catalogue snapshot and all indexed CPU/Vulkan consumers address that same owned storage |
-| Circular fisheye masking encoded an unused zero-weight ray whose direction violated the tracer's assumptions | `CameraRay::weight` was never consumed and masked rays could reach a unit-direction-only API | Fixed: camera rays carry explicit active/inactive state, both forms have complete representation invariants, and the session writes inactive samples as black without tracing them |
-| The display buffer exposed unlocked mutable storage while render, snapshot, encoding, and viewer threads shared it | raw vector access escaped the buffer mutex; a dead gamma-cache API returned another pointer after releasing the lock; malformed dimensions and tiles were silently ignored or clipped | Fixed: mutation is callback-scoped under the buffer lock, readers take stable float snapshots, the unused byte cache is deleted, shape is contract-enforced, and owned output encoders diagnose non-finite radiance before transfer encoding |
-| CPU and Slang trace policy drifted in retry ceilings, turbulence coordinates, point-star fallback colour, volumetric finite checks, capture finalisation, and endpoint event order | two live implementations had accumulated independent literals and terminal assumptions | Fixed: one shared host/device attempt ceiling and capture factor feed packing; turbulence uses the same reconstructed disk coordinates; malformed radiance inputs fail closed; captured rays avoid invalid terminal frames; and both paths accumulate disk events along an accepted segment before classifying its endpoint |
-| Film preset selection was overwritten by concrete default-valued fields and operator text described a stock simulation | serialisation could not distinguish an absent override from an explicit default, so non-default presets collapsed | Fixed: film finishing is explicitly bounded and non-stock; optional overrides inherit the selected preset, JSON emits only present overrides, and internal/session names no longer claim physical stock simulation |
-| Vulkan session initialisation constructed unused CPU tracers, thread pools, tiles, textures, and a duplicate 100,000-star catalogue before dispatch | backend selection happened after CPU-only scene construction and CPU scheduling controls were still admitted | Fixed: typed preflight enforces backend ownership and the Vulkan branch initialises only shared lifecycle/evidence state before entering its independently governed device path |
-| Direct metric construction admitted parameter combinations outside the implemented Kerr-Schild ansatz, while unknown setter keys were ignored | rotating/charged nonzero-Lambda instances and misspelled parameter names could be constructed below the config layer | Fixed: `MetricParameterIssue` is shared by config, session, and Vulkan; core constructors and setters contract-fail on unrepresented combinations and unknown keys |
-| Operator output labelled the raw observer coordinate radius as a number of `M`, EXR metadata labelled geometric mass as solar masses, and metrics accepted mass/throat/warp parameters their constructors ignored | validation passed the raw radius directly to the camera while scaling only its allowed interval; metric identity and length-unit semantics diverged across schema, CLI, viewer, session, trace, and metadata boundaries | Fixed: the registry owns mass and exotic-parameter applicability; identity changes select a compatible omitted-value mass default while explicit irrelevant mass, throat/topology, and warp/bubble changes decline at config and typed-session boundaries. Distance remains the established coordinate radius `r`, mass-bearing output derives `r/M`, focus and viewer motion are labelled as geometric coordinates, and EXR declares a geometric-coordinate length unit without inventing a physical scale |
-| Schwarzschild-de Sitter capture reused the asymptotically flat Kerr-Newman horizon, pure de Sitter reported a zero-radius black-hole horizon, and the renderer could launch or sample its directional sky beyond the cosmological horizon | the public cosmological sector ignored both Kottler roots, admitted negative Lambda under de Sitter names, allowed Nariai/super-Nariai scenes without a distinct black-hole exterior, and treated positive-Lambda space as though its arbitrary far sphere were asymptotically flat | Fixed: one scale-safe spherical positive-Lambda authority solves the smaller black-hole and larger cosmological roots of `1-2M/r-Lambda*r^2/3=0` for the metric, validation, and tracer; capture uses only the black-hole root, pure de Sitter never captures, the ADM/Eulerian launch radius is bounded by `0.99*r_c`, and the finite directional sky boundary is clamped to `r_c`. Its fp32 radius rounds inward and an accepted crossing segment is localised back onto the boundary before sky sampling. Named Schwarzschild-de Sitter requires `9 Lambda M^2 < 1`; negative/rotating/charged cosmological requests, Nariai/super-Nariai scenes, and observers outside the governed causal patch decline. No static-observer or cosmological-transfer claim is inferred |
-| A finite causal crossing localised the CPU central ray after advancing its Jacobi bundle through the overshooting endpoint, while ordinary disk and boundary interpolation used total affine time whenever bundle and polarisation were disabled | coupled state could terminate at different physical events and unrelated feature toggles changed the Hermite parameterisation of the same accepted segment | Fixed: the pre-step affine parameter is recorded unconditionally; a finite crossing exposes its fraction and clips the accepted central segment before Jacobi, polarisation, volume, or disk consumers advance. A positive-Lambda feature-toggle witness pins central-event invariance and a deliberately overshooting Minkowski pupil bundle recovers the exact analytic boundary footprint |
-| The metric-signature check inspected diagonal signs and accepted `g00` near zero | off-diagonal Lorentzian and degenerate synthetic tensors exposed the false proxy | Fixed: a deterministic symmetric Jacobi eigensolve verifies exact inertia (one negative, three positive, no zero eigenvalues), with mixed-chart fixtures corrected |
-| Metrics without Page–Thorne emission either inherited the Kerr approximation or accepted `diskEnabled` and silently rendered no disk | metric lensing and emission capability were not separated; `NotApplicable` bypassed rejection | Fixed: exact live disk support is restricted to Schwarzschild and Kerr; every other metric requires `--no-disk` at config, typed-session, and Vulkan boundaries |
-| Rendered polarisation controls could suggest Stokes transport while the live output only formed a local emission angle | render flags and colour mode were disconnected from transported Stokes state | Fixed on CPU: one operator `colorMode` transports an observer-screen basis on the accepted central ray, projects into the Page–Thorne circular-emitter screen, and applies the flux-normalised Chandrasekhar-Sobolev semi-infinite pure electron-scattering atmosphere; absorption, finite optical depth, returning radiation, and magnetic/Faraday effects are excluded. Vulkan, volume, and temporal-blur combinations decline |
-| Thin-disk shading applied relativistic beaming more than once | the caller formed `(g T)^4`, `ApplyColorMode` applied `g^4`, and the caller multiplied by `g^4` again | Fixed: emitted `T^4` and observed `g^4 T^4` are distinct values, TrueColor owns exactly one `g^4`, and a numeric unit witness pins the formula |
-| Kerr disk calculations used Kerr–Schild cylindrical radius as Boyer–Lindquist orbital radius | at the equator `sqrt(x^2+y^2)=sqrt(r^2+a^2)`, so ISCO clipping, Page–Thorne temperature, volume density, redshift, and polarised emitter motion used the wrong radius | Fixed: the shared spheroidal-radius authority now drives CPU and Slang thin/volume disk paths; an exact coordinate witness distinguishes the two radii |
-| Malformed vector indices, corona geometry, colour modes, tonemappers, trace outcomes, and film enums silently aliased or fell back | internal typed APIs retained permissive default branches after operator validation | Fixed: every malformed internal enum/index/state contracts or produces an explicit diagnostic rather than selecting another represented mode |
-| The default five-coefficient scalar tone curve was advertised simply as `ACES` | the implementation was the Narkowicz fit to sampled ACES 1 RRT plus Rec.709 output, without ACES working-space conversion, chroma/gamut processing, display targeting, white-point adaptation, or display encoding | Fixed: the sole parser, enum, function, help, and default call it `ACESFit`; bare `ACES` declines, source-derived values pin the rational curve, and governance rejects the old selector, copied coefficients, detached consumers, or an implied Academy Output Transform |
-| An unused spectral facade called a raw XYZ-to-AP0 matrix product `ACES` | the input bins carried physical spectral-radiance density, so the integrated tristimulus and matrix product retained radiometric scale; no scene-relative exposure normalisation established ACES2065-1, while the sole test asserted only that a blackbody produced positive channels | Fixed: the dead `ToAces()` API, weak positivity test, and detached matrix are removed; governance negative controls reject the false API and coefficient sequence from returning, and the documented boundary declines to claim ACES until a real relative-exposure encoding authority exists |
-| The same unused binned-radiance facade called an absolute XYZ matrix product plus clipping and a transfer curve `sRGB` | no exposure, normalisation, white adaptation, tone/gamut mapping, or display intent connected physical W/(m² sr) scale to display-relative code values; its only test multiplied a blackbody by an unexplained `1e-12` and then asserted the clipping function's range | Fixed: the dead `ToSrgb()` API, nested display tuple, and tautological arbitrary-scale test are removed; the physical facade ends at unit-documented XYZ, the separately normalised live blackbody-colour path remains explicit, and governance negative controls reject direct display encoding from returning to the binned facade |
-| Fisheye existed in the core camera factory but could not be selected through configuration | schema and session projection only named pinhole/thin lens | Fixed: Fisheye is a represented CPU mode; explicit Vulkan declines and `auto` selects CPU at the capability boundary |
-| Viewer flags were parsed but the progressive session used hard-coded controls; its later projection still overwrote validated tile, parallelism, bloom, and exposure policy, silently disabled a volume requested without its disk owner, orbit input could leave the typed azimuth domain, frame/session state raced, and shipped shaders were never consumed | CLI/config values did not reach the session; preview-only literals and dependent-feature coercion replaced the session template; unbounded azimuth accumulation made a previously admitted viewer fail on a later refinement; inline GLSL bypassed volume assets | Fixed: one projection preserves every control owned by the chosen backend and every viewer-requested feature, neutralises CPU-only scheduling state under Vulkan, overrides only live viewer state, and passes the complete typed-session authority before initialization, so impossible feature ownership declines; orbit input is reduced to its periodic equivalent, asynchronous refinement/cancellation is synchronised, shaders are file-backed and checked, and pure projection plus real headless-frame witnesses gate the boundary |
-| The viewer liveness test embedded local-host performance assumptions | hosted ASan/UBSan/LSan completed one refinement but teardown canceled a healthy second render at the fixed deadline | Fixed: the witness keeps a valid 64x64 Schwarzschild render, asynchronous completion, frame-size, state, and error assertions without duplicating multi-sample performance coverage; the exact sanitizer rerun passes |
-| Missing starfield changed the image to grey/analytic background | CPU warning and Vulkan fallback | Fixed: the starfield is a mandatory scene input and absence declines |
-| Kerr coordinate round-trip tolerated an intentionally wrong azimuth | forward transform omitted the Kerr phase while inverse subtracted it | Fixed with the exact oblate transform and 1e-12 round-trip gates |
-| Horizon-capture test asserted an identity | `x + (total-x) >= total` | Fixed with a positive captured/disk-ray postcondition |
-| One permanently disabled unstable-orbit test inflated registration counts | `DISABLED_PhotonSphereRadius` | Removed; the enabled instability test is the represented claim |
-| `GTEST_SKIP()` could still make required-profile evidence look green | CMake maps GoogleTest skips to successful CTest skips | Fixed: the required profile force-includes a test policy that converts every `GTEST_SKIP()` to a fatal assertion; portable capability-domain skips remain explicit |
-| P1 status had no Bardeen boundary or burn-in | no test referenced Bardeen screen coordinates | Fixed: CPU and Vulkan independently classify ten samples spanning the visible upper curve at 1920x1080, a/M=0.998, below one pixel; the required runtime profile repeats both three times |
-| P1 conservation evidence omitted Carter Q and did not span a terminated full ray; the legacy split oracle missed the 1e-10 target | oracle/live witnesses measured only E and L_z, the fixed 20-unit oracle segment stopped near 40M, and the rendered Slang RK4 had no invariant witness | Fixed: an independent adaptive double Hamiltonian oracle crosses the 200M escape surface at a/M=0.998 with E/L_z/Q below 1e-10; the CPU RK45 and actual Slang Cartesian RK4 each traverse a terminated full ray and gate all three live drifts below 1e-4 |
-| P1 CPU classifier counted any long-orbit ray as captured | a cinematic winding heuristic was included in the shadow predicate | Fixed: the heuristic and its termination outcome are deleted; the classifier uses a strong-field-only fine step cap, rejects numerical and max-step outcomes, and counts only physical horizon termination as capture |
-| FP64 image agreement and one conservation trajectory concealed widespread controller-induced false termination | the initial fp64 null threshold exactly equalled the integration target, and its later guard band still judged an absolute defect accumulated across accepted steps: once that global defect exceeded the threshold, shrinking the current step could not undo it. Camera screen directions were also normalised in fp32 before entering the fp64 tangent, so 3,752 of 4,096 fp64 field samples stopped black while fp32 had 448 | Fixed: screen directions normalise in the selected `Real` precision; each RK4 attempt is judged on its unprojected local null defect, and every accepted tangent is projected by a stable quadratic/linear solve onto the temporal root nearest its incoming branch while preserving all spatial components. A live storage-buffer witness covers future/past roots, two same-sign roots, a small nonzero `g_00` whose large root must remain quadratic, exact `g_00=0`, and no-root failure; all three precision probes escape with governed invariants, while the 64x64 field now has 448 black samples on both fp32/fp64 and mean difference `2.66e-6` |
-| Page-Thorne existed as an isolated model while the live paths used a legacy correction | rendered temperature did not equal the full model | Fixed: CPU and Slang render paths use the Page-Thorne flux shape; independent midpoint quadrature with finite-difference derivatives covers retrograde, Schwarzschild, and prograde spins, and a separate large-radius witness requires the Newtonian r^-3 flux tail so a shared determinant-factor error cannot self-validate |
-| The public Page-Thorne model accepted a configurable inner edge but always integrated from, and buffered, the ISCO | a truncated disk reported its declared edge while emitting nonzero flux there, and an edge inside the last stable orbit was accepted | Fixed: represented inner edges must be at or outside the ISCO; the zero-torque integral and numerical edge guard both use that exact edge, with independent truncated-disk quadrature as direct P4 evidence |
-| Thin-disk coordinate helpers mapped an invalid radius or polar-axis singularity to plausible equatorial coordinates | invalid geometry could become `theta=pi/2` or `z=0` and impersonate a disk intersection | Fixed: both transforms now expose an optional owned domain, reject non-finite/axis inputs, and pass bidirectional round-trip witnesses across positive radii and signed heights |
-| The Boyer-Lindquist Kerr oracle clamped spin after copying horizons derived from the unclamped request, and accepted charge although its equations contain no charge terms | exact-extremal and charged requests could combine one metric tensor with another spacetime's identity or horizons; the production ISCO authority separately clamped exact extremality to `0.9999` | Fixed: duplicated derived horizon fields are removed; the oracle accepts only finite uncharged Kerr with `M>0` and `|a|<=M` plus the exact `M=a=0` Minkowski limit, computes its own exact horizons without rewriting, and keeps black-hole-only radii unavailable on the flat limit; the production Kerr ISCO evaluates both exact extremal orientations while charged, massless, cosmological, and super-extremal ISCO requests decline |
-| Direct Boyer-Lindquist tensor and Hamiltonian calls could enter the polar singularity and replace `sin(theta)` plus the metric determinant with finite floors | the oracle could return a plausible tensor for an event that its own `IsValid` rejected | Fixed: one finite-event predicate owns the numerical chart for metric, analytic derivatives, curvature, Hamiltonian phase space, and integration validity; polar-margin and non-finite events contract-fail, with no pole-clamped substitute |
-| The live Cartesian Kerr-Schild metric and coordinate authorities replaced small nonzero spin with Schwarzschild, floored the radial and derivative denominators, and evaluated adaptive stages on the non-unique rotating `r=0` sheet | sufficiently small but represented scenes changed spacetime identity, the Kerr disk/ring could receive a fabricated finite tensor, and CPU/device derivatives lost scale covariance before any declared capture decision | Fixed: exact zero is the only spherical branch; one scale-normalised oblate-root and differential authority owns CPU coordinates and the metric, the live metric has an explicit event-domain predicate with the analytic regular pure-de-Sitter origin as its sole non-flat zero-radius limit, RK4/RK45 stages decline before evaluating an unrepresented event, and the Slang metric/connection uses the same exact branch plus a cancellation-resistant Sigma derivative. Core, integrator, coordinate, and emitted-device non-image witnesses pin sub-threshold scale covariance and singular-sheet rejection |
-| The production Cartesian Kerr-Schild family was checked by components, derivatives, horizons, inverse identities, and an oracle-only Boyer-Lindquist Kerr vacuum calculation, but never against the field equations on the live metric | mutually consistent metric/derivative defects could preserve those checks while violating vacuum, Einstein-Maxwell, source-free Maxwell, or the spherical cosmological equation | Fixed: a shared fourth-order connection-difference oracle now evaluates the live Cartesian family with generic sampled-metric inversion; an independently differentiated Kerr-Newman potential supplies the matter side and source-free divergence. Mandatory cases cover Minkowski, both Kerr spin signs, both charge signs, Reissner-Nordstrom, Kerr-Newman, a second scale, de Sitter, and Kottler; source-strength assertions reject omitted matter or Lambda terms, and repository controls reject self-oracle reuse or branch deletion |
-| Polarised and canonical Boyer-Lindquist integrators still clamped axis-crossing states, classified every invalid symplectic substep as a horizon hit, silently retained a state when null projection had no real solution, and carried a mutable renormalization counter across independent calls | oracle evidence could mutate an unrepresented trajectory, report a coordinate failure as physical capture, claim an enforced null constraint that was not enforced, or make an identical step depend on call history | Fixed: null/polarisation initial-data constructors are fallible total functions, every RK stage and final state shares the metric's chart predicate, the last valid state is retained, mutually exclusive outcomes distinguish escape/capture/chart exit/constraint failure/exhaustion, implicit nonconvergence and failed null projection are explicit constraint failures, and renormalization cadence is an explicit step argument; the stationary-limit linear null equation is covered directly |
-| The oracle interface advertised unused TTESI and frequency-transfer hooks; the latter described a ZAMO as static and returned an invented redshift of one on a zero emitter contraction | dead APIs could be mistaken for evidence of a live regularisation or transfer capability | Fixed: both zero-consumer hooks are removed; live frequency transfer remains owned and independently gated by the actual CPU/Slang Killing-field authority |
-| The Slang Kerr ISCO mapped every represented `0 < |a/M| < 0.001` request to exactly `6M` | the device Page-Thorne path silently became Schwarzschild over an arbitrary admitted interval while the CPU evaluated Kerr | Fixed: zero spin is the only Schwarzschild branch, every other admitted spin evaluates the Bardeen formula, and a live SPIR-V parity witness at `a/M=0.0009` rejects interval aliasing |
-| Obsolete Novikov-Thorne unit tests mirrored an unused Slang approximation | five green tests exercised only a test-local copy of dead kernel functions and never judged the production Page-Thorne path | Fixed: the unused approximation and its mirror are removed; the independent Page-Thorne comparison lives in the non-render oracle suite and is direct P4 evidence |
-| `ShakuraSunyaev` was a public CPU/Vulkan mode but absent from the capability ledger, while its implementation was only `T proportional to r^-3/4` | the named model emitted nonzero flux at its declared zero-torque inner edge, and a Mandatory test merely repeated the same standalone power expression without touching production | Fixed: the CPU authority and Slang kernel use the standard Newtonian zero-torque shape `r^-3[1-sqrt(r_in/r)]`, normalised at the shared `1.5 r_in` temperature scale; core boundary, live CPU, and kernel-parity gates cover it, and the operating model records it as an explicit non-relativistic substitute with no alpha-disk vertical-structure claim |
-| Mandatory analytic tests asserted assigned constants or unrelated bounds, and support suites contained unconditional success assertions | photon-sphere cases could not fail the Hamiltonian implementation; a Vulkan placeholder was counted as evidence; colour and memory cases ended in `true` | Fixed: analytic Kerr/Schwarzschild photon-orbit parameters now satisfy the production Hamiltonian null and radial-stationarity equations, ISCO pins use exact values, unconditional/placeholder registrations are removed, and surviving colour/memory/parameter cases assert observable postconditions |
-| Test sources could remain green while simulating an unrelated implementation, restating textbook arithmetic, estimating hypothetical resource use, or printing observations without a postcondition | FPS suites fabricated metrics/RK4 or extrapolated single evaluations through assumed CUDA parallelism; geodesic/lensing “benchmarks” compared formulas to themselves; deviation, ADM, and memory suites assigned expected/modelled state directly; Schwarzschild, Kerr, and Reissner–Nordström suites never instantiated the Cartesian Kerr–Schild product; a Christoffel benchmark timed a class expressly documented as non-Kerr; live azimuth/adaptive-step/null probes were advisory | Fixed: disconnected/self-oracle registrations are removed and replaced only where a production-backed independent oracle exists; the black-hole suites now exercise exact Cartesian Kerr–Schild forms, finite-difference derivatives, oblate geometry, horizon/capture authorities, limits, and inverse identities; surviving live probes enforce branch-cut continuity, adaptive-step change, and the named CPU null tolerance; every governed source GoogleTest must contain a direct postcondition, operating-model evidence is checked again at its claim boundary, and negative controls reject assertion-free, obvious no-op, disabled, or `#if 0` tests |
-| Spectral correctness largely retested fixture-local Planck/Wien/redshift equations, and a “GPU parity” suite compared two local copies of deleted CUDA-era arithmetic | production Planck and binned-radiance code could regress while independent-looking formulas stayed green | Fixed: the false parity suite is removed; production Planck, numerical Wien maximisation, independent spectral quadrature, Lorentz redshift, exact g-fourth deposition, wavelength boundaries, and integrated colour progression replace it. The independent gates exposed and fixed cancellation in `exp(x)-1` and non-finite/bin-boundary leakage |
-| Host Planck radiation remained implemented twice, Wien's displacement constant was copied into a facade, and `sigma T^4` was exposed as radiance although it is hemispheric radiant exitance | numerical equality tests stayed green while duplicate structure, density units, and the public physical-quantity name could drift independently | Fixed: one fallible, unit-explicit blackbody-laws authority serves both host consumers; binned spectra apply only the exact per-metre to per-nanometre density conversion; Wien and Stefan-Boltzmann consume the constants authority; numerical Planck, Wien-maximum, hemispheric quadrature, delegation, invalid-domain, and independent Slang gates bind the semantics; repository governance rejects all four structural regressions |
-| Starfield property loops could pass over an empty catalogue, while reusable phenomenological configurations retained NaN or infinity and fake jet/corona models exposed unsupported physics | loop bodies were the only postconditions and `std::clamp`/`std::max` do not sanitize NaN | Fixed: catalogue witnesses assert non-empty preconditions, retained core configurations reject values outside finite ordered domains without rewriting them, and the local jet plus grey/tinted corona implementations and their self-tests are deleted behind explicit fail-closed operator contracts |
-| Registered correctness tests were omitted from the build-time `Mandatory` gate | CI and external full-estate runs included them, but an ordinary build could pass after running only a subset | Fixed: every enabled source GoogleTest is labelled `Mandatory`; the operational verifier compares all parsed source identities with CTest's live JSON inventory, rejects missing or undeclared registrations and non-Mandatory labels, and permits only the explicitly conditional Vulkan session source as an all-or-nothing suite; category labels still support focused runs |
-| Backend full-image `KernelTrace` and `KernelBeam` suites lacked the `Rendering` label | a nominal `ctest -LE Rendering` selection could still dispatch 64x64 trace-kernel image fields | Fixed: the label generator classifies both full-image backend suites as rendering, its self-test pins that classification, and source governance rejects any new non-render suite that loads a trace-render SPIR-V module |
-| Deterministic physics witnesses could skip or report zero drift when their own fixture made no progress | angular-momentum and motion-blur tests treated a broken deterministic launch/camera scan as unavailable environment, while five Killing-vector gates initialised drift to zero and did not require an accepted step | Fixed: deterministic fixture preconditions and accepted-progress counts are fatal assertions; optional disk-hit, photon-ring, halation, and escape outcomes are now required by tests that claim them; skips remain only at actual compile/device capability boundaries and become failures in required profiles |
-| Volumetric disk emission omitted gravitational/Doppler shift, while the near-extremal gravitational square root could become NaN inside r=2M | only thin crossings called the g-factor authority and both CPU/Slang evaluated an unguarded ergosphere expression | Fixed: thin and volumetric CPU/Slang sources call one exactly-once g^4 authority; finite near-extremal inner-disk, isolated toggle, and end-to-end Vulkan thin/volume witnesses pin the live branches |
-| Volumetric Doppler suppression used the normal to a Kerr-Schild time slice while claiming an exact ZAMO | the slicing normal carries Boyer-Lindquist radial motion off the equator, so the diagnostic retained a radial Doppler term and disagreed with the thin-disk frame contract | Fixed: host and Slang arbitrary-latitude frame authorities derive the ZAMO from $E$, $L_z$, and the Boyer-Lindquist azimuthal metric; independent metric contraction, explicit frame-distinction, compute parity, and repository-governance gates bind both live volume consumers |
-| Volumetric transfer restarted and overwrote at every RK45 segment | optical depth depended on the final traversed segment | Fixed: emission and optical depth form one observer-to-source recurrence across accepted segments using invariant comoving path length. The bounded Gaussian grey atmosphere and procedural modulation are explicit; inverse-Compton corona transfer declines |
-| CPU volume transfer sampled a segment only when at least one endpoint was inside the finite atmosphere, and both backends discarded total optical depth at or below 0.01 | a finite accepted step can enter and leave with both endpoints outside; direct `1-exp(-delta_tau)` also cancels the first-order fp32 contribution of sufficiently thin layers | Fixed: every accepted CPU/device segment is midpoint-sampled without an endpoint prefilter; host `expm1` and a parity-gated Slang thin-layer series preserve the formal grey solution; every finite positive accumulated optical depth is composed; repository negative controls reject restoration of either cutoff |
-| The three-scale-height volumetric atmosphere normalised its opacity as an infinite Gaussian | the represented finite column was only `erf(3/sqrt(2))`, about 0.9973002, times the declared `tau_ref` law | Fixed: CPU and Slang divide by `sqrt(2*pi)*erf(3/sqrt(2))*H`; independent finite-support quadrature and a non-render kernel parity probe bind the exact declared column |
-| “Beam ellipse” collapsed to a circular Gaussian; Vulkan propagated one vector | star filter accepted one sigma and kernel alpha carried one norm | Fixed: both paths propagate two vectors, extract both singular axes and output-plane orientation, and apply an anisotropic tangent-plane Gaussian |
-| Beam orientation used the input right-singular vector | formula used `ab+cd` while documenting output position angle | Fixed in live and oracle geometry to the `MM^T` expression `ac+bd`, with a rotated-SVD witness |
-| Vulkan beam integration exposed only scalar area, so the device output-orientation formula could regress while P2 remained green | the live kernel alpha carried geometric-mean expansion and only the CPU/oracle rotated-SVD witnesses observed orientation | Fixed: trace and parity probe consume one Slang ellipse-projection authority; a device rotated-SVD witness pins both singular axes, determinant, and output-plane orientation while the live trace gate proves propagated deviation reaches it |
-| Beam orientation crossed an implicit tangent-basis rotation before point-star filtering | CPU and Slang Sachs screens measured the ellipse angle after projecting the least-aligned coordinate axis, while both catalogue filters interpreted it after projecting z except near the pole | Fixed: the host screen and filter call one typed celestial-basis authority, the Slang screen and filter call one device authority, an anisotropic single-star witness pins the physical rotation, and a live Vulkan probe agrees with the host on x/y/z least-axis fixtures |
-| The oracle beam step treated a Boyer-Lindquist coordinate derivative as a covariant derivative and froze curvature outside the ray's integration tableau | the exact radial and circular Schwarzschild null-congruence solutions exposed the missing connection/stage coupling | Fixed: central ray and four covariant Jacobi columns share one RK4 tableau; radial and photon-sphere screen axes agree with independent closed forms to one part in 1e6 |
-| The claimed symplectic-structure gate bounded nearby-ray separation instead of testing the canonical two-form | bounded separation is not implied by symplecticity, and the explicit kick-drift-kick map is not symplectic for the non-separable Kerr Hamiltonian | Fixed: the fixed-step oracle composes symmetric implicit-midpoint maps; a finite-difference gate enforces `D(Phi)^T J D(Phi) = J`, order accuracy is measured against the independent adaptive Hamiltonian solver, and variable-step/null-projection stabilisers are expressly outside the symplectic claim |
-| The flat CPU/Vulkan point-catalogue parity fixture changed the metric to Minkowski but retained Kerr spin and disk state | the shared typed session boundary correctly declined both sessions | Fixed in evidence: the fixture now projects a coherent massless, spinless, diskless Minkowski scene instead of weakening product validation |
-| Point-star sampling scanned 100,000 stars per escaped pixel | catalogue had no live acceleration structure | Fixed: deterministic latitude/longitude CSR index, exact exhaustive-oracle agreement, shared CPU/Vulkan candidate semantics, and bounded residency |
-| Point-star mode was numerically nonzero but display-invisible at its operator default | scale 1 produced a disk-free Radeon PNG with channel ranges 1/1/0 and only three colours; the Vulkan test passed because near-black point mode differed from the texture | Fixed: the relative-flux zero point is display-calibrated at the anti-flicker-tested scale 100, disk-free live gates require a bounded sparse lit-pixel fraction, and the IMAX verifier enforces sparse dark-field morphology rather than accepting disk structure |
-| P3 attestation admitted only the IMAX frame although the criterion quantifies both 1080p and 5616x4096 | no independent 1920x1080 artifact, transcript segment, wall time, dimensions, or morphology was required | Fixed: the physical runbook renders the identical governed sparse-star scene at both exact resolutions and the verifier independently binds, decodes, and morphology-checks each artifact and typed-session event |
-| P5 aberration evidence covered only motion along the view axis | the analytic witness reduced the Lorentz transform to one dimension | Fixed: an independent photon-four-vector Lorentz oracle covers mixed-sign three-axis velocities, varied ray directions, and near-luminal finite worldlines in addition to both lens models and the governed physical scene |
-| ThinLens aperture samples changed direction but every CPU and Slang ray still launched from the central pinhole event | an angular perturbation can affect an image while representing no finite pupil, so the P5 scene and prior live-effect tests could not establish the advertised finite-aperture geometry | Fixed: samples carry explicit pupil-up/right displacement, both live launch paths move the event across the moving camera's rest-frame axes and rebuild their metric frame, oversized tangent-plane pupils decline, host rays independently reconverge at the requested focus point, a direct Slang probe matches, and repository controls reject either direction-only substitution |
-| ThinLens reused the two subpixel coordinates as its two pupil coordinates | the required film/pupil integral is four-dimensional, but the live CPU and Slang paths sampled only the diagonal where both pairs were equal; an adversarial joint-moment integrand whose independent-domain mean is 1/3 therefore evaluated to exactly zero | Fixed: the exact-count sampler retains its film stratification and adds distinct base-5/base-7 pupil dimensions, both backends consume all four values, the analytic moment gate bounds the resulting sequence, and repository controls reject either host or device diagonal substitution |
-| Doppler toggle test attributed Kerr lensing/frame-dragging asymmetry to emitter motion | image-half ratio was the sole oracle | Fixed: the gate separately measures observed asymmetry and the isolated `(g/g_grav)^4` emitter factor; off is exactly zero in the isolated measure |
-| Leak checking had no reproducible operational profile | ad-hoc ASan runs disabled leak detection around Vulkan | Fixed: GCC ASan/UBSan/LSan preset and CI job; one narrow, printed suppression names the repeatable 128-byte Vulkan-loader/driver process-lifetime allocation |
-| Hardware script accepted software devices and called 4096x2864 “IMAX-class” | no physical-device precondition or attestation | Fixed: exact device matching, software rejection, readiness check, full log/hash/JSON attestation, and the specification's exact 5616x4096 frame |
-| External-domain records had no enforced schema and device inventory omitted driver identity | a handwritten JSON result could call llvmpipe physical, call Dozen native Windows, or name an IMAX output without decoding it | Fixed: a Mandatory negative-control verifier rejects software devices, domain mismatch, wrong dimensions, false test state, and tampered hashes; Vulkan inventory includes driver/vendor/device/API identity; the physical runbook decodes 5616x4096 and verifies its own record |
-| Physical test, readiness, and revision claims were unbound result booleans | the transcript was hashed, but the verifier did not require its CTest result or inventory to support `test_estate_passed`, `runtime_ready`, and `source_revision` | Fixed: the runbook emits a hashed non-skipping JUnit report and explicit revision/readiness markers; the verifier binds its case count to CTest, requires `linux-ci`, and cross-checks the selected device and platform against the hashed inventory |
-| Physical/runtime records could name clean `HEAD` while executing a dirty or stale binary tree | revision text and artifacts did not prove which configure/compiled authority the JUnit and device run consumed | Fixed: every runtime producer now bundles the clean configure-time receipt and its JUnit must contain the test that compared that receipt to the compiled authority; revision and model-domain bindings are revalidated during admission |
-| “Full test estate” meant only a green boolean and case count | a partial JUnit file could omit registered obligations while retaining plausible metadata; a declared floor could drift below the real source estate unnoticed | Fixed: producers hash CTest's JSON registration inventory; the local build independently parses 732 source GoogleTests and refuses to fall below the policy floor, while external admission requires that same floor and exact equality between every enabled registered test name and the non-skipping JUnit case set |
-| Full-frame scene claims were trusted from runbook metadata rather than bound to the executed session | structured unrelated PNGs and claimed P3/P5 scenes could satisfy the record without proving that bundles, stars, motion, and ThinLens reached dispatch | Fixed: the typed session emits canonical JSON; the verifier requires one exact event at 1920x1080 and one at 5616x4096, cross-checks every scene field, proves the actual 100,000-star catalogue reached Vulkan with beams enabled, and binds device, budget, dispatch completion, wall time, output name, and terminal state in each hashed transcript segment |
-| E1 claimed all nine CPU-renderable metrics from registry metadata while live render evidence exercised only Morris-Thorne | registry completeness did not prove every advertised CPU factory/session path completed | Fixed: a registration-driven product witness constructs legal parameters and completes a frame for every CPU-supported registry row without a hand-maintained metric list |
-| E2's machine ledger omitted its explicit decline witnesses | unsupported polarised volume/temporal/Vulkan requests were tested but not required evidence for the criterion | Fixed: configuration and typed-session decline witnesses are direct E2 evidence, alongside live Kerr, Schwarzschild-limit oracle, physical Stokes, and film-output gates; the same typed boundary separately proves that represented two-sheet Ellis configuration is admitted |
-| E2's cross-chart live/oracle witness exercised Kerr while the Schwarzschild rigid-transport witness remained oracle-only | the live thin-disk Stokes path did run Schwarzschild, but did not carry the same invariant comparison through a physically completed ray | Fixed: the existing cross-chart gate now completes escaping Schwarzschild and Kerr rays and compares their initial/final Walker-Penrose invariants between live Kerr-Schild Cartesian and independent Boyer-Lindquist paths |
-| CPU disk motion blur rotated an axisymmetric stationary crossing through a Euclidean line-of-sight factor | the synthetic phase change was not a covariant time-dependent emissivity or shutter integral | Fixed: the operator identity remains parseable but all CPU/Vulkan motion-blur requests decline until a time-dependent emissivity and covariant temporal transfer are represented |
-| CPU motion-blur evidence reimplemented a synthetic temporal formula disconnected from physical emissivity | source inspection and exact sample counts could not make the Euclidean phase rotation covariant | Fixed: the sampler and its mirror tests are deleted; schema, CLI, configuration, and typed-session witnesses require every temporal-blur request to decline before tracing |
-| Render-command help still said `--motion-blur` enabled CPU temporal integration after that model was retired | the parser preserved a fail-closed operator identity, but its human-facing contract advertised execution that validation always rejected | Fixed: usage names temporal transfer as declared but fail-closed, says the request is unrepresented and rejected, and a no-render CLI contract test forbids the former enablement claim |
-| Two-sheet wormholes were described only in comments | the operator could request a Morris-Thorne scene but could not state the required topology, allowing one-sheet output to be misunderstood | Fixed: `OneSheetCapture` and `TwoSheet` are explicit schema/CLI/typed identities. The former publishes a distinct dark throat event; the latter crosses the regular throat, reaches the inversion-matched opposite infinity, records the sheet, and maps the sky through the exact inversion Jacobian |
-| The live Morris-Thorne “Cartesian embedding” treated Euclidean radius as spherical areal radius, clamped every interior event to `1.001*b0`, classified capture only at an accepted endpoint, and admitted arbitrarily small double-valued scales through an fp32 device ABI | areal radius is nonmonotonic and its spherical metric coefficient diverges at the Ellis throat; the fabricated shell was not a coordinate transformation, hid the regular throat, discarded valid second-sheet RK stages, and a cubic-Hermite step could enter and leave the throat sphere with both endpoints outside. Tiny accepted operator values could cast or square to zero on Vulkan | Fixed: host and device now implement the exact zero-tidal isotropic Ellis chart, $r=\rho+b_0^2/(4\rho)$ and $g_{ij}=[1+b_0^2/(4\rho^2)]^2\delta_{ij}$, with finite throat $\rho=b_0/2$ and represented $0<\rho<b_0/2$. The metric does not advertise the regular throat as capture. One-sheet policy isolates all accepted-segment roots, including tangency, before consumers and publishes `Throat`; two-sheet policy instead reaches $\rho_-=b_0^2/(4\rho_+)$ with explicit sheet identity and inversion-related sky direction. The spherical areal chart and $\rho=0$ decline instead of being clamped; the shared CPU/Vulkan radius domain is the explicit fp32-resolved interval $0.1\le b_0\le1000$; non-Ellis Cartesian requests and out-of-authority redshift parameters fail closed; source governance rejects the fabricated metric, endpoint-only contact, intrinsic-throat capture, or an independent parity trajectory |
-| GLFW repeat actions were interpreted as key releases and non-finite pointer input could poison camera state | the handler treated only action 1 as pressed and accepted NaN/Inf | Fixed: press/repeat/release semantics, finite pointer/scroll guards, camera update, and refinement restart are Mandatory-gated; native event delivery remains a separate attestation |
-| Viewer state exposed an unwritten restart flag, unused camera velocities, and an attached GLFW window pointer that the CLI—not the viewer—owned | downstream callers could infer observable refinement/window capabilities from dead fields | Fixed: the actual atomic restart lifecycle now publishes and consumes the synchronised restart state under the input gate; dead velocity and window attachment surfaces are removed |
-| P2900/P2996, P1–P6/E1–E4, and external-profile boundaries were prose-only at runtime | C++26 mode could be mistaken for native contracts/reflection and installed volumes carried no complete acceptance ledger | Fixed: compile-time language facts distinguish native features from checked-macro/explicit-schema substitutes; all ten P/E criteria, 24 dimensions, and 30 capability contracts are build-gated, installed, readiness-required, and exposed by `info capabilities` |
-| CPU/Vulkan trace termination and step lengths were fixed in absolute coordinates while public black-hole and exotic geometry scales varied by orders of magnitude | at large M the 200-unit escape sphere could coincide with the horizon, while Morris-Thorne `b0` and Alcubierre `R`/`1/sigma` were ignored entirely; observers could start inside the one-sheet capture throat, the kernel could classify distant observers as escaped before one step, and unresolved walls could be advertised as rendered | Fixed: one registry authority governs observer bounds and both trace paths with `M`, `b0`, or Alcubierre `max/min(R,1/sigma)`; the escape sphere encloses the exterior observer in the asymptotic region, device stepping is scale-covariant, and `0.1 <= sigma*R <= 100` keeps the radius and inverse-wall scales inside the fp32-resolved envelope |
-| A valid Mandatory test could be substituted for an unrelated P/E or operating-model witness | evidence shape and existence checks did not preserve the reviewed semantic mapping | Fixed: the ten P/E evidence sets are explicit verifier policy, and canonical digests pin the complete acceptance, dimension, and capability sections; negative controls mutate both evidence identity and section semantics and require rejection |
-| Release packaging could retain a complete attestation receipt while weakening the product built from that revision | `BUILD_TESTS`, the Mandatory gate, warnings-as-errors, contract enforcement, Vulkan/Slang, SPIR-V validation, and the native viewer remained independently optional | Fixed: a two-phase build-policy verifier makes all of them non-negotiable, permits only the Release configuration, checks both configured flags and realised target/tool topology, and supplies a Mandatory negative-control CTest that rejects every weakened variant |
-| Qualification CI could execute different build inputs for the same source revision | remote Actions and FetchContent used movable tags, the Linux Slang archive had no checked digest, and Windows selected the latest third-party SwiftShader at runtime | Fixed: every Action and fetched source has an immutable commit identity, direct Slang/SwiftShader archives have versioned URLs and checked-in SHA-256 values, native Vulkan toolchain/device preflights fail early, and repository governance rejects movable actions/dependencies, latest rasterizer selection, and unchecked direct downloads |
-| Pull-request integration was inseparable from resource-heavy rendering qualification | opening any pull request launched the full Linux, sanitizer, Windows, and macOS runtime estates even when the needed evidence was compilation and authority governance | Fixed: pull requests and explicit integration dispatches now compile the complete strict topology on Linux, Windows, and macOS and run exactly nine non-render authority controls while proving no promotion receipt exists; full Mandatory/runtime and native attestation jobs are push-only, and repository governance rejects either side crossing that boundary |
-| The nominal application/configuration test executable contained CPU renders, conditional Vulkan dispatch, a Vulkan session-level capability decline, and progressive frame publication | an unfiltered `sirius_app_tests` invocation could enter the render path or spend rendering resources even though its CMake contract described CLI/configuration testing, and all cases carried only the generic Operational label | Fixed: the four command/session cases and two progressive-viewer cases compile only into `sirius_render_tests`, receive `Mandatory;Operational;Rendering`, and shared source governance rejects their return to `tests/app`, any app-side viewer/session start, or a new unclassified command execution |
-| Release install/package creation could bypass execution of the configured Mandatory target | `cmake --install` and CPack consumed an already-built tree without proving that its current tests or artifacts were the ones that passed | Fixed: the Mandatory target now owns CTest execution and writes a deterministic receipt only when its zero-skip JUnit name set exactly equals live registration; the receipt hashes seven test executables and the complete release product, and install/CPack rehash both the build tree and installed volume before succeeding |
-| Requiring the final Mandatory receipt inside the tests that issue it made first release promotion self-dependent and allowed an old staged receipt to influence the next run | the gate deleted its canonical stamp but runtime tests and install checks consumed a receipt that could exist only after they passed | Fixed: each gate removes both canonical and staged receipts before CTest; release pre-gate operational branches require install/readiness to fail closed and prove the resource override is ignored, the C++ release validator is exercised against an explicit isolated volume without changing packaged lookup, and only a newly passed exact-estate receipt is staged afterward |
-| An installed release could pass packaging and then lose or alter its Mandatory receipt, executable, or resources before startup | build/install verification ended before the product's operational trust boundary | Fixed: release readiness and render/view initialisation parse the installed receipt and rehash the running executable plus all eight installed resources; exact seven-test/nine-product inventories, clean revision, zero skips, model/alignment digests, sizes, and SHA-256 values are required, while missing receipt and same-size tamper controls fail closed |
-| Install-time Python verification and runtime C++ verification could each be correct without ever agreeing on the same relocated volume | the installer rehashed files but did not execute the installed product authority | Fixed: release install/CPack now invokes the relocated binary's non-rendering `info capabilities` path after external rehashing and requires schema 3 plus aligned ultimate-ideal state, so installation fails unless the executable accepts the exact installed authority/product set |
-| `SIRIUS_RESOURCE_DIR` could redirect a strict executable to a forged receipt and matching operator-controlled resources | development resource injection remained live in the release/qualification trust boundary | Fixed: the override is compiled out of qualification and release resource candidate selection, so all alignment/build-gate checks and subsequent renderer/viewer loads remain anchored beside the running executable; development retains explicit-root fail-closed behavior only for local diagnosis |
-| Resource-consuming test executables lived outside the strict candidate volume and depended on the now-disabled development override | clean qualification correctly ignored the override, so application authority tests failed before the gate could issue evidence and render tests would have inspected a different tree | Fixed: application and render suites execute beside the candidate binary, consume its exact eight-resource volume, and share the gate's remove-test-stage receipt lifecycle; source governance rejects relocation or restoration of the override |
-| Hardware admission required at least 891 JUnit cases after the governed strict estate had become 784 | a historical test count survived as policy, so an exact, complete, zero-skip current qualification run could never be admitted | Fixed: hardware admission uses the operating model's governed source-available floor, exact JUnit-to-live-CTest identity equality, the qualification gate's matching identity set, and named hardware semantic witnesses; no historical estate size can veto a complete current revision |
-| Individually valid external attestations never became a configure/build/runtime authority | the verifier could approve files, but no complete-set admission existed; overall readiness could not distinguish a development preflight from an aligned release | Fixed: release configuration requires all eight domains exactly once at the current clean revision; a deterministic receipt is checked on every build, statically required by the compiled release authority, installed, reported, and compared byte-semantically before render/view initialisation; development remains explicit and non-packageable |
-| External attestations could be generated by a weaker development artifact and later promote a different release product from the same source revision | the verifier accepted development receipts and carried no actual candidate executable or gate-generated test artifacts in the bundle | Fixed: only clean strict `qualification` receipts and gates are admissible; qualification enforces the full release-equivalent product but allows pending domains and cannot package. Each record carries the copied candidate bytes, exact seven-test/nine-product gate, gate JUnit/log, rerun JUnit/live inventory, alignment receipt, model digest, and revision under one cross-checked hash/test-identity chain; release separately retests and gates its final product |
-| Development readiness said `ready: true` while the same response said the strict ideal was unsatisfied | local resource readiness and aligned-system readiness shared one ambiguous boolean | Fixed: top-level `ready` and its exit status are reserved for a satisfied revision-bound ideal; development exposes a separate `evidence_generation_ready` preflight so external evidence can still be produced without calling the system aligned |
-| Runtime alignment reporting collapsed the receipt to an unactionable `0/8` count | operators could not identify the exact missing authorities from the installed volume | Fixed: the validated runtime authority carries sorted admitted, pending, and required IDs; JSON and human readiness expose the partition, and relocated-runtime plus unit controls prove it is the exact eight-domain model set |
-| Operating-model external profiles and release admission were separate policy lists | the viewer capability said `viewer-native-window` while the verifier admitted `viewer-native-window-input`; both authorities could validate independently | Fixed: exact capability-to-domain mappings are governance- and runtime-validated, admission derives the eight-profile set from the model, and every receipt carries the model SHA-256 checked by the compiled authority |
-| Native Windows Vulkan and macOS/MoltenVK records had a weaker evidence chain than Radeon/Dozen | physical-device fields plus arbitrary PNG/log files and result booleans could pass without a hashed JUnit estate, selected-device inventory, revision/readiness transcript, or required native preset | Fixed: every runtime-device domain now requires the same non-skipping JUnit/inventory/revision/readiness/transcript chain; domain-specific presets are enforced and positive plus missing-artifact controls cover both native routes |
-| Native Windows Vulkan and macOS/MoltenVK had verifier contracts but no executable evidence producer | operators had to hand-assemble a record and could not follow one source-bound route from native build through device selection to verification | Fixed: one clean-tree native producer chooses exactly one physical device, rejects Dozen/non-MoltenVK substitutions, binds configure/build/JUnit/inventory/readiness/probe output, rechecks revision identity, and verifies the record before publication |
-| Non-IMAX physical runtime records accepted any hashed file with a `.png` suffix | native Vulkan success could be asserted with renamed text or spatially collapsed bytes | Fixed: every physical runtime PNG is fully decoded and must have represented dimensions, dynamic range, colour structure, and more than one row signature; IMAX retains its stricter sparse-point morphology gate |
-| Application JSON types and conversion logic lived in the render layer and threw across the app/render seam | `render_config.h` mixed wire-schema strings with film and session-domain types | Fixed: app owns explicit JSON codecs, render owns film/session types, and one `std::expected` adapter projects validated strings into closed enums without an exception crossing the boundary |
-| CPU backend source was compiled by the render target and the repository retained two unused vendor trees | CMake carried a deferred re-home comment; no first-party build/include referenced GLM or Dear ImGui | Fixed: `sirius_backend_cpu` is always available and singly owns the tracer; render links it as a target; GLM/ImGui are removed; executable structure governance prevents ownership, layer, boundary-name, and vendor-set regression |
-| First-party physics and oracle code depended on non-standard `M_PI` macros and exposed mixed camel/snake data records | local compatibility defines and Java-style configuration/result members persisted after the C++26 port | Fixed: `<numbers>` is the sole standard pi source; app/render/backend/oracle boundary records use governed snake-case identifiers, public templates at the JSON seam are concept-constrained, and raw fixed-size tracer arrays are `std::array` |
-| Render configuration returned an ambiguous boolean, accepted invalid state, and reported ordinary resource/output failures by throwing after a worker launched | validation and error ownership were deferred into asynchronous initialisation | Fixed: `Configure` returns `std::expected`, validates synchronously, and the render state machine consumes typed configuration/IO/physics errors without deliberate exceptions on the live path |
-| The interactive viewer compiled its 450-line threaded implementation through every including translation unit | the legacy header-only port had never acquired target ownership | Fixed: the declaration-only header and singly owned `.cpp` separate the public surface from refinement implementation; copy/move semantics and discarded-return intent are explicit |
-| C translation units and standard size/integer names depended on compiler defaults and global aliases | only the C++ dialect was pinned and first-party code mixed `size_t`/`uint32_t` spellings | Fixed: mixed targets pin C17, all first-party C++ uses `std::size_t`/fixed-width types, and both GCC 14 and Clang 21 compile under warnings-as-errors |
-| A Dozen render completed and wrote output, then the render worker called a TLS destructor from an unloaded WSL D3D12 runtime | GDB placed the thread-exit program counter in the unmapped `libd3d12core.so` range; retaining both D3D12 mappings made the same dispatch exit cleanly | Fixed: the Vulkan backend detects `VK_DRIVER_ID_MESA_DOZEN`, retains the D3D12 wrapper and core for process lifetime, and gates dispatch plus device destruction on a worker thread |
-| Operator render scripts could report success from `tail` after a failed renderer and choose an arbitrary stale binary | pipeline status belonged to `tail`; `find ... | head -1` selected an unspecified build | Fixed: exact/explicit binary selection, status propagation, non-empty artefact checks, and failure/no-output negative controls |
-| EXR metadata was constructed but discarded, finite fp32 radiance could overflow half storage, and direct writers accepted NaN/Inf | writer header and advertised color-space claims did not match the file | Fixed: fp32 channels, embedded Sirius metadata, conservative color naming, and finite checks at display, session, Vulkan, PNG, and EXR boundaries |
-| Product PPM output bypassed the reusable writer and applied a separate gamma-2.2 loop | the direct writer could be correct while the session route transfer-encoded differently | Fixed: the session delegates RGBA display-linear output to the owned PPM writer, the writer shares the sRGB boundary authority, and byte-exact direct plus completed product-route witnesses are P6 evidence |
-| Spectral previews, explicit byte views, PNG, and PPM independently reimplemented the IEC sRGB curve | identical coefficients provided no structural guarantee that the display paths would retain one curve or the same clipping, rounding, and non-finite policy | Fixed: `core/srgb_transfer.h` solely owns the host curve and 8-bit quantisation; every represented production consumer delegates, mathematical controls span both branches and exact byte cases, independent writer decode tests remain external judges, and source governance rejects a second production breakpoint, detached consumer, or direct encoding of binned physical radiance |
-| The live viewer applied fixed Reinhard tone mapping and approximate gamma 2.2 after the session had already applied the configured tone mapper, grade, and film finish; two additional installed shader pairs exposed unreachable flare/bloom/tone curves | the window could not display the configured output contract, additive film bloom escaped the declared display-linear range, hardware sRGB state was implicit, and four dead shader products were nevertheless packaged and attested | Fixed: film finishing closes RGB to the finite unit display-linear range, the sole installed RDSD003A fragment shader mirrors only the exact IEC sRGB transfer, OpenGL framebuffer conversion is explicitly disabled, non-render numerical/source controls reject double tone/transfer paths, and the unreachable RDSD004A/RDSD005A assets are retired from source, install, runtime, and evidence inventories |
-| Two host spectral paths and the Slang disk path independently copied a rounded XYZ-to-linear-sRGB matrix | broad white/range tests and end-to-end blackbody tolerance could remain green while the declared sRGB primaries, D65 white point, host facades, and device coefficients diverged | Fixed: `core/xyz_srgb.h` owns the exact rational host transform, the explicitly normalised host blackbody path delegates, the binned physical-radiance path ends at XYZ, the Slang path exposes one fp32 mirror, an independent primary/white chromaticity reconstruction judges the host matrix, a direct non-render compute probe judges the mirror, and source governance rejects every legacy coefficient or second rational copy |
-| A 32-value CIE sequence for 400--710 nm was described and consumed as samples at the 386.25--773.75 nm spectral-bin centres, while the other host facade and Slang used an independent Gaussian fit | broad white-point, range, and blackbody tolerances stayed green even though the wavelength error drifted from +13.75 nm at the blue end to -63.75 nm at the red end | Fixed: `core/cie1931_observer.h` owns one explicitly approximate Wyman-Sloan-Shirley fit; both host facades evaluate it at their actual wavelengths, official checksum-bound CIE 018:2019 samples independently enforce a 0.014 per-channel absolute bound, direct non-render compute parity judges the Slang mirror, and governance rejects the stale table, copied lobes, detached consumers, or a missing parity route |
-| Native CI passed its full test estate but could not issue the promised build attestation | CTest placed relative JUnit outputs under each `--test-dir`, while the verifier looked in the repository root | Fixed: Windows and macOS attestations consume the exact binary-tree JUnit paths; publication CI is the executable witness |
-| Native build records trusted a caller-supplied revision and could relabel a stale JUnit file | the record contained no configure/compiled-authority witness tying the test binary to the clean checkout | Fixed: the producer derives and cross-checks the clean Git revision, bundles the configure receipt, and requires the JUnit case that compared that receipt with the compiled authority |
-| Native compilation claims were coupled to the rendering-inclusive promotion gate | a build-only domain could not be evidenced without executing unrelated runtime/image tests, while its JSON gate did not bundle the other compiled test binaries | Fixed: a distinct non-promoting native-build gate binds the full governed registration, exact nine non-render authority cases, all seven compiled executables, all nine live products, clean revision, and alignment receipt; dispatch-only publication states runtime false, while every physical/runtime domain retains the complete Mandatory estate |
-| Kerr ISCO and circular-emitter angular velocity were independently reimplemented by the metric, Page-Thorne disk, invariant transfer, and CPU tracer | equal formulas at one revision provided no structural guarantee that disk edges, redshift, polarisation, and emitter motion would remain the same physical orbit | Fixed: `core/kerr_orbits.h` is the sole CPU production authority for the exact signed-spin laws; all four consumers delegate, invalid and undefined domains decline, cross-consumer controls span mass scaling and both spin orientations, and the independent Boyer-Lindquist oracle plus Slang parity path remain separate judges |
-| The standalone Page-Thorne disk integrated from a declared truncated edge, but the CPU tracer cached an ISCO-default disk and both live Slang shading paths recomputed ISCO | default sessions declare ISCO and concealed the mismatch; a direct low-level request with a larger stable edge was dark only below that edge while emission above it still inherited the ISCO integral and normalisation | Fixed: the CPU cache is constructed from `disk_inner/M`, normalised at 1.5 times its actual inner edge, and invalidated by `SetConfig`; thin and volumetric Slang paths pass `innerRadius` to their independent Page-Thorne authority. A non-render live tracer witness first failed by 250--5,941 temperature units at twelve crossings, then matched the declared-edge model; a truncated device parity sample and repository negative controls cover the independent mirror and both substitution routes. |
-| External runbooks discovered a wrong host, software/ambiguous device, missing GUI/input route, or stale candidate only after starting expensive qualification | environmental mistakes could waste the very rendering/test resources needed for physical evidence, and an informal preflight could itself be mistaken for attestation | Fixed: one exact-candidate preflight permits only `info system`/`info readiness`, cross-checks the compiled receipt/resources/host/device/driver/memory/tools, rejects render/view/test commands, writes only outside the clean tree, and emits an explicitly non-promoting report with no admissible domains or artifacts |
-| The WSL2 hardware and native-viewer producers rebuilt and reran the same complete qualification estate on the same candidate and Radeon/Dozen device | the second estate added resource cost but no independent source, product, registration, or physical-device authority; skipping it informally would permit stale or cross-device substitution | Fixed: viewer reuse accepts only an independently verified same-revision physical-Radeon record, rehashes its candidate/receipts/gate/JUnit/registration/products against the live volume, requires exact WSL2 device identity, and carries the upstream transcript; only the newly published viewer frame and native callbacks are executed separately |
-| Alcubierre construction enforced the resolved $\sigma R$ wall only above the concrete metric, while device metric helpers and RK stages were infallible | a direct CPU caller could instantiate an unresolved wall and an invalid device profile could return zero connection, silently tracing flat motion; component tests did not prove the exotic stress-energy that defines the advertised spacetime | Fixed: one complete registry predicate now governs direct CPU construction/setters, the Slang metric/connection mirrors the same finite domain, every device RK stage is fallible, and both backends use the exact unit-determinant inverse. A reusable fourth-order connection-difference oracle independently reconstructs $G_{\mu\nu}$ and matches the strictly negative off-axis Eulerian warp-wall density; repository negative controls reject all four regressions |
-| Native viewer input had a verifier contract but no evidence producer | headless state-machine tests could pass, but no runbook could prove GLFW callback delivery | Fixed: an opt-in callback transcript and clean-tree X11/XWayland runbook deliver keyboard, drag, scroll, and Escape through the host window system and hash the resulting record |
-| E3 viewer attestation could bind callbacks to a CPU frame or unrelated device without a complete estate | the record lacked a published Vulkan-frame event, selected physical inventory/readiness, and non-skipping JUnit artifact | Fixed: the runbook selects the named Radeon, gates the full estate, waits for a native-window Vulkan refinement frame before injecting host input, and the verifier binds frame, callbacks, readiness, inventory, JUnit, log, and revision by hash |
-| The compiled capability authority exceeded MSVC's narrow string-literal limit | the 18,303-byte operating model was emitted as one raw literal and failed with C2026 | Fixed: CMake emits independently bounded 8,000-byte chunks; runtime validation reconstructs and semantically compares the complete authority |
-| Sanitizer publication limits assumed the faster review host | both pushed streams reproduced a 120-second relocated-volume timeout and a viewer teardown cancellation even though the same evidence passed locally | Fixed without dropping evidence: the specification-minimum 128x128 relocated render and every obstruction remain, the viewer witness removes redundant sampling load, and bounded test/job liveness windows admit slow instrumented hosted CPUs |
-| Compiler estates interfered through fixed `/tmp` render filenames | concurrent GCC and Clang runs could remove the other process's completed EXR between write and assertion | Fixed: render-session probes own collision-resistant RAII temporary directories; simultaneous GCC/Clang reproduction now passes |
-| Historical byte-identity claims had no executable consumer | no test referenced the baseline directory | Claim withdrawn; tapes remain forensic evidence only |
-| The upstream specification still required an unimplemented tape-identity gate, called macOS CI-only, and tied correctness to a stale branch name | current runtime admission, statistical/oracle evidence, and repository state followed different authorities | Fixed: the target now requires executable semantic/oracle/output evidence, external MoltenVK admission, and one exact clean revision; branch integration remains an owner workflow rather than correctness evidence |
-| The exact Ellis chart was checked only against its spherical coordinate transform and a copied device connection, while the lower host/device interfaces still admitted an unnormalised constant lapse | a mutually wrong metric/connection pair could pass parity and geometry tests without representing the claimed stress-energy; direct callers could also select a time convention absent from observer and boundary authorities | Fixed: a fourth-order independent connection-difference oracle recovers $R=-2b_0^2/r^4$, the zero angular Ricci eigenvalue, and $R_{\mu\nu}k^\mu k^\nu=-2b_0^2/r^4<0$ across the throat, both ends, and three scales. The live host and device surfaces now require $g_{tt}=-1$, exact Ellis shape, no irrelevant callbacks, and expose only throat radius; repository and compute negative controls reject lapse/shape regression |
-| An internally self-consistent attestation bundle could substitute different operating-model bytes while retaining the claimed exact source revision | the bundle verifier cross-checked its receipt, gate, and copied product, but neither it nor aggregate admission compared that product digest with the independently selected source model | Fixed: every record verification now requires the copied product to byte-match the canonical source operating model, aggregate admission passes its independently derived digest into the verifier, and a substituted-model negative control preserves the boundary |
-| Standalone attestation verification parsed `--source-root` but ignored it | an operator independently checking an older exact-revision bundle with a clean checkout was instead compared with the verifier branch's model; aggregate admission happened to use a separate correct digest path, concealing the detached CLI | Fixed: standalone verification and native evidence issuance derive the clean Git revision and canonical model digest from the selected source root, reject revision/model substitution, and repository governance makes source-root forwarding executable policy |
-
-## 4. Historical operating-model snapshot
+## 3. Operating-model evidence boundaries
 
 `tests/operating_model.json` is the machine-readable claim ledger.
 `scripts/verify-operating-model.py` proves that all ten P1–P6/E1–E4 acceptance
@@ -324,8 +147,8 @@ P/E summary, mutates P1 to prove semantic rejection, renders a CPU Minkowski fra
 then removes the starfield while a valid hostile-working-directory decoy is
 present and requires a non-zero diagnostic. Installation checks the exact
 capability-specific file set and rejects empty artefacts. Separate negative
-controls prove both operator scripts propagate a renderer failure and reject an
-exit-zero renderer that emits no file.
+controls prove the cross-platform render workflow propagates a renderer failure
+and rejects an exit-zero renderer that emits no file.
 
 `linux-ci` is the non-skipping runtime profile. Configuration fails without the
 Vulkan backend and compiled kernels; CTest fails without a ready device, a
@@ -333,7 +156,7 @@ governed multi-sample dispatch, or the repeated CPU/Vulkan P1 classifiers.
 Portable source profiles may omit Vulkan, but cannot be cited as evidence for
 this profile.
 
-## 5. Evidence semantics by profile
+## 4. Evidence semantics by profile
 
 Live attestation status is deliberately not frozen into this source file. An
 attestation names the exact source revision that it verifies, so committing a
@@ -347,11 +170,11 @@ boundaries instead.
 |---|---|---|
 | Revision-bound release alignment | EXTERNAL LEDGER AUTHORITATIVE | A source-only qualification configure intentionally admits no external domains. Development artifacts remain inadmissible; release configure reports every domain absent from the supplied same-revision ledger, and packaging/initialisation remain fail-closed until all eight domains have verified evidence. |
 | Pull-request/integration boundary | GOVERNED NON-RENDER PATH PRESENT | Linux, Windows, and macOS compile the complete strict topology and execute exactly nine authority controls without creating a Mandatory receipt. Pull requests cannot publish evidence; explicit dispatch may issue only the precisely scoped Windows/macOS compilation domains. |
-| Configure/compile/build, GCC 14 | STRICT NON-RENDER PATH PRESENT | Qualification binds all seven test executables and nine live products under warnings as errors, then runs the exact nine authority controls without issuing a Mandatory receipt. Execution outcomes belong to the workflow record for the tested revision. |
-| Configure/compile/build, Clang 21 | STRICT NON-RENDER PATH PRESENT | Qualification also emits and validates every Slang kernel, binds all seven test executables and nine live products under warnings as errors, and runs the exact nine authority controls without issuing a Mandatory receipt. Execution outcomes belong to the workflow record for the tested revision. |
-| Relocatable CPU volume | CURRENT INITIALISATION CHECKED; FULL PROFILE SNAPSHOT ONLY | Installed authority/resource readiness and tamper rejection pass after relocation; the relocation render snapshot predates this delta |
+| Configure/compile/build, GCC 14 | STRICT NON-RENDER PATH PRESENT | Qualification binds all six test executables, the candidate and nine live products under warnings as errors, then runs the exact nine authority controls without issuing a Mandatory receipt. Execution outcomes belong to the workflow record for the tested revision. |
+| Configure/compile/build, Clang 21 | STRICT NON-RENDER PATH PRESENT | Qualification also emits and validates every Slang kernel, binds all six test executables, the candidate and nine live products under warnings as errors, and runs the exact nine authority controls without issuing a Mandatory receipt. Execution outcomes belong to the workflow record for the tested revision. |
+| Relocatable CPU volume | LOCAL VALIDATION AT `cdcc254` | Complete installation, relocation and CPU image checks passed in the 934-test local selection; this is not a later-revision or release receipt. |
 | Viewer-disabled build/install | PRE-ALIGNMENT FULL-PROFILE SNAPSHOT | Capability-specific install verification, readiness, and fail-closed `view` were previously exercised; no current-delta full profile is claimed |
-| CPU physics/render path | ORACLE DELTA READY; RENDER PROFILE SNAPSHOT ONLY | Current Page-Thorne and canonical-symplectic oracle corrections pass on both compilers; near-extremal, shadow, volume, and film-output executions remain the immediately preceding snapshot under the no-render validation constraint |
+| CPU physics/render path | LOCAL VALIDATION AT `cdcc254` | The complete 934-test local selection included scientific calculation, shadow, Doppler, polarisation, output writers and the CPU viewer. See `SOURCE_CLOSEOUT.md` for exact scope and exclusions. |
 | Vulkan on WSL2 software and physical devices | PRE-ALIGNMENT FULL-PROFILE SNAPSHOT | Prior llvmpipe/Radeon-Dozen evidence covered dispatch and bounded scene semantics, but historical records are not admitted for a later source revision. |
 | Interactive viewer refinement | PRE-ALIGNMENT PREFLIGHT | The prior source opened a GLFW/OpenGL XWayland window, published a Radeon Vulkan frame, and received host-delivered input; native-viewer admission is asserted only by a verified same-revision external record. |
 | GCC ASan + UBSan + LSan | PRE-ALIGNMENT FULL-PROFILE SNAPSHOT | The historical 904-test sanitizer result is not promoted to evidence for a later source revision. |
@@ -359,11 +182,11 @@ boundaries instead.
 | Native Windows build/runtime | BUILD PRODUCER PRESENT; LIVE RECORD EXTERNAL | Explicit Windows dispatch can emit a clean-Git compilation record binding the full registration, exact non-render authority estate, all executables/products, and receipt. Native Vulkan remains a separate full-estate physical-host domain and rejects Dozen. The alignment receipt, not this table, states whether either record exists for a revision. |
 | macOS build/MoltenVK runtime | BUILD PRODUCER PRESENT; LIVE RECORD EXTERNAL | Explicit macOS dispatch can emit a clean-Git compilation record binding the full registration, exact non-render authority estate, all executables/products, and receipt. MoltenVK remains a separate full-estate physical-host domain. The alignment receipt, not this table, states whether either record exists for a revision. |
 
-## 6. Previously recorded limitations
+## 5. Previously recorded limitations
 
-These dispositions belong to the historical snapshots below. Reassess their
-implementation and evidence against the selected release revision; the current
-corrective review above does not promote them to completed qualification.
+These boundaries remain distinct from release qualification. Historical
+measurements and their detailed diagnoses remain in Git at `9e20150`; reassess
+implementation and evidence against the selected release revision.
 
 - P2 now has the specification's exact radial and circular Schwarzschild
   congruence pair at 1e-6, in addition to literal dual-vector ellipses,
@@ -392,42 +215,20 @@ corrective review above does not promote them to completed qualification.
   energy on the off-axis wall. That closes the prior geometry-versus-source
   ambiguity without claiming that a physical stress-energy construction is
   represented.
-- The exact 5616x4096 memory plan, catalogue/index residency, and sublinear
-  candidate query are Mandatory-gated. The physical runbook now requires the
-  same scene at both 1920x1080 and 5616x4096 to combine beam-filtered
-  100,000-star sampling, nonzero camera velocity, and a finite-aperture lens
-  under the 2048 MiB cap. A preflight of
-  that exact scene completed on the Radeon but exposed a finite-aperture
-  projection defect: all channels spanned at most 14 code values and only 62
-  colours survived at full resolution. That frame was rejected. The shared
-  CPU/Slang projection now preserves the requested field of view, a physical
-  Radeon regression retains a 56.0 per cent shadow with a 0--4.54 linear
-  luminance span, and the attestation verifier decodes the PNG to reject
-  collapsed output. The corrected current-worktree render then completed on the
-  Radeon in 16,841.9 seconds and 32,736 governed dispatches. Its 5,013,725-byte
-  5616x4096 RGBA PNG has SHA-256
-  `0a83eaf51a1d9c6293cc0ae1d11fe6ffcc941859a618ec23dedcaf3852343bc8`;
-  every RGB channel spans 216 code values and 66 distinct colours survive.
-  Visual review resolves the central shadow, asymmetric lensing, photon-ring
-  structure, and warped emission surface rather than the rejected bands, so it
-  closes only the earlier field-of-view/collapse diagnosis. It predates the
-  finite-pupil launch and four-dimensional camera-sampling corrections and
-  cannot establish current-revision P5. It
-  also does not close P3: disk emission
-  supplies the image structure, with 45.5 per cent bright channels and only
-  54.0 per cent dark channels. A disk-free Radeon probe then exposed that the
-  point catalogue's scale-1 default quantised to channel ranges 1/1/0 and three
-  colours. The display-calibrated scale-100 fix produces ranges 151/140/129,
-  at least 64 colours, 99.96 per cent dark channels, a 0.020 per cent bright
-  channel fraction, and bright sources across 8.2 per cent of rows. That exact
-  moving ThinLens scene completed in 20.0 seconds and 88 governed dispatches;
-  both strengthened Vulkan gates pass on the Radeon. The verifier now requires
-  this sparse disk-free morphology plus one hashed typed-session event, proves
-  the actual catalogue reached Vulkan with beams enabled, and binds device,
-  budget, completion, and output filename in the same transcript segment. The
-  existing 5616x4096 diagnostic predates those requirements and is rejected as
-  P3 evidence. Admission remains pending until the clean-revision runbook
-  produces both exact sparse-star records.
+- P3/P5 physical qualification requires both 1920×1080 and 5616×4096 images
+  of the governed moving ThinLens scene with beam-filtered 100,000-star
+  sampling under the 2048 MiB cap. Admission requires sparse disk-free
+  morphology, a hashed typed-session event proving catalogue/beam use, and
+  the same transcript's device, budget, completion and output identity.
+  Earlier full-resolution frames predate the physical pupil and sampling
+  corrections and cannot satisfy these requirements. The complete small
+  CPU/device comparison recorded in `SOURCE_CLOSEOUT.md` is also insufficient.
+- The retained physical point detector has a substantial throughput limit:
+  regular packets evaluate 601 coordinates before additional refinement.
+  Eight Kerr device pixels took more than three hours on the measured
+  Radeon/Dozen route. The larger moving ThinLens scene did not complete a pixel
+  before interruption. Correctness witnesses and component arithmetic timings
+  do not establish practical complete-frame rendering speed.
 - Vulkan volumetric transfer deliberately caps `volumetric.samples` at 128 per
   geodesic segment to protect the first dispatch from an unbounded watchdog
   exposure. The CPU accepts the schema maximum of 4096; explicit Vulkan requests
@@ -437,8 +238,8 @@ corrective review above does not promote them to completed qualification.
   denoiser/CUDA capabilities; neither is a DNGR parity criterion.
 - The viewer's strict parsing, projection, refinement render, frame publication,
   cancellation, and press/repeat/release/pointer/scroll state transitions are
-  gated. The current worktree has also opened the GLFW/OpenGL window and
-  received host-delivered callbacks on WSLg/XWayland. That older preflight is
+  gated. An earlier source snapshot opened the GLFW/OpenGL window and
+  received host-delivered callbacks on WSLg/XWayland. That preflight is
   not promoted into a revision attestation: the current record contract also
   requires a published progressive Vulkan frame on the selected physical
   Radeon plus hashed readiness, inventory, and non-skipping JUnit evidence. It
@@ -456,440 +257,7 @@ corrective review above does not promote them to completed qualification.
 - Historical reference images have no current byte-identity test. Any new
   identity claim requires a checked-in manifest and an executable comparator.
 
-## 7. Historical validation record
-
-The dates and snapshot labels below delimit the original reports. Their counts
-and timings have not been rerun or transferred to the September correction
-branch. Undated pre-alignment entries remain historical claims, not current
-qualification evidence; registration counts are never execution results.
-
-- 2026-08-27 alignment delta: GCC 14 and Clang 21 compiled the new
-  receipt/admission/runtime-authority path under warnings-as-errors. All three
-  non-rendering alignment tests passed on both compilers (incomplete/ambiguous-
-  set rejection, installed-receipt tamper rejection, compiled/staged authority
-  equality). Operating-model evidence/profile governance passed on both; the
-  expanded per-domain attestation controls and native-producer host/device
-  negative controls passed locally because they are compiler-independent.
-  A real three-test non-rendering selection proved CTest JSON inventory/JUnit
-  name-set equality. Label/structure governance, receipt installation, and a
-  relocated initialization probe passed with strict readiness false,
-  evidence-generation readiness true, the declared 700-case external floor,
-  and 0/8 domains admitted; dirty release admission failed as required. Per
-  owner direction, no rendering test was run to validate this delta. The full-
-  estate counts below therefore remain the immediately preceding implementation
-  snapshot and are not promoted as evidence for the new alignment code.
-
-- 2026-08-27 non-render oracle delta: the Page-Thorne production profile passed
-  an independent midpoint-quadrature/finite-difference comparison for three
-  spins on GCC 14 and Clang 21. A formerly non-probative symplectic test first
-  exposed an `8.2e-6` canonical-form defect in the explicit non-separable map;
-  after replacement with implicit midpoint/Yoshida composition, all nine
-  symplectic-oracle cases passed on both compilers, including the direct
-  canonical-form, `1e-10` conservation, and independent order-accuracy gates.
-
-- 2026-08-29 physical-model closure delta: back-propagating the Page-Thorne
-  determinant exposed a shared production/oracle defect: the Newtonian
-  `r^-3` prefactor had been multiplied directly by a radial factor that itself
-  tends as `r^-2`, producing a false `r^-5` tail. Production now forms the
-  dimensionless `(2/3) r^2 q(r)` correction, the independent oracle uses the
-  physical `q(r)/r` flux shape, and a separate large-radius slope witness
-  prevents recurrence. The same delta removes the unused kernel tidal
-  approximation, makes the accepted central-ray Hermite segment authoritative
-  for disk events, volume samples, polarisation, and Jacobi stages (including
-  tangent and equal-endpoint-sign cubic plane roots), introduces
-  scale-aware/null-gated adaptive GPU step doubling, and declares every
-  retained emission closure or fail-closed boundary in the 26-capability
-  operating model. On GCC 14 and Clang 21, all 365 core and 121 oracle tests
-  passed together with the named non-render Page-Thorne, integrated-blackbody,
-  and adaptive-integrator storage-buffer probes; all SPIR-V precision rungs plus
-  CUDA and Metal emissions compiled and validated. Rendering test binaries were
-  compiled; no rendering test completed or contributed evidence. Development
-  inventory is 741 Mandatory
-  registrations: 732 governed GoogleTests and nine operational CTests.
-
-- 2026-08-27 spectral/configuration/build-gate delta: 26 production spectral
-  validation/utility cases, nine binned-radiance cases, and 74
-  starfield/corona/turbulence/disk/jet cases passed on GCC 14 and Clang 21. Both
-  warnings-as-errors profiles compiled the application plus core, backend, and
-  rendering test targets; rendering tests were compiled but not executed. The
-  source/live-inventory, release-policy, and artifact-bound build-gate
-  operational controls passed on both profiles. The complete Mandatory runner
-  was intentionally not invoked because it includes owner-only rendering
-  validation, so no build-gate receipt or full-estate pass is claimed.
-  The current 741 development registrations (732 GoogleTests plus nine operational CTests)
-  remain an inventory count, not a full-estate pass claim. Disconnected
-  simulated/self-oracle registrations were removed; independent product-backed
-  replacements, finite-domain controls, and build/install receipt controls were
-  added where they establish a real postcondition. No rendering test was
-  executed for this delta.
-
-- 2026-08-27 release-runtime receipt delta: GCC 14 and Clang 21 compiled the
-  executable-path and SHA-256 authorities plus release initialisation checks
-  under warnings-as-errors. Five NIST/streaming SHA-256 witnesses plus eight
-  authority/path witnesses passed on both compilers; the release-volume
-  fixture accepted an exact 13-product receipt and rejected a same-size resource
-  alteration, a skipped test, and a missing receipt. The source/live-inventory,
-  release-policy, and artifact-bound build-gate operational controls also passed
-  on both profiles, as did the development installed-receipt tamper obstruction.
-  The Mandatory command was inspected to confirm remove, run, then stage order.
-  These were non-render selections; no full-estate pass or release receipt is
-  claimed, and the strict-mode pre-gate branches remain pending the external
-  clean-revision configuration.
-
-- 2026-08-27 qualification-promotion delta: an end-to-end trace found that the
-  external runbooks still built ordinary development artifacts, while admission
-  accepted their receipts and a later release build produced a different
-  product. The sole evidence producer is now clean `qualification` mode: it
-  enforces the release-equivalent configure/product policy, packaged-resource
-  lookup, and Mandatory gate while allowing pending domains and disabling CPack.
-  Every record directly carries and cross-checks the candidate executable, all
-  eight runtime resources, exact seven-test/nine-product gate, gate-generated
-  JUnit/log, independently rerun JUnit/live inventory, alignment receipt,
-  operating-model digest, and source revision. Development and release-mode
-  evidence producers, substituted candidates/products, missing gates, divergent
-  test identities, and dirty qualification are negative controls. GCC 14 and
-  Clang 21 compiled the executable and application authority under
-  warnings-as-errors; the same nine selected non-render governance, alignment,
-  build-policy, build-gate, attestation, producer, and C++ authority tests passed
-  on both. A disposable clean snapshot then configured strict qualification
-  with both compilers, emitted and validated all Slang kernels, and compiled all
-  seven gate-bound executables plus the 13-product volume. That execution
-  exposed a real trust-boundary defect: the application and render test binaries
-  were not beside the candidate, so strict lookup correctly ignored their
-  development resource override. Both suites now run from the exact candidate
-  volume; governance rejects either relocation or a restored override. The nine
-  non-render controls passed again on both qualification builds. Static
-  governance reports 732 governed GoogleTests and 23 dimensions plus 26
-  capability contracts. Development registers 741 Mandatory tests; strict
-  qualification registers 744 because it additionally forbids GoogleTest skips
-  and requires the Vulkan dispatch and P1 burn-in controls. Those three strict
-  runtime controls were compiled but not executed in this no-render pass. Native CI now
-  pins every Action and fetched dependency by commit, verifies the directly
-  downloaded Slang and SwiftShader archives by SHA-256, and preflights Slang,
-  SPIR-V validation, and a dispatchable SwiftShader/MoltenVK device before
-  qualification. Repository governance rejects a regression to movable or
-  unchecked inputs. No rendering test or full Mandatory runner was executed.
-  This local mirror has a synthetic audit revision and provides implementation
-  proof only; the external qualification branches and all eight admissible
-  clean-revision domain attestations remain unexecuted.
-
-- 2026-08-30 spherical Kottler correction: the advertised CPU cosmological
-  sector now distinguishes the exact smaller black-hole and larger
-  cosmological roots, treats pure de Sitter as horizonless for capture, and
-  rejects nonpositive Lambda plus Nariai/super-Nariai public scenes. GCC 14 and
-  Clang 21 each compiled the application and all six GoogleTest executables
-  under warnings-as-errors, including the render executable without executing
-  it; both passed all 368 core tests and the selected config boundaries. Live
-  CTest inventories contain exactly 746 Mandatory registrations (737 governed
-  GoogleTests plus nine operational CTests), and both inventories satisfy the
-  10-criterion, 23-dimension, 28-capability model. Runtime `info capabilities`
-  independently reports all 28 contracts. No rendering test was executed.
-- 2026-08-30 mass-scale trace-domain correction: the CPU and Vulkan paths now
-  share M-scaled step bounds and an escape surface that encloses the observer.
-  The M=1 production defaults remain byte-compatible by construction, while
-  the public 0.1 and 100 mass endpoints plus a 1000M observer are pinned by a
-  non-rendering authority test. The live model now contains 24 dimensions and
-  the source estate contains 738 governed GoogleTests (747 development CTests
-  including the nine operational controls). No rendering test was executed.
-- 2026-08-30 coordinate-unit and metric-parameter correction: public observer
-  distance remains the established coordinate radius rather than being
-  reinterpreted as a multiplier of mass; mass-bearing displays now derive
-  `r/M`, while EXR metadata no longer invents a solar-mass scale. The registry
-  also makes parameter applicability explicit: Minkowski, de Sitter,
-  Morris-Thorne, and Alcubierre require zero mass; non-default throat/topology
-  and warp/bubble fields are accepted only by their owning metric.
-  Identity-aware omitted-value defaults and explicit irrelevant input fail
-  closed at both configuration and typed-session boundaries. A non-render
-  metadata witness brings the current estate to 739 governed source GoogleTests
-  and 748 development CTests including nine operational controls. No rendering
-  test was executed.
-- 2026-08-30 feature-ownership correction: lens, disk-temperature, Doppler,
-  diagnostic-colour, bloom, volumetric, temporal, film, and typed point-star
-  parameters now require their consuming identity or feature at both public
-  configuration and typed-session boundaries. CLI parameter flags select the
-  owner they configure, and `MakeSessionConfig` can no longer be used to bypass
-  schema validation. Shared defaults remove the former app/session bloom and
-  volume drift. GCC 14 and Clang 21 each compile the complete explicit product
-  and six-test-executable topology; the focused pure config/projection controls
-  pass on both. The estate now contains 743 governed source GoogleTests and 752
-  development CTests. During initial witness selection the then-combined
-  `ConfigurationConversionPreservesObserverAndDiskControls` test unexpectedly
-  executed its embedded 8x8 in-memory CPU preview once per compiler; that
-  preview was then split under the explicit rendering name
-  `InMemoryPreviewCompletesWithoutWritingOutput` and was not executed again; the
-  later ownership audit retired that rendering witness in favour of a pure
-  configure-time rejection for an inactive output path.
-- 2026-08-30 exotic natural-scale correction: Morris-Thorne observer and trace
-  bounds now scale with `b0`; Alcubierre uses `max(R,1/sigma)` for scene extent
-  and `min(R,1/sigma)` for the smallest integration feature. The public and
-  typed boundaries require an exterior observer and reject `sigma*R` outside
-  `[0.1,100]`, while the device step schedule no longer hard-codes one
-  coordinate unit. CLI, registry, schema comments, and session diagnostics now
-  identify `sigma` as an inverse wall length. GCC 14 and Clang 21 each compiled
-  the complete explicit product and six-test-executable topology plus every
-  Slang precision/portability output; the three pure scale/config/CLI probes and
-  all 24 registry/Alcubierre mathematical probes pass on both. The estate now
-  contains 744 governed source GoogleTests, 753 development CTests, 24 operating
-  dimensions, and 29 capability contracts. No rendering test was executed.
-- 2026-08-30 cosmological causal-patch correction: de Sitter and spherical
-  Kottler observers now intersect the ordinary natural-scale interval with
-  `r <= 0.99*r_c`. One scale-safe root authority is shared by metric capture,
-  public and typed validation, and CPU trace construction; the fp32 outer
-  boundary rounds inward from `r_c`, and the accepted crossing segment is
-  localised back onto it before the directional sky is sampled. GCC 14 and
-  Clang 21 each compiled the executable and all six test binaries under
-  warnings-as-errors, including the render test executable without executing
-  it. The 11 pure registry/Kottler probes and two pure config/trace-domain
-  probes pass on both. The estate now contains 745 governed source GoogleTests,
-  754 development CTests, 24 operating dimensions, and 29 capability contracts.
-  No rendering test was executed.
-- 2026-08-30 interactive-projection correction: progressive sessions now
-  preserve template-owned tile, thread, parallelism, bloom, and exposure
-  policy instead of replacing it with viewer literals. The same projection
-  preserves requested volumetric state and rejects it without its disk owner,
-  passes `SessionConfigIssue` before initialization, and keeps orbit azimuth in
-  its periodic typed domain. GCC 14 and Clang 21 each compiled the complete
-  product and six-test-executable topology, including the render test
-  executable without executing it; both passed the two pure viewer
-  projection/input controls and the exact nine non-render authority CTests.
-  The estate remains 745 governed source GoogleTests and 754 development
-  CTests. No rendering test was executed.
-- 2026-08-31 typed-boundary and live-backend alignment delta: lower metric,
-  camera, disk, turbulence, RK45, oracle, post-process, film-finish, point-star,
-  pixel-sampling, tracer, and display-buffer APIs now reject malformed requests
-  without clamping or fallback. The indexed point catalogue owns the exact
-  validated snapshot used by CPU and Vulkan; fisheye masking is explicit;
-  absent film overrides inherit their preset; CPU-only scheduling and inactive
-  output controls have typed owners; and Vulkan initialization no longer builds
-  unused CPU scene state or requires the texture asset in point-catalogue mode.
-  CPU and Slang share the 20,000-attempt ceiling, disk-segment/terminal-event
-  precedence, reconstructed turbulence coordinates, and safe captured-endpoint
-  handling. That historical revision's device ABI was dense at 65 consumed
-  float slots with no future-corona padding; the explicit two-sheet topology
-  control now occupies slot 65, making 66. GCC 14 and Clang 21 each compiled the application, all
-  six test executables, and fp32/fp32-comp/fp64 SPIR-V plus CUDA and Metal
-  emissions under contracts and warnings-as-errors; the render executable was
-  compiled but not run. On each compiler, 20 focused core boundary cases, three
-  oracle boundary cases, and eight app/configuration/projection cases passed.
-  Source, label, live-inventory, semantic-policy, alignment, and strict-build
-  governance accept 753 governed source GoogleTests and 762 development CTests,
-  with 24 operating dimensions and 29 capability contracts. No rendering test
-  was executed.
-- 2026-08-31 Boyer-Lindquist integration-domain correction: polarised null and
-  screen initial-data construction now returns absence for invalid, impossible,
-  or ambiguous requests, including an exact linear solve on the Kerr
-  stationary-limit surface. Every polarised RK stage uses the metric's finite
-  off-axis chart predicate and preserves the last valid state on exit. The
-  canonical integrator no longer clamps `theta`, no longer calls every chart
-  exit a horizon hit, and reports an impossible null projection separately
-  instead of accepting the unchanged state. GCC 14 and Clang 21 each pass both
-  new non-render witnesses and all 129 oracle tests. Source, label, semantic
-  policy, repository, and operating-model governance accept 765 governed source
-  GoogleTests, 24 operating dimensions, and 29 capability contracts. No
-  rendering test was executed.
-- 2026-08-31 Cartesian Kerr-Schild event-domain correction: CPU and Slang now
-  share an exact-zero-only spherical branch and a scale-normalised oblate
-  radius; the metric and connection no longer replace low nonzero spin or a
-  singular radius with epsilon geometry. The regular pure-de-Sitter origin has
-  its exact analytic limit, while spherical singularities and the non-unique
-  rotating `r=0` sheet decline. CPU RK4/RK45 and the device full-step/two-half-
-  step controller validate every stage before evaluating the metric and shrink
-  without mutating a rejected state. GCC 14 and Clang 21 each compiled all six
-  test executables, including the render executable without running it, and
-  emitted validated fp32/fp32-comp/fp64 SPIR-V plus CUDA and Metal. On each,
-  all 381 core tests, all 129 oracle tests, the affected live device invariants,
-  and the exact nine non-render authority controls pass. Source, label, live-
-  inventory, semantic-policy, and repository governance accept 772 governed
-  source GoogleTests, 781 development CTests, 784 strict-qualification CTests,
-  24 operating dimensions, and 29 capability contracts. No rendering test was
-  executed.
-- 2026-08-31 cross-platform authority-identity correction: exact-main native
-  build artifacts exposed that automatic Windows CRLF checkout and text output
-  gave one Git revision different operating-model and alignment-receipt byte
-  identities from Linux/macOS. The governed model is now pinned to LF checkout
-  bytes, qualification rejects CRLF or non-LF-terminated model input, and the
-  receipt writer emits and checks explicit UTF-8/LF bytes. Repository and
-  alignment self-tests reject both missing checkout attributes and a simulated
-  CRLF authority. No rendering test was executed.
-- 2026-08-31 celestial tangent-basis correction: the observer/terminal Sachs
-  screen and anisotropic point-catalogue filter now select one deterministic
-  least-aligned coordinate axis on each host/device path, so the propagated
-  ellipse angle cannot cross an implicit basis rotation before sampling. An
-  anisotropic one-star CPU witness distinguishes the former z-projection, and
-  a live Vulkan parity probe pins the mirrored Slang authority on x/y/z least-
-  axis fixtures. GCC 14 and Clang 21 each compiled the complete product, all
-  six test executables, all three SPIR-V precision rungs, and CUDA and Metal
-  emissions under contracts and warnings-as-errors; the render executable was
-  compiled but not run. On each compiler, the exact nine non-render authority
-  controls, all 13 base tests, all 383 core tests, all 129 oracle tests, and
-  both pure beam-geometry parity probes passed. Governance accepts 777 source
-  GoogleTests, 786 development CTests, and 789 strict-qualification CTests over
-  24 operating dimensions and 29 capability contracts. No rendering test was
-  executed.
-- 2026-08-31 CPU metric construction-authority correction: the registry's CPU
-  support declarations and the render session's concrete metric switch were
-  independent authorities, so a future catalogue edit could advertise a family
-  the live tracer did not construct. One fail-closed factory now owns identity,
-  parameter-domain validation, dimensionless spin/charge conversion, and
-  concrete Cartesian family construction; one session adapter feeds both
-  validation and initialisation. A Mandatory non-render witness iterates all
-  nine advertised CPU families, checks the exact constructed parameters, and
-  traces an outward ray to a finite terminal event using a cosmological-patch
-  boundary where required. It also rejects a Minkowski spin and the absent
-  two-sheet Morris-Thorne continuation before construction. GCC 14 and Clang 21
-  each compiled the complete product and all six test executables, with the
-  render executable compiled but not run; all 13 base, 383 core, 129 oracle,
-  three CPU boundary, and 26 configuration-boundary tests passed on each.
-  Governance accepts 786 source GoogleTests and 798 development CTests over 24
-  operating dimensions and 29 capability contracts. No rendering test was
-  executed.
-- 2026-09-01 isotropic Ellis and accepted-throat-event correction: the former
-  areal-radius Cartesian construction and its `1.001*b0` clamp are removed from
-  host and device. The live path now uses the exact conformally flat isotropic
-  chart, retains finite throat and second-sheet integration stages, and finds
-  the first accepted cubic-Hermite contact with the throat by complete
-  derivative-partitioned sextic root isolation, including hidden enter/exit and
-  tangent cases. The spherical areal chart, Cartesian origin, non-Ellis shape,
-  non-finite event, and parameters outside the shared `0.1 <= b0 <= 1000` and
-  `-10 <= Phi0 <= 10` authorities decline. Repository negative controls reject
-  restoration of the fabricated chart or endpoint-only capture. GCC 14 and
-  Clang 21 each compiled the complete product, all six test executables, all
-  three SPIR-V precision rungs, and CUDA/Metal emissions with warnings as
-  errors; `sirius_render_tests` was linked but not run. GCC passed all 401 core
-  cases, 90 application cases, the CPU registry factory trace, and both
-  compute-only Lavapipe parity probes. Clang passed all 13 base, 401 core, 131
-  oracle, and 90 application cases plus the same factory/parity probes. The
-  exact nine non-render integration controls passed on both compilers. Source,
-  label, live-inventory, semantic-policy, and repository governance accept 819
-  governed GoogleTests and 831 development CTests, all Mandatory, across 24
-  operating dimensions and 29 capability contracts. No rendering test was
-  executed; 144 compiled cases remain explicitly labelled `Rendering`.
-- 2026-09-01 two-ended Ellis topology completion: metric construction no longer
-  embeds a lossy one-sheet boolean or treats the regular throat as an intrinsic
-  capture surface. `OneSheetCapture` now publishes a distinct dark `Throat`
-  event. `TwoSheet` crosses the throat, stops at the inversion-matched second
-  cutoff $\rho_-=b_0^2/(4\rho_+)$, records the opposite sheet, and maps the
-  terminal sky direction by $I-2nn^T$; both ends deliberately share one
-  catalogue. CPU RK45 and device rendering consume the typed topology, while
-  the render kernel and compute-only parity probe call one shared Slang
-  two-sheet trajectory authority. GCC 14 and Clang 21 compiled the application,
-  all six test executables, all three SPIR-V precision rungs, and CUDA/Metal
-  emissions with warnings as errors. On each compiler, all 13 base, 404 core,
-  131 oracle, 90 application, and eight CPU-backend cases passed. The focused
-  shared-production Slang trajectory passed on isolated Lavapipe. Governance
-  accepts 825 source GoogleTests and 837 development CTests, all Mandatory.
-  `sirius_render_tests` was linked but never run. An initially broad build
-  target was interrupted after it completed only CTest entries 1--23 (base and
-  operational governance); it had not reached the first Vulkan runtime case or
-  any `Rendering`-labelled test.
-- 2026-09-01 Ellis curvature and live-domain closure: back-propagating the
-  represented isotropic chart through Einstein curvature exposed that its
-  existing evidence proved only coordinate and host/device agreement. A new
-  fourth-order connection-difference oracle independently recovers
-  $R=-2b_0^2/r^4$, the zero angular Ricci eigenvalue, and
-  $R_{\mu\nu}k^\mu k^\nu=-2b_0^2/r^4<0$ at the throat and on both sheets for
-  $b_0\in\{0.25,1,10\}$. The live host and Slang boundaries now admit only the
-  asymptotically normalised $g_{tt}=-1$ Ellis member and reject nonzero lapse,
-  non-Ellis shape, and irrelevant callback data. GCC 14 and Clang 21 compiled
-  the application, all six test executables, all SPIR-V precision rungs, and
-  CUDA/Metal emissions with warnings as errors. On each compiler, all 13 base,
-  406 core, 131 oracle, 90 application, and eight CPU-backend cases passed; the
-  exact nine non-render authority controls also passed on both. Focused
-  compute-only Lavapipe checks passed the metric/connection, device decline,
-  and two-sheet trajectory seams. Governance accepts 828 source GoogleTests
-  and 840 development CTests, all Mandatory, across 24 dimensions and 29
-  capability contracts. `sirius_render_tests` was linked but never executed.
-- 2026-09-01 Alcubierre curvature and live-domain closure: direct CPU metric
-  construction and mutation now share the registry's complete finite parameter
-  predicate, including the resolved `0.1 <= sigma*R <= 100` wall. Device metric,
-  connection, and every RK stage fail closed on the same domain instead of
-  substituting zero connection, and the exact unit-determinant inverse replaces
-  numerical determinant repair. A reusable fourth-order connection-difference
-  oracle independently reconstructs the Einstein tensor and matches the exact
-  negative off-axis Eulerian wall density over both velocity orientations,
-  subluminal and superluminal cases, three scale/profile combinations, and three
-  off-axis directions. GCC 14 and Clang 21 compiled the application, all six
-  test executables, all SPIR-V precision rungs, and CUDA/Metal emissions with
-  warnings as errors. On each compiler, all 13 base, 409 core, 131 oracle, 90
-  application, and eight CPU-backend cases passed; the exact nine non-render
-  authority controls also passed on both. The new compute-only device-decline
-  probe passed on isolated Lavapipe for both compilers. Governance accepts 832
-  source GoogleTests and 841 development CTests across 24 dimensions and 29
-  capability contracts. `sirius_render_tests` was linked but never executed.
-- 2026-09-01 live Kerr--Schild field-equation closure: back-propagating the
-  production Cartesian family against its defining physics exposed that
-  component, derivative, horizon, inverse, and oracle-only Kerr checks did not
-  establish the live vacuum, electrovac, or cosmological equations. A shared
-  fourth-order connection-difference oracle now generically inverts the
-  sampled covariant metric and recovers vacuum Ricci, Einstein--Maxwell, and
-  spherical-Lambda equations. A separately differentiated Kerr--Newman
-  potential satisfies the source-free Maxwell equation outside the ring; its
-  matter side never calls production `H`, and explicit source-strength checks
-  prove that omitted electromagnetic or cosmological terms would fail. Cases
-  cover both spin and charge signs, exact extremality, a horizonless
-  continuation, a second scale, flat/spherical limits, de Sitter, and Kottler.
-  Repository negative controls reject specialised-inverse coupling,
-  production-`H` reuse, oracle-only metric substitution, missing equation
-  branches, or absent operating-model evidence. The first exact control run
-  also caught the runtime capability authority still closed over 29 IDs after
-  the model gained this 30th contract; that compiled set now includes the new
-  identity and the control passes. GCC 14 and Clang 21 compiled the complete
-  product and all six test executables, emitted all SPIR-V precision rungs plus
-  CUDA/Metal, and passed validation for every SPIR-V module; the render test
-  executable was linked but not run. On each compiler, all 13 base, 411 core,
-  131 oracle, 90 application, and eight CPU-backend cases passed, followed by
-  the exact nine non-render authority controls. Governance accepts 834 source
-  GoogleTests and 843 development CTests, all Mandatory, across 24 dimensions
-  and 30 capability contracts. No rendering test was executed.
-- GCC 14 strict required-Vulkan profile: the pre-alignment snapshot passed the complete
-  907/907 estate on the Radeon 780M through Dozen in 210.36 seconds. A separate
-  required-only run passed 697/697 on the Radeon in 281.34 seconds and the same
-  697/697 on isolated Lavapipe in 119.48 seconds. The two physical JUnit files
-  contain exactly 907 and 697 cases respectively, each with zero failures, zero
-  errors, and zero skips; both physical runs include the required dispatch and
-  repeated CPU/Vulkan P1 burn-in. Their timings are validation records, not
-  performance comparisons; the later full run reused warmed driver state.
-- GCC 14 Release portable profile (pre-alignment snapshot): 904/904 passed through an explicitly isolated
-  Lavapipe ICD; 694 Mandatory, 160 Operational, 47 Performance, and 26 Stability
-  tests passed. The concurrent run completed in approximately 39 seconds; that
-  contended validation timing is not a performance result.
-- Clang 21 Release with warnings as errors (pre-alignment snapshot): 904/904 passed through the same
-  isolated Lavapipe route; 694 Mandatory, 160 Operational, 47 Performance, and
-  26 Stability tests passed. Its concurrent run likewise completed in
-  approximately 39 seconds and is not a performance result.
-- GCC 14 ASan/UBSan/LSan (pre-alignment snapshot): the complete 904-test estate passed in 1578.53
-  seconds with no Sirius defect and the one
-  documented, printed external Vulkan-loader/driver suppression. Vulkan tests
-  were pinned to Lavapipe so the physical Radeon render remained isolated.
-- Historical physical-worktree P3/P5 preflight: the exact 1920x1080 scene completed
-  in 1575.7 seconds (SHA-256 `72d079f7dfa1f637e15e4773114fa91ed1256d093d4d96f4fa117f82824eaa8c`)
-  and the exact 5616x4096 scene completed in 17105.1 seconds (SHA-256
-  `094ae5b1379d39d9c6dfdddc7199f9d14d09f50c674505decd0bb364b0d768e6`).
-  Both decoded at the exact dimensions and passed the sparse dynamic-range,
-  resolved-source, row-distribution, and two-dimensional-structure gate. They
-  remain non-admissible until reproduced by the clean-revision runbook.
-- Historical native-viewer worktree preflight: a real XWayland/GLFW window used the
-  Radeon Vulkan backend, published a 256x192 progressive frame, and recorded
-  host-delivered keyboard press/release, pointer drag, scroll, and Escape
-  callbacks. The transcript and viewer log were hashed, but remain
-  non-admissible until reproduced by the clean-revision viewer runbook.
-- Slang `trace.slang`: SPIR-V validated for fp32, compensated fp32, and fp64;
-  CUDA and Metal emission gates pass.
-- Install relocation, hostile-working-directory initialisation, and resource
-  failure injection passed in the estates above. A viewer-disabled GCC build
-  compiled and installed, reported the capability absent, remained CPU/Vulkan
-  ready, and rejected `view`. Reduced real operator runs produced 2/2 smoke and
-  13/13 demonstration artefacts. The installed operating model reports all ten
-  P/E criteria, 24 review dimensions, and 30 capability contracts. The final
-  clean-revision physical record must bind the selected 780M/Dozen identity,
-  three precision rungs, and exact decoded 1920x1080 and 5616x4096 P3/P5
-  outputs under the 2048 MiB cap; the next native viewer record must bind a
-  physical-Radeon progressive Vulkan frame and hashed WSLg/XWayland callback
-  evidence. Attestation negative controls, shell syntax, JSON
-  governance, label freshness, formatting, and diff whitespace were checked
-  separately.
-
-## 8. Scope note
+## 6. Scope note
 
 The system in scope is the complete Sirius repository and its build, install,
 CLI, operator-script, CPU, Vulkan, viewer, physics, and output surfaces. External

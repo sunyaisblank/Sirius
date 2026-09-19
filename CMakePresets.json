@@ -119,7 +119,7 @@
             "output": { "outputOnFailure": true },
             "environment": {
                 "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1:strict_string_checks=1",
-                "LSAN_OPTIONS": "suppressions=${sourceDir}/sanitizers/lsan-vulkan.supp:print_suppressions=1",
+                "LSAN_OPTIONS": "suppressions=${sourceDir}/tests/sanitizers/lsan-vulkan.supp:print_suppressions=1",
                 "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
             },
             "execution": { "stopOnFailure": true }

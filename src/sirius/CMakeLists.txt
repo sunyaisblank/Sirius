@@ -1,6 +1,4 @@
-# New C++26 tree. The legacy include sets CMAKE_CXX_STANDARD 17 at root
-# scope; clear it here so the only standard flag on new targets is the one
-# sirius_configure_target adds.
+# First-party layers. sirius_configure_target owns the C++ standard policy.
 unset(CMAKE_CXX_STANDARD)
 unset(CMAKE_CXX_STANDARD_REQUIRED)
 
@@ -22,10 +20,7 @@ endif()
 
 sirius_configure_target(sirius_base)
 
-# Modules land one at a time during the port; each owns its CMakeLists so
-# parallel port workstreams never share a file.
+# Every layer is required and owns its sources in its own CMakeLists.txt.
 foreach(module core oracle backend render app)
-    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${module}/CMakeLists.txt")
-        add_subdirectory(${module})
-    endif()
+    add_subdirectory(${module})
 endforeach()

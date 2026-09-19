@@ -139,20 +139,35 @@ ready only after all eight revision-bound domains have been admitted.
 
 Configuration layers in a fixed order: struct defaults, then a JSON config file, then `SIRIUS_*` environment variables, then command-line flags; later layers win, every parameter is validated at startup against the ranges the physics supports, and invalid configuration stops the run rather than being clamped. `sirius render --help` lists the full flag set.
 
-`render_test.sh` and `render_demo.sh` select only the exact preset binary (or an explicit `SIRIUS_BINARY`), propagate renderer failures, and require every declared output to exist and be non-empty. They never search for an arbitrary stale build.
+`python3 scripts/render.py` lists example scenes without rendering. Select one
+with `--scene kerr`; add `--dry-run` to inspect its command first. The runner
+uses the exact `--preset` binary (or `--binary`), writes images under
+`renders/<run>/`, and keeps logs and command records under `out/render/<run>/`.
+See [the development workflow](docs/DEVELOPMENT.md) for workload selection,
+targeted builds, validation, and cleanup.
 
 The DNGR-technique features are explicit flags, each default-off so the pinned reference render is stable: `--beams` propagates two full-Riemann Jacobi vectors and derives the oriented beam ellipse; `--starfield point` replaces the background texture with a spatially indexed 100,000-star point catalogue filtered through both ellipse axes, using a display-calibrated relative-flux zero point so the catalogue survives PNG quantisation; `--volumetric` selects the declared stationary, vertically isothermal Gaussian grey atmosphere, midpoint-samples every accepted integration segment without using endpoint membership as an intersection proxy, and preserves every finite positive optically thin layer; `--turbulence` adds explicitly procedural density modulation; `--doppler-beaming off` substitutes the locally non-rotating ZAMO frequency at the actual disk latitude as a nonphysical diagnostic while retaining gravitational and frame-dragging transfer; `--color-mode Polarisation` selects transported CPU Stokes output; and a camera velocity applies special-relativistic aberration across all lens models. Ellis two-sheet traversal is represented with a symmetric catalogue boundary on both asymptotic ends. Distinct second-universe content, corona, narrowband lines, temporal motion blur, and every incomplete polarisation combination retain named fail-closed boundaries.
 
 ## Testing
 
 ```bash
-ctest --test-dir bin/linux-gcc -j"$(nproc)"          # everything
-ctest --test-dir bin/linux-gcc -L Mandatory          # the build gate
+# Inspect the selection, then run the cases affected by a change
+ctest --test-dir bin/linux-gcc -N -R '^CameraFilmDifferential\.'
+ctest --test-dir bin/linux-gcc --output-on-failure --no-tests=error \
+  -R '^CameraFilmDifferential\.'
 
-# Instrumented mandatory gate
+# Complete receipt-producing gate, when full validation is required
+cmake --build --preset linux-gcc --target RunMandatoryTests
+
+# Instrumented complete gate
 cmake --preset linux-gcc-sanitize
 cmake --build --preset linux-gcc-sanitize -j"$(nproc)"
 ```
+
+[The test harness guide](tests/README.md) distinguishes source checks, focused
+tests, complete local runs, and qualification. Ordinary builds still run the
+Mandatory gate; explicit development targets let an edit be checked without
+repeating unrelated renders.
 
 Labels carry gating semantics: Mandatory and Operational suites fail every normal build by default; Correctness suites cover additional feature behaviour; Performance suites measure without gating. New suites without an explicit policy are a hard generator error. Parameterised/typed GoogleTests are also rejected until the generator can prove their exact discovered names, preventing tests from escaping the Mandatory label. `tests/operating_model.json` maps all ten required P1–P6/E1–E4 acceptance criteria, 24 operating dimensions, and 30 explicit capability contracts to Mandatory evidence. Seven criteria are source/build gated; P3, P5, and E3 remain explicitly attestation-required because present software evidence cannot prove physical IMAX/780M operation. The build rejects a missing state, renamed witness, de-gated claim, or incomplete revision-bound release receipt; the same authorities are installed and available through `info capabilities` and `info readiness`.
 
@@ -163,7 +178,11 @@ cannot be relabelled as the complete estate.
 
 ## Documentation
 
-`docs/SPECIFICATION.md` is the target, while `docs/ADVERSARIAL_REVIEW.md` is the current evidence-based status and limitation ledger. `docs/ENGAGEMENT_REPORT.md` is retained as historical closure evidence and is not current ground truth.
+`docs/SPECIFICATION.md` defines the target, `docs/ARCHITECTURE.md` describes the
+implementation, and `docs/ADVERSARIAL_REVIEW.md` records evidence boundaries and
+limitations. `docs/SOURCE_CLOSEOUT.md` records the last complete local renderer
+validation. Retired engagement reports and detailed session logs remain in Git
+history.
 
 ## References
 

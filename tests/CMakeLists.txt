@@ -1,6 +1,6 @@
-# New-tree test estate. One executable per subject area; names and labels
-# per docs/STYLE.md section 10. Labels stay hand-set only until the label
-# generator learns the new tree (specification programme 2).
+# One executable per subject area; names follow docs/STYLE.md section 10.
+# GoogleTest labels are generated from the policy in generate-ctest-labels.py;
+# operational CTest registrations and their labels live here.
 
 include(GoogleTest)
 
@@ -35,17 +35,14 @@ gtest_discover_tests(
     PROPERTIES
         LABELS "Correctness")
 
-# Module suites land with their modules; same one-owner rule as src/sirius.
-# Each module directory also receives the generated label file as a ctest
+# Each module directory receives the generated label file as a CTest
 # include processed after its discovery include: CTest scopes test properties
 # per directory, so the attachment happens per module, guarded by if(TEST).
 foreach(module core oracle backend render app)
-    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${module}/CMakeLists.txt")
-        add_subdirectory(${module})
-        set_property(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${module}" APPEND
-            PROPERTY TEST_INCLUDE_FILES
-                "${CMAKE_CURRENT_SOURCE_DIR}/labels/CTestLabels.cmake")
-    endif()
+    add_subdirectory(${module})
+    set_property(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${module}" APPEND
+        PROPERTY TEST_INCLUDE_FILES
+            "${CMAKE_CURRENT_SOURCE_DIR}/labels/CTestLabels.cmake")
 endforeach()
 
 # The base suite lives in this directory; label it here too.
@@ -170,25 +167,17 @@ set_tests_properties(
         RUN_SERIAL TRUE
         TIMEOUT 600)
 
-# Operator scripts are part of the callable system surface. Their render
-# commands must not be masked by a successful logging pipeline, and an exit-zero
-# renderer which emits no artefact must not count as success.
-if(UNIX)
-    find_program(SIRIUS_BASH_EXECUTABLE bash REQUIRED)
-    configure_file(
-        operational/operator_script_status.cmake.in
-        "${CMAKE_CURRENT_BINARY_DIR}/operator_script_status.cmake"
-        @ONLY)
-    add_test(
-        NAME OperationalScripts.RenderFailuresAndMissingOutputsPropagate
-        COMMAND "${CMAKE_COMMAND}"
-            -P "${CMAKE_CURRENT_BINARY_DIR}/operator_script_status.cmake")
-    set_tests_properties(
-        OperationalScripts.RenderFailuresAndMissingOutputsPropagate
-        PROPERTIES
-            LABELS "Mandatory;Operational"
-            TIMEOUT 30)
-endif()
+# Real stub processes exercise exit status, image ownership and logs on every
+# host. This check does not invoke Sirius or require a configured renderer.
+add_test(
+    NAME OperationalScripts.RenderFailuresAndMissingOutputsPropagate
+    COMMAND "${Python3_EXECUTABLE}" -B
+        "${CMAKE_CURRENT_SOURCE_DIR}/operational/render_workflow_test.py")
+set_tests_properties(
+    OperationalScripts.RenderFailuresAndMissingOutputsPropagate
+    PROPERTIES
+        LABELS "Mandatory;Operational"
+        TIMEOUT 30)
 
 # The required Vulkan runtime profile is intentionally opt-in for portable
 # source builds and mandatory for the Linux operational CI profile. Unlike

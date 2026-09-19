@@ -62,7 +62,7 @@ Errors classify by recoverability, and each class has exactly one channel.
 
 ## 5. Names
 
-- Files: `snake_case.h` / `snake_case.cpp`; kernels `snake_case.slang`; a test file is `<subject>_test.cpp`. The codename scheme (`PHMT200A.h`) is retired; `docs/ARCHITECTURE.md` holds the mapping.
+- Files: `snake_case.h` / `snake_case.cpp`; kernels `snake_case.slang`; a test file is `<subject>_test.cpp`. The codename scheme (`PHMT200A.h`) is retired; its mapping remains in Git at `9e20150:docs/ARCHITECTURE.md`.
 - Types and functions: `PascalCase`. Cheap accessors may be `snake_case` per Google practice.
 - Variables and public aggregate fields `snake_case`; private and protected data
   members `snake_case_`; compile-time constants `kPascalCase`.

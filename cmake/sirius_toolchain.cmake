@@ -1,4 +1,4 @@
-# Toolchain gate and C++26 target configuration for the new tree.
+# Toolchain gate and C++26 target configuration for first-party code.
 #
 # CMake 3.28 maps cxx_std_26 for Clang but not for GCC 14, so the standard
 # flag is passed explicitly and identically on both (measured 2026-07-17,
@@ -40,7 +40,7 @@ else()
         "unrecognised compiler '${CMAKE_CXX_COMPILER_ID}'")
 endif()
 
-option(SIRIUS_WERROR "Treat warnings as errors in the new tree" ON)
+option(SIRIUS_WERROR "Treat first-party warnings as errors" ON)
 set(SIRIUS_SANITIZERS "none" CACHE STRING
     "First-party runtime instrumentation: none or address-undefined")
 set_property(CACHE SIRIUS_SANITIZERS PROPERTY STRINGS none address-undefined)
