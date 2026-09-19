@@ -46,6 +46,7 @@ SUITE_LABELS = {
     "KerrInfinity": MANDATORY,
     "PointSourceResponseTest": MANDATORY,
     "PointSourceDetector": MANDATORY,
+    "RayWorkQueue": MANDATORY,
     "RetainedCameraProgram": MANDATORY,
     "RetainedArithmetic": MANDATORY,
     "RetainedComputeTest": MANDATORY,

@@ -352,6 +352,50 @@ TEST(RenderSessionProbe, CancellationInterruptsAnActivePrivateRayBeforePublicati
     EXPECT_EQ(session.GetTileScheduler().GetCompletedCount(), 0);
 }
 
+TEST(RenderSessionProbe, OnePointRegionFeedsConcurrentDeviceProbesAndCancelsPrivately) {
+    struct BlockingExecutor final : sirius::backend::TraceStepExecutor {
+        std::promise<void> entered, resume;
+        std::shared_future<void> resumed = resume.get_future().share();
+        std::atomic<int> steps{0}, rejected{0};
+        std::optional<sirius::core::CameraLaunch> Launch(
+            sirius::core::IMetric& metric, double spin,
+            const sirius::core::CameraRay& camera) override {
+            return sirius::core::LaunchCameraRay(metric, spin, camera);
+        }
+        bool Step(sirius::core::Lightray& ray, sirius::core::IMetric& metric,
+                  const sirius::core::IntegratorConfig& config,
+                  sirius::core::Rk45CoupledState& coupled,
+                  sirius::core::Rk45CoupledComparison& comparison) override {
+            if (++steps == 2) entered.set_value();
+            resumed.wait();
+            return sirius::core::Geodesic::IntegrateStepRk45(ray, &metric, config, &coupled,
+                                                             &comparison);
+        }
+        void RejectLastInterval() override { ++rejected; }
+    } executor;
+    auto entered = executor.entered.get_future();
+    SessionConfig config;
+    sirius::test::ConfigureMovingKerrDetector(config);
+    config.width = config.height = 4;
+    config.samples_per_pixel = 1;
+    config.write_output = false;
+    config.backend = sirius::render::RenderBackend::Vulkan;
+    RenderSession session(executor, 2, sirius::render::kPointDetectorBlockEdge);
+    const auto configured = session.Configure(config);
+    ASSERT_TRUE(configured) << configured.error().Description();
+    ASSERT_TRUE(session.Start());
+    const bool active = entered.wait_for(std::chrono::seconds(5)) == std::future_status::ready;
+    const bool cancelled = session.Cancel();
+    executor.resume.set_value();
+    session.WaitForCompletion();
+    EXPECT_TRUE(active) << "one detector region did not submit concurrent independent rays";
+    EXPECT_TRUE(cancelled);
+    EXPECT_EQ(session.GetState(), SessionState::Cancelled);
+    EXPECT_EQ(executor.steps.load(), 2);
+    EXPECT_EQ(executor.rejected.load(), 2);
+    EXPECT_EQ(session.GetTileScheduler().GetCompletedCount(), 0);
+}
+
 TEST(RenderSessionProbe, CompletionCallbackCanReenterLifecycleWithoutDeadlock) {
     SessionConfig config = ProbeConfig("unused.ppm");
     config.width = 8;

@@ -59,6 +59,125 @@ std::array<double, 3> Expected(const core::StarEntry& star, DetectorCoordinate z
     return result;
 }
 
+PointDetectorProbeBatchSampler BulkSampler(const PointDetectorSampler& sample) {
+    return [sample](std::span<const DetectorCoordinate> coordinates) {
+        PointDetectorProbeBatch values;
+        values.reserve(coordinates.size());
+        for (const auto& coordinate : coordinates) values.push_back(sample(coordinate));
+        return values;
+    };
+}
+
+TEST(PointSourceDetector, BulkProbesPreserveScalarRefinementAndRadiance) {
+    core::StarfieldSpatialIndex catalogue({Star(.2 * kScale, .3 * kScale)});
+    for (int mode = 0; mode < 3; ++mode) {
+        SCOPED_TRACE(mode);
+        const PointDetectorSampler sample = [mode](DetectorCoordinate z) {
+            auto point = mode == 1 ? Gnomonic(kScale * (z[0] * z[0] - .4), kScale * z[1],
+                                              2 * kScale * z[0], kScale)
+                                   : Gnomonic(kScale * z[0], kScale * z[1], kScale, kScale);
+            point.visible = mode != 2;
+            point.camera_over_source_frequency = std::exp(.02 * z[0]);
+            point.transmission = .5 + .01 * z[1];
+            point.inner_attempts = 7;
+            point.tail_attempts = 3;
+            return point;
+        };
+        const auto scalar = EvaluatePointDetector(catalogue, 1, sample, {});
+        const auto bulk = EvaluatePointDetector(catalogue, 1, sample, {}, {}, BulkSampler(sample));
+        ASSERT_TRUE(scalar);
+        ASSERT_TRUE(bulk) << static_cast<int>(bulk.error().reason);
+        EXPECT_EQ(bulk->rgb, scalar->rgb);
+        EXPECT_EQ(bulk->estimated_error, scalar->estimated_error);
+        EXPECT_EQ(bulk->statistics.probes, scalar->statistics.probes);
+        EXPECT_EQ(bulk->statistics.probe_requests, scalar->statistics.probe_requests);
+        EXPECT_EQ(bulk->statistics.cells, scalar->statistics.cells);
+        EXPECT_EQ(bulk->statistics.roots, scalar->statistics.roots);
+        EXPECT_EQ(bulk->statistics.newton_steps, scalar->statistics.newton_steps);
+        EXPECT_EQ(bulk->statistics.inner_attempts, scalar->statistics.inner_attempts);
+        EXPECT_EQ(bulk->statistics.tail_attempts, scalar->statistics.tail_attempts);
+        EXPECT_LT(bulk->statistics.probe_batches, scalar->statistics.probe_batches);
+        EXPECT_EQ(bulk->statistics.maximum_probe_batch, kPointDetectorProbeBatchSize);
+    }
+}
+
+TEST(PointSourceDetector, BulkProbesPreserveSharedAndOriginalCoordinateTransforms) {
+    core::StarfieldSpatialIndex catalogue(
+        {Star(.2 * kScale, .3 * kScale), Star(-.7 * kScale, -.4 * kScale)});
+    const std::array<PointDetectorFootprint, 2> footprints{
+        {{{.3, -.2}, {{{.7, .12}, {-.2, 1.1}}}}, {{-.5, .1}, {{{.8, -.3}, {.2, .9}}}}}};
+    const PointDetectorSampler sample = [](DetectorCoordinate q) {
+        auto point = Gnomonic(kScale * q[0], kScale * q[1], kScale, kScale);
+        point.camera_over_source_frequency = std::exp(.02 * q[0]);
+        point.transmission = .5 + .01 * q[1];
+        return point;
+    };
+    // Two footprints exercise the common chart; one exercises the original
+    // rotated/sheared Gaussian leaf used after splitting failed discovery.
+    for (std::size_t count : {1u, 2u}) {
+        const auto scalar = EvaluatePointDetectorGroup(
+            catalogue, 1, std::span(footprints).first(count), sample, {});
+        const auto bulk = EvaluatePointDetectorGroup(
+            catalogue, 1, std::span(footprints).first(count), sample, {}, {}, BulkSampler(sample));
+        ASSERT_TRUE(scalar);
+        ASSERT_TRUE(bulk);
+        EXPECT_EQ(bulk->statistics.probes, scalar->statistics.probes);
+        EXPECT_LT(bulk->statistics.probe_batches, scalar->statistics.probe_batches);
+        for (std::size_t i = 0; i < count; ++i) {
+            EXPECT_EQ(bulk->samples[i].rgb, scalar->samples[i].rgb);
+            EXPECT_EQ(bulk->samples[i].estimated_error, scalar->samples[i].estimated_error);
+        }
+    }
+}
+
+TEST(PointSourceDetector, BulkFailureAndCancellationNeverPublishPartialRadiance) {
+    core::StarfieldSpatialIndex catalogue({Star(0, 0)});
+    const PointDetectorSampler sample = [](DetectorCoordinate) { return PointDetectorProbe{}; };
+    for (int mode = 0; mode < 4; ++mode) {
+        bool cancelled = false;
+        const PointDetectorProbeBatchSampler batch =
+            [&](std::span<const DetectorCoordinate> coordinates) {
+                PointDetectorProbeBatch values(coordinates.size());
+                for (auto& value : values) {
+                    value->inner_attempts = 7;
+                    value->tail_attempts = 3;
+                }
+                if (mode == 0) values.pop_back();
+                if (mode == 1) values[4] = std::unexpected(PointDetectorFailure::TraceFailed);
+                if (mode == 2) cancelled = true;
+                if (mode == 3) {
+                    values[4]->visible = true;
+                    values[4]->direction = {0, 0, 0};
+                }
+                return values;
+            };
+        const auto result =
+            EvaluatePointDetector(catalogue, 1, sample, [&] { return cancelled; }, {}, batch);
+        ASSERT_FALSE(result);
+        constexpr std::array reasons{
+            PointDetectorFailure::InvalidInput, PointDetectorFailure::TraceFailed,
+            PointDetectorFailure::Cancelled, PointDetectorFailure::Arithmetic};
+        EXPECT_EQ(result.error().reason, reasons[mode]);
+        EXPECT_EQ(result.error().statistics.probes, kPointDetectorProbeBatchSize);
+        if (mode == 1) {
+            EXPECT_EQ(result.error().statistics.inner_attempts, 7u * 12);
+            EXPECT_EQ(result.error().statistics.tail_attempts, 3u * 12);
+        }
+    }
+    std::size_t calls = 0;
+    auto policy = PointDetectorPolicy{};
+    policy.maximum_probes = kPointDetectorProbeBatchSize - 1;
+    const auto limited = EvaluatePointDetector(catalogue, 1, sample, {}, policy,
+                                               [&](std::span<const DetectorCoordinate>) {
+                                                   ++calls;
+                                                   return PointDetectorProbeBatch{};
+                                               });
+    ASSERT_FALSE(limited);
+    EXPECT_EQ(limited.error().reason, PointDetectorFailure::WorkLimit);
+    EXPECT_EQ(calls, 0u);
+    EXPECT_EQ(limited.error().statistics.probes, 0u);
+}
+
 TEST(PointSourceDetector, SharedDiscoveryPreservesDistinctGaussianShapesAndTransfer) {
     core::StarfieldSpatialIndex catalogue(
         {Star(.1 * kScale, .2 * kScale), Star(-1.7 * kScale, -.4 * kScale),

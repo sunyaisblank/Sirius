@@ -1327,6 +1327,9 @@ set_tests_properties(
     MorrisThorneTracerTest.CentralRayTerminatesAtExplicitThroatBoundary
     MorrisThorneTracerTest.DeflectionFallsQuadraticallyWithImpactParameter
     MorrisThorneTracerTest.EdgeRayEscapes
+    PointSourceDetector.BulkFailureAndCancellationNeverPublishPartialRadiance
+    PointSourceDetector.BulkProbesPreserveScalarRefinementAndRadiance
+    PointSourceDetector.BulkProbesPreserveSharedAndOriginalCoordinateTransforms
     PointSourceDetector.CacheRetainsClosePhysicalCoordinatesWithBoundedLookupWork
     PointSourceDetector.DisconnectedVisibilityIslandAndStripeUseActualImageVisibility
     PointSourceDetector.ExhaustionCancellationAndFailedTracesHaveNoPartialRadiance
@@ -1352,6 +1355,10 @@ set_tests_properties(
     RayBundleTest.KretschmannMatchesOracleKerrOffEquatorial
     RayBundleTest.KretschmannMatchesOracleSchwarzschild
     RayBundleTest.MagnificationComesOnlyFromJacobiMap
+    RayWorkQueue.ConcurrentCallersKeepTheirOwnResults
+    RayWorkQueue.IndependentRaysOverlapAndReturnInRequestOrder
+    RayWorkQueue.RejectsUnboundedWorkBeforeCallingTracer
+    RayWorkQueue.WorkerFailureDrainsBatchAndQueueRemainsUsable
     ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p
     ShadowBoundary.SchwarzschildCriticalImpactParameterMatchesAnalyticAt1080p
     SpectralEmissionTest.BlackbodyColourDirection
@@ -1461,6 +1468,7 @@ set_tests_properties(
     RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr
     RenderSessionProbe.LaterGoodCameraSampleCannotEraseCpuNumericalFailure
     RenderSessionProbe.NumericalRayFailureKeepsCpuTilesPrivateAndPreventsOutput
+    RenderSessionProbe.OnePointRegionFeedsConcurrentDeviceProbesAndCancelsPrivately
     RenderSessionProbe.PhysicalPointBlocksPreservePartialEdgesAndNonSquareSamples
     RenderSessionProbe.PhysicalPointDetectorCompletesAMovingThinLensKerrFrame
     RenderSessionProbe.PointStarfieldRejectsValuesItsGeneratorWouldClamp

@@ -82,21 +82,39 @@ only completed region RGB. Sky-only point scenes need no additional centre ray;
 scenes with disk or volume emission retain their foreground traces. Device jobs
 own whole regions so separate pixel workers do not repeat their discovery.
 
+Independent detector cell probes now execute through a bounded ray queue. Each
+worker owns its tracer; root refinements and foreground rays use that same pool,
+so coordinator threads do not add competing trace work. Probe coordinates,
+cache identity and result order remain unchanged. Retained-device capacity now
+accounts for up to 13 independent probes within each region. This provides work
+to batch even when an image contains only one region; the existing device memory
+and dispatch limits still apply.
+
 A 32×32 region of the moving ThinLens Kerr scene used 607 shared probes for 1,024
-footprints. Its two nonzero reference pixels agreed with separately evaluated
-original footprints to maximum relative RGB difference `1.5695371152294026e-10`.
-That check took 134.57 seconds including the independent scalar evaluations.
-The complete 32×16, one-sample, 100,000-star serial/two-worker frame comparison
-passed in 107.65 seconds with identical linear pixels; the former 4×2 comparison
-at `e1755eb` took 116.46 seconds. This is increased image resolution, not a timing
-comparison of identical workloads. The analytic 1,024-footprint check used 792
-probes and matched its independent Gaussian flux oracle within 2e-6 relative.
-Twenty-two focused detector/session tests passed across the implementation
-steps, including bounded fallback, disconnected visibility, folds, private
-failure, cancellation, image edges, three-sample accumulation and untouched
-linear EXR output. These are local source/CPU checks. The complete 192×128
-three-sample workload and current device throughput remain unmeasured; GPU
-probe scheduling and exact-domain qualification remain separate work.
+footprints, collected in 87 sampler calls of at most 13 probes. Its inner and
+infinity-tail work remained 137,580 and 44,454 attempts. Its two nonzero reference
+pixels agreed with separately evaluated original footprints to maximum relative
+RGB difference `1.5695371152294026e-10`, unchanged from `889e11f`. That physical
+check took 141.24 seconds including the independent scalar evaluations. It
+measures available probe concurrency, not GPU dispatch throughput. The analytic
+1,024-footprint check uses 792 probes and matches its independent Gaussian flux
+oracle within 2e-6 relative.
+
+The final 32×16, one-sample, 100,000-star serial/two-worker comparison passed in
+106.75 seconds with identical linear pixels. The 33×1 edge/three-sample comparison
+also retained identical pixels in 35.00 seconds. Thirty-one distinct focused
+detector, queue and session checks passed, with the 11 affected session/queue
+cases rerun after routing sequential traces through the same worker budget.
+The explicit Linux GCC render-test target built with warnings as errors;
+format, source ownership and the 1,055-case live CTest inventory checks passed.
+
+These checks cover bulk/scalar radiance and refinement agreement, original
+Gaussian transforms, folds, disconnected visibility, work limits, typed failures,
+concurrent queue callers, request ordering and queue reuse after failure. A
+mocked device executor confirms that one region supplies concurrent rays and
+that cancellation withholds its tile. These are local source/CPU checks. The
+complete 192×128 three-sample workload and current device throughput remain
+unmeasured; exact-domain qualification remains separate work.
 
 No external domain was admitted in the closeout build (0/8). Physical Radeon,
 WSL2/Dozen, native Windows/macOS build and runtime, native viewer input and the

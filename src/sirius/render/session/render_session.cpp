@@ -70,6 +70,7 @@ core::MetricConstructionParameters MetricConstructionParametersFor(const Session
 RenderSession::~RenderSession() {
     (void)Cancel();
     WaitForCompletion();
+    probe_workers_.reset();
 }
 
 base::Expected<void> RenderSession::Configure(const SessionConfig& config) {
@@ -799,9 +800,24 @@ base::Expected<void> RenderSession::Initialise() {
               << SessionSceneEvidenceJson(config_, star_index_ ? star_index_->Size() : 0)
               << std::endl;
 
-    // GPU acceleration removed: the legacy OptiX backend init and starfield
-    // upload lived here. OptiX is retired; the Vulkan compute path arrives
-    // through sirius::backend::device later. The CPU path renders directly.
+    // Detector coordinators retain sequential root refinement. Independent
+    // cell probes use separate tracers so one region can occupy several CPU
+    // cores or provide a batch to the retained device executor.
+    if (num_threads_ > 1 && UsesPhysicalPointDetector() &&
+        (config_.backend == RenderBackend::Cpu || external_step_executor_)) {
+        probe_tracers_.reserve(num_threads_);
+        for (int i = 0; i < num_threads_; ++i) {
+            auto tracer = std::make_unique<GeodesicTracer>(metric_.get(), tracer_config);
+            tracer->SetStepExecutor(external_step_executor_);
+            tracer->SetCancellationCallback([this] { return IsStopping(); });
+            probe_tracers_.push_back(std::move(tracer));
+        }
+        probe_workers_ =
+            std::make_unique<RayWorkQueue>(static_cast<std::size_t>(num_threads_),
+                                           [this](std::size_t worker, const core::CameraRay& ray) {
+                                               return probe_tracers_[worker]->TracePointSource(ray);
+                                           });
+    }
 
     if (progress_.GetCancellationToken().IsCancelled()) {
         fsm_.Process(SessionEvent::Cancel);
@@ -1128,6 +1144,7 @@ void RenderSession::OnSessionEnd(SessionState state) {
         }
     }
     worker_threads_.clear();
+    probe_workers_.reset();
 }
 
 // =============================================================================

@@ -52,6 +52,21 @@ Workers retain only completed region RGB, independent of image size and SPP;
 retained-device work items own whole regions to avoid duplicated discovery.
 This remains a finite adaptive estimator, not a global image-count certificate.
 
+Independent cell probes can be submitted together, up to 13 original camera
+coordinates per call. Exact cache lookup precedes submission, and results enter
+the estimator in request order. Image-root iterations retain their sequential
+dependencies. `session/ray_work_queue` owns a fixed worker pool and bounded
+pending queue; each worker has an exclusive tracer. Sequential roots and
+foreground point-scene rays use the same workers, bounding active trace work
+by the configured worker count. Detector coordinators wait
+for their own batch without holding the queue lock. Failed batches expose no
+partial result, and session cancellation reaches both running and queued traces.
+Parallel CPU sessions and retained-device sessions share this scheduling seam.
+Device capacity accounts for independent probes within a region, while the
+existing residency and dispatch governors retain their limits. A one-thread CPU
+session keeps scalar execution. Probe and batch counts distinguish physical work
+from opportunities to execute it concurrently.
+
 Detector probes and foreground centre rays use `GeodesicTracer::TracePointSource`.
 Sky-only point-source scenes need no additional centre geodesic: their radiance
 is entirely the sum of traced image contributions. An accepted outward

@@ -27,6 +27,7 @@ add_library(sirius_render STATIC
     session/render_session.cpp
     session/pixel_shading.cpp
     session/point_source_detector.cpp
+    session/ray_work_queue.cpp
 
     # Vendored deflate codec for tinyexr.
     "${SIRIUS_RENDER_MINIZ}"

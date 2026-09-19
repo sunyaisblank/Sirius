@@ -147,7 +147,8 @@ std::expected<PointDetectorProbe, PointDetectorFailure> MeasurePointDetector(
 std::expected<PointDetectorBatchResult, PointDetectorError> SharedPointSources(
     const core::ICamera& camera, GeodesicTracer& tracer,
     const core::StarfieldSpatialIndex& catalogue, double brightness, double sigma, int x, int y,
-    int width, int height, const CameraSample& sample, const std::function<bool()>& cancelled) {
+    int width, int height, const CameraSample& sample, const std::function<bool()>& cancelled,
+    RayWorkQueue* workers) {
     std::vector<PointDetectorFootprint> footprints;
     std::vector<std::size_t> indices;
     const auto count = static_cast<std::size_t>(width * height);
@@ -183,13 +184,47 @@ std::expected<PointDetectorBatchResult, PointDetectorError> SharedPointSources(
         if (!film->ray.active) return PointDetectorProbe{};
         // Derivative per common film coordinate. The batch engine composes
         // the discovery chart and each original Gaussian separately.
+        if (workers) {
+            const auto traced = workers->Execute(std::span(&film->ray, 1));
+            if (!traced) return std::unexpected(PointDetectorFailure::TraceFailed);
+            return MeasurePointDetector(*film, traced->front());
+        }
         return MeasurePointDetector(*film, tracer.TracePointSource(film->ray));
     };
     PointDetectorBatchResult result;
     result.samples.resize(count);
     if (footprints.empty()) return result;
-    const auto group =
-        EvaluatePointDetectorGroup(catalogue, brightness, footprints, probe, cancelled);
+    PointDetectorProbeBatchSampler probe_batch;
+    if (workers)
+        probe_batch = [&](std::span<const DetectorCoordinate> coordinates) {
+            PointDetectorProbeBatch values(coordinates.size());
+            std::vector<core::CameraFilmProjection> films;
+            std::vector<CameraRay> rays;
+            std::vector<std::size_t> active;
+            films.reserve(coordinates.size());
+            rays.reserve(coordinates.size());
+            active.reserve(coordinates.size());
+            for (std::size_t i = 0; i < coordinates.size(); ++i) {
+                const auto& q = coordinates[i];
+                const auto film = camera.ProjectFilmOffsetForObserver(
+                    x + double(sample.image_u), y + double(sample.image_v), q[0], q[1],
+                    sample.pupil_u, sample.pupil_v);
+                if (!film) {
+                    values[i] = std::unexpected(PointDetectorFailure::ProjectionUnavailable);
+                } else if (film->ray.active) {
+                    films.push_back(*film);
+                    rays.push_back(film->ray);
+                    active.push_back(i);
+                }
+            }
+            const auto traced = workers->Execute(rays);
+            for (std::size_t i = 0; i < active.size(); ++i)
+                values[active[i]] = traced ? MeasurePointDetector(films[i], (*traced)[i])
+                                           : std::unexpected(PointDetectorFailure::TraceFailed);
+            return values;
+        };
+    const auto group = EvaluatePointDetectorGroup(catalogue, brightness, footprints, probe,
+                                                  cancelled, {}, probe_batch);
     if (!group) return std::unexpected(group.error());
     result.statistics = group->statistics;
     for (std::size_t i = 0; i < indices.size(); ++i) result.samples[indices[i]] = group->samples[i];
@@ -222,11 +257,11 @@ base::Expected<void> RenderSession::ShadeBlock(int x, int y, int width, int heig
             // original footprint or pupil. A failed leaf withholds the block.
             std::optional<PointDetectorBatchResult> shared;
             if (physical_point_detector && !IsStopping()) {
-                auto batch =
-                    SharedPointSources(*camera_, *tracer, *star_index_,
-                                       config_.point_starfield_config.brightness_scale,
-                                       pixel_angular_size_ * (config_.ray_bundles ? 1.0 : .3), x, y,
-                                       width, height, sample, [&] { return IsStopping(); });
+                auto batch = SharedPointSources(
+                    *camera_, *tracer, *star_index_,
+                    config_.point_starfield_config.brightness_scale,
+                    pixel_angular_size_ * (config_.ray_bundles ? 1.0 : .3), x, y, width, height,
+                    sample, [&] { return IsStopping(); }, probe_workers_.get());
                 if (batch) {
                     shared = std::move(*batch);
                 } else {
@@ -289,9 +324,19 @@ base::Expected<void> RenderSession::ShadeBlock(int x, int y, int width, int heig
                     // The packet centre and all its offset probes must consume the same
                     // infinity map. Their surface/volume contributions still finish before
                     // an outward vacuum handoff can succeed.
-                    TraceResult trace_result = physical_point_detector
-                                                   ? tracer->TracePointSource(camera_ray)
-                                                   : tracer->Trace(camera_ray);
+                    TraceResult trace_result;
+                    if (probe_workers_) {
+                        auto traced = probe_workers_->Execute(std::span(&camera_ray, 1));
+                        if (!traced) {
+                            fail_sample(traced.error().Description());
+                            return;
+                        }
+                        trace_result = std::move(traced->front());
+                    } else {
+                        trace_result = physical_point_detector
+                                           ? tracer->TracePointSource(camera_ray)
+                                           : tracer->Trace(camera_ray);
+                    }
                     if (trace_result.cancelled) {
                         fail_sample("ray cancelled");
                         return;

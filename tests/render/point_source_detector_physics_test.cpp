@@ -93,11 +93,20 @@ TEST(PointSourceDetector, LargeSharedRegionMatchesOriginalMovingKerrPackets) {
                  {{{sigma * p[1][1] / determinant, -sigma * p[0][1] / determinant},
                    {-sigma * p[1][0] / determinant, sigma * p[0][0] / determinant}}}});
         }
-    const auto group = EvaluatePointDetectorGroup(catalogue, 1, footprints, sample, {});
+    const PointDetectorProbeBatchSampler batch =
+        [&](std::span<const DetectorCoordinate> coordinates) {
+            PointDetectorProbeBatch values;
+            values.reserve(coordinates.size());
+            for (const auto& q : coordinates) values.push_back(sample(q));
+            return values;
+        };
+    const auto group = EvaluatePointDetectorGroup(catalogue, 1, footprints, sample, {}, {}, batch);
     ASSERT_TRUE(group) << static_cast<int>(group.error().reason) << ' '
                        << group.error().statistics.probes;
     ASSERT_EQ(group->samples.size(), 1024u);
     EXPECT_LT(group->statistics.probes, 2048u);
+    EXPECT_LT(group->statistics.probe_batches * 4, group->statistics.probes);
+    EXPECT_EQ(group->statistics.maximum_probe_batch, kPointDetectorProbeBatchSize);
     double maximum_relative_difference = 0;
     for (const auto index : {14 * 32 + 14, 17 * 32 + 19}) {
         const auto& footprint = footprints[index];
@@ -128,6 +137,8 @@ TEST(PointSourceDetector, LargeSharedRegionMatchesOriginalMovingKerrPackets) {
         }
     }
     RecordProperty("shared_probes", static_cast<int>(group->statistics.probes));
+    RecordProperty("probe_batches", static_cast<int>(group->statistics.probe_batches));
+    RecordProperty("maximum_probe_batch", static_cast<int>(group->statistics.maximum_probe_batch));
     RecordProperty("shared_inner_attempts", static_cast<int>(group->statistics.inner_attempts));
     RecordProperty("shared_tail_attempts", static_cast<int>(group->statistics.tail_attempts));
     RecordProperty("maximum_relative_difference",

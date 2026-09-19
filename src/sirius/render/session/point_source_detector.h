@@ -15,6 +15,7 @@ namespace sirius::render {
 inline constexpr int kPointDetectorBlockEdge = 32;
 inline constexpr std::size_t kPointDetectorBatchCapacity =
     kPointDetectorBlockEdge * kPointDetectorBlockEdge;
+inline constexpr std::size_t kPointDetectorProbeBatchSize = 13;
 
 // A scalar sampler uses one original sample's z, q = q0 + L z, |z| <= 4.
 // A batch sampler uses a common film q at the same pupil. Subdivision never
@@ -59,6 +60,8 @@ struct PointDetectorStatistics {
     std::size_t probes = 0;
     std::size_t probe_requests = 0;
     std::size_t probe_cache_comparisons = 0;
+    std::size_t probe_batches = 0;
+    std::size_t maximum_probe_batch = 0;
     std::size_t cells = 0;
     std::size_t candidate_visits = 0;
     std::size_t newton_steps = 0;
@@ -82,6 +85,13 @@ struct PointDetectorError {
 
 using PointDetectorSampler = std::function<std::expected<PointDetectorProbe, PointDetectorFailure>(
     const DetectorCoordinate&)>;
+using PointDetectorProbeBatch =
+    std::vector<std::expected<PointDetectorProbe, PointDetectorFailure>>;
+// Optional execution of independent probes. Return exactly one result per
+// coordinate in request order, with the same physical meaning as the scalar
+// sampler. Completion order must not determine image ownership or RGB sums.
+using PointDetectorProbeBatchSampler =
+    std::function<PointDetectorProbeBatch(std::span<const DetectorCoordinate>)>;
 
 // Several original camera samples at the SAME pupil, expressed in one smooth
 // film chart. Each keeps q = centre + chart_from_standard*z, |z| <= 4.
@@ -106,7 +116,8 @@ struct PointDetectorBatchResult {
 [[nodiscard]] std::expected<PointDetectorResult, PointDetectorError> EvaluatePointDetector(
     const core::StarfieldSpatialIndex& catalogue, double brightness_scale,
     const PointDetectorSampler& sample, const std::function<bool()>& cancelled,
-    const PointDetectorPolicy& policy = {});
+    const PointDetectorPolicy& policy = {},
+    const PointDetectorProbeBatchSampler& sample_batch = {});
 
 // Shared finite image discovery for up to kPointDetectorBatchCapacity samples. The
 // callback traces actual chart coordinates and returns derivatives per chart
@@ -120,7 +131,8 @@ EvaluatePointDetectorBatch(const core::StarfieldSpatialIndex& catalogue, double 
                            std::span<const PointDetectorFootprint> footprints,
                            const PointDetectorSampler& sample,
                            const std::function<bool()>& cancelled,
-                           const PointDetectorPolicy& policy = {});
+                           const PointDetectorPolicy& policy = {},
+                           const PointDetectorProbeBatchSampler& sample_batch = {});
 
 // Try common discovery, bisect declined regions along their widest film axis,
 // and finish unresolved leaves with the original scalar detector. The shared
@@ -132,6 +144,7 @@ EvaluatePointDetectorGroup(const core::StarfieldSpatialIndex& catalogue, double 
                            std::span<const PointDetectorFootprint> footprints,
                            const PointDetectorSampler& sample,
                            const std::function<bool()>& cancelled,
-                           const PointDetectorPolicy& policy = {});
+                           const PointDetectorPolicy& policy = {},
+                           const PointDetectorProbeBatchSampler& sample_batch = {});
 
 }  // namespace sirius::render

@@ -145,12 +145,14 @@ class Detector {
   public:
     Detector(const core::StarfieldSpatialIndex& catalogue, double brightness,
              const PointDetectorSampler& sampler, const std::function<bool()>& cancelled,
-             const PointDetectorPolicy& policy, unsigned minimum_invisible_depth = 0)
+             const PointDetectorPolicy& policy, const PointDetectorProbeBatchSampler& sample_batch,
+             unsigned minimum_invisible_depth = 0)
         : catalogue_(catalogue),
           brightness_(brightness),
           sampler_(sampler),
           cancelled_(cancelled),
           policy_(policy),
+          sample_batch_(sample_batch),
           minimum_invisible_depth_(minimum_invisible_depth) {}
 
     std::expected<PointDetectorResult, PointDetectorError> Run(
@@ -196,39 +198,96 @@ class Detector {
     void CheckCancellation() const {
         if (cancelled_ && cancelled_()) Fail(PointDetectorFailure::Cancelled);
     }
-    std::size_t Probe(Coordinate z) {
-        CheckCancellation();
-        ++statistics_.probe_requests;
+    std::size_t ProbeSlot(const Coordinate& z) {
         const std::size_t mask = probe_slots_.size() - 1;
         std::size_t slot = CoordinateHash(z) & mask;
         while (probe_slots_[slot] != kEmptyProbe) {
             ++statistics_.probe_cache_comparisons;
             const auto index = probe_slots_[slot];
-            if (probes_[index].z == z) return index;
+            if (probes_[index].z == z) return slot;
             slot = (slot + 1) & mask;
         }
+        return slot;
+    }
+    std::size_t StoreProbe(Coordinate z, PointDetectorProbe value, std::size_t slot) {
+        if (value.visible) {
+            const double norm =
+                std::hypot(value.direction[0], value.direction[1], value.direction[2]);
+            if (!Positive(norm) || !Positive(value.camera_over_source_frequency) ||
+                !std::isfinite(value.transmission) || value.transmission < 0 ||
+                value.transmission > 1)
+                Fail(PointDetectorFailure::Arithmetic);
+            for (auto& component : value.direction) component /= norm;
+            for (const auto& row : value.source_derivative)
+                for (double component : row)
+                    if (!std::isfinite(component)) Fail(PointDetectorFailure::Arithmetic);
+        }
+        probes_.push_back({z, value});
+        probe_slots_[slot] = probes_.size() - 1;
+        return probes_.size() - 1;
+    }
+    std::size_t Probe(Coordinate z) {
+        CheckCancellation();
+        ++statistics_.probe_requests;
+        const auto slot = ProbeSlot(z);
+        if (probe_slots_[slot] != kEmptyProbe) return probe_slots_[slot];
         if (probes_.size() == policy_.maximum_probes) Fail(PointDetectorFailure::WorkLimit);
         auto value = sampler_(z);
         ++statistics_.probes;
+        ++statistics_.probe_batches;
+        statistics_.maximum_probe_batch = std::max<std::size_t>(1, statistics_.maximum_probe_batch);
         CheckCancellation();
         if (!value) Fail(value.error());
         statistics_.inner_attempts += value->inner_attempts;
         statistics_.tail_attempts += value->tail_attempts;
-        if (value->visible) {
-            const double norm =
-                std::hypot(value->direction[0], value->direction[1], value->direction[2]);
-            if (!Positive(norm) || !Positive(value->camera_over_source_frequency) ||
-                !std::isfinite(value->transmission) || value->transmission < 0 ||
-                value->transmission > 1)
-                Fail(PointDetectorFailure::Arithmetic);
-            for (auto& component : value->direction) component /= norm;
-            for (const auto& row : value->source_derivative)
-                for (double component : row)
-                    if (!std::isfinite(component)) Fail(PointDetectorFailure::Arithmetic);
+        return StoreProbe(z, *value, slot);
+    }
+    std::array<std::size_t, kPointDetectorProbeBatchSize> ProbeCell(
+        const std::array<Coordinate, kPointDetectorProbeBatchSize>& coordinates) {
+        std::array<std::size_t, kPointDetectorProbeBatchSize> indices{};
+        if (!sample_batch_) {
+            for (std::size_t i = 0; i < coordinates.size(); ++i) indices[i] = Probe(coordinates[i]);
+            return indices;
         }
-        probes_.push_back({z, *value});
-        probe_slots_[slot] = probes_.size() - 1;
-        return probes_.size() - 1;
+        CheckCancellation();
+        std::array<Coordinate, kPointDetectorProbeBatchSize> missing{};
+        std::array<std::size_t, kPointDetectorProbeBatchSize> pending{};
+        pending.fill(kEmptyProbe);
+        std::size_t count = 0;
+        for (std::size_t i = 0; i < coordinates.size(); ++i) {
+            ++statistics_.probe_requests;
+            const auto slot = ProbeSlot(coordinates[i]);
+            if (probe_slots_[slot] != kEmptyProbe) {
+                indices[i] = probe_slots_[slot];
+                continue;
+            }
+            const auto end = missing.begin() + count;
+            const auto found = std::find(missing.begin(), end, coordinates[i]);
+            pending[i] = static_cast<std::size_t>(found - missing.begin());
+            if (found == end) missing[count++] = coordinates[i];
+        }
+        if (count == 0) return indices;
+        if (count > policy_.maximum_probes - probes_.size()) Fail(PointDetectorFailure::WorkLimit);
+        auto values = sample_batch_(std::span(missing).first(count));
+        statistics_.probes += count;
+        ++statistics_.probe_batches;
+        statistics_.maximum_probe_batch = std::max(statistics_.maximum_probe_batch, count);
+        CheckCancellation();
+        if (values.size() != count) Fail(PointDetectorFailure::InvalidInput);
+        // All speculative independent work counts, even if one result failed.
+        for (const auto& value : values)
+            if (value) {
+                statistics_.inner_attempts += value->inner_attempts;
+                statistics_.tail_attempts += value->tail_attempts;
+            }
+        std::array<std::size_t, kPointDetectorProbeBatchSize> stored{};
+        for (std::size_t i = 0; i < count; ++i) {
+            if (!values[i]) Fail(values[i].error());
+            stored[i] = StoreProbe(missing[i], *values[i], ProbeSlot(missing[i]));
+        }
+        for (std::size_t i = 0; i < coordinates.size(); ++i)
+            if (pending[i] != kEmptyProbe) indices[i] = stored[pending[i]];
+        return indices;
     }
 
     std::optional<std::size_t> FindImage(std::uint32_t star, const Cell& cell, std::size_t seed,
@@ -332,17 +391,18 @@ class Detector {
         CheckCancellation();
         const auto centre = cell.Centre();
         const double half = cell.Width() * .5;
-        std::array<std::size_t, 13> nodes{};
+        std::array<Coordinate, kPointDetectorProbeBatchSize> coordinates{};
         std::size_t count = 0;
-        nodes[count++] = Probe(centre);
+        coordinates[count++] = centre;
         for (int y = -1; y <= 1; ++y)
             for (int x = -1; x <= 1; ++x)
                 if (x != 0 || y != 0)
-                    nodes[count++] = Probe({centre[0] + x * half, centre[1] + y * half});
+                    coordinates[count++] = {centre[0] + x * half, centre[1] + y * half};
         // Staggered positions are not the quadtree's next-level corners.
         for (const Coordinate shift : {Coordinate{-.37, -.61}, Coordinate{.61, -.37},
                                        Coordinate{.37, .61}, Coordinate{-.61, .37}})
-            nodes[count++] = Probe({centre[0] + shift[0] * half, centre[1] + shift[1] * half});
+            coordinates[count++] = {centre[0] + shift[0] * half, centre[1] + shift[1] * half};
+        const auto nodes = ProbeCell(coordinates);
         const auto seed = std::find_if(nodes.begin(), nodes.end(), [&](std::size_t i) {
             return probes_[i].value.visible &&
                    Solve(probes_[i].value.source_derivative, {1, 0}).has_value();
@@ -610,6 +670,7 @@ class Detector {
     const PointDetectorSampler& sampler_;
     const std::function<bool()>& cancelled_;
     const PointDetectorPolicy& policy_;
+    const PointDetectorProbeBatchSampler& sample_batch_;
     unsigned minimum_invisible_depth_;
     PointDetectorStatistics statistics_;
     std::vector<CachedProbe> probes_;
@@ -621,14 +682,15 @@ class Detector {
 std::expected<PointDetectorResult, PointDetectorError> EvaluatePointDetector(
     const core::StarfieldSpatialIndex& catalogue, double brightness_scale,
     const PointDetectorSampler& sample, const std::function<bool()>& cancelled,
-    const PointDetectorPolicy& policy) {
-    return Detector(catalogue, brightness_scale, sample, cancelled, policy).Run();
+    const PointDetectorPolicy& policy, const PointDetectorProbeBatchSampler& sample_batch) {
+    return Detector(catalogue, brightness_scale, sample, cancelled, policy, sample_batch).Run();
 }
 
 std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetectorBatch(
     const core::StarfieldSpatialIndex& catalogue, double brightness_scale,
     std::span<const PointDetectorFootprint> footprints, const PointDetectorSampler& sample,
-    const std::function<bool()>& cancelled, const PointDetectorPolicy& policy) {
+    const std::function<bool()>& cancelled, const PointDetectorPolicy& policy,
+    const PointDetectorProbeBatchSampler& sample_batch) {
     PointDetectorStatistics statistics;
     const auto failure = [&](PointDetectorFailure reason) {
         return std::unexpected(PointDetectorError{reason, statistics});
@@ -697,9 +759,23 @@ std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetecto
                     for (auto& value : row) value *= scale;
             return point;
         };
+        PointDetectorProbeBatchSampler normalized_batch;
+        if (sample_batch)
+            normalized_batch = [&](std::span<const Coordinate> coordinates) {
+                std::vector<Coordinate> chart;
+                chart.reserve(coordinates.size());
+                for (const auto& z : coordinates)
+                    chart.push_back({centre[0] + scale * z[0], centre[1] + scale * z[1]});
+                auto values = sample_batch(chart);
+                for (auto& point : values)
+                    if (point)
+                        for (auto& row : point->source_derivative)
+                            for (auto& value : row) value *= scale;
+                return values;
+            };
         std::vector<std::size_t> images;
         Detector engine(catalogue, brightness_scale, normalized, cancelled, discovery_policy,
-                        policy.minimum_depth + extra_depth);
+                        normalized_batch, policy.minimum_depth + extra_depth);
         const auto discovery = engine.Run(&images);
         if (!discovery) return std::unexpected(discovery.error());
         statistics = discovery->statistics;
@@ -794,7 +870,8 @@ std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetecto
 std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetectorGroup(
     const core::StarfieldSpatialIndex& catalogue, double brightness_scale,
     std::span<const PointDetectorFootprint> footprints, const PointDetectorSampler& sample,
-    const std::function<bool()>& cancelled, const PointDetectorPolicy& policy) {
+    const std::function<bool()>& cancelled, const PointDetectorPolicy& policy,
+    const PointDetectorProbeBatchSampler& sample_batch) {
     PointDetectorStatistics statistics;
     const auto failure = [&](PointDetectorFailure reason) {
         return std::unexpected(PointDetectorError{reason, statistics});
@@ -808,6 +885,9 @@ std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetecto
         statistics.probes += work.probes;
         statistics.probe_requests += work.probe_requests;
         statistics.probe_cache_comparisons += work.probe_cache_comparisons;
+        statistics.probe_batches += work.probe_batches;
+        statistics.maximum_probe_batch =
+            std::max(statistics.maximum_probe_batch, work.maximum_probe_batch);
         statistics.cells += work.cells;
         statistics.candidate_visits += work.candidate_visits;
         statistics.newton_steps += work.newton_steps;
@@ -848,8 +928,9 @@ std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetecto
                 auto shared_policy = policy;
                 shared_policy.maximum_probes =
                     std::min(policy.maximum_probes, remaining_shared_probes);
-                const auto batch = EvaluatePointDetectorBatch(catalogue, brightness_scale, packets,
-                                                              sample, cancelled, shared_policy);
+                const auto batch =
+                    EvaluatePointDetectorBatch(catalogue, brightness_scale, packets, sample,
+                                               cancelled, shared_policy, sample_batch);
                 const auto& work = batch ? batch->statistics : batch.error().statistics;
                 account(work);
                 remaining_shared_probes -= std::min(remaining_shared_probes, work.probes);
@@ -881,8 +962,29 @@ std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetecto
                                     derivative[row][0] * m[0][col] + derivative[row][1] * m[1][col];
                         return point;
                     };
+                    PointDetectorProbeBatchSampler original_batch;
+                    if (sample_batch)
+                        original_batch = [&](std::span<const Coordinate> coordinates) {
+                            std::vector<Coordinate> chart;
+                            chart.reserve(coordinates.size());
+                            for (const auto& z : coordinates)
+                                chart.push_back(
+                                    {footprint.centre[0] + (m[0][0] * z[0] + m[0][1] * z[1]),
+                                     footprint.centre[1] + (m[1][0] * z[0] + m[1][1] * z[1])});
+                            auto values = sample_batch(chart);
+                            for (auto& point : values)
+                                if (point) {
+                                    const auto derivative = point->source_derivative;
+                                    for (int row = 0; row < 2; ++row)
+                                        for (int col = 0; col < 2; ++col)
+                                            point->source_derivative[row][col] =
+                                                derivative[row][0] * m[0][col] +
+                                                derivative[row][1] * m[1][col];
+                                }
+                            return values;
+                        };
                     const auto leaf = EvaluatePointDetector(catalogue, brightness_scale, original,
-                                                            cancelled, policy);
+                                                            cancelled, policy, original_batch);
                     account(leaf ? leaf->statistics : leaf.error().statistics);
                     if (!leaf) return leaf.error().reason;
                     result.samples[index] = {leaf->rgb, leaf->estimated_error};

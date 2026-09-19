@@ -13,6 +13,7 @@
 #include "sirius/render/session/display_buffer.h"
 #include "sirius/render/session/point_source_detector.h"
 #include "sirius/render/session/progress_tracker.h"
+#include "sirius/render/session/ray_work_queue.h"
 #include "sirius/render/session/session_events.h"
 #include "sirius/render/session/session_states.h"
 #include "sirius/render/session/state_machine.h"
@@ -369,6 +370,8 @@ class RenderSession {
     std::vector<std::optional<base::Error>> worker_errors_;
     std::vector<std::unique_ptr<backend::GeodesicTracer>> thread_tracers_;  // Per-thread tracers.
     std::vector<PixelBlock> thread_pixel_blocks_;
+    std::vector<std::unique_ptr<backend::GeodesicTracer>> probe_tracers_;
+    std::unique_ptr<RayWorkQueue> probe_workers_;
     std::mutex tile_mutex_;                  // Protects tile acquisition.
     std::mutex display_mutex_;               // Protects display buffer updates.
     std::atomic<bool> stop_workers_{false};  // Signal workers to stop.

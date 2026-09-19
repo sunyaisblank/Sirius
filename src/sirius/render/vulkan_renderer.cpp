@@ -375,7 +375,9 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
             : 1;
     const auto work_count = static_cast<std::size_t>((config.width + work_edge - 1) / work_edge) *
                             ((config.height + work_edge - 1) / work_edge);
-    std::size_t capacity = std::min<std::size_t>(64, work_count);
+    const auto rays_per_work =
+        work_edge == kPointDetectorBlockEdge ? kPointDetectorProbeBatchSize : 1;
+    std::size_t capacity = std::min<std::size_t>(64, work_count * rays_per_work);
     while (capacity > 0 && backend::RetainedCompute::RequiredBufferBytes(capacity) +
                                    kMinTileEdge * kMinTileEdge * kTileWorkingSetBytesPerPixel >
                                usable)
@@ -403,7 +405,8 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     backend::RetainedTraceExecutor executor(
         **compute, [&] { return cancelled.load(); }, kDispatchStopMs);
     // Host work items are screen blocks or pixels, independent of device residency.
-    // Each worker has at most one pending ray interval in the bounded batch.
+    // Independent detector probes also feed this capacity. Each trace worker
+    // has at most one pending interval; device residency stays bounded here.
     RenderSession session(executor, static_cast<int>(capacity), work_edge);
     auto worker_config = config;
     worker_config.write_output = false;
