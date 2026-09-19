@@ -556,6 +556,14 @@ void GeodesicTracer::SetDiskPolarisation(const PolarisationFrame& frame,
 // Main trace.
 // =============================================================================
 TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
+    return TraceTo(camera_ray, false);
+}
+
+TraceResult GeodesicTracer::TracePointSource(const CameraRay& camera_ray) {
+    return TraceTo(camera_ray, true);
+}
+
+TraceResult GeodesicTracer::TraceTo(const CameraRay& camera_ray, bool allow_infinity_handoff) {
     struct ExecutionScope {
         TraceStepExecutor* executor;
         ~ExecutionScope() {
@@ -582,12 +590,13 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
         worker.page_thorne_reference_temperature_ = page_thorne_reference_temperature_;
         worker.page_thorne_cached_m_ = page_thorne_cached_m_;
         worker.page_thorne_cached_a_ = page_thorne_cached_a_;
-        return worker.TraceInCurrentChart(camera_ray);
+        return worker.TraceInCurrentChart(camera_ray, allow_infinity_handoff);
     }
-    return TraceInCurrentChart(camera_ray);
+    return TraceInCurrentChart(camera_ray, allow_infinity_handoff);
 }
 
-TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray) {
+TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
+                                                bool allow_infinity_handoff) {
     SIRIUS_PRE(IsRepresentedCameraRay(camera_ray) && camera_ray.active);
     TraceResult result;
     result.steps_taken = 0;
@@ -640,6 +649,16 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray) {
     const auto* family =
         outgoing_chart_ ? &outgoing_chart_->Source() : dynamic_cast<KerrSchildFamily*>(metric_);
     const bool use_coupled = family != nullptr;
+    const bool can_handoff_to_infinity =
+        allow_infinity_handoff && family && family->GetParams().Q == 0.0 &&
+        family->GetParams().Lambda == 0.0 && !config_.finite_causal_boundary;
+    // Both disk consumers restrict the oblate Kerr radius to disk_outer.
+    // The volume consumer rounds it to float before its membership test, so
+    // enclose that rounding too. Vertical extent cannot extend radial support.
+    double next_handoff_radius = config_.enable_disk
+                                     ? std::nextafter(static_cast<float>(config_.disk_outer),
+                                                      std::numeric_limits<float>::infinity())
+                                     : 0.0;
     Rk45CoupledState coupled;
     std::optional<TraceResult::Beam> admitted_source_maps;
     if (use_coupled) {
@@ -1420,6 +1439,43 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray) {
             result.final_direction = sky->world_direction;
             result.min_radius = min_r;
             break;
+        }
+
+        if (can_handoff_to_infinity) {
+            const coordinates::Vec4Cart cart{ray.position(0), x, y, z};
+            const double radius = coordinates::KerrSchildRadius(cart, family->GetParams().a);
+            const double radial_motion =
+                x * ray.velocity(1) + y * ray.velocity(2) + z * ray.velocity(3);
+            const double spatial_speed =
+                std::hypot(ray.velocity(1), ray.velocity(2), ray.velocity(3));
+            // This is only a scheduling filter to avoid repeatedly trying an
+            // ill-conditioned near-tangent radial chart. The infinity solver
+            // still checks the oblate outward branch and every extremum of
+            // the radial potential on the entire remaining interval.
+            if (radius > next_handoff_radius && radial_motion > .25 * r * spatial_speed) {
+                next_handoff_radius = radius * 1.25;
+                const auto angular =
+                    CameraAngularVariations(coupled.variations, camera_ray.phase_space);
+                TraceResult::Beam source;
+                if (angular &&
+                    SampleSourceSkyMaps(*metric_, ray.position, ray.velocity,
+                                        {(*angular)[0].displacement, (*angular)[1].displacement},
+                                        {(*angular)[0].derivative, (*angular)[1].derivative}, 1.0,
+                                        outgoing_chart_, source) &&
+                    source.infinity_source_map) {
+                    if (should_cancel_ && should_cancel_()) return cancelled_result();
+                    const auto sky =
+                        SampleSourceSky(*metric_, ray.position, ray.velocity, outgoing_chart_);
+                    if (sky) {
+                        admitted_source_maps = std::move(source);
+                        result.outcome = TraceResult::Outcome::Escaped;
+                        result.final_direction = sky->world_direction;
+                        break;
+                    }
+                }
+                // A declined private continuation commits neither source
+                // data nor an escape. Continue the unchanged accepted trace.
+            }
         }
     }
 

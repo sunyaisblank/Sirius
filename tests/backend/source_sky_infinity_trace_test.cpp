@@ -8,7 +8,9 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <format>
 #include <iostream>
+#include <numbers>
 #include <optional>
 
 namespace {
@@ -80,6 +82,24 @@ TracerConfig MapConfig(float radius, float maximum_step, float tolerance) {
 TraceResult Trace(KerrSchildFamily& metric, const CameraRay& ray, const TracerConfig& config) {
     GeodesicTracer tracer(&metric, config);
     return tracer.Trace(ray);
+}
+
+void ExpectSameInfinity(const TraceResult& actual, const TraceResult& reference) {
+    ASSERT_FALSE(actual.numerical_failure);
+    ASSERT_FALSE(reference.numerical_failure);
+    ASSERT_EQ(actual.outcome, TraceResult::Outcome::Escaped);
+    ASSERT_EQ(reference.outcome, TraceResult::Outcome::Escaped);
+    ASSERT_TRUE(actual.beam.infinity_source_map);
+    ASSERT_TRUE(reference.beam.infinity_source_map);
+    const auto& a = *actual.beam.infinity_source_map;
+    const auto& b = *reference.beam.infinity_source_map;
+    EXPECT_LE(Difference(a.map.jacobian, b.map.jacobian), 2.0e-6);
+    EXPECT_NEAR(a.frequency, b.frequency, 2.0e-8);
+    for (std::size_t axis = 0; axis < 3; ++axis)
+        EXPECT_NEAR(a.map.direction[axis], b.map.direction[axis], 2.0e-7);
+    for (std::size_t column = 0; column < 2; ++column)
+        EXPECT_NEAR(a.frequency_derivative[column], b.frequency_derivative[column], 2.0e-6);
+    EXPECT_LE(a.maximum_local_error_ratio, 1.0);
 }
 
 struct FlatMap {
@@ -235,6 +255,151 @@ TEST(SourceSkyInfinityTrace, KerrMapConvergesAcrossHandoffRadiiAndFixedPupilNeig
     }
 }
 
+TEST(SourceSkyInfinityTrace, PointSourceHandoffPreservesTheFlatObserverMap) {
+    KerrSchildFamily metric(KerrSchildParams::Minkowski());
+    auto ray = PupilRay(7.0, 1.3, -0.41, {0.6, 0.3, -0.74});
+    ray.beta_forward = 0.2;
+    ray.beta_up = -0.1;
+    ray.beta_right = 0.05;
+    const auto expected = AnalyticFlatMap(ray);
+    const auto config = MapConfig(200.0f, 3.0f, 1.0e-9f);
+    GeodesicTracer tracer(&metric, config);
+    const auto result = tracer.TracePointSource(ray);
+    ASSERT_FALSE(result.numerical_failure);
+    ASSERT_EQ(result.outcome, TraceResult::Outcome::Escaped);
+    ASSERT_TRUE(result.beam.infinity_source_map);
+    const auto& infinity = *result.beam.infinity_source_map;
+    EXPECT_LE(Difference(infinity.map.jacobian, expected.jacobian), 2.0e-8);
+    EXPECT_NEAR(infinity.frequency, expected.frequency, 2.0e-9);
+    for (std::size_t axis = 0; axis < 3; ++axis)
+        EXPECT_NEAR(infinity.map.direction[axis], expected.direction[axis], 2.0e-9);
+    for (std::size_t column = 0; column < 2; ++column)
+        EXPECT_NEAR(infinity.frequency_derivative[column], expected.frequency_derivative[column],
+                    2.0e-8);
+    EXPECT_LT(result.steps_taken, 10);
+    EXPECT_LT(
+        std::hypot(result.final_position(1), result.final_position(2), result.final_position(3)),
+        20.0);
+}
+
+TEST(SourceSkyInfinityTrace, PointSourceHandoffAvoidsVacuumTravelForMovingPhysicalPupils) {
+    sirius::core::CameraConfig camera_config;
+    camera_config.r = 50;
+    camera_config.theta = 60 * std::numbers::pi / 180;
+    camera_config.width = 4;
+    camera_config.height = 2;
+    camera_config.fov = 2;
+    camera_config.beta_x = .1;
+    camera_config.beta_y = .8;
+    camera_config.focus_distance = 50;
+    sirius::core::ThinLensCamera camera(camera_config);
+    int ordinary_attempts = 0, probe_attempts = 0;
+    double direction_gap = 0, jacobian_gap = 0;
+    for (double spin : {-0.7, 0.7}) {
+        KerrSchildFamily metric(KerrSchildParams::Kerr(1.0, spin));
+        auto config = MapConfig(200.0f, 2.0f, 5.0e-6f);
+        config.max_steps = 20000;
+        config.integrator.initial_step = .1f;
+        GeodesicTracer tracer(&metric, config);
+        for (const auto offset : {std::array{0.0, 0.0}, std::array{-1.0, .5}}) {
+            SCOPED_TRACE(spin);
+            SCOPED_TRACE(offset[0]);
+            const auto projection =
+                camera.ProjectFilmOffsetForObserver(1.5, .5, offset[0], offset[1], .2, 1.0 / 7.0);
+            ASSERT_TRUE(projection);
+            ASSERT_TRUE(projection->ray.phase_space);
+            const auto reference = tracer.Trace(projection->ray);
+            const auto result = tracer.TracePointSource(projection->ray);
+            ExpectSameInfinity(result, reference);
+            ordinary_attempts += reference.steps_taken;
+            probe_attempts += result.steps_taken;
+            if (result.beam.infinity_source_map && reference.beam.infinity_source_map) {
+                const auto& actual_map = result.beam.infinity_source_map->map;
+                const auto& reference_map = reference.beam.infinity_source_map->map;
+                for (int axis = 0; axis < 3; ++axis)
+                    direction_gap = std::max(
+                        direction_gap,
+                        std::abs(actual_map.direction[axis] - reference_map.direction[axis]));
+                jacobian_gap =
+                    std::max(jacobian_gap, Difference(actual_map.jacobian, reference_map.jacobian));
+            }
+            EXPECT_LT(result.steps_taken * 2, reference.steps_taken);
+            EXPECT_LT(result.central_stages * 2, reference.central_stages);
+            EXPECT_LT(std::hypot(result.final_position(1), result.final_position(2),
+                                 result.final_position(3)),
+                      100.0);
+            EXPECT_EQ(result.optical_depth, reference.optical_depth);
+            auto without_beam = config;
+            without_beam.enable_ray_bundles = false;
+            without_beam.bundle_point_source = false;
+            without_beam.bundle_angular_size = TracerConfig{}.bundle_angular_size;
+            GeodesicTracer unbundled(&metric, without_beam);
+            const auto plain = unbundled.TracePointSource(projection->ray);
+            ExpectSameInfinity(plain, result);
+            EXPECT_EQ(plain.steps_taken, result.steps_taken);
+            EXPECT_EQ(plain.central_stages, result.central_stages);
+        }
+    }
+    RecordProperty("ordinary_inner_attempts", ordinary_attempts);
+    RecordProperty("point_source_inner_attempts", probe_attempts);
+    RecordProperty("maximum_direction_difference", std::format("{:.17g}", direction_gap));
+    RecordProperty("maximum_jacobian_difference", std::format("{:.17g}", jacobian_gap));
+}
+
+TEST(SourceSkyInfinityTrace, PointSourceHandoffRetainsOpaqueAndVolumetricSources) {
+    KerrSchildFamily metric(KerrSchildParams::Schwarzschild(1.0));
+    for (bool volume : {false, true}) {
+        SCOPED_TRACE(volume);
+        const auto ray = PupilRay(8.0, std::numbers::pi / 2 - .05, 0.0, {.8, .6, 0});
+        auto config = MapConfig(60.0f, .25f, 1.0e-9f);
+        config.enable_disk = true;
+        config.enable_volumetric = volume;
+        if (volume) config.volumetric_tau_midplane = .01f;
+        GeodesicTracer tracer(&metric, config);
+        const auto reference = tracer.Trace(ray);
+        const auto result = tracer.TracePointSource(ray);
+        ASSERT_FALSE(reference.numerical_failure);
+        ASSERT_FALSE(result.numerical_failure);
+        if (volume) {
+            ExpectSameInfinity(result, reference);
+            EXPECT_TRUE(result.volumetric_hit);
+            EXPECT_GT(result.optical_depth, 0);
+            EXPECT_EQ(result.optical_depth, reference.optical_depth);
+            for (int channel = 0; channel < 3; ++channel)
+                EXPECT_EQ(result.volumetric_emission[channel],
+                          reference.volumetric_emission[channel]);
+            EXPECT_LT(result.steps_taken, reference.steps_taken);
+            EXPECT_GT(std::hypot(result.final_position(1), result.final_position(2),
+                                 result.final_position(3)),
+                      config.disk_outer);
+        } else {
+            EXPECT_EQ(result.outcome, TraceResult::Outcome::DiskHit);
+            EXPECT_EQ(result.outcome, reference.outcome);
+            EXPECT_EQ(result.steps_taken, reference.steps_taken);
+            EXPECT_EQ(result.disk_radius, reference.disk_radius);
+            EXPECT_FALSE(result.beam.infinity_source_map);
+        }
+    }
+}
+
+TEST(SourceSkyInfinityTrace, PointSourceWorkExhaustionAndCancellationHaveNoSourceMap) {
+    KerrSchildFamily metric(KerrSchildParams::Schwarzschild(1.0));
+    auto config = MapConfig(60.0f, .125f, 1.0e-9f);
+    config.max_steps = 1;
+    const auto ray = PupilRay(8.0, 1.1, 0, {-1, 0, 0});
+    GeodesicTracer tracer(&metric, config);
+    const auto exhausted = tracer.TracePointSource(ray);
+    EXPECT_TRUE(exhausted.numerical_failure);
+    EXPECT_EQ(exhausted.outcome, TraceResult::Outcome::MaxSteps);
+    EXPECT_EQ(exhausted.coupled_failure, sirius::core::CoupledStepFailure::WorkLimit);
+    EXPECT_FALSE(exhausted.beam.infinity_source_map);
+    tracer.SetCancellationCallback([] { return true; });
+    const auto cancelled = tracer.TracePointSource(ray);
+    EXPECT_TRUE(cancelled.cancelled);
+    EXPECT_EQ(cancelled.steps_taken, 0);
+    EXPECT_FALSE(cancelled.beam.infinity_source_map);
+}
+
 TEST(SourceSkyInfinityTrace, NonVacuumAndCapturedRaysDoNotClaimVacuumInfinity) {
     const auto outward = PupilRay(8.0, 1.1, 0.31, {0.8, 0.3, 0.1});
     for (const auto parameters :
@@ -248,6 +413,12 @@ TEST(SourceSkyInfinityTrace, NonVacuumAndCapturedRaysDoNotClaimVacuumInfinity) {
         ASSERT_TRUE(result.beam.finite_source_map);
         EXPECT_FALSE(result.beam.infinity_source_map);
         EXPECT_FALSE(result.beam.infinity_source_failure);
+        GeodesicTracer tracer(&metric, config);
+        const auto probe = tracer.TracePointSource(outward);
+        ASSERT_FALSE(probe.numerical_failure);
+        EXPECT_EQ(probe.outcome, result.outcome);
+        EXPECT_EQ(probe.steps_taken, result.steps_taken);
+        EXPECT_FALSE(probe.beam.infinity_source_map);
     }
     KerrSchildFamily schwarzschild(KerrSchildParams::Schwarzschild(1.0));
     CameraRay captured;
@@ -259,6 +430,12 @@ TEST(SourceSkyInfinityTrace, NonVacuumAndCapturedRaysDoNotClaimVacuumInfinity) {
     ASSERT_EQ(result.outcome, TraceResult::Outcome::Horizon);
     EXPECT_FALSE(result.beam.infinity_source_map);
     EXPECT_FALSE(result.beam.infinity_source_failure);
+    GeodesicTracer tracer(&schwarzschild, MapConfig(20.0f, 0.125f, 1.0e-10f));
+    const auto probe = tracer.TracePointSource(captured);
+    ASSERT_FALSE(probe.numerical_failure);
+    EXPECT_EQ(probe.outcome, TraceResult::Outcome::Horizon);
+    EXPECT_EQ(probe.steps_taken, result.steps_taken);
+    EXPECT_FALSE(probe.beam.infinity_source_map);
 }
 
 }  // namespace

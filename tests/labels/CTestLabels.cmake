@@ -1004,6 +1004,10 @@ set_tests_properties(
 set_tests_properties(
     SourceSkyInfinityTrace.FlatPupilMapAndFrequencyAreHandoffIndependent
     SourceSkyInfinityTrace.KerrMapConvergesAcrossHandoffRadiiAndFixedPupilNeighbours
+    SourceSkyInfinityTrace.PointSourceHandoffPreservesTheFlatObserverMap
+    SourceSkyInfinityTrace.PointSourceHandoffAvoidsVacuumTravelForMovingPhysicalPupils
+    SourceSkyInfinityTrace.PointSourceHandoffRetainsOpaqueAndVolumetricSources
+    SourceSkyInfinityTrace.PointSourceWorkExhaustionAndCancellationHaveNoSourceMap
     SourceSkyInfinityTrace.NonVacuumAndCapturedRaysDoNotClaimVacuumInfinity
     PROPERTIES LABELS "Mandatory;Correctness"
 )

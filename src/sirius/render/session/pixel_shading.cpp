@@ -152,7 +152,11 @@ base::Expected<RenderSession::PixelResult> RenderSession::ShadePixel(int px_coor
         const CameraRay& camera_ray = projection->ray;
         SIRIUS_ASSERT(core::IsRepresentedCameraRay(camera_ray));
         if (!camera_ray.active) return;
-        TraceResult trace_result = tracer->Trace(camera_ray);
+        // The packet centre and all its offset probes must consume the same
+        // infinity map. Their surface/volume contributions still finish before
+        // an outward vacuum handoff can succeed.
+        TraceResult trace_result = physical_point_detector ? tracer->TracePointSource(camera_ray)
+                                                           : tracer->Trace(camera_ray);
         if (trace_result.cancelled) {
             fail_sample("ray cancelled");
             return;
@@ -288,7 +292,7 @@ base::Expected<RenderSession::PixelResult> RenderSession::ShadePixel(int px_coor
                     sample.pupil_v);
                 if (!film) return std::unexpected(PointDetectorFailure::ProjectionUnavailable);
                 if (!film->ray.active) return PointDetectorProbe{};
-                return measure(*film, tracer->Trace(film->ray));
+                return measure(*film, tracer->TracePointSource(film->ray));
             };
             const auto detector =
                 EvaluatePointDetector(*star_index_, config_.point_starfield_config.brightness_scale,

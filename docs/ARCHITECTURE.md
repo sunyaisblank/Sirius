@@ -40,6 +40,17 @@ the two signs of zero; close image rays are never quantized into one key.
 Index iteration never determines sampling or radiance-reduction order. The
 cache-work regression counts comparisons rather than timing a particular host.
 
+Detector packets use `GeodesicTracer::TracePointSource` for both their centre
+and offset rays. An accepted outward vacuum-Kerr interval can hand off directly
+to the existing radial-infinity solver after leaving all disk/volume radial
+support. That solver checks the complete outward radial potential before
+continuing direction, angular derivatives and frequency to infinity. A declined
+handoff leaves the ordinary accepted trace intact. This removes travel needed
+only for a finite diagnostic sphere; `Trace` retains that sphere's contract.
+The Gaussian packet, its physical probes, root search and radiance budgets stay
+unchanged. Both host and retained-device detector workers use this ownership
+boundary; device-specific qualification remains separate from CPU comparisons.
+
 The source repository contains only these durable top-level concerns:
 
 | Path | Ownership |

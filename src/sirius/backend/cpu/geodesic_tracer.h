@@ -394,6 +394,14 @@ class GeodesicTracer {
     // result.outcome describes the termination condition.
     TraceResult Trace(const sirius::core::CameraRay& camera_ray);
 
+    // Detector probes consume visibility, transmission and the source map at
+    // infinity. Vacuum Kerr probes may finish at an earlier accepted outward
+    // event once the radial continuation proves no intervening turning point.
+    // All disk/volume support must lie behind that event. final_position and
+    // finite_source_map then describe the handoff, not the configured sphere.
+    // Other metrics and declined handoffs retain the ordinary tracing path.
+    TraceResult TracePointSource(const sirius::core::CameraRay& camera_ray);
+
     // Non-owning; the executor must outlive this tracer and any active trace.
     void SetStepExecutor(TraceStepExecutor* executor) { step_executor_ = executor; }
     // Configure before tracing. The owner supplies a thread-safe predicate.
@@ -438,7 +446,9 @@ class GeodesicTracer {
     TraceStepExecutor* step_executor_ = nullptr;
     std::function<bool()> should_cancel_;
     const sirius::core::OutgoingKerrSchild* outgoing_chart_ = nullptr;
-    TraceResult TraceInCurrentChart(const sirius::core::CameraRay& camera_ray);
+    TraceResult TraceTo(const sirius::core::CameraRay& camera_ray, bool allow_infinity_handoff);
+    TraceResult TraceInCurrentChart(const sirius::core::CameraRay& camera_ray,
+                                    bool allow_infinity_handoff);
 
     // Metric parameters cached once per trace.
     double cached_m_ = 1.0;
