@@ -83,6 +83,13 @@ selection; it cannot stand in for runtime or image evidence. Qualification
 and release modes retain their complete requirements. Development profiles can
 skip unavailable Vulkan cases, so a green local selection is not a Vulkan pass.
 
+The attestation authority control invokes only
+`RenderEvidence.RetainedWireRecordsFeedAttestationControls` from the render test
+executable. That case serializes synthetic scene/completion records without
+rendering or opening a GPU. The verifier consumes those native records before
+mutating source ownership, work coverage, stage counts, budgets and completion
+ordering; a handwritten valid fixture alone cannot establish producer compatibility.
+
 The last completed local renderer run is recorded in
 [SOURCE_CLOSEOUT.md](../docs/SOURCE_CLOSEOUT.md), including its Vulkan exclusions
 and exact tested revision. Reuse that historical evidence only for its stated

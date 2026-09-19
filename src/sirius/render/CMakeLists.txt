@@ -13,6 +13,7 @@ add_library(sirius_render STATIC
     # Output writers.
     exr_writer.cpp
     png_writer.cpp
+    render_evidence.cpp
 
     # Vendored stb implementation translation units.
     stb_impl.cpp
@@ -34,6 +35,7 @@ add_library(sirius_render STATIC
 )
 
 target_link_libraries(sirius_render PUBLIC sirius_core sirius_backend_cpu Threads::Threads)
+target_link_libraries(sirius_render PRIVATE nlohmann_json::nlohmann_json)
 
 # Vulkan render path: the trace-kernel dispatch through the ComputeDevice seam.
 # The backend target returns early when Vulkan dev files are absent, so this is

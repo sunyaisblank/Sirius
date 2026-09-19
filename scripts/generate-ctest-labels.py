@@ -160,6 +160,7 @@ SUITE_LABELS = {
     "RenderSessionProbe": OPERATIONAL,
     "TileScheduler": OPERATIONAL,
     "ProgressTrackerTest": OPERATIONAL,
+    "RenderEvidence": OPERATIONAL,
     "DisplayBuffer": OPERATIONAL,
     "OracleConnection": MANDATORY,
     "WalkerPenrose": MANDATORY,

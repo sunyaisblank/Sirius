@@ -150,6 +150,22 @@ independent per-worker tracers. Native integration runs compile all product and
 test targets and execute non-render authority controls; they do not issue the
 complete runtime or scientific receipt.
 
+Revision `8eeceb1` passed the complete strict product/test build and the fixed
+non-render authority selection on Linux, Windows and macOS in
+[PR integration run 35453639472](https://github.com/sunyaisblank/Sirius/actions/runs/35453639472).
+The subsequent telemetry alignment distinguishes host detector regions from
+submitted device rays and device residency. Each retained Vulkan scene has one request
+record, one scoped actual-source record and a versioned measured completion.
+The physical-workload verifier now binds the retained route's host catalogue to
+positive camera/transport stages, complete region coverage and actual allocations;
+it no longer assumes a legacy device-side catalogue upload. Its operational
+control reads records emitted by the compiled serializers with an exact
+non-render filter, alongside missing/mismatched-record controls.
+Four focused source/protocol checks and the compiled-producer operational check
+passed locally, as did strict GCC compilation, source ownership and the
+1,067-case live CTest inventory. These changes do not alter ray integration or
+radiance, and no new physical GPU workload was executed for this wire alignment.
+
 No external domain was admitted in the closeout build (0/8). Physical Radeon,
 WSL2/Dozen, native Windows/macOS build and runtime, native viewer input and the
 exact IMAX workload retain their independent qualification requirements. Release

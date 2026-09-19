@@ -102,7 +102,8 @@ set_tests_properties(
 add_test(
     NAME OperationalAttestation.FalseExternalEvidenceIsRejected
     COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_SOURCE_DIR}/scripts/verify-attestation.py" --self-test)
+        "${CMAKE_SOURCE_DIR}/scripts/verify-attestation.py" --self-test
+        --render-test-executable "$<TARGET_FILE:sirius_render_tests>")
 set_tests_properties(
     OperationalAttestation.FalseExternalEvidenceIsRejected
     PROPERTIES

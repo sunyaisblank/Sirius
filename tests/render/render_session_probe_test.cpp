@@ -14,6 +14,7 @@
 #include <gtest/gtest.h>
 
 #include "support/scoped_temporary_directory.h"
+#include <nlohmann/json.hpp>
 #include <stb_image.h>
 #include <tinyexr.h>
 
@@ -24,9 +25,11 @@
 #include <format>
 #include <fstream>
 #include <future>
+#include <iostream>
 #include <limits>
 #include <numbers>
 #include <optional>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -375,6 +378,11 @@ TEST(RenderSessionProbe, OnePointRegionFeedsConcurrentDeviceProbesAndCancelsPriv
         }
         void RejectLastInterval() override { ++rejected; }
     } executor;
+    struct Capture {
+        std::ostringstream output;
+        std::streambuf* previous = std::cout.rdbuf(output.rdbuf());
+        ~Capture() { std::cout.rdbuf(previous); }
+    } capture;
     auto entered = executor.entered.get_future();
     SessionConfig config;
     sirius::test::ConfigureMovingKerrDetector(config);
@@ -396,6 +404,19 @@ TEST(RenderSessionProbe, OnePointRegionFeedsConcurrentDeviceProbesAndCancelsPriv
     EXPECT_EQ(executor.steps.load(), 2);
     EXPECT_EQ(executor.rejected.load(), 2);
     EXPECT_EQ(session.GetTileScheduler().GetCompletedCount(), 0);
+    const auto output = capture.output.str();
+    EXPECT_EQ(output.find(sirius::render::kSceneEvidencePrefix), std::string::npos);
+    EXPECT_EQ(output.find(sirius::render::kVulkanEvidencePrefix), std::string::npos);
+    const auto prefix = sirius::render::kSourceSceneEvidencePrefix;
+    const auto source = output.find(prefix);
+    ASSERT_NE(source, std::string::npos);
+    EXPECT_EQ(output.find(prefix, source + prefix.size()), std::string::npos);
+    const auto record = nlohmann::json::parse(
+        output.substr(source + prefix.size(), output.find('\n', source) - source - prefix.size()));
+    EXPECT_EQ(record["point_star_count"], 100000);
+    EXPECT_EQ(record["point_seed"], 42);
+    EXPECT_EQ(record["backend"], "Vulkan");
+    EXPECT_EQ(record["width"], 4);
 }
 
 TEST(RenderSessionProbe, CompletionCallbackCanReenterLifecycleWithoutDeadlock) {

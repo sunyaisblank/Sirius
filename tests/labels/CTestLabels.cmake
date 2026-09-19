@@ -1463,6 +1463,8 @@ set_tests_properties(
     RenderCommandParse.CliCpuOverridesLowerLayerVulkanBackend
     RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent
     RenderCommandParse.ReusedCommandDoesNotRetainAnEarlierGpuRequest
+    RenderEvidence.DeviceIdentityEscapesJsonWithoutChangingItsValue
+    RenderEvidence.RetainedWireRecordsFeedAttestationControls
     RenderSessionProbe.CancellationInterruptsAnActivePrivateRayBeforePublication
     RenderSessionProbe.CompletionCallbackCanReenterLifecycleWithoutDeadlock
     RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr

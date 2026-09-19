@@ -168,65 +168,6 @@ void RenderSession::WaitForCompletion() {
     lifecycle_cv_.notify_all();
 }
 
-std::string SessionSceneEvidenceJson(const SessionConfig& config, std::size_t point_star_count) {
-    const char* backend = nullptr;
-    switch (config.backend) {
-        case RenderBackend::Cpu:
-            backend = "Cpu";
-            break;
-        case RenderBackend::Vulkan:
-            backend = "Vulkan";
-            break;
-        default:
-            SIRIUS_ASSERT(false);
-            backend = "Invalid";
-            break;
-    }
-
-    const char* lens = nullptr;
-    switch (config.lens_type) {
-        case core::LensType::Pinhole:
-            lens = "Pinhole";
-            break;
-        case core::LensType::ThinLens:
-            lens = "ThinLens";
-            break;
-        case core::LensType::Fisheye:
-            lens = "Fisheye";
-            break;
-        default:
-            SIRIUS_ASSERT(false);
-            lens = "Invalid";
-            break;
-    }
-
-    std::ostringstream evidence;
-    evidence.imbue(std::locale::classic());
-    evidence << std::setprecision(std::numeric_limits<double>::max_digits10)
-             << "{\"schema\":\"sirius-render-scene-v1\"" << ",\"backend\":\"" << backend << "\""
-             << ",\"metric\":\"" << core::MetricInfoFor(config.metric_id).canonical_name << "\""
-             << ",\"spin\":" << config.black_hole_spin << ",\"width\":" << config.width
-             << ",\"height\":" << config.height
-             << ",\"samples_per_pixel\":" << config.samples_per_pixel
-             << ",\"field_of_view\":" << static_cast<double>(config.camera_fov)
-             << ",\"disk_enabled\":" << (config.enable_disk ? "true" : "false")
-             << ",\"ray_bundles\":" << (config.ray_bundles ? "true" : "false")
-             << ",\"point_starfield\":" << (config.point_starfield ? "true" : "false")
-             << ",\"point_star_count\":" << point_star_count << ",\"point_brightness_scale\":"
-             << static_cast<double>(config.point_starfield_config.brightness_scale)
-             << ",\"point_seed\":" << config.point_starfield_config.seed
-             << ",\"point_min_distance_pc\":"
-             << static_cast<double>(config.point_starfield_config.min_distance_pc)
-             << ",\"point_max_distance_pc\":"
-             << static_cast<double>(config.point_starfield_config.max_distance_pc)
-             << ",\"camera_beta\":[" << config.camera_beta_forward << ',' << config.camera_beta_up
-             << ',' << config.camera_beta_right << "]" << ",\"lens\":\"" << lens << "\""
-             << ",\"focal_length\":" << static_cast<double>(config.camera_focal_length)
-             << ",\"aperture\":" << static_cast<double>(config.camera_aperture)
-             << ",\"focus_distance\":" << static_cast<double>(config.camera_focus_distance) << '}';
-    return evidence.str();
-}
-
 std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
     const SessionConfig defaults;
     const auto finite = [](double value) { return std::isfinite(value); };
@@ -557,14 +498,15 @@ base::Expected<void> RenderSession::Initialise() {
     progress_.Start();
     progress_.SetTotals(1, 1);
 
-    // The Vulkan renderer owns device scene construction, resource loading,
-    // catalogue upload, and dispatch. Do not construct an unused CPU metric,
+    // The Vulkan renderer owns route selection, source resources and dispatch.
+    // Its retained route constructs its one shared host source owner internally.
+    // Do not first construct an unused CPU metric,
     // camera, tracer pool, texture, or duplicate point catalogue first.
     if (config_.backend == RenderBackend::Vulkan && !external_step_executor_) {
         const std::size_t point_star_count =
             config_.point_starfield ? config_.point_starfield_config.star_count : 0;
-        std::cout << "[Session] Scene evidence: "
-                  << SessionSceneEvidenceJson(config_, point_star_count) << std::endl;
+        std::cout << kSceneEvidencePrefix << SessionSceneEvidenceJson(config_, point_star_count)
+                  << std::endl;
         if (progress_.GetCancellationToken().IsCancelled()) {
             fsm_.Process(SessionEvent::Cancel);
             return {};
@@ -786,7 +728,7 @@ base::Expected<void> RenderSession::Initialise() {
                   << (star_index_->MemoryBytes() / 1024) << " KiB index, beams "
                   << (config_.ray_bundles ? "on" : "off") << std::endl;
     }
-    std::cout << "[Session] Scene evidence: "
+    std::cout << (external_step_executor_ ? kSourceSceneEvidencePrefix : kSceneEvidencePrefix)
               << SessionSceneEvidenceJson(config_, star_index_ ? star_index_->Size() : 0)
               << std::endl;
 
@@ -940,16 +882,17 @@ void RenderSession::RenderVulkanPath() {
 
     std::cout << "[Session] Vulkan render complete: " << stats->metric_name << " on "
               << stats->device_name << ", " << stats->tiles_rendered << " tile(s) of "
-              << (stats->retained_intervals ? 1 : stats->tile_plan.tile_edge) << "px in "
-              << stats->band_dispatches << " governed dispatch(es), " << stats->seconds
-              << "s; governed ray submit/wait " << stats->dispatch_seconds << "s total, "
-              << stats->maximum_dispatch_ms << "ms maximum, " << stats->maximum_dispatch_pixels
-              << " active pixels maximum, " << stats->dispatch_target_overshoots
-              << " target overshoot(s), " << stats->dispatch_subdivisions
-              << " batch subdivision(s), " << stats->dispatch_fallbacks
-              << " safety fallback(s); initialization " << stats->initialization_dispatches
-              << " dispatch(es), " << stats->initialization_seconds << "s wall, "
-              << stats->initialization_submit_wait_ms << "ms submit/wait" << std::endl;
+              << stats->work_tile_edge << "px in " << stats->band_dispatches
+              << " governed dispatch(es), " << stats->seconds << "s; governed ray submit/wait "
+              << stats->dispatch_seconds << "s total, " << stats->maximum_dispatch_ms
+              << "ms maximum, " << stats->maximum_dispatch_rays << " active rays maximum, "
+              << stats->dispatch_target_overshoots << " target overshoot(s), "
+              << stats->dispatch_subdivisions << " batch subdivision(s), "
+              << stats->dispatch_fallbacks << " safety fallback(s); initialization "
+              << stats->initialization_dispatches << " dispatch(es), "
+              << stats->initialization_seconds << "s wall, " << stats->initialization_submit_wait_ms
+              << "ms submit/wait" << std::endl;
+    std::cout << kVulkanEvidencePrefix << VulkanRenderEvidenceJson(config_, *stats) << std::endl;
     fsm_.Process(SessionEvent::AllTilesComplete);
 #else
     error_message_ = "Vulkan backend not compiled in (build without Vulkan development files)";

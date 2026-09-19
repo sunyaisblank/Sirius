@@ -111,10 +111,15 @@ and admits only structured RGB images at 1920 by 1080 and 5616 by 4096 under a
 2048 MiB budget. It also requires one unambiguous hashed typed-session scene
 event at each resolution to agree with every claim, including the catalogue
 seed and minimum/maximum distances in parsecs,
-the actual 100,000-star catalogue to reach Vulkan dispatch with beams enabled,
-the logged device and memory budget to match the record, and that same render to
-write the admitted PNG before reaching `Complete`. A hashed JUnit report must
-contain the complete green estate with no skips, agree with the CTest transcript,
+one scoped source event from the retained renderer’s actual host catalogue,
+and a typed completion record proving positive camera/transport stage work on
+the selected Vulkan device. The record binds complete detector-region coverage,
+the 2048 MiB budget, actual allocation, bounded ray capacity and measured
+submission counts/times. That same render must write the admitted PNG before
+reaching `Complete`. The operational negative control obtains its valid wire
+records from the compiled C++ serializers using an exact non-render test filter;
+handwritten completion strings cannot silently drift from the producer.
+A hashed JUnit report must contain the complete green estate with no skips, agree with the CTest transcript,
 and come from the `linux-ci` profile; the hashed inventory must select the same
 device named by readiness and rendering. This rejects dimensionally valid but
 visually collapsed output as well as metadata that describes a scene or test

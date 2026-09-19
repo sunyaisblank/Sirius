@@ -723,10 +723,10 @@ TEST(VulkanRenderSession, DispatchSubdivisionPreservesExactCameraAndCatalogueOut
         ASSERT_TRUE(result.has_value()) << result.error().Description();
         check_initialization(*result);
         if (result->retained_intervals) {
-            EXPECT_LE(result->maximum_dispatch_pixels, result->continuation_capacity);
+            EXPECT_LE(result->maximum_dispatch_rays, result->continuation_capacity);
             EXPECT_GT(result->dispatch_subdivisions, 0);
         } else {
-            EXPECT_LE(result->maximum_dispatch_pixels, config.width);
+            EXPECT_LE(result->maximum_dispatch_rays, config.width);
         }
         minimum_dispatches = result->band_dispatches;
     }
@@ -736,11 +736,11 @@ TEST(VulkanRenderSession, DispatchSubdivisionPreservesExactCameraAndCatalogueOut
         ASSERT_TRUE(result.has_value()) << result.error().Description();
         check_initialization(*result);
         if (result->retained_intervals) {
-            EXPECT_LE(result->maximum_dispatch_pixels, result->continuation_capacity);
-            EXPECT_GT(result->maximum_dispatch_pixels, 1);
+            EXPECT_LE(result->maximum_dispatch_rays, result->continuation_capacity);
+            EXPECT_GT(result->maximum_dispatch_rays, 1);
         } else {
-            EXPECT_LE(result->maximum_dispatch_pixels, config.width * 4);
-            EXPECT_GT(result->maximum_dispatch_pixels, config.width);
+            EXPECT_LE(result->maximum_dispatch_rays, config.width * 4);
+            EXPECT_GT(result->maximum_dispatch_rays, config.width);
         }
         EXPECT_LT(result->band_dispatches, minimum_dispatches);
     }
@@ -1341,6 +1341,10 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
     });
     ASSERT_TRUE(rendered.has_value()) << rendered.error().Description();
     EXPECT_EQ(tiles, rendered->tiles_rendered);
+    ASSERT_GT(rendered->work_tile_edge, 0);
+    const int edge = rendered->work_tile_edge;
+    EXPECT_EQ(rendered->tiles_rendered,
+              ((config.width + edge - 1) / edge) * ((config.height + edge - 1) / edge));
     EXPECT_EQ(display.GetUpdateCounter(), 1u);
     EXPECT_GT(rendered->band_dispatches, config.samples_per_pixel * 2);
     if (rendered->retained_intervals) {
@@ -1360,7 +1364,7 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
     EXPECT_GT(rendered->explicit_buffer_allocation_bytes, 0u);
     EXPECT_LE(rendered->explicit_buffer_allocation_bytes, rendered->tile_plan.usable_bytes);
     EXPECT_GT(rendered->continuation_capacity, 0u);
-    EXPECT_LE(rendered->maximum_dispatch_pixels,
+    EXPECT_LE(rendered->maximum_dispatch_rays,
               static_cast<std::int64_t>(rendered->continuation_capacity));
     EXPECT_GT(rendered->maximum_dispatch_ms, 0.0);
     EXPECT_LE(rendered->maximum_dispatch_ms, 1000.0);

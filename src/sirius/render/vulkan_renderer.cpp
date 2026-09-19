@@ -399,6 +399,9 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     if (device.BufferAllocationBytes() != planned)
         return Fail(ErrorDomain::kInternal, "allocate retained renderer",
                     "buffer plan differs from actual allocation");
+    std::cout << "[Vulkan] Retained renderer: " << device.Info().name << ", " << RungName(rung)
+              << "; budget " << (*budget / (1024 * 1024)) << " MiB, " << capacity << " ray rows, "
+              << work_count << " host work tiles of " << work_edge << "px" << std::endl;
     // Poll the owner on this thread; device workers consume only the atomic
     // result, so an ordinary stateful cancellation callback is never raced.
     std::atomic<bool> cancelled{false};
@@ -429,8 +432,8 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
         if (std::chrono::steady_clock::now() >= next_progress) {
             const auto progress = executor.Statistics();
             std::clog << "[Vulkan] Retained progress: "
-                      << session.GetTileScheduler().GetCompletedCount() << " pixels, "
-                      << progress.camera_batches << " camera batches, "
+                      << session.GetTileScheduler().GetCompletedCount() << " work tiles of "
+                      << work_edge << "px, " << progress.camera_batches << " camera batches, "
                       << progress.accepted_intervals << " accepted intervals, "
                       << progress.rejected_intervals << " rejected intervals, "
                       << progress.initialized_phases << " phase initializations, "
@@ -454,6 +457,7 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
                      [](float value) { return std::isfinite(value); }))
         return Fail(ErrorDomain::kPhysics, "publish retained frame", "non-finite linear radiance");
     display.UpdateTile(0, 0, config.width, config.height, pixels.data());
+    const auto execution = executor.Statistics();
     VulkanRenderStats stats;
     stats.device_name = device.Info().name;
     stats.metric_name = core::MetricInfoFor(config.metric_id).canonical_name;
@@ -462,12 +466,13 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     stats.explicit_buffer_allocation_bytes = device.BufferAllocationBytes();
     stats.continuation_capacity = capacity;
     stats.retained_intervals = true;
-    stats.dispatch_fallbacks = static_cast<int>(executor.Statistics().safety_fallbacks);
-    stats.dispatch_subdivisions =
-        static_cast<std::int64_t>(executor.Statistics().batch_subdivisions);
+    stats.camera_batches = execution.camera_batches;
+    stats.accepted_intervals = execution.accepted_intervals;
+    stats.dispatch_fallbacks = static_cast<int>(execution.safety_fallbacks);
+    stats.dispatch_subdivisions = static_cast<std::int64_t>(execution.batch_subdivisions);
     stats.tiles_rendered = session.GetTileScheduler().GetCompletedCount();
-    stats.maximum_dispatch_pixels =
-        static_cast<std::int64_t>(executor.Statistics().maximum_batch_rows);
+    stats.work_tile_edge = work_edge;
+    stats.maximum_dispatch_rays = static_cast<std::int64_t>(execution.maximum_batch_rows);
     const auto stages = (*compute)->Statistics();
     for (std::size_t i = 0; i < stages.size(); ++i) {
         stats.retained_stage_dispatches[i] = static_cast<std::int64_t>(stages[i].submissions);
@@ -612,7 +617,9 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
 
     if (scene->metric_id == kDispatchKerrSchild) {
 #ifdef SIRIUS_HAS_RETAINED_COMPUTE
-        return RenderRetained(config, display, device, *rung, on_tile, should_cancel);
+        auto result = RenderRetained(config, display, device, *rung, on_tile, should_cancel);
+        if (result) result->device_index = *device_index;
+        return result;
 #else
         return Fail(ErrorDomain::kKernel, "load retained renderer",
                     "bounded retained kernels were not compiled");
@@ -815,7 +822,7 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
     std::array<double, 3> maximum_continuation_ms{};
     double dispatch_seconds = 0.0;
     double maximum_dispatch_ms = 0.0;
-    std::int64_t maximum_dispatch_pixels = 0;
+    std::int64_t maximum_dispatch_rays = 0;
     std::int64_t dispatch_target_overshoots = 0;
     int dispatch_fallbacks = 0;
     const backend::BufferHandle bindings[] = {*radiance_buf,    *params_buf,       *star_buf,
@@ -926,8 +933,8 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
                             dispatch_seconds += timing.submit_wait_ms / 1000.0;
                             maximum_dispatch_ms =
                                 std::max(maximum_dispatch_ms, timing.submit_wait_ms);
-                            maximum_dispatch_pixels =
-                                std::max(maximum_dispatch_pixels, region.Pixels());
+                            maximum_dispatch_rays =
+                                std::max(maximum_dispatch_rays, region.Pixels());
                             if (*target_ms > 0.0 && timing.submit_wait_ms > *target_ms) {
                                 ++dispatch_target_overshoots;
                             }
@@ -1037,6 +1044,7 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
 
     VulkanRenderStats stats;
     stats.device_name = info.name;
+    stats.device_index = *device_index;
     stats.metric_name = scene->metric_name;
     stats.tile_plan = *plan;
     stats.explicit_buffer_allocation_bytes = device.BufferAllocationBytes();
@@ -1045,12 +1053,13 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
     stats.starfield_uploaded = use_starfield;
     stats.point_catalogue_uploaded = config.point_starfield;
     stats.tiles_rendered = tiles_total;
+    stats.work_tile_edge = plan->tile_edge;
     stats.band_dispatches = band_dispatches;
     stats.continuation_dispatches = continuation_dispatches;
     stats.maximum_continuation_ms = maximum_continuation_ms;
     stats.dispatch_seconds = dispatch_seconds;
     stats.maximum_dispatch_ms = maximum_dispatch_ms;
-    stats.maximum_dispatch_pixels = maximum_dispatch_pixels;
+    stats.maximum_dispatch_rays = maximum_dispatch_rays;
     stats.dispatch_target_overshoots = dispatch_target_overshoots;
     stats.dispatch_fallbacks = dispatch_fallbacks;
     stats.initialization_dispatches = initialization_dispatches;

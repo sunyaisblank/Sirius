@@ -10,6 +10,7 @@
 // same asynchronous, cancellable session lifecycle as the CPU reference path.
 
 #include "sirius/render/film_config.h"
+#include "sirius/render/render_evidence.h"
 #include "sirius/render/session/display_buffer.h"
 #include "sirius/render/session/point_source_detector.h"
 #include "sirius/render/session/progress_tracker.h"
@@ -208,12 +209,6 @@ struct SessionConfig {
     bool enable_film_finish = false;
     FilmConfig film_config = FilmConfig::Interstellar();
 };
-
-// Canonical, machine-readable witness emitted from the typed configuration
-// that the session actually consumes. External attestation compares this event
-// with its claims instead of trusting runbook metadata alone.
-[[nodiscard]] std::string SessionSceneEvidenceJson(const SessionConfig& config,
-                                                   std::size_t point_star_count);
 
 // Typed boundary shared by CPU initialisation and Vulkan capability selection.
 // Small positive dimensions remain legal for probes, while production limits

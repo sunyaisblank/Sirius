@@ -242,7 +242,8 @@ unused padding is not presented as a capability.
 
 Precision inside kernels follows the ladder in section 6. Full-ray Mandatory
 diagnostics independently measure energy, axial angular momentum, Carter Q,
-and the null residual on the CPU RK45 and Vulkan Cartesian-RK4 paths. Constraint
+and the null residual on CPU RK45 and direct Vulkan Cartesian-RK4 probes.
+Production Kerr-family rendering uses the retained coupled path above. Constraint
 drift participates in live step acceptance on both paths; accepted-state null
 projection follows the bounded unprojected defect and preserves the selected
 light-cone branch. These projected adaptive live methods do not claim the
@@ -271,7 +272,38 @@ never enter the WSL-specific path.
 
 ## 5. Render orchestration
 
-The session orchestrator, progress tracking, and viewer port forward with their roles intact. On CPU, the tile scheduler threads over spiral-ordered operator tiles. Vulkan does not initialise that unused CPU scheduler or its duplicate scene objects: the backend derives device-budget tiles, then subdivides them into watchdog-governed row bands with measured safety subdivision, while the viewer consumes complete progressive frames. Both live paths propagate two deviation vectors, extract the singular axes and output-plane orientation, and feed that literal ellipse to an index that owns the exact validated point-catalogue snapshot used to build its topology. The terminal Sachs screen and catalogue tangent plane call one least-aligned-axis basis authority on each host/device path, with a live cross-backend probe pinning the mirrored implementations; anisotropic filtering therefore interprets orientation in the basis that produced it. Thin and volumetric disk contributions are accumulated along each accepted observer-to-scene segment before terminal horizon classification; captured endpoints do not construct an invalid terminal Eulerian frame. The CPU reference advances four canonical variation columns alongside the central Hamiltonian Dormand–Prince stages, then jointly checks projected endpoints, independent midpoint refinement and localized events before physical consumers commit the interval. At a regular moving event, arrival-position and tangent variations use the geodesic vector field, including its physical acceleration; differentiating the cubic locator twice would amplify interpolation roundoff into a false event sensitivity. Capture publishes the physical screen at the localized affine parameter. The current Vulkan Jacobi RK4 tableau evaluates connection and full Riemann curvature at the accepted central start, cubic-Hermite midpoint and end, sharing each stage across the two output deviation columns; replacing this reconstruction with validated same-stage coupling remains required. The double-precision beam integrator remains off the render path as an oracle and is gated against the exact radial and circular Schwarzschild null-congruence solutions to one part in \(10^6\).
+The session owns lifecycle, progress and image publication. CPU work follows
+operator tiles with the detector-region ownership described above. Vulkan
+selects retained coupled transport for Minkowski, Schwarzschild and Kerr; its
+shared host tracer owns event localization and source evaluation while bounded
+device stages advance the physical camera and transport state. Other represented
+metrics use the legacy trace shader with separately governed residency tiles
+and submission bands. The external Vulkan session constructs no duplicate CPU
+scene before selecting its route.
+
+Screen axes use the same least-aligned celestial tangent basis on host and
+device. Thin and volumetric disk contributions accumulate along accepted
+observer-to-scene segments before terminal horizon classification; captured
+endpoints do not construct an invalid terminal Eulerian frame. Coupled transport
+advances four canonical variation columns through the central Hamiltonian
+Dormand–Prince stages and checks projected endpoints, midpoint refinement and
+localized events before consumers commit an interval. Moving-event derivatives
+use the physical geodesic vector field, avoiding second differentiation of a
+cubic locator. Capture publishes the screen at the localized affine parameter.
+Legacy direct shader probes still exercise reconstructed Jacobi RK4 stages;
+that probe path is distinct from the production retained Kerr-family transport.
+The independent double-precision beam oracle remains off the render path and
+is checked against radial and circular Schwarzschild null congruences.
+
+`render_evidence.cpp` owns the versioned wire records. Each external session
+emits one scene request. The retained worker emits a separately scoped source
+scene containing its actual catalogue count; it does not impersonate another
+external session. Successful Vulkan completion records the selected device,
+source owner, work-tile coverage, actual allocation, ray capacity and measured
+stage counts/times. Human progress labels host work tiles and submitted rays
+separately from device residency. The operational attestation check consumes
+records emitted by the compiled serializers and rejects missing or mismatched
+source ownership, empty device work, invalid budgets and inconsistent completion.
 
 The CPU polarisation path carries two observer-screen vectors through the same
 accepted central-ray segments, reconditions them within the local observer
@@ -318,8 +350,9 @@ Retained Kerr-family stages have fixed buffers for at most 64 active ray rows,
 reduced further when the actual device budget requires it. Their embedded
 programs and scratch buffers are included in the allocation plan; creation
 checks the exact bytes against actual device allocations. Host source textures
-and catalogues stay with the shared host source owner. Pixels are independent
-host work items, and the external image is published once only after every
+and catalogues stay with the shared host source owner. Host work follows
+detector-region ownership for point scenes and individual pixels otherwise.
+The external image is published once only after every
 sample completes. Cancellation and numerical failure leave its previous image
 intact. Submission feedback reduces later batch sizes and recovers throughput
 when timings fall below the soft target, preserving any safety reduction.
