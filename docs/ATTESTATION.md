@@ -83,7 +83,7 @@ VK_DRIVER_FILES=/absolute/path/to/dzn_icd.x86_64.json \
     --profile wsl2-radeon-viewer \
     --candidate bin/linux-ci/src/sirius/app/sirius \
     --expected-revision "$(git rev-parse HEAD)" \
-    --output /tmp/sirius-wsl2-preflight.json
+    --output out/preflight/sirius-wsl2.json
 ```
 
 The profile requires the real executing host to be WSL2 with `/dev/dxg`, an

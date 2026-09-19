@@ -46,7 +46,7 @@ python3 -B tests/operational/render_workflow_test.py
 The operator workflow check uses real stub child processes on Linux, Windows,
 and macOS. It checks exit status, missing/empty images, stale output refusal,
 separate logs, explicit selection, and interrupted partial output cleanup.
-It does not invoke Sirius. Sanitizer suppression lives in `sanitizers/`; its
+It does not invoke Sirius. Sanitizer suppression lives in `tests/sanitizers/`; its
 single Vulkan-loader allocation pattern does not suppress Sirius allocations.
 
 Compile only the affected test target, inspect the selection, then execute it:

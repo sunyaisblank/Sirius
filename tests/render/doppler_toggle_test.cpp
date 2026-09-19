@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <atomic>
 #include <cmath>
+#include <future>
 #include <iostream>
 #include <numbers>
 #include <thread>
@@ -67,10 +68,10 @@ AsymmetryMeasurement DiskAsymmetry(bool doppler_beaming) {
     std::atomic<int> next_row{0};
     const unsigned worker_count = std::clamp(std::thread::hardware_concurrency(), 1u, 16u);
     {
-        std::vector<std::jthread> workers;
+        std::vector<std::future<void>> workers;
         workers.reserve(worker_count);
         for (unsigned worker = 0; worker < worker_count; ++worker) {
-            workers.emplace_back([&] {
+            workers.push_back(std::async(std::launch::async, [&] {
                 KerrSchildFamily metric(p);
                 GeodesicTracer tracer(&metric, tc);
                 PinholeCamera camera(cam);
@@ -79,8 +80,9 @@ AsymmetryMeasurement DiskAsymmetry(bool doppler_beaming) {
                         results[y * width + x] = tracer.Trace(camera.GenerateRay(x, y, 0.5f, 0.5f));
                     }
                 }
-            });
+            }));
         }
+        for (auto& worker : workers) worker.get();
     }
 
     double lum_left = 0.0, lum_right = 0.0;

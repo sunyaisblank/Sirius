@@ -1457,6 +1457,8 @@ set_tests_properties(
     PixelSampling.NonPositiveInputFailsClosed
     PixelSampling.NonSquareCountsCoverBothAxesWithoutRemainderBias
     PixelSampling.PatternIsDeterministic
+    ProgressTrackerTest.QuietWorkerWaveUpdatesEtaAndRestartClearsItsHistory
+    ProgressTrackerTest.WorkerCompletionBurstRetainsItsTracingTime
     RenderCommandParse.BackendVulkanDeclinesMetricOffTheRenderPath
     RenderCommandParse.CliCpuOverridesLowerLayerVulkanBackend
     RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent

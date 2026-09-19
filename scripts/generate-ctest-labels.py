@@ -159,6 +159,7 @@ SUITE_LABELS = {
     "VulkanBackend": OPERATIONAL,
     "RenderSessionProbe": OPERATIONAL,
     "TileScheduler": OPERATIONAL,
+    "ProgressTrackerTest": OPERATIONAL,
     "DisplayBuffer": OPERATIONAL,
     "OracleConnection": MANDATORY,
     "WalkerPenrose": MANDATORY,

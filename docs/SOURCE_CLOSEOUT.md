@@ -1,10 +1,9 @@
-# Renderer source closeout — 14 September 2026
+# Renderer validation and integration status
 
-This records the completed local renderer validation from the previous session,
-not completion of the subsequent repository consolidation or release
-qualification. Detailed recovery and experiment history remains at commit
-`9e20150` (`git show 9e20150:docs/SOURCE_CLOSEOUT.md`). Current development and
-retention instructions are in [DEVELOPMENT.md](DEVELOPMENT.md).
+This records scoped renderer validation and remaining qualification limits.
+Development and retention instructions are in [DEVELOPMENT.md](DEVELOPMENT.md).
+Earlier experiment details remain in Git history, including `9e20150` and
+`9661999`; historical results do not qualify later revisions.
 
 ## Completed local validation
 
@@ -68,10 +67,8 @@ at `c0634c7` after about 113 minutes with no completed pixels. It had executed
 2,808,742 accepted device intervals, 7,443 phase initializations and no rejected
 intervals or safety reductions. A regular detector packet alone evaluates 601
 coordinates: across 73,728 camera samples that implies about 44.3 million probes
-before nonlinear refinement and image-root searches. Component arithmetic
-speedups do not resolve that algorithmic workload. Detector sampling and
-CPU/device work ownership require further performance work while preserving
-physical acceptance criteria.
+before nonlinear refinement and image-root searches. That observation motivated shared detector sampling and bounded CPU/device
+work ownership; it remains the historical device result for that workload.
 
 Subsequent development hands outward vacuum detector rays to the checked Kerr
 infinity map earlier (`df95428`). Current point-source discovery shares canonical
@@ -113,14 +110,44 @@ throughput guarantees. Eighteen focused scheduler, queue and session checks
 passed. The explicit Linux GCC render-test target built with warnings as errors;
 format, source ownership and the 1,059-case live CTest inventory checks passed.
 
-The detector evidence at `78886be` covers bulk/scalar refinement and radiance,
-original Gaussian transforms, folds, disconnected visibility and work limits.
-The current scheduling checks establish exclusive region ownership, exact tile
-coverage, preserved default spiral order, constant-index completion and reset,
-concurrent queue callers, private failure/cancellation and untouched linear EXR
-output. These are local source/CPU checks. The complete 192×128 three-sample
-workload and current device throughput remain unmeasured; exact-domain
-qualification remains separate work.
+The full 192×128, three-sample CPU workload completed at `9661999` in
+386.29 seconds (63.62 pixels/second), using 15 workers and all 24 requested
+32×32 tiles. It used the scene in
+[`moving_kerr_detector_scene.h`](../tests/support/moving_kerr_detector_scene.h):
+Kerr mass 1 and spin 0.7, observer radius 50 and inclination 1.5708 radians,
+2-degree field of view, camera beta (0.1, 0.8, 0), and a 50 mm-equivalent thin
+lens at f/2.8 focused at 50 coordinate units. Disk, bloom, film and ray-bundle
+flags were off. The catalogue contained 100,000 stars, seed 42, distances
+1–10,000 parsecs and brightness 1e-5. The app's JSON configuration preserved
+these controls; its typed scene transcript confirmed them. The completed linear
+EXR decoded to finite, nonnegative RGB with 88 nonzero pixels and maximum
+channel value `3.2453112908115145e-7`. This measures CPU workload completion,
+not full-image convergence or current GPU throughput.
+
+The linear output is retained locally under `renders/moving-kerr-192x128/`.
+Its SHA-256 is `a65b191d83684a0958bb39d7f681b4d310c0712ed1897a171ca2ed9b41b80bb4`.
+The PNG beside it is an inspection preview with linear values multiplied by
+1e7 before the normal display pipeline; it is not a second rendered exposure.
+The producing executable hash was
+`2029e0b98b124bdf1ca6f8a1c29287ee4c8b302a9030416243cb275d6d340f85`.
+
+That workload exposed an ETA error: the first 15 completed tiles arrived as a
+burst after minutes of tracing, causing the old short-window rate to predict
+two seconds remaining. Progress now uses monotonic total elapsed throughput,
+with deterministic burst, quiet-period and restart checks. Scheduling and
+radiance are unchanged. Configuration, catalogue-domain, scene transcript,
+Gaussian normalization and disk-intersection checks passed (64 GoogleTests),
+as did the attestation verifier's missing/mismatched catalogue controls.
+The two deterministic progress checks, strict Linux GCC render-test build,
+format/source checks and current 1,065-case live CTest inventory also passed.
+
+PR integration found three native portability issues: MSVC could not prove
+disk-event locals initialized, AppleClang rejected `constexpr std::abs`, and
+Apple's standard library lacked the Doppler test's `std::jthread`. The fixes
+preserve the disk calculations, Gaussian formula, original raster reduction and
+independent per-worker tracers. Native integration runs compile all product and
+test targets and execute non-render authority controls; they do not issue the
+complete runtime or scientific receipt.
 
 No external domain was admitted in the closeout build (0/8). Physical Radeon,
 WSL2/Dozen, native Windows/macOS build and runtime, native viewer input and the
