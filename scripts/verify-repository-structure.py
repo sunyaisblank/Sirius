@@ -194,6 +194,7 @@ THIN_LENS_PARITY_PROBE = SOURCE_ROOT / "kernels" / "parity_probe.slang"
 THIN_LENS_SAMPLE_AUTHORITY = SOURCE_ROOT / "core" / "camera_sampling.h"
 THIN_LENS_APP_BOUNDARY = SOURCE_ROOT / "app" / "config" / "config_loader.cpp"
 THIN_LENS_SESSION_BOUNDARY = SOURCE_ROOT / "render" / "session" / "render_session.cpp"
+THIN_LENS_PIXEL_CONSUMER = SOURCE_ROOT / "render" / "session" / "pixel_shading.cpp"
 THIN_LENS_VULKAN_BOUNDARY = SOURCE_ROOT / "render" / "vulkan_renderer.cpp"
 THIN_LENS_DISPATCH_BOUNDARY = SOURCE_ROOT / "render" / "dispatch_governor.cpp"
 VOLUME_TRANSFER_HOST_AUTHORITY = KERR_TRANSFER_AUTHORITY
@@ -1758,8 +1759,8 @@ def thin_lens_authority_errors(documents: dict[Path, str]) -> list[str]:
             "RadicalInverse(ordinal, 7)",
         ),
         THIN_LENS_APP_BOUNDARY: ("ThinLensGeometryIssue",),
-        THIN_LENS_SESSION_BOUNDARY: (
-            "ThinLensGeometryIssue",
+        THIN_LENS_SESSION_BOUNDARY: ("ThinLensGeometryIssue",),
+        THIN_LENS_PIXEL_CONSUMER: (
             "ForEachCameraSample",
             "sample.image_u",
             "sample.image_v",
@@ -1920,8 +1921,9 @@ def verify_thin_lens_authority_policy() -> None:
             "ForEachCameraSample RadicalInverse(ordinal, 5) RadicalInverse(ordinal, 7)"
         ),
         THIN_LENS_APP_BOUNDARY: "ThinLensGeometryIssue",
-        THIN_LENS_SESSION_BOUNDARY: (
-            "ThinLensGeometryIssue ForEachCameraSample sample.image_u sample.image_v "
+        THIN_LENS_SESSION_BOUNDARY: "ThinLensGeometryIssue",
+        THIN_LENS_PIXEL_CONSUMER: (
+            "ForEachCameraSample sample.image_u sample.image_v "
             "sample.pupil_u sample.pupil_v"
         ),
         THIN_LENS_VULKAN_BOUNDARY: (
@@ -1987,8 +1989,8 @@ def verify_thin_lens_authority_policy() -> None:
         raise RuntimeError("thin-lens policy accepted an unbounded local pupil")
 
     diagonal_host = dict(valid)
-    diagonal_host[THIN_LENS_SESSION_BOUNDARY] = diagonal_host[
-        THIN_LENS_SESSION_BOUNDARY
+    diagonal_host[THIN_LENS_PIXEL_CONSUMER] = diagonal_host[
+        THIN_LENS_PIXEL_CONSUMER
     ].replace("sample.pupil_u sample.pupil_v", "sample.image_u sample.image_v")
     if not thin_lens_authority_errors(diagonal_host):
         raise RuntimeError("thin-lens policy accepted collapsed CPU film/pupil dimensions")

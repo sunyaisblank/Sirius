@@ -1322,6 +1322,7 @@ set_tests_properties(
     MorrisThorneTracerTest.CentralRayTerminatesAtExplicitThroatBoundary
     MorrisThorneTracerTest.DeflectionFallsQuadraticallyWithImpactParameter
     MorrisThorneTracerTest.EdgeRayEscapes
+    PointSourceDetector.CacheRetainsClosePhysicalCoordinatesWithBoundedLookupWork
     PointSourceDetector.DisconnectedVisibilityIslandAndStripeUseActualImageVisibility
     PointSourceDetector.ExhaustionCancellationAndFailedTracesHaveNoPartialRadiance
     PointSourceDetector.FoldKeepsBothImagesOfTheSameCatalogueEntry

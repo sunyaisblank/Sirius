@@ -7,6 +7,7 @@
 
 #include <cmath>
 #include <numbers>
+#include <set>
 #include <vector>
 
 namespace sirius::test {
@@ -74,6 +75,42 @@ TEST(PointSourceDetector, OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSuppor
         const auto value = Expected(star, {x / kScale, y / kScale},
                                     kScale * kScale / std::pow(1 + x * x + y * y, 1.5));
         for (int channel = 0; channel < 3; ++channel) expected[channel] += value[channel];
+    }
+    for (int channel = 0; channel < 3; ++channel)
+        EXPECT_NEAR(result->rgb[channel], expected[channel], 2e-7 * expected[channel]);
+}
+
+TEST(PointSourceDetector, CacheRetainsClosePhysicalCoordinatesWithBoundedLookupWork) {
+    const std::vector<core::StarEntry> stars{Star(0, 0), Star(1e-10 * kScale, -1e-10 * kScale)};
+    core::StarfieldSpatialIndex catalogue(stars);
+    std::set<DetectorCoordinate> sampled;
+    const auto result = EvaluatePointDetector(
+        catalogue, 1,
+        [&](DetectorCoordinate z) {
+            EXPECT_TRUE(sampled.insert(z).second) << "a shared ray was traced twice";
+            return Gnomonic(kScale * z[0], kScale * z[1], kScale, kScale);
+        },
+        [] { return false; });
+    ASSERT_TRUE(result);
+    EXPECT_EQ(result->statistics.probes, sampled.size());
+    EXPECT_GT(result->statistics.probe_requests, result->statistics.probes);
+    EXPECT_GE(result->statistics.probe_cache_comparisons,
+              result->statistics.probe_requests - result->statistics.probes);
+    // Count work instead of timing this machine: a scan of every prior sample
+    // grows quadratically even though the physical rays and result are equal.
+    EXPECT_LT(result->statistics.probe_cache_comparisons, 8 * result->statistics.probe_requests);
+    EXPECT_TRUE(sampled.contains({0, 0}));
+    EXPECT_TRUE(std::any_of(sampled.begin(), sampled.end(), [](DetectorCoordinate z) {
+        const double separation = std::hypot(z[0], z[1]);
+        return separation > 0 && separation < 1e-8;
+    })) << "a distinct corrected image ray was merged into the centre";
+    std::array<double, 3> expected{};
+    for (const auto& star : stars) {
+        const double x = double(star.direction_y) / star.direction_x;
+        const double y = double(star.direction_z) / star.direction_x;
+        const auto image = Expected(star, {x / kScale, y / kScale},
+                                    kScale * kScale / std::pow(1 + x * x + y * y, 1.5));
+        for (int channel = 0; channel < 3; ++channel) expected[channel] += image[channel];
     }
     for (int channel = 0; channel < 3; ++channel)
         EXPECT_NEAR(result->rgb[channel], expected[channel], 2e-7 * expected[channel]);

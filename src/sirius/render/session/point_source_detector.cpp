@@ -4,7 +4,9 @@
 #include "sirius/core/spectral/point_source_transfer.h"
 
 #include <algorithm>
+#include <bit>
 #include <cmath>
+#include <cstdint>
 #include <limits>
 #include <new>
 #include <numbers>
@@ -84,6 +86,24 @@ struct CachedProbe {
     Coordinate z;
     PointDetectorProbe value;
 };
+
+// Exact original-camera coordinates only. A rounded key would merge nearby
+// image rays, while scanning all preceding probes makes refinement quadratic.
+// The table remains at most half full and stores indices into the stable probe
+// vector; its iteration order never participates in sampling or RGB reduction.
+constexpr std::size_t kEmptyProbe = std::numeric_limits<std::size_t>::max();
+
+std::uint64_t CoordinateHash(Coordinate z) {
+    const auto mix = [](std::uint64_t value) {
+        value = (value ^ (value >> 30)) * UINT64_C(0xbf58476d1ce4e5b9);
+        value = (value ^ (value >> 27)) * UINT64_C(0x94d049bb133111eb);
+        return value ^ (value >> 31);
+    };
+    // Numeric equality treats both signs of zero as the same coordinate.
+    const auto x = std::bit_cast<std::uint64_t>(z[0] == 0 ? 0.0 : z[0]);
+    const auto y = std::bit_cast<std::uint64_t>(z[1] == 0 ? 0.0 : z[1]);
+    return mix(mix(x) ^ std::rotl(mix(y), 32));
+}
 struct ImageRoot {
     std::uint32_t star;
     Coordinate z;
@@ -122,9 +142,11 @@ class Detector {
                 policy_.maximum_depth > 20 || policy_.minimum_depth > policy_.maximum_depth)
                 Fail(PointDetectorFailure::InvalidInput);
             probes_.reserve(policy_.maximum_probes);
+            probe_slots_.assign(std::bit_ceil(2 * policy_.maximum_probes), kEmptyProbe);
             roots_.reserve(policy_.maximum_candidate_visits);
-            statistics_.reserved_cache_bytes =
-                probes_.capacity() * sizeof(CachedProbe) + roots_.capacity() * sizeof(ImageRoot);
+            statistics_.reserved_cache_bytes = probes_.capacity() * sizeof(CachedProbe) +
+                                               roots_.capacity() * sizeof(ImageRoot) +
+                                               probe_slots_.capacity() * sizeof(std::size_t);
             CheckCancellation();
             const Cell support{{-4, -4}, {4, 4}, 0};
             auto result = Refine(support, Measure(support));
@@ -148,8 +170,15 @@ class Detector {
     }
     std::size_t Probe(Coordinate z) {
         CheckCancellation();
-        for (std::size_t i = 0; i < probes_.size(); ++i)
-            if (probes_[i].z == z) return i;
+        ++statistics_.probe_requests;
+        const std::size_t mask = probe_slots_.size() - 1;
+        std::size_t slot = CoordinateHash(z) & mask;
+        while (probe_slots_[slot] != kEmptyProbe) {
+            ++statistics_.probe_cache_comparisons;
+            const auto index = probe_slots_[slot];
+            if (probes_[index].z == z) return index;
+            slot = (slot + 1) & mask;
+        }
         if (probes_.size() == policy_.maximum_probes) Fail(PointDetectorFailure::WorkLimit);
         auto value = sampler_(z);
         ++statistics_.probes;
@@ -170,6 +199,7 @@ class Detector {
                     if (!std::isfinite(component)) Fail(PointDetectorFailure::Arithmetic);
         }
         probes_.push_back({z, *value});
+        probe_slots_[slot] = probes_.size() - 1;
         return probes_.size() - 1;
     }
 
@@ -547,6 +577,7 @@ class Detector {
     const PointDetectorPolicy& policy_;
     PointDetectorStatistics statistics_;
     std::vector<CachedProbe> probes_;
+    std::vector<std::size_t> probe_slots_;
     std::vector<ImageRoot> roots_;
 };
 }  // namespace

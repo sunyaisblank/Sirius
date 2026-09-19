@@ -50,6 +50,8 @@ struct PointDetectorPolicy {
 
 struct PointDetectorStatistics {
     std::size_t probes = 0;
+    std::size_t probe_requests = 0;
+    std::size_t probe_cache_comparisons = 0;
     std::size_t cells = 0;
     std::size_t candidate_visits = 0;
     std::size_t newton_steps = 0;

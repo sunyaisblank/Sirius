@@ -31,6 +31,15 @@ declarations and state; `viewer/interactive_viewer.cpp` owns the threaded
 refinement loop. CLI and test translation units therefore do not compile the
 viewer implementation through an oversized header.
 
+Within rendering, `session/render_session.cpp` owns lifecycle, scene setup,
+worker scheduling and publication. `session/pixel_shading.cpp` owns the shared
+CPU/retained-device pixel radiance, disk transfer and background sampling.
+The physical point detector remains a separate adaptive estimator. Its bounded
+coordinate index reuses only exactly equal original-camera probes, including
+the two signs of zero; close image rays are never quantized into one key.
+Index iteration never determines sampling or radiance-reduction order. The
+cache-work regression counts comparisons rather than timing a particular host.
+
 The source repository contains only these durable top-level concerns:
 
 | Path | Ownership |
