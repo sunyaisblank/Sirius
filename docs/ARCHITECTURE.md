@@ -50,6 +50,13 @@ total probe budget, after which the original scalar detectors finish unresolved
 footprints with their unchanged policies. Any failed leaf withholds the region.
 Workers retain only completed region RGB, independent of image size and SPP;
 retained-device work items own whole regions to avoid duplicated discovery.
+CPU tiles smaller than a region are scheduled together with one worker, keeping
+their requested bounds, separate publication and progress counts. Groups are
+ordered from the image centre; the ordinary ungrouped path keeps its original
+spiral sequence. A worker finishes neighboring tiles from the same completed
+region cache, so small tile settings do not retrace that region on other workers.
+Tile IDs index the completion ledger directly, avoiding a full tile-list scan
+after each publication. No frame-sized detector cache is introduced.
 This remains a finite adaptive estimator, not a global image-count certificate.
 
 Independent cell probes can be submitted together, up to 13 original camera

@@ -546,26 +546,11 @@ base::Expected<void> RenderSession::Initialise() {
     }
     std::cout << "  Samples:    " << config_.samples_per_pixel << std::endl;
 
-    // CPU tiles are operator-sized and spiral ordered. Vulkan derives a separate
-    // device-budgeted tile plan and reports its actual total at dispatch time.
-    if (config_.backend == RenderBackend::Cpu || external_step_executor_) {
-        tiles_.Initialise(config_.width, config_.height,
-                          external_step_executor_ ? device_tile_edge_ : config_.tile_size);
-        std::cout << "  Tiles:      " << tiles_.GetTileCount() << " (spiral order)" << std::endl;
-    } else {
-        std::cout << "  Tiles:      device-budget governed (Vulkan)" << std::endl;
-    }
-
-    // Display buffer.
     display_.Initialise(config_.width, config_.height);
-
-    // Progress tracker (Start() before SetTotals to avoid a reset).
+    // CPU totals are set after the physical sampling path is known. Vulkan
+    // supplies its device-governed total through its progress callback.
     progress_.Start();
-    if (config_.backend == RenderBackend::Cpu || external_step_executor_) {
-        progress_.SetTotals(tiles_.GetTileCount(), config_.samples_per_pixel);
-    } else {
-        progress_.SetTotals(1, 1);
-    }
+    progress_.SetTotals(1, 1);
 
     // The Vulkan renderer owns device scene construction, resource loading,
     // catalogue upload, and dispatch. Do not construct an unused CPU metric,
@@ -799,6 +784,15 @@ base::Expected<void> RenderSession::Initialise() {
     std::cout << "[Session] Scene evidence: "
               << SessionSceneEvidenceJson(config_, star_index_ ? star_index_->Size() : 0)
               << std::endl;
+
+    // Keep requested tile bounds and publication units. Neighboring small
+    // point-scene tiles share one worker's completed canonical detector region;
+    // larger tiles already contain whole regions without overlap.
+    tiles_.Initialise(config_.width, config_.height,
+                      external_step_executor_ ? device_tile_edge_ : config_.tile_size,
+                      UsesPhysicalPointDetector() ? kPointDetectorBlockEdge : 0);
+    progress_.SetTotals(tiles_.GetTileCount(), config_.samples_per_pixel);
+    std::cout << "  Tiles:      " << tiles_.GetTileCount() << " (spiral work groups)" << std::endl;
 
     // Detector coordinators retain sequential root refinement. Independent
     // cell probes use separate tracers so one region can occupy several CPU
@@ -1190,36 +1184,26 @@ void RenderSession::RenderTilesParallel() {
 void RenderSession::WorkerThread(int thread_id) {
     active_workers_++;
 
-    while (!stop_workers_) {
-        Tile* tile = nullptr;
-        {
-            std::lock_guard<std::mutex> lock(tile_mutex_);
-            tile = tiles_.GetNextTile();
-        }
+    while (!IsStopping()) {
+        const auto group = tiles_.GetNextTileGroup();
+        if (group.empty()) break;
+        for (auto& tile : group) {
+            if (IsStopping()) break;
+            const auto rendered = RenderTileThreaded(&tile, thread_id);
+            if (!rendered) {
+                // Preserve the original failure while the remaining workers stop.
+                if (!stop_workers_.exchange(true))
+                    worker_errors_[static_cast<std::size_t>(thread_id)] = rendered.error();
+                break;
+            }
+            if (!*rendered) break;
 
-        if (tile == nullptr) {
-            break;
-        }
-
-        if (progress_.GetCancellationToken().IsCancelled()) {
-            stop_workers_ = true;
-            break;
-        }
-
-        const auto rendered = RenderTileThreaded(tile, thread_id);
-        if (!rendered) {
-            // Preserve the original failure while the remaining workers stop.
-            if (!stop_workers_.exchange(true))
-                worker_errors_[static_cast<std::size_t>(thread_id)] = rendered.error();
-            break;
-        }
-        if (!*rendered) break;
-
-        {
-            std::lock_guard<std::mutex> lock(tile_mutex_);
-            tiles_.CompleteTile(tile->id);
-            // Single progress surface: the ProgressTracker callback.
-            progress_.CompleteTile(tile->PixelCount());
+            {
+                std::lock_guard<std::mutex> lock(tile_mutex_);
+                tiles_.CompleteTile(tile.id);
+                // Single progress surface: the ProgressTracker callback.
+                progress_.CompleteTile(tile.PixelCount());
+            }
         }
     }
 

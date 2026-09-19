@@ -13,6 +13,7 @@ add_executable(sirius_render_tests
     film_pipeline_test.cpp
     spectral_emission_test.cpp
     render_session_probe_test.cpp
+    tile_scheduler_test.cpp
     memory_governor_test.cpp
     dispatch_governor_test.cpp
     vulkan_render_test.cpp

@@ -372,7 +372,7 @@ class RenderSession {
     std::vector<PixelBlock> thread_pixel_blocks_;
     std::vector<std::unique_ptr<backend::GeodesicTracer>> probe_tracers_;
     std::unique_ptr<RayWorkQueue> probe_workers_;
-    std::mutex tile_mutex_;                  // Protects tile acquisition.
+    std::mutex tile_mutex_;                  // Serializes tile completion and progress callbacks.
     std::mutex display_mutex_;               // Protects display buffer updates.
     std::atomic<bool> stop_workers_{false};  // Signal workers to stop.
     std::atomic<int> active_workers_{0};     // Workers currently rendering.

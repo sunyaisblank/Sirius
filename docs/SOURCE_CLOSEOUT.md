@@ -81,6 +81,10 @@ retains its Gaussian, source map, frequency and image transmission. Workers cach
 only completed region RGB. Sky-only point scenes need no additional centre ray;
 scenes with disk or volume emission retain their foreground traces. Device jobs
 own whole regions so separate pixel workers do not repeat their discovery.
+CPU tiles smaller than a region now form one worker-owned scheduling group,
+retaining their requested bounds and separate publication. Each region is
+evaluated once, including partial edges. Tile completion uses its direct ID
+index instead of scanning the full tile list.
 
 Independent detector cell probes now execute through a bounded ray queue. Each
 worker owns its tracer; root refinements and foreground rays use that same pool,
@@ -100,21 +104,23 @@ measures available probe concurrency, not GPU dispatch throughput. The analytic
 1,024-footprint check uses 792 probes and matches its independent Gaussian flux
 oracle within 2e-6 relative.
 
-The final 32×16, one-sample, 100,000-star serial/two-worker comparison passed in
-106.75 seconds with identical linear pixels. The 33×1 edge/three-sample comparison
-also retained identical pixels in 35.00 seconds. Thirty-one distinct focused
-detector, queue and session checks passed, with the 11 affected session/queue
-cases rerun after routing sequential traces through the same worker budget.
-The explicit Linux GCC render-test target built with warnings as errors;
-format, source ownership and the 1,055-case live CTest inventory checks passed.
+After grouping small tiles, the same 32×16, one-sample, 100,000-star
+serial/two-worker comparison passed in 83.92 seconds with identical linear pixels
+and unchanged requested tile counts (106.75 seconds at `78886be`). The 33×1
+edge/three-sample comparison likewise retained identical pixels in 30.03 seconds
+(previously 35.00). These are local comparison-test wall times, not portable
+throughput guarantees. Eighteen focused scheduler, queue and session checks
+passed. The explicit Linux GCC render-test target built with warnings as errors;
+format, source ownership and the 1,059-case live CTest inventory checks passed.
 
-These checks cover bulk/scalar radiance and refinement agreement, original
-Gaussian transforms, folds, disconnected visibility, work limits, typed failures,
-concurrent queue callers, request ordering and queue reuse after failure. A
-mocked device executor confirms that one region supplies concurrent rays and
-that cancellation withholds its tile. These are local source/CPU checks. The
-complete 192×128 three-sample workload and current device throughput remain
-unmeasured; exact-domain qualification remains separate work.
+The detector evidence at `78886be` covers bulk/scalar refinement and radiance,
+original Gaussian transforms, folds, disconnected visibility and work limits.
+The current scheduling checks establish exclusive region ownership, exact tile
+coverage, preserved default spiral order, constant-index completion and reset,
+concurrent queue callers, private failure/cancellation and untouched linear EXR
+output. These are local source/CPU checks. The complete 192×128 three-sample
+workload and current device throughput remain unmeasured; exact-domain
+qualification remains separate work.
 
 No external domain was admitted in the closeout build (0/8). Physical Radeon,
 WSL2/Dozen, native Windows/macOS build and runtime, native viewer input and the

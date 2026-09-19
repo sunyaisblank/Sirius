@@ -189,6 +189,7 @@ TEST(RenderSessionProbe, PhysicalPointDetectorCompletesAMovingThinLensKerrFrame)
     ASSERT_TRUE(parallel.Configure(config));
     ASSERT_EQ(parallel.Execute(), SessionState::Complete);
     EXPECT_EQ(parallel.GetDisplayBuffer().SnapshotFloatData(), pixels);
+    EXPECT_EQ(parallel.GetTileScheduler().GetTileCount(), (config.width + 15) / 16);
 }
 
 TEST(RenderSessionProbe, PhysicalPointBlocksPreservePartialEdgesAndNonSquareSamples) {
@@ -234,6 +235,7 @@ TEST(RenderSessionProbe, PhysicalPointBlocksPreservePartialEdgesAndNonSquareSamp
     ASSERT_TRUE(parallel.Configure(config));
     ASSERT_EQ(parallel.Execute(), SessionState::Complete) << parallel.GetErrorMessage();
     EXPECT_EQ(parallel.GetDisplayBuffer().SnapshotFloatData(), pixels);
+    EXPECT_EQ(parallel.GetTileScheduler().GetTileCount(), (config.width + 15) / 16);
 }
 
 TEST(RenderSessionProbe, FilmAffectsDisplayOutputButNeverLinearExr) {
@@ -573,21 +575,6 @@ TEST(RenderSessionProbe, PolarisedRequestsDeclineAndTwoSheetIsRepresented) {
     config.black_hole_mass = 0.0;
     config.wormhole_topology = sirius::render::WormholeTopology::TwoSheet;
     EXPECT_FALSE(sirius::render::SessionConfigIssue(config).has_value());
-}
-
-TEST(TileScheduler, ReinitialiseResetsCompletionLedger) {
-    sirius::render::TileScheduler scheduler;
-    scheduler.Initialise(128, 64, 64);
-    ASSERT_EQ(scheduler.GetTileCount(), 2);
-    const sirius::render::Tile* tile = scheduler.GetNextTile();
-    ASSERT_NE(tile, nullptr);
-    scheduler.CompleteTile(tile->id);
-    ASSERT_EQ(scheduler.GetCompletedCount(), 1);
-
-    scheduler.Initialise(64, 64, 64);
-    EXPECT_EQ(scheduler.GetTileCount(), 1);
-    EXPECT_EQ(scheduler.GetCompletedCount(), 0);
-    EXPECT_FALSE(scheduler.AllComplete());
 }
 
 TEST(DisplayBuffer, NonFiniteRadianceIsIdentifiedBeforeEncoding) {

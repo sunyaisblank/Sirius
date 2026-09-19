@@ -1483,7 +1483,11 @@ set_tests_properties(
     StarfieldPointTest.EllipticalFootprintUsesBothAxesAndOrientation
     StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope
     StarfieldPointTest.SpatialIndexMatchesExhaustiveBeamOracle
+    TileScheduler.CompletionLedgerIsIdempotentAndResetRetainsGroups
+    TileScheduler.DefaultGroupsRetainTheOriginalSpiralSequence
+    TileScheduler.ParallelAcquisitionNeverDuplicatesAGroupOrTile
     TileScheduler.ReinitialiseResetsCompletionLedger
+    TileScheduler.WorkGroupsPreserveEveryOriginalTileAndOwnEachRegionOnce
     ViewCommandOperational.HeadlessRefinementProducesASynchronisedFrame
     ViewCommandOperational.VulkanRefinementPublishesProgressiveFrames
     VulkanRenderSession.CapabilityBoundaryAcceptsRepresentedSceneSemantics
