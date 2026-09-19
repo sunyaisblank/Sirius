@@ -218,17 +218,20 @@ implementation and evidence against the selected release revision.
 - P3/P5 physical qualification requires both 1920×1080 and 5616×4096 images
   of the governed moving ThinLens scene with beam-filtered 100,000-star
   sampling under the 2048 MiB cap. Admission requires sparse disk-free
-  morphology, a hashed typed-session event proving catalogue/beam use, and
-  the same transcript's device, budget, completion and output identity.
+  morphology, hashed typed request and actual-source records proving host
+  catalogue/beam use, and the same transcript's measured retained stages,
+  region coverage, device, budget, completion and output identity.
   Earlier full-resolution frames predate the physical pupil and sampling
   corrections and cannot satisfy these requirements. The complete small
   CPU/device comparison recorded in `SOURCE_CLOSEOUT.md` is also insufficient.
-- The retained physical point detector has a substantial throughput limit:
-  regular packets evaluate 601 coordinates before additional refinement.
-  Eight Kerr device pixels took more than three hours on the measured
-  Radeon/Dozen route. The larger moving ThinLens scene did not complete a pixel
-  before interruption. Correctness witnesses and component arithmetic timings
-  do not establish practical complete-frame rendering speed.
+- Earlier retained-device timings exposed a substantial throughput limit:
+  eight Kerr pixels at `bf30294` took more than three hours on Radeon/Dozen,
+  and the larger moving ThinLens scene at `c0634c7` did not complete a pixel
+  before interruption. Current discovery shares canonical 32×32 regions and
+  batches independent probes; the 192×128, three-sample CPU workload completed
+  in 386.29 seconds at `9661999`. These results and their exact scenes are in
+  `SOURCE_CLOSEOUT.md`. Current GPU workload throughput remains unmeasured;
+  correctness witnesses and component arithmetic timings do not establish it.
 - Vulkan volumetric transfer deliberately caps `volumetric.samples` at 128 per
   geodesic segment to protect the first dispatch from an unbounded watchdog
   exposure. The CPU accepts the schema maximum of 4096; explicit Vulkan requests

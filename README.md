@@ -1,6 +1,6 @@
 # Sirius
 
-Sirius is a general relativistic ray tracing engine. It renders black holes, wormholes, and warp-drive spacetimes by integrating photon geodesics through analytically specified metric tensor fields, producing gravitational lensing, black hole shadows, and accretion disk emission from the geometry itself rather than from approximations layered on flat space. The engine is written in C++26 with a single Slang kernel source for GPU execution, and it targets the fidelity standard of DNGR, the renderer DNEG and Kip Thorne built for Interstellar; `docs/SPECIFICATION.md` states that standard as measurable criteria and `docs/ADVERSARIAL_REVIEW.md` records the current scorecard and limits.
+Sirius is a general relativistic ray tracing engine. It renders black holes, wormholes, and warp-drive spacetimes by integrating photon geodesics through analytically specified metric tensor fields, producing gravitational lensing, black hole shadows, and accretion disk emission from the geometry itself rather than from approximations layered on flat space. The engine is written in C++26 with Slang kernels for Vulkan execution, and it targets the fidelity standard of DNGR, the renderer DNEG and Kip Thorne built for Interstellar; `docs/SPECIFICATION.md` states that standard as measurable criteria and `docs/ADVERSARIAL_REVIEW.md` records the current scorecard and limits.
 
 ## The physics
 
