@@ -418,7 +418,8 @@ TEST_F(RetainedComputeTest, DenseSegmentsPreserveSmallCovariantArrivalDerivative
     auto invalid = compute->Dense(std::span(&input, 1));
     ASSERT_TRUE(invalid) << invalid.error().Description();
     EXPECT_FALSE(invalid->front().valid);
-    for (const auto& value : invalid->front().physical) EXPECT_EQ(value.valid, 0U);
+    for (const auto& rejected_value : invalid->front().physical)
+        EXPECT_EQ(rejected_value.valid, 0U);
     input = std::bit_cast<RetainedDenseInput>(cases[0].input);
     input.values[105] = RetainedValue::FromDouble(1.01);
     invalid = compute->Dense(std::span(&input, 1));

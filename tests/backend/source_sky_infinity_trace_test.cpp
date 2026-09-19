@@ -304,8 +304,8 @@ TEST(SourceSkyInfinityTrace, PointSourceHandoffAvoidsVacuumTravelForMovingPhysic
         for (const auto offset : {std::array{0.0, 0.0}, std::array{-1.0, .5}}) {
             SCOPED_TRACE(spin);
             SCOPED_TRACE(offset[0]);
-            const auto projection =
-                camera.ProjectFilmOffsetForObserver(1.5, .5, offset[0], offset[1], .2, 1.0 / 7.0);
+            const auto projection = camera.ProjectFilmOffsetForObserver(
+                1.5, .5, offset[0], offset[1], .2f, static_cast<float>(1.0 / 7.0));
             ASSERT_TRUE(projection);
             ASSERT_TRUE(projection->ray.phase_space);
             const auto reference = tracer.Trace(projection->ray);

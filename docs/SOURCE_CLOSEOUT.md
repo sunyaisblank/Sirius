@@ -141,10 +141,11 @@ as did the attestation verifier's missing/mismatched catalogue controls.
 The two deterministic progress checks, strict Linux GCC render-test build,
 format/source checks and current 1,065-case live CTest inventory also passed.
 
-PR integration found three native portability issues: MSVC could not prove
+PR integration found native portability issues: MSVC could not prove
 disk-event locals initialized, AppleClang rejected `constexpr std::abs`, and
-Apple's standard library lacked the Doppler test's `std::jthread`. The fixes
-preserve the disk calculations, Gaussian formula, original raster reduction and
+Apple's standard library lacked the Doppler test's `std::jthread`. MSVC also
+required explicit test argument conversions and a non-shadowing local name.
+The fixes preserve the disk calculations, Gaussian formula, original raster reduction and
 independent per-worker tracers. Native integration runs compile all product and
 test targets and execute non-render authority controls; they do not issue the
 complete runtime or scientific receipt.

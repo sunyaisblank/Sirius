@@ -261,8 +261,8 @@ void CheckCameraFrame(const std::string& artifact) {
             EXPECT_NEAR(output[36 + j], catalogue->second[j], 2e-6);
             // Project the observed physical screens back into their own frame;
             // a wrong yet orthonormal reference axis must fail this comparison.
-            EXPECT_NEAR(dot(24, 8 + 4 * j), output[33 + j], 4e-6);
-            EXPECT_NEAR(dot(28, 8 + 4 * j), output[36 + j], 4e-6);
+            EXPECT_NEAR(static_cast<double>(dot(24, 8 + 4 * j)), output[33 + j], 4e-6);
+            EXPECT_NEAR(static_cast<double>(dot(28, 8 + 4 * j)), output[36 + j], 4e-6);
         }
         const auto ray = relativity::PastDirectedCameraRay(*boosted, direction);
         const auto screen = relativity::ObserverScreenBasis(*boosted, direction);
