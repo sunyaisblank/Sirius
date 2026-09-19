@@ -91,12 +91,19 @@ class BandController {
     // Tail feedback uses only the area actually dispatched.
     bool Record(std::int64_t dispatched_pixels, double measured_ms);
 
+    // Choose the next region's soft size from its most expensive actual
+    // submission, so cheap initialization/finalization cannot mask costly
+    // advancement. This is feedback only, not another physical observation;
+    // every timing must already have passed Record. Sticky safety caps persist.
+    void FinalizeRegionFeedback(std::int64_t dispatched_pixels, double peak_measured_ms);
+
     [[nodiscard]] bool Enabled() const { return target_ms_ > 0.0; }
     [[nodiscard]] double TargetMs() const { return target_ms_; }
     [[nodiscard]] bool SafetyFallback() const { return safety_fallback_; }
     [[nodiscard]] std::int64_t SafetyPixelCap() const { return safety_pixel_cap_; }
 
   private:
+    void UpdateSoftSizing(std::int64_t dispatched_pixels, double measured_ms);
     std::int64_t max_pixels_;
     int max_rows_;
     double target_ms_;
@@ -105,11 +112,29 @@ class BandController {
     bool safety_fallback_ = false;
 };
 
+struct DispatchContinuationResult {
+    double submit_wait_ms;
+    bool sample_complete;
+};
+
 // Execute one private logical band within the caller's hard shape/area caps.
 // Subdivision only shrinks this region. Submission observes the original camera
 // sample order; completion is called only after every sample of a final region.
 // A reducible safety fallback discards that region's partial accumulation and
-// replays each disjoint child from sample zero. No device timing is synthesized.
+// replays each disjoint child from sample zero and continuation zero. Every
+// callback represents one physical submit/wait and is recorded separately.
+// Only sample_complete advances the camera sample; exhaustion of the caller's
+// positive per-sample submission bound fails without publishing the region.
+// No device timing is synthesized.
+[[nodiscard]] base::Expected<void> ExecuteDispatchRegions(
+    const DispatchRegion& region, int samples_per_pixel, BandController& bands,
+    std::uint32_t max_submissions_per_sample,
+    const std::function<base::Expected<DispatchContinuationResult>(
+        const DispatchRegion&, const CameraSample&, int, std::uint32_t)>& submit,
+    const std::function<base::Expected<void>(const DispatchRegion&)>& completed,
+    const std::function<bool()>& should_cancel = {});
+
+// One physical submission completes each sample for legacy callers.
 [[nodiscard]] base::Expected<void> ExecuteDispatchRegions(
     const DispatchRegion& region, int samples_per_pixel, BandController& bands,
     const std::function<base::Expected<double>(const DispatchRegion&, const CameraSample&, int)>&

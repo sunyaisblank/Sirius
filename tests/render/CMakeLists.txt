@@ -13,11 +13,17 @@ add_executable(sirius_render_tests
     film_pipeline_test.cpp
     spectral_emission_test.cpp
     render_session_probe_test.cpp
+    tile_scheduler_test.cpp
+    progress_tracker_test.cpp
+    render_evidence_test.cpp
     memory_governor_test.cpp
     dispatch_governor_test.cpp
     vulkan_render_test.cpp
     ray_bundle_test.cpp
     starfield_point_test.cpp
+    point_source_detector_test.cpp
+    point_source_detector_physics_test.cpp
+    ray_work_queue_test.cpp
     doppler_toggle_test.cpp
     camera_aberration_test.cpp
     pixel_sampling_test.cpp

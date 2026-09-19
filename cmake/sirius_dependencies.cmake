@@ -1,5 +1,4 @@
-# Single authority for fetched dependencies. Both the legacy tree and the
-# new tree consume these declarations; FetchContent honours the first
+# Single authority for fetched dependency pins. FetchContent honours the first
 # declaration per name, so pins live here and nowhere else.
 
 include(FetchContent)

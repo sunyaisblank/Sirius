@@ -264,6 +264,7 @@ python3 - "$DEVICE_JSON" "$TEST_REPORT" "$ATTESTATION" "$EVIDENCE_LOG" \
     "$SELECTED_INDEX" "$SOURCE_REVISION" "$PRESET" "$FP64_SUPPORTED" "$ATTESTATION_DOMAINS" \
     "$RENDER_1080_WALL_SECONDS" "$RENDER_WALL_SECONDS" "$SIRIUS" <<'PY'
 import hashlib
+import importlib.util
 import json
 import pathlib
 import struct
@@ -285,6 +286,10 @@ from datetime import datetime, timezone
     wall_seconds,
     candidate_executable_path,
 ) = sys.argv[1:]
+
+spec = importlib.util.spec_from_file_location("attestation", "scripts/verify-attestation.py")
+verifier = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(verifier)
 root = pathlib.Path(output_path).parent
 names = [
     "kerr_governed_1080p.png",
@@ -305,13 +310,8 @@ names.extend([
     "qualification-gate-junit",
     "qualification-gate-log",
 ])
+names.extend(verifier.QUALIFICATION_TEST_INPUT_EVIDENCE.values())
 names.extend([
-    "test-input-smoke_spv",
-    "test-input-parity_probe_spv",
-    "test-input-parity_probe_fp32comp_spv",
-    "test-input-parity_probe_fp64_spv",
-    "test-input-trace_cuda",
-    "test-input-trace_metal",
     "qualification-product-operating_model",
     "qualification-product-starfield",
     "qualification-product-trace_fp32comp_spv",
@@ -369,6 +369,9 @@ scene = {
     "point_starfield": True,
     "star_catalogue_minimum": 100000,
     "point_brightness_scale": 100.0,
+    "point_seed": 42,
+    "point_min_distance_pc": 1.0,
+    "point_max_distance_pc": 10000.0,
     "camera_beta": [0.1, 0.02, -0.01],
     "lens": "ThinLens",
     "focal_length": 50.0,

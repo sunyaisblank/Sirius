@@ -55,7 +55,7 @@ set(SIRIUS_KERNEL_SOURCES
 
 # Shared physics modules imported (via `import`, -I include path) by the
 # entry-point kernels; any edit re-triggers the affected kernel compiles.
-file(GLOB SIRIUS_KERNEL_LIBS "${SIRIUS_KERNEL_DIR}/gr_*.slang")
+file(GLOB SIRIUS_KERNEL_LIBS CONFIGURE_DEPENDS "${SIRIUS_KERNEL_DIR}/gr_*.slang")
 
 # spirv-val gates every emitted module when present (verification gate,
 # docs/SPECIFICATION.md section 7); when absent the build proceeds and the note
@@ -63,6 +63,52 @@ file(GLOB SIRIUS_KERNEL_LIBS "${SIRIUS_KERNEL_DIR}/gr_*.slang")
 find_program(SIRIUS_SPIRV_VAL spirv-val)
 if(NOT SIRIUS_SPIRV_VAL)
     message(STATUS "Sirius backend: spirv-val not found; emitted kernels will not be validated at build time")
+endif()
+
+# Bounded retained programs are embedded with their validated shaders. Their
+# bytes are consequently covered by the normal product/receipt hashes and do
+# not depend on a test fixture or an extra installed runtime file.
+find_program(SIRIUS_SPIRV_AS spirv-as)
+find_program(SIRIUS_SPIRV_DIS spirv-dis)
+if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS)
+    set(retained_build "${CMAKE_CURRENT_BINARY_DIR}/retained")
+    set(retained_header "${retained_build}/retained_kernels.h")
+    add_custom_command(
+        OUTPUT "${retained_header}"
+        BYPRODUCTS "${retained_build}/retained_camera.spv"
+                   "${retained_build}/retained_transport.spv"
+                   "${retained_build}/retained_endpoint.spv"
+                   "${retained_build}/retained_dense.spv"
+                   "${retained_build}/retained_initialize.spv"
+                   "${retained_build}/retained_ray_camera.spv"
+                   "${retained_build}/retained_camera_fp64.spv"
+                   "${retained_build}/retained_transport_fp64.spv"
+                   "${retained_build}/retained_endpoint_fp64.spv"
+                   "${retained_build}/retained_dense_fp64.spv"
+                   "${retained_build}/retained_initialize_fp64.spv"
+                   "${retained_build}/retained_ray_camera_fp64.spv"
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/scripts/build-retained-kernels.py"
+            --output "${retained_header}" --compiler "${SIRIUS_SLANGC}"
+            --assembler "${SIRIUS_SPIRV_AS}" --disassembler "${SIRIUS_SPIRV_DIS}"
+            --validator "${SIRIUS_SPIRV_VAL}"
+        DEPENDS "${CMAKE_SOURCE_DIR}/scripts/build-retained-kernels.py"
+                "${SIRIUS_KERNEL_DIR}/retained_program.py"
+                "${SIRIUS_KERNEL_DIR}/retained_pair.slang"
+                "${SIRIUS_KERNEL_DIR}/retained_triple.slang"
+                "${SIRIUS_KERNEL_DIR}/retained_scratch.slang"
+                "${SIRIUS_KERNEL_DIR}/retained_camera.slang"
+                "${SIRIUS_KERNEL_DIR}/retained_transport.slang"
+                "${SIRIUS_KERNEL_DIR}/retained_endpoint.slang"
+                "${SIRIUS_KERNEL_DIR}/retained_dense.slang"
+                "${SIRIUS_KERNEL_DIR}/retained_initialize.slang"
+                "${SIRIUS_KERNEL_DIR}/retained_ray_camera.slang"
+        COMMENT "Building bounded retained camera and joint transport stages"
+        VERBATIM)
+    target_sources(sirius_backend PRIVATE retained_compute.cpp retained_integrator.cpp
+        retained_trace_executor.cpp "${retained_header}")
+    target_link_libraries(sirius_backend PUBLIC sirius_core)
+    target_include_directories(sirius_backend PRIVATE "${retained_build}")
+    target_compile_definitions(sirius_backend PUBLIC SIRIUS_HAS_RETAINED_COMPUTE=1)
 endif()
 
 set(SIRIUS_KERNEL_OUTPUTS "")
@@ -91,9 +137,67 @@ endforeach()
 
 # Precision probes exercise the same Cartesian trajectory and adaptive-step
 # authorities as trace.slang without producing an image.  They are test-only
-# artefacts: storage-buffer records remain fp32 at the boundary while Real is
-# selected session-wide inside the probe.
+# artefacts. Real is selected session-wide; the original parity probe retains
+# float I/O while the dedicated probes below preserve Real-width records.
 if(BUILD_TESTS)
+    # These probes preserve Real-width inputs and outputs at the test boundary.
+    foreach(real_probe IN ITEMS infinity_probe metric_consistency_probe camera_frame_probe)
+        foreach(probe_rung IN ITEMS fp32 fp32comp fp64)
+            set(probe_flags "")
+            set(probe_suffix "")
+            if(probe_rung STREQUAL "fp32comp")
+                set(probe_flags -DSIRIUS_FP32_COMP)
+                set(probe_suffix "_fp32comp")
+            elseif(probe_rung STREQUAL "fp64")
+                set(probe_flags -DSIRIUS_FP64 -warnings-disable 30082)
+                set(probe_suffix "_fp64")
+            endif()
+            set(probe_out "${SIRIUS_KERNEL_BINARY_DIR}/${real_probe}${probe_suffix}.spv")
+            if(SIRIUS_SPIRV_VAL)
+                set(probe_validate COMMAND "${SIRIUS_SPIRV_VAL}" "${probe_out}")
+            else()
+                set(probe_validate "")
+            endif()
+            add_custom_command(
+                OUTPUT "${probe_out}"
+                COMMAND ${SIRIUS_SLANGC} "${SIRIUS_KERNEL_DIR}/${real_probe}.slang"
+                    ${probe_flags}
+                    -target spirv -profile spirv_1_5
+                    -entry ComputeMain -stage compute
+                    -I "${SIRIUS_KERNEL_DIR}"
+                    -o "${probe_out}"
+                ${probe_validate}
+                DEPENDS "${SIRIUS_KERNEL_DIR}/${real_probe}.slang" ${SIRIUS_KERNEL_LIBS}
+                COMMENT "Compiling ${real_probe}.slang (${probe_rung}) -> SPIR-V (+spirv-val)"
+                VERBATIM
+            )
+            list(APPEND SIRIUS_KERNEL_OUTPUTS "${probe_out}")
+        endforeach()
+    endforeach()
+    # The existing coupled regression consumes only fp64 and retains float I/O.
+    # Isolate its large call graph from the ordinary three-rung parity probe.
+    set(coupled_probe_fp64_out "${SIRIUS_KERNEL_BINARY_DIR}/coupled_probe_fp64.spv")
+    if(SIRIUS_SPIRV_VAL)
+        set(coupled_probe_fp64_validate COMMAND "${SIRIUS_SPIRV_VAL}" "${coupled_probe_fp64_out}")
+    else()
+        set(coupled_probe_fp64_validate "")
+    endif()
+    add_custom_command(
+        OUTPUT "${coupled_probe_fp64_out}"
+        COMMAND ${SIRIUS_SLANGC} "${SIRIUS_KERNEL_DIR}/coupled_probe.slang"
+            -DSIRIUS_FP64
+            -target spirv -profile spirv_1_5
+            -entry ComputeMain -stage compute
+            -I "${SIRIUS_KERNEL_DIR}"
+            -warnings-disable 30082
+            -o "${coupled_probe_fp64_out}"
+        ${coupled_probe_fp64_validate}
+        DEPENDS "${SIRIUS_KERNEL_DIR}/coupled_probe.slang" ${SIRIUS_KERNEL_LIBS}
+        COMMENT "Compiling coupled_probe.slang (fp64) -> SPIR-V (+spirv-val)"
+        VERBATIM
+    )
+    list(APPEND SIRIUS_KERNEL_OUTPUTS "${coupled_probe_fp64_out}")
+
     set(kernel_probe_fp64_out "${SIRIUS_KERNEL_BINARY_DIR}/parity_probe_fp64.spv")
     if(SIRIUS_SPIRV_VAL)
         set(kernel_probe_fp64_validate COMMAND "${SIRIUS_SPIRV_VAL}" "${kernel_probe_fp64_out}")

@@ -56,6 +56,9 @@ struct DeviceInfo {
     std::uint64_t render_memory_bytes = 0;
     // Whether fp64 kernels are available (precision ladder rung one).
     bool supports_fp64 = false;
+    bool preserves_fp32_denormals = false;
+    bool rounds_fp32_to_nearest = false;
+    bool rounds_fp64_to_nearest = false;
 };
 
 // Opaque per-device handles; values are indices into the owning device's
@@ -73,11 +76,18 @@ enum class BufferUsage {
     kUniform,  // small read-only parameter blocks
 };
 
-// Host wall time covering only queue submission and synchronous completion.
-// Excludes explicit pipeline creation and descriptor/command setup; driver work
-// deferred until submission is included. This is not a GPU timestamp.
+// Host wall-clock intervals, not GPU timestamps. submit_wait_ms retains the
+// queue-submit/completion interval used by the physical dispatch governor;
+// driver work deferred until submission is included. The other intervals
+// explain successful Dispatch calls and must not be used as GPU work times.
+// Failed calls may contain partial observations; callers must check the result.
 struct DispatchTiming {
     double submit_wait_ms = 0.0;
+    double pipeline_setup_ms = 0.0;  // Cache lookup and any pipeline/layout creation.
+    double command_setup_ms = 0.0;   // Descriptors and command recording.
+    double cleanup_ms = 0.0;         // Command/descriptor release after completion.
+    double total_ms = 0.0;           // Pipeline lookup through command/descriptor release.
+    bool pipeline_created = false;
 };
 
 // One compute device. Synchronous by design at this seam: a Dispatch
@@ -109,6 +119,12 @@ class ComputeDevice {
     [[nodiscard]] virtual base::Expected<void> Dispatch(
         KernelHandle kernel, std::span<const BufferHandle> buffers, std::uint32_t groups_x,
         std::uint32_t groups_y, std::uint32_t groups_z, DispatchTiming* timing = nullptr) = 0;
+
+    // Bound actual explicit device allocations, including adapter-required
+    // padding. Lowering below already resident bytes must fail without changing
+    // the prior limit. Driver-internal allocations remain outside this count.
+    [[nodiscard]] virtual base::Expected<void> SetBufferAllocationLimit(std::uint64_t bytes) = 0;
+    [[nodiscard]] virtual std::uint64_t BufferAllocationBytes() const noexcept = 0;
 };
 
 // Enumerates Vulkan-visible devices (empty vector when no loader or ICD is

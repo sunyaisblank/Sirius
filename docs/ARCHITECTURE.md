@@ -1,6 +1,6 @@
 # Sirius Architecture
 
-This document is the design authority for the rebuilt system. It records the layer structure, the single-authority seams, the kernel and backend strategy, the memory and precision design that reaches 2 GB integrated GPUs, the dependency decisions, and the complete mapping from the retired codename files to their successors. The specification (`docs/SPECIFICATION.md`) says what must be true; this document says how the system makes it true.
+This document is the design authority for the rebuilt system. It records the layer structure, the single-authority seams, the kernel and backend strategy, the memory and precision design that reaches 2 GB integrated GPUs, the dependency decisions. The specification (`docs/SPECIFICATION.md`) says what must be true; this document says how the system makes it true.
 
 ## 1. Layers
 
@@ -25,23 +25,87 @@ Application JSON structs stay in `app/config`, retain the public camel-case JSON
 wire keys for compatibility, and project once into closed render-domain enums
 and snake-case values through `session_config_adapter`. Exceptions do not cross
 that boundary: projection returns `std::expected<SessionConfig, Error>`.
+Point-catalogue defaults and their represented domain live in the lightweight
+`core/point_starfield_config.h`. The app's `pointStarfieldConfig` JSON object
+preserves that typed configuration through loading, saving and projection;
+catalogue construction and the scene transcript consume the same values.
 
 The interactive viewer follows the same ownership rule. Its public header holds
 declarations and state; `viewer/interactive_viewer.cpp` owns the threaded
 refinement loop. CLI and test translation units therefore do not compile the
 viewer implementation through an oversized header.
 
+Within rendering, `session/render_session.cpp` owns lifecycle, scene setup,
+worker scheduling and publication. `session/pixel_shading.cpp` owns the shared
+CPU/retained-device pixel radiance, disk transfer and background sampling.
+The physical point detector remains a separate adaptive estimator. Its bounded
+coordinate index reuses only exactly equal original-camera probes, including
+the two signs of zero; close image rays are never quantized into one key.
+Index iteration never determines sampling or radiance-reduction order. The
+cache-work regression counts comparisons rather than timing a particular host.
+
+Point-source image discovery is shared across canonical 32×32 screen regions
+at each original pupil sample. A common chart encloses the original Gaussian
+supports; each admitted image is traced and weighted through each original
+kernel, frequency and transmission separately. Root tolerances scale to the
+narrowest kernel, and hidden regions retain its spatial sampling depth.
+Declined regions split along their widest film axis. Shared attempts have one
+total probe budget, after which the original scalar detectors finish unresolved
+footprints with their unchanged policies. Any failed leaf withholds the region.
+Workers retain only completed region RGB, independent of image size and SPP;
+retained-device work items own whole regions to avoid duplicated discovery.
+CPU tiles smaller than a region are scheduled together with one worker, keeping
+their requested bounds, separate publication and progress counts. Groups are
+ordered from the image centre; the ordinary ungrouped path keeps its original
+spiral sequence. A worker finishes neighboring tiles from the same completed
+region cache, so small tile settings do not retrace that region on other workers.
+Tile IDs index the completion ledger directly, avoiding a full tile-list scan
+after each publication. No frame-sized detector cache is introduced.
+This remains a finite adaptive estimator, not a global image-count certificate.
+
+Independent cell probes can be submitted together, up to 13 original camera
+coordinates per call. Exact cache lookup precedes submission, and results enter
+the estimator in request order. Image-root iterations retain their sequential
+dependencies. `session/ray_work_queue` owns a fixed worker pool and bounded
+pending queue; each worker has an exclusive tracer. Sequential roots and
+foreground point-scene rays use the same workers, bounding active trace work
+by the configured worker count. Detector coordinators wait
+for their own batch without holding the queue lock. Failed batches expose no
+partial result, and session cancellation reaches both running and queued traces.
+Parallel CPU sessions and retained-device sessions share this scheduling seam.
+Device capacity accounts for independent probes within a region, while the
+existing residency and dispatch governors retain their limits. A one-thread CPU
+session keeps scalar execution. Probe and batch counts distinguish physical work
+from opportunities to execute it concurrently.
+
+Detector probes and foreground centre rays use `GeodesicTracer::TracePointSource`.
+Sky-only point-source scenes need no additional centre geodesic: their radiance
+is entirely the sum of traced image contributions. An accepted outward
+vacuum-Kerr interval can hand off directly
+to the existing radial-infinity solver after leaving all disk/volume radial
+support. That solver checks the complete outward radial potential before
+continuing direction, angular derivatives and frequency to infinity. A declined
+handoff leaves the ordinary accepted trace intact. This removes travel needed
+only for a finite diagnostic sphere; `Trace` retains that sphere's contract.
+The Gaussian packet, its physical probes, root search and radiance budgets stay
+unchanged. Both host and retained-device detector workers use this ownership
+boundary; device-specific qualification remains separate from CPU comparisons.
+
 The source repository contains only these durable top-level concerns:
 
 | Path | Ownership |
 |---|---|
 | `src/sirius/` | First-party C++ and Slang, split by the layers above |
-| `tests/` | Unit, oracle, backend, render, application, and operational gates |
-| `scripts/` | Test-label, operating-model, structure, attestation governance, and native evidence producers |
-| `cmake/` | Toolchain, dependency, embedded-model, and install-volume logic |
+| `tests/` | Unit, oracle, backend, render, application, operational gates, and sanitizer suppression |
+| `scripts/` | Source governance, generated-kernel tooling, render examples, and qualification producers |
+| `cmake/` | Toolchain, dependencies, build policy, alignment, test gates, and installation |
 | `assets/` | Required runtime assets installed with the executable |
-| `lib/` | Only the four live header/source vendors enumerated in section 8 |
-| `docs/` | Specification, architecture, style, current review, and history |
+| `lib/` | Only the four live header/source vendors enumerated in section 7 |
+| `docs/` | Specification, architecture, style, development, qualification, and concise validation findings |
+
+Generated files live in `bin/<preset>/`, disposable diagnostics in `out/`,
+rendered images in `renders/`, and qualification bundles in `attestations/`.
+[DEVELOPMENT.md](DEVELOPMENT.md) defines their workflow and retention.
 
 `scripts/verify-repository-structure.py` makes this more than a diagram: normal
 builds fail if a translation unit gains two owners, a lower layer reaches up, a
@@ -119,9 +183,46 @@ authority reports this as `explicit-schema`, never as native reflection.
 
 All device physics is written once, in Slang, as modules with interfaces per concern (metric family, integrator, disk emission, beam propagation). Slang was chosen over three alternatives: raw GLSL lacks the module and generics system a physics library needs; SYCL single-source C++ has no Metal path and weak Windows support outside oneAPI; WGSL has no 64-bit floating point at all. Slang compiles the same source to SPIR-V for Vulkan today, and to CUDA, Metal, and HLSL when a native adapter earns its keep by profiling; the compiler is Khronos-hosted, Apache-licensed, and ships prebuilt for all three desktop platforms.
 
-Two live integrators exist by design, and the difference is methodological rather than accidental. The kernel integrates Cartesian geodesics with adaptive RK4 step doubling and compensated or fp64 state accumulation on the corresponding precision rungs; the CPU reference tracer uses adaptive Dormand-Prince RK45. Both methods reject a candidate step when either its scale-aware truncation estimate or relative null residual exceeds the owned tolerance, preserving the prior state for retry, and both share the same 20,000-attempt render ceiling. Both live methods apply an accepted-state constraint method after bounding the unprojected candidate: a stable quadratic/linear solve prefers the nearest temporal-tangent root, preserving the spatial tangent. If no temporal root is represented inside a stationary limit, the smallest normalised single-spatial-component correction retains the temporal tangent. An unrepresented projection rejects the attempt. This prevents independently accumulated roundoff from becoming an irreducible global null defect while leaving the adaptive controller responsible for local integration error. One host authority scales both paths' step bounds and far boundary with the scene's natural geometry and expands that boundary to enclose the observer: `M` for black-hole sectors, `b0` for Morris-Thorne, `max(R,1/sigma)` for the Alcubierre extent, and `min(R,1/sigma)` for its narrowest integration feature. Minkowski and de Sitter retain the conservative unit scale. This prevents the kernel's pre-step escape test from accepting an observer outside a fixed sphere and keeps exotic metrics scale-covariant instead of silently reverting to unit geometry. A fixed-step Yoshida composition of implicit-midpoint maps is deliberately confined to the double-precision oracle stack; its canonical two-form is tested directly, while state-dependent step selection and optional oracle-only null projection are not misreported as symplectic operations. Two independent live methods agreeing within stated tolerance is stronger evidence than one method executed twice, so backend parity gates are statistical (per-pixel relative radiance bounds, conserved-quantity drift bounds) rather than bitwise. The reference tapes in `renders/` remain CPU-produced.
+Kerr-family Vulkan renders use retained Hamiltonian Dormand–Prince stages. The
+central phase and all four physical film/pupil derivative columns share each
+of seven stages. Three binary32 terms retain transport state; the camera uses
+two terms. An explicit arithmetic radius accompanies each component. Both
+`fp32` options select this path; `fp64` uses the same retained representation
+with exact binary64 products and an independently rounded binary32 high part.
+Devices must expose the required subnormal and rounding controls. Arithmetic
+radii bound arithmetic operations, not global ODE truncation error. Embedded
+and independent-refinement comparisons of the complete expansion centers own
+local step admission. After admission, those unchanged limbs define the next
+local numerical initial value with a fresh arithmetic enclosure. Candidate
+records retain their radii; private substages propagate them without a reset.
+The enclosures are not substituted for the local truncation estimator.
 
-CPU black-hole rays use an outgoing Kerr-Schild chart so past-directed capture
+The device computes camera frames, physical-to-Hamiltonian initialization,
+private RK candidates, null projection and dense admission samples. A candidate
+must satisfy its embedded estimate, physical-column budgets, an independent
+half-step midpoint and a refined endpoint. Projection first bounds the
+unprojected null defect and differentiates the represented root. The host
+tracer owns accepted-segment event localization, source sampling and the
+physical detector. Its worker-local retained phase survives accepted intervals
+and explicit rollback. Accepted full endpoints are used directly instead of
+reconstructing displacement columns from rounded increments. The host's affine
+time ledger does not invalidate the autonomous phase cache.
+Failed candidates and failed detector packets cannot publish partial radiance.
+Exact Minkowski formulas avoid evaluating curved-metric expressions without
+changing the tableau, dense polynomial or admission budgets.
+
+The CPU reference uses twofold working Hamiltonian arithmetic. Both renderer
+paths share the 20,000-attempt render ceiling and the same host trace-domain,
+event and source owners. Uncharged, zero-cosmological-constant Kerr-family point
+scenes use the actual smooth camera and fixed pupil through adaptive detector
+subdivision and image-root refinement, retaining each image's frequency and
+transmission. Independent multiprecision stage and refinement fixtures judge
+the numerical transport; shared source code is not an independent physics
+oracle. The separate Boyer–Lindquist oracle retains its fixed-step symplectic
+validation role. Legacy device metric shaders and direct legacy parity probes
+continue to use Cartesian RK4 step doubling.
+
+CPU and retained-device black-hole rays use an outgoing Kerr-Schild chart so past-directed capture
 crosses the past horizon on an accepted finite segment. The public metric's
 ingoing chart remains the observer and exterior-output convention. The exact
 exterior coordinate Jacobian transforms the original camera tetrad, tangent,
@@ -131,18 +232,18 @@ back to the original convention. Horizon endpoints explicitly identify their
 outgoing chart: their ingoing time and azimuth need not be finite, so a failed
 step is never replaced by an extrapolation or radial snap. All coupled consumers
 use the accepted step's actual affine interval, with double accumulation and
-publication. The Vulkan path retains its ingoing chart and exact declared horizon
-capture factor of 1.0; its finite-precision boundary behavior requires the
-separate device numerical witnesses. This chart distinction follows the backward-ray analysis in
+publication. Legacy direct device probes retain their ingoing chart and exact declared horizon
+capture factor of 1.0. The outgoing production chart follows the backward-ray analysis in
 [Bozzola, Chan and Paschalidis (2023)](https://doi.org/10.1103/PhysRevD.108.084004).
 
-The explicit host/device trace-parameter ABI has 68 occupied slots, numbered 0
+The legacy host/device trace-parameter ABI has 68 occupied slots, numbered 0
 through 67. Packing, bounds, and portability builds pin that literal boundary;
 unused padding is not presented as a capability.
 
 Precision inside kernels follows the ladder in section 6. Full-ray Mandatory
 diagnostics independently measure energy, axial angular momentum, Carter Q,
-and the null residual on the CPU RK45 and Vulkan Cartesian-RK4 paths. Constraint
+and the null residual on CPU RK45 and direct Vulkan Cartesian-RK4 probes.
+Production Kerr-family rendering uses the retained coupled path above. Constraint
 drift participates in live step acceptance on both paths; accepted-state null
 projection follows the bounded unprojected defect and preserves the selected
 light-cone branch. These projected adaptive live methods do not claim the
@@ -171,7 +272,38 @@ never enter the WSL-specific path.
 
 ## 5. Render orchestration
 
-The session orchestrator, progress tracking, and viewer port forward with their roles intact. On CPU, the tile scheduler threads over spiral-ordered operator tiles. Vulkan does not initialise that unused CPU scheduler or its duplicate scene objects: the backend derives device-budget tiles, then subdivides them into watchdog-governed row bands with measured safety subdivision, while the viewer consumes complete progressive frames. Both live paths propagate two deviation vectors, extract the singular axes and output-plane orientation, and feed that literal ellipse to an index that owns the exact validated point-catalogue snapshot used to build its topology. The terminal Sachs screen and catalogue tangent plane call one least-aligned-axis basis authority on each host/device path, with a live cross-backend probe pinning the mirrored implementations; anisotropic filtering therefore interprets orientation in the basis that produced it. Thin and volumetric disk contributions are accumulated along each accepted observer-to-scene segment before terminal horizon classification; captured endpoints do not construct an invalid terminal Eulerian frame. For each accepted central-ray segment, the Jacobi RK4 tableau evaluates connection and full Riemann curvature at the accepted start, cubic-Hermite midpoint, and accepted end, sharing each stage across both deviation columns. The double-precision beam integrator remains off the render path as an oracle and is gated against the exact radial and circular Schwarzschild null-congruence solutions to one part in \(10^6\).
+The session owns lifecycle, progress and image publication. CPU work follows
+operator tiles with the detector-region ownership described above. Vulkan
+selects retained coupled transport for Minkowski, Schwarzschild and Kerr; its
+shared host tracer owns event localization and source evaluation while bounded
+device stages advance the physical camera and transport state. Other represented
+metrics use the legacy trace shader with separately governed residency tiles
+and submission bands. The external Vulkan session constructs no duplicate CPU
+scene before selecting its route.
+
+Screen axes use the same least-aligned celestial tangent basis on host and
+device. Thin and volumetric disk contributions accumulate along accepted
+observer-to-scene segments before terminal horizon classification; captured
+endpoints do not construct an invalid terminal Eulerian frame. Coupled transport
+advances four canonical variation columns through the central Hamiltonian
+Dormand–Prince stages and checks projected endpoints, midpoint refinement and
+localized events before consumers commit an interval. Moving-event derivatives
+use the physical geodesic vector field, avoiding second differentiation of a
+cubic locator. Capture publishes the screen at the localized affine parameter.
+Legacy direct shader probes still exercise reconstructed Jacobi RK4 stages;
+that probe path is distinct from the production retained Kerr-family transport.
+The independent double-precision beam oracle remains off the render path and
+is checked against radial and circular Schwarzschild null congruences.
+
+`render_evidence.cpp` owns the versioned wire records. Each external session
+emits one scene request. The retained worker emits a separately scoped source
+scene containing its actual catalogue count; it does not impersonate another
+external session. Successful Vulkan completion records the selected device,
+source owner, work-tile coverage, actual allocation, ray capacity and measured
+stage counts/times. Human progress labels host work tiles and submitted rays
+separately from device residency. The operational attestation check consumes
+records emitted by the compiled serializers and rejects missing or mismatched
+source ownership, empty device work, invalid budgets and inconsistent completion.
 
 The CPU polarisation path carries two observer-screen vectors through the same
 accepted central-ray segments, reconditions them within the local observer
@@ -214,66 +346,39 @@ structure.
 
 ## 6. Memory governor and precision ladder
 
+Retained Kerr-family stages have fixed buffers for at most 64 active ray rows,
+reduced further when the actual device budget requires it. Their embedded
+programs and scratch buffers are included in the allocation plan; creation
+checks the exact bytes against actual device allocations. Host source textures
+and catalogues stay with the shared host source owner. Host work follows
+detector-region ownership for point scenes and individual pixels otherwise.
+The external image is published once only after every
+sample completes. Cancellation and numerical failure leave its previous image
+intact. Submission feedback reduces later batch sizes and recovers throughput
+when timings fall below the soft target, preserving any safety reduction.
+It does not change retained states, absolute camera coordinates or sample order.
+A zero soft target disables
+adaptation; the shared safety duration still limits later work and a single-ray
+overshoot declines. Statistics separate all six stage submissions, preparation,
+actual allocated bytes, overshoots and subdivisions. Each active ray owns a workgroup. The generated arithmetic DAG groups up to 64
+independent expressions behind each barrier, retaining every expression's original
+operands and arithmetic order. Its allocator verifies that simultaneous results
+cannot overwrite their inputs or each other. Shared registers and status fit
+Vulkan's [16 KiB required minimum](https://docs.vulkan.org/refpages/latest/refpages/source/Required_Limits.html).
+RK state components also run independently within the group. Only requested rows
+are dispatched; fixed buffer strides and immutable programs retain their capacity
+layout. Projection evaluates only the metric/tangent prefix before selecting a
+null root; its second pass evaluates all physical columns. These controls bound work;
+they cannot preempt a submitted interval or establish native-driver qualification.
+
 The governor exists because the 780M-class target has a 2 GB budget that a naive full-frame HDR pipeline exhausts (a 5616 by 4096 IMAX frame at RGBA32F is 368 MB per buffer before ray state, which at 96 bytes per ray for position, momentum, deviation vectors, and accumulators is another 2.2 GB full-frame). The design bounds device residency by construction rather than by hope.
 
 - At Vulkan startup the backend reports the largest heap compatible with host-visible, host-coherent storage buffers. The governor uses that size, or the explicit `SIRIUS_MEMORY_BUDGET_MB` override, as its planning budget; it does not query current free memory through `VK_EXT_memory_budget`. It derives a tile whose conservative working-set estimate and fixed asset overhead fit the configured residency fraction, subject to submission-policy and image bounds. Allocation can still decline under external memory pressure. CPU tile/thread controls do not govern this path. Full-frame buffers live host-side only.
-- The precision ladder has three explicitly selected rungs, recorded in render metadata: plain fp32 by default, fp32 with Kahan compensation on Cartesian position and velocity state accumulation when requested, and fp64 when requested on a device with `shaderFloat64`. An unsupported requested rung declines. Full-ray diagnostics derive Hamiltonian/null residual, E, L_z, and Carter-Q drift from those states. Separate storage-buffer probe artefacts compile the same trajectory and controller authorities for all three rungs, prove the fp64 module actually declares SPIR-V `Float64`, and require physical capture or escape plus the stated invariant envelope without shading an image. Image comparisons remain render-behaviour evidence, not the precision authority: capture boundaries are discontinuous and each precision policy owns a distinct adaptive schedule.
+- Legacy metric shaders have three explicitly selected precision rungs, recorded in render metadata: plain fp32 by default, fp32 with Kahan compensation on Cartesian position and velocity state accumulation when requested, and fp64 when requested on a device with `shaderFloat64`. An unsupported requested rung declines. Full-ray diagnostics derive Hamiltonian/null residual, E, L_z, and Carter-Q drift from those states. Separate storage-buffer probe artefacts compile the same trajectory and controller authorities for all three rungs, prove the fp64 module actually declares SPIR-V `Float64`, and require physical capture or escape plus the stated invariant envelope without shading an image. Image comparisons remain render-behaviour evidence, not the precision authority: capture boundaries are discontinuous and each precision policy owns a distinct adaptive schedule.
 - Progressive refinement increases samples per pixel across complete-image passes. Rendering runs separately from host input handling; frame publication waits for a complete pass, whose latency depends on the scene and device.
-- The dispatch governor (`render/dispatch_governor.h`) separates submission size from residency. The fp32 ray-bundle and point-catalogue paths use bands no larger than 64×4 (256 active pixels): physical Radeon/Dozen probes preserved exact output at that size, while a 512-pixel sample exceeded 1800 ms and stopped the probe. fp64 and the compensated-fp32 ray-bundle/catalogue paths retain the conservative 64×1 cap pending wider physical evidence; ordinary fp32 and compensated fp32 use a separate 512×16, 8192-active-pixel cap while retaining independently sized residency tiles. Unbounded ordinary-profile growth reached a 512×128 submission lasting 1948.7 ms on the physical route. Full 512×512 four-sample Kerr disk probes with the bounded profile peaked below 379 ms on both ordinary rungs, and fp32 retained identical PNG bytes. These scene-specific observations do not guarantee timing at larger resolutions or in other physical regimes. These hard caps remain active when `SIRIUS_DISPATCH_TARGET_MS=0` disables adaptation. When adaptation is enabled, every controller starts with one row; observations below the soft target double actual work, and observations above it halve work, subject to the independent shape and area caps. The fp32 ray-bundle/catalogue profile defaults to 750 ms: a complete physical 128×128 render preserved exact output with 288 submissions, a 777.5 ms maximum and no fallback. Other profiles retain the original 250 ms default; an explicit environment override takes precedence for every profile. Discrete growth avoids becoming trapped at one row when fixed submission cost prevents a useful fractional increase. Measurements cover Vulkan submit/wait wall time, excluding explicit pipeline setup but including any driver work deferred until submission. Software devices first initialise the actual trace kernel and bindings with one workgroup and zero active dimensions: every lane returns before camera, trajectory or radiance work. This isolates deferred compilation observed on cold llvmpipe from actual ray-band feedback. Initialization has separate count, wall-time and submit/wait fields, and remains included in complete render wall time; it never trains the governor. Physical and unknown devices receive no initialization dispatch. All actual ray submissions retain the same limits, including on software devices; compilation deferred beyond initialization can still cause a refusal. An observation above 1000 ms halves the actual submitted area into a safety ceiling that cannot grow again during that controller's lifetime; zero duration forces a one-pixel ceiling because it provides no usable timing. The controller covers one column of a residency tile and retains one-row logical bands after fallback. The unfinished band's private rectangle is split along rows and then columns until each child fits the current ceiling; every child restarts all film/pupil samples at index zero before its packed output is copied using that child's width. A later overshoot lowers the ceiling again, including for pending siblings. A single-pixel observation above 1000 ms declines further rendering, and invalid timing remains fatal. Halving reduces work, but can encounter additional over-limit submissions before reaching one pixel; it does not prove that the next submission will meet a duration bound. Ordinary soft-target feedback continues to adapt row count within the measured profile caps, preserving useful full-width work when fixed submission cost exceeds the soft target. Absolute coordinates, complete pixel coverage and per-pixel camera-sample order remain unchanged. Logs expose governed-ray count, total/max submission time, active-pixel maximum, target overshoots and fallbacks, separately from initialization. This bounds work and reacts to observed cost; it cannot preempt a trajectory or guarantee an unmeasured scene/device's watchdog safety. Final physical qualification must establish route timing and stability.
+- Legacy metric shaders use the dispatch governor (`render/dispatch_governor.h`) to separate submission size from residency. The fp32 ray-bundle and point-catalogue paths use bands no larger than 64×4 (256 active pixels): physical Radeon/Dozen probes preserved exact output at that size, while a 512-pixel sample exceeded 1800 ms and stopped the probe. fp64 and the compensated-fp32 ray-bundle/catalogue paths retain the conservative 64×1 cap pending wider physical evidence; ordinary fp32 and compensated fp32 use a separate 512×16, 8192-active-pixel cap while retaining independently sized residency tiles. Unbounded ordinary-profile growth reached a 512×128 submission lasting 1948.7 ms on the physical route. Full 512×512 four-sample Kerr disk probes with the bounded profile peaked below 379 ms on both ordinary rungs, and fp32 retained identical PNG bytes. These scene-specific observations do not guarantee timing at larger resolutions or in other physical regimes. These hard caps remain active when `SIRIUS_DISPATCH_TARGET_MS=0` disables adaptation. When adaptation is enabled, every controller starts with one row; observations below the soft target double actual work, and observations above it halve work, subject to the independent shape and area caps. The fp32 ray-bundle/catalogue profile defaults to 750 ms: a complete physical 128×128 render preserved exact output with 288 submissions, a 777.5 ms maximum and no fallback. Other profiles retain the original 250 ms default; an explicit environment override takes precedence for every profile. Discrete growth avoids becoming trapped at one row when fixed submission cost prevents a useful fractional increase. Measurements cover Vulkan submit/wait wall time, excluding explicit pipeline setup but including any driver work deferred until submission. Software devices first initialise the actual trace kernel and bindings with one workgroup and zero active dimensions: every lane returns before camera, trajectory or radiance work. This isolates deferred compilation observed on cold llvmpipe from actual ray-band feedback. Initialization has separate count, wall-time and submit/wait fields, and remains included in complete render wall time; it never trains the governor. Physical and unknown devices receive no initialization dispatch. All actual ray submissions retain the same limits, including on software devices; compilation deferred beyond initialization can still cause a refusal. An observation above 1000 ms halves the actual submitted area into a safety ceiling that cannot grow again during that controller's lifetime; zero duration forces a one-pixel ceiling because it provides no usable timing. The controller covers one column of a residency tile and retains one-row logical bands after fallback. The unfinished band's private rectangle is split along rows and then columns until each child fits the current ceiling; every child restarts all film/pupil samples at index zero before its packed output is copied using that child's width. A later overshoot lowers the ceiling again, including for pending siblings. A single-pixel observation above 1000 ms declines further rendering, and invalid timing remains fatal. Halving reduces work, but can encounter additional over-limit submissions before reaching one pixel; it does not prove that the next submission will meet a duration bound. Ordinary soft-target feedback continues to adapt row count within the measured profile caps, preserving useful full-width work when fixed submission cost exceeds the soft target. Absolute coordinates, complete pixel coverage and per-pixel camera-sample order remain unchanged. Logs expose governed-ray count, total/max submission time, active-pixel maximum, target overshoots and fallbacks, separately from initialization. This bounds work and reacts to observed cost; it cannot preempt a trajectory or guarantee an unmeasured scene/device's watchdog safety. Final physical qualification must establish route timing and stability.
 
-## 7. The port: codename to descriptive mapping
-
-The port renames every file per the style guide. The table is the traceability record from July's evidence ledger and project memory to the new tree; the A/B variant split (production versus double-precision oracle twin) survives as the `core`/`oracle` layer split.
-
-| Old (src/…) | New (src/sirius/…) |
-|---|---|
-| Sirius.Core/Constants/PHCN001A.h | core/constants.h |
-| Sirius.Core/Tensor/MTTN001A.{h,cpp} | core/tensor.{h,cpp} |
-| Sirius.Core/Autodiff/MTDL001A.h | core/dual_number.h |
-| Sirius.Core/Coordinate/PHCT002A.h | core/coordinates.h |
-| Sirius.Core/Metric/PHMT000A.h | core/metrics/metric.h |
-| Sirius.Core/Metric/PHMT100A.h | core/metrics/kerr_schild_family.h |
-| Sirius.Core/Metric/PHMT101A.h | core/metrics/morris_thorne_family.h |
-| Sirius.Core/Metric/PHMT102A.h | core/metrics/warp_drive_family.h |
-| Sirius.Core/Metric/PHMT200A.h | core/metrics/registry.h |
-| Sirius.Core/Metric/PHSM001A.h | retired: unused preset-only SI scaling; constants remain central in core/constants.h |
-| Sirius.Core/Geodesic/PHGD001A.{h,cpp} | core/geodesic_integrator.{h,cpp} |
-| Sirius.Core/Camera/CMBS001A.h | core/camera.h |
-| Sirius.Core/Disk/PHAD000A.h | core/disk/disk_model.h |
-| Sirius.Core/Disk/PHAD001A.h | core/disk/novikov_thorne_disk.h |
-| Sirius.Core/Disk/PHTR001A.h | core/disk/turbulence.h |
-| Sirius.Core/Environment/PHSF001A.h | core/starfield.h |
-| Sirius.Core/Spectral/PHSP001A.h | core/spectral/blackbody.h |
-| Sirius.Core/Spectral/MTSB001A.h | core/spectral/spectral_radiance.h |
-| Sirius.Core/Spectral/PHSC001A.h | core/spectral/colour_modes.h |
-| Sirius.Core/Polarisation/PHPL001A.h | core/polarisation/stokes.h |
-| Sirius.Core/PostProcess/PPOP001A.h | core/postprocess.h |
-| Sirius.Core/Metric/PHMT000B.h | oracle/metric_interface.h |
-| Sirius.Core/Metric/PHMT100B.h | oracle/kerr_boyer_lindquist.h |
-| Sirius.Core/Symplectic/PHSI001A.h | oracle/symplectic_integrator.h |
-| Sirius.Core/Transport/MTTP001A.h | oracle/transport_types.h |
-| Sirius.Render/Integration/INBI001A.h | oracle/beam_integrator.h |
-| Sirius.Render/Integration/GTRC001A.{h,cpp} | backend/cpu/geodesic_tracer.{h,cpp} |
-| Sirius.Render/Acceleration/Backend/ACIB001A.h, ACBM001A.h, ACBF001A.cpp | backend/device.h, backend/device_selector.{h,cpp} |
-| Sirius.Render/Acceleration/OptiX/* (RDOP/RDOX/RDPTX) | retired; physics reauthored in kernels/*.slang, host in backend/vulkan/ |
-| Sirius.Render/Output/OUIB001A.h | render/image_buffer.h |
-| Sirius.Render/Output/OUEW001A.{h,cpp} | render/exr_writer.{h,cpp} |
-| Sirius.Render/Output/OUPN001A.{h,cpp} | render/png_writer.{h,cpp} |
-| Sirius.Render/Output/RDFL001A.h | render/film_pipeline.h |
-| Sirius.Render/Pipeline/RDRT001A.{h,cpp} | render/renderer.{h,cpp} |
-| Sirius.Render/Shader/RDSD003A.{vert,frag} | app/viewer/shaders/RDSD003A.{vert,frag}; later unreachable RDSD004A/RDSD005A effects retired |
-| Sirius.Infrastructure/Application/CREP001A.cpp | app/main.cpp |
-| Sirius.Infrastructure/Cli/CRCL001A–006A | app/cli/{command_router,render_command,info_command,config_command,cli_output,view_command}.{h,cpp} |
-| Sirius.Infrastructure/Configuration/CRCF002A, CRCF003A | app/config/{config_loader,config_schema,session_config_adapter}.{h,cpp} |
-| Sirius.Infrastructure/Configuration/CRFM001A | render/film_config.h |
-| Sirius.Infrastructure/Platform/CRPF001A.{h,cpp} | app/platform_paths.{h,cpp} |
-| Sirius.Infrastructure/Session/SMSM001A, SNST001A, SNEV001A, SNPR001A, SNDP001A, SNTL001A, SNRS001A | render/session/{state_machine,session_states,session_events,progress_tracker,display_buffer,tile_scheduler,render_session}.h/.cpp |
-| Sirius.Infrastructure/Viewer/UIVW001A.h | app/viewer/interactive_viewer.{h,cpp} |
-| Sirius.Test/TS*.cpp | tests/, one file per subject, names per style guide |
-
-New files with no predecessor: `base/contracts.h`, `base/error.h`, `base/threading.h`, `kernels/*.slang`, `backend/vulkan/*`, `render/memory_governor.{h,cpp}`, `core/polarisation/walker_penrose.h` (specification E2), and the beam propagation additions to the CPU tracer (P2).
-
-## 8. Dependencies
+## 7. Dependencies
 
 The vendored source set is deliberately small and closed: GLFW and glad serve
 the optional OpenGL viewer, while stb and tinyexr/miniz serve image IO. FTXUI,
@@ -288,10 +393,23 @@ self-tests, and demo-only dependency copies are also omitted; its runtime,
 platform, Wayland, and MinGW compatibility sources remain intact. No scene graph, ECS, renderer
 framework, or unused prebuilt library is carried in the repository.
 
-## 9. Validation architecture
+## 8. Validation architecture
 
 Application and rendering tests run beside the strict candidate and inspect the same staged resources and receipt lifecycle, never an environment-selected substitute. Their execution boundary is structural: `sirius_app_tests` owns only parsing, validation, configuration/session projection, and input-state checks; every case that can enter a render session, dispatch CPU/Vulkan work, write a rendered output, or publish a completed frame is compiled only into `sirius_render_tests` and labelled `Rendering`. Shared source governance rejects the six governed rendering identities outside `tests/render`, any app-side viewer/session start, and every new unclassified `RenderCommand` or `ViewCommand` execution. This makes an unfiltered application-suite invocation non-rendering while preserving the complete rendering-inclusive Mandatory estate for external qualification and release.
 
 Pull-request and explicitly dispatched integration are a deliberately non-render compile boundary. Linux, Windows, and macOS each configure the strict qualification topology, compile the product and all six test executables, and run only nine named governance/authority controls. Pull requests cannot upload evidence. An explicit dispatch may issue only the Windows/macOS compilation domains through a separate non-promoting gate that binds the complete registration, compiled artifact topology and six generated test inputs while declaring runtime false. No integration path creates a Mandatory receipt; the complete runtime estate remains mandatory for physical/runtime domains and final release.
 
 Six gate families. Unit and property gates cover textbook values, exact identities, registry round-trips, live-path conservation, and determinism. Oracle gates compare the live path with the independent double-precision Boyer-Lindquist stack. Backend gates compare CPU and Vulkan statistics and enforce the Vulkan capability boundary. Operational gates install to a staged volume, relocate it, initialise from a hostile working directory, render, remove a mandatory resource to prove fail-closed behaviour, require a real software-Vulkan dispatch, and repeat the P1 near-extremal classifier as burn-in. Attestation-admission gates keep physical and native evidence revision- and qualification-candidate-bound and make complete admission a configure/build/compile/runtime invariant for releases. Qualification and release build gates remove their prior runtime receipt, then emit a deterministic zero-skip JUnit schema-v2 receipt bound to live CTest registration, every test executable, every strict product, and six generated test inputs (smoke, three parity probes, CUDA and Metal emissions). The gate snapshots and rechecks those inputs at their canonical build paths before and after CTest, rejecting missing files, changed bytes or substituted selectors. Native-build and runtime evidence copy and verify the same input hashes. These build-only inputs remain separate from the installed product set; installed initialization checks their receipt identities and rehashes the deployed products; pre-gate strict-mode install/readiness are negative controls, and install rejects an absent, stale, or product-mismatched final receipt. CTest stdout and stderr are written directly to the gate log while tests run, preserving flushed child output if the gate is interrupted. The log records an actual return code only after CTest exits; partial logs cannot produce a passing receipt. Only after CTest succeeds is the new receipt staged beside the build-tree executable. Qualification cannot package or report top-level readiness, but it locks resource discovery to its executable volume and is the sole mode accepted by external-evidence admission. Release separately regenerates its own gate for the final product; release install/package creation, readiness, and render/view initialisation parse the installed receipt and independently rehash the running executable plus the complete installed product set. Qualification and release resource discovery ignore the development `SIRIUS_RESOURCE_DIR` override, preventing an environment-selected tree from substituting for that volume. Development initialisation remains receipt-optional and override-capable for local diagnosis, but its artifacts cannot be promoted to evidence. The sanitizer profile runs the Mandatory estate under ASan, UBSan, and LSan with one named software-Vulkan process-lifetime suppression. Historical image tapes remain useful forensic material, but no current executable byte-identity gate consumes them; `docs/ADVERSARIAL_REVIEW.md` records that claim as unverified rather than treating files alone as evidence.
+
+The trace continuation record retains four seeded canonical transverse columns in fixed order: direction A/B followed by position A/B, with their covariant derivatives. The current beam consumer selects the same pair as its point-source or parallel-beam policy, while both pairs survive each accepted-segment update and dispatch boundary. The host checks all columns for finiteness and rejects any change to them during an unaccepted attempt. Record strides are272 bytes for either fp32 mode and480 bytes for fp64; residency allocation uses the shared host layout. This legacy record remains the ABI for direct probes and non-Kerr device metrics. Production Kerr-family rendering uses the retained stage and shared detector path described in section 3, including joint four-column admission and normalized low-part storage.
+
+The CPU render session now launches the smooth film projection with four physical
+columns: film x/y in pixels and Cartesian pupil right/up in geometric lengths.
+`core/camera_launch.h` owns the nominal event/tangent and their derivatives. It
+displaces the event in the boosted central pupil frame, rebuilds the observer
+frame from the metric there, and differentiates that rebuild before forming
+coordinate K and covariant V. Outgoing-chart changes transform both X and V as
+vectors. The joint controller scales each column's error floor with its units;
+legacy angular beam consumers receive the inverse film-to-angle transformation
+only after transport. Pinhole pupil columns are exactly zero. This CPU integration
+does not establish completion of the separate GPU and detector migrations above.

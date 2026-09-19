@@ -40,6 +40,33 @@ class OutgoingKerrSchild final : public IMetric {
         }
     }
 
+    bool EvaluateHessian(const Vec4& position, MetricHessian& hessian) const override {
+        if (!source_.EvaluateHessian(Reflect(position), hessian)) return false;
+        for (int i = 0; i < 4; ++i)
+            for (int j = 0; j < 4; ++j)
+                for (int mu = 0; mu < 4; ++mu)
+                    for (int nu = 0; nu < 4; ++nu)
+                        hessian.values[i][j][mu][nu] *=
+                            kReflection[i] * kReflection[j] * kReflection[mu] * kReflection[nu];
+        return true;
+    }
+
+    bool EvaluateRetained(const Vec4& position, RetainedMetricSample& sample) const override {
+        RetainedMetricSample result;
+        if (!source_.EvaluateRetained(Reflect(position), result)) return false;
+        for (int mu = 0; mu < 4; ++mu)
+            for (int nu = 0; nu < 4; ++nu) {
+                const double sign = kReflection[mu] * kReflection[nu];
+                result.metric(mu, nu) = result.metric(mu, nu) * sign;
+                result.inverse(mu, nu) = result.inverse(mu, nu) * sign;
+                for (int axis = 0; axis < 4; ++axis)
+                    result.derivative(axis, mu, nu) =
+                        result.derivative(axis, mu, nu) * (sign * kReflection[axis]);
+            }
+        sample = result;
+        return true;
+    }
+
     bool InverseMetric(const Vec4& position, Metric4d& inverse) const override {
         if (!source_.InverseMetric(Reflect(position), inverse)) return false;
         for (int mu = 0; mu < 4; ++mu)
@@ -89,7 +116,7 @@ class OutgoingKerrSchild final : public IMetric {
         if (!source_.HasHorizon()) return std::nullopt;
         const auto p = source_.GetParams();
         const double horizon = source_.OuterHorizonRadius();
-        if (!(radius > horizon)) return std::nullopt;
+        if (!(horizon > 0.0) || !std::isfinite(horizon) || !(radius > horizon)) return std::nullopt;
         double reference = 2.0 * horizon;
         double time_integral = 0.0;
         double angle_integral = 0.0;
@@ -104,6 +131,7 @@ class OutgoingKerrSchild final : public IMetric {
             }
         } else {
             const double inner = source_.InnerHorizonRadius();
+            if (!(inner >= 0.0) || !std::isfinite(inner)) return std::nullopt;
             const double separation = horizon - inner;
             double inverse_delta_integral;
             if (separation == 0.0) {

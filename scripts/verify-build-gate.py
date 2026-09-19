@@ -43,10 +43,23 @@ TESTED_ARTIFACTS = {
 # Bind selectors to that location as well as bytes: unrelated stable files
 # cannot stand in for the kernels the compiled test executables actually load.
 TEST_INPUT_PATHS = {
+    "retained_camera_fixture": "tests/backend/retained_camera/program_fixture.h",
+    "retained_camera_fp32_spv": "tests/backend/retained_camera/program_camera_probe-fp32.spv",
+    "retained_camera_fp32comp_spv": "tests/backend/retained_camera/program_camera_probe-fp32comp.spv",
     "smoke_spv": "kernels/smoke.spv",
     "parity_probe_spv": "kernels/parity_probe.spv",
     "parity_probe_fp32comp_spv": "kernels/parity_probe_fp32comp.spv",
     "parity_probe_fp64_spv": "kernels/parity_probe_fp64.spv",
+    "infinity_probe_spv": "kernels/infinity_probe.spv",
+    "infinity_probe_fp32comp_spv": "kernels/infinity_probe_fp32comp.spv",
+    "infinity_probe_fp64_spv": "kernels/infinity_probe_fp64.spv",
+    "metric_consistency_probe_spv": "kernels/metric_consistency_probe.spv",
+    "metric_consistency_probe_fp32comp_spv": "kernels/metric_consistency_probe_fp32comp.spv",
+    "metric_consistency_probe_fp64_spv": "kernels/metric_consistency_probe_fp64.spv",
+    "camera_frame_probe_spv": "kernels/camera_frame_probe.spv",
+    "camera_frame_probe_fp32comp_spv": "kernels/camera_frame_probe_fp32comp.spv",
+    "camera_frame_probe_fp64_spv": "kernels/camera_frame_probe_fp64.spv",
+    "coupled_probe_fp64_spv": "kernels/coupled_probe_fp64.spv",
     "trace_cuda": "kernels/portability/trace.cu",
     "trace_metal": "kernels/portability/trace.metal",
 }

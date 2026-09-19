@@ -46,8 +46,12 @@ constexpr std::uint32_t kApiVersion = VK_MAKE_API_VERSION(0, 1, 3, 0);
 }
 
 [[nodiscard]] DeviceInfo DescribeDevice(VkPhysicalDevice physical) {
+    VkPhysicalDeviceFloatControlsProperties float_controls{
+        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FLOAT_CONTROLS_PROPERTIES,
+    };
     VkPhysicalDeviceDriverProperties driver{
         .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES,
+        .pNext = &float_controls,
     };
     VkPhysicalDeviceProperties2 properties2{
         .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2,
@@ -90,6 +94,9 @@ constexpr std::uint32_t kApiVersion = VK_MAKE_API_VERSION(0, 1, 3, 0);
         .device_local_bytes = device_local,
         .render_memory_bytes = render_memory,
         .supports_fp64 = features.shaderFloat64 == VK_TRUE,
+        .preserves_fp32_denormals = float_controls.shaderDenormPreserveFloat32 == VK_TRUE,
+        .rounds_fp32_to_nearest = float_controls.shaderRoundingModeRTEFloat32 == VK_TRUE,
+        .rounds_fp64_to_nearest = float_controls.shaderRoundingModeRTEFloat64 == VK_TRUE,
     };
 }
 
@@ -469,8 +476,21 @@ Expected<KernelHandle> VulkanDevice::LoadKernel(std::span<const std::uint32_t> s
     return KernelHandle{static_cast<std::uint32_t>(kernels_.size() - 1)};
 }
 
+Expected<void> VulkanDevice::SetBufferAllocationLimit(std::uint64_t bytes) {
+    if (bytes < buffer_allocation_bytes_) {
+        return Fail(ErrorDomain::kDevice, "set buffer allocation limit",
+                    "limit is below the actual resident buffer allocations");
+    }
+    buffer_allocation_limit_ = bytes;
+    return {};
+}
+
 Expected<BufferHandle> VulkanDevice::CreateBuffer(std::uint64_t size_bytes, BufferUsage usage) {
     SIRIUS_PRE(size_bytes > 0);
+    if (size_bytes > buffer_allocation_limit_ - buffer_allocation_bytes_) {
+        return Fail(ErrorDomain::kDevice, "allocate buffer memory",
+                    "requested buffer exceeds the remaining explicit allocation budget");
+    }
     const VkBufferUsageFlags usage_flags = usage == BufferUsage::kStorage
                                                ? VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
                                                : VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
@@ -488,6 +508,11 @@ Expected<BufferHandle> VulkanDevice::CreateBuffer(std::uint64_t size_bytes, Buff
 
     VkMemoryRequirements requirements{};
     vkGetBufferMemoryRequirements(device_, buffer.buffer, &requirements);
+    if (requirements.size > buffer_allocation_limit_ - buffer_allocation_bytes_) {
+        vkDestroyBuffer(device_, buffer.buffer, nullptr);
+        return Fail(ErrorDomain::kDevice, "allocate buffer memory",
+                    "actual Vulkan allocation exceeds the remaining explicit allocation budget");
+    }
     VkPhysicalDeviceMemoryProperties memory_properties{};
     vkGetPhysicalDeviceMemoryProperties(physical_, &memory_properties);
 
@@ -531,6 +556,7 @@ Expected<BufferHandle> VulkanDevice::CreateBuffer(std::uint64_t size_bytes, Buff
     }
 
     buffers_.push_back(buffer);
+    buffer_allocation_bytes_ += requirements.size;
     return BufferHandle{static_cast<std::uint32_t>(buffers_.size() - 1)};
 }
 
@@ -563,7 +589,8 @@ Expected<void> VulkanDevice::ReadBuffer(BufferHandle handle, std::span<std::byte
 }
 
 Expected<VulkanDevice::Pipeline*> VulkanDevice::GetOrCreatePipeline(
-    KernelHandle kernel, std::span<const BufferHandle> buffers) {
+    KernelHandle kernel, std::span<const BufferHandle> buffers, bool* created) {
+    if (created != nullptr) *created = false;
     PipelineKey key{.kernel = kernel.value, .bindings = {}};
     key.bindings.reserve(buffers.size());
     for (const BufferHandle handle : buffers) {
@@ -629,6 +656,7 @@ Expected<VulkanDevice::Pipeline*> VulkanDevice::GetOrCreatePipeline(
     }
 
     auto [inserted, _] = pipelines_.emplace(std::move(key), pipeline);
+    if (created != nullptr) *created = true;
     return &inserted->second;
 }
 
@@ -641,7 +669,11 @@ Expected<void> VulkanDevice::Dispatch(KernelHandle kernel, std::span<const Buffe
         SIRIUS_PRE(handle.value < buffers_.size());
     }
 
-    auto pipeline = GetOrCreatePipeline(kernel, buffers);
+    if (timing != nullptr) *timing = {};
+    const auto dispatch_start = std::chrono::steady_clock::now();
+    auto pipeline = GetOrCreatePipeline(kernel, buffers,
+                                        timing != nullptr ? &timing->pipeline_created : nullptr);
+    const auto pipeline_end = std::chrono::steady_clock::now();
     if (!pipeline) {
         return std::unexpected(pipeline.error());
     }
@@ -697,12 +729,36 @@ Expected<void> VulkanDevice::Dispatch(KernelHandle kernel, std::span<const Buffe
         .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
         .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
     };
-    vkBeginCommandBuffer(command, &begin_info);
+    if (const auto result = vkBeginCommandBuffer(command, &begin_info); result != VK_SUCCESS) {
+        vkFreeCommandBuffers(device_, command_pool_, 1, &command);
+        vkFreeDescriptorSets(device_, descriptor_pool_, 1, &set);
+        return Fail(ErrorDomain::kDevice, "begin compute command buffer", VkResultText(result));
+    }
+    const VkMemoryBarrier before{
+        .sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER,
+        .srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_HOST_WRITE_BIT,
+        .dstAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+    };
+    vkCmdPipelineBarrier(command, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_HOST_BIT,
+                         VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 1, &before, 0, nullptr, 0,
+                         nullptr);
     vkCmdBindPipeline(command, VK_PIPELINE_BIND_POINT_COMPUTE, (*pipeline)->pipeline);
     vkCmdBindDescriptorSets(command, VK_PIPELINE_BIND_POINT_COMPUTE, (*pipeline)->layout, 0, 1,
                             &set, 0, nullptr);
     vkCmdDispatch(command, groups_x, groups_y, groups_z);
-    vkEndCommandBuffer(command);
+    const VkMemoryBarrier after{
+        .sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER,
+        .srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT,
+        .dstAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_HOST_READ_BIT,
+    };
+    vkCmdPipelineBarrier(command, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+                         VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_HOST_BIT, 0, 1,
+                         &after, 0, nullptr, 0, nullptr);
+    if (const auto result = vkEndCommandBuffer(command); result != VK_SUCCESS) {
+        vkFreeCommandBuffers(device_, command_pool_, 1, &command);
+        vkFreeDescriptorSets(device_, descriptor_pool_, 1, &set);
+        return Fail(ErrorDomain::kDevice, "end compute command buffer", VkResultText(result));
+    }
 
     const VkSubmitInfo submit_info{
         .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
@@ -715,13 +771,20 @@ Expected<void> VulkanDevice::Dispatch(KernelHandle kernel, std::span<const Buffe
         submit_result = vkQueueWaitIdle(queue_);
     }
 
-    if (timing != nullptr) {
-        timing->submit_wait_ms = std::chrono::duration<double, std::milli>(
-                                     std::chrono::steady_clock::now() - submit_start)
-                                     .count();
-    }
+    const auto submit_end = std::chrono::steady_clock::now();
     vkFreeCommandBuffers(device_, command_pool_, 1, &command);
     vkFreeDescriptorSets(device_, descriptor_pool_, 1, &set);
+    const auto dispatch_end = std::chrono::steady_clock::now();
+    if (timing != nullptr) {
+        const auto milliseconds = [](auto duration) {
+            return std::chrono::duration<double, std::milli>(duration).count();
+        };
+        timing->pipeline_setup_ms = milliseconds(pipeline_end - dispatch_start);
+        timing->command_setup_ms = milliseconds(submit_start - pipeline_end);
+        timing->submit_wait_ms = milliseconds(submit_end - submit_start);
+        timing->cleanup_ms = milliseconds(dispatch_end - submit_end);
+        timing->total_ms = milliseconds(dispatch_end - dispatch_start);
+    }
 
     if (submit_result != VK_SUCCESS) {
         return Fail(ErrorDomain::kDevice, "submit compute dispatch", VkResultText(submit_result));

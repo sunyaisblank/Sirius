@@ -146,10 +146,12 @@ if(_tampered_capability_result EQUAL 0 OR
 endif()
 file(WRITE "${_model}" "${_model_contents}")
 
+# Keep enough CPU tiles to use the available workers for this installation
+# check. The full 128x128 image and all numerical settings remain unchanged.
 execute_process(
     COMMAND "${_binary}" render
         --cpu --metric Minkowski --width 128 --height 128 --samples 1
-        --no-disk --no-bloom --output "${_render}"
+        --tile-size 16 --no-disk --no-bloom --output "${_render}"
     WORKING_DIRECTORY "${_hostile}"
     RESULT_VARIABLE _render_result
     OUTPUT_VARIABLE _render_stdout
@@ -176,7 +178,7 @@ file(RENAME
 execute_process(
     COMMAND "${_binary}" render
         --cpu --metric Minkowski --width 128 --height 128 --samples 1
-        --no-disk --no-bloom --output "${_audit_parent}/must-not-exist.ppm"
+        --tile-size 16 --no-disk --no-bloom --output "${_audit_parent}/must-not-exist.ppm"
     WORKING_DIRECTORY "${_hostile}"
     RESULT_VARIABLE _missing_result
     OUTPUT_VARIABLE _missing_stdout

@@ -85,10 +85,16 @@ REQUIRED_ACCEPTANCE_CRITERIA = {
 }
 REQUIRED_ACCEPTANCE_EVIDENCE = {
     "P1": {
+        "gtest:KernelParity.MetricConnectionAndJetShareRepresentedParametersFp32",
+        "gtest:KernelParity.MetricConnectionAndJetShareRepresentedParametersCompensatedFp32",
+        "gtest:KernelParity.MetricConnectionAndJetShareRepresentedParametersFp64",
         "ctest:OperationalP1.NearExtremalBurnIn",
         "gtest:AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter",
         "gtest:AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct",
         "gtest:KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter",
+        "gtest:KernelParity.ActualAffineAndJacobiClocksMatchFp32",
+        "gtest:KernelParity.ActualAffineAndJacobiClocksMatchFp32Comp",
+        "gtest:KernelParity.ActualAffineAndJacobiClocksMatchFp64",
         "gtest:KerrTests.CartesianMetricIsScaleCovariantBelowTheFormerSpinFloor",
         "gtest:KerrTests.SingularKerrDiskDeclinesInsteadOfReceivingAnEpsilonRadius",
         "gtest:CoordinateTransformTests.KerrRadiusPreservesExactZeroAndScaleCovariance",
@@ -112,6 +118,91 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p",
     },
     "P2": {
+        "gtest:RetainedComputeTest.BatchedCameraPreservesPhysicalColumnsAndRejectsInvalidRows",
+        "gtest:RetainedComputeTest.SmoothRayCameraPreservesPhysicalLensDerivatives",
+        "gtest:VulkanRenderSession.RetainedMovingThinLensKerrDetectorMatchesCpuLinearRadiance",
+        "gtest:RetainedComputeTest.Fp64ProductsPreserveIndependentScienceOrDeclineUnsupportedDevices",
+        "gtest:RetainedComputeTest.JointRkStagesRetainCriticalIncrementsAndEmbeddedError",
+        "gtest:RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation",
+        "gtest:RetainedComputeTest.DenseSegmentsPreserveSmallCovariantArrivalDerivatives",
+        "gtest:RetainedComputeTest.CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement",
+        "gtest:RetainedComputeTest.PhysicalInitializationRetainsTheHamiltonianResidual",
+        "gtest:RetainedComputeTest.SharedTracerCompletesDeviceIntervalsAndRetainsRollbackState",
+        "gtest:RetainedComputeTest.RejectedStepRowsCannotExposeOldOrPartialCandidates",
+        "gtest:RetainedValue.Binary64InputsKeepTheirRepresentationResidual",
+        "gtest:RetainedCameraProgram.Fp32CompletePhysicalLaunchAndRefusals",
+        "gtest:RetainedCameraProgram.CompensatedCompletePhysicalLaunchAndRefusals",
+        "gtest:PointSourceDetector.OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport",
+        "gtest:PointSourceDetector.ImageFrequencyAndTransmissionAreAppliedOnce",
+        "gtest:PointSourceDetector.FoldKeepsBothImagesOfTheSameCatalogueEntry",
+        "gtest:PointSourceDetector.FoldOwnershipSurvivesRotationTranslationAndTighterRefinement",
+        "gtest:PointSourceDetector.ExhaustionCancellationAndFailedTracesHaveNoPartialRadiance",
+        "gtest:PointSourceDetector.PolynomialFoldResolvesCloseImagesBetweenTheCoarseNodes",
+        "gtest:PointSourceDetector.DisconnectedVisibilityIslandAndStripeUseActualImageVisibility",
+        "gtest:RenderSessionProbe.PhysicalPointDetectorCompletesAMovingThinLensKerrFrame",
+        "gtest:CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets",
+        "gtest:KernelParity.MetricConnectionAndJetShareRepresentedParametersFp32",
+        "gtest:KernelParity.MetricConnectionAndJetShareRepresentedParametersCompensatedFp32",
+        "gtest:KernelParity.MetricConnectionAndJetShareRepresentedParametersFp64",
+        "gtest:PointSourceResponseTest.RestrictedCellsPreserveOriginalGaussianAndNormalization",
+        "gtest:PointSourceResponseTest.CatalogueBandTransferKeepsFluxAndDensityLinear",
+        "gtest:PointSourceTransfer.ReferenceFrequencyPreservesCatalogueColourAndFlux",
+        "gtest:CoupledTransport.PhysicalEventVariationRetainsArrivalPositionWithoutDenseAccelerationNoise",
+        "gtest:CoupledTransport.OriginalKerrDiskEventMatchesIndependentNeighboursAndRefinement",
+        "gtest:CoupledTransport.CapturedKerrBeamMatchesNeighboursAndStepRefinement",
+        "gtest:CoupledTransport.EveryCanonicalColumnCanRejectProjectedAndInteriorCurvedError",
+        "gtest:CoupledTransport.AcceptedIncrementsKeepRefinedEventDerivativesTranslationInvariant",
+        "gtest:CoupledTransport.EndpointAndZeroFractionIncludeEventTimeVariation",
+        "gtest:RetainedArithmetic.SmallTermsSurviveLargeSumsProductsAndDivision",
+        "gtest:RetainedArithmetic.CartesianGradientMatchesIndependentRationalValues",
+        "gtest:RetainedArithmetic.CompleteCriticalMetricMatchesIndependentPrecisionWitnesses",
+        "gtest:CoupledTransport.MinimumStepCriticalColumnsMatchIndependentRefinedFlow",
+        "gtest:CoupledTransport.OriginalCriticalLaunchesHavePhysicalFatesOrExplicitWorkExhaustion",
+        "gtest:CoupledTransport.FlatFourColumnsUseActualProjectedAndInteriorTrials",
+        "gtest:CoupledTransport.CameraColumnUnitsPreserveTheJointErrorDecision",
+        "gtest:CoupledTransport.PhysicalCameraColumnsReachTheLiveCpuSourceMap",
+        "gtest:CoupledTransport.NonfiniteColumnsAndUnrepresentedInteriorDeclineWithoutCommit",
+        "gtest:CoupledTransport.SkyMapIsIndependentOfPhysicalBundleOutputAndWorkLimitDeclines",
+        "gtest:RenderSessionProbe.ExhaustedNonKerrRayCannotPublishACompletedBlackFrame",
+        "gtest:RenderSessionProbe.NumericalRayFailureKeepsCpuTilesPrivateAndPreventsOutput",
+        "gtest:RenderSessionProbe.LaterGoodCameraSampleCannotEraseCpuNumericalFailure",
+        "gtest:KernelInfinityDevice.Fp32IndependentDirectionsVariationsAndTerminalStates",
+        "gtest:KernelInfinityDevice.CompensatedIndependentDirectionsVariationsAndTerminalStates",
+        "gtest:KernelInfinityDevice.Fp64IndependentDirectionsVariationsAndTerminalStates",
+        "gtest:KernelInfinityDevice.FinishDeclinesWithoutPublishingPartialResults",
+        "gtest:KerrInfinity.FlatOblateRaysAndAxesReachExactCartesianSky",
+        "gtest:KerrInfinity.VaryingHandoffAndTangentMatchExactFlatDerivative",
+        "gtest:KerrInfinity.FrequencyScaleAndSignedParityArePreserved",
+        "gtest:KerrInfinity.AxisPrincipalRaysHaveAnalyticAngularVariation",
+        "gtest:KerrInfinity.KerrTailMatchesIndependentSeparatedReference",
+        "gtest:KerrInfinity.RejectsHiddenRadialTurningPoint",
+        "gtest:KerrInfinity.MassSpinAndRadiusScalingPreserveDirectionAndJacobian",
+        "gtest:KerrInfinity.NearCriticalSchwarzschildDerivativeMatchesIndependentRadialIntegral",
+        "gtest:KerrInfinity.RejectsUnrepresentedInputsAndWorkExhaustion",
+        "gtest:SourceSkyDifferential.DeclinesUnrepresentedFrequencyGeometryAndVariation",
+        "gtest:SourceSkyDifferential.DirectionIsInvariantUnderFrequencyAndLongitudinalVariation",
+        "gtest:SourceSkyDifferential.KerrPositionAndTangentVariationsMatchIndependentDifferences",
+        "gtest:SourceSkyDifferential.MovingFlatCameraMatchesAnalyticLorentzDirectionDerivative",
+        "gtest:SourceSkyDifferential.NormalizesNonNullSpatialDirectionAndItsDerivative",
+        "gtest:SourceSkyDifferential.ReseedsMetricVariationWithoutInheritedDualMetadata",
+        "gtest:SourceSkyMap.EndpointVariationPreservesGaugeAndDeclinesGrazingContact",
+        "gtest:SourceSkyMap.FlatAngularMapIsIndependentOfSphereRadiusSeedAndFrequency",
+        "gtest:SourceSkyMap.KerrCovariantChartVariationsMatchMappedNominalFamily",
+        "gtest:SourceSkyMap.LocalizedFlatSphereVariationMatchesAnalyticRayFamily",
+        "gtest:SourceSkyMap.RetainsZeroRankDeficiencyAndSignedParity",
+        "gtest:SourceSkyInfinityTrace.FlatPupilMapAndFrequencyAreHandoffIndependent",
+        "gtest:SourceSkyInfinityTrace.KerrMapConvergesAcrossHandoffRadiiAndFixedPupilNeighbours",
+        "gtest:SourceSkyInfinityTrace.NonVacuumAndCapturedRaysDoNotClaimVacuumInfinity",
+        "gtest:SourceSkyMapTrace.KerrMapConvergesToFixedPupilRetracing",
+        "gtest:SourceSkyMapTrace.MovingPupilMapMatchesAnalyticAberration",
+        "gtest:SourceSkyMapTrace.StationaryTranslatedPupilMapIsRadiusIndependent",
+        "gtest:CpuTraceBoundary.OrdinaryEscapeBoundaryLaunchUsesCrossingDirection",
+        "gtest:CpuTraceBoundary.OrdinaryEscapeClipsCentralAndJacobiAffineIntervals",
+        "gtest:CpuTraceBoundary.OrdinaryEscapeDeclinesExteriorOutwardLaunchWithoutSourceEvent",
+        "gtest:CpuTraceBoundary.OrdinaryEscapeExcludesDiskAndVolumeBeyondBoundary",
+        "gtest:KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+        "gtest:KernelTrace.ActualTraceFiniteSphereExcludesLaterDiskAndVolumeAcrossRungs",
+        "gtest:KernelParity.FiniteEscapeUsesFirstOutwardEventAndClippedIntervalAcrossRungs",
         "gtest:BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion",
         "gtest:BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion",
         "gtest:CpuJacobiOracle.CurvatureScalarMatchesAnalyticKerrOffEquator",
@@ -122,13 +213,54 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:KernelParity.BeamEllipseRetainsBothAxesAndOutputOrientation",
         "gtest:KernelParity.CelestialTangentBasisIsSharedByBeamAndPointFilter",
         "gtest:KernelParity.DeviceRadialPointSourceCongruenceMatchesClosedForm",
+        "gtest:KernelParity.ActualAffineAndJacobiClocksMatchFp32",
+        "gtest:KernelParity.ActualAffineAndJacobiClocksMatchFp32Comp",
+        "gtest:KernelParity.ActualAffineAndJacobiClocksMatchFp64",
         "gtest:KernelParity.DeviceTidalContractionMatchesAnalyticKerrAtMatchedEvents",
         "gtest:KernelParity.DeviceTidalContractionMatchesAnalyticSchwarzschildAtMatchedEvents",
+        "gtest:RayBundleTest.CurvatureStencilPreservesMassScaleAndBothSpinSigns",
+        "gtest:RayBundleTest.CurvatureStencilStaysInsideTheActualKerrChartDomain",
         "gtest:RayBundleTest.MagnificationComesOnlyFromJacobiMap",
         "gtest:StarfieldGeneratorTests.EllipticalFilterUsesTheBeamSachsBasis",
+        "gtest:StarfieldGeneratorTests.PointFilterRetainsImaxSubpixelOffsets",
+        "gtest:StarfieldGeneratorTests.PointFilterMatchesIndependentAngularOracle",
+        "gtest:StarfieldGeneratorTests.SpatialIndexIncludesStarsAcrossAngularCellBoundaries",
+        "gtest:KernelParity.PointStarAngularWeightMatchesIndependentOracle",
         "gtest:StarfieldPointTest.BeamFootprintSuppressesStarFlicker",
     },
     "P3": {
+        "gtest:PointSourceDetector.OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport",
+        "gtest:PointSourceDetector.ImageFrequencyAndTransmissionAreAppliedOnce",
+        "gtest:PointSourceDetector.FoldKeepsBothImagesOfTheSameCatalogueEntry",
+        "gtest:PointSourceDetector.FoldOwnershipSurvivesRotationTranslationAndTighterRefinement",
+        "gtest:PointSourceDetector.ExhaustionCancellationAndFailedTracesHaveNoPartialRadiance",
+        "gtest:PointSourceDetector.PolynomialFoldResolvesCloseImagesBetweenTheCoarseNodes",
+        "gtest:PointSourceDetector.DisconnectedVisibilityIslandAndStripeUseActualImageVisibility",
+        "gtest:RenderSessionProbe.PhysicalPointDetectorCompletesAMovingThinLensKerrFrame",
+        "gtest:CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets",
+        "gtest:PointSourceResponseTest.RestrictedCellsPreserveOriginalGaussianAndNormalization",
+        "gtest:PointSourceResponseTest.RestrictedCellsOwnSharedEdgesAndKeepParentCutoff",
+        "gtest:PointSourceResponseTest.RestrictedCellsDeclineInvalidOrUnrepresentedGeometry",
+        "gtest:CameraContinuousProjection.GeometryAndDifferentialAcrossOutputCrop",
+        "gtest:CameraContinuousProjection.FixedPupilAndObserverArePreserved",
+        "gtest:CameraContinuousProjection.RefinementDeclinesLostCoordinatesAndDirections",
+        "gtest:PointSourceResponseTest.CatalogueBandTransferComposesDensityAndMovingFrequency",
+        "gtest:PointSourceResponseTest.CatalogueBandTransferKeepsFluxAndDensityLinear",
+        "gtest:PointSourceResponseTest.CatalogueBandTransferDeclinesInvalidFrequencyAndPartialFailure",
+        "gtest:PointSourceTransfer.ReferenceFrequencyPreservesCatalogueColourAndFlux",
+        "gtest:PointSourceTransfer.ShiftedSpectrumMatchesIndependentFixedBandPlanckLaw",
+        "gtest:PointSourceTransfer.RejectsReciprocalExtraGainAndShiftedNormalizerSubstitutions",
+        "gtest:PointSourceTransfer.MovingObserverUsesBandGainAndAngularAreaExactlyOnce",
+        "gtest:PointSourceTransfer.ShiftedTemperatureHasNoCatalogueLookupClamp",
+        "gtest:PointSourceTransfer.InvalidOrOverflowingTransferHasNoPublishedValue",
+        "gtest:PointSourceResponseTest.IntegratedDetectorFluxFollowsSignedAffineLensMeasure",
+        "gtest:PointSourceResponseTest.UnresolvedImageShapeStaysInDetectorCoordinates",
+        "gtest:PointSourceResponseTest.EllipticalSupportRejectsInsideMajorCircleOutsideEllipse",
+        "gtest:PointSourceResponseTest.SingularAndBroadMapsRequestRefinementWithoutFloors",
+        "gtest:PointSourceResponseTest.InvalidArithmeticIsDistinctFromEmptyContribution",
+        "gtest:PointSourceResponseTest.CatalogueAccumulationPreservesFluxColorAndExactSupport",
+        "gtest:PointSourceResponseTest.CompositionCancellationAndUnrepresentedParityDecline",
+        "gtest:PointSourceResponseTest.MovingThinLensAndSourceMapComposeIntoReceivedFlux",
         "ctest:OperationalAttestation.FalseExternalEvidenceIsRejected",
         "ctest:OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
         "gtest:RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration",
@@ -136,6 +268,10 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope",
         "gtest:StarfieldPointTest.SpatialIndexMatchesExhaustiveBeamOracle",
         "gtest:StarfieldGeneratorTests.EllipticalFilterUsesTheBeamSachsBasis",
+        "gtest:StarfieldGeneratorTests.PointFilterRetainsImaxSubpixelOffsets",
+        "gtest:StarfieldGeneratorTests.PointFilterMatchesIndependentAngularOracle",
+        "gtest:StarfieldGeneratorTests.SpatialIndexIncludesStarsAcrossAngularCellBoundaries",
+        "gtest:KernelParity.PointStarAngularWeightMatchesIndependentOracle",
         "gtest:KernelParity.CelestialTangentBasisIsSharedByBeamAndPointFilter",
         "gtest:VulkanRenderSession.CombinedParitySceneRetainsResolvedImageStructure",
         "gtest:VulkanRenderSession.IndexedPointCatalogueReachesLiveKernel",
@@ -181,6 +317,26 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:VulkanRenderSession.ProceduralVolumetricTurbulenceReachesLiveKernel",
     },
     "P5": {
+        "gtest:RetainedCameraProgram.Fp32CompletePhysicalLaunchAndRefusals",
+        "gtest:RetainedCameraProgram.CompensatedCompletePhysicalLaunchAndRefusals",
+        "gtest:CameraContinuousProjection.GeometryAndDifferentialAcrossOutputCrop",
+        "gtest:CameraContinuousProjection.FixedPupilAndObserverArePreserved",
+        "gtest:CameraContinuousProjection.FisheyeCropMaskCentreAndAntipodalRim",
+        "gtest:CameraContinuousProjection.RefinementDeclinesLostCoordinatesAndDirections",
+        "gtest:CameraContinuousProjection.CropTranslationDoesNotRenormalizeOrMaskProjection",
+        "gtest:CameraContinuousProjection.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff",
+        "gtest:CameraContinuousProjection.InvalidAndUnsupportedProjectionPublishesNoRay",
+        "gtest:PointSourceResponseTest.CatalogueBandTransferComposesDensityAndMovingFrequency",
+        "gtest:PointSourceTransfer.MovingObserverUsesBandGainAndAngularAreaExactlyOnce",
+        "gtest:CameraFilmDifferential.IndependentGeometryAndActualRayStencils",
+        "gtest:CameraFilmDifferential.FullLaunchDifferentiatesDisplacedMovingKerrObserver",
+        "gtest:CameraFilmDifferential.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns",
+        "gtest:CameraFilmDifferential.PerspectiveAndFixedPupilSolidAngleLaws",
+        "gtest:CameraFilmDifferential.EquidistantCentreLimitAndAntipodalMask",
+        "gtest:CameraFilmDifferential.PixelUnitsAndIntegratedRectangleSolidAngle",
+        "gtest:CameraFilmDifferential.PreservesNominalRaysAndExistingOrientationSemantics",
+        "gtest:CameraFilmDifferential.GovernedFourSampleLaunchAndSingleObserverBoost",
+        "gtest:CameraFilmDifferential.CustomCameraDeclinesUnavailableDifferential",
         "ctest:OperationalAttestation.FalseExternalEvidenceIsRejected",
         "ctest:OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
         "gtest:CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels",
@@ -222,6 +378,8 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:ConfigValidation.MetricMassAndObserverCoordinateRadiusAreIdentityAware",
         "gtest:ConfigValidation.DiskRequestDeclinesForEveryMetricWithoutAnEmissionModel",
         "gtest:CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle",
+        "gtest:CpuTraceBoundary.KottlerBothPastHorizonsRetainRadialAffineOracleAndTracerReuse",
+        "gtest:CpuTraceBoundary.KottlerOverlapPreservesCoupledSourceMapAgainstNativeChart",
         "gtest:CpuTraceBoundary.EveryAdvertisedCpuMetricConstructsAndTracesOneRay",
         "gtest:CpuTraceBoundary.TwoSheetEllisCrossesThroatAndReachesInversionMatchedInfinity",
         "gtest:MorrisThorneCartesianTests.CurvatureAndRadialNullEnergyConditionMatchExactEllis",
@@ -238,6 +396,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
     "E2": {
         "gtest:ConfigValidation.PolarisationRequiresRepresentedThinBlackHoleDisk",
         "gtest:GeodesicTracerTest.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation",
+        "gtest:GeodesicTracerTest.PolarisationGaugeRemainsRegularAtPastHorizonCapture",
         "gtest:RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes",
         "gtest:RenderSessionProbe.PolarisedRequestsDeclineAndTwoSheetIsRepresented",
         "gtest:WalkerPenrose.BoyerLindquistInitialDataAndAxisExitDeclineWithoutSubstitution",
@@ -246,6 +405,16 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:WalkerPenroseLivePath.ConservesConstantAndOrthonormality",
     },
     "E3": {
+        "gtest:VulkanRenderSession.ContinuationRendererPublishesOnlyCompleteFramesWithinActualBudget",
+        "gtest:DispatchGovernor.ContinuationReadbackRejectsStaleOrUncommittedState",
+        "gtest:DispatchGovernor.OnlyPhysicalTerminalReadbackCanFinalizeWithoutChangingTrajectory",
+        "gtest:VulkanBackend.BufferAllocationLimitCountsActualResidencyAndPreservesExistingBuffers",
+        "gtest:DispatchGovernor.ContinuationsPreserveFourCameraSamplesAndPublishOnce",
+        "gtest:DispatchGovernor.LateContinuationOvershootReplaysChildrenFromBothZeroOrdinals",
+        "gtest:DispatchGovernor.EveryContinuationTimingEnforcesThePhysicalSafetyBoundary",
+        "gtest:DispatchGovernor.CancellationStopsBetweenContinuationsAndBeforePublication",
+        "gtest:DispatchGovernor.CheapContinuationPhasesCannotHideThePeakSoftSizingFeedback",
+        "gtest:DispatchGovernor.ContinuationExhaustionNeverImplicitlyCompletesOrAdvancesSample",
         "ctest:OperationalAttestation.FalseExternalEvidenceIsRejected",
         "ctest:OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
         "gtest:MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile",
@@ -288,11 +457,23 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "b146c797fffe0ca6dfa0a83e7ea6748ef559ae4cfcd7701a8a996a56b919a5ef",
-    "required_dimensions": "da59f40256ff1b2241c56c7b04f6e50aed0e9ce163bc600bc8870756fe8db84e",
+    "acceptance_criteria": "dddd6433f3bad096e7942620d59887a599dcc8b762181bcfcfb7c638e4975f8f",
+    "required_dimensions": "359c4ff241f25d28777d15ebad4bd8216d4fbcbb29b597ac832005409addd725",
     "capability_contracts": "48c5b338c14c11e2ad7275322cd72f4bd014df621ca69e65e119621066fd5c6c",
 }
-CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
+# These groups match concrete optional compile boundaries. CPU transport tests
+# are always required, including on hosts without Vulkan development files.
+CONDITIONAL_SOURCE_GROUPS = {
+    "vulkan-backend": {
+        Path(f"tests/backend/{name}.cpp") for name in (
+            "vulkan_smoke_test", "kernel_parity_test", "kernel_metric_consistency_test",
+            "kernel_camera_frame_test", "retained_camera_program_test",
+            "retained_compute_test", "kernel_infinity_test", "kernel_trace_test",
+            "kernel_beam_test", "kernel_portability_test",
+        )
+    },
+    "vulkan-render": {Path("tests/render/vulkan_render_test.cpp")},
+}
 
 
 def source_tests():
@@ -385,7 +566,8 @@ def mandatory_coverage_error(source_names, mandatory_names):
     return None
 
 
-def ctest_inventory_errors(document, tests, declared_ctests, test_floor):
+def ctest_inventory_errors(document, tests, declared_ctests, test_floor,
+                           unavailable_groups=frozenset()):
     if not isinstance(document, dict) or document.get("kind") != "ctestInfo":
         return ["CTest inventory has an unsupported shape"]
     entries = document.get("tests")
@@ -434,21 +616,61 @@ def ctest_inventory_errors(document, tests, declared_ctests, test_floor):
             f"non-source CTest registrations are not Operational: {non_operational[:5]}"
         )
 
-    missing = source_names - actual
-    conditional = {
+    unavailable_paths = set().union(*(
+        CONDITIONAL_SOURCE_GROUPS[group] for group in unavailable_groups
+    ))
+    unavailable = {
         name
         for name, record in tests.items()
-        if record.path.relative_to(ROOT) in CONDITIONAL_SOURCE_PATHS
+        if record.path.relative_to(ROOT) in unavailable_paths
     }
-    unexpected_missing = sorted(missing - conditional)
+    unexpected_missing = sorted(source_names - actual - unavailable)
     if unexpected_missing:
         errors.append(
             f"source GoogleTests are absent from live CTest: {unexpected_missing[:5]}"
         )
-    conditional_missing = missing & conditional
-    if conditional_missing and conditional_missing != conditional:
-        errors.append("live CTest contains only part of a conditional source suite")
+    unexpected_available = sorted(actual & unavailable)
+    if unexpected_available:
+        errors.append(
+            "live CTest contains tests from unavailable build capabilities: "
+            f"{unexpected_available[:5]}"
+        )
     return errors
+
+
+def verify_backend_inventory_policy():
+    tests = source_tests()
+    cpu_test = "CoupledTransport.FlatFourColumnsUseActualProjectedAndInteriorTrials"
+    for unavailable in (frozenset(), frozenset({"vulkan-render"}),
+                        frozenset(CONDITIONAL_SOURCE_GROUPS)):
+        omitted_paths = set().union(*(
+            CONDITIONAL_SOURCE_GROUPS[group] for group in unavailable
+        ))
+        entries = [
+            {"name": name, "properties": [{"name": "LABELS", "value": ["Mandatory"]}]}
+            for name, record in tests.items()
+            if record.path.relative_to(ROOT) not in omitted_paths
+        ]
+        inventory = {"kind": "ctestInfo", "tests": entries}
+        if ctest_inventory_errors(inventory, tests, {}, 0, unavailable):
+            raise RuntimeError("inventory policy rejected the declared backend capabilities")
+        missing_cpu = {**inventory, "tests": [e for e in entries if e["name"] != cpu_test]}
+        if not ctest_inventory_errors(missing_cpu, tests, {}, 0, unavailable):
+            raise RuntimeError("inventory policy accepted missing CPU transport coverage")
+        for group, paths in CONDITIONAL_SOURCE_GROUPS.items():
+            witness = next(name for name, record in tests.items()
+                           if record.path.relative_to(ROOT) in paths)
+            if group in unavailable:
+                altered = entries + [{
+                    "name": witness,
+                    "properties": [{"name": "LABELS", "value": ["Mandatory"]}],
+                }]
+            else:
+                altered = [e for e in entries if e["name"] != witness]
+            if not ctest_inventory_errors(
+                {**inventory, "tests": altered}, tests, {}, 0, unavailable
+            ):
+                raise RuntimeError("inventory policy accepted backend capability drift")
 
 
 def attestation_profile_errors(capabilities):
@@ -522,8 +744,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--self-test", action="store_true")
     parser.add_argument("--ctest-inventory", type=Path)
+    parser.add_argument("--without-vulkan-backend", action="store_true",
+                        help="the configured build has no Vulkan backend target")
+    parser.add_argument("--without-vulkan-render", action="store_true",
+                        help="the configured build has no Vulkan render implementation")
     args = parser.parse_args()
     if args.self_test:
+        verify_backend_inventory_policy()
         policy_model = json.loads(MODEL.read_text(encoding="utf-8"))
         drifted_policy_model = json.loads(json.dumps(policy_model))
         drifted_policy_model["required_dimensions"][0]["evidence"] = []
@@ -630,7 +857,11 @@ def main():
         else:
             failures.extend(
                 ctest_inventory_errors(
-                    inventory, tests, ctest_labels, SOURCE_AVAILABLE_TEST_FLOOR
+                    inventory, tests, ctest_labels, SOURCE_AVAILABLE_TEST_FLOOR,
+                    {group for group, disabled in (
+                        ("vulkan-backend", args.without_vulkan_backend),
+                        ("vulkan-render", args.without_vulkan_render),
+                    ) if disabled},
                 )
             )
     floor_error = source_floor_error(len(tests))

@@ -1,59 +1,47 @@
-# =============================================================================
-# Sirius .gitignore - Comprehensive Build and IDE Exclusions
-# =============================================================================
+# Workspace outputs; see docs/DEVELOPMENT.md for ownership and retention.
+/bin/
+/out/
+/renders/
+/attestations/
 
-# =============================================================================
-# Build Artifacts
-# =============================================================================
-bin/
-renders/
-attestations/
-build/
-out/
+# CMake caches and generated build trees (presets use bin/<preset>).
+/build/
 cmake-build-*/
+CMakeUserPresets.json
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
 
-
-# Compiled Objects
+# Compiler and linker products, including shader portability output.
 *.o
 *.obj
 *.lo
 *.slo
-
-# Precompiled Headers
 *.gch
 *.pch
-
-# Compiled Libraries
 *.lib
 *.a
 *.la
-*.lo
 *.dll
 *.so
 *.so.*
 *.dylib
-
-# Executables
 *.exe
 *.out
 *.app
-
-# =============================================================================
-# CUDA/OptiX Artifacts
-# =============================================================================
 *.ptx
 *.cubin
 *.fatbin
 *.gpu
 *.i
 *.ii
-
-# CUDA temporary files
 tmpxft_*
 
-# =============================================================================
-# Visual Studio
-# =============================================================================
+# Visual Studio and multi-configuration build output.
 .vs/
 *.vcxproj.user
 *.suo
@@ -75,74 +63,33 @@ ARM64/
 *.lastbuildstate
 *.recipe
 
-# =============================================================================
-# CMake
-# =============================================================================
-CMakeCache.txt
-CMakeFiles/
-cmake_install.cmake
-install_manifest.txt
-compile_commands.json
-CTestTestfile.cmake
-_deps/
-
-# =============================================================================
-# IDE and Editor Files
-# =============================================================================
-# JetBrains
+# Local editor, OS, and tool state.
 .idea/
 *.iml
-
-# VS Code
 .vscode/
 *.code-workspace
-
-# Vim
 *.swp
 *.swo
 *~
-
-# =============================================================================
-# Operating System
-# =============================================================================
-# Windows
 Thumbs.db
 ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
-
-# macOS
 .DS_Store
 .AppleDouble
 .LSOverride
 ._*
-
-# Linux
-*~
 .directory
-
-# =============================================================================
-# Project-Specific
-# =============================================================================
-# Claude Code configuration
 .claude/
-
-# Debug artifacts
-debug_*.glsl
-*.log
 imgui.ini
 
-# Downloaded packages
+# Disposable diagnostics, downloads and backups.
+debug_*.glsl
+*.log
 *.deb
-
-# Backup files
 *.backup
 *.bak
 *.orig
-
-# =============================================================================
-# Testing
-# =============================================================================
 Testing/
 CTestCostData.txt
 __pycache__/

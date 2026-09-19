@@ -10,8 +10,11 @@
 // same asynchronous, cancellable session lifecycle as the CPU reference path.
 
 #include "sirius/render/film_config.h"
+#include "sirius/render/render_evidence.h"
 #include "sirius/render/session/display_buffer.h"
+#include "sirius/render/session/point_source_detector.h"
 #include "sirius/render/session/progress_tracker.h"
+#include "sirius/render/session/ray_work_queue.h"
 #include "sirius/render/session/session_events.h"
 #include "sirius/render/session/session_states.h"
 #include "sirius/render/session/state_machine.h"
@@ -207,18 +210,12 @@ struct SessionConfig {
     FilmConfig film_config = FilmConfig::Interstellar();
 };
 
-// Canonical, machine-readable witness emitted from the typed configuration
-// that the session actually consumes. External attestation compares this event
-// with its claims instead of trusting runbook metadata alone.
-[[nodiscard]] std::string SessionSceneEvidenceJson(const SessionConfig& config,
-                                                   std::size_t point_star_count);
-
 // Typed boundary shared by CPU initialisation and Vulkan capability selection.
 // Small positive dimensions remain legal for probes, while production limits
 // and every enum/feature dependency are enforced before allocation or dispatch.
 [[nodiscard]] std::optional<std::string> SessionConfigIssue(const SessionConfig& config);
 
-// Orchestrates a CPU render from configuration to written output.
+// Orchestrates shared camera, trace, detector and output work.
 class RenderSession {
   public:
     using FSM = StateMachine<SessionState, SessionEvent, 14>;
@@ -226,6 +223,15 @@ class RenderSession {
         std::function<void(SessionState final_state, const std::string& message)>;
 
     RenderSession() : fsm_(kSessionConfig) { SetupActions(); }
+    // Internal device-worker session. It retains Vulkan scene identity and
+    // returns linear radiance to the owning renderer's publication boundary.
+    RenderSession(backend::TraceStepExecutor& executor, int workers, int tile_edge)
+        : fsm_(kSessionConfig),
+          external_step_executor_(&executor),
+          device_workers_(workers),
+          device_tile_edge_(tile_edge) {
+        SetupActions();
+    }
     ~RenderSession();
 
     RenderSession(const RenderSession&) = delete;
@@ -260,6 +266,10 @@ class RenderSession {
     double GetEta() const { return progress_.GetEta(); }
     const TileScheduler& GetTileScheduler() const { return tiles_; }
     DisplayBuffer& GetDisplayBuffer() { return display_; }
+    const std::string& GetErrorMessage() const { return error_message_; }
+    bool IsStopping() const {
+        return stop_workers_.load() || progress_.GetCancellationToken().IsCancelled();
+    }
 
     void SetCompletionCallback(CompletionCallback cb) {
         std::lock_guard<std::mutex> lock(callback_mutex_);
@@ -288,11 +298,27 @@ class RenderSession {
         float r = 0.0f, g = 0.0f, b = 0.0f;
     };
 
-    PixelResult ShadePixel(int px, int py, backend::GeodesicTracer* tracer) const;
+    // Canonical screen blocks make shared detector work independent of tile
+    // scheduling. Each worker retains only one completed block, at most 1024 RGB
+    // values; storage does not grow with image size or samples per pixel.
+    struct PixelBlock {
+        int x = -1, y = -1, width = 0, height = 0;
+        std::array<PixelResult, kPointDetectorBatchCapacity> pixels{};
+    };
+    [[nodiscard]] bool UsesPhysicalPointDetector() const;
+    [[nodiscard]] base::Expected<void> ShadeBlock(int x, int y, int width, int height,
+                                                  backend::GeodesicTracer* tracer,
+                                                  PixelBlock& result) const;
+    [[nodiscard]] base::Expected<std::vector<float>> ShadeTile(const Tile& tile,
+                                                               backend::GeodesicTracer* tracer,
+                                                               PixelBlock& cache) const;
     PixelResult ShadeDiskHit(const backend::TraceResult& result) const;
     PixelResult ShadeEscaped(const backend::TraceResult& result) const;
 
     FSM fsm_;
+    backend::TraceStepExecutor* external_step_executor_ = nullptr;
+    int device_workers_ = 0;
+    int device_tile_edge_ = 0;
     SessionConfig config_;
     TileScheduler tiles_;
     ProgressTracker progress_;
@@ -307,8 +333,7 @@ class RenderSession {
     std::unique_ptr<core::IMetric> metric_;
     std::unique_ptr<backend::GeodesicTracer> tracer_;
     std::unique_ptr<core::ICamera> camera_;
-
-    // Relativistic jet model.
+    PixelBlock pixel_block_;
 
     // Starfield background texture (equirectangular RGBA).
     std::vector<unsigned char> starfield_data_;
@@ -332,11 +357,17 @@ class RenderSession {
     // metric, so no synchronisation is needed on the physics path.
     void RenderTilesParallel();
     void WorkerThread(int thread_id);
-    [[nodiscard]] bool RenderTileThreaded(Tile* tile, int thread_id);
+    [[nodiscard]] base::Expected<bool> RenderTileThreaded(Tile* tile, int thread_id);
 
     std::vector<std::thread> worker_threads_;
+    // Each worker owns one slot; the render thread reads them only after join.
+    // error_message_ and FSM transitions remain owned by the render thread.
+    std::vector<std::optional<base::Error>> worker_errors_;
     std::vector<std::unique_ptr<backend::GeodesicTracer>> thread_tracers_;  // Per-thread tracers.
-    std::mutex tile_mutex_;                  // Protects tile acquisition.
+    std::vector<PixelBlock> thread_pixel_blocks_;
+    std::vector<std::unique_ptr<backend::GeodesicTracer>> probe_tracers_;
+    std::unique_ptr<RayWorkQueue> probe_workers_;
+    std::mutex tile_mutex_;                  // Serializes tile completion and progress callbacks.
     std::mutex display_mutex_;               // Protects display buffer updates.
     std::atomic<bool> stop_workers_{false};  // Signal workers to stop.
     std::atomic<int> active_workers_{0};     // Workers currently rendering.

@@ -20,10 +20,12 @@
 #include <gtest/gtest.h>
 
 #include "kerr_shadow_oracle.h"
+#include "support/moving_kerr_detector_scene.h"
 #include "support/scoped_environment.h"
 
 #include <algorithm>
 #include <array>
+#include <bit>
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>
@@ -47,6 +49,8 @@
 #include "sirius/render/session/display_buffer.h"
 #include "sirius/render/session/render_session.h"
 #include "sirius/render/vulkan_renderer.h"
+
+#include "../support/trace_continuation_probe.h"
 #endif
 
 namespace {
@@ -127,7 +131,7 @@ std::vector<float> BuildTraceParams(const Scene& scene) {
     const double sp = std::sin(cartesian_phi);
     const double cp = std::cos(cartesian_phi);
 
-    std::vector<float> p(68, 0.0f);
+    std::vector<float> p(sirius::render::kTraceParameterCount, 0.0f);
     p[44] = 0.5f;
     p[45] = 0.5f;
     p[66] = 0.5f;
@@ -556,6 +560,37 @@ TEST(VulkanRenderSession, CpuVulkanPointCatalogueAgreeOnFlatScene) {
     EXPECT_LT(absolute_sum / signal_sum, 0.02);
 }
 
+TEST(VulkanRenderSession, RetainedMovingThinLensKerrDetectorMatchesCpuLinearRadiance) {
+    const auto devices = EnumerateVulkanDevices();
+    ASSERT_TRUE(devices) << devices.error().Description();
+    if (devices->empty()) GTEST_SKIP() << "no Vulkan device present";
+    ScopedEnvironmentVariable precision("SIRIUS_PRECISION", "fp32-comp");
+    const std::string root = std::getenv("TMPDIR") ? std::getenv("TMPDIR") : "/tmp";
+    const auto configure = sirius::test::ConfigureMovingKerrDetector;
+    const auto gpu =
+        RenderSessionVulkan(4, 2, root + "/sirius_retained_moving_kerr.exr", configure);
+    const auto cpu = RenderSessionVulkan(4, 2, root + "/sirius_cpu_moving_kerr.exr",
+                                         [&](sirius::render::SessionConfig& config) {
+                                             configure(config);
+                                             config.backend = sirius::render::RenderBackend::Cpu;
+                                             config.tile_size = 1;
+                                             config.thread_count = 8;
+                                         });
+    ASSERT_EQ(gpu.size(), 32U);
+    ASSERT_EQ(cpu.size(), gpu.size());
+    double signal = 0, error = 0;
+    for (std::size_t i = 0; i < gpu.size(); ++i) {
+        ASSERT_TRUE(std::isfinite(gpu[i]));
+        ASSERT_TRUE(std::isfinite(cpu[i]));
+        if (i % 4 == 3) continue;
+        signal += std::abs(cpu[i]);
+        error += std::abs(double(gpu[i]) - cpu[i]);
+    }
+    EXPECT_GT(signal, 0);
+    EXPECT_LT(error / signal, .02);
+    RecordProperty("relative_linear_radiance_error", std::to_string(error / signal));
+}
+
 TEST(VulkanRenderSession, ConstrainedBudgetDeclinesRatherThanChangingBackground) {
     if (const auto d = EnumerateVulkanDevices(); !d.has_value() || d->empty()) {
         GTEST_SKIP() << "no Vulkan device present";
@@ -646,13 +681,13 @@ TEST(VulkanRenderSession, DispatchSubdivisionPreservesExactCameraAndCatalogueOut
     ASSERT_TRUE(selected.has_value());
     const bool software = (*devices)[*selected].kind == sirius::backend::DeviceKind::kSoftware;
     const auto check_initialization = [software](const auto& stats) {
-        EXPECT_EQ(stats.initialization_dispatches, software ? 1 : 0);
+        EXPECT_EQ(stats.initialization_dispatches, software && !stats.retained_intervals ? 1 : 0);
         EXPECT_TRUE(std::isfinite(stats.initialization_seconds));
         EXPECT_TRUE(std::isfinite(stats.initialization_submit_wait_ms));
         EXPECT_GE(stats.initialization_seconds, 0.0);
         EXPECT_GE(stats.initialization_submit_wait_ms, 0.0);
         EXPECT_GE(stats.seconds, stats.initialization_seconds);
-        if (!software) {
+        if (!software && !stats.retained_intervals) {
             EXPECT_EQ(stats.initialization_seconds, 0.0);
             EXPECT_EQ(stats.initialization_submit_wait_ms, 0.0);
         }
@@ -681,13 +716,18 @@ TEST(VulkanRenderSession, DispatchSubdivisionPreservesExactCameraAndCatalogueOut
     minimum.Initialise(config.width, config.height);
     sirius::render::DisplayBuffer blocks;
     blocks.Initialise(config.width, config.height);
-    int minimum_dispatches = 0;
+    std::int64_t minimum_dispatches = 0;
     {
         ScopedEnvironmentVariable target("SIRIUS_DISPATCH_TARGET_MS", "0.000000001");
         const auto result = sirius::render::RenderVulkanToDisplay(config, minimum);
         ASSERT_TRUE(result.has_value()) << result.error().Description();
         check_initialization(*result);
-        EXPECT_LE(result->maximum_dispatch_pixels, config.width);
+        if (result->retained_intervals) {
+            EXPECT_LE(result->maximum_dispatch_rays, result->continuation_capacity);
+            EXPECT_GT(result->dispatch_subdivisions, 0);
+        } else {
+            EXPECT_LE(result->maximum_dispatch_rays, config.width);
+        }
         minimum_dispatches = result->band_dispatches;
     }
     {
@@ -695,8 +735,13 @@ TEST(VulkanRenderSession, DispatchSubdivisionPreservesExactCameraAndCatalogueOut
         const auto result = sirius::render::RenderVulkanToDisplay(config, blocks);
         ASSERT_TRUE(result.has_value()) << result.error().Description();
         check_initialization(*result);
-        EXPECT_LE(result->maximum_dispatch_pixels, config.width * 4);
-        EXPECT_GT(result->maximum_dispatch_pixels, config.width);
+        if (result->retained_intervals) {
+            EXPECT_LE(result->maximum_dispatch_rays, result->continuation_capacity);
+            EXPECT_GT(result->maximum_dispatch_rays, 1);
+        } else {
+            EXPECT_LE(result->maximum_dispatch_rays, config.width * 4);
+            EXPECT_GT(result->maximum_dispatch_rays, config.width);
+        }
         EXPECT_LT(result->band_dispatches, minimum_dispatches);
     }
     const auto first = minimum.SnapshotFloatData();
@@ -725,17 +770,16 @@ TEST(VulkanRenderSession, ZeroActiveTracePreservesRadianceAcrossPrecisionRungs) 
     auto& device = *fixture.device;
     auto params = BuildTraceParams(Scene{});
     std::array<float, 128 * 4> sentinel{};
-    for (std::size_t i = 0; i < sentinel.size(); ++i) {
+    for (std::size_t i = 0; i < sentinel.size(); ++i)
         sentinel[i] = -123.25f - static_cast<float>(i);
-    }
     const auto radiance = device.CreateBuffer(sizeof(sentinel), BufferUsage::kStorage);
     const auto parameters =
         device.CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
     ASSERT_TRUE(radiance.has_value());
     ASSERT_TRUE(parameters.has_value());
-    std::array<BufferHandle, 6> bindings{*radiance, *parameters};
+    std::array<BufferHandle, 7> bindings{*radiance, *parameters};
     const std::array<std::uint32_t, 1> zero{};
-    for (std::size_t i = 2; i < bindings.size(); ++i) {
+    for (std::size_t i = 2; i < 6; ++i) {
         const auto buffer = device.CreateBuffer(sizeof(zero), BufferUsage::kStorage);
         ASSERT_TRUE(buffer.has_value());
         bindings[i] = *buffer;
@@ -748,69 +792,161 @@ TEST(VulkanRenderSession, ZeroActiveTracePreservesRadianceAcrossPrecisionRungs) 
         const auto kernel = device.LoadKernel(spirv);
         if (std::string_view(module) == "trace_fp64.spv" && !device.Info().supports_fp64) {
             ASSERT_FALSE(kernel.has_value()) << "unsupported fp64 must decline before dispatch";
+            RecordProperty("fp64_evidence", "unsupported_kernel_declined");
             continue;
         }
         ASSERT_TRUE(kernel.has_value());
-        params[33] = 0.0f;
-        params[34] = 0.0f;
-        ASSERT_TRUE(device.WriteBuffer(*radiance, std::as_bytes(std::span(sentinel))));
-        ASSERT_TRUE(device.WriteBuffer(*parameters, std::as_bytes(std::span(params))));
-        // A real workgroup exercises the early return, rather than a no-op
-        // command with zero groups. No radiance byte may be touched.
-        ASSERT_TRUE(device.Dispatch(*kernel, bindings, 1, 1, 1));
-        auto result = sentinel;
-        ASSERT_TRUE(device.ReadBuffer(*radiance, std::as_writable_bytes(std::span(result))));
-        EXPECT_EQ(std::memcmp(sentinel.data(), result.data(), sizeof(sentinel)), 0);
-
-        // Prove the kernel ran: enabling one pixel must change exactly that
-        // pixel to finite radiance, leaving the other 127 sentinels intact.
-        params[33] = 1.0f;
-        params[34] = 1.0f;
-        ASSERT_TRUE(device.WriteBuffer(*parameters, std::as_bytes(std::span(params))));
-        ASSERT_TRUE(device.Dispatch(*kernel, bindings, 1, 1, 1));
-        ASSERT_TRUE(device.ReadBuffer(*radiance, std::as_writable_bytes(std::span(result))));
-        EXPECT_NE(std::memcmp(sentinel.data(), result.data(), 4 * sizeof(float)), 0);
-        EXPECT_TRUE(std::all_of(result.begin(), result.begin() + 4,
-                                [](float value) { return std::isfinite(value); }));
-        EXPECT_EQ(std::memcmp(sentinel.data() + 4, result.data() + 4,
-                              sizeof(sentinel) - 4 * sizeof(float)),
-                  0);
-
-        // Odd active widths use a different packed output stride while padded
-        // workgroup lanes must leave every inactive sentinel untouched.
-        params[31] = 2.0f;
-        params[32] = 3.0f;
-        params[33] = 9.0f;
-        params[34] = 3.0f;
-        ASSERT_TRUE(device.WriteBuffer(*radiance, std::as_bytes(std::span(sentinel))));
-        ASSERT_TRUE(device.WriteBuffer(*parameters, std::as_bytes(std::span(params))));
-        ASSERT_TRUE(device.Dispatch(*kernel, bindings, 2, 1, 1));
-        auto reference = sentinel;
-        ASSERT_TRUE(device.ReadBuffer(*radiance, std::as_writable_bytes(std::span(reference))));
-        for (int width : {1, 3, 7, 9}) {
-            SCOPED_TRACE(width);
-            params[33] = static_cast<float>(width);
+        const auto run = [&]<typename Real>() {
+            using Record = sirius::render::TraceContinuationRecord<Real>;
+            using Action = sirius::render::TraceAction;
+            const auto state = device.CreateBuffer(128 * sizeof(Record), BufferUsage::kStorage);
+            ASSERT_TRUE(state.has_value());
+            bindings[6] = *state;
+            const std::vector<std::byte> state_sentinel(128 * sizeof(Record), std::byte{0xa5});
+            std::uint32_t epoch =
+                0x7fc00000u;  // Exercise a NaN float payload as opaque uint identity.
+            params[69] = std::bit_cast<float>(epoch);
+            params[33] = params[34] = 0.0f;
             ASSERT_TRUE(device.WriteBuffer(*radiance, std::as_bytes(std::span(sentinel))));
-            ASSERT_TRUE(device.WriteBuffer(*parameters, std::as_bytes(std::span(params))));
-            ASSERT_TRUE(device.Dispatch(*kernel, bindings, (width + 7) / 8, 1, 1));
-            ASSERT_TRUE(device.ReadBuffer(*radiance, std::as_writable_bytes(std::span(result))));
-            for (int row = 0; row < 3; ++row) {
+            ASSERT_TRUE(device.WriteBuffer(*state, state_sentinel));
+            // Every action must return before reading or touching either buffer
+            // at zero active width/height, even with invalid sentinel records.
+            // These no-ray submissions include the software initialization.
+            for (const auto action : {Action::Initialise, Action::Advance, Action::Finalize}) {
+                params[68] = static_cast<float>(action);
+                ASSERT_TRUE(device.WriteBuffer(*parameters, std::as_bytes(std::span(params))));
+                sirius::backend::DispatchTiming timing;
+                ASSERT_TRUE(device.Dispatch(*kernel, bindings, 1, 1, 1, &timing));
+                EXPECT_TRUE(std::isfinite(timing.submit_wait_ms));
+                EXPECT_GT(timing.submit_wait_ms, 0.0);
+                auto result = sentinel;
+                auto state_result = state_sentinel;
+                ASSERT_TRUE(
+                    device.ReadBuffer(*radiance, std::as_writable_bytes(std::span(result))));
+                ASSERT_TRUE(device.ReadBuffer(*state, state_result));
+                EXPECT_EQ(std::memcmp(sentinel.data(), result.data(), sizeof(sentinel)), 0);
+                EXPECT_EQ(state_result, state_sentinel);
+            }
+            // Same actual buffers and modules: complete the unchanged positive
+            // scenes through bounded phases, validating active records and both
+            // radiance/state canaries after every individual submit.
+            const auto render_active =
+                [&](int width, int height) -> sirius::base::Expected<std::array<float, 128 * 4>> {
+                const auto fail = [](const char* why) {
+                    return sirius::base::Fail(sirius::base::ErrorDomain::kKernel,
+                                              "trace sentinel continuation", why);
+                };
+                params[33] = static_cast<float>(width);
+                params[34] = static_cast<float>(height);
+                params[69] = std::bit_cast<float>(++epoch);
+                auto written = device.WriteBuffer(*radiance, std::as_bytes(std::span(sentinel)));
+                if (!written) return std::unexpected(written.error());
+                written = device.WriteBuffer(*state, state_sentinel);
+                if (!written) return std::unexpected(written.error());
+                const auto active = static_cast<std::size_t>(width * height);
+                const auto maximum = static_cast<std::uint32_t>(params[21]);
+                std::array<Record, 128> records{};
+                std::array<float, 128 * 4> result = sentinel;
+                sirius::render::BandController bands(64, 0.0, 1, 64);
+                const auto phase = [&](Action action) -> sirius::base::Expected<bool> {
+                    const auto previous = records;
+                    const auto previous_output = result;
+                    params[68] = static_cast<float>(action);
+                    auto upload = device.WriteBuffer(*parameters, std::as_bytes(std::span(params)));
+                    if (!upload) return std::unexpected(upload.error());
+                    sirius::backend::DispatchTiming timing;
+                    auto dispatched = device.Dispatch(*kernel, bindings, (width + 7) / 8,
+                                                      (height + 7) / 8, 1, &timing);
+                    if (!dispatched) return std::unexpected(dispatched.error());
+                    if (!bands.Record(static_cast<std::int64_t>(active), timing.submit_wait_ms) ||
+                        timing.submit_wait_ms <= 0.0 ||
+                        timing.submit_wait_ms > sirius::render::kDispatchStopMs)
+                        return fail("invalid or over-budget physical phase");
+                    auto read =
+                        device.ReadBuffer(*state, std::as_writable_bytes(std::span(records)));
+                    if (!read) return std::unexpected(read.error());
+                    read = device.ReadBuffer(*radiance, std::as_writable_bytes(std::span(result)));
+                    if (!read) return std::unexpected(read.error());
+                    if (std::memcmp(reinterpret_cast<const std::byte*>(records.data()) +
+                                        active * sizeof(Record),
+                                    state_sentinel.data() + active * sizeof(Record),
+                                    (128 - active) * sizeof(Record)) != 0 ||
+                        std::memcmp(result.data() + active * 4, sentinel.data() + active * 4,
+                                    sizeof(sentinel) - active * 4 * sizeof(float)) != 0)
+                        return fail("inactive radiance/state sentinel changed");
+                    if (action == Action::Advance && result != previous_output)
+                        return fail("advance published radiance before finalization");
+                    bool terminal = true;
+                    for (std::size_t index = 0; index < active; ++index) {
+                        const std::array<std::uint32_t, 4> identity{
+                            static_cast<std::uint32_t>(params[31]) +
+                                static_cast<std::uint32_t>(index % width),
+                            static_cast<std::uint32_t>(params[32]) +
+                                static_cast<std::uint32_t>(index / width),
+                            0, epoch};
+                        auto checked = sirius::render::ValidateTraceContinuation(
+                            records[index],
+                            action == Action::Initialise ? nullptr : &previous[index], action,
+                            identity, maximum);
+                        if (!checked) return std::unexpected(checked.error());
+                        terminal = terminal && *checked;
+                    }
+                    return terminal;
+                };
+                auto initial = phase(Action::Initialise);
+                if (!initial) return std::unexpected(initial.error());
+                bool terminal = *initial;
+                for (std::uint32_t attempt = 0; !terminal && attempt < maximum; ++attempt) {
+                    auto advanced = phase(Action::Advance);
+                    if (!advanced) return std::unexpected(advanced.error());
+                    terminal = *advanced;
+                }
+                if (!terminal) return fail("active witness did not physically terminate");
+                auto finalized = phase(Action::Finalize);
+                if (!finalized) return std::unexpected(finalized.error());
+                return result;
+            };
+            params[31] = params[32] = 0.0f;
+            const auto one = render_active(1, 1);
+            ASSERT_TRUE(one.has_value()) << one.error().Description();
+            EXPECT_NE(std::memcmp(sentinel.data(), one->data(), 4 * sizeof(float)), 0);
+            EXPECT_TRUE(std::all_of(one->begin(), one->begin() + 4,
+                                    [](float value) { return std::isfinite(value); }));
+            EXPECT_EQ(std::memcmp(sentinel.data() + 4, one->data() + 4,
+                                  sizeof(sentinel) - 4 * sizeof(float)),
+                      0);
+
+            params[31] = 2.0f;
+            params[32] = 3.0f;
+            const auto reference = render_active(9, 3);
+            ASSERT_TRUE(reference.has_value()) << reference.error().Description();
+            for (int width : {1, 3, 7, 9}) {
+                SCOPED_TRACE(width);
+                const auto result = render_active(width, 3);
+                ASSERT_TRUE(result.has_value()) << result.error().Description();
+                for (int row = 0; row < 3; ++row) {
+                    EXPECT_EQ(std::memcmp(result->data() + row * width * 4,
+                                          reference->data() + row * 9 * 4,
+                                          static_cast<std::size_t>(width) * 4 * sizeof(float)),
+                              0);
+                }
+                const auto active_floats = static_cast<std::size_t>(width * 3 * 4);
+                EXPECT_TRUE(std::all_of(result->begin(), result->begin() + active_floats,
+                                        [](float value) { return std::isfinite(value); }));
+                EXPECT_NE(
+                    std::memcmp(result->data(), sentinel.data(), active_floats * sizeof(float)), 0);
                 EXPECT_EQ(
-                    std::memcmp(result.data() + row * width * 4, reference.data() + row * 9 * 4,
-                                static_cast<std::size_t>(width) * 4 * sizeof(float)),
+                    std::memcmp(result->data() + active_floats, sentinel.data() + active_floats,
+                                sizeof(sentinel) - active_floats * sizeof(float)),
                     0);
             }
-            const auto active_floats = static_cast<std::size_t>(width * 3 * 4);
-            EXPECT_TRUE(std::all_of(result.begin(), result.begin() + active_floats,
-                                    [](float value) { return std::isfinite(value); }));
-            EXPECT_NE(std::memcmp(result.data(), sentinel.data(), active_floats * sizeof(float)),
-                      0);
-            EXPECT_EQ(std::memcmp(result.data() + active_floats, sentinel.data() + active_floats,
-                                  sizeof(sentinel) - active_floats * sizeof(float)),
-                      0);
+        };
+        if (std::string_view(module) == "trace_fp64.spv") {
+            ASSERT_NO_FATAL_FAILURE(run.template operator()<double>());
+            RecordProperty("fp64_evidence", "actual_continuation_canaries_executed");
+        } else {
+            ASSERT_NO_FATAL_FAILURE(run.template operator()<float>());
         }
-        params[31] = 0.0f;
-        params[32] = 0.0f;
     }
 #else
     GTEST_SKIP() << "trace kernels unavailable";
@@ -829,23 +965,10 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds) {
 
     // --- Vulkan render (direct kernel dispatch, disk + starfield off) --------
     std::vector<float> params = BuildTraceParams(scene);
-    std::vector<float> vk(static_cast<std::size_t>(w) * h * 4, 0.0f);
-    const std::vector<std::uint32_t> star_dummy = {0u};
-
-    const auto rbuf = f.device->CreateBuffer(vk.size() * sizeof(float), BufferUsage::kStorage);
-    const auto pbuf = f.device->CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
-    const auto sbuf =
-        f.device->CreateBuffer(star_dummy.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
-    const auto psbuf = f.device->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
-    const auto pobuf = f.device->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
-    const auto pibuf = f.device->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
-    ASSERT_TRUE(rbuf && pbuf && sbuf && psbuf && pobuf && pibuf);
-    ASSERT_TRUE(f.device->WriteBuffer(*pbuf, std::as_bytes(std::span<const float>(params))));
-    ASSERT_TRUE(
-        f.device->WriteBuffer(*sbuf, std::as_bytes(std::span<const std::uint32_t>(star_dummy))));
-    const BufferHandle bind[] = {*rbuf, *pbuf, *sbuf, *psbuf, *pobuf, *pibuf};
-    ASSERT_TRUE(f.device->Dispatch(f.kernel, bind, (w + 7) / 8, (h + 7) / 8, 1).has_value());
-    ASSERT_TRUE(f.device->ReadBuffer(*rbuf, std::as_writable_bytes(std::span<float>(vk))));
+    const auto gpu_result = sirius::test::TraceContinuationImage<float>(
+        *f.device, f.kernel, params, static_cast<std::uint32_t>(w), static_cast<std::uint32_t>(h));
+    ASSERT_TRUE(gpu_result.has_value()) << gpu_result.error().Description();
+    const auto& vk = *gpu_result;
 
     // --- CPU reference (the geodesic tracer on the same scene) ---------------
     KerrSchildParams kp;
@@ -981,33 +1104,16 @@ TEST(VulkanRenderSession, KerrNearExtremalBardeenBoundaryAt1080p) {
     params[48] = static_cast<float>(stationary_observer->screen_beta[1]);
     params[49] = static_cast<float>(stationary_observer->screen_beta[2]);
 
-    std::array<float, 4> radiance{};
-    const std::array<std::uint32_t, 1> star_dummy{0u};
-    const auto radiance_buffer =
-        fixture.device->CreateBuffer(sizeof(radiance), BufferUsage::kStorage);
-    const auto params_buffer =
-        fixture.device->CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
-    const auto star_buffer =
-        fixture.device->CreateBuffer(sizeof(star_dummy), BufferUsage::kStorage);
-    const auto point_star_buffer =
-        fixture.device->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
-    const auto point_offset_buffer =
-        fixture.device->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
-    const auto point_index_buffer =
-        fixture.device->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
-    ASSERT_TRUE(radiance_buffer && params_buffer && star_buffer && point_star_buffer &&
-                point_offset_buffer && point_index_buffer);
-    ASSERT_TRUE(fixture.device->WriteBuffer(
-        *star_buffer, std::as_bytes(std::span<const std::uint32_t>(star_dummy))));
-    const BufferHandle bindings[] = {*radiance_buffer,   *params_buffer,       *star_buffer,
-                                     *point_star_buffer, *point_offset_buffer, *point_index_buffer};
+    sirius::test::TraceContinuationProbe<float> probe(*fixture.device, fixture.kernel);
+    const auto prepared = probe.Prepare();
+    ASSERT_TRUE(prepared.has_value()) << prepared.error().Description();
 
     constexpr VulkanScreenPoint kAnalyticCentre{2.1573218480479185, 0.0};
     const double tan_half_fov = std::tan(scene.fov_deg * kPi / 360.0);
     const double aspect = static_cast<double>(scene.width) / scene.height;
     const double pixels_per_screen_unit = 0.5 * scene.height / (scene.distance * tan_half_fov);
 
-    auto is_captured = [&](const VulkanScreenPoint& point) {
+    auto is_captured = [&](const VulkanScreenPoint& point) -> sirius::base::Expected<bool> {
         const double image_x =
             0.5 * scene.width * (1.0 + point.alpha / (scene.distance * tan_half_fov * aspect));
         const double image_y =
@@ -1018,14 +1124,9 @@ TEST(VulkanRenderSession, KerrNearExtremalBardeenBoundaryAt1080p) {
         params[32] = static_cast<float>(pixel_y);
         params[44] = static_cast<float>(image_x - pixel_x);
         params[45] = static_cast<float>(image_y - pixel_y);
-        radiance.fill(0.0f);
-        EXPECT_TRUE(fixture.device->WriteBuffer(*radiance_buffer,
-                                                std::as_bytes(std::span<const float>(radiance))));
-        EXPECT_TRUE(fixture.device->WriteBuffer(*params_buffer,
-                                                std::as_bytes(std::span<const float>(params))));
-        EXPECT_TRUE(fixture.device->Dispatch(fixture.kernel, bindings, 1, 1, 1));
-        EXPECT_TRUE(fixture.device->ReadBuffer(*radiance_buffer,
-                                               std::as_writable_bytes(std::span<float>(radiance))));
+        const auto output = probe.RunRegion(params);
+        if (!output) return std::unexpected(output.error());
+        const auto& radiance = *output;
         return std::max({radiance[0], radiance[1], radiance[2]}) < 1.0e-6f;
     };
 
@@ -1047,11 +1148,17 @@ TEST(VulkanRenderSession, KerrNearExtremalBardeenBoundaryAt1080p) {
 
         double inside = 0.70;
         double outside = 1.30;
-        ASSERT_TRUE(is_captured(scaled(inside)));
-        ASSERT_FALSE(is_captured(scaled(outside)));
+        const auto inner_result = is_captured(scaled(inside));
+        ASSERT_TRUE(inner_result.has_value()) << inner_result.error().Description();
+        ASSERT_TRUE(*inner_result);
+        const auto outer_result = is_captured(scaled(outside));
+        ASSERT_TRUE(outer_result.has_value()) << outer_result.error().Description();
+        ASSERT_FALSE(*outer_result);
         for (int iteration = 0; iteration < 14; ++iteration) {
             const double middle = 0.5 * (inside + outside);
-            if (is_captured(scaled(middle))) {
+            const auto middle_result = is_captured(scaled(middle));
+            ASSERT_TRUE(middle_result.has_value()) << middle_result.error().Description();
+            if (*middle_result) {
                 inside = middle;
             } else {
                 outside = middle;
@@ -1088,7 +1195,7 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalB
     const double theta = kInclinationDeg * kPi / 180.0;
     const double st = std::sin(theta);
     const double ct = std::cos(theta);
-    std::vector<float> params(68, 0.0f);
+    std::vector<float> params(sirius::render::kTraceParameterCount, 0.0f);
     params[44] = 0.5f;
     params[45] = 0.5f;
     params[66] = 0.5f;
@@ -1119,22 +1226,10 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalB
     params[42] = kThroat;
     params[43] = 0.0f;  // Ellis
 
-    std::vector<float> vk(static_cast<std::size_t>(w) * h * 4, 0.0f);
-    const std::vector<std::uint32_t> star_dummy = {0u};
-    const auto rbuf = f.device->CreateBuffer(vk.size() * sizeof(float), BufferUsage::kStorage);
-    const auto pbuf = f.device->CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
-    const auto sbuf =
-        f.device->CreateBuffer(star_dummy.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
-    const auto psbuf = f.device->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
-    const auto pobuf = f.device->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
-    const auto pibuf = f.device->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
-    ASSERT_TRUE(rbuf && pbuf && sbuf && psbuf && pobuf && pibuf);
-    ASSERT_TRUE(f.device->WriteBuffer(*pbuf, std::as_bytes(std::span<const float>(params))));
-    ASSERT_TRUE(
-        f.device->WriteBuffer(*sbuf, std::as_bytes(std::span<const std::uint32_t>(star_dummy))));
-    const BufferHandle bind[] = {*rbuf, *pbuf, *sbuf, *psbuf, *pobuf, *pibuf};
-    ASSERT_TRUE(f.device->Dispatch(f.kernel, bind, (w + 7) / 8, (h + 7) / 8, 1).has_value());
-    ASSERT_TRUE(f.device->ReadBuffer(*rbuf, std::as_writable_bytes(std::span<float>(vk))));
+    const auto gpu_result = sirius::test::TraceContinuationImage<float>(
+        *f.device, f.kernel, params, static_cast<std::uint32_t>(w), static_cast<std::uint32_t>(h));
+    ASSERT_TRUE(gpu_result.has_value()) << gpu_result.error().Description();
+    const auto& vk = *gpu_result;
 
     // --- CPU reference (the geodesic tracer on the same scene) ---------------
     sirius::core::MorrisThorneCartesian metric(sirius::core::MorrisThorneParams::Ellis(kThroat));
@@ -1213,6 +1308,103 @@ TEST(VulkanRenderSession, CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalB
     EXPECT_LE(frac_cpu, 0.40);
     EXPECT_LT(std::abs(frac_vk - frac_cpu), 0.02)
         << "throat-shadow fractions diverge between the backends";
+}
+
+TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinActualBudget) {
+    using namespace sirius::render;
+    const auto devices = EnumerateVulkanDevices();
+    ASSERT_TRUE(devices.has_value()) << devices.error().Description();
+    if (devices->empty()) GTEST_SKIP() << "no Vulkan device present";
+    ScopedEnvironmentVariable precision("SIRIUS_PRECISION", "fp32");
+    // Legacy source shaders upload the texture; the retained renderer's
+    // shared host source owner keeps it outside device residency.
+    ScopedEnvironmentVariable budget("SIRIUS_MEMORY_BUDGET_MB", "192");
+    ScopedEnvironmentVariable target("SIRIUS_DISPATCH_TARGET_MS", "250");
+    SessionConfig config;
+    config.backend = RenderBackend::Vulkan;
+    config.metric_id = sirius::core::MetricId::Minkowski;
+    config.black_hole_mass = 0.0;
+    config.enable_disk = false;
+    config.width = config.height = 8;
+    config.samples_per_pixel = 4;
+    config.camera_beta_forward = 0.08;
+    config.camera_beta_up = 0.02;
+    config.camera_beta_right = 0.01;
+    config.lens_type = sirius::core::LensType::ThinLens;
+    config.camera_focus_distance = 30.0f;
+    DisplayBuffer display;
+    display.Initialise(config.width, config.height);
+    int tiles = 0;
+    const auto rendered = RenderVulkanToDisplay(config, display, [&](int completed, int total) {
+        EXPECT_LE(completed, total);
+        ++tiles;
+    });
+    ASSERT_TRUE(rendered.has_value()) << rendered.error().Description();
+    EXPECT_EQ(tiles, rendered->tiles_rendered);
+    ASSERT_GT(rendered->work_tile_edge, 0);
+    const int edge = rendered->work_tile_edge;
+    EXPECT_EQ(rendered->tiles_rendered,
+              ((config.width + edge - 1) / edge) * ((config.height + edge - 1) / edge));
+    EXPECT_EQ(display.GetUpdateCounter(), 1u);
+    EXPECT_GT(rendered->band_dispatches, config.samples_per_pixel * 2);
+    if (rendered->retained_intervals) {
+        for (std::size_t stage = 1; stage < 6; ++stage)
+            EXPECT_GT(rendered->retained_stage_dispatches[stage], 0);
+        std::int64_t submissions = 0;
+        for (const auto count : rendered->retained_stage_dispatches) submissions += count;
+        EXPECT_EQ(rendered->band_dispatches, submissions);
+    } else {
+        EXPECT_GT(rendered->continuation_dispatches[0], 0);
+        EXPECT_GT(rendered->continuation_dispatches[1], 0);
+        EXPECT_GT(rendered->continuation_dispatches[2], 0);
+        EXPECT_EQ(rendered->band_dispatches, rendered->continuation_dispatches[0] +
+                                                 rendered->continuation_dispatches[1] +
+                                                 rendered->continuation_dispatches[2]);
+    }
+    EXPECT_GT(rendered->explicit_buffer_allocation_bytes, 0u);
+    EXPECT_LE(rendered->explicit_buffer_allocation_bytes, rendered->tile_plan.usable_bytes);
+    EXPECT_GT(rendered->continuation_capacity, 0u);
+    EXPECT_LE(rendered->maximum_dispatch_rays,
+              static_cast<std::int64_t>(rendered->continuation_capacity));
+    EXPECT_GT(rendered->maximum_dispatch_ms, 0.0);
+    EXPECT_LE(rendered->maximum_dispatch_ms, 1000.0);
+    const auto complete = display.SnapshotFloatData();
+    EXPECT_TRUE(std::all_of(complete.begin(), complete.end(),
+                            [](float value) { return std::isfinite(value); }));
+    float maximum_rgb = 0.0f;
+    for (std::size_t i = 0; i < complete.size(); ++i) {
+        if (i % 4 != 3) maximum_rgb = std::max(maximum_rgb, complete[i]);
+    }
+    EXPECT_GT(maximum_rgb, 0.0f) << "a never-executed black frame is not completion";
+    RecordProperty("physical_submissions", std::to_string(rendered->band_dispatches));
+    RecordProperty("advance_submissions", std::to_string(rendered->continuation_dispatches[1]));
+    RecordProperty("maximum_submit_ms", std::to_string(rendered->maximum_dispatch_ms));
+    RecordProperty("explicit_allocation_bytes",
+                   std::to_string(rendered->explicit_buffer_allocation_bytes));
+    // Cancel during frame preparation or tracing. The previously published
+    // image and its publication counter must remain unchanged.
+    int polls = 0;
+    const auto cancelled = RenderVulkanToDisplay(config, display, {}, [&] { return ++polls > 20; });
+    EXPECT_FALSE(cancelled.has_value());
+    EXPECT_GT(polls, 20);
+    EXPECT_EQ(display.GetUpdateCounter(), 1u);
+    EXPECT_EQ(display.SnapshotFloatData(), complete);
+    if (!rendered->retained_intervals) {
+        ScopedEnvironmentVariable source_too_large("SIRIUS_MEMORY_BUDGET_MB", "64");
+        const auto refused = RenderVulkanToDisplay(config, display);
+        ASSERT_FALSE(refused.has_value());
+        EXPECT_NE(refused.error().detail().find("budget cannot seat source buffers"),
+                  std::string::npos);
+        EXPECT_EQ(display.GetUpdateCounter(), 1u);
+        EXPECT_EQ(display.SnapshotFloatData(), complete);
+    }
+    {
+        ScopedEnvironmentVariable insufficient("SIRIUS_MEMORY_BUDGET_MB", "0.001");
+        const auto refused = RenderVulkanToDisplay(config, display);
+        EXPECT_FALSE(refused.has_value());
+        EXPECT_EQ(display.GetUpdateCounter(), 1u);
+        EXPECT_EQ(display.SnapshotFloatData(), complete);
+    }
 }
 
 #endif  // SIRIUS_HAS_VULKAN_BACKEND

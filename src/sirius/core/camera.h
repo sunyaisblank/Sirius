@@ -5,10 +5,13 @@
 // over ICamera for interchangeable lens models. Ported from CMBS001A.h.
 
 #include "sirius/base/contracts.h"
+#include "sirius/core/celestial_tangent_basis.h"
 #include "sirius/core/tensor.h"
 
 #include <algorithm>
+#include <array>
 #include <cmath>
+#include <expected>
 #include <memory>
 #include <numbers>
 #include <optional>
@@ -107,6 +110,15 @@ struct ThinLensProjectionSample {
     return std::nullopt;
 }
 
+// Columns are continuous film x/y in pixels and Cartesian pupil right/up in
+// geometric length units. The stochastic disk map itself is not differentiated.
+struct CameraPhaseSpaceDifferential {
+    std::array<std::array<double, 4>, 3> direction{};
+    std::array<double, 4> pupil_right{};
+    std::array<double, 4> pupil_up{};
+    std::array<std::array<double, 2>, 2> film_to_angle{};
+};
+
 // Ray emitted by a camera: observer position and unit 4-direction.
 struct CameraRay {
     Vec4 origin;                // Ray origin (observer position)
@@ -123,6 +135,7 @@ struct CameraRay {
     // circular fisheye image). Such a sample contributes black and must not be
     // passed to the geodesic tracer with its deliberately zero direction.
     bool active = true;
+    std::optional<CameraPhaseSpaceDifferential> phase_space;
 };
 
 [[nodiscard]] inline bool IsRepresentedCameraRay(const CameraRay& ray) noexcept {
@@ -148,6 +161,30 @@ struct CameraRay {
     return ray.active ? std::abs(direction_norm_squared - 1.0) <= 2.0e-5
                       : direction_norm_squared == 0.0;
 }
+
+// Local differential of normalized launch direction with respect to continuous
+// film coordinates measured in pixels (+x right, +y down), at fixed pupil.
+// Rows of angular_jacobian use the same rest-frame celestial tangent basis as
+// ObserverScreenBasis. The absolute determinant is a solid-angle density
+// (steradians per square film pixel), not a pixel-integrated solid angle.
+// Observer beta is already represented by the tracer's boosted screen: applying
+// aberration here would count that transformation twice.
+struct CameraFilmDifferential {
+    std::array<std::array<double, 2>, 3> direction_derivative;
+    std::array<std::array<double, 2>, 2> angular_jacobian;
+    double signed_solid_angle_density;
+    double solid_angle_density;
+};
+
+// A smooth geometric extension of the lens, in double film-pixel coordinates.
+// It does not differentiate or reproduce the legacy float arithmetic staircase.
+// A successful inactive ray denotes optical masking; it is never a trace input.
+// The antipodal fisheye rim has a ray but no regular angular differential.
+enum class CameraProjectionFailure { InvalidInput, Unsupported, Arithmetic, Unrepresentable };
+struct CameraFilmProjection {
+    CameraRay ray;
+    std::optional<CameraFilmDifferential> differential;
+};
 
 // Observer placement, orientation, and lens/image properties.
 struct CameraConfig {
@@ -249,6 +286,46 @@ class ICamera {
         ray.beta_up = cfg.beta_y;
         ray.beta_right = cfg.beta_z;
         return ray;
+    }
+
+    // Optional for custom projections. The built-in lenses differentiate their
+    // smooth geometric projection using the stored lens coefficients; float
+    // quantization itself is not differentiated. GenerateRay remains unchanged.
+    // Masked samples and the collapsed fisheye antipodal rim are unavailable.
+    [[nodiscard]] virtual std::optional<CameraFilmDifferential> FilmDifferentialForObserver(
+        int, int, float = 0.5f, float = 0.5f, float = 0.5f, float = 0.0f) const {
+        return std::nullopt;
+    }
+
+    // Output-crop-independent film coordinates (+x right, +y down). Built-in
+    // lenses preserve stored lens coefficients and the original float pupil
+    // sample. This leaves GenerateRay's nominal float results unchanged.
+    [[nodiscard]] virtual std::expected<CameraFilmProjection, CameraProjectionFailure>
+    ProjectFilmForObserver(double, double, float = 0.5f, float = 0.0f) const {
+        return std::unexpected(CameraProjectionFailure::Unsupported);
+    }
+
+    // Refinement must not silently reuse a rounded-away coordinate or active
+    // direction. Zero offset remains a valid request for the original geometry.
+    [[nodiscard]] std::expected<CameraFilmProjection, CameraProjectionFailure>
+    ProjectFilmOffsetForObserver(double x, double y, double dx, double dy, float pupil_u = 0.5f,
+                                 float pupil_v = 0.0f) const {
+        if (!std::isfinite(x) || !std::isfinite(y) || !std::isfinite(dx) || !std::isfinite(dy))
+            return std::unexpected(CameraProjectionFailure::InvalidInput);
+        const double shifted_x = x + dx, shifted_y = y + dy;
+        if (!std::isfinite(shifted_x) || !std::isfinite(shifted_y))
+            return std::unexpected(CameraProjectionFailure::Arithmetic);
+        if ((dx != 0.0 && shifted_x == x) || (dy != 0.0 && shifted_y == y))
+            return std::unexpected(CameraProjectionFailure::Unrepresentable);
+        auto result = ProjectFilmForObserver(shifted_x, shifted_y, pupil_u, pupil_v);
+        if (!result || !result->ray.active || (dx == 0.0 && dy == 0.0)) return result;
+        const auto original = ProjectFilmForObserver(x, y, pupil_u, pupil_v);
+        if (!original) return std::unexpected(original.error());
+        if (original->ray.active && original->ray.direction(1) == result->ray.direction(1) &&
+            original->ray.direction(2) == result->ray.direction(2) &&
+            original->ray.direction(3) == result->ray.direction(3))
+            return std::unexpected(CameraProjectionFailure::Unrepresentable);
+        return result;
     }
 
     virtual LensType GetLensType() const = 0;
@@ -356,6 +433,14 @@ class PinholeCamera : public ICamera {
         return ray;
     }
 
+    [[nodiscard]] std::optional<CameraFilmDifferential> FilmDifferentialForObserver(
+        int x, int y, float image_u = 0.5f, float image_v = 0.5f, float pupil_u = 0.5f,
+        float pupil_v = 0.0f) const override;
+
+    [[nodiscard]] std::expected<CameraFilmProjection, CameraProjectionFailure>
+    ProjectFilmForObserver(double film_x, double film_y, float pupil_u = 0.5f,
+                           float pupil_v = 0.0f) const override;
+
     LensType GetLensType() const override { return LensType::Pinhole; }
     const char* GetName() const override { return "Pinhole Camera"; }
     const CameraConfig& GetConfig() const override { return config_; }
@@ -417,6 +502,14 @@ class ThinLensCamera : public ICamera {
 
         return ray;
     }
+
+    [[nodiscard]] std::optional<CameraFilmDifferential> FilmDifferentialForObserver(
+        int x, int y, float image_u = 0.5f, float image_v = 0.5f, float pupil_u = 0.5f,
+        float pupil_v = 0.0f) const override;
+
+    [[nodiscard]] std::expected<CameraFilmProjection, CameraProjectionFailure>
+    ProjectFilmForObserver(double film_x, double film_y, float pupil_u = 0.5f,
+                           float pupil_v = 0.0f) const override;
 
     LensType GetLensType() const override { return LensType::ThinLens; }
     const char* GetName() const override { return "Thin Lens Camera"; }
@@ -492,6 +585,14 @@ class FisheyeCamera : public ICamera {
         return ray;
     }
 
+    [[nodiscard]] std::optional<CameraFilmDifferential> FilmDifferentialForObserver(
+        int x, int y, float image_u = 0.5f, float image_v = 0.5f, float pupil_u = 0.5f,
+        float pupil_v = 0.0f) const override;
+
+    [[nodiscard]] std::expected<CameraFilmProjection, CameraProjectionFailure>
+    ProjectFilmForObserver(double film_x, double film_y, float pupil_u = 0.5f,
+                           float pupil_v = 0.0f) const override;
+
     LensType GetLensType() const override { return LensType::Fisheye; }
     const char* GetName() const override { return "Fisheye Camera"; }
     const CameraConfig& GetConfig() const override { return config_; }
@@ -508,6 +609,259 @@ class FisheyeCamera : public ICamera {
     CameraConfig config_;
     float aspect_ratio_ = 1.0f;
 };
+
+namespace camera_detail {
+
+// Continuous geometry uses the same stored float coefficients and original
+// pupil arithmetic as the nominal projection, but double film evaluation. All
+// derivatives below belong to this same smooth function, including outside the
+// output crop; no isolated nominal-point rounding branch is introduced.
+[[nodiscard]] inline std::expected<CameraFilmProjection, CameraProjectionFailure>
+ProjectContinuousFilm(const CameraConfig& config, LensType lens, double film_x, double film_y,
+                      float pupil_u, float pupil_v) {
+    using Failure = CameraProjectionFailure;
+    using Vector = std::array<double, 3>;
+    if (CameraConfigIssue(lens, config) || !std::isfinite(film_x) || !std::isfinite(film_y) ||
+        !std::isfinite(pupil_u) || pupil_u < 0 || pupil_u >= 1 || !std::isfinite(pupil_v) ||
+        pupil_v < 0 || pupil_v >= 1)
+        return std::unexpected(Failure::InvalidInput);
+    CameraFilmProjection result{};
+    auto& ray = result.ray;
+    ray.origin(0) = config.t;
+    ray.origin(1) = config.r;
+    ray.origin(2) = config.theta;
+    ray.origin(3) = config.phi;
+    ray.beta_forward = config.beta_x;
+    ray.beta_up = config.beta_y;
+    ray.beta_right = config.beta_z;
+    const double aspect = static_cast<float>(config.width) / config.height;
+    const double px = (2.0 * film_x / config.width - 1.0) * aspect;
+    const double py = 1.0 - 2.0 * film_y / config.height;
+    const double sx = 2.0 * aspect / config.width, sy = -2.0 / config.height;
+    if (!std::isfinite(px) || !std::isfinite(py)) return std::unexpected(Failure::Arithmetic);
+    Vector q{};
+    std::array<Vector, 4> dq{};
+    CameraPhaseSpaceDifferential phase_space;
+    bool regular = true;
+    if (lens == LensType::Pinhole || lens == LensType::ThinLens) {
+        const double t = std::tan(config.fov * static_cast<float>(std::numbers::pi) / 360.0f);
+        if (lens == LensType::ThinLens) {
+            // Calling at the image centre retains the existing pupil arithmetic
+            // without narrowing the continuous film coordinates.
+            const auto pupil =
+                ProjectThinLensSample(0, 0, static_cast<float>(t), config.focal_length,
+                                      config.aperture, config.focus_distance, pupil_u, pupil_v);
+            ray.aperture_up = pupil.pupil_up;
+            ray.aperture_right = pupil.pupil_right;
+            q = {-config.focus_distance, ray.aperture_up - py * t * config.focus_distance,
+                 px * t * config.focus_distance - ray.aperture_right};
+            dq = {Vector{0, 0, sx * t * config.focus_distance},
+                  Vector{0, -sy * t * config.focus_distance, 0}};
+            dq[2] = {0, 0, -1};
+            dq[3] = {0, 1, 0};
+            phase_space.pupil_right[2] = 1;
+            phase_space.pupil_up[3] = 1;
+        } else {
+            const double cy = std::cos(config.yaw), syaw = std::sin(config.yaw);
+            const double cp = std::cos(config.pitch), sp = std::sin(config.pitch);
+            const double cr = std::cos(config.roll), sr = std::sin(config.roll);
+            const auto rotate = [&](Vector v) {
+                const double xr = v[0] * cr - v[1] * sr, yr = v[0] * sr + v[1] * cr;
+                const double yp = yr * cp - v[2] * sp, zp = yr * sp + v[2] * cp;
+                return Vector{-xr * syaw + zp * cy, -yp, xr * cy + zp * syaw};
+            };
+            q = rotate({px * t, py * t, -1});
+            dq = {rotate({sx * t, 0, 0}), rotate({0, sy * t, 0})};
+        }
+    } else {
+        const double a =
+            config.fov * static_cast<double>(static_cast<float>(std::numbers::pi)) / 360.0;
+        const double radius = std::hypot(px, py), theta = a * radius;
+        if (!std::isfinite(theta)) return std::unexpected(Failure::Arithmetic);
+        // The nominal camera uses the represented float pi as its mask edge.
+        if (theta > static_cast<float>(std::numbers::pi)) {
+            ray.active = false;
+            return result;
+        }
+        regular = theta < std::numbers::pi;
+        double sinc, radial;
+        if (std::abs(theta) < 1e-3) {
+            const double t2 = theta * theta;
+            sinc = a * (1 - t2 / 6 + t2 * t2 / 120 - t2 * t2 * t2 / 5040);
+            radial = a * a * a * (-1.0 / 3 + t2 / 30 - t2 * t2 / 840);
+        } else {
+            sinc = std::sin(theta) / radius;
+            radial = (theta * std::cos(theta) - std::sin(theta)) / (radius * radius * radius);
+        }
+        q = {-std::cos(theta), -sinc * py, sinc * px};
+        dq = {Vector{a * sinc * px * sx, -py * radial * px * sx, (sinc + px * px * radial) * sx},
+              Vector{a * sinc * py * sy, -(sinc + py * py * radial) * sy, px * radial * py * sy}};
+    }
+    for (double value : q)
+        if (!std::isfinite(value)) return std::unexpected(Failure::Arithmetic);
+    const double length = std::hypot(q[0], q[1], q[2]);
+    if (!std::isfinite(length) || !(length > 0)) return std::unexpected(Failure::Arithmetic);
+    Vector n{};
+    for (unsigned i = 0; i < 3; ++i) ray.direction(i + 1) = n[i] = q[i] / length;
+    if (!IsRepresentedCameraRay(ray)) return std::unexpected(Failure::Arithmetic);
+    if (!regular) return result;
+    const auto basis = relativity::MakeCelestialTangentBasis(n);
+    if (!basis) return std::unexpected(Failure::Arithmetic);
+    CameraFilmDifferential map{};
+    for (unsigned column = 0; column < 4; ++column) {
+        double longitudinal = 0;
+        for (unsigned i = 0; i < 3; ++i) longitudinal += n[i] * dq[column][i];
+        for (unsigned i = 0; i < 3; ++i) {
+            const double d = (dq[column][i] - n[i] * longitudinal) / length;
+            if (!std::isfinite(d)) return std::unexpected(Failure::Arithmetic);
+            phase_space.direction[i][column] = d;
+            if (column < 2) {
+                map.direction_derivative[i][column] = d;
+                // The celestial axes are orthogonal to n. Project dq directly:
+                // subtracting its longitudinal part first introduces spurious
+                // coupling when two rounded longitudinal terms cancel. Exact
+                // geometric zeros must survive the inverse film map.
+                map.angular_jacobian[0][column] += basis->first[i] * dq[column][i] / length;
+                map.angular_jacobian[1][column] += basis->second[i] * dq[column][i] / length;
+            }
+        }
+    }
+    map.signed_solid_angle_density =
+        std::fma(map.angular_jacobian[0][0], map.angular_jacobian[1][1],
+                 -map.angular_jacobian[0][1] * map.angular_jacobian[1][0]);
+    map.solid_angle_density = std::abs(map.signed_solid_angle_density);
+    if (!std::isfinite(map.solid_angle_density)) return std::unexpected(Failure::Arithmetic);
+    if (!(map.solid_angle_density > 0)) return std::unexpected(Failure::Unrepresentable);
+    result.differential = map;
+    phase_space.film_to_angle = map.angular_jacobian;
+    ray.phase_space = phase_space;
+    return result;
+}
+
+[[nodiscard]] inline std::optional<CameraFilmDifferential> MeasureFilmDifferential(
+    const ICamera& camera, int x, int y, float image_u, float image_v, float pupil_u,
+    float pupil_v) {
+    const CameraRay ray = camera.GenerateRayForObserver(x, y, image_u, image_v, pupil_u, pupil_v);
+    if (!ray.active || !IsRepresentedCameraRay(ray)) return std::nullopt;
+    const auto& config = camera.GetConfig();
+    using Vector = std::array<double, 3>;
+    const Vector raw{ray.direction(1), ray.direction(2), ray.direction(3)};
+    const double raw_norm = std::hypot(raw[0], raw[1], raw[2]);
+    const Vector n{raw[0] / raw_norm, raw[1] / raw_norm, raw[2] / raw_norm};
+    const auto basis = relativity::MakeCelestialTangentBasis(raw);
+    if (!basis) return std::nullopt;
+    const float aspect = static_cast<float>(config.width) / config.height;
+    const float px = (2.0f * (x + image_u) / config.width - 1.0f) * aspect;
+    const float py = 1.0f - 2.0f * (y + image_v) / config.height;
+    const double film_x = 2.0 * static_cast<double>(aspect) / config.width;
+    const double film_y = -2.0 / config.height;
+    Vector q{};
+    std::array<Vector, 2> dq{};
+    if (camera.GetLensType() == LensType::Pinhole) {
+        const float t = std::tan(config.fov * static_cast<float>(std::numbers::pi) / 360.0f);
+        const float cy = std::cos(config.yaw), sy = std::sin(config.yaw);
+        const float cp = std::cos(config.pitch), sp = std::sin(config.pitch);
+        const float cr = std::cos(config.roll), sr = std::sin(config.roll);
+        // Preserve the nominal projection's rounded intermediates without
+        // changing GenerateRay. Tangents follow its same roll/pitch/yaw order.
+        const float dx = px * t, dy = py * t, dz = -1.0f;
+        const float rx = dx * cr - dy * sr, ry = dx * sr + dy * cr;
+        const float ry2 = ry * cp - dz * sp, rz = ry * sp + dz * cp;
+        const float rx2 = rx * cy + rz * sy, rz2 = -rx * sy + rz * cy;
+        q = {rz2, -ry2, rx2};
+        const auto rotate = [&](Vector v) {
+            const double xr = v[0] * cr - v[1] * sr, yr = v[0] * sr + v[1] * cr;
+            const double yp = yr * cp - v[2] * sp, zp = yr * sp + v[2] * cp;
+            return Vector{-xr * sy + zp * cy, -yp, xr * cy + zp * sy};
+        };
+        dq = {rotate({film_x * t, 0, 0}), rotate({0, film_y * t, 0})};
+    } else if (camera.GetLensType() == LensType::ThinLens) {
+        const float t = std::tan(config.fov * static_cast<float>(std::numbers::pi) / 360.0f);
+        const float focus_right = px * t * config.focus_distance;
+        const float focus_up = py * t * config.focus_distance;
+        const float up = focus_up - static_cast<float>(ray.aperture_up);
+        const float right = focus_right - static_cast<float>(ray.aperture_right);
+        q = {-config.focus_distance, -up, right};
+        dq = {Vector{0, 0, film_x * t * config.focus_distance},
+              Vector{0, -film_y * t * config.focus_distance, 0}};
+        // ThinLens currently has no orientation rotation in GenerateRay;
+        // applying one only to the differential would be inconsistent.
+    } else if (camera.GetLensType() == LensType::Fisheye) {
+        const float image_radius = std::sqrt(px * px + py * py);
+        const float theta_ray =
+            image_radius * config.fov * static_cast<float>(std::numbers::pi) / 360.0f;
+        if (theta_ray >= static_cast<float>(std::numbers::pi)) return std::nullopt;
+        const double a =
+            static_cast<double>(config.fov) * static_cast<float>(std::numbers::pi) / 360.0;
+        const double radius = std::hypot(static_cast<double>(px), static_cast<double>(py));
+        const double theta = a * radius;
+        double sinc, radial;
+        if (std::abs(theta) < 1e-3) {
+            const double t2 = theta * theta;
+            sinc = a * (1.0 - t2 / 6.0 + t2 * t2 / 120.0 - t2 * t2 * t2 / 5040.0);
+            radial = a * a * a * (-1.0 / 3.0 + t2 / 30.0 - t2 * t2 / 840.0);
+        } else {
+            sinc = std::sin(theta) / radius;
+            radial = (theta * std::cos(theta) - std::sin(theta)) / (radius * radius * radius);
+        }
+        q = raw;
+        dq = {Vector{a * sinc * px * film_x, -py * radial * px * film_x,
+                     (sinc + px * px * radial) * film_x},
+              Vector{a * sinc * py * film_y, -(sinc + py * py * radial) * film_y,
+                     px * radial * py * film_y}};
+        // Fisheye likewise currently ignores yaw/pitch/roll. The analytic
+        // centre limit avoids differentiating atan2(0,0).
+    } else {
+        return std::nullopt;
+    }
+    const double length = std::hypot(q[0], q[1], q[2]);
+    if (!std::isfinite(length) || !(length > 0.0)) return std::nullopt;
+    CameraFilmDifferential result{};
+    for (unsigned column = 0; column < 2; ++column) {
+        double longitudinal = 0.0;
+        for (unsigned i = 0; i < 3; ++i) longitudinal += n[i] * dq[column][i];
+        for (unsigned i = 0; i < 3; ++i) {
+            const double derivative = (dq[column][i] - n[i] * longitudinal) / length;
+            if (!std::isfinite(derivative)) return std::nullopt;
+            result.direction_derivative[i][column] = derivative;
+            result.angular_jacobian[0][column] += basis->first[i] * derivative;
+            result.angular_jacobian[1][column] += basis->second[i] * derivative;
+        }
+    }
+    result.signed_solid_angle_density =
+        result.angular_jacobian[0][0] * result.angular_jacobian[1][1] -
+        result.angular_jacobian[0][1] * result.angular_jacobian[1][0];
+    result.solid_angle_density = std::abs(result.signed_solid_angle_density);
+    if (!std::isfinite(result.solid_angle_density)) return std::nullopt;
+    return result;
+}
+}  // namespace camera_detail
+
+inline std::optional<CameraFilmDifferential> PinholeCamera::FilmDifferentialForObserver(
+    int x, int y, float image_u, float image_v, float pupil_u, float pupil_v) const {
+    return camera_detail::MeasureFilmDifferential(*this, x, y, image_u, image_v, pupil_u, pupil_v);
+}
+inline std::optional<CameraFilmDifferential> ThinLensCamera::FilmDifferentialForObserver(
+    int x, int y, float image_u, float image_v, float pupil_u, float pupil_v) const {
+    return camera_detail::MeasureFilmDifferential(*this, x, y, image_u, image_v, pupil_u, pupil_v);
+}
+inline std::optional<CameraFilmDifferential> FisheyeCamera::FilmDifferentialForObserver(
+    int x, int y, float image_u, float image_v, float pupil_u, float pupil_v) const {
+    return camera_detail::MeasureFilmDifferential(*this, x, y, image_u, image_v, pupil_u, pupil_v);
+}
+
+inline std::expected<CameraFilmProjection, CameraProjectionFailure>
+PinholeCamera::ProjectFilmForObserver(double x, double y, float pupil_u, float pupil_v) const {
+    return camera_detail::ProjectContinuousFilm(config_, GetLensType(), x, y, pupil_u, pupil_v);
+}
+inline std::expected<CameraFilmProjection, CameraProjectionFailure>
+ThinLensCamera::ProjectFilmForObserver(double x, double y, float pupil_u, float pupil_v) const {
+    return camera_detail::ProjectContinuousFilm(config_, GetLensType(), x, y, pupil_u, pupil_v);
+}
+inline std::expected<CameraFilmProjection, CameraProjectionFailure>
+FisheyeCamera::ProjectFilmForObserver(double x, double y, float pupil_u, float pupil_v) const {
+    return camera_detail::ProjectContinuousFilm(config_, GetLensType(), x, y, pupil_u, pupil_v);
+}
 
 // Construct a camera for the requested lens. LensType contains only represented
 // models, so an ordinary typed call cannot request a silent approximation.

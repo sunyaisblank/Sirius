@@ -12,25 +12,31 @@
 // image-order machinery: Bardeen, Press & Teukolsky (1972); Gralla, Lupsasca &
 // Marrone (2020).
 
+#include "sirius/backend/trace_step_executor.h"
 #include "sirius/core/camera.h"
+#include "sirius/core/camera_launch.h"
 #include "sirius/core/coordinates.h"
 #include "sirius/core/disk/novikov_thorne_disk.h"
 #include "sirius/core/disk/turbulence.h"
 #include "sirius/core/disk/volumetric_disk.h"
 #include "sirius/core/geodesic_integrator.h"
+#include "sirius/core/kerr_infinity.h"
 #include "sirius/core/metrics/metric.h"
 #include "sirius/core/metrics/outgoing_kerr_schild.h"
 #include "sirius/core/metrics/registry.h"
 #include "sirius/core/observer_frame.h"
 #include "sirius/core/polarisation/walker_penrose.h"
 #include "sirius/core/relativistic_transfer.h"
+#include "sirius/core/source_sky_map.h"
 #include "sirius/core/spectral/colour_modes.h"
 #include "sirius/core/tensor.h"
 
 #include <array>
 #include <cmath>
+#include <functional>
 #include <memory>
 #include <numbers>
+#include <utility>
 
 namespace sirius::backend {
 
@@ -64,6 +70,11 @@ struct TraceResult {
     // Eulerian sky direction and is valid only for Escaped.
     sirius::core::Vec4 final_position;
     sirius::core::Vec4 final_direction;
+    // Coordinate four-tangent in the same terminal chart as final_position.
+    // Available after a represented launch when the retained terminal state
+    // is finite, including a retained state on numerical failure. Absence
+    // means no finite initialized state is available; presence is not success.
+    std::optional<sirius::core::Vec4> final_tangent;
 
     // Disk-hit data (valid for DiskHit).
     float disk_radius = 0.0f;
@@ -78,8 +89,14 @@ struct TraceResult {
 
     // Diagnostics.
     int steps_taken = 0;
+    std::uint64_t central_stages = 0;
+    std::uint64_t variation_stages = 0;
+    std::uint64_t variation_metric_evaluations = 0;
+    sirius::core::CoupledStepFailure coupled_failure = sirius::core::CoupledStepFailure::None;
     float redshift = 1.0f;
     bool numerical_failure = false;
+    // Cancellation has no physical outcome and publishes no partial ray data.
+    bool cancelled = false;
     // Exterior terminal events retain the public ingoing chart. A past-horizon
     // event has no finite ingoing coordinates and is published in the outgoing
     // chart in which its accepted trajectory and coupled state were advanced.
@@ -146,9 +163,21 @@ struct TraceResult {
         // Angular footprint on the celestial sphere (radians), the DNGR beam that
         // filters the star field (P3): the transverse extent divided by the
         // affine length converges to the ray-direction spread as the ray escapes.
-        // Meaningful when the pupil (point-source) bundle mode is used.
+        // Source-footprint interpretation requires an escaped point-source
+        // bundle; captured rays retain only a radius-normalised diagnostic.
         float footprint_major = 0.0f;
         float footprint_minor = 0.0f;
+        // Derivative of the measured source direction at the localized finite
+        // outer event, per unit launch angle. This is distinct from physical
+        // displacement/area diagnostics above and is not an infinity limit.
+        // Canonical angular map, independent of physical bundle output mode.
+        std::optional<sirius::core::relativity::SourceSkyAngularMap> finite_source_map;
+        // Infinity transfer for the canonical vacuum Kerr angular map. The existing
+        // point filter still uses the finite footprint until detector-response
+        // integration is migrated. A declined diagnostic is explicit; it must
+        // become a render failure/refinement request when that consumer moves.
+        std::optional<sirius::core::relativity::KerrInfinityResult> infinity_source_map;
+        std::optional<sirius::core::relativity::KerrInfinityFailure> infinity_source_failure;
     };
 
     Beam beam;
@@ -199,10 +228,11 @@ struct TracerConfig {
     // diagnostic inspired by the film treatment (James et al. 2015, section 5).
     bool doppler_beaming = true;
 
-    // Ray bundles (P2). When true the tracer propagates two geodesic-deviation
-    // vectors alongside the central ray and reports the beam ellipse at
-    // termination. Default false leaves the point-sampled path untouched (the
-    // pinned render). bundle_angular_size is the initial half-extent of the
+    // Physical beam output (P2). Kerr-family acceptance always monitors the
+    // same four canonical columns; this flag selects publication of the
+    // requested two-column ellipse without changing the central trajectory.
+    // Other metric families retain their optional Jacobi transport.
+    // bundle_angular_size is the initial half-extent of the
     // parallel bundle in the transverse plane (radians for a pixel footprint);
     // it cancels in the magnification and only sets the ellipse's absolute scale.
     bool enable_ray_bundles = false;
@@ -364,6 +394,21 @@ class GeodesicTracer {
     // result.outcome describes the termination condition.
     TraceResult Trace(const sirius::core::CameraRay& camera_ray);
 
+    // Detector probes consume visibility, transmission and the source map at
+    // infinity. Vacuum Kerr probes may finish at an earlier accepted outward
+    // event once the radial continuation proves no intervening turning point.
+    // All disk/volume support must lie behind that event. final_position and
+    // finite_source_map then describe the handoff, not the configured sphere.
+    // Other metrics and declined handoffs retain the ordinary tracing path.
+    TraceResult TracePointSource(const sirius::core::CameraRay& camera_ray);
+
+    // Non-owning; the executor must outlive this tracer and any active trace.
+    void SetStepExecutor(TraceStepExecutor* executor) { step_executor_ = executor; }
+    // Configure before tracing. The owner supplies a thread-safe predicate.
+    void SetCancellationCallback(std::function<bool()> callback) {
+        should_cancel_ = std::move(callback);
+    }
+
     void SetConfig(const TracerConfig& config) {
         SIRIUS_PRE(IsRepresentedTracerConfig(config));
         SIRIUS_PRE(config.wormhole_topology != sirius::core::WormholeTopology::TwoSheet ||
@@ -398,8 +443,12 @@ class GeodesicTracer {
   private:
     sirius::core::IMetric* metric_;
     TracerConfig config_;
+    TraceStepExecutor* step_executor_ = nullptr;
+    std::function<bool()> should_cancel_;
     const sirius::core::OutgoingKerrSchild* outgoing_chart_ = nullptr;
-    TraceResult TraceInCurrentChart(const sirius::core::CameraRay& camera_ray);
+    TraceResult TraceTo(const sirius::core::CameraRay& camera_ray, bool allow_infinity_handoff);
+    TraceResult TraceInCurrentChart(const sirius::core::CameraRay& camera_ray,
+                                    bool allow_infinity_handoff);
 
     // Metric parameters cached once per trace.
     double cached_m_ = 1.0;
@@ -413,21 +462,20 @@ class GeodesicTracer {
 
     // Convert a camera ray (BL) into a Cartesian Lightray, normalised to null,
     // and return the same metric-orthonormal camera frame used for launch.
-    sirius::core::Lightray InitializeLightray(
-        const sirius::core::CameraRay& camera_ray,
-        sirius::core::relativity::ObserverFrame* launch_frame);
+    sirius::core::Lightray InitializeLightray(const sirius::core::CameraRay& camera_ray,
+                                              sirius::core::relativity::ObserverFrame* launch_frame,
+                                              sirius::core::GeodesicVariations* launch_variations);
 
     // Whether an accepted central-ray segment crosses the equatorial disk.
     // Solves z(lambda)=0 on the cubic Hermite segment and returns the crossing
     // event, tangent, affine fraction, radius, and azimuth.
-    bool FindDiskIntersection(const sirius::core::Vec4& start_position,
-                              const sirius::core::Vec4& start_tangent,
-                              const sirius::core::Vec4& end_position,
-                              const sirius::core::Vec4& end_tangent, double d_lambda,
-                              float& intersection_r, float& intersection_phi,
-                              double& intersection_fraction,
-                              sirius::core::Vec4& intersection_position,
-                              sirius::core::Vec4& intersection_tangent);
+    bool FindDiskIntersection(
+        const sirius::core::Vec4& start_position, const sirius::core::Vec4& start_tangent,
+        const sirius::core::Vec4& end_position, const sirius::core::Vec4& end_tangent,
+        double d_lambda, float& intersection_r, float& intersection_phi,
+        double& intersection_fraction, sirius::core::Vec4& intersection_position,
+        sirius::core::Vec4& intersection_tangent, bool* transverse_event = nullptr,
+        const sirius::core::Vec4* increment = nullptr);
 
     // Novikov-Thorne thin-disk temperature T(r) ~ r^(-3/4) normalised at the edge.
     float ComputeDiskTemperature(float r);
@@ -477,10 +525,10 @@ class GeodesicTracer {
     // from the metric's analytic derivatives (single authority, no re-derivation).
     void ComputeChristoffelCart(const sirius::core::Vec4& pos, double Gamma[4][4][4]);
 
-    // Riemann R^mu_nu_rho_sigma by central differences of the Christoffels in the
-    // same chart the render integrates in, so k, xi, and R never mix charts
-    // (the central-difference stencil mirrors GetRiemannTensorCart; each path
-    // selects a step appropriate to its arithmetic precision).
+    // Riemann R^mu_nu_rho_sigma by fourth-order centred differences of the
+    // Christoffels in the current trace chart, so k, xi, and R never mix charts.
+    // The CPU stencil is preflighted against the metric domain; an unavailable
+    // finite, distinct stencil returns non-finite curvature for explicit decline.
     void ComputeRiemannCart(const sirius::core::Vec4& pos, double R[4][4][4][4]);
 
     // Initialise in the observer's Sachs screen, not a Euclidean chart plane.
@@ -491,7 +539,7 @@ class GeodesicTracer {
     // and curvature at its own start/midpoint/end stages; a cubic Hermite
     // interpolant of the accepted central ray supplies the midpoint event and
     // tangent without introducing a second geodesic authority.
-    void StepBundle(const sirius::core::Vec4& start_position,
+    bool StepBundle(const sirius::core::Vec4& start_position,
                     const sirius::core::Vec4& start_tangent, const sirius::core::Vec4& end_position,
                     const sirius::core::Vec4& end_tangent, double d_lambda, RayBundle& bundle);
 
@@ -499,7 +547,7 @@ class GeodesicTracer {
     // final bundle, projected onto the plane transverse to the ray direction; the
     // affine length lambda converts the transverse extent to the angular sky
     // footprint for the pupil bundle.
-    void FinaliseBundle(const RayBundle& bundle, const sirius::core::Vec4& position,
+    bool FinaliseBundle(const RayBundle& bundle, const sirius::core::Vec4& position,
                         const sirius::core::Vec4& k, TraceResult::Beam& out) const;
 
     // --- Polarisation transport (E2) -----------------------------------------
@@ -513,7 +561,7 @@ class GeodesicTracer {
                                PolarisationFrame& frame);
     void AdvancePolarisationFrame(PolarisationFrame& frame, const sirius::core::Vec4& end_position,
                                   const sirius::core::Vec4& end_tangent, double d_lambda);
-    void ReconditionPolarisationFrame(PolarisationFrame& frame, const sirius::core::Vec4& position,
+    bool ReconditionPolarisationFrame(PolarisationFrame& frame, const sirius::core::Vec4& position,
                                       const sirius::core::Vec4& velocity);
     void SetDiskPolarisation(const PolarisationFrame& frame, TraceResult::DiskCrossing& crossing);
 };

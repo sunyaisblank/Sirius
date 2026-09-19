@@ -23,6 +23,7 @@ import gr_disk;
 import gr_deviation;
 import gr_trace_event;
 import gr_ellis_topology;
+import gr_point_star;
 
 StructuredBuffer<float> samples;     // binding 0
 RWStructuredBuffer<float> results;   // binding 1
@@ -50,6 +51,9 @@ static const uint OP_SPHERICAL_CAPTURE_EVENT = 18;
 static const uint OP_ELLIS_TWO_SHEET_TRACE = 19;
 static const uint OP_WARP_RK4_DECLINE = 20;
 static const uint OP_THIN_LENS_PROJECTION = 21;
+static const uint OP_POINT_STAR_ANGULAR_WEIGHT = 22;
+static const uint OP_SPHERICAL_ESCAPE_EVENT = 23;
+static const uint OP_AFFINE_CLOCK = 24;
 
 // Future-directed null root used by the render kernel, repeated here only for
 // the diagnostic launch boundary. The integration below calls the production
@@ -289,7 +293,8 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         float affineToFocus = p3 / pupil.direction.x;
         results[rb + 5] = pupil.pupilUp + affineToFocus * pupil.direction.y;
         results[rb + 6] = pupil.pupilRight + affineToFocus * pupil.direction.z;
-    } else if (opcode == OP_SPHERICAL_CAPTURE_EVENT) {
+    } else if (opcode == OP_SPHERICAL_CAPTURE_EVENT ||
+               opcode == OP_SPHERICAL_ESCAPE_EVENT) {
         // Compute-only witness for the exact accepted-segment event authority.
         // p1=surface radius; c=start xyz; u=start tangent txyz; h=affine
         // length; aux=end xyz; p2..p4=end tangent xyz.
@@ -305,9 +310,17 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         Real fraction;
         Vec4Cart position;
         Vec4Cart tangent;
-        bool represented = FindSphericalCaptureEvent(
-            start, startTangent, finish, finishTangent,
-            Real(samples[sb + 12]), Real(p1), fraction, position, tangent);
+        bool represented;
+        if (opcode == OP_SPHERICAL_ESCAPE_EVENT) {
+            represented = FindSphericalBoundaryEvent(
+                start, startTangent, finish, finishTangent,
+                Real(samples[sb + 12]), Real(p1), kSphericalBoundaryIncreasingRadius,
+                fraction, position, tangent);
+        } else {
+            represented = FindSphericalCaptureEvent(
+                start, startTangent, finish, finishTangent,
+                Real(samples[sb + 12]), Real(p1), fraction, position, tangent);
+        }
         results[rb + 0] = represented ? 1.0f : 0.0f;
         results[rb + 1] = float(fraction);
         results[rb + 2] = float(position.x);
@@ -319,6 +332,16 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         results[rb + 8] = float(sqrt(position.x * position.x +
                                      position.y * position.y +
                                      position.z * position.z));
+        results[rb + 9] = float(fraction * Real(samples[sb + 12]));
+        results[rb + 10] = float(position.t);
+        // Restrict the same Hermite polynomial to the event interval. These
+        // are the actual endpoint/tangent/dLambda inputs to segment consumers.
+        if (represented && fraction > Real(0.0f)) {
+            Vec4Cart clippedMidpoint = AcceptedSegmentPosition(
+                start, startTangent, position, tangent,
+                Real(samples[sb + 12]) * fraction, Real(0.5f));
+            results[rb + 11] = float(clippedMidpoint.x);
+        }
     } else if (opcode == OP_ELLIS_TWO_SHEET_TRACE) {
         // Compute-only execution of the exact production two-sheet trajectory.
         // p1=b0, p2=observer-side escape radius; c=launch xyz;
@@ -551,6 +574,99 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         results[rb + 3] = second.x;
         results[rb + 4] = second.y;
         results[rb + 5] = second.z;
+    } else if (opcode == OP_POINT_STAR_ANGULAR_WEIGHT) {
+        // p1,p2=major/minor angular widths, p3=orientation; c=direction,
+        // u0..u2=star direction. Exercise the actual live filter authority.
+        float3 direction = float3(c0, c1, c2);
+        float3 star = float3(samples[sb + 8], samples[sb + 9], samples[sb + 10]);
+        float3 first, second;
+        MakeCelestialTangentBasis(direction, first, second);
+        results[rb] = PointStarAngularWeight(
+            direction, star, first, second, min(4.0f * p1, PI), cos(p3), sin(p3),
+            1.0f / (p1 * p1), 1.0f / (p2 * p2));
+    } else if (opcode == OP_AFFINE_CLOCK) {
+        // Actual central RK4 clocks, not an independently supplied trajectory.
+        // h=total affine length, aux0=1..4 equal intervals, aux1=point seed.
+        // Kerr M=a=Q=Lambda=0 and warp vs=0 are flat. Supported Ellis is
+        // ultrastatic: its temporal clock is exact despite spatial curvature.
+        // Outputs 0..6: success/count/affine/t/x/u.t/u.x; 7..8: normalized
+        // time/flat-space clock error; 9: Jacobi applicability; 10..13: actual
+        // xiA.z/xiB.w/VA.z/VB.w; 14..19: normalized Jacobi/clock residuals.
+        [unroll] for (uint slot = 0; slot < 20; ++slot) results[rb + slot] = 0.0f;
+        Real total = Real(samples[sb + 12]);
+        float countValue = samples[sb + 13];
+        Real seed = Real(samples[sb + 14]);
+        bool isFlatKerr = metricId == kMetricKerrSchild &&
+            p1 == 0.0f && p2 == 0.0f && p3 == 0.0f && p4 == 0.0f;
+        bool isFlatWarp = metricId == kMetricWarpDrive &&
+            p1 == 0.0f && p2 == 1.0f && p3 == 1.0f;
+        bool isEllis = metricId == kMetricMorrisThorne &&
+            p1 == 2.0f && p2 == 0.0f && p3 == 0.0f;
+        if (!(isFlatKerr || isFlatWarp || isEllis) || !isfinite(total) ||
+            total <= Real(0.0) || !isfinite(seed) || seed <= Real(0.0) ||
+            !isfinite(countValue) || countValue < 1.0f || countValue > 4.0f ||
+            floor(countValue) != countValue || c0 != 8.0f) return;
+        int intervalCount = int(countValue);
+        Real h = total / Real(intervalCount);
+        GeodesicStateCart state;
+        state.x = MakeVec4Cart(Real(0.0), Real(c0), Real(0.0), Real(0.0));
+        Real radialTangent = isEllis ? Real(1.0) /
+            (Real(1.0) + Real(p1) * Real(p1) / (Real(4.0) * Real(c0) * Real(c0))) : Real(1.0);
+        state.u = MakeVec4Cart(Real(-1.0), radialTangent, Real(0.0), Real(0.0));
+        Real4 xiA = Real4(0.0f), xiB = Real4(0.0f);
+        Real4 VA = Real4(Real(0.0), Real(0.0), seed, Real(0.0));
+        Real4 VB = Real4(Real(0.0), Real(0.0), Real(0.0), seed);
+        Real affine = Real(0.0);
+        int completed = 0;
+        for (int interval = 0; interval < intervalCount; ++interval) {
+            GeodesicStateCart next;
+            if (isEllis) {
+                // Direct production RK4 isolates the ultrastatic coefficient
+                // from adaptive temporal projection of spatial truncation.
+                if (!IntegrateGeodesicRK4MorrisThorneCart(state, h, p1, p2, 0, next)) break;
+            } else {
+                AdaptiveGeodesicStep trial = AttemptAdaptiveGeodesicStep(
+                    state, h, isFlatWarp, false, 0.0f, 0.0f, 0.0f, 0.0f,
+                    0.0f, 1.0f, 1.0f, 0.0f, 0,
+                    AdaptiveIntegrationTolerance(), AdaptiveNullTolerance());
+                if (!trial.accepted) break;
+                next = trial.candidate;
+            }
+            if (isFlatKerr) {
+                AdvanceJacobiPairAcceptedSegment(state.x, state.u, next.x, next.u, h,
+                    0.0f, 0.0f, 0.0f, 0.0f, xiA, VA, xiB, VB);
+            }
+            state = next;
+            affine += h;
+            completed += 1;
+        }
+        // Subtract and normalize in Real BEFORE the float ABI conversion:
+        // float-rounded 1/6 widened to fp64 otherwise hides in raw readback.
+        results[rb + 0] = completed == intervalCount ? 1.0f : 0.0f;
+        results[rb + 1] = float(completed);
+        results[rb + 2] = float(affine);
+        results[rb + 3] = float(state.x.t);
+        results[rb + 4] = float(state.x.x);
+        results[rb + 5] = float(state.u.t);
+        results[rb + 6] = float(state.u.x);
+        results[rb + 7] = float((state.x.t + total) / total);
+        if (!isEllis) results[rb + 8] = float((state.x.x - Real(c0) - total) / total);
+        results[rb + 9] = isFlatKerr ? 1.0f : 0.0f;
+        if (isFlatKerr) {
+            Real expected = seed * total;
+            results[rb + 10] = float(xiA.z);
+            results[rb + 11] = float(xiB.w);
+            results[rb + 12] = float(VA.z);
+            results[rb + 13] = float(VB.w);
+            results[rb + 14] = float((xiA.z - expected) / expected);
+            results[rb + 15] = float((xiB.w - expected) / expected);
+            results[rb + 16] = float((state.x.x - Real(c0) - xiA.z / seed) / total);
+            results[rb + 17] = float((abs(xiA.x) + abs(xiA.y) + abs(xiA.w) +
+                abs(xiB.x) + abs(xiB.y) + abs(xiB.z)) / expected +
+                (abs(VA.x) + abs(VA.y) + abs(VA.w) + abs(VB.x) + abs(VB.y) + abs(VB.z)) / seed);
+            results[rb + 18] = float((VA.z - seed) / seed);
+            results[rb + 19] = float((VB.w - seed) / seed);
+        }
     } else if (opcode == OP_JACOBI_RADIAL_CONGRUENCE) {
         // Integrate a two-axis point-source bundle along the exact affinely
         // parameterised ingoing Schwarzschild principal null ray

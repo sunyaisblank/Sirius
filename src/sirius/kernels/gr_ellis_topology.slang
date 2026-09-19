@@ -45,20 +45,30 @@ public bool MapEllisSecondSheetSkyDirection(
     return all(isfinite(mappedDirection));
 }
 
-// Integrate the production two-sheet central ray without shading.  This exact
-// function is consumed by both trace.slang and the compute-only parity probe,
-// so the tested trajectory is the one that reaches the renderer.  The Ellis
-// profile has no disk, volume, polarisation, or bundle model in Sirius; those
-// combinations decline at the typed boundary before this path is entered.
-public EllisTopologyTraceResult TraceEllisTwoSheet(
+// Resumable form of the same topology authority. A call to Advance performs
+// at most one adaptive attempt; the parity wrapper below repeats this function.
+public static const uint kEllisContinuationNone = 0;
+public static const uint kEllisContinuationInvalidInput = 1;
+public static const uint kEllisContinuationWorkLimit = 2;
+public static const uint kEllisContinuationMinimumStep = 3;
+
+public struct EllisTopologyContinuation {
+    public EllisTopologyTraceResult trace;
+    public Real adaptiveStep;
+    public Vec4Cart compensationX;
+    public Vec4Cart compensationU;
+    public uint accepted;
+    public Real lastStep;
+    public uint failure;
+};
+
+public EllisTopologyContinuation InitEllisTwoSheet(
     GeodesicStateCart launch, int maxAttempts, Real stepScale, Real minStep,
     Real maxStep, Real escapeRadius, Real b0, int wormShape) {
-    EllisTopologyTraceResult result;
-    result.state = launch;
-    result.termination = kEllisTraceUnresolved;
-    result.attempts = 0;
-    result.affineLength = Real(0.0f);
-
+    EllisTopologyContinuation continuation = (EllisTopologyContinuation)0;
+    continuation.trace.state = launch;
+    continuation.trace.termination = kEllisTraceUnresolved;
+    continuation.adaptiveStep = maxStep;
     Real throatRadius = Real(0.5f) * b0;
     Real oppositeRadius = EllisOppositeEscapeRadius(b0, escapeRadius);
     if (!(maxAttempts > 0 && isfinite(stepScale) && stepScale > Real(0.0f) &&
@@ -67,87 +77,135 @@ public EllisTopologyTraceResult TraceEllisTwoSheet(
           escapeRadius > throatRadius && isfinite(b0) && b0 > Real(0.0f) &&
           isfinite(oppositeRadius) && oppositeRadius > Real(0.0f) &&
           oppositeRadius < throatRadius && wormShape == 0)) {
-        return result;
+        continuation.failure = kEllisContinuationInvalidInput;
+        return continuation;
     }
 
-    Real adaptiveStep = maxStep;
-#ifdef SIRIUS_FP32_COMP
-    Vec4Cart compensationX = MakeVec4Cart(0.0f, 0.0f, 0.0f, 0.0f);
-    Vec4Cart compensationU = MakeVec4Cart(0.0f, 0.0f, 0.0f, 0.0f);
-#endif
+    return continuation;
+}
 
-    for (int attempt = 0; attempt < maxAttempts; ++attempt) {
-        result.attempts = attempt + 1;
-        Real radius = sqrt(result.state.x.x * result.state.x.x +
-                           result.state.x.y * result.state.x.y +
-                           result.state.x.z * result.state.x.z);
-        Real radialNumerator = result.state.x.x * result.state.u.x +
-                               result.state.x.y * result.state.u.y +
-                               result.state.x.z * result.state.u.z;
-        if (radius >= escapeRadius && radialNumerator > Real(0.0f)) {
-            result.termination = kEllisTraceObserverInfinity;
-            return result;
-        }
-        if (radius <= oppositeRadius && radialNumerator < Real(0.0f)) {
-            result.termination = kEllisTraceOppositeInfinity;
-            return result;
-        }
-
-        Real geometricStep = clamp(stepScale * max(radius, b0), minStep, maxStep);
-        Real dt = min(geometricStep, adaptiveStep);
-        AdaptiveGeodesicStep attempted = AttemptAdaptiveGeodesicStep(
-            result.state, dt, false, true, 0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, float(b0), wormShape,
-            AdaptiveIntegrationTolerance(), AdaptiveNullTolerance());
-        if (!attempted.accepted) {
-            if (dt <= minStep * Real(1.0001f)) return result;
-            adaptiveStep = max(minStep, dt * attempted.stepFactor);
-            continue;
-        }
-        adaptiveStep = clamp(dt * attempted.stepFactor, minStep, maxStep);
-
-        GeodesicStateCart candidate = attempted.candidate;
-#ifdef SIRIUS_FP32_COMP
-        Vec4Cart deltaX = AddVec4Cart(
-            candidate.x, ScaleVec4Cart(result.state.x, Real(-1.0f)));
-        Vec4Cart deltaU = AddVec4Cart(
-            candidate.u, ScaleVec4Cart(result.state.u, Real(-1.0f)));
-        candidate.x = KahanAddVec4Cart(result.state.x, compensationX, deltaX);
-        candidate.u = KahanAddVec4Cart(result.state.u, compensationU, deltaU);
-#endif
-
-        Real observerFraction;
-        Vec4Cart observerPosition;
-        Vec4Cart observerTangent;
-        bool observerEscape = FindSphericalBoundaryEvent(
-            result.state.x, result.state.u, candidate.x, candidate.u, dt,
-            escapeRadius, kSphericalBoundaryIncreasingRadius,
-            observerFraction, observerPosition, observerTangent);
-        Real oppositeFraction;
-        Vec4Cart oppositePosition;
-        Vec4Cart oppositeTangent;
-        bool oppositeEscape = FindSphericalBoundaryEvent(
-            result.state.x, result.state.u, candidate.x, candidate.u, dt,
-            oppositeRadius, kSphericalBoundaryDecreasingRadius,
-            oppositeFraction, oppositePosition, oppositeTangent);
-
-        if (observerEscape && (!oppositeEscape || observerFraction <= oppositeFraction)) {
-            result.state.x = observerPosition;
-            result.state.u = observerTangent;
-            result.affineLength += dt * observerFraction;
-            result.termination = kEllisTraceObserverInfinity;
-            return result;
-        }
-        if (oppositeEscape) {
-            result.state.x = oppositePosition;
-            result.state.u = oppositeTangent;
-            result.affineLength += dt * oppositeFraction;
-            result.termination = kEllisTraceOppositeInfinity;
-            return result;
-        }
-
-        result.state = candidate;
-        result.affineLength += dt;
+void AttemptEllisTwoSheet(
+    inout EllisTopologyTraceResult result, inout Real adaptiveStep,
+    inout Vec4Cart compensationX, inout Vec4Cart compensationU,
+    inout uint accepted, inout Real lastStep, inout uint failure,
+    Real stepScale, Real minStep, Real maxStep, Real escapeRadius,
+    Real b0, int wormShape) {
+    Real oppositeRadius = EllisOppositeEscapeRadius(b0, escapeRadius);
+    ++result.attempts;
+    Real radius = sqrt(result.state.x.x * result.state.x.x +
+                       result.state.x.y * result.state.x.y +
+                       result.state.x.z * result.state.x.z);
+    Real radialNumerator = result.state.x.x * result.state.u.x +
+                           result.state.x.y * result.state.u.y +
+                           result.state.x.z * result.state.u.z;
+    if (radius >= escapeRadius && radialNumerator > Real(0.0f)) {
+        result.termination = kEllisTraceObserverInfinity;
+        return;
     }
-    return result;
+    if (radius <= oppositeRadius && radialNumerator < Real(0.0f)) {
+        result.termination = kEllisTraceOppositeInfinity;
+        return;
+    }
+
+    Real geometricStep = clamp(stepScale * max(radius, b0), minStep, maxStep);
+    Real dt = min(geometricStep, adaptiveStep);
+    AdaptiveGeodesicStep attempted = AttemptAdaptiveGeodesicStep(
+        result.state, dt, false, true, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, float(b0), wormShape,
+        AdaptiveIntegrationTolerance(), AdaptiveNullTolerance());
+    if (!attempted.accepted) {
+        if (dt <= minStep * Real(1.0001f)) {
+            failure = kEllisContinuationMinimumStep;
+            return;
+        }
+        adaptiveStep = max(minStep, dt * attempted.stepFactor);
+        return;
+    }
+    adaptiveStep = clamp(dt * attempted.stepFactor, minStep, maxStep);
+
+    GeodesicStateCart candidate = attempted.candidate;
+#ifdef SIRIUS_FP32_COMP
+    Vec4Cart deltaX = AddVec4Cart(
+        candidate.x, ScaleVec4Cart(result.state.x, Real(-1.0f)));
+    Vec4Cart deltaU = AddVec4Cart(
+        candidate.u, ScaleVec4Cart(result.state.u, Real(-1.0f)));
+    candidate.x = KahanAddVec4Cart(result.state.x, compensationX, deltaX);
+    candidate.u = KahanAddVec4Cart(result.state.u, compensationU, deltaU);
+#endif
+
+    Real observerFraction;
+    Vec4Cart observerPosition;
+    Vec4Cart observerTangent;
+    bool observerEscape = FindSphericalBoundaryEvent(
+        result.state.x, result.state.u, candidate.x, candidate.u, dt,
+        escapeRadius, kSphericalBoundaryIncreasingRadius,
+        observerFraction, observerPosition, observerTangent);
+    Real oppositeFraction;
+    Vec4Cart oppositePosition;
+    Vec4Cart oppositeTangent;
+    bool oppositeEscape = FindSphericalBoundaryEvent(
+        result.state.x, result.state.u, candidate.x, candidate.u, dt,
+        oppositeRadius, kSphericalBoundaryDecreasingRadius,
+        oppositeFraction, oppositePosition, oppositeTangent);
+
+    if (observerEscape && (!oppositeEscape || observerFraction <= oppositeFraction)) {
+        result.state.x = observerPosition;
+        result.state.u = observerTangent;
+        lastStep = dt * observerFraction;
+        ++accepted;
+        result.affineLength += dt * observerFraction;
+        result.termination = kEllisTraceObserverInfinity;
+        return;
+    }
+    if (oppositeEscape) {
+        result.state.x = oppositePosition;
+        result.state.u = oppositeTangent;
+        lastStep = dt * oppositeFraction;
+        ++accepted;
+        result.affineLength += dt * oppositeFraction;
+        result.termination = kEllisTraceOppositeInfinity;
+        return;
+    }
+
+    result.state = candidate;
+    lastStep = dt;
+    ++accepted;
+    result.affineLength += dt;
+}
+
+public void AdvanceEllisTwoSheet(
+    inout EllisTopologyContinuation continuation, int maxAttempts,
+    Real stepScale, Real minStep, Real maxStep, Real escapeRadius,
+    Real b0, int wormShape) {
+    if (continuation.failure != kEllisContinuationNone ||
+        continuation.trace.termination != kEllisTraceUnresolved) return;
+    if (continuation.trace.attempts >= maxAttempts) {
+        continuation.failure = kEllisContinuationWorkLimit;
+        return;
+    }
+    AttemptEllisTwoSheet(
+        continuation.trace, continuation.adaptiveStep,
+        continuation.compensationX, continuation.compensationU,
+        continuation.accepted, continuation.lastStep, continuation.failure,
+        stepScale, minStep, maxStep, escapeRadius, b0, wormShape);
+    if (continuation.trace.termination == kEllisTraceUnresolved &&
+        continuation.failure == kEllisContinuationNone &&
+        continuation.trace.attempts >= maxAttempts)
+        continuation.failure = kEllisContinuationWorkLimit;
+}
+
+// Compute-only parity retains the monolithic convenience API, while production
+// schedules the exact same attempt function across governed dispatches.
+public EllisTopologyTraceResult TraceEllisTwoSheet(
+    GeodesicStateCart launch, int maxAttempts, Real stepScale, Real minStep,
+    Real maxStep, Real escapeRadius, Real b0, int wormShape) {
+    EllisTopologyContinuation continuation = InitEllisTwoSheet(
+        launch, maxAttempts, stepScale, minStep, maxStep, escapeRadius, b0, wormShape);
+    for (int attempt = 0; attempt < maxAttempts &&
+         continuation.failure == kEllisContinuationNone &&
+         continuation.trace.termination == kEllisTraceUnresolved; ++attempt) {
+        AdvanceEllisTwoSheet(continuation, maxAttempts, stepScale, minStep,
+                            maxStep, escapeRadius, b0, wormShape);
+    }
+    return continuation.trace;
 }

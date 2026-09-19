@@ -1,10 +1,6 @@
-// Render session implementation. Ported from SNRS001A.cpp.
-//
-// The CPU render path (metric construction, spiral tile scheduling, the
-// thread-pool, per-pixel shading, and output writing) is preserved exactly. The
-// legacy OptiX/GPU branches are removed; each removal site carries a one-line
-// decision comment. The Vulkan compute backend will re-enter through
-// sirius::backend::device, not from here.
+// Render-session lifecycle, scene setup, tile workers and output publication.
+// Pixel radiance evaluation is shared by the CPU and retained-device workers
+// through pixel_shading.cpp.
 
 #include "sirius/render/session/render_session.h"
 
@@ -12,7 +8,6 @@
 #include "sirius/render/exr_writer.h"
 #include "sirius/render/film_pipeline.h"
 #include "sirius/render/image_buffer.h"
-#include "sirius/render/pixel_sampling.h"
 #include "sirius/render/png_writer.h"
 #include "sirius/render/trace_domain.h"
 
@@ -23,7 +18,6 @@
 
 #include "sirius/core/constants.h"
 #include "sirius/core/metrics/cpu_metric_factory.h"
-#include "sirius/core/spectral/blackbody.h"  // Spectral blackbody colour.
 
 // stb_image decoder for the starfield texture; the implementation lives once in
 // stb_impl.cpp within this same library.
@@ -48,12 +42,9 @@ namespace sirius::render {
 
 using backend::GeodesicTracer;
 using backend::TracerConfig;
-using backend::TraceResult;
 using core::AccretionDiskD;
 using core::CameraConfig;
-using core::CameraRay;
 using core::MetricId;
-using core::Vec4;
 
 namespace math = core::constants::math;
 
@@ -79,6 +70,7 @@ core::MetricConstructionParameters MetricConstructionParametersFor(const Session
 RenderSession::~RenderSession() {
     (void)Cancel();
     WaitForCompletion();
+    probe_workers_.reset();
 }
 
 base::Expected<void> RenderSession::Configure(const SessionConfig& config) {
@@ -90,6 +82,11 @@ base::Expected<void> RenderSession::Configure(const SessionConfig& config) {
     if (const auto issue = SessionConfigIssue(config); issue.has_value()) {
         return base::Fail(base::ErrorDomain::kConfiguration, "configure render session", *issue);
     }
+    if (external_step_executor_ &&
+        (config.backend != RenderBackend::Vulkan || device_workers_ < 1 || device_workers_ > 256 ||
+         device_tile_edge_ < 1 || device_tile_edge_ > 4096))
+        return base::Fail(base::ErrorDomain::kConfiguration, "configure device workers",
+                          "invalid execution backend or worker bounds");
     config_ = config;
     return {};
 }
@@ -169,60 +166,6 @@ void RenderSession::WaitForCompletion() {
     render_thread_id_ = {};
     lock.unlock();
     lifecycle_cv_.notify_all();
-}
-
-std::string SessionSceneEvidenceJson(const SessionConfig& config, std::size_t point_star_count) {
-    const char* backend = nullptr;
-    switch (config.backend) {
-        case RenderBackend::Cpu:
-            backend = "Cpu";
-            break;
-        case RenderBackend::Vulkan:
-            backend = "Vulkan";
-            break;
-        default:
-            SIRIUS_ASSERT(false);
-            backend = "Invalid";
-            break;
-    }
-
-    const char* lens = nullptr;
-    switch (config.lens_type) {
-        case core::LensType::Pinhole:
-            lens = "Pinhole";
-            break;
-        case core::LensType::ThinLens:
-            lens = "ThinLens";
-            break;
-        case core::LensType::Fisheye:
-            lens = "Fisheye";
-            break;
-        default:
-            SIRIUS_ASSERT(false);
-            lens = "Invalid";
-            break;
-    }
-
-    std::ostringstream evidence;
-    evidence.imbue(std::locale::classic());
-    evidence << std::setprecision(std::numeric_limits<double>::max_digits10)
-             << "{\"schema\":\"sirius-render-scene-v1\"" << ",\"backend\":\"" << backend << "\""
-             << ",\"metric\":\"" << core::MetricInfoFor(config.metric_id).canonical_name << "\""
-             << ",\"spin\":" << config.black_hole_spin << ",\"width\":" << config.width
-             << ",\"height\":" << config.height
-             << ",\"samples_per_pixel\":" << config.samples_per_pixel
-             << ",\"field_of_view\":" << static_cast<double>(config.camera_fov)
-             << ",\"disk_enabled\":" << (config.enable_disk ? "true" : "false")
-             << ",\"ray_bundles\":" << (config.ray_bundles ? "true" : "false")
-             << ",\"point_starfield\":" << (config.point_starfield ? "true" : "false")
-             << ",\"point_star_count\":" << point_star_count << ",\"point_brightness_scale\":"
-             << static_cast<double>(config.point_starfield_config.brightness_scale)
-             << ",\"camera_beta\":[" << config.camera_beta_forward << ',' << config.camera_beta_up
-             << ',' << config.camera_beta_right << "]" << ",\"lens\":\"" << lens << "\""
-             << ",\"focal_length\":" << static_cast<double>(config.camera_focal_length)
-             << ",\"aperture\":" << static_cast<double>(config.camera_aperture)
-             << ",\"focus_distance\":" << static_cast<double>(config.camera_focus_distance) << '}';
-    return evidence.str();
 }
 
 std::optional<std::string> SessionConfigIssue(const SessionConfig& config) {
@@ -549,34 +492,21 @@ base::Expected<void> RenderSession::Initialise() {
     }
     std::cout << "  Samples:    " << config_.samples_per_pixel << std::endl;
 
-    // CPU tiles are operator-sized and spiral ordered. Vulkan derives a separate
-    // device-budgeted tile plan and reports its actual total at dispatch time.
-    if (config_.backend == RenderBackend::Cpu) {
-        tiles_.Initialise(config_.width, config_.height, config_.tile_size);
-        std::cout << "  Tiles:      " << tiles_.GetTileCount() << " (spiral order)" << std::endl;
-    } else {
-        std::cout << "  Tiles:      device-budget governed (Vulkan)" << std::endl;
-    }
-
-    // Display buffer.
     display_.Initialise(config_.width, config_.height);
-
-    // Progress tracker (Start() before SetTotals to avoid a reset).
+    // CPU totals are set after the physical sampling path is known. Vulkan
+    // supplies its device-governed total through its progress callback.
     progress_.Start();
-    if (config_.backend == RenderBackend::Cpu) {
-        progress_.SetTotals(tiles_.GetTileCount(), config_.samples_per_pixel);
-    } else {
-        progress_.SetTotals(1, 1);
-    }
+    progress_.SetTotals(1, 1);
 
-    // The Vulkan renderer owns device scene construction, resource loading,
-    // catalogue upload, and dispatch. Do not construct an unused CPU metric,
+    // The Vulkan renderer owns route selection, source resources and dispatch.
+    // Its retained route constructs its one shared host source owner internally.
+    // Do not first construct an unused CPU metric,
     // camera, tracer pool, texture, or duplicate point catalogue first.
-    if (config_.backend == RenderBackend::Vulkan) {
+    if (config_.backend == RenderBackend::Vulkan && !external_step_executor_) {
         const std::size_t point_star_count =
             config_.point_starfield ? config_.point_starfield_config.star_count : 0;
-        std::cout << "[Session] Scene evidence: "
-                  << SessionSceneEvidenceJson(config_, point_star_count) << std::endl;
+        std::cout << kSceneEvidencePrefix << SessionSceneEvidenceJson(config_, point_star_count)
+                  << std::endl;
         if (progress_.GetCancellationToken().IsCancelled()) {
             fsm_.Process(SessionEvent::Cancel);
             return {};
@@ -709,6 +639,8 @@ base::Expected<void> RenderSession::Initialise() {
     }
     if (metric_) {
         tracer_ = std::make_unique<GeodesicTracer>(metric_.get(), tracer_config);
+        tracer_->SetStepExecutor(external_step_executor_);
+        tracer_->SetCancellationCallback([this] { return IsStopping(); });
         if (tracer_config.enable_disk) {
             std::cout << "  Disk:       r_in=" << tracer_config.disk_inner
                       << "M, r_out=" << tracer_config.disk_outer << "M" << std::endl;
@@ -719,7 +651,6 @@ base::Expected<void> RenderSession::Initialise() {
                   << std::endl;
     }
 
-    // Relativistic jets.
     // Colour mode.
     const char* mode_name = "TrueColor";
     switch (config_.color_mode) {
@@ -739,8 +670,8 @@ base::Expected<void> RenderSession::Initialise() {
     std::cout << "[Session] Color mode: " << mode_name << std::endl;
 
     // Multi-threaded rendering setup.
-    if (config_.enable_parallel_rendering) {
-        num_threads_ = config_.thread_count;
+    if (config_.enable_parallel_rendering || external_step_executor_) {
+        num_threads_ = external_step_executor_ ? device_workers_ : config_.thread_count;
         if (num_threads_ <= 0) {
             // Auto-detect: hardware concurrency, leaving one core for the system.
             num_threads_ = static_cast<int>(std::thread::hardware_concurrency());
@@ -751,10 +682,13 @@ base::Expected<void> RenderSession::Initialise() {
         // Per-thread tracers share the metric but keep independent state.
         thread_tracers_.clear();
         thread_tracers_.reserve(num_threads_);
+        thread_pixel_blocks_.resize(static_cast<std::size_t>(num_threads_));
         if (metric_) {
             for (int i = 0; i < num_threads_; ++i) {
                 thread_tracers_.push_back(
                     std::make_unique<GeodesicTracer>(metric_.get(), tracer_config));
+                thread_tracers_.back()->SetStepExecutor(external_step_executor_);
+                thread_tracers_.back()->SetCancellationCallback([this] { return IsStopping(); });
             }
         }
 
@@ -768,8 +702,9 @@ base::Expected<void> RenderSession::Initialise() {
     // The background texture is a physics input, not decorative packaging:
     // substituting grey changes every escaped ray. Missing resources
     // therefore fail initialisation instead of quietly changing the scene.
-    const auto starfield = base::ResolveResource("assets/Starfield.png");
-    if (!starfield || !LoadStarfieldTexture(starfield->string())) {
+    const auto starfield =
+        config_.point_starfield ? std::nullopt : base::ResolveResource("assets/Starfield.png");
+    if (!config_.point_starfield && (!starfield || !LoadStarfieldTexture(starfield->string()))) {
         return base::Fail(
             base::ErrorDomain::kIo, "load render resource",
 #if SIRIUS_RELEASE_RESOURCE_LOCKED
@@ -793,13 +728,37 @@ base::Expected<void> RenderSession::Initialise() {
                   << (star_index_->MemoryBytes() / 1024) << " KiB index, beams "
                   << (config_.ray_bundles ? "on" : "off") << std::endl;
     }
-    std::cout << "[Session] Scene evidence: "
+    std::cout << (external_step_executor_ ? kSourceSceneEvidencePrefix : kSceneEvidencePrefix)
               << SessionSceneEvidenceJson(config_, star_index_ ? star_index_->Size() : 0)
               << std::endl;
 
-    // GPU acceleration removed: the legacy OptiX backend init and starfield
-    // upload lived here. OptiX is retired; the Vulkan compute path arrives
-    // through sirius::backend::device later. The CPU path renders directly.
+    // Keep requested tile bounds and publication units. Neighboring small
+    // point-scene tiles share one worker's completed canonical detector region;
+    // larger tiles already contain whole regions without overlap.
+    tiles_.Initialise(config_.width, config_.height,
+                      external_step_executor_ ? device_tile_edge_ : config_.tile_size,
+                      UsesPhysicalPointDetector() ? kPointDetectorBlockEdge : 0);
+    progress_.SetTotals(tiles_.GetTileCount(), config_.samples_per_pixel);
+    std::cout << "  Tiles:      " << tiles_.GetTileCount() << " (spiral work groups)" << std::endl;
+
+    // Detector coordinators retain sequential root refinement. Independent
+    // cell probes use separate tracers so one region can occupy several CPU
+    // cores or provide a batch to the retained device executor.
+    if (num_threads_ > 1 && UsesPhysicalPointDetector() &&
+        (config_.backend == RenderBackend::Cpu || external_step_executor_)) {
+        probe_tracers_.reserve(num_threads_);
+        for (int i = 0; i < num_threads_; ++i) {
+            auto tracer = std::make_unique<GeodesicTracer>(metric_.get(), tracer_config);
+            tracer->SetStepExecutor(external_step_executor_);
+            tracer->SetCancellationCallback([this] { return IsStopping(); });
+            probe_tracers_.push_back(std::move(tracer));
+        }
+        probe_workers_ =
+            std::make_unique<RayWorkQueue>(static_cast<std::size_t>(num_threads_),
+                                           [this](std::size_t worker, const core::CameraRay& ray) {
+                                               return probe_tracers_[worker]->TracePointSource(ray);
+                                           });
+    }
 
     if (progress_.GetCancellationToken().IsCancelled()) {
         fsm_.Process(SessionEvent::Cancel);
@@ -824,7 +783,7 @@ void RenderSession::ScheduleNextTile() {
     // seam (replacing the retired OptiX single-launch that once lived here). It
     // fills the display buffer directly and fires AllTilesComplete so WriteOutput
     // applies the host display pipeline, exactly as the CPU path does.
-    if (config_.backend == RenderBackend::Vulkan) {
+    if (config_.backend == RenderBackend::Vulkan && !external_step_executor_) {
         RenderVulkanPath();
         return;
     }
@@ -841,7 +800,7 @@ void RenderSession::ScheduleNextTile() {
     }
 
     // Parallel rendering when enabled and multiple threads are available.
-    if (config_.enable_parallel_rendering && num_threads_ > 1) {
+    if ((config_.enable_parallel_rendering || external_step_executor_) && num_threads_ > 1) {
         RenderTilesParallel();
         return;
     }
@@ -860,198 +819,27 @@ void RenderSession::ScheduleNextTile() {
 }
 
 // =============================================================================
-// Pixel shading helpers (unified for single- and multi-threaded paths).
-// =============================================================================
-RenderSession::PixelResult RenderSession::ShadeDiskHit(const TraceResult& result) const {
-    PixelResult px;
-
-    // Volumetric disk: use the pre-integrated emission from ray marching.
-    if (result.volumetric_hit) {
-        // Samples were coloured at their own temperature and g-factor before
-        // invariant transfer. Reconstructing one effective blackbody here would
-        // apply the spectral mapping twice.
-        px.r = result.volumetric_emission[0];
-        px.g = result.volumetric_emission[1];
-        px.b = result.volumetric_emission[2];
-        return px;
-    }
-
-    // Thin disk: accumulate emission from all disk crossings. Relativistic
-    // beaming is applied exactly once: emitted T^4 becomes observed g^4 T^4.
-    float total_r = 0.0f, total_g = 0.0f, total_b = 0.0f;
-    core::StokesVector total_stokes;
-    const bool polarisation_mode = config_.color_mode == core::color_modes::Mode::Polarisation;
-
-    for (int crossing_idx = 0; crossing_idx < result.num_disk_crossings; crossing_idx++) {
-        const auto& crossing = result.disk_crossings[crossing_idx];
-        if (!crossing.valid) continue;
-
-        float T_emit = crossing.temperature;
-        float g = crossing.redshift;
-
-        // The stationary axisymmetric disk has one covariant transfer sample at
-        // a crossing. Temporal requests fail at validation until an evolving
-        // emissivity (rather than an azimuth-shifted steady flow) is represented.
-        const std::array<float, 1> temporal_redshifts{g};
-
-        const float emitted_intensity = std::pow(T_emit, 4.0f);
-        const float observed_intensity =
-            core::color_modes::ObservedBolometricIntensity(emitted_intensity, g);
-
-        if (polarisation_mode) {
-            SIRIUS_ASSERT(crossing.polarisation_valid);
-            if (!crossing.polarisation_valid) continue;
-
-            const float chi = crossing.polarisation_evpa;
-            const float degree = crossing.polarisation_degree;
-            const float atmosphere_intensity =
-                observed_intensity * crossing.polarisation_intensity_scale;
-            core::StokesVector crossing_stokes{
-                atmosphere_intensity, atmosphere_intensity * degree * std::cos(2.0f * chi),
-                atmosphere_intensity * degree * std::sin(2.0f * chi), 0.0f};
-            total_stokes += crossing_stokes;
-            continue;
-        }
-
-        const core::spectral::Rgb disk_color = core::color_modes::AverageTemporalColorMode(
-            config_.color_mode, T_emit, temporal_redshifts, emitted_intensity,
-            config_.disk_temperature_scale);
-
-        total_r += disk_color.r;
-        total_g += disk_color.g;
-        total_b += disk_color.b;
-    }
-
-    // Lensing changes the ray-to-solid-angle map, not radiance along one ray.
-    constexpr float output_scale = 1.0f;
-
-    if (polarisation_mode) {
-        total_stokes *= output_scale;
-        total_stokes.Normalise();
-        const core::spectral::Rgb visualised =
-            core::color_modes::polarisation_vis::StokesToRgbHsv(total_stokes);
-        px.r = visualised.r;
-        px.g = visualised.g;
-        px.b = visualised.b;
-    } else {
-        px.r = total_r * output_scale;
-        px.g = total_g * output_scale;
-        px.b = total_b * output_scale;
-    }
-
-    return px;
-}
-
-RenderSession::PixelResult RenderSession::ShadeEscaped(const TraceResult& result) const {
-    PixelResult px;
-    if (config_.point_starfield && star_index_ && star_index_->Size() > 0) {
-        SampleStarfieldPoints(result, px.r, px.g, px.b);
-    } else {
-        SampleStarfield(result.final_direction, px.r, px.g, px.b);
-    }
-
-    return px;
-}
-
-RenderSession::PixelResult RenderSession::ShadePixel(int px_coord, int py_coord,
-                                                     GeodesicTracer* tracer) const {
-    PixelResult result;
-    float r_acc = 0.0f, g_acc = 0.0f, b_acc = 0.0f;
-
-    const int samples_taken =
-        ForEachCameraSample(config_.samples_per_pixel, [&](const CameraSample& sample) {
-            CameraRay camera_ray = camera_->GenerateRayForObserver(
-                px_coord, py_coord, sample.image_u, sample.image_v, sample.pupil_u, sample.pupil_v);
-            SIRIUS_ASSERT(core::IsRepresentedCameraRay(camera_ray));
-            if (!camera_ray.active) return;
-            TraceResult trace_result = tracer->Trace(camera_ray);
-
-            float sr = 0.0f, sg = 0.0f, sb = 0.0f;
-
-            switch (trace_result.outcome) {
-                case TraceResult::Outcome::Horizon:
-                case TraceResult::Outcome::Throat:
-                    break;
-
-                case TraceResult::Outcome::DiskHit: {
-                    PixelResult disk = ShadeDiskHit(trace_result);
-                    sr = disk.r;
-                    sg = disk.g;
-                    sb = disk.b;
-                    break;
-                }
-
-                case TraceResult::Outcome::Escaped: {
-                    PixelResult esc = ShadeEscaped(trace_result);
-                    sr = esc.r;
-                    sg = esc.g;
-                    sb = esc.b;
-                    break;
-                }
-
-                case TraceResult::Outcome::MaxSteps:
-                    sr = sg = sb = 0.0f;
-                    break;
-                default:
-                    SIRIUS_ASSERT(false);
-                    sr = 1.0f;
-                    sg = 0.0f;
-                    sb = 1.0f;
-                    break;
-            }
-
-            // Volumetric transfer composes with the terminal surface/background;
-            // it is not a terminal ray outcome. Apply I = I_bg exp(-tau) + I_vol
-            // after shading the actual fate of the central ray.
-            if (trace_result.volumetric_hit) {
-                PixelResult volume = ShadeDiskHit(trace_result);
-                const float transmission = std::exp(-std::max(trace_result.optical_depth, 0.0f));
-                sr = sr * transmission + volume.r;
-                sg = sg * transmission + volume.g;
-                sb = sb * transmission + volume.b;
-            }
-
-            r_acc += sr;
-            g_acc += sg;
-            b_acc += sb;
-        });
-
-    float inv_samples = 1.0f / static_cast<float>(samples_taken);
-    result.r = r_acc * inv_samples;
-    result.g = g_acc * inv_samples;
-    result.b = b_acc * inv_samples;
-
-    return result;
-}
-
-// =============================================================================
 // Tile rendering.
 // =============================================================================
 void RenderSession::RenderTile(Tile* tile) {
     if (!tile) return;
 
-    std::vector<float> tileBuffer(tile->width * tile->height * 4, 0.0f);
-
-    for (int ty = 0; ty < tile->height; ++ty) {
+    const auto pixels = ShadeTile(*tile, tracer_.get(), pixel_block_);
+    if (!pixels) {
         if (progress_.GetCancellationToken().IsCancelled()) {
             fsm_.Process(SessionEvent::Cancel);
-            return;
+        } else {
+            error_message_ = pixels.error().Description();
+            fsm_.Process(SessionEvent::Error);
         }
-        for (int tx = 0; tx < tile->width; ++tx) {
-            int px = tile->x + tx;
-            int py = tile->y + ty;
-
-            PixelResult pixel = ShadePixel(px, py, tracer_.get());
-
-            int idx = (ty * tile->width + tx) * 4;
-            tileBuffer[idx + 0] = pixel.r;
-            tileBuffer[idx + 1] = pixel.g;
-            tileBuffer[idx + 2] = pixel.b;
-            tileBuffer[idx + 3] = 1.0f;
-        }
+        return;
     }
 
-    display_.UpdateTile(tile->x, tile->y, tile->width, tile->height, tileBuffer.data());
+    if (progress_.GetCancellationToken().IsCancelled()) {
+        fsm_.Process(SessionEvent::Cancel);
+        return;
+    }
+    display_.UpdateTile(tile->x, tile->y, tile->width, tile->height, pixels->data());
 
     tiles_.CompleteTile(tile->id);
     // The ProgressTracker callback is the single progress surface (the CLI
@@ -1094,15 +882,17 @@ void RenderSession::RenderVulkanPath() {
 
     std::cout << "[Session] Vulkan render complete: " << stats->metric_name << " on "
               << stats->device_name << ", " << stats->tiles_rendered << " tile(s) of "
-              << stats->tile_plan.tile_edge << "px in " << stats->band_dispatches
+              << stats->work_tile_edge << "px in " << stats->band_dispatches
               << " governed dispatch(es), " << stats->seconds << "s; governed ray submit/wait "
               << stats->dispatch_seconds << "s total, " << stats->maximum_dispatch_ms
-              << "ms maximum, " << stats->maximum_dispatch_pixels << " active pixels maximum, "
+              << "ms maximum, " << stats->maximum_dispatch_rays << " active rays maximum, "
               << stats->dispatch_target_overshoots << " target overshoot(s), "
+              << stats->dispatch_subdivisions << " batch subdivision(s), "
               << stats->dispatch_fallbacks << " safety fallback(s); initialization "
               << stats->initialization_dispatches << " dispatch(es), "
               << stats->initialization_seconds << "s wall, " << stats->initialization_submit_wait_ms
               << "ms submit/wait" << std::endl;
+    std::cout << kVulkanEvidencePrefix << VulkanRenderEvidenceJson(config_, *stats) << std::endl;
     fsm_.Process(SessionEvent::AllTilesComplete);
 #else
     error_message_ = "Vulkan backend not compiled in (build without Vulkan development files)";
@@ -1140,102 +930,6 @@ bool RenderSession::LoadStarfieldTexture(const std::string& path) {
 }
 
 // =============================================================================
-// Starfield background sampling (equirectangular projection).
-// =============================================================================
-void RenderSession::SampleStarfield(const Vec4& direction, float& r, float& g, float& b) const {
-    if (!starfield_loaded_ || starfield_data_.empty()) {
-        SIRIUS_ASSERT(starfield_loaded_ && !starfield_data_.empty());
-        r = g = b = 0.0f;
-        return;
-    }
-
-    // Direction is Cartesian (x, y, z) from the geodesic tracer.
-    double dx = direction(1);
-    double dy = direction(2);
-    double dz = direction(3);
-
-    double len = std::sqrt(dx * dx + dy * dy + dz * dz);
-    if (len < 1e-10) {
-        SIRIUS_ASSERT(len >= 1e-10);
-        r = g = b = 0.0f;
-        return;
-    }
-
-    dx /= len;
-    dy /= len;
-    dz /= len;
-
-    // Spherical coordinates: theta 0 at +Z to pi at -Z; phi 0 at +X toward +Y.
-    double theta = std::acos(std::clamp(dz, -1.0, 1.0));
-    double phi = std::atan2(dy, dx);
-    if (phi < 0) phi += math::kTwoPi;
-
-    double u = phi / math::kTwoPi;
-    double v = theta / math::kPi;
-
-    double px = u * (starfield_width_ - 1);
-    double py = v * (starfield_height_ - 1);
-
-    int x0 = static_cast<int>(std::floor(px));
-    int y0 = static_cast<int>(std::floor(py));
-    int x1 = std::min(x0 + 1, starfield_width_ - 1);
-    int y1 = std::min(y0 + 1, starfield_height_ - 1);
-
-    double fx = px - x0;
-    double fy = py - y0;
-
-    auto sample = [this](int x, int y) -> std::array<float, 3> {
-        int idx = (y * starfield_width_ + x) * 4;  // 4 bytes per pixel (RGBA).
-        return {starfield_data_[idx + 0] / 255.0f, starfield_data_[idx + 1] / 255.0f,
-                starfield_data_[idx + 2] / 255.0f};
-    };
-
-    auto c00 = sample(x0, y0);
-    auto c10 = sample(x1, y0);
-    auto c01 = sample(x0, y1);
-    auto c11 = sample(x1, y1);
-
-    float w00 = static_cast<float>((1.0 - fx) * (1.0 - fy));
-    float w10 = static_cast<float>(fx * (1.0 - fy));
-    float w01 = static_cast<float>((1.0 - fx) * fy);
-    float w11 = static_cast<float>(fx * fy);
-
-    r = c00[0] * w00 + c10[0] * w10 + c01[0] * w01 + c11[0] * w11;
-    g = c00[1] * w00 + c10[1] * w10 + c01[1] * w01 + c11[1] * w11;
-    b = c00[2] * w00 + c10[2] * w10 + c01[2] * w01 + c11[2] * w11;
-}
-
-// =============================================================================
-// Filtered point-source star field sampling (P3).
-// =============================================================================
-void RenderSession::SampleStarfieldPoints(const TraceResult& result, float& r, float& g,
-                                          float& b) const {
-    // Beam footprint on the sky. With ray bundles the tracer supplies the full
-    // lensed ellipse; a pinhole (bundles off) samples at a fraction of the pixel
-    // angular size, so a star pops in and out as the camera rotates (the flicker
-    // the beam filter removes). Both ellipse axes are floored at the pixel size so
-    // a pixel always integrates at least its own solid angle.
-    constexpr float kPinholeFraction = 0.3f;  // Pinhole sigma as a fraction of a pixel.
-    float pixel = static_cast<float>(pixel_angular_size_);
-    float sigma_major;
-    float sigma_minor;
-    float orientation = 0.0f;
-    if (config_.ray_bundles && result.beam.valid) {
-        sigma_major = std::max(result.beam.footprint_major, pixel);
-        sigma_minor = std::max(result.beam.footprint_minor, pixel);
-        orientation = result.beam.orientation;
-    } else {
-        sigma_major = kPinholeFraction * pixel;
-        sigma_minor = sigma_major;
-    }
-
-    const auto& d = result.final_direction;
-    star_generator_->AccumulateThroughBeam(static_cast<float>(d(1)), static_cast<float>(d(2)),
-                                           static_cast<float>(d(3)), sigma_major, sigma_minor,
-                                           orientation, *star_index_, r, g, b);
-}
-
-// =============================================================================
 // Output writing.
 // =============================================================================
 base::Expected<void> RenderSession::WriteOutput() {
@@ -1248,6 +942,10 @@ base::Expected<void> RenderSession::WriteOutput() {
         return base::Fail(
             base::ErrorDomain::kPhysics, "write render output",
             "linear radiance contains a non-finite sample at channel " + std::to_string(*bad));
+    }
+    if (external_step_executor_) {
+        fsm_.Process(SessionEvent::OutputWritten);
+        return {};
     }
 
     // Format follows the output extension: .exr | .png | .ppm (default).
@@ -1357,6 +1055,7 @@ void RenderSession::OnSessionEnd(SessionState state) {
             break;
         case SessionState::Failed:
             message = error_message_;
+            std::cerr << "[Session] " << message << std::endl;
             break;
         case SessionState::Cancelled:
             message = "Render cancelled by user";
@@ -1387,6 +1086,7 @@ void RenderSession::OnSessionEnd(SessionState state) {
         }
     }
     worker_threads_.clear();
+    probe_workers_.reset();
 }
 
 // =============================================================================
@@ -1395,6 +1095,7 @@ void RenderSession::OnSessionEnd(SessionState state) {
 void RenderSession::RenderTilesParallel() {
     stop_workers_ = false;
     active_workers_ = 0;
+    worker_errors_.assign(static_cast<std::size_t>(num_threads_), std::nullopt);
 
     worker_threads_.clear();
     worker_threads_.reserve(num_threads_);
@@ -1417,79 +1118,61 @@ void RenderSession::RenderTilesParallel() {
     if (progress_.GetCancellationToken().IsCancelled()) {
         fsm_.Process(SessionEvent::Cancel);
     } else {
-        fsm_.Process(SessionEvent::AllTilesComplete);
+        const auto failed = std::find_if(worker_errors_.begin(), worker_errors_.end(),
+                                         [](const auto& error) { return error.has_value(); });
+        if (failed != worker_errors_.end()) {
+            error_message_ = (*failed)->Description();
+            fsm_.Process(SessionEvent::Error);
+        } else {
+            fsm_.Process(SessionEvent::AllTilesComplete);
+        }
     }
 }
 
 void RenderSession::WorkerThread(int thread_id) {
     active_workers_++;
 
-    while (!stop_workers_) {
-        Tile* tile = nullptr;
-        {
-            std::lock_guard<std::mutex> lock(tile_mutex_);
-            tile = tiles_.GetNextTile();
-        }
+    while (!IsStopping()) {
+        const auto group = tiles_.GetNextTileGroup();
+        if (group.empty()) break;
+        for (auto& tile : group) {
+            if (IsStopping()) break;
+            const auto rendered = RenderTileThreaded(&tile, thread_id);
+            if (!rendered) {
+                // Preserve the original failure while the remaining workers stop.
+                if (!stop_workers_.exchange(true))
+                    worker_errors_[static_cast<std::size_t>(thread_id)] = rendered.error();
+                break;
+            }
+            if (!*rendered) break;
 
-        if (tile == nullptr) {
-            break;
-        }
-
-        if (progress_.GetCancellationToken().IsCancelled()) {
-            stop_workers_ = true;
-            break;
-        }
-
-        if (!RenderTileThreaded(tile, thread_id)) {
-            stop_workers_ = true;
-            break;
-        }
-
-        {
-            std::lock_guard<std::mutex> lock(tile_mutex_);
-            tiles_.CompleteTile(tile->id);
-            // Single progress surface: the ProgressTracker callback.
-            progress_.CompleteTile(tile->PixelCount());
+            {
+                std::lock_guard<std::mutex> lock(tile_mutex_);
+                tiles_.CompleteTile(tile.id);
+                // Single progress surface: the ProgressTracker callback.
+                progress_.CompleteTile(tile.PixelCount());
+            }
         }
     }
 
     active_workers_--;
 }
 
-bool RenderSession::RenderTileThreaded(Tile* tile, int thread_id) {
+base::Expected<bool> RenderSession::RenderTileThreaded(Tile* tile, int thread_id) {
     if (!tile) return false;
 
-    GeodesicTracer* tracer = nullptr;
-    if (thread_id >= 0 && thread_id < static_cast<int>(thread_tracers_.size())) {
-        tracer = thread_tracers_[thread_id].get();
-    } else {
-        tracer = tracer_.get();
-    }
-
-    std::vector<float> tileBuffer(tile->width * tile->height * 4, 0.0f);
-
-    for (int ty = 0; ty < tile->height; ++ty) {
-        if (ty % 8 == 0 && (stop_workers_ || progress_.GetCancellationToken().IsCancelled())) {
-            return false;
-        }
-
-        for (int tx = 0; tx < tile->width; ++tx) {
-            int px = tile->x + tx;
-            int py = tile->y + ty;
-
-            PixelResult pixel = ShadePixel(px, py, tracer);
-
-            int idx = (ty * tile->width + tx) * 4;
-            tileBuffer[idx + 0] = pixel.r;
-            tileBuffer[idx + 1] = pixel.g;
-            tileBuffer[idx + 2] = pixel.b;
-            tileBuffer[idx + 3] = 1.0f;
-        }
+    SIRIUS_ASSERT(thread_id >= 0 && thread_id < static_cast<int>(thread_tracers_.size()));
+    const auto pixels =
+        ShadeTile(*tile, thread_tracers_[thread_id].get(), thread_pixel_blocks_[thread_id]);
+    if (!pixels) {
+        if (IsStopping()) return false;
+        return std::unexpected(pixels.error());
     }
 
     {
         std::lock_guard<std::mutex> lock(display_mutex_);
-        display_.UpdateTile(tile->x, tile->y, tile->width, tile->height, tileBuffer.data());
+        if (stop_workers_ || progress_.GetCancellationToken().IsCancelled()) return false;
+        display_.UpdateTile(tile->x, tile->y, tile->width, tile->height, pixels->data());
     }
     return true;
 }

@@ -37,6 +37,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <limits>
 #include <numbers>
 
 namespace {
@@ -218,3 +219,46 @@ TEST(RayBundleTest, MagnificationComesOnlyFromJacobiMap) {
 }
 
 }  // namespace
+
+TEST(RayBundleTest, CurvatureStencilPreservesMassScaleAndBothSpinSigns) {
+    constexpr double tolerance = sirius::core::constants::geodesic::kConservationTol;
+    for (double mass : {1.0e-3, 1.0, 1.0e3}) {
+        for (double dimensionless_spin : {-0.9, 0.0, 0.9}) {
+            SCOPED_TRACE(mass);
+            SCOPED_TRACE(dimensionless_spin);
+            const double spin = mass * dimensionless_spin;
+            KerrSchildFamily metric(KerrSchildParams::Kerr(mass, spin));
+            GeodesicTracer tracer(&metric, TracerConfig{});
+            sirius::oracle::KerrMetricD oracle(mass, spin);
+            for (double theta : {0.7, 1.2, 2.2}) {
+                const double radius = 4.0 * mass;
+                const double expected =
+                    oracle.Kretschmann(sirius::oracle::Vec4d(0.0, radius, theta, 0.0));
+                const double actual = tracer.KretschmannScalar(CartPoint(radius, theta, spin));
+                ASSERT_TRUE(std::isfinite(actual));
+                EXPECT_LT(std::abs((actual - expected) / expected), tolerance);
+            }
+        }
+    }
+}
+
+TEST(RayBundleTest, CurvatureStencilStaysInsideTheActualKerrChartDomain) {
+    for (double spin : {-0.9, 0.9}) {
+        KerrSchildFamily metric(KerrSchildParams::Kerr(1.0, spin));
+        GeodesicTracer tracer(&metric, TracerConfig{});
+        Vec4 position;
+        // The equatorial Kerr chart excludes the disk |x|<=|a|. The nominal
+        // four-node stencil crosses that disk, so domain preflight must shrink
+        // it before evaluating any Christoffel symbol there.
+        position(1) = std::abs(spin) * (1.0 + 1.0e-4);
+        ASSERT_TRUE(metric.IsValidEvent(position));
+        EXPECT_TRUE(std::isfinite(tracer.KretschmannScalar(position)));
+
+        // At the first representable event outside the disk there is no
+        // distinct symmetric stencil inside the domain. This must decline
+        // explicitly, not invoke the metric at an unrepresented event.
+        position(1) = std::nextafter(std::abs(spin), std::numeric_limits<double>::infinity());
+        ASSERT_TRUE(metric.IsValidEvent(position));
+        EXPECT_TRUE(std::isnan(tracer.KretschmannScalar(position)));
+    }
+}

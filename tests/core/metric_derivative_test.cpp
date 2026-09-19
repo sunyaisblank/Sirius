@@ -4,8 +4,9 @@
 #include "sirius/core/dual_number.h"                   // Dual numbers
 #include "sirius/core/metrics/kerr_schild_family.h"    // Kerr-Schild Family
 #include "sirius/core/metrics/morris_thorne_family.h"  // Morris-Thorne Family
-#include "sirius/core/metrics/warp_drive_family.h"     // Warp Drive Family
-#include "sirius/core/tensor.h"                        // Tensors
+#include "sirius/core/metrics/outgoing_kerr_schild.h"
+#include "sirius/core/metrics/warp_drive_family.h"  // Warp Drive Family
+#include "sirius/core/tensor.h"                     // Tensors
 
 #include <gtest/gtest.h>
 
@@ -13,6 +14,56 @@
 #include <cmath>
 
 using namespace sirius::core;
+
+TEST(MetricDerivativeHessian, AnalyticKerrFamilyMatchesIndependentFourthOrderMetricStencil) {
+    const std::array<KerrSchildParams, 7> families{KerrSchildParams::Minkowski(),
+                                                   KerrSchildParams::Schwarzschild(1),
+                                                   KerrSchildParams::Kerr(1, -0.9),
+                                                   KerrSchildParams::Kerr(10, 9),
+                                                   KerrSchildParams::KerrNewman(0.1, -0.06, 0.03),
+                                                   KerrSchildParams{1, 0, 0, 1e-4},
+                                                   KerrSchildParams::DeSitter(1e-4)};
+    for (const auto& parameters : families) {
+        KerrSchildFamily source(parameters);
+        OutgoingKerrSchild outgoing(source);
+        const double scale = parameters.M > 0 ? parameters.M : 1;
+        Vec4 position;
+        position(1) = 7 * scale;
+        position(2) = 4 * scale;
+        position(3) = 3 * scale;
+        for (IMetric* metric : std::array<IMetric*, 2>{&source, &outgoing}) {
+            MetricHessian actual;
+            ASSERT_TRUE(metric->EvaluateHessian(position, actual));
+            const double h = 0.001 * scale;
+            for (int axis = 0; axis < 4; ++axis) {
+                std::array<Tensor<Dual<double>, 4, 4, 4>, 4> samples;
+                constexpr std::array<int, 4> offsets{-2, -1, 1, 2};
+                for (int node = 0; node < 4; ++node) {
+                    auto varied = position;
+                    varied(axis) += offsets[node] * h;
+                    Metric4d g;
+                    metric->Evaluate(varied, g, samples[node]);
+                }
+                for (int derivative = 0; derivative < 4; ++derivative)
+                    for (int mu = 0; mu < 4; ++mu)
+                        for (int nu = 0; nu < 4; ++nu) {
+                            const double reference = ((samples[0](derivative, mu, nu).real -
+                                                       samples[3](derivative, mu, nu).real) +
+                                                      8 * (samples[2](derivative, mu, nu).real -
+                                                           samples[1](derivative, mu, nu).real)) /
+                                                     (12 * h);
+                            const double observed = actual.values[axis][derivative][mu][nu];
+                            EXPECT_NEAR(observed, reference,
+                                        1e-10 / (scale * scale) + 2e-8 * std::abs(reference));
+                            EXPECT_NEAR(observed, actual.values[derivative][axis][mu][nu],
+                                        1e-14 / (scale * scale));
+                            EXPECT_NEAR(observed, actual.values[axis][derivative][nu][mu],
+                                        1e-14 / (scale * scale));
+                        }
+            }
+        }
+    }
+}
 
 constexpr double kEpsilon = 1e-6;
 constexpr double kFiniteDiffH = 1e-5;

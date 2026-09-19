@@ -9,7 +9,10 @@
 
 #include <gtest/gtest.h>
 
+#include "../support/trace_continuation_probe.h"
+
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
@@ -27,6 +30,7 @@ using sirius::backend::BufferUsage;
 using sirius::backend::ComputeDevice;
 using sirius::backend::CreateVulkanDevice;
 using sirius::backend::EnumerateVulkanDevices;
+using sirius::backend::KernelHandle;
 using sirius::backend::ResolveVulkanDeviceIndex;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
@@ -67,7 +71,7 @@ TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
     // chosen so the capture cross-section covers a modest image fraction. The
     // full image is a single tile here (tileOrigin 0, tile == image). Background
     // is the analytic gradient (starfield disabled), so no texture is needed.
-    std::vector<float> params(68, 0.0f);
+    std::vector<float> params(sirius::render::kTraceParameterCount, 0.0f);
     params[44] = 0.5f;
     params[45] = 0.5f;
     params[66] = 0.5f;
@@ -109,29 +113,10 @@ TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
     params[36] = 1.0f;            // starfieldWidth (dummy)
     params[37] = 1.0f;            // starfieldHeight (dummy)
 
-    std::vector<float> radiance(kWidth * kHeight * 4, 0.0f);
-    const std::vector<std::uint32_t> starfield_dummy = {0u};
-
-    const auto rbuf =
-        (*device)->CreateBuffer(radiance.size() * sizeof(float), BufferUsage::kStorage);
-    const auto pbuf = (*device)->CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
-    const auto sbuf = (*device)->CreateBuffer(starfield_dummy.size() * sizeof(std::uint32_t),
-                                              BufferUsage::kStorage);
-    const auto psbuf = (*device)->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
-    const auto pobuf = (*device)->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
-    const auto pibuf = (*device)->CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
-    ASSERT_TRUE(rbuf && pbuf && sbuf && psbuf && pobuf && pibuf);
-    ASSERT_TRUE((*device)->WriteBuffer(*rbuf, std::as_bytes(std::span<const float>(radiance))));
-    ASSERT_TRUE((*device)->WriteBuffer(*pbuf, std::as_bytes(std::span<const float>(params))));
-    ASSERT_TRUE((*device)->WriteBuffer(
-        *sbuf, std::as_bytes(std::span<const std::uint32_t>(starfield_dummy))));
-
-    const BufferHandle binding[] = {*rbuf, *pbuf, *sbuf, *psbuf, *pobuf, *pibuf};
-    const auto dispatched =
-        (*device)->Dispatch(*kernel, binding, (kWidth + 7) / 8, (kHeight + 7) / 8, 1);
-    ASSERT_TRUE(dispatched.has_value()) << dispatched.error().Description();
-
-    ASSERT_TRUE((*device)->ReadBuffer(*rbuf, std::as_writable_bytes(std::span<float>(radiance))));
+    const auto output =
+        sirius::test::TraceContinuationImage<float>(**device, *kernel, params, kWidth, kHeight);
+    ASSERT_TRUE(output.has_value()) << output.error().Description();
+    const auto& radiance = *output;
 
     // Finiteness across every channel.
     for (float value : radiance) {
@@ -169,6 +154,7 @@ TEST(KernelTrace, KerrRenderIsFiniteNonConstantWithBoundedShadow) {
 // through the given SPIR-V module and return the RGBA radiance field. Keep the
 // direct probe under the product's 64-active-pixel work bound. This helper
 // retains conservative row strips; the product packs blocks into 8x8 groups.
+template <typename Real>
 std::vector<float> RunKerrScene(ComputeDevice& device, const std::vector<std::uint32_t>& spirv) {
     const auto kernel = device.LoadKernel(spirv);
     if (!kernel) {
@@ -178,9 +164,8 @@ std::vector<float> RunKerrScene(ComputeDevice& device, const std::vector<std::ui
 
     constexpr std::uint32_t kWidth = 64;
     constexpr std::uint32_t kHeight = 64;
-    constexpr std::uint32_t kTileHeight = 1;
 
-    std::vector<float> params(68, 0.0f);
+    std::vector<float> params(sirius::render::kTraceParameterCount, 0.0f);
     params[44] = 0.5f;
     params[45] = 0.5f;
     params[66] = 0.5f;
@@ -216,56 +201,13 @@ std::vector<float> RunKerrScene(ComputeDevice& device, const std::vector<std::ui
     params[36] = 1.0f;
     params[37] = 1.0f;
 
-    std::vector<float> radiance(kWidth * kHeight * 4, 0.0f);
-    std::vector<float> tile_radiance(kWidth * kTileHeight * 4, 0.0f);
-    const std::vector<std::uint32_t> starfield_dummy = {0u};
-
-    const auto rbuf =
-        device.CreateBuffer(tile_radiance.size() * sizeof(float), BufferUsage::kStorage);
-    const auto pbuf = device.CreateBuffer(params.size() * sizeof(float), BufferUsage::kStorage);
-    const auto sbuf =
-        device.CreateBuffer(starfield_dummy.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
-    const auto psbuf = device.CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
-    const auto pobuf = device.CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
-    const auto pibuf = device.CreateBuffer(sizeof(std::uint32_t), BufferUsage::kStorage);
-    if (!(rbuf && pbuf && sbuf && psbuf && pobuf && pibuf)) {
-        ADD_FAILURE() << "buffer creation failed";
+    const auto output =
+        sirius::test::TraceContinuationImage<Real>(device, *kernel, params, kWidth, kHeight);
+    if (!output) {
+        ADD_FAILURE() << output.error().Description();
         return {};
     }
-    if (!device.WriteBuffer(*sbuf,
-                            std::as_bytes(std::span<const std::uint32_t>(starfield_dummy)))) {
-        ADD_FAILURE() << "buffer upload failed";
-        return {};
-    }
-
-    const BufferHandle binding[] = {*rbuf, *pbuf, *sbuf, *psbuf, *pobuf, *pibuf};
-    for (std::uint32_t origin_y = 0; origin_y < kHeight; origin_y += kTileHeight) {
-        const std::uint32_t band_height = std::min(kTileHeight, kHeight - origin_y);
-        params[31] = 0.0f;
-        params[32] = static_cast<float>(origin_y);
-        params[33] = static_cast<float>(kWidth);
-        params[34] = static_cast<float>(band_height);
-        std::fill(tile_radiance.begin(), tile_radiance.end(), 0.0f);
-        if (!device.WriteBuffer(*rbuf, std::as_bytes(std::span<const float>(tile_radiance))) ||
-            !device.WriteBuffer(*pbuf, std::as_bytes(std::span<const float>(params)))) {
-            ADD_FAILURE() << "tile upload failed at row " << origin_y;
-            return {};
-        }
-        const auto dispatched =
-            device.Dispatch(*kernel, binding, (kWidth + 7) / 8, (band_height + 7) / 8, 1);
-        if (!dispatched) {
-            ADD_FAILURE() << "tile row " << origin_y << ": " << dispatched.error().Description();
-            return {};
-        }
-        if (!device.ReadBuffer(*rbuf, std::as_writable_bytes(std::span<float>(tile_radiance)))) {
-            ADD_FAILURE() << "tile readback failed at row " << origin_y;
-            return {};
-        }
-        const std::size_t band_values = static_cast<std::size_t>(kWidth) * band_height * 4;
-        const std::size_t output_offset = static_cast<std::size_t>(origin_y) * kWidth * 4;
-        std::copy_n(tile_radiance.begin(), band_values, radiance.begin() + output_offset);
-    }
-    return radiance;
+    return *output;
 }
 #endif
 
@@ -295,7 +237,7 @@ TEST(KernelTrace, Fp64RungAgreesWithFp32OnKerrScene) {
     ASSERT_FALSE(spirv32.empty()) << "trace.spv missing";
     ASSERT_FALSE(spirv64.empty()) << "trace_fp64.spv missing";
 
-    const auto r32 = RunKerrScene(**device, spirv32);
+    const auto r32 = RunKerrScene<float>(**device, spirv32);
     ASSERT_FALSE(r32.empty());
     if (!(*device)->Info().supports_fp64) {
         const auto refused = (*device)->LoadKernel(spirv64);
@@ -309,7 +251,7 @@ TEST(KernelTrace, Fp64RungAgreesWithFp32OnKerrScene) {
         return;
     }
     RecordProperty("fp64_evidence", "native_comparison_executed");
-    const auto r64 = RunKerrScene(**device, spirv64);
+    const auto r64 = RunKerrScene<double>(**device, spirv64);
     ASSERT_EQ(r32.size(), r64.size());
     ASSERT_FALSE(r64.empty());
 
@@ -383,8 +325,8 @@ TEST(KernelTrace, CompensatedRungTracksFp64AtLeastAsWellAsFp32) {
     ASSERT_FALSE(spirvC.empty()) << "trace_fp32comp.spv missing";
     ASSERT_FALSE(spirv64.empty());
 
-    const auto r32 = RunKerrScene(**device, spirv32);
-    const auto rC = RunKerrScene(**device, spirvC);
+    const auto r32 = RunKerrScene<float>(**device, spirv32);
+    const auto rC = RunKerrScene<float>(**device, spirvC);
     ASSERT_EQ(rC.size(), r32.size());
     ASSERT_FALSE(rC.empty());
 
@@ -411,7 +353,7 @@ TEST(KernelTrace, CompensatedRungTracksFp64AtLeastAsWellAsFp32) {
         return;
     }
     RecordProperty("fp64_evidence", "native_comparison_executed");
-    const auto r64 = RunKerrScene(**device, spirv64);
+    const auto r64 = RunKerrScene<double>(**device, spirv64);
     ASSERT_EQ(rC.size(), r64.size());
     double sum_c64 = 0.0, sum_3264 = 0.0;
     for (std::size_t i = 0; i < rC.size(); ++i) {
@@ -425,6 +367,281 @@ TEST(KernelTrace, CompensatedRungTracksFp64AtLeastAsWellAsFp32) {
               << " mean|comp-fp32|=" << mean_c32 << "\n";
     EXPECT_LE(mean_c64, mean_3264 * 1.5 + 1e-9)
         << "compensation made the fp64 tracking worse, which defeats the rung";
+#endif
+}
+
+#ifdef SIRIUS_KERNEL_DIR
+// Direct production trace ABI. A one-pixel launch has seven valid bindings;
+// the empty CSR covers every sky cell so the pupil-bundle diagnostic never
+// relies on an out-of-bounds dummy index. No production timing/state hook.
+std::array<float, sirius::render::kTraceParameterCount> FlatBoundaryTraceParams() {
+    std::array<float, sirius::render::kTraceParameterCount> p{};
+    p[0] = p[1] = p[33] = p[34] = 1.0f;
+    p[7] = 3.0f;
+    p[10] = p[14] = p[18] = 1.0f;
+    p[19] = 0.5f;
+    p[20] = 1.0f;
+    p[21] = 128.0f;
+    p[22] = 100.0f;
+    p[23] = 0.001f;
+    p[24] = 8.0f;
+    p[25] = 5.0f;
+    p[26] = 1.0f;
+    p[28] = 6.0f;
+    p[29] = 8.0f;
+    p[30] = 1.0e7f;
+    p[36] = p[37] = 1.0f;
+    p[39] = p[40] = p[42] = 1.0f;
+    p[44] = p[45] = p[66] = p[67] = 0.5f;
+    p[50] = p[51] = 1.0f;
+    p[53] = 50.0f;
+    p[54] = 2.8f;
+    p[55] = 10.0f;
+    p[57] = 0.001f;
+    p[58] = 1.0f;
+    p[60] = 0.1f;
+    p[61] = p[62] = 1.0f;
+    p[63] = 64.0f;
+    return p;
+}
+
+template <typename Real>
+sirius::base::Expected<std::array<float, 4>> TracePixel(
+    sirius::test::TraceContinuationProbe<Real>& probe,
+    const std::array<float, sirius::render::kTraceParameterCount>& parameters) {
+    auto result = probe.RunRegion(parameters);
+    if (!result) return std::unexpected(result.error());
+    if (result->size() != 4)
+        return sirius::base::Fail(sirius::base::ErrorDomain::kKernel, "trace pixel",
+                                  "wrong output extent");
+    return std::array<float, 4>{(*result)[0], (*result)[1], (*result)[2], (*result)[3]};
+}
+
+#endif
+
+TEST(KernelTrace, ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs) {
+#ifdef SIRIUS_KERNEL_DIR
+    const auto devices = EnumerateVulkanDevices();
+    ASSERT_TRUE(devices.has_value()) << devices.error().Description();
+    if (devices->empty()) GTEST_SKIP() << "no Vulkan device present";
+    const auto selected = ResolveVulkanDeviceIndex(*devices);
+    ASSERT_TRUE(selected.has_value()) << selected.error().Description();
+    auto opened = CreateVulkanDevice(*selected);
+    ASSERT_TRUE(opened.has_value()) << opened.error().Description();
+    auto& device = **opened;
+    for (const char* name : {"trace.spv", "trace_fp32comp.spv", "trace_fp64.spv"}) {
+        SCOPED_TRACE(name);
+        const auto words = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/" + name);
+        ASSERT_FALSE(words.empty());
+        const auto kernel = device.LoadKernel(words);
+        if (std::string(name) == "trace_fp64.spv" && !device.Info().supports_fp64) {
+            ASSERT_FALSE(kernel.has_value());
+            EXPECT_EQ(kernel.error().domain(), sirius::base::ErrorDomain::kKernel);
+            EXPECT_NE(kernel.error().detail().find("shaderFloat64"), std::string::npos);
+            RecordProperty("fp64_evidence", "unsupported_kernel_declined");
+            continue;
+        }
+        ASSERT_TRUE(kernel.has_value());
+        const auto run = [&]<typename Real>() {
+            sirius::test::TraceContinuationProbe<Real> probe(device, *kernel);
+            const auto prepared = probe.Prepare();
+            ASSERT_TRUE(prepared.has_value()) << prepared.error().Description();
+            // Independent Minkowski solution: X_direction=lambda*screen,
+            // V_direction=screen, X_position=screen, V_position=0. Both labelled
+            // pairs must survive regardless of which one feeds the beam image.
+            const auto check_columns = [&](Real affine) {
+                ASSERT_EQ(probe.Records().size(), 1U);
+                const auto& record = probe.Records()[0];
+                using Record = sirius::render::TraceContinuationRecord<Real>;
+                const Real seed = Real(0.001f);
+                const double tolerance = sizeof(Real) == 8 ? 1e-12 : 1e-8;
+                const std::array<std::array<Real, 4>, 2> screens{
+                    std::array<Real, 4>{0, 0, 0, -seed}, std::array<Real, 4>{0, 0, seed, 0}};
+                EXPECT_NEAR(record.physical[Record::kIntegration][1], affine, tolerance);
+                for (std::size_t column = 0; column < 4; ++column) {
+                    for (std::size_t component = 0; component < 4; ++component) {
+                        const Real screen = screens[column % 2][component];
+                        const Real x = column < 2 ? affine * screen : screen;
+                        const Real velocity = column < 2 ? screen : Real(0);
+                        EXPECT_NEAR(record.physical[Record::kPositionColumns + column][component],
+                                    x, tolerance)
+                            << column << component;
+                        EXPECT_NEAR(record.physical[Record::kCovariantColumns + column][component],
+                                    velocity, tolerance)
+                            << column << component;
+                    }
+                }
+            };
+            auto p = FlatBoundaryTraceParams();
+            p[41] = p[56] = 1.0f;  // Pupil Jacobi state, empty actual catalogue.
+            const auto large_step = TracePixel(probe, p);
+            ASSERT_TRUE(large_step.has_value()) << large_step.error().Description();
+            ASSERT_NO_FATAL_FAILURE(check_columns(Real(2)));
+            p[24] = 0.75f;
+            const auto small_step = TracePixel(probe, p);
+            ASSERT_TRUE(small_step.has_value()) << small_step.error().Description();
+            ASSERT_NO_FATAL_FAILURE(check_columns(Real(2)));
+            EXPECT_GT(probe.Records()[0].control[3], 1U);
+            p[56] = 0.0f;
+            const auto parallel = TracePixel(probe, p);
+            ASSERT_TRUE(parallel.has_value()) << parallel.error().Description();
+            EXPECT_NEAR((*parallel)[3], 1.0f, 3.0e-5f);
+            ASSERT_NO_FATAL_FAILURE(check_columns(Real(2)));
+            p[56] = 1.0f;
+            // In flat spacetime xi=lambda*epsilon at a translated observer. The
+            // existing geometric alpha is lambda/R, not the angular-map Jacobian.
+            // R=5, x_launch=3 => lambda=2. Overshot endpoints give a different ratio.
+            for (const auto& rgba : {*large_step, *small_step}) {
+                for (float value : rgba) EXPECT_TRUE(std::isfinite(value));
+                EXPECT_NEAR(rgba[3], 2.0f / 5.0f, 3.0e-5f);
+            }
+            p[7] = 4.0f;
+            p[24] = 8.0f;
+            const auto translated = TracePixel(probe, p);
+            ASSERT_TRUE(translated.has_value()) << translated.error().Description();
+            EXPECT_NEAR((*translated)[3], 1.0f / 5.0f, 3.0e-5f);
+            ASSERT_NO_FATAL_FAILURE(check_columns(Real(1)));
+            p[7] = 5.0f;
+            const auto at_surface = TracePixel(probe, p);
+            ASSERT_TRUE(at_surface.has_value()) << at_surface.error().Description();
+            for (float value : *at_surface) EXPECT_TRUE(std::isfinite(value));
+            EXPECT_NEAR((*at_surface)[3], 0.0f, 3.0e-5f);
+            ASSERT_NO_FATAL_FAILURE(check_columns(Real(0)));
+
+            // An exterior outward launch has no represented source-sphere event.
+            // The real typed failure must not publish a fabricated black/NaN sample.
+            p[7] = 6.0f;
+            const auto invalid = TracePixel(probe, p);
+            ASSERT_FALSE(invalid.has_value());
+            ASSERT_EQ(probe.Records().size(), 1U);
+            EXPECT_EQ(probe.Records()[0].control[0],
+                      static_cast<std::uint32_t>(sirius::render::TracePhase::Terminal));
+            EXPECT_EQ(
+                probe.Records()[0].control[1],
+                static_cast<std::uint32_t>(sirius::render::TraceTermination::UnrepresentedEvent));
+            const auto failed_record = probe.Records()[0];
+            const auto unpublished = probe.ReadRadiance();
+            ASSERT_TRUE(unpublished.has_value());
+            for (const float value : *unpublished) EXPECT_FLOAT_EQ(value, 0.0f);
+            const auto declined_finalize = probe.FinalizeFailedStateForControl();
+            ASSERT_TRUE(declined_finalize.has_value()) << declined_finalize.error().Description();
+            EXPECT_EQ(probe.Records()[0].control, failed_record.control);
+            EXPECT_EQ(probe.Records()[0].identity, failed_record.identity);
+            EXPECT_EQ(probe.Records()[0].physical, failed_record.physical);
+            EXPECT_EQ(probe.Records()[0].source, failed_record.source);
+            EXPECT_EQ(probe.Records()[0].volume, failed_record.volume);
+            const auto after_finalize = probe.ReadRadiance();
+            ASSERT_TRUE(after_finalize.has_value());
+            EXPECT_EQ(*after_finalize, *unpublished);
+            p[7] = 3.0f;
+            for (int sample_index : {1, 2}) {
+                p[46] = static_cast<float>(sample_index);
+                const auto before_submissions = probe.PhysicalSubmissions();
+                const auto retained = TracePixel(probe, p);
+                EXPECT_FALSE(retained.has_value());
+                EXPECT_EQ(probe.PhysicalSubmissions(), before_submissions)
+                    << "failed sample batch must not dispatch a fresh later sample";
+                const auto retained_output = probe.ReadRadiance();
+                ASSERT_TRUE(retained_output.has_value());
+                EXPECT_EQ(*retained_output, *unpublished);
+            }
+            // A new sample-zero accumulation must recover, proving both the
+            // valid launch and prior typed failure controls actually executed.
+            p[46] = 0.0f;
+            const auto reset = TracePixel(probe, p);
+            ASSERT_TRUE(reset.has_value()) << reset.error().Description();
+            for (float value : *reset) EXPECT_TRUE(std::isfinite(value));
+            EXPECT_NEAR((*reset)[3], 2.0f / 5.0f, 3.0e-5f);
+            p[46] = 1.0f;
+            const auto before_valid_sample = probe.PhysicalSubmissions();
+            const auto continued = TracePixel(probe, p);
+            ASSERT_TRUE(continued.has_value()) << continued.error().Description();
+            EXPECT_GT(probe.PhysicalSubmissions(), before_valid_sample);
+            EXPECT_EQ(*continued, *reset)
+                << "same valid sample must average normally after an explicit restart";
+        };
+        if (std::string(name) == "trace_fp64.spv") {
+            ASSERT_NO_FATAL_FAILURE(run.template operator()<double>());
+        } else {
+            ASSERT_NO_FATAL_FAILURE(run.template operator()<float>());
+        }
+    }
+#else
+    GTEST_SKIP() << "trace kernels not compiled";
+#endif
+}
+
+TEST(KernelTrace, ActualTraceFiniteSphereExcludesLaterDiskAndVolumeAcrossRungs) {
+#ifdef SIRIUS_KERNEL_DIR
+    const auto devices = EnumerateVulkanDevices();
+    ASSERT_TRUE(devices.has_value()) << devices.error().Description();
+    if (devices->empty()) GTEST_SKIP() << "no Vulkan device present";
+    const auto selected = ResolveVulkanDeviceIndex(*devices);
+    ASSERT_TRUE(selected.has_value()) << selected.error().Description();
+    auto opened = CreateVulkanDevice(*selected);
+    ASSERT_TRUE(opened.has_value()) << opened.error().Description();
+    auto& device = **opened;
+    for (const char* name : {"trace.spv", "trace_fp32comp.spv", "trace_fp64.spv"}) {
+        SCOPED_TRACE(name);
+        const auto words = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/" + name);
+        ASSERT_FALSE(words.empty());
+        const auto kernel = device.LoadKernel(words);
+        if (std::string(name) == "trace_fp64.spv" && !device.Info().supports_fp64) {
+            ASSERT_FALSE(kernel.has_value());
+            EXPECT_EQ(kernel.error().domain(), sirius::base::ErrorDomain::kKernel);
+            EXPECT_NE(kernel.error().detail().find("shaderFloat64"), std::string::npos);
+            RecordProperty("fp64_evidence", "unsupported_kernel_declined");
+            continue;
+        }
+        ASSERT_TRUE(kernel.has_value());
+        const auto run = [&]<typename Real>() {
+            sirius::test::TraceContinuationProbe<Real> probe(device, *kernel);
+            const auto prepared = probe.Prepare();
+            ASSERT_TRUE(prepared.has_value()) << prepared.error().Description();
+            auto p = FlatBoundaryTraceParams();
+            // The material transfer authority requires positive M. This weak-field
+            // Schwarzschild ray leaves R=5 before it can reach the r>=6 annulus,
+            // crosses z=0 near x=7, and therefore meets material before R=12.
+            p[3] = 1.0e-6f;
+            p[9] = 1.0f;
+            p[12] = -0.25f;
+            p[16] = 0.25f;
+            const auto short_clear = TracePixel(probe, p);
+            ASSERT_TRUE(short_clear.has_value()) << short_clear.error().Description();
+            p[25] = 12.0f;
+            const auto long_clear = TracePixel(probe, p);
+            ASSERT_TRUE(long_clear.has_value()) << long_clear.error().Description();
+            for (int volume : {0, 1}) {
+                SCOPED_TRACE(volume == 0 ? "opaque disk" : "volumetric disk");
+                p[27] = 1.0f;
+                p[59] = static_cast<float>(volume);
+                p[25] = 5.0f;
+                const auto short_material = TracePixel(probe, p);
+                ASSERT_TRUE(short_material.has_value()) << short_material.error().Description();
+                p[25] = 12.0f;
+                const auto long_material = TracePixel(probe, p);
+                ASSERT_TRUE(long_material.has_value()) << long_material.error().Description();
+                float positive_control_difference = 0.0f;
+                for (std::size_t channel = 0; channel < 3; ++channel) {
+                    ASSERT_TRUE(std::isfinite((*short_material)[channel]));
+                    ASSERT_TRUE(std::isfinite((*long_material)[channel]));
+                    EXPECT_NEAR((*short_material)[channel], (*short_clear)[channel], 3.0e-5f);
+                    positive_control_difference +=
+                        std::abs((*long_material)[channel] - (*long_clear)[channel]);
+                }
+                EXPECT_GT(positive_control_difference, 0.01f)
+                    << "larger sphere must expose actual material; disabling the consumer is not a "
+                       "pass";
+            }
+        };
+        if (std::string(name) == "trace_fp64.spv") {
+            ASSERT_NO_FATAL_FAILURE(run.template operator()<double>());
+        } else {
+            ASSERT_NO_FATAL_FAILURE(run.template operator()<float>());
+        }
+    }
+#else
+    GTEST_SKIP() << "trace kernels not compiled";
 #endif
 }
 

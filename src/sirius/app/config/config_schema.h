@@ -8,12 +8,17 @@
 #include "sirius/core/disk/disk_defaults.h"
 #include "sirius/core/feature_defaults.h"
 #include "sirius/core/metrics/registry.h"
+#include "sirius/core/point_starfield_config.h"
 #include "sirius/core/postprocess.h"
 
 #include <nlohmann/json.hpp>
 
+#include <cmath>
+#include <cstdint>
+#include <limits>
 #include <numbers>
 #include <optional>
+#include <stdexcept>
 #include <string>
 
 namespace sirius::app {
@@ -113,6 +118,7 @@ struct SiriusConfig {
     bool disk_enabled = true;
     bool doppler_beaming = true;
     bool point_starfield = false;
+    core::PointStarfieldConfig point_starfield_config;
     bool ray_bundles = false;
     std::string color_mode = "TrueColor";
 
@@ -135,6 +141,38 @@ void Read(const nlohmann::json& json, const char* key, T& value) {
     if (const auto item = json.find(key); item != json.end()) {
         item->get_to(value);
     }
+}
+
+// Catalogue identities must not wrap negative/oversized integers or truncate
+// fractional JSON numbers into a different deterministic catalogue.
+inline void ReadPointStarfieldIndex(const nlohmann::json& json, const char* key,
+                                    std::uint32_t& value) {
+    if (const auto item = json.find(key); item != json.end()) {
+        const double number = item->is_number() ? item->get<double>() : -1;
+        if (!std::isfinite(number) || number < 0 ||
+            number > std::numeric_limits<std::uint32_t>::max() || std::trunc(number) != number)
+            throw std::invalid_argument(std::string("pointStarfieldConfig.") + key +
+                                        " must be an integer between 0 and 4294967295");
+        // Every admitted uint32_t is exactly represented by double.
+        value = static_cast<std::uint32_t>(number);
+    }
+}
+
+inline nlohmann::json PointStarfieldJson(const core::PointStarfieldConfig& config) {
+    return {{"starCount", config.star_count},
+            {"minDistancePc", config.min_distance_pc},
+            {"maxDistancePc", config.max_distance_pc},
+            {"brightnessScale", config.brightness_scale},
+            {"seed", config.seed}};
+}
+
+inline void ReadPointStarfield(const nlohmann::json& json, core::PointStarfieldConfig& config) {
+    if (!json.is_object()) throw std::invalid_argument("pointStarfieldConfig must be an object");
+    ReadPointStarfieldIndex(json, "starCount", config.star_count);
+    ReadPointStarfieldIndex(json, "seed", config.seed);
+    Read(json, "minDistancePc", config.min_distance_pc);
+    Read(json, "maxDistancePc", config.max_distance_pc);
+    Read(json, "brightnessScale", config.brightness_scale);
 }
 
 }  // namespace detail
@@ -317,6 +355,7 @@ inline void to_json(nlohmann::json& json, const SiriusConfig& config) {
             {"diskEnabled", config.disk_enabled},
             {"dopplerBeaming", config.doppler_beaming},
             {"pointStarfield", config.point_starfield},
+            {"pointStarfieldConfig", detail::PointStarfieldJson(config.point_starfield_config)},
             {"rayBundles", config.ray_bundles},
             {"colorMode", config.color_mode}};
 }
@@ -334,6 +373,8 @@ inline void from_json(const nlohmann::json& json, SiriusConfig& config) {
     detail::Read(json, "diskEnabled", config.disk_enabled);
     detail::Read(json, "dopplerBeaming", config.doppler_beaming);
     detail::Read(json, "pointStarfield", config.point_starfield);
+    if (const auto point = json.find("pointStarfieldConfig"); point != json.end())
+        detail::ReadPointStarfield(*point, config.point_starfield_config);
     detail::Read(json, "rayBundles", config.ray_bundles);
     detail::Read(json, "colorMode", config.color_mode);
 }

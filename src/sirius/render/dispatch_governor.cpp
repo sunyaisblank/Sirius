@@ -60,23 +60,41 @@ bool BandController::Record(std::int64_t dispatched_pixels, double measured_ms) 
         pixels_ = safety_pixel_cap_;
         return true;
     }
-    if (!Enabled()) return true;
+    UpdateSoftSizing(dispatched_pixels, measured_ms);
+    return true;
+}
+
+void BandController::FinalizeRegionFeedback(std::int64_t dispatched_pixels,
+                                            double peak_measured_ms) {
+    SIRIUS_PRE(dispatched_pixels > 0 && dispatched_pixels <= max_pixels_);
+    SIRIUS_PRE(std::isfinite(peak_measured_ms) && peak_measured_ms >= 0.0 &&
+               peak_measured_ms <= kDispatchStopMs);
+    if (!safety_fallback_) UpdateSoftSizing(dispatched_pixels, peak_measured_ms);
+}
+
+void BandController::UpdateSoftSizing(std::int64_t dispatched_pixels, double measured_ms) {
+    if (!Enabled()) return;
     const double ratio = measured_ms < target_ms_   ? kBandGrowthCap
                          : measured_ms > target_ms_ ? 0.5
                                                     : 1.0;
     const double scaled = std::floor(static_cast<double>(dispatched_pixels) * ratio);
     // Clamp before conversion; the next band also honours row and area caps.
     pixels_ = static_cast<std::int64_t>(std::clamp(scaled, 1.0, static_cast<double>(max_pixels_)));
-    return true;
 }
 
 Expected<void> ExecuteDispatchRegions(
     const DispatchRegion& logical_region, int samples_per_pixel, BandController& bands,
-    const std::function<Expected<double>(const DispatchRegion&, const CameraSample&, int)>& submit,
+    std::uint32_t max_submissions_per_sample,
+    const std::function<Expected<DispatchContinuationResult>(
+        const DispatchRegion&, const CameraSample&, int, std::uint32_t)>& submit,
     const std::function<Expected<void>(const DispatchRegion&)>& completed,
     const std::function<bool()>& should_cancel) {
     SIRIUS_PRE(logical_region.width > 0 && logical_region.height > 0);
     SIRIUS_PRE(samples_per_pixel >= 1 && samples_per_pixel <= 4096);
+    if (max_submissions_per_sample == 0) {
+        return Fail(ErrorDomain::kDevice, "govern Vulkan dispatch",
+                    "per-sample submission bound must be positive");
+    }
     std::vector<DispatchRegion> pending{logical_region};
     while (!pending.empty()) {
         if (should_cancel && should_cancel()) {
@@ -92,37 +110,51 @@ Expected<void> ExecuteDispatchRegions(
         }
 
         int sample_index = 0;
+        double peak_measured_ms = 0.0;
         bool retry_smaller = false;
         std::optional<base::Error> sample_error;
         ForEachCameraSample(samples_per_pixel, [&](const CameraSample& sample) {
             if (sample_error.has_value() || retry_smaller) return;
-            if (should_cancel && should_cancel()) {
-                sample_error =
-                    base::Error{ErrorDomain::kInternal, "render Vulkan frame", "cancelled"};
-                return;
+            for (std::uint32_t ordinal = 0; ordinal < max_submissions_per_sample; ++ordinal) {
+                if (should_cancel && should_cancel()) {
+                    sample_error =
+                        base::Error{ErrorDomain::kInternal, "render Vulkan frame", "cancelled"};
+                    return;
+                }
+                const auto result = submit(region, sample, sample_index, ordinal);
+                if (!result) {
+                    sample_error = result.error();
+                    return;
+                }
+                if (!bands.Record(region.Pixels(), result->submit_wait_ms)) {
+                    sample_error = base::Error{
+                        ErrorDomain::kDevice, "govern Vulkan dispatch",
+                        std::format("refusing further submissions after {} ms for {} pixels "
+                                    "at ({}, {}) in {}x{} sample {} continuation {} "
+                                    "(invalid timing or one pixel exceeded {} ms)",
+                                    result->submit_wait_ms, region.Pixels(), region.x, region.y,
+                                    region.width, region.height, sample_index, ordinal,
+                                    kDispatchStopMs)};
+                    return;
+                }
+                peak_measured_ms = std::max(peak_measured_ms, result->submit_wait_ms);
+                if (region.Pixels() > bands.SafetyPixelCap()) {
+                    // Changing width also changes the radiance buffer stride. The
+                    // partial parent must never reach the completion callback.
+                    retry_smaller = true;
+                    return;
+                }
+                if (result->sample_complete) {
+                    ++sample_index;
+                    return;
+                }
             }
-            const auto timing = submit(region, sample, sample_index);
-            if (!timing) {
-                sample_error = timing.error();
-                return;
-            }
-            if (!bands.Record(region.Pixels(), *timing)) {
-                sample_error = base::Error{
-                    ErrorDomain::kDevice, "govern Vulkan dispatch",
-                    std::format("refusing further submissions after {} ms for {} pixels "
-                                "at ({}, {}) in {}x{} sample {} "
-                                "(invalid timing or one pixel exceeded {} ms)",
-                                *timing, region.Pixels(), region.x, region.y, region.width,
-                                region.height, sample_index, kDispatchStopMs)};
-                return;
-            }
-            if (region.Pixels() > bands.SafetyPixelCap()) {
-                // Changing width also changes the radiance buffer stride. The
-                // partial parent must never reach the completion callback.
-                retry_smaller = true;
-                return;
-            }
-            ++sample_index;
+            sample_error = base::Error{
+                ErrorDomain::kDevice, "govern Vulkan dispatch",
+                std::format("sample {} at ({}, {}) in {}x{} exhausted {} physical submissions "
+                            "without completion",
+                            sample_index, region.x, region.y, region.width, region.height,
+                            max_submissions_per_sample)};
         });
         if (sample_error.has_value()) {
             return std::unexpected(std::move(*sample_error));
@@ -134,11 +166,28 @@ Expected<void> ExecuteDispatchRegions(
         if (should_cancel && should_cancel()) {
             return Fail(ErrorDomain::kInternal, "render Vulkan frame", "cancelled");
         }
+        bands.FinalizeRegionFeedback(region.Pixels(), peak_measured_ms);
         if (auto accepted = completed(region); !accepted) {
             return std::unexpected(accepted.error());
         }
     }
     return {};
+}
+
+Expected<void> ExecuteDispatchRegions(
+    const DispatchRegion& logical_region, int samples_per_pixel, BandController& bands,
+    const std::function<Expected<double>(const DispatchRegion&, const CameraSample&, int)>& submit,
+    const std::function<Expected<void>(const DispatchRegion&)>& completed,
+    const std::function<bool()>& should_cancel) {
+    return ExecuteDispatchRegions(
+        logical_region, samples_per_pixel, bands, 1,
+        [&](const DispatchRegion& region, const CameraSample& sample, int sample_index,
+            std::uint32_t) -> Expected<DispatchContinuationResult> {
+            const auto timing = submit(region, sample, sample_index);
+            if (!timing) return std::unexpected(timing.error());
+            return DispatchContinuationResult{*timing, true};
+        },
+        completed, should_cancel);
 }
 
 Expected<double> ResolveDispatchTargetMs(double default_target_ms) {

@@ -24,6 +24,36 @@ struct AcceptedTraceSegmentSample {
 
 namespace detail {
 
+// The retained DP increment avoids subtracting two large rounded positions.
+// Both event isolation and transport sample this same Hermite polynomial.
+struct IncrementHermite {
+    Vec4 origin;
+    Vec4 tangent;
+    Vec4 quadratic;
+    Vec4 cubic;
+    double interval;
+
+    [[nodiscard]] Vec4 Displacement(double fraction) const {
+        return (tangent + (quadratic + cubic * fraction) * fraction) * (interval * fraction);
+    }
+    [[nodiscard]] AcceptedTraceSegmentSample Sample(double fraction) const {
+        return {origin + Displacement(fraction),
+                tangent + (quadratic * 2.0 + cubic * (3.0 * fraction)) * fraction, fraction};
+    }
+    [[nodiscard]] Vec4 Acceleration(double fraction) const {
+        return (quadratic * 2.0 + cubic * (6.0 * fraction)) / interval;
+    }
+};
+
+[[nodiscard]] inline IncrementHermite MakeIncrementHermite(const Vec4& start_position,
+                                                           const Vec4& start_tangent,
+                                                           const Vec4& end_tangent, double interval,
+                                                           const Vec4& increment) {
+    const Vec4 secant = increment / interval;
+    return {start_position, start_tangent, secant * 3.0 - start_tangent * 2.0 - end_tangent,
+            start_tangent + end_tangent - secant * 2.0, interval};
+}
+
 struct UnitIntervalPolynomialRoots {
     std::array<double, 6> values{};
     int count = 0;
@@ -131,7 +161,8 @@ inline void AppendUnitRoot(UnitIntervalPolynomialRoots& roots, double root,
 
 [[nodiscard]] inline std::array<double, 7> SphericalSegmentPolynomial(
     const Vec4& start_position, const Vec4& start_tangent, const Vec4& end_position,
-    const Vec4& end_tangent, double affine_length, double boundary_radius) {
+    const Vec4& end_tangent, double affine_length, double boundary_radius,
+    const Vec4* increment = nullptr) {
     // Each spatial Hermite component is a cubic a*s^3+b*s^2+c*s+d.
     double spatial[3][4]{};
     for (int axis = 0; axis < 3; ++axis) {
@@ -145,6 +176,16 @@ inline void AppendUnitRoot(UnitIntervalPolynomialRoots& roots, double root,
         spatial[axis][3] = 2.0 * start - 2.0 * finish + start_delta + finish_delta;
     }
 
+    if (increment) {
+        const auto polynomial = MakeIncrementHermite(start_position, start_tangent, end_tangent,
+                                                     affine_length, *increment);
+        for (int axis = 0; axis < 3; ++axis) {
+            spatial[axis][0] = polynomial.origin(axis + 1);
+            spatial[axis][1] = affine_length * polynomial.tangent(axis + 1);
+            spatial[axis][2] = affine_length * polynomial.quadratic(axis + 1);
+            spatial[axis][3] = affine_length * polynomial.cubic(axis + 1);
+        }
+    }
     std::array<double, 7> coefficients{};
     coefficients[0] = -boundary_radius * boundary_radius;
     for (const auto& component : spatial) {
@@ -162,9 +203,16 @@ inline void AppendUnitRoot(UnitIntervalPolynomialRoots& roots, double root,
 
 [[nodiscard]] inline AcceptedTraceSegmentSample SampleAcceptedTraceSegment(
     const Vec4& start_position, const Vec4& start_tangent, const Vec4& end_position,
-    const Vec4& end_tangent, double affine_length, double fraction) {
+    const Vec4& end_tangent, double affine_length, double fraction, const Vec4* increment = nullptr,
+    Vec4* acceleration = nullptr) {
     SIRIUS_PRE(std::isfinite(affine_length) && affine_length > 0.0);
     SIRIUS_PRE(std::isfinite(fraction) && fraction >= 0.0 && fraction <= 1.0);
+    if (increment) {
+        const auto polynomial = detail::MakeIncrementHermite(
+            start_position, start_tangent, end_tangent, affine_length, *increment);
+        if (acceleration) *acceleration = polynomial.Acceleration(fraction);
+        return polynomial.Sample(fraction);
+    }
     const double s2 = fraction * fraction;
     const double s3 = s2 * fraction;
     const double h00 = 2.0 * s3 - 3.0 * s2 + 1.0;
@@ -176,6 +224,13 @@ inline void AppendUnitRoot(UnitIntervalPolynomialRoots& roots, double root,
     const double dh01 = -6.0 * s2 + 6.0 * fraction;
     const double dh11 = 3.0 * s2 - 2.0 * fraction;
 
+    if (acceleration) {
+        *acceleration = (start_position * (12.0 * fraction - 6.0) +
+                         start_tangent * (affine_length * (6.0 * fraction - 4.0)) +
+                         end_position * (-12.0 * fraction + 6.0) +
+                         end_tangent * (affine_length * (6.0 * fraction - 2.0))) /
+                        (affine_length * affine_length);
+    }
     return {
         start_position * h00 + start_tangent * (affine_length * h10) + end_position * h01 +
             end_tangent * (affine_length * h11),
@@ -200,7 +255,7 @@ enum class SphericalBoundarySense {
 [[nodiscard]] inline std::optional<AcceptedTraceSegmentSample> FindSphericalBoundaryEvent(
     const Vec4& start_position, const Vec4& start_tangent, const Vec4& end_position,
     const Vec4& end_tangent, double affine_length, double boundary_radius,
-    SphericalBoundarySense sense) {
+    SphericalBoundarySense sense, const Vec4* increment = nullptr) {
     if (!(std::isfinite(affine_length) && affine_length > 0.0 && std::isfinite(boundary_radius) &&
           boundary_radius > 0.0)) {
         return std::nullopt;
@@ -215,20 +270,22 @@ enum class SphericalBoundarySense {
     }
     for (int component = 0; component < 4; ++component) {
         if (!std::isfinite(start_position(component)) || !std::isfinite(start_tangent(component)) ||
-            !std::isfinite(end_position(component)) || !std::isfinite(end_tangent(component))) {
+            !std::isfinite(end_position(component)) || !std::isfinite(end_tangent(component)) ||
+            (increment && !std::isfinite((*increment)(component)))) {
             return std::nullopt;
         }
     }
 
-    const auto coefficients = detail::SphericalSegmentPolynomial(
-        start_position, start_tangent, end_position, end_tangent, affine_length, boundary_radius);
+    const auto coefficients =
+        detail::SphericalSegmentPolynomial(start_position, start_tangent, end_position, end_tangent,
+                                           affine_length, boundary_radius, increment);
     const auto roots = detail::FindPolynomialRootsOnUnitInterval(coefficients, 6);
     if (roots.count == 0) return std::nullopt;
 
     for (int root = 0; root < roots.count; ++root) {
         const double fraction = roots.values[static_cast<std::size_t>(root)];
         auto event = SampleAcceptedTraceSegment(start_position, start_tangent, end_position,
-                                                end_tangent, affine_length, fraction);
+                                                end_tangent, affine_length, fraction, increment);
         const double sampled_radius =
             std::hypot(event.position(1), event.position(2), event.position(3));
         if (!(std::isfinite(sampled_radius) && sampled_radius > 0.0)) continue;
@@ -255,10 +312,11 @@ enum class SphericalBoundarySense {
 // contact as a dark terminal event.
 [[nodiscard]] inline std::optional<AcceptedTraceSegmentSample> FindSphericalCaptureEvent(
     const Vec4& start_position, const Vec4& start_tangent, const Vec4& end_position,
-    const Vec4& end_tangent, double affine_length, double capture_radius) {
+    const Vec4& end_tangent, double affine_length, double capture_radius,
+    const Vec4* increment = nullptr) {
     return FindSphericalBoundaryEvent(start_position, start_tangent, end_position, end_tangent,
                                       affine_length, capture_radius,
-                                      SphericalBoundarySense::AnyContact);
+                                      SphericalBoundarySense::AnyContact, increment);
 }
 
 // Locate the first sampled crossing of a finite outer causal boundary on an
@@ -266,14 +324,16 @@ enum class SphericalBoundarySense {
 // the patch, but the caller never needs to impose its boundary condition there.
 [[nodiscard]] inline std::optional<AcceptedTraceSegmentSample> FindCausalBoundaryEvent(
     const Vec4& start_position, const Vec4& start_tangent, const Vec4& end_position,
-    const Vec4& end_tangent, double affine_length, double boundary_radius) {
+    const Vec4& end_tangent, double affine_length, double boundary_radius,
+    const Vec4* increment = nullptr) {
     if (!(std::isfinite(affine_length) && affine_length > 0.0 && std::isfinite(boundary_radius) &&
           boundary_radius > 0.0)) {
         return std::nullopt;
     }
     const auto radius_at = [&](double fraction) {
-        const auto sample = SampleAcceptedTraceSegment(start_position, start_tangent, end_position,
-                                                       end_tangent, affine_length, fraction);
+        const auto sample =
+            SampleAcceptedTraceSegment(start_position, start_tangent, end_position, end_tangent,
+                                       affine_length, fraction, increment);
         return std::pair{sample,
                          std::hypot(sample.position(1), sample.position(2), sample.position(3))};
     };

@@ -11,6 +11,7 @@
 #include <vulkan/vulkan.h>
 
 #include <cstdint>
+#include <limits>
 #include <map>
 #include <vector>
 
@@ -39,6 +40,11 @@ class VulkanDevice final : public ComputeDevice {
 
     [[nodiscard]] base::Expected<BufferHandle> CreateBuffer(std::uint64_t size_bytes,
                                                             BufferUsage usage) override;
+
+    [[nodiscard]] base::Expected<void> SetBufferAllocationLimit(std::uint64_t bytes) override;
+    [[nodiscard]] std::uint64_t BufferAllocationBytes() const noexcept override {
+        return buffer_allocation_bytes_;
+    }
 
     [[nodiscard]] base::Expected<void> WriteBuffer(BufferHandle buffer,
                                                    std::span<const std::byte> data) override;
@@ -78,7 +84,7 @@ class VulkanDevice final : public ComputeDevice {
     };
 
     [[nodiscard]] base::Expected<Pipeline*> GetOrCreatePipeline(
-        KernelHandle kernel, std::span<const BufferHandle> buffers);
+        KernelHandle kernel, std::span<const BufferHandle> buffers, bool* created);
 
     VkInstance instance_ = VK_NULL_HANDLE;
     VkPhysicalDevice physical_ = VK_NULL_HANDLE;
@@ -91,6 +97,8 @@ class VulkanDevice final : public ComputeDevice {
 
     std::vector<VkShaderModule> kernels_;
     std::vector<Buffer> buffers_;
+    std::uint64_t buffer_allocation_bytes_ = 0;
+    std::uint64_t buffer_allocation_limit_ = std::numeric_limits<std::uint64_t>::max();
     std::map<PipelineKey, Pipeline> pipelines_;
 };
 

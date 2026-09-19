@@ -1,12 +1,11 @@
 #pragma once
 
 // Render progress, ETA estimation, and a cancellation token. Ported from
-// SNPR001A.h. ETA uses an exponentially weighted moving average of the tile
-// rate so the estimate stays stable under bursty tile completion.
+// SNPR001A.h. ETA uses complete elapsed render time so a burst of finished
+// tiles cannot discard the time spent tracing that worker wave.
 
 #include <atomic>
 #include <chrono>
-#include <cmath>
 #include <cstdint>
 #include <functional>
 #include <mutex>
@@ -29,20 +28,22 @@ class CancellationToken {
 using ProgressCallback =
     std::function<void(float progress, int tilesComplete, int tilesTotal, double etaSeconds)>;
 
-// Tracks tile completion and derives a smoothed ETA.
+// Tracks tile completion and estimates remaining time from overall throughput.
 class ProgressTracker {
   public:
+    using Clock = std::chrono::steady_clock;
+    using NowFunction = std::function<Clock::time_point()>;
+
+    explicit ProgressTracker(NowFunction now = Clock::now) : now_(std::move(now)) {}
+
     // Begin timing and reset counters.
     void Start() {
         std::lock_guard<std::mutex> lock(mutex_);
-        start_time_ = std::chrono::high_resolution_clock::now();
-        last_update_time_ = start_time_;
+        start_time_ = now_();
         tiles_complete_ = 0;
         tiles_total_ = 0;
         samples_complete_ = 0;
         samples_total_ = 0;
-        smoothed_tiles_per_second_ = 0.0;
-        last_tile_count_ = 0;
     }
 
     // Set the total tile and sample counts.
@@ -53,7 +54,7 @@ class ProgressTracker {
             static_cast<std::int64_t>(tiles) * static_cast<std::int64_t>(samples_per_tile);
     }
 
-    // Record one completed tile; updates the smoothed rate and fires the callback.
+    // Record one completed tile and fire the callback.
     void CompleteTile(int samples_in_tile = 1) {
         ProgressCallback callback;
         float progress = 0.0f;
@@ -65,27 +66,7 @@ class ProgressTracker {
             ++tiles_complete_;
             samples_complete_ += samples_in_tile;
 
-            const auto now = std::chrono::high_resolution_clock::now();
-            const double dt = std::chrono::duration<double>(now - last_update_time_).count();
-
-            if (dt > 0.1) {  // Update at most every 100 ms to suppress noise.
-                const int tiles_processed = tiles_complete_ - last_tile_count_;
-                const double current_rate = tiles_processed / dt;
-
-                // alpha = 0.3 balances responsiveness against stability.
-                constexpr double kSmoothingAlpha = 0.3;
-                if (smoothed_tiles_per_second_ <= 0) {
-                    smoothed_tiles_per_second_ = current_rate;
-                } else {
-                    smoothed_tiles_per_second_ =
-                        kSmoothingAlpha * current_rate +
-                        (1.0 - kSmoothingAlpha) * smoothed_tiles_per_second_;
-                }
-
-                last_update_time_ = now;
-                last_tile_count_ = tiles_complete_;
-            }
-
+            const auto now = now_();
             complete = tiles_complete_;
             total = tiles_total_;
             progress = ProgressLocked();
@@ -111,14 +92,14 @@ class ProgressTracker {
 
     double GetElapsedSeconds() const {
         std::lock_guard<std::mutex> lock(mutex_);
-        const auto now = std::chrono::high_resolution_clock::now();
+        const auto now = now_();
         return std::chrono::duration<double>(now - start_time_).count();
     }
 
     // Estimated seconds remaining (-1 when not yet estimable).
     double GetEta() const {
         std::lock_guard<std::mutex> lock(mutex_);
-        return EtaLocked(std::chrono::high_resolution_clock::now());
+        return EtaLocked(now_());
     }
 
     // ETA formatted "Xh Ym Zs".
@@ -140,14 +121,7 @@ class ProgressTracker {
 
     double GetTilesPerSecond() const {
         std::lock_guard<std::mutex> lock(mutex_);
-        if (smoothed_tiles_per_second_ > 0) {
-            return smoothed_tiles_per_second_;
-        }
-        const double elapsed =
-            std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - start_time_)
-                .count();
-        if (elapsed <= 0) return 0.0;
-        return static_cast<double>(tiles_complete_) / elapsed;
+        return RateLocked(now_());
     }
 
     int GetTilesComplete() const {
@@ -159,6 +133,7 @@ class ProgressTracker {
         return tiles_total_;
     }
     CancellationToken& GetCancellationToken() { return cancel_token_; }
+    const CancellationToken& GetCancellationToken() const { return cancel_token_; }
 
     void SetCallback(ProgressCallback callback) {
         std::lock_guard<std::mutex> lock(mutex_);
@@ -171,23 +146,22 @@ class ProgressTracker {
         return static_cast<float>(tiles_complete_) / static_cast<float>(tiles_total_);
     }
 
-    [[nodiscard]] double EtaLocked(std::chrono::high_resolution_clock::time_point now) const {
+    [[nodiscard]] double EtaLocked(Clock::time_point now) const {
         const int remaining = tiles_total_ - tiles_complete_;
         if (remaining <= 0) return 0.0;
 
-        double rate = smoothed_tiles_per_second_;
-        if (rate <= 0) {
-            const double elapsed = std::chrono::duration<double>(now - start_time_).count();
-            if (tiles_complete_ > 0 && elapsed > 0) {
-                rate = static_cast<double>(tiles_complete_) / elapsed;
-            }
-        }
+        const double rate = RateLocked(now);
         if (rate <= 0) return -1.0;
         return static_cast<double>(remaining) / rate;
     }
 
-    std::chrono::high_resolution_clock::time_point start_time_;
-    std::chrono::high_resolution_clock::time_point last_update_time_;
+    [[nodiscard]] double RateLocked(Clock::time_point now) const {
+        const double elapsed = std::chrono::duration<double>(now - start_time_).count();
+        return elapsed > 0 ? static_cast<double>(tiles_complete_) / elapsed : 0.0;
+    }
+
+    NowFunction now_;
+    Clock::time_point start_time_;
     int tiles_complete_ = 0;
     int tiles_total_ = 0;
     std::int64_t samples_complete_ = 0;
@@ -195,8 +169,6 @@ class ProgressTracker {
     CancellationToken cancel_token_;
     ProgressCallback callback_;
 
-    double smoothed_tiles_per_second_ = 0.0;
-    int last_tile_count_ = 0;
     mutable std::mutex mutex_;
 };
 

@@ -257,6 +257,27 @@ public bool FindSphericalBoundaryEvent(
           IsFiniteAcceptedSegmentValue(finish) &&
           IsFiniteAcceptedSegmentValue(finishVelocity))) return false;
 
+    // A cubic Hermite segment lies in the convex hull of these Bezier
+    // controls. A hull strictly inside the sphere cannot touch its surface,
+    // including hidden exit/re-entry between inside endpoints. Keep a rounding
+    // margin and fall through to root isolation for every uncertain hull.
+    Vec4Cart control1 = AddVec4Cart(
+        start, ScaleVec4Cart(startVelocity, affineLength / Real(3.0f)));
+    Vec4Cart control2 = AddVec4Cart(
+        finish, ScaleVec4Cart(finishVelocity, -affineLength / Real(3.0f)));
+    Real radiusSquared = boundaryRadius * boundaryRadius;
+    Real interiorLimit = radiusSquared *
+        (Real(1.0f) - Real(64.0f) * PolynomialEpsilon());
+    Real startSquared = start.x * start.x + start.y * start.y + start.z * start.z;
+    Real finishSquared = finish.x * finish.x + finish.y * finish.y + finish.z * finish.z;
+    Real control1Squared = control1.x * control1.x + control1.y * control1.y +
+                           control1.z * control1.z;
+    Real control2Squared = control2.x * control2.x + control2.y * control2.y +
+                           control2.z * control2.z;
+    if (isfinite(interiorLimit) && startSquared < interiorLimit &&
+        finishSquared < interiorLimit && control1Squared < interiorLimit &&
+        control2Squared < interiorLimit) return false;
+
     Real coefficients[7];
     SphericalSegmentPolynomial(start, startVelocity, finish, finishVelocity,
                                affineLength, boundaryRadius, coefficients);

@@ -108,11 +108,36 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    CameraContinuousProjection.GeometryAndDifferentialAcrossOutputCrop
+    CameraContinuousProjection.FixedPupilAndObserverArePreserved
+    CameraContinuousProjection.FisheyeCropMaskCentreAndAntipodalRim
+    CameraContinuousProjection.RefinementDeclinesLostCoordinatesAndDirections
+    CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets
+    CameraContinuousProjection.CropTranslationDoesNotRenormalizeOrMaskProjection
+    CameraContinuousProjection.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff
+    CameraContinuousProjection.InvalidAndUnsupportedProjectionPublishesNoRay
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     CameraFactoryTest.CreatePinhole
     CameraFactoryTest.CreateThinLens
     CameraFactoryTest.CreateFisheye
     CameraFactoryTest.MalformedLensValueFailsClosed
     CameraFactoryTest.ConfigPassthrough
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    CameraFilmDifferential.IndependentGeometryAndActualRayStencils
+    CameraFilmDifferential.PerspectiveAndFixedPupilSolidAngleLaws
+    CameraFilmDifferential.EquidistantCentreLimitAndAntipodalMask
+    CameraFilmDifferential.PixelUnitsAndIntegratedRectangleSolidAngle
+    CameraFilmDifferential.PreservesNominalRaysAndExistingOrientationSemantics
+    CameraFilmDifferential.GovernedFourSampleLaunchAndSingleObserverBoost
+    CameraFilmDifferential.CustomCameraDeclinesUnavailableDifferential
+    CameraFilmDifferential.FullLaunchDifferentiatesDisplacedMovingKerrObserver
+    CameraFilmDifferential.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -126,6 +151,11 @@ set_tests_properties(
     CaptureSurfaceTests.KerrOblateHorizonUsesKerrRadius
     CaptureSurfaceTests.HorizonlessSpacetimesNeverCapture
     CaptureSurfaceTests.CheckTerminationUsesCartesianNormAndCapture
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    CelestialTangentBasis.RepresentedOrderingSurvivesNormalisationAcrossPrecisions
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -182,6 +212,8 @@ set_tests_properties(
     ConfigLoading.ValidateCommandUsesTheSameStrictParserAsStartup
     ConfigLoading.InvalidKnownValueDeclines
     ConfigLoading.ValidPartialFileMergesOverDefaults
+    ConfigLoading.PointCatalogueSurvivesLoadingSavingAndSessionProjection
+    ConfigLoading.PointCatalogueRejectsChangedIntegerIdentitiesAndUnknownFields
     ConfigLoading.SaveDeclinesWhenParentCannotBeCreated
     ConfigLoading.SaveDeclinesInvalidConfiguration
     PROPERTIES LABELS "Mandatory;Operational"
@@ -190,12 +222,14 @@ set_tests_properties(
 set_tests_properties(
     ConfigSchema.DefaultsRoundTripThroughJson
     ConfigSchema.LegacyFieldSpellingsParse
+    ConfigSchema.PartialPointCatalogueKeepsCanonicalDefaults
     ConfigSchema.PartialJsonKeepsDefaultsForOmittedFields
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
     ConfigValidation.DefaultConfigurationIsValid
+    ConfigValidation.PointCatalogueUsesTheTypedRendererDomainAndRequiresItsMode
     ConfigValidation.WidthBelowMinimumRejected
     ConfigValidation.NonPowerOfTwoTileSizeRejected
     ConfigValidation.UnknownMetricNameRejected
@@ -279,6 +313,24 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    CoupledTransport.MinimumStepCriticalColumnsMatchIndependentRefinedFlow
+    CoupledTransport.OriginalCriticalLaunchesHavePhysicalFatesOrExplicitWorkExhaustion
+    CoupledTransport.FlatFourColumnsUseActualProjectedAndInteriorTrials
+    CoupledTransport.CameraColumnUnitsPreserveTheJointErrorDecision
+    CoupledTransport.PhysicalCameraColumnsReachTheLiveCpuSourceMap
+    CoupledTransport.NonfiniteColumnsAndUnrepresentedInteriorDeclineWithoutCommit
+    CoupledTransport.EndpointAndZeroFractionIncludeEventTimeVariation
+    CoupledTransport.FixedAffineEndpointsPreserveSmallCovariantColumns
+    CoupledTransport.EveryCanonicalColumnCanRejectProjectedAndInteriorCurvedError
+    CoupledTransport.AcceptedIncrementsKeepRefinedEventDerivativesTranslationInvariant
+    CoupledTransport.SkyMapIsIndependentOfPhysicalBundleOutputAndWorkLimitDeclines
+    CoupledTransport.CapturedKerrBeamMatchesNeighboursAndStepRefinement
+    CoupledTransport.PhysicalEventVariationRetainsArrivalPositionWithoutDenseAccelerationNoise
+    CoupledTransport.OriginalKerrDiskEventMatchesIndependentNeighboursAndRefinement
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     CpuGeodesicReferenceTests.CPUBaselineSchwarzschildEscaping
     CpuGeodesicReferenceTests.CPUBaselineSchwarzschildHorizon
     CpuGeodesicReferenceTests.CPUBaselineKerrPrograde
@@ -298,11 +350,18 @@ set_tests_properties(
 set_tests_properties(
     CpuTraceBoundary.EveryAdvertisedCpuMetricConstructsAndTracesOneRay
     CpuTraceBoundary.FinitePupilOffsetMovesTheLiveCpuLaunchEvent
+    CpuTraceBoundary.CancellationDiscardsPrivateRayDataAndAllowsTracerReuse
     CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge
     CpuTraceBoundary.CentralEventIsInvariantUnderBundleFeatureToggle
     CpuTraceBoundary.JacobiBundleTerminatesAtTheSameCausalEvent
+    CpuTraceBoundary.OrdinaryEscapeClipsCentralAndJacobiAffineIntervals
+    CpuTraceBoundary.OrdinaryEscapeBoundaryLaunchUsesCrossingDirection
+    CpuTraceBoundary.OrdinaryEscapeDeclinesExteriorOutwardLaunchWithoutSourceEvent
+    CpuTraceBoundary.OrdinaryEscapeExcludesDiskAndVolumeBeyondBoundary
     CpuTraceBoundary.OneSheetEllisNamesTheRegularThroatBoundary
     CpuTraceBoundary.TwoSheetEllisCrossesThroatAndReachesInversionMatchedInfinity
+    CpuTraceBoundary.KottlerBothPastHorizonsRetainRadialAffineOracleAndTracerReuse
+    CpuTraceBoundary.KottlerOverlapPreservesCoupledSourceMapAgainstNativeChart
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -401,12 +460,37 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    HorizonAuthority.TinyChargeAtEqualMassAndSpinIsExactlySuperextremal
+    HorizonAuthority.RoundedPythagoreanEqualityDoesNotDefineExtremality
+    HorizonAuthority.NearExtremalFloatSpinKeepsDistinctFiniteRoots
+    HorizonAuthority.ScalingAvoidsOverflowAndUnderflowOfSquaredParameters
+    HorizonAuthority.SmallPositiveInnerRootSurvivesCancellation
+    HorizonAuthority.UnrepresentableRootPairDoesNotSelectHorizonFreeRoute
+    HorizonAuthority.SchwarzschildNativeAndKottlerContractsRemain
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     ICameraTest.GetPositionReturnsConfigCoordinates
     ICameraTest.SetConfigUpdatesRayGeneration
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
+    KernelInfinityDevice.Fp32IndependentDirectionsVariationsAndTerminalStates
+    KernelInfinityDevice.CompensatedIndependentDirectionsVariationsAndTerminalStates
+    KernelInfinityDevice.Fp64IndependentDirectionsVariationsAndTerminalStates
+    KernelInfinityDevice.FinishDeclinesWithoutPublishingPartialResults
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    KernelParity.CameraFramePreservesActivePrecisionFp32
+    KernelParity.CameraFramePreservesActivePrecisionCompensatedFp32
+    KernelParity.CameraFramePreservesActivePrecisionFp64
+    KernelParity.MetricConnectionAndJetShareRepresentedParametersFp32
+    KernelParity.MetricConnectionAndJetShareRepresentedParametersCompensatedFp32
+    KernelParity.MetricConnectionAndJetShareRepresentedParametersFp64
     KernelParity.ThinLensPupilProjectionAndFocusMatchIndependentCoreModel
     KernelParity.KerrSchildMetricMatchesLegacyToOnePartInMillion
     KernelParity.RepresentedSubThresholdKerrMetricIsScaleCovariant
@@ -417,6 +501,10 @@ set_tests_properties(
     KernelParity.UnnormalisedOrNonEllisDeviceProfilesFailClosed
     KernelParity.UnresolvedWarpProfilesFailClosedOnDevice
     KernelParity.SphericalCaptureEventFindsHiddenAndTangentContacts
+    KernelParity.ActualAffineAndJacobiClocksMatchFp32
+    KernelParity.ActualAffineAndJacobiClocksMatchFp32Comp
+    KernelParity.ActualAffineAndJacobiClocksMatchFp64
+    KernelParity.FiniteEscapeUsesFirstOutwardEventAndClippedIntervalAcrossRungs
     KernelParity.EllisTwoSheetTraceCrossesThroatAndMapsTheOppositeSky
     KernelParity.KerrSchildChristoffelMatchesLegacyToOnePartInMillion
     KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel
@@ -434,11 +522,13 @@ set_tests_properties(
     KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability
     KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison
     KernelParity.BeamEllipseRetainsBothAxesAndOutputOrientation
+    KernelParity.PointStarAngularWeightMatchesIndependentOracle
     KernelParity.CelestialTangentBasisIsSharedByBeamAndPointFilter
     KernelParity.GeodesicDeviationIsFiniteAndCurvedNearBlackHole
     KernelParity.DeviceTidalContractionMatchesAnalyticSchwarzschildAtMatchedEvents
     KernelParity.DeviceTidalContractionMatchesAnalyticKerrAtMatchedEvents
     KernelParity.DeviceRadialPointSourceCongruenceMatchesClosedForm
+    KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -446,6 +536,19 @@ set_tests_properties(
     KernelPortability.CudaEmissionCarriesTheNativeComputeEntryPoint
     KernelPortability.MetalEmissionCarriesTheNativeComputeEntryPoint
     PROPERTIES LABELS "Mandatory;Operational"
+)
+
+set_tests_properties(
+    KerrInfinity.FlatOblateRaysAndAxesReachExactCartesianSky
+    KerrInfinity.VaryingHandoffAndTangentMatchExactFlatDerivative
+    KerrInfinity.FrequencyScaleAndSignedParityArePreserved
+    KerrInfinity.AxisPrincipalRaysHaveAnalyticAngularVariation
+    KerrInfinity.KerrTailMatchesIndependentSeparatedReference
+    KerrInfinity.RejectsHiddenRadialTurningPoint
+    KerrInfinity.MassSpinAndRadiusScalingPreserveDirectionAndJacobian
+    KerrInfinity.NearCriticalSchwarzschildDerivativeMatchesIndependentRadialIntegral
+    KerrInfinity.RejectsUnrepresentedInputsAndWorkExhaustion
+    PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
@@ -534,6 +637,11 @@ set_tests_properties(
     Mat4dTests.MatrixVectorMultiplication
     Mat4dTests.ScalarMultiplication
     Mat4dTests.Addition
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    MetricDerivativeHessian.AnalyticKerrFamilyMatchesIndependentFourthOrderMetricStencil
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -723,6 +831,35 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    PointSourceResponseTest.TracedImageDensityKeepsTheOriginalGaussianAndSignedMeasure
+    PointSourceResponseTest.IntegratedDetectorFluxFollowsSignedAffineLensMeasure
+    PointSourceResponseTest.UnresolvedImageShapeStaysInDetectorCoordinates
+    PointSourceResponseTest.EllipticalSupportRejectsInsideMajorCircleOutsideEllipse
+    PointSourceResponseTest.SingularAndBroadMapsRequestRefinementWithoutFloors
+    PointSourceResponseTest.InvalidArithmeticIsDistinctFromEmptyContribution
+    PointSourceResponseTest.CatalogueAccumulationPreservesFluxColorAndExactSupport
+    PointSourceResponseTest.CatalogueBandTransferComposesDensityAndMovingFrequency
+    PointSourceResponseTest.CatalogueBandTransferKeepsFluxAndDensityLinear
+    PointSourceResponseTest.CatalogueBandTransferDeclinesInvalidFrequencyAndPartialFailure
+    PointSourceResponseTest.CompositionCancellationAndUnrepresentedParityDecline
+    PointSourceResponseTest.MovingThinLensAndSourceMapComposeIntoReceivedFlux
+    PointSourceResponseTest.RestrictedCellsPreserveOriginalGaussianAndNormalization
+    PointSourceResponseTest.RestrictedCellsOwnSharedEdgesAndKeepParentCutoff
+    PointSourceResponseTest.RestrictedCellsDeclineInvalidOrUnrepresentedGeometry
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    PointSourceTransfer.ReferenceFrequencyPreservesCatalogueColourAndFlux
+    PointSourceTransfer.ShiftedSpectrumMatchesIndependentFixedBandPlanckLaw
+    PointSourceTransfer.RejectsReciprocalExtraGainAndShiftedNormalizerSubstitutions
+    PointSourceTransfer.MovingObserverUsesBandGainAndAngularAreaExactlyOnce
+    PointSourceTransfer.ShiftedTemperatureHasNoCatalogueLookupClamp
+    PointSourceTransfer.InvalidOrOverflowingTransferHasNoPublishedValue
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     PolarisedEmissionTests.ChandrasekharAtmosphereHasPhysicalEndpointPolarisation
     PolarisedEmissionTests.ChandrasekharAtmospherePreservesHemisphericFlux
     PolarisedEmissionTests.ChandrasekharAtmosphereRejectsInvalidDirectionCosines
@@ -810,6 +947,38 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    RetainedArithmetic.SmallTermsSurviveLargeSumsProductsAndDivision
+    RetainedArithmetic.CartesianGradientMatchesIndependentRationalValues
+    RetainedArithmetic.CompleteCriticalMetricMatchesIndependentPrecisionWitnesses
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    RetainedCameraProgram.Fp32CompletePhysicalLaunchAndRefusals
+    RetainedCameraProgram.CompensatedCompletePhysicalLaunchAndRefusals
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    RetainedComputeTest.BatchedCameraPreservesPhysicalColumnsAndRejectsInvalidRows
+    RetainedComputeTest.SmoothRayCameraPreservesPhysicalLensDerivatives
+    RetainedComputeTest.JointRkStagesRetainCriticalIncrementsAndEmbeddedError
+    RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation
+    RetainedComputeTest.DenseSegmentsPreserveSmallCovariantArrivalDerivatives
+    RetainedComputeTest.PhysicalInitializationRetainsTheHamiltonianResidual
+    RetainedComputeTest.CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement
+    RetainedComputeTest.SharedTracerCompletesDeviceIntervalsAndRetainsRollbackState
+    RetainedComputeTest.RejectedStepRowsCannotExposeOldOrPartialCandidates
+    RetainedComputeTest.Fp64ProductsPreserveIndependentScienceOrDeclineUnsupportedDevices
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    RetainedValue.Binary64InputsKeepTheirRepresentationResidual
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     SchwarzschildTests.MetricMatchesIndependentCartesianKerrSchildForm
     SchwarzschildTests.AnalyticDerivativesMatchIndependentFiniteDifferences
     SchwarzschildTests.HorizonAndCaptureUseTheExactArealRadius
@@ -824,6 +993,43 @@ set_tests_properties(
     Sha256Tests.MultiBlockPaddingMatchesNistKnownAnswer
     Sha256Tests.FileStreamingMatchesTheSameKnownAnswer
     Sha256Tests.MillionByteFileMatchesNistKnownAnswerAcrossReadChunks
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    SourceSkyDifferential.KerrPositionAndTangentVariationsMatchIndependentDifferences
+    SourceSkyDifferential.MovingFlatCameraMatchesAnalyticLorentzDirectionDerivative
+    SourceSkyDifferential.NormalizesNonNullSpatialDirectionAndItsDerivative
+    SourceSkyDifferential.DirectionIsInvariantUnderFrequencyAndLongitudinalVariation
+    SourceSkyDifferential.ReseedsMetricVariationWithoutInheritedDualMetadata
+    SourceSkyDifferential.DeclinesUnrepresentedFrequencyGeometryAndVariation
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    SourceSkyInfinityTrace.FlatPupilMapAndFrequencyAreHandoffIndependent
+    SourceSkyInfinityTrace.KerrMapConvergesAcrossHandoffRadiiAndFixedPupilNeighbours
+    SourceSkyInfinityTrace.PointSourceHandoffPreservesTheFlatObserverMap
+    SourceSkyInfinityTrace.PointSourceHandoffAvoidsVacuumTravelForMovingPhysicalPupils
+    SourceSkyInfinityTrace.PointSourceHandoffRetainsOpaqueAndVolumetricSources
+    SourceSkyInfinityTrace.PointSourceWorkExhaustionAndCancellationHaveNoSourceMap
+    SourceSkyInfinityTrace.NonVacuumAndCapturedRaysDoNotClaimVacuumInfinity
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    SourceSkyMap.LocalizedFlatSphereVariationMatchesAnalyticRayFamily
+    SourceSkyMap.EndpointVariationPreservesGaugeAndDeclinesGrazingContact
+    SourceSkyMap.FlatAngularMapIsIndependentOfSphereRadiusSeedAndFrequency
+    SourceSkyMap.KerrCovariantChartVariationsMatchMappedNominalFamily
+    SourceSkyMap.RetainsZeroRankDeficiencyAndSignedParity
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    SourceSkyMapTrace.StationaryTranslatedPupilMapIsRadiusIndependent
+    SourceSkyMapTrace.MovingPupilMapMatchesAnalyticAberration
+    SourceSkyMapTrace.KerrMapConvergesToFixedPupilRetracing
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -916,6 +1122,9 @@ set_tests_properties(
     StarfieldGeneratorTests.DeterministicWithSameSeed
     StarfieldGeneratorTests.DifferentSeedsDifferentCatalogs
     StarfieldGeneratorTests.NoNaNInCatalog
+    StarfieldGeneratorTests.PointFilterRetainsImaxSubpixelOffsets
+    StarfieldGeneratorTests.PointFilterMatchesIndependentAngularOracle
+    StarfieldGeneratorTests.SpatialIndexIncludesStarsAcrossAngularCellBoundaries
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -1057,6 +1266,7 @@ set_tests_properties(
     VulkanBackend.PortabilityCreationFailuresRemainExplicit
     VulkanBackend.KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions
     VulkanBackend.EnumerationReportsInsteadOfThrowing
+    VulkanBackend.BufferAllocationLimitCountsActualResidencyAndPreservesExistingBuffers
     VulkanBackend.SlangKernelMatchesCpuReference
     VulkanBackend.WorkerThreadDispatchTearsDownSafely
     VulkanBackend.DeviceSelectionIsStrictAndRangeChecked
@@ -1121,12 +1331,38 @@ set_tests_properties(
     MorrisThorneTracerTest.CentralRayTerminatesAtExplicitThroatBoundary
     MorrisThorneTracerTest.DeflectionFallsQuadraticallyWithImpactParameter
     MorrisThorneTracerTest.EdgeRayEscapes
+    PointSourceDetector.BulkFailureAndCancellationNeverPublishPartialRadiance
+    PointSourceDetector.BulkProbesPreserveScalarRefinementAndRadiance
+    PointSourceDetector.BulkProbesPreserveSharedAndOriginalCoordinateTransforms
+    PointSourceDetector.CacheRetainsClosePhysicalCoordinatesWithBoundedLookupWork
+    PointSourceDetector.DisconnectedVisibilityIslandAndStripeUseActualImageVisibility
+    PointSourceDetector.ExhaustionCancellationAndFailedTracesHaveNoPartialRadiance
+    PointSourceDetector.FailedSharingHasABoundedBudgetBeforeOriginalHiddenPackets
+    PointSourceDetector.FoldKeepsBothImagesOfTheSameCatalogueEntry
+    PointSourceDetector.FoldOwnershipSurvivesRotationTranslationAndTighterRefinement
+    PointSourceDetector.GroupNeverPublishesEarlierLeavesAfterFailureOrCancellation
+    PointSourceDetector.GroupSplitsAnUnrepresentedGapAndKeepsOriginalOutputOrder
+    PointSourceDetector.ImageFrequencyAndTransmissionAreAppliedOnce
+    PointSourceDetector.LargeSharedRegionMatchesOriginalMovingKerrPackets
+    PointSourceDetector.NewlyDetectedHiddenRegionRetainsOriginalSamplingDepth
+    PointSourceDetector.OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport
+    PointSourceDetector.PolynomialFoldResolvesCloseImagesBetweenTheCoarseNodes
+    PointSourceDetector.SharedDiscoveryDeclinesMalformedExhaustedAndCancelledBatches
+    PointSourceDetector.SharedDiscoveryDeclinesUncertainOriginalSupportOwnership
+    PointSourceDetector.SharedDiscoveryPreservesDistinctGaussianShapesAndTransfer
+    PointSourceDetector.ThousandFootprintsShareDiscoveryWithoutChangingTheirKernels
     RayBundleTest.BundleFiniteAndDeterministicKerr
+    RayBundleTest.CurvatureStencilPreservesMassScaleAndBothSpinSigns
+    RayBundleTest.CurvatureStencilStaysInsideTheActualKerrChartDomain
     RayBundleTest.FlatSpaceBundleMagnificationIsUnity
     RayBundleTest.KretschmannMatchesOracleKerrEquatorial
     RayBundleTest.KretschmannMatchesOracleKerrOffEquatorial
     RayBundleTest.KretschmannMatchesOracleSchwarzschild
     RayBundleTest.MagnificationComesOnlyFromJacobiMap
+    RayWorkQueue.ConcurrentCallersKeepTheirOwnResults
+    RayWorkQueue.IndependentRaysOverlapAndReturnInRequestOrder
+    RayWorkQueue.RejectsUnboundedWorkBeforeCallingTracer
+    RayWorkQueue.WorkerFailureDrainsBatchAndQueueRemainsUsable
     ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p
     ShadowBoundary.SchwarzschildCriticalImpactParameterMatchesAnalyticAt1080p
     SpectralEmissionTest.BlackbodyColourDirection
@@ -1140,15 +1376,23 @@ set_tests_properties(
 
 set_tests_properties(
     DispatchGovernor.BandsNeverExceedRemainingRowsNorDropBelowOne
+    DispatchGovernor.CancellationStopsBetweenContinuationsAndBeforePublication
+    DispatchGovernor.CheapContinuationPhasesCannotHideThePeakSoftSizingFeedback
+    DispatchGovernor.ContinuationExhaustionNeverImplicitlyCompletesOrAdvancesSample
+    DispatchGovernor.ContinuationReadbackRejectsStaleOrUncommittedState
+    DispatchGovernor.ContinuationsPreserveFourCameraSamplesAndPublishOnce
     DispatchGovernor.DisabledAdaptationPreservesCapsAndIgnoresOrdinaryFeedback
+    DispatchGovernor.EveryContinuationTimingEnforcesThePhysicalSafetyBoundary
     DispatchGovernor.ExpensivePrecisionAndBundleWorkloadsUseTheStrictPhysicalFootprint
     DispatchGovernor.FirstBandUsesTheMinimumFullWidthRowBeforeMeasurement
     DispatchGovernor.GrowthPerStepIsBoundedByTheCap
     DispatchGovernor.InvalidTimingAndIrreducibleOvershootDecline
+    DispatchGovernor.LateContinuationOvershootReplaysChildrenFromBothZeroOrdinals
     DispatchGovernor.LearnedAreaNormalisesAcrossBandWidths
     DispatchGovernor.MeasuredSafetyCapRetainsUsefulWorkAndBoundsRepeatedOvershoots
     DispatchGovernor.NearTargetLatencyStillGrowsWholeBands
     DispatchGovernor.OnePixelSafetyBoundaryRemainsFatalWithStickyFallback
+    DispatchGovernor.OnlyPhysicalTerminalReadbackCanFinalizeWithoutChangingTrajectory
     DispatchGovernor.OrdinaryPrecisionBoundsSurviveGrowthAndDisabledAdaptation
     DispatchGovernor.OvershootHalvesTheObservedWork
     DispatchGovernor.RegionExecutionPropagatesCancellationAndBoundaryErrors
@@ -1180,11 +1424,14 @@ set_tests_properties(
     GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile
     GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile
     GeodesicTracerTest.NoNumericalFailures
+    GeodesicTracerTest.PolarisationGaugeRemainsRegularAtPastHorizonCapture
     GeodesicTracerTest.TracingPerformance
     GeodesicTracerVolumetric.OpticallyThinTransferIsNotDiscardedAtCompositionBoundary
     GeodesicTracerVolumetric.ProceduralTurbulenceAltersLiveTransferDeterministically
     GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource
     GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment
+    KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs
+    KernelTrace.ActualTraceFiniteSphereExcludesLaterDiskAndVolumeAcrossRungs
     KernelTrace.CompensatedRungTracksFp64AtLeastAsWellAsFp32
     KernelTrace.Fp64RungAgreesWithFp32OnKerrScene
     KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow
@@ -1210,17 +1457,28 @@ set_tests_properties(
     PixelSampling.NonPositiveInputFailsClosed
     PixelSampling.NonSquareCountsCoverBothAxesWithoutRemainderBias
     PixelSampling.PatternIsDeterministic
+    ProgressTrackerTest.QuietWorkerWaveUpdatesEtaAndRestartClearsItsHistory
+    ProgressTrackerTest.WorkerCompletionBurstRetainsItsTracingTime
     RenderCommandParse.BackendVulkanDeclinesMetricOffTheRenderPath
     RenderCommandParse.CliCpuOverridesLowerLayerVulkanBackend
     RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent
     RenderCommandParse.ReusedCommandDoesNotRetainAnEarlierGpuRequest
+    RenderEvidence.DeviceIdentityEscapesJsonWithoutChangingItsValue
+    RenderEvidence.RetainedWireRecordsFeedAttestationControls
+    RenderSessionProbe.CancellationInterruptsAnActivePrivateRayBeforePublication
     RenderSessionProbe.CompletionCallbackCanReenterLifecycleWithoutDeadlock
     RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr
     RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter
     RenderSessionProbe.CpuMorrisThorneRenderCompletes
     RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes
     RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame
+    RenderSessionProbe.ExhaustedNonKerrRayCannotPublishACompletedBlackFrame
     RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr
+    RenderSessionProbe.LaterGoodCameraSampleCannotEraseCpuNumericalFailure
+    RenderSessionProbe.NumericalRayFailureKeepsCpuTilesPrivateAndPreventsOutput
+    RenderSessionProbe.OnePointRegionFeedsConcurrentDeviceProbesAndCancelsPrivately
+    RenderSessionProbe.PhysicalPointBlocksPreservePartialEdgesAndNonSquareSamples
+    RenderSessionProbe.PhysicalPointDetectorCompletesAMovingThinLensKerrFrame
     RenderSessionProbe.PointStarfieldRejectsValuesItsGeneratorWouldClamp
     RenderSessionProbe.PolarisedRequestsDeclineAndTwoSheetIsRepresented
     RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration
@@ -1233,7 +1491,11 @@ set_tests_properties(
     StarfieldPointTest.EllipticalFootprintUsesBothAxesAndOrientation
     StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope
     StarfieldPointTest.SpatialIndexMatchesExhaustiveBeamOracle
+    TileScheduler.CompletionLedgerIsIdempotentAndResetRetainsGroups
+    TileScheduler.DefaultGroupsRetainTheOriginalSpiralSequence
+    TileScheduler.ParallelAcquisitionNeverDuplicatesAGroupOrTile
     TileScheduler.ReinitialiseResetsCompletionLedger
+    TileScheduler.WorkGroupsPreserveEveryOriginalTileAndOwnEachRegionOnce
     ViewCommandOperational.HeadlessRefinementProducesASynchronisedFrame
     ViewCommandOperational.VulkanRefinementPublishesProgressiveFrames
     VulkanRenderSession.CapabilityBoundaryAcceptsRepresentedSceneSemantics
@@ -1241,6 +1503,7 @@ set_tests_properties(
     VulkanRenderSession.CombinedParitySceneRetainsResolvedImageStructure
     VulkanRenderSession.CompensatedRungRendersOnAnyDevice
     VulkanRenderSession.ConstrainedBudgetDeclinesRatherThanChangingBackground
+    VulkanRenderSession.ContinuationRendererPublishesOnlyCompleteFramesWithinActualBudget
     VulkanRenderSession.CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds
     VulkanRenderSession.CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalBounds
     VulkanRenderSession.CpuVulkanPointCatalogueAgreeOnFlatScene
@@ -1251,6 +1514,7 @@ set_tests_properties(
     VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p
     VulkanRenderSession.NonSquareMultisamplingCameraAndLensReachLiveKernel
     VulkanRenderSession.ProceduralVolumetricTurbulenceReachesLiveKernel
+    VulkanRenderSession.RetainedMovingThinLensKerrDetectorMatchesCpuLinearRadiance
     VulkanRenderSession.ThinAndVolumetricDopplerSuppressionAffectLiveEmission
     VulkanRenderSession.ZeroActiveTracePreservesRadianceAcrossPrecisionRungs
     PROPERTIES LABELS "Mandatory;Operational;Rendering"

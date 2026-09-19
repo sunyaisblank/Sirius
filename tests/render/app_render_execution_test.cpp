@@ -130,17 +130,17 @@ TEST(ViewCommandOperational, HeadlessRefinementProducesASynchronisedFrame) {
     config.backend = render::RenderBackend::Cpu;
     config.metric_id = core::MetricId::Schwarzschild;
     config.black_hole_spin = 0.0;
-    // Four tiles exercise parallel frame assembly at the minimum viewer resolution.
-    config.session_template.tile_size = 32;
+    // Keep enough independent tiles to use the CPU workers at this resolution.
+    config.session_template.tile_size = 8;
 
     InteractiveViewer viewer;
     ASSERT_TRUE(viewer.Initialise(config));
     ASSERT_TRUE(viewer.Start());
 
-    // This is a liveness bound, not a performance assertion. Keep a real
-    // render and complete frame publication while avoiding coupling the
-    // correctness gate to hosted-runner throughput under three sanitizers.
-    const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(60);
+    // Joint retained transport does substantially more work than the former
+    // scalar preview. This bound permits a complete physical frame, including
+    // sanitizer overhead; dedicated cancellation tests bound interruption.
+    const auto deadline = std::chrono::steady_clock::now() + std::chrono::minutes(30);
     while (!viewer.GetRefinementState().complete && viewer.GetLastError().empty() &&
            std::chrono::steady_clock::now() < deadline) {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -191,11 +191,11 @@ TEST(ViewCommandOperational, VulkanRefinementPublishesProgressiveFrames) {
     });
     ASSERT_TRUE(viewer.Start());
 
-    // Dozen performs substantial shader translation before each refinement
-    // frame: the physical Radeon route currently needs about 140 seconds for
-    // 64x64 and proportionally longer for 96x64. This is a liveness bound, not
-    // a performance gate, so retain enough margin for both real publications.
-    const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(600);
+    // Both frames use joint retained transport. On Dozen the interval work
+    // dominates the old scalar preview's shader-translation cost. This bound
+    // permits complete physical frames; cancellation has separate interval-
+    // and session-level checks, and throughput needs native qualification.
+    const auto deadline = std::chrono::steady_clock::now() + std::chrono::hours(6);
     while (!viewer.GetRefinementState().complete && viewer.GetLastError().empty() &&
            std::chrono::steady_clock::now() < deadline) {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));

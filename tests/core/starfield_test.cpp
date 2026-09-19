@@ -5,8 +5,11 @@
 
 #include <gtest/gtest.h>
 
+#include "../support/point_star_angular_oracle.h"
+
 #include <algorithm>
 #include <array>
+#include <bit>
 #include <cmath>
 #include <limits>
 #include <numbers>
@@ -231,6 +234,15 @@ TEST_F(StarfieldGeneratorTests, SpatialIndexOwnsValidatedCatalogueSnapshot) {
     ASSERT_TRUE(std::all_of(stars.begin(), stars.end(), IsRepresentedStarEntry));
     const StarfieldSpatialIndex index(stars);
     ASSERT_EQ(index.Size(), stars.size());
+    std::vector<std::uint32_t> complete, prefix;
+    index.ForEachCandidate(1, 0, 0, 1, [&](std::uint32_t entry) { complete.push_back(entry); });
+    index.ForEachCandidateWhile(1, 0, 0, 1, [&](std::uint32_t entry) {
+        prefix.push_back(entry);
+        return prefix.size() < 2;
+    });
+    ASSERT_EQ(complete.size(), stars.size());
+    ASSERT_EQ(prefix.size(), 2U);
+    EXPECT_TRUE(std::equal(prefix.begin(), prefix.end(), complete.begin()));
 
     float exhaustive_r = 0.0f;
     float exhaustive_g = 0.0f;
@@ -260,65 +272,71 @@ TEST_F(StarfieldGeneratorTests, EllipticalFilterUsesTheBeamSachsBasis) {
     // This direction's least-aligned coordinate axis is y. The former point
     // filter projected z here, so it interpreted a beam angle in a different
     // tangent basis and rotated an anisotropic footprint.
-    std::array<float, 3> direction{0.8f, 0.1f, 0.59f};
-    float norm = std::sqrt(direction[0] * direction[0] + direction[1] * direction[1] +
-                           direction[2] * direction[2]);
-    for (float& component : direction) component /= norm;
-    const auto basis = relativity::MakeCelestialTangentBasis(direction);
-    ASSERT_TRUE(basis.has_value());
-    EXPECT_GT(std::abs(basis->first[1]), 0.9f)
-        << "fixture no longer distinguishes the old z-projection basis";
+    const std::array<std::array<float, 3>, 2> inputs{
+        {{0.8f, 0.1f, 0.59f},
+         {std::bit_cast<float>(0x3e600009U), std::bit_cast<float>(0x3e600008U),
+          std::bit_cast<float>(0x3f894e83U)}}};
+    for (const auto& input : inputs) {
+        auto direction = input;
+        float norm = std::sqrt(direction[0] * direction[0] + direction[1] * direction[1] +
+                               direction[2] * direction[2]);
+        for (float& component : direction) component /= norm;
+        const auto basis = relativity::MakeCelestialTangentBasis(input);
+        ASSERT_TRUE(basis.has_value());
+        EXPECT_GT(std::abs(basis->first[1]), 0.9f)
+            << "fixture no longer distinguishes the old z-projection basis";
 
-    constexpr float angular_offset = 0.02f;
-    StarEntry star{};
-    for (std::size_t component = 0; component < direction.size(); ++component) {
-        const float value = std::cos(angular_offset) * direction[component] +
-                            std::sin(angular_offset) * basis->first[component];
-        if (component == 0) star.direction_x = value;
-        if (component == 1) star.direction_y = value;
-        if (component == 2) star.direction_z = value;
+        constexpr float angular_offset = 0.02f;
+        StarEntry star{};
+        for (std::size_t component = 0; component < direction.size(); ++component) {
+            const float value = std::cos(angular_offset) * direction[component] +
+                                std::sin(angular_offset) * basis->first[component];
+            if (component == 0) star.direction_x = value;
+            if (component == 1) star.direction_y = value;
+            if (component == 2) star.direction_z = value;
+        }
+        star.distance_pc = 10.0f;
+        star.magnitude = 0.0f;
+        star.color_bv = 0.65f;
+        star.temperature_K = 5778.0f;
+        ASSERT_TRUE(IsRepresentedStarEntry(star));
+
+        config.star_count = 1;
+        config.brightness_scale = 1.0f;
+        StarfieldGenerator generator(config);
+        const StarfieldSpatialIndex index(std::vector<StarEntry>{star});
+        constexpr float sigma_major = 0.05f;
+        constexpr float sigma_minor = 0.005f;
+
+        float color_r = 0.0f;
+        float color_g = 0.0f;
+        float color_b = 0.0f;
+        star.ComputeColor(color_r, color_g, color_b);
+        const float expected_major_weight =
+            std::exp(-0.5f * angular_offset * angular_offset / (sigma_major * sigma_major));
+        const float expected_minor_weight =
+            std::exp(-0.5f * angular_offset * angular_offset / (sigma_minor * sigma_minor));
+
+        float major_r = 0.0f;
+        float major_g = 0.0f;
+        float major_b = 0.0f;
+        generator.AccumulateThroughBeam(input[0], input[1], input[2], sigma_major, sigma_minor,
+                                        0.0f, index, major_r, major_g, major_b);
+        EXPECT_NEAR(major_r, color_r * expected_major_weight, 2.0e-5f);
+        EXPECT_NEAR(major_g, color_g * expected_major_weight, 2.0e-5f);
+        EXPECT_NEAR(major_b, color_b * expected_major_weight, 2.0e-5f);
+
+        float minor_r = 0.0f;
+        float minor_g = 0.0f;
+        float minor_b = 0.0f;
+        generator.AccumulateThroughBeam(input[0], input[1], input[2], sigma_major, sigma_minor,
+                                        static_cast<float>(std::numbers::pi / 2.0), index, minor_r,
+                                        minor_g, minor_b);
+        EXPECT_NEAR(minor_r, color_r * expected_minor_weight, 2.0e-5f);
+        EXPECT_NEAR(minor_g, color_g * expected_minor_weight, 2.0e-5f);
+        EXPECT_NEAR(minor_b, color_b * expected_minor_weight, 2.0e-5f);
+        EXPECT_GT(major_r + major_g + major_b, 100.0f * (minor_r + minor_g + minor_b));
     }
-    star.distance_pc = 10.0f;
-    star.magnitude = 0.0f;
-    star.color_bv = 0.65f;
-    star.temperature_K = 5778.0f;
-    ASSERT_TRUE(IsRepresentedStarEntry(star));
-
-    config.star_count = 1;
-    config.brightness_scale = 1.0f;
-    StarfieldGenerator generator(config);
-    const StarfieldSpatialIndex index(std::vector<StarEntry>{star});
-    constexpr float sigma_major = 0.05f;
-    constexpr float sigma_minor = 0.005f;
-
-    float color_r = 0.0f;
-    float color_g = 0.0f;
-    float color_b = 0.0f;
-    star.ComputeColor(color_r, color_g, color_b);
-    const float expected_major_weight =
-        std::exp(-0.5f * angular_offset * angular_offset / (sigma_major * sigma_major));
-    const float expected_minor_weight =
-        std::exp(-0.5f * angular_offset * angular_offset / (sigma_minor * sigma_minor));
-
-    float major_r = 0.0f;
-    float major_g = 0.0f;
-    float major_b = 0.0f;
-    generator.AccumulateThroughBeam(direction[0], direction[1], direction[2], sigma_major,
-                                    sigma_minor, 0.0f, index, major_r, major_g, major_b);
-    EXPECT_NEAR(major_r, color_r * expected_major_weight, 2.0e-5f);
-    EXPECT_NEAR(major_g, color_g * expected_major_weight, 2.0e-5f);
-    EXPECT_NEAR(major_b, color_b * expected_major_weight, 2.0e-5f);
-
-    float minor_r = 0.0f;
-    float minor_g = 0.0f;
-    float minor_b = 0.0f;
-    generator.AccumulateThroughBeam(direction[0], direction[1], direction[2], sigma_major,
-                                    sigma_minor, static_cast<float>(std::numbers::pi / 2.0), index,
-                                    minor_r, minor_g, minor_b);
-    EXPECT_NEAR(minor_r, color_r * expected_minor_weight, 2.0e-5f);
-    EXPECT_NEAR(minor_g, color_g * expected_minor_weight, 2.0e-5f);
-    EXPECT_NEAR(minor_b, color_b * expected_minor_weight, 2.0e-5f);
-    EXPECT_GT(major_r + major_g + major_b, 100.0f * (minor_r + minor_g + minor_b));
 }
 
 TEST_F(StarfieldGeneratorTests, CatalogSizeBounded) {
@@ -408,4 +426,147 @@ TEST_F(StarfieldGeneratorTests, NoNaNInCatalog) {
     }
 }
 
+TEST_F(StarfieldGeneratorTests, PointFilterRetainsImaxSubpixelOffsets) {
+    const auto c = point_star_oracle::RecordedImaxFailure();
+    const StarEntry star{c.star[0], c.star[1], c.star[2], 10.0f, 0.0f, 0.65f, 5778.0f, 0.0f};
+    config.star_count = 1;
+    config.brightness_scale = 1.0f;
+    const StarfieldGenerator generator(config);
+    const std::vector<StarEntry> stars{star};
+    const StarfieldSpatialIndex index(stars);
+    float sr, sg, sb;
+    star.ComputeColor(sr, sg, sb);
+    const double expected = point_star_oracle::Weight(c);
+    ASSERT_NEAR(expected, std::exp(-0.5), 1.0e-5);
+    float r, g, b;
+    generator.AccumulateThroughBeam(c.direction[0], c.direction[1], c.direction[2], c.major, stars,
+                                    r, g, b);
+    EXPECT_NEAR(r / sr, expected, 2.0e-4);
+    generator.AccumulateThroughBeam(c.direction[0], c.direction[1], c.direction[2], c.major, index,
+                                    r, g, b);
+    EXPECT_NEAR(r / sr, expected, 2.0e-4);
+    generator.AccumulateThroughBeam(c.direction[0], c.direction[1], c.direction[2], c.major,
+                                    c.minor, c.orientation, index, r, g, b);
+    EXPECT_NEAR(r / sr, expected, 2.0e-4);
+}
+
+TEST_F(StarfieldGeneratorTests, PointFilterMatchesIndependentAngularOracle) {
+    config.star_count = 1;
+    config.brightness_scale = 1.0f;
+    const StarfieldGenerator generator(config);
+    std::size_t case_number = 0;
+    for (const auto& c : point_star_oracle::Cases()) {
+        SCOPED_TRACE(case_number++);
+        // The represented catalogue admits small norm error. Angular filtering
+        // must depend on direction, not mistake that error for angular offset.
+        for (float norm_scale : {0.99995f, 1.0f, 1.00005f}) {
+            auto scaled = c;
+            for (float& x : scaled.star) x *= norm_scale;
+            const StarEntry star{scaled.star[0], scaled.star[1], scaled.star[2], 10.0f,
+                                 0.0f,           0.65f,          5778.0f,        0.0f};
+            ASSERT_TRUE(IsRepresentedStarEntry(star));
+            const std::vector<StarEntry> stars{star};
+            const StarfieldSpatialIndex index(stars);
+            float sr, sg, sb;
+            star.ComputeColor(sr, sg, sb);
+            const double expected = point_star_oracle::Weight(scaled);
+            const double circular = point_star_oracle::Weight(scaled, true);
+            float r, g, b;
+            generator.AccumulateThroughBeam(c.direction[0], c.direction[1], c.direction[2], c.major,
+                                            c.minor, c.orientation, index, r, g, b);
+            EXPECT_NEAR(r / sr, expected, 2.0e-4);
+            EXPECT_NEAR(g / sg, expected, 2.0e-4);
+            EXPECT_NEAR(b / sb, expected, 2.0e-4);
+            generator.AccumulateThroughBeam(c.direction[0], c.direction[1], c.direction[2], c.major,
+                                            stars, r, g, b);
+            EXPECT_NEAR(r / sr, circular, 2.0e-4);
+            generator.AccumulateThroughBeam(c.direction[0], c.direction[1], c.direction[2], c.major,
+                                            index, r, g, b);
+            EXPECT_NEAR(r / sr, circular, 2.0e-4);
+        }
+    }
+}
+
+TEST_F(StarfieldGeneratorTests, SpatialIndexIncludesStarsAcrossAngularCellBoundaries) {
+    std::vector<StarEntry> stars;
+    struct Query {
+        std::array<float, 3> direction;
+        float sigma;
+        std::uint32_t star_index;
+    };
+    std::vector<Query> queries;
+    const float sigma = static_cast<float>(std::numbers::pi / 3 / 4096) * 0.3f;
+    for (int latitude : {0, 1, 31, 128, 255, 256}) {
+        for (int longitude : {0, 1, 255, 511}) {
+            const double theta = latitude * std::numbers::pi / 256;
+            const double phi = longitude * 2 * std::numbers::pi / 512;
+            for (double side : {-1.0, 1.0}) {
+                const double star_theta = std::clamp(theta + side * 1e-7, 0.0, std::numbers::pi);
+                const double query_theta = std::clamp(theta - side * sigma, 0.0, std::numbers::pi);
+                const double star_phi = phi + side * 1e-7;
+                const double query_phi = phi - side * sigma;
+                StarEntry star{static_cast<float>(std::sin(star_theta) * std::cos(star_phi)),
+                               static_cast<float>(std::sin(star_theta) * std::sin(star_phi)),
+                               static_cast<float>(std::cos(star_theta)),
+                               10.0f,
+                               0.0f,
+                               0.65f,
+                               5778.0f,
+                               0.0f};
+                for (float norm_scale : {0.99995f, 1.00005f}) {
+                    auto scaled = star;
+                    scaled.direction_x *= norm_scale;
+                    scaled.direction_y *= norm_scale;
+                    scaled.direction_z *= norm_scale;
+                    queries.push_back(
+                        {{static_cast<float>(std::sin(query_theta) * std::cos(query_phi)),
+                          static_cast<float>(std::sin(query_theta) * std::sin(query_phi)),
+                          static_cast<float>(std::cos(query_theta))},
+                         sigma,
+                         static_cast<std::uint32_t>(stars.size())});
+                    stars.push_back(scaled);
+                }
+            }
+        }
+    }
+    const StarfieldSpatialIndex index(stars);
+    for (const auto& query : queries) {
+        bool found = false;
+        index.ForEachCandidate(query.direction[0], query.direction[1], query.direction[2],
+                               query.sigma, [&](std::uint32_t at) {
+                                   if (at == query.star_index) found = true;
+                               });
+        EXPECT_TRUE(found) << "star " << query.star_index;
+    }
+}
+
 }  // namespace sirius::test
+
+TEST(CelestialTangentBasis, RepresentedOrderingSurvivesNormalisationAcrossPrecisions) {
+    using sirius::core::relativity::MakeCelestialTangentBasis;
+    const std::array<float, 3> witness{std::bit_cast<float>(0x3e600009U),
+                                       std::bit_cast<float>(0x3e600008U),
+                                       std::bit_cast<float>(0x3f894e83U)};
+    ASSERT_LT(witness[1], witness[0]);
+    for (std::size_t shift = 0; shift < 3; ++shift) {
+        for (float sign : {-1.0f, 1.0f}) {
+            std::array<float, 3> narrow{};
+            std::array<double, 3> wide{};
+            for (std::size_t j = 0; j < 3; ++j) {
+                narrow[(j + shift) % 3] = sign * witness[j];
+                wide[(j + shift) % 3] = narrow[(j + shift) % 3];
+            }
+            const auto a = MakeCelestialTangentBasis(narrow);
+            const auto b = MakeCelestialTangentBasis(wide);
+            ASSERT_TRUE(a.has_value());
+            ASSERT_TRUE(b.has_value());
+            // The positive projection of the actual smallest axis fixes labels.
+            EXPECT_GT(a->first[(1 + shift) % 3], 0.9f);
+            EXPECT_GT(b->first[(1 + shift) % 3], 0.9);
+            for (std::size_t j = 0; j < 3; ++j) {
+                EXPECT_NEAR(a->first[j], b->first[j], 2e-6);
+                EXPECT_NEAR(a->second[j], b->second[j], 2e-6);
+            }
+        }
+    }
+}

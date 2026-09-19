@@ -44,12 +44,6 @@ FIXED_ARTIFACTS = {
     "qualification-sirius.bin": "qualification-sirius.bin",
     "qualification-gate-junit": "qualification-gate-junit",
     "qualification-gate-log": "qualification-gate-log",
-    "test-input-smoke_spv": "test-input-smoke_spv",
-    "test-input-parity_probe_spv": "test-input-parity_probe_spv",
-    "test-input-parity_probe_fp32comp_spv": "test-input-parity_probe_fp32comp_spv",
-    "test-input-parity_probe_fp64_spv": "test-input-parity_probe_fp64_spv",
-    "test-input-trace_cuda": "test-input-trace_cuda",
-    "test-input-trace_metal": "test-input-trace_metal",
 }
 
 
@@ -73,6 +67,12 @@ def load_verifier():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+# Reuse carries the same generated inputs as the qualification exporter.
+FIXED_ARTIFACTS.update({
+    name: name for name in load_verifier().QUALIFICATION_TEST_INPUT_EVIDENCE.values()
+})
 
 
 def classify_reusable_record(document: dict) -> dict[str, dict]:

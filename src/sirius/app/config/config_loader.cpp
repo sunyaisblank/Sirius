@@ -97,7 +97,12 @@ void RequireKnownConfigShape(const nlohmann::json& source) {
     RequireKnownKeys(source, "config",
                      {"render", "metric", "observer", "postprocess", "backend", "volumetric",
                       "film", "motionBlur", "diskEnabled", "dopplerBeaming", "pointStarfield",
-                      "rayBundles", "colorMode"});
+                      "pointStarfieldConfig", "rayBundles", "colorMode"});
+    if (source.contains("pointStarfieldConfig")) {
+        RequireKnownKeys(
+            source.at("pointStarfieldConfig"), "pointStarfieldConfig",
+            {"starCount", "minDistancePc", "maxDistancePc", "brightnessScale", "seed"});
+    }
     if (source.contains("render")) {
         RequireKnownKeys(
             source.at("render"), "render",
@@ -442,6 +447,12 @@ std::vector<std::string> ConfigLoader::Validate(const SiriusConfig& config) {
         errors.push_back(
             "rayBundles require Minkowski, Schwarzschild, or Kerr: covariant curvature "
             "transport is not represented for the selected metric");
+    }
+    if (config.point_starfield) {
+        if (!core::IsRepresentedPointStarfieldConfig(config.point_starfield_config))
+            errors.push_back("pointStarfieldConfig is outside the represented catalogue domain");
+    } else if (config.point_starfield_config != core::PointStarfieldConfig{}) {
+        errors.push_back("pointStarfieldConfig requires pointStarfield=true");
     }
     const bool throat_radius_finite = finite(config.metric.throat_radius, "metric.throat_radius");
     if (throat_radius_finite &&

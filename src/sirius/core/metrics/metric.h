@@ -8,6 +8,7 @@
 // family's valid domain.
 
 #include "sirius/core/tensor.h"
+#include "sirius/core/twofold.h"
 
 #include <algorithm>
 #include <cmath>
@@ -26,6 +27,17 @@ struct MetricParameter {
 };
 
 using Config = std::map<std::string, MetricParameter>;
+
+struct MetricHessian {
+    // d_axis d_derivative g_mu_nu, in the same chart as Evaluate.
+    double values[4][4][4][4]{};
+};
+
+struct RetainedMetricSample {
+    Tensor<Twofold, 4, 4> metric;
+    Tensor<Twofold, 4, 4> inverse;
+    Tensor<Twofold, 4, 4, 4> derivative;
+};
 
 // Abstract interface for a spacetime metric.
 class IMetric {
@@ -67,6 +79,24 @@ class IMetric {
     virtual bool InverseMetric(const Tensor<double, 4>& pos, Metric4d& g_inv) const {
         (void)pos;
         (void)g_inv;
+        return false;
+    }
+
+    // Exact second derivatives where the metric provides them. A false result
+    // leaves the existing independent finite-difference route available.
+    virtual bool EvaluateHessian(const Tensor<double, 4>& pos, MetricHessian& hessian) const {
+        (void)pos;
+        (void)hessian;
+        return false;
+    }
+
+    // Optional extra arithmetic precision for cancellations in coupled
+    // transport. False leaves the ordinary represented route available. A
+    // successful sample keeps the same chart and defining metric; failure
+    // leaves the caller's sample unchanged.
+    virtual bool EvaluateRetained(const Vec4& pos, RetainedMetricSample& sample) const {
+        (void)pos;
+        (void)sample;
         return false;
     }
 

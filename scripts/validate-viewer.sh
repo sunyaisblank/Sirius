@@ -284,6 +284,7 @@ python3 - "$ATTESTATION" "$TRANSCRIPT" "$EVIDENCE_LOG" "$DEVICE_JSON" \
     "$TEST_REPORT" "$ALIGNMENT_RECEIPT" "$MANDATORY_GATE" "$CTEST_INVENTORY" \
     "$SOURCE_REVISION" "$SYSTEM_JSON" "$SELECTED_INDEX" "$PRESET" "$SIRIUS" <<'PY'
 import hashlib
+import importlib.util
 import json
 import pathlib
 import sys
@@ -305,6 +306,10 @@ from datetime import datetime, timezone
     preset,
     candidate_executable_path,
 ) = sys.argv[1:]
+
+spec = importlib.util.spec_from_file_location("attestation", "scripts/verify-attestation.py")
+verifier = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(verifier)
 output = pathlib.Path(output_path)
 root = output.parent
 system = json.loads(system_text)
@@ -338,12 +343,7 @@ for source_text in (
     str(root / "qualification-sirius.bin"),
     str(root / "qualification-gate-junit"),
     str(root / "qualification-gate-log"),
-    str(root / "test-input-smoke_spv"),
-    str(root / "test-input-parity_probe_spv"),
-    str(root / "test-input-parity_probe_fp32comp_spv"),
-    str(root / "test-input-parity_probe_fp64_spv"),
-    str(root / "test-input-trace_cuda"),
-    str(root / "test-input-trace_metal"),
+    *(str(root / name) for name in verifier.QUALIFICATION_TEST_INPUT_EVIDENCE.values()),
     str(root / "qualification-product-operating_model"),
     str(root / "qualification-product-starfield"),
     str(root / "qualification-product-trace_fp32comp_spv"),

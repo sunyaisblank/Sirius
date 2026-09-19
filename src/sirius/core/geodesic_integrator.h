@@ -10,7 +10,9 @@
 #include "sirius/core/metrics/metric.h"
 #include "sirius/core/tensor.h"
 
+#include <array>
 #include <cmath>
+#include <cstdint>
 #include <optional>
 
 namespace sirius::core {
@@ -78,6 +80,87 @@ struct Rk45State {
     bool accepted;  // Whether the step was accepted.
 };
 
+// Canonical transverse variations. The derivative is D displacement/dlambda,
+// so both fields transform as vectors when the tracer changes charts.
+struct GeodesicVariation {
+    Vec4 displacement;
+    Vec4 derivative;
+};
+using GeodesicVariations = std::array<GeodesicVariation, 4>;
+
+enum class CoupledStepFailure {
+    None,
+    InvalidState,
+    DerivativeDomain,
+    Projection,
+    Interpolation,
+    Event,
+    WorkLimit,
+};
+
+[[nodiscard]] constexpr const char* CoupledStepFailureName(CoupledStepFailure failure) {
+    switch (failure) {
+        case CoupledStepFailure::None:
+            return "none";
+        case CoupledStepFailure::InvalidState:
+            return "invalid state";
+        case CoupledStepFailure::DerivativeDomain:
+            return "derivative domain";
+        case CoupledStepFailure::Projection:
+            return "projection";
+        case CoupledStepFailure::Interpolation:
+            return "interpolation";
+        case CoupledStepFailure::Event:
+            return "event";
+        case CoupledStepFailure::WorkLimit:
+            return "work limit";
+    }
+    return "unknown";
+}
+
+// Four independently seeded variations share one acceptance decision. Unit
+// scales retain the same error budget when camera columns use pixels and
+// geometric pupil lengths instead of unit angular/position perturbations.
+struct Rk45CoupledState {
+    GeodesicVariations variations;
+    double length_scale = 0.0;
+    double frequency_scale = 0.0;
+    double tolerance = 0.0;
+    std::array<double, 4> column_scale{1.0, 1.0, 1.0, 1.0};
+    bool stationary = false;
+    std::uint64_t central_stages = 0;
+    std::uint64_t variation_stages = 0;
+    std::uint64_t variation_metric_evaluations = 0;
+    CoupledStepFailure failure = CoupledStepFailure::None;
+};
+
+// Retain the DP increments before adding them to potentially much larger
+// coordinates. These are the same Hermite endpoint differences in exact
+// arithmetic, with their four directional derivatives.
+struct CoupledSegmentIncrement {
+    Vec4 position;
+    std::array<Vec4, 4> displacement;
+};
+
+struct Rk45CoupledComparison {
+    Lightray lower_order{};
+    GeodesicVariations lower_variations;
+    double error_ratio = 0.0;
+    Lightray midpoint{};
+    GeodesicVariations midpoint_variations;
+    Lightray refined_endpoint{};
+    GeodesicVariations refined_variations;
+    CoupledSegmentIncrement full_increment;
+    CoupledSegmentIncrement lower_increment;
+    CoupledSegmentIncrement midpoint_increment;
+    CoupledSegmentIncrement refined_increment;
+};
+
+struct CoupledSegmentSample {
+    Lightray ray{};
+    GeodesicVariations variations;
+};
+
 // Static methods for geodesic integration.
 class Geodesic {
   public:
@@ -113,7 +196,27 @@ class Geodesic {
     // Integrate one step with the RK45 (Dormand-Prince) embedded 4th/5th order
     // pair; the step is adapted from ||y5 - y4||. A false result with
     // terminated == 0 is a recoverable rejection and must be retried.
-    static bool IntegrateStepRk45(Lightray& ray, IMetric* metric, const IntegratorConfig& config);
+    static bool IntegrateStepRk45(Lightray& ray, IMetric* metric, const IntegratorConfig& config,
+                                  Rk45CoupledState* coupled = nullptr,
+                                  Rk45CoupledComparison* comparison = nullptr);
+
+    // Sample endpoint Hermite position/tangent and fixed-affine variations.
+    // A supplied event normal converts variations to physical geodesic-flow
+    // arrival derivatives using a=-Gamma(k,k), rather than differentiating the
+    // cubic tangent again. No independent null/variation projection occurs.
+    static std::optional<CoupledSegmentSample> SampleCoupledSegment(
+        IMetric* metric, const Lightray& start, const GeodesicVariations& start_variations,
+        const Lightray& end, const GeodesicVariations& end_variations, double interval,
+        double fraction, const Vec4* event_normal = nullptr,
+        std::uint64_t* metric_evaluations = nullptr,
+        const CoupledSegmentIncrement* increment = nullptr);
+
+    static double CoupledStateError(const Lightray& first,
+                                    const GeodesicVariations& first_variations,
+                                    const Lightray& second,
+                                    const GeodesicVariations& second_variations,
+                                    const IntegratorConfig& config,
+                                    const Rk45CoupledState& control);
 
     // Project a finite contravariant tangent onto the metric null cone using the
     // nearest temporal root when represented. In an ergoregion where no such

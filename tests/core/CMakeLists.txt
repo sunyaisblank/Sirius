@@ -1,13 +1,15 @@
-# Core suite. The orchestrator owns this file; port workstreams deliver
-# .cpp files and report them, and each lands here once its gate passes.
+# Core suite: geometry, integration, camera and physical-model authorities.
 
 add_executable(sirius_core_tests
     autodiff_dual_test.cpp
+    retained_arithmetic_test.cpp
     blackbody_planck_test.cpp
     cpu_geodesic_reference_test.cpp
     render_pipeline_integration_test.cpp
     blackbody_test.cpp
     camera_sampling_test.cpp
+    camera_film_differential_test.cpp
+    camera_continuous_projection_test.cpp
     camera_test.cpp
     cie1931_observer_authority_test.cpp
     coordinates_test.cpp
@@ -22,6 +24,7 @@ add_executable(sirius_core_tests
     christoffel_test.cpp
     kerr_orbit_authority_test.cpp
     kerr_schild_field_equation_test.cpp
+    horizon_authority_test.cpp
     kerr_test.cpp
     metric_derivative_test.cpp
     metric_loader_test.cpp
@@ -42,10 +45,16 @@ add_executable(sirius_core_tests
     xyz_srgb_authority_test.cpp
     spectral_radiance_test.cpp
     starfield_test.cpp
+    point_source_response_test.cpp
+    point_source_transfer_test.cpp
+    source_sky_differential_test.cpp
+    source_sky_map_test.cpp
+    kerr_infinity_test.cpp
     tensor_test.cpp
 )
 
 target_link_libraries(sirius_core_tests PRIVATE sirius_core GTest::gtest_main)
+target_include_directories(sirius_core_tests PRIVATE "${PROJECT_SOURCE_DIR}/tests")
 
 sirius_configure_target(sirius_core_tests CONTRACT_MODE 2)
 
