@@ -53,6 +53,13 @@ set_property(DIRECTORY APPEND
 # Source-to-CTest governance rejects unlabelled dynamic registration, and the
 # operating-model verifier requires every P/E acceptance criterion as a
 # Mandatory-backed obligation.
+set(SIRIUS_CTEST_CAPABILITY_ARGUMENTS)
+if(NOT TARGET sirius_backend)
+    list(APPEND SIRIUS_CTEST_CAPABILITY_ARGUMENTS --without-vulkan-backend)
+endif()
+if(NOT TARGET sirius_backend OR NOT TARGET sirius_kernels)
+    list(APPEND SIRIUS_CTEST_CAPABILITY_ARGUMENTS --without-vulkan-render)
+endif()
 configure_file(
     operational/evidence_governance.cmake.in
     "${CMAKE_CURRENT_BINARY_DIR}/evidence_governance.cmake"

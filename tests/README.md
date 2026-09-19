@@ -7,6 +7,12 @@ transport; `render` covers sessions, images and writers; `app` covers parsing,
 configuration and input-state logic without rendering. `operational` covers
 installation, evidence admission, build policy and operator workflows.
 
+The backend executable always includes the CPU tracer, coupled transport and
+source-map tests. Vulkan development files add device cases; Slang enables
+their kernel inputs. CTest inventory governance checks those configured
+capabilities explicitly: absent device tools cannot remove CPU coverage, and
+an enabled device suite cannot silently lose tests.
+
 The source authorities are `operating_model.json`, the policy in
 `scripts/generate-ctest-labels.py`, and the operational registrations in
 `tests/CMakeLists.txt`. `labels/CTestLabels.cmake` is generated: do not edit it

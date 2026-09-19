@@ -1,5 +1,4 @@
-# Core suite. The orchestrator owns this file; port workstreams deliver
-# .cpp files and report them, and each lands here once its gate passes.
+# Core suite: geometry, integration, camera and physical-model authorities.
 
 add_executable(sirius_core_tests
     autodiff_dual_test.cpp

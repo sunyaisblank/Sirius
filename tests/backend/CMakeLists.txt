@@ -1,17 +1,30 @@
-# Backend suite: runs against whatever Vulkan device is present (Lavapipe
-# in CI and WSL2), and skips cleanly when none is.
-
-if(NOT TARGET sirius_backend)
-    message(STATUS "Sirius tests: backend module absent; backend suite skipped")
-    return()
-endif()
-
+# CPU transport remains testable without Vulkan development files or Slang.
+# Device tests extend the same executable when their backend is available.
 add_executable(sirius_backend_tests
     cpu_jacobi_oracle_test.cpp
     cpu_trace_boundary_test.cpp
     coupled_transport_test.cpp
     source_sky_map_trace_test.cpp
     source_sky_infinity_trace_test.cpp
+)
+
+target_link_libraries(sirius_backend_tests PRIVATE sirius_backend_cpu GTest::gtest_main)
+target_include_directories(sirius_backend_tests PRIVATE "${CMAKE_SOURCE_DIR}/tests")
+sirius_configure_target(sirius_backend_tests CONTRACT_MODE 2)
+
+gtest_discover_tests(
+    sirius_backend_tests
+    PROPERTIES
+        # Keep one device lock for this mixed executable on Vulkan builds.
+        RESOURCE_LOCK sirius_vulkan_device
+        LABELS "Correctness")
+
+if(NOT TARGET sirius_backend)
+    message(STATUS "Sirius tests: CPU backend suite enabled; Vulkan tests unavailable")
+    return()
+endif()
+
+target_sources(sirius_backend_tests PRIVATE
     vulkan_smoke_test.cpp
     kernel_parity_test.cpp
     kernel_metric_consistency_test.cpp
@@ -28,10 +41,7 @@ add_executable(sirius_backend_tests
 # This is a test executable dependency; the backend library remains independent
 # of render orchestration. Actual renderer/session tests belong to tests/render.
 target_link_libraries(sirius_backend_tests PRIVATE
-    sirius_backend sirius_backend_cpu sirius_render GTest::gtest_main)
-target_include_directories(sirius_backend_tests PRIVATE "${CMAKE_SOURCE_DIR}/tests")
-
-sirius_configure_target(sirius_backend_tests CONTRACT_MODE 2)
+    sirius_backend sirius_render)
 
 if(TARGET sirius_kernels)
     target_compile_definitions(sirius_backend_tests
@@ -76,11 +86,3 @@ if(TARGET sirius_kernels)
             SIRIUS_RETAINED_CAMERA_TEST_DIR="${retained_build}")
     endif()
 endif()
-
-gtest_discover_tests(
-    sirius_backend_tests
-    PROPERTIES
-        # Backend and render cases share one physical device. Parallel CTest
-        # must not overlap their submissions or resident device allocations.
-        RESOURCE_LOCK sirius_vulkan_device
-        LABELS "Correctness")

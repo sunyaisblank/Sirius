@@ -43,6 +43,10 @@ without `--target` retains the complete Mandatory gate; use that at an
 appropriate integration boundary, not after every edit. Explicit targets do
 not issue qualification receipts.
 
+`sirius_backend_tests` is available even without Vulkan development files. In
+that configuration it links the CPU backend and its mathematical dependencies;
+it does not require the renderer, device loader or shader compilation.
+
 The root CMake file sequences the layers. `sirius_build_policy.cmake` checks
 configuration and product policy, `sirius_alignment.cmake` owns revision-bound
 alignment, `sirius_testing.cmake` owns source/build gates, and

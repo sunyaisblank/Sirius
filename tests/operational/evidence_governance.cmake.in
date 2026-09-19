@@ -31,7 +31,7 @@ file(WRITE "${_inventory_path}" "${_inventory_stdout}")
 execute_process(
     COMMAND "@Python3_EXECUTABLE@"
         "@CMAKE_SOURCE_DIR@/scripts/verify-operating-model.py"
-        --ctest-inventory "${_inventory_path}"
+        --ctest-inventory "${_inventory_path}" @SIRIUS_CTEST_CAPABILITY_ARGUMENTS@
     RESULT_VARIABLE _ideal_result
     OUTPUT_VARIABLE _ideal_stdout
     ERROR_VARIABLE _ideal_stderr)

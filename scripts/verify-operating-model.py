@@ -461,7 +461,19 @@ REQUIRED_SECTION_POLICY_DIGESTS = {
     "required_dimensions": "359c4ff241f25d28777d15ebad4bd8216d4fbcbb29b597ac832005409addd725",
     "capability_contracts": "48c5b338c14c11e2ad7275322cd72f4bd014df621ca69e65e119621066fd5c6c",
 }
-CONDITIONAL_SOURCE_PATHS = {Path("tests/render/vulkan_render_test.cpp")}
+# These groups match concrete optional compile boundaries. CPU transport tests
+# are always required, including on hosts without Vulkan development files.
+CONDITIONAL_SOURCE_GROUPS = {
+    "vulkan-backend": {
+        Path(f"tests/backend/{name}.cpp") for name in (
+            "vulkan_smoke_test", "kernel_parity_test", "kernel_metric_consistency_test",
+            "kernel_camera_frame_test", "retained_camera_program_test",
+            "retained_compute_test", "kernel_infinity_test", "kernel_trace_test",
+            "kernel_beam_test", "kernel_portability_test",
+        )
+    },
+    "vulkan-render": {Path("tests/render/vulkan_render_test.cpp")},
+}
 
 
 def source_tests():
@@ -554,7 +566,8 @@ def mandatory_coverage_error(source_names, mandatory_names):
     return None
 
 
-def ctest_inventory_errors(document, tests, declared_ctests, test_floor):
+def ctest_inventory_errors(document, tests, declared_ctests, test_floor,
+                           unavailable_groups=frozenset()):
     if not isinstance(document, dict) or document.get("kind") != "ctestInfo":
         return ["CTest inventory has an unsupported shape"]
     entries = document.get("tests")
@@ -603,21 +616,61 @@ def ctest_inventory_errors(document, tests, declared_ctests, test_floor):
             f"non-source CTest registrations are not Operational: {non_operational[:5]}"
         )
 
-    missing = source_names - actual
-    conditional = {
+    unavailable_paths = set().union(*(
+        CONDITIONAL_SOURCE_GROUPS[group] for group in unavailable_groups
+    ))
+    unavailable = {
         name
         for name, record in tests.items()
-        if record.path.relative_to(ROOT) in CONDITIONAL_SOURCE_PATHS
+        if record.path.relative_to(ROOT) in unavailable_paths
     }
-    unexpected_missing = sorted(missing - conditional)
+    unexpected_missing = sorted(source_names - actual - unavailable)
     if unexpected_missing:
         errors.append(
             f"source GoogleTests are absent from live CTest: {unexpected_missing[:5]}"
         )
-    conditional_missing = missing & conditional
-    if conditional_missing and conditional_missing != conditional:
-        errors.append("live CTest contains only part of a conditional source suite")
+    unexpected_available = sorted(actual & unavailable)
+    if unexpected_available:
+        errors.append(
+            "live CTest contains tests from unavailable build capabilities: "
+            f"{unexpected_available[:5]}"
+        )
     return errors
+
+
+def verify_backend_inventory_policy():
+    tests = source_tests()
+    cpu_test = "CoupledTransport.FlatFourColumnsUseActualProjectedAndInteriorTrials"
+    for unavailable in (frozenset(), frozenset({"vulkan-render"}),
+                        frozenset(CONDITIONAL_SOURCE_GROUPS)):
+        omitted_paths = set().union(*(
+            CONDITIONAL_SOURCE_GROUPS[group] for group in unavailable
+        ))
+        entries = [
+            {"name": name, "properties": [{"name": "LABELS", "value": ["Mandatory"]}]}
+            for name, record in tests.items()
+            if record.path.relative_to(ROOT) not in omitted_paths
+        ]
+        inventory = {"kind": "ctestInfo", "tests": entries}
+        if ctest_inventory_errors(inventory, tests, {}, 0, unavailable):
+            raise RuntimeError("inventory policy rejected the declared backend capabilities")
+        missing_cpu = {**inventory, "tests": [e for e in entries if e["name"] != cpu_test]}
+        if not ctest_inventory_errors(missing_cpu, tests, {}, 0, unavailable):
+            raise RuntimeError("inventory policy accepted missing CPU transport coverage")
+        for group, paths in CONDITIONAL_SOURCE_GROUPS.items():
+            witness = next(name for name, record in tests.items()
+                           if record.path.relative_to(ROOT) in paths)
+            if group in unavailable:
+                altered = entries + [{
+                    "name": witness,
+                    "properties": [{"name": "LABELS", "value": ["Mandatory"]}],
+                }]
+            else:
+                altered = [e for e in entries if e["name"] != witness]
+            if not ctest_inventory_errors(
+                {**inventory, "tests": altered}, tests, {}, 0, unavailable
+            ):
+                raise RuntimeError("inventory policy accepted backend capability drift")
 
 
 def attestation_profile_errors(capabilities):
@@ -691,8 +744,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--self-test", action="store_true")
     parser.add_argument("--ctest-inventory", type=Path)
+    parser.add_argument("--without-vulkan-backend", action="store_true",
+                        help="the configured build has no Vulkan backend target")
+    parser.add_argument("--without-vulkan-render", action="store_true",
+                        help="the configured build has no Vulkan render implementation")
     args = parser.parse_args()
     if args.self_test:
+        verify_backend_inventory_policy()
         policy_model = json.loads(MODEL.read_text(encoding="utf-8"))
         drifted_policy_model = json.loads(json.dumps(policy_model))
         drifted_policy_model["required_dimensions"][0]["evidence"] = []
@@ -799,7 +857,11 @@ def main():
         else:
             failures.extend(
                 ctest_inventory_errors(
-                    inventory, tests, ctest_labels, SOURCE_AVAILABLE_TEST_FLOOR
+                    inventory, tests, ctest_labels, SOURCE_AVAILABLE_TEST_FLOOR,
+                    {group for group, disabled in (
+                        ("vulkan-backend", args.without_vulkan_backend),
+                        ("vulkan-render", args.without_vulkan_render),
+                    ) if disabled},
                 )
             )
     floor_error = source_floor_error(len(tests))
