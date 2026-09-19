@@ -5,6 +5,7 @@
 
 #include "sirius/app/config/config_loader.h"
 #include "sirius/app/config/config_schema.h"
+#include "sirius/app/config/session_config_adapter.h"
 
 #include <gtest/gtest.h>
 
@@ -17,6 +18,47 @@ namespace sirius::app::test {
 TEST(ConfigValidation, DefaultConfigurationIsValid) {
     SiriusConfig config = SiriusConfig::Defaults();
     EXPECT_TRUE(ConfigLoader::Validate(config).empty());
+}
+
+TEST(ConfigValidation, PointCatalogueUsesTheTypedRendererDomainAndRequiresItsMode) {
+    SiriusConfig config;
+    config.point_starfield = true;
+    const auto check = [&](core::PointStarfieldConfig point, bool represented) {
+        config.point_starfield_config = point;
+        EXPECT_EQ(ConfigLoader::Validate(config).empty(), represented);
+        const auto session = MakeSessionConfig(config);
+        EXPECT_EQ(session.has_value(), represented);
+        if (session) {
+            EXPECT_EQ(session->point_starfield_config, point);
+        }
+    };
+    auto point = core::PointStarfieldConfig{};
+    point.star_count = 0;
+    check(point, false);
+    point.star_count = 10000001;
+    check(point, false);
+    point.star_count = 1;
+    point.min_distance_pc = .09f;
+    check(point, false);
+    point.min_distance_pc = 1;
+    point.max_distance_pc = 1;
+    check(point, false);
+    point.max_distance_pc = 2;
+    point.brightness_scale = -1;
+    check(point, false);
+    point.brightness_scale = std::numeric_limits<float>::infinity();
+    check(point, false);
+    point.brightness_scale = 1000001;
+    check(point, false);
+    point.brightness_scale = 0;
+    check(point, true);
+    point.min_distance_pc = std::numeric_limits<float>::quiet_NaN();
+    check(point, false);
+    config.point_starfield_config = {};
+    config.point_starfield_config.brightness_scale = .25f;
+    config.point_starfield = false;
+    EXPECT_FALSE(ConfigLoader::Validate(config).empty());
+    EXPECT_FALSE(MakeSessionConfig(config));
 }
 
 TEST(ConfigValidation, WidthBelowMinimumRejected) {

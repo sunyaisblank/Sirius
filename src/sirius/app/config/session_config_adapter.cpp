@@ -152,6 +152,7 @@ base::Expected<render::SessionConfig> MakeSessionConfig(const SiriusConfig& conf
     session.film_config = *film_config;
     session.doppler_beaming = config.doppler_beaming;
     session.point_starfield = config.point_starfield;
+    session.point_starfield_config = config.point_starfield_config;
     session.ray_bundles = config.ray_bundles;
     const auto color_mode = ParseColorMode(config.color_mode);
     if (!color_mode) {

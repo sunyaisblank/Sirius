@@ -109,7 +109,8 @@ plane; they do not replace the physical frame. The verifier
 requires those P3/P5 semantics in the record, fully decodes both governed PNGs,
 and admits only structured RGB images at 1920 by 1080 and 5616 by 4096 under a
 2048 MiB budget. It also requires one unambiguous hashed typed-session scene
-event at each resolution to agree with every claim,
+event at each resolution to agree with every claim, including the catalogue
+seed and minimum/maximum distances in parsecs,
 the actual 100,000-star catalogue to reach Vulkan dispatch with beams enabled,
 the logged device and memory budget to match the record, and that same render to
 write the admitted PNG before reaching `Complete`. A hashed JUnit report must

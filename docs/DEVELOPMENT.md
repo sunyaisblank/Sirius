@@ -94,6 +94,29 @@ qualification manifest. A hard process kill may leave partial files; a run
 still marked `running` is incomplete. Review or remove those outputs before
 keeping them.
 
+For a reproducible point catalogue, the application's `--config scene.json`
+accepts the existing typed renderer controls as one JSON object:
+
+```json
+{
+  "pointStarfield": true,
+  "pointStarfieldConfig": {
+    "starCount": 100000,
+    "minDistancePc": 1.0,
+    "maxDistancePc": 10000.0,
+    "brightnessScale": 100.0,
+    "seed": 42
+  }
+}
+```
+
+These are the defaults; omitted fields retain them. `starCount` admits 1 through
+10,000,000, and `seed` admits any unsigned 32-bit integer. Neither field wraps or
+truncates JSON numbers. Distances must be finite, with a minimum of at least
+0.1 parsec and a strictly greater maximum. Brightness must be finite and between
+0 and 1,000,000. Non-default catalogue controls require `pointStarfield: true`.
+The session logs the actual catalogue count, brightness, seed and distance range.
+
 ## Finish a task
 
 Preserve useful source and concise findings in Git. Remove task diagnostics

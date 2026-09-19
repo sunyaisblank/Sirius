@@ -212,6 +212,8 @@ set_tests_properties(
     ConfigLoading.ValidateCommandUsesTheSameStrictParserAsStartup
     ConfigLoading.InvalidKnownValueDeclines
     ConfigLoading.ValidPartialFileMergesOverDefaults
+    ConfigLoading.PointCatalogueSurvivesLoadingSavingAndSessionProjection
+    ConfigLoading.PointCatalogueRejectsChangedIntegerIdentitiesAndUnknownFields
     ConfigLoading.SaveDeclinesWhenParentCannotBeCreated
     ConfigLoading.SaveDeclinesInvalidConfiguration
     PROPERTIES LABELS "Mandatory;Operational"
@@ -220,12 +222,14 @@ set_tests_properties(
 set_tests_properties(
     ConfigSchema.DefaultsRoundTripThroughJson
     ConfigSchema.LegacyFieldSpellingsParse
+    ConfigSchema.PartialPointCatalogueKeepsCanonicalDefaults
     ConfigSchema.PartialJsonKeepsDefaultsForOmittedFields
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
     ConfigValidation.DefaultConfigurationIsValid
+    ConfigValidation.PointCatalogueUsesTheTypedRendererDomainAndRequiresItsMode
     ConfigValidation.WidthBelowMinimumRejected
     ConfigValidation.NonPowerOfTwoTileSizeRejected
     ConfigValidation.UnknownMetricNameRejected

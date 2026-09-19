@@ -445,7 +445,7 @@ std::array<double, 2> RestrictedSourceOffset(const AngularMatrix2& map, double x
 
 TEST(PointSourceResponseTest, RestrictedCellsPreserveOriginalGaussianAndNormalization) {
     constexpr AngularMatrix2 map{{{1.0 / 64, 1.0 / 256}, {1.0 / 512, -1.0 / 128}}};
-    constexpr double determinant = std::abs(map[0][0] * map[1][1] - map[0][1] * map[1][0]);
+    const double determinant = std::abs(map[0][0] * map[1][1] - map[0][1] * map[1][0]);
     std::vector<RestrictedAffinePointResponse> cells;
     for (int y = 0; y < 2; ++y) {
         for (int x = 0; x < 2; ++x) {

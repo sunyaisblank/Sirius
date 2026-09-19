@@ -96,6 +96,22 @@ TEST(ConfigSchema, LegacyFieldSpellingsParse) {
     EXPECT_EQ(config.backend.preferred, "cpu");
 }
 
+TEST(ConfigSchema, PartialPointCatalogueKeepsCanonicalDefaults) {
+    const auto legacy = nlohmann::json::parse(R"({"pointStarfield":true})").get<SiriusConfig>();
+    EXPECT_EQ(legacy.point_starfield_config, core::PointStarfieldConfig{});
+    const auto partial =
+        nlohmann::json::parse(
+            R"({"pointStarfield":true,"pointStarfieldConfig":{"brightnessScale":0.25}})")
+            .get<SiriusConfig>();
+    auto expected = core::PointStarfieldConfig{};
+    expected.brightness_scale = .25f;
+    EXPECT_EQ(partial.point_starfield_config, expected);
+    const nlohmann::json saved = partial;
+    EXPECT_TRUE(saved["pointStarfield"].get<bool>());
+    EXPECT_EQ(saved["pointStarfieldConfig"]["starCount"], expected.star_count);
+    EXPECT_EQ(saved["pointStarfieldConfig"]["brightnessScale"], .25f);
+}
+
 TEST(ConfigSchema, PartialJsonKeepsDefaultsForOmittedFields) {
     // WITH_DEFAULT semantics: a document that names only some fields leaves the
     // rest at their struct defaults.

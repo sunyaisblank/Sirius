@@ -25,6 +25,10 @@ Application JSON structs stay in `app/config`, retain the public camel-case JSON
 wire keys for compatibility, and project once into closed render-domain enums
 and snake-case values through `session_config_adapter`. Exceptions do not cross
 that boundary: projection returns `std::expected<SessionConfig, Error>`.
+Point-catalogue defaults and their represented domain live in the lightweight
+`core/point_starfield_config.h`. The app's `pointStarfieldConfig` JSON object
+preserves that typed configuration through loading, saving and projection;
+catalogue construction and the scene transcript consume the same values.
 
 The interactive viewer follows the same ownership rule. Its public header holds
 declarations and state; `viewer/interactive_viewer.cpp` owns the threaded

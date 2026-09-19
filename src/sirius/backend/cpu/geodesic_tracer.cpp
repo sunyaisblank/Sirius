@@ -1274,14 +1274,12 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
             curr_pos(1) = ray.position(1);
             curr_pos(2) = ray.position(2);
             curr_pos(3) = ray.position(3);
-            float disk_r, disk_phi;
+            float disk_r = prepared_disk_radius, disk_phi = prepared_disk_phi;
 
             double crossing_fraction = 0.0;
             Vec4 crossing_position;
             Vec4 ray_vel;
             if (prepared_disk) {
-                disk_r = prepared_disk_radius;
-                disk_phi = prepared_disk_phi;
                 crossing_fraction = d_lambda > 0.0 ? 1.0 : 0.0;
                 crossing_position = ray.position;
                 ray_vel = ray.velocity;

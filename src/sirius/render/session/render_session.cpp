@@ -214,6 +214,11 @@ std::string SessionSceneEvidenceJson(const SessionConfig& config, std::size_t po
              << ",\"point_starfield\":" << (config.point_starfield ? "true" : "false")
              << ",\"point_star_count\":" << point_star_count << ",\"point_brightness_scale\":"
              << static_cast<double>(config.point_starfield_config.brightness_scale)
+             << ",\"point_seed\":" << config.point_starfield_config.seed
+             << ",\"point_min_distance_pc\":"
+             << static_cast<double>(config.point_starfield_config.min_distance_pc)
+             << ",\"point_max_distance_pc\":"
+             << static_cast<double>(config.point_starfield_config.max_distance_pc)
              << ",\"camera_beta\":[" << config.camera_beta_forward << ',' << config.camera_beta_up
              << ',' << config.camera_beta_right << "]" << ",\"lens\":\"" << lens << "\""
              << ",\"focal_length\":" << static_cast<double>(config.camera_focal_length)

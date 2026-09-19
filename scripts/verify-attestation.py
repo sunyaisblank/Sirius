@@ -365,6 +365,11 @@ def verify_governed_scene_transcript(
     require_matching_number(evidence.get("point_brightness_scale"),
                             scene.get("point_brightness_scale"),
                             "point_brightness_scale")
+    require(type(evidence.get("point_seed")) is int
+            and evidence["point_seed"] == scene.get("point_seed"),
+            "scene transcript catalogue seed does not match the attested claim")
+    for field in ("point_min_distance_pc", "point_max_distance_pc"):
+        require_matching_number(evidence.get(field), scene.get(field), field)
     beta = evidence.get("camera_beta")
     claimed_beta = scene.get("camera_beta")
     require(isinstance(beta, list) and isinstance(claimed_beta, list)
@@ -474,6 +479,13 @@ def require_governed_scene_claim(render, dimensions, label):
             and math.isfinite(scene["point_brightness_scale"])
             and scene["point_brightness_scale"] > 0,
             f"{label} scene requires positive point-star display calibration")
+    require(type(scene.get("point_seed")) is int and 0 <= scene["point_seed"] <= 4294967295,
+            f"{label} scene requires an exact unsigned 32-bit catalogue seed")
+    minimum = scene.get("point_min_distance_pc")
+    maximum = scene.get("point_max_distance_pc")
+    require(type(minimum) in (int, float) and math.isfinite(minimum) and minimum >= 0.1
+            and type(maximum) in (int, float) and math.isfinite(maximum) and maximum > minimum,
+            f"{label} scene requires the represented point-star distance range")
     beta = scene.get("camera_beta")
     require(isinstance(beta, list) and len(beta) == 3
             and all(type(component) in (int, float) and math.isfinite(component)
@@ -1559,6 +1571,7 @@ def self_test():
             '"height":1080,"samples_per_pixel":4,"field_of_view":60.0,'
             '"disk_enabled":false,"ray_bundles":true,"point_starfield":true,'
             '"point_star_count":100000,"point_brightness_scale":100.0,'
+            '"point_seed":42,"point_min_distance_pc":1.0,"point_max_distance_pc":10000.0,'
             '"camera_beta":[0.1,0.02,-0.01],"lens":"ThinLens",'
             '"focal_length":50.0,"aperture":2.8,"focus_distance":30.0}\n'
             '[Vulkan] device[0]: AMD Radeon 780M (integrated)\n'
@@ -1578,6 +1591,7 @@ def self_test():
             '"height":4096,"samples_per_pixel":4,"field_of_view":60.0,'
             '"disk_enabled":false,"ray_bundles":true,"point_starfield":true,'
             '"point_star_count":100000,"point_brightness_scale":100.0,'
+            '"point_seed":42,"point_min_distance_pc":1.0,"point_max_distance_pc":10000.0,'
             '"camera_beta":[0.1,0.02,-0.01],"lens":"ThinLens",'
             '"focal_length":50.0,"aperture":2.8,"focus_distance":30.0}\n'
             '[Vulkan] device[0]: AMD Radeon 780M (integrated)\n'
@@ -1606,6 +1620,9 @@ def self_test():
             "point_starfield": True,
             "star_catalogue_minimum": 100000,
             "point_brightness_scale": 100.0,
+            "point_seed": 42,
+            "point_min_distance_pc": 1.0,
+            "point_max_distance_pc": 10000.0,
             "camera_beta": [0.1, 0.02, -0.01],
             "lens": "ThinLens",
             "focal_length": 50.0,
@@ -1951,11 +1968,20 @@ def self_test():
                 gpu_stars + original_transcript[:scene_start]
                 + scene_segment.replace(gpu_stars, "") + original_transcript[scene_end:]))
             for field, before, after in (("point_star_count", "100000", "100001"),
+                                         ("point_seed", "42", "43"),
+                                         ("point_min_distance_pc", "1.0", "2.0"),
+                                         ("point_max_distance_pc", "10000.0", "9000.0"),
                                          ("ray_bundles", "true", "false"),
                                          ("point_starfield", "true", "false")):
                 transcript_mutations.append((f"typed scene {field} mismatch",
                     original_transcript.replace(scene_line, scene_line.replace(
                         f'"{field}":{before}', f'"{field}":{after}'))))
+            for field, value in (("point_seed", "42"),
+                                 ("point_min_distance_pc", "1.0"),
+                                 ("point_max_distance_pc", "10000.0")):
+                transcript_mutations.append((f"missing typed scene {field}",
+                    original_transcript.replace(scene_line, scene_line.replace(
+                        f'"{field}":{value},', ''))))
             for description, mutated_text in transcript_mutations:
                 transcript.write_text(mutated_text, encoding="utf-8")
                 try:
@@ -2230,6 +2256,20 @@ def self_test():
             ("stationary camera",
              lambda doc: doc["claims"]["imax_render"]["scene"].update(
                  camera_beta=[0.0, 0.0, 0.0])),
+            ("missing catalogue seed",
+             lambda doc: doc["claims"]["imax_render"]["scene"].pop("point_seed")),
+            ("fractional catalogue seed",
+             lambda doc: doc["claims"]["imax_render"]["scene"].update(point_seed=42.5)),
+            ("oversized catalogue seed",
+             lambda doc: doc["claims"]["imax_render"]["scene"].update(point_seed=4294967296)),
+            ("missing catalogue distance",
+             lambda doc: doc["claims"]["imax_render"]["scene"].pop("point_min_distance_pc")),
+            ("reversed catalogue distances",
+             lambda doc: doc["claims"]["imax_render"]["scene"].update(
+                 point_min_distance_pc=10000.0, point_max_distance_pc=1.0)),
+            ("nonfinite catalogue distance",
+             lambda doc: doc["claims"]["imax_render"]["scene"].update(
+                 point_max_distance_pc=float("inf"))),
             ("pinhole camera",
              lambda doc: doc["claims"]["imax_render"]["scene"].update(lens="Pinhole")),
             ("non-required hardware preset",

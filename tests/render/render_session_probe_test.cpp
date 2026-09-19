@@ -454,6 +454,9 @@ TEST(RenderSessionProbe, SceneEvidenceBindsCanonicalTypedConfiguration) {
     config.enable_disk = false;
     config.ray_bundles = true;
     config.point_starfield = true;
+    config.point_starfield_config.seed = 4294967295u;
+    config.point_starfield_config.min_distance_pc = 2.5f;
+    config.point_starfield_config.max_distance_pc = 9000.0f;
     config.camera_beta_forward = 0.1;
     config.camera_beta_up = 0.02;
     config.camera_beta_right = -0.01;
@@ -476,6 +479,9 @@ TEST(RenderSessionProbe, SceneEvidenceBindsCanonicalTypedConfiguration) {
              "\"point_starfield\":true",
              "\"point_star_count\":100000",
              "\"point_brightness_scale\":100",
+             "\"point_seed\":4294967295",
+             "\"point_min_distance_pc\":2.5",
+             "\"point_max_distance_pc\":9000",
              "\"camera_beta\":[",
              "\"lens\":\"ThinLens\"",
              "\"focal_length\":50",
