@@ -111,25 +111,36 @@ struct ImageRoot {
     double uncertainty;
     std::size_t previous_probe;
 };
+struct TracedImage {
+    std::uint32_t star;
+    const Coordinate& z;
+    const PointDetectorProbe& point;
+    const Coordinate& previous_z;
+    const PointDetectorProbe& previous;
+    double uncertainty;
+};
 struct Estimate {
     Rgb rgb{};
     Rgb error{};
     std::vector<std::size_t> images;
     bool regular = true;
+    bool has_hidden_probe = false;
 };
 
 class Detector {
   public:
     Detector(const core::StarfieldSpatialIndex& catalogue, double brightness,
              const PointDetectorSampler& sampler, const std::function<bool()>& cancelled,
-             const PointDetectorPolicy& policy)
+             const PointDetectorPolicy& policy, unsigned minimum_invisible_depth = 0)
         : catalogue_(catalogue),
           brightness_(brightness),
           sampler_(sampler),
           cancelled_(cancelled),
-          policy_(policy) {}
+          policy_(policy),
+          minimum_invisible_depth_(minimum_invisible_depth) {}
 
-    std::expected<PointDetectorResult, PointDetectorError> Run() {
+    std::expected<PointDetectorResult, PointDetectorError> Run(
+        std::vector<std::size_t>* images = nullptr) {
         try {
             if (!sampler_ || !std::isfinite(brightness_) || brightness_ < 0 ||
                 !Positive(policy_.absolute_rgb_error) || !Positive(policy_.relative_rgb_error) ||
@@ -150,6 +161,10 @@ class Detector {
             CheckCancellation();
             const Cell support{{-4, -4}, {4, 4}, 0};
             auto result = Refine(support, Measure(support));
+            if (images) {
+                *images = std::move(result.images);
+                statistics_.reserved_cache_bytes += images->capacity() * sizeof(std::size_t);
+            }
             statistics_.roots = roots_.size();
             return PointDetectorResult{result.rgb, result.error, statistics_};
         } catch (PointDetectorFailure reason) {
@@ -160,6 +175,13 @@ class Detector {
             return std::unexpected(
                 PointDetectorError{PointDetectorFailure::WorkLimit, statistics_});
         }
+    }
+
+    TracedImage Image(std::size_t index) const {
+        const auto& root = roots_[index];
+        const auto& previous = probes_[root.previous_probe];
+        return {root.star,  root.z,         probes_[root.probe].value,
+                previous.z, previous.value, root.uncertainty};
     }
 
   private:
@@ -319,6 +341,8 @@ class Detector {
             return probes_[i].value.visible &&
                    Solve(probes_[i].value.source_derivative, {1, 0}).has_value();
         });
+        result.has_hidden_probe = std::any_of(
+            nodes.begin(), nodes.end(), [&](std::size_t i) { return !probes_[i].value.visible; });
         if (seed == nodes.end()) {
             result.regular = std::none_of(nodes.begin(), nodes.end(),
                                           [&](std::size_t i) { return probes_[i].value.visible; });
@@ -516,6 +540,7 @@ class Detector {
         Estimate result;
         for (const auto& child : children) {
             result.regular = result.regular && child.regular;
+            result.has_hidden_probe = result.has_hidden_probe || child.has_hidden_probe;
             result.images.insert(result.images.end(), child.images.begin(), child.images.end());
             for (int channel = 0; channel < 3; ++channel) {
                 result.rgb[channel] += child.rgb[channel];
@@ -554,8 +579,10 @@ class Detector {
         std::array<Estimate, 4> estimates;
         for (int i = 0; i < 4; ++i) estimates[i] = Measure(children[i]);
         auto fine = Sum(estimates);
-        if (cell.depth >= policy_.minimum_depth && cell.depth + 2 <= policy_.maximum_depth &&
-            Agrees(cell, coarse, fine)) {
+        if (cell.depth >= policy_.minimum_depth &&
+            ((!coarse.has_hidden_probe && !fine.has_hidden_probe) ||
+             cell.depth >= minimum_invisible_depth_) &&
+            cell.depth + 2 <= policy_.maximum_depth && Agrees(cell, coarse, fine)) {
             std::array<Estimate, 4> validation;
             for (int i = 0; i < 4; ++i) {
                 const auto grandchildren = children[i].Children();
@@ -575,6 +602,7 @@ class Detector {
     const PointDetectorSampler& sampler_;
     const std::function<bool()>& cancelled_;
     const PointDetectorPolicy& policy_;
+    unsigned minimum_invisible_depth_;
     PointDetectorStatistics statistics_;
     std::vector<CachedProbe> probes_;
     std::vector<std::size_t> probe_slots_;
@@ -587,6 +615,167 @@ std::expected<PointDetectorResult, PointDetectorError> EvaluatePointDetector(
     const PointDetectorSampler& sample, const std::function<bool()>& cancelled,
     const PointDetectorPolicy& policy) {
     return Detector(catalogue, brightness_scale, sample, cancelled, policy).Run();
+}
+
+std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetectorBatch(
+    const core::StarfieldSpatialIndex& catalogue, double brightness_scale,
+    std::span<const PointDetectorFootprint> footprints, const PointDetectorSampler& sample,
+    const std::function<bool()>& cancelled, const PointDetectorPolicy& policy) {
+    PointDetectorStatistics statistics;
+    const auto failure = [&](PointDetectorFailure reason) {
+        return std::unexpected(PointDetectorError{reason, statistics});
+    };
+    if (footprints.empty() || footprints.size() > 16 || !sample)
+        return failure(PointDetectorFailure::InvalidInput);
+    try {
+        // The norm is scale-safe and encloses every orientation of the original
+        // circular support; a rotated/sheared Gaussian must not be clipped by
+        // an axis-only extent or a new normalized discovery filter.
+        const auto norm = [](const Matrix& matrix) {
+            const double scale = std::max({std::abs(matrix[0][0]), std::abs(matrix[0][1]),
+                                           std::abs(matrix[1][0]), std::abs(matrix[1][1])});
+            if (!(scale > 0) || !std::isfinite(scale)) return scale;
+            const double a = matrix[0][0] / scale, b = matrix[0][1] / scale;
+            const double c = matrix[1][0] / scale, d = matrix[1][1] / scale;
+            const double aa = a * a + b * b, bb = c * c + d * d, ab = a * c + b * d;
+            return scale * std::sqrt(.5 * (aa + bb + std::hypot(aa - bb, 2 * ab)));
+        };
+        Coordinate lower = footprints.front().centre, upper = lower;
+        std::vector<Matrix> inverses;
+        for (const auto& footprint : footprints) {
+            for (int axis = 0; axis < 2; ++axis) {
+                if (!std::isfinite(footprint.centre[axis]))
+                    return failure(PointDetectorFailure::InvalidInput);
+                lower[axis] = std::min(lower[axis], footprint.centre[axis]);
+                upper[axis] = std::max(upper[axis], footprint.centre[axis]);
+            }
+            for (const auto& row : footprint.chart_from_standard)
+                for (const double value : row)
+                    if (!std::isfinite(value)) return failure(PointDetectorFailure::InvalidInput);
+            const auto x = Solve(footprint.chart_from_standard, {1, 0});
+            const auto y = Solve(footprint.chart_from_standard, {0, 1});
+            if (!x || !y) return failure(PointDetectorFailure::InvalidInput);
+            inverses.push_back({{{(*x)[0], (*y)[0]}, {(*x)[1], (*y)[1]}}});
+        }
+        const Coordinate centre{lower[0] + (upper[0] - lower[0]) * .5,
+                                lower[1] + (upper[1] - lower[1]) * .5};
+        double scale = 0;
+        for (const auto& footprint : footprints)
+            scale = std::max(scale, .25 * std::hypot(footprint.centre[0] - centre[0],
+                                                     footprint.centre[1] - centre[1]) +
+                                        norm(footprint.chart_from_standard));
+        scale = std::nextafter(
+            scale * (1 + policy.root_error + 128 * std::numeric_limits<double>::epsilon()),
+            std::numeric_limits<double>::infinity());
+        if (!std::isfinite(scale) || !(scale > 0))
+            return failure(PointDetectorFailure::InvalidInput);
+        double inverse_scale = 1;
+        for (const auto& inverse : inverses)
+            inverse_scale = std::max(inverse_scale, scale * norm(inverse));
+        if (!std::isfinite(inverse_scale)) return failure(PointDetectorFailure::InvalidInput);
+        auto discovery_policy = policy;
+        discovery_policy.root_error /= inverse_scale;
+        // Entirely hidden regions cannot disappear merely because this batch
+        // spans more than one original sample. Keep at least the narrowest
+        // original visibility resolution there, including disconnected islands.
+        const auto extra_depth =
+            static_cast<unsigned>(std::min(21.0, std::ceil(std::log2(inverse_scale))));
+        const PointDetectorSampler normalized =
+            [&](const Coordinate& z) -> std::expected<PointDetectorProbe, PointDetectorFailure> {
+            auto point = sample({centre[0] + scale * z[0], centre[1] + scale * z[1]});
+            if (point)
+                for (auto& row : point->source_derivative)
+                    for (auto& value : row) value *= scale;
+            return point;
+        };
+        std::vector<std::size_t> images;
+        Detector engine(catalogue, brightness_scale, normalized, cancelled, discovery_policy,
+                        policy.minimum_depth + extra_depth);
+        const auto discovery = engine.Run(&images);
+        if (!discovery) return std::unexpected(discovery.error());
+        statistics = discovery->statistics;
+        PointDetectorBatchResult result;
+        result.samples.resize(footprints.size());
+        result.statistics = statistics;
+        for (std::size_t packet = 0; packet < footprints.size(); ++packet) {
+            const auto& footprint = footprints[packet];
+            const auto& inverse = inverses[packet];
+            const double conditioning = norm(footprint.chart_from_standard) * norm(inverse);
+            if (!std::isfinite(conditioning)) return failure(PointDetectorFailure::Unresolved);
+            auto map = footprint.chart_from_standard;
+            for (auto& row : map)
+                for (auto& value : row) value /= scale;
+            auto& output = result.samples[packet];
+            for (const auto index : images) {
+                const auto image = engine.Image(index);
+                if (cancelled && cancelled()) return failure(PointDetectorFailure::Cancelled);
+                const Coordinate delta{(centre[0] - footprint.centre[0]) + scale * image.z[0],
+                                       (centre[1] - footprint.centre[1]) + scale * image.z[1]};
+                const Coordinate original{inverse[0][0] * delta[0] + inverse[0][1] * delta[1],
+                                          inverse[1][0] * delta[0] + inverse[1][1] * delta[1]};
+                const double radius = std::hypot(original[0], original[1]);
+                const double uncertainty =
+                    scale * norm(inverse) * image.uncertainty +
+                    64 * std::numeric_limits<double>::epsilon() * conditioning * (1 + radius);
+                // The original hard support cannot be decided from a root
+                // interval that straddles it. Keep the entire batch private so
+                // its caller can resolve that original packet independently.
+                if (std::abs(radius - 4) <= uncertainty)
+                    return failure(PointDetectorFailure::Unresolved);
+                const auto response = core::MakePointImageResponse(image.point.source_derivative,
+                                                                   map, policy.geometry_error);
+                if (!response) return failure(PointDetectorFailure::Unresolved);
+                const auto density = response->DensityAtOriginalRoot(original);
+                if (!density) return failure(PointDetectorFailure::Arithmetic);
+                if (*density == 0) continue;
+                const auto& star = catalogue.Stars()[image.star];
+                const auto rgb = core::spectral::TransferPointSourceBand(
+                    star.temperature_K, image.point.camera_over_source_frequency,
+                    static_cast<double>(star.Intensity()) * brightness_scale, *density);
+                if (!rgb) return failure(PointDetectorFailure::Arithmetic);
+                const double correction =
+                    std::hypot(image.z[0] - image.previous_z[0], image.z[1] - image.previous_z[1]);
+                Rgb prior_rgb{};
+                if (correction > 0) {
+                    const auto prior = core::MakePointImageResponse(
+                        image.previous.source_derivative, map, policy.geometry_error);
+                    if (!prior) return failure(PointDetectorFailure::Unresolved);
+                    const auto prior_density = prior->DensityAtOriginalRoot(original);
+                    if (!prior_density) return failure(PointDetectorFailure::Arithmetic);
+                    const auto transferred = core::spectral::TransferPointSourceBand(
+                        star.temperature_K, image.previous.camera_over_source_frequency,
+                        static_cast<double>(star.Intensity()) * brightness_scale, *prior_density);
+                    if (!transferred) return failure(PointDetectorFailure::Arithmetic);
+                    for (int channel = 0; channel < 3; ++channel)
+                        prior_rgb[channel] = (*transferred)[channel] * image.previous.transmission;
+                }
+                const double weight_error =
+                    std::expm1(4 * uncertainty + .5 * uncertainty * uncertainty);
+                for (int channel = 0; channel < 3; ++channel) {
+                    const double contribution = (*rgb)[channel] * image.point.transmission;
+                    const double smooth_error =
+                        correction > 0 ? 2 * std::abs(contribution - prior_rgb[channel]) *
+                                             image.uncertainty / correction
+                                       : 0;
+                    output.rgb[channel] += contribution;
+                    output.estimated_error[channel] +=
+                        smooth_error +
+                        contribution * (weight_error + response->arithmetic_area_bound +
+                                        128 * std::numeric_limits<double>::epsilon());
+                    if (!std::isfinite(output.rgb[channel]) ||
+                        !std::isfinite(output.estimated_error[channel]))
+                        return failure(PointDetectorFailure::Arithmetic);
+                }
+            }
+            for (int channel = 0; channel < 3; ++channel)
+                if (output.estimated_error[channel] >
+                    policy.absolute_rgb_error + policy.relative_rgb_error * output.rgb[channel])
+                    return failure(PointDetectorFailure::Unresolved);
+        }
+        return result;
+    } catch (const std::bad_alloc&) {
+        return failure(PointDetectorFailure::WorkLimit);
+    }
 }
 
 }  // namespace sirius::render

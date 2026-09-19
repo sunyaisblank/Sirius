@@ -46,13 +46,34 @@ struct AffinePointResponse {
     }
 };
 
+// Density at an already traced image root. Discovery has its own finite-cell
+// geometry checks; a local density does not approximate a finite sky footprint.
+struct PointImageResponse {
+    double density_scale;
+    double arithmetic_area_bound;
+
+    [[nodiscard]] std::expected<double, PointResponseFailure> DensityAtOriginalRoot(
+        const std::array<double, 2>& original) const {
+        if (!std::isfinite(original[0]) || !std::isfinite(original[1]))
+            return std::unexpected(PointResponseFailure::InvalidInput);
+        const double radius = std::hypot(original[0], original[1]);
+        if (radius > 4.0) return 0.0;
+        const double result = density_scale * std::exp(-0.5 * radius * radius);
+        if (!(result > 0.0) || !std::isfinite(result))
+            return std::unexpected(PointResponseFailure::Arithmetic);
+        return result;
+    }
+};
+
+namespace point_response_detail {
+
 // P maps a film-pixel displacement at fixed pupil to the launch rest-frame
 // angular basis. J maps that SAME basis to source angles and already includes
 // observer aberration. A circular film Gaussian of sigma pixels has source
 // covariance B B^T, B = sigma J P. No source-plane axis/determinant floor is used.
-[[nodiscard]] inline std::expected<AffinePointResponse, PointResponseFailure>
-MakeAffinePointResponse(const AngularMatrix2& source_map, const AngularMatrix2& film_map,
-                        double film_sigma, double geometry_area_budget) {
+[[nodiscard]] inline std::expected<AffinePointResponse, PointResponseFailure> BuildPointResponse(
+    const AngularMatrix2& source_map, const AngularMatrix2& film_map, double film_sigma,
+    double geometry_area_budget, bool finite_footprint) {
     if (!std::isfinite(film_sigma) || !(film_sigma > 0.0) || !std::isfinite(geometry_area_budget) ||
         !(geometry_area_budget > 0.0) || !(geometry_area_budget < 1.0)) {
         return std::unexpected(PointResponseFailure::InvalidInput);
@@ -122,9 +143,11 @@ MakeAffinePointResponse(const AngularMatrix2& source_map, const AngularMatrix2& 
     const double major = scale * std::sqrt(0.5 * (aa + bb + std::hypot(aa - bb, 2 * ab)));
     const double support = 4.0 * major;
     const double area_bound = support * support / 6.0;
-    if (!std::isfinite(area_bound) ||
-        area_bound + arithmetic_area_bound + area_bound * arithmetic_area_bound >
-            geometry_area_budget) {
+    if (arithmetic_area_bound > geometry_area_budget ||
+        (finite_footprint &&
+         (!std::isfinite(area_bound) ||
+          area_bound + arithmetic_area_bound + area_bound * arithmetic_area_bound >
+              geometry_area_budget))) {
         return std::unexpected(PointResponseFailure::NeedsRefinement);
     }
     // The normalization is exact for the elliptical truncation, not for the
@@ -153,6 +176,27 @@ MakeAffinePointResponse(const AngularMatrix2& source_map, const AngularMatrix2& 
         }
     }
     return response;
+}
+
+}  // namespace point_response_detail
+
+[[nodiscard]] inline std::expected<AffinePointResponse, PointResponseFailure>
+MakeAffinePointResponse(const AngularMatrix2& source_map, const AngularMatrix2& film_map,
+                        double film_sigma, double geometry_area_budget) {
+    return point_response_detail::BuildPointResponse(source_map, film_map, film_sigma,
+                                                     geometry_area_budget, true);
+}
+
+// source_map is d(source angle)/d(chart coordinate) at the actual image.
+// chart_from_standard maps this original sample's unit Gaussian into that
+// shared chart. The determinant includes both maps exactly once.
+[[nodiscard]] inline std::expected<PointImageResponse, PointResponseFailure> MakePointImageResponse(
+    const AngularMatrix2& source_map, const AngularMatrix2& chart_from_standard,
+    double arithmetic_area_budget) {
+    const auto response = point_response_detail::BuildPointResponse(
+        source_map, chart_from_standard, 1.0, arithmetic_area_budget, false);
+    if (!response) return std::unexpected(response.error());
+    return PointImageResponse{response->density_scale, response->arithmetic_area_bound};
 }
 
 // One affine leaf of the ORIGINAL packet's standardized Gaussian support.

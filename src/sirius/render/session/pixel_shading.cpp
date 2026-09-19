@@ -118,219 +118,343 @@ RenderSession::PixelResult RenderSession::ShadeEscaped(const TraceResult& result
     return px;
 }
 
-base::Expected<RenderSession::PixelResult> RenderSession::ShadePixel(int px_coord, int py_coord,
-                                                                     GeodesicTracer* tracer) const {
-    PixelResult result;
-    float r_acc = 0.0f, g_acc = 0.0f, b_acc = 0.0f;
+namespace {
+std::expected<PointDetectorProbe, PointDetectorFailure> MeasurePointDetector(
+    const core::CameraFilmProjection& film, const TraceResult& traced,
+    const core::AngularMatrix2& film_from_standard) {
+    if (traced.cancelled) return std::unexpected(PointDetectorFailure::Cancelled);
+    if (traced.numerical_failure || traced.outcome == TraceResult::Outcome::MaxSteps)
+        return std::unexpected(PointDetectorFailure::TraceFailed);
+    PointDetectorProbe value;
+    value.inner_attempts = static_cast<std::size_t>(traced.steps_taken);
+    if (traced.outcome != TraceResult::Outcome::Escaped) return value;
+    if (!film.differential || !traced.beam.infinity_source_map)
+        return std::unexpected(PointDetectorFailure::ProjectionUnavailable);
+    const auto& sky = *traced.beam.infinity_source_map;
+    value.tail_attempts = sky.attempted_steps;
+    value.visible = true;
+    value.direction = sky.map.direction;
+    value.camera_over_source_frequency = 1.0 / sky.frequency;
+    value.transmission = traced.volumetric_hit ? std::exp(-double(traced.optical_depth)) : 1;
+    for (int row = 0; row < 2; ++row)
+        for (int column = 0; column < 2; ++column)
+            for (int angular = 0; angular < 2; ++angular)
+                for (int axis = 0; axis < 2; ++axis)
+                    value.source_derivative[row][column] +=
+                        sky.map.jacobian[row][angular] *
+                        film.differential->angular_jacobian[angular][axis] *
+                        film_from_standard[axis][column];
+    return value;
+}
+
+std::expected<PointDetectorBatchResult, PointDetectorError> SharedPointSources(
+    const core::ICamera& camera, GeodesicTracer& tracer,
+    const core::StarfieldSpatialIndex& catalogue, double brightness, double sigma, int x, int y,
+    int width, int height, const CameraSample& sample, const std::function<bool()>& cancelled) {
+    std::array<PointDetectorFootprint, 16> footprints;
+    for (int i = 0; i < width * height; ++i) {
+        const int dx = i % width, dy = i / width;
+        const auto film = camera.ProjectFilmForObserver(x + dx + double(sample.image_u),
+                                                        y + dy + double(sample.image_v),
+                                                        sample.pupil_u, sample.pupil_v);
+        if (!film || !film->ray.active || !film->differential)
+            return std::unexpected(
+                PointDetectorError{PointDetectorFailure::ProjectionUnavailable, {}});
+        const auto& p = film->differential->angular_jacobian;
+        const double determinant = std::fma(p[0][0], p[1][1], -p[0][1] * p[1][0]);
+        if (!std::isfinite(determinant) || determinant == 0)
+            return std::unexpected(PointDetectorError{PointDetectorFailure::Unresolved, {}});
+        footprints[i] = {{double(dx), double(dy)},
+                         {{{sigma * p[1][1] / determinant, -sigma * p[0][1] / determinant},
+                           {-sigma * p[1][0] / determinant, sigma * p[0][0] / determinant}}}};
+    }
+    const PointDetectorSampler probe = [&](const DetectorCoordinate& q)
+        -> std::expected<PointDetectorProbe, PointDetectorFailure> {
+        const auto film = camera.ProjectFilmOffsetForObserver(x + double(sample.image_u),
+                                                              y + double(sample.image_v), q[0],
+                                                              q[1], sample.pupil_u, sample.pupil_v);
+        if (!film) return std::unexpected(PointDetectorFailure::ProjectionUnavailable);
+        if (!film->ray.active) return PointDetectorProbe{};
+        // Derivative per common film coordinate. The batch engine composes
+        // the discovery chart and each original Gaussian separately.
+        return MeasurePointDetector(*film, tracer.TracePointSource(film->ray), {{{1, 0}, {0, 1}}});
+    };
+    return EvaluatePointDetectorBatch(
+        catalogue, brightness,
+        std::span(footprints).first(static_cast<std::size_t>(width * height)), probe, cancelled);
+}
+}  // namespace
+
+bool RenderSession::UsesPhysicalPointDetector() const {
+    const auto* family = dynamic_cast<const core::KerrSchildFamily*>(metric_.get());
+    return config_.point_starfield && star_index_ && family && family->GetParams().Q == 0 &&
+           family->GetParams().Lambda == 0;
+}
+
+base::Expected<RenderSession::PixelBlock> RenderSession::ShadeBlock(int x, int y, int width,
+                                                                    int height,
+                                                                    GeodesicTracer* tracer) const {
+    PixelBlock result{x, y, width, height};
     std::optional<base::Error> sample_error;
     int sample_index = 0;
-    const auto* source_family = dynamic_cast<const core::KerrSchildFamily*>(metric_.get());
-    const bool physical_point_detector = config_.point_starfield && star_index_ && source_family &&
-                                         source_family->GetParams().Q == 0 &&
-                                         source_family->GetParams().Lambda == 0;
-
-    const int samples_taken = ForEachCameraSample(config_.samples_per_pixel, [&](const CameraSample&
-                                                                                     sample) {
-        const int current_sample = sample_index++;
-        if (sample_error) return;
-        const auto fail_sample = [&](const std::string& reason) {
-            sample_error.emplace(base::ErrorDomain::kPhysics, "shade pixel",
-                                 std::format("pixel ({}, {}), sample {}: {}", px_coord, py_coord,
-                                             current_sample, reason));
-        };
-        if (IsStopping()) {
-            fail_sample("render cancelled");
-            return;
-        }
-        const auto projection = camera_->ProjectFilmForObserver(
-            static_cast<double>(px_coord) + sample.image_u,
-            static_cast<double>(py_coord) + sample.image_v, sample.pupil_u, sample.pupil_v);
-        if (!projection) {
-            fail_sample("camera projection is not represented");
-            return;
-        }
-        const CameraRay& camera_ray = projection->ray;
-        SIRIUS_ASSERT(core::IsRepresentedCameraRay(camera_ray));
-        if (!camera_ray.active) return;
-        // The packet centre and all its offset probes must consume the same
-        // infinity map. Their surface/volume contributions still finish before
-        // an outward vacuum handoff can succeed.
-        TraceResult trace_result = physical_point_detector ? tracer->TracePointSource(camera_ray)
-                                                           : tracer->Trace(camera_ray);
-        if (trace_result.cancelled) {
-            fail_sample("ray cancelled");
-            return;
-        }
-        if (trace_result.numerical_failure) {
-            const char* reason = trace_result.coupled_failure == core::CoupledStepFailure::WorkLimit
-                                     ? "ray work limit exhausted"
-                                     : "numerical ray failure";
-            fail_sample(
-                std::format("{} (coupled failure: {}, integrator termination: {}, attempts: {}, "
+    const bool physical_point_detector = UsesPhysicalPointDetector();
+    const int samples_taken =
+        ForEachCameraSample(config_.samples_per_pixel, [&](const CameraSample& sample) {
+            const int current_sample = sample_index++;
+            if (sample_error) return;
+            // All pixels use this sample's original pupil and image offset. A
+            // declined envelope has no partial result: retry the individual
+            // footprints, whose smaller support may still be represented.
+            std::optional<PointDetectorBatchResult> shared;
+            if (physical_point_detector && width * height > 1 && !IsStopping()) {
+                auto batch =
+                    SharedPointSources(*camera_, *tracer, *star_index_,
+                                       config_.point_starfield_config.brightness_scale,
+                                       pixel_angular_size_ * (config_.ray_bundles ? 1.0 : .3), x, y,
+                                       width, height, sample, [&] { return IsStopping(); });
+                if (batch) {
+                    shared = std::move(*batch);
+                } else if (batch.error().reason == PointDetectorFailure::Cancelled) {
+                    sample_error.emplace(base::ErrorDomain::kPhysics, "shade block",
+                                         "render cancelled during shared point discovery");
+                    return;
+                }
+            }
+            for (int pixel_index = 0; pixel_index < width * height; ++pixel_index) {
+                const int px_coord = x + pixel_index % width;
+                const int py_coord = y + pixel_index / width;
+                // Keep a sample's early-return semantics local to its pixel. Every
+                // pixel accumulates float radiance in the original SPP order.
+                const auto shade_sample = [&] {
+                    const auto fail_sample = [&](const std::string& reason) {
+                        sample_error.emplace(base::ErrorDomain::kPhysics, "shade pixel",
+                                             std::format("pixel ({}, {}), sample {}: {}", px_coord,
+                                                         py_coord, current_sample, reason));
+                    };
+                    if (IsStopping()) {
+                        fail_sample("render cancelled");
+                        return;
+                    }
+                    const auto projection = camera_->ProjectFilmForObserver(
+                        static_cast<double>(px_coord) + sample.image_u,
+                        static_cast<double>(py_coord) + sample.image_v, sample.pupil_u,
+                        sample.pupil_v);
+                    if (!projection) {
+                        fail_sample("camera projection is not represented");
+                        return;
+                    }
+                    const CameraRay& camera_ray = projection->ray;
+                    SIRIUS_ASSERT(core::IsRepresentedCameraRay(camera_ray));
+                    if (!camera_ray.active) return;
+                    // The packet centre and all its offset probes must consume the same
+                    // infinity map. Their surface/volume contributions still finish before
+                    // an outward vacuum handoff can succeed.
+                    TraceResult trace_result = physical_point_detector
+                                                   ? tracer->TracePointSource(camera_ray)
+                                                   : tracer->Trace(camera_ray);
+                    if (trace_result.cancelled) {
+                        fail_sample("ray cancelled");
+                        return;
+                    }
+                    if (trace_result.numerical_failure) {
+                        const char* reason =
+                            trace_result.coupled_failure == core::CoupledStepFailure::WorkLimit
+                                ? "ray work limit exhausted"
+                                : "numerical ray failure";
+                        fail_sample(std::format(
+                            "{} (coupled failure: {}, integrator termination: {}, attempts: {}, "
                             "accepted affine distance: {})",
                             reason, core::CoupledStepFailureName(trace_result.coupled_failure),
                             trace_result.integrator_termination, trace_result.steps_taken,
                             trace_result.affine_length));
-            return;
-        }
-        if (trace_result.outcome == TraceResult::Outcome::Escaped) {
-            for (int component = 0; component < 4; ++component) {
-                if (!std::isfinite(trace_result.final_direction(component))) {
-                    fail_sample("non-finite escaped direction");
-                    return;
-                }
+                        return;
+                    }
+                    if (trace_result.outcome == TraceResult::Outcome::Escaped) {
+                        for (int component = 0; component < 4; ++component) {
+                            if (!std::isfinite(trace_result.final_direction(component))) {
+                                fail_sample("non-finite escaped direction");
+                                return;
+                            }
+                        }
+                    }
+                    if (trace_result.volumetric_hit && !std::isfinite(trace_result.optical_depth)) {
+                        fail_sample("non-finite optical depth");
+                        return;
+                    }
+
+                    float sr = 0.0f, sg = 0.0f, sb = 0.0f;
+
+                    switch (trace_result.outcome) {
+                        case TraceResult::Outcome::Horizon:
+                        case TraceResult::Outcome::Throat:
+                            break;
+
+                        case TraceResult::Outcome::DiskHit: {
+                            PixelResult disk = ShadeDiskHit(trace_result);
+                            sr = disk.r;
+                            sg = disk.g;
+                            sb = disk.b;
+                            break;
+                        }
+
+                        case TraceResult::Outcome::Escaped: {
+                            if (!physical_point_detector) {
+                                PixelResult esc = ShadeEscaped(trace_result);
+                                sr = esc.r;
+                                sg = esc.g;
+                                sb = esc.b;
+                            }
+                            break;
+                        }
+
+                        case TraceResult::Outcome::MaxSteps:
+                            // An unfinished ray has no terminal background to compose
+                            // with accumulated volume emission, even if its producer
+                            // omitted the numerical-failure flag.
+                            fail_sample("ray work limit exhausted");
+                            return;
+                        default:
+                            SIRIUS_ASSERT(false);
+                            sr = 1.0f;
+                            sg = 0.0f;
+                            sb = 1.0f;
+                            break;
+                    }
+
+                    // Volumetric transfer composes with the terminal surface/background;
+                    // it is not a terminal ray outcome. Apply I = I_bg exp(-tau) + I_vol
+                    // after shading the actual fate of the central ray.
+                    if (trace_result.volumetric_hit) {
+                        PixelResult volume = ShadeDiskHit(trace_result);
+                        const float transmission =
+                            std::exp(-std::max(trace_result.optical_depth, 0.0f));
+                        sr = sr * transmission + volume.r;
+                        sg = sg * transmission + volume.g;
+                        sb = sb * transmission + volume.b;
+                    }
+
+                    if (physical_point_detector && shared) {
+                        sr += static_cast<float>(shared->samples[pixel_index].rgb[0]);
+                        sg += static_cast<float>(shared->samples[pixel_index].rgb[1]);
+                        sb += static_cast<float>(shared->samples[pixel_index].rgb[2]);
+                    } else if (physical_point_detector) {
+                        if (!projection->differential) {
+                            fail_sample("point detector camera differential is unavailable");
+                            return;
+                        }
+                        // Freeze the original angular packet in its smooth film chart.
+                        // All refinement uses this same L, pupil and Gaussian support.
+                        const auto& p = projection->differential->angular_jacobian;
+                        const double determinant = std::fma(p[0][0], p[1][1], -p[0][1] * p[1][0]);
+                        const double sigma = pixel_angular_size_ * (config_.ray_bundles ? 1.0 : .3);
+                        if (!std::isfinite(determinant) || determinant == 0) {
+                            fail_sample("point detector camera map is singular");
+                            return;
+                        }
+                        const core::AngularMatrix2 film_from_standard{
+                            {{sigma * p[1][1] / determinant, -sigma * p[0][1] / determinant},
+                             {-sigma * p[1][0] / determinant, sigma * p[0][0] / determinant}}};
+                        const auto measure = [&](const core::CameraFilmProjection& film,
+                                                 const TraceResult& traced) {
+                            return MeasurePointDetector(film, traced, film_from_standard);
+                        };
+                        const PointDetectorSampler probe = [&](const DetectorCoordinate& z)
+                            -> std::expected<PointDetectorProbe, PointDetectorFailure> {
+                            if (z == DetectorCoordinate{})
+                                return measure(*projection, trace_result);
+                            const double dx =
+                                film_from_standard[0][0] * z[0] + film_from_standard[0][1] * z[1];
+                            const double dy =
+                                film_from_standard[1][0] * z[0] + film_from_standard[1][1] * z[1];
+                            const auto film = camera_->ProjectFilmOffsetForObserver(
+                                static_cast<double>(px_coord) + sample.image_u,
+                                static_cast<double>(py_coord) + sample.image_v, dx, dy,
+                                sample.pupil_u, sample.pupil_v);
+                            if (!film)
+                                return std::unexpected(PointDetectorFailure::ProjectionUnavailable);
+                            if (!film->ray.active) return PointDetectorProbe{};
+                            return measure(*film, tracer->TracePointSource(film->ray));
+                        };
+                        const auto detector = EvaluatePointDetector(
+                            *star_index_, config_.point_starfield_config.brightness_scale, probe,
+                            [&] { return IsStopping(); });
+                        if (!detector) {
+                            fail_sample(
+                                std::format("point detector failure {} after {} probes, {} cells "
+                                            "and {} candidate visits",
+                                            static_cast<int>(detector.error().reason),
+                                            detector.error().statistics.probes,
+                                            detector.error().statistics.cells,
+                                            detector.error().statistics.candidate_visits));
+                            return;
+                        }
+                        // Image-specific transmission is already included. The central
+                        // volume attenuation above must not be applied a second time.
+                        sr += static_cast<float>(detector->rgb[0]);
+                        sg += static_cast<float>(detector->rgb[1]);
+                        sb += static_cast<float>(detector->rgb[2]);
+                    }
+
+                    if (!std::isfinite(sr) || !std::isfinite(sg) || !std::isfinite(sb)) {
+                        fail_sample("non-finite sample radiance");
+                        return;
+                    }
+                    auto& accumulated = result.pixels[pixel_index];
+                    accumulated.r += sr;
+                    accumulated.g += sg;
+                    accumulated.b += sb;
+                    if (!std::isfinite(accumulated.r) || !std::isfinite(accumulated.g) ||
+                        !std::isfinite(accumulated.b)) {
+                        fail_sample("non-finite accumulated radiance");
+                    }
+                };
+                shade_sample();
+                if (sample_error) return;
             }
-        }
-        if (trace_result.volumetric_hit && !std::isfinite(trace_result.optical_depth)) {
-            fail_sample("non-finite optical depth");
-            return;
-        }
-
-        float sr = 0.0f, sg = 0.0f, sb = 0.0f;
-
-        switch (trace_result.outcome) {
-            case TraceResult::Outcome::Horizon:
-            case TraceResult::Outcome::Throat:
-                break;
-
-            case TraceResult::Outcome::DiskHit: {
-                PixelResult disk = ShadeDiskHit(trace_result);
-                sr = disk.r;
-                sg = disk.g;
-                sb = disk.b;
-                break;
-            }
-
-            case TraceResult::Outcome::Escaped: {
-                if (!physical_point_detector) {
-                    PixelResult esc = ShadeEscaped(trace_result);
-                    sr = esc.r;
-                    sg = esc.g;
-                    sb = esc.b;
-                }
-                break;
-            }
-
-            case TraceResult::Outcome::MaxSteps:
-                // An unfinished ray has no terminal background to compose
-                // with accumulated volume emission, even if its producer
-                // omitted the numerical-failure flag.
-                fail_sample("ray work limit exhausted");
-                return;
-            default:
-                SIRIUS_ASSERT(false);
-                sr = 1.0f;
-                sg = 0.0f;
-                sb = 1.0f;
-                break;
-        }
-
-        // Volumetric transfer composes with the terminal surface/background;
-        // it is not a terminal ray outcome. Apply I = I_bg exp(-tau) + I_vol
-        // after shading the actual fate of the central ray.
-        if (trace_result.volumetric_hit) {
-            PixelResult volume = ShadeDiskHit(trace_result);
-            const float transmission = std::exp(-std::max(trace_result.optical_depth, 0.0f));
-            sr = sr * transmission + volume.r;
-            sg = sg * transmission + volume.g;
-            sb = sb * transmission + volume.b;
-        }
-
-        if (physical_point_detector) {
-            if (!projection->differential) {
-                fail_sample("point detector camera differential is unavailable");
-                return;
-            }
-            // Freeze the original angular packet in its smooth film chart.
-            // All refinement uses this same L, pupil and Gaussian support.
-            const auto& p = projection->differential->angular_jacobian;
-            const double determinant = std::fma(p[0][0], p[1][1], -p[0][1] * p[1][0]);
-            const double sigma = pixel_angular_size_ * (config_.ray_bundles ? 1.0 : .3);
-            if (!std::isfinite(determinant) || determinant == 0) {
-                fail_sample("point detector camera map is singular");
-                return;
-            }
-            const core::AngularMatrix2 film_from_standard{
-                {{sigma * p[1][1] / determinant, -sigma * p[0][1] / determinant},
-                 {-sigma * p[1][0] / determinant, sigma * p[0][0] / determinant}}};
-            const auto measure = [&](const core::CameraFilmProjection& film,
-                                     const TraceResult& traced)
-                -> std::expected<PointDetectorProbe, PointDetectorFailure> {
-                if (traced.cancelled) return std::unexpected(PointDetectorFailure::Cancelled);
-                if (traced.numerical_failure || traced.outcome == TraceResult::Outcome::MaxSteps)
-                    return std::unexpected(PointDetectorFailure::TraceFailed);
-                PointDetectorProbe value;
-                value.inner_attempts = static_cast<std::size_t>(traced.steps_taken);
-                if (traced.outcome != TraceResult::Outcome::Escaped) return value;
-                if (!film.differential || !traced.beam.infinity_source_map)
-                    return std::unexpected(PointDetectorFailure::ProjectionUnavailable);
-                const auto& sky = *traced.beam.infinity_source_map;
-                value.tail_attempts = sky.attempted_steps;
-                value.visible = true;
-                value.direction = sky.map.direction;
-                value.camera_over_source_frequency = 1.0 / sky.frequency;
-                value.transmission =
-                    traced.volumetric_hit ? std::exp(-double(traced.optical_depth)) : 1;
-                for (int row = 0; row < 2; ++row)
-                    for (int column = 0; column < 2; ++column)
-                        for (int angular = 0; angular < 2; ++angular)
-                            for (int axis = 0; axis < 2; ++axis)
-                                value.source_derivative[row][column] +=
-                                    sky.map.jacobian[row][angular] *
-                                    film.differential->angular_jacobian[angular][axis] *
-                                    film_from_standard[axis][column];
-                return value;
-            };
-            const PointDetectorSampler probe = [&](const DetectorCoordinate& z)
-                -> std::expected<PointDetectorProbe, PointDetectorFailure> {
-                if (z == DetectorCoordinate{}) return measure(*projection, trace_result);
-                const double dx = film_from_standard[0][0] * z[0] + film_from_standard[0][1] * z[1];
-                const double dy = film_from_standard[1][0] * z[0] + film_from_standard[1][1] * z[1];
-                const auto film = camera_->ProjectFilmOffsetForObserver(
-                    static_cast<double>(px_coord) + sample.image_u,
-                    static_cast<double>(py_coord) + sample.image_v, dx, dy, sample.pupil_u,
-                    sample.pupil_v);
-                if (!film) return std::unexpected(PointDetectorFailure::ProjectionUnavailable);
-                if (!film->ray.active) return PointDetectorProbe{};
-                return measure(*film, tracer->TracePointSource(film->ray));
-            };
-            const auto detector =
-                EvaluatePointDetector(*star_index_, config_.point_starfield_config.brightness_scale,
-                                      probe, [&] { return IsStopping(); });
-            if (!detector) {
-                fail_sample(std::format(
-                    "point detector failure {} after {} probes, {} cells and {} candidate visits",
-                    static_cast<int>(detector.error().reason), detector.error().statistics.probes,
-                    detector.error().statistics.cells,
-                    detector.error().statistics.candidate_visits));
-                return;
-            }
-            // Image-specific transmission is already included. The central
-            // volume attenuation above must not be applied a second time.
-            sr += static_cast<float>(detector->rgb[0]);
-            sg += static_cast<float>(detector->rgb[1]);
-            sb += static_cast<float>(detector->rgb[2]);
-        }
-
-        if (!std::isfinite(sr) || !std::isfinite(sg) || !std::isfinite(sb)) {
-            fail_sample("non-finite sample radiance");
-            return;
-        }
-        r_acc += sr;
-        g_acc += sg;
-        b_acc += sb;
-        if (!std::isfinite(r_acc) || !std::isfinite(g_acc) || !std::isfinite(b_acc)) {
-            fail_sample("non-finite accumulated radiance");
-        }
-    });
+        });
     if (sample_error) return std::unexpected(std::move(*sample_error));
-
-    float inv_samples = 1.0f / static_cast<float>(samples_taken);
-    result.r = r_acc * inv_samples;
-    result.g = g_acc * inv_samples;
-    result.b = b_acc * inv_samples;
-
+    const float inv_samples = 1.0f / static_cast<float>(samples_taken);
+    for (int i = 0; i < width * height; ++i) {
+        result.pixels[i].r *= inv_samples;
+        result.pixels[i].g *= inv_samples;
+        result.pixels[i].b *= inv_samples;
+    }
     return result;
+}
+
+base::Expected<std::vector<float>> RenderSession::ShadeTile(const Tile& tile,
+                                                            GeodesicTracer* tracer,
+                                                            PixelBlock& cache) const {
+    std::vector<float> pixels(static_cast<std::size_t>(tile.width) * tile.height * 4, 0);
+    const int edge = UsesPhysicalPointDetector() ? 4 : 1;
+    // Walk block intersections rather than image rows so the bounded cache is
+    // sufficient even at high SPP. Anchors always refer to the complete frame.
+    for (int y = (tile.y / edge) * edge; y < tile.y + tile.height; y += edge) {
+        for (int x = (tile.x / edge) * edge; x < tile.x + tile.width; x += edge) {
+            if (IsStopping())
+                return base::Fail(base::ErrorDomain::kPhysics, "shade tile", "render cancelled");
+            if (cache.x != x || cache.y != y) {
+                auto block = ShadeBlock(x, y, std::min(edge, config_.width - x),
+                                        std::min(edge, config_.height - y), tracer);
+                if (!block) return std::unexpected(block.error());
+                cache = std::move(*block);
+            }
+            for (int py = std::max(y, tile.y); py < std::min(y + edge, tile.y + tile.height);
+                 ++py) {
+                for (int px = std::max(x, tile.x); px < std::min(x + edge, tile.x + tile.width);
+                     ++px) {
+                    const auto& pixel = cache.pixels[(py - y) * cache.width + px - x];
+                    const auto index =
+                        (static_cast<std::size_t>(py - tile.y) * tile.width + px - tile.x) * 4;
+                    pixels[index] = pixel.r;
+                    pixels[index + 1] = pixel.g;
+                    pixels[index + 2] = pixel.b;
+                    pixels[index + 3] = 1;
+                }
+            }
+        }
+    }
+    return pixels;
 }
 
 // =============================================================================

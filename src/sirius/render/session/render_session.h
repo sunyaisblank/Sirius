@@ -301,8 +301,19 @@ class RenderSession {
         float r = 0.0f, g = 0.0f, b = 0.0f;
     };
 
-    [[nodiscard]] base::Expected<PixelResult> ShadePixel(int px, int py,
-                                                         backend::GeodesicTracer* tracer) const;
+    // Canonical screen blocks make shared detector work independent of tile
+    // scheduling. Each worker retains only one completed block, at most 16 RGB
+    // values; storage does not grow with image size or samples per pixel.
+    struct PixelBlock {
+        int x = -1, y = -1, width = 0, height = 0;
+        std::array<PixelResult, 16> pixels{};
+    };
+    [[nodiscard]] bool UsesPhysicalPointDetector() const;
+    [[nodiscard]] base::Expected<PixelBlock> ShadeBlock(int x, int y, int width, int height,
+                                                        backend::GeodesicTracer* tracer) const;
+    [[nodiscard]] base::Expected<std::vector<float>> ShadeTile(const Tile& tile,
+                                                               backend::GeodesicTracer* tracer,
+                                                               PixelBlock& cache) const;
     PixelResult ShadeDiskHit(const backend::TraceResult& result) const;
     PixelResult ShadeEscaped(const backend::TraceResult& result) const;
 
@@ -324,6 +335,7 @@ class RenderSession {
     std::unique_ptr<core::IMetric> metric_;
     std::unique_ptr<backend::GeodesicTracer> tracer_;
     std::unique_ptr<core::ICamera> camera_;
+    PixelBlock pixel_block_;
 
     // Relativistic jet model.
 
@@ -356,6 +368,7 @@ class RenderSession {
     // error_message_ and FSM transitions remain owned by the render thread.
     std::vector<std::optional<base::Error>> worker_errors_;
     std::vector<std::unique_ptr<backend::GeodesicTracer>> thread_tracers_;  // Per-thread tracers.
+    std::vector<PixelBlock> thread_pixel_blocks_;
     std::mutex tile_mutex_;                  // Protects tile acquisition.
     std::mutex display_mutex_;               // Protects display buffer updates.
     std::atomic<bool> stop_workers_{false};  // Signal workers to stop.

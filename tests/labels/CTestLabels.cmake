@@ -827,6 +827,7 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    PointSourceResponseTest.TracedImageDensityKeepsTheOriginalGaussianAndSignedMeasure
     PointSourceResponseTest.IntegratedDetectorFluxFollowsSignedAffineLensMeasure
     PointSourceResponseTest.UnresolvedImageShapeStaysInDetectorCoordinates
     PointSourceResponseTest.EllipticalSupportRejectsInsideMajorCircleOutsideEllipse
@@ -1334,6 +1335,9 @@ set_tests_properties(
     PointSourceDetector.ImageFrequencyAndTransmissionAreAppliedOnce
     PointSourceDetector.OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport
     PointSourceDetector.PolynomialFoldResolvesCloseImagesBetweenTheCoarseNodes
+    PointSourceDetector.SharedDiscoveryDeclinesMalformedExhaustedAndCancelledBatches
+    PointSourceDetector.SharedDiscoveryDeclinesUncertainOriginalSupportOwnership
+    PointSourceDetector.SharedDiscoveryPreservesDistinctGaussianShapesAndTransfer
     RayBundleTest.BundleFiniteAndDeterministicKerr
     RayBundleTest.CurvatureStencilPreservesMassScaleAndBothSpinSigns
     RayBundleTest.CurvatureStencilStaysInsideTheActualKerrChartDomain
@@ -1451,6 +1455,7 @@ set_tests_properties(
     RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr
     RenderSessionProbe.LaterGoodCameraSampleCannotEraseCpuNumericalFailure
     RenderSessionProbe.NumericalRayFailureKeepsCpuTilesPrivateAndPreventsOutput
+    RenderSessionProbe.PhysicalPointBlocksPreservePartialEdgesAndNonSquareSamples
     RenderSessionProbe.PhysicalPointDetectorCompletesAMovingThinLensKerrFrame
     RenderSessionProbe.PointStarfieldRejectsValuesItsGeneratorWouldClamp
     RenderSessionProbe.PolarisedRequestsDeclineAndTwoSheetIsRepresented

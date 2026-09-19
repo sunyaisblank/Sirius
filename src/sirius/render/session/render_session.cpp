@@ -750,6 +750,7 @@ base::Expected<void> RenderSession::Initialise() {
         // Per-thread tracers share the metric but keep independent state.
         thread_tracers_.clear();
         thread_tracers_.reserve(num_threads_);
+        thread_pixel_blocks_.resize(static_cast<std::size_t>(num_threads_));
         if (metric_) {
             for (int i = 0; i < num_threads_; ++i) {
                 thread_tracers_.push_back(
@@ -867,45 +868,22 @@ void RenderSession::ScheduleNextTile() {
 void RenderSession::RenderTile(Tile* tile) {
     if (!tile) return;
 
-    std::vector<float> tileBuffer(tile->width * tile->height * 4, 0.0f);
-
-    for (int ty = 0; ty < tile->height; ++ty) {
+    const auto pixels = ShadeTile(*tile, tracer_.get(), pixel_block_);
+    if (!pixels) {
         if (progress_.GetCancellationToken().IsCancelled()) {
             fsm_.Process(SessionEvent::Cancel);
-            return;
+        } else {
+            error_message_ = pixels.error().Description();
+            fsm_.Process(SessionEvent::Error);
         }
-        for (int tx = 0; tx < tile->width; ++tx) {
-            if (IsStopping()) {
-                fsm_.Process(SessionEvent::Cancel);
-                return;
-            }
-            int px = tile->x + tx;
-            int py = tile->y + ty;
-
-            auto pixel = ShadePixel(px, py, tracer_.get());
-            if (!pixel) {
-                if (progress_.GetCancellationToken().IsCancelled()) {
-                    fsm_.Process(SessionEvent::Cancel);
-                } else {
-                    error_message_ = pixel.error().Description();
-                    fsm_.Process(SessionEvent::Error);
-                }
-                return;
-            }
-
-            int idx = (ty * tile->width + tx) * 4;
-            tileBuffer[idx + 0] = pixel->r;
-            tileBuffer[idx + 1] = pixel->g;
-            tileBuffer[idx + 2] = pixel->b;
-            tileBuffer[idx + 3] = 1.0f;
-        }
+        return;
     }
 
     if (progress_.GetCancellationToken().IsCancelled()) {
         fsm_.Process(SessionEvent::Cancel);
         return;
     }
-    display_.UpdateTile(tile->x, tile->y, tile->width, tile->height, tileBuffer.data());
+    display_.UpdateTile(tile->x, tile->y, tile->width, tile->height, pixels->data());
 
     tiles_.CompleteTile(tile->id);
     // The ProgressTracker callback is the single progress surface (the CLI
@@ -1235,36 +1213,18 @@ void RenderSession::WorkerThread(int thread_id) {
 base::Expected<bool> RenderSession::RenderTileThreaded(Tile* tile, int thread_id) {
     if (!tile) return false;
 
-    GeodesicTracer* tracer = nullptr;
-    if (thread_id >= 0 && thread_id < static_cast<int>(thread_tracers_.size())) {
-        tracer = thread_tracers_[thread_id].get();
-    } else {
-        tracer = tracer_.get();
-    }
-
-    std::vector<float> tileBuffer(tile->width * tile->height * 4, 0.0f);
-
-    for (int ty = 0; ty < tile->height; ++ty) {
-        for (int tx = 0; tx < tile->width; ++tx) {
-            if (IsStopping()) return false;
-            int px = tile->x + tx;
-            int py = tile->y + ty;
-
-            auto pixel = ShadePixel(px, py, tracer);
-            if (!pixel) return std::unexpected(pixel.error());
-
-            int idx = (ty * tile->width + tx) * 4;
-            tileBuffer[idx + 0] = pixel->r;
-            tileBuffer[idx + 1] = pixel->g;
-            tileBuffer[idx + 2] = pixel->b;
-            tileBuffer[idx + 3] = 1.0f;
-        }
+    SIRIUS_ASSERT(thread_id >= 0 && thread_id < static_cast<int>(thread_tracers_.size()));
+    const auto pixels =
+        ShadeTile(*tile, thread_tracers_[thread_id].get(), thread_pixel_blocks_[thread_id]);
+    if (!pixels) {
+        if (IsStopping()) return false;
+        return std::unexpected(pixels.error());
     }
 
     {
         std::lock_guard<std::mutex> lock(display_mutex_);
         if (stop_workers_ || progress_.GetCancellationToken().IsCancelled()) return false;
-        display_.UpdateTile(tile->x, tile->y, tile->width, tile->height, tileBuffer.data());
+        display_.UpdateTile(tile->x, tile->y, tile->width, tile->height, pixels->data());
     }
     return true;
 }

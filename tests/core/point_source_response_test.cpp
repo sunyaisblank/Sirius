@@ -38,6 +38,37 @@ std::array<double, 2> Forward(const AngularMatrix2& lens, double x, double y) {
     return {lens[0][0] * ax + lens[0][1] * ay, lens[1][0] * ax + lens[1][1] * ay};
 }
 
+TEST(PointSourceResponseTest, TracedImageDensityKeepsTheOriginalGaussianAndSignedMeasure) {
+    for (const auto& lens : kLenses) {
+        const auto response = MakePointImageResponse(lens.map, kFilm, .001);
+        ASSERT_TRUE(response);
+        for (const std::array<double, 2> original :
+             {std::array{0.0, 0.0}, std::array{.7, -1.3}, std::array{4.0, 0.0}}) {
+            const double radius_squared = original[0] * original[0] + original[1] * original[1];
+            const double expected =
+                std::exp(-.5 * radius_squared) /
+                (2 * std::numbers::pi * -std::expm1(-8.0) * lens.absolute_determinant * 2e-6);
+            const auto density = response->DensityAtOriginalRoot(original);
+            ASSERT_TRUE(density);
+            EXPECT_NEAR(*density, expected, 2e-13 * expected);
+        }
+        EXPECT_EQ(*response->DensityAtOriginalRoot({std::nextafter(4.0, 5.0), 0}), 0);
+        EXPECT_FALSE(response->DensityAtOriginalRoot({0, std::numeric_limits<double>::infinity()}));
+        EXPECT_FALSE(
+            response->DensityAtOriginalRoot({std::numeric_limits<double>::quiet_NaN(), 0}));
+    }
+    constexpr AngularMatrix2 wide{{{1000, 0}, {0, 1000}}};
+    constexpr AngularMatrix2 identity{{{1, 0}, {0, 1}}};
+    EXPECT_FALSE(MakeAffinePointResponse(wide, identity, 1, .001));
+    const auto local = MakePointImageResponse(wide, identity, .001);
+    ASSERT_TRUE(local);
+    EXPECT_NEAR(*local->DensityAtOriginalRoot({0, 0}),
+                1 / (2 * std::numbers::pi * -std::expm1(-8.0) * 1e6), 1e-20);
+    EXPECT_FALSE(MakePointImageResponse({{{1, 1}, {1, 1}}}, identity, .001));
+    EXPECT_FALSE(MakePointImageResponse(identity, {{{1, 1}, {1, 1}}}, .001));
+    EXPECT_FALSE(MakePointImageResponse(identity, identity, 0));
+}
+
 TEST(PointSourceResponseTest, IntegratedDetectorFluxFollowsSignedAffineLensMeasure) {
     constexpr int radial_cells = 4096;
     constexpr int angles = 16;

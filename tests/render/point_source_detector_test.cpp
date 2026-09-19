@@ -59,6 +59,125 @@ std::array<double, 3> Expected(const core::StarEntry& star, DetectorCoordinate z
     return result;
 }
 
+TEST(PointSourceDetector, SharedDiscoveryPreservesDistinctGaussianShapesAndTransfer) {
+    core::StarfieldSpatialIndex catalogue(
+        {Star(.1 * kScale, .2 * kScale), Star(-1.7 * kScale, -.4 * kScale),
+         Star(.6 * kScale, 2.2 * kScale), Star(4.6 * kScale, 0), Star(-5 * kScale, 0)});
+    std::vector<PointDetectorFootprint> footprints;
+    for (int y = 0; y < 4; ++y)
+        for (int x = 0; x < 4; ++x)
+            footprints.push_back(
+                {{x - 1.5, y - 1.5}, {{{.7 + .05 * x, .3}, {-.2, 1.1 - .03 * y}}}});
+    const PointDetectorSampler sample = [](DetectorCoordinate q) {
+        auto point = Gnomonic(kScale * q[0], kScale * q[1], kScale, kScale);
+        point.camera_over_source_frequency = std::exp(.1 * q[0]);
+        point.transmission = .5 + .02 * q[1];
+        return point;
+    };
+    const auto result =
+        EvaluatePointDetectorBatch(catalogue, 1, footprints, sample, [] { return false; });
+    ASSERT_TRUE(result) << static_cast<int>(result.error().reason) << ' '
+                        << result.error().statistics.probes;
+    ASSERT_EQ(result->samples.size(), footprints.size());
+    std::size_t separate_probes = 0;
+    for (std::size_t i = 0; i < footprints.size(); ++i) {
+        const auto& footprint = footprints[i];
+        const auto& m = footprint.chart_from_standard;
+        const double determinant = m[0][0] * m[1][1] - m[0][1] * m[1][0];
+        std::array<double, 3> expected{};
+        for (const auto& star : catalogue.Stars()) {
+            const double x = double(star.direction_y) / star.direction_x;
+            const double y = double(star.direction_z) / star.direction_x;
+            const double u = x / kScale - footprint.centre[0];
+            const double v = y / kScale - footprint.centre[1];
+            const DetectorCoordinate original{(m[1][1] * u - m[0][1] * v) / determinant,
+                                              (-m[1][0] * u + m[0][0] * v) / determinant};
+            const auto contribution = Expected(
+                star, original, determinant * kScale * kScale / std::pow(1 + x * x + y * y, 1.5),
+                std::exp(.1 * x / kScale), .5 + .02 * y / kScale);
+            for (int channel = 0; channel < 3; ++channel)
+                expected[channel] += contribution[channel];
+        }
+        const auto separate = EvaluatePointDetector(
+            catalogue, 1,
+            [&](DetectorCoordinate z) -> std::expected<PointDetectorProbe, PointDetectorFailure> {
+                auto point = sample({footprint.centre[0] + m[0][0] * z[0] + m[0][1] * z[1],
+                                     footprint.centre[1] + m[1][0] * z[0] + m[1][1] * z[1]});
+                if (!point) return point;
+                const auto original = point->source_derivative;
+                for (int row = 0; row < 2; ++row)
+                    for (int column = 0; column < 2; ++column)
+                        point->source_derivative[row][column] =
+                            original[row][0] * m[0][column] + original[row][1] * m[1][column];
+                return point;
+            },
+            [] { return false; });
+        ASSERT_TRUE(separate);
+        separate_probes += separate->statistics.probes;
+        for (int channel = 0; channel < 3; ++channel) {
+            EXPECT_NEAR(result->samples[i].rgb[channel], expected[channel],
+                        2e-6 * expected[channel]);
+            EXPECT_NEAR(result->samples[i].rgb[channel], separate->rgb[channel],
+                        2e-6 * expected[channel]);
+            EXPECT_LE(result->samples[i].estimated_error[channel],
+                      1e-7 + 1e-3 * result->samples[i].rgb[channel]);
+        }
+    }
+    EXPECT_LT(result->statistics.probes * 4, separate_probes);
+    RecordProperty("shared_probes", static_cast<int>(result->statistics.probes));
+    RecordProperty("separate_probes", static_cast<int>(separate_probes));
+}
+
+TEST(PointSourceDetector, SharedDiscoveryDeclinesMalformedExhaustedAndCancelledBatches) {
+    core::StarfieldSpatialIndex catalogue({Star(0, 0)});
+    std::array<PointDetectorFootprint, 2> footprints{};
+    footprints[1].centre = {.5, -.25};
+    const PointDetectorSampler sample = [](DetectorCoordinate z) {
+        return Gnomonic(kScale * z[0], kScale * z[1], kScale, kScale);
+    };
+    auto policy = PointDetectorPolicy{};
+    policy.maximum_probes = 1;
+    const auto exhausted =
+        EvaluatePointDetectorBatch(catalogue, 1, footprints, sample, [] { return false; }, policy);
+    ASSERT_FALSE(exhausted);
+    EXPECT_EQ(exhausted.error().reason, PointDetectorFailure::WorkLimit);
+    const auto cancelled =
+        EvaluatePointDetectorBatch(catalogue, 1, footprints, sample, [] { return true; });
+    ASSERT_FALSE(cancelled);
+    EXPECT_EQ(cancelled.error().reason, PointDetectorFailure::Cancelled);
+    const auto failed = EvaluatePointDetectorBatch(
+        catalogue, 1, footprints,
+        [](DetectorCoordinate) -> std::expected<PointDetectorProbe, PointDetectorFailure> {
+            return std::unexpected(PointDetectorFailure::TraceFailed);
+        },
+        [] { return false; });
+    ASSERT_FALSE(failed);
+    EXPECT_EQ(failed.error().reason, PointDetectorFailure::TraceFailed);
+    footprints[1].chart_from_standard = {{{1, 1}, {1, 1}}};
+    const auto singular =
+        EvaluatePointDetectorBatch(catalogue, 1, footprints, sample, [] { return false; });
+    ASSERT_FALSE(singular);
+    EXPECT_EQ(singular.error().reason, PointDetectorFailure::InvalidInput);
+    EXPECT_EQ(singular.error().statistics.probes, 0);
+    EXPECT_FALSE(EvaluatePointDetectorBatch(catalogue, 1, {}, sample, [] { return false; }));
+}
+
+TEST(PointSourceDetector, SharedDiscoveryDeclinesUncertainOriginalSupportOwnership) {
+    auto star = Star(0, 0);
+    // This represented catalogue direction has the exact gnomonic ratio
+    // (1/128)/1, hence an image at z=(4,0) when the map scale is 1/512.
+    star.direction_y = 1.0f / 128;
+    core::StarfieldSpatialIndex catalogue({star});
+    std::array<PointDetectorFootprint, 2> footprints{};
+    footprints[1].centre = {1, 0};
+    const auto result = EvaluatePointDetectorBatch(
+        catalogue, 1, footprints,
+        [](DetectorCoordinate z) { return Gnomonic(z[0] / 512, z[1] / 512, 1.0 / 512, 1.0 / 512); },
+        [] { return false; });
+    ASSERT_FALSE(result);
+    EXPECT_EQ(result.error().reason, PointDetectorFailure::Unresolved);
+}
+
 TEST(PointSourceDetector, OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport) {
     core::StarfieldSpatialIndex catalogue({Star(0, 0), Star(.3 * kScale, .4 * kScale),
                                            Star(2 * kScale, -kScale), Star(4.2 * kScale, 0)});
@@ -276,6 +395,28 @@ TEST(PointSourceDetector, PolynomialFoldResolvesCloseImagesBetweenTheCoarseNodes
             EXPECT_NEAR(result->rgb[channel], expected[channel], 2e-6 * expected[channel]);
             EXPECT_LE(result->estimated_error[channel], 1e-7 + 1e-3 * result->rgb[channel]);
         }
+        std::array<PointDetectorFootprint, 3> footprints{};
+        footprints[1].centre = {-.3, .2};
+        footprints[2].centre = {.7, -.4};
+        const auto batch =
+            EvaluatePointDetectorBatch(catalogue, 1, footprints, sample, [] { return false; });
+        ASSERT_TRUE(batch) << static_cast<int>(batch.error().reason) << ' '
+                           << batch.error().statistics.probes;
+        for (std::size_t packet = 0; packet < footprints.size(); ++packet) {
+            expected = {};
+            for (const double u : {a, b, c}) {
+                const double df = (u - b) * (u - c) + (u - a) * (u - c) + (u - a) * (u - b);
+                const DetectorCoordinate z{
+                    cosine * u - sine * y / kScale - footprints[packet].centre[0],
+                    sine * u + cosine * y / kScale - footprints[packet].centre[1]};
+                const auto image =
+                    Expected(star, z, kScale * kScale * df / std::pow(1 + y * y, 1.5));
+                for (int channel = 0; channel < 3; ++channel) expected[channel] += image[channel];
+            }
+            for (int channel = 0; channel < 3; ++channel)
+                EXPECT_NEAR(batch->samples[packet].rgb[channel], expected[channel],
+                            2e-6 * expected[channel]);
+        }
     }
 }
 
@@ -288,16 +429,14 @@ TEST(PointSourceDetector, DisconnectedVisibilityIslandAndStripeUseActualImageVis
         return std::hypot(z[0] - .273, z[1] + .331) < .22 ||
                std::abs(.8 * z[0] + .6 * z[1] + .338) < .09;
     };
-    const auto result = EvaluatePointDetector(
-        catalogue, 1,
-        [&](DetectorCoordinate z) {
-            auto point = Gnomonic(kScale * z[0], kScale * z[1], kScale, kScale);
-            point.visible = visible(z);
-            point.inner_attempts = 7;
-            point.tail_attempts = 3;
-            return point;
-        },
-        [] { return false; });
+    const PointDetectorSampler sample = [&](DetectorCoordinate z) {
+        auto point = Gnomonic(kScale * z[0], kScale * z[1], kScale, kScale);
+        point.visible = visible(z);
+        point.inner_attempts = 7;
+        point.tail_attempts = 3;
+        return point;
+    };
+    const auto result = EvaluatePointDetector(catalogue, 1, sample, [] { return false; });
     ASSERT_TRUE(result) << static_cast<int>(result.error().reason) << ' '
                         << result.error().statistics.probes;
     std::array<double, 3> expected{};
@@ -313,6 +452,30 @@ TEST(PointSourceDetector, DisconnectedVisibilityIslandAndStripeUseActualImageVis
         EXPECT_NEAR(result->rgb[channel], expected[channel], 2e-7 * expected[channel]);
     EXPECT_EQ(result->statistics.inner_attempts, 7 * result->statistics.probes);
     EXPECT_EQ(result->statistics.tail_attempts, 3 * result->statistics.probes);
+    std::array<PointDetectorFootprint, 2> footprints{};
+    footprints[1].centre = {.2, .1};
+    const auto batch =
+        EvaluatePointDetectorBatch(catalogue, 1, footprints, sample, [] { return false; });
+    ASSERT_TRUE(batch) << static_cast<int>(batch.error().reason) << ' '
+                       << batch.error().statistics.probes;
+    for (std::size_t packet = 0; packet < footprints.size(); ++packet) {
+        expected = {};
+        for (const auto& star : stars) {
+            const double x = double(star.direction_y) / star.direction_x;
+            const double y = double(star.direction_z) / star.direction_x;
+            const DetectorCoordinate q{x / kScale, y / kScale};
+            if (!visible(q)) continue;
+            const auto image = Expected(
+                star, {q[0] - footprints[packet].centre[0], q[1] - footprints[packet].centre[1]},
+                kScale * kScale / std::pow(1 + x * x + y * y, 1.5));
+            for (int channel = 0; channel < 3; ++channel) expected[channel] += image[channel];
+        }
+        for (int channel = 0; channel < 3; ++channel)
+            EXPECT_NEAR(batch->samples[packet].rgb[channel], expected[channel],
+                        2e-7 * expected[channel]);
+    }
+    EXPECT_EQ(batch->statistics.inner_attempts, 7 * batch->statistics.probes);
+    EXPECT_EQ(batch->statistics.tail_attempts, 3 * batch->statistics.probes);
 }
 }  // namespace
 }  // namespace sirius::test

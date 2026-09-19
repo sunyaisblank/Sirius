@@ -73,6 +73,21 @@ speedups do not resolve that algorithmic workload. Detector sampling and
 CPU/device work ownership require further performance work while preserving
 physical acceptance criteria.
 
+Subsequent development hands outward vacuum detector rays to the checked Kerr
+infinity map earlier (`df95428`) and now shares image discovery across canonical
+4×4 screen blocks at each original pupil. Each pixel retains its original
+Gaussian, signed map, source frequency and image transmission; uncertain support
+or error admission retries the individual footprints. Only completed block RGB
+is cached per worker. Device jobs use those blocks to avoid repeated discovery.
+The unchanged eight-pixel moving ThinLens Kerr serial/two-worker test took
+116.46 seconds, versus 556.21 seconds at `df95428`, with bit-identical results
+between worker counts. An analytic 16-footprint comparison used 614 shared probes
+versus 9,743 separate probes and agreed within the unchanged 2e-6 relative test
+tolerance. Thirty-two focused CPU tests passed, including partial image edges,
+non-square sample counts, disconnected visibility, folds, cancellation and
+private failure. These checks do not establish large-frame or device throughput;
+larger shared regions and device scheduling still need performance work.
+
 No external domain was admitted in the closeout build (0/8). Physical Radeon,
 WSL2/Dozen, native Windows/macOS build and runtime, native viewer input and the
 exact IMAX workload retain their independent qualification requirements. Release

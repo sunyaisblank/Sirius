@@ -7,17 +7,20 @@
 #include <cstddef>
 #include <expected>
 #include <functional>
+#include <span>
+#include <vector>
 
 namespace sirius::render {
 
-// All coordinates belong to one original camera sample and fixed pupil.
-// q = q0 + L z, |z| <= 4. Subdivision never changes L or the parent Gaussian.
+// A scalar sampler uses one original sample's z, q = q0 + L z, |z| <= 4.
+// A batch sampler uses a common film q at the same pupil. Subdivision never
+// changes the original L or parent Gaussian.
 using DetectorCoordinate = std::array<double, 2>;
 
 struct PointDetectorProbe {
     bool visible = false;
     std::array<double, 3> direction{};
-    core::AngularMatrix2 source_derivative{};  // Source radians per original z.
+    core::AngularMatrix2 source_derivative{};  // Source radians per sampler coordinate.
     double camera_over_source_frequency = 1;
     double transmission = 1;
     std::size_t inner_attempts = 0;
@@ -76,6 +79,23 @@ struct PointDetectorError {
 using PointDetectorSampler = std::function<std::expected<PointDetectorProbe, PointDetectorFailure>(
     const DetectorCoordinate&)>;
 
+// Several original camera samples at the SAME pupil, expressed in one smooth
+// film chart. Each keeps q = centre + chart_from_standard*z, |z| <= 4.
+// Their kernels are neither merged nor replaced by the discovery envelope.
+struct PointDetectorFootprint {
+    DetectorCoordinate centre{};
+    core::AngularMatrix2 chart_from_standard{{{1, 0}, {0, 1}}};
+};
+
+struct PointDetectorBatchResult {
+    struct Sample {
+        std::array<double, 3> rgb{};
+        std::array<double, 3> estimated_error{};
+    };
+    std::vector<Sample> samples;
+    PointDetectorStatistics statistics;
+};
+
 // Finite adaptive estimator, not an enclosure of every possible source map.
 // The callback must trace the actual continuous camera family, including at
 // candidate images. Failure has no RGB payload and cannot publish a partial sum.
@@ -83,5 +103,19 @@ using PointDetectorSampler = std::function<std::expected<PointDetectorProbe, Poi
     const core::StarfieldSpatialIndex& catalogue, double brightness_scale,
     const PointDetectorSampler& sample, const std::function<bool()>& cancelled,
     const PointDetectorPolicy& policy = {});
+
+// Shared finite image discovery for up to sixteen overlapping samples. The
+// callback traces actual chart coordinates and returns derivatives per chart
+// unit. Root error is tightened for the narrowest original Gaussian; entirely
+// invisible regions retain its spatial sampling depth. Every returned sample
+// must independently satisfy the original radiance allowance. Failure carries
+// no partial batch; except for cancellation, callers may retry the smaller
+// original packets when their common discovery envelope cannot be resolved.
+[[nodiscard]] std::expected<PointDetectorBatchResult, PointDetectorError>
+EvaluatePointDetectorBatch(const core::StarfieldSpatialIndex& catalogue, double brightness_scale,
+                           std::span<const PointDetectorFootprint> footprints,
+                           const PointDetectorSampler& sample,
+                           const std::function<bool()>& cancelled,
+                           const PointDetectorPolicy& policy = {});
 
 }  // namespace sirius::render

@@ -366,8 +366,16 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     const auto usable = static_cast<std::uint64_t>(double(*budget) * kResidencyFraction);
     const auto target = ResolveDispatchTargetMs(kDefaultDispatchTargetMs);
     if (!target) return std::unexpected(target.error());
-    std::size_t capacity =
-        std::min<std::size_t>(64, static_cast<std::size_t>(config.width) * config.height);
+    // Physical point detectors share image discovery within canonical 4x4
+    // blocks. Assign each block to one worker, otherwise sixteen pixel workers
+    // would repeat the same discovery. Other retained scenes keep pixel jobs.
+    const int work_edge =
+        config.point_starfield && config.black_hole_charge == 0 && config.cosmological_constant == 0
+            ? 4
+            : 1;
+    const auto work_count = static_cast<std::size_t>((config.width + work_edge - 1) / work_edge) *
+                            ((config.height + work_edge - 1) / work_edge);
+    std::size_t capacity = std::min<std::size_t>(64, work_count);
     while (capacity > 0 && backend::RetainedCompute::RequiredBufferBytes(capacity) +
                                    kMinTileEdge * kMinTileEdge * kTileWorkingSetBytesPerPixel >
                                usable)
@@ -394,9 +402,9 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     std::atomic<bool> cancelled{false};
     backend::RetainedTraceExecutor executor(
         **compute, [&] { return cancelled.load(); }, kDispatchStopMs);
-    // Host work items are individual pixels, independent of device residency.
+    // Host work items are screen blocks or pixels, independent of device residency.
     // Each worker has at most one pending ray interval in the bounded batch.
-    RenderSession session(executor, static_cast<int>(capacity), 1);
+    RenderSession session(executor, static_cast<int>(capacity), work_edge);
     auto worker_config = config;
     worker_config.write_output = false;
     worker_config.output_path = SessionConfig{}.output_path;

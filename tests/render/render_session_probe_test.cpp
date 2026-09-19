@@ -189,6 +189,49 @@ TEST(RenderSessionProbe, PhysicalPointDetectorCompletesAMovingThinLensKerrFrame)
     EXPECT_EQ(parallel.GetDisplayBuffer().SnapshotFloatData(), pixels);
 }
 
+TEST(RenderSessionProbe, PhysicalPointBlocksPreservePartialEdgesAndNonSquareSamples) {
+    const ScopedTemporaryDirectory directory("sirius-point-block-edges");
+    SessionConfig config;
+    sirius::test::ConfigureMovingKerrDetector(config);
+    // Flat transport keeps this scheduling regression bounded. Five columns
+    // exercise both a shared block and a one-pixel original packet; three SPP
+    // retain distinct film/pupil samples and their original accumulation order.
+    config.metric_id = sirius::core::MetricId::Minkowski;
+    config.black_hole_mass = 0;
+    config.black_hole_spin = 0;
+    config.width = 5;
+    config.height = 1;
+    config.samples_per_pixel = 3;
+    config.tile_size = 8;
+    config.enable_parallel_rendering = false;
+    config.output_path = (directory.path() / "serial.exr").string();
+    RenderSession serial;
+    const auto configured = serial.Configure(config);
+    ASSERT_TRUE(configured) << configured.error().Description();
+    ASSERT_EQ(serial.Execute(), SessionState::Complete) << serial.GetErrorMessage();
+    const auto pixels = serial.GetDisplayBuffer().SnapshotFloatData();
+    ASSERT_EQ(pixels.size(), 20u);
+    double total = 0;
+    for (std::size_t i = 0; i < pixels.size(); ++i) {
+        ASSERT_TRUE(std::isfinite(pixels[i]));
+        if (i % 4 == 3)
+            EXPECT_EQ(pixels[i], 1);
+        else
+            total += pixels[i];
+    }
+    EXPECT_GT(total, 0);
+    // A tile boundary through the shared block must not change discovery,
+    // kernel ownership or the partial block at the image edge.
+    config.enable_parallel_rendering = true;
+    config.thread_count = 2;
+    config.tile_size = 2;
+    config.output_path = (directory.path() / "parallel.exr").string();
+    RenderSession parallel;
+    ASSERT_TRUE(parallel.Configure(config));
+    ASSERT_EQ(parallel.Execute(), SessionState::Complete) << parallel.GetErrorMessage();
+    EXPECT_EQ(parallel.GetDisplayBuffer().SnapshotFloatData(), pixels);
+}
+
 TEST(RenderSessionProbe, FilmAffectsDisplayOutputButNeverLinearExr) {
     namespace fs = std::filesystem;
     const ScopedTemporaryDirectory temporary_directory("sirius-film-probe");
