@@ -12,6 +12,9 @@ The source authorities are `operating_model.json`, the policy in
 `tests/CMakeLists.txt`. `labels/CTestLabels.cmake` is generated: do not edit it
 by hand. Reference generators and high-precision fixtures in `support/` are
 test inputs, not disposable logs. Keep their independent derivations intact.
+Repository source-contract checks and their negative controls live by subject
+in `scripts/governance/`; `scripts/verify-repository-structure.py` remains the
+single command used by CMake and CI.
 
 ## Choose validation by the change
 

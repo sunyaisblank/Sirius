@@ -49,6 +49,14 @@ alignment, `sirius_testing.cmake` owns source/build gates, and
 `sirius_install.cmake` owns installation and packaging. Each source layer owns
 its translation units; `tests/CMakeLists.txt` owns test registration.
 
+Source governance keeps its existing command entrypoints. The repository
+verifier delegates to `scripts/governance/`: `repository.py` owns layer and
+translation-unit checks, `build_policy.py` owns CI and immutable input policy,
+and `colour_policy.py`, `transport_policy.py`, and `metric_policy.py` own their
+physical source contracts. Each policy keeps its negative controls beside its
+checks. Qualification producers and receipt verifiers remain separate tools
+because issuing evidence and admitting it are distinct operations.
+
 ## Render examples deliberately
 
 ```sh
