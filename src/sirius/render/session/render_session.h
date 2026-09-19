@@ -11,6 +11,7 @@
 
 #include "sirius/render/film_config.h"
 #include "sirius/render/session/display_buffer.h"
+#include "sirius/render/session/point_source_detector.h"
 #include "sirius/render/session/progress_tracker.h"
 #include "sirius/render/session/session_events.h"
 #include "sirius/render/session/session_states.h"
@@ -302,15 +303,16 @@ class RenderSession {
     };
 
     // Canonical screen blocks make shared detector work independent of tile
-    // scheduling. Each worker retains only one completed block, at most 16 RGB
+    // scheduling. Each worker retains only one completed block, at most 1024 RGB
     // values; storage does not grow with image size or samples per pixel.
     struct PixelBlock {
         int x = -1, y = -1, width = 0, height = 0;
-        std::array<PixelResult, 16> pixels{};
+        std::array<PixelResult, kPointDetectorBatchCapacity> pixels{};
     };
     [[nodiscard]] bool UsesPhysicalPointDetector() const;
-    [[nodiscard]] base::Expected<PixelBlock> ShadeBlock(int x, int y, int width, int height,
-                                                        backend::GeodesicTracer* tracer) const;
+    [[nodiscard]] base::Expected<void> ShadeBlock(int x, int y, int width, int height,
+                                                  backend::GeodesicTracer* tracer,
+                                                  PixelBlock& result) const;
     [[nodiscard]] base::Expected<std::vector<float>> ShadeTile(const Tile& tile,
                                                                backend::GeodesicTracer* tracer,
                                                                PixelBlock& cache) const;
@@ -336,8 +338,6 @@ class RenderSession {
     std::unique_ptr<backend::GeodesicTracer> tracer_;
     std::unique_ptr<core::ICamera> camera_;
     PixelBlock pixel_block_;
-
-    // Relativistic jet model.
 
     // Starfield background texture (equirectangular RGBA).
     std::vector<unsigned char> starfield_data_;

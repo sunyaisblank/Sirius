@@ -19,6 +19,7 @@ add_executable(sirius_render_tests
     ray_bundle_test.cpp
     starfield_point_test.cpp
     point_source_detector_test.cpp
+    point_source_detector_physics_test.cpp
     doppler_toggle_test.cpp
     camera_aberration_test.cpp
     pixel_sampling_test.cpp

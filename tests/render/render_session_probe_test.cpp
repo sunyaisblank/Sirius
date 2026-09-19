@@ -152,10 +152,12 @@ TEST(RenderSessionProbe, CpuKerrRenderProducesValidPpmThroughTheOwnedWriter) {
 TEST(RenderSessionProbe, PhysicalPointDetectorCompletesAMovingThinLensKerrFrame) {
     const ScopedTemporaryDirectory temporary_directory("sirius-point-detector-probe");
     SessionConfig config;
-    config.width = 4;
-    config.height = 2;
+    // Keep the original aspect ratio and physical scene while exercising a
+    // full 512-pixel shared region rather than the former eight-pixel witness.
+    config.width = 32;
+    config.height = 16;
     config.samples_per_pixel = 1;
-    config.tile_size = 4;
+    config.tile_size = 32;
     config.enable_parallel_rendering = false;
     // Inspect linear radiance: display grading can legitimately suppress this
     // deliberately faint catalogue. EXR also exercises the connected writer.
@@ -166,7 +168,7 @@ TEST(RenderSessionProbe, PhysicalPointDetectorCompletesAMovingThinLensKerrFrame)
     ASSERT_TRUE(configured) << configured.error().Description();
     ASSERT_EQ(session.Execute(), SessionState::Complete);
     const auto pixels = session.GetDisplayBuffer().SnapshotFloatData();
-    ASSERT_EQ(pixels.size(), 4u * 2u * 4u);
+    ASSERT_EQ(pixels.size(), 32u * 16u * 4u);
     double total = 0;
     bool varies = false;
     for (std::size_t i = 0; i < pixels.size(); ++i) {
@@ -181,7 +183,7 @@ TEST(RenderSessionProbe, PhysicalPointDetectorCompletesAMovingThinLensKerrFrame)
     // The sampler must use each worker's tracer and keep packet caches local.
     config.enable_parallel_rendering = true;
     config.thread_count = 2;
-    config.tile_size = 2;
+    config.tile_size = 16;
     config.output_path = (temporary_directory.path() / "detector-parallel.exr").string();
     RenderSession parallel;
     ASSERT_TRUE(parallel.Configure(config));
@@ -193,16 +195,18 @@ TEST(RenderSessionProbe, PhysicalPointBlocksPreservePartialEdgesAndNonSquareSamp
     const ScopedTemporaryDirectory directory("sirius-point-block-edges");
     SessionConfig config;
     sirius::test::ConfigureMovingKerrDetector(config);
-    // Flat transport keeps this scheduling regression bounded. Five columns
-    // exercise both a shared block and a one-pixel original packet; three SPP
-    // retain distinct film/pupil samples and their original accumulation order.
+    // Flat transport keeps this scheduling regression bounded. A full block
+    // and a one-pixel edge exercise cache replacement and scalar fallback;
+    // three SPP retain distinct film/pupil samples and their accumulation order.
     config.metric_id = sirius::core::MetricId::Minkowski;
     config.black_hole_mass = 0;
     config.black_hole_spin = 0;
-    config.width = 5;
+    config.width = 33;
     config.height = 1;
+    config.camera_fov = 1;
+    config.point_starfield_config.star_count = 10000;
     config.samples_per_pixel = 3;
-    config.tile_size = 8;
+    config.tile_size = 64;
     config.enable_parallel_rendering = false;
     config.output_path = (directory.path() / "serial.exr").string();
     RenderSession serial;
@@ -210,7 +214,7 @@ TEST(RenderSessionProbe, PhysicalPointBlocksPreservePartialEdgesAndNonSquareSamp
     ASSERT_TRUE(configured) << configured.error().Description();
     ASSERT_EQ(serial.Execute(), SessionState::Complete) << serial.GetErrorMessage();
     const auto pixels = serial.GetDisplayBuffer().SnapshotFloatData();
-    ASSERT_EQ(pixels.size(), 20u);
+    ASSERT_EQ(pixels.size(), 132u);
     double total = 0;
     for (std::size_t i = 0; i < pixels.size(); ++i) {
         ASSERT_TRUE(std::isfinite(pixels[i]));
@@ -224,7 +228,7 @@ TEST(RenderSessionProbe, PhysicalPointBlocksPreservePartialEdgesAndNonSquareSamp
     // kernel ownership or the partial block at the image edge.
     config.enable_parallel_rendering = true;
     config.thread_count = 2;
-    config.tile_size = 2;
+    config.tile_size = 16;
     config.output_path = (directory.path() / "parallel.exr").string();
     RenderSession parallel;
     ASSERT_TRUE(parallel.Configure(config));

@@ -12,6 +12,10 @@
 
 namespace sirius::render {
 
+inline constexpr int kPointDetectorBlockEdge = 32;
+inline constexpr std::size_t kPointDetectorBatchCapacity =
+    kPointDetectorBlockEdge * kPointDetectorBlockEdge;
+
 // A scalar sampler uses one original sample's z, q = q0 + L z, |z| <= 4.
 // A batch sampler uses a common film q at the same pupil. Subdivision never
 // changes the original L or parent Gaussian.
@@ -104,7 +108,7 @@ struct PointDetectorBatchResult {
     const PointDetectorSampler& sample, const std::function<bool()>& cancelled,
     const PointDetectorPolicy& policy = {});
 
-// Shared finite image discovery for up to sixteen overlapping samples. The
+// Shared finite image discovery for up to kPointDetectorBatchCapacity samples. The
 // callback traces actual chart coordinates and returns derivatives per chart
 // unit. Root error is tightened for the narrowest original Gaussian; entirely
 // invisible regions retain its spatial sampling depth. Every returned sample
@@ -113,6 +117,18 @@ struct PointDetectorBatchResult {
 // original packets when their common discovery envelope cannot be resolved.
 [[nodiscard]] std::expected<PointDetectorBatchResult, PointDetectorError>
 EvaluatePointDetectorBatch(const core::StarfieldSpatialIndex& catalogue, double brightness_scale,
+                           std::span<const PointDetectorFootprint> footprints,
+                           const PointDetectorSampler& sample,
+                           const std::function<bool()>& cancelled,
+                           const PointDetectorPolicy& policy = {});
+
+// Try common discovery, bisect declined regions along their widest film axis,
+// and finish unresolved leaves with the original scalar detector. The shared
+// attempts consume at most max(1024, 128*sample_count) extra probes in total;
+// exhaustion of that scheduling budget never relaxes an original leaf's policy.
+// Cancellation or any failed original footprint withholds the entire result.
+[[nodiscard]] std::expected<PointDetectorBatchResult, PointDetectorError>
+EvaluatePointDetectorGroup(const core::StarfieldSpatialIndex& catalogue, double brightness_scale,
                            std::span<const PointDetectorFootprint> footprints,
                            const PointDetectorSampler& sample,
                            const std::function<bool()>& cancelled,

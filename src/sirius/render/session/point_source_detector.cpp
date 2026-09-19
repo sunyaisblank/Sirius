@@ -10,6 +10,7 @@
 #include <limits>
 #include <new>
 #include <numbers>
+#include <numeric>
 #include <optional>
 #include <utility>
 #include <vector>
@@ -20,6 +21,19 @@ using Coordinate = DetectorCoordinate;
 using Matrix = core::AngularMatrix2;
 using Rgb = std::array<double, 3>;
 using Direction = std::array<double, 3>;
+
+bool Positive(double value) { return std::isfinite(value) && value > 0; }
+
+bool ValidPolicy(const PointDetectorPolicy& policy) {
+    return Positive(policy.absolute_rgb_error) && Positive(policy.relative_rgb_error) &&
+           Positive(policy.geometry_error) && Positive(policy.root_error) &&
+           Positive(policy.maximum_linearization_residual) &&
+           policy.maximum_linearization_residual < 1 && policy.maximum_probes > 0 &&
+           policy.maximum_probes <= 65536 && policy.maximum_cells > 0 &&
+           policy.maximum_candidate_visits > 0 && policy.maximum_candidate_visits <= 1048576 &&
+           policy.maximum_newton_steps > 0 && policy.maximum_depth <= 20 &&
+           policy.minimum_depth <= policy.maximum_depth;
+}
 
 struct Cell {
     Coordinate lower, upper;
@@ -143,14 +157,7 @@ class Detector {
         std::vector<std::size_t>* images = nullptr) {
         try {
             if (!sampler_ || !std::isfinite(brightness_) || brightness_ < 0 ||
-                !Positive(policy_.absolute_rgb_error) || !Positive(policy_.relative_rgb_error) ||
-                !Positive(policy_.geometry_error) || !Positive(policy_.root_error) ||
-                !Positive(policy_.maximum_linearization_residual) ||
-                policy_.maximum_linearization_residual >= 1 || policy_.maximum_probes == 0 ||
-                policy_.maximum_probes > 65536 || policy_.maximum_cells == 0 ||
-                policy_.maximum_candidate_visits == 0 ||
-                policy_.maximum_candidate_visits > 1048576 || policy_.maximum_newton_steps == 0 ||
-                policy_.maximum_depth > 20 || policy_.minimum_depth > policy_.maximum_depth)
+                !ValidPolicy(policy_))
                 Fail(PointDetectorFailure::InvalidInput);
             probes_.reserve(policy_.maximum_probes);
             probe_slots_.assign(std::bit_ceil(2 * policy_.maximum_probes), kEmptyProbe);
@@ -185,7 +192,6 @@ class Detector {
     }
 
   private:
-    static bool Positive(double value) { return std::isfinite(value) && value > 0; }
     [[noreturn]] static void Fail(PointDetectorFailure reason) { throw reason; }
     void CheckCancellation() const {
         if (cancelled_ && cancelled_()) Fail(PointDetectorFailure::Cancelled);
@@ -591,7 +597,9 @@ class Detector {
                 validation[i] = Sum(leaves);
             }
             auto checked = Sum(validation);
-            if (Agrees(cell, fine, checked)) return checked;
+            if ((!checked.has_hidden_probe || cell.depth >= minimum_invisible_depth_) &&
+                Agrees(cell, fine, checked))
+                return checked;
         }
         for (int i = 0; i < 4; ++i) estimates[i] = Refine(children[i], estimates[i]);
         return Sum(estimates);
@@ -625,7 +633,8 @@ std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetecto
     const auto failure = [&](PointDetectorFailure reason) {
         return std::unexpected(PointDetectorError{reason, statistics});
     };
-    if (footprints.empty() || footprints.size() > 16 || !sample)
+    if (footprints.empty() || footprints.size() > kPointDetectorBatchCapacity || !sample ||
+        !ValidPolicy(policy) || !std::isfinite(brightness_scale) || brightness_scale < 0)
         return failure(PointDetectorFailure::InvalidInput);
     try {
         // The norm is scale-safe and encloses every orientation of the original
@@ -700,7 +709,8 @@ std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetecto
         for (std::size_t packet = 0; packet < footprints.size(); ++packet) {
             const auto& footprint = footprints[packet];
             const auto& inverse = inverses[packet];
-            const double conditioning = norm(footprint.chart_from_standard) * norm(inverse);
+            const double inverse_norm = norm(inverse);
+            const double conditioning = norm(footprint.chart_from_standard) * inverse_norm;
             if (!std::isfinite(conditioning)) return failure(PointDetectorFailure::Unresolved);
             auto map = footprint.chart_from_standard;
             for (auto& row : map)
@@ -715,13 +725,16 @@ std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetecto
                                           inverse[1][0] * delta[0] + inverse[1][1] * delta[1]};
                 const double radius = std::hypot(original[0], original[1]);
                 const double uncertainty =
-                    scale * norm(inverse) * image.uncertainty +
+                    scale * inverse_norm * image.uncertainty +
                     64 * std::numeric_limits<double>::epsilon() * conditioning * (1 + radius);
                 // The original hard support cannot be decided from a root
                 // interval that straddles it. Keep the entire batch private so
                 // its caller can resolve that original packet independently.
                 if (std::abs(radius - 4) <= uncertainty)
                     return failure(PointDetectorFailure::Unresolved);
+                // A resolved image outside this original support contributes
+                // exactly zero; do not compose or transfer an unused density.
+                if (radius > 4 && std::isfinite(radius)) continue;
                 const auto response = core::MakePointImageResponse(image.point.source_derivative,
                                                                    map, policy.geometry_error);
                 if (!response) return failure(PointDetectorFailure::Unresolved);
@@ -772,6 +785,128 @@ std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetecto
                     policy.absolute_rgb_error + policy.relative_rgb_error * output.rgb[channel])
                     return failure(PointDetectorFailure::Unresolved);
         }
+        return result;
+    } catch (const std::bad_alloc&) {
+        return failure(PointDetectorFailure::WorkLimit);
+    }
+}
+
+std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetectorGroup(
+    const core::StarfieldSpatialIndex& catalogue, double brightness_scale,
+    std::span<const PointDetectorFootprint> footprints, const PointDetectorSampler& sample,
+    const std::function<bool()>& cancelled, const PointDetectorPolicy& policy) {
+    PointDetectorStatistics statistics;
+    const auto failure = [&](PointDetectorFailure reason) {
+        return std::unexpected(PointDetectorError{reason, statistics});
+    };
+    if (footprints.empty() || footprints.size() > kPointDetectorBatchCapacity || !sample ||
+        !ValidPolicy(policy) || !std::isfinite(brightness_scale) || brightness_scale < 0)
+        return failure(PointDetectorFailure::InvalidInput);
+    // Failed discovery still performed real work. Add operation counts, but
+    // caches are sequential and their peak reservation is the maximum, not sum.
+    const auto account = [&](const PointDetectorStatistics& work) {
+        statistics.probes += work.probes;
+        statistics.probe_requests += work.probe_requests;
+        statistics.probe_cache_comparisons += work.probe_cache_comparisons;
+        statistics.cells += work.cells;
+        statistics.candidate_visits += work.candidate_visits;
+        statistics.newton_steps += work.newton_steps;
+        statistics.roots += work.roots;
+        statistics.inner_attempts += work.inner_attempts;
+        statistics.tail_attempts += work.tail_attempts;
+        statistics.reserved_cache_bytes =
+            std::max(statistics.reserved_cache_bytes, work.reserved_cache_bytes);
+        statistics.maximum_root_coordinate_error =
+            std::max(statistics.maximum_root_coordinate_error, work.maximum_root_coordinate_error);
+    };
+    try {
+        // Validate geometry before any spatial ordering. In particular, NaN
+        // centres must never enter a comparator and singular kernels must not
+        // be retried as if they were merely difficult discovery envelopes.
+        for (const auto& footprint : footprints) {
+            for (const double value : footprint.centre)
+                if (!std::isfinite(value)) return failure(PointDetectorFailure::InvalidInput);
+            for (const auto& row : footprint.chart_from_standard)
+                for (const double value : row)
+                    if (!std::isfinite(value)) return failure(PointDetectorFailure::InvalidInput);
+            if (!Solve(footprint.chart_from_standard, {1, 0}) ||
+                !Solve(footprint.chart_from_standard, {0, 1}))
+                return failure(PointDetectorFailure::InvalidInput);
+        }
+        PointDetectorBatchResult result;
+        result.samples.resize(footprints.size());
+        std::vector<std::size_t> indices(footprints.size());
+        std::iota(indices.begin(), indices.end(), 0);
+        std::size_t remaining_shared_probes = std::max<std::size_t>(1024, 128 * footprints.size());
+        const auto evaluate =
+            [&](auto&& self, std::span<std::size_t> subset) -> std::optional<PointDetectorFailure> {
+            if (cancelled && cancelled()) return PointDetectorFailure::Cancelled;
+            if (subset.size() > 1 && remaining_shared_probes >= 512) {
+                std::vector<PointDetectorFootprint> packets;
+                packets.reserve(subset.size());
+                for (const auto index : subset) packets.push_back(footprints[index]);
+                auto shared_policy = policy;
+                shared_policy.maximum_probes =
+                    std::min(policy.maximum_probes, remaining_shared_probes);
+                const auto batch = EvaluatePointDetectorBatch(catalogue, brightness_scale, packets,
+                                                              sample, cancelled, shared_policy);
+                const auto& work = batch ? batch->statistics : batch.error().statistics;
+                account(work);
+                remaining_shared_probes -= std::min(remaining_shared_probes, work.probes);
+                if (batch) {
+                    for (std::size_t i = 0; i < subset.size(); ++i)
+                        result.samples[subset[i]] = batch->samples[i];
+                    return std::nullopt;
+                }
+                // Inputs were validated above. An invalid derived envelope
+                // (overflow or an unrepresentable scaled root tolerance) can
+                // still leave smaller original footprints represented.
+                if (batch.error().reason == PointDetectorFailure::Cancelled)
+                    return batch.error().reason;
+            }
+            if (subset.size() == 1 || remaining_shared_probes < 512) {
+                for (const auto index : subset) {
+                    const auto& footprint = footprints[index];
+                    const auto& m = footprint.chart_from_standard;
+                    const PointDetectorSampler original = [&](const Coordinate& z)
+                        -> std::expected<PointDetectorProbe, PointDetectorFailure> {
+                        auto point =
+                            sample({footprint.centre[0] + (m[0][0] * z[0] + m[0][1] * z[1]),
+                                    footprint.centre[1] + (m[1][0] * z[0] + m[1][1] * z[1])});
+                        if (!point) return point;
+                        const auto derivative = point->source_derivative;
+                        for (int row = 0; row < 2; ++row)
+                            for (int col = 0; col < 2; ++col)
+                                point->source_derivative[row][col] =
+                                    derivative[row][0] * m[0][col] + derivative[row][1] * m[1][col];
+                        return point;
+                    };
+                    const auto leaf = EvaluatePointDetector(catalogue, brightness_scale, original,
+                                                            cancelled, policy);
+                    account(leaf ? leaf->statistics : leaf.error().statistics);
+                    if (!leaf) return leaf.error().reason;
+                    result.samples[index] = {leaf->rgb, leaf->estimated_error};
+                }
+                return std::nullopt;
+            }
+            Coordinate lower = footprints[subset.front()].centre, upper = lower;
+            for (const auto index : subset)
+                for (int axis = 0; axis < 2; ++axis) {
+                    lower[axis] = std::min(lower[axis], footprints[index].centre[axis]);
+                    upper[axis] = std::max(upper[axis], footprints[index].centre[axis]);
+                }
+            const int axis = upper[1] - lower[1] > upper[0] - lower[0] ? 1 : 0;
+            std::sort(subset.begin(), subset.end(), [&](std::size_t a, std::size_t b) {
+                const double first = footprints[a].centre[axis],
+                             second = footprints[b].centre[axis];
+                return first == second ? a < b : first < second;
+            });
+            const auto middle = subset.size() / 2;
+            if (const auto error = self(self, subset.first(middle))) return error;
+            return self(self, subset.subspan(middle));
+        };
+        if (const auto error = evaluate(evaluate, std::span(indices))) return failure(*error);
+        result.statistics = statistics;
         return result;
     } catch (const std::bad_alloc&) {
         return failure(PointDetectorFailure::WorkLimit);

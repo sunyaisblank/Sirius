@@ -120,8 +120,7 @@ RenderSession::PixelResult RenderSession::ShadeEscaped(const TraceResult& result
 
 namespace {
 std::expected<PointDetectorProbe, PointDetectorFailure> MeasurePointDetector(
-    const core::CameraFilmProjection& film, const TraceResult& traced,
-    const core::AngularMatrix2& film_from_standard) {
+    const core::CameraFilmProjection& film, const TraceResult& traced) {
     if (traced.cancelled) return std::unexpected(PointDetectorFailure::Cancelled);
     if (traced.numerical_failure || traced.outcome == TraceResult::Outcome::MaxSteps)
         return std::unexpected(PointDetectorFailure::TraceFailed);
@@ -139,11 +138,9 @@ std::expected<PointDetectorProbe, PointDetectorFailure> MeasurePointDetector(
     for (int row = 0; row < 2; ++row)
         for (int column = 0; column < 2; ++column)
             for (int angular = 0; angular < 2; ++angular)
-                for (int axis = 0; axis < 2; ++axis)
-                    value.source_derivative[row][column] +=
-                        sky.map.jacobian[row][angular] *
-                        film.differential->angular_jacobian[angular][axis] *
-                        film_from_standard[axis][column];
+                value.source_derivative[row][column] +=
+                    sky.map.jacobian[row][angular] *
+                    film.differential->angular_jacobian[angular][column];
     return value;
 }
 
@@ -151,22 +148,31 @@ std::expected<PointDetectorBatchResult, PointDetectorError> SharedPointSources(
     const core::ICamera& camera, GeodesicTracer& tracer,
     const core::StarfieldSpatialIndex& catalogue, double brightness, double sigma, int x, int y,
     int width, int height, const CameraSample& sample, const std::function<bool()>& cancelled) {
-    std::array<PointDetectorFootprint, 16> footprints;
+    std::vector<PointDetectorFootprint> footprints;
+    std::vector<std::size_t> indices;
+    const auto count = static_cast<std::size_t>(width * height);
+    footprints.reserve(count);
+    indices.reserve(count);
     for (int i = 0; i < width * height; ++i) {
         const int dx = i % width, dy = i / width;
         const auto film = camera.ProjectFilmForObserver(x + dx + double(sample.image_u),
                                                         y + dy + double(sample.image_v),
                                                         sample.pupil_u, sample.pupil_v);
-        if (!film || !film->ray.active || !film->differential)
+        if (!film)
+            return std::unexpected(
+                PointDetectorError{PointDetectorFailure::ProjectionUnavailable, {}});
+        if (!film->ray.active) continue;
+        if (!film->differential)
             return std::unexpected(
                 PointDetectorError{PointDetectorFailure::ProjectionUnavailable, {}});
         const auto& p = film->differential->angular_jacobian;
         const double determinant = std::fma(p[0][0], p[1][1], -p[0][1] * p[1][0]);
         if (!std::isfinite(determinant) || determinant == 0)
             return std::unexpected(PointDetectorError{PointDetectorFailure::Unresolved, {}});
-        footprints[i] = {{double(dx), double(dy)},
-                         {{{sigma * p[1][1] / determinant, -sigma * p[0][1] / determinant},
-                           {-sigma * p[1][0] / determinant, sigma * p[0][0] / determinant}}}};
+        footprints.push_back({{double(dx), double(dy)},
+                              {{{sigma * p[1][1] / determinant, -sigma * p[0][1] / determinant},
+                                {-sigma * p[1][0] / determinant, sigma * p[0][0] / determinant}}}});
+        indices.push_back(static_cast<std::size_t>(i));
     }
     const PointDetectorSampler probe = [&](const DetectorCoordinate& q)
         -> std::expected<PointDetectorProbe, PointDetectorFailure> {
@@ -177,11 +183,17 @@ std::expected<PointDetectorBatchResult, PointDetectorError> SharedPointSources(
         if (!film->ray.active) return PointDetectorProbe{};
         // Derivative per common film coordinate. The batch engine composes
         // the discovery chart and each original Gaussian separately.
-        return MeasurePointDetector(*film, tracer.TracePointSource(film->ray), {{{1, 0}, {0, 1}}});
+        return MeasurePointDetector(*film, tracer.TracePointSource(film->ray));
     };
-    return EvaluatePointDetectorBatch(
-        catalogue, brightness,
-        std::span(footprints).first(static_cast<std::size_t>(width * height)), probe, cancelled);
+    PointDetectorBatchResult result;
+    result.samples.resize(count);
+    if (footprints.empty()) return result;
+    const auto group =
+        EvaluatePointDetectorGroup(catalogue, brightness, footprints, probe, cancelled);
+    if (!group) return std::unexpected(group.error());
+    result.statistics = group->statistics;
+    for (std::size_t i = 0; i < indices.size(); ++i) result.samples[indices[i]] = group->samples[i];
+    return result;
 }
 }  // namespace
 
@@ -191,10 +203,14 @@ bool RenderSession::UsesPhysicalPointDetector() const {
            family->GetParams().Lambda == 0;
 }
 
-base::Expected<RenderSession::PixelBlock> RenderSession::ShadeBlock(int x, int y, int width,
-                                                                    int height,
-                                                                    GeodesicTracer* tracer) const {
-    PixelBlock result{x, y, width, height};
+base::Expected<void> RenderSession::ShadeBlock(int x, int y, int width, int height,
+                                               GeodesicTracer* tracer, PixelBlock& result) const {
+    // Reuse worker storage and clear only the active rectangle. The one-pixel
+    // texture path must not initialize or copy a 1024-pixel detector buffer.
+    result.x = result.y = -1;
+    result.width = width;
+    result.height = height;
+    std::fill_n(result.pixels.begin(), width * height, PixelResult{});
     std::optional<base::Error> sample_error;
     int sample_index = 0;
     const bool physical_point_detector = UsesPhysicalPointDetector();
@@ -202,11 +218,10 @@ base::Expected<RenderSession::PixelBlock> RenderSession::ShadeBlock(int x, int y
         ForEachCameraSample(config_.samples_per_pixel, [&](const CameraSample& sample) {
             const int current_sample = sample_index++;
             if (sample_error) return;
-            // All pixels use this sample's original pupil and image offset. A
-            // declined envelope has no partial result: retry the individual
-            // footprints, whose smaller support may still be represented.
+            // The group subdivides declined envelopes without changing any
+            // original footprint or pupil. A failed leaf withholds the block.
             std::optional<PointDetectorBatchResult> shared;
-            if (physical_point_detector && width * height > 1 && !IsStopping()) {
+            if (physical_point_detector && !IsStopping()) {
                 auto batch =
                     SharedPointSources(*camera_, *tracer, *star_index_,
                                        config_.point_starfield_config.brightness_scale,
@@ -214,11 +229,36 @@ base::Expected<RenderSession::PixelBlock> RenderSession::ShadeBlock(int x, int y
                                        width, height, sample, [&] { return IsStopping(); });
                 if (batch) {
                     shared = std::move(*batch);
-                } else if (batch.error().reason == PointDetectorFailure::Cancelled) {
-                    sample_error.emplace(base::ErrorDomain::kPhysics, "shade block",
-                                         "render cancelled during shared point discovery");
+                } else {
+                    sample_error.emplace(
+                        base::ErrorDomain::kPhysics, "shade block",
+                        std::format("block ({}, {}), sample {}: point detector failure {} after {} "
+                                    "probes, {} cells and {} candidate visits",
+                                    x, y, current_sample, static_cast<int>(batch.error().reason),
+                                    batch.error().statistics.probes, batch.error().statistics.cells,
+                                    batch.error().statistics.candidate_visits));
                     return;
                 }
+            }
+            // With no emitting foreground, the point-image integral is the
+            // entire radiance. The camera footprints were validated above and
+            // every contributing image has its own physical trace. An extra
+            // centre geodesic supplies no term in this observable.
+            if (shared && !config_.enable_disk) {
+                for (int i = 0; i < width * height; ++i) {
+                    auto& accumulated = result.pixels[i];
+                    accumulated.r += static_cast<float>(shared->samples[i].rgb[0]);
+                    accumulated.g += static_cast<float>(shared->samples[i].rgb[1]);
+                    accumulated.b += static_cast<float>(shared->samples[i].rgb[2]);
+                    if (IsStopping() || !std::isfinite(accumulated.r) ||
+                        !std::isfinite(accumulated.g) || !std::isfinite(accumulated.b)) {
+                        sample_error.emplace(
+                            base::ErrorDomain::kPhysics, "shade block",
+                            IsStopping() ? "render cancelled" : "non-finite accumulated radiance");
+                        return;
+                    }
+                }
+                return;
             }
             for (int pixel_index = 0; pixel_index < width * height; ++pixel_index) {
                 const int px_coord = x + pixel_index % width;
@@ -337,62 +377,6 @@ base::Expected<RenderSession::PixelBlock> RenderSession::ShadeBlock(int x, int y
                         sr += static_cast<float>(shared->samples[pixel_index].rgb[0]);
                         sg += static_cast<float>(shared->samples[pixel_index].rgb[1]);
                         sb += static_cast<float>(shared->samples[pixel_index].rgb[2]);
-                    } else if (physical_point_detector) {
-                        if (!projection->differential) {
-                            fail_sample("point detector camera differential is unavailable");
-                            return;
-                        }
-                        // Freeze the original angular packet in its smooth film chart.
-                        // All refinement uses this same L, pupil and Gaussian support.
-                        const auto& p = projection->differential->angular_jacobian;
-                        const double determinant = std::fma(p[0][0], p[1][1], -p[0][1] * p[1][0]);
-                        const double sigma = pixel_angular_size_ * (config_.ray_bundles ? 1.0 : .3);
-                        if (!std::isfinite(determinant) || determinant == 0) {
-                            fail_sample("point detector camera map is singular");
-                            return;
-                        }
-                        const core::AngularMatrix2 film_from_standard{
-                            {{sigma * p[1][1] / determinant, -sigma * p[0][1] / determinant},
-                             {-sigma * p[1][0] / determinant, sigma * p[0][0] / determinant}}};
-                        const auto measure = [&](const core::CameraFilmProjection& film,
-                                                 const TraceResult& traced) {
-                            return MeasurePointDetector(film, traced, film_from_standard);
-                        };
-                        const PointDetectorSampler probe = [&](const DetectorCoordinate& z)
-                            -> std::expected<PointDetectorProbe, PointDetectorFailure> {
-                            if (z == DetectorCoordinate{})
-                                return measure(*projection, trace_result);
-                            const double dx =
-                                film_from_standard[0][0] * z[0] + film_from_standard[0][1] * z[1];
-                            const double dy =
-                                film_from_standard[1][0] * z[0] + film_from_standard[1][1] * z[1];
-                            const auto film = camera_->ProjectFilmOffsetForObserver(
-                                static_cast<double>(px_coord) + sample.image_u,
-                                static_cast<double>(py_coord) + sample.image_v, dx, dy,
-                                sample.pupil_u, sample.pupil_v);
-                            if (!film)
-                                return std::unexpected(PointDetectorFailure::ProjectionUnavailable);
-                            if (!film->ray.active) return PointDetectorProbe{};
-                            return measure(*film, tracer->TracePointSource(film->ray));
-                        };
-                        const auto detector = EvaluatePointDetector(
-                            *star_index_, config_.point_starfield_config.brightness_scale, probe,
-                            [&] { return IsStopping(); });
-                        if (!detector) {
-                            fail_sample(
-                                std::format("point detector failure {} after {} probes, {} cells "
-                                            "and {} candidate visits",
-                                            static_cast<int>(detector.error().reason),
-                                            detector.error().statistics.probes,
-                                            detector.error().statistics.cells,
-                                            detector.error().statistics.candidate_visits));
-                            return;
-                        }
-                        // Image-specific transmission is already included. The central
-                        // volume attenuation above must not be applied a second time.
-                        sr += static_cast<float>(detector->rgb[0]);
-                        sg += static_cast<float>(detector->rgb[1]);
-                        sb += static_cast<float>(detector->rgb[2]);
                     }
 
                     if (!std::isfinite(sr) || !std::isfinite(sg) || !std::isfinite(sb)) {
@@ -419,14 +403,16 @@ base::Expected<RenderSession::PixelBlock> RenderSession::ShadeBlock(int x, int y
         result.pixels[i].g *= inv_samples;
         result.pixels[i].b *= inv_samples;
     }
-    return result;
+    result.x = x;
+    result.y = y;
+    return {};
 }
 
 base::Expected<std::vector<float>> RenderSession::ShadeTile(const Tile& tile,
                                                             GeodesicTracer* tracer,
                                                             PixelBlock& cache) const {
     std::vector<float> pixels(static_cast<std::size_t>(tile.width) * tile.height * 4, 0);
-    const int edge = UsesPhysicalPointDetector() ? 4 : 1;
+    const int edge = UsesPhysicalPointDetector() ? kPointDetectorBlockEdge : 1;
     // Walk block intersections rather than image rows so the bounded cache is
     // sufficient even at high SPP. Anchors always refer to the complete frame.
     for (int y = (tile.y / edge) * edge; y < tile.y + tile.height; y += edge) {
@@ -435,9 +421,8 @@ base::Expected<std::vector<float>> RenderSession::ShadeTile(const Tile& tile,
                 return base::Fail(base::ErrorDomain::kPhysics, "shade tile", "render cancelled");
             if (cache.x != x || cache.y != y) {
                 auto block = ShadeBlock(x, y, std::min(edge, config_.width - x),
-                                        std::min(edge, config_.height - y), tracer);
+                                        std::min(edge, config_.height - y), tracer, cache);
                 if (!block) return std::unexpected(block.error());
-                cache = std::move(*block);
             }
             for (int py = std::max(y, tile.y); py < std::min(y + edge, tile.y + tile.height);
                  ++py) {

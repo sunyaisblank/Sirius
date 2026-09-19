@@ -366,12 +366,12 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     const auto usable = static_cast<std::uint64_t>(double(*budget) * kResidencyFraction);
     const auto target = ResolveDispatchTargetMs(kDefaultDispatchTargetMs);
     if (!target) return std::unexpected(target.error());
-    // Physical point detectors share image discovery within canonical 4x4
-    // blocks. Assign each block to one worker, otherwise sixteen pixel workers
+    // Physical point detectors share image discovery within canonical screen
+    // blocks. Assign each block to one worker, otherwise independent pixel workers
     // would repeat the same discovery. Other retained scenes keep pixel jobs.
     const int work_edge =
         config.point_starfield && config.black_hole_charge == 0 && config.cosmological_constant == 0
-            ? 4
+            ? kPointDetectorBlockEdge
             : 1;
     const auto work_count = static_cast<std::size_t>((config.width + work_edge - 1) / work_edge) *
                             ((config.height + work_edge - 1) / work_edge);

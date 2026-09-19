@@ -40,8 +40,22 @@ the two signs of zero; close image rays are never quantized into one key.
 Index iteration never determines sampling or radiance-reduction order. The
 cache-work regression counts comparisons rather than timing a particular host.
 
-Detector packets use `GeodesicTracer::TracePointSource` for both their centre
-and offset rays. An accepted outward vacuum-Kerr interval can hand off directly
+Point-source image discovery is shared across canonical 32×32 screen regions
+at each original pupil sample. A common chart encloses the original Gaussian
+supports; each admitted image is traced and weighted through each original
+kernel, frequency and transmission separately. Root tolerances scale to the
+narrowest kernel, and hidden regions retain its spatial sampling depth.
+Declined regions split along their widest film axis. Shared attempts have one
+total probe budget, after which the original scalar detectors finish unresolved
+footprints with their unchanged policies. Any failed leaf withholds the region.
+Workers retain only completed region RGB, independent of image size and SPP;
+retained-device work items own whole regions to avoid duplicated discovery.
+This remains a finite adaptive estimator, not a global image-count certificate.
+
+Detector probes and foreground centre rays use `GeodesicTracer::TracePointSource`.
+Sky-only point-source scenes need no additional centre geodesic: their radiance
+is entirely the sum of traced image contributions. An accepted outward
+vacuum-Kerr interval can hand off directly
 to the existing radial-infinity solver after leaving all disk/volume radial
 support. That solver checks the complete outward radial potential before
 continuing direction, angular derivatives and frequency to infinity. A declined

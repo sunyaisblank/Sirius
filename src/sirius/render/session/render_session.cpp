@@ -718,7 +718,6 @@ base::Expected<void> RenderSession::Initialise() {
                   << std::endl;
     }
 
-    // Relativistic jets.
     // Colour mode.
     const char* mode_name = "TrueColor";
     switch (config_.color_mode) {
