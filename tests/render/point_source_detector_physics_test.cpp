@@ -447,7 +447,7 @@ void CheckRotatingIsolatedStarBrightness(backend::TraceStepExecutor* executor = 
                     return values;
                 };
             const PointDetectorSampler sample = [&](const DetectorCoordinate& q) {
-                const std::array coordinates{q};
+                const std::array<DetectorCoordinate, 1> coordinates{q};
                 return batch(coordinates).front();
             };
             const auto central_before = sum_stages(central_stages);
