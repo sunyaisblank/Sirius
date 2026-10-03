@@ -394,11 +394,14 @@ void CheckRotatingIsolatedStarBrightness(backend::TraceStepExecutor* executor = 
             ASSERT_GT(minimum_support_margin, .01L);
             // Every original in the immediate outside rim has zero response:
             // the complete compact star image lies inside the measured patch.
-            for (int y = -1; y <= edge; ++y)
-                for (int x = -1; x <= edge; ++x)
-                    if (x == -1 || x == edge || y == -1 || y == edge)
+            for (int y = -1; y <= edge; ++y) {
+                for (int x = -1; x <= edge; ++x) {
+                    if (x == -1 || x == edge || y == -1 || y == edge) {
                         ASSERT_EQ(
                             geometry.OriginalResponse(image, {x + .5L, y + .5L}, sigma).density, 0);
+                    }
+                }
+            }
             double maximum_frequency_error = 0;
             const PointDetectorProbeBatchSampler batch =
                 [&](std::span<const DetectorCoordinate> coordinates) {
