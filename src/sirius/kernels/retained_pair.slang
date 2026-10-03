@@ -10,9 +10,10 @@ void Split32(RPScalar a,out RPScalar hi,out RPScalar lo){
  RPScalar c=OrderedMultiply32(RPFromBits(0x45800800u),a);hi=OrderedSubtract32(c,OrderedSubtract32(c,a));lo=OrderedSubtract32(a,hi);
 }
 void RetainedProduct32(RPScalar a,RPScalar b,out RPScalar hi,out RPScalar lo){
-#if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_FP64)
- // The bounded 48-bit product and its residual are exact binary64 operations;
- // this integer transform returns their same binary32 RTE projections.
+#if defined(SIRIUS_RETAINED_PORTABLE)
+ // The exact bounded integer product/residual avoids emulating Dekker's
+ // repeated scalar operations. Both binary32 projections satisfy the same
+ // five-minimum-subnormal enclosure used by the native product transforms.
  PB32Product product=PB32ProductResidual(RPBits(a),RPBits(b));
  hi=RPFromBits(product.valid!=0u?product.high:0x7f800000u);
  lo=RPFromBits(product.valid!=0u?product.low:0x7f800000u);
