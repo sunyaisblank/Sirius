@@ -1109,6 +1109,65 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
     ray.proper_time = std::nextafter(ray.proper_time, std::numeric_limits<float>::infinity());
     ASSERT_TRUE(executor.Step(ray, flat, config, coupled, comparison));
     EXPECT_GT(executor.Statistics().reused_phases, phase_reuses);
+
+    // Nested scopes count one live thread. Ending the inner scope must leave
+    // that thread registered; standalone calls after the outer end use the
+    // bounded fallback rather than falsely claiming all live traces are queued.
+    executor.BeginTrace();
+    executor.BeginTrace();
+    auto trace_ready = executor.Statistics().coalescing_traces_ready;
+    EXPECT_TRUE(executor.Step(ray, flat, config, coupled, comparison));
+    EXPECT_GT(executor.Statistics().coalescing_traces_ready, trace_ready);
+    executor.EndTrace();
+    trace_ready = executor.Statistics().coalescing_traces_ready;
+    EXPECT_TRUE(executor.Step(ray, flat, config, coupled, comparison));
+    EXPECT_GT(executor.Statistics().coalescing_traces_ready, trace_ready);
+    executor.EndTrace();
+    trace_ready = executor.Statistics().coalescing_traces_ready;
+    EXPECT_TRUE(executor.Step(ray, flat, config, coupled, comparison));
+    EXPECT_EQ(executor.Statistics().coalescing_traces_ready, trace_ready);
+
+    {
+        // One registered worker is deliberately doing host work. A concurrent
+        // standalone camera request cannot stand in for that missing worker.
+        executor.BeginTrace();
+        std::promise<void> registered, release;
+        const auto released = release.get_future().share();
+        auto held = std::async(std::launch::async, [&] {
+            executor.BeginTrace();
+            registered.set_value();
+            released.wait();
+            executor.EndTrace();
+        });
+        struct ReleaseHeldTrace {
+            std::promise<void>& release;
+            std::future<void>& held;
+            RetainedTraceExecutor& executor;
+            ~ReleaseHeldTrace() {
+                release.set_value();
+                held.wait();
+                executor.EndTrace();
+            }
+        } release_scope{release, held, executor};
+        registered.get_future().wait();
+        const auto mixed_before = executor.Statistics();
+        trace_ready = executor.Statistics().coalescing_traces_ready;
+        auto standalone = std::async(std::launch::async, [&] {
+            sirius::core::KerrSchildFamily camera_metric(
+                sirius::core::KerrSchildParams::Minkowski());
+            sirius::core::CameraRay camera;
+            camera.origin(1) = 5;
+            camera.origin(2) = std::numbers::pi / 2;
+            camera.direction(1) = 1;
+            return executor.Launch(camera_metric, 0, camera);
+        });
+        EXPECT_TRUE(executor.Step(ray, flat, config, coupled, comparison));
+        EXPECT_TRUE(standalone.get());
+        const auto mixed_after = executor.Statistics();
+        EXPECT_EQ(mixed_after.coalescing_traces_ready, trace_ready);
+        EXPECT_EQ(mixed_after.coalescing_timeouts - mixed_before.coalescing_timeouts,
+                  mixed_after.batches - mixed_before.batches);
+    }
     const auto accepted = ray;
     const auto submissions = executor.Statistics().interval_batches;
     cancelled = true;
@@ -1135,11 +1194,14 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
     EXPECT_LE(timing.coalescing_timeouts, timing.coalescing_underfilled);
     EXPECT_LE(timing.coalescing_underfilled, timing.batches);
     EXPECT_EQ(timing.coalescing_stopped, 0U);
+    EXPECT_GT(timing.coalescing_traces_ready, 0U);
+    EXPECT_LE(timing.coalescing_timeouts + timing.coalescing_traces_ready, timing.batches);
     RecordProperty("coordinator_batches", std::to_string(timing.batches));
     RecordProperty("coordinator_full_batches", std::to_string(timing.full_batches));
     RecordProperty("coordinator_rows", std::to_string(observed_rows));
     RecordProperty("coalescing_timeouts", std::to_string(timing.coalescing_timeouts));
     RecordProperty("coalescing_underfilled", std::to_string(timing.coalescing_underfilled));
+    RecordProperty("coalescing_traces_ready", std::to_string(timing.coalescing_traces_ready));
     RecordProperty("coalescing_wait_ms", std::to_string(timing.coalescing_wait_ms));
     RecordProperty("maximum_coalescing_wait_ms", std::to_string(timing.maximum_coalescing_wait_ms));
     RecordProperty("coordinator_execute_ms", std::to_string(timing.execute_ms));

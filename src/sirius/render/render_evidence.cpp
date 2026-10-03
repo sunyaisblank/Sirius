@@ -130,6 +130,7 @@ std::string VulkanRenderEvidenceJson(const SessionConfig& config, const VulkanRe
             {"coalescing_timeouts", timing.coalescing_timeouts},
             {"coalescing_underfilled", timing.coalescing_underfilled},
             {"coalescing_stopped", timing.coalescing_stopped},
+            {"coalescing_traces_ready", timing.coalescing_traces_ready},
             {"coalescing_wait_ms", timing.coalescing_wait_ms},
             {"maximum_coalescing_wait_ms", timing.maximum_coalescing_wait_ms},
             {"execute_ms", timing.execute_ms},

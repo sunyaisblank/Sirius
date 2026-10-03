@@ -464,6 +464,7 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     timing.coalescing_timeouts = execution.coalescing_timeouts;
     timing.coalescing_underfilled = execution.coalescing_underfilled;
     timing.coalescing_stopped = execution.coalescing_stopped;
+    timing.coalescing_traces_ready = execution.coalescing_traces_ready;
     timing.coalescing_wait_ms = execution.coalescing_wait_ms;
     timing.maximum_coalescing_wait_ms = execution.maximum_coalescing_wait_ms;
     timing.execute_ms = execution.execute_ms;

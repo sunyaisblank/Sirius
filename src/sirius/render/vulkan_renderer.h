@@ -84,6 +84,7 @@ struct VulkanRenderStats {
         std::uint64_t coalescing_timeouts = 0;
         std::uint64_t coalescing_underfilled = 0;
         std::uint64_t coalescing_stopped = 0;
+        std::uint64_t coalescing_traces_ready = 0;
         double coalescing_wait_ms = 0;
         double maximum_coalescing_wait_ms = 0;
         double execute_ms = 0;

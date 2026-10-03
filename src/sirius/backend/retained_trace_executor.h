@@ -52,6 +52,7 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
         std::uint64_t coalescing_timeouts = 0;
         std::uint64_t coalescing_underfilled = 0;
         std::uint64_t coalescing_stopped = 0;
+        std::uint64_t coalescing_traces_ready = 0;
         double coalescing_wait_ms = 0;
         double maximum_coalescing_wait_ms = 0;
         double execute_ms = 0;  // Serialized, including packing and device calls.
@@ -81,6 +82,7 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
         RetainedIntervalInput interval;
         base::Expected<RetainedIntervalOutput> result = RetainedIntervalOutput{};
         bool completed = false;
+        bool registered = false;
     };
     void Run();
     void Execute(std::span<Request*> requests);
@@ -91,6 +93,10 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
     std::condition_variable available_, completed_;
     std::deque<Request*> requests_;
     std::map<std::thread::id, Continuation> continuations_;
+    // Synchronous Launch/Step permits at most one queued request per thread.
+    // Nesting depth preserves distinct membership across nested trace scopes.
+    std::map<std::thread::id, std::size_t> active_traces_;
+    std::size_t queued_registered_ = 0;
     std::optional<base::Error> error_;
     Stats stats_;
     bool stopping_ = false;

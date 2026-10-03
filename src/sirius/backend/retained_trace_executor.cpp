@@ -64,10 +64,25 @@ std::optional<base::Error> RetainedTraceExecutor::Error() const {
 
 void RetainedTraceExecutor::BeginTrace() {
     std::lock_guard lock(mutex_);
-    continuations_.erase(std::this_thread::get_id());
+    const auto thread = std::this_thread::get_id();
+    continuations_.erase(thread);
+    ++active_traces_[thread];
 }
 
-void RetainedTraceExecutor::EndTrace() { BeginTrace(); }
+void RetainedTraceExecutor::EndTrace() {
+    bool removed = false;
+    {
+        std::lock_guard lock(mutex_);
+        const auto thread = std::this_thread::get_id();
+        continuations_.erase(thread);
+        const auto active = active_traces_.find(thread);
+        if (active != active_traces_.end() && --active->second == 0) {
+            active_traces_.erase(active);
+            removed = true;
+        }
+    }
+    if (removed) available_.notify_one();
+}
 
 void RetainedTraceExecutor::RejectLastInterval() {
     std::lock_guard lock(mutex_);
@@ -89,24 +104,31 @@ void RetainedTraceExecutor::Run() {
         bool coalescing_ready = false;
         bool coalescing_underfilled = false;
         bool coalescing_stopped = false;
+        bool coalescing_traces_ready = false;
         bool full_batch = false;
         {
             std::unique_lock lock(mutex_);
             available_.wait(lock, [&] { return stopping_ || !requests_.empty(); });
             if (stopping_ && requests_.empty()) return;
-            // One bounded coalescing window; no worker count or full batch is
-            // required for progress when rays finish at different times.
+            // A tail batch is ready when every live trace thread is queued.
+            // Standalone calls remain independent of trace registration, and
+            // the bounded window guarantees progress during intervening host work.
+            const auto traces_ready = [&] {
+                return !active_traces_.empty() && queued_registered_ == active_traces_.size();
+            };
             const auto coalescing_started = std::chrono::steady_clock::now();
             coalescing_underfilled = requests_.size() < batch_limit;
             coalescing_ready = available_.wait_for(lock, std::chrono::milliseconds(1), [&] {
-                return stopping_ || requests_.size() >= batch_limit;
+                return stopping_ || requests_.size() >= batch_limit || traces_ready();
             });
             coalescing_ms = std::chrono::duration<double, std::milli>(
                                 std::chrono::steady_clock::now() - coalescing_started)
                                 .count();
             coalescing_stopped = stopping_;
+            coalescing_traces_ready = traces_ready();
             while (!requests_.empty() && batch.size() < batch_limit) {
                 batch.push_back(requests_.front());
+                if (requests_.front()->registered) --queued_registered_;
                 requests_.pop_front();
             }
             full_batch = batch.size() == batch_limit;
@@ -125,6 +147,7 @@ void RetainedTraceExecutor::Run() {
             if (!coalescing_ready) ++stats_.coalescing_timeouts;
             if (coalescing_underfilled) ++stats_.coalescing_underfilled;
             if (coalescing_stopped) ++stats_.coalescing_stopped;
+            if (coalescing_traces_ready) ++stats_.coalescing_traces_ready;
             stats_.coalescing_wait_ms += coalescing_ms;
             stats_.maximum_coalescing_wait_ms =
                 std::max(stats_.maximum_coalescing_wait_ms, coalescing_ms);
@@ -303,7 +326,9 @@ std::optional<core::CameraLaunch> RetainedTraceExecutor::Launch(core::IMetric& m
     {
         std::unique_lock lock(mutex_);
         if (error_ || stopping_) return std::nullopt;
+        request.registered = active_traces_.contains(std::this_thread::get_id());
         requests_.push_back(&request);
+        if (request.registered) ++queued_registered_;
         available_.notify_one();
         completed_.wait(lock, [&] { return request.completed; });
     }
@@ -397,7 +422,9 @@ bool RetainedTraceExecutor::Step(core::Lightray& ray, core::IMetric& metric,
             ++stats_.reused_phases;
         else
             ++stats_.initialized_phases;
+        request.registered = active_traces_.contains(thread);
         requests_.push_back(&request);
+        if (request.registered) ++queued_registered_;
         available_.notify_one();
         completed_.wait(lock, [&] { return request.completed; });
     }
