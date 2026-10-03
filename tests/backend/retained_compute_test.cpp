@@ -11,12 +11,14 @@
 #include <array>
 #include <atomic>
 #include <bit>
+#include <chrono>
 #include <cmath>
 #include <cstring>
 #include <future>
 #include <iomanip>
 #include <limits>
 #include <numbers>
+#include <string>
 
 #if defined(SIRIUS_HAS_RETAINED_COMPUTE) && defined(SIRIUS_RETAINED_CAMERA_TEST_DIR)
 #define SIRIUS_RETAINED_TESTS_AVAILABLE 1
@@ -477,6 +479,60 @@ TEST_F(RetainedComputeTest, PhysicalInitializationRetainsTheHamiltonianResidual)
 
 TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement) {
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    using Clock = std::chrono::steady_clock;
+    using Stats = std::array<RetainedCompute::StageStats, 6>;
+    const auto fixture_started = Clock::now();
+    const auto fixture_before = compute->Statistics();
+    const auto milliseconds = [](Clock::time_point started, Clock::time_point finished) {
+        return std::chrono::duration<double, std::milli>(finished - started).count();
+    };
+    const auto record_timing = [](const std::string& prefix, const Stats& before,
+                                  const Stats& after, double wall_ms, bool per_stage = false) {
+        constexpr std::array names{"camera", "transport",  "endpoint",
+                                   "dense",  "initialize", "ray_camera"};
+        std::uint64_t submissions = 0;
+        double submit_wait_ms = 0, pipeline_setup_ms = 0, maximum_submit_wait_ms = 0;
+        for (std::size_t stage = 0; stage < after.size(); ++stage) {
+            const auto count = after[stage].submissions - before[stage].submissions;
+            const auto wait = after[stage].submit_wait_ms - before[stage].submit_wait_ms;
+            const auto pipeline = after[stage].pipeline_setup_ms - before[stage].pipeline_setup_ms;
+            submissions += count;
+            submit_wait_ms += wait;
+            pipeline_setup_ms += pipeline;
+            maximum_submit_wait_ms =
+                std::max(maximum_submit_wait_ms, after[stage].maximum_submit_wait_ms);
+            if (per_stage) {
+                const auto key = prefix + "_" + names[stage];
+                RecordProperty(key + "_submissions", std::to_string(count));
+                RecordProperty(key + "_submit_wait_ms", std::to_string(wait));
+                RecordProperty(key + "_pipeline_setup_ms", std::to_string(pipeline));
+                RecordProperty(key + "_maximum_submit_wait_ms",
+                               std::to_string(after[stage].maximum_submit_wait_ms));
+            }
+        }
+        RecordProperty(prefix + "_submissions", std::to_string(submissions));
+        RecordProperty(prefix + "_submit_wait_ms", std::to_string(submit_wait_ms));
+        RecordProperty(prefix + "_pipeline_setup_ms", std::to_string(pipeline_setup_ms));
+        RecordProperty(prefix + "_wall_ms", std::to_string(wall_ms));
+        RecordProperty(prefix + "_wall_minus_measured_ms",
+                       std::to_string(wall_ms - submit_wait_ms - pipeline_setup_ms));
+        // Peaks are lifetime maxima, not additive counters. Only the complete
+        // fresh-compute fixture can report them as maxima for its own window.
+        if (per_stage)
+            RecordProperty(prefix + "_maximum_submit_wait_ms",
+                           std::to_string(maximum_submit_wait_ms));
+    };
+    RecordProperty("device", device->Info().name);
+    RecordProperty("retained_capacity", std::to_string(compute->Capacity()));
+    RecordProperty("explicit_buffer_bytes", std::to_string(device->BufferAllocationBytes()));
+    RecordProperty("timing_scope",
+                   "interval fixture excludes device/compute SetUp; wall-minus-measured includes "
+                   "host coordination, transfers, command setup and cleanup without separate "
+                   "attribution; no frame or interactive qualification");
+    RecordProperty(
+        "pipeline_cache_scope",
+        "initial Endpoint warms projection; first interval first uses transport/dense; "
+        "repeated intervals reuse stage kernels; StageStats has no pipeline-created flag");
     std::vector<RetainedEndpointInput> initial;
     for (const auto& fixture : sirius::test::retained_transport::cases) {
         const auto step = std::bit_cast<RetainedStepInput>(fixture.input);
@@ -504,7 +560,12 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
         input.control.integrator.abs_tolerance = 1e-9f;
         input.control.integrator.rel_tolerance = 1e-9f;
     }
+    const auto first_before = compute->Statistics();
+    const auto first_started = Clock::now();
     const auto outputs = AttemptRetainedIntervals(*compute, inputs);
+    const auto first_finished = Clock::now();
+    record_timing("first_interval", first_before, compute->Statistics(),
+                  milliseconds(first_started, first_finished));
     ASSERT_TRUE(outputs) << outputs.error().Description();
     for (std::size_t row = 0; row < inputs.size(); ++row) {
         SCOPED_TRACE(sirius::test::retained_transport::cases[row].name);
@@ -528,7 +589,12 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
     // when the embedded error is exactly zero in flat space.
     auto sparse = inputs.back();
     sparse.start.phase[13] = sparse.start.physical[13] = {1, 0x1.000002p-35f, 0x1p-120f, 0, 1};
+    const auto sparse_before = compute->Statistics();
+    const auto sparse_started = Clock::now();
     const auto sparse_output = AttemptRetainedIntervals(*compute, {&sparse, 1});
+    const auto sparse_finished = Clock::now();
+    record_timing("repeated_sparse_interval", sparse_before, compute->Statistics(),
+                  milliseconds(sparse_started, sparse_finished));
     ASSERT_TRUE(sparse_output) << sparse_output.error().Description();
     ASSERT_TRUE(sparse_output->front().admissible);
     const auto& full_increment = sparse_output->front().full_increment[5];
@@ -541,7 +607,12 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
     inputs.resize(2);
     inputs[0].control.tolerance = 1e-30;
     inputs[1].start.phase[5].valid = 0;
+    const auto rejected_before = compute->Statistics();
+    const auto rejected_started = Clock::now();
     const auto rejected = AttemptRetainedIntervals(*compute, inputs);
+    const auto rejected_finished = Clock::now();
+    record_timing("repeated_rejection_interval", rejected_before, compute->Statistics(),
+                  milliseconds(rejected_started, rejected_finished));
     ASSERT_TRUE(rejected) << rejected.error().Description();
     for (const auto& output : *rejected) {
         EXPECT_FALSE(output.admissible);
@@ -552,6 +623,8 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
         EXPECT_FALSE(output.refined.valid);
         for (const auto& value : output.full_increment) EXPECT_EQ(value.valid, 0U);
     }
+    record_timing("interval_fixture", fixture_before, compute->Statistics(),
+                  milliseconds(fixture_started, Clock::now()), true);
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif

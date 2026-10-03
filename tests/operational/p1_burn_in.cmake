@@ -8,7 +8,7 @@ endif()
 # classification, and the near-extremal path are exercised repeatedly.
 execute_process(
     COMMAND "${SIRIUS_RENDER_TESTS}"
-        "--gtest_filter=ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p:VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p"
+        "--gtest_filter=ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p:ShadowBoundary.RetainedFp32ProductsKerrNearExtremalBardeenBoundaryAt1080p"
         --gtest_repeat=3
         --gtest_recreate_environments_when_repeating
         --gtest_break_on_failure

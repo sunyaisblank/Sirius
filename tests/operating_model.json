@@ -20,6 +20,7 @@
         {"kind": "gtest", "name": "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter"},
         {"kind": "gtest", "name": "AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct"},
         {"kind": "gtest", "name": "LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter"},
+        {"kind": "gtest", "name": "FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants"},
         {"kind": "gtest", "name": "KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter"},
         {"kind": "gtest", "name": "KerrTests.CartesianMetricIsScaleCovariantBelowTheFormerSpinFloor"},
         {"kind": "gtest", "name": "KerrTests.SingularKerrDiskDeclinesInsteadOfReceivingAnEpsilonRadius"},
@@ -40,6 +41,8 @@
         {"kind": "gtest", "name": "VulkanBackend.KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions"},
         {"kind": "gtest", "name": "KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison"},
         {"kind": "gtest", "name": "ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p"},
+        {"kind": "gtest", "name": "ShadowBoundary.RetainedFp32ProductsKerrNearExtremalBardeenBoundaryAt1080p"},
+        {"kind": "gtest", "name": "ShadowBoundary.RetainedFp64ProductsKerrNearExtremalBardeenBoundaryAt1080p"},
         {"kind": "gtest", "name": "VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p"},
         {"kind": "ctest", "name": "OperationalP1.NearExtremalBurnIn"}
       ]
@@ -565,10 +568,13 @@
         {"kind": "gtest", "name": "KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation"},
         {"kind": "gtest", "name": "KernelParity.NullProjectionPreservesConeBranchAndFailsClosed"},
         {"kind": "gtest", "name": "ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p"},
+        {"kind": "gtest", "name": "ShadowBoundary.RetainedFp32ProductsKerrNearExtremalBardeenBoundaryAt1080p"},
+        {"kind": "gtest", "name": "ShadowBoundary.RetainedFp64ProductsKerrNearExtremalBardeenBoundaryAt1080p"},
         {"kind": "gtest", "name": "VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p"},
         {"kind": "ctest", "name": "OperationalP1.NearExtremalBurnIn"},
         {"kind": "gtest", "name": "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter"},
         {"kind": "gtest", "name": "LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter"},
+        {"kind": "gtest", "name": "FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants"},
         {"kind": "gtest", "name": "KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter"},
         {"kind": "gtest", "name": "KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability"},
         {"kind": "gtest", "name": "KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison"}

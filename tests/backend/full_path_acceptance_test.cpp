@@ -6,11 +6,14 @@
 
 #include "support/separated_geodesic_reference.h"
 
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <format>
 #include <future>
+#include <limits>
 #include <numbers>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -18,6 +21,7 @@
 #include "sirius/backend/device.h"
 #include "sirius/backend/retained_compute.h"
 #include "sirius/backend/retained_trace_executor.h"
+#include "sirius/core/metrics/outgoing_kerr_schild.h"
 #endif
 
 namespace {
@@ -381,6 +385,163 @@ void Record(const Witness& witness, unsigned refinement, const Errors& error,
                     witness.reference_spacing));
 }
 
+#if defined(SIRIUS_HAS_RETAINED_COMPUTE) && defined(SIRIUS_RETAINED_CAMERA_TEST_DIR)
+struct RayInvariants {
+    Scalar energy, angular_momentum, carter, normalized_null;
+    Scalar radius, radial_velocity, absolute_sine;
+};
+
+// Contract the represented physical view with an independent analytic metric.
+// E=-p_t and Lz=x*p_y-y*p_x retain their signs for the past-directed tangent;
+// p_theta=Sigma*dtheta/dlambda gives Q=p_theta^2+cos(theta)^2
+// *(Lz^2/sin(theta)^2-a^2*E^2). These Killing quantities are unchanged by the
+// radial time/azimuth chart shift. No production metric or BL chart map is used.
+std::optional<RayInvariants> IndependentInvariants(const Vec4& position, const Vec4& tangent,
+                                                   double mass, double spin, bool outgoing) {
+    Four x{}, k{}, p{};
+    for (unsigned mu = 0; mu < 4; ++mu) {
+        x[mu] = position(static_cast<int>(mu));
+        k[mu] = tangent(static_cast<int>(mu));
+        if (!std::isfinite(x[mu]) || !std::isfinite(k[mu])) return std::nullopt;
+    }
+    const auto geometry = reference::At(x, mass, spin, outgoing);
+    const Scalar r = geometry.radius, sine = std::sin(geometry.theta),
+                 cosine = std::cos(geometry.theta), a = spin;
+    if (!(std::abs(sine) > 1e-5L)) return std::nullopt;
+    Scalar null_defect = 0, null_scale = 0;
+    for (unsigned mu = 0; mu < 4; ++mu)
+        for (unsigned nu = 0; nu < 4; ++nu) {
+            p[mu] += geometry.metric[mu][nu] * k[nu];
+            const Scalar term = geometry.metric[mu][nu] * k[mu] * k[nu];
+            null_defect += term;
+            null_scale += std::abs(term);
+        }
+    if (!(null_scale > 0)) return std::nullopt;
+    const Scalar sigma = r * r + a * a * cosine * cosine;
+    const Scalar radial =
+        (r * (x[1] * k[1] + x[2] * k[2]) + (r * r + a * a) * x[3] * k[3] / r) / sigma;
+    const Scalar polar_momentum = sigma * (cosine * radial - k[3]) / (r * sine);
+    const Scalar energy = -p[0], angular = x[1] * p[2] - x[2] * p[1];
+    const Scalar carter =
+        polar_momentum * polar_momentum +
+        cosine * cosine * (angular * angular / (sine * sine) - a * a * energy * energy);
+    RayInvariants result{energy, angular, carter,        std::abs(null_defect) / null_scale,
+                         r,      radial,  std::abs(sine)};
+    for (const Scalar value :
+         {result.energy, result.angular_momentum, result.carter, result.normalized_null,
+          result.radius, result.radial_velocity, result.absolute_sine})
+        if (!std::isfinite(value)) return std::nullopt;
+    return result;
+}
+
+class ConservationObserver final : public TraceStepExecutor {
+  public:
+    struct Measurements {
+        std::optional<RayInvariants> launch;
+        std::array<Scalar, 3> maximum_relative_drift{};
+        Scalar maximum_normalized_null = 0;
+        Scalar minimum_radius = std::numeric_limits<Scalar>::infinity();
+        Scalar minimum_absolute_sine = 1;
+        unsigned accepted_intervals = 0, successful_candidates = 0, rejected_candidates = 0;
+        unsigned native_samples = 0, outgoing_samples = 0, radial_turns = 0;
+        bool finite = true;
+    } measured;
+
+    ConservationObserver(RetainedTraceExecutor& executor, double mass, double spin)
+        : executor_(executor), mass_(mass), spin_(spin) {}
+
+    void BeginTrace() override { executor_.BeginTrace(); }
+    void EndTrace() override { executor_.EndTrace(); }
+    std::optional<CameraLaunch> Launch(IMetric& metric, double spin,
+                                       const CameraRay& camera) override {
+        auto launch = executor_.Launch(metric, spin, camera);
+        if (launch) {
+            measured.launch = IndependentInvariants(launch->position, launch->tangent, mass_, spin_,
+                                                    IsOutgoing(metric));
+            Observe(launch->position, launch->tangent, IsOutgoing(metric));
+        }
+        return launch;
+    }
+    bool Step(Lightray& ray, IMetric& metric, const IntegratorConfig& config,
+              Rk45CoupledState& coupled, Rk45CoupledComparison& comparison) override {
+        // Step returns a private device candidate. Only the next input proves
+        // that the host committed it, after event/source checks and any clipping.
+        // The first input additionally checks the native-to-outgoing launch join.
+        if (pending_ || !saw_initial_input_) {
+            Observe(ray.position, ray.velocity, IsOutgoing(metric));
+            if (pending_) ++measured.accepted_intervals;
+            pending_ = false;
+            saw_initial_input_ = true;
+        }
+        const bool success = executor_.Step(ray, metric, config, coupled, comparison);
+        if (success) {
+            pending_ = true;
+            ++measured.successful_candidates;
+        }
+        return success;
+    }
+    void RejectLastInterval() override {
+        // A rejected success contributes no sample or maximum. Failed device
+        // attempts can also call this hook, with no pending candidate to remove.
+        if (pending_) ++measured.rejected_candidates;
+        pending_ = false;
+        executor_.RejectLastInterval();
+    }
+    bool ObservePhysicalTerminal(const TraceResult& result) {
+        if (!pending_ || result.cancelled || result.numerical_failure || !result.final_tangent ||
+            result.outcome != TraceResult::Outcome::Escaped)
+            return false;
+        // The final candidate has no following Step. Sample the actual localized
+        // published event in its declared chart, rather than the device overshoot.
+        Observe(result.final_position, *result.final_tangent,
+                result.terminal_chart == TraceResult::TerminalChart::OutgoingKerrSchild);
+        ++measured.accepted_intervals;
+        pending_ = false;
+        return true;
+    }
+
+  private:
+    bool IsOutgoing(IMetric& metric) {
+        if (dynamic_cast<OutgoingKerrSchild*>(&metric)) return true;
+        if (!dynamic_cast<KerrSchildFamily*>(&metric)) measured.finite = false;
+        return false;
+    }
+    void Observe(const Vec4& position, const Vec4& tangent, bool outgoing) {
+        const auto sample = IndependentInvariants(position, tangent, mass_, spin_, outgoing);
+        if (!sample || !measured.launch || !(std::abs(measured.launch->energy) > 1e-8L) ||
+            !(std::abs(measured.launch->angular_momentum) > 1e-8L) ||
+            !(std::abs(measured.launch->carter) > 1e-8L)) {
+            measured.finite = false;
+            return;
+        }
+        const std::array<Scalar, 3> initial{
+            measured.launch->energy, measured.launch->angular_momentum, measured.launch->carter};
+        const std::array<Scalar, 3> actual{sample->energy, sample->angular_momentum,
+                                           sample->carter};
+        for (unsigned i = 0; i < 3; ++i)
+            measured.maximum_relative_drift[i] =
+                std::max(measured.maximum_relative_drift[i],
+                         std::abs((actual[i] - initial[i]) / initial[i]));
+        measured.maximum_normalized_null =
+            std::max(measured.maximum_normalized_null, sample->normalized_null);
+        measured.minimum_radius = std::min(measured.minimum_radius, sample->radius);
+        measured.minimum_absolute_sine =
+            std::min(measured.minimum_absolute_sine, sample->absolute_sine);
+        if (previous_radial_ && *previous_radial_ < 0 && sample->radial_velocity > 0)
+            ++measured.radial_turns;
+        previous_radial_ = sample->radial_velocity;
+        if (outgoing)
+            ++measured.outgoing_samples;
+        else
+            ++measured.native_samples;
+    }
+    RetainedTraceExecutor& executor_;
+    double mass_, spin_;
+    bool pending_ = false, saw_initial_input_ = false;
+    std::optional<Scalar> previous_radial_;
+};
+#endif
+
 TEST(FullPathAcceptance, CpuIndependentCarterEventsMapsAndRefinement) {
     for (const auto& witness : Witnesses()) {
         KerrSchildFamily metric(
@@ -466,6 +627,105 @@ TEST(FullPathAcceptance, VulkanRetainedIndependentCarterEventsMapsAndRefinement)
         RecordProperty(wide ? "fp64_evidence" : "fp32_evidence",
                        "full independent numerical corpus executed");
     }
+#else
+    GTEST_SKIP() << "retained compute kernels unavailable; Vulkan numerical backend unqualified";
+#endif
+}
+
+TEST(FullPathAcceptance, VulkanRetainedNearExtremalRayConservesIndependentInvariants) {
+#if defined(SIRIUS_HAS_RETAINED_COMPUTE) && defined(SIRIUS_RETAINED_CAMERA_TEST_DIR)
+    const auto& witnesses = Witnesses();
+    const auto selected = std::find_if(witnesses.begin(), witnesses.end(), [](const Witness& item) {
+        return item.input.name == "kerr_0998_inner_turn";
+    });
+    ASSERT_NE(selected, witnesses.end());
+    const auto& witness = *selected;
+    const auto& c = witness.input;
+    const auto inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory) << inventory.error().Description();
+    if (inventory->empty()) GTEST_SKIP() << "no Vulkan device; numerical backend unqualified";
+    const auto index = ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(index) << index.error().Description();
+    auto opened = CreateVulkanDevice(*index);
+    ASSERT_TRUE(opened) << opened.error().Description();
+    auto& device = **opened;
+    RecordProperty("device", device.Info().name);
+    RecordProperty("evidence_scope",
+                   "actual retained camera and intervals; committed physical host views and "
+                   "localized terminal; independently contracted E/Lz/Q and normalized null; "
+                   "one off-plane inward-turn-escape ray per supported product mode; no "
+                   "unprojected-stage or uniform-domain claim");
+    RecordProperty("reference_scalar_mantissa_bits", std::numeric_limits<Scalar>::digits);
+    unsigned executed_modes = 0;
+    for (const bool wide : {false, true}) {
+        SCOPED_TRACE(wide ? "retained_binary64_products" : "retained_binary32_products");
+        if (wide && (!device.Info().supports_fp64 || !device.Info().rounds_fp64_to_nearest)) {
+            RecordProperty("binary64_products_evidence", "unsupported; unqualified");
+            continue;
+        }
+        auto compute = RetainedCompute::Create(device, 1, wide);
+        ASSERT_TRUE(compute) << compute.error().Description();
+        RetainedTraceExecutor executor(**compute);
+        ConservationObserver observer(executor, c.mass, c.spin);
+        KerrSchildFamily metric(KerrSchildParams::Kerr(c.mass, c.spin));
+        // Preserve the coarsest existing coupled controller and its full ray,
+        // beam and source-map contract. This gate adds interval maxima only.
+        GeodesicTracer tracer(&metric, Control(c, 0));
+        tracer.SetStepExecutor(&observer);
+        const auto result = tracer.Trace(c.camera);
+        ASSERT_FALSE(result.cancelled);
+        ASSERT_FALSE(result.numerical_failure) << CoupledStepFailureName(result.coupled_failure)
+                                               << " termination=" << result.integrator_termination;
+        ASSERT_EQ(result.outcome, TraceResult::Outcome::Escaped);
+        ASSERT_EQ(result.terminal_chart, TraceResult::TerminalChart::MetricNative);
+        ASSERT_TRUE(observer.ObservePhysicalTerminal(result));
+        const auto& measured = observer.measured;
+        ASSERT_TRUE(measured.finite);
+        ASSERT_TRUE(measured.launch);
+        EXPECT_GT(measured.accepted_intervals, 2U);
+        EXPECT_EQ(measured.accepted_intervals,
+                  measured.successful_candidates - measured.rejected_candidates);
+        EXPECT_EQ(measured.native_samples, 2U);  // Measured launch and published terminal.
+        EXPECT_EQ(measured.outgoing_samples, measured.accepted_intervals);
+        EXPECT_GT(measured.radial_turns, 0U);
+        EXPECT_LT(measured.minimum_radius, measured.launch->radius);
+        EXPECT_GT(measured.minimum_radius, c.mass + std::sqrt(c.mass * c.mass - c.spin * c.spin));
+        EXPECT_GT(measured.minimum_absolute_sine, 1e-5L);
+        for (const Scalar drift : measured.maximum_relative_drift) EXPECT_LE(drift, kAcceptance);
+        EXPECT_LE(measured.maximum_normalized_null, 1e-6L);
+        const auto error = Check(witness, result);
+        auto named = witness;
+        named.input.name +=
+            wide ? "_conservation_binary64_products" : "_conservation_binary32_products";
+        Record(named, 0, error, result);
+        RecordProperty(
+            wide ? "binary64_products_conservation" : "binary32_products_conservation",
+            std::format(
+                "state=expanded_binary32;products={};E_initial={:.17g};Lz_initial={:.17g};"
+                "Q_initial={:.17g};max_E_relative={:.17g};max_Lz_relative={:.17g};"
+                "max_Q_relative={:.17g};max_abs_gkk_over_sum_abs_terms={:.17g};"
+                "accepted_intervals={};successful_candidates={};rolled_back_candidates={};"
+                "native_samples={};outgoing_samples={};radial_turns={};min_r_per_mass={:.17g};"
+                "min_abs_sin_theta={:.17g};terminal=physical_escape;affine_per_mass={:.17g}",
+                wide ? "binary64" : "binary32", static_cast<double>(measured.launch->energy),
+                static_cast<double>(measured.launch->angular_momentum),
+                static_cast<double>(measured.launch->carter),
+                static_cast<double>(measured.maximum_relative_drift[0]),
+                static_cast<double>(measured.maximum_relative_drift[1]),
+                static_cast<double>(measured.maximum_relative_drift[2]),
+                static_cast<double>(measured.maximum_normalized_null), measured.accepted_intervals,
+                measured.successful_candidates, measured.rejected_candidates,
+                measured.native_samples, measured.outgoing_samples, measured.radial_turns,
+                static_cast<double>(measured.minimum_radius / c.mass),
+                static_cast<double>(measured.minimum_absolute_sine),
+                result.affine_length / c.mass));
+        EXPECT_FALSE(executor.Error());
+        EXPECT_GT(executor.Statistics().camera_batches, 0U);
+        EXPECT_GT(executor.Statistics().interval_batches, 0U);
+        EXPECT_GT(executor.Statistics().reused_phases, 0U);
+        ++executed_modes;
+    }
+    RecordProperty("executed_product_modes", static_cast<int>(executed_modes));
 #else
     GTEST_SKIP() << "retained compute kernels unavailable; Vulkan numerical backend unqualified";
 #endif

@@ -429,6 +429,7 @@ set_tests_properties(
 set_tests_properties(
     FullPathAcceptance.CpuIndependentCarterEventsMapsAndRefinement
     FullPathAcceptance.VulkanRetainedIndependentCarterEventsMapsAndRefinement
+    FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -1389,6 +1390,8 @@ set_tests_properties(
     RayWorkQueue.RejectsUnboundedWorkBeforeCallingTracer
     RayWorkQueue.WorkerFailureDrainsBatchAndQueueRemainsUsable
     ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p
+    ShadowBoundary.RetainedFp32ProductsKerrNearExtremalBardeenBoundaryAt1080p
+    ShadowBoundary.RetainedFp64ProductsKerrNearExtremalBardeenBoundaryAt1080p
     ShadowBoundary.SchwarzschildCriticalImpactParameterMatchesAnalyticAt1080p
     SpectralEmissionTest.BlackbodyColourDirection
     SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor

@@ -114,7 +114,10 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:VulkanBackend.KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions",
         "gtest:KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison",
         "gtest:LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter",
+        "gtest:FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants",
         "gtest:ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p",
+        "gtest:ShadowBoundary.RetainedFp32ProductsKerrNearExtremalBardeenBoundaryAt1080p",
+        "gtest:ShadowBoundary.RetainedFp64ProductsKerrNearExtremalBardeenBoundaryAt1080p",
         "gtest:VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p",
     },
     "P2": {
@@ -457,8 +460,8 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "dddd6433f3bad096e7942620d59887a599dcc8b762181bcfcfb7c638e4975f8f",
-    "required_dimensions": "359c4ff241f25d28777d15ebad4bd8216d4fbcbb29b597ac832005409addd725",
+    "acceptance_criteria": "32eeb0ebf8051c2a3a90e19e4889e24c2090ce3890073a4a61c987066834163a",
+    "required_dimensions": "19e68c787f305c54edc6eb5084dd84faf81db96b3723fa7d6d08d90acbea09c0",
     "capability_contracts": "48c5b338c14c11e2ad7275322cd72f4bd014df621ca69e65e119621066fd5c6c",
 }
 # These groups match concrete optional compile boundaries. CPU transport tests
