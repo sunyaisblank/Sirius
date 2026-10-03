@@ -424,7 +424,9 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
                       << progress.initialized_phases << " phase initializations, "
                       << progress.reused_phases << " phase reuses, " << progress.batch_subdivisions
                       << " batch subdivisions, " << progress.safety_fallbacks
-                      << " safety reductions\n";
+                      << " safety reductions, " << progress.coalescing_wait_ms / 1000
+                      << "s coalescing, " << progress.execute_ms / 1000 << "s batch execution, "
+                      << progress.acceleration_ms / 1000 << "s summed worker acceleration\n";
             next_progress = std::chrono::steady_clock::now() + std::chrono::seconds(30);
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -453,6 +455,20 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     stats.retained_intervals = true;
     stats.camera_batches = execution.camera_batches;
     stats.accepted_intervals = execution.accepted_intervals;
+    auto& timing = stats.retained_timing;
+    timing.batches = execution.batches;
+    timing.full_batches = execution.full_batches;
+    timing.interval_rows = execution.interval_rows;
+    timing.camera_rows = execution.camera_rows;
+    timing.batch_row_counts = execution.batch_row_counts;
+    timing.coalescing_timeouts = execution.coalescing_timeouts;
+    timing.coalescing_underfilled = execution.coalescing_underfilled;
+    timing.coalescing_stopped = execution.coalescing_stopped;
+    timing.coalescing_wait_ms = execution.coalescing_wait_ms;
+    timing.maximum_coalescing_wait_ms = execution.maximum_coalescing_wait_ms;
+    timing.execute_ms = execution.execute_ms;
+    timing.acceleration_calls = execution.acceleration_calls;
+    timing.acceleration_ms = execution.acceleration_ms;
     stats.dispatch_fallbacks = static_cast<int>(execution.safety_fallbacks);
     stats.dispatch_subdivisions = static_cast<std::int64_t>(execution.batch_subdivisions);
     stats.tiles_rendered = session.GetTileScheduler().GetCompletedCount();
@@ -467,6 +483,16 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
             std::max(stats.maximum_dispatch_ms, stages[i].maximum_submit_wait_ms);
         stats.initialization_seconds += stages[i].pipeline_setup_ms / 1000;
         stats.dispatch_target_overshoots += static_cast<std::int64_t>(stages[i].target_overshoots);
+        timing.pipeline_setup_ms += stages[i].pipeline_setup_ms;
+        timing.command_setup_ms += stages[i].command_setup_ms;
+        timing.submit_wait_ms += stages[i].submit_wait_ms;
+        timing.cleanup_ms += stages[i].cleanup_ms;
+        timing.dispatch_total_ms += stages[i].dispatch_total_ms;
+        timing.write_buffer_ms += stages[i].write_buffer_ms;
+        timing.read_buffer_ms += stages[i].read_buffer_ms;
+        timing.write_buffer_bytes += stages[i].write_buffer_bytes;
+        timing.read_buffer_bytes += stages[i].read_buffer_bytes;
+        timing.pipeline_creations += stages[i].pipeline_creations;
     }
     stats.seconds =
         std::chrono::duration<double>(std::chrono::steady_clock::now() - started).count();

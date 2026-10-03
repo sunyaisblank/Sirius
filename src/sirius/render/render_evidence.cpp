@@ -86,7 +86,7 @@ std::string VulkanRenderEvidenceJson(const SessionConfig& config, const VulkanRe
     }
     // Human progress is deliberately separate from this versioned wire record.
     // In particular, retained ray rows are neither pixels nor residency tiles.
-    const nlohmann::ordered_json evidence = {
+    nlohmann::ordered_json evidence = {
         {"schema", "sirius-vulkan-render-v1"},
         {"route", stats.retained_intervals ? "retained" : "legacy"},
         {"source_owner", stats.retained_intervals ? "host" : "device"},
@@ -116,6 +116,36 @@ std::string VulkanRenderEvidenceJson(const SessionConfig& config, const VulkanRe
         {"initialization_dispatches", stats.initialization_dispatches},
         {"initialization_seconds", stats.initialization_seconds},
         {"initialization_submit_wait_ms", stats.initialization_submit_wait_ms}};
+    if (stats.retained_intervals) {
+        const auto& timing = stats.retained_timing;
+        evidence["retained_timing"] = {
+            {"scope",
+             "host steady-clock wall observations; worker acceleration sums overlap "
+             "dispatcher work and other workers; dispatch phases are nested in Execute"},
+            {"batches", timing.batches},
+            {"full_batches", timing.full_batches},
+            {"interval_rows", timing.interval_rows},
+            {"camera_rows", timing.camera_rows},
+            {"batch_row_counts", timing.batch_row_counts},
+            {"coalescing_timeouts", timing.coalescing_timeouts},
+            {"coalescing_underfilled", timing.coalescing_underfilled},
+            {"coalescing_stopped", timing.coalescing_stopped},
+            {"coalescing_wait_ms", timing.coalescing_wait_ms},
+            {"maximum_coalescing_wait_ms", timing.maximum_coalescing_wait_ms},
+            {"execute_ms", timing.execute_ms},
+            {"acceleration_calls", timing.acceleration_calls},
+            {"acceleration_ms", timing.acceleration_ms},
+            {"pipeline_setup_ms", timing.pipeline_setup_ms},
+            {"command_setup_ms", timing.command_setup_ms},
+            {"submit_wait_ms", timing.submit_wait_ms},
+            {"cleanup_ms", timing.cleanup_ms},
+            {"dispatch_total_ms", timing.dispatch_total_ms},
+            {"write_buffer_ms", timing.write_buffer_ms},
+            {"read_buffer_ms", timing.read_buffer_ms},
+            {"write_buffer_bytes", timing.write_buffer_bytes},
+            {"read_buffer_bytes", timing.read_buffer_bytes},
+            {"pipeline_creations", timing.pipeline_creations}};
+    }
     return evidence.dump();
 }
 

@@ -22,6 +22,7 @@
 #include <cstdint>
 #include <functional>
 #include <string>
+#include <vector>
 
 namespace sirius::render {
 
@@ -74,6 +75,35 @@ struct VulkanRenderStats {
     std::uint64_t accepted_intervals = 0;
     // Film camera, joint RK, projection, dense sampling, initialization, smooth ray camera.
     std::array<std::int64_t, 6> retained_stage_dispatches{};
+    struct RetainedTiming {
+        std::uint64_t batches = 0;
+        std::uint64_t full_batches = 0;
+        std::uint64_t interval_rows = 0;
+        std::uint64_t camera_rows = 0;
+        std::vector<std::uint64_t> batch_row_counts;
+        std::uint64_t coalescing_timeouts = 0;
+        std::uint64_t coalescing_underfilled = 0;
+        std::uint64_t coalescing_stopped = 0;
+        double coalescing_wait_ms = 0;
+        double maximum_coalescing_wait_ms = 0;
+        double execute_ms = 0;
+        // Worker totals overlap the serialized dispatcher and other workers.
+        std::uint64_t acceleration_calls = 0;
+        double acceleration_ms = 0;
+        // Sums of the six existing stage observations. Dispatch total includes
+        // pipeline/command/submit/cleanup phases; Execute includes all of these
+        // and buffer transfers. These are nested, not additive wall components.
+        double pipeline_setup_ms = 0;
+        double command_setup_ms = 0;
+        double submit_wait_ms = 0;
+        double cleanup_ms = 0;
+        double dispatch_total_ms = 0;
+        double write_buffer_ms = 0;
+        double read_buffer_ms = 0;
+        std::uint64_t write_buffer_bytes = 0;
+        std::uint64_t read_buffer_bytes = 0;
+        std::uint64_t pipeline_creations = 0;
+    } retained_timing;
     PrecisionRung precision = PrecisionRung::Fp32;
     bool starfield_uploaded = false;
     bool point_catalogue_uploaded = false;

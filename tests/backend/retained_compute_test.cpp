@@ -1118,6 +1118,33 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
         EXPECT_EQ(ray.position(axis), accepted.position(axis));
         EXPECT_EQ(ray.velocity(axis), accepted.velocity(axis));
     }
+    const auto timing = executor.Statistics();
+    std::uint64_t observed_batches = 0, observed_rows = 0;
+    for (std::size_t rows = 0; rows < timing.batch_row_counts.size(); ++rows) {
+        observed_batches += timing.batch_row_counts[rows];
+        observed_rows += rows * timing.batch_row_counts[rows];
+    }
+    EXPECT_EQ(timing.batch_row_counts.size(), compute->Capacity() + 1);
+    EXPECT_EQ(timing.batch_row_counts.front(), 0U);
+    EXPECT_EQ(observed_batches, timing.batches);
+    EXPECT_EQ(observed_rows, timing.interval_rows + timing.camera_rows);
+    EXPECT_EQ(timing.interval_rows, timing.accepted_intervals + timing.rejected_intervals);
+    EXPECT_EQ(timing.acceleration_calls, timing.accepted_intervals);
+    EXPECT_LE(timing.full_batches, timing.batches);
+    EXPECT_LE(timing.coalescing_timeouts, timing.batches);
+    EXPECT_LE(timing.coalescing_timeouts, timing.coalescing_underfilled);
+    EXPECT_LE(timing.coalescing_underfilled, timing.batches);
+    EXPECT_EQ(timing.coalescing_stopped, 0U);
+    RecordProperty("coordinator_batches", std::to_string(timing.batches));
+    RecordProperty("coordinator_full_batches", std::to_string(timing.full_batches));
+    RecordProperty("coordinator_rows", std::to_string(observed_rows));
+    RecordProperty("coalescing_timeouts", std::to_string(timing.coalescing_timeouts));
+    RecordProperty("coalescing_underfilled", std::to_string(timing.coalescing_underfilled));
+    RecordProperty("coalescing_wait_ms", std::to_string(timing.coalescing_wait_ms));
+    RecordProperty("maximum_coalescing_wait_ms", std::to_string(timing.maximum_coalescing_wait_ms));
+    RecordProperty("coordinator_execute_ms", std::to_string(timing.execute_ms));
+    RecordProperty("worker_acceleration_calls", std::to_string(timing.acceleration_calls));
+    RecordProperty("worker_acceleration_ms", std::to_string(timing.acceleration_ms));
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif

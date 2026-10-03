@@ -45,6 +45,7 @@ RetainedTraceExecutor::RetainedTraceExecutor(RetainedCompute& compute,
     : compute_(compute),
       maximum_submission_ms_(maximum_submission_ms),
       should_cancel_(std::move(should_cancel)),
+      stats_{.batch_row_counts = std::vector<std::uint64_t>(compute.Capacity() + 1)},
       dispatcher_(&RetainedTraceExecutor::Run, this) {}
 
 RetainedTraceExecutor::~RetainedTraceExecutor() {
@@ -84,23 +85,50 @@ void RetainedTraceExecutor::Run() {
     std::size_t safety_cap = batch_limit;
     for (;;) {
         std::vector<Request*> batch;
+        double coalescing_ms = 0;
+        bool coalescing_ready = false;
+        bool coalescing_underfilled = false;
+        bool coalescing_stopped = false;
+        bool full_batch = false;
         {
             std::unique_lock lock(mutex_);
             available_.wait(lock, [&] { return stopping_ || !requests_.empty(); });
             if (stopping_ && requests_.empty()) return;
             // One bounded coalescing window; no worker count or full batch is
             // required for progress when rays finish at different times.
-            available_.wait_for(lock, std::chrono::milliseconds(1),
-                                [&] { return stopping_ || requests_.size() >= batch_limit; });
+            const auto coalescing_started = std::chrono::steady_clock::now();
+            coalescing_underfilled = requests_.size() < batch_limit;
+            coalescing_ready = available_.wait_for(lock, std::chrono::milliseconds(1), [&] {
+                return stopping_ || requests_.size() >= batch_limit;
+            });
+            coalescing_ms = std::chrono::duration<double, std::milli>(
+                                std::chrono::steady_clock::now() - coalescing_started)
+                                .count();
+            coalescing_stopped = stopping_;
             while (!requests_.empty() && batch.size() < batch_limit) {
                 batch.push_back(requests_.front());
                 requests_.pop_front();
             }
+            full_batch = batch.size() == batch_limit;
         }
+        const auto execute_started = std::chrono::steady_clock::now();
         Execute(batch);
+        const double execute_ms = std::chrono::duration<double, std::milli>(
+                                      std::chrono::steady_clock::now() - execute_started)
+                                      .count();
         const double peak = compute_.TakeSubmissionPeakMs();
         {
             std::lock_guard lock(mutex_);
+            ++stats_.batches;
+            ++stats_.batch_row_counts[batch.size()];
+            if (full_batch) ++stats_.full_batches;
+            if (!coalescing_ready) ++stats_.coalescing_timeouts;
+            if (coalescing_underfilled) ++stats_.coalescing_underfilled;
+            if (coalescing_stopped) ++stats_.coalescing_stopped;
+            stats_.coalescing_wait_ms += coalescing_ms;
+            stats_.maximum_coalescing_wait_ms =
+                std::max(stats_.maximum_coalescing_wait_ms, coalescing_ms);
+            stats_.execute_ms += execute_ms;
             if (std::any_of(batch.begin(), batch.end(),
                             [](const Request* r) { return !r->camera; }))
                 ++stats_.interval_batches;
@@ -131,6 +159,10 @@ void RetainedTraceExecutor::Run() {
             }
             stats_.maximum_batch_rows = std::max(stats_.maximum_batch_rows, batch.size());
             for (auto* request : batch) {
+                if (request->camera)
+                    ++stats_.camera_rows;
+                else
+                    ++stats_.interval_rows;
                 if (!request->camera && request->result) {
                     if (request->result->admissible)
                         ++stats_.accepted_intervals;
@@ -405,7 +437,11 @@ bool RetainedTraceExecutor::Step(core::Lightray& ray, core::IMetric& metric,
     comparison.refined_increment = Increment(result.refined_increment);
     comparison.error_ratio = result.error_ratio;
     Physical(result.full, ray, coupled.variations);
+    const auto acceleration_started = std::chrono::steady_clock::now();
     ray.acceleration = core::Geodesic::CalculateAcceleration(ray.velocity, ray.position, &metric);
+    const double acceleration_ms = std::chrono::duration<double, std::milli>(
+                                       std::chrono::steady_clock::now() - acceleration_started)
+                                       .count();
     ray.proper_time += interval;
     ray.coordinate_time += static_cast<float>(interval * std::abs(ray.velocity(0)));
     ray.step_size = core::Geodesic::ComputeOptimalStep(
@@ -416,6 +452,8 @@ bool RetainedTraceExecutor::Step(core::Lightray& ray, core::IMetric& metric,
     {
         std::lock_guard lock(mutex_);
         continuations_[thread] = continuation;
+        ++stats_.acceleration_calls;
+        stats_.acceleration_ms += acceleration_ms;
     }
     return true;
 }

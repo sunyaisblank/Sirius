@@ -9,6 +9,7 @@
 #include <map>
 #include <mutex>
 #include <thread>
+#include <vector>
 
 namespace sirius::backend {
 
@@ -39,6 +40,25 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
         std::uint64_t initialized_phases = 0;
         std::uint64_t accepted_intervals = 0;
         std::uint64_t rejected_intervals = 0;
+        // Completed outer Execute calls; mixed batches count once. Histogram
+        // index is the gathered row count, including rejected interval rows.
+        std::uint64_t batches = 0;
+        std::uint64_t full_batches = 0;
+        std::uint64_t interval_rows = 0;
+        std::uint64_t camera_rows = 0;
+        std::vector<std::uint64_t> batch_row_counts;
+        // Predicate wait wall time includes lock reacquisition. Untimed idle
+        // waits for the first request are outside this coalescing observation.
+        std::uint64_t coalescing_timeouts = 0;
+        std::uint64_t coalescing_underfilled = 0;
+        std::uint64_t coalescing_stopped = 0;
+        double coalescing_wait_ms = 0;
+        double maximum_coalescing_wait_ms = 0;
+        double execute_ms = 0;  // Serialized, including packing and device calls.
+        // Summed worker intervals can overlap each other and the dispatcher.
+        // They are not an exclusive component of render wall time.
+        std::uint64_t acceleration_calls = 0;
+        double acceleration_ms = 0;
     };
     [[nodiscard]] Stats Statistics() const;
 
