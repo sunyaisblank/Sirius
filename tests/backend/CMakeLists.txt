@@ -4,8 +4,11 @@ add_executable(sirius_backend_tests
     cpu_jacobi_oracle_test.cpp
     cpu_trace_boundary_test.cpp
     coupled_transport_test.cpp
+    full_path_acceptance_test.cpp
+    polarisation_acceptance_test.cpp
     source_sky_map_trace_test.cpp
     source_sky_infinity_trace_test.cpp
+    volume_acceptance_test.cpp
 )
 
 target_link_libraries(sirius_backend_tests PRIVATE sirius_backend_cpu GTest::gtest_main)

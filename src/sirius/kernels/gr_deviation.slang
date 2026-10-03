@@ -299,17 +299,71 @@ public void MakeCelestialTangentBasis<T:__BuiltinFloatingPointType>(vector<T,3> 
 // eigenvector of J J^T, so a rotation of the input basis cannot rotate the
 // rendered output ellipse. Shared by trace.slang and the parity probe to keep
 // this final P2 projection a single device authority.
+// Binary32 product residual by Dekker splitting. Fraction inputs are bounded
+// by one, so the splitter cannot overflow. precise preserves this arithmetic
+// graph across SPIR-V, CUDA and Metal without target-specific assembly.
+float BeamProductResidual(float a, float b, float roundedProduct) {
+    precise float sa = 4097.0f * a, sb = 4097.0f * b;
+    precise float ah = sa - (sa - a), bh = sb - (sb - b);
+    precise float al = a - ah, bl = b - bh;
+    precise float e1 = roundedProduct - ah * bh;
+    precise float e2 = e1 - al * bh;
+    precise float e3 = e2 - ah * bl;
+    precise float residual = al * bl - e3;
+    return residual;
+}
+
+// GLSL Ldexp permits flushing below exponent -126 and has an undefined result
+// above 128, even when the final value is finite. Bound every intrinsic call;
+// monotone scaling keeps intermediate values representable whenever the final
+// result is normal. A zero product needs no exponent alignment.
+float BeamScaleExponent(float value, int exponent) {
+    if (value == 0.0f) return value;
+    while (exponent > 120) {
+        value = ldexp(value, 120.0f);
+        exponent -= 120;
+    }
+    while (exponent < -120) {
+        value = ldexp(value, -120.0f);
+        exponent += 120;
+    }
+    return ldexp(value, float(exponent));
+}
+
 public void BeamEllipseFromTransverseMap(float beamA, float beamB, float beamC, float beamD,
                                          out float semiMajor, out float semiMinor,
                                          out float orientation, out float determinant) {
-    float mapDeterminant = beamA * beamD - beamB * beamC;
-    float mapPower = beamA * beamA + beamB * beamB + beamC * beamC + beamD * beamD;
-    float discriminant = sqrt(max(mapPower * mapPower -
-                                  4.0f * mapDeterminant * mapDeterminant, 0.0f));
-    semiMajor = sqrt(max(0.5f * (mapPower + discriminant), 0.0f));
-    semiMinor = sqrt(max(0.5f * (mapPower - discriminant), 0.0f));
-    orientation = 0.5f * atan2(2.0f * (beamA * beamC + beamB * beamD),
-                               beamA * beamA + beamB * beamB -
-                               beamC * beamC - beamD * beamD);
-    determinant = mapDeterminant;
+    float scale = max(max(abs(beamA), abs(beamB)), max(abs(beamC), abs(beamD)));
+    if (scale == 0.0f) {
+        semiMajor = semiMinor = orientation = determinant = 0.0f;
+        return;
+    }
+    int exponent;
+    frexp(scale, exponent);
+    float a = BeamScaleExponent(beamA, -exponent), b = BeamScaleExponent(beamB, -exponent);
+    float c = BeamScaleExponent(beamC, -exponent), d = BeamScaleExponent(beamD, -exponent);
+    // Separately scaled products retain representable determinants/minor axes
+    // even when the common-normalized smallest coefficient underflows.
+    int ae, be, ce, de;
+    float af = frexp(beamA, ae), bf = frexp(beamB, be);
+    float cf = frexp(beamC, ce), df = frexp(beamD, de);
+    bool hasAD = beamA != 0.0f && beamD != 0.0f;
+    bool hasBC = beamB != 0.0f && beamC != 0.0f;
+    int determinantExponent = hasAD && hasBC ? max(ae + de, be + ce)
+                            : hasAD ? ae + de : hasBC ? be + ce : 0;
+    precise float ad = af * df, bc = bf * cf;
+    precise float normalizedDeterminant =
+        (BeamScaleExponent(ad, ae + de - determinantExponent) -
+         BeamScaleExponent(bc, be + ce - determinantExponent)) +
+        (BeamScaleExponent(BeamProductResidual(af, df, ad), ae + de - determinantExponent) -
+         BeamScaleExponent(BeamProductResidual(bf, cf, bc), be + ce - determinantExponent));
+    float normalizedMajor = 0.5f * (length(float2(a + d, b - c)) +
+                                     length(float2(a - d, b + c)));
+    semiMajor = BeamScaleExponent(normalizedMajor, exponent);
+    // The difference of the squared singular values loses small finite axes
+    // already at float condition numbers around 1e4. Use their product instead.
+    semiMinor = BeamScaleExponent(abs(normalizedDeterminant) / normalizedMajor,
+                                 determinantExponent - exponent);
+    orientation = 0.5f * atan2(2.0f * (a * c + b * d), a * a + b * b - c * c - d * d);
+    determinant = BeamScaleExponent(normalizedDeterminant, determinantExponent);
 }

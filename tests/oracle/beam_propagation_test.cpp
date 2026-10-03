@@ -207,6 +207,66 @@ TEST_F(BeamPropagationTest, BeamGeometryExtraction) {
 
     // Solid angle = π × 2 × 0.5 × 1e-6 = π×1e-6
     EXPECT_NEAR(beam.solid_angle, std::numbers::pi * 1e-6, 1e-8);
+
+    // Analytic diagonal matrices expose cancellation in the former small-axis
+    // expression. Rescaling cannot change the aspect ratio or numerical rank.
+    for (const double scale : {1.0e-100, 1.0, 1.0e100}) {
+        for (const double minor : {1.0e-9, 0.0}) {
+            SCOPED_TRACE(scale);
+            SCOPED_TRACE(minor);
+            beam.J[2][2] = scale;
+            beam.J[2][3] = beam.J[3][2] = 0;
+            beam.J[3][3] = scale * minor;
+            beam.UpdateGeometry();
+            EXPECT_NEAR(beam.major_axis, scale, 1.0e-14 * scale);
+            EXPECT_NEAR(beam.minor_axis, scale * minor, 1.0e-14 * scale * minor);
+            EXPECT_NEAR(beam.major_axis * beam.minor_axis, scale * scale * minor,
+                        2.0e-14 * scale * scale * minor);
+        }
+    }
+    beam.J[2][2] = beam.J[3][3] = 0;
+    beam.UpdateGeometry();
+    EXPECT_DOUBLE_EQ(beam.major_axis, 0);
+    EXPECT_DOUBLE_EQ(beam.minor_axis, 0);
+    EXPECT_DOUBLE_EQ(beam.solid_angle, 0);
+
+    // Exact non-diagonal rank one: (3,1)^T (1,3). A rounded max-entry
+    // division manufactures a determinant; binary rescaling must not.
+    const double next_three = std::nextafter(3.0, 4.0);
+    for (const int exponent : {-400, 0, 400}) {
+        const double scale = std::ldexp(1.0, exponent);
+        for (const double bottom_right : {3.0, next_three}) {
+            SCOPED_TRACE(exponent);
+            SCOPED_TRACE(bottom_right);
+            beam.J[2][2] = 3 * scale;
+            beam.J[2][3] = 9 * scale;
+            beam.J[3][2] = scale;
+            beam.J[3][3] = bottom_right * scale;
+            beam.UpdateGeometry();
+            const double expected_det = std::ldexp(3 * (bottom_right - 3), 2 * exponent);
+            const double expected_minor = std::ldexp(3 * (bottom_right - 3) / 10, exponent);
+            EXPECT_NEAR(beam.major_axis, 10 * scale, 1e-14 * 10 * scale);
+            EXPECT_NEAR(beam.minor_axis, expected_minor, 1e-14 * expected_minor);
+            EXPECT_NEAR(beam.major_axis * beam.minor_axis, expected_det, 2e-14 * expected_det);
+            EXPECT_NEAR(beam.orientation, std::atan2(1.0, 3.0), 1e-14);
+        }
+    }
+    // Both products round: compensating only one product fabricates rank.
+    const double common = std::nextafter(1.0, 2.0);
+    beam.J[2][2] = beam.J[2][3] = beam.J[3][2] = beam.J[3][3] = common;
+    beam.UpdateGeometry();
+    EXPECT_DOUBLE_EQ(beam.minor_axis, 0);
+    EXPECT_NEAR(beam.major_axis, 2 * common, 1e-14);
+
+    // The determinant and both axes remain representable even though common
+    // normalization underflows the small matrix entry.
+    beam.J[2][2] = std::ldexp(1.0, 600);
+    beam.J[3][3] = std::ldexp(1.0, -600);
+    beam.J[2][3] = beam.J[3][2] = 0;
+    beam.UpdateGeometry();
+    EXPECT_DOUBLE_EQ(beam.major_axis, beam.J[2][2]);
+    EXPECT_DOUBLE_EQ(beam.minor_axis, beam.J[3][3]);
+    EXPECT_DOUBLE_EQ(beam.magnification, 1);
 }
 
 TEST_F(BeamPropagationTest, OrientationDescribesOutputEllipseRatherThanInputBasis) {

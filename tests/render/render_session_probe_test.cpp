@@ -1,4 +1,7 @@
 #include "support/moving_kerr_detector_scene.h"
+#include "support/point_source_band_reference.h"
+#include "support/scoped_environment.h"
+#include "support/separated_geodesic_reference.h"
 // End-to-end CPU render-session probe (session-level gate).
 //
 // Drives RenderSession CPU-only at 64x64, 4 spp, Kerr a=0.9, writing a PNG and
@@ -10,6 +13,10 @@
 #include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/render/session/render_session.h"
 #include "sirius/render/trace_domain.h"
+#ifdef SIRIUS_HAS_VULKAN_BACKEND
+#include "sirius/backend/device.h"
+#include "sirius/render/vulkan_renderer.h"
+#endif
 
 #include <gtest/gtest.h>
 
@@ -18,6 +25,7 @@
 #include <stb_image.h>
 #include <tinyexr.h>
 
+#include <array>
 #include <chrono>
 #include <cmath>
 #include <cstdlib>
@@ -30,6 +38,7 @@
 #include <numbers>
 #include <optional>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -69,6 +78,251 @@ SessionState RenderTo(const std::string& output_path) {
 }
 
 }  // namespace
+
+namespace {
+namespace disk_reference = sirius::test::separated_reference;
+namespace disk_band_reference = sirius::test::point_source_band_reference;
+
+SessionConfig DiskCompositionConfig(double spin) {
+    SessionConfig config;
+    config.width = config.height = 3;
+    config.samples_per_pixel = 1;
+    config.tile_size = 4;
+    config.enable_parallel_rendering = false;
+    config.write_output = false;
+    config.metric_id =
+        spin == 0 ? sirius::core::MetricId::Schwarzschild : sirius::core::MetricId::Kerr;
+    config.black_hole_mass = 1;
+    config.black_hole_spin = spin;
+    config.observer_distance = 50;
+    config.observer_inclination = std::numbers::pi / 3;
+    config.observer_azimuth = .31;
+    config.camera_fov = 32;
+    if (spin != 0) {
+        config.camera_beta_forward = .03;
+        config.camera_beta_up = -.01;
+        config.camera_beta_right = .02;
+    }
+    config.temperature_model = sirius::render::DiskTemperatureModel::ShakuraSunyaev;
+    config.disk_temperature_scale = 12000;
+    config.enable_disk = true;
+    config.doppler_beaming = true;
+    config.enable_bloom = false;
+    config.enable_film_finish = false;
+    config.tonemapper = sirius::core::TonemapType::None;
+    config.exposure = config.contrast = config.saturation = 1;
+    return config;
+}
+
+// The declared model is a Newtonian zero-torque radial flux profile carried
+// by a relativistic circular emitter. This test does not call the production
+// ISCO, temperature, frequency-transfer or colour helpers for its expectation.
+long double IndependentDiskInner(double spin) {
+    const long double a = spin;
+    const long double z1 = 1 + std::cbrt(1 - a * a) * (std::cbrt(1 + a) + std::cbrt(1 - a));
+    const long double z2 = std::sqrt(3 * a * a + z1 * z1);
+    return 3 + z2 - (a >= 0 ? 1 : -1) * std::sqrt((3 - z1) * (3 + z1 + 2 * z2));
+}
+
+struct DiskCompositionExpected {
+    disk_reference::Result event;
+    long double radius, temperature, frequency_ratio;
+    disk_band_reference::Channels rgb;
+};
+
+DiskCompositionExpected IndependentDiskPixel(const SessionConfig& config,
+                                             const sirius::core::CameraLaunch& launch,
+                                             long double step_fraction) {
+    const long double mass = config.black_hole_mass;
+    const long double spin = config.black_hole_spin * mass;
+    const long double inner = IndependentDiskInner(config.black_hole_spin) * mass;
+    auto event = disk_reference::Trace(launch, static_cast<double>(mass), static_cast<double>(spin),
+                                       200 * static_cast<double>(mass), step_fraction,
+                                       static_cast<double>(inner), 20 * static_cast<double>(mass));
+    if (event.fate != disk_reference::Fate::Disk)
+        throw std::runtime_error("declared disk composition witness missed its first disk event");
+    const auto geometry = disk_reference::At(event.x, mass, spin);
+    const long double r = geometry.radius;
+    const long double omega = std::sqrt(mass) / (std::pow(r, 1.5L) + spin * std::sqrt(mass));
+    // Fixed-r circular coordinate velocity agrees in BL and Cartesian KS.
+    const long double gtt = -1 + 2 * mass / r;
+    const long double gtphi = -2 * mass * spin / r;
+    const long double gphiphi = r * r + spin * spin + 2 * mass * spin * spin / r;
+    const long double norm = -(gtt + 2 * omega * gtphi + omega * omega * gphiphi);
+    if (!(r > inner && r < 20 * mass && norm > 0))
+        throw std::runtime_error("disk witness outside stable timelike circular-emitter domain");
+    // The reference carries the past-directed tangent: E=-p_t, L=p_phi.
+    // The physical future photon has constants (-E,-L), camera frequency one.
+    const long double emitted_frequency =
+        (-event.energy + omega * event.angular_momentum) / std::sqrt(norm);
+    if (!(emitted_frequency > 0)) throw std::runtime_error("invalid independent disk frequency");
+    const long double g = 1 / emitted_frequency;
+    const auto flux = [inner](long double radius) {
+        const long double q = inner / radius;
+        return q * q * q * (1 - std::sqrt(q));
+    };
+    const long double temperature = std::pow(flux(r) / flux(1.5L * inner), .25L);
+    // The represented thin-disk colour is relative hue (brightest channel one)
+    // times observed bolometric intensity, not an absolute visible-band flux.
+    auto rgb = disk_band_reference::Rgb(disk_band_reference::Integrate(
+        temperature * g * config.disk_temperature_scale, 1, 32, false, false));
+    const long double normalizer = std::max({rgb[0], rgb[1], rgb[2], .001L});
+    for (auto& channel : rgb) channel = channel / normalizer * std::pow(temperature * g, 4);
+    return {std::move(event), r, temperature, g, rgb};
+}
+
+struct DiskCompositionWitness {
+    int x, y;
+    DiskCompositionExpected expected;
+    long double reference_gap;
+    long double event_gap;
+    long double frequency_gap;
+};
+
+std::vector<DiskCompositionWitness> DiskCompositionWitnesses(const SessionConfig& config) {
+    sirius::core::CameraConfig camera_config;
+    camera_config.r = config.observer_distance;
+    camera_config.theta = config.observer_inclination;
+    camera_config.phi = config.observer_azimuth;
+    camera_config.fov = config.camera_fov;
+    camera_config.width = config.width;
+    camera_config.height = config.height;
+    camera_config.beta_x = config.camera_beta_forward;
+    camera_config.beta_y = config.camera_beta_up;
+    camera_config.beta_z = config.camera_beta_right;
+    sirius::core::PinholeCamera camera(camera_config);
+    sirius::core::KerrSchildFamily metric(sirius::core::KerrSchildParams::Kerr(
+        config.black_hole_mass, config.black_hole_spin * config.black_hole_mass));
+    std::vector<DiskCompositionWitness> witnesses;
+    for (const int x : {0, 2}) {
+        // Public camera projections and LaunchCameraRay are measured boundary
+        // inputs. Their independent analytic qualification is P1; all complete
+        // trajectories and all emitter/spectral physics below are independent.
+        const auto film = camera.ProjectFilmForObserver(x + .5, 2.5, .2f, 1.f / 7);
+        if (!film) throw std::runtime_error("disk witness camera projection declined");
+        const auto launch = sirius::core::LaunchCameraRay(
+            metric, config.black_hole_spin * config.black_hole_mass, film->ray);
+        if (!launch) throw std::runtime_error("disk witness measured camera launch declined");
+        auto coarse = IndependentDiskPixel(config, *launch, .002L);
+        auto fine = IndependentDiskPixel(config, *launch, .001L);
+        const long double peak = std::max({fine.rgb[0], fine.rgb[1], fine.rgb[2]});
+        long double gap = 0;
+        for (int channel = 0; channel < 3; ++channel)
+            gap = std::max(gap, std::abs(coarse.rgb[channel] - fine.rgb[channel]) / peak);
+        long double event_gap = 0;
+        for (int mu = 0; mu < 4; ++mu)
+            event_gap = std::max(event_gap, std::abs(coarse.event.x[mu] - fine.event.x[mu]) /
+                                                config.black_hole_mass);
+        const long double frequency_gap =
+            std::abs(coarse.frequency_ratio - fine.frequency_ratio) / fine.frequency_ratio;
+        witnesses.push_back({x, 2, std::move(fine), gap, event_gap, frequency_gap});
+    }
+    return witnesses;
+}
+
+void CheckDiskComposition(const SessionConfig& config, const std::vector<float>& pixels,
+                          const std::vector<DiskCompositionWitness>& witnesses,
+                          const std::string& backend) {
+    ASSERT_EQ(pixels.size(), static_cast<std::size_t>(config.width * config.height * 4));
+    for (const auto& witness : witnesses) {
+        const auto& expected = witness.expected;
+        SCOPED_TRACE(backend + " spin=" + std::to_string(config.black_hole_spin) +
+                     " pixel=" + std::to_string(witness.x) + "," + std::to_string(witness.y));
+        ASSERT_EQ(expected.event.fate, disk_reference::Fate::Disk);
+        ASSERT_LT(witness.reference_gap, 1e-6L);
+        ASSERT_LT(witness.event_gap, 1e-6L);
+        ASSERT_LT(witness.frequency_gap, 1e-6L);
+        ASSERT_LE(std::abs(expected.event.x[3]) / config.black_hole_mass, 1e-12L);
+        ASSERT_EQ(expected.event.radial_turns, 0u);
+        // These are transverse first crossings, away from either disk edge;
+        // this finite witness makes no near-edge or caustic conditioning claim.
+        ASSERT_GT(
+            expected.radius / config.black_hole_mass - IndependentDiskInner(config.black_hole_spin),
+            1);
+        ASSERT_GT(20 - expected.radius / config.black_hole_mass, 1);
+        ASSERT_GT(std::abs(expected.event.k[3]), .1L);
+        const long double peak = std::max({expected.rgb[0], expected.rgb[1], expected.rgb[2]});
+        ASSERT_GT(peak, 1e-3L);
+        const std::size_t index = (witness.y * config.width + witness.x) * 4;
+        long double error = 0;
+        for (int channel = 0; channel < 3; ++channel) {
+            ASSERT_TRUE(std::isfinite(pixels[index + channel]));
+            ASSERT_GE(pixels[index + channel], 0);
+            error =
+                std::max(error, std::abs(pixels[index + channel] - expected.rgb[channel]) / peak);
+        }
+        // Fixed session controller abs/rel=5e-6, float film inputs and channels;
+        // use the existing central-trajectory 1e-4 envelope without fitting it
+        // to the observed result. The oracle spends at most 1% of that budget.
+        EXPECT_LE(error + witness.reference_gap, 1e-4L);
+        EXPECT_EQ(pixels[index + 3], 1);
+        const auto key = backend + "_a" + std::to_string(config.black_hole_spin) + "_x" +
+                         std::to_string(witness.x);
+        ::testing::Test::RecordProperty(
+            key, std::format("radius/M={:.12g},temperature/profile={:.12g},g={:.12g},"
+                             "rgb=[{:.12g},{:.12g},{:.12g}],relative_channel_error={:.12g},"
+                             "reference_relative_gap={:.12g},reference_endpoint_gap/M={:.12g},"
+                             "reference_frequency_gap={:.12g},reference_steps={}",
+                             expected.radius / config.black_hole_mass, expected.temperature,
+                             expected.frequency_ratio, expected.rgb[0], expected.rgb[1],
+                             expected.rgb[2], error, witness.reference_gap, witness.event_gap,
+                             witness.frequency_gap, expected.event.steps));
+    }
+}
+}  // namespace
+
+TEST(RenderSessionProbe, CpuThinDiskPublishedLinearChannelsMatchIndependentFirstEventPhysics) {
+    RecordProperty("scope",
+                   "typed CPU RenderSession; published pre-grade tile radiance; "
+                   "first opaque disk Carter event; moving Kerr observer; no output");
+    for (const double spin : {0., .7}) {
+        auto config = DiskCompositionConfig(spin);
+        const auto witnesses = DiskCompositionWitnesses(config);
+        RenderSession session;
+        const auto configured = session.Configure(config);
+        ASSERT_TRUE(configured) << configured.error().Description();
+        std::vector<float> linear;
+        // CPU UpdateTile publishes complete physical radiance before reporting
+        // completion. The final in-memory display later receives fixed shadow
+        // lift/clipping even when output and tonemapping are disabled.
+        session.SetProgressCallback([&](float, int done, int total, double) {
+            if (done == total) linear = session.GetDisplayBuffer().SnapshotFloatData();
+        });
+        ASSERT_EQ(session.Execute(), SessionState::Complete) << session.GetErrorMessage();
+        ASSERT_NO_FATAL_FAILURE(CheckDiskComposition(config, linear, witnesses, "cpu"));
+        EXPECT_EQ(session.GetTileScheduler().GetCompletedCount(), 1);
+    }
+}
+
+TEST(RenderSessionProbe, VulkanThinDiskPublishedLinearChannelsMatchIndependentFirstEventPhysics) {
+#ifdef SIRIUS_HAS_VULKAN_BACKEND
+    const auto devices = sirius::backend::EnumerateVulkanDevices();
+    ASSERT_TRUE(devices) << devices.error().Description();
+    if (devices->empty()) GTEST_SKIP() << "Vulkan unavailable; disk session unqualified";
+    const sirius::test::ScopedEnvironmentVariable precision("SIRIUS_PRECISION", "fp32");
+    RecordProperty("scope",
+                   "production RenderVulkanToDisplay -> retained executor -> internal "
+                   "RenderSession shared shading -> linear publication; no output");
+    for (const double spin : {0., .7}) {
+        auto config = DiskCompositionConfig(spin);
+        config.backend = sirius::render::RenderBackend::Vulkan;
+        const auto witnesses = DiskCompositionWitnesses(config);
+        sirius::render::DisplayBuffer display;
+        display.Initialise(config.width, config.height);
+        const auto rendered = sirius::render::RenderVulkanToDisplay(config, display);
+        ASSERT_TRUE(rendered) << rendered.error().Description();
+        ASSERT_TRUE(rendered->retained_intervals);
+        EXPECT_GT(rendered->camera_batches, 0u);
+        EXPECT_GT(rendered->accepted_intervals, 0u);
+        EXPECT_EQ(rendered->precision, sirius::render::PrecisionRung::Fp32);
+        RecordProperty("device", rendered->device_name);
+        ASSERT_NO_FATAL_FAILURE(
+            CheckDiskComposition(config, display.SnapshotFloatData(), witnesses, "vulkan_fp32"));
+    }
+#else
+    GTEST_SKIP() << "Vulkan backend absent; disk session unqualified";
+#endif
+}
 
 TEST(RenderSessionProbe, CpuKerrRenderProducesValidPngAndExr) {
     namespace fs = std::filesystem;

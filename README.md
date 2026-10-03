@@ -16,6 +16,18 @@ The black hole family uses the Kerr-Schild form $g_{\mu\nu} = \eta_{\mu\nu} + H\
 
 The Alcubierre family is the moving Cartesian metric $ds^2=-dt^2+[dx-v_s f(r_s)dt]^2+dy^2+dz^2$ with the declared smooth tanh wall. Its $t$--$x$ block has exact determinant $-1$ and one analytic inverse on both live backends. Configuration, direct CPU construction, device metric/connection evaluation, and every device RK stage share the complete finite domain $|v_s|\le10$, $0<R,\sigma\le1000$, and $0.1\le\sigma R\le100$; an unrepresented profile declines instead of becoming flat space. A reusable fourth-order connection-difference oracle reconstructs the Einstein tensor independently and recovers the Eulerian density $T_{\mu\nu}n^\mu n^\nu=-v_s^2[(\partial_y f)^2+(\partial_z f)^2]/(32\pi)$, including the strict negative energy on every sampled off-axis warp wall. Sirius therefore advertises the represented geometry and its required exotic stress-energy, not a physically ordinary propulsion model.
 
+## Numerical acceptance
+
+The bounded Schwarzschild/Kerr scientific profile, with Minkowski controls,
+is tracked in [the numerical acceptance record](https://github.com/sunyaisblank/Sirius/issues/39).
+It distinguishes independently checked trajectories, beams, frequency transfer,
+relative disk and point-source intensities, and CPU polarisation from backend
+admission and performance. Its frozen inputs, refinements, error measures,
+device identity and revision limit each claim. The other registered metrics
+retain their implementation contracts but are not qualified by this profile.
+The broader [specification](docs/SPECIFICATION.md), including DNGR, high-resolution,
+hardware and release requirements, remains in force.
+
 ## What it renders
 
 | Metric | Parameters | Backends | Accretion disk |

@@ -1738,6 +1738,72 @@ TEST(KernelParity, BeamEllipseRetainsBothAxesAndOutputOrientation) {
     EXPECT_NEAR(std::cos(2.0f * results[2]), std::cos(2.0f * output_angle), 2.0e-6f);
     EXPECT_NEAR(std::sin(2.0f * results[2]), std::sin(2.0f * output_angle), 2.0e-6f);
     EXPECT_NEAR(results[3], 3.0f, 2.0e-6f);
+
+    for (const float scale : {1.0e-10f, 1.0f, 1.0e10f}) {
+        for (const float minor : {1.0e-5f, 0.0f}) {
+            SCOPED_TRACE(scale);
+            SCOPED_TRACE(minor);
+            Sample diagonal;
+            diagonal.c0 = scale;
+            diagonal.u0 = scale * minor;
+            ASSERT_NO_FATAL_FAILURE(
+                RunProbe(*f.device, f.kernel, kOpBeamEllipse, {diagonal}, results));
+            EXPECT_NEAR(results[0], scale, 2.0e-6f * scale);
+            EXPECT_NEAR(results[1], scale * minor, 2.0e-6f * scale * minor);
+            const double expected_det = static_cast<double>(scale) * diagonal.u0;
+            EXPECT_NEAR(results[3], expected_det, 3.0e-6 * expected_det);
+            EXPECT_NEAR(static_cast<double>(results[0]) * results[1], expected_det,
+                        3.0e-6 * expected_det);
+        }
+    }
+    Sample zero;
+    ASSERT_NO_FATAL_FAILURE(RunProbe(*f.device, f.kernel, kOpBeamEllipse, {zero}, results));
+    EXPECT_FLOAT_EQ(results[0], 0);
+    EXPECT_FLOAT_EQ(results[1], 0);
+    EXPECT_FLOAT_EQ(results[3], 0);
+
+    // (3,1)^T (1,3) has exact rank one; one represented step of d makes
+    // it full rank with determinant 3*(d-3), independently of extraction.
+    for (const int exponent : {-10, 0, 10, 64}) {
+        const float scale = std::ldexp(1.0f, exponent);
+        for (const float d : {3.0f, std::nextafter(3.0f, 4.0f)}) {
+            SCOPED_TRACE(exponent);
+            SCOPED_TRACE(d);
+            Sample rank;
+            rank.c0 = 3 * scale;
+            rank.c1 = 9 * scale;
+            rank.c2 = scale;
+            rank.u0 = d * scale;
+            ASSERT_NO_FATAL_FAILURE(RunProbe(*f.device, f.kernel, kOpBeamEllipse, {rank}, results));
+            const double det = std::ldexp(3.0 * (static_cast<double>(d) - 3), 2 * exponent);
+            const double minor = std::ldexp(3.0 * (static_cast<double>(d) - 3) / 10, exponent);
+            EXPECT_NEAR(results[0], 10 * scale, 2e-6 * 10 * scale);
+            EXPECT_NEAR(results[1], minor, 2e-6 * minor);
+            EXPECT_NEAR(results[2], std::atan2(1.0, 3.0), 2e-6);
+            EXPECT_NEAR(results[3], det, 3e-6 * det);
+        }
+    }
+    Sample repeated;
+    repeated.c0 = repeated.c1 = repeated.c2 = repeated.u0 = std::nextafter(1.0f, 2.0f);
+    ASSERT_NO_FATAL_FAILURE(RunProbe(*f.device, f.kernel, kOpBeamEllipse, {repeated}, results));
+    EXPECT_FLOAT_EQ(results[1], 0);
+    EXPECT_FLOAT_EQ(results[3], 0);
+    EXPECT_NEAR(results[0], 2 * repeated.c0, 2e-6);
+
+    Sample disparate;
+    disparate.c0 = std::ldexp(1.0f, 100);
+    disparate.u0 = std::ldexp(1.0f, -100);
+    ASSERT_NO_FATAL_FAILURE(RunProbe(*f.device, f.kernel, kOpBeamEllipse, {disparate}, results));
+    EXPECT_NEAR(results[0], disparate.c0, 2e-6 * disparate.c0);
+    EXPECT_NEAR(results[1], disparate.u0, 2e-6 * disparate.u0);
+    EXPECT_NEAR(results[3], 1.0f, 3e-6f);
+
+    disparate.c0 = std::ldexp(1.0f, 127);
+    disparate.u0 = std::ldexp(1.0f, -125);
+    ASSERT_NO_FATAL_FAILURE(RunProbe(*f.device, f.kernel, kOpBeamEllipse, {disparate}, results));
+    EXPECT_NEAR(results[0], disparate.c0, 2e-6 * disparate.c0);
+    EXPECT_NEAR(results[1], disparate.u0, 2e-6 * disparate.u0);
+    EXPECT_NEAR(results[3], 4.0f, 3e-6f);
 }
 
 TEST(KernelParity, PointStarAngularWeightMatchesIndependentOracle) {

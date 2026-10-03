@@ -360,8 +360,7 @@ void AccumulateVolumeSegment(Vec4Cart start, Vec4Cart finish,
                 VolumeDiskTemperature(diskR, point.z, innerRadius,
                                       innerTemperature, temperatureModel, M,
                                       aStar, hOverR, hPower);
-            if (isfinite(diskOpacity) && diskOpacity > 0.0f &&
-                isfinite(temperature) && temperature > 0.0f) {
+            if (isfinite(diskOpacity) && diskOpacity > 0.0f) {
                 // Avoid a metric evaluation for empty samples. Every accepted
                 // segment is still midpoint-sampled, matching the CPU path.
                 Real localMetric[4][4];
@@ -393,11 +392,15 @@ void AccumulateVolumeSegment(Vec4Cart start, Vec4Cart finish,
                     Real(emitterTransfer.w * omega * point.x), Real(0.0f));
                 float emittedFrequency = emitterTransfer.y;
                 diskDeltaTau = diskOpacity * emittedFrequency * deltaLambda;
-                float emittedSource = pow(temperature / innerTemperature, 4.0f);
-                float sourceFrequency = dopplerBeaming ? emittedFrequency : zamoTransfer.y;
-                float gFactor = observerFrequency / sourceFrequency;
-                float observedSource = ObservedDiskBolometricSource(emittedSource, gFactor);
-                diskSource = BlackbodyColor(temperature * gFactor) * observedSource;
+                // The zero-torque dark buffer retains matter and extinction;
+                // only its emissivity is zero.
+                if (isfinite(temperature) && temperature > 0.0f) {
+                    float emittedSource = pow(temperature / innerTemperature, 4.0f);
+                    float sourceFrequency = dopplerBeaming ? emittedFrequency : zamoTransfer.y;
+                    float gFactor = observerFrequency / sourceFrequency;
+                    float observedSource = ObservedDiskBolometricSource(emittedSource, gFactor);
+                    diskSource = BlackbodyColor(temperature * gFactor) * observedSource;
+                }
             }
         }
 

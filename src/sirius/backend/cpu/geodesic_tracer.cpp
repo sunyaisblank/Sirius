@@ -534,6 +534,15 @@ void GeodesicTracer::SetDiskPolarisation(const PolarisationFrame& frame,
     crossing.polarisation_degree = atmosphere->linear_polarisation_degree;
     crossing.polarisation_intensity_scale = atmosphere->intensity_scale;
 
+    // Normal emission is unpolarised. Its meridian and EVPA are undefined,
+    // while the physical Stokes Q and U are exactly zero. Publish a finite
+    // canonical angle before attempting the degenerate screen projection.
+    if (crossing.polarisation_degree == 0.0f) {
+        crossing.polarisation_evpa = 0.0f;
+        crossing.polarisation_valid = true;
+        return;
+    }
+
     // The electric vector of the represented semi-infinite scattering atmosphere is
     // parallel to the disk plane, hence perpendicular to the disk normal
     // projected into the emitter's physical screen.  The emitter worldline,
@@ -1715,7 +1724,7 @@ void GeodesicTracer::AccumulateVolumetricEmission(const Vec4& entry_velocity,
                                                                        static_cast<float>(z), phi);
             const float temperature =
                 ComputeVolumetricTemperature(static_cast<float>(disk_r), static_cast<float>(z));
-            if (disk_opacity > 0.0f && temperature > 0.0f) {
+            if (disk_opacity > 0.0f) {
                 // Metric evaluation is needed only at an accepted volume
                 // sample.  This keeps the now-unconditional segment sampler
                 // cheap in the overwhelmingly empty part of a ray.
@@ -1750,15 +1759,20 @@ void GeodesicTracer::AccumulateVolumetricEmission(const Vec4& entry_velocity,
                     relativity::ComovingPathLength(past_velocity, emitter, metric, d_lambda);
                 if (!disk_path.has_value()) continue;
                 disk_dtau = static_cast<double>(disk_opacity) * *disk_path;
-                const float emitted_source =
-                    std::pow(temperature / config_.disk_temperature_inner, 4.0f);
-                const double source_frequency = config_.doppler_beaming
-                                                    ? emitter_transfer->frame_frequency
-                                                    : zamo_transfer->frame_frequency;
-                const float g = static_cast<float>(observer_frequency / source_frequency);
-                disk_source = core::color_modes::ApplyColorMode(
-                    config_.color_mode, temperature, g, emitted_source, nullptr,
-                    config_.disk_temperature_scale_kelvin);
+                // A dark source still has the declared extinction. In
+                // particular, the Page-Thorne inner-edge buffer is not vacuum.
+                if (temperature > 0.0f) {
+                    // Relative bolometric units are fixed across thin and
+                    // volume emission; a temperature amplitude retains T^4.
+                    const float emitted_source = std::pow(temperature, 4.0f);
+                    const double source_frequency = config_.doppler_beaming
+                                                        ? emitter_transfer->frame_frequency
+                                                        : zamo_transfer->frame_frequency;
+                    const float g = static_cast<float>(observer_frequency / source_frequency);
+                    disk_source = core::color_modes::ApplyColorMode(
+                        config_.color_mode, temperature, g, emitted_source, nullptr,
+                        config_.disk_temperature_scale_kelvin);
+                }
             }
         }
 
@@ -2067,7 +2081,38 @@ bool GeodesicTracer::FinaliseBundle(const RayBundle& bundle, const Vec4& positio
 
     if (!std::isfinite(a) || !std::isfinite(b) || !std::isfinite(c) || !std::isfinite(d))
         return false;
-    double det = a * d - b * c;
+    // Scale by an exact binary exponent before extracting singular values.
+    // Dividing by the largest entry can fabricate rank in a singular matrix.
+    // Recover the small axis from
+    // sigma_major*sigma_minor=|det M|: subtracting two nearly equal squared
+    // norms otherwise rounds a finite, strongly sheared beam down to rank one.
+    const double map_scale = std::max({std::abs(a), std::abs(b), std::abs(c), std::abs(d)});
+    int map_exponent = 0;
+    std::frexp(map_scale, &map_exponent);
+    const double na = std::ldexp(a, -map_exponent);
+    const double nb = std::ldexp(b, -map_exponent);
+    const double nc = std::ldexp(c, -map_exponent);
+    const double nd = std::ldexp(d, -map_exponent);
+    // Scale determinant factors separately: a very small coefficient can
+    // underflow under the screen's common scaling while its unscaled product
+    // and minor axis are still representable.
+    int ae = 0, be = 0, ce = 0, de = 0;
+    const double af = std::frexp(a, &ae), bf = std::frexp(b, &be);
+    const double cf = std::frexp(c, &ce), df = std::frexp(d, &de);
+    const bool has_ad = a != 0.0 && d != 0.0, has_bc = b != 0.0 && c != 0.0;
+    const int determinant_exponent = has_ad && has_bc ? std::max(ae + de, be + ce)
+                                     : has_ad         ? ae + de
+                                     : has_bc         ? be + ce
+                                                      : 0;
+    const double ad = af * df, bc = bf * cf;
+    // Both rounded products need their residual: a lone FMA leaves the other
+    // product's rounding error and can also fabricate a nonzero determinant.
+    const double normalized_det =
+        (std::ldexp(ad, ae + de - determinant_exponent) -
+         std::ldexp(bc, be + ce - determinant_exponent)) +
+        (std::ldexp(std::fma(af, df, -ad), ae + de - determinant_exponent) -
+         std::ldexp(std::fma(bf, cf, -bc), be + ce - determinant_exponent));
+    double det = std::ldexp(normalized_det, determinant_exponent);
     double area = std::abs(det);
     double eps = static_cast<double>(config_.bundle_angular_size);
     double area0 = eps * eps;
@@ -2076,18 +2121,18 @@ bool GeodesicTracer::FinaliseBundle(const RayBundle& bundle, const Vec4& positio
     out.area_ratio = (area0 > 0.0) ? static_cast<float>(area / area0) : 0.0f;
     out.magnification = (area > 1e-30) ? static_cast<float>(area0 / area) : 1.0e12f;
 
-    // Singular values of M give the ellipse semi-axes; the sum-of-squares
-    // discriminant form is the same one the oracle uses (BeamStateD::UpdateGeometry).
-    double p = a * a + b * b + c * c + d * d;
-    double disc = p * p - 4.0 * det * det;
-    if (disc < 0.0) disc = 0.0;
-    double s = std::sqrt(disc);
-    out.semi_major = static_cast<float>(std::sqrt(std::max(0.0, (p + s) / 2.0)));
-    out.semi_minor = static_cast<float>(std::sqrt(std::max(0.0, (p - s) / 2.0)));
+    const double normalized_major =
+        0.5 * (std::hypot(na + nd, nb - nc) + std::hypot(na - nd, nb + nc));
+    const double minor = normalized_major > 0.0
+                             ? std::ldexp(std::abs(normalized_det) / normalized_major,
+                                          determinant_exponent - map_exponent)
+                             : 0.0;
+    out.semi_major = static_cast<float>(std::ldexp(normalized_major, map_exponent));
+    out.semi_minor = static_cast<float>(minor);
     // Output-plane orientation is the major eigenvector of M M^T. The
     // right-singular-vector expression (ab+cd) orients the input basis instead.
-    double num = 2.0 * (a * c + b * d);
-    double den = a * a + b * b - c * c - d * d;
+    double num = 2.0 * (na * nc + nb * nd);
+    double den = na * na + nb * nb - nc * nc - nd * nd;
     out.orientation = static_cast<float>(0.5 * std::atan2(num, den));
 
     // Preserve the legacy radius-normalised diagnostic at every terminal.
@@ -2099,7 +2144,7 @@ bool GeodesicTracer::FinaliseBundle(const RayBundle& bundle, const Vec4& positio
     const double inverse_radius = radius > 1.0e-12 ? 1.0 / radius : 0.0;
     out.footprint_major = static_cast<float>(out.semi_major * inverse_radius);
     out.footprint_minor = static_cast<float>(out.semi_minor * inverse_radius);
-    for (const double value : {area, det, p, disc, s, num, den})
+    for (const double value : {area, det, normalized_major, minor, num, den})
         if (!std::isfinite(value)) return false;
     for (const float value :
          {out.transverse_area, out.area_ratio, out.magnification, out.semi_major, out.semi_minor,

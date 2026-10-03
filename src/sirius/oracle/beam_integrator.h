@@ -101,8 +101,36 @@ struct BeamStateD {
         double c = J[3][2];  // ∂φ/∂θ₀
         double d = J[3][3];  // ∂φ/∂φ₀
 
-        // Determinant of angular submatrix
-        double det = a * d - b * c;
+        // An exact binary rescaling avoids squaring the scene scale without
+        // changing represented rank through rounded division by a matrix entry.
+        const double scale = std::max({std::abs(a), std::abs(b), std::abs(c), std::abs(d)});
+        int exponent = 0;
+        std::frexp(scale, &exponent);
+        const double na = std::ldexp(a, -exponent);
+        const double nb = std::ldexp(b, -exponent);
+        const double nc = std::ldexp(c, -exponent);
+        const double nd = std::ldexp(d, -exponent);
+        // Each determinant factor gets its own exact exponent. This preserves
+        // diag(2^N,2^-N), whose common-normalized minor can otherwise underflow.
+        int a_exp = 0, b_exp = 0, c_exp = 0, d_exp = 0;
+        const double a_fraction = std::frexp(a, &a_exp), b_fraction = std::frexp(b, &b_exp);
+        const double c_fraction = std::frexp(c, &c_exp), d_fraction = std::frexp(d, &d_exp);
+        const bool first_nonzero = a != 0 && d != 0, second_nonzero = b != 0 && c != 0;
+        const int product_exponent = first_nonzero && second_nonzero
+                                         ? std::max(a_exp + d_exp, b_exp + c_exp)
+                                     : first_nonzero  ? a_exp + d_exp
+                                     : second_nonzero ? b_exp + c_exp
+                                                      : 0;
+        const double first_product = a_fraction * d_fraction;
+        const double second_product = b_fraction * c_fraction;
+        const double first_error = std::fma(a_fraction, d_fraction, -first_product);
+        const double second_error = std::fma(b_fraction, c_fraction, -second_product);
+        const double normalized_det =
+            (std::ldexp(first_product, a_exp + d_exp - product_exponent) -
+             std::ldexp(second_product, b_exp + c_exp - product_exponent)) +
+            (std::ldexp(first_error, a_exp + d_exp - product_exponent) -
+             std::ldexp(second_error, b_exp + c_exp - product_exponent));
+        double det = std::ldexp(normalized_det, product_exponent);
 
         // Check for caustic (det → 0)
         if (std::abs(det) < 1e-12) {
@@ -113,26 +141,25 @@ struct BeamStateD {
             magnification = 1.0 / std::abs(det);
         }
 
-        // Singular value decomposition for ellipse axes
-        // For matrix [[a,b],[c,d]], singular values are:
-        // σ = √[(p ± √(p² - 4q²))/2] where p = a² + b² + c² + d², q = det
-
-        double p = a * a + b * b + c * c + d * d;
-        double q = det;
-        double disc = p * p - 4 * q * q;
-
-        if (disc < 0) disc = 0;  // Numerical protection
-        double s = std::sqrt(disc);
-
-        major_axis = std::sqrt(std::max(0.0, (p + s) / 2));
-        minor_axis = std::sqrt(std::max(0.0, (p - s) / 2));
+        // The large eigenvalue of normalized J J^T has no subtractive
+        // cancellation. The determinant fixes the other singular value,
+        // including exact rank-one and widely separated scale witnesses.
+        const double power = na * na + nb * nb + nc * nc + nd * nd;
+        const double diagonal_difference = na * na + nb * nb - nc * nc - nd * nd;
+        const double off_diagonal_twice = 2 * (na * nc + nb * nd);
+        const double normalized_major =
+            std::sqrt((power + std::hypot(diagonal_difference, off_diagonal_twice)) / 2);
+        major_axis = std::ldexp(normalized_major, exponent);
+        minor_axis = normalized_major > 0 ? std::ldexp(std::abs(normalized_det) / normalized_major,
+                                                       product_exponent - exponent)
+                                          : 0;
 
         // Orientation of the output ellipse: the major eigenvector of J J^T.
         // For J=[[a,b],[c,d]], tan(2φ)=2(ac+bd)/(a²+b²-c²-d²).
         // The former ab+cd expression is the right-singular-vector angle in the
         // input plane and does not orient an ellipse on the rendered sky.
-        double num = 2 * (a * c + b * d);
-        double den = a * a + b * b - c * c - d * d;
+        double num = off_diagonal_twice;
+        double den = diagonal_difference;
         orientation = 0.5 * std::atan2(num, den);
 
         // Solid angle = π × σ_max × σ_min × (initial pixel solid angle)

@@ -150,19 +150,19 @@ struct TraceResult {
     // produces at escape or disk-hit, DNGR's distinguishing technique (James et
     // al. 2015, CQG 32 065001, section 3 and appendix B). Populated only when the
     // tracer runs with ray bundles enabled; otherwise valid stays false and the
-    // point-sampled behaviour is unchanged. Angles are in the same units as the
-    // initial bundle angular size.
+    // point-sampled behaviour is unchanged. The ellipse describes physical
+    // displacement in the terminal observer's screen, in geometric length units.
     struct Beam {
         bool valid = false;
-        float semi_major = 0.0f;       // Ellipse semi-major axis.
-        float semi_minor = 0.0f;       // Ellipse semi-minor axis.
+        float semi_major = 0.0f;       // Physical screen semi-major axis [length].
+        float semi_minor = 0.0f;       // Physical screen semi-minor axis [length].
         float orientation = 0.0f;      // Position angle of the major axis [rad].
-        float area_ratio = 1.0f;       // Final transverse area / initial area.
-        float magnification = 1.0f;    // Initial / final area (oracle 1/|det J|).
-        float transverse_area = 0.0f;  // Final transverse area (angular units^2).
-        // Angular footprint on the celestial sphere (radians), the DNGR beam that
-        // filters the star field (P3): the transverse extent divided by the
-        // affine length converges to the ray-direction spread as the ray escapes.
+        float area_ratio = 1.0f;       // Screen determinant / squared bundle seed.
+        float magnification = 1.0f;    // Reciprocal area_ratio; an area diagnostic.
+        float transverse_area = 0.0f;  // Absolute screen determinant [length^2].
+        // Legacy angular footprint on the celestial sphere (radians), used by
+        // the ellipse star filter (P3): screen extent divided by terminal
+        // Cartesian coordinate radius. This is not the measured angular map.
         // Source-footprint interpretation requires an escaped point-source
         // bundle; captured rays retain only a radius-normalised diagnostic.
         float footprint_major = 0.0f;
@@ -232,18 +232,21 @@ struct TracerConfig {
     // same four canonical columns; this flag selects publication of the
     // requested two-column ellipse without changing the central trajectory.
     // Other metric families retain their optional Jacobi transport.
-    // bundle_angular_size is the initial half-extent of the
-    // parallel bundle in the transverse plane (radians for a pixel footprint);
-    // it cancels in the magnification and only sets the ellipse's absolute scale.
+    // bundle_angular_size is the half-extent seed: geometric length for a
+    // parallel bundle, angular spread in radians for a point-source bundle.
+    // It cancels in area_ratio and only sets the ellipse's absolute scale.
     bool enable_ray_bundles = false;
     float bundle_angular_size = 1.0e-3f;
 
-    // Bundle initial condition. False (default) is a parallel bundle (identity
-    // Jacobian, xi = orthonormal transverse pair, D xi / d lambda = 0), matching
-    // the oracle's BeamStateD and giving the lensing magnification. True is a
-    // pupil (point-source) bundle (xi = 0, D xi / d lambda = orthonormal), whose
-    // transverse extent divided by affine length is the celestial-sphere
-    // footprint the star filter needs (P3).
+    // With physical camera phase-space data, false selects its two pupil
+    // columns (zero for a pinhole); true selects its two film/angular columns.
+    // Without that data, false initializes a parallel bundle (xi = transverse
+    // pair, D xi / d lambda = 0), matching the oracle's BeamStateD. True
+    // initializes a point-source bundle (xi = 0, D xi / d lambda = transverse pair), whose
+    // transverse extent divided by terminal coordinate radius supplies the
+    // legacy celestial-sphere footprint. The source maps above separately
+    // measure angular lensing; point-source area_ratio is not dimensionless
+    // lensing magnification (even in flat space it grows as affine length^2).
     bool bundle_point_source = false;
 
     // E2: transport an observer screen basis along the ray and project the
@@ -545,8 +548,7 @@ class GeodesicTracer {
 
     // Extract the beam ellipse (semi-axes, orientation, magnification) from the
     // final bundle, projected onto the plane transverse to the ray direction; the
-    // affine length lambda converts the transverse extent to the angular sky
-    // footprint for the pupil bundle.
+    // terminal coordinate radius normalises the legacy angular footprint.
     bool FinaliseBundle(const RayBundle& bundle, const sirius::core::Vec4& position,
                         const sirius::core::Vec4& k, TraceResult::Beam& out) const;
 

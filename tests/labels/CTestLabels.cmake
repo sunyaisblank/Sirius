@@ -344,6 +344,7 @@ set_tests_properties(
     CpuJacobiOracle.TidalContractionMatchesAnalyticSchwarzschildAtMatchedEvents
     CpuJacobiOracle.CurvatureScalarMatchesAnalyticKerrOffEquator
     CpuJacobiOracle.RadialPointSourceCongruenceMatchesClosedForm
+    CpuJacobiOracle.FlatScreenEllipseRetainsAnisotropyAndScale
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -422,6 +423,12 @@ set_tests_properties(
     FisheyeCameraTest.CentreRayPointsInward
     FisheyeCameraTest.EdgeRayPerpendicularAt180Fov
     FisheyeCameraTest.ProjectionMaskedRayIsInactiveAndRepresented
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    FullPathAcceptance.CpuIndependentCarterEventsMapsAndRefinement
+    FullPathAcceptance.VulkanRetainedIndependentCarterEventsMapsAndRefinement
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -860,6 +867,12 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    PolarisationAcceptance.NormalEmissionHasFiniteUnpolarisedStokes
+    PolarisationAcceptance.ActualDiskStokesMatchWalkerPenroseReconstruction
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     PolarisedEmissionTests.ChandrasekharAtmosphereHasPhysicalEndpointPolarisation
     PolarisedEmissionTests.ChandrasekharAtmospherePreservesHemisphericFlux
     PolarisedEmissionTests.ChandrasekharAtmosphereRejectsInvalidDirectionCosines
@@ -1255,6 +1268,16 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    VolumeAcceptance.TemperatureAmplitudeRetainsRelativeStefanBoltzmannScale
+    VolumeAcceptance.SchwarzschildRadialObservablesConvergeToIndependentTransfer
+    VolumeAcceptance.KerrPrincipalObservablesConvergeToIndependentTransfer
+    VolumeAcceptance.DarkPageThorneInnerBufferRetainsIndependentExtinction
+    VolumeAcceptance.OpticallyThinAndCappedLayersPreservePhysicalRayFate
+    VolumeAcceptance.RetainedVulkanRadialObservablesMatchIndependentTransfer
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     VolumetricDiskClosure.TruncatedGaussianColumnEqualsDeclaredOpticalDepth
     PROPERTIES LABELS "Mandatory;Correctness"
 )
@@ -1344,9 +1367,11 @@ set_tests_properties(
     PointSourceDetector.GroupSplitsAnUnrepresentedGapAndKeepsOriginalOutputOrder
     PointSourceDetector.ImageFrequencyAndTransmissionAreAppliedOnce
     PointSourceDetector.LargeSharedRegionMatchesOriginalMovingKerrPackets
+    PointSourceDetector.MovingKerrFluxMatchesIndependentSeparatedImageAndBand
     PointSourceDetector.NewlyDetectedHiddenRegionRetainsOriginalSamplingDepth
     PointSourceDetector.OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport
     PointSourceDetector.PolynomialFoldResolvesCloseImagesBetweenTheCoarseNodes
+    PointSourceDetector.RetainedMovingKerrFluxMatchesIndependentSeparatedImageAndBand
     PointSourceDetector.SharedDiscoveryDeclinesMalformedExhaustedAndCancelledBatches
     PointSourceDetector.SharedDiscoveryDeclinesUncertainOriginalSupportOwnership
     PointSourceDetector.SharedDiscoveryPreservesDistinctGaussianShapesAndTransfer
@@ -1471,6 +1496,7 @@ set_tests_properties(
     RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter
     RenderSessionProbe.CpuMorrisThorneRenderCompletes
     RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes
+    RenderSessionProbe.CpuThinDiskPublishedLinearChannelsMatchIndependentFirstEventPhysics
     RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame
     RenderSessionProbe.ExhaustedNonKerrRayCannotPublishACompletedBlackFrame
     RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr
@@ -1484,6 +1510,7 @@ set_tests_properties(
     RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration
     RenderSessionProbe.StartIsAsynchronousAndCancellationIsTerminalWithoutOutput
     RenderSessionProbe.TypedNumericBoundariesMatchTheExternalConfigurationBoundary
+    RenderSessionProbe.VulkanThinDiskPublishedLinearChannelsMatchIndependentFirstEventPhysics
     StarfieldPointTest.BeamAccumulationFiniteAndNonConstant
     StarfieldPointTest.BeamFootprintSuppressesStarFlicker
     StarfieldPointTest.CatalogueMeetsSizeFloorAndIsFinite

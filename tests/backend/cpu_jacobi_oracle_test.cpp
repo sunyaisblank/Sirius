@@ -9,6 +9,7 @@
 #include <gtest/gtest.h>
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <numbers>
 
@@ -188,6 +189,93 @@ TEST(CpuJacobiOracle, RadialPointSourceCongruenceMatchesClosedForm) {
     EXPECT_NEAR(result.beam.semi_minor, expected_axis, 2.0e-6 * expected_axis);
     EXPECT_NEAR(result.beam.transverse_area, expected_axis * expected_axis,
                 4.0e-6 * expected_axis * expected_axis);
+}
+
+TEST(CpuJacobiOracle, FlatScreenEllipseRetainsAnisotropyAndScale) {
+    KerrSchildFamily metric(KerrSchildParams::Minkowski());
+    TracerConfig config;
+    config.escape_radius = 12.0f;
+    config.enable_disk = false;
+    config.enable_ray_bundles = true;
+    config.integrator.initial_step = config.integrator.max_step = 2.0f;
+    config.max_steps = 100;
+    GeodesicTracer tracer(&metric, config);
+    // A flat, outward central ray with a separately specified constant pupil
+    // displacement family. Its transverse map is R(angle) diag(major,minor);
+    // flat parallel transport preserves that map exactly at the source event.
+    // No production geometry calculation supplies the expected singular axes.
+    for (const auto shape : {std::array{1.0, 1.0e-9, 0.0}, std::array{3.0, 1.0, 0.4},
+                             std::array{1.0, 0.0, 0.0}, std::array{0.0, 0.0, 0.0}}) {
+        for (const double scale : {1.0e-10, 1.0, 1.0e10}) {
+            SCOPED_TRACE(shape[0]);
+            SCOPED_TRACE(shape[1]);
+            SCOPED_TRACE(scale);
+            CameraRay ray;
+            constexpr double launch_radius = 5.0;
+            ray.origin(1) = launch_radius;
+            ray.origin(2) = std::numbers::pi / 2;
+            ray.direction(1) = 1.0;
+            ray.phase_space.emplace();
+            auto& family = *ray.phase_space;
+            family.direction[1][0] = family.direction[2][1] = 1;
+            family.film_to_angle[0][0] = family.film_to_angle[1][1] = 1;
+            const double c = std::cos(shape[2]), s = std::sin(shape[2]);
+            family.pupil_right[2] = launch_radius * scale * shape[0] * c;
+            family.pupil_up[2] = launch_radius * scale * shape[0] * s;
+            family.pupil_right[3] = -launch_radius * scale * shape[1] * s;
+            family.pupil_up[3] = launch_radius * scale * shape[1] * c;
+            const auto result = tracer.Trace(ray);
+            ASSERT_FALSE(result.numerical_failure);
+            ASSERT_EQ(result.outcome, TraceResult::Outcome::Escaped);
+            ASSERT_TRUE(result.beam.valid);
+            const double seed = config.bundle_angular_size;
+            const double expected_major = seed * scale * shape[0];
+            const double expected_minor = seed * scale * shape[1];
+            const double expected_area = expected_major * expected_minor;
+            EXPECT_NEAR(result.beam.semi_major, expected_major, 5.0e-6 * expected_major);
+            EXPECT_NEAR(result.beam.semi_minor, expected_minor, 5.0e-6 * expected_minor);
+            EXPECT_NEAR(result.beam.transverse_area, expected_area, 5.0e-6 * expected_area);
+            EXPECT_NEAR(static_cast<double>(result.beam.semi_major) * result.beam.semi_minor,
+                        expected_area, 1.0e-5 * expected_area);
+            if (shape[0] > shape[1]) {
+                EXPECT_NEAR(std::cos(2 * result.beam.orientation), std::cos(2 * shape[2]), 1.0e-6);
+                EXPECT_NEAR(std::sin(2 * result.beam.orientation), std::sin(2 * shape[2]), 1.0e-6);
+            }
+        }
+    }
+
+    // Dyadic seed/radius and a flat launch whose polar corrections round below
+    // binary64 resolution ensure the pupil map reaches extraction unchanged.
+    // The camera domain excludes the exact pole. In this regular chart the
+    // screen is (+y,-x); (3,1)^T(1,3) has det=0, nextafter(d) has det=3*(d-3).
+    config.bundle_angular_size = 1.f / 64;
+    GeodesicTracer rank_tracer(&metric, config);
+    for (const double d : {3.0, std::nextafter(3.0, 4.0)}) {
+        SCOPED_TRACE(d);
+        CameraRay ray;
+        ray.origin(1) = 4;
+        ray.origin(2) = 1e-100;
+        ray.direction(1) = 1;
+        ray.phase_space.emplace();
+        auto& family = *ray.phase_space;
+        family.direction[1][0] = family.direction[2][1] = 1;
+        family.film_to_angle[0][0] = family.film_to_angle[1][1] = 1;
+        constexpr double inverse_publication_scale = 256;
+        family.pupil_right[2] = 3 * inverse_publication_scale;
+        family.pupil_up[2] = inverse_publication_scale;
+        family.pupil_right[3] = 9 * inverse_publication_scale;
+        family.pupil_up[3] = d * inverse_publication_scale;
+        const auto result = rank_tracer.Trace(ray);
+        ASSERT_FALSE(result.numerical_failure);
+        ASSERT_EQ(result.outcome, TraceResult::Outcome::Escaped);
+        ASSERT_TRUE(result.beam.valid);
+        const double expected_area = 3 * (d - 3);
+        const double expected_minor = expected_area / 10;
+        EXPECT_NEAR(result.beam.semi_major, 10, 5e-6 * 10);
+        EXPECT_NEAR(result.beam.semi_minor, expected_minor, 5e-6 * expected_minor);
+        EXPECT_NEAR(result.beam.transverse_area, expected_area, 5e-6 * expected_area);
+        EXPECT_NEAR(result.beam.orientation, std::atan2(1.0, 3.0), 1e-6);
+    }
 }
 
 }  // namespace
