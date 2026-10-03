@@ -103,7 +103,7 @@ TracerConfig VolumeConfig(
     config.disk_outer = kOuter;
     config.disk_temperature_model = temperature_model;
     config.disk_temperature_scale_kelvin = kTemperatureKelvin;
-    config.volumetric_scale_height_ratio = kHOverR;
+    config.volumetric_scale_height_ratio = static_cast<float>(kHOverR);
     config.volumetric_flare_power = 0;
     config.volumetric_tau_midplane = .2f;
     config.volumetric_tau_max = 10;
@@ -313,7 +313,12 @@ State KerrReference(const TracerConfig& config, int panels, double spin) {
     // Locate the declared source-buffer discontinuity exactly in this oracle.
     // Its outer one-sided source was integrated above; extinction continues
     // through the dark inner material while accumulated observer emission stays.
-    if (page_thorne) state[0] += double(SimpsonIntegral(rate, kInner, lower, panels / 128));
+    if (page_thorne) {
+        const auto binary64_rate = [&](long double radius) {
+            return rate(static_cast<double>(radius));
+        };
+        state[0] += double(SimpsonIntegral(binary64_rate, kInner, lower, panels / 128));
+    }
     return state;
 }
 
