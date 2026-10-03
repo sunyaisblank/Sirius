@@ -43,9 +43,17 @@ class AdmissionDevice final : public ComputeDevice {
   public:
     DeviceInfo info;
     unsigned kernel_calls = 0, buffer_calls = 0;
+    bool kernel_has_float = false;
     const DeviceInfo& Info() const noexcept override { return info; }
-    sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t>) override {
+    sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t> code) override {
         ++kernel_calls;
+        // Inspect the actual selected module: OpTypeFloat is opcode 22.
+        for (std::size_t offset = 5; offset < code.size();) {
+            const auto words = code[offset] >> 16;
+            if (words == 0 || words > code.size() - offset) break;
+            kernel_has_float |= (code[offset] & 0xffffU) == 22U;
+            offset += words;
+        }
         return sirius::base::Fail(sirius::base::ErrorDomain::kKernel, "admission sentinel",
                                   "arithmetic admitted; external kernel loading reached");
     }
@@ -84,9 +92,9 @@ TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
                               .rounds_fp32_to_nearest = true,
                               .rounds_fp64_to_nearest = true};
     for (const bool wide : {false, true}) {
-        // No missing capability is a positive admission witness. Each individual
-        // absence then challenges the contract, including binary32 with wide products.
-        for (unsigned missing = 0; missing < 5; ++missing) {
+        // Missing native binary32 controls select actual integer modules. The
+        // binary64 rung still refuses absent support before external work.
+        for (unsigned missing = 0; missing < 6; ++missing) {
             SCOPED_TRACE(wide);
             SCOPED_TRACE(missing);
             AdmissionDevice device;
@@ -95,11 +103,18 @@ TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
             if (missing == 2) device.info.rounds_fp32_to_nearest = false;
             if (missing == 3) device.info.supports_fp64 = false;
             if (missing == 4) device.info.rounds_fp64_to_nearest = false;
-            const bool admitted = missing == 0 || (!wide && missing >= 3);
+            if (missing == 5) {
+                device.info.preserves_fp32_denormals = false;
+                device.info.rounds_fp32_to_nearest = false;
+            }
+            const bool admitted = !wide || (missing != 3 && missing != 4);
             const auto created = RetainedCompute::Create(device, 1, wide);
             ASSERT_FALSE(created);
             EXPECT_EQ(device.kernel_calls, admitted ? 1U : 0U);
             EXPECT_EQ(device.buffer_calls, 0U);
+            if (admitted) {
+                EXPECT_EQ(device.kernel_has_float, missing != 1 && missing != 2 && missing != 5);
+            }
             EXPECT_EQ(created.error().domain(), admitted ? sirius::base::ErrorDomain::kKernel
                                                          : sirius::base::ErrorDomain::kDevice);
             EXPECT_EQ(created.error().operation(),

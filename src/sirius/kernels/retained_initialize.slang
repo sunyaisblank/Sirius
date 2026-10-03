@@ -1,44 +1,45 @@
 import retained_scratch;
+import retained_scalar;
 import retained_triple;
 import retained_pair;
 [[vk::binding(0, 0)]] StructuredBuffer<uint> inputs;
 [[vk::binding(1, 0)]] RWStructuredBuffer<uint> outputs;
 RetainedTriple ReadStored(uint base) {
     RetainedTriple r;
-    r.hi = asfloat(outputs[base]);
-    r.lo = asfloat(outputs[base + 1]);
-    r.tail = asfloat(outputs[base + 2]);
-    r.error = asfloat(outputs[base + 3]);
+    r.hi = RPFromBits(outputs[base]);
+    r.lo = RPFromBits(outputs[base + 1]);
+    r.tail = RPFromBits(outputs[base + 2]);
+    r.error = RPFromBits(outputs[base + 3]);
     r.valid = outputs[base + 4];
     return r;
 }
 void WriteStored(uint base, RetainedTriple r) {
-    outputs[base] = asuint(r.hi);
-    outputs[base + 1] = asuint(r.lo);
-    outputs[base + 2] = asuint(r.tail);
-    outputs[base + 3] = asuint(r.error);
+    outputs[base] = RPBits(r.hi);
+    outputs[base + 1] = RPBits(r.lo);
+    outputs[base + 2] = RPBits(r.tail);
+    outputs[base + 3] = RPBits(r.error);
     outputs[base + 4] = r.valid;
 }
 RetainedTriple ReadValue(uint index, uint rowBase) {
     RetainedTriple r;
-    r.hi = asfloat(ScratchRead(index, 0, rowBase, 204));
-    r.lo = asfloat(ScratchRead(index, 1, rowBase, 204));
-    r.tail = asfloat(ScratchRead(index, 2, rowBase, 204));
-    r.error = asfloat(ScratchRead(index, 3, rowBase, 204));
+    r.hi = RPFromBits(ScratchRead(index, 0, rowBase, 204));
+    r.lo = RPFromBits(ScratchRead(index, 1, rowBase, 204));
+    r.tail = RPFromBits(ScratchRead(index, 2, rowBase, 204));
+    r.error = RPFromBits(ScratchRead(index, 3, rowBase, 204));
     r.valid = ScratchRead(index, 4, rowBase, 204);
     return r;
 }
 void WriteValue(uint index, RetainedTriple r, uint rowBase) {
-    ScratchWrite(index, 0, rowBase, 204, asuint(r.hi));
-    ScratchWrite(index, 1, rowBase, 204, asuint(r.lo));
-    ScratchWrite(index, 2, rowBase, 204, asuint(r.tail));
-    ScratchWrite(index, 3, rowBase, 204, asuint(r.error));
+    ScratchWrite(index, 0, rowBase, 204, RPBits(r.hi));
+    ScratchWrite(index, 1, rowBase, 204, RPBits(r.lo));
+    ScratchWrite(index, 2, rowBase, 204, RPBits(r.tail));
+    ScratchWrite(index, 3, rowBase, 204, RPBits(r.error));
     ScratchWrite(index, 4, rowBase, 204, r.valid);
 }
 RetainedTriple ReadOriginal(uint index, uint row) {
     uint base = 1 + 225 * row + 5 * index;
-    RetainedTriple value = RTPack(asfloat(inputs[base]), asfloat(inputs[base + 1]),
-                                  asfloat(inputs[base + 2]), asfloat(inputs[base + 3]));
+    RetainedTriple value = RTPack(RPFromBits(inputs[base]), RPFromBits(inputs[base + 1]),
+                                  RPFromBits(inputs[base + 2]), RPFromBits(inputs[base + 3]));
     if (inputs[base + 4] != 1) value.valid = 0;
     return value;
 }
@@ -49,7 +50,7 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint regi
     if (destination >= registers || op > 11) return false;
     RetainedTriple r = RTInvalid();
     if (op == 0)
-        r = RTConstant(asfloat(a));
+        r = RTConstant(RPFromBits(a));
     else if (op == 1) {
         if (a >= 45) return false;
         r = ReadOriginal(a, row);
@@ -61,8 +62,8 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint regi
         else if (op == 7)
             r = RTNegate(av);
         else if (op == 8) {
-            float bound = RTAbsoluteUpper(av);
-            if (av.valid != 0 && bound > 0)
+            RPScalar bound = RTAbsoluteUpper(av);
+            if (av.valid != 0 && RPScalarGreater(bound, RPZero()))
                 r = RTConstant(RPPowerOfTwo(RPFloorExponent(bound) + 1));
         } else {
             if (b >= registers) return false;
@@ -77,14 +78,16 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint regi
                 r = RTDivide(av, bv);
             else if (op == 9) {
                 if (av.valid != 0 && bv.valid != 0)
-                    r = RTConstant(max(RTAbsoluteUpper(av), RTAbsoluteUpper(bv)));
+                    r = RTConstant(RPScalarMax(RTAbsoluteUpper(av), RTAbsoluteUpper(bv)));
             } else if (op == 10 || op == 11) {
                 if (c >= registers) return false;
                 RetainedTriple cv = ReadValue(c, rowBase);
                 if (cv.valid != 0) {
-                    bool choose = op == 10
-                                      ? cv.hi >= 0
-                                      : (cv.hi == 0 && cv.lo == 0 && cv.tail == 0 && cv.error == 0);
+                    bool choose = op == 10 ? RPScalarGreaterEqual(cv.hi, RPZero())
+                                           : (RPScalarEqual(cv.hi, RPZero()) &&
+                                              RPScalarEqual(cv.lo, RPZero()) &&
+                                              RPScalarEqual(cv.tail, RPZero()) &&
+                                              RPScalarEqual(cv.error, RPZero()));
                     r = choose ? av : bv;
                 }
             }
@@ -153,11 +156,12 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
     for (uint i = 0; i < 45; ++i)
         if (ReadOriginal(i, row).valid == 0) return;
     RetainedTriple chart = ReadOriginal(44, row);
-    if (!RTExact(chart, 1) && !RTExact(chart, -1)) return;
-    if (RTAbsoluteUpper(ReadOriginal(1, row)) != 0 && RTAbsoluteUpper(ReadOriginal(3, row)) != 0)
+    if (!RTExact(chart, RPOne()) && !RTExact(chart, RPScalarNegate(RPOne()))) return;
+    if (!RPScalarEqual(RTAbsoluteUpper(ReadOriginal(1, row)), RPZero()) &&
+        !RPScalarEqual(RTAbsoluteUpper(ReadOriginal(3, row)), RPZero()))
         return;
-    if (RTExact(ReadOriginal(0, row), 0) && RTExact(ReadOriginal(2, row), 0) &&
-        RTExact(ReadOriginal(3, row), 0)) {
+    if (RTExact(ReadOriginal(0, row), RPZero()) && RTExact(ReadOriginal(2, row), RPZero()) &&
+        RTExact(ReadOriginal(3, row), RPZero())) {
         if (lane != 0) return;
         // Exact Minkowski lowering, including at the regular Cartesian origin.
         for (uint i = 0; i < 40; ++i) {

@@ -80,26 +80,42 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
         stage.buffers = {*input, *output};
         return {};
     };
-    const auto shader = [fp64_products](std::span<const std::uint32_t> narrow,
-                                        std::span<const std::uint32_t> wide) {
+    const bool portable = RetainedUsesPortableArithmetic(device.Info());
+    const auto shader = [fp64_products, portable](std::span<const std::uint32_t> narrow,
+                                                  std::span<const std::uint32_t> wide,
+                                                  std::span<const std::uint32_t> integer_narrow,
+                                                  std::span<const std::uint32_t> integer_wide) {
+        if (portable) return fp64_products ? integer_wide : integer_narrow;
         return fp64_products ? wide : narrow;
     };
-    auto status = create(result->camera_, shader(kCameraShader, kCameraFp64Shader), kCameraProgram,
-                         160, kCameraRowWords);
+    auto status = create(
+        result->camera_,
+        shader(kCameraShader, kCameraFp64Shader, kCameraPortableShader, kCameraPortableFp64Shader),
+        kCameraProgram, 160, kCameraRowWords);
     if (!status) return std::unexpected(status.error());
-    status = create(result->transport_, shader(kTransportShader, kTransportFp64Shader),
+    status = create(result->transport_,
+                    shader(kTransportShader, kTransportFp64Shader, kTransportPortableShader,
+                           kTransportPortableFp64Shader),
                     kTransportProgram, 230, kTransportRowWords);
     if (!status) return std::unexpected(status.error());
-    status = create(result->endpoint_, shader(kEndpointShader, kEndpointFp64Shader),
+    status = create(result->endpoint_,
+                    shader(kEndpointShader, kEndpointFp64Shader, kEndpointPortableShader,
+                           kEndpointPortableFp64Shader),
                     kEndpointProgram, 225, kEndpointRowWords);
     if (!status) return std::unexpected(status.error());
-    status = create(result->dense_, shader(kDenseShader, kDenseFp64Shader), kDenseProgram, 560,
-                    kDenseRowWords);
+    status = create(
+        result->dense_,
+        shader(kDenseShader, kDenseFp64Shader, kDensePortableShader, kDensePortableFp64Shader),
+        kDenseProgram, 560, kDenseRowWords);
     if (!status) return std::unexpected(status.error());
-    status = create(result->initialize_, shader(kInitializeShader, kInitializeFp64Shader),
+    status = create(result->initialize_,
+                    shader(kInitializeShader, kInitializeFp64Shader, kInitializePortableShader,
+                           kInitializePortableFp64Shader),
                     kInitializeProgram, 225, kInitializeRowWords);
     if (!status) return std::unexpected(status.error());
-    status = create(result->ray_camera_, shader(kRayCameraShader, kRayCameraFp64Shader),
+    status = create(result->ray_camera_,
+                    shader(kRayCameraShader, kRayCameraFp64Shader, kRayCameraPortableShader,
+                           kRayCameraPortableFp64Shader),
                     kRayCameraProgram, 225, kRayCameraRowWords);
     if (!status) return std::unexpected(status.error());
     return result;

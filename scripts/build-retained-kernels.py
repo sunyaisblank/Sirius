@@ -15,10 +15,12 @@ WORKGROUP_ROWS = 1
 WORKGROUP_LANES = 64
 
 
-def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False):
+def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False):
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
+    if portable:
+        definitions.append("-DSIRIUS_RETAINED_PORTABLE=1")
     if registers * terms * 4 + 8 > 16384:
         raise ValueError("retained program exceeds the portable shared-memory bound")
     definitions += [f"-DSIRIUS_RETAINED_REGISTERS={registers}",
@@ -26,12 +28,30 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
                     f"-DSIRIUS_RETAINED_LANES={WORKGROUP_LANES}",
                     f"-DSIRIUS_RETAINED_LAYERS={layers}",
                     f"-DSIRIUS_RETAINED_PREFIX={prefix}"]
+    float_controls = [] if portable else ["-denorm-mode-fp32", "preserve"]
     subprocess.run([compiler, str(source), *definitions, "-I", str(source.parent), "-O0",
                     "-target", "spirv", "-profile", "spirv_1_5", "-entry", "ComputeMain",
-                    "-stage", "compute", "-denorm-mode-fp32", "preserve", "-o", str(raw)],
+                    "-stage", "compute", *float_controls, "-o", str(raw)],
                    check=True)
     subprocess.run([disassembler, str(raw), "-o", str(assembly)], check=True)
     text = assembly.read_text()
+    if portable:
+        # Inspect the exact module being embedded, not an adjacent cached dump.
+        # Software RTE/gradual underflow must never depend on native float modes.
+        capabilities = re.findall(r"OpCapability (\S+)", text)
+        integer_widths = re.findall(r"OpTypeInt (\d+) [01]", text)
+        if capabilities != ["Shader"] or not integer_widths or set(integer_widths) != {"32"}:
+            raise ValueError("portable retained stage introduced an optional capability or non-32-bit integer")
+        if "OpTypeFloat" in text or re.search(r"OpExecutionMode\S* .* (?:Denorm|RoundingMode|SignedZeroInfNan)", text):
+            raise ValueError("portable retained stage depends on native floating arithmetic")
+        entry = re.search(r"OpEntryPoint GLCompute (%\S+)", text)[1]
+        if f"OpExecutionMode {entry} LocalSize {WORKGROUP_LANES} 1 1" not in text:
+            raise ValueError("portable retained stage changed its bounded workgroup layout")
+        subprocess.run([validator, "--target-env", "vulkan1.2", str(raw)], check=True)
+        raw.replace(destination)
+        data = destination.read_bytes()
+        assembly.unlink()
+        return struct.unpack("<" + str(len(data) // 4) + "I", data)
     if ("OpCapability Float64" in text) != fp64 or "OpTypeInt 64" in text or " Fma " in text:
         raise ValueError("retained stage introduced wide arithmetic or contraction")
     operations = re.findall(r"(%\S+) = OpF(?:Add|Sub|Mul) ", text)
@@ -93,22 +113,23 @@ def main():
         array("k" + kind + "Program", prefix + program["outputs"] + program["operations"] + program["layer_offsets"])
         stem = "retained_" + ("ray_camera" if kind == "RayCamera" else kind.lower())
         terms = 4 if kind in ("Camera", "RayCamera") else 5
-        code = compile_shader(source / (stem + ".slang"),
-                              args.output.parent / (stem + ".spv"),
-                              args.compiler, args.assembler, args.disassembler, args.validator,
-                              program["registers"], terms, len(program["layer_offsets"])-1, program.get("prefix_instructions", 0))
-        array("k" + kind + "Shader", code)
-        wide_code = compile_shader(source / (stem + ".slang"),
-                                   args.output.parent / (stem + "_fp64.spv"),
-                                   args.compiler, args.assembler, args.disassembler, args.validator,
-                                   program["registers"], terms, len(program["layer_offsets"])-1, program.get("prefix_instructions", 0),
-                                   fp64=True)
-        array("k" + kind + "Fp64Shader", wide_code)
+        sizes = []
+        for suffix, name, wide, portable in (("", "", False, False),
+                                             ("_fp64", "Fp64", True, False),
+                                             ("_portable", "Portable", False, True),
+                                             ("_portable_fp64", "PortableFp64", True, True)):
+            code = compile_shader(source / (stem + ".slang"),
+                                  args.output.parent / (stem + suffix + ".spv"),
+                                  args.compiler, args.assembler, args.disassembler, args.validator,
+                                  program["registers"], terms, len(program["layer_offsets"])-1,
+                                  program.get("prefix_instructions", 0), fp64=wide, portable=portable)
+            array("k" + kind + name + "Shader", code)
+            sizes.append(len(code) * 4)
         words = ((512 if kind == "Camera" else 576) + 4 * program["registers"] if kind in ("Camera", "RayCamera")
                  else {"Transport":2404, "Endpoint":769, "Dense":204, "Initialize":204}[kind] + 5 * program["registers"])
         lines.append(f"inline constexpr std::size_t k{kind}RowWords = {words};")
         print(kind, program["instructions"], "instructions;", program["registers"],
-              "registers;", len(code) * 4, "shader bytes")
+              "registers;", sizes, "native/native-wide/portable/portable-wide shader bytes", flush=True)
     lines.append("} // namespace sirius::backend::retained_program")
     args.output.write_text("\n".join(lines) + "\n")
 

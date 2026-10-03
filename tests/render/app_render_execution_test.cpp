@@ -41,8 +41,7 @@ TEST(RenderCommandParse, ExplicitGpuRequestRunsVulkanWhenDevicePresent) {
         const auto selected = backend::ResolveVulkanDeviceIndex(*devices);
         ASSERT_TRUE(selected) << selected.error().Description();
 #ifdef SIRIUS_HAS_RETAINED_COMPUTE
-        admitted = (*devices)[*selected].preserves_fp32_denormals &&
-                   (*devices)[*selected].rounds_fp32_to_nearest;
+        admitted = true;  // Native controls or the embedded integer arithmetic.
 #endif
     }
 #endif

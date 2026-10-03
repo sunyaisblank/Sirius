@@ -882,6 +882,11 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    PortableBinary32.MatchesIndependentExactCorpus
+    PROPERTIES LABELS "Mandatory;Stability"
+)
+
+set_tests_properties(
     RK45IntegratorTests.DefaultConfigReasonable
     RK45IntegratorTests.OptimalStepIncreasesForSmallError
     RK45IntegratorTests.OptimalStepDecreasesForLargeError

@@ -51,14 +51,15 @@ if(BUILD_TESTS AND SIRIUS_MANDATORY_TESTS)
                 "viewer_rdsd003a_fragment=${CMAKE_SOURCE_DIR}/src/sirius/app/viewer/shaders/RDSD003A.frag")
     endif()
     set(sirius_gate_test_input_artifacts)
-    if(TARGET sirius_retained_camera_test_inputs)
-        get_target_property(retained_camera_inputs sirius_retained_camera_test_inputs
-            SIRIUS_TEST_INPUT_ARTIFACTS)
-        foreach(retained_camera_input IN LISTS retained_camera_inputs)
-            list(APPEND sirius_gate_test_input_artifacts
-                --test-input-artifact "${retained_camera_input}")
-        endforeach()
-    endif()
+    foreach(input_target sirius_portable_binary32_test_inputs sirius_retained_camera_test_inputs)
+        if(TARGET ${input_target})
+            get_target_property(generated_inputs ${input_target} SIRIUS_TEST_INPUT_ARTIFACTS)
+            foreach(generated_input IN LISTS generated_inputs)
+                list(APPEND sirius_gate_test_input_artifacts
+                    --test-input-artifact "${generated_input}")
+            endforeach()
+        endif()
+    endforeach()
     if(TARGET sirius_kernels)
         list(APPEND sirius_gate_product_artifacts
             --product-artifact "trace_spv=${SIRIUS_KERNEL_BINARY_DIR}/trace.spv"

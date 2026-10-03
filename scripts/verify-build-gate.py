@@ -43,6 +43,7 @@ TESTED_ARTIFACTS = {
 # Bind selectors to that location as well as bytes: unrelated stable files
 # cannot stand in for the kernels the compiled test executables actually load.
 TEST_INPUT_PATHS = {
+    "portable_binary32_reference": "tests/backend/portable_binary32_reference.bin",
     "retained_camera_fixture": "tests/backend/retained_camera/program_fixture.h",
     "retained_camera_fp32_spv": "tests/backend/retained_camera/program_camera_probe-fp32.spv",
     "retained_camera_fp32comp_spv": "tests/backend/retained_camera/program_camera_probe-fp32comp.spv",
@@ -270,7 +271,8 @@ def git_identity(source_root: Path) -> tuple[str, bool]:
 
 def require_test_input_set(test_inputs: object, mode: str, products: dict) -> None:
     has_trace = bool({"trace_spv", "trace_fp32comp_spv", "trace_fp64_spv"} & set(products))
-    expected = TEST_INPUT_ARTIFACTS if mode != "development" or has_trace else set()
+    expected = (TEST_INPUT_ARTIFACTS if mode != "development" or has_trace
+                else {"portable_binary32_reference"})
     require(isinstance(test_inputs, dict) and set(test_inputs) == expected,
             "build gate does not bind the exact generated test input set")
 
@@ -1009,6 +1011,18 @@ runner(args)
 
 
 def self_test() -> None:
+    # Qualification receipts must also be readable by the installed authority.
+    # Catch additions that update the Python producer but strand the C++ reader.
+    runtime_source = (Path(__file__).resolve().parents[1] /
+                      "src/sirius/app/alignment_authority.cpp").read_text(encoding="utf-8")
+    runtime_block = re.search(r"kTestInputArtifacts\s*=\s*\{\{(.*?)\}\};",
+                              runtime_source, re.DOTALL)
+    require(runtime_block is not None, "runtime test-input contract is unavailable")
+    runtime_inputs = re.findall(r'\{\s*"([^\"]+)"\s*,\s*"([^\"]+)"\s*\}',
+                                runtime_block[1])
+    require(len(runtime_inputs) == len(TEST_INPUT_PATHS) and
+            dict(runtime_inputs) == TEST_INPUT_PATHS,
+            "build-gate producer and installed reader disagree on generated test inputs")
     with tempfile.TemporaryDirectory(prefix="sirius-build-gate-") as temporary:
         root = Path(temporary)
         source = root / "source"
@@ -1177,6 +1191,10 @@ def self_test() -> None:
                          "kernel-enabled development gate omitted test inputs")
         for name in ("trace_spv", "trace_fp32comp_spv", "trace_fp64_spv"):
             development["product_artifacts"].pop(name)
+        expect_rejection(lambda: validate_document(development),
+                         "kernel-free development gate omitted exact arithmetic expectations")
+        development["test_input_artifacts"] = {
+            "portable_binary32_reference": test_inputs["portable_binary32_reference"]}
         validate_document(development)
         verify_recorded_files(development, source, build)
         development["test_input_artifacts"] = test_inputs

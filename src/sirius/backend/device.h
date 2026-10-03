@@ -63,13 +63,21 @@ struct DeviceInfo {
     bool rounds_fp64_to_nearest = false;
 };
 
-// Retained camera/transport expansions require these arithmetic controls even
-// with binary64-assisted products. Enumeration alone does not admit this route.
-// The factory and automatic backend selection use the same capability contract.
+// Native expansion operations need both binary32 controls. The embedded
+// integer implementation supplies their numerical semantics on other devices;
+// inventory continues to report the actual hardware capabilities unchanged.
+[[nodiscard]] inline bool RetainedUsesPortableArithmetic(const DeviceInfo& device) {
+    return !device.preserves_fp32_denormals || !device.rounds_fp32_to_nearest;
+}
+
+// The factory and automatic backend selection share this precision contract.
+// Keep the advertised binary64 precision rung's support/refusal boundary.
 [[nodiscard]] inline std::optional<std::string_view> RetainedArithmeticIssue(
     const DeviceInfo& device, bool fp64_products = false) {
-    if (!device.preserves_fp32_denormals || !device.rounds_fp32_to_nearest)
+#ifndef SIRIUS_HAS_RETAINED_COMPUTE
+    if (RetainedUsesPortableArithmetic(device))
         return "device lacks binary32 subnormal preservation or round-to-nearest control";
+#endif
     if (fp64_products && (!device.supports_fp64 || !device.rounds_fp64_to_nearest))
         return "device lacks binary64 products or round-to-nearest control";
     return std::nullopt;

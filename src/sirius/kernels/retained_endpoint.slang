@@ -1,38 +1,39 @@
 import retained_scratch;
+import retained_scalar;
 import retained_triple;
 import retained_pair;
 [[vk::binding(0, 0)]] StructuredBuffer<uint> inputs;
 [[vk::binding(1, 0)]] RWStructuredBuffer<uint> outputs;
 RetainedTriple ReadStored(uint base) {
     RetainedTriple r;
-    r.hi = asfloat(outputs[base]);
-    r.lo = asfloat(outputs[base + 1]);
-    r.tail = asfloat(outputs[base + 2]);
-    r.error = asfloat(outputs[base + 3]);
+    r.hi = RPFromBits(outputs[base]);
+    r.lo = RPFromBits(outputs[base + 1]);
+    r.tail = RPFromBits(outputs[base + 2]);
+    r.error = RPFromBits(outputs[base + 3]);
     r.valid = outputs[base + 4];
     return r;
 }
 void WriteStored(uint base, RetainedTriple r) {
-    outputs[base] = asuint(r.hi);
-    outputs[base + 1] = asuint(r.lo);
-    outputs[base + 2] = asuint(r.tail);
-    outputs[base + 3] = asuint(r.error);
+    outputs[base] = RPBits(r.hi);
+    outputs[base + 1] = RPBits(r.lo);
+    outputs[base + 2] = RPBits(r.tail);
+    outputs[base + 3] = RPBits(r.error);
     outputs[base + 4] = r.valid;
 }
 RetainedTriple ReadValue(uint index, uint rowBase) {
     RetainedTriple r;
-    r.hi = asfloat(ScratchRead(index, 0, rowBase, 769));
-    r.lo = asfloat(ScratchRead(index, 1, rowBase, 769));
-    r.tail = asfloat(ScratchRead(index, 2, rowBase, 769));
-    r.error = asfloat(ScratchRead(index, 3, rowBase, 769));
+    r.hi = RPFromBits(ScratchRead(index, 0, rowBase, 769));
+    r.lo = RPFromBits(ScratchRead(index, 1, rowBase, 769));
+    r.tail = RPFromBits(ScratchRead(index, 2, rowBase, 769));
+    r.error = RPFromBits(ScratchRead(index, 3, rowBase, 769));
     r.valid = ScratchRead(index, 4, rowBase, 769);
     return r;
 }
 void WriteValue(uint index, RetainedTriple r, uint rowBase) {
-    ScratchWrite(index, 0, rowBase, 769, asuint(r.hi));
-    ScratchWrite(index, 1, rowBase, 769, asuint(r.lo));
-    ScratchWrite(index, 2, rowBase, 769, asuint(r.tail));
-    ScratchWrite(index, 3, rowBase, 769, asuint(r.error));
+    ScratchWrite(index, 0, rowBase, 769, RPBits(r.hi));
+    ScratchWrite(index, 1, rowBase, 769, RPBits(r.lo));
+    ScratchWrite(index, 2, rowBase, 769, RPBits(r.tail));
+    ScratchWrite(index, 3, rowBase, 769, RPBits(r.error));
     ScratchWrite(index, 4, rowBase, 769, r.valid);
 }
 bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint registers) {
@@ -42,7 +43,7 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint regi
     if (destination >= registers || op > 11) return false;
     RetainedTriple r = RTInvalid();
     if (op == 0)
-        r = RTConstant(asfloat(a));
+        r = RTConstant(RPFromBits(a));
     else if (op == 1) {
         if (a >= 53) return false;
         r = ReadStored(rowBase + 504 + 5 * a);
@@ -54,8 +55,8 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint regi
         else if (op == 7)
             r = RTNegate(av);
         else if (op == 8) {
-            float bound = RTAbsoluteUpper(av);
-            if (av.valid != 0 && bound > 0)
+            RPScalar bound = RTAbsoluteUpper(av);
+            if (av.valid != 0 && RPScalarGreater(bound, RPZero()))
                 r = RTConstant(RPPowerOfTwo(RPFloorExponent(bound) + 1));
         } else {
             if (b >= registers) return false;
@@ -70,14 +71,16 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint regi
                 r = RTDivide(av, bv);
             else if (op == 9) {
                 if (av.valid != 0 && bv.valid != 0)
-                    r = RTConstant(max(RTAbsoluteUpper(av), RTAbsoluteUpper(bv)));
+                    r = RTConstant(RPScalarMax(RTAbsoluteUpper(av), RTAbsoluteUpper(bv)));
             } else if (op == 10 || op == 11) {
                 if (c >= registers) return false;
                 RetainedTriple cv = ReadValue(c, rowBase);
                 if (cv.valid != 0) {
-                    bool choose = op == 10
-                                      ? cv.hi >= 0
-                                      : (cv.hi == 0 && cv.lo == 0 && cv.tail == 0 && cv.error == 0);
+                    bool choose = op == 10 ? RPScalarGreaterEqual(cv.hi, RPZero())
+                                           : (RPScalarEqual(cv.hi, RPZero()) &&
+                                              RPScalarEqual(cv.lo, RPZero()) &&
+                                              RPScalarEqual(cv.tail, RPZero()) &&
+                                              RPScalarEqual(cv.error, RPZero()));
                     r = choose ? av : bv;
                 }
             }
@@ -130,8 +133,8 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
     component = 4;
     root = RTInvalid();
     RetainedTriple best = RTInvalid();
-    RetainedTriple defect = RTConstant(0);
-    float scale = 0;
+    RetainedTriple defect = RTConstant(RPZero());
+    RPScalar scale = RPZero();
     for (uint i = 0; i < 4; ++i)
         for (uint j = 0; j < 4; ++j) {
             RetainedTriple term = RTMultiply(Metric(rowBase, i, j),
@@ -139,13 +142,15 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
             defect = RTAdd(defect, term);
             scale = RPUpAdd(scale, RTAbsoluteUpper(term));
         }
-    if (defect.valid == 0 || scale <= 0 || RPRatioUpper(RTAbsoluteUpper(defect), scale) > 1e-6f)
+    if (defect.valid == 0 || RPScalarLessEqual(scale, RPZero()) ||
+        RPScalarGreater(RPRatioUpper(RTAbsoluteUpper(defect), scale), RPFromBits(0x358637bdu)))
         return false;
     // Prefer a temporal root; if none is represented, preserve time orientation
     // and choose the smallest normalized spatial correction.
     for (uint c = 0; c < 4; ++c) {
         if (c > 0 && component == 0) break;
-        RetainedTriple a = Metric(rowBase, c, c), b = RTConstant(0), d = RTConstant(0);
+        RetainedTriple a = Metric(rowBase, c, c), b = RTConstant(RPZero()),
+                       d = RTConstant(RPZero());
         for (uint i = 0; i < 4; ++i)
             if (i != c) {
                 b = RTAdd(b, RTMultiply(RTAdd(Metric(rowBase, c, i), Metric(rowBase, i, c)),
@@ -157,16 +162,17 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
                                              RTMultiply(Tangent(rowBase, i), Tangent(rowBase, j))));
             }
         RetainedTriple first = RTInvalid(), second = RTInvalid();
-        if (RTExact(a, 0))
+        if (RTExact(a, RPZero()))
             first = RTDivide(RTNegate(d), b);
         else {
-            RetainedTriple discriminant =
-                RTSubtract(RTMultiply(b, b), RTMultiply(RTConstant(4), RTMultiply(a, d)));
+            RetainedTriple discriminant = RTSubtract(
+                RTMultiply(b, b), RTMultiply(RTConstant(RPFromUnsigned(4u)), RTMultiply(a, d)));
             RetainedTriple square = RTSqrt(discriminant);
-            RetainedTriple q =
-                RTMultiply(RTConstant(-0.5f), RTAdd(b, b.hi >= 0 ? square : RTNegate(square)));
-            if (RTExact(q, 0))
-                first = RTDivide(RTNegate(b), RTMultiply(RTConstant(2), a));
+            RetainedTriple q = RTMultiply(
+                RTConstant(RPFromBits(0xbf000000u)),
+                RTAdd(b, RPScalarGreaterEqual(b.hi, RPZero()) ? square : RTNegate(square)));
+            if (RTExact(q, RPZero()))
+                first = RTDivide(RTNegate(b), RTMultiply(RTConstant(RPFromUnsigned(2u)), a));
             else {
                 first = RTDivide(q, a);
                 second = RTDivide(d, q);
@@ -175,8 +181,8 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
         for (uint r = 0; r < 2; ++r) {
             RetainedTriple candidate = r == 0 ? first : second;
             if (candidate.valid == 0) continue;
-            RetainedTriple denominator = RTConstant(0);
-            float denominatorScale = 0;
+            RetainedTriple denominator = RTConstant(RPZero());
+            RPScalar denominatorScale = RPZero();
             for (uint i = 0; i < 4; ++i) {
                 RetainedTriple term =
                     RTMultiply(Metric(rowBase, c, i), i == c ? candidate : Tangent(rowBase, i));
@@ -186,17 +192,19 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
             // A central root with a singular differentiated constraint cannot
             // own the coupled candidate. Try the represented spatial roots.
             if (denominator.valid == 0 ||
-                RTAbsoluteLower(denominator) <=
-                    RPUpMultiply(5.6843418860808015e-14f, denominatorScale))
+                RPScalarLessEqual(RTAbsoluteLower(denominator),
+                                  RPUpMultiply(RPFromBits(0x29800000u), denominatorScale)))
                 continue;
             RetainedTriple difference = RTSubtract(candidate, Tangent(rowBase, c));
             RetainedTriple original = RTCenter(Tangent(rowBase, c));
             RetainedTriple absolute =
-                RTCenter(difference.hi < 0 ? RTNegate(difference) : difference);
+                RTCenter(RPScalarLess(difference.hi, RPZero()) ? RTNegate(difference) : difference);
             RetainedTriple scaleValue =
-                RTAdd(RTConstant(1), original.hi < 0 ? RTNegate(original) : original);
+                RTAdd(RTConstant(RPOne()),
+                      RPScalarLess(original.hi, RPZero()) ? RTNegate(original) : original);
             RetainedTriple correction = RTDivide(absolute, scaleValue);
-            if (correction.valid != 0 && (best.valid == 0 || RTSubtract(correction, best).hi < 0)) {
+            if (correction.valid != 0 &&
+                (best.valid == 0 || RPScalarLess(RTSubtract(correction, best).hi, RPZero()))) {
                 best = correction;
                 component = c;
                 root = candidate;
@@ -229,28 +237,31 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
         return;
     for (uint i = 0; i < 45; ++i) {
         uint address = 1 + 225 * row + 5 * i;
-        RetainedTriple value = RTPack(asfloat(inputs[address]), asfloat(inputs[address + 1]),
-                                      asfloat(inputs[address + 2]), asfloat(inputs[address + 3]));
+        RetainedTriple value =
+            RTPack(RPFromBits(inputs[address]), RPFromBits(inputs[address + 1]),
+                   RPFromBits(inputs[address + 2]), RPFromBits(inputs[address + 3]));
         if (inputs[address + 4] != 1 || value.valid == 0) return;
         if (lane == 0) WriteStored(rowBase + 504 + 5 * i, value);
     }
     AllMemoryBarrierWithGroupSync();
     RetainedTriple chart = ReadStored(rowBase + 504 + 5 * 44);
-    if (!RTExact(chart, 1) && !RTExact(chart, -1)) return;
-    if (RTAbsoluteUpper(ReadStored(rowBase + 504 + 5)) != 0 &&
-        RTAbsoluteUpper(ReadStored(rowBase + 504 + 15)) != 0)
+    if (!RTExact(chart, RPOne()) && !RTExact(chart, RPScalarNegate(RPOne()))) return;
+    if (!RPScalarEqual(RTAbsoluteUpper(ReadStored(rowBase + 504 + 5)), RPZero()) &&
+        !RPScalarEqual(RTAbsoluteUpper(ReadStored(rowBase + 504 + 15)), RPZero()))
         return;
     for (uint i = 45; i < 53; ++i)
-        if (lane == 0) WriteStored(rowBase + 504 + 5 * i, RTConstant(i == 49 ? 1 : 0));
+        if (lane == 0) WriteStored(rowBase + 504 + 5 * i, RTConstant(i == 49 ? RPOne() : RPZero()));
     AllMemoryBarrierWithGroupSync();
-    if (RTExact(ReadStored(rowBase + 504), 0) && RTExact(ReadStored(rowBase + 514), 0) &&
-        RTExact(ReadStored(rowBase + 519), 0)) {
+    if (RTExact(ReadStored(rowBase + 504), RPZero()) &&
+        RTExact(ReadStored(rowBase + 514), RPZero()) &&
+        RTExact(ReadStored(rowBase + 519), RPZero())) {
         if (lane != 0) return;
         for (uint i = 0; i < 4; ++i) {
             for (uint j = 0; j < 4; ++j)
                 if (lane == 0)
                     WriteStored(rowBase + 4 + 5 * (i * 4 + j),
-                                RTConstant(i == j ? (i == 0 ? -1 : 1) : 0));
+                                RTConstant(i == j ? (i == 0 ? RPScalarNegate(RPOne()) : RPOne())
+                                                  : RPZero()));
             RetainedTriple p = ReadStored(rowBase + 504 + 5 * (8 + i));
             if (lane == 0) WriteStored(rowBase + 4 + 5 * (16 + i), i == 0 ? RTNegate(p) : p);
         }
@@ -265,7 +276,7 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
                 phase = RTNegate(temporal);
             }
             if (i >= 8 && i % 8 == 4) {
-                RetainedTriple constraint = RTConstant(0);
+                RetainedTriple constraint = RTConstant(RPZero());
                 for (uint axis = 1; axis < 4; ++axis)
                     constraint = RTAdd(constraint,
                                        RTMultiply(Tangent(rowBase, axis),
@@ -289,7 +300,8 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
         if (lane == 0)
             WriteStored(rowBase + 504 + 5 * (45 + i), i == component ? root : Tangent(rowBase, i));
         if (lane == 0)
-            WriteStored(rowBase + 504 + 5 * (49 + i), RTConstant(i == component ? 1 : 0));
+            WriteStored(rowBase + 504 + 5 * (49 + i),
+                        RTConstant(i == component ? RPOne() : RPZero()));
     }
     AllMemoryBarrierWithGroupSync();
     if (!EvaluateProgram(row, rowBase, programBase, count, registers, 100, lane)) return;

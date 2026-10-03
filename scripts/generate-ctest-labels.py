@@ -112,6 +112,7 @@ SUITE_LABELS = {
     "SpectralEmissionTest": MANDATORY,
     # Numerical stability (build gate)
     "NumericalStabilityTests": STABILITY,
+    "PortableBinary32": STABILITY,
     "NumericalStabilityTest": STABILITY,
     "NaNInfDetectionTests": STABILITY,
     "GPUConservationTests": STABILITY,

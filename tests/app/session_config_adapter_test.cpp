@@ -329,16 +329,15 @@ TEST(RenderSessionProbe, BackendAutoResolvesByDeviceRegistryAndCapabilities) {
 #ifdef SIRIUS_HAS_RETAINED_COMPUTE
         if (devices && !devices->empty()) {
             const auto& device = devices->front();
-            admitted = device.preserves_fp32_denormals && device.rounds_fp32_to_nearest &&
-                       (std::string_view(mode) != "fp64" ||
-                        (device.supports_fp64 && device.rounds_fp64_to_nearest));
+            admitted = std::string_view(mode) != "fp64" ||
+                       (device.supports_fp64 && device.rounds_fp64_to_nearest);
         }
 #endif
         const auto adapted = MakeSessionConfig(config);
         ASSERT_TRUE(adapted) << adapted.error().Description();
         EXPECT_EQ(adapted->backend,
                   admitted ? render::RenderBackend::Vulkan : render::RenderBackend::Cpu)
-            << mode << ": enumeration alone does not admit the retained arithmetic";
+            << mode << ": retained admission must preserve the precision rung";
     }
 
     // Legacy metrics retain their scalar precision admission: their fp32 route
