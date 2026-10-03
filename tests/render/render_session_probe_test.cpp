@@ -306,6 +306,11 @@ TEST(RenderSessionProbe, VulkanThinDiskPublishedLinearChannelsMatchIndependentFi
     for (const double spin : {0., .7}) {
         auto config = DiskCompositionConfig(spin);
         config.backend = sirius::render::RenderBackend::Vulkan;
+        // Device batching accepts the Vulkan defaults, rather than CPU tile
+        // and thread controls from the shared composition fixture.
+        const SessionConfig defaults;
+        config.tile_size = defaults.tile_size;
+        config.enable_parallel_rendering = defaults.enable_parallel_rendering;
         const auto witnesses = DiskCompositionWitnesses(config);
         sirius::render::DisplayBuffer display;
         display.Initialise(config.width, config.height);
