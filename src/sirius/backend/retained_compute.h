@@ -94,10 +94,20 @@ struct RetainedInitializeOutput {
 class RetainedCompute {
   public:
     struct StageStats {
+        // Host wall-clock intervals, not GPU timestamps. Dispatch phases and
+        // creation counts cover successful device Dispatch calls with valid
+        // submission timing. Buffer totals include returned failing calls;
+        // a later read failure does not undo a successful dispatch observation.
         std::uint64_t submissions = 0;
         double submit_wait_ms = 0;
         double maximum_submit_wait_ms = 0;
         double pipeline_setup_ms = 0;
+        double command_setup_ms = 0;
+        double cleanup_ms = 0;
+        double dispatch_total_ms = 0;  // Inclusive of the four dispatch phases above.
+        double write_buffer_ms = 0;
+        double read_buffer_ms = 0;
+        std::uint64_t pipeline_creations = 0;  // Not a driver pipeline-cache hit counter.
         std::uint64_t target_overshoots = 0;
     };
     [[nodiscard]] static std::uint64_t RequiredBufferBytes(std::size_t capacity);

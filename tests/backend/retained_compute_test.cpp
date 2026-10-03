@@ -563,25 +563,51 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
         return std::chrono::duration<double, std::milli>(finished - started).count();
     };
     const auto record_timing = [](const std::string& prefix, const Stats& before,
-                                  const Stats& after, double wall_ms, bool per_stage = false) {
+                                  const Stats& after, double wall_ms,
+                                  bool lifetime_maxima = false) {
         constexpr std::array names{"camera", "transport",  "endpoint",
                                    "dense",  "initialize", "ray_camera"};
-        std::uint64_t submissions = 0;
+        std::uint64_t submissions = 0, pipeline_creations = 0, target_overshoots = 0;
         double submit_wait_ms = 0, pipeline_setup_ms = 0, maximum_submit_wait_ms = 0;
+        double command_setup_ms = 0, cleanup_ms = 0, dispatch_total_ms = 0;
+        double write_buffer_ms = 0, read_buffer_ms = 0;
         for (std::size_t stage = 0; stage < after.size(); ++stage) {
             const auto count = after[stage].submissions - before[stage].submissions;
             const auto wait = after[stage].submit_wait_ms - before[stage].submit_wait_ms;
             const auto pipeline = after[stage].pipeline_setup_ms - before[stage].pipeline_setup_ms;
+            const auto command = after[stage].command_setup_ms - before[stage].command_setup_ms;
+            const auto cleanup = after[stage].cleanup_ms - before[stage].cleanup_ms;
+            const auto dispatch = after[stage].dispatch_total_ms - before[stage].dispatch_total_ms;
+            const auto write = after[stage].write_buffer_ms - before[stage].write_buffer_ms;
+            const auto read = after[stage].read_buffer_ms - before[stage].read_buffer_ms;
+            const auto creations =
+                after[stage].pipeline_creations - before[stage].pipeline_creations;
+            const auto overshoots =
+                after[stage].target_overshoots - before[stage].target_overshoots;
             submissions += count;
             submit_wait_ms += wait;
             pipeline_setup_ms += pipeline;
+            command_setup_ms += command;
+            cleanup_ms += cleanup;
+            dispatch_total_ms += dispatch;
+            write_buffer_ms += write;
+            read_buffer_ms += read;
+            pipeline_creations += creations;
+            target_overshoots += overshoots;
             maximum_submit_wait_ms =
                 std::max(maximum_submit_wait_ms, after[stage].maximum_submit_wait_ms);
-            if (per_stage) {
-                const auto key = prefix + "_" + names[stage];
-                RecordProperty(key + "_submissions", std::to_string(count));
-                RecordProperty(key + "_submit_wait_ms", std::to_string(wait));
-                RecordProperty(key + "_pipeline_setup_ms", std::to_string(pipeline));
+            const auto key = prefix + "_" + names[stage];
+            RecordProperty(key + "_submissions", std::to_string(count));
+            RecordProperty(key + "_submit_wait_ms", std::to_string(wait));
+            RecordProperty(key + "_pipeline_setup_ms", std::to_string(pipeline));
+            RecordProperty(key + "_command_setup_ms", std::to_string(command));
+            RecordProperty(key + "_cleanup_ms", std::to_string(cleanup));
+            RecordProperty(key + "_dispatch_total_ms", std::to_string(dispatch));
+            RecordProperty(key + "_write_buffer_ms", std::to_string(write));
+            RecordProperty(key + "_read_buffer_ms", std::to_string(read));
+            RecordProperty(key + "_pipeline_creations", std::to_string(creations));
+            RecordProperty(key + "_target_overshoots", std::to_string(overshoots));
+            if (lifetime_maxima) {
                 RecordProperty(key + "_maximum_submit_wait_ms",
                                std::to_string(after[stage].maximum_submit_wait_ms));
             }
@@ -589,12 +615,24 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
         RecordProperty(prefix + "_submissions", std::to_string(submissions));
         RecordProperty(prefix + "_submit_wait_ms", std::to_string(submit_wait_ms));
         RecordProperty(prefix + "_pipeline_setup_ms", std::to_string(pipeline_setup_ms));
+        RecordProperty(prefix + "_command_setup_ms", std::to_string(command_setup_ms));
+        RecordProperty(prefix + "_cleanup_ms", std::to_string(cleanup_ms));
+        RecordProperty(prefix + "_dispatch_total_ms", std::to_string(dispatch_total_ms));
+        RecordProperty(prefix + "_write_buffer_ms", std::to_string(write_buffer_ms));
+        RecordProperty(prefix + "_read_buffer_ms", std::to_string(read_buffer_ms));
+        RecordProperty(prefix + "_pipeline_creations", std::to_string(pipeline_creations));
+        RecordProperty(prefix + "_target_overshoots", std::to_string(target_overshoots));
+        const double measured_interface_ms = write_buffer_ms + dispatch_total_ms + read_buffer_ms;
+        RecordProperty(prefix + "_measured_interface_ms", std::to_string(measured_interface_ms));
+        RecordProperty(prefix + "_dispatch_total_minus_phases_ms",
+                       std::to_string(dispatch_total_ms - pipeline_setup_ms - command_setup_ms -
+                                      submit_wait_ms - cleanup_ms));
         RecordProperty(prefix + "_wall_ms", std::to_string(wall_ms));
         RecordProperty(prefix + "_wall_minus_measured_ms",
-                       std::to_string(wall_ms - submit_wait_ms - pipeline_setup_ms));
+                       std::to_string(wall_ms - measured_interface_ms));
         // Peaks are lifetime maxima, not additive counters. Only the complete
         // fresh-compute fixture can report them as maxima for its own window.
-        if (per_stage)
+        if (lifetime_maxima)
             RecordProperty(prefix + "_maximum_submit_wait_ms",
                            std::to_string(maximum_submit_wait_ms));
     };
@@ -613,13 +651,21 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
     RecordProperty("pipeline_cache_blob_bound_bytes",
                    std::to_string(detail::kVulkanPipelineCacheBlobLimit));
     RecordProperty("timing_scope",
-                   "interval fixture excludes device/compute SetUp; wall-minus-measured includes "
-                   "host coordination, transfers, command setup and cleanup without separate "
-                   "attribution; no frame or interactive qualification");
+                   "host wall-clock observations, not GPU execution timestamps; interval fixture "
+                   "excludes device/compute SetUp; wall-minus-measured subtracts WriteBuffer, "
+                   "ReadBuffer and inclusive Dispatch total once, leaving host packing, decoding, "
+                   "coordination, assertions and diagnostic bookkeeping; no frame or interactive "
+                   "qualification");
+    RecordProperty("timing_failure_scope",
+                   "buffer timers include returned errors; dispatch phases and pipeline creations "
+                   "require device Dispatch success with valid submission timing; read failure "
+                   "retains successful dispatch observations; failed dispatch partial phases are "
+                   "not accumulated");
     RecordProperty(
         "pipeline_cache_scope",
         "initial Endpoint warms projection; first interval first uses transport/dense; "
-        "repeated intervals reuse stage kernels; StageStats has no pipeline-created flag");
+        "repeated intervals reuse stage kernels; pipeline_creations counts successful dispatches "
+        "that created a pipeline object, not driver pipeline-cache hits");
     std::vector<RetainedEndpointInput> initial;
     for (const auto& fixture : sirius::test::retained_transport::cases) {
         const auto step = std::bit_cast<RetainedStepInput>(fixture.input);

@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <bit>
+#include <chrono>
 #include <cmath>
 #include <cstring>
 #include <limits>
@@ -119,7 +120,16 @@ std::array<RetainedCompute::StageStats, 6> RetainedCompute::Statistics() const {
 
 base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_rows,
                                                DispatchTiming* timing) {
+    using Clock = std::chrono::steady_clock;
+    const auto milliseconds = [](Clock::time_point started, Clock::time_point finished) {
+        return std::chrono::duration<double, std::milli>(finished - started).count();
+    };
+    // A failed write must not leave the caller's previous dispatch observation.
+    if (timing) *timing = {};
+    const auto write_started = Clock::now();
     auto status = device_.WriteBuffer(stage.buffers[0], std::as_bytes(std::span(stage.input)));
+    const auto write_finished = Clock::now();
+    stage.stats.write_buffer_ms += milliseconds(write_started, write_finished);
     if (!status) return status;
     DispatchTiming measured;
     auto* observed = timing ? timing : &measured;
@@ -137,10 +147,18 @@ base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_
     stage.stats.maximum_submit_wait_ms =
         std::max(stage.stats.maximum_submit_wait_ms, observed->submit_wait_ms);
     stage.stats.pipeline_setup_ms += observed->pipeline_setup_ms;
+    stage.stats.command_setup_ms += observed->command_setup_ms;
+    stage.stats.cleanup_ms += observed->cleanup_ms;
+    stage.stats.dispatch_total_ms += observed->total_ms;
+    stage.stats.pipeline_creations += observed->pipeline_created ? 1 : 0;
     submission_peak_ms_ = std::max(submission_peak_ms_, observed->submit_wait_ms);
     if (dispatch_target_ms_ > 0 && observed->submit_wait_ms > dispatch_target_ms_)
         ++stage.stats.target_overshoots;
-    return device_.ReadBuffer(stage.buffers[1], std::as_writable_bytes(std::span(stage.output)));
+    const auto read_started = Clock::now();
+    status = device_.ReadBuffer(stage.buffers[1], std::as_writable_bytes(std::span(stage.output)));
+    const auto read_finished = Clock::now();
+    stage.stats.read_buffer_ms += milliseconds(read_started, read_finished);
+    return status;
 }
 
 double RetainedCompute::TakeSubmissionPeakMs() {
