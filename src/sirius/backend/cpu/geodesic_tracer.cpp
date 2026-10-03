@@ -593,6 +593,7 @@ TraceResult GeodesicTracer::TraceTo(const CameraRay& camera_ray, bool allow_infi
         worker.outgoing_chart_ = &outgoing;
         worker.step_executor_ = step_executor_;
         worker.should_cancel_ = should_cancel_;
+        worker.polarisation_observer_ = polarisation_observer_;
         // The radial disk profile is immutable during one trace. Reuse the
         // cached profile without moving or mutating the public tracer's state.
         worker.page_thorne_disk_ = page_thorne_disk_;
@@ -718,6 +719,18 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
     if (config_.enable_polarisation) {
         InitPolarisationFrame(ray, *launch_screen, polarisation_frame);
     }
+    std::optional<double> observed_polarisation_affine;
+    const auto observe_polarisation = [&] {
+        if (!config_.enable_polarisation || !polarisation_observer_) return;
+        const double affine = polarisation_frame.reference.affine;
+        if (observed_polarisation_affine && affine == *observed_polarisation_affine) return;
+        observed_polarisation_affine = affine;
+        const std::array sample{polarisation_frame.reference, polarisation_frame.perpendicular};
+        polarisation_observer_(sample, outgoing_chart_
+                                           ? TraceResult::TerminalChart::OutgoingKerrSchild
+                                           : TraceResult::TerminalChart::MetricNative);
+    };
+    observe_polarisation();
 
     // Schwarzschild-de Sitter has two different past horizons. Outgoing
     // Kerr-Schild coordinates are regular at black-hole capture; ingoing
@@ -737,6 +750,9 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
 
     for (int step = 0; step < config_.max_steps; ++step) {
         if (should_cancel_ && should_cancel_()) return cancelled_result();
+        // The previous iteration has finished rejection and event resolution.
+        // Rejected trials retain the same affine value and produce no sample.
+        observe_polarisation();
         if (chart_switch_radius > 0.0) {
             const bool use_outgoing =
                 std::hypot(ray.position(1), ray.position(2), ray.position(3)) < chart_switch_radius;
@@ -1485,6 +1501,10 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
             }
         }
     }
+
+    // Observe the committed disk/capture/escape frame, including the clipped
+    // disk reconstruction, before the public terminal event is remapped.
+    observe_polarisation();
 
     // Publish the actual terminal central-ray event for every outcome. For an
     // opaque disk this is the Hermite-rooted crossing, not the accepted RK45

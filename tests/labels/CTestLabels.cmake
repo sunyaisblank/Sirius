@@ -870,6 +870,7 @@ set_tests_properties(
 set_tests_properties(
     PolarisationAcceptance.NormalEmissionHasFiniteUnpolarisedStokes
     PolarisationAcceptance.ActualDiskStokesMatchWalkerPenroseReconstruction
+    PolarisationAcceptance.CommittedOutwardTransportReachesPhysicalEscapeAndObserverIsPassive
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 

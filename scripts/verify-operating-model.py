@@ -399,6 +399,8 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:VulkanRenderSession.CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalBounds",
     },
     "E2": {
+        "gtest:PolarisationAcceptance.ActualDiskStokesMatchWalkerPenroseReconstruction",
+        "gtest:PolarisationAcceptance.CommittedOutwardTransportReachesPhysicalEscapeAndObserverIsPassive",
         "gtest:ConfigValidation.PolarisationRequiresRepresentedThinBlackHoleDisk",
         "gtest:GeodesicTracerTest.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation",
         "gtest:GeodesicTracerTest.PolarisationGaugeRemainsRegularAtPastHorizonCapture",
@@ -467,8 +469,8 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "2bdc3ee03a95cb3f179805949f7dbdca80c18d267944ac30ae21f01ad7cf3129",
-    "required_dimensions": "d3dbe24b2d8b1a5e0db12c0a32693da02982c8cef2bad42d3fa4826be86f1bfc",
+    "acceptance_criteria": "526b05113b8b64b0edcb64c95afa5ea0e416cb4bc5ee46711eff5308bc0cf928",
+    "required_dimensions": "0ea8357c764bcc40f6f233b25e8ce5fe4942c368a60eff245d1859c36a659e76",
     "capability_contracts": "48c5b338c14c11e2ad7275322cd72f4bd014df621ca69e65e119621066fd5c6c",
 }
 # These groups match concrete optional compile boundaries. CPU transport tests

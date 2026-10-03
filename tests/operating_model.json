@@ -381,6 +381,8 @@
       "requirement": "Schwarzschild and Kerr thin-disk polarisation transports an observer-screen basis on the accepted central ray, conserves the Walker-Penrose constant, agrees across charts with an independent oracle whose null initial data and integration stages decline outside their explicit Boyer-Lindquist domain without clamping, and applies a flux-normalised Chandrasekhar-Sobolev semi-infinite pure electron-scattering atmosphere excluding absorption, finite optical depth, magnetic/Faraday effects, and returning radiation; incomplete combinations decline.",
       "capability_dependencies": [],
       "evidence": [
+        {"kind": "gtest", "name": "PolarisationAcceptance.ActualDiskStokesMatchWalkerPenroseReconstruction"},
+        {"kind": "gtest", "name": "PolarisationAcceptance.CommittedOutwardTransportReachesPhysicalEscapeAndObserverIsPassive"},
         {"kind": "gtest", "name": "WalkerPenroseLivePath.ConservesConstantAndOrthonormality"},
         {"kind": "gtest", "name": "WalkerPenroseLivePath.AgreesWithOracleAcrossCharts"},
         {"kind": "gtest", "name": "WalkerPenrose.BoyerLindquistInitialDataAndAxisExitDeclineWithoutSubstitution"},
@@ -598,6 +600,8 @@
     {
       "id": "polarised_transport_to_film",
       "evidence": [
+        {"kind": "gtest", "name": "PolarisationAcceptance.ActualDiskStokesMatchWalkerPenroseReconstruction"},
+        {"kind": "gtest", "name": "PolarisationAcceptance.CommittedOutwardTransportReachesPhysicalEscapeAndObserverIsPassive"},
         {"kind": "gtest", "name": "WalkerPenrose.PolarisationStaysOrthogonalAndNormalisedUnderTransport"},
         {"kind": "gtest", "name": "WalkerPenrose.BoyerLindquistInitialDataAndAxisExitDeclineWithoutSubstitution"},
         {"kind": "gtest", "name": "WalkerPenroseLivePath.ConservesConstantAndOrthonormality"},

@@ -411,6 +411,14 @@ class GeodesicTracer {
     void SetCancellationCallback(std::function<bool()> callback) {
         should_cancel_ = std::move(callback);
     }
+    // Optional synchronous diagnostics, configured before tracing. Receives
+    // immutable copies of the actual committed basis in its current chart;
+    // the callback must not mutate the tracer or retain references to samples.
+    using PolarisationObserver = std::function<void(
+        const std::array<sirius::core::PolarisedRay, 2>&, TraceResult::TerminalChart)>;
+    void SetPolarisationObserver(PolarisationObserver observer) {
+        polarisation_observer_ = std::move(observer);
+    }
 
     void SetConfig(const TracerConfig& config) {
         SIRIUS_PRE(IsRepresentedTracerConfig(config));
@@ -448,6 +456,7 @@ class GeodesicTracer {
     TracerConfig config_;
     TraceStepExecutor* step_executor_ = nullptr;
     std::function<bool()> should_cancel_;
+    PolarisationObserver polarisation_observer_;
     const sirius::core::OutgoingKerrSchild* outgoing_chart_ = nullptr;
     TraceResult TraceTo(const sirius::core::CameraRay& camera_ray, bool allow_infinity_handoff);
     TraceResult TraceInCurrentChart(const sirius::core::CameraRay& camera_ray,
