@@ -52,7 +52,7 @@
       "required": true,
       "verification": "build_gated",
       "profiles": ["cpu", "vulkan"],
-      "requirement": "Both live backends propagate two geodesic-deviation vectors into an oriented beam ellipse and interpret that orientation in the same deterministic celestial tangent basis during point-catalogue filtering; the CPU central ray and Jacobi map terminate on the same accepted-segment event at a finite causal boundary; the independent Schwarzschild congruence oracle agrees to one part per million, the live CPU Cartesian tidal contraction agrees with the analytic Boyer-Lindquist tensor below five parts in ten million at matched events, its Kerr curvature scalar agrees off-equator below one part per million, and its production radial point-source congruence obeys the exact affine-axis solution; the production fp32 Vulkan tidal contraction agrees with the analytic Schwarzschild tensor below five parts in ten thousand at matched off-equatorial non-radial events and with the analytic Kerr tensor below two parts in ten thousand across both spin signs at matched off-equatorial events, and its shared accepted-segment paired Jacobi update obeys the exact radial point-source affine-axis solution below five parts per million; the footprint measurably suppresses star flicker.",
+      "requirement": "Both live backends propagate two geodesic-deviation vectors into an oriented beam ellipse and interpret that orientation in the same deterministic celestial tangent basis during point-catalogue filtering; the CPU central ray and Jacobi map terminate on the same accepted-segment event at a finite causal boundary; the independent Schwarzschild congruence oracle agrees to one part per million, the live CPU Cartesian tidal contraction agrees with the analytic Boyer-Lindquist tensor below five parts in ten million at matched events, its Kerr curvature scalar agrees off-equator below one part per million, and its production radial point-source congruence obeys the exact affine-axis solution; the production fp32 Vulkan tidal contraction agrees with the analytic Schwarzschild tensor below five parts in ten thousand at matched off-equatorial non-radial events and with the analytic Kerr tensor below two parts in ten thousand across both spin signs at matched off-equatorial events, and its shared accepted-segment paired Jacobi update obeys the exact radial point-source affine-axis solution below five parts per million; the footprint measurably suppresses star flicker, and the complete brightness of one isolated represented star across four quarter-pixel optical rotations at a fixed unboosted flat-space event agrees with independent original-response photometry on CPU and retained binary32 products, varies by at most two percent for the small smoothly changing footprints, and reduces coefficient of variation by at least a factor of 1.5 relative to the identical narrow-width sequence.",
       "capability_dependencies": [],
       "evidence": [
         {"kind": "gtest", "name": "RetainedComputeTest.BatchedCameraPreservesPhysicalColumnsAndRejectsInvalidRows"},
@@ -163,6 +163,8 @@
         {"kind": "gtest", "name": "StarfieldGeneratorTests.PointFilterMatchesIndependentAngularOracle"},
         {"kind": "gtest", "name": "StarfieldGeneratorTests.SpatialIndexIncludesStarsAcrossAngularCellBoundaries"},
         {"kind": "gtest", "name": "KernelParity.PointStarAngularWeightMatchesIndependentOracle"},
+        {"kind": "gtest", "name": "PointSourceDetector.RotatingIsolatedStarMatchesIndependentSharedRegionBrightness"},
+        {"kind": "gtest", "name": "PointSourceDetector.RetainedRotatingIsolatedStarMatchesIndependentSharedRegionBrightness"},
         {"kind": "gtest", "name": "StarfieldPointTest.BeamFootprintSuppressesStarFlicker"}
       ]
     },
@@ -778,6 +780,8 @@
         {"kind": "gtest", "name": "StarfieldPointTest.EllipticalFootprintUsesBothAxesAndOrientation"},
         {"kind": "gtest", "name": "StarfieldPointTest.SpatialIndexMatchesExhaustiveBeamOracle"},
         {"kind": "gtest", "name": "StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope"},
+        {"kind": "gtest", "name": "PointSourceDetector.RotatingIsolatedStarMatchesIndependentSharedRegionBrightness"},
+        {"kind": "gtest", "name": "PointSourceDetector.RetainedRotatingIsolatedStarMatchesIndependentSharedRegionBrightness"},
         {"kind": "gtest", "name": "VulkanRenderSession.CpuVulkanPointCatalogueAgreeOnFlatScene"}
       ]
     },

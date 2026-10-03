@@ -229,6 +229,8 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:StarfieldGeneratorTests.PointFilterMatchesIndependentAngularOracle",
         "gtest:StarfieldGeneratorTests.SpatialIndexIncludesStarsAcrossAngularCellBoundaries",
         "gtest:KernelParity.PointStarAngularWeightMatchesIndependentOracle",
+        "gtest:PointSourceDetector.RotatingIsolatedStarMatchesIndependentSharedRegionBrightness",
+        "gtest:PointSourceDetector.RetainedRotatingIsolatedStarMatchesIndependentSharedRegionBrightness",
         "gtest:StarfieldPointTest.BeamFootprintSuppressesStarFlicker",
     },
     "P3": {
@@ -465,8 +467,8 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "8268fce14313c390c93ab0ec0553e77e438e7143283dcad8c98393e1aa02aa66",
-    "required_dimensions": "19e68c787f305c54edc6eb5084dd84faf81db96b3723fa7d6d08d90acbea09c0",
+    "acceptance_criteria": "2bdc3ee03a95cb3f179805949f7dbdca80c18d267944ac30ae21f01ad7cf3129",
+    "required_dimensions": "d3dbe24b2d8b1a5e0db12c0a32693da02982c8cef2bad42d3fa4826be86f1bfc",
     "capability_contracts": "48c5b338c14c11e2ad7275322cd72f4bd014df621ca69e65e119621066fd5c6c",
 }
 # These groups match concrete optional compile boundaries. CPU transport tests
