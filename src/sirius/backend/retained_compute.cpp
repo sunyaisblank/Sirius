@@ -70,6 +70,7 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
         stage.kernel = *kernel;
         stage.input.resize(1 + input_words * capacity + program.size());
         stage.output.resize(row_words * capacity);
+        stage.input_words_per_row = input_words;
         stage.input[0] = static_cast<std::uint32_t>(capacity);
         std::copy(program.begin(), program.end(), stage.input.begin() + 1 + input_words * capacity);
         auto input = device.CreateBuffer(stage.input.size() * 4, BufferUsage::kStorage);
@@ -126,11 +127,17 @@ base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_
     };
     // A failed write must not leave the caller's previous dispatch observation.
     if (timing) *timing = {};
+    auto input = std::span(stage.input);
+    // The fixed-capacity header and program tail define shader indexing. Once
+    // that immutable tail has reached the device, only requested rows change.
+    if (stage.program_uploaded) input = input.first(1 + active_rows * stage.input_words_per_row);
     const auto write_started = Clock::now();
-    auto status = device_.WriteBuffer(stage.buffers[0], std::as_bytes(std::span(stage.input)));
+    auto status = device_.WriteBuffer(stage.buffers[0], std::as_bytes(input));
     const auto write_finished = Clock::now();
     stage.stats.write_buffer_ms += milliseconds(write_started, write_finished);
     if (!status) return status;
+    stage.program_uploaded = true;
+    stage.stats.write_buffer_bytes += input.size_bytes();
     DispatchTiming measured;
     auto* observed = timing ? timing : &measured;
     // Buffer strides and the immutable program retain their capacity layout.
@@ -154,10 +161,12 @@ base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_
     submission_peak_ms_ = std::max(submission_peak_ms_, observed->submit_wait_ms);
     if (dispatch_target_ms_ > 0 && observed->submit_wait_ms > dispatch_target_ms_)
         ++stage.stats.target_overshoots;
+    auto output = std::span(stage.output).first(active_rows * (stage.output.size() / capacity_));
     const auto read_started = Clock::now();
-    status = device_.ReadBuffer(stage.buffers[1], std::as_writable_bytes(std::span(stage.output)));
+    status = device_.ReadBuffer(stage.buffers[1], std::as_writable_bytes(output));
     const auto read_finished = Clock::now();
     stage.stats.read_buffer_ms += milliseconds(read_started, read_finished);
+    if (status) stage.stats.read_buffer_bytes += output.size_bytes();
     return status;
 }
 

@@ -19,6 +19,7 @@
 #include <limits>
 #include <numbers>
 #include <string>
+#include <vector>
 
 #if defined(SIRIUS_HAS_RETAINED_COMPUTE) && defined(SIRIUS_RETAINED_CAMERA_TEST_DIR)
 #define SIRIUS_RETAINED_TESTS_AVAILABLE 1
@@ -135,6 +136,77 @@ class RetainedComputeTest : public ::testing::Test {
 };
 
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+// Observe real Vulkan transfers; injected returned errors stop at this seam.
+class TransferProbeDevice final : public ComputeDevice {
+  public:
+    enum class Failure { None, Write, Dispatch, Read };
+    struct Allocation {
+        BufferHandle handle;
+        std::uint64_t bytes;
+        BufferUsage usage;
+    };
+    struct Transfer {
+        BufferHandle handle;
+        std::size_t bytes;
+        std::uint32_t capacity = 0;
+    };
+    explicit TransferProbeDevice(ComputeDevice& device) : device_(device) {}
+    Failure fail_next = Failure::None;
+    std::vector<Allocation> allocations;
+    std::vector<Transfer> writes, reads;
+    std::uint64_t dispatch_calls = 0, forwarded_dispatches = 0;
+
+    const DeviceInfo& Info() const noexcept override { return device_.Info(); }
+    sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t> code) override {
+        return device_.LoadKernel(code);
+    }
+    sirius::base::Expected<BufferHandle> CreateBuffer(std::uint64_t bytes,
+                                                      BufferUsage usage) override {
+        auto buffer = device_.CreateBuffer(bytes, usage);
+        if (buffer) allocations.push_back({*buffer, bytes, usage});
+        return buffer;
+    }
+    sirius::base::Expected<void> WriteBuffer(BufferHandle buffer,
+                                             std::span<const std::byte> data) override {
+        std::uint32_t capacity = 0;
+        if (data.size_bytes() >= sizeof(capacity))
+            std::memcpy(&capacity, data.data(), sizeof(capacity));
+        writes.push_back({buffer, data.size_bytes(), capacity});
+        if (fail_next == Failure::Write) return Inject("write");
+        return device_.WriteBuffer(buffer, data);
+    }
+    sirius::base::Expected<void> ReadBuffer(BufferHandle buffer,
+                                            std::span<std::byte> data) override {
+        reads.push_back({buffer, data.size_bytes()});
+        if (fail_next == Failure::Read) return Inject("read");
+        return device_.ReadBuffer(buffer, data);
+    }
+    sirius::base::Expected<void> Dispatch(KernelHandle kernel,
+                                          std::span<const BufferHandle> buffers, std::uint32_t x,
+                                          std::uint32_t y, std::uint32_t z,
+                                          DispatchTiming* timing) override {
+        ++dispatch_calls;
+        if (fail_next == Failure::Dispatch) return Inject("dispatch");
+        ++forwarded_dispatches;
+        return device_.Dispatch(kernel, buffers, x, y, z, timing);
+    }
+    sirius::base::Expected<void> SetBufferAllocationLimit(std::uint64_t bytes) override {
+        return device_.SetBufferAllocationLimit(bytes);
+    }
+    std::uint64_t BufferAllocationBytes() const noexcept override {
+        return device_.BufferAllocationBytes();
+    }
+
+  private:
+    sirius::base::Expected<void> Inject(const char* operation) {
+        fail_next = Failure::None;
+        return sirius::base::Fail(sirius::base::ErrorDomain::kDevice,
+                                  std::string("retained transfer probe ") + operation,
+                                  "injected returned failure");
+    }
+    ComputeDevice& device_;
+};
+
 bool Encloses(const RetainedValue& value, long double expected, long double reference_gap) {
     if (!value.IsRepresented()) return false;
     const long double center = (static_cast<long double>(value.high) + value.low) + value.tail;
@@ -211,10 +283,43 @@ template <typename Fixture>
 
 TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInvalidRows) {
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
-    const auto allocation = device->BufferAllocationBytes();
+    const auto initial_allocation = device->BufferAllocationBytes();
     EXPECT_FALSE(RetainedCompute::Create(*device, 0));
     EXPECT_FALSE(RetainedCompute::Create(*device, 65536));
-    EXPECT_EQ(device->BufferAllocationBytes(), allocation);
+    EXPECT_EQ(device->BufferAllocationBytes(), initial_allocation);
+    TransferProbeDevice probe(*device);
+    auto observed = RetainedCompute::Create(probe, compute->Capacity());
+    ASSERT_TRUE(observed) << observed.error().Description();
+    auto& camera_compute = **observed;
+    const auto allocation = device->BufferAllocationBytes();
+    EXPECT_GT(allocation, initial_allocation);
+    EXPECT_LE(allocation, 8ull * 1024 * 1024);
+    ASSERT_EQ(probe.allocations.size(), 12U);
+    for (const auto& buffer : probe.allocations) EXPECT_EQ(buffer.usage, BufferUsage::kStorage);
+    EXPECT_TRUE(probe.writes.empty());
+    const auto full_input_bytes = probe.allocations[0].bytes;
+    const auto output_row_bytes = probe.allocations[1].bytes / camera_compute.Capacity();
+    const auto expect_transfer = [&](std::size_t rows, bool first_upload = false) {
+        ASSERT_FALSE(probe.writes.empty());
+        EXPECT_EQ(probe.writes.back().handle.value, probe.allocations[0].handle.value);
+        EXPECT_EQ(probe.writes.back().capacity, camera_compute.Capacity());
+        EXPECT_EQ(probe.writes.back().bytes,
+                  first_upload ? full_input_bytes
+                               : sizeof(std::uint32_t) + rows * sizeof(RetainedCameraInput));
+    };
+    const auto expect_read = [&](std::size_t rows) {
+        ASSERT_FALSE(probe.reads.empty());
+        EXPECT_EQ(probe.reads.back().handle.value, probe.allocations[1].handle.value);
+        EXPECT_EQ(probe.reads.back().bytes, rows * output_row_bytes);
+    };
+    const auto expect_reset_timing = [](const DispatchTiming& timing) {
+        EXPECT_EQ(timing.submit_wait_ms, 0);
+        EXPECT_EQ(timing.pipeline_setup_ms, 0);
+        EXPECT_EQ(timing.command_setup_ms, 0);
+        EXPECT_EQ(timing.cleanup_ms, 0);
+        EXPECT_EQ(timing.total_ms, 0);
+        EXPECT_FALSE(timing.pipeline_created);
+    };
     std::vector<RetainedCameraInput> inputs;
     for (const auto& fixture : sirius::test::retained_camera::kCases) {
         RetainedCameraInput input;
@@ -222,8 +327,51 @@ TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInval
             input.values[i] = RetainedValue::FromDouble(std::bit_cast<float>(fixture.input[i]));
         inputs.push_back(input);
     }
-    auto outputs = compute->Camera(inputs);
+    const auto original_inputs = inputs;
+    DispatchTiming timing{.submit_wait_ms = 1,
+                          .pipeline_setup_ms = 2,
+                          .command_setup_ms = 3,
+                          .cleanup_ms = 4,
+                          .total_ms = 10,
+                          .pipeline_created = true};
+    probe.fail_next = TransferProbeDevice::Failure::Write;
+    auto failed = camera_compute.Camera(inputs, &timing);
+    ASSERT_FALSE(failed);
+    EXPECT_EQ(failed.error().operation(), "retained transfer probe write");
+    ASSERT_NO_FATAL_FAILURE(expect_transfer(inputs.size(), true));
+    ASSERT_NO_FATAL_FAILURE(expect_reset_timing(timing));
+    EXPECT_EQ(probe.dispatch_calls, 0U);
+    EXPECT_TRUE(probe.reads.empty());
+    auto stats = camera_compute.Statistics()[0];
+    EXPECT_EQ(stats.submissions, 0U);
+    EXPECT_EQ(stats.write_buffer_bytes, 0U);
+    EXPECT_EQ(stats.read_buffer_bytes, 0U);
+
+    // A successful full write seeds the immutable program even if submission
+    // then fails. The following retry must use the active prefix.
+    probe.fail_next = TransferProbeDevice::Failure::Dispatch;
+    failed = camera_compute.Camera(inputs, &timing);
+    ASSERT_FALSE(failed);
+    EXPECT_EQ(failed.error().operation(), "retained transfer probe dispatch");
+    ASSERT_NO_FATAL_FAILURE(expect_transfer(inputs.size(), true));
+    ASSERT_NO_FATAL_FAILURE(expect_reset_timing(timing));
+    EXPECT_EQ(probe.dispatch_calls, 1U);
+    EXPECT_EQ(probe.forwarded_dispatches, 0U);
+    EXPECT_TRUE(probe.reads.empty());
+    stats = camera_compute.Statistics()[0];
+    EXPECT_EQ(stats.submissions, 0U);
+    EXPECT_EQ(stats.write_buffer_bytes, full_input_bytes);
+    EXPECT_EQ(stats.read_buffer_bytes, 0U);
+
+    auto outputs = camera_compute.Camera(inputs, &timing);
     ASSERT_TRUE(outputs) << outputs.error().Description();
+    ASSERT_NO_FATAL_FAILURE(expect_transfer(inputs.size()));
+    ASSERT_NO_FATAL_FAILURE(expect_read(inputs.size()));
+    stats = camera_compute.Statistics()[0];
+    EXPECT_EQ(stats.submissions, 1U);
+    EXPECT_EQ(stats.write_buffer_bytes, full_input_bytes + sizeof(std::uint32_t) +
+                                            inputs.size() * sizeof(RetainedCameraInput));
+    EXPECT_EQ(stats.read_buffer_bytes, inputs.size() * output_row_bytes);
     ASSERT_EQ(outputs->size(), inputs.size());
     for (std::size_t row = 0; row < inputs.size(); ++row) {
         SCOPED_TRACE(row);
@@ -233,10 +381,29 @@ TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInval
         for (auto& value : narrowed.values) value.low = 0;
         EXPECT_FALSE(CameraAgrees(narrowed, fixture));
     }
+    const auto before_read_failure = camera_compute.Statistics()[0];
+    const auto forwarded_before = probe.forwarded_dispatches;
+    probe.fail_next = TransferProbeDevice::Failure::Read;
+    failed = camera_compute.Camera(inputs, &timing);
+    ASSERT_FALSE(failed);
+    EXPECT_EQ(failed.error().operation(), "retained transfer probe read");
+    ASSERT_NO_FATAL_FAILURE(expect_transfer(inputs.size()));
+    ASSERT_NO_FATAL_FAILURE(expect_read(inputs.size()));
+    EXPECT_EQ(probe.forwarded_dispatches, forwarded_before + 1);
+    stats = camera_compute.Statistics()[0];
+    EXPECT_EQ(stats.submissions, before_read_failure.submissions + 1);
+    EXPECT_EQ(stats.submit_wait_ms, before_read_failure.submit_wait_ms + timing.submit_wait_ms);
+    EXPECT_EQ(stats.write_buffer_bytes, before_read_failure.write_buffer_bytes +
+                                            sizeof(std::uint32_t) +
+                                            inputs.size() * sizeof(RetainedCameraInput));
+    EXPECT_EQ(stats.read_buffer_bytes, before_read_failure.read_buffer_bytes);
+
     inputs[2].values[20].high = std::numeric_limits<float>::quiet_NaN();
     inputs[6].values[29] = RetainedValue::FromDouble(2);
-    outputs = compute->Camera(inputs);
+    outputs = camera_compute.Camera(inputs);
     ASSERT_TRUE(outputs) << outputs.error().Description();
+    ASSERT_NO_FATAL_FAILURE(expect_transfer(inputs.size()));
+    ASSERT_NO_FATAL_FAILURE(expect_read(inputs.size()));
     for (std::size_t row = 0; row < inputs.size(); ++row) {
         if (row == 2 || row == 6) {
             EXPECT_FALSE((*outputs)[row].valid);
@@ -246,10 +413,22 @@ TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInval
         }
     }
     inputs.resize(1);
-    outputs = compute->Camera(inputs);
+    outputs = camera_compute.Camera(inputs);
     ASSERT_TRUE(outputs) << outputs.error().Description();
+    ASSERT_NO_FATAL_FAILURE(expect_transfer(inputs.size()));
+    ASSERT_NO_FATAL_FAILURE(expect_read(inputs.size()));
     ASSERT_EQ(outputs->size(), 1U);
     EXPECT_TRUE(CameraAgrees(outputs->front(), sirius::test::retained_camera::kCases.front()));
+    // Grow after shrinking and replace previously invalid rows, preserving all
+    // original independent physical-column expectations.
+    inputs = original_inputs;
+    outputs = camera_compute.Camera(inputs);
+    ASSERT_TRUE(outputs) << outputs.error().Description();
+    ASSERT_NO_FATAL_FAILURE(expect_transfer(inputs.size()));
+    ASSERT_NO_FATAL_FAILURE(expect_read(inputs.size()));
+    ASSERT_EQ(outputs->size(), inputs.size());
+    for (std::size_t row = 0; row < inputs.size(); ++row)
+        EXPECT_TRUE(CameraAgrees((*outputs)[row], sirius::test::retained_camera::kCases[row]));
     inputs.clear();
     for (const auto& fixture : sirius::test::continuous_retained_camera::cases) {
         RetainedCameraInput input;
@@ -261,7 +440,7 @@ TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInval
     ASSERT_NE(inputs[0].values[25].low, inputs[1].values[25].low);
     ASSERT_EQ(inputs[0].values[27].high, inputs[2].values[27].high);
     ASSERT_NE(inputs[0].values[27].low, inputs[2].values[27].low);
-    outputs = compute->Camera(inputs);
+    outputs = camera_compute.Camera(inputs);
     ASSERT_TRUE(outputs) << outputs.error().Description();
     for (std::size_t row = 0; row < inputs.size(); ++row)
         EXPECT_TRUE(
@@ -271,7 +450,7 @@ TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInval
             value.low = 0;
             value.tail = 0;
         }
-    outputs = compute->Camera(inputs);
+    outputs = camera_compute.Camera(inputs);
     ASSERT_TRUE(outputs) << outputs.error().Description();
     EXPECT_FALSE(CameraAgrees((*outputs)[1], sirius::test::continuous_retained_camera::cases[1]));
     EXPECT_FALSE(CameraAgrees((*outputs)[2], sirius::test::continuous_retained_camera::cases[2]));
@@ -568,6 +747,7 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
         constexpr std::array names{"camera", "transport",  "endpoint",
                                    "dense",  "initialize", "ray_camera"};
         std::uint64_t submissions = 0, pipeline_creations = 0, target_overshoots = 0;
+        std::uint64_t write_buffer_bytes = 0, read_buffer_bytes = 0;
         double submit_wait_ms = 0, pipeline_setup_ms = 0, maximum_submit_wait_ms = 0;
         double command_setup_ms = 0, cleanup_ms = 0, dispatch_total_ms = 0;
         double write_buffer_ms = 0, read_buffer_ms = 0;
@@ -580,6 +760,10 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
             const auto dispatch = after[stage].dispatch_total_ms - before[stage].dispatch_total_ms;
             const auto write = after[stage].write_buffer_ms - before[stage].write_buffer_ms;
             const auto read = after[stage].read_buffer_ms - before[stage].read_buffer_ms;
+            const auto written_bytes =
+                after[stage].write_buffer_bytes - before[stage].write_buffer_bytes;
+            const auto read_bytes =
+                after[stage].read_buffer_bytes - before[stage].read_buffer_bytes;
             const auto creations =
                 after[stage].pipeline_creations - before[stage].pipeline_creations;
             const auto overshoots =
@@ -592,6 +776,8 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
             dispatch_total_ms += dispatch;
             write_buffer_ms += write;
             read_buffer_ms += read;
+            write_buffer_bytes += written_bytes;
+            read_buffer_bytes += read_bytes;
             pipeline_creations += creations;
             target_overshoots += overshoots;
             maximum_submit_wait_ms =
@@ -605,6 +791,8 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
             RecordProperty(key + "_dispatch_total_ms", std::to_string(dispatch));
             RecordProperty(key + "_write_buffer_ms", std::to_string(write));
             RecordProperty(key + "_read_buffer_ms", std::to_string(read));
+            RecordProperty(key + "_write_buffer_bytes", std::to_string(written_bytes));
+            RecordProperty(key + "_read_buffer_bytes", std::to_string(read_bytes));
             RecordProperty(key + "_pipeline_creations", std::to_string(creations));
             RecordProperty(key + "_target_overshoots", std::to_string(overshoots));
             if (lifetime_maxima) {
@@ -620,6 +808,8 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
         RecordProperty(prefix + "_dispatch_total_ms", std::to_string(dispatch_total_ms));
         RecordProperty(prefix + "_write_buffer_ms", std::to_string(write_buffer_ms));
         RecordProperty(prefix + "_read_buffer_ms", std::to_string(read_buffer_ms));
+        RecordProperty(prefix + "_write_buffer_bytes", std::to_string(write_buffer_bytes));
+        RecordProperty(prefix + "_read_buffer_bytes", std::to_string(read_buffer_bytes));
         RecordProperty(prefix + "_pipeline_creations", std::to_string(pipeline_creations));
         RecordProperty(prefix + "_target_overshoots", std::to_string(target_overshoots));
         const double measured_interface_ms = write_buffer_ms + dispatch_total_ms + read_buffer_ms;
@@ -657,7 +847,8 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
                    "coordination, assertions and diagnostic bookkeeping; no frame or interactive "
                    "qualification");
     RecordProperty("timing_failure_scope",
-                   "buffer timers include returned errors; dispatch phases and pipeline creations "
+                   "buffer timers include returned errors; buffer byte counters include only "
+                   "successful spans; dispatch phases and pipeline creations "
                    "require device Dispatch success with valid submission timing; read failure "
                    "retains successful dispatch observations; failed dispatch partial phases are "
                    "not accumulated");

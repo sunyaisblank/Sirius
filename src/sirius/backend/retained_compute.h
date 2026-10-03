@@ -96,7 +96,7 @@ class RetainedCompute {
     struct StageStats {
         // Host wall-clock intervals, not GPU timestamps. Dispatch phases and
         // creation counts cover successful device Dispatch calls with valid
-        // submission timing. Buffer totals include returned failing calls;
+        // submission timing. Buffer timing totals include returned failing calls;
         // a later read failure does not undo a successful dispatch observation.
         std::uint64_t submissions = 0;
         double submit_wait_ms = 0;
@@ -107,6 +107,10 @@ class RetainedCompute {
         double dispatch_total_ms = 0;  // Inclusive of the four dispatch phases above.
         double write_buffer_ms = 0;
         double read_buffer_ms = 0;
+        // Bytes in successfully completed host transfers; failing calls remain
+        // in the wall-clock totals above but do not claim transferred bytes.
+        std::uint64_t write_buffer_bytes = 0;
+        std::uint64_t read_buffer_bytes = 0;
         std::uint64_t pipeline_creations = 0;  // Not a driver pipeline-cache hit counter.
         std::uint64_t target_overshoots = 0;
     };
@@ -140,6 +144,8 @@ class RetainedCompute {
         KernelHandle kernel;
         std::array<BufferHandle, 2> buffers;
         std::vector<std::uint32_t> input, output;
+        std::size_t input_words_per_row = 0;
+        bool program_uploaded = false;
         StageStats stats;
     };
     [[nodiscard]] base::Expected<void> Dispatch(Stage& stage, std::size_t active_rows,
