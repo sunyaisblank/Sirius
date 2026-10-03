@@ -4,6 +4,7 @@
 // CPU/Vulkan work or publish a rendered frame.
 
 #include "sirius/app/cli/render_command.h"
+#include "sirius/app/config/session_config_adapter.h"
 #include "sirius/app/viewer/interactive_viewer.h"
 
 #include <gtest/gtest.h>
@@ -16,6 +17,7 @@
 
 #include <atomic>
 #include <chrono>
+#include <cmath>
 #include <filesystem>
 #include <thread>
 
@@ -24,37 +26,85 @@ namespace sirius::app::test {
 constexpr const char* kStopSentinel = "--stop-before-render";
 
 TEST(RenderCommandParse, ExplicitGpuRequestRunsVulkanWhenDevicePresent) {
+    sirius::test::ScopedEnvironmentVariable precision("SIRIUS_PRECISION", "fp32");
     RenderCommand cmd;
     GlobalOptions globals;
     SiriusConfig config = SiriusConfig::Defaults();
 
-    // --gpu is wired to the Vulkan render path: with a device present it renders
-    // a small Kerr scene (exit 0); with none it declines cleanly (exit 1). It
-    // never silently falls back to CPU.
-    bool device_present = false;
+    // --gpu is wired to Vulkan: the selected device must admit retained Kerr
+    // arithmetic before it can render. Enumeration alone cannot turn a factory
+    // refusal into success, and an explicit request never falls back to CPU.
+    bool admitted = false;
 #ifdef SIRIUS_HAS_VULKAN_BACKEND
     if (auto devices = backend::EnumerateVulkanDevices();
         devices.has_value() && !devices->empty()) {
-        device_present = true;
+        const auto selected = backend::ResolveVulkanDeviceIndex(*devices);
+        ASSERT_TRUE(selected) << selected.error().Description();
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+        admitted = (*devices)[*selected].preserves_fp32_denormals &&
+                   (*devices)[*selected].rounds_fp32_to_nearest;
+#endif
     }
 #endif
 #ifdef SIRIUS_TEST_REQUIRE_VULKAN_RUNTIME
-    ASSERT_TRUE(device_present) << "the required runtime profile has no Vulkan device";
+    ASSERT_TRUE(admitted) << "the required runtime profile cannot admit retained Kerr rendering";
 #endif
     const auto output = std::filesystem::temp_directory_path() / "sirius_gpu_parse.ppm";
     std::filesystem::remove(output);
     const int rc = cmd.Execute(
         {"--gpu", "-m", "Kerr", "-w", "128", "-h", "128", "-s", "1", "-o", output.string()},
         globals, config);
-    EXPECT_EQ(rc, device_present ? 0 : 1);
+    EXPECT_EQ(rc, admitted ? 0 : 1);
     EXPECT_EQ(config.backend.preferred, "vulkan");
-    if (device_present) {
+    if (admitted) {
         ASSERT_TRUE(std::filesystem::exists(output));
         EXPECT_GT(std::filesystem::file_size(output), 1024u);
     } else {
         EXPECT_FALSE(std::filesystem::exists(output));
     }
     std::filesystem::remove(output);
+}
+
+TEST(RenderSessionProbe, BackendAutoPublishesCpuWithNoIcd) {
+    sirius::test::ScopedEnvironmentVariable icd("VK_ICD_FILENAMES", "/sirius/missing-icd.json");
+    sirius::test::ScopedEnvironmentVariable drivers("VK_DRIVER_FILES", "/sirius/missing-icd.json");
+    sirius::test::ScopedEnvironmentVariable additional("VK_ADD_DRIVER_FILES", "");
+    sirius::test::ScopedEnvironmentVariable selector("SIRIUS_VULKAN_DEVICE", nullptr);
+    sirius::test::ScopedEnvironmentVariable precision("SIRIUS_PRECISION", "fp32");
+    auto request = SiriusConfig::Defaults();
+    request.metric.name = "Minkowski";
+    request.metric.mass = 0;
+    request.disk_enabled = false;
+    request.render.samples_per_pixel = 1;
+    const auto automatic = MakeSessionConfig(request);
+    ASSERT_TRUE(automatic) << automatic.error().Description();
+    ASSERT_EQ(automatic->backend, render::RenderBackend::Cpu);
+    // Operator dimensions retain their schema bounds. This typed in-memory
+    // session narrows only the publication witness to four straight flat rays.
+    auto config = *automatic;
+    config.width = config.height = 2;
+    config.write_output = false;
+    config.enable_bloom = false;
+    render::RenderSession session;
+    ASSERT_TRUE(session.Configure(config));
+    unsigned publications = 0;
+    session.SetProgressCallback([&](float, int complete, int, double) {
+        if (complete > 0) ++publications;
+    });
+    ASSERT_EQ(session.Execute(), render::SessionState::Complete);
+    EXPECT_GT(publications, 0U);
+    const auto pixels = session.GetDisplayBuffer().SnapshotFloatData();
+    ASSERT_EQ(pixels.size(), 16U);
+    float total_radiance = 0;
+    for (unsigned pixel = 0; pixel < 4; ++pixel) {
+        for (unsigned channel = 0; channel < 3; ++channel) {
+            EXPECT_TRUE(std::isfinite(pixels[4 * pixel + channel]));
+            EXPECT_GE(pixels[4 * pixel + channel], 0);
+            total_radiance += pixels[4 * pixel + channel];
+        }
+        EXPECT_EQ(pixels[4 * pixel + 3], 1);
+    }
+    EXPECT_GT(total_radiance, 0);
 }
 
 TEST(RenderCommandParse, BackendVulkanDeclinesMetricOffTheRenderPath) {

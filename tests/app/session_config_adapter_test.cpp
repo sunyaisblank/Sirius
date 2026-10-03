@@ -6,6 +6,8 @@
 #include "sirius/render/session/render_session.h"
 #include "sirius/render/trace_domain.h"
 
+#include "support/scoped_environment.h"
+
 #ifdef SIRIUS_HAS_VULKAN_BACKEND
 #include "sirius/backend/device.h"
 #endif
@@ -14,6 +16,8 @@
 
 #include <filesystem>
 #include <numbers>
+#include <string>
+#include <string_view>
 
 namespace sirius::app::test {
 
@@ -308,6 +312,8 @@ TEST(RenderSessionProbe, FilmFinishPresetsRetainUnspecifiedPresetControls) {
 }
 
 TEST(RenderSessionProbe, BackendAutoResolvesByDeviceRegistryAndCapabilities) {
+    sirius::test::ScopedEnvironmentVariable selector("SIRIUS_VULKAN_DEVICE", nullptr);
+    sirius::test::ScopedEnvironmentVariable precision("SIRIUS_PRECISION", "fp32");
     SiriusConfig config = SiriusConfig::Defaults();
     config.metric.name = "Kerr";
     config.backend.preferred = "cpu";
@@ -317,10 +323,42 @@ TEST(RenderSessionProbe, BackendAutoResolvesByDeviceRegistryAndCapabilities) {
     config.backend.preferred = "auto";
 #ifdef SIRIUS_HAS_VULKAN_BACKEND
     const auto devices = backend::EnumerateVulkanDevices();
-    const bool device_present = devices.has_value() && !devices->empty();
-    EXPECT_EQ(MakeSessionConfig(config)->backend,
-              device_present ? render::RenderBackend::Vulkan : render::RenderBackend::Cpu)
-        << "auto must follow device presence when the full sampled scene is represented";
+    for (const char* mode : {"fp32", "fp32-comp", "fp64"}) {
+        sirius::test::ScopedEnvironmentVariable requested("SIRIUS_PRECISION", mode);
+        bool admitted = false;
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+        if (devices && !devices->empty()) {
+            const auto& device = devices->front();
+            admitted = device.preserves_fp32_denormals && device.rounds_fp32_to_nearest &&
+                       (std::string_view(mode) != "fp64" ||
+                        (device.supports_fp64 && device.rounds_fp64_to_nearest));
+        }
+#endif
+        const auto adapted = MakeSessionConfig(config);
+        ASSERT_TRUE(adapted) << adapted.error().Description();
+        EXPECT_EQ(adapted->backend,
+                  admitted ? render::RenderBackend::Vulkan : render::RenderBackend::Cpu)
+            << mode << ": enumeration alone does not admit the retained arithmetic";
+    }
+
+    // Legacy metrics retain their scalar precision admission: their fp32 route
+    // does not require the retained expansion's subnormal/rounding controls.
+    config.metric.name = "Morris-Thorne";
+    config.metric.mass = 0;
+    config.disk_enabled = false;
+    for (const char* mode : {"fp32", "fp32-comp", "fp64"}) {
+        sirius::test::ScopedEnvironmentVariable requested("SIRIUS_PRECISION", mode);
+        const bool admitted = devices && !devices->empty() &&
+                              (std::string_view(mode) != "fp64" || devices->front().supports_fp64);
+        const auto adapted = MakeSessionConfig(config);
+        ASSERT_TRUE(adapted) << adapted.error().Description();
+        EXPECT_EQ(adapted->backend,
+                  admitted ? render::RenderBackend::Vulkan : render::RenderBackend::Cpu)
+            << "legacy precision admission changed for " << mode;
+    }
+    config = SiriusConfig::Defaults();
+    config.metric.name = "Kerr";
+    config.backend.preferred = "auto";
 
     config.volumetric.enabled = true;
     config.volumetric.samples = 129;
@@ -337,6 +375,64 @@ TEST(RenderSessionProbe, BackendAutoResolvesByDeviceRegistryAndCapabilities) {
     EXPECT_EQ(MakeSessionConfig(config)->backend, render::RenderBackend::Cpu)
         << "auto must resolve CPU when the Vulkan backend is not compiled in";
 #endif
+}
+
+TEST(RenderSessionProbe, BackendAutoPreservesStrictDeviceAndPrecisionRequests) {
+    sirius::test::ScopedEnvironmentVariable precision("SIRIUS_PRECISION", "fp32");
+    SiriusConfig config = SiriusConfig::Defaults();
+    config.metric.name = "Kerr";
+    config.backend.preferred = "auto";
+#ifdef SIRIUS_HAS_VULKAN_BACKEND
+    const auto devices = backend::EnumerateVulkanDevices();
+    ASSERT_TRUE(devices) << devices.error().Description();
+    for (const auto& invalid :
+         {std::string("-1"), std::string("1tail"), std::to_string(devices->size())}) {
+        sirius::test::ScopedEnvironmentVariable selector("SIRIUS_VULKAN_DEVICE", invalid.c_str());
+        const auto adapted = MakeSessionConfig(config);
+        ASSERT_FALSE(adapted) << "auto silently ignored selector " << invalid;
+        EXPECT_EQ(adapted.error().domain(), base::ErrorDomain::kConfiguration);
+        EXPECT_EQ(adapted.error().operation(), "select Vulkan device");
+    }
+    {
+        sirius::test::ScopedEnvironmentVariable selector("SIRIUS_VULKAN_DEVICE", nullptr);
+        sirius::test::ScopedEnvironmentVariable invalid_precision("SIRIUS_PRECISION", "fp128");
+        const auto adapted = MakeSessionConfig(config);
+        ASSERT_FALSE(adapted);
+        EXPECT_EQ(adapted.error().domain(), base::ErrorDomain::kConfiguration);
+        EXPECT_EQ(adapted.error().operation(), "select precision rung");
+    }
+#endif
+    // Forced CPU and CPU-only scenes do not consult unrelated GPU controls.
+    sirius::test::ScopedEnvironmentVariable selector("SIRIUS_VULKAN_DEVICE", "invalid");
+    sirius::test::ScopedEnvironmentVariable invalid_precision("SIRIUS_PRECISION", "fp128");
+    config.backend.preferred = "cpu";
+    const auto pinned = MakeSessionConfig(config);
+    ASSERT_TRUE(pinned) << pinned.error().Description();
+    EXPECT_EQ(pinned->backend, render::RenderBackend::Cpu);
+    config.backend.preferred = "auto";
+    config.metric.name = "Reissner-Nordstrom";
+    config.disk_enabled = false;
+    const auto cpu_only = MakeSessionConfig(config);
+    ASSERT_TRUE(cpu_only) << cpu_only.error().Description();
+    EXPECT_EQ(cpu_only->backend, render::RenderBackend::Cpu);
+}
+
+TEST(RenderSessionProbe, BackendAutoUsesCpuWithNoIcdAndKeepsExplicitVulkanIntent) {
+    sirius::test::ScopedEnvironmentVariable icd("VK_ICD_FILENAMES", "/sirius/missing-icd.json");
+    sirius::test::ScopedEnvironmentVariable drivers("VK_DRIVER_FILES", "/sirius/missing-icd.json");
+    sirius::test::ScopedEnvironmentVariable additional("VK_ADD_DRIVER_FILES", "");
+    sirius::test::ScopedEnvironmentVariable selector("SIRIUS_VULKAN_DEVICE", nullptr);
+    sirius::test::ScopedEnvironmentVariable precision("SIRIUS_PRECISION", "fp32");
+    SiriusConfig config = SiriusConfig::Defaults();
+    config.metric.name = "Kerr";
+    config.backend.preferred = "auto";
+    const auto automatic = MakeSessionConfig(config);
+    ASSERT_TRUE(automatic) << automatic.error().Description();
+    EXPECT_EQ(automatic->backend, render::RenderBackend::Cpu);
+    config.backend.preferred = "vulkan";
+    const auto explicit_gpu = MakeSessionConfig(config);
+    ASSERT_TRUE(explicit_gpu) << explicit_gpu.error().Description();
+    EXPECT_EQ(explicit_gpu->backend, render::RenderBackend::Vulkan);
 }
 
 TEST(RenderSessionProbe, ConfigurationConversionPreservesObserverAndDiskControls) {

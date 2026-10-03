@@ -36,6 +36,10 @@ enum class PrecisionRung {
                // binary64 legacy metrics. Requires shaderFloat64.
 };
 
+// Parse SIRIUS_PRECISION without substituting a different requested mode.
+// Automatic admission and the render boundary share this configuration authority.
+[[nodiscard]] base::Expected<PrecisionRung> ResolveVulkanPrecisionRequest();
+
 // Independent residency and submission caps. Expensive workloads admit at most
 // 256 active fp32 beam/catalogue trajectories in 64x4 bands; fp64 and heavy
 // compensated fp32 retain 64x1 pending wider physical evidence. Ordinary fp32

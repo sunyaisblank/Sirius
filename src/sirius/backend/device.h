@@ -11,8 +11,10 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <span>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace sirius::backend {
@@ -60,6 +62,18 @@ struct DeviceInfo {
     bool rounds_fp32_to_nearest = false;
     bool rounds_fp64_to_nearest = false;
 };
+
+// Retained camera/transport expansions require these arithmetic controls even
+// with binary64-assisted products. Enumeration alone does not admit this route.
+// The factory and automatic backend selection use the same capability contract.
+[[nodiscard]] inline std::optional<std::string_view> RetainedArithmeticIssue(
+    const DeviceInfo& device, bool fp64_products = false) {
+    if (!device.preserves_fp32_denormals || !device.rounds_fp32_to_nearest)
+        return "device lacks binary32 subnormal preservation or round-to-nearest control";
+    if (fp64_products && (!device.supports_fp64 || !device.rounds_fp64_to_nearest))
+        return "device lacks binary64 products or round-to-nearest control";
+    return std::nullopt;
+}
 
 // Opaque per-device handles; values are indices into the owning device's
 // tables and are meaningless across devices.

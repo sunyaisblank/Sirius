@@ -57,12 +57,8 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
     if (!std::isfinite(dispatch_target_ms) || dispatch_target_ms < 0)
         return Fail(ErrorDomain::kDevice, "create retained compute stages",
                     "invalid dispatch target");
-    if (!device.Info().preserves_fp32_denormals || !device.Info().rounds_fp32_to_nearest)
-        return Fail(ErrorDomain::kDevice, "create retained compute stages",
-                    "device lacks binary32 subnormal preservation or round-to-nearest control");
-    if (fp64_products && (!device.Info().supports_fp64 || !device.Info().rounds_fp64_to_nearest))
-        return Fail(ErrorDomain::kDevice, "create retained compute stages",
-                    "device lacks binary64 products or round-to-nearest control");
+    if (const auto issue = RetainedArithmeticIssue(device.Info(), fp64_products))
+        return Fail(ErrorDomain::kDevice, "create retained compute stages", std::string(*issue));
     auto result = std::unique_ptr<RetainedCompute>(new RetainedCompute(device, capacity));
     result->dispatch_target_ms_ = dispatch_target_ms;
     const auto create = [&](Stage& stage, std::span<const std::uint32_t> code,

@@ -955,6 +955,8 @@ set_tests_properties(
     RenderSessionProbe.LowLevelTracerRejectsUnownedOrPartialFeatureControls
     RenderSessionProbe.FilmFinishPresetsRetainUnspecifiedPresetControls
     RenderSessionProbe.BackendAutoResolvesByDeviceRegistryAndCapabilities
+    RenderSessionProbe.BackendAutoPreservesStrictDeviceAndPrecisionRequests
+    RenderSessionProbe.BackendAutoUsesCpuWithNoIcdAndKeepsExplicitVulkanIntent
     RenderSessionProbe.ConfigurationConversionPreservesObserverAndDiskControls
     RenderSessionProbe.InMemoryPreviewRejectsInactiveOutputPath
     PROPERTIES LABELS "Mandatory;Operational"
@@ -970,6 +972,11 @@ set_tests_properties(
 set_tests_properties(
     RetainedCameraProgram.Fp32CompletePhysicalLaunchAndRefusals
     RetainedCameraProgram.CompensatedCompletePhysicalLaunchAndRefusals
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    RetainedComputeAdmission.ArithmeticRefusalPrecedesKernelLoading
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
@@ -1288,6 +1295,8 @@ set_tests_properties(
     VulkanBackend.PortabilityDeviceEnablesSubsetWithoutChangingPrecisionOrQueues
     VulkanBackend.PortabilityEnumerationErrorsDeclineBeforeCreation
     VulkanBackend.PortabilityCreationFailuresRemainExplicit
+    VulkanBackend.PipelineCacheImportRequiresExactDeviceIdentityAndHeader
+    VulkanBackend.PipelineCacheImportRejectsOversizeWithoutTruncation
     VulkanBackend.KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions
     VulkanBackend.EnumerationReportsInsteadOfThrowing
     VulkanBackend.BufferAllocationLimitCountsActualResidencyAndPreservesExistingBuffers
@@ -1493,6 +1502,7 @@ set_tests_properties(
     RenderCommandParse.ReusedCommandDoesNotRetainAnEarlierGpuRequest
     RenderEvidence.DeviceIdentityEscapesJsonWithoutChangingItsValue
     RenderEvidence.RetainedWireRecordsFeedAttestationControls
+    RenderSessionProbe.BackendAutoPublishesCpuWithNoIcd
     RenderSessionProbe.CancellationInterruptsAnActivePrivateRayBeforePublication
     RenderSessionProbe.CompletionCallbackCanReenterLifecycleWithoutDeadlock
     RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr

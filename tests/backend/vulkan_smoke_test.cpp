@@ -221,6 +221,55 @@ TEST(VulkanBackend, PortabilityCreationFailuresRemainExplicit) {
     EXPECT_EQ(probe.creates, 2);
 }
 
+TEST(VulkanBackend, PipelineCacheImportRequiresExactDeviceIdentityAndHeader) {
+    using sirius::backend::detail::VulkanPipelineCacheDataCompatible;
+    // Fixed version-one wire header, not a host-structure reinterpretation.
+    const std::array<std::byte, 32> header{
+        std::byte{32}, std::byte{0},  std::byte{0},    std::byte{0},    std::byte{1},
+        std::byte{0},  std::byte{0},  std::byte{0},    std::byte{0x02}, std::byte{0x10},
+        std::byte{0},  std::byte{0},  std::byte{0xbf}, std::byte{0x15}, std::byte{0},
+        std::byte{0},  std::byte{0},  std::byte{1},    std::byte{2},    std::byte{3},
+        std::byte{4},  std::byte{5},  std::byte{6},    std::byte{7},    std::byte{8},
+        std::byte{9},  std::byte{10}, std::byte{11},   std::byte{12},   std::byte{13},
+        std::byte{14}, std::byte{15},
+    };
+    const VkPhysicalDeviceProperties properties{
+        .vendorID = 0x1002,
+        .deviceID = 0x15bf,
+        .pipelineCacheUUID = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15},
+    };
+    ASSERT_TRUE(VulkanPipelineCacheDataCompatible(header, properties));
+    for (std::size_t length = 0; length < header.size(); ++length)
+        EXPECT_FALSE(
+            VulkanPipelineCacheDataCompatible(std::span(header).first(length), properties));
+    for (const std::size_t changed : {0, 4, 8, 12, 16, 31}) {
+        auto incompatible = header;
+        incompatible[changed] ^= std::byte{1};
+        EXPECT_FALSE(VulkanPipelineCacheDataCompatible(incompatible, properties)) << changed;
+    }
+    auto big_endian = header;
+    big_endian[0] = std::byte{0};
+    big_endian[3] = std::byte{32};
+    EXPECT_FALSE(VulkanPipelineCacheDataCompatible(big_endian, properties));
+    auto extended_header = header;
+    extended_header[0] = std::byte{33};
+    EXPECT_FALSE(VulkanPipelineCacheDataCompatible(extended_header, properties));
+}
+
+TEST(VulkanBackend, PipelineCacheImportRejectsOversizeWithoutTruncation) {
+    using sirius::backend::detail::kVulkanPipelineCacheBlobLimit;
+    using sirius::backend::detail::VulkanPipelineCacheDataCompatible;
+    const VkPhysicalDeviceProperties properties{};
+    std::vector<std::byte> data(kVulkanPipelineCacheBlobLimit + 1);
+    data[0] = std::byte{32};
+    data[4] = std::byte{1};
+    EXPECT_TRUE(VulkanPipelineCacheDataCompatible(
+        std::span(data).first(kVulkanPipelineCacheBlobLimit), properties));
+    EXPECT_FALSE(VulkanPipelineCacheDataCompatible(data, properties));
+    // Compatibility controls touch only the guard, never submit fabricated
+    // opaque driver data. Production imports exclusively Vulkan-exported bytes.
+}
+
 TEST(VulkanBackend, KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions) {
     using sirius::backend::ValidateVulkanKernelPrecision;
     // Independent SPIR-V wire fixtures: Shader capability followed by Float64.
@@ -497,6 +546,9 @@ TEST(VulkanBackend, DeviceSelectionIsStrictAndRangeChecked) {
         const auto selected = ResolveVulkanDeviceIndex(devices);
         ASSERT_TRUE(selected.has_value()) << selected.error().Description();
         EXPECT_EQ(*selected, 0u);
+        const auto absent = ResolveVulkanDeviceIndex({});
+        ASSERT_FALSE(absent);
+        EXPECT_EQ(absent.error().domain(), sirius::base::ErrorDomain::kDevice);
     }
     {
         ScopedEnvironmentVariable selector("SIRIUS_VULKAN_DEVICE", "1");
@@ -508,7 +560,14 @@ TEST(VulkanBackend, DeviceSelectionIsStrictAndRangeChecked) {
         ScopedEnvironmentVariable selector("SIRIUS_VULKAN_DEVICE", invalid);
         const auto selected = ResolveVulkanDeviceIndex(devices);
         EXPECT_FALSE(selected.has_value()) << invalid;
+        const auto absent = ResolveVulkanDeviceIndex({});
+        ASSERT_FALSE(absent);
+        EXPECT_EQ(absent.error().domain(), sirius::base::ErrorDomain::kConfiguration);
     }
+    ScopedEnvironmentVariable selector("SIRIUS_VULKAN_DEVICE", "0");
+    const auto absent = ResolveVulkanDeviceIndex({});
+    ASSERT_FALSE(absent);
+    EXPECT_EQ(absent.error().domain(), sirius::base::ErrorDomain::kConfiguration);
 }
 
 }  // namespace

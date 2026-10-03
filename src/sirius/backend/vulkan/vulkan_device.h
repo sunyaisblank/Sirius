@@ -22,6 +22,23 @@ namespace sirius::backend {
 [[nodiscard]] base::Expected<void> ValidateVulkanKernelPrecision(
     std::span<const std::uint32_t> spirv, bool supports_fp64);
 
+namespace detail {
+// Bound the one process-lived serialized blob, not driver-internal cache memory.
+inline constexpr std::size_t kVulkanPipelineCacheBlobLimit = 32 * 1024 * 1024;
+[[nodiscard]] bool VulkanPipelineCacheDataCompatible(std::span<const std::byte> data,
+                                                     const VkPhysicalDeviceProperties& properties);
+}  // namespace detail
+
+struct VulkanPipelineCacheStats {
+    bool enabled = false;
+    VkResult creation_result = VK_SUCCESS;
+    std::size_t imported_bytes = 0;
+    std::size_t available_bytes = 0;
+    std::size_t exported_bytes = 0;
+    bool export_discarded = false;
+    bool import_discarded = false;
+};
+
 class VulkanDevice final : public ComputeDevice {
   public:
     // Use CreateVulkanDevice(); this is public only for std::make_unique.
@@ -34,6 +51,13 @@ class VulkanDevice final : public ComputeDevice {
     VulkanDevice& operator=(VulkanDevice&&) = delete;
 
     [[nodiscard]] const DeviceInfo& Info() const noexcept override { return info_; }
+
+    [[nodiscard]] VulkanPipelineCacheStats PipelineCacheStatistics() const noexcept {
+        return pipeline_cache_stats_;
+    }
+    // Caller serializes this with other device operations, as with Dispatch.
+    // Publish a complete bounded snapshot for later fresh devices; no disk I/O.
+    [[nodiscard]] base::Expected<VulkanPipelineCacheStats> SnapshotPipelineCache();
 
     [[nodiscard]] base::Expected<KernelHandle> LoadKernel(
         std::span<const std::uint32_t> spirv) override;
@@ -85,6 +109,7 @@ class VulkanDevice final : public ComputeDevice {
 
     [[nodiscard]] base::Expected<Pipeline*> GetOrCreatePipeline(
         KernelHandle kernel, std::span<const BufferHandle> buffers, bool* created);
+    void InitialisePipelineCache();
 
     VkInstance instance_ = VK_NULL_HANDLE;
     VkPhysicalDevice physical_ = VK_NULL_HANDLE;
@@ -93,6 +118,10 @@ class VulkanDevice final : public ComputeDevice {
     std::uint32_t queue_family_ = 0;
     VkCommandPool command_pool_ = VK_NULL_HANDLE;
     VkDescriptorPool descriptor_pool_ = VK_NULL_HANDLE;
+    VkPipelineCache pipeline_cache_ = VK_NULL_HANDLE;
+    VkPhysicalDeviceProperties pipeline_cache_properties_{};
+    VulkanPipelineCacheStats pipeline_cache_stats_;
+    bool pipeline_cache_modified_ = false;
     DeviceInfo info_;
 
     std::vector<VkShaderModule> kernels_;

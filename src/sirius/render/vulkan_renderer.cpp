@@ -149,32 +149,17 @@ struct KernelScene {
 // SIRIUS_PRECISION=fp64 selects the double-precision trace kernel
 // (trace_fp64.spv); it requires the device to report shaderFloat64 and
 // declines loudly otherwise, never silently running fp32 (docs/STYLE.md
-// section 4). SIRIUS_PRECISION=fp32-comp selects the compensated rung
-// (trace_fp32comp.spv, Kahan state accumulation), which any device runs.
-// Unset keeps the plain fp32 rung, the default: fp64 costs multiples of fp32
-// throughput on consumer GPUs and the fp32 path passes the parity gate. Any
-// other value is a loud error, not a silent default.
+// section 4). fp32-comp selects compensated legacy accumulation; retained
+// metric transport shares the expanded binary32 route with fp32. Both retained
+// modes additionally require the factory's arithmetic controls. Unset keeps
+// the fp32 default. Unknown requests are configuration errors.
 [[nodiscard]] Expected<PrecisionRung> SelectPrecisionRung(bool device_supports_fp64) {
-    const char* precision = std::getenv("SIRIUS_PRECISION");
-    if (precision == nullptr || *precision == '\0') {
-        return PrecisionRung::Fp32;
-    }
-    const std::string requested(precision);
-    if (requested == "fp32") {
-        return PrecisionRung::Fp32;
-    }
-    if (requested == "fp32-comp") {
-        return PrecisionRung::Fp32Comp;
-    }
-    if (requested == "fp64") {
-        if (!device_supports_fp64) {
-            return Fail(ErrorDomain::kDevice, "select precision rung",
-                        "SIRIUS_PRECISION=fp64 requested but the device lacks shaderFloat64");
-        }
-        return PrecisionRung::Fp64;
-    }
-    return Fail(ErrorDomain::kDevice, "select precision rung",
-                "unknown SIRIUS_PRECISION '" + requested + "' (accepted: fp32, fp32-comp, fp64)");
+    auto requested = ResolveVulkanPrecisionRequest();
+    if (!requested) return std::unexpected(requested.error());
+    if (*requested == PrecisionRung::Fp64 && !device_supports_fp64)
+        return Fail(ErrorDomain::kDevice, "select precision rung",
+                    "SIRIUS_PRECISION=fp64 requested but the device lacks shaderFloat64");
+    return *requested;
 }
 
 [[nodiscard]] const char* RungName(PrecisionRung rung) {
@@ -490,6 +475,17 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
 #endif
 
 }  // namespace
+
+Expected<PrecisionRung> ResolveVulkanPrecisionRequest() {
+    const char* precision = std::getenv("SIRIUS_PRECISION");
+    if (precision == nullptr || *precision == '\0') return PrecisionRung::Fp32;
+    const std::string requested(precision);
+    if (requested == "fp32") return PrecisionRung::Fp32;
+    if (requested == "fp32-comp") return PrecisionRung::Fp32Comp;
+    if (requested == "fp64") return PrecisionRung::Fp64;
+    return Fail(ErrorDomain::kConfiguration, "select precision rung",
+                "unknown SIRIUS_PRECISION '" + requested + "' (accepted: fp32, fp32-comp, fp64)");
+}
 
 VulkanDispatchLimits ResolveVulkanDispatchLimits(PrecisionRung precision, bool ray_bundles,
                                                  bool point_starfield) {

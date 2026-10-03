@@ -53,6 +53,7 @@ SUITE_LABELS = {
     "RetainedCameraProgram": MANDATORY,
     "RetainedArithmetic": MANDATORY,
     "RetainedComputeTest": MANDATORY,
+    "RetainedComputeAdmission": MANDATORY,
     "RetainedValue": MANDATORY,
     "PointSourceTransfer": MANDATORY,
     "SourceSkyDifferential": MANDATORY,

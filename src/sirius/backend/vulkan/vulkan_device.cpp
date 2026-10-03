@@ -9,6 +9,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <format>
+#include <mutex>
+#include <new>
 #include <string_view>
 #include <utility>
 
@@ -27,6 +29,19 @@ using base::Fail;
 // Headers on the measured toolchain are Vulkan 1.3 while the loader is 1.4;
 // requesting 1.3 is compatible with both (specification section 1.7 evidence).
 constexpr std::uint32_t kApiVersion = VK_MAKE_API_VERSION(0, 1, 3, 0);
+
+// One bounded serialized blob survives fresh render devices. Vulkan objects and
+// buffers retain their existing per-device lifetime. Concurrent device exports
+// replace this slot; they cannot accumulate entries for different adapters.
+struct ProcessPipelineCache {
+    std::mutex mutex;
+    std::vector<std::byte> data;
+};
+
+ProcessPipelineCache& PipelineCacheStore() {
+    static ProcessPipelineCache cache;
+    return cache;
+}
 
 [[nodiscard]] std::string VkResultText(VkResult result) {
     return std::format("VkResult {}", static_cast<int>(result));
@@ -257,6 +272,27 @@ Expected<VkDevice> CreateDeviceWithPortability(VkPhysicalDevice physical,
 
 }  // namespace detail
 
+bool detail::VulkanPipelineCacheDataCompatible(std::span<const std::byte> data,
+                                               const VkPhysicalDeviceProperties& properties) {
+    // Version-one fields are tightly packed little-endian bytes, independent of
+    // the host's byte order or C structure packing. Only Vulkan-exported bytes
+    // reach the driver; this guard discards incompatible optimization data.
+    // https://docs.vulkan.org/refpages/latest/refpages/source/VkPipelineCacheHeaderVersionOne.html
+    constexpr std::size_t kHeaderBytes = 32;
+    if (data.size() < kHeaderBytes || data.size() > kVulkanPipelineCacheBlobLimit) return false;
+    const auto word = [&](std::size_t offset) {
+        std::uint32_t value = 0;
+        for (std::size_t byte = 0; byte < 4; ++byte)
+            value |= std::uint32_t(std::to_integer<unsigned char>(data[offset + byte]))
+                     << (8 * byte);
+        return value;
+    };
+    return word(0) == kHeaderBytes &&
+           word(4) == static_cast<std::uint32_t>(VK_PIPELINE_CACHE_HEADER_VERSION_ONE) &&
+           word(8) == properties.vendorID && word(12) == properties.deviceID &&
+           std::memcmp(data.data() + 16, properties.pipelineCacheUUID, VK_UUID_SIZE) == 0;
+}
+
 Expected<std::vector<DeviceInfo>> EnumerateVulkanDevices() {
     auto instance = CreateInstance();
     if (!instance) {
@@ -279,11 +315,11 @@ Expected<std::vector<DeviceInfo>> EnumerateVulkanDevices() {
 }
 
 Expected<std::size_t> ResolveVulkanDeviceIndex(std::span<const DeviceInfo> devices) {
-    if (devices.empty()) {
-        return Fail(ErrorDomain::kDevice, "select Vulkan device", "no devices were enumerated");
-    }
     const char* raw = std::getenv("SIRIUS_VULKAN_DEVICE");
     if (raw == nullptr || *raw == '\0') {
+        if (devices.empty()) {
+            return Fail(ErrorDomain::kDevice, "select Vulkan device", "no devices were enumerated");
+        }
         return std::size_t{0};
     }
 
@@ -366,6 +402,8 @@ Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {
     device->device_ = *logical;
     vkGetDeviceQueue(device->device_, family, 0, &device->queue_);
 
+    device->InitialisePipelineCache();
+
     const VkCommandPoolCreateInfo pool_info{
         .sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
         .flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT,
@@ -402,6 +440,14 @@ Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {
 VulkanDevice::~VulkanDevice() {
     if (device_ != VK_NULL_HANDLE) {
         vkDeviceWaitIdle(device_);
+        // Export while the owning device is alive and no operations can modify
+        // its cache. A failed optimization snapshot must not escape a destructor.
+        if (pipeline_cache_modified_) {
+            try {
+                (void)SnapshotPipelineCache();
+            } catch (const std::bad_alloc&) {
+            }
+        }
         for (auto& [key, pipeline] : pipelines_) {
             vkDestroyPipeline(device_, pipeline.pipeline, nullptr);
             vkDestroyPipelineLayout(device_, pipeline.layout, nullptr);
@@ -414,6 +460,8 @@ VulkanDevice::~VulkanDevice() {
             vkDestroyBuffer(device_, buffer.buffer, nullptr);
             vkFreeMemory(device_, buffer.memory, nullptr);
         }
+        if (pipeline_cache_ != VK_NULL_HANDLE)
+            vkDestroyPipelineCache(device_, pipeline_cache_, nullptr);
         vkDestroyDescriptorPool(device_, descriptor_pool_, nullptr);
         vkDestroyCommandPool(device_, command_pool_, nullptr);
         vkDestroyDevice(device_, nullptr);
@@ -421,6 +469,89 @@ VulkanDevice::~VulkanDevice() {
     if (instance_ != VK_NULL_HANDLE) {
         vkDestroyInstance(instance_, nullptr);
     }
+}
+
+void VulkanDevice::InitialisePipelineCache() {
+    vkGetPhysicalDeviceProperties(physical_, &pipeline_cache_properties_);
+    std::vector<std::byte> seed;
+    try {
+        auto& stored = PipelineCacheStore();
+        std::lock_guard lock(stored.mutex);
+        if (detail::VulkanPipelineCacheDataCompatible(stored.data, pipeline_cache_properties_))
+            seed = stored.data;
+        else if (!stored.data.empty())
+            pipeline_cache_stats_.import_discarded = true;
+    } catch (const std::bad_alloc&) {
+        // Import is optional; an empty cache remains usable if the host cannot
+        // afford the bounded serialized copy.
+        seed.clear();
+        pipeline_cache_stats_.import_discarded = true;
+    }
+    // Default flags preserve Vulkan's internally synchronized pipeline creation.
+    // https://docs.vulkan.org/refpages/latest/refpages/source/vkCreatePipelineCache.html
+    VkPipelineCacheCreateInfo cache_info{
+        .sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO,
+        .initialDataSize = seed.size(),
+        .pInitialData = seed.empty() ? nullptr : seed.data(),
+    };
+    auto result = vkCreatePipelineCache(device_, &cache_info, nullptr, &pipeline_cache_);
+    if (result != VK_SUCCESS && !seed.empty()) {
+        // Cache import cannot add a product admission requirement. Retry empty,
+        // then retain the original uncached pipeline path if allocation fails.
+        pipeline_cache_ = VK_NULL_HANDLE;
+        seed.clear();
+        pipeline_cache_stats_.import_discarded = true;
+        cache_info.initialDataSize = 0;
+        cache_info.pInitialData = nullptr;
+        result = vkCreatePipelineCache(device_, &cache_info, nullptr, &pipeline_cache_);
+    }
+    pipeline_cache_stats_.creation_result = result;
+    pipeline_cache_stats_.enabled = result == VK_SUCCESS;
+    if (result == VK_SUCCESS)
+        pipeline_cache_stats_.imported_bytes = seed.size();
+    else
+        pipeline_cache_ = VK_NULL_HANDLE;
+}
+
+Expected<VulkanPipelineCacheStats> VulkanDevice::SnapshotPipelineCache() {
+    if (pipeline_cache_ == VK_NULL_HANDLE)
+        return Fail(ErrorDomain::kDevice, "snapshot pipeline cache", "cache is not initialized");
+    std::size_t available = 0;
+    if (const auto result = vkGetPipelineCacheData(device_, pipeline_cache_, &available, nullptr);
+        result != VK_SUCCESS)
+        return Fail(ErrorDomain::kDevice, "size pipeline cache", VkResultText(result));
+    pipeline_cache_stats_.available_bytes = available;
+    if (!pipeline_cache_modified_) return pipeline_cache_stats_;
+    pipeline_cache_stats_.exported_bytes = 0;
+    pipeline_cache_stats_.export_discarded = false;
+    const auto discard = [&] {
+        pipeline_cache_stats_.export_discarded = true;
+        pipeline_cache_modified_ = false;
+        return pipeline_cache_stats_;
+    };
+    // Never truncate a blob or allocate an unbounded serialization buffer. The
+    // driver's internal cache is separate from this bound and explicit buffers.
+    if (available < 32 || available > detail::kVulkanPipelineCacheBlobLimit) return discard();
+    std::vector<std::byte> data;
+    try {
+        data.resize(available);
+    } catch (const std::bad_alloc&) {
+        return discard();
+    }
+    std::size_t written = available;
+    const auto result = vkGetPipelineCacheData(device_, pipeline_cache_, &written, data.data());
+    if (result == VK_INCOMPLETE || written > data.size()) return discard();
+    if (result != VK_SUCCESS)
+        return Fail(ErrorDomain::kDevice, "export pipeline cache", VkResultText(result));
+    data.resize(written);
+    if (!detail::VulkanPipelineCacheDataCompatible(data, pipeline_cache_properties_))
+        return discard();
+    auto& stored = PipelineCacheStore();
+    std::lock_guard lock(stored.mutex);
+    stored.data = std::move(data);
+    pipeline_cache_stats_.exported_bytes = written;
+    pipeline_cache_modified_ = false;
+    return pipeline_cache_stats_;
 }
 
 Expected<void> ValidateVulkanKernelPrecision(std::span<const std::uint32_t> spirv,
@@ -647,13 +778,15 @@ Expected<VulkanDevice::Pipeline*> VulkanDevice::GetOrCreatePipeline(
             },
         .layout = pipeline.layout,
     };
-    if (const VkResult r = vkCreateComputePipelines(device_, VK_NULL_HANDLE, 1, &pipeline_info,
+    if (const VkResult r = vkCreateComputePipelines(device_, pipeline_cache_, 1, &pipeline_info,
                                                     nullptr, &pipeline.pipeline);
         r != VK_SUCCESS) {
         vkDestroyPipelineLayout(device_, pipeline.layout, nullptr);
         vkDestroyDescriptorSetLayout(device_, pipeline.set_layout, nullptr);
         return Fail(ErrorDomain::kKernel, "create compute pipeline", VkResultText(r));
     }
+
+    pipeline_cache_modified_ = pipeline_cache_ != VK_NULL_HANDLE;
 
     auto [inserted, _] = pipelines_.emplace(std::move(key), pipeline);
     if (created != nullptr) *created = true;

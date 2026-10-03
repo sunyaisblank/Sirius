@@ -22,6 +22,8 @@
 
 #if defined(SIRIUS_HAS_RETAINED_COMPUTE) && defined(SIRIUS_RETAINED_CAMERA_TEST_DIR)
 #define SIRIUS_RETAINED_TESTS_AVAILABLE 1
+#include "sirius/backend/vulkan/vulkan_device.h"
+
 #include "program_fixture.h"
 #include "support/cpu_critical/transport_reference.h"
 #include "support/retained_camera/continuous_reference.h"
@@ -33,6 +35,80 @@
 
 namespace {
 using namespace sirius::backend;
+
+// Arithmetic admission must finish before any external shader or buffer work.
+// The sentinel gives that boundary an observable positive path without a device.
+class AdmissionDevice final : public ComputeDevice {
+  public:
+    DeviceInfo info;
+    unsigned kernel_calls = 0, buffer_calls = 0;
+    const DeviceInfo& Info() const noexcept override { return info; }
+    sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t>) override {
+        ++kernel_calls;
+        return sirius::base::Fail(sirius::base::ErrorDomain::kKernel, "admission sentinel",
+                                  "arithmetic admitted; external kernel loading reached");
+    }
+    sirius::base::Expected<BufferHandle> CreateBuffer(std::uint64_t, BufferUsage) override {
+        ++buffer_calls;
+        return sirius::base::Fail(sirius::base::ErrorDomain::kDevice, "admission sentinel",
+                                  "unexpected buffer allocation");
+    }
+    sirius::base::Expected<void> WriteBuffer(BufferHandle, std::span<const std::byte>) override {
+        return Unused();
+    }
+    sirius::base::Expected<void> ReadBuffer(BufferHandle, std::span<std::byte>) override {
+        return Unused();
+    }
+    sirius::base::Expected<void> Dispatch(KernelHandle, std::span<const BufferHandle>,
+                                          std::uint32_t, std::uint32_t, std::uint32_t,
+                                          DispatchTiming*) override {
+        return Unused();
+    }
+    sirius::base::Expected<void> SetBufferAllocationLimit(std::uint64_t) override {
+        return Unused();
+    }
+    std::uint64_t BufferAllocationBytes() const noexcept override { return 0; }
+
+  private:
+    sirius::base::Expected<void> Unused() {
+        return sirius::base::Fail(sirius::base::ErrorDomain::kDevice, "admission sentinel",
+                                  "unexpected device work");
+    }
+};
+
+TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+    const DeviceInfo complete{.supports_fp64 = true,
+                              .preserves_fp32_denormals = true,
+                              .rounds_fp32_to_nearest = true,
+                              .rounds_fp64_to_nearest = true};
+    for (const bool wide : {false, true}) {
+        // No missing capability is a positive admission witness. Each individual
+        // absence then challenges the contract, including binary32 with wide products.
+        for (unsigned missing = 0; missing < 5; ++missing) {
+            SCOPED_TRACE(wide);
+            SCOPED_TRACE(missing);
+            AdmissionDevice device;
+            device.info = complete;
+            if (missing == 1) device.info.preserves_fp32_denormals = false;
+            if (missing == 2) device.info.rounds_fp32_to_nearest = false;
+            if (missing == 3) device.info.supports_fp64 = false;
+            if (missing == 4) device.info.rounds_fp64_to_nearest = false;
+            const bool admitted = missing == 0 || (!wide && missing >= 3);
+            const auto created = RetainedCompute::Create(device, 1, wide);
+            ASSERT_FALSE(created);
+            EXPECT_EQ(device.kernel_calls, admitted ? 1U : 0U);
+            EXPECT_EQ(device.buffer_calls, 0U);
+            EXPECT_EQ(created.error().domain(), admitted ? sirius::base::ErrorDomain::kKernel
+                                                         : sirius::base::ErrorDomain::kDevice);
+            EXPECT_EQ(created.error().operation(),
+                      admitted ? "admission sentinel" : "create retained compute stages");
+        }
+    }
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
 
 class RetainedComputeTest : public ::testing::Test {
   protected:
@@ -525,6 +601,17 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
     RecordProperty("device", device->Info().name);
     RecordProperty("retained_capacity", std::to_string(compute->Capacity()));
     RecordProperty("explicit_buffer_bytes", std::to_string(device->BufferAllocationBytes()));
+    auto* vulkan = dynamic_cast<VulkanDevice*>(device.get());
+    ASSERT_NE(vulkan, nullptr);
+    const auto cache_initial = vulkan->PipelineCacheStatistics();
+    RecordProperty("pipeline_cache_enabled", cache_initial.enabled ? "true" : "false");
+    RecordProperty("pipeline_cache_creation_result",
+                   std::to_string(static_cast<int>(cache_initial.creation_result)));
+    RecordProperty("pipeline_cache_imported_bytes", std::to_string(cache_initial.imported_bytes));
+    RecordProperty("pipeline_cache_import_discarded",
+                   cache_initial.import_discarded ? "true" : "false");
+    RecordProperty("pipeline_cache_blob_bound_bytes",
+                   std::to_string(detail::kVulkanPipelineCacheBlobLimit));
     RecordProperty("timing_scope",
                    "interval fixture excludes device/compute SetUp; wall-minus-measured includes "
                    "host coordination, transfers, command setup and cleanup without separate "
@@ -625,6 +712,29 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
     }
     record_timing("interval_fixture", fixture_before, compute->Statistics(),
                   milliseconds(fixture_started, Clock::now()), true);
+    // Keep serialization outside the unchanged interval timing window. A
+    // repeated gtest iteration creates a fresh device but can import this blob.
+    if (cache_initial.enabled) {
+        const auto cache_started = Clock::now();
+        const auto cache = vulkan->SnapshotPipelineCache();
+        RecordProperty("pipeline_cache_snapshot_wall_ms",
+                       std::to_string(milliseconds(cache_started, Clock::now())));
+        if (cache) {
+            RecordProperty("pipeline_cache_available_bytes",
+                           std::to_string(cache->available_bytes));
+            RecordProperty("pipeline_cache_exported_bytes", std::to_string(cache->exported_bytes));
+            RecordProperty("pipeline_cache_export_discarded",
+                           cache->export_discarded ? "true" : "false");
+            EXPECT_LE(cache->exported_bytes, detail::kVulkanPipelineCacheBlobLimit);
+        } else {
+            // Cache export is optional in the product. An export failure leaves
+            // its performance benefit unmeasured, not its physics disproved.
+            RecordProperty("pipeline_cache_export_error", cache.error().Description());
+        }
+    }
+    RecordProperty("pipeline_cache_memory_scope",
+                   "one process-lived serialized blob is bounded; driver-internal pipeline/cache "
+                   "allocations are separate from explicit_buffer_bytes; no frame qualification");
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif
