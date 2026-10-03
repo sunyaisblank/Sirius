@@ -13,6 +13,7 @@
 #include <cstdint>
 #include <limits>
 #include <map>
+#include <optional>
 #include <vector>
 
 namespace sirius::backend {
@@ -23,6 +24,10 @@ namespace sirius::backend {
     std::span<const std::uint32_t> spirv, bool supports_fp64);
 
 namespace detail {
+// Keep the largest compatible coherent host heap and its existing tie order;
+// prefer the same memory properties with host caching on that selected heap.
+[[nodiscard]] std::optional<std::uint32_t> VulkanHostMemoryType(
+    const VkPhysicalDeviceMemoryProperties& properties, std::uint32_t memory_type_bits);
 // Bound the one process-lived serialized blob, not driver-internal cache memory.
 inline constexpr std::size_t kVulkanPipelineCacheBlobLimit = 32 * 1024 * 1024;
 [[nodiscard]] bool VulkanPipelineCacheDataCompatible(std::span<const std::byte> data,

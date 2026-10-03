@@ -434,6 +434,41 @@ TEST(VulkanBackend, EnumerationReportsInsteadOfThrowing) {
     }
 }
 
+TEST(VulkanBackend, HostMemoryPreferencePreservesCompatibleHeapAndCoherence) {
+    using sirius::backend::detail::VulkanHostMemoryType;
+    constexpr auto coherent =
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+    constexpr auto cached = coherent | VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
+    VkPhysicalDeviceMemoryProperties properties{};
+    properties.memoryHeapCount = 5;
+    properties.memoryHeaps[0].size = 4096;
+    properties.memoryHeaps[1].size = 4096;
+    properties.memoryHeaps[2].size = 2048;
+    properties.memoryHeaps[3].size = 16384;
+    properties.memoryHeaps[4].size = 8192;
+    properties.memoryTypeCount = 8;
+    properties.memoryTypes[0] = {coherent, 0};
+    properties.memoryTypes[1] = {cached, 1};
+    properties.memoryTypes[2] = {cached, 0};
+    properties.memoryTypes[3] = {cached, 2};
+    properties.memoryTypes[4] = {
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT, 3};
+    properties.memoryTypes[5] = {coherent, 4};
+    properties.memoryTypes[6] = {cached, 4};
+    properties.memoryTypes[7] = {cached | VK_MEMORY_PROPERTY_DEVICE_COHERENT_BIT_AMD, 4};
+
+    EXPECT_EQ(VulkanHostMemoryType(properties, 0xffu), 6u);  // Largest coherent heap.
+    EXPECT_EQ(VulkanHostMemoryType(properties, 0x0fu), 2u);  // Cache on the original heap.
+    EXPECT_EQ(VulkanHostMemoryType(properties, 0x03u), 0u);  // Equal-size different heap.
+    EXPECT_EQ(VulkanHostMemoryType(properties, 0x09u), 0u);  // Smaller cached heap.
+    EXPECT_EQ(VulkanHostMemoryType(properties, 0x11u), 0u);  // Larger noncoherent heap.
+    EXPECT_EQ(VulkanHostMemoryType(properties, 0xa0u), 5u);  // Do not add device-coherent flags.
+    EXPECT_EQ(VulkanHostMemoryType(properties, 0x01u), 0u);  // Cached type incompatible.
+    EXPECT_EQ(VulkanHostMemoryType(properties, 0x04u), 2u);  // Already cached.
+    EXPECT_FALSE(VulkanHostMemoryType(properties, 0x10u));   // No coherent type.
+    EXPECT_FALSE(VulkanHostMemoryType(properties, 0u));      // No compatible type.
+}
+
 TEST(VulkanBackend, BufferAllocationLimitCountsActualResidencyAndPreservesExistingBuffers) {
     const auto devices = EnumerateVulkanDevices();
     ASSERT_TRUE(devices.has_value()) << devices.error().Description();

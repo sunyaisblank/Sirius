@@ -86,15 +86,9 @@ ProcessPipelineCache& PipelineCacheStore() {
         }
     }
 
-    constexpr VkMemoryPropertyFlags kRenderMemory =
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
     std::uint64_t render_memory = 0;
-    for (std::uint32_t i = 0; i < memory.memoryTypeCount; ++i) {
-        if ((memory.memoryTypes[i].propertyFlags & kRenderMemory) != kRenderMemory) {
-            continue;
-        }
-        const std::uint32_t heap = memory.memoryTypes[i].heapIndex;
-        render_memory = std::max(render_memory, memory.memoryHeaps[heap].size);
+    if (const auto type = detail::VulkanHostMemoryType(memory, ~std::uint32_t{0})) {
+        render_memory = memory.memoryHeaps[memory.memoryTypes[*type].heapIndex].size;
     }
 
     return DeviceInfo{
@@ -271,6 +265,38 @@ Expected<VkDevice> CreateDeviceWithPortability(VkPhysicalDevice physical,
 }
 
 }  // namespace detail
+
+std::optional<std::uint32_t> detail::VulkanHostMemoryType(
+    const VkPhysicalDeviceMemoryProperties& properties, std::uint32_t memory_type_bits) {
+    constexpr VkMemoryPropertyFlags kRequired =
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+    std::optional<std::uint32_t> selected;
+    VkDeviceSize selected_heap_size = 0;
+    for (std::uint32_t i = 0; i < properties.memoryTypeCount; ++i) {
+        const auto& type = properties.memoryTypes[i];
+        const auto heap_size = properties.memoryHeaps[type.heapIndex].size;
+        if ((memory_type_bits & (1u << i)) != 0 && (type.propertyFlags & kRequired) == kRequired &&
+            heap_size > selected_heap_size) {
+            selected = i;
+            selected_heap_size = heap_size;
+        }
+    }
+    if (!selected) return std::nullopt;
+
+    const auto& original = properties.memoryTypes[*selected];
+    const auto preferred_flags = original.propertyFlags | VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
+    // Uncached coherent memory is commonly write-combined; reading the retained
+    // output then costs much more than cached host memory. Keep the original
+    // heap/capacity, and add only host caching, never feature-dependent flags.
+    for (std::uint32_t i = 0; i < properties.memoryTypeCount; ++i) {
+        const auto& type = properties.memoryTypes[i];
+        if ((memory_type_bits & (1u << i)) != 0 && type.heapIndex == original.heapIndex &&
+            type.propertyFlags == preferred_flags) {
+            return i;
+        }
+    }
+    return selected;
+}
 
 bool detail::VulkanPipelineCacheDataCompatible(std::span<const std::byte> data,
                                                const VkPhysicalDeviceProperties& properties) {
@@ -647,23 +673,9 @@ Expected<BufferHandle> VulkanDevice::CreateBuffer(std::uint64_t size_bytes, Buff
     VkPhysicalDeviceMemoryProperties memory_properties{};
     vkGetPhysicalDeviceMemoryProperties(physical_, &memory_properties);
 
-    // Host-visible coherent memory in this increment; device-local staging
-    // is governor work, where the budget model decides placement.
-    constexpr VkMemoryPropertyFlags kWanted =
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-    std::uint32_t type_index = memory_properties.memoryTypeCount;
-    std::uint64_t selected_heap_size = 0;
-    for (std::uint32_t i = 0; i < memory_properties.memoryTypeCount; ++i) {
-        const bool allowed = (requirements.memoryTypeBits & (1u << i)) != 0;
-        const bool suitable = (memory_properties.memoryTypes[i].propertyFlags & kWanted) == kWanted;
-        const std::uint64_t heap_size =
-            memory_properties.memoryHeaps[memory_properties.memoryTypes[i].heapIndex].size;
-        if (allowed && suitable && heap_size > selected_heap_size) {
-            type_index = i;
-            selected_heap_size = heap_size;
-        }
-    }
-    if (type_index == memory_properties.memoryTypeCount) {
+    const auto type_index =
+        detail::VulkanHostMemoryType(memory_properties, requirements.memoryTypeBits);
+    if (!type_index) {
         vkDestroyBuffer(device_, buffer.buffer, nullptr);
         return Fail(ErrorDomain::kDevice, "allocate buffer memory",
                     "no host-visible coherent memory type");
@@ -672,7 +684,7 @@ Expected<BufferHandle> VulkanDevice::CreateBuffer(std::uint64_t size_bytes, Buff
     const VkMemoryAllocateInfo allocate_info{
         .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
         .allocationSize = requirements.size,
-        .memoryTypeIndex = type_index,
+        .memoryTypeIndex = *type_index,
     };
     if (const VkResult r = vkAllocateMemory(device_, &allocate_info, nullptr, &buffer.memory);
         r != VK_SUCCESS) {

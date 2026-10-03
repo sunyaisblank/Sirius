@@ -886,6 +886,7 @@
     {
       "id": "memory_and_dispatch_governance",
       "evidence": [
+        {"kind": "gtest", "name": "VulkanBackend.HostMemoryPreferencePreservesCompatibleHeapAndCoherence"},
         {"kind": "gtest", "name": "VulkanRenderSession.ContinuationRendererPublishesOnlyCompleteFramesWithinActualBudget"},
         {"kind": "gtest", "name": "DispatchGovernor.ContinuationReadbackRejectsStaleOrUncommittedState"},
         {"kind": "gtest", "name": "DispatchGovernor.OnlyPhysicalTerminalReadbackCanFinalizeWithoutChangingTrajectory"},

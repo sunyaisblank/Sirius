@@ -1300,6 +1300,7 @@ set_tests_properties(
     VulkanBackend.PipelineCacheImportRejectsOversizeWithoutTruncation
     VulkanBackend.KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions
     VulkanBackend.EnumerationReportsInsteadOfThrowing
+    VulkanBackend.HostMemoryPreferencePreservesCompatibleHeapAndCoherence
     VulkanBackend.BufferAllocationLimitCountsActualResidencyAndPreservesExistingBuffers
     VulkanBackend.SlangKernelMatchesCpuReference
     VulkanBackend.WorkerThreadDispatchTearsDownSafely
