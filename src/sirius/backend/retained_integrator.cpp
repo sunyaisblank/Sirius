@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <utility>
 
 namespace sirius::backend {
 namespace {
@@ -153,10 +154,24 @@ double RetainedPhysicalError(const std::array<RetainedValue, 40>& first,
 
 base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
     RetainedCompute& compute, std::span<const RetainedIntervalInput> inputs) {
+    return AttemptRetainedIntervals(compute, inputs, compute.Capacity());
+}
+
+base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
+    RetainedCompute& compute, std::span<const RetainedIntervalInput> inputs,
+    std::size_t projection_row_budget) {
     if (inputs.empty() || inputs.size() > compute.Capacity())
         return base::Fail(base::ErrorDomain::kDevice, "attempt retained intervals",
                           "invalid batch size");
+    if (projection_row_budget == 0 || projection_row_budget > compute.Capacity() ||
+        inputs.size() > projection_row_budget)
+        return base::Fail(base::ErrorDomain::kDevice, "attempt retained intervals",
+                          "invalid projection row budget");
     const auto count = inputs.size();
+    // Keep every row position, including inactive rows. A paired dispatch uses
+    // the unchanged endpoint shader and capacity layout, inside the current
+    // governor budget; larger batches retain two synchronous submissions.
+    const bool paired_projections = count <= projection_row_budget / 2;
     std::vector<RetainedIntervalOutput> work(count);
     std::vector<bool> active(count, true);
     for (std::size_t row = 0; row < count; ++row) {
@@ -188,7 +203,8 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
             }
         const auto stepped = compute.Step(packets);
         if (!stepped) return std::unexpected(stepped.error());
-        std::vector<RetainedEndpointInput> upper(count), lower(count);
+        std::vector<RetainedEndpointInput> upper(paired_projections ? 2 * count : count),
+            lower(paired_projections ? 0 : count);
         for (std::size_t row = 0; row < count; ++row)
             if (active[row]) {
                 auto& state = work[row];
@@ -204,17 +220,25 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
                     continue;
                 }
                 upper[row] = EndpointInput(inputs[row], step.fifth);
-                lower[row] = EndpointInput(inputs[row], step.fourth);
+                if (paired_projections)
+                    upper[count + row] = EndpointInput(inputs[row], step.fourth);
+                else
+                    lower[row] = EndpointInput(inputs[row], step.fourth);
             }
         const auto projected = compute.Endpoint(upper);
         if (!projected) return std::unexpected(projected.error());
-        const auto projected_lower = compute.Endpoint(lower);
-        if (!projected_lower) return std::unexpected(projected_lower.error());
+        std::vector<RetainedEndpointOutput> projected_lower;
+        if (!paired_projections) {
+            auto separate_lower = compute.Endpoint(lower);
+            if (!separate_lower) return std::unexpected(separate_lower.error());
+            projected_lower = std::move(*separate_lower);
+        }
         for (std::size_t row = 0; row < count; ++row)
             if (active[row]) {
                 auto& state = work[row];
                 const auto& high = (*projected)[row];
-                const auto& low = (*projected_lower)[row];
+                const auto& low =
+                    paired_projections ? (*projected)[count + row] : projected_lower[row];
                 const double error =
                     high.valid && low.valid && high.component == low.component
                         ? RetainedPhysicalError(high.physical, low.physical, inputs[row].control)

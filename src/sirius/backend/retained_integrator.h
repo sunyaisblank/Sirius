@@ -43,6 +43,11 @@ struct RetainedIntervalOutput {
 // problem's arithmetic box as an independent global uncertainty.
 [[nodiscard]] base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
     RetainedCompute& compute, std::span<const RetainedIntervalInput> inputs);
+// The current governor row budget also bounds combined upper/lower projections.
+// The two-argument entry above uses the fixed capacity for standalone callers.
+[[nodiscard]] base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
+    RetainedCompute& compute, std::span<const RetainedIntervalInput> inputs,
+    std::size_t projection_row_budget);
 
 [[nodiscard]] double RetainedPhysicalError(const std::array<RetainedValue, 40>& first,
                                            const std::array<RetainedValue, 40>& second,

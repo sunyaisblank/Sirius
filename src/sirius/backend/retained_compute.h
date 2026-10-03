@@ -132,7 +132,17 @@ class RetainedCompute {
         std::span<const RetainedInitializeInput> inputs, DispatchTiming* timing = nullptr);
     [[nodiscard]] std::size_t Capacity() const { return capacity_; }
     [[nodiscard]] double DispatchTargetMs() const { return dispatch_target_ms_; }
-    // Serialized dispatcher feedback, excluding pipeline preparation.
+    // One serialized observation window, excluding pipeline preparation.
+    // Only successful Dispatch calls with valid timing contribute. A later
+    // read failure retains its completed submission observation.
+    struct SubmissionFeedback {
+        double peak_ms = 0;
+        std::size_t peak_rows = 0;
+        std::size_t maximum_rows = 0;
+        double maximum_one_row_ms = 0;
+    };
+    [[nodiscard]] SubmissionFeedback TakeSubmissionFeedback();
+    // Compatibility view; consumes the same complete observation window.
     [[nodiscard]] double TakeSubmissionPeakMs();
     // Read only after the owning submissions have finished.
     [[nodiscard]] std::array<StageStats, 6> Statistics() const;
@@ -153,7 +163,7 @@ class RetainedCompute {
     ComputeDevice& device_;
     std::size_t capacity_;
     double dispatch_target_ms_ = 250;
-    double submission_peak_ms_ = 0;
+    SubmissionFeedback submission_feedback_;
     Stage camera_, transport_, endpoint_, dense_, initialize_, ray_camera_;
 };
 

@@ -14,10 +14,12 @@
 #include <chrono>
 #include <cmath>
 #include <cstring>
+#include <functional>
 #include <future>
 #include <iomanip>
 #include <limits>
 #include <numbers>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -165,11 +167,22 @@ class TransferProbeDevice final : public ComputeDevice {
         std::size_t bytes;
         std::uint32_t capacity = 0;
     };
+    struct Submission {
+        std::array<BufferHandle, 2> buffers;
+        std::size_t binding_count;
+        std::uint32_t x, y, z;
+    };
     explicit TransferProbeDevice(ComputeDevice& device) : device_(device) {}
     Failure fail_next = Failure::None;
     std::vector<Allocation> allocations;
     std::vector<Transfer> writes, reads;
+    std::vector<Submission> submissions;
     std::uint64_t dispatch_calls = 0, forwarded_dispatches = 0;
+    // Optional control-test observations. Physical outputs still come from the
+    // actual device; injected timing never sleeps or claims hardware duration.
+    std::function<double(BufferHandle, std::uint32_t)> submission_ms;
+    std::optional<BufferHandle> capture_output;
+    std::vector<std::vector<std::byte>> readbacks;
 
     const DeviceInfo& Info() const noexcept override { return device_.Info(); }
     sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t> code) override {
@@ -194,16 +207,31 @@ class TransferProbeDevice final : public ComputeDevice {
                                             std::span<std::byte> data) override {
         reads.push_back({buffer, data.size_bytes()});
         if (fail_next == Failure::Read) return Inject("read");
-        return device_.ReadBuffer(buffer, data);
+        auto status = device_.ReadBuffer(buffer, data);
+        if (status && capture_output && buffer.value == capture_output->value)
+            readbacks.emplace_back(data.begin(), data.end());
+        return status;
     }
     sirius::base::Expected<void> Dispatch(KernelHandle kernel,
                                           std::span<const BufferHandle> buffers, std::uint32_t x,
                                           std::uint32_t y, std::uint32_t z,
                                           DispatchTiming* timing) override {
         ++dispatch_calls;
+        submissions.push_back({{buffers.empty() ? BufferHandle{} : buffers[0],
+                                buffers.size() < 2 ? BufferHandle{} : buffers[1]},
+                               buffers.size(),
+                               x,
+                               y,
+                               z});
         if (fail_next == Failure::Dispatch) return Inject("dispatch");
         ++forwarded_dispatches;
-        return device_.Dispatch(kernel, buffers, x, y, z, timing);
+        auto status = device_.Dispatch(kernel, buffers, x, y, z, timing);
+        if (status && timing && submission_ms) {
+            timing->submit_wait_ms = submission_ms(buffers[0], x);
+            timing->total_ms = timing->pipeline_setup_ms + timing->command_setup_ms +
+                               timing->submit_wait_ms + timing->cleanup_ms;
+        }
+        return status;
     }
     sirius::base::Expected<void> SetBufferAllocationLimit(std::uint64_t bytes) override {
         return device_.SetBufferAllocationLimit(bytes);
@@ -228,6 +256,52 @@ bool Encloses(const RetainedValue& value, long double expected, long double refe
     const long double rounding =
         16 * std::numeric_limits<long double>::epsilon() * (std::abs(center) + std::abs(expected));
     return std::abs(center - expected) <= value.radius + reference_gap + rounding;
+}
+
+// Compare stored words, not a rounded expansion center or structure padding.
+::testing::AssertionResult IntervalBitsAgree(const RetainedIntervalOutput& actual,
+                                             const RetainedIntervalOutput& expected) {
+    if (actual.admissible != expected.admissible || actual.failure != expected.failure ||
+        actual.attempted_stages != expected.attempted_stages ||
+        std::bit_cast<std::uint64_t>(actual.error_ratio) !=
+            std::bit_cast<std::uint64_t>(expected.error_ratio))
+        return ::testing::AssertionFailure() << "interval admission metadata differs";
+    const auto values_agree = [](const auto& first, const auto& second,
+                                 const std::string& name) -> ::testing::AssertionResult {
+        for (std::size_t i = 0; i < first.size(); ++i) {
+            const auto a = std::bit_cast<std::array<std::uint32_t, 5>>(first[i]);
+            const auto b = std::bit_cast<std::array<std::uint32_t, 5>>(second[i]);
+            for (std::size_t word = 0; word < a.size(); ++word)
+                if (a[word] != b[word])
+                    return ::testing::AssertionFailure()
+                           << name << " component " << i << " word " << word << " actual=0x"
+                           << std::hex << a[word] << " expected=0x" << b[word];
+        }
+        return ::testing::AssertionSuccess();
+    };
+    const std::array first{&actual.full, &actual.lower, &actual.midpoint, &actual.refined};
+    const std::array second{&expected.full, &expected.lower, &expected.midpoint, &expected.refined};
+    constexpr std::array names{"full", "lower", "midpoint", "refined"};
+    for (std::size_t i = 0; i < first.size(); ++i) {
+        if (first[i]->valid != second[i]->valid || first[i]->component != second[i]->component)
+            return ::testing::AssertionFailure() << names[i] << " projection metadata differs";
+        const auto phase =
+            values_agree(first[i]->phase, second[i]->phase, std::string(names[i]) + " phase");
+        if (!phase) return phase;
+        const auto physical = values_agree(first[i]->physical, second[i]->physical,
+                                           std::string(names[i]) + " physical");
+        if (!physical) return physical;
+    }
+    const std::array increments{&actual.full_increment, &actual.lower_increment,
+                                &actual.midpoint_increment, &actual.refined_increment};
+    const std::array expected_increments{&expected.full_increment, &expected.lower_increment,
+                                         &expected.midpoint_increment, &expected.refined_increment};
+    for (std::size_t i = 0; i < increments.size(); ++i) {
+        const auto result = values_agree(*increments[i], *expected_increments[i],
+                                         std::string(names[i]) + " increment");
+        if (!result) return result;
+    }
+    return ::testing::AssertionSuccess();
 }
 
 template <typename Fixture>
@@ -899,6 +973,7 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
         input.control.integrator.abs_tolerance = 1e-9f;
         input.control.integrator.rel_tolerance = 1e-9f;
     }
+    const auto original_inputs = inputs;
     const auto first_before = compute->Statistics();
     const auto first_started = Clock::now();
     const auto outputs = AttemptRetainedIntervals(*compute, inputs);
@@ -987,6 +1062,195 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
     RecordProperty("pipeline_cache_memory_scope",
                    "one process-lived serialized blob is bounded; driver-internal pipeline/cache "
                    "allocations are separate from explicit_buffer_bytes; no frame qualification");
+    // These bounded equivalence and governor checks are outside the original
+    // interval timing window and keep its independent science cases unchanged.
+    TransferProbeDevice probe(*device);
+    const auto initial_allocation = device->BufferAllocationBytes();
+    // An intentionally tiny soft target exercises actual feedback/subdivision;
+    // its elapsed timings do not claim a production performance result.
+    auto observed = RetainedCompute::Create(probe, 4, false, 1e-12);
+    ASSERT_TRUE(observed) << observed.error().Description();
+    auto& paired_compute = **observed;
+    const auto allocated = device->BufferAllocationBytes();
+    EXPECT_GT(allocated, initial_allocation);
+    EXPECT_LE(allocated, 8ull * 1024 * 1024);
+    ASSERT_EQ(probe.allocations.size(), 12U);
+    const auto endpoint_input = probe.allocations[4].handle;
+    const auto endpoint_output = probe.allocations[5].handle;
+    const auto endpoint_row_bytes = probe.allocations[5].bytes / paired_compute.Capacity();
+    const auto check_endpoint_transfers = [&](std::size_t rows, std::size_t calls,
+                                              std::size_t writes_begin, std::size_t reads_begin,
+                                              std::size_t submissions_begin) {
+        std::size_t writes = 0, reads = 0, submissions = 0;
+        for (std::size_t i = writes_begin; i < probe.writes.size(); ++i)
+            if (probe.writes[i].handle.value == endpoint_input.value) {
+                ++writes;
+                EXPECT_EQ(probe.writes[i].capacity, paired_compute.Capacity());
+                EXPECT_EQ(probe.writes[i].bytes,
+                          sizeof(std::uint32_t) + rows * sizeof(RetainedEndpointInput));
+            }
+        for (std::size_t i = reads_begin; i < probe.reads.size(); ++i)
+            if (probe.reads[i].handle.value == endpoint_output.value) {
+                ++reads;
+                EXPECT_EQ(probe.reads[i].bytes, rows * endpoint_row_bytes);
+            }
+        for (std::size_t i = submissions_begin; i < probe.submissions.size(); ++i)
+            if (probe.submissions[i].buffers[0].value == endpoint_input.value) {
+                ++submissions;
+                EXPECT_EQ(probe.submissions[i].binding_count, 2U);
+                EXPECT_EQ(probe.submissions[i].buffers[1].value, endpoint_output.value);
+                // The existing retained shader gives each row one workgroup.
+                EXPECT_EQ(probe.submissions[i].x, rows);
+                EXPECT_EQ(probe.submissions[i].y, 1U);
+                EXPECT_EQ(probe.submissions[i].z, 1U);
+            }
+        EXPECT_EQ(writes, calls);
+        EXPECT_EQ(reads, calls);
+        EXPECT_EQ(submissions, calls);
+    };
+    const auto run = [&](std::span<const RetainedIntervalInput> batch, std::size_t budget,
+                         std::uint64_t endpoint_calls, std::size_t endpoint_rows,
+                         bool first_upload = false) {
+        const auto before = paired_compute.Statistics();
+        const auto writes_begin = probe.writes.size(), reads_begin = probe.reads.size(),
+                   submissions_begin = probe.submissions.size();
+        const auto dispatches = probe.forwarded_dispatches;
+        auto result = AttemptRetainedIntervals(paired_compute, batch, budget);
+        const auto after = paired_compute.Statistics();
+        EXPECT_EQ(after[1].submissions - before[1].submissions, 3U);
+        EXPECT_EQ(after[2].submissions - before[2].submissions, endpoint_calls);
+        EXPECT_EQ(after[3].submissions - before[3].submissions, 1U);
+        EXPECT_EQ(probe.forwarded_dispatches - dispatches, 4 + endpoint_calls);
+        EXPECT_EQ(device->BufferAllocationBytes(), allocated);
+        EXPECT_EQ(probe.allocations.size(), 12U);
+        if (!first_upload)
+            check_endpoint_transfers(endpoint_rows, endpoint_calls, writes_begin, reads_begin,
+                                     submissions_begin);
+        return result;
+    };
+    // Include a critical curved row and the independently pinned sparse flat
+    // row. Four projection rows exactly fit capacity; budget three must fall back.
+    const std::array pair_inputs{original_inputs.front(), sparse};
+    const auto serialized_before = paired_compute.Statistics();
+    const auto serialized = run(pair_inputs, 2, 6, 2, true);
+    const auto serialized_endpoint_calls =
+        paired_compute.Statistics()[2].submissions - serialized_before[2].submissions;
+    ASSERT_TRUE(serialized) << serialized.error().Description();
+    for (const auto& output : *serialized) ASSERT_TRUE(output.admissible);
+    const auto paired_before = paired_compute.Statistics();
+    const auto paired = run(pair_inputs, 4, 3, 4);
+    const auto paired_endpoint_calls =
+        paired_compute.Statistics()[2].submissions - paired_before[2].submissions;
+    ASSERT_TRUE(paired) << paired.error().Description();
+    const auto fallback = run(pair_inputs, 3, 6, 2);
+    ASSERT_TRUE(fallback) << fallback.error().Description();
+    for (std::size_t row = 0; row < pair_inputs.size(); ++row) {
+        SCOPED_TRACE(row);
+        EXPECT_TRUE(IntervalBitsAgree((*paired)[row], (*serialized)[row]));
+        EXPECT_TRUE(IntervalBitsAgree((*fallback)[row], (*serialized)[row]));
+    }
+    auto mixed = pair_inputs;
+    mixed[1].start.phase[5].valid = 0;
+    const auto mixed_paired = run(mixed, 4, 3, 4);
+    const auto mixed_serialized = run(mixed, 2, 6, 2);
+    ASSERT_TRUE(mixed_paired) << mixed_paired.error().Description();
+    ASSERT_TRUE(mixed_serialized) << mixed_serialized.error().Description();
+    ASSERT_TRUE((*mixed_paired)[0].admissible);
+    EXPECT_TRUE(IntervalBitsAgree((*mixed_paired)[0], (*paired)[0]));
+    EXPECT_FALSE((*mixed_paired)[1].admissible);
+    EXPECT_EQ((*mixed_paired)[1].failure, sirius::core::CoupledStepFailure::InvalidState);
+    for (std::size_t row = 0; row < mixed.size(); ++row)
+        EXPECT_TRUE(IntervalBitsAgree((*mixed_paired)[row], (*mixed_serialized)[row]));
+    auto rejected_pair = pair_inputs;
+    rejected_pair[0].control.tolerance = 1e-30;
+    const auto rejected_paired = run(rejected_pair, 4, 3, 4);
+    const auto rejected_serialized = run(rejected_pair, 2, 6, 2);
+    ASSERT_TRUE(rejected_paired) << rejected_paired.error().Description();
+    ASSERT_TRUE(rejected_serialized) << rejected_serialized.error().Description();
+    ASSERT_FALSE((*rejected_paired)[0].admissible);
+    ASSERT_TRUE((*rejected_paired)[1].admissible);
+    EXPECT_TRUE(IntervalBitsAgree((*rejected_paired)[1], (*paired)[1]));
+    for (std::size_t row = 0; row < rejected_pair.size(); ++row)
+        EXPECT_TRUE(IntervalBitsAgree((*rejected_paired)[row], (*rejected_serialized)[row]));
+    for (const auto* rejected_row : {&(*mixed_paired)[1], &(*rejected_paired)[0]}) {
+        for (const auto* endpoint : {&rejected_row->full, &rejected_row->lower,
+                                     &rejected_row->midpoint, &rejected_row->refined}) {
+            EXPECT_FALSE(endpoint->valid);
+            for (const auto& value : endpoint->phase) EXPECT_EQ(value.valid, 0U);
+            for (const auto& value : endpoint->physical) EXPECT_EQ(value.valid, 0U);
+        }
+        for (const auto* increment :
+             {&rejected_row->full_increment, &rejected_row->lower_increment,
+              &rejected_row->midpoint_increment, &rejected_row->refined_increment})
+            for (const auto& value : *increment) EXPECT_EQ(value.valid, 0U);
+    }
+    const auto writes_before_invalid = probe.writes.size();
+    const auto dispatches_before_invalid = probe.dispatch_calls;
+    for (const std::size_t budget : {0U, 1U, 5U}) {
+        const auto invalid = AttemptRetainedIntervals(paired_compute, pair_inputs, budget);
+        EXPECT_FALSE(invalid);
+    }
+    EXPECT_EQ(probe.writes.size(), writes_before_invalid);
+    EXPECT_EQ(probe.dispatch_calls, dispatches_before_invalid);
+    const auto default_before = paired_compute.Statistics();
+    const auto capacity_default = AttemptRetainedIntervals(paired_compute, pair_inputs);
+    ASSERT_TRUE(capacity_default) << capacity_default.error().Description();
+    EXPECT_EQ(paired_compute.Statistics()[2].submissions - default_before[2].submissions, 3U);
+    for (std::size_t row = 0; row < pair_inputs.size(); ++row)
+        EXPECT_TRUE(IntervalBitsAgree((*capacity_default)[row], (*serialized)[row]));
+
+    // Prove the live coordinator forwards its reduced limit, rather than the
+    // static capacity. The first one-row attempt can pair; measured positive
+    // submission time exceeds the tiny target and the next attempt's limit is one.
+    EXPECT_GT(paired_compute.TakeSubmissionPeakMs(), 0);
+    RetainedTraceExecutor bounded_executor(paired_compute);
+    sirius::core::KerrSchildFamily flat_metric(sirius::core::KerrSchildParams::Minkowski());
+    sirius::core::Lightray ray{};
+    ray.position(1) = 5;
+    ray.velocity(0) = -1;
+    ray.velocity(1) = 1;
+    ray.step_size = 1;
+    sirius::core::Rk45CoupledState coupled;
+    coupled.length_scale = coupled.frequency_scale = 1;
+    coupled.tolerance = 1e-9;
+    coupled.variations[0].derivative(2) = .001;
+    coupled.variations[1].derivative(3) = .001;
+    coupled.variations[2].displacement(2) = 1;
+    coupled.variations[3].displacement(3) = 1;
+    sirius::core::IntegratorConfig control;
+    control.min_step = .01f;
+    control.max_step = 2;
+    sirius::core::Rk45CoupledComparison comparison;
+    const auto first_governed = paired_compute.Statistics();
+    ASSERT_TRUE(bounded_executor.Step(ray, flat_metric, control, coupled, comparison));
+    EXPECT_EQ(paired_compute.Statistics()[2].submissions - first_governed[2].submissions, 4U);
+    ASSERT_GT(bounded_executor.Statistics().batch_subdivisions, 0U);
+    const auto second_governed = paired_compute.Statistics();
+    const auto governed_writes = probe.writes.size(), governed_reads = probe.reads.size(),
+               governed_submissions = probe.submissions.size();
+    ASSERT_TRUE(bounded_executor.Step(ray, flat_metric, control, coupled, comparison));
+    EXPECT_EQ(paired_compute.Statistics()[1].submissions - second_governed[1].submissions, 3U);
+    EXPECT_EQ(paired_compute.Statistics()[2].submissions - second_governed[2].submissions, 6U);
+    EXPECT_EQ(paired_compute.Statistics()[3].submissions - second_governed[3].submissions, 1U);
+    ASSERT_NO_FATAL_FAILURE(
+        check_endpoint_transfers(1, 6, governed_writes, governed_reads, governed_submissions));
+    EXPECT_EQ(device->BufferAllocationBytes(), allocated);
+    std::uint32_t maximum_governed_endpoint_rows = 0;
+    for (std::size_t i = governed_submissions; i < probe.submissions.size(); ++i)
+        if (probe.submissions[i].buffers[0].value == endpoint_input.value)
+            maximum_governed_endpoint_rows =
+                std::max(maximum_governed_endpoint_rows, probe.submissions[i].x);
+    RecordProperty("endpoint_pairing_paired_endpoint_submissions",
+                   std::to_string(paired_endpoint_calls));
+    RecordProperty("endpoint_pairing_serialized_endpoint_submissions",
+                   std::to_string(serialized_endpoint_calls));
+    RecordProperty("endpoint_pairing_governed_endpoint_rows",
+                   std::to_string(maximum_governed_endpoint_rows));
+    RecordProperty("endpoint_pairing_scope",
+                   "stored-word equivalence within one product mode; capacity-four fit/fallback, "
+                   "inactive and rejected row positions, and actual tiny-target subdivision; "
+                   "outside interval_fixture timing, no frame-speed claim");
+
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif
@@ -1222,6 +1486,236 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
     RecordProperty("coordinator_execute_ms", std::to_string(timing.execute_ms));
     RecordProperty("worker_acceleration_calls", std::to_string(timing.acceleration_calls));
     RecordProperty("worker_acceleration_ms", std::to_string(timing.acceleration_ms));
+
+    // Deterministic hard-guard timings at the real ComputeDevice seam. This is
+    // a controller witness, not a measured Radeon/software-driver duration.
+    TransferProbeDevice guard_probe(*device);
+    auto guard_created = RetainedCompute::Create(guard_probe, 4, false, 0);
+    ASSERT_TRUE(guard_created) << guard_created.error().Description();
+    auto& guard_compute = **guard_created;
+    const auto guard_allocation = device->BufferAllocationBytes();
+    EXPECT_LE(guard_allocation, 8ull * 1024 * 1024);
+    ASSERT_EQ(guard_probe.allocations.size(), 12U);
+    const auto transport_input = guard_probe.allocations[2].handle;
+    const auto endpoint_input = guard_probe.allocations[4].handle;
+    guard_probe.capture_output = guard_probe.allocations[5].handle;
+    const auto endpoint_row_bytes = guard_probe.allocations[5].bytes / guard_compute.Capacity();
+    enum class GuardTiming {
+        Normal,
+        Reducible,
+        Irreducible,
+        RetryIrreducible,
+        FailedPair,
+        FailedRetry,
+        Cancelled,
+        CancelledRetry
+    };
+    GuardTiming guard_timing = GuardTiming::Normal;
+    std::size_t paired_endpoint_calls = 0;
+    std::atomic<bool> guard_cancelled{false};
+    guard_probe.submission_ms = [&](BufferHandle input, std::uint32_t rows) {
+        if (input.value == endpoint_input.value && rows == 2) {
+            ++paired_endpoint_calls;
+            if (guard_timing == GuardTiming::Cancelled) guard_cancelled = true;
+            if (guard_timing == GuardTiming::FailedPair)
+                guard_probe.fail_next = TransferProbeDevice::Failure::Read;
+            return guard_timing == GuardTiming::Normal ? 800.0 : 1200.0;
+        }
+        if (input.value == endpoint_input.value && rows == 1 && paired_endpoint_calls == 3) {
+            if (guard_timing == GuardTiming::FailedRetry)
+                guard_probe.fail_next = TransferProbeDevice::Failure::Read;
+            if (guard_timing == GuardTiming::CancelledRetry) guard_cancelled = true;
+        }
+        if (input.value == transport_input.value && rows == 1 &&
+            (guard_timing == GuardTiming::Irreducible ||
+             (guard_timing == GuardTiming::RetryIrreducible && paired_endpoint_calls == 3)))
+            return 1100.0;
+        return 600.0;
+    };
+    const auto make_ray = [] {
+        sirius::core::Lightray result{};
+        result.position(1) = 5;
+        result.velocity(0) = -1;
+        result.velocity(1) = 1;
+        result.step_size = 1;
+        return result;
+    };
+    const auto make_columns = [] {
+        sirius::core::Rk45CoupledState result;
+        result.length_scale = result.frequency_scale = 1;
+        result.tolerance = 1e-9;
+        result.variations[0].derivative(2) = .001;
+        result.variations[1].derivative(3) = .001;
+        result.variations[2].displacement(2) = 1;
+        result.variations[3].displacement(3) = 1;
+        return result;
+    };
+    const auto seed = make_ray();
+    const auto seed_columns = make_columns();
+    RetainedInitializeInput seed_input;
+    for (std::size_t axis = 0; axis < 4; ++axis) {
+        seed_input.values[axis] = RetainedValue::FromDouble(0);
+        seed_input.values[4 + axis] =
+            RetainedValue::FromDouble(seed.position(static_cast<int>(axis)));
+        seed_input.values[8 + axis] =
+            RetainedValue::FromDouble(seed.velocity(static_cast<int>(axis)));
+        for (std::size_t column = 0; column < 4; ++column) {
+            seed_input.values[12 + 8 * column + axis] = RetainedValue::FromDouble(
+                seed_columns.variations[column].displacement(static_cast<int>(axis)));
+            seed_input.values[16 + 8 * column + axis] = RetainedValue::FromDouble(
+                seed_columns.variations[column].derivative(static_cast<int>(axis)));
+        }
+    }
+    seed_input.values[44] = RetainedValue::FromDouble(1);
+    const auto phase = guard_compute.Initialize({&seed_input, 1});
+    ASSERT_TRUE(phase) << phase.error().Description();
+    ASSERT_TRUE(phase->front().valid);
+    RetainedEndpointInput projection_input;
+    std::copy_n(seed_input.values.begin(), 4, projection_input.values.begin());
+    std::copy(phase->front().phase.begin(), phase->front().phase.end(),
+              projection_input.values.begin() + 4);
+    projection_input.values[44] = RetainedValue::FromDouble(1);
+    const auto initial = guard_compute.Endpoint({&projection_input, 1});
+    ASSERT_TRUE(initial) << initial.error().Description();
+    ASSERT_TRUE(initial->front().valid);
+    RetainedIntervalInput serial_input;
+    std::copy_n(seed_input.values.begin(), 4, serial_input.metric.begin());
+    serial_input.start = initial->front();
+    serial_input.chart = 1;
+    serial_input.interval = 1;
+    serial_input.control = {config, seed_columns.length_scale, seed_columns.frequency_scale,
+                            seed_columns.tolerance, seed_columns.column_scale};
+    guard_probe.readbacks.clear();
+    const auto serial = AttemptRetainedIntervals(guard_compute, {&serial_input, 1}, 1);
+    ASSERT_TRUE(serial) << serial.error().Description();
+    ASSERT_TRUE(serial->front().admissible);
+    const auto serial_rows = guard_probe.readbacks;
+    ASSERT_EQ(serial_rows.size(), 6U);
+    const auto serial_feedback = guard_compute.TakeSubmissionFeedback();
+    EXPECT_EQ(serial_feedback.peak_ms, 600);
+    EXPECT_EQ(serial_feedback.peak_rows, 1U);
+    EXPECT_EQ(serial_feedback.maximum_rows, 1U);
+    EXPECT_EQ(serial_feedback.maximum_one_row_ms, 600);
+    const auto consumed = guard_compute.TakeSubmissionFeedback();
+    EXPECT_EQ(consumed.peak_ms, 0);
+    EXPECT_EQ(consumed.maximum_rows, 0U);
+    EXPECT_EQ(consumed.maximum_one_row_ms, 0);
+    const auto compare_row = [&](const std::vector<std::byte>& actual, std::size_t row,
+                                 const std::vector<std::byte>& expected) {
+        ASSERT_EQ(expected.size(), endpoint_row_bytes);
+        ASSERT_GE(actual.size(), (row + 1) * endpoint_row_bytes);
+        const auto first = actual.begin() + row * endpoint_row_bytes;
+        EXPECT_TRUE(std::equal(expected.begin(), expected.end(), first));
+    };
+    for (const auto mode :
+         {GuardTiming::Normal, GuardTiming::Reducible, GuardTiming::Irreducible,
+          GuardTiming::RetryIrreducible, GuardTiming::FailedPair, GuardTiming::FailedRetry,
+          GuardTiming::Cancelled, GuardTiming::CancelledRetry}) {
+        SCOPED_TRACE(static_cast<unsigned>(mode));
+        guard_timing = mode;
+        paired_endpoint_calls = 0;
+        guard_cancelled = false;
+        guard_probe.readbacks.clear();
+        auto guarded_ray = make_ray();
+        auto guarded_columns = make_columns();
+        sirius::core::Rk45CoupledComparison guarded_comparison;
+        RetainedTraceExecutor guarded_executor(
+            guard_compute, [&] { return guard_cancelled.load(); }, 1000);
+        const bool completed =
+            guarded_executor.Step(guarded_ray, flat, config, guarded_columns, guarded_comparison);
+        const auto guarded_stats = guarded_executor.Statistics();
+        const bool recovered = mode == GuardTiming::Normal || mode == GuardTiming::Reducible;
+        EXPECT_EQ(completed, recovered);
+        EXPECT_EQ(guarded_stats.accepted_intervals, recovered ? 1U : 0U);
+        EXPECT_EQ(guarded_stats.rejected_intervals, recovered ? 0U : 1U);
+        EXPECT_EQ(guarded_stats.interval_rows, 1U);
+        EXPECT_EQ(guarded_stats.paired_projection_retries,
+                  mode == GuardTiming::Reducible || mode == GuardTiming::RetryIrreducible ||
+                          mode == GuardTiming::FailedRetry || mode == GuardTiming::CancelledRetry
+                      ? 1U
+                      : 0U);
+        const auto completed_stages = mode == GuardTiming::FailedPair ? 0U
+                                      : mode == GuardTiming::Reducible ||
+                                              mode == GuardTiming::RetryIrreducible ||
+                                              mode == GuardTiming::CancelledRetry
+                                          ? 42U
+                                          : 21U;
+        EXPECT_EQ(guarded_columns.central_stages, completed_stages);
+        EXPECT_EQ(guarded_columns.variation_stages, completed_stages);
+        EXPECT_EQ(guard_probe.allocations.size(), 12U);
+        EXPECT_EQ(device->BufferAllocationBytes(), guard_allocation);
+        if (recovered) {
+            EXPECT_FALSE(guarded_executor.Error());
+            ASSERT_EQ(guard_probe.readbacks.size(), mode == GuardTiming::Normal ? 4U : 10U);
+            for (std::size_t part = 0; part < 3; ++part)
+                for (std::size_t order = 0; order < 2; ++order)
+                    ASSERT_NO_FATAL_FAILURE(compare_row(guard_probe.readbacks[part + 1], order,
+                                                        serial_rows[part * 2 + order]));
+            EXPECT_EQ(guarded_columns.central_stages, mode == GuardTiming::Normal ? 21U : 42U);
+            for (int axis = 0; axis < 4; ++axis) {
+                EXPECT_EQ(guarded_ray.position(axis), serial->front().full.physical[axis].Center());
+                EXPECT_EQ(guarded_ray.velocity(axis),
+                          serial->front().full.physical[4 + axis].Center());
+            }
+            if (mode == GuardTiming::Reducible) {
+                for (std::size_t row = 0; row < serial_rows.size(); ++row)
+                    ASSERT_NO_FATAL_FAILURE(
+                        compare_row(guard_probe.readbacks[4 + row], 0, serial_rows[row]));
+                EXPECT_EQ(guarded_stats.safety_fallbacks, 1U);
+                const auto after_recovery = guard_compute.Statistics();
+                ASSERT_TRUE(guarded_executor.Step(guarded_ray, flat, config, guarded_columns,
+                                                  guarded_comparison));
+                EXPECT_EQ(paired_endpoint_calls, 3U);
+                EXPECT_EQ(guard_compute.Statistics()[2].submissions - after_recovery[2].submissions,
+                          6U);
+                EXPECT_EQ(guarded_executor.Statistics().paired_projection_retries, 1U);
+                EXPECT_FALSE(guarded_executor.Error());
+                RecordProperty("paired_guard_recovery_retries",
+                               std::to_string(guarded_stats.paired_projection_retries));
+                RecordProperty("paired_guard_recovery_charged_stages",
+                               std::to_string(guarded_columns.central_stages - 21));
+            }
+        } else {
+            const bool fatal =
+                mode != GuardTiming::Cancelled && mode != GuardTiming::CancelledRetry;
+            EXPECT_EQ(guarded_executor.Error().has_value(), fatal);
+            EXPECT_EQ(guarded_ray.terminated, 3);
+            for (int axis = 0; axis < 4; ++axis) {
+                EXPECT_EQ(guarded_ray.position(axis), seed.position(static_cast<int>(axis)));
+                EXPECT_EQ(guarded_ray.velocity(axis), seed.velocity(static_cast<int>(axis)));
+                for (std::size_t column = 0; column < 4; ++column) {
+                    EXPECT_EQ(guarded_columns.variations[column].displacement(axis),
+                              seed_columns.variations[column].displacement(static_cast<int>(axis)));
+                    EXPECT_EQ(guarded_columns.variations[column].derivative(axis),
+                              seed_columns.variations[column].derivative(static_cast<int>(axis)));
+                }
+            }
+            EXPECT_EQ(guarded_ray.proper_time, seed.proper_time);
+            EXPECT_EQ(guarded_ray.step_size, seed.step_size);
+            EXPECT_EQ(guard_probe.readbacks.size(),
+                      mode == GuardTiming::RetryIrreducible || mode == GuardTiming::CancelledRetry
+                          ? 10U
+                      : mode == GuardTiming::FailedPair ? 1U
+                                                        : 4U);
+            if (mode == GuardTiming::FailedPair || mode == GuardTiming::FailedRetry) {
+                ASSERT_TRUE(guarded_executor.Error());
+                EXPECT_EQ(guarded_executor.Error()->operation(), "retained transfer probe read");
+            }
+            if (fatal) {
+                const auto calls = guard_probe.dispatch_calls;
+                EXPECT_FALSE(guarded_executor.Step(guarded_ray, flat, config, guarded_columns,
+                                                   guarded_comparison));
+                EXPECT_EQ(guard_probe.dispatch_calls, calls);
+                EXPECT_EQ(guarded_columns.central_stages, completed_stages);
+                EXPECT_EQ(guarded_columns.variation_stages, completed_stages);
+            }
+        }
+    }
+    RecordProperty("paired_guard_timing_scope",
+                   "injected valid seam observations only: single rows 600ms, paired endpoints "
+                   "800/1200ms, transport overshoot 1100ms, hard bound 1000ms; no sleeps and no "
+                   "hardware-duration claim; real device outputs compare bitwise to serialization");
+
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif
@@ -1329,6 +1823,20 @@ TEST_F(RetainedComputeTest, Fp64ProductsPreserveIndependentScienceOrDeclineUnsup
             RetainedPhysicalError((*wide_intervals)[row].full.physical,
                                   (*narrow_intervals)[row].full.physical, intervals[row].control),
             1e-4);
+    }
+    const auto pair_inputs = std::span<const RetainedIntervalInput>(intervals).first(2);
+    const auto serialized_before = (*wide)->Statistics();
+    const auto serialized = AttemptRetainedIntervals(**wide, pair_inputs, 2);
+    ASSERT_TRUE(serialized) << serialized.error().Description();
+    EXPECT_EQ((*wide)->Statistics()[2].submissions - serialized_before[2].submissions, 6U);
+    const auto paired_before = (*wide)->Statistics();
+    const auto paired = AttemptRetainedIntervals(**wide, pair_inputs, 4);
+    ASSERT_TRUE(paired) << paired.error().Description();
+    EXPECT_EQ((*wide)->Statistics()[2].submissions - paired_before[2].submissions, 3U);
+    for (std::size_t row = 0; row < pair_inputs.size(); ++row) {
+        SCOPED_TRACE(row);
+        ASSERT_TRUE((*paired)[row].admissible);
+        EXPECT_TRUE(IntervalBitsAgree((*paired)[row], (*serialized)[row]));
     }
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";

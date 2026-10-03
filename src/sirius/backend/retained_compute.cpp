@@ -174,7 +174,14 @@ base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_
     stage.stats.cleanup_ms += observed->cleanup_ms;
     stage.stats.dispatch_total_ms += observed->total_ms;
     stage.stats.pipeline_creations += observed->pipeline_created ? 1 : 0;
-    submission_peak_ms_ = std::max(submission_peak_ms_, observed->submit_wait_ms);
+    if (observed->submit_wait_ms >= submission_feedback_.peak_ms) {
+        submission_feedback_.peak_ms = observed->submit_wait_ms;
+        submission_feedback_.peak_rows = active_rows;
+    }
+    submission_feedback_.maximum_rows = std::max(submission_feedback_.maximum_rows, active_rows);
+    if (active_rows == 1)
+        submission_feedback_.maximum_one_row_ms =
+            std::max(submission_feedback_.maximum_one_row_ms, observed->submit_wait_ms);
     if (dispatch_target_ms_ > 0 && observed->submit_wait_ms > dispatch_target_ms_)
         ++stage.stats.target_overshoots;
     auto output = std::span(stage.output).first(active_rows * (stage.output.size() / capacity_));
@@ -186,11 +193,13 @@ base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_
     return status;
 }
 
-double RetainedCompute::TakeSubmissionPeakMs() {
-    const double peak = submission_peak_ms_;
-    submission_peak_ms_ = 0;
-    return peak;
+RetainedCompute::SubmissionFeedback RetainedCompute::TakeSubmissionFeedback() {
+    const auto feedback = submission_feedback_;
+    submission_feedback_ = {};
+    return feedback;
 }
+
+double RetainedCompute::TakeSubmissionPeakMs() { return TakeSubmissionFeedback().peak_ms; }
 
 base::Expected<std::vector<RetainedCameraOutput>> RetainedCompute::Camera(
     std::span<const RetainedCameraInput> inputs, DispatchTiming* timing) {

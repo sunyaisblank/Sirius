@@ -133,12 +133,49 @@ void RetainedTraceExecutor::Run() {
             }
             full_batch = batch.size() == batch_limit;
         }
+        // Exclude any serialized pre-dispatcher work from this gathered window.
+        (void)compute_.TakeSubmissionFeedback();
         const auto execute_started = std::chrono::steady_clock::now();
-        Execute(batch);
+        Execute(batch, batch_limit);
+        auto feedback = compute_.TakeSubmissionFeedback();
+        bool projection_retry = false;
+        if (maximum_submission_ms_ > 0 && feedback.peak_ms > maximum_submission_ms_ &&
+            feedback.peak_rows > 1 && feedback.maximum_one_row_ms <= maximum_submission_ms_ &&
+            batch.size() == 1 && !batch.front()->camera && batch.front()->result) {
+            // A single logical ray still has two reducible endpoint rows. Its
+            // candidate remains private until a bounded serialized retry returns.
+            auto& request = *batch.front();
+            const auto cancelled = [&] {
+                if (should_cancel_ && should_cancel_()) return true;
+                std::lock_guard lock(mutex_);
+                return stopping_;
+            };
+            bool cancel = cancelled();
+            if (!cancel) {
+                projection_retry = true;
+                Execute(batch, 1);
+                const auto retry = compute_.TakeSubmissionFeedback();
+                if (retry.peak_ms >= feedback.peak_ms) {
+                    feedback.peak_ms = retry.peak_ms;
+                    feedback.peak_rows = retry.peak_rows;
+                }
+                feedback.maximum_rows = std::max(feedback.maximum_rows, retry.maximum_rows);
+                feedback.maximum_one_row_ms =
+                    std::max(feedback.maximum_one_row_ms, retry.maximum_one_row_ms);
+                cancel = cancelled();
+            }
+            if (cancel && request.result) {
+                request.result = RetainedIntervalOutput{};
+                request.result->failure = core::CoupledStepFailure::InvalidState;
+                request.cancelled = true;
+            }
+        }
         const double execute_ms = std::chrono::duration<double, std::milli>(
                                       std::chrono::steady_clock::now() - execute_started)
                                       .count();
-        const double peak = compute_.TakeSubmissionPeakMs();
+        // Retain the original paired overshoot for sticky safety/soft feedback,
+        // and every actual one-row overshoot from either observation window.
+        const double peak = feedback.peak_ms;
         {
             std::lock_guard lock(mutex_);
             ++stats_.batches;
@@ -157,10 +194,13 @@ void RetainedTraceExecutor::Run() {
                 ++stats_.interval_batches;
             if (std::any_of(batch.begin(), batch.end(), [](const Request* r) { return r->camera; }))
                 ++stats_.camera_batches;
+            if (projection_retry) ++stats_.paired_projection_retries;
             const bool safety = maximum_submission_ms_ > 0 && peak > maximum_submission_ms_;
-            if (safety && batch.size() == 1 && !error_)
+            const bool irreducible =
+                maximum_submission_ms_ > 0 && feedback.maximum_one_row_ms > maximum_submission_ms_;
+            if (irreducible && !error_)
                 error_.emplace(base::ErrorDomain::kDevice, "dispatch retained renderer",
-                               "single-ray submission exceeded the safety duration");
+                               "single-row submission exceeded the safety duration");
             if ((safety || peak == 0) && batch_limit > 1) {
                 safety_cap = std::min(safety_cap,
                                       peak == 0 ? 1 : std::max<std::size_t>(1, batch.size() / 2));
@@ -186,8 +226,8 @@ void RetainedTraceExecutor::Run() {
                     ++stats_.camera_rows;
                 else
                     ++stats_.interval_rows;
-                if (!request->camera && request->result) {
-                    if (request->result->admissible)
+                if (!request->camera) {
+                    if (request->result && request->result->admissible && !error_)
                         ++stats_.accepted_intervals;
                     else
                         ++stats_.rejected_intervals;
@@ -206,7 +246,8 @@ void RetainedTraceExecutor::Run() {
     }
 }
 
-void RetainedTraceExecutor::Execute(std::span<Request*> requests) {
+void RetainedTraceExecutor::Execute(std::span<Request*> requests,
+                                    std::size_t projection_row_budget) {
     if (std::any_of(requests.begin(), requests.end(),
                     [](const Request* request) { return request->camera; })) {
         std::vector<RetainedRayCameraInput> packets;
@@ -223,7 +264,7 @@ void RetainedTraceExecutor::Execute(std::span<Request*> requests) {
             cameras[row]->camera_result =
                 outputs ? base::Expected<RetainedCameraOutput>((*outputs)[row])
                         : std::unexpected(outputs.error());
-        if (!steps.empty()) Execute(steps);
+        if (!steps.empty()) Execute(steps, projection_row_budget);
         return;
     }
     const auto fail = [&](const base::Error& error) {
@@ -263,12 +304,15 @@ void RetainedTraceExecutor::Execute(std::span<Request*> requests) {
     }
     std::vector<RetainedIntervalInput> intervals;
     for (const auto* request : requests) intervals.push_back(request->interval);
-    const auto results = AttemptRetainedIntervals(compute_, intervals);
+    const auto results = AttemptRetainedIntervals(compute_, intervals, projection_row_budget);
     if (!results) {
         fail(results.error());
         return;
     }
-    for (std::size_t row = 0; row < requests.size(); ++row) requests[row]->result = (*results)[row];
+    for (std::size_t row = 0; row < requests.size(); ++row) {
+        requests[row]->completed_stages += (*results)[row].attempted_stages;
+        requests[row]->result = (*results)[row];
+    }
 }
 
 std::optional<core::CameraLaunch> RetainedTraceExecutor::Launch(core::IMetric& metric,
@@ -428,14 +472,19 @@ bool RetainedTraceExecutor::Step(core::Lightray& ray, core::IMetric& metric,
         available_.notify_one();
         completed_.wait(lock, [&] { return request.completed; });
     }
+    coupled.central_stages += request.completed_stages;
+    coupled.variation_stages += request.completed_stages;
+    if (request.cancelled) {
+        ray.terminated = 3;
+        coupled.failure = core::CoupledStepFailure::InvalidState;
+        return false;
+    }
     if (!request.result) {
         ray.terminated = 3;
         coupled.failure = core::CoupledStepFailure::InvalidState;
         return false;
     }
     const auto& result = *request.result;
-    coupled.central_stages += result.attempted_stages;
-    coupled.variation_stages += result.attempted_stages;
     coupled.failure = result.failure;
     Continuation continuation;
     continuation.before = snapshot;

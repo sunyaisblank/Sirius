@@ -35,13 +35,16 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
         std::uint64_t camera_batches = 0;
         std::uint64_t batch_subdivisions = 0;
         std::uint64_t safety_fallbacks = 0;
+        // A private singleton attempt repeated with serialized projections
+        // before publication; its discarded stage work remains charged.
+        std::uint64_t paired_projection_retries = 0;
         std::size_t maximum_batch_rows = 0;
         std::uint64_t reused_phases = 0;
         std::uint64_t initialized_phases = 0;
         std::uint64_t accepted_intervals = 0;
         std::uint64_t rejected_intervals = 0;
-        // Completed outer Execute calls; mixed batches count once. Histogram
-        // index is the gathered row count, including rejected interval rows.
+        // Completed gathered batches; mixed requests and a private retry count
+        // once. Histogram includes rejected interval rows.
         std::uint64_t batches = 0;
         std::uint64_t full_batches = 0;
         std::uint64_t interval_rows = 0;
@@ -81,11 +84,14 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
         RetainedInitializeInput initialization;
         RetainedIntervalInput interval;
         base::Expected<RetainedIntervalOutput> result = RetainedIntervalOutput{};
+        // Known completed attempts remain charged after retry, error or cancellation.
+        std::uint32_t completed_stages = 0;
         bool completed = false;
+        bool cancelled = false;
         bool registered = false;
     };
     void Run();
-    void Execute(std::span<Request*> requests);
+    void Execute(std::span<Request*> requests, std::size_t projection_row_budget);
     RetainedCompute& compute_;
     double maximum_submission_ms_;
     std::function<bool()> should_cancel_;
