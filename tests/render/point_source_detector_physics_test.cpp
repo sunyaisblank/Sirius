@@ -504,9 +504,10 @@ void CheckRotatingIsolatedStarBrightness(backend::TraceStepExecutor* executor = 
             ASSERT_GT(observed_flux, 0);
             brightness[mode][frame] = static_cast<double>(observed_flux);
             reference_brightness[mode][frame] = static_cast<double>(expected_flux);
-            EXPECT_NEAR(brightness[mode][frame], reference_brightness[mode][frame],
-                        policy.relative_rgb_error * reference_brightness[mode][frame] +
-                            policy.absolute_rgb_error * 3 * total_solid_angle);
+            EXPECT_NEAR(
+                brightness[mode][frame], reference_brightness[mode][frame],
+                static_cast<double>(policy.relative_rgb_error * reference_brightness[mode][frame] +
+                                    policy.absolute_rgb_error * 3 * total_solid_angle));
             ::testing::Test::RecordProperty(prefix + "_brightness",
                                             std::format("{:.17g}", brightness[mode][frame]));
             ::testing::Test::RecordProperty(
