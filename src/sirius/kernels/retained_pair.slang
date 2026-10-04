@@ -202,19 +202,24 @@ RetainedPair RPDivide(RetainedPair a,RetainedPair b) {
     if(a.valid==0u||b.valid==0u)return RPInvalid();
     RPScalar lower=RPAbsoluteLower(b);
     if(RPScalarLessEqual(lower,RPZero())||RPScalarGreater(RPRatioUpper(RPAbsoluteUpper(a),lower),RPFromBits(0x5e000000u)))return RPInvalid();
-    RetainedPair q=RPConstant(RPDivideSeed(a.hi,b.hi));if(q.valid==0u)return q;
 #ifdef SIRIUS_RETAINED_PORTABLE
-    // Share the original residual before and after its one correction.
-    RetainedPair residual=RPInvalid();
+    // Share each seed and residual while retaining the one correction.
+    RetainedPair q=RPInvalid(),residual=RPInvalid();
+    RPScalar numerator=a.hi;
     [loop] for(uint i=0;i<2;++i) {
+        RetainedPair seed=RPConstant(RPDivideSeed(numerator,b.hi));
+        if(i==0) q=seed;
+        else q=RPCenter(RPAdd(q,seed));
+        if(q.valid==0u)return q;
         residual=RPSubtract(a,RPMultiply(b,q));
         if(residual.valid==0u)return residual;
         if(i==0) {
             if(RPScalarGreater(RPRatioUpper(RPAbs(residual.hi),RPAbs(b.hi)),RPFromBits(0x5d000000u)))return RPInvalid();
-            q=RPCenter(RPAdd(q,RPConstant(RPDivideSeed(residual.hi,b.hi))));if(q.valid==0u)return q;
+            numerator=residual.hi;
         }
     }
 #else
+    RetainedPair q=RPConstant(RPDivideSeed(a.hi,b.hi));if(q.valid==0u)return q;
     RetainedPair residual=RPSubtract(a,RPMultiply(b,q));if(residual.valid==0u)return residual;
     if(RPScalarGreater(RPRatioUpper(RPAbs(residual.hi),RPAbs(b.hi)),RPFromBits(0x5d000000u)))return RPInvalid();
     q=RPCenter(RPAdd(q,RPConstant(RPDivideSeed(residual.hi,b.hi))));if(q.valid==0u)return q;
