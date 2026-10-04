@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <chrono>
 #include <cmath>
+#include <format>
 
 namespace sirius::backend {
 namespace {
@@ -160,8 +161,11 @@ void RetainedTraceExecutor::Run() {
                     feedback.peak_rows = retry.peak_rows;
                 }
                 feedback.maximum_rows = std::max(feedback.maximum_rows, retry.maximum_rows);
-                feedback.maximum_one_row_ms =
-                    std::max(feedback.maximum_one_row_ms, retry.maximum_one_row_ms);
+                if (retry.maximum_one_row_stage &&
+                    retry.maximum_one_row_ms >= feedback.maximum_one_row_ms) {
+                    feedback.maximum_one_row_ms = retry.maximum_one_row_ms;
+                    feedback.maximum_one_row_stage = retry.maximum_one_row_stage;
+                }
                 cancel = cancelled();
             }
             if (cancel && request.result) {
@@ -199,8 +203,15 @@ void RetainedTraceExecutor::Run() {
             const bool irreducible =
                 maximum_submission_ms_ > 0 && feedback.maximum_one_row_ms > maximum_submission_ms_;
             if (irreducible && !error_)
-                error_.emplace(base::ErrorDomain::kDevice, "dispatch retained renderer",
-                               "single-row submission exceeded the safety duration");
+                error_.emplace(
+                    base::ErrorDomain::kDevice, "dispatch retained renderer",
+                    std::format("single-row submission exceeded the safety duration: "
+                                "stage={}, active_rows=1, submit_wait_ms={:.17g}, "
+                                "limit_ms={:.17g}",
+                                feedback.maximum_one_row_stage
+                                    ? RetainedCompute::StageName(*feedback.maximum_one_row_stage)
+                                    : "unknown",
+                                feedback.maximum_one_row_ms, maximum_submission_ms_));
             if ((safety || peak == 0) && batch_limit > 1) {
                 safety_cap = std::min(safety_cap,
                                       peak == 0 ? 1 : std::max<std::size_t>(1, batch.size() / 2));

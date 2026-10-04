@@ -1602,10 +1602,13 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
     EXPECT_EQ(serial_feedback.peak_rows, 1U);
     EXPECT_EQ(serial_feedback.maximum_rows, 1U);
     EXPECT_EQ(serial_feedback.maximum_one_row_ms, 600);
+    ASSERT_TRUE(serial_feedback.maximum_one_row_stage);
+    EXPECT_EQ(*serial_feedback.maximum_one_row_stage, RetainedCompute::KernelStage::kDense);
     const auto consumed = guard_compute.TakeSubmissionFeedback();
     EXPECT_EQ(consumed.peak_ms, 0);
     EXPECT_EQ(consumed.maximum_rows, 0U);
     EXPECT_EQ(consumed.maximum_one_row_ms, 0);
+    EXPECT_FALSE(consumed.maximum_one_row_stage);
     const auto compare_row = [&](const std::vector<std::byte>& actual, std::size_t row,
                                  const std::vector<std::byte>& expected) {
         ASSERT_EQ(expected.size(), endpoint_row_bytes);
@@ -1707,6 +1710,16 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
                 ASSERT_TRUE(guarded_executor.Error());
                 EXPECT_EQ(guarded_executor.Error()->operation(), "retained transfer probe read");
             }
+            if (mode == GuardTiming::Irreducible || mode == GuardTiming::RetryIrreducible) {
+                ASSERT_TRUE(guarded_executor.Error());
+                EXPECT_EQ(guarded_executor.Error()->operation(), "dispatch retained renderer");
+                // The paired endpoint peak is 1200ms. The terminal one-row
+                // observation is transport at 1100ms, including a retry-only
+                // overshoot after a preceding window with different stage identity.
+                EXPECT_EQ(guarded_executor.Error()->detail(),
+                          "single-row submission exceeded the safety duration: "
+                          "stage=transport, active_rows=1, submit_wait_ms=1100, limit_ms=1000");
+            }
             if (fatal) {
                 const auto calls = guard_probe.dispatch_calls;
                 EXPECT_FALSE(guarded_executor.Step(guarded_ray, flat, config, guarded_columns,
@@ -1721,6 +1734,41 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
                    "injected valid seam observations only: single rows 600ms, paired endpoints "
                    "800/1200ms, transport overshoot 1100ms, hard bound 1000ms; no sleeps and no "
                    "hardware-duration claim; real device outputs compare bitwise to serialization");
+
+    // A failed camera launch has no accepted interval through which to export
+    // timings. Preserve that stage in the error, including an adjacent timing
+    // above the unchanged strict 1000ms guard which coarse decimals could hide.
+    sirius::core::CameraRay guard_camera;
+    guard_camera.origin(1) = 5;
+    guard_camera.origin(2) = std::numbers::pi / 2;
+    guard_camera.direction(1) = 1;
+    const auto ray_camera_input = guard_probe.allocations[10].handle;
+    for (const double duration :
+         {1000.0, std::nextafter(1000.0, std::numeric_limits<double>::infinity())}) {
+        guard_probe.submission_ms = [&, duration](BufferHandle input, std::uint32_t rows) {
+            EXPECT_EQ(input.value, ray_camera_input.value);
+            EXPECT_EQ(rows, 1U);
+            return duration;
+        };
+        RetainedTraceExecutor guarded_executor(guard_compute, {}, 1000);
+        const auto launch = guarded_executor.Launch(flat, 0, guard_camera);
+        const bool permitted = duration == 1000;
+        EXPECT_EQ(launch.has_value(), permitted);
+        EXPECT_EQ(guarded_executor.Statistics().initialized_phases, 0U);
+        EXPECT_EQ(guarded_executor.Statistics().interval_rows, 0U);
+        if (permitted) {
+            EXPECT_FALSE(guarded_executor.Error());
+        } else {
+            ASSERT_TRUE(guarded_executor.Error());
+            EXPECT_EQ(guarded_executor.Error()->detail(),
+                      "single-row submission exceeded the safety duration: "
+                      "stage=ray_camera, active_rows=1, "
+                      "submit_wait_ms=1000.0000000000001, limit_ms=1000");
+            const auto calls = guard_probe.dispatch_calls;
+            EXPECT_FALSE(guarded_executor.Launch(flat, 0, guard_camera));
+            EXPECT_EQ(guard_probe.dispatch_calls, calls);
+        }
+    }
 
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";

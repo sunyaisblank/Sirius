@@ -4,6 +4,7 @@
 
 #include <array>
 #include <memory>
+#include <optional>
 
 namespace sirius::backend {
 
@@ -93,6 +94,8 @@ struct RetainedInitializeOutput {
 // object, and callers must serialize its synchronous submissions.
 class RetainedCompute {
   public:
+    enum class KernelStage { kCamera, kTransport, kEndpoint, kDense, kInitialize, kRayCamera };
+    [[nodiscard]] static const char* StageName(KernelStage stage);
     struct StageStats {
         // Host wall-clock intervals, not GPU timestamps. Dispatch phases and
         // creation counts cover successful device Dispatch calls with valid
@@ -140,6 +143,9 @@ class RetainedCompute {
         std::size_t peak_rows = 0;
         std::size_t maximum_rows = 0;
         double maximum_one_row_ms = 0;
+        // Identity belongs to this window's one-row maximum, not the lifetime
+        // stage statistics or a larger paired submission.
+        std::optional<KernelStage> maximum_one_row_stage;
     };
     [[nodiscard]] SubmissionFeedback TakeSubmissionFeedback();
     // Compatibility view; consumes the same complete observation window.
@@ -151,6 +157,7 @@ class RetainedCompute {
     explicit RetainedCompute(ComputeDevice& device, std::size_t capacity)
         : device_(device), capacity_(capacity) {}
     struct Stage {
+        KernelStage kind = KernelStage::kCamera;
         KernelHandle kernel;
         std::array<BufferHandle, 2> buffers;
         std::vector<std::uint32_t> input, output;

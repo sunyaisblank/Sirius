@@ -51,6 +51,24 @@ bool RetainedValue::IsRepresented() const {
            std::abs(double(tail)) <= spacing(low) && (high != 0 || (low == 0 && tail == 0));
 }
 
+const char* RetainedCompute::StageName(KernelStage stage) {
+    switch (stage) {
+        case KernelStage::kCamera:
+            return "camera";
+        case KernelStage::kTransport:
+            return "transport";
+        case KernelStage::kEndpoint:
+            return "endpoint";
+        case KernelStage::kDense:
+            return "dense";
+        case KernelStage::kInitialize:
+            return "initialize";
+        case KernelStage::kRayCamera:
+            return "ray_camera";
+    }
+    return "unknown";
+}
+
 base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
     ComputeDevice& device, std::size_t capacity, bool fp64_products, double dispatch_target_ms) {
     if (capacity == 0 || capacity > kMaximumCapacity)
@@ -62,11 +80,12 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
         return Fail(ErrorDomain::kDevice, "create retained compute stages", std::string(*issue));
     auto result = std::unique_ptr<RetainedCompute>(new RetainedCompute(device, capacity));
     result->dispatch_target_ms_ = dispatch_target_ms;
-    const auto create = [&](Stage& stage, std::span<const std::uint32_t> code,
+    const auto create = [&](Stage& stage, KernelStage kind, std::span<const std::uint32_t> code,
                             std::span<const std::uint32_t> program, std::size_t input_words,
                             std::size_t row_words) -> base::Expected<void> {
         auto kernel = device.LoadKernel(code);
         if (!kernel) return std::unexpected(kernel.error());
+        stage.kind = kind;
         stage.kernel = *kernel;
         stage.input.resize(1 + input_words * capacity + program.size());
         stage.output.resize(row_words * capacity);
@@ -89,31 +108,31 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
         return fp64_products ? wide : narrow;
     };
     auto status = create(
-        result->camera_,
+        result->camera_, KernelStage::kCamera,
         shader(kCameraShader, kCameraFp64Shader, kCameraPortableShader, kCameraPortableFp64Shader),
         kCameraProgram, 160, kCameraRowWords);
     if (!status) return std::unexpected(status.error());
-    status = create(result->transport_,
+    status = create(result->transport_, KernelStage::kTransport,
                     shader(kTransportShader, kTransportFp64Shader, kTransportPortableShader,
                            kTransportPortableFp64Shader),
                     kTransportProgram, 230, kTransportRowWords);
     if (!status) return std::unexpected(status.error());
-    status = create(result->endpoint_,
+    status = create(result->endpoint_, KernelStage::kEndpoint,
                     shader(kEndpointShader, kEndpointFp64Shader, kEndpointPortableShader,
                            kEndpointPortableFp64Shader),
                     kEndpointProgram, 225, kEndpointRowWords);
     if (!status) return std::unexpected(status.error());
     status = create(
-        result->dense_,
+        result->dense_, KernelStage::kDense,
         shader(kDenseShader, kDenseFp64Shader, kDensePortableShader, kDensePortableFp64Shader),
         kDenseProgram, 560, kDenseRowWords);
     if (!status) return std::unexpected(status.error());
-    status = create(result->initialize_,
+    status = create(result->initialize_, KernelStage::kInitialize,
                     shader(kInitializeShader, kInitializeFp64Shader, kInitializePortableShader,
                            kInitializePortableFp64Shader),
                     kInitializeProgram, 225, kInitializeRowWords);
     if (!status) return std::unexpected(status.error());
-    status = create(result->ray_camera_,
+    status = create(result->ray_camera_, KernelStage::kRayCamera,
                     shader(kRayCameraShader, kRayCameraFp64Shader, kRayCameraPortableShader,
                            kRayCameraPortableFp64Shader),
                     kRayCameraProgram, 225, kRayCameraRowWords);
@@ -179,9 +198,10 @@ base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_
         submission_feedback_.peak_rows = active_rows;
     }
     submission_feedback_.maximum_rows = std::max(submission_feedback_.maximum_rows, active_rows);
-    if (active_rows == 1)
-        submission_feedback_.maximum_one_row_ms =
-            std::max(submission_feedback_.maximum_one_row_ms, observed->submit_wait_ms);
+    if (active_rows == 1 && observed->submit_wait_ms >= submission_feedback_.maximum_one_row_ms) {
+        submission_feedback_.maximum_one_row_ms = observed->submit_wait_ms;
+        submission_feedback_.maximum_one_row_stage = stage.kind;
+    }
     if (dispatch_target_ms_ > 0 && observed->submit_wait_ms > dispatch_target_ms_)
         ++stage.stats.target_overshoots;
     auto output = std::span(stage.output).first(active_rows * (stage.output.size() / capacity_));

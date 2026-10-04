@@ -29,6 +29,8 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
                                              const core::CameraRay& camera) override;
     bool Step(core::Lightray& ray, core::IMetric& metric, const core::IntegratorConfig& config,
               core::Rk45CoupledState& coupled, core::Rk45CoupledComparison& comparison) override;
+    // A submission safety error includes its observed one-row stage and host
+    // submit/wait duration; it does not attribute the driver's compilation work.
     [[nodiscard]] std::optional<base::Error> Error() const;
     struct Stats {
         std::uint64_t interval_batches = 0;
