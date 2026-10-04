@@ -70,7 +70,14 @@ endif()
 # not depend on a test fixture or an extra installed runtime file.
 find_program(SIRIUS_SPIRV_AS spirv-as)
 find_program(SIRIUS_SPIRV_DIS spirv-dis)
-if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS)
+find_program(SIRIUS_SPIRV_OPT spirv-opt)
+if(SIRIUS_REQUIRE_VULKAN_RUNTIME AND
+   (NOT SIRIUS_SPIRV_VAL OR NOT SIRIUS_SPIRV_AS OR
+    NOT SIRIUS_SPIRV_DIS OR NOT SIRIUS_SPIRV_OPT))
+    message(FATAL_ERROR
+        "Required retained compute needs spirv-val, spirv-as, spirv-dis and spirv-opt.")
+endif()
+if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS AND SIRIUS_SPIRV_OPT)
     set(retained_build "${CMAKE_CURRENT_BINARY_DIR}/retained")
     set(retained_header "${retained_build}/retained_kernels.h")
     add_custom_command(
@@ -102,8 +109,9 @@ if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS)
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/scripts/build-retained-kernels.py"
             --output "${retained_header}" --compiler "${SIRIUS_SLANGC}"
             --assembler "${SIRIUS_SPIRV_AS}" --disassembler "${SIRIUS_SPIRV_DIS}"
-            --validator "${SIRIUS_SPIRV_VAL}"
+            --validator "${SIRIUS_SPIRV_VAL}" --optimizer "${SIRIUS_SPIRV_OPT}"
         DEPENDS "${CMAKE_SOURCE_DIR}/scripts/build-retained-kernels.py"
+                "${SIRIUS_SPIRV_OPT}"
                 "${SIRIUS_KERNEL_DIR}/retained_program.py"
                 "${SIRIUS_KERNEL_DIR}/portable_binary32.h"
                 "${SIRIUS_KERNEL_DIR}/retained_scalar.slang"
@@ -123,6 +131,8 @@ if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS)
     target_link_libraries(sirius_backend PUBLIC sirius_core)
     target_include_directories(sirius_backend PRIVATE "${retained_build}")
     target_compile_definitions(sirius_backend PUBLIC SIRIUS_HAS_RETAINED_COMPUTE=1)
+else()
+    message(STATUS "Retained compute unavailable: SPIR-V build tools are incomplete")
 endif()
 
 set(SIRIUS_KERNEL_OUTPUTS "")

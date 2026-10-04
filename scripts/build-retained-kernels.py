@@ -15,7 +15,7 @@ WORKGROUP_ROWS = 1
 WORKGROUP_LANES = 64
 
 
-def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False):
+def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None):
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
@@ -30,12 +30,19 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
                     f"-DSIRIUS_RETAINED_LAYERS={layers}",
                     f"-DSIRIUS_RETAINED_PREFIX={prefix}"]
     float_controls = [] if portable else ["-denorm-mode-fp32", "preserve"]
-    # Portable arithmetic is integer-only; native transforms retain their order.
-    optimization = "-O1" if portable else "-O0"
-    subprocess.run([compiler, str(source), *definitions, "-I", str(source.parent), optimization,
+    subprocess.run([compiler, str(source), *definitions, "-I", str(source.parent), "-O0",
                     "-target", "spirv", "-profile", "spirv_1_5", "-entry", "ComputeMain",
                     "-stage", "compute", *float_controls, "-o", str(raw)],
                    check=True)
+    if portable:
+        if not optimizer:
+            raise ValueError("portable retained shaders require spirv-opt")
+        # Promote local state without the default inlining/unrolling expansion.
+        optimized = destination.with_suffix(".optimized.spv")
+        subprocess.run([optimizer, "--target-env=vulkan1.2", "--ssa-rewrite",
+                        "--eliminate-dead-code-aggressive", "--preserve-bindings",
+                        "--preserve-interface", str(raw), "-o", str(optimized)], check=True)
+        optimized.replace(raw)
     subprocess.run([disassembler, str(raw), "-o", str(assembly)], check=True)
     text = assembly.read_text()
     if portable:
@@ -86,7 +93,7 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
-    for name in ("compiler", "assembler", "disassembler", "validator"):
+    for name in ("compiler", "assembler", "disassembler", "validator", "optimizer"):
         parser.add_argument("--" + name, required=True)
     args = parser.parse_args()
     source = Path(__file__).resolve().parents[1] / "src/sirius/kernels"
@@ -127,7 +134,7 @@ def main():
                                   args.output.parent / (stem + suffix + ".spv"),
                                   args.compiler, args.assembler, args.disassembler, args.validator,
                                   program["registers"], terms, len(program["layer_offsets"])-1,
-                                  program.get("prefix_instructions", 0), fp64=wide, portable=portable)
+                                  program.get("prefix_instructions", 0), fp64=wide, portable=portable, optimizer=args.optimizer)
             array("k" + kind + name + "Shader", code)
             sizes.append(len(code) * 4)
         words = ((512 if kind == "Camera" else 576) + 4 * program["registers"] if kind in ("Camera", "RayCamera")
