@@ -142,8 +142,20 @@ RetainedPair RPMultiply(RetainedPair a,RetainedPair b) {
     RetainedPair r=RPAdd(RPAdd(RPScalarProduct(a.hi,b.hi),RPScalarProduct(a.hi,b.lo)),
                         RPAdd(RPScalarProduct(a.lo,b.hi),RPScalarProduct(a.lo,b.lo)));
 #endif
+#ifdef SIRIUS_RETAINED_PORTABLE
+    // Preserve the three bound products and their ordered upward sum.
+    RPScalar uncertainty=RPZero();
+    [loop] for(uint i=0;i<3;++i) {
+        RPScalar other=b.error;
+        if(i<2) other=RPCenterUpper(i==0?b:a);
+        RPScalar term=RPUpMultiply(i==1?b.error:a.error,other);
+        if(i==0) uncertainty=term;
+        else uncertainty=RPUpAdd(uncertainty,term);
+    }
+#else
     RPScalar uncertainty=RPUpAdd(RPUpAdd(RPUpMultiply(a.error,RPCenterUpper(b)),
         RPUpMultiply(b.error,RPCenterUpper(a))),RPUpMultiply(a.error,b.error));
+#endif
     return r.valid==0u?r:RPPack(r.hi,r.lo,RPUpAdd(r.error,uncertainty));
 }
 int RPFloorExponent(RPScalar positive) {
