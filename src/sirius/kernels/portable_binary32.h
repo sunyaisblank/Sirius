@@ -7,6 +7,7 @@
 // are outside this value API. Bit operations preserve the input payload bits.
 // The same source is used by C++ and Slang; no native floating operation is used.
 #if defined(__cplusplus)
+#include <bit>
 #include <cstdint>
 namespace sirius::portable_binary32 {
 using uint = std::uint32_t;
@@ -24,6 +25,16 @@ struct PB32Finite {
     uint significand;
     int exponent;
 };
+
+// Callers supply a nonzero word. Its leading bit replaces exact one-bit
+// normalization loops without changing significands, exponents or rounding.
+SIRIUS_PB32_INLINE int PB32LeadingBit(uint a) {
+#if defined(__cplusplus)
+    return 31 - int(std::countl_zero(a));
+#else
+    return int(firstbithigh(a));
+#endif
+}
 
 SIRIUS_PB32_INLINE uint PB32Abs(uint a) { return a & 0x7fffffffu; }
 SIRIUS_PB32_INLINE uint PB32Negate(uint a) { return a ^ 0x80000000u; }
@@ -81,11 +92,11 @@ SIRIUS_PB32_INLINE PB32Finite PB32Unpack(uint a) {
         r.significand |= 0x00800000u;
     else {
         r.exponent = -126;
-        if (r.significand != 0u)
-            while (r.significand < 0x00800000u) {
-                r.significand <<= 1;
-                --r.exponent;
-            }
+        if (r.significand != 0u) {
+            uint distance = uint(23 - PB32LeadingBit(r.significand));
+            r.significand <<= distance;
+            r.exponent -= int(distance);
+        }
     }
     return r;
 }
@@ -136,10 +147,9 @@ SIRIUS_PB32_INLINE uint PB32Add(uint a, uint b) {
     } else {
         result = ax - bx;
         if (result == 0u) return 0u;
-        while (result < 0x04000000u) {
-            result <<= 1;
-            --exponent;
-        }
+        uint distance = uint(26 - PB32LeadingBit(result));
+        result <<= distance;
+        exponent -= int(distance);
     }
     return PB32Round(sign, exponent, result);
 }
@@ -210,12 +220,7 @@ SIRIUS_PB32_INLINE uint PB32Sqrt(uint a) {
 }
 SIRIUS_PB32_INLINE uint PB32FromUnsigned(uint a) {
     if (a == 0u) return 0u;
-    uint probe = a;
-    int exponent = 0;
-    while (probe > 1u) {
-        probe >>= 1;
-        ++exponent;
-    }
+    int exponent = PB32LeadingBit(a);
     uint extended =
         exponent <= 26 ? a << uint(26 - exponent) : PB32ShiftJam(a, uint(exponent - 26));
     return PB32Round(0u, exponent, extended);
@@ -250,12 +255,8 @@ SIRIUS_PB32_INLINE PB32Wide PB32WideSubtract(PB32Wide a, PB32Wide b) {
 }
 SIRIUS_PB32_INLINE uint PB32RoundWide(uint sign, int leastBitExponent, PB32Wide magnitude) {
     if ((magnitude.lo | magnitude.hi) == 0u) return sign << 31;
-    uint probe = magnitude.hi != 0u ? magnitude.hi : magnitude.lo;
-    int leading = magnitude.hi != 0u ? 32 : 0;
-    while (probe > 1u) {
-        probe >>= 1;
-        ++leading;
-    }
+    int leading =
+        magnitude.hi != 0u ? 32 + PB32LeadingBit(magnitude.hi) : PB32LeadingBit(magnitude.lo);
     uint extended;
     if (leading > 26)
         extended = PB32WideShiftJam(magnitude, uint(leading - 26));
