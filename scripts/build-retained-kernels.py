@@ -30,7 +30,9 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
                     f"-DSIRIUS_RETAINED_LAYERS={layers}",
                     f"-DSIRIUS_RETAINED_PREFIX={prefix}"]
     float_controls = [] if portable else ["-denorm-mode-fp32", "preserve"]
-    subprocess.run([compiler, str(source), *definitions, "-I", str(source.parent), "-O0",
+    # Portable arithmetic is integer-only; native transforms retain their order.
+    optimization = "-O1" if portable else "-O0"
+    subprocess.run([compiler, str(source), *definitions, "-I", str(source.parent), optimization,
                     "-target", "spirv", "-profile", "spirv_1_5", "-entry", "ComputeMain",
                     "-stage", "compute", *float_controls, "-o", str(raw)],
                    check=True)
