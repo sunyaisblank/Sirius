@@ -112,6 +112,19 @@ if(BUILD_TESTS AND SIRIUS_MANDATORY_TESTS)
         ${sirius_gate_test_artifacts}
         ${sirius_gate_product_artifacts}
         ${sirius_gate_test_input_artifacts})
+    if(SIRIUS_REQUIRE_VULKAN_RUNTIME)
+        set(sirius_identity_require_vulkan true)
+    else()
+        set(sirius_identity_require_vulkan false)
+    endif()
+    set(sirius_runtime_identity_command
+        "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/scripts/runtime_identity.py"
+        --source-root "${CMAKE_SOURCE_DIR}"
+        --source-revision "${SIRIUS_SOURCE_REVISION}"
+        --source-tree-clean "${SIRIUS_SOURCE_TREE_CLEAN}"
+        --executable "$<TARGET_FILE:sirius>"
+        --require-vulkan "${sirius_identity_require_vulkan}"
+        --output "${CMAKE_BINARY_DIR}/generated/sirius/mandatory_runtime_identity_gate.json")
     if(NOT SIRIUS_SANITIZERS STREQUAL "none")
         set(sirius_mandatory_gate_command
             "${CMAKE_COMMAND}" -E env
@@ -119,11 +132,19 @@ if(BUILD_TESTS AND SIRIUS_MANDATORY_TESTS)
             "LSAN_OPTIONS=suppressions=${CMAKE_SOURCE_DIR}/tests/sanitizers/lsan-vulkan.supp:print_suppressions=1"
             "UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1"
             ${sirius_mandatory_gate_command})
+        set(sirius_runtime_identity_command
+            "${CMAKE_COMMAND}" -E env
+            "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1:strict_string_checks=1"
+            "LSAN_OPTIONS=suppressions=${CMAKE_SOURCE_DIR}/tests/sanitizers/lsan-vulkan.supp:print_suppressions=1"
+            "UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1"
+            ${sirius_runtime_identity_command})
     endif()
 
     add_custom_target(RunMandatoryTests ALL
         COMMAND "${CMAKE_COMMAND}" -E rm -f
+            "${SIRIUS_MANDATORY_GATE_STAMP}"
             "$<TARGET_FILE_DIR:sirius>/resources/model/mandatory_gate.json"
+        COMMAND ${sirius_runtime_identity_command}
         COMMAND ${sirius_mandatory_gate_command}
         COMMAND "${CMAKE_COMMAND}" -E copy_if_different
             "${SIRIUS_MANDATORY_GATE_STAMP}"
@@ -135,6 +156,7 @@ if(BUILD_TESTS AND SIRIUS_MANDATORY_TESTS)
             SiriusAlignmentGate SiriusSourceGovernance
         BYPRODUCTS
             "${SIRIUS_MANDATORY_GATE_STAMP}"
+            "${CMAKE_BINARY_DIR}/generated/sirius/mandatory_runtime_identity_gate.json"
             "${CMAKE_BINARY_DIR}/generated/sirius/mandatory_gate_junit.xml"
             "${CMAKE_BINARY_DIR}/generated/sirius/mandatory_gate_ctest.log"
         COMMENT "=== MANDATORY TEST GATE ==="

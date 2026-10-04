@@ -232,6 +232,12 @@ jobs:
             libvulkan-dev mesa-vulkan-drivers spirv-tools \
             xorg-dev libgl1-mesa-dev libwayland-dev \
             wayland-protocols libxkbcommon-dev
+      - name: Select required Lavapipe provider
+        run: |
+          set -euo pipefail
+          manifests=(/usr/share/vulkan/icd.d/lvp_icd*.json)
+          test "${#manifests[@]}" -eq 1 && test -f "${manifests[0]}"
+          echo "VK_DRIVER_FILES=${manifests[0]}" >> "$GITHUB_ENV"
       - name: Slang
         run: |
           TAG=v2026.12.0.1
@@ -286,6 +292,12 @@ jobs:
             libvulkan-dev mesa-vulkan-drivers spirv-tools \
             xorg-dev libgl1-mesa-dev libwayland-dev \
             wayland-protocols libxkbcommon-dev
+      - name: Select required Lavapipe provider
+        run: |
+          set -euo pipefail
+          manifests=(/usr/share/vulkan/icd.d/lvp_icd*.json)
+          test "${#manifests[@]}" -eq 1 && test -f "${manifests[0]}"
+          echo "VK_DRIVER_FILES=${manifests[0]}" >> "$GITHUB_ENV"
       - name: Slang
         run: |
           TAG=v2026.12.0.1
@@ -297,7 +309,7 @@ jobs:
             | sha256sum --check -
           sudo mkdir -p /opt/slang && sudo tar xzf "$archive" -C /opt/slang
       - name: Configure
-        run: cmake --preset linux-gcc-sanitize
+        run: cmake --preset linux-gcc-sanitize -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON
       - name: Build and mandatory ASan/UBSan/LSan gate
         run: cmake --build --preset linux-gcc-sanitize -j"$(nproc)"
       - name: Preserve gate diagnostics

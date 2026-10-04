@@ -1109,7 +1109,15 @@ def verify_document(data, location, expected_operating_model_sha256=None):
             and "tested_artifacts" in document
             and "product_artifacts" in document
         ]
-        require(len(json_artifacts) == 4,
+        runtime_identities = [
+            (path, document) for path, document in json_artifacts.items()
+            if isinstance(document, dict) and document.get("kind") == "sirius-runtime-identity"
+        ]
+        identity_claim = claims.get("runtime_identity")
+        native_runtime = bool({"windows-native-vulkan", "macos-moltenvk"}.intersection(domains))
+        require(not native_runtime or identity_claim is not None,
+                "native runtime attestation requires the actual identity sidecar")
+        require(len(json_artifacts) == 4 + (1 if identity_claim is not None else 0),
                 "runtime attestation has an unclassified JSON artifact")
         require(len(inventories) == 1,
                 "runtime attestation requires one hashed device inventory")
@@ -1120,6 +1128,22 @@ def verify_document(data, location, expected_operating_model_sha256=None):
         require(len(gates) == 1,
                 "runtime attestation requires one qualification build gate")
         inventory = inventories[0][1]
+        if identity_claim is not None:
+            require(isinstance(identity_claim, str) and len(runtime_identities) == 1,
+                    "runtime identity claim requires one hashed sidecar")
+            identity_path, identity_document = runtime_identities[0]
+            require(artifact_files.get(identity_claim) == identity_path,
+                    "runtime identity claim names a different artifact")
+            identity_spec = importlib.util.spec_from_file_location(
+                "sirius_runtime_identity", Path(__file__).with_name("runtime_identity.py")
+            )
+            require(identity_spec is not None and identity_spec.loader is not None,
+                    "runtime identity validator is unavailable")
+            identity_validator = importlib.util.module_from_spec(identity_spec)
+            identity_spec.loader.exec_module(identity_validator)
+            candidate_claim = claims.get("qualification_executable", {})
+            identity_validator.validate_record(identity_document, source_revision, candidate_claim,
+                                               inventory, required=True, clean=True)
         inspect_build_alignment_receipt(receipts[0], source_revision)
         inspect_qualification_build_gate(
             gates[0], source_revision, receipts[0], reports[0],
@@ -2204,6 +2228,8 @@ def self_test(render_test_executable=None):
             ),
         ]
         for domain, platform_name, preset, native_device in native_runtime_controls:
+            native_device = {**native_device, "preserves_fp32_denormals": False,
+                             "rounds_fp32_to_nearest": False, "rounds_fp64_to_nearest": False}
             native_inventory = root / f"{domain}-device.json"
             native_inventory.write_text(
                 json.dumps({
@@ -2211,6 +2237,8 @@ def self_test(render_test_executable=None):
                     "wsl2": False,
                     "backends": {
                         "vulkan": {
+                            "compiled": True,
+                            "available": True,
                             "selected_device_index": 0,
                             "devices": [native_device],
                         }
@@ -2218,6 +2246,43 @@ def self_test(render_test_executable=None):
                 }),
                 encoding="utf-8",
             )
+            # Synthetic metadata controls only: these bytes are never loaded
+            # as a provider or asserted to be a real hosted identity capture.
+            import base64
+            native_inventory_document = json.loads(native_inventory.read_text())
+            raw_inventory = native_inventory.read_bytes()
+            synthetic_input = {
+                "path": str(native_inventory), "bytes": len(raw_inventory),
+                "sha256": hashlib.sha256(raw_inventory).hexdigest(),
+            }
+            synthetic_manifest = json.dumps({"ICD": {"library_path": "synthetic library"}}).encode()
+            native_identity = root / f"{domain}-identity.json"
+            native_identity_document = {
+                "schema_version": 1, "kind": "sirius-runtime-identity", "status": "captured",
+                "qualification_claimed": False, "numerics_executed": False,
+                "phase": "before_native_runtime_estate", "source": {"revision": source_revision, "clean": True},
+                "executable": {**qualification_claim, "path": "synthetic executable"},
+                "classification": "vulkan_selected", "selected_device": native_device,
+                "inventory": native_inventory_document, "environment": {"VK_DRIVER_FILES": "synthetic.json"},
+                "host": {"platform": "win32" if platform_name == "windows" else "darwin"},
+                "ci": {"hosted": False, **dict.fromkeys(("repository", "run_id", "run_attempt", "job", "runner", "os", "arch"))},
+                "query": {"argv": ["--json", "info", "system"], "exit_code": 0,
+                          "stdout_base64": base64.b64encode(raw_inventory).decode(),
+                          "stdout_sha256": hashlib.sha256(raw_inventory).hexdigest(),
+                          "stderr_base64": "", "stderr_sha256": hashlib.sha256(b"").hexdigest()},
+                "provider_inputs": {
+                    "scope": "hashed input candidates; not actual loaded-module or per-ICD execution proof",
+                    "selector": {"name": "VK_DRIVER_FILES", "value": "synthetic.json", "kind": "explicit_manifest_list"},
+                    "manifests": [{"selector_path": "synthetic.json",
+                                   "manifest": {"path": "synthetic.json", "bytes": len(synthetic_manifest),
+                                                "sha256": hashlib.sha256(synthetic_manifest).hexdigest()},
+                                   "contents_base64": base64.b64encode(synthetic_manifest).decode(),
+                                   "library_path": "synthetic library",
+                                   "driver_candidates": [synthetic_input]}],
+                    "loader_candidates": [synthetic_input],
+                },
+            }
+            native_identity.write_text(json.dumps(native_identity_document), encoding="utf-8")
             native_transcript = root / f"{domain}-transcript.log"
             native_transcript.write_text(
                 f"== source revision: {source_revision}\n"
@@ -2241,6 +2306,7 @@ def self_test(render_test_executable=None):
                     "test_report": valid["claims"]["test_report"],
                     "qualification_executable": qualification_claim,
                     "runtime_ready": True,
+                    "runtime_identity": native_identity.name,
                 },
                 "artifacts": {
                     "frame.png": valid["artifacts"]["frame.png"],
@@ -2259,6 +2325,11 @@ def self_test(render_test_executable=None):
                         "path": native_inventory.name,
                         "bytes": native_inventory.stat().st_size,
                         "sha256": hashlib.sha256(native_inventory.read_bytes()).hexdigest(),
+                    },
+                    native_identity.name: {
+                        "path": native_identity.name,
+                        "bytes": native_identity.stat().st_size,
+                        "sha256": hashlib.sha256(native_identity.read_bytes()).hexdigest(),
                     },
                     native_transcript.name: {
                         "path": native_transcript.name,
@@ -2279,6 +2350,7 @@ def self_test(render_test_executable=None):
                 "qualification-gate-log",
                 *(path.name for path in (*self_test_products.values(), *self_test_inputs.values())),
                 native_inventory.name,
+                native_identity.name,
                 native_transcript.name,
             ):
                 candidate = json.loads(json.dumps(native_document))
@@ -2290,6 +2362,34 @@ def self_test(render_test_executable=None):
                 raise ValueError(
                     f"negative control accepted: {domain} without {missing_artifact}"
                 )
+            missing_identity_claim = json.loads(json.dumps(native_document))
+            missing_identity_claim["claims"].pop("runtime_identity")
+            try:
+                verify_document(missing_identity_claim, root / "attestation.json")
+            except ValueError:
+                pass
+            else:
+                raise ValueError(f"negative control accepted: {domain} without identity claim")
+            for mutation in ("query_digest", "executable_digest", "source_clean", "driver_input", "control"):
+                changed = json.loads(json.dumps(native_identity_document))
+                if mutation == "query_digest": changed["query"]["stdout_sha256"] = "0" * 64
+                if mutation == "executable_digest": changed["executable"]["sha256"] = "0" * 64
+                if mutation == "source_clean": changed["source"]["clean"] = False
+                if mutation == "driver_input": changed["provider_inputs"]["manifests"][0]["driver_candidates"] = []
+                if mutation == "control": changed["selected_device"].pop("rounds_fp32_to_nearest")
+                native_identity.write_text(json.dumps(changed), encoding="utf-8")
+                changed_document = json.loads(json.dumps(native_document))
+                changed_document["artifacts"][native_identity.name].update(
+                    bytes=native_identity.stat().st_size,
+                    sha256=hashlib.sha256(native_identity.read_bytes()).hexdigest(),
+                )
+                try:
+                    verify_document(changed_document, root / "attestation.json")
+                except ValueError:
+                    pass
+                else:
+                    raise ValueError(f"negative control accepted: {domain} altered identity {mutation}")
+            native_identity.write_text(json.dumps(native_identity_document), encoding="utf-8")
 
         corruptions = [
             ("software device", lambda doc: doc["device"].update(kind="software")),
