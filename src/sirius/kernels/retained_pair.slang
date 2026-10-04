@@ -121,8 +121,27 @@ RetainedPair RPScalarProduct(RPScalar a,RPScalar b) {
 }
 RetainedPair RPMultiply(RetainedPair a,RetainedPair b) {
     if(a.valid==0u||b.valid==0u)return RPInvalid();
+#ifdef SIRIUS_RETAINED_PORTABLE
+    // Preserve the balanced four-product sum with shared product/add bodies.
+    RetainedPair left=RPInvalid(),r=RPInvalid();
+    [loop] for(uint group=0;group<3;++group) {
+        RetainedPair first=left,second=r;
+        if(group<2) {
+            [loop] for(uint term=0;term<2;++term) {
+                RetainedPair product=RPScalarProduct(group==0?a.hi:a.lo,
+                                                     term==0?b.hi:b.lo);
+                if(term==0) first=product;
+                else second=product;
+            }
+        }
+        RetainedPair sum=RPAdd(first,second);
+        if(group==0) left=sum;
+        else r=sum;
+    }
+#else
     RetainedPair r=RPAdd(RPAdd(RPScalarProduct(a.hi,b.hi),RPScalarProduct(a.hi,b.lo)),
                         RPAdd(RPScalarProduct(a.lo,b.hi),RPScalarProduct(a.lo,b.lo)));
+#endif
     RPScalar uncertainty=RPUpAdd(RPUpAdd(RPUpMultiply(a.error,RPCenterUpper(b)),
         RPUpMultiply(b.error,RPCenterUpper(a))),RPUpMultiply(a.error,b.error));
     return r.valid==0u?r:RPPack(r.hi,r.lo,RPUpAdd(r.error,uncertainty));
