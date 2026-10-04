@@ -58,10 +58,17 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint rows, uint registers) 
         } else {
             if (b >= registers) return false;
             RetainedPair bv = ReadValue(b, rowBase);
+#ifdef SIRIUS_RETAINED_PORTABLE
+            if (op == 2 || op == 3) {
+                if (op == 3) bv = RPNegate(bv);
+                r = RPAdd(av, bv);
+            }
+#else
             if (op == 2)
                 r = RPAdd(av, bv);
             else if (op == 3)
                 r = RPSubtract(av, bv);
+#endif
             else if (op == 4)
                 r = RPMultiply(av, bv);
             else if (op == 5)
