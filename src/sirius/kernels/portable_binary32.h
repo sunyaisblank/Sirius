@@ -61,6 +61,10 @@ SIRIUS_PB32_INLINE uint PB32ShiftJam(uint a, uint distance) {
     return (a >> distance) | ((a << (32u - distance)) != 0u ? 1u : 0u);
 }
 SIRIUS_PB32_INLINE PB32Wide PB32WideProduct(uint a, uint b) {
+#if !defined(__cplusplus)
+    // SPIR-V supplies both exact unsigned product words without Int64.
+    return spirv_asm { OpUMulExtended $$PB32Wide result $a $b; };
+#else
     uint a0 = a & 0xffffu, a1 = a >> 16;
     uint b0 = b & 0xffffu, b1 = b >> 16;
     uint w0 = a0 * b0;
@@ -71,6 +75,7 @@ SIRIUS_PB32_INLINE PB32Wide PB32WideProduct(uint a, uint b) {
     r.hi = a1 * b1 + w2 + (w1 >> 16);
     r.lo = (w1 << 16) | (w0 & 0xffffu);
     return r;
+#endif
 }
 SIRIUS_PB32_INLINE uint PB32WideShiftJam(PB32Wide a, uint distance) {
     // Callers ensure that the retained quotient fits in one word.
@@ -179,14 +184,16 @@ SIRIUS_PB32_INLINE uint PB32Divide(uint a, uint b) {
         remainder <<= 1;
         --exponent;
     }
-    uint quotient = 0u;
-    for (uint i = 0u; i < 27u; ++i) {
-        quotient <<= 1;
-        if (remainder >= bb.significand) {
-            remainder -= bb.significand;
-            quotient |= 1u;
-        }
-        if (i != 26u) remainder <<= 1;
+    // Normalization gives d <= remainder < 2*d. Emit the leading bit,
+    // then the same 26 fractional bits in exact radix-256/4 chunks.
+    uint quotient = 1u;
+    remainder -= bb.significand;
+    for (uint chunk = 0u; chunk < 4u; ++chunk) {
+        const uint bits = chunk == 3u ? 2u : 8u;
+        const uint numerator = remainder << bits;
+        const uint digit = numerator / bb.significand;
+        remainder = numerator - digit * bb.significand;
+        quotient = (quotient << bits) | digit;
     }
     if (remainder != 0u) quotient |= 1u;
     return PB32Round(sign, exponent, quotient);
