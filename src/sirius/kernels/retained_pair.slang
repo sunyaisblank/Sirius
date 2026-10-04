@@ -70,7 +70,27 @@ RetainedPair RPPack(RPScalar hi,RPScalar lo,RPScalar error) {
        !RPBounded(error,0x7b800000u)||(RPBits(error)&0x80000000u)!=0u)return RPInvalid();
     RetainedPair r;RetainedSum32(hi,lo,r.hi,r.lo);if(!RPBounded(r.hi,0x7b800000u))return RPInvalid();r.error=error;r.valid=1;return r;
 }
-RetainedPair RPConstant(RPScalar x) {return RPPack(x,RPZero(),RPZero());}
+#ifdef SIRIUS_RETAINED_PORTABLE
+// Precondition: a successful RetainedSum32 center, unchanged since normalization.
+// Its exact residual makes normalization idempotent, including nearest-even ties
+// and attainable zero pairs. Arbitrary pairs and RPNegate outputs do not qualify.
+RetainedPair RPPackCanonicalCenter(RetainedPair center,RPScalar error) {
+    if(!RPBounded(center.hi,0x7b800000u)||!RPBounded(center.lo,0x7b800000u)||
+       !RPBounded(error,0x7b800000u)||(RPBits(error)&0x80000000u)!=0u)return RPInvalid();
+    if(!RPBounded(center.hi,0x7b800000u))return RPInvalid();
+    center.error=error;center.valid=1;return center;
+}
+#endif
+RetainedPair RPConstant(RPScalar x) {
+#ifdef SIRIUS_RETAINED_PORTABLE
+    // RPPack(x,+0,+0) preserves nonzero x and maps either zero sign to +0.
+    if(!RPBounded(x,0x7b800000u))return RPInvalid();
+    RetainedPair r;r.hi=(RPBits(x)&0x7fffffffu)==0u?RPZero():x;
+    r.lo=RPZero();r.error=RPZero();r.valid=1;return r;
+#else
+    return RPPack(x,RPZero(),RPZero());
+#endif
+}
 RetainedPair RPCenter(RetainedPair a) {a.error=RPZero();return a;}
 RetainedPair RPNegate(RetainedPair a) {
     a.hi=RPFromBits(RPBits(a.hi)^0x80000000u);a.lo=RPFromBits(RPBits(a.lo)^0x80000000u);return a;
@@ -118,7 +138,11 @@ RetainedPair RPAdd(RetainedPair a,RetainedPair b) {
 #else
     RetainedPair r=RPAppend(RPAppend(a,b.hi),b.lo);
 #endif
+#ifdef SIRIUS_RETAINED_PORTABLE
+    return r.valid==0u?r:RPPackCanonicalCenter(r,RPUpAdd(r.error,b.error));
+#else
     return r.valid==0u?r:RPPack(r.hi,r.lo,RPUpAdd(r.error,b.error));
+#endif
 }
 RetainedPair RPSubtract(RetainedPair a,RetainedPair b) {return RPAdd(a,RPNegate(b));}
 RetainedPair RPScalarProduct(RPScalar a,RPScalar b) {
@@ -164,7 +188,11 @@ RetainedPair RPMultiply(RetainedPair a,RetainedPair b) {
     RPScalar uncertainty=RPUpAdd(RPUpAdd(RPUpMultiply(a.error,RPCenterUpper(b)),
         RPUpMultiply(b.error,RPCenterUpper(a))),RPUpMultiply(a.error,b.error));
 #endif
+#ifdef SIRIUS_RETAINED_PORTABLE
+    return r.valid==0u?r:RPPackCanonicalCenter(r,RPUpAdd(r.error,uncertainty));
+#else
     return r.valid==0u?r:RPPack(r.hi,r.lo,RPUpAdd(r.error,uncertainty));
+#endif
 }
 int RPFloorExponent(RPScalar positive) {
     uint bits=RPBits(positive),exponent=bits>>23;
@@ -228,7 +256,11 @@ RetainedPair RPDivide(RetainedPair a,RetainedPair b) {
     q=RPCenter(RPAdd(q,RPConstant(RPDivideSeed(residual.hi,b.hi))));if(q.valid==0u)return q;
     residual=RPSubtract(a,RPMultiply(b,q));if(residual.valid==0u)return residual;
 #endif
+#ifdef SIRIUS_RETAINED_PORTABLE
+    return RPPackCanonicalCenter(q,RPRatioUpper(RPAbsoluteUpper(residual),lower));
+#else
     return RPPack(q.hi,q.lo,RPRatioUpper(RPAbsoluteUpper(residual),lower));
+#endif
 }
 RetainedPair RPSqrt(RetainedPair a) {
     if(a.valid==0u)return a;
@@ -257,5 +289,9 @@ RetainedPair RPSqrt(RetainedPair a) {
     RPScalar lower=RPAbsoluteLower(q);if(q.valid==0u||RPScalarLessEqual(q.hi,RPZero())||RPScalarLessEqual(lower,RPZero()))return RPInvalid();
     residual=RPSubtract(a,RPMultiply(q,q));if(residual.valid==0u)return residual;
 #endif
+#ifdef SIRIUS_RETAINED_PORTABLE
+    return RPPackCanonicalCenter(q,RPRatioUpper(RPAbsoluteUpper(residual),lower));
+#else
     return RPPack(q.hi,q.lo,RPRatioUpper(RPAbsoluteUpper(residual),lower));
+#endif
 }
