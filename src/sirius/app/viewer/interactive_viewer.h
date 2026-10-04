@@ -8,6 +8,7 @@
 
 #include <atomic>
 #include <chrono>
+#include <cstdint>
 #include <functional>
 #include <memory>
 #include <mutex>
@@ -81,6 +82,10 @@ struct RefinementState {
 class InteractiveViewer {
   public:
     using FrameCallback = std::function<void(const float* data, int width, int height)>;
+    // A provisional, configured display-linear snapshot. Borrowed pixels last
+    // for the call; a presentation owner checks the generation again at upload.
+    using PreviewCallback =
+        std::function<void(const float* data, int width, int height, std::uint64_t generation)>;
 
     InteractiveViewer();
     ~InteractiveViewer();
@@ -92,6 +97,11 @@ class InteractiveViewer {
 
     bool Initialise(const ViewerConfig& config);
     void SetFrameCallback(FrameCallback callback);
+    // Install before Start. Final FrameCallback retains its complete-frame meaning.
+    void SetPreviewCallback(PreviewCallback callback);
+    [[nodiscard]] std::uint64_t GetPreviewGeneration() const noexcept {
+        return preview_generation_.load();
+    }
 
     bool Start();
     void Stop();
@@ -142,6 +152,8 @@ class InteractiveViewer {
     std::string last_error_;
 
     FrameCallback frame_callback_;
+    PreviewCallback preview_callback_;
+    std::atomic<std::uint64_t> preview_generation_{0};
 
     double last_mouse_x_ = 0.0;
     double last_mouse_y_ = 0.0;

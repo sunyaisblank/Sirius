@@ -344,7 +344,8 @@ void FillSceneParams(std::vector<float>& params, const SessionConfig& config,
 Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayBuffer& display,
                                            backend::ComputeDevice& device, PrecisionRung rung,
                                            const std::function<void(int, int)>& on_tile,
-                                           const std::function<bool()>& should_cancel) {
+                                           const std::function<bool()>& should_cancel,
+                                           const CompletedTileCallback& on_completed_tile) {
     const auto started = std::chrono::steady_clock::now();
     const auto budget = ResolveBudgetBytes(device.Info().render_memory_bytes);
     if (!budget) return std::unexpected(budget.error());
@@ -404,6 +405,7 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     if (on_tile)
         session.SetProgressCallback(
             [&](float, int done, int total, double) { on_tile(done, total); });
+    if (on_completed_tile) session.SetCompletedTileCallback(on_completed_tile);
     if (!session.Start())
         return Fail(ErrorDomain::kInternal, "start retained renderer",
                     "worker session did not start");
@@ -599,7 +601,8 @@ Expected<void> ValidateVulkanRenderConfig(const SessionConfig& config) {
 Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
                                                   DisplayBuffer& display,
                                                   const std::function<void(int, int)>& on_tile,
-                                                  const std::function<bool()>& should_cancel) {
+                                                  const std::function<bool()>& should_cancel,
+                                                  const CompletedTileCallback& on_completed_tile) {
     const auto start = std::chrono::steady_clock::now();
 
     if (auto compatible = ValidateVulkanRenderConfig(config); !compatible) {
@@ -640,7 +643,8 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
 
     if (scene->metric_id == kDispatchKerrSchild) {
 #ifdef SIRIUS_HAS_RETAINED_COMPUTE
-        auto result = RenderRetained(config, display, device, *rung, on_tile, should_cancel);
+        auto result = RenderRetained(config, display, device, *rung, on_tile, should_cancel,
+                                     on_completed_tile);
         if (result) result->device_index = *device_index;
         return result;
 #else
@@ -1046,6 +1050,23 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
                 }
             }
 
+            if (on_completed_tile && (!should_cancel || !should_cancel())) {
+                try {
+                    std::vector<float> completed(static_cast<std::size_t>(tw) * th * 4);
+                    for (int row = 0; row < th; ++row) {
+                        const auto source =
+                            frame_pixels.begin() +
+                            (static_cast<std::size_t>(oy + row) * config.width + ox) * 4;
+                        std::copy_n(source, static_cast<std::size_t>(tw) * 4,
+                                    completed.begin() + static_cast<std::size_t>(row) * tw * 4);
+                    }
+                    if (std::all_of(completed.begin(), completed.end(),
+                                    [](float value) { return std::isfinite(value); }))
+                        on_completed_tile(ox, oy, tw, th, completed);
+                } catch (...) {
+                    std::cerr << "[Vulkan] completed-tile preview failed; radiance retained\n";
+                }
+            }
             ++tiles_done;
             if (on_tile) {
                 on_tile(tiles_done, tiles_total);

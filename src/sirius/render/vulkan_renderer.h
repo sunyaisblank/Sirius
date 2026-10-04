@@ -16,6 +16,7 @@
 #include "sirius/base/error.h"
 #include "sirius/render/dispatch_governor.h"
 #include "sirius/render/memory_governor.h"
+#include "sirius/render/session/display_buffer.h"
 
 #include <array>
 #include <cstddef>
@@ -132,10 +133,13 @@ struct VulkanRenderStats {
 // progress as (tiles_done, tiles_total). Preconditions: the display buffer is
 // initialised to the config resolution. Postcondition on success: every pixel of
 // `display` holds finite linear radiance; on failure nothing is partially
-// committed to the caller beyond the error return.
+// committed to the caller beyond the error return. The optional completed-tile
+// outlet carries provisional finite linear radiance separately; its borrowed
+// span is valid during the callback and never commits `display`.
 [[nodiscard]] base::Expected<VulkanRenderStats> RenderVulkanToDisplay(
     const SessionConfig& config, DisplayBuffer& display,
     const std::function<void(int tiles_done, int tiles_total)>& on_tile = {},
-    const std::function<bool()>& should_cancel = {});
+    const std::function<bool()>& should_cancel = {},
+    const CompletedTileCallback& on_completed_tile = {});
 
 }  // namespace sirius::render

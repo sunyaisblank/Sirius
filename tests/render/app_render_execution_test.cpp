@@ -15,11 +15,14 @@
 #include "sirius/backend/device.h"
 #endif
 
+#include <algorithm>
 #include <atomic>
 #include <chrono>
 #include <cmath>
 #include <filesystem>
+#include <future>
 #include <thread>
+#include <vector>
 
 namespace sirius::app::test {
 
@@ -181,9 +184,38 @@ TEST(ViewCommandOperational, HeadlessRefinementProducesASynchronisedFrame) {
     config.black_hole_spin = 0.0;
     // Keep enough independent tiles to use the CPU workers at this resolution.
     config.session_template.tile_size = 8;
+    config.session_template.thread_count = 2;
+    config.session_template.enable_film_finish = true;
+    // Bloom and the configured film finish must match the final display pipeline.
+    config.session_template.enable_bloom = true;
 
     InteractiveViewer viewer;
     ASSERT_TRUE(viewer.Initialise(config));
+    std::atomic<unsigned> previews{0}, completed_frames{0};
+    std::atomic<bool> partial_preview{false};
+    std::vector<float> last_preview;
+    viewer.SetPreviewCallback(
+        [&](const float* data, int width, int height, std::uint64_t generation) {
+            EXPECT_EQ(generation, viewer.GetPreviewGeneration());
+            EXPECT_EQ(width, 64);
+            EXPECT_EQ(height, 64);
+            EXPECT_EQ(completed_frames.load(), 0U);
+            EXPECT_FALSE(viewer.GetRefinementState().complete);
+            EXPECT_TRUE(viewer.GetFrameBufferSnapshot().empty())
+                << "provisional radiance must not commit the final frame owner";
+            last_preview.assign(data, data + static_cast<std::size_t>(width) * height * 4);
+            EXPECT_TRUE(std::all_of(last_preview.begin(), last_preview.end(),
+                                    [](float value) { return std::isfinite(value); }));
+            bool completed_alpha = false, unfinished_alpha = false;
+            for (std::size_t alpha = 3; alpha < last_preview.size(); alpha += 4) {
+                EXPECT_TRUE(last_preview[alpha] == 0 || last_preview[alpha] == 1);
+                completed_alpha |= last_preview[alpha] == 1;
+                unfinished_alpha |= last_preview[alpha] == 0;
+            }
+            if (completed_alpha && unfinished_alpha) partial_preview = true;
+            ++previews;
+        });
+    viewer.SetFrameCallback([&](const float*, int, int) { ++completed_frames; });
     ASSERT_TRUE(viewer.Start());
 
     // Joint retained transport does substantially more work than the former
@@ -203,6 +235,47 @@ TEST(ViewCommandOperational, HeadlessRefinementProducesASynchronisedFrame) {
     EXPECT_EQ(refinement.current_height, 64);
     EXPECT_EQ(refinement.current_samples_per_pixel, 1);
     EXPECT_EQ(viewer.GetFrameBufferSnapshot().size(), 64u * 64u * 4u);
+    EXPECT_GT(previews.load(), 0U);
+    EXPECT_TRUE(partial_preview.load())
+        << "preview must expose completed tiles while other physical tiles remain unfinished";
+    EXPECT_EQ(completed_frames.load(), 1U);
+    // The last complete radiance preview runs the exact configured tone/bloom/
+    // grade pipeline, while its private owner never feeds back into the final.
+    EXPECT_EQ(last_preview, viewer.GetFrameBufferSnapshot());
+    RecordProperty("preview_scope",
+                   "in-flight preview has both completed/unfinished alpha ledger; separate "
+                   "owner uses configured bloom/film pipeline before final frame callback; "
+                   "this is not a frame-speed gate");
+
+    ASSERT_TRUE(viewer.Initialise(config));
+    completed_frames = 0;
+    std::vector<std::uint64_t> generations;
+    std::promise<void> stopped;
+    auto stopped_future = stopped.get_future();
+    viewer.SetPreviewCallback([&](const float*, int, int, std::uint64_t generation) {
+        EXPECT_EQ(generation, viewer.GetPreviewGeneration());
+        EXPECT_TRUE(viewer.GetFrameBufferSnapshot().empty());
+        generations.push_back(generation);
+        if (generations.size() == 1) {
+            viewer.Restart();
+            EXPECT_NE(generation, viewer.GetPreviewGeneration());
+        } else {
+            EXPECT_GT(generation, generations.front());
+            viewer.SetPreviewCallback({});
+            viewer.Stop();  // Reentrant owner callback requests stop without self-join.
+            EXPECT_NE(generation, viewer.GetPreviewGeneration());
+            stopped.set_value();
+        }
+    });
+    ASSERT_TRUE(viewer.Start());
+    const bool callback_stopped =
+        stopped_future.wait_for(std::chrono::minutes(30)) == std::future_status::ready;
+    viewer.Stop();  // External owner joins; captures remain alive until this returns.
+    EXPECT_TRUE(callback_stopped);
+    ASSERT_EQ(generations.size(), 2U);
+    EXPECT_EQ(completed_frames.load(), 0U);
+    EXPECT_TRUE(viewer.GetFrameBufferSnapshot().empty());
+    EXPECT_TRUE(viewer.GetLastError().empty()) << viewer.GetLastError();
 }
 
 TEST(ViewCommandOperational, VulkanRefinementPublishesProgressiveFrames) {

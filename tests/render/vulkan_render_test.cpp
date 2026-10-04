@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <array>
+#include <atomic>
 #include <bit>
 #include <cmath>
 #include <cstdint>
@@ -1335,10 +1336,25 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
     DisplayBuffer display;
     display.Initialise(config.width, config.height);
     int tiles = 0;
-    const auto rendered = RenderVulkanToDisplay(config, display, [&](int completed, int total) {
-        EXPECT_LE(completed, total);
-        ++tiles;
-    });
+    DisplayBuffer provisional;
+    provisional.Initialise(config.width, config.height);
+    std::atomic<unsigned> preview_tiles{0};
+    const auto rendered = RenderVulkanToDisplay(
+        config, display,
+        [&](int completed, int total) {
+            EXPECT_LE(completed, total);
+            ++tiles;
+        },
+        {},
+        [&](int x, int y, int width, int height, std::span<const float> rgba) {
+            EXPECT_EQ(display.GetUpdateCounter(), 0U)
+                << "completed-tile previews must not commit the caller display";
+            EXPECT_TRUE(std::all_of(rgba.begin(), rgba.end(),
+                                    [](float value) { return std::isfinite(value); }));
+            EXPECT_EQ(rgba.size(), static_cast<std::size_t>(width) * height * 4);
+            provisional.UpdateTile(x, y, width, height, rgba.data());
+            ++preview_tiles;
+        });
     ASSERT_TRUE(rendered.has_value()) << rendered.error().Description();
     EXPECT_EQ(tiles, rendered->tiles_rendered);
     ASSERT_GT(rendered->work_tile_edge, 0);
@@ -1369,6 +1385,8 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
     EXPECT_GT(rendered->maximum_dispatch_ms, 0.0);
     EXPECT_LE(rendered->maximum_dispatch_ms, 1000.0);
     const auto complete = display.SnapshotFloatData();
+    EXPECT_GT(preview_tiles.load(), 0U);
+    EXPECT_EQ(provisional.SnapshotFloatData(), complete);
     EXPECT_TRUE(std::all_of(complete.begin(), complete.end(),
                             [](float value) { return std::isfinite(value); }));
     float maximum_rgb = 0.0f;
