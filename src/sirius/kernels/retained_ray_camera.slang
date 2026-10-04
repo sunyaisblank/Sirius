@@ -7,9 +7,6 @@ import retained_pair;
 uint ReadInput(uint index, uint row, uint rows) {
     return inputs[index < 45 ? 1 + 225 * row + 5 * index : 1 + 225 * rows + index - 45];
 }
-#ifdef SIRIUS_RETAINED_PORTABLE
-[noinline]
-#endif
 RetainedPair ReadOriginal(uint index, uint row) {
     uint base = 1 + 225 * row + 5 * index;
     if (inputs[base + 4] != 1) return RPInvalid();
