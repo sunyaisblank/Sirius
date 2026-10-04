@@ -191,10 +191,23 @@ RetainedPair RPDivide(RetainedPair a,RetainedPair b) {
     RPScalar lower=RPAbsoluteLower(b);
     if(RPScalarLessEqual(lower,RPZero())||RPScalarGreater(RPRatioUpper(RPAbsoluteUpper(a),lower),RPFromBits(0x5e000000u)))return RPInvalid();
     RetainedPair q=RPConstant(RPDivideSeed(a.hi,b.hi));if(q.valid==0u)return q;
+#ifdef SIRIUS_RETAINED_PORTABLE
+    // Share the original residual before and after its one correction.
+    RetainedPair residual=RPInvalid();
+    [loop] for(uint i=0;i<2;++i) {
+        residual=RPSubtract(a,RPMultiply(b,q));
+        if(residual.valid==0u)return residual;
+        if(i==0) {
+            if(RPScalarGreater(RPRatioUpper(RPAbs(residual.hi),RPAbs(b.hi)),RPFromBits(0x5d000000u)))return RPInvalid();
+            q=RPCenter(RPAdd(q,RPConstant(RPDivideSeed(residual.hi,b.hi))));if(q.valid==0u)return q;
+        }
+    }
+#else
     RetainedPair residual=RPSubtract(a,RPMultiply(b,q));if(residual.valid==0u)return residual;
     if(RPScalarGreater(RPRatioUpper(RPAbs(residual.hi),RPAbs(b.hi)),RPFromBits(0x5d000000u)))return RPInvalid();
     q=RPCenter(RPAdd(q,RPConstant(RPDivideSeed(residual.hi,b.hi))));if(q.valid==0u)return q;
     residual=RPSubtract(a,RPMultiply(b,q));if(residual.valid==0u)return residual;
+#endif
     return RPPack(q.hi,q.lo,RPRatioUpper(RPAbsoluteUpper(residual),lower));
 }
 RetainedPair RPSqrt(RetainedPair a) {
@@ -202,11 +215,27 @@ RetainedPair RPSqrt(RetainedPair a) {
     if(RPScalarEqual(a.hi,RPZero())&&RPScalarEqual(a.lo,RPZero())&&RPScalarEqual(a.error,RPZero()))return RPConstant(RPZero());
     if(RPScalarLessEqual(a.hi,RPZero())||RPScalarLessEqual(RPAbsoluteLower(a),RPZero()))return RPInvalid();
     RetainedPair q=RPConstant(RPSqrtSeed(a.hi));if(q.valid==0u||RPScalarLessEqual(q.hi,RPZero())||!RPBounded(q.hi,0x5d800000u))return RPInvalid();
+#ifdef SIRIUS_RETAINED_PORTABLE
+    // Keep the correction guards between the two ordered residuals.
+    RetainedPair residual=RPInvalid();
+    RPScalar lower=RPZero();
+    [loop] for(uint i=0;i<2;++i) {
+        residual=RPSubtract(a,RPMultiply(q,q));
+        if(residual.valid==0u)return residual;
+        if(i==0) {
+            RPScalar twice=OrderedAdd32(q.hi,q.hi);
+            if(RPScalarGreater(RPRatioUpper(RPAbs(residual.hi),twice),RPFromBits(0x5d000000u)))return RPInvalid();
+            q=RPCenter(RPAdd(q,RPConstant(RPDivideSeed(residual.hi,twice))));
+            lower=RPAbsoluteLower(q);if(q.valid==0u||RPScalarLessEqual(q.hi,RPZero())||RPScalarLessEqual(lower,RPZero()))return RPInvalid();
+        }
+    }
+#else
     RetainedPair residual=RPSubtract(a,RPMultiply(q,q));if(residual.valid==0u)return residual;
     RPScalar twice=OrderedAdd32(q.hi,q.hi);
     if(RPScalarGreater(RPRatioUpper(RPAbs(residual.hi),twice),RPFromBits(0x5d000000u)))return RPInvalid();
     q=RPCenter(RPAdd(q,RPConstant(RPDivideSeed(residual.hi,twice))));
     RPScalar lower=RPAbsoluteLower(q);if(q.valid==0u||RPScalarLessEqual(q.hi,RPZero())||RPScalarLessEqual(lower,RPZero()))return RPInvalid();
     residual=RPSubtract(a,RPMultiply(q,q));if(residual.valid==0u)return residual;
+#endif
     return RPPack(q.hi,q.lo,RPRatioUpper(RPAbsoluteUpper(residual),lower));
 }
