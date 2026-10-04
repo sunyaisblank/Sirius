@@ -107,22 +107,16 @@ RetainedPair RPAppend(RetainedPair a,RPScalar x) {
     if(a.valid==0u||!RPBounded(a.hi,0x7b800000u)||!RPBounded(a.lo,0x7b800000u)||
        !RPBounded(x,0x7b800000u))return RPInvalid();
 #ifdef SIRIUS_RETAINED_PORTABLE
-    // Share all four sums, including RPPack's normalization and exact guards.
-    RPScalar h=RPZero(),l=RPZero(),f=RPZero(),error=RPZero();
+    // The third sum already produces a canonical center; keep all pack guards.
+    RPScalar h=RPZero(),l=RPZero(),f=RPZero();
     RPScalar first=a.hi,second=x,carry=RPZero();
-    [loop] for(uint i=0;i<4;++i) {
-        if(i==3) {
-            error=RPUpAdd(a.error,RPAbs(f));
-            if(!RPBounded(h,0x7b800000u)||!RPBounded(l,0x7b800000u)||
-               !RPBounded(error,0x7b800000u)||(RPBits(error)&0x80000000u)!=0u)return RPInvalid();
-            first=h;second=l;
-        }
+    [loop] for(uint i=0;i<3;++i) {
         RetainedSum32(first,second,h,l);
         if(i==0) {carry=h;first=a.lo;second=l;}
         else if(i==1) {f=l;first=carry;second=h;}
     }
-    if(!RPBounded(h,0x7b800000u))return RPInvalid();
-    RetainedPair r;r.hi=h;r.lo=l;r.error=error;r.valid=1;return r;
+    RetainedPair center;center.hi=h;center.lo=l;center.error=RPZero();center.valid=1;
+    return RPPackCanonicalCenter(center,RPUpAdd(a.error,RPAbs(f)));
 #else
     RPScalar s,e,t,f,h,l;RetainedSum32(a.hi,x,s,e);RetainedSum32(a.lo,e,t,f);RetainedSum32(s,t,h,l);
     return RPPack(h,l,RPUpAdd(a.error,RPAbs(f)));
