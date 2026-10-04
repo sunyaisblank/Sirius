@@ -14,9 +14,11 @@
 #include <chrono>
 #include <cmath>
 #include <cstring>
+#include <format>
 #include <functional>
 #include <future>
 #include <iomanip>
+#include <iostream>
 #include <limits>
 #include <numbers>
 #include <optional>
@@ -555,6 +557,68 @@ TEST_F(RetainedComputeTest, SmoothRayCameraPreservesPhysicalLensDerivatives) {
     std::vector<RetainedRayCameraInput> inputs;
     for (const auto& fixture : sirius::test::retained_ray_camera::cases)
         inputs.push_back(std::bit_cast<RetainedRayCameraInput>(fixture.input));
+
+    // Observe first use and repetition of exactly the same original row on the
+    // fresh fixture compute. These are host intervals, not GPU timestamps or a
+    // claim about driver cache state or the operational renderer's hard guard.
+    RecordProperty("ray_camera_reuse_device", device->Info().name);
+    RecordProperty("ray_camera_reuse_row", sirius::test::retained_ray_camera::cases.front().name);
+    RecordProperty("ray_camera_reuse_timing_scope",
+                   "same original row twice on fresh fixture compute; host timings exclude "
+                   "SetUp; no speed threshold, cache attribution or cold render qualification");
+    const auto observe = [&](const std::string& prefix) {
+        const auto before = compute->Statistics().back();
+        DispatchTiming timing;
+        std::cerr << "[RayCamera reuse] " << prefix << " started" << std::endl;
+        const auto started = std::chrono::steady_clock::now();
+        auto result = compute->RayCamera(std::span(inputs.data(), 1), &timing);
+        const auto finished = std::chrono::steady_clock::now();
+        const auto after = compute->Statistics().back();
+        auto message = std::format("[RayCamera reuse] {} completed", prefix);
+        const auto record = [&](const char* key, const auto& value) {
+            const auto text = std::format("{}", value);
+            RecordProperty(prefix + "_" + key, text);
+            message += std::format(" {}={}", key, text);
+        };
+        record("success", result.has_value());
+        record("wall_ms", std::chrono::duration<double, std::milli>(finished - started).count());
+        record("submit_wait_ms", timing.submit_wait_ms);
+        record("pipeline_setup_ms", timing.pipeline_setup_ms);
+        record("command_setup_ms", timing.command_setup_ms);
+        record("cleanup_ms", timing.cleanup_ms);
+        record("dispatch_total_ms", timing.total_ms);
+        record("pipeline_created", timing.pipeline_created);
+        record("stage_submissions", after.submissions - before.submissions);
+        record("stage_submit_wait_ms", after.submit_wait_ms - before.submit_wait_ms);
+        record("stage_pipeline_setup_ms", after.pipeline_setup_ms - before.pipeline_setup_ms);
+        record("stage_command_setup_ms", after.command_setup_ms - before.command_setup_ms);
+        record("stage_cleanup_ms", after.cleanup_ms - before.cleanup_ms);
+        record("stage_dispatch_total_ms", after.dispatch_total_ms - before.dispatch_total_ms);
+        record("stage_write_buffer_ms", after.write_buffer_ms - before.write_buffer_ms);
+        record("stage_read_buffer_ms", after.read_buffer_ms - before.read_buffer_ms);
+        record("stage_write_buffer_bytes", after.write_buffer_bytes - before.write_buffer_bytes);
+        record("stage_read_buffer_bytes", after.read_buffer_bytes - before.read_buffer_bytes);
+        record("stage_pipeline_creations", after.pipeline_creations - before.pipeline_creations);
+        record("stage_target_overshoots", after.target_overshoots - before.target_overshoots);
+        if (!result) message += std::format(" error={}", result.error().Description());
+        std::cerr << message << std::endl;
+        return result;
+    };
+    const auto first = observe("ray_camera_first");
+    ASSERT_TRUE(first) << first.error().Description();
+    ASSERT_EQ(first->size(), 1U);
+    ASSERT_TRUE(CameraAgrees(first->front(), sirius::test::retained_ray_camera::cases.front()));
+    const auto repeated = observe("ray_camera_repeat");
+    ASSERT_TRUE(repeated) << repeated.error().Description();
+    ASSERT_EQ(repeated->size(), 1U);
+    ASSERT_TRUE(CameraAgrees(repeated->front(), sirius::test::retained_ray_camera::cases.front()));
+    EXPECT_EQ(repeated->front().valid, first->front().valid);
+    for (std::size_t i = 0; i < first->front().values.size(); ++i) {
+        SCOPED_TRACE(i);
+        EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(repeated->front().values[i])),
+                  (std::bit_cast<std::array<std::uint32_t, 5>>(first->front().values[i])));
+    }
+
     auto outputs = compute->RayCamera(inputs);
     ASSERT_TRUE(outputs) << outputs.error().Description();
     ASSERT_EQ(outputs->size(), inputs.size());
