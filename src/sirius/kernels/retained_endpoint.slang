@@ -144,6 +144,108 @@ RetainedTriple Metric(uint rowBase, uint i, uint j) {
     return ReadStored(rowBase + 4 + 5 * (4 * i + j));
 }
 RetainedTriple Tangent(uint rowBase, uint i) { return ReadStored(rowBase + 4 + 5 * (16 + i)); }
+#ifdef SIRIUS_RETAINED_PORTABLE
+bool Project(uint rowBase, out uint component, out RetainedTriple root) {
+    component = 4;
+    root = RTInvalid();
+    RetainedTriple best = RTInvalid();
+    RetainedTriple defect = RTConstant(RPZero());
+    RPScalar scale = RPZero();
+    for (uint i = 0; i < 4; ++i)
+        for (uint j = 0; j < 4; ++j) {
+            RetainedTriple term = RTInvalid();
+            // Preserve ti*tj followed by metric*term, including invalid terms.
+            [loop] for (uint product = 0; product < 2; ++product)
+                term = RTMultiply(product == 0 ? Tangent(rowBase, i) : Metric(rowBase, i, j),
+                                  product == 0 ? Tangent(rowBase, j) : term);
+            defect = RTAdd(defect, term);
+            scale = RPUpAdd(scale, RTAbsoluteUpper(term));
+        }
+    if (defect.valid == 0 || RPScalarLessEqual(scale, RPZero()) ||
+        RPScalarGreater(RPRatioUpper(RTAbsoluteUpper(defect), scale), RPFromBits(0x358637bdu)))
+        return false;
+    // Prefer a temporal root; if none is represented, preserve time orientation
+    // and choose the smallest normalized spatial correction.
+    for (uint c = 0; c < 4; ++c) {
+        if (c > 0 && component == 0) break;
+        RetainedTriple a = Metric(rowBase, c, c), b = RTConstant(RPZero()),
+                       d = RTConstant(RPZero());
+        for (uint i = 0; i < 4; ++i)
+            if (i != c) {
+                b = RTAdd(b, RTMultiply(RTAdd(Metric(rowBase, c, i), Metric(rowBase, i, c)),
+                                        Tangent(rowBase, i)));
+                for (uint j = 0; j < 4; ++j)
+                    if (j != c)
+                    {
+                        RetainedTriple term = RTInvalid();
+                        [loop] for (uint product = 0; product < 2; ++product)
+                            term = RTMultiply(product == 0 ? Tangent(rowBase, i) : Metric(rowBase, i, j),
+                                              product == 0 ? Tangent(rowBase, j) : term);
+                        d = RTAdd(d, term);
+                    }
+            }
+        RetainedTriple first = RTInvalid(), second = RTInvalid();
+        if (RTExact(a, RPZero()))
+            first = RTDivide(RTNegate(d), b);
+        else {
+            RetainedTriple square_b = RTInvalid(), product_term = RTInvalid();
+            [loop] for (uint product = 0; product < 3; ++product) {
+                product_term = RTMultiply(product == 0 ? b : (product == 1 ? a : RTConstant(RPFromUnsigned(4u))),
+                                          product == 0 ? b : (product == 1 ? d : product_term));
+                if (product == 0) square_b = product_term;
+            }
+            RetainedTriple discriminant = RTSubtract(square_b, product_term);
+            RetainedTriple square = RTSqrt(discriminant);
+            RetainedTriple q = RTMultiply(
+                RTConstant(RPFromBits(0xbf000000u)),
+                RTAdd(b, RPScalarGreaterEqual(b.hi, RPZero()) ? square : RTNegate(square)));
+            if (RTExact(q, RPZero()))
+                first = RTDivide(RTNegate(b), RTMultiply(RTConstant(RPFromUnsigned(2u)), a));
+            else {
+                // Both divisions execute in order even if the first is invalid.
+                [loop] for (uint division = 0; division < 2; ++division) {
+                    RetainedTriple quotient = RTDivide(division == 0 ? q : d, division == 0 ? a : q);
+                    if (division == 0) first = quotient;
+                    else second = quotient;
+                }
+            }
+        }
+        for (uint r = 0; r < 2; ++r) {
+            RetainedTriple candidate = r == 0 ? first : second;
+            if (candidate.valid == 0) continue;
+            RetainedTriple denominator = RTConstant(RPZero());
+            RPScalar denominatorScale = RPZero();
+            for (uint i = 0; i < 4; ++i) {
+                RetainedTriple term =
+                    RTMultiply(Metric(rowBase, c, i), i == c ? candidate : Tangent(rowBase, i));
+                denominator = RTAdd(denominator, term);
+                denominatorScale = RPUpAdd(denominatorScale, RTAbsoluteUpper(term));
+            }
+            // A central root with a singular differentiated constraint cannot
+            // own the coupled candidate. Try the represented spatial roots.
+            if (denominator.valid == 0 ||
+                RPScalarLessEqual(RTAbsoluteLower(denominator),
+                                  RPUpMultiply(RPFromBits(0x29800000u), denominatorScale)))
+                continue;
+            RetainedTriple difference = RTSubtract(candidate, Tangent(rowBase, c));
+            RetainedTriple original = RTCenter(Tangent(rowBase, c));
+            RetainedTriple absolute =
+                RTCenter(RPScalarLess(difference.hi, RPZero()) ? RTNegate(difference) : difference);
+            RetainedTriple scaleValue =
+                RTAdd(RTConstant(RPOne()),
+                      RPScalarLess(original.hi, RPZero()) ? RTNegate(original) : original);
+            RetainedTriple correction = RTDivide(absolute, scaleValue);
+            if (correction.valid != 0 &&
+                (best.valid == 0 || RPScalarLess(RTSubtract(correction, best).hi, RPZero()))) {
+                best = correction;
+                component = c;
+                root = candidate;
+            }
+        }
+    }
+    return component < 4 && root.valid != 0;
+}
+#else
 bool Project(uint rowBase, out uint component, out RetainedTriple root) {
     component = 4;
     root = RTInvalid();
@@ -228,7 +330,114 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
     }
     return component < 4 && root.valid != 0;
 }
+#endif
 
+#ifdef SIRIUS_RETAINED_PORTABLE
+[shader("compute")][numthreads(SIRIUS_RETAINED_EXECUTION_LANES, 1, 1)] void ComputeMain(uint3 id
+                                                                              : SV_GroupID,
+                                                                                uint lane
+                                                                              : SV_GroupIndex) {
+    uint ni, si, no, so;
+    inputs.GetDimensions(ni, si);
+    outputs.GetDimensions(no, so);
+    if (ni < 1 || id.y != 0 || id.z != 0) return;
+    uint rows = inputs[0], row = id.x;
+    if (rows == 0 || rows > 65536 || row >= rows || ni < 1 + 225 * rows + 103 || no % rows != 0)
+        return;
+    uint programBase = 1 + 225 * rows, count = inputs[programBase],
+         registers = inputs[programBase + 1];
+    uint rowWords = no / rows, rowBase = row * rowWords;
+    if (rowWords < 769) return;
+    for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
+#ifndef SIRIUS_RETAINED_PORTABLE
+    AllMemoryBarrierWithGroupSync();
+#endif
+    if (inputs[programBase + 2] != 100 || count > 65536 || registers != SIRIUS_RETAINED_REGISTERS ||
+        ni != programBase + 103 + 5 * count + SIRIUS_RETAINED_LAYERS + 1 ||
+        rowWords != 769 + 5 * registers)
+        return;
+    for (uint i = 0; i < 45; ++i) {
+        uint address = 1 + 225 * row + 5 * i;
+        RetainedTriple value =
+            RTPack(RPFromBits(inputs[address]), RPFromBits(inputs[address + 1]),
+                   RPFromBits(inputs[address + 2]), RPFromBits(inputs[address + 3]));
+        if (inputs[address + 4] != 1 || value.valid == 0) return;
+        if (lane == 0) WriteStored(rowBase + 504 + 5 * i, value);
+    }
+#ifndef SIRIUS_RETAINED_PORTABLE
+    AllMemoryBarrierWithGroupSync();
+#endif
+    RetainedTriple chart = ReadStored(rowBase + 504 + 5 * 44);
+    if (!RTExact(chart, RPOne()) && !RTExact(chart, RPScalarNegate(RPOne()))) return;
+    if (!RPScalarEqual(RTAbsoluteUpper(ReadStored(rowBase + 504 + 5)), RPZero()) &&
+        !RPScalarEqual(RTAbsoluteUpper(ReadStored(rowBase + 504 + 15)), RPZero()))
+        return;
+    for (uint i = 45; i < 53; ++i)
+        if (lane == 0) WriteStored(rowBase + 504 + 5 * i, RTConstant(i == 49 ? RPOne() : RPZero()));
+#ifndef SIRIUS_RETAINED_PORTABLE
+    AllMemoryBarrierWithGroupSync();
+#endif
+    bool flat = RTExact(ReadStored(rowBase + 504), RPZero()) &&
+        RTExact(ReadStored(rowBase + 514), RPZero()) &&
+        RTExact(ReadStored(rowBase + 519), RPZero());
+    uint component = 4;
+    RetainedTriple root = RTInvalid();
+    // Preserve flat initialization or the curved metric prefix, projection,
+    // and finally the curved continuation, sharing each large call body once.
+    [loop] for (uint phase_index = 0; phase_index < 3; ++phase_index) {
+        if (phase_index == 1) {
+            if (!Project(rowBase, component, root)) return;
+            if (flat) {
+                if (component != 0) return;
+                for (uint i = 0; i < 40; ++i) {
+                    RetainedTriple phase = ReadStored(rowBase + 504 + 5 * (4 + i));
+                    RetainedTriple physical = i % 8 == 4 ? RTNegate(phase) : phase;
+                    if (i == 4) {
+                        physical = root;
+                        phase = RTNegate(root);
+                    }
+                    if (i >= 8 && i % 8 == 4) {
+                        RetainedTriple constraint = RTConstant(RPZero());
+                        for (uint axis = 1; axis < 4; ++axis)
+                            constraint = RTAdd(constraint,
+                                               RTMultiply(Tangent(rowBase, axis),
+                                                          ReadStored(rowBase + 504 + 5 * (4 + i + axis))));
+                        physical = RTDivide(constraint, root);
+                        phase = RTNegate(physical);
+                    }
+                    if (phase.valid == 0 || physical.valid == 0) return;
+                    if (lane == 0) WriteStored(rowBase + 104 + i * 5, phase);
+                    if (lane == 0) WriteStored(rowBase + 304 + i * 5, physical);
+                }
+                if (lane == 0) outputs[rowBase] = 1;
+                if (lane == 0) outputs[rowBase + 1] = 0;
+                return;
+            }
+            for (uint i = 0; i < 4; ++i) {
+                if (lane == 0)
+                    WriteStored(rowBase + 504 + 5 * (45 + i), i == component ? root : Tangent(rowBase, i));
+                if (lane == 0)
+                    WriteStored(rowBase + 504 + 5 * (49 + i),
+                                RTConstant(i == component ? RPOne() : RPZero()));
+            }
+        } else if (flat) {
+            if (lane != 0) return;
+            for (uint i = 0; i < 4; ++i) {
+                for (uint j = 0; j < 4; ++j)
+                    if (lane == 0)
+                        WriteStored(rowBase + 4 + 5 * (i * 4 + j),
+                                    RTConstant(i == j ? (i == 0 ? RPScalarNegate(RPOne()) : RPOne())
+                                                      : RPZero()));
+                RetainedTriple p = ReadStored(rowBase + 504 + 5 * (8 + i));
+                if (lane == 0) WriteStored(rowBase + 4 + 5 * (16 + i), i == 0 ? RTNegate(p) : p);
+            }
+        } else if (!EvaluateProgram(row, rowBase, programBase, count, registers,
+                                    phase_index == 0 ? 20 : 100, lane)) return;
+    }
+    if (lane == 0) outputs[rowBase] = 1;
+    if (lane == 0) outputs[rowBase + 1] = component;
+}
+#else
 [shader("compute")][numthreads(SIRIUS_RETAINED_EXECUTION_LANES, 1, 1)] void ComputeMain(uint3 id
                                                                               : SV_GroupID,
                                                                                 uint lane
@@ -331,3 +540,4 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
     if (lane == 0) outputs[rowBase] = 1;
     if (lane == 0) outputs[rowBase + 1] = component;
 }
+#endif
