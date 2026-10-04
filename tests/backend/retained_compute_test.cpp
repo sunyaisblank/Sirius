@@ -1444,8 +1444,14 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
         EXPECT_TRUE(standalone.get());
         const auto mixed_after = executor.Statistics();
         EXPECT_EQ(mixed_after.coalescing_traces_ready, trace_ready);
-        EXPECT_EQ(mixed_after.coalescing_timeouts - mixed_before.coalescing_timeouts,
-                  mixed_after.batches - mixed_before.batches);
+        const auto mixed_batches = mixed_after.batches - mixed_before.batches;
+        EXPECT_GT(mixed_batches, 0U);
+        // Prior feedback can shrink the batch limit until these two requests
+        // fill it. The held trace forbids traces-ready, but permits a full batch
+        // or the bounded timeout; no stopping occurs inside this window.
+        EXPECT_EQ(mixed_after.coalescing_timeouts - mixed_before.coalescing_timeouts +
+                      mixed_after.full_batches - mixed_before.full_batches,
+                  mixed_batches);
     }
     const auto accepted = ray;
     const auto submissions = executor.Statistics().interval_batches;
