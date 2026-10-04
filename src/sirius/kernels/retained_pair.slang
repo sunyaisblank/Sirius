@@ -87,18 +87,26 @@ RetainedPair RPAppend(RetainedPair a,RPScalar x) {
     if(a.valid==0u||!RPBounded(a.hi,0x7b800000u)||!RPBounded(a.lo,0x7b800000u)||
        !RPBounded(x,0x7b800000u))return RPInvalid();
 #ifdef SIRIUS_RETAINED_PORTABLE
-    // Preserve the three ordered sums and their lost term with one shared body.
-    RPScalar h=RPZero(),l=RPZero(),f=RPZero();
+    // Share all four sums, including RPPack's normalization and exact guards.
+    RPScalar h=RPZero(),l=RPZero(),f=RPZero(),error=RPZero();
     RPScalar first=a.hi,second=x,carry=RPZero();
-    [loop] for(uint i=0;i<3;++i) {
+    [loop] for(uint i=0;i<4;++i) {
+        if(i==3) {
+            error=RPUpAdd(a.error,RPAbs(f));
+            if(!RPBounded(h,0x7b800000u)||!RPBounded(l,0x7b800000u)||
+               !RPBounded(error,0x7b800000u)||(RPBits(error)&0x80000000u)!=0u)return RPInvalid();
+            first=h;second=l;
+        }
         RetainedSum32(first,second,h,l);
         if(i==0) {carry=h;first=a.lo;second=l;}
         else if(i==1) {f=l;first=carry;second=h;}
     }
+    if(!RPBounded(h,0x7b800000u))return RPInvalid();
+    RetainedPair r;r.hi=h;r.lo=l;r.error=error;r.valid=1;return r;
 #else
     RPScalar s,e,t,f,h,l;RetainedSum32(a.hi,x,s,e);RetainedSum32(a.lo,e,t,f);RetainedSum32(s,t,h,l);
-#endif
     return RPPack(h,l,RPUpAdd(a.error,RPAbs(f)));
+#endif
 }
 RetainedPair RPAdd(RetainedPair a,RetainedPair b) {
     if(a.valid==0u||b.valid==0u)return RPInvalid();
