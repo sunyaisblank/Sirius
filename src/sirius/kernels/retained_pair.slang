@@ -4,7 +4,18 @@ import retained_scalar;
 // The longer Knuth chain lost a correction in the combined camera pipeline.
 void RetainedSum32(RPScalar a,RPScalar b,out RPScalar hi,out RPScalar lo){
  if((RPBits(a)&0x7fffffffu)<(RPBits(b)&0x7fffffffu)){RPScalar t=a;a=b;b=t;}
+#ifdef SIRIUS_RETAINED_PORTABLE
+ // Preserve the three ordered sums while sharing their integer body.
+ RPScalar x=a,y=b;
+ [loop] for(uint i=0;i<3;++i) {
+  RPScalar sum=OrderedAdd32(x,y);
+  if(i==0) {hi=sum;x=sum;y=RPScalarNegate(a);}
+  else if(i==1) {x=b;y=RPScalarNegate(sum);}
+  else lo=sum;
+ }
+#else
  hi=OrderedAdd32(a,b);lo=OrderedSubtract32(b,OrderedSubtract32(hi,a));
+#endif
 }
 void Split32(RPScalar a,out RPScalar hi,out RPScalar lo){
  RPScalar c=OrderedMultiply32(RPFromBits(0x45800800u),a);hi=OrderedSubtract32(c,OrderedSubtract32(c,a));lo=OrderedSubtract32(a,hi);

@@ -26,6 +26,7 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     definitions += [f"-DSIRIUS_RETAINED_REGISTERS={registers}",
                     f"-DSIRIUS_RETAINED_TERMS={terms}",
                     f"-DSIRIUS_RETAINED_LANES={WORKGROUP_LANES}",
+                    f"-DSIRIUS_RETAINED_EXECUTION_LANES={1 if portable else WORKGROUP_LANES}",
                     f"-DSIRIUS_RETAINED_LAYERS={layers}",
                     f"-DSIRIUS_RETAINED_PREFIX={prefix}"]
     float_controls = [] if portable else ["-denorm-mode-fp32", "preserve"]
@@ -45,8 +46,10 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
         if "OpTypeFloat" in text or re.search(r"OpExecutionMode\S* .* (?:Denorm|RoundingMode|SignedZeroInfNan)", text):
             raise ValueError("portable retained stage depends on native floating arithmetic")
         entry = re.search(r"OpEntryPoint GLCompute (%\S+)", text)[1]
-        if f"OpExecutionMode {entry} LocalSize {WORKGROUP_LANES} 1 1" not in text:
-            raise ValueError("portable retained stage changed its bounded workgroup layout")
+        if f"OpExecutionMode {entry} LocalSize 1 1 1" not in text:
+            raise ValueError("portable retained stage lost its one-invocation-per-ray layout")
+        if "OpControlBarrier" in text:
+            raise ValueError("serial portable stage retained an inter-invocation barrier")
         subprocess.run([validator, "--target-env", "vulkan1.2", str(raw)], check=True)
         raw.replace(destination)
         data = destination.read_bytes()

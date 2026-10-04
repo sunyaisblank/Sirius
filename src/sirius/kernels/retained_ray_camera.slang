@@ -86,7 +86,7 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint rows, uint registers) 
 
     return true;
 }
-[shader("compute")][numthreads(SIRIUS_RETAINED_LANES, 1, 1)] void ComputeMain(uint3 id
+[shader("compute")][numthreads(SIRIUS_RETAINED_EXECUTION_LANES, 1, 1)] void ComputeMain(uint3 id
                                                                               : SV_GroupID,
                                                                                 uint lane
                                                                               : SV_GroupIndex) {
@@ -100,8 +100,10 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint rows, uint registers) 
         return;
     uint row = id.x, no = rawNo / rows, ni = rawNi - 1 - 225 * rows + 45, rowBase = row * no;
     if (no < 576) return;
-    for (uint i = lane; i < no; i += SIRIUS_RETAINED_LANES) outputs[rowBase + i] = 0;
+    for (uint i = lane; i < no; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
+#ifndef SIRIUS_RETAINED_PORTABLE
     AllMemoryBarrierWithGroupSync();
+#endif
     if (ni < 151) return;
     uint count = ReadInput(45, row, rows), registers = ReadInput(46, row, rows);
     if (count > 65536 || registers != SIRIUS_RETAINED_REGISTERS ||
@@ -124,7 +126,9 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint rows, uint registers) 
         !RPScalarEqual(RPAbsoluteUpper(ReadOriginal(3, row)), RPZero()))
         return;
     if (lane == 0) retainedStatus = 0;
+#ifndef SIRIUS_RETAINED_PORTABLE
     AllMemoryBarrierWithGroupSync();
+#endif
     uint layerBase = 151 + 5 * count;
     if (ReadInput(layerBase, row, rows) != 0 ||
         ReadInput(layerBase + SIRIUS_RETAINED_LAYERS, row, rows) != count)
@@ -135,9 +139,20 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint rows, uint registers) 
              end = ReadInput(layerBase + layer + 1, row, rows);
         if (start != expected || end <= start || end > count || end - start > SIRIUS_RETAINED_LANES)
             RejectRetainedProgram();
+#ifdef SIRIUS_RETAINED_PORTABLE
+        else {
+            // Layer destinations are disjoint from every input register and
+            // from one another; the generated plan releases inputs afterwards.
+            for (uint node = start; node < end; ++node)
+                if (!EvaluateOne(node, row, rowBase, rows, registers)) RejectRetainedProgram();
+        }
+#else
         else if (start + lane < end && !EvaluateOne(start + lane, row, rowBase, rows, registers))
             RejectRetainedProgram();
+#endif
+#ifndef SIRIUS_RETAINED_PORTABLE
         GroupMemoryBarrierWithGroupSync();
+#endif
         if (retainedStatus != 0) return;
         expected = end;
     }

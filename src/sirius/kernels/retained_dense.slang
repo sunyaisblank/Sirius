@@ -102,7 +102,9 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
     uint needed = count;
     if (needed == 0 || needed > count) return false;
     if (lane == 0) retainedStatus = 0;
+#ifndef SIRIUS_RETAINED_PORTABLE
     GroupMemoryBarrierWithGroupSync();
+#endif
     uint layerBase = programBase + 43 + 5 * count;
     if (inputs[layerBase] != 0 || inputs[layerBase + SIRIUS_RETAINED_LAYERS] != count) return false;
     uint expected = 0;
@@ -112,10 +114,21 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
         if (start != expected || end <= start || end > needed ||
             end - start > SIRIUS_RETAINED_LANES)
             RejectRetainedProgram();
+#ifdef SIRIUS_RETAINED_PORTABLE
+        else {
+            // Layer destinations are disjoint from every input register and
+            // from one another; the generated plan releases inputs afterwards.
+            for (uint node = start; node < end; ++node)
+                if (!EvaluateOne(node, row, rowBase, programBase, registers)) RejectRetainedProgram();
+        }
+#else
         else if (start + lane < end &&
                  !EvaluateOne(start + lane, row, rowBase, programBase, registers))
             RejectRetainedProgram();
+#endif
+#ifndef SIRIUS_RETAINED_PORTABLE
         GroupMemoryBarrierWithGroupSync();
+#endif
         if (retainedStatus != 0) return false;
         expected = end;
     }
@@ -128,7 +141,9 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
         for (uint i = 0; i < 40; ++i)
             WriteStored(rowBase + 4 + i * 5, ReadValue(inputs[programBase + 3 + i], rowBase));
     }
+#ifndef SIRIUS_RETAINED_PORTABLE
     AllMemoryBarrierWithGroupSync();
+#endif
     return true;
 }
 
@@ -193,7 +208,7 @@ bool FlatDense(uint row, uint rowBase, RetainedTriple h, RetainedTriple s, Retai
     return true;
 }
 
-[shader("compute")][numthreads(SIRIUS_RETAINED_LANES, 1, 1)] void ComputeMain(uint3 id
+[shader("compute")][numthreads(SIRIUS_RETAINED_EXECUTION_LANES, 1, 1)] void ComputeMain(uint3 id
                                                                               : SV_GroupID,
                                                                                 uint lane
                                                                               : SV_GroupIndex) {
@@ -208,8 +223,10 @@ bool FlatDense(uint row, uint rowBase, RetainedTriple h, RetainedTriple s, Retai
          registers = inputs[programBase + 1];
     uint rowWords = no / rows, rowBase = row * rowWords;
     if (rowWords < 204) return;
-    for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_LANES) outputs[rowBase + i] = 0;
+    for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
+#ifndef SIRIUS_RETAINED_PORTABLE
     AllMemoryBarrierWithGroupSync();
+#endif
     if (inputs[programBase + 2] != 40 || count > 65536 || registers != SIRIUS_RETAINED_REGISTERS ||
         ni != programBase + 43 + 5 * count + SIRIUS_RETAINED_LAYERS + 1 ||
         rowWords != 204 + 5 * registers)

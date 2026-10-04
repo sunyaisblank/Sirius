@@ -107,7 +107,9 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
     uint needed = count;
     if (needed == 0 || needed > count) return false;
     if (lane == 0) retainedStatus = 0;
+#ifndef SIRIUS_RETAINED_PORTABLE
     GroupMemoryBarrierWithGroupSync();
+#endif
     uint layerBase = programBase + 43 + 5 * count;
     if (inputs[layerBase] != 0 || inputs[layerBase + SIRIUS_RETAINED_LAYERS] != count) return false;
     uint expected = 0;
@@ -117,10 +119,21 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
         if (start != expected || end <= start || end > needed ||
             end - start > SIRIUS_RETAINED_LANES)
             RejectRetainedProgram();
+#ifdef SIRIUS_RETAINED_PORTABLE
+        else {
+            // Layer destinations are disjoint from every input register and
+            // from one another; the generated plan releases inputs afterwards.
+            for (uint node = start; node < end; ++node)
+                if (!EvaluateOne(node, row, rowBase, programBase, registers)) RejectRetainedProgram();
+        }
+#else
         else if (start + lane < end &&
                  !EvaluateOne(start + lane, row, rowBase, programBase, registers))
             RejectRetainedProgram();
+#endif
+#ifndef SIRIUS_RETAINED_PORTABLE
         GroupMemoryBarrierWithGroupSync();
+#endif
         if (retainedStatus != 0) return false;
         expected = end;
     }
@@ -134,7 +147,9 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
             WriteStored(rowBase + 1004 + stage * 200 + i * 5,
                         ReadValue(inputs[programBase + 3 + i], rowBase));
     }
+#ifndef SIRIUS_RETAINED_PORTABLE
     AllMemoryBarrierWithGroupSync();
+#endif
     return true;
 }
 RetainedTriple Rational(int numerator, int denominator) {
@@ -158,7 +173,7 @@ static const int ad[7][7] = {{1, 1, 1, 1, 1, 1, 1},
                              {384, 1, 1113, 192, 6784, 84, 1}};
 static const int en[7] = {71, 0, -71, 71, -17253, 22, -1};
 static const int ed[7] = {57600, 1, 16695, 1920, 339200, 525, 40};
-[shader("compute")][numthreads(SIRIUS_RETAINED_LANES, 1, 1)] void ComputeMain(uint3 id
+[shader("compute")][numthreads(SIRIUS_RETAINED_EXECUTION_LANES, 1, 1)] void ComputeMain(uint3 id
                                                                               : SV_GroupID,
                                                                                 uint lane
                                                                               : SV_GroupIndex) {
@@ -173,8 +188,10 @@ static const int ed[7] = {57600, 1, 16695, 1920, 339200, 525, 40};
          registers = inputs[programBase + 1];
     uint rowWords = no / rows, rowBase = row * rowWords;
     if (rowWords < 2404) return;
-    for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_LANES) outputs[rowBase + i] = 0;
+    for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
+#ifndef SIRIUS_RETAINED_PORTABLE
     AllMemoryBarrierWithGroupSync();
+#endif
     if (inputs[programBase + 2] != 40 || count > 65536 || registers != SIRIUS_RETAINED_REGISTERS ||
         ni != programBase + 43 + 5 * count + SIRIUS_RETAINED_LAYERS + 1 ||
         rowWords != 2404 + 5 * registers)
@@ -218,8 +235,10 @@ static const int ed[7] = {57600, 1, 16695, 1920, 339200, 525, 40};
     }
     for (uint stage = 0; stage < 7; ++stage) {
         if (lane == 0) retainedStatus = 0;
+#ifndef SIRIUS_RETAINED_PORTABLE
         GroupMemoryBarrierWithGroupSync();
-        for (uint i = lane; i < 40; i += SIRIUS_RETAINED_LANES) {
+#endif
+        for (uint i = lane; i < 40; i += SIRIUS_RETAINED_EXECUTION_LANES) {
             RetainedTriple value = ReadOriginal(4 + i, row);
             if (stage != 0) {
                 RetainedTriple first = ReadStored(rowBase + 1004 + i * 5);
@@ -238,14 +257,18 @@ static const int ed[7] = {57600, 1, 16695, 1920, 339200, 525, 40};
             if (value.valid == 0) RejectRetainedProgram();
             WriteStored(rowBase + 804 + i * 5, value);
         }
+#ifndef SIRIUS_RETAINED_PORTABLE
         AllMemoryBarrierWithGroupSync();
+#endif
         if (retainedStatus != 0) return;
         if (lane == 0) outputs[rowBase + 1] = stage + 1;
         if (!EvaluateProgram(row, rowBase, programBase, count, registers, stage, lane)) return;
     }
     if (lane == 0) retainedStatus = 0;
+#ifndef SIRIUS_RETAINED_PORTABLE
     GroupMemoryBarrierWithGroupSync();
-    for (uint i = lane; i < 40; i += SIRIUS_RETAINED_LANES) {
+#endif
+    for (uint i = lane; i < 40; i += SIRIUS_RETAINED_EXECUTION_LANES) {
         RetainedTriple first = ReadStored(rowBase + 1004 + i * 5), weighted = RTConstant(RPZero());
         for (uint j = 1; j < 7; ++j)
             if (en[j] != 0) {
@@ -260,7 +283,9 @@ static const int ed[7] = {57600, 1, 16695, 1920, 339200, 525, 40};
         WriteStored(rowBase + 4 + 40 * 5 + i * 5, lower);
         WriteStored(rowBase + 4 + 120 * 5 + i * 5, error);
     }
+#ifndef SIRIUS_RETAINED_PORTABLE
     AllMemoryBarrierWithGroupSync();
+#endif
     if (retainedStatus != 0) return;
     if (lane == 0) outputs[rowBase] = 1;
 }
