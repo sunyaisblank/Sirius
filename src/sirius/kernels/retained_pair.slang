@@ -91,7 +91,14 @@ RetainedPair RPAppend(RetainedPair a,RPScalar x) {
 }
 RetainedPair RPAdd(RetainedPair a,RetainedPair b) {
     if(a.valid==0u||b.valid==0u)return RPInvalid();
+#ifdef SIRIUS_RETAINED_PORTABLE
+    // Preserve high then low accumulation with one shared integer body.
+    RetainedPair r=a;
+    [loop] for(uint i=0;i<2;++i)
+        r=RPAppend(r,i==0?b.hi:b.lo);
+#else
     RetainedPair r=RPAppend(RPAppend(a,b.hi),b.lo);
+#endif
     return r.valid==0u?r:RPPack(r.hi,r.lo,RPUpAdd(r.error,b.error));
 }
 RetainedPair RPSubtract(RetainedPair a,RetainedPair b) {return RPAdd(a,RPNegate(b));}
