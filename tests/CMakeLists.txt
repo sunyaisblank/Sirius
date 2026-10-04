@@ -227,9 +227,8 @@ if(SIRIUS_REQUIRE_VULKAN_RUNTIME)
         PROPERTIES
             LABELS "Mandatory;Operational;Stability"
             RUN_SERIAL TRUE
-            # Three independent ten-point boundary searches take about five
-            # minutes on the target Dozen route. This is a stability witness,
-            # not a throughput assertion, so retain substantial liveness
-            # margin for cold shader translation and driver variation.
-            TIMEOUT 1200)
+            # Repeated CPU and retained physical classifications include cold
+            # driver translation. Bound liveness without reducing the prescribed
+            # repetitions, classifier points or numerical/work criteria.
+            TIMEOUT 28800)
 endif()
