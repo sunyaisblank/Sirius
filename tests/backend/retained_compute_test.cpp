@@ -153,10 +153,11 @@ TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
         EXPECT_EQ(padded.kernel_calls, 0U);
         EXPECT_EQ(padded.buffer_calls, 0U);
         EXPECT_EQ(padded.BufferAllocationBytes(), 0U);
-        if (capacity == 24)
+        if (capacity == 24) {
             EXPECT_EQ(padded.queried_spans,
                       (std::vector<std::uint64_t>{122728, 284544, 74300, 451104, 84744, 367584,
                                                   181492, 410784, 61292, 193344, 145452, 308736}));
+        }
     }
     AdmissionDevice invalid;
     EXPECT_FALSE(RetainedCompute::RequiredAllocationBytes(invalid, 0));
