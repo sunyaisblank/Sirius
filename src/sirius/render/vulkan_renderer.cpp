@@ -364,14 +364,22 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     const auto rays_per_work =
         work_edge == kPointDetectorBlockEdge ? kPointDetectorProbeBatchSize : 1;
     std::size_t capacity = std::min<std::size_t>(64, work_count * rays_per_work);
-    while (capacity > 0 && backend::RetainedCompute::RequiredBufferBytes(capacity) +
-                                   kMinTileEdge * kMinTileEdge * kTileWorkingSetBytesPerPixel >
-                               usable)
+    const auto resident_before = device.BufferAllocationBytes();
+    constexpr auto minimum_tile_bytes = kMinTileEdge * kMinTileEdge * kTileWorkingSetBytesPerPixel;
+    std::uint64_t planned = 0;
+    while (capacity > 0) {
+        auto required = backend::RetainedCompute::RequiredAllocationBytes(device, capacity);
+        if (!required) return std::unexpected(required.error());
+        if (resident_before <= usable && *required <= usable - resident_before &&
+            minimum_tile_bytes <= usable - resident_before - *required) {
+            planned = resident_before + *required;
+            break;
+        }
         --capacity;
+    }
     if (capacity == 0)
         return Fail(ErrorDomain::kDevice, "allocate retained renderer",
                     "budget cannot seat one bounded ray batch");
-    const auto planned = backend::RetainedCompute::RequiredBufferBytes(capacity);
     // Device scratch reserves a minimum tile independently of the number of
     // host pixels. A tiny image still fits within that existing reservation.
     const auto plan = DeriveTilePlan(*budget, std::max(config.width, kMinTileEdge),
@@ -382,9 +390,16 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     auto compute =
         backend::RetainedCompute::Create(device, capacity, rung == PrecisionRung::Fp64, *target);
     if (!compute) return std::unexpected(compute.error());
-    if (device.BufferAllocationBytes() != planned)
+    const auto resident_after = device.BufferAllocationBytes();
+    if (resident_after != planned)
         return Fail(ErrorDomain::kInternal, "allocate retained renderer",
-                    "buffer plan differs from actual allocation");
+                    std::format("buffer plan differs from actual allocation: planned_bytes={}, "
+                                "logical_span_bytes={}, resident_before_bytes={}, "
+                                "resident_after_bytes={}, capacity={}, precision={}, "
+                                "budget_bytes={}, usable_bytes={}",
+                                planned, backend::RetainedCompute::RequiredBufferBytes(capacity),
+                                resident_before, resident_after, capacity, RungName(rung), *budget,
+                                usable));
     std::cout << "[Vulkan] Retained renderer: " << device.Info().name << ", " << RungName(rung)
               << "; budget " << (*budget / (1024 * 1024)) << " MiB, " << capacity << " ray rows, "
               << work_count << " host work tiles of " << work_edge << "px" << std::endl;

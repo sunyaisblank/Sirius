@@ -17,6 +17,27 @@ using namespace retained_program;
 // One ray owns one workgroup; stay within Vulkan's portable X dispatch bound.
 constexpr std::size_t kMaximumCapacity = 65535;
 
+struct StageLayout {
+    std::span<const std::uint32_t> program;
+    std::size_t input_words;
+    std::size_t row_words;
+};
+// Same order as KernelStage; planning and allocation share these exact spans.
+constexpr std::array<StageLayout, 6> kStageLayouts{{
+    {kCameraProgram, 160, kCameraRowWords},
+    {kTransportProgram, 230, kTransportRowWords},
+    {kEndpointProgram, 225, kEndpointRowWords},
+    {kDenseProgram, 560, kDenseRowWords},
+    {kInitializeProgram, 225, kInitializeRowWords},
+    {kRayCameraProgram, 225, kRayCameraRowWords},
+}};
+
+std::array<std::uint64_t, 2> StageBufferBytes(const StageLayout& layout, std::size_t capacity) {
+    const auto rows = static_cast<std::uint64_t>(capacity);
+    return {4 * (1 + rows * layout.input_words + layout.program.size()),
+            4 * rows * layout.row_words};
+}
+
 RetainedValue Decode(const std::uint32_t* words) {
     return std::bit_cast<RetainedValue>(
         std::array<std::uint32_t, 5>{words[0], words[1], words[2], words[3], words[4]});
@@ -80,21 +101,23 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
         return Fail(ErrorDomain::kDevice, "create retained compute stages", std::string(*issue));
     auto result = std::unique_ptr<RetainedCompute>(new RetainedCompute(device, capacity));
     result->dispatch_target_ms_ = dispatch_target_ms;
-    const auto create = [&](Stage& stage, KernelStage kind, std::span<const std::uint32_t> code,
-                            std::span<const std::uint32_t> program, std::size_t input_words,
-                            std::size_t row_words) -> base::Expected<void> {
+    const auto create = [&](Stage& stage, KernelStage kind,
+                            std::span<const std::uint32_t> code) -> base::Expected<void> {
         auto kernel = device.LoadKernel(code);
         if (!kernel) return std::unexpected(kernel.error());
+        const auto& layout = kStageLayouts[static_cast<std::size_t>(kind)];
+        const auto bytes = StageBufferBytes(layout, capacity);
         stage.kind = kind;
         stage.kernel = *kernel;
-        stage.input.resize(1 + input_words * capacity + program.size());
-        stage.output.resize(row_words * capacity);
-        stage.input_words_per_row = input_words;
+        stage.input.resize(bytes[0] / 4);
+        stage.output.resize(bytes[1] / 4);
+        stage.input_words_per_row = layout.input_words;
         stage.input[0] = static_cast<std::uint32_t>(capacity);
-        std::copy(program.begin(), program.end(), stage.input.begin() + 1 + input_words * capacity);
-        auto input = device.CreateBuffer(stage.input.size() * 4, BufferUsage::kStorage);
+        std::copy(layout.program.begin(), layout.program.end(),
+                  stage.input.begin() + 1 + layout.input_words * capacity);
+        auto input = device.CreateBuffer(bytes[0], BufferUsage::kStorage);
         if (!input) return std::unexpected(input.error());
-        auto output = device.CreateBuffer(stage.output.size() * 4, BufferUsage::kStorage);
+        auto output = device.CreateBuffer(bytes[1], BufferUsage::kStorage);
         if (!output) return std::unexpected(output.error());
         stage.buffers = {*input, *output};
         return {};
@@ -109,44 +132,58 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
     };
     auto status = create(
         result->camera_, KernelStage::kCamera,
-        shader(kCameraShader, kCameraFp64Shader, kCameraPortableShader, kCameraPortableFp64Shader),
-        kCameraProgram, 160, kCameraRowWords);
+        shader(kCameraShader, kCameraFp64Shader, kCameraPortableShader, kCameraPortableFp64Shader));
     if (!status) return std::unexpected(status.error());
     status = create(result->transport_, KernelStage::kTransport,
                     shader(kTransportShader, kTransportFp64Shader, kTransportPortableShader,
-                           kTransportPortableFp64Shader),
-                    kTransportProgram, 230, kTransportRowWords);
+                           kTransportPortableFp64Shader));
     if (!status) return std::unexpected(status.error());
     status = create(result->endpoint_, KernelStage::kEndpoint,
                     shader(kEndpointShader, kEndpointFp64Shader, kEndpointPortableShader,
-                           kEndpointPortableFp64Shader),
-                    kEndpointProgram, 225, kEndpointRowWords);
+                           kEndpointPortableFp64Shader));
     if (!status) return std::unexpected(status.error());
     status = create(
         result->dense_, KernelStage::kDense,
-        shader(kDenseShader, kDenseFp64Shader, kDensePortableShader, kDensePortableFp64Shader),
-        kDenseProgram, 560, kDenseRowWords);
+        shader(kDenseShader, kDenseFp64Shader, kDensePortableShader, kDensePortableFp64Shader));
     if (!status) return std::unexpected(status.error());
     status = create(result->initialize_, KernelStage::kInitialize,
                     shader(kInitializeShader, kInitializeFp64Shader, kInitializePortableShader,
-                           kInitializePortableFp64Shader),
-                    kInitializeProgram, 225, kInitializeRowWords);
+                           kInitializePortableFp64Shader));
     if (!status) return std::unexpected(status.error());
     status = create(result->ray_camera_, KernelStage::kRayCamera,
                     shader(kRayCameraShader, kRayCameraFp64Shader, kRayCameraPortableShader,
-                           kRayCameraPortableFp64Shader),
-                    kRayCameraProgram, 225, kRayCameraRowWords);
+                           kRayCameraPortableFp64Shader));
     if (!status) return std::unexpected(status.error());
     return result;
 }
 
 std::uint64_t RetainedCompute::RequiredBufferBytes(std::size_t capacity) {
     if (capacity == 0 || capacity > kMaximumCapacity) return 0;
-    return 4 * (6 + kCameraProgram.size() + kTransportProgram.size() + kEndpointProgram.size() +
-                kDenseProgram.size() + kInitializeProgram.size() + kRayCameraProgram.size() +
-                capacity *
-                    (160 + kCameraRowWords + 230 + kTransportRowWords + 225 + kEndpointRowWords +
-                     560 + kDenseRowWords + 225 + kInitializeRowWords + 225 + kRayCameraRowWords));
+    std::uint64_t total = 0;
+    for (const auto& layout : kStageLayouts)
+        for (const auto bytes : StageBufferBytes(layout, capacity)) total += bytes;
+    return total;
+}
+
+base::Expected<std::uint64_t> RetainedCompute::RequiredAllocationBytes(ComputeDevice& device,
+                                                                       std::size_t capacity) {
+    if (capacity == 0 || capacity > kMaximumCapacity)
+        return Fail(ErrorDomain::kDevice, "plan retained buffers", "invalid capacity");
+    std::uint64_t total = 0;
+    for (const auto& layout : kStageLayouts) {
+        for (const auto bytes : StageBufferBytes(layout, capacity)) {
+            auto required = device.RequiredBufferAllocationBytes(bytes, BufferUsage::kStorage);
+            if (!required) return std::unexpected(required.error());
+            if (*required < bytes)
+                return Fail(ErrorDomain::kDevice, "plan retained buffers",
+                            "allocation requirement is smaller than the requested buffer");
+            if (*required > std::numeric_limits<std::uint64_t>::max() - total)
+                return Fail(ErrorDomain::kDevice, "plan retained buffers",
+                            "allocation requirement sum overflows");
+            total += *required;
+        }
+    }
+    return total;
 }
 
 std::array<RetainedCompute::StageStats, 6> RetainedCompute::Statistics() const {

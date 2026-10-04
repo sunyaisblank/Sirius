@@ -46,7 +46,11 @@ using namespace sirius::backend;
 class AdmissionDevice final : public ComputeDevice {
   public:
     DeviceInfo info;
-    unsigned kernel_calls = 0, buffer_calls = 0;
+    unsigned kernel_calls = 0, buffer_calls = 0, query_calls = 0;
+    unsigned query_failure_call = 0;
+    std::uint64_t query_padding = 0;
+    std::optional<std::uint64_t> fixed_requirement;
+    std::vector<std::uint64_t> queried_spans;
     bool kernel_has_float = false;
     const DeviceInfo& Info() const noexcept override { return info; }
     sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t> code) override {
@@ -65,6 +69,15 @@ class AdmissionDevice final : public ComputeDevice {
         ++buffer_calls;
         return sirius::base::Fail(sirius::base::ErrorDomain::kDevice, "admission sentinel",
                                   "unexpected buffer allocation");
+    }
+    sirius::base::Expected<std::uint64_t> RequiredBufferAllocationBytes(
+        std::uint64_t bytes, BufferUsage usage) override {
+        ++query_calls;
+        queried_spans.push_back(bytes);
+        if (usage != BufferUsage::kStorage || query_calls == query_failure_call)
+            return sirius::base::Fail(sirius::base::ErrorDomain::kDevice,
+                                      "allocation query sentinel", "injected query failure");
+        return fixed_requirement ? *fixed_requirement : bytes + query_padding;
     }
     sirius::base::Expected<void> WriteBuffer(BufferHandle, std::span<const std::byte>) override {
         return Unused();
@@ -116,6 +129,7 @@ TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
             ASSERT_FALSE(created);
             EXPECT_EQ(device.kernel_calls, admitted ? 1U : 0U);
             EXPECT_EQ(device.buffer_calls, 0U);
+            EXPECT_EQ(device.query_calls, 0U);
             if (admitted) {
                 EXPECT_EQ(device.kernel_has_float, missing != 1 && missing != 2 && missing != 5);
             }
@@ -125,6 +139,50 @@ TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
                       admitted ? "admission sentinel" : "create retained compute stages");
         }
     }
+    // A driver's allocation requirement can exceed every logical shader span.
+    // These fixed layout totals are independent of the production planner.
+    for (const auto& [capacity, logical] : std::array<std::pair<std::size_t, std::uint64_t>, 3>{
+             {{1, 604512}, {24, 2686104}, {64, 6306264}}}) {
+        AdmissionDevice padded;
+        padded.query_padding = 128;
+        const auto required = RetainedCompute::RequiredAllocationBytes(padded, capacity);
+        ASSERT_TRUE(required) << required.error().Description();
+        EXPECT_EQ(RetainedCompute::RequiredBufferBytes(capacity), logical);
+        EXPECT_EQ(*required, logical + 12 * 128);
+        EXPECT_EQ(padded.query_calls, 12U);
+        EXPECT_EQ(padded.kernel_calls, 0U);
+        EXPECT_EQ(padded.buffer_calls, 0U);
+        EXPECT_EQ(padded.BufferAllocationBytes(), 0U);
+        if (capacity == 24)
+            EXPECT_EQ(padded.queried_spans,
+                      (std::vector<std::uint64_t>{122728, 284544, 74300, 451104, 84744, 367584,
+                                                  181492, 410784, 61292, 193344, 145452, 308736}));
+    }
+    AdmissionDevice invalid;
+    EXPECT_FALSE(RetainedCompute::RequiredAllocationBytes(invalid, 0));
+    EXPECT_FALSE(RetainedCompute::RequiredAllocationBytes(invalid, 65536));
+    EXPECT_EQ(invalid.query_calls, 0U);
+    AdmissionDevice failing;
+    failing.query_failure_call = 3;
+    const auto failure = RetainedCompute::RequiredAllocationBytes(failing, 24);
+    ASSERT_FALSE(failure);
+    EXPECT_EQ(failure.error().operation(), "allocation query sentinel");
+    EXPECT_EQ(failing.query_calls, 3U);
+    EXPECT_EQ(failing.kernel_calls + failing.buffer_calls, 0U);
+    AdmissionDevice overflow;
+    overflow.fixed_requirement = std::numeric_limits<std::uint64_t>::max();
+    const auto too_large = RetainedCompute::RequiredAllocationBytes(overflow, 24);
+    ASSERT_FALSE(too_large);
+    EXPECT_NE(too_large.error().detail().find("overflows"), std::string::npos);
+    EXPECT_EQ(overflow.query_calls, 2U);
+    EXPECT_EQ(overflow.kernel_calls + overflow.buffer_calls, 0U);
+    AdmissionDevice undersized;
+    undersized.fixed_requirement = 1;
+    const auto too_small = RetainedCompute::RequiredAllocationBytes(undersized, 24);
+    ASSERT_FALSE(too_small);
+    EXPECT_NE(too_small.error().detail().find("smaller"), std::string::npos);
+    EXPECT_EQ(undersized.query_calls, 1U);
+    EXPECT_EQ(undersized.kernel_calls + undersized.buffer_calls, 0U);
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif
@@ -143,8 +201,12 @@ class RetainedComputeTest : public ::testing::Test {
         ASSERT_TRUE(opened) << opened.error().Description();
         device = std::move(*opened);
         ASSERT_TRUE(device->SetBufferAllocationLimit(8 * 1024 * 1024));
+        auto required = RetainedCompute::RequiredAllocationBytes(*device, 24);
+        ASSERT_TRUE(required) << required.error().Description();
+        EXPECT_EQ(device->BufferAllocationBytes(), 0U);
         auto created = RetainedCompute::Create(*device, 24);
         ASSERT_TRUE(created) << created.error().Description();
+        EXPECT_EQ(device->BufferAllocationBytes(), *required);
         compute = std::move(*created);
 #else
         GTEST_SKIP() << "Retained compute build tools unavailable";
@@ -240,6 +302,10 @@ class TransferProbeDevice final : public ComputeDevice {
     }
     std::uint64_t BufferAllocationBytes() const noexcept override {
         return device_.BufferAllocationBytes();
+    }
+    sirius::base::Expected<std::uint64_t> RequiredBufferAllocationBytes(
+        std::uint64_t bytes, BufferUsage usage) override {
+        return device_.RequiredBufferAllocationBytes(bytes, usage);
     }
 
   private:
@@ -379,11 +445,15 @@ TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInval
     EXPECT_FALSE(RetainedCompute::Create(*device, 65536));
     EXPECT_EQ(device->BufferAllocationBytes(), initial_allocation);
     TransferProbeDevice probe(*device);
+    const auto required = RetainedCompute::RequiredAllocationBytes(probe, compute->Capacity());
+    ASSERT_TRUE(required) << required.error().Description();
+    EXPECT_EQ(device->BufferAllocationBytes(), initial_allocation);
     auto observed = RetainedCompute::Create(probe, compute->Capacity());
     ASSERT_TRUE(observed) << observed.error().Description();
     auto& camera_compute = **observed;
     const auto allocation = device->BufferAllocationBytes();
     EXPECT_GT(allocation, initial_allocation);
+    EXPECT_EQ(allocation - initial_allocation, *required);
     EXPECT_LE(allocation, 8ull * 1024 * 1024);
     ASSERT_EQ(probe.allocations.size(), 12U);
     for (const auto& buffer : probe.allocations) EXPECT_EQ(buffer.usage, BufferUsage::kStorage);

@@ -70,6 +70,9 @@ class VulkanDevice final : public ComputeDevice {
     [[nodiscard]] base::Expected<BufferHandle> CreateBuffer(std::uint64_t size_bytes,
                                                             BufferUsage usage) override;
 
+    [[nodiscard]] base::Expected<std::uint64_t> RequiredBufferAllocationBytes(
+        std::uint64_t size_bytes, BufferUsage usage) override;
+
     [[nodiscard]] base::Expected<void> SetBufferAllocationLimit(std::uint64_t bytes) override;
     [[nodiscard]] std::uint64_t BufferAllocationBytes() const noexcept override {
         return buffer_allocation_bytes_;

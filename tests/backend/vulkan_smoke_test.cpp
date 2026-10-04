@@ -480,6 +480,11 @@ TEST(VulkanBackend, BufferAllocationLimitCountsActualResidencyAndPreservesExisti
     auto& device = **opened;
     EXPECT_EQ(device.BufferAllocationBytes(), 0u);
     ASSERT_TRUE(device.SetBufferAllocationLimit(0).has_value());
+    EXPECT_FALSE(device.RequiredBufferAllocationBytes(0, BufferUsage::kStorage));
+    const auto required = device.RequiredBufferAllocationBytes(1024, BufferUsage::kStorage);
+    ASSERT_TRUE(required) << required.error().Description();
+    EXPECT_GE(*required, 1024U);
+    EXPECT_EQ(device.BufferAllocationBytes(), 0U);
     EXPECT_FALSE(device.CreateBuffer(1, BufferUsage::kStorage).has_value());
     EXPECT_EQ(device.BufferAllocationBytes(), 0u);
     ASSERT_TRUE(device.SetBufferAllocationLimit(1024 * 1024).has_value());
@@ -487,6 +492,7 @@ TEST(VulkanBackend, BufferAllocationLimitCountsActualResidencyAndPreservesExisti
     ASSERT_TRUE(buffer.has_value()) << buffer.error().Description();
     auto resident = device.BufferAllocationBytes();
     EXPECT_GE(resident, 1024u);
+    EXPECT_EQ(resident, *required);
     const std::array<std::uint32_t, 4> sent{0x12345678u, 0xffffffffu, 0u, 0xabcdef01u};
     ASSERT_TRUE(device.WriteBuffer(*buffer, std::as_bytes(std::span(sent))).has_value());
     ASSERT_TRUE(device.SetBufferAllocationLimit(resident + 1).has_value());
@@ -502,10 +508,14 @@ TEST(VulkanBackend, BufferAllocationLimitCountsActualResidencyAndPreservesExisti
     // Observe this driver's allocation requirement for a one-byte buffer, then
     // make the same request with one fewer byte of actual residency available.
     ASSERT_TRUE(device.SetBufferAllocationLimit(1024 * 1024).has_value());
+    const auto tiny_required = device.RequiredBufferAllocationBytes(1, BufferUsage::kStorage);
+    ASSERT_TRUE(tiny_required) << tiny_required.error().Description();
+    EXPECT_EQ(device.BufferAllocationBytes(), resident);
     const auto tiny = device.CreateBuffer(1, BufferUsage::kStorage);
     ASSERT_TRUE(tiny.has_value());
     const auto tiny_allocation = device.BufferAllocationBytes() - resident;
     EXPECT_GE(tiny_allocation, 1u);
+    EXPECT_EQ(tiny_allocation, *tiny_required);
     RecordProperty("one_byte_buffer_actual_allocation", std::to_string(tiny_allocation));
     resident = device.BufferAllocationBytes();
     ASSERT_TRUE(device.SetBufferAllocationLimit(resident + tiny_allocation - 1).has_value());

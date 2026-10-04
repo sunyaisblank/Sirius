@@ -30,6 +30,16 @@ using base::Fail;
 // requesting 1.3 is compatible with both (specification section 1.7 evidence).
 constexpr std::uint32_t kApiVersion = VK_MAKE_API_VERSION(0, 1, 3, 0);
 
+VkBufferCreateInfo BufferCreateInfo(std::uint64_t size_bytes, BufferUsage usage) {
+    return {
+        .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
+        .size = size_bytes,
+        .usage = usage == BufferUsage::kStorage ? VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+                                                : VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+        .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
+    };
+}
+
 // One bounded serialized blob survives fresh render devices. Vulkan objects and
 // buffers retain their existing per-device lifetime. Concurrent device exports
 // replace this slot; they cannot accumulate entries for different adapters.
@@ -648,15 +658,7 @@ Expected<BufferHandle> VulkanDevice::CreateBuffer(std::uint64_t size_bytes, Buff
         return Fail(ErrorDomain::kDevice, "allocate buffer memory",
                     "requested buffer exceeds the remaining explicit allocation budget");
     }
-    const VkBufferUsageFlags usage_flags = usage == BufferUsage::kStorage
-                                               ? VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-                                               : VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
-    const VkBufferCreateInfo buffer_info{
-        .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
-        .size = size_bytes,
-        .usage = usage_flags,
-        .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
-    };
+    const auto buffer_info = BufferCreateInfo(size_bytes, usage);
     Buffer buffer{.size_bytes = size_bytes, .usage = usage};
     if (const VkResult r = vkCreateBuffer(device_, &buffer_info, nullptr, &buffer.buffer);
         r != VK_SUCCESS) {
@@ -701,6 +703,24 @@ Expected<BufferHandle> VulkanDevice::CreateBuffer(std::uint64_t size_bytes, Buff
     buffers_.push_back(buffer);
     buffer_allocation_bytes_ += requirements.size;
     return BufferHandle{static_cast<std::uint32_t>(buffers_.size() - 1)};
+}
+
+Expected<std::uint64_t> VulkanDevice::RequiredBufferAllocationBytes(std::uint64_t size_bytes,
+                                                                    BufferUsage usage) {
+    if (size_bytes == 0)
+        return Fail(ErrorDomain::kDevice, "query buffer allocation",
+                    "buffer size must be positive");
+    const auto buffer_info = BufferCreateInfo(size_bytes, usage);
+    VkBuffer buffer = VK_NULL_HANDLE;
+    if (const VkResult r = vkCreateBuffer(device_, &buffer_info, nullptr, &buffer); r != VK_SUCCESS)
+        return Fail(ErrorDomain::kDevice, "query buffer allocation", VkResultText(r));
+    VkMemoryRequirements requirements{};
+    vkGetBufferMemoryRequirements(device_, buffer, &requirements);
+    vkDestroyBuffer(device_, buffer, nullptr);
+    if (requirements.size < size_bytes)
+        return Fail(ErrorDomain::kDevice, "query buffer allocation",
+                    "driver allocation requirement is smaller than the requested buffer");
+    return requirements.size;
 }
 
 Expected<void> VulkanDevice::WriteBuffer(BufferHandle handle, std::span<const std::byte> data) {

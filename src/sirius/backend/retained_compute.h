@@ -117,7 +117,10 @@ class RetainedCompute {
         std::uint64_t pipeline_creations = 0;  // Not a driver pipeline-cache hit counter.
         std::uint64_t target_overshoots = 0;
     };
+    // Logical shader spans; actual device residency may include adapter padding.
     [[nodiscard]] static std::uint64_t RequiredBufferBytes(std::size_t capacity);
+    [[nodiscard]] static base::Expected<std::uint64_t> RequiredAllocationBytes(
+        ComputeDevice& device, std::size_t capacity);
     [[nodiscard]] static base::Expected<std::unique_ptr<RetainedCompute>> Create(
         ComputeDevice& device, std::size_t capacity, bool fp64_products = false,
         double dispatch_target_ms = 250);

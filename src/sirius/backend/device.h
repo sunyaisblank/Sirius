@@ -130,6 +130,11 @@ class ComputeDevice {
     [[nodiscard]] virtual base::Expected<BufferHandle> CreateBuffer(std::uint64_t size_bytes,
                                                                     BufferUsage usage) = 0;
 
+    // Query the actual allocation required by the same descriptor as CreateBuffer.
+    // No explicit device memory is allocated; resident bytes/owned handles stay unchanged.
+    [[nodiscard]] virtual base::Expected<std::uint64_t> RequiredBufferAllocationBytes(
+        std::uint64_t size_bytes, BufferUsage usage) = 0;
+
     [[nodiscard]] virtual base::Expected<void> WriteBuffer(BufferHandle buffer,
                                                            std::span<const std::byte> data) = 0;
 
