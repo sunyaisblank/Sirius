@@ -217,16 +217,44 @@ RPScalar RPDivideSeed(RPScalar a,RPScalar b) {
     RPScalar am=RPMantissa(aa),bm=RPMantissa(bb);
     RPScalar seed=OrderedDivide32(am,bm);
     if(!RPBounded(seed,0x40800000u))return RPZero();
+#ifdef SIRIUS_RETAINED_PORTABLE
+    // Preserve optional subnormal pre-scaling, then the original final scale.
+    [loop] for(uint i=0;i<2;++i) {
+        if(i==0 && exponent>=-126)continue;
+        RPScalar scale=RPFromBits(0x00800000u);
+        if(i==1)scale=RPPowerOfTwo(exponent);
+        seed=OrderedMultiply32(seed,scale);
+        if(i==0)exponent+=126;
+    }
+#else
     if(exponent < -126){seed=OrderedMultiply32(seed,RPFromBits(0x00800000u));exponent+=126;}
     seed=OrderedMultiply32(seed,RPPowerOfTwo(exponent));
+#endif
     return RPFromBits(RPBits(seed)^((RPBits(a)^RPBits(b))&0x80000000u));
 }
 RPScalar RPSqrtSeed(RPScalar positive) {
     int exponent=RPFloorExponent(positive),odd=exponent&1;
     RPScalar mantissa=RPMantissa(positive);
+#ifdef SIRIUS_RETAINED_PORTABLE
+    // Keep optional doubling before sqrt, and the bound before final scaling.
+    RPScalar seed=mantissa;
+    [loop] for(uint i=0;i<2;++i) {
+        if(i==0) {
+            if(odd==0)continue;
+        } else {
+            seed=OrderedSqrt32(seed);
+            if(!RPBounded(seed,0x40800000u))return RPZero();
+        }
+        RPScalar scale=RPFromBits(0x40000000u);
+        if(i==1)scale=RPPowerOfTwo((exponent-odd)/2);
+        seed=OrderedMultiply32(seed,scale);
+    }
+    return seed;
+#else
     if(odd!=0)mantissa=OrderedMultiply32(mantissa,RPFromBits(0x40000000u));
     RPScalar seed=OrderedSqrt32(mantissa);if(!RPBounded(seed,0x40800000u))return RPZero();
     return OrderedMultiply32(seed,RPPowerOfTwo((exponent-odd)/2));
+#endif
 }
 RetainedPair RPDivide(RetainedPair a,RetainedPair b) {
     if(a.valid==0u||b.valid==0u)return RPInvalid();
