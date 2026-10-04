@@ -211,9 +211,6 @@ SIRIUS_PB32_INLINE uint PB32Sqrt(uint a) {
     radicand.lo = aa.significand << shift;
     radicand.hi = aa.significand >> (32u - shift);
     uint remainder = 0u, root = 0u;
-#if !defined(__cplusplus)
-    [loop]
-#endif
     for (int i = 26; i >= 0; --i) {
         uint bit = uint(i) * 2u;
         uint pair = bit >= 32u ? (radicand.hi >> (bit - 32u)) & 3u : (radicand.lo >> bit) & 3u;
