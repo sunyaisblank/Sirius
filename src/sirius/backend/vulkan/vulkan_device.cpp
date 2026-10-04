@@ -31,11 +31,13 @@ using base::Fail;
 constexpr std::uint32_t kApiVersion = VK_MAKE_API_VERSION(0, 1, 3, 0);
 
 VkBufferCreateInfo BufferCreateInfo(std::uint64_t size_bytes, BufferUsage usage) {
+    const VkBufferUsageFlags usage_flags = usage == BufferUsage::kStorage
+                                               ? VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+                                               : VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
     return {
         .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
         .size = size_bytes,
-        .usage = usage == BufferUsage::kStorage ? VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-                                                : VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+        .usage = usage_flags,
         .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
     };
 }
