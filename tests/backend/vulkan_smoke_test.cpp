@@ -615,4 +615,96 @@ TEST(VulkanBackend, DeviceSelectionIsStrictAndRangeChecked) {
     EXPECT_EQ(absent.error().domain(), sirius::base::ErrorDomain::kConfiguration);
 }
 
+TEST(VulkanBackend, IdenticalKernelWordsReusePipelineAcrossBuffers) {
+#ifndef SIRIUS_KERNEL_DIR
+    GTEST_SKIP() << "kernels not compiled (slangc absent at configure time)";
+#else
+    const auto inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory) << inventory.error().Description();
+    if (inventory->empty()) {
+        GTEST_SKIP() << "no Vulkan device present";
+    }
+    const auto selected = ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(selected) << selected.error().Description();
+    auto opened = CreateVulkanDevice(*selected);
+    ASSERT_TRUE(opened) << opened.error().Description();
+    auto& device = **opened;
+    auto words = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/smoke.spv");
+    ASSERT_GE(words.size(), 5U);
+    const auto unchanged = words;
+    const auto first = device.LoadKernel(words);
+    ASSERT_TRUE(first) << first.error().Description();
+    const auto again = device.LoadKernel(unchanged);
+    ASSERT_TRUE(again) << again.error().Description();
+    EXPECT_EQ(again->value, first->value);
+
+    // Change the smoke factor from 1-2M/r to 1-4M/r. A different complete
+    // module must not inherit the original handle or executable pipeline.
+    std::uint32_t float_type = 0;
+    std::size_t changed_constants = 0;
+    for (std::size_t offset = 5; offset < words.size();) {
+        const auto extent = words[offset] >> 16;
+        const auto opcode = words[offset] & 0xffffU;
+        ASSERT_GT(extent, 0U);
+        ASSERT_LE(extent, words.size() - offset);
+        if (opcode == 22U && extent == 3U && words[offset + 2] == 32U)
+            float_type = words[offset + 1];
+        if (opcode == 43U && extent == 4U && words[offset + 1] == float_type &&
+            words[offset + 3] == 0x40000000U) {
+            words[offset + 3] = 0x40800000U;
+            ++changed_constants;
+        }
+        offset += extent;
+    }
+    ASSERT_EQ(changed_constants, 1U);
+    const auto variant = device.LoadKernel(words);
+    ASSERT_TRUE(variant) << variant.error().Description();
+    EXPECT_NE(variant->value, first->value);
+    const auto after_mutation = device.LoadKernel(unchanged);
+    ASSERT_TRUE(after_mutation) << after_mutation.error().Description();
+    EXPECT_EQ(after_mutation->value, first->value);
+
+    constexpr std::array<float, 4> radii{1, 2, 4, 8};
+    constexpr std::array<float, 3> masses{.5f, .75f, .5f};
+    constexpr std::array<std::array<float, 4>, 3> expected{{
+        {0, .5f, .75f, .875f}, {-.5f, .25f, .625f, .8125f}, {-1, 0, .5f, .75f}}};
+    std::array<sirius::backend::BufferHandle, 3> prior_outputs{};
+    std::array<std::array<float, 4>, 3> saved_outputs{};
+    for (std::size_t invocation = 0; invocation < expected.size(); ++invocation) {
+        const std::array<float, 2> params{masses[invocation], 4};
+        constexpr std::array<float, 4> unwritten{-42, -42, -42, -42};
+        const auto in = device.CreateBuffer(sizeof(radii), BufferUsage::kStorage);
+        const auto out = device.CreateBuffer(sizeof(unwritten), BufferUsage::kStorage);
+        const auto parameters = device.CreateBuffer(sizeof(params), BufferUsage::kStorage);
+        ASSERT_TRUE(in);
+        ASSERT_TRUE(out);
+        ASSERT_TRUE(parameters);
+        ASSERT_TRUE(device.WriteBuffer(*in, std::as_bytes(std::span(radii))));
+        ASSERT_TRUE(device.WriteBuffer(*out, std::as_bytes(std::span(unwritten))));
+        ASSERT_TRUE(device.WriteBuffer(*parameters, std::as_bytes(std::span(params))));
+        const std::array bindings{*in, *out, *parameters};
+        sirius::backend::DispatchTiming timing;
+        ASSERT_TRUE(device.Dispatch(invocation == 2 ? *variant : invocation == 0 ? *first : *again,
+                                    bindings, 1, 1, 1, &timing));
+        EXPECT_EQ(timing.pipeline_created, invocation != 1);
+        prior_outputs[invocation] = *out;
+        // Rebinding a cached pipeline must write this output, leaving every
+        // previous output unchanged. Keep the original smoke tolerance:
+        // Vulkan division need not round each exactly representable quotient.
+        for (std::size_t prior = 0; prior <= invocation; ++prior) {
+            std::array<float, 4> actual{};
+            ASSERT_TRUE(device.ReadBuffer(prior_outputs[prior],
+                                          std::as_writable_bytes(std::span(actual))));
+            if (prior == invocation) {
+                for (std::size_t value = 0; value < actual.size(); ++value)
+                    EXPECT_NEAR(actual[value], expected[prior][value], 1e-6f);
+                saved_outputs[prior] = actual;
+            } else {
+                EXPECT_EQ(std::memcmp(actual.data(), saved_outputs[prior].data(), sizeof(actual)), 0);
+            }
+        }
+    }
+#endif
+}
+
 }  // namespace

@@ -132,7 +132,11 @@ class VulkanDevice final : public ComputeDevice {
     bool pipeline_cache_modified_ = false;
     DeviceInfo info_;
 
-    std::vector<VkShaderModule> kernels_;
+    struct Kernel {
+        std::vector<std::uint32_t> words;
+        VkShaderModule module = VK_NULL_HANDLE;
+    };
+    std::vector<Kernel> kernels_;
     std::vector<Buffer> buffers_;
     std::uint64_t buffer_allocation_bytes_ = 0;
     std::uint64_t buffer_allocation_limit_ = std::numeric_limits<std::uint64_t>::max();

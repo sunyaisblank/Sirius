@@ -1310,6 +1310,7 @@ set_tests_properties(
     VulkanBackend.SlangKernelMatchesCpuReference
     VulkanBackend.WorkerThreadDispatchTearsDownSafely
     VulkanBackend.DeviceSelectionIsStrictAndRangeChecked
+    VulkanBackend.IdenticalKernelWordsReusePipelineAcrossBuffers
     PROPERTIES LABELS "Mandatory;Operational"
 )
 

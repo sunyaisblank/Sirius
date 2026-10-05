@@ -491,8 +491,8 @@ VulkanDevice::~VulkanDevice() {
             vkDestroyPipelineLayout(device_, pipeline.layout, nullptr);
             vkDestroyDescriptorSetLayout(device_, pipeline.set_layout, nullptr);
         }
-        for (VkShaderModule module : kernels_) {
-            vkDestroyShaderModule(device_, module, nullptr);
+        for (const Kernel& kernel : kernels_) {
+            vkDestroyShaderModule(device_, kernel.module, nullptr);
         }
         for (Buffer& buffer : buffers_) {
             vkDestroyBuffer(device_, buffer.buffer, nullptr);
@@ -631,17 +631,30 @@ Expected<KernelHandle> VulkanDevice::LoadKernel(std::span<const std::uint32_t> s
     if (auto precision = ValidateVulkanKernelPrecision(spirv, info_.supports_fp64); !precision) {
         return std::unexpected(precision.error());
     }
+    // Identical modules share their device-lived pipelines even when a new
+    // retained compute instance owns different input and output buffers.
+    for (std::size_t index = 0; index < kernels_.size(); ++index) {
+        if (std::ranges::equal(kernels_[index].words, spirv))
+            return KernelHandle{static_cast<std::uint32_t>(index)};
+    }
+    Kernel kernel;
+    try {
+        kernel.words.assign(spirv.begin(), spirv.end());
+        // Complete host allocations before acquiring the Vulkan object.
+        kernels_.reserve(kernels_.size() + 1);
+    } catch (const std::bad_alloc&) {
+        return Fail(ErrorDomain::kKernel, "load shader module", "host shader storage allocation failed");
+    }
     const VkShaderModuleCreateInfo create_info{
         .sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
-        .codeSize = spirv.size_bytes(),
-        .pCode = spirv.data(),
+        .codeSize = kernel.words.size() * sizeof(std::uint32_t),
+        .pCode = kernel.words.data(),
     };
-    VkShaderModule module = VK_NULL_HANDLE;
-    if (const VkResult r = vkCreateShaderModule(device_, &create_info, nullptr, &module);
+    if (const VkResult r = vkCreateShaderModule(device_, &create_info, nullptr, &kernel.module);
         r != VK_SUCCESS) {
         return Fail(ErrorDomain::kKernel, "create shader module", VkResultText(r));
     }
-    kernels_.push_back(module);
+    kernels_.push_back(std::move(kernel));
     return KernelHandle{static_cast<std::uint32_t>(kernels_.size() - 1)};
 }
 
@@ -807,7 +820,7 @@ Expected<VulkanDevice::Pipeline*> VulkanDevice::GetOrCreatePipeline(
             VkPipelineShaderStageCreateInfo{
                 .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
                 .stage = VK_SHADER_STAGE_COMPUTE_BIT,
-                .module = kernels_[kernel.value],
+                .module = kernels_[kernel.value].module,
                 .pName = "main",
             },
         .layout = pipeline.layout,
