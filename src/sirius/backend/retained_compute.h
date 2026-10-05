@@ -3,6 +3,7 @@
 #include "sirius/backend/device.h"
 
 #include <array>
+#include <functional>
 #include <memory>
 #include <optional>
 
@@ -117,6 +118,22 @@ class RetainedCompute {
         std::uint64_t pipeline_creations = 0;  // Not a driver pipeline-cache hit counter.
         std::uint64_t target_overshoots = 0;
     };
+    struct PreparationStageStats {
+        std::uint64_t attempts = 0;
+        std::uint64_t dispatch_attempts = 0;
+        std::uint64_t completed_dispatches = 0;  // Successful call with valid timing.
+        std::uint64_t completed = 0;  // Dispatch and capacity-header restoration succeeded.
+        bool header_restored = false;
+        DispatchTiming timing;  // Includes partial observations returned by a failing call.
+        std::uint64_t write_buffer_calls = 0;
+        double write_buffer_ms = 0;            // Includes returned failing calls.
+        std::uint64_t write_buffer_bytes = 0;  // Successfully transferred bytes only.
+    };
+    struct PreparationStats {
+        // Existing KernelStage order; the renderer does not use film Camera.
+        std::array<PreparationStageStats, 6> stages{};
+        double wall_ms = 0;  // Entire preparation, including failure/cancellation and restoration.
+    };
     // Logical shader spans; actual device residency may include adapter padding.
     [[nodiscard]] static std::uint64_t RequiredBufferBytes(std::size_t capacity);
     [[nodiscard]] static base::Expected<std::uint64_t> RequiredAllocationBytes(
@@ -124,6 +141,15 @@ class RetainedCompute {
     [[nodiscard]] static base::Expected<std::unique_ptr<RetainedCompute>> Create(
         ComputeDevice& device, std::size_t capacity, bool fp64_products = false,
         double dispatch_target_ms = 250);
+    // Explicit software-render initialization, never implicit in Create. The
+    // caller must own all submissions and run this before starting workers.
+    // One real workgroup per used stage has zero active rows. Outputs, host
+    // inputs, program-upload state, physical statistics and feedback stay intact.
+    // The caller retains partial observations on failure and includes this work
+    // in complete render wall time. Cancellation is polled on the caller thread;
+    // it cannot interrupt a synchronous Dispatch already in progress.
+    [[nodiscard]] base::Expected<void> PrepareSoftwareRendererStages(
+        PreparationStats& observation, const std::function<bool()>& should_cancel = {});
     [[nodiscard]] base::Expected<std::vector<RetainedCameraOutput>> Camera(
         std::span<const RetainedCameraInput> inputs, DispatchTiming* timing = nullptr);
     [[nodiscard]] base::Expected<std::vector<RetainedCameraOutput>> RayCamera(

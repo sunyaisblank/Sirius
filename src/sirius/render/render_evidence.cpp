@@ -117,6 +117,34 @@ std::string VulkanRenderEvidenceJson(const SessionConfig& config, const VulkanRe
         {"initialization_seconds", stats.initialization_seconds},
         {"initialization_submit_wait_ms", stats.initialization_submit_wait_ms}};
     if (stats.retained_intervals) {
+        nlohmann::ordered_json preparation_stages = nlohmann::ordered_json::array();
+        for (std::size_t i = 0; i < stats.retained_preparation.stages.size(); ++i) {
+            const auto& stage = stats.retained_preparation.stages[i];
+            preparation_stages.push_back(
+                {{"stage", backend::RetainedCompute::StageName(
+                               static_cast<backend::RetainedCompute::KernelStage>(i))},
+                 {"attempts", stage.attempts},
+                 {"dispatch_attempts", stage.dispatch_attempts},
+                 {"completed_dispatches", stage.completed_dispatches},
+                 {"completed", stage.completed},
+                 {"header_restored", stage.header_restored},
+                 {"pipeline_setup_ms", stage.timing.pipeline_setup_ms},
+                 {"command_setup_ms", stage.timing.command_setup_ms},
+                 {"submit_wait_ms", stage.timing.submit_wait_ms},
+                 {"cleanup_ms", stage.timing.cleanup_ms},
+                 {"dispatch_total_ms", stage.timing.total_ms},
+                 {"pipeline_created", stage.timing.pipeline_created},
+                 {"write_buffer_calls", stage.write_buffer_calls},
+                 {"write_buffer_ms", stage.write_buffer_ms},
+                 {"write_buffer_bytes", stage.write_buffer_bytes}});
+        }
+        evidence["retained_preparation"] = {
+            {"scope",
+             "explicit software initialization before workers; zero active rays; "
+             "transfers and dispatch phases are nested in preparation wall time; "
+             "excluded from governed work and feedback; included in render wall time"},
+            {"wall_ms", stats.retained_preparation.wall_ms},
+            {"stages", std::move(preparation_stages)}};
         const auto& timing = stats.retained_timing;
         evidence["retained_timing"] = {
             {"scope",

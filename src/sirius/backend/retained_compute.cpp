@@ -157,6 +157,75 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
     return result;
 }
 
+base::Expected<void> RetainedCompute::PrepareSoftwareRendererStages(
+    PreparationStats& observation, const std::function<bool()>& should_cancel) {
+    using Clock = std::chrono::steady_clock;
+    observation = {};
+    const auto started = Clock::now();
+    const auto finish = [&](base::Expected<void> status) {
+        observation.wall_ms =
+            std::chrono::duration<double, std::milli>(Clock::now() - started).count();
+        return status;
+    };
+    if (device_.Info().kind != DeviceKind::kSoftware)
+        return finish(Fail(ErrorDomain::kDevice, "prepare retained renderer",
+                           "zero-row initialization is restricted to software devices"));
+    const auto cancelled = [&] { return should_cancel && should_cancel(); };
+    const auto cancellation = [] {
+        return Fail(ErrorDomain::kInternal, "prepare retained renderer", "cancelled");
+    };
+    const auto valid_timing = [](const DispatchTiming& timing) {
+        return std::isfinite(timing.pipeline_setup_ms) && timing.pipeline_setup_ms >= 0 &&
+               std::isfinite(timing.command_setup_ms) && timing.command_setup_ms >= 0 &&
+               std::isfinite(timing.submit_wait_ms) && timing.submit_wait_ms >= 0 &&
+               std::isfinite(timing.cleanup_ms) && timing.cleanup_ms >= 0 &&
+               std::isfinite(timing.total_ms) && timing.total_ms >= 0;
+    };
+    for (auto* stage : {&ray_camera_, &initialize_, &transport_, &endpoint_, &dense_}) {
+        if (cancelled()) return finish(cancellation());
+        auto& stats = observation.stages[static_cast<std::size_t>(stage->kind)];
+        ++stats.attempts;
+        const auto write_header = [&](std::uint32_t header) {
+            ++stats.write_buffer_calls;
+            const auto write_started = Clock::now();
+            auto status =
+                device_.WriteBuffer(stage->buffers[0], std::as_bytes(std::span(&header, 1)));
+            stats.write_buffer_ms +=
+                std::chrono::duration<double, std::milli>(Clock::now() - write_started).count();
+            if (status) stats.write_buffer_bytes += sizeof(header);
+            return status;
+        };
+        // Do not use the physical Dispatch owner: preparation must not upload
+        // programs, alter feedback, clear outputs or count completed ray work.
+        auto status = write_header(0);
+        if (status) {
+            if (cancelled()) {
+                status = cancellation();
+            } else {
+                ++stats.dispatch_attempts;
+                status = device_.Dispatch(stage->kernel, stage->buffers, 1, 1, 1, &stats.timing);
+                if (status) {
+                    if (!valid_timing(stats.timing)) {
+                        status = Fail(ErrorDomain::kDevice, "prepare retained renderer",
+                                      "invalid submission timing");
+                    } else {
+                        ++stats.completed_dispatches;
+                    }
+                }
+            }
+        }
+        // Restore even after a failed write/dispatch or cancellation. Preserve
+        // the original error if restoration also fails; no later stage executes.
+        auto restored = write_header(static_cast<std::uint32_t>(capacity_));
+        stats.header_restored = restored.has_value();
+        if (stats.completed_dispatches && restored) ++stats.completed;
+        if (!status) return finish(std::move(status));
+        if (!restored) return finish(std::move(restored));
+        if (cancelled()) return finish(cancellation());
+    }
+    return finish({});
+}
+
 std::uint64_t RetainedCompute::RequiredBufferBytes(std::size_t capacity) {
     if (capacity == 0 || capacity > kMaximumCapacity) return 0;
     std::uint64_t total = 0;

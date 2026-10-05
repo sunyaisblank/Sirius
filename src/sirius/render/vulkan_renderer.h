@@ -13,6 +13,7 @@
 // metric or scene semantics outside the Vulkan render path and when a requested
 // precision rung is unsupported, never substituting a different render.
 
+#include "sirius/backend/retained_compute.h"
 #include "sirius/base/error.h"
 #include "sirius/render/dispatch_governor.h"
 #include "sirius/render/memory_governor.h"
@@ -106,6 +107,9 @@ struct VulkanRenderStats {
         std::uint64_t read_buffer_bytes = 0;
         std::uint64_t pipeline_creations = 0;
     } retained_timing;
+    // Explicit software preparation before workers. These zero-active
+    // submissions never contribute to governed stages or feedback.
+    backend::RetainedCompute::PreparationStats retained_preparation;
     PrecisionRung precision = PrecisionRung::Fp32;
     bool starfield_uploaded = false;
     bool point_catalogue_uploaded = false;

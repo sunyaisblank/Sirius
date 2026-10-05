@@ -85,4 +85,47 @@ TEST(RenderEvidence, DeviceIdentityEscapesJsonWithoutChangingItsValue) {
     EXPECT_EQ(decoded["precision"], "fp64");
     EXPECT_EQ(decoded["route"], "legacy");
     EXPECT_EQ(decoded["source_owner"], "device");
+    EXPECT_FALSE(decoded.contains("retained_preparation"));
+
+    // Initialization is visible without inventing governed rays or folding
+    // its submission time into physical dispatch measurements.
+    stats.retained_intervals = true;
+    stats.initialization_dispatches = 5;
+    stats.initialization_seconds = 2;
+    stats.initialization_submit_wait_ms = 1500;
+    stats.retained_preparation.wall_ms = 2000;
+    auto& ray_camera = stats.retained_preparation.stages.back();
+    ray_camera.attempts = 1;
+    ray_camera.dispatch_attempts = 1;
+    ray_camera.completed_dispatches = 1;
+    ray_camera.completed = 1;
+    ray_camera.header_restored = true;
+    ray_camera.timing.pipeline_setup_ms = 25;
+    ray_camera.timing.command_setup_ms = 2;
+    ray_camera.timing.submit_wait_ms = 1100;
+    ray_camera.timing.cleanup_ms = 3;
+    ray_camera.timing.total_ms = 1130;
+    ray_camera.timing.pipeline_created = true;
+    ray_camera.write_buffer_calls = 2;
+    ray_camera.write_buffer_ms = 4;
+    ray_camera.write_buffer_bytes = 8;
+    const auto prepared = nlohmann::json::parse(VulkanRenderEvidenceJson(config, stats));
+    EXPECT_EQ(prepared["initialization_dispatches"], 5);
+    EXPECT_EQ(prepared["retained_preparation"]["wall_ms"], 2000);
+    const auto& observed = prepared["retained_preparation"]["stages"].back();
+    EXPECT_EQ(observed["stage"], "ray_camera");
+    EXPECT_EQ(observed["completed_dispatches"], 1);
+    EXPECT_EQ(observed["header_restored"], true);
+    EXPECT_EQ(observed["pipeline_setup_ms"], 25);
+    EXPECT_EQ(observed["command_setup_ms"], 2);
+    EXPECT_EQ(observed["submit_wait_ms"], 1100);
+    EXPECT_EQ(observed["cleanup_ms"], 3);
+    EXPECT_EQ(observed["dispatch_total_ms"], 1130);
+    EXPECT_EQ(observed["pipeline_created"], true);
+    EXPECT_EQ(observed["write_buffer_calls"], 2);
+    EXPECT_EQ(observed["write_buffer_ms"], 4);
+    EXPECT_EQ(observed["write_buffer_bytes"], 8);
+    EXPECT_EQ(prepared["dispatches"], 0);
+    EXPECT_EQ(prepared["dispatch_seconds"], 0);
+    EXPECT_EQ(prepared["retained_timing"]["submit_wait_ms"], 0);
 }

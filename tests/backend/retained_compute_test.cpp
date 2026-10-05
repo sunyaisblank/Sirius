@@ -207,6 +207,285 @@ TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
 #endif
 }
 
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+// Host-only model of the genuine ComputeDevice boundary. It does not claim
+// shader execution; the separately selectable device control checks that join.
+class PreparationProbeDevice final : public ComputeDevice {
+  public:
+    struct Write {
+        BufferHandle buffer;
+        std::size_t bytes;
+        std::uint32_t header;
+    };
+    DeviceInfo info{.kind = DeviceKind::kSoftware};
+    std::vector<std::vector<std::byte>> buffers;
+    std::vector<Write> writes;
+    std::vector<std::uint32_t> kernels;
+    std::vector<std::size_t> failed_writes;
+    std::function<void()> after_write, after_dispatch;
+    DispatchTiming observation{.submit_wait_ms = 5000,
+                               .pipeline_setup_ms = 1,
+                               .command_setup_ms = 2,
+                               .cleanup_ms = 3,
+                               .total_ms = 5006,
+                               .pipeline_created = true};
+    bool fail_dispatch = false;
+    unsigned loads = 0, reads = 0;
+    const DeviceInfo& Info() const noexcept override { return info; }
+    sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t>) override {
+        return KernelHandle{loads++};
+    }
+    sirius::base::Expected<BufferHandle> CreateBuffer(std::uint64_t bytes,
+                                                      BufferUsage usage) override {
+        EXPECT_EQ(usage, BufferUsage::kStorage);
+        const BufferHandle result{static_cast<std::uint32_t>(buffers.size())};
+        buffers.emplace_back(bytes, std::byte{0xa5});
+        return result;
+    }
+    sirius::base::Expected<std::uint64_t> RequiredBufferAllocationBytes(std::uint64_t bytes,
+                                                                        BufferUsage) override {
+        return bytes;
+    }
+    sirius::base::Expected<void> WriteBuffer(BufferHandle buffer,
+                                             std::span<const std::byte> data) override {
+        if (buffer.value >= buffers.size() || data.size() > buffers[buffer.value].size())
+            return Failure("range");
+        std::uint32_t header = 0;
+        if (data.size() >= sizeof(header)) std::memcpy(&header, data.data(), sizeof(header));
+        writes.push_back({buffer, data.size(), header});
+        if (std::ranges::find(failed_writes, writes.size()) != failed_writes.end())
+            return Failure("write");
+        std::copy(data.begin(), data.end(), buffers[buffer.value].begin());
+        if (after_write) after_write();
+        return {};
+    }
+    sirius::base::Expected<void> ReadBuffer(BufferHandle buffer,
+                                            std::span<std::byte> data) override {
+        ++reads;
+        if (buffer.value >= buffers.size() || data.size() > buffers[buffer.value].size())
+            return Failure("range");
+        std::copy_n(buffers[buffer.value].begin(), data.size(), data.begin());
+        return {};
+    }
+    sirius::base::Expected<void> Dispatch(KernelHandle kernel,
+                                          std::span<const BufferHandle> bindings, std::uint32_t x,
+                                          std::uint32_t y, std::uint32_t z,
+                                          DispatchTiming* timing) override {
+        EXPECT_EQ(bindings.size(), 2U);
+        EXPECT_EQ(x, 1U);
+        EXPECT_EQ(y, 1U);
+        EXPECT_EQ(z, 1U);
+        kernels.push_back(kernel.value);
+        if (timing) *timing = observation;
+        if (after_dispatch) after_dispatch();
+        if (fail_dispatch) return Failure("dispatch");
+        std::uint32_t rows = 0;
+        std::memcpy(&rows, buffers[bindings[0].value].data(), sizeof(rows));
+        // A physical control returns a declined, zero-stage row; only its
+        // actual submission/feedback ownership is tested against this model.
+        if (rows != 0) std::ranges::fill(buffers[bindings[1].value], std::byte{0});
+        return {};
+    }
+    sirius::base::Expected<void> SetBufferAllocationLimit(std::uint64_t) override { return {}; }
+    std::uint64_t BufferAllocationBytes() const noexcept override {
+        std::uint64_t bytes = 0;
+        for (const auto& buffer : buffers) bytes += buffer.size();
+        return bytes;
+    }
+
+  private:
+    static sirius::base::Expected<void> Failure(const char* operation) {
+        return sirius::base::Fail(sirius::base::ErrorDomain::kDevice,
+                                  std::string("preparation probe ") + operation,
+                                  "injected returned failure");
+    }
+};
+
+void ExpectPhysicalStatsEqual(const std::array<RetainedCompute::StageStats, 6>& actual,
+                              const std::array<RetainedCompute::StageStats, 6>& expected) {
+    for (std::size_t i = 0; i < actual.size(); ++i) {
+        SCOPED_TRACE(i);
+        EXPECT_EQ(actual[i].submissions, expected[i].submissions);
+        EXPECT_EQ(actual[i].submit_wait_ms, expected[i].submit_wait_ms);
+        EXPECT_EQ(actual[i].maximum_submit_wait_ms, expected[i].maximum_submit_wait_ms);
+        EXPECT_EQ(actual[i].pipeline_setup_ms, expected[i].pipeline_setup_ms);
+        EXPECT_EQ(actual[i].command_setup_ms, expected[i].command_setup_ms);
+        EXPECT_EQ(actual[i].cleanup_ms, expected[i].cleanup_ms);
+        EXPECT_EQ(actual[i].dispatch_total_ms, expected[i].dispatch_total_ms);
+        EXPECT_EQ(actual[i].write_buffer_ms, expected[i].write_buffer_ms);
+        EXPECT_EQ(actual[i].read_buffer_ms, expected[i].read_buffer_ms);
+        EXPECT_EQ(actual[i].write_buffer_bytes, expected[i].write_buffer_bytes);
+        EXPECT_EQ(actual[i].read_buffer_bytes, expected[i].read_buffer_bytes);
+        EXPECT_EQ(actual[i].pipeline_creations, expected[i].pipeline_creations);
+        EXPECT_EQ(actual[i].target_overshoots, expected[i].target_overshoots);
+    }
+}
+#endif
+
+TEST(RetainedComputeAdmission, SoftwareRendererPreparationPreservesPhysicalAccounting) {
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+    using Stats = RetainedCompute::PreparationStats;
+    for (const auto kind :
+         {DeviceKind::kIntegratedGpu, DeviceKind::kDiscreteGpu, DeviceKind::kOther}) {
+        PreparationProbeDevice probe;
+        probe.info.kind = kind;
+        probe.info.preserves_fp32_denormals = true;
+        probe.info.rounds_fp32_to_nearest = true;
+        auto created = RetainedCompute::Create(probe, 2);
+        ASSERT_TRUE(created);
+        Stats observation;
+        observation.stages[0].attempts = 42;
+        const auto refused = (*created)->PrepareSoftwareRendererStages(observation);
+        ASSERT_FALSE(refused);
+        EXPECT_NE(refused.error().detail().find("software"), std::string::npos);
+        EXPECT_TRUE(probe.writes.empty());
+        EXPECT_TRUE(probe.kernels.empty());
+        for (const auto& stage : observation.stages) EXPECT_EQ(stage.attempts, 0U);
+    }
+    PreparationProbeDevice probe;
+    auto created = RetainedCompute::Create(probe, 2);
+    ASSERT_TRUE(created);
+    auto& compute = **created;
+    ASSERT_EQ(probe.loads, 6U);
+    ASSERT_EQ(probe.buffers.size(), 12U);
+    ASSERT_TRUE(probe.writes.empty());
+    ASSERT_TRUE(probe.kernels.empty()) << "Create must remain free of preparation work";
+    const auto allocated = probe.BufferAllocationBytes();
+    // Preserve an existing physical observation, including an adjacent hard
+    // boundary overshoot, rather than merely proving zero stays zero.
+    probe.observation.submit_wait_ms = std::nextafter(1000.0, INFINITY);
+    const std::array<RetainedStepInput, 1> input{};
+    ASSERT_TRUE(compute.Step(input));
+    const auto physical = compute.Statistics();
+    auto expected_buffers = probe.buffers;
+    const auto before_writes = probe.writes.size();
+    probe.observation.submit_wait_ms = 5000;  // Controlled initialization observation only.
+    Stats observation;
+    ASSERT_TRUE(compute.PrepareSoftwareRendererStages(observation));
+    ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(compute.Statistics(), physical));
+    EXPECT_EQ(probe.BufferAllocationBytes(), allocated);
+    EXPECT_EQ(probe.kernels, (std::vector<std::uint32_t>{1, 5, 4, 1, 2, 3}));
+    ASSERT_EQ(probe.writes.size(), before_writes + 10);
+    for (std::size_t i = 0; i < 5; ++i) {
+        const auto& zero = probe.writes[before_writes + 2 * i];
+        const auto& restored = probe.writes[before_writes + 2 * i + 1];
+        EXPECT_EQ(zero.bytes, 4U);
+        EXPECT_EQ(zero.header, 0U);
+        EXPECT_EQ(restored.bytes, 4U);
+        EXPECT_EQ(restored.header, compute.Capacity());
+        EXPECT_EQ(zero.buffer.value, restored.buffer.value);
+        const std::uint32_t capacity = static_cast<std::uint32_t>(compute.Capacity());
+        std::memcpy(expected_buffers[zero.buffer.value].data(), &capacity, sizeof(capacity));
+    }
+    EXPECT_EQ(probe.buffers, expected_buffers) << "Only the five capacity headers may change";
+    for (std::size_t i = 0; i < observation.stages.size(); ++i) {
+        const auto& stage = observation.stages[i];
+        const auto count = i == 0 ? 0U : 1U;
+        EXPECT_EQ(stage.attempts, count);
+        EXPECT_EQ(stage.dispatch_attempts, count);
+        EXPECT_EQ(stage.completed_dispatches, count);
+        EXPECT_EQ(stage.completed, count);
+        EXPECT_EQ(stage.header_restored, i != 0);
+        EXPECT_EQ(stage.write_buffer_calls, 2 * count);
+        EXPECT_EQ(stage.write_buffer_bytes, 8 * count);
+        EXPECT_EQ(stage.timing.submit_wait_ms, i == 0 ? 0 : 5000);
+        EXPECT_EQ(stage.timing.pipeline_setup_ms, i == 0 ? 0 : 1);
+        EXPECT_EQ(stage.timing.command_setup_ms, i == 0 ? 0 : 2);
+        EXPECT_EQ(stage.timing.cleanup_ms, i == 0 ? 0 : 3);
+        EXPECT_EQ(stage.timing.total_ms, i == 0 ? 0 : 5006);
+        EXPECT_GE(stage.write_buffer_ms, 0);
+    }
+    const auto feedback = compute.TakeSubmissionFeedback();
+    EXPECT_EQ(feedback.peak_ms, std::nextafter(1000.0, INFINITY));
+    EXPECT_EQ(feedback.peak_rows, 1U);
+    EXPECT_EQ(feedback.maximum_rows, 1U);
+    EXPECT_EQ(feedback.maximum_one_row_ms, feedback.peak_ms);
+    EXPECT_EQ(feedback.maximum_one_row_stage, RetainedCompute::KernelStage::kTransport);
+    // A previously uploaded stage keeps its prefix behavior; an unused Camera
+    // still needs its first complete program upload after preparation.
+    ASSERT_TRUE(compute.Step(input));
+    EXPECT_EQ(probe.writes.back().bytes, 4U + sizeof(RetainedStepInput));
+    const std::array<RetainedCameraInput, 1> camera{};
+    ASSERT_TRUE(compute.Camera(camera));
+    EXPECT_EQ(probe.writes.back().bytes, probe.buffers[0].size());
+
+    for (unsigned mode = 0; mode < 8; ++mode) {
+        SCOPED_TRACE(mode);
+        PreparationProbeDevice failing;
+        auto prepared = RetainedCompute::Create(failing, 2);
+        ASSERT_TRUE(prepared);
+        bool cancelled = mode == 4;
+        if (mode == 0) failing.failed_writes = {1};
+        if (mode == 1 || mode == 3) failing.fail_dispatch = true;
+        if (mode == 2 || mode == 3) failing.failed_writes.push_back(2);
+        if (mode == 5) failing.after_write = [&] { cancelled = true; };
+        if (mode == 6) failing.after_dispatch = [&] { cancelled = true; };
+        if (mode == 7)
+            failing.after_write = [&] {
+                if (failing.writes.size() == 2) cancelled = true;
+            };
+        const auto owner = std::this_thread::get_id();
+        Stats partial;
+        const auto result = (*prepared)->PrepareSoftwareRendererStages(partial, [&] {
+            EXPECT_EQ(std::this_thread::get_id(), owner);
+            return cancelled;
+        });
+        ASSERT_FALSE(result);
+        EXPECT_EQ(result.error().operation(), mode == 0 || mode == 2 ? "preparation probe write"
+                                              : mode == 1 || mode == 3
+                                                  ? "preparation probe dispatch"
+                                                  : "prepare retained renderer");
+        const auto& stage = partial.stages[5];
+        EXPECT_EQ(stage.attempts, mode == 4 ? 0U : 1U);
+        EXPECT_EQ(stage.dispatch_attempts, mode == 0 || mode == 4 || mode == 5 ? 0U : 1U);
+        EXPECT_EQ(stage.completed_dispatches, mode == 2 || mode == 6 || mode == 7 ? 1U : 0U);
+        EXPECT_EQ(stage.completed, mode == 6 || mode == 7 ? 1U : 0U);
+        EXPECT_EQ(stage.header_restored, mode != 2 && mode != 3 && mode != 4);
+        EXPECT_EQ(stage.write_buffer_calls, mode == 4 ? 0U : 2U);
+        EXPECT_EQ(stage.write_buffer_bytes, mode == 4                             ? 0U
+                                            : mode == 0 || mode == 2 || mode == 3 ? 4U
+                                                                                  : 8U);
+        if (stage.dispatch_attempts) {
+            EXPECT_EQ(stage.timing.total_ms, 5006);
+        }
+        EXPECT_TRUE(std::isfinite(partial.wall_ms));
+        EXPECT_GE(partial.wall_ms, stage.write_buffer_ms);
+        for (std::size_t i = 0; i < 5; ++i) EXPECT_EQ(partial.stages[i].attempts, 0U);
+        EXPECT_EQ((*prepared)->TakeSubmissionFeedback().peak_ms, 0);
+        ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual((*prepared)->Statistics(), {}));
+        if (stage.header_restored) {
+            std::uint32_t header = 0;
+            std::memcpy(&header, failing.buffers[10].data(), sizeof(header));
+            EXPECT_EQ(header, 2U);
+        }
+    }
+    for (double DispatchTiming::*field :
+         {&DispatchTiming::pipeline_setup_ms, &DispatchTiming::command_setup_ms,
+          &DispatchTiming::submit_wait_ms, &DispatchTiming::cleanup_ms,
+          &DispatchTiming::total_ms}) {
+        for (const double invalid : {-1.0, std::numeric_limits<double>::quiet_NaN(),
+                                     std::numeric_limits<double>::infinity()}) {
+            PreparationProbeDevice invalid_timing;
+            invalid_timing.observation.*field = invalid;
+            auto prepared = RetainedCompute::Create(invalid_timing, 2);
+            ASSERT_TRUE(prepared);
+            Stats partial;
+            const auto result = (*prepared)->PrepareSoftwareRendererStages(partial);
+            ASSERT_FALSE(result);
+            EXPECT_EQ(result.error().detail(), "invalid submission timing");
+            EXPECT_EQ(partial.stages[5].dispatch_attempts, 1U);
+            EXPECT_EQ(partial.stages[5].completed_dispatches, 0U);
+            EXPECT_EQ(partial.stages[5].completed, 0U);
+            EXPECT_TRUE(partial.stages[5].header_restored);
+            EXPECT_EQ(partial.stages[5].write_buffer_bytes, 8U);
+            for (std::size_t i = 0; i < 5; ++i) EXPECT_EQ(partial.stages[i].attempts, 0U);
+        }
+    }
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
 class RetainedComputeTest : public ::testing::Test {
   protected:
     void SetUp() override {
@@ -745,6 +1024,148 @@ TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInval
     EXPECT_FALSE(CameraAgrees((*outputs)[1], sirius::test::continuous_retained_camera::cases[1]));
     EXPECT_FALSE(CameraAgrees((*outputs)[2], sirius::test::continuous_retained_camera::cases[2]));
     EXPECT_EQ(device->BufferAllocationBytes(), allocation);
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
+TEST_F(RetainedComputeTest, SoftwareRendererPreparationPreservesBuffersAndPhysicalFeedback) {
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    if (device->Info().kind != DeviceKind::kSoftware) {
+        const auto before = compute->Statistics();
+        const auto allocated = device->BufferAllocationBytes();
+        RetainedCompute::PreparationStats observation;
+        const auto result = compute->PrepareSoftwareRendererStages(observation);
+        ASSERT_FALSE(result);
+        EXPECT_NE(result.error().detail().find("software"), std::string::npos);
+        for (const auto& stage : observation.stages) {
+            EXPECT_EQ(stage.attempts, 0U);
+            EXPECT_EQ(stage.dispatch_attempts, 0U);
+            EXPECT_EQ(stage.write_buffer_calls, 0U);
+        }
+        ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(compute->Statistics(), before));
+        EXPECT_EQ(device->BufferAllocationBytes(), allocated);
+        EXPECT_EQ(compute->TakeSubmissionFeedback().peak_ms, 0);
+        RecordProperty("software_preparation_disposition", "nonsoftware_refused_without_work");
+        return;
+    }
+    TransferProbeDevice probe(*device);
+    auto created = RetainedCompute::Create(probe, compute->Capacity());
+    ASSERT_TRUE(created) << created.error().Description();
+    auto& prepared = **created;
+    ASSERT_EQ(probe.allocations.size(), 12U);
+    EXPECT_TRUE(probe.writes.empty());
+    EXPECT_EQ(probe.dispatch_calls, 0U);
+    const auto allocated = device->BufferAllocationBytes();
+    std::vector<std::vector<std::byte>> expected;
+    for (std::size_t i = 0; i < probe.allocations.size(); ++i) {
+        expected.emplace_back(probe.allocations[i].bytes, std::byte(i % 2 ? 0x5a : 0xa5));
+        ASSERT_TRUE(device->WriteBuffer(probe.allocations[i].handle, expected.back()));
+    }
+    RetainedCompute::PreparationStats observation;
+    const auto result = prepared.PrepareSoftwareRendererStages(observation);
+    // Publish all observations even if preparation failed; these are actual
+    // initialization host intervals, not physical work or GPU timestamps.
+    RecordProperty("software_preparation_scope",
+                   "five explicit zero-row initialization submissions; preparation is outside "
+                   "physical feedback; subsequent RayCamera is not cold-render qualification");
+    RecordProperty("software_preparation_wall_ms", std::to_string(observation.wall_ms));
+    for (std::size_t i = 0; i < observation.stages.size(); ++i) {
+        const auto& stage = observation.stages[i];
+        const auto name = RetainedCompute::StageName(static_cast<RetainedCompute::KernelStage>(i));
+        const std::string prefix = std::string("software_preparation_") + name;
+        std::string message = "[Retained preparation] " + std::string(name);
+        const auto record = [&](const char* key, const auto value) {
+            const auto text = std::format("{}", value);
+            RecordProperty(prefix + "_" + key, text);
+            message += std::format(" {}={}", key, text);
+        };
+        record("attempts", stage.attempts);
+        record("dispatch_attempts", stage.dispatch_attempts);
+        record("completed_dispatches", stage.completed_dispatches);
+        record("completed", stage.completed);
+        record("header_restored", stage.header_restored);
+        record("pipeline_setup_ms", stage.timing.pipeline_setup_ms);
+        record("command_setup_ms", stage.timing.command_setup_ms);
+        record("submit_wait_ms", stage.timing.submit_wait_ms);
+        record("cleanup_ms", stage.timing.cleanup_ms);
+        record("dispatch_total_ms", stage.timing.total_ms);
+        record("pipeline_created", stage.timing.pipeline_created);
+        record("write_buffer_calls", stage.write_buffer_calls);
+        record("write_buffer_ms", stage.write_buffer_ms);
+        record("write_buffer_bytes", stage.write_buffer_bytes);
+        std::cerr << message << std::endl;
+    }
+    ASSERT_TRUE(result) << result.error().Description();
+    const std::array<std::size_t, 5> order{5, 4, 1, 2, 3};
+    ASSERT_EQ(probe.submissions.size(), order.size());
+    ASSERT_EQ(probe.writes.size(), 2 * order.size());
+    EXPECT_TRUE(probe.reads.empty());
+    for (std::size_t j = 0; j < order.size(); ++j) {
+        const auto i = order[j];
+        const auto input = probe.allocations[2 * i].handle;
+        const auto output = probe.allocations[2 * i + 1].handle;
+        EXPECT_EQ(probe.submissions[j].buffers[0].value, input.value);
+        EXPECT_EQ(probe.submissions[j].buffers[1].value, output.value);
+        EXPECT_EQ(probe.submissions[j].binding_count, 2U);
+        EXPECT_EQ(probe.submissions[j].x, 1U);
+        EXPECT_EQ(probe.submissions[j].y, 1U);
+        EXPECT_EQ(probe.submissions[j].z, 1U);
+        EXPECT_EQ(probe.writes[2 * j].bytes, 4U);
+        EXPECT_EQ(probe.writes[2 * j].capacity, 0U);
+        EXPECT_EQ(probe.writes[2 * j + 1].bytes, 4U);
+        EXPECT_EQ(probe.writes[2 * j + 1].capacity, prepared.Capacity());
+        const auto capacity = static_cast<std::uint32_t>(prepared.Capacity());
+        std::memcpy(expected[2 * i].data(), &capacity, sizeof(capacity));
+        const auto& stage = observation.stages[i];
+        EXPECT_EQ(stage.attempts, 1U);
+        EXPECT_EQ(stage.dispatch_attempts, 1U);
+        EXPECT_EQ(stage.completed_dispatches, 1U);
+        EXPECT_EQ(stage.completed, 1U);
+        EXPECT_TRUE(stage.header_restored);
+        EXPECT_EQ(stage.write_buffer_calls, 2U);
+        EXPECT_EQ(stage.write_buffer_bytes, 8U);
+        EXPECT_GE(stage.timing.submit_wait_ms, 0);
+    }
+    EXPECT_EQ(observation.stages[0].attempts, 0U);
+    for (std::size_t i = 0; i < expected.size(); ++i) {
+        SCOPED_TRACE(i);
+        std::vector<std::byte> actual(expected[i].size());
+        ASSERT_TRUE(device->ReadBuffer(probe.allocations[i].handle, actual));
+        EXPECT_EQ(actual, expected[i]) << "zero rows must preserve output and nonheader inputs";
+    }
+    EXPECT_EQ(device->BufferAllocationBytes(), allocated);
+    ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(prepared.Statistics(), {}));
+    const auto empty_feedback = prepared.TakeSubmissionFeedback();
+    EXPECT_EQ(empty_feedback.peak_ms, 0);
+    EXPECT_EQ(empty_feedback.maximum_rows, 0U);
+    EXPECT_FALSE(empty_feedback.maximum_one_row_stage);
+    const auto& fixture = sirius::test::retained_ray_camera::cases.front();
+    const std::array input{std::bit_cast<RetainedRayCameraInput>(fixture.input)};
+    DispatchTiming timing;
+    const auto physical = prepared.RayCamera(input, &timing);
+    RecordProperty("prepared_ray_camera_physical_submit_wait_ms",
+                   std::to_string(timing.submit_wait_ms));
+    RecordProperty("prepared_ray_camera_physical_pipeline_setup_ms",
+                   std::to_string(timing.pipeline_setup_ms));
+    RecordProperty("prepared_ray_camera_physical_dispatch_total_ms",
+                   std::to_string(timing.total_ms));
+    std::cerr << std::format(
+                     "[Retained preparation] subsequent physical RayCamera: submit/wait "
+                     "{}ms, pipeline {}ms, total {}ms",
+                     timing.submit_wait_ms, timing.pipeline_setup_ms, timing.total_ms)
+              << std::endl;
+    ASSERT_TRUE(physical) << physical.error().Description();
+    ASSERT_EQ(physical->size(), 1U);
+    ASSERT_TRUE(CameraAgrees(physical->front(), fixture));
+    EXPECT_EQ(probe.writes.back().bytes, probe.allocations[10].bytes)
+        << "preparation must not claim the immutable program was uploaded";
+    const auto feedback = prepared.TakeSubmissionFeedback();
+    EXPECT_EQ(feedback.peak_ms, timing.submit_wait_ms);
+    EXPECT_EQ(feedback.maximum_rows, 1U);
+    EXPECT_EQ(feedback.maximum_one_row_ms, timing.submit_wait_ms);
+    EXPECT_EQ(feedback.maximum_one_row_stage, RetainedCompute::KernelStage::kRayCamera);
+    EXPECT_EQ(prepared.Statistics()[5].submissions, 1U);
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif

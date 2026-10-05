@@ -682,12 +682,23 @@ TEST(VulkanRenderSession, DispatchSubdivisionPreservesExactCameraAndCatalogueOut
     ASSERT_TRUE(selected.has_value());
     const bool software = (*devices)[*selected].kind == sirius::backend::DeviceKind::kSoftware;
     const auto check_initialization = [software](const auto& stats) {
-        EXPECT_EQ(stats.initialization_dispatches, software && !stats.retained_intervals ? 1 : 0);
+        EXPECT_EQ(stats.initialization_dispatches,
+                  software ? (stats.retained_intervals ? 5 : 1) : 0);
         EXPECT_TRUE(std::isfinite(stats.initialization_seconds));
         EXPECT_TRUE(std::isfinite(stats.initialization_submit_wait_ms));
         EXPECT_GE(stats.initialization_seconds, 0.0);
         EXPECT_GE(stats.initialization_submit_wait_ms, 0.0);
         EXPECT_GE(stats.seconds, stats.initialization_seconds);
+        if (stats.retained_intervals) {
+            EXPECT_EQ(stats.retained_preparation.stages[0].attempts, 0U);
+            for (std::size_t i = 1; i < stats.retained_preparation.stages.size(); ++i) {
+                const auto& stage = stats.retained_preparation.stages[i];
+                EXPECT_EQ(stage.completed_dispatches, software ? 1U : 0U);
+                EXPECT_EQ(stage.completed, software ? 1U : 0U);
+                EXPECT_EQ(stage.write_buffer_bytes, software ? 8U : 0U);
+                EXPECT_EQ(stage.header_restored, software);
+            }
+        }
         if (!software && !stats.retained_intervals) {
             EXPECT_EQ(stats.initialization_seconds, 0.0);
             EXPECT_EQ(stats.initialization_submit_wait_ms, 0.0);

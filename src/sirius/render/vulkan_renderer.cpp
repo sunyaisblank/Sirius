@@ -404,6 +404,37 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     std::cout << "[Vulkan] Retained renderer: " << device.Info().name << ", " << RungName(rung)
               << "; budget " << (*budget / (1024 * 1024)) << " MiB, " << capacity << " ray rows, "
               << work_count << " host work tiles of " << work_edge << "px" << std::endl;
+    backend::RetainedCompute::PreparationStats preparation;
+    if (device.Info().kind == backend::DeviceKind::kSoftware) {
+        std::cout << "[Vulkan] initialising five software retained kernels with zero active rays"
+                  << std::endl;
+        const auto prepared = (*compute)->PrepareSoftwareRendererStages(preparation, should_cancel);
+        for (std::size_t i = 0; i < preparation.stages.size(); ++i) {
+            const auto& stage = preparation.stages[i];
+            if (stage.attempts == 0) continue;
+            std::cout << "[Vulkan] software retained initialization: "
+                      << backend::RetainedCompute::StageName(
+                             static_cast<backend::RetainedCompute::KernelStage>(i))
+                      << ", attempts=" << stage.attempts
+                      << ", dispatch_attempts=" << stage.dispatch_attempts
+                      << ", completed_dispatches=" << stage.completed_dispatches
+                      << ", completed=" << stage.completed
+                      << ", pipeline_setup_ms=" << stage.timing.pipeline_setup_ms
+                      << ", command_setup_ms=" << stage.timing.command_setup_ms
+                      << ", submit_wait_ms=" << stage.timing.submit_wait_ms
+                      << ", cleanup_ms=" << stage.timing.cleanup_ms
+                      << ", dispatch_total_ms=" << stage.timing.total_ms
+                      << ", pipeline_created=" << stage.timing.pipeline_created
+                      << ", write_buffer_calls=" << stage.write_buffer_calls
+                      << ", write_buffer_ms=" << stage.write_buffer_ms
+                      << ", write_buffer_bytes=" << stage.write_buffer_bytes
+                      << ", header_restored=" << stage.header_restored << ", 0 active rays"
+                      << std::endl;
+        }
+        std::cout << "[Vulkan] software retained initialization wall: "
+                  << preparation.wall_ms / 1000 << "s" << std::endl;
+        if (!prepared) return std::unexpected(prepared.error());
+    }
     // Poll the owner on this thread; device workers consume only the atomic
     // result, so an ordinary stateful cancellation callback is never raced.
     std::atomic<bool> cancelled{false};
@@ -473,6 +504,12 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     stats.retained_intervals = true;
     stats.camera_batches = execution.camera_batches;
     stats.accepted_intervals = execution.accepted_intervals;
+    stats.retained_preparation = preparation;
+    stats.initialization_seconds = preparation.wall_ms / 1000;
+    for (const auto& stage : preparation.stages) {
+        stats.initialization_dispatches += static_cast<int>(stage.completed_dispatches);
+        stats.initialization_submit_wait_ms += stage.timing.submit_wait_ms;
+    }
     auto& timing = stats.retained_timing;
     timing.batches = execution.batches;
     timing.full_batches = execution.full_batches;

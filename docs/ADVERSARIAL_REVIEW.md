@@ -13,6 +13,28 @@ performance limits are recorded in `SOURCE_CLOSEOUT.md`. Detailed historical
 defects, session logs and the retired engagement report are preserved at
 commit `9e20150`; use `git show 9e20150:docs/ADVERSARIAL_REVIEW.md` for that ledger.
 
+On 2026-10-05, an isolated camera-only SPIR-V dead-branch candidate based on
+`6f91642` removed 83/79 constant branches, with all 20 unaffected modules exact.
+The unchanged original lens-derivative case passed, but first submit/wait was
+1210.027109 ms, above the unchanged 1000 ms operational limit; repeat was
+9.040036 ms. This candidate was rejected without source adoption. Its 77-payload
+local bundle is `attestations/software-vulkan/6f91642/camera-dead-branches-rejected`
+(manifest SHA-256 `adedb177d4e612c9b1d73af2db752e6a0bf53c829d9ff4960d1493bca3faf166`).
+This single observation establishes no comparative speed claim, interval-stage
+acceptance, complete cold scene, or full scientific/release qualification.
+
+The subsequent explicit software-preparation prototype, also based on
+`6f91642`, passed five zero-active dispatches and all 12 buffer canaries, restored
+the five capacity headers, transferred 40 bytes and preserved physical feedback.
+The next original RayCamera row passed its independent assertions with
+7.451175 ms submit/wait. Preparation itself took 269.138415992 seconds; the
+diagnostic supervisor took 272.180317969993 seconds, with no guard triggered.
+The tested patch was uncommitted and its backend/test objects used `-O0`; this
+is a finite prototype control, not production-head numerical or cold-frame
+qualification. Its 131-payload local bundle is
+`attestations/software-vulkan/6f91642/software-retained-preparation-prototype`
+(manifest SHA-256 `0f375b0fff54510f1e1819022e1ffd0ce356e0b565a7a27af199115549e463e1`).
+
 ## September corrective work
 
 At this review checkpoint, focused diagnostics establish only the boundaries

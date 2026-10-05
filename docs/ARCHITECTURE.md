@@ -373,6 +373,15 @@ are dispatched; fixed buffer strides and immutable programs retain their capacit
 layout. Projection evaluates only the metric/tangent prefix before selecting a
 null root; its second pass evaluates all physical columns. These controls bound work;
 they cannot preempt a submitted interval or establish native-driver qualification.
+Before retained render workers start, software devices explicitly initialise
+the five stages used by the renderer with one workgroup and a zero-row header.
+Each entry point returns before program evaluation or output writes; the
+capacity header is restored and the first physical submission still uploads its
+complete input and immutable program. Preparation has a separate per-stage
+transfer/dispatch ledger, remains inside render wall time, and never trains
+physical feedback. Physical and unknown devices receive no preparation.
+Constructing retained compute does not submit work. Every actual ray submission
+retains the 1000 ms refusal, including driver work deferred beyond preparation.
 
 The governor exists because the 780M-class target has a 2 GB budget that a naive full-frame HDR pipeline exhausts (a 5616 by 4096 IMAX frame at RGBA32F is 368 MB per buffer before ray state, which at 96 bytes per ray for position, momentum, deviation vectors, and accumulators is another 2.2 GB full-frame). The design bounds device residency by construction rather than by hope.
 
