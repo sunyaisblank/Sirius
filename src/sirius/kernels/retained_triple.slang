@@ -44,7 +44,17 @@ RetainedTriple RTPack(RPScalar hi,RPScalar lo,RPScalar tail,RPScalar error) {
        !RPBounded(tail,0x7b800000u)) return RTInvalid();
     return RTFinishAccumulation(hi,lo,tail,error);
 }
-RetainedTriple RTConstant(RPScalar x) {return RTPack(x,RPZero(),RPZero(),RPZero());}
+RetainedTriple RTConstant(RPScalar x) {
+#ifdef SIRIUS_RETAINED_PORTABLE
+    // Five zero-tail TwoSum calls preserve every bounded nonzero x and map
+    // either zero sign to +0. Construct those same limbs after the same bound.
+    if(!RPBounded(x,0x7b800000u)) return RTInvalid();
+    RetainedTriple r;r.hi=(RPBits(x)&0x7fffffffu)==0u?RPZero():x;
+    r.lo=RPZero();r.tail=RPZero();r.error=RPZero();r.valid=1;return r;
+#else
+    return RTPack(x,RPZero(),RPZero(),RPZero());
+#endif
+}
 bool RTExact(RetainedTriple a,RPScalar x) {
     return a.valid!=0&&RPScalarEqual(a.hi,x)&&RPScalarEqual(a.lo,RPZero())&&RPScalarEqual(a.tail,RPZero())&&RPScalarEqual(a.error,RPZero());
 }
