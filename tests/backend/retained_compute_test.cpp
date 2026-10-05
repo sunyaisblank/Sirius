@@ -25,7 +25,7 @@
 #include <string>
 #include <vector>
 
-#if defined(SIRIUS_HAS_RETAINED_COMPUTE) && defined(SIRIUS_RETAINED_CAMERA_TEST_DIR)
+#if defined(SIRIUS_HAS_RETAINED_COMPUTE) && defined(SIRIUS_TEST_HAS_RETAINED_CAMERA)
 #define SIRIUS_RETAINED_TESTS_AVAILABLE 1
 #include "sirius/backend/vulkan/vulkan_device.h"
 

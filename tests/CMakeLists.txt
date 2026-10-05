@@ -167,6 +167,7 @@ add_test(
     NAME OperationalVolume.InstallRelocateInitialiseAndFailClosed
     COMMAND "${CMAKE_COMMAND}"
         -DSIRIUS_TEST_CONFIG=$<CONFIG>
+        -DSIRIUS_BACKEND_TESTS=$<TARGET_FILE:sirius_backend_tests>
         -P "${CMAKE_CURRENT_BINARY_DIR}/volume_initialization.cmake")
 set_tests_properties(
     OperationalVolume.InstallRelocateInitialiseAndFailClosed

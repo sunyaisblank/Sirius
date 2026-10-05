@@ -1,3 +1,5 @@
+#include "support/test_resource.h"
+
 #include "sirius/backend/device.h"
 #include "sirius/render/dispatch_governor.h"
 
@@ -41,10 +43,7 @@ std::vector<std::uint32_t> ReadMetricProbe(const std::string& path) {
 template <class Real>
 void CheckMetricConsistency(const std::string& artifact) {
     using namespace sirius::backend;
-#ifdef SIRIUS_KERNEL_DIR
-    const std::string directory = SIRIUS_KERNEL_DIR;
-#else
-    const std::string directory;
+#ifndef SIRIUS_TEST_HAS_KERNELS
     GTEST_SKIP() << "Vulkan kernels are not configured";
 #endif
     constexpr bool wide = std::is_same_v<Real, double>;
@@ -71,7 +70,7 @@ void CheckMetricConsistency(const std::string& artifact) {
     ::testing::Test::RecordProperty("metric_driver_name", info.driver_name);
     ::testing::Test::RecordProperty("metric_driver_info", info.driver_info);
     ::testing::Test::RecordProperty("metric_supports_fp64", info.supports_fp64 ? "true" : "false");
-    const auto words = ReadMetricProbe(directory + "/" + artifact);
+    const auto words = ReadMetricProbe(sirius::test::ResourcePath(std::string("kernels/") + artifact));
     ASSERT_FALSE(words.empty()) << artifact;
     const auto kernel = device->LoadKernel(words);
     if constexpr (wide) {

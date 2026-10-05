@@ -1,3 +1,5 @@
+#include "support/test_resource.h"
+
 // Vulkan render-path gates (specification programmes 3 and 4). Three concerns:
 //   1. a Kerr render through the RenderSession Vulkan path yields finite,
 //      non-constant radiance with a bounded horizon shadow (64x64 and 160x120,
@@ -184,14 +186,14 @@ struct KernelFixture {
 
 KernelFixture OpenKernel() {
     KernelFixture f;
-#ifdef SIRIUS_KERNEL_DIR
+#ifdef SIRIUS_TEST_HAS_KERNELS
     const auto devices = EnumerateVulkanDevices();
     if (!devices.has_value() || devices->empty()) return f;
     const auto selected = ResolveVulkanDeviceIndex(*devices);
     if (!selected.has_value()) return f;
     auto device = CreateVulkanDevice(*selected);
     if (!device.has_value()) return f;
-    const auto spirv = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace.spv");
+    const auto spirv = LoadSpirv(sirius::test::ResourcePath("kernels/trace.spv"));
     if (spirv.empty()) return f;
     auto kernel = (*device)->LoadKernel(spirv);
     if (!kernel.has_value()) return f;
@@ -776,7 +778,7 @@ TEST(VulkanRenderSession, DispatchSubdivisionPreservesExactCameraAndCatalogueOut
 }
 
 TEST(VulkanRenderSession, ZeroActiveTracePreservesRadianceAcrossPrecisionRungs) {
-#ifdef SIRIUS_KERNEL_DIR
+#ifdef SIRIUS_TEST_HAS_KERNELS
     KernelFixture fixture = OpenKernel();
     if (!fixture.ready) GTEST_SKIP() << "Vulkan device or trace kernel unavailable";
     auto& device = *fixture.device;
@@ -799,7 +801,7 @@ TEST(VulkanRenderSession, ZeroActiveTracePreservesRadianceAcrossPrecisionRungs) 
     }
     for (const char* module : {"trace.spv", "trace_fp32comp.spv", "trace_fp64.spv"}) {
         SCOPED_TRACE(module);
-        const auto spirv = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/" + module);
+        const auto spirv = LoadSpirv(sirius::test::ResourcePath(std::string("kernels/") + module));
         ASSERT_FALSE(spirv.empty());
         const auto kernel = device.LoadKernel(spirv);
         if (std::string_view(module) == "trace_fp64.spv" && !device.Info().supports_fp64) {

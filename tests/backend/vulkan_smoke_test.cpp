@@ -1,3 +1,5 @@
+#include "support/test_resource.h"
+
 // CPU controls cover portability negotiation and precision refusal. Device
 // checks cover enumeration, shader parity and worker-thread teardown. Missing
 // devices skip the device checks; strict qualification rejects those skips.
@@ -535,7 +537,7 @@ TEST(VulkanBackend, BufferAllocationLimitCountsActualResidencyAndPreservesExisti
 }
 
 TEST(VulkanBackend, SlangKernelMatchesCpuReference) {
-#ifndef SIRIUS_KERNEL_DIR
+#ifndef SIRIUS_TEST_HAS_KERNELS
     GTEST_SKIP() << "kernels not compiled (slangc absent at configure time)";
 #else
     const auto devices = EnumerateVulkanDevices();
@@ -546,7 +548,7 @@ TEST(VulkanBackend, SlangKernelMatchesCpuReference) {
 
     const auto selected = ResolveVulkanDeviceIndex(*devices);
     ASSERT_TRUE(selected.has_value()) << selected.error().Description();
-    const auto spirv = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/smoke.spv");
+    const auto spirv = LoadSpirv(sirius::test::ResourcePath("kernels/smoke.spv"));
     ASSERT_FALSE(spirv.empty()) << "smoke.spv missing or empty";
 
     const auto max_difference = DispatchSmokeKernel(*selected, spirv);
@@ -556,7 +558,7 @@ TEST(VulkanBackend, SlangKernelMatchesCpuReference) {
 }
 
 TEST(VulkanBackend, WorkerThreadDispatchTearsDownSafely) {
-#ifndef SIRIUS_KERNEL_DIR
+#ifndef SIRIUS_TEST_HAS_KERNELS
     GTEST_SKIP() << "kernels not compiled (slangc absent at configure time)";
 #else
     const auto devices = EnumerateVulkanDevices();
@@ -567,7 +569,7 @@ TEST(VulkanBackend, WorkerThreadDispatchTearsDownSafely) {
 
     const auto selected = ResolveVulkanDeviceIndex(*devices);
     ASSERT_TRUE(selected.has_value()) << selected.error().Description();
-    const auto spirv = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/smoke.spv");
+    const auto spirv = LoadSpirv(sirius::test::ResourcePath("kernels/smoke.spv"));
     ASSERT_FALSE(spirv.empty()) << "smoke.spv missing or empty";
 
     std::optional<sirius::base::Expected<float> > result;
@@ -616,7 +618,7 @@ TEST(VulkanBackend, DeviceSelectionIsStrictAndRangeChecked) {
 }
 
 TEST(VulkanBackend, IdenticalKernelWordsReusePipelineAcrossBuffers) {
-#ifndef SIRIUS_KERNEL_DIR
+#ifndef SIRIUS_TEST_HAS_KERNELS
     GTEST_SKIP() << "kernels not compiled (slangc absent at configure time)";
 #else
     const auto inventory = EnumerateVulkanDevices();
@@ -629,7 +631,7 @@ TEST(VulkanBackend, IdenticalKernelWordsReusePipelineAcrossBuffers) {
     auto opened = CreateVulkanDevice(*selected);
     ASSERT_TRUE(opened) << opened.error().Description();
     auto& device = **opened;
-    auto words = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/smoke.spv");
+    auto words = LoadSpirv(sirius::test::ResourcePath("kernels/smoke.spv"));
     ASSERT_GE(words.size(), 5U);
     const auto unchanged = words;
     const auto first = device.LoadKernel(words);

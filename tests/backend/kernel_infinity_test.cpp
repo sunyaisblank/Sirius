@@ -1,3 +1,5 @@
+#include "support/test_resource.h"
+
 // Actual bounded device continuation against independent flat/axis/Carter
 // oracles. Each dispatch performs at most one adaptive attempt per case.
 // Accuracy budgets were declared before the first device comparison; they
@@ -96,10 +98,7 @@ void DispatchInfinityProbe(ComputeDevice& device, KernelHandle kernel,
 template <class Real>
 void RunInfinityProbe(const std::string& artifact) {
     SCOPED_TRACE(artifact);
-#ifdef SIRIUS_KERNEL_DIR
-    const std::string kernel_dir = SIRIUS_KERNEL_DIR;
-#else
-    const std::string kernel_dir;
+#ifndef SIRIUS_TEST_HAS_KERNELS
     GTEST_SKIP() << "Vulkan kernels are not configured";
 #endif
     // Declared before the first device run. These are smooth-case diagnostic
@@ -128,7 +127,7 @@ void RunInfinityProbe(const std::string& artifact) {
     RecordInfinityDevice(*device, *index, prefix);
     std::size_t submissions = 0;
     const auto& info = device->Info();
-    const auto words = Spirv(kernel_dir + "/" + artifact);
+    const auto words = Spirv(sirius::test::ResourcePath(std::string("kernels/") + artifact));
     ASSERT_FALSE(words.empty()) << artifact;
     if constexpr (wide) {
         if (!info.supports_fp64) {
@@ -293,10 +292,7 @@ TEST(KernelInfinityDevice, Fp64IndependentDirectionsVariationsAndTerminalStates)
 template <class Real>
 void RunFinishProbe(const std::string& artifact) {
     SCOPED_TRACE(artifact);
-#ifdef SIRIUS_KERNEL_DIR
-    const std::string kernel_dir = SIRIUS_KERNEL_DIR;
-#else
-    const std::string kernel_dir;
+#ifndef SIRIUS_TEST_HAS_KERNELS
     GTEST_SKIP() << "Vulkan kernels are not configured";
 #endif
     const auto inventory = EnumerateVulkanDevices();
@@ -310,7 +306,7 @@ void RunFinishProbe(const std::string& artifact) {
     const std::string prefix = artifact.substr(0, artifact.rfind('.'));
     RecordInfinityDevice(*device, *index, prefix);
     std::size_t submissions = 0;
-    const auto words = Spirv(kernel_dir + "/" + artifact);
+    const auto words = Spirv(sirius::test::ResourcePath(std::string("kernels/") + artifact));
     ASSERT_FALSE(words.empty()) << artifact;
     constexpr bool wide = std::is_same_v<Real, double>;
     if constexpr (wide) {

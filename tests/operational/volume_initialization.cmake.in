@@ -6,6 +6,50 @@ set(_hostile "${_audit_parent}/hostile-working-directory")
 file(REMOVE_RECURSE "${_audit_parent}")
 file(MAKE_DIRECTORY "${_stage}" "${_hostile}" "${_audit_parent}/relocated")
 
+# Replay the original independent CPU corpus from a relocated test volume,
+# including strict pre-gate builds. Neither its old build path nor a hostile
+# working-directory/environment substitute may provide the consumed input.
+set(_test_stage "${_audit_parent}/test-stage")
+set(_test_volume "${_audit_parent}/relocated/test-volume")
+set(_corpus_relative "tests/backend/portable_binary32_reference.bin")
+get_filename_component(_backend_directory "${SIRIUS_BACKEND_TESTS}" DIRECTORY)
+get_filename_component(_backend_name "${SIRIUS_BACKEND_TESTS}" NAME)
+set(_source_corpus "${_backend_directory}/resources/${_corpus_relative}")
+file(MAKE_DIRECTORY "${_test_stage}/resources/tests/backend"
+    "${_hostile}/resources/tests/backend")
+file(COPY "${SIRIUS_BACKEND_TESTS}" DESTINATION "${_test_stage}")
+file(COPY "${_source_corpus}" DESTINATION "${_test_stage}/resources/tests/backend")
+file(RENAME "${_test_stage}" "${_test_volume}")
+set(_test_binary "${_test_volume}/${_backend_name}")
+set(_test_corpus "${_test_volume}/resources/${_corpus_relative}")
+file(WRITE "${_hostile}/resources/${_corpus_relative}" "hostile corpus substitute")
+file(SHA256 "${_source_corpus}" _expected_corpus_sha256)
+file(SHA256 "${_test_corpus}" _relocated_corpus_sha256)
+if(NOT _relocated_corpus_sha256 STREQUAL _expected_corpus_sha256)
+    message(FATAL_ERROR "relocation changed the independent corpus bytes")
+endif()
+
+function(_check_relocated_corpus expected_result)
+    execute_process(
+        COMMAND "@CMAKE_COMMAND@" -E env "SIRIUS_RESOURCE_DIR=${_hostile}/resources"
+            "${_test_binary}" --gtest_filter=PortableBinary32.MatchesIndependentExactCorpus
+        WORKING_DIRECTORY "${_hostile}"
+        RESULT_VARIABLE _result OUTPUT_VARIABLE _stdout ERROR_VARIABLE _stderr
+        TIMEOUT 30)
+    if(NOT _result STREQUAL "${expected_result}")
+        message(FATAL_ERROR
+            "relocated independent corpus expected exit ${expected_result}, got ${_result}\n"
+            "${_stdout}\n${_stderr}")
+    endif()
+endfunction()
+
+_check_relocated_corpus(0)
+file(REMOVE "${_test_corpus}")
+_check_relocated_corpus(1)
+file(WRITE "${_test_corpus}" "tampered corpus")
+_check_relocated_corpus(1)
+file(REMOVE_RECURSE "${_test_volume}")
+
 set(_install_command
     "@CMAKE_COMMAND@" --install "@CMAKE_BINARY_DIR@" --prefix "${_stage}")
 if(DEFINED SIRIUS_TEST_CONFIG AND NOT SIRIUS_TEST_CONFIG STREQUAL "")

@@ -32,7 +32,7 @@ set_property(TARGET sirius_portable_binary32_test_inputs PROPERTY
     SIRIUS_TEST_INPUT_ARTIFACTS "portable_binary32_reference=${portable_reference}")
 add_dependencies(sirius_backend_tests sirius_portable_binary32_test_inputs)
 target_compile_definitions(sirius_backend_tests PRIVATE
-    SIRIUS_PORTABLE_BINARY32_REFERENCE_PATH="${portable_reference}")
+    SIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1)
 
 gtest_discover_tests(
     sirius_backend_tests
@@ -67,7 +67,7 @@ target_link_libraries(sirius_backend_tests PRIVATE
 
 if(TARGET sirius_kernels)
     target_compile_definitions(sirius_backend_tests
-        PRIVATE SIRIUS_KERNEL_DIR="${SIRIUS_KERNEL_BINARY_DIR}")
+        PRIVATE SIRIUS_TEST_HAS_KERNELS=1)
     add_dependencies(sirius_backend_tests sirius_kernels)
 
     find_program(SIRIUS_SPIRV_AS spirv-as)
@@ -105,6 +105,6 @@ if(TARGET sirius_kernels)
         add_dependencies(sirius_backend_tests sirius_retained_camera_test_inputs)
         target_include_directories(sirius_backend_tests PRIVATE "${retained_build}")
         target_compile_definitions(sirius_backend_tests PRIVATE
-            SIRIUS_RETAINED_CAMERA_TEST_DIR="${retained_build}")
+            SIRIUS_TEST_HAS_RETAINED_CAMERA=1)
     endif()
 endif()

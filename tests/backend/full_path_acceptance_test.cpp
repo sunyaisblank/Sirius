@@ -17,7 +17,7 @@
 #include <string>
 #include <vector>
 
-#if defined(SIRIUS_HAS_RETAINED_COMPUTE) && defined(SIRIUS_RETAINED_CAMERA_TEST_DIR)
+#if defined(SIRIUS_HAS_RETAINED_COMPUTE) && defined(SIRIUS_TEST_HAS_RETAINED_CAMERA)
 #include "sirius/backend/device.h"
 #include "sirius/backend/retained_compute.h"
 #include "sirius/backend/retained_trace_executor.h"
@@ -385,7 +385,7 @@ void Record(const Witness& witness, unsigned refinement, const Errors& error,
                     witness.reference_spacing));
 }
 
-#if defined(SIRIUS_HAS_RETAINED_COMPUTE) && defined(SIRIUS_RETAINED_CAMERA_TEST_DIR)
+#if defined(SIRIUS_HAS_RETAINED_COMPUTE) && defined(SIRIUS_TEST_HAS_RETAINED_CAMERA)
 struct RayInvariants {
     Scalar energy, angular_momentum, carter, normalized_null;
     Scalar radius, radial_velocity, absolute_sine;
@@ -566,7 +566,7 @@ TEST(FullPathAcceptance, CpuIndependentCarterEventsMapsAndRefinement) {
 }
 
 TEST(FullPathAcceptance, VulkanRetainedIndependentCarterEventsMapsAndRefinement) {
-#if defined(SIRIUS_HAS_RETAINED_COMPUTE) && defined(SIRIUS_RETAINED_CAMERA_TEST_DIR)
+#if defined(SIRIUS_HAS_RETAINED_COMPUTE) && defined(SIRIUS_TEST_HAS_RETAINED_CAMERA)
     const auto inventory = EnumerateVulkanDevices();
     ASSERT_TRUE(inventory) << inventory.error().Description();
     if (inventory->empty()) GTEST_SKIP() << "no Vulkan device; numerical backend unqualified";
@@ -633,7 +633,7 @@ TEST(FullPathAcceptance, VulkanRetainedIndependentCarterEventsMapsAndRefinement)
 }
 
 TEST(FullPathAcceptance, VulkanRetainedNearExtremalRayConservesIndependentInvariants) {
-#if defined(SIRIUS_HAS_RETAINED_COMPUTE) && defined(SIRIUS_RETAINED_CAMERA_TEST_DIR)
+#if defined(SIRIUS_HAS_RETAINED_COMPUTE) && defined(SIRIUS_TEST_HAS_RETAINED_CAMERA)
     const auto& witnesses = Witnesses();
     const auto selected = std::find_if(witnesses.begin(), witnesses.end(), [](const Witness& item) {
         return item.input.name == "kerr_0998_inner_turn";

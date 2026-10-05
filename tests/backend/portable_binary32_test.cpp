@@ -1,3 +1,5 @@
+#include "support/test_resource.h"
+
 #include "sirius/kernels/portable_binary32.h"
 
 #include <gtest/gtest.h>
@@ -8,7 +10,7 @@
 #include <iomanip>
 #include <string>
 
-#ifndef SIRIUS_PORTABLE_BINARY32_REFERENCE_PATH
+#ifndef SIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE
 #error "The build must provide the generated independent portable-binary32 fixture"
 #endif
 
@@ -81,7 +83,8 @@ PB32Product Evaluate(std::uint32_t operation, std::uint32_t a, std::uint32_t b) 
 }  // namespace
 
 TEST(PortableBinary32, MatchesIndependentExactCorpus) {
-    const std::string path = SIRIUS_PORTABLE_BINARY32_REFERENCE_PATH;
+    const std::string path = sirius::test::ResourcePath(
+        "tests/backend/portable_binary32_reference.bin");
     std::ifstream stream(path, std::ios::binary);
     ASSERT_TRUE(stream.is_open()) << "Missing independent fixture: " << path;
     std::array<std::uint8_t, 12> header{};
