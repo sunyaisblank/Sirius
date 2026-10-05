@@ -15,6 +15,6 @@ sirius_configure_target(sirius_core)
 # but ordinary multiply/add operations must retain their ordered rounding.
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_SYSTEM_NAME STREQUAL "Linux"
    AND CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|AMD64|amd64)$")
-    set_property(SOURCE geodesic_integrator.cpp APPEND PROPERTY
+    set_source_files_properties(geodesic_integrator.cpp PROPERTIES
         COMPILE_OPTIONS -ffp-contract=off)
 endif()
