@@ -839,6 +839,7 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
             live_revision = revision
             live_status = ""
             executed = False
+            changed_paths = set()
             escaped_copies = {}
             original_resolve = Path.resolve
 
@@ -860,6 +861,7 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
             def mutate_copy(action: str, consumer: str,
                             name: str = "portable_binary32_reference") -> None:
                 path = consumed[(consumer, name)]
+                changed_paths.add(path)
                 payload = originals[path]
                 if action in {"missing", "restored"}:
                     path.unlink()
@@ -923,23 +925,28 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                         return subprocess.CompletedProcess(command, 8)
                     if mutation == "tested":
                         path = tested["sirius_core_tests"]
+                        changed_paths.add(path)
                         path.write_bytes(b"x" * len(originals[path]))
                     elif mutation == "product":
                         path = products["trace_spv"]
+                        changed_paths.add(path)
                         path.write_bytes(b"x" * len(originals[path]))
                     elif mutation in {"missing", "restored"}:
                         path = products["starfield"]
+                        changed_paths.add(path)
                         path.unlink()
                         if mutation == "restored":
                             path.write_bytes(originals[path])
                     elif mutation.startswith("input_changed:"):
                         name = mutation.partition(":")[2]
                         path = test_inputs[name]
+                        changed_paths.add(path)
                         payload = bytearray(originals[path])
                         payload[-1] ^= 1
                         path.write_bytes(payload)
                     elif mutation in {"input_missing", "input_restored"}:
                         path = test_inputs["parity_probe_spv"]
+                        changed_paths.add(path)
                         path.unlink()
                         if mutation == "input_restored":
                             path.write_bytes(originals[path])
@@ -1003,10 +1010,15 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                 require(executed != preflight_failure,
                         "input control did not enforce the CTest execution boundary")
             finally:
-                for path, payload in originals.items():
+                # Reuse the immutable fixture instead of rewriting all its
+                # artifacts after controls which leave most files untouched.
+                for path in changed_paths:
                     if path.is_symlink():
                         path.unlink()
-                    path.write_bytes(payload)
+                    path.write_bytes(originals[path])
+    for path, payload in originals.items():
+        require(path.is_file() and not path.is_symlink() and path.read_bytes() == payload,
+                f"execution controls did not restore their fixture: {path}")
 
 
 def self_test_persistent_output(source: Path, build: Path, tested: dict,
