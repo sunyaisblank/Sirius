@@ -638,11 +638,26 @@ class Detector {
         std::array<std::uint32_t, kPointDetectorProbeBatchSize> pending{};
         std::size_t pending_count = 0;
         const auto flush = [&] {
-            PrefetchImageProbes(std::span(pending).first(pending_count), cell, *seed, image_margin);
-            for (std::size_t i = 0; i < pending_count; ++i) (void)accumulate(pending[i]);
-            // Completed speculative work stays charged if a query was cached
-            // by an earlier star. No future coordinate is predicted here.
-            prefetched_count_ = 0;
+            std::size_t completed = 0;
+            while (completed < pending_count) {
+                const auto remaining = policy_.maximum_probes - statistics_.probes;
+                // The shared-discovery budget can be smaller than a full
+                // cohort's reservation. Keep its original bound and use the
+                // largest affordable prefix, checking before multiplication.
+                const std::size_t affordable =
+                    remaining != 0 && policy_.maximum_newton_steps <= (remaining - 1) / 12
+                        ? remaining / (std::size_t{12} * policy_.maximum_newton_steps + 1)
+                        : 1;
+                const auto count =
+                    std::min(pending_count - completed, std::max(std::size_t{1}, affordable));
+                PrefetchImageProbes(std::span(pending).subspan(completed, count), cell, *seed,
+                                    image_margin);
+                for (std::size_t i = 0; i < count; ++i) (void)accumulate(pending[completed + i]);
+                // Completed speculative work stays charged if a query was
+                // cached by an earlier star. Commit each prefix in original order.
+                prefetched_count_ = 0;
+                completed += count;
+            }
             pending_count = 0;
         };
         catalogue_.ForEachCandidateWhile(

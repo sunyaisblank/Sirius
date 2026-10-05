@@ -107,22 +107,26 @@ TEST(PointSourceDetector, BulkProbesPreserveScalarRefinementAndRadiance) {
             return point;
         };
         const auto scalar = EvaluatePointDetector(catalogue, 1, sample, {});
+        const auto classify_roots = [&](std::span<const DetectorCoordinate> coordinates) {
+            std::set<std::size_t> found;
+            for (const auto& q : coordinates)
+                for (std::size_t i = 0; i < entries.size(); ++i) {
+                    const double x =
+                        entries[i].direction_y / double(entries[i].direction_x) / kScale;
+                    const double root_x = 2 * x / (1 + std::sqrt(1 + .08 * x));
+                    const double root_y =
+                        entries[i].direction_z / double(entries[i].direction_x) / kScale;
+                    if (std::abs(q[0] - root_x) < .02 && std::abs(q[1] - root_y) < .02)
+                        found.insert(i);
+                }
+            return found;
+        };
         std::size_t batches = 0;
         std::set<std::size_t> second_batch_roots;
         const PointDetectorProbeBatchSampler batched =
             [&](std::span<const DetectorCoordinate> coordinates) {
                 ++batches;
-                if (mode == 3 && batches == 2)
-                    for (const auto& q : coordinates)
-                        for (std::size_t i = 0; i < entries.size(); ++i) {
-                            const double x =
-                                entries[i].direction_y / double(entries[i].direction_x) / kScale;
-                            const double root_x = 2 * x / (1 + std::sqrt(1 + .08 * x));
-                            const double root_y =
-                                entries[i].direction_z / double(entries[i].direction_x) / kScale;
-                            if (std::abs(q[0] - root_x) < .02 && std::abs(q[1] - root_y) < .02)
-                                second_batch_roots.insert(i);
-                        }
+                if (mode == 3 && batches == 2) second_batch_roots = classify_roots(coordinates);
                 return BulkSampler(sample)(coordinates);
             };
         const auto bulk = EvaluatePointDetector(catalogue, 1, sample, {}, {}, batched);
@@ -158,8 +162,36 @@ TEST(PointSourceDetector, BulkProbesPreserveScalarRefinementAndRadiance) {
             EXPECT_LT(bulk->statistics.probe_batches, limited->statistics.probe_batches);
             RecordProperty("cohort_probe_batches",
                            static_cast<int>(bulk->statistics.probe_batches));
-            RecordProperty("scalar_root_probe_batches",
+            RecordProperty("tight_budget_probe_batches",
                            static_cast<int>(limited->statistics.probe_batches));
+            auto shared_budget = PointDetectorPolicy{};
+            shared_budget.maximum_probes = 1024;
+            std::size_t shared_batches = 0, first_shared_root_batch = 0;
+            std::set<std::size_t> shared_batch_roots;
+            const auto affordable =
+                EvaluatePointDetector(catalogue, 1, sample, {}, shared_budget,
+                                      [&](std::span<const DetectorCoordinate> coordinates) {
+                                          if (++shared_batches == 2) {
+                                              first_shared_root_batch = coordinates.size();
+                                              shared_batch_roots = classify_roots(coordinates);
+                                          }
+                                          return BulkSampler(sample)(coordinates);
+                                      });
+            ASSERT_TRUE(affordable);
+            EXPECT_EQ(affordable->rgb, scalar->rgb);
+            EXPECT_EQ(affordable->estimated_error, scalar->estimated_error);
+            EXPECT_EQ(affordable->statistics.probes, scalar->statistics.probes);
+            EXPECT_EQ(affordable->statistics.probe_requests, scalar->statistics.probe_requests);
+            EXPECT_EQ(affordable->statistics.newton_steps, scalar->statistics.newton_steps);
+            EXPECT_EQ(affordable->statistics.inner_attempts, scalar->statistics.inner_attempts);
+            EXPECT_EQ(affordable->statistics.tail_attempts, scalar->statistics.tail_attempts);
+            EXPECT_GT(shared_batch_roots.size(), 1u);
+            EXPECT_LE(first_shared_root_batch, 5u);
+            EXPECT_LT(affordable->statistics.probe_batches, limited->statistics.probe_batches);
+            RecordProperty("shared_budget_first_root_batch",
+                           static_cast<int>(first_shared_root_batch));
+            RecordProperty("shared_budget_probe_batches",
+                           static_cast<int>(affordable->statistics.probe_batches));
             auto large_step_limit = PointDetectorPolicy{};
             large_step_limit.maximum_newton_steps = std::numeric_limits<unsigned>::max();
             const auto overflow_control = EvaluatePointDetector(
@@ -168,8 +200,10 @@ TEST(PointSourceDetector, BulkProbesPreserveScalarRefinementAndRadiance) {
             EXPECT_EQ(overflow_control->rgb, scalar->rgb);
             EXPECT_EQ(overflow_control->estimated_error, scalar->estimated_error);
             EXPECT_EQ(overflow_control->statistics.probes, scalar->statistics.probes);
-            EXPECT_EQ(overflow_control->statistics.probe_batches,
+            EXPECT_GT(overflow_control->statistics.probe_batches,
                       limited->statistics.probe_batches);
+            RecordProperty("scalar_root_probe_batches",
+                           static_cast<int>(overflow_control->statistics.probe_batches));
         }
     }
 }
