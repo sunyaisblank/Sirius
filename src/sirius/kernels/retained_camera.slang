@@ -63,8 +63,19 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint rows, uint registers) 
     } else {
         if (a >= registers) return false;
         RetainedPair av = ReadValue(a, rowBase);
+#ifdef SIRIUS_RETAINED_PORTABLE
+        if (op >= 2 && op <= 6) {
+            RetainedPair bv = RPInvalid();
+            if (op != 6) {
+                if (b >= registers) return false;
+                bv = ReadValue(b, rowBase);
+            }
+            r = RPEvaluateArithmetic(av, bv, op);
+        }
+#else
         if (op == 6)
             r = RPSqrt(av);
+#endif
         else if (op == 7)
             r = RPNegate(av);
         else if (op == 8) {
@@ -74,22 +85,18 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint rows, uint registers) 
         } else {
             if (b >= registers) return false;
             RetainedPair bv = ReadValue(b, rowBase);
-#ifdef SIRIUS_RETAINED_PORTABLE
-            if (op == 2 || op == 3) {
-                if (op == 3) bv = RPNegate(bv);
-                r = RPAdd(av, bv);
-            }
-#else
+#ifndef SIRIUS_RETAINED_PORTABLE
             if (op == 2)
                 r = RPAdd(av, bv);
             else if (op == 3)
                 r = RPSubtract(av, bv);
-#endif
             else if (op == 4)
                 r = RPMultiply(av, bv);
             else if (op == 5)
                 r = RPDivide(av, bv);
-            else if (op == 9) {
+            else
+#endif
+            if (op == 9) {
                 if (av.valid != 0 && bv.valid != 0)
                     r = RPConstant(RPScalarMax(RPAbsoluteUpper(av), RPAbsoluteUpper(bv)));
             } else if (op == 10 || op == 11) {
