@@ -666,8 +666,8 @@ TEST(VulkanBackend, IdenticalKernelWordsReusePipelineAcrossBuffers) {
 
     constexpr std::array<float, 4> radii{1, 2, 4, 8};
     constexpr std::array<float, 3> masses{.5f, .75f, .5f};
-    constexpr std::array<std::array<float, 4>, 3> expected{{
-        {0, .5f, .75f, .875f}, {-.5f, .25f, .625f, .8125f}, {-1, 0, .5f, .75f}}};
+    constexpr std::array<std::array<float, 4>, 3> expected{
+        {{0, .5f, .75f, .875f}, {-.5f, .25f, .625f, .8125f}, {-1, 0, .5f, .75f}}};
     std::array<sirius::backend::BufferHandle, 3> prior_outputs{};
     std::array<std::array<float, 4>, 3> saved_outputs{};
     for (std::size_t invocation = 0; invocation < expected.size(); ++invocation) {
@@ -684,7 +684,9 @@ TEST(VulkanBackend, IdenticalKernelWordsReusePipelineAcrossBuffers) {
         ASSERT_TRUE(device.WriteBuffer(*parameters, std::as_bytes(std::span(params))));
         const std::array bindings{*in, *out, *parameters};
         sirius::backend::DispatchTiming timing;
-        ASSERT_TRUE(device.Dispatch(invocation == 2 ? *variant : invocation == 0 ? *first : *again,
+        ASSERT_TRUE(device.Dispatch(invocation == 2   ? *variant
+                                    : invocation == 0 ? *first
+                                                      : *again,
                                     bindings, 1, 1, 1, &timing));
         EXPECT_EQ(timing.pipeline_created, invocation != 1);
         prior_outputs[invocation] = *out;
@@ -693,14 +695,15 @@ TEST(VulkanBackend, IdenticalKernelWordsReusePipelineAcrossBuffers) {
         // Vulkan division need not round each exactly representable quotient.
         for (std::size_t prior = 0; prior <= invocation; ++prior) {
             std::array<float, 4> actual{};
-            ASSERT_TRUE(device.ReadBuffer(prior_outputs[prior],
-                                          std::as_writable_bytes(std::span(actual))));
+            ASSERT_TRUE(
+                device.ReadBuffer(prior_outputs[prior], std::as_writable_bytes(std::span(actual))));
             if (prior == invocation) {
                 for (std::size_t value = 0; value < actual.size(); ++value)
                     EXPECT_NEAR(actual[value], expected[prior][value], 1e-6f);
                 saved_outputs[prior] = actual;
             } else {
-                EXPECT_EQ(std::memcmp(actual.data(), saved_outputs[prior].data(), sizeof(actual)), 0);
+                EXPECT_EQ(std::memcmp(actual.data(), saved_outputs[prior].data(), sizeof(actual)),
+                          0);
             }
         }
     }

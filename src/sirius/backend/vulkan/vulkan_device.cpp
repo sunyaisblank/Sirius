@@ -643,7 +643,8 @@ Expected<KernelHandle> VulkanDevice::LoadKernel(std::span<const std::uint32_t> s
         // Complete host allocations before acquiring the Vulkan object.
         kernels_.reserve(kernels_.size() + 1);
     } catch (const std::bad_alloc&) {
-        return Fail(ErrorDomain::kKernel, "load shader module", "host shader storage allocation failed");
+        return Fail(ErrorDomain::kKernel, "load shader module",
+                    "host shader storage allocation failed");
     }
     const VkShaderModuleCreateInfo create_info{
         .sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
