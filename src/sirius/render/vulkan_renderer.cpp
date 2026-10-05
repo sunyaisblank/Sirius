@@ -364,7 +364,10 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
                             ((config.height + work_edge - 1) / work_edge);
     const auto rays_per_work =
         work_edge == kPointDetectorBlockEdge ? kPointDetectorProbeBatchSize : 1;
-    std::size_t capacity = std::min<std::size_t>(64, work_count * rays_per_work);
+    const auto physical = device.Info().kind == backend::DeviceKind::kIntegratedGpu ||
+                          device.Info().kind == backend::DeviceKind::kDiscreteGpu;
+    const std::size_t row_limit = physical ? 128 : 64;
+    std::size_t capacity = std::min(row_limit, work_count * rays_per_work);
     const auto resident_before = device.BufferAllocationBytes();
     constexpr auto minimum_tile_bytes = kMinTileEdge * kMinTileEdge * kTileWorkingSetBytesPerPixel;
     std::uint64_t planned = 0;

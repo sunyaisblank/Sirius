@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <array>
+#include <chrono>
 #include <cmath>
 #include <format>
 #include <future>
@@ -626,6 +627,105 @@ TEST(FullPathAcceptance, VulkanRetainedIndependentCarterEventsMapsAndRefinement)
         EXPECT_GT(executor.Statistics().interval_batches, 0U);
         RecordProperty(wide ? "fp64_evidence" : "fp32_evidence",
                        "full independent numerical corpus executed");
+
+        if (device.Info().kind != DeviceKind::kIntegratedGpu &&
+            device.Info().kind != DeviceKind::kDiscreteGpu)
+            continue;
+
+        // Compare the same mixed physical rays at both renderer capacities.
+        // The original independent witnesses judge every row, including capture,
+        // disk, turning and moving-pupil events. A start gate supplies real
+        // concurrent demand; the histogram records the batches actually executed.
+        constexpr std::size_t cohort_rows = 128;
+        for (const std::size_t capacity : {64U, 128U}) {
+            SCOPED_TRACE(capacity);
+            const auto resident_before = device.BufferAllocationBytes();
+            const auto allocation = RetainedCompute::RequiredAllocationBytes(device, capacity);
+            ASSERT_TRUE(allocation) << allocation.error().Description();
+            const auto creation_started = std::chrono::steady_clock::now();
+            auto cohort_compute = RetainedCompute::Create(device, capacity, wide);
+            ASSERT_TRUE(cohort_compute) << cohort_compute.error().Description();
+            const auto creation_ms = std::chrono::duration<double, std::milli>(
+                                         std::chrono::steady_clock::now() - creation_started)
+                                         .count();
+            const auto resident = device.BufferAllocationBytes() - resident_before;
+            EXPECT_EQ(resident, *allocation);
+            RetainedTraceExecutor cohort_executor(**cohort_compute, {}, 1000);
+            std::vector<std::future<TraceResult>> tasks;
+            tasks.reserve(cohort_rows);
+            // Destroy the promise before the futures if thread creation fails:
+            // waiting workers then wake instead of blocking future destruction.
+            std::promise<void> launch_signal;
+            const auto launch_gate = launch_signal.get_future().share();
+            const auto started = std::chrono::steady_clock::now();
+            for (std::size_t row = 0; row < cohort_rows; ++row) {
+                tasks.push_back(
+                    std::async(std::launch::async, [&cohort_executor, launch_gate, row] {
+                        const auto& witness = Witnesses()[row % Witnesses().size()];
+                        KerrSchildFamily metric(
+                            witness.input.mass == 0
+                                ? KerrSchildParams::Minkowski()
+                                : KerrSchildParams::Kerr(witness.input.mass, witness.input.spin));
+                        GeodesicTracer tracer(&metric, Control(witness.input, 0));
+                        tracer.SetStepExecutor(&cohort_executor);
+                        launch_gate.wait();
+                        return tracer.Trace(witness.input.camera);
+                    }));
+            }
+            launch_signal.set_value();
+            for (std::size_t row = 0; row < tasks.size(); ++row) {
+                SCOPED_TRACE(row);
+                Check(Witnesses()[row % Witnesses().size()], tasks[row].get());
+            }
+            EXPECT_FALSE(cohort_executor.Error());
+            const auto timing = cohort_executor.Statistics();
+            EXPECT_LE(timing.maximum_batch_rows, capacity);
+            const auto prefix = std::format("fanout_{}_{}", wide ? "fp64" : "fp32", capacity);
+            RecordProperty(prefix + "_host_wall_ms",
+                           std::format("{:.17g}", std::chrono::duration<double, std::milli>(
+                                                      std::chrono::steady_clock::now() - started)
+                                                      .count()));
+            RecordProperty(prefix + "_creation_ms", std::format("{:.17g}", creation_ms));
+            RecordProperty(prefix + "_resident_bytes", std::to_string(resident));
+            RecordProperty(prefix + "_submission_guard_ms", "1000");
+            RecordProperty(prefix + "_larger_batches_executed",
+                           timing.maximum_batch_rows > 64 ? "yes" : "no");
+            RecordProperty(prefix + "_full_batches", std::to_string(timing.full_batches));
+            RecordProperty(prefix + "_maximum_rows", std::to_string(timing.maximum_batch_rows));
+            RecordProperty(prefix + "_accepted_intervals",
+                           std::to_string(timing.accepted_intervals));
+            RecordProperty(prefix + "_rejected_intervals",
+                           std::to_string(timing.rejected_intervals));
+            RecordProperty(prefix + "_batch_subdivisions",
+                           std::to_string(timing.batch_subdivisions));
+            RecordProperty(prefix + "_safety_reductions", std::to_string(timing.safety_fallbacks));
+            RecordProperty(prefix + "_paired_projection_retries",
+                           std::to_string(timing.paired_projection_retries));
+            RecordProperty(prefix + "_execute_ms", std::format("{:.17g}", timing.execute_ms));
+            std::string histogram;
+            for (std::size_t rows = 1; rows < timing.batch_row_counts.size(); ++rows) {
+                if (timing.batch_row_counts[rows] != 0)
+                    histogram += std::format("{}:{};", rows, timing.batch_row_counts[rows]);
+            }
+            RecordProperty(prefix + "_batch_histogram", histogram);
+            const auto stages = (*cohort_compute)->Statistics();
+            for (std::size_t stage = 0; stage < stages.size(); ++stage) {
+                const auto& stat = stages[stage];
+                RecordProperty(
+                    prefix + "_" +
+                        RetainedCompute::StageName(
+                            static_cast<RetainedCompute::KernelStage>(stage)),
+                    std::format(
+                        "submissions={};max_submit_wait_ms={:.17g};submit_wait_ms={:.17g};"
+                        "pipeline_setup_ms={:.17g};command_setup_ms={:.17g};cleanup_ms={:.17g};"
+                        "dispatch_total_ms={:.17g};write_ms={:.17g};read_ms={:.17g};"
+                        "pipeline_creations={};target_overshoots={}",
+                        stat.submissions, stat.maximum_submit_wait_ms, stat.submit_wait_ms,
+                        stat.pipeline_setup_ms, stat.command_setup_ms, stat.cleanup_ms,
+                        stat.dispatch_total_ms, stat.write_buffer_ms, stat.read_buffer_ms,
+                        stat.pipeline_creations, stat.target_overshoots));
+            }
+        }
     }
 #else
     GTEST_SKIP() << "retained compute kernels unavailable; Vulkan numerical backend unqualified";
