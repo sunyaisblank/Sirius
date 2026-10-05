@@ -605,6 +605,11 @@ using PhaseVariations = std::array<PhaseVariation, 4>;
 // Hessian comes from the metric's exact derivative hook where available. The
 // fallback differentiates its first derivatives with a fourth-order stencil;
 // those samples must be finite, distinct and in the concrete metric chart.
+#if defined(__GNUC__) && !defined(__clang__) && defined(__linux__) && defined(__x86_64__)
+// Keep the baseline implementation for CPUs without FMA. The core build
+// disables implicit contraction; only explicit std::fma operations may fuse.
+__attribute__((target_clones("fma", "default")))
+#endif
 bool EvaluateVariationStage(IMetric& metric, const Vec4& position, const WideVector& tangent,
                             const PhaseVariations& columns, PhaseVariations& rhs,
                             Rk45CoupledState& control, const RetainedMetricSample& geometry) {
