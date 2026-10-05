@@ -1,8 +1,8 @@
-#include "support/test_resource.h"
-
 #include "sirius/backend/device.h"
 
 #include <gtest/gtest.h>
+
+#include "support/test_resource.h"
 
 #include <algorithm>
 #include <array>
@@ -70,10 +70,9 @@ void CheckProgram(bool compensated) {
     ::testing::Test::RecordProperty("retained_camera_driver", device->Info().driver_info);
     ::testing::Test::RecordProperty("retained_camera_registers", std::to_string(kRegisters));
     ::testing::Test::RecordProperty("retained_camera_instructions", std::to_string(kInstructions));
-    const std::string shader =
-        sirius::test::ResourcePath(compensated
-            ? "tests/backend/retained_camera/program_camera_probe-fp32comp.spv"
-            : "tests/backend/retained_camera/program_camera_probe-fp32.spv");
+    const std::string shader = sirius::test::ResourcePath(
+        compensated ? "tests/backend/retained_camera/program_camera_probe-fp32comp.spv"
+                    : "tests/backend/retained_camera/program_camera_probe-fp32.spv");
     std::ifstream file(shader, std::ios::binary | std::ios::ate);
     ASSERT_TRUE(file) << shader;
     const auto size = file.tellg();

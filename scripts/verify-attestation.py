@@ -127,7 +127,7 @@ def inspect_test_input_evidence(gate, artifacts):
 
 
 def copy_qualification_test_inputs(gate_path, build_root, output=None):
-    """Check live build inputs against the gate; optionally copy their bound bytes."""
+    """Check canonical and consumed inputs; optionally export the canonical bytes."""
     gate = json.loads(gate_path.read_text(encoding="utf-8"))
     verifier = load_build_gate_verifier()
     require(isinstance(gate, dict), "test input gate must be a JSON object")
@@ -147,6 +147,15 @@ def copy_qualification_test_inputs(gate_path, build_root, output=None):
                 f"generated test input is absent or resolves to a substituted path: {logical_name}")
         sources[evidence_name] = source
     inspect_test_input_evidence(gate, sources)
+    tested_paths = {}
+    for consumer in ("sirius_backend_tests", "sirius_render_tests"):
+        record = gate["tested_artifacts"][consumer]
+        require(isinstance(record, dict) and record.get("root") == "build",
+                f"test input consumer must be anchored to the build root: {consumer}")
+        tested_paths[consumer] = verifier.resolve_record(record, root, root)
+    verifier.verify_test_input_copies(
+        tested_paths, gate["product_artifacts"], gate["test_input_artifacts"]
+    )
     if output is None:
         return list(sources.values())
     copied = {}
@@ -2593,7 +2602,11 @@ def self_test(render_test_executable=None):
             }
 
         native_tested = {
-            logical_name: native_gate_record(path.name, path.read_bytes())
+            logical_name: native_gate_record(
+                f"consumers/{logical_name}/{path.name}"
+                if logical_name in {"sirius_backend_tests", "sirius_render_tests"}
+                else path.name, path.read_bytes()
+            )
             for logical_name, path in native_test_products.items()
         }
         candidate_payload = qualification_executable.read_bytes()
@@ -2713,12 +2726,120 @@ def self_test(render_test_executable=None):
             path = input_build / relative_path
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes(self_test_inputs[name].read_bytes())
+        input_consumers = {}
+        for consumer in ("sirius_backend_tests", "sirius_render_tests"):
+            executable = input_build / native_tested[consumer]["path"]
+            executable.parent.mkdir(parents=True, exist_ok=True)
+            executable.write_bytes(native_test_products[consumer].read_bytes())
+            input_consumers[consumer] = executable
+            resources = executable.parent / "resources"
+            for name, relative_path in test_input_paths.items():
+                destination = resources / relative_path
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                destination.write_bytes(self_test_inputs[name].read_bytes())
+            for name in ("trace_spv", "trace_fp32comp_spv", "trace_fp64_spv"):
+                destination = resources / build_gate_verifier.INSTALLED_PRODUCTS[
+                    name].removeprefix("share/sirius/")
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                destination.write_bytes(self_test_products[name].read_bytes())
         copied_inputs = copy_qualification_test_inputs(
             native_build_gate, input_build, input_bundle
         )
         require({path.name for path in copied_inputs}
                 == set(QUALIFICATION_TEST_INPUT_EVIDENCE.values()),
                 "generated test input producer failed its positive control")
+        require({path.name for path in copy_qualification_test_inputs(
+                    native_build_gate, input_build)}
+                == {Path(path).name for path in test_input_paths.values()},
+                "generated test input live check failed its positive control")
+        # The full-estate document takes the same live-consumer path. This is a
+        # synthetic authority fixture, not evidence of an executed estate.
+        input_mandatory_gate = root / "input-mandatory-gate.json"
+        input_mandatory_document = json.loads(mandatory_gate.read_text(encoding="utf-8"))
+        for consumer in input_consumers:
+            input_mandatory_document["tested_artifacts"][consumer] = native_tested[consumer]
+        input_mandatory_gate.write_text(json.dumps(input_mandatory_document), encoding="utf-8")
+        copy_qualification_test_inputs(input_mandatory_gate, input_build)
+
+        rejected_bundle = root / "input-rejected-bundle"
+        rejected_bundle.mkdir()
+
+        def reject_live_input_copy(label):
+            for destination in (None, rejected_bundle):
+                try:
+                    copy_qualification_test_inputs(native_build_gate, input_build, destination)
+                except (OSError, ValueError):
+                    pass
+                else:
+                    raise ValueError(f"producer accepted {label}")
+                require(not any(rejected_bundle.iterdir()),
+                        "producer exported bytes before rejecting a consumed-copy failure")
+
+        from unittest.mock import patch
+        original_resolve = Path.resolve
+        probe = input_build / "symlink-capability-control"
+        try:
+            probe.symlink_to(input_build / test_input_paths["portable_binary32_reference"])
+            filesystem_symlinks = True
+        except (OSError, NotImplementedError):
+            filesystem_symlinks = False
+        finally:
+            if probe.is_symlink():
+                probe.unlink()
+        print("live-consumer escaping-copy controls: " +
+              ("filesystem symlinks" if filesystem_symlinks else
+               "simulated resolved paths (filesystem symlink creation unavailable)"))
+        for consumer, executable in input_consumers.items():
+            consumed = (executable.parent / "resources" /
+                        test_input_paths["portable_binary32_reference"])
+            original = consumed.read_bytes()
+            try:
+                consumed.unlink()
+                reject_live_input_copy(f"missing {consumer} consumed copy")
+                replacement = bytearray(original)
+                replacement[-1] ^= 1
+                consumed.write_bytes(replacement)
+                reject_live_input_copy(f"tampered {consumer} consumed copy")
+                consumed.unlink()
+                outside = input_build / f"escaping-copy-{consumer}"
+                outside.write_bytes(original)
+                if filesystem_symlinks:
+                    consumed.symlink_to(outside)
+                    reject_live_input_copy(f"same-byte escaping {consumer} consumed copy")
+                else:
+                    consumed.write_bytes(original)
+
+                    def resolve_copy(path, *args, **kwargs):
+                        return outside if path == consumed else original_resolve(path, *args, **kwargs)
+
+                    with patch.object(Path, "resolve", resolve_copy):
+                        reject_live_input_copy(f"same-byte escaping {consumer} consumed copy")
+            finally:
+                consumed.unlink(missing_ok=True)
+                consumed.write_bytes(original)
+            original_executable = executable.read_bytes()
+            try:
+                executable.write_bytes(original_executable + b"changed consumer\n")
+                reject_live_input_copy(f"tampered {consumer} executable")
+                executable.unlink()
+                outside_executable = root / f"outside-build-{consumer}"
+                outside_executable.write_bytes(original_executable)
+                if filesystem_symlinks:
+                    executable.symlink_to(outside_executable)
+                    reject_live_input_copy(f"same-byte escaping {consumer} executable")
+                else:
+                    executable.write_bytes(original_executable)
+
+                    def resolve_executable(path, *args, **kwargs):
+                        return (outside_executable if path == executable else
+                                original_resolve(path, *args, **kwargs))
+
+                    with patch.object(Path, "resolve", resolve_executable):
+                        reject_live_input_copy(f"same-byte escaping {consumer} executable")
+            finally:
+                executable.unlink(missing_ok=True)
+                executable.write_bytes(original_executable)
+        copy_qualification_test_inputs(native_build_gate, input_build)
         for name, relative_path in test_input_paths.items():
             path = input_build / relative_path
             original = path.read_bytes()
@@ -2734,8 +2855,6 @@ def self_test(render_test_executable=None):
                 path.write_bytes(original)
         # Model a same-byte symlink target through the actual resolver boundary.
         # This also runs on Windows hosts without symbolic-link privileges.
-        from unittest.mock import patch
-        original_resolve = Path.resolve
         for name, relative_path in test_input_paths.items():
             canonical = input_build / relative_path
             substitute = input_build / f"same-byte-substitute-{name}"

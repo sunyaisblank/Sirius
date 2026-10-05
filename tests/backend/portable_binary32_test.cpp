@@ -1,8 +1,8 @@
-#include "support/test_resource.h"
-
 #include "sirius/kernels/portable_binary32.h"
 
 #include <gtest/gtest.h>
+
+#include "support/test_resource.h"
 
 #include <array>
 #include <cstdint>
@@ -83,8 +83,8 @@ PB32Product Evaluate(std::uint32_t operation, std::uint32_t a, std::uint32_t b) 
 }  // namespace
 
 TEST(PortableBinary32, MatchesIndependentExactCorpus) {
-    const std::string path = sirius::test::ResourcePath(
-        "tests/backend/portable_binary32_reference.bin");
+    const std::string path =
+        sirius::test::ResourcePath("tests/backend/portable_binary32_reference.bin");
     std::ifstream stream(path, std::ios::binary);
     ASSERT_TRUE(stream.is_open()) << "Missing independent fixture: " << path;
     std::array<std::uint8_t, 12> header{};

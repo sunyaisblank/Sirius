@@ -1,10 +1,10 @@
-#include "support/test_resource.h"
-
 #include "sirius/backend/device.h"
 #include "sirius/core/observer_frame.h"
 #include "sirius/render/dispatch_governor.h"
 
 #include <gtest/gtest.h>
+
+#include "support/test_resource.h"
 
 #include <algorithm>
 #include <array>
@@ -143,7 +143,8 @@ void CheckCameraFrame(const std::string& artifact) {
     ::testing::Test::RecordProperty("camera_driver_name", info.driver_name);
     ::testing::Test::RecordProperty("camera_driver_info", info.driver_info);
     ::testing::Test::RecordProperty("camera_supports_fp64", info.supports_fp64 ? "true" : "false");
-    const auto words = ReadCameraProbe(sirius::test::ResourcePath(std::string("kernels/") + artifact));
+    const auto words =
+        ReadCameraProbe(sirius::test::ResourcePath(std::string("kernels/") + artifact));
     ASSERT_FALSE(words.empty()) << artifact;
     const auto kernel = device->LoadKernel(words);
     if constexpr (wide) {

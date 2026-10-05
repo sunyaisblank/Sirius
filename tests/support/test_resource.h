@@ -17,8 +17,7 @@ inline std::string ResourcePath(std::string_view relative) {
     if (const auto path = base::ResolveResourceFromRoot(root, relative)) {
         return path->string();
     }
-    throw std::runtime_error("Missing or escaping test resource: " +
-                             (root / relative).string());
+    throw std::runtime_error("Missing or escaping test resource: " + (root / relative).string());
 }
 
 }  // namespace sirius::test
