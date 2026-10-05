@@ -1445,11 +1445,12 @@ bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const Integrato
     comparison->refined_endpoint = refined;
     comparison->refined_variations = refined_coupled.variations;
     comparison->error_ratio = std::max({comparison->error_ratio, interior_error, refined_error});
-    // Limit growth by the independent dense checks as well as the embedded pair.
-    ray.step_size =
-        std::min(ray.step_size,
+    // Cap growth by the dense checks; preserve the embedded controller's shrinking.
+    ray.step_size = std::min(
+        ray.step_size,
+        std::max(previous.step_size,
                  ComputeOptimalStep(previous.step_size, static_cast<float>(comparison->error_ratio),
-                                    1.0f, config));
+                                    1.0f, config)));
     return true;
 }
 
