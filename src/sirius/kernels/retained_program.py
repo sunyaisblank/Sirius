@@ -207,7 +207,7 @@ def build():
     assert len(scientific) == 104
     return [v.i for v in scientific]
 
-def compile_parallel_program(outputs, live):
+def compile_parallel_program(outputs, live, prefix_outputs=None):
     """Schedule independent DAG nodes together, without changing any expression.
 
     A layer never reuses its inputs' registers. They become available only after
@@ -217,14 +217,31 @@ def compile_parallel_program(outputs, live):
         op, a, b, c = ops[old]
         return [] if op in (0, 1) else [a] + ([] if op in (6, 7, 8) else [b]) + ([c] if op in (10, 11) else [])
 
-    levels = {}
-    for old in sorted(live):
-        levels[old] = 1 + max((levels[d] for d in dependencies(old)), default=-1)
-    layers = [[] for _ in range(max(levels.values()) + 1)]
-    for old in sorted(live):
-        layers[levels[old]].append(old)
-    layers = [sorted(layer, key=lambda i: (ops[i][0], i))[start:start+64]
-              for layer in layers for start in range(0, len(layer), 64)]
+    phases = [live]
+    if prefix_outputs is not None:
+        prefix = set()
+        def visit(old):
+            if old in prefix:
+                return
+            assert old in live
+            prefix.add(old)
+            for dependency in dependencies(old):
+                visit(dependency)
+        for output in prefix_outputs:
+            visit(output)
+        assert prefix and prefix != live
+        phases = [prefix, live - prefix]
+
+    layers = []
+    for phase in phases:
+        levels = {}
+        for old in sorted(phase):
+            levels[old] = 1 + max((levels[d] for d in dependencies(old) if d in phase), default=-1)
+        phase_layers = [[] for _ in range(max(levels.values()) + 1)]
+        for old in sorted(phase):
+            phase_layers[levels[old]].append(old)
+        layers.extend(sorted(layer, key=lambda i: (ops[i][0], i))[start:start+64]
+                      for layer in phase_layers for start in range(0, len(layer), 64))
     levels = {old: level for level, layer in enumerate(layers) for old in layer}
     last_use = levels.copy()
     for old in sorted(live):
@@ -270,7 +287,7 @@ def compile_parallel_program(outputs, live):
             'layer_offsets': offsets}
 
 
-def compile_program(outputs, parallel=False):
+def compile_program(outputs, parallel=False, prefix_outputs=None):
     live = set()
 
     def visit(i):
@@ -287,7 +304,7 @@ def compile_program(outputs, parallel=False):
     for i in outputs:
         visit(i)
     if parallel:
-        return compile_parallel_program(outputs, live)
+        return compile_parallel_program(outputs, live, prefix_outputs)
     sequence = sorted(live)
     last_use = {i: i for i in sequence}
     for old in sequence:
@@ -409,7 +426,7 @@ def build_endpoint_program(parallel=False):
     """Metric and projected physical columns from the complete phase expansion.
 
     The endpoint kernel first consumes the metric/tangent outputs to select a
-    null root, then evaluates the same program with that retained root and its
+    null root, then resumes the program with that retained root and its
     component selector. No rounded coordinate variation is subtracted from a
     rounded connection to recover a small covariant variation.
     """
@@ -449,7 +466,7 @@ def build_endpoint_program(parallel=False):
         physical.extend(X + V)
     outputs = [v.v for line in g for v in line] + tangent + phase + physical
     assert len(outputs) == 100
-    program = compile_program([v.i for v in outputs], parallel)
+    program = compile_program([v.i for v in outputs], parallel, [v.i for v in outputs[:20]])
     # Output registers are pinned through the whole program. Their final writes
     # delimit the metric/tangent prefix needed before selecting the null root.
     last_write = {program['operations'][5*i+1]: i for i in range(program['instructions'])}

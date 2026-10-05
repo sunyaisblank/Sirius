@@ -107,7 +107,10 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint regi
 bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint registers,
                      uint required, uint lane) {
     uint needed = required == 20 ? SIRIUS_RETAINED_PREFIX : count;
-    if (needed == 0 || needed > count) return false;
+    // The generated prefix owns every metric/tangent dependency until the
+    // continuation consumes it. Projected inputs are read only in the suffix.
+    uint first = required == 20 ? 0 : SIRIUS_RETAINED_PREFIX;
+    if (needed == 0 || needed > count || first > needed) return false;
     if (lane == 0) retainedStatus = 0;
 #ifndef SIRIUS_RETAINED_PORTABLE
     GroupMemoryBarrierWithGroupSync();
@@ -119,8 +122,14 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
         uint start = inputs[layerBase + layer], end = inputs[layerBase + layer + 1];
         if (start >= needed) break;
         if (start != expected || end <= start || end > needed ||
-            end - start > SIRIUS_RETAINED_LANES)
+            end - start > SIRIUS_RETAINED_LANES || (start < first && end > first))
             RejectRetainedProgram();
+        else if (start < first) {
+            // Only validated prefix layers skip their now-unneeded barrier.
+            // A malformed layer still synchronizes and consumes rejection.
+            expected = end;
+            continue;
+        }
 #ifdef SIRIUS_RETAINED_PORTABLE
         else {
             // Layer destinations are disjoint from every input register and
@@ -140,6 +149,7 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
         expected = end;
     }
 
+    if (expected != needed) return false;
     for (uint i = 0; i < required; ++i) {
         uint index = inputs[programBase + 3 + i];
         if (index >= registers || ReadValue(index, rowBase).valid == 0) return false;
