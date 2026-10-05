@@ -31,6 +31,7 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
               core::Rk45CoupledState& coupled, core::Rk45CoupledComparison& comparison) override;
     // A submission safety error includes its observed one-row stage and host
     // submit/wait duration; it does not attribute the driver's compilation work.
+    // Sticky errors complete queued calls without further device work.
     [[nodiscard]] std::optional<base::Error> Error() const;
     struct Stats {
         std::uint64_t interval_batches = 0;
@@ -69,6 +70,7 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
     [[nodiscard]] Stats Statistics() const;
 
   private:
+    friend struct RetainedTraceExecutorTestPeer;
     struct Snapshot {
         std::array<double, 40> physical{};
         std::array<double, 4> metric{};

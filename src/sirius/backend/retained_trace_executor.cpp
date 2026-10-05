@@ -107,6 +107,7 @@ void RetainedTraceExecutor::Run() {
         bool coalescing_stopped = false;
         bool coalescing_traces_ready = false;
         bool full_batch = false;
+        bool draining_error = false;
         {
             std::unique_lock lock(mutex_);
             available_.wait(lock, [&] { return stopping_ || !requests_.empty(); });
@@ -133,12 +134,18 @@ void RetainedTraceExecutor::Run() {
                 requests_.pop_front();
             }
             full_batch = batch.size() == batch_limit;
+            // The final locked fanout completes queued requests with the sticky
+            // error; no further device work is needed to drain them.
+            draining_error = error_.has_value();
         }
         // Exclude any serialized pre-dispatcher work from this gathered window.
-        (void)compute_.TakeSubmissionFeedback();
+        if (!draining_error) (void)compute_.TakeSubmissionFeedback();
         const auto execute_started = std::chrono::steady_clock::now();
-        Execute(batch, batch_limit);
-        auto feedback = compute_.TakeSubmissionFeedback();
+        RetainedCompute::SubmissionFeedback feedback;
+        if (!draining_error) {
+            Execute(batch, batch_limit);
+            feedback = compute_.TakeSubmissionFeedback();
+        }
         bool projection_retry = false;
         if (maximum_submission_ms_ > 0 && feedback.peak_ms > maximum_submission_ms_ &&
             feedback.peak_rows > 1 && feedback.maximum_one_row_ms <= maximum_submission_ms_ &&
@@ -174,9 +181,11 @@ void RetainedTraceExecutor::Run() {
                 request.cancelled = true;
             }
         }
-        const double execute_ms = std::chrono::duration<double, std::milli>(
-                                      std::chrono::steady_clock::now() - execute_started)
-                                      .count();
+        const double execute_ms = draining_error
+                                      ? 0
+                                      : std::chrono::duration<double, std::milli>(
+                                            std::chrono::steady_clock::now() - execute_started)
+                                            .count();
         // Retain the original paired overshoot for sticky safety/soft feedback,
         // and every actual one-row overshoot from either observation window.
         const double peak = feedback.peak_ms;
@@ -212,7 +221,7 @@ void RetainedTraceExecutor::Run() {
                                     ? RetainedCompute::StageName(*feedback.maximum_one_row_stage)
                                     : "unknown",
                                 feedback.maximum_one_row_ms, maximum_submission_ms_));
-            if ((safety || peak == 0) && batch_limit > 1) {
+            if (!draining_error && (safety || peak == 0) && batch_limit > 1) {
                 safety_cap = std::min(safety_cap,
                                       peak == 0 ? 1 : std::max<std::size_t>(1, batch.size() / 2));
                 batch_limit = std::min(batch_limit, safety_cap);

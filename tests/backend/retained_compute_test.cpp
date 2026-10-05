@@ -38,6 +38,24 @@
 #include "support/retained_transport/reference_cases.h"
 #endif
 
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+namespace sirius::backend {
+struct RetainedTraceExecutorTestPeer {
+    static std::array<std::size_t, 3> WaitForQueued(RetainedTraceExecutor& executor) {
+        std::unique_lock lock(executor.mutex_);
+        executor.available_.wait(lock, [&] { return !executor.requests_.empty(); });
+        return {executor.requests_.size(), executor.queued_registered_,
+                executor.active_traces_.size()};
+    }
+    static std::array<std::size_t, 3> QueueState(RetainedTraceExecutor& executor) {
+        std::lock_guard lock(executor.mutex_);
+        return {executor.requests_.size(), executor.queued_registered_,
+                executor.active_traces_.size()};
+    }
+};
+}  // namespace sirius::backend
+#endif
+
 namespace {
 using namespace sirius::backend;
 
@@ -246,6 +264,7 @@ class TransferProbeDevice final : public ComputeDevice {
     // Optional control-test observations. Physical outputs still come from the
     // actual device; injected timing never sleeps or claims hardware duration.
     std::function<double(BufferHandle, std::uint32_t)> submission_ms;
+    std::function<void()> before_dispatch;
     std::optional<BufferHandle> capture_output;
     std::vector<std::vector<std::byte>> readbacks;
 
@@ -288,6 +307,7 @@ class TransferProbeDevice final : public ComputeDevice {
                                x,
                                y,
                                z});
+        if (before_dispatch) before_dispatch();
         if (fail_next == Failure::Dispatch) return Inject("dispatch");
         ++forwarded_dispatches;
         auto status = device_.Dispatch(kernel, buffers, x, y, z, timing);
@@ -318,6 +338,114 @@ class TransferProbeDevice final : public ComputeDevice {
     }
     ComputeDevice& device_;
 };
+
+void CheckStickyErrorDrainsQueuedRequests(ComputeDevice& device) {
+    for (const bool queued_camera : {true, false}) {
+        SCOPED_TRACE(queued_camera ? "queued camera" : "queued interval");
+        TransferProbeDevice probe(device);
+        auto created = RetainedCompute::Create(probe, 1, false);
+        ASSERT_TRUE(created) << created.error().Description();
+        auto& compute = **created;
+        RetainedTraceExecutor executor(compute, {}, 1000);
+        std::promise<void> first_dispatch, release_dispatch;
+        auto entered = first_dispatch.get_future();
+        auto release = release_dispatch.get_future();
+        probe.before_dispatch = [&] {
+            if (probe.dispatch_calls == 1) {
+                first_dispatch.set_value();
+                release.wait();
+            } else if (!queued_camera) {
+                // Bound the old implementation's unnecessary interval work:
+                // expose the extra call before forwarding any further stages.
+                probe.fail_next = TransferProbeDevice::Failure::Dispatch;
+            }
+        };
+        const double overshoot = std::nextafter(1000.0, std::numeric_limits<double>::infinity());
+        probe.submission_ms = [overshoot](BufferHandle, std::uint32_t) { return overshoot; };
+        sirius::core::CameraRay camera;
+        camera.origin(1) = 5;
+        camera.origin(2) = std::numbers::pi / 2;
+        camera.direction(1) = 1;
+        auto first = std::async(std::launch::async, [&] {
+            sirius::core::KerrSchildFamily metric(sirius::core::KerrSchildParams::Minkowski());
+            executor.BeginTrace();
+            const auto result = executor.Launch(metric, 0, camera);
+            executor.EndTrace();
+            return result.has_value();
+        });
+        entered.wait();
+        sirius::core::Lightray ray{};
+        ray.position(1) = 5;
+        ray.velocity(0) = -1;
+        ray.velocity(1) = 1;
+        ray.step_size = 1;
+        const auto original = ray;
+        sirius::core::Rk45CoupledState columns;
+        columns.length_scale = columns.frequency_scale = 1;
+        columns.tolerance = 1e-9;
+        columns.variations[0].derivative(2) = .001;
+        columns.variations[1].derivative(3) = .001;
+        columns.variations[2].displacement(2) = 1;
+        columns.variations[3].displacement(3) = 1;
+        sirius::core::IntegratorConfig config;
+        config.min_step = .01f;
+        config.max_step = 2;
+        sirius::core::Rk45CoupledComparison comparison;
+        auto second = std::async(std::launch::async, [&] {
+            sirius::core::KerrSchildFamily metric(sirius::core::KerrSchildParams::Minkowski());
+            executor.BeginTrace();
+            const bool result = queued_camera
+                                    ? executor.Launch(metric, 0, camera).has_value()
+                                    : executor.Step(ray, metric, config, columns, comparison);
+            executor.EndTrace();
+            return result;
+        });
+        // The first dispatch is held, so this observes the second request's
+        // actual queue membership before failure; elapsed time is not the proof.
+        const auto queued = RetainedTraceExecutorTestPeer::WaitForQueued(executor);
+        release_dispatch.set_value();
+        EXPECT_FALSE(first.get());
+        EXPECT_FALSE(second.get());
+        EXPECT_EQ(queued, (std::array<std::size_t, 3>{1, 1, 2}));
+        EXPECT_EQ(RetainedTraceExecutorTestPeer::QueueState(executor),
+                  (std::array<std::size_t, 3>{0, 0, 0}));
+        ASSERT_TRUE(executor.Error());
+        EXPECT_EQ(executor.Error()->detail(),
+                  "single-row submission exceeded the safety duration: "
+                  "stage=ray_camera, active_rows=1, "
+                  "submit_wait_ms=1000.0000000000001, limit_ms=1000");
+        EXPECT_EQ(probe.dispatch_calls, 1U);
+        EXPECT_EQ(probe.forwarded_dispatches, 1U);
+        EXPECT_EQ(probe.writes.size(), 1U);
+        EXPECT_EQ(probe.reads.size(), 1U);
+        ASSERT_EQ(probe.allocations.size(), 12U);
+        for (std::size_t stage = 0; stage < compute.Statistics().size(); ++stage)
+            EXPECT_EQ(compute.Statistics()[stage].submissions, stage == 5 ? 1U : 0U);
+        const auto stats = executor.Statistics();
+        EXPECT_EQ(stats.batches, 2U);
+        EXPECT_EQ(stats.batch_row_counts[1], 2U);
+        EXPECT_EQ(stats.camera_rows, queued_camera ? 2U : 1U);
+        EXPECT_EQ(stats.interval_rows, queued_camera ? 0U : 1U);
+        EXPECT_EQ(stats.accepted_intervals, 0U);
+        EXPECT_EQ(stats.rejected_intervals, queued_camera ? 0U : 1U);
+        EXPECT_EQ(stats.paired_projection_retries, 0U);
+        EXPECT_EQ(stats.safety_fallbacks, 0U);
+        EXPECT_EQ(stats.acceleration_calls, 0U);
+        if (!queued_camera) {
+            EXPECT_EQ(ray.terminated, 3);
+            EXPECT_EQ(columns.failure, sirius::core::CoupledStepFailure::InvalidState);
+            EXPECT_EQ(columns.central_stages, 0U);
+            EXPECT_EQ(columns.variation_stages, 0U);
+            for (int axis = 0; axis < 4; ++axis) {
+                EXPECT_EQ(ray.position(axis), original.position(axis));
+                EXPECT_EQ(ray.velocity(axis), original.velocity(axis));
+            }
+        }
+        ::testing::Test::RecordProperty(queued_camera ? "sticky_error_queued_camera_dispatches"
+                                                      : "sticky_error_queued_interval_dispatches",
+                                        std::to_string(probe.dispatch_calls));
+    }
+}
 
 bool Encloses(const RetainedValue& value, long double expected, long double reference_gap) {
     if (!value.IsRepresented()) return false;
@@ -1904,6 +2032,7 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
             EXPECT_EQ(guard_probe.dispatch_calls, calls);
         }
     }
+    ASSERT_NO_FATAL_FAILURE(CheckStickyErrorDrainsQueuedRequests(*device));
 
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
