@@ -894,6 +894,16 @@ std::optional<GeodesicVariations> ProjectVariations(const RetainedMetricSample& 
         std::abs(projected_covector[component].Rounded()) <=
             256 * std::numeric_limits<double>::epsilon() * denominator_scale)
         return std::nullopt;
+    // Each column uses the same geometry and central tangent. Keep the
+    // represented products once, then retain each column's accumulation order.
+    WideConnection first_kind_tangent, connection_correction;
+    for (int mu = 0; mu < 4; ++mu)
+        for (int a = 0; a < 4; ++a)
+            for (int b = 0; b < 4; ++b) {
+                first_kind_tangent[mu][a][b] = FirstKind(derivatives, a, mu, b) * unprojected(a);
+                connection_correction[mu][a][b] =
+                    connection[mu][a][b] * (Twofold(projection.tangent(a)) - unprojected(a));
+            }
     GeodesicVariations result;
     for (std::size_t column = 0; column < result.size(); ++column) {
         std::array<Twofold, 4> covector, V;
@@ -902,14 +912,13 @@ std::optional<GeodesicVariations> ProjectVariations(const RetainedMetricSample& 
             for (int a = 0; a < 4; ++a)
                 for (int b = 0; b < 4; ++b)
                     covector[mu] -=
-                        FirstKind(derivatives, a, mu, b) * unprojected(a) * phase[column].x(b);
+                        first_kind_tangent[mu][a][b] * phase[column].x(b);
         }
         for (int mu = 0; mu < 4; ++mu) {
             for (int nu = 0; nu < 4; ++nu) V[mu] += inverse(mu, nu) * covector[nu];
             for (int a = 0; a < 4; ++a)
                 for (int b = 0; b < 4; ++b)
-                    V[mu] += connection[mu][a][b] *
-                             (Twofold(projection.tangent(a)) - unprojected(a)) * phase[column].x(b);
+                    V[mu] += connection_correction[mu][a][b] * phase[column].x(b);
         }
         Twofold numerator;
         for (int mu = 0; mu < 4; ++mu)
