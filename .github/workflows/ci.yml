@@ -475,14 +475,15 @@ jobs:
             bin/**/generated/sirius/*gate*.json
             bin/**/generated/sirius/*gate*.xml
             bin/**/generated/sirius/*gate*.log
-            bin/windows-msvc/generated/sirius/windows_vulkan_preflight*.json
-            bin/windows-msvc/generated/sirius/windows_vulkan_preflight.xml
-            bin/windows-msvc/generated/sirius/windows_vulkan_preflight.log
             bin/**/Testing/Temporary/LastTest.log
             bin/**/Testing/Temporary/LastTestsFailed.log
             linux-tests.xml
             windows-tests.xml
             macos-tests.xml
+            bin/windows-msvc/generated/sirius/windows_vulkan_preflight_inventory.json
+            bin/windows-msvc/generated/sirius/windows_vulkan_preflight_identity.json
+            bin/windows-msvc/generated/sirius/windows_vulkan_preflight.xml
+            bin/windows-msvc/generated/sirius/windows_vulkan_preflight.log
           if-no-files-found: ignore
 
   macos-build:
