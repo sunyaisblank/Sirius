@@ -174,26 +174,89 @@ RetainedTriple RTMultiply(RetainedTriple a,RetainedTriple b) {
         RPUpMultiply(b.error,RTCenterUpper(a))),RPUpMultiply(a.error,b.error));
     return RTFinishAccumulation(r.hi,r.lo,r.tail,RPUpAdd(RPUpAdd(r.error,omitted),uncertainty));
 }
-RetainedTriple RTDivide(RetainedTriple a,RetainedTriple b) {
 #ifdef SIRIUS_RETAINED_PORTABLE
-    if(a.valid==0||b.valid==0) return RTInvalid();
-    RPScalar lower=RTAbsoluteLower(b);
-    if(RPScalarLessEqual(lower,RPZero())||RPScalarGreater(RPRatioUpper(RTAbsoluteUpper(a),lower),RPFromBits(0x5e000000u))) return RTInvalid();
-    if(RTExact(b,RPOne())) return a;
-    RetainedTriple q=RTConstant(RPDivideSeed(a.hi,b.hi));
-    // The first three residuals refine q; the fourth supplies its enclosure.
-    [loop] for(uint i=0;i<4;++i) {
-        RetainedTriple residual=RTSubtract(a,RTMultiply(b,q));
-        if(i==3) {
-            if(residual.valid==0) return residual;
-            return RTPack(q.hi,q.lo,q.tail,RPRatioUpper(RTAbsoluteUpper(residual),lower));
-        }
-        if(residual.valid==0||RPScalarGreater(RPRatioUpper(RPAbs(residual.hi),RPAbs(b.hi)),RPFromBits(0x5d000000u)))
+// Caller supplies an arithmetic bytecode opcode in [2,6]. Seven phases retain
+// three corrections and the final residual while sharing the integer bodies.
+RetainedTriple RTEvaluateArithmetic(RetainedTriple a,RetainedTriple b,uint op) {
+    bool direct_add=op==2||op==3;
+    bool direct_product=op==4;
+    bool square_root=op==6;
+    RetainedTriple q=RTInvalid(),correction=RTInvalid();
+    RPScalar lower=RPZero();
+    if(direct_add) {
+        if(op==3) b=RTNegate(b);
+    } else if(direct_product) {
+        q=b;
+    } else if(square_root) {
+        if(a.valid==0) return a;
+        if(RPScalarEqual(a.hi,RPZero())&&RPScalarEqual(a.lo,RPZero())&&
+           RPScalarEqual(a.tail,RPZero())&&RPScalarEqual(a.error,RPZero()))
+            return RTConstant(RPZero());
+        if(RPScalarLessEqual(a.hi,RPZero())||RPScalarLessEqual(RTAbsoluteLower(a),RPZero()))
             return RTInvalid();
-        q=RTCenter(RTAdd(q,RTConstant(RPDivideSeed(residual.hi,b.hi))));
-        if(q.valid==0) return q;
+        q=RTConstant(RPSqrtSeed(a.hi));
+    } else {
+        if(a.valid==0||b.valid==0) return RTInvalid();
+        lower=RTAbsoluteLower(b);
+        if(RPScalarLessEqual(lower,RPZero())||
+           RPScalarGreater(RPRatioUpper(RTAbsoluteUpper(a),lower),RPFromBits(0x5e000000u)))
+            return RTInvalid();
+        if(RTExact(b,RPOne())) return a;
+        q=RTConstant(RPDivideSeed(a.hi,b.hi));
+    }
+    [loop] for(uint phase=0;phase<7;++phase) {
+        bool correcting=(phase&1u)!=0u;
+        RetainedTriple lhs=a,rhs=RTInvalid();
+        if(correcting) {
+            lhs=q;rhs=correction;
+        } else if(direct_add) {
+            rhs=b;
+        } else {
+            if(square_root) {
+                if(phase==6) {
+                    lower=RTAbsoluteLower(q);
+                    if(q.valid==0||RPScalarLessEqual(q.hi,RPZero())||RPScalarLessEqual(lower,RPZero()))
+                        return RTInvalid();
+                } else if(q.valid==0||RPScalarLessEqual(q.hi,RPZero())||!RPBounded(q.hi,0x5d000000u))
+                    return RTInvalid();
+            }
+            RetainedTriple factor=RTInvalid();
+            if(square_root) factor=q;
+            else if(direct_product) factor=a;
+            else factor=b;
+            RetainedTriple product=RTMultiply(factor,q);
+            if(direct_product) return product;
+            rhs=RTNegate(product);
+        }
+        RetainedTriple result=RTAdd(lhs,rhs);
+        if(direct_add) return result;
+        if(correcting) {
+            q=RTCenter(result);
+            if(!square_root&&q.valid==0) return q;
+        } else {
+            if(phase==6) {
+                if(result.valid==0) return result;
+                return RTPack(q.hi,q.lo,q.tail,RPRatioUpper(RTAbsoluteUpper(result),lower));
+            }
+            RPScalar denominator=RPZero();
+            // The original square-root sequence computes twice before refusal.
+            if(square_root) denominator=OrderedAdd32(q.hi,q.hi);
+            else denominator=b.hi;
+            RPScalar magnitude=denominator;
+            if(!square_root) magnitude=RPAbs(denominator);
+            if(result.valid==0||
+               RPScalarGreater(RPRatioUpper(RPAbs(result.hi),magnitude),RPFromBits(0x5d000000u)))
+                return RTInvalid();
+            correction=RTConstant(RPDivideSeed(result.hi,denominator));
+        }
     }
     return RTInvalid();
+}
+#endif
+
+RetainedTriple RTDivide(RetainedTriple a,RetainedTriple b) {
+#ifdef SIRIUS_RETAINED_PORTABLE
+    return RTEvaluateArithmetic(a,b,5);
 #else
     if(a.valid==0||b.valid==0) return RTInvalid();
     RPScalar lower=RTAbsoluteLower(b);
@@ -214,28 +277,7 @@ RetainedTriple RTDivide(RetainedTriple a,RetainedTriple b) {
 }
 RetainedTriple RTSqrt(RetainedTriple a) {
 #ifdef SIRIUS_RETAINED_PORTABLE
-    if(a.valid==0) return a;
-    if(RPScalarEqual(a.hi,RPZero())&&RPScalarEqual(a.lo,RPZero())&&RPScalarEqual(a.tail,RPZero())&&RPScalarEqual(a.error,RPZero())) return RTConstant(RPZero());
-    if(RPScalarLessEqual(a.hi,RPZero())||RPScalarLessEqual(RTAbsoluteLower(a),RPZero())) return RTInvalid();
-    RetainedTriple q=RTConstant(RPSqrtSeed(a.hi));
-    [loop] for(uint i=0;i<4;++i) {
-        RPScalar lower=RPZero();
-        if(i==3) {
-            lower=RTAbsoluteLower(q);
-            if(q.valid==0||RPScalarLessEqual(q.hi,RPZero())||RPScalarLessEqual(lower,RPZero())) return RTInvalid();
-        } else if(q.valid==0||RPScalarLessEqual(q.hi,RPZero())||!RPBounded(q.hi,0x5d000000u)) return RTInvalid();
-        RetainedTriple residual=RTSubtract(a,RTMultiply(q,q));
-        if(i==3) {
-            if(residual.valid==0) return residual;
-            return RTPack(q.hi,q.lo,q.tail,RPRatioUpper(RTAbsoluteUpper(residual),lower));
-        }
-        // Keep twice before the residual-validity check, as in the original.
-        RPScalar twice=OrderedAdd32(q.hi,q.hi);
-        if(residual.valid==0||RPScalarGreater(RPRatioUpper(RPAbs(residual.hi),twice),RPFromBits(0x5d000000u)))
-            return RTInvalid();
-        q=RTCenter(RTAdd(q,RTConstant(RPDivideSeed(residual.hi,twice))));
-    }
-    return RTInvalid();
+    return RTEvaluateArithmetic(a,RTInvalid(),6);
 #else
     if(a.valid==0) return a;
     if(RPScalarEqual(a.hi,RPZero())&&RPScalarEqual(a.lo,RPZero())&&RPScalarEqual(a.tail,RPZero())&&RPScalarEqual(a.error,RPZero())) return RTConstant(RPZero());
