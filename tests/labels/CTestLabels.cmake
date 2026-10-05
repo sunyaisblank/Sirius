@@ -902,6 +902,7 @@ set_tests_properties(
     RK45IntegratorTests.RejectionMaySelectTheMinimumStepBeforeTerminating
     RK45IntegratorTests.DoublePrecisionStagesMatchAnAnalyticRindlerNullRay
     RK45IntegratorTests.OutgoingChartPreservesMetricKillingQuantitiesAndInverseMap
+    RK45IntegratorTests.AcceptedEndpointsReuseOwnedGeometryAndPreserveAccelerationWords
     RK45IntegratorTests.NullDefectAboveTheDeclaredBoundIsRejectedBeforeProjection
     RK45IntegratorTests.NullProjectionPreservesTheIncomingLightConeBranch
     RK45IntegratorTests.NoNaNInResults

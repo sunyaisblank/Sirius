@@ -8,12 +8,15 @@
 #include "sirius/core/metrics/kerr_schild_family.h"  // Unified Kerr-Schild family
 #include "sirius/core/metrics/metric.h"
 #include "sirius/core/metrics/outgoing_kerr_schild.h"
+#include "sirius/core/observer_frame.h"
 #include "sirius/core/tensor.h"
 
 #include <gtest/gtest.h>
 
 #include <algorithm>
+#include <bit>
 #include <cmath>
+#include <cstdint>
 #include <limits>
 #include <vector>
 
@@ -53,6 +56,50 @@ class HalfSpaceMinkowskiMetric final : public IMetric {
 
   private:
     Config config;
+};
+
+// Count the actual native queries, without changing the geometry supplied to
+// the production integrator. A retained refusal still uses its native fallback.
+class EndpointQueryMetric final : public IMetric {
+  public:
+    explicit EndpointQueryMetric(IMetric& source) : source_(source) {}
+
+    void Evaluate(const Vec4& position, Metric4d& metric,
+                  Tensor<Dual<double>, 4, 4, 4>& derivative) override {
+        ++evaluations;
+        source_.Evaluate(position, metric, derivative);
+    }
+    bool InverseMetric(const Vec4& position, Metric4d& inverse) const override {
+        ++inverses;
+        return source_.InverseMetric(position, inverse);
+    }
+    bool EvaluateRetained(const Vec4& position, RetainedMetricSample& sample) const override {
+        const bool represented = source_.EvaluateRetained(position, sample);
+        if (represented)
+            ++retained_samples;
+        else
+            ++fallback_samples;
+        return represented;
+    }
+    bool EvaluateHessian(const Vec4& position, MetricHessian& hessian) const override {
+        return source_.EvaluateHessian(position, hessian);
+    }
+    bool IsValidEvent(const Vec4& position) const override {
+        return source_.IsValidEvent(position);
+    }
+    const Config& GetParameters() const override { return source_.GetParameters(); }
+    void SetParameter(const std::string& key, double value) override {
+        source_.SetParameter(key, value);
+    }
+    const char* GetName() const override { return source_.GetName(); }
+
+    int evaluations = 0;
+    mutable int inverses = 0;
+    mutable int retained_samples = 0;
+    mutable int fallback_samples = 0;
+
+  private:
+    IMetric& source_;
 };
 
 // =============================================================================
@@ -568,6 +615,95 @@ TEST_F(RK45IntegratorTests, OutgoingChartPreservesMetricKillingQuantitiesAndInve
         Vec4 horizon;
         horizon(1) = std::hypot(incoming.OuterHorizonRadius(), parameters_at_event.a);
         EXPECT_FALSE(outgoing.ToIngoing(horizon).has_value());
+    }
+}
+
+TEST_F(RK45IntegratorTests, AcceptedEndpointsReuseOwnedGeometryAndPreserveAccelerationWords) {
+    // Include outgoing reflection's zero derivatives and both native fallback
+    // inverse routes, without substituting a copied acceleration algorithm.
+    KerrSchildFamily kerr(KerrSchildParams::Kerr(1.0, 0.998));
+    OutgoingKerrSchild outgoing(kerr);
+    OutgoingKerrSchild outgoing_flat(minkowski);
+    HalfSpaceMinkowskiMetric generic_flat;
+    struct Witness {
+        IMetric* source;
+        bool coupled;
+        bool retained;
+    };
+    const std::array<Witness, 7> witnesses{{{&kerr, false, true},
+                                            {&outgoing, false, true},
+                                            {&kerr, true, true},
+                                            {&outgoing, true, true},
+                                            {&minkowski, false, false},
+                                            {&outgoing_flat, false, false},
+                                            {&generic_flat, false, false}}};
+    config.abs_tolerance = 5e-6f;
+    config.rel_tolerance = 5e-6f;
+    config.initial_step = .02f;
+    config.min_step = 1e-5f;
+    config.max_step = .1f;
+
+    for (const auto& witness : witnesses) {
+        SCOPED_TRACE(witness.source->GetName());
+        SCOPED_TRACE(witness.coupled ? "coupled" : "central");
+        Vec4 position;
+        position(1) = 8.0;
+        position(3) = 2.0;
+        Metric4d metric, inverse;
+        Tensor<Dual<double>, 4, 4, 4> derivative;
+        witness.source->Evaluate(position, metric, derivative);
+        if (!witness.source->InverseMetric(position, inverse)) inverse = TensorOps::Inverse(metric);
+        std::array<Vec4, 3> seeds;
+        for (int axis = 0; axis < 3; ++axis) seeds[axis](axis + 1) = 1.0;
+        const auto frame = relativity::EulerianObserverFrame(metric, inverse, seeds);
+        ASSERT_TRUE(frame.has_value());
+        const std::array<double, 3> direction{-0.9, 0.3, std::sqrt(0.1)};
+        const auto tangent = relativity::PastDirectedCameraRay(*frame, direction);
+        const auto screen = relativity::ObserverScreenBasis(*frame, direction);
+        ASSERT_TRUE(tangent.has_value());
+        ASSERT_TRUE(screen.has_value());
+        Lightray ray = createTestRay(position, *tangent, witness.source);
+        Rk45CoupledState coupled;
+        coupled.length_scale = 1.0;
+        coupled.frequency_scale = 1.0;
+        coupled.tolerance = 1e-4 / (4.0 * 20000);
+        coupled.stationary = true;
+        for (int column = 0; column < 2; ++column) {
+            coupled.variations[column].derivative = (*screen)[column];
+            coupled.variations[column + 2].displacement = (*screen)[column];
+        }
+
+        EndpointQueryMetric counted(*witness.source);
+        int accepted = 0;
+        for (int attempts = 0; attempts < 40 && accepted < 3 && !ray.terminated; ++attempts) {
+            Rk45CoupledComparison comparison;
+            if (!Geodesic::IntegrateStepRk45(ray, &counted, config,
+                                             witness.coupled ? &coupled : nullptr,
+                                             witness.coupled ? &comparison : nullptr))
+                continue;
+            ++accepted;
+            const Vec4 expected =
+                Geodesic::CalculateAcceleration(ray.velocity, ray.position, witness.source);
+            for (int mu = 0; mu < 4; ++mu) {
+                ASSERT_TRUE(std::isfinite(expected(mu)));
+                ASSERT_TRUE(std::isfinite(ray.acceleration(mu)));
+                EXPECT_EQ(std::bit_cast<std::uint64_t>(ray.acceleration(mu)),
+                          std::bit_cast<std::uint64_t>(expected(mu)));
+            }
+        }
+        ASSERT_EQ(accepted, 3);
+        EXPECT_EQ(ray.terminated, 0);
+        // Every refused retained sample accounts for one Evaluate+InverseAt.
+        // The old endpoint calculation adds another pair after those samples.
+        EXPECT_EQ(counted.evaluations, counted.fallback_samples);
+        EXPECT_EQ(counted.inverses, counted.fallback_samples);
+        if (witness.retained) {
+            EXPECT_GT(counted.retained_samples, 0);
+            EXPECT_EQ(counted.fallback_samples, 0);
+        } else {
+            EXPECT_EQ(counted.retained_samples, 0);
+            EXPECT_GT(counted.fallback_samples, 0);
+        }
     }
 }
 

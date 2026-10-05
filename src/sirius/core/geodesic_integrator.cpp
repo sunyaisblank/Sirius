@@ -479,6 +479,21 @@ Metric4d RoundedMetric(const RetainedMetricSample& sample) {
     return result;
 }
 
+// Preserve the existing binary64 contraction and its operation order. The
+// sample belongs to this candidate's unchanged final position, and velocity
+// is the same post-projection tangent used by CalculateAcceleration.
+inline Vec4 EndpointAcceleration(const Vec4& velocity, const RetainedMetricSample& geometry) {
+    Metric4d inverse;
+    Tensor<Dual<double>, 4, 4, 4> derivative;
+    for (int mu = 0; mu < 4; ++mu)
+        for (int nu = 0; nu < 4; ++nu) {
+            inverse(mu, nu) = geometry.inverse(mu, nu).Rounded();
+            for (int axis = 0; axis < 4; ++axis)
+                derivative(axis, mu, nu) = geometry.derivative(axis, mu, nu).Rounded();
+        }
+    return TensorOps::GeodesicAccelerationDirect(velocity, inverse, derivative);
+}
+
 using WideConnection = std::array<std::array<std::array<Twofold, 4>, 4>, 4>;
 static WideConnection WideChristoffel(const Tensor<Twofold, 4, 4>& inverse,
                                       const Tensor<Twofold, 4, 4, 4>& dg) {
@@ -1303,7 +1318,7 @@ static bool IntegrateStepRk45Candidate(Lightray& ray, IMetric* metric,
     // the candidate state.
     ray.position = new_position;
     ray.velocity = new_velocity;
-    ray.acceleration = Geodesic::CalculateAcceleration(new_velocity, new_position, metric);
+    ray.acceleration = EndpointAcceleration(new_velocity, geometries[6]);
     ray.proper_time += h;
     ray.coordinate_time += static_cast<float>(h * std::abs(new_velocity(0)));
     ray.step_size = Geodesic::ComputeOptimalStep(h, error_norm, 1.0f, config);
