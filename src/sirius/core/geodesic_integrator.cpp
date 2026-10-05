@@ -669,14 +669,30 @@ bool EvaluateVariationStage(IMetric& metric, const Vec4& position, const WideVec
     // for each film/pupil direction does not add an independent error estimate.
     Twofold first_contraction[4][4]{};
     Twofold second_contraction[4][4]{};
-    for (int axis = 0; axis < 4; ++axis)
-        for (int a = 0; a < 4; ++a)
-            for (int b = 0; b < 4; ++b) {
-                first_contraction[axis][a] += dg(axis, a, b) * tangent(b);
-                for (int mu = 0; mu < 4; ++mu)
-                    second_contraction[mu][axis] +=
-                        Twofold(second[axis][mu][a][b]) * 0.5 * tangent(a) * tangent(b);
-            }
+    // Zero geometry contributes no Jacobian blocks. Retain the metric/Hessian
+    // evaluation and all column arithmetic, including their finite checks.
+    const bool zero_geometry = [&] {
+        for (const auto& axis : dg.data)
+            for (const auto& row : axis)
+                for (const auto& value : row)
+                    if (value.hi != 0.0 || value.lo != 0.0) return false;
+        for (const auto& axis : second)
+            for (const auto& derivative : axis)
+                for (const auto& row : derivative)
+                    for (double value : row)
+                        if (value != 0.0) return false;
+        return true;
+    }();
+    if (!zero_geometry) {
+        for (int axis = 0; axis < 4; ++axis)
+            for (int a = 0; a < 4; ++a)
+                for (int b = 0; b < 4; ++b) {
+                    first_contraction[axis][a] += dg(axis, a, b) * tangent(b);
+                    for (int mu = 0; mu < 4; ++mu)
+                        second_contraction[mu][axis] +=
+                            Twofold(second[axis][mu][a][b]) * 0.5 * tangent(a) * tangent(b);
+                }
+    }
     for (std::size_t column = 0; column < columns.size(); ++column) {
         WideVector covector = columns[column].p;
         for (int a = 0; a < 4; ++a)
