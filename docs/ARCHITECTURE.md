@@ -188,7 +188,10 @@ central phase and all four physical film/pupil derivative columns share each
 of seven stages. Three binary32 terms retain transport state; the camera uses
 two terms. An explicit arithmetic radius accompanies each component. Both
 `fp32` options select this path; `fp64` uses the same retained representation
-with exact binary64 products and an independently rounded binary32 high part.
+with exact two-word integer products and independently rounded binary32 high
+and residual parts. This avoids assuming 53-bit accuracy from Vulkan's Float64
+and rounding-control flags. The existing FP64 capability refusal remains;
+legacy metrics still use binary64 arithmetic on this rung.
 Devices must expose the required subnormal and rounding controls. Arithmetic
 radii bound arithmetic operations, not global ODE truncation error. Embedded
 and independent-refinement comparisons of the complete expansion centers own

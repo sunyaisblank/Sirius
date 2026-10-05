@@ -1,8 +1,10 @@
 // Scalar words retain the same storage ABI in both arithmetic implementations.
 // Integer arithmetic establishes RTE and gradual underflow independently of
 // native float-control properties. Native arithmetic keeps its explicit order.
-#ifdef SIRIUS_RETAINED_PORTABLE
+#if defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_FP64)
 #include "portable_binary32.h"
+#endif
+#ifdef SIRIUS_RETAINED_PORTABLE
 typedef uint RPScalar;
 RPScalar RPFromBits(uint bits) { return bits; }
 uint RPBits(RPScalar value) { return value; }

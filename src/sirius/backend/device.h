@@ -71,7 +71,8 @@ struct DeviceInfo {
 }
 
 // The factory and automatic backend selection share this precision contract.
-// Keep the advertised binary64 precision rung's support/refusal boundary.
+// Keep the existing FP64 rung's conservative support/refusal boundary even
+// though retained exact products no longer assume native binary64 accuracy.
 [[nodiscard]] inline std::optional<std::string_view> RetainedArithmeticIssue(
     const DeviceInfo& device, bool fp64_products = false) {
 #ifndef SIRIUS_HAS_RETAINED_COMPUTE

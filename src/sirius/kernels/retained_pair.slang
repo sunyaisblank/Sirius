@@ -21,25 +21,13 @@ void Split32(RPScalar a,out RPScalar hi,out RPScalar lo){
  RPScalar c=OrderedMultiply32(RPFromBits(0x45800800u),a);hi=OrderedSubtract32(c,OrderedSubtract32(c,a));lo=OrderedSubtract32(a,hi);
 }
 void RetainedProduct32(RPScalar a,RPScalar b,out RPScalar hi,out RPScalar lo){
-#if defined(SIRIUS_RETAINED_PORTABLE)
- // The exact bounded integer product/residual avoids emulating Dekker's
- // repeated scalar operations. Both binary32 projections satisfy the same
- // five-minimum-subnormal enclosure used by the native product transforms.
+#if defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_FP64)
+ // Exact two-word products establish the high/residual split independently
+ // of native binary64 accuracy. Vulkan Float64/RTE64 alone does not promise
+ // 53-bit arithmetic. Both callers bound |a|,|b| <= 2^60 before this owner.
  PB32Product product=PB32ProductResidual(RPBits(a),RPBits(b));
  hi=RPFromBits(product.valid!=0u?product.high:0x7f800000u);
  lo=RPFromBits(product.valid!=0u?product.low:0x7f800000u);
-#elif defined(SIRIUS_RETAINED_FP64)
- // A binary32 product has at most 48 significant bits and is normal in
- // binary64 even for two binary32 subnormals. Keep its rounded high part
- // and exact residual separately; the caller bounds binary32 underflow.
- double da=double(a),db=double(b);
- double product=spirv_asm{OpFMul $$double %v $da $db;OpDecorate %v NoContraction;OpCopyObject $$double result %v;};
- // Establish the high part through the ordered binary32 operation itself.
- // A native wide-to-narrow conversion did not preserve this residual split
- // in the complete Radeon/Dozen camera program.
- hi=OrderedMultiply32(a,b);double dh=double(hi);
- double residual=spirv_asm{OpFSub $$double %v $product $dh;OpDecorate %v NoContraction;OpCopyObject $$double result %v;};
- lo=RPScalar(residual);
 #else
  RPScalar ah,al,bh,bl;Split32(a,ah,al);Split32(b,bh,bl);hi=OrderedMultiply32(a,b);
  RPScalar e1=OrderedSubtract32(hi,OrderedMultiply32(ah,bh));

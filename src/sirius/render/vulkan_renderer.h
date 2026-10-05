@@ -34,7 +34,7 @@ class DisplayBuffer;
 enum class PrecisionRung {
     Fp32,      // Retained binary32 Kerr-family transport; scalar legacy metrics.
     Fp32Comp,  // Same retained Kerr-family path; compensated legacy metrics.
-    Fp64,      // Retained Kerr-family transport with exact binary64 products;
+    Fp64,      // Retained Kerr-family transport with exact two-word products;
                // binary64 legacy metrics. Requires shaderFloat64.
 };
 

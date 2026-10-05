@@ -69,7 +69,7 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
         data = destination.read_bytes()
         assembly.unlink()
         return struct.unpack("<" + str(len(data) // 4) + "I", data)
-    if ("OpCapability Float64" in text) != fp64 or "OpTypeInt 64" in text or " Fma " in text:
+    if "OpCapability Float64" in text or "OpTypeFloat 64" in text or "OpTypeInt 64" in text or " Fma " in text:
         raise ValueError("retained stage introduced wide arithmetic or contraction")
     operations = re.findall(r"(%\S+) = OpF(?:Add|Sub|Mul) ", text)
     decorated = set(re.findall(r"OpDecorate (%\S+) NoContraction", text))
@@ -83,8 +83,7 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     local_size = re.search(r"^.*OpExecutionMode " + re.escape(entry) + r" LocalSize.*$",
                            text, re.M)[0]
     text = text.replace(local_size, local_size + "\n               OpExecutionMode " +
-                        entry + " RoundingModeRTE 32" +
-                        ("\n               OpExecutionMode " + entry + " RoundingModeRTE 64" if fp64 else ""), 1)
+                        entry + " RoundingModeRTE 32", 1)
     assembly.write_text(text)
     subprocess.run([assembler, "--target-env", "spv1.5", str(assembly), "-o", str(destination)],
                    check=True)

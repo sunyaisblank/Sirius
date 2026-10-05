@@ -146,13 +146,14 @@ struct KernelScene {
 }
 
 // Selects the precision-ladder rung (docs/ARCHITECTURE.md section 6).
-// SIRIUS_PRECISION=fp64 selects the double-precision trace kernel
+// For legacy metrics, SIRIUS_PRECISION=fp64 selects the double-precision trace kernel
 // (trace_fp64.spv); it requires the device to report shaderFloat64 and
 // declines loudly otherwise, never silently running fp32 (docs/STYLE.md
 // section 4). fp32-comp selects compensated legacy accumulation; retained
-// metric transport shares the expanded binary32 route with fp32. Both retained
-// modes additionally require the factory's arithmetic controls. Unset keeps
-// the fp32 default. Unknown requests are configuration errors.
+// metric transport shares the expanded binary32 route with fp32. Retained
+// FP64 transport uses exact two-word products; all retained modes require the
+// factory's arithmetic controls. Unset keeps the fp32 default. Unknown requests
+// are configuration errors.
 [[nodiscard]] Expected<PrecisionRung> SelectPrecisionRung(bool device_supports_fp64) {
     auto requested = ResolveVulkanPrecisionRequest();
     if (!requested) return std::unexpected(requested.error());
