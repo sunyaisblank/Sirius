@@ -164,7 +164,8 @@ class Detector {
             probes_.reserve(policy_.maximum_probes);
             probe_slots_.assign(std::bit_ceil(2 * policy_.maximum_probes), kEmptyProbe);
             roots_.reserve(policy_.maximum_candidate_visits);
-            statistics_.reserved_cache_bytes = probes_.capacity() * sizeof(CachedProbe) +
+            statistics_.reserved_cache_bytes = sizeof(prefetched_) +
+                                               probes_.capacity() * sizeof(CachedProbe) +
                                                roots_.capacity() * sizeof(ImageRoot) +
                                                probe_slots_.capacity() * sizeof(std::size_t);
             CheckCancellation();
@@ -231,7 +232,14 @@ class Detector {
         ++statistics_.probe_requests;
         const auto slot = ProbeSlot(z);
         if (probe_slots_[slot] != kEmptyProbe) return probe_slots_[slot];
-        if (probes_.size() == policy_.maximum_probes) Fail(PointDetectorFailure::WorkLimit);
+        for (std::size_t i = 0; i < prefetched_count_; ++i)
+            if (prefetched_[i].z == z) {
+                auto value = std::move(prefetched_[i].value);
+                prefetched_[i] = std::move(prefetched_[--prefetched_count_]);
+                if (!value) Fail(value.error());
+                return StoreProbe(z, *value, slot);
+            }
+        if (statistics_.probes == policy_.maximum_probes) Fail(PointDetectorFailure::WorkLimit);
         auto value = sampler_(z);
         ++statistics_.probes;
         ++statistics_.probe_batches;
@@ -267,7 +275,8 @@ class Detector {
             if (found == end) missing[count++] = coordinates[i];
         }
         if (count == 0) return indices;
-        if (count > policy_.maximum_probes - probes_.size()) Fail(PointDetectorFailure::WorkLimit);
+        if (count > policy_.maximum_probes - statistics_.probes)
+            Fail(PointDetectorFailure::WorkLimit);
         auto values = sample_batch_(std::span(missing).first(count));
         statistics_.probes += count;
         ++statistics_.probe_batches;
@@ -290,6 +299,68 @@ class Detector {
         return indices;
     }
 
+    std::optional<std::size_t> ReusableImage(std::uint32_t star, const Cell& cell) const {
+        for (std::size_t i = 0; i < roots_.size(); ++i)
+            if (roots_[i].star == star && cell.Contains(roots_[i].z, roots_[i].uncertainty))
+                return i;
+        return std::nullopt;
+    }
+    void PrefetchImageProbes(std::span<const std::uint32_t> stars, const Cell& cell,
+                             std::size_t seed, double margin) {
+        if (!sample_batch_ || stars.size() < 2) return;
+        // Leave room for every possible remaining Newton/backtracking request
+        // in this cohort. Division avoids overflow for an arbitrary step limit.
+        const auto room = (policy_.maximum_probes - statistics_.probes) / stars.size();
+        if (room == 0 || policy_.maximum_newton_steps > (room - 1) / 12 ||
+            stars.size() > policy_.maximum_candidate_visits - roots_.size())
+            return;
+        for (std::size_t i = 0; i < stars.size(); ++i)
+            if (std::find(stars.begin(), stars.begin() + i, stars[i]) != stars.begin() + i) return;
+        const auto& initial = probes_[seed];
+        if (!initial.value.visible) return;
+        std::array<Coordinate, kPointDetectorProbeBatchSize> coordinates{};
+        std::size_t count = 0;
+        for (auto star : stars) {
+            if (ReusableImage(star, cell)) continue;
+            const auto& entry = catalogue_.Stars()[star];
+            const auto residual =
+                SkyOffset(initial.value.direction,
+                          Direction{entry.direction_x, entry.direction_y, entry.direction_z});
+            const auto delta =
+                residual ? Solve(initial.value.source_derivative, *residual) : std::nullopt;
+            if (!delta) continue;
+            const Coordinate next{initial.z[0] + (*delta)[0], initial.z[1] + (*delta)[1]};
+            // In a regular cell, both corrected-image and full-weight Newton
+            // queries must pass this same bound before any physical sampling.
+            if (!cell.Contains(next, margin) || next == initial.z ||
+                probe_slots_[ProbeSlot(next)] != kEmptyProbe ||
+                std::find(coordinates.begin(), coordinates.begin() + count, next) !=
+                    coordinates.begin() + count)
+                continue;
+            coordinates[count++] = next;
+        }
+        if (count < 2) return;
+        CheckCancellation();
+        auto values = sample_batch_(std::span(coordinates).first(count));
+        statistics_.probes += count;
+        ++statistics_.probe_batches;
+        statistics_.maximum_probe_batch = std::max(statistics_.maximum_probe_batch, count);
+        for (const auto& value : values)
+            if (value) {
+                statistics_.inner_attempts += value->inner_attempts;
+                statistics_.tail_attempts += value->tail_attempts;
+            }
+        CheckCancellation();
+        const bool shape_valid = values.size() == count;
+        for (std::size_t i = 0; i < count; ++i)
+            prefetched_[prefetched_count_++] = {
+                coordinates[i], shape_valid ? std::move(values[i])
+                                            : std::unexpected(PointDetectorFailure::InvalidInput)};
+        // Raw answers enter the committed cache only when ordinary Probe
+        // consumes them, preserving root/RGB order and deferred row errors.
+        // A shared device/queue failure may still decline the entire cohort;
+        // the enclosing detector publishes no partial radiance on any failure.
+    }
     std::optional<std::size_t> FindImage(std::uint32_t star, const Cell& cell, std::size_t seed,
                                          bool regular, double margin, bool& unresolved) {
         const auto& entry = catalogue_.Stars()[star];
@@ -297,9 +368,7 @@ class Detector {
         // A regular validated cell has a single local branch. Reuse its existing
         // original-coordinate root at a shared edge; never merge by star ID.
         if (regular) {
-            for (std::size_t i = 0; i < roots_.size(); ++i)
-                if (roots_[i].star == star && cell.Contains(roots_[i].z, roots_[i].uncertainty))
-                    return i;
+            if (const auto reused = ReusableImage(star, cell)) return reused;
         }
         auto index = seed;
         Coordinate z = probes_[index].z;
@@ -504,11 +573,85 @@ class Detector {
         bool unresolved = false;
         bool has_candidate = false;
         const auto& n = anchor.value.direction;
+        const double image_margin = 2 * residual_bound + policy_.root_error;
+        const auto accumulate = [&](std::uint32_t star) {
+            const auto image = FindImage(star, cell, *seed, true, image_margin, unresolved);
+            if (!image) return true;
+            const auto& root = roots_[*image];
+            const auto& point = probes_[root.probe].value;
+            const auto response = core::MakeRestrictedAffinePointResponse(
+                point.source_derivative, cell.lower, cell.upper, policy_.geometry_error);
+            if (!response) {
+                unresolved = true;
+                return true;
+            }
+            const auto density = response->DensityAtOriginalRoot(root.z);
+            if (!density) Fail(PointDetectorFailure::Arithmetic);
+            if (*density == 0) return true;
+            const auto& entry = catalogue_.Stars()[star];
+            const auto rgb = core::spectral::TransferPointSourceBand(
+                entry.temperature_K, point.camera_over_source_frequency,
+                static_cast<double>(entry.Intensity()) * brightness_, *density);
+            if (!rgb) Fail(PointDetectorFailure::Arithmetic);
+            const auto& previous = probes_[root.previous_probe];
+            const double correction =
+                std::hypot(previous.z[0] - root.z[0], previous.z[1] - root.z[1]);
+            Rgb prior_rgb{};
+            if (correction > 0) {
+                const auto prior_response = core::MakeRestrictedAffinePointResponse(
+                    previous.value.source_derivative, cell.lower, cell.upper,
+                    policy_.geometry_error);
+                if (!prior_response) {
+                    unresolved = true;
+                    return true;
+                }
+                const auto prior_density = prior_response->DensityAtOriginalRoot(root.z);
+                if (!prior_density) Fail(PointDetectorFailure::Arithmetic);
+                const auto transferred = core::spectral::TransferPointSourceBand(
+                    entry.temperature_K, previous.value.camera_over_source_frequency,
+                    static_cast<double>(entry.Intensity()) * brightness_, *prior_density);
+                if (!transferred) Fail(PointDetectorFailure::Arithmetic);
+                for (int channel = 0; channel < 3; ++channel)
+                    prior_rgb[channel] = (*transferred)[channel] * previous.value.transmission;
+            }
+            result.images.push_back(*image);
+            for (int channel = 0; channel < 3; ++channel) {
+                const double contribution = (*rgb)[channel] * point.transmission;
+                result.rgb[channel] += contribution;
+                // Estimate root-location, local transfer and represented
+                // response errors separately from level differences.
+                const double smooth_error = correction > 0
+                                                ? 2 * std::abs(contribution - prior_rgb[channel]) *
+                                                      root.uncertainty / correction
+                                                : 0;
+                const double weight_error =
+                    std::expm1(4 * root.uncertainty + .5 * root.uncertainty * root.uncertainty);
+                result.error[channel] +=
+                    smooth_error +
+                    contribution * (weight_error + response->query.arithmetic_area_bound +
+                                    128 * std::numeric_limits<double>::epsilon());
+                if (!std::isfinite(result.rgb[channel]) || !std::isfinite(result.error[channel]))
+                    Fail(PointDetectorFailure::Arithmetic);
+            }
+            return true;
+        };
+        std::array<std::uint32_t, kPointDetectorProbeBatchSize> pending{};
+        std::size_t pending_count = 0;
+        const auto flush = [&] {
+            PrefetchImageProbes(std::span(pending).first(pending_count), cell, *seed, image_margin);
+            for (std::size_t i = 0; i < pending_count; ++i) (void)accumulate(pending[i]);
+            // Completed speculative work stays charged if a query was cached
+            // by an earlier star. No future coordinate is predicted here.
+            prefetched_count_ = 0;
+            pending_count = 0;
+        };
         catalogue_.ForEachCandidateWhile(
             static_cast<float>(n[0]), static_cast<float>(n[1]), static_cast<float>(n[2]),
             query_sigma, [&](std::uint32_t star) {
-                if (++statistics_.candidate_visits > policy_.maximum_candidate_visits)
+                if (++statistics_.candidate_visits > policy_.maximum_candidate_visits) {
+                    flush();
                     Fail(PointDetectorFailure::WorkLimit);
+                }
                 CheckCancellation();
                 const auto& candidate = catalogue_.Stars()[star];
                 const auto separation = core::relativity::MeasureCelestialSeparation(
@@ -535,68 +678,12 @@ class Detector {
                 // An irregular cell only needs an existence witness before
                 // subdivision; further catalogue visits cannot change its estimate.
                 if (!result.regular) return false;
-                const auto image = FindImage(star, cell, *seed, true,
-                                             2 * residual_bound + policy_.root_error, unresolved);
-                if (!image) return true;
-                const auto& root = roots_[*image];
-                const auto& point = probes_[root.probe].value;
-                const auto response = core::MakeRestrictedAffinePointResponse(
-                    point.source_derivative, cell.lower, cell.upper, policy_.geometry_error);
-                if (!response) {
-                    unresolved = true;
-                    return true;
-                }
-                const auto density = response->DensityAtOriginalRoot(root.z);
-                if (!density) Fail(PointDetectorFailure::Arithmetic);
-                if (*density == 0) return true;
-                const auto& entry = catalogue_.Stars()[star];
-                const auto rgb = core::spectral::TransferPointSourceBand(
-                    entry.temperature_K, point.camera_over_source_frequency,
-                    static_cast<double>(entry.Intensity()) * brightness_, *density);
-                if (!rgb) Fail(PointDetectorFailure::Arithmetic);
-                const auto& previous = probes_[root.previous_probe];
-                const double correction =
-                    std::hypot(previous.z[0] - root.z[0], previous.z[1] - root.z[1]);
-                Rgb prior_rgb{};
-                if (correction > 0) {
-                    const auto prior_response = core::MakeRestrictedAffinePointResponse(
-                        previous.value.source_derivative, cell.lower, cell.upper,
-                        policy_.geometry_error);
-                    if (!prior_response) {
-                        unresolved = true;
-                        return true;
-                    }
-                    const auto prior_density = prior_response->DensityAtOriginalRoot(root.z);
-                    if (!prior_density) Fail(PointDetectorFailure::Arithmetic);
-                    const auto transferred = core::spectral::TransferPointSourceBand(
-                        entry.temperature_K, previous.value.camera_over_source_frequency,
-                        static_cast<double>(entry.Intensity()) * brightness_, *prior_density);
-                    if (!transferred) Fail(PointDetectorFailure::Arithmetic);
-                    for (int channel = 0; channel < 3; ++channel)
-                        prior_rgb[channel] = (*transferred)[channel] * previous.value.transmission;
-                }
-                result.images.push_back(*image);
-                for (int channel = 0; channel < 3; ++channel) {
-                    const double contribution = (*rgb)[channel] * point.transmission;
-                    result.rgb[channel] += contribution;
-                    // Estimate root-location, local transfer and represented
-                    // response errors separately from level differences.
-                    const double smooth_error =
-                        correction > 0 ? 2 * std::abs(contribution - prior_rgb[channel]) *
-                                             root.uncertainty / correction
-                                       : 0;
-                    const double weight_error =
-                        std::expm1(4 * root.uncertainty + .5 * root.uncertainty * root.uncertainty);
-                    result.error[channel] +=
-                        smooth_error +
-                        contribution * (weight_error + response->query.arithmetic_area_bound +
-                                        128 * std::numeric_limits<double>::epsilon());
-                    if (!std::isfinite(result.rgb[channel]) ||
-                        !std::isfinite(result.error[channel]))
-                        Fail(PointDetectorFailure::Arithmetic);
-                }
+                if (!sample_batch_) return accumulate(star);
+                pending[pending_count++] = star;
+                if (pending_count == pending.size()) flush();
                 return true;
             });
+        flush();
         result.regular = !unresolved && (result.regular || !has_candidate);
         std::sort(result.images.begin(), result.images.end());
         return result;
@@ -676,6 +763,12 @@ class Detector {
     std::vector<CachedProbe> probes_;
     std::vector<std::size_t> probe_slots_;
     std::vector<ImageRoot> roots_;
+    struct PrefetchedProbe {
+        Coordinate z;
+        std::expected<PointDetectorProbe, PointDetectorFailure> value;
+    };
+    std::array<PrefetchedProbe, kPointDetectorProbeBatchSize> prefetched_{};
+    std::size_t prefetched_count_ = 0;
 };
 }  // namespace
 

@@ -6,6 +6,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <limits>
 #include <numbers>
 #include <set>
 #include <vector>
@@ -47,6 +48,23 @@ core::StarEntry Star(double x, double y) {
             0};
 }
 
+std::vector<core::StarEntry> RootCohortStars() {
+    std::vector<core::StarEntry> entries;
+    for (int y = -2; y <= 2; ++y)
+        for (int x = -2; x <= 2; ++x)
+            entries.push_back(Star((.13 + .25 * x) * kScale, (.17 + .24 * y) * kScale));
+    return entries;
+}
+PointDetectorProbe RootCohortProbe(DetectorCoordinate z) {
+    auto point = Gnomonic(kScale * (z[0] + .02 * z[0] * z[0]), kScale * z[1],
+                          kScale * (1 + .04 * z[0]), kScale);
+    point.camera_over_source_frequency = std::exp(.02 * z[0]);
+    point.transmission = .5 + .01 * z[1];
+    point.inner_attempts = 7;
+    point.tail_attempts = 3;
+    return point;
+}
+
 std::array<double, 3> Expected(const core::StarEntry& star, DetectorCoordinate z,
                                double determinant, double g = 1, double transmission = 1) {
     const double radius = std::hypot(z[0], z[1]);
@@ -69,13 +87,18 @@ PointDetectorProbeBatchSampler BulkSampler(const PointDetectorSampler& sample) {
 }
 
 TEST(PointSourceDetector, BulkProbesPreserveScalarRefinementAndRadiance) {
-    core::StarfieldSpatialIndex catalogue({Star(.2 * kScale, .3 * kScale)});
-    for (int mode = 0; mode < 3; ++mode) {
+    for (int mode = 0; mode < 4; ++mode) {
         SCOPED_TRACE(mode);
+        std::vector<core::StarEntry> entries{Star(.2 * kScale, .3 * kScale)};
+        if (mode == 3) entries = RootCohortStars();
+        core::StarfieldSpatialIndex catalogue(entries);
         const PointDetectorSampler sample = [mode](DetectorCoordinate z) {
             auto point = mode == 1 ? Gnomonic(kScale * (z[0] * z[0] - .4), kScale * z[1],
                                               2 * kScale * z[0], kScale)
                                    : Gnomonic(kScale * z[0], kScale * z[1], kScale, kScale);
+            if (mode == 3)
+                point = Gnomonic(kScale * (z[0] + .02 * z[0] * z[0]), kScale * z[1],
+                                 kScale * (1 + .04 * z[0]), kScale);
             point.visible = mode != 2;
             point.camera_over_source_frequency = std::exp(.02 * z[0]);
             point.transmission = .5 + .01 * z[1];
@@ -84,7 +107,25 @@ TEST(PointSourceDetector, BulkProbesPreserveScalarRefinementAndRadiance) {
             return point;
         };
         const auto scalar = EvaluatePointDetector(catalogue, 1, sample, {});
-        const auto bulk = EvaluatePointDetector(catalogue, 1, sample, {}, {}, BulkSampler(sample));
+        std::size_t batches = 0;
+        std::set<std::size_t> second_batch_roots;
+        const PointDetectorProbeBatchSampler batched =
+            [&](std::span<const DetectorCoordinate> coordinates) {
+                ++batches;
+                if (mode == 3 && batches == 2)
+                    for (const auto& q : coordinates)
+                        for (std::size_t i = 0; i < entries.size(); ++i) {
+                            const double x =
+                                entries[i].direction_y / double(entries[i].direction_x) / kScale;
+                            const double root_x = 2 * x / (1 + std::sqrt(1 + .08 * x));
+                            const double root_y =
+                                entries[i].direction_z / double(entries[i].direction_x) / kScale;
+                            if (std::abs(q[0] - root_x) < .02 && std::abs(q[1] - root_y) < .02)
+                                second_batch_roots.insert(i);
+                        }
+                return BulkSampler(sample)(coordinates);
+            };
+        const auto bulk = EvaluatePointDetector(catalogue, 1, sample, {}, {}, batched);
         ASSERT_TRUE(scalar);
         ASSERT_TRUE(bulk) << static_cast<int>(bulk.error().reason);
         EXPECT_EQ(bulk->rgb, scalar->rgb);
@@ -98,6 +139,38 @@ TEST(PointSourceDetector, BulkProbesPreserveScalarRefinementAndRadiance) {
         EXPECT_EQ(bulk->statistics.tail_attempts, scalar->statistics.tail_attempts);
         EXPECT_LT(bulk->statistics.probe_batches, scalar->statistics.probe_batches);
         EXPECT_EQ(bulk->statistics.maximum_probe_batch, kPointDetectorProbeBatchSize);
+        if (mode == 3) {
+            // The initial cell is regular. Its already-known first image
+            // queries must share the next batch before dependent refinement.
+            EXPECT_GT(second_batch_roots.size(), 1u);
+            RecordProperty("distinct_stars_in_first_root_batch",
+                           static_cast<int>(second_batch_roots.size()));
+            auto tight = PointDetectorPolicy{};
+            tight.maximum_probes = scalar->statistics.probes;
+            const auto limited =
+                EvaluatePointDetector(catalogue, 1, sample, {}, tight, BulkSampler(sample));
+            ASSERT_TRUE(limited);
+            EXPECT_EQ(limited->rgb, scalar->rgb);
+            EXPECT_EQ(limited->estimated_error, scalar->estimated_error);
+            EXPECT_EQ(limited->statistics.probes, scalar->statistics.probes);
+            EXPECT_EQ(limited->statistics.probe_requests, scalar->statistics.probe_requests);
+            EXPECT_EQ(limited->statistics.newton_steps, scalar->statistics.newton_steps);
+            EXPECT_LT(bulk->statistics.probe_batches, limited->statistics.probe_batches);
+            RecordProperty("cohort_probe_batches",
+                           static_cast<int>(bulk->statistics.probe_batches));
+            RecordProperty("scalar_root_probe_batches",
+                           static_cast<int>(limited->statistics.probe_batches));
+            auto large_step_limit = PointDetectorPolicy{};
+            large_step_limit.maximum_newton_steps = std::numeric_limits<unsigned>::max();
+            const auto overflow_control = EvaluatePointDetector(
+                catalogue, 1, sample, {}, large_step_limit, BulkSampler(sample));
+            ASSERT_TRUE(overflow_control);
+            EXPECT_EQ(overflow_control->rgb, scalar->rgb);
+            EXPECT_EQ(overflow_control->estimated_error, scalar->estimated_error);
+            EXPECT_EQ(overflow_control->statistics.probes, scalar->statistics.probes);
+            EXPECT_EQ(overflow_control->statistics.probe_batches,
+                      limited->statistics.probe_batches);
+        }
     }
 }
 
@@ -176,6 +249,55 @@ TEST(PointSourceDetector, BulkFailureAndCancellationNeverPublishPartialRadiance)
     EXPECT_EQ(limited.error().reason, PointDetectorFailure::WorkLimit);
     EXPECT_EQ(calls, 0u);
     EXPECT_EQ(limited.error().statistics.probes, 0u);
+    core::StarfieldSpatialIndex cohort_catalogue(RootCohortStars());
+    for (int mode = 0; mode < 6; ++mode) {
+        SCOPED_TRACE(mode);
+        bool cancelled = false, cohort_returned = false;
+        std::size_t batches = 0;
+        const PointDetectorSampler cohort_sample =
+            [&](DetectorCoordinate q) -> std::expected<PointDetectorProbe, PointDetectorFailure> {
+            if (mode == 5 && cohort_returned)
+                return std::unexpected(PointDetectorFailure::Arithmetic);
+            return RootCohortProbe(q);
+        };
+        const PointDetectorProbeBatchSampler cohort_batch =
+            [&](std::span<const DetectorCoordinate> coordinates) {
+                ++batches;
+                auto values = BulkSampler(cohort_sample)(coordinates);
+                if (batches == 2) {
+                    EXPECT_EQ(coordinates.size(), kPointDetectorProbeBatchSize);
+                    if (coordinates.size() != kPointDetectorProbeBatchSize) return values;
+                    if (mode == 0 || mode == 5)
+                        values[4] = std::unexpected(PointDetectorFailure::TraceFailed);
+                    if (mode == 1) values.pop_back();
+                    if (mode == 2) cancelled = true;
+                    if (mode == 3) values[4]->direction = {0, 0, 0};
+                    if (mode == 4)
+                        for (auto& value : values)
+                            value = std::unexpected(PointDetectorFailure::TraceFailed);
+                    cohort_returned = true;
+                }
+                return values;
+            };
+        const auto declined = EvaluatePointDetector(
+            cohort_catalogue, 1, cohort_sample, [&] { return cancelled; }, {}, cohort_batch);
+        ASSERT_FALSE(declined);
+        constexpr std::array reasons{
+            PointDetectorFailure::TraceFailed, PointDetectorFailure::InvalidInput,
+            PointDetectorFailure::Cancelled,   PointDetectorFailure::Arithmetic,
+            PointDetectorFailure::TraceFailed, PointDetectorFailure::Arithmetic};
+        EXPECT_EQ(declined.error().reason, reasons[mode]);
+        EXPECT_EQ(batches, 2u);
+        const auto& work = declined.error().statistics;
+        EXPECT_GE(work.probes, 2 * kPointDetectorProbeBatchSize);
+        const auto known_successful = mode == 0   ? work.probes - 1
+                                      : mode == 1 ? work.probes - 1
+                                      : mode == 4 ? kPointDetectorProbeBatchSize
+                                      : mode == 5 ? 2 * kPointDetectorProbeBatchSize - 1
+                                                  : work.probes;
+        EXPECT_EQ(work.inner_attempts, 7 * known_successful);
+        EXPECT_EQ(work.tail_attempts, 3 * known_successful);
+    }
 }
 
 TEST(PointSourceDetector, SharedDiscoveryPreservesDistinctGaussianShapesAndTransfer) {
