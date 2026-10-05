@@ -427,6 +427,8 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile",
         "gtest:RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr",
         "gtest:RetainedComputeAdmission.ArithmeticRefusalPrecedesKernelLoading",
+        "gtest:RetainedComputeAdmission.SoftwareRendererPreparationPreservesPhysicalAccounting",
+        "gtest:RetainedComputeTest.SoftwareRendererPreparationPreservesBuffersAndPhysicalFeedback",
         "gtest:RenderSessionProbe.BackendAutoResolvesByDeviceRegistryAndCapabilities",
         "gtest:RenderSessionProbe.BackendAutoPreservesStrictDeviceAndPrecisionRequests",
         "gtest:RenderSessionProbe.BackendAutoUsesCpuWithNoIcdAndKeepsExplicitVulkanIntent",
@@ -469,7 +471,7 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "526b05113b8b64b0edcb64c95afa5ea0e416cb4bc5ee46711eff5308bc0cf928",
+    "acceptance_criteria": "69f57310b65bb1658e348099f013a6596a9402052fda64c765bda2ce0517d752",
     "required_dimensions": "478b6dcf90628ab1cd01d12fbc7c9033d324e1470c8bfcf0db555420f160d9b6",
     "capability_contracts": "48c5b338c14c11e2ad7275322cd72f4bd014df621ca69e65e119621066fd5c6c",
 }

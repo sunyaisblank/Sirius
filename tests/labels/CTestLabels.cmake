@@ -983,11 +983,13 @@ set_tests_properties(
 
 set_tests_properties(
     RetainedComputeAdmission.ArithmeticRefusalPrecedesKernelLoading
+    RetainedComputeAdmission.SoftwareRendererPreparationPreservesPhysicalAccounting
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 
 set_tests_properties(
     RetainedComputeTest.BatchedCameraPreservesPhysicalColumnsAndRejectsInvalidRows
+    RetainedComputeTest.SoftwareRendererPreparationPreservesBuffersAndPhysicalFeedback
     RetainedComputeTest.SmoothRayCameraPreservesPhysicalLensDerivatives
     RetainedComputeTest.JointRkStagesRetainCriticalIncrementsAndEmbeddedError
     RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation
@@ -1569,4 +1571,3 @@ set_tests_properties(
     VulkanRenderSession.ZeroActiveTracePreservesRadianceAcrossPrecisionRungs
     PROPERTIES LABELS "Mandatory;Operational;Rendering"
 )
-
