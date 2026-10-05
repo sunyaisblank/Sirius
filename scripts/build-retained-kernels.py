@@ -21,7 +21,9 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
     if portable:
         definitions.append("-DSIRIUS_RETAINED_PORTABLE=1")
-    if registers * terms * 4 + 8 > 16384:
+    original_inputs = ({"retained_camera": 32, "retained_ray_camera": 45}.get(source.stem, 0)
+                       if portable else 0)
+    if (registers * terms + original_inputs * 4) * 4 + 8 > 16384:
         raise ValueError("retained program exceeds the portable shared-memory bound")
     definitions += [f"-DSIRIUS_RETAINED_REGISTERS={registers}",
                     f"-DSIRIUS_RETAINED_TERMS={terms}",

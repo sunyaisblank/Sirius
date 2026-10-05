@@ -7,7 +7,13 @@ import retained_pair;
 uint ReadInput(uint index, uint row, uint rows) {
     return inputs[index < 45 ? 1 + 225 * row + 5 * index : 1 + 225 * rows + index - 45];
 }
+#ifdef SIRIUS_RETAINED_PORTABLE
+// Each portable group has one invocation and owns its decoded input cache.
+groupshared uint originalTerms[180];
+RetainedPair ReadOriginalInput(uint index, uint row) {
+#else
 RetainedPair ReadOriginal(uint index, uint row) {
+#endif
     uint base = 1 + 225 * row + 5 * index;
     if (inputs[base + 4] != 1) return RPInvalid();
     RetainedPair r = RPPack(RPFromBits(inputs[base]), RPFromBits(inputs[base + 1]),
@@ -15,6 +21,16 @@ RetainedPair ReadOriginal(uint index, uint row) {
     // Retain the third input term through the camera pair's rounding radius.
     return RPAdd(r, RPConstant(RPFromBits(inputs[base + 2])));
 }
+#ifdef SIRIUS_RETAINED_PORTABLE
+RetainedPair ReadOriginal(uint index, uint row) {
+    RetainedPair r;
+    r.hi = RPFromBits(originalTerms[4 * index]);
+    r.lo = RPFromBits(originalTerms[4 * index + 1]);
+    r.error = RPFromBits(originalTerms[4 * index + 2]);
+    r.valid = originalTerms[4 * index + 3];
+    return r;
+}
+#endif
 bool Exact(RetainedPair value, RPScalar x) {
     return value.valid != 0 && RPScalarEqual(value.hi, x) && RPScalarEqual(value.lo, RPZero()) &&
            RPScalarEqual(value.error, RPZero());
@@ -127,8 +143,21 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint rows, uint registers) 
         outputs[rowBase + 6] = RPBits(RPFromUnsigned(no));
         for (uint i = 0; i < 225; ++i) outputs[rowBase + 8 + i] = inputs[1 + 225 * row + i];
     }
+#ifdef SIRIUS_RETAINED_PORTABLE
+    // Inputs stay immutable during dispatch. Successful decoded words are
+    // initialized here before any precondition or program reads the cache.
+    for (uint i = 0; i < 45; ++i) {
+        RetainedPair r = ReadOriginalInput(i, row);
+        if (r.valid == 0) return;
+        originalTerms[4 * i] = RPBits(r.hi);
+        originalTerms[4 * i + 1] = RPBits(r.lo);
+        originalTerms[4 * i + 2] = RPBits(r.error);
+        originalTerms[4 * i + 3] = r.valid;
+    }
+#else
     for (uint i = 0; i < 45; ++i)
         if (ReadOriginal(i, row).valid == 0) return;
+#endif
     if (!RPScalarEqual(RPAbsoluteUpper(ReadOriginal(1, row)), RPZero()) &&
         !RPScalarEqual(RPAbsoluteUpper(ReadOriginal(3, row)), RPZero()))
         return;
