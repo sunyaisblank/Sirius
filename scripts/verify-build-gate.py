@@ -812,12 +812,24 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                          for phase in ("pre", "post")
                          for action in ("missing", "changed", "escape"))
         mutations.append(f"copy_restored:{consumer}")
-    # Exercise every expected copy, while the missing/escape controls above
-    # cover both volumes and phases without repeating the full cross product.
+    # Check every copy's bytes directly. The full producer controls above
+    # separately cover both volumes, producers and execution phases.
+    product_records = artifact_records(products, source, build)
+    test_input_records = artifact_records(test_inputs, source, build)
     for index, name in enumerate((*sorted(TEST_INPUT_ARTIFACTS),
                                   "trace_spv", "trace_fp32comp_spv", "trace_fp64_spv")):
         consumer = ("sirius_backend_tests", "sirius_render_tests")[index % 2]
-        mutations.append(f"copy_changed:{consumer}:{name}")
+        path = consumed[(consumer, name)]
+        try:
+            replacement = bytearray(originals[path])
+            replacement[-1] ^= 1
+            path.write_bytes(replacement)
+            expect_rejection(lambda: verify_test_input_copies(
+                tested, product_records, test_input_records),
+                f"changed {consumer} consumed copy {name}")
+        finally:
+            path.write_bytes(originals[path])
+    verify_test_input_copies(tested, product_records, test_input_records)
     for native, runner in ((False, run_gate), (True, run_native_build_gate)):
         for mutation in mutations:
             stamp = build / "execution-controls" / "gate.json"
@@ -943,9 +955,6 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                     elif mutation.startswith("copy_post_"):
                         action, consumer = mutation.removeprefix("copy_post_").split(":")
                         mutate_copy(action, consumer)
-                    elif mutation.startswith("copy_changed:"):
-                        _, consumer, name = mutation.split(":")
-                        mutate_copy("changed", consumer, name)
                     elif mutation.startswith("copy_restored:"):
                         mutate_copy("restored", mutation.partition(":")[2])
                     elif mutation == "revision":
