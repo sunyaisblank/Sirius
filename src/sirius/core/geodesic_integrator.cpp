@@ -911,8 +911,7 @@ std::optional<GeodesicVariations> ProjectVariations(const RetainedMetricSample& 
             covector[mu] = phase[column].p(mu);
             for (int a = 0; a < 4; ++a)
                 for (int b = 0; b < 4; ++b)
-                    covector[mu] -=
-                        first_kind_tangent[mu][a][b] * phase[column].x(b);
+                    covector[mu] -= first_kind_tangent[mu][a][b] * phase[column].x(b);
         }
         for (int mu = 0; mu < 4; ++mu) {
             for (int nu = 0; nu < 4; ++nu) V[mu] += inverse(mu, nu) * covector[nu];
