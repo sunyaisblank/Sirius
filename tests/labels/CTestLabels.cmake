@@ -1571,3 +1571,4 @@ set_tests_properties(
     VulkanRenderSession.ZeroActiveTracePreservesRadianceAcrossPrecisionRungs
     PROPERTIES LABELS "Mandatory;Operational;Rendering"
 )
+

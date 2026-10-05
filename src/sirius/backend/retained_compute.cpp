@@ -72,24 +72,6 @@ bool RetainedValue::IsRepresented() const {
            std::abs(double(tail)) <= spacing(low) && (high != 0 || (low == 0 && tail == 0));
 }
 
-const char* RetainedCompute::StageName(KernelStage stage) {
-    switch (stage) {
-        case KernelStage::kCamera:
-            return "camera";
-        case KernelStage::kTransport:
-            return "transport";
-        case KernelStage::kEndpoint:
-            return "endpoint";
-        case KernelStage::kDense:
-            return "dense";
-        case KernelStage::kInitialize:
-            return "initialize";
-        case KernelStage::kRayCamera:
-            return "ray_camera";
-    }
-    return "unknown";
-}
-
 base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
     ComputeDevice& device, std::size_t capacity, bool fp64_products, double dispatch_target_ms) {
     if (capacity == 0 || capacity > kMaximumCapacity)

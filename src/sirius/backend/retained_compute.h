@@ -96,7 +96,24 @@ struct RetainedInitializeOutput {
 class RetainedCompute {
   public:
     enum class KernelStage { kCamera, kTransport, kEndpoint, kDense, kInitialize, kRayCamera };
-    [[nodiscard]] static const char* StageName(KernelStage stage);
+    // Evidence writers also compile when the optional device backend is absent.
+    [[nodiscard]] static constexpr const char* StageName(KernelStage stage) {
+        switch (stage) {
+            case KernelStage::kCamera:
+                return "camera";
+            case KernelStage::kTransport:
+                return "transport";
+            case KernelStage::kEndpoint:
+                return "endpoint";
+            case KernelStage::kDense:
+                return "dense";
+            case KernelStage::kInitialize:
+                return "initialize";
+            case KernelStage::kRayCamera:
+                return "ray_camera";
+        }
+        return "unknown";
+    }
     struct StageStats {
         // Host wall-clock intervals, not GPU timestamps. Dispatch phases and
         // creation counts cover successful device Dispatch calls with valid
