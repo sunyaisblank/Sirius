@@ -399,7 +399,7 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = "Stop"
-          $directory = "bin/windows-msvc/generated/sirius"
+          $directory = (Resolve-Path "bin/windows-msvc/generated/sirius").Path
           $app = (Resolve-Path "bin/windows-msvc/src/sirius/app/Release/sirius.exe").Path
           $inventoryPath = Join-Path $directory "windows_vulkan_preflight_inventory.json"
           $identityPath = Join-Path $directory "windows_vulkan_preflight_identity.json"
