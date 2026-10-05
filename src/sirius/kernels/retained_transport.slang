@@ -187,6 +187,44 @@ static const int ad[7][7] = {{1, 1, 1, 1, 1, 1, 1},
                              {384, 1, 1113, 192, 6784, 84, 1}};
 static const int en[7] = {71, 0, -71, 71, -17253, 22, -1};
 static const int ed[7] = {57600, 1, 16695, 1920, 339200, 525, 40};
+#ifndef SIRIUS_RETAINED_PORTABLE
+// Six row sums, fourteen nonzero corrections and five embedded-error weights.
+// Preserve the complete retained value, including its integer validity word.
+groupshared uint retainedCoefficients[SIRIUS_RETAINED_COEFFICIENTS * 5];
+void CacheCoefficient(uint lane) {
+    if (lane >= SIRIUS_RETAINED_COEFFICIENTS) return;
+    RetainedTriple value = RTInvalid();
+    if (lane < 6)
+        value = Rational(cn[lane + 1], cd[lane + 1]);
+    else if (lane >= 20)
+        value = Rational(en[lane - 18], ed[lane - 18]);
+    else {
+        uint index = 6;
+        for (uint stage = 2; stage < 7; ++stage)
+            for (uint previous = 1; previous < stage; ++previous)
+                if (an[stage][previous] != 0) {
+                    if (lane == index) value = Rational(an[stage][previous], ad[stage][previous]);
+                    ++index;
+                }
+    }
+    uint base = lane * 5;
+    retainedCoefficients[base] = RPBits(value.hi);
+    retainedCoefficients[base + 1] = RPBits(value.lo);
+    retainedCoefficients[base + 2] = RPBits(value.tail);
+    retainedCoefficients[base + 3] = RPBits(value.error);
+    retainedCoefficients[base + 4] = value.valid;
+}
+RetainedTriple ReadCoefficient(uint index) {
+    uint base = index * 5;
+    RetainedTriple value;
+    value.hi = RPFromBits(retainedCoefficients[base]);
+    value.lo = RPFromBits(retainedCoefficients[base + 1]);
+    value.tail = RPFromBits(retainedCoefficients[base + 2]);
+    value.error = RPFromBits(retainedCoefficients[base + 3]);
+    value.valid = retainedCoefficients[base + 4];
+    return value;
+}
+#endif
 [shader("compute")][numthreads(SIRIUS_RETAINED_EXECUTION_LANES, 1, 1)] void ComputeMain(uint3 id
                                                                               : SV_GroupID,
                                                                                 uint lane
@@ -250,19 +288,32 @@ static const int ed[7] = {57600, 1, 16695, 1920, 339200, 525, 40};
     for (uint stage = 0; stage < 7; ++stage) {
         if (lane == 0) retainedStatus = 0;
 #ifndef SIRIUS_RETAINED_PORTABLE
+        // Stage zero has succeeded. Publish once at the existing stage barrier;
+        // expression register reuse never writes this separate immutable cache.
+        if (stage == 1) CacheCoefficient(lane);
         GroupMemoryBarrierWithGroupSync();
 #endif
         for (uint i = lane; i < 40; i += SIRIUS_RETAINED_EXECUTION_LANES) {
             RetainedTriple value = ReadOriginal(4 + i, row);
             if (stage != 0) {
                 RetainedTriple first = ReadStored(rowBase + 1004 + i * 5);
+#ifdef SIRIUS_RETAINED_PORTABLE
                 RetainedTriple weighted = RTMultiply(first, Rational(cn[stage], cd[stage]));
+#else
+                RetainedTriple weighted = RTMultiply(first, ReadCoefficient(stage - 1));
+#endif
                 for (uint j = 1; j < stage; ++j)
                     if (an[stage][j] != 0) {
                         RetainedTriple difference =
                             RTSubtract(ReadStored(rowBase + 1004 + j * 200 + i * 5), first);
+#ifdef SIRIUS_RETAINED_PORTABLE
                         weighted = RTAdd(
                             weighted, RTMultiply(difference, Rational(an[stage][j], ad[stage][j])));
+#else
+                        uint index = 6 + (stage - 2) * (stage - 1) / 2 + j - 1;
+                        if (stage == 6) --index; // The preceding correction is zero.
+                        weighted = RTAdd(weighted, RTMultiply(difference, ReadCoefficient(index)));
+#endif
                     }
                 RetainedTriple increment = RTMultiply(weighted, h);
                 value = RTAdd(value, increment);
@@ -288,7 +339,11 @@ static const int ed[7] = {57600, 1, 16695, 1920, 339200, 525, 40};
             if (en[j] != 0) {
                 RetainedTriple difference =
                     RTSubtract(ReadStored(rowBase + 1004 + j * 200 + i * 5), first);
+#ifdef SIRIUS_RETAINED_PORTABLE
                 weighted = RTAdd(weighted, RTMultiply(difference, Rational(en[j], ed[j])));
+#else
+                weighted = RTAdd(weighted, RTMultiply(difference, ReadCoefficient(18 + j)));
+#endif
             }
         RetainedTriple error = RTMultiply(weighted, h), full = ReadStored(rowBase + 804 + i * 5);
         RetainedTriple lower = RTSubtract(full, error);
