@@ -614,11 +614,13 @@ class TransferProbeDevice final : public ComputeDevice {
     // actual device; injected timing never sleeps or claims hardware duration.
     std::function<double(BufferHandle, std::uint32_t)> submission_ms;
     std::function<void()> before_dispatch;
+    std::function<void(std::span<const BufferHandle>, const DispatchTiming*)> after_dispatch;
     std::optional<BufferHandle> capture_output;
     std::vector<std::vector<std::byte>> readbacks;
     bool independent_pairs = false;
     std::uint64_t pair_calls = 0;
     std::function<void()> after_pair;
+    std::function<void(const IndependentPairTiming*)> after_pair_timing;
     std::optional<double> pair_submit_ms;
     std::function<void(BufferHandle, std::span<std::byte>)> after_read;
 
@@ -666,6 +668,7 @@ class TransferProbeDevice final : public ComputeDevice {
                                         timing->combined.cleanup_ms;
         }
         if (status && after_pair) after_pair();
+        if (status && after_pair_timing) after_pair_timing(timing);
         return status;
     }
     sirius::base::Expected<void> Dispatch(KernelHandle kernel,
@@ -688,6 +691,7 @@ class TransferProbeDevice final : public ComputeDevice {
             timing->total_ms = timing->pipeline_setup_ms + timing->command_setup_ms +
                                timing->submit_wait_ms + timing->cleanup_ms;
         }
+        if (status && after_dispatch) after_dispatch(buffers, timing);
         return status;
     }
     sirius::base::Expected<void> SetBufferAllocationLimit(std::uint64_t bytes) override {
@@ -1595,6 +1599,155 @@ TEST_F(RetainedComputeTest, PhysicalInitializationRetainsTheHamiltonianResidual)
     ASSERT_TRUE(invalid) << invalid.error().Description();
     EXPECT_FALSE(invalid->front().valid);
     for (const auto& value : invalid->front().phase) EXPECT_EQ(value.valid, 0U);
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
+TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    auto* vulkan = dynamic_cast<VulkanDevice*>(device.get());
+    ASSERT_NE(vulkan, nullptr);
+    const auto properties = vulkan->TimestampProperties();
+    RecordProperty("timestamp_valid_bits", std::to_string(properties.valid_bits));
+    RecordProperty("timestamp_period_ns", std::format("{:.17g}", properties.period_ns));
+    RecordProperty("timestamp_scope",
+                   "opt-in device marker span includes original barriers and scheduling; not "
+                   "isolated shader time or calibrated host/driver overhead; existing host "
+                   "governor unchanged; finite original critical0/critical1/flat intervals, "
+                   "not frame, cold, full-science or release qualification");
+    const auto enabled = vulkan->SetDispatchTimestampsEnabled(true);
+    if (properties.valid_bits == 0) {
+        ASSERT_FALSE(enabled);
+        RecordProperty("timestamp_observation", "unsupported selected queue explicitly declined");
+        return;
+    }
+    ASSERT_TRUE(enabled) << enabled.error().Description();
+    ASSERT_TRUE(vulkan->SetDispatchTimestampsEnabled(false));
+    std::vector<RetainedEndpointInput> launch_inputs;
+    for (const auto index :
+         {std::size_t{0}, std::size_t{1}, sirius::test::retained_transport::cases.size() - 1}) {
+        const auto step =
+            std::bit_cast<RetainedStepInput>(sirius::test::retained_transport::cases[index].input);
+        RetainedEndpointInput endpoint;
+        std::copy_n(step.values.begin(), 45, endpoint.values.begin());
+        launch_inputs.push_back(endpoint);
+    }
+    const auto launches = compute->Endpoint(launch_inputs);
+    ASSERT_TRUE(launches) << launches.error().Description();
+    std::vector<RetainedIntervalInput> inputs(launch_inputs.size());
+    for (std::size_t row = 0; row < inputs.size(); ++row) {
+        const auto index = row < 2 ? row : sirius::test::retained_transport::cases.size() - 1;
+        const auto step =
+            std::bit_cast<RetainedStepInput>(sirius::test::retained_transport::cases[index].input);
+        auto& input = inputs[row];
+        std::copy_n(step.values.begin(), 4, input.metric.begin());
+        input.start = (*launches)[row];
+        input.chart = step.values[44].Center();
+        input.interval = step.values[45].Center();
+        input.control.length_scale = input.control.frequency_scale = 1;
+        input.control.tolerance = 1e-4 / (4 * 30000);
+        input.control.integrator.min_step = static_cast<float>(input.interval);
+        input.control.integrator.max_step = 1;
+        input.control.integrator.abs_tolerance = input.control.integrator.rel_tolerance = 1e-9f;
+    }
+    const auto baseline = AttemptRetainedIntervals(*compute, inputs);
+    ASSERT_TRUE(baseline) << baseline.error().Description();
+    EXPECT_FALSE(vulkan->LastDispatchTimestamp());
+    TransferProbeDevice probe(*device);
+    probe.independent_pairs = true;
+    auto observed = RetainedCompute::Create(probe, 24);
+    ASSERT_TRUE(observed) << observed.error().Description();
+    ASSERT_EQ(probe.allocations.size(), 12U);
+    const auto resident = device->BufferAllocationBytes();
+    ASSERT_TRUE(vulkan->SetDispatchTimestampsEnabled(true));
+    std::size_t samples = 0;
+    std::string phase;
+    const auto capture = [&](const std::string& stage, const DispatchTiming* host) {
+        ASSERT_LT(samples, 64U);
+        ASSERT_NE(host, nullptr);
+        const auto timestamp = vulkan->LastDispatchTimestamp();
+        ASSERT_TRUE(timestamp);
+        ASSERT_EQ(timestamp->query_result, VK_SUCCESS);
+        ASSERT_NE(timestamp->availability[0], 0U);
+        ASSERT_NE(timestamp->availability[1], 0U);
+        ASSERT_TRUE(timestamp->device_span_ms);
+        EXPECT_TRUE(std::isfinite(*timestamp->device_span_ms));
+        EXPECT_GE(*timestamp->device_span_ms, 0);
+        EXPECT_NEAR(timestamp->host_submit_ms + timestamp->host_wait_ms, host->submit_wait_ms,
+                    1e-9 * std::max(1., host->submit_wait_ms));
+        RecordProperty(
+            "device_observation_" + std::to_string(samples++),
+            std::format("phase={};stage={};begin={};end={};available0={};available1={};"
+                        "device_ms={:.17g};host_submit_ms={:.17g};host_wait_ms={:.17g};"
+                        "host_completion_ms={:.17g};pipeline_ms={:.17g};total_ms={:.17g}",
+                        phase, stage, timestamp->ticks[0], timestamp->ticks[1],
+                        timestamp->availability[0], timestamp->availability[1],
+                        *timestamp->device_span_ms, timestamp->host_submit_ms,
+                        timestamp->host_wait_ms, host->submit_wait_ms, host->pipeline_setup_ms,
+                        host->total_ms));
+    };
+    probe.after_dispatch = [&](std::span<const BufferHandle> bound, const DispatchTiming* host) {
+        constexpr std::array names{"camera", "transport",  "endpoint",
+                                   "dense",  "initialize", "ray_camera"};
+        ASSERT_FALSE(bound.empty());
+        for (std::size_t i = 0; i < probe.allocations.size(); i += 2)
+            if (bound[0].value == probe.allocations[i].handle.value) {
+                capture(names[i / 2], host);
+                return;
+            }
+        FAIL() << "unknown observed stage binding";
+    };
+    probe.after_pair_timing = [&](const IndependentPairTiming* host) {
+        ASSERT_NE(host, nullptr);
+        capture("endpoint+dense", &host->combined);
+    };
+    for (unsigned repeat = 0; repeat < 3; ++repeat) {
+        phase = "repeat" + std::to_string(repeat);
+        const auto output = AttemptRetainedIntervals(**observed, inputs);
+        ASSERT_TRUE(output) << output.error().Description();
+        ASSERT_EQ(output->size(), baseline->size());
+        for (std::size_t row = 0; row < output->size(); ++row) {
+            const auto& actual = (*output)[row];
+            const auto& expected = (*baseline)[row];
+            ASSERT_TRUE(actual.admissible);
+            EXPECT_EQ(actual.admissible, expected.admissible);
+            EXPECT_EQ(actual.attempted_stages, 21U);
+            EXPECT_EQ(actual.attempted_stages, expected.attempted_stages);
+            EXPECT_EQ(actual.failure, expected.failure);
+            EXPECT_EQ(std::bit_cast<std::uint64_t>(actual.error_ratio),
+                      std::bit_cast<std::uint64_t>(expected.error_ratio));
+            EXPECT_EQ(std::bit_cast<std::uint64_t>(actual.embedded_projected_error_ratio),
+                      std::bit_cast<std::uint64_t>(expected.embedded_projected_error_ratio));
+            for (const auto& endpoints : {std::pair{&actual.full, &expected.full},
+                                          {&actual.lower, &expected.lower},
+                                          {&actual.midpoint, &expected.midpoint},
+                                          {&actual.refined, &expected.refined}}) {
+                EXPECT_EQ(endpoints.first->valid, endpoints.second->valid);
+                EXPECT_EQ(endpoints.first->component, endpoints.second->component);
+                EXPECT_EQ(std::memcmp(endpoints.first->phase.data(), endpoints.second->phase.data(),
+                                      sizeof(endpoints.first->phase)),
+                          0);
+                EXPECT_EQ(
+                    std::memcmp(endpoints.first->physical.data(), endpoints.second->physical.data(),
+                                sizeof(endpoints.first->physical)),
+                    0);
+            }
+            for (const auto& increments :
+                 {std::pair{&actual.full_increment, &expected.full_increment},
+                  {&actual.lower_increment, &expected.lower_increment},
+                  {&actual.midpoint_increment, &expected.midpoint_increment},
+                  {&actual.refined_increment, &expected.refined_increment}})
+                EXPECT_EQ(std::memcmp(increments.first->data(), increments.second->data(),
+                                      sizeof(*increments.first)),
+                          0);
+        }
+        EXPECT_EQ(device->BufferAllocationBytes(), resident);
+    }
+    EXPECT_GT(samples, 0U);
+    EXPECT_GT(probe.pair_calls, 0U);
+    RecordProperty("device_observations", std::to_string(samples));
+    ASSERT_TRUE(vulkan->SetDispatchTimestampsEnabled(false));
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif

@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <charconv>
 #include <chrono>
+#include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <format>
@@ -472,6 +473,8 @@ Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {
     vkGetDeviceQueue(device->device_, family, 0, &device->queue_);
 
     device->InitialisePipelineCache();
+    device->timestamp_properties_ = {families[family].timestampValidBits,
+                                     device->pipeline_cache_properties_.limits.timestampPeriod};
 
     const VkCommandPoolCreateInfo pool_info{
         .sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
@@ -508,7 +511,17 @@ Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {
 
 VulkanDevice::~VulkanDevice() {
     if (device_ != VK_NULL_HANDLE) {
-        vkDeviceWaitIdle(device_);
+        const auto completion = vkDeviceWaitIdle(device_);
+        // Device loss establishes the same pending/in-use lifetime boundary as
+        // success, but another error leaves completion unproven. Retain the
+        // entire device/instance chain until process termination in that case.
+        // https://docs.vulkan.org/spec/latest/chapters/devsandqueues.html#devsandqueues-lost-device
+        if (completion != VK_SUCCESS && completion != VK_ERROR_DEVICE_LOST) return;
+        if (pending_dispatch_) {
+            vkFreeCommandBuffers(device_, command_pool_, 1, &pending_dispatch_->command);
+            vkFreeDescriptorSets(device_, descriptor_pool_, pending_dispatch_->set_count,
+                                 pending_dispatch_->sets.data());
+        }
         // Export while the owning device is alive and no operations can modify
         // its cache. A failed optimization snapshot must not escape a destructor.
         if (pipeline_cache_modified_) {
@@ -531,6 +544,8 @@ VulkanDevice::~VulkanDevice() {
         }
         if (pipeline_cache_ != VK_NULL_HANDLE)
             vkDestroyPipelineCache(device_, pipeline_cache_, nullptr);
+        if (timestamp_pool_ != VK_NULL_HANDLE)
+            vkDestroyQueryPool(device_, timestamp_pool_, nullptr);
         vkDestroyDescriptorPool(device_, descriptor_pool_, nullptr);
         vkDestroyCommandPool(device_, command_pool_, nullptr);
         vkDestroyDevice(device_, nullptr);
@@ -580,6 +595,52 @@ void VulkanDevice::InitialisePipelineCache() {
         pipeline_cache_stats_.imported_bytes = seed.size();
     else
         pipeline_cache_ = VK_NULL_HANDLE;
+}
+
+std::optional<double> detail::VulkanTimestampSpanMs(std::uint64_t begin, std::uint64_t end,
+                                                    std::uint32_t valid_bits, double period_ns,
+                                                    double host_completion_ms) {
+    if (valid_bits < 36 || valid_bits > 64 || !std::isfinite(period_ns) || period_ns <= 0 ||
+        !std::isfinite(host_completion_ms) || host_completion_ms < 0)
+        return std::nullopt;
+    const double wrap_ms = std::ldexp(period_ns * 1e-6, static_cast<int>(valid_bits));
+    if (!std::isfinite(wrap_ms) || host_completion_ms >= wrap_ms) return std::nullopt;
+    const std::uint64_t mask = std::numeric_limits<std::uint64_t>::max() >> (64 - valid_bits);
+    return static_cast<double>((end - begin) & mask) * period_ns * 1e-6;
+}
+
+Expected<void> VulkanDevice::SetDispatchTimestampsEnabled(bool enabled) {
+    if (pending_dispatch_)
+        return Fail(ErrorDomain::kDevice, "configure dispatch timestamps",
+                    "earlier submitted work has no confirmed completion");
+    last_dispatch_timestamp_.reset();
+    if (!enabled) {
+        if (timestamp_pool_ != VK_NULL_HANDLE)
+            vkDestroyQueryPool(device_, timestamp_pool_, nullptr);
+        timestamp_pool_ = VK_NULL_HANDLE;
+        return {};
+    }
+    if (timestamp_pool_ != VK_NULL_HANDLE) return {};
+    if (timestamp_properties_.valid_bits < 36 || timestamp_properties_.valid_bits > 64 ||
+        !std::isfinite(timestamp_properties_.period_ns) || timestamp_properties_.period_ns <= 0)
+        return Fail(ErrorDomain::kDevice, "enable dispatch timestamps",
+                    "selected compute queue has no supported timestamp counter");
+    const VkQueryPoolCreateInfo info{
+        .sType = VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO,
+        .queryType = VK_QUERY_TYPE_TIMESTAMP,
+        .queryCount = 2,
+    };
+    if (const auto result = vkCreateQueryPool(device_, &info, nullptr, &timestamp_pool_);
+        result != VK_SUCCESS) {
+        timestamp_pool_ = VK_NULL_HANDLE;
+        return Fail(ErrorDomain::kDevice, "create dispatch timestamp pool", VkResultText(result));
+    }
+    return {};
+}
+
+bool detail::VulkanSubmissionNeedsCompletion(VkResult submitted, VkResult waited) {
+    if (submitted == VK_SUCCESS) return waited != VK_SUCCESS && waited != VK_ERROR_DEVICE_LOST;
+    return submitted != VK_ERROR_OUT_OF_HOST_MEMORY && submitted != VK_ERROR_OUT_OF_DEVICE_MEMORY;
 }
 
 Expected<VulkanPipelineCacheStats> VulkanDevice::SnapshotPipelineCache() {
@@ -798,6 +859,9 @@ Expected<std::uint64_t> VulkanDevice::RequiredBufferAllocationBytes(std::uint64_
 }
 
 Expected<void> VulkanDevice::WriteBuffer(BufferHandle handle, std::span<const std::byte> data) {
+    if (pending_dispatch_)
+        return Fail(ErrorDomain::kDevice, "write buffer",
+                    "earlier submitted work has no confirmed completion");
     SIRIUS_PRE(handle.value < buffers_.size());
     Buffer& buffer = buffers_[handle.value];
     SIRIUS_PRE(data.size_bytes() <= buffer.size_bytes);
@@ -812,6 +876,9 @@ Expected<void> VulkanDevice::WriteBuffer(BufferHandle handle, std::span<const st
 }
 
 Expected<void> VulkanDevice::ReadBuffer(BufferHandle handle, std::span<std::byte> out) {
+    if (pending_dispatch_)
+        return Fail(ErrorDomain::kDevice, "read buffer",
+                    "earlier submitted work has no confirmed completion");
     SIRIUS_PRE(handle.value < buffers_.size());
     Buffer& buffer = buffers_[handle.value];
     SIRIUS_PRE(out.size_bytes() <= buffer.size_bytes);
@@ -908,6 +975,7 @@ Expected<void> VulkanDevice::Dispatch(KernelHandle kernel, std::span<const Buffe
 
 Expected<void> VulkanDevice::DispatchIndependentPair(const std::array<ComputeDispatch, 2>& commands,
                                                      IndependentPairTiming* timing) {
+    last_dispatch_timestamp_.reset();
     if (timing) *timing = {};
     for (const auto first : commands[0].buffers)
         for (const auto second : commands[1].buffers)
@@ -929,7 +997,11 @@ Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> c
     }
 
     if (timing != nullptr) *timing = {};
+    last_dispatch_timestamp_.reset();
     if (pipeline_creations) *pipeline_creations = 0;
+    if (pending_dispatch_)
+        return Fail(ErrorDomain::kDevice, "dispatch compute commands",
+                    "earlier submitted work has no confirmed completion");
     const auto dispatch_start = std::chrono::steady_clock::now();
     std::array<Pipeline*, 2> pipelines{};
     std::array<VkDescriptorSetLayout, 2> layouts{};
@@ -1007,6 +1079,12 @@ Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> c
         free_sets();
         return Fail(ErrorDomain::kDevice, "begin compute command buffer", VkResultText(result));
     }
+    if (timestamp_pool_ != VK_NULL_HANDLE) {
+        // Core Vulkan query ordering; the original barriers/commands stay intact.
+        // https://docs.vulkan.org/refpages/latest/refpages/source/vkCmdWriteTimestamp.html
+        vkCmdResetQueryPool(command, timestamp_pool_, 0, 2);
+        vkCmdWriteTimestamp(command, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, timestamp_pool_, 0);
+    }
     for (std::size_t i = 0; i < commands.size(); ++i) {
         const auto& item = commands[i];
         const VkMemoryBarrier before{
@@ -1030,6 +1108,8 @@ Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> c
                              VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_HOST_BIT, 0,
                              1, &after, 0, nullptr, 0, nullptr);
     }
+    if (timestamp_pool_ != VK_NULL_HANDLE)
+        vkCmdWriteTimestamp(command, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, timestamp_pool_, 1);
     if (const auto result = vkEndCommandBuffer(command); result != VK_SUCCESS) {
         vkFreeCommandBuffers(device_, command_pool_, 1, &command);
         free_sets();
@@ -1043,13 +1123,41 @@ Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> c
     };
     const auto submit_start = std::chrono::steady_clock::now();
     VkResult submit_result = vkQueueSubmit(queue_, 1, &submit_info, VK_NULL_HANDLE);
+    const VkResult submitted = submit_result;
+    const auto queue_submit_end =
+        timestamp_pool_ != VK_NULL_HANDLE ? std::chrono::steady_clock::now() : submit_start;
     if (submit_result == VK_SUCCESS) {
         submit_result = vkQueueWaitIdle(queue_);
     }
 
     const auto submit_end = std::chrono::steady_clock::now();
-    vkFreeCommandBuffers(device_, command_pool_, 1, &command);
-    free_sets();
+    if (submit_result == VK_SUCCESS && timestamp_pool_ != VK_NULL_HANDLE) {
+        const auto ms = [](auto span) {
+            return std::chrono::duration<double, std::milli>(span).count();
+        };
+        VulkanDispatchTimestamp observation{
+            .properties = timestamp_properties_,
+            .host_submit_ms = ms(queue_submit_end - submit_start),
+            .host_wait_ms = ms(submit_end - queue_submit_end),
+        };
+        std::array<std::uint64_t, 4> data{};
+        observation.query_result = vkGetQueryPoolResults(
+            device_, timestamp_pool_, 0, 2, sizeof(data), data.data(), 2 * sizeof(std::uint64_t),
+            VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
+        observation.ticks = {data[0], data[2]};
+        observation.availability = {data[1], data[3]};
+        if (observation.query_result == VK_SUCCESS && data[1] != 0 && data[3] != 0)
+            observation.device_span_ms = detail::VulkanTimestampSpanMs(
+                data[0], data[2], timestamp_properties_.valid_bits, timestamp_properties_.period_ns,
+                ms(submit_end - submit_start));
+        last_dispatch_timestamp_ = observation;
+    }
+    if (detail::VulkanSubmissionNeedsCompletion(submitted, submit_result)) {
+        pending_dispatch_ = PendingDispatch{command, sets, set_info.descriptorSetCount};
+    } else {
+        vkFreeCommandBuffers(device_, command_pool_, 1, &command);
+        free_sets();
+    }
     const auto dispatch_end = std::chrono::steady_clock::now();
     if (timing != nullptr) {
         const auto milliseconds = [](auto duration) {

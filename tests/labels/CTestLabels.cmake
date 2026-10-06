@@ -998,6 +998,7 @@ set_tests_properties(
     RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation
     RetainedComputeTest.DenseSegmentsPreserveSmallCovariantArrivalDerivatives
     RetainedComputeTest.PhysicalInitializationRetainsTheHamiltonianResidual
+    RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults
     RetainedComputeTest.CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement
     RetainedComputeTest.SharedEndpointDensePreservesPrivateIntervalsAndSerialRetry
     RetainedComputeTest.ProjectionReserveKeepsLogicalCohortsBounded
@@ -1321,6 +1322,8 @@ set_tests_properties(
     VulkanBackend.DeviceSelectionIsStrictAndRangeChecked
     VulkanBackend.IdenticalKernelWordsReusePipelineAcrossBuffers
     VulkanBackend.IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffers
+    VulkanBackend.TimestampSpansBoundWrapAndInvalidCounters
+    VulkanBackend.SubmissionErrorsDoNotImplyIdleCompletion
     PROPERTIES LABELS "Mandatory;Operational"
 )
 

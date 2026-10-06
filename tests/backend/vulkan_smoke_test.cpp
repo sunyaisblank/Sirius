@@ -17,7 +17,9 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstring>
+#include <format>
 #include <fstream>
+#include <limits>
 #include <optional>
 #include <span>
 #include <thread>
@@ -845,6 +847,15 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
     ASSERT_TRUE(opened) << opened.error().Description();
     auto& device = **opened;
     ASSERT_TRUE(device.SupportsIndependentPair());
+    auto* vulkan = dynamic_cast<sirius::backend::VulkanDevice*>(&device);
+    ASSERT_NE(vulkan, nullptr);
+    const auto timestamp_properties = vulkan->TimestampProperties();
+    const bool timestamps_supported =
+        timestamp_properties.valid_bits >= 36 && timestamp_properties.valid_bits <= 64 &&
+        std::isfinite(timestamp_properties.period_ns) && timestamp_properties.period_ns > 0;
+    EXPECT_FALSE(vulkan->LastDispatchTimestamp());  // Default dispatch has no queries.
+    RecordProperty("timestamp_valid_bits", std::to_string(timestamp_properties.valid_bits));
+    RecordProperty("timestamp_period_ns", std::format("{:.17g}", timestamp_properties.period_ns));
     auto words = LoadSpirv(sirius::test::ResourcePath("kernels/smoke.spv"));
     ASSERT_GE(words.size(), 5U);
     const auto original = device.LoadKernel(words);
@@ -890,10 +901,50 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
         sirius::backend::ComputeDispatch{*original, bindings[0], 2, 1, 1},
         sirius::backend::ComputeDispatch{*variant, bindings[1], 3, 1, 1}};
     sirius::backend::IndependentPairTiming timing;
+    const auto check_timestamp = [&](const std::string& prefix,
+                                     const sirius::backend::DispatchTiming& host, bool enabled) {
+        const auto observation = vulkan->LastDispatchTimestamp();
+        if (!enabled) {
+            EXPECT_FALSE(observation);
+            return;
+        }
+        ASSERT_TRUE(observation);
+        EXPECT_EQ(observation->query_result, VK_SUCCESS);
+        EXPECT_NE(observation->availability[0], 0U);
+        EXPECT_NE(observation->availability[1], 0U);
+        ASSERT_TRUE(observation->device_span_ms);
+        EXPECT_TRUE(std::isfinite(*observation->device_span_ms));
+        EXPECT_GE(*observation->device_span_ms, 0);
+        EXPECT_NEAR(observation->host_submit_ms + observation->host_wait_ms, host.submit_wait_ms,
+                    1e-9 * std::max(1., host.submit_wait_ms));
+        RecordProperty(prefix + "_device_span_ms",
+                       std::format("{:.17g}", *observation->device_span_ms));
+        RecordProperty(prefix + "_host_submit_ms",
+                       std::format("{:.17g}", observation->host_submit_ms));
+        RecordProperty(prefix + "_host_wait_ms", std::format("{:.17g}", observation->host_wait_ms));
+        RecordProperty(prefix + "_begin_tick", std::to_string(observation->ticks[0]));
+        RecordProperty(prefix + "_end_tick", std::to_string(observation->ticks[1]));
+    };
     for (unsigned invocation = 0; invocation < 4; ++invocation) {
+        const bool requested = invocation == 1 || invocation == 3;
+        const auto configured = vulkan->SetDispatchTimestampsEnabled(requested);
+        if (!requested || timestamps_supported) {
+            ASSERT_TRUE(configured) << configured.error().Description();
+        } else {
+            EXPECT_FALSE(configured);  // Unsupported diagnostics do not disable ordinary work.
+        }
         for (const auto& bound : bindings)
             ASSERT_TRUE(device.WriteBuffer(bound[1], std::as_bytes(std::span(untouched))));
+        if (invocation == 1) {
+            sirius::backend::DispatchTiming single;
+            const auto& first_command = commands[0];
+            ASSERT_TRUE(device.Dispatch(first_command.kernel, first_command.buffers,
+                                        first_command.groups_x, 1, 1, &single));
+            check_timestamp("single", single, timestamps_supported);
+        }
         ASSERT_TRUE(device.DispatchIndependentPair(commands, &timing));
+        check_timestamp("pair_" + std::to_string(invocation), timing.combined,
+                        requested && timestamps_supported);
         EXPECT_EQ(timing.pipeline_creations, invocation == 0 ? 2U : 0U);
         EXPECT_EQ(timing.combined.pipeline_created, invocation == 0);
         EXPECT_TRUE(std::isfinite(timing.combined.submit_wait_ms));
@@ -923,15 +974,61 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
     commands[1].buffers = overlapping;
     const auto refused = device.DispatchIndependentPair(commands, &timing);
     ASSERT_FALSE(refused);
+    EXPECT_FALSE(vulkan->LastDispatchTimestamp());  // Refusal cannot retain a prior sample.
     EXPECT_EQ(refused.error().operation(), "dispatch independent compute pair");
     EXPECT_EQ(timing.combined.total_ms, 0);
     EXPECT_EQ(timing.pipeline_creations, 0U);
+    ASSERT_TRUE(vulkan->SetDispatchTimestampsEnabled(false));
     for (const auto& bound : bindings) {
         std::array<float, 194> actual{};
         ASSERT_TRUE(device.ReadBuffer(bound[1], std::as_writable_bytes(std::span(actual))));
         EXPECT_EQ(actual, untouched);
     }
 #endif
+}
+
+TEST(VulkanBackend, TimestampSpansBoundWrapAndInvalidCounters) {
+    using sirius::backend::detail::VulkanTimestampSpanMs;
+    const auto simple = VulkanTimestampSpanMs(100, 110, 36, 2, .1);
+    ASSERT_TRUE(simple);
+    EXPECT_NEAR(*simple, .000020, 1e-20);
+    // Independent fixed counter witnesses: 30 ticks through a 36-bit wrap,
+    // and four through a 64-bit wrap. Upper undefined bits are deliberately set.
+    const auto wrapped =
+        VulkanTimestampSpanMs(0xffffffffffffffecULL, 0xabcde0000000000aULL, 36, 2, .1);
+    ASSERT_TRUE(wrapped);
+    EXPECT_NEAR(*wrapped, .000060, 1e-20);
+    const auto full = VulkanTimestampSpanMs(0xfffffffffffffffdULL, 1, 64, 2, .1);
+    ASSERT_TRUE(full);
+    EXPECT_NEAR(*full, .000008, 1e-20);
+    EXPECT_FALSE(VulkanTimestampSpanMs(100, 110, 36, 2, 137438.953472));
+    EXPECT_FALSE(VulkanTimestampSpanMs(100, 110, 36, 2, 200000));
+    for (const auto bits : {0U, 35U, 65U})
+        EXPECT_FALSE(VulkanTimestampSpanMs(100, 110, bits, 2, .1));
+    for (const auto period : {0., -1., std::numeric_limits<double>::infinity(),
+                              std::numeric_limits<double>::quiet_NaN()})
+        EXPECT_FALSE(VulkanTimestampSpanMs(100, 110, 36, period, .1));
+    for (const auto completion :
+         {-1., std::numeric_limits<double>::infinity(), std::numeric_limits<double>::quiet_NaN()})
+        EXPECT_FALSE(VulkanTimestampSpanMs(100, 110, 36, 2, completion));
+}
+
+TEST(VulkanBackend, SubmissionErrorsDoNotImplyIdleCompletion) {
+    using sirius::backend::detail::VulkanSubmissionNeedsCompletion;
+    // Fixed Vulkan lifetime decisions, not injected device or physics outcomes.
+    for (const auto waited : {VK_SUCCESS, VK_ERROR_DEVICE_LOST, VK_ERROR_OUT_OF_HOST_MEMORY,
+                              VK_ERROR_OUT_OF_DEVICE_MEMORY}) {
+        SCOPED_TRACE(waited);
+        EXPECT_TRUE(VulkanSubmissionNeedsCompletion(VK_ERROR_DEVICE_LOST, waited));
+        EXPECT_FALSE(VulkanSubmissionNeedsCompletion(VK_ERROR_OUT_OF_HOST_MEMORY, waited));
+        EXPECT_FALSE(VulkanSubmissionNeedsCompletion(VK_ERROR_OUT_OF_DEVICE_MEMORY, waited));
+    }
+    EXPECT_FALSE(VulkanSubmissionNeedsCompletion(VK_SUCCESS, VK_SUCCESS));
+    EXPECT_FALSE(VulkanSubmissionNeedsCompletion(VK_SUCCESS, VK_ERROR_DEVICE_LOST));
+    EXPECT_TRUE(VulkanSubmissionNeedsCompletion(VK_SUCCESS, VK_ERROR_OUT_OF_HOST_MEMORY));
+    EXPECT_TRUE(VulkanSubmissionNeedsCompletion(VK_SUCCESS, VK_ERROR_OUT_OF_DEVICE_MEMORY));
+    EXPECT_TRUE(VulkanSubmissionNeedsCompletion(VK_ERROR_UNKNOWN, VK_SUCCESS));
+    EXPECT_TRUE(VulkanSubmissionNeedsCompletion(VK_SUCCESS, VK_ERROR_UNKNOWN));
 }
 
 }  // namespace
