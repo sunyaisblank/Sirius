@@ -561,6 +561,20 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
         timing.read_buffer_bytes += stages[i].read_buffer_bytes;
         timing.pipeline_creations += stages[i].pipeline_creations;
     }
+    const auto paired = (*compute)->EndpointDenseStatistics();
+    stats.endpoint_dense_timing = paired;
+    stats.queue_submissions =
+        static_cast<std::uint64_t>(stats.band_dispatches) - paired.submissions;
+    stats.dispatch_seconds += paired.submit_wait_ms / 1000;
+    stats.maximum_dispatch_ms = std::max(stats.maximum_dispatch_ms, paired.maximum_submit_wait_ms);
+    stats.initialization_seconds += paired.pipeline_setup_ms / 1000;
+    stats.dispatch_target_overshoots += static_cast<std::int64_t>(paired.target_overshoots);
+    timing.pipeline_setup_ms += paired.pipeline_setup_ms;
+    timing.command_setup_ms += paired.command_setup_ms;
+    timing.submit_wait_ms += paired.submit_wait_ms;
+    timing.cleanup_ms += paired.cleanup_ms;
+    timing.dispatch_total_ms += paired.dispatch_total_ms;
+    timing.pipeline_creations += paired.pipeline_creations;
     stats.seconds =
         std::chrono::duration<double>(std::chrono::steady_clock::now() - started).count();
     return stats;

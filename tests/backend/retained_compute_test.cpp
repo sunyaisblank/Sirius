@@ -616,6 +616,11 @@ class TransferProbeDevice final : public ComputeDevice {
     std::function<void()> before_dispatch;
     std::optional<BufferHandle> capture_output;
     std::vector<std::vector<std::byte>> readbacks;
+    bool independent_pairs = false;
+    std::uint64_t pair_calls = 0;
+    std::function<void()> after_pair;
+    std::optional<double> pair_submit_ms;
+    std::function<void(BufferHandle, std::span<std::byte>)> after_read;
 
     const DeviceInfo& Info() const noexcept override { return device_.Info(); }
     sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t> code) override {
@@ -643,6 +648,24 @@ class TransferProbeDevice final : public ComputeDevice {
         auto status = device_.ReadBuffer(buffer, data);
         if (status && capture_output && buffer.value == capture_output->value)
             readbacks.emplace_back(data.begin(), data.end());
+        if (status && after_read) after_read(buffer, data);
+        return status;
+    }
+    bool SupportsIndependentPair() const noexcept override {
+        return independent_pairs && device_.SupportsIndependentPair();
+    }
+    sirius::base::Expected<void> DispatchIndependentPair(
+        const std::array<ComputeDispatch, 2>& commands, IndependentPairTiming* timing) override {
+        ++pair_calls;
+        if (fail_next == Failure::Dispatch) return Inject("pair dispatch");
+        auto status = device_.DispatchIndependentPair(commands, timing);
+        if (status && timing && pair_submit_ms) {
+            timing->combined.submit_wait_ms = *pair_submit_ms;
+            timing->combined.total_ms = timing->combined.pipeline_setup_ms +
+                                        timing->combined.command_setup_ms + *pair_submit_ms +
+                                        timing->combined.cleanup_ms;
+        }
+        if (status && after_pair) after_pair();
         return status;
     }
     sirius::base::Expected<void> Dispatch(KernelHandle kernel,
@@ -1583,12 +1606,13 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
     using Stats = std::array<RetainedCompute::StageStats, 6>;
     const auto fixture_started = Clock::now();
     const auto fixture_before = compute->Statistics();
+    const auto fixture_pair_before = compute->EndpointDenseStatistics();
     const auto milliseconds = [](Clock::time_point started, Clock::time_point finished) {
         return std::chrono::duration<double, std::milli>(finished - started).count();
     };
-    const auto record_timing = [](const std::string& prefix, const Stats& before,
-                                  const Stats& after, double wall_ms,
-                                  bool lifetime_maxima = false) {
+    auto record_timing = [&, previous_pair = fixture_pair_before](
+                             const std::string& prefix, const Stats& before, const Stats& after,
+                             double wall_ms, bool lifetime_maxima = false) mutable {
         constexpr std::array names{"camera", "transport",  "endpoint",
                                    "dense",  "initialize", "ray_camera"};
         std::uint64_t submissions = 0, pipeline_creations = 0, target_overshoots = 0;
@@ -1645,6 +1669,34 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
                                std::to_string(after[stage].maximum_submit_wait_ms));
             }
         }
+        const auto pair = compute->EndpointDenseStatistics();
+        const auto pair_before = lifetime_maxima ? fixture_pair_before : previous_pair;
+        const auto shared = pair.submissions - pair_before.submissions;
+        submit_wait_ms += pair.submit_wait_ms - pair_before.submit_wait_ms;
+        pipeline_setup_ms += pair.pipeline_setup_ms - pair_before.pipeline_setup_ms;
+        command_setup_ms += pair.command_setup_ms - pair_before.command_setup_ms;
+        cleanup_ms += pair.cleanup_ms - pair_before.cleanup_ms;
+        dispatch_total_ms += pair.dispatch_total_ms - pair_before.dispatch_total_ms;
+        pipeline_creations += pair.pipeline_creations - pair_before.pipeline_creations;
+        target_overshoots += pair.target_overshoots - pair_before.target_overshoots;
+        maximum_submit_wait_ms = std::max(maximum_submit_wait_ms, pair.maximum_submit_wait_ms);
+        previous_pair = pair;
+        RecordProperty(prefix + "_shared_endpoint_dense_submissions", std::to_string(shared));
+        RecordProperty(prefix + "_shared_endpoint_dense_submit_wait_ms",
+                       std::to_string(pair.submit_wait_ms - pair_before.submit_wait_ms));
+        RecordProperty(prefix + "_shared_endpoint_dense_pipeline_setup_ms",
+                       std::to_string(pair.pipeline_setup_ms - pair_before.pipeline_setup_ms));
+        RecordProperty(prefix + "_shared_endpoint_dense_command_setup_ms",
+                       std::to_string(pair.command_setup_ms - pair_before.command_setup_ms));
+        RecordProperty(prefix + "_shared_endpoint_dense_cleanup_ms",
+                       std::to_string(pair.cleanup_ms - pair_before.cleanup_ms));
+        RecordProperty(prefix + "_shared_endpoint_dense_dispatch_total_ms",
+                       std::to_string(pair.dispatch_total_ms - pair_before.dispatch_total_ms));
+        RecordProperty(prefix + "_shared_endpoint_dense_pipeline_creations",
+                       std::to_string(pair.pipeline_creations - pair_before.pipeline_creations));
+        RecordProperty(prefix + "_shared_endpoint_dense_target_overshoots",
+                       std::to_string(pair.target_overshoots - pair_before.target_overshoots));
+        RecordProperty(prefix + "_queue_submissions", std::to_string(submissions - shared));
         RecordProperty(prefix + "_submissions", std::to_string(submissions));
         RecordProperty(prefix + "_submit_wait_ms", std::to_string(submit_wait_ms));
         RecordProperty(prefix + "_pipeline_setup_ms", std::to_string(pipeline_setup_ms));
@@ -2017,6 +2069,144 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
                    "inactive and rejected row positions, and actual tiny-target subdivision; "
                    "outside interval_fixture timing, no frame-speed claim");
 
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
+TEST_F(RetainedComputeTest, SharedEndpointDensePreservesPrivateIntervalsAndSerialRetry) {
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    TransferProbeDevice probe(*device);
+    ASSERT_TRUE(device->SupportsIndependentPair());
+    auto created = RetainedCompute::Create(probe, 4, false, 250);
+    ASSERT_TRUE(created) << created.error().Description();
+    auto& observed = **created;
+    ASSERT_EQ(probe.allocations.size(), 12U);
+    const auto endpoint_output = probe.allocations[5].handle;
+    const auto dense_output = probe.allocations[7].handle;
+    const auto resident = device->BufferAllocationBytes();
+    std::array<RetainedEndpointInput, 2> initial{};
+    std::array<RetainedIntervalInput, 2> inputs{};
+    for (std::size_t row = 0; row < inputs.size(); ++row) {
+        const auto step =
+            std::bit_cast<RetainedStepInput>(sirius::test::retained_transport::cases[row].input);
+        std::copy_n(step.values.begin(), 45, initial[row].values.begin());
+        auto& input = inputs[row];
+        std::copy_n(step.values.begin(), 4, input.metric.begin());
+        input.chart = step.values[44].Center();
+        input.interval = step.values[45].Center();
+        input.control.length_scale = input.control.frequency_scale = 1;
+        input.control.tolerance = 1e-4 / (4 * 30000);
+        input.control.integrator.min_step = static_cast<float>(input.interval);
+        input.control.integrator.max_step = 1;
+        input.control.integrator.abs_tolerance = input.control.integrator.rel_tolerance = 1e-9f;
+    }
+    const auto launched = observed.Endpoint(initial);
+    ASSERT_TRUE(launched) << launched.error().Description();
+    for (std::size_t row = 0; row < inputs.size(); ++row) {
+        ASSERT_TRUE((*launched)[row].valid);
+        inputs[row].start = (*launched)[row];
+    }
+    const auto serial = AttemptRetainedIntervals(observed, inputs, 4);
+    ASSERT_TRUE(serial) << serial.error().Description();
+    for (const auto& row : *serial) ASSERT_TRUE(row.admissible);
+    probe.independent_pairs = true;
+    ASSERT_TRUE(observed.SupportsIndependentPair());
+    const auto paired = AttemptRetainedIntervals(observed, inputs, 4);
+    ASSERT_TRUE(paired) << paired.error().Description();
+    EXPECT_EQ(probe.pair_calls, 1U);
+    for (std::size_t row = 0; row < inputs.size(); ++row)
+        EXPECT_TRUE(IntervalBitsAgree((*paired)[row], (*serial)[row]));
+
+    // The third Endpoint is the final projection in both execution schedules.
+    // Its rejected row must not acquire a speculative Dense decode error.
+    unsigned endpoint_reads = 0;
+    bool corrupt_dense = false;
+    probe.after_read = [&](BufferHandle buffer, std::span<std::byte> bytes) {
+        std::uint32_t flag = 0;
+        if (buffer.value == endpoint_output.value && ++endpoint_reads == 3) {
+            std::memcpy(bytes.data(), &flag, sizeof(flag));
+        } else if (corrupt_dense && buffer.value == dense_output.value) {
+            flag = 2;
+            std::memcpy(bytes.data(), &flag, sizeof(flag));
+        }
+    };
+    probe.independent_pairs = false;
+    const auto rejected_serial = AttemptRetainedIntervals(observed, inputs, 4);
+    ASSERT_TRUE(rejected_serial);
+    ASSERT_FALSE(rejected_serial->front().admissible);
+    ASSERT_TRUE(rejected_serial->back().admissible);
+    EXPECT_EQ(rejected_serial->front().failure, sirius::core::CoupledStepFailure::Projection);
+    endpoint_reads = 0;
+    corrupt_dense = true;
+    probe.independent_pairs = true;
+    const auto rejected_pair = AttemptRetainedIntervals(observed, inputs, 4);
+    ASSERT_TRUE(rejected_pair) << rejected_pair.error().Description();
+    for (std::size_t row = 0; row < inputs.size(); ++row)
+        EXPECT_TRUE(IntervalBitsAgree((*rejected_pair)[row], (*rejected_serial)[row]));
+
+    // A malformed ACTIVE dense result remains a global error; a zero-input row
+    // already inactive before speculation also keeps the original decode veto.
+    probe.after_read = [&](BufferHandle buffer, std::span<std::byte> bytes) {
+        if (buffer.value == dense_output.value) {
+            const std::uint32_t malformed = 2;
+            std::memcpy(bytes.data(), &malformed, sizeof(malformed));
+        }
+    };
+    for (const bool initially_inactive : {false, true}) {
+        auto malformed_input = inputs;
+        if (initially_inactive) malformed_input[0].start.phase[5].valid = 0;
+        const auto malformed = AttemptRetainedIntervals(observed, malformed_input, 4);
+        ASSERT_FALSE(malformed);
+        EXPECT_EQ(malformed.error().operation(), "read retained dense segment");
+    }
+    probe.after_read = {};
+    const auto before_failed_read = observed.EndpointDenseStatistics();
+    probe.after_pair = [&] { probe.fail_next = TransferProbeDevice::Failure::Read; };
+    const auto failed_read = AttemptRetainedIntervals(observed, inputs, 4);
+    ASSERT_FALSE(failed_read);
+    EXPECT_EQ(failed_read.error().operation(), "retained transfer probe read");
+    EXPECT_EQ(observed.EndpointDenseStatistics().submissions - before_failed_read.submissions, 1U);
+    EXPECT_GT(observed.EndpointDenseStatistics().submit_wait_ms - before_failed_read.submit_wait_ms,
+              0);
+    probe.after_pair = {};
+    EXPECT_EQ(device->BufferAllocationBytes(), resident);
+
+    // Synthetic governor timings are explicit controls, not physical duration.
+    // The actual device still calculates every private candidate and retry.
+    probe.submission_ms = [](BufferHandle, std::uint32_t) { return 100.; };
+    probe.pair_submit_ms = 1200;
+    (void)observed.TakeSubmissionFeedback();
+    RetainedTraceExecutor executor(observed, {}, 1000);
+    sirius::core::KerrSchildFamily flat(sirius::core::KerrSchildParams::Minkowski());
+    sirius::core::Lightray ray{};
+    ray.position(1) = 5;
+    ray.velocity(0) = -1;
+    ray.velocity(1) = 1;
+    ray.step_size = 1;
+    sirius::core::Rk45CoupledState columns;
+    columns.length_scale = columns.frequency_scale = 1;
+    columns.tolerance = 1e-9;
+    columns.variations[0].derivative(2) = .001;
+    columns.variations[1].derivative(3) = .001;
+    columns.variations[2].displacement(2) = 1;
+    columns.variations[3].displacement(3) = 1;
+    sirius::core::IntegratorConfig control;
+    control.min_step = .01f;
+    control.max_step = 2;
+    sirius::core::Rk45CoupledComparison comparison;
+    const auto pairs_before = probe.pair_calls;
+    ASSERT_TRUE(executor.Step(ray, flat, control, columns, comparison));
+    EXPECT_EQ(probe.pair_calls - pairs_before, 1U);
+    EXPECT_EQ(executor.Statistics().paired_projection_retries, 1U);
+    EXPECT_EQ(columns.central_stages, 42U);
+    ASSERT_TRUE(executor.Step(ray, flat, control, columns, comparison));
+    EXPECT_EQ(probe.pair_calls - pairs_before, 1U);  // Sticky budget one is fully serialized.
+    EXPECT_EQ(device->BufferAllocationBytes(), resident);
+    RecordProperty("device", device->Info().name);
+    RecordProperty("scope",
+                   "actual pair arithmetic/word equivalence and injected rejection/read/governor "
+                   "controls; no frame-speed qualification");
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif

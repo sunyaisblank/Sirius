@@ -42,6 +42,38 @@ RetainedValue Decode(const std::uint32_t* words) {
     return std::bit_cast<RetainedValue>(
         std::array<std::uint32_t, 5>{words[0], words[1], words[2], words[3], words[4]});
 }
+
+base::Expected<RetainedEndpointOutput> DecodeEndpoint(const std::uint32_t* words) {
+    RetainedEndpointOutput output;
+    if (words[0] == 0) return output;
+    if (words[0] != 1 || words[1] > 3)
+        return Fail(ErrorDomain::kKernel, "read retained endpoint", "invalid projection state");
+    for (std::size_t i = 0; i < 40; ++i) {
+        output.phase[i] = Decode(words + 104 + i * 5);
+        output.physical[i] = Decode(words + 304 + i * 5);
+        if (!output.phase[i].IsRepresented() || !output.physical[i].IsRepresented())
+            return Fail(ErrorDomain::kKernel, "read retained endpoint", "invalid retained value");
+    }
+    output.component = words[1];
+    output.valid = true;
+    return output;
+}
+
+base::Expected<RetainedDenseOutput> DecodeDense(const std::uint32_t* words) {
+    RetainedDenseOutput output;
+    if (words[0] == 0) return output;
+    if (words[0] != 1)
+        return Fail(ErrorDomain::kKernel, "read retained dense segment",
+                    "invalid completion state");
+    for (std::size_t i = 0; i < 40; ++i) {
+        output.physical[i] = Decode(words + 4 + i * 5);
+        if (!output.physical[i].IsRepresented())
+            return Fail(ErrorDomain::kKernel, "read retained dense segment",
+                        "invalid retained value");
+    }
+    output.valid = true;
+    return output;
+}
 }  // namespace
 
 RetainedValue RetainedValue::FromDouble(double value) {
@@ -390,20 +422,9 @@ base::Expected<std::vector<RetainedEndpointOutput>> RetainedCompute::Endpoint(
     if (!status) return std::unexpected(status.error());
     std::vector<RetainedEndpointOutput> result(inputs.size());
     for (std::size_t row = 0; row < inputs.size(); ++row) {
-        const auto* words = endpoint_.output.data() + row * kEndpointRowWords;
-        if (words[0] == 0) continue;
-        if (words[0] != 1 || words[1] > 3)
-            return Fail(ErrorDomain::kKernel, "read retained endpoint", "invalid projection state");
-        auto& output = result[row];
-        for (std::size_t i = 0; i < 40; ++i) {
-            output.phase[i] = Decode(words + 104 + i * 5);
-            output.physical[i] = Decode(words + 304 + i * 5);
-            if (!output.phase[i].IsRepresented() || !output.physical[i].IsRepresented())
-                return Fail(ErrorDomain::kKernel, "read retained endpoint",
-                            "invalid retained value");
-        }
-        output.component = words[1];
-        output.valid = true;
+        auto output = DecodeEndpoint(endpoint_.output.data() + row * kEndpointRowWords);
+        if (!output) return std::unexpected(output.error());
+        result[row] = *output;
     }
     return result;
 }
@@ -419,19 +440,102 @@ base::Expected<std::vector<RetainedDenseOutput>> RetainedCompute::Dense(
     if (!status) return std::unexpected(status.error());
     std::vector<RetainedDenseOutput> result(inputs.size());
     for (std::size_t row = 0; row < inputs.size(); ++row) {
-        const auto* words = dense_.output.data() + row * kDenseRowWords;
-        if (words[0] == 0) continue;
-        if (words[0] != 1)
-            return Fail(ErrorDomain::kKernel, "read retained dense segment",
-                        "invalid completion state");
-        for (std::size_t i = 0; i < 40; ++i) {
-            result[row].physical[i] = Decode(words + 4 + i * 5);
-            if (!result[row].physical[i].IsRepresented())
-                return Fail(ErrorDomain::kKernel, "read retained dense segment",
-                            "invalid retained value");
-        }
-        result[row].valid = true;
+        auto output = DecodeDense(dense_.output.data() + row * kDenseRowWords);
+        if (!output) return std::unexpected(output.error());
+        result[row] = *output;
     }
+    return result;
+}
+
+base::Expected<RetainedEndpointDenseOutput> RetainedCompute::EndpointAndDense(
+    std::span<const RetainedEndpointInput> endpoints, std::span<const RetainedDenseInput> dense) {
+    const auto rows = std::max(endpoints.size(), dense.size());
+    if (!SupportsIndependentPair() || endpoints.empty() || dense.empty() || rows <= 1 ||
+        rows > capacity_)
+        return Fail(ErrorDomain::kDevice, "dispatch retained endpoint and dense",
+                    "invalid or unsupported independent pair");
+    using Clock = std::chrono::steady_clock;
+    const auto milliseconds = [](auto started, auto finished) {
+        return std::chrono::duration<double, std::milli>(finished - started).count();
+    };
+    std::fill_n(endpoint_.input.begin() + 1, capacity_ * 225, 0U);
+    std::memcpy(endpoint_.input.data() + 1, endpoints.data(), endpoints.size_bytes());
+    std::fill_n(dense_.input.begin() + 1, capacity_ * 560, 0U);
+    std::memcpy(dense_.input.data() + 1, dense.data(), dense.size_bytes());
+    const auto write = [&](Stage& stage, std::size_t active) -> base::Expected<void> {
+        auto input = std::span(stage.input);
+        if (stage.program_uploaded) input = input.first(1 + active * stage.input_words_per_row);
+        const auto started = Clock::now();
+        auto status = device_.WriteBuffer(stage.buffers[0], std::as_bytes(input));
+        stage.stats.write_buffer_ms += milliseconds(started, Clock::now());
+        if (status) {
+            stage.program_uploaded = true;
+            stage.stats.write_buffer_bytes += input.size_bytes();
+        }
+        return status;
+    };
+    auto status = write(endpoint_, endpoints.size());
+    if (!status) return std::unexpected(status.error());
+    status = write(dense_, dense.size());
+    if (!status) return std::unexpected(status.error());
+    const std::array commands{
+        ComputeDispatch{endpoint_.kernel, endpoint_.buffers,
+                        static_cast<std::uint32_t>((endpoints.size() + kRetainedGroupRows - 1) /
+                                                   kRetainedGroupRows),
+                        1, 1},
+        ComputeDispatch{dense_.kernel, dense_.buffers,
+                        static_cast<std::uint32_t>((dense.size() + kRetainedGroupRows - 1) /
+                                                   kRetainedGroupRows),
+                        1, 1}};
+    IndependentPairTiming observed;
+    status = device_.DispatchIndependentPair(commands, &observed);
+    if (!status) return std::unexpected(status.error());
+    const auto& timing = observed.combined;
+    if (!std::isfinite(timing.submit_wait_ms) || timing.submit_wait_ms < 0)
+        return Fail(ErrorDomain::kDevice, "dispatch retained endpoint and dense",
+                    "invalid submission timing");
+    ++endpoint_.stats.submissions;
+    ++dense_.stats.submissions;
+    auto& stats = endpoint_dense_stats_;
+    ++stats.submissions;
+    stats.submit_wait_ms += timing.submit_wait_ms;
+    stats.maximum_submit_wait_ms = std::max(stats.maximum_submit_wait_ms, timing.submit_wait_ms);
+    stats.pipeline_setup_ms += timing.pipeline_setup_ms;
+    stats.command_setup_ms += timing.command_setup_ms;
+    stats.cleanup_ms += timing.cleanup_ms;
+    stats.dispatch_total_ms += timing.total_ms;
+    stats.pipeline_creations += observed.pipeline_creations;
+    if (dispatch_target_ms_ > 0 && timing.submit_wait_ms > dispatch_target_ms_)
+        ++stats.target_overshoots;
+    if (timing.submit_wait_ms >= submission_feedback_.peak_ms) {
+        submission_feedback_.peak_ms = timing.submit_wait_ms;
+        submission_feedback_.peak_rows = rows;
+    }
+    submission_feedback_.maximum_rows = std::max(submission_feedback_.maximum_rows, rows);
+    // A pair is reducible even for one logical ray. The caller must retry it
+    // through budget-one individual stages, never call it an irreducible stage.
+    const auto read = [&](Stage& stage, std::size_t active) -> base::Expected<void> {
+        auto output = std::span(stage.output).first(active * (stage.output.size() / capacity_));
+        const auto started = Clock::now();
+        auto result = device_.ReadBuffer(stage.buffers[1], std::as_writable_bytes(output));
+        stage.stats.read_buffer_ms += milliseconds(started, Clock::now());
+        if (result) stage.stats.read_buffer_bytes += output.size_bytes();
+        return result;
+    };
+    status = read(endpoint_, endpoints.size());
+    if (!status) return std::unexpected(status.error());
+    RetainedEndpointDenseOutput result;
+    result.endpoints.reserve(endpoints.size());
+    for (std::size_t row = 0; row < endpoints.size(); ++row) {
+        auto output = DecodeEndpoint(endpoint_.output.data() + row * kEndpointRowWords);
+        if (!output) return std::unexpected(output.error());
+        result.endpoints.push_back(*output);
+    }
+    status = read(dense_, dense.size());
+    if (!status) return std::unexpected(status.error());
+    result.dense.reserve(dense.size());
+    for (std::size_t row = 0; row < dense.size(); ++row)
+        result.dense.push_back(DecodeDense(dense_.output.data() + row * kDenseRowWords));
     return result;
 }
 

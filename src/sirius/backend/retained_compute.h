@@ -80,6 +80,13 @@ struct RetainedDenseOutput {
     bool valid = false;
 };
 
+struct RetainedEndpointDenseOutput {
+    std::vector<RetainedEndpointOutput> endpoints;
+    // Decode errors remain private row results until Endpoint admission has
+    // determined which Dense rows the original interval actually needs.
+    std::vector<base::Expected<RetainedDenseOutput>> dense;
+};
+
 struct RetainedInitializeInput {
     // M,a,Q,L; physical x,k and four X,V columns; exact chart reflection.
     std::array<RetainedValue, 45> values{};
@@ -115,8 +122,10 @@ class RetainedCompute {
         return "unknown";
     }
     struct StageStats {
-        // Host wall-clock intervals, not GPU timestamps. Dispatch phases and
-        // creation counts cover successful device Dispatch calls with valid
+        // Host wall-clock intervals, not GPU timestamps. Individual-stage counts
+        // count successful kernel commands; EndpointDenseStatistics counts pairs.
+        // Shared phases/creation counts live only in EndpointDenseStatistics;
+        // individual phases cover Dispatch calls with valid
         // submission timing. Buffer timing totals include returned failing calls;
         // a later read failure does not undo a successful dispatch observation.
         std::uint64_t submissions = 0;
@@ -177,6 +186,12 @@ class RetainedCompute {
         std::span<const RetainedEndpointInput> inputs, DispatchTiming* timing = nullptr);
     [[nodiscard]] base::Expected<std::vector<RetainedDenseOutput>> Dense(
         std::span<const RetainedDenseInput> inputs, DispatchTiming* timing = nullptr);
+    [[nodiscard]] bool SupportsIndependentPair() const noexcept {
+        return device_.SupportsIndependentPair();
+    }
+    [[nodiscard]] base::Expected<RetainedEndpointDenseOutput> EndpointAndDense(
+        std::span<const RetainedEndpointInput> endpoints,
+        std::span<const RetainedDenseInput> dense);
     [[nodiscard]] base::Expected<std::vector<RetainedInitializeOutput>> Initialize(
         std::span<const RetainedInitializeInput> inputs, DispatchTiming* timing = nullptr);
     [[nodiscard]] std::size_t Capacity() const { return capacity_; }
@@ -198,6 +213,9 @@ class RetainedCompute {
     [[nodiscard]] double TakeSubmissionPeakMs();
     // Read only after the owning submissions have finished.
     [[nodiscard]] std::array<StageStats, 6> Statistics() const;
+    // Kernel command counts above include both commands in a shared submit.
+    // All timing for that submit belongs here, never to either individual stage.
+    [[nodiscard]] StageStats EndpointDenseStatistics() const { return endpoint_dense_stats_; }
 
   private:
     explicit RetainedCompute(ComputeDevice& device, std::size_t capacity)
@@ -217,6 +235,7 @@ class RetainedCompute {
     std::size_t capacity_;
     double dispatch_target_ms_ = 250;
     SubmissionFeedback submission_feedback_;
+    StageStats endpoint_dense_stats_;
     Stage camera_, transport_, endpoint_, dense_, initialize_, ray_camera_;
 };
 

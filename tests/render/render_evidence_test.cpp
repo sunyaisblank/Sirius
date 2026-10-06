@@ -48,6 +48,18 @@ TEST(RenderEvidence, RetainedWireRecordsFeedAttestationControls) {
         stats.retained_stage_dispatches =
             imax ? std::array<std::int64_t, 6>{0, 5000, 5000, 5000, 5000, 12736}
                  : std::array<std::int64_t, 6>{0, 500, 500, 500, 500, 1000};
+        auto& paired = stats.endpoint_dense_timing;
+        paired.submissions = imax ? 3000 : 300;
+        paired.submit_wait_ms = imax ? 30000 : 3000;
+        paired.maximum_submit_wait_ms = 25;
+        paired.pipeline_setup_ms = 3;
+        paired.command_setup_ms = 4;
+        paired.cleanup_ms = 5;
+        paired.dispatch_total_ms = paired.submit_wait_ms + 12;
+        paired.pipeline_creations = 2;
+        paired.target_overshoots = 0;
+        stats.queue_submissions =
+            static_cast<std::uint64_t>(stats.band_dispatches) - paired.submissions;
         stats.camera_batches = imax ? 12736 : 1000;
         stats.accepted_intervals = imax ? 10000 : 1000;
         stats.dispatch_seconds = imax ? 90.0 : 15.0;
@@ -68,6 +80,11 @@ TEST(RenderEvidence, RetainedWireRecordsFeedAttestationControls) {
         EXPECT_EQ(decoded["source_owner"], "host");
         EXPECT_EQ(decoded["route"], "retained");
         EXPECT_TRUE(decoded["dispatches"].is_number_integer());
+        EXPECT_EQ(decoded["dispatches"], stats.band_dispatches);
+        EXPECT_EQ(decoded["queue_submissions"], stats.queue_submissions);
+        EXPECT_EQ(decoded["shared_endpoint_dense"]["submissions"], paired.submissions);
+        EXPECT_EQ(decoded["shared_endpoint_dense"]["submit_wait_ms"], paired.submit_wait_ms);
+        EXPECT_EQ(decoded["shared_endpoint_dense"]["dispatch_total_ms"], paired.dispatch_total_ms);
         std::cout << kSceneEvidencePrefix << scene << '\n'
                   << kSourceSceneEvidencePrefix << scene << '\n'
                   << kVulkanEvidencePrefix << completion << '\n';

@@ -455,6 +455,35 @@ def verify_governed_scene_transcript(
             and all(count > 0 for count in stages[1:])
             and sum(stages) == completion["dispatches"],
             f"{label} completion does not prove the retained device stages")
+    # Older schema-v1 records count individual commands only. When the writer
+    # reports shared Endpoint+Dense waits, require both the physical queue count
+    # and its separately owned timing without changing the scientific criteria.
+    if "queue_submissions" in completion or "shared_endpoint_dense" in completion:
+        require_positive_integer(completion.get("queue_submissions"), f"{label} queue_submissions")
+        paired = completion.get("shared_endpoint_dense")
+        require(isinstance(paired, dict), f"{label} shared Endpoint+Dense timing is missing")
+        for field in ("submissions", "pipeline_creations", "target_overshoots"):
+            require(type(paired.get(field)) is int and paired[field] >= 0,
+                    f"{label} shared Endpoint+Dense {field} must be a nonnegative integer")
+        count = paired["submissions"]
+        require(count <= min(stages[2], stages[3])
+                and completion["queue_submissions"] == sum(stages) - count
+                and paired["pipeline_creations"] <= 2 * count
+                and paired["target_overshoots"] <= count,
+                f"{label} shared Endpoint+Dense counts contradict the kernel commands")
+        for field in ("submit_wait_ms", "maximum_submit_wait_ms", "pipeline_setup_ms",
+                      "command_setup_ms", "cleanup_ms", "dispatch_total_ms"):
+            value = paired.get(field)
+            require(type(value) in (int, float) and math.isfinite(value) and value >= 0,
+                    f"{label} shared Endpoint+Dense {field} must be finite and nonnegative")
+        phases = sum(paired[field] for field in
+                     ("submit_wait_ms", "pipeline_setup_ms", "command_setup_ms", "cleanup_ms"))
+        require(paired["maximum_submit_wait_ms"] <= paired["submit_wait_ms"]
+                and paired["submit_wait_ms"] <= count * paired["maximum_submit_wait_ms"] +
+                    max(1e-6, paired["submit_wait_ms"] * 1e-6)
+                and math.isclose(phases, paired["dispatch_total_ms"], rel_tol=1e-6, abs_tol=1e-6)
+                and (count > 0 or phases == 0),
+                f"{label} shared Endpoint+Dense phases are inconsistent")
     for field in ("target_overshoots", "batch_subdivisions", "safety_fallbacks",
                   "initialization_dispatches"):
         require(type(completion.get(field)) is int and completion[field] >= 0,
@@ -465,6 +494,12 @@ def verify_governed_scene_transcript(
         require(type(value) in (int, float) and math.isfinite(value) and value >= 0,
                 f"{label} {field} must be finite and nonnegative")
     rendered_seconds = completion["wall_seconds"]
+    if "shared_endpoint_dense" in completion:
+        require(completion["shared_endpoint_dense"]["submit_wait_ms"] <=
+                completion["dispatch_seconds"] * 1000
+                and completion["shared_endpoint_dense"]["maximum_submit_wait_ms"] <=
+                    completion["maximum_dispatch_ms"],
+                f"{label} shared Endpoint+Dense wait exceeds total device wait or peak")
     claimed_seconds = float(render.get("wall_seconds"))
     require(0 < completion["dispatch_seconds"] <= rendered_seconds
             and completion["maximum_dispatch_ms"] > 0
@@ -2003,7 +2038,53 @@ def self_test(render_test_executable=None):
                 return original_transcript.replace(lines[prefix], prefix + json.dumps(record))
 
             check_completion()
+            paired = completion.get("shared_endpoint_dense", {
+                "submissions": 1, "submit_wait_ms": 1.0, "maximum_submit_wait_ms": 1.0,
+                "pipeline_setup_ms": 0.0, "command_setup_ms": 0.0, "cleanup_ms": 0.0,
+                "dispatch_total_ms": 1.0, "pipeline_creations": 0, "target_overshoots": 0,
+            })
+            pair_fields = {"shared_endpoint_dense": paired,
+                           "queue_submissions": completion["dispatches"] - paired["submissions"]}
+            transcript.write_text(replace_record(VULKAN_EVIDENCE_PREFIX, pair_fields), encoding="utf-8")
+            check_completion()
+            legacy = dict(completion)
+            legacy.pop("queue_submissions", None)
+            legacy.pop("shared_endpoint_dense", None)
+            transcript.write_text(original_transcript.replace(
+                completion_line, VULKAN_EVIDENCE_PREFIX + json.dumps(legacy)), encoding="utf-8")
+            check_completion()
+            transcript.write_text(original_transcript, encoding="utf-8")
             mutations = []
+            for description, changes in (
+                    ("contradictory physical queue count", {"queue_submissions": completion["dispatches"] + 1}),
+                    ("non-integer physical queue count", {"queue_submissions": True}),
+                    ("missing shared timing", {"shared_endpoint_dense": None}),
+                    ("excessive pair count", {"shared_endpoint_dense": {
+                        **paired, "submissions": completion["dispatches"] + 1}}),
+                    ("invalid pair timing", {"shared_endpoint_dense": {
+                        **paired, "submit_wait_ms": float("inf")}}),
+                    ("contradictory pair peak", {"shared_endpoint_dense": {
+                        **paired, "maximum_submit_wait_ms": paired["submit_wait_ms"] + 1}}),
+                    ("contradictory pair phases", {"shared_endpoint_dense": {
+                        **paired, "dispatch_total_ms": paired["dispatch_total_ms"] + 1}})):
+                mutations.append((description, replace_record(
+                    VULKAN_EVIDENCE_PREFIX, {**pair_fields, **changes})))
+            for missing in pair_fields:
+                partial = {**completion, **pair_fields}
+                partial.pop(missing)
+                mutations.append(("missing " + missing, original_transcript.replace(
+                    completion_line, VULKAN_EVIDENCE_PREFIX + json.dumps(partial))))
+            peak = completion["maximum_dispatch_ms"]
+            for description, wait, maximum in (
+                    ("pair peak concealed by global peak", peak + 1, peak + 1),
+                    ("pair sum exceeds count times peak", 2 * peak, peak)):
+                one_pair = {"submissions": 1, "submit_wait_ms": wait,
+                            "maximum_submit_wait_ms": maximum, "pipeline_setup_ms": 0,
+                            "command_setup_ms": 0, "cleanup_ms": 0, "dispatch_total_ms": wait,
+                            "pipeline_creations": 0, "target_overshoots": 0}
+                mutations.append((description, replace_record(VULKAN_EVIDENCE_PREFIX, {
+                    "shared_endpoint_dense": one_pair,
+                    "queue_submissions": completion["dispatches"] - 1})))
             for prefix, line in lines.items():
                 for description, replacement in (("missing", ""), ("duplicate", line + "\n" + line),
                                                  ("non-object", prefix + "[]"),

@@ -76,7 +76,10 @@ struct VulkanRenderStats {
     std::uint64_t camera_batches = 0;
     std::uint64_t accepted_intervals = 0;
     // Film camera, joint RK, projection, dense sampling, initialization, smooth ray camera.
+    // Counts kernel commands, including both commands in a shared submission.
     std::array<std::int64_t, 6> retained_stage_dispatches{};
+    backend::RetainedCompute::StageStats endpoint_dense_timing;
+    std::uint64_t queue_submissions = 0;
     struct RetainedTiming {
         // Allocated stage rows; the adaptive submission budget can be lower.
         // Ray concurrency is separately recorded in continuation_capacity.
@@ -96,9 +99,9 @@ struct VulkanRenderStats {
         // Worker totals overlap the serialized dispatcher and other workers.
         std::uint64_t acceleration_calls = 0;
         double acceleration_ms = 0;
-        // Sums of the six existing stage observations. Dispatch total includes
-        // pipeline/command/submit/cleanup phases; Execute includes all of these
-        // and buffer transfers. These are nested, not additive wall components.
+        // Sums of individual stages and shared-pair observations, once each. Dispatch total
+        // includes pipeline/command/submit/cleanup phases; Execute includes all of these and buffer
+        // transfers. These are nested, not additive wall components.
         double pipeline_setup_ms = 0;
         double command_setup_ms = 0;
         double submit_wait_ms = 0;
@@ -118,7 +121,7 @@ struct VulkanRenderStats {
     bool point_catalogue_uploaded = false;
     int tiles_rendered = 0;
     int work_tile_edge = 0;            // Host publication work, independent of device residency.
-    std::int64_t band_dispatches = 0;  // governed ray submissions, excluding initialization
+    std::int64_t band_dispatches = 0;  // governed kernel commands, excluding initialization
     double dispatch_seconds = 0.0;
     double maximum_dispatch_ms = 0.0;
     std::int64_t maximum_dispatch_rays = 0;

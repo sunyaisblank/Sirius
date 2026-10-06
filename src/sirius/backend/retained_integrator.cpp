@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <optional>
 #include <utility>
 
 namespace sirius::backend {
@@ -190,6 +191,28 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
         }
     }
 
+    const auto dense_packets = [&] {
+        std::vector<RetainedDenseInput> packets(count);
+        for (std::size_t row = 0; row < count; ++row)
+            if (active[row]) {
+                auto& values = packets[row].values;
+                std::copy(inputs[row].metric.begin(), inputs[row].metric.end(), values.begin());
+                std::copy(inputs[row].start.physical.begin(), inputs[row].start.physical.end(),
+                          values.begin() + 4);
+                std::copy(work[row].full.physical.begin(), work[row].full.physical.end(),
+                          values.begin() + 44);
+                std::copy(work[row].full_increment.begin(), work[row].full_increment.end(),
+                          values.begin() + 84);
+                values[104] = RetainedValue::FromDouble(inputs[row].interval);
+                values[105] = RetainedValue::FromDouble(.5);
+                for (std::size_t i = 106; i < 111; ++i) values[i] = RetainedValue::FromDouble(0);
+                values[111] = RetainedValue::FromDouble(inputs[row].chart);
+            }
+        return packets;
+    };
+    std::optional<RetainedEndpointDenseOutput> shared;
+    std::vector<bool> speculative_dense;
+
     for (std::size_t part = 0; part < 3; ++part) {
         std::vector<RetainedStepInput> packets(count);
         for (std::size_t row = 0; row < count; ++row)
@@ -225,7 +248,20 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
                 else
                     lower[row] = EndpointInput(inputs[row], step.fourth);
             }
-        const auto projected = compute.Endpoint(upper);
+        base::Expected<std::vector<RetainedEndpointOutput>> projected;
+        // Dense uses only the already projected full state and original start.
+        // Keep budget-one retry completely serialized; a shared wait is reducible.
+        if (part == 2 && paired_projections && projection_row_budget > 1 &&
+            compute.SupportsIndependentPair()) {
+            const auto packets = dense_packets();
+            auto paired = compute.EndpointAndDense(upper, packets);
+            if (!paired) return std::unexpected(paired.error());
+            shared = std::move(*paired);
+            projected = std::move(shared->endpoints);
+            speculative_dense = active;
+        } else {
+            projected = compute.Endpoint(upper);
+        }
         if (!projected) return std::unexpected(projected.error());
         std::vector<RetainedEndpointOutput> projected_lower;
         if (!paired_projections) {
@@ -265,31 +301,28 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
     }
 
     for (auto& state : work) state.embedded_projected_error_ratio = state.error_ratio;
-    std::vector<RetainedDenseInput> dense_inputs(count);
-    for (std::size_t row = 0; row < count; ++row)
-        if (active[row]) {
-            auto& values = dense_inputs[row].values;
-            std::copy(inputs[row].metric.begin(), inputs[row].metric.end(), values.begin());
-            std::copy(inputs[row].start.physical.begin(), inputs[row].start.physical.end(),
-                      values.begin() + 4);
-            std::copy(work[row].full.physical.begin(), work[row].full.physical.end(),
-                      values.begin() + 44);
-            std::copy(work[row].full_increment.begin(), work[row].full_increment.end(),
-                      values.begin() + 84);
-            values[104] = RetainedValue::FromDouble(inputs[row].interval);
-            values[105] = RetainedValue::FromDouble(.5);
-            for (std::size_t i = 106; i < 111; ++i) values[i] = RetainedValue::FromDouble(0);
-            values[111] = RetainedValue::FromDouble(inputs[row].chart);
+    std::vector<RetainedDenseOutput> dense(count);
+    if (shared) {
+        for (std::size_t row = 0; row < count; ++row) {
+            // Ignore only a speculative result whose final projection rejected.
+            // Actual transfer failures and malformed original zero-input rows
+            // keep their original global-error meaning.
+            if (speculative_dense[row] && !active[row]) continue;
+            if (!shared->dense[row]) return std::unexpected(shared->dense[row].error());
+            dense[row] = *shared->dense[row];
         }
-    const auto dense = compute.Dense(dense_inputs);
-    if (!dense) return std::unexpected(dense.error());
+    } else {
+        const auto evaluated = compute.Dense(dense_packets());
+        if (!evaluated) return std::unexpected(evaluated.error());
+        dense = std::move(*evaluated);
+    }
     for (std::size_t row = 0; row < count; ++row) {
         auto& state = work[row];
         if (active[row]) {
             const double error =
-                (*dense)[row].valid
-                    ? std::max(RetainedPhysicalError((*dense)[row].physical,
-                                                     state.midpoint.physical, inputs[row].control),
+                dense[row].valid
+                    ? std::max(RetainedPhysicalError(dense[row].physical, state.midpoint.physical,
+                                                     inputs[row].control),
                                RetainedPhysicalError(state.full.physical, state.refined.physical,
                                                      inputs[row].control))
                     : kInvalid;
