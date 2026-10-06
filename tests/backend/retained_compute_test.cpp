@@ -1542,6 +1542,37 @@ TEST_F(RetainedComputeTest, DenseSegmentsPreserveSmallCovariantArrivalDerivative
     EXPECT_LT(value.radius, 0x1p-60);
     EXPECT_NE(value.low, 0);
 
+    // Exact endpoints own their values even when the interior secant exceeds
+    // the retained divide domain. This synthetic packet tests representation,
+    // rather than a unit-speed geodesic with this displacement and duration.
+    std::array<RetainedDenseInput, 3> endpoint_masks;
+    const std::array<double, 3> fractions{0, 1, .5};
+    for (std::size_t row = 0; row < endpoint_masks.size(); ++row) {
+        auto& input = endpoint_masks[row];
+        input.values.fill(RetainedValue::FromDouble(0));
+        input.values[8] = input.values[9] = RetainedValue::FromDouble(1);
+        input.values[48] = input.values[49] = RetainedValue::FromDouble(1);
+        input.values[104] = RetainedValue::FromDouble(0x1p-100);
+        input.values[44] = input.values[84] = input.values[104];
+        input.values[45] = input.values[85] = RetainedValue::FromDouble(1);
+        input.values[105] = RetainedValue::FromDouble(fractions[row]);
+        input.values[111] = RetainedValue::FromDouble(1);
+    }
+    const auto masked = compute->Dense(endpoint_masks);
+    ASSERT_TRUE(masked) << masked.error().Description();
+    ASSERT_EQ(masked->size(), endpoint_masks.size());
+    for (std::size_t row = 0; row < 2; ++row) {
+        SCOPED_TRACE(row);
+        ASSERT_TRUE((*masked)[row].valid);
+        for (std::size_t i = 0; i < 40; ++i) {
+            SCOPED_TRACE(i);
+            const auto expected = endpoint_masks[row].values[(row == 0 ? 4 : 44) + i];
+            EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>((*masked)[row].physical[i])),
+                      (std::bit_cast<std::array<std::uint32_t, 5>>(expected)));
+        }
+    }
+    EXPECT_FALSE(masked->back().valid);
+
     auto input = std::bit_cast<RetainedDenseInput>(cases[1].input);
     for (std::size_t i = 106; i < 110; ++i) input.values[i] = RetainedValue::FromDouble(0);
     auto invalid = compute->Dense(std::span(&input, 1));

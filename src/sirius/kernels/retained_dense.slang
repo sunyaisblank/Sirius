@@ -162,6 +162,164 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
 }
 
 bool FlatDense(uint row, uint rowBase, RetainedTriple h, RetainedTriple s, RetainedTriple moving) {
+#ifdef SIRIUS_RETAINED_PORTABLE
+    // The same primitive dependencies as the native Hermite expression. The
+    // last phase owns endpoint overrides even when an interior phase refuses.
+    // One call site shares the existing portable arithmetic authority.
+    RetainedTriple first = RTInvalid(), slope0 = RTInvalid(), slope1 = RTInvalid(),
+                   delta = RTInvalid(), a = RTInvalid(), b = RTInvalid(),
+                   quadratic = RTInvalid(), cubic = RTInvalid(), temporary = RTInvalid(),
+                   hs = RTInvalid(), left = RTInvalid(), right = RTInvalid(),
+                   value = RTInvalid(), slope = RTInvalid(), denominator = RTInvalid(),
+                   numerator = RTInvalid(), shift = RTInvalid();
+    const uint hermitePhases = 21, hermiteComponents = 20;
+    const uint arrivalPhases = 76;
+    [loop] for (uint phase = 0; phase < hermiteComponents * hermitePhases + arrivalPhases;
+                ++phase) {
+        bool hermite = phase < hermiteComponents * hermitePhases;
+        uint step = 0, index = 0, column = 0, axis = 0;
+        uint op = 0;
+        RetainedTriple lhs = RTInvalid(), rhs = RTInvalid();
+        if (hermite) {
+            uint component = phase / hermitePhases;
+            step = phase % hermitePhases;
+            index = (component / 4) * 8 + component % 4;
+            if (step == 0) {
+                first = ReadOriginal(4 + index, row);
+                slope0 = ReadOriginal(8 + index, row);
+                slope1 = ReadOriginal(48 + index, row);
+                delta = ReadOriginal(84 + component, row);
+                lhs = delta; rhs = h; op = 5;
+            } else if (step == 1) {
+                lhs = temporary; rhs = slope0; op = 3;
+            } else if (step == 2) {
+                lhs = slope1; rhs = slope0; op = 3;
+            } else if (step == 3) {
+                lhs = RTConstant(RPFromUnsigned(3u)); rhs = a; op = 4;
+            } else if (step == 4) {
+                lhs = temporary; rhs = b; op = 3;
+            } else if (step == 5) {
+                lhs = RTConstant(RPFromUnsigned(2u)); rhs = a; op = 4;
+            } else if (step == 6) {
+                lhs = b; rhs = temporary; op = 3;
+            } else if (step == 7) {
+                lhs = cubic; rhs = s; op = 4;
+            } else if (step == 8) {
+                lhs = quadratic; rhs = temporary; op = 2;
+            } else if (step == 9) {
+                lhs = temporary; rhs = s; op = 4;
+            } else if (step == 10) {
+                lhs = slope0; rhs = temporary; op = 2;
+            } else if (step == 11) {
+                lhs = h; rhs = s; op = 4;
+            } else if (step == 12) {
+                lhs = temporary; rhs = hs; op = 4;
+            } else if (step == 13) {
+                lhs = first; rhs = value; op = 2;
+            } else if (step == 14) {
+                lhs = RTConstant(RPFromUnsigned(2u)); rhs = quadratic; op = 4;
+            } else if (step == 15) {
+                lhs = RTConstant(RPFromUnsigned(3u)); rhs = cubic; op = 4;
+            } else if (step == 16) {
+                lhs = right; rhs = s; op = 4;
+            } else if (step == 17) {
+                lhs = left; rhs = right; op = 2;
+            } else if (step == 18) {
+                lhs = temporary; rhs = s; op = 4;
+            } else if (step == 19) {
+                lhs = slope0; rhs = temporary; op = 2;
+            } else {
+                if (RTExact(s, RPZero())) {
+                    value = first;
+                    slope = slope0;
+                }
+                if (RTExact(s, RPOne())) {
+                    lhs = first; rhs = delta; op = 2;
+                    slope = slope1;
+                }
+            }
+        } else {
+            uint arrival = phase - hermiteComponents * hermitePhases;
+            if (arrival == 0) {
+                if (!RTExact(moving, RPOne())) return true;
+                denominator = RTConstant(RPZero());
+            }
+            if (arrival < 8) {
+                axis = arrival / 2;
+                step = arrival % 2;
+                if (step == 0) {
+                    lhs = ReadOriginal(106 + axis, row);
+                    rhs = ReadStored(rowBase + 4 + (4 + axis) * 5); op = 4;
+                } else {
+                    lhs = denominator; rhs = temporary; op = 2;
+                }
+            } else {
+                column = (arrival - 8) / 17;
+                step = (arrival - 8) % 17;
+                if (step < 8) {
+                    axis = step / 2;
+                    if (step == 0) numerator = RTConstant(RPZero());
+                    if ((step & 1u) == 0) {
+                        lhs = ReadOriginal(106 + axis, row);
+                        rhs = ReadStored(rowBase + 4 + (8 + 8 * column + axis) * 5); op = 4;
+                    } else {
+                        lhs = numerator; rhs = temporary; op = 2;
+                    }
+                } else if (step == 8) {
+                    lhs = RTNegate(numerator); rhs = denominator; op = 5;
+                } else {
+                    axis = (step - 9) / 2;
+                    index = 8 + 8 * column + axis;
+                    if (((step - 9) & 1u) == 0) {
+                        lhs = ReadStored(rowBase + 4 + (4 + axis) * 5);
+                        rhs = shift; op = 4;
+                    } else {
+                        lhs = ReadStored(rowBase + 4 + index * 5);
+                        rhs = temporary; op = 2;
+                    }
+                }
+            }
+        }
+        if (op != 0) {
+            RetainedTriple result = RTEvaluateArithmetic(lhs, rhs, op);
+            if (hermite) {
+                if (step == 1) a = result;
+                else if (step == 2) b = result;
+                else if (step == 4) quadratic = result;
+                else if (step == 6) cubic = result;
+                else if (step == 11) hs = result;
+                else if (step == 12 || step == 13 || step == 20) value = result;
+                else if (step == 14) left = result;
+                else if (step == 15 || step == 16) right = result;
+                else if (step == 19) slope = result;
+                else temporary = result;
+            } else {
+                uint arrival = phase - hermiteComponents * hermitePhases;
+                if (arrival < 8) {
+                    if (step == 0) temporary = result;
+                    else denominator = result;
+                } else if (step < 8) {
+                    if ((step & 1u) == 0) temporary = result;
+                    else numerator = result;
+                } else if (step == 8) {
+                    shift = result;
+                } else if (((step - 9) & 1u) == 0) {
+                    temporary = result;
+                } else {
+                    value = result;
+                    if (value.valid == 0) return false;
+                    WriteStored(rowBase + 4 + index * 5, value);
+                }
+            }
+        }
+        if (hermite && step == 20) {
+            if (value.valid == 0 || slope.valid == 0) return false;
+            WriteStored(rowBase + 4 + index * 5, value);
+            WriteStored(rowBase + 4 + (index + 4) * 5, slope);
+        }
+    }
+    return true;
+#else
     // The same factored Hermite polynomial with exactly zero connection.
     // Arbitrary endpoint slopes are retained; flat geometry does not imply
     // that a supplied test segment is linear.
@@ -220,6 +378,7 @@ bool FlatDense(uint row, uint rowBase, RetainedTriple h, RetainedTriple s, Retai
         }
     }
     return true;
+#endif
 }
 
 [shader("compute")][numthreads(SIRIUS_RETAINED_EXECUTION_LANES, 1, 1)] void ComputeMain(uint3 id
