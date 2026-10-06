@@ -152,6 +152,7 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
         expected = end;
     }
 
+#ifdef SIRIUS_RETAINED_PORTABLE
     for (uint i = 0; i < 40; ++i) {
         uint index = inputs[programBase + 3 + i];
         if (index >= registers || ReadValue(index, rowBase).valid == 0) return false;
@@ -161,6 +162,21 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
             WriteStored(rowBase + 1004 + stage * 200 + i * 5,
                         ReadValue(inputs[programBase + 3 + i], rowBase));
     }
+#else
+    // Every root must pass before any stage value is published.
+    for (uint i = lane; i < 40; i += SIRIUS_RETAINED_EXECUTION_LANES) {
+        uint index = inputs[programBase + 3 + i];
+        if (index >= registers)
+            RejectRetainedProgram();
+        else if (ScratchRead(index, 4, rowBase, 2404) == 0)
+            RejectRetainedProgram();
+    }
+    GroupMemoryBarrierWithGroupSync();
+    if (retainedStatus != 0) return false;
+    for (uint i = lane; i < 40; i += SIRIUS_RETAINED_EXECUTION_LANES)
+        WriteStored(rowBase + 1004 + stage * 200 + i * 5,
+                    ReadValue(inputs[programBase + 3 + i], rowBase));
+#endif
 #ifndef SIRIUS_RETAINED_PORTABLE
     AllMemoryBarrierWithGroupSync();
 #endif
@@ -285,6 +301,13 @@ RetainedTriple ReadCoefficient(uint index) {
         if (lane == 0) outputs[rowBase + 1] = 7;
         return;
     }
+#ifndef SIRIUS_RETAINED_PORTABLE
+    // The immutable plan leaves never-assigned slots invalid across all stages.
+    // The existing stage-zero barrier publishes this disjoint validity clear.
+    for (uint index = lane; index < SIRIUS_RETAINED_REGISTERS;
+         index += SIRIUS_RETAINED_EXECUTION_LANES)
+        ScratchWrite(index, 4, rowBase, 2404, 0);
+#endif
     for (uint stage = 0; stage < 7; ++stage) {
         if (lane == 0) retainedStatus = 0;
 #ifndef SIRIUS_RETAINED_PORTABLE
