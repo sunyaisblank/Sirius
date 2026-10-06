@@ -118,6 +118,8 @@ ProcessPipelineCache& PipelineCacheStore() {
         .preserves_fp32_denormals = float_controls.shaderDenormPreserveFloat32 == VK_TRUE,
         .rounds_fp32_to_nearest = float_controls.shaderRoundingModeRTEFloat32 == VK_TRUE,
         .rounds_fp64_to_nearest = float_controls.shaderRoundingModeRTEFloat64 == VK_TRUE,
+        .preserves_fp32_signed_zero_inf_nan =
+            float_controls.shaderSignedZeroInfNanPreserveFloat32 == VK_TRUE,
     };
 }
 
@@ -240,7 +242,9 @@ Expected<VkInstance> CreateInstanceWithPortability(
 Expected<VkDevice> CreateDeviceWithPortability(VkPhysicalDevice physical,
                                                VkDeviceCreateInfo create_info,
                                                PFN_vkEnumerateDeviceExtensionProperties enumerate,
-                                               PFN_vkCreateDevice create) {
+                                               PFN_vkCreateDevice create, DeviceInfo* device_info,
+                                               PFN_vkGetPhysicalDeviceFeatures2 get_features) {
+    if (device_info) device_info->fma_fp32_enabled = false;
     std::uint32_t count = 0;
     if (const VkResult r = enumerate(physical, nullptr, &count, nullptr); r != VK_SUCCESS) {
         return Fail(ErrorDomain::kDevice, "enumerate Vulkan device extensions", VkResultText(r));
@@ -267,12 +271,37 @@ Expected<VkDevice> CreateDeviceWithPortability(VkPhysicalDevice physical,
         })) {
         enabled.push_back(kPortabilitySubset);
     }
+    ShaderFmaFeatures fma{.sType = kShaderFmaFeaturesType};
+    constexpr const char* kShaderFma = "VK_KHR_shader_fma";
+    const bool eligible =
+        device_info && device_info->preserves_fp32_denormals &&
+        device_info->rounds_fp32_to_nearest && device_info->preserves_fp32_signed_zero_inf_nan &&
+        std::any_of(advertised.begin(), advertised.end(), [](const auto& extension) {
+            return std::strcmp(extension.extensionName, kShaderFma) == 0;
+        });
+    bool enable_fma = false;
+    if (eligible) {
+        VkPhysicalDeviceFeatures2 features{.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2,
+                                           .pNext = &fma};
+        get_features(physical, &features);
+        enable_fma = fma.shaderFmaFloat32 == VK_TRUE;
+        if (enable_fma) {
+            // Preserve the caller's chain and legacy Float64 admission. Only
+            // binary32 FMA is needed by the optional retained Transport module.
+            fma.pNext = const_cast<void*>(create_info.pNext);
+            fma.shaderFmaFloat16 = VK_FALSE;
+            fma.shaderFmaFloat64 = VK_FALSE;
+            create_info.pNext = &fma;
+            enabled.push_back(kShaderFma);
+        }
+    }
     create_info.enabledExtensionCount = static_cast<std::uint32_t>(enabled.size());
     create_info.ppEnabledExtensionNames = enabled.empty() ? nullptr : enabled.data();
     VkDevice device = VK_NULL_HANDLE;
     if (const VkResult r = create(physical, &create_info, nullptr, &device); r != VK_SUCCESS) {
         return Fail(ErrorDomain::kDevice, "create Vulkan logical device", VkResultText(r));
     }
+    if (device_info) device_info->fma_fp32_enabled = enable_fma;
     return device;
 }
 
@@ -433,7 +462,9 @@ Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {
         .pQueueCreateInfos = &queue_info,
         .pEnabledFeatures = &enabled,
     };
-    auto logical = detail::CreateDeviceWithPortability(device->physical_, device_info);
+    auto logical = detail::CreateDeviceWithPortability(device->physical_, device_info,
+                                                       vkEnumerateDeviceExtensionProperties,
+                                                       vkCreateDevice, &device->info_);
     if (!logical) {
         return std::unexpected(logical.error());
     }
@@ -593,17 +624,22 @@ Expected<VulkanPipelineCacheStats> VulkanDevice::SnapshotPipelineCache() {
 }
 
 Expected<void> ValidateVulkanKernelPrecision(std::span<const std::uint32_t> spirv,
-                                             bool supports_fp64) {
+                                             bool supports_fp64, bool fma_fp32_enabled) {
     // SPIR-V binary encoding: five-word header, high 16 bits instruction word
     // count, low 16 bits opcode; OpCapability=17 and Float64=10. Khronos authority:
     // https://github.com/KhronosGroup/SPIRV-Headers/blob/main/include/spirv/unified1/spirv.hpp11
     constexpr std::uint32_t kMagic = 0x07230203u;
     constexpr std::uint32_t kOpCapability = 17u;
     constexpr std::uint32_t kFloat64 = 10u;
+    constexpr std::uint32_t kFmaKHR = 6030u;
+    constexpr std::uint32_t kOpFmaKHR = 4427u;
     if (spirv.size() <= 5 || spirv[0] != kMagic || spirv[4] != 0) {
         return Fail(ErrorDomain::kKernel, "validate shader module", "malformed SPIR-V header");
     }
     bool needs_fp64 = false;
+    bool needs_fma = false;
+    std::map<std::uint32_t, std::uint32_t> float_widths;
+    std::vector<std::uint32_t> fma_types;
     for (std::size_t offset = 5; offset < spirv.size();) {
         const std::uint32_t word_count = spirv[offset] >> 16;
         const std::uint32_t opcode = spirv[offset] & 0xffffu;
@@ -617,6 +653,16 @@ Expected<void> ValidateVulkanKernelPrecision(std::span<const std::uint32_t> spir
                             "malformed SPIR-V OpCapability");
             }
             needs_fp64 = needs_fp64 || spirv[offset + 1] == kFloat64;
+            needs_fma = needs_fma || spirv[offset + 1] == kFmaKHR;
+        }
+        needs_fma = needs_fma || opcode == kOpFmaKHR;
+        if (opcode == 22u && word_count == 3)
+            float_widths.emplace(spirv[offset + 1], spirv[offset + 2]);
+        if (opcode == kOpFmaKHR) {
+            if (word_count != 6)
+                return Fail(ErrorDomain::kKernel, "validate shader module",
+                            "malformed SPIR-V OpFmaKHR");
+            fma_types.push_back(spirv[offset + 1]);
         }
         offset += word_count;
     }
@@ -624,11 +670,23 @@ Expected<void> ValidateVulkanKernelPrecision(std::span<const std::uint32_t> spir
         return Fail(ErrorDomain::kKernel, "load shader precision",
                     "SPIR-V Float64 requested but the device lacks shaderFloat64");
     }
+    if (needs_fma && !fma_fp32_enabled)
+        return Fail(ErrorDomain::kKernel, "load shader precision",
+                    "SPIR-V FMAKHR requested but the logical device has not enabled "
+                    "shaderFmaFloat32 with required controls");
+    for (const auto type : fma_types) {
+        const auto width = float_widths.find(type);
+        if (width == float_widths.end() || width->second != 32u)
+            return Fail(ErrorDomain::kKernel, "load shader precision",
+                        "only binary32 OpFmaKHR is enabled on this logical device");
+    }
     return {};
 }
 
 Expected<KernelHandle> VulkanDevice::LoadKernel(std::span<const std::uint32_t> spirv) {
-    if (auto precision = ValidateVulkanKernelPrecision(spirv, info_.supports_fp64); !precision) {
+    if (auto precision =
+            ValidateVulkanKernelPrecision(spirv, info_.supports_fp64, info_.fma_fp32_enabled);
+        !precision) {
         return std::unexpected(precision.error());
     }
     // Identical modules share their device-lived pipelines even when a new

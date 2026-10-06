@@ -21,7 +21,17 @@ void Split32(RPScalar a,out RPScalar hi,out RPScalar lo){
  RPScalar c=OrderedMultiply32(RPFromBits(0x45800800u),a);hi=OrderedSubtract32(c,OrderedSubtract32(c,a));lo=OrderedSubtract32(a,hi);
 }
 void RetainedProduct32(RPScalar a,RPScalar b,out RPScalar hi,out RPScalar lo){
-#if defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_FP64)
+#if defined(SIRIUS_RETAINED_FMA32) && defined(SIRIUS_RETAINED_FP64) && !defined(SIRIUS_RETAINED_PORTABLE)
+ // VK_KHR_shader_fma guarantees the correctly rounded residual. Both callers
+ // bound |a|,|b| <= 2^60; the original five-subnormal error radius still applies.
+ hi=OrderedMultiply32(a,b);
+ RPScalar negativeHigh=RPScalarNegate(hi);
+ lo=spirv_asm {
+  OpFmaKHR $$float %v $a $b $negativeHigh;
+  OpDecorate %v NoContraction;
+  OpCopyObject $$float result %v;
+ };
+#elif defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_FP64)
  // Exact two-word products establish the high/residual split independently
  // of native binary64 accuracy. Vulkan Float64/RTE64 alone does not promise
  // 53-bit arithmetic. Both callers bound |a|,|b| <= 2^60 before this owner.

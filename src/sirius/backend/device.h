@@ -61,6 +61,10 @@ struct DeviceInfo {
     bool preserves_fp32_denormals = false;
     bool rounds_fp32_to_nearest = false;
     bool rounds_fp64_to_nearest = false;
+    bool preserves_fp32_signed_zero_inf_nan = false;
+    // True only after this logical device enables the advertised FMA32 feature
+    // with all required binary32 controls. Inventory alone cannot admit it.
+    bool fma_fp32_enabled = false;
 };
 
 // Native expansion operations need both binary32 controls. The embedded

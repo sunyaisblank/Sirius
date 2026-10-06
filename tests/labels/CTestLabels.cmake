@@ -985,6 +985,7 @@ set_tests_properties(
 
 set_tests_properties(
     RetainedComputeAdmission.ArithmeticRefusalPrecedesKernelLoading
+    RetainedComputeAdmission.FmaSelectsOnlyNativeWideTransportAndPreservesAllocation
     RetainedComputeAdmission.SoftwareRendererPreparationPreservesPhysicalAccounting
     PROPERTIES LABELS "Mandatory;Correctness"
 )
@@ -1305,10 +1306,12 @@ set_tests_properties(
     VulkanBackend.PortabilityInstanceOptInRequiresAdvertisedExtension
     VulkanBackend.PortabilityDeviceEnablesSubsetWithoutChangingPrecisionOrQueues
     VulkanBackend.PortabilityEnumerationErrorsDeclineBeforeCreation
+    VulkanBackend.Fma32DeviceAdmissionRequiresAdvertisedFeatureAndEveryFloatControl
     VulkanBackend.PortabilityCreationFailuresRemainExplicit
     VulkanBackend.PipelineCacheImportRequiresExactDeviceIdentityAndHeader
     VulkanBackend.PipelineCacheImportRejectsOversizeWithoutTruncation
     VulkanBackend.KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions
+    VulkanBackend.KernelPrecisionDeclinesFmaBeforeDriverWorkUnlessBinary32WasEnabled
     VulkanBackend.EnumerationReportsInsteadOfThrowing
     VulkanBackend.HostMemoryPreferencePreservesCompatibleHeapAndCoherence
     VulkanBackend.BufferAllocationLimitCountsActualResidencyAndPreservesExistingBuffers

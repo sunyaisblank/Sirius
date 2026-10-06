@@ -64,6 +64,10 @@ target_sources(sirius_backend_tests PRIVATE
 # of render orchestration. Actual renderer/session tests belong to tests/render.
 target_link_libraries(sirius_backend_tests PRIVATE
     sirius_backend sirius_render)
+if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS AND SIRIUS_SPIRV_OPT)
+    target_include_directories(sirius_backend_tests PRIVATE
+        "${CMAKE_BINARY_DIR}/src/sirius/backend/retained")
+endif()
 
 if(TARGET sirius_kernels)
     target_compile_definitions(sirius_backend_tests

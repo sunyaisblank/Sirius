@@ -60,6 +60,10 @@ struct PortabilityProbe {
     const VkDeviceQueueCreateInfo* queues = nullptr;
     std::uint32_t queue_count = 0;
     VkPhysicalDevice physical = VK_NULL_HANDLE;
+    bool supports_fma32 = false;
+    unsigned feature_queries = 0;
+    const void* create_chain = nullptr;
+    std::optional<sirius::backend::detail::ShaderFmaFeatures> fma;
 
     PortabilityProbe() { current = this; }
     ~PortabilityProbe() { current = nullptr; }
@@ -115,11 +119,30 @@ struct PortabilityProbe {
         current->features = info->pEnabledFeatures;
         current->queues = info->pQueueCreateInfos;
         current->queue_count = info->queueCreateInfoCount;
+        current->create_chain = info->pNext;
+        if (info->pNext && static_cast<const VkBaseInStructure*>(info->pNext)->sType ==
+                               sirius::backend::detail::kShaderFmaFeaturesType) {
+            current->fma =
+                *static_cast<const sirius::backend::detail::ShaderFmaFeatures*>(info->pNext);
+        }
         for (std::uint32_t i = 0; i < info->enabledExtensionCount; ++i) {
             current->enabled.emplace_back(info->ppEnabledExtensionNames[i]);
         }
         *result = VK_NULL_HANDLE;
         return current->create_result;
+    }
+    static VKAPI_ATTR void VKAPI_CALL Features(VkPhysicalDevice physical,
+                                               VkPhysicalDeviceFeatures2* features) {
+        EXPECT_EQ(physical, current->physical);
+        EXPECT_EQ(features->sType, VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2);
+        ASSERT_NE(features->pNext, nullptr);
+        auto* fma = static_cast<sirius::backend::detail::ShaderFmaFeatures*>(features->pNext);
+        EXPECT_EQ(fma->sType, sirius::backend::detail::kShaderFmaFeaturesType);
+        EXPECT_EQ(fma->pNext, nullptr);
+        ++current->feature_queries;
+        fma->shaderFmaFloat16 = VK_TRUE;
+        fma->shaderFmaFloat32 = current->supports_fma32 ? VK_TRUE : VK_FALSE;
+        fma->shaderFmaFloat64 = VK_TRUE;
     }
 };
 
@@ -204,6 +227,76 @@ TEST(VulkanBackend, PortabilityEnumerationErrorsDeclineBeforeCreation) {
             EXPECT_EQ(device.error().operation(), "enumerate Vulkan device extensions");
             EXPECT_EQ(probe.creates, 0);
         }
+    }
+}
+
+TEST(VulkanBackend, Fma32DeviceAdmissionRequiresAdvertisedFeatureAndEveryFloatControl) {
+    for (unsigned mask = 0; mask < 32; ++mask) {
+        for (const VkBool32 fp64 : {VK_FALSE, VK_TRUE}) {
+            SCOPED_TRACE(mask);
+            PortabilityProbe probe;
+            probe.advertised = {"VK_KHR_portability_subset"};
+            if (mask & 1u) probe.advertised.push_back("VK_KHR_shader_fma");
+            probe.supports_fma32 = (mask & 2u) != 0;
+            sirius::backend::DeviceInfo device{
+                .preserves_fp32_denormals = (mask & 4u) != 0,
+                .rounds_fp32_to_nearest = (mask & 8u) != 0,
+                .preserves_fp32_signed_zero_inf_nan = (mask & 16u) != 0,
+                .fma_fp32_enabled = true,
+            };
+            const VkPhysicalDeviceFeatures features{.shaderFloat64 = fp64};
+            const VkDeviceQueueCreateInfo queue{.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
+                                                .queueCount = 1};
+            const VkPhysicalDeviceTimelineSemaphoreFeatures caller_chain{
+                .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TIMELINE_SEMAPHORE_FEATURES};
+            const VkDeviceCreateInfo info{.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
+                                          .pNext = &caller_chain,
+                                          .queueCreateInfoCount = 1,
+                                          .pQueueCreateInfos = &queue,
+                                          .pEnabledFeatures = &features};
+            const auto result = sirius::backend::detail::CreateDeviceWithPortability(
+                VK_NULL_HANDLE, info, PortabilityProbe::DeviceExtensions, PortabilityProbe::Device,
+                &device, PortabilityProbe::Features);
+            ASSERT_TRUE(result) << result.error().Description();
+            const bool admitted = mask == 31u;
+            EXPECT_EQ(device.fma_fp32_enabled, admitted);
+            EXPECT_EQ(probe.feature_queries, (mask & 29u) == 29u ? 1u : 0u);
+            EXPECT_EQ(probe.fma.has_value(), admitted);
+            EXPECT_EQ(probe.features, &features);
+            EXPECT_EQ(probe.features->shaderFloat64, fp64);
+            EXPECT_EQ(probe.queues, &queue);
+            if (admitted) {
+                EXPECT_EQ(probe.fma->pNext, &caller_chain);
+                EXPECT_EQ(probe.fma->shaderFmaFloat16, VK_FALSE);
+                EXPECT_EQ(probe.fma->shaderFmaFloat32, VK_TRUE);
+                EXPECT_EQ(probe.fma->shaderFmaFloat64, VK_FALSE);
+                EXPECT_EQ(probe.enabled, (std::vector<std::string>{"VK_KHR_portability_subset",
+                                                                   "VK_KHR_shader_fma"}));
+            } else {
+                EXPECT_EQ(probe.create_chain, &caller_chain);
+                EXPECT_EQ(probe.enabled, (std::vector<std::string>{"VK_KHR_portability_subset"}));
+            }
+        }
+    }
+    for (const bool enumeration_failure : {false, true}) {
+        PortabilityProbe probe;
+        probe.advertised = {"VK_KHR_shader_fma"};
+        probe.supports_fma32 = true;
+        if (enumeration_failure)
+            probe.list_result = VK_INCOMPLETE;
+        else
+            probe.create_result = VK_ERROR_INITIALIZATION_FAILED;
+        sirius::backend::DeviceInfo device{.preserves_fp32_denormals = true,
+                                           .rounds_fp32_to_nearest = true,
+                                           .preserves_fp32_signed_zero_inf_nan = true,
+                                           .fma_fp32_enabled = true};
+        const auto result = sirius::backend::detail::CreateDeviceWithPortability(
+            VK_NULL_HANDLE, {.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO},
+            PortabilityProbe::DeviceExtensions, PortabilityProbe::Device, &device,
+            PortabilityProbe::Features);
+        EXPECT_FALSE(result);
+        EXPECT_FALSE(device.fma_fp32_enabled);
+        EXPECT_EQ(probe.creates, enumeration_failure ? 0 : 1);
     }
 }
 
@@ -314,6 +407,33 @@ TEST(VulkanBackend, KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstruc
         const auto result = unopened.LoadKernel(malformed);
         ASSERT_FALSE(result.has_value());
         EXPECT_EQ(result.error().operation(), "validate shader module");
+    }
+}
+
+TEST(VulkanBackend, KernelPrecisionDeclinesFmaBeforeDriverWorkUnlessBinary32WasEnabled) {
+    using sirius::backend::ValidateVulkanKernelPrecision;
+    const std::vector<std::uint32_t> fma = {
+        0x07230203u, 0x00010500u, 0u,  8u,          0u, 0x00020011u, 1u, 0x00020011u, 6030u,
+        0x00030016u, 1u,          32u, 0x0006114bu, 1u, 2u,          3u, 4u,          5u};
+    EXPECT_TRUE(ValidateVulkanKernelPrecision(fma, false, true));
+    EXPECT_TRUE(ValidateVulkanKernelPrecision(fma, true, true));
+    const auto refused = ValidateVulkanKernelPrecision(fma, true);
+    ASSERT_FALSE(refused);
+    EXPECT_NE(refused.error().detail().find("shaderFmaFloat32"), std::string::npos);
+    sirius::backend::VulkanDevice unopened;
+    const auto unbound = unopened.LoadKernel(fma);
+    ASSERT_FALSE(unbound);
+    EXPECT_EQ(unbound.error().detail(), refused.error().detail());
+    auto undeclared = fma;
+    undeclared.erase(undeclared.begin() + 7, undeclared.begin() + 9);
+    EXPECT_FALSE(ValidateVulkanKernelPrecision(undeclared, true));
+    auto bad_extent = fma;
+    bad_extent[12] = 0x0005114bu;
+    EXPECT_FALSE(ValidateVulkanKernelPrecision(bad_extent, true, true));
+    for (const auto width : {16u, 64u}) {
+        auto unsupported = fma;
+        unsupported[11] = width;
+        EXPECT_FALSE(ValidateVulkanKernelPrecision(unsupported, true, true));
     }
 }
 

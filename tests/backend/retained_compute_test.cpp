@@ -25,6 +25,10 @@
 #include <string>
 #include <vector>
 
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+#include "retained_kernels.h"
+#endif
+
 #if defined(SIRIUS_HAS_RETAINED_COMPUTE) && defined(SIRIUS_TEST_HAS_RETAINED_CAMERA)
 #define SIRIUS_RETAINED_TESTS_AVAILABLE 1
 #include "sirius/backend/vulkan/vulkan_device.h"
@@ -225,6 +229,7 @@ class PreparationProbeDevice final : public ComputeDevice {
     std::vector<std::vector<std::byte>> buffers;
     std::vector<Write> writes;
     std::vector<std::uint32_t> kernels;
+    std::vector<std::vector<std::uint32_t>> loaded_codes;
     std::vector<std::size_t> failed_writes;
     std::function<void()> after_write, after_dispatch;
     DispatchTiming observation{.submit_wait_ms = 5000,
@@ -236,7 +241,8 @@ class PreparationProbeDevice final : public ComputeDevice {
     bool fail_dispatch = false;
     unsigned loads = 0, reads = 0;
     const DeviceInfo& Info() const noexcept override { return info; }
-    sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t>) override {
+    sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t> code) override {
+        loaded_codes.emplace_back(code.begin(), code.end());
         return KernelHandle{loads++};
     }
     sirius::base::Expected<BufferHandle> CreateBuffer(std::uint64_t bytes,
@@ -322,6 +328,61 @@ void ExpectPhysicalStatsEqual(const std::array<RetainedCompute::StageStats, 6>& 
         EXPECT_EQ(actual[i].read_buffer_bytes, expected[i].read_buffer_bytes);
         EXPECT_EQ(actual[i].pipeline_creations, expected[i].pipeline_creations);
         EXPECT_EQ(actual[i].target_overshoots, expected[i].target_overshoots);
+    }
+}
+#endif
+
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideTransportAndPreservesAllocation) {
+    using namespace sirius::backend::retained_program;
+    for (unsigned mask = 0; mask < 16; ++mask) {
+        for (const bool wide : {false, true}) {
+            SCOPED_TRACE(mask);
+            SCOPED_TRACE(wide);
+            PreparationProbeDevice control, candidate;
+            control.info.supports_fp64 = control.info.rounds_fp64_to_nearest = true;
+            control.info.preserves_fp32_denormals = (mask & 1u) != 0;
+            control.info.rounds_fp32_to_nearest = (mask & 2u) != 0;
+            control.info.preserves_fp32_signed_zero_inf_nan = (mask & 4u) != 0;
+            candidate.info = control.info;
+            candidate.info.fma_fp32_enabled = (mask & 8u) != 0;
+            auto baseline = RetainedCompute::Create(control, 2, wide);
+            auto created = RetainedCompute::Create(candidate, 2, wide);
+            ASSERT_TRUE(baseline);
+            ASSERT_TRUE(created);
+            ASSERT_EQ(control.loaded_codes.size(), 6U);
+            ASSERT_EQ(candidate.loaded_codes.size(), 6U);
+            const bool selected = kTransportFmaAvailable && wide && mask == 15u;
+            for (std::size_t stage = 0; stage < 6; ++stage) {
+                if (stage == 1 && selected) {
+                    EXPECT_EQ(candidate.loaded_codes[stage],
+                              (std::vector<std::uint32_t>(kTransportFmaShader.begin(),
+                                                          kTransportFmaShader.end())));
+                    EXPECT_NE(candidate.loaded_codes[stage], control.loaded_codes[stage]);
+                } else {
+                    EXPECT_EQ(candidate.loaded_codes[stage], control.loaded_codes[stage]);
+                }
+            }
+            EXPECT_EQ(candidate.buffers.size(), 12U);
+            ASSERT_EQ(candidate.buffers.size(), control.buffers.size());
+            for (std::size_t i = 0; i < candidate.buffers.size(); ++i)
+                EXPECT_EQ(candidate.buffers[i].size(), control.buffers[i].size());
+            const auto required = RetainedCompute::RequiredAllocationBytes(candidate, 2);
+            ASSERT_TRUE(required);
+            EXPECT_EQ(candidate.BufferAllocationBytes(), *required);
+        }
+    }
+    for (const bool has_fp64 : {false, true}) {
+        PreparationProbeDevice refused;
+        refused.info = {.supports_fp64 = has_fp64,
+                        .preserves_fp32_denormals = true,
+                        .rounds_fp32_to_nearest = true,
+                        .rounds_fp64_to_nearest = !has_fp64,
+                        .preserves_fp32_signed_zero_inf_nan = true,
+                        .fma_fp32_enabled = true};
+        EXPECT_FALSE(RetainedCompute::Create(refused, 2, true));
+        EXPECT_EQ(refused.loads, 0U);
+        EXPECT_TRUE(refused.buffers.empty());
     }
 }
 #endif

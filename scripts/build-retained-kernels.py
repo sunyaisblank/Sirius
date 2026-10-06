@@ -9,16 +9,84 @@ from pathlib import Path
 import re
 import struct
 import subprocess
+import tempfile
+import shutil
 
 
 WORKGROUP_ROWS = 1
 WORKGROUP_LANES = 64
 
 
-def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None):
+def native_controls(text, fma=False):
+    if "OpCapability Float64" in text or "OpTypeFloat 64" in text or "OpTypeInt 64" in text or " Fma " in text:
+        raise ValueError("retained stage introduced wide arithmetic or contraction")
+    if re.search(r"\b(?:FPFastMathMode|FPFastMathDefault|RelaxedPrecision)\b", text):
+        raise ValueError("retained stage introduced relaxed arithmetic")
+    operations = re.findall(r"(%\S+) = OpF(?:Add|Sub|Mul) ", text)
+    fmas = re.findall(r"(%\S+) = OpFmaKHR ", text)
+    decorated = set(re.findall(r"OpDecorate (%\S+) NoContraction", text))
+    if (not operations and not fmas) or any(operation not in decorated for operation in operations + fmas):
+        raise ValueError("retained arithmetic lost NoContraction")
+    if bool(fmas) != fma:
+        raise ValueError("retained FMA instructions disagree with the selected variant")
+    entry = re.search(r"OpEntryPoint GLCompute (%\S+)", text)[1]
+    if f"OpExecutionMode {entry} DenormPreserve 32" not in text:
+        raise ValueError("retained arithmetic lost subnormal preservation")
+    capabilities = "OpCapability Shader\n               OpCapability RoundingModeRTE"
+    if fma:
+        capabilities += "\n               OpCapability FMAKHR\n               OpCapability SignedZeroInfNanPreserve"
+    text = text.replace("OpCapability Shader", capabilities, 1)
+    if fma:
+        end = list(re.finditer(r"^.*OpCapability .*?$", text, re.M))[-1].end()
+        text = text[:end] + '\n               OpExtension "SPV_KHR_fma"' + text[end:]
+    local_size = re.search(r"^.*OpExecutionMode " + re.escape(entry) + r" LocalSize.*$", text, re.M)[0]
+    modes = "\n               OpExecutionMode " + entry + " RoundingModeRTE 32"
+    if fma:
+        modes += "\n               OpExecutionMode " + entry + " SignedZeroInfNanPreserve 32"
+    return text.replace(local_size, local_size + modes, 1)
+
+
+def supports_fma32(directory, compiler, assembler, disassembler, validator):
+    # Probe only toolset capability. Errors in the real candidate remain fatal.
+    # Ordinary GLSL Fma does not guarantee the fused, correctly rounded residual.
+    with tempfile.TemporaryDirectory(prefix="fma-tool-probe-", dir=directory) as temporary:
+        root = Path(temporary)
+        source = root / "probe.slang"
+        raw, assembly, final = (root / name for name in ("raw.spv", "probe.spvasm", "probe.spv"))
+        source.write_text('''[[vk::binding(0,0)]] RWStructuredBuffer<float> values;
+[shader("compute")][numthreads(1,1,1)] void ComputeMain() {
+ float a=values[0],b=values[1],c=values[2];
+ values[3]=spirv_asm {
+  OpFmaKHR $$float %v $a $b $c;
+  OpDecorate %v NoContraction;
+  OpCopyObject $$float result %v;
+ };
+}
+''')
+        try:
+            subprocess.run([compiler, str(source), "-O0", "-target", "spirv", "-profile", "spirv_1_5",
+                "-entry", "ComputeMain", "-stage", "compute", "-denorm-mode-fp32", "preserve", "-o", str(raw)],
+                capture_output=True, check=True)
+            subprocess.run([disassembler, str(raw), "-o", str(assembly)], capture_output=True, check=True)
+            assembly.write_text(native_controls(assembly.read_text(), fma=True))
+            subprocess.run([assembler, "--target-env", "spv1.5", str(assembly), "-o", str(final)], capture_output=True, check=True)
+            subprocess.run([validator, "--target-env", "vulkan1.2", str(final)], capture_output=True, check=True)
+        except subprocess.CalledProcessError as error:
+            print("Optional retained FMA32 unavailable in configured toolset:",
+                  Path(error.cmd[0]).name, "exit", error.returncode,
+                  error.stderr.decode(errors="replace").strip(), flush=True)
+            return False
+    return True
+
+
+def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False):
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
+    if fma:
+        if not fp64 or portable or source.stem != "retained_transport":
+            raise ValueError("FMA32 is qualified only for native-wide retained Transport")
+        definitions.append("-DSIRIUS_RETAINED_FMA32=1")
     if portable:
         definitions.append("-DSIRIUS_RETAINED_PORTABLE=1")
     original_inputs = ({"retained_camera": 32, "retained_ray_camera": 45}.get(source.stem, 0)
@@ -72,21 +140,7 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
         data = destination.read_bytes()
         assembly.unlink()
         return struct.unpack("<" + str(len(data) // 4) + "I", data)
-    if "OpCapability Float64" in text or "OpTypeFloat 64" in text or "OpTypeInt 64" in text or " Fma " in text:
-        raise ValueError("retained stage introduced wide arithmetic or contraction")
-    operations = re.findall(r"(%\S+) = OpF(?:Add|Sub|Mul) ", text)
-    decorated = set(re.findall(r"OpDecorate (%\S+) NoContraction", text))
-    if not operations or any(operation not in decorated for operation in operations):
-        raise ValueError("retained arithmetic lost NoContraction")
-    entry = re.search(r"OpEntryPoint GLCompute (%\S+)", text)[1]
-    if f"OpExecutionMode {entry} DenormPreserve 32" not in text:
-        raise ValueError("retained arithmetic lost subnormal preservation")
-    text = text.replace("OpCapability Shader", "OpCapability Shader\n"
-                        "               OpCapability RoundingModeRTE", 1)
-    local_size = re.search(r"^.*OpExecutionMode " + re.escape(entry) + r" LocalSize.*$",
-                           text, re.M)[0]
-    text = text.replace(local_size, local_size + "\n               OpExecutionMode " +
-                        entry + " RoundingModeRTE 32", 1)
+    text = native_controls(text, fma=fma)
     assembly.write_text(text)
     subprocess.run([assembler, "--target-env", "spv1.5", str(assembly), "-o", str(destination)],
                    check=True)
@@ -108,6 +162,8 @@ def main():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     args.output.parent.mkdir(parents=True, exist_ok=True)
+    fma_available = supports_fma32(args.output.parent, args.compiler, args.assembler,
+                                  args.disassembler, args.validator)
     lines = ["// Generated retained programs and validated shaders; do not edit.",
              "#pragma once", "#include <array>", "#include <cstdint>",
              "namespace sirius::backend::retained_program {"]
@@ -144,6 +200,19 @@ def main():
                                   program.get("prefix_instructions", 0), fp64=wide, portable=portable, optimizer=args.optimizer)
             array("k" + kind + name + "Shader", code)
             sizes.append(len(code) * 4)
+        if kind == "Transport":
+            destination = args.output.parent / (stem + "_fma.spv")
+            lines.append(f"inline constexpr bool kTransportFmaAvailable = {'true' if fma_available else 'false'};")
+            if fma_available:
+                code = compile_shader(source / (stem + ".slang"), destination,
+                    args.compiler, args.assembler, args.disassembler, args.validator,
+                    program["registers"], terms, len(program["layer_offsets"])-1,
+                    program.get("prefix_instructions", 0), fp64=True, fma=True)
+                array("kTransportFmaShader", code)
+            else:
+                shutil.copyfile(args.output.parent / (stem + "_fp64.spv"), destination)
+                lines.append("inline constexpr auto& kTransportFmaShader = kTransportFp64Shader;")
+            print("Transport optional FMA32:", "validated" if fma_available else "integer fallback", flush=True)
         words = ((512 if kind == "Camera" else 576) + 4 * program["registers"] if kind in ("Camera", "RayCamera")
                  else {"Transport":2404, "Endpoint":769, "Dense":204, "Initialize":204}[kind] + 5 * program["registers"])
         lines.append(f"inline constexpr std::size_t k{kind}RowWords = {words};")

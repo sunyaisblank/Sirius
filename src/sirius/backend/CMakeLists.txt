@@ -90,6 +90,7 @@ if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS AND SIRIUS_SPIRV_OP
                    "${retained_build}/retained_ray_camera.spv"
                    "${retained_build}/retained_camera_fp64.spv"
                    "${retained_build}/retained_transport_fp64.spv"
+                   "${retained_build}/retained_transport_fma.spv"
                    "${retained_build}/retained_endpoint_fp64.spv"
                    "${retained_build}/retained_dense_fp64.spv"
                    "${retained_build}/retained_initialize_fp64.spv"
