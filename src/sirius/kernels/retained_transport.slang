@@ -203,12 +203,216 @@ static const int ad[7][7] = {{1, 1, 1, 1, 1, 1, 1},
                              {384, 1, 1113, 192, 6784, 84, 1}};
 static const int en[7] = {71, 0, -71, 71, -17253, 22, -1};
 static const int ed[7] = {57600, 1, 16695, 1920, 339200, 525, 40};
-#ifndef SIRIUS_RETAINED_PORTABLE
 // Six row sums, fourteen nonzero corrections and five embedded-error weights.
 // Preserve the complete retained value, including its integer validity word.
 groupshared uint retainedCoefficients[SIRIUS_RETAINED_COEFFICIENTS * 5];
 void CacheCoefficient(uint lane) {
     if (lane >= SIRIUS_RETAINED_COEFFICIENTS) return;
+#ifdef SIRIUS_RETAINED_PORTABLE
+    // Complete integer-arithmetic quotient words; retain the radius and status.
+    // The kernel builder checks every exact rational enclosure before compile.
+    uint base = lane * 5;
+    if (lane == 0u) {
+        retainedCoefficients[base + 0u] = 0x3e4ccccdu;
+        retainedCoefficients[base + 1u] = 0xb14ccccdu;
+        retainedCoefficients[base + 2u] = 0x244ccccdu;
+        retainedCoefficients[base + 3u] = 0x19800000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 1u) {
+        retainedCoefficients[base + 0u] = 0x3e99999au;
+        retainedCoefficients[base + 1u] = 0xb24ccccdu;
+        retainedCoefficients[base + 2u] = 0x254ccccdu;
+        retainedCoefficients[base + 3u] = 0x1a800000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 2u) {
+        retainedCoefficients[base + 0u] = 0x3f4ccccdu;
+        retainedCoefficients[base + 1u] = 0xb24ccccdu;
+        retainedCoefficients[base + 2u] = 0x254ccccdu;
+        retainedCoefficients[base + 3u] = 0x1a800000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 3u) {
+        retainedCoefficients[base + 0u] = 0x3f638e39u;
+        retainedCoefficients[base + 1u] = 0xb1e38e39u;
+        retainedCoefficients[base + 2u] = 0x24638e39u;
+        retainedCoefficients[base + 3u] = 0x19800000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 4u) {
+        retainedCoefficients[base + 0u] = 0x3f800000u;
+        retainedCoefficients[base + 1u] = 0x00000000u;
+        retainedCoefficients[base + 2u] = 0x00000000u;
+        retainedCoefficients[base + 3u] = 0x00000000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 5u) {
+        retainedCoefficients[base + 0u] = 0x3f800000u;
+        retainedCoefficients[base + 1u] = 0x00000000u;
+        retainedCoefficients[base + 2u] = 0x00000000u;
+        retainedCoefficients[base + 3u] = 0x00000000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 6u) {
+        retainedCoefficients[base + 0u] = 0x3e666666u;
+        retainedCoefficients[base + 1u] = 0x31cccccdu;
+        retainedCoefficients[base + 2u] = 0xa4cccccdu;
+        retainedCoefficients[base + 3u] = 0x1a000000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 7u) {
+        retainedCoefficients[base + 0u] = 0xc06eeeefu;
+        retainedCoefficients[base + 1u] = 0x32888889u;
+        retainedCoefficients[base + 2u] = 0xa66eeeefu;
+        retainedCoefficients[base + 3u] = 0x1b800000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 8u) {
+        retainedCoefficients[base + 0u] = 0x40638e39u;
+        retainedCoefficients[base + 1u] = 0xb2e38e39u;
+        retainedCoefficients[base + 2u] = 0x25638e39u;
+        retainedCoefficients[base + 3u] = 0x1a800000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 9u) {
+        retainedCoefficients[base + 0u] = 0xc139885fu;
+        retainedCoefficients[base + 1u] = 0x34d6adf2u;
+        retainedCoefficients[base + 2u] = 0xa80fbe73u;
+        retainedCoefficients[base + 3u] = 0x1d000000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 10u) {
+        retainedCoefficients[base + 0u] = 0x411d2a92u;
+        retainedCoefficients[base + 1u] = 0xb49c3ad7u;
+        retainedCoefficients[base + 2u] = 0x2589584du;
+        retainedCoefficients[base + 3u] = 0x1b000000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 11u) {
+        retainedCoefficients[base + 0u] = 0xbe94e4f6u;
+        retainedCoefficients[base + 1u] = 0x31bc3997u;
+        retainedCoefficients[base + 2u] = 0x25347fd3u;
+        retainedCoefficients[base + 3u] = 0x1a800000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 12u) {
+        retainedCoefficients[base + 0u] = 0xc12c1f08u;
+        retainedCoefficients[base + 1u] = 0x34783e10u;
+        retainedCoefficients[base + 2u] = 0xa7f83e10u;
+        retainedCoefficients[base + 3u] = 0x1d000000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 13u) {
+        retainedCoefficients[base + 0u] = 0x410e80b5u;
+        retainedCoefficients[base + 1u] = 0x33dc87a3u;
+        retainedCoefficients[base + 2u] = 0xa7127789u;
+        retainedCoefficients[base + 3u] = 0x1c000000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 14u) {
+        retainedCoefficients[base + 0u] = 0x3e8e8ba3u;
+        retainedCoefficients[base + 1u] = 0xb13a2e8cu;
+        retainedCoefficients[base + 2u] = 0x24ba2e8cu;
+        retainedCoefficients[base + 3u] = 0x1a000000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 15u) {
+        retainedCoefficients[base + 0u] = 0xbe8c0c4cu;
+        retainedCoefficients[base + 1u] = 0x3272633du;
+        retainedCoefficients[base + 2u] = 0x24138a52u;
+        retainedCoefficients[base + 3u] = 0x19000000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 16u) {
+        retainedCoefficients[base + 0u] = 0x3ee6024du;
+        retainedCoefficients[base + 1u] = 0xb1b53f41u;
+        retainedCoefficients[base + 2u] = 0x253c25b9u;
+        retainedCoefficients[base + 3u] = 0x1a000000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 17u) {
+        retainedCoefficients[base + 0u] = 0x3f26aaabu;
+        retainedCoefficients[base + 1u] = 0xb2aaaaabu;
+        retainedCoefficients[base + 2u] = 0x262aaaabu;
+        retainedCoefficients[base + 3u] = 0x1b800000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 18u) {
+        retainedCoefficients[base + 0u] = 0xbea50e7eu;
+        retainedCoefficients[base + 1u] = 0x3254873fu;
+        retainedCoefficients[base + 2u] = 0xa554873fu;
+        retainedCoefficients[base + 3u] = 0x1a800000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 19u) {
+        retainedCoefficients[base + 0u] = 0x3e061862u;
+        retainedCoefficients[base + 1u] = 0xb1f3cf3du;
+        retainedCoefficients[base + 2u] = 0x23c30c31u;
+        retainedCoefficients[base + 3u] = 0x19000000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 20u) {
+        retainedCoefficients[base + 0u] = 0xbb8b5ad3u;
+        retainedCoefficients[base + 1u] = 0x2f2f5404u;
+        retainedCoefficients[base + 2u] = 0xa2845ccdu;
+        retainedCoefficients[base + 3u] = 0x17800000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 21u) {
+        retainedCoefficients[base + 0u] = 0x3d177777u;
+        retainedCoefficients[base + 1u] = 0x30eeeeefu;
+        retainedCoefficients[base + 2u] = 0xa3088889u;
+        retainedCoefficients[base + 3u] = 0x18800000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 22u) {
+        retainedCoefficients[base + 0u] = 0xbd50568fu;
+        retainedCoefficients[base + 1u] = 0x30d35e7au;
+        retainedCoefficients[base + 2u] = 0x247cb729u;
+        retainedCoefficients[base + 3u] = 0x19800000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 23u) {
+        retainedCoefficients[base + 0u] = 0x3d2ba454u;
+        retainedCoefficients[base + 1u] = 0xb004a1e4u;
+        retainedCoefficients[base + 2u] = 0x239055d2u;
+        retainedCoefficients[base + 3u] = 0x18800000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+    if (lane == 24u) {
+        retainedCoefficients[base + 0u] = 0xbccccccdu;
+        retainedCoefficients[base + 1u] = 0x2fcccccdu;
+        retainedCoefficients[base + 2u] = 0xa2cccccdu;
+        retainedCoefficients[base + 3u] = 0x18000000u;
+        retainedCoefficients[base + 4u] = 0x00000001u;
+        return;
+    }
+#else
     RetainedTriple value = RTInvalid();
     if (lane < 6)
         value = Rational(cn[lane + 1], cd[lane + 1]);
@@ -229,6 +433,7 @@ void CacheCoefficient(uint lane) {
     retainedCoefficients[base + 2] = RPBits(value.tail);
     retainedCoefficients[base + 3] = RPBits(value.error);
     retainedCoefficients[base + 4] = value.valid;
+#endif
 }
 RetainedTriple ReadCoefficient(uint index) {
     uint base = index * 5;
@@ -240,7 +445,6 @@ RetainedTriple ReadCoefficient(uint index) {
     value.valid = retainedCoefficients[base + 4];
     return value;
 }
-#endif
 [shader("compute")][numthreads(SIRIUS_RETAINED_EXECUTION_LANES, 1, 1)] void ComputeMain(uint3 id
                                                                               : SV_GroupID,
                                                                                 uint lane
@@ -310,7 +514,13 @@ RetainedTriple ReadCoefficient(uint index) {
 #endif
     for (uint stage = 0; stage < 7; ++stage) {
         if (lane == 0) retainedStatus = 0;
-#ifndef SIRIUS_RETAINED_PORTABLE
+#ifdef SIRIUS_RETAINED_PORTABLE
+        // One invocation owns this row; cache all complete coefficients after
+        // stage zero succeeds, before their first use. No inter-invocation join.
+        if (stage == 1)
+            for (uint index = 0; index < SIRIUS_RETAINED_COEFFICIENTS; ++index)
+                CacheCoefficient(index);
+#else
         // Stage zero has succeeded. Publish once at the existing stage barrier;
         // expression register reuse never writes this separate immutable cache.
         if (stage == 1) CacheCoefficient(lane);
@@ -320,23 +530,14 @@ RetainedTriple ReadCoefficient(uint index) {
             RetainedTriple value = ReadOriginal(4 + i, row);
             if (stage != 0) {
                 RetainedTriple first = ReadStored(rowBase + 1004 + i * 5);
-#ifdef SIRIUS_RETAINED_PORTABLE
-                RetainedTriple weighted = RTMultiply(first, Rational(cn[stage], cd[stage]));
-#else
                 RetainedTriple weighted = RTMultiply(first, ReadCoefficient(stage - 1));
-#endif
                 for (uint j = 1; j < stage; ++j)
                     if (an[stage][j] != 0) {
                         RetainedTriple difference =
                             RTSubtract(ReadStored(rowBase + 1004 + j * 200 + i * 5), first);
-#ifdef SIRIUS_RETAINED_PORTABLE
-                        weighted = RTAdd(
-                            weighted, RTMultiply(difference, Rational(an[stage][j], ad[stage][j])));
-#else
                         uint index = 6 + (stage - 2) * (stage - 1) / 2 + j - 1;
                         if (stage == 6) --index; // The preceding correction is zero.
                         weighted = RTAdd(weighted, RTMultiply(difference, ReadCoefficient(index)));
-#endif
                     }
                 RetainedTriple increment = RTMultiply(weighted, h);
                 value = RTAdd(value, increment);
@@ -362,11 +563,7 @@ RetainedTriple ReadCoefficient(uint index) {
             if (en[j] != 0) {
                 RetainedTriple difference =
                     RTSubtract(ReadStored(rowBase + 1004 + j * 200 + i * 5), first);
-#ifdef SIRIUS_RETAINED_PORTABLE
-                weighted = RTAdd(weighted, RTMultiply(difference, Rational(en[j], ed[j])));
-#else
                 weighted = RTAdd(weighted, RTMultiply(difference, ReadCoefficient(18 + j)));
-#endif
             }
         RetainedTriple error = RTMultiply(weighted, h), full = ReadStored(rowBase + 804 + i * 5);
         RetainedTriple lower = RTSubtract(full, error);

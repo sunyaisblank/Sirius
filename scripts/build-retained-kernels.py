@@ -1,6 +1,8 @@
 """Build and embed the bounded retained arithmetic stages and their programs."""
 
 import argparse
+import ast
+from fractions import Fraction
 import sys
 sys.dont_write_bytecode = True
 
@@ -79,6 +81,94 @@ def supports_fma32(directory, compiler, assembler, disassembler, validator):
     return True
 
 
+def validate_portable_coefficients(source):
+    """Check stored words against the exact tableau, without shader arithmetic."""
+    text = re.sub(r"/\*.*?\*/|//[^\n]*", "", source.read_text(), flags=re.S)
+    def table(name):
+        match = re.search(r"static const int " + name + r"\[7\](?:\[7\])? = (\{.*?\});", text, re.S)
+        if not match:
+            raise ValueError(f"missing retained tableau {name}")
+        return ast.literal_eval(match[1].replace("{", "[").replace("}", "]"))
+
+    cn, cd, an, ad, en, ed = map(table, ("cn", "cd", "an", "ad", "en", "ed"))
+    if (any(type(values) is not list or len(values) != 7 or
+            any(type(value) is not int for value in values) for values in (cn, cd, en, ed)) or
+            any(type(matrix) is not list or len(matrix) != 7 or
+                any(type(row) is not list or len(row) != 7 or
+                    any(type(value) is not int for value in row) for row in matrix)
+                for matrix in (an, ad))):
+        raise ValueError("retained tableau requires integer 7 / 7-by-7 arrays")
+    pairs = [(cn[stage], cd[stage]) for stage in range(1, 7)]
+    for stage in range(2, 7):
+        for previous in range(1, stage):
+            if an[stage][previous] != 0:
+                consumer = 6 + (stage - 2) * (stage - 1) // 2 + previous - 1
+                if stage == 6:
+                    consumer -= 1
+                if consumer != len(pairs):
+                    raise ValueError("retained correction producer/consumer slots disagree")
+                pairs.append((an[stage][previous], ad[stage][previous]))
+    if len(pairs) != 20 or en[1] != 0:
+        raise ValueError("retained embedded-error coefficient layout changed")
+    pairs += [(en[stage], ed[stage]) for stage in range(2, 7)]
+    function = re.search(r"\bvoid\s+CacheCoefficient\s*\(\s*uint\s+lane\s*\)\s*\{\s*"
+        r"if\s*\(\s*lane\s*>=\s*SIRIUS_RETAINED_COEFFICIENTS\s*\)\s*return\s*;\s*"
+        r"#ifdef\s+SIRIUS_RETAINED_PORTABLE\s*(.*?)\s*#else\b", text, re.S)
+    if not function:
+        raise ValueError("retained literal-cache branch is missing")
+    branch = function[1]
+    base = re.match(r"\s*uint\s+base\s*=\s*lane\s*\*\s*5\s*;\s*", branch)
+    if not base:
+        raise ValueError("retained literal-cache base changed")
+    cursor, blocks = base.end(), []
+    pattern = re.compile(r"\s*if\s*\(\s*lane\s*==\s*(\d+)u\s*\)\s*\{(.*?)\}\s*", re.S)
+    while cursor < len(branch):
+        match = pattern.match(branch, cursor)
+        if not match:
+            raise ValueError("unexpected statement in retained literal-cache branch")
+        blocks.append((match[1], match[2]))
+        cursor = match.end()
+    if len(blocks) != 25 or sorted(int(slot) for slot, _ in blocks) != list(range(25)):
+        raise ValueError("retained tableau literal slots do not match the coefficient cache")
+
+    def number(word):
+        exponent = (word >> 23) & 255
+        if exponent == 255:
+            raise ValueError("retained tableau literal is not finite")
+        significand = word & 0x7fffff
+        power = -149 if exponent == 0 else exponent - 150
+        if exponent:
+            significand += 1 << 23
+        scale = Fraction(2**power) if power >= 0 else Fraction(1, 2**-power)
+        return (-1 if word >> 31 else 1) * significand * scale
+
+    for slot, block in blocks:
+        stores, cursor = [], 0
+        store = re.compile(r"\s*retainedCoefficients\s*\[\s*base\s*\+\s*(\d+)u\s*\]\s*"
+                           r"=\s*0x([0-9a-fA-F]{8})u\s*;\s*")
+        for _ in range(5):
+            match = store.match(block, cursor)
+            if not match:
+                raise ValueError(f"retained tableau slot {slot} store sequence changed")
+            stores.append((match[1], match[2]))
+            cursor = match.end()
+        if not re.fullmatch(r"\s*return\s*;\s*", block[cursor:]):
+            raise ValueError(f"unexpected statement in retained tableau slot {slot}")
+        if len(stores) != 5 or sorted(int(index) for index, _ in stores) != list(range(5)):
+            raise ValueError(f"retained tableau slot {slot} does not store five distinct words")
+        words = [word for _, word in sorted((int(index), int(word, 16)) for index, word in stores)]
+        hi, lo, tail, radius = map(number, words[:4])
+        spacing = lambda word: number((word & 0x7fffffff) + 1) - abs(number(word))
+        if (words[4] != 1 or words[3] & 0x80000000 or
+                max(abs(hi), abs(lo), abs(tail), radius) > 2**120 or
+                abs(lo) > spacing(words[0]) or abs(tail) > spacing(words[1]) or
+                (hi == 0 and (lo != 0 or tail != 0))):
+            raise ValueError(f"retained tableau slot {slot} is not represented")
+        numerator, denominator = pairs[int(slot)]
+        if denominator <= 0 or abs(hi + lo + tail - Fraction(numerator, denominator)) > radius:
+            raise ValueError(f"retained tableau slot {slot} does not enclose its exact rational")
+
+
 def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False):
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
@@ -89,9 +179,11 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
         definitions.append("-DSIRIUS_RETAINED_FMA32=1")
     if portable:
         definitions.append("-DSIRIUS_RETAINED_PORTABLE=1")
+        if source.stem == "retained_transport":
+            validate_portable_coefficients(source)
     original_inputs = ({"retained_camera": 32, "retained_ray_camera": 45}.get(source.stem, 0)
                        if portable else 0)
-    coefficients = 25 if source.stem == "retained_transport" and not portable else 0
+    coefficients = 25 if source.stem == "retained_transport" else 0
     if coefficients:
         definitions.append(f"-DSIRIUS_RETAINED_COEFFICIENTS={coefficients}")
     if (registers * terms + original_inputs * 4 + coefficients * 5) * 4 + 8 > 16384:
