@@ -42,6 +42,7 @@ TEST(RenderEvidence, RetainedWireRecordsFeedAttestationControls) {
         stats.work_tile_edge = 32;
         stats.tiles_rendered = imax ? 22528 : 2040;
         stats.continuation_capacity = 64;
+        stats.retained_timing.projection_capacity = 128;
         stats.maximum_dispatch_rays = 64;
         stats.band_dispatches = imax ? 32736 : 3000;
         stats.retained_stage_dispatches =
@@ -62,6 +63,8 @@ TEST(RenderEvidence, RetainedWireRecordsFeedAttestationControls) {
         EXPECT_EQ(decoded["work_items"], imax ? 22528 : 2040);
         EXPECT_EQ(decoded["work_tile_edge"], 32);
         EXPECT_EQ(decoded["maximum_dispatch_rays"], 64);
+        EXPECT_EQ(decoded["ray_capacity"], 64);
+        EXPECT_EQ(decoded["retained_timing"]["projection_capacity"], 128);
         EXPECT_EQ(decoded["source_owner"], "host");
         EXPECT_EQ(decoded["route"], "retained");
         EXPECT_TRUE(decoded["dispatches"].is_number_integer());

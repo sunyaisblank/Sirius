@@ -42,8 +42,12 @@ core::CoupledSegmentIncrement Increment(const std::array<RetainedValue, 20>& inp
 
 RetainedTraceExecutor::RetainedTraceExecutor(RetainedCompute& compute,
                                              std::function<bool()> should_cancel,
-                                             double maximum_submission_ms)
+                                             double maximum_submission_ms,
+                                             std::size_t maximum_batch_rows)
     : compute_(compute),
+      maximum_batch_rows_(maximum_batch_rows == 0
+                              ? compute.Capacity()
+                              : std::min(maximum_batch_rows, compute.Capacity())),
       maximum_submission_ms_(maximum_submission_ms),
       should_cancel_(std::move(should_cancel)),
       stats_{.batch_row_counts = std::vector<std::uint64_t>(compute.Capacity() + 1)},
@@ -100,6 +104,7 @@ void RetainedTraceExecutor::Run() {
     std::size_t batch_limit = compute_.Capacity();
     std::size_t safety_cap = batch_limit;
     for (;;) {
+        const auto gather_limit = std::min(maximum_batch_rows_, batch_limit);
         std::vector<Request*> batch;
         double coalescing_ms = 0;
         bool coalescing_ready = false;
@@ -119,21 +124,21 @@ void RetainedTraceExecutor::Run() {
                 return !active_traces_.empty() && queued_registered_ == active_traces_.size();
             };
             const auto coalescing_started = std::chrono::steady_clock::now();
-            coalescing_underfilled = requests_.size() < batch_limit;
+            coalescing_underfilled = requests_.size() < gather_limit;
             coalescing_ready = available_.wait_for(lock, std::chrono::milliseconds(1), [&] {
-                return stopping_ || requests_.size() >= batch_limit || traces_ready();
+                return stopping_ || requests_.size() >= gather_limit || traces_ready();
             });
             coalescing_ms = std::chrono::duration<double, std::milli>(
                                 std::chrono::steady_clock::now() - coalescing_started)
                                 .count();
             coalescing_stopped = stopping_;
             coalescing_traces_ready = traces_ready();
-            while (!requests_.empty() && batch.size() < batch_limit) {
+            while (!requests_.empty() && batch.size() < gather_limit) {
                 batch.push_back(requests_.front());
                 if (requests_.front()->registered) --queued_registered_;
                 requests_.pop_front();
             }
-            full_batch = batch.size() == batch_limit;
+            full_batch = batch.size() == gather_limit;
             // The final locked fanout completes queued requests with the sticky
             // error; no further device work is needed to drain them.
             draining_error = error_.has_value();
@@ -235,7 +240,7 @@ void RetainedTraceExecutor::Run() {
                                                          compute_.DispatchTargetMs() / peak)));
                 ++stats_.batch_subdivisions;
             } else if (compute_.DispatchTargetMs() > 0 && peak > 0 &&
-                       peak < .5 * compute_.DispatchTargetMs() && batch.size() == batch_limit) {
+                       peak < .5 * compute_.DispatchTargetMs() && full_batch) {
                 // Recover throughput after a temporary soft-target overshoot,
                 // while preserving any irreversible safety ceiling.
                 batch_limit = std::min(safety_cap, batch_limit * 2);

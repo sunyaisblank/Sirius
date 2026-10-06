@@ -150,6 +150,7 @@ std::string VulkanRenderEvidenceJson(const SessionConfig& config, const VulkanRe
             {"scope",
              "host steady-clock wall observations; worker acceleration sums overlap "
              "dispatcher work and other workers; dispatch phases are nested in Execute"},
+            {"projection_capacity", timing.projection_capacity},
             {"batches", timing.batches},
             {"full_batches", timing.full_batches},
             {"interval_rows", timing.interval_rows},

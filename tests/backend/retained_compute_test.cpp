@@ -47,6 +47,10 @@ struct RetainedTraceExecutorTestPeer {
         return {executor.requests_.size(), executor.queued_registered_,
                 executor.active_traces_.size()};
     }
+    static void WaitForQueued(RetainedTraceExecutor& executor, std::size_t rows) {
+        std::unique_lock lock(executor.mutex_);
+        executor.available_.wait(lock, [&] { return executor.requests_.size() >= rows; });
+    }
     static std::array<std::size_t, 3> QueueState(RetainedTraceExecutor& executor) {
         std::lock_guard lock(executor.mutex_);
         return {executor.requests_.size(), executor.queued_registered_,
@@ -1940,6 +1944,137 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
 #endif
 }
 
+TEST_F(RetainedComputeTest, ProjectionReserveKeepsLogicalCohortsBounded) {
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    const auto inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory);
+    const auto index = ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(index);
+    for (const std::size_t rays : {3U, 7U, 8U, 13U}) {
+        SCOPED_TRACE(rays);
+        // ComputeDevice owns its buffers until destruction. Each finite case
+        // gets a separate device so its unchanged 8 MiB bound includes all rows.
+        auto opened = CreateVulkanDevice(*index);
+        ASSERT_TRUE(opened) << opened.error().Description();
+        auto& cohort_device = **opened;
+        ASSERT_TRUE(cohort_device.SetBufferAllocationLimit(8 * 1024 * 1024));
+        TransferProbeDevice probe(cohort_device);
+        const auto resident_before = cohort_device.BufferAllocationBytes();
+        const auto required = RetainedCompute::RequiredAllocationBytes(probe, 2 * rays);
+        ASSERT_TRUE(required);
+        auto created = RetainedCompute::Create(probe, 2 * rays, false, rays == 3 ? 100 : 250);
+        ASSERT_TRUE(created) << created.error().Description();
+        auto& reserved = **created;
+        EXPECT_EQ(cohort_device.BufferAllocationBytes(), resident_before + *required);
+        const auto endpoint_input = probe.allocations[4].handle;
+        std::promise<void> entered, release;
+        auto dispatched = entered.get_future();
+        auto released = release.get_future().share();
+        probe.before_dispatch = [&] {
+            if (probe.dispatch_calls == 1) {
+                entered.set_value();
+                released.wait();
+            }
+        };
+        // Timing feedback is controlled at the device seam; numerical outputs
+        // still come from the real stages. This makes queue limits deterministic.
+        bool reduced = false;
+        probe.submission_ms = [&](BufferHandle input, std::uint32_t rows) {
+            if (rays == 3 && !reduced && input.value == endpoint_input.value && rows == 6) {
+                reduced = true;
+                return 160.0;
+            }
+            return 1.0;
+        };
+        RetainedTraceExecutor executor(reserved, {}, 1000, rays);
+        auto held = std::async(std::launch::async, [&] {
+            sirius::core::KerrSchildFamily metric(sirius::core::KerrSchildParams::Minkowski());
+            sirius::core::CameraRay camera;
+            camera.origin(1) = 5;
+            camera.origin(2) = std::numbers::pi / 2;
+            camera.direction(1) = 1;
+            return executor.Launch(metric, 0, camera).has_value();
+        });
+        dispatched.wait();
+        std::vector<std::future<void>> workers;
+        // Extra queued rays prove that storage capacity does not also increase
+        // logical gathering. Hold a real preceding dispatch while all requests
+        // enter the queue; no elapsed-time assumption establishes it.
+        const std::size_t row_count = rays == 3 ? 12 : rays + 1;
+        for (std::size_t row = 0; row < row_count; ++row)
+            workers.push_back(std::async(std::launch::async, [&, row] {
+                sirius::core::KerrSchildFamily metric(sirius::core::KerrSchildParams::Minkowski());
+                sirius::core::Lightray ray{};
+                ray.position(1) = 5 + row;
+                ray.velocity(0) = -1;
+                ray.velocity(1) = 1;
+                ray.step_size = 1;
+                sirius::core::Rk45CoupledState columns;
+                columns.length_scale = columns.frequency_scale = 1;
+                columns.tolerance = 1e-9;
+                columns.variations[0].derivative(2) = .001;
+                columns.variations[1].derivative(3) = .001;
+                columns.variations[2].displacement(2) = 1;
+                columns.variations[3].displacement(3) = 1;
+                sirius::core::IntegratorConfig config;
+                config.min_step = .01f;
+                config.max_step = 2;
+                sirius::core::Rk45CoupledComparison comparison;
+                executor.BeginTrace();
+                const bool completed = executor.Step(ray, metric, config, columns, comparison);
+                executor.EndTrace();
+                EXPECT_TRUE(completed);
+                EXPECT_EQ(ray.position(0), -1);
+                EXPECT_EQ(ray.position(1), 6 + row);
+                EXPECT_EQ(ray.velocity(0), -1);
+                EXPECT_EQ(ray.velocity(1), 1);
+                EXPECT_EQ(columns.central_stages, 21U);
+                EXPECT_EQ(columns.variation_stages, 21U);
+            }));
+        RetainedTraceExecutorTestPeer::WaitForQueued(executor, row_count);
+        release.set_value();
+        EXPECT_TRUE(held.get());
+        for (auto& worker : workers) worker.get();
+        EXPECT_FALSE(executor.Error());
+        const auto stats = executor.Statistics();
+        EXPECT_EQ(stats.maximum_batch_rows, rays);
+        EXPECT_EQ(stats.full_batches, rays == 3 ? 5U : 1U);
+        EXPECT_EQ(stats.batch_row_counts[rays], rays == 3 ? 3U : 1U);
+        EXPECT_EQ(stats.batch_row_counts[1], 2U);
+        if (rays == 3) {
+            EXPECT_EQ(stats.batch_row_counts[2], 1U);
+        }
+        EXPECT_EQ(stats.camera_rows, 1U);
+        EXPECT_EQ(stats.interval_rows, row_count);
+        EXPECT_EQ(stats.accepted_intervals, row_count);
+        EXPECT_EQ(stats.batch_subdivisions, rays == 3 ? 1U : 0U);
+        EXPECT_EQ(stats.safety_fallbacks, 0U);
+        std::vector<std::uint32_t> projection_rows;
+        for (const auto& submission : probe.submissions)
+            if (submission.buffers[0].value == endpoint_input.value)
+                projection_rows.push_back(submission.x);
+        if (rays == 3) {
+            // The first soft overshoot gives budgets 6->1->2->4->6.
+            // Logical gathers 3,1,2,3,3 must recover pairing in the last cohort;
+            // comparing fullness against budget four would incorrectly stall.
+            EXPECT_EQ(projection_rows,
+                      (std::vector<std::uint32_t>{3, 6, 6, 6, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2,
+                                                  2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 6, 6, 6}));
+        } else {
+            EXPECT_EQ(projection_rows,
+                      (std::vector<std::uint32_t>{
+                          static_cast<std::uint32_t>(rays), static_cast<std::uint32_t>(2 * rays),
+                          static_cast<std::uint32_t>(2 * rays),
+                          static_cast<std::uint32_t>(2 * rays), 1, 2, 2, 2}));
+        }
+        EXPECT_EQ(probe.allocations.size(), 12U);
+        EXPECT_EQ(cohort_device.BufferAllocationBytes(), resident_before + *required);
+    }
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
 TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollbackState) {
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
     std::atomic<bool> cancelled{false};
@@ -2313,7 +2448,7 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
         auto guarded_columns = make_columns();
         sirius::core::Rk45CoupledComparison guarded_comparison;
         RetainedTraceExecutor guarded_executor(
-            guard_compute, [&] { return guard_cancelled.load(); }, 1000);
+            guard_compute, [&] { return guard_cancelled.load(); }, 1000, 1);
         const bool completed =
             guarded_executor.Step(guarded_ray, flat, config, guarded_columns, guarded_comparison);
         const auto guarded_stats = guarded_executor.Statistics();

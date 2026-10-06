@@ -78,6 +78,9 @@ struct VulkanRenderStats {
     // Film camera, joint RK, projection, dense sampling, initialization, smooth ray camera.
     std::array<std::int64_t, 6> retained_stage_dispatches{};
     struct RetainedTiming {
+        // Allocated stage rows; the adaptive submission budget can be lower.
+        // Ray concurrency is separately recorded in continuation_capacity.
+        std::uint64_t projection_capacity = 0;
         std::uint64_t batches = 0;
         std::uint64_t full_batches = 0;
         std::uint64_t interval_rows = 0;

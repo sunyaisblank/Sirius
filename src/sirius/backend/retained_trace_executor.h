@@ -20,7 +20,8 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
   public:
     explicit RetainedTraceExecutor(RetainedCompute& compute,
                                    std::function<bool()> should_cancel = {},
-                                   double maximum_submission_ms = 0);
+                                   double maximum_submission_ms = 0,
+                                   std::size_t maximum_batch_rows = 0);
     ~RetainedTraceExecutor() override;
     void BeginTrace() override;
     void EndTrace() override;
@@ -97,6 +98,9 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
     void Run();
     void Execute(std::span<Request*> requests, std::size_t projection_row_budget);
     RetainedCompute& compute_;
+    // A lower logical limit reserves both endpoint orders of each queued ray.
+    // Zero in the constructor selects the complete storage capacity.
+    std::size_t maximum_batch_rows_;
     double maximum_submission_ms_;
     std::function<bool()> should_cancel_;
     mutable std::mutex mutex_;

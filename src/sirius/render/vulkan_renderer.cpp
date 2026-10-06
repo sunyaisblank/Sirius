@@ -367,7 +367,10 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     const auto physical = device.Info().kind == backend::DeviceKind::kIntegratedGpu ||
                           device.Info().kind == backend::DeviceKind::kDiscreteGpu;
     const std::size_t row_limit = physical ? 128 : 64;
-    std::size_t capacity = std::min(row_limit, work_count * rays_per_work);
+    const auto desired_rays = std::min(row_limit, work_count * rays_per_work);
+    // Small cohorts need separate upper/lower endpoint slots without creating
+    // more concurrent rays or exceeding the existing submission row ceiling.
+    std::size_t capacity = std::min(row_limit, 2 * desired_rays);
     const auto resident_before = device.BufferAllocationBytes();
     constexpr auto minimum_tile_bytes = kMinTileEdge * kMinTileEdge * kTileWorkingSetBytesPerPixel;
     std::uint64_t planned = 0;
@@ -384,6 +387,7 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     if (capacity == 0)
         return Fail(ErrorDomain::kDevice, "allocate retained renderer",
                     "budget cannot seat one bounded ray batch");
+    const auto ray_capacity = std::min(desired_rays, capacity);
     // Device scratch reserves a minimum tile independently of the number of
     // host pixels. A tiny image still fits within that existing reservation.
     const auto plan = DeriveTilePlan(*budget, std::max(config.width, kMinTileEdge),
@@ -405,8 +409,9 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
                                 resident_before, resident_after, capacity, RungName(rung), *budget,
                                 usable));
     std::cout << "[Vulkan] Retained renderer: " << device.Info().name << ", " << RungName(rung)
-              << "; budget " << (*budget / (1024 * 1024)) << " MiB, " << capacity << " ray rows, "
-              << work_count << " host work tiles of " << work_edge << "px" << std::endl;
+              << "; budget " << (*budget / (1024 * 1024)) << " MiB, " << ray_capacity
+              << " ray rows, " << capacity << " projection slots, " << work_count
+              << " host work tiles of " << work_edge << "px" << std::endl;
     backend::RetainedCompute::PreparationStats preparation;
     if (device.Info().kind == backend::DeviceKind::kSoftware) {
         std::cout << "[Vulkan] initialising five software retained kernels with zero active rays"
@@ -442,11 +447,11 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     // result, so an ordinary stateful cancellation callback is never raced.
     std::atomic<bool> cancelled{false};
     backend::RetainedTraceExecutor executor(
-        **compute, [&] { return cancelled.load(); }, kDispatchStopMs);
+        **compute, [&] { return cancelled.load(); }, kDispatchStopMs, ray_capacity);
     // Host work items are screen blocks or pixels, independent of device residency.
     // Independent detector probes also feed this capacity. Each trace worker
     // has at most one pending interval; device residency stays bounded here.
-    RenderSession session(executor, static_cast<int>(capacity), work_edge);
+    RenderSession session(executor, static_cast<int>(ray_capacity), work_edge);
     auto worker_config = config;
     worker_config.write_output = false;
     worker_config.output_path = SessionConfig{}.output_path;
@@ -503,7 +508,7 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     stats.precision = rung;
     stats.tile_plan = *plan;
     stats.explicit_buffer_allocation_bytes = device.BufferAllocationBytes();
-    stats.continuation_capacity = capacity;
+    stats.continuation_capacity = ray_capacity;
     stats.retained_intervals = true;
     stats.camera_batches = execution.camera_batches;
     stats.accepted_intervals = execution.accepted_intervals;
@@ -514,6 +519,7 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
         stats.initialization_submit_wait_ms += stage.timing.submit_wait_ms;
     }
     auto& timing = stats.retained_timing;
+    timing.projection_capacity = capacity;
     timing.batches = execution.batches;
     timing.full_batches = execution.full_batches;
     timing.interval_rows = execution.interval_rows;

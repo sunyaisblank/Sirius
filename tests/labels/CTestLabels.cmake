@@ -997,6 +997,7 @@ set_tests_properties(
     RetainedComputeTest.DenseSegmentsPreserveSmallCovariantArrivalDerivatives
     RetainedComputeTest.PhysicalInitializationRetainsTheHamiltonianResidual
     RetainedComputeTest.CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement
+    RetainedComputeTest.ProjectionReserveKeepsLogicalCohortsBounded
     RetainedComputeTest.SharedTracerCompletesDeviceIntervalsAndRetainsRollbackState
     RetainedComputeTest.RejectedStepRowsCannotExposeOldOrPartialCandidates
     RetainedComputeTest.Fp64ProductsPreserveIndependentScienceOrDeclineUnsupportedDevices
