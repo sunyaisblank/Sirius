@@ -2005,7 +2005,7 @@ TEST_F(RetainedComputeTest, ProjectionReserveKeepsLogicalCohortsBounded) {
             workers.push_back(std::async(std::launch::async, [&, row] {
                 sirius::core::KerrSchildFamily metric(sirius::core::KerrSchildParams::Minkowski());
                 sirius::core::Lightray ray{};
-                ray.position(1) = 5 + row;
+                ray.position(1) = 5 + static_cast<double>(row);
                 ray.velocity(0) = -1;
                 ray.velocity(1) = 1;
                 ray.step_size = 1;
@@ -2025,7 +2025,7 @@ TEST_F(RetainedComputeTest, ProjectionReserveKeepsLogicalCohortsBounded) {
                 executor.EndTrace();
                 EXPECT_TRUE(completed);
                 EXPECT_EQ(ray.position(0), -1);
-                EXPECT_EQ(ray.position(1), 6 + row);
+                EXPECT_EQ(ray.position(1), 6 + static_cast<double>(row));
                 EXPECT_EQ(ray.velocity(0), -1);
                 EXPECT_EQ(ray.velocity(1), 1);
                 EXPECT_EQ(columns.central_stages, 21U);
