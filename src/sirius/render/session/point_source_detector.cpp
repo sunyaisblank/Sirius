@@ -164,7 +164,7 @@ class Detector {
             probes_.reserve(policy_.maximum_probes);
             probe_slots_.assign(std::bit_ceil(2 * policy_.maximum_probes), kEmptyProbe);
             roots_.reserve(policy_.maximum_candidate_visits);
-            statistics_.reserved_cache_bytes = sizeof(prefetched_) +
+            statistics_.reserved_cache_bytes = sizeof(searches_) +
                                                probes_.capacity() * sizeof(CachedProbe) +
                                                roots_.capacity() * sizeof(ImageRoot) +
                                                probe_slots_.capacity() * sizeof(std::size_t);
@@ -232,13 +232,6 @@ class Detector {
         ++statistics_.probe_requests;
         const auto slot = ProbeSlot(z);
         if (probe_slots_[slot] != kEmptyProbe) return probe_slots_[slot];
-        for (std::size_t i = 0; i < prefetched_count_; ++i)
-            if (prefetched_[i].z == z) {
-                auto value = std::move(prefetched_[i].value);
-                prefetched_[i] = std::move(prefetched_[--prefetched_count_]);
-                if (!value) Fail(value.error());
-                return StoreProbe(z, *value, slot);
-            }
         if (statistics_.probes == policy_.maximum_probes) Fail(PointDetectorFailure::WorkLimit);
         auto value = sampler_(z);
         ++statistics_.probes;
@@ -305,152 +298,302 @@ class Detector {
                 return i;
         return std::nullopt;
     }
-    void PrefetchImageProbes(std::span<const std::uint32_t> stars, const Cell& cell,
-                             std::size_t seed, double margin) {
-        if (!sample_batch_ || stars.size() < 2) return;
-        // Leave room for every possible remaining Newton/backtracking request
-        // in this cohort. Division avoids overflow for an arbitrary step limit.
-        const auto room = (policy_.maximum_probes - statistics_.probes) / stars.size();
-        if (room == 0 || policy_.maximum_newton_steps > (room - 1) / 12 ||
-            stars.size() > policy_.maximum_candidate_visits - roots_.size())
-            return;
-        for (std::size_t i = 0; i < stars.size(); ++i)
-            if (std::find(stars.begin(), stars.begin() + i, stars[i]) != stars.begin() + i) return;
-        const auto& initial = probes_[seed];
-        if (!initial.value.visible) return;
-        std::array<Coordinate, kPointDetectorProbeBatchSize> coordinates{};
-        std::size_t count = 0;
-        for (auto star : stars) {
-            if (ReusableImage(star, cell)) continue;
-            const auto& entry = catalogue_.Stars()[star];
-            const auto residual =
-                SkyOffset(initial.value.direction,
-                          Direction{entry.direction_x, entry.direction_y, entry.direction_z});
-            const auto delta =
-                residual ? Solve(initial.value.source_derivative, *residual) : std::nullopt;
-            if (!delta) continue;
-            const Coordinate next{initial.z[0] + (*delta)[0], initial.z[1] + (*delta)[1]};
-            // In a regular cell, both corrected-image and full-weight Newton
-            // queries must pass this same bound before any physical sampling.
-            if (!cell.Contains(next, margin) || next == initial.z ||
-                probe_slots_[ProbeSlot(next)] != kEmptyProbe ||
-                std::find(coordinates.begin(), coordinates.begin() + count, next) !=
-                    coordinates.begin() + count)
-                continue;
-            coordinates[count++] = next;
-        }
-        if (count < 2) return;
-        CheckCancellation();
-        auto values = sample_batch_(std::span(coordinates).first(count));
-        statistics_.probes += count;
-        ++statistics_.probe_batches;
-        statistics_.maximum_probe_batch = std::max(statistics_.maximum_probe_batch, count);
-        for (const auto& value : values)
-            if (value) {
-                statistics_.inner_attempts += value->inner_attempts;
-                statistics_.tail_attempts += value->tail_attempts;
-            }
-        CheckCancellation();
-        const bool shape_valid = values.size() == count;
-        for (std::size_t i = 0; i < count; ++i)
-            prefetched_[prefetched_count_++] = {
-                coordinates[i], shape_valid ? std::move(values[i])
-                                            : std::unexpected(PointDetectorFailure::InvalidInput)};
-        // Raw answers enter the committed cache only when ordinary Probe
-        // consumes them, preserving root/RGB order and deferred row errors.
-        // A shared device/queue failure may still decline the entire cohort;
-        // the enclosing detector publishes no partial radiance on any failure.
-    }
-    std::optional<std::size_t> FindImage(std::uint32_t star, const Cell& cell, std::size_t seed,
-                                         bool regular, double margin, bool& unresolved) {
+    struct ImageSearch {
+        enum class Stage { Iteration, Trial, TrialAnswer, ValidationAnswer, Complete };
+        std::uint32_t star = 0;
+        Direction target{};
+        Coordinate z{}, residual{}, delta{}, next{};
+        std::size_t index = 0, answer = 0, newton_steps = 0;
+        unsigned iteration = 0, backtrack = 0;
+        double weight = 1, uncertainty = 0;
+        Stage stage = Stage::Iteration;
+        bool regular = true, unresolved = false, validated = false, awaiting = false;
+        std::optional<std::size_t> reused;
+        std::optional<PointDetectorFailure> failure;
+    };
+    ImageSearch StartImageSearch(std::uint32_t star, const Cell& cell, std::size_t seed,
+                                 bool regular) const {
         const auto& entry = catalogue_.Stars()[star];
-        const Direction target{entry.direction_x, entry.direction_y, entry.direction_z};
-        // A regular validated cell has a single local branch. Reuse its existing
-        // original-coordinate root at a shared edge; never merge by star ID.
-        if (regular) {
-            if (const auto reused = ReusableImage(star, cell)) return reused;
-        }
-        auto index = seed;
-        Coordinate z = probes_[index].z;
-        for (unsigned iteration = 0; iteration < policy_.maximum_newton_steps; ++iteration) {
-            ++statistics_.newton_steps;
-            const auto& current = probes_[index].value;
-            if (!current.visible) return std::nullopt;
-            const auto residual = SkyOffset(current.direction, target);
-            const auto delta =
-                residual ? Solve(current.source_derivative, *residual) : std::nullopt;
-            if (!delta) {
-                unresolved = true;
-                return std::nullopt;
+        ImageSearch state;
+        state.star = star;
+        state.target = {entry.direction_x, entry.direction_y, entry.direction_z};
+        state.index = seed;
+        state.z = probes_[seed].z;
+        state.regular = regular;
+        // Only the same catalogue ID can own a reusable image. Distinct
+        // searches can determine their next ray independently.
+        if (regular) state.reused = ReusableImage(star, cell);
+        if (state.reused) state.stage = ImageSearch::Stage::Complete;
+        return state;
+    }
+    std::optional<Coordinate> AdvanceImageSearch(ImageSearch& state, const Cell& cell,
+                                                 double margin) {
+        using Stage = ImageSearch::Stage;
+        for (;;) {
+            if (state.stage == Stage::Complete) return std::nullopt;
+            if (state.stage == Stage::Iteration) {
+                if (state.iteration == policy_.maximum_newton_steps) {
+                    state.unresolved = true;
+                    state.stage = Stage::Complete;
+                    continue;
+                }
+                ++state.newton_steps;
+                const auto& current = probes_[state.index].value;
+                if (!current.visible) {
+                    state.stage = Stage::Complete;
+                    continue;
+                }
+                const auto residual = SkyOffset(current.direction, state.target);
+                const auto delta =
+                    residual ? Solve(current.source_derivative, *residual) : std::nullopt;
+                if (!delta) {
+                    state.unresolved = true;
+                    state.stage = Stage::Complete;
+                    continue;
+                }
+                state.residual = *residual;
+                state.delta = *delta;
+                const double error = std::hypot((*delta)[0], (*delta)[1]);
+                if (error <= policy_.root_error) {
+                    // Validation always traces the independently corrected
+                    // image, including when it is an exact cache hit.
+                    state.next = {state.z[0] + (*delta)[0], state.z[1] + (*delta)[1]};
+                    if (!cell.Contains(state.next, margin)) {
+                        state.stage = Stage::Complete;
+                        continue;
+                    }
+                    state.stage = Stage::ValidationAnswer;
+                    return state.next;
+                }
+                const Coordinate next{state.z[0] + (*delta)[0], state.z[1] + (*delta)[1]};
+                if (state.regular && !cell.Contains(next, margin)) {
+                    state.stage = Stage::Complete;
+                    continue;
+                }
+                state.weight = 1;
+                state.backtrack = 0;
+                state.stage = Stage::Trial;
             }
-            const double error = std::hypot((*delta)[0], (*delta)[1]);
-            if (error <= policy_.root_error) {
-                // Validate with an independently evaluated corrected image ray.
-                const Coordinate corrected{z[0] + (*delta)[0], z[1] + (*delta)[1]};
-                if (!cell.Contains(corrected, margin)) return std::nullopt;
-                const auto validated = Probe(corrected);
-                const auto& actual = probes_[validated].value;
-                if (!actual.visible) return std::nullopt;
-                const auto remainder = SkyOffset(actual.direction, target);
+            if (state.stage == Stage::Trial) {
+                if (state.backtrack == 12) {
+                    state.unresolved = true;
+                    state.stage = Stage::Complete;
+                    continue;
+                }
+                state.next = {state.z[0] + state.weight * state.delta[0],
+                              state.z[1] + state.weight * state.delta[1]};
+                if (cell.Contains(state.next, margin) && state.next != state.z) {
+                    state.stage = Stage::TrialAnswer;
+                    return state.next;
+                }
+                state.weight *= .5;
+                ++state.backtrack;
+                continue;
+            }
+            if (state.stage == Stage::TrialAnswer) {
+                if (probes_[state.answer].value.visible) {
+                    const auto candidate_residual =
+                        SkyOffset(probes_[state.answer].value.direction, state.target);
+                    if (candidate_residual &&
+                        std::hypot((*candidate_residual)[0], (*candidate_residual)[1]) <
+                            std::hypot(state.residual[0], state.residual[1])) {
+                        state.z = state.next;
+                        state.index = state.answer;
+                        ++state.iteration;
+                        state.stage = Stage::Iteration;
+                        continue;
+                    }
+                }
+                state.weight *= .5;
+                ++state.backtrack;
+                state.stage = Stage::Trial;
+                continue;
+            }
+            if (state.stage == Stage::ValidationAnswer) {
+                const auto& actual = probes_[state.answer].value;
+                state.stage = Stage::Complete;
+                if (!actual.visible) continue;
+                const auto remainder = SkyOffset(actual.direction, state.target);
                 const auto remaining =
                     remainder ? Solve(actual.source_derivative, *remainder) : std::nullopt;
                 if (!remaining ||
                     std::hypot((*remaining)[0], (*remaining)[1]) > policy_.root_error) {
-                    unresolved = true;
-                    return std::nullopt;
+                    state.unresolved = true;
+                    continue;
                 }
-                const double uncertainty = std::hypot((*remaining)[0], (*remaining)[1]) +
-                                           32 * std::numeric_limits<double>::epsilon() *
-                                               (1 + std::hypot(corrected[0], corrected[1]));
-                for (std::size_t i = 0; i < roots_.size(); ++i) {
-                    if (roots_[i].star != star) continue;
-                    if (roots_[i].z == corrected) return i;
-                    if (std::hypot(roots_[i].z[0] - corrected[0], roots_[i].z[1] - corrected[1]) <=
-                        roots_[i].uncertainty + uncertainty) {
-                        if (regular) return i;
-                        unresolved = true;
-                        return std::nullopt;
-                    }
-                }
-                if (roots_.size() == policy_.maximum_candidate_visits)
-                    Fail(PointDetectorFailure::WorkLimit);
-                statistics_.maximum_root_coordinate_error =
-                    std::max(statistics_.maximum_root_coordinate_error, uncertainty);
-                roots_.push_back({star, corrected, validated, uncertainty, index});
-                return roots_.size() - 1;
+                state.uncertainty = std::hypot((*remaining)[0], (*remaining)[1]) +
+                                    32 * std::numeric_limits<double>::epsilon() *
+                                        (1 + std::hypot(state.next[0], state.next[1]));
+                state.validated = true;
             }
-            Coordinate next{z[0] + (*delta)[0], z[1] + (*delta)[1]};
-            if (regular && !cell.Contains(next, margin)) return std::nullopt;
-            // A bounded trust region keeps nonlinear trials on this cell's
-            // branch. Failed visibility trials backtrack toward the seed.
-            double weight = 1;
-            bool advanced = false;
-            for (unsigned backtrack = 0; backtrack < 12; ++backtrack) {
-                next = {z[0] + weight * (*delta)[0], z[1] + weight * (*delta)[1]};
-                if (cell.Contains(next, margin) && next != z) {
-                    const auto candidate = Probe(next);
-                    if (probes_[candidate].value.visible) {
-                        const auto candidate_residual =
-                            SkyOffset(probes_[candidate].value.direction, target);
-                        if (candidate_residual &&
-                            std::hypot((*candidate_residual)[0], (*candidate_residual)[1]) <
-                                std::hypot((*residual)[0], (*residual)[1])) {
-                            z = next;
-                            index = candidate;
-                            advanced = true;
-                            break;
-                        }
-                    }
-                }
-                weight *= .5;
-            }
-            if (!advanced) {
+        }
+    }
+    std::optional<std::size_t> FinishImageSearch(ImageSearch& state, bool& unresolved) {
+        unresolved = unresolved || state.unresolved;
+        if (state.reused) return state.reused;
+        if (!state.validated) return std::nullopt;
+        // Registration is separate from ray evaluation so cohort completion
+        // order cannot change root indices or subsequent RGB reduction order.
+        for (std::size_t i = 0; i < roots_.size(); ++i) {
+            if (roots_[i].star != state.star) continue;
+            if (roots_[i].z == state.next) return i;
+            if (std::hypot(roots_[i].z[0] - state.next[0], roots_[i].z[1] - state.next[1]) <=
+                roots_[i].uncertainty + state.uncertainty) {
+                if (state.regular) return i;
                 unresolved = true;
                 return std::nullopt;
             }
         }
-        unresolved = true;
-        return std::nullopt;
+        if (roots_.size() == policy_.maximum_candidate_visits)
+            Fail(PointDetectorFailure::WorkLimit);
+        statistics_.maximum_root_coordinate_error =
+            std::max(statistics_.maximum_root_coordinate_error, state.uncertainty);
+        roots_.push_back({state.star, state.next, state.answer, state.uncertainty, state.index});
+        return roots_.size() - 1;
+    }
+    struct SearchWork {
+        PointDetectorStatistics& statistics;
+        std::span<ImageSearch> searches;
+        ~SearchWork() {
+            // All actually executed Newton operations count, including
+            // independent work discarded after another search fails.
+            for (const auto& state : searches) statistics.newton_steps += state.newton_steps;
+        }
+    };
+    std::optional<std::size_t> FindImage(std::uint32_t star, const Cell& cell, std::size_t seed,
+                                         bool regular, double margin, bool& unresolved) {
+        auto state = StartImageSearch(star, cell, seed, regular);
+        const SearchWork work{statistics_, std::span(&state, 1)};
+        while (const auto coordinate = AdvanceImageSearch(state, cell, margin))
+            state.answer = Probe(*coordinate);
+        return FinishImageSearch(state, unresolved);
+    }
+
+    template <class Accumulate>
+    void FindImages(std::span<const std::uint32_t> stars, const Cell& cell, std::size_t seed,
+                    double margin, bool& unresolved, const Accumulate& accumulate) {
+        // Reserve the entire worst-case Newton/backtracking chain before any
+        // independent root work. A tight or arbitrary unsigned step limit
+        // retains the same scalar transition driver.
+        const auto room = (policy_.maximum_probes - statistics_.probes) / stars.size();
+        bool eligible = sample_batch_ && stars.size() > 1 && room > 0 &&
+                        policy_.maximum_newton_steps <= (room - 1) / 12 &&
+                        stars.size() <= policy_.maximum_candidate_visits - roots_.size();
+        for (std::size_t i = 0; eligible && i < stars.size(); ++i)
+            eligible = std::find(stars.begin(), stars.begin() + i, stars[i]) == stars.begin() + i;
+        if (!eligible) {
+            for (const auto star : stars)
+                (void)accumulate(star, FindImage(star, cell, seed, true, margin, unresolved));
+            return;
+        }
+        auto states = std::span(searches_).first(stars.size());
+        for (std::size_t i = 0; i < stars.size(); ++i)
+            states[i] = StartImageSearch(stars[i], cell, seed, true);
+        const SearchWork work{statistics_, states};
+        struct FailedProbe {
+            Coordinate z;
+            PointDetectorFailure reason;
+        };
+        // At most one newly failed coordinate per failed search. Keep its
+        // answer available if an earlier search later requests that ray.
+        std::array<FailedProbe, kPointDetectorProbeBatchSize> failed{};
+        std::size_t failed_count = 0, completed = 0;
+        while (completed < states.size()) {
+            CheckCancellation();
+            // A later row failure remains deferred while preceding searches
+            // finish. No work beyond the first known failure is newly issued.
+            std::size_t limit = states.size();
+            for (std::size_t i = completed; i < limit; ++i) {
+                auto& state = states[i];
+                if (state.failure) {
+                    limit = i;
+                    break;
+                }
+                if (!state.awaiting)
+                    if (const auto coordinate = AdvanceImageSearch(state, cell, margin))
+                        state.awaiting = true;
+            }
+            // Root indices, error precedence through photometry, and RGB sums
+            // follow catalogue order, regardless of which ray finished first.
+            while (completed < states.size()) {
+                auto& state = states[completed];
+                if (state.failure) Fail(*state.failure);
+                if (state.stage != ImageSearch::Stage::Complete) break;
+                (void)accumulate(state.star, FinishImageSearch(state, unresolved));
+                ++completed;
+            }
+            if (completed == states.size()) break;
+            std::array<Coordinate, kPointDetectorProbeBatchSize> missing{};
+            std::array<std::size_t, kPointDetectorProbeBatchSize> pending{};
+            pending.fill(kEmptyProbe);
+            std::size_t count = 0;
+            for (std::size_t i = completed; i < limit; ++i) {
+                auto& state = states[i];
+                if (!state.awaiting) continue;
+                ++statistics_.probe_requests;
+                const auto slot = ProbeSlot(state.next);
+                if (probe_slots_[slot] != kEmptyProbe) {
+                    state.answer = probe_slots_[slot];
+                    state.awaiting = false;
+                    continue;
+                }
+                const auto error =
+                    std::find_if(failed.begin(), failed.begin() + failed_count,
+                                 [&](const auto& value) { return value.z == state.next; });
+                if (error != failed.begin() + failed_count) {
+                    state.failure = error->reason;
+                    state.awaiting = false;
+                    break;
+                }
+                const auto end = missing.begin() + count;
+                const auto found = std::find(missing.begin(), end, state.next);
+                pending[i] = static_cast<std::size_t>(found - missing.begin());
+                if (found == end) missing[count++] = state.next;
+            }
+            if (count == 0) continue;
+            if (count > policy_.maximum_probes - statistics_.probes)
+                Fail(PointDetectorFailure::WorkLimit);
+            auto values = sample_batch_(std::span(missing).first(count));
+            statistics_.probes += count;
+            ++statistics_.probe_batches;
+            statistics_.maximum_probe_batch = std::max(statistics_.maximum_probe_batch, count);
+            for (const auto& value : values)
+                if (value) {
+                    statistics_.inner_attempts += value->inner_attempts;
+                    statistics_.tail_attempts += value->tail_attempts;
+                }
+            CheckCancellation();
+            const bool shape_valid = values.size() == count;
+            std::array<std::expected<std::size_t, PointDetectorFailure>,
+                       kPointDetectorProbeBatchSize>
+                answers{};
+            for (std::size_t i = 0; i < count; ++i) {
+                if (!shape_valid)
+                    answers[i] = std::unexpected(PointDetectorFailure::InvalidInput);
+                else if (!values[i])
+                    answers[i] = std::unexpected(values[i].error());
+                else {
+                    try {
+                        // Exact-coordinate deduplication normalizes each
+                        // successful physical answer once, through StoreProbe.
+                        answers[i] = StoreProbe(missing[i], *values[i], ProbeSlot(missing[i]));
+                    } catch (PointDetectorFailure reason) {
+                        answers[i] = std::unexpected(reason);
+                    }
+                }
+                if (!answers[i]) failed[failed_count++] = {missing[i], answers[i].error()};
+            }
+            for (std::size_t i = completed; i < limit; ++i) {
+                if (pending[i] == kEmptyProbe) continue;
+                auto& state = states[i];
+                const auto& answer = answers[pending[i]];
+                state.awaiting = false;
+                if (answer)
+                    state.answer = *answer;
+                else
+                    state.failure = answer.error();
+            }
+        }
     }
 
     Estimate Measure(const Cell& cell) {
@@ -574,8 +717,7 @@ class Detector {
         bool has_candidate = false;
         const auto& n = anchor.value.direction;
         const double image_margin = 2 * residual_bound + policy_.root_error;
-        const auto accumulate = [&](std::uint32_t star) {
-            const auto image = FindImage(star, cell, *seed, true, image_margin, unresolved);
+        const auto accumulate = [&](std::uint32_t star, std::optional<std::size_t> image) {
             if (!image) return true;
             const auto& root = roots_[*image];
             const auto& point = probes_[root.probe].value;
@@ -650,12 +792,8 @@ class Detector {
                         : 1;
                 const auto count =
                     std::min(pending_count - completed, std::max(std::size_t{1}, affordable));
-                PrefetchImageProbes(std::span(pending).subspan(completed, count), cell, *seed,
-                                    image_margin);
-                for (std::size_t i = 0; i < count; ++i) (void)accumulate(pending[completed + i]);
-                // Completed speculative work stays charged if a query was
-                // cached by an earlier star. Commit each prefix in original order.
-                prefetched_count_ = 0;
+                FindImages(std::span(pending).subspan(completed, count), cell, *seed, image_margin,
+                           unresolved, accumulate);
                 completed += count;
             }
             pending_count = 0;
@@ -693,7 +831,9 @@ class Detector {
                 // An irregular cell only needs an existence witness before
                 // subdivision; further catalogue visits cannot change its estimate.
                 if (!result.regular) return false;
-                if (!sample_batch_) return accumulate(star);
+                if (!sample_batch_)
+                    return accumulate(star,
+                                      FindImage(star, cell, *seed, true, image_margin, unresolved));
                 pending[pending_count++] = star;
                 if (pending_count == pending.size()) flush();
                 return true;
@@ -778,12 +918,7 @@ class Detector {
     std::vector<CachedProbe> probes_;
     std::vector<std::size_t> probe_slots_;
     std::vector<ImageRoot> roots_;
-    struct PrefetchedProbe {
-        Coordinate z;
-        std::expected<PointDetectorProbe, PointDetectorFailure> value;
-    };
-    std::array<PrefetchedProbe, kPointDetectorProbeBatchSize> prefetched_{};
-    std::size_t prefetched_count_ = 0;
+    std::array<ImageSearch, kPointDetectorProbeBatchSize> searches_{};
 };
 }  // namespace
 
