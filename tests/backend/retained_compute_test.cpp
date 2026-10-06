@@ -1456,6 +1456,53 @@ TEST_F(RetainedComputeTest, ProjectedEndpointsKeepPhysicalColumnsAndRetainedCont
         for (const auto& value : (*invalid)[row].physical) EXPECT_EQ(value.valid, 0U);
         for (const auto& value : (*invalid)[row].phase) EXPECT_EQ(value.valid, 0U);
     }
+    // Both represented temporal roots near -1 +/- 2^-45 fail the denominator
+    // guard: at M=1,r=1,chart=+1 their denominator magnitudes (~2^-45) are
+    // below its ~2^-43 cutoff. The accepted root must therefore be spatial.
+    {
+        SCOPED_TRACE("guarded temporal roots use spatial fallback");
+        RetainedEndpointInput fallback_input;
+        fallback_input.values.fill(RetainedValue::FromDouble(0));
+        fallback_input.values[0] = RetainedValue::FromDouble(1);
+        fallback_input.values[5] = RetainedValue::FromDouble(1);
+        fallback_input.values[9] = RetainedValue::FromDouble(-.5);
+        fallback_input.values[10] = std::bit_cast<RetainedValue>(
+            std::array<std::uint32_t, 5>{0x3f000000U, 0x92800000U, 0U, 0U, 1U});
+        fallback_input.values[44] = RetainedValue::FromDouble(1);
+        const std::array fallback_inputs{fallback_input};
+        const auto fallback = compute->Endpoint(fallback_inputs);
+        ASSERT_TRUE(fallback) << fallback.error().Description();
+        ASSERT_EQ(fallback->size(), 1U);
+        const auto& endpoint = fallback->front();
+        ASSERT_TRUE(endpoint.valid);
+        ASSERT_TRUE(endpoint.component == 1 || endpoint.component == 2);
+        // Independent dyadic centers retain delta in low limbs. Component 1
+        // approximation error is below 13*delta^2 < 8.5e-54; component 2 is exact.
+        constexpr double delta = 0x1p-90;
+        using sirius::core::Twofold;
+        std::array<Twofold, 40> phase_reference{}, physical_reference{};
+        phase_reference[1] = physical_reference[1] = Twofold(1);
+        physical_reference[4] = Twofold(-1);
+        if (endpoint.component == 1) {
+            phase_reference[4] = Twofold(-2 * delta);
+            phase_reference[5] = Twofold(-.5, -3 * delta);
+            phase_reference[6] = Twofold(.5, -delta);
+            physical_reference[5] = physical_reference[6] = Twofold(.5, -delta);
+        } else {
+            phase_reference[5] = Twofold(-.5);
+            phase_reference[6] = Twofold(.5);
+            physical_reference[5] = physical_reference[6] = Twofold(.5);
+        }
+        for (std::size_t i = 0; i < 80; ++i) {
+            SCOPED_TRACE(i);
+            const auto& value = i < 40 ? endpoint.phase[i] : endpoint.physical[i - 40];
+            const auto& oracle = i < 40 ? phase_reference[i] : physical_reference[i - 40];
+            const auto center = Twofold(value.high) + Twofold(value.low) + Twofold(value.tail);
+            const double difference = std::abs((center - oracle).Rounded());
+            EXPECT_LE(difference, value.radius + 1e-29 * (1 + std::abs(oracle.hi)));
+            EXPECT_LE(difference, 1e-11 * (1 + std::abs(oracle.hi)));
+        }
+    }
     EXPECT_EQ(device->BufferAllocationBytes(), allocation);
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";

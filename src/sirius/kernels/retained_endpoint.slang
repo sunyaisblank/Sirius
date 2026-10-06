@@ -172,107 +172,203 @@ RetainedTriple Tangent(uint rowBase, uint i) { return ReadStored(rowBase + 4 + 5
 bool Project(uint rowBase, out uint component, out RetainedTriple root) {
     component = 4;
     root = RTInvalid();
-    RetainedTriple best = RTInvalid();
-    RetainedTriple defect = RTConstant(RPZero());
-    RPScalar scale = RPZero();
-    for (uint i = 0; i < 4; ++i)
-        for (uint j = 0; j < 4; ++j) {
-            RetainedTriple term = RTInvalid();
-            // Preserve ti*tj followed by metric*term, including invalid terms.
-            [loop] for (uint product = 0; product < 2; ++product)
-                term = RTMultiply(product == 0 ? Tangent(rowBase, i) : Metric(rowBase, i, j),
-                                  product == 0 ? Tangent(rowBase, j) : term);
-            defect = RTAdd(defect, term);
-            scale = RPUpAdd(scale, RTAbsoluteUpper(term));
-        }
-    if (defect.valid == 0 || RPScalarLessEqual(scale, RPZero()) ||
-        RPScalarGreater(RPRatioUpper(RTAbsoluteUpper(defect), scale), RPFromBits(0x358637bdu)))
-        return false;
-    // Prefer a temporal root; if none is represented, preserve time orientation
-    // and choose the smallest normalized spatial correction.
-    for (uint c = 0; c < 4; ++c) {
-        if (c > 0 && component == 0) break;
-        RetainedTriple a = Metric(rowBase, c, c), b = RTConstant(RPZero()),
-                       d = RTConstant(RPZero());
-        for (uint i = 0; i < 4; ++i)
-            if (i != c) {
-                b = RTAdd(b, RTMultiply(RTAdd(Metric(rowBase, c, i), Metric(rowBase, i, c)),
-                                        Tangent(rowBase, i)));
-                for (uint j = 0; j < 4; ++j)
-                    if (j != c)
-                    {
-                        RetainedTriple term = RTInvalid();
-                        [loop] for (uint product = 0; product < 2; ++product)
-                            term = RTMultiply(product == 0 ? Tangent(rowBase, i) : Metric(rowBase, i, j),
-                                              product == 0 ? Tangent(rowBase, j) : term);
-                        d = RTAdd(d, term);
-                    }
-            }
-        RetainedTriple first = RTInvalid(), second = RTInvalid();
-        RetainedTriple numerator = RTInvalid(), denominator = RTInvalid(), q = RTInvalid();
-        uint divisions = 1;
-        if (RTExact(a, RPZero())) {
-            numerator = RTNegate(d);
-            denominator = b;
-        } else {
-            RetainedTriple square_b = RTInvalid(), product_term = RTInvalid();
-            [loop] for (uint product = 0; product < 3; ++product) {
-                product_term = RTMultiply(product == 0 ? b : (product == 1 ? a : RTConstant(RPFromUnsigned(4u))),
-                                          product == 0 ? b : (product == 1 ? d : product_term));
-                if (product == 0) square_b = product_term;
-            }
-            RetainedTriple discriminant = RTSubtract(square_b, product_term);
-            RetainedTriple square = RTSqrt(discriminant);
-            q = RTMultiply(
-                RTConstant(RPFromBits(0xbf000000u)),
-                RTAdd(b, RPScalarGreaterEqual(b.hi, RPZero()) ? square : RTNegate(square)));
-            if (RTExact(q, RPZero())) {
-                numerator = RTNegate(b);
-                denominator = RTMultiply(RTConstant(RPFromUnsigned(2u)), a);
+    RetainedTriple best = RTInvalid(), defect = RTConstant(RPZero());
+    RetainedTriple a = RTInvalid(), b = RTInvalid(), d = RTInvalid(), temporary = RTInvalid(),
+                   square_b = RTInvalid(), product_term = RTInvalid(), discriminant = RTInvalid(),
+                   square = RTInvalid(), q = RTInvalid(), numerator = RTInvalid(),
+                   quotient_denominator = RTInvalid(), first = RTInvalid(), second = RTInvalid(),
+                   candidate = RTInvalid(), denominator = RTInvalid(), difference = RTInvalid(),
+                   absolute = RTInvalid(), scale_value = RTInvalid(), correction = RTInvalid();
+    RPScalar scale = RPZero(), denominator_scale = RPZero();
+    bool linear = false, root_allowed = false;
+    uint divisions = 1;
+    const uint defect_phases = 48, coefficient_phases = 36, solve_phases = 10,
+               root_phases = 12;
+    const uint component_phases = coefficient_phases + solve_phases + 2 * root_phases;
+    // Preserve every retained operation and its refusal boundary. Guarded
+    // slots issue no operation; all active slots share one arithmetic body.
+    [loop] for (uint phase = 0; phase < defect_phases + 4 * component_phases; ++phase) {
+        bool defect_phase = phase < defect_phases;
+        uint c = 0, step = 0;
+        RetainedTriple lhs = RTInvalid(), rhs = RTInvalid();
+        uint op = 0;
+        if (defect_phase) {
+            uint index = phase / 3;
+            uint i = index / 4;
+            uint j = index % 4;
+            step = phase % 3;
+            if (step == 0) {
+                lhs = Tangent(rowBase, i); rhs = Tangent(rowBase, j); op = 4;
+            } else if (step == 1) {
+                lhs = Metric(rowBase, i, j); rhs = temporary; op = 4;
             } else {
-                numerator = q;
-                denominator = a;
-                divisions = 2;
+                lhs = defect; rhs = temporary; op = 2;
+            }
+        } else {
+            if (phase == defect_phases &&
+                (defect.valid == 0 || RPScalarLessEqual(scale, RPZero()) ||
+                 RPScalarGreater(RPRatioUpper(RTAbsoluteUpper(defect), scale),
+                                 RPFromBits(0x358637bdu))))
+                return false;
+            uint relative = phase - defect_phases;
+            c = relative / component_phases;
+            step = relative % component_phases;
+            if (step == 0) {
+                // Both roots of the previous component were examined before
+                // applying the original preference for a temporal root.
+                if (c > 0 && component == 0) break;
+                a = Metric(rowBase, c, c);
+                b = RTConstant(RPZero()); d = RTConstant(RPZero());
+                first = RTInvalid(); second = RTInvalid(); q = RTInvalid();
+                numerator = RTInvalid(); quotient_denominator = RTInvalid();
+                divisions = 1;
+            }
+            if (step < coefficient_phases) {
+                // For each i != c, finish b before traversing j != c for d.
+                uint position = step / 12;
+                uint i = position < c ? position : position + 1;
+                uint local = step % 12;
+                if (local == 0) {
+                    lhs = Metric(rowBase, c, i); rhs = Metric(rowBase, i, c); op = 2;
+                } else if (local == 1) {
+                    lhs = temporary; rhs = Tangent(rowBase, i); op = 4;
+                } else if (local == 2) {
+                    lhs = b; rhs = temporary; op = 2;
+                } else {
+                    uint j_position = (local - 3) / 3;
+                    uint j = j_position < c ? j_position : j_position + 1;
+                    uint product = (local - 3) % 3;
+                    if (product == 0) {
+                        lhs = Tangent(rowBase, i); rhs = Tangent(rowBase, j); op = 4;
+                    } else if (product == 1) {
+                        lhs = Metric(rowBase, i, j); rhs = temporary; op = 4;
+                    } else {
+                        lhs = d; rhs = temporary; op = 2;
+                    }
+                }
+            } else if (step < coefficient_phases + solve_phases) {
+                uint solve = step - coefficient_phases;
+                if (solve == 0) {
+                    linear = RTExact(a, RPZero());
+                    if (linear) {
+                        numerator = RTNegate(d); quotient_denominator = b;
+                    }
+                }
+                if (solve < 8 && linear) continue;
+                if (solve == 0) {
+                    lhs = b; rhs = b; op = 4;
+                } else if (solve == 1) {
+                    lhs = a; rhs = d; op = 4;
+                } else if (solve == 2) {
+                    lhs = RTConstant(RPFromUnsigned(4u)); rhs = temporary; op = 4;
+                } else if (solve == 3) {
+                    lhs = square_b; rhs = product_term; op = 3;
+                } else if (solve == 4) {
+                    lhs = discriminant; op = 6;
+                } else if (solve == 5) {
+                    lhs = b;
+                    rhs = RPScalarGreaterEqual(b.hi, RPZero()) ? square : RTNegate(square);
+                    op = 2;
+                } else if (solve == 6) {
+                    lhs = RTConstant(RPFromBits(0xbf000000u)); rhs = temporary; op = 4;
+                } else if (solve == 7) {
+                    if (divisions == 2) continue;
+                    lhs = RTConstant(RPFromUnsigned(2u)); rhs = a; op = 4;
+                } else if (solve == 8) {
+                    lhs = numerator; rhs = quotient_denominator; op = 5;
+                } else {
+                    if (divisions != 2) continue;
+                    // Evaluate d/q even when the preceding q/a refused.
+                    lhs = d; rhs = q; op = 5;
+                }
+            } else {
+                uint root_step = (step - coefficient_phases - solve_phases) % root_phases;
+                uint r = (step - coefficient_phases - solve_phases) / root_phases;
+                if (root_step == 0) {
+                    candidate = r == 0 ? first : second;
+                    root_allowed = candidate.valid != 0;
+                    if (root_allowed) {
+                        denominator = RTConstant(RPZero()); denominator_scale = RPZero();
+                    }
+                }
+                if (!root_allowed) continue;
+                if (root_step < 8) {
+                    uint i = root_step / 2;
+                    if ((root_step & 1u) == 0) {
+                        lhs = Metric(rowBase, c, i);
+                        rhs = i == c ? candidate : Tangent(rowBase, i); op = 4;
+                    } else {
+                        lhs = denominator; rhs = temporary; op = 2;
+                    }
+                } else if (root_step == 8) {
+                    lhs = candidate; rhs = Tangent(rowBase, c); op = 3;
+                } else if (root_step == 9) {
+                    RetainedTriple original = RTCenter(Tangent(rowBase, c));
+                    absolute = RTCenter(RPScalarLess(difference.hi, RPZero())
+                                            ? RTNegate(difference) : difference);
+                    lhs = RTConstant(RPOne());
+                    rhs = RPScalarLess(original.hi, RPZero()) ? RTNegate(original) : original;
+                    op = 2;
+                } else if (root_step == 10) {
+                    lhs = absolute; rhs = scale_value; op = 5;
+                } else {
+                    if (correction.valid == 0) continue;
+                    if (best.valid == 0) {
+                        best = correction; component = c; root = candidate;
+                        continue;
+                    }
+                    // Preserve the short-circuited correction-best comparison.
+                    lhs = correction; rhs = best; op = 3;
+                }
             }
         }
-        // Retain the single-root branches or q/a followed by d/q, even when
-        // the first quotient is invalid. The arithmetic call has one site.
-        [loop] for (uint division = 0; division < divisions; ++division) {
-            RetainedTriple quotient = RTDivide(division == 0 ? numerator : d,
-                                                division == 0 ? denominator : q);
-            if (division == 0) first = quotient;
-            else second = quotient;
-        }
-        for (uint r = 0; r < 2; ++r) {
-            RetainedTriple candidate = r == 0 ? first : second;
-            if (candidate.valid == 0) continue;
-            RetainedTriple denominator = RTConstant(RPZero());
-            RPScalar denominatorScale = RPZero();
-            for (uint i = 0; i < 4; ++i) {
-                RetainedTriple term =
-                    RTMultiply(Metric(rowBase, c, i), i == c ? candidate : Tangent(rowBase, i));
-                denominator = RTAdd(denominator, term);
-                denominatorScale = RPUpAdd(denominatorScale, RTAbsoluteUpper(term));
+        RetainedTriple result = RTEvaluateArithmetic(lhs, rhs, op);
+        if (defect_phase) {
+            if (step != 2) temporary = result;
+            else {
+                defect = result;
+                scale = RPUpAdd(scale, RTAbsoluteUpper(temporary));
             }
-            // A central root with a singular differentiated constraint cannot
-            // own the coupled candidate. Try the represented spatial roots.
-            if (denominator.valid == 0 ||
-                RPScalarLessEqual(RTAbsoluteLower(denominator),
-                                  RPUpMultiply(RPFromBits(0x29800000u), denominatorScale)))
-                continue;
-            RetainedTriple difference = RTSubtract(candidate, Tangent(rowBase, c));
-            RetainedTriple original = RTCenter(Tangent(rowBase, c));
-            RetainedTriple absolute =
-                RTCenter(RPScalarLess(difference.hi, RPZero()) ? RTNegate(difference) : difference);
-            RetainedTriple scaleValue =
-                RTAdd(RTConstant(RPOne()),
-                      RPScalarLess(original.hi, RPZero()) ? RTNegate(original) : original);
-            RetainedTriple correction = RTDivide(absolute, scaleValue);
-            if (correction.valid != 0 &&
-                (best.valid == 0 || RPScalarLess(RTSubtract(correction, best).hi, RPZero()))) {
-                best = correction;
-                component = c;
-                root = candidate;
+        } else if (step < coefficient_phases) {
+            uint local = step % 12;
+            if (local == 2) b = result;
+            else if (local >= 3 && (local - 3) % 3 == 2) d = result;
+            else temporary = result;
+        } else if (step < coefficient_phases + solve_phases) {
+            uint solve = step - coefficient_phases;
+            if (solve == 0) square_b = result;
+            else if (solve == 2) product_term = result;
+            else if (solve == 3) discriminant = result;
+            else if (solve == 4) square = result;
+            else if (solve == 6) {
+                q = result;
+                if (RTExact(q, RPZero())) {
+                    numerator = RTNegate(b);
+                } else {
+                    numerator = q; quotient_denominator = a; divisions = 2;
+                }
+            } else if (solve == 7) quotient_denominator = result;
+            else if (solve == 8) first = result;
+            else if (solve == 9) second = result;
+            else temporary = result;
+        } else {
+            uint root_step = (step - coefficient_phases - solve_phases) % root_phases;
+            if (root_step < 8) {
+                if ((root_step & 1u) == 0) temporary = result;
+                else {
+                    denominator = result;
+                    denominator_scale = RPUpAdd(denominator_scale, RTAbsoluteUpper(temporary));
+                    if (root_step == 7 &&
+                        (denominator.valid == 0 ||
+                         RPScalarLessEqual(RTAbsoluteLower(denominator),
+                                           RPUpMultiply(RPFromBits(0x29800000u), denominator_scale))))
+                        root_allowed = false;
+                }
+            } else if (root_step == 8) difference = result;
+            else if (root_step == 9) scale_value = result;
+            else if (root_step == 10) correction = result;
+            else if (RPScalarLess(result.hi, RPZero())) {
+                best = correction; component = c; root = candidate;
             }
         }
     }
