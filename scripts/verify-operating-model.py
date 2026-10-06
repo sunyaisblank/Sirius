@@ -113,6 +113,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:KernelParity.NullProjectionPreservesConeBranchAndFailsClosed",
         "gtest:KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability",
         "gtest:VulkanBackend.KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions",
+        "gtest:VulkanBackend.KernelPrecisionDeclinesFmaBeforeDriverWorkUnlessBinary32WasEnabled",
         "gtest:KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison",
         "gtest:LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter",
         "gtest:FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants",
@@ -429,6 +430,8 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile",
         "gtest:RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr",
         "gtest:RetainedComputeAdmission.ArithmeticRefusalPrecedesKernelLoading",
+        "gtest:VulkanBackend.Fma32DeviceAdmissionRequiresAdvertisedFeatureAndEveryFloatControl",
+        "gtest:RetainedComputeAdmission.FmaSelectsOnlyNativeWideTransportAndPreservesAllocation",
         "gtest:RetainedComputeAdmission.SoftwareRendererPreparationPreservesPhysicalAccounting",
         "gtest:RetainedComputeTest.SoftwareRendererPreparationPreservesBuffersAndPhysicalFeedback",
         "gtest:RenderSessionProbe.BackendAutoResolvesByDeviceRegistryAndCapabilities",
@@ -473,7 +476,7 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "f45c64371e015f46db3b39c4dd2a7e8f9b669d1415d4b5810d59ad0b9745031c",
+    "acceptance_criteria": "e0d66f2b11105cc98a7a8517166770ee89b22206a84df9636161c8cc5c66034b",
     "required_dimensions": "206d109e64687caff131e2f8e67e3fe3942ea096e03f9e7ea150eca69a7106b8",
     "capability_contracts": "48c5b338c14c11e2ad7275322cd72f4bd014df621ca69e65e119621066fd5c6c",
 }
