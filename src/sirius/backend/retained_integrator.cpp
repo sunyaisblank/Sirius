@@ -253,8 +253,8 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
         // Keep budget-one retry completely serialized; a shared wait is reducible.
         if (part == 2 && paired_projections && projection_row_budget > 1 &&
             compute.SupportsIndependentPair()) {
-            const auto packets = dense_packets();
-            auto paired = compute.EndpointAndDense(upper, packets);
+            const auto dense_inputs = dense_packets();
+            auto paired = compute.EndpointAndDense(upper, dense_inputs);
             if (!paired) return std::unexpected(paired.error());
             shared = std::move(*paired);
             projected = std::move(shared->endpoints);
