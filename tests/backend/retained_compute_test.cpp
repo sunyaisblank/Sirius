@@ -2191,6 +2191,7 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
         camera.direction(1) = .7;
         camera.direction(2) = .2;
         camera.direction(3) = .1;
+        camera.direction = camera.direction / std::sqrt(.7 * .7 + .2 * .2 + .1 * .1);
         const auto launch = sirius::core::LaunchCameraRay(metric, .5, camera);
         ASSERT_TRUE(launch);
         sirius::core::Lightray candidate{};
