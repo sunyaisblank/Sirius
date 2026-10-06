@@ -229,6 +229,11 @@ class Geodesic {
     static float ComputeOptimalStep(float h, float error, float tolerance,
                                     const IntegratorConfig& config);
 
+    // Independent dense checks limit growth after admission. Preserve any
+    // shrinking already chosen by the embedded/projected candidate controller.
+    static float LimitAcceptedStepGrowth(float interval, float candidate_step, float error_ratio,
+                                         const IntegratorConfig& config);
+
     // Default integrator configuration.
     static IntegratorConfig GetDefaultConfig();
 };

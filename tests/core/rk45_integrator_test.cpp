@@ -217,6 +217,32 @@ TEST_F(RK45IntegratorTests, OptimalStepRespectsBounds) {
     EXPECT_GE(new_step, config.min_step);
 }
 
+TEST_F(RK45IntegratorTests, AcceptedDenseErrorOnlyLimitsGrowth) {
+    const float h = .01f;
+    // A .8 admitted dense norm would suggest shrinking even when the candidate
+    // has ample accuracy. Dense disagreement may cap growth at h, not shrink it.
+    const float growing = Geodesic::ComputeOptimalStep(h, .1f, 1, config);
+    ASSERT_GT(growing, h);
+    EXPECT_FLOAT_EQ(Geodesic::LimitAcceptedStepGrowth(h, growing, .8f, config), h);
+
+    const float shrinking = Geodesic::ComputeOptimalStep(h, .8f, 1, config);
+    ASSERT_LT(shrinking, h);
+    EXPECT_FLOAT_EQ(Geodesic::LimitAcceptedStepGrowth(h, shrinking, .9f, config), shrinking);
+    // With no added dense disagreement, the candidate controller is unchanged.
+    for (const float error : {0.0f, .1f, .6f, .8f, 1.0f}) {
+        const float candidate = Geodesic::ComputeOptimalStep(h, error, 1, config);
+        EXPECT_FLOAT_EQ(Geodesic::LimitAcceptedStepGrowth(h, candidate, error, config), candidate);
+    }
+    // .9*(1/.25)^(1/5) is strictly between 1.18 and 1.19.
+    const float capped = Geodesic::LimitAcceptedStepGrowth(h, 2 * h, .25f, config);
+    EXPECT_GT(capped, 1.18f * h);
+    EXPECT_LT(capped, 1.19f * h);
+    EXPECT_FLOAT_EQ(Geodesic::LimitAcceptedStepGrowth(config.min_step, config.min_step, 1, config),
+                    config.min_step);
+    EXPECT_FLOAT_EQ(Geodesic::LimitAcceptedStepGrowth(config.max_step, config.max_step, 0, config),
+                    config.max_step);
+}
+
 // =============================================================================
 // Minkowski Integration Tests (Trivial Case)
 // =============================================================================

@@ -264,6 +264,7 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
             }
     }
 
+    for (auto& state : work) state.embedded_projected_error_ratio = state.error_ratio;
     std::vector<RetainedDenseInput> dense_inputs(count);
     for (std::size_t row = 0; row < count; ++row)
         if (active[row]) {
@@ -304,10 +305,12 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
             // No earlier successful substage can escape a rejected attempt.
             const auto stages = state.attempted_stages;
             const auto error = state.error_ratio;
+            const auto embedded_projected_error = state.embedded_projected_error_ratio;
             const auto failure = state.failure;
             state = {};
             state.attempted_stages = stages;
             state.error_ratio = error;
+            state.embedded_projected_error_ratio = embedded_projected_error;
             state.failure = failure;
         }
     }

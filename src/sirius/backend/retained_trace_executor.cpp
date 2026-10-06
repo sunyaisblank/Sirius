@@ -545,8 +545,10 @@ bool RetainedTraceExecutor::Step(core::Lightray& ray, core::IMetric& metric,
                                        .count();
     ray.proper_time += interval;
     ray.coordinate_time += static_cast<float>(interval * std::abs(ray.velocity(0)));
-    ray.step_size = core::Geodesic::ComputeOptimalStep(
-        interval, static_cast<float>(result.error_ratio), 1, config);
+    const float candidate_step = core::Geodesic::ComputeOptimalStep(
+        interval, static_cast<float>(result.embedded_projected_error_ratio), 1, config);
+    ray.step_size = core::Geodesic::LimitAcceptedStepGrowth(
+        interval, candidate_step, static_cast<float>(result.error_ratio), config);
     continuation.after = snapshot;
     snapshot_physical(continuation.after);
     continuation.finish = result.full;

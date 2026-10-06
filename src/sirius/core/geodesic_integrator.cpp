@@ -374,6 +374,15 @@ float Geodesic::ComputeOptimalStep(float h, float error, float tolerance,
     return std::max(config.min_step, std::min(config.max_step, new_step));
 }
 
+float Geodesic::LimitAcceptedStepGrowth(float interval, float candidate_step, float error_ratio,
+                                        const IntegratorConfig& config) {
+    SIRIUS_PRE(std::isfinite(candidate_step) && candidate_step >= config.min_step &&
+               candidate_step <= config.max_step);
+    SIRIUS_PRE(std::isfinite(error_ratio) && error_ratio >= 0.0f && error_ratio <= 1.0f);
+    return std::min(candidate_step,
+                    std::max(interval, ComputeOptimalStep(interval, error_ratio, 1.0f, config)));
+}
+
 // Covariant momentum p_mu = g_mu_nu k^nu.
 static Vec4 ComputeMomentum(const Vec4& velocity, const Metric4d& g) {
     Vec4 p;
@@ -1445,12 +1454,8 @@ bool Geodesic::IntegrateStepRk45(Lightray& ray, IMetric* metric, const Integrato
     comparison->refined_endpoint = refined;
     comparison->refined_variations = refined_coupled.variations;
     comparison->error_ratio = std::max({comparison->error_ratio, interior_error, refined_error});
-    // Cap growth by the dense checks; preserve the embedded controller's shrinking.
-    ray.step_size = std::min(
-        ray.step_size,
-        std::max(previous.step_size,
-                 ComputeOptimalStep(previous.step_size, static_cast<float>(comparison->error_ratio),
-                                    1.0f, config)));
+    ray.step_size = LimitAcceptedStepGrowth(previous.step_size, ray.step_size,
+                                            static_cast<float>(comparison->error_ratio), config);
     return true;
 }
 

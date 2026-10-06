@@ -100,6 +100,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:CoordinateTransformTests.KerrRadiusPreservesExactZeroAndScaleCovariance",
         "gtest:RK45IntegratorTests.UnrepresentedStageShrinksBeforeMetricEvaluation",
         "gtest:RK45IntegratorTests.RejectionMaySelectTheMinimumStepBeforeTerminating",
+        "gtest:RK45IntegratorTests.AcceptedDenseErrorOnlyLimitsGrowth",
         "gtest:RK45IntegratorTests.NullProjectionPreservesTheIncomingLightConeBranch",
         "gtest:RK45IntegratorTests.NullDefectAboveTheDeclaredBoundIsRejectedBeforeProjection",
         "gtest:RK45IntegratorTests.DoublePrecisionStagesMatchAnAnalyticRindlerNullRay",
@@ -472,7 +473,7 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "35bcfb651da8119e06b6d97c2aaf0600710132b73b8895f0bb2390886ecc62c5",
+    "acceptance_criteria": "f45c64371e015f46db3b39c4dd2a7e8f9b669d1415d4b5810d59ad0b9745031c",
     "required_dimensions": "206d109e64687caff131e2f8e67e3fe3942ea096e03f9e7ea150eca69a7106b8",
     "capability_contracts": "48c5b338c14c11e2ad7275322cd72f4bd014df621ca69e65e119621066fd5c6c",
 }

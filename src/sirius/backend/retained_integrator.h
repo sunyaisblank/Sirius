@@ -29,6 +29,9 @@ struct RetainedIntervalOutput {
         refined_increment{};
     std::uint32_t attempted_stages = 0;
     double error_ratio = 0;
+    // Maximum of the full and both half-trial embedded/projected checks,
+    // before independent dense/refinement disagreement limits next-step growth.
+    double embedded_projected_error_ratio = 0;
     core::CoupledStepFailure failure = core::CoupledStepFailure::None;
     bool admissible = false;
 };

@@ -891,6 +891,7 @@ set_tests_properties(
     RK45IntegratorTests.OptimalStepIncreasesForSmallError
     RK45IntegratorTests.OptimalStepDecreasesForLargeError
     RK45IntegratorTests.OptimalStepRespectsBounds
+    RK45IntegratorTests.AcceptedDenseErrorOnlyLimitsGrowth
     RK45IntegratorTests.MinkowskiStraightLine
     RK45IntegratorTests.MinkowskiNullConstraint
     RK45IntegratorTests.SchwarzschildIntegration

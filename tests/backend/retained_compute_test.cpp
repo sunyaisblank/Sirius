@@ -744,7 +744,9 @@ bool Encloses(const RetainedValue& value, long double expected, long double refe
     if (actual.admissible != expected.admissible || actual.failure != expected.failure ||
         actual.attempted_stages != expected.attempted_stages ||
         std::bit_cast<std::uint64_t>(actual.error_ratio) !=
-            std::bit_cast<std::uint64_t>(expected.error_ratio))
+            std::bit_cast<std::uint64_t>(expected.error_ratio) ||
+        std::bit_cast<std::uint64_t>(actual.embedded_projected_error_ratio) !=
+            std::bit_cast<std::uint64_t>(expected.embedded_projected_error_ratio))
         return ::testing::AssertionFailure() << "interval admission metadata differs";
     const auto values_agree = [](const auto& first, const auto& second,
                                  const std::string& name) -> ::testing::AssertionResult {
@@ -1669,6 +1671,7 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
     record_timing("first_interval", first_before, compute->Statistics(),
                   milliseconds(first_started, first_finished));
     ASSERT_TRUE(outputs) << outputs.error().Description();
+    bool positive_embedded_projected_error = false;
     for (std::size_t row = 0; row < inputs.size(); ++row) {
         SCOPED_TRACE(sirius::test::retained_transport::cases[row].name);
         const auto& output = (*outputs)[row];
@@ -1677,11 +1680,20 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
             << " failure=" << sirius::core::CoupledStepFailureName(output.failure);
         EXPECT_EQ(output.attempted_stages, 21U);
         EXPECT_LE(output.error_ratio, 1);
+        EXPECT_GE(output.embedded_projected_error_ratio, 0);
+        EXPECT_LE(output.embedded_projected_error_ratio, output.error_ratio);
+        positive_embedded_projected_error =
+            positive_embedded_projected_error || output.embedded_projected_error_ratio > 0;
+        RecordProperty("embedded_projected_error_" + std::to_string(row),
+                       std::to_string(output.embedded_projected_error_ratio));
+        RecordProperty("combined_error_" + std::to_string(row), std::to_string(output.error_ratio));
     }
+    EXPECT_TRUE(positive_embedded_projected_error);
     // Exact flat flow remains exact through all three independent candidates.
     const auto& flat = outputs->back();
     ASSERT_TRUE(flat.admissible);
     EXPECT_EQ(flat.error_ratio, 0);
+    EXPECT_EQ(flat.embedded_projected_error_ratio, 0);
     EXPECT_EQ(flat.full.physical[0].Center(), .75);
     EXPECT_EQ(flat.full.physical[3].Center(), 4.25);
     EXPECT_EQ(flat.midpoint.physical[0].Center(), .875);
@@ -2167,6 +2179,83 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
     EXPECT_GT(executor.Statistics().camera_batches, 0U);
     EXPECT_GT(executor.Statistics().reused_phases, 0U);
     EXPECT_EQ(executor.Statistics().initialized_phases, 4U);
+
+    // Calibrate only this controller regression's budgets against genuine
+    // device stages. The original scientific fixtures above remain unchanged.
+    // Reinitialization uses the same public state as the actual Step consumer.
+    {
+        sirius::core::KerrSchildFamily metric(sirius::core::KerrSchildParams::Kerr(1, .5));
+        sirius::core::CameraRay camera;
+        camera.origin(1) = 5;
+        camera.origin(2) = 1.1;
+        camera.direction(1) = .7;
+        camera.direction(2) = .2;
+        camera.direction(3) = .1;
+        const auto launch = sirius::core::LaunchCameraRay(metric, .5, camera);
+        ASSERT_TRUE(launch);
+        sirius::core::Lightray candidate{};
+        candidate.position = launch->position;
+        candidate.velocity = launch->tangent;
+        candidate.step_size = .5f;
+        sirius::core::Rk45CoupledState columns;
+        columns.variations = launch->variations;
+        columns.length_scale = columns.frequency_scale = 1;
+        columns.tolerance = 1e-3;
+        sirius::core::IntegratorConfig control;
+        control.min_step = 1e-6f;
+        control.max_step = 2;
+        control.abs_tolerance = control.rel_tolerance = 1e-3f;
+        RetainedInitializeInput initialization;
+        initialization.values[0] = RetainedValue::FromDouble(1);
+        initialization.values[1] = RetainedValue::FromDouble(.5);
+        initialization.values[2] = initialization.values[3] = RetainedValue::FromDouble(0);
+        for (int axis = 0; axis < 4; ++axis) {
+            initialization.values[4 + axis] = RetainedValue::FromDouble(candidate.position(axis));
+            initialization.values[8 + axis] = RetainedValue::FromDouble(candidate.velocity(axis));
+            for (std::size_t column = 0; column < 4; ++column) {
+                initialization.values[12 + 8 * column + axis] =
+                    RetainedValue::FromDouble(columns.variations[column].displacement(axis));
+                initialization.values[16 + 8 * column + axis] =
+                    RetainedValue::FromDouble(columns.variations[column].derivative(axis));
+            }
+        }
+        initialization.values[44] = RetainedValue::FromDouble(1);
+        const auto start = compute->Initialize({&initialization, 1});
+        ASSERT_TRUE(start);
+        ASSERT_TRUE(start->front().valid);
+        RetainedEndpointInput projection;
+        std::copy_n(initialization.values.begin(), 4, projection.values.begin());
+        std::copy(start->front().phase.begin(), start->front().phase.end(),
+                  projection.values.begin() + 4);
+        projection.values[44] = RetainedValue::FromDouble(1);
+        const auto projected = compute->Endpoint({&projection, 1});
+        ASSERT_TRUE(projected);
+        ASSERT_TRUE(projected->front().valid);
+        RetainedIntervalInput interval;
+        std::copy_n(initialization.values.begin(), 4, interval.metric.begin());
+        interval.start = projected->front();
+        interval.chart = 1;
+        interval.interval = candidate.step_size;
+        interval.control = {control, 1, 1, columns.tolerance, columns.column_scale};
+        const auto calibration = AttemptRetainedIntervals(*compute, {&interval, 1});
+        ASSERT_TRUE(calibration);
+        const auto& output = calibration->front();
+        ASSERT_TRUE(output.admissible);
+        ASSERT_GT(output.error_ratio, 0);
+        ASSERT_LT(output.embedded_projected_error_ratio, .5 * output.error_ratio);
+        const double scale = output.error_ratio / .8;
+        control.abs_tolerance *= static_cast<float>(scale);
+        control.rel_tolerance *= static_cast<float>(scale);
+        columns.tolerance *= scale;
+        const float accepted_interval = candidate.step_size;
+        sirius::core::Rk45CoupledComparison comparison;
+        ASSERT_TRUE(executor.Step(candidate, metric, control, columns, comparison));
+        ASSERT_GT(comparison.error_ratio, .79);
+        ASSERT_LT(comparison.error_ratio, .81);
+        EXPECT_FLOAT_EQ(candidate.step_size, accepted_interval);
+        EXPECT_EQ(columns.central_stages, 21U);
+        EXPECT_EQ(columns.variation_stages, 21U);
+    }
 
     sirius::core::KerrSchildFamily flat(sirius::core::KerrSchildParams::Minkowski());
     sirius::core::Lightray ray{};
