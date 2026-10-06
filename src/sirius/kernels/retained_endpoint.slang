@@ -209,9 +209,12 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
                     }
             }
         RetainedTriple first = RTInvalid(), second = RTInvalid();
-        if (RTExact(a, RPZero()))
-            first = RTDivide(RTNegate(d), b);
-        else {
+        RetainedTriple numerator = RTInvalid(), denominator = RTInvalid(), q = RTInvalid();
+        uint divisions = 1;
+        if (RTExact(a, RPZero())) {
+            numerator = RTNegate(d);
+            denominator = b;
+        } else {
             RetainedTriple square_b = RTInvalid(), product_term = RTInvalid();
             [loop] for (uint product = 0; product < 3; ++product) {
                 product_term = RTMultiply(product == 0 ? b : (product == 1 ? a : RTConstant(RPFromUnsigned(4u))),
@@ -220,19 +223,25 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
             }
             RetainedTriple discriminant = RTSubtract(square_b, product_term);
             RetainedTriple square = RTSqrt(discriminant);
-            RetainedTriple q = RTMultiply(
+            q = RTMultiply(
                 RTConstant(RPFromBits(0xbf000000u)),
                 RTAdd(b, RPScalarGreaterEqual(b.hi, RPZero()) ? square : RTNegate(square)));
-            if (RTExact(q, RPZero()))
-                first = RTDivide(RTNegate(b), RTMultiply(RTConstant(RPFromUnsigned(2u)), a));
-            else {
-                // Both divisions execute in order even if the first is invalid.
-                [loop] for (uint division = 0; division < 2; ++division) {
-                    RetainedTriple quotient = RTDivide(division == 0 ? q : d, division == 0 ? a : q);
-                    if (division == 0) first = quotient;
-                    else second = quotient;
-                }
+            if (RTExact(q, RPZero())) {
+                numerator = RTNegate(b);
+                denominator = RTMultiply(RTConstant(RPFromUnsigned(2u)), a);
+            } else {
+                numerator = q;
+                denominator = a;
+                divisions = 2;
             }
+        }
+        // Retain the single-root branches or q/a followed by d/q, even when
+        // the first quotient is invalid. The arithmetic call has one site.
+        [loop] for (uint division = 0; division < divisions; ++division) {
+            RetainedTriple quotient = RTDivide(division == 0 ? numerator : d,
+                                                division == 0 ? denominator : q);
+            if (division == 0) first = quotient;
+            else second = quotient;
         }
         for (uint r = 0; r < 2; ++r) {
             RetainedTriple candidate = r == 0 ? first : second;
