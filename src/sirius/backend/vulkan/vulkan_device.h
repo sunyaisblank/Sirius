@@ -90,6 +90,11 @@ class VulkanDevice final : public ComputeDevice {
                                                 std::uint32_t groups_z,
                                                 DispatchTiming* timing = nullptr) override;
 
+    [[nodiscard]] bool SupportsIndependentPair() const noexcept override { return true; }
+    [[nodiscard]] base::Expected<void> DispatchIndependentPair(
+        const std::array<ComputeDispatch, 2>& commands,
+        IndependentPairTiming* timing = nullptr) override;
+
   private:
     friend base::Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index);
 
@@ -117,6 +122,9 @@ class VulkanDevice final : public ComputeDevice {
 
     [[nodiscard]] base::Expected<Pipeline*> GetOrCreatePipeline(
         KernelHandle kernel, std::span<const BufferHandle> buffers, bool* created);
+    [[nodiscard]] base::Expected<void> DispatchCommands(std::span<const ComputeDispatch> commands,
+                                                        DispatchTiming* timing,
+                                                        std::uint32_t* pipeline_creations);
     void InitialisePipelineCache();
 
     VkInstance instance_ = VK_NULL_HANDLE;

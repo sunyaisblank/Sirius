@@ -832,4 +832,106 @@ TEST(VulkanBackend, IdenticalKernelWordsReusePipelineAcrossBuffers) {
 #endif
 }
 
+TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffers) {
+#ifndef SIRIUS_TEST_HAS_KERNELS
+    GTEST_SKIP() << "kernels not compiled (slangc absent at configure time)";
+#else
+    const auto inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory) << inventory.error().Description();
+    if (inventory->empty()) GTEST_SKIP() << "no Vulkan device present";
+    const auto selected = ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(selected) << selected.error().Description();
+    auto opened = CreateVulkanDevice(*selected);
+    ASSERT_TRUE(opened) << opened.error().Description();
+    auto& device = **opened;
+    ASSERT_TRUE(device.SupportsIndependentPair());
+    auto words = LoadSpirv(sirius::test::ResourcePath("kernels/smoke.spv"));
+    ASSERT_GE(words.size(), 5U);
+    const auto original = device.LoadKernel(words);
+    ASSERT_TRUE(original);
+    std::uint32_t float_type = 0;
+    std::size_t changed = 0;
+    for (std::size_t offset = 5; offset < words.size();) {
+        const auto extent = words[offset] >> 16, opcode = words[offset] & 0xffffU;
+        ASSERT_GT(extent, 0U);
+        ASSERT_LE(extent, words.size() - offset);
+        if (opcode == 22U && extent == 3U && words[offset + 2] == 32U)
+            float_type = words[offset + 1];
+        if (opcode == 43U && extent == 4U && words[offset + 1] == float_type &&
+            words[offset + 3] == 0x40000000U) {
+            words[offset + 3] = 0x40800000U;
+            ++changed;
+        }
+        offset += extent;
+    }
+    ASSERT_EQ(changed, 1U);
+    const auto variant = device.LoadKernel(words);
+    ASSERT_TRUE(variant);
+    std::array<std::array<sirius::backend::BufferHandle, 3>, 2> bindings{};
+    std::array<float, 194> radii{}, untouched{};
+    for (std::size_t i = 0; i < radii.size(); ++i) radii[i] = float(4U << (i % 3));
+    untouched.fill(-42);
+    constexpr std::array<unsigned, 2> counts{67, 131};
+    constexpr std::array<float, 2> masses{.5f, .75f};
+    for (std::size_t i = 0; i < bindings.size(); ++i) {
+        const std::array<float, 2> parameters{masses[i], float(counts[i])};
+        const auto in = device.CreateBuffer(sizeof(radii), BufferUsage::kStorage);
+        const auto out = device.CreateBuffer(sizeof(untouched), BufferUsage::kStorage);
+        const auto params = device.CreateBuffer(sizeof(parameters), BufferUsage::kStorage);
+        ASSERT_TRUE(in);
+        ASSERT_TRUE(out);
+        ASSERT_TRUE(params);
+        bindings[i] = {*in, *out, *params};
+        ASSERT_TRUE(device.WriteBuffer(*in, std::as_bytes(std::span(radii))));
+        ASSERT_TRUE(device.WriteBuffer(*params, std::as_bytes(std::span(parameters))));
+    }
+    const auto resident = device.BufferAllocationBytes();
+    std::array<sirius::backend::ComputeDispatch, 2> commands{
+        sirius::backend::ComputeDispatch{*original, bindings[0], 2, 1, 1},
+        sirius::backend::ComputeDispatch{*variant, bindings[1], 3, 1, 1}};
+    sirius::backend::IndependentPairTiming timing;
+    for (unsigned invocation = 0; invocation < 4; ++invocation) {
+        for (const auto& bound : bindings)
+            ASSERT_TRUE(device.WriteBuffer(bound[1], std::as_bytes(std::span(untouched))));
+        ASSERT_TRUE(device.DispatchIndependentPair(commands, &timing));
+        EXPECT_EQ(timing.pipeline_creations, invocation == 0 ? 2U : 0U);
+        EXPECT_EQ(timing.combined.pipeline_created, invocation == 0);
+        EXPECT_TRUE(std::isfinite(timing.combined.submit_wait_ms));
+        EXPECT_GT(timing.combined.submit_wait_ms, 0);
+        EXPECT_NEAR(timing.combined.total_ms,
+                    timing.combined.pipeline_setup_ms + timing.combined.command_setup_ms +
+                        timing.combined.submit_wait_ms + timing.combined.cleanup_ms,
+                    1e-9 * std::max(1., timing.combined.total_ms));
+        EXPECT_EQ(device.BufferAllocationBytes(), resident);
+        for (std::size_t row = 0; row < bindings.size(); ++row) {
+            std::array<float, 194> actual{};
+            ASSERT_TRUE(
+                device.ReadBuffer(bindings[row][1], std::as_writable_bytes(std::span(actual))));
+            for (std::size_t i = 0; i < actual.size(); ++i) {
+                if (i < counts[row])
+                    EXPECT_NEAR(actual[i], 1 - (row == 0 ? 2 : 4) * masses[row] / radii[i], 1e-6f);
+                else
+                    EXPECT_EQ(actual[i], untouched[i]);
+            }
+        }
+        std::swap(commands[0], commands[1]);
+    }
+    for (const auto& bound : bindings)
+        ASSERT_TRUE(device.WriteBuffer(bound[1], std::as_bytes(std::span(untouched))));
+    auto overlapping = bindings[1];
+    overlapping[1] = bindings[0][1];
+    commands[1].buffers = overlapping;
+    const auto refused = device.DispatchIndependentPair(commands, &timing);
+    ASSERT_FALSE(refused);
+    EXPECT_EQ(refused.error().operation(), "dispatch independent compute pair");
+    EXPECT_EQ(timing.combined.total_ms, 0);
+    EXPECT_EQ(timing.pipeline_creations, 0U);
+    for (const auto& bound : bindings) {
+        std::array<float, 194> actual{};
+        ASSERT_TRUE(device.ReadBuffer(bound[1], std::as_writable_bytes(std::span(actual))));
+        EXPECT_EQ(actual, untouched);
+    }
+#endif
+}
+
 }  // namespace

@@ -1319,6 +1319,7 @@ set_tests_properties(
     VulkanBackend.WorkerThreadDispatchTearsDownSafely
     VulkanBackend.DeviceSelectionIsStrictAndRangeChecked
     VulkanBackend.IdenticalKernelWordsReusePipelineAcrossBuffers
+    VulkanBackend.IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffers
     PROPERTIES LABELS "Mandatory;Operational"
 )
 

@@ -8,6 +8,7 @@
 
 #include "sirius/base/error.h"
 
+#include <array>
 #include <cstddef>
 #include <cstdint>
 #include <memory>
@@ -117,6 +118,19 @@ struct DispatchTiming {
     bool pipeline_created = false;
 };
 
+struct ComputeDispatch {
+    KernelHandle kernel;
+    std::span<const BufferHandle> buffers;
+    std::uint32_t groups_x = 1, groups_y = 1, groups_z = 1;
+};
+
+// Two independent commands share one synchronous queue submission. The complete
+// host interval belongs to the pair; it cannot be attributed to either kernel.
+struct IndependentPairTiming {
+    DispatchTiming combined;
+    std::uint32_t pipeline_creations = 0;
+};
+
 // One compute device. Synchronous by design at this seam: a Dispatch
 // returns when results are readable. Tile-level parallelism lives above
 // (the scheduler overlaps tiles, not intra-tile commands), which keeps
@@ -151,6 +165,17 @@ class ComputeDevice {
     [[nodiscard]] virtual base::Expected<void> Dispatch(
         KernelHandle kernel, std::span<const BufferHandle> buffers, std::uint32_t groups_x,
         std::uint32_t groups_y, std::uint32_t groups_z, DispatchTiming* timing = nullptr) = 0;
+
+    [[nodiscard]] virtual bool SupportsIndependentPair() const noexcept { return false; }
+    // All bound buffers must be disjoint. Both results are readable on success;
+    // no result may be consumed after a failure. The owner serializes this with
+    // all other device work, just as with Dispatch.
+    [[nodiscard]] virtual base::Expected<void> DispatchIndependentPair(
+        const std::array<ComputeDispatch, 2>&, IndependentPairTiming* timing = nullptr) {
+        if (timing) *timing = {};
+        return base::Fail(base::ErrorDomain::kDevice, "dispatch independent compute pair",
+                          "device does not support a shared submission");
+    }
 
     // Bound actual explicit device allocations, including adapter-required
     // padding. Lowering below already resident bytes must fail without changing
