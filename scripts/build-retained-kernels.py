@@ -84,8 +84,8 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
     if fma:
-        if not fp64 or portable or source.stem != "retained_transport":
-            raise ValueError("FMA32 is qualified only for native-wide retained Transport")
+        if not fp64 or portable or source.stem not in ("retained_transport", "retained_endpoint"):
+            raise ValueError("FMA32 is qualified only for native-wide retained Transport and Endpoint")
         definitions.append("-DSIRIUS_RETAINED_FMA32=1")
     if portable:
         definitions.append("-DSIRIUS_RETAINED_PORTABLE=1")
@@ -200,19 +200,19 @@ def main():
                                   program.get("prefix_instructions", 0), fp64=wide, portable=portable, optimizer=args.optimizer)
             array("k" + kind + name + "Shader", code)
             sizes.append(len(code) * 4)
-        if kind == "Transport":
+        if kind in ("Transport", "Endpoint"):
             destination = args.output.parent / (stem + "_fma.spv")
-            lines.append(f"inline constexpr bool kTransportFmaAvailable = {'true' if fma_available else 'false'};")
+            lines.append(f"inline constexpr bool k{kind}FmaAvailable = {'true' if fma_available else 'false'};")
             if fma_available:
                 code = compile_shader(source / (stem + ".slang"), destination,
                     args.compiler, args.assembler, args.disassembler, args.validator,
                     program["registers"], terms, len(program["layer_offsets"])-1,
                     program.get("prefix_instructions", 0), fp64=True, fma=True)
-                array("kTransportFmaShader", code)
+                array("k" + kind + "FmaShader", code)
             else:
                 shutil.copyfile(args.output.parent / (stem + "_fp64.spv"), destination)
-                lines.append("inline constexpr auto& kTransportFmaShader = kTransportFp64Shader;")
-            print("Transport optional FMA32:", "validated" if fma_available else "integer fallback", flush=True)
+                lines.append(f"inline constexpr auto& k{kind}FmaShader = k{kind}Fp64Shader;")
+            print(kind + " optional FMA32:", "validated" if fma_available else "integer fallback", flush=True)
         words = ((512 if kind == "Camera" else 576) + 4 * program["registers"] if kind in ("Camera", "RayCamera")
                  else {"Transport":2404, "Endpoint":769, "Dense":204, "Initialize":204}[kind] + 5 * program["registers"])
         lines.append(f"inline constexpr std::size_t k{kind}RowWords = {words};")

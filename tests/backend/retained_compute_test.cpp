@@ -333,7 +333,7 @@ void ExpectPhysicalStatsEqual(const std::array<RetainedCompute::StageStats, 6>& 
 #endif
 
 #ifdef SIRIUS_HAS_RETAINED_COMPUTE
-TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideTransportAndPreservesAllocation) {
+TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideProductsAndPreservesAllocation) {
     using namespace sirius::backend::retained_program;
     for (unsigned mask = 0; mask < 16; ++mask) {
         for (const bool wide : {false, true}) {
@@ -352,12 +352,17 @@ TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideTransportAndPreservesAllo
             ASSERT_TRUE(created);
             ASSERT_EQ(control.loaded_codes.size(), 6U);
             ASSERT_EQ(candidate.loaded_codes.size(), 6U);
-            const bool selected = kTransportFmaAvailable && wide && mask == 15u;
+            const bool eligible = wide && mask == 15u;
             for (std::size_t stage = 0; stage < 6; ++stage) {
-                if (stage == 1 && selected) {
+                if (stage == 1 && eligible && kTransportFmaAvailable) {
                     EXPECT_EQ(candidate.loaded_codes[stage],
                               (std::vector<std::uint32_t>(kTransportFmaShader.begin(),
                                                           kTransportFmaShader.end())));
+                    EXPECT_NE(candidate.loaded_codes[stage], control.loaded_codes[stage]);
+                } else if (stage == 2 && eligible && kEndpointFmaAvailable) {
+                    EXPECT_EQ(candidate.loaded_codes[stage],
+                              (std::vector<std::uint32_t>(kEndpointFmaShader.begin(),
+                                                          kEndpointFmaShader.end())));
                     EXPECT_NE(candidate.loaded_codes[stage], control.loaded_codes[stage]);
                 } else {
                     EXPECT_EQ(candidate.loaded_codes[stage], control.loaded_codes[stage]);
@@ -2782,6 +2787,7 @@ TEST_F(RetainedComputeTest, RejectedStepRowsCannotExposeOldOrPartialCandidates) 
 
 TEST_F(RetainedComputeTest, Fp64ProductsPreserveIndependentScienceOrDeclineUnsupportedDevices) {
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    RecordProperty("fma_fp32_enabled", static_cast<int>(device->Info().fma_fp32_enabled));
     auto wide = RetainedCompute::Create(*device, 24, true);
     if (!device->Info().supports_fp64 || !device->Info().rounds_fp64_to_nearest) {
         ASSERT_FALSE(wide);

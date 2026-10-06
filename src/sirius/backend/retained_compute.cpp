@@ -116,18 +116,20 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
         result->camera_, KernelStage::kCamera,
         shader(kCameraShader, kCameraFp64Shader, kCameraPortableShader, kCameraPortableFp64Shader));
     if (!status) return std::unexpected(status.error());
-    const bool fma = kTransportFmaAvailable && fp64_products && !portable &&
-                     device.Info().fma_fp32_enabled &&
+    const bool fma = fp64_products && !portable && device.Info().fma_fp32_enabled &&
                      device.Info().preserves_fp32_signed_zero_inf_nan;
     const std::span<const std::uint32_t> transport =
-        fma ? std::span(kTransportFmaShader)
+        fma && kTransportFmaAvailable
+            ? std::span(kTransportFmaShader)
             : shader(kTransportShader, kTransportFp64Shader, kTransportPortableShader,
                      kTransportPortableFp64Shader);
     status = create(result->transport_, KernelStage::kTransport, transport);
     if (!status) return std::unexpected(status.error());
-    status = create(result->endpoint_, KernelStage::kEndpoint,
-                    shader(kEndpointShader, kEndpointFp64Shader, kEndpointPortableShader,
-                           kEndpointPortableFp64Shader));
+    const std::span<const std::uint32_t> endpoint =
+        fma && kEndpointFmaAvailable ? std::span(kEndpointFmaShader)
+                                     : shader(kEndpointShader, kEndpointFp64Shader,
+                                              kEndpointPortableShader, kEndpointPortableFp64Shader);
+    status = create(result->endpoint_, KernelStage::kEndpoint, endpoint);
     if (!status) return std::unexpected(status.error());
     status = create(
         result->dense_, KernelStage::kDense,

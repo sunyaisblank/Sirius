@@ -985,7 +985,7 @@ set_tests_properties(
 
 set_tests_properties(
     RetainedComputeAdmission.ArithmeticRefusalPrecedesKernelLoading
-    RetainedComputeAdmission.FmaSelectsOnlyNativeWideTransportAndPreservesAllocation
+    RetainedComputeAdmission.FmaSelectsOnlyNativeWideProductsAndPreservesAllocation
     RetainedComputeAdmission.SoftwareRendererPreparationPreservesPhysicalAccounting
     PROPERTIES LABELS "Mandatory;Correctness"
 )
