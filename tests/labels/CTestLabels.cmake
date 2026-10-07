@@ -160,6 +160,12 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    ChargedReference.ExteriorChartShiftMatchesIndependentQuadrature
+    ChargedReference.SphericalRadialCaptureMatchesExactAffineAndTangent
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     ChristoffelTests.FlatSpaceChristoffelAllZero
     ChristoffelTests.TorsionFreeSymmetry
     ChristoffelTests.SphericalGammaRThetaTheta
@@ -427,6 +433,7 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    FullPathAcceptance.CpuChargedFiniteEventsMapsAndRefinement
     FullPathAcceptance.CpuIndependentCarterEventsMapsAndRefinement
     FullPathAcceptance.VulkanRetainedIndependentCarterEventsMapsAndRefinement
     FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants

@@ -380,6 +380,9 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:KernelParity.Cie1931TwoDegreeFitMatchesHostAuthority",
     },
     "E1": {
+        "gtest:ChargedReference.ExteriorChartShiftMatchesIndependentQuadrature",
+        "gtest:ChargedReference.SphericalRadialCaptureMatchesExactAffineAndTangent",
+        "gtest:FullPathAcceptance.CpuChargedFiniteEventsMapsAndRefinement",
         "gtest:AlcubierreMetricTests.AnalyticInverseMatchesExactUnitDeterminantBlock",
         "gtest:AlcubierreMetricTests.DirectMetricRejectsUnresolvedProfiles",
         "gtest:AlcubierreMetricTests.EulerianWarpWallEnergyMatchesEinsteinConstraint",
@@ -476,7 +479,7 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "9a24f4edb182f2837339bc000725d24079184b8eacd6a9d1bd2e413e3621a502",
+    "acceptance_criteria": "6b6a7abf6eead349e993cef0cce619453ac290541c7cabbb88c71ed3428ccd28",
     "required_dimensions": "206d109e64687caff131e2f8e67e3fe3942ea096e03f9e7ea150eca69a7106b8",
     "capability_contracts": "48c5b338c14c11e2ad7275322cd72f4bd014df621ca69e65e119621066fd5c6c",
 }

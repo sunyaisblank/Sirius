@@ -1,6 +1,7 @@
 // Complete production camera-to-event rays against an independently evolved
 // Carter flow. This is numerical acceptance, with no image or throughput claim.
 #include "sirius/backend/cpu/geodesic_tracer.h"
+#include "sirius/core/metrics/cpu_metric_factory.h"
 
 #include <gtest/gtest.h>
 
@@ -49,6 +50,7 @@ struct Case {
     reference::Fate fate;
     bool radial_turn;
     double disk_inner = 0, disk_outer = 0;
+    double charge = 0;
 };
 
 CameraRay Ray(double radius, double theta, Three n) {
@@ -115,12 +117,53 @@ std::vector<Case> Cases() {
     return cases;
 }
 
+CameraRay StaticChargedRay(double mass, double charge_ratio, double impact) {
+    constexpr double radius = 12;
+    const double h = 2 / radius - charge_ratio * charge_ratio / (radius * radius);
+    const double transverse = impact * std::sqrt(1 - h) / radius;
+    auto ray = Ray(radius * mass, std::numbers::pi / 2,
+                   {-std::sqrt(1 - transverse * transverse), 0, transverse});
+    ray.beta_forward = -h;
+    return ray;
+}
+
+std::vector<Case> ChargedCases() {
+    std::vector<Case> cases;
+    cases.push_back({"rn_charge_06_capture", 1, 0, 40, StaticChargedRay(1, .6, 2),
+                     reference::Fate::Capture, false, 0, 0, .6});
+    cases.push_back({"rn_charge_09_turn_mass_01", .1, 0, 4, StaticChargedRay(.1, .9, 8),
+                     reference::Fate::Escape, true, 0, 0, .09});
+    constexpr double charge = .999;
+    const double photon_radius = (3 + std::sqrt(9 - 8 * charge * charge)) / 2;
+    const double photon_f =
+        1 - 2 / photon_radius + charge * charge / (photon_radius * photon_radius);
+    const double critical_impact = photon_radius / std::sqrt(photon_f);
+    cases.push_back({"rn_charge_0999_critical_plus_005_mass_100", 100, 0, 4000,
+                     StaticChargedRay(100, charge, critical_impact + .05), reference::Fate::Escape,
+                     true, 0, 0, 100 * charge});
+    auto moving = Ray(8, 1.1, {.5, .65, .57});
+    moving.beta_forward = .08;
+    moving.beta_up = .025;
+    moving.beta_right = -.015;
+    moving.aperture_right = -.017;
+    moving.aperture_up = .021;
+    cases.push_back({"kn_spin_07_charge_06_moving_pupil", 1, .7, 40, moving,
+                     reference::Fate::Escape, false, 0, 0, .6});
+    cases.push_back({"kn_spin_07_charge_07_inner_turn", 1, .7, 40,
+                     Ray(12, 1.1, {-.6, .25, std::sqrt(.5775L)}), reference::Fate::Escape, true, 0,
+                     0, .7});
+    cases.push_back({"kn_spin_02_charge_097_capture", 1, .2, 40, Ray(8, 1.1, {-1, 0, 0}),
+                     reference::Fate::Capture, false, 0, 0, .97});
+    return cases;
+}
+
 reference::Result IndependentTrace(const Case& c, const CameraRay& camera, Scalar step) {
     KerrSchildFamily metric(c.mass == 0 ? KerrSchildParams::Minkowski()
-                                        : KerrSchildParams::Kerr(c.mass, c.spin));
+                                        : KerrSchildParams::KerrNewman(c.mass, c.spin, c.charge));
     const auto launch = LaunchCameraRay(metric, c.spin, camera);
     if (!launch) throw std::runtime_error("unrepresented measured reference launch");
-    return reference::Trace(*launch, c.mass, c.spin, c.boundary, step, c.disk_inner, c.disk_outer);
+    return reference::Trace(*launch, c.mass, c.spin, c.boundary, step, c.disk_inner, c.disk_outer,
+                            c.charge);
 }
 
 double MatrixError(const Matrix& actual, const Matrix& expected) {
@@ -157,7 +200,7 @@ Maps IndependentMaps(const Case& c, const reference::Result& central, Scalar ste
     const auto infinity_basis =
         reference::Basis(central.infinity_direction == Three{} ? central.finite_direction
                                                                : central.infinity_direction);
-    const auto geometry = reference::At(central.x, c.mass, c.spin, central.outgoing);
+    const auto geometry = reference::At(central.x, c.mass, c.spin, central.outgoing, c.charge);
     const auto physical_screen = geometry.Screen(central.k);
     Matrix displacement{};
     Maps result;
@@ -211,41 +254,47 @@ struct Witness {
     double reference_spacing = 0;
 };
 
+std::vector<Witness> BuildWitnesses(const std::vector<Case>& cases) {
+    std::vector<Witness> rows;
+    for (const auto& c : cases) {
+        // Critical scattering amplifies the reference's fourth-order
+        // inner-flow error. Refine the expectation rather than reducing
+        // its witness set or admitting a larger uncertainty budget.
+        const bool critical = c.name.find("critical") != std::string::npos;
+        const Scalar coarse_step = critical ? .001L : .002L;
+        const Scalar fine_step = coarse_step / 2;
+        const double narrow_spacing = critical ? 5e-5 : 1e-4;
+        const double wide_spacing = 2 * narrow_spacing;
+        const auto coarse = IndependentTrace(c, c.camera, coarse_step);
+        const auto fine = IndependentTrace(c, c.camera, fine_step);
+        const auto coarse_maps = IndependentMaps(c, coarse, coarse_step, wide_spacing);
+        const auto maps = IndependentMaps(c, fine, fine_step, narrow_spacing);
+        const auto spacing = IndependentMaps(c, fine, fine_step, wide_spacing);
+        const double scale = c.mass > 0 ? c.mass : 1;
+        double uncertainty =
+            std::max({FourError(coarse.x, fine.x, scale), FourError(coarse.k, fine.k, 1),
+                      std::abs(static_cast<double>(coarse.affine - fine.affine)) / scale});
+        if (fine.fate == reference::Fate::Escape)
+            uncertainty =
+                std::max(uncertainty, Angle(coarse.infinity_direction, fine.infinity_direction));
+        const double map_uncertainty = std::max(
+            {MatrixError(coarse_maps.finite, maps.finite),
+             MatrixError(coarse_maps.infinity, maps.infinity),
+             MatrixError(coarse_maps.covariance, maps.covariance),
+             MatrixError(spacing.finite, maps.finite), MatrixError(spacing.infinity, maps.infinity),
+             MatrixError(spacing.covariance, maps.covariance)});
+        rows.push_back({c, fine, maps, uncertainty, map_uncertainty, fine_step, narrow_spacing});
+    }
+    return rows;
+}
+
 const std::vector<Witness>& Witnesses() {
-    static const auto values = [] {
-        std::vector<Witness> rows;
-        for (const auto& c : Cases()) {
-            // Critical scattering amplifies the reference's fourth-order
-            // inner-flow error. Refine the expectation rather than reducing
-            // its witness set or admitting a larger uncertainty budget.
-            const Scalar coarse_step = c.name == "schwarzschild_critical_plus_005" ? .001L : .002L;
-            const Scalar fine_step = coarse_step / 2;
-            const double narrow_spacing = c.name == "schwarzschild_critical_plus_005" ? 5e-5 : 1e-4;
-            const double wide_spacing = 2 * narrow_spacing;
-            const auto coarse = IndependentTrace(c, c.camera, coarse_step);
-            const auto fine = IndependentTrace(c, c.camera, fine_step);
-            const auto coarse_maps = IndependentMaps(c, coarse, coarse_step, wide_spacing);
-            const auto maps = IndependentMaps(c, fine, fine_step, narrow_spacing);
-            const auto spacing = IndependentMaps(c, fine, fine_step, wide_spacing);
-            const double scale = c.mass > 0 ? c.mass : 1;
-            double uncertainty =
-                std::max({FourError(coarse.x, fine.x, scale), FourError(coarse.k, fine.k, 1),
-                          std::abs(static_cast<double>(coarse.affine - fine.affine)) / scale});
-            if (fine.fate == reference::Fate::Escape)
-                uncertainty = std::max(uncertainty,
-                                       Angle(coarse.infinity_direction, fine.infinity_direction));
-            const double map_uncertainty =
-                std::max({MatrixError(coarse_maps.finite, maps.finite),
-                          MatrixError(coarse_maps.infinity, maps.infinity),
-                          MatrixError(coarse_maps.covariance, maps.covariance),
-                          MatrixError(spacing.finite, maps.finite),
-                          MatrixError(spacing.infinity, maps.infinity),
-                          MatrixError(spacing.covariance, maps.covariance)});
-            rows.push_back(
-                {c, fine, maps, uncertainty, map_uncertainty, fine_step, narrow_spacing});
-        }
-        return rows;
-    }();
+    static const auto values = BuildWitnesses(Cases());
+    return values;
+}
+
+const std::vector<Witness>& ChargedWitnesses() {
+    static const auto values = BuildWitnesses(ChargedCases());
     return values;
 }
 
@@ -336,22 +385,28 @@ Errors Check(const Witness& witness, const TraceResult& actual) {
     }
     if (expected.fate == reference::Fate::Escape) {
         EXPECT_TRUE(actual.beam.finite_source_map);
-        EXPECT_TRUE(actual.beam.infinity_source_map);
-        if (!actual.beam.finite_source_map || !actual.beam.infinity_source_map) return error;
+        EXPECT_EQ(actual.beam.infinity_source_map.has_value(), c.charge == 0);
+        if (!actual.beam.finite_source_map || (c.charge == 0 && !actual.beam.infinity_source_map))
+            return error;
         Matrix finite{}, infinity{};
         for (unsigned row = 0; row < 2; ++row)
             for (unsigned col = 0; col < 2; ++col) {
                 finite[row][col] = actual.beam.finite_source_map->jacobian[row][col];
-                infinity[row][col] = actual.beam.infinity_source_map->map.jacobian[row][col];
+                if (c.charge == 0)
+                    infinity[row][col] = actual.beam.infinity_source_map->map.jacobian[row][col];
                 EXPECT_TRUE(std::isfinite(finite[row][col]));
                 EXPECT_TRUE(std::isfinite(infinity[row][col]));
             }
         error.finite_map = MatrixError(finite, witness.maps.finite);
-        error.infinity_map = MatrixError(infinity, witness.maps.infinity);
-        Three sky{};
-        for (unsigned axis = 0; axis < 3; ++axis)
-            sky[axis] = actual.beam.infinity_source_map->map.direction[axis];
-        error.angle = Angle(sky, expected.infinity_direction);
+        if (c.charge == 0) {
+            error.infinity_map = MatrixError(infinity, witness.maps.infinity);
+            Three sky{};
+            for (unsigned axis = 0; axis < 3; ++axis)
+                sky[axis] = actual.beam.infinity_source_map->map.direction[axis];
+            error.angle = Angle(sky, expected.infinity_direction);
+            EXPECT_NEAR(actual.beam.infinity_source_map->frequency,
+                        -static_cast<double>(expected.energy), kAcceptance);
+        }
         Three finite_sky{}, finite_map_direction{};
         for (unsigned axis = 0; axis < 3; ++axis) {
             finite_sky[axis] = actual.final_direction(static_cast<int>(axis) + 1);
@@ -362,8 +417,6 @@ Errors Check(const Witness& witness, const TraceResult& actual) {
         EXPECT_LE(error.angle + witness.endpoint_uncertainty, kAcceptance);
         EXPECT_LE(error.finite_map + witness.map_uncertainty, kAcceptance);
         EXPECT_LE(error.infinity_map + witness.map_uncertainty, kAcceptance);
-        EXPECT_NEAR(actual.beam.infinity_source_map->frequency,
-                    -static_cast<double>(expected.energy), kAcceptance);
     } else {
         EXPECT_FALSE(actual.beam.infinity_source_map);
     }
@@ -542,6 +595,100 @@ class ConservationObserver final : public TraceStepExecutor {
     std::optional<Scalar> previous_radial_;
 };
 #endif
+
+std::array<Scalar, 2> QuadratureShift(Scalar radius, Scalar mass, Scalar spin, Scalar charge,
+                                      unsigned panels) {
+    const Scalar horizon = mass + std::sqrt(mass * mass - spin * spin - charge * charge);
+    const Scalar anchor = 2 * horizon;
+    const Scalar step = (radius - anchor) / panels;
+    std::array<Scalar, 2> integral{};
+    for (unsigned index = 0; index <= panels; ++index) {
+        const Scalar r = anchor + step * index;
+        const Scalar delta = r * r - 2 * mass * r + spin * spin + charge * charge;
+        const Scalar weight = index == 0 || index == panels ? 1 : index % 2 == 0 ? 2 : 4;
+        integral[0] += weight * -2 * (2 * mass * r - charge * charge) / delta;
+        integral[1] += weight * (-2 * spin / delta + 2 * spin / (r * r + spin * spin));
+    }
+    for (auto& value : integral) value *= step / 3;
+    return integral;
+}
+
+TEST(ChargedReference, ExteriorChartShiftMatchesIndependentQuadrature) {
+    for (const auto parameters :
+         {std::array<Scalar, 3>{1, 0, .6L}, {1, .7L, .6L}, {1, .2L, .97L}}) {
+        const auto [mass, spin, charge] = parameters;
+        const Scalar radius = 12 * mass;
+        const reference::detail::Constants constants{mass, spin, 0, 0, 0, charge};
+        const auto analytic = reference::detail::Shift(radius, constants);
+        const auto coarse = QuadratureShift(radius, mass, spin, charge, 2048);
+        const auto fine = QuadratureShift(radius, mass, spin, charge, 4096);
+        for (unsigned component = 0; component < 2; ++component) {
+            EXPECT_LE(std::abs(coarse[component] - fine[component]), 1e-10L);
+            EXPECT_LE(std::abs(analytic[component] - fine[component]), 1e-10L);
+        }
+    }
+}
+
+TEST(ChargedReference, SphericalRadialCaptureMatchesExactAffineAndTangent) {
+    for (const auto parameters : {std::array<double, 2>{.1, .9}, {1, .6}, {100, .999}}) {
+        const auto [mass, ratio] = parameters;
+        const double charge = mass * ratio;
+        KerrSchildFamily metric(KerrSchildParams::ReissnerNordstrom(mass, charge));
+        const auto launch = LaunchCameraRay(metric, 0, StaticChargedRay(mass, ratio, 0));
+        ASSERT_TRUE(launch);
+        const Scalar radius = 12 * mass;
+        const Scalar horizon = mass + std::sqrt(Scalar(mass) * mass - Scalar(charge) * charge);
+        const Scalar h = 2 * mass / radius - Scalar(charge) * charge / (radius * radius);
+        Scalar radial_velocity = 0;
+        Three radial{};
+        for (unsigned axis = 0; axis < 3; ++axis) {
+            radial[axis] = launch->position(static_cast<int>(axis) + 1) / radius;
+            radial_velocity += radial[axis] * launch->tangent(static_cast<int>(axis) + 1);
+        }
+        const Scalar speed = (-1 + h) * launch->tangent(0) + h * radial_velocity;
+        ASSERT_GT(speed, 0);
+        const auto expected_shift = QuadratureShift(radius, mass, 0, charge, 4096);
+        const auto result = reference::Trace(*launch, mass, 0, 40 * mass, .0005L, 0, 0, charge);
+        ASSERT_EQ(result.fate, reference::Fate::Capture);
+        EXPECT_TRUE(result.outgoing);
+        EXPECT_EQ(result.infinity_direction, Three{});
+        EXPECT_LE(std::abs(result.affine - (radius - horizon) / speed) / mass, 1e-8L);
+        EXPECT_LE(
+            std::abs(result.x[0] - launch->position(0) - expected_shift[0] - (horizon - radius)) /
+                mass,
+            1e-8L);
+        EXPECT_LE(std::abs(result.k[0] + speed), 1e-8L);
+        for (unsigned axis = 0; axis < 3; ++axis) {
+            EXPECT_LE(std::abs(result.x[axis + 1] - horizon * radial[axis]) / mass, 1e-8L);
+            EXPECT_LE(std::abs(result.k[axis + 1] + speed * radial[axis]), 1e-8L);
+        }
+    }
+}
+
+TEST(FullPathAcceptance, CpuChargedFiniteEventsMapsAndRefinement) {
+    // The direct coupled tracer monitors Jacobi columns for charged rays.
+    // Public charged beam rendering and vacuum infinity transfer still decline.
+    for (const auto& witness : ChargedWitnesses()) {
+        const auto& c = witness.input;
+        MetricConstructionParameters parameters;
+        parameters.mass = c.mass;
+        parameters.dimensionless_spin = c.spin / c.mass;
+        parameters.dimensionless_charge = c.charge / c.mass;
+        auto metric = CreateCpuMetric(
+            c.spin == 0 ? MetricId::ReissnerNordstrom : MetricId::KerrNewman, parameters);
+        ASSERT_TRUE(metric) << c.name;
+        std::array<Errors, 3> errors{};
+        for (unsigned refinement = 0; refinement < 3; ++refinement) {
+            SCOPED_TRACE(refinement);
+            GeodesicTracer tracer(metric.get(), Control(c, refinement));
+            const auto result = tracer.Trace(c.camera);
+            errors[refinement] = Check(witness, result);
+            Record(witness, refinement, errors[refinement], result);
+        }
+        EXPECT_LE(errors[2].endpoint, errors[0].endpoint + 2 * witness.endpoint_uncertainty + 2e-8);
+        EXPECT_LE(errors[2].finite_map, errors[0].finite_map + 2 * witness.map_uncertainty + 2e-8);
+    }
+}
 
 TEST(FullPathAcceptance, CpuIndependentCarterEventsMapsAndRefinement) {
     for (const auto& witness : Witnesses()) {
