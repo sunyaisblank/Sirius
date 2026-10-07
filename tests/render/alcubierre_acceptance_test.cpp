@@ -121,9 +121,10 @@ TEST(CpuAlcubierreAcceptance, PublicCentreRaysMatchIndependentFiniteAxialOrbits)
         for (int axis = 0; axis < 4; ++axis) {
             ASSERT_TRUE(std::isfinite(launch->position(axis)));
             ASSERT_TRUE(std::isfinite(launch->tangent(axis)));
-            EXPECT_NEAR(launch->position(axis) / scale, expected.initial_position[axis] / scale,
-                        1.0e-12L);
-            EXPECT_NEAR(launch->tangent(axis), expected.initial_tangent[axis], 1.0e-12L);
+            EXPECT_LE(
+                std::abs(launch->position(axis) / scale - expected.initial_position[axis] / scale),
+                1.0e-12L);
+            EXPECT_LE(std::abs(launch->tangent(axis) - expected.initial_tangent[axis]), 1.0e-12L);
         }
         for (int refinement = 0; refinement < 3; ++refinement) {
             SCOPED_TRACE(refinement);

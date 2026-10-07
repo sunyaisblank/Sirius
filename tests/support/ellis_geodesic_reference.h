@@ -31,8 +31,7 @@ Scalar Integrate(Function function, Scalar start, Scalar end, unsigned panels) {
     if (panels == 0 || panels % 2 != 0) throw std::invalid_argument("reference panel count");
     const Scalar step = (end - start) / panels;
     Scalar sum = function(start) + function(end);
-    for (unsigned i = 1; i < panels; ++i)
-        sum += (i % 2 == 0 ? 2 : 4) * function(start + i * step);
+    for (unsigned i = 1; i < panels; ++i) sum += (i % 2 == 0 ? 2 : 4) * function(start + i * step);
     return sum * step / 3;
 }
 
@@ -44,8 +43,8 @@ inline State Orbit(Scalar launch_rho, Scalar terminal_rho, Scalar impact, bool o
     const Scalar j = std::abs(impact);
     const Scalar launch_l = launch_rho - 1 / (4 * launch_rho);
     const Scalar terminal_l = terminal_rho - 1 / (4 * terminal_rho);
-    if (!std::isfinite(launch_rho) || !std::isfinite(terminal_rho) ||
-        !std::isfinite(j) || !(launch_rho > 0.5L) || !(terminal_rho > 0) || j == 1 ||
+    if (!std::isfinite(launch_rho) || !std::isfinite(terminal_rho) || !std::isfinite(j) ||
+        !(launch_rho > 0.5L) || !(terminal_rho > 0) || j == 1 ||
         !(j < launch_rho + 1 / (4 * launch_rho)))
         throw std::invalid_argument("reference finite Ellis orbit domain");
     Scalar angle = 0, affine = 0;
@@ -90,10 +89,10 @@ inline State Orbit(Scalar launch_rho, Scalar terminal_rho, Scalar impact, bool o
     // keeping the tangential component: the independent I-2nn^T Jacobian.
     const Scalar sky_radial = opposite ? -radial : radial;
     return {{-affine, terminal_rho * c, terminal_rho * s, 0},
-            {-1, (radial * c - angular * s) / conformal,
-             (radial * s + angular * c) / conformal, 0},
+            {-1, (radial * c - angular * s) / conformal, (radial * s + angular * c) / conformal, 0},
             {0, sky_radial * c - angular * s, sky_radial * s + angular * c, 0},
-            affine, angle};
+            affine,
+            angle};
 }
 
 }  // namespace sirius::test::ellis_reference

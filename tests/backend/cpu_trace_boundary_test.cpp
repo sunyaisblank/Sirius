@@ -9,10 +9,10 @@
 #include "sirius/core/metrics/registry.h"
 #include "sirius/render/trace_domain.h"
 
+#include <gtest/gtest.h>
+
 #include "support/ellis_geodesic_reference.h"
 #include "support/kottler_geodesic_reference.h"
-
-#include <gtest/gtest.h>
 
 #include <cmath>
 #include <iomanip>
@@ -661,14 +661,15 @@ TEST(CpuTraceBoundary, TwoSheetEllisCrossesThroatAndReachesInversionMatchedInfin
     }
 }
 
+// Keep reference errors in long double; EXPECT_NEAR takes binary64 arguments.
 TEST(CpuTraceBoundary, EllisReferenceRetainsExactRadialLengthAndIndependentRefinement) {
     namespace reference = sirius::test::ellis_reference;
     for (const long double terminal_rho : {0.5L, 1.0L / 48}) {
         const auto radial = reference::Orbit(8, terminal_rho, 0, terminal_rho < 0.5L, 8192);
         const long double exact = 8 - 1.0L / 32 - terminal_rho + 1 / (4 * terminal_rho);
-        EXPECT_NEAR(radial.affine, exact, 1.0e-8L);
+        EXPECT_LE(std::abs(radial.affine - exact), 1.0e-8L);
         EXPECT_EQ(radial.angle, 0);
-        EXPECT_NEAR(radial.sky[1], terminal_rho < 0.5L ? 1 : -1, 1.0e-14L);
+        EXPECT_LE(std::abs(radial.sky[1] - (terminal_rho < 0.5L ? 1 : -1)), 1.0e-14L);
     }
     EXPECT_THROW(reference::Orbit(8, 12, 1, false, 8192), std::invalid_argument);
 }
@@ -684,8 +685,8 @@ TEST(CpuTraceBoundary, NonradialEllisFiniteEventsMatchIndependentQuadrature) {
         auto metric = sirius::core::CreateCpuMetric(MetricId::MorrisThorne, parameters);
         ASSERT_NE(metric, nullptr);
         for (const double impact : {0.5, -0.95, 1.05, -2.0}) {
-            for (const auto topology : {WormholeTopology::OneSheetCapture,
-                                        WormholeTopology::TwoSheet}) {
+            for (const auto topology :
+                 {WormholeTopology::OneSheetCapture, WormholeTopology::TwoSheet}) {
                 const bool reflection = std::abs(impact) > 1;
                 const bool opposite = !reflection && topology == WormholeTopology::TwoSheet;
                 const float stored_boundary = static_cast<float>(12 * b0);
@@ -702,9 +703,10 @@ TEST(CpuTraceBoundary, NonradialEllisFiniteEventsMatchIndependentQuadrature) {
                     ASSERT_LT(std::abs(coarse.sky[axis] - expected.sky[axis]), 1.0e-6L);
                 }
                 for (const double maximum_step : {0.25, 0.125, 0.0625}) {
-                    SCOPED_TRACE(::testing::Message() << "b0=" << b0 << " J/b0=" << impact
-                        << " opposite=" << opposite << " topology=" << static_cast<int>(topology)
-                        << " max_step/b0=" << maximum_step);
+                    SCOPED_TRACE(::testing::Message()
+                                 << "b0=" << b0 << " J/b0=" << impact << " opposite=" << opposite
+                                 << " topology=" << static_cast<int>(topology)
+                                 << " max_step/b0=" << maximum_step);
                     TracerConfig config;
                     config.escape_radius = stored_boundary;
                     config.horizon_factor = 1;
@@ -723,21 +725,27 @@ TEST(CpuTraceBoundary, NonradialEllisFiniteEventsMatchIndependentQuadrature) {
                     ray.direction(1) = -std::sqrt(1 - ray.direction(3) * ray.direction(3));
                     GeodesicTracer tracer(metric.get(), config);
                     const auto actual = tracer.Trace(ray);
-                    ASSERT_EQ(actual.outcome, reflection || opposite ? TraceResult::Outcome::Escaped
-                                                                       : TraceResult::Outcome::Throat);
+                    ASSERT_EQ(actual.outcome, reflection || opposite
+                                                  ? TraceResult::Outcome::Escaped
+                                                  : TraceResult::Outcome::Throat);
                     ASSERT_FALSE(actual.numerical_failure);
                     ASSERT_FALSE(actual.cancelled);
                     ASSERT_EQ(actual.integrator_termination, 0);
                     ASSERT_EQ(actual.terminal_chart, TraceResult::TerminalChart::MetricNative);
-                    ASSERT_EQ(actual.asymptotic_sheet, opposite ? TraceResult::AsymptoticSheet::Opposite
-                                                              : TraceResult::AsymptoticSheet::Observer);
+                    ASSERT_EQ(actual.asymptotic_sheet,
+                              opposite ? TraceResult::AsymptoticSheet::Opposite
+                                       : TraceResult::AsymptoticSheet::Observer);
                     ASSERT_TRUE(actual.final_tangent.has_value());
-                    EXPECT_NEAR(actual.affine_length / b0, expected.affine, kEnvelope);
+                    EXPECT_LE(std::abs(actual.affine_length / b0 - expected.affine), kEnvelope);
                     for (int axis = 0; axis < 4; ++axis) {
-                        EXPECT_NEAR(actual.final_position(axis) / b0, expected.position[axis], kEnvelope);
-                        EXPECT_NEAR((*actual.final_tangent)(axis), expected.tangent[axis], kEnvelope);
+                        EXPECT_LE(
+                            std::abs(actual.final_position(axis) / b0 - expected.position[axis]),
+                            kEnvelope);
+                        EXPECT_LE(std::abs((*actual.final_tangent)(axis)-expected.tangent[axis]),
+                                  kEnvelope);
                         if (reflection || opposite) {
-                            EXPECT_NEAR(actual.final_direction(axis), expected.sky[axis], kEnvelope);
+                            EXPECT_LE(std::abs(actual.final_direction(axis) - expected.sky[axis]),
+                                      kEnvelope);
                         }
                     }
                 }
@@ -767,14 +775,14 @@ TEST(CpuTraceBoundary, KottlerReferenceRetainsExactDeSitterAndRadialIdentities) 
         const long double phi = angle(boundary) + (inward ? angle(r0) : -angle(r0));
         const auto actual = reference::Orbit(0, 0.01L, r0, boundary, nr, nphi, 8192);
         ASSERT_EQ(actual.fate, reference::Fate::Escape);
-        EXPECT_NEAR(actual.affine, affine, 1.0e-8L);
-        EXPECT_NEAR(actual.angle, phi, 1.0e-10L);
-        EXPECT_NEAR(actual.position[1], boundary * std::cos(phi), 1.0e-8L);
-        EXPECT_NEAR(actual.position[2], boundary * std::sin(phi), 1.0e-8L);
+        EXPECT_LE(std::abs(actual.affine - affine), 1.0e-8L);
+        EXPECT_LE(std::abs(actual.angle - phi), 1.0e-10L);
+        EXPECT_LE(std::abs(actual.position[1] - boundary * std::cos(phi)), 1.0e-8L);
+        EXPECT_LE(std::abs(actual.position[2] - boundary * std::sin(phi)), 1.0e-8L);
     }
     const auto roots = reference::Roots(1, 0.001L);
-    EXPECT_NEAR(reference::Lapse(roots.capture, 1, 0.001L), 0, 1.0e-14L);
-    EXPECT_NEAR(reference::Lapse(roots.cosmological, 1, 0.001L), 0, 1.0e-14L);
+    EXPECT_LE(std::abs(reference::Lapse(roots.capture, 1, 0.001L)), 1.0e-14L);
+    EXPECT_LE(std::abs(reference::Lapse(roots.cosmological, 1, 0.001L)), 1.0e-14L);
     // Radial outgoing-chart capture: r'=-C and t_out'=-C, including the
     // declared initial time gauge. Check its quadrature independently from a
     // derivative-free exact cubic partial-fraction integral of H/f.
@@ -790,10 +798,10 @@ TEST(CpuTraceBoundary, KottlerReferenceRetainsExactDeSitterAndRadialIdentities) 
     }
     const auto radial = reference::Orbit(1, lambda, radius, 50, -1, 0, 8192);
     ASSERT_EQ(radial.fate, reference::Fate::Capture);
-    EXPECT_NEAR(radial.affine, (radius - roots.capture) / c, 1.0e-9L);
-    EXPECT_NEAR(radial.position[0], -2 * primitive - (radius - roots.capture), 1.0e-8L);
-    EXPECT_NEAR(radial.tangent[0], -c, 1.0e-14L);
-    EXPECT_NEAR(radial.tangent[1], -c, 1.0e-14L);
+    EXPECT_LE(std::abs(radial.affine - (radius - roots.capture) / c), 1.0e-9L);
+    EXPECT_LE(std::abs(radial.position[0] - (-2 * primitive - (radius - roots.capture))), 1.0e-8L);
+    EXPECT_LE(std::abs(radial.tangent[0] + c), 1.0e-14L);
+    EXPECT_LE(std::abs(radial.tangent[1] + c), 1.0e-14L);
     EXPECT_EQ(radial.angular_momentum, 0);
 }
 
