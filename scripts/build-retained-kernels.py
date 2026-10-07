@@ -173,7 +173,8 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
-    portable_parallel = portable and source.stem == "retained_transport"
+    portable_parallel = portable and source.stem in ("retained_transport", "retained_endpoint")
+    projection_words = 7 if portable and source.stem == "retained_endpoint" else 0
     if fma:
         if not fp64 or portable or source.stem not in ("retained_transport", "retained_endpoint"):
             raise ValueError("FMA32 is qualified only for native-wide retained Transport and Endpoint")
@@ -183,12 +184,14 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
         if source.stem == "retained_transport":
             definitions.append("-DSIRIUS_RETAINED_PARALLEL_TRANSPORT=1")
             validate_portable_coefficients(source)
+        elif source.stem == "retained_endpoint":
+            definitions.append("-DSIRIUS_RETAINED_PARALLEL_ENDPOINT=1")
     original_inputs = ({"retained_camera": 32, "retained_ray_camera": 45}.get(source.stem, 0)
                        if portable else 0)
     coefficients = 25 if source.stem == "retained_transport" else 0
     if coefficients:
         definitions.append(f"-DSIRIUS_RETAINED_COEFFICIENTS={coefficients}")
-    if (registers * terms + original_inputs * 4 + coefficients * 5) * 4 + 8 > 16384:
+    if (registers * terms + original_inputs * 4 + coefficients * 5 + projection_words) * 4 + 8 > 16384:
         raise ValueError("retained program exceeds the portable shared-memory bound")
     definitions += [f"-DSIRIUS_RETAINED_REGISTERS={registers}",
                     f"-DSIRIUS_RETAINED_TERMS={terms}",
@@ -230,7 +233,7 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
             raise ValueError("portable retained stage lost its declared execution layout")
         if portable_parallel:
             if "OpControlBarrier" not in text:
-                raise ValueError("parallel portable Transport lost its inter-invocation join")
+                raise ValueError("parallel portable retained stage lost its inter-invocation join")
         elif "OpControlBarrier" in text:
             raise ValueError("serial portable stage retained an inter-invocation barrier")
         subprocess.run([validator, "--target-env", "vulkan1.2", str(raw)], check=True)

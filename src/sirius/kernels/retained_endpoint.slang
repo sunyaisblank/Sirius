@@ -4,6 +4,10 @@ import retained_triple;
 import retained_pair;
 [[vk::binding(0, 0)]] StructuredBuffer<uint> inputs;
 [[vk::binding(1, 0)]] RWStructuredBuffer<uint> outputs;
+#if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
+// Lane zero publishes success, component, and all five retained root words.
+groupshared uint retainedProjection[7];
+#endif
 RetainedTriple ReadStored(uint base) {
     RetainedTriple r;
     r.hi = RPFromBits(outputs[base]);
@@ -112,7 +116,7 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
     uint first = required == 20 ? 0 : SIRIUS_RETAINED_PREFIX;
     if (needed == 0 || needed > count || first > needed) return false;
     if (lane == 0) retainedStatus = 0;
-#ifndef SIRIUS_RETAINED_PORTABLE
+#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
     GroupMemoryBarrierWithGroupSync();
 #endif
     uint layerBase = programBase + 103 + 5 * count;
@@ -130,7 +134,7 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
             expected = end;
             continue;
         }
-#ifdef SIRIUS_RETAINED_PORTABLE
+#if defined(SIRIUS_RETAINED_PORTABLE) && !defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
         else {
             // Layer destinations are disjoint from every input register and
             // from one another; the generated plan releases inputs afterwards.
@@ -142,7 +146,7 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
                  !EvaluateOne(start + lane, row, rowBase, programBase, registers))
             RejectRetainedProgram();
 #endif
-#ifndef SIRIUS_RETAINED_PORTABLE
+#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
         GroupMemoryBarrierWithGroupSync();
 #endif
         if (retainedStatus != 0) return false;
@@ -158,7 +162,7 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
         for (uint i = 0; i < required; ++i)
             WriteStored(rowBase + 4 + i * 5, ReadValue(inputs[programBase + 3 + i], rowBase));
     }
-#ifndef SIRIUS_RETAINED_PORTABLE
+#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
     AllMemoryBarrierWithGroupSync();
 #endif
     return true;
@@ -478,7 +482,7 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
     uint rowWords = no / rows, rowBase = row * rowWords;
     if (rowWords < 769) return;
     for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
-#ifndef SIRIUS_RETAINED_PORTABLE
+#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
     AllMemoryBarrierWithGroupSync();
 #endif
     if (inputs[programBase + 2] != 100 || count > 65536 || registers != SIRIUS_RETAINED_REGISTERS ||
@@ -493,7 +497,7 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
         if (inputs[address + 4] != 1 || value.valid == 0) return;
         if (lane == 0) WriteStored(rowBase + 504 + 5 * i, value);
     }
-#ifndef SIRIUS_RETAINED_PORTABLE
+#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
     AllMemoryBarrierWithGroupSync();
 #endif
     RetainedTriple chart = ReadStored(rowBase + 504 + 5 * 44);
@@ -503,7 +507,7 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
         return;
     for (uint i = 45; i < 53; ++i)
         if (lane == 0) WriteStored(rowBase + 504 + 5 * i, RTConstant(i == 49 ? RPOne() : RPZero()));
-#ifndef SIRIUS_RETAINED_PORTABLE
+#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
     AllMemoryBarrierWithGroupSync();
 #endif
     bool flat = RTExact(ReadStored(rowBase + 504), RPZero()) &&
@@ -515,9 +519,37 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
     // and finally the curved continuation, sharing each large call body once.
     [loop] for (uint phase_index = 0; phase_index < 3; ++phase_index) {
         if (phase_index == 1) {
+#ifdef SIRIUS_RETAINED_PARALLEL_ENDPOINT
+            // The flat metric is lane-zero-owned; the curved prefix already
+            // joined its outputs. Publish either before the serial projection.
+            AllMemoryBarrierWithGroupSync();
+            if (lane == 0) {
+                retainedProjection[0] = Project(rowBase, component, root) ? 1u : 0u;
+                retainedProjection[1] = component;
+                retainedProjection[2] = RPBits(root.hi);
+                retainedProjection[3] = RPBits(root.lo);
+                retainedProjection[4] = RPBits(root.tail);
+                retainedProjection[5] = RPBits(root.error);
+                retainedProjection[6] = root.valid;
+            }
+            GroupMemoryBarrierWithGroupSync();
+            if (retainedProjection[0] == 0) return;
+            component = retainedProjection[1];
+            root.hi = RPFromBits(retainedProjection[2]);
+            root.lo = RPFromBits(retainedProjection[3]);
+            root.tail = RPFromBits(retainedProjection[4]);
+            root.error = RPFromBits(retainedProjection[5]);
+            root.valid = retainedProjection[6];
+#else
             if (!Project(rowBase, component, root)) return;
+#endif
             if (flat) {
                 if (component != 0) return;
+#ifdef SIRIUS_RETAINED_PARALLEL_ENDPOINT
+                // No collective remains in this flat path; lane zero retains
+                // the original ordered physical-column writes and refusals.
+                if (lane != 0) return;
+#endif
                 for (uint i = 0; i < 40; ++i) {
                     RetainedTriple phase = ReadStored(rowBase + 504 + 5 * (4 + i));
                     RetainedTriple physical = i % 8 == 4 ? RTNegate(phase) : phase;
@@ -549,8 +581,17 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
                     WriteStored(rowBase + 504 + 5 * (49 + i),
                                 RTConstant(i == component ? RPOne() : RPZero()));
             }
+#ifdef SIRIUS_RETAINED_PARALLEL_ENDPOINT
+            // Projected inputs 45..52 cross lanes before suffix evaluation.
+            AllMemoryBarrierWithGroupSync();
+#endif
         } else if (flat) {
+#ifndef SIRIUS_RETAINED_PARALLEL_ENDPOINT
             if (lane != 0) return;
+#else
+            // Nonowners must remain until the collective projection handoff.
+            if (lane == 0) {
+#endif
             for (uint i = 0; i < 4; ++i) {
                 for (uint j = 0; j < 4; ++j)
                     if (lane == 0)
@@ -560,6 +601,9 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
                 RetainedTriple p = ReadStored(rowBase + 504 + 5 * (8 + i));
                 if (lane == 0) WriteStored(rowBase + 4 + 5 * (16 + i), i == 0 ? RTNegate(p) : p);
             }
+#ifdef SIRIUS_RETAINED_PARALLEL_ENDPOINT
+            }
+#endif
         } else if (!EvaluateProgram(row, rowBase, programBase, count, registers,
                                     phase_index == 0 ? 20 : 100, lane)) return;
     }
