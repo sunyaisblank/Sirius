@@ -486,6 +486,31 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
                       << " safety reductions, " << progress.coalescing_wait_ms / 1000
                       << "s coalescing, " << progress.execute_ms / 1000 << "s batch execution, "
                       << progress.acceleration_ms / 1000 << "s summed worker acceleration\n";
+            // These cumulative host counters come from the dispatcher's locked
+            // completed-batch snapshot. Shared submit timing is reported once
+            // below; individual command counts still include both shared commands.
+            for (std::size_t i = 0; i < progress.stage_timing.size(); ++i) {
+                const auto& stage = progress.stage_timing[i];
+                std::clog << std::format(
+                    "[Vulkan] Retained cumulative physical stage: {}, "
+                    "kernel_commands_including_shared={}, individual_submit_wait_ms={:.6f}, "
+                    "individual_pipeline_setup_ms={:.6f}, individual_command_setup_ms={:.6f}, "
+                    "individual_cleanup_ms={:.6f}, individual_dispatch_total_ms_inclusive={:.6f}, "
+                    "write_buffer_ms={:.6f}, read_buffer_ms={:.6f}\n",
+                    backend::RetainedCompute::StageName(
+                        static_cast<backend::RetainedCompute::KernelStage>(i)),
+                    stage.submissions, stage.submit_wait_ms, stage.pipeline_setup_ms,
+                    stage.command_setup_ms, stage.cleanup_ms, stage.dispatch_total_ms,
+                    stage.write_buffer_ms, stage.read_buffer_ms);
+            }
+            const auto& shared = progress.endpoint_dense_timing;
+            std::clog << std::format(
+                "[Vulkan] Retained cumulative shared Endpoint/Dense host timing: "
+                "queue_submissions={}, submit_wait_ms={:.6f}, pipeline_setup_ms={:.6f}, "
+                "command_setup_ms={:.6f}, cleanup_ms={:.6f}, "
+                "dispatch_total_ms_inclusive={:.6f}\n",
+                shared.submissions, shared.submit_wait_ms, shared.pipeline_setup_ms,
+                shared.command_setup_ms, shared.cleanup_ms, shared.dispatch_total_ms);
             next_progress = std::chrono::steady_clock::now() + std::chrono::seconds(30);
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(10));

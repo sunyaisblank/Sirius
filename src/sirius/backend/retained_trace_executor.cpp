@@ -196,6 +196,13 @@ void RetainedTraceExecutor::Run() {
         const double peak = feedback.peak_ms;
         {
             std::lock_guard lock(mutex_);
+            // The owning dispatcher has returned from every synchronous device
+            // call in this batch and any private retry. Publish a copied view;
+            // progress readers must never read the live compute counters.
+            if (!draining_error) {
+                stats_.stage_timing = compute_.Statistics();
+                stats_.endpoint_dense_timing = compute_.EndpointDenseStatistics();
+            }
             ++stats_.batches;
             ++stats_.batch_row_counts[batch.size()];
             if (full_batch) ++stats_.full_batches;

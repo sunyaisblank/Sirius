@@ -63,6 +63,14 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
         double coalescing_wait_ms = 0;
         double maximum_coalescing_wait_ms = 0;
         double execute_ms = 0;  // Serialized, including packing and device calls.
+        // Cumulative physical compute counters, copied by the dispatcher only
+        // after a complete batch (including private retry and returned failures).
+        // Preparation has separate counters. Earlier serialized work on the
+        // same compute, if any, remains included in these cumulative values.
+        // Stage counts include shared commands; shared submission timing lives
+        // only in endpoint_dense_timing, so it must be counted once.
+        std::array<RetainedCompute::StageStats, 6> stage_timing{};
+        RetainedCompute::StageStats endpoint_dense_timing{};
         // Summed worker intervals can overlap each other and the dispatcher.
         // They are not an exclusive component of render wall time.
         std::uint64_t acceleration_calls = 0;
