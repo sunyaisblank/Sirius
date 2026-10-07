@@ -8,8 +8,14 @@ void RetainedSum32(RPScalar a,RPScalar b,out RPScalar hi,out RPScalar lo){
  // Both inputs lie on the 2^-126 lattice. Every nonzero result of this
  // ordered FastTwoSum is normal; the 2^126 ceiling excludes overflow.
  // The optional Transport module declares RTE32 and validates all three
- // NoContraction decorations. Zero/special/out-of-domain inputs keep the integer path.
+ // NoContraction decorations. Special/out-of-domain inputs keep the integer path.
  uint am=RPBits(a)&0x7fffffffu,bm=RPBits(b)&0x7fffffffu;
+#if defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
+ // Magnitude-ordered finite plus zero is exact, including its residual sign.
+ if(bm==0u&&am<0x7f800000u) {
+  hi=am!=0u?a:RPFromBits(RPBits(a)&RPBits(b));lo=b;return;
+ }
+#endif
  if(am>=0x0c000000u&&am<=0x7e800000u&&bm>=0x0c000000u&&bm<=0x7e800000u) {
   float af=asfloat(RPBits(a)),bf=asfloat(RPBits(b));
   float sum=spirv_asm {
