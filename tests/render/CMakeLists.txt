@@ -6,6 +6,7 @@
 # lib/stb and lib/tinyexr include paths.
 
 add_executable(sirius_render_tests
+    alcubierre_acceptance_test.cpp
     app_render_execution_test.cpp
     geodesic_tracer_test.cpp
     exr_writer_test.cpp

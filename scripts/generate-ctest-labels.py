@@ -43,6 +43,7 @@ SUITE_LABELS = {
     "CameraContinuousProjection": MANDATORY,
     "CoupledTransport": MANDATORY,
     "FullPathAcceptance": MANDATORY,
+    "CpuAlcubierreAcceptance": MANDATORY,
     "ChargedReference": MANDATORY,
     "PolarisationAcceptance": MANDATORY,
     "VolumeAcceptance": MANDATORY,

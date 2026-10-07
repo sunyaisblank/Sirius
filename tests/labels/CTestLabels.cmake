@@ -1367,6 +1367,7 @@ set_tests_properties(
     CameraWorldlineTest.InvalidInternalWorldlineFailsClosed
     CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels
     CameraWorldlineTest.ZeroVelocityIsExactlyRepresented
+    CpuAlcubierreAcceptance.PublicCentreRaysMatchIndependentFiniteAxialOrbits
     CpuTraceBoundary.HorizonlessKerrSchildFamiliesKeepTheirNativeTraceChart
     CpuTraceBoundary.LateMinimumStepsPreserveAnalyticAffineAndJacobiLength
     CpuTraceBoundary.PastRadialHorizonIsAnAcceptedFiniteOutgoingEvent

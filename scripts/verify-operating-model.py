@@ -380,6 +380,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:KernelParity.Cie1931TwoDegreeFitMatchesHostAuthority",
     },
     "E1": {
+        "gtest:CpuAlcubierreAcceptance.PublicCentreRaysMatchIndependentFiniteAxialOrbits",
         "gtest:ChargedReference.ExteriorChartShiftMatchesIndependentQuadrature",
         "gtest:ChargedReference.SphericalRadialCaptureMatchesExactAffineAndTangent",
         "gtest:FullPathAcceptance.CpuChargedFiniteEventsMapsAndRefinement",
@@ -483,9 +484,9 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "d654c9741b41de5361e087e66f1375942c7a9e5ae01b0d1ad86635982ea87385",
+    "acceptance_criteria": "8e74eb19e4bbb32ba76ee27f8e7501d54f59e3bbb76e7afa87715a5812a8a4f3",
     "required_dimensions": "15f5ac8ea592f9b7da14c3673e20d063ab9a774cba2c267329e9026420acf78d",
-    "capability_contracts": "b7983f8dbc492bddcb91ffda76605c5c89c9c467f71d0b4a2d7991484c489a03",
+    "capability_contracts": "4a32b1a16171759ce66d99f1c4370975424b87d3f36d6574f840efb8360a9bda",
 }
 # These groups match concrete optional compile boundaries. CPU transport tests
 # are always required, including on hosts without Vulkan development files.
