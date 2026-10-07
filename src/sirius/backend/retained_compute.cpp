@@ -150,11 +150,15 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
     if (!status) return std::unexpected(status.error());
     const bool fma = fp64_products && !portable && device.Info().fma_fp32_enabled &&
                      device.Info().preserves_fp32_signed_zero_inf_nan;
+    // The normal-lattice transform needs RTE32 but no denormal preservation.
+    // Adapters without RTE32 retain the pure-integer portable modules.
+    const bool normal_sum = portable && device.Info().rounds_fp32_to_nearest;
     const std::span<const std::uint32_t> transport =
-        fma && kTransportFmaAvailable
-            ? std::span(kTransportFmaShader)
-            : shader(kTransportShader, kTransportFp64Shader, kTransportPortableShader,
-                     kTransportPortableFp64Shader);
+        normal_sum ? std::span(kTransportPortableNormalSumShader)
+                   : (fma && kTransportFmaAvailable
+                          ? std::span(kTransportFmaShader)
+                          : shader(kTransportShader, kTransportFp64Shader, kTransportPortableShader,
+                                   kTransportPortableFp64Shader));
     status = create(result->transport_, KernelStage::kTransport, transport);
     if (!status) return std::unexpected(status.error());
     const std::span<const std::uint32_t> endpoint =

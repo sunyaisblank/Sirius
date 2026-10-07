@@ -48,6 +48,58 @@ def native_controls(text, fma=False):
     return text.replace(local_size, local_size + modes, 1)
 
 
+def portable_normal_sum_controls(text):
+    """Admit only the guarded, ordered binary32 FastTwoSum transform."""
+    if (re.findall(r"OpCapability (\S+)", text) != ["Shader"] or
+            set(re.findall(r"OpTypeInt (\d+) [01]", text)) != {"32"} or
+            re.findall(r"OpTypeFloat (\d+)", text) != ["32"]):
+        raise ValueError("portable normal sum introduced an optional type or capability")
+    if re.search(r"\b(?:FPFastMathMode|FPFastMathDefault|RelaxedPrecision|OpFmaKHR)\b", text):
+        raise ValueError("portable normal sum introduced relaxed or fused arithmetic")
+    if re.search(r"OpExecutionMode\S* .* (?:Denorm|RoundingMode|SignedZeroInfNan)", text):
+        raise ValueError("portable normal sum introduced an unqualified float mode")
+    float_type = re.search(r"(%\S+) = OpTypeFloat 32", text)[1]
+    operations = re.findall(r"(%\S+) = (OpF(?!unction)\S+) (%\S+) ", text)
+    bodies = [body for body in re.findall(r"%\S+ = OpFunction .*?OpFunctionEnd", text, re.S)
+              if re.search(r"= OpF(?!unction)", body)]
+    expected = []
+    if not bodies:
+        raise ValueError("portable normal sum lost its guarded arithmetic")
+    for body in bodies:
+        if (not re.match(r"%RetainedSum32(?:_\d+)? = OpFunction ", body) or
+                re.findall(r"= (OpF(?!unction)\S+) ", body) != ["OpFAdd", "OpFSub", "OpFSub"]):
+            raise ValueError("portable normal sum changed its ordered three-operation body")
+        expected.extend(["OpFAdd", "OpFSub", "OpFSub"])
+        links = re.findall(r"(%\S+) = OpF(?:Add|Sub) %\S+ (%\S+) (%\S+)", body)
+        copies = dict(re.findall(r"(%\S+) = OpCopyObject " + re.escape(float_type) + r" (%\S+)", body))
+        def origin(value):
+            seen = set()
+            while value in copies:
+                if value in seen:
+                    raise ValueError("portable normal sum has a cyclic copy chain")
+                seen.add(value)
+                value = copies[value]
+            return value
+        total, a, b = links[0]
+        displaced, left, right = links[1]
+        _, residual_left, residual_right = links[2]
+        if (origin(left) != total or origin(right) != origin(a) or
+                origin(residual_left) != origin(b) or origin(residual_right) != displaced):
+            raise ValueError("portable normal sum changed its FastTwoSum dependency chain")
+    decorated = set(re.findall(r"OpDecorate (%\S+) NoContraction", text))
+    if ([op for _, op, _ in operations] != expected or
+            any(value not in decorated or kind != float_type for value, _, kind in operations)):
+        raise ValueError("portable normal sum lost binary32 operation ordering or NoContraction")
+    if (re.search(r"\bOpConvert(?:FTo[SU]|[SU]ToF)\b|\bOpDot\b|\bOpQuantizeToF16\b|"
+                  r"\bOp(?:Vector|Matrix)Times\w+\b|\bOpOuterProduct\b", text) or
+            re.search(r"= OpExtInst " + re.escape(float_type) + r" ", text)):
+        raise ValueError("portable normal sum introduced additional floating arithmetic")
+    entry = re.search(r"OpEntryPoint GLCompute (%\S+)", text)[1]
+    text = text.replace("OpCapability Shader", "OpCapability Shader\n               OpCapability RoundingModeRTE", 1)
+    local_size = re.search(r"^.*OpExecutionMode " + re.escape(entry) + r" LocalSize.*$", text, re.M)[0]
+    return text.replace(local_size, local_size + "\n               OpExecutionMode " + entry + " RoundingModeRTE 32", 1)
+
+
 def supports_fma32(directory, compiler, assembler, disassembler, validator):
     # Probe only toolset capability. Errors in the real candidate remain fatal.
     # Ordinary GLSL Fma does not guarantee the fused, correctly rounded residual.
@@ -169,12 +221,16 @@ def validate_portable_coefficients(source):
             raise ValueError(f"retained tableau slot {slot} does not enclose its exact rational")
 
 
-def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False):
+def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False, normal_sum32=False):
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
     portable_parallel = portable and source.stem in ("retained_transport", "retained_endpoint", "retained_dense")
     projection_words = 7 if portable and source.stem == "retained_endpoint" else 0
+    if normal_sum32:
+        if not portable or source.stem != "retained_transport":
+            raise ValueError("guarded normal sums are qualified only for portable Transport")
+        definitions.append("-DSIRIUS_RETAINED_NORMAL_SUM32=1")
     if fma:
         if not fp64 or portable or source.stem not in ("retained_transport", "retained_endpoint"):
             raise ValueError("FMA32 is qualified only for native-wide retained Transport and Endpoint")
@@ -222,12 +278,15 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     text = assembly.read_text()
     if portable:
         # Inspect the exact module being embedded, not an adjacent cached dump.
-        # Software RTE/gradual underflow must never depend on native float modes.
+        # Legacy portable modules supply RTE/gradual underflow with integers.
+        # The separate normal-sum variant admits only guarded normal arithmetic.
         capabilities = re.findall(r"OpCapability (\S+)", text)
         integer_widths = re.findall(r"OpTypeInt (\d+) [01]", text)
         if capabilities != ["Shader"] or not integer_widths or set(integer_widths) != {"32"}:
             raise ValueError("portable retained stage introduced an optional capability or non-32-bit integer")
-        if "OpTypeFloat" in text or re.search(r"OpExecutionMode\S* .* (?:Denorm|RoundingMode|SignedZeroInfNan)", text):
+        if normal_sum32:
+            text = portable_normal_sum_controls(text)
+        elif "OpTypeFloat" in text or re.search(r"OpExecutionMode\S* .* (?:Denorm|RoundingMode|SignedZeroInfNan)", text):
             raise ValueError("portable retained stage depends on native floating arithmetic")
         entry = re.search(r"OpEntryPoint GLCompute (%\S+)", text)[1]
         execution_lanes = WORKGROUP_LANES if portable_parallel else 1
@@ -238,8 +297,15 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
                 raise ValueError("parallel portable retained stage lost its inter-invocation join")
         elif "OpControlBarrier" in text:
             raise ValueError("serial portable stage retained an inter-invocation barrier")
-        subprocess.run([validator, "--target-env", "vulkan1.2", str(raw)], check=True)
-        raw.replace(destination)
+        if normal_sum32:
+            assembly.write_text(text)
+            subprocess.run([assembler, "--target-env", "spv1.5", str(assembly), "-o", str(destination)],
+                           check=True)
+            subprocess.run([validator, "--target-env", "vulkan1.2", str(destination)], check=True)
+            raw.unlink()
+        else:
+            subprocess.run([validator, "--target-env", "vulkan1.2", str(raw)], check=True)
+            raw.replace(destination)
         data = destination.read_bytes()
         assembly.unlink()
         return struct.unpack("<" + str(len(data) // 4) + "I", data)
@@ -303,6 +369,19 @@ def main():
                                   program.get("prefix_instructions", 0), fp64=wide, portable=portable, optimizer=args.optimizer)
             array("k" + kind + name + "Shader", code)
             sizes.append(len(code) * 4)
+        if kind == "Transport":
+            # Portable products use the same integer owner in both host modes.
+            # Refuse sharing if a future macro change makes their modules differ.
+            if ((args.output.parent / (stem + "_portable.spv")).read_bytes() !=
+                    (args.output.parent / (stem + "_portable_fp64.spv")).read_bytes()):
+                raise ValueError("shared portable normal sum requires identical product modules")
+            code = compile_shader(source / (stem + ".slang"),
+                args.output.parent / (stem + "_portable_normal_sum.spv"),
+                args.compiler, args.assembler, args.disassembler, args.validator,
+                program["registers"], terms, len(program["layer_offsets"])-1,
+                program.get("prefix_instructions", 0), portable=True,
+                optimizer=args.optimizer, normal_sum32=True)
+            array("kTransportPortableNormalSumShader", code)
         if kind in ("Transport", "Endpoint"):
             destination = args.output.parent / (stem + "_fma.spv")
             lines.append(f"inline constexpr bool k{kind}FmaAvailable = {'true' if fma_available else 'false'};")

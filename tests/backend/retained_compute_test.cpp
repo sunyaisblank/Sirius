@@ -352,8 +352,33 @@ TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideProductsAndPreservesAlloc
             ASSERT_TRUE(created);
             ASSERT_EQ(control.loaded_codes.size(), 6U);
             ASSERT_EQ(candidate.loaded_codes.size(), 6U);
+            const bool portable = (mask & 3u) != 3u;
+            const auto expected = [portable, wide](std::span<const std::uint32_t> native,
+                                                   std::span<const std::uint32_t> native_wide,
+                                                   std::span<const std::uint32_t> integer,
+                                                   std::span<const std::uint32_t> integer_wide) {
+                return portable ? (wide ? integer_wide : integer) : (wide ? native_wide : native);
+            };
+            std::array<std::span<const std::uint32_t>, 6> stages{
+                expected(kCameraShader, kCameraFp64Shader, kCameraPortableShader,
+                         kCameraPortableFp64Shader),
+                expected(kTransportShader, kTransportFp64Shader, kTransportPortableShader,
+                         kTransportPortableFp64Shader),
+                expected(kEndpointShader, kEndpointFp64Shader, kEndpointPortableShader,
+                         kEndpointPortableFp64Shader),
+                expected(kDenseShader, kDenseFp64Shader, kDensePortableShader,
+                         kDensePortableFp64Shader),
+                expected(kInitializeShader, kInitializeFp64Shader, kInitializePortableShader,
+                         kInitializePortableFp64Shader),
+                expected(kRayCameraShader, kRayCameraFp64Shader, kRayCameraPortableShader,
+                         kRayCameraPortableFp64Shader)};
+            if ((mask & 3u) == 2u) stages[1] = std::span(kTransportPortableNormalSumShader);
             const bool eligible = wide && mask == 15u;
             for (std::size_t stage = 0; stage < 6; ++stage) {
+                // The baseline excludes FMA and independently checks native,
+                // pure-integer fallback and RTE32-only Transport selection.
+                EXPECT_EQ(control.loaded_codes[stage],
+                          (std::vector<std::uint32_t>(stages[stage].begin(), stages[stage].end())));
                 if (stage == 1 && eligible && kTransportFmaAvailable) {
                     EXPECT_EQ(candidate.loaded_codes[stage],
                               (std::vector<std::uint32_t>(kTransportFmaShader.begin(),

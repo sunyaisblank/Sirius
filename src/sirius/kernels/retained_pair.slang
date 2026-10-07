@@ -4,6 +4,35 @@ import retained_scalar;
 // The longer Knuth chain lost a correction in the combined camera pipeline.
 void RetainedSum32(RPScalar a,RPScalar b,out RPScalar hi,out RPScalar lo){
  if((RPBits(a)&0x7fffffffu)<(RPBits(b)&0x7fffffffu)){RPScalar t=a;a=b;b=t;}
+#if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_NORMAL_SUM32)
+ // Both inputs lie on the 2^-126 lattice. Every nonzero result of this
+ // ordered FastTwoSum is normal; the 2^126 ceiling excludes overflow.
+ // The optional Transport module declares RTE32 and validates all three
+ // NoContraction decorations. Zero/special/out-of-domain inputs keep the integer path.
+ uint am=RPBits(a)&0x7fffffffu,bm=RPBits(b)&0x7fffffffu;
+ if(am>=0x0c000000u&&am<=0x7e800000u&&bm>=0x0c000000u&&bm<=0x7e800000u) {
+  float af=asfloat(RPBits(a)),bf=asfloat(RPBits(b));
+  float sum=spirv_asm {
+   OpFAdd $$float %v $af $bf;
+   OpDecorate %v NoContraction;
+   OpCopyObject $$float result %v;
+  };
+  float displaced=spirv_asm {
+   OpFSub $$float %v $sum $af;
+   OpDecorate %v NoContraction;
+   OpCopyObject $$float result %v;
+  };
+  float residual=spirv_asm {
+   OpFSub $$float %v $bf $displaced;
+   OpDecorate %v NoContraction;
+   OpCopyObject $$float result %v;
+  };
+  uint high=asuint(sum),low=asuint(residual);
+  hi=RPFromBits((high&0x7fffffffu)==0u?0u:high);
+  lo=RPFromBits((low&0x7fffffffu)==0u?0u:low);
+  return;
+ }
+#endif
 #ifdef SIRIUS_RETAINED_PORTABLE
  // Preserve the three ordered sums while sharing their integer body.
  RPScalar x=a,y=b;
