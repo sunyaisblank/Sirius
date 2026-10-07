@@ -367,6 +367,8 @@ set_tests_properties(
     CpuTraceBoundary.OrdinaryEscapeExcludesDiskAndVolumeBeyondBoundary
     CpuTraceBoundary.OneSheetEllisNamesTheRegularThroatBoundary
     CpuTraceBoundary.TwoSheetEllisCrossesThroatAndReachesInversionMatchedInfinity
+    CpuTraceBoundary.EllisReferenceRetainsExactRadialLengthAndIndependentRefinement
+    CpuTraceBoundary.NonradialEllisFiniteEventsMatchIndependentQuadrature
     CpuTraceBoundary.KottlerBothPastHorizonsRetainRadialAffineOracleAndTracerReuse
     CpuTraceBoundary.KottlerOverlapPreservesCoupledSourceMapAgainstNativeChart
     PROPERTIES LABELS "Mandatory;Correctness"

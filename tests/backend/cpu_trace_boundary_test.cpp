@@ -8,6 +8,8 @@
 #include "sirius/core/metrics/morris_thorne_family.h"
 #include "sirius/core/metrics/registry.h"
 
+#include "support/ellis_geodesic_reference.h"
+
 #include <gtest/gtest.h>
 
 #include <cmath>
@@ -652,6 +654,91 @@ TEST(CpuTraceBoundary, TwoSheetEllisCrossesThroatAndReachesInversionMatchedInfin
         const double terminal_l =
             sirius::core::EllisProperRadialDistanceFromIsotropic(b0, opposite_radius);
         EXPECT_NEAR(trace.affine_length, launch_l - terminal_l, 3.0e-3 * b0);
+    }
+}
+
+TEST(CpuTraceBoundary, EllisReferenceRetainsExactRadialLengthAndIndependentRefinement) {
+    namespace reference = sirius::test::ellis_reference;
+    for (const long double terminal_rho : {0.5L, 1.0L / 48}) {
+        const auto radial = reference::Orbit(8, terminal_rho, 0, terminal_rho < 0.5L, 8192);
+        const long double exact = 8 - 1.0L / 32 - terminal_rho + 1 / (4 * terminal_rho);
+        EXPECT_NEAR(radial.affine, exact, 1.0e-8L);
+        EXPECT_EQ(radial.angle, 0);
+        EXPECT_NEAR(radial.sky[1], terminal_rho < 0.5L ? 1 : -1, 1.0e-14L);
+    }
+    EXPECT_THROW(reference::Orbit(8, 12, 1, false, 8192), std::invalid_argument);
+}
+
+TEST(CpuTraceBoundary, NonradialEllisFiniteEventsMatchIndependentQuadrature) {
+    namespace reference = sirius::test::ellis_reference;
+    using sirius::core::WormholeTopology;
+    constexpr double kEnvelope = 1.0e-4;
+    for (const double b0 : {0.1, 1.0, 1000.0}) {
+        sirius::core::MetricConstructionParameters parameters;
+        parameters.mass = 0;
+        parameters.throat_radius = b0;
+        auto metric = sirius::core::CreateCpuMetric(MetricId::MorrisThorne, parameters);
+        ASSERT_NE(metric, nullptr);
+        for (const double impact : {0.5, -0.95, 1.05, -2.0}) {
+            for (const auto topology : {WormholeTopology::OneSheetCapture,
+                                        WormholeTopology::TwoSheet}) {
+                const bool reflection = std::abs(impact) > 1;
+                const bool opposite = !reflection && topology == WormholeTopology::TwoSheet;
+                const float stored_boundary = static_cast<float>(12 * b0);
+                const long double boundary = static_cast<long double>(stored_boundary) / b0;
+                const long double terminal_rho =
+                    reflection ? boundary : (opposite ? 1 / (4 * boundary) : 0.5L);
+                const auto coarse = reference::Orbit(8, terminal_rho, impact, opposite, 4096);
+                const auto expected = reference::Orbit(8, terminal_rho, impact, opposite, 8192);
+                ASSERT_LT(std::abs(coarse.angle - expected.angle), 1.0e-6L);
+                ASSERT_LT(std::abs(coarse.affine - expected.affine), 1.0e-6L);
+                for (int axis = 0; axis < 4; ++axis) {
+                    ASSERT_LT(std::abs(coarse.position[axis] - expected.position[axis]), 1.0e-6L);
+                    ASSERT_LT(std::abs(coarse.tangent[axis] - expected.tangent[axis]), 1.0e-6L);
+                    ASSERT_LT(std::abs(coarse.sky[axis] - expected.sky[axis]), 1.0e-6L);
+                }
+                for (const double maximum_step : {0.25, 0.125, 0.0625}) {
+                    SCOPED_TRACE(::testing::Message() << "b0=" << b0 << " J/b0=" << impact
+                        << " opposite=" << opposite << " topology=" << static_cast<int>(topology)
+                        << " max_step/b0=" << maximum_step);
+                    TracerConfig config;
+                    config.escape_radius = stored_boundary;
+                    config.horizon_factor = 1;
+                    config.wormhole_topology = topology;
+                    config.enable_disk = false;
+                    config.max_steps = 20000;
+                    config.integrator.initial_step = static_cast<float>(maximum_step * b0);
+                    config.integrator.max_step = config.integrator.initial_step;
+                    config.integrator.min_step = static_cast<float>(1.0e-6 * b0);
+                    config.integrator.abs_tolerance = 1.0e-7f;
+                    config.integrator.rel_tolerance = 1.0e-7f;
+                    CameraRay ray;
+                    ray.origin(1) = 8 * b0;
+                    ray.origin(2) = std::numbers::pi / 2;
+                    ray.direction(3) = impact / (8 + 1.0 / 32);
+                    ray.direction(1) = -std::sqrt(1 - ray.direction(3) * ray.direction(3));
+                    GeodesicTracer tracer(metric.get(), config);
+                    const auto actual = tracer.Trace(ray);
+                    ASSERT_EQ(actual.outcome, reflection || opposite ? TraceResult::Outcome::Escaped
+                                                                       : TraceResult::Outcome::Throat);
+                    ASSERT_FALSE(actual.numerical_failure);
+                    ASSERT_FALSE(actual.cancelled);
+                    ASSERT_EQ(actual.integrator_termination, 0);
+                    ASSERT_EQ(actual.terminal_chart, TraceResult::TerminalChart::MetricNative);
+                    ASSERT_EQ(actual.asymptotic_sheet, opposite ? TraceResult::AsymptoticSheet::Opposite
+                                                              : TraceResult::AsymptoticSheet::Observer);
+                    ASSERT_TRUE(actual.final_tangent.has_value());
+                    EXPECT_NEAR(actual.affine_length / b0, expected.affine, kEnvelope);
+                    for (int axis = 0; axis < 4; ++axis) {
+                        EXPECT_NEAR(actual.final_position(axis) / b0, expected.position[axis], kEnvelope);
+                        EXPECT_NEAR((*actual.final_tangent)(axis), expected.tangent[axis], kEnvelope);
+                        if (reflection || opposite) {
+                            EXPECT_NEAR(actual.final_direction(axis), expected.sky[axis], kEnvelope);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
