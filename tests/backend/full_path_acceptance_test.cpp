@@ -263,7 +263,7 @@ std::vector<Witness> BuildWitnesses(const std::vector<Case>& cases) {
         // inner-flow error. Refine the expectation rather than reducing
         // its witness set or admitting a larger uncertainty budget.
         const bool critical = c.name.find("critical") != std::string::npos;
-        const Scalar coarse_step = critical ? .001L : .002L;
+        const Scalar coarse_step = critical ? (c.charge_ratio != 0 ? .0005L : .001L) : .002L;
         const Scalar fine_step = coarse_step / 2;
         const double narrow_spacing = critical ? 5e-5 : 1e-4;
         const double wide_spacing = 2 * narrow_spacing;
