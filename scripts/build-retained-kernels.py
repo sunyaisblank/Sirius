@@ -173,6 +173,7 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
+    portable_parallel = portable and source.stem == "retained_transport"
     if fma:
         if not fp64 or portable or source.stem not in ("retained_transport", "retained_endpoint"):
             raise ValueError("FMA32 is qualified only for native-wide retained Transport and Endpoint")
@@ -180,6 +181,7 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     if portable:
         definitions.append("-DSIRIUS_RETAINED_PORTABLE=1")
         if source.stem == "retained_transport":
+            definitions.append("-DSIRIUS_RETAINED_PARALLEL_TRANSPORT=1")
             validate_portable_coefficients(source)
     original_inputs = ({"retained_camera": 32, "retained_ray_camera": 45}.get(source.stem, 0)
                        if portable else 0)
@@ -191,7 +193,7 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     definitions += [f"-DSIRIUS_RETAINED_REGISTERS={registers}",
                     f"-DSIRIUS_RETAINED_TERMS={terms}",
                     f"-DSIRIUS_RETAINED_LANES={WORKGROUP_LANES}",
-                    f"-DSIRIUS_RETAINED_EXECUTION_LANES={1 if portable else WORKGROUP_LANES}",
+                    f"-DSIRIUS_RETAINED_EXECUTION_LANES={WORKGROUP_LANES if portable_parallel or not portable else 1}",
                     f"-DSIRIUS_RETAINED_LAYERS={layers}",
                     f"-DSIRIUS_RETAINED_PREFIX={prefix}"]
     float_controls = [] if portable else ["-denorm-mode-fp32", "preserve"]
@@ -223,9 +225,13 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
         if "OpTypeFloat" in text or re.search(r"OpExecutionMode\S* .* (?:Denorm|RoundingMode|SignedZeroInfNan)", text):
             raise ValueError("portable retained stage depends on native floating arithmetic")
         entry = re.search(r"OpEntryPoint GLCompute (%\S+)", text)[1]
-        if f"OpExecutionMode {entry} LocalSize 1 1 1" not in text:
-            raise ValueError("portable retained stage lost its one-invocation-per-ray layout")
-        if "OpControlBarrier" in text:
+        execution_lanes = WORKGROUP_LANES if portable_parallel else 1
+        if f"OpExecutionMode {entry} LocalSize {execution_lanes} 1 1" not in text:
+            raise ValueError("portable retained stage lost its declared execution layout")
+        if portable_parallel:
+            if "OpControlBarrier" not in text:
+                raise ValueError("parallel portable Transport lost its inter-invocation join")
+        elif "OpControlBarrier" in text:
             raise ValueError("serial portable stage retained an inter-invocation barrier")
         subprocess.run([validator, "--target-env", "vulkan1.2", str(raw)], check=True)
         raw.replace(destination)

@@ -121,7 +121,7 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
     uint needed = count;
     if (needed == 0 || needed > count) return false;
     if (lane == 0) retainedStatus = 0;
-#ifndef SIRIUS_RETAINED_PORTABLE
+#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
     GroupMemoryBarrierWithGroupSync();
 #endif
     uint layerBase = programBase + 43 + 5 * count;
@@ -133,7 +133,7 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
         if (start != expected || end <= start || end > needed ||
             end - start > SIRIUS_RETAINED_LANES)
             RejectRetainedProgram();
-#ifdef SIRIUS_RETAINED_PORTABLE
+#if defined(SIRIUS_RETAINED_PORTABLE) && !defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
         else {
             // Layer destinations are disjoint from every input register and
             // from one another; the generated plan releases inputs afterwards.
@@ -145,14 +145,14 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
                  !EvaluateOne(start + lane, row, rowBase, programBase, registers))
             RejectRetainedProgram();
 #endif
-#ifndef SIRIUS_RETAINED_PORTABLE
+#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
         GroupMemoryBarrierWithGroupSync();
 #endif
         if (retainedStatus != 0) return false;
         expected = end;
     }
 
-#ifdef SIRIUS_RETAINED_PORTABLE
+#if defined(SIRIUS_RETAINED_PORTABLE) && !defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
     for (uint i = 0; i < 40; ++i) {
         uint index = inputs[programBase + 3 + i];
         if (index >= registers || ReadValue(index, rowBase).valid == 0) return false;
@@ -177,7 +177,7 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
         WriteStored(rowBase + 1004 + stage * 200 + i * 5,
                     ReadValue(inputs[programBase + 3 + i], rowBase));
 #endif
-#ifndef SIRIUS_RETAINED_PORTABLE
+#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
     AllMemoryBarrierWithGroupSync();
 #endif
     return true;
@@ -461,7 +461,7 @@ RetainedTriple ReadCoefficient(uint index) {
     uint rowWords = no / rows, rowBase = row * rowWords;
     if (rowWords < 2404) return;
     for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
-#ifndef SIRIUS_RETAINED_PORTABLE
+#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
     AllMemoryBarrierWithGroupSync();
 #endif
     if (inputs[programBase + 2] != 40 || count > 65536 || registers != SIRIUS_RETAINED_REGISTERS ||
@@ -505,7 +505,7 @@ RetainedTriple ReadCoefficient(uint index) {
         if (lane == 0) outputs[rowBase + 1] = 7;
         return;
     }
-#ifndef SIRIUS_RETAINED_PORTABLE
+#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
     // The immutable plan leaves never-assigned slots invalid across all stages.
     // The existing stage-zero barrier publishes this disjoint validity clear.
     for (uint index = lane; index < SIRIUS_RETAINED_REGISTERS;
@@ -514,7 +514,7 @@ RetainedTriple ReadCoefficient(uint index) {
 #endif
     for (uint stage = 0; stage < 7; ++stage) {
         if (lane == 0) retainedStatus = 0;
-#ifdef SIRIUS_RETAINED_PORTABLE
+#if defined(SIRIUS_RETAINED_PORTABLE) && !defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
         // One invocation owns this row; cache all complete coefficients after
         // stage zero succeeds, before their first use. No inter-invocation join.
         if (stage == 1)
@@ -546,7 +546,7 @@ RetainedTriple ReadCoefficient(uint index) {
             if (value.valid == 0) RejectRetainedProgram();
             WriteStored(rowBase + 804 + i * 5, value);
         }
-#ifndef SIRIUS_RETAINED_PORTABLE
+#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
         AllMemoryBarrierWithGroupSync();
 #endif
         if (retainedStatus != 0) return;
@@ -554,7 +554,7 @@ RetainedTriple ReadCoefficient(uint index) {
         if (!EvaluateProgram(row, rowBase, programBase, count, registers, stage, lane)) return;
     }
     if (lane == 0) retainedStatus = 0;
-#ifndef SIRIUS_RETAINED_PORTABLE
+#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
     GroupMemoryBarrierWithGroupSync();
 #endif
     for (uint i = lane; i < 40; i += SIRIUS_RETAINED_EXECUTION_LANES) {
@@ -572,7 +572,7 @@ RetainedTriple ReadCoefficient(uint index) {
         WriteStored(rowBase + 4 + 40 * 5 + i * 5, lower);
         WriteStored(rowBase + 4 + 120 * 5 + i * 5, error);
     }
-#ifndef SIRIUS_RETAINED_PORTABLE
+#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
     AllMemoryBarrierWithGroupSync();
 #endif
     if (retainedStatus != 0) return;
