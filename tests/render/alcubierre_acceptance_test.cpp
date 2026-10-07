@@ -152,6 +152,9 @@ TEST(CpuAlcubierreAcceptance, PublicCentreRaysMatchIndependentFiniteAxialOrbits)
             ASSERT_GT(actual.affine_length, 0);
             ASSERT_GT(actual.steps_taken, 0);
             ASSERT_LE(actual.steps_taken, config.max_steps);
+            ASSERT_GT(actual.central_stages, 0);
+            ASSERT_GT(actual.variation_stages, 0);
+            ASSERT_GT(actual.variation_metric_evaluations, 0);
             maximum_steps = std::max(maximum_steps, actual.steps_taken);
             const long double affine_error =
                 std::abs(actual.affine_length - expected.affine) / scale;

@@ -6,6 +6,7 @@
 #include "sirius/core/constants.h"
 #include "sirius/core/disk/novikov_thorne_disk.h"
 #include "sirius/core/metrics/morris_thorne_family.h"
+#include "sirius/core/metrics/warp_drive_family.h"
 #include "sirius/core/observer_frame.h"
 #include "sirius/core/spectral/colour_modes.h"
 #include "sirius/core/trace_boundary.h"
@@ -654,11 +655,14 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
     const auto launch_screen = relativity::ObserverScreenBasis(launch_frame, launch_direction);
     SIRIUS_ASSERT(launch_screen.has_value());
 
-    // Every Kerr-family ray monitors the same two angular and two spatial
-    // columns. Output toggles cannot select a different central trajectory.
+    // Kerr-family and moving-warp rays monitor the same two angular and two
+    // spatial columns. Projected endpoint and dense/event comparisons expose
+    // normalization drift that a pre-projection embedded pair can miss.
+    // Output toggles cannot select a different central trajectory.
     const auto* family =
         outgoing_chart_ ? &outgoing_chart_->Source() : dynamic_cast<KerrSchildFamily*>(metric_);
-    const bool use_coupled = family != nullptr;
+    const auto* warp = dynamic_cast<WarpDriveFamily*>(metric_);
+    const bool use_coupled = family != nullptr || warp != nullptr;
     const bool can_handoff_to_infinity =
         allow_infinity_handoff && family && family->GetParams().Q == 0.0 &&
         family->GetParams().Lambda == 0.0 && !config_.finite_causal_boundary;
@@ -672,16 +676,23 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
     Rk45CoupledState coupled;
     std::optional<TraceResult::Beam> admitted_source_maps;
     if (use_coupled) {
-        const auto parameters = family->GetParams();
-        coupled.length_scale = parameters.M > 0.0
-                                   ? parameters.M
+        if (family) {
+            const auto parameters = family->GetParams();
+            coupled.length_scale =
+                parameters.M > 0.0 ? parameters.M
                                    : std::hypot(ray.position(1), ray.position(2), ray.position(3));
+        } else {
+            const auto parameters = warp->GetParams();
+            coupled.length_scale = std::max(parameters.R, 1.0 / parameters.sigma);
+        }
         coupled.frequency_scale = ray.ku_uobsu;
         // Local estimator allocation from the 1e-4 source-map accuracy goal.
         // Four columns share the budget over the configured maximum attempts;
         // this is an estimator policy, not a global observable-error proof.
         coupled.tolerance = 1.0e-4 / (4.0 * config_.max_steps);
-        coupled.stationary = true;
+        // The moving wall has nonzero time derivatives. Its variation flow
+        // must evaluate the full Hessian rather than freeze the t column.
+        coupled.stationary = family != nullptr;
         if (camera_ray.phase_space) {
             coupled.variations = launch_variations;
             for (int column = 0; column < 2; ++column) {
