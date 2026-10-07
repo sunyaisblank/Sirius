@@ -369,6 +369,8 @@ set_tests_properties(
     CpuTraceBoundary.TwoSheetEllisCrossesThroatAndReachesInversionMatchedInfinity
     CpuTraceBoundary.EllisReferenceRetainsExactRadialLengthAndIndependentRefinement
     CpuTraceBoundary.NonradialEllisFiniteEventsMatchIndependentQuadrature
+    CpuTraceBoundary.KottlerReferenceRetainsExactDeSitterAndRadialIdentities
+    CpuTraceBoundary.NonradialKottlerFiniteEventsMatchIndependentQuadrature
     CpuTraceBoundary.KottlerBothPastHorizonsRetainRadialAffineOracleAndTracerReuse
     CpuTraceBoundary.KottlerOverlapPreservesCoupledSourceMapAgainstNativeChart
     PROPERTIES LABELS "Mandatory;Correctness"
