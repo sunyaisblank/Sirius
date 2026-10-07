@@ -393,6 +393,8 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:CpuTraceBoundary.KottlerOverlapPreservesCoupledSourceMapAgainstNativeChart",
         "gtest:CpuTraceBoundary.EveryAdvertisedCpuMetricConstructsAndTracesOneRay",
         "gtest:CpuTraceBoundary.TwoSheetEllisCrossesThroatAndReachesInversionMatchedInfinity",
+        "gtest:CpuTraceBoundary.NonradialEllisFiniteEventsMatchIndependentQuadrature",
+        "gtest:CpuTraceBoundary.EllisReferenceRetainsExactRadialLengthAndIndependentRefinement",
         "gtest:MorrisThorneCartesianTests.CurvatureAndRadialNullEnergyConditionMatchExactEllis",
         "gtest:MetricRegistryTests.BackendSupportMatchesImplementations",
         "gtest:MetricRegistryTests.EveryCanonicalNameParsesToItsOwnId",
@@ -479,9 +481,9 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "6b6a7abf6eead349e993cef0cce619453ac290541c7cabbb88c71ed3428ccd28",
+    "acceptance_criteria": "6da5aa83dbccaddd764f2a23cc94d6e48ea3da3aec61283caf1370a17d9dab51",
     "required_dimensions": "206d109e64687caff131e2f8e67e3fe3942ea096e03f9e7ea150eca69a7106b8",
-    "capability_contracts": "48c5b338c14c11e2ad7275322cd72f4bd014df621ca69e65e119621066fd5c6c",
+    "capability_contracts": "25545da7b7abf419e486db1cef0b42b57dfb820238b41f5a9b59a36177a44b12",
 }
 # These groups match concrete optional compile boundaries. CPU transport tests
 # are always required, including on hosts without Vulkan development files.
