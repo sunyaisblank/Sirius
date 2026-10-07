@@ -90,6 +90,20 @@ RPScalar RPFailureBound() { return RPFromBits(0x7f000000u); } // finite 2^127 se
 RPScalar RPUpAdd(RPScalar a,RPScalar b) {
     if(!RPBounded(a,0x7d800000u)||!RPBounded(b,0x7d800000u))return RPFailureBound();
     if(RPScalarEqual(a,RPZero()))return b;if(RPScalarEqual(b,RPZero()))return a;
+#if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_NORMAL_SUM32) && defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
+    // Positive normal inputs <= 2^124 have a normal finite sum <= 2^125.
+    // The RTE32 module retains the same nearest-even result and upward word.
+    uint aw=RPBits(a),bw=RPBits(b);
+    if(aw>=0x00800000u&&aw<=0x7d800000u&&bw>=0x00800000u&&bw<=0x7d800000u) {
+        float af=asfloat(aw),bf=asfloat(bw);
+        float sum=spirv_asm {
+            OpFAdd $$float %v $af $bf;
+            OpDecorate %v NoContraction;
+            OpCopyObject $$float result %v;
+        };
+        return RPFromBits(asuint(sum)+1u);
+    }
+#endif
     return RPFromBits(RPBits(OrderedAdd32(a,b))+1u);
 }
 RPScalar RPUpMultiply(RPScalar a,RPScalar b) {

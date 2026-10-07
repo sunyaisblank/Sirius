@@ -49,7 +49,7 @@ def native_controls(text, fma=False):
 
 
 def portable_normal_sum_controls(text):
-    """Admit only the guarded, ordered binary32 FastTwoSum transform."""
+    """Admit guarded binary32 FastTwoSum and positive upward-bound sums."""
     if (re.findall(r"OpCapability (\S+)", text) != ["Shader"] or
             set(re.findall(r"OpTypeInt (\d+) [01]", text)) != {"32"} or
             re.findall(r"OpTypeFloat (\d+)", text) != ["32"]):
@@ -66,6 +66,11 @@ def portable_normal_sum_controls(text):
     if not bodies:
         raise ValueError("portable normal sum lost its guarded arithmetic")
     for body in bodies:
+        if re.match(r"%RPUpAdd(?:_\d+)? = OpFunction ", body):
+            if re.findall(r"= (OpF(?!unction)\S+) ", body) != ["OpFAdd"]:
+                raise ValueError("normal upward bound changed its single add body")
+            expected.append("OpFAdd")
+            continue
         if (not re.match(r"%RetainedSum32(?:_\d+)? = OpFunction ", body) or
                 re.findall(r"= (OpF(?!unction)\S+) ", body) != ["OpFAdd", "OpFSub", "OpFSub"]):
             raise ValueError("portable normal sum changed its ordered three-operation body")
