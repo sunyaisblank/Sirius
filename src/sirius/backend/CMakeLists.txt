@@ -100,6 +100,7 @@ if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS AND SIRIUS_SPIRV_OP
                    "${retained_build}/retained_transport_portable.spv"
                    "${retained_build}/retained_transport_portable_normal_sum.spv"
                    "${retained_build}/retained_endpoint_portable.spv"
+                   "${retained_build}/retained_endpoint_portable_normal_sum.spv"
                    "${retained_build}/retained_dense_portable.spv"
                    "${retained_build}/retained_initialize_portable.spv"
                    "${retained_build}/retained_ray_camera_portable.spv"

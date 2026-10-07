@@ -372,11 +372,14 @@ TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideProductsAndPreservesAlloc
                          kInitializePortableFp64Shader),
                 expected(kRayCameraShader, kRayCameraFp64Shader, kRayCameraPortableShader,
                          kRayCameraPortableFp64Shader)};
-            if ((mask & 3u) == 2u) stages[1] = std::span(kTransportPortableNormalSumShader);
+            if ((mask & 3u) == 2u) {
+                stages[1] = std::span(kTransportPortableNormalSumShader);
+                stages[2] = std::span(kEndpointPortableNormalSumShader);
+            }
             const bool eligible = wide && mask == 15u;
             for (std::size_t stage = 0; stage < 6; ++stage) {
                 // The baseline excludes FMA and independently checks native,
-                // pure-integer fallback and RTE32-only Transport selection.
+                // pure-integer fallback and RTE32-only Transport/Endpoint selection.
                 EXPECT_EQ(control.loaded_codes[stage],
                           (std::vector<std::uint32_t>(stages[stage].begin(), stages[stage].end())));
                 if (stage == 1 && eligible && kTransportFmaAvailable) {

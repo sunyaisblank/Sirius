@@ -162,9 +162,11 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
     status = create(result->transport_, KernelStage::kTransport, transport);
     if (!status) return std::unexpected(status.error());
     const std::span<const std::uint32_t> endpoint =
-        fma && kEndpointFmaAvailable ? std::span(kEndpointFmaShader)
-                                     : shader(kEndpointShader, kEndpointFp64Shader,
-                                              kEndpointPortableShader, kEndpointPortableFp64Shader);
+        normal_sum ? std::span(kEndpointPortableNormalSumShader)
+                   : (fma && kEndpointFmaAvailable
+                          ? std::span(kEndpointFmaShader)
+                          : shader(kEndpointShader, kEndpointFp64Shader,
+                                   kEndpointPortableShader, kEndpointPortableFp64Shader));
     status = create(result->endpoint_, KernelStage::kEndpoint, endpoint);
     if (!status) return std::unexpected(status.error());
     status = create(

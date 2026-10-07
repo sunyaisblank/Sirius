@@ -228,8 +228,8 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     portable_parallel = portable and source.stem in ("retained_transport", "retained_endpoint", "retained_dense")
     projection_words = 7 if portable and source.stem == "retained_endpoint" else 0
     if normal_sum32:
-        if not portable or source.stem != "retained_transport":
-            raise ValueError("guarded normal sums are qualified only for portable Transport")
+        if not portable or source.stem not in ("retained_transport", "retained_endpoint"):
+            raise ValueError("guarded normal sums are qualified only for portable Transport and Endpoint")
         definitions.append("-DSIRIUS_RETAINED_NORMAL_SUM32=1")
     if fma:
         if not fp64 or portable or source.stem not in ("retained_transport", "retained_endpoint"):
@@ -369,7 +369,7 @@ def main():
                                   program.get("prefix_instructions", 0), fp64=wide, portable=portable, optimizer=args.optimizer)
             array("k" + kind + name + "Shader", code)
             sizes.append(len(code) * 4)
-        if kind == "Transport":
+        if kind in ("Transport", "Endpoint"):
             # Portable products use the same integer owner in both host modes.
             # Refuse sharing if a future macro change makes their modules differ.
             if ((args.output.parent / (stem + "_portable.spv")).read_bytes() !=
@@ -381,7 +381,7 @@ def main():
                 program["registers"], terms, len(program["layer_offsets"])-1,
                 program.get("prefix_instructions", 0), portable=True,
                 optimizer=args.optimizer, normal_sum32=True)
-            array("kTransportPortableNormalSumShader", code)
+            array("k" + kind + "PortableNormalSumShader", code)
         if kind in ("Transport", "Endpoint"):
             destination = args.output.parent / (stem + "_fma.spv")
             lines.append(f"inline constexpr bool k{kind}FmaAvailable = {'true' if fma_available else 'false'};")
