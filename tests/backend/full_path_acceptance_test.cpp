@@ -277,8 +277,10 @@ std::vector<Witness> BuildWitnesses(const std::vector<Case>& cases) {
             std::max({FourError(coarse.x, fine.x, scale), FourError(coarse.k, fine.k, 1),
                       std::abs(static_cast<double>(coarse.affine - fine.affine)) / scale});
         if (fine.fate == reference::Fate::Escape)
-            uncertainty =
-                std::max(uncertainty, Angle(coarse.infinity_direction, fine.infinity_direction));
+            uncertainty = std::max(uncertainty,
+                                   c.charge_ratio == 0
+                                       ? Angle(coarse.infinity_direction, fine.infinity_direction)
+                                       : Angle(coarse.finite_direction, fine.finite_direction));
         const double map_uncertainty = std::max(
             {MatrixError(coarse_maps.finite, maps.finite),
              MatrixError(coarse_maps.infinity, maps.infinity),
