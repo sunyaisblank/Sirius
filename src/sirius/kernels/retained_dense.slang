@@ -116,7 +116,7 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
     uint needed = count;
     if (needed == 0 || needed > count) return false;
     if (lane == 0) retainedStatus = 0;
-#ifndef SIRIUS_RETAINED_PORTABLE
+#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_DENSE)
     GroupMemoryBarrierWithGroupSync();
 #endif
     uint layerBase = programBase + 43 + 5 * count;
@@ -128,7 +128,7 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
         if (start != expected || end <= start || end > needed ||
             end - start > SIRIUS_RETAINED_LANES)
             RejectRetainedProgram();
-#ifdef SIRIUS_RETAINED_PORTABLE
+#if defined(SIRIUS_RETAINED_PORTABLE) && !defined(SIRIUS_RETAINED_PARALLEL_DENSE)
         else {
             // Layer destinations are disjoint from every input register and
             // from one another; the generated plan releases inputs afterwards.
@@ -140,7 +140,7 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
                  !EvaluateOne(start + lane, row, rowBase, programBase, registers))
             RejectRetainedProgram();
 #endif
-#ifndef SIRIUS_RETAINED_PORTABLE
+#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_DENSE)
         GroupMemoryBarrierWithGroupSync();
 #endif
         if (retainedStatus != 0) return false;
@@ -155,7 +155,7 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
         for (uint i = 0; i < 40; ++i)
             WriteStored(rowBase + 4 + i * 5, ReadValue(inputs[programBase + 3 + i], rowBase));
     }
-#ifndef SIRIUS_RETAINED_PORTABLE
+#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_DENSE)
     AllMemoryBarrierWithGroupSync();
 #endif
     return true;
@@ -397,7 +397,7 @@ bool FlatDense(uint row, uint rowBase, RetainedTriple h, RetainedTriple s, Retai
     uint rowWords = no / rows, rowBase = row * rowWords;
     if (rowWords < 204) return;
     for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
-#ifndef SIRIUS_RETAINED_PORTABLE
+#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_DENSE)
     AllMemoryBarrierWithGroupSync();
 #endif
     if (inputs[programBase + 2] != 40 || count > 65536 || registers != SIRIUS_RETAINED_REGISTERS ||

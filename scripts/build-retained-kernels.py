@@ -173,7 +173,7 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
-    portable_parallel = portable and source.stem in ("retained_transport", "retained_endpoint")
+    portable_parallel = portable and source.stem in ("retained_transport", "retained_endpoint", "retained_dense")
     projection_words = 7 if portable and source.stem == "retained_endpoint" else 0
     if fma:
         if not fp64 or portable or source.stem not in ("retained_transport", "retained_endpoint"):
@@ -186,6 +186,8 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
             validate_portable_coefficients(source)
         elif source.stem == "retained_endpoint":
             definitions.append("-DSIRIUS_RETAINED_PARALLEL_ENDPOINT=1")
+        elif source.stem == "retained_dense":
+            definitions.append("-DSIRIUS_RETAINED_PARALLEL_DENSE=1")
     original_inputs = ({"retained_camera": 32, "retained_ray_camera": 45}.get(source.stem, 0)
                        if portable else 0)
     coefficients = 25 if source.stem == "retained_transport" else 0
