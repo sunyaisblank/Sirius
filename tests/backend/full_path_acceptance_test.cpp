@@ -50,7 +50,7 @@ struct Case {
     reference::Fate fate;
     bool radial_turn;
     double disk_inner = 0, disk_outer = 0;
-    double charge = 0;
+    double charge_ratio = 0;
 };
 
 CameraRay Ray(double radius, double theta, Three n) {
@@ -132,7 +132,7 @@ std::vector<Case> ChargedCases() {
     cases.push_back({"rn_charge_06_capture", 1, 0, 40, StaticChargedRay(1, .6, 2),
                      reference::Fate::Capture, false, 0, 0, .6});
     cases.push_back({"rn_charge_09_turn_mass_01", .1, 0, 4, StaticChargedRay(.1, .9, 8),
-                     reference::Fate::Escape, true, 0, 0, .09});
+                     reference::Fate::Escape, true, 0, 0, .9});
     constexpr double charge = .999;
     const double photon_radius = (3 + std::sqrt(9 - 8 * charge * charge)) / 2;
     const double photon_f =
@@ -140,7 +140,7 @@ std::vector<Case> ChargedCases() {
     const double critical_impact = photon_radius / std::sqrt(photon_f);
     cases.push_back({"rn_charge_0999_critical_plus_005_mass_100", 100, 0, 4000,
                      StaticChargedRay(100, charge, critical_impact + .05), reference::Fate::Escape,
-                     true, 0, 0, 100 * charge});
+                     true, 0, 0, charge});
     auto moving = Ray(8, 1.1, {.5, .65, .57});
     moving.beta_forward = .08;
     moving.beta_up = .025;
@@ -158,12 +158,13 @@ std::vector<Case> ChargedCases() {
 }
 
 reference::Result IndependentTrace(const Case& c, const CameraRay& camera, Scalar step) {
+    const double charge = c.mass * c.charge_ratio;
     KerrSchildFamily metric(c.mass == 0 ? KerrSchildParams::Minkowski()
-                                        : KerrSchildParams::KerrNewman(c.mass, c.spin, c.charge));
+                                        : KerrSchildParams::KerrNewman(c.mass, c.spin, charge));
     const auto launch = LaunchCameraRay(metric, c.spin, camera);
     if (!launch) throw std::runtime_error("unrepresented measured reference launch");
     return reference::Trace(*launch, c.mass, c.spin, c.boundary, step, c.disk_inner, c.disk_outer,
-                            c.charge);
+                            charge);
 }
 
 double MatrixError(const Matrix& actual, const Matrix& expected) {
@@ -200,7 +201,8 @@ Maps IndependentMaps(const Case& c, const reference::Result& central, Scalar ste
     const auto infinity_basis =
         reference::Basis(central.infinity_direction == Three{} ? central.finite_direction
                                                                : central.infinity_direction);
-    const auto geometry = reference::At(central.x, c.mass, c.spin, central.outgoing, c.charge);
+    const auto geometry =
+        reference::At(central.x, c.mass, c.spin, central.outgoing, c.mass * c.charge_ratio);
     const auto physical_screen = geometry.Screen(central.k);
     Matrix displacement{};
     Maps result;
@@ -385,20 +387,21 @@ Errors Check(const Witness& witness, const TraceResult& actual) {
     }
     if (expected.fate == reference::Fate::Escape) {
         EXPECT_TRUE(actual.beam.finite_source_map);
-        EXPECT_EQ(actual.beam.infinity_source_map.has_value(), c.charge == 0);
-        if (!actual.beam.finite_source_map || (c.charge == 0 && !actual.beam.infinity_source_map))
+        EXPECT_EQ(actual.beam.infinity_source_map.has_value(), c.charge_ratio == 0);
+        if (!actual.beam.finite_source_map ||
+            (c.charge_ratio == 0 && !actual.beam.infinity_source_map))
             return error;
         Matrix finite{}, infinity{};
         for (unsigned row = 0; row < 2; ++row)
             for (unsigned col = 0; col < 2; ++col) {
                 finite[row][col] = actual.beam.finite_source_map->jacobian[row][col];
-                if (c.charge == 0)
+                if (c.charge_ratio == 0)
                     infinity[row][col] = actual.beam.infinity_source_map->map.jacobian[row][col];
                 EXPECT_TRUE(std::isfinite(finite[row][col]));
                 EXPECT_TRUE(std::isfinite(infinity[row][col]));
             }
         error.finite_map = MatrixError(finite, witness.maps.finite);
-        if (c.charge == 0) {
+        if (c.charge_ratio == 0) {
             error.infinity_map = MatrixError(infinity, witness.maps.infinity);
             Three sky{};
             for (unsigned axis = 0; axis < 3; ++axis)
@@ -673,7 +676,7 @@ TEST(FullPathAcceptance, CpuChargedFiniteEventsMapsAndRefinement) {
         MetricConstructionParameters parameters;
         parameters.mass = c.mass;
         parameters.dimensionless_spin = c.spin / c.mass;
-        parameters.dimensionless_charge = c.charge / c.mass;
+        parameters.dimensionless_charge = c.charge_ratio;
         auto metric = CreateCpuMetric(
             c.spin == 0 ? MetricId::ReissnerNordstrom : MetricId::KerrNewman, parameters);
         ASSERT_TRUE(metric) << c.name;
