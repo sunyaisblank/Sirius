@@ -524,8 +524,8 @@ TEST(RetainedComputeAdmission, SoftwareRendererPreparationPreservesPhysicalAccou
     // A retained owner starts a fresh observation after all prior synchronous
     // work. Exercise every stage plus the shared pair so old maxima/counts and
     // feedback cannot leak into a later render's governor or report.
-    const std::array<sirius::backend::RetainedEndpointInput, 1> endpoint{};
-    const std::array<sirius::backend::RetainedDenseInput, 1> dense{};
+    const std::array<sirius::backend::RetainedEndpointInput, 2> endpoint{};
+    const std::array<sirius::backend::RetainedDenseInput, 2> dense{};
     const std::array<sirius::backend::RetainedInitializeInput, 1> initialize{};
     const std::array<sirius::backend::RetainedRayCameraInput, 1> ray_camera{};
     ASSERT_TRUE(compute.Endpoint(endpoint));
