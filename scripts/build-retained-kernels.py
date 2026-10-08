@@ -250,6 +250,10 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
                         f"-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS={specialized_layers}",
                         f"-DSIRIUS_RETAINED_SCHWARZSCHILD_PREFIX={specialized_prefix}"]
     portable_parallel = portable and source.stem in ("retained_transport", "retained_endpoint", "retained_dense", "retained_dopri_phase")
+    # The normal Endpoint module executes complete 64-wide layers with fewer
+    # invocations; all sixteen projection-cache producers remain present.
+    execution_lanes = (16 if portable and normal_sum32 and source.stem == "retained_endpoint"
+                       else WORKGROUP_LANES if portable_parallel or not portable else 1)
     # Projection publishes its root and sixteen complete weighted tangent terms.
     projection_words = 7 + 16 * 5 if portable and source.stem == "retained_endpoint" else 0
     if normal_sum32:
@@ -283,7 +287,7 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     definitions += [f"-DSIRIUS_RETAINED_REGISTERS={registers}",
                     f"-DSIRIUS_RETAINED_TERMS={terms}",
                     f"-DSIRIUS_RETAINED_LANES={WORKGROUP_LANES}",
-                    f"-DSIRIUS_RETAINED_EXECUTION_LANES={WORKGROUP_LANES if portable_parallel or not portable else 1}",
+                    f"-DSIRIUS_RETAINED_EXECUTION_LANES={execution_lanes}",
                     f"-DSIRIUS_RETAINED_LAYERS={layers}",
                     f"-DSIRIUS_RETAINED_PREFIX={prefix}"]
     float_controls = [] if portable else ["-denorm-mode-fp32", "preserve"]
@@ -318,7 +322,6 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
         elif "OpTypeFloat" in text or re.search(r"OpExecutionMode\S* .* (?:Denorm|RoundingMode|SignedZeroInfNan)", text):
             raise ValueError("portable retained stage depends on native floating arithmetic")
         entry = re.search(r"OpEntryPoint GLCompute (%\S+)", text)[1]
-        execution_lanes = WORKGROUP_LANES if portable_parallel else 1
         if f"OpExecutionMode {entry} LocalSize {execution_lanes} 1 1" not in text:
             raise ValueError("portable retained stage lost its declared execution layout")
         if portable_parallel:

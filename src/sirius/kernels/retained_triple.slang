@@ -148,7 +148,18 @@ RetainedTriple RTAccumulateRoundedProduct(RetainedTriple sum,RPScalar a,RPScalar
     RPScalar product=OrderedMultiply32(a,b);
     // A full binary32 ulp plus the underflow allowance bounds this rounded
     // low-order product. Its omitted residual stays in the arithmetic radius.
+#if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_NORMAL_SUM32) && defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
+    // Exact normal scaling by 2^-23. The five-subnormal allowance rounds
+    // back to the first upward word; retain both original word increments.
+    uint magnitude=RPBits(RPAbs(product));
+    RPScalar error;
+    if(magnitude>=0x0e000000u&&magnitude<=0x5e800000u)
+        error=RPFromBits(magnitude-0x0b800000u+2u);
+    else
+        error=RPUpAdd(RPUpMultiply(RPAbs(product),RPFromBits(0x34000000u)),RPFromBits(5u));
+#else
     RPScalar error=RPUpAdd(RPUpMultiply(RPAbs(product),RPFromBits(0x34000000u)),RPFromBits(5u));
+#endif
     RetainedTriple r=RTAccumulateTerm(sum,product);
     if(r.valid!=0) r.error=RPUpAdd(r.error,error);
     return r;

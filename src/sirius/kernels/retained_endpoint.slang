@@ -144,9 +144,20 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
                 if (!EvaluateOne(node, row, rowBase, programBase, registers)) RejectRetainedProgram();
         }
 #else
+#if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_NORMAL_SUM32)
+        else {
+            // All layer destinations are disjoint; inputs live until the join.
+            // Execute the same bounded layer with the declared invocation stride.
+            for (uint node = start + lane; node < end;
+                 node += SIRIUS_RETAINED_EXECUTION_LANES)
+                if (!EvaluateOne(node, row, rowBase, programBase, registers))
+                    RejectRetainedProgram();
+        }
+#else
         else if (start + lane < end &&
                  !EvaluateOne(start + lane, row, rowBase, programBase, registers))
             RejectRetainedProgram();
+#endif
 #endif
 #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
         GroupMemoryBarrierWithGroupSync();
