@@ -18,6 +18,7 @@
 #include <iomanip>
 #include <numbers>
 #include <sstream>
+#include <vector>
 
 namespace {
 
@@ -232,6 +233,185 @@ void ExpectConstructedParameters(MetricId id,
             break;
         }
     }
+}
+
+// Controlled executor samples exercise coordinator ownership, not geodesic
+// accuracy. Position locators and physical tangents are deliberately distinct.
+struct QuarticCoordinatorExecutor final : sirius::backend::TraceStepExecutor {
+    struct VolumeSample {
+        double fraction;
+        sirius::core::Vec4 position;
+    };
+    bool fail_volume = false;
+    int rejected = 0, ended = 0;
+    std::vector<VolumeSample> volume_samples;
+    std::array<sirius::core::DopriPositionSegment, sirius::core::kCoupledTrialCount> curves;
+    sirius::core::Lightray origin{};
+    sirius::core::GeodesicVariations initial;
+    sirius::core::IMetric* metric = nullptr;
+    double interval = 0.0;
+
+    void BeginTrace() override { volume_samples.clear(); }
+    void EndTrace() override { ++ended; }
+    void RejectLastInterval() override { ++rejected; }
+    std::optional<sirius::core::CameraLaunch> Launch(sirius::core::IMetric& authority, double spin,
+                                                     const CameraRay& camera) override {
+        return sirius::core::LaunchCameraRay(authority, spin, camera);
+    }
+    sirius::core::CoupledSegmentSample At(sirius::core::CoupledTrial trial, double fraction,
+                                          const sirius::core::Vec4* normal = nullptr) {
+        const auto index = static_cast<std::size_t>(trial);
+        const auto locator = curves[index].Sample(fraction);
+        const double global_fraction =
+            index < 2 ? fraction : (fraction + (index == 3 ? 1.0 : 0.0)) * 0.5;
+        sirius::core::CoupledSegmentSample sample;
+        sample.ray = origin;
+        sample.ray.position = locator.position;
+        // Unit outward radial affine velocity, with its past null time
+        // component derived from the current metric at this supplied event.
+        sirius::core::Metric4d values;
+        sirius::core::Tensor<sirius::core::Dual<double>, 4, 4, 4> derivatives;
+        metric->Evaluate(sample.ray.position, values, derivatives);
+        sample.ray.velocity = {};
+        sample.ray.velocity(1) = 1.0;
+        sample.ray.velocity(0) =
+            (-values(0, 1) + std::sqrt(values(0, 1) * values(0, 1) - values(0, 0) * values(1, 1))) /
+            values(0, 0);
+        sample.polynomial_tangent = locator.tangent;
+        sample.variations = initial;
+        for (auto& column : sample.variations) {
+            column.displacement += column.derivative * (interval * global_fraction);
+            if (normal) {
+                double numerator = 0.0, denominator = 0.0;
+                for (int axis = 0; axis < 4; ++axis) {
+                    numerator += (*normal)(axis)*column.displacement(axis);
+                    denominator += (*normal)(axis)*sample.ray.velocity(axis);
+                }
+                column.displacement -= sample.ray.velocity * (numerator / denominator);
+            }
+        }
+        return sample;
+    }
+    bool Step(sirius::core::Lightray& ray, sirius::core::IMetric& authority,
+              const sirius::core::IntegratorConfig&, sirius::core::Rk45CoupledState& coupled,
+              sirius::core::Rk45CoupledComparison& comparison) override {
+        metric = &authority;
+        origin = ray;
+        initial = coupled.variations;
+        interval = ray.step_size;
+        // x(s)=x0+40s(1-s): both full endpoints lie inside R=12,
+        // while the interior crosses that boundary and the later disk annulus.
+        curves[0] = {};
+        curves[0].origin = origin.position;
+        curves[0].increment(0) = -interval;
+        curves[0].a(1) = 40.0;
+        curves[0].interval = interval;
+        curves[1] = curves[0];
+        curves[2] = {};
+        curves[2].origin = origin.position;
+        curves[2].increment(0) = -interval * 0.5;
+        curves[2].increment(1) = curves[2].a(1) = 10.0;
+        curves[2].interval = interval * 0.5;
+        curves[3] = curves[2];
+        curves[3].origin = curves[0].Sample(0.5).position;
+        curves[3].increment(1) = -10.0;
+        for (std::size_t trial = 0; trial < curves.size(); ++trial)
+            comparison.dopri_positions[trial] = curves[trial];
+        const auto full = At(sirius::core::CoupledTrial::Full, 1.0);
+        const auto half = At(sirius::core::CoupledTrial::FirstHalf, 1.0);
+        ray = comparison.lower_order = comparison.refined_endpoint = full.ray;
+        coupled.variations = comparison.lower_variations = comparison.refined_variations =
+            full.variations;
+        comparison.midpoint = half.ray;
+        comparison.midpoint_variations = half.variations;
+        return true;
+    }
+    std::optional<sirius::core::CoupledSegmentSample> Sample(
+        sirius::core::CoupledTrial trial, double fraction,
+        const sirius::core::Vec4* normal = nullptr) override {
+        const auto sample = At(trial, fraction, normal);
+        if (trial == sirius::core::CoupledTrial::Full && !normal && fraction > 0.0 &&
+            fraction < 1.0) {
+            volume_samples.push_back({fraction, sample.ray.position});
+            if (fail_volume && volume_samples.size() == 3) return std::nullopt;
+        }
+        return sample;
+    }
+};
+
+TEST(CpuTraceBoundary, RetainedQuarticEventsKeepOriginalFractionsAndExcludeLaterDisk) {
+    KerrSchildFamily metric(KerrSchildParams::Minkowski());
+    auto config = OrdinaryBoundaryConfig(10.0f);
+    config.finite_causal_boundary = true;
+    config.enable_disk = true;
+    config.disk_inner = 13.0;
+    config.disk_outer = 20.0;
+    config.max_steps = 1;
+    CameraRay camera;
+    camera.origin(1) = 5.0;
+    camera.origin(2) = std::numbers::pi / 2.0;
+    camera.direction(1) = 1.0;
+    QuarticCoordinatorExecutor executor;
+    GeodesicTracer tracer(&metric, config);
+    tracer.SetStepExecutor(&executor);
+    const auto result = tracer.Trace(camera);
+    ASSERT_FALSE(result.numerical_failure);
+    ASSERT_EQ(result.outcome, TraceResult::Outcome::Escaped);
+    EXPECT_NEAR(TerminalRadius(result), 12.0, 2.0e-10);
+    EXPECT_NEAR(result.affine_length, 5.0 * (1.0 - std::sqrt(0.3)), 2.0e-10);
+    EXPECT_EQ(result.num_disk_crossings, 0);
+    ASSERT_TRUE(result.final_tangent);
+    EXPECT_NEAR((*result.final_tangent)(1), 1.0, 1.0e-12);
+    EXPECT_GT(executor.curves[0].Sample(result.affine_length / 10.0).tangent(1), 2.0);
+    EXPECT_EQ(executor.rejected, 0);
+}
+
+TEST(CpuTraceBoundary, RetainedQuarticVolumeFailurePublishesNothingAndRecovers) {
+    // A charged metric avoids an infinity-handoff requirement in this finite
+    // coordinator witness. These supplied samples do not qualify charged flow.
+    KerrSchildFamily metric(KerrSchildParams::ReissnerNordstrom(1.0, 0.5));
+    auto config = OrdinaryBoundaryConfig(10.0f);
+    config.finite_causal_boundary = true;
+    config.enable_disk = config.enable_volumetric = true;
+    config.volumetric_samples = 4;
+    config.volumetric_tau_midplane = 0.01f;
+    config.max_steps = 1;
+    CameraRay camera;
+    camera.origin(1) = 8.0;
+    camera.origin(2) = std::numbers::pi / 2.0;
+    camera.direction(1) = 1.0;
+    QuarticCoordinatorExecutor executor;
+    GeodesicTracer tracer(&metric, config);
+    tracer.SetStepExecutor(&executor);
+    executor.fail_volume = true;
+    const auto failed = tracer.Trace(camera);
+    EXPECT_TRUE(failed.numerical_failure);
+    ASSERT_EQ(executor.volume_samples.size(), 3);
+    EXPECT_FALSE(failed.volumetric_hit);
+    EXPECT_FLOAT_EQ(failed.optical_depth, 0.0f);
+    EXPECT_FLOAT_EQ(failed.volumetric_affine_length, 0.0f);
+    for (float channel : failed.volumetric_emission) EXPECT_FLOAT_EQ(channel, 0.0f);
+    EXPECT_DOUBLE_EQ(failed.affine_length, 0.0);
+    EXPECT_GE(executor.rejected, 1);
+
+    executor.fail_volume = false;
+    const auto recovered = tracer.Trace(camera);
+    ASSERT_FALSE(recovered.numerical_failure);
+    ASSERT_EQ(recovered.outcome, TraceResult::Outcome::Escaped);
+    ASSERT_EQ(executor.volume_samples.size(), 4);
+    ASSERT_TRUE(recovered.volumetric_hit);
+    EXPECT_GT(recovered.optical_depth, 0.0f);
+    EXPECT_GT(recovered.volumetric_affine_length, 0.0f);
+    const double limit = 0.5 * (1.0 - std::sqrt(0.6));
+    for (std::size_t index = 0; index < executor.volume_samples.size(); ++index) {
+        const double fraction = limit * (static_cast<double>(index) + 0.5) / 4.0;
+        EXPECT_NEAR(executor.volume_samples[index].fraction, fraction, 2.0e-12);
+        EXPECT_NEAR(executor.volume_samples[index].position(1),
+                    8.0 + 40.0 * fraction * (1.0 - fraction), 2.0e-10);
+        EXPECT_LT(executor.volume_samples[index].position(1), 12.0);
+    }
+    EXPECT_NEAR(recovered.affine_length, 10.0 * limit, 2.0e-10);
+    EXPECT_EQ(executor.ended, 2);
 }
 
 TEST(CpuTraceBoundary, EveryAdvertisedCpuMetricConstructsAndTracesOneRay) {

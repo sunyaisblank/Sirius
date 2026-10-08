@@ -133,6 +133,10 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:RetainedDopriTest.IndependentQuarticPreservesCompletePhase",
         "gtest:RetainedDopriTest.MalformedRowsRefuseAndRecover",
         "gtest:RetainedDopriTest.CurvedTransportConnectsSamplerAndProjection",
+        "gtest:RetainedDopriTest.ConnectedIntervalsPreserveTrialsAndIndependentBudgets",
+        "gtest:RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates",
+        "gtest:CpuTraceBoundary.RetainedQuarticEventsKeepOriginalFractionsAndExcludeLaterDisk",
+        "gtest:CpuTraceBoundary.RetainedQuarticVolumeFailurePublishesNothingAndRecovers",
         "gtest:DopriPositionSegment.SamplesTheQuarticAndItsAffineDerivative",
         "gtest:DopriPositionSegment.DegreeEightIsolationCoversEveryRootWithoutGridSampling",
         "gtest:DopriPositionSegment.SameSideQuarticContactsRespectDirectionAndOriginalRestriction",
@@ -493,8 +497,8 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "8775d64d71aa0fbc181e2238c0f8b7c6130e1668c5658f701d96310c55fea706",
-    "required_dimensions": "da6720e91bd8b9292ffb392298c6737b04fae357b4a509697a10f30d608e0962",
+    "acceptance_criteria": "285f3a259b413a60cf934714d5bb8a0dce941159f606ba1f4f490efbc54fe1a8",
+    "required_dimensions": "8fc8a54bff28e22a5c7b77bf6c70ec182a2ca54009158f788d984a89ff7de92f",
     "capability_contracts": "4a32b1a16171759ce66d99f1c4370975424b87d3f36d6574f840efb8360a9bda",
 }
 # These groups match concrete optional compile boundaries. CPU transport tests

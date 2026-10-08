@@ -95,6 +95,7 @@ void RetainedTraceExecutor::RejectLastInterval() {
     if (found != continuations_.end()) {
         if (found->second.finish.valid) ++stats_.tracer_rollbacks;
         found->second.finish = {};
+        found->second.dopri.reset();
     }
 }
 
@@ -157,7 +158,8 @@ void RetainedTraceExecutor::Run() {
         bool projection_retry = false;
         if (maximum_submission_ms_ > 0 && feedback.peak_ms > maximum_submission_ms_ &&
             feedback.peak_rows > 1 && feedback.maximum_one_row_ms <= maximum_submission_ms_ &&
-            batch.size() == 1 && !batch.front()->camera && batch.front()->result) {
+            batch.size() == 1 && !batch.front()->camera && !batch.front()->sampling &&
+            batch.front()->result) {
             // A single logical ray still has two reducible endpoint rows. Its
             // candidate remains private until a bounded serialized retry returns.
             auto& request = *batch.front();
@@ -218,10 +220,13 @@ void RetainedTraceExecutor::Run() {
                 std::max(stats_.maximum_coalescing_wait_ms, coalescing_ms);
             stats_.execute_ms += execute_ms;
             if (std::any_of(batch.begin(), batch.end(),
-                            [](const Request* r) { return !r->camera; }))
+                            [](const Request* r) { return !r->camera && !r->sampling; }))
                 ++stats_.interval_batches;
             if (std::any_of(batch.begin(), batch.end(), [](const Request* r) { return r->camera; }))
                 ++stats_.camera_batches;
+            if (std::any_of(batch.begin(), batch.end(),
+                            [](const Request* r) { return r->sampling; }))
+                ++stats_.sample_batches;
             if (projection_retry) ++stats_.paired_projection_retries;
             const bool safety = maximum_submission_ms_ > 0 && peak > maximum_submission_ms_;
             const bool irreducible =
@@ -236,7 +241,12 @@ void RetainedTraceExecutor::Run() {
                                     ? RetainedCompute::StageName(*feedback.maximum_one_row_stage)
                                     : "unknown",
                                 feedback.maximum_one_row_ms, maximum_submission_ms_));
-            if (!draining_error && (safety || peak == 0) && batch_limit > 1) {
+            const bool interval_work =
+                std::any_of(batch.begin(), batch.end(),
+                            [](const Request* r) { return !r->camera && !r->sampling; });
+            if (!draining_error &&
+                (safety || (peak == 0 && (interval_work || feedback.maximum_rows > 0))) &&
+                batch_limit > 1) {
                 safety_cap = std::min(safety_cap,
                                       peak == 0 ? 1 : std::max<std::size_t>(1, batch.size() / 2));
                 batch_limit = std::min(batch_limit, safety_cap);
@@ -259,9 +269,11 @@ void RetainedTraceExecutor::Run() {
             for (auto* request : batch) {
                 if (request->camera)
                     ++stats_.camera_rows;
+                else if (request->sampling)
+                    ++stats_.sample_rows;
                 else
                     ++stats_.interval_rows;
-                if (!request->camera) {
+                if (!request->camera && !request->sampling) {
                     const bool admitted = request->result && request->result->admissible && !error_;
                     if (admitted)
                         ++stats_.accepted_intervals;
@@ -321,10 +333,14 @@ void RetainedTraceExecutor::Run() {
                 }
                 if (request->camera && !request->camera_result && !error_)
                     error_ = request->camera_result.error();
-                if (!request->result && !error_) error_ = request->result.error();
+                if (request->sampling && !request->sample_result && !error_)
+                    error_ = request->sample_result.error();
+                if (!request->camera && !request->sampling && !request->result && !error_)
+                    error_ = request->result.error();
                 if (error_) {
                     request->camera_result = std::unexpected(*error_);
                     request->result = std::unexpected(*error_);
+                    request->sample_result = std::unexpected(*error_);
                 }
                 request->completed = true;
             }
@@ -350,6 +366,25 @@ void RetainedTraceExecutor::Execute(std::span<Request*> requests,
         for (std::size_t row = 0; row < cameras.size(); ++row)
             cameras[row]->camera_result =
                 outputs ? base::Expected<RetainedCameraOutput>((*outputs)[row])
+                        : std::unexpected(outputs.error());
+        if (!steps.empty()) Execute(steps, projection_row_budget);
+        return;
+    }
+    if (std::any_of(requests.begin(), requests.end(),
+                    [](const Request* request) { return request->sampling; })) {
+        std::vector<RetainedDopriSampleInput> packets;
+        std::vector<Request*> samples, steps;
+        for (auto* request : requests) {
+            if (request->sampling) {
+                samples.push_back(request);
+                packets.push_back(request->sample_input);
+            } else
+                steps.push_back(request);
+        }
+        const auto outputs = SampleRetainedDopriIntervals(compute_, packets, projection_row_budget);
+        for (std::size_t row = 0; row < samples.size(); ++row)
+            samples[row]->sample_result =
+                outputs ? base::Expected<RetainedDopriSampleOutput>((*outputs)[row])
                         : std::unexpected(outputs.error());
         if (!steps.empty()) Execute(steps, projection_row_budget);
         return;
@@ -391,7 +426,7 @@ void RetainedTraceExecutor::Execute(std::span<Request*> requests,
     }
     std::vector<RetainedIntervalInput> intervals;
     for (const auto* request : requests) intervals.push_back(request->interval);
-    const auto results = AttemptRetainedIntervals(compute_, intervals, projection_row_budget);
+    const auto results = AttemptRetainedDopriIntervals(compute_, intervals, projection_row_budget);
     if (!results) {
         fail(results.error());
         return;
@@ -484,6 +519,12 @@ bool RetainedTraceExecutor::Step(core::Lightray& ray, core::IMetric& metric,
                                  const core::IntegratorConfig& config,
                                  core::Rk45CoupledState& coupled,
                                  core::Rk45CoupledComparison& comparison) {
+    const auto thread = std::this_thread::get_id();
+    {
+        std::lock_guard lock(mutex_);
+        const auto previous = continuations_.find(thread);
+        if (previous != continuations_.end()) previous->second.dopri.reset();
+    }
     if (should_cancel_ && should_cancel_()) {
         ray.terminated = 3;
         coupled.failure = core::CoupledStepFailure::InvalidState;
@@ -526,7 +567,6 @@ bool RetainedTraceExecutor::Step(core::Lightray& ray, core::IMetric& metric,
     request.interval.interval = ray.step_size;
     request.interval.control = {config, coupled.length_scale, coupled.frequency_scale,
                                 coupled.tolerance, coupled.column_scale};
-    const auto thread = std::this_thread::get_id();
     {
         std::unique_lock lock(mutex_);
         if (error_ || stopping_) {
@@ -576,6 +616,7 @@ bool RetainedTraceExecutor::Step(core::Lightray& ray, core::IMetric& metric,
     Continuation continuation;
     continuation.before = snapshot;
     continuation.start = request.interval.start;
+    continuation.origin = ray;
     if (!result.admissible) {
         if (ray.step_size <= config.min_step)
             ray.terminated = 5;
@@ -598,6 +639,9 @@ bool RetainedTraceExecutor::Step(core::Lightray& ray, core::IMetric& metric,
     comparison.lower_increment = Increment(result.lower_increment);
     comparison.midpoint_increment = Increment(result.midpoint_increment);
     comparison.refined_increment = Increment(result.refined_increment);
+    if (result.dopri)
+        for (std::size_t trial = 0; trial < core::kCoupledTrialCount; ++trial)
+            comparison.dopri_positions[trial] = result.dopri->positions[trial];
     comparison.error_ratio = result.error_ratio;
     Physical(result.full, ray, coupled.variations);
     const auto acceleration_started = std::chrono::steady_clock::now();
@@ -614,6 +658,7 @@ bool RetainedTraceExecutor::Step(core::Lightray& ray, core::IMetric& metric,
     continuation.after = snapshot;
     snapshot_physical(continuation.after);
     continuation.finish = result.full;
+    continuation.dopri = result.dopri;
     {
         std::lock_guard lock(mutex_);
         continuations_[thread] = continuation;
@@ -622,6 +667,67 @@ bool RetainedTraceExecutor::Step(core::Lightray& ray, core::IMetric& metric,
         if (ray.step_size < candidate_step) ++stats_.dense_growth_limits;
     }
     return true;
+}
+
+std::optional<core::CoupledSegmentSample> RetainedTraceExecutor::Sample(core::CoupledTrial trial,
+                                                                        double fraction,
+                                                                        const core::Vec4* normal) {
+    if (should_cancel_ && should_cancel_()) return std::nullopt;
+    Request request;
+    request.sampling = true;
+    core::Lightray origin{};
+    const auto index = static_cast<std::size_t>(trial);
+    if (index >= core::kCoupledTrialCount || !std::isfinite(fraction) || fraction < 0 ||
+        fraction > 1)
+        return std::nullopt;
+    {
+        std::unique_lock lock(mutex_);
+        if (error_ || stopping_) return std::nullopt;
+        const auto thread = std::this_thread::get_id();
+        const auto found = continuations_.find(thread);
+        if (found == continuations_.end() || !found->second.finish.valid || !found->second.dopri)
+            return std::nullopt;
+        origin = found->second.origin;
+        request.sample_input.interval = found->second.dopri;
+        request.sample_input.trial = index;
+        request.sample_input.fraction = fraction;
+        if (normal) request.sample_input.normal = *normal;
+        if (!normal && (fraction == 0 || fraction == 1)) {
+            // The immutable trial already owns its projected endpoint. Reading
+            // it does no device work and need not wait for a dispatch batch.
+            const auto& curve = *request.sample_input.interval;
+            const auto& endpoint = fraction == 0 ? curve.starts[index] : curve.endpoints[index];
+            request.sample_result->physical = endpoint.physical;
+            request.sample_result->valid = endpoint.valid;
+            const auto stage = fraction == 0 ? 0 : 6;
+            for (std::size_t axis = 0; axis < 4; ++axis)
+                request.sample_result->polynomial_tangent[axis] =
+                    curve.packets[index].values[80 + 40 * stage + axis];
+        } else {
+            request.registered = active_traces_.contains(thread);
+            requests_.push_back(&request);
+            if (request.registered) ++queued_registered_;
+            available_.notify_one();
+            completed_.wait(lock, [&] { return request.completed; });
+        }
+    }
+    if ((should_cancel_ && should_cancel_()) || !request.sample_result ||
+        !request.sample_result->valid)
+        return std::nullopt;
+    core::CoupledSegmentSample sample;
+    sample.ray = origin;
+    RetainedEndpointOutput physical;
+    physical.physical = request.sample_result->physical;
+    Physical(physical, sample.ray, sample.variations);
+    core::Vec4 polynomial_tangent;
+    for (int axis = 0; axis < 4; ++axis)
+        polynomial_tangent(axis) = Rounded(request.sample_result->polynomial_tangent[axis]);
+    sample.polynomial_tangent = polynomial_tangent;
+    const double interval = request.sample_input.interval->positions[index].interval;
+    sample.ray.proper_time += static_cast<float>(interval * fraction);
+    if (trial == core::CoupledTrial::SecondHalf)
+        sample.ray.proper_time += static_cast<float>(interval);
+    return sample;
 }
 
 }  // namespace sirius::backend

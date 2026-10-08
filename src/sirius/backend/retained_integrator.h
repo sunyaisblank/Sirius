@@ -1,7 +1,11 @@
 #pragma once
 
 #include "sirius/backend/retained_compute.h"
+#include "sirius/core/dopri_segment.h"
 #include "sirius/core/geodesic_integrator.h"
+
+#include <memory>
+#include <optional>
 
 namespace sirius::backend {
 
@@ -30,12 +34,37 @@ struct RetainedErrorObservation {
     bool evaluated = false;
 };
 
+// Immutable trial data belongs to one private accepted interval. Event location
+// uses rounded position views; physical samples always use the retained packets.
+struct RetainedDopriInterval {
+    std::array<RetainedDopriPhaseInput, 4> packets;
+    std::array<core::DopriPositionSegment, 4> positions;
+    std::array<RetainedEndpointOutput, 4> starts, endpoints;
+    std::array<RetainedValue, 4> metric;
+    double chart = 0;
+    RetainedIntervalControl control;
+};
+
+struct RetainedDopriSampleInput {
+    std::shared_ptr<const RetainedDopriInterval> interval;
+    std::size_t trial = 0;
+    double fraction = 0;
+    std::optional<core::Vec4> normal;
+};
+
+struct RetainedDopriSampleOutput {
+    std::array<RetainedValue, 40> physical{};
+    std::array<RetainedValue, 4> polynomial_tangent{};
+    bool valid = false;
+};
+
 struct RetainedIntervalOutput {
     // Private until all embedded, midpoint and refined comparisons admit.
     // The tracer must still compare localized events before committing it.
     RetainedEndpointOutput full, lower, midpoint, refined;
     std::array<RetainedValue, 20> full_increment{}, lower_increment{}, midpoint_increment{},
         refined_increment{};
+    std::shared_ptr<const RetainedDopriInterval> dopri;
     std::uint32_t attempted_stages = 0;
     double error_ratio = 0;
     // Maximum of the full and both half-trial embedded/projected checks,
@@ -64,6 +93,19 @@ struct RetainedIntervalOutput {
 [[nodiscard]] base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
     RetainedCompute& compute, std::span<const RetainedIntervalInput> inputs,
     std::size_t projection_row_budget);
+
+// The live retained route admits its DP phase midpoint against the unchanged
+// independent half-step and physical component budgets. The cubic entry points
+// above remain available for their original numerical controls.
+[[nodiscard]] base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedDopriIntervals(
+    RetainedCompute& compute, std::span<const RetainedIntervalInput> inputs);
+[[nodiscard]] base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedDopriIntervals(
+    RetainedCompute& compute, std::span<const RetainedIntervalInput> inputs,
+    std::size_t projection_row_budget);
+
+[[nodiscard]] base::Expected<std::vector<RetainedDopriSampleOutput>> SampleRetainedDopriIntervals(
+    RetainedCompute& compute, std::span<const RetainedDopriSampleInput> inputs,
+    std::size_t row_budget);
 
 [[nodiscard]] double RetainedPhysicalError(const std::array<RetainedValue, 40>& first,
                                            const std::array<RetainedValue, 40>& second,

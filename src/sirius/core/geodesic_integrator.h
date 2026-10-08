@@ -7,11 +7,13 @@
 // (dx^beta/dlambda) = 0 under the null constraint g_mu_nu k^mu k^nu = 0, with
 // adaptive step control and termination on horizon capture, escape, or NaN/Inf.
 
+#include "sirius/core/dopri_segment.h"
 #include "sirius/core/metrics/metric.h"
 #include "sirius/core/tensor.h"
 
 #include <array>
 #include <cmath>
+#include <cstddef>
 #include <cstdint>
 #include <optional>
 
@@ -142,6 +144,9 @@ struct CoupledSegmentIncrement {
     std::array<Vec4, 4> displacement;
 };
 
+enum class CoupledTrial : std::size_t { Full = 0, Lower = 1, FirstHalf = 2, SecondHalf = 3 };
+inline constexpr std::size_t kCoupledTrialCount = 4;
+
 struct Rk45CoupledComparison {
     Lightray lower_order{};
     GeodesicVariations lower_variations;
@@ -154,11 +159,16 @@ struct Rk45CoupledComparison {
     CoupledSegmentIncrement lower_increment;
     CoupledSegmentIncrement midpoint_increment;
     CoupledSegmentIncrement refined_increment;
+    // All four retained position locators, or none for the legacy CPU path.
+    // Restriction keeps fractions relative to each original trial interval.
+    std::array<std::optional<DopriPositionSegment>, kCoupledTrialCount> dopri_positions{};
 };
 
 struct CoupledSegmentSample {
     Lightray ray{};
     GeodesicVariations variations;
+    // The retained quartic affine derivative W is not the physical tangent k.
+    std::optional<Vec4> polynomial_tangent = std::nullopt;
 };
 
 // Static methods for geodesic integration.

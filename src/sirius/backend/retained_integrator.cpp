@@ -85,6 +85,11 @@ bool ValidControl(const RetainedIntervalControl& control) {
     return true;
 }
 
+bool ExactZero(const RetainedValue& value) {
+    return value.IsRepresented() && value.high == 0 && value.low == 0 && value.tail == 0 &&
+           value.radius == 0;
+}
+
 double EmbeddedError(const RetainedStepInput& input, const RetainedStepOutput& output,
                      const core::IntegratorConfig& config) {
     double sum = 0;
@@ -132,6 +137,50 @@ std::array<RetainedValue, 20> Increments(const RetainedStepOutput& output, bool 
         }
     return result;
 }
+
+std::array<RetainedValue, 40> PhaseIncrements(const RetainedStepOutput& output, bool lower) {
+    auto result = output.increment;
+    if (!lower) return result;
+    for (std::size_t i = 0; i < result.size(); ++i) {
+        CenterDifference difference(output.increment[i], output.error[i]);
+        const float high = difference.Extract(), low = difference.Extract(),
+                    tail = difference.Extract();
+        const double radius = difference.Radius(output.increment[i].radius, output.error[i].radius);
+        const float upper = radius == 0 ? 0
+                                        : std::nextafter(static_cast<float>(radius),
+                                                         std::numeric_limits<float>::infinity());
+        result[i] = {high, low, tail, upper, 1};
+    }
+    return result;
+}
+
+RetainedDopriPhaseInput PhasePacket(const RetainedEndpointOutput& start,
+                                    const RetainedStepOutput& step, double interval, bool lower) {
+    RetainedDopriPhaseInput packet;
+    std::copy(start.phase.begin(), start.phase.end(), packet.values.begin());
+    const auto increments = PhaseIncrements(step, lower);
+    std::copy(increments.begin(), increments.end(), packet.values.begin() + 40);
+    for (std::size_t stage = 0; stage < 7; ++stage)
+        std::copy(step.rhs[stage].begin(), step.rhs[stage].end(),
+                  packet.values.begin() + 80 + stage * 40);
+    packet.values[360] = RetainedValue::FromDouble(interval);
+    packet.values[361] = RetainedValue::FromDouble(1);
+    return packet;
+}
+
+core::DopriPositionSegment PositionCurve(const RetainedDopriPhaseInput& input,
+                                         const RetainedDopriPhaseOutput& output) {
+    core::DopriPositionSegment curve;
+    curve.interval = Center(input.values[360]).Rounded();
+    for (int i = 0; i < 4; ++i) {
+        curve.origin(i) = Center(input.values[i]).Rounded();
+        curve.increment(i) = Center(input.values[40 + i]).Rounded();
+        curve.a(i) = Center(output.a[i]).Rounded();
+        curve.b(i) = Center(output.b[i]).Rounded();
+        curve.c(i) = Center(output.c[i]).Rounded();
+    }
+    return curve;
+}
 }  // namespace
 
 double RetainedPhysicalError(const std::array<RetainedValue, 40>& first,
@@ -165,14 +214,10 @@ double RetainedPhysicalError(const std::array<RetainedValue, 40>& first,
     return std::max(ratio, central);
 }
 
-base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
-    RetainedCompute& compute, std::span<const RetainedIntervalInput> inputs) {
-    return AttemptRetainedIntervals(compute, inputs, compute.Capacity());
-}
-
-base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
+namespace {
+base::Expected<std::vector<RetainedIntervalOutput>> AttemptIntervals(
     RetainedCompute& compute, std::span<const RetainedIntervalInput> inputs,
-    std::size_t projection_row_budget) {
+    std::size_t projection_row_budget, bool dopri) {
     if (inputs.empty() || inputs.size() > compute.Capacity())
         return base::Fail(base::ErrorDomain::kDevice, "attempt retained intervals",
                           "invalid batch size");
@@ -186,6 +231,7 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
     // governor budget; larger batches retain two synchronous submissions.
     const bool paired_projections = count <= projection_row_budget / 2;
     std::vector<RetainedIntervalOutput> work(count);
+    std::vector<std::shared_ptr<RetainedDopriInterval>> curves(count);
     std::vector<bool> active(count, true);
     for (std::size_t row = 0; row < count; ++row) {
         const auto& input = inputs[row];
@@ -260,11 +306,39 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
                     upper[count + row] = EndpointInput(inputs[row], step.fourth);
                 else
                     lower[row] = EndpointInput(inputs[row], step.fourth);
+                if (dopri) {
+                    const bool flat = ExactZero(inputs[row].metric[0]) &&
+                                      ExactZero(inputs[row].metric[2]) &&
+                                      ExactZero(inputs[row].metric[3]);
+                    if (!flat && !step.rhs_valid) {
+                        active[row] = false;
+                        state.failure = CoupledStepFailure::Interpolation;
+                        continue;
+                    }
+                    if (!flat) {
+                        if (part == 0) {
+                            curves[row] = std::make_shared<RetainedDopriInterval>();
+                            curves[row]->metric = inputs[row].metric;
+                            curves[row]->chart = inputs[row].chart;
+                            curves[row]->control = inputs[row].control;
+                        }
+                        auto& curve = *curves[row];
+                        const auto& start = part == 2 ? state.midpoint : inputs[row].start;
+                        const double h = inputs[row].interval / (part == 0 ? 1 : 2);
+                        const auto trial = part == 0 ? 0 : part + 1;
+                        curve.starts[trial] = start;
+                        curve.packets[trial] = PhasePacket(start, step, h, false);
+                        if (part == 0) {
+                            curve.starts[1] = start;
+                            curve.packets[1] = PhasePacket(start, step, h, true);
+                        }
+                    }
+                }
             }
         base::Expected<std::vector<RetainedEndpointOutput>> projected;
         // Dense uses only the already projected full state and original start.
         // Keep budget-one retry completely serialized; a shared wait is reducible.
-        if (part == 2 && paired_projections && projection_row_budget > 1 &&
+        if (!dopri && part == 2 && paired_projections && projection_row_budget > 1 &&
             compute.SupportsIndependentPair()) {
             const auto dense_inputs = dense_packets();
             auto paired = compute.EndpointAndDense(upper, dense_inputs);
@@ -312,6 +386,11 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
                     state.refined = high;
                     state.refined_increment = Increments((*stepped)[row], false);
                 }
+                if (curves[row]) {
+                    const auto trial = part == 0 ? 0 : part + 1;
+                    curves[row]->endpoints[trial] = high;
+                    if (part == 0) curves[row]->endpoints[1] = low;
+                }
             }
     }
 
@@ -327,9 +406,60 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
             dense[row] = *shared->dense[row];
         }
     } else {
-        const auto evaluated = compute.Dense(dense_packets());
-        if (!evaluated) return std::unexpected(evaluated.error());
-        dense = std::move(*evaluated);
+        // Only the exact flat fast path retains Hermite sampling in the DP
+        // route. Invalid placeholders preserve original row positions.
+        auto packets = dense_packets();
+        bool needed = !dopri;
+        if (dopri)
+            for (std::size_t row = 0; row < count; ++row) {
+                if (curves[row]) packets[row] = {};
+                if (active[row] && !curves[row]) needed = true;
+            }
+        if (needed) {
+            const auto evaluated = compute.Dense(packets);
+            if (!evaluated) return std::unexpected(evaluated.error());
+            dense = std::move(*evaluated);
+        }
+    }
+    if (dopri) {
+        std::vector<RetainedEndpointInput> midpoint_packets(count);
+        bool needed = false;
+        for (std::size_t trial = 0; trial < 4; ++trial) {
+            std::vector<RetainedDopriPhaseInput> packets(count);
+            bool trial_needed = false;
+            for (std::size_t row = 0; row < count; ++row)
+                if (active[row] && curves[row]) {
+                    trial_needed = true;
+                    packets[row] = curves[row]->packets[trial];
+                    if (trial == 0) packets[row].values[361] = RetainedValue::FromDouble(.5);
+                }
+            if (!trial_needed) break;
+            const auto sampled = compute.DopriPhase(packets);
+            if (!sampled) return std::unexpected(sampled.error());
+            for (std::size_t row = 0; row < count; ++row)
+                if (active[row] && curves[row]) {
+                    auto& curve = *curves[row];
+                    curve.positions[trial] = PositionCurve(packets[row], (*sampled)[row]);
+                    if (!(*sampled)[row].valid || !curve.positions[trial].IsFinite()) {
+                        active[row] = false;
+                        work[row].failure = CoupledStepFailure::Interpolation;
+                        continue;
+                    }
+                    if (trial == 0) {
+                        needed = true;
+                        midpoint_packets[row] = EndpointInput(inputs[row], (*sampled)[row].phase);
+                    }
+                }
+        }
+        if (needed) {
+            const auto sampled = compute.Endpoint(midpoint_packets);
+            if (!sampled) return std::unexpected(sampled.error());
+            for (std::size_t row = 0; row < count; ++row)
+                if (active[row] && curves[row]) {
+                    dense[row].physical = (*sampled)[row].physical;
+                    dense[row].valid = (*sampled)[row].valid;
+                }
+        }
     }
     for (std::size_t row = 0; row < count; ++row) {
         auto& state = work[row];
@@ -356,6 +486,7 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
                 for (const auto& value : *increment)
                     state.admissible = state.admissible && value.IsRepresented();
             if (!state.admissible) state.failure = CoupledStepFailure::Interpolation;
+            if (state.admissible) state.dopri = std::move(curves[row]);
         }
         if (!state.admissible) {
             // No earlier successful substage can escape a rejected attempt.
@@ -371,6 +502,202 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
             state.error_checks = error_checks;
             state.failure = failure;
         }
+    }
+    return work;
+}
+}  // namespace
+
+base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
+    RetainedCompute& compute, std::span<const RetainedIntervalInput> inputs) {
+    return AttemptRetainedIntervals(compute, inputs, compute.Capacity());
+}
+
+base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
+    RetainedCompute& compute, std::span<const RetainedIntervalInput> inputs,
+    std::size_t projection_row_budget) {
+    return AttemptIntervals(compute, inputs, projection_row_budget, false);
+}
+
+base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedDopriIntervals(
+    RetainedCompute& compute, std::span<const RetainedIntervalInput> inputs) {
+    return AttemptRetainedDopriIntervals(compute, inputs, compute.Capacity());
+}
+
+base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedDopriIntervals(
+    RetainedCompute& compute, std::span<const RetainedIntervalInput> inputs,
+    std::size_t projection_row_budget) {
+    return AttemptIntervals(compute, inputs, projection_row_budget, true);
+}
+
+namespace {
+RetainedDenseInput ArrivalPacket(const RetainedDopriInterval& interval,
+                                 const std::array<RetainedValue, 40>& physical,
+                                 const core::Vec4& normal) {
+    RetainedDenseInput packet;
+    std::copy(interval.metric.begin(), interval.metric.end(), packet.values.begin());
+    // At exact fraction zero Dense selects the supplied physical endpoint and
+    // covariant V. Only its existing retained arrival transformation is used;
+    // these identical endpoints do not refit the accepted quartic.
+    std::copy(physical.begin(), physical.end(), packet.values.begin() + 4);
+    std::copy(physical.begin(), physical.end(), packet.values.begin() + 44);
+    for (std::size_t i = 84; i < 106; ++i) packet.values[i] = RetainedValue::FromDouble(0);
+    packet.values[104] = RetainedValue::FromDouble(1);
+    for (int axis = 0; axis < 4; ++axis)
+        packet.values[106 + axis] = RetainedValue::FromDouble(normal(axis));
+    packet.values[110] = RetainedValue::FromDouble(1);
+    packet.values[111] = RetainedValue::FromDouble(interval.chart);
+    return packet;
+}
+
+bool ArrivalDenominators(const RetainedDopriSampleOutput& sample, const core::Vec4& normal,
+                         core::Twofold& physical, core::Twofold& polynomial) {
+    double physical_sum = 0, polynomial_sum = 0;
+    for (int axis = 0; axis < 4; ++axis) {
+        if (!std::isfinite(normal(axis))) return false;
+        const auto k = Center(sample.physical[4 + axis]) * normal(axis);
+        const auto w = Center(sample.polynomial_tangent[axis]) * normal(axis);
+        physical += k;
+        polynomial += w;
+        physical_sum += std::abs(k.Rounded());
+        polynomial_sum += std::abs(w.Rounded());
+    }
+    const double k = physical.Rounded(), w = polynomial.Rounded();
+    constexpr double cancellation = 256 * std::numeric_limits<double>::epsilon();
+    return std::isfinite(k) && std::isfinite(w) && std::isfinite(physical_sum) &&
+           std::isfinite(polynomial_sum) && std::abs(k) > cancellation * physical_sum &&
+           std::abs(w) > cancellation * polynomial_sum && std::signbit(k) == std::signbit(w);
+}
+
+bool ArrivalAgreement(const RetainedDopriSampleOutput& fixed, const RetainedDenseOutput& physical,
+                      const RetainedDenseOutput& polynomial, const RetainedDopriInterval& interval,
+                      const core::Vec4& normal) {
+    if (!physical.valid || !polynomial.valid) return false;
+    auto comparison = physical.physical;
+    for (std::size_t column = 0; column < 4; ++column)
+        for (std::size_t axis = 0; axis < 4; ++axis)
+            comparison[8 + 8 * column + axis] = polynomial.physical[8 + 8 * column + axis];
+    if (RetainedPhysicalError(physical.physical, comparison, interval.control) > 1) return false;
+    core::Twofold k_normal, w_normal;
+    if (!ArrivalDenominators(fixed, normal, k_normal, w_normal)) return false;
+    for (std::size_t column = 0; column < 4; ++column) {
+        core::Twofold numerator;
+        for (int axis = 0; axis < 4; ++axis)
+            numerator += Center(fixed.physical[8 + 8 * column + axis]) * normal(axis);
+        const auto difference = -numerator / k_normal + numerator / w_normal;
+        for (std::size_t axis = 0; axis < 4; ++axis) {
+            const auto index = 8 + 8 * column + axis;
+            const double magnitude = std::max(std::abs(Center(physical.physical[index]).Rounded()),
+                                              std::abs(Center(comparison[index]).Rounded()));
+            const double budget =
+                interval.control.tolerance *
+                (interval.control.length_scale * interval.control.column_scale[column] + magnitude);
+            const double shift =
+                std::abs((Center(fixed.physical[4 + axis]) * difference).Rounded());
+            if (!std::isfinite(budget) || budget <= 0 || !std::isfinite(shift) || shift > budget)
+                return false;
+        }
+    }
+    return true;
+}
+}  // namespace
+
+base::Expected<std::vector<RetainedDopriSampleOutput>> SampleRetainedDopriIntervals(
+    RetainedCompute& compute, std::span<const RetainedDopriSampleInput> inputs,
+    std::size_t row_budget) {
+    if (inputs.empty() || inputs.size() > compute.Capacity() || row_budget == 0 ||
+        row_budget > compute.Capacity() || inputs.size() > row_budget)
+        return base::Fail(base::ErrorDomain::kDevice, "sample retained DP intervals",
+                          "invalid batch size or row budget");
+    const auto count = inputs.size();
+    std::vector<RetainedDopriSampleOutput> work(count);
+    std::vector<RetainedDopriPhaseInput> packets(count);
+    std::vector<bool> interior(count, false);
+    bool sample_interior = false;
+    for (std::size_t row = 0; row < count; ++row) {
+        const auto& input = inputs[row];
+        if (!input.interval || input.trial >= 4 || !std::isfinite(input.fraction) ||
+            input.fraction < 0 || input.fraction > 1 || !ValidControl(input.interval->control))
+            continue;
+        const auto& curve = *input.interval;
+        if (input.fraction == 0 || input.fraction == 1) {
+            const auto& endpoint =
+                input.fraction == 0 ? curve.starts[input.trial] : curve.endpoints[input.trial];
+            if (!endpoint.valid) continue;
+            work[row].physical = endpoint.physical;
+            const auto stage = input.fraction == 0 ? 0 : 6;
+            for (std::size_t axis = 0; axis < 4; ++axis)
+                work[row].polynomial_tangent[axis] =
+                    curve.packets[input.trial].values[80 + 40 * stage + axis];
+            work[row].valid = true;
+        } else {
+            sample_interior = interior[row] = true;
+            packets[row] = curve.packets[input.trial];
+            packets[row].values[361] = RetainedValue::FromDouble(input.fraction);
+        }
+    }
+    if (sample_interior) {
+        const auto phases = compute.DopriPhase(packets);
+        if (!phases) return std::unexpected(phases.error());
+        std::vector<RetainedEndpointInput> endpoints(count);
+        for (std::size_t row = 0; row < count; ++row)
+            if (interior[row] && (*phases)[row].valid) {
+                const auto& interval = *inputs[row].interval;
+                std::copy(interval.metric.begin(), interval.metric.end(),
+                          endpoints[row].values.begin());
+                std::copy((*phases)[row].phase.begin(), (*phases)[row].phase.end(),
+                          endpoints[row].values.begin() + 4);
+                endpoints[row].values[44] = RetainedValue::FromDouble(interval.chart);
+                std::copy_n((*phases)[row].derivative.begin(), 4,
+                            work[row].polynomial_tangent.begin());
+            }
+        const auto projected = compute.Endpoint(endpoints);
+        if (!projected) return std::unexpected(projected.error());
+        for (std::size_t row = 0; row < count; ++row)
+            if (interior[row] && (*phases)[row].valid && (*projected)[row].valid) {
+                work[row].physical = (*projected)[row].physical;
+                work[row].valid = true;
+            }
+    }
+    std::vector<RetainedDenseInput> physical_packets(count), polynomial_packets(count);
+    std::vector<bool> moving(count, false);
+    bool sample_arrival = false;
+    for (std::size_t row = 0; row < count; ++row)
+        if (work[row].valid && inputs[row].normal) {
+            core::Twofold k_normal, w_normal;
+            if (!ArrivalDenominators(work[row], *inputs[row].normal, k_normal, w_normal)) {
+                work[row] = {};
+                continue;
+            }
+            sample_arrival = moving[row] = true;
+            physical_packets[row] =
+                ArrivalPacket(*inputs[row].interval, work[row].physical, *inputs[row].normal);
+            auto polynomial = work[row].physical;
+            std::copy(work[row].polynomial_tangent.begin(), work[row].polynomial_tangent.end(),
+                      polynomial.begin() + 4);
+            polynomial_packets[row] =
+                ArrivalPacket(*inputs[row].interval, polynomial, *inputs[row].normal);
+        }
+    if (sample_arrival) {
+        const auto physical = compute.Dense(physical_packets);
+        if (!physical) return std::unexpected(physical.error());
+        const auto polynomial = compute.Dense(polynomial_packets);
+        if (!polynomial) return std::unexpected(polynomial.error());
+        for (std::size_t row = 0; row < count; ++row)
+            if (moving[row]) {
+                if (ArrivalAgreement(work[row], (*physical)[row], (*polynomial)[row],
+                                     *inputs[row].interval, *inputs[row].normal))
+                    work[row].physical = (*physical)[row].physical;
+                else
+                    work[row] = {};
+            }
+    }
+    for (auto& output : work) {
+        if (output.valid) {
+            for (const auto& value : output.physical) output.valid &= value.IsRepresented();
+            for (const auto& value : output.polynomial_tangent)
+                output.valid &= value.IsRepresented();
+        }
+        if (!output.valid) output = {};
     }
     return work;
 }

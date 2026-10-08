@@ -488,6 +488,11 @@ class GeodesicTracer {
         double& intersection_fraction, sirius::core::Vec4& intersection_position,
         sirius::core::Vec4& intersection_tangent, bool* transverse_event = nullptr,
         const sirius::core::Vec4* increment = nullptr);
+    bool FindDiskIntersection(const sirius::core::DopriPositionSegment& segment,
+                              float& intersection_r, float& intersection_phi,
+                              double& intersection_fraction,
+                              sirius::core::Vec4& intersection_position,
+                              sirius::core::Vec4& intersection_tangent, bool* transverse_event);
 
     // Novikov-Thorne thin-disk temperature T(r) ~ r^(-3/4) normalised at the edge.
     float ComputeDiskTemperature(float r);
@@ -518,10 +523,11 @@ class GeodesicTracer {
     float ComputeScaleHeight(float r);
     float ComputeVolumetricOpacityDensity(float r, float z, float phi);
     float ComputeVolumetricTemperature(float r, float z);
-    void AccumulateVolumetricEmission(const sirius::core::Vec4& entry_velocity,
+    bool AccumulateVolumetricEmission(const sirius::core::Vec4& entry_velocity,
                                       const sirius::core::Vec4& exit_velocity, double affine_length,
                                       float observer_frequency, const sirius::core::Vec4& entry_pos,
-                                      const sirius::core::Vec4& exit_pos, TraceResult& result);
+                                      const sirius::core::Vec4& exit_pos, TraceResult& result,
+                                      const sirius::core::DopriPositionSegment* curve = nullptr);
 
     // --- Ray-bundle (geodesic deviation) machinery (P2) ----------------------
     // A parallel bundle carried alongside the central ray: two deviation vectors
@@ -571,7 +577,8 @@ class GeodesicTracer {
                                const std::array<sirius::core::Vec4, 2>& launch_screen,
                                PolarisationFrame& frame);
     void AdvancePolarisationFrame(PolarisationFrame& frame, const sirius::core::Vec4& end_position,
-                                  const sirius::core::Vec4& end_tangent, double d_lambda);
+                                  const sirius::core::Vec4& end_tangent, double d_lambda,
+                                  const sirius::core::CoupledSegmentSample* midpoint = nullptr);
     bool ReconditionPolarisationFrame(PolarisationFrame& frame, const sirius::core::Vec4& position,
                                       const sirius::core::Vec4& velocity);
     void SetDiskPolarisation(const PolarisationFrame& frame, TraceResult::DiskCrossing& crossing);

@@ -170,6 +170,8 @@ std::string VulkanRenderEvidenceJson(const SessionConfig& config, const VulkanRe
             {"full_batches", timing.full_batches},
             {"interval_rows", timing.interval_rows},
             {"camera_rows", timing.camera_rows},
+            {"sample_batches", timing.sample_batches},
+            {"sample_rows", timing.sample_rows},
             {"batch_row_counts", timing.batch_row_counts},
             {"coalescing_timeouts", timing.coalescing_timeouts},
             {"coalescing_underfilled", timing.coalescing_underfilled},

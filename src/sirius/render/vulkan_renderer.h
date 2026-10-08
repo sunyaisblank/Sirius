@@ -77,8 +77,7 @@ struct VulkanRenderStats {
     std::uint64_t accepted_intervals = 0;
     // Film camera, joint RK, projection, dense sampling, initialization, smooth ray camera.
     // Counts kernel commands, including both commands in a shared submission.
-    // Original six stages followed by the separate DP phase sampler. Its
-    // count remains zero until that sampler is installed in the trace owner.
+    // Original six stages followed by the separate DP phase sampler.
     std::array<std::int64_t, backend::RetainedCompute::kStageCount> retained_stage_dispatches{};
     backend::RetainedCompute::StageStats endpoint_dense_timing;
     std::uint64_t queue_submissions = 0;
@@ -90,6 +89,8 @@ struct VulkanRenderStats {
         std::uint64_t full_batches = 0;
         std::uint64_t interval_rows = 0;
         std::uint64_t camera_rows = 0;
+        std::uint64_t sample_batches = 0;
+        std::uint64_t sample_rows = 0;
         std::vector<std::uint64_t> batch_row_counts;
         std::uint64_t coalescing_timeouts = 0;
         std::uint64_t coalescing_underfilled = 0;

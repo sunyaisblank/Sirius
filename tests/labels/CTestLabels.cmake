@@ -355,6 +355,8 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    CpuTraceBoundary.RetainedQuarticEventsKeepOriginalFractionsAndExcludeLaterDisk
+    CpuTraceBoundary.RetainedQuarticVolumeFailurePublishesNothingAndRecovers
     CpuTraceBoundary.EveryAdvertisedCpuMetricConstructsAndTracesOneRay
     CpuTraceBoundary.FinitePupilOffsetMovesTheLiveCpuLaunchEvent
     CpuTraceBoundary.CancellationDiscardsPrivateRayDataAndAllowsTracerReuse
@@ -1033,6 +1035,8 @@ set_tests_properties(
     RetainedDopriTest.IndependentQuarticPreservesCompletePhase
     RetainedDopriTest.MalformedRowsRefuseAndRecover
     RetainedDopriTest.CurvedTransportConnectsSamplerAndProjection
+    RetainedDopriTest.ConnectedIntervalsPreserveTrialsAndIndependentBudgets
+    RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 

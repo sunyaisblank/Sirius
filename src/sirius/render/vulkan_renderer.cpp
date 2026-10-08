@@ -686,6 +686,8 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     timing.full_batches = execution.full_batches;
     timing.interval_rows = execution.interval_rows;
     timing.camera_rows = execution.camera_rows;
+    timing.sample_batches = execution.sample_batches;
+    timing.sample_rows = execution.sample_rows;
     timing.batch_row_counts = execution.batch_row_counts;
     timing.coalescing_timeouts = execution.coalescing_timeouts;
     timing.coalescing_underfilled = execution.coalescing_underfilled;

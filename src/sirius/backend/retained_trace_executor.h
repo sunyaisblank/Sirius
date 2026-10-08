@@ -30,6 +30,8 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
                                              const core::CameraRay& camera) override;
     bool Step(core::Lightray& ray, core::IMetric& metric, const core::IntegratorConfig& config,
               core::Rk45CoupledState& coupled, core::Rk45CoupledComparison& comparison) override;
+    std::optional<core::CoupledSegmentSample> Sample(core::CoupledTrial trial, double fraction,
+                                                     const core::Vec4* normal = nullptr) override;
     // A submission safety error includes its observed one-row stage and host
     // submit/wait duration; it does not attribute the driver's compilation work.
     // Sticky errors complete queued calls without further device work.
@@ -37,6 +39,7 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
     struct Stats {
         std::uint64_t interval_batches = 0;
         std::uint64_t camera_batches = 0;
+        std::uint64_t sample_batches = 0;
         std::uint64_t batch_subdivisions = 0;
         std::uint64_t safety_fallbacks = 0;
         // A private singleton attempt repeated with serialized projections
@@ -75,6 +78,7 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
         std::uint64_t full_batches = 0;
         std::uint64_t interval_rows = 0;
         std::uint64_t camera_rows = 0;
+        std::uint64_t sample_rows = 0;
         std::vector<std::uint64_t> batch_row_counts;
         // Predicate wait wall time includes lock reacquisition. Untimed idle
         // waits for the first request are outside this coalescing observation.
@@ -111,14 +115,19 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
     struct Continuation {
         Snapshot before, after;
         RetainedEndpointOutput start, finish;
+        std::shared_ptr<const RetainedDopriInterval> dopri;
+        core::Lightray origin{};
     };
     struct Request {
         bool camera = false;
+        bool sampling = false;
         RetainedRayCameraInput camera_input;
         base::Expected<RetainedCameraOutput> camera_result = RetainedCameraOutput{};
         RetainedInitializeInput initialization;
         RetainedIntervalInput interval;
         base::Expected<RetainedIntervalOutput> result = RetainedIntervalOutput{};
+        RetainedDopriSampleInput sample_input;
+        base::Expected<RetainedDopriSampleOutput> sample_result = RetainedDopriSampleOutput{};
         // Known completed attempts remain charged after retry, error or cancellation.
         std::uint32_t completed_stages = 0;
         bool completed = false;
@@ -137,7 +146,7 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
     std::condition_variable available_, completed_;
     std::deque<Request*> requests_;
     std::map<std::thread::id, Continuation> continuations_;
-    // Synchronous Launch/Step permits at most one queued request per thread.
+    // Synchronous Launch/Step/Sample permits at most one queued request per thread.
     // Nesting depth preserves distinct membership across nested trace scopes.
     std::map<std::thread::id, std::size_t> active_traces_;
     std::size_t queued_registered_ = 0;
