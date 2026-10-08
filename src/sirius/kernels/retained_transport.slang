@@ -117,17 +117,17 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint regi
     return true;
 }
 bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint registers,
-                     uint stage, uint lane) {
+                     uint layers, uint stage, uint lane) {
     uint needed = count;
-    if (needed == 0 || needed > count) return false;
+    if (needed == 0 || needed > count || layers == 0 || layers > SIRIUS_RETAINED_LAYERS) return false;
     if (lane == 0) retainedStatus = 0;
 #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
     GroupMemoryBarrierWithGroupSync();
 #endif
     uint layerBase = programBase + 43 + 5 * count;
-    if (inputs[layerBase] != 0 || inputs[layerBase + SIRIUS_RETAINED_LAYERS] != count) return false;
+    if (inputs[layerBase] != 0 || inputs[layerBase + layers] != count) return false;
     uint expected = 0;
-    for (uint layer = 0; layer < SIRIUS_RETAINED_LAYERS; ++layer) {
+    for (uint layer = 0; layer < layers; ++layer) {
         uint start = inputs[layerBase + layer], end = inputs[layerBase + layer + 1];
         if (start >= needed) break;
         if (start != expected || end <= start || end > needed ||
@@ -464,8 +464,11 @@ RetainedTriple ReadCoefficient(uint index) {
 #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
     AllMemoryBarrierWithGroupSync();
 #endif
+    uint layers = SIRIUS_RETAINED_LAYERS;
     if (inputs[programBase + 2] != 40 || count > 65536 || registers != SIRIUS_RETAINED_REGISTERS ||
-        ni != programBase + 43 + 5 * count + SIRIUS_RETAINED_LAYERS + 1 ||
+        43 + 5 * count + layers + 1 != SIRIUS_RETAINED_GENERAL_PROGRAM_WORDS ||
+        ni != programBase + SIRIUS_RETAINED_GENERAL_PROGRAM_WORDS +
+                            SIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS ||
         rowWords != 2404 + 5 * registers)
         return;
     for (uint i = 0; i < 46; ++i)
@@ -504,6 +507,19 @@ RetainedTriple ReadCoefficient(uint index) {
         if (lane == 0) outputs[rowBase] = 1;
         if (lane == 0) outputs[rowBase + 1] = 7;
         return;
+    }
+    // The parameters are immutable for the complete seven-stage trial. Every
+    // lane in this row chooses the same table, so all existing joins remain
+    // uniform. Nonzero centres or parameter radii retain the general family.
+    if (RTExact(spin, RPZero()) && RTExact(ReadOriginal(2, row), RPZero()) &&
+        RTExact(lambda, RPZero())) {
+        programBase += SIRIUS_RETAINED_GENERAL_PROGRAM_WORDS;
+        count = inputs[programBase];
+        layers = SIRIUS_RETAINED_SCHWARZSCHILD_LAYERS;
+        if (inputs[programBase + 1] != registers || inputs[programBase + 2] != 40 ||
+            count > 65536 ||
+            43 + 5 * count + layers + 1 != SIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS)
+            return;
     }
 #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
     // The immutable plan leaves never-assigned slots invalid across all stages.
@@ -551,7 +567,7 @@ RetainedTriple ReadCoefficient(uint index) {
 #endif
         if (retainedStatus != 0) return;
         if (lane == 0) outputs[rowBase + 1] = stage + 1;
-        if (!EvaluateProgram(row, rowBase, programBase, count, registers, stage, lane)) return;
+        if (!EvaluateProgram(row, rowBase, programBase, count, registers, layers, stage, lane)) return;
     }
     if (lane == 0) retainedStatus = 0;
 #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)

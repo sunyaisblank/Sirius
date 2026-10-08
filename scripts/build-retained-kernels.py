@@ -226,10 +226,19 @@ def validate_portable_coefficients(source):
             raise ValueError(f"retained tableau slot {slot} does not enclose its exact rational")
 
 
-def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False, normal_sum32=False):
+def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False, normal_sum32=False, transport_specialized=None):
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
+    if transport_specialized is not None:
+        if source.stem != "retained_transport":
+            raise ValueError("the second transport table belongs only to Transport")
+        general_words, specialized_words, specialized_layers = transport_specialized
+        if min(general_words, specialized_words, specialized_layers) <= 0 or specialized_layers > layers:
+            raise ValueError("invalid bounded transport table frame")
+        definitions += [f"-DSIRIUS_RETAINED_GENERAL_PROGRAM_WORDS={general_words}",
+                        f"-DSIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS={specialized_words}",
+                        f"-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS={specialized_layers}"]
     portable_parallel = portable and source.stem in ("retained_transport", "retained_endpoint", "retained_dense", "retained_dopri_phase")
     projection_words = 7 if portable and source.stem == "retained_endpoint" else 0
     if normal_sum32:
@@ -364,7 +373,19 @@ def main():
         prefix = [program["instructions"], program["registers"]]
         if kind not in ("Camera", "RayCamera"):
             prefix.append(len(program["outputs"]))
-        array("k" + kind + "Program", prefix + program["outputs"] + program["operations"] + program["layer_offsets"])
+        encoded = prefix + program["outputs"] + program["operations"] + program["layer_offsets"]
+        transport_specialized = None
+        if kind == "Transport":
+            specialized = module.build_schwarzschild_transport_program(parallel=True)
+            if specialized["registers"] != program["registers"] or len(specialized["outputs"]) != 40:
+                raise ValueError("Schwarzschild Transport changed the shared row frame")
+            specialized_words = ([specialized["instructions"], specialized["registers"], 40] +
+                                 specialized["outputs"] + specialized["operations"] + specialized["layer_offsets"])
+            transport_specialized = (len(encoded), len(specialized_words), len(specialized["layer_offsets"]) - 1)
+            # One immutable input span and one kernel; planning charges both
+            # tables through the same complete span as allocation and upload.
+            encoded += specialized_words
+        array("k" + kind + "Program", encoded)
         stem = "retained_" + ({"RayCamera": "ray_camera", "DopriPhase": "dopri_phase"}.get(kind, kind.lower()))
         terms = 4 if kind in ("Camera", "RayCamera") else 5
         sizes = []
@@ -376,7 +397,8 @@ def main():
                                   args.output.parent / (stem + suffix + ".spv"),
                                   args.compiler, args.assembler, args.disassembler, args.validator,
                                   program["registers"], terms, len(program["layer_offsets"])-1,
-                                  program.get("prefix_instructions", 0), fp64=wide, portable=portable, optimizer=args.optimizer)
+                                  program.get("prefix_instructions", 0), fp64=wide, portable=portable, optimizer=args.optimizer,
+                                  transport_specialized=transport_specialized)
             array("k" + kind + name + "Shader", code)
             sizes.append(len(code) * 4)
         if kind in ("Transport", "Endpoint", "DopriPhase"):
@@ -390,7 +412,7 @@ def main():
                 args.compiler, args.assembler, args.disassembler, args.validator,
                 program["registers"], terms, len(program["layer_offsets"])-1,
                 program.get("prefix_instructions", 0), portable=True,
-                optimizer=args.optimizer, normal_sum32=True)
+                optimizer=args.optimizer, normal_sum32=True, transport_specialized=transport_specialized)
             array("k" + kind + "PortableNormalSumShader", code)
         if kind in ("Transport", "Endpoint"):
             destination = args.output.parent / (stem + "_fma.spv")
@@ -399,7 +421,8 @@ def main():
                 code = compile_shader(source / (stem + ".slang"), destination,
                     args.compiler, args.assembler, args.disassembler, args.validator,
                     program["registers"], terms, len(program["layer_offsets"])-1,
-                    program.get("prefix_instructions", 0), fp64=True, fma=True)
+                    program.get("prefix_instructions", 0), fp64=True, fma=True,
+                    transport_specialized=transport_specialized)
                 array("k" + kind + "FmaShader", code)
             else:
                 shutil.copyfile(args.output.parent / (stem + "_fp64.spv"), destination)

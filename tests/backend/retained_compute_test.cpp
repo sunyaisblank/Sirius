@@ -23,6 +23,7 @@
 #include <numbers>
 #include <optional>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #ifdef SIRIUS_HAS_RETAINED_COMPUTE
@@ -41,6 +42,7 @@
 #include "support/retained_transport/dopri_reference.h"
 #include "support/retained_transport/endpoint_reference.h"
 #include "support/retained_transport/reference_cases.h"
+#include "support/retained_transport/schwarzschild_reference_cases.h"
 #endif
 
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
@@ -169,7 +171,7 @@ TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
     // A driver's allocation requirement can exceed every logical shader span.
     // These fixed layout totals are independent of the production planner.
     for (const auto& [capacity, logical] : std::array<std::pair<std::size_t, std::uint64_t>, 3>{
-             {{1, 671396}, {24, 3301216}, {64, 7874816}}}) {
+             {{1, 682880}, {24, 3312700}, {64, 7886300}}}) {
         AdmissionDevice padded;
         padded.query_padding = 128;
         const auto required = RetainedCompute::RequiredAllocationBytes(padded, capacity);
@@ -182,7 +184,7 @@ TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
         EXPECT_EQ(padded.BufferAllocationBytes(), 0U);
         if (capacity == 24) {
             EXPECT_EQ(padded.queried_spans,
-                      (std::vector<std::uint64_t>{122728, 284544, 74468, 451104, 84864, 367584,
+                      (std::vector<std::uint64_t>{122728, 284544, 85952, 451104, 84864, 367584,
                                                   181492, 410784, 61292, 193344, 145452, 308736,
                                                   216520, 398304}));
         }
@@ -729,6 +731,7 @@ class TransferProbeDevice final : public ComputeDevice {
     std::function<void(const IndependentPairTiming*)> after_pair_timing;
     std::optional<double> pair_submit_ms;
     std::function<void(BufferHandle, std::span<std::byte>)> after_read;
+    std::function<void(BufferHandle, std::span<std::byte>)> before_write;
 
     const DeviceInfo& Info() const noexcept override { return info_ ? *info_ : device_.Info(); }
     sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t> code) override {
@@ -747,6 +750,11 @@ class TransferProbeDevice final : public ComputeDevice {
             std::memcpy(&capacity, data.data(), sizeof(capacity));
         writes.push_back({buffer, data.size_bytes(), capacity});
         if (fail_next == Failure::Write) return Inject("write");
+        if (before_write) {
+            std::vector<std::byte> changed(data.begin(), data.end());
+            before_write(buffer, changed);
+            return device_.WriteBuffer(buffer, changed);
+        }
         return device_.WriteBuffer(buffer, data);
     }
     sirius::base::Expected<void> ReadBuffer(BufferHandle buffer,
@@ -1054,6 +1062,52 @@ template <typename Fixture>
             }
             if (error > 1e-11L * scale) return ::testing::AssertionFailure();
         }
+    return ::testing::AssertionSuccess();
+}
+
+::testing::AssertionResult SchwarzschildStepAgrees(
+    const RetainedStepOutput& output, const sirius::test::retained_schwarzschild::Case& fixture) {
+    if (!output.valid || output.stages != 7) return ::testing::AssertionFailure();
+    const bool flat = std::string_view(fixture.name) == "frozen-analytic-flat";
+    if (output.rhs_valid == flat) return ::testing::AssertionFailure() << "RHS classification";
+    const std::array records{&output.fifth, &output.fourth, &output.increment, &output.error};
+    const auto get = [&](std::size_t index) -> const RetainedValue& {
+        return index < 160 ? (*records[index / 40])[index % 40]
+                           : output.rhs[(index - 160) / 40][index % 40];
+    };
+    // The unchanged flat oracle has no performed RHS records. Curved cases
+    // check all 160 final and 280 independently differentiated RHS fields.
+    const std::size_t limit = flat ? 160 : 440;
+    for (std::size_t begin = 0; begin < limit; begin += 4) {
+        long double error = 0, scale = 0;
+        for (std::size_t axis = 0; axis < 4; ++axis) {
+            const auto index = begin + axis;
+            const auto& value = get(index);
+            if (!value.IsRepresented()) return ::testing::AssertionFailure();
+            const auto reference = fixture.reference[index];
+            const sirius::core::Twofold exact(reference.high, reference.low);
+            const auto center = sirius::core::Twofold(value.high) +
+                                sirius::core::Twofold(value.low) +
+                                sirius::core::Twofold(value.tail);
+            const double difference = std::abs((center - exact).Rounded());
+            constexpr double epsilon = std::numeric_limits<double>::epsilon();
+            const double rounding =
+                128 * epsilon * epsilon * (std::abs(reference.high) + std::abs(value.high));
+            if (difference > value.radius + fixture.gap[index] + rounding)
+                return ::testing::AssertionFailure()
+                       << "Schwarzschild component " << index << " difference=" << difference
+                       << " radius=" << value.radius;
+            error = std::max(
+                error, std::abs((static_cast<long double>(value.high) + value.low + value.tail) -
+                                (static_cast<long double>(reference.high) + reference.low)));
+            const auto scale_index = index >= 120 && index < 160 ? index - 40 : index;
+            const auto scale_reference = fixture.reference[scale_index];
+            scale = std::max(scale, std::abs(static_cast<long double>(scale_reference.high) +
+                                             scale_reference.low));
+        }
+        if (error > 1e-11L * scale)
+            return ::testing::AssertionFailure() << "Schwarzschild group " << begin;
+    }
     return ::testing::AssertionSuccess();
 }
 
@@ -1519,6 +1573,235 @@ TEST_F(RetainedComputeTest, JointRkStagesRetainCriticalIncrementsAndEmbeddedErro
     for (std::size_t i = 0; i < 40; ++i) {
         EXPECT_EQ(flat.error[i].Center(), 0);
         EXPECT_EQ(flat.fifth[i].Center(), flat.fourth[i].Center());
+    }
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
+TEST_F(RetainedComputeTest, SchwarzschildStagesPreserveIndependentFieldsAndGeneralFallback) {
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    namespace fixture = sirius::test::retained_schwarzschild;
+    std::vector<RetainedStepInput> witnesses;
+    for (const auto& item : fixture::cases)
+        witnesses.push_back(std::bit_cast<RetainedStepInput>(item.input));
+    ASSERT_EQ(witnesses.size(), 23U);
+    std::vector<RetainedStepInput> mixed{witnesses[0], witnesses[1], witnesses[0], witnesses[0]};
+    // Normalization, rather than raw high-word equality, determines exact zero.
+    mixed[2].values[1] = {0.5F, -0.5F, -0.0F, -0.0F, 1};
+    mixed[3].values[0] = {2.0F, -1.0F, 0.0F, 0.0F, 1};
+    mixed.push_back(
+        std::bit_cast<RetainedStepInput>(sirius::test::retained_transport::cases.front().input));
+    mixed.push_back(
+        std::bit_cast<RetainedStepInput>(sirius::test::retained_transport::cases.back().input));
+    for (std::size_t parameter = 1; parameter <= 3; ++parameter) {
+        auto row = witnesses[0];
+        // A nonzero lower limb must not be swallowed by a high-word-only gate.
+        row.values[parameter] = {0.0F, 0x1p-40F, 0.0F, 0.0F, 1};
+        mixed.push_back(row);
+    }
+    for (std::size_t parameter = 1; parameter <= 3; ++parameter) {
+        auto row = witnesses[0];
+        row.values[parameter].radius = 0x1p-40F;
+        mixed.push_back(row);
+    }
+    const auto good_rows = mixed.size();
+    auto bad = witnesses[0];
+    bad.values[4].high = std::numeric_limits<float>::quiet_NaN();
+    mixed.push_back(bad);
+    bad = witnesses[0];
+    bad.values[43].valid = 0;
+    mixed.push_back(bad);
+    bad = witnesses[0];
+    bad.values[44] = RetainedValue::FromDouble(0);
+    mixed.push_back(bad);
+    bad = witnesses[0];
+    bad.values[45] = RetainedValue::FromDouble(0);
+    mixed.push_back(bad);
+    bad = witnesses[0];
+    bad.values[0].radius = -1;
+    mixed.push_back(bad);
+    bad = witnesses[0];
+    for (std::size_t i = 5; i < 8; ++i) bad.values[i] = RetainedValue::FromDouble(0);
+    mixed.push_back(bad);
+    ASSERT_LE(mixed.size(), 24U);
+
+    // Locate the second immutable table from the general table's terminal
+    // layer offset, without depending on the specialized instruction count.
+    const auto& program = sirius::backend::retained_program::kTransportProgram;
+    std::size_t specialized = 43 + 5 * program[0];
+    ASSERT_LT(specialized, program.size());
+    ASSERT_EQ(program[specialized], 0U);
+    while (specialized < program.size() && program[specialized] != program[0]) ++specialized;
+    ++specialized;
+    ASSERT_LT(specialized + 2, program.size());
+    ASSERT_EQ(program[specialized + 1], program[1]);
+    ASSERT_EQ(program[specialized + 2], 40U);
+
+    const auto inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory) << inventory.error().Description();
+    const auto index = ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(index) << index.error().Description();
+    RecordProperty("schwarzschild_normal_default_exercised", 0);
+    RecordProperty("schwarzschild_normal_fp64_exercised", 0);
+    for (const bool decline_rte32 : {false, true}) {
+        for (const bool wide : {false, true}) {
+            SCOPED_TRACE(decline_rte32 ? "conservative integer admission" : "actual admission");
+            SCOPED_TRACE(wide ? "fp64 products" : "default products");
+            auto opened = CreateVulkanDevice(*index);
+            ASSERT_TRUE(opened) << opened.error().Description();
+            ASSERT_EQ((*opened)->Info(), device->Info());
+            ASSERT_TRUE((*opened)->SetBufferAllocationLimit(8 * 1024 * 1024));
+            TransferProbeDevice probe(**opened, decline_rte32);
+            auto expected_info = device->Info();
+            if (decline_rte32) expected_info.rounds_fp32_to_nearest = false;
+            ASSERT_EQ(probe.Info(), expected_info);
+            auto created = RetainedCompute::Create(probe, 24, wide);
+            if (wide && (!device->Info().supports_fp64 || !device->Info().rounds_fp64_to_nearest)) {
+                ASSERT_FALSE(created);
+                EXPECT_NE(created.error().detail().find("binary64"), std::string::npos);
+                EXPECT_TRUE(probe.allocations.empty());
+                EXPECT_EQ((*opened)->BufferAllocationBytes(), 0U);
+                continue;
+            }
+            ASSERT_TRUE(created) << created.error().Description();
+            auto& instance = **created;
+            const auto allocation = (*opened)->BufferAllocationBytes();
+            const auto required = RetainedCompute::RequiredAllocationBytes(probe, 24);
+            ASSERT_TRUE(required) << required.error().Description();
+            EXPECT_EQ(allocation, *required);
+            ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+            const auto transport_input = probe.allocations[2].handle;
+            probe.capture_output = probe.allocations[3].handle;
+            const auto row_bytes = probe.allocations[3].bytes / instance.Capacity();
+            ASSERT_EQ(row_bytes, sirius::backend::retained_program::kTransportRowWords * 4U);
+            if (!decline_rte32 && RetainedUsesPortableArithmetic(probe.Info()) &&
+                probe.Info().rounds_fp32_to_nearest) {
+                RecordProperty(wide ? "schwarzschild_normal_fp64_exercised"
+                                    : "schwarzschild_normal_default_exercised",
+                               1);
+            }
+            if (decline_rte32) {
+                EXPECT_TRUE(RetainedUsesPortableArithmetic(probe.Info()));
+                RecordProperty(wide ? "schwarzschild_integer_fp64_exercised"
+                                    : "schwarzschild_integer_default_exercised",
+                               1);
+            }
+            std::vector<RetainedStepOutput> outputs;
+            std::vector<std::byte> raw;
+            const auto step = [&](std::span<const RetainedStepInput> rows) {
+                probe.readbacks.clear();
+                const auto returned = instance.Step(rows);
+                ASSERT_TRUE(returned) << returned.error().Description();
+                ASSERT_EQ(returned->size(), rows.size());
+                ASSERT_EQ(probe.readbacks.size(), 1U);
+                ASSERT_EQ(probe.readbacks.front().size(), rows.size() * row_bytes);
+                outputs = *returned;
+                raw = probe.readbacks.front();
+                EXPECT_EQ((*opened)->BufferAllocationBytes(), allocation);
+            };
+            const auto erased = [](const RetainedStepOutput& output) {
+                EXPECT_FALSE(output.valid);
+                EXPECT_FALSE(output.rhs_valid);
+                EXPECT_LE(output.stages, 7U);
+                for (const auto* record :
+                     {&output.fifth, &output.fourth, &output.increment, &output.error}) {
+                    for (const auto& value : *record)
+                        EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(value)),
+                                  (std::array<std::uint32_t, 5>{}));
+                }
+                for (const auto& record : output.rhs) {
+                    for (const auto& value : record)
+                        EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(value)),
+                                  (std::array<std::uint32_t, 5>{}));
+                }
+            };
+            ASSERT_NO_FATAL_FAILURE(step(witnesses));
+            for (std::size_t row = 0; row < witnesses.size(); ++row) {
+                SCOPED_TRACE(fixture::cases[row].name);
+                ASSERT_TRUE(SchwarzschildStepAgrees(outputs[row], fixture::cases[row]));
+            }
+            ASSERT_NO_FATAL_FAILURE(step(mixed));
+            for (std::size_t row = 0; row < good_rows; ++row) {
+                ASSERT_TRUE(outputs[row].valid) << row;
+                EXPECT_EQ(outputs[row].stages, 7U);
+                EXPECT_EQ(outputs[row].rhs_valid, row != 5);
+            }
+            for (std::size_t row = good_rows; row < mixed.size(); ++row) erased(outputs[row]);
+            ASSERT_TRUE(SchwarzschildStepAgrees(outputs[0], fixture::cases[0]));
+            ASSERT_TRUE(SchwarzschildStepAgrees(outputs[1], fixture::cases[1]));
+            ASSERT_TRUE(SchwarzschildStepAgrees(outputs[2], fixture::cases[0]));
+            ASSERT_TRUE(SchwarzschildStepAgrees(outputs[3], fixture::cases[0]));
+            ASSERT_TRUE(StepAgrees(outputs[4], sirius::test::retained_transport::cases.front()));
+            ASSERT_TRUE(StepAgrees(outputs[5], sirius::test::retained_transport::cases.back()));
+            const auto initial_raw = raw;
+            const auto same_row = [&](std::size_t row, std::size_t initial_row) {
+                const auto current = std::span(raw).subspan(row * row_bytes, row_bytes);
+                const auto initial =
+                    std::span(initial_raw).subspan(initial_row * row_bytes, row_bytes);
+                EXPECT_TRUE(
+                    std::equal(current.begin(), current.end(), initial.begin(), initial.end()))
+                    << "raw row " << row << " reference row " << initial_row;
+            };
+            // Smaller reordered batches still own complete active rows; no
+            // claim is made about untouched inactive capacity or cross-route words.
+            const std::array<std::size_t, 6> order{11, 5, 1, 4, 8, 2};
+            std::vector<RetainedStepInput> reordered;
+            for (const auto row : order) reordered.push_back(mixed[row]);
+            ASSERT_NO_FATAL_FAILURE(step(reordered));
+            for (std::size_t row = 0; row < order.size(); ++row) same_row(row, order[row]);
+
+            // An invalid specialized header is harmless to all general/flat
+            // rows. This distinguishes tiny nonzero/radius inputs from exact
+            // Schwarzschild parameters without deriving new tiny-input goldens.
+            // Ordinary Step uploads cache this immutable tail. The explicit
+            // full-span writes below perturb and restore only this test seam.
+            const auto table = 1 + instance.Capacity() * 230;
+            std::vector<std::uint32_t> complete_input(table + program.size());
+            complete_input[0] = static_cast<std::uint32_t>(instance.Capacity());
+            std::memcpy(complete_input.data() + 1, mixed.data(),
+                        mixed.size() * sizeof(RetainedStepInput));
+            std::copy(program.begin(), program.end(), complete_input.begin() + table);
+            std::size_t changed_uploads = 0;
+            probe.before_write = [&](BufferHandle buffer, std::span<std::byte> data) {
+                if (buffer.value != transport_input.value) return;
+                const auto table_bytes = table * sizeof(std::uint32_t);
+                ASSERT_EQ(data.size(), table_bytes + program.size() * sizeof(std::uint32_t));
+                ASSERT_EQ(std::memcmp(data.data() + table_bytes, program.data(),
+                                      program.size() * sizeof(std::uint32_t)),
+                          0);
+                const auto wrong_registers = program[1] ^ 1U;
+                std::memcpy(data.data() + table_bytes + (specialized + 1) * sizeof(std::uint32_t),
+                            &wrong_registers, sizeof(wrong_registers));
+                ++changed_uploads;
+            };
+            ASSERT_TRUE(
+                probe.WriteBuffer(transport_input, std::as_bytes(std::span(complete_input))));
+            probe.before_write = {};
+            ASSERT_NO_FATAL_FAILURE(step(mixed));
+            ASSERT_EQ(changed_uploads, 1U);
+            for (std::size_t row = 0; row < 4; ++row) {
+                erased(outputs[row]);
+                EXPECT_EQ(outputs[row].stages, 0U);
+                const auto words = std::span(raw).subspan(row * row_bytes, row_bytes);
+                EXPECT_TRUE(std::all_of(words.begin(), words.end(),
+                                        [](std::byte word) { return word == std::byte{}; }));
+            }
+            for (std::size_t row = 4; row < good_rows; ++row) {
+                ASSERT_TRUE(outputs[row].valid) << row;
+                same_row(row, row);
+            }
+            for (std::size_t row = good_rows; row < mixed.size(); ++row) erased(outputs[row]);
+            ASSERT_TRUE(
+                probe.WriteBuffer(transport_input, std::as_bytes(std::span(complete_input))));
+            ASSERT_NO_FATAL_FAILURE(step(mixed));
+            for (std::size_t row = 0; row < good_rows; ++row) same_row(row, row);
+            ASSERT_TRUE(SchwarzschildStepAgrees(outputs[0], fixture::cases[0]));
+            ASSERT_TRUE(StepAgrees(outputs[4], sirius::test::retained_transport::cases.front()));
+            ASSERT_TRUE(StepAgrees(outputs[5], sirius::test::retained_transport::cases.back()));
+            ASSERT_NO_FATAL_FAILURE(step(std::span(witnesses).first(1)));
+            ASSERT_TRUE(SchwarzschildStepAgrees(outputs.front(), fixture::cases.front()));
+        }
     }
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";

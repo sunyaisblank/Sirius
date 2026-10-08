@@ -451,6 +451,52 @@ def build_transport_program(parallel=False):
     return program
 
 
+def build_schwarzschild_transport_program(parallel=False):
+    """Coupled Schwarzschild RHS for exact a=Q=Lambda=0 and r>0.
+
+    The shader owns parameter admission and its prior analytic flat bypass.
+    This changes retained arithmetic ordering; it is not an exact-word
+    replacement for the general Kerr expression graph.
+    """
+    ops.clear()
+    cache.clear()
+    row = [inp(i) for i in range(45)]
+    position, momentum = row[4:8], row[8:12]
+    reflection = [row[44], p(1), row[44], p(1)]
+    reflected = [x * c for x, c in zip(position, reflection)]
+    xx, yy, zz = [coord(reflected[i], i) for i in range(1, 4)]
+    bound = node(9, node(9, reflected[1], reflected[2]),
+                 node(9, reflected[3], p(0)))
+    scale = J(node(8, bound))
+    x, y, z = xx / scale, yy / scale, zz / scale
+    radius = scale * (x * x + y * y + z * z).sqrt()
+    ell = [j(1), xx / radius, yy / radius, zz / radius]
+    factor = (2 * j(row[0])) / radius
+    n = [ell[i].v * reflection[i] for i in range(1, 4)]
+    radial_momentum = sum(n[i] * momentum[i + 1] for i in range(3))
+    contraction = -(row[44] * momentum[0]) + radial_momentum
+    tangent = [-momentum[0] + row[44] * factor.v * contraction]
+    tangent.extend(momentum[i + 1] - factor.v * n[i] * contraction
+                   for i in range(3))
+    # K=(eta*p*p-H*S*S)/2, H=2M/r, S=-chart*p0+n.p.
+    # -partial_i K=(H/r)*S*(pi-(n.p+S/2)*ni); stationarity gives F0=0.
+    common = (factor.v / radius.v) * contraction
+    radial_coefficient = radial_momentum + contraction / 2
+    force = [p(0)]
+    force.extend(common * (momentum[i + 1] - radial_coefficient * n[i])
+                 for i in range(3))
+    central = tangent + force
+    outputs = central[:]
+    for column in range(4):
+        seeds = {4 + i: row[12 + 8 * column + i] for i in range(8)}
+        outputs.extend(differentiate(central, seeds))
+    program = compile_program([v.i for v in outputs], parallel, homogeneous=parallel)
+    if parallel:
+        # Keep the existing Transport scratch and output span in every mode.
+        program['registers'] = max(program['registers'], 459)
+    return program
+
+
 def build_endpoint_program(parallel=False):
     """Metric and projected physical columns from the complete phase expansion.
 
