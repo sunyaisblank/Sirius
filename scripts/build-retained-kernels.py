@@ -250,9 +250,9 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
                         f"-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS={specialized_layers}",
                         f"-DSIRIUS_RETAINED_SCHWARZSCHILD_PREFIX={specialized_prefix}"]
     portable_parallel = portable and source.stem in ("retained_transport", "retained_endpoint", "retained_dense", "retained_dopri_phase")
-    # Normal Transport and Endpoint modules cover complete 64-wide layers
+    # Normal Transport, Endpoint and DopriPhase cover complete 64-wide layers
     # with sixteen invocations and stride over their complete producer sets.
-    execution_lanes = (16 if portable and normal_sum32 and source.stem in ("retained_endpoint", "retained_transport")
+    execution_lanes = (16 if portable and normal_sum32 and source.stem in ("retained_endpoint", "retained_transport", "retained_dopri_phase")
                        else WORKGROUP_LANES if portable_parallel or not portable else 1)
     # Projection publishes its root and sixteen complete weighted tangent terms.
     projection_words = 7 + 16 * 5 if portable and source.stem == "retained_endpoint" else 0
