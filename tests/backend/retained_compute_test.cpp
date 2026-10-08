@@ -1875,12 +1875,12 @@ TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
                         host->total_ms));
     };
     probe.after_dispatch = [&](std::span<const BufferHandle> bound, const DispatchTiming* host) {
-        constexpr std::array names{"camera", "transport",  "endpoint",
-                                   "dense",  "initialize", "ray_camera"};
         ASSERT_FALSE(bound.empty());
         for (std::size_t i = 0; i < probe.allocations.size(); i += 2)
             if (bound[0].value == probe.allocations[i].handle.value) {
-                capture(names[i / 2], host);
+                capture(
+                    RetainedCompute::StageName(static_cast<RetainedCompute::KernelStage>(i / 2)),
+                    host);
                 return;
             }
         FAIL() << "unknown observed stage binding";
@@ -1953,8 +1953,6 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
     auto record_timing = [&, previous_pair = fixture_pair_before](
                              const std::string& prefix, const Stats& before, const Stats& after,
                              double wall_ms, bool lifetime_maxima = false) mutable {
-        constexpr std::array names{"camera", "transport",  "endpoint",
-                                   "dense",  "initialize", "ray_camera"};
         std::uint64_t submissions = 0, pipeline_creations = 0, target_overshoots = 0;
         std::uint64_t write_buffer_bytes = 0, read_buffer_bytes = 0;
         double submit_wait_ms = 0, pipeline_setup_ms = 0, maximum_submit_wait_ms = 0;
@@ -1991,7 +1989,9 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
             target_overshoots += overshoots;
             maximum_submit_wait_ms =
                 std::max(maximum_submit_wait_ms, after[stage].maximum_submit_wait_ms);
-            const auto key = prefix + "_" + names[stage];
+            const auto key =
+                prefix + "_" +
+                RetainedCompute::StageName(static_cast<RetainedCompute::KernelStage>(stage));
             RecordProperty(key + "_submissions", std::to_string(count));
             RecordProperty(key + "_submit_wait_ms", std::to_string(wait));
             RecordProperty(key + "_pipeline_setup_ms", std::to_string(pipeline));
