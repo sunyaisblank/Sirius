@@ -3007,7 +3007,7 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
     EXPECT_EQ(timing.batch_row_counts.size(), compute->Capacity() + 1);
     EXPECT_EQ(timing.batch_row_counts.front(), 0U);
     EXPECT_EQ(observed_batches, timing.batches);
-    EXPECT_EQ(observed_rows, timing.interval_rows + timing.camera_rows);
+    EXPECT_EQ(observed_rows, timing.interval_rows + timing.camera_rows + timing.sample_rows);
     EXPECT_EQ(timing.interval_rows, timing.accepted_intervals + timing.rejected_intervals);
     std::uint64_t scaled_rows = 0;
     for (const auto rows : timing.scaled_interval_bins) scaled_rows += rows;
