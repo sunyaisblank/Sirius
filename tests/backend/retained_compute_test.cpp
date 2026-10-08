@@ -2178,7 +2178,11 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
     ASSERT_TRUE(rejected) << rejected.error().Description();
     EXPECT_TRUE((*rejected)[0].error_checks[1].observed);
     EXPECT_TRUE((*rejected)[0].error_checks[1].evaluated);
-    EXPECT_GT((*rejected)[0].error_checks[1].ratio, 1);
+    double largest_observed = 0;
+    for (const auto& check : (*rejected)[0].error_checks)
+        if (check.observed) largest_observed = std::max(largest_observed, check.ratio);
+    EXPECT_GT(largest_observed, 1);
+    EXPECT_EQ(largest_observed, (*rejected)[0].error_ratio);
     for (const auto& check : (*rejected)[1].error_checks) EXPECT_FALSE(check.observed);
     for (const auto& output : *rejected) {
         EXPECT_FALSE(output.admissible);
