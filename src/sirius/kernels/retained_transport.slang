@@ -140,6 +140,14 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
             for (uint node = start; node < end; ++node)
                 if (!EvaluateOne(node, row, rowBase, programBase, registers)) RejectRetainedProgram();
         }
+#elif defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_NORMAL_SUM32) && defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
+        else {
+            // Cover the original complete layer before its publication barrier.
+            for (uint node = start + lane; node < end;
+                 node += SIRIUS_RETAINED_EXECUTION_LANES)
+                if (!EvaluateOne(node, row, rowBase, programBase, registers))
+                    RejectRetainedProgram();
+        }
 #else
         else if (start + lane < end &&
                  !EvaluateOne(start + lane, row, rowBase, programBase, registers))
@@ -539,7 +547,14 @@ RetainedTriple ReadCoefficient(uint index) {
 #else
         // Stage zero has succeeded. Publish once at the existing stage barrier;
         // expression register reuse never writes this separate immutable cache.
+#if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_NORMAL_SUM32) && defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
+        if (stage == 1)
+            for (uint index = lane; index < SIRIUS_RETAINED_COEFFICIENTS;
+                 index += SIRIUS_RETAINED_EXECUTION_LANES)
+                CacheCoefficient(index);
+#else
         if (stage == 1) CacheCoefficient(lane);
+#endif
         GroupMemoryBarrierWithGroupSync();
 #endif
         for (uint i = lane; i < 40; i += SIRIUS_RETAINED_EXECUTION_LANES) {
