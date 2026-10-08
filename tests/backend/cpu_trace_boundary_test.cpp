@@ -274,9 +274,8 @@ struct QuarticCoordinatorExecutor final : sirius::backend::TraceStepExecutor {
         metric->Evaluate(sample.ray.position, values, derivatives);
         sample.ray.velocity = {};
         sample.ray.velocity(1) = 1.0;
-        sample.ray.velocity(0) =
-            (-values(0, 1) + std::sqrt(values(0, 1) * values(0, 1) - values(0, 0) * values(1, 1))) /
-            values(0, 0);
+        const double g00 = values(0, 0).real, g01 = values(0, 1).real, g11 = values(1, 1).real;
+        sample.ray.velocity(0) = (-g01 + std::sqrt(g01 * g01 - g00 * g11)) / g00;
         sample.polynomial_tangent = locator.tangent;
         sample.variations = initial;
         for (auto& column : sample.variations) {
