@@ -240,6 +240,7 @@ class PreparationProbeDevice final : public ComputeDevice {
                                .pipeline_created = true};
     bool fail_dispatch = false;
     bool independent_pair = false;
+    std::uint32_t expected_groups_x = 1;
     unsigned loads = 0, reads = 0;
     const DeviceInfo& Info() const noexcept override { return info; }
     sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t> code) override {
@@ -283,7 +284,7 @@ class PreparationProbeDevice final : public ComputeDevice {
                                           std::uint32_t y, std::uint32_t z,
                                           DispatchTiming* timing) override {
         EXPECT_EQ(bindings.size(), 2U);
-        EXPECT_EQ(x, 1U);
+        EXPECT_EQ(x, expected_groups_x);
         EXPECT_EQ(y, 1U);
         EXPECT_EQ(z, 1U);
         kernels.push_back(kernel.value);
@@ -528,11 +529,14 @@ TEST(RetainedComputeAdmission, SoftwareRendererPreparationPreservesPhysicalAccou
     const std::array<sirius::backend::RetainedDenseInput, 2> dense{};
     const std::array<sirius::backend::RetainedInitializeInput, 1> initialize{};
     const std::array<sirius::backend::RetainedRayCameraInput, 1> ray_camera{};
+    probe.expected_groups_x = 2;
     ASSERT_TRUE(compute.Endpoint(endpoint));
     ASSERT_TRUE(compute.Dense(dense));
+    probe.expected_groups_x = 1;
     ASSERT_TRUE(compute.Initialize(initialize));
     ASSERT_TRUE(compute.RayCamera(ray_camera));
     probe.independent_pair = true;
+    probe.expected_groups_x = 2;
     ASSERT_TRUE(compute.EndpointAndDense(endpoint, dense));
     for (const auto& stage : compute.Statistics()) EXPECT_GT(stage.submissions, 0U);
     EXPECT_GT(compute.EndpointDenseStatistics().submissions, 0U);
@@ -552,6 +556,7 @@ TEST(RetainedComputeAdmission, SoftwareRendererPreparationPreservesPhysicalAccou
     EXPECT_EQ(probe.loads, 6U);
     EXPECT_EQ(probe.buffers.size(), 12U);
     probe.observation.submit_wait_ms = 8;
+    probe.expected_groups_x = 1;
     ASSERT_TRUE(compute.Step(input));
     EXPECT_EQ(probe.writes.back().bytes, 4U + sizeof(RetainedStepInput));
     EXPECT_EQ(compute.Statistics()[1].submissions, 1U);
