@@ -925,6 +925,13 @@ bool Encloses(const RetainedValue& value, long double expected, long double refe
         std::bit_cast<std::uint64_t>(actual.embedded_projected_error_ratio) !=
             std::bit_cast<std::uint64_t>(expected.embedded_projected_error_ratio))
         return ::testing::AssertionFailure() << "interval admission metadata differs";
+    for (std::size_t i = 0; i < actual.error_checks.size(); ++i) {
+        const auto& a = actual.error_checks[i];
+        const auto& b = expected.error_checks[i];
+        if (std::bit_cast<std::uint64_t>(a.ratio) != std::bit_cast<std::uint64_t>(b.ratio) ||
+            a.field != b.field || a.observed != b.observed || a.evaluated != b.evaluated)
+            return ::testing::AssertionFailure() << "passive error observation differs: " << i;
+    }
     const auto values_agree = [](const auto& first, const auto& second,
                                  const std::string& name) -> ::testing::AssertionResult {
         for (std::size_t i = 0; i < first.size(); ++i) {
@@ -2115,6 +2122,14 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
         EXPECT_LE(output.error_ratio, 1);
         EXPECT_GE(output.embedded_projected_error_ratio, 0);
         EXPECT_LE(output.embedded_projected_error_ratio, output.error_ratio);
+        for (const auto& check : output.error_checks) {
+            EXPECT_TRUE(check.observed);
+            EXPECT_TRUE(check.evaluated);
+            EXPECT_TRUE(std::isfinite(check.ratio));
+            EXPECT_LE(check.ratio, output.error_ratio);
+            EXPECT_GE(check.field, 8U);
+            EXPECT_LE(check.field, 40U);
+        }
         positive_embedded_projected_error =
             positive_embedded_projected_error || output.embedded_projected_error_ratio > 0;
         RecordProperty("embedded_projected_error_" + std::to_string(row),
@@ -2161,6 +2176,10 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
     record_timing("repeated_rejection_interval", rejected_before, compute->Statistics(),
                   milliseconds(rejected_started, rejected_finished));
     ASSERT_TRUE(rejected) << rejected.error().Description();
+    EXPECT_TRUE((*rejected)[0].error_checks[1].observed);
+    EXPECT_TRUE((*rejected)[0].error_checks[1].evaluated);
+    EXPECT_GT((*rejected)[0].error_checks[1].ratio, 1);
+    for (const auto& check : (*rejected)[1].error_checks) EXPECT_FALSE(check.observed);
     for (const auto& output : *rejected) {
         EXPECT_FALSE(output.admissible);
         EXPECT_NE(output.failure, sirius::core::CoupledStepFailure::None);
@@ -2821,10 +2840,12 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
         columns.tolerance *= scale;
         const float accepted_interval = candidate.step_size;
         sirius::core::Rk45CoupledComparison comparison;
+        const auto growth_limits = executor.Statistics().dense_growth_limits;
         ASSERT_TRUE(executor.Step(candidate, metric, control, columns, comparison));
         ASSERT_GT(comparison.error_ratio, .79);
         ASSERT_LT(comparison.error_ratio, .81);
         EXPECT_FLOAT_EQ(candidate.step_size, accepted_interval);
+        EXPECT_EQ(executor.Statistics().dense_growth_limits, growth_limits + 1);
         EXPECT_EQ(columns.central_stages, 21U);
         EXPECT_EQ(columns.variation_stages, 21U);
     }
@@ -2852,9 +2873,13 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
     ASSERT_TRUE(executor.Step(ray, flat, config, coupled, comparison));
     const auto midpoint = comparison.midpoint;
     const auto reused = executor.Statistics().reused_phases;
+    const auto rollbacks = executor.Statistics().tracer_rollbacks;
     // Mimic a rejected localized event: restore the original public state and
     // retry half the interval. The future phase must not contaminate this retry.
     executor.RejectLastInterval();
+    EXPECT_EQ(executor.Statistics().tracer_rollbacks, rollbacks + 1);
+    executor.RejectLastInterval();
+    EXPECT_EQ(executor.Statistics().tracer_rollbacks, rollbacks + 1);
     ray = before;
     coupled = columns;
     ray.step_size = .5f;
@@ -2953,6 +2978,14 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
     EXPECT_EQ(observed_batches, timing.batches);
     EXPECT_EQ(observed_rows, timing.interval_rows + timing.camera_rows);
     EXPECT_EQ(timing.interval_rows, timing.accepted_intervals + timing.rejected_intervals);
+    std::uint64_t scaled_rows = 0;
+    for (const auto rows : timing.scaled_interval_bins) scaled_rows += rows;
+    EXPECT_EQ(scaled_rows, timing.interval_measurements);
+    EXPECT_LE(timing.interval_measurements, timing.interval_rows);
+    EXPECT_GT(timing.interval_min, 0);
+    EXPECT_GT(timing.scaled_interval_min, 0);
+    EXPECT_LE(timing.interval_min, timing.interval_max);
+    EXPECT_LE(timing.scaled_interval_min, timing.scaled_interval_max);
     EXPECT_EQ(timing.acceleration_calls, timing.accepted_intervals);
     EXPECT_LE(timing.full_batches, timing.batches);
     EXPECT_LE(timing.coalescing_timeouts, timing.batches);
@@ -3403,8 +3436,26 @@ TEST(RetainedValue, Binary64InputsKeepTheirRepresentationResidual) {
     control.tolerance = 1e-40;
     const double expected = 0x1p-120 / (control.tolerance * (1 + first[8].Center()));
     EXPECT_DOUBLE_EQ(RetainedPhysicalError(first, second, control), expected);
+    std::size_t limiting_field = 41;
+    EXPECT_DOUBLE_EQ(RetainedPhysicalError(first, second, control, &limiting_field), expected);
+    EXPECT_EQ(limiting_field, 8U);
     EXPECT_DOUBLE_EQ(RetainedPhysicalError(second, first, control), expected);
     EXPECT_EQ(RetainedPhysicalError(first, first, control), 0);
+    EXPECT_EQ(RetainedPhysicalError(first, first, control, &limiting_field), 0);
+    EXPECT_EQ(limiting_field, 40U);
+    first.fill(RetainedValue::FromDouble(0));
+    second = first;
+    first[0] = RetainedValue::FromDouble(1);
+    control.integrator.abs_tolerance = control.integrator.rel_tolerance = 1;
+    // One physical central component contributes 1/2; the norm is its RMS
+    // over eight components, rather than that largest single contributor.
+    EXPECT_DOUBLE_EQ(RetainedPhysicalError(first, second, control, &limiting_field),
+                     .5 / std::sqrt(8.));
+    EXPECT_EQ(limiting_field, 40U);
+    second[8].valid = 0;
+    EXPECT_EQ(RetainedPhysicalError(first, second, control, &limiting_field),
+              std::numeric_limits<double>::infinity());
+    EXPECT_EQ(limiting_field, 41U);
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif

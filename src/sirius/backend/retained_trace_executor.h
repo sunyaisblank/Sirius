@@ -47,6 +47,28 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
         std::uint64_t initialized_phases = 0;
         std::uint64_t accepted_intervals = 0;
         std::uint64_t rejected_intervals = 0;
+        // Observations of final returned attempt rows only. Discarded private
+        // projection retries, cancellations and sticky-error defaults can have
+        // no observations; these are not counts per completed ray or frame.
+        struct ErrorStats {
+            std::uint64_t rows = 0, refused = 0, invalid = 0, over_one = 0;
+            double finite_ratio_sum = 0, finite_ratio_max = 0;
+        };
+        std::array<ErrorStats, 4> error_checks{};
+        std::array<std::uint64_t, 4> dominant_admitted_checks{}, dominant_rejected_checks{};
+        std::array<std::uint64_t, 42> limiting_error_fields{};
+        // Requested intervals of completed fanout rows, including error drains
+        // with no returned norm observation. These count unfinished rays too.
+        std::uint64_t interval_measurements = 0;
+        double interval_min = 0, interval_max = 0, interval_sum = 0;
+        double scaled_interval_min = 0, scaled_interval_max = 0, scaled_interval_sum = 0;
+        // h * frequency_scale / length_scale, bins ending at
+        // 1e-6,1e-5,1e-4,1e-3,1e-2,1e-1,1,10; final bin is above10.
+        std::array<std::uint64_t, 9> scaled_interval_bins{};
+        // Actual accepted-step growth clips and distinct valid continuations
+        // discarded by the tracer (event checks or cancellation).
+        std::uint64_t dense_growth_limits = 0;
+        std::uint64_t tracer_rollbacks = 0;
         // Completed gathered batches; mixed requests and a private retry count
         // once. Histogram includes rejected interval rows.
         std::uint64_t batches = 0;

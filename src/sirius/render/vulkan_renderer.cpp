@@ -586,6 +586,41 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
                       << " safety reductions, " << progress.coalescing_wait_ms / 1000
                       << "s coalescing, " << progress.execute_ms / 1000 << "s batch execution, "
                       << progress.acceleration_ms / 1000 << "s summed worker acceleration\n";
+            const auto measured = progress.interval_measurements;
+            std::clog << std::format(
+                "[Vulkan] Retained attempt attribution: measured_rows={}, "
+                "h_min={:.9g}, h_mean={:.9g}, h_max={:.9g}, "
+                "h_frequency_over_length_min={:.9g}, h_frequency_over_length_mean={:.9g}, "
+                "h_frequency_over_length_max={:.9g}, dense_growth_limits={}, tracer_rollbacks={}\n",
+                measured, progress.interval_min,
+                measured ? progress.interval_sum / static_cast<double>(measured) : 0,
+                progress.interval_max, progress.scaled_interval_min,
+                measured ? progress.scaled_interval_sum / static_cast<double>(measured) : 0,
+                progress.scaled_interval_max, progress.dense_growth_limits,
+                progress.tracer_rollbacks);
+            constexpr std::array check_names{"embedded_phase", "projected_physical",
+                                             "dense_midpoint_physical", "refined_physical"};
+            for (std::size_t i = 0; i < check_names.size(); ++i) {
+                const auto& check = progress.error_checks[i];
+                const auto finite = check.rows - check.refused - check.invalid;
+                std::clog << std::format(
+                    "[Vulkan] Retained error attribution: {}, observed_rows={}, refused={}, "
+                    "invalid={}, finite_ratio_mean={:.9g}, finite_ratio_max={:.9g}, over_one={}, "
+                    "dominant_admitted={}, dominant_rejected={}\n",
+                    check_names[i], check.rows, check.refused, check.invalid,
+                    finite ? check.finite_ratio_sum / static_cast<double>(finite) : 0,
+                    check.finite_ratio_max, check.over_one, progress.dominant_admitted_checks[i],
+                    progress.dominant_rejected_checks[i]);
+            }
+            std::clog << "[Vulkan] Retained scaled interval bins "
+                         "(<=1e-6,1e-5,1e-4,1e-3,1e-2,1e-1,1,10,above10):";
+            for (const auto count : progress.scaled_interval_bins) std::clog << ' ' << count;
+            std::clog << "\n[Vulkan] Retained dominant error fields "
+                         "(physical variation components8..39, central_RMS40, unavailable41):";
+            for (std::size_t i = 0; i < progress.limiting_error_fields.size(); ++i)
+                if (progress.limiting_error_fields[i])
+                    std::clog << ' ' << i << ':' << progress.limiting_error_fields[i];
+            std::clog << '\n';
             // These cumulative host counters come from the dispatcher's locked
             // completed-batch snapshot. Shared submit timing is reported once
             // below; individual command counts still include both shared commands.

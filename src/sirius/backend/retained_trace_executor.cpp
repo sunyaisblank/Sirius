@@ -92,7 +92,10 @@ void RetainedTraceExecutor::EndTrace() {
 void RetainedTraceExecutor::RejectLastInterval() {
     std::lock_guard lock(mutex_);
     const auto found = continuations_.find(std::this_thread::get_id());
-    if (found != continuations_.end()) found->second.finish = {};
+    if (found != continuations_.end()) {
+        if (found->second.finish.valid) ++stats_.tracer_rollbacks;
+        found->second.finish = {};
+    }
 }
 
 RetainedTraceExecutor::Stats RetainedTraceExecutor::Statistics() const {
@@ -259,10 +262,62 @@ void RetainedTraceExecutor::Run() {
                 else
                     ++stats_.interval_rows;
                 if (!request->camera) {
-                    if (request->result && request->result->admissible && !error_)
+                    const bool admitted = request->result && request->result->admissible && !error_;
+                    if (admitted)
                         ++stats_.accepted_intervals;
                     else
                         ++stats_.rejected_intervals;
+                    const double h = request->interval.interval;
+                    const auto& control = request->interval.control;
+                    const double scaled =
+                        std::isfinite(h) && h > 0 && std::isfinite(control.frequency_scale) &&
+                                control.frequency_scale > 0 &&
+                                std::isfinite(control.length_scale) && control.length_scale > 0
+                            ? h * control.frequency_scale / control.length_scale
+                            : 0;
+                    if (std::isfinite(h) && h > 0 && std::isfinite(scaled) && scaled > 0) {
+                        if (stats_.interval_measurements++ == 0) {
+                            stats_.interval_min = h;
+                            stats_.scaled_interval_min = scaled;
+                        }
+                        stats_.interval_min = std::min(stats_.interval_min, h);
+                        stats_.interval_max = std::max(stats_.interval_max, h);
+                        stats_.interval_sum += h;
+                        stats_.scaled_interval_min = std::min(stats_.scaled_interval_min, scaled);
+                        stats_.scaled_interval_max = std::max(stats_.scaled_interval_max, scaled);
+                        stats_.scaled_interval_sum += scaled;
+                        constexpr std::array bounds{1e-6, 1e-5, 1e-4, 1e-3, 1e-2, .1, 1., 10.};
+                        const auto bin = std::lower_bound(bounds.begin(), bounds.end(), scaled);
+                        ++stats_.scaled_interval_bins[bin - bounds.begin()];
+                    }
+                    if (request->result) {
+                        std::optional<std::size_t> dominant;
+                        const auto& checks = request->result->error_checks;
+                        for (std::size_t i = 0; i < checks.size(); ++i) {
+                            const auto& observation = checks[i];
+                            if (!observation.observed) continue;
+                            auto& observed = stats_.error_checks[i];
+                            ++observed.rows;
+                            if (!observation.evaluated)
+                                ++observed.refused;
+                            else if (!std::isfinite(observation.ratio))
+                                ++observed.invalid;
+                            else {
+                                observed.finite_ratio_sum += observation.ratio;
+                                observed.finite_ratio_max =
+                                    std::max(observed.finite_ratio_max, observation.ratio);
+                                if (observation.ratio > 1) ++observed.over_one;
+                            }
+                            if (!dominant || observation.ratio > checks[*dominant].ratio)
+                                dominant = i;
+                        }
+                        if (dominant) {
+                            auto& counts = admitted ? stats_.dominant_admitted_checks
+                                                    : stats_.dominant_rejected_checks;
+                            ++counts[*dominant];
+                            ++stats_.limiting_error_fields[checks[*dominant].field];
+                        }
+                    }
                 }
                 if (request->camera && !request->camera_result && !error_)
                     error_ = request->camera_result.error();
@@ -564,6 +619,7 @@ bool RetainedTraceExecutor::Step(core::Lightray& ray, core::IMetric& metric,
         continuations_[thread] = continuation;
         ++stats_.acceleration_calls;
         stats_.acceleration_ms += acceleration_ms;
+        if (ray.step_size < candidate_step) ++stats_.dense_growth_limits;
     }
     return true;
 }

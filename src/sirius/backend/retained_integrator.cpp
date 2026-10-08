@@ -13,6 +13,12 @@ namespace {
 constexpr double kInvalid = std::numeric_limits<double>::infinity();
 using core::CoupledStepFailure;
 
+void Observe(RetainedErrorObservation& observation, double ratio, std::size_t field,
+             bool evaluated) {
+    if (!observation.observed || ratio > observation.ratio)
+        observation = {ratio, field, true, evaluated};
+}
+
 core::Twofold Center(const RetainedValue& value) {
     return core::Twofold(value.high) + core::Twofold(value.low) + core::Twofold(value.tail);
 }
@@ -130,9 +136,11 @@ std::array<RetainedValue, 20> Increments(const RetainedStepOutput& output, bool 
 
 double RetainedPhysicalError(const std::array<RetainedValue, 40>& first,
                              const std::array<RetainedValue, 40>& second,
-                             const RetainedIntervalControl& control) {
+                             const RetainedIntervalControl& control, std::size_t* limiting_field) {
+    if (limiting_field) *limiting_field = 41;
     if (!ValidControl(control)) return kInvalid;
     double sum = 0, ratio = 0;
+    std::size_t field = 40;
     for (std::size_t i = 0; i < 40; ++i) {
         if (!first[i].IsRepresented() || !second[i].IsRepresented()) return kInvalid;
         const auto a = Center(first[i]), b = Center(second[i]);
@@ -147,10 +155,14 @@ double RetainedPhysicalError(const std::array<RetainedValue, 40>& first,
         if (!std::isfinite(scale) || scale <= 0 || !std::isfinite(error)) return kInvalid;
         if (i < 8)
             sum += error * error;
-        else
+        else {
+            if (error > ratio) field = i;
             ratio = std::max(ratio, error);
+        }
     }
-    return std::max(ratio, std::sqrt(sum / 8));
+    const double central = std::sqrt(sum / 8);
+    if (limiting_field && std::isfinite(central)) *limiting_field = central > ratio ? 40 : field;
+    return std::max(ratio, central);
 }
 
 base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
@@ -236,6 +248,7 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
                 const double error =
                     step.valid ? EmbeddedError(packets[row], step, inputs[row].control.integrator)
                                : kInvalid;
+                Observe(state.error_checks[0], error, std::isfinite(error) ? 40 : 41, step.valid);
                 state.error_ratio = std::max(state.error_ratio, error);
                 if (error > 1) {
                     active[row] = false;
@@ -275,10 +288,12 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
                 const auto& high = (*projected)[row];
                 const auto& low =
                     paired_projections ? (*projected)[count + row] : projected_lower[row];
-                const double error =
-                    high.valid && low.valid && high.component == low.component
-                        ? RetainedPhysicalError(high.physical, low.physical, inputs[row].control)
-                        : kInvalid;
+                std::size_t field = 41;
+                const bool evaluated = high.valid && low.valid && high.component == low.component;
+                const double error = evaluated ? RetainedPhysicalError(high.physical, low.physical,
+                                                                       inputs[row].control, &field)
+                                               : kInvalid;
+                Observe(state.error_checks[1], error, field, evaluated);
                 state.error_ratio = std::max(state.error_ratio, error);
                 if (error > 1) {
                     active[row] = false;
@@ -319,13 +334,21 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
     for (std::size_t row = 0; row < count; ++row) {
         auto& state = work[row];
         if (active[row]) {
-            const double error =
+            std::size_t midpoint_field = 41, refined_field = 41;
+            const double midpoint_error =
                 dense[row].valid
-                    ? std::max(RetainedPhysicalError(dense[row].physical, state.midpoint.physical,
-                                                     inputs[row].control),
-                               RetainedPhysicalError(state.full.physical, state.refined.physical,
-                                                     inputs[row].control))
+                    ? RetainedPhysicalError(dense[row].physical, state.midpoint.physical,
+                                            inputs[row].control, &midpoint_field)
                     : kInvalid;
+            const double refined_error =
+                dense[row].valid
+                    ? RetainedPhysicalError(state.full.physical, state.refined.physical,
+                                            inputs[row].control, &refined_field)
+                    : kInvalid;
+            Observe(state.error_checks[2], midpoint_error, midpoint_field, dense[row].valid);
+            Observe(state.error_checks[3], refined_error, refined_field, dense[row].valid);
+            const double error =
+                dense[row].valid ? std::max(midpoint_error, refined_error) : kInvalid;
             state.error_ratio = std::max(state.error_ratio, error);
             state.admissible = state.error_ratio <= 1;
             for (const auto* increment : {&state.full_increment, &state.lower_increment,
@@ -339,11 +362,13 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptRetainedIntervals(
             const auto stages = state.attempted_stages;
             const auto error = state.error_ratio;
             const auto embedded_projected_error = state.embedded_projected_error_ratio;
+            const auto error_checks = state.error_checks;
             const auto failure = state.failure;
             state = {};
             state.attempted_stages = stages;
             state.error_ratio = error;
             state.embedded_projected_error_ratio = embedded_projected_error;
+            state.error_checks = error_checks;
             state.failure = failure;
         }
     }

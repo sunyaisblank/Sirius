@@ -21,6 +21,15 @@ struct RetainedIntervalInput {
     RetainedIntervalControl control;
 };
 
+struct RetainedErrorObservation {
+    double ratio = 0;
+    // Physical variation component 8..39, central RMS 40, or unavailable 41.
+    // Embedded errors use the central phase (x,p) RMS, not physical (x,k).
+    std::size_t field = 41;
+    bool observed = false;
+    bool evaluated = false;
+};
+
 struct RetainedIntervalOutput {
     // Private until all embedded, midpoint and refined comparisons admit.
     // The tracer must still compare localized events before committing it.
@@ -32,6 +41,10 @@ struct RetainedIntervalOutput {
     // Maximum of the full and both half-trial embedded/projected checks,
     // before independent dense/refinement disagreement limits next-step growth.
     double embedded_projected_error_ratio = 0;
+    // Passive maxima of embedded, projected, midpoint and refined checks.
+    // A refusal is observed but unevaluated; untouched checks are unobserved.
+    // These observations never select acceptance or the next step.
+    std::array<RetainedErrorObservation, 4> error_checks{};
     core::CoupledStepFailure failure = core::CoupledStepFailure::None;
     bool admissible = false;
 };
@@ -54,6 +67,7 @@ struct RetainedIntervalOutput {
 
 [[nodiscard]] double RetainedPhysicalError(const std::array<RetainedValue, 40>& first,
                                            const std::array<RetainedValue, 40>& second,
-                                           const RetainedIntervalControl& control);
+                                           const RetainedIntervalControl& control,
+                                           std::size_t* limiting_field = nullptr);
 
 }  // namespace sirius::backend
