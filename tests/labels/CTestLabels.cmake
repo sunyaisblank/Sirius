@@ -1018,6 +1018,7 @@ set_tests_properties(
     RetainedComputeTest.SoftwareRendererPreparationPreservesBuffersAndPhysicalFeedback
     RetainedComputeTest.SmoothRayCameraPreservesPhysicalLensDerivatives
     RetainedComputeTest.JointRkStagesRetainCriticalIncrementsAndEmbeddedError
+    RetainedComputeTest.SchwarzschildStagesPreserveIndependentFieldsAndGeneralFallback
     RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation
     RetainedComputeTest.DenseSegmentsPreserveSmallCovariantArrivalDerivatives
     RetainedComputeTest.PhysicalInitializationRetainsTheHamiltonianResidual
