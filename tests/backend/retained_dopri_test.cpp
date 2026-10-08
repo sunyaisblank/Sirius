@@ -177,8 +177,8 @@ void SameEndpoint(const RetainedEndpointOutput& actual, const RetainedEndpointOu
     EXPECT_EQ(actual.component, expected.component);
     for (std::size_t field = 0; field < 40; ++field) {
         SCOPED_TRACE(field);
-        for (const auto pair : {std::pair{&actual.phase[field], &expected.phase[field]},
-                                std::pair{&actual.physical[field], &expected.physical[field]}}) {
+        for (const auto& pair : {std::pair{&actual.phase[field], &expected.phase[field]},
+                                 std::pair{&actual.physical[field], &expected.physical[field]}}) {
             EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(*pair.first)),
                       (std::bit_cast<std::array<std::uint32_t, 5>>(*pair.second)));
         }
