@@ -366,11 +366,12 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
         work_edge == kPointDetectorBlockEdge ? kPointDetectorProbeBatchSize : 1;
     const auto physical = device.Info().kind == backend::DeviceKind::kIntegratedGpu ||
                           device.Info().kind == backend::DeviceKind::kDiscreteGpu;
-    const std::size_t row_limit = physical ? 128 : 64;
+    const std::size_t row_limit =
+        physical || device.Info().kind == backend::DeviceKind::kSoftware ? 128 : 64;
     // The full-scene hardware contract bounds logical ray concurrency at 64;
     // paired endpoint projections can use the larger physical row ceiling.
     const auto desired_rays = std::min<std::size_t>(64, work_count * rays_per_work);
-    // Small cohorts need separate upper/lower endpoint slots without creating
+    // Cohorts need separate upper/lower endpoint slots without creating
     // more concurrent rays or exceeding the existing submission row ceiling.
     std::size_t capacity = std::min(row_limit, 2 * desired_rays);
     const auto resident_before = device.BufferAllocationBytes();
