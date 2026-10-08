@@ -160,8 +160,8 @@ void RetainedTraceExecutor::Run() {
             feedback.peak_rows > 1 && feedback.maximum_one_row_ms <= maximum_submission_ms_ &&
             batch.size() == 1 && !batch.front()->camera && !batch.front()->sampling &&
             batch.front()->result) {
-            // A single logical ray still has two reducible endpoint rows. Its
-            // candidate remains private until a bounded serialized retry returns.
+            // A single logical ray can have reducible endpoint or DP trial
+            // rows. Its candidate stays private until a bounded serialized retry.
             auto& request = *batch.front();
             const auto cancelled = [&] {
                 if (should_cancel_ && should_cancel_()) return true;

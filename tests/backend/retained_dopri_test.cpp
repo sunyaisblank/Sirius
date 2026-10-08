@@ -454,9 +454,93 @@ TEST_F(RetainedDopriTest, ConnectedIntervalsPreserveTrialsAndIndependentBudgets)
         input.control.integrator.min_step = static_cast<float>(input.interval);
         input.control.integrator.max_step = 1;
         input.control.integrator.abs_tolerance = input.control.integrator.rel_tolerance = 1e-9f;
+        const auto same_values = [](const auto& actual, const auto& expected) {
+            ASSERT_EQ(actual.size(), expected.size());
+            for (std::size_t field = 0; field < actual.size(); ++field) {
+                SCOPED_TRACE(field);
+                EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(actual[field])),
+                          (std::bit_cast<std::array<std::uint32_t, 5>>(expected[field])));
+            }
+        };
+        const auto step_control = [](const sirius::core::IntegratorConfig& control) {
+            return std::array{control.abs_tolerance, control.rel_tolerance,  control.min_step,
+                              control.max_step,      control.initial_step,   control.safety_factor,
+                              control.step_grow_max, control.step_shrink_min};
+        };
+        const auto same_attempt = [&](const RetainedIntervalOutput& actual,
+                                      const RetainedIntervalOutput& expected) {
+            EXPECT_EQ(actual.admissible, expected.admissible);
+            EXPECT_EQ(actual.failure, expected.failure);
+            EXPECT_EQ(actual.attempted_stages, expected.attempted_stages);
+            EXPECT_EQ(actual.error_ratio, expected.error_ratio);
+            EXPECT_EQ(actual.embedded_projected_error_ratio,
+                      expected.embedded_projected_error_ratio);
+            for (std::size_t check = 0; check < actual.error_checks.size(); ++check) {
+                SCOPED_TRACE(check);
+                const auto& a = actual.error_checks[check];
+                const auto& b = expected.error_checks[check];
+                EXPECT_EQ(a.ratio, b.ratio);
+                EXPECT_EQ(a.field, b.field);
+                EXPECT_EQ(a.observed, b.observed);
+                EXPECT_EQ(a.evaluated, b.evaluated);
+            }
+            SameEndpoint(actual.full, expected.full);
+            SameEndpoint(actual.lower, expected.lower);
+            SameEndpoint(actual.midpoint, expected.midpoint);
+            SameEndpoint(actual.refined, expected.refined);
+            same_values(actual.full_increment, expected.full_increment);
+            same_values(actual.lower_increment, expected.lower_increment);
+            same_values(actual.midpoint_increment, expected.midpoint_increment);
+            same_values(actual.refined_increment, expected.refined_increment);
+            ASSERT_EQ(bool(actual.dopri), bool(expected.dopri));
+            if (!actual.admissible) {
+                EXPECT_FALSE(actual.dopri);
+                for (const auto* endpoint :
+                     {&actual.full, &actual.lower, &actual.midpoint, &actual.refined}) {
+                    SameEndpoint(*endpoint, RetainedEndpointOutput{});
+                }
+                const std::array<RetainedValue, 20> erased{};
+                same_values(actual.full_increment, erased);
+                same_values(actual.lower_increment, erased);
+                same_values(actual.midpoint_increment, erased);
+                same_values(actual.refined_increment, erased);
+            }
+            if (!actual.dopri) return;
+            const auto& a = *actual.dopri;
+            const auto& b = *expected.dopri;
+            same_values(a.metric, b.metric);
+            EXPECT_EQ(a.chart, b.chart);
+            EXPECT_EQ(a.control.length_scale, b.control.length_scale);
+            EXPECT_EQ(a.control.frequency_scale, b.control.frequency_scale);
+            EXPECT_EQ(a.control.tolerance, b.control.tolerance);
+            EXPECT_EQ(a.control.column_scale, b.control.column_scale);
+            EXPECT_EQ(step_control(a.control.integrator), step_control(b.control.integrator));
+            for (std::size_t trial = 0; trial < sirius::core::kCoupledTrialCount; ++trial) {
+                SCOPED_TRACE(trial);
+                same_values(a.packets[trial].values, b.packets[trial].values);
+                SameEndpoint(a.starts[trial], b.starts[trial]);
+                SameEndpoint(a.endpoints[trial], b.endpoints[trial]);
+                const auto& p = a.positions[trial];
+                const auto& q = b.positions[trial];
+                EXPECT_EQ(p.interval, q.interval);
+                EXPECT_EQ(p.parameter_limit, q.parameter_limit);
+                for (int axis = 0; axis < 4; ++axis) {
+                    EXPECT_EQ(p.origin(axis), q.origin(axis));
+                    EXPECT_EQ(p.increment(axis), q.increment(axis));
+                    EXPECT_EQ(p.a(axis), q.a(axis));
+                    EXPECT_EQ(p.b(axis), q.b(axis));
+                    EXPECT_EQ(p.c(axis), q.c(axis));
+                }
+            }
+        };
+        constexpr auto phase_stage =
+            static_cast<std::size_t>(RetainedCompute::KernelStage::kDopriPhase);
+        const auto serial_before = compute.Statistics()[phase_stage].submissions;
         const auto attempted = AttemptRetainedDopriIntervals(compute, std::span(&input, 1), 1);
         ASSERT_TRUE(attempted) << attempted.error().Description();
         ASSERT_EQ(attempted->size(), 1U);
+        const auto serial_after = compute.Statistics()[phase_stage].submissions;
+        EXPECT_EQ(serial_after - serial_before, 4U);
         const auto& accepted = attempted->front();
         ASSERT_TRUE(accepted.admissible) << sirius::core::CoupledStepFailureName(accepted.failure)
                                          << " " << accepted.error_ratio;
@@ -472,6 +556,50 @@ TEST_F(RetainedDopriTest, ConnectedIntervalsPreserveTrialsAndIndependentBudgets)
         constexpr auto first_half = static_cast<std::size_t>(sirius::core::CoupledTrial::FirstHalf);
         constexpr auto second_half =
             static_cast<std::size_t>(sirius::core::CoupledTrial::SecondHalf);
+
+        // Count only the connected attempt. The standalone independent trials
+        // below deliberately add their own phase submissions afterwards.
+        const auto packed_before = compute.Statistics()[phase_stage].submissions;
+        const auto packed = AttemptRetainedDopriIntervals(compute, std::span(&input, 1));
+        ASSERT_TRUE(packed) << packed.error().Description();
+        ASSERT_EQ(packed->size(), 1U);
+        const auto packed_after = compute.Statistics()[phase_stage].submissions;
+        EXPECT_EQ(packed_after - packed_before, 1U);
+        same_attempt(packed->front(), accepted);
+        EXPECT_EQ(device->BufferAllocationBytes(), allocation);
+
+        // Two different intervals cross a trial boundary inside a three-row
+        // chunk: Full0, Full1, Lower0, then Lower1, FirstHalf0, FirstHalf1.
+        auto shorter = input;
+        shorter.interval *= .5;
+        shorter.control.integrator.min_step = static_cast<float>(shorter.interval);
+        const auto shorter_serial =
+            AttemptRetainedDopriIntervals(compute, std::span(&shorter, 1), 1);
+        ASSERT_TRUE(shorter_serial) << shorter_serial.error().Description();
+        ASSERT_EQ(shorter_serial->size(), 1U);
+        ASSERT_TRUE(shorter_serial->front().admissible)
+            << sirius::core::CoupledStepFailureName(shorter_serial->front().failure) << " "
+            << shorter_serial->front().error_ratio;
+        ASSERT_TRUE(shorter_serial->front().dopri);
+        EXPECT_NE(shorter_serial->front().full.physical[0].Center(),
+                  accepted.full.physical[0].Center());
+        const std::array distinct{input, shorter};
+        const auto distinct_before = compute.Statistics()[phase_stage].submissions;
+        (void)compute.TakeSubmissionFeedback();
+        const auto distinct_packed = AttemptRetainedDopriIntervals(compute, distinct, 3);
+        ASSERT_TRUE(distinct_packed) << distinct_packed.error().Description();
+        ASSERT_EQ(distinct_packed->size(), distinct.size());
+        const auto distinct_after = compute.Statistics()[phase_stage].submissions;
+        EXPECT_EQ(distinct_after - distinct_before, 3U);
+        EXPECT_EQ(compute.TakeSubmissionFeedback().maximum_rows, 3U);
+        for (const auto& result : *distinct_packed) {
+            ASSERT_TRUE(result.admissible) << sirius::core::CoupledStepFailureName(result.failure)
+                                           << " " << result.error_ratio;
+            ASSERT_TRUE(result.dopri);
+        }
+        same_attempt((*distinct_packed)[0], accepted);
+        same_attempt((*distinct_packed)[1], shorter_serial->front());
+        EXPECT_EQ(device->BufferAllocationBytes(), allocation);
 
         // Form three independent original Step/Endpoint trials, without using
         // capsule starts or increments to supply their initial values.
@@ -573,11 +701,6 @@ TEST_F(RetainedDopriTest, ConnectedIntervalsPreserveTrialsAndIndependentBudgets)
         EXPECT_EQ(capsule.control.frequency_scale, input.control.frequency_scale);
         EXPECT_EQ(capsule.control.tolerance, input.control.tolerance);
         EXPECT_EQ(capsule.control.column_scale, input.control.column_scale);
-        const auto step_control = [](const sirius::core::IntegratorConfig& control) {
-            return std::array{control.abs_tolerance, control.rel_tolerance,  control.min_step,
-                              control.max_step,      control.initial_step,   control.safety_factor,
-                              control.step_grow_max, control.step_shrink_min};
-        };
         EXPECT_EQ(step_control(capsule.control.integrator), step_control(input.control.integrator));
         for (std::size_t parameter = 0; parameter < 4; ++parameter) {
             EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(capsule.metric[parameter])),
@@ -663,6 +786,13 @@ TEST_F(RetainedDopriTest, ConnectedIntervalsPreserveTrialsAndIndependentBudgets)
         EXPECT_EQ(mixed_result->back().error_ratio, 0);
         EXPECT_EQ(mixed_result->back().full.physical[0].Center(), .75);
         EXPECT_EQ(mixed_result->back().full.physical[3].Center(), 4.25);
+        const auto mixed_packed = AttemptRetainedDopriIntervals(compute, mixed, compute.Capacity());
+        ASSERT_TRUE(mixed_packed) << mixed_packed.error().Description();
+        ASSERT_EQ(mixed_packed->size(), mixed_result->size());
+        for (std::size_t row = 0; row < mixed.size(); ++row) {
+            SCOPED_TRACE(row);
+            same_attempt((*mixed_packed)[row], (*mixed_result)[row]);
+        }
         auto strict = input;
         strict.control.tolerance = 1e-30;
         const auto rejected = AttemptRetainedDopriIntervals(compute, std::span(&strict, 1), 1);
@@ -675,6 +805,10 @@ TEST_F(RetainedDopriTest, ConnectedIntervalsPreserveTrialsAndIndependentBudgets)
                                      &rejected->front().midpoint, &rejected->front().refined}) {
             EXPECT_FALSE(endpoint->valid);
         }
+        const auto rejected_packed = AttemptRetainedDopriIntervals(compute, std::span(&strict, 1));
+        ASSERT_TRUE(rejected_packed) << rejected_packed.error().Description();
+        ASSERT_EQ(rejected_packed->size(), rejected->size());
+        same_attempt(rejected_packed->front(), rejected->front());
         const auto recovered = AttemptRetainedDopriIntervals(compute, std::span(&input, 1));
         ASSERT_TRUE(recovered) << recovered.error().Description();
         ASSERT_TRUE(recovered->front().admissible);

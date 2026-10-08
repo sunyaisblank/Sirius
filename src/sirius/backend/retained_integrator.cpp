@@ -426,32 +426,48 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptIntervals(
     if (dopri) {
         std::vector<RetainedEndpointInput> midpoint_packets(count);
         bool needed = false;
-        for (std::size_t trial = 0; trial < 4; ++trial) {
-            std::vector<RetainedDopriPhaseInput> packets(count);
+        // All four private trial packets already exist. Preserve trial-major
+        // row positions while filling each current governor-sized dispatch;
+        // budget one retains the original serialized evaluation. No packet
+        // depends on another trial's interpolation result.
+        const auto total = core::kCoupledTrialCount * count;
+        for (std::size_t offset = 0; offset < total;) {
             bool trial_needed = false;
             for (std::size_t row = 0; row < count; ++row)
-                if (active[row] && curves[row]) {
-                    trial_needed = true;
-                    packets[row] = curves[row]->packets[trial];
-                    if (trial == 0) packets[row].values[361] = RetainedValue::FromDouble(.5);
-                }
+                trial_needed = trial_needed || (active[row] && curves[row]);
             if (!trial_needed) break;
+            const auto rows = std::min(projection_row_budget, total - offset);
+            std::vector<RetainedDopriPhaseInput> packets(rows);
+            for (std::size_t item = 0; item < rows; ++item) {
+                const auto trial = (offset + item) / count;
+                const auto row = (offset + item) % count;
+                if (active[row] && curves[row]) {
+                    packets[item] = curves[row]->packets[trial];
+                    if (trial == 0) packets[item].values[361] = RetainedValue::FromDouble(.5);
+                }
+            }
             const auto sampled = compute.DopriPhase(packets);
+            // Performed transfer/malformed-result failures stay global, even
+            // if an earlier private trial in this dispatch refused its row.
             if (!sampled) return std::unexpected(sampled.error());
-            for (std::size_t row = 0; row < count; ++row)
+            for (std::size_t item = 0; item < rows; ++item) {
+                const auto trial = (offset + item) / count;
+                const auto row = (offset + item) % count;
                 if (active[row] && curves[row]) {
                     auto& curve = *curves[row];
-                    curve.positions[trial] = PositionCurve(packets[row], (*sampled)[row]);
-                    if (!(*sampled)[row].valid || !curve.positions[trial].IsFinite()) {
+                    curve.positions[trial] = PositionCurve(packets[item], (*sampled)[item]);
+                    if (!(*sampled)[item].valid || !curve.positions[trial].IsFinite()) {
                         active[row] = false;
                         work[row].failure = CoupledStepFailure::Interpolation;
                         continue;
                     }
                     if (trial == 0) {
                         needed = true;
-                        midpoint_packets[row] = EndpointInput(inputs[row], (*sampled)[row].phase);
+                        midpoint_packets[row] = EndpointInput(inputs[row], (*sampled)[item].phase);
                     }
                 }
+            }
+            offset += rows;
         }
         if (needed) {
             const auto sampled = compute.Endpoint(midpoint_packets);

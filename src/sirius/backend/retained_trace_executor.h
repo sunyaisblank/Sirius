@@ -42,8 +42,8 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
         std::uint64_t sample_batches = 0;
         std::uint64_t batch_subdivisions = 0;
         std::uint64_t safety_fallbacks = 0;
-        // A private singleton attempt repeated with serialized projections
-        // before publication; its discarded stage work remains charged.
+        // A private singleton repeated with serialized projection/trial rows
+        // before publication; discarded stage work remains charged.
         std::uint64_t paired_projection_retries = 0;
         std::size_t maximum_batch_rows = 0;
         std::uint64_t reused_phases = 0;

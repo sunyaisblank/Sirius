@@ -38,6 +38,7 @@
 #include "support/retained_camera/continuous_reference.h"
 #include "support/retained_camera/ray_reference.h"
 #include "support/retained_transport/dense_reference.h"
+#include "support/retained_transport/dopri_reference.h"
 #include "support/retained_transport/endpoint_reference.h"
 #include "support/retained_transport/reference_cases.h"
 #endif
@@ -3278,6 +3279,195 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
                    "injected valid seam observations only: single rows 600ms, paired endpoints "
                    "800/1200ms, transport overshoot 1100ms, hard bound 1000ms; no sleeps and no "
                    "hardware-duration claim; real device outputs compare bitwise to serialization");
+
+    // The curved DP packet has four independent private trials. A packed
+    // overshoot must retry all of them at budget one before publishing a ray.
+    const auto dp_original =
+        std::bit_cast<RetainedStepInput>(sirius::test::retained_dopri::connection.input);
+    RetainedEndpointInput dp_projection;
+    std::copy_n(dp_original.values.begin(), 45, dp_projection.values.begin());
+    guard_probe.submission_ms = [](BufferHandle, std::uint32_t) { return 600.0; };
+    const auto dp_start = guard_compute.Endpoint({&dp_projection, 1});
+    ASSERT_TRUE(dp_start) << dp_start.error().Description();
+    ASSERT_TRUE(dp_start->front().valid);
+    RetainedIntervalInput dp_input;
+    std::copy_n(dp_original.values.begin(), 4, dp_input.metric.begin());
+    dp_input.start = dp_start->front();
+    dp_input.chart = dp_original.values[44].Center();
+    dp_input.interval = dp_original.values[45].Center();
+    dp_input.control.length_scale = dp_input.control.frequency_scale = 1;
+    dp_input.control.tolerance = 1e-4 / (4 * 30000);
+    dp_input.control.integrator.min_step = static_cast<float>(dp_input.interval);
+    dp_input.control.integrator.max_step = 1;
+    dp_input.control.integrator.abs_tolerance = dp_input.control.integrator.rel_tolerance = 1e-9f;
+    const auto rounded = [](const RetainedValue& value) {
+        return (sirius::core::Twofold(value.high) + sirius::core::Twofold(value.low) +
+                sirius::core::Twofold(value.tail))
+            .Rounded();
+    };
+    sirius::core::KerrSchildFamily dp_family(
+        {dp_input.metric[0].Center(), dp_input.metric[1].Center(), dp_input.metric[2].Center(),
+         dp_input.metric[3].Center()});
+    sirius::core::OutgoingKerrSchild dp_metric(dp_family);
+    ASSERT_EQ(dp_input.chart, -1);
+    auto dp_ray = sirius::core::Lightray{};
+    dp_ray.step_size = static_cast<float>(dp_input.interval);
+    sirius::core::Rk45CoupledState dp_columns;
+    dp_columns.length_scale = dp_columns.frequency_scale = 1;
+    dp_columns.tolerance = dp_input.control.tolerance;
+    dp_columns.column_scale = dp_input.control.column_scale;
+    for (int axis = 0; axis < 4; ++axis) {
+        dp_ray.position(axis) = rounded(dp_input.start.physical[axis]);
+        dp_ray.velocity(axis) = rounded(dp_input.start.physical[4 + axis]);
+        for (std::size_t column = 0; column < 4; ++column) {
+            dp_columns.variations[column].displacement(axis) =
+                rounded(dp_input.start.physical[8 + 8 * column + axis]);
+            dp_columns.variations[column].derivative(axis) =
+                rounded(dp_input.start.physical[12 + 8 * column + axis]);
+        }
+    }
+    // Step initializes from the public rounded physical state, not the
+    // fixture's original retained phase. Use that identical start for serial.
+    RetainedInitializeInput dp_initialization;
+    for (std::size_t parameter = 0; parameter < 4; ++parameter)
+        dp_initialization.values[parameter] =
+            RetainedValue::FromDouble(dp_input.metric[parameter].Center());
+    for (std::size_t field = 0; field < 40; ++field)
+        dp_initialization.values[4 + field] =
+            RetainedValue::FromDouble(rounded(dp_input.start.physical[field]));
+    dp_initialization.values[44] = RetainedValue::FromDouble(dp_input.chart);
+    const auto dp_phase = guard_compute.Initialize({&dp_initialization, 1});
+    ASSERT_TRUE(dp_phase) << dp_phase.error().Description();
+    ASSERT_TRUE(dp_phase->front().valid);
+    RetainedEndpointInput dp_serial_projection;
+    std::copy_n(dp_initialization.values.begin(), 4, dp_serial_projection.values.begin());
+    std::copy(dp_phase->front().phase.begin(), dp_phase->front().phase.end(),
+              dp_serial_projection.values.begin() + 4);
+    dp_serial_projection.values[44] = dp_initialization.values[44];
+    const auto dp_serial_start = guard_compute.Endpoint({&dp_serial_projection, 1});
+    ASSERT_TRUE(dp_serial_start) << dp_serial_start.error().Description();
+    ASSERT_TRUE(dp_serial_start->front().valid);
+    auto dp_serial_input = dp_input;
+    std::copy_n(dp_initialization.values.begin(), 4, dp_serial_input.metric.begin());
+    dp_serial_input.start = dp_serial_start->front();
+    guard_probe.readbacks.clear();
+    const auto dp_serial = AttemptRetainedDopriIntervals(guard_compute, {&dp_serial_input, 1}, 1);
+    ASSERT_TRUE(dp_serial) << dp_serial.error().Description();
+    ASSERT_TRUE(dp_serial->front().admissible);
+    ASSERT_TRUE(dp_serial->front().dopri);
+    EXPECT_EQ(dp_serial->front().attempted_stages, 21U);
+    const auto dp_serial_rows = guard_probe.readbacks;
+    ASSERT_EQ(dp_serial_rows.size(), 7U);
+    guard_probe.readbacks.clear();
+    const auto dp_input_buffer = guard_probe.allocations[12].handle;
+    const auto dp_output_buffer = guard_probe.allocations[13].handle;
+    std::vector<std::uint32_t> dp_dispatch_rows;
+    guard_probe.submission_ms = [&](BufferHandle input, std::uint32_t rows) {
+        if (input.value == dp_input_buffer.value) {
+            dp_dispatch_rows.push_back(rows);
+            return rows == 4 ? 1200.0 : 600.0;
+        }
+        return 600.0;
+    };
+    {
+        RetainedTraceExecutor dp_executor(guard_compute, {}, 1000, 1);
+        sirius::core::Rk45CoupledComparison dp_comparison;
+        ASSERT_TRUE(dp_executor.Step(dp_ray, dp_metric, dp_input.control.integrator, dp_columns,
+                                     dp_comparison));
+        EXPECT_FALSE(dp_executor.Error());
+        EXPECT_EQ(dp_dispatch_rows, (std::vector<std::uint32_t>{4, 1, 1, 1, 1}));
+        EXPECT_EQ(dp_executor.Statistics().accepted_intervals, 1U);
+        EXPECT_EQ(dp_executor.Statistics().paired_projection_retries, 1U);
+        EXPECT_EQ(dp_executor.Statistics().safety_fallbacks, 1U);
+        EXPECT_EQ(dp_columns.central_stages, 42U);
+        EXPECT_EQ(dp_columns.variation_stages, 42U);
+        ASSERT_EQ(guard_probe.readbacks.size(), 12U);
+        for (std::size_t part = 0; part < 3; ++part)
+            for (std::size_t order = 0; order < 2; ++order)
+                ASSERT_NO_FATAL_FAILURE(compare_row(guard_probe.readbacks[part + 1], order,
+                                                    dp_serial_rows[part * 2 + order]));
+        ASSERT_NO_FATAL_FAILURE(compare_row(guard_probe.readbacks[4], 0, dp_serial_rows[6]));
+        for (std::size_t row = 0; row < dp_serial_rows.size(); ++row)
+            ASSERT_NO_FATAL_FAILURE(
+                compare_row(guard_probe.readbacks[5 + row], 0, dp_serial_rows[row]));
+        for (int axis = 0; axis < 4; ++axis) {
+            EXPECT_EQ(dp_ray.position(axis), rounded(dp_serial->front().full.physical[axis]));
+            EXPECT_EQ(dp_ray.velocity(axis), rounded(dp_serial->front().full.physical[4 + axis]));
+            for (std::size_t column = 0; column < 4; ++column) {
+                EXPECT_EQ(dp_columns.variations[column].displacement(axis),
+                          rounded(dp_serial->front().full.physical[8 + 8 * column + axis]));
+                EXPECT_EQ(dp_columns.variations[column].derivative(axis),
+                          rounded(dp_serial->front().full.physical[12 + 8 * column + axis]));
+            }
+        }
+        dp_dispatch_rows.clear();
+        ASSERT_TRUE(dp_executor.Step(dp_ray, dp_metric, dp_input.control.integrator, dp_columns,
+                                     dp_comparison));
+        EXPECT_FALSE(dp_executor.Error());
+        EXPECT_EQ(dp_dispatch_rows, (std::vector<std::uint32_t>{1, 1, 1, 1}));
+        EXPECT_EQ(dp_executor.Statistics().accepted_intervals, 2U);
+        EXPECT_EQ(dp_executor.Statistics().paired_projection_retries, 1U);
+        EXPECT_EQ(dp_executor.Statistics().safety_fallbacks, 1U);
+        EXPECT_EQ(dp_columns.central_stages, 63U);
+        EXPECT_EQ(dp_columns.variation_stages, 63U);
+    }
+
+    // Decode every performed trial before applying a Full-row refusal. A
+    // malformed later Lower completion cannot be masked by that refusal.
+    guard_probe.submission_ms = [](BufferHandle, std::uint32_t) { return 600.0; };
+    const auto dp_reference = AttemptRetainedDopriIntervals(guard_compute, {&dp_input, 1}, 4);
+    ASSERT_TRUE(dp_reference) << dp_reference.error().Description();
+    ASSERT_TRUE(dp_reference->front().admissible);
+    ASSERT_TRUE(dp_reference->front().dopri);
+    const auto dp_row_bytes = guard_probe.allocations[13].bytes / guard_compute.Capacity();
+    for (const bool malformed_lower : {false, true}) {
+        SCOPED_TRACE(malformed_lower);
+        std::size_t dp_reads = 0;
+        guard_probe.after_read = [&](BufferHandle buffer, std::span<std::byte> bytes) {
+            if (buffer.value != dp_output_buffer.value) return;
+            ++dp_reads;
+            ASSERT_EQ(bytes.size(), 4 * dp_row_bytes);
+            const std::uint32_t refused = 0;
+            std::memcpy(bytes.data(), &refused, sizeof(refused));
+            if (malformed_lower) {
+                const std::uint32_t malformed = 2;
+                std::memcpy(bytes.data() + dp_row_bytes, &malformed, sizeof(malformed));
+            }
+        };
+        const auto refused = AttemptRetainedDopriIntervals(guard_compute, {&dp_input, 1}, 4);
+        EXPECT_EQ(dp_reads, 1U);
+        if (malformed_lower) {
+            ASSERT_FALSE(refused);
+            EXPECT_EQ(refused.error().operation(), "read retained DP phase");
+            EXPECT_EQ(refused.error().detail(), "invalid completion state");
+        } else {
+            ASSERT_TRUE(refused) << refused.error().Description();
+            const auto& row = refused->front();
+            EXPECT_FALSE(row.admissible);
+            EXPECT_FALSE(row.dopri);
+            EXPECT_EQ(row.failure, sirius::core::CoupledStepFailure::Interpolation);
+            EXPECT_EQ(row.attempted_stages, 21U);
+            for (const auto* endpoint : {&row.full, &row.lower, &row.midpoint, &row.refined}) {
+                EXPECT_FALSE(endpoint->valid);
+                EXPECT_EQ(endpoint->component, 4U);
+                for (const auto* values : {&endpoint->phase, &endpoint->physical})
+                    for (const auto& value : *values)
+                        EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(value)),
+                                  (std::array<std::uint32_t, 5>{}));
+            }
+            for (const auto* increment : {&row.full_increment, &row.lower_increment,
+                                          &row.midpoint_increment, &row.refined_increment})
+                for (const auto& value : *increment)
+                    EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(value)),
+                              (std::array<std::uint32_t, 5>{}));
+        }
+        guard_probe.after_read = {};
+        const auto recovered = AttemptRetainedDopriIntervals(guard_compute, {&dp_input, 1}, 4);
+        ASSERT_TRUE(recovered) << recovered.error().Description();
+        ASSERT_TRUE(recovered->front().admissible);
+        ASSERT_TRUE(recovered->front().dopri);
+        EXPECT_TRUE(IntervalBitsAgree(recovered->front(), dp_reference->front()));
+    }
 
     // A failed camera launch has no accepted interval through which to export
     // timings. Preserve that stage in the error, including an adjacent timing
