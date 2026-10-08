@@ -2804,12 +2804,21 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
         camera.direction(2) = .2;
         camera.direction(3) = .1;
         camera.direction = camera.direction / std::sqrt(.7 * .7 + .2 * .2 + .1 * .1);
+        // Differentiate normalized sky coordinates and the two pupil axes so
+        // this growth control exercises physical beam columns as well as x,k.
+        camera.phase_space.emplace();
+        camera.phase_space->direction[1][0] = 1;
+        camera.phase_space->direction[2][1] = 1;
+        camera.phase_space->pupil_right[2] = 1;
+        camera.phase_space->pupil_up[3] = 1;
         const auto launch = sirius::core::LaunchCameraRay(metric, .5, camera);
         ASSERT_TRUE(launch);
         sirius::core::Lightray candidate{};
         candidate.position = launch->position;
         candidate.velocity = launch->tangent;
-        candidate.step_size = .5f;
+        // At h=1 the genuine DP midpoint disagreement dominates the embedded
+        // check; the measured calibration below requires that fact explicitly.
+        candidate.step_size = 1;
         sirius::core::Rk45CoupledState columns;
         columns.variations = launch->variations;
         columns.length_scale = columns.frequency_scale = 1;
