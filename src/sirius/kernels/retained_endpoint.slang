@@ -481,9 +481,6 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
          registers = inputs[programBase + 1];
     uint rowWords = no / rows, rowBase = row * rowWords;
     if (rowWords < 769) return;
-#ifdef SIRIUS_RETAINED_COOPERATIVE_ENDPOINT_INPUTS
-    if (lane == 0) retainedStatus = 45;
-#endif
     for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
 #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
     AllMemoryBarrierWithGroupSync();
@@ -492,22 +489,6 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
         ni != programBase + 103 + 5 * count + SIRIUS_RETAINED_LAYERS + 1 ||
         rowWords != 769 + 5 * registers)
         return;
-#ifdef SIRIUS_RETAINED_COOPERATIVE_ENDPOINT_INPUTS
-    // Every original input has its own lane. Join the earliest invalid index
-    // before publishing exactly the serial path's successfully packed prefix.
-    RetainedTriple original = RTInvalid();
-    if (lane < 45) {
-        uint address = 1 + 225 * row + 5 * lane;
-        original = RTPack(RPFromBits(inputs[address]), RPFromBits(inputs[address + 1]),
-                          RPFromBits(inputs[address + 2]), RPFromBits(inputs[address + 3]));
-        if (inputs[address + 4] != 1 || original.valid == 0) {
-            uint previous;
-            InterlockedMin(retainedStatus, lane, previous);
-        }
-    }
-    GroupMemoryBarrierWithGroupSync();
-    if (lane < 45 && lane < retainedStatus) WriteStored(rowBase + 504 + 5 * lane, original);
-#else
     for (uint i = 0; i < 45; ++i) {
         uint address = 1 + 225 * row + 5 * i;
         RetainedTriple value =
@@ -516,12 +497,8 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
         if (inputs[address + 4] != 1 || value.valid == 0) return;
         if (lane == 0) WriteStored(rowBase + 504 + 5 * i, value);
     }
-#endif
 #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
     AllMemoryBarrierWithGroupSync();
-#endif
-#ifdef SIRIUS_RETAINED_COOPERATIVE_ENDPOINT_INPUTS
-    if (retainedStatus < 45) return;
 #endif
     RetainedTriple chart = ReadStored(rowBase + 504 + 5 * 44);
     if (!RTExact(chart, RPOne()) && !RTExact(chart, RPScalarNegate(RPOne()))) return;
