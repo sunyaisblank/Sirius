@@ -40,6 +40,7 @@
 #include "support/retained_camera/ray_reference.h"
 #include "support/retained_transport/dense_reference.h"
 #include "support/retained_transport/dopri_reference.h"
+#include "support/retained_transport/endpoint_factor_reference.h"
 #include "support/retained_transport/endpoint_reference.h"
 #include "support/retained_transport/reference_cases.h"
 #include "support/retained_transport/schwarzschild_reference_cases.h"
@@ -171,7 +172,7 @@ TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
     // A driver's allocation requirement can exceed every logical shader span.
     // These fixed layout totals are independent of the production planner.
     for (const auto& [capacity, logical] : std::array<std::pair<std::size_t, std::uint64_t>, 3>{
-             {{1, 682880}, {24, 3312700}, {64, 7886300}}}) {
+             {{1, 664580}, {24, 3294400}, {64, 7868000}}}) {
         AdmissionDevice padded;
         padded.query_padding = 128;
         const auto required = RetainedCompute::RequiredAllocationBytes(padded, capacity);
@@ -184,7 +185,7 @@ TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
         EXPECT_EQ(padded.BufferAllocationBytes(), 0U);
         if (capacity == 24) {
             EXPECT_EQ(padded.queried_spans,
-                      (std::vector<std::uint64_t>{122728, 284544, 85952, 451104, 84864, 367584,
+                      (std::vector<std::uint64_t>{122728, 284544, 85952, 451104, 66564, 367584,
                                                   181492, 410784, 61292, 193344, 145452, 308736,
                                                   216520, 398304}));
         }
@@ -1805,6 +1806,197 @@ TEST_F(RetainedComputeTest, SchwarzschildStagesPreserveIndependentFieldsAndGener
             ASSERT_TRUE(StepAgrees(outputs[5], sirius::test::retained_transport::cases.back()));
             ASSERT_NO_FATAL_FAILURE(step(std::span(witnesses).first(1)));
             ASSERT_TRUE(SchwarzschildStepAgrees(outputs.front(), fixture::cases.front()));
+        }
+    }
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
+TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission) {
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    namespace fixture = sirius::test::retained_endpoint_factor;
+    constexpr std::size_t capacity = 32;
+    std::vector<RetainedEndpointInput> inputs;
+    std::size_t alternatives = 0;
+    for (const auto& item : fixture::cases) {
+        inputs.push_back(std::bit_cast<RetainedEndpointInput>(item.input));
+        ASSERT_GE(item.alternatives, 1U);
+        ASSERT_LE(item.alternatives, item.expected.size());
+        alternatives += item.alternatives;
+    }
+    ASSERT_EQ(inputs.size(), 29U);
+    ASSERT_EQ(alternatives, 30U);
+    const auto inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory) << inventory.error().Description();
+    const auto index = ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(index) << index.error().Description();
+    const bool mask_useful =
+        RetainedUsesPortableArithmetic(device->Info()) && device->Info().rounds_fp32_to_nearest;
+    RecordProperty("factored_endpoint_normal_default_exercised", 0);
+    RecordProperty("factored_endpoint_normal_fp64_exercised", 0);
+    RecordProperty("factored_endpoint_integer_default_exercised", 0);
+    RecordProperty("factored_endpoint_integer_fp64_exercised", 0);
+    for (const bool decline_rte32 : {false, true}) {
+        if (decline_rte32 && !mask_useful) continue;
+        for (const bool wide : {false, true}) {
+            SCOPED_TRACE(decline_rte32 ? "conservative integer admission" : "actual admission");
+            SCOPED_TRACE(wide ? "fp64 products" : "default products");
+            auto opened = CreateVulkanDevice(*index);
+            ASSERT_TRUE(opened) << opened.error().Description();
+            ASSERT_EQ((*opened)->Info(), device->Info());
+            ASSERT_TRUE((*opened)->SetBufferAllocationLimit(8 * 1024 * 1024));
+            TransferProbeDevice probe(**opened, decline_rte32);
+            auto expected_info = device->Info();
+            if (decline_rte32) expected_info.rounds_fp32_to_nearest = false;
+            ASSERT_EQ(probe.Info(), expected_info);
+            auto created = RetainedCompute::Create(probe, capacity, wide);
+            if (wide && (!device->Info().supports_fp64 || !device->Info().rounds_fp64_to_nearest)) {
+                ASSERT_FALSE(created);
+                EXPECT_NE(created.error().detail().find("binary64"), std::string::npos);
+                EXPECT_TRUE(probe.allocations.empty());
+                EXPECT_EQ((*opened)->BufferAllocationBytes(), 0U);
+                continue;
+            }
+            ASSERT_TRUE(created) << created.error().Description();
+            auto& instance = **created;
+            ASSERT_EQ(instance.Capacity(), capacity);
+            ASSERT_EQ(probe.allocations.size(), 14U);
+            const auto allocation = (*opened)->BufferAllocationBytes();
+            const auto required = RetainedCompute::RequiredAllocationBytes(probe, capacity);
+            ASSERT_TRUE(required) << required.error().Description();
+            ASSERT_EQ(allocation, *required);
+            probe.capture_output = probe.allocations[5].handle;
+            ASSERT_EQ(probe.allocations[5].bytes % capacity, 0U);
+            const auto row_bytes = probe.allocations[5].bytes / capacity;
+            ASSERT_EQ(row_bytes, retained_program::kEndpointRowWords * sizeof(std::uint32_t));
+            ASSERT_GE(row_bytes, 504U * sizeof(std::uint32_t));
+            if (mask_useful) {
+                RecordProperty(decline_rte32
+                                   ? (wide ? "factored_endpoint_integer_fp64_exercised"
+                                           : "factored_endpoint_integer_default_exercised")
+                                   : (wide ? "factored_endpoint_normal_fp64_exercised"
+                                           : "factored_endpoint_normal_default_exercised"),
+                               1);
+            }
+            std::vector<RetainedEndpointOutput> outputs;
+            std::vector<std::byte> raw;
+            const auto endpoint = [&](std::span<const RetainedEndpointInput> rows) {
+                probe.readbacks.clear();
+                const auto returned = instance.Endpoint(rows);
+                ASSERT_TRUE(returned) << returned.error().Description();
+                ASSERT_EQ(returned->size(), rows.size());
+                ASSERT_EQ(probe.readbacks.size(), 1U);
+                ASSERT_EQ(probe.readbacks.front().size(), rows.size() * row_bytes);
+                outputs = *returned;
+                raw = probe.readbacks.front();
+                EXPECT_EQ((*opened)->BufferAllocationBytes(), allocation);
+                EXPECT_EQ(probe.allocations.size(), 14U);
+            };
+            const auto agrees = [&](std::size_t row, std::size_t reference_row) {
+                const auto& item = fixture::cases[reference_row];
+                SCOPED_TRACE(item.name);
+                ASSERT_TRUE(outputs[row].valid);
+                const fixture::Expected* oracle = nullptr;
+                for (std::size_t i = 0; i < item.alternatives; ++i) {
+                    if (item.expected[i].component == outputs[row].component)
+                        oracle = &item.expected[i];
+                }
+                ASSERT_NE(oracle, nullptr) << "component=" << outputs[row].component;
+                for (std::size_t field = 0; field < 100; ++field) {
+                    SCOPED_TRACE(field);
+                    std::array<std::uint32_t, 5> words{};
+                    std::memcpy(
+                        words.data(),
+                        raw.data() + row * row_bytes + (4 + 5 * field) * sizeof(std::uint32_t),
+                        sizeof(words));
+                    const auto value = std::bit_cast<RetainedValue>(words);
+                    ASSERT_TRUE(value.IsRepresented());
+                    const auto reference = oracle->reference[field];
+                    const auto center = sirius::core::Twofold(value.high) +
+                                        sirius::core::Twofold(value.low) +
+                                        sirius::core::Twofold(value.tail);
+                    const double difference = std::abs(
+                        (center - sirius::core::Twofold(reference.high, reference.low)).Rounded());
+                    ASSERT_TRUE(std::isfinite(difference));
+                    ASSERT_GE(oracle->gap[field], 0.0);
+                    EXPECT_LE(difference, value.radius + oracle->gap[field] +
+                                              1e-29 * (1 + std::abs(reference.high)));
+                    EXPECT_LE(difference, 1e-11 * (1 + std::abs(reference.high)));
+                    if (field >= 20) {
+                        const auto& decoded = field < 60 ? outputs[row].phase[field - 20]
+                                                         : outputs[row].physical[field - 60];
+                        EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(decoded)), words);
+                    }
+                }
+            };
+            ASSERT_NO_FATAL_FAILURE(endpoint(inputs));
+            for (std::size_t row = 0; row < inputs.size(); ++row) {
+                ASSERT_NO_FATAL_FAILURE(agrees(row, row));
+            }
+            const auto initial_raw = raw;
+            const auto same_row = [&](std::size_t row, std::size_t reference_row) {
+                const auto current = std::span(raw).subspan(row * row_bytes, row_bytes);
+                const auto initial =
+                    std::span(initial_raw).subspan(reference_row * row_bytes, row_bytes);
+                EXPECT_TRUE(
+                    std::equal(current.begin(), current.end(), initial.begin(), initial.end()))
+                    << "raw row " << row << " reference row " << reference_row;
+            };
+            // Compare every active status, stored root, input and scratch word
+            // within this arithmetic route; inactive capacity is not observed.
+            ASSERT_NO_FATAL_FAILURE(endpoint(inputs));
+            EXPECT_EQ(raw, initial_raw);
+            auto reordered = inputs;
+            std::reverse(reordered.begin(), reordered.end());
+            ASSERT_NO_FATAL_FAILURE(endpoint(reordered));
+            for (std::size_t row = 0; row < inputs.size(); ++row) {
+                same_row(row, inputs.size() - 1 - row);
+            }
+            constexpr std::array<std::size_t, 4> order{18, 16, 28, 0};
+            std::vector<RetainedEndpointInput> shrunk;
+            for (const auto row : order) shrunk.push_back(inputs[row]);
+            ASSERT_NO_FATAL_FAILURE(endpoint(shrunk));
+            for (std::size_t row = 0; row < order.size(); ++row) {
+                same_row(row, order[row]);
+                ASSERT_NO_FATAL_FAILURE(agrees(row, order[row]));
+            }
+            // The distinct large-column boundary witnesses remain admitted
+            // beside late normalization failures and a nonphysical chart.
+            constexpr std::array<std::size_t, 5> good{16, 17, 18, 19, 28};
+            ASSERT_STREQ(fixture::cases[16].name, "weak-large-gradient-outgoing");
+            ASSERT_STREQ(fixture::cases[18].name, "small-radius-large-X-outgoing");
+            std::vector<RetainedEndpointInput> mixed;
+            for (const auto row : good) mixed.push_back(inputs[row]);
+            auto bad = inputs[16];
+            bad.values[43].valid = 0;
+            mixed.push_back(bad);
+            bad = inputs[18];
+            bad.values[0].radius = -0.0F;
+            mixed.push_back(bad);
+            bad = inputs[0];
+            bad.values[44] = RetainedValue::FromDouble(2);
+            mixed.push_back(bad);
+            ASSERT_NO_FATAL_FAILURE(endpoint(mixed));
+            for (std::size_t row = 0; row < good.size(); ++row) {
+                same_row(row, good[row]);
+                ASSERT_NO_FATAL_FAILURE(agrees(row, good[row]));
+            }
+            for (std::size_t row = good.size(); row < mixed.size(); ++row) {
+                EXPECT_FALSE(outputs[row].valid);
+                EXPECT_EQ(outputs[row].component, 4U);
+                for (const auto* record : {&outputs[row].phase, &outputs[row].physical}) {
+                    for (const auto& value : *record) {
+                        EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(value)),
+                                  (std::array<std::uint32_t, 5>{}));
+                    }
+                }
+            }
+            ASSERT_NO_FATAL_FAILURE(endpoint(inputs));
+            EXPECT_EQ(raw, initial_raw);
+            for (std::size_t row = 0; row < inputs.size(); ++row) {
+                ASSERT_NO_FATAL_FAILURE(agrees(row, row));
+            }
         }
     }
 #else

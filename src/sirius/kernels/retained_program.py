@@ -516,25 +516,70 @@ def build_endpoint_program(parallel=False):
     covector = [sum(g[i][k].v * projected[k] for k in range(4)) for i in range(4)]
     denominator = sum(covector[i] * selected[i] for i in range(4))
 
-    def first(a, b, c):
-        return (g[a][c].d[b] + g[a][b].d[c] - g[b][c].d[a]) / 2
+    H, ell = chart_metric_profile(row[4:8], row, row[44])
+    # Weight each derivative before contracting large physical columns. An
+    # unweighted D_X ell or (ell.W)*(ell.X) can exceed retained product bounds
+    # even when the corresponding weak-field metric derivative stays small.
+    weighted_light = [[H.v * ell[i].d[a] for a in range(4)] for i in range(4)]
+    directions = {}
+    metric_changes = {}
+
+    def directional(vector):
+        key = tuple(v.i for v in vector)
+        if key not in directions:
+            contraction = sum(ell[i].v * vector[i] for i in range(4))
+            profile_change = sum(H.d[a] * vector[a] for a in range(4))
+            light_change = [sum(weighted_light[i][a] * vector[a] for a in range(4))
+                            for i in range(4)]
+            # These are transpose contractions, not D_vector ell. Their
+            # distinction retains the rotating Kerr congruence's twist.
+            light_gradient = [sum(weighted_light[i][a] * vector[i] for i in range(4))
+                              for a in range(4)]
+            directions[key] = contraction, profile_change, light_change, light_gradient
+        return directions[key]
+
+    def phi(A, B):
+        # (D_A g) B for g=eta+H*ell*ell^T, holding B fixed.
+        key = tuple(v.i for v in A), tuple(v.i for v in B)
+        if key not in metric_changes:
+            _, profile_change, light_change, _ = directional(A)
+            contraction, _, _, _ = directional(B)
+            scalar = profile_change * contraction + sum(
+                light_change[i] * B[i] for i in range(4))
+            metric_changes[key] = [ell[i].v * scalar + light_change[i] * contraction
+                                   for i in range(4)]
+        return metric_changes[key]
+
+    def gradient(A, B):
+        # grad(A^T g B), with both vectors fixed during differentiation.
+        first, _, _, first_gradient = directional(A)
+        second, _, _, second_gradient = directional(B)
+        return [(H.d[i] * first) * second + first_gradient[i] * second +
+                first * second_gradient[i] for i in range(4)]
+
+    def connection(W, X, swapped=False):
+        dxw, dwx, grad = phi(X, W), phi(W, X), gradient(W, X)
+        if swapped:
+            # Contract the first index instead: Gamma_{a,mu,b} W^a X^b.
+            return [(dxw[i] + grad[i] - dwx[i]) / 2 for i in range(4)]
+        return [(dxw[i] + dwx[i] - grad[i]) / 2 for i in range(4)]
 
     phase = row[4:8] + covector
     physical = row[4:8] + projected
     for column in range(4):
         X = row[12+8*column:16+8*column]
         P = row[16+8*column:20+8*column]
-        lowered = [P[mu] + sum((first(mu, a, b) * delta[a] -
-                                first(a, mu, b) * tangent[a]) * X[b]
-                               for a in range(4) for b in range(4)) for mu in range(4)]
+        correction = connection(delta, X)
+        previous = connection(tangent, X, swapped=True)
+        lowered = [P[mu] + correction[mu] - previous[mu] for mu in range(4)]
         raw = [sum(inverse[mu][nu] * lowered[nu] for nu in range(4)) for mu in range(4)]
         numerator = sum(covector[i] * raw[i] * (1-selected[i]) for i in range(4))
         solved = -numerator / denominator
         V = [(1-selected[i]) * raw[i] + selected[i] * solved for i in range(4)]
         # Preserve P itself. Reconstructing it from g*V and a large connection
         # contraction would discard the very residual retained by transport.
-        corrected = [P[mu] + sum(g[mu][a].d[b] * delta[a] * X[b]
-                                 for a in range(4) for b in range(4)) +
+        changed = phi(X, delta)
+        corrected = [P[mu] + changed[mu] +
                      sum(g[mu][a].v * selected[a] * (V[a]-raw[a]) for a in range(4))
                      for mu in range(4)]
         phase.extend(X + corrected)
@@ -542,6 +587,9 @@ def build_endpoint_program(parallel=False):
     outputs = [v.v for line in g for v in line] + tangent + phase + physical
     assert len(outputs) == 100
     program = compile_program([v.i for v in outputs], parallel, [v.i for v in outputs[:20]])
+    if parallel:
+        # Preserve the existing Endpoint scratch and 3829-word output row.
+        program['registers'] = max(program['registers'], 612)
     # Output registers are pinned through the whole program. Their final writes
     # delimit the metric/tangent prefix needed before selecting the null root.
     last_write = {program['operations'][5*i+1]: i for i in range(program['instructions'])}
@@ -549,6 +597,18 @@ def build_endpoint_program(parallel=False):
     if parallel:
         program['prefix_instructions'] = next(end for end in program['layer_offsets'] if end >= program['prefix_instructions'])
     return program
+
+
+def chart_metric_profile(position, row, chart):
+    """Rank-one profile and coordinate derivatives in the active chart."""
+    reflection = [chart, p(1), chart, p(1)]
+    reflected = [position[i] * reflection[i] for i in range(4)]
+    H, ell, _ = metric_profile(reflected, row)
+    H = J(H.v, [H.d[a] * reflection[a] for a in range(4)])
+    ell = [J(ell[i].v * reflection[i],
+             [ell[i].d[a] * reflection[i] * reflection[a] for a in range(4)])
+           for i in range(4)]
+    return H, ell
 
 
 def chart_geometry(position, row, chart):
