@@ -567,6 +567,58 @@ def build_dense_program(parallel=False):
     return compile_program([v.i for v in outputs], parallel)
 
 
+def build_dopri_phase_program(parallel=False):
+    """Order-four continuous DP phase extension using the existing seven RHS.
+
+    Hairer/Wanner DOPRI5 CONTD5: https://www.unige.ch/~hairer/prog/nonstiff/dopri5.f
+    Every phase field is interpolated, including momenta and their variations.
+    Physical null projection and event-time differentiation are separate owners.
+    """
+    from fractions import Fraction
+    ops.clear()
+    cache.clear()
+    row = [inp(i) for i in range(362)]
+    h, s = row[360:362]
+    d = [(0, 1), (87487479700, 32700410799),
+         (-10690763975, 1880347072), (701980252875, 199316789632),
+         (-1453857185, 822651844), (69997945, 29380423)]
+    assert sum((Fraction(n, q) for n, q in d), Fraction(0)) == Fraction(12715105075, 11282082432)
+
+    def integer(value):
+        # Base-2^16 digits are exact binary32 constants. Division happens in
+        # retained device arithmetic; no large rational is rounded on the host
+        # or narrowed through the shader's signed-32-bit Rational interface.
+        sign = -1 if value < 0 else 1
+        value = abs(value)
+        digits = []
+        while value:
+            digits.append(value & 65535)
+            value >>= 16
+        result = p(0)
+        for digit in reversed(digits):
+            result = result * 65536 + digit
+        return result if sign > 0 else -result
+
+    weights = [integer(n) / integer(q) for n, q in d]
+    phase, derivative, aa, bb, cc = [], [], [], [], []
+    for i in range(40):
+        original, delta = row[i], row[40+i]
+        k1, k7 = row[80+i], row[320+i]
+        a = h*k1-delta
+        b = 2*delta-h*(k1+k7)
+        # Sum d_i=0 permits this difference form; constant RHS cancels before
+        # any weighted products instead of subtracting large stage values.
+        c = h*sum(weights[j-1]*(row[80+40*j+i]-k1) for j in range(2, 7))
+        value = original+s*(delta+(1-s)*(a+s*(b+(1-s)*c)))
+        rate = (delta+(1-2*s)*a+s*(2-3*s)*b+2*s*(1-s)*(1-2*s)*c)/h
+        value = node(11, original, node(11, original+delta, value, s-1), s)
+        rate = node(11, k1, node(11, k7, rate, s-1), s)
+        phase.append(value); derivative.append(rate)
+        aa.append(a); bb.append(b); cc.append(c)
+    outputs = phase+derivative+aa+bb+cc
+    return compile_program([v.i for v in outputs], parallel)
+
+
 def build_initialize_program(parallel=False):
     """Convert physical camera/trace columns to retained Hamiltonian phase."""
     ops.clear()

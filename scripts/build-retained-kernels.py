@@ -230,7 +230,7 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
-    portable_parallel = portable and source.stem in ("retained_transport", "retained_endpoint", "retained_dense")
+    portable_parallel = portable and source.stem in ("retained_transport", "retained_endpoint", "retained_dense", "retained_dopri_phase")
     projection_words = 7 if portable and source.stem == "retained_endpoint" else 0
     if normal_sum32:
         if not portable or source.stem not in ("retained_transport", "retained_endpoint"):
@@ -249,6 +249,8 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
             definitions.append("-DSIRIUS_RETAINED_PARALLEL_ENDPOINT=1")
         elif source.stem == "retained_dense":
             definitions.append("-DSIRIUS_RETAINED_PARALLEL_DENSE=1")
+        elif source.stem == "retained_dopri_phase":
+            definitions.append("-DSIRIUS_RETAINED_PARALLEL_DOPRI_PHASE=1")
     original_inputs = ({"retained_camera": 32, "retained_ray_camera": 45}.get(source.stem, 0)
                        if portable else 0)
     coefficients = 25 if source.stem == "retained_transport" else 0
@@ -354,13 +356,14 @@ def main():
                          ("Endpoint", module.build_endpoint_program),
                          ("Dense", module.build_dense_program),
                          ("Initialize", module.build_initialize_program),
-                         ("RayCamera", module.build_ray_camera_program)):
+                         ("RayCamera", module.build_ray_camera_program),
+                         ("DopriPhase", module.build_dopri_phase_program)):
         program = build(parallel=True)
         prefix = [program["instructions"], program["registers"]]
         if kind not in ("Camera", "RayCamera"):
             prefix.append(len(program["outputs"]))
         array("k" + kind + "Program", prefix + program["outputs"] + program["operations"] + program["layer_offsets"])
-        stem = "retained_" + ("ray_camera" if kind == "RayCamera" else kind.lower())
+        stem = "retained_" + ({"RayCamera": "ray_camera", "DopriPhase": "dopri_phase"}.get(kind, kind.lower()))
         terms = 4 if kind in ("Camera", "RayCamera") else 5
         sizes = []
         for suffix, name, wide, portable in (("", "", False, False),
@@ -401,7 +404,7 @@ def main():
                 lines.append(f"inline constexpr auto& k{kind}FmaShader = k{kind}Fp64Shader;")
             print(kind + " optional FMA32:", "validated" if fma_available else "integer fallback", flush=True)
         words = ((512 if kind == "Camera" else 576) + 4 * program["registers"] if kind in ("Camera", "RayCamera")
-                 else {"Transport":2404, "Endpoint":769, "Dense":204, "Initialize":204}[kind] + 5 * program["registers"])
+                 else {"Transport":2404, "Endpoint":769, "Dense":204, "Initialize":204, "DopriPhase":1004}[kind] + 5 * program["registers"])
         lines.append(f"inline constexpr std::size_t k{kind}RowWords = {words};")
         print(kind, program["instructions"], "instructions;", program["registers"],
               "registers;", sizes, "native/native-wide/portable/portable-wide shader bytes", flush=True)

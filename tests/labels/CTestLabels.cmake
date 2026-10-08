@@ -400,6 +400,16 @@ set_tests_properties(
 )
 
 set_tests_properties(
+    DopriPositionSegment.SamplesTheQuarticAndItsAffineDerivative
+    DopriPositionSegment.DegreeEightIsolationCoversEveryRootWithoutGridSampling
+    DopriPositionSegment.SameSideQuarticContactsRespectDirectionAndOriginalRestriction
+    DopriPositionSegment.TangenciesAndKerrEllipsoidUseTheSameQuartic
+    DopriPositionSegment.DiskRootsIncludeTangenciesAndKeepOriginalFractions
+    DopriPositionSegment.IncrementBoundarySurvivesLargeOriginsAndInvalidInputsFailClosed
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
     DualNumberTests.AdditiveIdentity
     DualNumberTests.MultiplicativeIdentity
     DualNumberTests.AdditiveInverse
@@ -1016,6 +1026,13 @@ set_tests_properties(
     RetainedComputeTest.SharedTracerCompletesDeviceIntervalsAndRetainsRollbackState
     RetainedComputeTest.RejectedStepRowsCannotExposeOldOrPartialCandidates
     RetainedComputeTest.Fp64ProductsPreserveIndependentScienceOrDeclineUnsupportedDevices
+    PROPERTIES LABELS "Mandatory;Correctness"
+)
+
+set_tests_properties(
+    RetainedDopriTest.IndependentQuarticPreservesCompletePhase
+    RetainedDopriTest.MalformedRowsRefuseAndRecover
+    RetainedDopriTest.CurvedTransportConnectsSamplerAndProjection
     PROPERTIES LABELS "Mandatory;Correctness"
 )
 

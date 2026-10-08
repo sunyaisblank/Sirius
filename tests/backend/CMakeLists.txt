@@ -53,6 +53,7 @@ target_sources(sirius_backend_tests PRIVATE
     kernel_camera_frame_test.cpp
     retained_camera_program_test.cpp
     retained_compute_test.cpp
+    retained_dopri_test.cpp
     kernel_infinity_test.cpp
     kernel_trace_test.cpp
     kernel_beam_test.cpp

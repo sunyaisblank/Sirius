@@ -449,10 +449,13 @@ def verify_governed_scene_transcript(
             f"{label} completion does not cover the canonical detector regions")
     require(0 < completion["maximum_dispatch_rays"] <= completion["ray_capacity"] <= 64,
             f"{label} completion exceeds the retained ray capacity")
+    # Preserve the original six-stage evidence contract. The appended phase
+    # sampler is an optional measured stage until the trace owner installs it;
+    # zero here never establishes a DP interpolation or performance claim.
     stages = completion.get("retained_stage_dispatches")
-    require(isinstance(stages, list) and len(stages) == 6
+    require(isinstance(stages, list) and len(stages) in (6, 7)
             and all(type(count) is int and count >= 0 for count in stages)
-            and all(count > 0 for count in stages[1:])
+            and all(count > 0 for count in stages[1:6])
             and sum(stages) == completion["dispatches"],
             f"{label} completion does not prove the retained device stages")
     # Older schema-v1 records count individual commands only. When the writer

@@ -168,21 +168,22 @@ TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
     // A driver's allocation requirement can exceed every logical shader span.
     // These fixed layout totals are independent of the production planner.
     for (const auto& [capacity, logical] : std::array<std::pair<std::size_t, std::uint64_t>, 3>{
-             {{1, 604800}, {24, 2686392}, {64, 6306552}}}) {
+             {{1, 671396}, {24, 3301216}, {64, 7874816}}}) {
         AdmissionDevice padded;
         padded.query_padding = 128;
         const auto required = RetainedCompute::RequiredAllocationBytes(padded, capacity);
         ASSERT_TRUE(required) << required.error().Description();
         EXPECT_EQ(RetainedCompute::RequiredBufferBytes(capacity), logical);
-        EXPECT_EQ(*required, logical + 12 * 128);
-        EXPECT_EQ(padded.query_calls, 12U);
+        EXPECT_EQ(*required, logical + 14 * 128);
+        EXPECT_EQ(padded.query_calls, 14U);
         EXPECT_EQ(padded.kernel_calls, 0U);
         EXPECT_EQ(padded.buffer_calls, 0U);
         EXPECT_EQ(padded.BufferAllocationBytes(), 0U);
         if (capacity == 24) {
             EXPECT_EQ(padded.queried_spans,
                       (std::vector<std::uint64_t>{122728, 284544, 74468, 451104, 84864, 367584,
-                                                  181492, 410784, 61292, 193344, 145452, 308736}));
+                                                  181492, 410784, 61292, 193344, 145452, 308736,
+                                                  216520, 398304}));
         }
     }
     AdmissionDevice invalid;
@@ -326,8 +327,9 @@ class PreparationProbeDevice final : public ComputeDevice {
     }
 };
 
-void ExpectPhysicalStatsEqual(const std::array<RetainedCompute::StageStats, 6>& actual,
-                              const std::array<RetainedCompute::StageStats, 6>& expected) {
+void ExpectPhysicalStatsEqual(
+    const std::array<RetainedCompute::StageStats, RetainedCompute::kStageCount>& actual,
+    const std::array<RetainedCompute::StageStats, RetainedCompute::kStageCount>& expected) {
     for (std::size_t i = 0; i < actual.size(); ++i) {
         SCOPED_TRACE(i);
         EXPECT_EQ(actual[i].submissions, expected[i].submissions);
@@ -365,8 +367,8 @@ TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideProductsAndPreservesAlloc
             auto created = RetainedCompute::Create(candidate, 2, wide);
             ASSERT_TRUE(baseline);
             ASSERT_TRUE(created);
-            ASSERT_EQ(control.loaded_codes.size(), 6U);
-            ASSERT_EQ(candidate.loaded_codes.size(), 6U);
+            ASSERT_EQ(control.loaded_codes.size(), RetainedCompute::kStageCount);
+            ASSERT_EQ(candidate.loaded_codes.size(), RetainedCompute::kStageCount);
             const bool portable = (mask & 3u) != 3u;
             const auto expected = [portable, wide](std::span<const std::uint32_t> native,
                                                    std::span<const std::uint32_t> native_wide,
@@ -374,7 +376,7 @@ TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideProductsAndPreservesAlloc
                                                    std::span<const std::uint32_t> integer_wide) {
                 return portable ? (wide ? integer_wide : integer) : (wide ? native_wide : native);
             };
-            std::array<std::span<const std::uint32_t>, 6> stages{
+            std::array<std::span<const std::uint32_t>, RetainedCompute::kStageCount> stages{
                 expected(kCameraShader, kCameraFp64Shader, kCameraPortableShader,
                          kCameraPortableFp64Shader),
                 expected(kTransportShader, kTransportFp64Shader, kTransportPortableShader,
@@ -386,13 +388,15 @@ TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideProductsAndPreservesAlloc
                 expected(kInitializeShader, kInitializeFp64Shader, kInitializePortableShader,
                          kInitializePortableFp64Shader),
                 expected(kRayCameraShader, kRayCameraFp64Shader, kRayCameraPortableShader,
-                         kRayCameraPortableFp64Shader)};
+                         kRayCameraPortableFp64Shader),
+                expected(kDopriPhaseShader, kDopriPhaseFp64Shader, kDopriPhasePortableShader,
+                         kDopriPhasePortableFp64Shader)};
             if ((mask & 3u) == 2u) {
                 stages[1] = std::span(kTransportPortableNormalSumShader);
                 stages[2] = std::span(kEndpointPortableNormalSumShader);
             }
             const bool eligible = wide && mask == 15u;
-            for (std::size_t stage = 0; stage < 6; ++stage) {
+            for (std::size_t stage = 0; stage < RetainedCompute::kStageCount; ++stage) {
                 // The baseline excludes FMA and independently checks native,
                 // pure-integer fallback and RTE32-only Transport/Endpoint selection.
                 EXPECT_EQ(control.loaded_codes[stage],
@@ -411,7 +415,7 @@ TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideProductsAndPreservesAlloc
                     EXPECT_EQ(candidate.loaded_codes[stage], control.loaded_codes[stage]);
                 }
             }
-            EXPECT_EQ(candidate.buffers.size(), 12U);
+            EXPECT_EQ(candidate.buffers.size(), 2 * RetainedCompute::kStageCount);
             ASSERT_EQ(candidate.buffers.size(), control.buffers.size());
             for (std::size_t i = 0; i < candidate.buffers.size(); ++i)
                 EXPECT_EQ(candidate.buffers[i].size(), control.buffers[i].size());
@@ -459,8 +463,8 @@ TEST(RetainedComputeAdmission, SoftwareRendererPreparationPreservesPhysicalAccou
     auto created = RetainedCompute::Create(probe, 2);
     ASSERT_TRUE(created);
     auto& compute = **created;
-    ASSERT_EQ(probe.loads, 6U);
-    ASSERT_EQ(probe.buffers.size(), 12U);
+    ASSERT_EQ(probe.loads, RetainedCompute::kStageCount);
+    ASSERT_EQ(probe.buffers.size(), 2 * RetainedCompute::kStageCount);
     ASSERT_TRUE(probe.writes.empty());
     ASSERT_TRUE(probe.kernels.empty()) << "Create must remain free of preparation work";
     const auto allocated = probe.BufferAllocationBytes();
@@ -477,9 +481,9 @@ TEST(RetainedComputeAdmission, SoftwareRendererPreparationPreservesPhysicalAccou
     ASSERT_TRUE(compute.PrepareSoftwareRendererStages(observation));
     ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(compute.Statistics(), physical));
     EXPECT_EQ(probe.BufferAllocationBytes(), allocated);
-    EXPECT_EQ(probe.kernels, (std::vector<std::uint32_t>{1, 5, 4, 1, 2, 3}));
-    ASSERT_EQ(probe.writes.size(), before_writes + 10);
-    for (std::size_t i = 0; i < 5; ++i) {
+    EXPECT_EQ(probe.kernels, (std::vector<std::uint32_t>{1, 5, 4, 1, 2, 3, 6}));
+    ASSERT_EQ(probe.writes.size(), before_writes + 12);
+    for (std::size_t i = 0; i < 6; ++i) {
         const auto& zero = probe.writes[before_writes + 2 * i];
         const auto& restored = probe.writes[before_writes + 2 * i + 1];
         EXPECT_EQ(zero.bytes, 4U);
@@ -490,7 +494,7 @@ TEST(RetainedComputeAdmission, SoftwareRendererPreparationPreservesPhysicalAccou
         const std::uint32_t capacity = static_cast<std::uint32_t>(compute.Capacity());
         std::memcpy(expected_buffers[zero.buffer.value].data(), &capacity, sizeof(capacity));
     }
-    EXPECT_EQ(probe.buffers, expected_buffers) << "Only the five capacity headers may change";
+    EXPECT_EQ(probe.buffers, expected_buffers) << "Only the six capacity headers may change";
     for (std::size_t i = 0; i < observation.stages.size(); ++i) {
         const auto& stage = observation.stages[i];
         const auto count = i == 0 ? 0U : 1U;
@@ -535,6 +539,8 @@ TEST(RetainedComputeAdmission, SoftwareRendererPreparationPreservesPhysicalAccou
     probe.expected_groups_x = 1;
     ASSERT_TRUE(compute.Initialize(initialize));
     ASSERT_TRUE(compute.RayCamera(ray_camera));
+    const std::array<RetainedDopriPhaseInput, 1> dopri{};
+    ASSERT_TRUE(compute.DopriPhase(dopri));
     probe.independent_pair = true;
     probe.expected_groups_x = 2;
     ASSERT_TRUE(compute.EndpointAndDense(endpoint, dense));
@@ -543,7 +549,7 @@ TEST(RetainedComputeAdmission, SoftwareRendererPreparationPreservesPhysicalAccou
     const auto unchanged_buffers = probe.buffers;
     compute.ResetStatistics();
     ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(compute.Statistics(), {}));
-    std::array<RetainedCompute::StageStats, 6> reset_shared{};
+    std::array<RetainedCompute::StageStats, RetainedCompute::kStageCount> reset_shared{};
     reset_shared[0] = compute.EndpointDenseStatistics();
     ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(reset_shared, {}));
     const auto reset_feedback = compute.TakeSubmissionFeedback();
@@ -553,8 +559,8 @@ TEST(RetainedComputeAdmission, SoftwareRendererPreparationPreservesPhysicalAccou
     EXPECT_EQ(reset_feedback.maximum_one_row_ms, 0);
     EXPECT_FALSE(reset_feedback.maximum_one_row_stage.has_value());
     EXPECT_EQ(probe.buffers, unchanged_buffers);
-    EXPECT_EQ(probe.loads, 6U);
-    EXPECT_EQ(probe.buffers.size(), 12U);
+    EXPECT_EQ(probe.loads, RetainedCompute::kStageCount);
+    EXPECT_EQ(probe.buffers.size(), 2 * RetainedCompute::kStageCount);
     probe.observation.submit_wait_ms = 8;
     probe.expected_groups_x = 1;
     ASSERT_TRUE(compute.Step(input));
@@ -604,7 +610,11 @@ TEST(RetainedComputeAdmission, SoftwareRendererPreparationPreservesPhysicalAccou
         }
         EXPECT_TRUE(std::isfinite(partial.wall_ms));
         EXPECT_GE(partial.wall_ms, stage.write_buffer_ms);
-        for (std::size_t i = 0; i < 5; ++i) EXPECT_EQ(partial.stages[i].attempts, 0U);
+        for (std::size_t i = 0; i < RetainedCompute::kStageCount; ++i) {
+            if (i != 5) {
+                EXPECT_EQ(partial.stages[i].attempts, 0U);
+            }
+        }
         EXPECT_EQ((*prepared)->TakeSubmissionFeedback().peak_ms, 0);
         ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual((*prepared)->Statistics(), {}));
         if (stage.header_restored) {
@@ -632,7 +642,11 @@ TEST(RetainedComputeAdmission, SoftwareRendererPreparationPreservesPhysicalAccou
             EXPECT_EQ(partial.stages[5].completed, 0U);
             EXPECT_TRUE(partial.stages[5].header_restored);
             EXPECT_EQ(partial.stages[5].write_buffer_bytes, 8U);
-            for (std::size_t i = 0; i < 5; ++i) EXPECT_EQ(partial.stages[i].attempts, 0U);
+            for (std::size_t i = 0; i < RetainedCompute::kStageCount; ++i) {
+                if (i != 5) {
+                    EXPECT_EQ(partial.stages[i].attempts, 0U);
+                }
+            }
         }
     }
 #else
@@ -878,7 +892,7 @@ void CheckStickyErrorDrainsQueuedRequests(ComputeDevice& device) {
         EXPECT_EQ(probe.forwarded_dispatches, 1U);
         EXPECT_EQ(probe.writes.size(), 1U);
         EXPECT_EQ(probe.reads.size(), 1U);
-        ASSERT_EQ(probe.allocations.size(), 12U);
+        ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
         for (std::size_t stage = 0; stage < compute.Statistics().size(); ++stage)
             EXPECT_EQ(compute.Statistics()[stage].submissions, stage == 5 ? 1U : 0U);
         const auto stats = executor.Statistics();
@@ -1053,7 +1067,7 @@ TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInval
     EXPECT_GT(allocation, initial_allocation);
     EXPECT_EQ(allocation - initial_allocation, *required);
     EXPECT_LE(allocation, 8ull * 1024 * 1024);
-    ASSERT_EQ(probe.allocations.size(), 12U);
+    ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
     for (const auto& buffer : probe.allocations) EXPECT_EQ(buffer.usage, BufferUsage::kStorage);
     EXPECT_TRUE(probe.writes.empty());
     const auto full_input_bytes = probe.allocations[0].bytes;
@@ -1243,7 +1257,7 @@ TEST_F(RetainedComputeTest, SoftwareRendererPreparationPreservesBuffersAndPhysic
     auto created = RetainedCompute::Create(probe, compute->Capacity());
     ASSERT_TRUE(created) << created.error().Description();
     auto& prepared = **created;
-    ASSERT_EQ(probe.allocations.size(), 12U);
+    ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
     EXPECT_TRUE(probe.writes.empty());
     EXPECT_EQ(probe.dispatch_calls, 0U);
     const auto allocated = device->BufferAllocationBytes();
@@ -1257,7 +1271,7 @@ TEST_F(RetainedComputeTest, SoftwareRendererPreparationPreservesBuffersAndPhysic
     // Publish all observations even if preparation failed; these are actual
     // initialization host intervals, not physical work or GPU timestamps.
     RecordProperty("software_preparation_scope",
-                   "five explicit zero-row initialization submissions; preparation is outside "
+                   "six explicit zero-row initialization submissions; preparation is outside "
                    "physical feedback; subsequent RayCamera is not cold-render qualification");
     RecordProperty("software_preparation_wall_ms", std::to_string(observation.wall_ms));
     for (std::size_t i = 0; i < observation.stages.size(); ++i) {
@@ -1287,7 +1301,7 @@ TEST_F(RetainedComputeTest, SoftwareRendererPreparationPreservesBuffersAndPhysic
         std::cerr << message << std::endl;
     }
     ASSERT_TRUE(result) << result.error().Description();
-    const std::array<std::size_t, 5> order{5, 4, 1, 2, 3};
+    const std::array<std::size_t, 6> order{5, 4, 1, 2, 3, 6};
     ASSERT_EQ(probe.submissions.size(), order.size());
     ASSERT_EQ(probe.writes.size(), 2 * order.size());
     EXPECT_TRUE(probe.reads.empty());
@@ -1377,13 +1391,17 @@ TEST_F(RetainedComputeTest, SmoothRayCameraPreservesPhysicalLensDerivatives) {
                    "same original row twice on fresh fixture compute; host timings exclude "
                    "SetUp; no speed threshold, cache attribution or cold render qualification");
     const auto observe = [&](const std::string& prefix) {
-        const auto before = compute->Statistics().back();
+        const auto before =
+            compute
+                ->Statistics()[static_cast<std::size_t>(RetainedCompute::KernelStage::kRayCamera)];
         DispatchTiming timing;
         std::cerr << "[RayCamera reuse] " << prefix << " started" << std::endl;
         const auto started = std::chrono::steady_clock::now();
         auto result = compute->RayCamera(std::span(inputs.data(), 1), &timing);
         const auto finished = std::chrono::steady_clock::now();
-        const auto after = compute->Statistics().back();
+        const auto after =
+            compute
+                ->Statistics()[static_cast<std::size_t>(RetainedCompute::KernelStage::kRayCamera)];
         auto message = std::format("[RayCamera reuse] {} completed", prefix);
         const auto record = [&](const char* key, const auto& value) {
             const auto text = std::format("{}", value);
@@ -1827,7 +1845,7 @@ TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
     probe.independent_pairs = true;
     auto observed = RetainedCompute::Create(probe, 24);
     ASSERT_TRUE(observed) << observed.error().Description();
-    ASSERT_EQ(probe.allocations.size(), 12U);
+    ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
     const auto resident = device->BufferAllocationBytes();
     ASSERT_TRUE(vulkan->SetDispatchTimestampsEnabled(true));
     std::size_t samples = 0;
@@ -1925,7 +1943,7 @@ TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
 TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement) {
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
     using Clock = std::chrono::steady_clock;
-    using Stats = std::array<RetainedCompute::StageStats, 6>;
+    using Stats = std::array<RetainedCompute::StageStats, RetainedCompute::kStageCount>;
     const auto fixture_started = Clock::now();
     const auto fixture_before = compute->Statistics();
     const auto fixture_pair_before = compute->EndpointDenseStatistics();
@@ -2230,7 +2248,7 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
     const auto allocated = device->BufferAllocationBytes();
     EXPECT_GT(allocated, initial_allocation);
     EXPECT_LE(allocated, 8ull * 1024 * 1024);
-    ASSERT_EQ(probe.allocations.size(), 12U);
+    ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
     const auto endpoint_input = probe.allocations[4].handle;
     const auto endpoint_output = probe.allocations[5].handle;
     const auto endpoint_row_bytes = probe.allocations[5].bytes / paired_compute.Capacity();
@@ -2278,7 +2296,7 @@ TEST_F(RetainedComputeTest, CoupledIntervalsRequireEmbeddedAndIndependentDenseAg
         EXPECT_EQ(after[3].submissions - before[3].submissions, 1U);
         EXPECT_EQ(probe.forwarded_dispatches - dispatches, 4 + endpoint_calls);
         EXPECT_EQ(device->BufferAllocationBytes(), allocated);
-        EXPECT_EQ(probe.allocations.size(), 12U);
+        EXPECT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
         if (!first_upload)
             check_endpoint_transfers(endpoint_rows, endpoint_calls, writes_begin, reads_begin,
                                      submissions_begin);
@@ -2419,7 +2437,7 @@ TEST_F(RetainedComputeTest, SharedEndpointDensePreservesPrivateIntervalsAndSeria
     auto created = RetainedCompute::Create(probe, 4, false, 250);
     ASSERT_TRUE(created) << created.error().Description();
     auto& observed = **created;
-    ASSERT_EQ(probe.allocations.size(), 12U);
+    ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
     const auto endpoint_output = probe.allocations[5].handle;
     const auto dense_output = probe.allocations[7].handle;
     const auto resident = device->BufferAllocationBytes();
@@ -2673,7 +2691,7 @@ TEST_F(RetainedComputeTest, ProjectionReserveKeepsLogicalCohortsBounded) {
                           static_cast<std::uint32_t>(2 * rays),
                           static_cast<std::uint32_t>(2 * rays), 1, 2, 2, 2}));
         }
-        EXPECT_EQ(probe.allocations.size(), 12U);
+        EXPECT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
         EXPECT_EQ(cohort_device.BufferAllocationBytes(), resident_before + *required);
     }
 #else
@@ -3018,7 +3036,7 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
     auto& guard_compute = **guard_created;
     const auto guard_allocation = device->BufferAllocationBytes();
     EXPECT_LE(guard_allocation, 8ull * 1024 * 1024);
-    ASSERT_EQ(guard_probe.allocations.size(), 12U);
+    ASSERT_EQ(guard_probe.allocations.size(), 2 * RetainedCompute::kStageCount);
     const auto transport_input = guard_probe.allocations[2].handle;
     const auto endpoint_input = guard_probe.allocations[4].handle;
     guard_probe.capture_output = guard_probe.allocations[5].handle;
@@ -3168,7 +3186,7 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
                                           : 21U;
         EXPECT_EQ(guarded_columns.central_stages, completed_stages);
         EXPECT_EQ(guarded_columns.variation_stages, completed_stages);
-        EXPECT_EQ(guard_probe.allocations.size(), 12U);
+        EXPECT_EQ(guard_probe.allocations.size(), 2 * RetainedCompute::kStageCount);
         EXPECT_EQ(device->BufferAllocationBytes(), guard_allocation);
         if (recovered) {
             EXPECT_FALSE(guarded_executor.Error());

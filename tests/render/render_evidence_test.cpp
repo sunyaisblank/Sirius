@@ -46,8 +46,8 @@ TEST(RenderEvidence, RetainedWireRecordsFeedAttestationControls) {
         stats.maximum_dispatch_rays = 64;
         stats.band_dispatches = imax ? 32736 : 3000;
         stats.retained_stage_dispatches =
-            imax ? std::array<std::int64_t, 6>{0, 5000, 5000, 5000, 5000, 12736}
-                 : std::array<std::int64_t, 6>{0, 500, 500, 500, 500, 1000};
+            imax ? std::array<std::int64_t, 7>{0, 5000, 5000, 5000, 5000, 12736, 0}
+                 : std::array<std::int64_t, 7>{0, 500, 500, 500, 500, 1000, 0};
         auto& paired = stats.endpoint_dense_timing;
         paired.submissions = imax ? 3000 : 300;
         paired.submit_wait_ms = imax ? 30000 : 3000;
@@ -114,7 +114,8 @@ TEST(RenderEvidence, DeviceIdentityEscapesJsonWithoutChangingItsValue) {
     stats.initialization_seconds = 2;
     stats.initialization_submit_wait_ms = 1500;
     stats.retained_preparation.wall_ms = 2000;
-    auto& ray_camera = stats.retained_preparation.stages.back();
+    auto& ray_camera = stats.retained_preparation.stages[static_cast<std::size_t>(
+        sirius::backend::RetainedCompute::KernelStage::kRayCamera)];
     ray_camera.attempts = 1;
     ray_camera.dispatch_attempts = 1;
     ray_camera.completed_dispatches = 1;
@@ -132,7 +133,8 @@ TEST(RenderEvidence, DeviceIdentityEscapesJsonWithoutChangingItsValue) {
     const auto prepared = nlohmann::json::parse(VulkanRenderEvidenceJson(config, stats));
     EXPECT_EQ(prepared["initialization_dispatches"], 5);
     EXPECT_EQ(prepared["retained_preparation"]["wall_ms"], 2000);
-    const auto& observed = prepared["retained_preparation"]["stages"].back();
+    const auto& observed = prepared["retained_preparation"]["stages"][static_cast<std::size_t>(
+        sirius::backend::RetainedCompute::KernelStage::kRayCamera)];
     EXPECT_EQ(observed["stage"], "ray_camera");
     EXPECT_EQ(observed["completed_dispatches"], 1);
     EXPECT_EQ(observed["header_restored"], true);

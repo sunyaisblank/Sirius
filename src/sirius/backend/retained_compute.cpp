@@ -23,13 +23,14 @@ struct StageLayout {
     std::size_t row_words;
 };
 // Same order as KernelStage; planning and allocation share these exact spans.
-constexpr std::array<StageLayout, 6> kStageLayouts{{
+constexpr std::array<StageLayout, RetainedCompute::kStageCount> kStageLayouts{{
     {kCameraProgram, 160, kCameraRowWords},
     {kTransportProgram, 230, kTransportRowWords},
     {kEndpointProgram, 225, kEndpointRowWords},
     {kDenseProgram, 560, kDenseRowWords},
     {kInitializeProgram, 225, kInitializeRowWords},
     {kRayCameraProgram, 225, kRayCameraRowWords},
+    {kDopriPhaseProgram, 1810, kDopriPhaseRowWords},
 }};
 
 std::array<std::uint64_t, 2> StageBufferBytes(const StageLayout& layout, std::size_t capacity) {
@@ -181,6 +182,10 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
                     shader(kRayCameraShader, kRayCameraFp64Shader, kRayCameraPortableShader,
                            kRayCameraPortableFp64Shader));
     if (!status) return std::unexpected(status.error());
+    status = create(result->dopri_phase_, KernelStage::kDopriPhase,
+                    shader(kDopriPhaseShader, kDopriPhaseFp64Shader, kDopriPhasePortableShader,
+                           kDopriPhasePortableFp64Shader));
+    if (!status) return std::unexpected(status.error());
     return result;
 }
 
@@ -208,7 +213,8 @@ base::Expected<void> RetainedCompute::PrepareSoftwareRendererStages(
                std::isfinite(timing.cleanup_ms) && timing.cleanup_ms >= 0 &&
                std::isfinite(timing.total_ms) && timing.total_ms >= 0;
     };
-    for (auto* stage : {&ray_camera_, &initialize_, &transport_, &endpoint_, &dense_}) {
+    for (auto* stage :
+         {&ray_camera_, &initialize_, &transport_, &endpoint_, &dense_, &dopri_phase_}) {
         if (cancelled()) return finish(cancellation());
         auto& stats = observation.stages[static_cast<std::size_t>(stage->kind)];
         ++stats.attempts;
@@ -282,13 +288,15 @@ base::Expected<std::uint64_t> RetainedCompute::RequiredAllocationBytes(ComputeDe
     return total;
 }
 
-std::array<RetainedCompute::StageStats, 6> RetainedCompute::Statistics() const {
-    return {camera_.stats, transport_.stats,  endpoint_.stats,
-            dense_.stats,  initialize_.stats, ray_camera_.stats};
+std::array<RetainedCompute::StageStats, RetainedCompute::kStageCount> RetainedCompute::Statistics()
+    const {
+    return {camera_.stats,     transport_.stats,  endpoint_.stats,   dense_.stats,
+            initialize_.stats, ray_camera_.stats, dopri_phase_.stats};
 }
 
 void RetainedCompute::ResetStatistics() {
-    for (auto* stage : {&camera_, &transport_, &endpoint_, &dense_, &initialize_, &ray_camera_})
+    for (auto* stage :
+         {&camera_, &transport_, &endpoint_, &dense_, &initialize_, &ray_camera_, &dopri_phase_})
         stage->stats = {};
     endpoint_dense_stats_ = {};
     submission_feedback_ = {};
@@ -407,7 +415,7 @@ base::Expected<std::vector<RetainedStepOutput>> RetainedCompute::Step(
         if (output.stages > 7)
             return Fail(ErrorDomain::kKernel, "read retained transport", "invalid stage count");
         if (words[0] == 0) continue;
-        if (words[0] != 1 || output.stages != 7)
+        if (words[0] != 1 || output.stages != 7 || words[2] > 1)
             return Fail(ErrorDomain::kKernel, "read retained transport",
                         "invalid completion state");
         const std::array groups{&output.fifth, &output.fourth, &output.increment, &output.error};
@@ -419,6 +427,16 @@ base::Expected<std::vector<RetainedStepOutput>> RetainedCompute::Step(
                     return Fail(ErrorDomain::kKernel, "read retained transport",
                                 "invalid retained value");
             }
+        output.rhs_valid = words[2] == 1;
+        if (output.rhs_valid)
+            for (std::size_t stage = 0; stage < 7; ++stage)
+                for (std::size_t i = 0; i < 40; ++i) {
+                    auto& value = output.rhs[stage][i];
+                    value = Decode(words + 1004 + stage * 200 + i * 5);
+                    if (!value.IsRepresented())
+                        return Fail(ErrorDomain::kKernel, "read retained transport",
+                                    "invalid retained RHS value");
+                }
         output.valid = true;
     }
     return result;
@@ -456,6 +474,36 @@ base::Expected<std::vector<RetainedDenseOutput>> RetainedCompute::Dense(
         auto output = DecodeDense(dense_.output.data() + row * kDenseRowWords);
         if (!output) return std::unexpected(output.error());
         result[row] = *output;
+    }
+    return result;
+}
+
+base::Expected<std::vector<RetainedDopriPhaseOutput>> RetainedCompute::DopriPhase(
+    std::span<const RetainedDopriPhaseInput> inputs, DispatchTiming* timing) {
+    if (inputs.empty() || inputs.size() > capacity_)
+        return Fail(ErrorDomain::kDevice, "dispatch retained DP phase", "invalid batch size");
+    static_assert(sizeof(RetainedDopriPhaseInput) == 1810 * sizeof(std::uint32_t));
+    std::fill_n(dopri_phase_.input.begin() + 1, capacity_ * 1810, 0U);
+    std::memcpy(dopri_phase_.input.data() + 1, inputs.data(), inputs.size_bytes());
+    auto status = Dispatch(dopri_phase_, inputs.size(), timing);
+    if (!status) return std::unexpected(status.error());
+    std::vector<RetainedDopriPhaseOutput> result(inputs.size());
+    for (std::size_t row = 0; row < inputs.size(); ++row) {
+        const auto* words = dopri_phase_.output.data() + row * kDopriPhaseRowWords;
+        auto& output = result[row];
+        if (words[0] == 0) continue;
+        if (words[0] != 1)
+            return Fail(ErrorDomain::kKernel, "read retained DP phase", "invalid completion state");
+        const std::array groups{&output.phase, &output.derivative, &output.a, &output.b, &output.c};
+        for (std::size_t group = 0; group < groups.size(); ++group)
+            for (std::size_t i = 0; i < 40; ++i) {
+                auto& value = (*groups[group])[i];
+                value = Decode(words + 4 + group * 200 + i * 5);
+                if (!value.IsRepresented())
+                    return Fail(ErrorDomain::kKernel, "read retained DP phase",
+                                "invalid retained value");
+            }
+        output.valid = true;
     }
     return result;
 }

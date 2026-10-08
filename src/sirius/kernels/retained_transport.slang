@@ -577,4 +577,6 @@ RetainedTriple ReadCoefficient(uint index) {
 #endif
     if (retainedStatus != 0) return;
     if (lane == 0) outputs[rowBase] = 1;
+    // Unlike the analytic flat path, this row owns seven complete RHS records.
+    if (lane == 0) outputs[rowBase + 2] = 1;
 }

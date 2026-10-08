@@ -53,6 +53,10 @@ struct RetainedStepInput {
 struct RetainedStepOutput {
     // All phase records use x[4], p[4], four (X[4], delta-p[4]) columns.
     std::array<RetainedValue, 40> fifth{}, fourth{}, increment{}, error{};
+    // The seven unprojected Hamiltonian RHS records already returned by curved
+    // Transport. The exact flat fast path has no stored RHS and sets false.
+    std::array<std::array<RetainedValue, 40>, 7> rhs{};
+    bool rhs_valid = false;
     // Attempted RHS evaluations, including an evaluation that declined.
     std::uint32_t stages = 0;
     bool valid = false;
@@ -80,6 +84,19 @@ struct RetainedDenseOutput {
     bool valid = false;
 };
 
+struct RetainedDopriPhaseInput {
+    // Original phase[40], retained increment[40], seven RHS[40], h, fraction.
+    // This is a distinct quartic phase interpolation problem, not Hermite.
+    std::array<RetainedValue, 362> values{};
+};
+struct RetainedDopriPhaseOutput {
+    // All forty Hamiltonian phase fields and their polynomial affine rates.
+    // A,B,C define Y=y0+s{increment+(1-s)[A+s(B+(1-s)C)]}.
+    // Polynomial rates are not the projected physical geodesic tangent.
+    std::array<RetainedValue, 40> phase{}, derivative{}, a{}, b{}, c{};
+    bool valid = false;
+};
+
 struct RetainedEndpointDenseOutput {
     std::vector<RetainedEndpointOutput> endpoints;
     // Decode errors remain private row results until Endpoint admission has
@@ -102,7 +119,16 @@ struct RetainedInitializeOutput {
 // object, and callers must serialize its synchronous submissions.
 class RetainedCompute {
   public:
-    enum class KernelStage { kCamera, kTransport, kEndpoint, kDense, kInitialize, kRayCamera };
+    enum class KernelStage {
+        kCamera,
+        kTransport,
+        kEndpoint,
+        kDense,
+        kInitialize,
+        kRayCamera,
+        kDopriPhase
+    };
+    static constexpr std::size_t kStageCount = 7;
     // Evidence writers also compile when the optional device backend is absent.
     [[nodiscard]] static constexpr const char* StageName(KernelStage stage) {
         switch (stage) {
@@ -118,6 +144,8 @@ class RetainedCompute {
                 return "initialize";
             case KernelStage::kRayCamera:
                 return "ray_camera";
+            case KernelStage::kDopriPhase:
+                return "dopri_phase";
         }
         return "unknown";
     }
@@ -157,7 +185,7 @@ class RetainedCompute {
     };
     struct PreparationStats {
         // Existing KernelStage order; the renderer does not use film Camera.
-        std::array<PreparationStageStats, 6> stages{};
+        std::array<PreparationStageStats, kStageCount> stages{};
         double wall_ms = 0;  // Entire preparation, including failure/cancellation and restoration.
     };
     // Logical shader spans; actual device residency may include adapter padding.
@@ -186,6 +214,8 @@ class RetainedCompute {
         std::span<const RetainedEndpointInput> inputs, DispatchTiming* timing = nullptr);
     [[nodiscard]] base::Expected<std::vector<RetainedDenseOutput>> Dense(
         std::span<const RetainedDenseInput> inputs, DispatchTiming* timing = nullptr);
+    [[nodiscard]] base::Expected<std::vector<RetainedDopriPhaseOutput>> DopriPhase(
+        std::span<const RetainedDopriPhaseInput> inputs, DispatchTiming* timing = nullptr);
     [[nodiscard]] bool SupportsIndependentPair() const noexcept {
         return device_.SupportsIndependentPair();
     }
@@ -212,7 +242,7 @@ class RetainedCompute {
     // Compatibility view; consumes the same complete observation window.
     [[nodiscard]] double TakeSubmissionPeakMs();
     // Read only after the owning submissions have finished.
-    [[nodiscard]] std::array<StageStats, 6> Statistics() const;
+    [[nodiscard]] std::array<StageStats, kStageCount> Statistics() const;
     // Only the exclusive owner may start a new render observation, after every
     // previous worker/submission has completed. Device buffers and uploaded
     // programs remain intact; no physical operation is suppressed.
@@ -240,7 +270,7 @@ class RetainedCompute {
     double dispatch_target_ms_ = 250;
     SubmissionFeedback submission_feedback_;
     StageStats endpoint_dense_stats_;
-    Stage camera_, transport_, endpoint_, dense_, initialize_, ray_camera_;
+    Stage camera_, transport_, endpoint_, dense_, initialize_, ray_camera_, dopri_phase_;
 };
 
 }  // namespace sirius::backend
