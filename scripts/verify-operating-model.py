@@ -130,6 +130,15 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:RetainedComputeTest.JointRkStagesRetainCriticalIncrementsAndEmbeddedError",
         "gtest:RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation",
         "gtest:RetainedComputeTest.DenseSegmentsPreserveSmallCovariantArrivalDerivatives",
+        "gtest:RetainedDopriTest.IndependentQuarticPreservesCompletePhase",
+        "gtest:RetainedDopriTest.MalformedRowsRefuseAndRecover",
+        "gtest:RetainedDopriTest.CurvedTransportConnectsSamplerAndProjection",
+        "gtest:DopriPositionSegment.SamplesTheQuarticAndItsAffineDerivative",
+        "gtest:DopriPositionSegment.DegreeEightIsolationCoversEveryRootWithoutGridSampling",
+        "gtest:DopriPositionSegment.SameSideQuarticContactsRespectDirectionAndOriginalRestriction",
+        "gtest:DopriPositionSegment.TangenciesAndKerrEllipsoidUseTheSameQuartic",
+        "gtest:DopriPositionSegment.DiskRootsIncludeTangenciesAndKeepOriginalFractions",
+        "gtest:DopriPositionSegment.IncrementBoundarySurvivesLargeOriginsAndInvalidInputsFailClosed",
         "gtest:RetainedComputeTest.CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement",
         "gtest:RetainedComputeTest.PhysicalInitializationRetainsTheHamiltonianResidual",
         "gtest:RetainedComputeTest.ProjectionReserveKeepsLogicalCohortsBounded",
@@ -484,8 +493,8 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "8e74eb19e4bbb32ba76ee27f8e7501d54f59e3bbb76e7afa87715a5812a8a4f3",
-    "required_dimensions": "15f5ac8ea592f9b7da14c3673e20d063ab9a774cba2c267329e9026420acf78d",
+    "acceptance_criteria": "8775d64d71aa0fbc181e2238c0f8b7c6130e1668c5658f701d96310c55fea706",
+    "required_dimensions": "da6720e91bd8b9292ffb392298c6737b04fae357b4a509697a10f30d608e0962",
     "capability_contracts": "4a32b1a16171759ce66d99f1c4370975424b87d3f36d6574f840efb8360a9bda",
 }
 # These groups match concrete optional compile boundaries. CPU transport tests
@@ -495,7 +504,8 @@ CONDITIONAL_SOURCE_GROUPS = {
         Path(f"tests/backend/{name}.cpp") for name in (
             "vulkan_smoke_test", "kernel_parity_test", "kernel_metric_consistency_test",
             "kernel_camera_frame_test", "retained_camera_program_test",
-            "retained_compute_test", "kernel_infinity_test", "kernel_trace_test",
+            "retained_compute_test", "retained_dopri_test", "kernel_infinity_test",
+            "kernel_trace_test",
             "kernel_beam_test", "kernel_portability_test",
         )
     },
