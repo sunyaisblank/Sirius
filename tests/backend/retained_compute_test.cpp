@@ -43,6 +43,7 @@
 #include "support/retained_transport/endpoint_factor_reference.h"
 #include "support/retained_transport/endpoint_reference.h"
 #include "support/retained_transport/reference_cases.h"
+#include "support/retained_transport/schwarzschild_endpoint_reference.h"
 #include "support/retained_transport/schwarzschild_reference_cases.h"
 #endif
 
@@ -172,7 +173,7 @@ TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
     // A driver's allocation requirement can exceed every logical shader span.
     // These fixed layout totals are independent of the production planner.
     for (const auto& [capacity, logical] : std::array<std::pair<std::size_t, std::uint64_t>, 3>{
-             {{1, 664580}, {24, 3294400}, {64, 7868000}}}) {
+             {{1, 704192}, {24, 3334012}, {64, 7907612}}}) {
         AdmissionDevice padded;
         padded.query_padding = 128;
         const auto required = RetainedCompute::RequiredAllocationBytes(padded, capacity);
@@ -185,7 +186,7 @@ TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
         EXPECT_EQ(padded.BufferAllocationBytes(), 0U);
         if (capacity == 24) {
             EXPECT_EQ(padded.queried_spans,
-                      (std::vector<std::uint64_t>{122728, 284544, 85952, 451104, 66564, 367584,
+                      (std::vector<std::uint64_t>{122728, 284544, 85952, 451104, 106176, 367584,
                                                   181492, 410784, 61292, 193344, 145452, 308736,
                                                   216520, 398304}));
         }
@@ -1816,6 +1817,7 @@ TEST_F(RetainedComputeTest, SchwarzschildStagesPreserveIndependentFieldsAndGener
 TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission) {
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
     namespace fixture = sirius::test::retained_endpoint_factor;
+    namespace additional = sirius::test::retained_schwarzschild_endpoint;
     constexpr std::size_t capacity = 32;
     std::vector<RetainedEndpointInput> inputs;
     std::size_t alternatives = 0;
@@ -1827,6 +1829,17 @@ TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundary
     }
     ASSERT_EQ(inputs.size(), 29U);
     ASSERT_EQ(alternatives, 30U);
+    std::vector<RetainedEndpointInput> additional_inputs;
+    std::size_t required_admissions = 0;
+    for (const auto& item : additional::cases) {
+        additional_inputs.push_back(std::bit_cast<RetainedEndpointInput>(item.input));
+        ASSERT_GE(item.alternatives, 1U);
+        ASSERT_LE(item.alternatives, item.expected.size());
+        required_admissions += item.admission_required;
+    }
+    ASSERT_EQ(additional_inputs.size(), 27U);
+    ASSERT_EQ(required_admissions, 23U);
+    ASSERT_LE(additional_inputs.size(), capacity);
     const auto inventory = EnumerateVulkanDevices();
     ASSERT_TRUE(inventory) << inventory.error().Description();
     const auto index = ResolveVulkanDeviceIndex(*inventory);
@@ -1893,11 +1906,10 @@ TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundary
                 EXPECT_EQ((*opened)->BufferAllocationBytes(), allocation);
                 EXPECT_EQ(probe.allocations.size(), 14U);
             };
-            const auto agrees = [&](std::size_t row, std::size_t reference_row) {
-                const auto& item = fixture::cases[reference_row];
+            const auto agrees_item = [&](std::size_t row, const auto& item) {
                 SCOPED_TRACE(item.name);
                 ASSERT_TRUE(outputs[row].valid);
-                const fixture::Expected* oracle = nullptr;
+                decltype(item.expected.data()) oracle = nullptr;
                 for (std::size_t i = 0; i < item.alternatives; ++i) {
                     if (item.expected[i].component == outputs[row].component)
                         oracle = &item.expected[i];
@@ -1929,6 +1941,9 @@ TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundary
                         EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(decoded)), words);
                     }
                 }
+            };
+            const auto agrees = [&](std::size_t row, std::size_t reference_row) {
+                ASSERT_NO_FATAL_FAILURE(agrees_item(row, fixture::cases[reference_row]));
             };
             ASSERT_NO_FATAL_FAILURE(endpoint(inputs));
             for (std::size_t row = 0; row < inputs.size(); ++row) {
@@ -1997,6 +2012,195 @@ TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundary
             for (std::size_t row = 0; row < inputs.size(); ++row) {
                 ASSERT_NO_FATAL_FAILURE(agrees(row, row));
             }
+
+            // The independent Schwarzschild authority retains all 100 roots,
+            // including both projected physical and covariant columns. Four
+            // large-axis probes permit refusal, but every admitted row must
+            // meet the same enclosure, precision and decoding checks above.
+            const auto erased = [&](std::size_t row) {
+                EXPECT_FALSE(outputs[row].valid);
+                EXPECT_EQ(outputs[row].component, 4U);
+                for (const auto* record : {&outputs[row].phase, &outputs[row].physical}) {
+                    for (const auto& value : *record) {
+                        EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(value)),
+                                  (std::array<std::uint32_t, 5>{}));
+                    }
+                }
+            };
+            ASSERT_NO_FATAL_FAILURE(endpoint(additional_inputs));
+            for (std::size_t row = 0; row < additional_inputs.size(); ++row) {
+                const auto& item = additional::cases[row];
+                SCOPED_TRACE(item.name);
+                if (item.admission_required) {
+                    ASSERT_TRUE(outputs[row].valid);
+                }
+                if (outputs[row].valid) {
+                    ASSERT_NO_FATAL_FAILURE(agrees_item(row, item));
+                } else {
+                    ASSERT_NO_FATAL_FAILURE(erased(row));
+                }
+            }
+            const auto additional_raw = raw;
+            ASSERT_NO_FATAL_FAILURE(endpoint(additional_inputs));
+            EXPECT_EQ(raw, additional_raw);
+
+            // Locate the second immutable table from the first table's final
+            // layer offset, rather than guessing its physical input position.
+            const auto& program = retained_program::kEndpointProgram;
+            ASSERT_GE(program.size(), 103U);
+            ASSERT_EQ(program[1], 612U);
+            ASSERT_EQ(program[2], 100U);
+            std::size_t specialized = 103 + 5 * program[0];
+            ASSERT_LT(specialized, program.size());
+            ASSERT_EQ(program[specialized], 0U);
+            while (specialized < program.size() && program[specialized] != program[0]) {
+                ++specialized;
+            }
+            ++specialized;
+            ASSERT_LT(specialized + 102, program.size());
+            ASSERT_EQ(program[specialized + 1], program[1]);
+            ASSERT_EQ(program[specialized + 2], 100U);
+            const auto specialized_offsets = specialized + 103 + 5 * program[specialized];
+            ASSERT_LT(specialized_offsets, program.size());
+            ASSERT_EQ(program[specialized_offsets], 0U);
+            ASSERT_EQ(program.back(), program[specialized]);
+            ASSERT_EQ(program.size() - specialized_offsets, 85U);
+            ASSERT_NE(std::find(program.begin() + specialized_offsets, program.end(), 202U),
+                      program.end());
+
+            std::vector<RetainedEndpointInput> selection;
+            for (std::size_t row = 20; row < 26; ++row) selection.push_back(inputs[row]);
+            // This raw overlapping packet normalizes to the first witness's
+            // exact zero spin; the selector must use all normalized words.
+            auto normalized_zero = inputs[20];
+            normalized_zero.values[1] = {0.5F, -0.5F, -0.0F, 0.0F, 1};
+            selection.push_back(normalized_zero);
+            const auto specialized_rows = selection.size();
+            const auto general_row = selection.size();
+            selection.push_back(inputs[0]);
+            const auto flat_row = selection.size();
+            ASSERT_STREQ(sirius::test::retained_endpoint::cases[14].name, "analytic-flat");
+            selection.push_back(std::bit_cast<RetainedEndpointInput>(
+                sirius::test::retained_endpoint::cases[14].input));
+            for (std::size_t parameter = 1; parameter <= 3; ++parameter) {
+                for (unsigned kind = 0; kind < 3; ++kind) {
+                    auto row = inputs[20];
+                    if (kind == 0) row.values[parameter] = RetainedValue::FromDouble(0x1p-80);
+                    if (kind == 1) row.values[parameter].low = 0x1p-90F;
+                    if (kind == 2) row.values[parameter].radius = 0x1p-90F;
+                    selection.push_back(row);
+                }
+            }
+            const auto good_rows = selection.size();
+            for (std::size_t parameter = 1; parameter <= 3; ++parameter) {
+                auto row = inputs[20];
+                row.values[parameter].radius = -0.0F;
+                selection.push_back(row);
+            }
+            const auto singular_first = selection.size();
+            for (const bool uncertain : {false, true}) {
+                auto row = inputs[20];
+                for (std::size_t field = 5; field < 8; ++field) {
+                    row.values[field] = RetainedValue::FromDouble(0);
+                }
+                if (uncertain) {
+                    row.values[5] = RetainedValue::FromDouble(.25);
+                    row.values[5].radius = .5F;
+                }
+                selection.push_back(row);
+            }
+            ASSERT_EQ(selection.size(), 23U);
+            ASSERT_LE(selection.size(), capacity);
+            ASSERT_NO_FATAL_FAILURE(endpoint(selection));
+            for (std::size_t row = 0; row < good_rows; ++row) {
+                ASSERT_TRUE(outputs[row].valid) << row;
+            }
+            for (std::size_t row = good_rows; row < selection.size(); ++row) {
+                // Singular profiles may decline after publishing a metric
+                // prefix, so only the decoded phase/physical erasure is required.
+                ASSERT_NO_FATAL_FAILURE(erased(row));
+            }
+            for (std::size_t row = 0; row < 6; ++row) {
+                ASSERT_NO_FATAL_FAILURE(agrees_item(row, fixture::cases[20 + row]));
+            }
+            ASSERT_NO_FATAL_FAILURE(agrees_item(6, fixture::cases[20]));
+            ASSERT_NO_FATAL_FAILURE(agrees_item(general_row, fixture::cases[0]));
+            const auto selection_raw = raw;
+            const auto same_selection_row = [&](std::size_t row, std::size_t reference_row) {
+                const auto current = std::span(raw).subspan(row * row_bytes, row_bytes);
+                const auto initial =
+                    std::span(selection_raw).subspan(reference_row * row_bytes, row_bytes);
+                EXPECT_TRUE(
+                    std::equal(current.begin(), current.end(), initial.begin(), initial.end()))
+                    << "selection row " << row << " reference row " << reference_row;
+            };
+            const auto public_erased = [&](std::size_t row) {
+                ASSERT_NO_FATAL_FAILURE(erased(row));
+                const auto public_words =
+                    std::span(raw).subspan(row * row_bytes, 504U * sizeof(std::uint32_t));
+                EXPECT_TRUE(std::all_of(public_words.begin(), public_words.end(),
+                                        [](std::byte word) { return word == std::byte{}; }));
+            };
+
+            // Ordinary Endpoint calls upload only the active packet prefix
+            // after creation. Explicit full-span writes poison and restore the
+            // cached second-table header without changing the general table.
+            const auto endpoint_input = probe.allocations[4].handle;
+            const auto table = 1 + instance.Capacity() * 225;
+            std::vector<std::uint32_t> complete_input(table + program.size());
+            complete_input[0] = static_cast<std::uint32_t>(instance.Capacity());
+            std::memcpy(complete_input.data() + 1, selection.data(),
+                        selection.size() * sizeof(RetainedEndpointInput));
+            std::copy(program.begin(), program.end(), complete_input.begin() + table);
+            std::size_t changed_uploads = 0;
+            probe.before_write = [&](BufferHandle buffer, std::span<std::byte> data) {
+                if (buffer.value != endpoint_input.value) return;
+                const auto table_bytes = table * sizeof(std::uint32_t);
+                ASSERT_EQ(data.size(), table_bytes + program.size() * sizeof(std::uint32_t));
+                ASSERT_EQ(std::memcmp(data.data() + table_bytes, program.data(),
+                                      program.size() * sizeof(std::uint32_t)),
+                          0);
+                const auto wrong_registers = program[1] ^ 1U;
+                std::memcpy(data.data() + table_bytes + (specialized + 1) * sizeof(std::uint32_t),
+                            &wrong_registers, sizeof(wrong_registers));
+                ++changed_uploads;
+            };
+            ASSERT_TRUE(
+                probe.WriteBuffer(endpoint_input, std::as_bytes(std::span(complete_input))));
+            probe.before_write = {};
+            ASSERT_NO_FATAL_FAILURE(endpoint(selection));
+            ASSERT_EQ(changed_uploads, 1U);
+            for (std::size_t row = 0; row < specialized_rows; ++row) {
+                ASSERT_NO_FATAL_FAILURE(public_erased(row));
+            }
+            for (std::size_t row = specialized_rows; row < good_rows; ++row) {
+                ASSERT_TRUE(outputs[row].valid) << row;
+                same_selection_row(row, row);
+            }
+            for (std::size_t row = good_rows; row < singular_first; ++row) {
+                ASSERT_NO_FATAL_FAILURE(erased(row));
+            }
+            for (std::size_t row = singular_first; row < selection.size(); ++row) {
+                ASSERT_NO_FATAL_FAILURE(public_erased(row));
+            }
+            ASSERT_TRUE(
+                probe.WriteBuffer(endpoint_input, std::as_bytes(std::span(complete_input))));
+            ASSERT_NO_FATAL_FAILURE(endpoint(selection));
+            EXPECT_EQ(raw, selection_raw);
+            const std::array<std::size_t, 4> selection_order{specialized_rows - 1, general_row,
+                                                             flat_row, good_rows - 1};
+            std::vector<RetainedEndpointInput> selection_shrunk;
+            for (const auto row : selection_order) selection_shrunk.push_back(selection[row]);
+            ASSERT_NO_FATAL_FAILURE(endpoint(selection_shrunk));
+            for (std::size_t row = 0; row < selection_order.size(); ++row) {
+                ASSERT_TRUE(outputs[row].valid);
+                same_selection_row(row, selection_order[row]);
+            }
+            ASSERT_NO_FATAL_FAILURE(endpoint(std::span(inputs).subspan(20, 1)));
+            ASSERT_NO_FATAL_FAILURE(agrees_item(0, fixture::cases[20]));
+            same_selection_row(0, 0);
+            ASSERT_NO_FATAL_FAILURE(endpoint(inputs));
+            EXPECT_EQ(raw, initial_raw);
         }
     }
 #else

@@ -226,7 +226,7 @@ def validate_portable_coefficients(source):
             raise ValueError(f"retained tableau slot {slot} does not enclose its exact rational")
 
 
-def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False, normal_sum32=False, transport_specialized=None):
+def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False, normal_sum32=False, transport_specialized=None, endpoint_specialized=None):
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
@@ -239,6 +239,16 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
         definitions += [f"-DSIRIUS_RETAINED_GENERAL_PROGRAM_WORDS={general_words}",
                         f"-DSIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS={specialized_words}",
                         f"-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS={specialized_layers}"]
+    if endpoint_specialized is not None:
+        if source.stem != "retained_endpoint":
+            raise ValueError("the second Endpoint table belongs only to Endpoint")
+        general_words, specialized_words, specialized_layers, specialized_prefix = endpoint_specialized
+        if min(endpoint_specialized) <= 0 or specialized_layers > layers:
+            raise ValueError("invalid bounded Endpoint table frame")
+        definitions += [f"-DSIRIUS_RETAINED_GENERAL_PROGRAM_WORDS={general_words}",
+                        f"-DSIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS={specialized_words}",
+                        f"-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS={specialized_layers}",
+                        f"-DSIRIUS_RETAINED_SCHWARZSCHILD_PREFIX={specialized_prefix}"]
     portable_parallel = portable and source.stem in ("retained_transport", "retained_endpoint", "retained_dense", "retained_dopri_phase")
     # Projection publishes its root and sixteen complete weighted tangent terms.
     projection_words = 7 + 16 * 5 if portable and source.stem == "retained_endpoint" else 0
@@ -376,6 +386,7 @@ def main():
             prefix.append(len(program["outputs"]))
         encoded = prefix + program["outputs"] + program["operations"] + program["layer_offsets"]
         transport_specialized = None
+        endpoint_specialized = None
         if kind == "Transport":
             specialized = module.build_schwarzschild_transport_program(parallel=True)
             if specialized["registers"] != program["registers"] or len(specialized["outputs"]) != 40:
@@ -385,6 +396,19 @@ def main():
             transport_specialized = (len(encoded), len(specialized_words), len(specialized["layer_offsets"]) - 1)
             # One immutable input span and one kernel; planning charges both
             # tables through the same complete span as allocation and upload.
+            encoded += specialized_words
+        if kind == "Endpoint":
+            specialized = module.build_schwarzschild_endpoint_program(parallel=True)
+            if (specialized["registers"] != program["registers"] or
+                    len(specialized["outputs"]) != 100 or
+                    specialized["prefix_instructions"] not in specialized["layer_offsets"]):
+                raise ValueError("Schwarzschild Endpoint changed the shared row frame")
+            specialized_words = ([specialized["instructions"], specialized["registers"], 100] +
+                                 specialized["outputs"] + specialized["operations"] + specialized["layer_offsets"])
+            endpoint_specialized = (len(encoded), len(specialized_words),
+                                    len(specialized["layer_offsets"]) - 1,
+                                    specialized["prefix_instructions"])
+            # Allocation and both Endpoint consumers charge the complete span.
             encoded += specialized_words
         array("k" + kind + "Program", encoded)
         stem = "retained_" + ({"RayCamera": "ray_camera", "DopriPhase": "dopri_phase"}.get(kind, kind.lower()))
@@ -399,7 +423,7 @@ def main():
                                   args.compiler, args.assembler, args.disassembler, args.validator,
                                   program["registers"], terms, len(program["layer_offsets"])-1,
                                   program.get("prefix_instructions", 0), fp64=wide, portable=portable, optimizer=args.optimizer,
-                                  transport_specialized=transport_specialized)
+                                  transport_specialized=transport_specialized, endpoint_specialized=endpoint_specialized)
             array("k" + kind + name + "Shader", code)
             sizes.append(len(code) * 4)
         if kind in ("Transport", "Endpoint", "DopriPhase"):
@@ -413,7 +437,7 @@ def main():
                 args.compiler, args.assembler, args.disassembler, args.validator,
                 program["registers"], terms, len(program["layer_offsets"])-1,
                 program.get("prefix_instructions", 0), portable=True,
-                optimizer=args.optimizer, normal_sum32=True, transport_specialized=transport_specialized)
+                optimizer=args.optimizer, normal_sum32=True, transport_specialized=transport_specialized, endpoint_specialized=endpoint_specialized)
             array("k" + kind + "PortableNormalSumShader", code)
         if kind in ("Transport", "Endpoint"):
             destination = args.output.parent / (stem + "_fma.spv")
@@ -423,7 +447,7 @@ def main():
                     args.compiler, args.assembler, args.disassembler, args.validator,
                     program["registers"], terms, len(program["layer_offsets"])-1,
                     program.get("prefix_instructions", 0), fp64=True, fma=True,
-                    transport_specialized=transport_specialized)
+                    transport_specialized=transport_specialized, endpoint_specialized=endpoint_specialized)
                 array("k" + kind + "FmaShader", code)
             else:
                 shutil.copyfile(args.output.parent / (stem + "_fp64.spv"), destination)

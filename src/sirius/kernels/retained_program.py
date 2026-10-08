@@ -137,8 +137,8 @@ def metric_profile(position, row):
     return H, ell, flat
 
 
-def metric(position, row):
-    H, ell, flat = metric_profile(position, row)
+def metric(position, row, profile=metric_profile):
+    H, ell, flat = profile(position, row)
     g = []
     inv = []
     for i in range(4):
@@ -497,7 +497,30 @@ def build_schwarzschild_transport_program(parallel=False):
     return program
 
 
+def schwarzschild_metric_profile(position, row):
+    """Exact a=Q=Lambda=0 profile; the shader owns admission and flat bypass."""
+    xx, yy, zz = [coord(position[i], i) for i in range(1, 4)]
+    bound = node(9, node(9, position[1], position[2]),
+                 node(9, position[3], p(0)))
+    scale = J(node(8, bound))
+    x, y, z = xx / scale, yy / scale, zz / scale
+    radius = scale * (x * x + y * y + z * z).sqrt()
+    ell = [j(1), xx / radius, yy / radius, zz / radius]
+    factor = (2 * j(row[0])) / radius
+    return factor, ell, node(9, row[0], p(0))
+
+
 def build_endpoint_program(parallel=False):
+    return build_endpoint_profile_program(parallel, metric_profile)
+
+
+def build_schwarzschild_endpoint_program(parallel=False):
+    # Arithmetic regrouping needs independent numerical acceptance; it does
+    # not promise the general graph's exact words or enclosure widths.
+    return build_endpoint_profile_program(parallel, schwarzschild_metric_profile)
+
+
+def build_endpoint_profile_program(parallel, profile):
     """Metric and projected physical columns from the complete phase expansion.
 
     The endpoint kernel first consumes the metric/tangent outputs to select a
@@ -508,7 +531,7 @@ def build_endpoint_program(parallel=False):
     ops.clear()
     cache.clear()
     row = [inp(i) for i in range(53)]
-    g, inverse = chart_geometry(row[4:8], row, row[44])
+    g, inverse = chart_geometry(row[4:8], row, row[44], profile)
     tangent = [sum(inverse[i][k] * row[8+k] for k in range(4)) for i in range(4)]
     projected = row[45:49]
     selected = row[49:53]
@@ -516,7 +539,7 @@ def build_endpoint_program(parallel=False):
     covector = [sum(g[i][k].v * projected[k] for k in range(4)) for i in range(4)]
     denominator = sum(covector[i] * selected[i] for i in range(4))
 
-    H, ell = chart_metric_profile(row[4:8], row, row[44])
+    H, ell = chart_metric_profile(row[4:8], row, row[44], profile)
     # Weight each derivative before contracting large physical columns. An
     # unweighted D_X ell or (ell.W)*(ell.X) can exceed retained product bounds
     # even when the corresponding weak-field metric derivative stays small.
@@ -599,11 +622,11 @@ def build_endpoint_program(parallel=False):
     return program
 
 
-def chart_metric_profile(position, row, chart):
+def chart_metric_profile(position, row, chart, profile=metric_profile):
     """Rank-one profile and coordinate derivatives in the active chart."""
     reflection = [chart, p(1), chart, p(1)]
     reflected = [position[i] * reflection[i] for i in range(4)]
-    H, ell, _ = metric_profile(reflected, row)
+    H, ell, _ = profile(reflected, row)
     H = J(H.v, [H.d[a] * reflection[a] for a in range(4)])
     ell = [J(ell[i].v * reflection[i],
              [ell[i].d[a] * reflection[i] * reflection[a] for a in range(4)])
@@ -611,10 +634,10 @@ def chart_metric_profile(position, row, chart):
     return H, ell
 
 
-def chart_geometry(position, row, chart):
+def chart_geometry(position, row, chart, profile=metric_profile):
     reflection = [chart, p(1), chart, p(1)]
     reflected = [position[i] * reflection[i] for i in range(4)]
-    g, inverse = metric(reflected, row)
+    g, inverse = metric(reflected, row, profile)
     g = [[J(g[i][k].v * reflection[i] * reflection[k],
             [g[i][k].d[a] * reflection[i] * reflection[k] * reflection[a]
              for a in range(4)]) for k in range(4)] for i in range(4)]

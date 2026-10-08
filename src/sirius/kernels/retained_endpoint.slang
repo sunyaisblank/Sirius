@@ -111,20 +111,20 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint regi
     return true;
 }
 bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint registers,
-                     uint required, uint lane) {
-    uint needed = required == 20 ? SIRIUS_RETAINED_PREFIX : count;
+                     uint required, uint lane, uint layers, uint prefix) {
+    uint needed = required == 20 ? prefix : count;
     // The generated prefix owns every metric/tangent dependency until the
     // continuation consumes it. Projected inputs are read only in the suffix.
-    uint first = required == 20 ? 0 : SIRIUS_RETAINED_PREFIX;
+    uint first = required == 20 ? 0 : prefix;
     if (needed == 0 || needed > count || first > needed) return false;
     if (lane == 0) retainedStatus = 0;
 #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
     GroupMemoryBarrierWithGroupSync();
 #endif
     uint layerBase = programBase + 103 + 5 * count;
-    if (inputs[layerBase] != 0 || inputs[layerBase + SIRIUS_RETAINED_LAYERS] != count) return false;
+    if (inputs[layerBase] != 0 || inputs[layerBase + layers] != count) return false;
     uint expected = 0;
-    for (uint layer = 0; layer < SIRIUS_RETAINED_LAYERS; ++layer) {
+    for (uint layer = 0; layer < layers; ++layer) {
         uint start = inputs[layerBase + layer], end = inputs[layerBase + layer + 1];
         if (start >= needed) break;
         if (start != expected || end <= start || end > needed ||
@@ -502,6 +502,20 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
 }
 #endif
 
+bool SelectEndpointProgram(uint rowBase, inout uint programBase, inout uint count,
+                           uint registers, inout uint layers, inout uint prefix) {
+    if (!RTExact(ReadStored(rowBase + 509), RPZero()) ||
+        !RTExact(ReadStored(rowBase + 514), RPZero()) ||
+        !RTExact(ReadStored(rowBase + 519), RPZero())) return true;
+    programBase += SIRIUS_RETAINED_GENERAL_PROGRAM_WORDS;
+    count = inputs[programBase];
+    layers = SIRIUS_RETAINED_SCHWARZSCHILD_LAYERS;
+    prefix = SIRIUS_RETAINED_SCHWARZSCHILD_PREFIX;
+    return inputs[programBase + 1] == registers && inputs[programBase + 2] == 100 &&
+           count <= 65536 &&
+           SIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS == 103 + 5 * count + layers + 1;
+}
+
 #ifdef SIRIUS_RETAINED_PORTABLE
 [shader("compute")][numthreads(SIRIUS_RETAINED_EXECUTION_LANES, 1, 1)] void ComputeMain(uint3 id
                                                                               : SV_GroupID,
@@ -515,7 +529,8 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
     if (rows == 0 || rows > 65536 || row >= rows || ni < 1 + 225 * rows + 103 || no % rows != 0)
         return;
     uint programBase = 1 + 225 * rows, count = inputs[programBase],
-         registers = inputs[programBase + 1];
+         registers = inputs[programBase + 1], layers = SIRIUS_RETAINED_LAYERS,
+         prefix = SIRIUS_RETAINED_PREFIX;
     uint rowWords = no / rows, rowBase = row * rowWords;
     if (rowWords < 769) return;
     for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
@@ -523,7 +538,9 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
     AllMemoryBarrierWithGroupSync();
 #endif
     if (inputs[programBase + 2] != 100 || count > 65536 || registers != SIRIUS_RETAINED_REGISTERS ||
-        ni != programBase + 103 + 5 * count + SIRIUS_RETAINED_LAYERS + 1 ||
+        SIRIUS_RETAINED_GENERAL_PROGRAM_WORDS != 103 + 5 * count + layers + 1 ||
+        ni != programBase + SIRIUS_RETAINED_GENERAL_PROGRAM_WORDS +
+                            SIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS ||
         rowWords != 769 + 5 * registers)
         return;
     for (uint i = 0; i < 45; ++i) {
@@ -550,6 +567,7 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
     bool flat = RTExact(ReadStored(rowBase + 504), RPZero()) &&
         RTExact(ReadStored(rowBase + 514), RPZero()) &&
         RTExact(ReadStored(rowBase + 519), RPZero());
+    if (!flat && !SelectEndpointProgram(rowBase, programBase, count, registers, layers, prefix)) return;
     uint component = 4;
     RetainedTriple root = RTInvalid();
     // Preserve flat initialization or the curved metric prefix, projection,
@@ -646,7 +664,7 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
             }
 #endif
         } else if (!EvaluateProgram(row, rowBase, programBase, count, registers,
-                                    phase_index == 0 ? 20 : 100, lane)) return;
+                                    phase_index == 0 ? 20 : 100, lane, layers, prefix)) return;
     }
     if (lane == 0) outputs[rowBase] = 1;
     if (lane == 0) outputs[rowBase + 1] = component;
@@ -664,7 +682,8 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
     if (rows == 0 || rows > 65536 || row >= rows || ni < 1 + 225 * rows + 103 || no % rows != 0)
         return;
     uint programBase = 1 + 225 * rows, count = inputs[programBase],
-         registers = inputs[programBase + 1];
+         registers = inputs[programBase + 1], layers = SIRIUS_RETAINED_LAYERS,
+         prefix = SIRIUS_RETAINED_PREFIX;
     uint rowWords = no / rows, rowBase = row * rowWords;
     if (rowWords < 769) return;
     for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
@@ -672,7 +691,9 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
     AllMemoryBarrierWithGroupSync();
 #endif
     if (inputs[programBase + 2] != 100 || count > 65536 || registers != SIRIUS_RETAINED_REGISTERS ||
-        ni != programBase + 103 + 5 * count + SIRIUS_RETAINED_LAYERS + 1 ||
+        SIRIUS_RETAINED_GENERAL_PROGRAM_WORDS != 103 + 5 * count + layers + 1 ||
+        ni != programBase + SIRIUS_RETAINED_GENERAL_PROGRAM_WORDS +
+                            SIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS ||
         rowWords != 769 + 5 * registers)
         return;
     for (uint i = 0; i < 45; ++i) {
@@ -736,7 +757,8 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
         if (lane == 0) outputs[rowBase + 1] = 0;
         return;
     }
-    if (!EvaluateProgram(row, rowBase, programBase, count, registers, 20, lane)) return;
+    if (!SelectEndpointProgram(rowBase, programBase, count, registers, layers, prefix)) return;
+    if (!EvaluateProgram(row, rowBase, programBase, count, registers, 20, lane, layers, prefix)) return;
     uint component;
     RetainedTriple root;
     if (!Project(rowBase, component, root)) return;
@@ -750,7 +772,7 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
 #ifndef SIRIUS_RETAINED_PORTABLE
     AllMemoryBarrierWithGroupSync();
 #endif
-    if (!EvaluateProgram(row, rowBase, programBase, count, registers, 100, lane)) return;
+    if (!EvaluateProgram(row, rowBase, programBase, count, registers, 100, lane, layers, prefix)) return;
     if (lane == 0) outputs[rowBase] = 1;
     if (lane == 0) outputs[rowBase + 1] = component;
 }
