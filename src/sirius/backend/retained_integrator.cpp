@@ -338,7 +338,9 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptIntervals(
         base::Expected<std::vector<RetainedEndpointOutput>> projected;
         // Dense uses only the already projected full state and original start.
         // Keep budget-one retry completely serialized; a shared wait is reducible.
-        if (!dopri && part == 2 && paired_projections && projection_row_budget > 1 &&
+        const bool legacy_dense = !dopri || std::none_of(curves.begin(), curves.end(),
+                                                         [](const auto& p) { return bool(p); });
+        if (legacy_dense && part == 2 && paired_projections && projection_row_budget > 1 &&
             compute.SupportsIndependentPair()) {
             const auto dense_inputs = dense_packets();
             auto paired = compute.EndpointAndDense(upper, dense_inputs);

@@ -2850,7 +2850,7 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
         interval.chart = 1;
         interval.interval = candidate.step_size;
         interval.control = {control, 1, 1, columns.tolerance, columns.column_scale};
-        const auto calibration = AttemptRetainedIntervals(*compute, {&interval, 1});
+        const auto calibration = AttemptRetainedDopriIntervals(*compute, {&interval, 1});
         ASSERT_TRUE(calibration);
         const auto& output = calibration->front();
         ASSERT_TRUE(output.admissible);
