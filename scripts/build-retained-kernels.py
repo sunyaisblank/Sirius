@@ -238,6 +238,10 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
         definitions.append("-DSIRIUS_RETAINED_NORMAL_SUM32=1")
         if source.stem == "retained_dopri_phase":
             definitions.append("-DSIRIUS_RETAINED_COOPERATIVE_DOPRI_INPUTS=1")
+        elif source.stem == "retained_endpoint":
+            if WORKGROUP_LANES < 45:
+                raise ValueError("cooperative Endpoint validation requires one lane per input")
+            definitions.append("-DSIRIUS_RETAINED_COOPERATIVE_ENDPOINT_INPUTS=1")
     if fma:
         if not fp64 or portable or source.stem not in ("retained_transport", "retained_endpoint"):
             raise ValueError("FMA32 is qualified only for native-wide retained Transport and Endpoint")
