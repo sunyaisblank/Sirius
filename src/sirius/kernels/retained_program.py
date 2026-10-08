@@ -207,7 +207,7 @@ def build():
     assert len(scientific) == 104
     return [v.i for v in scientific]
 
-def compile_parallel_program(outputs, live, prefix_outputs=None):
+def compile_parallel_program(outputs, live, prefix_outputs=None, homogeneous=False):
     """Schedule independent DAG nodes together, without changing any expression.
 
     A layer never reuses its inputs' registers. They become available only after
@@ -234,6 +234,29 @@ def compile_parallel_program(outputs, live, prefix_outputs=None):
 
     layers = []
     for phase in phases:
+        if homogeneous:
+            consumers = {old: set() for old in phase}
+            remaining = {}
+            for old in phase:
+                local = set(dependencies(old)) & phase
+                remaining[old] = len(local)
+                for dependency in local:
+                    consumers[dependency].add(old)
+            ready = {old for old in phase if remaining[old] == 0}
+            while ready:
+                grouped = {}
+                for old in sorted(ready):
+                    grouped.setdefault(ops[old][0], []).append(old)
+                opcode = max(grouped, key=lambda op: (len(grouped[op]), -op))
+                layer = grouped[opcode][:64]
+                layers.append(layer)
+                ready.difference_update(layer)
+                for old in layer:
+                    for consumer in consumers[old]:
+                        remaining[consumer] -= 1
+                        if remaining[consumer] == 0:
+                            ready.add(consumer)
+            continue
         levels = {}
         for old in sorted(phase):
             levels[old] = 1 + max((levels[d] for d in dependencies(old) if d in phase), default=-1)
@@ -287,7 +310,7 @@ def compile_parallel_program(outputs, live, prefix_outputs=None):
             'layer_offsets': offsets}
 
 
-def compile_program(outputs, parallel=False, prefix_outputs=None):
+def compile_program(outputs, parallel=False, prefix_outputs=None, homogeneous=False):
     live = set()
 
     def visit(i):
@@ -304,7 +327,7 @@ def compile_program(outputs, parallel=False, prefix_outputs=None):
     for i in outputs:
         visit(i)
     if parallel:
-        return compile_parallel_program(outputs, live, prefix_outputs)
+        return compile_parallel_program(outputs, live, prefix_outputs, homogeneous)
     sequence = sorted(live)
     last_use = {i: i for i in sequence}
     for old in sequence:
@@ -419,7 +442,13 @@ def build_hamiltonian_rhs():
 
 
 def build_transport_program(parallel=False):
-    return compile_program(build_hamiltonian_rhs(), parallel)
+    # Ready opcode cohorts reduce mixed arithmetic paths without changing the
+    # complete coupled expression DAG or its per-layer ownership rules.
+    program = compile_program(build_hamiltonian_rhs(), parallel, homogeneous=parallel)
+    if parallel:
+        # Preserve the existing Transport storage span across arithmetic modes.
+        program['registers'] = max(program['registers'], 459)
+    return program
 
 
 def build_endpoint_program(parallel=False):
