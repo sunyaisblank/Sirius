@@ -77,6 +77,7 @@ class RetainedDopriTest : public ::testing::Test {
             const auto required = RetainedCompute::RequiredAllocationBytes(*device, 24);
             ASSERT_TRUE(required) << required.error().Description();
             EXPECT_EQ(device->BufferAllocationBytes(), *required);
+            fp64_products_ = wide;
             check(**created);
             created->reset();
             // Numeric kernel/buffer handles belong to the logical device.
@@ -92,10 +93,63 @@ class RetainedDopriTest : public ::testing::Test {
     std::unique_ptr<ComputeDevice> device;
     std::vector<DeviceInfo> inventory_;
     std::size_t device_index_ = 0;
+    bool fp64_products_ = false;
 };
 
 #ifdef SIRIUS_HAS_RETAINED_COMPUTE
 namespace reference = sirius::test::retained_dopri;
+
+// Conservatively decline the optional native sum. Kernels, buffers and every
+// submission still belong to the same real device; no numerical result is mocked.
+class IntegerReferenceDevice final : public ComputeDevice {
+  public:
+    explicit IntegerReferenceDevice(ComputeDevice& device) : device_(device), info_(device.Info()) {
+        info_.rounds_fp32_to_nearest = false;
+    }
+    const DeviceInfo& Info() const noexcept override { return info_; }
+    sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t> code) override {
+        return device_.LoadKernel(code);
+    }
+    sirius::base::Expected<BufferHandle> CreateBuffer(std::uint64_t bytes,
+                                                      BufferUsage usage) override {
+        return device_.CreateBuffer(bytes, usage);
+    }
+    sirius::base::Expected<std::uint64_t> RequiredBufferAllocationBytes(
+        std::uint64_t bytes, BufferUsage usage) override {
+        return device_.RequiredBufferAllocationBytes(bytes, usage);
+    }
+    sirius::base::Expected<void> WriteBuffer(BufferHandle buffer,
+                                             std::span<const std::byte> bytes) override {
+        return device_.WriteBuffer(buffer, bytes);
+    }
+    sirius::base::Expected<void> ReadBuffer(BufferHandle buffer,
+                                            std::span<std::byte> bytes) override {
+        return device_.ReadBuffer(buffer, bytes);
+    }
+    sirius::base::Expected<void> Dispatch(KernelHandle kernel,
+                                          std::span<const BufferHandle> buffers, std::uint32_t x,
+                                          std::uint32_t y, std::uint32_t z,
+                                          DispatchTiming* timing) override {
+        return device_.Dispatch(kernel, buffers, x, y, z, timing);
+    }
+    bool SupportsIndependentPair() const noexcept override {
+        return device_.SupportsIndependentPair();
+    }
+    sirius::base::Expected<void> DispatchIndependentPair(
+        const std::array<ComputeDispatch, 2>& commands, IndependentPairTiming* timing) override {
+        return device_.DispatchIndependentPair(commands, timing);
+    }
+    sirius::base::Expected<void> SetBufferAllocationLimit(std::uint64_t bytes) override {
+        return device_.SetBufferAllocationLimit(bytes);
+    }
+    std::uint64_t BufferAllocationBytes() const noexcept override {
+        return device_.BufferAllocationBytes();
+    }
+
+  private:
+    ComputeDevice& device_;
+    DeviceInfo info_;
+};
 
 sirius::core::Twofold Center(const RetainedValue& value) {
     return sirius::core::Twofold(value.high) + sirius::core::Twofold(value.low) +
@@ -273,6 +327,112 @@ TEST_F(RetainedDopriTest, IndependentQuarticPreservesCompletePhase) {
                 EXPECT_EQ(statistics[i].submissions, 0U);
             }
         }
+
+        // The original numerical and submission assertions above also run on
+        // native devices. This additional parity checks the optional DP module
+        // only when its real capability predicate selects it.
+        if (!RetainedUsesPortableArithmetic(device->Info()) ||
+            !device->Info().rounds_fp32_to_nearest)
+            return;
+        RecordProperty(
+            fp64_products_ ? "normal_sum_fp64_exercised" : "normal_sum_default_exercised", 1);
+        IntegerReferenceDevice integer_device(*device);
+        const auto integer_required =
+            RetainedCompute::RequiredAllocationBytes(integer_device, compute.Capacity());
+        ASSERT_TRUE(integer_required) << integer_required.error().Description();
+        ASSERT_LE(*integer_required, 8 * 1024 * 1024 - allocation);
+        auto integer = RetainedCompute::Create(integer_device, compute.Capacity(), fp64_products_);
+        ASSERT_TRUE(integer) << integer.error().Description();
+        const auto parity_allocation = allocation + *integer_required;
+        EXPECT_EQ(device->BufferAllocationBytes(), parity_allocation);
+        for (std::size_t begin = 0; begin < reference::cases.size(); begin += compute.Capacity()) {
+            const auto count = std::min(compute.Capacity(), reference::cases.size() - begin);
+            std::vector<RetainedDopriPhaseInput> inputs;
+            for (std::size_t i = 0; i < count; ++i) {
+                inputs.push_back(
+                    std::bit_cast<RetainedDopriPhaseInput>(reference::cases[begin + i].input));
+            }
+            const auto sampled = (*integer)->DopriPhase(inputs);
+            ASSERT_TRUE(sampled) << sampled.error().Description();
+            ASSERT_EQ(sampled->size(), count);
+            for (std::size_t i = 0; i < count; ++i) {
+                SCOPED_TRACE(reference::cases[begin + i].name);
+                SameWords((*sampled)[i], original[begin + i]);
+            }
+            EXPECT_EQ(device->BufferAllocationBytes(), parity_allocation);
+        }
+        const auto integer_reordered = (*integer)->DopriPhase(reordered);
+        ASSERT_TRUE(integer_reordered) << integer_reordered.error().Description();
+        ASSERT_EQ(integer_reordered->size(), repeated->size());
+        for (std::size_t row = 0; row < reordered.size(); ++row) {
+            SameWords((*integer_reordered)[row], (*repeated)[row]);
+        }
+
+        // At h=s=1 with all RHS zero, the endpoint is exactly y0+Delta,
+        // derivative=0, A=-Delta, B=2Delta and C=0. These binary32 witnesses
+        // distinguish the admitted 2^-126 lattice from the adjacent fallback,
+        // both tie parities and the valid DP public 2^120 bound. The primitive
+        // sum ceiling 2^126 is outside the DP input domain.
+        struct EndpointSum {
+            std::uint32_t origin, increment, high, low;
+        };
+        constexpr std::array witnesses{
+            EndpointSum{0x0c000001, 0x8c000000, 0x00800000, 0},
+            EndpointSum{0x8c000000, 0x0c000001, 0x00800000, 0},
+            EndpointSum{0x8c000001, 0x0c000000, 0x80800000, 0},
+            EndpointSum{0x0bffffff, 0x8c000000, 0x80400000, 0},
+            EndpointSum{0x8c000000, 0x0bffffff, 0x80400000, 0},
+            EndpointSum{0x8bffffff, 0x0c000000, 0x00400000, 0},
+            EndpointSum{0x0c000000, 0x8c000000, 0, 0},
+            EndpointSum{0x80000000, 0x80000000, 0, 0},
+            EndpointSum{0x3f800000, 0x33800000, 0x3f800000, 0x33800000},
+            EndpointSum{0x3f800001, 0x33800000, 0x3f800002, 0xb3800000},
+            EndpointSum{0x33800000, 0x3f800001, 0x3f800002, 0xb3800000},
+            EndpointSum{0xbf800001, 0xb3800000, 0xbf800002, 0x33800000},
+            EndpointSum{0x7b800000, 0xdd000000, 0x7b800000, 0xdd000000},
+            EndpointSum{0xfb800000, 0x5d000000, 0xfb800000, 0x5d000000},
+        };
+        std::array<RetainedDopriPhaseInput, witnesses.size()> boundary;
+        for (std::size_t row = 0; row < boundary.size(); ++row) {
+            auto& packet = boundary[row];
+            packet.values.fill(RetainedValue::FromDouble(0));
+            for (std::size_t field = 0; field < 40; ++field) {
+                packet.values[field] =
+                    RetainedValue::FromDouble(std::bit_cast<float>(witnesses[row].origin));
+                packet.values[40 + field] =
+                    RetainedValue::FromDouble(std::bit_cast<float>(witnesses[row].increment));
+            }
+            packet.values[360] = packet.values[361] = RetainedValue::FromDouble(1);
+        }
+        const auto optional_boundary = compute.DopriPhase(boundary);
+        const auto integer_boundary = (*integer)->DopriPhase(boundary);
+        ASSERT_TRUE(optional_boundary) << optional_boundary.error().Description();
+        ASSERT_TRUE(integer_boundary) << integer_boundary.error().Description();
+        ASSERT_EQ(optional_boundary->size(), boundary.size());
+        ASSERT_EQ(integer_boundary->size(), boundary.size());
+        for (std::size_t row = 0; row < boundary.size(); ++row) {
+            SCOPED_TRACE(row);
+            const auto& output = (*optional_boundary)[row];
+            ASSERT_TRUE(output.valid);
+            SameWords(output, (*integer_boundary)[row]);
+            const auto delta =
+                sirius::core::Twofold(std::bit_cast<float>(witnesses[row].increment));
+            const auto endpoint =
+                sirius::core::Twofold(std::bit_cast<float>(witnesses[row].origin)) + delta;
+            for (std::size_t field = 0; field < 40; ++field) {
+                EXPECT_EQ(std::bit_cast<std::uint32_t>(output.phase[field].high),
+                          witnesses[row].high);
+                EXPECT_EQ(std::bit_cast<std::uint32_t>(output.phase[field].low),
+                          witnesses[row].low);
+                EXPECT_EQ(std::bit_cast<std::uint32_t>(output.phase[field].tail), 0U);
+                EXPECT_EQ((Center(output.phase[field]) - endpoint).Rounded(), 0);
+                EXPECT_EQ(Center(output.derivative[field]).Rounded(), 0);
+                EXPECT_EQ((Center(output.a[field]) + delta).Rounded(), 0);
+                EXPECT_EQ((Center(output.b[field]) - delta * 2.).Rounded(), 0);
+                EXPECT_EQ(Center(output.c[field]).Rounded(), 0);
+            }
+        }
+        EXPECT_EQ(device->BufferAllocationBytes(), parity_allocation);
     });
 #endif
 }
@@ -356,6 +516,31 @@ TEST_F(RetainedDopriTest, MalformedRowsRefuseAndRecover) {
         ASSERT_EQ(recovered->size(), 1U);
         CheckOutput(recovered->front(), *fixture);
         SameWords(recovered->front(), first->front());
+        EXPECT_EQ(device->BufferAllocationBytes(), allocation);
+
+        // Every lane owns one of these tail records under the cooperative
+        // 64-lane validation schedule. No invalid lane may publish an output.
+        constexpr std::size_t validation_lanes = 64;
+        for (std::size_t begin = 0; begin < validation_lanes; begin += compute.Capacity()) {
+            const auto count = std::min(compute.Capacity(), validation_lanes - begin);
+            std::vector<RetainedDopriPhaseInput> lane_refusals(count, good);
+            for (std::size_t row = 0; row < count; ++row) {
+                lane_refusals[row].values[256 + begin + row].valid = 0;
+            }
+            const auto lane_results = compute.DopriPhase(lane_refusals);
+            ASSERT_TRUE(lane_results) << lane_results.error().Description();
+            ASSERT_EQ(lane_results->size(), count);
+            for (std::size_t row = 0; row < count; ++row) {
+                SCOPED_TRACE(begin + row);
+                Refused((*lane_results)[row]);
+            }
+            EXPECT_EQ(device->BufferAllocationBytes(), allocation);
+        }
+        const auto lane_recovery = compute.DopriPhase(std::span(&good, 1));
+        ASSERT_TRUE(lane_recovery) << lane_recovery.error().Description();
+        ASSERT_EQ(lane_recovery->size(), 1U);
+        CheckOutput(lane_recovery->front(), *fixture);
+        SameWords(lane_recovery->front(), first->front());
         EXPECT_EQ(device->BufferAllocationBytes(), allocation);
     });
 #endif

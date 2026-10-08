@@ -395,11 +395,12 @@ TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideProductsAndPreservesAlloc
             if ((mask & 3u) == 2u) {
                 stages[1] = std::span(kTransportPortableNormalSumShader);
                 stages[2] = std::span(kEndpointPortableNormalSumShader);
+                stages[6] = std::span(kDopriPhasePortableNormalSumShader);
             }
             const bool eligible = wide && mask == 15u;
             for (std::size_t stage = 0; stage < RetainedCompute::kStageCount; ++stage) {
                 // The baseline excludes FMA and independently checks native,
-                // pure-integer fallback and RTE32-only Transport/Endpoint selection.
+                // pure-integer fallback and RTE32-only Transport/Endpoint/DP selection.
                 EXPECT_EQ(control.loaded_codes[stage],
                           (std::vector<std::uint32_t>(stages[stage].begin(), stages[stage].end())));
                 if (stage == 1 && eligible && kTransportFmaAvailable) {

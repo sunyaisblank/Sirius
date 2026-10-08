@@ -233,9 +233,11 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     portable_parallel = portable and source.stem in ("retained_transport", "retained_endpoint", "retained_dense", "retained_dopri_phase")
     projection_words = 7 if portable and source.stem == "retained_endpoint" else 0
     if normal_sum32:
-        if not portable or source.stem not in ("retained_transport", "retained_endpoint"):
-            raise ValueError("guarded normal sums are qualified only for portable Transport and Endpoint")
+        if not portable or source.stem not in ("retained_transport", "retained_endpoint", "retained_dopri_phase"):
+            raise ValueError("guarded normal sums are qualified only for portable Transport, Endpoint and DopriPhase")
         definitions.append("-DSIRIUS_RETAINED_NORMAL_SUM32=1")
+        if source.stem == "retained_dopri_phase":
+            definitions.append("-DSIRIUS_RETAINED_COOPERATIVE_DOPRI_INPUTS=1")
     if fma:
         if not fp64 or portable or source.stem not in ("retained_transport", "retained_endpoint"):
             raise ValueError("FMA32 is qualified only for native-wide retained Transport and Endpoint")
@@ -377,7 +379,7 @@ def main():
                                   program.get("prefix_instructions", 0), fp64=wide, portable=portable, optimizer=args.optimizer)
             array("k" + kind + name + "Shader", code)
             sizes.append(len(code) * 4)
-        if kind in ("Transport", "Endpoint"):
+        if kind in ("Transport", "Endpoint", "DopriPhase"):
             # Portable products use the same integer owner in both host modes.
             # Refuse sharing if a future macro change makes their modules differ.
             if ((args.output.parent / (stem + "_portable.spv")).read_bytes() !=

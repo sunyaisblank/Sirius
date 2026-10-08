@@ -115,7 +115,9 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
                      uint required, uint lane) {
     uint needed = count;
     if (needed == 0 || needed > count) return false;
+#ifndef SIRIUS_RETAINED_COOPERATIVE_DOPRI_INPUTS
     if (lane == 0) retainedStatus = 0;
+#endif
 #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_DOPRI_PHASE)
     GroupMemoryBarrierWithGroupSync();
 #endif
@@ -184,8 +186,19 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
         ni != programBase + 203 + 5 * count + SIRIUS_RETAINED_LAYERS + 1 ||
         rowWords != 1004 + 5 * registers)
         return;
+#ifdef SIRIUS_RETAINED_COOPERATIVE_DOPRI_INPUTS
+    // Partition every original field, including the zero-weight RHS. No lane
+    // exits before the join; a failed field leaves the complete output zero.
+    if (lane == 0) retainedStatus = 0;
+    GroupMemoryBarrierWithGroupSync();
+    for (uint i = lane; i < 362; i += SIRIUS_RETAINED_EXECUTION_LANES)
+        if (ReadOriginal(i, row).valid == 0) RejectRetainedProgram();
+    GroupMemoryBarrierWithGroupSync();
+    if (retainedStatus != 0) return;
+#else
     for (uint i = 0; i < 362; ++i)
         if (ReadOriginal(i, row).valid == 0) return;
+#endif
     RetainedTriple h = ReadOriginal(360, row), fraction = ReadOriginal(361, row);
     if (RPScalarLessEqual(h.hi, RPZero()) || RPScalarLessEqual(RTAbsoluteLower(h), RPZero()))
         return;
