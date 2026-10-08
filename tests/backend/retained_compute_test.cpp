@@ -2046,9 +2046,15 @@ TEST_F(RetainedComputeTest, ProjectedEndpointsKeepPhysicalColumnsAndRetainedCont
     }
     inputs[0].values[4].valid = 0;
     inputs[1].values[8] = RetainedValue::FromDouble(100);
+    // Validly packed flat inputs reach Project, where their tangent products
+    // refuse. Complete cached invalid terms must retain that row's refusal.
+    ASSERT_STREQ(sirius::test::retained_endpoint::cases[14].name, "analytic-flat");
+    inputs[2] =
+        std::bit_cast<RetainedEndpointInput>(sirius::test::retained_endpoint::cases[14].input);
+    inputs[2].values[8] = RetainedValue::FromDouble(0x1p70);
     const auto invalid = compute->Endpoint(inputs);
     ASSERT_TRUE(invalid) << invalid.error().Description();
-    for (std::size_t row = 0; row < 2; ++row) {
+    for (std::size_t row = 0; row < 3; ++row) {
         EXPECT_FALSE((*invalid)[row].valid);
         for (const auto& value : (*invalid)[row].physical) EXPECT_EQ(value.valid, 0U);
         for (const auto& value : (*invalid)[row].phase) EXPECT_EQ(value.valid, 0U);

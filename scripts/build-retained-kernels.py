@@ -240,7 +240,8 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
                         f"-DSIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS={specialized_words}",
                         f"-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS={specialized_layers}"]
     portable_parallel = portable and source.stem in ("retained_transport", "retained_endpoint", "retained_dense", "retained_dopri_phase")
-    projection_words = 7 if portable and source.stem == "retained_endpoint" else 0
+    # Projection publishes its root and sixteen complete weighted tangent terms.
+    projection_words = 7 + 16 * 5 if portable and source.stem == "retained_endpoint" else 0
     if normal_sum32:
         if not portable or source.stem not in ("retained_transport", "retained_endpoint", "retained_dopri_phase"):
             raise ValueError("guarded normal sums are qualified only for portable Transport, Endpoint and DopriPhase")

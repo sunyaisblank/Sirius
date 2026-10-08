@@ -7,6 +7,8 @@ import retained_pair;
 #if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
 // Lane zero publishes success, component, and all five retained root words.
 groupshared uint retainedProjection[7];
+// Complete weighted terms preserve both retained multiplies and their status.
+groupshared uint retainedProjectionTerms[16 * 5];
 #endif
 RetainedTriple ReadStored(uint base) {
     RetainedTriple r;
@@ -172,6 +174,30 @@ RetainedTriple Metric(uint rowBase, uint i, uint j) {
     return ReadStored(rowBase + 4 + 5 * (4 * i + j));
 }
 RetainedTriple Tangent(uint rowBase, uint i) { return ReadStored(rowBase + 4 + 5 * (16 + i)); }
+#if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
+void CacheProjectionTerm(uint rowBase, uint lane) {
+    if (lane >= 16) return;
+    RetainedTriple product = RTEvaluateArithmetic(Tangent(rowBase, lane / 4),
+                                                  Tangent(rowBase, lane % 4), 4);
+    RetainedTriple term = RTEvaluateArithmetic(Metric(rowBase, lane / 4, lane % 4), product, 4);
+    uint base = 5 * lane;
+    retainedProjectionTerms[base] = RPBits(term.hi);
+    retainedProjectionTerms[base + 1] = RPBits(term.lo);
+    retainedProjectionTerms[base + 2] = RPBits(term.tail);
+    retainedProjectionTerms[base + 3] = RPBits(term.error);
+    retainedProjectionTerms[base + 4] = term.valid;
+}
+RetainedTriple ProjectionTerm(uint index) {
+    uint base = 5 * index;
+    RetainedTriple term;
+    term.hi = RPFromBits(retainedProjectionTerms[base]);
+    term.lo = RPFromBits(retainedProjectionTerms[base + 1]);
+    term.tail = RPFromBits(retainedProjectionTerms[base + 2]);
+    term.error = RPFromBits(retainedProjectionTerms[base + 3]);
+    term.valid = retainedProjectionTerms[base + 4];
+    return term;
+}
+#endif
 #ifdef SIRIUS_RETAINED_PORTABLE
 bool Project(uint rowBase, out uint component, out RetainedTriple root) {
     component = 4;
@@ -201,6 +227,11 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
             uint i = index / 4;
             uint j = index % 4;
             step = phase % 3;
+#ifdef SIRIUS_RETAINED_PARALLEL_ENDPOINT
+            if (step != 2) continue;
+            temporary = ProjectionTerm(index);
+            lhs = defect; rhs = temporary; op = 2;
+#else
             if (step == 0) {
                 lhs = Tangent(rowBase, i); rhs = Tangent(rowBase, j); op = 4;
             } else if (step == 1) {
@@ -208,6 +239,7 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
             } else {
                 lhs = defect; rhs = temporary; op = 2;
             }
+#endif
         } else {
             if (phase == defect_phases &&
                 (defect.valid == 0 || RPScalarLessEqual(scale, RPZero()) ||
@@ -242,6 +274,10 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
                     uint j_position = (local - 3) / 3;
                     uint j = j_position < c ? j_position : j_position + 1;
                     uint product = (local - 3) % 3;
+#ifdef SIRIUS_RETAINED_PARALLEL_ENDPOINT
+                    if (product != 2) continue;
+                    lhs = d; rhs = ProjectionTerm(4 * i + j); op = 2;
+#else
                     if (product == 0) {
                         lhs = Tangent(rowBase, i); rhs = Tangent(rowBase, j); op = 4;
                     } else if (product == 1) {
@@ -249,6 +285,7 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
                     } else {
                         lhs = d; rhs = temporary; op = 2;
                     }
+#endif
                 }
             } else if (step < coefficient_phases + solve_phases) {
                 uint solve = step - coefficient_phases;
@@ -523,6 +560,10 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
             // The flat metric is lane-zero-owned; the curved prefix already
             // joined its outputs. Publish either before the serial projection.
             AllMemoryBarrierWithGroupSync();
+            // Every lane joins before lane zero consumes all sixteen terms.
+            // Invalid products retain their original ordered refusal meaning.
+            CacheProjectionTerm(rowBase, lane);
+            GroupMemoryBarrierWithGroupSync();
             if (lane == 0) {
                 retainedProjection[0] = Project(rowBase, component, root) ? 1u : 0u;
                 retainedProjection[1] = component;
