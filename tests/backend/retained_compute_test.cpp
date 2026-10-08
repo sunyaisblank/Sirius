@@ -1588,7 +1588,7 @@ TEST_F(RetainedComputeTest, SchwarzschildStagesPreserveIndependentFieldsAndGener
     ASSERT_EQ(witnesses.size(), 23U);
     std::vector<RetainedStepInput> mixed{witnesses[0], witnesses[1], witnesses[0], witnesses[0]};
     // Normalization, rather than raw high-word equality, determines exact zero.
-    mixed[2].values[1] = {0.5F, -0.5F, -0.0F, -0.0F, 1};
+    mixed[2].values[1] = {0.5F, -0.5F, -0.0F, 0.0F, 1};
     mixed[3].values[0] = {2.0F, -1.0F, 0.0F, 0.0F, 1};
     mixed.push_back(
         std::bit_cast<RetainedStepInput>(sirius::test::retained_transport::cases.front().input));
@@ -1620,6 +1620,10 @@ TEST_F(RetainedComputeTest, SchwarzschildStagesPreserveIndependentFieldsAndGener
     mixed.push_back(bad);
     bad = witnesses[0];
     bad.values[0].radius = -1;
+    mixed.push_back(bad);
+    // The retained radius rejects a sign bit even when its magnitude is zero.
+    bad = mixed[2];
+    bad.values[1].radius = -0.0F;
     mixed.push_back(bad);
     bad = witnesses[0];
     for (std::size_t i = 5; i < 8; ++i) bad.values[i] = RetainedValue::FromDouble(0);
