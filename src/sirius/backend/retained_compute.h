@@ -213,6 +213,10 @@ class RetainedCompute {
     [[nodiscard]] double TakeSubmissionPeakMs();
     // Read only after the owning submissions have finished.
     [[nodiscard]] std::array<StageStats, 6> Statistics() const;
+    // Only the exclusive owner may start a new render observation, after every
+    // previous worker/submission has completed. Device buffers and uploaded
+    // programs remain intact; no physical operation is suppressed.
+    void ResetStatistics();
     // Kernel command counts above include both commands in a shared submit.
     // All timing for that submit belongs here, never to either individual stage.
     [[nodiscard]] StageStats EndpointDenseStatistics() const { return endpoint_dense_stats_; }

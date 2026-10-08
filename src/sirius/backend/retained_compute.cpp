@@ -287,6 +287,13 @@ std::array<RetainedCompute::StageStats, 6> RetainedCompute::Statistics() const {
             dense_.stats,  initialize_.stats, ray_camera_.stats};
 }
 
+void RetainedCompute::ResetStatistics() {
+    for (auto* stage : {&camera_, &transport_, &endpoint_, &dense_, &initialize_, &ray_camera_})
+        stage->stats = {};
+    endpoint_dense_stats_ = {};
+    submission_feedback_ = {};
+}
+
 base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_rows,
                                                DispatchTiming* timing) {
     using Clock = std::chrono::steady_clock;

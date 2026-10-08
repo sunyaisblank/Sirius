@@ -66,6 +66,11 @@ struct DeviceInfo {
     // True only after this logical device enables the advertised FMA32 feature
     // with all required binary32 controls. Inventory alone cannot admit it.
     bool fma_fp32_enabled = false;
+    // In-process ownership identity from VkPhysicalDeviceIDProperties. Missing
+    // or ambiguous identities cannot admit reuse of an existing logical device.
+    std::array<std::uint8_t, 16> device_uuid{};
+    std::array<std::uint8_t, 16> driver_uuid{};
+    bool operator==(const DeviceInfo&) const = default;
 };
 
 // Native expansion operations need both binary32 controls. The embedded

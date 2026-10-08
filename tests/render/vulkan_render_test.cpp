@@ -1412,6 +1412,68 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
     RecordProperty("maximum_submit_ms", std::to_string(rendered->maximum_dispatch_ms));
     RecordProperty("explicit_allocation_bytes",
                    std::to_string(rendered->explicit_buffer_allocation_bytes));
+    const auto selected_index = ResolveVulkanDeviceIndex(*devices);
+    ASSERT_TRUE(selected_index) << selected_index.error().Description();
+    const auto& selected = (*devices)[*selected_index];
+    const auto nonzero = [](const auto& uuid) {
+        return std::any_of(uuid.begin(), uuid.end(), [](auto byte) { return byte != 0; });
+    };
+    const bool reusable_software =
+        selected.kind == sirius::backend::DeviceKind::kSoftware && nonzero(selected.device_uuid) &&
+        nonzero(selected.driver_uuid) &&
+        std::count_if(devices->begin(), devices->end(), [&](const auto& other) {
+            return other.device_uuid == selected.device_uuid &&
+                   other.driver_uuid == selected.driver_uuid;
+        }) == 1;
+    const auto expect_fresh_frame_stats = [&](const VulkanRenderStats& stats) {
+        EXPECT_EQ(stats.explicit_buffer_allocation_bytes,
+                  rendered->explicit_buffer_allocation_bytes);
+        EXPECT_LE(stats.explicit_buffer_allocation_bytes, stats.tile_plan.usable_bytes);
+        EXPECT_EQ(stats.continuation_capacity, rendered->continuation_capacity);
+        EXPECT_LE(stats.maximum_dispatch_ms, 1000.0);
+        if (!stats.retained_intervals) return;
+        // The fresh executor counts camera batches independently of the reused
+        // compute owner. An accumulated physical count fails this equality.
+        EXPECT_EQ(stats.retained_stage_dispatches[5], stats.camera_batches);
+        if (selected.kind != sirius::backend::DeviceKind::kSoftware) return;
+        EXPECT_EQ(stats.initialization_dispatches, 5);
+        for (std::size_t stage = 1; stage < 6; ++stage) {
+            EXPECT_EQ(stats.retained_preparation.stages[stage].completed_dispatches, 1U);
+            EXPECT_TRUE(stats.retained_preparation.stages[stage].header_restored);
+        }
+    };
+    // The identical scene must publish identical finite radiance without
+    // accumulating buffers, statistics or pipeline creation on an idle owner.
+    DisplayBuffer repeated;
+    repeated.Initialise(config.width, config.height);
+    const auto repeat = RenderVulkanToDisplay(config, repeated);
+    ASSERT_TRUE(repeat) << repeat.error().Description();
+    EXPECT_EQ(repeated.GetUpdateCounter(), 1U);
+    EXPECT_EQ(repeated.SnapshotFloatData(), complete);
+    expect_fresh_frame_stats(*repeat);
+    if (repeat->retained_intervals && reusable_software) {
+        for (std::size_t stage = 1; stage < 6; ++stage)
+            EXPECT_FALSE(repeat->retained_preparation.stages[stage].timing.pipeline_created);
+    }
+    RecordProperty("repeated_initialization_seconds",
+                   std::to_string(repeat->initialization_seconds));
+    // Compatible residency must still upload the new camera inputs.
+    auto changed_config = config;
+    changed_config.camera_beta_right = -0.12;
+    DisplayBuffer changed;
+    changed.Initialise(config.width, config.height);
+    const auto changed_frame = RenderVulkanToDisplay(changed_config, changed);
+    ASSERT_TRUE(changed_frame) << changed_frame.error().Description();
+    EXPECT_EQ(changed.GetUpdateCounter(), 1U);
+    const auto changed_pixels = changed.SnapshotFloatData();
+    EXPECT_NE(changed_pixels, complete);
+    EXPECT_TRUE(std::all_of(changed_pixels.begin(), changed_pixels.end(),
+                            [](float value) { return std::isfinite(value); }));
+    expect_fresh_frame_stats(*changed_frame);
+    if (changed_frame->retained_intervals && reusable_software) {
+        for (std::size_t stage = 1; stage < 6; ++stage)
+            EXPECT_FALSE(changed_frame->retained_preparation.stages[stage].timing.pipeline_created);
+    }
     // Cancel during frame preparation or tracing. The previously published
     // image and its publication counter must remain unchanged.
     int polls = 0;
@@ -1435,6 +1497,20 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
         EXPECT_FALSE(refused.has_value());
         EXPECT_EQ(display.GetUpdateCounter(), 1u);
         EXPECT_EQ(display.SnapshotFloatData(), complete);
+    }
+    // Cancellation and an insufficient budget retire the leased pair. A
+    // subsequent normal render must recover within the original budget and
+    // publish the original scene, rather than inheriting failed-frame state.
+    DisplayBuffer recovered;
+    recovered.Initialise(config.width, config.height);
+    const auto recovery = RenderVulkanToDisplay(config, recovered);
+    ASSERT_TRUE(recovery) << recovery.error().Description();
+    EXPECT_EQ(recovered.GetUpdateCounter(), 1U);
+    EXPECT_EQ(recovered.SnapshotFloatData(), complete);
+    expect_fresh_frame_stats(*recovery);
+    if (recovery->retained_intervals && reusable_software) {
+        for (std::size_t stage = 1; stage < 6; ++stage)
+            EXPECT_TRUE(recovery->retained_preparation.stages[stage].timing.pipeline_created);
     }
 }
 

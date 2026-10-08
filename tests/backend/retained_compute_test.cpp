@@ -239,6 +239,7 @@ class PreparationProbeDevice final : public ComputeDevice {
                                .total_ms = 5006,
                                .pipeline_created = true};
     bool fail_dispatch = false;
+    bool independent_pair = false;
     unsigned loads = 0, reads = 0;
     const DeviceInfo& Info() const noexcept override { return info; }
     sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t> code) override {
@@ -297,6 +298,19 @@ class PreparationProbeDevice final : public ComputeDevice {
         return {};
     }
     sirius::base::Expected<void> SetBufferAllocationLimit(std::uint64_t) override { return {}; }
+    bool SupportsIndependentPair() const noexcept override { return independent_pair; }
+    sirius::base::Expected<void> DispatchIndependentPair(
+        const std::array<sirius::backend::ComputeDispatch, 2>& commands,
+        sirius::backend::IndependentPairTiming* timing) override {
+        if (!independent_pair) return ComputeDevice::DispatchIndependentPair(commands, timing);
+        for (const auto& command : commands) {
+            auto status = Dispatch(command.kernel, command.buffers, command.groups_x,
+                                   command.groups_y, command.groups_z, nullptr);
+            if (!status) return status;
+        }
+        if (timing) *timing = {.combined = observation, .pipeline_creations = 2};
+        return {};
+    }
     std::uint64_t BufferAllocationBytes() const noexcept override {
         std::uint64_t bytes = 0;
         for (const auto& buffer : buffers) bytes += buffer.size();
@@ -506,6 +520,43 @@ TEST(RetainedComputeAdmission, SoftwareRendererPreparationPreservesPhysicalAccou
     const std::array<RetainedCameraInput, 1> camera{};
     ASSERT_TRUE(compute.Camera(camera));
     EXPECT_EQ(probe.writes.back().bytes, probe.buffers[0].size());
+
+    // A retained owner starts a fresh observation after all prior synchronous
+    // work. Exercise every stage plus the shared pair so old maxima/counts and
+    // feedback cannot leak into a later render's governor or report.
+    const std::array<sirius::backend::RetainedEndpointInput, 1> endpoint{};
+    const std::array<sirius::backend::RetainedDenseInput, 1> dense{};
+    const std::array<sirius::backend::RetainedInitializeInput, 1> initialize{};
+    const std::array<sirius::backend::RetainedRayCameraInput, 1> ray_camera{};
+    ASSERT_TRUE(compute.Endpoint(endpoint));
+    ASSERT_TRUE(compute.Dense(dense));
+    ASSERT_TRUE(compute.Initialize(initialize));
+    ASSERT_TRUE(compute.RayCamera(ray_camera));
+    probe.independent_pair = true;
+    ASSERT_TRUE(compute.EndpointAndDense(endpoint, dense));
+    for (const auto& stage : compute.Statistics()) EXPECT_GT(stage.submissions, 0U);
+    EXPECT_GT(compute.EndpointDenseStatistics().submissions, 0U);
+    const auto unchanged_buffers = probe.buffers;
+    compute.ResetStatistics();
+    ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(compute.Statistics(), {}));
+    std::array<RetainedCompute::StageStats, 6> reset_shared{};
+    reset_shared[0] = compute.EndpointDenseStatistics();
+    ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(reset_shared, {}));
+    const auto reset_feedback = compute.TakeSubmissionFeedback();
+    EXPECT_EQ(reset_feedback.peak_ms, 0);
+    EXPECT_EQ(reset_feedback.peak_rows, 0U);
+    EXPECT_EQ(reset_feedback.maximum_rows, 0U);
+    EXPECT_EQ(reset_feedback.maximum_one_row_ms, 0);
+    EXPECT_FALSE(reset_feedback.maximum_one_row_stage.has_value());
+    EXPECT_EQ(probe.buffers, unchanged_buffers);
+    EXPECT_EQ(probe.loads, 6U);
+    EXPECT_EQ(probe.buffers.size(), 12U);
+    probe.observation.submit_wait_ms = 8;
+    ASSERT_TRUE(compute.Step(input));
+    EXPECT_EQ(probe.writes.back().bytes, 4U + sizeof(RetainedStepInput));
+    EXPECT_EQ(compute.Statistics()[1].submissions, 1U);
+    EXPECT_EQ(compute.Statistics()[1].maximum_submit_wait_ms, 8);
+    EXPECT_EQ(compute.TakeSubmissionFeedback().peak_ms, 8);
 
     for (unsigned mode = 0; mode < 8; ++mode) {
         SCOPED_TRACE(mode);

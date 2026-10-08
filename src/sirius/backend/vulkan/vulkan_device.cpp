@@ -81,9 +81,13 @@ ProcessPipelineCache& PipelineCacheStore() {
         .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES,
         .pNext = &float_controls,
     };
+    VkPhysicalDeviceIDProperties identity{
+        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ID_PROPERTIES,
+        .pNext = &driver,
+    };
     VkPhysicalDeviceProperties2 properties2{
         .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2,
-        .pNext = &driver,
+        .pNext = &identity,
     };
     vkGetPhysicalDeviceProperties2(physical, &properties2);
     const VkPhysicalDeviceProperties& properties = properties2.properties;
@@ -104,7 +108,7 @@ ProcessPipelineCache& PipelineCacheStore() {
         render_memory = memory.memoryHeaps[memory.memoryTypes[*type].heapIndex].size;
     }
 
-    return DeviceInfo{
+    DeviceInfo info{
         .name = properties.deviceName,
         .driver_name = driver.driverName,
         .driver_info = driver.driverInfo,
@@ -122,6 +126,9 @@ ProcessPipelineCache& PipelineCacheStore() {
         .preserves_fp32_signed_zero_inf_nan =
             float_controls.shaderSignedZeroInfNanPreserveFloat32 == VK_TRUE,
     };
+    std::copy_n(identity.deviceUUID, info.device_uuid.size(), info.device_uuid.begin());
+    std::copy_n(identity.driverUUID, info.driver_uuid.size(), info.driver_uuid.begin());
+    return info;
 }
 
 [[nodiscard]] Expected<void> RetainDozenThreadRuntime(const DeviceInfo& info) {
