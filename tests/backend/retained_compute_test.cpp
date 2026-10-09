@@ -2497,7 +2497,14 @@ TEST_F(RetainedComputeTest, ProjectedEndpointsKeepPhysicalColumnsAndRetainedCont
         }
         const std::array<std::uint32_t, 5> one{0x3f800000U, 0U, 0U, 0U, 1U};
         const std::array<std::uint32_t, 5> zero{0U, 0U, 0U, 0U, 1U};
-        EXPECT_EQ(words(4 + 5 * 10), one);  // g_yy = 1 at the signed-axis point.
+        // g_yy is exactly one; subtraction can leave signed zero low limbs.
+        // Its complete word identity is already checked against the valid row.
+        const auto transverse_metric = words(4 + 5 * 10);
+        EXPECT_EQ(transverse_metric[0], 0x3f800000U);
+        EXPECT_EQ(transverse_metric[1] & 0x7fffffffU, 0U);
+        EXPECT_EQ(transverse_metric[2] & 0x7fffffffU, 0U);
+        EXPECT_EQ(transverse_metric[3], 0U);
+        EXPECT_EQ(transverse_metric[4], 1U);
         EXPECT_EQ(words(4 + 5 * 18), (std::array<std::uint32_t, 5>{0x67800000U, 0U, 0U, 0U, 1U}));
         for (std::size_t field = 45; field < 53; ++field)
             EXPECT_EQ(words(504 + 5 * field), field == 49 ? one : zero);
