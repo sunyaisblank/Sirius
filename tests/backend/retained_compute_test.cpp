@@ -174,7 +174,7 @@ TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
     // A driver's allocation requirement can exceed every logical shader span.
     // These fixed layout totals are independent of the production planner.
     for (const auto& [capacity, logical] : std::array<std::pair<std::size_t, std::uint64_t>, 3>{
-             {{1, 704192}, {24, 3334012}, {64, 7907612}}}) {
+             {{1, 729388}, {24, 3414500}, {64, 8084260}}}) {
         AdmissionDevice padded;
         padded.query_padding = 128;
         const auto required = RetainedCompute::RequiredAllocationBytes(padded, capacity);
@@ -189,7 +189,7 @@ TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
             EXPECT_EQ(padded.queried_spans,
                       (std::vector<std::uint64_t>{122728, 284544, 85952, 451104, 106176, 367584,
                                                   181492, 410784, 61292, 193344, 145452, 308736,
-                                                  216520, 398304}));
+                                                  297008, 398304}));
         }
     }
     AdmissionDevice invalid;
@@ -1034,6 +1034,17 @@ bool Encloses(const RetainedValue& value, long double expected, long double refe
             const auto packet = values_agree(a.packets[trial].values, b.packets[trial].values,
                                              "DP packet " + std::to_string(trial));
             if (!packet) return packet;
+            if (bool(a.bases[trial]) != bool(b.bases[trial]))
+                return ::testing::AssertionFailure() << "DP basis presence differs";
+            if (a.bases[trial]) {
+                const auto ac = a.bases[trial]->Coefficients();
+                const auto bc = b.bases[trial]->Coefficients();
+                for (std::size_t group = 0; group < ac.size(); ++group) {
+                    const auto coefficients = values_agree(
+                        ac[group], bc[group], "DP coefficients " + std::to_string(trial));
+                    if (!coefficients) return coefficients;
+                }
+            }
             for (const auto& endpoints : {std::pair{&a.starts[trial], &b.starts[trial]},
                                           std::pair{&a.endpoints[trial], &b.endpoints[trial]}}) {
                 if (endpoints.first->valid != endpoints.second->valid ||
@@ -3135,7 +3146,7 @@ TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
     }
     // The sampler/event consumer needs the complete private capsule. A changed
     // packet tail, event curve, physical endpoint or control must not escape equality.
-    for (unsigned mutation = 0; mutation < 7; ++mutation) {
+    for (unsigned mutation = 0; mutation < 8; ++mutation) {
         SCOPED_TRACE(mutation);
         auto changed = coupled_baseline->front();
         auto capsule = std::make_shared<RetainedDopriInterval>(*changed.dopri);
@@ -3164,6 +3175,9 @@ TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
             case 6:
                 changed.dopri.reset();
                 break;
+            case 7:
+                capsule->bases[3].reset();
+                break;
         }
         EXPECT_FALSE(IntervalBitsAgree(changed, coupled_baseline->front()));
     }
@@ -3182,7 +3196,8 @@ TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
                                     : stage == RetainedCompute::KernelStage::kEndpoint
                                         ? sizeof(RetainedEndpointInput)
                                     : stage == RetainedCompute::KernelStage::kDopriPhase
-                                        ? sizeof(RetainedDopriPhaseInput)
+                                        ? sizeof(RetainedDopriPhaseInput) +
+                                              120 * sizeof(RetainedValue) + sizeof(std::uint32_t)
                                         : 0;
                 ASSERT_GT(stride, 0U);
                 const auto payload_bytes = probe.writes.back().bytes - sizeof(std::uint32_t);

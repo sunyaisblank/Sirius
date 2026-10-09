@@ -38,6 +38,7 @@ struct RetainedErrorObservation {
 // uses rounded position views; physical samples always use the retained packets.
 struct RetainedDopriInterval {
     std::array<RetainedDopriPhaseInput, 4> packets;
+    std::array<std::shared_ptr<const RetainedDopriBasis>, 4> bases;
     std::array<core::DopriPositionSegment, 4> positions;
     std::array<RetainedEndpointOutput, 4> starts, endpoints;
     std::array<RetainedValue, 4> metric;

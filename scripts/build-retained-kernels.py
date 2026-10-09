@@ -226,10 +226,17 @@ def validate_portable_coefficients(source):
             raise ValueError(f"retained tableau slot {slot} does not enclose its exact rational")
 
 
-def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False, normal_sum32=False, transport_specialized=None, endpoint_specialized=None):
+def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False, normal_sum32=False, transport_specialized=None, endpoint_specialized=None, dopri_evaluation=None):
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
+    if dopri_evaluation is not None:
+        if source.stem != "retained_dopri_phase":
+            raise ValueError("the evaluation table belongs only to DopriPhase")
+        full_words, evaluation_words, evaluation_layers = dopri_evaluation
+        definitions += [f"-DSIRIUS_RETAINED_DOPRI_FULL_WORDS={full_words}",
+                        f"-DSIRIUS_RETAINED_DOPRI_EVALUATION_WORDS={evaluation_words}",
+                        f"-DSIRIUS_RETAINED_DOPRI_EVALUATION_LAYERS={evaluation_layers}"]
     if transport_specialized is not None:
         if source.stem != "retained_transport":
             raise ValueError("the second transport table belongs only to Transport")
@@ -390,6 +397,7 @@ def main():
         encoded = prefix + program["outputs"] + program["operations"] + program["layer_offsets"]
         transport_specialized = None
         endpoint_specialized = None
+        dopri_evaluation = None
         if kind == "Transport":
             specialized = module.build_schwarzschild_transport_program(parallel=True)
             if specialized["registers"] != program["registers"] or len(specialized["outputs"]) != 40:
@@ -413,6 +421,19 @@ def main():
                                     specialized["prefix_instructions"])
             # Allocation and both Endpoint consumers charge the complete span.
             encoded += specialized_words
+        if kind == "DopriPhase":
+            evaluation = module.build_dopri_evaluation_program(parallel=True)
+            if evaluation["registers"] > program["registers"] or len(evaluation["outputs"]) != 200:
+                raise ValueError("DP evaluation changed the original shared row frame")
+            # The smaller graph uses the original row/register frame. Both
+            # complete tables belong to the same charged immutable input span.
+            evaluation_words = ([evaluation["instructions"], program["registers"], 200] +
+                                evaluation["outputs"] + evaluation["operations"] +
+                                evaluation["layer_offsets"])
+            dopri_evaluation = (len(encoded), len(evaluation_words),
+                                len(evaluation["layer_offsets"]) - 1)
+            encoded += evaluation_words
+            lines.append("inline constexpr std::size_t kDopriPhaseInputWords = 2411;")
         array("k" + kind + "Program", encoded)
         stem = "retained_" + ({"RayCamera": "ray_camera", "DopriPhase": "dopri_phase"}.get(kind, kind.lower()))
         terms = 4 if kind in ("Camera", "RayCamera") else 5
@@ -426,7 +447,8 @@ def main():
                                   args.compiler, args.assembler, args.disassembler, args.validator,
                                   program["registers"], terms, len(program["layer_offsets"])-1,
                                   program.get("prefix_instructions", 0), fp64=wide, portable=portable, optimizer=args.optimizer,
-                                  transport_specialized=transport_specialized, endpoint_specialized=endpoint_specialized)
+                                  transport_specialized=transport_specialized, endpoint_specialized=endpoint_specialized,
+                                  dopri_evaluation=dopri_evaluation)
             array("k" + kind + name + "Shader", code)
             sizes.append(len(code) * 4)
         if kind in ("Transport", "Endpoint", "DopriPhase"):
@@ -440,7 +462,8 @@ def main():
                 args.compiler, args.assembler, args.disassembler, args.validator,
                 program["registers"], terms, len(program["layer_offsets"])-1,
                 program.get("prefix_instructions", 0), portable=True,
-                optimizer=args.optimizer, normal_sum32=True, transport_specialized=transport_specialized, endpoint_specialized=endpoint_specialized)
+                optimizer=args.optimizer, normal_sum32=True, transport_specialized=transport_specialized, endpoint_specialized=endpoint_specialized,
+                dopri_evaluation=dopri_evaluation)
             array("k" + kind + "PortableNormalSumShader", code)
         if kind in ("Transport", "Endpoint"):
             destination = args.output.parent / (stem + "_fma.spv")
