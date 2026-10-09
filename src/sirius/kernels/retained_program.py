@@ -507,15 +507,6 @@ def schwarzschild_metric_profile(position, row):
     radius = scale * (x * x + y * y + z * z).sqrt()
     ell = [j(1), xx / radius, yy / radius, zz / radius]
     factor = (2 * j(row[0])) / radius
-    # Preserve the metric values, but differentiate r directly: d_a r = n_a.
-    # Stationarity gives zero time derivatives. Keep the quotient numerator
-    # and multiplication-before-division order for the spatial derivatives.
-    normal = [component.v for component in ell]
-    ell = [ell[0]] + [J(normal[i], [p(0)] + [
-        (p(int(i == a)) - normal[i] * normal[a]) / radius.v
-        for a in range(1, 4)]) for i in range(1, 4)]
-    factor = J(factor.v, [p(0)] + [
-        (p(0) - factor.v * normal[a]) / radius.v for a in range(1, 4)])
     return factor, ell, node(9, row[0], p(0))
 
 
