@@ -984,6 +984,35 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
         ASSERT_TRUE(device.ReadBuffer(bound[1], std::as_writable_bytes(std::span(actual))));
         EXPECT_EQ(actual, untouched);
     }
+    // A refused pair must leave the completed primary usable for a different
+    // single stream and then a pair, without stale bindings or query commands.
+    commands[1].buffers = bindings[1];
+    sirius::backend::DispatchTiming recovered_single;
+    ASSERT_TRUE(device.Dispatch(commands[0].kernel, commands[0].buffers, commands[0].groups_x, 1, 1,
+                                &recovered_single));
+    EXPECT_FALSE(vulkan->LastDispatchTimestamp());
+    for (std::size_t row = 0; row < bindings.size(); ++row) {
+        std::array<float, 194> actual{};
+        ASSERT_TRUE(device.ReadBuffer(bindings[row][1], std::as_writable_bytes(std::span(actual))));
+        for (std::size_t i = 0; i < actual.size(); ++i)
+            if (row == 0 && i < counts[row])
+                EXPECT_NEAR(actual[i], 1 - 2 * masses[row] / radii[i], 1e-6f);
+            else
+                EXPECT_EQ(actual[i], untouched[i]);
+    }
+    ASSERT_TRUE(device.DispatchIndependentPair(commands, &timing));
+    EXPECT_FALSE(vulkan->LastDispatchTimestamp());
+    EXPECT_EQ(timing.pipeline_creations, 0U);
+    EXPECT_EQ(device.BufferAllocationBytes(), resident);
+    for (std::size_t row = 0; row < bindings.size(); ++row) {
+        std::array<float, 194> actual{};
+        ASSERT_TRUE(device.ReadBuffer(bindings[row][1], std::as_writable_bytes(std::span(actual))));
+        for (std::size_t i = 0; i < actual.size(); ++i)
+            if (i < counts[row])
+                EXPECT_NEAR(actual[i], 1 - (row == 0 ? 2 : 4) * masses[row] / radii[i], 1e-6f);
+            else
+                EXPECT_EQ(actual[i], untouched[i]);
+    }
 #endif
 }
 

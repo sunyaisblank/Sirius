@@ -525,7 +525,6 @@ VulkanDevice::~VulkanDevice() {
         // https://docs.vulkan.org/spec/latest/chapters/devsandqueues.html#devsandqueues-lost-device
         if (completion != VK_SUCCESS && completion != VK_ERROR_DEVICE_LOST) return;
         if (pending_dispatch_) {
-            vkFreeCommandBuffers(device_, command_pool_, 1, &pending_dispatch_->command);
             vkFreeDescriptorSets(device_, descriptor_pool_, pending_dispatch_->set_count,
                                  pending_dispatch_->sets.data());
         }
@@ -1064,25 +1063,31 @@ Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> c
                                nullptr);
     }
 
-    const VkCommandBufferAllocateInfo command_info{
-        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
-        .commandPool = command_pool_,
-        .level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
-        .commandBufferCount = 1,
-    };
-    VkCommandBuffer command = VK_NULL_HANDLE;
-    if (const VkResult r = vkAllocateCommandBuffers(device_, &command_info, &command);
-        r != VK_SUCCESS) {
-        free_sets();
-        return Fail(ErrorDomain::kDevice, "allocate command buffer", VkResultText(r));
+    if (dispatch_command_ == VK_NULL_HANDLE) {
+        const VkCommandBufferAllocateInfo command_info{
+            .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+            .commandPool = command_pool_,
+            .level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+            .commandBufferCount = 1,
+        };
+        if (const VkResult r = vkAllocateCommandBuffers(device_, &command_info, &dispatch_command_);
+            r != VK_SUCCESS) {
+            free_sets();
+            return Fail(ErrorDomain::kDevice, "allocate command buffer", VkResultText(r));
+        }
     }
+    const auto command = dispatch_command_;
 
+    // This reset-capable pool lets Begin implicitly reset a completed one-time
+    // command, including descriptor/query invalidation. The pending guard above
+    // prevents touching a command whose completion is still unproven.
     const VkCommandBufferBeginInfo begin_info{
         .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
         .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
     };
     if (const auto result = vkBeginCommandBuffer(command, &begin_info); result != VK_SUCCESS) {
-        vkFreeCommandBuffers(device_, command_pool_, 1, &command);
+        vkFreeCommandBuffers(device_, command_pool_, 1, &dispatch_command_);
+        dispatch_command_ = VK_NULL_HANDLE;
         free_sets();
         return Fail(ErrorDomain::kDevice, "begin compute command buffer", VkResultText(result));
     }
@@ -1118,7 +1123,8 @@ Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> c
     if (timestamp_pool_ != VK_NULL_HANDLE)
         vkCmdWriteTimestamp(command, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, timestamp_pool_, 1);
     if (const auto result = vkEndCommandBuffer(command); result != VK_SUCCESS) {
-        vkFreeCommandBuffers(device_, command_pool_, 1, &command);
+        vkFreeCommandBuffers(device_, command_pool_, 1, &dispatch_command_);
+        dispatch_command_ = VK_NULL_HANDLE;
         free_sets();
         return Fail(ErrorDomain::kDevice, "end compute command buffer", VkResultText(result));
     }
@@ -1160,9 +1166,8 @@ Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> c
         last_dispatch_timestamp_ = observation;
     }
     if (detail::VulkanSubmissionNeedsCompletion(submitted, submit_result)) {
-        pending_dispatch_ = PendingDispatch{command, sets, set_info.descriptorSetCount};
+        pending_dispatch_ = PendingDispatch{sets, set_info.descriptorSetCount};
     } else {
-        vkFreeCommandBuffers(device_, command_pool_, 1, &command);
         free_sets();
     }
     const auto dispatch_end = std::chrono::steady_clock::now();

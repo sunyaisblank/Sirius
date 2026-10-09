@@ -169,7 +169,6 @@ class VulkanDevice final : public ComputeDevice {
     // At most one accepted submission can lack a confirmed completion. Further
     // work/query reuse refuses; destruction waits before releasing its resources.
     struct PendingDispatch {
-        VkCommandBuffer command = VK_NULL_HANDLE;
         std::array<VkDescriptorSet, 2> sets{};
         std::uint32_t set_count = 0;
     };
@@ -181,6 +180,9 @@ class VulkanDevice final : public ComputeDevice {
     VkQueue queue_ = VK_NULL_HANDLE;
     std::uint32_t queue_family_ = 0;
     VkCommandPool command_pool_ = VK_NULL_HANDLE;
+    // One primary belongs to this serialized device owner. Re-record only
+    // after completion; the pool also owns its eventual destruction.
+    VkCommandBuffer dispatch_command_ = VK_NULL_HANDLE;
     VkDescriptorPool descriptor_pool_ = VK_NULL_HANDLE;
     VkPipelineCache pipeline_cache_ = VK_NULL_HANDLE;
     VkQueryPool timestamp_pool_ = VK_NULL_HANDLE;
