@@ -214,8 +214,8 @@ if(SIRIUS_REQUIRE_VULKAN_RUNTIME)
         PROPERTIES
             LABELS "Mandatory;Operational"
             RUN_SERIAL TRUE
-            # Cold Dozen translation plus a governed 128x128 physical render
-            # is measured at about 164 seconds on the target Radeon route.
+            # Bound cold translation plus the complete governed 128x128 render.
+            # This deadline is an acceptance limit, not a performance claim.
             TIMEOUT 300)
 
     add_test(

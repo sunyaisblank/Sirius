@@ -723,6 +723,7 @@ class TransferProbeDevice final : public ComputeDevice {
     std::uint64_t dispatch_calls = 0, forwarded_dispatches = 0;
     // Optional control-test observations. Physical outputs still come from the
     // actual device; injected timing never sleeps or claims hardware duration.
+    std::function<void(std::span<const std::uint32_t>)> after_load;
     std::function<double(BufferHandle, std::uint32_t)> submission_ms;
     std::function<void()> before_dispatch;
     std::function<void(std::span<const BufferHandle>, const DispatchTiming*)> after_dispatch;
@@ -738,7 +739,9 @@ class TransferProbeDevice final : public ComputeDevice {
 
     const DeviceInfo& Info() const noexcept override { return info_ ? *info_ : device_.Info(); }
     sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t> code) override {
-        return device_.LoadKernel(code);
+        auto loaded = device_.LoadKernel(code);
+        if (loaded && after_load) after_load(code);
+        return loaded;
     }
     sirius::base::Expected<BufferHandle> CreateBuffer(std::uint64_t bytes,
                                                       BufferUsage usage) override {
@@ -1919,7 +1922,20 @@ TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundary
             auto expected_info = device->Info();
             if (decline_rte32) expected_info.rounds_fp32_to_nearest = false;
             ASSERT_EQ(probe.Info(), expected_info);
+            std::vector<std::string> loaded_shaders;
+            probe.after_load = [&](std::span<const std::uint32_t> code) {
+                const auto digest = sirius::base::Sha256Hex(std::span(
+                    reinterpret_cast<const std::uint8_t*>(code.data()), code.size_bytes()));
+                ASSERT_TRUE(digest) << digest.error();
+                loaded_shaders.push_back(*digest);
+            };
+            std::clog << "[FactoredEndpoint] create: portable="
+                      << RetainedUsesPortableArithmetic(probe.Info()) << ";wide=" << wide
+                      << ";decline_rte32=" << decline_rte32
+                      << ";fma_enabled=" << probe.Info().fma_fp32_enabled << std::endl;
             auto created = RetainedCompute::Create(probe, capacity, wide);
+            std::clog << "[FactoredEndpoint] create returned: success=" << bool(created)
+                      << std::endl;
             if (wide && (!device->Info().supports_fp64 || !device->Info().rounds_fp64_to_nearest)) {
                 ASSERT_FALSE(created);
                 EXPECT_NE(created.error().detail().find("binary64"), std::string::npos);
@@ -1928,6 +1944,11 @@ TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundary
                 continue;
             }
             ASSERT_TRUE(created) << created.error().Description();
+            ASSERT_EQ(loaded_shaders.size(), RetainedCompute::kStageCount);
+            std::clog
+                << "[FactoredEndpoint] selected_endpoint_sha256="
+                << loaded_shaders[static_cast<std::size_t>(RetainedCompute::KernelStage::kEndpoint)]
+                << std::endl;
             auto& instance = **created;
             ASSERT_EQ(instance.Capacity(), capacity);
             ASSERT_EQ(probe.allocations.size(), 14U);
@@ -1950,9 +1971,19 @@ TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundary
             }
             std::vector<RetainedEndpointOutput> outputs;
             std::vector<std::byte> raw;
+            std::size_t endpoint_calls = 0;
             const auto endpoint = [&](std::span<const RetainedEndpointInput> rows) {
                 probe.readbacks.clear();
-                const auto returned = instance.Endpoint(rows);
+                const auto call = endpoint_calls++;
+                std::clog << "[FactoredEndpoint] begin: call=" << call << ";rows=" << rows.size()
+                          << ";wide=" << wide << ";decline_rte32=" << decline_rte32 << std::endl;
+                DispatchTiming timing;
+                const auto returned = instance.Endpoint(rows, &timing);
+                std::clog << "[FactoredEndpoint] returned: call=" << call
+                          << ";success=" << bool(returned)
+                          << ";pipeline_ms=" << timing.pipeline_setup_ms
+                          << ";submit_wait_ms=" << timing.submit_wait_ms
+                          << ";total_ms=" << timing.total_ms << std::endl;
                 ASSERT_TRUE(returned) << returned.error().Description();
                 ASSERT_EQ(returned->size(), rows.size());
                 ASSERT_EQ(probe.readbacks.size(), 1U);
