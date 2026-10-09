@@ -3202,11 +3202,22 @@ TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
         {Stage::kEndpoint, 24},   {Stage::kTransport, 12},  {Stage::kEndpoint, 24},
         {Stage::kDopriPhase, 24}, {Stage::kDopriPhase, 24}, {Stage::kEndpoint, 12},
         {Stage::kDopriPhase, 12}, {Stage::kEndpoint, 12}};
+    using Clock = std::chrono::steady_clock;
+    const auto milliseconds = [](Clock::time_point started, Clock::time_point finished) {
+        return std::chrono::duration<double, std::milli>(finished - started).count();
+    };
+    RecordProperty("coupled_call_timing_scope",
+                   "sum of synchronous construction and interior sampling calls, including "
+                   "allocation, packing, decoding and existing marker/readback observers; "
+                   "excludes SetUp, assertions between calls and result disposal; unchanged "
+                   "12-row inputs and projection budget; no cold, frame or release claim");
     for (unsigned repeat = 0; repeat < 3; ++repeat) {
         phase = "coupled_repeat" + std::to_string(repeat);
         stream.clear();
         readbacks.clear();
+        const auto attempt_started = Clock::now();
         const auto output = AttemptRetainedDopriIntervals(**observed, coupled, 24);
+        const auto attempt_finished = Clock::now();
         ASSERT_TRUE(output) << output.error().Description();
         ASSERT_EQ(output->size(), coupled_baseline->size());
         for (std::size_t row = 0; row < output->size(); ++row) {
@@ -3214,7 +3225,14 @@ TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
             ASSERT_TRUE((*output)[row].admissible);
             EXPECT_TRUE(IntervalBitsAgree((*output)[row], (*coupled_baseline)[row]));
         }
+        const auto sample_started = Clock::now();
         const auto sampled = SampleRetainedDopriIntervals(**observed, sample_inputs(*output), 24);
+        const auto sample_finished = Clock::now();
+        const auto attempt_ms = milliseconds(attempt_started, attempt_finished);
+        const auto sample_ms = milliseconds(sample_started, sample_finished);
+        RecordProperty(phase + "_attempt_ms", std::format("{:.17g}", attempt_ms));
+        RecordProperty(phase + "_sample_ms", std::format("{:.17g}", sample_ms));
+        RecordProperty(phase + "_complete_call_ms", std::format("{:.17g}", attempt_ms + sample_ms));
         ASSERT_TRUE(sampled) << sampled.error().Description();
         ASSERT_EQ(sampled->size(), sample_baseline->size());
         for (std::size_t row = 0; row < sampled->size(); ++row) {
