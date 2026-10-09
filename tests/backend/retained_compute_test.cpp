@@ -1000,6 +1000,61 @@ bool Encloses(const RetainedValue& value, long double expected, long double refe
                                          std::string(names[i]) + " increment");
         if (!result) return result;
     }
+    if (bool(actual.dopri) != bool(expected.dopri))
+        return ::testing::AssertionFailure() << "DP capsule presence differs";
+    if (actual.dopri) {
+        const auto& a = *actual.dopri;
+        const auto& b = *expected.dopri;
+        const auto same_double = [](double first, double second) {
+            return std::bit_cast<std::uint64_t>(first) == std::bit_cast<std::uint64_t>(second);
+        };
+        const auto metric = values_agree(a.metric, b.metric, "DP metric");
+        if (!metric) return metric;
+        if (!same_double(a.chart, b.chart) ||
+            !same_double(a.control.length_scale, b.control.length_scale) ||
+            !same_double(a.control.frequency_scale, b.control.frequency_scale) ||
+            !same_double(a.control.tolerance, b.control.tolerance))
+            return ::testing::AssertionFailure() << "DP chart/component control differs";
+        for (std::size_t column = 0; column < a.control.column_scale.size(); ++column)
+            if (!same_double(a.control.column_scale[column], b.control.column_scale[column]))
+                return ::testing::AssertionFailure() << "DP column control differs: " << column;
+        const auto step_words = [](const sirius::core::IntegratorConfig& control) {
+            return std::bit_cast<std::array<std::uint32_t, 8>>(
+                std::array{control.abs_tolerance, control.rel_tolerance, control.min_step,
+                           control.max_step, control.initial_step, control.safety_factor,
+                           control.step_grow_max, control.step_shrink_min});
+        };
+        if (step_words(a.control.integrator) != step_words(b.control.integrator))
+            return ::testing::AssertionFailure() << "DP integrator control differs";
+        for (std::size_t trial = 0; trial < a.packets.size(); ++trial) {
+            const auto packet = values_agree(a.packets[trial].values, b.packets[trial].values,
+                                             "DP packet " + std::to_string(trial));
+            if (!packet) return packet;
+            for (const auto& endpoints : {std::pair{&a.starts[trial], &b.starts[trial]},
+                                          std::pair{&a.endpoints[trial], &b.endpoints[trial]}}) {
+                if (endpoints.first->valid != endpoints.second->valid ||
+                    endpoints.first->component != endpoints.second->component)
+                    return ::testing::AssertionFailure() << "DP endpoint metadata differs";
+                const auto phase = values_agree(endpoints.first->phase, endpoints.second->phase,
+                                                "DP endpoint phase");
+                if (!phase) return phase;
+                const auto physical = values_agree(
+                    endpoints.first->physical, endpoints.second->physical, "DP endpoint physical");
+                if (!physical) return physical;
+            }
+            const auto& p = a.positions[trial];
+            const auto& q = b.positions[trial];
+            if (!same_double(p.interval, q.interval) ||
+                !same_double(p.parameter_limit, q.parameter_limit))
+                return ::testing::AssertionFailure() << "DP position interval differs";
+            for (const auto& coefficient :
+                 {std::pair{&p.origin, &q.origin}, std::pair{&p.increment, &q.increment},
+                  std::pair{&p.a, &q.a}, std::pair{&p.b, &q.b}, std::pair{&p.c, &q.c}})
+                for (int axis = 0; axis < 4; ++axis)
+                    if (!same_double((*coefficient.first)(axis), (*coefficient.second)(axis)))
+                        return ::testing::AssertionFailure() << "DP position coefficient differs";
+        }
+    }
     return ::testing::AssertionSuccess();
 }
 
@@ -2728,7 +2783,8 @@ TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
                    "opt-in device marker span includes original barriers and scheduling; not "
                    "isolated shader time or calibrated host/driver overhead; existing host "
                    "governor unchanged; finite original critical0/critical1/flat intervals, "
-                   "not frame, cold, full-science or release qualification");
+                   "plus current 12-row Schwarzschild DP/sample cohorts; not frame, cold, "
+                   "full-science or release qualification");
     const auto enabled = vulkan->SetDispatchTimestampsEnabled(true);
     if (properties.valid_bits == 0) {
         ASSERT_FALSE(enabled);
@@ -2793,12 +2849,13 @@ TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
             "device_observation_" + std::to_string(samples++),
             std::format("phase={};stage={};begin={};end={};available0={};available1={};"
                         "device_ms={:.17g};host_submit_ms={:.17g};host_wait_ms={:.17g};"
-                        "host_completion_ms={:.17g};pipeline_ms={:.17g};total_ms={:.17g}",
+                        "host_completion_ms={:.17g};pipeline_ms={:.17g};setup_ms={:.17g};"
+                        "cleanup_ms={:.17g};total_ms={:.17g}",
                         phase, stage, timestamp->ticks[0], timestamp->ticks[1],
                         timestamp->availability[0], timestamp->availability[1],
                         *timestamp->device_span_ms, timestamp->host_submit_ms,
                         timestamp->host_wait_ms, host->submit_wait_ms, host->pipeline_setup_ms,
-                        host->total_ms));
+                        host->command_setup_ms, host->cleanup_ms, host->total_ms));
     };
     probe.after_dispatch = [&](std::span<const BufferHandle> bound, const DispatchTiming* host) {
         ASSERT_FALSE(bound.empty());
@@ -2816,7 +2873,7 @@ TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
         capture("endpoint+dense", &host->combined);
     };
     for (unsigned repeat = 0; repeat < 3; ++repeat) {
-        phase = "repeat" + std::to_string(repeat);
+        phase = "legacy_repeat" + std::to_string(repeat);
         const auto output = AttemptRetainedIntervals(**observed, inputs);
         ASSERT_TRUE(output) << output.error().Description();
         ASSERT_EQ(output->size(), baseline->size());
@@ -2824,37 +2881,183 @@ TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
             const auto& actual = (*output)[row];
             const auto& expected = (*baseline)[row];
             ASSERT_TRUE(actual.admissible);
-            EXPECT_EQ(actual.admissible, expected.admissible);
+            EXPECT_TRUE(IntervalBitsAgree(actual, expected));
             EXPECT_EQ(actual.attempted_stages, 21U);
-            EXPECT_EQ(actual.attempted_stages, expected.attempted_stages);
-            EXPECT_EQ(actual.failure, expected.failure);
-            EXPECT_EQ(std::bit_cast<std::uint64_t>(actual.error_ratio),
-                      std::bit_cast<std::uint64_t>(expected.error_ratio));
-            EXPECT_EQ(std::bit_cast<std::uint64_t>(actual.embedded_projected_error_ratio),
-                      std::bit_cast<std::uint64_t>(expected.embedded_projected_error_ratio));
-            for (const auto& endpoints : {std::pair{&actual.full, &expected.full},
-                                          {&actual.lower, &expected.lower},
-                                          {&actual.midpoint, &expected.midpoint},
-                                          {&actual.refined, &expected.refined}}) {
-                EXPECT_EQ(endpoints.first->valid, endpoints.second->valid);
-                EXPECT_EQ(endpoints.first->component, endpoints.second->component);
-                EXPECT_EQ(std::memcmp(endpoints.first->phase.data(), endpoints.second->phase.data(),
-                                      sizeof(endpoints.first->phase)),
-                          0);
-                EXPECT_EQ(
-                    std::memcmp(endpoints.first->physical.data(), endpoints.second->physical.data(),
-                                sizeof(endpoints.first->physical)),
-                    0);
-            }
-            for (const auto& increments :
-                 {std::pair{&actual.full_increment, &expected.full_increment},
-                  {&actual.lower_increment, &expected.lower_increment},
-                  {&actual.midpoint_increment, &expected.midpoint_increment},
-                  {&actual.refined_increment, &expected.refined_increment}})
-                EXPECT_EQ(std::memcmp(increments.first->data(), increments.second->data(),
-                                      sizeof(*increments.first)),
-                          0);
         }
+        EXPECT_EQ(device->BufferAllocationBytes(), resident);
+    }
+    // Same complete coupled route as the frame, with two projection slots per
+    // logical row. These frozen inputs and budgets do not measure frame throughput.
+    ASSERT_TRUE(vulkan->SetDispatchTimestampsEnabled(false));
+    probe.after_dispatch = {};
+    probe.after_pair_timing = {};
+    namespace schwarzschild = sirius::test::retained_schwarzschild;
+    ASSERT_STREQ(schwarzschild::cases[16].name, "null_weak-outgoing");
+    ASSERT_STREQ(schwarzschild::cases[17].name, "null_weak-ingoing");
+    std::vector<RetainedStepInput> steps;
+    std::vector<RetainedEndpointInput> starts;
+    for (std::size_t row = 0; row < 12; ++row) {
+        steps.push_back(std::bit_cast<RetainedStepInput>(schwarzschild::cases[16 + row % 2].input));
+        RetainedEndpointInput start;
+        std::copy_n(steps.back().values.begin(), 45, start.values.begin());
+        starts.push_back(start);
+    }
+    const auto independent = compute->Step(steps);
+    ASSERT_TRUE(independent) << independent.error().Description();
+    for (std::size_t row = 0; row < steps.size(); ++row)
+        ASSERT_TRUE(
+            SchwarzschildStepAgrees((*independent)[row], schwarzschild::cases[16 + row % 2]));
+    const auto initial = compute->Endpoint(starts);
+    ASSERT_TRUE(initial) << initial.error().Description();
+    std::vector<RetainedIntervalInput> coupled(steps.size());
+    for (std::size_t row = 0; row < steps.size(); ++row) {
+        auto& input = coupled[row];
+        ASSERT_TRUE((*initial)[row].valid);
+        std::copy_n(steps[row].values.begin(), 4, input.metric.begin());
+        input.start = (*initial)[row];
+        input.chart = steps[row].values[44].Center();
+        input.interval = steps[row].values[45].Center();
+        input.control = inputs.front().control;
+        input.control.integrator.min_step = static_cast<float>(input.interval);
+    }
+    RecordProperty("coupled_rows", std::to_string(coupled.size()));
+    RecordProperty("coupled_projection_budget", "24");
+    RecordProperty("product_mode", "default");
+    RecordProperty("selected_device", device->Info().name);
+    RecordProperty("selected_driver",
+                   device->Info().driver_name + ": " + device->Info().driver_info);
+    RecordProperty(
+        "retained_scalar_route",
+        device->Info().preserves_fp32_denormals && device->Info().rounds_fp32_to_nearest
+            ? "native binary32"
+            : (device->Info().rounds_fp32_to_nearest ? "portable with guarded normal sums"
+                                                     : "conservative portable integer"));
+    const auto sample_inputs = [](const std::vector<RetainedIntervalOutput>& output) {
+        std::vector<RetainedDopriSampleInput> result;
+        for (const auto& interval : output) result.push_back({interval.dopri, 0, 3. / 8., {}});
+        return result;
+    };
+    using Readback = std::pair<RetainedCompute::KernelStage, std::vector<std::byte>>;
+    std::vector<Readback> readbacks;
+    probe.after_read = [&](BufferHandle buffer, std::span<std::byte> bytes) {
+        for (std::size_t i = 1; i < probe.allocations.size(); i += 2)
+            if (buffer.value == probe.allocations[i].handle.value) {
+                readbacks.emplace_back(static_cast<RetainedCompute::KernelStage>(i / 2),
+                                       std::vector<std::byte>(bytes.begin(), bytes.end()));
+                return;
+            }
+        FAIL() << "unknown observed readback stage";
+    };
+    const auto coupled_baseline = AttemptRetainedDopriIntervals(**observed, coupled, 24);
+    ASSERT_TRUE(coupled_baseline) << coupled_baseline.error().Description();
+    for (const auto& interval : *coupled_baseline) {
+        ASSERT_TRUE(interval.admissible);
+        ASSERT_TRUE(interval.dopri);
+    }
+    const auto sample_baseline =
+        SampleRetainedDopriIntervals(**observed, sample_inputs(*coupled_baseline), 24);
+    ASSERT_TRUE(sample_baseline) << sample_baseline.error().Description();
+    EXPECT_FALSE(vulkan->LastDispatchTimestamp());
+    const auto baseline_readbacks = std::move(readbacks);
+    ASSERT_EQ(baseline_readbacks.size(), 11U);
+    // The sampler/event consumer needs the complete private capsule. A changed
+    // packet tail, event curve, physical endpoint or control must not escape equality.
+    for (unsigned mutation = 0; mutation < 7; ++mutation) {
+        SCOPED_TRACE(mutation);
+        auto changed = coupled_baseline->front();
+        auto capsule = std::make_shared<RetainedDopriInterval>(*changed.dopri);
+        changed.dopri = capsule;
+        switch (mutation) {
+            case 0:
+                capsule->packets[3].values[319].tail = std::bit_cast<float>(
+                    std::bit_cast<std::uint32_t>(capsule->packets[3].values[319].tail) ^ 1U);
+                break;
+            case 1:
+                capsule->positions[2].c(3) += 0.125;
+                break;
+            case 2:
+                capsule->starts[1].physical[39].valid ^= 1U;
+                break;
+            case 3:
+                capsule->endpoints[3].phase[38].radius = std::bit_cast<float>(
+                    std::bit_cast<std::uint32_t>(capsule->endpoints[3].phase[38].radius) ^ 1U);
+                break;
+            case 4:
+                capsule->control.column_scale[3] += 0.125;
+                break;
+            case 5:
+                capsule->metric[1].valid ^= 1U;
+                break;
+            case 6:
+                changed.dopri.reset();
+                break;
+        }
+        EXPECT_FALSE(IntervalBitsAgree(changed, coupled_baseline->front()));
+    }
+    ASSERT_TRUE(vulkan->SetDispatchTimestampsEnabled(true));
+    std::vector<std::pair<RetainedCompute::KernelStage, std::uint32_t>> stream;
+    probe.after_dispatch = [&](std::span<const BufferHandle> bound, const DispatchTiming* host) {
+        ASSERT_FALSE(bound.empty());
+        ASSERT_FALSE(probe.writes.empty());
+        for (std::size_t i = 0; i < probe.allocations.size(); i += 2)
+            if (bound[0].value == probe.allocations[i].handle.value) {
+                const auto stage = static_cast<RetainedCompute::KernelStage>(i / 2);
+                // The header is immutable allocation capacity. After the disabled
+                // baseline uploads each program, transfer size names the active rows.
+                const auto stride = stage == RetainedCompute::KernelStage::kTransport
+                                        ? sizeof(RetainedStepInput)
+                                    : stage == RetainedCompute::KernelStage::kEndpoint
+                                        ? sizeof(RetainedEndpointInput)
+                                    : stage == RetainedCompute::KernelStage::kDopriPhase
+                                        ? sizeof(RetainedDopriPhaseInput)
+                                        : 0;
+                ASSERT_GT(stride, 0U);
+                const auto payload_bytes = probe.writes.back().bytes - sizeof(std::uint32_t);
+                ASSERT_EQ(payload_bytes % stride, 0U);
+                const auto rows = static_cast<std::uint32_t>(payload_bytes / stride);
+                stream.emplace_back(stage, rows);
+                capture(std::string(RetainedCompute::StageName(stage)) +
+                            ":rows=" + std::to_string(rows),
+                        host);
+                return;
+            }
+        FAIL() << "unknown current coupled stage";
+    };
+    using Stage = RetainedCompute::KernelStage;
+    const std::vector<std::pair<Stage, std::uint32_t>> expected_stream{
+        {Stage::kTransport, 12},  {Stage::kEndpoint, 24},   {Stage::kTransport, 12},
+        {Stage::kEndpoint, 24},   {Stage::kTransport, 12},  {Stage::kEndpoint, 24},
+        {Stage::kDopriPhase, 24}, {Stage::kDopriPhase, 24}, {Stage::kEndpoint, 12},
+        {Stage::kDopriPhase, 12}, {Stage::kEndpoint, 12}};
+    for (unsigned repeat = 0; repeat < 3; ++repeat) {
+        phase = "coupled_repeat" + std::to_string(repeat);
+        stream.clear();
+        readbacks.clear();
+        const auto output = AttemptRetainedDopriIntervals(**observed, coupled, 24);
+        ASSERT_TRUE(output) << output.error().Description();
+        ASSERT_EQ(output->size(), coupled_baseline->size());
+        for (std::size_t row = 0; row < output->size(); ++row) {
+            SCOPED_TRACE(row);
+            ASSERT_TRUE((*output)[row].admissible);
+            EXPECT_TRUE(IntervalBitsAgree((*output)[row], (*coupled_baseline)[row]));
+        }
+        const auto sampled = SampleRetainedDopriIntervals(**observed, sample_inputs(*output), 24);
+        ASSERT_TRUE(sampled) << sampled.error().Description();
+        ASSERT_EQ(sampled->size(), sample_baseline->size());
+        for (std::size_t row = 0; row < sampled->size(); ++row) {
+            ASSERT_TRUE((*sampled)[row].valid);
+            EXPECT_EQ((*sampled)[row].valid, (*sample_baseline)[row].valid);
+            EXPECT_EQ(std::memcmp((*sampled)[row].physical.data(),
+                                  (*sample_baseline)[row].physical.data(),
+                                  sizeof((*sampled)[row].physical)),
+                      0);
+            EXPECT_EQ(std::memcmp((*sampled)[row].polynomial_tangent.data(),
+                                  (*sample_baseline)[row].polynomial_tangent.data(),
+                                  sizeof((*sampled)[row].polynomial_tangent)),
+                      0);
+        }
+        EXPECT_EQ(stream, expected_stream);
+        EXPECT_EQ(readbacks, baseline_readbacks);
         EXPECT_EQ(device->BufferAllocationBytes(), resident);
     }
     EXPECT_GT(samples, 0U);
