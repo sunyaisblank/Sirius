@@ -282,6 +282,8 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     coefficients = 25 if source.stem == "retained_transport" else 0
     if coefficients:
         definitions.append(f"-DSIRIUS_RETAINED_COEFFICIENTS={coefficients}")
+    # The eight-byte status allowance covers retainedStatus and the native
+    # Endpoint projection-refusal word; other stages may use less.
     if (registers * terms + original_inputs * 4 + coefficients * 5 + projection_words) * 4 + 8 > 16384:
         raise ValueError("retained program exceeds the portable shared-memory bound")
     definitions += [f"-DSIRIUS_RETAINED_REGISTERS={registers}",

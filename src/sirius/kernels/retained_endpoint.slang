@@ -10,6 +10,10 @@ groupshared uint retainedProjection[7];
 // Complete weighted terms preserve both retained multiplies and their status.
 groupshared uint retainedProjectionTerms[16 * 5];
 #endif
+#ifndef SIRIUS_RETAINED_PORTABLE
+// The continuation resets retainedStatus; projection refusal needs its own owner word.
+groupshared uint retainedProjectionRefused;
+#endif
 RetainedTriple ReadStored(uint base) {
     RetainedTriple r;
     r.hi = RPFromBits(outputs[base]);
@@ -771,18 +775,24 @@ bool SelectEndpointProgram(uint rowBase, inout uint programBase, inout uint coun
     if (!SelectEndpointProgram(rowBase, programBase, count, registers, layers, prefix)) return;
     if (!EvaluateProgram(row, rowBase, programBase, count, registers, 20, lane, layers, prefix)) return;
     uint component;
-    RetainedTriple root;
-    if (!Project(rowBase, component, root)) return;
-    for (uint i = 0; i < 4; ++i) {
-        if (lane == 0)
-            WriteStored(rowBase + 504 + 5 * (45 + i), i == component ? root : Tangent(rowBase, i));
-        if (lane == 0)
-            WriteStored(rowBase + 504 + 5 * (49 + i),
-                        RTConstant(i == component ? RPOne() : RPZero()));
+    if (lane == 0) {
+        RetainedTriple root;
+        bool projected = Project(rowBase, component, root);
+        retainedProjectionRefused = projected ? 0 : 1;
+        if (projected) {
+            for (uint i = 0; i < 4; ++i) {
+                WriteStored(rowBase + 504 + 5 * (45 + i),
+                            i == component ? root : Tangent(rowBase, i));
+                WriteStored(rowBase + 504 + 5 * (49 + i),
+                            RTConstant(i == component ? RPOne() : RPZero()));
+            }
+        }
     }
 #ifndef SIRIUS_RETAINED_PORTABLE
+    // Every lane consumes the owner outcome and projected inputs at the original handoff.
     AllMemoryBarrierWithGroupSync();
 #endif
+    if (retainedProjectionRefused != 0) return;
     if (!EvaluateProgram(row, rowBase, programBase, count, registers, 100, lane, layers, prefix)) return;
     if (lane == 0) outputs[rowBase] = 1;
     if (lane == 0) outputs[rowBase + 1] = component;
