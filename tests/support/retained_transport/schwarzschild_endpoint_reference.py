@@ -136,7 +136,8 @@ def main():
                    'Every admitted row must still meet original1e-29 enclosure slack and1e-11 accuracy criteria.',
                    'No device, trajectory, timing, native hardware, full-frame or release acceptance.']}
     text = factor.header(cases, mp).replace('retained_endpoint_factor', 'retained_schwarzschild_endpoint')
-    text = text.replace('See endpoint_factor_reference.py.', 'See schwarzschild_endpoint_reference.py and its unchanged generic authorities.')
+    text = text.replace('. See endpoint_factor_reference.py.',
+                        '.\n// See schwarzschild_endpoint_reference.py and its unchanged generic authorities.')
     text = text.replace('std::array<Expected,2> expected;};', 'std::array<Expected,2> expected;bool admission_required;};')
     lines = text.splitlines()
     ends = [i for i, line in enumerate(lines) if line == '}}},']

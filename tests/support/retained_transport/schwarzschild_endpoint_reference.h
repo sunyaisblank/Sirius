@@ -1,4 +1,5 @@
-// Independent exact-decoded-centre witnesses. See schwarzschild_endpoint_reference.py and its unchanged generic authorities.
+// Independent exact-decoded-centre witnesses.
+// See schwarzschild_endpoint_reference.py and its unchanged generic authorities.
 // clang-format off
 #pragma once
 #include <array>
