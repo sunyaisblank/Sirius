@@ -138,59 +138,56 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
         return {};
     };
     const bool portable = RetainedUsesPortableArithmetic(device.Info());
-    const auto shader = [fp64_products](bool emulated, std::span<const std::uint32_t> narrow,
-                                        std::span<const std::uint32_t> wide,
-                                        std::span<const std::uint32_t> integer_narrow,
-                                        std::span<const std::uint32_t> integer_wide) {
-        if (emulated) return fp64_products ? integer_wide : integer_narrow;
+    const auto shader = [fp64_products, portable](std::span<const std::uint32_t> narrow,
+                                                  std::span<const std::uint32_t> wide,
+                                                  std::span<const std::uint32_t> integer_narrow,
+                                                  std::span<const std::uint32_t> integer_wide) {
+        if (portable) return fp64_products ? integer_wide : integer_narrow;
         return fp64_products ? wide : narrow;
     };
-    auto status = create(result->camera_, KernelStage::kCamera,
-                         shader(portable, kCameraShader, kCameraFp64Shader, kCameraPortableShader,
-                                kCameraPortableFp64Shader));
+    auto status = create(
+        result->camera_, KernelStage::kCamera,
+        shader(kCameraShader, kCameraFp64Shader, kCameraPortableShader, kCameraPortableFp64Shader));
     if (!status) return std::unexpected(status.error());
     const bool fma = fp64_products && !portable && device.Info().fma_fp32_enabled &&
                      device.Info().preserves_fp32_signed_zero_inf_nan;
-    // Wide triples without native FMA use the existing emulated exact-product
-    // owner. Pair-only camera stages and conservative wide admission stay separate.
-    const bool emulated_triples = portable || (fp64_products && !fma);
     // The normal-lattice transform needs RTE32 but no denormal preservation.
     // Adapters without RTE32 retain the pure-integer portable modules.
-    const bool normal_sum = emulated_triples && device.Info().rounds_fp32_to_nearest;
+    const bool normal_sum = portable && device.Info().rounds_fp32_to_nearest;
     const std::span<const std::uint32_t> transport =
         normal_sum ? std::span(kTransportPortableNormalSumShader)
                    : (fma && kTransportFmaAvailable
                           ? std::span(kTransportFmaShader)
-                          : shader(emulated_triples, kTransportShader, kTransportFp64Shader,
-                                   kTransportPortableShader, kTransportPortableFp64Shader));
+                          : shader(kTransportShader, kTransportFp64Shader, kTransportPortableShader,
+                                   kTransportPortableFp64Shader));
     status = create(result->transport_, KernelStage::kTransport, transport);
     if (!status) return std::unexpected(status.error());
     const std::span<const std::uint32_t> endpoint =
         normal_sum ? std::span(kEndpointPortableNormalSumShader)
                    : (fma && kEndpointFmaAvailable
                           ? std::span(kEndpointFmaShader)
-                          : shader(emulated_triples, kEndpointShader, kEndpointFp64Shader,
-                                   kEndpointPortableShader, kEndpointPortableFp64Shader));
+                          : shader(kEndpointShader, kEndpointFp64Shader, kEndpointPortableShader,
+                                   kEndpointPortableFp64Shader));
     status = create(result->endpoint_, KernelStage::kEndpoint, endpoint);
     if (!status) return std::unexpected(status.error());
-    status = create(result->dense_, KernelStage::kDense,
-                    shader(emulated_triples, kDenseShader, kDenseFp64Shader, kDensePortableShader,
-                           kDensePortableFp64Shader));
+    status = create(
+        result->dense_, KernelStage::kDense,
+        shader(kDenseShader, kDenseFp64Shader, kDensePortableShader, kDensePortableFp64Shader));
     if (!status) return std::unexpected(status.error());
     status = create(result->initialize_, KernelStage::kInitialize,
-                    shader(emulated_triples, kInitializeShader, kInitializeFp64Shader,
-                           kInitializePortableShader, kInitializePortableFp64Shader));
+                    shader(kInitializeShader, kInitializeFp64Shader, kInitializePortableShader,
+                           kInitializePortableFp64Shader));
     if (!status) return std::unexpected(status.error());
     status = create(result->ray_camera_, KernelStage::kRayCamera,
-                    shader(portable, kRayCameraShader, kRayCameraFp64Shader,
-                           kRayCameraPortableShader, kRayCameraPortableFp64Shader));
+                    shader(kRayCameraShader, kRayCameraFp64Shader, kRayCameraPortableShader,
+                           kRayCameraPortableFp64Shader));
     if (!status) return std::unexpected(status.error());
     // Reuse the same guarded normal-lattice sums without changing the DP
     // program or its integer fallback, including on adapters without RTE32.
     const std::span<const std::uint32_t> dopri_phase =
         normal_sum ? std::span(kDopriPhasePortableNormalSumShader)
-                   : shader(emulated_triples, kDopriPhaseShader, kDopriPhaseFp64Shader,
-                            kDopriPhasePortableShader, kDopriPhasePortableFp64Shader);
+                   : shader(kDopriPhaseShader, kDopriPhaseFp64Shader, kDopriPhasePortableShader,
+                            kDopriPhasePortableFp64Shader);
     status = create(result->dopri_phase_, KernelStage::kDopriPhase, dopri_phase);
     if (!status) return std::unexpected(status.error());
     return result;

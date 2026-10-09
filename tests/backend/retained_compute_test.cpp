@@ -397,36 +397,26 @@ TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideProductsAndPreservesAlloc
                          kRayCameraPortableFp64Shader),
                 expected(kDopriPhaseShader, kDopriPhaseFp64Shader, kDopriPhasePortableShader,
                          kDopriPhasePortableFp64Shader)};
-            const auto native_stages = stages;
-            // No-FMA wide triples retain the existing emulated exact products;
-            // the pair-only camera stages keep their original selection.
-            if (wide && !portable) {
-                stages[1] = std::span(kTransportPortableFp64Shader);
-                stages[2] = std::span(kEndpointPortableFp64Shader);
-                stages[3] = std::span(kDensePortableFp64Shader);
-                stages[4] = std::span(kInitializePortableFp64Shader);
-                stages[6] = std::span(kDopriPhasePortableFp64Shader);
-            }
-            if ((mask & 3u) == 2u || (wide && !portable)) {
+            if ((mask & 3u) == 2u) {
                 stages[1] = std::span(kTransportPortableNormalSumShader);
                 stages[2] = std::span(kEndpointPortableNormalSumShader);
                 stages[6] = std::span(kDopriPhasePortableNormalSumShader);
             }
             const bool eligible = wide && mask == 15u;
-            auto candidate_stages = eligible ? native_stages : stages;
-            if (eligible && kTransportFmaAvailable)
-                candidate_stages[1] = std::span(kTransportFmaShader);
-            if (eligible && kEndpointFmaAvailable)
-                candidate_stages[2] = std::span(kEndpointFmaShader);
             for (std::size_t stage = 0; stage < RetainedCompute::kStageCount; ++stage) {
-                // Check every actual module in both routes, including unchanged
-                // native-default/camera choices and the complete eligible FMA route.
+                // The baseline excludes FMA and independently checks native,
+                // pure-integer fallback and RTE32-only Transport/Endpoint/DP selection.
                 EXPECT_EQ(control.loaded_codes[stage],
                           (std::vector<std::uint32_t>(stages[stage].begin(), stages[stage].end())));
-                EXPECT_EQ(candidate.loaded_codes[stage],
-                          (std::vector<std::uint32_t>(candidate_stages[stage].begin(),
-                                                      candidate_stages[stage].end())));
-                if (eligible && stage != 0 && stage != 5) {
+                if (stage == 1 && eligible && kTransportFmaAvailable) {
+                    EXPECT_EQ(candidate.loaded_codes[stage],
+                              (std::vector<std::uint32_t>(kTransportFmaShader.begin(),
+                                                          kTransportFmaShader.end())));
+                    EXPECT_NE(candidate.loaded_codes[stage], control.loaded_codes[stage]);
+                } else if (stage == 2 && eligible && kEndpointFmaAvailable) {
+                    EXPECT_EQ(candidate.loaded_codes[stage],
+                              (std::vector<std::uint32_t>(kEndpointFmaShader.begin(),
+                                                          kEndpointFmaShader.end())));
                     EXPECT_NE(candidate.loaded_codes[stage], control.loaded_codes[stage]);
                 } else {
                     EXPECT_EQ(candidate.loaded_codes[stage], control.loaded_codes[stage]);
@@ -1913,7 +1903,8 @@ TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundary
     ASSERT_TRUE(inventory) << inventory.error().Description();
     const auto index = ResolveVulkanDeviceIndex(*inventory);
     ASSERT_TRUE(index) << index.error().Description();
-    const bool mask_useful = device->Info().rounds_fp32_to_nearest;
+    const bool mask_useful =
+        RetainedUsesPortableArithmetic(device->Info()) && device->Info().rounds_fp32_to_nearest;
     RecordProperty("factored_endpoint_normal_default_exercised", 0);
     RecordProperty("factored_endpoint_normal_fp64_exercised", 0);
     RecordProperty("factored_endpoint_integer_default_exercised", 0);
