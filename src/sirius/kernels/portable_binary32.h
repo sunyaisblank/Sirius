@@ -159,6 +159,11 @@ SIRIUS_PB32_INLINE uint PB32Add(uint a, uint b) {
     return PB32Round(sign, exponent, result);
 }
 SIRIUS_PB32_INLINE uint PB32Subtract(uint a, uint b) { return PB32Add(a, PB32Negate(b)); }
+SIRIUS_PB32_INLINE uint PB32RoundProduct(uint sign, int exponent, PB32Wide product) {
+    bool upper = (product.hi & 0x00008000u) != 0u;
+    uint extended = PB32WideShiftJam(product, upper ? 21u : 20u);
+    return PB32Round(sign, exponent + (upper ? 1 : 0), extended);
+}
 SIRIUS_PB32_INLINE uint PB32Multiply(uint a, uint b) {
     uint sign = (a ^ b) >> 31;
     if (PB32Nan(a) || PB32Nan(b)) return 0x7fc00000u;
@@ -167,9 +172,7 @@ SIRIUS_PB32_INLINE uint PB32Multiply(uint a, uint b) {
     if (PB32Zero(a) || PB32Zero(b)) return sign << 31;
     PB32Finite aa = PB32Unpack(a), bb = PB32Unpack(b);
     PB32Wide product = PB32WideProduct(aa.significand, bb.significand);
-    bool upper = (product.hi & 0x00008000u) != 0u;
-    uint extended = PB32WideShiftJam(product, upper ? 21u : 20u);
-    return PB32Round(sign, aa.exponent + bb.exponent + (upper ? 1 : 0), extended);
+    return PB32RoundProduct(sign, aa.exponent + bb.exponent, product);
 }
 SIRIUS_PB32_INLINE uint PB32Divide(uint a, uint b) {
     uint sign = (a ^ b) >> 31;
@@ -278,8 +281,8 @@ SIRIUS_PB32_INLINE PB32Product PB32ProductResidual(uint a, uint b) {
     r.valid = 0u;
     // This is a bounded primitive, not a new policy for out-of-domain inputs.
     if (PB32Abs(a) > 0x5d800000u || PB32Abs(b) > 0x5d800000u) return r;
-    r.high = PB32Multiply(a, b);
     if (PB32Zero(a) || PB32Zero(b)) {
+        r.high = (a ^ b) & 0x80000000u;
         // Exact cancellation in product - high has positive zero under RTE,
         // including (-0)-(-0). The signed high product remains explicit.
         r.valid = 1u;
@@ -289,6 +292,7 @@ SIRIUS_PB32_INLINE PB32Product PB32ProductResidual(uint a, uint b) {
     int sumExponent = aa.exponent + bb.exponent;
     // exact |a*b| = product * 2^(sumExponent-46).
     PB32Wide product = PB32WideProduct(aa.significand, bb.significand);
+    r.high = PB32RoundProduct((a ^ b) >> 31, sumExponent, product);
     PB32Wide rounded;
     rounded.lo = 0u;
     rounded.hi = 0u;
