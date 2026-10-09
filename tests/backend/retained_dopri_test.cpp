@@ -469,6 +469,18 @@ TEST_F(RetainedDopriTest, IndependentQuarticPreservesCompletePhase) {
                 SCOPED_TRACE(reference::cases[begin + i].name);
                 SameWords((*sampled)[i], original[begin + i]);
             }
+            std::vector<std::shared_ptr<const RetainedDopriBasis>> integer_bases;
+            for (const auto& output : *sampled) {
+                ASSERT_TRUE(output.basis);
+                integer_bases.push_back(output.basis);
+            }
+            const auto integer_reused = (*integer)->DopriPhaseFromBasis(inputs, integer_bases);
+            ASSERT_TRUE(integer_reused) << integer_reused.error().Description();
+            for (std::size_t i = 0; i < count; ++i) {
+                CheckOutput((*integer_reused)[i], reference::cases[begin + i]);
+                SameWords((*integer_reused)[i], (*sampled)[i]);
+                EXPECT_EQ((*integer_reused)[i].basis, integer_bases[i]);
+            }
             EXPECT_EQ(device->BufferAllocationBytes(), parity_allocation);
         }
         const auto integer_reordered = (*integer)->DopriPhase(reordered);
