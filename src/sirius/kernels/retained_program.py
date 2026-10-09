@@ -556,8 +556,14 @@ def build_endpoint_profile_program(parallel, profile):
                             for i in range(4)]
             # These are transpose contractions, not D_vector ell. Their
             # distinction retains the rotating Kerr congruence's twist.
-            light_gradient = [sum(weighted_light[i][a] * vector[i] for i in range(4))
-                              for a in range(4)]
+            if profile is schwarzschild_metric_profile:
+                # The Schwarzschild spatial light Jacobian is symmetric in
+                # either chart. Reuse its weighted contraction, preserving
+                # the downstream product order and covariant P residual.
+                light_gradient = light_change
+            else:
+                light_gradient = [sum(weighted_light[i][a] * vector[i] for i in range(4))
+                                  for a in range(4)]
             directions[key] = contraction, profile_change, light_change, light_gradient
         return directions[key]
 
