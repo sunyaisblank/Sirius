@@ -328,116 +328,6 @@ TEST_F(RetainedDopriTest, IndependentQuarticPreservesCompletePhase) {
             }
         }
 
-        // Every frozen independent quartic also exercises raw coefficient
-        // consumption. Complete five-word roots, including all forty rates,
-        // must equal original reconstruction after active-prefix shrink/reorder.
-        for (std::size_t begin = 0; begin < reference::cases.size(); begin += compute.Capacity()) {
-            const auto count = std::min(compute.Capacity(), reference::cases.size() - begin);
-            std::vector<RetainedDopriPhaseInput> inputs;
-            std::vector<std::shared_ptr<const RetainedDopriBasis>> bases;
-            for (std::size_t i = 0; i < count; ++i) {
-                inputs.push_back(
-                    std::bit_cast<RetainedDopriPhaseInput>(reference::cases[begin + i].input));
-                ASSERT_TRUE(original[begin + i].basis);
-                bases.push_back(original[begin + i].basis);
-            }
-            const auto reused = compute.DopriPhaseFromBasis(inputs, bases);
-            ASSERT_TRUE(reused) << reused.error().Description();
-            for (std::size_t i = 0; i < count; ++i) {
-                CheckOutput((*reused)[i], reference::cases[begin + i]);
-                SameWords((*reused)[i], original[begin + i]);
-                EXPECT_EQ((*reused)[i].basis, bases[i]);
-            }
-        }
-        const auto source = std::bit_cast<RetainedDopriPhaseInput>(reference::cases[0].input);
-        const std::array basis{original[0].basis};
-        for (const double fraction : {0., 1. / 8, 3. / 8, .5, 7. / 8, 1.}) {
-            auto input = source;
-            input.values[361] = RetainedValue::FromDouble(fraction);
-            const auto full = compute.DopriPhase(std::span(&input, 1));
-            const auto reused = compute.DopriPhaseFromBasis(std::span(&input, 1), basis);
-            ASSERT_TRUE(full) << full.error().Description();
-            ASSERT_TRUE(reused) << reused.error().Description();
-            ASSERT_TRUE(full->front().valid);
-            SameWords(reused->front(), full->front());
-            EXPECT_EQ(reused->front().basis, basis.front());
-        }
-        // Even a zero-weight RHS remains original packet authority. A valid
-        // change rebuilds; an invalid status refuses rather than using stale
-        // coefficients. A following original row must recover completely.
-        auto changed = source;
-        changed.values[120] = RetainedValue::FromDouble(.25);
-        changed.values[361] = RetainedValue::FromDouble(3. / 8);
-        const auto changed_full = compute.DopriPhase(std::span(&changed, 1));
-        const auto rebuilt = compute.DopriPhaseFromBasis(std::span(&changed, 1), basis);
-        ASSERT_TRUE(changed_full);
-        ASSERT_TRUE(rebuilt);
-        ASSERT_TRUE(changed_full->front().valid);
-        SameWords(rebuilt->front(), changed_full->front());
-        EXPECT_NE(rebuilt->front().basis, basis.front());
-        changed.values[120].valid = 0;
-        const auto refused = compute.DopriPhaseFromBasis(std::span(&changed, 1), basis);
-        ASSERT_TRUE(refused);
-        Refused(refused->front());
-        EXPECT_FALSE(refused->front().basis);
-        const auto recovered = compute.DopriPhaseFromBasis(std::span(&source, 1), basis);
-        ASSERT_TRUE(recovered);
-        SameWords(recovered->front(), original[0]);
-        EXPECT_EQ(recovered->front().basis, basis.front());
-
-        // A different or retired logical compute cannot supply current
-        // arithmetic authority, even when its numerical words happen to agree.
-        std::shared_ptr<const RetainedDopriBasis> retired_basis;
-        {
-            auto foreign_device = CreateVulkanDevice(device_index_);
-            ASSERT_TRUE(foreign_device) << foreign_device.error().Description();
-            ASSERT_EQ((*foreign_device)->Info(), device->Info());
-            ASSERT_TRUE((*foreign_device)->SetBufferAllocationLimit(8 * 1024 * 1024));
-            ASSERT_EQ((*foreign_device)->BufferAllocationBytes(), 0U);
-            auto foreign = RetainedCompute::Create(**foreign_device, 1, fp64_products_);
-            ASSERT_TRUE(foreign) << foreign.error().Description();
-            const auto foreign_source = (*foreign)->DopriPhase(std::span(&source, 1));
-            ASSERT_TRUE(foreign_source);
-            retired_basis = foreign_source->front().basis;
-            ASSERT_TRUE(retired_basis);
-            const std::array foreign_basis{retired_basis};
-            const auto rebuilt_foreign =
-                compute.DopriPhaseFromBasis(std::span(&source, 1), foreign_basis);
-            ASSERT_TRUE(rebuilt_foreign);
-            SameWords(rebuilt_foreign->front(), original[0]);
-            EXPECT_NE(rebuilt_foreign->front().basis, retired_basis);
-        }
-        const std::array retired{retired_basis};
-        const auto rebuilt_retired = compute.DopriPhaseFromBasis(std::span(&source, 1), retired);
-        ASSERT_TRUE(rebuilt_retired);
-        SameWords(rebuilt_retired->front(), original[0]);
-        EXPECT_NE(rebuilt_retired->front().basis, retired_basis);
-        auto invalid_source = source;
-        invalid_source.values[120].valid = 0;
-        auto invalid_fraction = source;
-        invalid_fraction.values[361] = RetainedValue::FromDouble(.5);
-        invalid_fraction.values[361].radius = .5f;
-        const std::array mixed{source, invalid_source, source, source, invalid_fraction};
-        const std::array<std::shared_ptr<const RetainedDopriBasis>, 5> mixed_bases{
-            basis.front(), basis.front(), retired_basis, {}, basis.front()};
-        const auto mixed_full = compute.DopriPhase(mixed);
-        const auto mixed_reuse = compute.DopriPhaseFromBasis(mixed, mixed_bases);
-        ASSERT_TRUE(mixed_full);
-        ASSERT_TRUE(mixed_reuse);
-        for (std::size_t row = 0; row < mixed.size(); ++row)
-            SameWords((*mixed_reuse)[row], (*mixed_full)[row]);
-        EXPECT_EQ((*mixed_reuse)[0].basis, basis.front());
-        Refused((*mixed_reuse)[1]);
-        EXPECT_FALSE((*mixed_reuse)[1].basis);
-        EXPECT_NE((*mixed_reuse)[2].basis, retired_basis);
-        ASSERT_TRUE((*mixed_reuse)[3].basis);
-        // Source words still match: the reuse route must independently refuse
-        // a fraction radius touching both endpoints before evaluating a table.
-        Refused((*mixed_reuse)[4]);
-        EXPECT_FALSE((*mixed_reuse)[4].basis);
-        EXPECT_FALSE(compute.DopriPhaseFromBasis(mixed, {}));
-        EXPECT_EQ(device->BufferAllocationBytes(), allocation);
-
         // The original numerical and submission assertions above also run on
         // native devices. This additional parity checks the optional DP module
         // only when its real capability predicate selects it.
@@ -468,18 +358,6 @@ TEST_F(RetainedDopriTest, IndependentQuarticPreservesCompletePhase) {
             for (std::size_t i = 0; i < count; ++i) {
                 SCOPED_TRACE(reference::cases[begin + i].name);
                 SameWords((*sampled)[i], original[begin + i]);
-            }
-            std::vector<std::shared_ptr<const RetainedDopriBasis>> integer_bases;
-            for (const auto& output : *sampled) {
-                ASSERT_TRUE(output.basis);
-                integer_bases.push_back(output.basis);
-            }
-            const auto integer_reused = (*integer)->DopriPhaseFromBasis(inputs, integer_bases);
-            ASSERT_TRUE(integer_reused) << integer_reused.error().Description();
-            for (std::size_t i = 0; i < count; ++i) {
-                CheckOutput((*integer_reused)[i], reference::cases[begin + i]);
-                SameWords((*integer_reused)[i], (*sampled)[i]);
-                EXPECT_EQ((*integer_reused)[i].basis, integer_bases[i]);
             }
             EXPECT_EQ(device->BufferAllocationBytes(), parity_allocation);
         }
@@ -825,12 +703,6 @@ TEST_F(RetainedDopriTest, ConnectedIntervalsPreserveTrialsAndIndependentBudgets)
             for (std::size_t trial = 0; trial < sirius::core::kCoupledTrialCount; ++trial) {
                 SCOPED_TRACE(trial);
                 same_values(a.packets[trial].values, b.packets[trial].values);
-                ASSERT_TRUE(a.bases[trial]);
-                ASSERT_TRUE(b.bases[trial]);
-                const auto ac = a.bases[trial]->Coefficients();
-                const auto bc = b.bases[trial]->Coefficients();
-                for (std::size_t group = 0; group < ac.size(); ++group)
-                    same_values(ac[group], bc[group]);
                 SameEndpoint(a.starts[trial], b.starts[trial]);
                 SameEndpoint(a.endpoints[trial], b.endpoints[trial]);
                 const auto& p = a.positions[trial];
@@ -1298,11 +1170,9 @@ TEST_F(RetainedDopriTest, SamplerPreservesPhysicalArrivalAndRejectsInconsistentR
         malformed_control->control.tolerance = 0;
         auto malformed_endpoint = std::make_shared<RetainedDopriInterval>(*capsule);
         malformed_endpoint->endpoints[full].physical.back().valid = 0;
-        auto malformed_rhs = std::make_shared<RetainedDopriInterval>(*capsule);
-        malformed_rhs->packets[full].values[120].valid = 0;
         sirius::core::Vec4 invalid_normal = normal;
         invalid_normal(2) = std::numeric_limits<double>::quiet_NaN();
-        const std::array<RetainedDopriSampleInput, 11> invalid{{
+        const std::array<RetainedDopriSampleInput, 10> invalid{{
             {nullptr, full, .5, std::nullopt},
             {capsule, 4, .5, std::nullopt},
             {capsule, full, -1, std::nullopt},
@@ -1313,7 +1183,6 @@ TEST_F(RetainedDopriTest, SamplerPreservesPhysicalArrivalAndRejectsInconsistentR
             {capsule, full, 1, sirius::core::Vec4{}},
             {capsule, full, 1, tangent_normal},
             {capsule, full, .5, invalid_normal},
-            {malformed_rhs, full, 3. / 8, std::nullopt},
         }};
         std::vector<RetainedDopriSampleInput> mixed(invalid.begin(), invalid.end());
         mixed.push_back({capsule, full, 3. / 8, std::nullopt});

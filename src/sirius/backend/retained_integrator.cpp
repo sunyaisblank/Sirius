@@ -461,7 +461,6 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptIntervals(
                         work[row].failure = CoupledStepFailure::Interpolation;
                         continue;
                     }
-                    curve.bases[trial] = (*sampled)[item].basis;
                     if (trial == 0) {
                         needed = true;
                         midpoint_packets[row] = EndpointInput(inputs[row], (*sampled)[item].phase);
@@ -630,7 +629,6 @@ base::Expected<std::vector<RetainedDopriSampleOutput>> SampleRetainedDopriInterv
     const auto count = inputs.size();
     std::vector<RetainedDopriSampleOutput> work(count);
     std::vector<RetainedDopriPhaseInput> packets(count);
-    std::vector<std::shared_ptr<const RetainedDopriBasis>> bases(count);
     std::vector<bool> interior(count, false);
     bool sample_interior = false;
     for (std::size_t row = 0; row < count; ++row) {
@@ -653,11 +651,10 @@ base::Expected<std::vector<RetainedDopriSampleOutput>> SampleRetainedDopriInterv
             sample_interior = interior[row] = true;
             packets[row] = curve.packets[input.trial];
             packets[row].values[361] = RetainedValue::FromDouble(input.fraction);
-            bases[row] = curve.bases[input.trial];
         }
     }
     if (sample_interior) {
-        const auto phases = compute.DopriPhaseFromBasis(packets, bases);
+        const auto phases = compute.DopriPhase(packets);
         if (!phases) return std::unexpected(phases.error());
         std::vector<RetainedEndpointInput> endpoints(count);
         for (std::size_t row = 0; row < count; ++row)

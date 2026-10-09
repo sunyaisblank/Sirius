@@ -37,35 +37,11 @@ void WriteValue(uint index, RetainedTriple r, uint rowBase) {
     ScratchWrite(index, 4, rowBase, 1004, r.valid);
 }
 RetainedTriple ReadOriginal(uint index, uint row) {
-    uint base = 1 + 2411 * row + 5 * index;
+    uint base = 1 + 1810 * row + 5 * index;
     RetainedTriple value = RTPack(RPFromBits(inputs[base]), RPFromBits(inputs[base + 1]),
                                   RPFromBits(inputs[base + 2]), RPFromBits(inputs[base + 3]));
     if (inputs[base + 4] != 1) value.valid = 0;
     return value;
-}
-uint RetainedSpacingBits(uint bits) {
-    uint exponent = (bits & 0x7fffffffu) >> 23;
-    return exponent > 23 ? (exponent - 23) << 23 : 1u << (exponent == 0 ? 0 : exponent - 1);
-}
-RetainedTriple ReadCoefficient(uint index, uint row) {
-    uint base = 1 + 2411 * row + 5 * index;
-    RetainedTriple r;
-    r.hi = RPFromBits(inputs[base]);
-    r.lo = RPFromBits(inputs[base + 1]);
-    r.tail = RPFromBits(inputs[base + 2]);
-    r.error = RPFromBits(inputs[base + 3]);
-    r.valid = inputs[base + 4];
-    // These are already produced retained words. Validate their public
-    // representation without normalizing again or changing any limb/radius.
-    if (r.valid != 1 || !RPBounded(r.hi, 0x7b800000u) ||
-        !RPBounded(r.lo, 0x7b800000u) || !RPBounded(r.tail, 0x7b800000u) ||
-        !RPBounded(r.error, 0x7b800000u) || (RPBits(r.error) & 0x80000000u) != 0 ||
-        (RPBits(r.lo) & 0x7fffffffu) > RetainedSpacingBits(RPBits(r.hi)) ||
-        (RPBits(r.tail) & 0x7fffffffu) > RetainedSpacingBits(RPBits(r.lo)) ||
-        ((RPBits(r.hi) & 0x7fffffffu) == 0 &&
-         ((RPBits(r.lo) | RPBits(r.tail)) & 0x7fffffffu) != 0))
-        return RTInvalid();
-    return r;
 }
 bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint registers) {
     uint address = programBase + 203 + 5 * index, op = inputs[address],
@@ -76,12 +52,8 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint regi
     if (op == 0)
         r = RTConstant(RPFromBits(a));
     else if (op == 1) {
-        if (a < 362)
-            r = ReadOriginal(a, row);
-        else {
-            if (a >= 482 || inputs[1 + 2411 * row + 2410] != 1) return false;
-            r = ReadCoefficient(a, row);
-        }
+        if (a >= 362) return false;
+        r = ReadOriginal(a, row);
     } else {
         if (a >= registers) return false;
         RetainedTriple av = ReadValue(a, rowBase);
@@ -140,7 +112,7 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint regi
     return true;
 }
 bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint registers,
-                     uint required, uint layers, uint lane) {
+                     uint required, uint lane) {
     uint needed = count;
     if (needed == 0 || needed > count) return false;
 #ifndef SIRIUS_RETAINED_COOPERATIVE_DOPRI_INPUTS
@@ -150,9 +122,9 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
     GroupMemoryBarrierWithGroupSync();
 #endif
     uint layerBase = programBase + 203 + 5 * count;
-    if (inputs[layerBase] != 0 || inputs[layerBase + layers] != count) return false;
+    if (inputs[layerBase] != 0 || inputs[layerBase + SIRIUS_RETAINED_LAYERS] != count) return false;
     uint expected = 0;
-    for (uint layer = 0; layer < layers; ++layer) {
+    for (uint layer = 0; layer < SIRIUS_RETAINED_LAYERS; ++layer) {
         uint start = inputs[layerBase + layer], end = inputs[layerBase + layer + 1];
         if (start >= needed) break;
         if (start != expected || end <= start || end > needed ||
@@ -208,27 +180,18 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
     outputs.GetDimensions(no, so);
     if (ni < 1 || id.y != 0 || id.z != 0) return;
     uint rows = inputs[0], row = id.x;
-    if (rows == 0 || rows > 65536 || row >= rows || ni < 1 + 2411 * rows + 203 || no % rows != 0)
+    if (rows == 0 || rows > 65536 || row >= rows || ni < 1 + 1810 * rows + 203 || no % rows != 0)
         return;
+    uint programBase = 1 + 1810 * rows, count = inputs[programBase],
+         registers = inputs[programBase + 1];
     uint rowWords = no / rows, rowBase = row * rowWords;
     if (rowWords < 1004) return;
     for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
 #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_DOPRI_PHASE)
     AllMemoryBarrierWithGroupSync();
 #endif
-    uint mode = inputs[1 + 2411 * row + 2410], programBase = 1 + 2411 * rows;
-    if (mode > 1 || ni != programBase + SIRIUS_RETAINED_DOPRI_FULL_WORDS +
-                                              SIRIUS_RETAINED_DOPRI_EVALUATION_WORDS)
-        return;
-    uint layers = SIRIUS_RETAINED_LAYERS, tableWords = SIRIUS_RETAINED_DOPRI_FULL_WORDS;
-    if (mode == 1) {
-        programBase += SIRIUS_RETAINED_DOPRI_FULL_WORDS;
-        layers = SIRIUS_RETAINED_DOPRI_EVALUATION_LAYERS;
-        tableWords = SIRIUS_RETAINED_DOPRI_EVALUATION_WORDS;
-    }
-    uint count = inputs[programBase], registers = inputs[programBase + 1];
     if (inputs[programBase + 2] != 200 || count > 65536 || registers != SIRIUS_RETAINED_REGISTERS ||
-        tableWords != 203 + 5 * count + layers + 1 ||
+        ni != programBase + 203 + 5 * count + SIRIUS_RETAINED_LAYERS + 1 ||
         rowWords != 1004 + 5 * registers)
         return;
 #ifdef SIRIUS_RETAINED_COOPERATIVE_DOPRI_INPUTS
@@ -255,6 +218,6 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
             RPScalarLessEqual(RTAbsoluteLower(remaining), RPZero()))
             return;
     }
-    if (!EvaluateProgram(row, rowBase, programBase, count, registers, 200, layers, lane)) return;
+    if (!EvaluateProgram(row, rowBase, programBase, count, registers, 200, lane)) return;
     if (lane == 0) outputs[rowBase] = 1;
 }

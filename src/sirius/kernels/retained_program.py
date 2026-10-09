@@ -696,14 +696,6 @@ def build_dense_program(parallel=False):
     return compile_program([v.i for v in outputs], parallel)
 
 
-def dopri_phase_field(original, delta, k1, k7, h, s, a, b, c):
-    value = original+s*(delta+(1-s)*(a+s*(b+(1-s)*c)))
-    rate = (delta+(1-2*s)*a+s*(2-3*s)*b+2*s*(1-s)*(1-2*s)*c)/h
-    value = node(11, original, node(11, original+delta, value, s-1), s)
-    rate = node(11, k1, node(11, k7, rate, s-1), s)
-    return value, rate
-
-
 def build_dopri_phase_program(parallel=False):
     """Order-four continuous DP phase extension using the existing seven RHS.
 
@@ -746,27 +738,14 @@ def build_dopri_phase_program(parallel=False):
         # Sum d_i=0 permits this difference form; constant RHS cancels before
         # any weighted products instead of subtracting large stage values.
         c = h*sum(weights[j-1]*(row[80+40*j+i]-k1) for j in range(2, 7))
-        value, rate = dopri_phase_field(original, delta, k1, k7, h, s, a, b, c)
+        value = original+s*(delta+(1-s)*(a+s*(b+(1-s)*c)))
+        rate = (delta+(1-2*s)*a+s*(2-3*s)*b+2*s*(1-s)*(1-2*s)*c)/h
+        value = node(11, original, node(11, original+delta, value, s-1), s)
+        rate = node(11, k1, node(11, k7, rate, s-1), s)
         phase.append(value); derivative.append(rate)
         aa.append(a); bb.append(b); cc.append(c)
     outputs = phase+derivative+aa+bb+cc
     return compile_program([v.i for v in outputs], parallel)
-
-
-def build_dopri_evaluation_program(parallel=False):
-    # Only the producer's immutable retained words may occupy inputs 362..481.
-    # Original packet admission still covers all seven RHS on the device.
-    ops.clear()
-    cache.clear()
-    row = [inp(i) for i in range(482)]
-    h, s = row[360:362]
-    phase, derivative = [], []
-    for i in range(40):
-        value, rate = dopri_phase_field(row[i], row[40+i], row[80+i], row[320+i], h, s,
-                                       row[362+i], row[402+i], row[442+i])
-        phase.append(value)
-        derivative.append(rate)
-    return compile_program([v.i for v in phase+derivative+row[362:482]], parallel)
 
 
 def build_initialize_program(parallel=False):

@@ -89,34 +89,12 @@ struct RetainedDopriPhaseInput {
     // This is a distinct quartic phase interpolation problem, not Hermite.
     std::array<RetainedValue, 362> values{};
 };
-class RetainedDopriBasis;
 struct RetainedDopriPhaseOutput {
     // All forty Hamiltonian phase fields and their polynomial affine rates.
     // A,B,C define Y=y0+s{increment+(1-s)[A+s(B+(1-s)C)]}.
     // Polynomial rates are not the projected physical geodesic tangent.
     std::array<RetainedValue, 40> phase{}, derivative{}, a{}, b{}, c{};
     bool valid = false;
-    std::shared_ptr<const RetainedDopriBasis> basis;
-};
-
-// Only a successful device result can create coefficient authority. Copies
-// retain exact source words; the weak identity cannot keep a compute alive.
-class RetainedDopriBasis {
-  public:
-    ~RetainedDopriBasis() = default;
-    [[nodiscard]] std::array<std::span<const RetainedValue>, 3> Coefficients() const {
-        return {a_, b_, c_};
-    }
-
-  private:
-    friend class RetainedCompute;
-    RetainedDopriBasis(const RetainedDopriPhaseInput& source,
-                       const RetainedDopriPhaseOutput& output,
-                       const std::shared_ptr<const std::uint8_t>& owner)
-        : source_(source), a_(output.a), b_(output.b), c_(output.c), owner_(owner) {}
-    RetainedDopriPhaseInput source_;
-    std::array<RetainedValue, 40> a_, b_, c_;
-    std::weak_ptr<const std::uint8_t> owner_;
 };
 
 struct RetainedEndpointDenseOutput {
@@ -141,11 +119,6 @@ struct RetainedInitializeOutput {
 // object, and callers must serialize its synchronous submissions.
 class RetainedCompute {
   public:
-    RetainedCompute(const RetainedCompute&) = delete;
-    RetainedCompute& operator=(const RetainedCompute&) = delete;
-    RetainedCompute(RetainedCompute&&) = delete;
-    RetainedCompute& operator=(RetainedCompute&&) = delete;
-
     enum class KernelStage {
         kCamera,
         kTransport,
@@ -243,12 +216,6 @@ class RetainedCompute {
         std::span<const RetainedDenseInput> inputs, DispatchTiming* timing = nullptr);
     [[nodiscard]] base::Expected<std::vector<RetainedDopriPhaseOutput>> DopriPhase(
         std::span<const RetainedDopriPhaseInput> inputs, DispatchTiming* timing = nullptr);
-    // Exact source and live arithmetic-owner checks select reuse internally.
-    // Missing, foreign or modified bases retain original reconstruction.
-    [[nodiscard]] base::Expected<std::vector<RetainedDopriPhaseOutput>> DopriPhaseFromBasis(
-        std::span<const RetainedDopriPhaseInput> inputs,
-        std::span<const std::shared_ptr<const RetainedDopriBasis>> bases,
-        DispatchTiming* timing = nullptr);
     [[nodiscard]] bool SupportsIndependentPair() const noexcept {
         return device_.SupportsIndependentPair();
     }
@@ -298,17 +265,12 @@ class RetainedCompute {
     };
     [[nodiscard]] base::Expected<void> Dispatch(Stage& stage, std::size_t active_rows,
                                                 DispatchTiming* timing);
-    [[nodiscard]] base::Expected<std::vector<RetainedDopriPhaseOutput>> DispatchDopriPhase(
-        std::span<const RetainedDopriPhaseInput> inputs,
-        std::span<const std::shared_ptr<const RetainedDopriBasis>> bases, DispatchTiming* timing);
     ComputeDevice& device_;
     std::size_t capacity_;
     double dispatch_target_ms_ = 250;
     SubmissionFeedback submission_feedback_;
     StageStats endpoint_dense_stats_;
     Stage camera_, transport_, endpoint_, dense_, initialize_, ray_camera_, dopri_phase_;
-    std::shared_ptr<const std::uint8_t> dopri_basis_owner_ =
-        std::make_shared<const std::uint8_t>(0);
 };
 
 }  // namespace sirius::backend

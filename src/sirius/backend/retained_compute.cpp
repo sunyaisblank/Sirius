@@ -30,7 +30,7 @@ constexpr std::array<StageLayout, RetainedCompute::kStageCount> kStageLayouts{{
     {kDenseProgram, 560, kDenseRowWords},
     {kInitializeProgram, 225, kInitializeRowWords},
     {kRayCameraProgram, 225, kRayCameraRowWords},
-    {kDopriPhaseProgram, kDopriPhaseInputWords, kDopriPhaseRowWords},
+    {kDopriPhaseProgram, 1810, kDopriPhaseRowWords},
 }};
 
 std::array<std::uint64_t, 2> StageBufferBytes(const StageLayout& layout, std::size_t capacity) {
@@ -484,41 +484,11 @@ base::Expected<std::vector<RetainedDenseOutput>> RetainedCompute::Dense(
 
 base::Expected<std::vector<RetainedDopriPhaseOutput>> RetainedCompute::DopriPhase(
     std::span<const RetainedDopriPhaseInput> inputs, DispatchTiming* timing) {
-    return DispatchDopriPhase(inputs, {}, timing);
-}
-
-base::Expected<std::vector<RetainedDopriPhaseOutput>> RetainedCompute::DopriPhaseFromBasis(
-    std::span<const RetainedDopriPhaseInput> inputs,
-    std::span<const std::shared_ptr<const RetainedDopriBasis>> bases, DispatchTiming* timing) {
-    if (bases.size() != inputs.size())
-        return Fail(ErrorDomain::kDevice, "dispatch retained DP phase", "invalid basis batch size");
-    return DispatchDopriPhase(inputs, bases, timing);
-}
-
-base::Expected<std::vector<RetainedDopriPhaseOutput>> RetainedCompute::DispatchDopriPhase(
-    std::span<const RetainedDopriPhaseInput> inputs,
-    std::span<const std::shared_ptr<const RetainedDopriBasis>> bases, DispatchTiming* timing) {
     if (inputs.empty() || inputs.size() > capacity_)
         return Fail(ErrorDomain::kDevice, "dispatch retained DP phase", "invalid batch size");
     static_assert(sizeof(RetainedDopriPhaseInput) == 1810 * sizeof(std::uint32_t));
-    static_assert(kDopriPhaseInputWords == 1810 + 600 + 1);
-    std::fill_n(dopri_phase_.input.begin() + 1, capacity_ * kDopriPhaseInputWords, 0U);
-    for (std::size_t row = 0; row < inputs.size(); ++row) {
-        auto* words = dopri_phase_.input.data() + 1 + row * kDopriPhaseInputWords;
-        std::memcpy(words, &inputs[row], sizeof(inputs[row]));
-        if (bases.empty() || !bases[row]) continue;
-        const auto& basis = *bases[row];
-        // Fraction is independently admitted for this request. The original
-        // four-trial builder may have produced coefficients at a midpoint.
-        if (basis.owner_.lock() != dopri_basis_owner_ ||
-            std::memcmp(inputs[row].values.data(), basis.source_.values.data(),
-                        361 * sizeof(RetainedValue)) != 0)
-            continue;
-        std::memcpy(words + 1810, basis.a_.data(), sizeof(basis.a_));
-        std::memcpy(words + 2010, basis.b_.data(), sizeof(basis.b_));
-        std::memcpy(words + 2210, basis.c_.data(), sizeof(basis.c_));
-        words[2410] = 1;
-    }
+    std::fill_n(dopri_phase_.input.begin() + 1, capacity_ * 1810, 0U);
+    std::memcpy(dopri_phase_.input.data() + 1, inputs.data(), inputs.size_bytes());
     auto status = Dispatch(dopri_phase_, inputs.size(), timing);
     if (!status) return std::unexpected(status.error());
     std::vector<RetainedDopriPhaseOutput> result(inputs.size());
@@ -538,11 +508,6 @@ base::Expected<std::vector<RetainedDopriPhaseOutput>> RetainedCompute::DispatchD
                                 "invalid retained value");
             }
         output.valid = true;
-        if (dopri_phase_.input[1 + row * kDopriPhaseInputWords + 2410] == 1)
-            output.basis = bases[row];
-        else
-            output.basis = std::shared_ptr<const RetainedDopriBasis>(
-                new RetainedDopriBasis(inputs[row], output, dopri_basis_owner_));
     }
     return result;
 }
