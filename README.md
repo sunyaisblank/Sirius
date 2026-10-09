@@ -1,6 +1,6 @@
 # Sirius
 
-Sirius is a general relativistic ray tracing engine. It renders black holes, wormholes, and warp-drive spacetimes by integrating photon geodesics through analytically specified metric tensor fields, producing gravitational lensing, black hole shadows, and accretion disk emission from the geometry itself rather than from approximations layered on flat space. The engine is written in C++26 with Slang kernels for Vulkan execution, and it targets the fidelity standard of DNGR, the renderer DNEG and Kip Thorne built for Interstellar; `docs/SPECIFICATION.md` states that standard as measurable criteria and `docs/ADVERSARIAL_REVIEW.md` records the current scorecard and limits.
+Sirius is a general relativistic ray tracing engine. It renders black holes, wormholes, and warp-drive spacetimes by integrating photon geodesics through analytically specified metric tensor fields, producing gravitational lensing, black hole shadows, and accretion disk emission from the geometry itself rather than from approximations layered on flat space. The engine is written in C++26 with Slang kernels for Vulkan execution, and it targets the fidelity standard of DNGR, the renderer DNEG and Kip Thorne built for Interstellar. [The specification](docs/SPECIFICATION.md) states that target as measurable criteria; the numerical acceptance and backend limitations below distinguish implemented behavior from qualified results.
 
 ## The physics
 
@@ -25,6 +25,12 @@ relative disk and point-source intensities, and CPU polarisation from backend
 admission and performance. Its frozen inputs, refinements, error measures,
 device identity and revision limit each claim. The other registered metrics
 retain their implementation contracts but are not qualified by this profile.
+Separate finite CPU witnesses cover [charged rays](https://github.com/sunyaisblank/Sirius/issues/58),
+[Ellis rays](https://github.com/sunyaisblank/Sirius/issues/59),
+[Kottler rays](https://github.com/sunyaisblank/Sirius/issues/60), and
+[axial Alcubierre escapes](https://github.com/sunyaisblank/Sirius/issues/61);
+their stated input and revision bounds do not establish complete images or
+current-revision scientific and release qualification.
 The broader [specification](docs/SPECIFICATION.md), including DNGR, high-resolution,
 hardware and release requirements, remains in force.
 
@@ -193,10 +199,11 @@ cannot be relabelled as the complete estate.
 ## Documentation
 
 `docs/SPECIFICATION.md` defines the target, `docs/ARCHITECTURE.md` describes the
-implementation, and `docs/ADVERSARIAL_REVIEW.md` records evidence boundaries and
-limitations. `docs/SOURCE_CLOSEOUT.md` records the last complete local renderer
-validation. Retired engagement reports and detailed session logs remain in Git
-history.
+implementation, and `docs/STYLE.md` defines the source rules. Development and
+test instructions are in `docs/DEVELOPMENT.md` and `tests/README.md`;
+`docs/ATTESTATION.md` defines the external evidence and release runbooks.
+GitHub issues carry scoped acceptance records and remaining defects. Historical
+reviews, closeout reports and detailed session logs remain in Git history.
 
 ## References
 
