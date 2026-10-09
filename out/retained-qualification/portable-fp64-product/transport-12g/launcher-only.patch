@@ -1,0 +1,20 @@
+--- original8GiB/run_once.py
++++ transport-12g/run_once.py
+@@ -14,7 +14,7 @@
+ ROOT=HERE.parents[3]
+ REPORT=HERE/'run-report.json'
+ TIMEOUT=600
+-RSS_GUARD_KIB=8*1024*1024
++RSS_GUARD_KIB=12*1024*1024
+ RESERVE_KIB=2*1024*1024
+ def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+ def now(): return datetime.datetime.now(datetime.timezone.utc).isoformat()
+@@ -66,6 +66,8 @@
+    'driver_library':{'path':str(library),'sha256':sha(library)},
+    'peak_sampled_process_tree_rss_kib':0,'minimum_sampled_available_kib':available(),
+    'guard_reason':None,'terminated_by_supervisor':False,'terminal_exit_code':None}
++r['resource_bound_followup']=json.loads((HERE/'followup-provenance.json').read_text())
++r['followup_provenance_sha256']=sha(HERE/'followup-provenance.json')
+ save(r);started=time.monotonic()
+ with (HERE/'raw.log').open('w') as stdout,(HERE/'stderr.log').open('w') as stderr:
+     process=subprocess.Popen(command,cwd=ROOT,env=environment,stdout=stdout,stderr=stderr,start_new_session=True)

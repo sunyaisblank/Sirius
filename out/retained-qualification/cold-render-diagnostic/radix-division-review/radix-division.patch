@@ -1,0 +1,27 @@
+--- a/src/sirius/kernels/portable_binary32.h
++++ b/src/sirius/kernels/portable_binary32.h
+@@ -179,14 +179,16 @@
+         remainder <<= 1;
+         --exponent;
+     }
+-    uint quotient = 0u;
+-    for (uint i = 0u; i < 27u; ++i) {
+-        quotient <<= 1;
+-        if (remainder >= bb.significand) {
+-            remainder -= bb.significand;
+-            quotient |= 1u;
+-        }
+-        if (i != 26u) remainder <<= 1;
++    // Normalization gives d <= remainder < 2*d. Emit the leading bit,
++    // then the same 26 fractional bits in exact radix-256/4 chunks.
++    uint quotient = 1u;
++    remainder -= bb.significand;
++    for (uint chunk = 0u; chunk < 4u; ++chunk) {
++        const uint bits = chunk == 3u ? 2u : 8u;
++        const uint numerator = remainder << bits;
++        const uint digit = numerator / bb.significand;
++        remainder = numerator - digit * bb.significand;
++        quotient = (quotient << bits) | digit;
+     }
+     if (remainder != 0u) quotient |= 1u;
+     return PB32Round(sign, exponent, quotient);

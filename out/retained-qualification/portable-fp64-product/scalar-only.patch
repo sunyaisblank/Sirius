@@ -1,0 +1,23 @@
+--- original/src/sirius/kernels/retained_scalar.slang
++++ src/sirius/kernels/retained_scalar.slang
+@@ -3,6 +3,7 @@
+ // native float-control properties. Native arithmetic keeps its explicit order.
+ #ifdef SIRIUS_RETAINED_PORTABLE
+ #include "portable_binary32.h"
++#include "fp64_product.h"
+ typedef uint RPScalar;
+ RPScalar RPFromBits(uint bits) { return bits; }
+ uint RPBits(RPScalar value) { return value; }
+@@ -13,9 +14,9 @@
+ bool RPScalarLessEqual(RPScalar a, RPScalar b) { return PB32LessEqual(a, b); }
+ RPScalar RPScalarNegate(RPScalar value) { return PB32Negate(value); }
+ RPScalar RPScalarMax(RPScalar a, RPScalar b) { return PB32Less(a, b) ? b : a; }
+-RPScalar OrderedAdd32(RPScalar a, RPScalar b) { return PB32Add(a, b); }
+-RPScalar OrderedSubtract32(RPScalar a, RPScalar b) { return PB32Subtract(a, b); }
+-RPScalar OrderedMultiply32(RPScalar a, RPScalar b) { return PB32Multiply(a, b); }
++RPScalar OrderedAdd32(RPScalar a, RPScalar b) { return PB64Add(a, b); }
++RPScalar OrderedSubtract32(RPScalar a, RPScalar b) { return PB64Subtract(a, b); }
++RPScalar OrderedMultiply32(RPScalar a, RPScalar b) { return PB64Multiply(a, b); }
+ RPScalar OrderedDivide32(RPScalar a, RPScalar b) { return PB32Divide(a, b); }
+ RPScalar OrderedSqrt32(RPScalar value) { return PB32Sqrt(value); }
+ #else

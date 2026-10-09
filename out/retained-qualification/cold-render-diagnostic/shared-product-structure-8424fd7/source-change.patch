@@ -1,0 +1,27 @@
+diff --git a/src/sirius/kernels/portable_binary32.h b/src/sirius/kernels/portable_binary32.h
+index f1a1a01..4f038b9 100644
+--- a/src/sirius/kernels/portable_binary32.h
++++ b/src/sirius/kernels/portable_binary32.h
+@@ -271,10 +271,10 @@ SIRIUS_PB32_INLINE PB32Product PB32ProductResidual(uint a, uint b) {
+     r.valid = 0u;
+     // This is a bounded primitive, not a new policy for out-of-domain inputs.
+     if (PB32Abs(a) > 0x5d800000u || PB32Abs(b) > 0x5d800000u) return r;
+-    r.high = PB32Multiply(a, b);
+     if (PB32Zero(a) || PB32Zero(b)) {
+         // Exact cancellation in product - high has positive zero under RTE,
+         // including (-0)-(-0). The signed high product remains explicit.
++        r.high = (a ^ b) & 0x80000000u;
+         r.valid = 1u;
+         return r;
+     }
+@@ -282,6 +282,10 @@ SIRIUS_PB32_INLINE PB32Product PB32ProductResidual(uint a, uint b) {
+     int sumExponent = aa.exponent + bb.exponent;
+     // exact |a*b| = product * 2^(sumExponent-46).
+     PB32Wide product = PB32WideProduct(aa.significand, bb.significand);
++    // Same finite nonzero high projection as PB32Multiply, sharing the exact product.
++    bool upper = (product.hi & 0x00008000u) != 0u;
++    uint extended = PB32WideShiftJam(product, upper ? 21u : 20u);
++    r.high = PB32Round((a ^ b) >> 31, sumExponent + (upper ? 1 : 0), extended);
+     PB32Wide rounded;
+     rounded.lo = 0u;
+     rounded.hi = 0u;

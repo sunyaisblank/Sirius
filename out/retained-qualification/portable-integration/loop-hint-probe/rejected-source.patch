@@ -1,0 +1,85 @@
+diff --git a/src/sirius/kernels/portable_binary32.h b/src/sirius/kernels/portable_binary32.h
+index 4a7610e..6210488 100644
+--- a/src/sirius/kernels/portable_binary32.h
++++ b/src/sirius/kernels/portable_binary32.h
+@@ -12,8 +12,12 @@ namespace sirius::portable_binary32 {
+ using uint = std::uint32_t;
+ static_assert(sizeof(uint) == 4 && sizeof(int) == 4);
+ #define SIRIUS_PB32_INLINE inline
++#define SIRIUS_PB32_LOOP
+ #else
+ #define SIRIUS_PB32_INLINE
++// Keep bounded integer arithmetic loops compact in downstream shader compilers.
++// This optimization hint does not change their iterations or rounding.
++#define SIRIUS_PB32_LOOP [loop]
+ #endif
+ 
+ struct PB32Wide {
+@@ -81,11 +85,12 @@ SIRIUS_PB32_INLINE PB32Finite PB32Unpack(uint a) {
+         r.significand |= 0x00800000u;
+     else {
+         r.exponent = -126;
+-        if (r.significand != 0u)
+-            while (r.significand < 0x00800000u) {
++        if (r.significand != 0u) {
++            SIRIUS_PB32_LOOP while (r.significand < 0x00800000u) {
+                 r.significand <<= 1;
+                 --r.exponent;
+             }
++        }
+     }
+     return r;
+ }
+@@ -136,7 +141,7 @@ SIRIUS_PB32_INLINE uint PB32Add(uint a, uint b) {
+     } else {
+         result = ax - bx;
+         if (result == 0u) return 0u;
+-        while (result < 0x04000000u) {
++        SIRIUS_PB32_LOOP while (result < 0x04000000u) {
+             result <<= 1;
+             --exponent;
+         }
+@@ -170,7 +175,7 @@ SIRIUS_PB32_INLINE uint PB32Divide(uint a, uint b) {
+         --exponent;
+     }
+     uint quotient = 0u;
+-    for (uint i = 0u; i < 27u; ++i) {
++    SIRIUS_PB32_LOOP for (uint i = 0u; i < 27u; ++i) {
+         quotient <<= 1;
+         if (remainder >= bb.significand) {
+             remainder -= bb.significand;
+@@ -194,7 +199,7 @@ SIRIUS_PB32_INLINE uint PB32Sqrt(uint a) {
+     radicand.lo = aa.significand << shift;
+     radicand.hi = aa.significand >> (32u - shift);
+     uint remainder = 0u, root = 0u;
+-    for (int i = 26; i >= 0; --i) {
++    SIRIUS_PB32_LOOP for (int i = 26; i >= 0; --i) {
+         uint bit = uint(i) * 2u;
+         uint pair = bit >= 32u ? (radicand.hi >> (bit - 32u)) & 3u : (radicand.lo >> bit) & 3u;
+         remainder = (remainder << 2) | pair;
+@@ -212,7 +217,7 @@ SIRIUS_PB32_INLINE uint PB32FromUnsigned(uint a) {
+     if (a == 0u) return 0u;
+     uint probe = a;
+     int exponent = 0;
+-    while (probe > 1u) {
++    SIRIUS_PB32_LOOP while (probe > 1u) {
+         probe >>= 1;
+         ++exponent;
+     }
+@@ -252,7 +257,7 @@ SIRIUS_PB32_INLINE uint PB32RoundWide(uint sign, int leastBitExponent, PB32Wide
+     if ((magnitude.lo | magnitude.hi) == 0u) return sign << 31;
+     uint probe = magnitude.hi != 0u ? magnitude.hi : magnitude.lo;
+     int leading = magnitude.hi != 0u ? 32 : 0;
+-    while (probe > 1u) {
++    SIRIUS_PB32_LOOP while (probe > 1u) {
+         probe >>= 1;
+         ++leading;
+     }
+@@ -311,6 +316,7 @@ SIRIUS_PB32_INLINE PB32Product PB32ProductResidual(uint a, uint b) {
+ }
+ 
+ #undef SIRIUS_PB32_INLINE
++#undef SIRIUS_PB32_LOOP
+ #if defined(__cplusplus)
+ }  // namespace sirius::portable_binary32
+ #endif

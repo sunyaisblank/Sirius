@@ -1,0 +1,13 @@
+--- a/scripts/build-retained-kernels.py
++++ b/scripts/build-retained-kernels.py
+@@ -30,7 +30,9 @@
+                     f"-DSIRIUS_RETAINED_LAYERS={layers}",
+                     f"-DSIRIUS_RETAINED_PREFIX={prefix}"]
+     float_controls = [] if portable else ["-denorm-mode-fp32", "preserve"]
+-    subprocess.run([compiler, str(source), *definitions, "-I", str(source.parent), "-O0",
++    # Inline portable helpers before the existing SSA cleanup; preserve native -O0.
++    optimization = "-O1" if portable else "-O0"
++    subprocess.run([compiler, str(source), *definitions, "-I", str(source.parent), optimization,
+                     "-target", "spirv", "-profile", "spirv_1_5", "-entry", "ComputeMain",
+                     "-stage", "compute", *float_controls, "-o", str(raw)],
+                    check=True)
