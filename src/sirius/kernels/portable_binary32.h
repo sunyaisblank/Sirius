@@ -276,37 +276,13 @@ struct PB32Sum {
     uint high;
     uint low;
 };
-SIRIUS_PB32_INLINE PB32Sum PB32SumResidual(uint a, uint b) {
-    if (PB32Abs(a) < PB32Abs(b)) {
-        uint temporary = a;
-        a = b;
-        b = temporary;
-    }
+// Precondition: |a| >= |b| and both operands are finite with |a| <= 2^126.
+// Retained packing bounds public limbs by 2^120 and private limbs by 2^124;
+// accumulation and normalization preserve this ceiling before each call.
+SIRIUS_PB32_INLINE PB32Sum PB32FiniteSumResidual(uint a, uint b) {
     PB32Sum r;
     r.high = 0u;
     r.low = 0u;
-    // Above this finite bound, retain the original three rounded operations,
-    // including their infinity/NaN behavior. The exact branch cannot overflow.
-    if (PB32Abs(a) > 0x7e800000u) {
-        uint x = a, y = b;
-#if !defined(__cplusplus)
-        [loop]
-#endif
-            for (uint phase = 0u; phase < 3u; ++phase) {
-            uint sum = PB32Add(x, y);
-            if (phase == 0u) {
-                r.high = sum;
-                x = sum;
-                y = PB32Negate(a);
-            } else if (phase == 1u) {
-                x = b;
-                y = PB32Negate(sum);
-            } else {
-                r.low = sum;
-            }
-        }
-        return r;
-    }
     if (PB32Zero(b)) {
         r.high = PB32Zero(a) ? a & b : a;
         r.low = b;
@@ -354,6 +330,38 @@ SIRIUS_PB32_INLINE PB32Sum PB32SumResidual(uint a, uint b) {
         roundedUp ? PB32WideSubtract(rounded, exactSum) : PB32WideSubtract(exactSum, rounded);
     if ((difference.lo | difference.hi) != 0u)
         r.low = PB32RoundWide((a >> 31) ^ (roundedUp ? 1u : 0u), bb.exponent - 23, difference);
+    return r;
+}
+
+SIRIUS_PB32_INLINE PB32Sum PB32SumResidual(uint a, uint b) {
+    if (PB32Abs(a) < PB32Abs(b)) {
+        uint temporary = a;
+        a = b;
+        b = temporary;
+    }
+    if (PB32Abs(a) <= 0x7e800000u) return PB32FiniteSumResidual(a, b);
+    // Arbitrary words keep the original three rounded operations, including
+    // their infinity/NaN behavior. Only the bounded finite owner cannot overflow.
+    PB32Sum r;
+    r.high = 0u;
+    r.low = 0u;
+    uint x = a, y = b;
+#if !defined(__cplusplus)
+    [loop]
+#endif
+        for (uint phase = 0u; phase < 3u; ++phase) {
+        uint sum = PB32Add(x, y);
+        if (phase == 0u) {
+            r.high = sum;
+            x = sum;
+            y = PB32Negate(a);
+        } else if (phase == 1u) {
+            x = b;
+            y = PB32Negate(sum);
+        } else {
+            r.low = sum;
+        }
+    }
     return r;
 }
 

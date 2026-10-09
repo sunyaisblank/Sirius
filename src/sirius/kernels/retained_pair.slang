@@ -40,8 +40,8 @@ void RetainedSum32(RPScalar a,RPScalar b,out RPScalar hi,out RPScalar lo){
  }
 #endif
 #ifdef SIRIUS_RETAINED_PORTABLE
- // One exact integer sum owns the same high and residual words.
- PB32Sum sum=PB32SumResidual(RPBits(a),RPBits(b));
+ // Packing, accumulation and refusal checks bound these ordered operands.
+ PB32Sum sum=PB32FiniteSumResidual(RPBits(a),RPBits(b));
  hi=RPFromBits(sum.high);lo=RPFromBits(sum.low);
 #else
  hi=OrderedAdd32(a,b);lo=OrderedSubtract32(b,OrderedSubtract32(hi,a));
