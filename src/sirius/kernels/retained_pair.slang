@@ -129,14 +129,11 @@ RetainedPair RPPackCanonicalCenter(RetainedPair center,RPScalar error) {
 }
 #endif
 RetainedPair RPConstant(RPScalar x) {
-#ifdef SIRIUS_RETAINED_PORTABLE
-    // RPPack(x,+0,+0) preserves nonzero x and maps either zero sign to +0.
+    // A bounded scalar has no residual to normalize. Canonicalize either
+    // zero sign and keep the remaining limbs exact positive zero.
     if(!RPBounded(x,0x7b800000u))return RPInvalid();
     RetainedPair r;r.hi=(RPBits(x)&0x7fffffffu)==0u?RPZero():x;
     r.lo=RPZero();r.error=RPZero();r.valid=1;return r;
-#else
-    return RPPack(x,RPZero(),RPZero());
-#endif
 }
 RetainedPair RPCenter(RetainedPair a) {a.error=RPZero();return a;}
 RetainedPair RPNegate(RetainedPair a) {
