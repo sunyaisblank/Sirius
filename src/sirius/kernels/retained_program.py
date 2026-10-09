@@ -609,7 +609,7 @@ def build_endpoint_profile_program(parallel, profile):
         physical.extend(X + V)
     outputs = [v.v for line in g for v in line] + tangent + phase + physical
     assert len(outputs) == 100
-    program = compile_program([v.i for v in outputs], parallel, [v.i for v in outputs[:20]], homogeneous=parallel)
+    program = compile_program([v.i for v in outputs], parallel, [v.i for v in outputs[:20]])
     if parallel:
         # Preserve the existing Endpoint scratch and 3829-word output row.
         program['registers'] = max(program['registers'], 612)

@@ -174,7 +174,7 @@ TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
     // A driver's allocation requirement can exceed every logical shader span.
     // These fixed layout totals are independent of the production planner.
     for (const auto& [capacity, logical] : std::array<std::pair<std::size_t, std::uint64_t>, 3>{
-             {{1, 704448}, {24, 3334268}, {64, 7907868}}}) {
+             {{1, 704192}, {24, 3334012}, {64, 7907612}}}) {
         AdmissionDevice padded;
         padded.query_padding = 128;
         const auto required = RetainedCompute::RequiredAllocationBytes(padded, capacity);
@@ -187,7 +187,7 @@ TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
         EXPECT_EQ(padded.BufferAllocationBytes(), 0U);
         if (capacity == 24) {
             EXPECT_EQ(padded.queried_spans,
-                      (std::vector<std::uint64_t>{122728, 284544, 85952, 451104, 106432, 367584,
+                      (std::vector<std::uint64_t>{122728, 284544, 85952, 451104, 106176, 367584,
                                                   181492, 410784, 61292, 193344, 145452, 308736,
                                                   216520, 398304}));
         }
