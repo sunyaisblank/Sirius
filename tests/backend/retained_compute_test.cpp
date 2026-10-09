@@ -2429,6 +2429,99 @@ TEST_F(RetainedComputeTest, ProjectedEndpointsKeepPhysicalColumnsAndRetainedCont
             EXPECT_LE(difference, 1e-11 * (1 + std::abs(oracle.hi)));
         }
     }
+    // Curved projection must refuse invalid retained tangent products before
+    // publishing a root. Observe the prefix and untouched
+    // projected-input slots so a later suffix refusal cannot hide this failure.
+    RecordProperty("curved_projection_default_exercised", 0);
+    RecordProperty("curved_projection_fp64_exercised", 0);
+    const auto curved_inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(curved_inventory) << curved_inventory.error().Description();
+    const auto curved_index = ResolveVulkanDeviceIndex(*curved_inventory);
+    ASSERT_TRUE(curved_index) << curved_index.error().Description();
+    for (const bool wide : {false, true}) {
+        SCOPED_TRACE(wide ? "curved fp64 projection refusal" : "curved default projection refusal");
+        auto opened = CreateVulkanDevice(*curved_index);
+        ASSERT_TRUE(opened) << opened.error().Description();
+        ASSERT_EQ((*opened)->Info(), device->Info());
+        ASSERT_TRUE((*opened)->SetBufferAllocationLimit(8 * 1024 * 1024));
+        EXPECT_EQ((*opened)->BufferAllocationBytes(), 0U);
+        const auto required = RetainedCompute::RequiredAllocationBytes(**opened, 1);
+        ASSERT_TRUE(required) << required.error().Description();
+        TransferProbeDevice probe(**opened);
+        auto created = RetainedCompute::Create(probe, 1, wide);
+        if (wide && (!device->Info().supports_fp64 || !device->Info().rounds_fp64_to_nearest)) {
+            ASSERT_FALSE(created);
+            EXPECT_TRUE(probe.allocations.empty());
+            continue;
+        }
+        ASSERT_TRUE(created) << created.error().Description();
+        EXPECT_EQ((*opened)->BufferAllocationBytes(), *required);
+        ASSERT_EQ(probe.allocations.size(), 14U);
+        probe.capture_output = probe.allocations[5].handle;
+        namespace curved = sirius::test::retained_schwarzschild_endpoint;
+        ASSERT_STREQ(curved::cases[0].name, "axis-1-negative-outgoing");
+        const auto original = std::bit_cast<RetainedEndpointInput>(curved::cases[0].input);
+        const std::array original_rows{original};
+        auto accepted = (*created)->Endpoint(original_rows);
+        ASSERT_TRUE(accepted) << accepted.error().Description();
+        ASSERT_EQ(accepted->size(), 1U);
+        ASSERT_TRUE(accepted->front().valid);
+        ASSERT_EQ(probe.readbacks.size(), 1U);
+        const auto accepted_raw = probe.readbacks.front();
+        ASSERT_EQ(accepted_raw.size(), retained_program::kEndpointRowWords * sizeof(std::uint32_t));
+        auto bad = original;
+        bad.values[10] = RetainedValue::FromDouble(0x1p80);
+        const std::array bad_rows{bad};
+        probe.readbacks.clear();
+        const auto refused = (*created)->Endpoint(bad_rows);
+        ASSERT_TRUE(refused) << refused.error().Description();
+        ASSERT_EQ(refused->size(), 1U);
+        ASSERT_FALSE(refused->front().valid);
+        ASSERT_EQ(probe.readbacks.size(), 1U);
+        const auto& refused_raw = probe.readbacks.front();
+        ASSERT_EQ(refused_raw.size(), accepted_raw.size());
+        const auto words = [&](std::size_t first) {
+            std::array<std::uint32_t, 5> value{};
+            std::memcpy(value.data(), refused_raw.data() + first * sizeof(std::uint32_t),
+                        sizeof(value));
+            return value;
+        };
+        for (std::size_t field = 0; field < 20; ++field) {
+            SCOPED_TRACE(field);
+            EXPECT_TRUE(std::bit_cast<RetainedValue>(words(4 + 5 * field)).IsRepresented());
+            if (field == 18) continue;
+            const auto offset = (4 + 5 * field) * sizeof(std::uint32_t);
+            EXPECT_EQ(std::memcmp(refused_raw.data() + offset, accepted_raw.data() + offset,
+                                  5 * sizeof(std::uint32_t)),
+                      0);
+        }
+        const std::array<std::uint32_t, 5> one{0x3f800000U, 0U, 0U, 0U, 1U};
+        const std::array<std::uint32_t, 5> zero{0U, 0U, 0U, 0U, 1U};
+        EXPECT_EQ(words(4 + 5 * 10), one);  // g_yy = 1 at the signed-axis point.
+        EXPECT_EQ(words(4 + 5 * 18), (std::array<std::uint32_t, 5>{0x67800000U, 0U, 0U, 0U, 1U}));
+        for (std::size_t field = 45; field < 53; ++field)
+            EXPECT_EQ(words(504 + 5 * field), field == 49 ? one : zero);
+        for (const auto& value : refused->front().phase) EXPECT_EQ(value.valid, 0U);
+        for (const auto& value : refused->front().physical) EXPECT_EQ(value.valid, 0U);
+        const auto erased = [&](std::size_t first, std::size_t count) {
+            const auto bytes =
+                std::span(refused_raw)
+                    .subspan(first * sizeof(std::uint32_t), count * sizeof(std::uint32_t));
+            EXPECT_TRUE(std::all_of(bytes.begin(), bytes.end(),
+                                    [](std::byte word) { return word == std::byte{}; }));
+        };
+        erased(0, 4);
+        erased(104, 400);
+        RecordProperty(
+            wide ? "curved_projection_fp64_exercised" : "curved_projection_default_exercised", 1);
+        probe.readbacks.clear();
+        const auto recovered = (*created)->Endpoint(original_rows);
+        ASSERT_TRUE(recovered) << recovered.error().Description();
+        ASSERT_EQ(recovered->size(), 1U);
+        ASSERT_TRUE(recovered->front().valid);
+        ASSERT_EQ(probe.readbacks.size(), 1U);
+        EXPECT_EQ(probe.readbacks.front(), accepted_raw);
+    }
     EXPECT_EQ(device->BufferAllocationBytes(), allocation);
 
     // Compare the optional cooperative input path with the real integer
