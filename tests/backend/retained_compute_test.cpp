@@ -2178,8 +2178,9 @@ TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundary
                 for (std::size_t node = 0; node < program[base]; ++node) {
                     const auto instruction = base + 103 + 5 * node;
                     if (program[instruction] == 1 && program[instruction + 2] >= 45 &&
-                        program[instruction + 2] <= 52)
+                        program[instruction + 2] <= 52) {
                         ASSERT_GE(node, prefix);
+                    }
                 }
             };
             ASSERT_NO_FATAL_FAILURE(topology(0, 103 + 5 * program[0], specialized, 250));
