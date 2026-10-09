@@ -10,7 +10,7 @@ void RetainedSum32(RPScalar a,RPScalar b,out RPScalar hi,out RPScalar lo){
  // The optional normal-sum module declares RTE32 and validates all three
  // NoContraction decorations. Special/out-of-domain inputs keep the integer path.
  uint am=RPBits(a)&0x7fffffffu,bm=RPBits(b)&0x7fffffffu;
-#if defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT) || defined(SIRIUS_RETAINED_PARALLEL_DOPRI_PHASE)
+#if defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
  // Magnitude-ordered finite plus zero is exact, including its residual sign.
  if(bm==0u&&am<0x7f800000u) {
   hi=am!=0u?a:RPFromBits(RPBits(a)&RPBits(b));lo=b;return;
@@ -90,7 +90,7 @@ RPScalar RPFailureBound() { return RPFromBits(0x7f000000u); } // finite 2^127 se
 RPScalar RPUpAdd(RPScalar a,RPScalar b) {
     if(!RPBounded(a,0x7d800000u)||!RPBounded(b,0x7d800000u))return RPFailureBound();
     if(RPScalarEqual(a,RPZero()))return b;if(RPScalarEqual(b,RPZero()))return a;
-#if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_NORMAL_SUM32) && (defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT) || defined(SIRIUS_RETAINED_PARALLEL_DOPRI_PHASE))
+#if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_NORMAL_SUM32) && (defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT))
     // Positive normal inputs <= 2^124 have a normal finite sum <= 2^125.
     // The RTE32 module retains the same nearest-even result and upward word.
     uint aw=RPBits(a),bw=RPBits(b);
