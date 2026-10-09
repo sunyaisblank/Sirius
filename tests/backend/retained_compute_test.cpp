@@ -174,7 +174,7 @@ TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
     // A driver's allocation requirement can exceed every logical shader span.
     // These fixed layout totals are independent of the production planner.
     for (const auto& [capacity, logical] : std::array<std::pair<std::size_t, std::uint64_t>, 3>{
-             {{1, 704192}, {24, 3334012}, {64, 7907612}}}) {
+             {{1, 704448}, {24, 3334268}, {64, 7907868}}}) {
         AdmissionDevice padded;
         padded.query_padding = 128;
         const auto required = RetainedCompute::RequiredAllocationBytes(padded, capacity);
@@ -187,7 +187,7 @@ TEST(RetainedComputeAdmission, ArithmeticRefusalPrecedesKernelLoading) {
         EXPECT_EQ(padded.BufferAllocationBytes(), 0U);
         if (capacity == 24) {
             EXPECT_EQ(padded.queried_spans,
-                      (std::vector<std::uint64_t>{122728, 284544, 85952, 451104, 106176, 367584,
+                      (std::vector<std::uint64_t>{122728, 284544, 85952, 451104, 106432, 367584,
                                                   181492, 410784, 61292, 193344, 145452, 308736,
                                                   216520, 398304}));
         }
@@ -2163,9 +2163,28 @@ TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundary
             ASSERT_LT(specialized_offsets, program.size());
             ASSERT_EQ(program[specialized_offsets], 0U);
             ASSERT_EQ(program.back(), program[specialized]);
-            ASSERT_EQ(program.size() - specialized_offsets, 85U);
-            ASSERT_NE(std::find(program.begin() + specialized_offsets, program.end(), 202U),
-                      program.end());
+            const auto topology = [&](std::size_t base, std::size_t offsets, std::size_t end,
+                                      std::uint32_t prefix) {
+                ASSERT_LT(offsets, end);
+                ASSERT_EQ(program[offsets], 0U);
+                ASSERT_EQ(program[end - 1], program[base]);
+                ASSERT_NE(std::find(program.begin() + offsets, program.begin() + end, prefix),
+                          program.begin() + end);
+                for (std::size_t i = offsets + 1; i < end; ++i) {
+                    ASSERT_GT(program[i], program[i - 1]);
+                    ASSERT_LE(program[i], program[base]);
+                    ASSERT_LE(program[i] - program[i - 1], 64U);
+                }
+                for (std::size_t node = 0; node < program[base]; ++node) {
+                    const auto instruction = base + 103 + 5 * node;
+                    if (program[instruction] == 1 && program[instruction + 2] >= 45 &&
+                        program[instruction + 2] <= 52)
+                        ASSERT_GE(node, prefix);
+                }
+            };
+            ASSERT_NO_FATAL_FAILURE(topology(0, 103 + 5 * program[0], specialized, 250));
+            ASSERT_NO_FATAL_FAILURE(
+                topology(specialized, specialized_offsets, program.size(), 202));
 
             std::vector<RetainedEndpointInput> selection;
             for (std::size_t row = 20; row < 26; ++row) selection.push_back(inputs[row]);
