@@ -40,9 +40,14 @@ void RetainedSum32(RPScalar a,RPScalar b,out RPScalar hi,out RPScalar lo){
  }
 #endif
 #ifdef SIRIUS_RETAINED_PORTABLE
- // Packing, accumulation and refusal checks bound these ordered operands.
- PB32Sum sum=PB32FiniteSumResidual(RPBits(a),RPBits(b));
- hi=RPFromBits(sum.high);lo=RPFromBits(sum.low);
+ // Preserve the three ordered sums while sharing their integer body.
+ RPScalar x=a,y=b;
+ [loop] for(uint i=0;i<3;++i) {
+  RPScalar sum=OrderedAdd32(x,y);
+  if(i==0) {hi=sum;x=sum;y=RPScalarNegate(a);}
+  else if(i==1) {x=b;y=RPScalarNegate(sum);}
+  else lo=sum;
+ }
 #else
  hi=OrderedAdd32(a,b);lo=OrderedSubtract32(b,OrderedSubtract32(hi,a));
 #endif
