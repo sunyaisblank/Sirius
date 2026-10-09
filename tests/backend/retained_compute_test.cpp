@@ -3,6 +3,7 @@
 #include "sirius/backend/cpu/geodesic_tracer.h"
 #include "sirius/backend/retained_integrator.h"
 #include "sirius/backend/retained_trace_executor.h"
+#include "sirius/base/sha256.h"
 #include "sirius/core/twofold.h"
 
 #include <gtest/gtest.h>
@@ -2960,6 +2961,15 @@ TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
     EXPECT_FALSE(vulkan->LastDispatchTimestamp());
     const auto baseline_readbacks = std::move(readbacks);
     ASSERT_EQ(baseline_readbacks.size(), 11U);
+    for (std::size_t index = 0; index < baseline_readbacks.size(); ++index) {
+        const auto& [stage, bytes] = baseline_readbacks[index];
+        const auto digest = sirius::base::Sha256Hex(
+            std::span(reinterpret_cast<const std::uint8_t*>(bytes.data()), bytes.size()));
+        ASSERT_TRUE(digest) << digest.error();
+        RecordProperty("coupled_readback_" + std::to_string(index),
+                       std::format("stage={};bytes={};sha256={}", RetainedCompute::StageName(stage),
+                                   bytes.size(), *digest));
+    }
     // The sampler/event consumer needs the complete private capsule. A changed
     // packet tail, event curve, physical endpoint or control must not escape equality.
     for (unsigned mutation = 0; mutation < 7; ++mutation) {
