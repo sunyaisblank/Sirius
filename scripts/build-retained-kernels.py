@@ -254,9 +254,8 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     # with sixteen invocations and stride over their complete producer sets.
     execution_lanes = (16 if portable and normal_sum32 and source.stem in ("retained_endpoint", "retained_transport", "retained_dopri_phase")
                        else WORKGROUP_LANES if portable_parallel or not portable else 1)
-    # Both Endpoint paths share sixteen complete weighted tangent terms;
-    # portable projection also publishes its root to the continuation lanes.
-    projection_words = (16 * 5 + (7 if portable else 0)) if source.stem == "retained_endpoint" else 0
+    # Projection publishes its root and sixteen complete weighted tangent terms.
+    projection_words = 7 + 16 * 5 if portable and source.stem == "retained_endpoint" else 0
     if normal_sum32:
         if not portable or source.stem not in ("retained_transport", "retained_endpoint", "retained_dopri_phase"):
             raise ValueError("guarded normal sums are qualified only for portable Transport, Endpoint and DopriPhase")

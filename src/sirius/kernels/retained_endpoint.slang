@@ -7,8 +7,6 @@ import retained_pair;
 #if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
 // Lane zero publishes success, component, and all five retained root words.
 groupshared uint retainedProjection[7];
-#endif
-#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
 // Complete weighted terms preserve both retained multiplies and their status.
 groupshared uint retainedProjectionTerms[16 * 5];
 #endif
@@ -187,17 +185,12 @@ RetainedTriple Metric(uint rowBase, uint i, uint j) {
     return ReadStored(rowBase + 4 + 5 * (4 * i + j));
 }
 RetainedTriple Tangent(uint rowBase, uint i) { return ReadStored(rowBase + 4 + 5 * (16 + i)); }
-#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
+#if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
 void CacheProjectionTerm(uint rowBase, uint lane) {
     if (lane >= 16) return;
-#ifdef SIRIUS_RETAINED_PORTABLE
     RetainedTriple product = RTEvaluateArithmetic(Tangent(rowBase, lane / 4),
                                                   Tangent(rowBase, lane % 4), 4);
     RetainedTriple term = RTEvaluateArithmetic(Metric(rowBase, lane / 4, lane % 4), product, 4);
-#else
-    RetainedTriple product = RTMultiply(Tangent(rowBase, lane / 4), Tangent(rowBase, lane % 4));
-    RetainedTriple term = RTMultiply(Metric(rowBase, lane / 4, lane % 4), product);
-#endif
     uint base = 5 * lane;
     retainedProjectionTerms[base] = RPBits(term.hi);
     retainedProjectionTerms[base + 1] = RPBits(term.lo);
@@ -434,15 +427,7 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root) {
     return component < 4 && root.valid != 0;
 }
 #else
-RetainedTriple NativeProjectionTerm(uint rowBase, uint index, bool cached) {
-    if (cached) {
-        return ProjectionTerm(index);
-    } else {
-        return RTMultiply(Metric(rowBase, index / 4, index % 4),
-                          RTMultiply(Tangent(rowBase, index / 4), Tangent(rowBase, index % 4)));
-    }
-}
-bool Project(uint rowBase, out uint component, out RetainedTriple root, bool cached) {
+bool Project(uint rowBase, out uint component, out RetainedTriple root) {
     component = 4;
     root = RTInvalid();
     RetainedTriple best = RTInvalid();
@@ -450,7 +435,8 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root, bool cac
     RPScalar scale = RPZero();
     for (uint i = 0; i < 4; ++i)
         for (uint j = 0; j < 4; ++j) {
-            RetainedTriple term = NativeProjectionTerm(rowBase, 4 * i + j, cached);
+            RetainedTriple term = RTMultiply(Metric(rowBase, i, j),
+                                             RTMultiply(Tangent(rowBase, i), Tangent(rowBase, j)));
             defect = RTAdd(defect, term);
             scale = RPUpAdd(scale, RTAbsoluteUpper(term));
         }
@@ -469,7 +455,9 @@ bool Project(uint rowBase, out uint component, out RetainedTriple root, bool cac
                                         Tangent(rowBase, i)));
                 for (uint j = 0; j < 4; ++j)
                     if (j != c)
-                        d = RTAdd(d, NativeProjectionTerm(rowBase, 4 * i + j, cached));
+                        d = RTAdd(d,
+                                  RTMultiply(Metric(rowBase, i, j),
+                                             RTMultiply(Tangent(rowBase, i), Tangent(rowBase, j))));
             }
         RetainedTriple first = RTInvalid(), second = RTInvalid();
         if (RTExact(a, RPZero()))
@@ -755,7 +743,7 @@ bool SelectEndpointProgram(uint rowBase, inout uint programBase, inout uint coun
         }
         uint selected;
         RetainedTriple temporal;
-        if (!Project(rowBase, selected, temporal, false) || selected != 0) return;
+        if (!Project(rowBase, selected, temporal) || selected != 0) return;
         for (uint i = 0; i < 40; ++i) {
             RetainedTriple phase = ReadStored(rowBase + 504 + 5 * (4 + i));
             RetainedTriple physical = i % 8 == 4 ? RTNegate(phase) : phase;
@@ -782,13 +770,9 @@ bool SelectEndpointProgram(uint rowBase, inout uint programBase, inout uint coun
     }
     if (!SelectEndpointProgram(rowBase, programBase, count, registers, layers, prefix)) return;
     if (!EvaluateProgram(row, rowBase, programBase, count, registers, 20, lane, layers, prefix)) return;
-    // The published prefix owns all metric/tangent inputs. Every producer
-    // stores all five words, including refusal, before all lanes consume them.
-    CacheProjectionTerm(rowBase, lane);
-    GroupMemoryBarrierWithGroupSync();
     uint component;
     RetainedTriple root;
-    if (!Project(rowBase, component, root, true)) return;
+    if (!Project(rowBase, component, root)) return;
     for (uint i = 0; i < 4; ++i) {
         if (lane == 0)
             WriteStored(rowBase + 504 + 5 * (45 + i), i == component ? root : Tangent(rowBase, i));
