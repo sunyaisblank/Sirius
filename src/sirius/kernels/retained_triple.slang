@@ -171,7 +171,7 @@ RetainedTriple RTMultiply(RetainedTriple a,RetainedTriple b) {
     if(RTExact(b,RPOne())) return a;
     if(RTExact(a,RPFromSigned(-1))) return RTNegate(b);
     if(RTExact(b,RPFromSigned(-1))) return RTNegate(a);
-#if defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_FP64)
+#ifdef SIRIUS_RETAINED_PORTABLE
     RetainedTriple r=RTConstant(RPZero());
     // Same three full products, then the same three rounded products. Keeping
     // their calls in loop bodies bounds duplicated compiler input after inlining.
