@@ -1995,6 +1995,13 @@ TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundary
                 ASSERT_EQ(probe.readbacks.front().size(), rows.size() * row_bytes);
                 outputs = *returned;
                 raw = probe.readbacks.front();
+                const auto digest = sirius::base::Sha256Hex(
+                    std::span(reinterpret_cast<const std::uint8_t*>(raw.data()), raw.size()));
+                ASSERT_TRUE(digest) << digest.error();
+                RecordProperty("factored_endpoint_readback_" + std::to_string(decline_rte32) + "_" +
+                                   std::to_string(wide) + "_" + std::to_string(call),
+                               "rows=" + std::to_string(rows.size()) +
+                                   ";bytes=" + std::to_string(raw.size()) + ";sha256=" + *digest);
                 EXPECT_EQ((*opened)->BufferAllocationBytes(), allocation);
                 EXPECT_EQ(probe.allocations.size(), 14U);
             };
