@@ -498,7 +498,7 @@ REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
     "acceptance_criteria": "285f3a259b413a60cf934714d5bb8a0dce941159f606ba1f4f490efbc54fe1a8",
-    "required_dimensions": "b1917efe685d514ee76f743861e26017353dd2c693649d18cd7af0cead12a3bb",
+    "required_dimensions": "a051c21e5259f473e56e3603a8afac8cd1978dbec1cce6223d3f4cb73faabeb2",
     "capability_contracts": "4a32b1a16171759ce66d99f1c4370975424b87d3f36d6574f840efb8360a9bda",
 }
 # These groups match concrete optional compile boundaries. CPU transport tests

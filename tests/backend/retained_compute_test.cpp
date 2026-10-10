@@ -1888,6 +1888,146 @@ TEST_F(RetainedComputeTest, SchwarzschildStagesPreserveIndependentFieldsAndGener
 #endif
 }
 
+TEST_F(RetainedComputeTest, MixedIndependentTransportLayersPreserveWordsAndRefusal) {
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    namespace fixture = sirius::test::retained_transport;
+    std::vector<RetainedStepInput> witnesses;
+    for (const auto& item : fixture::cases)
+        witnesses.push_back(std::bit_cast<RetainedStepInput>(item.input));
+    ASSERT_EQ(witnesses.size(), 15U);
+
+    const auto& program = sirius::backend::retained_program::kTransportProgram;
+    const auto layer_base = 43U + 5U * program[0];
+    ASSERT_LT(layer_base + 2, program.size());
+    ASSERT_EQ(program[2], 40U);
+    ASSERT_EQ(program[layer_base], 0U);
+    ASSERT_EQ(program[layer_base + 1], 40U);
+    ASSERT_EQ(program[layer_base + 2], 47U);
+    // These input/constant producers read no scratch and own distinct writes.
+    // Moving six constants into the first layer preserves all dependencies,
+    // instruction order, layer count, register frame and both table positions.
+    for (std::size_t node = 0; node < 47; ++node) {
+        ASSERT_EQ(program[43 + 5 * node], node < 40 ? 1U : 0U);
+        ASSERT_EQ(program[44 + 5 * node], node);
+    }
+    for (std::size_t parameter = 0; parameter < 4; ++parameter)
+        ASSERT_EQ(witnesses.back().values[parameter].Center(), 0);
+    for (std::size_t row = 0; row + 1 < witnesses.size(); ++row)
+        ASSERT_TRUE(std::any_of(witnesses[row].values.begin(), witnesses[row].values.begin() + 4,
+                                [](const auto& value) { return value.Center() != 0; }));
+
+    const auto inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory) << inventory.error().Description();
+    const auto index = ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(index) << index.error().Description();
+    for (const bool decline_rte32 : {false, true}) {
+        for (const bool wide : {false, true}) {
+            SCOPED_TRACE(decline_rte32 ? "conservative integer admission" : "actual admission");
+            SCOPED_TRACE(wide ? "fp64 products" : "default products");
+            auto opened = CreateVulkanDevice(*index);
+            ASSERT_TRUE(opened) << opened.error().Description();
+            ASSERT_EQ((*opened)->Info(), device->Info());
+            ASSERT_TRUE((*opened)->SetBufferAllocationLimit(8 * 1024 * 1024));
+            TransferProbeDevice probe(**opened, decline_rte32);
+            auto created = RetainedCompute::Create(probe, 24, wide);
+            if (wide && (!device->Info().supports_fp64 || !device->Info().rounds_fp64_to_nearest)) {
+                ASSERT_FALSE(created);
+                EXPECT_NE(created.error().detail().find("binary64"), std::string::npos);
+                EXPECT_TRUE(probe.allocations.empty());
+                EXPECT_EQ((*opened)->BufferAllocationBytes(), 0U);
+                continue;
+            }
+            ASSERT_TRUE(created) << created.error().Description();
+            auto& instance = **created;
+            ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+            const auto transport_input = probe.allocations[2].handle;
+            probe.capture_output = probe.allocations[3].handle;
+            const auto row_bytes = probe.allocations[3].bytes / instance.Capacity();
+            ASSERT_EQ(row_bytes, sirius::backend::retained_program::kTransportRowWords * 4U);
+            const auto allocation = (*opened)->BufferAllocationBytes();
+            const auto required = RetainedCompute::RequiredAllocationBytes(probe, 24);
+            ASSERT_TRUE(required) << required.error().Description();
+            EXPECT_EQ(allocation, *required);
+            std::vector<RetainedStepOutput> observed;
+            std::vector<std::byte> raw;
+            const auto step = [&] {
+                probe.readbacks.clear();
+                const auto returned = instance.Step(witnesses);
+                ASSERT_TRUE(returned) << returned.error().Description();
+                ASSERT_EQ(returned->size(), witnesses.size());
+                ASSERT_EQ(probe.readbacks.size(), 1U);
+                ASSERT_EQ(probe.readbacks.front().size(), witnesses.size() * row_bytes);
+                observed = *returned;
+                raw = probe.readbacks.front();
+                EXPECT_EQ((*opened)->BufferAllocationBytes(), allocation);
+            };
+            const auto science = [&] {
+                for (std::size_t row = 0; row < witnesses.size(); ++row) {
+                    SCOPED_TRACE(fixture::cases[row].name);
+                    ASSERT_TRUE(StepAgrees(observed[row], fixture::cases[row]));
+                }
+            };
+            ASSERT_NO_FATAL_FAILURE(step());
+            ASSERT_NO_FATAL_FAILURE(science());
+            const auto original_raw = raw;
+
+            // Warmed Step uploads only its row prefix. This explicit full-span
+            // seam changes the actual device table, then restores that owner.
+            const auto table = 1 + instance.Capacity() * 230;
+            std::vector<std::uint32_t> complete_input(table + program.size());
+            complete_input[0] = static_cast<std::uint32_t>(instance.Capacity());
+            std::memcpy(complete_input.data() + 1, witnesses.data(),
+                        witnesses.size() * sizeof(RetainedStepInput));
+            std::copy(program.begin(), program.end(), complete_input.begin() + table);
+            complete_input[table + layer_base + 1] = 46;
+            ASSERT_TRUE(
+                probe.WriteBuffer(transport_input, std::as_bytes(std::span(complete_input))));
+            ASSERT_NO_FATAL_FAILURE(step());
+            ASSERT_NO_FATAL_FAILURE(science());
+            // Includes every active RHS, final field, status and reserved word.
+            EXPECT_EQ(raw, original_raw);
+
+            complete_input[table + 43 + 5 * 40] = 12;
+            ASSERT_TRUE(
+                probe.WriteBuffer(transport_input, std::as_bytes(std::span(complete_input))));
+            ASSERT_NO_FATAL_FAILURE(step());
+            for (std::size_t row = 0; row + 1 < witnesses.size(); ++row) {
+                SCOPED_TRACE(fixture::cases[row].name);
+                EXPECT_FALSE(observed[row].valid);
+                EXPECT_FALSE(observed[row].rhs_valid);
+                EXPECT_EQ(observed[row].stages, 1U);
+                std::array<std::uint32_t, 3> completion{};
+                std::memcpy(completion.data(), raw.data() + row * row_bytes, sizeof(completion));
+                EXPECT_EQ(completion, (std::array<std::uint32_t, 3>{0, 1, 0}));
+                for (const auto* values : {&observed[row].fifth, &observed[row].fourth,
+                                           &observed[row].increment, &observed[row].error})
+                    for (const auto& value : *values)
+                        EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(value)),
+                                  (std::array<std::uint32_t, 5>{}));
+                for (const auto& values : observed[row].rhs)
+                    for (const auto& value : values)
+                        EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>(value)),
+                                  (std::array<std::uint32_t, 5>{}));
+            }
+            // Analytic flat transport bypasses the bytecode interpreter.
+            ASSERT_TRUE(StepAgrees(observed.back(), fixture::cases.back()));
+            const auto flat_offset = (witnesses.size() - 1) * row_bytes;
+            EXPECT_TRUE(std::equal(raw.begin() + flat_offset, raw.end(),
+                                   original_raw.begin() + flat_offset, original_raw.end()));
+
+            std::copy(program.begin(), program.end(), complete_input.begin() + table);
+            ASSERT_TRUE(
+                probe.WriteBuffer(transport_input, std::as_bytes(std::span(complete_input))));
+            ASSERT_NO_FATAL_FAILURE(step());
+            ASSERT_NO_FATAL_FAILURE(science());
+            EXPECT_EQ(raw, original_raw);
+        }
+    }
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
 TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission) {
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
     namespace fixture = sirius::test::retained_endpoint_factor;
