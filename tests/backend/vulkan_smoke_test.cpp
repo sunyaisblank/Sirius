@@ -1058,6 +1058,8 @@ TEST(VulkanBackend, SubmissionErrorsDoNotImplyIdleCompletion) {
     EXPECT_TRUE(VulkanSubmissionNeedsCompletion(VK_SUCCESS, VK_ERROR_OUT_OF_DEVICE_MEMORY));
     EXPECT_TRUE(VulkanSubmissionNeedsCompletion(VK_ERROR_UNKNOWN, VK_SUCCESS));
     EXPECT_TRUE(VulkanSubmissionNeedsCompletion(VK_SUCCESS, VK_ERROR_UNKNOWN));
+    EXPECT_TRUE(VulkanSubmissionNeedsCompletion(VK_SUCCESS, VK_TIMEOUT));
+    EXPECT_TRUE(VulkanSubmissionNeedsCompletion(VK_SUCCESS, VK_NOT_READY));
 }
 
 }  // namespace

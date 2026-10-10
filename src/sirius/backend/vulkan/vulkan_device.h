@@ -68,6 +68,7 @@ struct VulkanDispatchTimestamp {
     std::array<std::uint64_t, 2> ticks{}, availability{};
     std::optional<double> device_span_ms;
     double host_submit_ms = 0, host_wait_ms = 0;
+    bool submission_fence = false;
 };
 
 class VulkanDevice final : public ComputeDevice {
@@ -183,6 +184,9 @@ class VulkanDevice final : public ComputeDevice {
     // One primary belongs to this serialized device owner. Re-record only
     // after completion; the pool also owns its eventual destruction.
     VkCommandBuffer dispatch_command_ = VK_NULL_HANDLE;
+    // Optional synchronous completion primitive. The pending guard also owns
+    // this fence; reset/destruction requires the same known completion boundary.
+    VkFence dispatch_fence_ = VK_NULL_HANDLE;
     VkDescriptorPool descriptor_pool_ = VK_NULL_HANDLE;
     VkPipelineCache pipeline_cache_ = VK_NULL_HANDLE;
     VkQueryPool timestamp_pool_ = VK_NULL_HANDLE;

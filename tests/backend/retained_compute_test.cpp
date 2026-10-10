@@ -3549,12 +3549,13 @@ TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
             std::format("phase={};stage={};begin={};end={};available0={};available1={};"
                         "device_ms={:.17g};host_submit_ms={:.17g};host_wait_ms={:.17g};"
                         "host_completion_ms={:.17g};pipeline_ms={:.17g};setup_ms={:.17g};"
-                        "cleanup_ms={:.17g};total_ms={:.17g}",
+                        "cleanup_ms={:.17g};total_ms={:.17g};submission_fence={}",
                         phase, stage, timestamp->ticks[0], timestamp->ticks[1],
                         timestamp->availability[0], timestamp->availability[1],
                         *timestamp->device_span_ms, timestamp->host_submit_ms,
                         timestamp->host_wait_ms, host->submit_wait_ms, host->pipeline_setup_ms,
-                        host->command_setup_ms, host->cleanup_ms, host->total_ms));
+                        host->command_setup_ms, host->cleanup_ms, host->total_ms,
+                        timestamp->submission_fence ? 1 : 0));
     };
     probe.after_dispatch = [&](std::span<const BufferHandle> bound, const DispatchTiming* host) {
         ASSERT_FALSE(bound.empty());
