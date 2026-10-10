@@ -230,9 +230,6 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
-    native_endpoint32 = source.stem == "retained_endpoint" and not fp64 and not portable
-    if native_endpoint32:
-        definitions.append("-DSIRIUS_RETAINED_NATIVE_ENDPOINT32=1")
     if transport_specialized is not None:
         if source.stem != "retained_transport":
             raise ValueError("the second transport table belongs only to Transport")
@@ -255,7 +252,7 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     portable_parallel = portable and source.stem in ("retained_transport", "retained_endpoint", "retained_dense", "retained_dopri_phase")
     # Normal Transport, Endpoint and DopriPhase cover complete 64-wide layers
     # with sixteen invocations and stride over their complete producer sets.
-    execution_lanes = (32 if native_endpoint32 else 16 if portable and normal_sum32 and source.stem in ("retained_endpoint", "retained_transport", "retained_dopri_phase")
+    execution_lanes = (16 if portable and normal_sum32 and source.stem in ("retained_endpoint", "retained_transport", "retained_dopri_phase")
                        else WORKGROUP_LANES if portable_parallel or not portable else 1)
     # Projection publishes its root and sixteen complete weighted tangent terms.
     projection_words = 7 + 16 * 5 if portable and source.stem == "retained_endpoint" else 0
