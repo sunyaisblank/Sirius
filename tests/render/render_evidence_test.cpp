@@ -43,6 +43,11 @@ TEST(RenderEvidence, RetainedWireRecordsFeedAttestationControls) {
         stats.tiles_rendered = imax ? 22528 : 2040;
         stats.continuation_capacity = 64;
         stats.retained_timing.projection_capacity = 128;
+        stats.retained_timing.first_request_waits = 11;
+        stats.retained_timing.first_request_wait_ms = 12.5;
+        stats.retained_timing.maximum_first_request_wait_ms = 3.25;
+        stats.retained_timing.awaiting_first_request = true;
+        stats.retained_timing.current_first_request_wait_ms = .75;
         stats.maximum_dispatch_rays = 64;
         stats.band_dispatches = imax ? 32736 : 3000;
         stats.retained_stage_dispatches =
@@ -77,6 +82,11 @@ TEST(RenderEvidence, RetainedWireRecordsFeedAttestationControls) {
         EXPECT_EQ(decoded["maximum_dispatch_rays"], 64);
         EXPECT_EQ(decoded["ray_capacity"], 64);
         EXPECT_EQ(decoded["retained_timing"]["projection_capacity"], 128);
+        EXPECT_EQ(decoded["retained_timing"]["first_request_waits"], 11);
+        EXPECT_EQ(decoded["retained_timing"]["first_request_wait_ms"], 12.5);
+        EXPECT_EQ(decoded["retained_timing"]["maximum_first_request_wait_ms"], 3.25);
+        EXPECT_EQ(decoded["retained_timing"]["awaiting_first_request"], true);
+        EXPECT_EQ(decoded["retained_timing"]["current_first_request_wait_ms"], .75);
         EXPECT_EQ(decoded["source_owner"], "host");
         EXPECT_EQ(decoded["route"], "retained");
         EXPECT_TRUE(decoded["dispatches"].is_number_integer());

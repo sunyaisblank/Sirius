@@ -173,6 +173,15 @@ std::string VulkanRenderEvidenceJson(const SessionConfig& config, const VulkanRe
             {"sample_batches", timing.sample_batches},
             {"sample_rows", timing.sample_rows},
             {"batch_row_counts", timing.batch_row_counts},
+            {"first_request_wait_scope",
+             "empty-queue predicate waits including lock reacquisition; completed waits end in "
+             "a request before coalescing, excluding stop-only wakes; the separate current wait "
+             "can include startup/session-tail idle and is not CPU/GPU starvation attribution"},
+            {"first_request_waits", timing.first_request_waits},
+            {"first_request_wait_ms", timing.first_request_wait_ms},
+            {"maximum_first_request_wait_ms", timing.maximum_first_request_wait_ms},
+            {"awaiting_first_request", timing.awaiting_first_request},
+            {"current_first_request_wait_ms", timing.current_first_request_wait_ms},
             {"coalescing_timeouts", timing.coalescing_timeouts},
             {"coalescing_underfilled", timing.coalescing_underfilled},
             {"coalescing_stopped", timing.coalescing_stopped},

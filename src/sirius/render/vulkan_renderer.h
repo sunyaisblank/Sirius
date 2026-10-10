@@ -92,6 +92,13 @@ struct VulkanRenderStats {
         std::uint64_t sample_batches = 0;
         std::uint64_t sample_rows = 0;
         std::vector<std::uint64_t> batch_row_counts;
+        // Request-released waits and a separate live snapshot; include startup
+        // and session-tail idle, not an exclusive CPU/GPU wall-time partition.
+        std::uint64_t first_request_waits = 0;
+        double first_request_wait_ms = 0;
+        double maximum_first_request_wait_ms = 0;
+        bool awaiting_first_request = false;
+        double current_first_request_wait_ms = 0;
         std::uint64_t coalescing_timeouts = 0;
         std::uint64_t coalescing_underfilled = 0;
         std::uint64_t coalescing_stopped = 0;

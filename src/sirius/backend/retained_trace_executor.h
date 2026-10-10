@@ -3,11 +3,13 @@
 #include "sirius/backend/retained_integrator.h"
 #include "sirius/backend/trace_step_executor.h"
 
+#include <chrono>
 #include <condition_variable>
 #include <deque>
 #include <functional>
 #include <map>
 #include <mutex>
+#include <optional>
 #include <thread>
 #include <vector>
 
@@ -80,8 +82,18 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
         std::uint64_t camera_rows = 0;
         std::uint64_t sample_rows = 0;
         std::vector<std::uint64_t> batch_row_counts;
-        // Predicate wait wall time includes lock reacquisition. Untimed idle
-        // waits for the first request are outside this coalescing observation.
+        // Empty-queue waits released by a request, including startup and lock
+        // reacquisition; stop-only wakes are excluded. Completion precedes
+        // coalescing, so this count can be one ahead of completed batches.
+        std::uint64_t first_request_waits = 0;
+        double first_request_wait_ms = 0;
+        double maximum_first_request_wait_ms = 0;
+        // Read-only live snapshot, separate from completed wait totals. It may
+        // include session-tail idle and does not establish CPU or GPU starvation.
+        bool awaiting_first_request = false;
+        double current_first_request_wait_ms = 0;
+        // Predicate wait wall time includes lock reacquisition. First-request
+        // waiting remains outside this coalescing observation.
         std::uint64_t coalescing_timeouts = 0;
         std::uint64_t coalescing_underfilled = 0;
         std::uint64_t coalescing_stopped = 0;
@@ -153,6 +165,8 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
     std::optional<base::Error> error_;
     Stats stats_;
     bool stopping_ = false;
+    // Initialized before the constructor starts dispatcher_; mutex-owned.
+    std::optional<std::chrono::steady_clock::time_point> first_request_wait_started_;
     std::thread dispatcher_;
 };
 

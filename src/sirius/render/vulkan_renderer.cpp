@@ -586,6 +586,13 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
                       << " safety reductions, " << progress.coalescing_wait_ms / 1000
                       << "s coalescing, " << progress.execute_ms / 1000 << "s batch execution, "
                       << progress.acceleration_ms / 1000 << "s summed worker acceleration\n";
+            std::clog << std::format(
+                "[Vulkan] Retained dispatcher first-request wait: completed_waits={}, "
+                "completed_wait_ms={:.6f}, maximum_completed_wait_ms={:.6f}, "
+                "awaiting_first_request={}, current_wait_ms={:.6f}\n",
+                progress.first_request_waits, progress.first_request_wait_ms,
+                progress.maximum_first_request_wait_ms, progress.awaiting_first_request,
+                progress.current_first_request_wait_ms);
             const auto measured = progress.interval_measurements;
             std::clog << std::format(
                 "[Vulkan] Retained attempt attribution: measured_rows={}, "
@@ -689,6 +696,11 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     timing.sample_batches = execution.sample_batches;
     timing.sample_rows = execution.sample_rows;
     timing.batch_row_counts = execution.batch_row_counts;
+    timing.first_request_waits = execution.first_request_waits;
+    timing.first_request_wait_ms = execution.first_request_wait_ms;
+    timing.maximum_first_request_wait_ms = execution.maximum_first_request_wait_ms;
+    timing.awaiting_first_request = execution.awaiting_first_request;
+    timing.current_first_request_wait_ms = execution.current_first_request_wait_ms;
     timing.coalescing_timeouts = execution.coalescing_timeouts;
     timing.coalescing_underfilled = execution.coalescing_underfilled;
     timing.coalescing_stopped = execution.coalescing_stopped;

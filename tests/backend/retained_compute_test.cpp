@@ -51,6 +51,17 @@
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
 namespace sirius::backend {
 struct RetainedTraceExecutorTestPeer {
+    static std::optional<RetainedTraceExecutor::Stats> WaitForFirstRequest(
+        RetainedTraceExecutor& executor) {
+        // A deadlock watchdog, not a duration/performance acceptance threshold.
+        const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(5);
+        do {
+            const auto stats = executor.Statistics();
+            if (stats.awaiting_first_request) return stats;
+            std::this_thread::yield();
+        } while (std::chrono::steady_clock::now() < deadline);
+        return std::nullopt;
+    }
     static std::array<std::size_t, 3> WaitForQueued(RetainedTraceExecutor& executor) {
         std::unique_lock lock(executor.mutex_);
         executor.available_.wait(lock, [&] { return !executor.requests_.empty(); });
@@ -871,6 +882,10 @@ void CheckStickyErrorDrainsQueuedRequests(ComputeDevice& device) {
             return result.has_value();
         });
         entered.wait();
+        // The dispatcher is held in execution, after its first-request wait.
+        const auto dispatching = executor.Statistics();
+        EXPECT_FALSE(dispatching.awaiting_first_request);
+        EXPECT_EQ(dispatching.current_first_request_wait_ms, 0);
         sirius::core::Lightray ray{};
         ray.position(1) = 5;
         ray.velocity(0) = -1;
@@ -4285,7 +4300,18 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
             }
         } release_scope{release, held, executor};
         registered.get_future().wait();
+        const auto waiting = RetainedTraceExecutorTestPeer::WaitForFirstRequest(executor);
+        ASSERT_TRUE(waiting);
         const auto mixed_before = executor.Statistics();
+        EXPECT_TRUE(mixed_before.awaiting_first_request);
+        EXPECT_EQ(mixed_before.first_request_waits, waiting->first_request_waits);
+        EXPECT_EQ(mixed_before.first_request_wait_ms, waiting->first_request_wait_ms);
+        EXPECT_EQ(mixed_before.maximum_first_request_wait_ms,
+                  waiting->maximum_first_request_wait_ms);
+        EXPECT_TRUE(std::isfinite(waiting->current_first_request_wait_ms));
+        EXPECT_GE(waiting->current_first_request_wait_ms, 0);
+        EXPECT_GE(mixed_before.current_first_request_wait_ms,
+                  waiting->current_first_request_wait_ms);
         trace_ready = executor.Statistics().coalescing_traces_ready;
         auto standalone = std::async(std::launch::async, [&] {
             sirius::core::KerrSchildFamily camera_metric(
@@ -4299,6 +4325,9 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
         EXPECT_TRUE(executor.Step(ray, flat, config, coupled, comparison));
         EXPECT_TRUE(standalone.get());
         const auto mixed_after = executor.Statistics();
+        EXPECT_GT(mixed_after.first_request_waits, mixed_before.first_request_waits);
+        EXPECT_GE(mixed_after.maximum_first_request_wait_ms,
+                  mixed_before.current_first_request_wait_ms);
         EXPECT_EQ(mixed_after.coalescing_traces_ready, trace_ready);
         const auto mixed_batches = mixed_after.batches - mixed_before.batches;
         EXPECT_GT(mixed_batches, 0U);
@@ -4348,6 +4377,13 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
     RecordProperty("coordinator_batches", std::to_string(timing.batches));
     RecordProperty("coordinator_full_batches", std::to_string(timing.full_batches));
     RecordProperty("coordinator_rows", std::to_string(observed_rows));
+    RecordProperty("first_request_waits", std::to_string(timing.first_request_waits));
+    RecordProperty("first_request_wait_ms", std::to_string(timing.first_request_wait_ms));
+    RecordProperty("maximum_first_request_wait_ms",
+                   std::to_string(timing.maximum_first_request_wait_ms));
+    RecordProperty("awaiting_first_request", timing.awaiting_first_request ? "true" : "false");
+    RecordProperty("current_first_request_wait_ms",
+                   std::to_string(timing.current_first_request_wait_ms));
     RecordProperty("coalescing_timeouts", std::to_string(timing.coalescing_timeouts));
     RecordProperty("coalescing_underfilled", std::to_string(timing.coalescing_underfilled));
     RecordProperty("coalescing_traces_ready", std::to_string(timing.coalescing_traces_ready));

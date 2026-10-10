@@ -101,7 +101,15 @@ void RetainedTraceExecutor::RejectLastInterval() {
 
 RetainedTraceExecutor::Stats RetainedTraceExecutor::Statistics() const {
     std::lock_guard lock(mutex_);
-    return stats_;
+    auto result = stats_;
+    if (first_request_wait_started_) {
+        result.awaiting_first_request = true;
+        result.current_first_request_wait_ms =
+            std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() -
+                                                      *first_request_wait_started_)
+                .count();
+    }
+    return result;
 }
 
 void RetainedTraceExecutor::Run() {
@@ -119,8 +127,22 @@ void RetainedTraceExecutor::Run() {
         bool draining_error = false;
         {
             std::unique_lock lock(mutex_);
+            if (!stopping_ && requests_.empty())
+                first_request_wait_started_ = std::chrono::steady_clock::now();
             available_.wait(lock, [&] { return stopping_ || !requests_.empty(); });
+            const auto first_request_started = first_request_wait_started_;
+            first_request_wait_started_.reset();
             if (stopping_ && requests_.empty()) return;
+            if (first_request_started) {
+                const double waited_ms =
+                    std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() -
+                                                              *first_request_started)
+                        .count();
+                ++stats_.first_request_waits;
+                stats_.first_request_wait_ms += waited_ms;
+                stats_.maximum_first_request_wait_ms =
+                    std::max(stats_.maximum_first_request_wait_ms, waited_ms);
+            }
             // A tail batch is ready when every live trace thread is queued.
             // Standalone calls remain independent of trace registration, and
             // the bounded window guarantees progress during intervening host work.
