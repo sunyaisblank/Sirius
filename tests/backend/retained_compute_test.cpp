@@ -5562,17 +5562,153 @@ TEST_F(RetainedComputeTest, RejectedStepRowsCannotExposeOldOrPartialCandidates) 
 TEST_F(RetainedComputeTest, Fp64ProductsPreserveIndependentScienceOrDeclineUnsupportedDevices) {
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
     RecordProperty("fma_fp32_enabled", static_cast<int>(device->Info().fma_fp32_enabled));
-    auto wide = RetainedCompute::Create(*device, 24, true);
+    RecordProperty("selected_device", device->Info().name);
+    RecordProperty("selected_driver",
+                   device->Info().driver_name + ": " + device->Info().driver_info);
+    RecordProperty("product_mode", "fp64 requested; selected modules recorded independently");
+    RecordProperty("preserves_fp32_denormals", device->Info().preserves_fp32_denormals);
+    RecordProperty("rounds_fp32_to_nearest", device->Info().rounds_fp32_to_nearest);
+    RecordProperty("supports_fp64", device->Info().supports_fp64);
+    RecordProperty("rounds_fp64_to_nearest", device->Info().rounds_fp64_to_nearest);
+    TransferProbeDevice probe(*device);
+    probe.independent_pairs = true;
+    std::size_t modules = 0;
+    probe.after_load = [&](std::span<const std::uint32_t> code) {
+        ASSERT_LT(modules, RetainedCompute::kStageCount);
+        const auto digest = sirius::base::Sha256Hex(
+            std::span(reinterpret_cast<const std::uint8_t*>(code.data()), code.size_bytes()));
+        ASSERT_TRUE(digest) << digest.error();
+        RecordProperty("selected_module_" + std::to_string(modules),
+                       std::format("stage={};bytes={};sha256={}",
+                                   RetainedCompute::StageName(
+                                       static_cast<RetainedCompute::KernelStage>(modules)),
+                                   code.size_bytes(), *digest));
+        ++modules;
+    };
+    auto wide = RetainedCompute::Create(probe, 24, true);
     if (!device->Info().supports_fp64 || !device->Info().rounds_fp64_to_nearest) {
         ASSERT_FALSE(wide);
         EXPECT_NE(wide.error().detail().find("binary64"), std::string::npos);
         return;
     }
     ASSERT_TRUE(wide) << wide.error().Description();
+    ASSERT_EQ(modules, RetainedCompute::kStageCount);
+    ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+    auto* vulkan = dynamic_cast<VulkanDevice*>(device.get());
+    ASSERT_NE(vulkan, nullptr);
+    const auto properties = vulkan->TimestampProperties();
+    RecordProperty("timestamp_valid_bits", std::to_string(properties.valid_bits));
+    RecordProperty("timestamp_period_ns", std::format("{:.17g}", properties.period_ns));
+    const auto timestamps = vulkan->SetDispatchTimestampsEnabled(true);
+    RecordProperty("timestamp_observation",
+                   timestamps ? "enabled" : timestamps.error().Description());
+    RecordProperty("observation_scope",
+                   "unchanged original FP64 science calls, no repeats; wide-only ordered "
+                   "dispatch/readback observations, narrow call has only a host span; device spans "
+                   "include barriers/scheduling, not isolated shader or calibrated driver time; "
+                   "complete-call spans include marker/capture observers and exclude digest "
+                   "serialization, assertions and result disposal; no frame/cold/release claim");
+    using Stage = RetainedCompute::KernelStage;
+    using Readback = std::pair<Stage, std::vector<std::byte>>;
+    std::vector<Readback> readbacks;
+    std::string phase;
+    std::size_t observations = 0;
+    const auto capture = [&](const std::string& stage, const DispatchTiming* host) {
+        ASSERT_NE(host, nullptr);
+        const auto key = "device_observation_" + std::to_string(observations++);
+        auto value = std::format(
+            "phase={};stage={};pipeline_ms={:.17g};setup_ms={:.17g};"
+            "host_completion_ms={:.17g};cleanup_ms={:.17g};total_ms={:.17g}",
+            phase, stage, host->pipeline_setup_ms, host->command_setup_ms, host->submit_wait_ms,
+            host->cleanup_ms, host->total_ms);
+        if (const auto& timestamp = vulkan->LastDispatchTimestamp(); timestamp) {
+            value += std::format(
+                ";query_result={};begin={};end={};available0={};available1={};"
+                "host_submit_ms={:.17g};host_wait_ms={:.17g};device_ms={}",
+                static_cast<int>(timestamp->query_result), timestamp->ticks[0], timestamp->ticks[1],
+                timestamp->availability[0], timestamp->availability[1], timestamp->host_submit_ms,
+                timestamp->host_wait_ms,
+                timestamp->device_span_ms ? std::format("{:.17g}", *timestamp->device_span_ms)
+                                          : "unavailable");
+        }
+        RecordProperty(key, value);
+    };
+    probe.after_dispatch = [&](std::span<const BufferHandle> bound, const DispatchTiming* host) {
+        ASSERT_FALSE(bound.empty());
+        ASSERT_FALSE(probe.submissions.empty());
+        for (std::size_t i = 0; i < probe.allocations.size(); i += 2)
+            if (bound[0].value == probe.allocations[i].handle.value) {
+                capture(std::format("{};groups_x={}",
+                                    RetainedCompute::StageName(static_cast<Stage>(i / 2)),
+                                    probe.submissions.back().x),
+                        host);
+                return;
+            }
+        FAIL() << "unknown FP64 observation stage";
+    };
+    probe.after_pair_timing = [&](const IndependentPairTiming* host) {
+        ASSERT_NE(host, nullptr);
+        ASSERT_GE(probe.writes.size(), 2U);
+        const auto& endpoint_write = probe.writes[probe.writes.size() - 2];
+        const auto& dense_write = probe.writes.back();
+        ASSERT_EQ(endpoint_write.handle.value, probe.allocations[4].handle.value);
+        ASSERT_EQ(dense_write.handle.value, probe.allocations[6].handle.value);
+        ASSERT_GE(endpoint_write.bytes, sizeof(std::uint32_t));
+        ASSERT_GE(dense_write.bytes, sizeof(std::uint32_t));
+        // Both programs were already uploaded by the preceding original calls;
+        // these two transfers contain only their actual active row prefixes.
+        const auto endpoint_bytes = endpoint_write.bytes - sizeof(std::uint32_t);
+        const auto dense_bytes = dense_write.bytes - sizeof(std::uint32_t);
+        ASSERT_EQ(endpoint_bytes % sizeof(RetainedEndpointInput), 0U);
+        ASSERT_EQ(dense_bytes % sizeof(RetainedDenseInput), 0U);
+        capture(std::format("endpoint+dense;endpoint_rows={};dense_rows={}",
+                            endpoint_bytes / sizeof(RetainedEndpointInput),
+                            dense_bytes / sizeof(RetainedDenseInput)),
+                &host->combined);
+    };
+    probe.after_read = [&](BufferHandle buffer, std::span<std::byte> bytes) {
+        for (std::size_t i = 1; i < probe.allocations.size(); i += 2)
+            if (buffer.value == probe.allocations[i].handle.value) {
+                readbacks.emplace_back(static_cast<Stage>(i / 2),
+                                       std::vector<std::byte>(bytes.begin(), bytes.end()));
+                return;
+            }
+        FAIL() << "unknown FP64 readback stage";
+    };
+    const auto observe = [&](const char* name, std::size_t expected_reads, auto&& operation) {
+        phase = name;
+        readbacks.clear();
+        const auto started = std::chrono::steady_clock::now();
+        auto result = operation();
+        const auto finished = std::chrono::steady_clock::now();
+        if (result) EXPECT_EQ(readbacks.size(), expected_reads);
+        RecordProperty(
+            phase + "_complete_call_ms",
+            std::format("{:.17g}",
+                        std::chrono::duration<double, std::milli>(finished - started).count()));
+        for (std::size_t index = 0; index < readbacks.size(); ++index) {
+            const auto& [stage, bytes] = readbacks[index];
+            const auto stride =
+                probe.allocations[2 * static_cast<std::size_t>(stage) + 1].bytes / 24;
+            EXPECT_GT(stride, 0U);
+            if (stride == 0) continue;
+            EXPECT_EQ(bytes.size() % stride, 0U);
+            const auto digest = sirius::base::Sha256Hex(
+                std::span(reinterpret_cast<const std::uint8_t*>(bytes.data()), bytes.size()));
+            EXPECT_TRUE(digest);
+            if (digest)
+                RecordProperty(phase + "_readback_" + std::to_string(index),
+                               std::format("stage={};rows={};bytes={};sha256={}",
+                                           RetainedCompute::StageName(stage), bytes.size() / stride,
+                                           bytes.size(), *digest));
+        }
+        RecordProperty(phase + "_readbacks", std::to_string(readbacks.size()));
+        return result;
+    };
     std::vector<RetainedRayCameraInput> cameras;
     for (const auto& fixture : sirius::test::retained_ray_camera::cases)
         cameras.push_back(std::bit_cast<RetainedRayCameraInput>(fixture.input));
-    const auto launched = (*wide)->RayCamera(cameras);
+    const auto launched = observe("ray_camera", 1, [&] { return (*wide)->RayCamera(cameras); });
     ASSERT_TRUE(launched) << launched.error().Description();
     for (std::size_t row = 0; row < cameras.size(); ++row)
         EXPECT_TRUE(CameraAgrees((*launched)[row], sirius::test::retained_ray_camera::cases[row]));
@@ -5584,11 +5720,11 @@ TEST_F(RetainedComputeTest, Fp64ProductsPreserveIndependentScienceOrDeclineUnsup
         std::copy_n(steps.back().values.begin(), 45, endpoint.values.begin());
         endpoints.push_back(endpoint);
     }
-    const auto stepped = (*wide)->Step(steps);
+    const auto stepped = observe("transport", 1, [&] { return (*wide)->Step(steps); });
     ASSERT_TRUE(stepped) << stepped.error().Description();
     for (std::size_t row = 0; row < steps.size(); ++row)
         EXPECT_TRUE(StepAgrees((*stepped)[row], sirius::test::retained_transport::cases[row]));
-    const auto projected = (*wide)->Endpoint(endpoints);
+    const auto projected = observe("endpoint", 1, [&] { return (*wide)->Endpoint(endpoints); });
     ASSERT_TRUE(projected) << projected.error().Description();
     std::vector<RetainedIntervalInput> intervals(steps.size());
     std::vector<RetainedInitializeInput> physical(steps.size());
@@ -5611,11 +5747,14 @@ TEST_F(RetainedComputeTest, Fp64ProductsPreserveIndependentScienceOrDeclineUnsup
                   physical[row].values.begin() + 4);
         physical[row].values[44] = steps[row].values[44];
     }
-    const auto initialized = (*wide)->Initialize(physical);
+    const auto initialized =
+        observe("initialize", 1, [&] { return (*wide)->Initialize(physical); });
     ASSERT_TRUE(initialized) << initialized.error().Description();
     for (const auto& row : *initialized) EXPECT_TRUE(row.valid);
-    const auto narrow_intervals = AttemptRetainedIntervals(*compute, intervals);
-    const auto wide_intervals = AttemptRetainedIntervals(**wide, intervals);
+    const auto narrow_intervals = observe(
+        "narrow_intervals", 0, [&] { return AttemptRetainedIntervals(*compute, intervals); });
+    const auto wide_intervals =
+        observe("wide_intervals", 10, [&] { return AttemptRetainedIntervals(**wide, intervals); });
     ASSERT_TRUE(narrow_intervals) << narrow_intervals.error().Description();
     ASSERT_TRUE(wide_intervals) << wide_intervals.error().Description();
     for (std::size_t row = 0; row < intervals.size(); ++row) {
@@ -5631,11 +5770,13 @@ TEST_F(RetainedComputeTest, Fp64ProductsPreserveIndependentScienceOrDeclineUnsup
     }
     const auto pair_inputs = std::span<const RetainedIntervalInput>(intervals).first(2);
     const auto serialized_before = (*wide)->Statistics();
-    const auto serialized = AttemptRetainedIntervals(**wide, pair_inputs, 2);
+    const auto serialized =
+        observe("serialized", 10, [&] { return AttemptRetainedIntervals(**wide, pair_inputs, 2); });
     ASSERT_TRUE(serialized) << serialized.error().Description();
     EXPECT_EQ((*wide)->Statistics()[2].submissions - serialized_before[2].submissions, 6U);
     const auto paired_before = (*wide)->Statistics();
-    const auto paired = AttemptRetainedIntervals(**wide, pair_inputs, 4);
+    const auto paired =
+        observe("paired", 7, [&] { return AttemptRetainedIntervals(**wide, pair_inputs, 4); });
     ASSERT_TRUE(paired) << paired.error().Description();
     EXPECT_EQ((*wide)->Statistics()[2].submissions - paired_before[2].submissions, 3U);
     for (std::size_t row = 0; row < pair_inputs.size(); ++row) {
@@ -5643,6 +5784,9 @@ TEST_F(RetainedComputeTest, Fp64ProductsPreserveIndependentScienceOrDeclineUnsup
         ASSERT_TRUE((*paired)[row].admissible);
         EXPECT_TRUE(IntervalBitsAgree((*paired)[row], (*serialized)[row]));
     }
+    RecordProperty("device_observations", std::to_string(observations));
+    EXPECT_EQ(observations, 30U);
+    EXPECT_TRUE(vulkan->SetDispatchTimestampsEnabled(false));
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif
