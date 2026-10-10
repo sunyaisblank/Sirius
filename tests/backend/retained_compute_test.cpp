@@ -5681,7 +5681,9 @@ TEST_F(RetainedComputeTest, Fp64ProductsPreserveIndependentScienceOrDeclineUnsup
         const auto started = std::chrono::steady_clock::now();
         auto result = operation();
         const auto finished = std::chrono::steady_clock::now();
-        if (result) EXPECT_EQ(readbacks.size(), expected_reads);
+        if (result) {
+            EXPECT_EQ(readbacks.size(), expected_reads);
+        }
         RecordProperty(
             phase + "_complete_call_ms",
             std::format("{:.17g}",
