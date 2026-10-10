@@ -242,18 +242,13 @@ def compile_parallel_program(outputs, live, prefix_outputs=None, homogeneous=Fal
                 remaining[old] = len(local)
                 for dependency in local:
                     consumers[dependency].add(old)
-            # Release longer remaining dependency chains first inside the
-            # chosen opcode cohort; keep its homogeneous arithmetic and cap.
-            height = {}
-            for old in sorted(phase, reverse=True):
-                height[old] = 1 + max((height[c] for c in consumers[old]), default=0)
             ready = {old for old in phase if remaining[old] == 0}
             while ready:
                 grouped = {}
                 for old in sorted(ready):
                     grouped.setdefault(ops[old][0], []).append(old)
                 opcode = max(grouped, key=lambda op: (len(grouped[op]), -op))
-                layer = sorted(grouped[opcode], key=lambda old: (-height[old], old))[:64]
+                layer = grouped[opcode][:64]
                 layers.append(layer)
                 ready.difference_update(layer)
                 for old in layer:
