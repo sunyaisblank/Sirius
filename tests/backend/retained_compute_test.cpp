@@ -3051,10 +3051,44 @@ TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
         ASSERT_NE(host, nullptr);
         capture("endpoint+dense", &host->combined);
     };
+    using Clock = std::chrono::steady_clock;
+    const auto milliseconds = [](Clock::time_point started, Clock::time_point finished) {
+        return std::chrono::duration<double, std::milli>(finished - started).count();
+    };
+    using Readback = std::pair<RetainedCompute::KernelStage, std::vector<std::byte>>;
+    std::vector<Readback> readbacks;
+    probe.after_read = [&](BufferHandle buffer, std::span<std::byte> bytes) {
+        for (std::size_t i = 1; i < probe.allocations.size(); i += 2)
+            if (buffer.value == probe.allocations[i].handle.value) {
+                readbacks.emplace_back(static_cast<RetainedCompute::KernelStage>(i / 2),
+                                       std::vector<std::byte>(bytes.begin(), bytes.end()));
+                return;
+            }
+        FAIL() << "unknown observed readback stage";
+    };
+    RecordProperty("legacy_call_timing_scope",
+                   "original synchronous interval call including allocation, packing, decoding "
+                   "and existing marker/readback observers; excludes SetUp, assertions, digest "
+                   "serialization and result disposal; unchanged general-Kerr/flat inputs and "
+                   "projection budget; no cold, frame or release claim");
     for (unsigned repeat = 0; repeat < 3; ++repeat) {
         phase = "legacy_repeat" + std::to_string(repeat);
+        readbacks.clear();
+        const auto started = Clock::now();
         const auto output = AttemptRetainedIntervals(**observed, inputs);
+        const auto finished = Clock::now();
+        RecordProperty(phase + "_complete_call_ms",
+                       std::format("{:.17g}", milliseconds(started, finished)));
         ASSERT_TRUE(output) << output.error().Description();
+        for (std::size_t index = 0; index < readbacks.size(); ++index) {
+            const auto& [stage, bytes] = readbacks[index];
+            const auto digest = sirius::base::Sha256Hex(
+                std::span(reinterpret_cast<const std::uint8_t*>(bytes.data()), bytes.size()));
+            ASSERT_TRUE(digest) << digest.error();
+            RecordProperty(phase + "_readback_" + std::to_string(index),
+                           std::format("stage={};bytes={};sha256={}",
+                                       RetainedCompute::StageName(stage), bytes.size(), *digest));
+        }
         ASSERT_EQ(output->size(), baseline->size());
         for (std::size_t row = 0; row < output->size(); ++row) {
             const auto& actual = (*output)[row];
@@ -3116,17 +3150,7 @@ TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
         for (const auto& interval : output) result.push_back({interval.dopri, 0, 3. / 8., {}});
         return result;
     };
-    using Readback = std::pair<RetainedCompute::KernelStage, std::vector<std::byte>>;
-    std::vector<Readback> readbacks;
-    probe.after_read = [&](BufferHandle buffer, std::span<std::byte> bytes) {
-        for (std::size_t i = 1; i < probe.allocations.size(); i += 2)
-            if (buffer.value == probe.allocations[i].handle.value) {
-                readbacks.emplace_back(static_cast<RetainedCompute::KernelStage>(i / 2),
-                                       std::vector<std::byte>(bytes.begin(), bytes.end()));
-                return;
-            }
-        FAIL() << "unknown observed readback stage";
-    };
+    readbacks.clear();
     const auto coupled_baseline = AttemptRetainedDopriIntervals(**observed, coupled, 24);
     ASSERT_TRUE(coupled_baseline) << coupled_baseline.error().Description();
     for (const auto& interval : *coupled_baseline) {
@@ -3217,10 +3241,6 @@ TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
         {Stage::kEndpoint, 24},   {Stage::kTransport, 12},  {Stage::kEndpoint, 24},
         {Stage::kDopriPhase, 24}, {Stage::kDopriPhase, 24}, {Stage::kEndpoint, 12},
         {Stage::kDopriPhase, 12}, {Stage::kEndpoint, 12}};
-    using Clock = std::chrono::steady_clock;
-    const auto milliseconds = [](Clock::time_point started, Clock::time_point finished) {
-        return std::chrono::duration<double, std::milli>(finished - started).count();
-    };
     RecordProperty("coupled_call_timing_scope",
                    "sum of synchronous construction and interior sampling calls, including "
                    "allocation, packing, decoding and existing marker/readback observers; "
