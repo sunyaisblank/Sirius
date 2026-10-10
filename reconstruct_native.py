@@ -46,7 +46,7 @@ for consumer in ['sirius','sirius_backend_tests','sirius_render_tests']:
  put(bundle/'alignment_receipt.json',parent/'resources/model/alignment_receipt.json')
  if consumer!='sirius':
   for name,rel in g.TEST_INPUT_PATHS.items():put(bundle/v.QUALIFICATION_TEST_INPUT_EVIDENCE[name],parent/'resources'/rel)
-assert source_differences==(['tests/operating_model.json'] if label=='baseline' else [])
+assert source_differences==[], source_differences
 g.verify_recorded_files(gate,source_view,stage)
 checked=v.copy_qualification_test_inputs(stage/'generated/sirius/native_build_gate.json',stage);assert len(checked)==20
 receipt={'source_revision':revision,'live_source_revision':head,'original_ci_export':str(bundle.relative_to(root)),'whole_recorded_files_verified':True,'source_root_records_match_committed_bytes':True,'recorded_source_view':str(source_view.relative_to(root)),'source_records':source_records,'intentional_baseline_local_differences':source_differences,'canonical_and_consumed_inputs_checked':20,'source_eol_exceptions':[],'full_native_runtime_qualification_claimed':False,'ctest_registration_reconstructed':False,'executables':{n:{'path':str(p.relative_to(root)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for n,p in executables.items()},'gate_sha256':hashlib.sha256((bundle/'native_build_gate.json').read_bytes()).hexdigest()}

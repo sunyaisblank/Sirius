@@ -4,7 +4,7 @@ import json, os, subprocess, sys, time, signal
 from native_contracts import ROOT, WORK, CASES, document, sha
 
 mode,label,case=sys.argv[1:]
-assert (mode, label, case) == ('controls', 'original', 'science')
+assert (mode == 'controls' and label == 'candidate' and case in CASES) or (mode == 'matched' and label in ('a1','b1','b2','a2') and case == 'timestamps')
 producer='baseline' if mode=='baseline' or (mode=='matched' and label.startswith('a')) else 'candidate'
 binding_path=WORK/('baseline-native-bindings.json' if mode=='baseline' else 'execution-bindings.json')
 bindings = document(binding_path)

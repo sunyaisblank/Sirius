@@ -14,7 +14,7 @@ for count, name, body in re.findall(r'inline constexpr std::array<std::uint32_t,
     words = [int(q[:-1], 0) for q in re.findall(r'(?:0x[0-9a-fA-F]+|\d+)u', body)]
     assert len(words) == int(count)
     payloads[name] = struct.pack('<'+'I'*len(words), *words)
-assert len(payloads) == 40
+assert len(payloads) == 42
 consumers = {}
 for relative in ['bin/linux-gcc/src/sirius/app/sirius', 'bin/linux-gcc/tests/backend/sirius_backend_tests', 'bin/linux-gcc/src/sirius/app/sirius_app_tests', 'bin/linux-gcc/src/sirius/app/sirius_render_tests']:
     data = (root/relative).read_bytes()
@@ -44,6 +44,6 @@ for relative in ['bin/linux-gcc/src/sirius/app/sirius', 'bin/linux-gcc/tests/bac
     consumers[relative] = dict(bytes=len(data), sha256=hashlib.sha256(data).hexdigest(), arrays=bindings)
 record = dict(source_revision=build['source_revision'], whole_header_sha256=build['whole_header_sha256'],
               actual_consumers=consumers, pass_=True,
-              scope='All40 complete payloads in allocated nonwritable/nonexecutable ELF sections of all four actual Linux consumers. No all40 loaded/runtime-selection or native/performance/fullqualification claim.')
+              scope='All42 complete payloads in allocated nonwritable/nonexecutable ELF sections of all four actual Linux consumers. No all42 loaded/runtime-selection or native/performance/fullqualification claim.')
 (work/'linux-readonly-payloads.json').write_text(json.dumps(record, indent=2)+'\n')
-print('All40 complete actual Linux consumer payloads bound in allocated read-only sections.')
+print('All42 complete actual Linux consumer payloads bound in allocated read-only sections.')

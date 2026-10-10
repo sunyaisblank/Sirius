@@ -1,23 +1,117 @@
 {
-  "source_revision": "95c36cb7d4a032e3614973ef7882d5dbe5320788",
-  "science_case": "RetainedComputeTest.Fp64ProductsPreserveIndependentScienceOrDeclineUnsupportedDevices",
+  "baseline_production_revision": "95c36cb7d4a032e3614973ef7882d5dbe5320788",
+  "baseline_observation_revision": "7341f20d874bd3dc5c6b2158bbea23fcbc4a810f",
+  "candidate_revision": "b72868050aae51cd4e2e3e0615259ed790db7798",
+  "case": "RetainedComputeTest.WideDeviceTimestampsPreserveOriginalIntervalResults",
+  "selected_device": "AMD Radeon 780M Graphics",
+  "selected_driver": "AMD proprietary driver: 26.8.1 (LLPC)",
   "owner_seconds": 300,
   "bridge_seconds": 480,
   "owner_rss_bytes": 4294967296,
-  "selected_device": "AMD Radeon 780M Graphics",
-  "selected_driver": "AMD proprietary driver: 26.8.1 (LLPC)",
-  "required_capabilities": {
-    "preserves_fp32_denormals": true,
-    "rounds_fp32_to_nearest": true,
-    "fma_fp32_enabled": true,
-    "supports_fp64": true,
-    "rounds_fp64_to_nearest": true
+  "allocation_limit_bytes": 8388608,
+  "retained_capacity": 24,
+  "logical_coupled_rows": 12,
+  "coupled_projection_budget": 24,
+  "sequence": [
+    "a1",
+    "b1",
+    "b2",
+    "a2"
+  ],
+  "producer_labels": {
+    "a1": "baseline",
+    "a2": "baseline",
+    "b1": "candidate",
+    "b2": "candidate"
   },
-  "repeat_count": 1,
-  "no_failed_frame_rerun": true,
-  "scientific_inputs_calls_assertions_unchanged": true,
-  "ordered_wide_marker_count": 30,
-  "complete_active_readback_count": 31,
-  "module_count": 7,
-  "scope": "One current exact native original body after verified official producer export, no CTest wrapper/native estate/frame/speed/cold qualification."
+  "repeats_per_family_per_process": 3,
+  "families": [
+    "legacy",
+    "modern"
+  ],
+  "complete_call_ms_definition": {
+    "legacy": "original synchronous AttemptRetainedIntervals call with original Kerr/flat inputs, marker and raw-readback copying; excludes assertions/digest serialization/result disposal",
+    "modern": "sum original synchronous AttemptRetainedDopriIntervals and SampleRetainedDopriIntervals calls, original12-row Schwarzschild/24projection workload; excludes assertions between calls/digest/result disposal"
+  },
+  "thresholds": {
+    "each_direction_each_family_complete_call_improvement_min_percent": 5,
+    "each_direction_each_family_stage_inclusive_regression_max_percent": 5
+  },
+  "directions": {
+    "forward": {
+      "baseline": "a1",
+      "candidate": "b1"
+    },
+    "reverse": {
+      "baseline": "a2",
+      "candidate": "b2"
+    }
+  },
+  "markers_expected": 51,
+  "readback_digest_records_expected": 32,
+  "complete_readback_strides_words": {
+    "dense": 4279,
+    "dopri_phase": 4149
+  },
+  "required_equivalence": [
+    "complete active raw bytes including completion flags/radii/coefficients/reserved suffix",
+    "original semantic/repeated-buffer/capsule/submission assertions",
+    "actual same device/driver/provider module identity",
+    "five identical selected stage modules and exact two Dense/DP Fp64-to-Fma transitions",
+    "original40 array payloads unchanged, candidate only2 extra modules",
+    "source/provider/product/controller pre-post seals and terminal owner absence"
+  ],
+  "required_predecessors": [
+    "reviewed exact source diff and observer",
+    "strict existing-preset build",
+    "official native export and20canonical/consumed input bindings",
+    "actual readonly PE payload bindings",
+    "all7original Dense/DP numerical/refusal controls and timestamp control before matched sequence",
+    "frozen compositor/validator/owner and GitHub issue readback before invocation"
+  ],
+  "failure_policy": "Stop at first owner, numerical, raw-word or source/provider contract failure. No repeat or weaker gate. Performance rejection restores original selectors and preserves failed outcomes.",
+  "scope": "Finite generally warm complete-call workload comparison only. No cold state, unchanged failed frame rerun, completed rendering or full scientific/release qualification.",
+  "baseline_tag": "evidence/issue-93-wide-observation-baseline-95c36cb",
+  "baseline_40_concrete_arrays": 40,
+  "candidate_concrete_arrays": 42,
+  "baseline_complete_readonly_PE_joins": 120,
+  "candidate_complete_readonly_PE_joins": 126,
+  "controls": [
+    {
+      "case": "dense",
+      "filter": "RetainedComputeTest.DenseSegmentsPreserveSmallCovariantArrivalDerivatives"
+    },
+    {
+      "case": "dense_authority",
+      "filter": "RetainedComputeTest.ZeroFractionArrivalsPreserveProgramAuthorityAndCompleteRefusal"
+    },
+    {
+      "case": "dopri_reference",
+      "filter": "RetainedDopriTest.IndependentQuarticPreservesCompletePhase"
+    },
+    {
+      "case": "dopri_refusal",
+      "filter": "RetainedDopriTest.MalformedRowsRefuseAndRecover"
+    },
+    {
+      "case": "dopri_projection",
+      "filter": "RetainedDopriTest.CurvedTransportConnectsSamplerAndProjection"
+    },
+    {
+      "case": "dopri_connected",
+      "filter": "RetainedDopriTest.ConnectedIntervalsPreserveTrialsAndIndependentBudgets"
+    },
+    {
+      "case": "dopri_arrival",
+      "filter": "RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates"
+    },
+    {
+      "case": "timestamps",
+      "filter": "RetainedComputeTest.WideDeviceTimestampsPreserveOriginalIntervalResults"
+    }
+  ],
+  "control_execution_count": 8,
+  "matched_execution_count": 4,
+  "original_science_execution_identity_scope": "Same frozen factory/product source, actual selected AMD loader/ICD pre-post hashes and default device selection; seven individual original science bodies preserve default/wide loops. Actual7 loaded selected module spans are directly observed in the matched wide timestamp body; original DP bodies do not separately log module spans.",
+  "comparison_statistic": "For each direction and workload family separately, median of the three complete-call repeats. For each labeled stage separately, first sum inclusive Dispatch total_ms within each repeat, then compare medians of those three per-repeat sums. Do not pool forward/reverse samples or compare sums of all repeats."
 }
