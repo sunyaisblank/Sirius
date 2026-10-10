@@ -454,6 +454,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:RetainedComputeAdmission.ArithmeticRefusalPrecedesKernelLoading",
         "gtest:VulkanBackend.Fma32DeviceAdmissionRequiresAdvertisedFeatureAndEveryFloatControl",
         "gtest:RetainedComputeAdmission.FmaSelectsOnlyNativeWideProductsAndPreservesAllocation",
+        "gtest:RetainedComputeAdmission.TransportPrefixesPreserveCapacityAndLogicalAccounting",
         "gtest:RetainedComputeAdmission.SoftwareRendererPreparationPreservesPhysicalAccounting",
         "gtest:RetainedComputeTest.SoftwareRendererPreparationPreservesBuffersAndPhysicalFeedback",
         "gtest:RenderSessionProbe.BackendAutoResolvesByDeviceRegistryAndCapabilities",
@@ -498,7 +499,7 @@ REQUIRED_ATTESTATION_PROFILES = {
 REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
 INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
 REQUIRED_SECTION_POLICY_DIGESTS = {
-    "acceptance_criteria": "4dac673606406762f36e72f046a7ddfd75f9836334bffe97d9852e2d73fd07ba",
+    "acceptance_criteria": "98db011c3861885c4b373ef91c309b5cf87f1050127a72d47d5937e8e4ccbcff",
     "required_dimensions": "155eb58c17545a5e0a817ca93e390fd7c7c698e413ba48a84dbd3daf49dd83c0",
     "capability_contracts": "4a32b1a16171759ce66d99f1c4370975424b87d3f36d6574f840efb8360a9bda",
 }
