@@ -782,6 +782,7 @@ class RetainedComputeTest : public ::testing::Test {
     }
     std::unique_ptr<ComputeDevice> device;
     std::unique_ptr<RetainedCompute> compute;
+    void CheckOriginalIntervalTimestamps(bool fp64_products);
 };
 
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
@@ -3471,7 +3472,7 @@ TEST_F(RetainedComputeTest, PhysicalInitializationRetainsTheHamiltonianResidual)
 #endif
 }
 
-TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
+void RetainedComputeTest::CheckOriginalIntervalTimestamps(bool fp64_products) {
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
     auto* vulkan = dynamic_cast<VulkanDevice*>(device.get());
     ASSERT_NE(vulkan, nullptr);
@@ -3524,8 +3525,22 @@ TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
     EXPECT_FALSE(vulkan->LastDispatchTimestamp());
     TransferProbeDevice probe(*device);
     probe.independent_pairs = true;
-    auto observed = RetainedCompute::Create(probe, 24);
+    std::size_t modules = 0;
+    probe.after_load = [&](std::span<const std::uint32_t> code) {
+        ASSERT_LT(modules, RetainedCompute::kStageCount);
+        const auto digest = sirius::base::Sha256Hex(
+            std::span(reinterpret_cast<const std::uint8_t*>(code.data()), code.size_bytes()));
+        ASSERT_TRUE(digest) << digest.error();
+        RecordProperty("selected_module_" + std::to_string(modules),
+                       std::format("stage={};bytes={};sha256={}",
+                                   RetainedCompute::StageName(
+                                       static_cast<RetainedCompute::KernelStage>(modules)),
+                                   code.size_bytes(), *digest));
+        ++modules;
+    };
+    auto observed = RetainedCompute::Create(probe, 24, fp64_products);
     ASSERT_TRUE(observed) << observed.error().Description();
+    ASSERT_EQ(modules, RetainedCompute::kStageCount);
     ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
     const auto resident = device->BufferAllocationBytes();
     ASSERT_TRUE(vulkan->SetDispatchTimestampsEnabled(true));
@@ -3655,7 +3670,10 @@ TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
     }
     RecordProperty("coupled_rows", std::to_string(coupled.size()));
     RecordProperty("coupled_projection_budget", "24");
-    RecordProperty("product_mode", "default");
+    RecordProperty("product_mode", fp64_products ? "fp64" : "default");
+    RecordProperty("fma_fp32_enabled", device->Info().fma_fp32_enabled);
+    RecordProperty("preserves_fp32_signed_zero_inf_nan",
+                   device->Info().preserves_fp32_signed_zero_inf_nan);
     RecordProperty("selected_device", device->Info().name);
     RecordProperty("selected_driver",
                    device->Info().driver_name + ": " + device->Info().driver_info);
@@ -3810,6 +3828,46 @@ TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
     EXPECT_GT(probe.pair_calls, 0U);
     RecordProperty("device_observations", std::to_string(samples));
     ASSERT_TRUE(vulkan->SetDispatchTimestampsEnabled(false));
+    if (fp64_products) RecordProperty("wide_exercised", 1);
+#else
+    (void)fp64_products;
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
+TEST_F(RetainedComputeTest, DeviceTimestampsPreserveOriginalIntervalResults) {
+    ASSERT_NO_FATAL_FAILURE(CheckOriginalIntervalTimestamps(false));
+}
+
+TEST_F(RetainedComputeTest, WideDeviceTimestampsPreserveOriginalIntervalResults) {
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    const auto original_info = device->Info();
+    compute.reset();
+    device.reset();
+    const auto inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory) << inventory.error().Description();
+    const auto index = ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(index) << index.error().Description();
+    auto opened = CreateVulkanDevice(*index);
+    ASSERT_TRUE(opened) << opened.error().Description();
+    device = std::move(*opened);
+    ASSERT_EQ(device->Info(), original_info);
+    ASSERT_TRUE(device->SetBufferAllocationLimit(8 * 1024 * 1024));
+    ASSERT_EQ(device->BufferAllocationBytes(), 0U);
+    auto created = RetainedCompute::Create(*device, 24, true);
+    RecordProperty("wide_exercised", 0);
+    if (!original_info.supports_fp64 || !original_info.rounds_fp64_to_nearest) {
+        ASSERT_FALSE(created);
+        EXPECT_NE(created.error().detail().find("binary64"), std::string::npos);
+        EXPECT_EQ(device->BufferAllocationBytes(), 0U);
+        return;
+    }
+    ASSERT_TRUE(created) << created.error().Description();
+    const auto required = RetainedCompute::RequiredAllocationBytes(*device, 24);
+    ASSERT_TRUE(required) << required.error().Description();
+    EXPECT_EQ(device->BufferAllocationBytes(), *required);
+    compute = std::move(*created);
+    ASSERT_NO_FATAL_FAILURE(CheckOriginalIntervalTimestamps(true));
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif

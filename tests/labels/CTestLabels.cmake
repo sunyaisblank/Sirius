@@ -1027,6 +1027,7 @@ set_tests_properties(
     RetainedComputeTest.ZeroFractionArrivalsPreserveProgramAuthorityAndCompleteRefusal
     RetainedComputeTest.PhysicalInitializationRetainsTheHamiltonianResidual
     RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults
+    RetainedComputeTest.WideDeviceTimestampsPreserveOriginalIntervalResults
     RetainedComputeTest.CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement
     RetainedComputeTest.SharedEndpointDensePreservesPrivateIntervalsAndSerialRetry
     RetainedComputeTest.ProjectionReserveKeepsLogicalCohortsBounded
