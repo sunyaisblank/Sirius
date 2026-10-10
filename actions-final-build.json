@@ -1,0 +1,278 @@
+{
+  "baseline-configure": {
+    "kind": "build",
+    "revision": "179f01c28bcf63aac4ecc5803dbbb6d724b32eab",
+    "limits": {
+      "seconds": 600,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "scope": "Existing strict preset configuration for test-only pre-fix regression revision; no runtime qualification.",
+    "expected_exit": 0,
+    "argv": [
+      "cmake",
+      "--preset",
+      "linux-gcc",
+      "-DSIRIUS_ALIGNMENT_MODE=qualification"
+    ]
+  },
+  "baseline-build": {
+    "kind": "build",
+    "revision": "179f01c28bcf63aac4ecc5803dbbb6d724b32eab",
+    "limits": {
+      "seconds": 600,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "scope": "Strict source/alignment/backend build for test-only regression revision; production tracer still original.",
+    "expected_exit": 0,
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "linux-gcc",
+      "--target",
+      "SiriusAlignmentGate",
+      "SiriusSourceGovernance",
+      "sirius_backend_tests",
+      "-j2"
+    ]
+  },
+  "baseline-regression": {
+    "kind": "test",
+    "revision": "179f01c28bcf63aac4ecc5803dbbb6d724b32eab",
+    "limits": {
+      "seconds": 90,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "scope": "New host ComputeDevice-boundary cancellation regression on original tracer. One failed case is the expected reproduction, not accepted qualification.",
+    "expected_exit": 8,
+    "argv": [
+      "ctest",
+      "--preset",
+      "linux-gcc",
+      "--no-tests=error",
+      "--output-on-failure",
+      "-R",
+      "^RetainedComputeAdmission.CameraCancellationPrecedesNumericalRefusal$",
+      "--timeout",
+      "90",
+      "--output-junit",
+      "{folder}/ctest.xml"
+    ],
+    "frozen_inputs": [
+      "bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "bin/linux-gcc/CMakeCache.txt",
+      "bin/linux-gcc/compile_commands.json",
+      "bin/linux-gcc/build.ninja",
+      "bin/linux-gcc/generated/sirius/alignment_receipt.json",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+      "bin/linux-gcc/CTestTestfile.cmake",
+      "bin/linux-gcc/tests/CTestTestfile.cmake",
+      "bin/linux-gcc/src/sirius/CTestTestfile.cmake",
+      "bin/linux-gcc/src/sirius/render/CTestTestfile.cmake",
+      "bin/linux-gcc/src/sirius/app/CTestTestfile.cmake",
+      "bin/linux-gcc/src/sirius/backend/CTestTestfile.cmake",
+      "bin/linux-gcc/src/sirius/core/CTestTestfile.cmake",
+      "bin/linux-gcc/src/sirius/oracle/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/test/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/examples/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/external/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/examples/cpp-interface/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/lint/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/fuzz/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/opt/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/reduce/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/link/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/diff/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/external/spirv-headers/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/lesspipe/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/emacs/CTestTestfile.cmake",
+      "bin/linux-gcc/tests/render/CTestTestfile.cmake",
+      "bin/linux-gcc/tests/app/CTestTestfile.cmake",
+      "bin/linux-gcc/tests/backend/CTestTestfile.cmake",
+      "bin/linux-gcc/tests/core/CTestTestfile.cmake",
+      "bin/linux-gcc/tests/oracle/CTestTestfile.cmake",
+      "bin/linux-gcc/lib/glfw/CTestTestfile.cmake",
+      "bin/linux-gcc/lib/glfw/src/CTestTestfile.cmake",
+      "bin/linux-gcc/_deps/googletest-build/CTestTestfile.cmake",
+      "bin/linux-gcc/_deps/googletest-build/googletest/CTestTestfile.cmake",
+      "bin/linux-gcc/_deps/googletest-build/googlemock/CTestTestfile.cmake",
+      "bin/linux-gcc/tests/sirius_base_tests[1]_tests.cmake",
+      "bin/linux-gcc/tests/render/sirius_render_tests[1]_tests.cmake",
+      "bin/linux-gcc/tests/app/sirius_app_tests[1]_tests.cmake",
+      "bin/linux-gcc/tests/backend/sirius_backend_tests[1]_tests.cmake",
+      "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+      "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake",
+      "bin/linux-gcc/tests/sirius_base_tests[1]_include.cmake",
+      "bin/linux-gcc/tests/render/sirius_render_tests[1]_include.cmake",
+      "bin/linux-gcc/tests/app/sirius_app_tests[1]_include.cmake",
+      "bin/linux-gcc/tests/backend/sirius_backend_tests[1]_include.cmake",
+      "bin/linux-gcc/tests/core/sirius_core_tests[1]_include.cmake",
+      "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_include.cmake"
+    ]
+  },
+  "corrected-baseline-configure": {
+    "kind": "build",
+    "revision": "17c551f230a6569c593965ba4f4cc4e2fd539270",
+    "limits": {
+      "seconds": 600,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "scope": "Existing strict preset configuration for test-only pre-fix regression revision; no runtime qualification.",
+    "expected_exit": 0,
+    "argv": [
+      "cmake",
+      "--preset",
+      "linux-gcc",
+      "-DSIRIUS_ALIGNMENT_MODE=qualification"
+    ]
+  },
+  "corrected-baseline-build": {
+    "kind": "build",
+    "revision": "17c551f230a6569c593965ba4f4cc4e2fd539270",
+    "limits": {
+      "seconds": 600,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "scope": "Strict source/alignment/backend build for test-only regression revision; production tracer still original.",
+    "expected_exit": 0,
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "linux-gcc",
+      "--target",
+      "SiriusAlignmentGate",
+      "SiriusSourceGovernance",
+      "sirius_backend_tests",
+      "-j2"
+    ]
+  },
+  "corrected-baseline-regression": {
+    "kind": "test",
+    "revision": "17c551f230a6569c593965ba4f4cc4e2fd539270",
+    "limits": {
+      "seconds": 90,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "scope": "New host ComputeDevice-boundary cancellation regression on original tracer. One failed case is the expected reproduction, not accepted qualification.",
+    "expected_exit": 8,
+    "argv": [
+      "ctest",
+      "--preset",
+      "linux-gcc",
+      "--no-tests=error",
+      "--output-on-failure",
+      "-R",
+      "^RetainedComputeAdmission.CameraCancellationPrecedesNumericalRefusal$",
+      "--timeout",
+      "90",
+      "--output-junit",
+      "{folder}/ctest.xml"
+    ],
+    "frozen_inputs": [
+      "bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "bin/linux-gcc/CMakeCache.txt",
+      "bin/linux-gcc/compile_commands.json",
+      "bin/linux-gcc/build.ninja",
+      "bin/linux-gcc/generated/sirius/alignment_receipt.json",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+      "bin/linux-gcc/CTestTestfile.cmake",
+      "bin/linux-gcc/tests/CTestTestfile.cmake",
+      "bin/linux-gcc/src/sirius/CTestTestfile.cmake",
+      "bin/linux-gcc/src/sirius/render/CTestTestfile.cmake",
+      "bin/linux-gcc/src/sirius/app/CTestTestfile.cmake",
+      "bin/linux-gcc/src/sirius/backend/CTestTestfile.cmake",
+      "bin/linux-gcc/src/sirius/core/CTestTestfile.cmake",
+      "bin/linux-gcc/src/sirius/oracle/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/test/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/examples/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/external/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/examples/cpp-interface/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/lint/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/fuzz/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/opt/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/reduce/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/link/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/source/diff/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/external/spirv-headers/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/lesspipe/CTestTestfile.cmake",
+      "bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/emacs/CTestTestfile.cmake",
+      "bin/linux-gcc/tests/render/CTestTestfile.cmake",
+      "bin/linux-gcc/tests/app/CTestTestfile.cmake",
+      "bin/linux-gcc/tests/backend/CTestTestfile.cmake",
+      "bin/linux-gcc/tests/core/CTestTestfile.cmake",
+      "bin/linux-gcc/tests/oracle/CTestTestfile.cmake",
+      "bin/linux-gcc/lib/glfw/CTestTestfile.cmake",
+      "bin/linux-gcc/lib/glfw/src/CTestTestfile.cmake",
+      "bin/linux-gcc/_deps/googletest-build/CTestTestfile.cmake",
+      "bin/linux-gcc/_deps/googletest-build/googletest/CTestTestfile.cmake",
+      "bin/linux-gcc/_deps/googletest-build/googlemock/CTestTestfile.cmake",
+      "bin/linux-gcc/tests/sirius_base_tests[1]_tests.cmake",
+      "bin/linux-gcc/tests/render/sirius_render_tests[1]_tests.cmake",
+      "bin/linux-gcc/tests/app/sirius_app_tests[1]_tests.cmake",
+      "bin/linux-gcc/tests/backend/sirius_backend_tests[1]_tests.cmake",
+      "bin/linux-gcc/tests/core/sirius_core_tests[1]_tests.cmake",
+      "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_tests.cmake",
+      "bin/linux-gcc/tests/sirius_base_tests[1]_include.cmake",
+      "bin/linux-gcc/tests/render/sirius_render_tests[1]_include.cmake",
+      "bin/linux-gcc/tests/app/sirius_app_tests[1]_include.cmake",
+      "bin/linux-gcc/tests/backend/sirius_backend_tests[1]_include.cmake",
+      "bin/linux-gcc/tests/core/sirius_core_tests[1]_include.cmake",
+      "bin/linux-gcc/tests/oracle/sirius_oracle_tests[1]_include.cmake"
+    ]
+  },
+  "final-configure": {
+    "kind": "build",
+    "revision": "312bda3bd4c34bbf2b743a7b4254684d23a8c200",
+    "limits": {
+      "seconds": 600,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "scope": "Existing strict preset configuration at the integrated cancellation repair; no release admission.",
+    "expected_exit": 0,
+    "argv": [
+      "cmake",
+      "--preset",
+      "linux-gcc",
+      "-DSIRIUS_ALIGNMENT_MODE=qualification"
+    ]
+  },
+  "final-build": {
+    "kind": "build",
+    "revision": "312bda3bd4c34bbf2b743a7b4254684d23a8c200",
+    "limits": {
+      "seconds": 600,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "scope": "Strict existing-preset source/alignment/app/render/backend integrated repair build; no full scientific/runtime/release verdict.",
+    "expected_exit": 0,
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "linux-gcc",
+      "--target",
+      "SiriusAlignmentGate",
+      "SiriusSourceGovernance",
+      "sirius",
+      "sirius_app_tests",
+      "sirius_render_tests",
+      "sirius_backend_tests",
+      "-j2"
+    ]
+  }
+}

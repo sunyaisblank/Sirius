@@ -1,0 +1,41 @@
+{
+  "baseline-configure": {
+    "kind": "build",
+    "revision": "179f01c28bcf63aac4ecc5803dbbb6d724b32eab",
+    "limits": {
+      "seconds": 600,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "scope": "Existing strict preset configuration for test-only pre-fix regression revision; no runtime qualification.",
+    "expected_exit": 0,
+    "argv": [
+      "cmake",
+      "--preset",
+      "linux-gcc",
+      "-DSIRIUS_ALIGNMENT_MODE=qualification"
+    ]
+  },
+  "baseline-build": {
+    "kind": "build",
+    "revision": "179f01c28bcf63aac4ecc5803dbbb6d724b32eab",
+    "limits": {
+      "seconds": 600,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "scope": "Strict source/alignment/backend build for test-only regression revision; production tracer still original.",
+    "expected_exit": 0,
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "linux-gcc",
+      "--target",
+      "SiriusAlignmentGate",
+      "SiriusSourceGovernance",
+      "sirius_backend_tests",
+      "-j2"
+    ]
+  }
+}
