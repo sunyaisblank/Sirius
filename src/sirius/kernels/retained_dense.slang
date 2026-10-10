@@ -2,10 +2,8 @@ import retained_scratch;
 import retained_scalar;
 import retained_triple;
 import retained_pair;
-#include "retained_dense_program_identity.slang"
 [[vk::binding(0, 0)]] StructuredBuffer<uint> inputs;
 [[vk::binding(1, 0)]] RWStructuredBuffer<uint> outputs;
-groupshared uint denseProgramMismatch;
 RetainedTriple ReadStored(uint base) {
     RetainedTriple r;
     r.hi = RPFromBits(outputs[base]);
@@ -160,51 +158,6 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
 #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_DENSE)
     AllMemoryBarrierWithGroupSync();
 #endif
-    return true;
-}
-
-bool CanonicalDenseProgram(uint programBase, uint lane) {
-    if (lane == 0) denseProgramMismatch = 0;
-    GroupMemoryBarrierWithGroupSync();
-    for (uint i = lane; i < kDenseCanonicalProgramWords;
-         i += SIRIUS_RETAINED_EXECUTION_LANES) {
-        if (inputs[programBase + i] != kDenseCanonicalProgram[i]) {
-            uint previous;
-            InterlockedOr(denseProgramMismatch, 1, previous);
-        }
-    }
-    // The original evaluator resets retainedStatus. Keep this joined decision
-    // in a separate owner so every lane takes the same path before that reset.
-    GroupMemoryBarrierWithGroupSync();
-    return denseProgramMismatch == 0;
-}
-
-bool ZeroFractionArrival(uint row, uint rowBase) {
-    // The exact-zero selectors own packed start values and covariant V. Stage
-    // every result privately: a late column refusal must leave the whole
-    // cleared global row unpublished, as the original interpreter does.
-    for (uint i = 0; i < 40; ++i) WriteValue(i, ReadOriginal(4 + i, row), rowBase);
-    RetainedTriple denominator = RTConstant(RPZero());
-    for (uint axis = 0; axis < 4; ++axis)
-        denominator = RTAdd(denominator,
-                            RTMultiply(ReadOriginal(106 + axis, row),
-                                       ReadValue(4 + axis, rowBase)));
-    for (uint column = 0; column < 4; ++column) {
-        RetainedTriple numerator = RTConstant(RPZero());
-        for (uint axis = 0; axis < 4; ++axis)
-            numerator = RTAdd(numerator,
-                              RTMultiply(ReadOriginal(106 + axis, row),
-                                         ReadValue(8 + 8 * column + axis, rowBase)));
-        RetainedTriple shift = RTDivide(RTNegate(numerator), denominator);
-        for (uint axis = 0; axis < 4; ++axis) {
-            uint index = 8 + 8 * column + axis;
-            WriteValue(index, RTAdd(ReadValue(index, rowBase),
-                                   RTMultiply(ReadValue(4 + axis, rowBase), shift)), rowBase);
-        }
-    }
-    for (uint i = 0; i < 40; ++i)
-        if (ReadValue(i, rowBase).valid == 0) return false;
-    for (uint i = 0; i < 40; ++i) WriteStored(rowBase + 4 + i * 5, ReadValue(i, rowBase));
     return true;
 }
 
@@ -479,12 +432,6 @@ bool FlatDense(uint row, uint rowBase, RetainedTriple h, RetainedTriple s, Retai
         if (lane != 0) return;
         if (FlatDense(row, rowBase, h, fraction, moving))
             if (lane == 0) outputs[rowBase] = 1;
-        return;
-    }
-    if (RTExact(fraction, RPZero()) && RTExact(moving, RPOne()) &&
-        ni - programBase == kDenseCanonicalProgramWords &&
-        CanonicalDenseProgram(programBase, lane)) {
-        if (lane == 0 && ZeroFractionArrival(row, rowBase)) outputs[rowBase] = 1;
         return;
     }
     if (!EvaluateProgram(row, rowBase, programBase, count, registers, 40, lane)) return;

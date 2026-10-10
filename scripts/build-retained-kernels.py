@@ -105,64 +105,6 @@ def portable_normal_sum_controls(text):
     return text.replace(local_size, local_size + "\n               OpExecutionMode " + entry + " RoundingModeRTE 32", 1)
 
 
-def dense_identity_controls(text, expected):
-    """Keep the immutable identity literal outside the comparison loop.
-
-    Slang O0 materializes an addressable constant array as a Function variable
-    and stores the whole literal at each indexed read. Give that sole read-only
-    object a module-scope Private initializer; no arithmetic is transformed.
-    Refuse a different lowering rather than applying a general rewrite.
-    """
-    uint = re.search(r"^\s*(%\S+) = OpTypeInt 32 0$", text, re.M)
-    if not uint:
-        raise ValueError("Dense identity lost its unsigned binary32 words")
-    uint = uint[1]
-    literals = {name: int(value) for name, value in re.findall(
-        r"^\s*(%\S+) = OpConstant " + re.escape(uint) + r" (\d+)$", text, re.M)}
-    matches = []
-    for name, kind, words in re.findall(r"^\s*(%\S+) = OpConstantComposite (%\S+) (.+)$", text, re.M):
-        identifiers = words.split()
-        if len(identifiers) == len(expected) and [literals.get(word) for word in identifiers] == expected:
-            matches.append((name, kind))
-    if len(matches) != 1:
-        raise ValueError("Dense compiled identity does not match the complete generated program")
-    literal, kind = matches[0]
-    pointer = re.search(r"^\s*(%\S+) = OpTypePointer Function " + re.escape(kind) + r"$", text, re.M)
-    if not pointer:
-        raise ValueError("Dense identity address lowering changed")
-    variable = re.findall(r"^\s*(%\S+) = OpVariable " + re.escape(pointer[1]) + r" Function$", text, re.M)
-    if len(variable) != 1:
-        raise ValueError("Dense identity must have one local literal owner")
-    variable = variable[0]
-    store = r"^\s*OpStore " + re.escape(variable) + " " + re.escape(literal) + r"$"
-    access = r"^(\s*%\S+ = OpAccessChain) (%\S+) " + re.escape(variable) + r" (%\S+)$"
-    accesses = re.findall(access, text, re.M)
-    users = re.findall(r"^.*\b(?:Op\w+) .*" + re.escape(variable) + r"(?:[ \t]|$).*$", text, re.M)
-    if len(re.findall(store, text, re.M)) != 1 or len(accesses) != 1 or len(users) != 2:
-        raise ValueError("Dense identity is not a sole immutable indexed literal")
-    word = accesses[0][0].split()[0]
-    word_users = re.findall(r"^.*\b(?:Op\w+) .*" + re.escape(word) + r"(?:[ \t]|$).*$", text, re.M)
-    if len(word_users) != 1 or not re.fullmatch(r"\s*%\S+ = OpLoad " + re.escape(uint) + " " + re.escape(word), word_users[0]):
-        raise ValueError("Dense identity word address must have one read and no escape")
-    if not re.search(r"^\s*" + re.escape(accesses[0][1]) + r" = OpTypePointer Function " + re.escape(uint) + r"$", text, re.M):
-        raise ValueError("Dense identity word pointer changed")
-    text = text[:pointer.start()] + pointer[0].replace(" Function ", " Private ") + text[pointer.end():]
-    text = re.sub(r"^\s*" + re.escape(variable) + r" = OpVariable .* Function$", "", text, flags=re.M)
-    text = re.sub(store, "", text, flags=re.M)
-    private_word = "%siriusDenseIdentityWordPointer"
-    if private_word in text:
-        raise ValueError("Dense identity pointer name is already owned")
-    text = re.sub(access, lambda match: match[1] + " " + private_word + " " + variable + " " + match[3], text, flags=re.M)
-    entry = re.findall(r"^.*OpEntryPoint GLCompute.*$", text, re.M)
-    if len(entry) != 1:
-        raise ValueError("Dense identity requires one compute entry point")
-    text = text.replace(entry[0], entry[0] + " " + variable, 1)
-    first_function = re.search(r"^\s*%\S+ = OpFunction ", text, re.M).start()
-    globals = (private_word + " = OpTypePointer Private " + uint + "\n" +
-               variable + " = OpVariable " + pointer[1] + " Private " + literal + "\n")
-    return text[:first_function] + "\n" + globals + text[first_function:]
-
-
 def supports_fma32(directory, compiler, assembler, disassembler, validator):
     # Probe only toolset capability. Errors in the real candidate remain fatal.
     # Ordinary GLSL Fma does not guarantee the fused, correctly rounded residual.
@@ -340,8 +282,7 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     coefficients = 25 if source.stem == "retained_transport" else 0
     if coefficients:
         definitions.append(f"-DSIRIUS_RETAINED_COEFFICIENTS={coefficients}")
-    identity_words = 1 if source.stem == "retained_dense" else 0
-    if (registers * terms + original_inputs * 4 + coefficients * 5 + projection_words + identity_words) * 4 + 8 > 16384:
+    if (registers * terms + original_inputs * 4 + coefficients * 5 + projection_words) * 4 + 8 > 16384:
         raise ValueError("retained program exceeds the portable shared-memory bound")
     definitions += [f"-DSIRIUS_RETAINED_REGISTERS={registers}",
                     f"-DSIRIUS_RETAINED_TERMS={terms}",
@@ -353,10 +294,7 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     # Bound inlining to the two portable camera stages.
     optimization = ("-O1" if portable and source.stem in ("retained_camera", "retained_ray_camera")
                     else "-O0")
-    includes = ["-I", str(source.parent)]
-    if source.stem == "retained_dense":
-        includes += ["-I", str(destination.parent)]
-    subprocess.run([compiler, str(source), *definitions, *includes, optimization,
+    subprocess.run([compiler, str(source), *definitions, "-I", str(source.parent), optimization,
                     "-target", "spirv", "-profile", "spirv_1_5", "-entry", "ComputeMain",
                     "-stage", "compute", *float_controls, "-o", str(raw)],
                    check=True)
@@ -371,15 +309,6 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
         optimized.replace(raw)
     subprocess.run([disassembler, str(raw), "-o", str(assembly)], check=True)
     text = assembly.read_text()
-    if source.stem == "retained_dense":
-        identity = (destination.parent / "retained_dense_program_identity.slang").read_text()
-        body = re.search(r"kDenseCanonicalProgram\[\d+\] = \{(.*?)\};", identity, re.S)
-        if not body:
-            raise ValueError("Dense generated identity is missing")
-        expected = list(map(int, re.findall(r"(\d+)u", body[1])))
-        text = dense_identity_controls(text, expected)
-        assembly.write_text(text)
-        subprocess.run([assembler, "--target-env", "spv1.5", str(assembly), "-o", str(raw)], check=True)
     if portable:
         # Inspect the exact module being embedded, not an adjacent cached dump.
         # Legacy portable modules supply RTE/gradual underflow with integers.
@@ -459,16 +388,6 @@ def main():
         if kind not in ("Camera", "RayCamera"):
             prefix.append(len(program["outputs"]))
         encoded = prefix + program["outputs"] + program["operations"] + program["layer_offsets"]
-        if kind == "Dense":
-            # The zero-fraction shortcut owns only this exact program. A legal
-            # changed table must retain the original interpreter's authority.
-            identity = [f"static const uint kDenseCanonicalProgramWords = {len(encoded)}u;",
-                        f"static const uint kDenseCanonicalProgram[{len(encoded)}] = {{"]
-            for start in range(0, len(encoded), 16):
-                identity.append(",".join(str(v) + "u" for v in encoded[start:start + 16]) + ",")
-            identity.append("};")
-            (args.output.parent / "retained_dense_program_identity.slang").write_text(
-                "\n".join(identity) + "\n")
         transport_specialized = None
         endpoint_specialized = None
         if kind == "Transport":
