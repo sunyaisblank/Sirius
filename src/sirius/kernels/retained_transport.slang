@@ -48,8 +48,8 @@ void WriteValue(uint index, RetainedTriple r, uint rowBase) {
     ScratchWrite(index, 4, rowBase, 2404, r.valid);
 }
 
-bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint registers) {
-    uint address = programBase + 43 + 5 * index, op = inputs[address],
+bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint registers, uint op) {
+    uint address = programBase + 43 + 5 * index,
          destination = inputs[address + 1], a = inputs[address + 2], b = inputs[address + 3],
          c = inputs[address + 4];
     if (destination >= registers || op > 11) return false;
@@ -116,6 +116,28 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint regi
 
     return true;
 }
+groupshared uint retainedHomogeneousLayer[SIRIUS_RETAINED_LAYERS];
+void ClassifyLayers(uint programBase, uint count, uint layers, uint lane) {
+    uint layerBase = programBase + 43 + 5 * count;
+    for (uint layer = lane; layer < layers; layer += SIRIUS_RETAINED_EXECUTION_LANES) {
+        uint start = inputs[layerBase + layer], end = inputs[layerBase + layer + 1];
+        uint homogeneous = 0;
+        if (start < end && end <= count && end - start <= SIRIUS_RETAINED_LANES) {
+            uint opcode = inputs[programBase + 43 + 5 * start];
+            homogeneous = 1;
+            for (uint node = start + 1; node < end; ++node)
+                if (inputs[programBase + 43 + 5 * node] != opcode) homogeneous = 0;
+        }
+        retainedHomogeneousLayer[layer] = homogeneous;
+    }
+}
+bool EvaluateNode(uint index, uint row, uint rowBase, uint programBase, uint registers,
+                  uint layerOpcode, uint homogeneous) {
+    if (homogeneous != 0)
+        return EvaluateOne(index, row, rowBase, programBase, registers, layerOpcode);
+    return EvaluateOne(index, row, rowBase, programBase, registers,
+                       inputs[programBase + 43 + 5 * index]);
+}
 bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint registers,
                      uint layers, uint stage, uint lane) {
     uint needed = count;
@@ -135,22 +157,25 @@ bool EvaluateProgram(uint row, uint rowBase, uint programBase, uint count, uint 
             RejectRetainedProgram();
 #if defined(SIRIUS_RETAINED_PORTABLE) && !defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
         else {
+            uint layerOpcode = inputs[programBase + 43 + 5 * start];
             // Layer destinations are disjoint from every input register and
             // from one another; the generated plan releases inputs afterwards.
             for (uint node = start; node < end; ++node)
-                if (!EvaluateOne(node, row, rowBase, programBase, registers)) RejectRetainedProgram();
+                if (!EvaluateNode(node, row, rowBase, programBase, registers, layerOpcode, retainedHomogeneousLayer[layer])) RejectRetainedProgram();
         }
 #elif defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_NORMAL_SUM32) && defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
         else {
+            uint layerOpcode = inputs[programBase + 43 + 5 * start];
             // Cover the original complete layer before its publication barrier.
             for (uint node = start + lane; node < end;
                  node += SIRIUS_RETAINED_EXECUTION_LANES)
-                if (!EvaluateOne(node, row, rowBase, programBase, registers))
+                if (!EvaluateNode(node, row, rowBase, programBase, registers, layerOpcode, retainedHomogeneousLayer[layer]))
                     RejectRetainedProgram();
         }
 #else
         else if (start + lane < end &&
-                 !EvaluateOne(start + lane, row, rowBase, programBase, registers))
+                 !EvaluateNode(start + lane, row, rowBase, programBase, registers,
+                               inputs[programBase + 43 + 5 * start], retainedHomogeneousLayer[layer]))
             RejectRetainedProgram();
 #endif
 #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
@@ -536,6 +561,7 @@ RetainedTriple ReadCoefficient(uint index) {
          index += SIRIUS_RETAINED_EXECUTION_LANES)
         ScratchWrite(index, 4, rowBase, 2404, 0);
 #endif
+    ClassifyLayers(programBase, count, layers, lane);
     for (uint stage = 0; stage < 7; ++stage) {
         if (lane == 0) retainedStatus = 0;
 #if defined(SIRIUS_RETAINED_PORTABLE) && !defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)

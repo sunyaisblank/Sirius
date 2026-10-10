@@ -282,7 +282,8 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     coefficients = 25 if source.stem == "retained_transport" else 0
     if coefficients:
         definitions.append(f"-DSIRIUS_RETAINED_COEFFICIENTS={coefficients}")
-    if (registers * terms + original_inputs * 4 + coefficients * 5 + projection_words) * 4 + 8 > 16384:
+    layer_words = layers if source.stem == "retained_transport" else 0
+    if (registers * terms + original_inputs * 4 + coefficients * 5 + projection_words + layer_words) * 4 + 8 > 16384:
         raise ValueError("retained program exceeds the portable shared-memory bound")
     definitions += [f"-DSIRIUS_RETAINED_REGISTERS={registers}",
                     f"-DSIRIUS_RETAINED_TERMS={terms}",
