@@ -482,8 +482,8 @@ TEST(RetainedComputeAdmission, CameraCancellationPrecedesNumericalRefusal) {
             RetainedTraceExecutor executor(**created, [&] { return cancelled.load(); }, 1000);
             sirius::core::KerrSchildFamily metric(sirius::core::KerrSchildParams::Minkowski());
             TracerConfig config;
-            config.enable_disk = false;
             config.enable_polarisation = true;
+            ASSERT_TRUE(IsRepresentedTracerConfig(config));
             GeodesicTracer tracer(&metric, config);
             tracer.SetStepExecutor(&executor);
             tracer.SetCancellationCallback([&] { return cancelled.load(); });
