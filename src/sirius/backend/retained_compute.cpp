@@ -163,6 +163,7 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
                                    kTransportPortableFp64Shader));
     status = create(result->transport_, KernelStage::kTransport, transport);
     if (!status) return std::unexpected(status.error());
+    result->transport_.paired_rows = !portable && !fp64_products;
     const std::span<const std::uint32_t> endpoint =
         normal_sum ? std::span(kEndpointPortableNormalSumShader)
                    : (fma && kEndpointFmaAvailable
@@ -335,7 +336,10 @@ base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_
     // Only requested rows execute; a later larger batch clears its own rows.
     status = device_.Dispatch(
         stage.kernel, stage.buffers,
-        static_cast<std::uint32_t>((active_rows + kRetainedGroupRows - 1) / kRetainedGroupRows), 1,
+        static_cast<std::uint32_t>(stage.paired_rows
+                                      ? (active_rows + 1) / 2
+                                      : (active_rows + kRetainedGroupRows - 1) / kRetainedGroupRows),
+        stage.paired_rows && active_rows % 2 != 0 ? 2 : 1,
         1, observed);
     if (!status) return status;
     if (!std::isfinite(observed->submit_wait_ms) || observed->submit_wait_ms < 0)

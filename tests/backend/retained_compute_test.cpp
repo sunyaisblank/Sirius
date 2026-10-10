@@ -259,6 +259,7 @@ class PreparationProbeDevice final : public ComputeDevice {
     bool fail_dispatch = false;
     bool independent_pair = false;
     std::uint32_t expected_groups_x = 1;
+    std::uint32_t expected_groups_y = 1;
     unsigned loads = 0, reads = 0;
     const DeviceInfo& Info() const noexcept override { return info; }
     sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t> code) override {
@@ -303,7 +304,7 @@ class PreparationProbeDevice final : public ComputeDevice {
                                           DispatchTiming* timing) override {
         EXPECT_EQ(bindings.size(), 2U);
         EXPECT_EQ(x, expected_groups_x);
-        EXPECT_EQ(y, 1U);
+        EXPECT_EQ(y, expected_groups_y);
         EXPECT_EQ(z, 1U);
         kernels.push_back(kernel.value);
         if (timing) *timing = observation;
@@ -460,6 +461,68 @@ TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideProductsAndPreservesAlloc
         EXPECT_FALSE(RetainedCompute::Create(refused, 2, true));
         EXPECT_EQ(refused.loads, 0U);
         EXPECT_TRUE(refused.buffers.empty());
+    }
+}
+#endif
+
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+TEST(RetainedComputeAdmission, TransportPrefixesPreserveCapacityAndLogicalAccounting) {
+    // Concrete dispatch metadata for the native paired protocol, including
+    // shrink/grow transitions. Excluded arithmetic routes retain one row/group.
+    constexpr std::array<std::array<std::uint32_t, 3>, 6> prefixes{
+        {{7, 4, 2}, {1, 1, 2}, {6, 3, 1}, {3, 2, 2}, {2, 1, 1}, {7, 4, 2}}};
+    for (unsigned mode = 0; mode < 5; ++mode) {
+        SCOPED_TRACE(mode);
+        PreparationProbeDevice probe;
+        probe.info.supports_fp64 = probe.info.rounds_fp64_to_nearest = true;
+        probe.info.preserves_fp32_denormals = mode < 3;
+        probe.info.rounds_fp32_to_nearest = mode != 4;
+        probe.info.preserves_fp32_signed_zero_inf_nan = true;
+        probe.info.fma_fp32_enabled = mode == 2;
+        auto created = RetainedCompute::Create(probe, 7, mode == 1 || mode == 2);
+        ASSERT_TRUE(created);
+        auto& compute = **created;
+        const auto allocation = probe.BufferAllocationBytes();
+        RetainedCompute::PreparationStats preparation;
+        ASSERT_TRUE(compute.PrepareSoftwareRendererStages(preparation));
+        EXPECT_EQ(compute.Statistics()[1].submissions, 0U);
+        EXPECT_EQ(compute.TakeSubmissionFeedback().maximum_rows, 0U);
+        const std::array<RetainedStepInput, 7> inputs{};
+        std::array<std::uint64_t, 8> counts{};
+        for (std::size_t index = 0; index < prefixes.size(); ++index) {
+            const auto [active, x, y] = prefixes[index];
+            probe.expected_groups_x = mode == 0 ? x : active;
+            probe.expected_groups_y = mode == 0 ? y : 1;
+            const auto outputs = compute.Step(std::span(inputs).first(active));
+            ASSERT_TRUE(outputs);
+            EXPECT_EQ(outputs->size(), active);
+            ASSERT_FALSE(probe.writes.empty());
+            const auto& write = probe.writes.back();
+            EXPECT_EQ(write.header, 7U);
+            EXPECT_EQ(write.bytes, index == 0 ? probe.buffers[write.buffer.value].size()
+                                             : 4U + active * sizeof(RetainedStepInput));
+            ++counts[active];
+        }
+        EXPECT_EQ(compute.Statistics()[1].submissions, prefixes.size());
+        EXPECT_TRUE(std::ranges::equal(compute.Statistics()[1].command_row_counts, counts));
+        EXPECT_EQ(compute.TakeSubmissionFeedback().maximum_rows, 7U);
+        probe.expected_groups_x = mode == 0 ? 2 : 3;
+        probe.expected_groups_y = mode == 0 ? 2 : 1;
+        probe.fail_dispatch = true;
+        const auto reads = probe.reads;
+        EXPECT_FALSE(compute.Step(std::span(inputs).first(3)));
+        EXPECT_EQ(probe.reads, reads);
+        EXPECT_EQ(compute.Statistics()[1].submissions, prefixes.size());
+        probe.fail_dispatch = false;
+        probe.expected_groups_x = 1;
+        probe.expected_groups_y = mode == 0 ? 2 : 1;
+        ASSERT_TRUE(compute.Step(std::span(inputs).first(1)));
+        EXPECT_EQ(probe.writes.back().bytes, 4U + sizeof(RetainedStepInput));
+        probe.expected_groups_x = 3;
+        probe.expected_groups_y = 1;
+        const std::array<RetainedEndpointInput, 3> endpoints{};
+        ASSERT_TRUE(compute.Endpoint(endpoints));
+        EXPECT_EQ(probe.BufferAllocationBytes(), allocation);
     }
 }
 #endif

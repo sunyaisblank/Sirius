@@ -230,6 +230,13 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
+    paired_transport = source.stem == "retained_transport" and not portable and not fp64
+    if paired_transport:
+        if terms != 5 or registers < 384 or not 0 < layers <= 255:
+            raise ValueError("paired Transport requires five-word registers and bounded layer status")
+        if transport_specialized is not None and transport_specialized[2] > 255:
+            raise ValueError("paired Transport specialized layers exceed status storage")
+        definitions.append("-DSIRIUS_RETAINED_PAIRED_TRANSPORT=1")
     if transport_specialized is not None:
         if source.stem != "retained_transport":
             raise ValueError("the second transport table belongs only to Transport")
@@ -282,7 +289,8 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     coefficients = 25 if source.stem == "retained_transport" else 0
     if coefficients:
         definitions.append(f"-DSIRIUS_RETAINED_COEFFICIENTS={coefficients}")
-    if (registers * terms + original_inputs * 4 + coefficients * 5 + projection_words) * 4 + 8 > 16384:
+    scratch_words = 2 * 384 * 5 if paired_transport else registers * terms
+    if (scratch_words + original_inputs * 4 + coefficients * 5 + projection_words) * 4 + 8 > 16384:
         raise ValueError("retained program exceeds the portable shared-memory bound")
     definitions += [f"-DSIRIUS_RETAINED_REGISTERS={registers}",
                     f"-DSIRIUS_RETAINED_TERMS={terms}",
