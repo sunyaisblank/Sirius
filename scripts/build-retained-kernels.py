@@ -137,11 +137,11 @@ def dense_identity_controls(text, expected):
     store = r"^\s*OpStore " + re.escape(variable) + " " + re.escape(literal) + r"$"
     access = r"^(\s*%\S+ = OpAccessChain) (%\S+) " + re.escape(variable) + r" (%\S+)$"
     accesses = re.findall(access, text, re.M)
-    users = re.findall(r"^.*\b(?:Op\w+) .*" + re.escape(variable) + r"(?:\s|$).*$", text, re.M)
+    users = re.findall(r"^.*\b(?:Op\w+) .*" + re.escape(variable) + r"(?:[ \t]|$).*$", text, re.M)
     if len(re.findall(store, text, re.M)) != 1 or len(accesses) != 1 or len(users) != 2:
         raise ValueError("Dense identity is not a sole immutable indexed literal")
     word = accesses[0][0].split()[0]
-    word_users = re.findall(r"^.*\b(?:Op\w+) .*" + re.escape(word) + r"(?:\s|$).*$", text, re.M)
+    word_users = re.findall(r"^.*\b(?:Op\w+) .*" + re.escape(word) + r"(?:[ \t]|$).*$", text, re.M)
     if len(word_users) != 1 or not re.fullmatch(r"\s*%\S+ = OpLoad " + re.escape(uint) + " " + re.escape(word), word_users[0]):
         raise ValueError("Dense identity word address must have one read and no escape")
     if not re.search(r"^\s*" + re.escape(accesses[0][1]) + r" = OpTypePointer Function " + re.escape(uint) + r"$", text, re.M):
