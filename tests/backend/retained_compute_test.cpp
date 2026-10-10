@@ -464,6 +464,81 @@ TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideProductsAndPreservesAlloc
 }
 #endif
 
+TEST(RetainedComputeAdmission, CameraCancellationPrecedesNumericalRefusal) {
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+    // Exercise the real tracer/executor join through the existing model of the
+    // external device boundary. This does not claim camera shader execution.
+    for (const bool point_source : {false, true}) {
+        for (const bool dispatch_error : {false, true}) {
+            SCOPED_TRACE(point_source);
+            SCOPED_TRACE(dispatch_error);
+            PreparationProbeDevice probe;
+            probe.fail_dispatch = dispatch_error;
+            probe.observation.submit_wait_ms = 8;
+            probe.observation.total_ms = 14;
+            auto created = RetainedCompute::Create(probe, 1);
+            ASSERT_TRUE(created) << created.error().Description();
+            std::atomic<bool> cancelled{false};
+            RetainedTraceExecutor executor(**created, [&] { return cancelled.load(); }, 1000);
+            sirius::core::KerrSchildFamily metric(sirius::core::KerrSchildParams::Minkowski());
+            TracerConfig config;
+            config.enable_disk = false;
+            config.enable_polarisation = true;
+            GeodesicTracer tracer(&metric, config);
+            tracer.SetStepExecutor(&executor);
+            tracer.SetCancellationCallback([&] { return cancelled.load(); });
+            unsigned observations = 0;
+            tracer.SetPolarisationObserver([&](const auto&, auto) { ++observations; });
+            sirius::core::CameraRay ray;
+            ray.origin(1) = 5;
+            ray.origin(2) = std::numbers::pi / 2;
+            ray.direction(1) = 1;
+            const auto trace = [&] {
+                return point_source ? tracer.TracePointSource(ray) : tracer.Trace(ray);
+            };
+            probe.after_dispatch = [&] { cancelled = true; };
+            const auto stopped = trace();
+            EXPECT_TRUE(stopped.cancelled);
+            EXPECT_FALSE(stopped.numerical_failure);
+            EXPECT_EQ(stopped.integrator_termination, 0);
+            EXPECT_EQ(stopped.steps_taken, 0);
+            EXPECT_EQ(stopped.affine_length, 0);
+            EXPECT_FALSE(stopped.final_tangent);
+            EXPECT_FALSE(stopped.beam.valid);
+            EXPECT_FALSE(stopped.volumetric_hit);
+            EXPECT_EQ(stopped.num_disk_crossings, 0);
+            EXPECT_EQ(observations, 0U);
+            EXPECT_EQ(probe.kernels.size(), 1U);
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+            EXPECT_EQ(RetainedTraceExecutorTestPeer::QueueState(executor),
+                      (std::array<std::size_t, 3>{0, 0, 0}));
+#endif
+
+            // Cancellation must not hide later noncancelled refusal, including
+            // the dispatch error's existing sticky drain without new device work.
+            probe.after_dispatch = {};
+            cancelled = false;
+            const auto refused = trace();
+            EXPECT_FALSE(refused.cancelled);
+            EXPECT_TRUE(refused.numerical_failure);
+            EXPECT_EQ(refused.integrator_termination, 3);
+            EXPECT_EQ(refused.steps_taken, 0);
+            EXPECT_EQ(probe.kernels.size(), dispatch_error ? 1U : 2U);
+            EXPECT_EQ(executor.Statistics().camera_rows, dispatch_error ? 1U : 2U);
+            EXPECT_EQ(executor.Statistics().interval_rows, 0U);
+            EXPECT_EQ(executor.Statistics().sample_rows, 0U);
+            EXPECT_EQ(executor.Error().has_value(), dispatch_error);
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+            EXPECT_EQ(RetainedTraceExecutorTestPeer::QueueState(executor),
+                      (std::array<std::size_t, 3>{0, 0, 0}));
+#endif
+        }
+    }
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
 TEST(RetainedComputeAdmission, SoftwareRendererPreparationPreservesPhysicalAccounting) {
 #ifdef SIRIUS_HAS_RETAINED_COMPUTE
     using Stats = RetainedCompute::PreparationStats;
