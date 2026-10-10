@@ -195,17 +195,12 @@ RetainedTriple RTMultiply(RetainedTriple a,RetainedTriple b) {
         RPUpMultiply(b.error,RTCenterUpper(a))),RPUpMultiply(a.error,b.error));
     return RTFinishAccumulation(r.hi,r.lo,r.tail,RPUpAdd(RPUpAdd(r.error,omitted),uncertainty));
 }
-#if defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_ENDPOINT_CORRECTIONS)
-// Portable callers supply opcodes [2,6]; default native Endpoint supplies [5,6].
-// Seven phases retain three corrections and the final residual in order.
-RetainedTriple RTEvaluateArithmetic(RetainedTriple a,RetainedTriple b,uint op) {
 #ifdef SIRIUS_RETAINED_PORTABLE
+// Caller supplies an arithmetic bytecode opcode in [2,6]. Seven phases retain
+// three corrections and the final residual while sharing the integer bodies.
+RetainedTriple RTEvaluateArithmetic(RetainedTriple a,RetainedTriple b,uint op) {
     bool direct_add=op==2||op==3;
     bool direct_product=op==4;
-#else
-    bool direct_add=false;
-    bool direct_product=false;
-#endif
     bool square_root=op==6;
     RetainedTriple q=RTInvalid(),correction=RTInvalid();
     RPScalar lower=RPZero();
