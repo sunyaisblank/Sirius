@@ -336,11 +336,10 @@ base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_
     // Only requested rows execute; a later larger batch clears its own rows.
     status = device_.Dispatch(
         stage.kernel, stage.buffers,
-        static_cast<std::uint32_t>(stage.paired_rows
-                                      ? (active_rows + 1) / 2
-                                      : (active_rows + kRetainedGroupRows - 1) / kRetainedGroupRows),
-        stage.paired_rows && active_rows % 2 != 0 ? 2 : 1,
-        1, observed);
+        static_cast<std::uint32_t>(stage.paired_rows ? (active_rows + 1) / 2
+                                                     : (active_rows + kRetainedGroupRows - 1) /
+                                                           kRetainedGroupRows),
+        stage.paired_rows && active_rows % 2 != 0 ? 2 : 1, 1, observed);
     if (!status) return status;
     if (!std::isfinite(observed->submit_wait_ms) || observed->submit_wait_ms < 0)
         return Fail(ErrorDomain::kDevice, "dispatch retained stage", "invalid submission timing");

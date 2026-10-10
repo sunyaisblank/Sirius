@@ -500,7 +500,7 @@ TEST(RetainedComputeAdmission, TransportPrefixesPreserveCapacityAndLogicalAccoun
             const auto& write = probe.writes.back();
             EXPECT_EQ(write.header, 7U);
             EXPECT_EQ(write.bytes, index == 0 ? probe.buffers[write.buffer.value].size()
-                                             : 4U + active * sizeof(RetainedStepInput));
+                                              : 4U + active * sizeof(RetainedStepInput));
             ++counts[active];
         }
         EXPECT_EQ(compute.Statistics()[1].submissions, prefixes.size());
