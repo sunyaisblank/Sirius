@@ -4636,6 +4636,82 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
     EXPECT_GT(executor.Statistics().reused_phases, 0U);
     EXPECT_EQ(executor.Statistics().initialized_phases, 4U);
 
+    // All original trace workers have joined. Later direct calibration calls
+    // share this compute owner but are outside these executor request counts.
+    const auto cohort = executor.Statistics();
+    ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(cohort.stage_timing, compute->Statistics()));
+    const auto record_histogram = [&](const std::string& key,
+                                      const std::vector<std::uint64_t>& bins) {
+        EXPECT_EQ(bins.size(), compute->Capacity() + 1);
+        if (bins.empty()) return std::array<std::uint64_t, 2>{};
+        EXPECT_EQ(bins.front(), 0U);
+        std::string encoded;
+        std::array<std::uint64_t, 2> totals{};
+        for (std::size_t rows = 0; rows < bins.size(); ++rows) {
+            if (rows) encoded += ',';
+            encoded += std::to_string(bins[rows]);
+            totals[0] += bins[rows];
+            totals[1] += rows * bins[rows];
+        }
+        RecordProperty(key, encoded);
+        return totals;
+    };
+    RecordProperty("mixed_tracer_scope",
+                   "Original two launches and four joined flat/curved traces, before direct "
+                   "calibration and injected guard controls. Gathered cohorts differ from stage "
+                   "prefixes; raw flags are not physical admission; timings are inclusive host "
+                   "observations, not exclusive GPU costs.");
+    RecordProperty("mixed_tracer_device", device->Info().name);
+    RecordProperty("mixed_tracer_capacity", std::to_string(compute->Capacity()));
+    const auto gathered =
+        record_histogram("mixed_tracer_gather_prefix_counts", cohort.batch_row_counts);
+    EXPECT_EQ(gathered[0], cohort.batches);
+    EXPECT_EQ(gathered[1], cohort.camera_rows + cohort.sample_rows + cohort.interval_rows);
+    EXPECT_EQ(cohort.interval_rows, cohort.accepted_intervals + cohort.rejected_intervals);
+    const auto record_count = [&](const std::string& key, std::uint64_t value) {
+        RecordProperty("mixed_tracer_" + key, std::to_string(value));
+    };
+    record_count("batches", cohort.batches);
+    record_count("full_batches", cohort.full_batches);
+    record_count("camera_batches", cohort.camera_batches);
+    record_count("camera_rows", cohort.camera_rows);
+    record_count("sample_batches", cohort.sample_batches);
+    record_count("sample_rows", cohort.sample_rows);
+    record_count("interval_batches", cohort.interval_batches);
+    record_count("interval_rows", cohort.interval_rows);
+    record_count("accepted_intervals", cohort.accepted_intervals);
+    record_count("rejected_intervals", cohort.rejected_intervals);
+    EXPECT_TRUE(cohort.endpoint_dense_timing.command_row_counts.empty());
+    record_count("shared_endpoint_dense_submissions", cohort.endpoint_dense_timing.submissions);
+    RecordProperty("mixed_tracer_shared_endpoint_dense_submit_wait_ms",
+                   std::to_string(cohort.endpoint_dense_timing.submit_wait_ms));
+    RecordProperty("mixed_tracer_shared_endpoint_dense_dispatch_total_ms",
+                   std::to_string(cohort.endpoint_dense_timing.dispatch_total_ms));
+    for (std::size_t i = 0; i < RetainedCompute::kStageCount; ++i) {
+        const auto& stage = cohort.stage_timing[i];
+        const std::string key =
+            RetainedCompute::StageName(static_cast<RetainedCompute::KernelStage>(i));
+        const auto prefixes =
+            record_histogram("mixed_tracer_" + key + "_prefix_counts", stage.command_row_counts);
+        EXPECT_EQ(prefixes[0], stage.submissions);
+        EXPECT_EQ(prefixes[1], stage.completion_flag_counts[0] + stage.completion_flag_counts[1] +
+                                   stage.completion_flag_counts[2]);
+        record_count(key + "_commands", stage.submissions);
+        record_count(key + "_prefix_rows", prefixes[1]);
+        record_count(key + "_raw_flag_zero", stage.completion_flag_counts[0]);
+        record_count(key + "_raw_flag_one", stage.completion_flag_counts[1]);
+        record_count(key + "_raw_flag_other", stage.completion_flag_counts[2]);
+        record_count(key + "_read_buffer_bytes", stage.read_buffer_bytes);
+        RecordProperty("mixed_tracer_" + key + "_submit_wait_ms",
+                       std::to_string(stage.submit_wait_ms));
+        RecordProperty("mixed_tracer_" + key + "_dispatch_total_ms",
+                       std::to_string(stage.dispatch_total_ms));
+        if (i == static_cast<std::size_t>(RetainedCompute::KernelStage::kRayCamera)) {
+            EXPECT_EQ(stage.submissions, cohort.camera_batches);
+            EXPECT_EQ(prefixes[1], cohort.camera_rows);
+        }
+    }
+
     // Calibrate only this controller regression's budgets against genuine
     // device stages. The original scientific fixtures above remain unchanged.
     // Reinitialization uses the same public state as the actual Step consumer.
