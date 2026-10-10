@@ -1,0 +1,25 @@
+{
+  "source_revision": "0fc9eb66579e749c56c0d3d2e1f1501f53f0cb68",
+  "export_ci_run": 38077831907,
+  "science_case": "RetainedComputeTest.Fp64ProductsPreserveIndependentScienceOrDeclineUnsupportedDevices",
+  "render_case": "VulkanRenderSession.Fp64RungRendersOrDeclinesLoudly",
+  "science_owner_seconds": 300,
+  "render_owner_seconds": 300,
+  "owner_rss_bytes": 4294967296,
+  "linux_bridge_outer_seconds": 480,
+  "bridge_scope": "Includes bounded owner bootstrap/preflight/post-exit overhead; Windows scientific/test owner remains 300 seconds. Incomplete or uncertainty prevents dependent work.",
+  "inventory_owner_seconds": 60,
+  "render_output_root": "renders/native-fp64-64-0fc9eb6",
+  "original_device_memory_and_dispatch_governors_unchanged": true,
+  "precision_selected_by_original_render_case": "fp64",
+  "inherited_precision_memory_dispatch_provider_overrides_permitted": false,
+  "prerequisites": [
+    "exact official producer gate and inputs",
+    "all 40 arrays in app/backend/render products",
+    "actual current Radeon FP64/RNE and native binary32 admission",
+    "prospective owner review",
+    "fresh original dedicated FP64 science normal pass"
+  ],
+  "repeat_after_failure_permitted": false,
+  "full_qualification_claimed": false
+}
