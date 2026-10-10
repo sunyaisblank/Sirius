@@ -4,7 +4,8 @@ import json,os,signal,subprocess,sys,time
 from native_contracts import ROOT,WORK,read_case,document,sha
 controller_signals=[]
 def interrupted(signum,frame):controller_signals.append(signum)
-signal.signal(signal.SIGTERM,interrupted);signal.signal(signal.SIGINT,interrupted)
+for signum in (signal.SIGTERM,signal.SIGINT,signal.SIGHUP):
+ signal.signal(signum,interrupted)
 mode,label,case=sys.argv[1:]
 binding_path=WORK/('baseline-native-bindings.json' if mode=='baseline' else 'execution-bindings.json')
 bindings=document(binding_path)
@@ -21,10 +22,12 @@ arguments=['/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe','-NoP
 cleanup_args=[arguments[0],'-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',win(WORK/'emergency_native_cleanup.ps1'),'-TemporaryDirectory',win(temp),'-Output',win(temp),'-Receipt',win(WORK/(prefix+'-emergency-cleanup.json'))]
 record={'mode':mode,'label':label,'case':case,'read_case_pass':True,'execution_bindings_sha256':binding_sha256,'whole_input_source_seals_checked_before_audit':True,'observer_sha256':sha(Path(__file__)),'audit_script_sha256':sha(WORK/'fresh_native_consumers.ps1'),'arguments':arguments,'deadline_seconds':60,'outer_stop':False,'errors':[],'started_epoch':time.time(),'qualification_claimed':False,'scope':'Actual normal owner completion, exact scientific XML and whole-input/clean-source seals checked before and after bounded read-only Windows birth/provider/accessible-consumer audit. Hidden fields/handles/global or unconditional descendant absence not asserted.'}
 started=time.monotonic()
+child=None;code=None;spawn_attempted=False
 with (WORK/(prefix+'.stdout')).open('wb') as out,(WORK/(prefix+'.stderr')).open('wb') as err:
- assert not controller_signals,('interrupted before spawn',controller_signals)
- child=subprocess.Popen(arguments,stdout=out,stderr=err,start_new_session=True)
  try:
+  assert not controller_signals,('interrupted before spawn',controller_signals)
+  spawn_attempted=True;record['spawn_attempted']=True
+  child=subprocess.Popen(arguments,stdout=out,stderr=err,start_new_session=True)
   record['linux_child_pid']=child.pid;record['linux_child_birth']=Path('/proc',str(child.pid),'stat').read_text().rsplit(')',1)[1].split()[19]
   while child.poll() is None:
    if controller_signals:
@@ -40,28 +43,36 @@ with (WORK/(prefix+'.stdout')).open('wb') as out,(WORK/(prefix+'.stderr')).open(
   if controller_signals:
    record['outer_stop']=True
    if 'controller_signal' not in record['errors']:record['errors'].append('controller_signal')
-  if record['outer_stop'] or child.poll() is None:
+  if spawn_attempted and (record['outer_stop'] or child is None or child.poll() is None):
    try:
     with (WORK/(prefix+'-emergency.stdout')).open('wb') as cout,(WORK/(prefix+'-emergency.stderr')).open('wb') as cerr:
      c=subprocess.run(cleanup_args,stdout=cout,stderr=cerr,timeout=60)
     assert c.returncode==0
     cleanup=document(WORK/(prefix+'-emergency-cleanup.json'));assert cleanup['recorded_births_absent'] and not cleanup['errors']
    except BaseException as error:record['errors'].append(repr(error))
-  try:code=child.wait(timeout=15)
-  except BaseException as error:
-   record['errors'].append(repr(error))
-   try:os.killpg(child.pid,signal.SIGKILL)
-   except ProcessLookupError:pass
-   except BaseException as error:record['errors'].append(repr(error))
-   try:code=child.wait(timeout=10)
-   except BaseException as error:record['errors'].append(repr(error));code=child.returncode
+  if child is not None:
+   try:code=child.wait(timeout=15)
+   except BaseException as error:
+    record['errors'].append(repr(error))
+    try:
+     saved=record.get('linux_child_birth')
+     current=Path('/proc',str(child.pid),'stat').read_text().rsplit(')',1)[1].split()[19]
+     assert saved is not None and current==saved and os.getpgid(child.pid)==child.pid, 'Unconfirmed Linux birth/process group; signal declined'
+     os.killpg(child.pid,signal.SIGKILL)
+    except (FileNotFoundError,ProcessLookupError):pass
+    except BaseException as error:record['errors'].append(repr(error))
+    # Reap independently even if identity verification or signalling failed.
+    try:code=child.wait(timeout=10)
+    except BaseException as error:record['errors'].append(repr(error));code=child.returncode
 if controller_signals:
  record['outer_stop']=True
  if 'controller_signal' not in record['errors']:record['errors'].append('controller_signal')
 record['controller_signals']=list(controller_signals)
 record['returncode']=code;record['elapsed_seconds']=time.monotonic()-started
-try:current=Path('/proc',str(child.pid),'stat').read_text().rsplit(')',1)[1].split()[19]
-except (FileNotFoundError,ProcessLookupError):current=None
+current=None
+if child is not None:
+ try:current=Path('/proc',str(child.pid),'stat').read_text().rsplit(')',1)[1].split()[19]
+ except (FileNotFoundError,ProcessLookupError):current=None
 record['linux_child_birth_absent']=record.get('linux_child_birth') is not None and current!=record['linux_child_birth']
 record['accepted']=code==0 and not record['outer_stop'] and not record['errors'] and record['linux_child_birth_absent']
 if record['accepted']:
