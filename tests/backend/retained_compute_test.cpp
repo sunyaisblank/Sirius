@@ -436,6 +436,16 @@ TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideProductsAndPreservesAlloc
                               (std::vector<std::uint32_t>(kEndpointFmaShader.begin(),
                                                           kEndpointFmaShader.end())));
                     EXPECT_NE(candidate.loaded_codes[stage], control.loaded_codes[stage]);
+                } else if (stage == 3 && eligible && kDenseFmaAvailable) {
+                    EXPECT_EQ(candidate.loaded_codes[stage],
+                              (std::vector<std::uint32_t>(kDenseFmaShader.begin(),
+                                                          kDenseFmaShader.end())));
+                    EXPECT_NE(candidate.loaded_codes[stage], control.loaded_codes[stage]);
+                } else if (stage == 6 && eligible && kDopriPhaseFmaAvailable) {
+                    EXPECT_EQ(candidate.loaded_codes[stage],
+                              (std::vector<std::uint32_t>(kDopriPhaseFmaShader.begin(),
+                                                          kDopriPhaseFmaShader.end())));
+                    EXPECT_NE(candidate.loaded_codes[stage], control.loaded_codes[stage]);
                 } else {
                     EXPECT_EQ(candidate.loaded_codes[stage], control.loaded_codes[stage]);
                 }
@@ -3066,128 +3076,170 @@ TEST_F(RetainedComputeTest, ProjectedEndpointsKeepPhysicalColumnsAndRetainedCont
 
 TEST_F(RetainedComputeTest, DenseSegmentsPreserveSmallCovariantArrivalDerivatives) {
 #ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
-    const auto allocation = device->BufferAllocationBytes();
-    const auto& cases = sirius::test::retained_dense::cases;
-    for (std::size_t begin = 0; begin < cases.size(); begin += compute->Capacity()) {
-        const auto count = std::min(compute->Capacity(), cases.size() - begin);
-        std::vector<RetainedDenseInput> inputs;
-        for (std::size_t i = 0; i < count; ++i)
-            inputs.push_back(std::bit_cast<RetainedDenseInput>(cases[begin + i].input));
-        const auto outputs = compute->Dense(inputs);
-        ASSERT_TRUE(outputs) << outputs.error().Description();
-        for (std::size_t row = 0; row < count; ++row) {
-            const auto& fixture = cases[begin + row];
-            SCOPED_TRACE(fixture.name);
-            ASSERT_TRUE((*outputs)[row].valid);
-            for (std::size_t i = 0; i < 40; ++i) {
-                SCOPED_TRACE(i);
-                const auto& value = (*outputs)[row].physical[i];
-                const auto oracle = fixture.reference[i];
-                const auto center = sirius::core::Twofold(value.high) +
-                                    sirius::core::Twofold(value.low) +
-                                    sirius::core::Twofold(value.tail);
-                const double difference =
-                    std::abs((center - sirius::core::Twofold(oracle.high, oracle.low)).Rounded());
-                EXPECT_LE(difference, value.radius + 1e-28 * (1 + std::abs(oracle.high)));
-                EXPECT_LE(difference, 1e-10 * (1 + std::abs(oracle.high)));
+    const auto check = [&](RetainedCompute& sampler, ComputeDevice& owner) {
+        const auto allocation = owner.BufferAllocationBytes();
+        const auto& cases = sirius::test::retained_dense::cases;
+        for (std::size_t begin = 0; begin < cases.size(); begin += sampler.Capacity()) {
+            const auto count = std::min(sampler.Capacity(), cases.size() - begin);
+            std::vector<RetainedDenseInput> inputs;
+            for (std::size_t i = 0; i < count; ++i)
+                inputs.push_back(std::bit_cast<RetainedDenseInput>(cases[begin + i].input));
+            const auto outputs = sampler.Dense(inputs);
+            ASSERT_TRUE(outputs) << outputs.error().Description();
+            for (std::size_t row = 0; row < count; ++row) {
+                const auto& fixture = cases[begin + row];
+                SCOPED_TRACE(fixture.name);
+                ASSERT_TRUE((*outputs)[row].valid);
+                for (std::size_t i = 0; i < 40; ++i) {
+                    SCOPED_TRACE(i);
+                    const auto& value = (*outputs)[row].physical[i];
+                    const auto oracle = fixture.reference[i];
+                    const auto center = sirius::core::Twofold(value.high) +
+                                        sirius::core::Twofold(value.low) +
+                                        sirius::core::Twofold(value.tail);
+                    const double difference = std::abs(
+                        (center - sirius::core::Twofold(oracle.high, oracle.low)).Rounded());
+                    EXPECT_LE(difference, value.radius + 1e-28 * (1 + std::abs(oracle.high)));
+                    EXPECT_LE(difference, 1e-10 * (1 + std::abs(oracle.high)));
+                }
             }
         }
-    }
-    // Endpoint ownership evaluates the retained sum directly. Cancellation
-    // must promote the surviving sparse term into the leading output limb.
-    const std::array<RetainedValue, 3> first{{
-        {1, 0x1.000002p-35f, 0x1p-120f, 0, 1},
-        {0x1p60f, 1, 0x1p-90f, 0, 1},
-        {0x1p120f, -0x1p95f, -0x1p70f, 0, 1},
-    }};
-    const std::array<RetainedValue, 3> delta{{
-        {-1, -0x1.000002p-35f, 0, 0, 1},
-        {-0x1p60f, -1, 0x1p-100f, 0, 1},
-        {-0x1p120f, 0x1p95f, 0x1p69f, 0, 1},
-    }};
-    const std::array<float, 3> sums{0x1p-120f, 0x1.004p-90f, -0x1p69f};
-    std::vector<RetainedDenseInput> cancellation(4);
-    for (auto& row : cancellation) {
-        row.values.fill(RetainedValue::FromDouble(0));
-        row.values[104] = row.values[105] = row.values[111] = RetainedValue::FromDouble(1);
-    }
-    for (std::size_t row = 0; row < first.size(); ++row) {
-        cancellation[row].values[5] = first[row];
-        cancellation[row].values[45] = RetainedValue::FromDouble(sums[row]);
-        cancellation[row].values[85] = delta[row];
-    }
-    // With zero displacement and opposite endpoint slopes, the midpoint is
-    // h*v/4. For e=2^-24, (1+e+e^2)*(1-e+e^2)/4 = (1+e^2+e^4)/4.
-    auto& product = cancellation.back();
-    product.values[9] = {1, 0x1p-24f, 0x1p-48f, 0, 1};
-    product.values[49] = {-1, -0x1p-24f, -0x1p-48f, 0, 1};
-    product.values[104] = {1, -0x1p-24f, 0x1p-48f, 0, 1};
-    product.values[105] = RetainedValue::FromDouble(.5);
-    const auto cancelled = compute->Dense(cancellation);
-    ASSERT_TRUE(cancelled) << cancelled.error().Description();
-    for (std::size_t row = 0; row < first.size(); ++row) {
-        SCOPED_TRACE(row);
-        ASSERT_TRUE((*cancelled)[row].valid);
-        const auto& value = (*cancelled)[row].physical[1];
-        EXPECT_EQ(value.high, sums[row]);
-        EXPECT_EQ(value.low, 0);
-        EXPECT_EQ(value.tail, 0);
-        EXPECT_EQ(value.radius, 0);
-    }
-    ASSERT_TRUE(cancelled->back().valid);
-    const auto& value = cancelled->back().physical[1];
-    const auto center = sirius::core::Twofold(value.high) + sirius::core::Twofold(value.low) +
-                        sirius::core::Twofold(value.tail);
-    const auto exact = sirius::core::Twofold(.25) + sirius::core::Twofold(0x1p-50) +
-                       sirius::core::Twofold(0x1p-98);
-    EXPECT_LE(std::abs((center - exact).Rounded()), value.radius);
-    EXPECT_LT(value.radius, 0x1p-60);
-    EXPECT_NE(value.low, 0);
-
-    // Exact endpoints own their values even when the interior secant exceeds
-    // the retained divide domain. This synthetic packet tests representation,
-    // rather than a unit-speed geodesic with this displacement and duration.
-    std::array<RetainedDenseInput, 3> endpoint_masks;
-    const std::array<double, 3> fractions{0, 1, .5};
-    for (std::size_t row = 0; row < endpoint_masks.size(); ++row) {
-        auto& input = endpoint_masks[row];
-        input.values.fill(RetainedValue::FromDouble(0));
-        input.values[8] = input.values[9] = RetainedValue::FromDouble(1);
-        input.values[48] = input.values[49] = RetainedValue::FromDouble(1);
-        input.values[104] = RetainedValue::FromDouble(0x1p-100);
-        input.values[44] = input.values[84] = input.values[104];
-        input.values[45] = input.values[85] = RetainedValue::FromDouble(1);
-        input.values[105] = RetainedValue::FromDouble(fractions[row]);
-        input.values[111] = RetainedValue::FromDouble(1);
-    }
-    const auto masked = compute->Dense(endpoint_masks);
-    ASSERT_TRUE(masked) << masked.error().Description();
-    ASSERT_EQ(masked->size(), endpoint_masks.size());
-    for (std::size_t row = 0; row < 2; ++row) {
-        SCOPED_TRACE(row);
-        ASSERT_TRUE((*masked)[row].valid);
-        for (std::size_t i = 0; i < 40; ++i) {
-            SCOPED_TRACE(i);
-            const auto expected = endpoint_masks[row].values[(row == 0 ? 4 : 44) + i];
-            EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>((*masked)[row].physical[i])),
-                      (std::bit_cast<std::array<std::uint32_t, 5>>(expected)));
+        // Endpoint ownership evaluates the retained sum directly. Cancellation
+        // must promote the surviving sparse term into the leading output limb.
+        const std::array<RetainedValue, 3> first{{
+            {1, 0x1.000002p-35f, 0x1p-120f, 0, 1},
+            {0x1p60f, 1, 0x1p-90f, 0, 1},
+            {0x1p120f, -0x1p95f, -0x1p70f, 0, 1},
+        }};
+        const std::array<RetainedValue, 3> delta{{
+            {-1, -0x1.000002p-35f, 0, 0, 1},
+            {-0x1p60f, -1, 0x1p-100f, 0, 1},
+            {-0x1p120f, 0x1p95f, 0x1p69f, 0, 1},
+        }};
+        const std::array<float, 3> sums{0x1p-120f, 0x1.004p-90f, -0x1p69f};
+        std::vector<RetainedDenseInput> cancellation(4);
+        for (auto& row : cancellation) {
+            row.values.fill(RetainedValue::FromDouble(0));
+            row.values[104] = row.values[105] = row.values[111] = RetainedValue::FromDouble(1);
         }
-    }
-    EXPECT_FALSE(masked->back().valid);
+        for (std::size_t row = 0; row < first.size(); ++row) {
+            cancellation[row].values[5] = first[row];
+            cancellation[row].values[45] = RetainedValue::FromDouble(sums[row]);
+            cancellation[row].values[85] = delta[row];
+        }
+        // With zero displacement and opposite endpoint slopes, the midpoint is
+        // h*v/4. For e=2^-24, (1+e+e^2)*(1-e+e^2)/4 = (1+e^2+e^4)/4.
+        auto& product = cancellation.back();
+        product.values[9] = {1, 0x1p-24f, 0x1p-48f, 0, 1};
+        product.values[49] = {-1, -0x1p-24f, -0x1p-48f, 0, 1};
+        product.values[104] = {1, -0x1p-24f, 0x1p-48f, 0, 1};
+        product.values[105] = RetainedValue::FromDouble(.5);
+        const auto cancelled = sampler.Dense(cancellation);
+        ASSERT_TRUE(cancelled) << cancelled.error().Description();
+        for (std::size_t row = 0; row < first.size(); ++row) {
+            SCOPED_TRACE(row);
+            ASSERT_TRUE((*cancelled)[row].valid);
+            const auto& value = (*cancelled)[row].physical[1];
+            EXPECT_EQ(value.high, sums[row]);
+            EXPECT_EQ(value.low, 0);
+            EXPECT_EQ(value.tail, 0);
+            EXPECT_EQ(value.radius, 0);
+        }
+        ASSERT_TRUE(cancelled->back().valid);
+        const auto& value = cancelled->back().physical[1];
+        const auto center = sirius::core::Twofold(value.high) + sirius::core::Twofold(value.low) +
+                            sirius::core::Twofold(value.tail);
+        const auto exact = sirius::core::Twofold(.25) + sirius::core::Twofold(0x1p-50) +
+                           sirius::core::Twofold(0x1p-98);
+        EXPECT_LE(std::abs((center - exact).Rounded()), value.radius);
+        EXPECT_LT(value.radius, 0x1p-60);
+        EXPECT_NE(value.low, 0);
 
-    auto input = std::bit_cast<RetainedDenseInput>(cases[1].input);
-    for (std::size_t i = 106; i < 110; ++i) input.values[i] = RetainedValue::FromDouble(0);
-    auto invalid = compute->Dense(std::span(&input, 1));
-    ASSERT_TRUE(invalid) << invalid.error().Description();
-    EXPECT_FALSE(invalid->front().valid);
-    for (const auto& rejected_value : invalid->front().physical)
-        EXPECT_EQ(rejected_value.valid, 0U);
-    input = std::bit_cast<RetainedDenseInput>(cases[0].input);
-    input.values[105] = RetainedValue::FromDouble(1.01);
-    invalid = compute->Dense(std::span(&input, 1));
-    ASSERT_TRUE(invalid) << invalid.error().Description();
-    EXPECT_FALSE(invalid->front().valid);
-    EXPECT_EQ(device->BufferAllocationBytes(), allocation);
+        // Exact endpoints own their values even when the interior secant exceeds
+        // the retained divide domain. This synthetic packet tests representation,
+        // rather than a unit-speed geodesic with this displacement and duration.
+        std::array<RetainedDenseInput, 3> endpoint_masks;
+        const std::array<double, 3> fractions{0, 1, .5};
+        for (std::size_t row = 0; row < endpoint_masks.size(); ++row) {
+            auto& input = endpoint_masks[row];
+            input.values.fill(RetainedValue::FromDouble(0));
+            input.values[8] = input.values[9] = RetainedValue::FromDouble(1);
+            input.values[48] = input.values[49] = RetainedValue::FromDouble(1);
+            input.values[104] = RetainedValue::FromDouble(0x1p-100);
+            input.values[44] = input.values[84] = input.values[104];
+            input.values[45] = input.values[85] = RetainedValue::FromDouble(1);
+            input.values[105] = RetainedValue::FromDouble(fractions[row]);
+            input.values[111] = RetainedValue::FromDouble(1);
+        }
+        const auto masked = sampler.Dense(endpoint_masks);
+        ASSERT_TRUE(masked) << masked.error().Description();
+        ASSERT_EQ(masked->size(), endpoint_masks.size());
+        for (std::size_t row = 0; row < 2; ++row) {
+            SCOPED_TRACE(row);
+            ASSERT_TRUE((*masked)[row].valid);
+            for (std::size_t i = 0; i < 40; ++i) {
+                SCOPED_TRACE(i);
+                const auto expected = endpoint_masks[row].values[(row == 0 ? 4 : 44) + i];
+                EXPECT_EQ((std::bit_cast<std::array<std::uint32_t, 5>>((*masked)[row].physical[i])),
+                          (std::bit_cast<std::array<std::uint32_t, 5>>(expected)));
+            }
+        }
+        EXPECT_FALSE(masked->back().valid);
+
+        auto input = std::bit_cast<RetainedDenseInput>(cases[1].input);
+        for (std::size_t i = 106; i < 110; ++i) input.values[i] = RetainedValue::FromDouble(0);
+        auto invalid = sampler.Dense(std::span(&input, 1));
+        ASSERT_TRUE(invalid) << invalid.error().Description();
+        EXPECT_FALSE(invalid->front().valid);
+        for (const auto& rejected_value : invalid->front().physical)
+            EXPECT_EQ(rejected_value.valid, 0U);
+        input = std::bit_cast<RetainedDenseInput>(cases[0].input);
+        input.values[105] = RetainedValue::FromDouble(1.01);
+        invalid = sampler.Dense(std::span(&input, 1));
+        ASSERT_TRUE(invalid) << invalid.error().Description();
+        EXPECT_FALSE(invalid->front().valid);
+        EXPECT_EQ(owner.BufferAllocationBytes(), allocation);
+    };
+    ASSERT_NO_FATAL_FAILURE(check(*compute, *device));
+
+    // The same independent witnesses and refusal controls also exercise the
+    // admitted wide product route, with a fresh original 24-row/8-MiB owner.
+    const auto original_info = device->Info();
+    compute.reset();
+    device.reset();
+    const auto inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory) << inventory.error().Description();
+    const auto index = ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(index) << index.error().Description();
+    auto opened = CreateVulkanDevice(*index);
+    ASSERT_TRUE(opened) << opened.error().Description();
+    device = std::move(*opened);
+    ASSERT_EQ(device->Info(), original_info);
+    ASSERT_TRUE(device->SetBufferAllocationLimit(8 * 1024 * 1024));
+    ASSERT_EQ(device->BufferAllocationBytes(), 0U);
+    TransferProbeDevice probe(*device);
+    std::vector<std::string> loaded;
+    probe.after_load = [&](std::span<const std::uint32_t> code) {
+        const auto digest = sirius::base::Sha256Hex(
+            std::span(reinterpret_cast<const std::uint8_t*>(code.data()), code.size_bytes()));
+        ASSERT_TRUE(digest) << digest.error();
+        loaded.push_back(*digest);
+    };
+    auto wide = RetainedCompute::Create(probe, 24, true);
+    RecordProperty("dense_wide_exercised", 0);
+    if (!original_info.supports_fp64 || !original_info.rounds_fp64_to_nearest) {
+        ASSERT_FALSE(wide);
+        EXPECT_NE(wide.error().detail().find("binary64"), std::string::npos);
+        EXPECT_TRUE(loaded.empty());
+        EXPECT_EQ(device->BufferAllocationBytes(), 0U);
+        return;
+    }
+    ASSERT_TRUE(wide) << wide.error().Description();
+    ASSERT_EQ(loaded.size(), RetainedCompute::kStageCount);
+    RecordProperty("dense_wide_shader_sha256", loaded[3]);
+    SCOPED_TRACE("fp64 products");
+    ASSERT_NO_FATAL_FAILURE(check(**wide, probe));
+    RecordProperty("dense_wide_exercised", 1);
 
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
@@ -3385,11 +3437,14 @@ TEST_F(RetainedComputeTest, ZeroFractionArrivalsPreserveProgramAuthorityAndCompl
         ASSERT_TRUE(small_input);
         ASSERT_TRUE(small_output);
         const bool portable = RetainedUsesPortableArithmetic(probe.Info());
+        const bool fma = wide && !portable && probe.Info().fma_fp32_enabled &&
+                         probe.Info().preserves_fp32_signed_zero_inf_nan && kDenseFmaAvailable;
         using ShaderWords = std::span<const std::uint32_t>;
         const ShaderWords code =
             portable
                 ? (wide ? ShaderWords(kDensePortableFp64Shader) : ShaderWords(kDensePortableShader))
-                : (wide ? ShaderWords(kDenseFp64Shader) : ShaderWords(kDenseShader));
+                : (fma ? ShaderWords(kDenseFmaShader)
+                       : (wide ? ShaderWords(kDenseFp64Shader) : ShaderWords(kDenseShader)));
         const auto kernel = probe.LoadKernel(code);
         ASSERT_TRUE(kernel);
         ASSERT_TRUE(probe.WriteBuffer(*small_input, std::as_bytes(std::span(short_input))));
