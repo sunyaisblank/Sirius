@@ -348,18 +348,20 @@ void InteractiveViewer::GetResolutionForLevel(int level, int& width, int& height
         std::lock_guard<std::mutex> lock(state_mutex_);
         config = config_;
     }
-    float t = static_cast<float>(level) / std::max(1, config.refinement_levels - 1);
+    const int last_level = config.refinement_levels - 1;
+    level = std::clamp(level, 0, last_level);
+    // A sole pass is already the final pass. Partial-edge tiles preserve the
+    // requested image dimensions, so the ladder needs no image-axis alignment.
+    if (level == last_level) {
+        width = config.final_width;
+        height = config.final_height;
+        return;
+    }
+    const float t = static_cast<float>(level) / last_level;
     width =
         static_cast<int>(config.preview_width + t * (config.final_width - config.preview_width));
     height =
         static_cast<int>(config.preview_height + t * (config.final_height - config.preview_height));
-
-    // Round to a multiple of 8 for tile alignment.
-    width = (width / 8) * 8;
-    height = (height / 8) * 8;
-
-    width = std::max(64, width);
-    height = std::max(64, height);
 }
 
 render::SessionConfig InteractiveViewer::CreateSessionConfig(int width, int height, int spp) const {

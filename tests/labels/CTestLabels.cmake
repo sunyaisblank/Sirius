@@ -1596,6 +1596,7 @@ set_tests_properties(
     TileScheduler.ReinitialiseResetsCompletionLedger
     TileScheduler.WorkGroupsPreserveEveryOriginalTileAndOwnEachRegionOnce
     ViewCommandOperational.HeadlessRefinementProducesASynchronisedFrame
+    ViewCommandOperational.SoleRefinementPublishesExactRequestedDimensions
     ViewCommandOperational.VulkanRefinementPublishesProgressiveFrames
     VulkanRenderSession.CapabilityBoundaryAcceptsRepresentedSceneSemantics
     VulkanRenderSession.CapabilityBoundaryRejectsUnrepresentedSceneSemantics

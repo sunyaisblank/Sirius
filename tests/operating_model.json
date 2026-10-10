@@ -883,6 +883,8 @@
       "id": "interactive_viewer_projection",
       "evidence": [
         {"kind": "gtest", "name": "ViewCommandOperational.StrictParsingAndSessionProjection"},
+        {"kind": "gtest", "name": "ViewCommandOperational.RefinementLadderPreservesRequestedDimensions"},
+        {"kind": "gtest", "name": "ViewCommandOperational.SoleRefinementPublishesExactRequestedDimensions"},
         {"kind": "gtest", "name": "ViewCommandOperational.HeadlessRefinementProducesASynchronisedFrame"},
         {"kind": "gtest", "name": "ViewCommandOperational.VulkanRefinementPublishesProgressiveFrames"}
       ]

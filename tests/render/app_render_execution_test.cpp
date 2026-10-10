@@ -278,6 +278,62 @@ TEST(ViewCommandOperational, HeadlessRefinementProducesASynchronisedFrame) {
     EXPECT_TRUE(viewer.GetLastError().empty()) << viewer.GetLastError();
 }
 
+TEST(ViewCommandOperational, SoleRefinementPublishesExactRequestedDimensions) {
+    ViewerConfig config;
+    config.preview_width = 64;
+    config.preview_height = 64;
+    config.final_width = 67;
+    config.final_height = 65;
+    config.refinement_levels = 1;
+    config.samples_per_level = 1;
+    config.backend = render::RenderBackend::Cpu;
+    config.metric_id = core::MetricId::Schwarzschild;
+    config.black_hole_spin = 0.0;
+    config.observer_distance = 5.0;
+    config.observer_fov = 1.0f;
+    config.enable_disk = false;
+    config.session_template.tile_size = 8;
+    config.session_template.thread_count = 2;
+    config.session_template.enable_bloom = false;
+
+    InteractiveViewer viewer;
+    ASSERT_TRUE(viewer.Initialise(config));
+    std::promise<void> published;
+    auto publication = published.get_future();
+    int callback_width = 0;
+    int callback_height = 0;
+    std::vector<float> callback_pixels;
+    viewer.SetFrameCallback([&](const float* data, int width, int height) {
+        callback_width = width;
+        callback_height = height;
+        callback_pixels.assign(data, data + static_cast<std::size_t>(width) * height * 4);
+        published.set_value();
+    });
+    ASSERT_TRUE(viewer.Start());
+    const bool completed =
+        publication.wait_for(std::chrono::minutes(2)) == std::future_status::ready;
+    viewer.Stop();
+
+    ASSERT_TRUE(completed) << viewer.GetLastError();
+    EXPECT_TRUE(viewer.GetLastError().empty()) << viewer.GetLastError();
+    const auto refinement = viewer.GetRefinementState();
+    EXPECT_TRUE(refinement.complete);
+    EXPECT_EQ(refinement.current_width, 67);
+    EXPECT_EQ(refinement.current_height, 65);
+    EXPECT_EQ(refinement.current_samples_per_pixel, 1);
+    EXPECT_EQ(callback_width, 67);
+    EXPECT_EQ(callback_height, 65);
+    EXPECT_EQ(viewer.GetFrameWidth(), 67);
+    EXPECT_EQ(viewer.GetFrameHeight(), 65);
+    const auto snapshot = viewer.GetFrameBufferSnapshot();
+    ASSERT_EQ(snapshot.size(), 67u * 65u * 4u);
+    EXPECT_EQ(snapshot, callback_pixels);
+    EXPECT_TRUE(std::all_of(snapshot.begin(), snapshot.end(),
+                            [](float value) { return std::isfinite(value); }));
+    for (std::size_t alpha = 3; alpha < snapshot.size(); alpha += 4)
+        EXPECT_FLOAT_EQ(snapshot[alpha], 1.0f);
+}
+
 TEST(ViewCommandOperational, VulkanRefinementPublishesProgressiveFrames) {
 #ifndef SIRIUS_HAS_VULKAN_BACKEND
     GTEST_SKIP() << "Vulkan backend was not compiled";
