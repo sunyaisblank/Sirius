@@ -744,6 +744,9 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
     relativity::ObserverFrame launch_frame;
     GeodesicVariations launch_variations;
     Lightray ray = InitializeLightray(camera_ray, &launch_frame, &launch_variations);
+    // Initialization can return a device refusal after cancellation arrives.
+    // Give cancellation the same precedence as after an attempted interval.
+    if (should_cancel_ && should_cancel_()) return cancelled_result();
 
     if (ray.terminated != 0 || HasInvalidState(ray)) {
         result.final_position = ray.position;
