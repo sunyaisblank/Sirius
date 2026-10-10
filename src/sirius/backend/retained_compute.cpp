@@ -171,11 +171,9 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
                                    kEndpointPortableFp64Shader));
     status = create(result->endpoint_, KernelStage::kEndpoint, endpoint);
     if (!status) return std::unexpected(status.error());
-    const std::span<const std::uint32_t> dense =
-        fma && kDenseFmaAvailable ? std::span(kDenseFmaShader)
-                                  : shader(kDenseShader, kDenseFp64Shader, kDensePortableShader,
-                                           kDensePortableFp64Shader);
-    status = create(result->dense_, KernelStage::kDense, dense);
+    status = create(
+        result->dense_, KernelStage::kDense,
+        shader(kDenseShader, kDenseFp64Shader, kDensePortableShader, kDensePortableFp64Shader));
     if (!status) return std::unexpected(status.error());
     status = create(result->initialize_, KernelStage::kInitialize,
                     shader(kInitializeShader, kInitializeFp64Shader, kInitializePortableShader,
@@ -189,10 +187,8 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
     // program or its integer fallback, including on adapters without RTE32.
     const std::span<const std::uint32_t> dopri_phase =
         normal_sum ? std::span(kDopriPhasePortableNormalSumShader)
-                   : (fma && kDopriPhaseFmaAvailable
-                          ? std::span(kDopriPhaseFmaShader)
-                          : shader(kDopriPhaseShader, kDopriPhaseFp64Shader,
-                                   kDopriPhasePortableShader, kDopriPhasePortableFp64Shader));
+                   : shader(kDopriPhaseShader, kDopriPhaseFp64Shader, kDopriPhasePortableShader,
+                            kDopriPhasePortableFp64Shader);
     status = create(result->dopri_phase_, KernelStage::kDopriPhase, dopri_phase);
     if (!status) return std::unexpected(status.error());
     return result;

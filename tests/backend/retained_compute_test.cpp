@@ -436,16 +436,6 @@ TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideProductsAndPreservesAlloc
                               (std::vector<std::uint32_t>(kEndpointFmaShader.begin(),
                                                           kEndpointFmaShader.end())));
                     EXPECT_NE(candidate.loaded_codes[stage], control.loaded_codes[stage]);
-                } else if (stage == 3 && eligible && kDenseFmaAvailable) {
-                    EXPECT_EQ(candidate.loaded_codes[stage],
-                              (std::vector<std::uint32_t>(kDenseFmaShader.begin(),
-                                                          kDenseFmaShader.end())));
-                    EXPECT_NE(candidate.loaded_codes[stage], control.loaded_codes[stage]);
-                } else if (stage == 6 && eligible && kDopriPhaseFmaAvailable) {
-                    EXPECT_EQ(candidate.loaded_codes[stage],
-                              (std::vector<std::uint32_t>(kDopriPhaseFmaShader.begin(),
-                                                          kDopriPhaseFmaShader.end())));
-                    EXPECT_NE(candidate.loaded_codes[stage], control.loaded_codes[stage]);
                 } else {
                     EXPECT_EQ(candidate.loaded_codes[stage], control.loaded_codes[stage]);
                 }
@@ -3438,14 +3428,11 @@ TEST_F(RetainedComputeTest, ZeroFractionArrivalsPreserveProgramAuthorityAndCompl
         ASSERT_TRUE(small_input);
         ASSERT_TRUE(small_output);
         const bool portable = RetainedUsesPortableArithmetic(probe.Info());
-        const bool fma = wide && !portable && probe.Info().fma_fp32_enabled &&
-                         probe.Info().preserves_fp32_signed_zero_inf_nan && kDenseFmaAvailable;
         using ShaderWords = std::span<const std::uint32_t>;
         const ShaderWords code =
             portable
                 ? (wide ? ShaderWords(kDensePortableFp64Shader) : ShaderWords(kDensePortableShader))
-                : (fma ? ShaderWords(kDenseFmaShader)
-                       : (wide ? ShaderWords(kDenseFp64Shader) : ShaderWords(kDenseShader)));
+                : (wide ? ShaderWords(kDenseFp64Shader) : ShaderWords(kDenseShader));
         const auto kernel = probe.LoadKernel(code);
         ASSERT_TRUE(kernel);
         ASSERT_TRUE(probe.WriteBuffer(*small_input, std::as_bytes(std::span(short_input))));

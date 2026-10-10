@@ -263,9 +263,8 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
         if source.stem == "retained_dopri_phase":
             definitions.append("-DSIRIUS_RETAINED_COOPERATIVE_DOPRI_INPUTS=1")
     if fma:
-        if not fp64 or portable or source.stem not in (
-                "retained_transport", "retained_endpoint", "retained_dense", "retained_dopri_phase"):
-            raise ValueError("FMA32 is qualified only for native-wide retained product stages")
+        if not fp64 or portable or source.stem not in ("retained_transport", "retained_endpoint"):
+            raise ValueError("FMA32 is qualified only for native-wide retained Transport and Endpoint")
         definitions.append("-DSIRIUS_RETAINED_FMA32=1")
     if portable:
         definitions.append("-DSIRIUS_RETAINED_PORTABLE=1")
@@ -443,7 +442,7 @@ def main():
                 program.get("prefix_instructions", 0), portable=True,
                 optimizer=args.optimizer, normal_sum32=True, transport_specialized=transport_specialized, endpoint_specialized=endpoint_specialized)
             array("k" + kind + "PortableNormalSumShader", code)
-        if kind in ("Transport", "Endpoint", "Dense", "DopriPhase"):
+        if kind in ("Transport", "Endpoint"):
             destination = args.output.parent / (stem + "_fma.spv")
             lines.append(f"inline constexpr bool k{kind}FmaAvailable = {'true' if fma_available else 'false'};")
             if fma_available:
