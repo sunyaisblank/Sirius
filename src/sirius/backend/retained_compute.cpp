@@ -127,6 +127,7 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
         stage.input.resize(bytes[0] / 4);
         stage.output.resize(bytes[1] / 4);
         stage.input_words_per_row = layout.input_words;
+        stage.stats.command_row_counts.resize(capacity + 1);
         stage.input[0] = static_cast<std::uint32_t>(capacity);
         std::copy(layout.program.begin(), layout.program.end(),
                   stage.input.begin() + 1 + layout.input_words * capacity);
@@ -300,8 +301,11 @@ std::array<RetainedCompute::StageStats, RetainedCompute::kStageCount> RetainedCo
 
 void RetainedCompute::ResetStatistics() {
     for (auto* stage :
-         {&camera_, &transport_, &endpoint_, &dense_, &initialize_, &ray_camera_, &dopri_phase_})
-        stage->stats = {};
+         {&camera_, &transport_, &endpoint_, &dense_, &initialize_, &ray_camera_, &dopri_phase_}) {
+        auto counts = std::move(stage->stats.command_row_counts);
+        std::fill(counts.begin(), counts.end(), 0);
+        stage->stats = {.command_row_counts = std::move(counts)};
+    }
     endpoint_dense_stats_ = {};
     submission_feedback_ = {};
 }
@@ -337,6 +341,7 @@ base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_
     if (!std::isfinite(observed->submit_wait_ms) || observed->submit_wait_ms < 0)
         return Fail(ErrorDomain::kDevice, "dispatch retained stage", "invalid submission timing");
     ++stage.stats.submissions;
+    ++stage.stats.command_row_counts[active_rows];
     stage.stats.submit_wait_ms += observed->submit_wait_ms;
     stage.stats.maximum_submit_wait_ms =
         std::max(stage.stats.maximum_submit_wait_ms, observed->submit_wait_ms);
@@ -361,8 +366,21 @@ base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_
     status = device_.ReadBuffer(stage.buffers[1], std::as_writable_bytes(output));
     const auto read_finished = Clock::now();
     stage.stats.read_buffer_ms += milliseconds(read_started, read_finished);
-    if (status) stage.stats.read_buffer_bytes += output.size_bytes();
+    if (status) {
+        stage.stats.read_buffer_bytes += output.size_bytes();
+        ObserveReadback(stage, active_rows);
+    }
     return status;
+}
+
+void RetainedCompute::ObserveReadback(Stage& stage, std::size_t active_rows) {
+    const bool camera = stage.kind == KernelStage::kCamera || stage.kind == KernelStage::kRayCamera;
+    const std::uint32_t one = camera ? std::bit_cast<std::uint32_t>(1.0f) : 1U;
+    const auto stride = stage.output.size() / capacity_;
+    for (std::size_t row = 0; row < active_rows; ++row) {
+        const auto flag = stage.output[row * stride + (camera ? 3 : 0)];
+        ++stage.stats.completion_flag_counts[flag == 0 ? 0 : (flag == one ? 1 : 2)];
+    }
 }
 
 RetainedCompute::SubmissionFeedback RetainedCompute::TakeSubmissionFeedback() {
@@ -561,6 +579,8 @@ base::Expected<RetainedEndpointDenseOutput> RetainedCompute::EndpointAndDense(
                     "invalid submission timing");
     ++endpoint_.stats.submissions;
     ++dense_.stats.submissions;
+    ++endpoint_.stats.command_row_counts[endpoints.size()];
+    ++dense_.stats.command_row_counts[dense.size()];
     auto& stats = endpoint_dense_stats_;
     ++stats.submissions;
     stats.submit_wait_ms += timing.submit_wait_ms;
@@ -584,7 +604,10 @@ base::Expected<RetainedEndpointDenseOutput> RetainedCompute::EndpointAndDense(
         const auto started = Clock::now();
         auto result = device_.ReadBuffer(stage.buffers[1], std::as_writable_bytes(output));
         stage.stats.read_buffer_ms += milliseconds(started, Clock::now());
-        if (result) stage.stats.read_buffer_bytes += output.size_bytes();
+        if (result) {
+            stage.stats.read_buffer_bytes += output.size_bytes();
+            ObserveReadback(stage, active);
+        }
         return result;
     };
     status = read(endpoint_, endpoints.size());

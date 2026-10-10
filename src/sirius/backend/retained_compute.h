@@ -157,6 +157,15 @@ class RetainedCompute {
         // submission timing. Buffer timing totals include returned failing calls;
         // a later read failure does not undo a successful dispatch observation.
         std::uint64_t submissions = 0;
+        // Successful kernel commands indexed by their actual active prefix.
+        // Includes shared commands and invalid/inactive placeholders, excludes
+        // preparation. Sum equals submissions; index zero is unused. Empty for
+        // the shared pair timing owner, whose commands belong to their stages.
+        std::vector<std::uint64_t> command_row_counts;
+        // Raw completion flags from successful readbacks: zero, one, other.
+        // Zero includes placeholders; one is not decoded validity/admission.
+        // Read/decode failures never erase earlier command/flag observations.
+        std::array<std::uint64_t, 3> completion_flag_counts{};
         double submit_wait_ms = 0;
         double maximum_submit_wait_ms = 0;
         double pipeline_setup_ms = 0;
@@ -265,6 +274,7 @@ class RetainedCompute {
     };
     [[nodiscard]] base::Expected<void> Dispatch(Stage& stage, std::size_t active_rows,
                                                 DispatchTiming* timing);
+    void ObserveReadback(Stage& stage, std::size_t active_rows);
     ComputeDevice& device_;
     std::size_t capacity_;
     double dispatch_target_ms_ = 250;

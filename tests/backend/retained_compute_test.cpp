@@ -350,6 +350,13 @@ void ExpectPhysicalStatsEqual(
     for (std::size_t i = 0; i < actual.size(); ++i) {
         SCOPED_TRACE(i);
         EXPECT_EQ(actual[i].submissions, expected[i].submissions);
+        if (expected[i].command_row_counts.empty())
+            EXPECT_TRUE(std::all_of(actual[i].command_row_counts.begin(),
+                                    actual[i].command_row_counts.end(),
+                                    [](auto count) { return count == 0; }));
+        else
+            EXPECT_EQ(actual[i].command_row_counts, expected[i].command_row_counts);
+        EXPECT_EQ(actual[i].completion_flag_counts, expected[i].completion_flag_counts);
         EXPECT_EQ(actual[i].submit_wait_ms, expected[i].submit_wait_ms);
         EXPECT_EQ(actual[i].maximum_submit_wait_ms, expected[i].maximum_submit_wait_ms);
         EXPECT_EQ(actual[i].pipeline_setup_ms, expected[i].pipeline_setup_ms);
@@ -567,6 +574,8 @@ TEST(RetainedComputeAdmission, SoftwareRendererPreparationPreservesPhysicalAccou
     const auto unchanged_buffers = probe.buffers;
     compute.ResetStatistics();
     ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(compute.Statistics(), {}));
+    for (const auto& stage : compute.Statistics())
+        EXPECT_EQ(stage.command_row_counts.size(), compute.Capacity() + 1);
     std::array<RetainedCompute::StageStats, RetainedCompute::kStageCount> reset_shared{};
     reset_shared[0] = compute.EndpointDenseStatistics();
     ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(reset_shared, {}));
@@ -935,6 +944,11 @@ void CheckStickyErrorDrainsQueuedRequests(ComputeDevice& device) {
             EXPECT_EQ(compute.Statistics()[stage].submissions, stage == 5 ? 1U : 0U);
         const auto stats = executor.Statistics();
         EXPECT_EQ(stats.batches, 2U);
+        // Both gathered requests complete, but the sticky drain dispatches none.
+        EXPECT_EQ(stats.stage_timing[5].command_row_counts, (std::vector<std::uint64_t>{0, 1}));
+        EXPECT_EQ(stats.stage_timing[5].completion_flag_counts,
+                  (std::array<std::uint64_t, 3>{0, 1, 0}));
+        ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(stats.stage_timing, compute.Statistics()));
         EXPECT_EQ(stats.batch_row_counts[1], 2U);
         EXPECT_EQ(stats.camera_rows, queued_camera ? 2U : 1U);
         EXPECT_EQ(stats.interval_rows, queued_camera ? 0U : 1U);
@@ -1258,6 +1272,8 @@ TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInval
     EXPECT_EQ(stats.submissions, 0U);
     EXPECT_EQ(stats.write_buffer_bytes, 0U);
     EXPECT_EQ(stats.read_buffer_bytes, 0U);
+    EXPECT_EQ(stats.command_row_counts, std::vector<std::uint64_t>(camera_compute.Capacity() + 1));
+    EXPECT_EQ(stats.completion_flag_counts, (std::array<std::uint64_t, 3>{}));
 
     // A successful full write seeds the immutable program even if submission
     // then fails. The following retry must use the active prefix.
@@ -1274,6 +1290,8 @@ TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInval
     EXPECT_EQ(stats.submissions, 0U);
     EXPECT_EQ(stats.write_buffer_bytes, full_input_bytes);
     EXPECT_EQ(stats.read_buffer_bytes, 0U);
+    EXPECT_EQ(stats.command_row_counts, std::vector<std::uint64_t>(camera_compute.Capacity() + 1));
+    EXPECT_EQ(stats.completion_flag_counts, (std::array<std::uint64_t, 3>{}));
 
     auto outputs = camera_compute.Camera(inputs, &timing);
     ASSERT_TRUE(outputs) << outputs.error().Description();
@@ -1281,6 +1299,8 @@ TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInval
     ASSERT_NO_FATAL_FAILURE(expect_read(inputs.size()));
     stats = camera_compute.Statistics()[0];
     EXPECT_EQ(stats.submissions, 1U);
+    EXPECT_EQ(stats.command_row_counts[inputs.size()], 1U);
+    EXPECT_EQ(stats.completion_flag_counts, (std::array<std::uint64_t, 3>{0, inputs.size(), 0}));
     EXPECT_EQ(stats.write_buffer_bytes, full_input_bytes + sizeof(std::uint32_t) +
                                             inputs.size() * sizeof(RetainedCameraInput));
     EXPECT_EQ(stats.read_buffer_bytes, inputs.size() * output_row_bytes);
@@ -1309,6 +1329,8 @@ TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInval
                                             sizeof(std::uint32_t) +
                                             inputs.size() * sizeof(RetainedCameraInput));
     EXPECT_EQ(stats.read_buffer_bytes, before_read_failure.read_buffer_bytes);
+    EXPECT_EQ(stats.command_row_counts[inputs.size()], 2U);
+    EXPECT_EQ(stats.completion_flag_counts, before_read_failure.completion_flag_counts);
 
     inputs[2].values[20].high = std::numeric_limits<float>::quiet_NaN();
     inputs[6].values[29] = RetainedValue::FromDouble(2);
@@ -1324,6 +1346,10 @@ TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInval
             EXPECT_TRUE(CameraAgrees((*outputs)[row], sirius::test::retained_camera::kCases[row]));
         }
     }
+    stats = camera_compute.Statistics()[0];
+    EXPECT_EQ(stats.command_row_counts[inputs.size()], 3U);
+    EXPECT_EQ(stats.completion_flag_counts,
+              (std::array<std::uint64_t, 3>{2, 2 * inputs.size() - 2, 0}));
     inputs.resize(1);
     outputs = camera_compute.Camera(inputs);
     ASSERT_TRUE(outputs) << outputs.error().Description();
@@ -1366,6 +1392,51 @@ TEST_F(RetainedComputeTest, BatchedCameraPreservesPhysicalColumnsAndRejectsInval
     ASSERT_TRUE(outputs) << outputs.error().Description();
     EXPECT_FALSE(CameraAgrees((*outputs)[1], sirius::test::continuous_retained_camera::cases[1]));
     EXPECT_FALSE(CameraAgrees((*outputs)[2], sirius::test::continuous_retained_camera::cases[2]));
+    // Malformed raw flag encodings are observations, never host admissions.
+    // Every read still comes from the real provider before this injected seam.
+    inputs = {original_inputs.front()};
+    for (const std::uint32_t flag : {0U, 0x3f800000U, 0x80000000U, 0x7fc00000U, 1U}) {
+        const auto before = camera_compute.Statistics()[0];
+        probe.after_read = [flag](BufferHandle, std::span<std::byte> bytes) {
+            std::memcpy(bytes.data() + 3 * sizeof(flag), &flag, sizeof(flag));
+        };
+        outputs = camera_compute.Camera(inputs);
+        if (flag == 0 || flag == 0x3f800000U) {
+            ASSERT_TRUE(outputs);
+            EXPECT_EQ(outputs->front().valid, flag != 0);
+        } else {
+            ASSERT_FALSE(outputs);
+            EXPECT_EQ(outputs.error().operation(), "read retained camera");
+        }
+        const auto after = camera_compute.Statistics()[0];
+        EXPECT_EQ(after.command_row_counts[1], before.command_row_counts[1] + 1);
+        auto flags = before.completion_flag_counts;
+        ++flags[flag == 0 ? 0 : (flag == 0x3f800000U ? 1 : 2)];
+        EXPECT_EQ(after.completion_flag_counts, flags);
+    }
+    // A completion flag one can still fail full value decoding.
+    const auto before_bad_value = camera_compute.Statistics()[0];
+    probe.after_read = [](BufferHandle, std::span<std::byte> bytes) {
+        const std::uint32_t nan = 0x7fc00000U;
+        std::memcpy(bytes.data() + 168 * sizeof(nan), &nan, sizeof(nan));
+    };
+    outputs = camera_compute.Camera(inputs);
+    ASSERT_FALSE(outputs);
+    EXPECT_EQ(outputs.error().detail(), "invalid retained value");
+    stats = camera_compute.Statistics()[0];
+    EXPECT_EQ(stats.completion_flag_counts[1], before_bad_value.completion_flag_counts[1] + 1);
+    probe.after_read = {};
+    camera_compute.ResetStatistics();
+    ASSERT_NO_FATAL_FAILURE(ExpectPhysicalStatsEqual(camera_compute.Statistics(), {}));
+    const auto writes_before_recovery = probe.writes.size();
+    outputs = camera_compute.Camera(inputs);
+    ASSERT_TRUE(outputs);
+    EXPECT_TRUE(CameraAgrees(outputs->front(), sirius::test::retained_camera::kCases.front()));
+    EXPECT_EQ(probe.writes.size(), writes_before_recovery + 1);
+    ASSERT_NO_FATAL_FAILURE(expect_transfer(1));  // Reset preserves the uploaded program.
+    stats = camera_compute.Statistics()[0];
+    EXPECT_EQ(stats.command_row_counts[1], 1U);
+    EXPECT_EQ(stats.completion_flag_counts, (std::array<std::uint64_t, 3>{0, 1, 0}));
     EXPECT_EQ(device->BufferAllocationBytes(), allocation);
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
@@ -4053,6 +4124,47 @@ TEST_F(RetainedComputeTest, SharedEndpointDensePreservesPrivateIntervalsAndSeria
     EXPECT_EQ(columns.central_stages, 42U);
     ASSERT_TRUE(executor.Step(ray, flat, control, columns, comparison));
     EXPECT_EQ(probe.pair_calls - pairs_before, 1U);  // Sticky budget one is fully serialized.
+    // A pair has two different active prefixes, not two copies of their max.
+    std::array<RetainedDenseInput, 2> inactive_dense{};
+    for (const bool reverse : {false, true}) {
+        const auto endpoint_rows = reverse ? 1U : 2U;
+        const auto dense_rows = reverse ? 2U : 1U;
+        const auto before = observed.Statistics();
+        const auto asymmetric = observed.EndpointAndDense(
+            std::span(initial).first(endpoint_rows), std::span(inactive_dense).first(dense_rows));
+        ASSERT_TRUE(asymmetric) << asymmetric.error().Description();
+        const auto after = observed.Statistics();
+        EXPECT_EQ(after[2].command_row_counts[endpoint_rows],
+                  before[2].command_row_counts[endpoint_rows] + 1);
+        EXPECT_EQ(after[3].command_row_counts[dense_rows],
+                  before[3].command_row_counts[dense_rows] + 1);
+        EXPECT_EQ(after[2].completion_flag_counts[1],
+                  before[2].completion_flag_counts[1] + endpoint_rows);
+        EXPECT_EQ(after[3].completion_flag_counts[0],
+                  before[3].completion_flag_counts[0] + dense_rows);
+        EXPECT_TRUE(observed.EndpointDenseStatistics().command_row_counts.empty());
+    }
+    // Endpoint decode fails before Dense readback, after both commands complete.
+    const auto before_decode_failure = observed.Statistics();
+    probe.after_read = [endpoint_output](BufferHandle buffer, std::span<std::byte> bytes) {
+        if (buffer.value == endpoint_output.value) {
+            const std::uint32_t malformed = 2;
+            std::memcpy(bytes.data(), &malformed, sizeof(malformed));
+        }
+    };
+    const auto bad_pair = observed.EndpointAndDense(initial, inactive_dense);
+    ASSERT_FALSE(bad_pair);
+    EXPECT_EQ(bad_pair.error().operation(), "read retained endpoint");
+    const auto after_decode_failure = observed.Statistics();
+    EXPECT_EQ(after_decode_failure[2].command_row_counts[2],
+              before_decode_failure[2].command_row_counts[2] + 1);
+    EXPECT_EQ(after_decode_failure[3].command_row_counts[2],
+              before_decode_failure[3].command_row_counts[2] + 1);
+    EXPECT_EQ(after_decode_failure[2].completion_flag_counts[2],
+              before_decode_failure[2].completion_flag_counts[2] + 1);
+    EXPECT_EQ(after_decode_failure[3].completion_flag_counts,
+              before_decode_failure[3].completion_flag_counts);
+    probe.after_read = {};
     EXPECT_EQ(device->BufferAllocationBytes(), resident);
     RecordProperty("device", device->Info().name);
     RecordProperty("scope",
@@ -4172,6 +4284,9 @@ TEST_F(RetainedComputeTest, ProjectionReserveKeepsLogicalCohortsBounded) {
         for (const auto& submission : probe.submissions)
             if (submission.buffers[0].value == endpoint_input.value)
                 projection_rows.push_back(submission.x);
+        std::vector<std::uint64_t> expected_prefixes(reserved.Capacity() + 1);
+        for (const auto rows : projection_rows) ++expected_prefixes[rows];
+        EXPECT_EQ(stats.stage_timing[2].command_row_counts, expected_prefixes);
         if (rays == 3) {
             // The first soft overshoot gives budgets 6->1->2->4->6.
             // Logical gathers 3,1,2,3,3 must recover pairing in the last cohort;

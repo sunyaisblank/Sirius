@@ -117,6 +117,23 @@ std::string VulkanRenderEvidenceJson(const SessionConfig& config, const VulkanRe
         {"initialization_seconds", stats.initialization_seconds},
         {"initialization_submit_wait_ms", stats.initialization_submit_wait_ms}};
     if (stats.retained_intervals) {
+        nlohmann::ordered_json stage_rows = nlohmann::ordered_json::array();
+        for (std::size_t i = 0; i < stats.retained_stages.size(); ++i) {
+            const auto& stage = stats.retained_stages[i];
+            stage_rows.push_back(
+                {{"stage", backend::RetainedCompute::StageName(
+                               static_cast<backend::RetainedCompute::KernelStage>(i))},
+                 {"submissions", stage.submissions},
+                 {"command_row_counts", stage.command_row_counts},
+                 {"completion_flag_counts", stage.completion_flag_counts}});
+        }
+        evidence["retained_stage_rows"] = {
+            {"scope",
+             "successful kernel commands indexed by active prefix, including shared commands "
+             "and inactive placeholders; preparation excluded; raw completion flags zero/one/other "
+             "from successful readbacks; one does not establish host validity or admission; "
+             "later read/decode failure does not erase earlier observations"},
+            {"stages", std::move(stage_rows)}};
         nlohmann::ordered_json preparation_stages = nlohmann::ordered_json::array();
         for (std::size_t i = 0; i < stats.retained_preparation.stages.size(); ++i) {
             const auto& stage = stats.retained_preparation.stages[i];

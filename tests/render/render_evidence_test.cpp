@@ -53,6 +53,14 @@ TEST(RenderEvidence, RetainedWireRecordsFeedAttestationControls) {
         stats.retained_stage_dispatches =
             imax ? std::array<std::int64_t, 7>{0, 5000, 5000, 5000, 5000, 12736, 0}
                  : std::array<std::int64_t, 7>{0, 500, 500, 500, 500, 1000, 0};
+        for (std::size_t i = 0; i < stats.retained_stages.size(); ++i) {
+            auto& stage = stats.retained_stages[i];
+            stage.submissions = static_cast<std::uint64_t>(stats.retained_stage_dispatches[i]);
+            stage.command_row_counts.resize(129);
+            stage.command_row_counts[1 + i] = stage.submissions;
+            const auto zero = stage.submissions == 0 ? 0 : i;
+            stage.completion_flag_counts = {zero, stage.submissions * (1 + i) - zero, 0};
+        }
         auto& paired = stats.endpoint_dense_timing;
         paired.submissions = imax ? 3000 : 300;
         paired.submit_wait_ms = imax ? 30000 : 3000;
@@ -87,6 +95,18 @@ TEST(RenderEvidence, RetainedWireRecordsFeedAttestationControls) {
         EXPECT_EQ(decoded["retained_timing"]["maximum_first_request_wait_ms"], 3.25);
         EXPECT_EQ(decoded["retained_timing"]["awaiting_first_request"], true);
         EXPECT_EQ(decoded["retained_timing"]["current_first_request_wait_ms"], .75);
+        const auto& stage_rows = decoded["retained_stage_rows"]["stages"];
+        ASSERT_EQ(stage_rows.size(), stats.retained_stages.size());
+        for (std::size_t i = 0; i < stage_rows.size(); ++i) {
+            EXPECT_EQ(stage_rows[i]["stage"],
+                      sirius::backend::RetainedCompute::StageName(
+                          static_cast<sirius::backend::RetainedCompute::KernelStage>(i)));
+            EXPECT_EQ(stage_rows[i]["submissions"], stats.retained_stages[i].submissions);
+            EXPECT_EQ(stage_rows[i]["command_row_counts"],
+                      stats.retained_stages[i].command_row_counts);
+            EXPECT_EQ(stage_rows[i]["completion_flag_counts"],
+                      stats.retained_stages[i].completion_flag_counts);
+        }
         EXPECT_EQ(decoded["source_owner"], "host");
         EXPECT_EQ(decoded["route"], "retained");
         EXPECT_TRUE(decoded["dispatches"].is_number_integer());

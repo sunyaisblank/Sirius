@@ -79,6 +79,8 @@ struct VulkanRenderStats {
     // Counts kernel commands, including both commands in a shared submission.
     // Original six stages followed by the separate DP phase sampler.
     std::array<std::int64_t, backend::RetainedCompute::kStageCount> retained_stage_dispatches{};
+    std::array<backend::RetainedCompute::StageStats, backend::RetainedCompute::kStageCount>
+        retained_stages{};
     backend::RetainedCompute::StageStats endpoint_dense_timing;
     std::uint64_t queue_submissions = 0;
     struct RetainedTiming {

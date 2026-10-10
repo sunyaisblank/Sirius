@@ -37,6 +37,7 @@
 #include <functional>
 #include <limits>
 #include <numbers>
+#include <numeric>
 #include <span>
 #include <string>
 #include <string_view>
@@ -1382,6 +1383,19 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
         std::int64_t submissions = 0;
         for (const auto count : rendered->retained_stage_dispatches) submissions += count;
         EXPECT_EQ(rendered->band_dispatches, submissions);
+        for (std::size_t i = 0; i < rendered->retained_stages.size(); ++i) {
+            const auto& stage = rendered->retained_stages[i];
+            std::uint64_t commands = 0, rows = 0;
+            EXPECT_EQ(stage.command_row_counts.size(),
+                      rendered->retained_timing.projection_capacity + 1);
+            for (std::size_t prefix = 0; prefix < stage.command_row_counts.size(); ++prefix) {
+                commands += stage.command_row_counts[prefix];
+                rows += prefix * stage.command_row_counts[prefix];
+            }
+            EXPECT_EQ(commands, static_cast<std::uint64_t>(rendered->retained_stage_dispatches[i]));
+            EXPECT_EQ(rows, stage.completion_flag_counts[0] + stage.completion_flag_counts[1] +
+                                stage.completion_flag_counts[2]);
+        }
     } else {
         EXPECT_GT(rendered->continuation_dispatches[0], 0);
         EXPECT_GT(rendered->continuation_dispatches[1], 0);
@@ -1435,6 +1449,11 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
         // The fresh executor counts camera batches independently of the reused
         // compute owner. An accumulated physical count fails this equality.
         EXPECT_EQ(stats.retained_stage_dispatches[5], stats.camera_batches);
+        for (std::size_t stage = 0; stage < stats.retained_stages.size(); ++stage)
+            EXPECT_EQ(std::accumulate(stats.retained_stages[stage].command_row_counts.begin(),
+                                      stats.retained_stages[stage].command_row_counts.end(),
+                                      std::uint64_t{}),
+                      static_cast<std::uint64_t>(stats.retained_stage_dispatches[stage]));
         if (selected.kind != sirius::backend::DeviceKind::kSoftware) return;
         EXPECT_EQ(stats.initialization_dispatches, 5);
         for (std::size_t stage = 1; stage < 6; ++stage) {

@@ -644,6 +644,18 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
                     stage.submissions, stage.submit_wait_ms, stage.pipeline_setup_ms,
                     stage.command_setup_ms, stage.cleanup_ms, stage.dispatch_total_ms,
                     stage.write_buffer_ms, stage.read_buffer_ms);
+                std::clog << "[Vulkan] Retained stage prefixes: "
+                          << backend::RetainedCompute::StageName(
+                                 static_cast<backend::RetainedCompute::KernelStage>(i))
+                          << " (successful kernel commands, including shared and inactive rows):";
+                for (std::size_t rows = 1; rows < stage.command_row_counts.size(); ++rows)
+                    if (stage.command_row_counts[rows])
+                        std::clog << ' ' << rows << ':' << stage.command_row_counts[rows];
+                std::clog << std::format(
+                    "; raw completion flags zero/one/other={}/{}/{} "
+                    "(successful readbacks, not host admission)\n",
+                    stage.completion_flag_counts[0], stage.completion_flag_counts[1],
+                    stage.completion_flag_counts[2]);
             }
             const auto& shared = progress.endpoint_dense_timing;
             std::clog << std::format(
@@ -716,6 +728,7 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     stats.work_tile_edge = work_edge;
     stats.maximum_dispatch_rays = static_cast<std::int64_t>(execution.maximum_batch_rows);
     const auto stages = compute->Statistics();
+    stats.retained_stages = stages;
     for (std::size_t i = 0; i < stages.size(); ++i) {
         stats.retained_stage_dispatches[i] = static_cast<std::int64_t>(stages[i].submissions);
         stats.band_dispatches += stats.retained_stage_dispatches[i];
