@@ -516,7 +516,7 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
               << " host work tiles of " << work_edge << "px" << std::endl;
     backend::RetainedCompute::PreparationStats preparation;
     if (device.Info().kind == backend::DeviceKind::kSoftware) {
-        std::cout << "[Vulkan] initialising five software retained kernels with zero active rays"
+        std::cout << "[Vulkan] initialising software retained kernels with zero active rays"
                   << std::endl;
         const auto prepared = compute->PrepareSoftwareRendererStages(preparation, should_cancel);
         for (std::size_t i = 0; i < preparation.stages.size(); ++i) {

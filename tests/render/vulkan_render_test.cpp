@@ -83,6 +83,17 @@ using sirius::render::test::ProjectBardeenAtFiniteObserver;
 
 constexpr double kPi = std::numbers::pi;
 
+// These are the renderer's zero-active software preparations. Film Camera is
+// unused; DP sampling participates in preparation, reuse and recovery.
+using RetainedKernelStage = sirius::backend::RetainedCompute::KernelStage;
+constexpr std::array kSoftwarePreparationStages{
+    static_cast<std::size_t>(RetainedKernelStage::kRayCamera),
+    static_cast<std::size_t>(RetainedKernelStage::kInitialize),
+    static_cast<std::size_t>(RetainedKernelStage::kTransport),
+    static_cast<std::size_t>(RetainedKernelStage::kEndpoint),
+    static_cast<std::size_t>(RetainedKernelStage::kDense),
+    static_cast<std::size_t>(RetainedKernelStage::kDopriPhase)};
+
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
     if (!file) return {};
@@ -686,7 +697,10 @@ TEST(VulkanRenderSession, DispatchSubdivisionPreservesExactCameraAndCatalogueOut
     const bool software = (*devices)[*selected].kind == sirius::backend::DeviceKind::kSoftware;
     const auto check_initialization = [software](const auto& stats) {
         EXPECT_EQ(stats.initialization_dispatches,
-                  software ? (stats.retained_intervals ? 5 : 1) : 0);
+                  software ? (stats.retained_intervals
+                                  ? static_cast<int>(kSoftwarePreparationStages.size())
+                                  : 1)
+                           : 0);
         EXPECT_TRUE(std::isfinite(stats.initialization_seconds));
         EXPECT_TRUE(std::isfinite(stats.initialization_submit_wait_ms));
         EXPECT_GE(stats.initialization_seconds, 0.0);
@@ -694,7 +708,8 @@ TEST(VulkanRenderSession, DispatchSubdivisionPreservesExactCameraAndCatalogueOut
         EXPECT_GE(stats.seconds, stats.initialization_seconds);
         if (stats.retained_intervals) {
             EXPECT_EQ(stats.retained_preparation.stages[0].attempts, 0U);
-            for (std::size_t i = 1; i < stats.retained_preparation.stages.size(); ++i) {
+            EXPECT_EQ(stats.retained_preparation.stages[0].completed_dispatches, 0U);
+            for (const auto i : kSoftwarePreparationStages) {
                 const auto& stage = stats.retained_preparation.stages[i];
                 EXPECT_EQ(stage.completed_dispatches, software ? 1U : 0U);
                 EXPECT_EQ(stage.completed, software ? 1U : 0U);
@@ -1455,12 +1470,16 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
                                       std::uint64_t{}),
                       static_cast<std::uint64_t>(stats.retained_stage_dispatches[stage]));
         if (selected.kind != sirius::backend::DeviceKind::kSoftware) return;
-        EXPECT_EQ(stats.initialization_dispatches, 5);
-        for (std::size_t stage = 1; stage < 6; ++stage) {
+        EXPECT_EQ(stats.initialization_dispatches,
+                  static_cast<int>(kSoftwarePreparationStages.size()));
+        EXPECT_EQ(stats.retained_preparation.stages[0].attempts, 0U);
+        EXPECT_EQ(stats.retained_preparation.stages[0].completed_dispatches, 0U);
+        for (const auto stage : kSoftwarePreparationStages) {
             EXPECT_EQ(stats.retained_preparation.stages[stage].completed_dispatches, 1U);
             EXPECT_TRUE(stats.retained_preparation.stages[stage].header_restored);
         }
     };
+    expect_fresh_frame_stats(*rendered);
     // The identical scene must publish identical finite radiance without
     // accumulating buffers, statistics or pipeline creation on an idle owner.
     DisplayBuffer repeated;
@@ -1471,7 +1490,7 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
     EXPECT_EQ(repeated.SnapshotFloatData(), complete);
     expect_fresh_frame_stats(*repeat);
     if (repeat->retained_intervals && reusable_software) {
-        for (std::size_t stage = 1; stage < 6; ++stage)
+        for (const auto stage : kSoftwarePreparationStages)
             EXPECT_FALSE(repeat->retained_preparation.stages[stage].timing.pipeline_created);
     }
     RecordProperty("repeated_initialization_seconds",
@@ -1490,7 +1509,7 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
                             [](float value) { return std::isfinite(value); }));
     expect_fresh_frame_stats(*changed_frame);
     if (changed_frame->retained_intervals && reusable_software) {
-        for (std::size_t stage = 1; stage < 6; ++stage)
+        for (const auto stage : kSoftwarePreparationStages)
             EXPECT_FALSE(changed_frame->retained_preparation.stages[stage].timing.pipeline_created);
     }
     // Cancel during frame preparation or tracing. The previously published
@@ -1528,7 +1547,7 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
     EXPECT_EQ(recovered.SnapshotFloatData(), complete);
     expect_fresh_frame_stats(*recovery);
     if (recovery->retained_intervals && reusable_software) {
-        for (std::size_t stage = 1; stage < 6; ++stage)
+        for (const auto stage : kSoftwarePreparationStages)
             EXPECT_TRUE(recovery->retained_preparation.stages[stage].timing.pipeline_created);
     }
 }
