@@ -3282,10 +3282,11 @@ TEST_F(RetainedComputeTest, DenseSegmentsPreserveSmallCovariantArrivalDerivative
         ASSERT_TRUE(small_input);
         ASSERT_TRUE(small_output);
         const bool portable = RetainedUsesPortableArithmetic(probe.Info());
-        const std::span<const std::uint32_t> code =
+        using ShaderWords = std::span<const std::uint32_t>;
+        const ShaderWords code =
             portable
-                ? (wide ? std::span(kDensePortableFp64Shader) : std::span(kDensePortableShader))
-                : (wide ? std::span(kDenseFp64Shader) : std::span(kDenseShader));
+                ? (wide ? ShaderWords(kDensePortableFp64Shader) : ShaderWords(kDensePortableShader))
+                : (wide ? ShaderWords(kDenseFp64Shader) : ShaderWords(kDenseShader));
         const auto kernel = probe.LoadKernel(code);
         ASSERT_TRUE(kernel);
         ASSERT_TRUE(probe.WriteBuffer(*small_input, std::as_bytes(std::span(short_input))));
