@@ -1023,6 +1023,7 @@ set_tests_properties(
     RetainedComputeTest.FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission
     RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation
     RetainedComputeTest.DenseSegmentsPreserveSmallCovariantArrivalDerivatives
+    RetainedComputeTest.ZeroFractionArrivalsPreserveProgramAuthorityAndCompleteRefusal
     RetainedComputeTest.PhysicalInitializationRetainsTheHamiltonianResidual
     RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults
     RetainedComputeTest.CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement

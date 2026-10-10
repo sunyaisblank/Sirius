@@ -130,6 +130,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
         "gtest:RetainedComputeTest.JointRkStagesRetainCriticalIncrementsAndEmbeddedError",
         "gtest:RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation",
         "gtest:RetainedComputeTest.DenseSegmentsPreserveSmallCovariantArrivalDerivatives",
+        "gtest:RetainedComputeTest.ZeroFractionArrivalsPreserveProgramAuthorityAndCompleteRefusal",
         "gtest:RetainedDopriTest.IndependentQuarticPreservesCompletePhase",
         "gtest:RetainedDopriTest.MalformedRowsRefuseAndRecover",
         "gtest:RetainedDopriTest.CurvedTransportConnectsSamplerAndProjection",
