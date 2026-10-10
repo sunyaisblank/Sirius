@@ -3113,6 +3113,195 @@ TEST_F(RetainedComputeTest, DenseSegmentsPreserveSmallCovariantArrivalDerivative
     ASSERT_TRUE(invalid) << invalid.error().Description();
     EXPECT_FALSE(invalid->front().valid);
     EXPECT_EQ(device->BufferAllocationBytes(), allocation);
+
+    // Exact-zero curved arrivals own supplied endpoint fields even when
+    // discarded interpolation arithmetic refuses. Compare the complete row
+    // against the original interpreter, including its reserved zero suffix.
+    using namespace sirius::backend::retained_program;
+    const auto curved = std::find_if(cases.begin(), cases.end(), [](const auto& item) {
+        const auto row = std::bit_cast<RetainedDenseInput>(item.input);
+        return row.values[0].Center() != 0 && row.values[110].Center() == 1;
+    });
+    ASSERT_NE(curved, cases.end());
+    std::array<RetainedDenseInput, 8> arrivals;
+    arrivals.fill(std::bit_cast<RetainedDenseInput>(curved->input));
+    for (auto& row : arrivals) row.values[105] = RetainedValue::FromDouble(0);
+    arrivals[1].values[104] = RetainedValue::FromDouble(0x1p-100);
+    arrivals[2].values[16] = {-0.0f, 0, -0.0f, 0, 1};
+    arrivals[2].values[17] = {1, 0x1p-26f, 0x1p-90f, 0x1p-100f, 1};
+    auto& late = arrivals[3];
+    for (std::size_t i = 8; i < 44; ++i) late.values[i] = RetainedValue::FromDouble(0);
+    late.values[8] = RetainedValue::FromDouble(0x1p-100);
+    late.values[9] = RetainedValue::FromDouble(1);
+    late.values[36] = RetainedValue::FromDouble(0x1p100);
+    for (std::size_t i = 106; i < 110; ++i) late.values[i] = RetainedValue::FromDouble(0);
+    late.values[106] = RetainedValue::FromDouble(1);
+    arrivals[4].values[43].valid = 2;
+    for (std::size_t i = 106; i < 110; ++i) arrivals[5].values[i] = RetainedValue::FromDouble(0);
+    arrivals[6] = std::bit_cast<RetainedDenseInput>(curved->input);
+    const auto flat = std::find_if(cases.begin(), cases.end(), [](const auto& item) {
+        const auto row = std::bit_cast<RetainedDenseInput>(item.input);
+        return row.values[0].Center() == 0 && row.values[110].Center() == 1;
+    });
+    ASSERT_NE(flat, cases.end());
+    arrivals[7] = std::bit_cast<RetainedDenseInput>(flat->input);
+    arrivals[7].values[105] = RetainedValue::FromDouble(0);
+    const std::array<bool, 8> admitted{true, true, true, false, false, false, true, true};
+    const auto inventory = EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory) << inventory.error().Description();
+    const auto index = ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(index) << index.error().Description();
+    for (const bool wide : {false, true}) {
+        SCOPED_TRACE(wide ? "fp64 arrivals" : "default arrivals");
+        auto opened = CreateVulkanDevice(*index);
+        ASSERT_TRUE(opened) << opened.error().Description();
+        ASSERT_EQ((*opened)->Info(), device->Info());
+        ASSERT_TRUE((*opened)->SetBufferAllocationLimit(8 * 1024 * 1024));
+        TransferProbeDevice probe(**opened);
+        auto created = RetainedCompute::Create(probe, arrivals.size(), wide);
+        if (wide && (!probe.Info().supports_fp64 || !probe.Info().rounds_fp64_to_nearest)) {
+            ASSERT_FALSE(created);
+            EXPECT_EQ(probe.BufferAllocationBytes(), 0U);
+            continue;
+        }
+        ASSERT_TRUE(created) << created.error().Description();
+        auto& instance = **created;
+        ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+        const auto dense_input = probe.allocations[6].handle;
+        probe.capture_output = probe.allocations[7].handle;
+        const auto resident = probe.BufferAllocationBytes();
+        const auto row_bytes = kDenseRowWords * sizeof(std::uint32_t);
+        std::vector<std::byte> raw;
+        std::vector<RetainedDenseOutput> results;
+        const auto dense = [&](std::span<const RetainedDenseInput> rows) {
+            const auto readbacks = probe.readbacks.size();
+            const auto output = instance.Dense(rows);
+            ASSERT_TRUE(output) << output.error().Description();
+            ASSERT_EQ(probe.readbacks.size(), readbacks + 1);
+            raw = probe.readbacks.back();
+            results = *output;
+            ASSERT_EQ(raw.size(), rows.size() * row_bytes);
+            EXPECT_EQ(probe.BufferAllocationBytes(), resident);
+        };
+        ASSERT_NO_FATAL_FAILURE(dense(arrivals));
+        for (std::size_t row = 0; row < arrivals.size(); ++row) {
+            SCOPED_TRACE(row);
+            EXPECT_EQ(results[row].valid, admitted[row]);
+            const auto words = std::span(raw).subspan(row * row_bytes, row_bytes);
+            if (!admitted[row]) {
+                EXPECT_TRUE(std::all_of(words.begin(), words.end(),
+                                        [](std::byte word) { return word == std::byte{}; }));
+            } else {
+                EXPECT_TRUE(std::all_of(words.begin() + 204 * sizeof(std::uint32_t), words.end(),
+                                        [](std::byte word) { return word == std::byte{}; }));
+            }
+        }
+        const auto original_raw = raw;
+        const auto original_outputs = results;
+        const auto same_row = [&](std::size_t row, std::size_t original_row) {
+            const auto actual = std::span(raw).subspan(row * row_bytes, row_bytes);
+            const auto expected =
+                std::span(original_raw).subspan(original_row * row_bytes, row_bytes);
+            EXPECT_TRUE(std::equal(actual.begin(), actual.end(), expected.begin(), expected.end()));
+        };
+        const auto table = 1 + instance.Capacity() * 560;
+        std::vector<std::uint32_t> complete_input(table + kDenseProgram.size());
+        complete_input[0] = static_cast<std::uint32_t>(instance.Capacity());
+        std::memcpy(complete_input.data() + 1, arrivals.data(), sizeof(arrivals));
+        const auto upload = [&](const std::vector<std::uint32_t>& program) {
+            ASSERT_EQ(program.size(), kDenseProgram.size());
+            std::copy(program.begin(), program.end(), complete_input.begin() + table);
+            ASSERT_TRUE(probe.WriteBuffer(dense_input, std::as_bytes(std::span(complete_input))));
+        };
+        const std::vector<std::uint32_t> canonical(kDenseProgram.begin(), kDenseProgram.end());
+        auto changed = canonical;
+        std::size_t constant = 43;
+        while (constant < 43 + 5 * kDenseProgram[0] && changed[constant] != 0) constant += 5;
+        ASSERT_LT(constant, 43 + 5 * kDenseProgram[0]);
+        // Constant opcodes ignore c. This changed table has identical semantics
+        // and forces the canonical shortcut to use the original interpreter.
+        changed[constant + 4] ^= 1U;
+        ASSERT_NO_FATAL_FAILURE(upload(changed));
+        ASSERT_NO_FATAL_FAILURE(dense(arrivals));
+        EXPECT_EQ(raw, original_raw);
+
+        // A legal root-map mutation must retain supplied-program authority.
+        changed = canonical;
+        changed[3] = changed[4];
+        ASSERT_NE(changed[3], canonical[3]);
+        ASSERT_NO_FATAL_FAILURE(upload(changed));
+        ASSERT_NO_FATAL_FAILURE(dense(std::span(arrivals).first(3)));
+        for (std::size_t row = 0; row < 3; ++row) {
+            ASSERT_TRUE(results[row].valid);
+            for (std::size_t field = 0; field < 40; ++field) {
+                const auto& expected = original_outputs[row].physical[field == 0 ? 1 : field];
+                EXPECT_EQ(
+                    (std::bit_cast<std::array<std::uint32_t, 5>>(results[row].physical[field])),
+                    (std::bit_cast<std::array<std::uint32_t, 5>>(expected)));
+            }
+        }
+        for (const auto location :
+             {constant, std::size_t{3}, std::size_t{43 + 5 * kDenseProgram[0]}}) {
+            changed = canonical;
+            changed[location] = location == constant ? 12U : location == 3 ? kDenseProgram[1] : 1U;
+            ASSERT_NO_FATAL_FAILURE(upload(changed));
+            ASSERT_NO_FATAL_FAILURE(dense(std::span(arrivals).first(3)));
+            for (const auto& output : results) EXPECT_FALSE(output.valid);
+            EXPECT_TRUE(std::all_of(raw.begin(), raw.end(),
+                                    [](std::byte word) { return word == std::byte{}; }));
+        }
+        ASSERT_NO_FATAL_FAILURE(upload(canonical));
+        ASSERT_NO_FATAL_FAILURE(dense(std::span(arrivals).first(3)));
+        for (std::size_t row = 0; row < 3; ++row) same_row(row, row);
+        const std::array<RetainedDenseInput, 4> reordered{arrivals[3], arrivals[2], arrivals[0],
+                                                          arrivals[7]};
+        ASSERT_NO_FATAL_FAILURE(dense(reordered));
+        const std::array<std::size_t, 4> order{3, 2, 0, 7};
+        for (std::size_t row = 0; row < order.size(); ++row) same_row(row, order[row]);
+        ASSERT_NO_FATAL_FAILURE(dense(std::span(arrivals).first(1)));
+        same_row(0, 0);
+
+        // A physically shorter, well-formed table retains its own authority.
+        // One constant producer per original layer maps all roots to +1;
+        // the identity comparator must not read beyond this supplied span.
+        const auto layers = kDenseProgram.size() - 43 - 5 * kDenseProgram[0] - 1;
+        std::vector<std::uint32_t> short_input(561);
+        short_input[0] = 1;
+        std::memcpy(short_input.data() + 1, arrivals.data(), sizeof(RetainedDenseInput));
+        short_input.push_back(static_cast<std::uint32_t>(layers));
+        short_input.push_back(kDenseProgram[1]);
+        short_input.push_back(40);
+        short_input.insert(short_input.end(), 40, 0);
+        for (std::size_t node = 0; node < layers; ++node)
+            short_input.insert(short_input.end(), {0, 0, std::bit_cast<std::uint32_t>(1.0f), 0, 0});
+        for (std::size_t layer = 0; layer <= layers; ++layer)
+            short_input.push_back(static_cast<std::uint32_t>(layer));
+        const auto small_input =
+            probe.CreateBuffer(short_input.size() * sizeof(std::uint32_t), BufferUsage::kStorage);
+        const auto small_output = probe.CreateBuffer(row_bytes, BufferUsage::kStorage);
+        ASSERT_TRUE(small_input);
+        ASSERT_TRUE(small_output);
+        const bool portable = RetainedUsesPortableArithmetic(probe.Info());
+        const std::span<const std::uint32_t> code =
+            portable
+                ? (wide ? std::span(kDensePortableFp64Shader) : std::span(kDensePortableShader))
+                : (wide ? std::span(kDenseFp64Shader) : std::span(kDenseShader));
+        const auto kernel = probe.LoadKernel(code);
+        ASSERT_TRUE(kernel);
+        ASSERT_TRUE(probe.WriteBuffer(*small_input, std::as_bytes(std::span(short_input))));
+        const std::array<BufferHandle, 2> bindings{*small_input, *small_output};
+        ASSERT_TRUE(probe.Dispatch(*kernel, bindings, 1, 1, 1, nullptr));
+        std::vector<std::uint32_t> short_words(kDenseRowWords);
+        ASSERT_TRUE(
+            probe.ReadBuffer(*small_output, std::as_writable_bytes(std::span(short_words))));
+        std::vector<std::uint32_t> expected_words(kDenseRowWords);
+        expected_words[0] = 1;
+        for (std::size_t field = 0; field < 40; ++field) {
+            expected_words[4 + 5 * field] = std::bit_cast<std::uint32_t>(1.0f);
+            expected_words[8 + 5 * field] = 1;
+        }
+        EXPECT_EQ(short_words, expected_words);
+    }
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
 #endif
