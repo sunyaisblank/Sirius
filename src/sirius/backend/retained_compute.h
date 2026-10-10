@@ -270,7 +270,6 @@ class RetainedCompute {
         std::vector<std::uint32_t> input, output;
         std::size_t input_words_per_row = 0;
         bool program_uploaded = false;
-        bool paired_rows = false;
         StageStats stats;
     };
     [[nodiscard]] base::Expected<void> Dispatch(Stage& stage, std::size_t active_rows,
