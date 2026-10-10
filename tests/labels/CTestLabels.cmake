@@ -1313,6 +1313,7 @@ set_tests_properties(
 set_tests_properties(
     ViewCommandOperational.StrictParsingAndSessionProjection
     ViewCommandOperational.RelativisticJetsDeclineBeforeViewerInitialisation
+    ViewCommandOperational.RefinementLadderPreservesRequestedDimensions
     ViewCommandOperational.InputStateHandlesPressRepeatReleaseMouseAndScroll
     PROPERTIES LABELS "Mandatory;Operational"
 )

@@ -127,11 +127,12 @@ class InteractiveViewer {
     // Public so the non-windowed test estate can prove that operator controls
     // are not discarded before a preview begins.
     [[nodiscard]] render::SessionConfig CreateSessionConfig(int width, int height, int spp) const;
+    // The same zero-based resolution ladder consumed by the live render thread.
+    void GetResolutionForLevel(int level, int& width, int& height) const;
 
   private:
     void RenderThread();
     [[nodiscard]] bool RenderStep();
-    void GetResolutionForLevel(int level, int& width, int& height) const;
     void NotifyFrame();
 
     ViewerConfig config_;
