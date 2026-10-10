@@ -56,8 +56,12 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint regi
     } else {
         if (a >= registers) return false;
         RetainedTriple av = ReadValue(a, rowBase);
+#if defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_ENDPOINT_CORRECTIONS)
 #ifdef SIRIUS_RETAINED_PORTABLE
         if (op >= 2 && op <= 6) {
+#else
+        if (op == 5 || op == 6) {
+#endif
             RetainedTriple bv = RTInvalid();
             if (op != 6) {
                 if (b >= registers) return false;
@@ -85,8 +89,10 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint regi
                 r = RTSubtract(av, bv);
             else if (op == 4)
                 r = RTMultiply(av, bv);
+#ifndef SIRIUS_RETAINED_ENDPOINT_CORRECTIONS
             else if (op == 5)
                 r = RTDivide(av, bv);
+#endif
             else
 #endif
             if (op == 9) {

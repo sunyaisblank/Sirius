@@ -230,6 +230,8 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
+    if source.stem == "retained_endpoint" and not fp64 and not portable:
+        definitions.append("-DSIRIUS_RETAINED_ENDPOINT_CORRECTIONS=1")
     if transport_specialized is not None:
         if source.stem != "retained_transport":
             raise ValueError("the second transport table belongs only to Transport")
