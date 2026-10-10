@@ -513,12 +513,6 @@ Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {
         return Fail(ErrorDomain::kDevice, "create descriptor pool", VkResultText(r));
     }
 
-    // Optional: allocation refusal preserves the original queue-idle path.
-    const VkFenceCreateInfo fence_info{.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO};
-    if (vkCreateFence(device->device_, &fence_info, nullptr, &device->dispatch_fence_) !=
-        VK_SUCCESS)
-        device->dispatch_fence_ = VK_NULL_HANDLE;
-
     return Expected<std::unique_ptr<ComputeDevice>>{std::move(device)};
 }
 
@@ -558,7 +552,6 @@ VulkanDevice::~VulkanDevice() {
             vkDestroyPipelineCache(device_, pipeline_cache_, nullptr);
         if (timestamp_pool_ != VK_NULL_HANDLE)
             vkDestroyQueryPool(device_, timestamp_pool_, nullptr);
-        if (dispatch_fence_ != VK_NULL_HANDLE) vkDestroyFence(device_, dispatch_fence_, nullptr);
         vkDestroyDescriptorPool(device_, descriptor_pool_, nullptr);
         vkDestroyCommandPool(device_, command_pool_, nullptr);
         vkDestroyDevice(device_, nullptr);
@@ -1141,24 +1134,13 @@ Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> c
         .commandBufferCount = 1,
         .pCommandBuffers = &command,
     };
-    // The pending guard established that no earlier command remains in use.
-    // Reset refusal can discard this completed fence and use the original wait.
-    // https://docs.vulkan.org/refpages/latest/refpages/source/vkResetFences.html
-    if (dispatch_fence_ != VK_NULL_HANDLE &&
-        vkResetFences(device_, 1, &dispatch_fence_) != VK_SUCCESS) {
-        vkDestroyFence(device_, dispatch_fence_, nullptr);
-        dispatch_fence_ = VK_NULL_HANDLE;
-    }
     const auto submit_start = std::chrono::steady_clock::now();
-    VkResult submit_result = vkQueueSubmit(queue_, 1, &submit_info, dispatch_fence_);
+    VkResult submit_result = vkQueueSubmit(queue_, 1, &submit_info, VK_NULL_HANDLE);
     const VkResult submitted = submit_result;
     const auto queue_submit_end =
         timestamp_pool_ != VK_NULL_HANDLE ? std::chrono::steady_clock::now() : submit_start;
     if (submit_result == VK_SUCCESS) {
-        submit_result = dispatch_fence_ != VK_NULL_HANDLE
-                            ? vkWaitForFences(device_, 1, &dispatch_fence_, VK_TRUE,
-                                              std::numeric_limits<std::uint64_t>::max())
-                            : vkQueueWaitIdle(queue_);
+        submit_result = vkQueueWaitIdle(queue_);
     }
 
     const auto submit_end = std::chrono::steady_clock::now();
@@ -1170,7 +1152,6 @@ Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> c
             .properties = timestamp_properties_,
             .host_submit_ms = ms(queue_submit_end - submit_start),
             .host_wait_ms = ms(submit_end - queue_submit_end),
-            .submission_fence = dispatch_fence_ != VK_NULL_HANDLE,
         };
         std::array<std::uint64_t, 4> data{};
         observation.query_result = vkGetQueryPoolResults(
