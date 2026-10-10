@@ -3114,6 +3114,15 @@ TEST_F(RetainedComputeTest, DenseSegmentsPreserveSmallCovariantArrivalDerivative
     EXPECT_FALSE(invalid->front().valid);
     EXPECT_EQ(device->BufferAllocationBytes(), allocation);
 
+#else
+    GTEST_SKIP() << "Retained compute build tools unavailable";
+#endif
+}
+
+TEST_F(RetainedComputeTest, ZeroFractionArrivalsPreserveProgramAuthorityAndCompleteRefusal) {
+#ifdef SIRIUS_RETAINED_TESTS_AVAILABLE
+    const auto& cases = sirius::test::retained_dense::cases;
+
     // Exact-zero curved arrivals own supplied endpoint fields even when
     // discarded interpolation arithmetic refuses. Compare the complete row
     // against the original interpreter, including its reserved zero suffix.
@@ -3171,17 +3180,36 @@ TEST_F(RetainedComputeTest, DenseSegmentsPreserveSmallCovariantArrivalDerivative
         probe.capture_output = probe.allocations[7].handle;
         const auto resident = probe.BufferAllocationBytes();
         const auto row_bytes = kDenseRowWords * sizeof(std::uint32_t);
+        const std::string mode = wide ? "zero_arrival_fp64" : "zero_arrival_default";
+        RecordProperty(mode + "_device", probe.Info().name);
+        RecordProperty(mode + "_driver",
+                       probe.Info().driver_name + ": " + probe.Info().driver_info);
         std::vector<std::byte> raw;
         std::vector<RetainedDenseOutput> results;
         const auto dense = [&](std::span<const RetainedDenseInput> rows) {
             const auto readbacks = probe.readbacks.size();
+            const auto submissions = probe.submissions.size();
             const auto output = instance.Dense(rows);
             ASSERT_TRUE(output) << output.error().Description();
+            ASSERT_EQ(probe.submissions.size(), submissions + 1);
+            const auto& command = probe.submissions.back();
+            EXPECT_EQ(command.binding_count, 2U);
+            EXPECT_EQ(command.buffers[0].value, dense_input.value);
+            EXPECT_EQ(command.buffers[1].value, probe.capture_output->value);
+            EXPECT_EQ(command.x, rows.size());
+            EXPECT_EQ(command.y, 1U);
+            EXPECT_EQ(command.z, 1U);
             ASSERT_EQ(probe.readbacks.size(), readbacks + 1);
             raw = probe.readbacks.back();
             results = *output;
             ASSERT_EQ(raw.size(), rows.size() * row_bytes);
             EXPECT_EQ(probe.BufferAllocationBytes(), resident);
+            const auto digest = sirius::base::Sha256Hex(
+                std::span(reinterpret_cast<const std::uint8_t*>(raw.data()), raw.size()));
+            ASSERT_TRUE(digest) << digest.error();
+            RecordProperty(mode + "_command_" + std::to_string(submissions),
+                           std::format("stage=dense;rows={};bytes={};sha256={}", command.x,
+                                       raw.size(), *digest));
         };
         ASSERT_NO_FATAL_FAILURE(dense(arrivals));
         for (std::size_t row = 0; row < arrivals.size(); ++row) {
@@ -3291,7 +3319,16 @@ TEST_F(RetainedComputeTest, DenseSegmentsPreserveSmallCovariantArrivalDerivative
         ASSERT_TRUE(kernel);
         ASSERT_TRUE(probe.WriteBuffer(*small_input, std::as_bytes(std::span(short_input))));
         const std::array<BufferHandle, 2> bindings{*small_input, *small_output};
+        ASSERT_EQ(probe.submissions.size(), 9U);
         ASSERT_TRUE(probe.Dispatch(*kernel, bindings, 1, 1, 1, nullptr));
+        ASSERT_EQ(probe.submissions.size(), 10U);
+        const auto& command = probe.submissions.back();
+        EXPECT_EQ(command.binding_count, 2U);
+        EXPECT_EQ(command.buffers[0].value, small_input->value);
+        EXPECT_EQ(command.buffers[1].value, small_output->value);
+        EXPECT_EQ(command.x, 1U);
+        EXPECT_EQ(command.y, 1U);
+        EXPECT_EQ(command.z, 1U);
         std::vector<std::uint32_t> short_words(kDenseRowWords);
         ASSERT_TRUE(
             probe.ReadBuffer(*small_output, std::as_writable_bytes(std::span(short_words))));
@@ -3302,6 +3339,13 @@ TEST_F(RetainedComputeTest, DenseSegmentsPreserveSmallCovariantArrivalDerivative
             expected_words[8 + 5 * field] = 1;
         }
         EXPECT_EQ(short_words, expected_words);
+        const auto bytes = std::as_bytes(std::span(short_words));
+        const auto digest = sirius::base::Sha256Hex(
+            std::span(reinterpret_cast<const std::uint8_t*>(bytes.data()), bytes.size()));
+        ASSERT_TRUE(digest) << digest.error();
+        RecordProperty(
+            mode + "_command_9",
+            std::format("stage=dense-short;rows=1;bytes={};sha256={}", bytes.size(), *digest));
     }
 #else
     GTEST_SKIP() << "Retained compute build tools unavailable";
