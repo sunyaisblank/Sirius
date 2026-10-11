@@ -1,0 +1,37 @@
+{
+  "accepted": true,
+  "reviewer": "/root/retained_latency_review",
+  "inspection_seal": {
+    "bytes": 16777885,
+    "sha256": "471ab6c5aee059998d43bb9333edc161153f4f7d9d5bad974a54107c2a4267c5"
+  },
+  "inspector_seal": {
+    "bytes": 5520,
+    "sha256": "5f619ffd7ebdb00820257b73af12974733d880117756e121baa5043156d8a47b"
+  },
+  "scope": "Actual zero-dispatch diagnostic Transport driver static comparison; not uninstrumented production resources or exclusive cost/numerical identity/benefit.",
+  "correction_extent": {
+    "baseline": {
+      "start": 37664,
+      "end_exclusive": 52716,
+      "instructions": 2793,
+      "direct_branches": 119,
+      "conditional_selections": 225,
+      "floating_operations": 284
+    },
+    "candidate": {
+      "start": 42832,
+      "end_exclusive": 59136,
+      "instructions": 2826,
+      "direct_branches": 68,
+      "conditional_selections": 393,
+      "floating_operations": 284
+    }
+  },
+  "findings": [
+    "Whole ELF/printedISAprefix/all directbranch encodings exact.",
+    "Candidate 3corrections remain:counter3 at0xa6f8,rcp0xdb40,decrement0xe6d4,backedge0xe6fc\u21920xa750;finalresidual starts0xe700.",
+    "Instrumented baseline andcandidate56VGPR106SGPR9728LDS0scratch64x1x1 unchanged.",
+    "Branch reduction reaches actual RHS loop but selects/code grow; finite comparison possible, no static gain forecast."
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "accepted": true,
+  "source_revision": "2053ef79c90752d37b0075b8137cfb9b571b6820",
+  "issue": "https://github.com/sunyaisblank/Sirius/issues/44",
+  "source_optimization_adopted": false,
+  "numerical_dispatches": 0,
+  "native_pipelines_created": 2,
+  "scope": "Bounded source, actual SPIR-V and diagnostic native driver static screens. Production source, controls, scientific counts, budgets and contracts unchanged.",
+  "baseline": {
+    "spv_sha256": "e3a1589d852a4254312bb0e9e4b0343ab6aea32855c02c4f0f93b9fe1e18e5a3",
+    "text_bytes": 237568,
+    "instructions": 45504,
+    "direct_branches": 2293,
+    "vgprs": 56,
+    "correction_lexical_instructions": 2793,
+    "correction_lexical_branches": 119,
+    "correction_lexical_conditional_masks": 225,
+    "correction_lexical_fp_operations": 284
+  },
+  "variants": [
+    {
+      "formulation": "raw masks",
+      "source_patch": {
+        "bytes": 2057,
+        "sha256": "a6c168302377e8ba882be770c5a48c3e5c070a9fe3cc21f16342333421b3ef99"
+      },
+      "compiled_spv": {
+        "bytes": 88360,
+        "sha256": "0cb8acec4646038f184d2553d8def1f3f5cb538ab0c2fcf73f7ab82c001a5d37"
+      },
+      "tool_runs": 4,
+      "tool_runs_pass": true,
+      "raw_postcheck_accepted": false,
+      "compile_admission": {
+        "bytes": 4996,
+        "sha256": "e6291b7e3ad7108f22645ed6819b7463f814c53c6b08b6f410b29b68b1a770a9"
+      },
+      "independent_driver_review": {
+        "bytes": 1371,
+        "sha256": "a84d718c37f4bad1a1231034fb7ad37557f9b2fbda431d5bd68898c9549a027c"
+      },
+      "native_query_and_retirement_review": {
+        "bytes": 1329,
+        "sha256": "8311e5db47e479c16ff35bf1a99e1938058e5b901355b2354d11e09150e82e25"
+      },
+      "whole_static": {
+        "text_bytes": 262272,
+        "printed_text_bytes": 261848,
+        "instructions": 47478,
+        "direct_branches": 1264,
+        "vgprs": 56
+      },
+      "correction_lexical_extent": {
+        "start": 42832,
+        "end_exclusive": 59136,
+        "instructions": 2826,
+        "direct_branches": 68,
+        "conditional_selections": 393,
+        "floating_operations": 284
+      }
+    },
+    {
+      "formulation": "explicit OpSelect",
+      "source_patch": {
+        "bytes": 2292,
+        "sha256": "8bbe8c62a11bfbb50f7635ccc5c7d490cb32aae10d6ed737515181d7b6a61314"
+      },
+      "compiled_spv": {
+        "bytes": 87708,
+        "sha256": "a4224ca8109b4308631d0af81c4c3218b73ba83f55d9e3a29acfce8bdc273012"
+      },
+      "tool_runs": 4,
+      "tool_runs_pass": true,
+      "raw_postcheck_accepted": true,
+      "compile_admission": {
+        "bytes": 3607,
+        "sha256": "721f3007e8192ada9784c6d1336472cb94ea2468887a1931187935f0beac420b"
+      },
+      "independent_driver_review": {
+        "bytes": 1649,
+        "sha256": "16dd0d6cfc9cd2b68abb5345c5f7750d6c8634ae5a295e69f64b2ec7bc7b0cf5"
+      },
+      "native_query_and_retirement_review": {
+        "bytes": 1322,
+        "sha256": "a80bd3390092f9f36291d38bb93cd858797ca785440e5a3afb0803afa502fa7a"
+      },
+      "whole_static": {
+        "text_bytes": 242816,
+        "printed_text_bytes": 242336,
+        "instructions": 44187,
+        "direct_branches": 1267,
+        "vgprs": 59
+      },
+      "correction_lexical_extent": {
+        "start": 39620,
+        "end_exclusive": 54968,
+        "instructions": 2660,
+        "direct_branches": 68,
+        "conditional_selections": 403,
+        "floating_operations": 284
+      }
+    }
+  ],
+  "source_contract": "Both formulations preserve raw signed words, old guard/zero precedence and increment, finite masked extra arithmetic, and portable exclusion. Source reasoning and compiled inspection are not machine-checked proof or runtime equality.",
+  "controller_correction": "Variant1 four tools passed; raw compiler receipt remains accepted=false due to a postcheck expecting calls that Slang inlined. A separate pure actual-SPV admission corrects that inspection without another compile. Variant2 postcheck passes.",
+  "disposition": "Explicit OpSelect retains 284 correction FP operations while reducing correction lexical instructions 2793 to2660 and branches119 to68. Whole static instructions45504 to44187 and branches2293 to1267, but text237568 to242816 and VGPR56 to59. Static costs cannot forecast benefit. Raw mask formulation increases whole text/instructions and is not the selected next finite comparison.",
+  "next_acceptance": "Restricted native Transport/Endpoint source and actual-program generation review; original same-provider complete words, ordered streams, refusal/recovery and rollback; then original >=5% whole-call benefit in both alternating orders. No unchanged failed-frame rerun. All40 arrays, portable/CPU paths, counts and governors preserved.",
+  "remaining": "Issues44/48/53 stay open; full scientific, software/physical rendering and release qualification remain incomplete."
+}

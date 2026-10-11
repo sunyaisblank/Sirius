@@ -1,0 +1,24 @@
+{
+  "accepted": true,
+  "reviewer": "/root/retained_latency_review",
+  "scope": "Independent actual SPV compiled contract screen only; no native/numerical/benefit verdict.",
+  "admission_seal": {
+    "bytes": 4996,
+    "sha256": "e6291b7e3ad7108f22645ed6819b7463f814c53c6b08b6f410b29b68b1a770a9"
+  },
+  "inspector_seal": {
+    "bytes": 4964,
+    "sha256": "21d7f0bbe6c29d6866c52de0b35147aed072210a2a377755799c6dc55b4cbd5f"
+  },
+  "spv": {
+    "bytes": 88360,
+    "sha256": "0cb8acec4646038f184d2553d8def1f3f5cb538ab0c2fcf73f7ab82c001a5d37"
+  },
+  "findings": [
+    "Both helper bodies preserve raw operands,bound constants,Add first-zero precedence,Mul zero-before-invalid precedence and exact increment.",
+    "Each has one decorated floating operation and zero conditional branches/loops.",
+    "70 other function bodies structurally unchanged; entry/interfaces/capabilities/modes/barriers9/clocks2/NoContraction59 match baseline.",
+    "All75 source/compiler input seals exact. Four tools passed; raw postcheck failure retained.",
+    "Portable exclusion source-proven; no portable compiler/run or machine-checked proof."
+  ]
+}

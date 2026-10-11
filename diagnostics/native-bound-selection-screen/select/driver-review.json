@@ -1,0 +1,37 @@
+{
+  "accepted": true,
+  "reviewer": "/root/retained_latency_review",
+  "inspection_seal": {
+    "bytes": 16220698,
+    "sha256": "a3e90b6ba20a9c9ccc3674780475b59b45d860c47f6f2414a45b04068a5df0f1"
+  },
+  "inspector_seal": {
+    "bytes": 5527,
+    "sha256": "9feb5bf164b96e03de484a46c06d857a00f1900aa9b983d4190216c84b49f203"
+  },
+  "scope": "Actual zero-dispatch diagnostic Transport driver static comparison. Lexical extents are not complete CFGs, dynamic costs, numerical identity, or benefit.",
+  "correction_extent": {
+    "baseline": {
+      "start": 37664,
+      "end_exclusive": 52716,
+      "instructions": 2793,
+      "direct_branches": 119,
+      "conditional_selections": 225,
+      "floating_operations": 284
+    },
+    "candidate": {
+      "start": 39620,
+      "end_exclusive": 54968,
+      "instructions": 2660,
+      "direct_branches": 68,
+      "conditional_selections": 403,
+      "floating_operations": 284
+    }
+  },
+  "findings": [
+    "All 242336 printed ISA bytes match ELF .text prefix of 242816 bytes; all 1267 encoded direct branch targets independently checked. Remaining 480 bytes are outside printed join.",
+    "Op5 selector 0x8c8c, initial reciprocal 0x98c4, correction reciprocal 0xcb74, counter=3 at 0x9a6c; decrement 0xd690/test 0xd6a4/backedge 0xd6b4 to 0x9ac4; final residual begins 0xd6b8.",
+    "Three correction passes and final residual retained. VGPRs 59 vs diagnostic baseline 56 is a real +3 countercost; SGPR106/LDS9728/scratch0/local64 remain unchanged.",
+    "No static blocker to original bounded finite comparison. No numerical dispatch, gain forecast, production adoption or full qualification."
+  ]
+}

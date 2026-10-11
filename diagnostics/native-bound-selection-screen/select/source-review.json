@@ -1,0 +1,22 @@
+{
+  "accepted": true,
+  "reviewer": "/root/retained_latency_review",
+  "scope": "Source reasoning for explicit native uint32 OpSelect variant; compiler-only screen admissible, no compiled/runtime/benefit proof.",
+  "seals": {
+    "prototype.patch": {
+      "bytes": 2292,
+      "sha256": "8bbe8c62a11bfbb50f7635ccc5c7d490cb32aae10d6ed737515181d7b6a61314"
+    },
+    "kernels/retained_pair.slang": {
+      "bytes": 19437,
+      "sha256": "fcf590cd9c193f63d27bda9ca3b87d62fdb2167741242492f45883909565d90d"
+    }
+  },
+  "findings": [
+    "Removing guarded insertion restores original pair exactly; portable body unchanged.",
+    "Unsigned max preserves both bound tests; min==0 detects either zero.",
+    "Nested Add select returns rawb first for azero, thenrawa for bzero; outerboundselect preservesinvalid precedence.",
+    "FinalMultiply zeroselect preserves zero-over-invalid.",
+    "One pure uint32OpSelect helper; existingOrdered FPops onunchangedeligible operands; rejected operands finitezero; signedzeros/negativewords/subnormals retained."
+  ]
+}

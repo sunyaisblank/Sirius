@@ -1,0 +1,24 @@
+{
+  "accepted": true,
+  "reviewer": "/root/retained_latency_review",
+  "source_revision": "2053ef79c90752d37b0075b8137cfb9b571b6820",
+  "seals": {
+    "out/native-bound-selection/prototype.patch": {
+      "bytes": 2057,
+      "sha256": "a6c168302377e8ba882be770c5a48c3e5c070a9fe3cc21f16342333421b3ef99"
+    },
+    "out/native-bound-selection/kernels/retained_pair.slang": {
+      "bytes": 19206,
+      "sha256": "3c2a2bb80f75b262aad94f50e92ec12e21f5b88d41033a987cc090d8a3bb3122"
+    }
+  },
+  "scope": "Independent source reasoning at helper-word boundary; not machine-checked proof, compiled/runtime result or benefit.",
+  "findings": [
+    "Reversing only guarded insertion restores original pair bytes exactly; portable body unchanged.",
+    "Add bad input selects failure before either zero; bounded a zero selects raw b first, then b zero selects raw a; otherwise original raw OrderedAdd32 result +1.",
+    "Multiply either zero selects +0 before invalid other operand; nonzero bad selects failure, bounded nonzero selects original raw OrderedMultiply32 result +1.",
+    "Negative operands, four signed-zero pairs, specials, cancellation, ties, underflow to either zero retain selected words. Extra masked arithmetic inputs are finite.",
+    "Initial abs-word proposal was rejected in review before compiler/runtime; corrected prototype uses raw words and disjoint zero masks."
+  ],
+  "countercost": "Unconditional finite masked FP work and integer mask ALU; actual driver lowering/material complete-path benefit unproved."
+}
