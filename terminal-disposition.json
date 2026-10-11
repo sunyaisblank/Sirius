@@ -1,0 +1,258 @@
+{
+  "scope": "compiler-only complete-literal Transport isolation; noSPV, no candidate optimizer/assembler/validator/inspector-main/device/word/performance/frame/adoption/fullscientificqualification; unchanged production revision",
+  "revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
+  "source": {
+    "bytes": 2467177,
+    "sha256": "2fe0634e4683b22b774251205d45978518cbe5a912500aacf9deb76290f906c8"
+  },
+  "phase_directories": [
+    ".",
+    "frontend",
+    "passprobe",
+    "minprobe"
+  ],
+  "phases": {
+    ".": {
+      "result": {
+        "scope": "only compilation, SPIR-V control inspection, assembly, validation, disassembly; no device workload",
+        "pass": false,
+        "error_type": "TimeoutExpired",
+        "error": "Command '['/opt/slang/bin/slangc', '/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/kernels/retained_transport.slang', '-DSIRIUS_RETAINED_GENERAL_PROGRAM_WORDS=13096', '-DSIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS=2871', '-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS=42', '-DSIRIUS_RETAINED_NORMAL_SUM32=1', '-DSIRIUS_RETAINED_PORTABLE=1', '-DSIRIUS_RETAINED_PARALLEL_TRANSPORT=1', '-DSIRIUS_RETAINED_COEFFICIENTS=25', '-DSIRIUS_RETAINED_REGISTERS=459', '-DSIRIUS_RETAINED_TERMS=5', '-DSIRIUS_RETAINED_LANES=64', '-DSIRIUS_RETAINED_EXECUTION_LANES=16', '-DSIRIUS_RETAINED_LAYERS=117', '-DSIRIUS_RETAINED_PREFIX=0', '-I', '/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/kernels', '-O0', '-target', 'spirv', '-profile', 'spirv_1_5', '-entry', 'ComputeMain', '-stage', 'compute', '-o', '/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/literal-transport.compiler.spv']' timed out after 300 seconds",
+        "traceback": "Traceback (most recent call last):\n  File \"/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/compile.py\", line 190, in main\n    encoded = builder.compile_shader(source, destination, tools[\"SLANGC\"], tools[\"SPIRV_AS\"],\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/astra/.project/Sirius/scripts/build-retained-kernels.py\", line 297, in compile_shader\n    subprocess.run([compiler, str(source), *definitions, \"-I\", str(source.parent), optimization,\n  File \"/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/compile.py\", line 119, in bounded_run\n    code = process.wait(timeout=300)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1264, in wait\n    return self._wait(timeout=timeout)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 2045, in _wait\n    raise TimeoutExpired(self.args, timeout)\nsubprocess.TimeoutExpired: Command '['/opt/slang/bin/slangc', '/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/kernels/retained_transport.slang', '-DSIRIUS_RETAINED_GENERAL_PROGRAM_WORDS=13096', '-DSIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS=2871', '-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS=42', '-DSIRIUS_RETAINED_NORMAL_SUM32=1', '-DSIRIUS_RETAINED_PORTABLE=1', '-DSIRIUS_RETAINED_PARALLEL_TRANSPORT=1', '-DSIRIUS_RETAINED_COEFFICIENTS=25', '-DSIRIUS_RETAINED_REGISTERS=459', '-DSIRIUS_RETAINED_TERMS=5', '-DSIRIUS_RETAINED_LANES=64', '-DSIRIUS_RETAINED_EXECUTION_LANES=16', '-DSIRIUS_RETAINED_LAYERS=117', '-DSIRIUS_RETAINED_PREFIX=0', '-I', '/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/kernels', '-O0', '-target', 'spirv', '-profile', 'spirv_1_5', '-entry', 'ComputeMain', '-stage', 'compute', '-o', '/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/literal-transport.compiler.spv']' timed out after 300 seconds\n",
+        "elapsed_seconds": 300.1109214909957,
+        "source_unchanged": true,
+        "stage_inputs_unchanged": true,
+        "input_checks": {
+          "reference_count": 46,
+          "changed": []
+        },
+        "commands": 2
+      },
+      "terminal_commands": [
+        {
+          "pid": 1732279,
+          "birth": "15351668",
+          "disposition": "completed",
+          "returncode": 0,
+          "elapsed_seconds": 0.012915658007841557,
+          "cleanup": {
+            "forced_cleanup": false,
+            "signal_actions": [],
+            "errors": [],
+            "terminal_group_scan": {
+              "scope": "point-in-time accessible Linux /proc members of recorded new-session group; excludes escaped groups, hidden/scheduled work",
+              "group": 1732279,
+              "members": [],
+              "unreadable_or_raced": 0
+            },
+            "known_leader_reaped": true
+          }
+        },
+        {
+          "pid": 1732280,
+          "birth": "15351672",
+          "disposition": "timeout",
+          "returncode": -15,
+          "elapsed_seconds": 300.0714617779886,
+          "cleanup": {
+            "forced_cleanup": true,
+            "signal_actions": [
+              {
+                "group": 1732280,
+                "signal": 15
+              }
+            ],
+            "errors": [],
+            "terminal_group_scan": {
+              "scope": "point-in-time accessible Linux /proc members of recorded new-session group; excludes escaped groups, hidden/scheduled work",
+              "group": 1732280,
+              "members": [],
+              "unreadable_or_raced": 0
+            },
+            "known_leader_reaped": true
+          }
+        }
+      ]
+    },
+    "frontend": {
+      "result": {
+        "scope": "90-second complete-source compiler front-end phase only, skip-codegen; no usable shader, validation, device, numerical or benefit result",
+        "frontend_completed": true,
+        "elapsed_seconds": 1.7745196010218933,
+        "input_seals_unchanged": true,
+        "output_exists": false
+      },
+      "terminal_commands": [
+        {
+          "pid": 1732503,
+          "birth": "15383256",
+          "disposition": "completed",
+          "returncode": 0,
+          "elapsed_seconds": 1.7741814659966622,
+          "cleanup": {
+            "forced_cleanup": false,
+            "signal_actions": [],
+            "errors": [],
+            "terminal_group_scan": {
+              "scope": "point-in-time accessible Linux /proc members of recorded new-session group; excludes escaped groups, hidden/scheduled work",
+              "group": 1732503,
+              "members": [],
+              "unreadable_or_raced": 0
+            },
+            "known_leader_reaped": true
+          }
+        }
+      ]
+    },
+    "passprobe": {
+      "result": {
+        "scope": "90-second unchanged-source backend pass-boundary diagnostic; all regular output files capped at128MiB each, no full builder/validation/device/numerical/benefit admission",
+        "raw_compile_completed": false,
+        "error_type": "TimeoutExpired",
+        "error": "Command '['/opt/slang/bin/slangc', '/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/kernels/retained_transport.slang', '-DSIRIUS_RETAINED_GENERAL_PROGRAM_WORDS=13096', '-DSIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS=2871', '-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS=42', '-DSIRIUS_RETAINED_NORMAL_SUM32=1', '-DSIRIUS_RETAINED_PORTABLE=1', '-DSIRIUS_RETAINED_PARALLEL_TRANSPORT=1', '-DSIRIUS_RETAINED_COEFFICIENTS=25', '-DSIRIUS_RETAINED_REGISTERS=459', '-DSIRIUS_RETAINED_TERMS=5', '-DSIRIUS_RETAINED_LANES=64', '-DSIRIUS_RETAINED_EXECUTION_LANES=16', '-DSIRIUS_RETAINED_LAYERS=117', '-DSIRIUS_RETAINED_PREFIX=0', '-I', '/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/kernels', '-O0', '-target', 'spirv', '-profile', 'spirv_1_5', '-entry', 'ComputeMain', '-stage', 'compute', '-o', '/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/passprobe/raw-unqualified.spv', '-report-detailed-perf-benchmark', '-dump-ir-before', 'replaceGlobalConstants', '-dump-ir-after', 'replaceGlobalConstants', '-dump-ir-before', 'simplifyIR', '-dump-ir-after', 'simplifyIR', '-dump-ir-before', 'performForceInlining', '-dump-ir-after', 'performForceInlining']' timed out after 90 seconds",
+        "traceback": "Traceback (most recent call last):\n  File \"/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/passscreen.py\", line 59, in main\n    module.bounded_run(command, preexec_fn=cap_output)\n  File \"/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/passprobe/phase_runner.py\", line 119, in bounded_run\n    code = process.wait(timeout=90)\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1264, in wait\n    return self._wait(timeout=timeout)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 2045, in _wait\n    raise TimeoutExpired(self.args, timeout)\nsubprocess.TimeoutExpired: Command '['/opt/slang/bin/slangc', '/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/kernels/retained_transport.slang', '-DSIRIUS_RETAINED_GENERAL_PROGRAM_WORDS=13096', '-DSIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS=2871', '-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS=42', '-DSIRIUS_RETAINED_NORMAL_SUM32=1', '-DSIRIUS_RETAINED_PORTABLE=1', '-DSIRIUS_RETAINED_PARALLEL_TRANSPORT=1', '-DSIRIUS_RETAINED_COEFFICIENTS=25', '-DSIRIUS_RETAINED_REGISTERS=459', '-DSIRIUS_RETAINED_TERMS=5', '-DSIRIUS_RETAINED_LANES=64', '-DSIRIUS_RETAINED_EXECUTION_LANES=16', '-DSIRIUS_RETAINED_LAYERS=117', '-DSIRIUS_RETAINED_PREFIX=0', '-I', '/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/kernels', '-O0', '-target', 'spirv', '-profile', 'spirv_1_5', '-entry', 'ComputeMain', '-stage', 'compute', '-o', '/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/passprobe/raw-unqualified.spv', '-report-detailed-perf-benchmark', '-dump-ir-before', 'replaceGlobalConstants', '-dump-ir-after', 'replaceGlobalConstants', '-dump-ir-before', 'simplifyIR', '-dump-ir-after', 'simplifyIR', '-dump-ir-before', 'performForceInlining', '-dump-ir-after', 'performForceInlining']' timed out after 90 seconds\n",
+        "elapsed_seconds": 90.12622217298485,
+        "input_seals_unchanged": true,
+        "output_exists": false
+      },
+      "terminal_commands": [
+        {
+          "pid": 1732969,
+          "birth": "15414719",
+          "disposition": "timeout",
+          "returncode": -15,
+          "elapsed_seconds": 90.07469301199308,
+          "cleanup": {
+            "forced_cleanup": true,
+            "signal_actions": [
+              {
+                "group": 1732969,
+                "signal": 15
+              }
+            ],
+            "errors": [],
+            "terminal_group_scan": {
+              "scope": "point-in-time accessible Linux /proc members of recorded new-session group; excludes escaped groups, hidden/scheduled work",
+              "group": 1732969,
+              "members": [],
+              "unreadable_or_raced": 0
+            },
+            "known_leader_reaped": true
+          }
+        }
+      ],
+      "log_seal": {
+        "bytes": 37574278,
+        "sha256": "4816eb3ee6a014a088421bcb4c7b542728f848810e5cb826ca0d3a2cdfc4057e"
+      },
+      "markers": [
+        "### BEFORE replaceGlobalConstants:",
+        "### AFTER replaceGlobalConstants:",
+        "### BEFORE simplifyIR:"
+      ],
+      "final_dump_terminated": true,
+      "below_file_cap": true
+    },
+    "minprobe": {
+      "result": {
+        "scope": "90-second unchanged-source minimum-slang-optimization diagnostic; optional compiler passes/analysis differ, no production equivalence assumed; all regular output files capped at128MiB each, no full builder/validation/device/numerical/benefit admission",
+        "raw_compile_completed": false,
+        "error_type": "TimeoutExpired",
+        "error": "Command '['/opt/slang/bin/slangc', '/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/kernels/retained_transport.slang', '-DSIRIUS_RETAINED_GENERAL_PROGRAM_WORDS=13096', '-DSIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS=2871', '-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS=42', '-DSIRIUS_RETAINED_NORMAL_SUM32=1', '-DSIRIUS_RETAINED_PORTABLE=1', '-DSIRIUS_RETAINED_PARALLEL_TRANSPORT=1', '-DSIRIUS_RETAINED_COEFFICIENTS=25', '-DSIRIUS_RETAINED_REGISTERS=459', '-DSIRIUS_RETAINED_TERMS=5', '-DSIRIUS_RETAINED_LANES=64', '-DSIRIUS_RETAINED_EXECUTION_LANES=16', '-DSIRIUS_RETAINED_LAYERS=117', '-DSIRIUS_RETAINED_PREFIX=0', '-I', '/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/kernels', '-O0', '-target', 'spirv', '-profile', 'spirv_1_5', '-entry', 'ComputeMain', '-stage', 'compute', '-o', '/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/minprobe/raw-unqualified.spv', '-report-detailed-perf-benchmark', '-minimum-slang-optimization', '-dump-ir-before', 'simplifyIR', '-dump-ir-after', 'simplifyIR']' timed out after 90 seconds",
+        "traceback": "Traceback (most recent call last):\n  File \"/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/minscreen.py\", line 58, in main\n    module.bounded_run(command, preexec_fn=cap_output)\n  File \"/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/minprobe/phase_runner.py\", line 119, in bounded_run\n    code = process.wait(timeout=90)\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1264, in wait\n    return self._wait(timeout=timeout)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 2045, in _wait\n    raise TimeoutExpired(self.args, timeout)\nsubprocess.TimeoutExpired: Command '['/opt/slang/bin/slangc', '/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/kernels/retained_transport.slang', '-DSIRIUS_RETAINED_GENERAL_PROGRAM_WORDS=13096', '-DSIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS=2871', '-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS=42', '-DSIRIUS_RETAINED_NORMAL_SUM32=1', '-DSIRIUS_RETAINED_PORTABLE=1', '-DSIRIUS_RETAINED_PARALLEL_TRANSPORT=1', '-DSIRIUS_RETAINED_COEFFICIENTS=25', '-DSIRIUS_RETAINED_REGISTERS=459', '-DSIRIUS_RETAINED_TERMS=5', '-DSIRIUS_RETAINED_LANES=64', '-DSIRIUS_RETAINED_EXECUTION_LANES=16', '-DSIRIUS_RETAINED_LAYERS=117', '-DSIRIUS_RETAINED_PREFIX=0', '-I', '/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/kernels', '-O0', '-target', 'spirv', '-profile', 'spirv_1_5', '-entry', 'ComputeMain', '-stage', 'compute', '-o', '/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/minprobe/raw-unqualified.spv', '-report-detailed-perf-benchmark', '-minimum-slang-optimization', '-dump-ir-before', 'simplifyIR', '-dump-ir-after', 'simplifyIR']' timed out after 90 seconds\n",
+        "elapsed_seconds": 90.15611591201741,
+        "input_seals_unchanged": true,
+        "output_exists": false
+      },
+      "terminal_commands": [
+        {
+          "pid": 1733218,
+          "birth": "15432816",
+          "disposition": "timeout",
+          "returncode": -15,
+          "elapsed_seconds": 90.12307597100153,
+          "cleanup": {
+            "forced_cleanup": true,
+            "signal_actions": [
+              {
+                "group": 1733218,
+                "signal": 15
+              }
+            ],
+            "errors": [],
+            "terminal_group_scan": {
+              "scope": "point-in-time accessible Linux /proc members of recorded new-session group; excludes escaped groups, hidden/scheduled work",
+              "group": 1733218,
+              "members": [],
+              "unreadable_or_raced": 0
+            },
+            "known_leader_reaped": true
+          }
+        }
+      ],
+      "log_seal": {
+        "bytes": 24900796,
+        "sha256": "4befaa8ba46638e548f81dd3a84c25ab33e121daab84dfe3a70e50d968038476"
+      },
+      "markers": [
+        "### BEFORE simplifyIR:",
+        "### AFTER simplifyIR:"
+      ],
+      "final_dump_terminated": true,
+      "below_file_cap": true
+    }
+  },
+  "compiler_version_command": {
+    "command": [
+      "/opt/slang/bin/slangc",
+      "-version"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "2026.12.0.1\n",
+    "tool": {
+      "bytes": 60464,
+      "sha256": "26d7fd442248bc702dd07c07757d628e5bf20c17a95359aa54191ab19da4ff7b"
+    }
+  },
+  "interpretation": [
+    "Fullsplit-layer compile timeout300.110921s; frontend skipcodegen completes1.774520s only",
+    "Passprobe completes BEFORE firstsimplifyIR dump without AFTER; globalconstantreplacement completed. Minprobe completes BEFORE AND AFTER firstsimplifyIR dumps before timing out later. No subsequentselectedsimplifyIR marker; actualremaining stalledpass/subpass and exactdurations unresolved.",
+    "No128MiB filecap hit, no nonzero cleanup errors, knownleadersreaped/groupempty; markers do not identify costlysubpass or exclusive duration",
+    "Minimum optimization onlydiagnostic; mandatory numerical source unchanged; compileranalysis/checks differ so no production-equivalence or admission",
+    "No evidence SCCP aggregate expansion: exactupstream isEvaluableOpCode excludesMakeArray/GetElement; arraylowering inotherpasses remainsunresolved",
+    "Distinctnextsource-onlylead: remove36308uintidentitycalls inliteraloperand/rootreads andresultwrites; leave22constantarguments/arithmetic/order/barriers/status/recognizer/fallback unchanged; no feasibility/benefit claimyet"
+  ],
+  "primary_references": [
+    {
+      "url": "https://raw.githubusercontent.com/shader-slang/slang/v2026.12.0.1/source/slang/slang-emit.cpp",
+      "path": "/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/upstream-source/slang-emit.cpp",
+      "bytes": 129995,
+      "sha256": "c18ed12484abad7a1e86001c6d2c8252085d0ae3bbf2766e3ddba9319cb1ce6c"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/shader-slang/slang/v2026.12.0.1/source/slang/slang-pass-wrapper.h",
+      "path": "/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/upstream-source/slang-pass-wrapper.h",
+      "bytes": 1793,
+      "sha256": "5deb0a9958c6ff41841a1e9ecf0e2ef71a9aea37b537ab9af620ab49e9fdf070"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/shader-slang/slang/v2026.12.0.1/source/slang/slang-ir-ssa-simplification.cpp",
+      "path": "/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/upstream-source/slang-ir-ssa-simplification.cpp",
+      "bytes": 6761,
+      "sha256": "253ff57eaedc9bf513f26a18c4d4ebbabf2163c9adf5a3e2a80b1c57ab2c50a9"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/shader-slang/slang/v2026.12.0.1/source/slang/slang-pass-wrapper.cpp",
+      "path": "/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/upstream-source/slang-pass-wrapper.cpp",
+      "bytes": 2710,
+      "sha256": "4b52fb7b7fa283c2e9a908c57a12e88a7c2533cea6c4446a285c23e8b05a6d75"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/shader-slang/slang/v2026.12.0.1/source/slang/slang-ir-sccp.cpp",
+      "path": "/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/upstream-source/slang-ir-sccp.cpp",
+      "bytes": 77684,
+      "sha256": "7276c200d2e7d3bd310cf450e490b04648a090968c2c7bb4e80a1ef693141d0d"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "reviewer": "command_owner_review",
+  "reviewed_source": {
+    "path": "/home/astra/.project/Sirius/out/literal-transport-compiler-isolation/passscreen.py",
+    "bytes": 3715,
+    "sha256": "f659eeb98073de5cf80841651b050c558ca498f1cb386cc802f8037356cb6036"
+  },
+  "scope": "read-only source review for bounded compiler-only pass-boundary probe, no execution or qualification",
+  "accepted": true,
+  "observations": [
+    "six repeated pass flags each name one exactpass; oldCSV plan was corrected before invocation",
+    "90-second reviewed lifecycle cleanup and post-input seals retained",
+    "RLIMIT_FSIZE caps every regular output file to128MiB, including rawSPV; a cap stop cannotattribute missingAFTER to the pass itself",
+    "repeated simplifyIR/forceinline markers must be interpreted sequentially; BEFORE dumpsprecede passbody; rawmodule unqualified"
+  ],
+  "primary_reference": "https://raw.githubusercontent.com/shader-slang/slang/v2026.12.0.1/source/slang/slang-options.cpp"
+}

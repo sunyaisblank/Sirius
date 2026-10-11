@@ -1,0 +1,55 @@
+{
+  "reviewer": "retained_latency_review",
+  "scope": "read-only complete-emission and exactupstream source/IR review, noexecution/causalproof/admission",
+  "source": {
+    "bytes": 2467177,
+    "sha256": "2fe0634e4683b22b774251205d45978518cbe5a912500aacf9deb76290f906c8"
+  },
+  "pass_dump": {
+    "bytes": 37574278,
+    "sha256": "4816eb3ee6a014a088421bcb4c7b542728f848810e5cb826ca0d3a2cdfc4057e"
+  },
+  "before_first_simplification": {
+    "functions": 269,
+    "literal_layer_functions": 159,
+    "largest_layer_IR_lines": 6052,
+    "call_instructions": 43495,
+    "getElementPtr": 45612,
+    "load": 35990,
+    "local_var": 5967,
+    "large_makeArray_word_counts": [
+      13096,
+      2871
+    ],
+    "dynamic_getElement_uses_per_array": [
+      1,
+      1
+    ]
+  },
+  "negative_attribution": [
+    "Forceinlining not reached bypassprobe; literal arithmetic body expansion isnotshown",
+    "SCCP isEvaluableOpCode excludesMakeArray/GetElement; aggregate SCCP expansion isunproved"
+  ],
+  "next_source_only_lead": {
+    "premise_file": {
+      "path": "src/sirius/kernels/retained_scalar.slang",
+      "lines": [
+        7,
+        8,
+        9,
+        10
+      ],
+      "bytes": 3102,
+      "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc"
+    },
+    "required_guard": "generatedsourcealreadyrequiresPORTABLEandNORMAL_SUM32; native/FP64unsupported andmuststayexcluded",
+    "change": "read_literal operand/rootlimbs andliteral node result writesuse uint assignment insteadRPFromBits/RPBitsidentityfunctions",
+    "identity_calls_removed": 36308,
+    "frombits_read_calls": 23732,
+    "bits_write_calls": 12576,
+    "constant_argument_identity_calls_preserved": 22,
+    "frame_conditions": "all3144nodes,459registers,5wordstorage,16lanes,117/42layerorder andbarriers,status/rootpublication,arithmetic/constants/exactwordrecognizer/genericfallbackunchanged",
+    "remaining": "hypothesisuntested; required ordinarycompiler/modulecontrols/footprint/fullwordoracle/default+widebenefit andcompletequalificationbeforeadoption"
+  },
+  "minprobe_terminal_correction": "Passprobe completes BEFORE firstsimplifyIR dump without AFTER; globalconstantreplacement completed. Minprobe completes BEFORE AND AFTER firstsimplifyIR dumps before timing out later. No subsequentselectedsimplifyIR marker; actualremaining stalledpass/subpass and exactdurations unresolved."
+}
