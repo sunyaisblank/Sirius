@@ -109,22 +109,6 @@ RPScalar RPUpAdd(RPScalar a,RPScalar b) {
 RPScalar RPUpMultiply(RPScalar a,RPScalar b) {
     if(RPScalarEqual(a,RPZero())||RPScalarEqual(b,RPZero()))return RPZero();
     if(!RPBounded(a,0x5e800000u)||!RPBounded(b,0x5e800000u))return RPFailureBound();
-#if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_NORMAL_SUM32) && (defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT))
-    // Positive normal operands <= 2^62 and a floor-exponent sum >= -126
-    // give a normal finite product. RTE32 preserves its nearest-even word;
-    // the same upward increment and integer fallback retain the old bound.
-    uint aw=RPBits(a),bw=RPBits(b);
-    if(aw>=0x00800000u&&aw<=0x5e800000u&&bw>=0x00800000u&&bw<=0x5e800000u&&
-       (aw>>23)+(bw>>23)>=128u) {
-        float af=asfloat(aw),bf=asfloat(bw);
-        float product=spirv_asm {
-            OpFMul $$float %v $af $bf;
-            OpDecorate %v NoContraction;
-            OpCopyObject $$float result %v;
-        };
-        return RPFromBits(asuint(product)+1u);
-    }
-#endif
     return RPFromBits(RPBits(OrderedMultiply32(a,b))+1u);
 }
 RetainedPair RPInvalid() { RetainedPair r;r.hi=RPZero();r.lo=RPZero();r.error=RPZero();r.valid=0;return r; }

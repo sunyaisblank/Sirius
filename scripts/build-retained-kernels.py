@@ -48,8 +48,8 @@ def native_controls(text, fma=False):
     return text.replace(local_size, local_size + modes, 1)
 
 
-def portable_normal_sum_controls(text, upmultiply=False):
-    """Admit guarded FastTwoSum and positive normal upward bounds."""
+def portable_normal_sum_controls(text):
+    """Admit guarded binary32 FastTwoSum and positive upward-bound sums."""
     if (re.findall(r"OpCapability (\S+)", text) != ["Shader"] or
             set(re.findall(r"OpTypeInt (\d+) [01]", text)) != {"32"} or
             re.findall(r"OpTypeFloat (\d+)", text) != ["32"]):
@@ -63,16 +63,9 @@ def portable_normal_sum_controls(text, upmultiply=False):
     bodies = [body for body in re.findall(r"%\S+ = OpFunction .*?OpFunctionEnd", text, re.S)
               if re.search(r"= OpF(?!unction)", body)]
     expected = []
-    multiply_bodies = 0
     if not bodies:
         raise ValueError("portable normal sum lost its guarded arithmetic")
     for body in bodies:
-        if re.match(r"%RPUpMultiply(?:_\d+)? = OpFunction ", body):
-            if not upmultiply or re.findall(r"= (OpF(?!unction)\S+) ", body) != ["OpFMul"]:
-                raise ValueError("normal upward bound changed its single multiply body")
-            expected.append("OpFMul")
-            multiply_bodies += 1
-            continue
         if re.match(r"%RPUpAdd(?:_\d+)? = OpFunction ", body):
             if re.findall(r"= (OpF(?!unction)\S+) ", body) != ["OpFAdd"]:
                 raise ValueError("normal upward bound changed its single add body")
@@ -98,8 +91,6 @@ def portable_normal_sum_controls(text, upmultiply=False):
         if (origin(left) != total or origin(right) != origin(a) or
                 origin(residual_left) != origin(b) or origin(residual_right) != displaced):
             raise ValueError("portable normal sum changed its FastTwoSum dependency chain")
-    if multiply_bodies != int(upmultiply):
-        raise ValueError("normal upward multiply disagrees with the selected stage")
     decorated = set(re.findall(r"OpDecorate (%\S+) NoContraction", text))
     if ([op for _, op, _ in operations] != expected or
             any(value not in decorated or kind != float_type for value, _, kind in operations)):
@@ -327,7 +318,7 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
         if capabilities != ["Shader"] or not integer_widths or set(integer_widths) != {"32"}:
             raise ValueError("portable retained stage introduced an optional capability or non-32-bit integer")
         if normal_sum32:
-            text = portable_normal_sum_controls(text, upmultiply=source.stem in ("retained_transport", "retained_endpoint"))
+            text = portable_normal_sum_controls(text)
         elif "OpTypeFloat" in text or re.search(r"OpExecutionMode\S* .* (?:Denorm|RoundingMode|SignedZeroInfNan)", text):
             raise ValueError("portable retained stage depends on native floating arithmetic")
         entry = re.search(r"OpEntryPoint GLCompute (%\S+)", text)[1]
