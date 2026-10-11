@@ -1,0 +1,20 @@
+{
+  "reviewer": "/root/command_owner_review",
+  "scope": "read-only compiler apparatus review",
+  "reviewed_compile": {
+    "bytes": 6233,
+    "sha256": "545202e824568b9021212b6bec8d9e3c5cec170efbb8e0fb460b565813942d62"
+  },
+  "reviewed_inspect": {
+    "bytes": 5987,
+    "sha256": "319e8b7c629b044e63f47bd14b8130e7e8a9bdd79cec2bc80fe37102589972e1"
+  },
+  "warnings": [
+    "Wrapper waits recorded leaders but failure-path finally/group descendant cleanup incomplete; separate fresh accessible group scan required.",
+    "Runner pass does not enforce every post-seal; root independent post-input check required.",
+    "Reviewed inspector lacked module/assembly joins; root added explicit compile-result seals and7actualcommand bindings before inspector execution.",
+    "Body-local structural claims do not prove transitive access, branch authority, barrier convergence, fallback equivalence or benefit.",
+    "Constant tables63868literal bytes; actual storage/allocation unmeasured. Shared storage9688B vs existing builder conservativecharge9688B."
+  ],
+  "scope_is_compiler_only": true
+}

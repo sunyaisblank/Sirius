@@ -1,0 +1,10 @@
+{
+  "scope": "only compilation, SPIR-V control inspection, assembly, validation, disassembly; no device workload",
+  "pass": false,
+  "error_type": "TimeoutExpired",
+  "error": "Command '['/opt/slang/bin/slangc', '/home/astra/.project/Sirius/out/literal-transport-feasibility/kernels/retained_transport.slang', '-DSIRIUS_RETAINED_GENERAL_PROGRAM_WORDS=13096', '-DSIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS=2871', '-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS=42', '-DSIRIUS_RETAINED_NORMAL_SUM32=1', '-DSIRIUS_RETAINED_PORTABLE=1', '-DSIRIUS_RETAINED_PARALLEL_TRANSPORT=1', '-DSIRIUS_RETAINED_COEFFICIENTS=25', '-DSIRIUS_RETAINED_REGISTERS=459', '-DSIRIUS_RETAINED_TERMS=5', '-DSIRIUS_RETAINED_LANES=64', '-DSIRIUS_RETAINED_EXECUTION_LANES=16', '-DSIRIUS_RETAINED_LAYERS=117', '-DSIRIUS_RETAINED_PREFIX=0', '-I', '/home/astra/.project/Sirius/out/literal-transport-feasibility/kernels', '-O0', '-target', 'spirv', '-profile', 'spirv_1_5', '-entry', 'ComputeMain', '-stage', 'compute', '-o', '/home/astra/.project/Sirius/out/literal-transport-feasibility/literal-transport.compiler.spv']' timed out after 300 seconds",
+  "elapsed_seconds": 300.10888934799004,
+  "source_unchanged": true,
+  "stage_inputs_unchanged": true,
+  "commands": 2
+}
