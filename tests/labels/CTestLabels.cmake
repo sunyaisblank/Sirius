@@ -1008,7 +1008,7 @@ set_tests_properties(
 
 set_tests_properties(
     RetainedComputeAdmission.ArithmeticRefusalPrecedesKernelLoading
-    RetainedComputeAdmission.FmaSelectsAdmittedNativeProductsAndPreservesAllocation
+    RetainedComputeAdmission.FmaSelectsOnlyNativeWideProductsAndPreservesAllocation
     RetainedComputeAdmission.CameraCancellationPrecedesNumericalRefusal
     RetainedComputeAdmission.SoftwareRendererPreparationPreservesPhysicalAccounting
     PROPERTIES LABELS "Mandatory;Correctness"

@@ -74,21 +74,6 @@ void RetainedProduct32(RPScalar a,RPScalar b,out RPScalar hi,out RPScalar lo){
  hi=RPFromBits(product.valid!=0u?product.high:0x7f800000u);
  lo=RPFromBits(product.valid!=0u?product.low:0x7f800000u);
 #else
-#ifdef SIRIUS_RETAINED_FMA32
- // Only nonzero exact residuals on the bounded normal lattice substitute for
- // the default split product. Zero signs and all other inputs retain its body.
- uint am=RPBits(a)&0x7fffffffu,bm=RPBits(b)&0x7fffffffu;
- if(am>=0x2b800000u&&am<=0x5d800000u&&bm>=0x2b800000u&&bm<=0x5d800000u) {
-  RPScalar high=OrderedMultiply32(a,b);
-  RPScalar negativeHigh=RPScalarNegate(high);
-  RPScalar residual=spirv_asm {
-   OpFmaKHR $$float %v $a $b $negativeHigh;
-   OpDecorate %v NoContraction;
-   OpCopyObject $$float result %v;
-  };
-  if((RPBits(residual)&0x7fffffffu)!=0u) {hi=high;lo=residual;return;}
- }
-#endif
  RPScalar ah,al,bh,bl;Split32(a,ah,al);Split32(b,bh,bl);hi=OrderedMultiply32(a,b);
  RPScalar e1=OrderedSubtract32(hi,OrderedMultiply32(ah,bh));
  RPScalar e2=OrderedSubtract32(e1,OrderedMultiply32(al,bh));

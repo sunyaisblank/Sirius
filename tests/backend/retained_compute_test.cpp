@@ -374,7 +374,7 @@ void ExpectPhysicalStatsEqual(
 #endif
 
 #ifdef SIRIUS_HAS_RETAINED_COMPUTE
-TEST(RetainedComputeAdmission, FmaSelectsAdmittedNativeProductsAndPreservesAllocation) {
+TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideProductsAndPreservesAllocation) {
     using namespace sirius::backend::retained_program;
     for (unsigned mask = 0; mask < 16; ++mask) {
         for (const bool wide : {false, true}) {
@@ -420,27 +420,21 @@ TEST(RetainedComputeAdmission, FmaSelectsAdmittedNativeProductsAndPreservesAlloc
                 stages[2] = std::span(kEndpointPortableNormalSumShader);
                 stages[6] = std::span(kDopriPhasePortableNormalSumShader);
             }
-            const bool eligible = mask == 15u;
-            const bool transport_fma = wide ? kTransportFmaAvailable : kTransportNarrowFmaAvailable;
-            const bool endpoint_fma = wide ? kEndpointFmaAvailable : kEndpointNarrowFmaAvailable;
-            const std::span<const std::uint32_t> transport =
-                wide ? std::span<const std::uint32_t>(kTransportFmaShader)
-                     : std::span<const std::uint32_t>(kTransportNarrowFmaShader);
-            const std::span<const std::uint32_t> endpoint =
-                wide ? std::span<const std::uint32_t>(kEndpointFmaShader)
-                     : std::span<const std::uint32_t>(kEndpointNarrowFmaShader);
+            const bool eligible = wide && mask == 15u;
             for (std::size_t stage = 0; stage < RetainedCompute::kStageCount; ++stage) {
                 // The baseline excludes FMA and independently checks native,
                 // pure-integer fallback and RTE32-only Transport/Endpoint/DP selection.
                 EXPECT_EQ(control.loaded_codes[stage],
                           (std::vector<std::uint32_t>(stages[stage].begin(), stages[stage].end())));
-                if (stage == 1 && eligible && transport_fma) {
+                if (stage == 1 && eligible && kTransportFmaAvailable) {
                     EXPECT_EQ(candidate.loaded_codes[stage],
-                              (std::vector<std::uint32_t>(transport.begin(), transport.end())));
+                              (std::vector<std::uint32_t>(kTransportFmaShader.begin(),
+                                                          kTransportFmaShader.end())));
                     EXPECT_NE(candidate.loaded_codes[stage], control.loaded_codes[stage]);
-                } else if (stage == 2 && eligible && endpoint_fma) {
+                } else if (stage == 2 && eligible && kEndpointFmaAvailable) {
                     EXPECT_EQ(candidate.loaded_codes[stage],
-                              (std::vector<std::uint32_t>(endpoint.begin(), endpoint.end())));
+                              (std::vector<std::uint32_t>(kEndpointFmaShader.begin(),
+                                                          kEndpointFmaShader.end())));
                     EXPECT_NE(candidate.loaded_codes[stage], control.loaded_codes[stage]);
                 } else {
                     EXPECT_EQ(candidate.loaded_codes[stage], control.loaded_codes[stage]);
@@ -466,23 +460,6 @@ TEST(RetainedComputeAdmission, FmaSelectsAdmittedNativeProductsAndPreservesAlloc
         EXPECT_FALSE(RetainedCompute::Create(refused, 2, true));
         EXPECT_EQ(refused.loads, 0U);
         EXPECT_TRUE(refused.buffers.empty());
-        // Default FMA needs neither Float64 support nor its rounding mode.
-        auto narrow = RetainedCompute::Create(refused, 2, false);
-        ASSERT_TRUE(narrow);
-        ASSERT_EQ(refused.loaded_codes.size(), RetainedCompute::kStageCount);
-        const std::span<const std::uint32_t> transport =
-            kTransportNarrowFmaAvailable ? std::span<const std::uint32_t>(kTransportNarrowFmaShader)
-                                         : std::span<const std::uint32_t>(kTransportShader);
-        const std::span<const std::uint32_t> endpoint =
-            kEndpointNarrowFmaAvailable ? std::span<const std::uint32_t>(kEndpointNarrowFmaShader)
-                                        : std::span<const std::uint32_t>(kEndpointShader);
-        EXPECT_EQ(refused.loaded_codes[1],
-                  (std::vector<std::uint32_t>(transport.begin(), transport.end())));
-        EXPECT_EQ(refused.loaded_codes[2],
-                  (std::vector<std::uint32_t>(endpoint.begin(), endpoint.end())));
-        const auto required = RetainedCompute::RequiredAllocationBytes(refused, 2);
-        ASSERT_TRUE(required);
-        EXPECT_EQ(refused.BufferAllocationBytes(), *required);
     }
 }
 #endif
