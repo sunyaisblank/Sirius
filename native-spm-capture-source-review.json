@@ -1,0 +1,109 @@
+{
+  "accepted": true,
+  "reviewers": [
+    "command_owner_review",
+    "retained_latency_review"
+  ],
+  "controller_seals": {
+    "run_spm_capture_control.ps1": {
+      "bytes": 24612,
+      "sha256": "00d2e7000b5aa5ded5245dd9506076a52de6a9f948b490db9865f2f5a2465a35"
+    },
+    "owned_console_capture.cs": {
+      "bytes": 7071,
+      "sha256": "715ba320b39e960e1ea6990abdefefa74a1410c045808773a69ab9857d4ba7fb"
+    },
+    "run_native_spm_capture.py": {
+      "bytes": 11179,
+      "sha256": "b871f5004bd46b9409ec2ad74d595a6f384fc9072dd5cb63b8eb8013fc637907"
+    },
+    "emergency_profile_cleanup.ps1": {
+      "bytes": 6196,
+      "sha256": "83d58d2730778f332853ce93792ee1c0bc12a74dea6bb268cf26b75d76a23bb1"
+    },
+    "verify_spm_capture_control.py": {
+      "bytes": 8396,
+      "sha256": "bf2d712b25633b692133f33055736501e3e1311b45fa86170be3857fad4a4f0d"
+    },
+    "prepare_spm_capture.py": {
+      "bytes": 11416,
+      "sha256": "4c8aa4b10ee84b29102574fccc5b7f83e876e6a9c68e676d06d8c1de26e48979"
+    },
+    "capture-spm-plan.json": {
+      "bytes": 46107,
+      "sha256": "4200263ee499c9892b63e8ff22ec09ef007a3e12b150fd9e3e91eef110dffe38"
+    },
+    "capture-reference.json": {
+      "bytes": 34056,
+      "sha256": "7ed9828f114b1753e5e08bfe3a781227fe71bde4d36155e36361b2050c5d9a85"
+    }
+  },
+  "native_syntax_result": {
+    "source_sha256": "00d2e7000b5aa5ded5245dd9506076a52de6a9f948b490db9865f2f5a2465a35",
+    "tokens": 4089,
+    "errors": [],
+    "passed": true
+  },
+  "native_syntax_bridge": {
+    "input_seals": {
+      "out/native-spm-cost/check_native_syntax.py": {
+        "bytes": 4163,
+        "sha256": "00bf90d6006539d45c3d728d2951af490238d22c3d0eda36afdf00a22a89f82b"
+      },
+      "out/native-spm-cost/run_spm_capture_control.ps1": {
+        "bytes": 24612,
+        "sha256": "00d2e7000b5aa5ded5245dd9506076a52de6a9f948b490db9865f2f5a2465a35"
+      },
+      "out/native-spm-cost/emergency_native_cleanup.ps1": {
+        "bytes": 5855,
+        "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+      }
+    },
+    "linux_owner_pid": 2420317,
+    "linux_owner_start_ticks": "17987656",
+    "scope": "Native syntax parsing and exact-birth observer closure only; no device/GUI/compiler/scientific launch.",
+    "errors": [],
+    "parser": {
+      "arguments": [
+        "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "$ErrorActionPreference='Stop';$t=(New-Item -ItemType Directory -Path '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-spm-cost\\native-syntax\\temp' -Force).FullName;$p=Get-Process -Id $PID;$h=$p.Handle;@{owner_pid=$PID;owner_start_time_utc=$p.StartTime.ToUniversalTime().ToString('o');expected_test_executable='';scope='Native Parser.ParseFile only; no controller execution or child compiler'}|ConvertTo-Json|Set-Content -LiteralPath (Join-Path $t 'bootstrap.json') -Encoding UTF8;$tokens=$null;$errors=$null;$ast=[System.Management.Automation.Language.Parser]::ParseFile('\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-spm-cost\\run_spm_capture_control.ps1',[ref]$tokens,[ref]$errors);@{source_sha256=(Get-FileHash -LiteralPath '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-spm-cost\\run_spm_capture_control.ps1' -Algorithm SHA256).Hash.ToLowerInvariant();tokens=$tokens.Count;errors=@($errors|ForEach-Object {$_.Message});passed=($errors.Count -eq 0)}|ConvertTo-Json -Depth 6|Set-Content -LiteralPath '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-spm-cost\\native-syntax\\result.json' -Encoding UTF8;if($errors.Count){exit 1}"
+      ],
+      "pid": 2420322,
+      "start_ticks": "17987661",
+      "timeout_seconds": 20,
+      "returncode": 0,
+      "linux_birth_absent": true
+    },
+    "closure": {
+      "arguments": [
+        "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-spm-cost\\emergency_native_cleanup.ps1",
+        "-TemporaryDirectory",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-spm-cost\\native-syntax\\temp",
+        "-Output",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-spm-cost\\native-syntax",
+        "-Receipt",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-spm-cost\\native-syntax\\closure.json"
+      ],
+      "pid": 2420355,
+      "start_ticks": "17987708",
+      "timeout_seconds": 60,
+      "returncode": 0,
+      "linux_birth_absent": true
+    },
+    "elapsed_seconds": 1.1937389179947786,
+    "accepted": true
+  },
+  "plan_input_versions": 195,
+  "scope": "Accepted for one original9:7 acquisition with RDP-child-only experimental SPM support-gate setting and original science/tool bounds. Restore before RDP resume/science/closure; real inherited environment via null CreateProcessW lpEnvironment. Original32completebuffers/7modules/51markers/provider verified. Acquisition success does not establish actual SPM, executed cost, hardware support, performance benefit, frames or qualification."
+}

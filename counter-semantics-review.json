@@ -1,0 +1,31 @@
+{
+  "reviewer": "command_owner_review",
+  "reference_revision": "d63073a854c8ccc4b10edbf27559bb698c5685b3",
+  "derived_schema": "Win64 native little-endian u32/binary64; joins use counter_index, not arbitrary chunk ordering or perfCounters order; length-counted strings without terminators; derived PCI0 is a writer placeholder.",
+  "public_unit_encodings": {
+    "0": "ratio",
+    "1": "percentage",
+    "2": "cycles",
+    "3": "milliseconds",
+    "4": "bytes",
+    "5": "items",
+    "6": "kilobytes",
+    "7": "nanoseconds",
+    "8": "sentinel"
+  },
+  "unit_source": "https://github.com/GPUOpen-Tools/radeon_developer_panel/blob/d63073a854c8ccc4b10edbf27559bb698c5685b3/source/trace/inc/counters/rgp_spm_database.h#L125",
+  "builder_reference_revision": "3c84493d93e054b48c784f3ed8deb6b8cb40faa6",
+  "builder_source": "https://github.com/GPUOpen-Tools/spm_db/blob/3c84493d93e054b48c784f3ed8deb6b8cb40faa6/source/spm_db/derived_raw_builder.cpp",
+  "public_builder_semantics": [
+    "Samplei uses raw constituentsi beginning0 without first-sample removal.",
+    "Timing constituents receive4096 shader-clock cycles; all-zero raw constituents yield0 without GPA evaluation.",
+    "Default bad-value filtering can drop whole counters; cache-noise filtering can modify samples or remove counters; earlier initial negative values may remain even after count reset."
+  ],
+  "packaged_revision_limit": "RDP reference fetches spm_db from main; this later pinned public implementation does not attest the actual packaged dependency or formulas/filter implementation.",
+  "dependency_source": "https://github.com/GPUOpen-Tools/radeon_developer_panel/blob/d63073a854c8ccc4b10edbf27559bb698c5685b3/cmake/fetch_external.cmake#L84",
+  "default_filter_source": "https://github.com/GPUOpen-Tools/radeon_developer_panel/blob/d63073a854c8ccc4b10edbf27559bb698c5685b3/source/trace/inc/counters/rgp_derived_spm_database.h#L35",
+  "clock_boundary": "Raw SPM timestamps are separate from SQTT-mapped event timestamps; mapping implementation and whether timestamps mark measurement-interval start/end are unestablished. Do not directly align with Vulkan markers or delta derived values.",
+  "next_supported_observation": "One owned RGP Wavefront occupancy/counter-view inspection on this exact trace, correlated with actual event/pipeline/code identities.",
+  "viewer_documentation": "https://gpuopen.com/manuals/rgp_manual/events_windows/",
+  "scope": "Pinned primary reference interpretation only; no new sample semantic/eventcost or binary hardware qualification claim."
+}

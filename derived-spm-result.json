@@ -1,0 +1,714 @@
+{
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "input_seals": {
+    "out/native-spm-cost/verify_derived_spm.py": {
+      "bytes": 5715,
+      "sha256": "ff8a811063ea67210e5fd0066354d6265fb52dc78476c190ddea9a0f21864e10"
+    },
+    "out/native-spm-cost/native-spm-capture-console/spm-original-legacy-interval.rgp": {
+      "bytes": 9581418,
+      "sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9"
+    },
+    "out/native-spm-cost/spm-index-result.json": {
+      "bytes": 135860,
+      "sha256": "b6e0ca44f92563bc8a18c62f61bce56299e46fa3f501ea7cafc100206ca804cc"
+    },
+    "out/native-spm-cost/raw-spm-result.json": {
+      "bytes": 81132,
+      "sha256": "c53f0745126ad0f3a3aa83798edfcc112125afe949531e66c4caafe72a31c113"
+    },
+    "out/native-spm-cost/derived-references.json": {
+      "bytes": 1259,
+      "sha256": "2ab4dca79ad88f4f32accb14b86cf6b038af53b8d41ab4e270959f583f086bf9"
+    },
+    "out/native-spm-cost/rdp-derived-header.h": {
+      "bytes": 2309,
+      "sha256": "da7e086957a178ab820d5f6c569bb48c418b2a3fa20c01d77403085211cec4ca"
+    },
+    "out/native-spm-cost/rdp-derived-database.cpp": {
+      "bytes": 56812,
+      "sha256": "d0caad7c90ccfab2fd591a618dfdcaa33ba0ccd598c16060e00621a2d596e2d4"
+    }
+  },
+  "trace": {
+    "bytes": 9581418,
+    "sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9"
+  },
+  "session": {
+    "pci_id": 0,
+    "raw_session_pci_id": 12910592,
+    "pci_id_scope": "Public writer deliberately writes zero for derived chunks; do not equate this placeholder with raw/device PCI identity.",
+    "counter_count": 33,
+    "group_count": 5,
+    "samples_per_counter": 11911
+  },
+  "counters": [
+    {
+      "counter_index": 0,
+      "chunk_ordinal": 205,
+      "display_name": "Instruction cache hit",
+      "description": "The percentage of read requests made that hit the data in the Instruction cache. The Instruction cache supplies shader code to an executing shader. Each request is 64 bytes in size. Value range: 0% (no hit) to 100% (optimal).",
+      "usage_type_encoding": 1,
+      "component_indices": [
+        1,
+        2,
+        3
+      ],
+      "samples": 11911,
+      "sample_data_sha256": "4960229502b2a030d580d70b3a92c226ec1520c790e84eac79ed9255166d45b2",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 7889,
+      "minimum_finite": 0.0,
+      "maximum_finite": 100.0,
+      "component_display_names": [
+        "Requests",
+        "Hits",
+        "Misses"
+      ]
+    },
+    {
+      "counter_index": 1,
+      "chunk_ordinal": 206,
+      "display_name": "Requests",
+      "description": "The number of read requests made to the Instruction cache. The Instruction cache supplies shader code to an executing shader. Each request is 64 bytes in size.",
+      "usage_type_encoding": 5,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "ada65d2510b458590c366f8b18d1f50cc28481f237da3f42d011bf231f744aef",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 8035,
+      "minimum_finite": 0.0,
+      "maximum_finite": 10194.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 2,
+      "chunk_ordinal": 207,
+      "display_name": "Hits",
+      "description": "The number of read requests which result in a cache hit from the Instruction cache. The Instruction cache supplies shader code to an executing shader. Each request is 64 bytes in size.",
+      "usage_type_encoding": 5,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "081c93c42228b334b96f9b89d16c2e0cc9d04ba96ee7a6722d9fcb03a8fbb0d6",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 7889,
+      "minimum_finite": 0.0,
+      "maximum_finite": 10194.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 3,
+      "chunk_ordinal": 208,
+      "display_name": "Misses",
+      "description": "The number of read requests which result in a cache miss from the Instruction cache. The Instruction cache supplies shader code to an executing shader. Each request is 64 bytes in size.",
+      "usage_type_encoding": 5,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "5dc7ac27c1d4c20183187182b78e95e7f0bc19619fe3d8f1f1e330812d1190c1",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 6730,
+      "minimum_finite": 0.0,
+      "maximum_finite": 1441.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 4,
+      "chunk_ordinal": 209,
+      "display_name": "Scalar cache hit",
+      "description": "The percentage of read requests made from executing shader code that hit the data in the Scalar cache. The Scalar cache contains data that does not vary in each thread across the wavefront. Each request is 64 bytes in size. Value range: 0% (no hit) to 100% (optimal).",
+      "usage_type_encoding": 1,
+      "component_indices": [
+        5,
+        6,
+        7
+      ],
+      "samples": 11911,
+      "sample_data_sha256": "0c9836dae04a5faeda2420aec3b83563cd86f99ce8823210d163c015da566f68",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 4136,
+      "minimum_finite": 0.0,
+      "maximum_finite": 100.0,
+      "component_display_names": [
+        "Requests",
+        "Hits",
+        "Misses"
+      ]
+    },
+    {
+      "counter_index": 5,
+      "chunk_ordinal": 210,
+      "display_name": "Requests",
+      "description": "The number of read requests made from executing shader code to the Scalar cache. The Scalar cache contains data that does not vary in each thread across the wavefront. Each request is 64 bytes in size.",
+      "usage_type_encoding": 5,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "7aeec4fc061eae0f06e3bd6beef5ee078c09ddf1aad79973222a79eac21ecd33",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 4153,
+      "minimum_finite": 0.0,
+      "maximum_finite": 2197.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 6,
+      "chunk_ordinal": 211,
+      "display_name": "Hits",
+      "description": "The number of read requests made from executing shader code which result in a cache hit from the Scalar cache. The Scalar cache contains data that does not vary in each thread across the wavefront. Each request is 64 bytes in size.",
+      "usage_type_encoding": 5,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "71bde6ba3a0fbee8f322ffab599b03772f727f87e68c84c8a3afc76736e9adab",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 4136,
+      "minimum_finite": 0.0,
+      "maximum_finite": 2194.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 7,
+      "chunk_ordinal": 212,
+      "display_name": "Misses",
+      "description": "The number of read requests made from executing shader code which result in a cache miss from the Scalar cache. The Scalar cache contains data that does not vary in each thread across the wavefront. Each request is 64 bytes in size.",
+      "usage_type_encoding": 5,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "c49846c8ea2c0b6ee4c48cd470161f663b954a647d1648c252639e6525108b4f",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 212,
+      "minimum_finite": 0.0,
+      "maximum_finite": 268.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 8,
+      "chunk_ordinal": 213,
+      "display_name": "L0 cache hit",
+      "description": "The percentage of read requests that hit the data in the L0 cache. The L0 cache contains vector data, which is data that may vary in each thread across the wavefront. Each request is 128 bytes in size. Value range: 0% (no hit) to 100% (optimal).",
+      "usage_type_encoding": 1,
+      "component_indices": [
+        9,
+        10,
+        13
+      ],
+      "samples": 11911,
+      "sample_data_sha256": "9316f918600064e2c87aedaaab78a90b9593697602d15c8fa08c20973642f3f5",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 4506,
+      "minimum_finite": 0.0,
+      "maximum_finite": 100.0,
+      "component_display_names": [
+        "Requests",
+        "Hits",
+        "Misses"
+      ]
+    },
+    {
+      "counter_index": 9,
+      "chunk_ordinal": 214,
+      "display_name": "Requests",
+      "description": "The number of read requests made to the L0 cache. The L0 cache contains vector data, which is data that may vary in each thread across the wavefront. Each request is 128 bytes in size.",
+      "usage_type_encoding": 5,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "47b6555d56cdceb4dada6d6c013a2e47ec677ed3ed711e6ef28ed61cddfc7b7e",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 4536,
+      "minimum_finite": 0.0,
+      "maximum_finite": 4132.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 10,
+      "chunk_ordinal": 215,
+      "display_name": "Hits",
+      "description": "The number of read requests which result in a cache hit from the L0 cache. The L0 cache contains vector data, which is data that may vary in each thread across the wavefront. Each request is 128 bytes in size.",
+      "usage_type_encoding": 5,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "b3ce596bdade08069b8e8c4d430cce22bc9b8805d983e663c26751f3b5dc47ba",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 4506,
+      "minimum_finite": 0.0,
+      "maximum_finite": 3377.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 11,
+      "chunk_ordinal": 216,
+      "display_name": "Ray-box tests",
+      "description": "The number of ray box intersection tests.",
+      "usage_type_encoding": 5,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "9b4d289c1ce22229634dec40aa52239afd7317cf2c23f52c97885719982557e2",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 0,
+      "minimum_finite": 0.0,
+      "maximum_finite": 0.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 12,
+      "chunk_ordinal": 217,
+      "display_name": "Write size",
+      "description": "The total bytes written to the video memory. This is measured with all extra fetches and any cache or memory effects taken into account.",
+      "usage_type_encoding": 4,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "3ba7f15e89a78360c8ea93171df1fd35bbbc4aaa908a5a33a5c9959cb95c003c",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 292,
+      "minimum_finite": 0.0,
+      "maximum_finite": 524384.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 13,
+      "chunk_ordinal": 218,
+      "display_name": "Misses",
+      "description": "The number of read requests which result in a cache miss from the L0 cache. The L0 cache contains vector data, which is data that may vary in each thread across the wavefront. Each request is 128 bytes in size.",
+      "usage_type_encoding": 5,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "0c31ba095cc13e52d3d0e502d4c67514d6cd248e65ad6d23e37e3edfdba74249",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 3813,
+      "minimum_finite": 0.0,
+      "maximum_finite": 1639.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 14,
+      "chunk_ordinal": 219,
+      "display_name": "L1 cache hit",
+      "description": "The percentage of read or write requests that hit the data in the L1 cache. The L1 cache is shared across all WGPs in a single shader engine. Each request is 128 bytes in size. Value range: 0% (no hit) to 100% (optimal).",
+      "usage_type_encoding": 1,
+      "component_indices": [
+        15,
+        16,
+        17
+      ],
+      "samples": 11911,
+      "sample_data_sha256": "a79bfc20bac99e129e4290c136c0364bedf96a541dd552761498394d86200fdc",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 1469,
+      "minimum_finite": 0.0,
+      "maximum_finite": 100.0,
+      "component_display_names": [
+        "Requests",
+        "Hits",
+        "Misses"
+      ]
+    },
+    {
+      "counter_index": 15,
+      "chunk_ordinal": 220,
+      "display_name": "Requests",
+      "description": "The number of read or write requests made to the L1 cache. The L1 cache is shared across all WGPs in a single shader engine. Each request is 128 bytes in size.",
+      "usage_type_encoding": 5,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "8889a0a5aac52bdb6c9299408dbea6867dc260e780248906d9c6fb800b748913",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 7429,
+      "minimum_finite": 0.0,
+      "maximum_finite": 3510.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 16,
+      "chunk_ordinal": 221,
+      "display_name": "Hits",
+      "description": "The number of read or write requests which result in a cache hit from the L1 cache. The L1 cache is shared across all WGPs in a single shader engine. Each request is 128 bytes in size.",
+      "usage_type_encoding": 5,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "4445cf18d7526648417c35dcc444526d5fb975401249aa18133adad2a4671847",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 1469,
+      "minimum_finite": 0.0,
+      "maximum_finite": 540.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 17,
+      "chunk_ordinal": 222,
+      "display_name": "Misses",
+      "description": "The number of read or write requests which result in a cache miss from the L1 cache. The L1 cache is shared across all WGPs in a single shader engine. Each request is 128 bytes in size.",
+      "usage_type_encoding": 5,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "25e2338afe16f3e44d55b0350c58a173b61cd03e308629f8315bbe804cde288c",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 7346,
+      "minimum_finite": 0.0,
+      "maximum_finite": 3510.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 18,
+      "chunk_ordinal": 223,
+      "display_name": "L2 cache hit",
+      "description": "The percentage of read or write requests that hit the data in the L2 cache. The L2 cache is shared by many blocks across the GPU, including the Command Processor, Geometry Engine, all WGPs, all Render Backends, and others. Each request is 128 bytes in size. Value range: 0% (no hit) to 100% (optimal).",
+      "usage_type_encoding": 1,
+      "component_indices": [
+        19,
+        20,
+        21
+      ],
+      "samples": 11911,
+      "sample_data_sha256": "e15fd0b85ba237d42ebc6f12f5da34428ca8025f0d11d549a747f8b54992dbd4",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 7202,
+      "minimum_finite": 0.0,
+      "maximum_finite": 100.0,
+      "component_display_names": [
+        "Requests",
+        "Hits",
+        "Misses"
+      ]
+    },
+    {
+      "counter_index": 19,
+      "chunk_ordinal": 224,
+      "display_name": "Requests",
+      "description": "The number of read or write requests made to the L2 cache. The L2 cache is shared by many blocks across the GPU, including the Command Processor, Geometry Engine, all WGPs, all Render Backends, and others. Each request is 128 bytes in size.",
+      "usage_type_encoding": 5,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "4ebdc7c5d3caf1d12171dd4af20037296de785d18b928d57769828d14971acf7",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 7382,
+      "minimum_finite": 0.0,
+      "maximum_finite": 3611.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 20,
+      "chunk_ordinal": 225,
+      "display_name": "Hits",
+      "description": "The number of read or write requests which result in a cache hit from the L2 cache. The L2 cache is shared by many blocks across the GPU, including the Command Processor, Geometry Engine, all WGPs, all Render Backends, and others. Each request is 128 bytes in size.",
+      "usage_type_encoding": 5,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "283da61d2e8bcac6518c91436b758df6152fef87d84d6ed2f3dd25b582860533",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 7202,
+      "minimum_finite": 0.0,
+      "maximum_finite": 2262.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 21,
+      "chunk_ordinal": 226,
+      "display_name": "Misses",
+      "description": "The number of read or write requests which result in a cache miss from the L2 cache. The L2 cache is shared by many blocks across the GPU, including the Command Processor, Geometry Engine, all WGPs, all Render Backends, and others. Each request is 128 bytes in size.",
+      "usage_type_encoding": 5,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "4e7079dcfb9659f7342576eb054c94838f9a792a584aa72545ce0529eb13511c",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 985,
+      "minimum_finite": 0.0,
+      "maximum_finite": 1757.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 22,
+      "chunk_ordinal": 227,
+      "display_name": "Ray-triangle tests",
+      "description": "The number of ray triangle intersection tests.",
+      "usage_type_encoding": 5,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "9b4d289c1ce22229634dec40aa52239afd7317cf2c23f52c97885719982557e2",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 0,
+      "minimum_finite": 0.0,
+      "maximum_finite": 0.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 23,
+      "chunk_ordinal": 228,
+      "display_name": "LDS Bank Conflict",
+      "description": "The average percentage of GPUTime an LDS is stalled due to bank conflicts. Value range: 0% (optimal) to 100% (bad).",
+      "usage_type_encoding": 1,
+      "component_indices": [
+        24,
+        25
+      ],
+      "samples": 11911,
+      "sample_data_sha256": "77170a61905c79cff58ea5bc2448cbb761ac3501b016d2eb5a43f395cf99b1cb",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 3338,
+      "minimum_finite": 0.0,
+      "maximum_finite": 0.13221056057277683,
+      "component_display_names": [
+        "Gpu Busy Cycles",
+        "LDS Busy Cycles"
+      ]
+    },
+    {
+      "counter_index": 24,
+      "chunk_ordinal": 229,
+      "display_name": "Gpu Busy Cycles",
+      "description": "Number of GPU cycles that the GPU command processor was busy.",
+      "usage_type_encoding": 2,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "6c188d9389a24c182b164ee588792ae6867a5d057c7e39439981f74bc1b7f6a0",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 8843,
+      "minimum_finite": 0.0,
+      "maximum_finite": 53261.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 25,
+      "chunk_ordinal": 230,
+      "display_name": "LDS Busy Cycles",
+      "description": "The average number of GPU cycles an LDS is stalled by bank conflicts. Value range: 0 (optimal) to GPUBusyCycles (bad).",
+      "usage_type_encoding": 2,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "3276742421f85ee56080c070204db96e6e1eafd432315e7a797ed0f1a7d37151",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 3338,
+      "minimum_finite": 0.0,
+      "maximum_finite": 5.416666666666667,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 26,
+      "chunk_ordinal": 231,
+      "display_name": "Memory unit busy",
+      "description": "The percentage of GPUTime the memory unit is active. The result includes the stall time (MemUnitStalled). This is measured with all extra fetches and writes and any cache or memory effects taken into account. Value range: 0% to 100% (fetch-bound).",
+      "usage_type_encoding": 1,
+      "component_indices": [
+        24,
+        28
+      ],
+      "samples": 11911,
+      "sample_data_sha256": "a6bbdd76ada87129a01882f8e386645a7e30df327b6e8155d173e767f0f92c45",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 4564,
+      "minimum_finite": 0.0,
+      "maximum_finite": 100.0,
+      "component_display_names": [
+        "Gpu Busy Cycles",
+        "Memory unit busy cycles"
+      ]
+    },
+    {
+      "counter_index": 27,
+      "chunk_ordinal": 232,
+      "display_name": "Memory unit stalled",
+      "description": "The percentage of GPUTime the memory unit is stalled. Try reducing the number or size of fetches and writes if possible. Value range: 0% (optimal) to 100% (bad).",
+      "usage_type_encoding": 1,
+      "component_indices": [
+        24,
+        29
+      ],
+      "samples": 11911,
+      "sample_data_sha256": "91165e078fc7aab4ca6b3fca25301d795283b253a4c6548ed20138ac9e54ba96",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 215,
+      "minimum_finite": 0.0,
+      "maximum_finite": 29.89992677568953,
+      "component_display_names": [
+        "Gpu Busy Cycles",
+        "Memory unit stalled cycles"
+      ]
+    },
+    {
+      "counter_index": 28,
+      "chunk_ordinal": 233,
+      "display_name": "Memory unit busy cycles",
+      "description": "Number of GPU cycles the memory unit is active. The result includes the stall time (MemUnitStalledCycles). This is measured with all extra fetches and writes and any cache or memory effects taken into account.",
+      "usage_type_encoding": 2,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "75d32522bf97f609df25a9d94c5aa2968bef86d1646751e30596d7213f87b41c",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 4564,
+      "minimum_finite": 0.0,
+      "maximum_finite": 4097.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 29,
+      "chunk_ordinal": 234,
+      "display_name": "Memory unit stalled cycles",
+      "description": "Number of GPU cycles the memory unit is stalled.",
+      "usage_type_encoding": 2,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "9d566273fdab4c3c927be69a27a3312ca53a4f35a994501645c6daceb9b36d5e",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 215,
+      "minimum_finite": 0.0,
+      "maximum_finite": 1225.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 30,
+      "chunk_ordinal": 235,
+      "display_name": "Fetch size",
+      "description": "The total bytes fetched from the video memory. This is measured with all extra fetches and any cache or memory effects taken into account.",
+      "usage_type_encoding": 4,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "0306f0b15be534217bf0d365ab24012d64ae4b7a2588ebb102da11f146f80a30",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 977,
+      "minimum_finite": 0.0,
+      "maximum_finite": 214336.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 31,
+      "chunk_ordinal": 236,
+      "display_name": "Local video memory bytes",
+      "description": "Number of bytes read from or written to the Infinity Cache (if available) or local video memory",
+      "usage_type_encoding": 4,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "a9cc0fcbf1ca8fed4396ac456c60bfa58c15432ff8195a45885f8c2e579575d2",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 1398,
+      "minimum_finite": 0.0,
+      "maximum_finite": 916864.0,
+      "component_display_names": []
+    },
+    {
+      "counter_index": 32,
+      "chunk_ordinal": 237,
+      "display_name": "PCIe bytes",
+      "description": "Number of bytes sent and received over the PCIe bus",
+      "usage_type_encoding": 4,
+      "component_indices": [],
+      "samples": 11911,
+      "sample_data_sha256": "9b4d289c1ce22229634dec40aa52239afd7317cf2c23f52c97885719982557e2",
+      "finite_samples": 11911,
+      "nonfinite_sample_indices": [],
+      "nonzero_finite_samples": 0,
+      "minimum_finite": 0.0,
+      "maximum_finite": 0.0,
+      "component_display_names": []
+    }
+  ],
+  "groups": [
+    {
+      "group_index": 0,
+      "chunk_ordinal": 238,
+      "name": "Cache",
+      "description": "",
+      "member_indices": [
+        0,
+        4,
+        8,
+        14,
+        18
+      ],
+      "member_display_names": [
+        "Instruction cache hit",
+        "Scalar cache hit",
+        "L0 cache hit",
+        "L1 cache hit",
+        "L2 cache hit"
+      ]
+    },
+    {
+      "group_index": 1,
+      "chunk_ordinal": 239,
+      "name": "Ray tracing",
+      "description": "",
+      "member_indices": [
+        11,
+        22
+      ],
+      "member_display_names": [
+        "Ray-box tests",
+        "Ray-triangle tests"
+      ]
+    },
+    {
+      "group_index": 2,
+      "chunk_ordinal": 240,
+      "name": "LDS",
+      "description": "",
+      "member_indices": [
+        23
+      ],
+      "member_display_names": [
+        "LDS Bank Conflict"
+      ]
+    },
+    {
+      "group_index": 3,
+      "chunk_ordinal": 241,
+      "name": "Memory (%)",
+      "description": "",
+      "member_indices": [
+        26,
+        27
+      ],
+      "member_display_names": [
+        "Memory unit busy",
+        "Memory unit stalled"
+      ]
+    },
+    {
+      "group_index": 4,
+      "chunk_ordinal": 242,
+      "name": "Memory (bytes)",
+      "description": "",
+      "member_indices": [
+        30,
+        12,
+        31,
+        32
+      ],
+      "member_display_names": [
+        "Fetch size",
+        "Write size",
+        "Local video memory bytes",
+        "PCIe bytes"
+      ]
+    }
+  ],
+  "scope": "Recorded tool-derived binary64 values, length-counted UTF8 strings, counter_index identities and complete component/group links conform to the pinned public v1 writer schema. No formula reconstruction or unit/interval semantic verification, event/pipeline/source cost join, exclusive bottleneck, hardware qualification, ordinary performance benefit, rendered frame or full release/scientific qualification claim."
+}

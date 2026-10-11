@@ -1,0 +1,903 @@
+{
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "input_seals": {
+    "out/native-spm-cost/libamdrdf.md": {
+      "bytes": 2471,
+      "sha256": "d43a56d32c35d5bf92cfb9f1ddca636b3b8e4876bb04101467e9bc869077a8c7"
+    },
+    "out/native-spm-cost/libamdrdf-license": {
+      "bytes": 1090,
+      "sha256": "55a88f9bcb0faea405a9058fb481fb4e9a9215bd5a717377cee8b18fcabbd28b"
+    },
+    "out/native-spm-cost/pal-gpu-perf-header.h": {
+      "bytes": 6543,
+      "sha256": "ed219731c2c45ab994e15bdf2656ff3d6446677d17fe6a992f2925dafdf64466"
+    },
+    "out/native-spm-cost/pal-gpu-perf-producer.cpp": {
+      "bytes": 27415,
+      "sha256": "74d648fbc7a09d4090688c435aa36449c837dff3e3be3cb03dc3380804b3244d"
+    },
+    "out/native-spm-cost/pal-trace-config.cpp": {
+      "bytes": 2652,
+      "sha256": "11f044fd5c28b860200dfcc46b17f38bcc035492e93c35eac32e91ac323c7016"
+    },
+    "out/native-spm-cost/rdp-spm-support.cpp": {
+      "bytes": 19720,
+      "sha256": "054425f185332ffb2a4d76704d4e0a3b7a91e352c5f7e06671c12e7fb2745050"
+    },
+    "out/native-spm-cost/rdp-ubertrace-client.cpp": {
+      "bytes": 15668,
+      "sha256": "a0b03470e265a57f1809b6e74ec3ab1c991237484bd79dfbce289a347f0881cc"
+    },
+    "out/native-spm-cost/rdp-asic-info.cpp": {
+      "bytes": 5802,
+      "sha256": "a2f83ef5699fffa04810dee9fcdce52f4daab96f99397ee8bf0ef48606f1a857"
+    },
+    "out/native-spm-cost/rdp-capture-params.cpp": {
+      "bytes": 4362,
+      "sha256": "c6e74eae1cf0a723d6634ebbeb691cfcca9a01b7af5022eda634afc46fdcc745"
+    },
+    "out/native-spm-cost/rdp-counter-handler.cpp": {
+      "bytes": 17253,
+      "sha256": "e86f361c12ad709c1415d4f19ac8cf972abb924ea6f81f2cecad0f91522f8097"
+    },
+    "out/native-spm-cost/rdp-license.txt": {
+      "bytes": 1090,
+      "sha256": "52ad61689c7e9486fc7c5aca89ae699d057424b1e50bf71d5706e190459dc3bf"
+    },
+    "attestations/native-vulkan/6be3132/native-executed-cost/manifest.json": {
+      "bytes": 889969,
+      "sha256": "35165b071872e30e3861e87e39794aecf7f34d5225592d2a188541e00ca270d3"
+    },
+    "out/native-spm-cost/inspect_saved_traces.py": {
+      "bytes": 5229,
+      "sha256": "06a9dda87d92a1bc79d67120d8c5af95d54abc96da252c50dba1a97870c384f5"
+    },
+    "out/native-spm-cost/source.json": {
+      "bytes": 380,
+      "sha256": "4bd6021f5991b14e4c7f39d3adc18846b0bb55f395adfafd51508b7a4dd6197a"
+    },
+    "out/native-spm-cost/references.json": {
+      "bytes": 5859,
+      "sha256": "9e30af1675e0941606c81b2a14b0057a8d8ee0967a6f52fb0c9d248ee7228493"
+    },
+    "attestations/native-vulkan/6be3132/native-executed-cost/payloads/ae2224a5d0b45b833d4f2ce484cd61f6488a01976d5b99959aa83749c7a9edd6": {
+      "bytes": 1262370,
+      "sha256": "ae2224a5d0b45b833d4f2ce484cd61f6488a01976d5b99959aa83749c7a9edd6"
+    },
+    "attestations/native-vulkan/6be3132/native-executed-cost/payloads/52420f5f1531998f48a939658165ac6c297f4d86700e68f3a283ad46458ad4e4": {
+      "bytes": 1411970,
+      "sha256": "52420f5f1531998f48a939658165ac6c297f4d86700e68f3a283ad46458ad4e4"
+    }
+  },
+  "traces": [
+    {
+      "trace_name": "original-legacy-te.rgp",
+      "protected_input": "attestations/native-vulkan/6be3132/native-executed-cost/payloads/ae2224a5d0b45b833d4f2ce484cd61f6488a01976d5b99959aa83749c7a9edd6",
+      "bytes": 1262370,
+      "sha256": "ae2224a5d0b45b833d4f2ce484cd61f6488a01976d5b99959aa83749c7a9edd6",
+      "index_offset": 1261346,
+      "index_bytes": 1024,
+      "chunks": [
+        {
+          "ordinal": 0,
+          "name": "AsicInfo",
+          "version": 3,
+          "compression": 0,
+          "header_offset": 32,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 32,
+          "data_bytes": 608,
+          "data_sha256": "a80c73cbe11275d7da7f7aed11ec23a3a9b74d39ea0284f4e87d268d02d1ec9c"
+        },
+        {
+          "ordinal": 1,
+          "name": "ApiInfo",
+          "version": 2,
+          "compression": 0,
+          "header_offset": 640,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 640,
+          "data_bytes": 8,
+          "data_sha256": "f0a0278e4372459cca6159cd5e71cfee638302a7b9ca9b05c34181ac0a65ac5d"
+        },
+        {
+          "ordinal": 2,
+          "name": "ClockCalibration",
+          "version": 2,
+          "compression": 0,
+          "header_offset": 648,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 648,
+          "data_bytes": 24,
+          "data_sha256": "4b020488f0ffd7139fd6ba0b6e48ec31dca0195f4f633462702ec619352c8729"
+        },
+        {
+          "ordinal": 3,
+          "name": "CodeObject",
+          "version": 2,
+          "compression": 0,
+          "header_offset": 672,
+          "header_bytes": 24,
+          "header_sha256": "9beb95a7b4e57ef73afdccb07c855d889e18edd08b379ca4d2febc08ba055057",
+          "data_offset": 696,
+          "data_bytes": 669600,
+          "data_sha256": "63a5347c70df566fcadda1edcd6371f463f793d88fc7ea0557fc4e3241fcfbef"
+        },
+        {
+          "ordinal": 4,
+          "name": "CodeObject",
+          "version": 2,
+          "compression": 0,
+          "header_offset": 670296,
+          "header_bytes": 24,
+          "header_sha256": "96f6acfca69b5702f36f401e721a9b4b12f2d38dcdbbaf5589dbc8255664c50e",
+          "data_offset": 670320,
+          "data_bytes": 240912,
+          "data_sha256": "d78a1135f40cc339d91d48539bc9acd0f544e60d61eb86b56d2eb61c46eedd83"
+        },
+        {
+          "ordinal": 5,
+          "name": "CodeObject",
+          "version": 2,
+          "compression": 0,
+          "header_offset": 911232,
+          "header_bytes": 24,
+          "header_sha256": "086354597471048831ab8626c2feb63faac61c2ecb5d3a8aaaa1dbba27cb3969",
+          "data_offset": 911256,
+          "data_bytes": 259360,
+          "data_sha256": "f2cff092f1a2fe12bc77488572ef8f1ee4ff6c6fdb56eed39083ed91f89b2907"
+        },
+        {
+          "ordinal": 6,
+          "name": "COLoadEvent",
+          "version": 3,
+          "compression": 0,
+          "header_offset": 1170616,
+          "header_bytes": 4,
+          "header_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+          "data_offset": 1170620,
+          "data_bytes": 120,
+          "data_sha256": "75c201e160360481315dcc006a1c41240f05bc81b0fe8e15a2479064dde165bf"
+        },
+        {
+          "ordinal": 7,
+          "name": "PsoCorrelation",
+          "version": 3,
+          "compression": 0,
+          "header_offset": 1170740,
+          "header_bytes": 4,
+          "header_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+          "data_offset": 1170744,
+          "data_bytes": 288,
+          "data_sha256": "d9e2d748318b70d02f4f7f55c800f9e71c23e09bb9e2003f1d4b819b0062e2b6"
+        },
+        {
+          "ordinal": 8,
+          "name": "SqttData",
+          "version": 5,
+          "compression": 0,
+          "header_offset": 1171032,
+          "header_bytes": 40,
+          "header_sha256": "5e5ae9a499c33dd3f2e20e9fed858556d353f8ff4b8263cc17acd1e3f43a70ad",
+          "data_offset": 1171072,
+          "data_bytes": 87456,
+          "data_sha256": "e28b35d687bf60cb2008ff35e920e9ab51a3114ec6225c7e529377e2ba3d55b4"
+        },
+        {
+          "ordinal": 9,
+          "name": "QueueInfo",
+          "version": 1,
+          "compression": 0,
+          "header_offset": 1258528,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 1258528,
+          "data_bytes": 32,
+          "data_sha256": "e7704be2814eaf2815d7d4fd787a3d4fd75a1a45f00396f48001811900281635"
+        },
+        {
+          "ordinal": 10,
+          "name": "QueueEvent",
+          "version": 1,
+          "compression": 0,
+          "header_offset": 1258560,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 1258560,
+          "data_bytes": 72,
+          "data_sha256": "3c3d87dd01e6861593b9299ff3fb40c757671da20208c35f7300c834c3defae9"
+        },
+        {
+          "ordinal": 11,
+          "name": "QueueEvent",
+          "version": 1,
+          "compression": 0,
+          "header_offset": 1258632,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 1258632,
+          "data_bytes": 72,
+          "data_sha256": "dcf4c777fc196d631f2b466c05b03517deb8153523c73435092cef28ecb89841"
+        },
+        {
+          "ordinal": 12,
+          "name": "TraceConfig",
+          "version": 1,
+          "compression": 0,
+          "header_offset": 1258704,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 1258704,
+          "data_bytes": 507,
+          "data_sha256": "3f386f90e7fe33c03b55fe3da1f1f1db05c53eb7d147391360476c8332fc12f1",
+          "config": {
+            "sources": [
+              {
+                "name": "asicinfo"
+              },
+              {
+                "name": "apiinfo"
+              },
+              {
+                "name": "clockcalibration"
+              },
+              {
+                "name": "codeobject"
+              },
+              {
+                "name": "gpuperfexp",
+                "config": {
+                  "sqtt": {
+                    "enabled": true,
+                    "memoryLimitInMb": 75,
+                    "enableInstructionTokens": true,
+                    "enableExecPopTokens": false,
+                    "seMask": 1
+                  },
+                  "spm": {
+                    "enabled": false
+                  }
+                }
+              },
+              {
+                "name": "queuetimings"
+              },
+              {
+                "name": "traceconfig"
+              }
+            ],
+            "controller": {
+              "name": "renderop",
+              "config": {
+                "enabled": true,
+                "renderOpMode": "dispatch",
+                "numPrepRenderOps": 0,
+                "captureRenderOpCount": 2,
+                "captureMode": "absolute",
+                "preparationStartRenderOp": 9
+              }
+            }
+          },
+          "terminal_nul_bytes": 1
+        },
+        {
+          "ordinal": 13,
+          "name": "SystemInfo",
+          "version": 1,
+          "compression": 0,
+          "header_offset": 1259211,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 1259211,
+          "data_bytes": 1940,
+          "data_sha256": "7f7992788cc10cd9a91ce9289f0b2e60953bfc62bdcebbd8d56b029bfcdabfe0",
+          "system_info": {
+            "version": {
+              "major": 2,
+              "minor": 0
+            },
+            "devdriver": {
+              "version": {
+                "major": 43
+              }
+            },
+            "os": {
+              "type": "Windows",
+              "name": "Windows 11 Pro",
+              "description": "26100.1.amd64fre.ge_release.240331-1435",
+              "hostname": "Alaris",
+              "memory": {
+                "physical": 66342330368,
+                "swap": 70503079936,
+                "name": "DDR5"
+              },
+              "config": {
+                "windows": {
+                  "etwSupport": {
+                    "isSupported": true,
+                    "hasPermission": false,
+                    "statusCode": 5,
+                    "needsRegistryOrUserGroup": true
+                  }
+                }
+              }
+            },
+            "driver": {
+              "name": "AMD Windows",
+              "description": "AMD Windows Driver",
+              "packagingVersion": "26.10.41.01-260811a-203304C-AMD-Software-Adrenalin-Edition",
+              "packagingDate": "260811",
+              "softwareVersion": "26.8.1"
+            },
+            "drivers": [
+              {
+                "name": "Advanced Micro Devices, Inc.",
+                "description": "AMD Radeon 780M Graphics",
+                "packagingVersion": "26.10.41.01-260811a-203304C-AMD-Software-Adrenalin-Edition",
+                "packagingDate": "260811",
+                "softwareVersion": "26.8.1"
+              }
+            ],
+            "cpus": [
+              {
+                "name": "AMD Ryzen 9 PRO 8945HS w/ Radeon 780M Graphics",
+                "virtualization": "enabled",
+                "deviceId": "CPU0",
+                "cpuId": "AMD64 Family 25 Model 117 Stepping 2",
+                "architecture": "x64",
+                "speed": {
+                  "max": 4001
+                },
+                "numPhysicalCores": 8,
+                "numLogicalCores": 16,
+                "vendorId": "AuthenticAMD",
+                "cpuTimeClockFreq": 10000000
+              }
+            ],
+            "gpus": [
+              {
+                "name": "AMD Radeon 780M Graphics",
+                "pci": {
+                  "bus": 197,
+                  "device": 0,
+                  "function": 0
+                },
+                "asic": {
+                  "gpuIndex": 0,
+                  "gpuCounterFreq": 100000000,
+                  "numShaderEngines": 1,
+                  "numShaderArraysPerEngine": 2,
+                  "numCus": 12,
+                  "cuMask": [
+                    [
+                      63,
+                      63
+                    ]
+                  ],
+                  "engineClockHz": {
+                    "min": 800000000,
+                    "max": 2799000000
+                  },
+                  "ids": {
+                    "gfxEngine": 13,
+                    "family": 148,
+                    "eRev": 192,
+                    "revision": 212,
+                    "device": 6400,
+                    "subsystem": 2954239820,
+                    "vendor": 4098,
+                    "luid": "b5f9000000000000"
+                  }
+                },
+                "memory": {
+                  "type": "Ddr5",
+                  "memOpsPerClock": 4,
+                  "busBitWidth": 128,
+                  "bandwidthBytesPerSec": 125440000000,
+                  "memClockHz": {
+                    "min": 500000000,
+                    "max": 1960000000
+                  },
+                  "heaps": {
+                    "local": {
+                      "physicalAddress": 0,
+                      "size": 268435456
+                    },
+                    "invisible": {
+                      "physicalAddress": 268435456,
+                      "size": 1879048192
+                    }
+                  },
+                  "excludedVaRanges": [
+                    {
+                      "base": 0,
+                      "size": 4096
+                    },
+                    {
+                      "base": 140737488355328,
+                      "size": 18446462598732840959
+                    }
+                  ]
+                },
+                "bigSw": {
+                  "major": 2023,
+                  "minor": 0,
+                  "misc": 33413048
+                },
+                "driverIndex": 0
+              }
+            ]
+          }
+        },
+        {
+          "ordinal": 14,
+          "name": "DriverOverrides",
+          "version": 3,
+          "compression": 0,
+          "header_offset": 1261151,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 1261151,
+          "data_bytes": 44,
+          "data_sha256": "c977ed950d5130ffc5d34f9eaaf0b1b0ac0e9c483701d0bf59c3b351a4a3ba40"
+        },
+        {
+          "ordinal": 15,
+          "name": "TraceProcessInfo",
+          "version": 1,
+          "compression": 0,
+          "header_offset": 1261195,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 1261195,
+          "data_bytes": 151,
+          "data_sha256": "ac4aca3dd2dd0f6d06a20d222e02ce2698f8cb6fc949856a89b5cfaaf1c246f5"
+        }
+      ],
+      "counter_data_available": false
+    },
+    {
+      "trace_name": "original-legacy-interval.rgp",
+      "protected_input": "attestations/native-vulkan/6be3132/native-executed-cost/payloads/52420f5f1531998f48a939658165ac6c297f4d86700e68f3a283ad46458ad4e4",
+      "bytes": 1411970,
+      "sha256": "52420f5f1531998f48a939658165ac6c297f4d86700e68f3a283ad46458ad4e4",
+      "index_offset": 1410690,
+      "index_bytes": 1280,
+      "chunks": [
+        {
+          "ordinal": 0,
+          "name": "AsicInfo",
+          "version": 3,
+          "compression": 0,
+          "header_offset": 32,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 32,
+          "data_bytes": 608,
+          "data_sha256": "a80c73cbe11275d7da7f7aed11ec23a3a9b74d39ea0284f4e87d268d02d1ec9c"
+        },
+        {
+          "ordinal": 1,
+          "name": "ApiInfo",
+          "version": 2,
+          "compression": 0,
+          "header_offset": 640,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 640,
+          "data_bytes": 8,
+          "data_sha256": "f0a0278e4372459cca6159cd5e71cfee638302a7b9ca9b05c34181ac0a65ac5d"
+        },
+        {
+          "ordinal": 2,
+          "name": "ClockCalibration",
+          "version": 2,
+          "compression": 0,
+          "header_offset": 648,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 648,
+          "data_bytes": 24,
+          "data_sha256": "ae2cbb2fb785e62b829e8b4a37a6be1d92dc15229a91b926c86ada33ee826838"
+        },
+        {
+          "ordinal": 3,
+          "name": "CodeObject",
+          "version": 2,
+          "compression": 0,
+          "header_offset": 672,
+          "header_bytes": 24,
+          "header_sha256": "9beb95a7b4e57ef73afdccb07c855d889e18edd08b379ca4d2febc08ba055057",
+          "data_offset": 696,
+          "data_bytes": 669600,
+          "data_sha256": "63a5347c70df566fcadda1edcd6371f463f793d88fc7ea0557fc4e3241fcfbef"
+        },
+        {
+          "ordinal": 4,
+          "name": "CodeObject",
+          "version": 2,
+          "compression": 0,
+          "header_offset": 670296,
+          "header_bytes": 24,
+          "header_sha256": "96f6acfca69b5702f36f401e721a9b4b12f2d38dcdbbaf5589dbc8255664c50e",
+          "data_offset": 670320,
+          "data_bytes": 240912,
+          "data_sha256": "d78a1135f40cc339d91d48539bc9acd0f544e60d61eb86b56d2eb61c46eedd83"
+        },
+        {
+          "ordinal": 5,
+          "name": "CodeObject",
+          "version": 2,
+          "compression": 0,
+          "header_offset": 911232,
+          "header_bytes": 24,
+          "header_sha256": "086354597471048831ab8626c2feb63faac61c2ecb5d3a8aaaa1dbba27cb3969",
+          "data_offset": 911256,
+          "data_bytes": 259360,
+          "data_sha256": "f2cff092f1a2fe12bc77488572ef8f1ee4ff6c6fdb56eed39083ed91f89b2907"
+        },
+        {
+          "ordinal": 6,
+          "name": "COLoadEvent",
+          "version": 3,
+          "compression": 0,
+          "header_offset": 1170616,
+          "header_bytes": 4,
+          "header_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+          "data_offset": 1170620,
+          "data_bytes": 120,
+          "data_sha256": "0aa628db1ddcda238572423124c2c484fb75cadb19c651e880d7b08ece305c3d"
+        },
+        {
+          "ordinal": 7,
+          "name": "PsoCorrelation",
+          "version": 3,
+          "compression": 0,
+          "header_offset": 1170740,
+          "header_bytes": 4,
+          "header_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+          "data_offset": 1170744,
+          "data_bytes": 288,
+          "data_sha256": "d9e2d748318b70d02f4f7f55c800f9e71c23e09bb9e2003f1d4b819b0062e2b6"
+        },
+        {
+          "ordinal": 8,
+          "name": "SqttData",
+          "version": 5,
+          "compression": 0,
+          "header_offset": 1171032,
+          "header_bytes": 40,
+          "header_sha256": "f38d5cb6cb64a19a5e3f033babe7da7d130479563a5b6b39ef7d33d5602544c0",
+          "data_offset": 1171072,
+          "data_bytes": 236512,
+          "data_sha256": "746168ed8ff254392f15af56ba3d05244f861c8c580b2155666867845588e1e6"
+        },
+        {
+          "ordinal": 9,
+          "name": "QueueInfo",
+          "version": 1,
+          "compression": 0,
+          "header_offset": 1407584,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 1407584,
+          "data_bytes": 32,
+          "data_sha256": "cd43b85bef24243e69ad45de5087d58c93c2cc7636b1aa10dfd13545173fd6ca"
+        },
+        {
+          "ordinal": 10,
+          "name": "QueueEvent",
+          "version": 1,
+          "compression": 0,
+          "header_offset": 1407616,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 1407616,
+          "data_bytes": 72,
+          "data_sha256": "3dd7d6d97f4820b0d0454308e237843eccc4300f143ba2b08595816712f325d9"
+        },
+        {
+          "ordinal": 11,
+          "name": "QueueEvent",
+          "version": 1,
+          "compression": 0,
+          "header_offset": 1407688,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 1407688,
+          "data_bytes": 72,
+          "data_sha256": "404044a050e6159dc288928aefb60b6b0878ca7c19bf5b89663af2f11411296b"
+        },
+        {
+          "ordinal": 12,
+          "name": "QueueEvent",
+          "version": 1,
+          "compression": 0,
+          "header_offset": 1407760,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 1407760,
+          "data_bytes": 72,
+          "data_sha256": "d1b6a4855ab827aeb08b9613c619d6dc70588aa8b3a424f86f751c1d2e8c8875"
+        },
+        {
+          "ordinal": 13,
+          "name": "QueueEvent",
+          "version": 1,
+          "compression": 0,
+          "header_offset": 1407832,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 1407832,
+          "data_bytes": 72,
+          "data_sha256": "d97f5fa8df11c34acfd9344d0a24b7b3a410f9f26bea11d3caaf08bb5777a4b4"
+        },
+        {
+          "ordinal": 14,
+          "name": "QueueEvent",
+          "version": 1,
+          "compression": 0,
+          "header_offset": 1407904,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 1407904,
+          "data_bytes": 72,
+          "data_sha256": "3b224cf63456e468c0e94e3009743a8f69b4bf4e5281dfd6a2825de3e413bafe"
+        },
+        {
+          "ordinal": 15,
+          "name": "QueueEvent",
+          "version": 1,
+          "compression": 0,
+          "header_offset": 1407976,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 1407976,
+          "data_bytes": 72,
+          "data_sha256": "4ae3f9755e1991ab3e7784e03a3751823746b2a6cd35a902ba40381e32765b23"
+        },
+        {
+          "ordinal": 16,
+          "name": "TraceConfig",
+          "version": 1,
+          "compression": 0,
+          "header_offset": 1408048,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 1408048,
+          "data_bytes": 507,
+          "data_sha256": "c8a6b00a49b183d8ebc836c11e785204a5279af53ab4da3478b42abd55a6804b",
+          "config": {
+            "sources": [
+              {
+                "name": "asicinfo"
+              },
+              {
+                "name": "apiinfo"
+              },
+              {
+                "name": "clockcalibration"
+              },
+              {
+                "name": "codeobject"
+              },
+              {
+                "name": "gpuperfexp",
+                "config": {
+                  "sqtt": {
+                    "enabled": true,
+                    "memoryLimitInMb": 75,
+                    "enableInstructionTokens": true,
+                    "enableExecPopTokens": false,
+                    "seMask": 1
+                  },
+                  "spm": {
+                    "enabled": false
+                  }
+                }
+              },
+              {
+                "name": "queuetimings"
+              },
+              {
+                "name": "traceconfig"
+              }
+            ],
+            "controller": {
+              "name": "renderop",
+              "config": {
+                "enabled": true,
+                "renderOpMode": "dispatch",
+                "numPrepRenderOps": 0,
+                "captureRenderOpCount": 7,
+                "captureMode": "absolute",
+                "preparationStartRenderOp": 9
+              }
+            }
+          },
+          "terminal_nul_bytes": 1
+        },
+        {
+          "ordinal": 17,
+          "name": "SystemInfo",
+          "version": 1,
+          "compression": 0,
+          "header_offset": 1408555,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 1408555,
+          "data_bytes": 1940,
+          "data_sha256": "7f7992788cc10cd9a91ce9289f0b2e60953bfc62bdcebbd8d56b029bfcdabfe0",
+          "system_info": {
+            "version": {
+              "major": 2,
+              "minor": 0
+            },
+            "devdriver": {
+              "version": {
+                "major": 43
+              }
+            },
+            "os": {
+              "type": "Windows",
+              "name": "Windows 11 Pro",
+              "description": "26100.1.amd64fre.ge_release.240331-1435",
+              "hostname": "Alaris",
+              "memory": {
+                "physical": 66342330368,
+                "swap": 70503079936,
+                "name": "DDR5"
+              },
+              "config": {
+                "windows": {
+                  "etwSupport": {
+                    "isSupported": true,
+                    "hasPermission": false,
+                    "statusCode": 5,
+                    "needsRegistryOrUserGroup": true
+                  }
+                }
+              }
+            },
+            "driver": {
+              "name": "AMD Windows",
+              "description": "AMD Windows Driver",
+              "packagingVersion": "26.10.41.01-260811a-203304C-AMD-Software-Adrenalin-Edition",
+              "packagingDate": "260811",
+              "softwareVersion": "26.8.1"
+            },
+            "drivers": [
+              {
+                "name": "Advanced Micro Devices, Inc.",
+                "description": "AMD Radeon 780M Graphics",
+                "packagingVersion": "26.10.41.01-260811a-203304C-AMD-Software-Adrenalin-Edition",
+                "packagingDate": "260811",
+                "softwareVersion": "26.8.1"
+              }
+            ],
+            "cpus": [
+              {
+                "name": "AMD Ryzen 9 PRO 8945HS w/ Radeon 780M Graphics",
+                "virtualization": "enabled",
+                "deviceId": "CPU0",
+                "cpuId": "AMD64 Family 25 Model 117 Stepping 2",
+                "architecture": "x64",
+                "speed": {
+                  "max": 4001
+                },
+                "numPhysicalCores": 8,
+                "numLogicalCores": 16,
+                "vendorId": "AuthenticAMD",
+                "cpuTimeClockFreq": 10000000
+              }
+            ],
+            "gpus": [
+              {
+                "name": "AMD Radeon 780M Graphics",
+                "pci": {
+                  "bus": 197,
+                  "device": 0,
+                  "function": 0
+                },
+                "asic": {
+                  "gpuIndex": 0,
+                  "gpuCounterFreq": 100000000,
+                  "numShaderEngines": 1,
+                  "numShaderArraysPerEngine": 2,
+                  "numCus": 12,
+                  "cuMask": [
+                    [
+                      63,
+                      63
+                    ]
+                  ],
+                  "engineClockHz": {
+                    "min": 800000000,
+                    "max": 2799000000
+                  },
+                  "ids": {
+                    "gfxEngine": 13,
+                    "family": 148,
+                    "eRev": 192,
+                    "revision": 212,
+                    "device": 6400,
+                    "subsystem": 2954239820,
+                    "vendor": 4098,
+                    "luid": "b5f9000000000000"
+                  }
+                },
+                "memory": {
+                  "type": "Ddr5",
+                  "memOpsPerClock": 4,
+                  "busBitWidth": 128,
+                  "bandwidthBytesPerSec": 125440000000,
+                  "memClockHz": {
+                    "min": 500000000,
+                    "max": 1960000000
+                  },
+                  "heaps": {
+                    "local": {
+                      "physicalAddress": 0,
+                      "size": 268435456
+                    },
+                    "invisible": {
+                      "physicalAddress": 268435456,
+                      "size": 1879048192
+                    }
+                  },
+                  "excludedVaRanges": [
+                    {
+                      "base": 0,
+                      "size": 4096
+                    },
+                    {
+                      "base": 140737488355328,
+                      "size": 18446462598732840959
+                    }
+                  ]
+                },
+                "bigSw": {
+                  "major": 2023,
+                  "minor": 0,
+                  "misc": 33413048
+                },
+                "driverIndex": 0
+              }
+            ]
+          }
+        },
+        {
+          "ordinal": 18,
+          "name": "DriverOverrides",
+          "version": 3,
+          "compression": 0,
+          "header_offset": 1410495,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 1410495,
+          "data_bytes": 44,
+          "data_sha256": "c977ed950d5130ffc5d34f9eaaf0b1b0ac0e9c483701d0bf59c3b351a4a3ba40"
+        },
+        {
+          "ordinal": 19,
+          "name": "TraceProcessInfo",
+          "version": 1,
+          "compression": 0,
+          "header_offset": 1410539,
+          "header_bytes": 0,
+          "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_offset": 1410539,
+          "data_bytes": 151,
+          "data_sha256": "47292242a22b5b181f6507b40bc1f7a1c64250fa62197a72527a78efc3929684"
+        }
+      ],
+      "counter_data_available": false
+    }
+  ],
+  "counter_data_available": false,
+  "scope": "Complete concrete RDF indexes and exact TraceConfig/SystemInfo bytes inspected. Both saved traces explicitly disable SPM and lack its documented chunks; no cache/LDS/memory samples can be exported. Public format/producer references do not attest packaged binary internals or establish the exclusive reason SPM was disabled. No new scientific/device/GUI execution or optimization/render/qualification claim."
+}

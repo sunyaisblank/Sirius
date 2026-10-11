@@ -1,0 +1,66 @@
+{
+  "accepted_as_diagnostic_route": true,
+  "reviewer": "command_owner_review",
+  "reference_revision": "d63073a854c8ccc4b10edbf27559bb698c5685b3",
+  "reference_input_seals": {
+    "out/native-spm-cost/libamdrdf.md": {
+      "bytes": 2471,
+      "sha256": "d43a56d32c35d5bf92cfb9f1ddca636b3b8e4876bb04101467e9bc869077a8c7"
+    },
+    "out/native-spm-cost/libamdrdf-license": {
+      "bytes": 1090,
+      "sha256": "55a88f9bcb0faea405a9058fb481fb4e9a9215bd5a717377cee8b18fcabbd28b"
+    },
+    "out/native-spm-cost/pal-gpu-perf-header.h": {
+      "bytes": 6543,
+      "sha256": "ed219731c2c45ab994e15bdf2656ff3d6446677d17fe6a992f2925dafdf64466"
+    },
+    "out/native-spm-cost/pal-gpu-perf-producer.cpp": {
+      "bytes": 27415,
+      "sha256": "74d648fbc7a09d4090688c435aa36449c837dff3e3be3cb03dc3380804b3244d"
+    },
+    "out/native-spm-cost/pal-trace-config.cpp": {
+      "bytes": 2652,
+      "sha256": "11f044fd5c28b860200dfcc46b17f38bcc035492e93c35eac32e91ac323c7016"
+    },
+    "out/native-spm-cost/rdp-spm-support.cpp": {
+      "bytes": 19720,
+      "sha256": "054425f185332ffb2a4d76704d4e0a3b7a91e352c5f7e06671c12e7fb2745050"
+    },
+    "out/native-spm-cost/rdp-ubertrace-client.cpp": {
+      "bytes": 15668,
+      "sha256": "a0b03470e265a57f1809b6e74ec3ab1c991237484bd79dfbce289a347f0881cc"
+    },
+    "out/native-spm-cost/rdp-asic-info.cpp": {
+      "bytes": 5802,
+      "sha256": "a2f83ef5699fffa04810dee9fcdce52f4daab96f99397ee8bf0ef48606f1a857"
+    },
+    "out/native-spm-cost/rdp-capture-params.cpp": {
+      "bytes": 4362,
+      "sha256": "c6e74eae1cf0a723d6634ebbeb691cfcca9a01b7af5022eda634afc46fdcc745"
+    },
+    "out/native-spm-cost/rdp-counter-handler.cpp": {
+      "bytes": 17253,
+      "sha256": "e86f361c12ad709c1415d4f19ac8cf972abb924ea6f81f2cecad0f91522f8097"
+    },
+    "out/native-spm-cost/rdp-license.txt": {
+      "bytes": 1090,
+      "sha256": "52ad61689c7e9486fc7c5aca89ae699d057424b1e50bf71d5706e190459dc3bf"
+    }
+  },
+  "findings": [
+    "Default CaptureContext/container registers real GpaSpmCounterHandler for both UberTrace and legacy paths; no missing/no-op counter provider established.",
+    "CLI counter request reaches enable_spm_counters; UberTrace emits successful SQTT-only configuration when the active GPU is absent from spm_supported_gpus.",
+    "Public reference maps recorded family148 to Phoenix, unconditionally disables Phoenix before its later minimum26.10 driver branch. The recorded base is26.10.41.01; marketed softwareVersion26.8.1 is a distinct field.",
+    "Public reference checks existence of RDP_ENABLE_SPM_COUNTERS before eligibility. It must exist in the owned RDP process before router enumeration; a value0 also bypasses in this public source.",
+    "Root found the exact control literal in the packaged RdpCaptureApi.dll. This alone does not attest the internal route or hardware support."
+  ],
+  "proposed_control": "One child-only process environment value1 around creating owned suspended RDP; restore parent before resuming RDP or creating science. RDS is already created without it.",
+  "required_result": [
+    "Fresh unchanged original numerical/provider/stream and owned closure evidence",
+    "Actual TraceConfig spm.enabled=true",
+    "Nonempty actual requested counter definitions",
+    "Nonempty documented SPM sample chunks"
+  ],
+  "scope": "Read-only route review; no execution, source change, exclusive-cause finding, packaged internal attestation, ordinary performance or qualification claim."
+}

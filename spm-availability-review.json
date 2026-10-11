@@ -1,0 +1,55 @@
+{
+  "accepted": true,
+  "reviewer": "retained_latency_review",
+  "controller_and_result_seals": {
+    "inventory_spm_trace.py": {
+      "bytes": 4613,
+      "sha256": "b187366fad33b443e579ccca8d9cae9cb670c60956fbbb699eefa40302faed92"
+    },
+    "spm-index-result.json": {
+      "bytes": 135860,
+      "sha256": "b6e0ca44f92563bc8a18c62f61bce56299e46fa3f501ea7cafc100206ca804cc"
+    },
+    "verify_raw_spm.py": {
+      "bytes": 5018,
+      "sha256": "eb406073a4427215a3db235f219453d0315793f0701cff7ee3bd434a89edc2c9"
+    },
+    "raw-spm-result.json": {
+      "bytes": 81132,
+      "sha256": "c53f0745126ad0f3a3aa83798edfcc112125afe949531e66c4caafe72a31c113"
+    },
+    "verify_derived_spm.py": {
+      "bytes": 5715,
+      "sha256": "ff8a811063ea67210e5fd0066354d6265fb52dc78476c190ddea9a0f21864e10"
+    },
+    "derived-spm-result.json": {
+      "bytes": 27334,
+      "sha256": "2669205a8e7a91ba69957dbfca90589235c6831937c19b3e5f26da26889a596c"
+    },
+    "derived-references.json": {
+      "bytes": 1259,
+      "sha256": "2ab4dca79ad88f4f32accb14b86cf6b038af53b8d41ab4e270959f583f086bf9"
+    }
+  },
+  "trace": {
+    "bytes": 9581418,
+    "sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9"
+  },
+  "findings": {
+    "indexed_chunks": 243,
+    "spm_enabled": true,
+    "requested_counter_rows": 27,
+    "raw_counter_streams": 183,
+    "timestamps": 11911,
+    "raw_values": 2179713,
+    "nonzero_raw_values": 197087,
+    "derived_counter_streams": 33,
+    "finite_derived_values": 393063,
+    "derived_groups": 5,
+    "original_complete_buffers": 32,
+    "selected_original_modules": 7,
+    "ordered_available_markers": 51,
+    "actual_provider_dlls": 2
+  },
+  "scope": "Independent whole-byte/index/raw/derived schema and original-control availability review. Returned instance expansion does not independently attest complete hardware inventory. Formulas/units, event/source/pipeline/clock joins and duration/cost attribution remain unverified. No device/UI execution, production source change, exclusive eligibility cause, hardware qualification, ordinary performance benefit, rendered frame or full scientific/release qualification."
+}
