@@ -1,0 +1,20 @@
+{
+ "accepted": true,
+ "review_mode": "Independent read-only exact-source and byte review; no supplied reader or native launches and no writes.",
+ "clock_reviewer": "retained_latency_review",
+ "clock_seals": {
+  "inspect_clock_alignment.py": "0b9004dc8bc0b9ef4e99fe8e20a43338272f8cb98711d77bd0f9e8834cd4bdd2",
+  "clock-alignment-result.json": "52470711d11e29c8a87c7c3a6ad81f7a37294879ebc1faad6f413942ee036ae4",
+  "verify_recorded_clock_bits.py": "9161227843e1b31010077acda42542fdc60feeceaae28763ce2b3e410ce9aad9",
+  "clock-bit-result.json": "8362bae36fee730f8f104f73fa5cff2f40a0fac45cb7dbc8f86b32f3225770cb"
+ },
+ "clock_findings": "All8 alignment seals/all5 bit-reader seals checked independently; exact11912 chronological fields, residual histogram, positions hash and372 nonzero followingnibbles agree. Finite scope accepted; no epoch/frequency/RGP-origin/exclusive-cost verdict.",
+ "normalization_reviewer": "command_owner_review",
+ "normalization_seals": {
+  "normalization-result.json": {"bytes":7013,"sha256":"e24175e2c01b2229de1fc4cd916994ab401d9a8d68c511cec1a3b0cc10030f6e"},
+  "normalization-gfx-major.json": {"bytes":1799,"sha256":"4ee4d5e9d144c40ae5c00aa847d52c583dfb93a1e22a9f1ae0ffe920ef7e7492"},
+  "bind_counter_normalization.py": {"bytes":4559,"sha256":"1defc9138493ea88d67612590796c8ebfbef81b70d30b9c0dd0db17d843ab4fe"},
+  "verify_asic_major.py": {"bytes":1661,"sha256":"d38223811fcacfeb9213ffe77eea5015b8667518d8b4123a3a77880a0c4baefa"}
+ },
+ "normalization_findings": "All12 normalization seals/all7 supplementary-major seals checked independently. Only recordedmajor11at104 is asserted, selecting gfx>=10 and publicNUM_SIMDS48; earlier inferredfullversiontuple withdrawn. PackagedDLL/physicalinventory/eventattribution unproved."
+}

@@ -1,0 +1,45 @@
+{
+  "input_seals": {
+    "out/native-counter-clock/prepare_cpu_decoder.py": {
+      "bytes": 3024,
+      "sha256": "a800af2f1013d4ecb77cc689fd3222e3720b1ce3c552846412f4a2fadedb989b"
+    },
+    "out/native-counter-clock/rocprof-trace-decoder-ubuntu-24.04-0.1.3-Linux.tar.gz": {
+      "bytes": 82987,
+      "sha256": "d2c0a4147a7ac7a179da89fd5d7370cbfadb0a67c7ced9cd3ec27109d9c2f3c8"
+    }
+  },
+  "primary_sources": [
+    {
+      "path": "out/native-counter-clock/sdk-decode.cpp",
+      "repository": "ROCm/rocprofiler-sdk",
+      "revision": "d5c0aaae36a6cb348f408c9fde8be435e29981b9",
+      "repository_path": "source/lib/rocprofiler-sdk/thread_trace/decode.cpp",
+      "git_blob": "9af82a99e132230c843492d83c88c76fa9aa549d",
+      "bytes": 9915,
+      "sha256": "5c14f43cc04b9e9c6d8d635a49f414ad697d77ea7dff063481143f8beb0f50d8"
+    },
+    {
+      "path": "out/native-counter-clock/aql-threadtrace.cpp",
+      "repository": "ROCm/aqlprofile",
+      "revision": "65c636e9acaff36a89e73a7aa38986f55aeaa9cd",
+      "repository_path": "src/core/threadtrace.cpp",
+      "git_blob": "b52af778978028c9a0e91bb8c7a9f1de90aa4c4d",
+      "bytes": 16160,
+      "sha256": "141ae850811892ccfcbbfc024717d92779827500eac1141d5b939518641a89b7"
+    }
+  ],
+  "extracted_library": {
+    "path": "bin/linux-gcc/qualification-tools/rocprof-trace-decoder-0.1.3/librocprof-trace-decoder.so",
+    "archive_member": "rocprof-trace-decoder-ubuntu-24.04-0.1.3-Linux/opt/rocm/lib/librocprof-trace-decoder.so",
+    "bytes": 199792,
+    "sha256": "9aae97c42c748c095f2241421f9586a780d42b9d97678e2e061cf00d17cb150f"
+  },
+  "host_glibc": "glibc 2.39",
+  "elf_dynamic": {
+    "path": "out/native-counter-clock/decoder-elf-dynamic.txt",
+    "bytes": 1618,
+    "sha256": "21a8dfab15cce22861a0158e6583d6cb7655a8a2b2d983137a1e7ea462f8bcc4"
+  },
+  "scope": "Verified member-only extraction and static ELF inspection under existing ignored preset. No library execution, system install, HSA/ROCm/GPU collection or product change."
+}

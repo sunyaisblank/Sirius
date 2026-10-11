@@ -1,0 +1,39 @@
+{
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "input_seals": {
+    "out/native-counter-clock/verify_asic_major.py": {
+      "bytes": 1661,
+      "sha256": "d38223811fcacfeb9213ffe77eea5015b8667518d8b4123a3a77880a0c4baefa"
+    },
+    "attestations/native-vulkan/6be3132/native-spm-cost/payloads/ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9": {
+      "bytes": 9581418,
+      "sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9"
+    },
+    "out/native-counter-clock/plan.json": {
+      "bytes": 2569,
+      "sha256": "6ca915faa54be264bd6d0ff170ebf4300b64b17b86e4d91160882a4521ad6de0"
+    },
+    "out/native-counter-clock/spm-index-result.json": {
+      "bytes": 135860,
+      "sha256": "b6e0ca44f92563bc8a18c62f61bce56299e46fa3f501ea7cafc100206ca804cc"
+    },
+    "out/native-counter-clock/rdp-file-format.h": {
+      "bytes": 21793,
+      "sha256": "23f707aa03fbaf6e0b0fef9d2fe3bde6a178e71113366da0f743577847967a5e"
+    },
+    "out/native-counter-clock/rdp-derived-database.cpp": {
+      "bytes": 56812,
+      "sha256": "d0caad7c90ccfab2fd591a618dfdcaa33ba0ccd598c16060e00621a2d596e2d4"
+    },
+    "out/native-counter-clock/normalization-result.json": {
+      "bytes": 7013,
+      "sha256": "e24175e2c01b2229de1fc4cd916994ab401d9a8d68c511cec1a3b0cc10030f6e"
+    }
+  },
+  "recorded_gfx_major": 11,
+  "byte_offset": 104,
+  "public_rdp_field_encoding": "TraceGfxIpLevel begins with uint16_t major. Only this major field is needed for isGfx10OrHigher.",
+  "gfx10_or_higher_branch_selected": true,
+  "public_normalization_num_simds": 48,
+  "scope": "Major-version branch for source-defined counter normalization only. No assertion about other GFX version fields, physical CU inventory, packaged DLL equivalence, epoch or qualification."
+}

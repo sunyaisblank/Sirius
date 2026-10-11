@@ -1,0 +1,12 @@
+{
+ "reviewers": ["command_owner_review", "retained_latency_review"],
+ "accepted": true,
+ "review_mode": "Independent read-only exact-source, recorded-byte and metadata review; agents did not execute native code or mutate files.",
+ "result_seals": {
+  "decoder-run.json": {"sha256": "b26d4f06bdd707bd0cc436facb6b536be601bf5128da4c1a16133a9b6f54f281"},
+  "decoder-result.json": {"sha256": "64e099f6b1e21a01892894406201f6f69b4f22030700d98d29f8de223969d484"},
+  "public-formula-corrected-result.json": {"sha256": "1d730a5f423fe857f85eeb7687f587d674ff6894dd1c5956cea5d5763fd43bf9"}
+ },
+ "findings": ["One actual offline decoder probe: status success, 11912 realtime pairs, 72 occupancy records (36 starts/36 ends), no callback errors; no frequency record, three unknown ISA requests, stitch incomplete.", "Owner rc0 in 0.166635 seconds, sampled RSS45993984 bytes, no limit/signal/cleanup errors, saved births absent and owned group empty.", "Independent all-value reconstruction: 30 streams x11911 samples =357330 binary64 values, all exact. Initial divisor24 candidate rejected and preserved.", "NUM_SIMDS48 supported by recorded ASIC1/12/2 and pinned public RDP/GPA attribute chain; packaged implementation/physical inventory not attested.", "11912 chronological 36-bit payload matches; nonzero following nibble in372 cases excludes a simple40-bit field at these positions, without a primary TT3.2 semantic specification.", "Candidate reference epoch lift18691697672192:7160 nearest matches exact,4730 residual minus4 ticks,21 other residuals within minus56..88;11910 unique anchors for11911 samples. Exact sample identity not established; frequency/epoch certification and RGP displayed-event origin unresolved."],
+ "scope": "Accepted finite recorded-byte observations and public source joins only; no event-exclusive cost, instruction coverage, ordinary performance, render/scientific/release qualification or long-term remediation completion."
+}

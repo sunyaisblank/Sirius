@@ -1,0 +1,898 @@
+{
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "input_seals": {
+    "out/native-counter-clock/verify_public_counter_formulas.py": {
+      "bytes": 8070,
+      "sha256": "df6bb657f2429ead5396cb73963dc6cf098f8738e96d9c576a0c740ffef0f952"
+    },
+    "out/native-counter-clock/plan.json": {
+      "bytes": 2569,
+      "sha256": "6ca915faa54be264bd6d0ff170ebf4300b64b17b86e4d91160882a4521ad6de0"
+    },
+    "attestations/native-vulkan/6be3132/native-spm-cost/payloads/ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9": {
+      "bytes": 9581418,
+      "sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9"
+    },
+    "out/native-counter-clock/spm-index-result.json": {
+      "bytes": 135860,
+      "sha256": "b6e0ca44f92563bc8a18c62f61bce56299e46fa3f501ea7cafc100206ca804cc"
+    },
+    "out/native-counter-clock/raw-spm-result.json": {
+      "bytes": 81132,
+      "sha256": "c53f0745126ad0f3a3aa83798edfcc112125afe949531e66c4caafe72a31c113"
+    },
+    "out/native-counter-clock/derived-spm-result.json": {
+      "bytes": 27334,
+      "sha256": "2669205a8e7a91ba69957dbfca90589235c6831937c19b3e5f26da26889a596c"
+    },
+    "out/native-counter-clock/gpa-hardware-preparation.json": {
+      "bytes": 3989,
+      "sha256": "49fd37c37d7b34837d8c32a517ab85e1aaf73ec27da0f9492dca1d6ec6b79e25"
+    },
+    "out/native-counter-clock/gpa-public-counter-definitions-gfx11.txt": {
+      "bytes": 51492,
+      "sha256": "6d7cb2f0c542102d30ece3259d7caa6ea2c0a492339342d9b9f78c1f3cc20419"
+    },
+    "out/native-counter-clock/gpa-hardware-cpf.cc": {
+      "bytes": 980,
+      "sha256": "b9a9764b998978f48a68f84e970483e0079a00a2a9451836690276c2d29f998f"
+    },
+    "out/native-counter-clock/gpa-hardware-sqwgp.cc": {
+      "bytes": 204576,
+      "sha256": "0ea69eb3d5bc0983353d6d72968ece31a9d235d8a1905b934ea799c219acc90b"
+    },
+    "out/native-counter-clock/gpa-hardware-ta.cc": {
+      "bytes": 190136,
+      "sha256": "8119cbe55d952e0a2c2bf9f8dbc0ae6ce3b0fc8d4432f9d2aa079950ddf0769d"
+    },
+    "out/native-counter-clock/gpa-hardware-tcp.cc": {
+      "bytes": 80568,
+      "sha256": "7b4b9d57c2b1f2f2e90c6b8f7f1e724665e8c1eed79eec715db7ad55817fde58"
+    },
+    "out/native-counter-clock/gpa-hardware-gl1c.cc": {
+      "bytes": 23576,
+      "sha256": "5a8f74f69299a8fd7c2ea44780435404cebfd0c7218b9acf010e7e1123caf2ea"
+    },
+    "out/native-counter-clock/gpa-hardware-gl2c.cc": {
+      "bytes": 40428,
+      "sha256": "b32c442e19aa003c36702c59cd0efe861ff746705556e0090a6882fa196a8608"
+    },
+    "out/native-counter-clock/gpa-hardware-gcea.cc": {
+      "bytes": 12224,
+      "sha256": "6387fd31e99fd2f9fdb5729931bbd37e2b462b1ec98dc5f592a9a177be60765b"
+    }
+  },
+  "trace": {
+    "bytes": 9581418,
+    "sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9"
+  },
+  "public_gpa_revision": "5b7a7544eac3ebc7f0f62ff878c69f8f893f3583",
+  "numeric_name_bindings": [
+    {
+      "raw_block": 0,
+      "event": 24,
+      "public_instance_zero_name": "CPF_PERF_SEL_CPF_STAT_BUSY",
+      "observed_instances": [
+        0
+      ]
+    },
+    {
+      "raw_block": 8,
+      "event": 15,
+      "public_instance_zero_name": "TA0_PERF_SEL_TA_BUSY",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "raw_block": 10,
+      "event": 9,
+      "public_instance_zero_name": "TCP0_PERF_SEL_REQ",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "raw_block": 10,
+      "event": 17,
+      "public_instance_zero_name": "TCP0_PERF_SEL_REQ_MISS",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "raw_block": 10,
+      "event": 39,
+      "public_instance_zero_name": "TCP0_PERF_SEL_TCP_TA_REQ_STALL",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "raw_block": 29,
+      "event": 55,
+      "public_instance_zero_name": "GCEA0_PERF_SEL_SARB_DRAM_SIZE_REQ",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "raw_block": 29,
+      "event": 57,
+      "public_instance_zero_name": "GCEA0_PERF_SEL_SARB_IO_SIZE_REQ",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "raw_block": 35,
+      "event": 14,
+      "public_instance_zero_name": "GL1C0_PERF_SEL_REQ",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "raw_block": 35,
+      "event": 18,
+      "public_instance_zero_name": "GL1C0_PERF_SEL_REQ_MISS",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "raw_block": 38,
+      "event": 3,
+      "public_instance_zero_name": "GL2C0_PERF_SEL_REQ",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "raw_block": 38,
+      "event": 43,
+      "public_instance_zero_name": "GL2C0_PERF_SEL_MISS",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "raw_block": 38,
+      "event": 83,
+      "public_instance_zero_name": "GL2C0_PERF_SEL_MC_WRREQ",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "raw_block": 38,
+      "event": 85,
+      "public_instance_zero_name": "GL2C0_PERF_SEL_EA_WRREQ_64B",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "raw_block": 38,
+      "event": 99,
+      "public_instance_zero_name": "GL2C0_PERF_SEL_EA_RDREQ_32B",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "raw_block": 38,
+      "event": 100,
+      "public_instance_zero_name": "GL2C0_PERF_SEL_EA_RDREQ_64B",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "raw_block": 38,
+      "event": 101,
+      "public_instance_zero_name": "GL2C0_PERF_SEL_EA_RDREQ_96B",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "raw_block": 38,
+      "event": 102,
+      "public_instance_zero_name": "GL2C0_PERF_SEL_EA_RDREQ_128B",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "raw_block": 49,
+      "event": 256,
+      "public_instance_zero_name": "SQWGP0_SQC_PERF_SEL_LDS_BANK_CONFLICT",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "raw_block": 49,
+      "event": 270,
+      "public_instance_zero_name": "SQWGP0_SQC_PERF_SEL_ICACHE_HITS",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "raw_block": 49,
+      "event": 271,
+      "public_instance_zero_name": "SQWGP0_SQC_PERF_SEL_ICACHE_MISSES",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "raw_block": 49,
+      "event": 272,
+      "public_instance_zero_name": "SQWGP0_SQC_PERF_SEL_ICACHE_MISSES_DUPLICATE",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "raw_block": 49,
+      "event": 294,
+      "public_instance_zero_name": "SQWGP0_SQC_PERF_SEL_DCACHE_HITS",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "raw_block": 49,
+      "event": 295,
+      "public_instance_zero_name": "SQWGP0_SQC_PERF_SEL_DCACHE_MISSES",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "raw_block": 49,
+      "event": 296,
+      "public_instance_zero_name": "SQWGP0_SQC_PERF_SEL_DCACHE_MISSES_DUPLICATE",
+      "observed_instances": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "counter_checks": [
+    {
+      "derived_index": 0,
+      "display_name": "Instruction cache hit",
+      "public_counter_name": "InstCacheHit",
+      "public_expression": "SQWGP*_SQC_PERF_SEL_ICACHE_HITS,sum48,SQWGP*_SQC_PERF_SEL_ICACHE_HITS,sum48,SQWGP*_SQC_PERF_SEL_ICACHE_MISSES,sum48,+,SQWGP*_SQC_PERF_SEL_ICACHE_MISSES_DUPLICATE,sum48,+,/,(100),*",
+      "observed_recipe": "hits / (hits + misses + duplicate misses) * 100; zero denominator -> 0",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "4960229502b2a030d580d70b3a92c226ec1520c790e84eac79ed9255166d45b2",
+      "stored_binary64_sha256": "4960229502b2a030d580d70b3a92c226ec1520c790e84eac79ed9255166d45b2",
+      "minimum": 0.0,
+      "maximum": 100.0,
+      "nonzero_samples": 7889
+    },
+    {
+      "derived_index": 1,
+      "display_name": "Requests",
+      "public_counter_name": "InstCacheRequestCount",
+      "public_expression": "SQWGP*_SQC_PERF_SEL_ICACHE_HITS,sum48,SQWGP*_SQC_PERF_SEL_ICACHE_MISSES,sum48,+,SQWGP*_SQC_PERF_SEL_ICACHE_MISSES_DUPLICATE,sum48,+",
+      "observed_recipe": "sum hits + sum misses + sum duplicate misses",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "ada65d2510b458590c366f8b18d1f50cc28481f237da3f42d011bf231f744aef",
+      "stored_binary64_sha256": "ada65d2510b458590c366f8b18d1f50cc28481f237da3f42d011bf231f744aef",
+      "minimum": 0.0,
+      "maximum": 10194.0,
+      "nonzero_samples": 8035
+    },
+    {
+      "derived_index": 2,
+      "display_name": "Hits",
+      "public_counter_name": "InstCacheHitCount",
+      "public_expression": "SQWGP*_SQC_PERF_SEL_ICACHE_HITS,sum48",
+      "observed_recipe": "sum hits",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "081c93c42228b334b96f9b89d16c2e0cc9d04ba96ee7a6722d9fcb03a8fbb0d6",
+      "stored_binary64_sha256": "081c93c42228b334b96f9b89d16c2e0cc9d04ba96ee7a6722d9fcb03a8fbb0d6",
+      "minimum": 0.0,
+      "maximum": 10194.0,
+      "nonzero_samples": 7889
+    },
+    {
+      "derived_index": 3,
+      "display_name": "Misses",
+      "public_counter_name": "InstCacheMissCount",
+      "public_expression": "SQWGP*_SQC_PERF_SEL_ICACHE_MISSES,sum48,SQWGP*_SQC_PERF_SEL_ICACHE_MISSES_DUPLICATE,sum48,+",
+      "observed_recipe": "sum misses + sum duplicate misses",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "5dc7ac27c1d4c20183187182b78e95e7f0bc19619fe3d8f1f1e330812d1190c1",
+      "stored_binary64_sha256": "5dc7ac27c1d4c20183187182b78e95e7f0bc19619fe3d8f1f1e330812d1190c1",
+      "minimum": 0.0,
+      "maximum": 1441.0,
+      "nonzero_samples": 6730
+    },
+    {
+      "derived_index": 4,
+      "display_name": "Scalar cache hit",
+      "public_counter_name": "ScalarCacheHit",
+      "public_expression": "SQWGP*_SQC_PERF_SEL_DCACHE_HITS,sum48,SQWGP*_SQC_PERF_SEL_DCACHE_HITS,sum48,SQWGP*_SQC_PERF_SEL_DCACHE_MISSES,sum48,+,SQWGP*_SQC_PERF_SEL_DCACHE_MISSES_DUPLICATE,sum48,+,/,(100),*",
+      "observed_recipe": "hits / (hits + misses + duplicate misses) * 100; zero denominator -> 0",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "0c9836dae04a5faeda2420aec3b83563cd86f99ce8823210d163c015da566f68",
+      "stored_binary64_sha256": "0c9836dae04a5faeda2420aec3b83563cd86f99ce8823210d163c015da566f68",
+      "minimum": 0.0,
+      "maximum": 100.0,
+      "nonzero_samples": 4136
+    },
+    {
+      "derived_index": 5,
+      "display_name": "Requests",
+      "public_counter_name": "ScalarCacheRequestCount",
+      "public_expression": "SQWGP*_SQC_PERF_SEL_DCACHE_HITS,sum48,SQWGP*_SQC_PERF_SEL_DCACHE_MISSES,sum48,+,SQWGP*_SQC_PERF_SEL_DCACHE_MISSES_DUPLICATE,sum48,+",
+      "observed_recipe": "sum hits + sum misses + sum duplicate misses",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "7aeec4fc061eae0f06e3bd6beef5ee078c09ddf1aad79973222a79eac21ecd33",
+      "stored_binary64_sha256": "7aeec4fc061eae0f06e3bd6beef5ee078c09ddf1aad79973222a79eac21ecd33",
+      "minimum": 0.0,
+      "maximum": 2197.0,
+      "nonzero_samples": 4153
+    },
+    {
+      "derived_index": 6,
+      "display_name": "Hits",
+      "public_counter_name": "ScalarCacheHitCount",
+      "public_expression": "SQWGP*_SQC_PERF_SEL_DCACHE_HITS,sum48",
+      "observed_recipe": "sum hits",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "71bde6ba3a0fbee8f322ffab599b03772f727f87e68c84c8a3afc76736e9adab",
+      "stored_binary64_sha256": "71bde6ba3a0fbee8f322ffab599b03772f727f87e68c84c8a3afc76736e9adab",
+      "minimum": 0.0,
+      "maximum": 2194.0,
+      "nonzero_samples": 4136
+    },
+    {
+      "derived_index": 7,
+      "display_name": "Misses",
+      "public_counter_name": "ScalarCacheMissCount",
+      "public_expression": "SQWGP*_SQC_PERF_SEL_DCACHE_MISSES,sum48,SQWGP*_SQC_PERF_SEL_DCACHE_MISSES_DUPLICATE,sum48,+",
+      "observed_recipe": "sum misses + sum duplicate misses",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "c49846c8ea2c0b6ee4c48cd470161f663b954a647d1648c252639e6525108b4f",
+      "stored_binary64_sha256": "c49846c8ea2c0b6ee4c48cd470161f663b954a647d1648c252639e6525108b4f",
+      "minimum": 0.0,
+      "maximum": 268.0,
+      "nonzero_samples": 212
+    },
+    {
+      "derived_index": 8,
+      "display_name": "L0 cache hit",
+      "public_counter_name": "L0CacheHit",
+      "public_expression": "(0),(1),96..191,sum96,0..95,sum96,/,-,(100),*,0..95,sum96,ifnotzero",
+      "observed_recipe": "(1 - sum misses / sum requests) * 100; zero denominator -> 0",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "9316f918600064e2c87aedaaab78a90b9593697602d15c8fa08c20973642f3f5",
+      "stored_binary64_sha256": "9316f918600064e2c87aedaaab78a90b9593697602d15c8fa08c20973642f3f5",
+      "minimum": 0.0,
+      "maximum": 100.0,
+      "nonzero_samples": 4506
+    },
+    {
+      "derived_index": 9,
+      "display_name": "Requests",
+      "public_counter_name": "L0CacheRequestCount",
+      "public_expression": "0..95,sum96",
+      "observed_recipe": "sum requests",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "47b6555d56cdceb4dada6d6c013a2e47ec677ed3ed711e6ef28ed61cddfc7b7e",
+      "stored_binary64_sha256": "47b6555d56cdceb4dada6d6c013a2e47ec677ed3ed711e6ef28ed61cddfc7b7e",
+      "minimum": 0.0,
+      "maximum": 4132.0,
+      "nonzero_samples": 4536
+    },
+    {
+      "derived_index": 10,
+      "display_name": "Hits",
+      "public_counter_name": "L0CacheHitCount",
+      "public_expression": "0..95,sum96,96..191,sum96,-",
+      "observed_recipe": "sum requests - sum misses",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "b3ce596bdade08069b8e8c4d430cce22bc9b8805d983e663c26751f3b5dc47ba",
+      "stored_binary64_sha256": "b3ce596bdade08069b8e8c4d430cce22bc9b8805d983e663c26751f3b5dc47ba",
+      "minimum": 0.0,
+      "maximum": 3377.0,
+      "nonzero_samples": 4506
+    },
+    {
+      "derived_index": 12,
+      "display_name": "Write size",
+      "public_counter_name": "WriteSize",
+      "public_expression": "GL2C*_PERF_SEL_MC_WRREQ,sum24,GL2C*_PERF_SEL_EA_WRREQ_64B,sum24,-,(32),*,GL2C*_PERF_SEL_EA_WRREQ_64B,sum24,(64),*,+",
+      "observed_recipe": "(sum MC_WRREQ - sum EA_WRREQ_64B) * 32 + sum EA_WRREQ_64B * 64",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "3ba7f15e89a78360c8ea93171df1fd35bbbc4aaa908a5a33a5c9959cb95c003c",
+      "stored_binary64_sha256": "3ba7f15e89a78360c8ea93171df1fd35bbbc4aaa908a5a33a5c9959cb95c003c",
+      "minimum": 0.0,
+      "maximum": 524384.0,
+      "nonzero_samples": 292
+    },
+    {
+      "derived_index": 13,
+      "display_name": "Misses",
+      "public_counter_name": "L0CacheMissCount",
+      "public_expression": "0..95,sum96",
+      "observed_recipe": "sum misses",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "0c31ba095cc13e52d3d0e502d4c67514d6cd248e65ad6d23e37e3edfdba74249",
+      "stored_binary64_sha256": "0c31ba095cc13e52d3d0e502d4c67514d6cd248e65ad6d23e37e3edfdba74249",
+      "minimum": 0.0,
+      "maximum": 1639.0,
+      "nonzero_samples": 3813
+    },
+    {
+      "derived_index": 14,
+      "display_name": "L1 cache hit",
+      "public_counter_name": "L1CacheHit",
+      "public_expression": "(1),48..95,sum48,GL1C*_PERF_SEL_REQ,sum48,/,-,(100),*",
+      "observed_recipe": "(1 - sum misses / sum requests) * 100; zero denominator -> 0",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "a79bfc20bac99e129e4290c136c0364bedf96a541dd552761498394d86200fdc",
+      "stored_binary64_sha256": "a79bfc20bac99e129e4290c136c0364bedf96a541dd552761498394d86200fdc",
+      "minimum": 0.0,
+      "maximum": 100.0,
+      "nonzero_samples": 1469
+    },
+    {
+      "derived_index": 15,
+      "display_name": "Requests",
+      "public_counter_name": "L1CacheRequestCount",
+      "public_expression": "0..47,sum48",
+      "observed_recipe": "sum requests",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "8889a0a5aac52bdb6c9299408dbea6867dc260e780248906d9c6fb800b748913",
+      "stored_binary64_sha256": "8889a0a5aac52bdb6c9299408dbea6867dc260e780248906d9c6fb800b748913",
+      "minimum": 0.0,
+      "maximum": 3510.0,
+      "nonzero_samples": 7429
+    },
+    {
+      "derived_index": 16,
+      "display_name": "Hits",
+      "public_counter_name": "L1CacheHitCount",
+      "public_expression": "0..47,sum48,48..95,sum48,-",
+      "observed_recipe": "sum requests - sum misses",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "4445cf18d7526648417c35dcc444526d5fb975401249aa18133adad2a4671847",
+      "stored_binary64_sha256": "4445cf18d7526648417c35dcc444526d5fb975401249aa18133adad2a4671847",
+      "minimum": 0.0,
+      "maximum": 540.0,
+      "nonzero_samples": 1469
+    },
+    {
+      "derived_index": 17,
+      "display_name": "Misses",
+      "public_counter_name": "L1CacheMissCount",
+      "public_expression": "0..47,sum48",
+      "observed_recipe": "sum misses",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "25e2338afe16f3e44d55b0350c58a173b61cd03e308629f8315bbe804cde288c",
+      "stored_binary64_sha256": "25e2338afe16f3e44d55b0350c58a173b61cd03e308629f8315bbe804cde288c",
+      "minimum": 0.0,
+      "maximum": 3510.0,
+      "nonzero_samples": 7346
+    },
+    {
+      "derived_index": 18,
+      "display_name": "L2 cache hit",
+      "public_counter_name": "L2CacheHit",
+      "public_expression": "(0),(1),24..47,sum24,0..23,sum24,/,-,(100),*,0..23,sum24,ifnotzero",
+      "observed_recipe": "(1 - sum misses / sum requests) * 100; zero denominator -> 0",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "e15fd0b85ba237d42ebc6f12f5da34428ca8025f0d11d549a747f8b54992dbd4",
+      "stored_binary64_sha256": "e15fd0b85ba237d42ebc6f12f5da34428ca8025f0d11d549a747f8b54992dbd4",
+      "minimum": 0.0,
+      "maximum": 100.0,
+      "nonzero_samples": 7202
+    },
+    {
+      "derived_index": 19,
+      "display_name": "Requests",
+      "public_counter_name": "L2CacheRequestCount",
+      "public_expression": "0..23,sum24",
+      "observed_recipe": "sum requests",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "4ebdc7c5d3caf1d12171dd4af20037296de785d18b928d57769828d14971acf7",
+      "stored_binary64_sha256": "4ebdc7c5d3caf1d12171dd4af20037296de785d18b928d57769828d14971acf7",
+      "minimum": 0.0,
+      "maximum": 3611.0,
+      "nonzero_samples": 7382
+    },
+    {
+      "derived_index": 20,
+      "display_name": "Hits",
+      "public_counter_name": "L2CacheHitCount",
+      "public_expression": "0..23,sum24,24..47,sum24,-",
+      "observed_recipe": "sum requests - sum misses",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "283da61d2e8bcac6518c91436b758df6152fef87d84d6ed2f3dd25b582860533",
+      "stored_binary64_sha256": "283da61d2e8bcac6518c91436b758df6152fef87d84d6ed2f3dd25b582860533",
+      "minimum": 0.0,
+      "maximum": 2262.0,
+      "nonzero_samples": 7202
+    },
+    {
+      "derived_index": 21,
+      "display_name": "Misses",
+      "public_counter_name": "L2CacheMissCount",
+      "public_expression": "0..23,sum24",
+      "observed_recipe": "sum misses",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "4e7079dcfb9659f7342576eb054c94838f9a792a584aa72545ce0529eb13511c",
+      "stored_binary64_sha256": "4e7079dcfb9659f7342576eb054c94838f9a792a584aa72545ce0529eb13511c",
+      "minimum": 0.0,
+      "maximum": 1757.0,
+      "nonzero_samples": 985
+    },
+    {
+      "derived_index": 23,
+      "display_name": "LDS Bank Conflict",
+      "public_counter_name": "CSLDSBankConflict",
+      "public_expression": "SQWGP_CS*_SQC_PERF_SEL_LDS_BANK_CONFLICT,sum48,NUM_SIMDS,/,CPF_PERF_SEL_CPF_STAT_BUSY,/,(100),*",
+      "observed_recipe": "sum observed SQWGP bank-conflict cycles / 24 / CPF busy * 100; zero denominator -> 0; same fitted-divisor limitation",
+      "samples": 11911,
+      "binary64_different_samples": 3338,
+      "first_different_samples": [
+        23,
+        32,
+        36,
+        37,
+        39,
+        41,
+        42,
+        43
+      ],
+      "maximum_absolute_error": 0.13221056057277683,
+      "expected_binary64_sha256": "1dade5bd06524b25df536df8dbf3618c2eb3bbf4bd9f760b1957dbe7d4dd1a2b",
+      "stored_binary64_sha256": "77170a61905c79cff58ea5bc2448cbb761ac3501b016d2eb5a43f395cf99b1cb",
+      "minimum": 0.0,
+      "maximum": 0.13221056057277683,
+      "nonzero_samples": 3338
+    },
+    {
+      "derived_index": 24,
+      "display_name": "Gpu Busy Cycles",
+      "public_counter_name": "GPUBusyCycles",
+      "public_expression": "0",
+      "observed_recipe": "raw CPF busy cycles instance 0",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "6c188d9389a24c182b164ee588792ae6867a5d057c7e39439981f74bc1b7f6a0",
+      "stored_binary64_sha256": "6c188d9389a24c182b164ee588792ae6867a5d057c7e39439981f74bc1b7f6a0",
+      "minimum": 0.0,
+      "maximum": 53261.0,
+      "nonzero_samples": 8843
+    },
+    {
+      "derived_index": 25,
+      "display_name": "LDS Busy Cycles",
+      "public_counter_name": "CSLDSBankConflictCycles",
+      "public_expression": "SQWGP_CS*_SQC_PERF_SEL_LDS_BANK_CONFLICT,sum48,NUM_SIMDS,/",
+      "observed_recipe": "sum observed SQWGP bank-conflict cycles / 24; divisor fitted to this recorded stream, not independently bound NUM_SIMDS metadata",
+      "samples": 11911,
+      "binary64_different_samples": 3338,
+      "first_different_samples": [
+        23,
+        32,
+        36,
+        37,
+        39,
+        41,
+        42,
+        43
+      ],
+      "maximum_absolute_error": 5.416666666666667,
+      "expected_binary64_sha256": "81b7ab052ce62765fa5b2f885fc827fd87bf634f2df0cf4486eb025f5b1321b0",
+      "stored_binary64_sha256": "3276742421f85ee56080c070204db96e6e1eafd432315e7a797ed0f1a7d37151",
+      "minimum": 0.0,
+      "maximum": 5.416666666666667,
+      "nonzero_samples": 3338
+    },
+    {
+      "derived_index": 26,
+      "display_name": "Memory unit busy",
+      "public_counter_name": "MemUnitBusy",
+      "public_expression": "0..95,max96,96,/,(100),*",
+      "observed_recipe": "maximum TA busy / CPF busy * 100; zero denominator -> 0",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "a6bbdd76ada87129a01882f8e386645a7e30df327b6e8155d173e767f0f92c45",
+      "stored_binary64_sha256": "a6bbdd76ada87129a01882f8e386645a7e30df327b6e8155d173e767f0f92c45",
+      "minimum": 0.0,
+      "maximum": 100.0,
+      "nonzero_samples": 4564
+    },
+    {
+      "derived_index": 27,
+      "display_name": "Memory unit stalled",
+      "public_counter_name": "MemUnitStalled",
+      "public_expression": "0..95,max96,96,/,(100),*",
+      "observed_recipe": "maximum TCP request stall / CPF busy * 100; zero denominator -> 0",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "91165e078fc7aab4ca6b3fca25301d795283b253a4c6548ed20138ac9e54ba96",
+      "stored_binary64_sha256": "91165e078fc7aab4ca6b3fca25301d795283b253a4c6548ed20138ac9e54ba96",
+      "minimum": 0.0,
+      "maximum": 29.89992677568953,
+      "nonzero_samples": 215
+    },
+    {
+      "derived_index": 28,
+      "display_name": "Memory unit busy cycles",
+      "public_counter_name": "MemUnitBusyCycles",
+      "public_expression": "0..95,max96",
+      "observed_recipe": "maximum TA busy cycles over the 12 observed instances",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "75d32522bf97f609df25a9d94c5aa2968bef86d1646751e30596d7213f87b41c",
+      "stored_binary64_sha256": "75d32522bf97f609df25a9d94c5aa2968bef86d1646751e30596d7213f87b41c",
+      "minimum": 0.0,
+      "maximum": 4097.0,
+      "nonzero_samples": 4564
+    },
+    {
+      "derived_index": 29,
+      "display_name": "Memory unit stalled cycles",
+      "public_counter_name": "MemUnitStalledCycles",
+      "public_expression": "0..95,max96",
+      "observed_recipe": "maximum TCP request-stall cycles over the 12 observed instances",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "9d566273fdab4c3c927be69a27a3312ca53a4f35a994501645c6daceb9b36d5e",
+      "stored_binary64_sha256": "9d566273fdab4c3c927be69a27a3312ca53a4f35a994501645c6daceb9b36d5e",
+      "minimum": 0.0,
+      "maximum": 1225.0,
+      "nonzero_samples": 215
+    },
+    {
+      "derived_index": 30,
+      "display_name": "Fetch size",
+      "public_counter_name": "FetchSize",
+      "public_expression": "GL2C*_PERF_SEL_EA_RDREQ_32B,sum24,(32),*,GL2C*_PERF_SEL_EA_RDREQ_64B,sum24,(64),*,GL2C*_PERF_SEL_EA_RDREQ_96B,sum24,(96),*,GL2C*_PERF_SEL_EA_RDREQ_128B,sum24,(128),*,sum4",
+      "observed_recipe": "sum 32/64/96/128-byte GL2C read requests multiplied by their sizes",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "0306f0b15be534217bf0d365ab24012d64ae4b7a2588ebb102da11f146f80a30",
+      "stored_binary64_sha256": "0306f0b15be534217bf0d365ab24012d64ae4b7a2588ebb102da11f146f80a30",
+      "minimum": 0.0,
+      "maximum": 214336.0,
+      "nonzero_samples": 977
+    },
+    {
+      "derived_index": 31,
+      "display_name": "Local video memory bytes",
+      "public_counter_name": "LocalVidMemBytes",
+      "public_expression": "0..23,sum24,(32),*",
+      "observed_recipe": "sum observed GCEA DRAM size requests * 32",
+      "samples": 11911,
+      "binary64_different_samples": 0,
+      "first_different_samples": [],
+      "maximum_absolute_error": 0.0,
+      "expected_binary64_sha256": "a9cc0fcbf1ca8fed4396ac456c60bfa58c15432ff8195a45885f8c2e579575d2",
+      "stored_binary64_sha256": "a9cc0fcbf1ca8fed4396ac456c60bfa58c15432ff8195a45885f8c2e579575d2",
+      "minimum": 0.0,
+      "maximum": 916864.0,
+      "nonzero_samples": 1398
+    }
+  ],
+  "unreconstructed_indices": [
+    11,
+    22,
+    32
+  ],
+  "limits": [
+    "Finite all-sample arithmetic agreement and pinned public formulas only; no packaged GPA binary build/formula/filter attestation or complete hardware inventory.",
+    "LDS divisor 24 is an observed fitting parameter; NUM_SIMDS applicability remains separately unbound.",
+    "Ray zero streams and writer-placeholder PCIe zero stream not treated as unique formula reconstruction.",
+    "No SPM-to-SQTT/RGP event origin mapping, exclusive ownership, ordinary performance benefit or scientific/release qualification."
+  ]
+}

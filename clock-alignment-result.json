@@ -1,0 +1,275 @@
+{
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "input_seals": {
+    "out/native-counter-clock/inspect_clock_alignment.py": {
+      "bytes": 4497,
+      "sha256": "0b9004dc8bc0b9ef4e99fe8e20a43338272f8cb98711d77bd0f9e8834cd4bdd2"
+    },
+    "out/native-counter-clock/plan.json": {
+      "bytes": 2569,
+      "sha256": "6ca915faa54be264bd6d0ff170ebf4300b64b17b86e4d91160882a4521ad6de0"
+    },
+    "attestations/native-vulkan/6be3132/native-spm-cost/payloads/ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9": {
+      "bytes": 9581418,
+      "sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9"
+    },
+    "out/native-counter-clock/spm-index-result.json": {
+      "bytes": 135860,
+      "sha256": "b6e0ca44f92563bc8a18c62f61bce56299e46fa3f501ea7cafc100206ca804cc"
+    },
+    "out/native-counter-clock/raw-spm-result.json": {
+      "bytes": 81132,
+      "sha256": "c53f0745126ad0f3a3aa83798edfcc112125afe949531e66c4caafe72a31c113"
+    },
+    "out/native-counter-clock/decoder-result.json": {
+      "bytes": 1227586,
+      "sha256": "64e099f6b1e21a01892894406201f6f69b4f22030700d98d29f8de223969d484"
+    },
+    "out/native-counter-clock/decoder-run.json": {
+      "bytes": 2943,
+      "sha256": "b26d4f06bdd707bd0cc436facb6b536be601bf5128da4c1a16133a9b6f54f281"
+    },
+    "out/native-counter-clock/trace_decoder_types.h": {
+      "bytes": 10828,
+      "sha256": "5fcbfd8b6ed9b596ec8572279707f434ec15651e4f9d47e524929cfef0249437"
+    }
+  },
+  "trace": {
+    "bytes": 9581418,
+    "sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9"
+  },
+  "status": 0,
+  "info_records": [
+    2
+  ],
+  "info_strings": {
+    "2": "Stitch Incomplete: The parser could not fully match a trace token to the underlying disassembly."
+  },
+  "clock_pairs": 11912,
+  "shader_clock_strictly_increasing": true,
+  "realtime_clock_strictly_increasing": true,
+  "spm_clock_strictly_increasing": true,
+  "rt_frequency_hz_records": [],
+  "first_pair": {
+    "shader_clock": 2108,
+    "realtime_clock": 63517841318,
+    "reserved": 0
+  },
+  "last_pair": {
+    "shader_clock": 25249855,
+    "realtime_clock": 63519581246,
+    "reserved": 0
+  },
+  "paired_shader_delta": 25247747,
+  "paired_reference_delta": 1739928,
+  "whole_span_shader_units_per_reference_unit": 14.51079987217862,
+  "candidate_reference_epoch_offset": 18691697672192,
+  "offset_ambiguity": "Same observed offset is 272 * 2^36 and 17 * 2^40; these bytes alone do not identify the truncated timestamp width.",
+  "nearest_anchor_residual_counts": {
+    "-56": 1,
+    "-4": 4730,
+    "0": 7160,
+    "4": 1,
+    "8": 2,
+    "12": 1,
+    "32": 1,
+    "44": 2,
+    "48": 1,
+    "52": 1,
+    "56": 1,
+    "60": 1,
+    "64": 1,
+    "68": 3,
+    "72": 2,
+    "76": 1,
+    "80": 1,
+    "88": 1
+  },
+  "maximum_absolute_reference_residual": 88,
+  "distinct_nearest_anchors": 11910,
+  "nearest_anchor_tie_samples": [
+    3689
+  ],
+  "nearest_anchor_indices_strictly_increasing": false,
+  "nonzero_or_minus4_residuals": [
+    {
+      "sample": 0,
+      "reference_residual": 32,
+      "nearest_anchor": 0
+    },
+    {
+      "sample": 2039,
+      "reference_residual": 72,
+      "nearest_anchor": 2039
+    },
+    {
+      "sample": 2040,
+      "reference_residual": 56,
+      "nearest_anchor": 2040
+    },
+    {
+      "sample": 2080,
+      "reference_residual": 12,
+      "nearest_anchor": 2080
+    },
+    {
+      "sample": 3689,
+      "reference_residual": 80,
+      "nearest_anchor": 3689
+    },
+    {
+      "sample": 3690,
+      "reference_residual": 64,
+      "nearest_anchor": 3690
+    },
+    {
+      "sample": 3733,
+      "reference_residual": 72,
+      "nearest_anchor": 3733
+    },
+    {
+      "sample": 3734,
+      "reference_residual": 52,
+      "nearest_anchor": 3734
+    },
+    {
+      "sample": 3735,
+      "reference_residual": 4,
+      "nearest_anchor": 3735
+    },
+    {
+      "sample": 3773,
+      "reference_residual": 48,
+      "nearest_anchor": 3773
+    },
+    {
+      "sample": 5838,
+      "reference_residual": 44,
+      "nearest_anchor": 5838
+    },
+    {
+      "sample": 5839,
+      "reference_residual": 44,
+      "nearest_anchor": 5839
+    },
+    {
+      "sample": 6483,
+      "reference_residual": 8,
+      "nearest_anchor": 6483
+    },
+    {
+      "sample": 6484,
+      "reference_residual": 8,
+      "nearest_anchor": 6484
+    },
+    {
+      "sample": 9246,
+      "reference_residual": 76,
+      "nearest_anchor": 9247
+    },
+    {
+      "sample": 9852,
+      "reference_residual": -56,
+      "nearest_anchor": 9854
+    },
+    {
+      "sample": 9853,
+      "reference_residual": 88,
+      "nearest_anchor": 9854
+    },
+    {
+      "sample": 11251,
+      "reference_residual": 68,
+      "nearest_anchor": 11252
+    },
+    {
+      "sample": 11252,
+      "reference_residual": 68,
+      "nearest_anchor": 11253
+    },
+    {
+      "sample": 11253,
+      "reference_residual": 68,
+      "nearest_anchor": 11254
+    },
+    {
+      "sample": 11254,
+      "reference_residual": 60,
+      "nearest_anchor": 11255
+    }
+  ],
+  "occupancy_address_groups": [
+    {
+      "raw_address_hex": "0x10001b800",
+      "record_count": 12,
+      "start_records": 6,
+      "end_records": 6,
+      "first_shader_time": 24794,
+      "last_shader_time": 18673554,
+      "marker_ids": [
+        0
+      ],
+      "observed_cu_ids": [
+        0,
+        1,
+        2,
+        8,
+        10
+      ]
+    },
+    {
+      "raw_address_hex": "0x1000d0000",
+      "record_count": 36,
+      "start_records": 18,
+      "end_records": 18,
+      "first_shader_time": 6845007,
+      "last_shader_time": 19752993,
+      "marker_ids": [
+        0
+      ],
+      "observed_cu_ids": [
+        0,
+        1,
+        2,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "raw_address_hex": "0x1001d0000",
+      "record_count": 18,
+      "start_records": 9,
+      "end_records": 9,
+      "first_shader_time": 32200,
+      "last_shader_time": 18208747,
+      "marker_ids": [
+        0
+      ],
+      "observed_cu_ids": [
+        0,
+        2,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "raw_address_hex": "0x100210000",
+      "record_count": 6,
+      "start_records": 3,
+      "end_records": 3,
+      "first_shader_time": 19762183,
+      "last_shader_time": 20998288,
+      "marker_ids": [
+        0
+      ],
+      "observed_cu_ids": [
+        0,
+        1,
+        2
+      ]
+    }
+  ],
+  "scope": "Full observed finite clock-phase proximity only. No exact sample identity, independently certified REFCLK epoch/frequency binding, RGP displayed-event origin, complete ISA stitching, exclusive counter ownership, ordinary benefit or scientific/release qualification."
+}

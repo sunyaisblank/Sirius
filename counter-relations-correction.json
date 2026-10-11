@@ -1,0 +1,16 @@
+{
+  "accepted_initial_ratios": false,
+  "initial_versions": {
+    "inspect_counter_relations.py": {
+      "recovery": "out/native-counter-clock/inspect_counter_relations_initial.py",
+      "bytes": 5060,
+      "sha256": "53b4a94357d34689d53c5f1ec3b6e98e76984b0cfcb98543fe40ab7b22bacee6"
+    },
+    "counter-relations.json": {
+      "recovery": "out/native-counter-clock/counter-relations-initial.json",
+      "bytes": 22793,
+      "sha256": "7854e72330070dfd3f612f021c9b75b9aa6d8a3852ccd15e904ec15dd58003a3"
+    }
+  },
+  "reason": "Initial exploratory memory ratio candidates used wrong counter indices. Actual serialized component links are26busy=[24,28] and27stalled=[24,29]. No candidate ratio/interval/bottleneck verdict adopted. Correct final memory ratio pairs to26/28/24 and27/29/24 and assert semantic names/component membership."
+}

@@ -1,0 +1,46 @@
+{
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "input_seals": {
+    "out/native-counter-clock/verify_recorded_clock_bits.py": {
+      "bytes": 2439,
+      "sha256": "9161227843e1b31010077acda42542fdc60feeceaae28763ce2b3e410ce9aad9"
+    },
+    "out/native-counter-clock/plan.json": {
+      "bytes": 2569,
+      "sha256": "6ca915faa54be264bd6d0ff170ebf4300b64b17b86e4d91160882a4521ad6de0"
+    },
+    "attestations/native-vulkan/6be3132/native-spm-cost/payloads/ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9": {
+      "bytes": 9581418,
+      "sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9"
+    },
+    "out/native-counter-clock/spm-index-result.json": {
+      "bytes": 135860,
+      "sha256": "b6e0ca44f92563bc8a18c62f61bce56299e46fa3f501ea7cafc100206ca804cc"
+    },
+    "out/native-counter-clock/decoder-result.json": {
+      "bytes": 1227586,
+      "sha256": "64e099f6b1e21a01892894406201f6f69b4f22030700d98d29f8de223969d484"
+    }
+  },
+  "payload": {
+    "bytes": 781088,
+    "sha256": "cf34a1540d57146bade08c3686de5848640f5ebc35b28d6c08e4ee842800822d"
+  },
+  "records_matched": 11912,
+  "observed_pattern": "12 LSB-first bits with value 0x201, then 36 LSB-first bits equal to returned realtime value; chronological nibble-aligned exact payload matches.",
+  "first_pattern_bit_positions": [
+    3084,
+    6324,
+    6676,
+    38308
+  ],
+  "last_pattern_bit_positions": [
+    6246484,
+    6246740,
+    6246996,
+    6247252
+  ],
+  "next_nibble_nonzero_records": 372,
+  "pattern_positions_sha256": "655b37b9098dde331fa72e3d81694066045f81e9cd3e71385010be3841363a10",
+  "scope": "Finite raw-payload bit correspondence only; no decoder-binary analysis, published hardware token-layout proof, exact SPM sample identity, certified epoch/frequency, RGP event origin, exclusive cost or qualification."
+}

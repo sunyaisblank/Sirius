@@ -1,0 +1,18 @@
+{
+  "initial_codec_source": {
+    "path": "out/native-counter-clock/verify_public_counter_formulas_initial.py",
+    "sha256": "b2c06b1bcea001cac67ccc016107473d0dce1bcf41f30d96bf8286d312a934cb"
+  },
+  "initial_codec_failure": "Invalid Python codec name utf8-sig; stopped before opening plan or reading trace. Corrected to utf-8-sig.",
+  "initial_value_source": {
+    "path": "out/native-counter-clock/verify_public_counter_formulas.py",
+    "sha256": "df6bb657f2429ead5396cb73963dc6cf098f8738e96d9c576a0c740ffef0f952"
+  },
+  "initial_value_result": {
+    "path": "out/native-counter-clock/public-formula-result.json",
+    "sha256": "294dff4a585951711fededff4b86d5ea411a3e8a20ffe7a721da00f9223364e8"
+  },
+  "value_finding": "28 of 30 candidate arithmetic reconstructions match bit-exact. The unsupported LDS divisor 24 is falsified; its recipe wording fitted was incorrect and is not an adopted finding.",
+  "correction": "Check candidate divisor 48 against all 11911 values in a separate source/result. Observed agreement will not independently bind GPA NUM_SIMDS hardware metadata.",
+  "qualification": "No product change, hardware completeness, event mapping or qualification verdict."
+}

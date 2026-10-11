@@ -1,0 +1,9 @@
+{
+  "reviewer": "command_owner_review independent read-only source review",
+  "probe": {"path": "out/native-counter-clock/decode_saved_sqtt.py", "bytes": 7402, "sha256": "a7bc5b11a2d1c25d2499291556927c31093a63e5ad5966d52c022842531758f8"},
+  "owner": {"path": "out/native-counter-clock/run_cpu_decoder.py", "bytes": 5366, "sha256": "b72001e1e08d9632d3dfc97e12f96b66efb260f0faadc0d359433975ee31e7aa"},
+  "accepted": true,
+  "fixed_before_launch": ["Contained independent signal, leader-wait and census attempts; errors invalidate acceptance.", "Contained ISA callback exceptions with documented INVALID_ARGUMENT return.", "Deferred owner SIGINT/SIGTERM with pre-spawn and pre-START gates.", "Independent final known-leader wait before final owned-group census."],
+  "retained_prior_sources": ["decode_saved_sqtt_initial.py", "decode_saved_sqtt_pre_isa.py", "run_cpu_decoder_initial.py", "run_cpu_decoder_pre_containment.py", "run_cpu_decoder_pre_signal.py", "run_cpu_decoder_pre_gate.py"],
+  "scope": "One CPU-only saved-byte compatibility probe under 45 seconds and 512 MiB. ABI declarations and ownership source inspected. No actual parser compatibility, useful clock records, event mapping, instruction coverage, ordinary performance or scientific/release verdict. Leader RSS sampled; closure scoped to saved births and accessibly observed owned group."
+}

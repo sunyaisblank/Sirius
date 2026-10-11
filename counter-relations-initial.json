@@ -1,0 +1,731 @@
+{
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "input_seals": {
+    "out/native-counter-clock/inspect_counter_relations.py": {
+      "bytes": 5060,
+      "sha256": "53b4a94357d34689d53c5f1ec3b6e98e76984b0cfcb98543fe40ab7b22bacee6"
+    },
+    "out/native-counter-clock/plan.json": {
+      "bytes": 2569,
+      "sha256": "6ca915faa54be264bd6d0ff170ebf4300b64b17b86e4d91160882a4521ad6de0"
+    },
+    "attestations/native-vulkan/6be3132/native-spm-cost/payloads/ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9": {
+      "bytes": 9581418,
+      "sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9"
+    },
+    "out/native-counter-clock/spm-index-result.json": {
+      "bytes": 135860,
+      "sha256": "b6e0ca44f92563bc8a18c62f61bce56299e46fa3f501ea7cafc100206ca804cc"
+    },
+    "out/native-counter-clock/raw-spm-result.json": {
+      "bytes": 81132,
+      "sha256": "c53f0745126ad0f3a3aa83798edfcc112125afe949531e66c4caafe72a31c113"
+    },
+    "out/native-counter-clock/derived-spm-result.json": {
+      "bytes": 27334,
+      "sha256": "2669205a8e7a91ba69957dbfca90589235c6831937c19b3e5f26da26889a596c"
+    },
+    "out/native-counter-clock/rdp-derived-header.h": {
+      "bytes": 2309,
+      "sha256": "da7e086957a178ab820d5f6c569bb48c418b2a3fa20c01d77403085211cec4ca"
+    },
+    "out/native-counter-clock/pal-gpu-perf-header.h": {
+      "bytes": 6543,
+      "sha256": "ed219731c2c45ab994e15bdf2656ff3d6446677d17fe6a992f2925dafdf64466"
+    }
+  },
+  "trace": {
+    "bytes": 9581418,
+    "sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9"
+  },
+  "samples_per_stream": 11911,
+  "raw_block_event_groups": 27,
+  "raw_to_derived_observed_joins": [
+    {
+      "derived_index": 0,
+      "display_name": "Instruction cache hit",
+      "usage_type_encoding": 1,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 1,
+      "display_name": "Requests",
+      "usage_type_encoding": 5,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 2,
+      "display_name": "Hits",
+      "usage_type_encoding": 5,
+      "complete_raw_sum_byte_matches": [
+        {
+          "gpu_block": 49,
+          "event_index": 270,
+          "instances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      ],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 3,
+      "display_name": "Misses",
+      "usage_type_encoding": 5,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 4,
+      "display_name": "Scalar cache hit",
+      "usage_type_encoding": 1,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 5,
+      "display_name": "Requests",
+      "usage_type_encoding": 5,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 6,
+      "display_name": "Hits",
+      "usage_type_encoding": 5,
+      "complete_raw_sum_byte_matches": [
+        {
+          "gpu_block": 49,
+          "event_index": 294,
+          "instances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      ],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 7,
+      "display_name": "Misses",
+      "usage_type_encoding": 5,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 8,
+      "display_name": "L0 cache hit",
+      "usage_type_encoding": 1,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 9,
+      "display_name": "Requests",
+      "usage_type_encoding": 5,
+      "complete_raw_sum_byte_matches": [
+        {
+          "gpu_block": 10,
+          "event_index": 9,
+          "instances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        }
+      ],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 10,
+      "display_name": "Hits",
+      "usage_type_encoding": 5,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 11,
+      "display_name": "Ray-box tests",
+      "usage_type_encoding": 5,
+      "complete_raw_sum_byte_matches": [
+        {
+          "gpu_block": 9,
+          "event_index": 116,
+          "instances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        {
+          "gpu_block": 9,
+          "event_index": 117,
+          "instances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        {
+          "gpu_block": 9,
+          "event_index": 118,
+          "instances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        {
+          "gpu_block": 29,
+          "event_index": 57,
+          "instances": [
+            0,
+            1,
+            2,
+            3
+          ]
+        }
+      ],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 12,
+      "display_name": "Write size",
+      "usage_type_encoding": 4,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 13,
+      "display_name": "Misses",
+      "usage_type_encoding": 5,
+      "complete_raw_sum_byte_matches": [
+        {
+          "gpu_block": 10,
+          "event_index": 17,
+          "instances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        }
+      ],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 14,
+      "display_name": "L1 cache hit",
+      "usage_type_encoding": 1,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 15,
+      "display_name": "Requests",
+      "usage_type_encoding": 5,
+      "complete_raw_sum_byte_matches": [
+        {
+          "gpu_block": 35,
+          "event_index": 14,
+          "instances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        }
+      ],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 16,
+      "display_name": "Hits",
+      "usage_type_encoding": 5,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 17,
+      "display_name": "Misses",
+      "usage_type_encoding": 5,
+      "complete_raw_sum_byte_matches": [
+        {
+          "gpu_block": 35,
+          "event_index": 18,
+          "instances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        }
+      ],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 18,
+      "display_name": "L2 cache hit",
+      "usage_type_encoding": 1,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 19,
+      "display_name": "Requests",
+      "usage_type_encoding": 5,
+      "complete_raw_sum_byte_matches": [
+        {
+          "gpu_block": 38,
+          "event_index": 3,
+          "instances": [
+            0,
+            1,
+            2,
+            3
+          ]
+        }
+      ],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 20,
+      "display_name": "Hits",
+      "usage_type_encoding": 5,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 21,
+      "display_name": "Misses",
+      "usage_type_encoding": 5,
+      "complete_raw_sum_byte_matches": [
+        {
+          "gpu_block": 38,
+          "event_index": 43,
+          "instances": [
+            0,
+            1,
+            2,
+            3
+          ]
+        }
+      ],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 22,
+      "display_name": "Ray-triangle tests",
+      "usage_type_encoding": 5,
+      "complete_raw_sum_byte_matches": [
+        {
+          "gpu_block": 9,
+          "event_index": 116,
+          "instances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        {
+          "gpu_block": 9,
+          "event_index": 117,
+          "instances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        {
+          "gpu_block": 9,
+          "event_index": 118,
+          "instances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        {
+          "gpu_block": 29,
+          "event_index": 57,
+          "instances": [
+            0,
+            1,
+            2,
+            3
+          ]
+        }
+      ],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 23,
+      "display_name": "LDS Bank Conflict",
+      "usage_type_encoding": 1,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 24,
+      "display_name": "Gpu Busy Cycles",
+      "usage_type_encoding": 2,
+      "complete_raw_sum_byte_matches": [
+        {
+          "gpu_block": 0,
+          "event_index": 24,
+          "instances": [
+            0
+          ]
+        }
+      ],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 25,
+      "display_name": "LDS Busy Cycles",
+      "usage_type_encoding": 2,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 26,
+      "display_name": "Memory unit busy",
+      "usage_type_encoding": 1,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 27,
+      "display_name": "Memory unit stalled",
+      "usage_type_encoding": 1,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 28,
+      "display_name": "Memory unit busy cycles",
+      "usage_type_encoding": 2,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 29,
+      "display_name": "Memory unit stalled cycles",
+      "usage_type_encoding": 2,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 30,
+      "display_name": "Fetch size",
+      "usage_type_encoding": 4,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 31,
+      "display_name": "Local video memory bytes",
+      "usage_type_encoding": 4,
+      "complete_raw_sum_byte_matches": [],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    },
+    {
+      "derived_index": 32,
+      "display_name": "PCIe bytes",
+      "usage_type_encoding": 4,
+      "complete_raw_sum_byte_matches": [
+        {
+          "gpu_block": 9,
+          "event_index": 116,
+          "instances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        {
+          "gpu_block": 9,
+          "event_index": 117,
+          "instances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        {
+          "gpu_block": 9,
+          "event_index": 118,
+          "instances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        {
+          "gpu_block": 29,
+          "event_index": 57,
+          "instances": [
+            0,
+            1,
+            2,
+            3
+          ]
+        }
+      ],
+      "scope": "Complete observed raw-instance sum converted to binary64 equals stored derived values. Multiple all-zero matches are ambiguous; equality alone is not a hardware counter name/formula/filter proof."
+    }
+  ],
+  "ratio_observed_joins": [
+    {
+      "index": 0,
+      "name": "Instruction cache hit",
+      "numerator_index": 2,
+      "denominator_index": 1,
+      "observed_relation": "(numerator / denominator) * 100; zero denominator -> zero",
+      "nonzero_denominator_samples": 8035,
+      "maximum_absolute_error": 0.0,
+      "binary64_different_samples": 0,
+      "first_different_samples": []
+    },
+    {
+      "index": 4,
+      "name": "Scalar cache hit",
+      "numerator_index": 6,
+      "denominator_index": 5,
+      "observed_relation": "(numerator / denominator) * 100; zero denominator -> zero",
+      "nonzero_denominator_samples": 4153,
+      "maximum_absolute_error": 0.0,
+      "binary64_different_samples": 0,
+      "first_different_samples": []
+    },
+    {
+      "index": 8,
+      "name": "L0 cache hit",
+      "numerator_index": 10,
+      "denominator_index": 9,
+      "observed_relation": "(numerator / denominator) * 100; zero denominator -> zero",
+      "nonzero_denominator_samples": 4536,
+      "maximum_absolute_error": 1.4210854715202004e-14,
+      "binary64_different_samples": 860,
+      "first_different_samples": [
+        10,
+        11,
+        12,
+        22,
+        25,
+        36,
+        41,
+        57
+      ]
+    },
+    {
+      "index": 14,
+      "name": "L1 cache hit",
+      "numerator_index": 16,
+      "denominator_index": 15,
+      "observed_relation": "(numerator / denominator) * 100; zero denominator -> zero",
+      "nonzero_denominator_samples": 7429,
+      "maximum_absolute_error": 1.4210854715202004e-14,
+      "binary64_different_samples": 873,
+      "first_different_samples": [
+        9,
+        10,
+        12,
+        20,
+        21,
+        22,
+        23,
+        30
+      ]
+    },
+    {
+      "index": 18,
+      "name": "L2 cache hit",
+      "numerator_index": 20,
+      "denominator_index": 19,
+      "observed_relation": "(numerator / denominator) * 100; zero denominator -> zero",
+      "nonzero_denominator_samples": 7382,
+      "maximum_absolute_error": 1.4210854715202004e-14,
+      "binary64_different_samples": 142,
+      "first_different_samples": [
+        12,
+        18,
+        19,
+        20,
+        25,
+        28,
+        34,
+        37
+      ]
+    },
+    {
+      "index": 23,
+      "name": "LDS Bank Conflict",
+      "numerator_index": 25,
+      "denominator_index": 24,
+      "observed_relation": "(numerator / denominator) * 100; zero denominator -> zero",
+      "nonzero_denominator_samples": 8843,
+      "maximum_absolute_error": 0.0,
+      "binary64_different_samples": 0,
+      "first_different_samples": []
+    },
+    {
+      "index": 26,
+      "name": "Memory unit busy",
+      "numerator_index": 27,
+      "denominator_index": 24,
+      "observed_relation": "(numerator / denominator) * 100; zero denominator -> zero",
+      "nonzero_denominator_samples": 8843,
+      "maximum_absolute_error": 100.0,
+      "binary64_different_samples": 4564,
+      "first_different_samples": [
+        7,
+        10,
+        11,
+        12,
+        20,
+        21,
+        22,
+        23
+      ]
+    },
+    {
+      "index": 28,
+      "name": "Memory unit busy cycles",
+      "numerator_index": 29,
+      "denominator_index": 24,
+      "observed_relation": "(numerator / denominator) * 100; zero denominator -> zero",
+      "nonzero_denominator_samples": 8843,
+      "maximum_absolute_error": 4097.0,
+      "binary64_different_samples": 4564,
+      "first_different_samples": [
+        7,
+        10,
+        11,
+        12,
+        20,
+        21,
+        22,
+        23
+      ]
+    }
+  ],
+  "scope": "Finite whole-stream equality and arithmetic checks on this immutable trace only. No hardware/formula/filter universality, clock/event interval mapping, exclusive ownership, removable bottleneck, ordinary performance gain or scientific/release qualification."
+}

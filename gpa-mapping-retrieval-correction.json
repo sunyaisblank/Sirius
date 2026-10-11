@@ -1,0 +1,10 @@
+{
+  "initial_source": {
+    "path": "out/native-counter-clock/fetch_gpa_counter_mapping.py",
+    "bytes": 1436,
+    "sha256": "3078bcc3ae798d4f6ba694521dbaddc607e3468a56cbac066873a427cb9f198c"
+  },
+  "initial_result": "Stopped at SQWGP expected-size preflight: 204576 exceeds initial 131072-byte retrieval bound. CPF 980 bytes was pinned successfully; no unverified bytes consumed.",
+  "correction": "Use 262144-byte bound for these seven known official files; reuse existing CPF only after Git blob and size verification.",
+  "scope": "Retrieval preflight correction only; no numeric or decoder verdict."
+}
