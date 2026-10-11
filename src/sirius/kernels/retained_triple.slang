@@ -284,6 +284,22 @@ RetainedTriple RTDivide(RetainedTriple a,RetainedTriple b) {
     if(RPScalarLessEqual(lower,RPZero())||RPScalarGreater(RPRatioUpper(RTAbsoluteUpper(a),lower),RPFromBits(0x5e000000u))) return RTInvalid();
     if(RTExact(b,RPOne())) return a;
     RetainedTriple q=RTConstant(RPDivideSeed(a.hi,b.hi));
+#if defined(SIRIUS_RETAINED_DIVISION_FIRST_CORRECTION32) && !defined(SIRIUS_RETAINED_PORTABLE) && !defined(SIRIUS_RETAINED_FP64) && !defined(SIRIUS_RETAINED_FMA32)
+    {
+        RetainedTriple residual=RTSubtract(a,RTMultiply(b,q));
+        if(residual.valid==0||RPScalarGreater(RPRatioUpper(RPAbs(residual.hi),RPAbs(b.hi)),RPFromBits(0x5d000000u)))
+            return RTInvalid();
+        q=RTCenter(RTAdd(q,RTConstant(RPDivideSeed(residual.hi,b.hi))));
+        if(q.valid==0) return q;
+    }
+    [loop] for(uint i=1;i<3;++i) {
+        RetainedTriple residual=RTSubtract(a,RTMultiply(b,q));
+        if(residual.valid==0||RPScalarGreater(RPRatioUpper(RPAbs(residual.hi),RPAbs(b.hi)),RPFromBits(0x5d000000u)))
+            return RTInvalid();
+        q=RTCenter(RTAdd(q,RTConstant(RPDivideSeed(residual.hi,b.hi))));
+        if(q.valid==0) return q;
+    }
+#else
     [loop] for(uint i=0;i<3;++i) {
         RetainedTriple residual=RTSubtract(a,RTMultiply(b,q));
         if(residual.valid==0||RPScalarGreater(RPRatioUpper(RPAbs(residual.hi),RPAbs(b.hi)),RPFromBits(0x5d000000u)))
@@ -291,6 +307,7 @@ RetainedTriple RTDivide(RetainedTriple a,RetainedTriple b) {
         q=RTCenter(RTAdd(q,RTConstant(RPDivideSeed(residual.hi,b.hi))));
         if(q.valid==0) return q;
     }
+#endif
     RetainedTriple residual=RTSubtract(a,RTMultiply(b,q));
     if(residual.valid==0) return residual;
     return RTPack(q.hi,q.lo,q.tail,RPRatioUpper(RTAbsoluteUpper(residual),lower));
