@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/home/astra/.project/Sirius/out/native-sqtt-source-clock/dump_saved_sqtt.py", line 63, in <module>
+    lib=C.CDLL(str(libpath));lib.rocprof_trace_decoder_dump_data.argtypes=[C.c_void_p,C.c_uint64,CB,C.c_void_p];lib.rocprof_trace_decoder_dump_data.restype=C.c_int
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/ctypes/__init__.py", line 392, in __getattr__
+    func = self.__getitem__(name)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/ctypes/__init__.py", line 397, in __getitem__
+    func = self._FuncPtr((name_or_ordinal, self))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: /home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/rocprof-trace-decoder-0.1.3/librocprof-trace-decoder.so: undefined symbol: rocprof_trace_decoder_dump_data

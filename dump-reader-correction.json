@@ -1,0 +1,8 @@
+{
+  "initial_source": {
+    "bytes": 5690,
+    "sha256": "be911fc4c6e7cf47bea88fd2e16352b30caab03b3259fa7bf07f2ff63ba1646b"
+  },
+  "review": "Callback error cleanup can itself throw before os._exit, allowing ctypes to suppress an exception and return to native decoding.",
+  "correction": "Use unconditional os._exit in finally, independently best-effort logging/part close, and bound distinct type strings. No native launch before correction."
+}

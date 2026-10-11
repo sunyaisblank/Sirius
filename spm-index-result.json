@@ -1,0 +1,4977 @@
+{
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "input_seals": {
+    "out/native-spm-cost/inventory_spm_trace.py": {
+      "bytes": 4613,
+      "sha256": "b187366fad33b443e579ccca8d9cae9cb670c60956fbbb699eefa40302faed92"
+    },
+    "out/native-spm-cost/native-spm-capture-console/spm-original-legacy-interval.rgp": {
+      "bytes": 9581418,
+      "sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9"
+    },
+    "out/native-spm-cost/native-spm-capture-console/owner.json": {
+      "bytes": 7923,
+      "sha256": "d07364f55c6189420c2cc021c4f7df6fdfbf5a8a87397eada30efd4c84af75f6"
+    },
+    "out/native-spm-cost/native-spm-capture-console-bridge.json": {
+      "bytes": 51264,
+      "sha256": "e092715afae8ee68f34e382e6c147793c86f798bed4bef01f850137a34a2bf6a"
+    },
+    "out/native-spm-cost/verify_spm_capture_control.py": {
+      "bytes": 8396,
+      "sha256": "bf2d712b25633b692133f33055736501e3e1311b45fa86170be3857fad4a4f0d"
+    },
+    "out/native-spm-cost/capture-spm-plan.json": {
+      "bytes": 46107,
+      "sha256": "4200263ee499c9892b63e8ff22ec09ef007a3e12b150fd9e3e91eef110dffe38"
+    },
+    "out/native-spm-cost/references.json": {
+      "bytes": 5859,
+      "sha256": "9e30af1675e0941606c81b2a14b0057a8d8ee0967a6f52fb0c9d248ee7228493"
+    }
+  },
+  "original_control": {
+    "original_testcase_passed": true,
+    "complete_readbacks_exact": 32,
+    "selected_original_modules_exact": 7,
+    "ordered_available_markers": 51,
+    "actual_provider_modules_exact": true,
+    "actual_connected_application_pid": 11256,
+    "actual_connected_application_path_exact": true,
+    "trace_completion_and_save_logged": true,
+    "trace_bytes": 9581418,
+    "trace_sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9",
+    "scope": "Original numerical/stream/provider control plus whole trace acquisition. Trace dispatch/pipeline identity and sample interpretation remain a separate analysis prerequisite; no performance benefit, frame or full qualification."
+  },
+  "trace": {
+    "bytes": 9581418,
+    "sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9"
+  },
+  "index_offset": 9565866,
+  "index_bytes": 15552,
+  "chunks": [
+    {
+      "ordinal": 0,
+      "name": "AsicInfo",
+      "version": 3,
+      "compression": 0,
+      "header_offset": 32,
+      "header_bytes": 0,
+      "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "data_offset": 32,
+      "data_bytes": 608,
+      "data_sha256": "a80c73cbe11275d7da7f7aed11ec23a3a9b74d39ea0284f4e87d268d02d1ec9c",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 1,
+      "name": "ApiInfo",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 640,
+      "header_bytes": 0,
+      "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "data_offset": 640,
+      "data_bytes": 8,
+      "data_sha256": "f0a0278e4372459cca6159cd5e71cfee638302a7b9ca9b05c34181ac0a65ac5d",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 2,
+      "name": "ClockCalibration",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 648,
+      "header_bytes": 0,
+      "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "data_offset": 648,
+      "data_bytes": 24,
+      "data_sha256": "410e0df219a314cc125e7b7ed31e8956786efbbe9e52aa0feea3394ac2ad2d5c",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 3,
+      "name": "CodeObject",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 672,
+      "header_bytes": 24,
+      "header_sha256": "9beb95a7b4e57ef73afdccb07c855d889e18edd08b379ca4d2febc08ba055057",
+      "data_offset": 696,
+      "data_bytes": 669600,
+      "data_sha256": "63a5347c70df566fcadda1edcd6371f463f793d88fc7ea0557fc4e3241fcfbef",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 4,
+      "name": "CodeObject",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 670296,
+      "header_bytes": 24,
+      "header_sha256": "96f6acfca69b5702f36f401e721a9b4b12f2d38dcdbbaf5589dbc8255664c50e",
+      "data_offset": 670320,
+      "data_bytes": 240912,
+      "data_sha256": "d78a1135f40cc339d91d48539bc9acd0f544e60d61eb86b56d2eb61c46eedd83",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 5,
+      "name": "CodeObject",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 911232,
+      "header_bytes": 24,
+      "header_sha256": "086354597471048831ab8626c2feb63faac61c2ecb5d3a8aaaa1dbba27cb3969",
+      "data_offset": 911256,
+      "data_bytes": 259360,
+      "data_sha256": "f2cff092f1a2fe12bc77488572ef8f1ee4ff6c6fdb56eed39083ed91f89b2907",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 6,
+      "name": "COLoadEvent",
+      "version": 3,
+      "compression": 0,
+      "header_offset": 1170616,
+      "header_bytes": 4,
+      "header_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+      "data_offset": 1170620,
+      "data_bytes": 120,
+      "data_sha256": "8b350a5badce956f50a137c71b053e0e7fc26e6a6ff921934d87eeaab94dfa6d",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 7,
+      "name": "PsoCorrelation",
+      "version": 3,
+      "compression": 0,
+      "header_offset": 1170740,
+      "header_bytes": 4,
+      "header_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+      "data_offset": 1170744,
+      "data_bytes": 288,
+      "data_sha256": "d9e2d748318b70d02f4f7f55c800f9e71c23e09bb9e2003f1d4b819b0062e2b6",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 8,
+      "name": "SqttData",
+      "version": 5,
+      "compression": 0,
+      "header_offset": 1171032,
+      "header_bytes": 40,
+      "header_sha256": "76dfff95d9895a6a3bd481377a9977c94818dea9320a6f960b4a2e96cb5ef358",
+      "data_offset": 1171072,
+      "data_bytes": 781088,
+      "data_sha256": "cf34a1540d57146bade08c3686de5848640f5ebc35b28d6c08e4ee842800822d",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 9,
+      "name": "SpmSession",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 1952160,
+      "header_bytes": 20,
+      "header_sha256": "dc4b8c07796e2ac779b197238db62f39336f31ef408772b47fc997c1d7d0538e",
+      "data_offset": 1952180,
+      "data_bytes": 95288,
+      "data_sha256": "6e12ce93207ba0a38ecea37261d5fd9423efdb83cb7a5758e9fde0385d706098",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        0,
+        4096,
+        11911,
+        183
+      ]
+    },
+    {
+      "ordinal": 10,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2047468,
+      "header_bytes": 20,
+      "header_sha256": "d35bc18e348e499d95bd1bd9019eace23938706bec421837876372c802011c3d",
+      "data_offset": 2047488,
+      "data_bytes": 23822,
+      "data_sha256": "33491a409db91336bb3ccfaf447aa96a433bcb1f7152792ade0a0d673665a3d2",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        0,
+        270,
+        2
+      ]
+    },
+    {
+      "ordinal": 11,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2071310,
+      "header_bytes": 20,
+      "header_sha256": "2cd68e125607a8b6e1c706645b22023f91e8b4e3a91bd1d9ed6a114d3141883d",
+      "data_offset": 2071330,
+      "data_bytes": 23822,
+      "data_sha256": "65269e3b73e267cd7592958a1a372231a57a62b97f8293e23a1c784b60287f30",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        1,
+        270,
+        2
+      ]
+    },
+    {
+      "ordinal": 12,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2095152,
+      "header_bytes": 20,
+      "header_sha256": "1b2bbec4591039cf11d51473818ea898bf1ee1fb9c3fa8df674a7746a534a5a4",
+      "data_offset": 2095172,
+      "data_bytes": 23822,
+      "data_sha256": "46785ee3c3ac9e21c2e9408588d7a5cbac08f477fda7c2b6ff40c519ccca7736",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        2,
+        270,
+        2
+      ]
+    },
+    {
+      "ordinal": 13,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2118994,
+      "header_bytes": 20,
+      "header_sha256": "5da9405f7cead15684d1f89fead7fb4b8c4e295635f31da2b2ea3562332172c7",
+      "data_offset": 2119014,
+      "data_bytes": 23822,
+      "data_sha256": "4f4c25662f121d3f437d226853f0fa6d8d83c2e8fa35238178f844f0dc80740d",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        3,
+        270,
+        2
+      ]
+    },
+    {
+      "ordinal": 14,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2142836,
+      "header_bytes": 20,
+      "header_sha256": "deaa3f86ed19b9a17ea53c371eb122153101e2ae33ce82de4347881fa849a66f",
+      "data_offset": 2142856,
+      "data_bytes": 23822,
+      "data_sha256": "c326268d6f003107d2ccffec56e3bf0c791bedc52cf9553158b9e2125922a8f5",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        4,
+        270,
+        2
+      ]
+    },
+    {
+      "ordinal": 15,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2166678,
+      "header_bytes": 20,
+      "header_sha256": "aa64865fe99fe46adf6e9187a88bdc9ab22eddac34faba530daa75034e5c17a5",
+      "data_offset": 2166698,
+      "data_bytes": 23822,
+      "data_sha256": "81097d26dee6f3b9720abe3ea7eb90e5cae3f74a620ccdb8d7b392c612468104",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        5,
+        270,
+        2
+      ]
+    },
+    {
+      "ordinal": 16,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2190520,
+      "header_bytes": 20,
+      "header_sha256": "4775e81187f57bb89d7f4b6eabe32d4a6a7cf5341c768cda62fbb71d9b688c4e",
+      "data_offset": 2190540,
+      "data_bytes": 23822,
+      "data_sha256": "0b3cdea68c0a6f0558af7eff4e16afa9d9e32ce4e6ba5fd7424724e10833b5f2",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        0,
+        271,
+        2
+      ]
+    },
+    {
+      "ordinal": 17,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2214362,
+      "header_bytes": 20,
+      "header_sha256": "f6521bc761f0920a5398c73d583d97b36601fdedf8d6fe13e2c9309a8e2e040d",
+      "data_offset": 2214382,
+      "data_bytes": 23822,
+      "data_sha256": "a21d0e3cb05caeced063c582834dfcedb933cb0f870135a5d920ef5527bffd56",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        1,
+        271,
+        2
+      ]
+    },
+    {
+      "ordinal": 18,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2238204,
+      "header_bytes": 20,
+      "header_sha256": "793491a9e5cb2217661abaae81d70c04d179e4feea59e8c2f0150771b212e74f",
+      "data_offset": 2238224,
+      "data_bytes": 23822,
+      "data_sha256": "d17379b476400c2c5001bb680bfa1836e70b5344fc2833302a54a7830b4ecb5d",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        2,
+        271,
+        2
+      ]
+    },
+    {
+      "ordinal": 19,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2262046,
+      "header_bytes": 20,
+      "header_sha256": "4ff8f6118c08238fb341a1d2ecfceb2ecdde5dabb8e262c12ca1d16e5dd2aca3",
+      "data_offset": 2262066,
+      "data_bytes": 23822,
+      "data_sha256": "d5aacfef3de61940e138dbef054155c79c2a714f08afe1b830287036a0441364",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        3,
+        271,
+        2
+      ]
+    },
+    {
+      "ordinal": 20,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2285888,
+      "header_bytes": 20,
+      "header_sha256": "7a9932cefa2a13e1df7f652430b3253d8116008f12e06e22fb2aa8c432bf4a68",
+      "data_offset": 2285908,
+      "data_bytes": 23822,
+      "data_sha256": "169d4be2b9f26e0a11cb69b0cef00af5019e5c1d80dfec3976ff173ad192541a",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        4,
+        271,
+        2
+      ]
+    },
+    {
+      "ordinal": 21,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2309730,
+      "header_bytes": 20,
+      "header_sha256": "9b4fd4591d4c161fac9fda56fe2be1fdf41e6ae04e365b811f808a501acbfc83",
+      "data_offset": 2309750,
+      "data_bytes": 23822,
+      "data_sha256": "cdc470e962842724a68bb6bc115d4784c39b9a2853abba2b6f6806786d2ec17d",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        5,
+        271,
+        2
+      ]
+    },
+    {
+      "ordinal": 22,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2333572,
+      "header_bytes": 20,
+      "header_sha256": "f394b8bf5481b0137c0d7967e6eec4caf45d34a849734b79393a117eb3cee9be",
+      "data_offset": 2333592,
+      "data_bytes": 23822,
+      "data_sha256": "1b73298c36c711c6fa2bf077d6445547bd028e145abc48febcb1def397b8c7ff",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        0,
+        272,
+        2
+      ]
+    },
+    {
+      "ordinal": 23,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2357414,
+      "header_bytes": 20,
+      "header_sha256": "add749d62701b669954a77b42c7f8060b5a57dc3499d81eb09200a28f3e63f80",
+      "data_offset": 2357434,
+      "data_bytes": 23822,
+      "data_sha256": "b1c07c05fabbc669ade601ebf1893b55e6fa718596b26f17ac094f1b38ac8274",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        1,
+        272,
+        2
+      ]
+    },
+    {
+      "ordinal": 24,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2381256,
+      "header_bytes": 20,
+      "header_sha256": "c460c76569080ffc9575b1a49f6c98825547140823629fcc1540a99594d5e499",
+      "data_offset": 2381276,
+      "data_bytes": 23822,
+      "data_sha256": "a8f678b153486bc38dc878775ff42ea3745319940cf2cb02aecc307b221dce83",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        2,
+        272,
+        2
+      ]
+    },
+    {
+      "ordinal": 25,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2405098,
+      "header_bytes": 20,
+      "header_sha256": "f28eb4789183719a8dbd1dcce73b33c28f9105b729a5f97a6e6d0bab4014f1af",
+      "data_offset": 2405118,
+      "data_bytes": 23822,
+      "data_sha256": "8582a49f73522385fb70025d522fceb05d57146efe025fdbf5b9127ee0739de9",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        3,
+        272,
+        2
+      ]
+    },
+    {
+      "ordinal": 26,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2428940,
+      "header_bytes": 20,
+      "header_sha256": "1d567dde5f559c524a35ec97ce919f7206b9b20b2ef3021f2b5d874b109d879c",
+      "data_offset": 2428960,
+      "data_bytes": 23822,
+      "data_sha256": "2a3809dad5b671445ce6ffbbe5816fad9b9122809d325be215886df18c2811e5",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        4,
+        272,
+        2
+      ]
+    },
+    {
+      "ordinal": 27,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2452782,
+      "header_bytes": 20,
+      "header_sha256": "b213ca8be945e4a74ab7a16d932d9b642aea1fd783ce57757bde8e628e47c001",
+      "data_offset": 2452802,
+      "data_bytes": 23822,
+      "data_sha256": "b4b3600dc01f79affc991f39b2429ad1ca1279a0d3bdc95a8d5a95cd035b3c01",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        5,
+        272,
+        2
+      ]
+    },
+    {
+      "ordinal": 28,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2476624,
+      "header_bytes": 20,
+      "header_sha256": "7ed6862617cb19a5ba38da86024b7533d358dcc40e781b5d0285b908f46920b7",
+      "data_offset": 2476644,
+      "data_bytes": 23822,
+      "data_sha256": "3a18e80c0b7b348f2344899c5a8e234a94f8aeff343f227ee701a8d0c526fc64",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        0,
+        294,
+        2
+      ]
+    },
+    {
+      "ordinal": 29,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2500466,
+      "header_bytes": 20,
+      "header_sha256": "93b821c08258b41fb8a058f3e45f088f41e317c52f398667be00198591a82ff3",
+      "data_offset": 2500486,
+      "data_bytes": 23822,
+      "data_sha256": "e9821906ed89c4c778b790b6652c94ad60f80c339da2a5bd376eae2944a113f2",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        1,
+        294,
+        2
+      ]
+    },
+    {
+      "ordinal": 30,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2524308,
+      "header_bytes": 20,
+      "header_sha256": "1584483d09c00617a469e1d1ca33b1257170808023af95ec3e841966afc19ce2",
+      "data_offset": 2524328,
+      "data_bytes": 23822,
+      "data_sha256": "0026c51b8179d2e89565937da208bbfd62b24853a4c290807aedbfbbba7965a3",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        2,
+        294,
+        2
+      ]
+    },
+    {
+      "ordinal": 31,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2548150,
+      "header_bytes": 20,
+      "header_sha256": "e0b35d5c2b0486891f1716726809cf4943d7525d9b703160bba8ebbebb467d3d",
+      "data_offset": 2548170,
+      "data_bytes": 23822,
+      "data_sha256": "32940257f7f6b8f9fe7912b5d0d980bafcc3e8982f03c15e5933de781f20593a",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        3,
+        294,
+        2
+      ]
+    },
+    {
+      "ordinal": 32,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2571992,
+      "header_bytes": 20,
+      "header_sha256": "eb8eca3e018e2d9883accbea2b747c80cdfea0007f840dc4b10ad677062a292c",
+      "data_offset": 2572012,
+      "data_bytes": 23822,
+      "data_sha256": "4c846deeb5ad99ebb3f2a07044d16618a1708ccfe23e707ad4461a056249602b",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        4,
+        294,
+        2
+      ]
+    },
+    {
+      "ordinal": 33,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2595834,
+      "header_bytes": 20,
+      "header_sha256": "e0ff5e7b3d23cf1fc723b43352a434ec0dbb0ff59a2c1c69272de7fd911a4b91",
+      "data_offset": 2595854,
+      "data_bytes": 23822,
+      "data_sha256": "3af8f94509696978e0182ceab31593c27ccac736c46478b789ddf6aed1cf9236",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        5,
+        294,
+        2
+      ]
+    },
+    {
+      "ordinal": 34,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2619676,
+      "header_bytes": 20,
+      "header_sha256": "205d8243c76fba316395b904833eec8f37ca41211ccaff8fdc58bad9a68343a6",
+      "data_offset": 2619696,
+      "data_bytes": 23822,
+      "data_sha256": "ed6f921c46fd21b37307537c67198577e8a14ba48a7ecdf37339a6ae8197b91c",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        0,
+        295,
+        2
+      ]
+    },
+    {
+      "ordinal": 35,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2643518,
+      "header_bytes": 20,
+      "header_sha256": "9c9576c7e111b9234024cbc02d406963aee069335cddbe1fbacf59bb722307e9",
+      "data_offset": 2643538,
+      "data_bytes": 23822,
+      "data_sha256": "8a9ea5e5588428f44e0b6b1ee60a86afa632de75d2dd6cb73359648ce00c2541",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        1,
+        295,
+        2
+      ]
+    },
+    {
+      "ordinal": 36,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2667360,
+      "header_bytes": 20,
+      "header_sha256": "1bd67689737f005d5f56c2a4186880fa0a7636daca53dbf30f594cf1258e35a9",
+      "data_offset": 2667380,
+      "data_bytes": 23822,
+      "data_sha256": "f856e89eb60c519171bc65cc4d0f77b5b94bf36f223bdc0303533d5c472f6051",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        2,
+        295,
+        2
+      ]
+    },
+    {
+      "ordinal": 37,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2691202,
+      "header_bytes": 20,
+      "header_sha256": "1a309fb75272ba2950b4c2e4e7dd249b0bfa33f79cfe1a64cdcc59cd08c69e2a",
+      "data_offset": 2691222,
+      "data_bytes": 23822,
+      "data_sha256": "75694b330381aabcd4700d1008be1204f773da0963ac23da7f2113b77d0f0571",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        3,
+        295,
+        2
+      ]
+    },
+    {
+      "ordinal": 38,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2715044,
+      "header_bytes": 20,
+      "header_sha256": "1d6a374fc08b3828bfdd8e5800520ce9c00242a818ab8c33f73d80dbf0a01170",
+      "data_offset": 2715064,
+      "data_bytes": 23822,
+      "data_sha256": "e65fe79ae7427ae948431d803116f63ca874da17205ab011d71a3775f43c9578",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        4,
+        295,
+        2
+      ]
+    },
+    {
+      "ordinal": 39,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2738886,
+      "header_bytes": 20,
+      "header_sha256": "09a4dc5d52237337fa14901548fd60a5f7b1c26bc07c058c176b8903f97a27f8",
+      "data_offset": 2738906,
+      "data_bytes": 23822,
+      "data_sha256": "24dedecb1dc92a4ca75635b80f4bf1ed2c7b555e0e7226aae068e02f6de02177",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        5,
+        295,
+        2
+      ]
+    },
+    {
+      "ordinal": 40,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2762728,
+      "header_bytes": 20,
+      "header_sha256": "5ef9b9c312336d1971289999b44c780b8976aeb4f0c96f49bfa3dbe4ead0d753",
+      "data_offset": 2762748,
+      "data_bytes": 23822,
+      "data_sha256": "29c889e4e51d8506f2bc50101821a7098230f9847e06705d2bb354fe416b2118",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        0,
+        296,
+        2
+      ]
+    },
+    {
+      "ordinal": 41,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2786570,
+      "header_bytes": 20,
+      "header_sha256": "6ffc60b02e54de4b787778951b64b87350d8105c4fac385422dbdc1dc9dadf46",
+      "data_offset": 2786590,
+      "data_bytes": 23822,
+      "data_sha256": "0746095459cc91bc3be716f32468745835b03faad5543c8a4ced897fc50ff221",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        1,
+        296,
+        2
+      ]
+    },
+    {
+      "ordinal": 42,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2810412,
+      "header_bytes": 20,
+      "header_sha256": "c686b43c0a251e65b539604a37469a3ae5de78c46182cac2a5c14139344881e3",
+      "data_offset": 2810432,
+      "data_bytes": 23822,
+      "data_sha256": "198cecd285a9a3b43095abcf5789ec45a4830687e32d70fa6b166eb0024f2739",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        2,
+        296,
+        2
+      ]
+    },
+    {
+      "ordinal": 43,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2834254,
+      "header_bytes": 20,
+      "header_sha256": "b445f02d558db768a342e5d34f1119cf0a657ab6820934eec81f4f088cc45ef5",
+      "data_offset": 2834274,
+      "data_bytes": 23822,
+      "data_sha256": "1820658e77c1f8249a32335ebf9171de3fce7ed9cc8ebe23584913f37851c57d",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        3,
+        296,
+        2
+      ]
+    },
+    {
+      "ordinal": 44,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2858096,
+      "header_bytes": 20,
+      "header_sha256": "eab5749ede4c951426d5559ebf2eac43176f9d52d7775e6f06f0017097a26388",
+      "data_offset": 2858116,
+      "data_bytes": 23822,
+      "data_sha256": "75bcc96c21a994fa460c8d489532f56708d4dc8327c5557edd7b783a6a8bc71c",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        4,
+        296,
+        2
+      ]
+    },
+    {
+      "ordinal": 45,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2881938,
+      "header_bytes": 20,
+      "header_sha256": "1f771ae8f1c69abf1899cd250bc96d68a7b753486b76c1c33607de5a7dd4fa30",
+      "data_offset": 2881958,
+      "data_bytes": 23822,
+      "data_sha256": "f88bd5bc129a34cd4d367e35fd27580da378adcadb79566eac413ffcba172da2",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        5,
+        296,
+        2
+      ]
+    },
+    {
+      "ordinal": 46,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2905780,
+      "header_bytes": 20,
+      "header_sha256": "53d98425e8fd22f63219b7234156303fd9754209cf26def4c256ea87c0924d73",
+      "data_offset": 2905800,
+      "data_bytes": 23822,
+      "data_sha256": "9f9641cc0441656f0067e37849b047d5877877765005c0eb5723bb9b650d7ed5",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        0,
+        9,
+        2
+      ]
+    },
+    {
+      "ordinal": 47,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2929622,
+      "header_bytes": 20,
+      "header_sha256": "fe1bc0b04fc4f102f72587aafe39f4bede22eeb668d1155efaae3f2a1d2e17f9",
+      "data_offset": 2929642,
+      "data_bytes": 23822,
+      "data_sha256": "e24d6285ce43ed03e7f18c4aa12894d2186e55e7f0f3555bec92147f9b136b68",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        1,
+        9,
+        2
+      ]
+    },
+    {
+      "ordinal": 48,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2953464,
+      "header_bytes": 20,
+      "header_sha256": "16862cfe333a6a44d3b14cb412a6fab81d875c561d651fec151f8d8b2a55ab6b",
+      "data_offset": 2953484,
+      "data_bytes": 23822,
+      "data_sha256": "7b2ce38b0cf126a9d16fffbd08399c767643d7b27888e38ca5973a08b443bca9",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        2,
+        9,
+        2
+      ]
+    },
+    {
+      "ordinal": 49,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 2977306,
+      "header_bytes": 20,
+      "header_sha256": "511511175259bf05f0025370b9253cde231efddb00fde520e0b09d0ae96eda50",
+      "data_offset": 2977326,
+      "data_bytes": 23822,
+      "data_sha256": "0c6f17ef2e7675dc0350e13ea8f7ad62713ba6f94e28e0c2551741b8f0aed0a1",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        3,
+        9,
+        2
+      ]
+    },
+    {
+      "ordinal": 50,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3001148,
+      "header_bytes": 20,
+      "header_sha256": "a879e73a998980db83d76f6bef13daa9668ded17ee9302284f183bb0a83c44af",
+      "data_offset": 3001168,
+      "data_bytes": 23822,
+      "data_sha256": "7afd35671b5ab8391fd110fab0d672bde3f32b5c376540d6555063ba981d4804",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        4,
+        9,
+        2
+      ]
+    },
+    {
+      "ordinal": 51,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3024990,
+      "header_bytes": 20,
+      "header_sha256": "50ea5a9d98a2c4fa19d1b3b25cb489b79f48eeb09385fb14cb830fe80fa4cd7a",
+      "data_offset": 3025010,
+      "data_bytes": 23822,
+      "data_sha256": "568e7bb1b43da6c9d0e58d075302a47b8db453deaeee016d2718bc481265a113",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        5,
+        9,
+        2
+      ]
+    },
+    {
+      "ordinal": 52,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3048832,
+      "header_bytes": 20,
+      "header_sha256": "88f6627feed25e43b3a305e06b8bcbbf9b66f1e10d655a609b786d9ded2abbeb",
+      "data_offset": 3048852,
+      "data_bytes": 23822,
+      "data_sha256": "f1ce5b570af9c90d3d813b8664f8cadc4e7d2e7d7db577e621f6da3be6e694fd",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        6,
+        9,
+        2
+      ]
+    },
+    {
+      "ordinal": 53,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3072674,
+      "header_bytes": 20,
+      "header_sha256": "f12f933892e75137425a9aa868a9299dcab281d16b7a36a602c9a8d78c87304e",
+      "data_offset": 3072694,
+      "data_bytes": 23822,
+      "data_sha256": "cbbf881d8528855d539982f75a9bfa25a0e33eef6d8c8f97dab2b6663ac52e5b",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        7,
+        9,
+        2
+      ]
+    },
+    {
+      "ordinal": 54,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3096516,
+      "header_bytes": 20,
+      "header_sha256": "d59cb6c6374753b44ec42fb460ceb75f2b90ce27ec9f4d22c35830b5aa33a102",
+      "data_offset": 3096536,
+      "data_bytes": 23822,
+      "data_sha256": "56c6916857d7daa8c0260adc3b0104113a64f588147743eda7a935420e92a369",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        8,
+        9,
+        2
+      ]
+    },
+    {
+      "ordinal": 55,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3120358,
+      "header_bytes": 20,
+      "header_sha256": "39e0d561fad407dcfeed16ddca1457f03a3b35a11239b7775a3cb783e47067bf",
+      "data_offset": 3120378,
+      "data_bytes": 23822,
+      "data_sha256": "b4f9a6369c387839e14fc846cceb25f76d00bcf5b3f64135a29afb9d1432f7fd",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        9,
+        9,
+        2
+      ]
+    },
+    {
+      "ordinal": 56,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3144200,
+      "header_bytes": 20,
+      "header_sha256": "22a55d9c4f3a77c8e96cb2d4d276b7ceb2340c2c571becd98c28c9272ebdf436",
+      "data_offset": 3144220,
+      "data_bytes": 23822,
+      "data_sha256": "e209bb8dbfa7b07752f76693e2068fef8c30da76cfb90e49234cce0030b55e1d",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        10,
+        9,
+        2
+      ]
+    },
+    {
+      "ordinal": 57,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3168042,
+      "header_bytes": 20,
+      "header_sha256": "d8e7a2253e69d0be62fb6470727f0a6f04ccfe248081dc2b58ad191e435bfa06",
+      "data_offset": 3168062,
+      "data_bytes": 23822,
+      "data_sha256": "e8cc38d8b93cec9a7bf0d50ade2fa8c0e64724ee038b436dfb72ce33724fcf33",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        11,
+        9,
+        2
+      ]
+    },
+    {
+      "ordinal": 58,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3191884,
+      "header_bytes": 20,
+      "header_sha256": "81bece6bf3ccfacc1591415c682a12356d0a42a4475e2674f196afa17cac5684",
+      "data_offset": 3191904,
+      "data_bytes": 23822,
+      "data_sha256": "487e9d750fba8d2c5c1996934e8237e6615e5daef5a057bdbfa7b6f01500d242",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        0,
+        17,
+        2
+      ]
+    },
+    {
+      "ordinal": 59,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3215726,
+      "header_bytes": 20,
+      "header_sha256": "268c8c42ff4231a9fdf31b5548b998d8c7352cee0c8cc11959099c9d17f853ea",
+      "data_offset": 3215746,
+      "data_bytes": 23822,
+      "data_sha256": "8b57ef9c5ee034be1d088e578f5be33c7a414d71f9362819c3ceed5aae2242c4",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        1,
+        17,
+        2
+      ]
+    },
+    {
+      "ordinal": 60,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3239568,
+      "header_bytes": 20,
+      "header_sha256": "6ef235769ab9af93372d04dfac6bb697ae097809a69c1e774b3f328b37c6a967",
+      "data_offset": 3239588,
+      "data_bytes": 23822,
+      "data_sha256": "c858f56f19a8ab8fa7c916bafc3467a3726db2fe45f4b352e3911693a04264e8",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        2,
+        17,
+        2
+      ]
+    },
+    {
+      "ordinal": 61,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3263410,
+      "header_bytes": 20,
+      "header_sha256": "3eb3c52d74a8fbe5445897e2d5341baa0d759a746dfdff9fefd8944ad099f951",
+      "data_offset": 3263430,
+      "data_bytes": 23822,
+      "data_sha256": "49228cb55734d83664f0c9e1ec5c619e3aa6315bf8d2626bd6d22a498fbd373d",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        3,
+        17,
+        2
+      ]
+    },
+    {
+      "ordinal": 62,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3287252,
+      "header_bytes": 20,
+      "header_sha256": "881a862b5e359c140a345a168d649c9ff256e56745ba6ffd14786e48e2003f2c",
+      "data_offset": 3287272,
+      "data_bytes": 23822,
+      "data_sha256": "51b0e898f2cb239fbe263871c9b6dc14aa68480378557723ef0a214302837143",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        4,
+        17,
+        2
+      ]
+    },
+    {
+      "ordinal": 63,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3311094,
+      "header_bytes": 20,
+      "header_sha256": "a12926176809e60930ea336d64f2615475aa93f66f8795af1d70ef26c916a275",
+      "data_offset": 3311114,
+      "data_bytes": 23822,
+      "data_sha256": "61273db723c262ad7757031c21982bc4e45778549790b9d7f8223b677066dba5",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        5,
+        17,
+        2
+      ]
+    },
+    {
+      "ordinal": 64,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3334936,
+      "header_bytes": 20,
+      "header_sha256": "a4e353c2dc57be5b82c392f1f917ead456267670edd5bd52b94abad7a4564add",
+      "data_offset": 3334956,
+      "data_bytes": 23822,
+      "data_sha256": "db6fd1a1124b4e9f940e6f3151743e78c5d6c7e942e8a08792b6079db0b46464",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        6,
+        17,
+        2
+      ]
+    },
+    {
+      "ordinal": 65,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3358778,
+      "header_bytes": 20,
+      "header_sha256": "331d0aad9b6e0cecf85eae8374362a234e80aef7297fa664532244132b1bed96",
+      "data_offset": 3358798,
+      "data_bytes": 23822,
+      "data_sha256": "711c1a5c4fe13870486210c6e564b90f01a2df139d358c236e35d5102cdb2a0b",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        7,
+        17,
+        2
+      ]
+    },
+    {
+      "ordinal": 66,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3382620,
+      "header_bytes": 20,
+      "header_sha256": "e53afc89664e773456464f1d4754311ae3325b1ff8a8b275054488245688d4e7",
+      "data_offset": 3382640,
+      "data_bytes": 23822,
+      "data_sha256": "9c441eb389f6a5d25f4d4f4d7a955ec8a520ead080d1ec63c45be40d389314c8",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        8,
+        17,
+        2
+      ]
+    },
+    {
+      "ordinal": 67,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3406462,
+      "header_bytes": 20,
+      "header_sha256": "4201d22a5c752511b28cb8c021ab5649e9e7fec9ceca5b505a95b34a2bd2a0e2",
+      "data_offset": 3406482,
+      "data_bytes": 23822,
+      "data_sha256": "e2de0ec08506aadbcbe40b9a5a8770b1088f6ab22e7b5b81d60b459507394872",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        9,
+        17,
+        2
+      ]
+    },
+    {
+      "ordinal": 68,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3430304,
+      "header_bytes": 20,
+      "header_sha256": "56a3265b2f87ef5e7774ba79fa060a9cc53dfe4adcc8f60a5fb21b4b0d185d3d",
+      "data_offset": 3430324,
+      "data_bytes": 23822,
+      "data_sha256": "8e844f2d9f44ee68ca7a98765bf5e8bca3f06e25d7169f7948f2607228ce820f",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        10,
+        17,
+        2
+      ]
+    },
+    {
+      "ordinal": 69,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3454146,
+      "header_bytes": 20,
+      "header_sha256": "5be30e298e3e9fb5b3cd1ac1ef242400d779f9e0c70ea74c6b76c1cdf58712b3",
+      "data_offset": 3454166,
+      "data_bytes": 23822,
+      "data_sha256": "d65814feab1f5601d02efa3fc833780c5d90a7cfc315c624d16e45db0586ea1f",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        11,
+        17,
+        2
+      ]
+    },
+    {
+      "ordinal": 70,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3477988,
+      "header_bytes": 20,
+      "header_sha256": "d4c74868b1f088fe5db9ea2b9ea11cde06d632a31861b16482b0c48335997c2f",
+      "data_offset": 3478008,
+      "data_bytes": 23822,
+      "data_sha256": "f4957d0ce97fad58259c0348229e4c12bfd1cbb5a8e79f41e158d0faa486bf00",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        35,
+        0,
+        14,
+        2
+      ]
+    },
+    {
+      "ordinal": 71,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3501830,
+      "header_bytes": 20,
+      "header_sha256": "941e3b413b426ec65eda5990425abfc1e848511b51c45bb825be69a9bb88699d",
+      "data_offset": 3501850,
+      "data_bytes": 23822,
+      "data_sha256": "91d94ccd036966049783460dd06d1a395bfcb76239863b2faed3867d56454f20",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        35,
+        1,
+        14,
+        2
+      ]
+    },
+    {
+      "ordinal": 72,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3525672,
+      "header_bytes": 20,
+      "header_sha256": "5699301982a142c391a287b78ac7d2983a8e2f72e0f1e57e7272ccaa568af1e4",
+      "data_offset": 3525692,
+      "data_bytes": 23822,
+      "data_sha256": "761f56abc86ae34e70463910995962fdb3717654467f1c8a973dfe737d1ff054",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        35,
+        2,
+        14,
+        2
+      ]
+    },
+    {
+      "ordinal": 73,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3549514,
+      "header_bytes": 20,
+      "header_sha256": "59472842ef5303b5b6ac46d26c5583f14273a8f0d6acbe394a9952befd1f8857",
+      "data_offset": 3549534,
+      "data_bytes": 23822,
+      "data_sha256": "53d36ea41eeb0c5ca39063fcd516c430e6e0a20e8cf61da1bc29c2a8933a4a58",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        35,
+        3,
+        14,
+        2
+      ]
+    },
+    {
+      "ordinal": 74,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3573356,
+      "header_bytes": 20,
+      "header_sha256": "cf65400bf7ef4ede52c467ec8c7434de088f0a700d71fa1d4b3df5cc6a0cfa86",
+      "data_offset": 3573376,
+      "data_bytes": 23822,
+      "data_sha256": "a18743e2fa39ccdd2280aa2f2d4784a56e3fbcb0289d9214ffceb28471e26a82",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        35,
+        4,
+        14,
+        2
+      ]
+    },
+    {
+      "ordinal": 75,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3597198,
+      "header_bytes": 20,
+      "header_sha256": "088f854ae8ddcc841664921ddc65de5d1f823eb26418d262ef5a585f472f4263",
+      "data_offset": 3597218,
+      "data_bytes": 23822,
+      "data_sha256": "44ab429ef91a90596b7ba4fd3eba2c292a53e1c062593a7bb3bd4bafa09e2293",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        35,
+        5,
+        14,
+        2
+      ]
+    },
+    {
+      "ordinal": 76,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3621040,
+      "header_bytes": 20,
+      "header_sha256": "0ea583cfd5c12f16570b9ac04e61e4722ec079ebd4c7de7e99253a2096a3bac5",
+      "data_offset": 3621060,
+      "data_bytes": 23822,
+      "data_sha256": "ace96f79cef403af775a2272fd72d8d446e764560adc3ace7a6b08a9e2d7d6c8",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        35,
+        6,
+        14,
+        2
+      ]
+    },
+    {
+      "ordinal": 77,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3644882,
+      "header_bytes": 20,
+      "header_sha256": "c730569cc625c2fc0c5dfc2833ca1e91fbdaa398899f3ee854bfdec08608f087",
+      "data_offset": 3644902,
+      "data_bytes": 23822,
+      "data_sha256": "4e43e27a9b9d7f53de480e3ad135ee1fb7d86a50ee9e64e087839803908efa52",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        35,
+        7,
+        14,
+        2
+      ]
+    },
+    {
+      "ordinal": 78,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3668724,
+      "header_bytes": 20,
+      "header_sha256": "b71dcc3c060bc9095760c79187e9517b7b0194d1b2fefa8a59dcff6b0d33a2c4",
+      "data_offset": 3668744,
+      "data_bytes": 23822,
+      "data_sha256": "8b386d99bd1f79b802c8e6bc0d91bd377b168eda4549eb4463bd41b3be823695",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        35,
+        0,
+        18,
+        2
+      ]
+    },
+    {
+      "ordinal": 79,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3692566,
+      "header_bytes": 20,
+      "header_sha256": "7b84d187399b603dadce17e6b946712cf53ae11c4b7b9768cc40fdcb64f8e122",
+      "data_offset": 3692586,
+      "data_bytes": 23822,
+      "data_sha256": "25844bbe3bd0a883668bb5dc9ef68405509966dc83cf14c6d3e5669844c40c42",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        35,
+        1,
+        18,
+        2
+      ]
+    },
+    {
+      "ordinal": 80,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3716408,
+      "header_bytes": 20,
+      "header_sha256": "33ed33a43d8e75306a5edecaff8cae26c3e14da68f7a337e1bac64bcee9832d2",
+      "data_offset": 3716428,
+      "data_bytes": 23822,
+      "data_sha256": "200c87c2abe395a59d6cbcb9815f99f64fb4bdc8084a9b5ae6c8e78b2f1c8012",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        35,
+        2,
+        18,
+        2
+      ]
+    },
+    {
+      "ordinal": 81,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3740250,
+      "header_bytes": 20,
+      "header_sha256": "71a41b84a5303b25eb8fba42b890d6dd02d40964b1decd7d6ee053b8c3523fc9",
+      "data_offset": 3740270,
+      "data_bytes": 23822,
+      "data_sha256": "632a602d60ebc5bceca6a591d6ab745a9e9579fa75a823ed57309f78be0fb02a",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        35,
+        3,
+        18,
+        2
+      ]
+    },
+    {
+      "ordinal": 82,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3764092,
+      "header_bytes": 20,
+      "header_sha256": "2ddffbbfa87fa0dae4270c847114eec188d1d12c1d85eadd1be9b5a6b25c8894",
+      "data_offset": 3764112,
+      "data_bytes": 23822,
+      "data_sha256": "e4631c5601d1129a1ced3520d6288210b57fae65873f85d976670a6d7fd32d5a",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        35,
+        4,
+        18,
+        2
+      ]
+    },
+    {
+      "ordinal": 83,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3787934,
+      "header_bytes": 20,
+      "header_sha256": "0c4577c06fe92b71365ca17c7c846f9e6f9f63fbf4cbf60f5df6c3aa7b0323db",
+      "data_offset": 3787954,
+      "data_bytes": 23822,
+      "data_sha256": "86ac80090c53bc9c5672ac1a0e6a8b3c9f8793d1b26f94c71d2cc4ccd08d8fa8",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        35,
+        5,
+        18,
+        2
+      ]
+    },
+    {
+      "ordinal": 84,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3811776,
+      "header_bytes": 20,
+      "header_sha256": "5c2088ee6c2391e4f45abb4f61ca49e39fc503fbf32cc65666a714b655c42b03",
+      "data_offset": 3811796,
+      "data_bytes": 23822,
+      "data_sha256": "c40b79320ebeda690b127ba98ff393d947a603244456245a5241799ca2723355",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        35,
+        6,
+        18,
+        2
+      ]
+    },
+    {
+      "ordinal": 85,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3835618,
+      "header_bytes": 20,
+      "header_sha256": "5993036dca88f570387e84fc4868a0988bcd29c43d9942109fae6fcdd1a67deb",
+      "data_offset": 3835638,
+      "data_bytes": 23822,
+      "data_sha256": "561c6c98838eb40e4e5f2f22c77709a1034e8677ffeac1022b323bef18104bda",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        35,
+        7,
+        18,
+        2
+      ]
+    },
+    {
+      "ordinal": 86,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3859460,
+      "header_bytes": 20,
+      "header_sha256": "72f3e383c1b593844ad938fa048afb7ab42b88a74f84cbe975932e11bf5a80d7",
+      "data_offset": 3859480,
+      "data_bytes": 23822,
+      "data_sha256": "ed069413e7b3bda8dda2a1a4213da7f70d29b87964cb118d2b94bb9a73f48a2f",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        0,
+        3,
+        2
+      ]
+    },
+    {
+      "ordinal": 87,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3883302,
+      "header_bytes": 20,
+      "header_sha256": "a23170082f3a2996c280c3ea908f6747955818bb6e8a8c78005e56c1ea5e1abd",
+      "data_offset": 3883322,
+      "data_bytes": 23822,
+      "data_sha256": "8384113b290391c3ea63d76003a0cc13fd95bfa4956f074ae118ac6f010e742c",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        1,
+        3,
+        2
+      ]
+    },
+    {
+      "ordinal": 88,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3907144,
+      "header_bytes": 20,
+      "header_sha256": "a8f4c071ec2f580c0b698811ce27b73a17975f23205a6e04fc7d1d4a14b16c62",
+      "data_offset": 3907164,
+      "data_bytes": 23822,
+      "data_sha256": "fd989b95a427f09005ccaf363393923ec0b1d0fe85674a56b087cc60ac9bed03",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        2,
+        3,
+        2
+      ]
+    },
+    {
+      "ordinal": 89,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3930986,
+      "header_bytes": 20,
+      "header_sha256": "0ae024ddc987fb220281db32a652a3413026cd634afe43d75a66a16a6aa04ab5",
+      "data_offset": 3931006,
+      "data_bytes": 23822,
+      "data_sha256": "bb44026627b667ce33cb99750d312e8b04c76fdd869ce3d251d78fac7ee2c5e5",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        3,
+        3,
+        2
+      ]
+    },
+    {
+      "ordinal": 90,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3954828,
+      "header_bytes": 20,
+      "header_sha256": "81a9c1674841546798a9161b965a6b5f464b1138f610099a069882b610f149a8",
+      "data_offset": 3954848,
+      "data_bytes": 23822,
+      "data_sha256": "d1fafaee2b4ee079703cb5f2e92e75c8837ac6c51bc097a9789cfda7afc0506d",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        0,
+        43,
+        2
+      ]
+    },
+    {
+      "ordinal": 91,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 3978670,
+      "header_bytes": 20,
+      "header_sha256": "c0efffd75a6668b19d3e97549ecdcd07568c9e8368ff2fc5ffdffc2970cdda4c",
+      "data_offset": 3978690,
+      "data_bytes": 23822,
+      "data_sha256": "3f4080f357549100aa989c611aa2ac5dbea332adbd4afdd1b098962828dfc1ca",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        1,
+        43,
+        2
+      ]
+    },
+    {
+      "ordinal": 92,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4002512,
+      "header_bytes": 20,
+      "header_sha256": "9fcdc96c3d28e280ceb1a0f4da712fd53691b280b7f0201c7d0c19d9d352c38e",
+      "data_offset": 4002532,
+      "data_bytes": 23822,
+      "data_sha256": "51916cefdc29c1758c129a3632170ecc6670ad3d9d64bba47ff86dc7754e258a",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        2,
+        43,
+        2
+      ]
+    },
+    {
+      "ordinal": 93,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4026354,
+      "header_bytes": 20,
+      "header_sha256": "8a1b1b5837f2b28a855712d161727c6ccb88756c458fcd00690e60152d320f9f",
+      "data_offset": 4026374,
+      "data_bytes": 23822,
+      "data_sha256": "9bde44954eaec82d52c5cbdfcbb6c20e8cb9a83ee5fb058af6c2bce6d815a77e",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        3,
+        43,
+        2
+      ]
+    },
+    {
+      "ordinal": 94,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4050196,
+      "header_bytes": 20,
+      "header_sha256": "63b907320e0bec149c6dc12290bd3faaee3c675fadaa754bd5a94b5060555744",
+      "data_offset": 4050216,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        0,
+        116,
+        2
+      ]
+    },
+    {
+      "ordinal": 95,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4074038,
+      "header_bytes": 20,
+      "header_sha256": "2adde50a1f5320b3ebfc50c4e19c7c778ebdf6d955ab97dffe2f5ae8f494dba0",
+      "data_offset": 4074058,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        1,
+        116,
+        2
+      ]
+    },
+    {
+      "ordinal": 96,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4097880,
+      "header_bytes": 20,
+      "header_sha256": "d1f6c5c4d5cba2b5329cc138ab99dc2745c2e507e52705d0ee34a6057d1376c6",
+      "data_offset": 4097900,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        2,
+        116,
+        2
+      ]
+    },
+    {
+      "ordinal": 97,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4121722,
+      "header_bytes": 20,
+      "header_sha256": "5aa966c5deaa6f860e572d1c8ecaf1bb96a01dad325db292779285e28618ccd3",
+      "data_offset": 4121742,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        3,
+        116,
+        2
+      ]
+    },
+    {
+      "ordinal": 98,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4145564,
+      "header_bytes": 20,
+      "header_sha256": "ab9804266a7c8dca4f64a2c48810167b0dd21c65686f6a9affc0393136f745c6",
+      "data_offset": 4145584,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        4,
+        116,
+        2
+      ]
+    },
+    {
+      "ordinal": 99,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4169406,
+      "header_bytes": 20,
+      "header_sha256": "80559d441665eef710f21f51a5fe1869bbb88649c05ab23322cbed3fb3cf45e4",
+      "data_offset": 4169426,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        5,
+        116,
+        2
+      ]
+    },
+    {
+      "ordinal": 100,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4193248,
+      "header_bytes": 20,
+      "header_sha256": "12a9b4274a7c781a5c5d193b494bef819bb8609e8b50facfb5b86f60da2924c8",
+      "data_offset": 4193268,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        6,
+        116,
+        2
+      ]
+    },
+    {
+      "ordinal": 101,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4217090,
+      "header_bytes": 20,
+      "header_sha256": "5d609343fafc085bbc8194a9a0379b44e414d207dd567c519d317c455fd3c276",
+      "data_offset": 4217110,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        7,
+        116,
+        2
+      ]
+    },
+    {
+      "ordinal": 102,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4240932,
+      "header_bytes": 20,
+      "header_sha256": "38d809cc0138f9e959af6d01692c142e1edcf207493fba3db7de32f827416035",
+      "data_offset": 4240952,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        8,
+        116,
+        2
+      ]
+    },
+    {
+      "ordinal": 103,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4264774,
+      "header_bytes": 20,
+      "header_sha256": "eba6b3ac74e52ac24e0f84c146169eacd5ded88b57d86789d659013eebcf84af",
+      "data_offset": 4264794,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        9,
+        116,
+        2
+      ]
+    },
+    {
+      "ordinal": 104,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4288616,
+      "header_bytes": 20,
+      "header_sha256": "d369afb06bd163a52fbf85e38dd234cb016baf902793a5005c84f49321350797",
+      "data_offset": 4288636,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        10,
+        116,
+        2
+      ]
+    },
+    {
+      "ordinal": 105,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4312458,
+      "header_bytes": 20,
+      "header_sha256": "91ad4d588845452a7955d695bf118095a74711e50ce3daa3834bb6f774de97fb",
+      "data_offset": 4312478,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        11,
+        116,
+        2
+      ]
+    },
+    {
+      "ordinal": 106,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4336300,
+      "header_bytes": 20,
+      "header_sha256": "b442a6c8878bb0b6cc3a6ba9b416cde0d23d729e4443fee40fa94040ae3ef31c",
+      "data_offset": 4336320,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        0,
+        117,
+        2
+      ]
+    },
+    {
+      "ordinal": 107,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4360142,
+      "header_bytes": 20,
+      "header_sha256": "8a888394ac7a73ea529421f514c9122418ef1acfb286effc67b2bc6093010a31",
+      "data_offset": 4360162,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        1,
+        117,
+        2
+      ]
+    },
+    {
+      "ordinal": 108,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4383984,
+      "header_bytes": 20,
+      "header_sha256": "f9088c6cd4b275629bfad38785122ea0629b6c9ca141cf81f5983b8eb038cb74",
+      "data_offset": 4384004,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        2,
+        117,
+        2
+      ]
+    },
+    {
+      "ordinal": 109,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4407826,
+      "header_bytes": 20,
+      "header_sha256": "9b33d4161ac9c61f5e14e7e36bee8a5e9cce5b3b537575625d032f9628d36d8b",
+      "data_offset": 4407846,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        3,
+        117,
+        2
+      ]
+    },
+    {
+      "ordinal": 110,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4431668,
+      "header_bytes": 20,
+      "header_sha256": "1a349ac4b8d7bcc825c26f3a0cced3a1770961cc630f2ef230b0e79bd0749df1",
+      "data_offset": 4431688,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        4,
+        117,
+        2
+      ]
+    },
+    {
+      "ordinal": 111,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4455510,
+      "header_bytes": 20,
+      "header_sha256": "e3343af5787db0803c8bcc2958381e96df83ebdba8f51482cc33b5f6fc3943c4",
+      "data_offset": 4455530,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        5,
+        117,
+        2
+      ]
+    },
+    {
+      "ordinal": 112,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4479352,
+      "header_bytes": 20,
+      "header_sha256": "17931cfce6a427b5613475e991ead6e548bec242eea8554ed9b230b9449f5b7b",
+      "data_offset": 4479372,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        6,
+        117,
+        2
+      ]
+    },
+    {
+      "ordinal": 113,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4503194,
+      "header_bytes": 20,
+      "header_sha256": "7979da7a3f09cc9deaaa8f233ede274df927e6428d3079b52de503c92a041a3d",
+      "data_offset": 4503214,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        7,
+        117,
+        2
+      ]
+    },
+    {
+      "ordinal": 114,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4527036,
+      "header_bytes": 20,
+      "header_sha256": "f6a17c0dcc099f860a41817a2ce6d69eddc26d27a5e7b74df47550078b241076",
+      "data_offset": 4527056,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        8,
+        117,
+        2
+      ]
+    },
+    {
+      "ordinal": 115,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4550878,
+      "header_bytes": 20,
+      "header_sha256": "86d853bb5c59ab5fefda9e69bd5577af1bd374cf82d46fd37fc84d1108be3728",
+      "data_offset": 4550898,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        9,
+        117,
+        2
+      ]
+    },
+    {
+      "ordinal": 116,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4574720,
+      "header_bytes": 20,
+      "header_sha256": "45145f2e186e8e14511f9bea138981dfff44568ccf815f8b0f3acabd36f8566e",
+      "data_offset": 4574740,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        10,
+        117,
+        2
+      ]
+    },
+    {
+      "ordinal": 117,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4598562,
+      "header_bytes": 20,
+      "header_sha256": "eababfc6e91ea335bab41e8204450e186906d0660c54c27b97fad92e1add181b",
+      "data_offset": 4598582,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        11,
+        117,
+        2
+      ]
+    },
+    {
+      "ordinal": 118,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4622404,
+      "header_bytes": 20,
+      "header_sha256": "1844c4c27fa3d8f026216f55bc573022e1306dacd0028ca85511f4eda48b318a",
+      "data_offset": 4622424,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        0,
+        118,
+        2
+      ]
+    },
+    {
+      "ordinal": 119,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4646246,
+      "header_bytes": 20,
+      "header_sha256": "1daa9e25ff8c40beb39fa81009b83fbdb3474e25feaf340b9f4100f287ce9784",
+      "data_offset": 4646266,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        1,
+        118,
+        2
+      ]
+    },
+    {
+      "ordinal": 120,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4670088,
+      "header_bytes": 20,
+      "header_sha256": "e5a2e482c394839c6142bd71d20b4d2b022f3c5baa77bc2ad40d835877717479",
+      "data_offset": 4670108,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        2,
+        118,
+        2
+      ]
+    },
+    {
+      "ordinal": 121,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4693930,
+      "header_bytes": 20,
+      "header_sha256": "d7213b84fd22fcfcb7a9feb68c72ddbc4c8372a443ef692da1d1dafc46bd25cc",
+      "data_offset": 4693950,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        3,
+        118,
+        2
+      ]
+    },
+    {
+      "ordinal": 122,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4717772,
+      "header_bytes": 20,
+      "header_sha256": "784ecb44297147b420d034191ba4e012d4a1aed9afc8fb1cbc94fe7bd3f038a3",
+      "data_offset": 4717792,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        4,
+        118,
+        2
+      ]
+    },
+    {
+      "ordinal": 123,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4741614,
+      "header_bytes": 20,
+      "header_sha256": "191469afcda2122e41ae94c2405b751ce904c1d56b33deb6a82ef187afea02aa",
+      "data_offset": 4741634,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        5,
+        118,
+        2
+      ]
+    },
+    {
+      "ordinal": 124,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4765456,
+      "header_bytes": 20,
+      "header_sha256": "78b4bebaeea8300cccb4aeee8303e1a63c0e6229fc7ac8a92daf736080a7ceb8",
+      "data_offset": 4765476,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        6,
+        118,
+        2
+      ]
+    },
+    {
+      "ordinal": 125,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4789298,
+      "header_bytes": 20,
+      "header_sha256": "9de0a40e06ff230f32ab81736f2d654e969bf40b16a68845d0906c83f918ad85",
+      "data_offset": 4789318,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        7,
+        118,
+        2
+      ]
+    },
+    {
+      "ordinal": 126,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4813140,
+      "header_bytes": 20,
+      "header_sha256": "124ebd3eb1c91cf6bf2fcbe566802d91c5da6c6d8d95afdb599e291e9f527653",
+      "data_offset": 4813160,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        8,
+        118,
+        2
+      ]
+    },
+    {
+      "ordinal": 127,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4836982,
+      "header_bytes": 20,
+      "header_sha256": "cb27c5e3a5c76f6324c61c9e68e56f6f19bdb7002208acec963572118df7df27",
+      "data_offset": 4837002,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        9,
+        118,
+        2
+      ]
+    },
+    {
+      "ordinal": 128,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4860824,
+      "header_bytes": 20,
+      "header_sha256": "a34aa56d6b83262686b4b28da140c0f5d46b51626ea7757b4e2d5460ae68d7b8",
+      "data_offset": 4860844,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        10,
+        118,
+        2
+      ]
+    },
+    {
+      "ordinal": 129,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4884666,
+      "header_bytes": 20,
+      "header_sha256": "66c23ac0b873ef0120e55a0eddb7dddc6cfa2cbcbebd6fbaf01246adafceabcf",
+      "data_offset": 4884686,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        9,
+        11,
+        118,
+        2
+      ]
+    },
+    {
+      "ordinal": 130,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4908508,
+      "header_bytes": 20,
+      "header_sha256": "797d992bd194598d0fb4d0d6b86d749272df99b87b4ae9b7d637c8d3c4c39a84",
+      "data_offset": 4908528,
+      "data_bytes": 23822,
+      "data_sha256": "78d27be9b1b1f1d13f46f67a05d2c51f78a1e2a7dba1804a5c0d02dc770d42e0",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        0,
+        256,
+        2
+      ]
+    },
+    {
+      "ordinal": 131,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4932350,
+      "header_bytes": 20,
+      "header_sha256": "b3139ca9fcb887b72f379564c73fbced7d2b8d5e20383ea2af7398a571205d54",
+      "data_offset": 4932370,
+      "data_bytes": 23822,
+      "data_sha256": "621634f60a009d5581d7d3c9e2363a1ff084e63d9ab5209e5a8176d555ca3107",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        1,
+        256,
+        2
+      ]
+    },
+    {
+      "ordinal": 132,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4956192,
+      "header_bytes": 20,
+      "header_sha256": "c022501916ecc5e13fff2f888b3d982bff437082f73117ade2c4e6cb2031e7ba",
+      "data_offset": 4956212,
+      "data_bytes": 23822,
+      "data_sha256": "e6543447013423aa25a3ed14d16a248ff4413a39bbdd5a74519bfa047c605ad9",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        2,
+        256,
+        2
+      ]
+    },
+    {
+      "ordinal": 133,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 4980034,
+      "header_bytes": 20,
+      "header_sha256": "c80f616e225671275598fa353fa303c0aa28f8d8ca4533aeeaeab225487dfc7b",
+      "data_offset": 4980054,
+      "data_bytes": 23822,
+      "data_sha256": "69ed3737a349eec27ff20683af62ae293eb112b21af3aec9e27d6990d11a7443",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        3,
+        256,
+        2
+      ]
+    },
+    {
+      "ordinal": 134,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5003876,
+      "header_bytes": 20,
+      "header_sha256": "df5487faf0f462b2b356998cd064006778613c631b1ee1dfeffd1155abefb592",
+      "data_offset": 5003896,
+      "data_bytes": 23822,
+      "data_sha256": "0842ee5e9d32617efd8b18b062075285da0e5d73e56e48854b6aa0f3702e8c22",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        4,
+        256,
+        2
+      ]
+    },
+    {
+      "ordinal": 135,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5027718,
+      "header_bytes": 20,
+      "header_sha256": "5ac809aaa2bd60bd0d16a5572ce68cf1ddc08d829ed90d43e6096f2742bc9b9e",
+      "data_offset": 5027738,
+      "data_bytes": 23822,
+      "data_sha256": "6a80efc1a5298b2f47fab79561291af72921f6ee166ad338158270956d87fadb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        49,
+        5,
+        256,
+        2
+      ]
+    },
+    {
+      "ordinal": 136,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5051560,
+      "header_bytes": 20,
+      "header_sha256": "4e901b22240b8bbec6f1b6dee49d0d4f4fc1eb4cf4086b87f1cb88f2878d5fc7",
+      "data_offset": 5051580,
+      "data_bytes": 23822,
+      "data_sha256": "b7a42c7b0c44e882dd5474cd7ccf9269b04b0b5d41b3ab0408d04792c19caef4",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        0,
+        0,
+        24,
+        2
+      ]
+    },
+    {
+      "ordinal": 137,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5075402,
+      "header_bytes": 20,
+      "header_sha256": "4d49a8da6c571d30c04616d57e6835a0b5cc48145b21c4474965f64219c7e11a",
+      "data_offset": 5075422,
+      "data_bytes": 23822,
+      "data_sha256": "fe3e10dea35b9d0c4304d926b7397181cb9870192e5fbfc0563ad53857702cd1",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        8,
+        0,
+        15,
+        2
+      ]
+    },
+    {
+      "ordinal": 138,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5099244,
+      "header_bytes": 20,
+      "header_sha256": "35bb33434d4c27d6ef94f74d06e904e83e079131ce0977ccd86f48ae30a17fd1",
+      "data_offset": 5099264,
+      "data_bytes": 23822,
+      "data_sha256": "03d54227fa82d54c9f1253d8893196c6226d0b89d9a474d5b04cd6a8a638fd57",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        8,
+        1,
+        15,
+        2
+      ]
+    },
+    {
+      "ordinal": 139,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5123086,
+      "header_bytes": 20,
+      "header_sha256": "0381713c3e28de1555e92271d0072a5781513175b28ef120d864d95a1bec72fb",
+      "data_offset": 5123106,
+      "data_bytes": 23822,
+      "data_sha256": "c495c05ae12d5ed9cccb3bf143746d018179db02cd848f758b41b34799fcff54",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        8,
+        2,
+        15,
+        2
+      ]
+    },
+    {
+      "ordinal": 140,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5146928,
+      "header_bytes": 20,
+      "header_sha256": "b2ea5641d6dc8582638547d75f0115a6d334210bea4d60a88e85ef74d7d312dc",
+      "data_offset": 5146948,
+      "data_bytes": 23822,
+      "data_sha256": "40fe72b54da661bb2f96bbfc965e47660febc9580e37034360834b6bf519b480",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        8,
+        3,
+        15,
+        2
+      ]
+    },
+    {
+      "ordinal": 141,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5170770,
+      "header_bytes": 20,
+      "header_sha256": "35090118e95375bc194a67271867fadeac341a7cec7170136108944db7bf0dd6",
+      "data_offset": 5170790,
+      "data_bytes": 23822,
+      "data_sha256": "d0ea29c40b2e1baf1a3f1f6c5a399206b20dba6b632074762cbcf84982fb4d35",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        8,
+        4,
+        15,
+        2
+      ]
+    },
+    {
+      "ordinal": 142,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5194612,
+      "header_bytes": 20,
+      "header_sha256": "2ab7f8a7e276a489ed7e94a13ce6c324ce02b32b661c880c72284e56d1846279",
+      "data_offset": 5194632,
+      "data_bytes": 23822,
+      "data_sha256": "15a6c997a467b89326ac682c194158a77fd32bff7a8391577e1d42f75e90e87a",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        8,
+        5,
+        15,
+        2
+      ]
+    },
+    {
+      "ordinal": 143,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5218454,
+      "header_bytes": 20,
+      "header_sha256": "004b094acf367a59a05111f9bc256551e35e1e839f77433051b897ee11ffff7b",
+      "data_offset": 5218474,
+      "data_bytes": 23822,
+      "data_sha256": "8a5d1f17d7043d27be93c49a6d7e7f8ffd907fb74b36026ccf30b2ab27326e23",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        8,
+        6,
+        15,
+        2
+      ]
+    },
+    {
+      "ordinal": 144,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5242296,
+      "header_bytes": 20,
+      "header_sha256": "00337056e3e3a53a8552d7b486359ffe4850114c0b10278fecf53d29bd08e44e",
+      "data_offset": 5242316,
+      "data_bytes": 23822,
+      "data_sha256": "488b52d7f03e316f97fb5d7e16c3c199b5af72bb41df149930dd40c58fc811a8",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        8,
+        7,
+        15,
+        2
+      ]
+    },
+    {
+      "ordinal": 145,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5266138,
+      "header_bytes": 20,
+      "header_sha256": "27b48d1aff2e4e0d8c72028dbf3b25e9fba239befb9886ca35bab59fd43d9816",
+      "data_offset": 5266158,
+      "data_bytes": 23822,
+      "data_sha256": "4cd36a9e1a9e5feb4b8484409a5e711c5bb876e268ea24e8743761860597b14c",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        8,
+        8,
+        15,
+        2
+      ]
+    },
+    {
+      "ordinal": 146,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5289980,
+      "header_bytes": 20,
+      "header_sha256": "02d053af3455ee7561f9a5eba88a0fb8be784ff89796483a0aece8d94f64d9ca",
+      "data_offset": 5290000,
+      "data_bytes": 23822,
+      "data_sha256": "f384e26e1b589bf8bd95f3c07c9d1108359adafc93b8b3f85c6c7584eab6183a",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        8,
+        9,
+        15,
+        2
+      ]
+    },
+    {
+      "ordinal": 147,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5313822,
+      "header_bytes": 20,
+      "header_sha256": "af4128bb5dc4dd88e1ae0af747fca617750f2e78dbed1ea8372a9b5bc4e05847",
+      "data_offset": 5313842,
+      "data_bytes": 23822,
+      "data_sha256": "c6bd5e92755aa5846dca31f38090927a2186893ad0ddec72325a354ff4db2a06",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        8,
+        10,
+        15,
+        2
+      ]
+    },
+    {
+      "ordinal": 148,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5337664,
+      "header_bytes": 20,
+      "header_sha256": "8cdf28399155e33f6003ab03c7bc0998b346379a99e47d8002af0f519b6a9dc0",
+      "data_offset": 5337684,
+      "data_bytes": 23822,
+      "data_sha256": "89cdbd5cf4b73d165f61bbacd1540878fd7e40b851a92791e36246939aecd480",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        8,
+        11,
+        15,
+        2
+      ]
+    },
+    {
+      "ordinal": 149,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5361506,
+      "header_bytes": 20,
+      "header_sha256": "c9eb672c2521a86a8f6c38d189f6f76679501ed359caff1dfe84e9ff28caceca",
+      "data_offset": 5361526,
+      "data_bytes": 23822,
+      "data_sha256": "e4d7c940e44a4f3e4d326e36a12d4e65e415dc8672dcd4c2780ab3d8e9a5c5be",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        0,
+        39,
+        2
+      ]
+    },
+    {
+      "ordinal": 150,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5385348,
+      "header_bytes": 20,
+      "header_sha256": "5a03bc10ec236e9a70084aa18f634144ef0a4ee21de585122ca3510936cfbd63",
+      "data_offset": 5385368,
+      "data_bytes": 23822,
+      "data_sha256": "4cc62f8e6bc0bd1b00e802f2e32a76a1c924451068d8e38a9db4dfe081d1d2fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        1,
+        39,
+        2
+      ]
+    },
+    {
+      "ordinal": 151,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5409190,
+      "header_bytes": 20,
+      "header_sha256": "1b93fcbf4bf9e78885902e1e9b81ddefc757aa2c3014074e35c05f8fe1523189",
+      "data_offset": 5409210,
+      "data_bytes": 23822,
+      "data_sha256": "bce92128d29c179ae5e8e6ad0334aafe1cc6d277bf4d34b962815a26fdfb9fcf",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        2,
+        39,
+        2
+      ]
+    },
+    {
+      "ordinal": 152,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5433032,
+      "header_bytes": 20,
+      "header_sha256": "03bd167bf6f353ce43f39d1ba9ac885bdafdf711c8aab064c641c7859e880db0",
+      "data_offset": 5433052,
+      "data_bytes": 23822,
+      "data_sha256": "fba75fe900711f21c3f90638eb38d94589a9baabf665b712157ca9c0cd8a1c3a",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        3,
+        39,
+        2
+      ]
+    },
+    {
+      "ordinal": 153,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5456874,
+      "header_bytes": 20,
+      "header_sha256": "d795757e436a2e9cca60ccb256bd98b5434b38af8c421c505da2c1bce2db4711",
+      "data_offset": 5456894,
+      "data_bytes": 23822,
+      "data_sha256": "61d34b0cd35be661cda6d5509b5c85ccc13b8cb92311329888051c9567b2932b",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        4,
+        39,
+        2
+      ]
+    },
+    {
+      "ordinal": 154,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5480716,
+      "header_bytes": 20,
+      "header_sha256": "74fb26b94a2322d259c8048477b7ccf551f714d4754f3b0cba9fc81dcc1ca66f",
+      "data_offset": 5480736,
+      "data_bytes": 23822,
+      "data_sha256": "4715a8bb248618b4a676f1dd898c9116e6e4a9dba8eaef941fd4eed889782f6b",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        5,
+        39,
+        2
+      ]
+    },
+    {
+      "ordinal": 155,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5504558,
+      "header_bytes": 20,
+      "header_sha256": "7988bcc083bd219262ada1223d08e994485b99ce7c7cb49273335656306d192c",
+      "data_offset": 5504578,
+      "data_bytes": 23822,
+      "data_sha256": "69c0279847fe6d086b07abf25f67b353954903faeaec25ac31559792a44d9a91",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        6,
+        39,
+        2
+      ]
+    },
+    {
+      "ordinal": 156,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5528400,
+      "header_bytes": 20,
+      "header_sha256": "f39630a4acd5d693ba7411501ff97d67936c0f4ed12e02a8b36996cbc91ba834",
+      "data_offset": 5528420,
+      "data_bytes": 23822,
+      "data_sha256": "85e3e011195fd45a0eb309338b1c00e570fa2c367a2850e9215f043e525a5564",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        7,
+        39,
+        2
+      ]
+    },
+    {
+      "ordinal": 157,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5552242,
+      "header_bytes": 20,
+      "header_sha256": "eb88ec983fe477dabb32150c8a6afd376015af056f98c9a31211699d626f09d6",
+      "data_offset": 5552262,
+      "data_bytes": 23822,
+      "data_sha256": "ebe3bc1031ab656013828f4b8dbb3335088ba1cec187c29d9e3102d89716cd38",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        8,
+        39,
+        2
+      ]
+    },
+    {
+      "ordinal": 158,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5576084,
+      "header_bytes": 20,
+      "header_sha256": "aae71ea037b1c09e7a6a2dbaa127cfb498c4591f1f9d89a6d2a6b37ddc300c9f",
+      "data_offset": 5576104,
+      "data_bytes": 23822,
+      "data_sha256": "f05e19941aabfbc3af03d7fb4eb149e63c3d759270f10d51dd7881158d2e5725",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        9,
+        39,
+        2
+      ]
+    },
+    {
+      "ordinal": 159,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5599926,
+      "header_bytes": 20,
+      "header_sha256": "46fb3287ad8af67631b72a4988507029b026903d4d8471dcc69f6cd62205ecae",
+      "data_offset": 5599946,
+      "data_bytes": 23822,
+      "data_sha256": "ade22dd78056e05fa6dab866a9ba9c36c9d8c8cb07dc903ac4e5e6ec46cce2c8",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        10,
+        39,
+        2
+      ]
+    },
+    {
+      "ordinal": 160,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5623768,
+      "header_bytes": 20,
+      "header_sha256": "f112ce1b6bc08b11f34511b46cf987d1de579cc0fe14ffe3fda5d841984251c3",
+      "data_offset": 5623788,
+      "data_bytes": 23822,
+      "data_sha256": "8c684d13f7653fe535ca716fcd0da2b7a5e82e30319f8207d41ae5cf264ff326",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        10,
+        11,
+        39,
+        2
+      ]
+    },
+    {
+      "ordinal": 161,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5647610,
+      "header_bytes": 20,
+      "header_sha256": "bc8f465e68e29c9b48665f8dcd195ddc6cbd08fdfb0dae200446d96a1f203bae",
+      "data_offset": 5647630,
+      "data_bytes": 23822,
+      "data_sha256": "db737baa8bce3d3dc4243d7aecceaec877dc5e32dc90d802f5447d8a54446e60",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        0,
+        99,
+        2
+      ]
+    },
+    {
+      "ordinal": 162,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5671452,
+      "header_bytes": 20,
+      "header_sha256": "d9cf1feb0b07bb98edccb82051eee436b60b6304bbe944ec6c129d05c2694ba8",
+      "data_offset": 5671472,
+      "data_bytes": 23822,
+      "data_sha256": "0783555c37570926e933fb6aa3a18bd6d1c2c76b3e47153a71aead708df82ea8",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        1,
+        99,
+        2
+      ]
+    },
+    {
+      "ordinal": 163,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5695294,
+      "header_bytes": 20,
+      "header_sha256": "9a42728073a14542497255f8d1753b2955ae9a5dc40cf98fe4e126a226fa896b",
+      "data_offset": 5695314,
+      "data_bytes": 23822,
+      "data_sha256": "ad747135490fbec6dab84edf9a59982a9cbeafe3aa4a48eb60bb14e2a18a43fd",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        2,
+        99,
+        2
+      ]
+    },
+    {
+      "ordinal": 164,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5719136,
+      "header_bytes": 20,
+      "header_sha256": "4457843fff03a5fe0d15815970617baba7c1571cb8491a20e098ee2778930751",
+      "data_offset": 5719156,
+      "data_bytes": 23822,
+      "data_sha256": "871dbbed42e0f15841456c16f036ab0dd89ca55709182c3b6cde8b4f9574dc30",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        3,
+        99,
+        2
+      ]
+    },
+    {
+      "ordinal": 165,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5742978,
+      "header_bytes": 20,
+      "header_sha256": "4a013bc427b30440036c3f36b331d75560fce59b6c6a910da1e168e457aa0143",
+      "data_offset": 5742998,
+      "data_bytes": 23822,
+      "data_sha256": "08026b0a75a50001a21e6e1cef261b487b981afe0827789a7242eafe638a0299",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        0,
+        100,
+        2
+      ]
+    },
+    {
+      "ordinal": 166,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5766820,
+      "header_bytes": 20,
+      "header_sha256": "97df7e0bfef0e4a0aa01c73ce8b073100b01a93b2258e366a8b91c9dce311da8",
+      "data_offset": 5766840,
+      "data_bytes": 23822,
+      "data_sha256": "d262f21e0fe0d10fa76f0f3606d300ce0d43099510af21b5f98f506cc0df6f2a",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        1,
+        100,
+        2
+      ]
+    },
+    {
+      "ordinal": 167,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5790662,
+      "header_bytes": 20,
+      "header_sha256": "739fd32eb8a1f9280708b07b646a96c89b4ea7961ea62b6ec8559824fb7f3e8a",
+      "data_offset": 5790682,
+      "data_bytes": 23822,
+      "data_sha256": "233d4a05e24f3609fdefda7cdbfa49f2ecb3f486316780b655e7092306f67476",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        2,
+        100,
+        2
+      ]
+    },
+    {
+      "ordinal": 168,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5814504,
+      "header_bytes": 20,
+      "header_sha256": "ece5b339f758aff31c4bfe641453f831ef3989c6dee94e3b28f8764d70c9a146",
+      "data_offset": 5814524,
+      "data_bytes": 23822,
+      "data_sha256": "92b61f22d03089ec7bf1268edf54867afe06eb5916d15e3865538163037baaee",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        3,
+        100,
+        2
+      ]
+    },
+    {
+      "ordinal": 169,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5838346,
+      "header_bytes": 20,
+      "header_sha256": "d8eceb709df7aff835144e97e8bc9b5754133b54c1dbe9b477f1f5da2e2cb008",
+      "data_offset": 5838366,
+      "data_bytes": 23822,
+      "data_sha256": "7447826046f246a0a7bca12f4414a59c3d622b2bd714e86bb1d67d2835b41463",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        0,
+        101,
+        2
+      ]
+    },
+    {
+      "ordinal": 170,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5862188,
+      "header_bytes": 20,
+      "header_sha256": "79753a5c8496de7490de1f1a7032e7a714b4c3180c4337d7e2ce83b15e7c230d",
+      "data_offset": 5862208,
+      "data_bytes": 23822,
+      "data_sha256": "125b26332c9fcc5c7e33c94744a50d19cd03120124dcc594ba8c59149c3ff5db",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        1,
+        101,
+        2
+      ]
+    },
+    {
+      "ordinal": 171,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5886030,
+      "header_bytes": 20,
+      "header_sha256": "a923846d04ca1bbf7f8089e5dec8d09f929d93b6010fb03840c2005ed4b3ac45",
+      "data_offset": 5886050,
+      "data_bytes": 23822,
+      "data_sha256": "5a3e5d1f919a493b7a8f5d0023713ea288c3d9642d3f584b510b87c382f727fd",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        2,
+        101,
+        2
+      ]
+    },
+    {
+      "ordinal": 172,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5909872,
+      "header_bytes": 20,
+      "header_sha256": "2546a8cd4762e5c0c2ab8d5de827095db228067285922ba6905c72c8f8d7c3e1",
+      "data_offset": 5909892,
+      "data_bytes": 23822,
+      "data_sha256": "c36c61da3c63cc438807797cb088c0178f4606e2b325bdd003695026d77be5b0",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        3,
+        101,
+        2
+      ]
+    },
+    {
+      "ordinal": 173,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5933714,
+      "header_bytes": 20,
+      "header_sha256": "60ac3ea21420ee2714535be60cd5827720d4881b615873895187e9749cb7f578",
+      "data_offset": 5933734,
+      "data_bytes": 23822,
+      "data_sha256": "4566b813ef61c1bc8b086a769a499bddb43f2cc1e26a869590b39a2dcf8c5e0e",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        0,
+        102,
+        2
+      ]
+    },
+    {
+      "ordinal": 174,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5957556,
+      "header_bytes": 20,
+      "header_sha256": "8499f12f674bd59a8932264d926a8f70832d03e8c697567b720c1ac080625fab",
+      "data_offset": 5957576,
+      "data_bytes": 23822,
+      "data_sha256": "75926326b9406e972b09b2f371ce13dfe39184d54d33b8dd5282e0a60855e9cc",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        1,
+        102,
+        2
+      ]
+    },
+    {
+      "ordinal": 175,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 5981398,
+      "header_bytes": 20,
+      "header_sha256": "6f5eab3ffba63116f499da2614f3ec8683a1d312ab30af19801f5988a28928d6",
+      "data_offset": 5981418,
+      "data_bytes": 23822,
+      "data_sha256": "57af8388a78f0e9487a68826efebd2b64c6c922e4b5c36cf0a735aa7c1f2aee3",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        2,
+        102,
+        2
+      ]
+    },
+    {
+      "ordinal": 176,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 6005240,
+      "header_bytes": 20,
+      "header_sha256": "6c9022f1778d3020a6dcab2491cdd8ed1a11e9e014b84ff17811b2533b62f5e8",
+      "data_offset": 6005260,
+      "data_bytes": 23822,
+      "data_sha256": "513cf35428a415caca9c5086314a5ab641c6a868232fa2a6053ba8af653fb634",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        3,
+        102,
+        2
+      ]
+    },
+    {
+      "ordinal": 177,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 6029082,
+      "header_bytes": 20,
+      "header_sha256": "b66cac52002a8e563327e03db401a1e62a86b3ded49ed94d887b6ec55856b403",
+      "data_offset": 6029102,
+      "data_bytes": 23822,
+      "data_sha256": "a73719b7cc9d65c90a5798a3f842e171963499df24d2a9915812c9d91c66692c",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        0,
+        83,
+        2
+      ]
+    },
+    {
+      "ordinal": 178,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 6052924,
+      "header_bytes": 20,
+      "header_sha256": "cb7bbadb0192c882d3438fd57ff9eeb69771b98a43b19b5c28951018a8db852e",
+      "data_offset": 6052944,
+      "data_bytes": 23822,
+      "data_sha256": "2d4f94fb2cae6bba8b9d545f3e183fc6937ccad695cbeaef343f7a9febed86e5",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        1,
+        83,
+        2
+      ]
+    },
+    {
+      "ordinal": 179,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 6076766,
+      "header_bytes": 20,
+      "header_sha256": "5f52d1d7d3ab748cf200847abe8a6d5bbbd92d23b2d38450b95bfb74354731ba",
+      "data_offset": 6076786,
+      "data_bytes": 23822,
+      "data_sha256": "f84b7888fd7ba18115a5d17793d631abe9020ddb6a0abfa6bcb37e7c561b00e5",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        2,
+        83,
+        2
+      ]
+    },
+    {
+      "ordinal": 180,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 6100608,
+      "header_bytes": 20,
+      "header_sha256": "95323ab7d6eb6f7b7b6bb693f041af0d97ed08ddad7795bd6265907bc80b8f67",
+      "data_offset": 6100628,
+      "data_bytes": 23822,
+      "data_sha256": "2304d3f80db28178dbc51e109133e1d163e32a1750b8b738183d4bbc132c7593",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        3,
+        83,
+        2
+      ]
+    },
+    {
+      "ordinal": 181,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 6124450,
+      "header_bytes": 20,
+      "header_sha256": "c6cc40903e764c617888b2a3ab97bacf7d1bf97a1e6d8c6d80ed2df0639a3db4",
+      "data_offset": 6124470,
+      "data_bytes": 23822,
+      "data_sha256": "e4038954fa40099a9f2d9cf238b0ecf0e7b686942cea6e7f65bb84428d60d870",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        0,
+        85,
+        2
+      ]
+    },
+    {
+      "ordinal": 182,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 6148292,
+      "header_bytes": 20,
+      "header_sha256": "31275defa0460323de978a3e03e299775c77c96fa92f902dc82a2b4bdaa29a63",
+      "data_offset": 6148312,
+      "data_bytes": 23822,
+      "data_sha256": "62553cd750fb7395752a80aaed92ad7a71f31f9426a09afa00b6875d3332b7d1",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        1,
+        85,
+        2
+      ]
+    },
+    {
+      "ordinal": 183,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 6172134,
+      "header_bytes": 20,
+      "header_sha256": "2282e7eb884235945c2c7c083a310384d94388dcd8e33c2da470cacd8f6788fc",
+      "data_offset": 6172154,
+      "data_bytes": 23822,
+      "data_sha256": "f8a995308e79a5eb3766e426f6de3ab176051e97d04b4c2e48959549151adba6",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        2,
+        85,
+        2
+      ]
+    },
+    {
+      "ordinal": 184,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 6195976,
+      "header_bytes": 20,
+      "header_sha256": "a682a6d561c1f1bf8dd8d2e8737cdb61a580c15f82df501ce3802453e424577f",
+      "data_offset": 6195996,
+      "data_bytes": 23822,
+      "data_sha256": "0ac70091a30b82f82e659f07437e9bcf6833315290693bc2dbd4ded9fc9cd456",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        38,
+        3,
+        85,
+        2
+      ]
+    },
+    {
+      "ordinal": 185,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 6219818,
+      "header_bytes": 20,
+      "header_sha256": "7c1a8380f25d716be4ed138df2c03e7aed05462a0f6bcf6fc4d507a0953849a5",
+      "data_offset": 6219838,
+      "data_bytes": 23822,
+      "data_sha256": "3a472b73b0be535b68eb0eb9bea24d6ad1f95fc5af85fd13b148981118da2928",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        29,
+        0,
+        55,
+        2
+      ]
+    },
+    {
+      "ordinal": 186,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 6243660,
+      "header_bytes": 20,
+      "header_sha256": "7461767c090100dced6b81c74305739be3b31fed4666eae50236d06ea23682ac",
+      "data_offset": 6243680,
+      "data_bytes": 23822,
+      "data_sha256": "26d0e4052eabb518a2314a69c1f4de49e77b9ccd3def32623026e04262eb3445",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        29,
+        1,
+        55,
+        2
+      ]
+    },
+    {
+      "ordinal": 187,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 6267502,
+      "header_bytes": 20,
+      "header_sha256": "9460732d689363e60c15159b91be8efbf0a86a79653751c030f66e22afced605",
+      "data_offset": 6267522,
+      "data_bytes": 23822,
+      "data_sha256": "c16d349246070929a27c985610104947d4fbc5bb2a900cf8744c869f92b5071c",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        29,
+        2,
+        55,
+        2
+      ]
+    },
+    {
+      "ordinal": 188,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 6291344,
+      "header_bytes": 20,
+      "header_sha256": "e8854122d7f4cc34ea453fa563f23fb2da5572b8ec1682c48b54a61e2465e52f",
+      "data_offset": 6291364,
+      "data_bytes": 23822,
+      "data_sha256": "f77e5e88fade3bbda7b5ec487e5512d15e7b231329a4c6187bf880db5923529f",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        29,
+        3,
+        55,
+        2
+      ]
+    },
+    {
+      "ordinal": 189,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 6315186,
+      "header_bytes": 20,
+      "header_sha256": "6f855a3b00a013551ef2846eacbb8a9822d1b4b924b7f957d6db0c25ed786436",
+      "data_offset": 6315206,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        29,
+        0,
+        57,
+        2
+      ]
+    },
+    {
+      "ordinal": 190,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 6339028,
+      "header_bytes": 20,
+      "header_sha256": "97bbffb4fb85c0700179f01c8cc4847472eb13d367dbc35deca580512a5e317b",
+      "data_offset": 6339048,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        29,
+        1,
+        57,
+        2
+      ]
+    },
+    {
+      "ordinal": 191,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 6362870,
+      "header_bytes": 20,
+      "header_sha256": "ed90f0218c9bf573c86606cc6b7237b64088bd5c794f349a3087e3f993bd88ae",
+      "data_offset": 6362890,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        29,
+        2,
+        57,
+        2
+      ]
+    },
+    {
+      "ordinal": 192,
+      "name": "SpmCounterData",
+      "version": 2,
+      "compression": 0,
+      "header_offset": 6386712,
+      "header_bytes": 20,
+      "header_sha256": "b761cf96a70f394c7cbade477378075b3760bed1739da8c91c59d7c8e3b56c9a",
+      "data_offset": 6386732,
+      "data_bytes": 23822,
+      "data_sha256": "4ba4b7b55c785b484e540528f79739e8653ea17b85aa2fada080e8826bcf47fb",
+      "uncompressed_size": 0,
+      "header_u32_le": [
+        12910592,
+        29,
+        3,
+        57,
+        2
+      ]
+    },
+    {
+      "ordinal": 193,
+      "name": "QueueInfo",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 6410554,
+      "header_bytes": 0,
+      "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "data_offset": 6410554,
+      "data_bytes": 32,
+      "data_sha256": "d0b434aa5a71fd05a69c5a6922c0fa8fd51dbe9548995f40d36806815708550b",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 194,
+      "name": "QueueEvent",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 6410586,
+      "header_bytes": 0,
+      "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "data_offset": 6410586,
+      "data_bytes": 72,
+      "data_sha256": "fc9beff2ef62fdecbdb04bfcb7d08d4472a5ae8eb5ad06fd8d2c7c3c09f06b63",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 195,
+      "name": "QueueEvent",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 6410658,
+      "header_bytes": 0,
+      "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "data_offset": 6410658,
+      "data_bytes": 72,
+      "data_sha256": "0ecdae5cee422ac4576aa75eb6c0f11dfb3a8f533f536a3e982caec08b95c21b",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 196,
+      "name": "QueueEvent",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 6410730,
+      "header_bytes": 0,
+      "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "data_offset": 6410730,
+      "data_bytes": 72,
+      "data_sha256": "ce8b59f2824187d45d78d11568c8c54a18ac6038bf4283108ba7ee0347188d00",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 197,
+      "name": "QueueEvent",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 6410802,
+      "header_bytes": 0,
+      "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "data_offset": 6410802,
+      "data_bytes": 72,
+      "data_sha256": "359d6234d5620d7e9f4b98b951cc21fd38c4383516513d737e63902e96e2a5d2",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 198,
+      "name": "QueueEvent",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 6410874,
+      "header_bytes": 0,
+      "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "data_offset": 6410874,
+      "data_bytes": 72,
+      "data_sha256": "2aee01f6d01716e40c8a2bd485a3b4e2f29efd9fc6c40df0dc4c2f54a93c7de9",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 199,
+      "name": "QueueEvent",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 6410946,
+      "header_bytes": 0,
+      "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "data_offset": 6410946,
+      "data_bytes": 72,
+      "data_sha256": "dbb58097edb5f1bdf40db0dd027fd54f4a18dfd0d40937b8d02d4634d938ca59",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 200,
+      "name": "TraceConfig",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 6411018,
+      "header_bytes": 0,
+      "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "data_offset": 6411018,
+      "data_bytes": 925,
+      "data_sha256": "a8aac39830761cc329464d882c4e2acea50b2fac8eb6ff62b290ccab6b19e1a7",
+      "uncompressed_size": 0,
+      "config": {
+        "sources": [
+          {
+            "name": "asicinfo"
+          },
+          {
+            "name": "apiinfo"
+          },
+          {
+            "name": "clockcalibration"
+          },
+          {
+            "name": "codeobject"
+          },
+          {
+            "name": "gpuperfexp",
+            "config": {
+              "sqtt": {
+                "enabled": true,
+                "memoryLimitInMb": 75,
+                "enableInstructionTokens": true,
+                "enableExecPopTokens": false,
+                "seMask": 1
+              },
+              "spm": {
+                "enabled": true,
+                "perfCounters": [
+                  [
+                    49,
+                    4095,
+                    270
+                  ],
+                  [
+                    49,
+                    4095,
+                    271
+                  ],
+                  [
+                    49,
+                    4095,
+                    272
+                  ],
+                  [
+                    49,
+                    4095,
+                    294
+                  ],
+                  [
+                    49,
+                    4095,
+                    295
+                  ],
+                  [
+                    49,
+                    4095,
+                    296
+                  ],
+                  [
+                    10,
+                    4095,
+                    9
+                  ],
+                  [
+                    10,
+                    4095,
+                    17
+                  ],
+                  [
+                    35,
+                    4095,
+                    14
+                  ],
+                  [
+                    35,
+                    4095,
+                    18
+                  ],
+                  [
+                    38,
+                    4095,
+                    3
+                  ],
+                  [
+                    38,
+                    4095,
+                    43
+                  ],
+                  [
+                    9,
+                    4095,
+                    116
+                  ],
+                  [
+                    9,
+                    4095,
+                    117
+                  ],
+                  [
+                    9,
+                    4095,
+                    118
+                  ],
+                  [
+                    49,
+                    4095,
+                    256
+                  ],
+                  [
+                    0,
+                    4095,
+                    24
+                  ],
+                  [
+                    8,
+                    4095,
+                    15
+                  ],
+                  [
+                    10,
+                    4095,
+                    39
+                  ],
+                  [
+                    38,
+                    4095,
+                    99
+                  ],
+                  [
+                    38,
+                    4095,
+                    100
+                  ],
+                  [
+                    38,
+                    4095,
+                    101
+                  ],
+                  [
+                    38,
+                    4095,
+                    102
+                  ],
+                  [
+                    38,
+                    4095,
+                    83
+                  ],
+                  [
+                    38,
+                    4095,
+                    85
+                  ],
+                  [
+                    29,
+                    4095,
+                    55
+                  ],
+                  [
+                    29,
+                    4095,
+                    57
+                  ]
+                ],
+                "sampleFrequency": 4096,
+                "memoryLimitInMb": 128
+              }
+            }
+          },
+          {
+            "name": "queuetimings"
+          },
+          {
+            "name": "traceconfig"
+          }
+        ],
+        "controller": {
+          "name": "renderop",
+          "config": {
+            "enabled": true,
+            "renderOpMode": "dispatch",
+            "numPrepRenderOps": 0,
+            "captureRenderOpCount": 7,
+            "captureMode": "absolute",
+            "preparationStartRenderOp": 9
+          }
+        }
+      },
+      "terminal_nul_bytes": 1
+    },
+    {
+      "ordinal": 201,
+      "name": "SystemInfo",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 6411943,
+      "header_bytes": 0,
+      "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "data_offset": 6411943,
+      "data_bytes": 1940,
+      "data_sha256": "7f7992788cc10cd9a91ce9289f0b2e60953bfc62bdcebbd8d56b029bfcdabfe0",
+      "uncompressed_size": 0,
+      "system_info": {
+        "version": {
+          "major": 2,
+          "minor": 0
+        },
+        "devdriver": {
+          "version": {
+            "major": 43
+          }
+        },
+        "os": {
+          "type": "Windows",
+          "name": "Windows 11 Pro",
+          "description": "26100.1.amd64fre.ge_release.240331-1435",
+          "hostname": "Alaris",
+          "memory": {
+            "physical": 66342330368,
+            "swap": 70503079936,
+            "name": "DDR5"
+          },
+          "config": {
+            "windows": {
+              "etwSupport": {
+                "isSupported": true,
+                "hasPermission": false,
+                "statusCode": 5,
+                "needsRegistryOrUserGroup": true
+              }
+            }
+          }
+        },
+        "driver": {
+          "name": "AMD Windows",
+          "description": "AMD Windows Driver",
+          "packagingVersion": "26.10.41.01-260811a-203304C-AMD-Software-Adrenalin-Edition",
+          "packagingDate": "260811",
+          "softwareVersion": "26.8.1"
+        },
+        "drivers": [
+          {
+            "name": "Advanced Micro Devices, Inc.",
+            "description": "AMD Radeon 780M Graphics",
+            "packagingVersion": "26.10.41.01-260811a-203304C-AMD-Software-Adrenalin-Edition",
+            "packagingDate": "260811",
+            "softwareVersion": "26.8.1"
+          }
+        ],
+        "cpus": [
+          {
+            "name": "AMD Ryzen 9 PRO 8945HS w/ Radeon 780M Graphics",
+            "virtualization": "enabled",
+            "deviceId": "CPU0",
+            "cpuId": "AMD64 Family 25 Model 117 Stepping 2",
+            "architecture": "x64",
+            "speed": {
+              "max": 4001
+            },
+            "numPhysicalCores": 8,
+            "numLogicalCores": 16,
+            "vendorId": "AuthenticAMD",
+            "cpuTimeClockFreq": 10000000
+          }
+        ],
+        "gpus": [
+          {
+            "name": "AMD Radeon 780M Graphics",
+            "pci": {
+              "bus": 197,
+              "device": 0,
+              "function": 0
+            },
+            "asic": {
+              "gpuIndex": 0,
+              "gpuCounterFreq": 100000000,
+              "numShaderEngines": 1,
+              "numShaderArraysPerEngine": 2,
+              "numCus": 12,
+              "cuMask": [
+                [
+                  63,
+                  63
+                ]
+              ],
+              "engineClockHz": {
+                "min": 800000000,
+                "max": 2799000000
+              },
+              "ids": {
+                "gfxEngine": 13,
+                "family": 148,
+                "eRev": 192,
+                "revision": 212,
+                "device": 6400,
+                "subsystem": 2954239820,
+                "vendor": 4098,
+                "luid": "b5f9000000000000"
+              }
+            },
+            "memory": {
+              "type": "Ddr5",
+              "memOpsPerClock": 4,
+              "busBitWidth": 128,
+              "bandwidthBytesPerSec": 125440000000,
+              "memClockHz": {
+                "min": 500000000,
+                "max": 1960000000
+              },
+              "heaps": {
+                "local": {
+                  "physicalAddress": 0,
+                  "size": 268435456
+                },
+                "invisible": {
+                  "physicalAddress": 268435456,
+                  "size": 1879048192
+                }
+              },
+              "excludedVaRanges": [
+                {
+                  "base": 0,
+                  "size": 4096
+                },
+                {
+                  "base": 140737488355328,
+                  "size": 18446462598732840959
+                }
+              ]
+            },
+            "bigSw": {
+              "major": 2023,
+              "minor": 0,
+              "misc": 33413048
+            },
+            "driverIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "ordinal": 202,
+      "name": "DriverOverrides",
+      "version": 3,
+      "compression": 0,
+      "header_offset": 6413883,
+      "header_bytes": 0,
+      "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "data_offset": 6413883,
+      "data_bytes": 44,
+      "data_sha256": "c977ed950d5130ffc5d34f9eaaf0b1b0ac0e9c483701d0bf59c3b351a4a3ba40",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 203,
+      "name": "TraceProcessInfo",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 6413927,
+      "header_bytes": 0,
+      "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "data_offset": 6413927,
+      "data_bytes": 151,
+      "data_sha256": "6ffa33b2334d658d2344d82006236677b5f9adfa080962e79468a38bf9d0a0c2",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 204,
+      "name": "DerivedSpmSes",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 6414078,
+      "header_bytes": 0,
+      "header_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "data_offset": 6414078,
+      "data_bytes": 12,
+      "data_sha256": "562ce62c466744612c830a70a248a9963a3bb5a6b644f21071fcfefd7fc47bfc",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 205,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 6414090,
+      "header_bytes": 24,
+      "header_sha256": "dfa6d6d7b651686a6ed30b5943e8f960ffbd1fc781b517389591382dc9bbd541",
+      "data_offset": 6414114,
+      "data_bytes": 95546,
+      "data_sha256": "8cae7ffebb4d99f8b30a42d504e2da67c8dd083299b7dcc318f8d9a07e816091",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 206,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 6509660,
+      "header_bytes": 24,
+      "header_sha256": "71c6ed38c141be3276e3e8861681e903c4232d5c7ab53d1066cfa1939effef1f",
+      "data_offset": 6509684,
+      "data_bytes": 95455,
+      "data_sha256": "b3b2a247ff159ec1382715f6b875370577882cb569e4b0bafab798479b071a58",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 207,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 6605139,
+      "header_bytes": 24,
+      "header_sha256": "5d1a2c9d1d8c5f216e596c951de3a83386bf0e2faf68fe7642a836ef8299601a",
+      "data_offset": 6605163,
+      "data_bytes": 95476,
+      "data_sha256": "1f56c72353e17499e1666ff68a1e7abf199992aaaf6379fb6faa95f424b022c7",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 208,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 6700639,
+      "header_bytes": 24,
+      "header_sha256": "a93420c303a1d4f0d5a2db5fba1514176c4c15873a9bd993374052814352f623",
+      "data_offset": 6700663,
+      "data_bytes": 95479,
+      "data_sha256": "4f1cd799a8aa2256f0fa7b34cb55c8e3e3dc2f7150a29eb9405b9587f68f905b",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 209,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 6796142,
+      "header_bytes": 24,
+      "header_sha256": "900476ecf03ae22a95da3b6ea987bdadf913820b5d8e7434ab68f67d57df919d",
+      "data_offset": 6796166,
+      "data_bytes": 95583,
+      "data_sha256": "4b12d21efd61381a4281016f3c5533a3cc6fdf4201dbf8b4b634f70025ea4479",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 210,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 6891749,
+      "header_bytes": 24,
+      "header_sha256": "1ba16a62d688bb098a0e6137c98b85d8eb3578f66bb12421c81d6168d333aaa1",
+      "data_offset": 6891773,
+      "data_bytes": 95497,
+      "data_sha256": "08b7130505d882689a981436bab6a4276dd16d1b5b896425a43d5cea54fe3b8f",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 211,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 6987270,
+      "header_bytes": 24,
+      "header_sha256": "b38af99588049d7c780179e761a70d5695f67edf738f21aabdd812b32bf016eb",
+      "data_offset": 6987294,
+      "data_bytes": 95523,
+      "data_sha256": "ab76c0924a4f1e44ec020bc86b13ebfa7135825fc0187812b1aa1a9d560d1735",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 212,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 7082817,
+      "header_bytes": 24,
+      "header_sha256": "aa3f4af13ae86e2579d927edb9c74fa2bf0691ec4b20594db10ed08cfa845916",
+      "data_offset": 7082841,
+      "data_bytes": 95526,
+      "data_sha256": "8dc51f24fed3b7184292007d01fcea40e158ead7b53ff9d64cbe5484554528b6",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 213,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 7178367,
+      "header_bytes": 24,
+      "header_sha256": "a626265d8e27599420b5c2ad78f37a360255cfb228056b4b3b0f23822617bbdf",
+      "data_offset": 7178391,
+      "data_bytes": 95557,
+      "data_sha256": "3e164d162d744b7c4f3f2390368c8519fb0fa956f95dc521d59ce06841fc01c7",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 214,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 7273948,
+      "header_bytes": 24,
+      "header_sha256": "4fa8548dfeed6bdefc03a5744e360855266799bd5152c3b6319b37dc3caabb84",
+      "data_offset": 7273972,
+      "data_bytes": 95480,
+      "data_sha256": "193d991481f5e532d7098165ce7fcd69ea2033675a537caae277547613e2f23a",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 215,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 7369452,
+      "header_bytes": 24,
+      "header_sha256": "f1af4b587a8fe544d4adb95bce752f1bb0fe225c50a7bd9931a3ef6a41a21e9d",
+      "data_offset": 7369476,
+      "data_bytes": 95501,
+      "data_sha256": "eafc1fe04e7140460f0f019b69e9b1781040bf595efef5cf221b401c284793aa",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 216,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 7464977,
+      "header_bytes": 24,
+      "header_sha256": "8ef418489cbc72fd856210164d2f775652f217c04e4323f5d6b460bdbb19748a",
+      "data_offset": 7465001,
+      "data_bytes": 95342,
+      "data_sha256": "0ace51c88a911120f48671c9f722bd301d9f25b95b74416fe9984f35f389de3c",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 217,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 7560343,
+      "header_bytes": 24,
+      "header_sha256": "2eb020b0c762b9cd1681e7297443a699e158efca2f53ec7582df98201e554026",
+      "data_offset": 7560367,
+      "data_bytes": 95434,
+      "data_sha256": "e6632e778808df93de4675e03a4273afea4ae02c397a0f490d28b86e900e8f39",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 218,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 7655801,
+      "header_bytes": 24,
+      "header_sha256": "0cd97715697c7cc5005794311341d529afbaacd7ddf355a3fb8e474b33a42910",
+      "data_offset": 7655825,
+      "data_bytes": 95504,
+      "data_sha256": "e75ba3bd060bf5d332fa804743344d1d1b809d62dd7bab88445ea21a92dd4966",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 219,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 7751329,
+      "header_bytes": 24,
+      "header_sha256": "30ad8c6b2fbcf813cc939623834c80dd96407ff441d273d959471c4f4ea3f468",
+      "data_offset": 7751353,
+      "data_bytes": 95532,
+      "data_sha256": "a17e09af4e44a17c21bf907fe1fa7759b7369a949d9c91d1dccca60fedd2f5d1",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 220,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 7846885,
+      "header_bytes": 24,
+      "header_sha256": "be777cbb18c959d07e97661bde2c939e2d400e412e7c52e203c38002d6094c32",
+      "data_offset": 7846909,
+      "data_bytes": 95455,
+      "data_sha256": "e83376ff6f885275e713f9c04da09eb69acdf18a292f568d20260f0f65fdd6f7",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 221,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 7942364,
+      "header_bytes": 24,
+      "header_sha256": "1a0daf67e9e7462b392893000d29a00e84d01b545fb1d38b693936d6964c181f",
+      "data_offset": 7942388,
+      "data_bytes": 95476,
+      "data_sha256": "c0993ec11fe743323ab822957cc6dae68e9c64112b428e0b08fa4d13c54f10bf",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 222,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 8037864,
+      "header_bytes": 24,
+      "header_sha256": "69a51b8abe18c7826ad745e5c7941e82c8242ff97ddf0a9be01227418acc4534",
+      "data_offset": 8037888,
+      "data_bytes": 95479,
+      "data_sha256": "842322025cc64d358efebbb746c090950db598284c724b53cfb752c99a963ac6",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 223,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 8133367,
+      "header_bytes": 24,
+      "header_sha256": "d37f72a4c6b8f389c0d7d5d41cdd0135633ce5e6248de3b078dbc9d5bc27dd39",
+      "data_offset": 8133391,
+      "data_bytes": 95613,
+      "data_sha256": "38d6ed069f3d5e1d5b9f3cc38c13b65d30b3beec8d781a8848226411cc15acea",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 224,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 8229004,
+      "header_bytes": 24,
+      "header_sha256": "fe1ccf5ebda015a0f317ed377f40a08c9730af6107e215ae7f5d3c2a8ccff60c",
+      "data_offset": 8229028,
+      "data_bytes": 95536,
+      "data_sha256": "043ff42b1a177ec4cb0649c0b4b1b1dfa4a44890c6b60e3dd32164ffc7b5de0e",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 225,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 8324564,
+      "header_bytes": 24,
+      "header_sha256": "4084bce95f6f5c9cac75ea06751460bc1ae48a5995d603c7af8ebe5e203cf8b6",
+      "data_offset": 8324588,
+      "data_bytes": 95557,
+      "data_sha256": "f091c5035a7b849eada713a1e54efa3fb294c814ffe0b658539e053913166699",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 226,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 8420145,
+      "header_bytes": 24,
+      "header_sha256": "c76611f640e2bc43447536eb7ff6e67d3ddf85cea94f0536bda8e076199809a5",
+      "data_offset": 8420169,
+      "data_bytes": 95560,
+      "data_sha256": "81a6fae75f312756d7bcf401574d6b6db7639b2ae53a58de90b8ceac325cb670",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 227,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 8515729,
+      "header_bytes": 24,
+      "header_sha256": "0a87614afb6730602ee700d93cf27b05d43355ec9ca752d1a81952dabfa7d464",
+      "data_offset": 8515753,
+      "data_bytes": 95352,
+      "data_sha256": "8df8d3b473dc8d8b01b3d75b1233f93ed559844f140e157ce92d745f8e915ea9",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 228,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 8611105,
+      "header_bytes": 24,
+      "header_sha256": "c27d423df8be2fb834bb0f3e1a4592f3b312996f39914c27f85d50120adcfd09",
+      "data_offset": 8611129,
+      "data_bytes": 95428,
+      "data_sha256": "01703b81debf7e113df777b602e7eed14ddbf470ee540f1be4334a1919beedda",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 229,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 8706557,
+      "header_bytes": 24,
+      "header_sha256": "f840e470cdd73cf0d57fe7858c1fc56b284cfa616414cada14fe6e3ae6f15c3b",
+      "data_offset": 8706581,
+      "data_bytes": 95364,
+      "data_sha256": "b66551596557d28ac817ffbb2e0630082af3f1ce39ab069981cf5729c3cdd187",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 230,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 8801945,
+      "header_bytes": 24,
+      "header_sha256": "7786cdac324159f29aa477fecf9ead94e543e80b6017c1fa1a24f52e57fbd3da",
+      "data_offset": 8801969,
+      "data_bytes": 95421,
+      "data_sha256": "f05300b5dff66dec0f17110e4b7cc7dfe49a48098c36f81dc8a42c851cb9f5f8",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 231,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 8897390,
+      "header_bytes": 24,
+      "header_sha256": "6bdac552a02f41b73edc37afb8d9dac0e6c99fc29c7074f4a995aa8a3b7c9926",
+      "data_offset": 8897414,
+      "data_bytes": 95559,
+      "data_sha256": "14dcaed73234eb65cb423377cd0f2819a2673af7076ec7ea16432f8a0747bb9c",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 232,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 8992973,
+      "header_bytes": 24,
+      "header_sha256": "dc3104b93b8a5f46477e03c012b97f2b0773badace73541a01ee673cec710180",
+      "data_offset": 8992997,
+      "data_bytes": 95476,
+      "data_sha256": "227c7507eb554a8b5664b6a791c60ba0f6c1cc02c24bd6aee68cc1b564b1705c",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 233,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 9088473,
+      "header_bytes": 24,
+      "header_sha256": "64cdb77dedd4a868185f8d8b1082c056a087a3a252b690767b2dc93303a15909",
+      "data_offset": 9088497,
+      "data_bytes": 95520,
+      "data_sha256": "c6aeb91fe3c1fb25a1a83493a13fc0981246c7466abd1fa2a127c03dfccb9659",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 234,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 9184017,
+      "header_bytes": 24,
+      "header_sha256": "20c834f6773802f89ac51b37729b9fb16c96092ce962ba0d35c57bdaa81381d4",
+      "data_offset": 9184041,
+      "data_bytes": 95362,
+      "data_sha256": "dbacf46e25d095c087706da9ae5cfdb83d017d06392028332551a4b3cf4cdafb",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 235,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 9279403,
+      "header_bytes": 24,
+      "header_sha256": "8eca0462398fad2afefe45f7228877931aa064a7f60cf063d09dbdc3c5117f52",
+      "data_offset": 9279427,
+      "data_bytes": 95436,
+      "data_sha256": "f3aaa1d040894f6961a1425f3feb0ed742edf7174fc0dfd286baf694b59b6585",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 236,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 9374863,
+      "header_bytes": 24,
+      "header_sha256": "10596689cf91bef137aa577decbfde7bfa11ce243d9a95cfe105dbf69152d306",
+      "data_offset": 9374887,
+      "data_bytes": 95407,
+      "data_sha256": "b17913f716c83163957c3ca9fc73bebe63849b9e7253e0e02bb6f5cebebeffd5",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 237,
+      "name": "DerivedSpmCtr",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 9470294,
+      "header_bytes": 24,
+      "header_sha256": "144d8cd065b86e65196d9b9b31fba2087fbb9f5c3f382660dbcc6b5a32d0d064",
+      "data_offset": 9470318,
+      "data_bytes": 95349,
+      "data_sha256": "2c67f01c60ff7537f2ba5ee3c5084b3ca4ff46cf1fa6b72822e37c2e12eb44d4",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 238,
+      "name": "DerivedSpmGroup",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 9565667,
+      "header_bytes": 20,
+      "header_sha256": "e642a5c379f1d765182120065a9deff8722870e1803eb11e79ccc5e6a09bd432",
+      "data_offset": 9565687,
+      "data_bytes": 25,
+      "data_sha256": "9ef07d59110a508de6612e788b5d4516fe72c96f0ed95e80aad0401def4e5e70",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 239,
+      "name": "DerivedSpmGroup",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 9565712,
+      "header_bytes": 20,
+      "header_sha256": "653c3c4fa045af1410b0bffce14036bb35d9fd80014920254f8afc17e6a6d3d4",
+      "data_offset": 9565732,
+      "data_bytes": 19,
+      "data_sha256": "ff6c29e58c15deee0275fa6bd341d39b8ef644e5b6444aee19e1f7c3403b7254",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 240,
+      "name": "DerivedSpmGroup",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 9565751,
+      "header_bytes": 20,
+      "header_sha256": "f1e13aef391fe3d99942a25b68f3da09ff1367eaef55f96c497fa03f9f558d12",
+      "data_offset": 9565771,
+      "data_bytes": 7,
+      "data_sha256": "40f85b7bd627cf021ae20832f61a6df9fdc6482688a068764f416045d83001dc",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 241,
+      "name": "DerivedSpmGroup",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 9565778,
+      "header_bytes": 20,
+      "header_sha256": "6b30492896c225cc166ec97d7bbd5d320dfc47674c64484ab75e8d8e565ab9fd",
+      "data_offset": 9565798,
+      "data_bytes": 18,
+      "data_sha256": "ca5562c248bdfddb26bde04e51fb4e29c9ca465346f6e7b9e13c51085f176cdd",
+      "uncompressed_size": 0
+    },
+    {
+      "ordinal": 242,
+      "name": "DerivedSpmGroup",
+      "version": 1,
+      "compression": 0,
+      "header_offset": 9565816,
+      "header_bytes": 20,
+      "header_sha256": "80757a1e621b93eea09184deccd1e1af9544e4fb92d1a1f9bb28fabd789f6492",
+      "data_offset": 9565836,
+      "data_bytes": 30,
+      "data_sha256": "7e494ee246a568b2be14be599efee38f78cb5f719f31704142e98415061a0c6a",
+      "uncompressed_size": 0
+    }
+  ],
+  "unindexed_regions": [],
+  "spm_configuration": {
+    "enabled": true,
+    "perfCounters": [
+      [
+        49,
+        4095,
+        270
+      ],
+      [
+        49,
+        4095,
+        271
+      ],
+      [
+        49,
+        4095,
+        272
+      ],
+      [
+        49,
+        4095,
+        294
+      ],
+      [
+        49,
+        4095,
+        295
+      ],
+      [
+        49,
+        4095,
+        296
+      ],
+      [
+        10,
+        4095,
+        9
+      ],
+      [
+        10,
+        4095,
+        17
+      ],
+      [
+        35,
+        4095,
+        14
+      ],
+      [
+        35,
+        4095,
+        18
+      ],
+      [
+        38,
+        4095,
+        3
+      ],
+      [
+        38,
+        4095,
+        43
+      ],
+      [
+        9,
+        4095,
+        116
+      ],
+      [
+        9,
+        4095,
+        117
+      ],
+      [
+        9,
+        4095,
+        118
+      ],
+      [
+        49,
+        4095,
+        256
+      ],
+      [
+        0,
+        4095,
+        24
+      ],
+      [
+        8,
+        4095,
+        15
+      ],
+      [
+        10,
+        4095,
+        39
+      ],
+      [
+        38,
+        4095,
+        99
+      ],
+      [
+        38,
+        4095,
+        100
+      ],
+      [
+        38,
+        4095,
+        101
+      ],
+      [
+        38,
+        4095,
+        102
+      ],
+      [
+        38,
+        4095,
+        83
+      ],
+      [
+        38,
+        4095,
+        85
+      ],
+      [
+        29,
+        4095,
+        55
+      ],
+      [
+        29,
+        4095,
+        57
+      ]
+    ],
+    "sampleFrequency": 4096,
+    "memoryLimitInMb": 128
+  },
+  "spm_enabled": true,
+  "raw_spm_chunk_counts": {
+    "SpmSession": 1,
+    "SpmCounterData": 183,
+    "SpmDb": 0,
+    "DerivedSpmDb": 0
+  },
+  "scope": "Exact whole trace/index, recorded counter configuration and raw SPM headers. No counter value/schema/semantic or event/source cost attribution yet; no exclusive eligibility cause, hardware-support, ordinary performance, frame or qualification claim."
+}

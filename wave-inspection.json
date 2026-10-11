@@ -1,0 +1,322 @@
+{
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "input_seals": {
+    "out/native-sqtt-source-clock/inspect_saved_waves.py": {
+      "bytes": 3706,
+      "sha256": "6fdce56b9a3addc47ac059e2278c11adb1972d3dc89d72adee08500f831ae270"
+    },
+    "out/native-sqtt-source-clock/isa-result.json": {
+      "bytes": 1229999,
+      "sha256": "0b4188cad080b554beb52eaf1e1f06c25a90d4e93bda19d5b1c7945689d2edfc"
+    },
+    "out/native-sqtt-source-clock/isa-run.json": {
+      "bytes": 3134,
+      "sha256": "91b394385b9a2b1abcac1d9c93d24eccad177b2bfdcdf37089e19d7b023e746c"
+    },
+    "out/native-sqtt-source-clock/saved-isa-map.json": {
+      "bytes": 19649017,
+      "sha256": "3f11304feccf7b2b665291a3c3da1b8b5d805604ce6b2c411f20c55e35604ad1"
+    },
+    "out/native-sqtt-source-clock/trace_decoder_types.h": {
+      "bytes": 10828,
+      "sha256": "5fcbfd8b6ed9b596ec8572279707f434ec15651e4f9d47e524929cfef0249437"
+    },
+    "attestations/native-vulkan/6be3132/native-counter-clock/payloads/64e099f6b1e21a01892894406201f6f69b4f22030700d98d29f8de223969d484": {
+      "bytes": 1227586,
+      "sha256": "64e099f6b1e21a01892894406201f6f69b4f22030700d98d29f8de223969d484"
+    },
+    "out/native-sqtt-source-clock/isa-wave-0000-instructions-000.bin": {
+      "bytes": 511264,
+      "sha256": "d2b849036ad10216c0db75c0f4b9751b6d06f3ff7fc477bb2c4581e5790815a9"
+    },
+    "out/native-sqtt-source-clock/isa-wave-0000-timeline-000.bin": {
+      "bytes": 24992,
+      "sha256": "6006fb82e34c88c3579fce6f0de61cfb6ddaeebbf940299b803e358e76556c84"
+    },
+    "out/native-sqtt-source-clock/isa-wave-0001-instructions-000.bin": {
+      "bytes": 512,
+      "sha256": "4fbdacb651dbad21b0cf7593a8711192628cb37cfdda01d276eeddc85902f076"
+    },
+    "out/native-sqtt-source-clock/isa-wave-0001-timeline-000.bin": {
+      "bytes": 40,
+      "sha256": "003cc193b63a996acc202f33572cbd4df2a03c858915f6e163780b9aaee78d88"
+    }
+  },
+  "status": 0,
+  "isa_status_counts": {
+    "0": 13,
+    "2": 1,
+    "3": 1
+  },
+  "info_strings": {
+    "2": "Stitch Incomplete: The parser could not fully match a trace token to the underlying disassembly."
+  },
+  "prior_records_whole_value_equal": {
+    "realtime_records": true,
+    "occupancy_records": true,
+    "record_counts": true,
+    "rt_frequency_hz_records": true,
+    "info_records": true
+  },
+  "wave_array_bytes": 536808,
+  "waves": [
+    {
+      "cu": 0,
+      "simd": 0,
+      "wave_id": 0,
+      "contexts": 0,
+      "begin": 32204,
+      "end": 142177,
+      "instructions": 15977,
+      "categories": {
+        "2": 4902,
+        "1": 564,
+        "9": 1579,
+        "7": 436,
+        "6": 7391,
+        "3": 398,
+        "8": 705,
+        "11": 2
+      },
+      "resolved_pc_records": 11,
+      "zero_pc_records": 15966,
+      "other_unresolved_examples": [],
+      "first_zero_pc_record": {
+        "ordinal": 11,
+        "category": 7,
+        "stall": 0,
+        "duration": 1,
+        "time": 34957,
+        "addr": 0,
+        "marker_id": 0
+      },
+      "bound_examples": [
+        {
+          "ordinal": 0,
+          "category": 2,
+          "stall": 0,
+          "duration": 1,
+          "time": 33568,
+          "addr": 4296867840,
+          "marker_id": 0,
+          "saved_instruction": {
+            "stage": "Transport",
+            "offset": 0,
+            "memory_size": 4,
+            "instruction": "s_getpc_b64 s[6:7]",
+            "encoded_hex": "004786be"
+          }
+        },
+        {
+          "ordinal": 1,
+          "category": 2,
+          "stall": 0,
+          "duration": 1,
+          "time": 33573,
+          "addr": 4296867844,
+          "marker_id": 0,
+          "saved_instruction": {
+            "stage": "Transport",
+            "offset": 4,
+            "memory_size": 4,
+            "instruction": "s_mov_b32 s0, s1",
+            "encoded_hex": "010080be"
+          }
+        },
+        {
+          "ordinal": 2,
+          "category": 2,
+          "stall": 0,
+          "duration": 1,
+          "time": 33574,
+          "addr": 4296867848,
+          "marker_id": 0,
+          "saved_instruction": {
+            "stage": "Transport",
+            "offset": 8,
+            "memory_size": 4,
+            "instruction": "s_mov_b32 s1, s7",
+            "encoded_hex": "070081be"
+          }
+        },
+        {
+          "ordinal": 3,
+          "category": 1,
+          "stall": 0,
+          "duration": 1,
+          "time": 33583,
+          "addr": 4296867852,
+          "marker_id": 0,
+          "saved_instruction": {
+            "stage": "Transport",
+            "offset": 12,
+            "memory_size": 8,
+            "instruction": "s_load_b128 s[44:47], s[0:1], null",
+            "encoded_hex": "000b08f4000000f8"
+          }
+        },
+        {
+          "ordinal": 4,
+          "category": 9,
+          "stall": 1354,
+          "duration": 1355,
+          "time": 33584,
+          "addr": 4296867860,
+          "marker_id": 0,
+          "saved_instruction": {
+            "stage": "Transport",
+            "offset": 20,
+            "memory_size": 4,
+            "instruction": "s_waitcnt lgkmcnt(0)",
+            "encoded_hex": "07fc89bf"
+          }
+        },
+        {
+          "ordinal": 5,
+          "category": 2,
+          "stall": 0,
+          "duration": 1,
+          "time": 34939,
+          "addr": 4296867864,
+          "marker_id": 0,
+          "saved_instruction": {
+            "stage": "Transport",
+            "offset": 24,
+            "memory_size": 4,
+            "instruction": "s_lshr_b32 s5, s46, 2",
+            "encoded_hex": "2e820585"
+          }
+        },
+        {
+          "ordinal": 6,
+          "category": 2,
+          "stall": 0,
+          "duration": 1,
+          "time": 34940,
+          "addr": 4296867868,
+          "marker_id": 0,
+          "saved_instruction": {
+            "stage": "Transport",
+            "offset": 28,
+            "memory_size": 4,
+            "instruction": "s_cselect_b64 s[6:7], -1, 0",
+            "encoded_hex": "c1808698"
+          }
+        },
+        {
+          "ordinal": 7,
+          "category": 2,
+          "stall": 0,
+          "duration": 1,
+          "time": 34941,
+          "addr": 4296867872,
+          "marker_id": 0,
+          "saved_instruction": {
+            "stage": "Transport",
+            "offset": 32,
+            "memory_size": 4,
+            "instruction": "s_or_b32 s3, s4, s3",
+            "encoded_hex": "0403038c"
+          }
+        },
+        {
+          "ordinal": 8,
+          "category": 2,
+          "stall": 0,
+          "duration": 1,
+          "time": 34942,
+          "addr": 4296867876,
+          "marker_id": 0,
+          "saved_instruction": {
+            "stage": "Transport",
+            "offset": 36,
+            "memory_size": 4,
+            "instruction": "s_cselect_b64 s[8:9], 0, -1",
+            "encoded_hex": "80c18898"
+          }
+        },
+        {
+          "ordinal": 9,
+          "category": 2,
+          "stall": 0,
+          "duration": 1,
+          "time": 34944,
+          "addr": 4296867884,
+          "marker_id": 0,
+          "saved_instruction": {
+            "stage": "Transport",
+            "offset": 44,
+            "memory_size": 4,
+            "instruction": "s_and_b64 s[6:7], s[8:9], s[6:7]",
+            "encoded_hex": "0806868b"
+          }
+        },
+        {
+          "ordinal": 10,
+          "category": 2,
+          "stall": 0,
+          "duration": 1,
+          "time": 34946,
+          "addr": 4296867888,
+          "marker_id": 0,
+          "saved_instruction": {
+            "stage": "Transport",
+            "offset": 48,
+            "memory_size": 4,
+            "instruction": "s_and_b64 vcc, exec, s[6:7]",
+            "encoded_hex": "7e06ea8b"
+          }
+        }
+      ],
+      "backward_instruction_times": 0,
+      "negative_duration_records": 0,
+      "timeline_states": {
+        "1": 1,
+        "2": 1562,
+        "3": 1558,
+        "4": 3
+      },
+      "timeline_duration_sum": 109973,
+      "declared_wave_duration": 109973
+    },
+    {
+      "cu": 0,
+      "simd": 0,
+      "wave_id": 0,
+      "contexts": 0,
+      "begin": 12911339,
+      "end": 19726385,
+      "instructions": 16,
+      "categories": {
+        "9": 3,
+        "2": 4,
+        "6": 6,
+        "3": 1,
+        "11": 2
+      },
+      "resolved_pc_records": 0,
+      "zero_pc_records": 16,
+      "other_unresolved_examples": [],
+      "first_zero_pc_record": {
+        "ordinal": 0,
+        "category": 9,
+        "stall": 0,
+        "duration": 1,
+        "time": 12911549,
+        "addr": 0,
+        "marker_id": 0
+      },
+      "bound_examples": [],
+      "backward_instruction_times": 0,
+      "negative_duration_records": 0,
+      "timeline_states": {
+        "1": 1,
+        "3": 2,
+        "2": 2
+      },
+      "timeline_duration_sum": 509,
+      "declared_wave_duration": 6815046
+    }
+  ],
+  "scope": "Actual partial selected-wave observation; zero-PC/category timing cannot be charged to source lines or UI events. Incomplete stitching, missing frequency and display origin remain. No exclusive cost, bottleneck, optimized code or qualification."
+}

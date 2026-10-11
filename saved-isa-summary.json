@@ -1,0 +1,458 @@
+{
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "input_seals": {
+    "out/native-sqtt-source-clock/map_saved_isa.py": {
+      "bytes": 7095,
+      "sha256": "666785b62ded81c0d39e56b38f3a35b192976c346df4e30629b2bc75b446ad61"
+    },
+    "out/native-sqtt-source-clock/plan.json": {
+      "bytes": 4710,
+      "sha256": "a106b2f76b0cb22117e344764965e47e1296e9cc64ca8f711e0d36adf8902165"
+    },
+    "out/native-sqtt-source-clock/spm-index-result.json": {
+      "bytes": 135860,
+      "sha256": "b6e0ca44f92563bc8a18c62f61bce56299e46fa3f501ea7cafc100206ca804cc"
+    },
+    "out/native-sqtt-source-clock/trace-code-join.json": {
+      "bytes": 10800,
+      "sha256": "993fdb3c7b90de2e67f274c757f2384d0de703d8759e05c12625643a5ad865f3"
+    },
+    "out/native-sqtt-source-clock/pal-code-load-header.h": {
+      "bytes": 8705,
+      "sha256": "334bf64929df37f4f59973f6aaef979548047e80ec98ef5e86d1153e31ade5a4"
+    },
+    "out/native-sqtt-source-clock/pal-code-load-producer.cpp": {
+      "bytes": 27948,
+      "sha256": "1de9831bfbe579d34f698dfaeac5d82d5fdd99fcd6a38a6d738b9d759e530b1a"
+    },
+    "out/native-sqtt-source-clock/pal-code-uploader.cpp": {
+      "bytes": 30829,
+      "sha256": "9e69253b1c162742cc4342c9e4fa91fa2c04c3fe0545e79cdad671b23c7e2f6c"
+    },
+    "attestations/native-vulkan/6be3132/native-spm-cost/payloads/ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9": {
+      "bytes": 9581418,
+      "sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9"
+    },
+    "attestations/native-vulkan/3045067/ordinary-pipeline-generated-code/query-payloads/transport.info2": {
+      "bytes": 2705182,
+      "sha256": "d6cfbab079bae4941645f0f74d165b0ce9c9f234a8a2ebd339e23f5cbe038021"
+    },
+    "attestations/native-vulkan/3045067/ordinary-pipeline-generated-code/endpoint-payloads/endpoint.info2": {
+      "bytes": 7743150,
+      "sha256": "2b706dc8e57107210a1422583627764d0fac1413f63d83416d15f6ea7a2834ed"
+    }
+  },
+  "loads": [
+    {
+      "pci_id": 12910592,
+      "event_type": 0,
+      "base": 4295819264,
+      "hash_lo": 16962453157929558399,
+      "hash_hi": 12339828283321894607,
+      "cpu_timestamp": 1878918345216
+    },
+    {
+      "pci_id": 12910592,
+      "event_type": 0,
+      "base": 4296867840,
+      "hash_lo": 3080381450978085906,
+      "hash_hi": 12414187788375858802,
+      "cpu_timestamp": 1878918366507
+    },
+    {
+      "pci_id": 12910592,
+      "event_type": 0,
+      "base": 4297129984,
+      "hash_lo": 9783277973078251945,
+      "hash_hi": 8727119473150298890,
+      "cpu_timestamp": 1878918480889
+    }
+  ],
+  "callback_policy": "Only marker_id zero raw VA and proven instruction boundaries. Keep archived assembly literal operands and explicitly disclose 14 Transport load relocations; no claim of live operand equality. Unknown driver address/marker IDs rejected.",
+  "scope": "Complete declared entry/source-product encoding and saved-load applicability. No native execution, event identity, clock origin, executed cost, optimization or qualification.",
+  "stages": [
+    {
+      "stage": "Transport",
+      "base": 4296867840,
+      "load": {
+        "pci_id": 12910592,
+        "event_type": 0,
+        "base": 4296867840,
+        "hash_lo": 3080381450978085906,
+        "hash_hi": 12414187788375858802,
+        "cpu_timestamp": 1878918366507
+      },
+      "code_object": {
+        "ordinal": 4,
+        "data_offset": 670320,
+        "data_bytes": 240912,
+        "data_sha256": "d78a1135f40cc339d91d48539bc9acd0f544e60d61eb86b56d2eb61c46eedd83"
+      },
+      "entry": {
+        "name": "_amdgpu_cs_main",
+        "info": 18,
+        "section": 2,
+        "value": 0,
+        "size": 237516
+      },
+      "allocated_sections": [
+        {
+          "name": ".text",
+          "gpu_offset": 0,
+          "size": 237952,
+          "alignment": 256
+        },
+        {
+          "name": ".rodata",
+          "gpu_offset": 237952,
+          "size": 540,
+          "alignment": 16
+        }
+      ],
+      "instruction_count": 45524,
+      "encoding": {
+        "bytes": 237516,
+        "sha256": "fa1e42ccc87dfb98661b29815bb6b9275eb6e3cb69790085b309443176c0a1ba"
+      },
+      "width_counts": {
+        "4": 32963,
+        "8": 11267,
+        "12": 1294
+      },
+      "labels": 2152,
+      "relocations": [
+        {
+          "text_offset": 7536,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "info": 3,
+            "section": 5,
+            "value": 0,
+            "size": 0
+          }
+        },
+        {
+          "text_offset": 7604,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "info": 3,
+            "section": 5,
+            "value": 0,
+            "size": 0
+          }
+        },
+        {
+          "text_offset": 7632,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "info": 3,
+            "section": 5,
+            "value": 0,
+            "size": 0
+          }
+        },
+        {
+          "text_offset": 7640,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "info": 3,
+            "section": 5,
+            "value": 0,
+            "size": 0
+          }
+        },
+        {
+          "text_offset": 8052,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "info": 3,
+            "section": 5,
+            "value": 0,
+            "size": 0
+          }
+        },
+        {
+          "text_offset": 8064,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "info": 3,
+            "section": 5,
+            "value": 0,
+            "size": 0
+          }
+        },
+        {
+          "text_offset": 8196,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "info": 3,
+            "section": 5,
+            "value": 0,
+            "size": 0
+          }
+        },
+        {
+          "text_offset": 8204,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "info": 3,
+            "section": 5,
+            "value": 0,
+            "size": 0
+          }
+        },
+        {
+          "text_offset": 33056,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "info": 3,
+            "section": 5,
+            "value": 0,
+            "size": 0
+          }
+        },
+        {
+          "text_offset": 33068,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "info": 3,
+            "section": 5,
+            "value": 0,
+            "size": 0
+          }
+        },
+        {
+          "text_offset": 33080,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "info": 3,
+            "section": 5,
+            "value": 0,
+            "size": 0
+          }
+        },
+        {
+          "text_offset": 33108,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "info": 3,
+            "section": 5,
+            "value": 0,
+            "size": 0
+          }
+        },
+        {
+          "text_offset": 175664,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "info": 3,
+            "section": 5,
+            "value": 0,
+            "size": 0
+          }
+        },
+        {
+          "text_offset": 175676,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "info": 3,
+            "section": 5,
+            "value": 0,
+            "size": 0
+          }
+        }
+      ],
+      "directives": [
+        {
+          "offset": 0,
+          "text": "// _amdgpu_cs_main_pm4Crc = 0x4f4f185b5807d4e2"
+        },
+        {
+          "offset": 0,
+          "text": "_amdgpu_cs_main:"
+        },
+        {
+          "offset": 7532,
+          "text": ".Ltmp0:"
+        },
+        {
+          "offset": 7532,
+          "text": ".reloc .Ltmp0+4, R_AMDGPU_ABS32_HI, .rodata"
+        },
+        {
+          "offset": 7600,
+          "text": ".Ltmp1:"
+        },
+        {
+          "offset": 7600,
+          "text": ".reloc .Ltmp1+4, R_AMDGPU_ABS32_LO, .rodata"
+        },
+        {
+          "offset": 7628,
+          "text": ".Ltmp2:"
+        },
+        {
+          "offset": 7628,
+          "text": ".reloc .Ltmp2+4, R_AMDGPU_ABS32_LO, .rodata"
+        },
+        {
+          "offset": 7636,
+          "text": ".Ltmp3:"
+        },
+        {
+          "offset": 7636,
+          "text": ".reloc .Ltmp3+4, R_AMDGPU_ABS32_HI, .rodata"
+        },
+        {
+          "offset": 8048,
+          "text": ".Ltmp4:"
+        },
+        {
+          "offset": 8048,
+          "text": ".reloc .Ltmp4+4, R_AMDGPU_ABS32_LO, .rodata"
+        },
+        {
+          "offset": 8060,
+          "text": ".Ltmp5:"
+        },
+        {
+          "offset": 8060,
+          "text": ".reloc .Ltmp5+4, R_AMDGPU_ABS32_HI, .rodata"
+        },
+        {
+          "offset": 8192,
+          "text": ".Ltmp6:"
+        },
+        {
+          "offset": 8192,
+          "text": ".reloc .Ltmp6+4, R_AMDGPU_ABS32_LO, .rodata"
+        },
+        {
+          "offset": 8200,
+          "text": ".Ltmp7:"
+        },
+        {
+          "offset": 8200,
+          "text": ".reloc .Ltmp7+4, R_AMDGPU_ABS32_HI, .rodata"
+        },
+        {
+          "offset": 33048,
+          "text": ".Ltmp8:"
+        },
+        {
+          "offset": 33048,
+          "text": ".reloc .Ltmp8+8, R_AMDGPU_ABS32_LO, .rodata"
+        },
+        {
+          "offset": 33060,
+          "text": ".Ltmp9:"
+        },
+        {
+          "offset": 33060,
+          "text": ".reloc .Ltmp9+8, R_AMDGPU_ABS32_HI, .rodata"
+        },
+        {
+          "offset": 33072,
+          "text": ".Ltmp10:"
+        },
+        {
+          "offset": 33072,
+          "text": ".reloc .Ltmp10+8, R_AMDGPU_ABS32_LO, .rodata"
+        },
+        {
+          "offset": 33100,
+          "text": ".Ltmp11:"
+        },
+        {
+          "offset": 33100,
+          "text": ".reloc .Ltmp11+8, R_AMDGPU_ABS32_HI, .rodata"
+        },
+        {
+          "offset": 175660,
+          "text": ".Ltmp12:"
+        },
+        {
+          "offset": 175660,
+          "text": ".reloc .Ltmp12+4, R_AMDGPU_ABS32_LO, .rodata"
+        },
+        {
+          "offset": 175672,
+          "text": ".Ltmp13:"
+        },
+        {
+          "offset": 175672,
+          "text": ".reloc .Ltmp13+4, R_AMDGPU_ABS32_HI, .rodata"
+        }
+      ]
+    },
+    {
+      "stage": "Endpoint",
+      "base": 4295819264,
+      "load": {
+        "pci_id": 12910592,
+        "event_type": 0,
+        "base": 4295819264,
+        "hash_lo": 16962453157929558399,
+        "hash_hi": 12339828283321894607,
+        "cpu_timestamp": 1878918345216
+      },
+      "code_object": {
+        "ordinal": 3,
+        "data_offset": 696,
+        "data_bytes": 669600,
+        "data_sha256": "63a5347c70df566fcadda1edcd6371f463f793d88fc7ea0557fc4e3241fcfbef"
+      },
+      "entry": {
+        "name": "_amdgpu_cs_main",
+        "info": 18,
+        "section": 2,
+        "value": 0,
+        "size": 667368
+      },
+      "allocated_sections": [
+        {
+          "name": ".text",
+          "gpu_offset": 0,
+          "size": 667776,
+          "alignment": 256
+        }
+      ],
+      "instruction_count": 130811,
+      "encoding": {
+        "bytes": 667368,
+        "sha256": "52bfd804f3090377753667a84652f34126aab0c4b0118b60f597da8683789a1e"
+      },
+      "width_counts": {
+        "4": 96788,
+        "8": 32015,
+        "12": 2008
+      },
+      "labels": 7815,
+      "relocations": [],
+      "directives": [
+        {
+          "offset": 0,
+          "text": "// _amdgpu_cs_main_pm4Crc = 0x93461d538cb713ea"
+        },
+        {
+          "offset": 0,
+          "text": "_amdgpu_cs_main:"
+        }
+      ]
+    }
+  ]
+}

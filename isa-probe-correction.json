@@ -1,0 +1,12 @@
+{
+  "initial_source": {
+    "bytes": 9822,
+    "sha256": "96a2fd4285d581361145a593c53a316b76c0a3ca0395d0550f33f4b2efd6aff1"
+  },
+  "source_review": "Global output-prefix rename inadvertently changed two consumed preparation filenames.",
+  "correction": "Reference existing pinned decoder preparation inputs; keep new isa-* output names. No helper/native launch before correction.",
+  "corrected_source": {
+    "bytes": 9834,
+    "sha256": "a4469b9226f5f63e70420e7f811f63f7454aae117e4a95f953b1f9ab08391d5a"
+  }
+}

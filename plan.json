@@ -1,0 +1,104 @@
+{
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "previous_goal_turn": "progress: actual offline decode/arithmetic evidence changed next action; useful source pushed, issue44 updated, scratch removed. No live handle carried forward.",
+  "trace": {
+    "path": "attestations/native-vulkan/6be3132/native-spm-cost/payloads/ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9",
+    "bytes": 9581418,
+    "sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9"
+  },
+  "prior_decoder_result": {
+    "path": "attestations/native-vulkan/6be3132/native-counter-clock/payloads/64e099f6b1e21a01892894406201f6f69b4f22030700d98d29f8de223969d484",
+    "bytes": 1227586,
+    "sha256": "64e099f6b1e21a01892894406201f6f69b4f22030700d98d29f8de223969d484"
+  },
+  "prior_manifest": {
+    "path": "attestations/native-vulkan/6be3132/native-counter-clock/manifest.json",
+    "bytes": 121303,
+    "sha256": "e1d36718289f7060b2589b468e98d788c5e9cfad9a7c09999ecfd6983bd79b72"
+  },
+  "restored_sources": {
+    "decode_saved_sqtt.py": {
+      "revision": "0e2c7d64886b8218e9727057c067755b9089677f",
+      "blob": "aba308c14073771e50a55c850edb034d0de56ce7",
+      "bytes": 7402,
+      "sha256": "a7bc5b11a2d1c25d2499291556927c31093a63e5ad5966d52c022842531758f8"
+    },
+    "run_cpu_decoder.py": {
+      "revision": "0e2c7d64886b8218e9727057c067755b9089677f",
+      "blob": "20b978fb4633bcee70e3a57c9bcfa956c6a9c97c",
+      "bytes": 5366,
+      "sha256": "b72001e1e08d9632d3dfc97e12f96b66efb260f0faadc0d359433975ee31e7aa"
+    },
+    "rocprof_trace_decoder.h": {
+      "revision": "0e2c7d64886b8218e9727057c067755b9089677f",
+      "blob": "ebb2195e803308b365748127c559cbf01c4d5f54",
+      "bytes": 6771,
+      "sha256": "ea7a70337f83c2a0a8dfcd23b9c9b51827cdfd685211a75e6dbb10d0d4396de2"
+    },
+    "trace_decoder_types.h": {
+      "revision": "0e2c7d64886b8218e9727057c067755b9089677f",
+      "blob": "a2aa2b06e081d09f09065077d481470c9db00623",
+      "bytes": 10828,
+      "sha256": "5fcbfd8b6ed9b596ec8572279707f434ec15651e4f9d47e524929cfef0249437"
+    },
+    "decoder-LICENSE": {
+      "revision": "0e2c7d64886b8218e9727057c067755b9089677f",
+      "blob": "a9d3b6c512994a09dca202915e47d2751716a3db",
+      "bytes": 13571,
+      "sha256": "1aab3e68504fecc5d6ff5e14664f81405e791826a886ecdac7da9e0e2ba9bdf8"
+    },
+    "decoder-preparation.json": {
+      "revision": "0e2c7d64886b8218e9727057c067755b9089677f",
+      "blob": "293ef48aa22203d25b0901ff16d8bedf4c85a1c7",
+      "bytes": 3900,
+      "sha256": "936ad904a14d362a88086006f5856e56f600d43ce01b104d02ab5b6fdb6544e5"
+    },
+    "cpu-decoder-preparation.json": {
+      "revision": "0e2c7d64886b8218e9727057c067755b9089677f",
+      "blob": "6d8e7e4b92f33ec23e00e0b170d67a223a65328d",
+      "bytes": 1990,
+      "sha256": "60d1351b54f65b9554e8692f23cc881731af859c5b200500d7960dccc4867de3"
+    },
+    "sdk-decode.cpp": {
+      "revision": "0e2c7d64886b8218e9727057c067755b9089677f",
+      "blob": "9af82a99e132230c843492d83c88c76fa9aa549d",
+      "bytes": 9915,
+      "sha256": "5c14f43cc04b9e9c6d8d635a49f414ad697d77ea7dff063481143f8beb0f50d8"
+    },
+    "aql-threadtrace.cpp": {
+      "revision": "0e2c7d64886b8218e9727057c067755b9089677f",
+      "blob": "b52af778978028c9a0e91bb8c7a9f1de90aa4c4d",
+      "bytes": 16160,
+      "sha256": "141ae850811892ccfcbbfc024717d92779827500eac1141d5b939518641a89b7"
+    },
+    "spm-index-result.json": {
+      "revision": "0e2c7d64886b8218e9727057c067755b9089677f",
+      "blob": "8f920f54b5fd068ef746793d88884b33329a9860",
+      "bytes": 135860,
+      "sha256": "b6e0ca44f92563bc8a18c62f61bce56299e46fa3f501ea7cafc100206ca804cc"
+    },
+    "clock-alignment-result.json": {
+      "revision": "0e2c7d64886b8218e9727057c067755b9089677f",
+      "blob": "0fbbdd779eee29110285e71a3ccd95360d7043cd",
+      "bytes": 6677,
+      "sha256": "52470711d11e29c8a87c7c3a6ad81f7a37294879ebc1faad6f413942ee036ae4"
+    },
+    "trace-code-join.json": {
+      "revision": "30f2237b384ec20655db0539014a0fa2430f829c",
+      "blob": "dc0e8808caf207616079f596da7abac973c44081",
+      "bytes": 10800,
+      "sha256": "993fdb3c7b90de2e67f274c757f2384d0de703d8759e05c12625643a5ad865f3"
+    },
+    "counter-findings.json": {
+      "revision": "30f2237b384ec20655db0539014a0fa2430f829c",
+      "blob": "fd1e60ad5fb6f846e00fdf2b11f5aa2e16ac60d7",
+      "bytes": 11626,
+      "sha256": "8b8410ae9a8a64a76acacd0072a3011a60e435d23e42026b63a85d5fc058c2de"
+    }
+  },
+  "limits": {
+    "wall_seconds": 45,
+    "address_space_bytes": 536870912
+  },
+  "purpose": "Join exact saved code-load addresses/ELF/printed ISA to a valid callback; then inspect actual event-origin/clock records. No GPU acquisition or production change."
+}

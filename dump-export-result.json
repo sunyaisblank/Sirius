@@ -1,0 +1,16 @@
+{
+  "input_seals": {
+    "bin/linux-gcc/qualification-tools/rocprof-trace-decoder-0.1.3/librocprof-trace-decoder.so": {
+      "bytes": 199792,
+      "sha256": "9aae97c42c748c095f2241421f9586a780d42b9d97678e2e061cf00d17cb150f"
+    },
+    "out/native-sqtt-source-clock/dump-run.json": {
+      "bytes": 2237,
+      "sha256": "14562448312c96a4da54b420938362f2056230a9c282f0f5e6a8d3ac4573febf"
+    }
+  },
+  "actual_attempt": "Owned child failed at ctypes function lookup before dump invocation, AttributeError undefined symbol rocprof_trace_decoder_dump_data.",
+  "exports": "Complete dynamic symbol table retained: parse/status/info APIs present; dump_data absent. No binary disassembly.",
+  "consequence": "Header declaration is not a callable package capability. No token grammar/marker/time read occurred; do not retry same library/input route.",
+  "disposition": "negative compatibility observation, cleanly contained; no product or scientific conclusion."
+}

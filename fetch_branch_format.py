@@ -1,0 +1,14 @@
+"""Pin the public code-load record schema and its actual producer."""
+import sys
+sys.dont_write_bytecode=True
+from pathlib import Path
+import hashlib,json,subprocess,urllib.request
+ROOT=Path.cwd();W=Path(__file__).resolve().parent
+repo='ROCm/rocprofiler-sdk';revision='d5c0aaae36a6cb348f408c9fde8be435e29981b9';records=[]
+for origin,name in [('source/include/rocprofiler-sdk/cxx/codeobj/disassembly.hpp','sdk-disassembly.hpp'),('source/lib/tests/codeobj/hipcc_output.s','sdk-codeobj-test.s')]:
+ obj=json.loads(subprocess.check_output(['gh','api','repos/'+repo+'/contents/'+origin+'?ref='+revision]));assert obj['type']=='file' and obj['size']<1048576
+ url='https://raw.githubusercontent.com/'+repo+'/'+revision+'/'+origin
+ with urllib.request.urlopen(url,timeout=30) as r:data=r.read(1048577)
+ assert len(data)==obj['size'] and hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()==obj['sha']
+ p=W/name;assert not p.exists();p.write_bytes(data);records.append({'path':str(p.relative_to(ROOT)),'url':url,'revision':revision,'git_blob':obj['sha'],'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()})
+(W/'branch-format-preparation.json').write_text(json.dumps({'files':records},indent=2)+'\n');print(json.dumps({'pinned_files':len(records)}))

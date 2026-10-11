@@ -1,0 +1,100 @@
+{
+  "owner": {
+    "pid": 2632977,
+    "start_ticks": 18767621,
+    "process_group": 2632977,
+    "parent_pid": 2446
+  },
+  "input_seals": {
+    "out/native-sqtt-source-clock/run_isa_decoder.py": {
+      "bytes": 5346,
+      "sha256": "87cd40a9d8ceb43747746cf6f84d91c2160730e9a210a7ad721fc22c313e222a"
+    },
+    "out/native-sqtt-source-clock/decode_with_saved_isa.py": {
+      "bytes": 9834,
+      "sha256": "a4469b9226f5f63e70420e7f811f63f7454aae117e4a95f953b1f9ab08391d5a"
+    },
+    "out/native-sqtt-source-clock/plan.json": {
+      "bytes": 4710,
+      "sha256": "a106b2f76b0cb22117e344764965e47e1296e9cc64ca8f711e0d36adf8902165"
+    }
+  },
+  "recorded_children": [
+    {
+      "pid": 2632980,
+      "start_ticks": 18767626,
+      "process_group": 2632980,
+      "parent_pid": 2632977
+    }
+  ],
+  "recorded_child_closure": [
+    {
+      "birth": {
+        "pid": 2632980,
+        "start_ticks": 18767626,
+        "process_group": 2632980,
+        "parent_pid": 2632977
+      },
+      "current": null,
+      "recorded_birth_absent": true
+    }
+  ],
+  "final_owned_group": [],
+  "returncode": 0,
+  "limit_reason": null,
+  "deferred_signals": [],
+  "errors": [],
+  "peak_sampled_rss_bytes": 177172480,
+  "elapsed_seconds": 0.42401488800533116,
+  "outputs": {
+    "isa-wave-0001-instructions-000.bin": {
+      "bytes": 512,
+      "sha256": "4fbdacb651dbad21b0cf7593a8711192628cb37cfdda01d276eeddc85902f076"
+    },
+    "isa-stdout.txt": {
+      "bytes": 391,
+      "sha256": "b7a0d101169dfe45a15ee4c5b7ee8cd18fcb93e2a8aff014b52d64baa098e99c"
+    },
+    "isa-wave-0000-instructions-000.bin": {
+      "bytes": 511264,
+      "sha256": "d2b849036ad10216c0db75c0f4b9751b6d06f3ff7fc477bb2c4581e5790815a9"
+    },
+    "isa-wave-0000-timeline-000.bin": {
+      "bytes": 24992,
+      "sha256": "6006fb82e34c88c3579fce6f0de61cfb6ddaeebbf940299b803e358e76556c84"
+    },
+    "isa-owner.json": {
+      "bytes": 818,
+      "sha256": "db1e69d3610e545627c0412ffaf54bd040a3e0a0454339429af4749c89d00d91"
+    },
+    "isa-stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "isa-prelaunch-review.json": {
+      "bytes": 942,
+      "sha256": "7a115814881ab9e65584b0bfa75b51fbb758be6816e44bde85db1cf2972da4c4"
+    },
+    "isa-reader-correction.json": {
+      "bytes": 902,
+      "sha256": "3c9ee5dd5cb55ad2b975e2bc5224ceac279a3a6e32ace17269e4efb4da8ee881"
+    },
+    "isa-bootstrap.json": {
+      "bytes": 3136,
+      "sha256": "b1bae97c2e7e5f9c2d22e42d59c77108469f6f7bbaef48f8b4b713cba5c39f39"
+    },
+    "isa-wave-0001-timeline-000.bin": {
+      "bytes": 40,
+      "sha256": "003cc193b63a996acc202f33572cbd4df2a03c858915f6e163780b9aaee78d88"
+    },
+    "isa-probe-correction.json": {
+      "bytes": 512,
+      "sha256": "287da133e321430ff3b198168d3cde663fd6536d6931ce83434ddfd49d522cc7"
+    },
+    "isa-result.json": {
+      "bytes": 1229999,
+      "sha256": "0b4188cad080b554beb52eaf1e1f06c25a90d4e93bda19d5b1c7945689d2edfc"
+    }
+  },
+  "scope": "Recorded Linux child births and final owned-group closure only; no global process, hidden task or scheduled-job absence claim."
+}

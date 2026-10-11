@@ -1,0 +1,14 @@
+{
+  "initial_source": {
+    "bytes": 6765,
+    "sha256": "234c98dd867249c13b3514f10a4abab505c20ac3b6070e354e5af12c18972d9a"
+  },
+  "actual_failure": "ValueError at assembly split: source-bound provider output also contains crc comment, entry label and 14 relocation directives with local temporary labels.",
+  "correction": "Account for only these explicit non-instruction records; preserve them. Instruction encodings remain checked against complete saved ELF entry. No native call occurred.",
+  "second_source": {
+    "bytes": 7091,
+    "sha256": "85cbea32c9b3dfa1616899e31b6e8a1fb123fcaa5ca80b42b577de7518c5b2cb"
+  },
+  "second_failure": "Four relocation directives point to literal word +8 in 12-byte instructions, rather than +4.",
+  "second_correction": "Permit explicitly declared +4/+8 relocations and independently check each actual ELF relocation against an encoded literal word boundary."
+}
