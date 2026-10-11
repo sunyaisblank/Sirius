@@ -1,0 +1,54 @@
+{
+  "candidate_revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
+  "baseline_revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
+  "original_baseline_producer_revision": "7f028007a4935ffdefe5ee9c886b138299f50dd8",
+  "candidate_kind": "Unadopted compact full-table Transport evaluator in a private factory host; production source/head unchanged",
+  "candidate_source": {
+    "bytes": 114739,
+    "sha256": "c0c8642cf6db0a0631969669ed01bc78a5af230475e1cd3b8794d213b86261b3"
+  },
+  "candidate_module": {
+    "bytes": 186476,
+    "sha256": "926398c2301cc39d6d2c6670066ed7c5279fbc417f367a188a5cb20b61fe55ce"
+  },
+  "executables": {
+    "baseline": {
+      "path": "out/transport-private-table-compiler-screen/baseline-backend-tests",
+      "source_revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
+      "bytes": 17968952,
+      "sha256": "b9b8e7688cdf2979ff196ee1b34197bc1ea5192f54c2d210f4547ad97024ee00"
+    },
+    "candidate": {
+      "path": "out/transport-private-table-compiler-screen/candidate-backend-tests",
+      "source_revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
+      "bytes": 18050912,
+      "sha256": "d2eb51811f500eb7b566084cd1bba60edd2834cd4f47434e8e54dfea6fcd8e97"
+    }
+  },
+  "sequence": [
+    "a1",
+    "b1",
+    "b2",
+    "a2"
+  ],
+  "within_slot_repeats": 3,
+  "complete_call_minimum_improvement_percent": 5,
+  "every_inclusive_stage_minimum_improvement_percent": -5,
+  "all20_gates_required": true,
+  "reader_sha256": "2a089e496948fb84091ccac8face2cc5645e0c1be7250f6b36d21f2548841ec7",
+  "comparator_sha256": "d3e4d72b417132e5dcb90f232ec0dffd6ba2f6337856c1a0c746f92cca68f467",
+  "launcher_sha256": "7e4cde85b0596e266eb1f794eac4d513d91c83228035a088f78c604509529a77",
+  "actions_sha256": "476b4b1435a8403dbbe6ad61acd5e3d32f403ad05e684aed024561ab2d6d67af",
+  "owner_sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d",
+  "guard_sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+  "preparer_sha256": "0a3451ec5224850a4f4787adc4a6e64aa1b8fe6307498785c42dcc725580e472",
+  "prior_original_gate": {
+    "path": "attestations/software-vulkan/dc714b9/guarded-upmultiply-trial/diagnostic/retention-gate-frozen.json",
+    "bytes": 2018,
+    "sha256": "35f2d611dede5dfa91b61ac00f5fa4155f873c8d6e024533cb8e64570084b075"
+  },
+  "changed_selected_modules": [
+    "transport"
+  ],
+  "scope": "Frozen before any benefit invocation. Original four complete-call >=5% and sixteen inclusive-stage >=-5% conditions; fixed forward/reverse A1/B1/B2/A2 and three original repeats. Actual baseline/candidate same strict private factory frames, only Transport differs; cold cache-disabled ownership remains separate from prepared-cache correctness. No retry pooling, scene/threshold/assertion changes, product adoption, rendering or final qualification."
+}

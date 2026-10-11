@@ -1,0 +1,1160 @@
+{
+  "pass": true,
+  "scope": "Single current compact canonical evaluator default numerical case and protected historical same-provider full-buffer equality; no performance gate or current-final qualification",
+  "current_owner_seconds": 128.87372898301692,
+  "current_peak_sampled_rss_kib": 3253140,
+  "current_input_seals": 1060,
+  "full_readback_digests_exact": 32,
+  "ordered_available_markers": 51,
+  "selected_modules": {
+    "camera": {
+      "array": "kCameraPortableShader",
+      "stage": "camera",
+      "bytes": "512324",
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+    },
+    "transport": {
+      "array": "kTransportPortableNormalSumShader",
+      "stage": "transport",
+      "bytes": "186476",
+      "sha256": "926398c2301cc39d6d2c6670066ed7c5279fbc417f367a188a5cb20b61fe55ce"
+    },
+    "endpoint": {
+      "array": "kEndpointPortableNormalSumShader",
+      "stage": "endpoint",
+      "bytes": "151400",
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+    },
+    "dense": {
+      "array": "kDensePortableShader",
+      "stage": "dense",
+      "bytes": "116204",
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+    },
+    "initialize": {
+      "array": "kInitializePortableShader",
+      "stage": "initialize",
+      "bytes": "77444",
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+    },
+    "ray_camera": {
+      "array": "kRayCameraPortableShader",
+      "stage": "ray_camera",
+      "bytes": "475256",
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+    },
+    "dopri_phase": {
+      "array": "kDopriPhasePortableNormalSumShader",
+      "stage": "dopri_phase",
+      "bytes": "96752",
+      "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0"
+    }
+  },
+  "provider_file_and_case_identity_exact": true,
+  "historical_owner_revision": "dc714b9759f69936cbab0bb5235d174379b0e6fe",
+  "historical_baseline_producer_revision": "7f028007a4935ffdefe5ee9c886b138299f50dd8",
+  "original_current_executable_byte_exact_historical_baseline_producer": true,
+  "current_tracked_tree_exact_historical_baseline_producer": true,
+  "historical_baseline_not_current_execution": true,
+  "compact_canonical_program_evaluator_with_original_generic_fallback": true,
+  "diagnostic_raw_marker_absent": true,
+  "physical_table_traffic_storage_and_cost_unresolved": true,
+  "current_result": {
+    "legacy": {
+      "repeats": [
+        {
+          "complete_call_ms": 37.940103,
+          "device_ms": 30.235937999999997,
+          "host_completion_ms": 34.948219,
+          "markers": [
+            {
+              "phase": "legacy_repeat0",
+              "stage": "transport",
+              "begin": "158342117846741",
+              "end": "158342126947043",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 9.100302,
+              "host_submit_ms": 0.019167,
+              "host_wait_ms": 9.938456,
+              "host_completion_ms": 9.957623,
+              "pipeline_ms": 0.001284,
+              "setup_ms": 0.027427,
+              "cleanup_ms": 0.13704,
+              "total_ms": 10.123374
+            },
+            {
+              "phase": "legacy_repeat0",
+              "stage": "endpoint",
+              "begin": "158342129281866",
+              "end": "158342131205626",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.92376,
+              "host_submit_ms": 0.028483,
+              "host_wait_ms": 3.248345,
+              "host_completion_ms": 3.276828,
+              "pipeline_ms": 0.001094,
+              "setup_ms": 0.048469,
+              "cleanup_ms": 0.115973,
+              "total_ms": 3.442364
+            },
+            {
+              "phase": "legacy_repeat0",
+              "stage": "transport",
+              "begin": "158342132154116",
+              "end": "158342137750356",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 5.59624,
+              "host_submit_ms": 0.015627,
+              "host_wait_ms": 6.141738,
+              "host_completion_ms": 6.157365,
+              "pipeline_ms": 0.000638,
+              "setup_ms": 0.017444,
+              "cleanup_ms": 0.101228,
+              "total_ms": 6.276675
+            },
+            {
+              "phase": "legacy_repeat0",
+              "stage": "endpoint",
+              "begin": "158342138692860",
+              "end": "158342140627536",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.9346759999999998,
+              "host_submit_ms": 0.029045,
+              "host_wait_ms": 2.511587,
+              "host_completion_ms": 2.540632,
+              "pipeline_ms": 0.001533,
+              "setup_ms": 0.050885,
+              "cleanup_ms": 0.112963,
+              "total_ms": 2.706013
+            },
+            {
+              "phase": "legacy_repeat0",
+              "stage": "transport",
+              "begin": "158342141630899",
+              "end": "158342147410924",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 5.780024999999999,
+              "host_submit_ms": 0.027846,
+              "host_wait_ms": 6.430073,
+              "host_completion_ms": 6.457919,
+              "pipeline_ms": 0.000885,
+              "setup_ms": 0.038133,
+              "cleanup_ms": 0.119995,
+              "total_ms": 6.616932
+            },
+            {
+              "phase": "legacy_repeat0",
+              "stage": "endpoint+dense",
+              "begin": "158342148773438",
+              "end": "158342154674373",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 5.900935,
+              "host_submit_ms": 0.019966,
+              "host_wait_ms": 6.537886,
+              "host_completion_ms": 6.557852,
+              "pipeline_ms": 0.001132,
+              "setup_ms": 0.054293,
+              "cleanup_ms": 0.105645,
+              "total_ms": 6.718922
+            }
+          ]
+        },
+        {
+          "complete_call_ms": 33.886803,
+          "device_ms": 27.896915999999997,
+          "host_completion_ms": 31.886394,
+          "markers": [
+            {
+              "phase": "legacy_repeat1",
+              "stage": "transport",
+              "begin": "158342157402017",
+              "end": "158342163507569",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 6.105551999999999,
+              "host_submit_ms": 0.017968,
+              "host_wait_ms": 6.773014,
+              "host_completion_ms": 6.790982,
+              "pipeline_ms": 0.001209,
+              "setup_ms": 0.032737,
+              "cleanup_ms": 0.110661,
+              "total_ms": 6.935589
+            },
+            {
+              "phase": "legacy_repeat1",
+              "stage": "endpoint",
+              "begin": "158342164495278",
+              "end": "158342166190056",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.694778,
+              "host_submit_ms": 0.01852,
+              "host_wait_ms": 2.367834,
+              "host_completion_ms": 2.386354,
+              "pipeline_ms": 0.000837,
+              "setup_ms": 0.026542,
+              "cleanup_ms": 0.076051,
+              "total_ms": 2.489784
+            },
+            {
+              "phase": "legacy_repeat1",
+              "stage": "transport",
+              "begin": "158342167180893",
+              "end": "158342172760147",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 5.579254,
+              "host_submit_ms": 0.016569,
+              "host_wait_ms": 6.135301,
+              "host_completion_ms": 6.15187,
+              "pipeline_ms": 0.000561,
+              "setup_ms": 0.018139,
+              "cleanup_ms": 0.142893,
+              "total_ms": 6.313463
+            },
+            {
+              "phase": "legacy_repeat1",
+              "stage": "endpoint",
+              "begin": "158342173760694",
+              "end": "158342175599898",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.8392039999999998,
+              "host_submit_ms": 0.028065,
+              "host_wait_ms": 2.582353,
+              "host_completion_ms": 2.610418,
+              "pipeline_ms": 0.001209,
+              "setup_ms": 0.049544,
+              "cleanup_ms": 0.08308,
+              "total_ms": 2.744251
+            },
+            {
+              "phase": "legacy_repeat1",
+              "stage": "transport",
+              "begin": "158342176682860",
+              "end": "158342182560716",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 5.8778559999999995,
+              "host_submit_ms": 0.016207,
+              "host_wait_ms": 6.414065,
+              "host_completion_ms": 6.430272,
+              "pipeline_ms": 0.00059,
+              "setup_ms": 0.019614,
+              "cleanup_ms": 0.083519,
+              "total_ms": 6.533995
+            },
+            {
+              "phase": "legacy_repeat1",
+              "stage": "endpoint+dense",
+              "begin": "158342183316902",
+              "end": "158342190117174",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 6.800272,
+              "host_submit_ms": 0.016322,
+              "host_wait_ms": 7.500176,
+              "host_completion_ms": 7.516498,
+              "pipeline_ms": 0.000648,
+              "setup_ms": 0.027607,
+              "cleanup_ms": 0.101391,
+              "total_ms": 7.646144
+            }
+          ]
+        },
+        {
+          "complete_call_ms": 32.542098,
+          "device_ms": 27.145687,
+          "host_completion_ms": 30.671258,
+          "markers": [
+            {
+              "phase": "legacy_repeat2",
+              "stage": "transport",
+              "begin": "158342193402191",
+              "end": "158342199580402",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 6.178211,
+              "host_submit_ms": 0.017253,
+              "host_wait_ms": 6.877775,
+              "host_completion_ms": 6.895028,
+              "pipeline_ms": 0.001533,
+              "setup_ms": 0.048316,
+              "cleanup_ms": 0.124631,
+              "total_ms": 7.069508
+            },
+            {
+              "phase": "legacy_repeat2",
+              "stage": "endpoint",
+              "begin": "158342200609433",
+              "end": "158342202145750",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.536317,
+              "host_submit_ms": 0.017701,
+              "host_wait_ms": 2.077779,
+              "host_completion_ms": 2.09548,
+              "pipeline_ms": 0.000571,
+              "setup_ms": 0.026523,
+              "cleanup_ms": 0.069567,
+              "total_ms": 2.192141
+            },
+            {
+              "phase": "legacy_repeat2",
+              "stage": "transport",
+              "begin": "158342203000148",
+              "end": "158342208338351",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 5.338203,
+              "host_submit_ms": 0.016369,
+              "host_wait_ms": 5.900629,
+              "host_completion_ms": 5.916998,
+              "pipeline_ms": 0.000352,
+              "setup_ms": 0.016845,
+              "cleanup_ms": 0.095272,
+              "total_ms": 6.029467
+            },
+            {
+              "phase": "legacy_repeat2",
+              "stage": "endpoint",
+              "begin": "158342209212507",
+              "end": "158342211101274",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.8887669999999999,
+              "host_submit_ms": 0.017663,
+              "host_wait_ms": 2.413374,
+              "host_completion_ms": 2.431037,
+              "pipeline_ms": 0.000686,
+              "setup_ms": 0.03032,
+              "cleanup_ms": 0.084766,
+              "total_ms": 2.546809
+            },
+            {
+              "phase": "legacy_repeat2",
+              "stage": "transport",
+              "begin": "158342211948944",
+              "end": "158342218482377",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 6.533433,
+              "host_submit_ms": 0.015732,
+              "host_wait_ms": 7.117956,
+              "host_completion_ms": 7.133688,
+              "pipeline_ms": 0.000257,
+              "setup_ms": 0.015464,
+              "cleanup_ms": 0.064704,
+              "total_ms": 7.214113
+            },
+            {
+              "phase": "legacy_repeat2",
+              "stage": "endpoint+dense",
+              "begin": "158342219301564",
+              "end": "158342224972320",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 5.670756,
+              "host_submit_ms": 0.026133,
+              "host_wait_ms": 6.172894,
+              "host_completion_ms": 6.199027,
+              "pipeline_ms": 0.000647,
+              "setup_ms": 0.040113,
+              "cleanup_ms": 0.078076,
+              "total_ms": 6.317863
+            }
+          ]
+        }
+      ],
+      "sums": {
+        "device_ms": 85.27854099999999,
+        "host_completion_ms": 97.505871,
+        "complete_call_ms": 104.369004
+      }
+    },
+    "modern": {
+      "repeats": [
+        {
+          "complete_call_ms": 44.258711999999996,
+          "device_ms": 30.912188999999998,
+          "host_completion_ms": 39.142517,
+          "markers": [
+            {
+              "phase": "coupled_repeat0",
+              "stage": "transport:rows=12",
+              "begin": "158351709201576",
+              "end": "158351714489919",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 5.288342999999999,
+              "host_submit_ms": 0.022374,
+              "host_wait_ms": 7.614883,
+              "host_completion_ms": 7.637257,
+              "pipeline_ms": 0.001084,
+              "setup_ms": 0.036894,
+              "cleanup_ms": 0.127608,
+              "total_ms": 7.802843
+            },
+            {
+              "phase": "coupled_repeat0",
+              "stage": "endpoint:rows=24",
+              "begin": "158351715796406",
+              "end": "158351718389295",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 2.592889,
+              "host_submit_ms": 0.018076,
+              "host_wait_ms": 3.142972,
+              "host_completion_ms": 3.161048,
+              "pipeline_ms": 0.000875,
+              "setup_ms": 0.039652,
+              "cleanup_ms": 0.077107,
+              "total_ms": 3.278682
+            },
+            {
+              "phase": "coupled_repeat0",
+              "stage": "transport:rows=12",
+              "begin": "158351719388135",
+              "end": "158351723187518",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 3.7993829999999997,
+              "host_submit_ms": 0.017934,
+              "host_wait_ms": 4.48663,
+              "host_completion_ms": 4.504564,
+              "pipeline_ms": 0.001806,
+              "setup_ms": 0.032216,
+              "cleanup_ms": 0.094366,
+              "total_ms": 4.632952
+            },
+            {
+              "phase": "coupled_repeat0",
+              "stage": "endpoint:rows=24",
+              "begin": "158351724321107",
+              "end": "158351726739387",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 2.4182799999999998,
+              "host_submit_ms": 0.018627,
+              "host_wait_ms": 2.960775,
+              "host_completion_ms": 2.979402,
+              "pipeline_ms": 0.000999,
+              "setup_ms": 0.042105,
+              "cleanup_ms": 0.084197,
+              "total_ms": 3.106703
+            },
+            {
+              "phase": "coupled_repeat0",
+              "stage": "transport:rows=12",
+              "begin": "158351727790734",
+              "end": "158351731747850",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 3.9571159999999996,
+              "host_submit_ms": 0.017544,
+              "host_wait_ms": 4.572678,
+              "host_completion_ms": 4.590222,
+              "pipeline_ms": 0.002111,
+              "setup_ms": 0.041392,
+              "cleanup_ms": 0.073836,
+              "total_ms": 4.707561
+            },
+            {
+              "phase": "coupled_repeat0",
+              "stage": "endpoint:rows=24",
+              "begin": "158351732747412",
+              "end": "158351735228659",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 2.4812469999999998,
+              "host_submit_ms": 0.017657,
+              "host_wait_ms": 3.016001,
+              "host_completion_ms": 3.033658,
+              "pipeline_ms": 0.001007,
+              "setup_ms": 0.037551,
+              "cleanup_ms": 0.098844,
+              "total_ms": 3.17106
+            },
+            {
+              "phase": "coupled_repeat0",
+              "stage": "dopri_phase:rows=24",
+              "begin": "158351736539434",
+              "end": "158351738781442",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 2.242008,
+              "host_submit_ms": 0.018314,
+              "host_wait_ms": 2.763441,
+              "host_completion_ms": 2.781755,
+              "pipeline_ms": 0.00192,
+              "setup_ms": 0.042685,
+              "cleanup_ms": 0.067883,
+              "total_ms": 2.894243
+            },
+            {
+              "phase": "coupled_repeat0",
+              "stage": "dopri_phase:rows=24",
+              "begin": "158351739669863",
+              "end": "158351741535497",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.865634,
+              "host_submit_ms": 0.017163,
+              "host_wait_ms": 2.370109,
+              "host_completion_ms": 2.387272,
+              "pipeline_ms": 0.000969,
+              "setup_ms": 0.048999,
+              "cleanup_ms": 0.046869,
+              "total_ms": 2.484109
+            },
+            {
+              "phase": "coupled_repeat0",
+              "stage": "endpoint:rows=12",
+              "begin": "158351742286529",
+              "end": "158351744747085",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 2.460556,
+              "host_submit_ms": 0.023439,
+              "host_wait_ms": 3.054038,
+              "host_completion_ms": 3.077477,
+              "pipeline_ms": 0.000571,
+              "setup_ms": 0.021708,
+              "cleanup_ms": 0.111776,
+              "total_ms": 3.211532
+            },
+            {
+              "phase": "coupled_repeat0",
+              "stage": "dopri_phase:rows=12",
+              "begin": "158351746560647",
+              "end": "158351748712939",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 2.152292,
+              "host_submit_ms": 0.029449,
+              "host_wait_ms": 2.705598,
+              "host_completion_ms": 2.735047,
+              "pipeline_ms": 0.00212,
+              "setup_ms": 0.060685,
+              "cleanup_ms": 0.06466,
+              "total_ms": 2.862512
+            },
+            {
+              "phase": "coupled_repeat0",
+              "stage": "endpoint:rows=12",
+              "begin": "158351749587727",
+              "end": "158351751242168",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.6544409999999998,
+              "host_submit_ms": 0.027661,
+              "host_wait_ms": 2.227154,
+              "host_completion_ms": 2.254815,
+              "pipeline_ms": 0.001198,
+              "setup_ms": 0.032263,
+              "cleanup_ms": 0.070365,
+              "total_ms": 2.358641
+            }
+          ]
+        },
+        {
+          "complete_call_ms": 41.337268,
+          "device_ms": 29.358863,
+          "host_completion_ms": 36.047342,
+          "markers": [
+            {
+              "phase": "coupled_repeat1",
+              "stage": "transport:rows=12",
+              "begin": "158351754186351",
+              "end": "158351757740892",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 3.554541,
+              "host_submit_ms": 0.020425,
+              "host_wait_ms": 4.148964,
+              "host_completion_ms": 4.169389,
+              "pipeline_ms": 0.00173,
+              "setup_ms": 0.046213,
+              "cleanup_ms": 0.085226,
+              "total_ms": 4.302558
+            },
+            {
+              "phase": "coupled_repeat1",
+              "stage": "endpoint:rows=24",
+              "begin": "158351758803098",
+              "end": "158351761399193",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 2.596095,
+              "host_submit_ms": 0.020473,
+              "host_wait_ms": 3.236112,
+              "host_completion_ms": 3.256585,
+              "pipeline_ms": 0.001664,
+              "setup_ms": 0.06698,
+              "cleanup_ms": 0.091911,
+              "total_ms": 3.41714
+            },
+            {
+              "phase": "coupled_repeat1",
+              "stage": "transport:rows=12",
+              "begin": "158351762575524",
+              "end": "158351766697397",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 4.121873,
+              "host_submit_ms": 0.05052,
+              "host_wait_ms": 4.675784,
+              "host_completion_ms": 4.726304,
+              "pipeline_ms": 0.001312,
+              "setup_ms": 0.04142,
+              "cleanup_ms": 0.091564,
+              "total_ms": 4.8606
+            },
+            {
+              "phase": "coupled_repeat1",
+              "stage": "endpoint:rows=24",
+              "begin": "158351767615411",
+              "end": "158351770355432",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 2.740021,
+              "host_submit_ms": 0.018019,
+              "host_wait_ms": 3.300901,
+              "host_completion_ms": 3.31892,
+              "pipeline_ms": 0.000837,
+              "setup_ms": 0.039547,
+              "cleanup_ms": 0.103573,
+              "total_ms": 3.462877
+            },
+            {
+              "phase": "coupled_repeat1",
+              "stage": "transport:rows=12",
+              "begin": "158351771446896",
+              "end": "158351775270564",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 3.8236679999999996,
+              "host_submit_ms": 0.030609,
+              "host_wait_ms": 4.363395,
+              "host_completion_ms": 4.394004,
+              "pipeline_ms": 0.001436,
+              "setup_ms": 0.04239,
+              "cleanup_ms": 0.10163,
+              "total_ms": 4.53946
+            },
+            {
+              "phase": "coupled_repeat1",
+              "stage": "endpoint:rows=24",
+              "begin": "158351776248437",
+              "end": "158351778855629",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 2.607192,
+              "host_submit_ms": 0.01859,
+              "host_wait_ms": 3.186361,
+              "host_completion_ms": 3.204951,
+              "pipeline_ms": 0.000989,
+              "setup_ms": 0.040973,
+              "cleanup_ms": 0.07686,
+              "total_ms": 3.323773
+            },
+            {
+              "phase": "coupled_repeat1",
+              "stage": "dopri_phase:rows=24",
+              "begin": "158351779876549",
+              "end": "158351782363949",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 2.4874,
+              "host_submit_ms": 0.020216,
+              "host_wait_ms": 3.178012,
+              "host_completion_ms": 3.198228,
+              "pipeline_ms": 0.001255,
+              "setup_ms": 0.035924,
+              "cleanup_ms": 0.079167,
+              "total_ms": 3.314574
+            },
+            {
+              "phase": "coupled_repeat1",
+              "stage": "dopri_phase:rows=24",
+              "begin": "158351783704229",
+              "end": "158351785676311",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.972082,
+              "host_submit_ms": 0.029829,
+              "host_wait_ms": 2.482307,
+              "host_completion_ms": 2.512136,
+              "pipeline_ms": 0.001854,
+              "setup_ms": 0.047943,
+              "cleanup_ms": 0.077211,
+              "total_ms": 2.639144
+            },
+            {
+              "phase": "coupled_repeat1",
+              "stage": "endpoint:rows=12",
+              "begin": "158351786550967",
+              "end": "158351788442566",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.8915989999999998,
+              "host_submit_ms": 0.018228,
+              "host_wait_ms": 2.415705,
+              "host_completion_ms": 2.433933,
+              "pipeline_ms": 0.000694,
+              "setup_ms": 0.034793,
+              "cleanup_ms": 0.072949,
+              "total_ms": 2.542369
+            },
+            {
+              "phase": "coupled_repeat1",
+              "stage": "dopri_phase:rows=12",
+              "begin": "158351789749500",
+              "end": "158351791548646",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.799146,
+              "host_submit_ms": 0.031255,
+              "host_wait_ms": 2.405809,
+              "host_completion_ms": 2.437064,
+              "pipeline_ms": 0.000808,
+              "setup_ms": 0.02943,
+              "cleanup_ms": 0.073085,
+              "total_ms": 2.540387
+            },
+            {
+              "phase": "coupled_repeat1",
+              "stage": "endpoint:rows=12",
+              "begin": "158351792401641",
+              "end": "158351794166887",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.7652459999999999,
+              "host_submit_ms": 0.016897,
+              "host_wait_ms": 2.378931,
+              "host_completion_ms": 2.395828,
+              "pipeline_ms": 0.000761,
+              "setup_ms": 0.027252,
+              "cleanup_ms": 0.087265,
+              "total_ms": 2.511106
+            }
+          ]
+        },
+        {
+          "complete_call_ms": 40.570495,
+          "device_ms": 28.526296,
+          "host_completion_ms": 35.06498,
+          "markers": [
+            {
+              "phase": "coupled_repeat2",
+              "stage": "transport:rows=12",
+              "begin": "158351796722313",
+              "end": "158351800712604",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 3.990291,
+              "host_submit_ms": 0.021994,
+              "host_wait_ms": 4.609407,
+              "host_completion_ms": 4.631401,
+              "pipeline_ms": 0.001731,
+              "setup_ms": 0.048209,
+              "cleanup_ms": 0.104387,
+              "total_ms": 4.785728
+            },
+            {
+              "phase": "coupled_repeat2",
+              "stage": "endpoint:rows=24",
+              "begin": "158351801734454",
+              "end": "158351804503257",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 2.7688029999999997,
+              "host_submit_ms": 0.01762,
+              "host_wait_ms": 3.300353,
+              "host_completion_ms": 3.317973,
+              "pipeline_ms": 0.001046,
+              "setup_ms": 0.037112,
+              "cleanup_ms": 0.075429,
+              "total_ms": 3.43156
+            },
+            {
+              "phase": "coupled_repeat2",
+              "stage": "transport:rows=12",
+              "begin": "158351805366521",
+              "end": "158351808859808",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 3.493287,
+              "host_submit_ms": 0.017629,
+              "host_wait_ms": 4.057895,
+              "host_completion_ms": 4.075524,
+              "pipeline_ms": 0.00115,
+              "setup_ms": 0.028964,
+              "cleanup_ms": 0.087537,
+              "total_ms": 4.193175
+            },
+            {
+              "phase": "coupled_repeat2",
+              "stage": "endpoint:rows=24",
+              "begin": "158351809807890",
+              "end": "158351812242536",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 2.434646,
+              "host_submit_ms": 0.017801,
+              "host_wait_ms": 3.02777,
+              "host_completion_ms": 3.045571,
+              "pipeline_ms": 0.001407,
+              "setup_ms": 0.04239,
+              "cleanup_ms": 0.091213,
+              "total_ms": 3.180581
+            },
+            {
+              "phase": "coupled_repeat2",
+              "stage": "transport:rows=12",
+              "begin": "158351813383046",
+              "end": "158351817242162",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 3.8591159999999998,
+              "host_submit_ms": 0.018218,
+              "host_wait_ms": 4.425973,
+              "host_completion_ms": 4.444191,
+              "pipeline_ms": 0.002026,
+              "setup_ms": 0.0633,
+              "cleanup_ms": 0.080197,
+              "total_ms": 4.589714
+            },
+            {
+              "phase": "coupled_repeat2",
+              "stage": "endpoint:rows=24",
+              "begin": "158351818241783",
+              "end": "158351820956738",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 2.714955,
+              "host_submit_ms": 0.017971,
+              "host_wait_ms": 3.378417,
+              "host_completion_ms": 3.396388,
+              "pipeline_ms": 0.000979,
+              "setup_ms": 0.073665,
+              "cleanup_ms": 0.106179,
+              "total_ms": 3.577211
+            },
+            {
+              "phase": "coupled_repeat2",
+              "stage": "dopri_phase:rows=24",
+              "begin": "158351822367839",
+              "end": "158351824524467",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 2.156628,
+              "host_submit_ms": 0.02051,
+              "host_wait_ms": 2.737024,
+              "host_completion_ms": 2.757534,
+              "pipeline_ms": 0.001817,
+              "setup_ms": 0.043084,
+              "cleanup_ms": 0.073512,
+              "total_ms": 2.875947
+            },
+            {
+              "phase": "coupled_repeat2",
+              "stage": "dopri_phase:rows=24",
+              "begin": "158351825653463",
+              "end": "158351827385411",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.7319479999999998,
+              "host_submit_ms": 0.020092,
+              "host_wait_ms": 2.296371,
+              "host_completion_ms": 2.316463,
+              "pipeline_ms": 0.000713,
+              "setup_ms": 0.031835,
+              "cleanup_ms": 0.112175,
+              "total_ms": 2.461186
+            },
+            {
+              "phase": "coupled_repeat2",
+              "stage": "endpoint:rows=12",
+              "begin": "158351828482229",
+              "end": "158351830506171",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 2.023942,
+              "host_submit_ms": 0.021623,
+              "host_wait_ms": 2.577752,
+              "host_completion_ms": 2.599375,
+              "pipeline_ms": 0.00117,
+              "setup_ms": 0.051613,
+              "cleanup_ms": 0.075457,
+              "total_ms": 2.727615
+            },
+            {
+              "phase": "coupled_repeat2",
+              "stage": "dopri_phase:rows=12",
+              "begin": "158351832175322",
+              "end": "158351833863690",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.6883679999999999,
+              "host_submit_ms": 0.018561,
+              "host_wait_ms": 2.255272,
+              "host_completion_ms": 2.273833,
+              "pipeline_ms": 0.002015,
+              "setup_ms": 0.036229,
+              "cleanup_ms": 0.064498,
+              "total_ms": 2.376575
+            },
+            {
+              "phase": "coupled_repeat2",
+              "stage": "endpoint:rows=12",
+              "begin": "158351834697971",
+              "end": "158351836362283",
+              "available0": "1",
+              "available1": "1",
+              "device_ms": 1.664312,
+              "host_submit_ms": 0.016869,
+              "host_wait_ms": 2.189858,
+              "host_completion_ms": 2.206727,
+              "pipeline_ms": 0.000428,
+              "setup_ms": 0.021052,
+              "cleanup_ms": 0.080533,
+              "total_ms": 2.30874
+            }
+          ]
+        }
+      ],
+      "sums": {
+        "device_ms": 88.797348,
+        "host_completion_ms": 110.254839,
+        "complete_call_ms": 126.16647499999999
+      }
+    },
+    "readbacks": {
+      "coupled_readback_9": {
+        "stage": "dopri_phase",
+        "bytes": "199152",
+        "sha256": "847994d56006225c17cc08a5fb3d5e500a5693b1a402a7ee3caab72021676f53"
+      },
+      "legacy_repeat1_readback_1": {
+        "stage": "endpoint",
+        "bytes": "91896",
+        "sha256": "2392d208b92fabcabeee04669fcdf2688e8234607e1306fb75f28c5e34195b92"
+      },
+      "coupled_readback_8": {
+        "stage": "endpoint",
+        "bytes": "183792",
+        "sha256": "18459f1c648f042aab2e859376cccbf18ec18e16c9bfae6dde9d6f368fb750a0"
+      },
+      "legacy_repeat2_readback_0": {
+        "stage": "transport",
+        "bytes": "56388",
+        "sha256": "4cf9ffe096d9ace36bca6867767ccb5acbe30463a40b0cc87e5b740e9a8aa992"
+      },
+      "legacy_repeat0_readback_5": {
+        "stage": "endpoint",
+        "bytes": "91896",
+        "sha256": "fb48a763c12cf4d52827dee2e8e2c8207ff770edbe0680832c54b5a6832b6849"
+      },
+      "legacy_repeat0_readback_2": {
+        "stage": "transport",
+        "bytes": "56388",
+        "sha256": "79b0d6467ece91283d8dbf37e0185b358a98daad6fee9f47f67daaf824d72e9e"
+      },
+      "legacy_repeat2_readback_3": {
+        "stage": "endpoint",
+        "bytes": "91896",
+        "sha256": "22b704d410a74c57beda4d4f894a1808b4c0ace884b5a7e117963ebb4b2a1894"
+      },
+      "coupled_readback_2": {
+        "stage": "transport",
+        "bytes": "225552",
+        "sha256": "a89924f583c595ccf231f317649c12e71644b09b2f9f09a059b3d3d8f5a1cd18"
+      },
+      "legacy_repeat2_readback_6": {
+        "stage": "dense",
+        "bytes": "51348",
+        "sha256": "71718445bff7000df95382f35bc35eaa7a9974f7d2cb24be5574e07a5bba8bb4"
+      },
+      "legacy_repeat2_readback_2": {
+        "stage": "transport",
+        "bytes": "56388",
+        "sha256": "79b0d6467ece91283d8dbf37e0185b358a98daad6fee9f47f67daaf824d72e9e"
+      },
+      "legacy_repeat1_readback_6": {
+        "stage": "dense",
+        "bytes": "51348",
+        "sha256": "71718445bff7000df95382f35bc35eaa7a9974f7d2cb24be5574e07a5bba8bb4"
+      },
+      "legacy_repeat0_readback_4": {
+        "stage": "transport",
+        "bytes": "56388",
+        "sha256": "6a35d074b5d1f7ecd2a33987501cbeef4faa00c32b51bac31c503186e94479b7"
+      },
+      "legacy_repeat0_readback_0": {
+        "stage": "transport",
+        "bytes": "56388",
+        "sha256": "4cf9ffe096d9ace36bca6867767ccb5acbe30463a40b0cc87e5b740e9a8aa992"
+      },
+      "legacy_repeat1_readback_2": {
+        "stage": "transport",
+        "bytes": "56388",
+        "sha256": "79b0d6467ece91283d8dbf37e0185b358a98daad6fee9f47f67daaf824d72e9e"
+      },
+      "legacy_repeat2_readback_4": {
+        "stage": "transport",
+        "bytes": "56388",
+        "sha256": "6a35d074b5d1f7ecd2a33987501cbeef4faa00c32b51bac31c503186e94479b7"
+      },
+      "coupled_readback_6": {
+        "stage": "dopri_phase",
+        "bytes": "398304",
+        "sha256": "fcaccde411844474559ec8659a13bf2ce95e8cb46c527c1bae243e1a7628e890"
+      },
+      "legacy_repeat2_readback_1": {
+        "stage": "endpoint",
+        "bytes": "91896",
+        "sha256": "2392d208b92fabcabeee04669fcdf2688e8234607e1306fb75f28c5e34195b92"
+      },
+      "legacy_repeat1_readback_3": {
+        "stage": "endpoint",
+        "bytes": "91896",
+        "sha256": "22b704d410a74c57beda4d4f894a1808b4c0ace884b5a7e117963ebb4b2a1894"
+      },
+      "coupled_readback_5": {
+        "stage": "endpoint",
+        "bytes": "367584",
+        "sha256": "b4408b8dda064f1d12abf8598245e8a567aa31ee8096bad7041c6d4890201997"
+      },
+      "legacy_repeat1_readback_0": {
+        "stage": "transport",
+        "bytes": "56388",
+        "sha256": "4cf9ffe096d9ace36bca6867767ccb5acbe30463a40b0cc87e5b740e9a8aa992"
+      },
+      "legacy_repeat0_readback_3": {
+        "stage": "endpoint",
+        "bytes": "91896",
+        "sha256": "22b704d410a74c57beda4d4f894a1808b4c0ace884b5a7e117963ebb4b2a1894"
+      },
+      "coupled_readback_7": {
+        "stage": "dopri_phase",
+        "bytes": "398304",
+        "sha256": "c000b75ee1877747d09e009fe9793e5ed9b3365bd8b974e59c486c1ff50950d2"
+      },
+      "coupled_readback_0": {
+        "stage": "transport",
+        "bytes": "225552",
+        "sha256": "81c7f02e920712a3db9716fd3d905b28f1160fbcfdcf25d01527ee53d48c30f0"
+      },
+      "legacy_repeat1_readback_5": {
+        "stage": "endpoint",
+        "bytes": "91896",
+        "sha256": "fb48a763c12cf4d52827dee2e8e2c8207ff770edbe0680832c54b5a6832b6849"
+      },
+      "coupled_readback_10": {
+        "stage": "endpoint",
+        "bytes": "183792",
+        "sha256": "ecfbd3a1a711e5c92f7847cc1a499e07dea34c198b6a91c69ea9484140d77005"
+      },
+      "coupled_readback_1": {
+        "stage": "endpoint",
+        "bytes": "367584",
+        "sha256": "95c43956ef31bb8e5f37b34f76e2c97ef4454564749057f683f663a789522362"
+      },
+      "coupled_readback_4": {
+        "stage": "transport",
+        "bytes": "225552",
+        "sha256": "3f17380bf46356395bccd0747676642a421a7662b984136e4a939e77981aed04"
+      },
+      "legacy_repeat1_readback_4": {
+        "stage": "transport",
+        "bytes": "56388",
+        "sha256": "6a35d074b5d1f7ecd2a33987501cbeef4faa00c32b51bac31c503186e94479b7"
+      },
+      "coupled_readback_3": {
+        "stage": "endpoint",
+        "bytes": "367584",
+        "sha256": "d17ba462c17ab8e2d3ab8829757026419e9677de54faa111d5323d106f743392"
+      },
+      "legacy_repeat0_readback_1": {
+        "stage": "endpoint",
+        "bytes": "91896",
+        "sha256": "2392d208b92fabcabeee04669fcdf2688e8234607e1306fb75f28c5e34195b92"
+      },
+      "legacy_repeat2_readback_5": {
+        "stage": "endpoint",
+        "bytes": "91896",
+        "sha256": "fb48a763c12cf4d52827dee2e8e2c8207ff770edbe0680832c54b5a6832b6849"
+      },
+      "legacy_repeat0_readback_6": {
+        "stage": "dense",
+        "bytes": "51348",
+        "sha256": "71718445bff7000df95382f35bc35eaa7a9974f7d2cb24be5574e07a5bba8bb4"
+      }
+    },
+    "identity": {
+      "selected_device": "llvmpipe (LLVM 20.1.2, 256 bits)",
+      "selected_driver": "llvmpipe: Mesa 25.2.8-0ubuntu0.24.04.2 (LLVM 20.1.2)",
+      "retained_scalar_route": "portable with guarded normal sums",
+      "product_mode": "default",
+      "timestamp_valid_bits": "64",
+      "timestamp_period_ns": "1",
+      "coupled_rows": "12",
+      "coupled_projection_budget": "24",
+      "timestamp_scope": "opt-in device marker span includes original barriers and scheduling; not isolated shader time or calibrated host/driver overhead; existing host governor unchanged; finite original critical0/critical1/flat intervals, plus current 12-row Schwarzschild DP/sample cohorts; not frame, cold, full-science or release qualification",
+      "legacy_call_timing_scope": "original synchronous interval call including allocation, packing, decoding and existing marker/readback observers; excludes SetUp, assertions, digest serialization and result disposal; unchanged general-Kerr/flat inputs and projection budget; no cold, frame or release claim",
+      "coupled_call_timing_scope": "sum of synchronous construction and interior sampling calls, including allocation, packing, decoding and existing marker/readback observers; excludes SetUp, assertions between calls and result disposal; unchanged 12-row inputs and projection budget; no cold, frame or release claim"
+    },
+    "selected_modules": {
+      "camera": {
+        "array": "kCameraPortableShader",
+        "stage": "camera",
+        "bytes": "512324",
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+      },
+      "transport": {
+        "array": "kTransportPortableNormalSumShader",
+        "stage": "transport",
+        "bytes": "186476",
+        "sha256": "926398c2301cc39d6d2c6670066ed7c5279fbc417f367a188a5cb20b61fe55ce"
+      },
+      "endpoint": {
+        "array": "kEndpointPortableNormalSumShader",
+        "stage": "endpoint",
+        "bytes": "151400",
+        "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+      },
+      "dense": {
+        "array": "kDensePortableShader",
+        "stage": "dense",
+        "bytes": "116204",
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+      },
+      "initialize": {
+        "array": "kInitializePortableShader",
+        "stage": "initialize",
+        "bytes": "77444",
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+      },
+      "ray_camera": {
+        "array": "kRayCameraPortableShader",
+        "stage": "ray_camera",
+        "bytes": "475256",
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+      },
+      "dopri_phase": {
+        "array": "kDopriPhasePortableNormalSumShader",
+        "stage": "dopri_phase",
+        "bytes": "96752",
+        "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0"
+      }
+    },
+    "expected_complete_readback_count": 32
+  }
+}
