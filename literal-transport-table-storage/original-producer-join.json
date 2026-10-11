@@ -1,0 +1,295 @@
+{
+  "scope": "Exact relink to accepted source/build product using current original Ninja object/archive/link command; no independent recompile of reused objects or scientific execution",
+  "argv": [
+    "/usr/bin/g++-14",
+    "-O3",
+    "-DNDEBUG",
+    "tests/backend/CMakeFiles/sirius_backend_tests.dir/portable_binary32_test.cpp.o",
+    "tests/backend/CMakeFiles/sirius_backend_tests.dir/cpu_jacobi_oracle_test.cpp.o",
+    "tests/backend/CMakeFiles/sirius_backend_tests.dir/cpu_trace_boundary_test.cpp.o",
+    "tests/backend/CMakeFiles/sirius_backend_tests.dir/coupled_transport_test.cpp.o",
+    "tests/backend/CMakeFiles/sirius_backend_tests.dir/full_path_acceptance_test.cpp.o",
+    "tests/backend/CMakeFiles/sirius_backend_tests.dir/polarisation_acceptance_test.cpp.o",
+    "tests/backend/CMakeFiles/sirius_backend_tests.dir/source_sky_map_trace_test.cpp.o",
+    "tests/backend/CMakeFiles/sirius_backend_tests.dir/source_sky_infinity_trace_test.cpp.o",
+    "tests/backend/CMakeFiles/sirius_backend_tests.dir/volume_acceptance_test.cpp.o",
+    "tests/backend/CMakeFiles/sirius_backend_tests.dir/vulkan_smoke_test.cpp.o",
+    "tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_parity_test.cpp.o",
+    "tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_metric_consistency_test.cpp.o",
+    "tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_camera_frame_test.cpp.o",
+    "tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_camera_program_test.cpp.o",
+    "tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_compute_test.cpp.o",
+    "tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_dopri_test.cpp.o",
+    "tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_infinity_test.cpp.o",
+    "tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_trace_test.cpp.o",
+    "tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_beam_test.cpp.o",
+    "tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_portability_test.cpp.o",
+    "-o",
+    "/home/astra/.project/Sirius/out/literal-transport-table-storage/canonical-reference-backend-tests",
+    "src/sirius/backend/libsirius_backend_cpu.a",
+    "lib/libgtest_main.a",
+    "src/sirius/backend/libsirius_backend.a",
+    "src/sirius/render/libsirius_render.a",
+    "lib/libgtest.a",
+    "src/sirius/backend/libsirius_backend_cpu.a",
+    "src/sirius/backend/libsirius_backend.a",
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+    "-ldl",
+    "src/sirius/core/libsirius_core.a",
+    "src/sirius/libsirius_base.a"
+  ],
+  "cwd": "/home/astra/.project/Sirius/bin/linux-gcc",
+  "exit": 0,
+  "inputs_before": {
+    "/usr/bin/x86_64-linux-gnu-g++-14": {
+      "bytes": 1186944,
+      "sha256": "916ef3c03c2d024857af2e084d3648204033b9c79e0e62575974f567f99adc84"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/portable_binary32_test.cpp.o": {
+      "bytes": 93952,
+      "sha256": "62675e37175fab01fc27639c61e2e7e932e02137c5f85408cdb10342cf5f1c46"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/cpu_jacobi_oracle_test.cpp.o": {
+      "bytes": 356712,
+      "sha256": "b470b9c1aeeab6e445668cf95477f39a23bdd8b1d91c89150200c83660af0c32"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/cpu_trace_boundary_test.cpp.o": {
+      "bytes": 911688,
+      "sha256": "3e68d594e733ecb3925baa9e83c59e1abb8a5ff1b003a9ee5a670eccb66252d5"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/coupled_transport_test.cpp.o": {
+      "bytes": 640752,
+      "sha256": "f4ed57130bd6422198c95069a9e5ff22c34fdc0574d2693efefcf5794b08b03d"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/full_path_acceptance_test.cpp.o": {
+      "bytes": 878400,
+      "sha256": "d66c490a3257033805c66b90984afc41265b694bfa81e594f071868b93dbbab6"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/polarisation_acceptance_test.cpp.o": {
+      "bytes": 637184,
+      "sha256": "03e7de241da9621359b3a70e769f8901778c1513eede5b799c7c5bf0c87a918d"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/source_sky_map_trace_test.cpp.o": {
+      "bytes": 307832,
+      "sha256": "10b878b93a6ae062da2a275974c925b30c094ee92d0de1efd2dbaddbb0883ba8"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/source_sky_infinity_trace_test.cpp.o": {
+      "bytes": 582128,
+      "sha256": "4b718992509bcc5b1961da5d597f54854dfc1061324b0afdf2554c11d72378e2"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/volume_acceptance_test.cpp.o": {
+      "bytes": 654480,
+      "sha256": "9e3c129f589449d151e4d992b5694294155cab65995db5b71b7c0ec85edbd2aa"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/vulkan_smoke_test.cpp.o": {
+      "bytes": 779712,
+      "sha256": "3d859dae369c7cd8935af32a43477ab86e186ac8e393e7813cfb1b1b76470f02"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_parity_test.cpp.o": {
+      "bytes": 1397184,
+      "sha256": "12c6280f978d4135c639f4a32570f8e7e3f10684cd3e9c3b6bf59138866e1380"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_metric_consistency_test.cpp.o": {
+      "bytes": 368968,
+      "sha256": "0db8a565e8cf1b1319a6a71baef14b515422b7b0a4954648dcb6ea7a237472dc"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_camera_frame_test.cpp.o": {
+      "bytes": 393480,
+      "sha256": "b4bb070b8b4ff56d3c83821c82998e27dfa8b514dd7987d889ad0817a60ddac4"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_camera_program_test.cpp.o": {
+      "bytes": 453584,
+      "sha256": "d974d3ade71be29295e91775bd4bde5f00f4f331639cfc5ec41f93cfbfd11120"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_compute_test.cpp.o": {
+      "bytes": 9244728,
+      "sha256": "6c666443f954e250bb9788809b9f98b9e934c271610c3e6d242ecd7b5d0a968a"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_dopri_test.cpp.o": {
+      "bytes": 1455592,
+      "sha256": "9e2b5639a2627dfcfb9444da83fb078e25d603f797d51e7483fdcf12687f2193"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_infinity_test.cpp.o": {
+      "bytes": 707080,
+      "sha256": "7698a491a8b733d967e80637bb2d8b8298250c206a83a842f7fb172d147d1572"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_trace_test.cpp.o": {
+      "bytes": 611568,
+      "sha256": "6bdad45c28abb1391f7b000db8a7985ae8c07755db478136c0888f5e101f098d"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_beam_test.cpp.o": {
+      "bytes": 277712,
+      "sha256": "e6704ffb82012590a9b4b1bc5472f3cf30e1166203c6ad4b50f2c3f841b43752"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_portability_test.cpp.o": {
+      "bytes": 68368,
+      "sha256": "ec6b54fd59bd5b33f1a91fda2a4b0ce17c0e7e820c908d5f742c7d2ddbbf8da7"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a": {
+      "bytes": 667240,
+      "sha256": "917adc1d6ce6abb01048cbb80ced16e52eb85cdb1856352ec1dc029ecb7a91ca"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a": {
+      "bytes": 2326,
+      "sha256": "66ca767ee35e6fbfa8f6ce232d198bb536aca8b2edcc7da458c798df4adc3a5f"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a": {
+      "bytes": 6293772,
+      "sha256": "879d127d318402923712712ac036a40c3caedfbff44a5da374ab3afe1504f72b"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/render/libsirius_render.a": {
+      "bytes": 3867786,
+      "sha256": "f7eed9ddb6e59a705456fe4d3fee4d7e92c488d21c3567f5736fd82a19ee9ca9"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a": {
+      "bytes": 984792,
+      "sha256": "885201c4fd2b55268bb9147039d01ab252912bbb0a3d982efe9b9cde65536748"
+    },
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275": {
+      "bytes": 510592,
+      "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/core/libsirius_core.a": {
+      "bytes": 478012,
+      "sha256": "2dde748cfbc88c5f20c6aa22fd5030145f8efb1d1660a4e6f5b54be700649cdf"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a": {
+      "bytes": 35862,
+      "sha256": "1fb43165640e4059b46e8cd2802a954e529788cdc17e832fa1c583f920014d76"
+    }
+  },
+  "inputs_after": {
+    "/usr/bin/x86_64-linux-gnu-g++-14": {
+      "bytes": 1186944,
+      "sha256": "916ef3c03c2d024857af2e084d3648204033b9c79e0e62575974f567f99adc84"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/portable_binary32_test.cpp.o": {
+      "bytes": 93952,
+      "sha256": "62675e37175fab01fc27639c61e2e7e932e02137c5f85408cdb10342cf5f1c46"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/cpu_jacobi_oracle_test.cpp.o": {
+      "bytes": 356712,
+      "sha256": "b470b9c1aeeab6e445668cf95477f39a23bdd8b1d91c89150200c83660af0c32"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/cpu_trace_boundary_test.cpp.o": {
+      "bytes": 911688,
+      "sha256": "3e68d594e733ecb3925baa9e83c59e1abb8a5ff1b003a9ee5a670eccb66252d5"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/coupled_transport_test.cpp.o": {
+      "bytes": 640752,
+      "sha256": "f4ed57130bd6422198c95069a9e5ff22c34fdc0574d2693efefcf5794b08b03d"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/full_path_acceptance_test.cpp.o": {
+      "bytes": 878400,
+      "sha256": "d66c490a3257033805c66b90984afc41265b694bfa81e594f071868b93dbbab6"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/polarisation_acceptance_test.cpp.o": {
+      "bytes": 637184,
+      "sha256": "03e7de241da9621359b3a70e769f8901778c1513eede5b799c7c5bf0c87a918d"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/source_sky_map_trace_test.cpp.o": {
+      "bytes": 307832,
+      "sha256": "10b878b93a6ae062da2a275974c925b30c094ee92d0de1efd2dbaddbb0883ba8"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/source_sky_infinity_trace_test.cpp.o": {
+      "bytes": 582128,
+      "sha256": "4b718992509bcc5b1961da5d597f54854dfc1061324b0afdf2554c11d72378e2"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/volume_acceptance_test.cpp.o": {
+      "bytes": 654480,
+      "sha256": "9e3c129f589449d151e4d992b5694294155cab65995db5b71b7c0ec85edbd2aa"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/vulkan_smoke_test.cpp.o": {
+      "bytes": 779712,
+      "sha256": "3d859dae369c7cd8935af32a43477ab86e186ac8e393e7813cfb1b1b76470f02"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_parity_test.cpp.o": {
+      "bytes": 1397184,
+      "sha256": "12c6280f978d4135c639f4a32570f8e7e3f10684cd3e9c3b6bf59138866e1380"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_metric_consistency_test.cpp.o": {
+      "bytes": 368968,
+      "sha256": "0db8a565e8cf1b1319a6a71baef14b515422b7b0a4954648dcb6ea7a237472dc"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_camera_frame_test.cpp.o": {
+      "bytes": 393480,
+      "sha256": "b4bb070b8b4ff56d3c83821c82998e27dfa8b514dd7987d889ad0817a60ddac4"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_camera_program_test.cpp.o": {
+      "bytes": 453584,
+      "sha256": "d974d3ade71be29295e91775bd4bde5f00f4f331639cfc5ec41f93cfbfd11120"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_compute_test.cpp.o": {
+      "bytes": 9244728,
+      "sha256": "6c666443f954e250bb9788809b9f98b9e934c271610c3e6d242ecd7b5d0a968a"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_dopri_test.cpp.o": {
+      "bytes": 1455592,
+      "sha256": "9e2b5639a2627dfcfb9444da83fb078e25d603f797d51e7483fdcf12687f2193"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_infinity_test.cpp.o": {
+      "bytes": 707080,
+      "sha256": "7698a491a8b733d967e80637bb2d8b8298250c206a83a842f7fb172d147d1572"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_trace_test.cpp.o": {
+      "bytes": 611568,
+      "sha256": "6bdad45c28abb1391f7b000db8a7985ae8c07755db478136c0888f5e101f098d"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_beam_test.cpp.o": {
+      "bytes": 277712,
+      "sha256": "e6704ffb82012590a9b4b1bc5472f3cf30e1166203c6ad4b50f2c3f841b43752"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_portability_test.cpp.o": {
+      "bytes": 68368,
+      "sha256": "ec6b54fd59bd5b33f1a91fda2a4b0ce17c0e7e820c908d5f742c7d2ddbbf8da7"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a": {
+      "bytes": 667240,
+      "sha256": "917adc1d6ce6abb01048cbb80ced16e52eb85cdb1856352ec1dc029ecb7a91ca"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a": {
+      "bytes": 2326,
+      "sha256": "66ca767ee35e6fbfa8f6ce232d198bb536aca8b2edcc7da458c798df4adc3a5f"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a": {
+      "bytes": 6293772,
+      "sha256": "879d127d318402923712712ac036a40c3caedfbff44a5da374ab3afe1504f72b"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/render/libsirius_render.a": {
+      "bytes": 3867786,
+      "sha256": "f7eed9ddb6e59a705456fe4d3fee4d7e92c488d21c3567f5736fd82a19ee9ca9"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a": {
+      "bytes": 984792,
+      "sha256": "885201c4fd2b55268bb9147039d01ab252912bbb0a3d982efe9b9cde65536748"
+    },
+    "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275": {
+      "bytes": 510592,
+      "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/core/libsirius_core.a": {
+      "bytes": 478012,
+      "sha256": "2dde748cfbc88c5f20c6aa22fd5030145f8efb1d1660a4e6f5b54be700649cdf"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a": {
+      "bytes": 35862,
+      "sha256": "1fb43165640e4059b46e8cd2802a954e529788cdc17e832fa1c583f920014d76"
+    }
+  },
+  "receipt": {
+    "path": "/home/astra/.project/Sirius/attestations/review/b81e061/rejected-upmultiply-restoration-source-checks/diagnostic/restoration/linux-readonly-payloads.json",
+    "bytes": 53416,
+    "sha256": "1b47710fd942dad71dccf5ff0d37cb7062bbfc2d24d34075df965f0895612caa"
+  },
+  "accepted_product": {
+    "path": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+    "bytes": 13082752,
+    "sha256": "9a8f8e766d7f8bf6bbc7f74c4fbfb34e0b43aa764e60a8a76ae2b678c0310623"
+  },
+  "relinked_product": {
+    "path": "/home/astra/.project/Sirius/out/literal-transport-table-storage/canonical-reference-backend-tests",
+    "bytes": 13082752,
+    "sha256": "9a8f8e766d7f8bf6bbc7f74c4fbfb34e0b43aa764e60a8a76ae2b678c0310623"
+  },
+  "pass": true
+}

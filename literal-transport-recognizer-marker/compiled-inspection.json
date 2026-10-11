@@ -1,0 +1,896 @@
+{
+  "pass": true,
+  "scope": "Recognizer+original generic compiler isolation only; no device/numerical/benefit result. Main CFG, loop/composite-store joins require independent review.",
+  "module": {
+    "path": "/home/astra/.project/Sirius/out/literal-transport-recognizer-marker/literal-transport.spv",
+    "bytes": 177976,
+    "sha256": "561be3974d637f6f9ace88e82603737ebea59fadb6953d5879579d7b48c7c186"
+  },
+  "assembly": {
+    "path": "/home/astra/.project/Sirius/out/literal-transport-recognizer-marker/literal-transport.spvasm",
+    "bytes": 464929,
+    "sha256": "b72a5596c7bc1da9fea2385399867448b024eb86f098846022c93830abd113ae"
+  },
+  "seals_checked": 67,
+  "function_count": 93,
+  "literal_functions_present": 0,
+  "recognizer_entry_calls": 1,
+  "generic_stage_calls": 1,
+  "recognizer_barriers": 2,
+  "recognizer_atomic_mismatch_sites": 2,
+  "complete_tables": {
+    "General": {
+      "words": 13096,
+      "exact_constant_composite": "%1019",
+      "private_table": "%LiteralGeneralTable"
+    },
+    "Schwarzschild": {
+      "words": 2871,
+      "exact_constant_composite": "%645",
+      "private_table": "%LiteralSchwarzschildTable"
+    }
+  },
+  "storage": {
+    "scope": "SPIR-V declared logical scalar/aggregate member bytes; excludes ABI padding, driver lowering and physical residency",
+    "variables": [
+      {
+        "id": "%LiteralSchwarzschildTable",
+        "storage": "Private",
+        "type": "%_arr_uint_int_2871",
+        "logical_member_bytes": 11484,
+        "initializer": null
+      },
+      {
+        "id": "%LiteralGeneralTable",
+        "storage": "Private",
+        "type": "%_arr_uint_int_13096",
+        "logical_member_bytes": 52384,
+        "initializer": null
+      },
+      {
+        "id": "%literalTransportMatch",
+        "storage": "Workgroup",
+        "type": "%uint",
+        "logical_member_bytes": 4,
+        "initializer": null
+      },
+      {
+        "id": "%retainedScratch",
+        "storage": "Workgroup",
+        "type": "%_arr_uint_int_2295",
+        "logical_member_bytes": 9180,
+        "initializer": null
+      },
+      {
+        "id": "%retainedStatus",
+        "storage": "Workgroup",
+        "type": "%uint",
+        "logical_member_bytes": 4,
+        "initializer": null
+      },
+      {
+        "id": "%retainedCoefficients",
+        "storage": "Workgroup",
+        "type": "%_arr_uint_int_125",
+        "logical_member_bytes": 500,
+        "initializer": null
+      },
+      {
+        "id": "%1232",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1233",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1234",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1235",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1236",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1237",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1238",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1239",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1240",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1241",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1242",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1243",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1244",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1245",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1246",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1247",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1248",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1249",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1250",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1251",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1252",
+        "storage": "Function",
+        "type": "%_arr__arr_int_int_7_int_7",
+        "logical_member_bytes": 196,
+        "initializer": null
+      },
+      {
+        "id": "%1253",
+        "storage": "Function",
+        "type": "%_arr_int_int_7",
+        "logical_member_bytes": 28,
+        "initializer": null
+      },
+      {
+        "id": "%1254",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1255",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1256",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1257",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1258",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1259",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1260",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1261",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1262",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1263",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1264",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1265",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1266",
+        "storage": "Function",
+        "type": "%_arr_int_int_7",
+        "logical_member_bytes": 28,
+        "initializer": null
+      },
+      {
+        "id": "%1267",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1268",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1269",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1270",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1271",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1272",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1273",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1274",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1275",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1276",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1277",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1278",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%1279",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%r",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%r_0",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%r_1",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%upper",
+        "storage": "Function",
+        "type": "%uint",
+        "logical_member_bytes": 4,
+        "initializer": null
+      },
+      {
+        "id": "%lower",
+        "storage": "Function",
+        "type": "%uint",
+        "logical_member_bytes": 4,
+        "initializer": null
+      },
+      {
+        "id": "%r_2",
+        "storage": "Function",
+        "type": "%PB32Finite",
+        "logical_member_bytes": 8,
+        "initializer": null
+      },
+      {
+        "id": "%difference",
+        "storage": "Function",
+        "type": "%uint",
+        "logical_member_bytes": 4,
+        "initializer": null
+      },
+      {
+        "id": "%correction",
+        "storage": "Function",
+        "type": "%uint",
+        "logical_member_bytes": 4,
+        "initializer": null
+      },
+      {
+        "id": "%r_3",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%2668",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%2687",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%2688",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%hi_3",
+        "storage": "Function",
+        "type": "%uint",
+        "logical_member_bytes": 4,
+        "initializer": null
+      },
+      {
+        "id": "%lo_3",
+        "storage": "Function",
+        "type": "%uint",
+        "logical_member_bytes": 4,
+        "initializer": null
+      },
+      {
+        "id": "%r_4",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%2875",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%r_5",
+        "storage": "Function",
+        "type": "%PB32Product",
+        "logical_member_bytes": 12,
+        "initializer": null
+      },
+      {
+        "id": "%rounded",
+        "storage": "Function",
+        "type": "%PB32Wide",
+        "logical_member_bytes": 8,
+        "initializer": null
+      },
+      {
+        "id": "%2955",
+        "storage": "Function",
+        "type": "%PB32Wide",
+        "logical_member_bytes": 8,
+        "initializer": null
+      },
+      {
+        "id": "%2956",
+        "storage": "Function",
+        "type": "%PB32Wide",
+        "logical_member_bytes": 8,
+        "initializer": null
+      },
+      {
+        "id": "%2957",
+        "storage": "Function",
+        "type": "%PB32Wide",
+        "logical_member_bytes": 8,
+        "initializer": null
+      },
+      {
+        "id": "%2958",
+        "storage": "Function",
+        "type": "%PB32Wide",
+        "logical_member_bytes": 8,
+        "initializer": null
+      },
+      {
+        "id": "%2959",
+        "storage": "Function",
+        "type": "%PB32Wide",
+        "logical_member_bytes": 8,
+        "initializer": null
+      },
+      {
+        "id": "%2960",
+        "storage": "Function",
+        "type": "%PB32Wide",
+        "logical_member_bytes": 8,
+        "initializer": null
+      },
+      {
+        "id": "%2961",
+        "storage": "Function",
+        "type": "%PB32Wide",
+        "logical_member_bytes": 8,
+        "initializer": null
+      },
+      {
+        "id": "%3042",
+        "storage": "Function",
+        "type": "%PB32Wide",
+        "logical_member_bytes": 8,
+        "initializer": null
+      },
+      {
+        "id": "%r_6",
+        "storage": "Function",
+        "type": "%PB32Wide",
+        "logical_member_bytes": 8,
+        "initializer": null
+      },
+      {
+        "id": "%r_7",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%upper_1",
+        "storage": "Function",
+        "type": "%uint",
+        "logical_member_bytes": 4,
+        "initializer": null
+      },
+      {
+        "id": "%lower_0",
+        "storage": "Function",
+        "type": "%uint",
+        "logical_member_bytes": 4,
+        "initializer": null
+      },
+      {
+        "id": "%r_8",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%3462",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%r_10",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%value_4",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%3965",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%3971",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%4127",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%4128",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%4129",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%4130",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%4131",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%4132",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%4133",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%r_11",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%4340",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%4341",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%4342",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%4343",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%4344",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%4345",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%4346",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%4347",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%radicand",
+        "storage": "Function",
+        "type": "%PB32Wide",
+        "logical_member_bytes": 8,
+        "initializer": null
+      },
+      {
+        "id": "%4886",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      },
+      {
+        "id": "%4892",
+        "storage": "Function",
+        "type": "%RetainedTriple",
+        "logical_member_bytes": 20,
+        "initializer": null
+      }
+    ],
+    "declared_workgroup_member_bytes": 9688,
+    "aggregate_variables_at_least_10000_bytes": [
+      {
+        "id": "%LiteralSchwarzschildTable",
+        "storage": "Private",
+        "type": "%_arr_uint_int_2871",
+        "logical_member_bytes": 11484,
+        "initializer": null
+      },
+      {
+        "id": "%LiteralGeneralTable",
+        "storage": "Private",
+        "type": "%_arr_uint_int_13096",
+        "logical_member_bytes": 52384,
+        "initializer": null
+      }
+    ]
+  },
+  "main_calls": [
+    "%1281",
+    "%1283",
+    "ReadOriginal",
+    "ReadOriginal",
+    "RPOne",
+    "RPScalarEqual",
+    "RPScalarNegate",
+    "RPScalarEqual",
+    "RPZero",
+    "RPScalarEqual",
+    "RPZero",
+    "RPScalarEqual",
+    "RPZero",
+    "RPScalarEqual",
+    "ReadOriginal",
+    "ReadOriginal",
+    "RTAbsoluteUpper",
+    "RPZero",
+    "RPScalarEqual",
+    "RTAbsoluteUpper",
+    "RPScalarEqual",
+    "ReadOriginal",
+    "RPScalarLessEqual",
+    "RTAbsoluteLower",
+    "RPScalarLessEqual",
+    "ReadOriginal",
+    "RTExact",
+    "ReadOriginal",
+    "RTExact",
+    "RTExact",
+    "RTConstant",
+    "ReadOriginal",
+    "RTNegate",
+    "RTMultiply",
+    "ReadOriginal",
+    "RTAdd",
+    "WriteStored",
+    "WriteStored",
+    "WriteStored",
+    "WriteStored",
+    "RTExact",
+    "ReadOriginal",
+    "RTExact",
+    "RTExact",
+    "RecognizeLiteralTransport",
+    "ScratchWrite",
+    "CacheCoefficient",
+    "ReadOriginal",
+    "ReadStored",
+    "ReadCoefficient",
+    "RTMultiply",
+    "ReadStored",
+    "RTSubtract",
+    "ReadCoefficient",
+    "RTMultiply",
+    "RTAdd",
+    "RTMultiply",
+    "RTAdd",
+    "WriteStored",
+    "RejectRetainedProgram",
+    "WriteStored",
+    "EvaluateProgramGeneric",
+    "ReadStored",
+    "RTConstant",
+    "ReadStored",
+    "RTSubtract",
+    "ReadCoefficient",
+    "RTMultiply",
+    "RTAdd",
+    "RTMultiply",
+    "ReadStored",
+    "RTSubtract",
+    "RejectRetainedProgram",
+    "WriteStored",
+    "WriteStored",
+    "WriteStored"
+  ]
+}

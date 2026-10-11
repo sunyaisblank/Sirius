@@ -1,0 +1,20 @@
+{
+  "reviewer": "command_owner_review",
+  "accepted_for_compiler_only": true,
+  "scope": "read-only compiler/inspector source review; compiled structural checks and independent joins required before runtime",
+  "runner": {
+    "bytes": 10406,
+    "sha256": "ad8bc38b743bc3a0cea61b28b126dc58f220278320231cc5a6870fa95ed831f0"
+  },
+  "inspector": {
+    "bytes": 11115,
+    "sha256": "82a4cbe995040d4b363bc123cac4c3fcdf61e28f9ba85615d38209c1619d83a8"
+  },
+  "pending_compiled_joins": [
+    "Bind baseline assembly to actual baseline disassembly output seal",
+    "All literal scratch offsets within0..2294",
+    "Recognition accesses use matched full table constants with actual storage/initialization/aggregate-copy locations",
+    "Main CFG authority, uniform joins and generic fallback independent review"
+  ],
+  "limitations": "Structural pass alone is not admission; logical declared bytes are not physical residency"
+}

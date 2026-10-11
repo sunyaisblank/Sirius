@@ -1,0 +1,10 @@
+{
+  "scope": "Causal feasibility isolation, never candidate adoption",
+  "source_change": "Retain declaration-only tables, recognizer call and all literal source bodies; replace stage routing with always-original EvaluateProgramGeneric. Actual module must retain recognition effects and remove all unreachable literal functions.",
+  "required_module_boundary": "Full original recognizer loops, barriers, atomics, exacttableinit and entrycall; only generic stage eval; all159literalfunctions absent/unreachable.",
+  "comparison_limit": "Outcome applies to recognizer+generic combination; neither exclusive table storage/driver phase nor literal-code interaction causality is proved.",
+  "prior_emitter_sha256": "30a8a1cb3d228626e5857dca499d9c1a1e6ae51c25956c29cb570a6d1239a351",
+  "new_emitter_sha256": "e14a5367fd8483fd35945120173b391e88b4a8778f33fa3c6573f394571a7a4c",
+  "removed_emitter_router": "    modified = modified.replace(marker,\n        \"bool evaluated;\\n\"\n        \"        if (literalProgram) {\\n\"\n        \"            if (literalSchwarzschild)\\n\"\n        \"                evaluated = LiteralSchwarzschildProgram(row, rowBase, stage, lane);\\n\"\n        \"            else\\n\"\n        \"                evaluated = LiteralGeneralProgram(row, rowBase, stage, lane);\\n\"\n        \"        } else {\\n\"\n        \"            evaluated = EvaluateProgramGeneric(row, rowBase, programBase, count, registers, layers, stage, lane);\\n\"\n        \"        }\\n\"\n        \"        if (!evaluated) return;\", 1)\n",
+  "replacement_emitter_router": "    modified = modified.replace(marker,\n        \"if (!EvaluateProgramGeneric(row, rowBase, programBase, count, registers, layers, stage, lane)) return;\", 1)\n"
+}

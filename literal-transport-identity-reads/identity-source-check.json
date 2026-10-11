@@ -1,0 +1,36 @@
+{
+  "scope": "source-only literaloperand/rootreads andnode resultstores; no compiler orruntimeclaim",
+  "source": {
+    "bytes": 2081641,
+    "sha256": "9498084b751c27347f153838ef9970376564b7a3fe7e85117dca3a0f9da0db01"
+  },
+  "prior_source": {
+    "bytes": 2467177,
+    "sha256": "2fe0634e4683b22b774251205d45978518cbe5a912500aacf9deb76290f906c8"
+  },
+  "source_identity_calls_removed": 36320,
+  "source_read_assignments": 23744,
+  "source_write_assignments": 12576,
+  "prior_reported_IR_identity_calls": 36308,
+  "count_interpretation": "Earlierreviewinferenceerror:22totalRTConstantcalls includes12op8/op9power/maxcalls withnoRPFromBits argument; correctop0RPFromBitsconstantcount10, so23754totalminus10=23744readcalls, plus12576writecalls=36320. Source/IR countsdonotdiffer; earlier36308/22claimisdiscarded. Completeemissioninverseandschedule byteexact checksvalid.",
+  "source_literal_constant_argument_calls_unchanged": 10,
+  "inverse_byteexact_original_complete_source": true,
+  "programs_schedule_byteexact": true,
+  "portable_type_source": {
+    "path": "src/sirius/kernels/retained_scalar.slang",
+    "lines": [
+      7,
+      8,
+      9,
+      10
+    ],
+    "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc"
+  },
+  "source_guard_lines": [
+    "#if !defined(SIRIUS_RETAINED_PORTABLE) || !defined(SIRIUS_RETAINED_NORMAL_SUM32) || !defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT) || SIRIUS_RETAINED_EXECUTION_LANES != 16",
+    "#error This compiler-only diagnostic requires the existing portable normal Transport layout.",
+    "#endif"
+  ],
+  "remaining": "ordinaryfullcompiler/modulecontracts/footprint/wordstream/default+widebenefit/fullscientificqualification unexecuted",
+  "corrected_IR_identity_calls": 36320
+}

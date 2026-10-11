@@ -1,0 +1,204 @@
+{
+  "scope": "compiler-only; no runtime, device, performance, or product adoption",
+  "revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
+  "header": {
+    "path": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+    "bytes": 7952166,
+    "sha256": "3f7aca3372bb872934e978fb0270f2375ce8d2361555b35c8b891e42e07161cc"
+  },
+  "inputs": [
+    {
+      "path": "src/sirius/kernels/camera_frame_probe.slang",
+      "bytes": 2470,
+      "sha256": "00120f5858efb20ba53ffa9cb3942860ed5474c012f5db75a2b79c3e9448105c"
+    },
+    {
+      "path": "src/sirius/kernels/coupled_probe.slang",
+      "bytes": 6259,
+      "sha256": "748058bbfecfab730d2e652d21c5c10eadd9414c14410829d3180e5965774ddc"
+    },
+    {
+      "path": "src/sirius/kernels/gr_camera.slang",
+      "bytes": 7542,
+      "sha256": "06cb1c0e22a26512def78ad4ac6c72e592925bd36222d64227fd0ae88918ba12"
+    },
+    {
+      "path": "src/sirius/kernels/gr_coupled.slang",
+      "bytes": 12632,
+      "sha256": "04ad113197382182dd822341afce78c7a37c6187e228efe6709e332adb022cd7"
+    },
+    {
+      "path": "src/sirius/kernels/gr_deviation.slang",
+      "bytes": 17259,
+      "sha256": "8a68f6f728746da1ba41ec4302e09da34f04b6a16a8ccb5821e7b859b5ef4326"
+    },
+    {
+      "path": "src/sirius/kernels/gr_disk.slang",
+      "bytes": 16688,
+      "sha256": "e0badef1c0f70de6798eb8763ec676023f25b531000f3d253adf9c1f4e2100f8"
+    },
+    {
+      "path": "src/sirius/kernels/gr_ellis_topology.slang",
+      "bytes": 9374,
+      "sha256": "de0f2120591ecebbc00325eb6877cf4c6e8ebd0259637e300d4289ef82ab6e0b"
+    },
+    {
+      "path": "src/sirius/kernels/gr_integrator.slang",
+      "bytes": 23338,
+      "sha256": "340ce0ad2fa9bde152f606c0d76c3286363803d849cdcd7fdde255fe467a8dfd"
+    },
+    {
+      "path": "src/sirius/kernels/gr_kerr_infinity.slang",
+      "bytes": 23616,
+      "sha256": "f9b4d653247d3c09137db6a6c5238626e57504c0b207ec89d786c2b046cdc84c"
+    },
+    {
+      "path": "src/sirius/kernels/gr_metrics.slang",
+      "bytes": 30379,
+      "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b"
+    },
+    {
+      "path": "src/sirius/kernels/gr_point_star.slang",
+      "bytes": 1773,
+      "sha256": "72629a80cd151829b52797b19811add156f8ec5403812e8bf94e19f3796d6eae"
+    },
+    {
+      "path": "src/sirius/kernels/gr_trace_continuation.slang",
+      "bytes": 2212,
+      "sha256": "28240c519a6b2f552e39155cb0ef72afccecf4d89b295b25df02dff695a8cbfb"
+    },
+    {
+      "path": "src/sirius/kernels/gr_trace_event.slang",
+      "bytes": 15656,
+      "sha256": "345b5ab0953fc4f4c5bbc9a45bb2581e4b318f45fdee0d8bfa990e4e29ccab7c"
+    },
+    {
+      "path": "src/sirius/kernels/gr_types.slang",
+      "bytes": 5519,
+      "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d"
+    },
+    {
+      "path": "src/sirius/kernels/infinity_probe.slang",
+      "bytes": 3057,
+      "sha256": "dcddb120fe9cf4306df9e18ded240e629fea31012352e540f275f77955700888"
+    },
+    {
+      "path": "src/sirius/kernels/metric_consistency_probe.slang",
+      "bytes": 2352,
+      "sha256": "d21dd5305080cbee5c13aa0e435bb47e45117e35de4aafece4cd94224f64739e"
+    },
+    {
+      "path": "src/sirius/kernels/parity_probe.slang",
+      "bytes": 36380,
+      "sha256": "b120f39b79986cb774f95b6ea6b9646a571c3b6ffab1a9bfc0e2c6d90b4f8f1d"
+    },
+    {
+      "path": "src/sirius/kernels/retained_camera.slang",
+      "bytes": 9716,
+      "sha256": "a2ec29ccb7d7dc5aba98319d0ac902f2550ece2837f8d6366620bb5b54ed5929"
+    },
+    {
+      "path": "src/sirius/kernels/retained_dense.slang",
+      "bytes": 20082,
+      "sha256": "9230821aa20883ab0994e06f7d17165fb9ada0fc8054e5eceaae4fd421e0193c"
+    },
+    {
+      "path": "src/sirius/kernels/retained_dopri_phase.slang",
+      "bytes": 9959,
+      "sha256": "23251c8dd1fbe880cbc4f18be17a4bbb8082a67743eeff48f4a22627a7212f3f"
+    },
+    {
+      "path": "src/sirius/kernels/retained_endpoint.slang",
+      "bytes": 38328,
+      "sha256": "0c98ba39f13678ae4b92bd0803581379a2ded6a91bf4a6f456ee0f0cd8b5377e"
+    },
+    {
+      "path": "src/sirius/kernels/retained_initialize.slang",
+      "bytes": 8778,
+      "sha256": "79bf6e37634991d94e85f7bd032576b5cc5ae2c9bf3a6a172d20557ffd9c59a6"
+    },
+    {
+      "path": "src/sirius/kernels/retained_pair.slang",
+      "bytes": 18139,
+      "sha256": "395dd782f3309b22f0fb481a2bf2a898489e700043c248c0fad2e53dd2fbe304"
+    },
+    {
+      "path": "src/sirius/kernels/retained_ray_camera.slang",
+      "bytes": 9201,
+      "sha256": "e3bfbfedd91096af1374ccd32119c6e1556b2b588f0106e7df1f488055acaf00"
+    },
+    {
+      "path": "src/sirius/kernels/retained_scalar.slang",
+      "bytes": 3102,
+      "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc"
+    },
+    {
+      "path": "src/sirius/kernels/retained_scratch.slang",
+      "bytes": 892,
+      "sha256": "cd4a8c27cd2936d78f893c1d825eb988fb9c7f993433a5756d24e1b423626ed8"
+    },
+    {
+      "path": "src/sirius/kernels/retained_transport.slang",
+      "bytes": 27729,
+      "sha256": "d7fc2b531cf62ea3fc8454a2d1578c64c11614ac9ba046198879de925ef9f632"
+    },
+    {
+      "path": "src/sirius/kernels/retained_triple.slang",
+      "bytes": 15360,
+      "sha256": "5a4a948a2527526644ec7b82a6e18409577debe997ae47be899cdecb8f4654bd"
+    },
+    {
+      "path": "src/sirius/kernels/smoke.slang",
+      "bytes": 1002,
+      "sha256": "674183f4aef31db29e7a78985ba616c7e5cd401fd21161c798b3028b2142c27e"
+    },
+    {
+      "path": "src/sirius/kernels/trace.slang",
+      "bytes": 63419,
+      "sha256": "a66222aa9d6bb3e16b0e2df4b2d903669347badb0118e838091c6e569c590c77"
+    },
+    {
+      "path": "src/sirius/kernels/retained_program.py",
+      "bytes": 33191,
+      "sha256": "3754f0911b2b1a3d58276b23f4468d61a6092c65a1b522d7b557e373c6e96516"
+    },
+    {
+      "path": "scripts/build-retained-kernels.py",
+      "bytes": 29307,
+      "sha256": "701136ea2a5b538b6421f5ddc3eb2a47a1a7db0d3babbf0e41a3c2fe998e7cd2"
+    },
+    {
+      "path": "src/sirius/kernels/portable_binary32.h",
+      "bytes": 12797,
+      "sha256": "49d3008fb46cd95fe4cbc2f84d41336ac6b2e5ed0d82334c831357ce9a823a60"
+    }
+  ],
+  "programs": {
+    "General": {
+      "words": 13096,
+      "nodes": 2587,
+      "layers": 117,
+      "roots": 40,
+      "registers": 459
+    },
+    "Schwarzschild": {
+      "words": 2871,
+      "nodes": 557,
+      "layers": 42,
+      "roots": 40,
+      "registers": 459
+    }
+  },
+  "constructor_words_equal_current_embedded_table": true,
+  "recognition": "all live selected table words, after original admission and flat bypass; mismatch uses unchanged generic interpreter",
+  "emission": {
+    "path": "out/literal-transport-table-storage/kernels/retained_transport.slang",
+    "bytes": 2081629,
+    "sha256": "167b9cb56b62d52fe7fa4016037ae1db59dec9635229486b6be4f4a425ece181"
+  },
+  "schedule": {
+    "path": "out/literal-transport-table-storage/schedule.json",
+    "bytes": 190189,
+    "sha256": "1ca50382b6f50cfe434cf040b58a6d0155f5d1d3df06842930a0ab372ed8f5bb"
+  }
+}

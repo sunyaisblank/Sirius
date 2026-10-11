@@ -1,0 +1,20 @@
+{
+  "identity_module_sha256": "540f0f21103a5884a6c26b45216f286e06d4874bd3471d2760dc8ec74524c4e7",
+  "storage_module_sha256": "19769aee98beec9c5b2c34b46d27fd9a9eee7a7eacb5e3e062b7bb36000299c5",
+  "reviewer": "command_owner_review",
+  "scope": "Independent source/compiled semantic and routing review; root records agent read-only findings, not machine-checked proof.",
+  "pass": true,
+  "full_table_words_exact": [
+    13096,
+    2871
+  ],
+  "source_change_two_declarations_only": true,
+  "sole_private_table_writes": "One initialization store per table at entry before guards; exact complete composites, one bounded element-read site per table, no aliases/escapes or later writes",
+  "main_cfg_equivalence": "Actual main identical modulo four new initialization instructions and unnamed SSA IDs/whitespace to independently reviewed identity variant",
+  "recognizer_cfg_equivalence": "Actual same comparisons, atomics, bounded stride16 loops, collective joins and generic fallback after removal of Function variables/copies and Private pointer substitutions",
+  "input_seals": 46,
+  "completed_normal_commands": 7,
+  "private_logical_bytes_per_invocation": 63868,
+  "workgroup_logical_bytes": 9688,
+  "no_physical_or_numerical_or_benefit_assurance": true
+}

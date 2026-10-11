@@ -1,0 +1,11 @@
+{
+  "pass": true,
+  "scope": "One source routing-region substitution only; no module/runtime proof",
+  "source_bytes": 2081296,
+  "source_sha256": "892b840520d5ede69921b6e755bbc852906be4d93052265cb3e71e37892578d7",
+  "reverting_one_main_router_region_recovers_prior_exact": true,
+  "retained_literal_source_bodies": 159,
+  "programs_schedule_runner_exact_prior": true,
+  "old_router": "bool evaluated;\n        if (literalProgram) {\n            if (literalSchwarzschild)\n                evaluated = LiteralSchwarzschildProgram(row, rowBase, stage, lane);\n            else\n                evaluated = LiteralGeneralProgram(row, rowBase, stage, lane);\n        } else {\n            evaluated = EvaluateProgramGeneric(row, rowBase, programBase, count, registers, layers, stage, lane);\n        }\n        if (!evaluated) return;",
+  "new_router": "if (!EvaluateProgramGeneric(row, rowBase, programBase, count, registers, layers, stage, lane)) return;"
+}

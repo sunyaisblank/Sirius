@@ -1,0 +1,20 @@
+{
+  "reviewer": "cleanup_review",
+  "scope": "Independent read-only review before build-only preparation, not device readiness. Root records agent findings",
+  "build_clear": true,
+  "reviewed_actions_sha256": "a917360fda67bac020fd53507ac9719aeb83678582d1bf6de3c52d93a7a2b8df",
+  "reviewed_prepare_sha256": "8f84e5741cd8b1245a7e8437c9ed19dbccb2d9e062eaecd2ee6bfac21cde8abe",
+  "reviewed_payload_sha256": "fcb2fa4ad8a354276c1dbecb0e583d0014f557eaa6e81d33b12d934755bcb33d",
+  "objects": 20,
+  "libraries": 7,
+  "private_arrays": 40,
+  "unchanged_other_arrays": 39,
+  "original_test_arrays": 36,
+  "factory_substitutions": 2,
+  "limits": {
+    "seconds": 300,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "elf_reader_limit": "Original symbol byte reader does not inspect section/segment flags; root added independent check_hosts.py after build. No runtime binding assertion from static reader alone."
+}

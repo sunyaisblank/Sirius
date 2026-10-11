@@ -1,0 +1,146 @@
+{
+  "issue": 44,
+  "source_revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
+  "source_tree_unchanged": true,
+  "status": "unadopted diagnostic compiler/feasibility batch",
+  "corrected_direct_uint_identity_calls": 36320,
+  "correction_reason": "Only10op0constant arguments containRPFromBits;12power/max RTConstant calls do not. Prior36308inference was wrong; GitHublivebody/comment corrected transparently; immutable historical exports retain old number.",
+  "variants": [
+    {
+      "name": "literal-transport-identity-reads",
+      "source": {
+        "path": "/home/astra/.project/Sirius/out/literal-transport-identity-reads/kernels/retained_transport.slang",
+        "bytes": 2081641,
+        "sha256": "9498084b751c27347f153838ef9970376564b7a3fe7e85117dca3a0f9da0db01"
+      },
+      "ordinary_compile_seconds": 26.467638164001983,
+      "module": {
+        "path": "/home/astra/.project/Sirius/out/literal-transport-identity-reads/literal-transport.spv",
+        "bytes": 3726708,
+        "sha256": "540f0f21103a5884a6c26b45216f286e06d4874bd3471d2760dc8ec74524c4e7"
+      },
+      "compiled_inspection_pass": true
+    },
+    {
+      "name": "literal-transport-table-storage",
+      "source": {
+        "path": "/home/astra/.project/Sirius/out/literal-transport-table-storage/kernels/retained_transport.slang",
+        "bytes": 2081629,
+        "sha256": "167b9cb56b62d52fe7fa4016037ae1db59dec9635229486b6be4f4a425ece181"
+      },
+      "ordinary_compile_seconds": 26.212075755989645,
+      "module": {
+        "path": "/home/astra/.project/Sirius/out/literal-transport-table-storage/literal-transport.spv",
+        "bytes": 3726932,
+        "sha256": "19769aee98beec9c5b2c34b46d27fd9a9eee7a7eacb5e3e062b7bb36000299c5"
+      },
+      "compiled_inspection_pass": true,
+      "device_feasibility": {
+        "passed": false,
+        "child_exit": -15,
+        "wall_seconds": 27.634369542007335,
+        "peak_sampled_rss_kib": 4201680,
+        "stop_reason": "diagnostic_sampled_rss_guard",
+        "source_unchanged": true,
+        "whole_inputs_unchanged": true,
+        "remaining_owned_processes": [],
+        "cleanup_errors": []
+      }
+    },
+    {
+      "name": "literal-transport-recognizer-isolation",
+      "source": {
+        "path": "/home/astra/.project/Sirius/out/literal-transport-recognizer-isolation/kernels/retained_transport.slang",
+        "bytes": 2081296,
+        "sha256": "892b840520d5ede69921b6e755bbc852906be4d93052265cb3e71e37892578d7"
+      },
+      "ordinary_compile_seconds": 1.9260698800208047,
+      "module": {
+        "path": "/home/astra/.project/Sirius/out/literal-transport-recognizer-isolation/literal-transport.spv",
+        "bytes": 177712,
+        "sha256": "59e76e9fb32d9f3db4469bfcea85746f69affaaa83622bf82a147c3c6c8916e8"
+      },
+      "compiled_inspection_pass": true,
+      "device_feasibility": {
+        "passed": true,
+        "child_exit": 0,
+        "wall_seconds": 123.33847042999696,
+        "peak_sampled_rss_kib": 2736148,
+        "stop_reason": null,
+        "source_unchanged": true,
+        "whole_inputs_unchanged": true,
+        "remaining_owned_processes": [],
+        "cleanup_errors": []
+      },
+      "readback": {
+        "pass": true,
+        "scope": "Single current default diagnostic numerical case and protected historical same-provider full-buffer equality; no literal execution, performance gate or current-final qualification",
+        "current_owner_seconds": 123.33847042999696,
+        "current_peak_sampled_rss_kib": 2736148,
+        "current_input_seals": 981,
+        "full_readback_digests_exact": 32,
+        "ordered_available_markers": 51,
+        "provider_file_and_case_identity_exact": true,
+        "historical_owner_revision": "dc714b9759f69936cbab0bb5235d174379b0e6fe",
+        "historical_baseline_producer_revision": "7f028007a4935ffdefe5ee9c886b138299f50dd8",
+        "original_current_executable_byte_exact_historical_baseline_producer": true,
+        "current_tracked_tree_exact_historical_baseline_producer": true,
+        "historical_baseline_not_current_execution": true,
+        "unused_recognizer_result_driver_elimination_unresolved": true
+      }
+    },
+    {
+      "name": "literal-transport-recognizer-marker",
+      "source": {
+        "path": "/home/astra/.project/Sirius/out/literal-transport-recognizer-marker/kernels/retained_transport.slang",
+        "bytes": 2081364,
+        "sha256": "81fbe87635e71389f0fa262df57b81dcbf42af86be21126163429eb6dc598fc8"
+      },
+      "ordinary_compile_seconds": 1.6054702709952835,
+      "module": {
+        "path": "/home/astra/.project/Sirius/out/literal-transport-recognizer-marker/literal-transport.spv",
+        "bytes": 177976,
+        "sha256": "561be3974d637f6f9ace88e82603737ebea59fadb6953d5879579d7b48c7c186"
+      },
+      "compiled_inspection_pass": true,
+      "device_feasibility": {
+        "passed": true,
+        "child_exit": 0,
+        "wall_seconds": 111.58647272898816,
+        "peak_sampled_rss_kib": 2725728,
+        "stop_reason": null,
+        "source_unchanged": true,
+        "whole_inputs_unchanged": true,
+        "remaining_owned_processes": [],
+        "cleanup_errors": []
+      },
+      "readback": {
+        "pass": true,
+        "scope": "Single current default diagnostic numerical case and protected historical same-provider full-buffer equality; no literal execution, performance gate or current-final qualification",
+        "current_owner_seconds": 111.58647272898816,
+        "current_peak_sampled_rss_kib": 2725728,
+        "current_input_seals": 983,
+        "full_readback_digests_exact": 32,
+        "ordered_available_markers": 51,
+        "provider_file_and_case_identity_exact": true,
+        "historical_owner_revision": "dc714b9759f69936cbab0bb5235d174379b0e6fe",
+        "historical_baseline_producer_revision": "7f028007a4935ffdefe5ee9c886b138299f50dd8",
+        "original_current_executable_byte_exact_historical_baseline_producer": true,
+        "current_tracked_tree_exact_historical_baseline_producer": true,
+        "historical_baseline_not_current_execution": true,
+        "recognizer_result_observable_in_reserved_raw_word3": true,
+        "canonical_marker0_preserves_original_bytes": true,
+        "mismatch_marker1_deliberately_changes_raw_word3_not_executed_here": true,
+        "physical_table_traffic_storage_and_cost_unresolved": true
+      }
+    }
+  ],
+  "scope_limits": [
+    "Full literal module has no completed numerical readback or performance qualification",
+    "Two completed controls execute original generic stages only, preserving all32fullbuffers and51markers",
+    "Observable marker records canonical0 and mismatch1 in reservedrawrowword3; falsebranch notexecuted here",
+    "SPIR-VPrivatelogicalstorage/init and observedRSS do not establish physical allocation, comparisontraffic or cost cause",
+    "No production source, canonical modules, gates, governors, scene or main admission changed; #44/#48/#53remainopen, PR62draft, alignment0/8"
+  ],
+  "next_boundary": "Address full literal driver-resource feasibility before correctness/performance adoption. Do not repeat unchanged failed fullmodule or historicalframes."
+}

@@ -1,0 +1,525 @@
+{
+  "source_revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
+  "input_checks": {
+    "references_checked": 9025,
+    "exact_historical_action_versions": [
+      {
+        "phase": "out/literal-transport-table-storage/candidate-timestamps",
+        "version": "out/literal-transport-table-storage/action-versions/candidate-timestamps.json",
+        "bytes": 141338,
+        "sha256": "4673f15883921b5b0e598ecf1f4362a2b451fc7c0efe49fe797f910cc321805c"
+      },
+      {
+        "phase": "out/literal-transport-table-storage/join-original-producer",
+        "version": "out/literal-transport-table-storage/action-versions/join-original-producer.json",
+        "bytes": 140919,
+        "sha256": "ce55147e48e07caf471a056ede7c6e5739e729b44e97aaf3a6accc6234cb11f7"
+      },
+      {
+        "phase": "out/literal-transport-table-storage/prepare-hosts",
+        "version": "out/literal-transport-table-storage/action-versions/prepare-hosts.json",
+        "bytes": 4436,
+        "sha256": "a917360fda67bac020fd53507ac9719aeb83678582d1bf6de3c52d93a7a2b8df"
+      },
+      {
+        "phase": "out/literal-transport-recognizer-isolation/candidate-timestamps",
+        "version": "out/literal-transport-recognizer-isolation/action-versions/candidate-timestamps.json",
+        "bytes": 76343,
+        "sha256": "af775764af0833e8e4abc55cd8a699468438134b90430ccfdd210241ff8a37e7"
+      },
+      {
+        "phase": "out/literal-transport-recognizer-isolation/prepare-hosts",
+        "version": "out/literal-transport-recognizer-isolation/action-versions/prepare-hosts.json",
+        "bytes": 7751,
+        "sha256": "bcabded92a534158cdfa8760c2b6126b3d2cf98d698f73e466f18e0e1971d7d5"
+      },
+      {
+        "phase": "out/literal-transport-recognizer-marker/candidate-timestamps",
+        "version": "out/literal-transport-recognizer-marker/action-versions/candidate-timestamps.json",
+        "bytes": 76524,
+        "sha256": "7785c845ba03d482bdb2f789dbd3a279294c087717ae3ed20c5cbabc33af85f2"
+      },
+      {
+        "phase": "out/literal-transport-recognizer-marker/prepare-hosts",
+        "version": "out/literal-transport-recognizer-marker/action-versions/prepare-hosts.json",
+        "bytes": 7839,
+        "sha256": "a8506b223109427505c70cf3da0fc8b7bd76ca8932115815edc601855280c8b7"
+      }
+    ],
+    "terminal_phases": [
+      {
+        "phase": "out/literal-transport-table-storage/candidate-timestamps",
+        "passed": false,
+        "seconds": 27.634369542007335,
+        "rss_kib": 4201680,
+        "stop_reason": "diagnostic_sampled_rss_guard"
+      },
+      {
+        "phase": "out/literal-transport-table-storage/join-original-producer",
+        "passed": true,
+        "seconds": 0.5262594200030435,
+        "rss_kib": 97688,
+        "stop_reason": null
+      },
+      {
+        "phase": "out/literal-transport-table-storage/prepare-hosts",
+        "passed": true,
+        "seconds": 15.056483054999262,
+        "rss_kib": 922484,
+        "stop_reason": null
+      },
+      {
+        "phase": "out/literal-transport-recognizer-isolation/candidate-timestamps",
+        "passed": true,
+        "seconds": 123.33847042999696,
+        "rss_kib": 2736148,
+        "stop_reason": null
+      },
+      {
+        "phase": "out/literal-transport-recognizer-isolation/prepare-hosts",
+        "passed": true,
+        "seconds": 11.740793986973586,
+        "rss_kib": 617012,
+        "stop_reason": null
+      },
+      {
+        "phase": "out/literal-transport-recognizer-marker/candidate-timestamps",
+        "passed": true,
+        "seconds": 111.58647272898816,
+        "rss_kib": 2725728,
+        "stop_reason": null
+      },
+      {
+        "phase": "out/literal-transport-recognizer-marker/prepare-hosts",
+        "passed": true,
+        "seconds": 11.736357065004995,
+        "rss_kib": 613956,
+        "stop_reason": null
+      }
+    ],
+    "scope": "Exact recorded inputs and positive compiler/build contracts; bounded full-candidate RSS rejection and two generic numerical controls. No full literal numerical, performance, rendering, adoption or final qualification."
+  },
+  "process_scan": {
+    "scope": "Accessible point-in-time /proc recorded PID/birth, compiler groups and owned host/runtime sessions; excludes hidden, escaped and scheduled work",
+    "leaders": [
+      [
+        1736805,
+        "15520974"
+      ],
+      [
+        1736806,
+        "15520984"
+      ],
+      [
+        1736807,
+        "15520989"
+      ],
+      [
+        1736824,
+        "15523113"
+      ],
+      [
+        1736825,
+        "15523331"
+      ],
+      [
+        1736826,
+        "15523441"
+      ],
+      [
+        1736827,
+        "15523468"
+      ],
+      [
+        1736828,
+        "15523563"
+      ],
+      [
+        1737518,
+        "15573509"
+      ],
+      [
+        1737519,
+        "15573520"
+      ],
+      [
+        1737520,
+        "15573524"
+      ],
+      [
+        1737558,
+        "15575548"
+      ],
+      [
+        1737560,
+        "15575816"
+      ],
+      [
+        1737561,
+        "15575934"
+      ],
+      [
+        1737562,
+        "15575966"
+      ],
+      [
+        1737563,
+        "15576072"
+      ],
+      [
+        1737869,
+        "15601118"
+      ],
+      [
+        1737876,
+        "15601136"
+      ],
+      [
+        1737881,
+        "15601287"
+      ],
+      [
+        1737886,
+        "15601293"
+      ],
+      [
+        1737887,
+        "15601293"
+      ],
+      [
+        1737888,
+        "15601337"
+      ],
+      [
+        1737889,
+        "15601337"
+      ],
+      [
+        1737890,
+        "15601448"
+      ],
+      [
+        1737891,
+        "15601448"
+      ],
+      [
+        1737893,
+        "15601871"
+      ],
+      [
+        1737894,
+        "15601871"
+      ],
+      [
+        1737897,
+        "15601906"
+      ],
+      [
+        1737898,
+        "15601907"
+      ],
+      [
+        1737904,
+        "15602549"
+      ],
+      [
+        1737905,
+        "15602573"
+      ],
+      [
+        1737906,
+        "15602574"
+      ],
+      [
+        1737907,
+        "15602583"
+      ],
+      [
+        1738531,
+        "15624744"
+      ],
+      [
+        1738535,
+        "15624788"
+      ],
+      [
+        1738039,
+        "15614252"
+      ],
+      [
+        1738043,
+        "15614294"
+      ],
+      [
+        1738045,
+        "15614302"
+      ],
+      [
+        1738046,
+        "15614303"
+      ],
+      [
+        1738047,
+        "15614312"
+      ],
+      [
+        1742323,
+        "15646298"
+      ],
+      [
+        1742328,
+        "15646308"
+      ],
+      [
+        1742334,
+        "15646312"
+      ],
+      [
+        1742488,
+        "15646480"
+      ],
+      [
+        1742505,
+        "15646488"
+      ],
+      [
+        1742507,
+        "15646492"
+      ],
+      [
+        1742508,
+        "15646494"
+      ],
+      [
+        1742513,
+        "15646498"
+      ],
+      [
+        1744982,
+        "15653852"
+      ],
+      [
+        1744986,
+        "15653871"
+      ],
+      [
+        1744996,
+        "15653946"
+      ],
+      [
+        1744997,
+        "15653946"
+      ],
+      [
+        1745001,
+        "15653992"
+      ],
+      [
+        1745002,
+        "15653992"
+      ],
+      [
+        1745003,
+        "15654056"
+      ],
+      [
+        1745004,
+        "15654056"
+      ],
+      [
+        1745013,
+        "15654482"
+      ],
+      [
+        1745014,
+        "15654497"
+      ],
+      [
+        1745015,
+        "15654497"
+      ],
+      [
+        1745016,
+        "15654508"
+      ],
+      [
+        1745018,
+        "15654532"
+      ],
+      [
+        1745019,
+        "15654532"
+      ],
+      [
+        1745027,
+        "15654960"
+      ],
+      [
+        1745028,
+        "15654975"
+      ],
+      [
+        1745029,
+        "15654975"
+      ],
+      [
+        1745030,
+        "15654984"
+      ],
+      [
+        1747517,
+        "15670973"
+      ],
+      [
+        1747524,
+        "15671013"
+      ],
+      [
+        1750458,
+        "15711241"
+      ],
+      [
+        1750459,
+        "15711251"
+      ],
+      [
+        1750460,
+        "15711254"
+      ],
+      [
+        1750461,
+        "15711392"
+      ],
+      [
+        1750462,
+        "15711399"
+      ],
+      [
+        1750463,
+        "15711403"
+      ],
+      [
+        1750464,
+        "15711405"
+      ],
+      [
+        1750465,
+        "15711409"
+      ],
+      [
+        1750488,
+        "15714427"
+      ],
+      [
+        1750492,
+        "15714446"
+      ],
+      [
+        1750502,
+        "15714524"
+      ],
+      [
+        1750503,
+        "15714525"
+      ],
+      [
+        1750505,
+        "15714576"
+      ],
+      [
+        1750506,
+        "15714576"
+      ],
+      [
+        1750507,
+        "15714664"
+      ],
+      [
+        1750508,
+        "15714664"
+      ],
+      [
+        1750510,
+        "15715096"
+      ],
+      [
+        1750511,
+        "15715111"
+      ],
+      [
+        1750512,
+        "15715111"
+      ],
+      [
+        1750513,
+        "15715120"
+      ],
+      [
+        1750515,
+        "15715145"
+      ],
+      [
+        1750516,
+        "15715146"
+      ],
+      [
+        1750518,
+        "15715559"
+      ],
+      [
+        1750519,
+        "15715560"
+      ],
+      [
+        1750767,
+        "15737527"
+      ],
+      [
+        1750774,
+        "15737567"
+      ]
+    ],
+    "groups": [
+      1736806,
+      1736807,
+      1736824,
+      1736825,
+      1736826,
+      1736827,
+      1736828,
+      1737519,
+      1737520,
+      1737558,
+      1737560,
+      1737561,
+      1737562,
+      1737563,
+      1742328,
+      1742334,
+      1742488,
+      1742505,
+      1742507,
+      1742508,
+      1742513,
+      1750459,
+      1750460,
+      1750461,
+      1750462,
+      1750463,
+      1750464,
+      1750465
+    ],
+    "sessions": [
+      1737876,
+      1738043,
+      1738535,
+      1744986,
+      1747524,
+      1750492,
+      1750774
+    ],
+    "inspected": 54,
+    "raced_or_unreadable": 0,
+    "matches": []
+  }
+}

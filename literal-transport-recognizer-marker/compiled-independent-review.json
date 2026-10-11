@@ -1,0 +1,15 @@
+{
+  "accepted": true,
+  "reviewer": "retained_latency_review",
+  "scope": "Actual compiled diagnostic result-to-SSBO def/use and ownership; no performance/adoption qualification",
+  "source_sha256": "81fbe87635e71389f0fa262df57b81dcbf42af86be21126163429eb6dc598fc8",
+  "module_bytes": 177976,
+  "module_sha256": "561be3974d637f6f9ace88e82603737ebea59fadb6953d5879579d7b48c7c186",
+  "facts": [
+    "Recognizer bool controls Phi0/1 store at outputs[rowBase+3] under LocalInvocationIndex==0; recognition dominates marker and generic call",
+    "Both Private table initializers return exact13096/2871-word composites; eager stores before admission",
+    "Full selected stride16 recognition loops, atomics, twojoins, resultload retained",
+    "93 compiled functions, no literalfunctions, generic7stage callonly",
+    "One marker line removal restores prior sourcebyteexact; canonical0 unchanged, mismatch1 deliberate rawdiagnostic"
+  ]
+}

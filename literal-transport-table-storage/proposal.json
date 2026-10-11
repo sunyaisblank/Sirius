@@ -1,0 +1,71 @@
+{
+  "scope": "compiler-only table-storage representation; no device or product change",
+  "change": "Only the two generated table declarations lose const; initializers and all program references unchanged. No assignments exist in source.",
+  "reference": "https://docs.shader-slang.org/en/latest/external/slang/docs/language-reference/declarations.html#static-global-variables",
+  "reference_contract": "Per-invocation static global storage, initial-value assigned before any reference; eager versus lazy is implementation-dependent. Primary docs warn semantics documentation is work in progress; actual module inspected separately.",
+  "prior": [
+    {
+      "path": "/home/astra/.project/Sirius/out/literal-transport-identity-reads/emit.py",
+      "bytes": 12711,
+      "sha256": "52a09fda02123c8d37a8f328c2cf144cf830e3307b1793b8b19cb159be34c37b"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/out/literal-transport-identity-reads/compile.py",
+      "bytes": 10406,
+      "sha256": "ad8bc38b743bc3a0cea61b28b126dc58f220278320231cc5a6870fa95ed831f0"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/out/literal-transport-identity-reads/inspect_module.py",
+      "bytes": 11115,
+      "sha256": "82a4cbe995040d4b363bc123cac4c3fcdf61e28f9ba85615d38209c1619d83a8"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/out/literal-transport-identity-reads/kernels/retained_transport.slang",
+      "bytes": 2081641,
+      "sha256": "9498084b751c27347f153838ef9970376564b7a3fe7e85117dca3a0f9da0db01"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/out/literal-transport-identity-reads/literal-transport.spv",
+      "bytes": 3726708,
+      "sha256": "540f0f21103a5884a6c26b45216f286e06d4874bd3471d2760dc8ec74524c4e7"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/out/literal-transport-identity-reads/literal-transport.spvasm",
+      "bytes": 11728400,
+      "sha256": "2add2c3405fdde699a833dca318fbe62100d27bf5b8a960add5122f6ddf49155"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/out/literal-transport-identity-reads/compile-result.json",
+      "bytes": 776,
+      "sha256": "6e246d6edafe71d8424aafe5adccd04730e2af593f4980e9eccc73cf2ec7caa1"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/out/literal-transport-identity-reads/programs.json",
+      "bytes": 159073,
+      "sha256": "9dc10444ab5cad6bfcff91c93d66c8f013f5b191b20fad8c989b7d9013a5aeda"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/out/literal-transport-identity-reads/schedule.json",
+      "bytes": 190189,
+      "sha256": "1ca50382b6f50cfe434cf040b58a6d0155f5d1d3df06842930a0ab372ed8f5bb"
+    }
+  ],
+  "variant_tools": [
+    {
+      "path": "/home/astra/.project/Sirius/out/literal-transport-table-storage/emit.py",
+      "bytes": 12705,
+      "sha256": "30a8a1cb3d228626e5857dca499d9c1a1e6ae51c25956c29cb570a6d1239a351"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/out/literal-transport-table-storage/compile.py",
+      "bytes": 10406,
+      "sha256": "ad8bc38b743bc3a0cea61b28b126dc58f220278320231cc5a6870fa95ed831f0"
+    },
+    {
+      "path": "/home/astra/.project/Sirius/out/literal-transport-table-storage/inspect_module.py",
+      "bytes": 11115,
+      "sha256": "82a4cbe995040d4b363bc123cac4c3fcdf61e28f9ba85615d38209c1619d83a8"
+    }
+  ],
+  "acceptance": "Exact original full-word comparisons, table initialization/read-only module stores outside comparison loops, original admission/fallback/barriers/literal program contracts; no compiler result substitutes for numerical/performance gates."
+}
