@@ -1,0 +1,21 @@
+{
+  "accepted": true,
+  "reviewer": "/root/command_owner_review",
+  "controller_seals": {
+    "service_info_loopback.ps1": {
+      "bytes": 9016,
+      "sha256": "d3cdc894f171061e58fe5a73140803d555ebb90a17bd2dd47bb010b7b7785b7a"
+    },
+    "run_service_info_loopback.py": {
+      "bytes": 10205,
+      "sha256": "212d96484073badd439837fb940307f5ec28619166c5c9242d50c94b5fd648e0"
+    },
+    "emergency_profile_cleanup.ps1": {
+      "bytes": 6196,
+      "sha256": "83d58d2730778f332853ce93792ee1c0bc12a74dea6bb268cf26b75d76a23bb1"
+    }
+  },
+  "findings": "Exact delta limited to one-shot action/output/review paths and explicit remote-host 127.0.0.1 / remote-port 27300. Ownership, guards, strict service stop, sealing and recovery unchanged. Public RDP capture_context.cpp at d63073 skips local router creation with a remote hostname; API CreateRouter can fail on router creation or module loading. Failed prior local diagnostic stays rejected with all 64 inputs exact and recorded births absent.",
+  "source_url": "https://github.com/GPUOpen-Tools/radeon_developer_panel/blob/d63073a854c8ccc4b10edbf27559bb698c5685b3/source/api/capture_context.cpp#L76-L105",
+  "limits": "Public source is corroboration, not a packaged binary attestation. Loopback needs meaningful system information beyond rc0. Capture compatibility and exclusive original failure cause remain unproved."
+}

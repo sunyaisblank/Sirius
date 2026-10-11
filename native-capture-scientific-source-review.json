@@ -1,0 +1,53 @@
+{
+  "accepted": true,
+  "reviewer": "/root/retained_latency_review",
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "seals": {
+    "verify_capture_control.py": {
+      "bytes": 6478,
+      "sha256": "3c419c23ea9afb0a67d121310631ae46c3fb6fbc93492375d15c44a6ee2af1e1"
+    },
+    "capture-reference.json": {
+      "bytes": 34056,
+      "sha256": "7ed9828f114b1753e5e08bfe3a781227fe71bde4d36155e36361b2050c5d9a85"
+    },
+    "capture-plan.json": {
+      "bytes": 39151,
+      "sha256": "ccb65d1cf22c623735210f07f3dc0194e46464a870a7f3bd9f4cec2a0b20e65b"
+    },
+    "prepare_capture_inputs.py": {
+      "bytes": 5443,
+      "sha256": "0270aa3a5c3a7e058e200274c27392c3ef08d8c7a3968b86bd06533fce55eb8d"
+    }
+  },
+  "reviewed_capture_controller_sha256": "9eeb91a6020e3c2de9df6d81c82517285bb79d81ee65974d7201ec594512d1f9",
+  "subsequent_root_change": "Adds RDS working-set sampling during capture dump; independently reviewed by ownership reviewer before launch. No scientific or reader change.",
+  "independent_checks": {
+    "archived_A1_whole_reference_join": true,
+    "complete_same_provider_readbacks": 32,
+    "selected_original_modules": 7,
+    "ordered_available_marker_labels": 51,
+    "current_source_range_inputs_exact": 4,
+    "conditional_range": "dispatch:43:2",
+    "conditional_expected_dimensions": [
+      [
+        12,
+        1,
+        1
+      ],
+      [
+        24,
+        1,
+        1
+      ]
+    ],
+    "exact_owned_test_pid_and_path_for_all_logged_connections": true,
+    "one_matching_whole_trace_completion_and_save": true
+  },
+  "limitations": [
+    "Current public vendor source log format is conditional provenance rather than acquired-binary source attestation. Any format or identity mismatch invalidates acceptance.",
+    "Actual trace dispatch/pipeline/dimensions and instruction sample availability remain separate analysis prerequisites.",
+    "No performance benefit, original frame, full scientific or release qualification follows from acquisition."
+  ],
+  "reviewer_execution_or_writes": false
+}

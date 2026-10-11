@@ -1,0 +1,48 @@
+{
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "finished_capture_batch": true,
+  "full_qualification": false,
+  "optimization_accepted": false,
+  "scientific_scope": "Four original DeviceTimestampsPreserveOriginalIntervalResults executions passed their unchanged 32 readbacks, 7 modules, 51 markers and provider controls. Original 90-second/4-GiB limits, source and ordered stream preserved. No frame produced.",
+  "captures": [
+    {
+      "range": "43:2",
+      "result": "collection failed with generic -2 at 15% dump; science passed; no trace"
+    },
+    {
+      "range": "9:2",
+      "result": "trace acquired; science passed",
+      "trace_sha256": "ae2224a5d0b45b833d4f2ce484cd61f6488a01976d5b99959aa83749c7a9edd6"
+    },
+    {
+      "range": "32:2",
+      "result": "collection failed with generic -2 at 15% dump; science passed; no trace; disabled modern range has no measured marker pair"
+    },
+    {
+      "range": "9:7",
+      "result": "trace acquired; science passed",
+      "trace_sha256": "52420f5f1531998f48a939658165ac6c297f4d86700e68f3a283ad46458ad4e4"
+    }
+  ],
+  "analysis": "Actual GUI events 4/10 in 9:2 and 16/22 in 9:7 were inspected. Early Transport reported no wavefronts analyzed; other inspected instruction panes reported no instruction timing data. This does not establish absence of usable samples elsewhere in either trace. API/driver hashes are not SPIR-V SHA values; event indices are not process dispatch ordinals. Displayed durations are RGP event durations observed under profiling, not arithmetic cost or ordinary baseline performance.",
+  "failed_observation": "The first seven-entry GUI guard failed before selection and did not retain the discovered names. Subsequent clipped tree inventory found dispatch events 4/10/16/22/28/34; it does not prove a total trace count or absence of Dense.",
+  "clock_scope": "RDP automatic peak-clock and restoration requests were logged. Actual frequencies and restored clock state were not measured. No explicit clock or driver experiment; no ordinary performance comparison.",
+  "next_prerequisite": "Establish executed-cost evidence and an exact source/pipeline/stream join before proposing an optimization. Any further capture needs a separately justified original curved cohort and capture lifetime; no blind retry or weakened functionality.",
+  "cleanup": {
+    "remove": [
+      "out/native-executed-cost",
+      "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/RadeonDeveloperToolSuite-2026-10-02-1872.zip"
+    ],
+    "retain": [
+      {
+        "path": "bin/windows-msvc/native-b81e061-executed-cost",
+        "reason": "94 original native products retained for the next issue-44 investigation"
+      },
+      {
+        "path": "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872",
+        "reason": "70 verified extracted official tool files retained for saved-trace investigation; redundant download ZIP archived and removed"
+      }
+    ]
+  },
+  "git_disposition": "Original production source remains restored at 6be3132, with tree identical to b81e061. Diagnostic source is preserved in this separate evidence tag. Failed and successful acquisitions remain distinct; executed instruction-cost attribution, rendering and full scientific/release admission remain open on #44/#48/#53."
+}

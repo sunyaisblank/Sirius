@@ -1,0 +1,50 @@
+{
+  "accepted": true,
+  "reviewer": "/root/command_owner_review",
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "controller_seals": {
+    "console_readiness_sized.ps1": {
+      "bytes": 11958,
+      "sha256": "02fbf9db215c4317a655e88031bfbfe90133e31d192789a1311036945a91d14d"
+    },
+    "run_console_readiness_sized.py": {
+      "bytes": 11295,
+      "sha256": "279881fcf58c9323e3923c4fd58cfd45a4a0ea441ecbb1ae4b22ef3c86e11c1a"
+    },
+    "owned_console_sized.cs": {
+      "bytes": 6786,
+      "sha256": "5e8b51b418af9ee223e93b3c2dddf2de82f25687e67cb2e9d15aa4392f4a0814"
+    },
+    "prepare_sized_console.py": {
+      "bytes": 3729,
+      "sha256": "1cf8faacf18b9fcac780c093bdc1ebf1a6ff97c6b7d547c67e364d8c3153cf67"
+    },
+    "emergency_profile_cleanup.ps1": {
+      "bytes": 6196,
+      "sha256": "83d58d2730778f332853ce93792ee1c0bc12a74dea6bb268cf26b75d76a23bb1"
+    }
+  },
+  "scope": "Tools-only sizing/readiness diagnostic. Record exact held child birth before resume, observe bounded initial raw screen cells/geometry/membership, size created console1024x2048, verify strict geometry/wrap/bottom checks, require genuine enabled/waiting messages, deliberately stop tools. No scientific consumer or actual trace.30s/1GiBtools90sbridge.",
+  "root_static_checks": {
+    "powershell_parser_returncode": 0,
+    "python_parsers_passed": 2
+  },
+  "prior_failure_scoped_closure": {
+    "accepted": true,
+    "Windows_target_births_absent": 3,
+    "old_frozen_inputs_exact": 66,
+    "no_cleanup_errors": true,
+    "initial_dimensions_unrecorded": true
+  },
+  "limitations": [
+    "Sizing feasibility and readiness remain runtime prerequisites.",
+    "Screen text is reconstructed from cells rather than a complete stdout byte history.",
+    "Initial pre-sizing observation permits wrapping and is not accepted as complete acquisition history.",
+    "No trace cost, benefit, rendering, scientific/release qualification or universal hidden/process closure."
+  ],
+  "primary_sources": [
+    "https://learn.microsoft.com/en-us/windows/console/setconsolescreenbuffersize",
+    "https://learn.microsoft.com/en-us/windows/console/readconsoleoutputcharacter"
+  ],
+  "reviewer_execution_or_writes": false
+}

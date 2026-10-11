@@ -1,0 +1,49 @@
+{
+  "accepted": true,
+  "reviewer": "/root/command_owner_review",
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "controller_seals": {
+    "console_readiness_native.ps1": {
+      "bytes": 11741,
+      "sha256": "7af03a3825817b0f7056f2e10b432df552febac600b3f886b0433039d31a4ed8"
+    },
+    "run_console_readiness_native.py": {
+      "bytes": 11873,
+      "sha256": "876dedf300cafc5061e2a90286d275e35541c8c3a4fa137f7ebe819b16c9008a"
+    },
+    "owned_console_native.cs": {
+      "bytes": 6535,
+      "sha256": "f527cd3ab4f1ae1f2a4be85414240108797ec1d0018664161c11fb058457dac0"
+    },
+    "prepare_native_console.py": {
+      "bytes": 5047,
+      "sha256": "3b398f6597b9684b303435ad54197b67950f85bb3452b02fc2e344066bd53ec9"
+    },
+    "emergency_profile_cleanup.ps1": {
+      "bytes": 6196,
+      "sha256": "83d58d2730778f332853ce93792ee1c0bc12a74dea6bb268cf26b75d76a23bb1"
+    }
+  },
+  "scope": "Separate tools-only read-only native-console readiness diagnostic. No resizing/count-character startup flag. Required minimum width derived from sealed planned paths and requiredmessages plus one sparecolumn. FirstRead binds actualgeometry, laterreadsrequirestablegeometry/membership/boundedcells/wrap/bottomchecks. Genuineenabled/waitingmessagesrequired; deliberatelystopownedtools, no science/capture.30s/1GiBtools90sbridge.",
+  "root_static_checks": {
+    "powershell_parser_returncode": 0,
+    "python_parsers_passed": 2
+  },
+  "prior_failure_scoped_closure": {
+    "accepted": true,
+    "Windows_target_births_absent": 3,
+    "old_frozen_inputs_exact": 66,
+    "no_cleanup_errors": true,
+    "prior_saved_geometry": [
+      235,
+      2048
+    ]
+  },
+  "limitations": [
+    "Prior geometry is not an established result for this separate action.",
+    "Actual readiness and future capture compatibility remain unproved.",
+    "Screen text is reconstructed from cells rather than complete stdout byte history.",
+    "No trace cost/benefit/frame/scientific/release qualification or universal hidden process closure."
+  ],
+  "reviewer_execution_or_writes": false
+}

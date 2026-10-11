@@ -1,0 +1,741 @@
+{
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "native_producer_revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
+  "stage": "bin/windows-msvc/native-b81e061-executed-cost",
+  "gate_sha256": "96c1add302931977ced3168d9893a67c4a770e3a64054232d533a44104a03c64",
+  "tools": "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools",
+  "filter": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+  "dispatch_spec": "dispatch:9:2",
+  "expected_dispatch_dimensions": [
+    [
+      3,
+      1,
+      1
+    ],
+    [
+      6,
+      1,
+      1
+    ]
+  ],
+  "original_control_seconds": 90,
+  "original_control_rss_bytes": 4294967296,
+  "tool_rss_bytes": 1073741824,
+  "bridge_seconds": 300,
+  "clock_or_driver_experiments": [],
+  "shader_instrumentation": false,
+  "files": {
+    "bin/windows-msvc/native-b81e061-executed-cost/kernels/coupled_probe_fp64.spv": {
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/kernels/parity_probe.spv": {
+      "bytes": 5562236,
+      "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 5566460,
+      "sha256": "0a040fdc8d6f9486939cc831a17587246e8a32231bc1d72d77557dfd85169702"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/kernels/parity_probe_fp64.spv": {
+      "bytes": 5533624,
+      "sha256": "51bac11f8830a22d95b979ed67681c8282fffed4be515a01838f16b5245ac2ed"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/kernels/trace_fp32comp.spv": {
+      "bytes": 4041528,
+      "sha256": "7fc1e970ce77669e8c3f21214ecd2b999ac4e9f41a475b52cbcba6e651dca1ec"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/kernels/trace.spv": {
+      "bytes": 4038204,
+      "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/kernels/trace_fp64.spv": {
+      "bytes": 3916680,
+      "sha256": "78d6bb1d5653397a12c666c72a03d37948a3de469fa062745e138edb4b63286a"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/kernels/portability/trace.metal": {
+      "bytes": 358272,
+      "sha256": "5888cface9be8c28ef1a49c4db8d780052d7230059eb1048bc6511c86134dbd6"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/kernels/portability/trace.cu": {
+      "bytes": 649633,
+      "sha256": "e1fa755f007585cbe4258d86ca9279a63fa8c88f9be55d4bb17e2e3d88447cb4"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/sirius_app_tests.exe": {
+      "bytes": 8391168,
+      "sha256": "3d72d0ab38a3d5d787e3676e2196ce21b7462c48d3831c986641a227ea154c71"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/sirius.exe": {
+      "bytes": 7571456,
+      "sha256": "f128ef25e0829882cdae61ea3075d350d33bb4127e703caf3fd47a46ae53f144"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/sirius_render_tests.exe": {
+      "bytes": 8855040,
+      "sha256": "e2047683e93cf7725b493d9ff1b738afeff1fbcb1da8fa3e5ee9cebb47d87bfb"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/kernels/coupled_probe_fp64.spv": {
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/kernels/parity_probe.spv": {
+      "bytes": 5562236,
+      "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 5566460,
+      "sha256": "0a040fdc8d6f9486939cc831a17587246e8a32231bc1d72d77557dfd85169702"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 5533624,
+      "sha256": "51bac11f8830a22d95b979ed67681c8282fffed4be515a01838f16b5245ac2ed"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/kernels/trace_fp32comp.spv": {
+      "bytes": 4041528,
+      "sha256": "7fc1e970ce77669e8c3f21214ecd2b999ac4e9f41a475b52cbcba6e651dca1ec"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/kernels/trace.spv": {
+      "bytes": 4038204,
+      "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/kernels/trace_fp64.spv": {
+      "bytes": 3916680,
+      "sha256": "78d6bb1d5653397a12c666c72a03d37948a3de469fa062745e138edb4b63286a"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/assets/Starfield.png": {
+      "bytes": 29984397,
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/model/operating_model.json": {
+      "bytes": 129868,
+      "sha256": "01c99fa5cd9b8b5f7d8a754cf278a4df20dba60279ea1316e66d6d5a0524aa7e"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/model/alignment_receipt.json": {
+      "bytes": 1240,
+      "sha256": "34574d32fbe7d73836ef25b2c907cbacc9c346047fe0c8d428c3f9cb9d359c9a"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/shaders/RDSD003A.frag": {
+      "bytes": 1167,
+      "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/shaders/RDSD003A.vert": {
+      "bytes": 198,
+      "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/kernels/portability/trace.metal": {
+      "bytes": 358272,
+      "sha256": "5888cface9be8c28ef1a49c4db8d780052d7230059eb1048bc6511c86134dbd6"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/kernels/portability/trace.cu": {
+      "bytes": 649633,
+      "sha256": "e1fa755f007585cbe4258d86ca9279a63fa8c88f9be55d4bb17e2e3d88447cb4"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/tests/backend/retained_camera/program_fixture.h": {
+      "bytes": 421866,
+      "sha256": "014897a87643202168eff89b3da0fabbcf68c5442a7d4dec451f15553704b7d4"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/src/sirius/app/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/Release/sirius_base_tests.exe": {
+      "bytes": 583680,
+      "sha256": "9f7ff0bc10ec281bebafae0d6097ca16b8f63a07c13ae390933c6964e73b728f"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/sirius_backend_tests.exe": {
+      "bytes": 10706944,
+      "sha256": "5e01bad179c838022585d14bf6b7be6fa64f3fe2f070178970ca1aee40e494fa"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/retained_camera/program_fixture.h": {
+      "bytes": 421866,
+      "sha256": "014897a87643202168eff89b3da0fabbcf68c5442a7d4dec451f15553704b7d4"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/kernels/coupled_probe_fp64.spv": {
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/kernels/parity_probe.spv": {
+      "bytes": 5562236,
+      "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 5566460,
+      "sha256": "0a040fdc8d6f9486939cc831a17587246e8a32231bc1d72d77557dfd85169702"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 5533624,
+      "sha256": "51bac11f8830a22d95b979ed67681c8282fffed4be515a01838f16b5245ac2ed"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/kernels/trace_fp32comp.spv": {
+      "bytes": 4041528,
+      "sha256": "7fc1e970ce77669e8c3f21214ecd2b999ac4e9f41a475b52cbcba6e651dca1ec"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/kernels/trace.spv": {
+      "bytes": 4038204,
+      "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/kernels/trace_fp64.spv": {
+      "bytes": 3916680,
+      "sha256": "78d6bb1d5653397a12c666c72a03d37948a3de469fa062745e138edb4b63286a"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/assets/Starfield.png": {
+      "bytes": 29984397,
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/model/operating_model.json": {
+      "bytes": 129868,
+      "sha256": "01c99fa5cd9b8b5f7d8a754cf278a4df20dba60279ea1316e66d6d5a0524aa7e"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/model/alignment_receipt.json": {
+      "bytes": 1240,
+      "sha256": "34574d32fbe7d73836ef25b2c907cbacc9c346047fe0c8d428c3f9cb9d359c9a"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/shaders/RDSD003A.frag": {
+      "bytes": 1167,
+      "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/shaders/RDSD003A.vert": {
+      "bytes": 198,
+      "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/kernels/portability/trace.metal": {
+      "bytes": 358272,
+      "sha256": "5888cface9be8c28ef1a49c4db8d780052d7230059eb1048bc6511c86134dbd6"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/kernels/portability/trace.cu": {
+      "bytes": 649633,
+      "sha256": "e1fa755f007585cbe4258d86ca9279a63fa8c88f9be55d4bb17e2e3d88447cb4"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/tests/backend/retained_camera/program_fixture.h": {
+      "bytes": 421866,
+      "sha256": "014897a87643202168eff89b3da0fabbcf68c5442a7d4dec451f15553704b7d4"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/backend/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/core/Release/sirius_core_tests.exe": {
+      "bytes": 2473472,
+      "sha256": "40b766354ec3e5923d47bfe0f213795f35740b674f2969b22295923fdaea1d2f"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/tests/oracle/Release/sirius_oracle_tests.exe": {
+      "bytes": 838656,
+      "sha256": "cbbf3be103e9f87a01f843113f2e919ba17d167dfb526ac3026b66bb4b628ca2"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/generated/sirius/native_build_gate_ctest.log": {
+      "bytes": 2931,
+      "sha256": "ddb0ded2b8fef5a4f420ba0b603f0952619a06be9a62d407ad8e9b0a88ebcd79"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/generated/sirius/native_build_gate.json": {
+      "bytes": 10013,
+      "sha256": "96c1add302931977ced3168d9893a67c4a770e3a64054232d533a44104a03c64"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/generated/sirius/native_build_gate_junit.xml": {
+      "bytes": 5243,
+      "sha256": "0e740768271014af1298368c148a2d4e8cbc9b99fcca0e385481ed1b9726a4ff"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/generated/sirius/alignment_receipt.json": {
+      "bytes": 1240,
+      "sha256": "34574d32fbe7d73836ef25b2c907cbacc9c346047fe0c8d428c3f9cb9d359c9a"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/recorded-source/assets/Starfield.png": {
+      "bytes": 29984397,
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/recorded-source/tests/operating_model.json": {
+      "bytes": 129868,
+      "sha256": "01c99fa5cd9b8b5f7d8a754cf278a4df20dba60279ea1316e66d6d5a0524aa7e"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/recorded-source/src/sirius/app/viewer/shaders/RDSD003A.frag": {
+      "bytes": 1167,
+      "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+    },
+    "bin/windows-msvc/native-b81e061-executed-cost/recorded-source/src/sirius/app/viewer/shaders/RDSD003A.vert": {
+      "bytes": 198,
+      "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+    },
+    "out/native-executed-cost/tools-extraction.json": {
+      "bytes": 20539,
+      "sha256": "233f8aaf4e43dde97e8ea4095a7ec4184254355bbed75a3997be6bcec4ba2a50"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/amdgpu_dis.dll": {
+      "bytes": 17501960,
+      "sha256": "f89c6d0d4b02a3ef6ee48e91837bf25f3e0db6965809208651caecd6a9f7443b"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/amd_comgr_3.dll": {
+      "bytes": 135028488,
+      "sha256": "5ea87f7e97bdb009bfe545c12d545a5e36cc1e0f9aae2e96f35a3d398685d12e"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/concrt140.dll": {
+      "bytes": 324208,
+      "sha256": "2405355f0a58067b258f8df33c327e3a3d716eaac5a3a5aebb757842d85bd376"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/EULA.txt": {
+      "bytes": 19812,
+      "sha256": "731c35187e13b0ebe887f280040bdead24fdba540b81d0a36157934046fcff70"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/GPUPerfAPICounters-x64.dll": {
+      "bytes": 3753224,
+      "sha256": "97336fc9276ecf6df5aa84e459c73f9a10238e2f46b8be1bf26d3f9ca53b1ae5"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/bug_report.rst.txt": {
+      "bytes": 443,
+      "sha256": "6370149b09ccbe86206b3d8ce822ec99047cc8bc680e9f496b897020a25defdc"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/capture.rst.txt": {
+      "bytes": 6198,
+      "sha256": "4c6a20145ad2c48414c6b91130f7aa30109e57fca211629349f1464a90b31f5b"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/features.rst.txt": {
+      "bytes": 12532,
+      "sha256": "35b3301974cc336543340018f9e4d046ad757ab40267b4673d55aa94d1a045ce"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/index.rst.txt": {
+      "bytes": 4966,
+      "sha256": "5be2eef258469c677853d9ff72011b6a8289d61dcbf573195380079528c22bcb"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/initial_setup.rst.txt": {
+      "bytes": 1837,
+      "sha256": "7e2cd6f3949670e46c3877e411143085791ee0a271a3c2ec19dbc1c7cbb0b3ae"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/known_issues.rst.txt": {
+      "bytes": 9187,
+      "sha256": "16d46c51ef668c2089fdf5ed23e2fac2a3b3382ec662341ea03f8e4193a12501"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/radeon_developer_panel_cli.rst.txt": {
+      "bytes": 13550,
+      "sha256": "25c167e151e4868bf5884317ab98f22718d243697a1e71c7870cdc3ee6f7f8fa"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/radeon_developer_service.rst.txt": {
+      "bytes": 2553,
+      "sha256": "ee2dfe6ed995b6a5081140961b5892e50a7623a92ee60d82b472a1912969d1a2"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/remote_connections.rst.txt": {
+      "bytes": 636,
+      "sha256": "fe51f562f23a64a0d6c8042277f64e56086c40e74d993e8078e9aa1b26c7eb5c"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/settings.rst.txt": {
+      "bytes": 1433,
+      "sha256": "b67ad08e6cd8beec7bf45ae1e06b7514f72827106e4ae81f67399abecad9f467"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rdp/_sources/system.rst.txt": {
+      "bytes": 24159,
+      "sha256": "77b901d8f62203f56d0a5b8f13e7dc83cc87dae57a46e6ddb931f99f9b63cd20"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/api_shader_stage_control.rst.txt": {
+      "bytes": 1953,
+      "sha256": "5c26b1ecc3c42d0bc0d7234415cf0b2417f90f23d3540db6de1ef777ba585373"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/events_windows.rst.txt": {
+      "bytes": 64900,
+      "sha256": "ccba561af13ec7fc3530f3baf65943948e0dc00fbf53713c982dc339db6c431e"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/index.rst.txt": {
+      "bytes": 6443,
+      "sha256": "9779ba3c657b8fc62e867832f56d38a0a9a296cfa3d2518b65c121c898f40ef6"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/isa_view.rst.txt": {
+      "bytes": 2350,
+      "sha256": "47fa8393e018e8bca8f6e6826c70485c0f7f6c6379eafb08a7fbe478ab6ea1be"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/overview_windows.rst.txt": {
+      "bytes": 32136,
+      "sha256": "dda0087d92b0938f0304a1e01673553ddcd714cf453da5f2ca723b55da06453f"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/quickstart.rst.txt": {
+      "bytes": 6345,
+      "sha256": "dc7780c0d1219f80377c0cadad8ae96550c95ea3ba1d465c4a4b1466b738dcab"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/renderdoc_and_rgp_interop.rst.txt": {
+      "bytes": 7136,
+      "sha256": "23e83827b13a9a650761e328b619c3f52ea0151c1298dd18455696d5f079a392"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/rga_and_rgp_interop.rst.txt": {
+      "bytes": 2937,
+      "sha256": "c590d002f7184af1c7b5234ab5059a6b0838e1295b2103d67d39d6c95ce26b2a"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/settings.rst.txt": {
+      "bytes": 6890,
+      "sha256": "30f22a005fdf0fe8dfe9c37766c07467c1f1d028e8e6831f1cd8f7011a2214bf"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/user_debug_markers.rst.txt": {
+      "bytes": 21693,
+      "sha256": "d5e5a8e3a9e15c54244e9d54938cfef50fac536a4f8be35e5f76764ef73059e3"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/help/rgp/_sources/zoom_controls.rst.txt": {
+      "bytes": 3831,
+      "sha256": "81205415a3838fc454fbcc7273d0d6f3c7cb4c172436e19e800d8ed376a8fbc6"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/LICENSE.txt": {
+      "bytes": 1113,
+      "sha256": "c07533eda6ec6635fcf1f2b57f47c1c3d75e3983ecb44987d81eb2aee419a185"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/msvcp140.dll": {
+      "bytes": 557728,
+      "sha256": "0f885b509a685d2bbfa652fed26b5fb31d88fbdab0a978c641d1c7b8aa460aa9"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/msvcp140_1.dll": {
+      "bytes": 35952,
+      "sha256": "bfad5aef4c63a669e3c140655cdfdf395b6c979b400a447bd5dcb65ed8826c3d"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/msvcp140_2.dll": {
+      "bytes": 280200,
+      "sha256": "3ea06f0ee098b4823cb79599df3780e7f23cce52c19aac31d2a0d47efe33a5e9"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/msvcp140_atomic_wait.dll": {
+      "bytes": 50304,
+      "sha256": "640b2aefced484d0368eea5bdd06addd0658a3a70a49256e560d6923b404a479"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/msvcp140_codecvt_ids.dll": {
+      "bytes": 31872,
+      "sha256": "f2069a52880ec885ee7f0511186100eb7fada0411a2b4948fafea7735b878a18"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/Qt6Core.dll": {
+      "bytes": 6394584,
+      "sha256": "fac6623c015b4747b261844c6a3b36c6ed06d769f0fb94b82c1409345bbbeeec"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/Qt6Gui.dll": {
+      "bytes": 9033432,
+      "sha256": "8c898ce2166d4c9af201e9e365bd9ceb33950eb1d65e45e0c3b2d8d3e81d51cc"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/Qt6Network.dll": {
+      "bytes": 1715416,
+      "sha256": "9b5111bde72291826323d2fad5cfdc5f87dee3fc44b607eff08139e4d7f0b8bc"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/Qt6Svg.dll": {
+      "bytes": 500952,
+      "sha256": "ab7fc1e71ff6a85162019fcb2cc2d976a712bf29c2625af53aa353ad41f31139"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/Qt6Widgets.dll": {
+      "bytes": 6573272,
+      "sha256": "5d97cd6e699c9a37f6ce4c55b18303bd245b94a69717420e0e65aaec3d1269a6"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RadeonDeveloperPanelCLI.exe": {
+      "bytes": 670984,
+      "sha256": "4b1fc3d2c73b02fe357927baab931d534916ea18d97f9afdce657d931d4959f1"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RadeonDeveloperServiceCLI.exe": {
+      "bytes": 2009360,
+      "sha256": "5ac9f2d7a01fd176e9ed24df470dabaeab8821cf3a7f982f60cd9e5e0378ec19"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RadeonGPUProfiler.exe": {
+      "bytes": 20497680,
+      "sha256": "e9a76dce98553f717a4b0162d4a04a9a33872dbf3aad7e11a947838bd700dac1"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RdpCaptureApi.dll": {
+      "bytes": 3684624,
+      "sha256": "b099f6148aabec7623bb45e3183658b68b416c358da96881ec1ddb6bef7331b2"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RDP_NOTICES.txt": {
+      "bytes": 103880,
+      "sha256": "d3037787bcdb2fbd1b5a04d0122f227713a42d22495e438431671460717eadb6"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RDP_RELEASE_NOTES.txt": {
+      "bytes": 8089,
+      "sha256": "eb6ec40f6d467bf683b385682f81bfaeaf981549b4e2c4a1a8ec41aa8b9d707e"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RGA_NOTICES.txt": {
+      "bytes": 19148,
+      "sha256": "9e302dd6a0bd26c0c6d56aa576a658eb7de42c83c28429002a5916cee49adb30"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RGA_RELEASE_NOTES.txt": {
+      "bytes": 13213,
+      "sha256": "c7844d4a853213a45749e56c209cfbb19407daa8318fda60443145401b48783e"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RGD_NOTICES.txt": {
+      "bytes": 1380,
+      "sha256": "2e11d85b98fb40dbfe526f4159c49f16571c604c7e348268258efe01439c8b73"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RGD_RELEASE_NOTES.txt": {
+      "bytes": 5365,
+      "sha256": "c6b5f9df42e1107d0353e3dfbd2c4a55c6f85d0fc2b46708e9b5c593b0ab28b0"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RGP_NOTICES.txt": {
+      "bytes": 69048,
+      "sha256": "78ff5adb3950efe978a9d8527ab9823603f3450a7fcec7a1cccb47e8c314d8d2"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RGP_RELEASE_NOTES.txt": {
+      "bytes": 37509,
+      "sha256": "8338069703367758ff48ab1957cada34610fb5e713d08587afd29bee2efeafee"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RMV_NOTICES.txt": {
+      "bytes": 15213,
+      "sha256": "7c8fc4ca491ee58cd35555d850c1b8a835d8a61e7d444ee7f5cb31a6b70ad883"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RMV_RELEASE_NOTES.txt": {
+      "bytes": 8760,
+      "sha256": "c4372605322a4bbbd38811e9fef851d0282d0d2fc5e98ea88388cf3a352ce6ff"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RRA_NOTICES.txt": {
+      "bytes": 24878,
+      "sha256": "08751465696cd59c14e33be8a612c4861e61d66be5ab53fd02576e30747aa8e3"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/RRA_RELEASE_NOTES.txt": {
+      "bytes": 9277,
+      "sha256": "5cc7b575a42ddaa7eefb86303adce396e77d9e597048a6e92ede92cfd84332f9"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/rtda.exe": {
+      "bytes": 6712584,
+      "sha256": "f568fbe4d5d94d5810d38e6053a811ac271426e72a68229ba1f0705a8ffc54e3"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/vccorlib140.dll": {
+      "bytes": 352384,
+      "sha256": "19839407c3fdbc824e5bce189bf68ddf8097f12ec28b757797ffa0415c144ddd"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/vcruntime140.dll": {
+      "bytes": 124544,
+      "sha256": "d5e4d9a3e835fa679450145d6a7d94e36573a509317111904d9b3712c30d9066"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/vcruntime140_1.dll": {
+      "bytes": 49792,
+      "sha256": "1f2d41c4aa5db0bc33ebf7b66d72943a817d7ce6cbe880502a9403823633093f"
+    },
+    "out/native-executed-cost/tools-gui-extraction.json": {
+      "bytes": 4632,
+      "sha256": "425db59727b5ff68813836e4caa012e53904ef57e85e051a14849f5633f79e0d"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/iconengines/qsvgicon.dll": {
+      "bytes": 71432,
+      "sha256": "0243078bb440960bd0fe3fe01a535877a477721989a54eeb37d487da48cb713e"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/imageformats/qgif.dll": {
+      "bytes": 47368,
+      "sha256": "3010c2bcaa75f6ec8afaff0629508f821bfecc91102d31eaab6f2a08192edc06"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/imageformats/qicns.dll": {
+      "bytes": 56584,
+      "sha256": "9e7fa035c27fccf69df37f2ae264482408685f3a85c071456d5f896d8b6887ef"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/imageformats/qico.dll": {
+      "bytes": 45840,
+      "sha256": "15428148fd62e0ac23821e97a3ddbc999ca23173792b15c17d5bd982d0b23c3f"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/imageformats/qjpeg.dll": {
+      "bytes": 566024,
+      "sha256": "5070735701df53baa1aa1cd25d27a94b5f6389caa37665d10293f68b5a8d7991"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/imageformats/qsvg.dll": {
+      "bytes": 39176,
+      "sha256": "19ef04d92da43101f7d094643af09bb8a44e5a729877723f2fd55cf2f3c93aff"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/imageformats/qtga.dll": {
+      "bytes": 37648,
+      "sha256": "1fd48a8be4a1b43e650d4c5ab944e3c5bd654e089c910657484dafa194468f6a"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/imageformats/qtiff.dll": {
+      "bytes": 426248,
+      "sha256": "a05f5d2b972e119394c6a437fc6d1d1c0fe7ebc3dc536f28b96eaafd1f097831"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/imageformats/qwbmp.dll": {
+      "bytes": 36616,
+      "sha256": "94175e1923537ce2941f3fea02be30a9af938ce862c8072d216f270b629e0abc"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/imageformats/qwebp.dll": {
+      "bytes": 539400,
+      "sha256": "23d3d8dd7b25bfaab6d74c4e562385144a17f658a7efecd8ae1b8da8fb7a5a1f"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/platforms/qwindows.dll": {
+      "bytes": 910600,
+      "sha256": "325596cd447c2a430b0256b6d22196aca981ac87c7c2dc594fd5924f3c622a57"
+    },
+    "bin/windows-msvc/qualification-tools/rdts-2026-10-02-1872/tools/plugins/styles/qmodernwindowsstyle.dll": {
+      "bytes": 194832,
+      "sha256": "6c0274c91c8cd491bfcaff94ce4948393c1fad29f6b6e1341bffd5213175662a"
+    },
+    "/mnt/c/WINDOWS/SYSTEM32/vulkan-1.dll": {
+      "bytes": 1719408,
+      "sha256": "45ee2efc5c6d3986da8181775610f308122c752e55e703340d9733bbbc4b9f1a"
+    },
+    "/mnt/c/WINDOWS/System32/DriverStore/FileRepository/amdvlk.inf_amd64_914ba89eaaafdf60/amdvlk64.dll": {
+      "bytes": 103213064,
+      "sha256": "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650"
+    },
+    "attestations/native-vulkan/21e55ce/guarded-native-default-fma-rejected/payloads/775a5b04720aafe9a32862548de89532592646f54229f84d786a0220a5e61f5f": {
+      "bytes": 30277,
+      "sha256": "775a5b04720aafe9a32862548de89532592646f54229f84d786a0220a5e61f5f"
+    },
+    "attestations/native-vulkan/95c36cb/original-fp64-observation/payloads/9c36fc19810a20b59c41f05581125d3a27d508c8fb80315edeed553ac8e446c7": {
+      "bytes": 585,
+      "sha256": "9c36fc19810a20b59c41f05581125d3a27d508c8fb80315edeed553ac8e446c7"
+    },
+    "out/native-executed-cost/source.json": {
+      "bytes": 411,
+      "sha256": "d4271fe2d8f54f119bc526f4c7b47033e0021d15c8edd7e92a9b48a0ad14a606"
+    },
+    "out/native-executed-cost/baseline-reconstruction.json": {
+      "bytes": 2382,
+      "sha256": "3c0f95537d42de76c0b1cdbc5c76bc34e4e7293592ccedeb5247c2962ed5cafa"
+    },
+    "out/native-executed-cost/capture-range-source-review.json": {
+      "bytes": 3796,
+      "sha256": "30612d8413bef0c385810f51c83f260276d06fcd91a3477b4ba4900446f4fcd2"
+    },
+    "out/native-executed-cost/service-info-loopback-result.json": {
+      "bytes": 1093,
+      "sha256": "4834e461ce9a32d37305767ce20562f2032e744dde10dd92c16d7019915bfeff"
+    },
+    "out/native-executed-cost/run_original_control.ps1": {
+      "bytes": 11396,
+      "sha256": "4394988ece0fdc1cea47681a8aab9bd5e3d4e108f0ad63eb8c678b9219daa760"
+    },
+    "out/native-executed-cost/capture-reference.json": {
+      "bytes": 34056,
+      "sha256": "7ed9828f114b1753e5e08bfe3a781227fe71bde4d36155e36361b2050c5d9a85"
+    }
+  },
+  "scope": "One changed early legacy-range acquisition on the unchanged original numerical control. More natural remaining device lifetime is a hypothesis, not a proven failure cause or guaranteed dump margin. Actual trace must confirm events/pipeline identity and sample availability.",
+  "expected_marker_indices": [
+    0,
+    1
+  ],
+  "expected_phase": "legacy_repeat0",
+  "automatic_profiler_peak_clocks": true,
+  "clock_scope": "RDP tracing automatically requests peak clocks and restoration. No explicit clock or driver experiment configuration; actual frequencies/restoration not independently measured. No unprofiled benefit comparison."
+}

@@ -1,0 +1,58 @@
+{
+  "bounded_readiness_prefix_verified": true,
+  "original_bridge_accepted": false,
+  "original_bridge_seal": {
+    "bytes": 19706,
+    "sha256": "d6f85c0ea89ecb2af9f266de85de15b32b5384cdf402bd0102474b5c9a8c39d6"
+  },
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "observations": [
+    {
+      "snapshot": "out/native-executed-cost/console-readiness-requested/initial-screen.json",
+      "snapshot_seal": {
+        "bytes": 459,
+        "sha256": "ee06f4386d1027552bc75a6cd0adb1482b35b7e782f0d9a5ddc9e6fa036cf521"
+      },
+      "native_requested_count": 184,
+      "native_read_count_source_inferred": 184,
+      "excluded_serialized_suffix_codepoint": 57888,
+      "bounded_prefix_sha256_utf16le": "8b9f6a083d84394116440c4462001dd2d8a3d33f8d4654c5340438d3aaab495a",
+      "geometry": [
+        184,
+        2048
+      ],
+      "cursor": [
+        0,
+        0
+      ]
+    },
+    {
+      "snapshot": "out/native-executed-cost/console-readiness-requested/ready-screen.json",
+      "snapshot_seal": {
+        "bytes": 3279,
+        "sha256": "0ad5f676d33255e1c40f2c5f919f9925ee2e940fb91494129c3c459cb6b613c8"
+      },
+      "native_requested_count": 2392,
+      "native_read_count_source_inferred": 2392,
+      "excluded_serialized_suffix_codepoint": 120,
+      "bounded_prefix_sha256_utf16le": "ec7e4f046110a2df4f8688ff7edee207189d6444d65eee9930dbfc3ef6cc478e",
+      "geometry": [
+        184,
+        2048
+      ],
+      "cursor": [
+        0,
+        12
+      ]
+    }
+  ],
+  "recorded_ownership_closed": true,
+  "all_frozen_inputs_exact": 67,
+  "native_count_limitation": "Count inferred from the immutable executed C# branch requiring read==length; not separately serialized. Excluded suffixes are unaccounted marshaling artifacts, not console cells or NUL terminators.",
+  "scope": "Separate derived counted-prefix observation only. Original rejection unchanged. No science, dispatch, trace, executed cost, performance benefit, frame or full qualification.",
+  "independent_reviewer": "/root/command_owner_review",
+  "references": [
+    "https://learn.microsoft.com/en-us/windows/console/readconsoleoutputcharacter",
+    "https://learn.microsoft.com/en-us/dotnet/standard/native-interop/best-practices"
+  ]
+}

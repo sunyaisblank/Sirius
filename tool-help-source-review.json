@@ -1,0 +1,21 @@
+{
+  "accepted": true,
+  "reviewer": "/root/command_owner_review",
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "controller_seals": {
+    "tool_help.ps1": {
+      "bytes": 6332,
+      "sha256": "b5f166858f531c7a0edf565ad7cd22385078f5f6f3c95f75501e2f64c3bdc5cd"
+    },
+    "run_tool_help.py": {
+      "bytes": 9750,
+      "sha256": "a63df2d251fa4c7f16864daa7d9f43e3c498807acc9ca9dfa75292d35b521c05"
+    },
+    "emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    }
+  },
+  "findings": "Nonzero or failed acceptance invokes recovery. Recovery helpers record births with bounded cleanup. PowerShell post-hash, census and receipt failures independently invalidate acceptance. Python syntax parsed. No toolkit executable launched in review.",
+  "limits": "Normal completion alone does not establish meaningful help output or a headless analysis interface. RSS is sampled for the owned tool. Failed recovery or leaf timeout retains unresolved ownership and blocks dependent work; no hidden-process or universal descendant containment claim."
+}

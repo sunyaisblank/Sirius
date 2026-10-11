@@ -1,0 +1,49 @@
+{
+  "accepted": true,
+  "reviewer": "/root/command_owner_review",
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "controller_seals": {
+    "console_readiness_running.ps1": {
+      "bytes": 11663,
+      "sha256": "c1d17536f6b12b31a480294fdeb8e32ebe04bcc4ec60c4bc9a1b6790617ea91b"
+    },
+    "run_console_readiness_running.py": {
+      "bytes": 11034,
+      "sha256": "9989727dc8b7c1cf05541ee9d2b9b6259ad4922a79f0f7688aa6557e70b48e4b"
+    },
+    "owned_console_running.cs": {
+      "bytes": 6102,
+      "sha256": "5deec7ad4156747c43a0fa4eb23642fb449aa9e64e78819110c033fd954a91a6"
+    },
+    "prepare_running_console.py": {
+      "bytes": 3507,
+      "sha256": "9557d36a4ec6c9dfd67b5f7206bdd155ad45dda4281d416d39ba218000484046"
+    },
+    "emergency_profile_cleanup.ps1": {
+      "bytes": 6196,
+      "sha256": "83d58d2730778f332853ce93792ee1c0bc12a74dea6bb268cf26b75d76a23bb1"
+    }
+  },
+  "scope": "Separate tools-only readiness action. Creation-time STARTF_USECOUNTCHARS requests1024x2048; exact birth/handle recorded while suspended. ResumeThread must return1, then3s actual attachment bound. Geometry verified without resizing earlier output. Actual feature-enabled AND waiting messages; owned tools deliberately stopped, no scientific launch or actual trace.",
+  "root_static_checks": {
+    "powershell_parser_returncode": 0,
+    "python_parsers_passed": 2
+  },
+  "prior_failure_scoped_closure": {
+    "accepted": true,
+    "Windows_target_births_absent": 3,
+    "old_frozen_inputs_exact": 66,
+    "signals_or_cleanup_errors": false,
+    "no_resume_or_scientific_execution_or_trace_evidenced": true
+  },
+  "limitations": [
+    "Requested console geometry, attachment and readiness remain actual runtime prerequisites.",
+    "Screen snapshots are not stdout byte logs, atomic console history or global/hidden process closure.",
+    "No performance, frame, scientific or release qualification result."
+  ],
+  "primary_sources": [
+    "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/ns-processthreadsapi-startupinfow",
+    "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-resumethread"
+  ],
+  "reviewer_execution_or_writes": false
+}

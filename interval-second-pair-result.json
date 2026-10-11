@@ -1,0 +1,87 @@
+{
+  "capture_acquired": true,
+  "gui_observation_accepted": true,
+  "usable_executed_instruction_cost": false,
+  "events": [
+    {
+      "label": "transport",
+      "actual_rgp_event": "16 vkCmdDispatch(3, 1, 1)",
+      "start_time_display": "5,369.204 \u03bcs",
+      "end_time_display": "8,231.427 \u03bcs",
+      "duration_display": "2,862.223 \u03bcs",
+      "work_duration_display": "2,862.223 \u03bcs",
+      "total_wavefronts_display": "3",
+      "total_threads_display": "192",
+      "average_threads_per_wave_display": "64",
+      "api_shader_hash_display": "CS: 0x930F6E31C49F106C16FC9C2EAF77A01F",
+      "api_pso_hash_display": "0xB4BAD5049F1D989E",
+      "driver_pipeline_hash_display": "0xAC480E0535229E722ABFB69BEE404C12",
+      "usable_instruction_samples": false,
+      "instruction_pane_message": "Event 16 \nNo instruction timing data"
+    },
+    {
+      "label": "endpoint",
+      "actual_rgp_event": "22 vkCmdDispatch(6, 1, 1)",
+      "start_time_display": "8,453.458 \u03bcs",
+      "end_time_display": "9,118.363 \u03bcs",
+      "duration_display": "664.904 \u03bcs",
+      "work_duration_display": "664.904 \u03bcs",
+      "total_wavefronts_display": "6",
+      "total_threads_display": "384",
+      "average_threads_per_wave_display": "64",
+      "api_shader_hash_display": "CS: 0x7AD707D5E76ACCA7D7F76761DFFB1854",
+      "api_pso_hash_display": "0xA08A2F262ECA2B69",
+      "driver_pipeline_hash_display": "0xAB3FE071C8B846CFEB66BD46B598217F",
+      "usable_instruction_samples": false,
+      "instruction_pane_message": "Event 22 \nNo instruction timing data"
+    }
+  ],
+  "all_gui_frozen_inputs_rechecked_exact": 97,
+  "scope": "Actual selected trace events and displayed identifiers are observed. RGP event indices16/22 are not process dispatch ordinals. Range and dimensions support intended legacy Transport/Endpoint but do not independently prove source ordinals or marker indices. Only this selected pair was observed; no whole-trace absence-of-samples claim. API/driver hashes are not SPIR-V SHA256. No analyzed instruction cost, exclusive arithmetic cost, ordinary timing benefit, frame or full qualification.",
+  "evidence": {
+    "out/native-executed-cost/native-capture-interval-console/original-legacy-interval.rgp": {
+      "bytes": 1411970,
+      "sha256": "52420f5f1531998f48a939658165ac6c297f4d86700e68f3a283ad46458ad4e4"
+    },
+    "out/native-executed-cost/profiler-interval-second-pair-bridge.json": {
+      "bytes": 35062,
+      "sha256": "340b5cbff623b418edb86d9b507fde63025439cbfeda6619447a0e95f5d2a1c2"
+    },
+    "out/native-executed-cost/profiler-interval-second-pair/owner.json": {
+      "bytes": 22858,
+      "sha256": "f521bdd0d8094af32af02a7add3f33617023813186bfd52bf28472957a36d12c"
+    },
+    "out/native-executed-cost/profiler-interval-second-pair/transport-event-automation.json": {
+      "bytes": 95692,
+      "sha256": "81d61eb93b35b27887e7f8206b8ce096989088f3871ec8e261c4a119c416be4c"
+    },
+    "out/native-executed-cost/profiler-interval-second-pair/transport-instructions-automation.json": {
+      "bytes": 17475,
+      "sha256": "df62369480853ca3246e269d989523baf57515e430f8e8d6cc0ec731d20e3c5d"
+    },
+    "out/native-executed-cost/profiler-interval-second-pair/transport-event-owned-window-1f034e.png": {
+      "bytes": 78669,
+      "sha256": "3f7e939569b250f2d1c18b128f61e8e8e7f470926aa0e7e4909196a4699a4176"
+    },
+    "out/native-executed-cost/profiler-interval-second-pair/transport-instructions-owned-window-1f034e.png": {
+      "bytes": 25478,
+      "sha256": "a7dcf40ba18141d2a3d98b2c859a34dc16f153d751b62dada81b63ac663ea135"
+    },
+    "out/native-executed-cost/profiler-interval-second-pair/endpoint-event-automation.json": {
+      "bytes": 97192,
+      "sha256": "ca8a6f5827554a159a26bd7b53f24704671211b7218004bc5cba45bd65d75c3e"
+    },
+    "out/native-executed-cost/profiler-interval-second-pair/endpoint-instructions-automation.json": {
+      "bytes": 15599,
+      "sha256": "c4f18853b7223c5276ea3192ad4a4e5e6a0c2c4024a8b5656fdba14c29c4ca39"
+    },
+    "out/native-executed-cost/profiler-interval-second-pair/endpoint-event-owned-window-1f034e.png": {
+      "bytes": 77895,
+      "sha256": "e60ae90cdef6a980a89e5f24e06619c4762dbccd4b3757cbd0eefb6144466da5"
+    },
+    "out/native-executed-cost/profiler-interval-second-pair/endpoint-instructions-owned-window-1f034e.png": {
+      "bytes": 24499,
+      "sha256": "884f3ee4cf9b559626c940339bb62f33aa5ede1bc4aba00209cf67a6ae29e449"
+    }
+  }
+}

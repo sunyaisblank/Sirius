@@ -1,0 +1,49 @@
+{
+  "numerical_control_passed": true,
+  "capture_acquired": false,
+  "original_bridge_accepted": false,
+  "original_owner_status": "failed",
+  "complete_readbacks_exact": 32,
+  "selected_original_modules_exact": 7,
+  "ordered_available_markers": 51,
+  "actual_provider_modules_exact": true,
+  "actual_connected_application_pid": 10952,
+  "actual_connected_application_path_exact": true,
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "native_producer_revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
+  "science_elapsed_seconds": 63.0348537,
+  "science_sampled_peak_rss_bytes": 582189056,
+  "all_frozen_inputs_independently_rechecked_exact": 189,
+  "recorded_ownership_closed": true,
+  "automatic_peak_clock_request_and_restore_logged": true,
+  "clock_scope_correction": "Earlier preserved controller/plan wording saying no clocks was inaccurate: RDP automatically reported peak clocks and restoration. No explicit clock or driver experiment configuration was supplied. Actual frequencies and restored hardware state were not independently measured. Profiled timings cannot establish ordinary baseline benefit.",
+  "observed_failure": "RDP requested a trace, began dumping, reported 15% / 0.4 of 2.9 MB, then collection errors/disconnection/failed abort and generic result -2; RDP exit1. Cause unestablished.",
+  "scope": "Original numerical, stream and provider checks passed under profiler activity; trace acquisition failed. No executed instruction cost, optimization benefit, frame or full qualification.",
+  "independent_reviewer": "/root/command_owner_review",
+  "evidence": {
+    "out/native-executed-cost/native-capture-console-bridge.json": {
+      "bytes": 43968,
+      "sha256": "1edb4048c973b8f76433e4968ba2b87ff15dc0979d3fa45bb578dc782e9eee1b"
+    },
+    "out/native-executed-cost/native-capture-console/owner.json": {
+      "bytes": 6417,
+      "sha256": "af7093d4cd7b3ea60561820d7678ac7a301510f5daca6719dd7f67a2b6ac1be7"
+    },
+    "out/native-executed-cost/native-capture-console/gtest.xml": {
+      "bytes": 29963,
+      "sha256": "2444f5a6a19fdcb6c875d10927729efaa70fa46e93f09f86dee87a6224ab31f8"
+    },
+    "out/native-executed-cost/native-capture-console/final-screen.json": {
+      "bytes": 12233,
+      "sha256": "cc97b01e94cab441f6f5ba22ccb5267264680dcc2da731b0a365e267c155d0c6"
+    },
+    "out/native-executed-cost/native-capture-console-emergency.json": {
+      "bytes": 1829,
+      "sha256": "88b6b6a1f5cb42698037cf85e732bda188693ecc4c0e798956387fa5d6c2a494"
+    },
+    "out/native-executed-cost/verify_console_capture_control.py": {
+      "bytes": 8045,
+      "sha256": "e2f815ce53bef7962b7201ca3959efc28f3f865b57d1b4cd1289ed7b31d0eaa8"
+    }
+  }
+}

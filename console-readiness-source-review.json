@@ -1,0 +1,43 @@
+{
+  "accepted": true,
+  "reviewer": "/root/command_owner_review",
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "controller_seals": {
+    "console_readiness.ps1": {
+      "bytes": 11485,
+      "sha256": "d3ac3fb3da8cfc7408b3ecdec2811a182b4f112c1cc60f081cff5f5aace32317"
+    },
+    "run_console_readiness.py": {
+      "bytes": 10988,
+      "sha256": "beee10a456440529c1fdc62d05c062c8a09e70c4b653102eec66a8d668027775"
+    },
+    "owned_console.cs": {
+      "bytes": 6026,
+      "sha256": "ea9e3dc969b685fc3939fc0b8cdba7d178990b29209e383399fa00fdad7d27f9"
+    },
+    "prepare_console_readiness.py": {
+      "bytes": 7344,
+      "sha256": "c0a543f1a4806543e259eb7e478e297ab6de7ae16b959b13b90beda217f04ada"
+    },
+    "emergency_profile_cleanup.ps1": {
+      "bytes": 6196,
+      "sha256": "83d58d2730778f332853ce93792ee1c0bc12a74dea6bb268cf26b75d76a23bb1"
+    }
+  },
+  "root_static_checks": {
+    "powershell_parser_returncode": 0,
+    "python_parsers_passed": 2,
+    "reviewed_paths_present_before_execution": true
+  },
+  "scope": "Tools-only unchanged signed auto-capture command in its own real console. Suspended child birth/handle recorded before resume;3s attachment bound and1024x2048 geometry initialized first. Actual feature-enabled AND waiting messages required; then deliberate owned tool stop.30s/1GiB sampled tools/90s bridge. No scientific consumer is launched.",
+  "limitations": [
+    "Console attachment feasibility remains unproved until executed.",
+    "Screen cells/geometry are preserved as console snapshots, not original stdout bytes or atomic console history.",
+    "No trace, dispatch cost, performance benefit, original frame, full scientific/release qualification or global/hidden process closure is established."
+  ],
+  "primary_sources": [
+    "https://learn.microsoft.com/en-us/windows/console/attachconsole",
+    "https://learn.microsoft.com/en-us/windows/console/setconsolescreenbuffersize"
+  ],
+  "reviewer_execution_or_writes": false
+}

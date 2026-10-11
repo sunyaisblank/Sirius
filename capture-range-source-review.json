@@ -1,0 +1,145 @@
+{
+  "reviewer": "/root/retained_latency_review",
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "scope": "Source and preserved historical raw-topology prerequisite only; no profiler/device launch or actual ordinal/cost claim.",
+  "single_original_filter": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+  "physical_dispatches": 75,
+  "submission_batches": 71,
+  "single_submissions": 67,
+  "paired_submissions": 4,
+  "measured_marker_batches": 51,
+  "legacy_sequence": [
+    "T3",
+    "E6",
+    "T3",
+    "E6",
+    "T3",
+    "E6",
+    "D3"
+  ],
+  "modern_sequence": [
+    "T12",
+    "E24",
+    "T12",
+    "E24",
+    "T12",
+    "E24",
+    "DP24",
+    "DP24",
+    "E12",
+    "DP12",
+    "E12"
+  ],
+  "ordinal_map": [
+    {
+      "first": 1,
+      "last": 1,
+      "work": "InitialEndpoint3"
+    },
+    {
+      "first": 2,
+      "last": 8,
+      "work": "DisabledLegacyBaseline"
+    },
+    {
+      "first": 9,
+      "last": 15,
+      "work": "LegacyRepeat0"
+    },
+    {
+      "first": 16,
+      "last": 22,
+      "work": "LegacyRepeat1"
+    },
+    {
+      "first": 23,
+      "last": 29,
+      "work": "LegacyRepeat2"
+    },
+    {
+      "first": 30,
+      "last": 31,
+      "work": "IndependentTransport12,initialEndpoint12"
+    },
+    {
+      "first": 32,
+      "last": 42,
+      "work": "DisabledModernBaseline"
+    },
+    {
+      "first": 43,
+      "last": 53,
+      "work": "ModernRepeat0"
+    },
+    {
+      "first": 54,
+      "last": 64,
+      "work": "ModernRepeat1"
+    },
+    {
+      "first": 65,
+      "last": 75,
+      "work": "ModernRepeat2"
+    }
+  ],
+  "conditional_cli_range": "dispatch:43:2",
+  "require_capture_armed_before_process_dispatches": true,
+  "require_zero_delay": true,
+  "expected_captured_events": [
+    {
+      "ordinal": 43,
+      "stage": "Transport",
+      "workgroups": [
+        12,
+        1,
+        1
+      ],
+      "observation": 18,
+      "module_bytes": 85364,
+      "module_sha256": "b52e6373f6b30aac6c7fe877f6e07f3c47c7ac9eafa1671840eacd19960d7cb1"
+    },
+    {
+      "ordinal": 44,
+      "stage": "Endpoint",
+      "workgroups": [
+        24,
+        1,
+        1
+      ],
+      "observation": 19,
+      "module_bytes": 99300,
+      "module_sha256": "785d94c53839693af8a0c752b8d7f0f1bd44789df17f3ab4eef79d3684faa559"
+    }
+  ],
+  "historical_A1_XML_sha256": "775a5b04720aafe9a32862548de89532592646f54229f84d786a0220a5e61f5f",
+  "source_input_seals": {
+    "tests/backend/retained_compute_test.cpp": {
+      "bytes": 332296,
+      "sha256": "f26e74928e72db7c63e57415a04ac84e194aea29e68e7e442a3a3c532c5e2216",
+      "blob": "714e07e379f2be402ff8c2f04e995b2d61991434"
+    },
+    "src/sirius/backend/retained_integrator.cpp": {
+      "bytes": 36093,
+      "sha256": "72c6bb13865548f42a17fe987fd6849a24bcedd0371584e5f713ab3031336f9d",
+      "blob": "a3d9690388cf4b9f01dad9ee14b56ecabca806f9"
+    },
+    "src/sirius/backend/retained_compute.cpp": {
+      "bytes": 36027,
+      "sha256": "ce9b76de99a51ba63a3a6f3ed32a75838989478f9b28f1ee7cc3d6c78bf10f03",
+      "blob": "7664b4d269ca69bc88302c15f28a411449be3001"
+    },
+    "src/sirius/backend/vulkan/vulkan_device.cpp": {
+      "bytes": 55423,
+      "sha256": "1bd9ce4f7264b1f958ad4bffdf2141af2dee837d7df2767ab267b728dc3a0bc2",
+      "blob": "3f8b0dfc9cb42a662e7ea5b9dce6d324e80a5026"
+    }
+  },
+  "limits": [
+    "Actualcapturemustconfirmapplicationevents/dimensions/pipelinecodeidentity independently",
+    "Sourceordinals do notproveprofiler counting/internaldriverevents",
+    "Earlierfailure or unsupportedtimestamps invalidaterange",
+    "SetUp/Create/timestampconfigprepare no dispatch; no rendererpreparation"
+  ],
+  "primary_cli_documentation": "https://gpuopen.com/manuals/rdp_manual/radeon_developer_panel_cli/",
+  "reviewer_writes_or_execution": false
+}

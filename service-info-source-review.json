@@ -1,0 +1,20 @@
+{
+  "accepted": true,
+  "reviewer": "/root/command_owner_review",
+  "controller_seals": {
+    "service_info.ps1": {
+      "bytes": 8955,
+      "sha256": "a0945d2c834713201db4a441f4c3d48d5101409917c64593fef6e47d38193d06"
+    },
+    "run_service_info.py": {
+      "bytes": 10160,
+      "sha256": "696bb617cc7af410ac8ffd10b9d1014520ebabe24a43a6a3ca1849631bd83410"
+    },
+    "emergency_profile_cleanup.ps1": {
+      "bytes": 6196,
+      "sha256": "83d58d2730778f332853ce93792ee1c0bc12a74dea6bb268cf26b75d76a23bb1"
+    }
+  },
+  "findings": "Scoped recovery covers both early-declared executables and recorded births. Unexpected service exit invalidates acceptance; bridge requires deliberate stop and exact recorded service identity. Python syntax parsed; no execution during review.",
+  "limits": "Bounded service/system-info prerequisite only. Natural info-client rc0 is information completion. Connectivity needs actual log evidence and capture compatibility remains unproved."
+}

@@ -1,0 +1,50 @@
+{
+  "accepted": true,
+  "reviewer": "/root/command_owner_review",
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "controller_seals": {
+    "console_readiness_requested.ps1": {
+      "bytes": 11747,
+      "sha256": "b8264386f9bc1d4dc21e26458be4479ae8da9143c5838620ccf87cfd986f9695"
+    },
+    "run_console_readiness_requested.py": {
+      "bytes": 11894,
+      "sha256": "7d16f527f44169f5a1d2a8a19e41539bf36942137c9c7475659781eb14d6c0dd"
+    },
+    "owned_console_requested.cs": {
+      "bytes": 6589,
+      "sha256": "96c552e5342770d6a5bb7e1114664939c4b5da3d627a5799d628a1d789db7dee"
+    },
+    "prepare_requested_console.py": {
+      "bytes": 1634,
+      "sha256": "d4e187a909bc07d880a483e83e7a5f3964716d84a5f7c62429d7433f705d34f7"
+    },
+    "emergency_profile_cleanup.ps1": {
+      "bytes": 6196,
+      "sha256": "83d58d2730778f332853ce93792ee1c0bc12a74dea6bb268cf26b75d76a23bb1"
+    }
+  },
+  "scope": "Separate tools-only requested-width readiness action. Only C# change from reviewed nativegeometry variant: STARTUPINFO flags1to9, xCountChars=derivedminimumWidth184,yCountChars2048. Readonlyactualgeometry/membership/boundedcells/wrap/bottomchecks unchanged. Genuineenabled/waitingmessagesrequired; ownedtoolsdeliberatelystopped, noSCI/trace.30s/1GiBtools90sbridge.",
+  "root_static_checks": {
+    "powershell_parser_returncode": 0,
+    "python_parsers_passed": 2
+  },
+  "prior_failure_scoped_closure": {
+    "accepted": true,
+    "Windows_target_births_absent": 3,
+    "old_frozen_inputs_exact": 67,
+    "no_cleanup_errors": true,
+    "reported_initial_geometry": [
+      120,
+      9001
+    ],
+    "required_width": 184
+  },
+  "limitations": [
+    "Creation request is not actual readiness/geometry; runtimechecks remain required.",
+    "Screen cells are not complete stdout byte history.",
+    "No capture compatibility, cost, performance, frame, scientific/release qualification or universal hidden process closure."
+  ],
+  "primary_source": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/ns-processthreadsapi-startupinfow",
+  "reviewer_execution_or_writes": false
+}

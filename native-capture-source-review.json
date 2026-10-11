@@ -1,0 +1,53 @@
+{
+  "accepted": true,
+  "reviewer": "/root/command_owner_review",
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "controller_seals": {
+    "run_capture_control.ps1": {
+      "bytes": 19556,
+      "sha256": "ae60048802882551db813a5df5e75c4b5118a8982d5812bbe32ae56b5378d985"
+    },
+    "run_native_capture.py": {
+      "bytes": 10398,
+      "sha256": "783bb2454ce112806aa22fd0a0b8f9d5a7a04501db90ec589a5aab17b788d075"
+    },
+    "emergency_profile_cleanup.ps1": {
+      "bytes": 6196,
+      "sha256": "83d58d2730778f332853ce93792ee1c0bc12a74dea6bb268cf26b75d76a23bb1"
+    },
+    "verify_capture_control.py": {
+      "bytes": 6478,
+      "sha256": "3c419c23ea9afb0a67d121310631ae46c3fb6fbc93492375d15c44a6ee2af1e1"
+    },
+    "prepare_capture_controller.py": {
+      "bytes": 10446,
+      "sha256": "02d2569faf79a5662297d4162a2d418edbb061ce81e74ed6a06ff79fa09b665a"
+    }
+  },
+  "scientific_review": "out/native-executed-cost/native-capture-scientific-source-review.json",
+  "corrected_prelaunch_gaps": [
+    "Separate task-local temporary directory leaves original output nonexistence preflight intact.",
+    "Path seal helper cannot be overwritten by review seal loop.",
+    "RDS and RDP sampled RSS both included during trace dump.",
+    "All reviewed generator/input/scientific-review files are included in bridge frozen paths; actual Python-only KeyError preserved separately before any native launch."
+  ],
+  "root_static_checks": {
+    "powershell_parser_returncode": 0,
+    "python_parsers_passed": 3,
+    "frozen_plan_inputs_exact": 176
+  },
+  "contract": "One attempt only. Actual waiting message required before original scientific process. Original 90s/4GiB science and sampled 1GiB tools;300s bridge; exact birth/held-handle closure and scoped recovery.",
+  "limitations": [
+    "No actual trace has been acquired. Dispatch/pipeline identity and useful samples remain separate.",
+    "Readiness stdout buffering may fail closed at15s with no scientific launch.",
+    "Sampled per-process working sets are not aggregate GPU/2GiB qualification; hidden descendants/global ownership not asserted."
+  ],
+  "reviewer_execution_or_writes": false,
+  "adaptive_independent_review": {
+    "reviewer": "/root/command_owner_review",
+    "accepted": true,
+    "all_reviewed_controller_keys_present": true,
+    "all_176_plan_seals_exact": true,
+    "no_native_launch_or_acquisition_before_correction": true
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "accepted": true,
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "controller_seals": {
+    "prepare_large_capture.py": {
+      "bytes": 3474,
+      "sha256": "d96c35791ff637612360a9d6e6f5a5d03e917199d96922c392d60144ab1569a7"
+    },
+    "run_large_capture_control.ps1": {
+      "bytes": 21959,
+      "sha256": "4aca3576c6d25c09923b3a93b5113dbfaef8ed1e3b0348d6119cbbea95acc125"
+    },
+    "run_native_large_capture.py": {
+      "bytes": 11568,
+      "sha256": "686c23a0fd9749054780e6d7c3e9ac24cbacc199370eafda06ca986ef8ba76dc"
+    },
+    "verify_large_capture_control.py": {
+      "bytes": 8075,
+      "sha256": "eee650c71f3a209cd258b57e7da870beae130bb2f8ad78eed9ea3b3115c7904a"
+    },
+    "capture-large-plan.json": {
+      "bytes": 39794,
+      "sha256": "ab768cd483aa5e68b7cbf39e52b0920dddd1bfb2d6426778e3fa559ef098af4d"
+    }
+  },
+  "reviewers": [
+    "/root/command_owner_review",
+    "/root/retained_latency_review"
+  ],
+  "scope": "Reviewed changed acquisition range32:2, original disabled-modern Transport12/Endpoint24; no associated measured marker pair. Original numerical/provider/32readback/7module/51marker controls and90s4GiB remain. More waves/lifetime are hypotheses; actual trace joins and sample availability separate. Automatic RDP peak/restoration effects acknowledged; no ordinary performance or full qualification claim. Python AST and native PowerShell parse passed;176frozeninputs exact.",
+  "blockers": []
+}

@@ -1,0 +1,87 @@
+{
+  "capture_acquired": true,
+  "gui_observation_accepted": true,
+  "usable_executed_instruction_cost": false,
+  "events": [
+    {
+      "label": "transport",
+      "actual_rgp_event": "4 vkCmdDispatch(3, 1, 1)",
+      "start_time_display": "9.599 \u03bcs",
+      "end_time_display": "2,903.671 \u03bcs",
+      "duration_display": "2,894.073 \u03bcs",
+      "work_duration_display": "2,894.073 \u03bcs",
+      "total_wavefronts_display": "3",
+      "total_threads_display": "192",
+      "average_threads_per_wave_display": "64",
+      "api_shader_hash_display": "CS: 0x930F6E31C49F106C16FC9C2EAF77A01F",
+      "api_pso_hash_display": "0xB4BAD5049F1D989E",
+      "driver_pipeline_hash_display": "0xAC480E0535229E722ABFB69BEE404C12",
+      "usable_instruction_samples": false,
+      "instruction_pane_message": "No wavefronts analyzed"
+    },
+    {
+      "label": "endpoint",
+      "actual_rgp_event": "10 vkCmdDispatch(6, 1, 1)",
+      "start_time_display": "4,830.592 \u03bcs",
+      "end_time_display": "5,508.464 \u03bcs",
+      "duration_display": "677.872 \u03bcs",
+      "work_duration_display": "677.872 \u03bcs",
+      "total_wavefronts_display": "6",
+      "total_threads_display": "384",
+      "average_threads_per_wave_display": "64",
+      "api_shader_hash_display": "CS: 0x7AD707D5E76ACCA7D7F76761DFFB1854",
+      "api_pso_hash_display": "0xA08A2F262ECA2B69",
+      "driver_pipeline_hash_display": "0xAB3FE071C8B846CFEB66BD46B598217F",
+      "usable_instruction_samples": false,
+      "instruction_pane_message": "Event 10 \nNo instruction timing data"
+    }
+  ],
+  "all_gui_frozen_inputs_rechecked_exact": 95,
+  "scope": "Actual selected trace events and displayed identifiers are observed. RGP event indices 4/10 are not process dispatch ordinals 9/10. Range and dimensions support intended legacy Transport/Endpoint but do not independently prove repeat0/marker0/1. API/driver hashes are not SPIR-V SHA256. No analyzed instruction cost, exclusive arithmetic cost, ordinary timing benefit, frame or full qualification.",
+  "evidence": {
+    "out/native-executed-cost/native-capture-early-console/original-legacy-te.rgp": {
+      "bytes": 1262370,
+      "sha256": "ae2224a5d0b45b833d4f2ce484cd61f6488a01976d5b99959aa83749c7a9edd6"
+    },
+    "out/native-executed-cost/profiler-trace-samples-bridge.json": {
+      "bytes": 34436,
+      "sha256": "ed656734191411125610ebc96edab3b0cfeb00a4df4aaf25e8a954a8058c5012"
+    },
+    "out/native-executed-cost/profiler-trace-samples/owner.json": {
+      "bytes": 22678,
+      "sha256": "fcb8ca92381ba4ef8b9a210e263bdc4e991f9814c2a06efd3e0881d5e8035b01"
+    },
+    "out/native-executed-cost/profiler-trace-samples/transport-event-automation.json": {
+      "bytes": 78486,
+      "sha256": "44e5476f1e71916f881c50d6905ae85a5ae3eaece1555a32a7c8f8347320e272"
+    },
+    "out/native-executed-cost/profiler-trace-samples/transport-instructions-automation.json": {
+      "bytes": 18127,
+      "sha256": "56b17be0ff89c220af43a6afebe2a071c52878e05c0a19ad44d471e03f98b33d"
+    },
+    "out/native-executed-cost/profiler-trace-samples/transport-event-owned-window-1204da.png": {
+      "bytes": 59963,
+      "sha256": "57d541eb400f37169c997320697426c3234e9ccba17d87dc39ac81264cd08f6e"
+    },
+    "out/native-executed-cost/profiler-trace-samples/transport-instructions-owned-window-1204da.png": {
+      "bytes": 25912,
+      "sha256": "a91022e15accf226f2a5030ede9449ce36df212e57eb1f9d6f84de1f13242096"
+    },
+    "out/native-executed-cost/profiler-trace-samples/endpoint-event-automation.json": {
+      "bytes": 78484,
+      "sha256": "37e6d22e0d24348a987178f32ab8dbf664b18a732a0e99bb310460f2c0f8a860"
+    },
+    "out/native-executed-cost/profiler-trace-samples/endpoint-instructions-automation.json": {
+      "bytes": 15599,
+      "sha256": "9c8f6df021f86b5738b9c4bca91a2c85c6a50956e64e13825851b6bef4a88c03"
+    },
+    "out/native-executed-cost/profiler-trace-samples/endpoint-event-owned-window-1204da.png": {
+      "bytes": 59720,
+      "sha256": "bd441b08a2e265fb59087661ab448684d2368f4cb8123f4ec5926b720fc3c1aa"
+    },
+    "out/native-executed-cost/profiler-trace-samples/endpoint-instructions-owned-window-1204da.png": {
+      "bytes": 24378,
+      "sha256": "b1e6b17f6b9b27d52c8fae5132d9928d22379554b22d5ca0382ca4b770e7e894"
+    }
+  }
+}

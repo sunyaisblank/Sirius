@@ -1,0 +1,49 @@
+{
+  "numerical_control_passed": true,
+  "capture_acquired": false,
+  "original_bridge_accepted": false,
+  "original_owner_status": "failed",
+  "complete_readbacks_exact": 32,
+  "selected_original_modules_exact": 7,
+  "ordered_available_markers": 51,
+  "actual_provider_modules_exact": true,
+  "actual_connected_application_pid": 10276,
+  "actual_connected_application_path_exact": true,
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "native_producer_revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
+  "science_elapsed_seconds": 3.8063259,
+  "science_sampled_peak_rss_bytes": 43495424,
+  "all_frozen_inputs_independently_rechecked_exact": 196,
+  "recorded_ownership_closed": true,
+  "automatic_peak_clock_request_and_restore_logged": true,
+  "clock_scope": "RDP automatically reported peak clocks and restoration. No explicit clock or driver experiment configuration was supplied. Actual frequencies and restored hardware state were not independently measured. Profiled timings cannot establish ordinary baseline benefit.",
+  "observed_failure": "RDP requested a trace, began dumping, reported 15% / 0.4 of 2.9 MB, then collection errors/disconnection/failed abort and generic result -2; RDP exit1. Cause unestablished.",
+  "scope": "Original numerical, stream and provider checks passed under profiler activity; trace acquisition failed. No executed instruction cost, optimization benefit, frame or full qualification.",
+  "independent_reviewer": "/root/command_owner_review",
+  "evidence": {
+    "out/native-executed-cost/native-capture-large-console-bridge.json": {
+      "bytes": 45497,
+      "sha256": "12d93740d998663c3563e18fdd39af263788468d531b41a6c3ab934ad87123c9"
+    },
+    "out/native-executed-cost/native-capture-large-console/owner.json": {
+      "bytes": 6650,
+      "sha256": "0a6f939051a11a13ce1eade546565f4231fee65027e7fdf8dc11ec3ff0e01a67"
+    },
+    "out/native-executed-cost/native-capture-large-console/gtest.xml": {
+      "bytes": 30510,
+      "sha256": "6898ef537cebe50dbb54d2d8b6518294e2429cfaad917515033386f5deb531c1"
+    },
+    "out/native-executed-cost/native-capture-large-console/final-screen.json": {
+      "bytes": 12234,
+      "sha256": "be596de9b992b709d7e458b24ba074c510d015cd073817bec4030ba5f95d0810"
+    },
+    "out/native-executed-cost/native-capture-large-console-emergency.json": {
+      "bytes": 1831,
+      "sha256": "933b34ca4d1333827e2636b7761505cbf497b82632c14f4ef65c503fcff9d3ef"
+    },
+    "out/native-executed-cost/verify_console_capture_control.py": {
+      "bytes": 8045,
+      "sha256": "e2f815ce53bef7962b7201ca3959efc28f3f865b57d1b4cd1289ed7b31d0eaa8"
+    }
+  }
+}

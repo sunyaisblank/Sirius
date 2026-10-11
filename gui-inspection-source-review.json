@@ -1,0 +1,17 @@
+{
+  "accepted": true,
+  "reviewer": "/root/command_owner_review",
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "controller_seals": {
+    "profiler_ui.ps1": {
+      "bytes": 10272,
+      "sha256": "fcdd20f19fbb50c1e6b771087d663298a9d358926bc71999cdb3d98bb2360c15"
+    },
+    "run_profiler_ui.py": {
+      "bytes": 10218,
+      "sha256": "9fab991a78d5384a6b8a1a8b8a365838e7a1c45f98571f72a394b1ea29778d54"
+    }
+  },
+  "findings": "PID checks surround PrintWindow, callback exceptions contained, acceptance requires a saved PNG and bridge validates its exact path/bytes/hash. Explicit framework assemblies. All 12 additional Qt files exact to ZIP. Guard labels distinguish polling from synchronous blocked-call bridge recovery.",
+  "limits": "Saved PNG requires visual interpretation and may show an error dialog. No atomic universal HWND guarantee, capture, analysis-interface or scientific qualification claim. No executable launch during review."
+}

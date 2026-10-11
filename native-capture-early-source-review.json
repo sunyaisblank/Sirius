@@ -1,0 +1,32 @@
+{
+  "accepted": true,
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "controller_seals": {
+    "prepare_early_capture.py": {
+      "bytes": 3375,
+      "sha256": "2dbc3b22758975f1055283b10d163857bb36e20ec57f0a84e5fb82c1226a4fe8"
+    },
+    "run_early_capture_control.ps1": {
+      "bytes": 21883,
+      "sha256": "9218399242c5e71783a2ff715519f8b9626f83e3b3d36eda77994a431e894f1a"
+    },
+    "run_native_early_capture.py": {
+      "bytes": 11282,
+      "sha256": "1d307f20f080ebd884293b8b9ccb6bcd59baf1448cfe2067999521d99c2f3163"
+    },
+    "verify_early_capture_control.py": {
+      "bytes": 8057,
+      "sha256": "1f7064e110fd740839abf214bd1803e5c5e1e0ee0e15a7d3f466196925b011ad"
+    },
+    "capture-early-plan.json": {
+      "bytes": 39544,
+      "sha256": "7906e01bf6a56bda6acb1e8e890e597e4488bd6fab221ff51d00b90a95a1c211"
+    }
+  },
+  "reviewers": [
+    "/root/command_owner_review",
+    "/root/retained_latency_review"
+  ],
+  "scope": "One material changed legacy dispatch9:2 acquisition only. Original scientific/provider/32readback/7module/51orderedmarker controls and90s4GiB remain. More remaining natural device lifetime is an observed prior-run hypothesis with unproved cache/future margin; no exclusive previous-failure cause. Actual trace identity/sample availability separately required. Automatic RDP peak/restoration messages acknowledged, no unprofiled benefit comparison.",
+  "blockers": []
+}
