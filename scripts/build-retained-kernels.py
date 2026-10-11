@@ -19,7 +19,7 @@ WORKGROUP_ROWS = 1
 WORKGROUP_LANES = 64
 
 
-def native_controls(text, fma=False):
+def native_controls(text, fma=False, signed_zero=True):
     if "OpCapability Float64" in text or "OpTypeFloat 64" in text or "OpTypeInt 64" in text or " Fma " in text:
         raise ValueError("retained stage introduced wide arithmetic or contraction")
     if re.search(r"\b(?:FPFastMathMode|FPFastMathDefault|RelaxedPrecision)\b", text):
@@ -36,14 +36,16 @@ def native_controls(text, fma=False):
         raise ValueError("retained arithmetic lost subnormal preservation")
     capabilities = "OpCapability Shader\n               OpCapability RoundingModeRTE"
     if fma:
-        capabilities += "\n               OpCapability FMAKHR\n               OpCapability SignedZeroInfNanPreserve"
+        capabilities += "\n               OpCapability FMAKHR"
+    if fma and signed_zero:
+        capabilities += "\n               OpCapability SignedZeroInfNanPreserve"
     text = text.replace("OpCapability Shader", capabilities, 1)
     if fma:
         end = list(re.finditer(r"^.*OpCapability .*?$", text, re.M))[-1].end()
         text = text[:end] + '\n               OpExtension "SPV_KHR_fma"' + text[end:]
     local_size = re.search(r"^.*OpExecutionMode " + re.escape(entry) + r" LocalSize.*$", text, re.M)[0]
     modes = "\n               OpExecutionMode " + entry + " RoundingModeRTE 32"
-    if fma:
+    if fma and signed_zero:
         modes += "\n               OpExecutionMode " + entry + " SignedZeroInfNanPreserve 32"
     return text.replace(local_size, local_size + modes, 1)
 
@@ -263,8 +265,8 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
         if source.stem == "retained_dopri_phase":
             definitions.append("-DSIRIUS_RETAINED_COOPERATIVE_DOPRI_INPUTS=1")
     if fma:
-        if not fp64 or portable or source.stem not in ("retained_transport", "retained_endpoint"):
-            raise ValueError("FMA32 is qualified only for native-wide retained Transport and Endpoint")
+        if portable or source.stem not in ("retained_transport", "retained_endpoint"):
+            raise ValueError("FMA32 belongs only to native retained Transport and Endpoint")
         definitions.append("-DSIRIUS_RETAINED_FMA32=1")
     if portable:
         definitions.append("-DSIRIUS_RETAINED_PORTABLE=1")
@@ -341,7 +343,7 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
         data = destination.read_bytes()
         assembly.unlink()
         return struct.unpack("<" + str(len(data) // 4) + "I", data)
-    text = native_controls(text, fma=fma)
+    text = native_controls(text, fma=fma, signed_zero=fp64)
     assembly.write_text(text)
     subprocess.run([assembler, "--target-env", "spv1.5", str(assembly), "-o", str(destination)],
                    check=True)
@@ -456,6 +458,19 @@ def main():
                 shutil.copyfile(args.output.parent / (stem + "_fp64.spv"), destination)
                 lines.append(f"inline constexpr auto& k{kind}FmaShader = k{kind}Fp64Shader;")
             print(kind + " optional FMA32:", "validated" if fma_available else "integer fallback", flush=True)
+            destination = args.output.parent / (stem + "_narrow_fma.spv")
+            lines.append(f"inline constexpr bool k{kind}NarrowFmaAvailable = {'true' if fma_available else 'false'};")
+            if fma_available:
+                code = compile_shader(source / (stem + ".slang"), destination,
+                    args.compiler, args.assembler, args.disassembler, args.validator,
+                    program["registers"], terms, len(program["layer_offsets"])-1,
+                    program.get("prefix_instructions", 0), fma=True,
+                    transport_specialized=transport_specialized, endpoint_specialized=endpoint_specialized)
+                array("k" + kind + "NarrowFmaShader", code)
+            else:
+                shutil.copyfile(args.output.parent / (stem + ".spv"), destination)
+                lines.append(f"inline constexpr auto& k{kind}NarrowFmaShader = k{kind}Shader;")
+            print(kind + " optional narrow FMA32:", "validated" if fma_available else "split fallback", flush=True)
         words = ((512 if kind == "Camera" else 576) + 4 * program["registers"] if kind in ("Camera", "RayCamera")
                  else {"Transport":2404, "Endpoint":769, "Dense":204, "Initialize":204, "DopriPhase":1004}[kind] + 5 * program["registers"])
         lines.append(f"inline constexpr std::size_t k{kind}RowWords = {words};")

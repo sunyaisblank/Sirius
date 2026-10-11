@@ -150,25 +150,31 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
         result->camera_, KernelStage::kCamera,
         shader(kCameraShader, kCameraFp64Shader, kCameraPortableShader, kCameraPortableFp64Shader));
     if (!status) return std::unexpected(status.error());
-    const bool fma = fp64_products && !portable && device.Info().fma_fp32_enabled &&
-                     device.Info().preserves_fp32_signed_zero_inf_nan;
+    const bool native_fma = !portable && device.Info().fma_fp32_enabled &&
+                            device.Info().preserves_fp32_signed_zero_inf_nan;
+    const bool fma = fp64_products && native_fma;
+    const bool narrow_fma = !fp64_products && native_fma;
     // The normal-lattice transform needs RTE32 but no denormal preservation.
     // Adapters without RTE32 retain the pure-integer portable modules.
     const bool normal_sum = portable && device.Info().rounds_fp32_to_nearest;
     const std::span<const std::uint32_t> transport =
         normal_sum ? std::span(kTransportPortableNormalSumShader)
-                   : (fma && kTransportFmaAvailable
-                          ? std::span(kTransportFmaShader)
-                          : shader(kTransportShader, kTransportFp64Shader, kTransportPortableShader,
-                                   kTransportPortableFp64Shader));
+                   : (narrow_fma && kTransportNarrowFmaAvailable
+                          ? std::span(kTransportNarrowFmaShader)
+                          : (fma && kTransportFmaAvailable
+                                 ? std::span(kTransportFmaShader)
+                                 : shader(kTransportShader, kTransportFp64Shader,
+                                          kTransportPortableShader, kTransportPortableFp64Shader)));
     status = create(result->transport_, KernelStage::kTransport, transport);
     if (!status) return std::unexpected(status.error());
     const std::span<const std::uint32_t> endpoint =
         normal_sum ? std::span(kEndpointPortableNormalSumShader)
-                   : (fma && kEndpointFmaAvailable
-                          ? std::span(kEndpointFmaShader)
-                          : shader(kEndpointShader, kEndpointFp64Shader, kEndpointPortableShader,
-                                   kEndpointPortableFp64Shader));
+                   : (narrow_fma && kEndpointNarrowFmaAvailable
+                          ? std::span(kEndpointNarrowFmaShader)
+                          : (fma && kEndpointFmaAvailable
+                                 ? std::span(kEndpointFmaShader)
+                                 : shader(kEndpointShader, kEndpointFp64Shader,
+                                          kEndpointPortableShader, kEndpointPortableFp64Shader)));
     status = create(result->endpoint_, KernelStage::kEndpoint, endpoint);
     if (!status) return std::unexpected(status.error());
     status = create(
