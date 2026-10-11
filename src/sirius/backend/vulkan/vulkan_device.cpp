@@ -464,10 +464,40 @@ Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {
     // ladder can select double kernels at run time.
     VkPhysicalDeviceFeatures enabled{};
     enabled.shaderFloat64 = device->info_.supports_fp64 ? VK_TRUE : VK_FALSE;
+    // Temporary issue-44 diagnostic branch: device clock only, with the existing
+    // float64/FMA/portability feature chain preserved by the creation helper.
+    std::uint32_t extension_count = 0;
+    auto extension_result =
+        vkEnumerateDeviceExtensionProperties(device->physical_, nullptr, &extension_count, nullptr);
+    if (extension_result != VK_SUCCESS)
+        return Fail(ErrorDomain::kDevice, "query diagnostic clock extension",
+                    VkResultText(extension_result));
+    std::vector<VkExtensionProperties> extensions(extension_count);
+    extension_result = vkEnumerateDeviceExtensionProperties(device->physical_, nullptr,
+                                                            &extension_count, extensions.data());
+    if (extension_result != VK_SUCCESS)
+        return Fail(ErrorDomain::kDevice, "query diagnostic clock extension",
+                    VkResultText(extension_result));
+    extensions.resize(extension_count);
+    const bool has_clock = std::ranges::any_of(extensions, [](const auto& extension) {
+        return std::strcmp(extension.extensionName, VK_KHR_SHADER_CLOCK_EXTENSION_NAME) == 0;
+    });
+    VkPhysicalDeviceShaderClockFeaturesKHR clock{
+        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CLOCK_FEATURES_KHR};
+    if (has_clock) {
+        VkPhysicalDeviceFeatures2 query{.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2,
+                                        .pNext = &clock};
+        vkGetPhysicalDeviceFeatures2(device->physical_, &query);
+    }
+    clock.shaderSubgroupClock = VK_FALSE;
+    const char* clock_extension = VK_KHR_SHADER_CLOCK_EXTENSION_NAME;
     const VkDeviceCreateInfo device_info{
         .sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
+        .pNext = clock.shaderDeviceClock ? &clock : nullptr,
         .queueCreateInfoCount = 1,
         .pQueueCreateInfos = &queue_info,
+        .enabledExtensionCount = clock.shaderDeviceClock ? 1U : 0U,
+        .ppEnabledExtensionNames = clock.shaderDeviceClock ? &clock_extension : nullptr,
         .pEnabledFeatures = &enabled,
     };
     auto logical = detail::CreateDeviceWithPortability(device->physical_, device_info,

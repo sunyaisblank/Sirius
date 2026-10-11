@@ -36,6 +36,7 @@
 #include "sirius/backend/vulkan/vulkan_device.h"
 
 #include "program_fixture.h"
+#include "shader_clock_observer.h"
 #include "support/cpu_critical/transport_reference.h"
 #include "support/retained_camera/continuous_reference.h"
 #include "support/retained_camera/ray_reference.h"
@@ -806,7 +807,7 @@ class TransferProbeDevice final : public ComputeDevice {
         std::uint32_t x, y, z;
     };
     explicit TransferProbeDevice(ComputeDevice& device, bool decline_rte32 = false)
-        : device_(device) {
+        : device_(device), clock_(device) {
         if (decline_rte32) {
             info_ = device.Info();
             info_->rounds_fp32_to_nearest = false;
@@ -834,9 +835,17 @@ class TransferProbeDevice final : public ComputeDevice {
     std::function<void(BufferHandle, std::span<std::byte>)> before_write;
 
     const DeviceInfo& Info() const noexcept override { return info_ ? *info_ : device_.Info(); }
+    sirius::base::Expected<void> EnablePhaseObserver(std::uint32_t capacity, bool wide) {
+        return clock_.Enable(capacity, wide, Info());
+    }
+    std::uint64_t PhaseAllocationBytes() const { return clock_.AllocationBytes(); }
+    std::size_t PhaseKernelCount() const { return clock_.KernelCount(); }
+    std::size_t ExpectedPhaseKernelCount() const { return clock_.ExpectedKernelCount(); }
     sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t> code) override {
-        auto loaded = device_.LoadKernel(code);
-        if (loaded && after_load) after_load(code);
+        const auto selected = clock_.Select(code);
+        auto loaded = device_.LoadKernel(selected);
+        if (loaded) clock_.Remember(*loaded, selected);
+        if (loaded && after_load) after_load(selected);
         return loaded;
     }
     sirius::base::Expected<BufferHandle> CreateBuffer(std::uint64_t bytes,
@@ -876,7 +885,19 @@ class TransferProbeDevice final : public ComputeDevice {
         const std::array<ComputeDispatch, 2>& commands, IndependentPairTiming* timing) override {
         ++pair_calls;
         if (fail_next == Failure::Dispatch) return Inject("pair dispatch");
-        auto status = device_.DispatchIndependentPair(commands, timing);
+        std::array<std::array<BufferHandle, 3>, 2> bindings;
+        auto forwarded = commands;
+        for (std::size_t slot = 0; slot < commands.size(); ++slot) {
+            auto prepared = clock_.Prepare(commands[slot], slot, bindings[slot], forwarded[slot]);
+            if (!prepared) return prepared;
+        }
+        auto status = device_.DispatchIndependentPair(forwarded, timing);
+        if (status) {
+            for (std::size_t slot = 0; slot < commands.size(); ++slot) {
+                auto captured = clock_.Capture(commands[slot], slot, true);
+                if (!captured) return captured;
+            }
+        }
         if (status && timing && pair_submit_ms) {
             timing->combined.submit_wait_ms = *pair_submit_ms;
             timing->combined.total_ms = timing->combined.pipeline_setup_ms +
@@ -901,7 +922,16 @@ class TransferProbeDevice final : public ComputeDevice {
         if (before_dispatch) before_dispatch();
         if (fail_next == Failure::Dispatch) return Inject("dispatch");
         ++forwarded_dispatches;
-        auto status = device_.Dispatch(kernel, buffers, x, y, z, timing);
+        const ComputeDispatch command{kernel, buffers, x, y, z};
+        ComputeDispatch forwarded;
+        std::array<BufferHandle, 3> bindings;
+        auto prepared = clock_.Prepare(command, 0, bindings, forwarded);
+        if (!prepared) return prepared;
+        auto status = device_.Dispatch(kernel, forwarded.buffers, x, y, z, timing);
+        if (status) {
+            auto captured = clock_.Capture(command, 0, false);
+            if (!captured) return captured;
+        }
         if (status && timing && submission_ms) {
             timing->submit_wait_ms = submission_ms(buffers[0], x);
             timing->total_ms = timing->pipeline_setup_ms + timing->command_setup_ms +
@@ -929,6 +959,7 @@ class TransferProbeDevice final : public ComputeDevice {
                                   "injected returned failure");
     }
     ComputeDevice& device_;
+    sirius::test::shader_clock::Observer clock_;
     std::optional<DeviceInfo> info_;
 };
 
@@ -2076,6 +2107,8 @@ TEST_F(RetainedComputeTest, MixedIndependentTransportLayersPreserveWordsAndRefus
             ASSERT_EQ((*opened)->Info(), device->Info());
             ASSERT_TRUE((*opened)->SetBufferAllocationLimit(8 * 1024 * 1024));
             TransferProbeDevice probe(**opened, decline_rte32);
+            const auto phase_enabled = probe.EnablePhaseObserver(24, wide);
+            ASSERT_TRUE(phase_enabled) << phase_enabled.error().Description();
             auto created = RetainedCompute::Create(probe, 24, wide);
             if (wide && (!device->Info().supports_fp64 || !device->Info().rounds_fp64_to_nearest)) {
                 ASSERT_FALSE(created);
@@ -2085,6 +2118,7 @@ TEST_F(RetainedComputeTest, MixedIndependentTransportLayersPreserveWordsAndRefus
                 continue;
             }
             ASSERT_TRUE(created) << created.error().Description();
+            ASSERT_EQ(probe.PhaseKernelCount(), probe.ExpectedPhaseKernelCount());
             auto& instance = **created;
             ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
             const auto transport_input = probe.allocations[2].handle;
@@ -2094,7 +2128,7 @@ TEST_F(RetainedComputeTest, MixedIndependentTransportLayersPreserveWordsAndRefus
             const auto allocation = (*opened)->BufferAllocationBytes();
             const auto required = RetainedCompute::RequiredAllocationBytes(probe, 24);
             ASSERT_TRUE(required) << required.error().Description();
-            EXPECT_EQ(allocation, *required);
+            EXPECT_EQ(allocation, *required + probe.PhaseAllocationBytes());
             std::vector<RetainedStepOutput> observed;
             std::vector<std::byte> raw;
             const auto step = [&] {
@@ -2221,6 +2255,8 @@ TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundary
             ASSERT_EQ((*opened)->Info(), device->Info());
             ASSERT_TRUE((*opened)->SetBufferAllocationLimit(8 * 1024 * 1024));
             TransferProbeDevice probe(**opened, decline_rte32);
+            const auto phase_enabled = probe.EnablePhaseObserver(capacity, wide);
+            ASSERT_TRUE(phase_enabled) << phase_enabled.error().Description();
             auto expected_info = device->Info();
             if (decline_rte32) expected_info.rounds_fp32_to_nearest = false;
             ASSERT_EQ(probe.Info(), expected_info);
@@ -2246,6 +2282,7 @@ TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundary
                 continue;
             }
             ASSERT_TRUE(created) << created.error().Description();
+            ASSERT_EQ(probe.PhaseKernelCount(), probe.ExpectedPhaseKernelCount());
             ASSERT_EQ(loaded_shaders.size(), RetainedCompute::kStageCount);
             for (std::size_t stage = 0; stage < loaded_shaders.size(); ++stage)
                 std::clog << "[FactoredEndpoint] selected_stage="
@@ -2262,7 +2299,7 @@ TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundary
             const auto allocation = (*opened)->BufferAllocationBytes();
             const auto required = RetainedCompute::RequiredAllocationBytes(probe, capacity);
             ASSERT_TRUE(required) << required.error().Description();
-            ASSERT_EQ(allocation, *required);
+            ASSERT_EQ(allocation, *required + probe.PhaseAllocationBytes());
             probe.capture_output = probe.allocations[5].handle;
             ASSERT_EQ(probe.allocations[5].bytes % capacity, 0U);
             const auto row_bytes = probe.allocations[5].bytes / capacity;
@@ -3566,6 +3603,8 @@ void RetainedComputeTest::CheckOriginalIntervalTimestamps(bool fp64_products) {
     ASSERT_TRUE(baseline) << baseline.error().Description();
     EXPECT_FALSE(vulkan->LastDispatchTimestamp());
     TransferProbeDevice probe(*device);
+    const auto phase_enabled = probe.EnablePhaseObserver(24, fp64_products);
+    ASSERT_TRUE(phase_enabled) << phase_enabled.error().Description();
     probe.independent_pairs = true;
     std::size_t modules = 0;
     probe.after_load = [&](std::span<const std::uint32_t> code) {
@@ -3582,6 +3621,7 @@ void RetainedComputeTest::CheckOriginalIntervalTimestamps(bool fp64_products) {
     };
     auto observed = RetainedCompute::Create(probe, 24, fp64_products);
     ASSERT_TRUE(observed) << observed.error().Description();
+    ASSERT_EQ(probe.PhaseKernelCount(), probe.ExpectedPhaseKernelCount());
     ASSERT_EQ(modules, RetainedCompute::kStageCount);
     ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
     const auto resident = device->BufferAllocationBytes();
@@ -3645,8 +3685,9 @@ void RetainedComputeTest::CheckOriginalIntervalTimestamps(bool fp64_products) {
     };
     RecordProperty("legacy_call_timing_scope",
                    "original synchronous interval call including allocation, packing, decoding "
-                   "and existing marker/readback observers; excludes SetUp, assertions, digest "
-                   "serialization and result disposal; unchanged general-Kerr/flat inputs and "
+                   "and marker/readback observers, plus diagnostic sidecar clear/read/hash/file/"
+                   "XML work; excludes SetUp, assertions, original-output digest serialization "
+                   "and result disposal; unchanged general-Kerr/flat inputs and "
                    "projection budget; no cold, frame or release claim");
     for (unsigned repeat = 0; repeat < 3; ++repeat) {
         phase = "legacy_repeat" + std::to_string(repeat);
@@ -3823,7 +3864,8 @@ void RetainedComputeTest::CheckOriginalIntervalTimestamps(bool fp64_products) {
         {Stage::kDopriPhase, 12}, {Stage::kEndpoint, 12}};
     RecordProperty("coupled_call_timing_scope",
                    "sum of synchronous construction and interior sampling calls, including "
-                   "allocation, packing, decoding and existing marker/readback observers; "
+                   "allocation, packing, decoding and marker/readback observers, plus "
+                   "diagnostic sidecar clear/read/hash/file/XML work; "
                    "excludes SetUp, assertions between calls and result disposal; unchanged "
                    "12-row inputs and projection budget; no cold, frame or release claim");
     for (unsigned repeat = 0; repeat < 3; ++repeat) {
