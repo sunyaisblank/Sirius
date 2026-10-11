@@ -1,0 +1,62 @@
+{
+  "command": [
+    "python3",
+    "out/literal-transport-compiler-isolation/finish.py",
+    "--cleanup"
+  ],
+  "returncode": 1,
+  "failed_before_copy_or_delete": true,
+  "failed_statement": "Path component order compared directly to string lexical order",
+  "exactsets_equal": true,
+  "count": 93,
+  "sha256_all93_unchanged": true,
+  "first_order_differences": [
+    {
+      "index": 55,
+      "component_sorted": "minprobe/before.json",
+      "string_sorted": "minprobe-independent-review.json"
+    },
+    {
+      "index": 56,
+      "component_sorted": "minprobe/commands.json",
+      "string_sorted": "minprobe/before.json"
+    },
+    {
+      "index": 57,
+      "component_sorted": "minprobe/phase_runner.py",
+      "string_sorted": "minprobe/commands.json"
+    },
+    {
+      "index": 58,
+      "component_sorted": "minprobe/result.json",
+      "string_sorted": "minprobe/phase_runner.py"
+    },
+    {
+      "index": 59,
+      "component_sorted": "minprobe/tool-00.stderr",
+      "string_sorted": "minprobe/result.json"
+    },
+    {
+      "index": 60,
+      "component_sorted": "minprobe/tool-00.stdout",
+      "string_sorted": "minprobe/tool-00.stderr"
+    },
+    {
+      "index": 61,
+      "component_sorted": "minprobe-independent-review.json",
+      "string_sorted": "minprobe/tool-00.stdout"
+    },
+    {
+      "index": 63,
+      "component_sorted": "passprobe/before.json",
+      "string_sorted": "passprobe-independent-review.json"
+    }
+  ],
+  "corrected_helper": {
+    "path": "attestations/review/b81e061/literal-transport-isolation-publication/cleanup_v2.py",
+    "bytes": 12770,
+    "sha256": "7295148a667b975151214fe94b9d279a45d2ac233cc5993cadab736a888b39b2"
+  },
+  "correction": "sort relative strings onbothsides; approvalbindstheactualexecutedhelper insteadfrozenoriginalhelper; originalarchiveandscratchhelperremainbyteexact",
+  "scope": "cleanupapparatus correction only; no product/build/device/resultchange"
+}
