@@ -37,7 +37,8 @@ def native_controls(text, fma=False):
     capabilities = "OpCapability Shader\n               OpCapability RoundingModeRTE"
     if fma:
         capabilities += "\n               OpCapability FMAKHR\n               OpCapability SignedZeroInfNanPreserve"
-    text = text.replace("OpCapability Shader", capabilities, 1)
+    text = re.sub(r"(?m)^([ \t]*)OpCapability Shader$",
+                  lambda match: match[1] + capabilities, text, count=1)
     if fma:
         end = list(re.finditer(r"^.*OpCapability .*?$", text, re.M))[-1].end()
         text = text[:end] + '\n               OpExtension "SPV_KHR_fma"' + text[end:]

@@ -86,6 +86,16 @@ set_tests_properties(
         TIMEOUT 10)
 
 add_test(
+    NAME OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls
+    COMMAND "${Python3_EXECUTABLE}" -B
+        "${CMAKE_CURRENT_SOURCE_DIR}/operational/retained_shader_controls_test.py")
+set_tests_properties(
+    OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls
+    PROPERTIES
+        LABELS "Mandatory;Operational"
+        TIMEOUT 10)
+
+add_test(
     NAME OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate
     COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_SOURCE_DIR}/scripts/verify-build-gate.py" --self-test)
