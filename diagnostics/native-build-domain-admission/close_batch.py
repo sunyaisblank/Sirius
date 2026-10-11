@@ -199,6 +199,10 @@ def finish():
                      'publication-accepted.json', 'cleanup-clearance.json']:
         receipt = read(WORK / filename)
         assert receipt['accepted'] and receipt['source_revision'] == HEAD
+    clearance = read(WORK / 'cleanup-clearance.json')
+    assert clearance['approved_initial_manifest'] == seal(ARCHIVE / 'manifest.json')
+    assert clearance['approved_helper'] == seal(WORK / 'close_batch.py')
+    assert clearance['approved_recovery'] == seal(WORK / 'executed-input-recovery.json')
     for filename in ['source-preservation-pushed.json', 'closing-source-preservation.json']:
         receipt = read(WORK / filename)
         assert git('ls-remote', 'origin', 'refs/tags/' + receipt['source_tag']).decode().split()[0] == receipt['source_commit']
