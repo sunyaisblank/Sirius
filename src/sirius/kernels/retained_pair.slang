@@ -87,6 +87,29 @@ struct RetainedPair { RPScalar hi; RPScalar lo; RPScalar error; uint valid; }
 RPScalar RPAbs(RPScalar x) { return RPFromBits(RPBits(x)&0x7fffffffu); }
 bool RPBounded(RPScalar x,uint limit) { return (RPBits(x)&0x7fffffffu)<=limit; }
 RPScalar RPFailureBound() { return RPFromBits(0x7f000000u); } // finite 2^127 sentinel
+#if defined(SIRIUS_RETAINED_BOUND_SELECT32) && !defined(SIRIUS_RETAINED_PORTABLE) && !defined(SIRIUS_RETAINED_FP64) && !defined(SIRIUS_RETAINED_FMA32)
+uint RPSelectBoundWord(bool condition,uint yes,uint no) {
+    return spirv_asm { OpSelect $$uint result $condition $yes $no; };
+}
+// Keep raw signs and original zero/failure precedence. Invalid operands become
+// finite zero before arithmetic; integer selection owns the returned word.
+RPScalar RPUpAdd(RPScalar a,RPScalar b) {
+    uint aw=RPBits(a),bw=RPBits(b),am=aw&0x7fffffffu,bm=bw&0x7fffffffu;
+    bool good=max(am,bm)<=0x7d800000u;
+    uint safeA=RPSelectBoundWord(good,aw,0u),safeB=RPSelectBoundWord(good,bw,0u);
+    uint sum=RPBits(OrderedAdd32(RPFromBits(safeA),RPFromBits(safeB)))+1u;
+    uint selected=RPSelectBoundWord(am==0u,bw,RPSelectBoundWord(bm==0u,aw,sum));
+    return RPFromBits(RPSelectBoundWord(good,selected,0x7f000000u));
+}
+RPScalar RPUpMultiply(RPScalar a,RPScalar b) {
+    uint aw=RPBits(a),bw=RPBits(b),am=aw&0x7fffffffu,bm=bw&0x7fffffffu;
+    bool good=max(am,bm)<=0x5e800000u;
+    uint safeA=RPSelectBoundWord(good,aw,0u),safeB=RPSelectBoundWord(good,bw,0u);
+    uint product=RPBits(OrderedMultiply32(RPFromBits(safeA),RPFromBits(safeB)))+1u;
+    uint bounded=RPSelectBoundWord(good,product,0x7f000000u);
+    return RPFromBits(RPSelectBoundWord(min(am,bm)==0u,0u,bounded));
+}
+#else
 RPScalar RPUpAdd(RPScalar a,RPScalar b) {
     if(!RPBounded(a,0x7d800000u)||!RPBounded(b,0x7d800000u))return RPFailureBound();
     if(RPScalarEqual(a,RPZero()))return b;if(RPScalarEqual(b,RPZero()))return a;
@@ -111,6 +134,7 @@ RPScalar RPUpMultiply(RPScalar a,RPScalar b) {
     if(!RPBounded(a,0x5e800000u)||!RPBounded(b,0x5e800000u))return RPFailureBound();
     return RPFromBits(RPBits(OrderedMultiply32(a,b))+1u);
 }
+#endif
 RetainedPair RPInvalid() { RetainedPair r;r.hi=RPZero();r.lo=RPZero();r.error=RPZero();r.valid=0;return r; }
 RetainedPair RPPack(RPScalar hi,RPScalar lo,RPScalar error) {
     if(!RPBounded(hi,0x7b800000u)||!RPBounded(lo,0x7b800000u)||

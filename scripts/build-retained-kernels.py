@@ -231,6 +231,10 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
+    # Preserve the original native bound words while avoiding divergent guards.
+    # Only the default Transport/Endpoint modules use this selection body.
+    if not portable and not fp64 and not fma and source.stem in ("retained_transport", "retained_endpoint"):
+        definitions.append("-DSIRIUS_RETAINED_BOUND_SELECT32=1")
     if transport_specialized is not None:
         if source.stem != "retained_transport":
             raise ValueError("the second transport table belongs only to Transport")
