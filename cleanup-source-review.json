@@ -3,11 +3,17 @@
   "reviewer": "cleanup_review",
   "source_revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
   "file": {
-    "bytes": 9300,
-    "sha256": "8c7846a2b15791689c747cbf38c93cfbcd553a21ca3e20c82bceed289cf099fa"
+    "bytes": 9296,
+    "sha256": "7eb4fea8fc718e5739fde4bc56aedb8bab38cf24abf786e0fc1260efec7e684e"
   },
   "only_work_target": true,
   "every_file_recovery_before_deletion": true,
   "resources_link_unlink_without_traversal": true,
-  "scope": "Read-only source review. Scripted seventeen-owner and scoped accessible references must pass immediately before cleanup. Source-V2 and closing metadata remain prerequisites; no deletion/fresh-consumer/hidden/scheduled/global consumer clearance from this review."
+  "scope": "Read-only source review. Scripted seventeen-owner and scoped accessible references must pass immediately before cleanup. Source-V2 and closing metadata remain prerequisites; no deletion/fresh-consumer/hidden/scheduled/global consumer clearance from this review.",
+  "corrected_receipt_guard_reviewed": true,
+  "only_finisher_changes": "Trial review accepted->pass, and source-preservation receiptV2->V3",
+  "preserve_tools_v3": {
+    "bytes": 3495,
+    "sha256": "a106c931e7237d6721dff899a97f54d69d174d7cd92925dbc00b38430d42648c"
+  }
 }

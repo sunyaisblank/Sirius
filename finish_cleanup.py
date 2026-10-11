@@ -16,7 +16,7 @@ assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip() 
 assert not subprocess.check_output(['git', 'status', '--porcelain'])
 assert subprocess.check_output(['git', 'rev-parse', 'HEAD']) == subprocess.check_output(['git', 'rev-parse', '@{u}'])
 assert not read(WORK / 'software-comparison.json')['pass']
-assert read(WORK / 'trial-preservation-reviewed.json')['accepted']
+assert read(WORK / 'trial-preservation-reviewed.json')['pass']
 assert read(WORK / 'restoration-preservation-reviewed.json')['accepted']
 assert read(WORK / 'restoration-source-independent-review.json')['pass']
 assert read(WORK / 'cleanup-source-review.json')['pass']
@@ -25,7 +25,7 @@ assert read(WORK / 'restoration/linux-readonly-payloads.json')['pass_']
 ci = read(WORK / 'restoration-ci.json')
 assert ci['headSha'] == head and ci['status'] in ('queued', 'in_progress', 'completed')
 if ci['status'] == 'completed': assert ci['conclusion'] == 'success'
-tools = read(WORK / 'tools-preservation-v2.json')
+tools = read(WORK / 'tools-preservation-v3.json')
 assert tools['pushed'] and tools['source_revision'] == head
 assert subprocess.check_output(['git', 'rev-parse', tools['tag'] + '^{commit}'], text=True).strip() == tools['commit']
 assert subprocess.check_output(['git', 'ls-remote', 'origin', 'refs/tags/' + tools['tag'] + '^{}'], text=True).split()[0] == tools['commit']
