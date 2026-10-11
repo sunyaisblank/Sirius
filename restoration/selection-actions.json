@@ -1,0 +1,63 @@
+{
+  "selection": {
+    "revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+    "limits": {
+      "seconds": 90,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "test",
+    "argv": [
+      "bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "--gtest_filter=RetainedComputeAdmission.FmaSelectsOnlyNativeWideProductsAndPreservesAllocation"
+    ],
+    "scope": "Only the genuinely omitted original host-only FMA selection control, under unchanged90s/4GiB bound; not a rerun of the four completed cases or native science.",
+    "frozen_inputs": [
+      "out/native-narrow-fma-trial/restoration/source.json",
+      "out/native-narrow-fma-trial/restoration/verify_restoration.py",
+      "out/native-narrow-fma-trial/restoration/bind_linux.py",
+      "out/native-narrow-fma-trial/baseline-products.json",
+      "out/native-narrow-fma-trial/baseline-arrays.json",
+      "out/native-narrow-fma-trial/baseline-retained_kernels.h",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable_normal_sum.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_fma.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_fma.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable_normal_sum.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+      "bin/linux-gcc/src/sirius/app/sirius",
+      "bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "bin/linux-gcc/src/sirius/app/sirius_app_tests",
+      "bin/linux-gcc/src/sirius/app/sirius_render_tests"
+    ]
+  }
+}

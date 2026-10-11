@@ -1,0 +1,25 @@
+{
+  "restoration-protection": {
+    "revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "command",
+    "argv": [
+      "python3",
+      "out/native-narrow-fma-trial/protect_restoration.py"
+    ],
+    "scope": "Preserve restored exact source/build/product and host-only4+1 evidence before cleanup; no new science/device/qualification.",
+    "frozen_inputs": [
+      "out/native-narrow-fma-trial/protect_restoration.py",
+      "out/native-narrow-fma-trial/restoration-independent-review.json",
+      "out/native-narrow-fma-trial/trial-protection.json",
+      "out/native-narrow-fma-trial/trial-preservation-reviewed.json",
+      "out/native-narrow-fma-trial/restoration-protection-source-review.json",
+      "out/native-narrow-fma-trial/restoration/source.json"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "remove_stages": [
+    "bin/windows-msvc/native-b81e061",
+    "bin/windows-msvc/native-21e55ce",
+    "bin/macos-clang/native-b81e061",
+    "bin/macos-clang/native-21e55ce"
+  ],
+  "retain_stages": [],
+  "retained_dependencies": [],
+  "reason": "All four94-file execution reconstructions belong to completed rejected #95 trial; exact original official bundles and whole recovery records remain retained, so a justified later diagnostic can reconstruct inside the same preset without retaining obsolete stages. No current device/consumer is authorized from these stages.",
+  "canonical_resources_retained": [
+    "bin/linux-gcc/tests/backend/resources",
+    "bin/linux-gcc/src/sirius/app/resources"
+  ],
+  "current_original_products_retained": true,
+  "obsolete_products_only": [
+    "retained_endpoint_narrow_fma.spv",
+    "retained_transport_narrow_fma.spv"
+  ]
+}
