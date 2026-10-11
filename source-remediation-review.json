@@ -1,0 +1,23 @@
+{
+  "accepted": true,
+  "reviewer": "command_owner_review",
+  "source_seals": {
+    "scripts/build-retained-kernels.py": {
+      "bytes": 29371,
+      "sha256": "d2654bf6c0441243749206b4e3d1bf211215dd591aebbe18a556949af869eba1"
+    },
+    "tests/operational/retained_shader_controls_test.py": {
+      "bytes": 2186,
+      "sha256": "30deb3fa9a6a1981461427ccb0315feea17b867fc1cf8275e58a98e5fa3236f3"
+    },
+    "tests/CMakeLists.txt": {
+      "bytes": 10200,
+      "sha256": "dfec9ce7aaa2c997d39964e2881cec5322680db5295b30fcfb99a0f9f8267697"
+    },
+    ".github/workflows/ci.yml": {
+      "bytes": 30783,
+      "sha256": "8450d6e57e372f8a2ad34cf862ffb2fba9ce0112bed0610b2c2e06db9dd52de7"
+    }
+  },
+  "scope": "Complete Shader capability match preserves ShaderClockKHR; regression covers bothorders and original controls; CMake mandatoryoperational+threeCIfilters coherent. No science/runtime qualification."
+}

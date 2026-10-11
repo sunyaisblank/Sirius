@@ -1,0 +1,17 @@
+{
+  "accepted": true,
+  "original_source_sha256": "701136ea2a5b538b6421f5ddc3eb2a47a1a7db0d3babbf0e41a3c2fe998e7cd2",
+  "old_tests": {
+    "run": 2,
+    "failures": 1,
+    "errors": 0,
+    "output": ".F\n======================================================================\nFAIL: test_shader_clock_capability_survives_either_declaration_order (clock_regression.RetainedShaderControlsTest.test_shader_clock_capability_survives_either_declaration_order) (capabilities=('ShaderClockKHR', 'Shader', 'DenormPreserve'))\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/astra/.project/Sirius/tests/operational/retained_shader_controls_test.py\", line 34, in test_shader_clock_capability_survives_either_declaration_order\n    self.assertCountEqual(actual, (*capabilities, \"RoundingModeRTE\"))\nAssertionError: Element counts were not equal:\nFirst has 2, Second has 1:  'Shader'\nFirst has 1, Second has 0:  'RoundingModeRTEClockKHR'\nFirst has 0, Second has 1:  'ShaderClockKHR'\nFirst has 0, Second has 1:  'RoundingModeRTE'\n\n----------------------------------------------------------------------\nRan 2 tests in 0.001s\n\nFAILED (failures=1)\n"
+  },
+  "corrected_tests": {
+    "run": 2,
+    "failures": 0,
+    "errors": 0,
+    "output": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n"
+  },
+  "scope": "Unit-level semantic capability-token regression; complete module validation is separate."
+}
