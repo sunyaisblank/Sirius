@@ -1,0 +1,171 @@
+{
+  "accepted": true,
+  "source_revision": "8f1118dd56d10cdd0f932613427b68409a1f77f6",
+  "baseline_revision": "2053ef79c90752d37b0075b8137cfb9b571b6820",
+  "CI": 38146532819,
+  "local_controls": 10,
+  "cases": {
+    "device-timestamps": {
+      "accepted": true,
+      "original_case": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "native_elapsed_seconds": 104.7192527,
+      "bridge_elapsed_seconds": 101.09928239797591,
+      "peak_sampled_rss_bytes": 614866944,
+      "captures": 50,
+      "stages": {
+        "endpoint": {
+          "captures": 29,
+          "active_row_observations": 438,
+          "completed_rows": 420,
+          "mask_counts": {
+            "15": 420,
+            "0": 18
+          }
+        },
+        "transport": {
+          "captures": 21,
+          "active_row_observations": 171,
+          "completed_rows": 162,
+          "mask_counts": {
+            "65535": 162,
+            "0": 9
+          }
+        }
+      },
+      "analysis_sha256": "f4cffde17e1ec2f23f8cf49530da34767657598330b9bf04b23b8238789d1c4a"
+    },
+    "mixed-transport": {
+      "accepted": true,
+      "original_case": "RetainedComputeTest.MixedIndependentTransportLayersPreserveWordsAndRefusal",
+      "native_elapsed_seconds": 39.3389964,
+      "bridge_elapsed_seconds": 39.34195001301123,
+      "peak_sampled_rss_bytes": 500375552,
+      "captures": 4,
+      "stages": {
+        "transport": {
+          "captures": 4,
+          "active_row_observations": 60,
+          "completed_rows": 42,
+          "mask_counts": {
+            "65535": 42,
+            "0": 4,
+            "3": 14
+          }
+        }
+      },
+      "analysis_sha256": "edb3a5976e20d5c5e89f46baed4a6190058db3af4ea896b02d6746df82edcfbc"
+    },
+    "factored-endpoints": {
+      "accepted": true,
+      "original_case": "RetainedComputeTest.FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission",
+      "native_elapsed_seconds": 39.3275663,
+      "bridge_elapsed_seconds": 39.34227518597618,
+      "peak_sampled_rss_bytes": 498642944,
+      "captures": 14,
+      "stages": {
+        "endpoint": {
+          "captures": 14,
+          "active_row_observations": 285,
+          "completed_rows": 256,
+          "mask_counts": {
+            "15": 256,
+            "0": 25,
+            "1": 4
+          }
+        }
+      },
+      "analysis_sha256": "c3cf322b403e56968031a57b216385f822addfbe51bee7b84dc45c5f75f48a65"
+    }
+  },
+  "phase_tick_summaries": {
+    "device-timestamps:endpoint": {
+      "completed_rows": 420,
+      "eligible_rows": 420,
+      "median_first_to_last_raw_ticks": 167528.0,
+      "bands": {
+        "prefix_to_roots20": {
+          "median_raw_ticks": 26908.0,
+          "median_fraction_of_same_row_observed_interval": 0.16059675810794036
+        },
+        "roots20_to_projected_input_join": {
+          "median_raw_ticks": 78444.0,
+          "median_fraction_of_same_row_observed_interval": 0.46802600805039146
+        },
+        "projected_input_join_to_roots100": {
+          "median_raw_ticks": 62240.0,
+          "median_fraction_of_same_row_observed_interval": 0.37170543668871864
+        }
+      },
+      "scope": "Source-delimited inclusive bands of perturbed diagnostic Device-clock observations; raw tick units, unknown rate; scheduling/waits/observer traffic included; no exclusive opcode cost or ordinary benefit."
+    },
+    "device-timestamps:transport": {
+      "completed_rows": 162,
+      "eligible_rows": 162,
+      "median_first_to_last_raw_ticks": 406084.0,
+      "bands": {
+        "rhs_input_join_to_publication": {
+          "median_raw_ticks": 316314.0,
+          "median_fraction_of_same_row_observed_interval": 0.7795516605418245
+        },
+        "initial_join_to_first_input": {
+          "median_raw_ticks": 912.0,
+          "median_fraction_of_same_row_observed_interval": 0.0022387952907482024
+        },
+        "between_rhs_publication_and_next_input_join": {
+          "median_raw_ticks": 81094.0,
+          "median_fraction_of_same_row_observed_interval": 0.19953251205170464
+        },
+        "last_rhs_to_final_publication": {
+          "median_raw_ticks": 7580.0,
+          "median_fraction_of_same_row_observed_interval": 0.018634866035777558
+        }
+      },
+      "scope": "Source-delimited inclusive bands of perturbed diagnostic Device-clock observations; raw tick units, unknown rate; scheduling/waits/observer traffic included; no exclusive opcode cost or ordinary benefit."
+    },
+    "mixed-transport:transport": {
+      "completed_rows": 42,
+      "eligible_rows": 42,
+      "median_first_to_last_raw_ticks": 988132.0,
+      "bands": {
+        "rhs_input_join_to_publication": {
+          "median_raw_ticks": 898454.0,
+          "median_fraction_of_same_row_observed_interval": 0.9099982642370958
+        },
+        "initial_join_to_first_input": {
+          "median_raw_ticks": 794.0,
+          "median_fraction_of_same_row_observed_interval": 0.0007929164210570274
+        },
+        "between_rhs_publication_and_next_input_join": {
+          "median_raw_ticks": 81056.0,
+          "median_fraction_of_same_row_observed_interval": 0.08197422955526135
+        },
+        "last_rhs_to_final_publication": {
+          "median_raw_ticks": 7468.0,
+          "median_fraction_of_same_row_observed_interval": 0.007586432902360751
+        }
+      },
+      "scope": "Source-delimited inclusive bands of perturbed diagnostic Device-clock observations; raw tick units, unknown rate; scheduling/waits/observer traffic included; no exclusive opcode cost or ordinary benefit."
+    },
+    "factored-endpoints:endpoint": {
+      "completed_rows": 256,
+      "eligible_rows": 256,
+      "median_first_to_last_raw_ticks": 175744.0,
+      "bands": {
+        "prefix_to_roots20": {
+          "median_raw_ticks": 27642.0,
+          "median_fraction_of_same_row_observed_interval": 0.18538958668911953
+        },
+        "roots20_to_projected_input_join": {
+          "median_raw_ticks": 80320.0,
+          "median_fraction_of_same_row_observed_interval": 0.39166406092754014
+        },
+        "projected_input_join_to_roots100": {
+          "median_raw_ticks": 63178.0,
+          "median_fraction_of_same_row_observed_interval": 0.3898646868268396
+        }
+      },
+      "scope": "Source-delimited inclusive bands of perturbed diagnostic Device-clock observations; raw tick units, unknown rate; scheduling/waits/observer traffic included; no exclusive opcode cost or ordinary benefit."
+    }
+  },
+  "completion_scope": "Finite diagnostic host wiring and original numerical/ordered-stream/refusal/recovery controls only. No adopted optimization, calibrated clock, ordinary performance improvement, full science or release qualification."
+}

@@ -1,0 +1,4516 @@
+{
+  "accepted": true,
+  "source_revision": "8f1118dd56d10cdd0f932613427b68409a1f77f6",
+  "case": "RetainedComputeTest.FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission",
+  "original_test_passed": true,
+  "captures": 14,
+  "stages": [
+    "endpoint"
+  ],
+  "records": [
+    {
+      "capture": {
+        "ordinal": 0,
+        "stage": "endpoint",
+        "capacity": 32,
+        "active_rows": 29,
+        "groups_y": 1,
+        "groups_z": 1,
+        "words_per_row": 12,
+        "slot": 0,
+        "paired": false,
+        "kernel": 2,
+        "input": 6,
+        "output": 7,
+        "sidecar": 0,
+        "bytes": 4608,
+        "sidecar_allocation_bytes": 9216,
+        "sha256": "03d63ec016045c6caa9d45056bff68572022f64dba42c9d951750fdbe852dd51"
+      },
+      "mask_counts": {
+        "15": 29
+      },
+      "completed_rows": 29,
+      "observed_rows": [
+        {
+          "row": 0,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265474473,
+            20654265532321,
+            20654265616157,
+            20654265707197
+          ],
+          "adjacent_modulo64_differences": [
+            57848,
+            83836,
+            91040
+          ]
+        },
+        {
+          "row": 1,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265475073,
+            20654265532841,
+            20654265617585,
+            20654265709169
+          ],
+          "adjacent_modulo64_differences": [
+            57768,
+            84744,
+            91584
+          ]
+        },
+        {
+          "row": 2,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265475081,
+            20654265537413,
+            20654265626065,
+            20654265716145
+          ],
+          "adjacent_modulo64_differences": [
+            62332,
+            88652,
+            90080
+          ]
+        },
+        {
+          "row": 3,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265474593,
+            20654265535333,
+            20654265620537,
+            20654265710473
+          ],
+          "adjacent_modulo64_differences": [
+            60740,
+            85204,
+            89936
+          ]
+        },
+        {
+          "row": 4,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265474617,
+            20654265532217,
+            20654265619245,
+            20654265709373
+          ],
+          "adjacent_modulo64_differences": [
+            57600,
+            87028,
+            90128
+          ]
+        },
+        {
+          "row": 5,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265474609,
+            20654265531181,
+            20654265617065,
+            20654265707549
+          ],
+          "adjacent_modulo64_differences": [
+            56572,
+            85884,
+            90484
+          ]
+        },
+        {
+          "row": 6,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265475153,
+            20654265520137,
+            20654265600637,
+            20654265680177
+          ],
+          "adjacent_modulo64_differences": [
+            44984,
+            80500,
+            79540
+          ]
+        },
+        {
+          "row": 7,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265475145,
+            20654265520545,
+            20654265601729,
+            20654265681933
+          ],
+          "adjacent_modulo64_differences": [
+            45400,
+            81184,
+            80204
+          ]
+        },
+        {
+          "row": 8,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265475137,
+            20654265520345,
+            20654265605669,
+            20654265688513
+          ],
+          "adjacent_modulo64_differences": [
+            45208,
+            85324,
+            82844
+          ]
+        },
+        {
+          "row": 9,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265475161,
+            20654265520669,
+            20654265606085,
+            20654265687469
+          ],
+          "adjacent_modulo64_differences": [
+            45508,
+            85416,
+            81384
+          ]
+        },
+        {
+          "row": 10,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265474553,
+            20654265525601,
+            20654265579981,
+            20654265673869
+          ],
+          "adjacent_modulo64_differences": [
+            51048,
+            54380,
+            93888
+          ]
+        },
+        {
+          "row": 11,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265474585,
+            20654265525145,
+            20654265577153,
+            20654265671889
+          ],
+          "adjacent_modulo64_differences": [
+            50560,
+            52008,
+            94736
+          ]
+        },
+        {
+          "row": 12,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265475105,
+            20654265520093,
+            20654265581825,
+            20654265667313
+          ],
+          "adjacent_modulo64_differences": [
+            44988,
+            61732,
+            85488
+          ]
+        },
+        {
+          "row": 13,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265475113,
+            20654265520529,
+            20654265583013,
+            20654265667305
+          ],
+          "adjacent_modulo64_differences": [
+            45416,
+            62484,
+            84292
+          ]
+        },
+        {
+          "row": 14,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265475121,
+            20654265520657,
+            20654265586621,
+            20654265670845
+          ],
+          "adjacent_modulo64_differences": [
+            45536,
+            65964,
+            84224
+          ]
+        },
+        {
+          "row": 15,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265474633,
+            20654265520621,
+            20654265584905,
+            20654265667905
+          ],
+          "adjacent_modulo64_differences": [
+            45988,
+            64284,
+            83000
+          ]
+        },
+        {
+          "row": 16,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265474625,
+            20654265532225,
+            20654265615045,
+            20654265705029
+          ],
+          "adjacent_modulo64_differences": [
+            57600,
+            82820,
+            89984
+          ]
+        },
+        {
+          "row": 17,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265474601,
+            20654265531189,
+            20654265612929,
+            20654265704045
+          ],
+          "adjacent_modulo64_differences": [
+            56588,
+            81740,
+            91116
+          ]
+        },
+        {
+          "row": 18,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265475385,
+            20654265501469,
+            20654265582693,
+            20654265645629
+          ],
+          "adjacent_modulo64_differences": [
+            26084,
+            81224,
+            62936
+          ]
+        },
+        {
+          "row": 19,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265475353,
+            20654265501921,
+            20654265583021,
+            20654265645493
+          ],
+          "adjacent_modulo64_differences": [
+            26568,
+            81100,
+            62472
+          ]
+        },
+        {
+          "row": 20,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265475361,
+            20654265501569,
+            20654265586717,
+            20654265648609
+          ],
+          "adjacent_modulo64_differences": [
+            26208,
+            85148,
+            61892
+          ]
+        },
+        {
+          "row": 21,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265475385,
+            20654265500221,
+            20654265585697,
+            20654265643897
+          ],
+          "adjacent_modulo64_differences": [
+            24836,
+            85476,
+            58200
+          ]
+        },
+        {
+          "row": 22,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265475369,
+            20654265502785,
+            20654265588609,
+            20654265651197
+          ],
+          "adjacent_modulo64_differences": [
+            27416,
+            85824,
+            62588
+          ]
+        },
+        {
+          "row": 23,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265475361,
+            20654265503001,
+            20654265588577,
+            20654265649729
+          ],
+          "adjacent_modulo64_differences": [
+            27640,
+            85576,
+            61152
+          ]
+        },
+        {
+          "row": 24,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265475393,
+            20654265501461,
+            20654265582701,
+            20654265645661
+          ],
+          "adjacent_modulo64_differences": [
+            26068,
+            81240,
+            62960
+          ]
+        },
+        {
+          "row": 25,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265475377,
+            20654265501929,
+            20654265583389,
+            20654265645501
+          ],
+          "adjacent_modulo64_differences": [
+            26552,
+            81460,
+            62112
+          ]
+        },
+        {
+          "row": 26,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265475369,
+            20654265492497,
+            20654265512933,
+            20654265569109
+          ],
+          "adjacent_modulo64_differences": [
+            17128,
+            20436,
+            56176
+          ]
+        },
+        {
+          "row": 27,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265475353,
+            20654265495125,
+            20654265580521,
+            20654265628853
+          ],
+          "adjacent_modulo64_differences": [
+            19772,
+            85396,
+            48332
+          ]
+        },
+        {
+          "row": 28,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654265475377,
+            20654265495141,
+            20654265597973,
+            20654265634173
+          ],
+          "adjacent_modulo64_differences": [
+            19764,
+            102832,
+            36200
+          ]
+        }
+      ]
+    },
+    {
+      "capture": {
+        "ordinal": 1,
+        "stage": "endpoint",
+        "capacity": 32,
+        "active_rows": 29,
+        "groups_y": 1,
+        "groups_z": 1,
+        "words_per_row": 12,
+        "slot": 0,
+        "paired": false,
+        "kernel": 2,
+        "input": 6,
+        "output": 7,
+        "sidecar": 0,
+        "bytes": 4608,
+        "sidecar_allocation_bytes": 9216,
+        "sha256": "d84d4c2cb4b7c16b9f2f9bdad2c0ee9b4e1769d76c2a5ca74481ada50a2a5617"
+      },
+      "mask_counts": {
+        "15": 29
+      },
+      "completed_rows": 29,
+      "observed_rows": [
+        {
+          "row": 0,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268624754,
+            20654268682022,
+            20654268763614,
+            20654268854338
+          ],
+          "adjacent_modulo64_differences": [
+            57268,
+            81592,
+            90724
+          ]
+        },
+        {
+          "row": 1,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625034,
+            20654268682626,
+            20654268767782,
+            20654268859250
+          ],
+          "adjacent_modulo64_differences": [
+            57592,
+            85156,
+            91468
+          ]
+        },
+        {
+          "row": 2,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625026,
+            20654268688230,
+            20654268776106,
+            20654268866970
+          ],
+          "adjacent_modulo64_differences": [
+            63204,
+            87876,
+            90864
+          ]
+        },
+        {
+          "row": 3,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268624858,
+            20654268685322,
+            20654268770622,
+            20654268860582
+          ],
+          "adjacent_modulo64_differences": [
+            60464,
+            85300,
+            89960
+          ]
+        },
+        {
+          "row": 4,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268624898,
+            20654268682046,
+            20654268769050,
+            20654268859570
+          ],
+          "adjacent_modulo64_differences": [
+            57148,
+            87004,
+            90520
+          ]
+        },
+        {
+          "row": 5,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268624874,
+            20654268680990,
+            20654268766970,
+            20654268854850
+          ],
+          "adjacent_modulo64_differences": [
+            56116,
+            85980,
+            87880
+          ]
+        },
+        {
+          "row": 6,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625018,
+            20654268670078,
+            20654268750442,
+            20654268831358
+          ],
+          "adjacent_modulo64_differences": [
+            45060,
+            80364,
+            80916
+          ]
+        },
+        {
+          "row": 7,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625010,
+            20654268670438,
+            20654268751894,
+            20654268831862
+          ],
+          "adjacent_modulo64_differences": [
+            45428,
+            81456,
+            79968
+          ]
+        },
+        {
+          "row": 8,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625002,
+            20654268670390,
+            20654268756538,
+            20654268839418
+          ],
+          "adjacent_modulo64_differences": [
+            45388,
+            86148,
+            82880
+          ]
+        },
+        {
+          "row": 9,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625026,
+            20654268670446,
+            20654268755906,
+            20654268837214
+          ],
+          "adjacent_modulo64_differences": [
+            45420,
+            85460,
+            81308
+          ]
+        },
+        {
+          "row": 10,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268624882,
+            20654268675462,
+            20654268730070,
+            20654268822938
+          ],
+          "adjacent_modulo64_differences": [
+            50580,
+            54608,
+            92868
+          ]
+        },
+        {
+          "row": 11,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268624890,
+            20654268675006,
+            20654268727022,
+            20654268822050
+          ],
+          "adjacent_modulo64_differences": [
+            50116,
+            52016,
+            95028
+          ]
+        },
+        {
+          "row": 12,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625066,
+            20654268670022,
+            20654268731802,
+            20654268816142
+          ],
+          "adjacent_modulo64_differences": [
+            44956,
+            61780,
+            84340
+          ]
+        },
+        {
+          "row": 13,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625042,
+            20654268670398,
+            20654268732894,
+            20654268816602
+          ],
+          "adjacent_modulo64_differences": [
+            45356,
+            62496,
+            83708
+          ]
+        },
+        {
+          "row": 14,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625050,
+            20654268670454,
+            20654268735970,
+            20654268819394
+          ],
+          "adjacent_modulo64_differences": [
+            45404,
+            65516,
+            83424
+          ]
+        },
+        {
+          "row": 15,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625010,
+            20654268670398,
+            20654268734138,
+            20654268817774
+          ],
+          "adjacent_modulo64_differences": [
+            45388,
+            63740,
+            83636
+          ]
+        },
+        {
+          "row": 16,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268624906,
+            20654268682054,
+            20654268765046,
+            20654268852778
+          ],
+          "adjacent_modulo64_differences": [
+            57148,
+            82992,
+            87732
+          ]
+        },
+        {
+          "row": 17,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268624866,
+            20654268680998,
+            20654268762858,
+            20654268854362
+          ],
+          "adjacent_modulo64_differences": [
+            56132,
+            81860,
+            91504
+          ]
+        },
+        {
+          "row": 18,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625258,
+            20654268651282,
+            20654268732242,
+            20654268794794
+          ],
+          "adjacent_modulo64_differences": [
+            26024,
+            80960,
+            62552
+          ]
+        },
+        {
+          "row": 19,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625242,
+            20654268651810,
+            20654268732902,
+            20654268795498
+          ],
+          "adjacent_modulo64_differences": [
+            26568,
+            81092,
+            62596
+          ]
+        },
+        {
+          "row": 20,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625226,
+            20654268651514,
+            20654268735978,
+            20654268797542
+          ],
+          "adjacent_modulo64_differences": [
+            26288,
+            84464,
+            61564
+          ]
+        },
+        {
+          "row": 21,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625250,
+            20654268650022,
+            20654268735174,
+            20654268793510
+          ],
+          "adjacent_modulo64_differences": [
+            24772,
+            85152,
+            58336
+          ]
+        },
+        {
+          "row": 22,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625226,
+            20654268652510,
+            20654268738014,
+            20654268800382
+          ],
+          "adjacent_modulo64_differences": [
+            27284,
+            85504,
+            62368
+          ]
+        },
+        {
+          "row": 23,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625234,
+            20654268652846,
+            20654268738898,
+            20654268800894
+          ],
+          "adjacent_modulo64_differences": [
+            27612,
+            86052,
+            61996
+          ]
+        },
+        {
+          "row": 24,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625266,
+            20654268651274,
+            20654268732494,
+            20654268794802
+          ],
+          "adjacent_modulo64_differences": [
+            26008,
+            81220,
+            62308
+          ]
+        },
+        {
+          "row": 25,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625250,
+            20654268651818,
+            20654268733278,
+            20654268795530
+          ],
+          "adjacent_modulo64_differences": [
+            26568,
+            81460,
+            62252
+          ]
+        },
+        {
+          "row": 26,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625234,
+            20654268642362,
+            20654268662750,
+            20654268718974
+          ],
+          "adjacent_modulo64_differences": [
+            17128,
+            20388,
+            56224
+          ]
+        },
+        {
+          "row": 27,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625258,
+            20654268644890,
+            20654268729370,
+            20654268777678
+          ],
+          "adjacent_modulo64_differences": [
+            19632,
+            84480,
+            48308
+          ]
+        },
+        {
+          "row": 28,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654268625242,
+            20654268644946,
+            20654268747242,
+            20654268781418
+          ],
+          "adjacent_modulo64_differences": [
+            19704,
+            102296,
+            34176
+          ]
+        }
+      ]
+    },
+    {
+      "capture": {
+        "ordinal": 2,
+        "stage": "endpoint",
+        "capacity": 32,
+        "active_rows": 29,
+        "groups_y": 1,
+        "groups_z": 1,
+        "words_per_row": 12,
+        "slot": 0,
+        "paired": false,
+        "kernel": 2,
+        "input": 6,
+        "output": 7,
+        "sidecar": 0,
+        "bytes": 4608,
+        "sidecar_allocation_bytes": 9216,
+        "sha256": "5158486fae2f9d0acf682468cea3d80972d2002a3cf6a77db7af4894a08adf73"
+      },
+      "mask_counts": {
+        "15": 29
+      },
+      "completed_rows": 29,
+      "observed_rows": [
+        {
+          "row": 0,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589580,
+            20654271609080,
+            20654271707200,
+            20654271741908
+          ],
+          "adjacent_modulo64_differences": [
+            19500,
+            98120,
+            34708
+          ]
+        },
+        {
+          "row": 1,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589572,
+            20654271609316,
+            20654271693140,
+            20654271743304
+          ],
+          "adjacent_modulo64_differences": [
+            19744,
+            83824,
+            50164
+          ]
+        },
+        {
+          "row": 2,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589556,
+            20654271606724,
+            20654271626864,
+            20654271682244
+          ],
+          "adjacent_modulo64_differences": [
+            17168,
+            20140,
+            55380
+          ]
+        },
+        {
+          "row": 3,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589580,
+            20654271615568,
+            20654271694932,
+            20654271758052
+          ],
+          "adjacent_modulo64_differences": [
+            25988,
+            79364,
+            63120
+          ]
+        },
+        {
+          "row": 4,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589564,
+            20654271615992,
+            20654271697644,
+            20654271759828
+          ],
+          "adjacent_modulo64_differences": [
+            26428,
+            81652,
+            62184
+          ]
+        },
+        {
+          "row": 5,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589548,
+            20654271617216,
+            20654271703248,
+            20654271766416
+          ],
+          "adjacent_modulo64_differences": [
+            27668,
+            86032,
+            63168
+          ]
+        },
+        {
+          "row": 6,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589588,
+            20654271616944,
+            20654271700060,
+            20654271761624
+          ],
+          "adjacent_modulo64_differences": [
+            27356,
+            83116,
+            61564
+          ]
+        },
+        {
+          "row": 7,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589564,
+            20654271615164,
+            20654271700948,
+            20654271760172
+          ],
+          "adjacent_modulo64_differences": [
+            25600,
+            85784,
+            59224
+          ]
+        },
+        {
+          "row": 8,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589548,
+            20654271615904,
+            20654271701100,
+            20654271763004
+          ],
+          "adjacent_modulo64_differences": [
+            26356,
+            85196,
+            61904
+          ]
+        },
+        {
+          "row": 9,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589572,
+            20654271615576,
+            20654271694940,
+            20654271758060
+          ],
+          "adjacent_modulo64_differences": [
+            26004,
+            79364,
+            63120
+          ]
+        },
+        {
+          "row": 10,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589556,
+            20654271615984,
+            20654271696932,
+            20654271759820
+          ],
+          "adjacent_modulo64_differences": [
+            26428,
+            80948,
+            62888
+          ]
+        },
+        {
+          "row": 11,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589252,
+            20654271645408,
+            20654271727112,
+            20654271818988
+          ],
+          "adjacent_modulo64_differences": [
+            56156,
+            81704,
+            91876
+          ]
+        },
+        {
+          "row": 12,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589236,
+            20654271647292,
+            20654271727876,
+            20654271814556
+          ],
+          "adjacent_modulo64_differences": [
+            58056,
+            80584,
+            86680
+          ]
+        },
+        {
+          "row": 13,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589228,
+            20654271633620,
+            20654271696916,
+            20654271783464
+          ],
+          "adjacent_modulo64_differences": [
+            44392,
+            63296,
+            86548
+          ]
+        },
+        {
+          "row": 14,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589308,
+            20654271634824,
+            20654271701108,
+            20654271786148
+          ],
+          "adjacent_modulo64_differences": [
+            45516,
+            66284,
+            85040
+          ]
+        },
+        {
+          "row": 15,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589428,
+            20654271633132,
+            20654271694948,
+            20654271783472
+          ],
+          "adjacent_modulo64_differences": [
+            43704,
+            61816,
+            88524
+          ]
+        },
+        {
+          "row": 16,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589268,
+            20654271633140,
+            20654271697636,
+            20654271783464
+          ],
+          "adjacent_modulo64_differences": [
+            43872,
+            64496,
+            85828
+          ]
+        },
+        {
+          "row": 17,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589244,
+            20654271639388,
+            20654271691300,
+            20654271786148
+          ],
+          "adjacent_modulo64_differences": [
+            50144,
+            51912,
+            94848
+          ]
+        },
+        {
+          "row": 18,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589132,
+            20654271639004,
+            20654271692120,
+            20654271783992
+          ],
+          "adjacent_modulo64_differences": [
+            49872,
+            53116,
+            91872
+          ]
+        },
+        {
+          "row": 19,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589284,
+            20654271633660,
+            20654271720496,
+            20654271802404
+          ],
+          "adjacent_modulo64_differences": [
+            44376,
+            86836,
+            81908
+          ]
+        },
+        {
+          "row": 20,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589364,
+            20654271633948,
+            20654271721196,
+            20654271804748
+          ],
+          "adjacent_modulo64_differences": [
+            44584,
+            87248,
+            83552
+          ]
+        },
+        {
+          "row": 21,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589316,
+            20654271633172,
+            20654271715888,
+            20654271796696
+          ],
+          "adjacent_modulo64_differences": [
+            43856,
+            82716,
+            80808
+          ]
+        },
+        {
+          "row": 22,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589324,
+            20654271633180,
+            20654271715460,
+            20654271797180
+          ],
+          "adjacent_modulo64_differences": [
+            43856,
+            82280,
+            81720
+          ]
+        },
+        {
+          "row": 23,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589260,
+            20654271645400,
+            20654271731256,
+            20654271818980
+          ],
+          "adjacent_modulo64_differences": [
+            56140,
+            85856,
+            87724
+          ]
+        },
+        {
+          "row": 24,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589500,
+            20654271647300,
+            20654271731896,
+            20654271823012
+          ],
+          "adjacent_modulo64_differences": [
+            57800,
+            84596,
+            91116
+          ]
+        },
+        {
+          "row": 25,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589492,
+            20654271651920,
+            20654271739960,
+            20654271829904
+          ],
+          "adjacent_modulo64_differences": [
+            62428,
+            88040,
+            89944
+          ]
+        },
+        {
+          "row": 26,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589516,
+            20654271653884,
+            20654271744180,
+            20654271835444
+          ],
+          "adjacent_modulo64_differences": [
+            64368,
+            90296,
+            91264
+          ]
+        },
+        {
+          "row": 27,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589468,
+            20654271647944,
+            20654271735060,
+            20654271823936
+          ],
+          "adjacent_modulo64_differences": [
+            58476,
+            87116,
+            88876
+          ]
+        },
+        {
+          "row": 28,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654271589500,
+            20654271648844,
+            20654271736924,
+            20654271824672
+          ],
+          "adjacent_modulo64_differences": [
+            59344,
+            88080,
+            87748
+          ]
+        }
+      ]
+    },
+    {
+      "capture": {
+        "ordinal": 3,
+        "stage": "endpoint",
+        "capacity": 32,
+        "active_rows": 4,
+        "groups_y": 1,
+        "groups_z": 1,
+        "words_per_row": 12,
+        "slot": 0,
+        "paired": false,
+        "kernel": 2,
+        "input": 6,
+        "output": 7,
+        "sidecar": 0,
+        "bytes": 4608,
+        "sidecar_allocation_bytes": 9216,
+        "sha256": "9ca6ad346c1ee839782f127656d4ce5e511351fcdffab8e147080a7f9807d3c9"
+      },
+      "mask_counts": {
+        "15": 4
+      },
+      "completed_rows": 4,
+      "observed_rows": [
+        {
+          "row": 0,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654274430829,
+            20654274456341,
+            20654274532581,
+            20654274594809
+          ],
+          "adjacent_modulo64_differences": [
+            25512,
+            76240,
+            62228
+          ]
+        },
+        {
+          "row": 1,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654274429949,
+            20654274490821,
+            20654274563841,
+            20654274661165
+          ],
+          "adjacent_modulo64_differences": [
+            60872,
+            73020,
+            97324
+          ]
+        },
+        {
+          "row": 2,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654274430821,
+            20654274449953,
+            20654274541921,
+            20654274577341
+          ],
+          "adjacent_modulo64_differences": [
+            19132,
+            91968,
+            35420
+          ]
+        },
+        {
+          "row": 3,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654274430025,
+            20654274490817,
+            20654274567197,
+            20654274661165
+          ],
+          "adjacent_modulo64_differences": [
+            60792,
+            76380,
+            93968
+          ]
+        }
+      ]
+    },
+    {
+      "capture": {
+        "ordinal": 4,
+        "stage": "endpoint",
+        "capacity": 32,
+        "active_rows": 8,
+        "groups_y": 1,
+        "groups_z": 1,
+        "words_per_row": 12,
+        "slot": 0,
+        "paired": false,
+        "kernel": 2,
+        "input": 6,
+        "output": 7,
+        "sidecar": 0,
+        "bytes": 4608,
+        "sidecar_allocation_bytes": 9216,
+        "sha256": "e88039074384f851b8f2c8d719310893ce54ff02c284d6c0fa7058271f0fecc6"
+      },
+      "mask_counts": {
+        "15": 5,
+        "0": 3
+      },
+      "completed_rows": 5,
+      "observed_rows": [
+        {
+          "row": 0,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654277157095,
+            20654277215391,
+            20654277287899,
+            20654277383431
+          ],
+          "adjacent_modulo64_differences": [
+            58296,
+            72508,
+            95532
+          ]
+        },
+        {
+          "row": 1,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654277157199,
+            20654277215611,
+            20654277288863,
+            20654277383423
+          ],
+          "adjacent_modulo64_differences": [
+            58412,
+            73252,
+            94560
+          ]
+        },
+        {
+          "row": 2,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654277157443,
+            20654277183703,
+            20654277261099,
+            20654277324435
+          ],
+          "adjacent_modulo64_differences": [
+            26260,
+            77396,
+            63336
+          ]
+        },
+        {
+          "row": 3,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654277157443,
+            20654277183003,
+            20654277259139,
+            20654277319023
+          ],
+          "adjacent_modulo64_differences": [
+            25560,
+            76136,
+            59884
+          ]
+        },
+        {
+          "row": 4,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654277157435,
+            20654277176363,
+            20654277267287,
+            20654277300811
+          ],
+          "adjacent_modulo64_differences": [
+            18928,
+            90924,
+            33524
+          ]
+        }
+      ]
+    },
+    {
+      "capture": {
+        "ordinal": 5,
+        "stage": "endpoint",
+        "capacity": 32,
+        "active_rows": 29,
+        "groups_y": 1,
+        "groups_z": 1,
+        "words_per_row": 12,
+        "slot": 0,
+        "paired": false,
+        "kernel": 2,
+        "input": 6,
+        "output": 7,
+        "sidecar": 0,
+        "bytes": 4608,
+        "sidecar_allocation_bytes": 9216,
+        "sha256": "cf3f339b7409a8e0cad098903fa42c56a9ff55799ffee1ba407e78e6eb503ad7"
+      },
+      "mask_counts": {
+        "15": 29
+      },
+      "completed_rows": 29,
+      "observed_rows": [
+        {
+          "row": 0,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279911509,
+            20654279968885,
+            20654280053369,
+            20654280141421
+          ],
+          "adjacent_modulo64_differences": [
+            57376,
+            84484,
+            88052
+          ]
+        },
+        {
+          "row": 1,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279911825,
+            20654279969361,
+            20654280055097,
+            20654280142737
+          ],
+          "adjacent_modulo64_differences": [
+            57536,
+            85736,
+            87640
+          ]
+        },
+        {
+          "row": 2,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279911865,
+            20654279976293,
+            20654280064237,
+            20654280154465
+          ],
+          "adjacent_modulo64_differences": [
+            64428,
+            87944,
+            90228
+          ]
+        },
+        {
+          "row": 3,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279911669,
+            20654279973529,
+            20654280059829,
+            20654280148597
+          ],
+          "adjacent_modulo64_differences": [
+            61860,
+            86300,
+            88768
+          ]
+        },
+        {
+          "row": 4,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279911661,
+            20654279968917,
+            20654280055361,
+            20654280146325
+          ],
+          "adjacent_modulo64_differences": [
+            57256,
+            86444,
+            90964
+          ]
+        },
+        {
+          "row": 5,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279911629,
+            20654279967801,
+            20654280054253,
+            20654280145361
+          ],
+          "adjacent_modulo64_differences": [
+            56172,
+            86452,
+            91108
+          ]
+        },
+        {
+          "row": 6,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279911765,
+            20654279956133,
+            20654280038121,
+            20654280120145
+          ],
+          "adjacent_modulo64_differences": [
+            44368,
+            81988,
+            82024
+          ]
+        },
+        {
+          "row": 7,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279911757,
+            20654279956649,
+            20654280039841,
+            20654280123233
+          ],
+          "adjacent_modulo64_differences": [
+            44892,
+            83192,
+            83392
+          ]
+        },
+        {
+          "row": 8,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279911749,
+            20654279956645,
+            20654280042345,
+            20654280124221
+          ],
+          "adjacent_modulo64_differences": [
+            44896,
+            85700,
+            81876
+          ]
+        },
+        {
+          "row": 9,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279911765,
+            20654279956173,
+            20654280040541,
+            20654280121533
+          ],
+          "adjacent_modulo64_differences": [
+            44408,
+            84368,
+            80992
+          ]
+        },
+        {
+          "row": 10,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279911605,
+            20654279962325,
+            20654280016133,
+            20654280109721
+          ],
+          "adjacent_modulo64_differences": [
+            50720,
+            53808,
+            93588
+          ]
+        },
+        {
+          "row": 11,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279911637,
+            20654279961797,
+            20654280013669,
+            20654280108997
+          ],
+          "adjacent_modulo64_differences": [
+            50160,
+            51872,
+            95328
+          ]
+        },
+        {
+          "row": 12,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279911857,
+            20654279956077,
+            20654280018277,
+            20654280103181
+          ],
+          "adjacent_modulo64_differences": [
+            44220,
+            62200,
+            84904
+          ]
+        },
+        {
+          "row": 13,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279911841,
+            20654279956613,
+            20654280018893,
+            20654280103349
+          ],
+          "adjacent_modulo64_differences": [
+            44772,
+            62280,
+            84456
+          ]
+        },
+        {
+          "row": 14,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279911897,
+            20654279957605,
+            20654280025809,
+            20654280109005
+          ],
+          "adjacent_modulo64_differences": [
+            45708,
+            68204,
+            83196
+          ]
+        },
+        {
+          "row": 15,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279911677,
+            20654279956133,
+            20654280017649,
+            20654280103181
+          ],
+          "adjacent_modulo64_differences": [
+            44456,
+            61516,
+            85532
+          ]
+        },
+        {
+          "row": 16,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279911653,
+            20654279968925,
+            20654280051121,
+            20654280139061
+          ],
+          "adjacent_modulo64_differences": [
+            57272,
+            82196,
+            87940
+          ]
+        },
+        {
+          "row": 17,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279911645,
+            20654279967793,
+            20654280049473,
+            20654280139609
+          ],
+          "adjacent_modulo64_differences": [
+            56148,
+            81680,
+            90136
+          ]
+        },
+        {
+          "row": 18,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279912009,
+            20654279938061,
+            20654280018285,
+            20654280080517
+          ],
+          "adjacent_modulo64_differences": [
+            26052,
+            80224,
+            62232
+          ]
+        },
+        {
+          "row": 19,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279912033,
+            20654279938417,
+            20654280018901,
+            20654280081365
+          ],
+          "adjacent_modulo64_differences": [
+            26384,
+            80484,
+            62464
+          ]
+        },
+        {
+          "row": 20,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279912017,
+            20654279938369,
+            20654280025817,
+            20654280087177
+          ],
+          "adjacent_modulo64_differences": [
+            26352,
+            87448,
+            61360
+          ]
+        },
+        {
+          "row": 21,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279912009,
+            20654279936977,
+            20654280021561,
+            20654280080365
+          ],
+          "adjacent_modulo64_differences": [
+            24968,
+            84584,
+            58804
+          ]
+        },
+        {
+          "row": 22,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279912025,
+            20654279939413,
+            20654280025621,
+            20654280086617
+          ],
+          "adjacent_modulo64_differences": [
+            27388,
+            86208,
+            60996
+          ]
+        },
+        {
+          "row": 23,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279912017,
+            20654279939661,
+            20654280025589,
+            20654280086537
+          ],
+          "adjacent_modulo64_differences": [
+            27644,
+            85928,
+            60948
+          ]
+        },
+        {
+          "row": 24,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279912049,
+            20654279938065,
+            20654280018293,
+            20654280080525
+          ],
+          "adjacent_modulo64_differences": [
+            26016,
+            80228,
+            62232
+          ]
+        },
+        {
+          "row": 25,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279912041,
+            20654279938425,
+            20654280019201,
+            20654280081373
+          ],
+          "adjacent_modulo64_differences": [
+            26384,
+            80776,
+            62172
+          ]
+        },
+        {
+          "row": 26,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279912025,
+            20654279929333,
+            20654279949621,
+            20654280007273
+          ],
+          "adjacent_modulo64_differences": [
+            17308,
+            20288,
+            57652
+          ]
+        },
+        {
+          "row": 27,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279912041,
+            20654279931725,
+            20654280016717,
+            20654280066629
+          ],
+          "adjacent_modulo64_differences": [
+            19684,
+            84992,
+            49912
+          ]
+        },
+        {
+          "row": 28,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654279912033,
+            20654279931785,
+            20654280035689,
+            20654280071825
+          ],
+          "adjacent_modulo64_differences": [
+            19752,
+            103904,
+            36136
+          ]
+        }
+      ]
+    },
+    {
+      "capture": {
+        "ordinal": 6,
+        "stage": "endpoint",
+        "capacity": 32,
+        "active_rows": 27,
+        "groups_y": 1,
+        "groups_z": 1,
+        "words_per_row": 12,
+        "slot": 0,
+        "paired": false,
+        "kernel": 2,
+        "input": 6,
+        "output": 7,
+        "sidecar": 0,
+        "bytes": 4608,
+        "sidecar_allocation_bytes": 9216,
+        "sha256": "16fb8f72ac115281c70001af2ad4cc4ba95afdedd88fddf74c6c8e87e698d2e9"
+      },
+      "mask_counts": {
+        "15": 27
+      },
+      "completed_rows": 27,
+      "observed_rows": [
+        {
+          "row": 0,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823609,
+            20654282843621,
+            20654282888129,
+            20654282940065
+          ],
+          "adjacent_modulo64_differences": [
+            20012,
+            44508,
+            51936
+          ]
+        },
+        {
+          "row": 1,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823577,
+            20654282843541,
+            20654282887337,
+            20654282936713
+          ],
+          "adjacent_modulo64_differences": [
+            19964,
+            43796,
+            49376
+          ]
+        },
+        {
+          "row": 2,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823537,
+            20654282843605,
+            20654282887169,
+            20654282936697
+          ],
+          "adjacent_modulo64_differences": [
+            20068,
+            43564,
+            49528
+          ]
+        },
+        {
+          "row": 3,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823593,
+            20654282843389,
+            20654282886813,
+            20654282936253
+          ],
+          "adjacent_modulo64_differences": [
+            19796,
+            43424,
+            49440
+          ]
+        },
+        {
+          "row": 4,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823553,
+            20654282842997,
+            20654282887257,
+            20654282936245
+          ],
+          "adjacent_modulo64_differences": [
+            19444,
+            44260,
+            48988
+          ]
+        },
+        {
+          "row": 5,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823521,
+            20654282843757,
+            20654282885525,
+            20654282939977
+          ],
+          "adjacent_modulo64_differences": [
+            20236,
+            41768,
+            54452
+          ]
+        },
+        {
+          "row": 6,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823513,
+            20654282843629,
+            20654282884549,
+            20654282936729
+          ],
+          "adjacent_modulo64_differences": [
+            20116,
+            40920,
+            52180
+          ]
+        },
+        {
+          "row": 7,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823561,
+            20654282843549,
+            20654282887345,
+            20654282936721
+          ],
+          "adjacent_modulo64_differences": [
+            19988,
+            43796,
+            49376
+          ]
+        },
+        {
+          "row": 8,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823521,
+            20654282843613,
+            20654282887129,
+            20654282936705
+          ],
+          "adjacent_modulo64_differences": [
+            20092,
+            43516,
+            49576
+          ]
+        },
+        {
+          "row": 9,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823585,
+            20654282843397,
+            20654282883193,
+            20654282931833
+          ],
+          "adjacent_modulo64_differences": [
+            19812,
+            39796,
+            48640
+          ]
+        },
+        {
+          "row": 10,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823561,
+            20654282842989,
+            20654282883097,
+            20654282931737
+          ],
+          "adjacent_modulo64_differences": [
+            19428,
+            40108,
+            48640
+          ]
+        },
+        {
+          "row": 11,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823529,
+            20654282843749,
+            20654282889301,
+            20654282942105
+          ],
+          "adjacent_modulo64_differences": [
+            20220,
+            45552,
+            52804
+          ]
+        },
+        {
+          "row": 12,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823617,
+            20654282844937,
+            20654282891557,
+            20654282946961
+          ],
+          "adjacent_modulo64_differences": [
+            21320,
+            46620,
+            55404
+          ]
+        },
+        {
+          "row": 13,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823585,
+            20654282845193,
+            20654282892857,
+            20654282943477
+          ],
+          "adjacent_modulo64_differences": [
+            21608,
+            47664,
+            50620
+          ]
+        },
+        {
+          "row": 14,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823545,
+            20654282845217,
+            20654282890009,
+            20654282943749
+          ],
+          "adjacent_modulo64_differences": [
+            21672,
+            44792,
+            53740
+          ]
+        },
+        {
+          "row": 15,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823577,
+            20654282845113,
+            20654282894101,
+            20654282946273
+          ],
+          "adjacent_modulo64_differences": [
+            21536,
+            48988,
+            52172
+          ]
+        },
+        {
+          "row": 16,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823513,
+            20654282841777,
+            20654282869929,
+            20654282922461
+          ],
+          "adjacent_modulo64_differences": [
+            18264,
+            28152,
+            52532
+          ]
+        },
+        {
+          "row": 17,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823537,
+            20654282848853,
+            20654282935789,
+            20654282996381
+          ],
+          "adjacent_modulo64_differences": [
+            25316,
+            86936,
+            60592
+          ]
+        },
+        {
+          "row": 18,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823601,
+            20654282847957,
+            20654282931345,
+            20654282990045
+          ],
+          "adjacent_modulo64_differences": [
+            24356,
+            83388,
+            58700
+          ]
+        },
+        {
+          "row": 19,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823569,
+            20654282845249,
+            20654282892377,
+            20654282943581
+          ],
+          "adjacent_modulo64_differences": [
+            21680,
+            47128,
+            51204
+          ]
+        },
+        {
+          "row": 20,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823529,
+            20654282845241,
+            20654282894173,
+            20654282946897
+          ],
+          "adjacent_modulo64_differences": [
+            21712,
+            48932,
+            52724
+          ]
+        },
+        {
+          "row": 21,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823601,
+            20654282845217,
+            20654282890097,
+            20654282942685
+          ],
+          "adjacent_modulo64_differences": [
+            21616,
+            44880,
+            52588
+          ]
+        },
+        {
+          "row": 22,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823569,
+            20654282846425,
+            20654282893409,
+            20654282946745
+          ],
+          "adjacent_modulo64_differences": [
+            22856,
+            46984,
+            53336
+          ]
+        },
+        {
+          "row": 23,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823545,
+            20654282844805,
+            20654282897129,
+            20654282951681
+          ],
+          "adjacent_modulo64_differences": [
+            21260,
+            52324,
+            54552
+          ]
+        },
+        {
+          "row": 24,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823625,
+            20654282844873,
+            20654282896021,
+            20654282950553
+          ],
+          "adjacent_modulo64_differences": [
+            21248,
+            51148,
+            54532
+          ]
+        },
+        {
+          "row": 25,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823593,
+            20654282843645,
+            20654282892369,
+            20654282942869
+          ],
+          "adjacent_modulo64_differences": [
+            20052,
+            48724,
+            50500
+          ]
+        },
+        {
+          "row": 26,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654282823553,
+            20654282843709,
+            20654282890017,
+            20654282938417
+          ],
+          "adjacent_modulo64_differences": [
+            20156,
+            46308,
+            48400
+          ]
+        }
+      ]
+    },
+    {
+      "capture": {
+        "ordinal": 7,
+        "stage": "endpoint",
+        "capacity": 32,
+        "active_rows": 27,
+        "groups_y": 1,
+        "groups_z": 1,
+        "words_per_row": 12,
+        "slot": 0,
+        "paired": false,
+        "kernel": 2,
+        "input": 6,
+        "output": 7,
+        "sidecar": 0,
+        "bytes": 4608,
+        "sidecar_allocation_bytes": 9216,
+        "sha256": "f111e8f6ea47294c7ba7b7b79b8910c70ce80a37b63619bf3e1b03d2954644f2"
+      },
+      "mask_counts": {
+        "15": 27
+      },
+      "completed_rows": 27,
+      "observed_rows": [
+        {
+          "row": 0,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506846,
+            20654285526858,
+            20654285571310,
+            20654285623862
+          ],
+          "adjacent_modulo64_differences": [
+            20012,
+            44452,
+            52552
+          ]
+        },
+        {
+          "row": 1,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506814,
+            20654285526778,
+            20654285570554,
+            20654285619802
+          ],
+          "adjacent_modulo64_differences": [
+            19964,
+            43776,
+            49248
+          ]
+        },
+        {
+          "row": 2,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506766,
+            20654285526842,
+            20654285570386,
+            20654285619818
+          ],
+          "adjacent_modulo64_differences": [
+            20076,
+            43544,
+            49432
+          ]
+        },
+        {
+          "row": 3,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506838,
+            20654285526626,
+            20654285570010,
+            20654285619234
+          ],
+          "adjacent_modulo64_differences": [
+            19788,
+            43384,
+            49224
+          ]
+        },
+        {
+          "row": 4,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506798,
+            20654285526234,
+            20654285570410,
+            20654285619114
+          ],
+          "adjacent_modulo64_differences": [
+            19436,
+            44176,
+            48704
+          ]
+        },
+        {
+          "row": 5,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506758,
+            20654285526994,
+            20654285568662,
+            20654285623254
+          ],
+          "adjacent_modulo64_differences": [
+            20236,
+            41668,
+            54592
+          ]
+        },
+        {
+          "row": 6,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506854,
+            20654285526866,
+            20654285567754,
+            20654285620210
+          ],
+          "adjacent_modulo64_differences": [
+            20012,
+            40888,
+            52456
+          ]
+        },
+        {
+          "row": 7,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506798,
+            20654285526786,
+            20654285570562,
+            20654285619826
+          ],
+          "adjacent_modulo64_differences": [
+            19988,
+            43776,
+            49264
+          ]
+        },
+        {
+          "row": 8,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506758,
+            20654285526850,
+            20654285570346,
+            20654285619810
+          ],
+          "adjacent_modulo64_differences": [
+            20092,
+            43496,
+            49464
+          ]
+        },
+        {
+          "row": 9,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506830,
+            20654285526634,
+            20654285566398,
+            20654285615058
+          ],
+          "adjacent_modulo64_differences": [
+            19804,
+            39764,
+            48660
+          ]
+        },
+        {
+          "row": 10,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506806,
+            20654285526226,
+            20654285566298,
+            20654285615042
+          ],
+          "adjacent_modulo64_differences": [
+            19420,
+            40072,
+            48744
+          ]
+        },
+        {
+          "row": 11,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506782,
+            20654285526986,
+            20654285572442,
+            20654285624962
+          ],
+          "adjacent_modulo64_differences": [
+            20204,
+            45456,
+            52520
+          ]
+        },
+        {
+          "row": 12,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506862,
+            20654285528166,
+            20654285574738,
+            20654285630662
+          ],
+          "adjacent_modulo64_differences": [
+            21304,
+            46572,
+            55924
+          ]
+        },
+        {
+          "row": 13,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506822,
+            20654285528426,
+            20654285576142,
+            20654285626626
+          ],
+          "adjacent_modulo64_differences": [
+            21604,
+            47716,
+            50484
+          ]
+        },
+        {
+          "row": 14,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506782,
+            20654285528470,
+            20654285573222,
+            20654285626898
+          ],
+          "adjacent_modulo64_differences": [
+            21688,
+            44752,
+            53676
+          ]
+        },
+        {
+          "row": 15,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506822,
+            20654285528350,
+            20654285577298,
+            20654285629186
+          ],
+          "adjacent_modulo64_differences": [
+            21528,
+            48948,
+            51888
+          ]
+        },
+        {
+          "row": 16,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506790,
+            20654285525022,
+            20654285553174,
+            20654285606254
+          ],
+          "adjacent_modulo64_differences": [
+            18232,
+            28152,
+            53080
+          ]
+        },
+        {
+          "row": 17,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506766,
+            20654285532082,
+            20654285618654,
+            20654285679150
+          ],
+          "adjacent_modulo64_differences": [
+            25316,
+            86572,
+            60496
+          ]
+        },
+        {
+          "row": 18,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506838,
+            20654285531178,
+            20654285614490,
+            20654285673558
+          ],
+          "adjacent_modulo64_differences": [
+            24340,
+            83312,
+            59068
+          ]
+        },
+        {
+          "row": 19,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506806,
+            20654285528482,
+            20654285575578,
+            20654285626690
+          ],
+          "adjacent_modulo64_differences": [
+            21676,
+            47096,
+            51112
+          ]
+        },
+        {
+          "row": 20,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506774,
+            20654285528474,
+            20654285577378,
+            20654285630054
+          ],
+          "adjacent_modulo64_differences": [
+            21700,
+            48904,
+            52676
+          ]
+        },
+        {
+          "row": 21,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506846,
+            20654285528450,
+            20654285573294,
+            20654285625830
+          ],
+          "adjacent_modulo64_differences": [
+            21604,
+            44844,
+            52536
+          ]
+        },
+        {
+          "row": 22,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506814,
+            20654285529650,
+            20654285576598,
+            20654285629474
+          ],
+          "adjacent_modulo64_differences": [
+            22836,
+            46948,
+            52876
+          ]
+        },
+        {
+          "row": 23,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506774,
+            20654285528038,
+            20654285580298,
+            20654285634954
+          ],
+          "adjacent_modulo64_differences": [
+            21264,
+            52260,
+            54656
+          ]
+        },
+        {
+          "row": 24,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506870,
+            20654285528142,
+            20654285579190,
+            20654285632378
+          ],
+          "adjacent_modulo64_differences": [
+            21272,
+            51048,
+            53188
+          ]
+        },
+        {
+          "row": 25,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506830,
+            20654285526882,
+            20654285575586,
+            20654285626014
+          ],
+          "adjacent_modulo64_differences": [
+            20052,
+            48704,
+            50428
+          ]
+        },
+        {
+          "row": 26,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654285506790,
+            20654285526954,
+            20654285573230,
+            20654285621574
+          ],
+          "adjacent_modulo64_differences": [
+            20164,
+            46276,
+            48344
+          ]
+        }
+      ]
+    },
+    {
+      "capture": {
+        "ordinal": 8,
+        "stage": "endpoint",
+        "capacity": 32,
+        "active_rows": 23,
+        "groups_y": 1,
+        "groups_z": 1,
+        "words_per_row": 12,
+        "slot": 0,
+        "paired": false,
+        "kernel": 2,
+        "input": 6,
+        "output": 7,
+        "sidecar": 0,
+        "bytes": 4608,
+        "sidecar_allocation_bytes": 9216,
+        "sha256": "a76b10ab2cc59d5c679ea6f9e01def2b2dd423dc0a201c47e46acf4dd2b88702"
+      },
+      "mask_counts": {
+        "15": 17,
+        "0": 4,
+        "1": 2
+      },
+      "completed_rows": 17,
+      "observed_rows": [
+        {
+          "row": 0,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654288394964,
+            20654288419596,
+            20654288497676,
+            20654288556936
+          ],
+          "adjacent_modulo64_differences": [
+            24632,
+            78080,
+            59260
+          ]
+        },
+        {
+          "row": 1,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654288394992,
+            20654288419844,
+            20654288502824,
+            20654288562928
+          ],
+          "adjacent_modulo64_differences": [
+            24852,
+            82980,
+            60104
+          ]
+        },
+        {
+          "row": 2,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654288394956,
+            20654288422584,
+            20654288503356,
+            20654288563788
+          ],
+          "adjacent_modulo64_differences": [
+            27628,
+            80772,
+            60432
+          ]
+        },
+        {
+          "row": 3,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654288394964,
+            20654288421180,
+            20654288500424,
+            20654288560624
+          ],
+          "adjacent_modulo64_differences": [
+            26216,
+            79244,
+            60200
+          ]
+        },
+        {
+          "row": 4,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654288394948,
+            20654288419928,
+            20654288500512,
+            20654288560616
+          ],
+          "adjacent_modulo64_differences": [
+            24980,
+            80584,
+            60104
+          ]
+        },
+        {
+          "row": 5,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654288394956,
+            20654288420236,
+            20654288501612,
+            20654288561916
+          ],
+          "adjacent_modulo64_differences": [
+            25280,
+            81376,
+            60304
+          ]
+        },
+        {
+          "row": 6,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654288394968,
+            20654288419604,
+            20654288497668,
+            20654288556928
+          ],
+          "adjacent_modulo64_differences": [
+            24636,
+            78064,
+            59260
+          ]
+        },
+        {
+          "row": 7,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654288394716,
+            20654288452544,
+            20654288535596,
+            20654288624884
+          ],
+          "adjacent_modulo64_differences": [
+            57828,
+            83052,
+            89288
+          ]
+        },
+        {
+          "row": 9,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654288394716,
+            20654288437508,
+            20654288516312,
+            20654288595900
+          ],
+          "adjacent_modulo64_differences": [
+            42792,
+            78804,
+            79588
+          ]
+        },
+        {
+          "row": 10,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654288394708,
+            20654288437516,
+            20654288517388,
+            20654288595884
+          ],
+          "adjacent_modulo64_differences": [
+            42808,
+            79872,
+            78496
+          ]
+        },
+        {
+          "row": 11,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654288394748,
+            20654288437780,
+            20654288518584,
+            20654288596196
+          ],
+          "adjacent_modulo64_differences": [
+            43032,
+            80804,
+            77612
+          ]
+        },
+        {
+          "row": 12,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654288394692,
+            20654288437628,
+            20654288517428,
+            20654288595876
+          ],
+          "adjacent_modulo64_differences": [
+            42936,
+            79800,
+            78448
+          ]
+        },
+        {
+          "row": 13,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654288394780,
+            20654288438068,
+            20654288519164,
+            20654288596976
+          ],
+          "adjacent_modulo64_differences": [
+            43288,
+            81096,
+            77812
+          ]
+        },
+        {
+          "row": 14,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654288394796,
+            20654288438148,
+            20654288518440,
+            20654288596816
+          ],
+          "adjacent_modulo64_differences": [
+            43352,
+            80292,
+            78376
+          ]
+        },
+        {
+          "row": 15,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654288394836,
+            20654288437500,
+            20654288516304,
+            20654288595892
+          ],
+          "adjacent_modulo64_differences": [
+            42664,
+            78804,
+            79588
+          ]
+        },
+        {
+          "row": 16,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654288394828,
+            20654288437524,
+            20654288517396,
+            20654288595876
+          ],
+          "adjacent_modulo64_differences": [
+            42696,
+            79872,
+            78480
+          ]
+        },
+        {
+          "row": 17,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654288394860,
+            20654288437772,
+            20654288518576,
+            20654288596188
+          ],
+          "adjacent_modulo64_differences": [
+            42912,
+            80804,
+            77612
+          ]
+        },
+        {
+          "row": 21,
+          "mask": 1,
+          "completion": 0,
+          "raw_ticks": [
+            20654288395020
+          ],
+          "adjacent_modulo64_differences": []
+        },
+        {
+          "row": 22,
+          "mask": 1,
+          "completion": 0,
+          "raw_ticks": [
+            20654288395044
+          ],
+          "adjacent_modulo64_differences": []
+        }
+      ]
+    },
+    {
+      "capture": {
+        "ordinal": 9,
+        "stage": "endpoint",
+        "capacity": 32,
+        "active_rows": 23,
+        "groups_y": 1,
+        "groups_z": 1,
+        "words_per_row": 12,
+        "slot": 0,
+        "paired": false,
+        "kernel": 2,
+        "input": 6,
+        "output": 7,
+        "sidecar": 0,
+        "bytes": 4608,
+        "sidecar_allocation_bytes": 9216,
+        "sha256": "9b176ff93b6e30222b2110e8f0c86b3219f582f337d8fa6d22a77c24205b09dc"
+      },
+      "mask_counts": {
+        "0": 13,
+        "15": 10
+      },
+      "completed_rows": 10,
+      "observed_rows": [
+        {
+          "row": 7,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654291359172,
+            20654291415412,
+            20654291494036,
+            20654291585020
+          ],
+          "adjacent_modulo64_differences": [
+            56240,
+            78624,
+            90984
+          ]
+        },
+        {
+          "row": 9,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654291359212,
+            20654291401704,
+            20654291477968,
+            20654291560364
+          ],
+          "adjacent_modulo64_differences": [
+            42492,
+            76264,
+            82396
+          ]
+        },
+        {
+          "row": 10,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654291359204,
+            20654291401688,
+            20654291478548,
+            20654291560356
+          ],
+          "adjacent_modulo64_differences": [
+            42484,
+            76860,
+            81808
+          ]
+        },
+        {
+          "row": 11,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654291359220,
+            20654291401840,
+            20654291479292,
+            20654291560432
+          ],
+          "adjacent_modulo64_differences": [
+            42620,
+            77452,
+            81140
+          ]
+        },
+        {
+          "row": 12,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654291359204,
+            20654291401808,
+            20654291477944,
+            20654291560180
+          ],
+          "adjacent_modulo64_differences": [
+            42604,
+            76136,
+            82236
+          ]
+        },
+        {
+          "row": 13,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654291359228,
+            20654291401800,
+            20654291481144,
+            20654291560172
+          ],
+          "adjacent_modulo64_differences": [
+            42572,
+            79344,
+            79028
+          ]
+        },
+        {
+          "row": 14,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654291359276,
+            20654291402184,
+            20654291479508,
+            20654291560408
+          ],
+          "adjacent_modulo64_differences": [
+            42908,
+            77324,
+            80900
+          ]
+        },
+        {
+          "row": 15,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654291359308,
+            20654291401680,
+            20654291477960,
+            20654291560340
+          ],
+          "adjacent_modulo64_differences": [
+            42372,
+            76280,
+            82380
+          ]
+        },
+        {
+          "row": 16,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654291359332,
+            20654291401696,
+            20654291478540,
+            20654291560348
+          ],
+          "adjacent_modulo64_differences": [
+            42364,
+            76844,
+            81808
+          ]
+        },
+        {
+          "row": 17,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654291359356,
+            20654291401848,
+            20654291479300,
+            20654291560440
+          ],
+          "adjacent_modulo64_differences": [
+            42492,
+            77452,
+            81140
+          ]
+        }
+      ]
+    },
+    {
+      "capture": {
+        "ordinal": 10,
+        "stage": "endpoint",
+        "capacity": 32,
+        "active_rows": 23,
+        "groups_y": 1,
+        "groups_z": 1,
+        "words_per_row": 12,
+        "slot": 0,
+        "paired": false,
+        "kernel": 2,
+        "input": 6,
+        "output": 7,
+        "sidecar": 0,
+        "bytes": 4608,
+        "sidecar_allocation_bytes": 9216,
+        "sha256": "b066000fc066cb2c9081b03c24188e5db21bc9cb0deb1a8167427900b3e7b00f"
+      },
+      "mask_counts": {
+        "15": 17,
+        "0": 4,
+        "1": 2
+      },
+      "completed_rows": 17,
+      "observed_rows": [
+        {
+          "row": 0,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654294148851,
+            20654294173535,
+            20654294251619,
+            20654294310607
+          ],
+          "adjacent_modulo64_differences": [
+            24684,
+            78084,
+            58988
+          ]
+        },
+        {
+          "row": 1,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654294148883,
+            20654294173679,
+            20654294256783,
+            20654294317131
+          ],
+          "adjacent_modulo64_differences": [
+            24796,
+            83104,
+            60348
+          ]
+        },
+        {
+          "row": 2,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654294148843,
+            20654294176435,
+            20654294257203,
+            20654294317899
+          ],
+          "adjacent_modulo64_differences": [
+            27592,
+            80768,
+            60696
+          ]
+        },
+        {
+          "row": 3,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654294148851,
+            20654294175067,
+            20654294254331,
+            20654294315355
+          ],
+          "adjacent_modulo64_differences": [
+            26216,
+            79264,
+            61024
+          ]
+        },
+        {
+          "row": 4,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654294148835,
+            20654294173831,
+            20654294254507,
+            20654294315347
+          ],
+          "adjacent_modulo64_differences": [
+            24996,
+            80676,
+            60840
+          ]
+        },
+        {
+          "row": 5,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654294148843,
+            20654294174127,
+            20654294255607,
+            20654294317435
+          ],
+          "adjacent_modulo64_differences": [
+            25284,
+            81480,
+            61828
+          ]
+        },
+        {
+          "row": 6,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654294148859,
+            20654294173543,
+            20654294251611,
+            20654294310615
+          ],
+          "adjacent_modulo64_differences": [
+            24684,
+            78068,
+            59004
+          ]
+        },
+        {
+          "row": 7,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654294148571,
+            20654294206531,
+            20654294289511,
+            20654294378679
+          ],
+          "adjacent_modulo64_differences": [
+            57960,
+            82980,
+            89168
+          ]
+        },
+        {
+          "row": 9,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654294148599,
+            20654294191491,
+            20654294270219,
+            20654294351119
+          ],
+          "adjacent_modulo64_differences": [
+            42892,
+            78728,
+            80900
+          ]
+        },
+        {
+          "row": 10,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654294148591,
+            20654294191475,
+            20654294271395,
+            20654294351103
+          ],
+          "adjacent_modulo64_differences": [
+            42884,
+            79920,
+            79708
+          ]
+        },
+        {
+          "row": 11,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654294148631,
+            20654294191755,
+            20654294272583,
+            20654294351687
+          ],
+          "adjacent_modulo64_differences": [
+            43124,
+            80828,
+            79104
+          ]
+        },
+        {
+          "row": 12,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654294148579,
+            20654294191595,
+            20654294271399,
+            20654294351095
+          ],
+          "adjacent_modulo64_differences": [
+            43016,
+            79804,
+            79696
+          ]
+        },
+        {
+          "row": 13,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654294148627,
+            20654294192031,
+            20654294273131,
+            20654294351111
+          ],
+          "adjacent_modulo64_differences": [
+            43404,
+            81100,
+            77980
+          ]
+        },
+        {
+          "row": 14,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654294148651,
+            20654294192119,
+            20654294272447,
+            20654294351103
+          ],
+          "adjacent_modulo64_differences": [
+            43468,
+            80328,
+            78656
+          ]
+        },
+        {
+          "row": 15,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654294148719,
+            20654294191467,
+            20654294270211,
+            20654294351111
+          ],
+          "adjacent_modulo64_differences": [
+            42748,
+            78744,
+            80900
+          ]
+        },
+        {
+          "row": 16,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654294148703,
+            20654294191483,
+            20654294271403,
+            20654294351095
+          ],
+          "adjacent_modulo64_differences": [
+            42780,
+            79920,
+            79692
+          ]
+        },
+        {
+          "row": 17,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654294148743,
+            20654294191747,
+            20654294272575,
+            20654294351679
+          ],
+          "adjacent_modulo64_differences": [
+            43004,
+            80828,
+            79104
+          ]
+        },
+        {
+          "row": 21,
+          "mask": 1,
+          "completion": 0,
+          "raw_ticks": [
+            20654294148907
+          ],
+          "adjacent_modulo64_differences": []
+        },
+        {
+          "row": 22,
+          "mask": 1,
+          "completion": 0,
+          "raw_ticks": [
+            20654294148931
+          ],
+          "adjacent_modulo64_differences": []
+        }
+      ]
+    },
+    {
+      "capture": {
+        "ordinal": 11,
+        "stage": "endpoint",
+        "capacity": 32,
+        "active_rows": 4,
+        "groups_y": 1,
+        "groups_z": 1,
+        "words_per_row": 12,
+        "slot": 0,
+        "paired": false,
+        "kernel": 2,
+        "input": 6,
+        "output": 7,
+        "sidecar": 0,
+        "bytes": 4608,
+        "sidecar_allocation_bytes": 9216,
+        "sha256": "f69b3e2705eee5448c27021ed9a3d0a9a9f4d4c9437bc6970039735205d9faca"
+      },
+      "mask_counts": {
+        "15": 3,
+        "0": 1
+      },
+      "completed_rows": 3,
+      "observed_rows": [
+        {
+          "row": 0,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654297015546,
+            20654297040814,
+            20654297116878,
+            20654297176138
+          ],
+          "adjacent_modulo64_differences": [
+            25268,
+            76064,
+            59260
+          ]
+        },
+        {
+          "row": 1,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654297014694,
+            20654297073014,
+            20654297149894,
+            20654297241218
+          ],
+          "adjacent_modulo64_differences": [
+            58320,
+            76880,
+            91324
+          ]
+        },
+        {
+          "row": 3,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654297015338,
+            20654297058406,
+            20654297134618,
+            20654297218546
+          ],
+          "adjacent_modulo64_differences": [
+            43068,
+            76212,
+            83928
+          ]
+        }
+      ]
+    },
+    {
+      "capture": {
+        "ordinal": 12,
+        "stage": "endpoint",
+        "capacity": 32,
+        "active_rows": 1,
+        "groups_y": 1,
+        "groups_z": 1,
+        "words_per_row": 12,
+        "slot": 0,
+        "paired": false,
+        "kernel": 2,
+        "input": 6,
+        "output": 7,
+        "sidecar": 0,
+        "bytes": 4608,
+        "sidecar_allocation_bytes": 9216,
+        "sha256": "a01faf99506ca3536effa2c3e3f9f5d54c7a237721ae07b77982fea2ce1982ad"
+      },
+      "mask_counts": {
+        "15": 1
+      },
+      "completed_rows": 1,
+      "observed_rows": [
+        {
+          "row": 0,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654299794762,
+            20654299820326,
+            20654299896562,
+            20654299955766
+          ],
+          "adjacent_modulo64_differences": [
+            25564,
+            76236,
+            59204
+          ]
+        }
+      ]
+    },
+    {
+      "capture": {
+        "ordinal": 13,
+        "stage": "endpoint",
+        "capacity": 32,
+        "active_rows": 29,
+        "groups_y": 1,
+        "groups_z": 1,
+        "words_per_row": 12,
+        "slot": 0,
+        "paired": false,
+        "kernel": 2,
+        "input": 6,
+        "output": 7,
+        "sidecar": 0,
+        "bytes": 4608,
+        "sidecar_allocation_bytes": 9216,
+        "sha256": "e03e182558b73996f48444d0ccfdbe379822ad9cde78489d041ca3d4b8b2ef11"
+      },
+      "mask_counts": {
+        "15": 29
+      },
+      "completed_rows": 29,
+      "observed_rows": [
+        {
+          "row": 0,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550068,
+            20654302607916,
+            20654302691856,
+            20654302780836
+          ],
+          "adjacent_modulo64_differences": [
+            57848,
+            83940,
+            88980
+          ]
+        },
+        {
+          "row": 1,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550692,
+            20654302608420,
+            20654302694208,
+            20654302785328
+          ],
+          "adjacent_modulo64_differences": [
+            57728,
+            85788,
+            91120
+          ]
+        },
+        {
+          "row": 2,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550172,
+            20654302613596,
+            20654302701724,
+            20654302792276
+          ],
+          "adjacent_modulo64_differences": [
+            63424,
+            88128,
+            90552
+          ]
+        },
+        {
+          "row": 3,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550236,
+            20654302611580,
+            20654302696428,
+            20654302786232
+          ],
+          "adjacent_modulo64_differences": [
+            61344,
+            84848,
+            89804
+          ]
+        },
+        {
+          "row": 4,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550220,
+            20654302607604,
+            20654302694596,
+            20654302785440
+          ],
+          "adjacent_modulo64_differences": [
+            57384,
+            86992,
+            90844
+          ]
+        },
+        {
+          "row": 5,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550188,
+            20654302606760,
+            20654302692644,
+            20654302781724
+          ],
+          "adjacent_modulo64_differences": [
+            56572,
+            85884,
+            89080
+          ]
+        },
+        {
+          "row": 6,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550780,
+            20654302595368,
+            20654302676640,
+            20654302758304
+          ],
+          "adjacent_modulo64_differences": [
+            44588,
+            81272,
+            81664
+          ]
+        },
+        {
+          "row": 7,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550764,
+            20654302595700,
+            20654302678996,
+            20654302761552
+          ],
+          "adjacent_modulo64_differences": [
+            44936,
+            83296,
+            82556
+          ]
+        },
+        {
+          "row": 8,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550756,
+            20654302595628,
+            20654302682344,
+            20654302764632
+          ],
+          "adjacent_modulo64_differences": [
+            44872,
+            86716,
+            82288
+          ]
+        },
+        {
+          "row": 9,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550780,
+            20654302595896,
+            20654302680620,
+            20654302762908
+          ],
+          "adjacent_modulo64_differences": [
+            45116,
+            84724,
+            82288
+          ]
+        },
+        {
+          "row": 10,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550196,
+            20654302600992,
+            20654302654980,
+            20654302748832
+          ],
+          "adjacent_modulo64_differences": [
+            50796,
+            53988,
+            93852
+          ]
+        },
+        {
+          "row": 11,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550212,
+            20654302600740,
+            20654302652660,
+            20654302748200
+          ],
+          "adjacent_modulo64_differences": [
+            50528,
+            51920,
+            95540
+          ]
+        },
+        {
+          "row": 12,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550772,
+            20654302595312,
+            20654302657008,
+            20654302742448
+          ],
+          "adjacent_modulo64_differences": [
+            44540,
+            61696,
+            85440
+          ]
+        },
+        {
+          "row": 13,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550732,
+            20654302595668,
+            20654302658016,
+            20654302742440
+          ],
+          "adjacent_modulo64_differences": [
+            44936,
+            62348,
+            84424
+          ]
+        },
+        {
+          "row": 14,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550788,
+            20654302596620,
+            20654302661460,
+            20654302745616
+          ],
+          "adjacent_modulo64_differences": [
+            45832,
+            64840,
+            84156
+          ]
+        },
+        {
+          "row": 15,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550244,
+            20654302595852,
+            20654302659596,
+            20654302742744
+          ],
+          "adjacent_modulo64_differences": [
+            45608,
+            63744,
+            83148
+          ]
+        },
+        {
+          "row": 16,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550228,
+            20654302607612,
+            20654302690400,
+            20654302778572
+          ],
+          "adjacent_modulo64_differences": [
+            57384,
+            82788,
+            88172
+          ]
+        },
+        {
+          "row": 17,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550204,
+            20654302606752,
+            20654302688540,
+            20654302780088
+          ],
+          "adjacent_modulo64_differences": [
+            56548,
+            81788,
+            91548
+          ]
+        },
+        {
+          "row": 18,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302551008,
+            20654302577048,
+            20654302657360,
+            20654302720548
+          ],
+          "adjacent_modulo64_differences": [
+            26040,
+            80312,
+            63188
+          ]
+        },
+        {
+          "row": 19,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550992,
+            20654302577568,
+            20654302658024,
+            20654302720684
+          ],
+          "adjacent_modulo64_differences": [
+            26576,
+            80456,
+            62660
+          ]
+        },
+        {
+          "row": 20,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550980,
+            20654302577232,
+            20654302661572,
+            20654302723372
+          ],
+          "adjacent_modulo64_differences": [
+            26252,
+            84340,
+            61800
+          ]
+        },
+        {
+          "row": 21,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302551012,
+            20654302575772,
+            20654302661036,
+            20654302720220
+          ],
+          "adjacent_modulo64_differences": [
+            24760,
+            85264,
+            59184
+          ]
+        },
+        {
+          "row": 22,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550988,
+            20654302578384,
+            20654302664228,
+            20654302725940
+          ],
+          "adjacent_modulo64_differences": [
+            27396,
+            85844,
+            61712
+          ]
+        },
+        {
+          "row": 23,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550980,
+            20654302578584,
+            20654302664044,
+            20654302725380
+          ],
+          "adjacent_modulo64_differences": [
+            27604,
+            85460,
+            61336
+          ]
+        },
+        {
+          "row": 24,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302551016,
+            20654302577040,
+            20654302657776,
+            20654302720556
+          ],
+          "adjacent_modulo64_differences": [
+            26024,
+            80736,
+            62780
+          ]
+        },
+        {
+          "row": 25,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302551000,
+            20654302577576,
+            20654302658348,
+            20654302720724
+          ],
+          "adjacent_modulo64_differences": [
+            26576,
+            80772,
+            62376
+          ]
+        },
+        {
+          "row": 26,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550988,
+            20654302568120,
+            20654302588508,
+            20654302643972
+          ],
+          "adjacent_modulo64_differences": [
+            17132,
+            20388,
+            55464
+          ]
+        },
+        {
+          "row": 27,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302551004,
+            20654302570576,
+            20654302656528,
+            20654302705380
+          ],
+          "adjacent_modulo64_differences": [
+            19572,
+            85952,
+            48852
+          ]
+        },
+        {
+          "row": 28,
+          "mask": 15,
+          "completion": 1,
+          "raw_ticks": [
+            20654302550996,
+            20654302570696,
+            20654302674844,
+            20654302711000
+          ],
+          "adjacent_modulo64_differences": [
+            19700,
+            104148,
+            36156
+          ]
+        }
+      ]
+    }
+  ],
+  "scope": "Complete diagnostic sidecars and all assertions of the named original test passed. All-zero rows are unobserved; sidecar bytes alone do not identify flat bypass versus prior refusal. Raw ticks and modulo64 differences only; clock rate and exclusive costs unestablished; perturbed observers; no ordinary rendering benefit or full science/release claim."
+}
