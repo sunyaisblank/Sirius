@@ -1,0 +1,25 @@
+{
+  "accepted": true,
+  "reviewer": "/root/retained_latency_review",
+  "baseline_revision": "2053ef79c90752d37b0075b8137cfb9b571b6820",
+  "input_seals": {
+    "trial.patch": {
+      "bytes": 3584,
+      "sha256": "18d109e5b4eb3ed66a992c4169415721408b9f73e991db2cdb4e36f1dd7dfa29"
+    },
+    "src/sirius/kernels/retained_pair.slang": {
+      "bytes": 19508,
+      "sha256": "64ef4e97b2d2c96cd869f7aabe6a80e1355258a31b932c185857d5992da5e4d3"
+    },
+    "scripts/build-retained-kernels.py": {
+      "bytes": 29700,
+      "sha256": "db92a97b84581b265ab5700bfc33aaebac6d0303299248d239d3a0d7f6d34790"
+    }
+  },
+  "findings": [
+    "Two file inverses reconstruct accepted HEAD exactly; pair otherwise exact prior explicitselector.",
+    "Guard excludes portable/FP64/FMA; builder enables only defaultnativeT/E.",
+    "CPU/host/program/tests/selectors and all original fallback bytes unchanged."
+  ],
+  "scope": "Source clearance for bounded trial commit/export only; compiled products, numerical equality/streams and benefit pending."
+}

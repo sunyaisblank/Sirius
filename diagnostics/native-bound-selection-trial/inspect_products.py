@@ -1,0 +1,213 @@
+"""Inspect actual built default modules and the full 40-array boundary."""
+import sys
+sys.dont_write_bytecode=True
+from pathlib import Path
+import hashlib,json,os,re,signal,struct,subprocess,time
+ROOT=Path.cwd();WORK=Path(__file__).resolve().parent
+HEAD='99a4a6d3a6bff69d9f20c995383a5f2e6b8cb901'
+TOOLS=ROOT/'bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools'
+def seal(p):
+ b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def read(p):return json.loads(p.read_text())
+def git(*a):return subprocess.check_output(['git',*a],text=True,timeout=30).strip()
+assert WORK==ROOT/'out/native-bound-selection-trial'
+assert git('rev-parse','HEAD')==HEAD==git('rev-parse','@{u}') and not git('status','--porcelain')
+assert read(WORK/'source-build.json')['accepted'] and read(WORK/'product-controller-review.json')['accepted']
+BUILT=ROOT/'bin/linux-gcc/src/sirius/backend/retained'
+paths=[Path(__file__),WORK/'product-controller-review.json',WORK/'source-build.json',WORK/'baseline-arrays.json',WORK/'baseline/bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h',BUILT/'retained_kernels.h',TOOLS/'spirv-dis']
+paths += [directory/(name+'.spv') for directory in (WORK/'baseline',BUILT) for name in ('retained_transport','retained_endpoint')]
+record={'accepted':False,'source_revision':HEAD,'input_seals':{str(p):seal(p) for p in paths},'runs':[],'errors':[],'seconds_per_command':60,'sampled_rss_bytes':536870912,'scope':'Actual generated40array boundary and native-default SPIR-V source/compiled screen; no numerical dispatch, gain or fullqualification.'}
+signals=[]
+for sig in (signal.SIGTERM,signal.SIGINT,signal.SIGHUP):signal.signal(sig,lambda n,f:signals.append(n))
+def save():
+ record['signals']=list(signals);(WORK/'product-inspection.json').write_text(json.dumps(record,indent=2)+'\n')
+def birth(pid):
+    try:
+        return Path('/proc', str(pid), 'stat').read_text().rsplit(')', 1)[1].split()[19]
+    except (FileNotFoundError, ProcessLookupError):
+        return None
+
+def live_group_members(group):
+    members = []
+    for p in Path('/proc').iterdir():
+        if not p.name.isdigit():
+            continue
+        try:
+            fields = (p / 'stat').read_text().rsplit(')', 1)[1].split()
+        except (FileNotFoundError, ProcessLookupError):
+            continue
+        if int(fields[2]) == group and fields[0] != 'Z':
+            members.append({'pid': int(p.name), 'start_ticks': fields[19], 'state': fields[0]})
+    return members
+
+def run(name, args):
+    r = {'name': name, 'arguments': list(map(str, args)), 'errors': [], 'outer_stop': False, 'peak_rss_bytes': 0}
+    child = None
+    ticks = None
+    exit_observation = None
+    started = time.monotonic()
+    try:
+        assert not signals
+        with (WORK / (name + '.stdout')).open('xb') as out, (WORK / (name + '.stderr')).open('xb') as err:
+            child = subprocess.Popen(r['arguments'], stdout=out, stderr=err, start_new_session=True)
+            r.update(pid=child.pid, start_ticks=None)
+            ticks = birth(child.pid)
+            r['start_ticks'] = ticks
+            assert ticks, 'Child birth unavailable'
+            while True:
+                if signals:
+                    raise RuntimeError('Controller signal received')
+                # Keep the exited leader unreaped until its owned group is
+                # inspected and stopped. Its reserved PID prevents reuse of
+                # this PGID while group cleanup is still authorized.
+                status = os.waitid(os.P_PID, child.pid, os.WEXITED | os.WNOHANG | os.WNOWAIT)
+                if status is not None:
+                    exit_observation = {'code': status.si_code, 'status': status.si_status}
+                    r['unreaped_exit_observation'] = exit_observation
+                    break
+                try:
+                    rss = int(Path('/proc', str(child.pid), 'statm').read_text().split()[1]) * os.sysconf('SC_PAGE_SIZE')
+                    r['peak_rss_bytes'] = max(r['peak_rss_bytes'], rss)
+                except (FileNotFoundError, ProcessLookupError):
+                    pass
+                if signals or time.monotonic() - started > 60 or r['peak_rss_bytes'] > 536870912:
+                    raise RuntimeError('Fixed signal/time/RSS guard triggered')
+                time.sleep(.05)
+            assert exit_observation == {'code': os.CLD_EXITED, 'status': 0}
+    except BaseException as e:
+        r['errors'].append(repr(e))
+        r['outer_stop'] = True
+    finally:
+        if child is not None:
+            leader_matches = False
+            owned_unreaped = False
+            try:
+                # A successful waitid query also confirms this exact child
+                # remains waitable by this parent, without releasing its PID.
+                os.waitid(os.P_PID, child.pid, os.WEXITED | os.WNOHANG | os.WNOWAIT)
+                owned_unreaped = True
+                r['owned_leader_pending_reap'] = True
+            except BaseException as e:
+                r['errors'].append('Owned waitability observation: ' + repr(e))
+            try:
+                leader_matches = bool(ticks) and birth(child.pid) == ticks
+                r['leader_birth_matches_before_reap'] = leader_matches
+                assert leader_matches and os.getpgid(child.pid) == child.pid
+            except BaseException as e:
+                r['errors'].append('Unreaped leader observation: ' + repr(e))
+            members = None
+            try:
+                members = live_group_members(child.pid)
+                r['live_group_members_before_reap'] = members
+            except BaseException as e:
+                r['errors'].append('Pre-reap group census: ' + repr(e))
+            try:
+                # Close a surviving owned group regardless of leader exit.
+                # Failed census also requires stop while the leader is held.
+                if members is None or members:
+                    assert owned_unreaped and os.getpgid(child.pid) == child.pid
+                    os.killpg(child.pid, signal.SIGKILL)
+                    r['forced_group_cleanup'] = True
+                    if exit_observation == {'code': os.CLD_EXITED, 'status': 0}:
+                        r['errors'].append('Normal rc0 required forced owned-group cleanup')
+                else:
+                    r['forced_group_cleanup'] = False
+            except BaseException as e:
+                r['errors'].append('Owned stop: ' + repr(e))
+            try:
+                r['returncode'] = child.wait(timeout=10)
+            except BaseException as e:
+                r['errors'].append('Owned reap: ' + repr(e))
+            r['owned_birth_absent'] = False
+            try:
+                r['owned_birth_absent'] = bool(ticks) and birth(child.pid) != ticks
+            except BaseException as e:
+                r['errors'].append('Final birth observation: ' + repr(e))
+            r['owned_group_absent'] = False
+            try:
+                os.killpg(child.pid, 0)
+            except ProcessLookupError:
+                r['owned_group_absent'] = True
+            except BaseException as e:
+                r['errors'].append('Group census: ' + repr(e))
+        r['elapsed_seconds'] = time.monotonic() - started
+        r['accepted'] = (not r['errors'] and not signals and r.get('returncode') == 0
+                         and r.get('owned_birth_absent') and r.get('owned_group_absent'))
+        record['runs'].append(r)
+        save()
+    assert r['accepted'], r
+
+def parse(text):
+    functions = re.findall(r'(%\S+) = OpFunction\b.*?OpFunctionEnd', text, re.S)
+    bodies = re.findall(r'%\S+ = OpFunction\b.*?OpFunctionEnd', text, re.S)
+    assert len(functions) == len(bodies) == len(set(functions))
+    definitions = dict(re.findall(r'^\s*(%\S+) = (.*)$', text, re.M))
+    names = dict(re.findall(r'OpName (%\S+) "([^"]+)"', text))
+    function_names = {symbol: names[symbol] for symbol in functions}
+    cache = {}
+    def global_value(symbol):
+        if symbol in function_names:
+            return 'FUNCTION:' + function_names[symbol]
+        if symbol not in cache:
+            value = definitions[symbol]
+            cache[symbol] = re.sub(r'%\S+', lambda m: global_value(m[0]), value)
+        return cache[symbol]
+    canonical = {}
+    for symbol, body in zip(functions, bodies):
+        name = names[symbol]
+        local = {s: 'LOCAL' + str(i) for i, s in enumerate(
+            re.findall(r'^\s*(%\S+) = ', body, re.M))}
+        local.pop(symbol)
+        normalized = re.sub(r'%\S+', lambda m: local[m[0]] if m[0] in local
+                            else global_value(m[0]), body)
+        normalized = '\n'.join(line.strip() for line in normalized.splitlines())
+        canonical.setdefault(name, []).append(normalized)
+    return canonical
+
+try:
+ arrays={};payloads={}
+ for count,name,body in re.findall(r'inline constexpr std::array<std::uint32_t, (\d+)> (\w+)\{\{(.*?)\}\};', (BUILT/'retained_kernels.h').read_text(),re.S):
+  words=[int(x[:-1],0) for x in re.findall(r'(?:0x[0-9a-fA-F]+|\d+)u',body)]
+  assert len(words)==int(count)
+  data=struct.pack('<'+'I'*len(words),*words);payloads[name]=data
+  arrays[name]={'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()}
+ baseline_record=read(WORK/'baseline-arrays.json');baseline=baseline_record['arrays']
+ assert seal(WORK/'baseline/bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h')=={'bytes':baseline_record['header_bytes'],'sha256':baseline_record['header_sha256']}
+ assert set(arrays)==set(baseline) and len(arrays)==40
+ changed=sorted(n for n in arrays if arrays[n]!=baseline[n]);assert changed==['kEndpointShader','kTransportShader'],changed
+ record.update(arrays=arrays,changed_arrays=changed,unchanged_complete_arrays=38,modules={})
+ for stem,array in (('retained_transport','kTransportShader'),('retained_endpoint','kEndpointShader')):
+  assert seal(WORK/'baseline'/(stem+'.spv'))==baseline[array]
+  candidate=WORK/'candidate';candidate.mkdir(exist_ok=True)
+  path=candidate/(stem+'.spv');assert not path.exists();path.write_bytes((BUILT/(stem+'.spv')).read_bytes())
+  assert path.read_bytes()==payloads[array]
+  old_asm=WORK/'baseline'/(stem+'.spvasm');new_asm=candidate/(stem+'.spvasm')
+  run(stem+'-baseline-dis',[TOOLS/'spirv-dis',WORK/'baseline'/(stem+'.spv'),'-o',old_asm])
+  run(stem+'-candidate-dis',[TOOLS/'spirv-dis',path,'-o',new_asm])
+  before,after=old_asm.read_text(),new_asm.read_text();old,new=parse(before),parse(after)
+  changed_functions=sorted(n for n in old.keys() & new.keys() if old[n]!=new[n])
+  assert changed_functions==['RPUpAdd','RPUpMultiply'] and old.keys()==new.keys(),changed_functions
+  assert before.count('OpControlBarrier')==after.count('OpControlBarrier')
+  assert before.count('OpReadClockKHR')==after.count('OpReadClockKHR')==0
+  for pattern in (r'OpCapability (\S+)',r'OpExecutionMode ([^\n]+)',r'OpEntryPoint ([^\n]+)',r'OpDecorate (%\S+) (?!NoContraction\b)([^\n]+)',r'OpMemberDecorate (%\S+) ([^\n]+)'):
+   assert re.findall(pattern,before)==re.findall(pattern,after),(stem,pattern)
+  assert not re.search(r'FPFastMathMode|FPFastMathDefault|RelaxedPrecision|OpFmaKHR|OpTypeInt 64|OpTypeFloat 64',after)
+  operations=re.findall(r'(%\S+) = OpF(?:Add|Sub|Mul) ',after)
+  decorated=set(re.findall(r'OpDecorate (%\S+) NoContraction',after))
+  assert operations and all(op in decorated for op in operations)
+  assert before.count('NoContraction')==after.count('NoContraction')
+  helpers={}
+  for name,expected in (('RPUpAdd','OpFAdd'),('RPUpMultiply','OpFMul')):
+   body=re.search(r'%'+name+r' = OpFunction\b.*?OpFunctionEnd',after,re.S)[0]
+   assert not re.search(r'OpBranchConditional|OpSelectionMerge|OpLoopMerge',body)
+   fp=re.findall(r'(%\S+) = (OpF(?:Add|Sub|Mul|Div)) ',body)
+   assert len(fp)==1 and fp[0][1]==expected and fp[0][0] in decorated
+   helpers[name]={'body':body,'fp_operations':1,'conditional_branches':0,'NoContraction':True,'uint_selects':body.count('OpSelect %uint')}
+  record['modules'][stem]={'spv':seal(path),'baseline_assembly':seal(old_asm),'candidate_assembly':seal(new_asm),'unchanged_function_bodies':sum(len(old[n]) for n in old if n not in changed_functions),'changed_bodies':changed_functions,'barriers':after.count('OpControlBarrier'),'NoContraction':after.count('NoContraction'),'helpers':helpers}
+ (WORK/'candidate/retained_kernels.h').write_bytes((BUILT/'retained_kernels.h').read_bytes())
+ assert {str(p):seal(p) for p in paths}==record['input_seals']
+ assert git('rev-parse','HEAD')==HEAD==git('rev-parse','@{u}') and not git('status','--porcelain')
+ assert not signals;record['accepted']=True
+except BaseException as e:record['errors'].append(repr(e))
+finally:save()
+print(json.dumps({k:v for k,v in record.items() if k not in ('input_seals','modules','arrays')}));assert record['accepted']
