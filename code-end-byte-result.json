@@ -1,0 +1,50 @@
+{
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "input_seals": {
+    "out/native-sqtt-source-clock/inspect_code_end.py": {
+      "bytes": 2891,
+      "sha256": "149065ada41b735285d6ae8f039a1076302815b90c45284f9067c2d410198d89"
+    },
+    "out/native-sqtt-source-clock/plan.json": {
+      "bytes": 4710,
+      "sha256": "a106b2f76b0cb22117e344764965e47e1296e9cc64ca8f711e0d36adf8902165"
+    },
+    "out/native-sqtt-source-clock/trace-code-join.json": {
+      "bytes": 10800,
+      "sha256": "993fdb3c7b90de2e67f274c757f2384d0de703d8759e05c12625643a5ad865f3"
+    },
+    "out/native-sqtt-source-clock/isa2-result.json": {
+      "bytes": 1230175,
+      "sha256": "bc5fab72c04837992f7b2a8737d49248c2ec2ff5143a1575510447640b8ad41c"
+    },
+    "out/native-sqtt-source-clock/rocm-gfx11-sopp-test.txt": {
+      "bytes": 10813,
+      "sha256": "2e143a53431faa99628b6832b9f5ce149d360b62eb76760751228d38e2d046d2"
+    },
+    "attestations/native-vulkan/6be3132/native-spm-cost/payloads/ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9": {
+      "bytes": 9581418,
+      "sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9"
+    },
+    "attestations/native-vulkan/3045067/ordinary-pipeline-generated-code/query-payloads/transport.info1": {
+      "bytes": 2812208,
+      "sha256": "2967045a42faed2855c192caa217e013d459190b745d93d7473b12fd4ccdc8e2"
+    }
+  },
+  "requested_unknown": {
+    "addr": 4297105356,
+    "marker_id": 0
+  },
+  "source_bound_allocated_text_exact": {
+    "bytes": 237952,
+    "sha256": "594fbbe946b34aba02a27c723290084f0cc16e1c5ab7cb39609a92ff46ea19cd"
+  },
+  "entry_end_offset": 237516,
+  "tail": {
+    "bytes": 436,
+    "sha256": "29deafed4ab33704b414ae204949ee786ccd6f1fbf70d13ba90daeac931ca289",
+    "words": 109,
+    "word": "bf9f0000",
+    "primary_instruction": "s_code_end"
+  },
+  "scope": "Actual requested address is the exact entry-end in source-bound allocated text; primary GFX11 test names the identical tail word. No callback supplied this tail and no executed padding, runtime operand, full stitching, event/cost or qualification claim."
+}

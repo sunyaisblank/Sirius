@@ -1,0 +1,39 @@
+{
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "finished_offline_batch": true,
+  "actual_owned_cpu_runs": [
+    "isa-run.json",
+    "isa016-run.json"
+  ],
+  "observations": {
+    "padding_request_bound": true,
+    "remaining_auxiliary_address": "0x10001b800",
+    "selected_detailed_target": [
+      0,
+      0
+    ],
+    "expensive_transport_lane_coverage": false,
+    "endpoint_detailed_wave_coverage": false,
+    "supported_rdp_lane_selector_established": false,
+    "decoder016_other_simd_records": 2663,
+    "decoder016_bound_transport_pc_records": 15977,
+    "decoder016_auxiliary_zero_pc_records": 16,
+    "reference_clock_pairs": 11912,
+    "reference_clock_frequency_observed": false,
+    "exact_spm_event_display_origin_established": false
+  },
+  "findings": {
+    "bytes": 1878,
+    "sha256": "81113e6b16d9b699897c98bb2a5d446bed7fa46497f3ca5076f2a29756682679"
+  },
+  "optimization_adopted": false,
+  "product_source_changed": false,
+  "new_gpu_work": false,
+  "new_scientific_or_release_qualification": false,
+  "open_issues": [
+    44,
+    48,
+    53
+  ],
+  "next_ready_work": "Evaluate supported per-shader clock phase observation using existing native feature evidence and compiler capabilities. Require actual support and separate diagnostic outputs preserving original whole buffers; otherwise select another justified cost premise. Do not retry unchanged default-lane acquisition, missing dump export or failed frame."
+}

@@ -1,0 +1,196 @@
+{
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "previous_turn": "progress: actual15977-PC first-wave binding, reviewed preserved/pushed sources, issue44 updated and completed scratch removed. No live handle carried forward.",
+  "trace": {
+    "path": "attestations/native-vulkan/6be3132/native-spm-cost/payloads/ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9",
+    "bytes": 9581418,
+    "sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9"
+  },
+  "prior_manifest": {
+    "path": "attestations/native-vulkan/6be3132/native-sqtt-source-clock/manifest.json",
+    "bytes": 155076,
+    "sha256": "08e33d89fb29db7c84a3f5f0b43c4b568d9db49fe05433fa365ad1daa6d08a75"
+  },
+  "prior": {
+    "saved-isa2-map.json": {
+      "path": "attestations/native-vulkan/6be3132/native-sqtt-source-clock/payloads/579a666dec397d483956fdcc3f3955c0c417cd9e01eb9fbd0fc40444bc1275b1",
+      "bytes": 20140247,
+      "sha256": "579a666dec397d483956fdcc3f3955c0c417cd9e01eb9fbd0fc40444bc1275b1",
+      "recovery": {
+        "kind": "local-archive-payload",
+        "path": "attestations/native-vulkan/6be3132/native-sqtt-source-clock/payloads/579a666dec397d483956fdcc3f3955c0c417cd9e01eb9fbd0fc40444bc1275b1"
+      }
+    },
+    "isa2-result.json": {
+      "path": "attestations/native-vulkan/6be3132/native-sqtt-source-clock/payloads/bc5fab72c04837992f7b2a8737d49248c2ec2ff5143a1575510447640b8ad41c",
+      "bytes": 1230175,
+      "sha256": "bc5fab72c04837992f7b2a8737d49248c2ec2ff5143a1575510447640b8ad41c",
+      "recovery": {
+        "kind": "local-archive-payload",
+        "path": "attestations/native-vulkan/6be3132/native-sqtt-source-clock/payloads/bc5fab72c04837992f7b2a8737d49248c2ec2ff5143a1575510447640b8ad41c"
+      }
+    },
+    "isa2-run.json": {
+      "path": "out/native-sqtt-code-end/isa2-run.json",
+      "bytes": 2874,
+      "sha256": "28be3699a9c0f3312553905cd1d9e4a2f0122797c92b0a8621b37b6611f5e0de",
+      "recovery": {
+        "kind": "immutable-Git-blob",
+        "revision": "06e85e0630cef0bfa3ec9fcef4cb44c59a63db75",
+        "blob": "da62dc3b6285a84268d67b6ed1920a45116d0aa6",
+        "path": "isa2-run.json"
+      }
+    }
+  },
+  "restored_sources": {
+    "decode_with_normalized_branches.py": {
+      "revision": "06e85e0630cef0bfa3ec9fcef4cb44c59a63db75",
+      "blob": "63f2f4ef5c226c30d7887a0ac4e4127b2dc05680",
+      "bytes": 9938,
+      "sha256": "55ccdaae91c9f53165ea42eb6f3f397d42c75bd768052d9378a0115aa04f6493"
+    },
+    "run_normalized_isa_decoder.py": {
+      "revision": "06e85e0630cef0bfa3ec9fcef4cb44c59a63db75",
+      "blob": "2f64cf30097a75390d227e37cd8e030237d26979",
+      "bytes": 5362,
+      "sha256": "78ee4a589d72f2470f064c516abe9e6597cc13244901393831193d555b7ebaa9"
+    },
+    "rocprof_trace_decoder.h": {
+      "revision": "06e85e0630cef0bfa3ec9fcef4cb44c59a63db75",
+      "blob": "ebb2195e803308b365748127c559cbf01c4d5f54",
+      "bytes": 6771,
+      "sha256": "ea7a70337f83c2a0a8dfcd23b9c9b51827cdfd685211a75e6dbb10d0d4396de2"
+    },
+    "trace_decoder_types.h": {
+      "revision": "06e85e0630cef0bfa3ec9fcef4cb44c59a63db75",
+      "blob": "a2aa2b06e081d09f09065077d481470c9db00623",
+      "bytes": 10828,
+      "sha256": "5fcbfd8b6ed9b596ec8572279707f434ec15651e4f9d47e524929cfef0249437"
+    },
+    "sdk-decode.cpp": {
+      "revision": "06e85e0630cef0bfa3ec9fcef4cb44c59a63db75",
+      "blob": "9af82a99e132230c843492d83c88c76fa9aa549d",
+      "bytes": 9915,
+      "sha256": "5c14f43cc04b9e9c6d8d635a49f414ad697d77ea7dff063481143f8beb0f50d8"
+    },
+    "sdk-disassembly.hpp": {
+      "revision": "06e85e0630cef0bfa3ec9fcef4cb44c59a63db75",
+      "blob": "c054143e62afa2d883f4c0c12ce009e5dce5a4c9",
+      "bytes": 11134,
+      "sha256": "f6487a24786227ed5678e1fdd937b22fd814fc8f28d4e838868dc233c2476b36"
+    },
+    "aql-threadtrace.cpp": {
+      "revision": "06e85e0630cef0bfa3ec9fcef4cb44c59a63db75",
+      "blob": "b52af778978028c9a0e91bb8c7a9f1de90aa4c4d",
+      "bytes": 16160,
+      "sha256": "141ae850811892ccfcbbfc024717d92779827500eac1141d5b939518641a89b7"
+    },
+    "cpu-decoder-preparation.json": {
+      "revision": "06e85e0630cef0bfa3ec9fcef4cb44c59a63db75",
+      "blob": "6d8e7e4b92f33ec23e00e0b170d67a223a65328d",
+      "bytes": 1990,
+      "sha256": "60d1351b54f65b9554e8692f23cc881731af859c5b200500d7960dccc4867de3"
+    },
+    "decoder-preparation.json": {
+      "revision": "06e85e0630cef0bfa3ec9fcef4cb44c59a63db75",
+      "blob": "293ef48aa22203d25b0901ff16d8bedf4c85a1c7",
+      "bytes": 3900,
+      "sha256": "936ad904a14d362a88086006f5856e56f600d43ce01b104d02ab5b6fdb6544e5"
+    },
+    "decoder-LICENSE": {
+      "revision": "06e85e0630cef0bfa3ec9fcef4cb44c59a63db75",
+      "blob": "a9d3b6c512994a09dca202915e47d2751716a3db",
+      "bytes": 13571,
+      "sha256": "1aab3e68504fecc5d6ff5e14664f81405e791826a886ecdac7da9e0e2ba9bdf8"
+    },
+    "spm-index-result.json": {
+      "revision": "06e85e0630cef0bfa3ec9fcef4cb44c59a63db75",
+      "blob": "8f920f54b5fd068ef746793d88884b33329a9860",
+      "bytes": 135860,
+      "sha256": "b6e0ca44f92563bc8a18c62f61bce56299e46fa3f501ea7cafc100206ca804cc"
+    },
+    "trace-code-join.json": {
+      "revision": "06e85e0630cef0bfa3ec9fcef4cb44c59a63db75",
+      "blob": "dc0e8808caf207616079f596da7abac973c44081",
+      "bytes": 10800,
+      "sha256": "993fdb3c7b90de2e67f274c757f2384d0de703d8759e05c12625643a5ad865f3"
+    },
+    "code-end-byte-result.json": {
+      "revision": "06e85e0630cef0bfa3ec9fcef4cb44c59a63db75",
+      "blob": "5668a1dfab1dc3a9d4cc118bb9b4e8f7d8a7a25e",
+      "bytes": 2122,
+      "sha256": "6d6e82933044430090dea49a82bb5856d58b352d7f151aae736f684b7010e623"
+    },
+    "rocm-gfx11-sopp-test.txt": {
+      "revision": "06e85e0630cef0bfa3ec9fcef4cb44c59a63db75",
+      "blob": "c21f2fcc375d6728b7e5ad47c470f24c9d0d5e6f",
+      "bytes": 10813,
+      "sha256": "2e143a53431faa99628b6832b9f5ce149d360b62eb76760751228d38e2d046d2"
+    },
+    "rocm-llvm-LICENSE.txt": {
+      "revision": "06e85e0630cef0bfa3ec9fcef4cb44c59a63db75",
+      "blob": "fa6ac540007032cbd0ec772a1c72e6cb5527a4fe",
+      "bytes": 15141,
+      "sha256": "8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee"
+    },
+    "pal-code-load-header.h": {
+      "revision": "06e85e0630cef0bfa3ec9fcef4cb44c59a63db75",
+      "blob": "011781fd380751e0db14c7a7ac8903924e281764",
+      "bytes": 8705,
+      "sha256": "334bf64929df37f4f59973f6aaef979548047e80ec98ef5e86d1153e31ade5a4"
+    },
+    "pal-code-load-producer.cpp": {
+      "revision": "06e85e0630cef0bfa3ec9fcef4cb44c59a63db75",
+      "blob": "a81a9a7962fbb6620736034890d806cce15dfe95",
+      "bytes": 27948,
+      "sha256": "1de9831bfbe579d34f698dfaeac5d82d5fdd99fcd6a38a6d738b9d759e530b1a"
+    },
+    "pal-code-uploader.cpp": {
+      "revision": "06e85e0630cef0bfa3ec9fcef4cb44c59a63db75",
+      "blob": "4fe368c1c199e685cff589e0adab16152a5564ce",
+      "bytes": 30829,
+      "sha256": "9e69253b1c162742cc4342c9e4fa91fa2c04c3fe0545e79cdad671b23c7e2f6c"
+    }
+  },
+  "limits": {
+    "wall_seconds": 45,
+    "address_space_bytes": 536870912
+  },
+  "purpose": "One bounded CPU-only check of official 0.1.6 on unchanged saved PAL bytes for supported other-SIMD records and timing corrections. No new GPU capture, guessed lane selection or optimization.",
+  "new_decoder": {
+    "path": "bin/linux-gcc/qualification-tools/rocprof-trace-decoder-0.1.6/librocprof-trace-decoder.so",
+    "archive_member": "rocprof-trace-decoder-manylinux-2.28-0.1.6-Linux/opt/rocm/lib/librocprof-trace-decoder.so",
+    "bytes": 199760,
+    "sha256": "3f58eeb657b3bf7fd12e0e9ef512c73d95780fe5c2ce89101ca1ace97410c053"
+  },
+  "input_seals": {
+    "out/native-sqtt-code-end/prepare_decoder_016_probe.py": {
+      "bytes": 3917,
+      "sha256": "c316975405860e60e6db7e819dc7c5848e7173b3c8aa0018bcb4212036cd5f51"
+    },
+    "out/native-sqtt-code-end/decode_with_code_end.py": {
+      "bytes": 10063,
+      "sha256": "f0f82ec5fe876cb9e348917e88c274413f0ef24282258e2a738abd2c07fbc1a5"
+    },
+    "out/native-sqtt-code-end/run_code_end_decoder.py": {
+      "bytes": 5345,
+      "sha256": "8bb6cf97d1fb81dc8665c1237b30d0c7cd5c7543844cab119745fcd38af16f39"
+    },
+    "out/native-sqtt-code-end/plan.json": {
+      "bytes": 7257,
+      "sha256": "9776ac25188454be824d0d80064b2e7bb1d016b4a8cf93ae6343659d15089dd6"
+    },
+    "out/native-sqtt-code-end/decoder016-preparation.json": {
+      "bytes": 4255,
+      "sha256": "33c0b4d5cf2539c1875fa4579a6f81c551631d50036b24f7e95e488bdc97ee4d"
+    },
+    "out/native-sqtt-code-end/isa-result.json": {
+      "bytes": 1230172,
+      "sha256": "b449d9a5bd340e090a8119b3a63fdafa3d45543477433009f88cf87526a8f7b2"
+    },
+    "out/native-sqtt-code-end/isa-run.json": {
+      "bytes": 2690,
+      "sha256": "0784ee2d41e680ff9c06a0c22faaab22a878ac194fbc85e43a76f75ca8c99af3"
+    }
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "owner": {
+    "pid": 2643829,
+    "start_ticks": 18922688,
+    "process_group": 2643829,
+    "parent_pid": 2446
+  },
+  "input_seals": {
+    "out/native-sqtt-code-end/run_code_end_decoder.py": {
+      "bytes": 5345,
+      "sha256": "8bb6cf97d1fb81dc8665c1237b30d0c7cd5c7543844cab119745fcd38af16f39"
+    },
+    "out/native-sqtt-code-end/decode_with_code_end.py": {
+      "bytes": 10063,
+      "sha256": "f0f82ec5fe876cb9e348917e88c274413f0ef24282258e2a738abd2c07fbc1a5"
+    },
+    "out/native-sqtt-code-end/plan.json": {
+      "bytes": 7257,
+      "sha256": "9776ac25188454be824d0d80064b2e7bb1d016b4a8cf93ae6343659d15089dd6"
+    }
+  },
+  "recorded_children": [
+    {
+      "pid": 2643832,
+      "start_ticks": 18922693,
+      "process_group": 2643832,
+      "parent_pid": 2643829
+    }
+  ],
+  "recorded_child_closure": [
+    {
+      "birth": {
+        "pid": 2643832,
+        "start_ticks": 18922693,
+        "process_group": 2643832,
+        "parent_pid": 2643829
+      },
+      "current": null,
+      "recorded_birth_absent": true
+    }
+  ],
+  "final_owned_group": [],
+  "returncode": 0,
+  "limit_reason": null,
+  "deferred_signals": [],
+  "errors": [],
+  "peak_sampled_rss_bytes": 182386688,
+  "elapsed_seconds": 0.5306095459964126,
+  "outputs": {
+    "isa-wave-0001-instructions-000.bin": {
+      "bytes": 512,
+      "sha256": "4fbdacb651dbad21b0cf7593a8711192628cb37cfdda01d276eeddc85902f076"
+    },
+    "isa-stdout.txt": {
+      "bytes": 393,
+      "sha256": "33ee96cf21d01e2f7fb86e6d0d6fd3d444d09ca0551f022cd36c59c2ad68f4bc"
+    },
+    "isa-wave-0000-instructions-000.bin": {
+      "bytes": 511264,
+      "sha256": "bcb3f849e2ba5a1b890af53721cf5ff85f0ddd3943f166dc5c25675ff6a60906"
+    },
+    "isa-wave-0000-timeline-000.bin": {
+      "bytes": 24992,
+      "sha256": "6006fb82e34c88c3579fce6f0de61cfb6ddaeebbf940299b803e358e76556c84"
+    },
+    "isa-owner.json": {
+      "bytes": 811,
+      "sha256": "925a8088a55d93265867d106ce24dda85acfe6bac50472f35a6a2be9af578fa5"
+    },
+    "isa-stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "isa-bootstrap.json": {
+      "bytes": 3092,
+      "sha256": "aea714ecfc65c5ebef42c09fea3f7199fcdce51a3fc0805d838d35c60d5ca67a"
+    },
+    "isa-wave-0001-timeline-000.bin": {
+      "bytes": 40,
+      "sha256": "003cc193b63a996acc202f33572cbd4df2a03c858915f6e163780b9aaee78d88"
+    },
+    "isa-result.json": {
+      "bytes": 1230172,
+      "sha256": "b449d9a5bd340e090a8119b3a63fdafa3d45543477433009f88cf87526a8f7b2"
+    }
+  },
+  "scope": "Recorded Linux child births and final owned-group closure only; no global process, hidden task or scheduled-job absence claim."
+}

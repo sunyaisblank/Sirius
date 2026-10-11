@@ -1,0 +1,1007 @@
+{
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "input_seals": {
+    "out/native-sqtt-code-end/inspect_decoder_016.py": {
+      "bytes": 6377,
+      "sha256": "b4e4ecd6c3828870f1cb97c61d69888cc621028ce81b5fba909c6bed79c29b50"
+    },
+    "out/native-sqtt-code-end/isa016-result.json": {
+      "bytes": 1230752,
+      "sha256": "d9fa1622968bba9de7ca4182086fdcb5e42d0855ef44556f7ab982a5e747ce2d"
+    },
+    "out/native-sqtt-code-end/isa016-run.json": {
+      "bytes": 2877,
+      "sha256": "39424a79e4a3ce078123c7745f4fb90c26e8135ffbc4034c6ee494442ecb521b"
+    },
+    "out/native-sqtt-code-end/isa-result.json": {
+      "bytes": 1230172,
+      "sha256": "b449d9a5bd340e090a8119b3a63fdafa3d45543477433009f88cf87526a8f7b2"
+    },
+    "out/native-sqtt-code-end/saved-isa-map.json": {
+      "bytes": 20164686,
+      "sha256": "2ba84c0ff5872ef9d2f5152beb1c93190e8fbb4b42ed53e2ee7d9dbb57f24172"
+    },
+    "out/native-sqtt-code-end/decoder016-types.h": {
+      "bytes": 11864,
+      "sha256": "b4564f8a190d23d8fcfd10dd35266ffebf295c89b029097a47e68bcbc3df876c"
+    },
+    "out/native-sqtt-code-end/decoder016-release.json": {
+      "bytes": 14817,
+      "sha256": "e382231a7c72a4878a499dd7417b2de877fdb2505b7571a8fe338e4727a21a8d"
+    },
+    "out/native-sqtt-code-end/isa016-wave-0000-instructions-000.bin": {
+      "bytes": 511264,
+      "sha256": "72881ebaca052b0b3563b9ae31b04804b4ef8b0502af83dcf0fc8b63bbb6b9a0"
+    },
+    "out/native-sqtt-code-end/isa-wave-0000-instructions-000.bin": {
+      "bytes": 511264,
+      "sha256": "bcb3f849e2ba5a1b890af53721cf5ff85f0ddd3943f166dc5c25675ff6a60906"
+    },
+    "out/native-sqtt-code-end/isa016-wave-0000-timeline-000.bin": {
+      "bytes": 24992,
+      "sha256": "3ee1a310fc540190a9a0dd896d130cc8da753751e756110f8f119615a2a0c29f"
+    },
+    "out/native-sqtt-code-end/isa016-wave-0001-instructions-000.bin": {
+      "bytes": 512,
+      "sha256": "af95b836845b2db8b6e7cf98283d115eec72a96fe6774e0bb3c8b6cab68b87f7"
+    },
+    "out/native-sqtt-code-end/isa-wave-0001-instructions-000.bin": {
+      "bytes": 512,
+      "sha256": "4fbdacb651dbad21b0cf7593a8711192628cb37cfdda01d276eeddc85902f076"
+    },
+    "out/native-sqtt-code-end/isa016-wave-0001-timeline-000.bin": {
+      "bytes": 40,
+      "sha256": "0e18be8eff19dbd592631f751f108e1a5b193aff159e0971a372a6bb845a73a9"
+    },
+    "out/native-sqtt-code-end/isa016-record-09-0000-000.bin": {
+      "bytes": 63912,
+      "sha256": "33d41df8d2406a2ca6c1a4c8e2b9ed5fd8609e28ccf04291ddc5e2bfbdb16e8f"
+    }
+  },
+  "status": 0,
+  "info_records": [],
+  "isa_status_counts": {
+    "0": 2415,
+    "2": 2,
+    "3": 1
+  },
+  "unknown_requests": [
+    {
+      "addr": 4295079936,
+      "marker_id": 0
+    }
+  ],
+  "waves": [
+    {
+      "ordinal": 0,
+      "cu": 0,
+      "simd": 0,
+      "wave_id": 0,
+      "begin": 31636,
+      "end": 130585,
+      "instructions": 15977,
+      "categories": {
+        "2": 4902,
+        "1": 564,
+        "9": 1579,
+        "7": 436,
+        "6": 7391,
+        "3": 398,
+        "8": 705,
+        "11": 2
+      },
+      "bound_source_records": {
+        "Transport": 15977
+      },
+      "zero_pc_records": 0,
+      "other_unbound_records": 0,
+      "negative_duration_records": 0,
+      "backward_time_records": 0,
+      "timeline_records": 3124,
+      "timeline_sum": 98949,
+      "declared_lifetime": 98949,
+      "occupancy_boundaries": [
+        {
+          "addr": 4296867840,
+          "marker_id": 0,
+          "time": 31636,
+          "cu": 0,
+          "simd": 0,
+          "wave_id": 0,
+          "start": true,
+          "reserved_flags": 0
+        },
+        {
+          "addr": 4296867840,
+          "marker_id": 0,
+          "time": 130585,
+          "cu": 0,
+          "simd": 0,
+          "wave_id": 0,
+          "start": false,
+          "reserved_flags": 0
+        }
+      ],
+      "prior_record_count_equal": true,
+      "prior_ordered_pc_values_equal": true,
+      "prior_category_differences": 0
+    },
+    {
+      "ordinal": 1,
+      "cu": 0,
+      "simd": 0,
+      "wave_id": 0,
+      "begin": 12866331,
+      "end": 12866800,
+      "instructions": 16,
+      "categories": {
+        "9": 3,
+        "2": 4,
+        "6": 6,
+        "3": 1,
+        "11": 2
+      },
+      "bound_source_records": {},
+      "zero_pc_records": 16,
+      "other_unbound_records": 0,
+      "negative_duration_records": 0,
+      "backward_time_records": 0,
+      "timeline_records": 5,
+      "timeline_sum": 469,
+      "declared_lifetime": 469,
+      "occupancy_boundaries": [
+        {
+          "addr": 4295079936,
+          "marker_id": 0,
+          "time": 12866331,
+          "cu": 0,
+          "simd": 0,
+          "wave_id": 0,
+          "start": true,
+          "reserved_flags": 0
+        },
+        {
+          "addr": 4295079936,
+          "marker_id": 0,
+          "time": 12866800,
+          "cu": 0,
+          "simd": 0,
+          "wave_id": 0,
+          "start": false,
+          "reserved_flags": 0
+        }
+      ],
+      "prior_record_count_equal": true,
+      "prior_ordered_pc_values_equal": true,
+      "prior_category_differences": 0
+    }
+  ],
+  "other_simd": {
+    "records": 2663,
+    "first_issue_clock": 18629768,
+    "last_issue_clock": 19679581,
+    "encoded_wgp_counts": {
+      "0": 2663
+    },
+    "category_counts": {
+      "3": 1077,
+      "5": 1586
+    },
+    "sum_execution_cycles_inclusive": 4187,
+    "max_execution_cycles": 5,
+    "backward_issue_records": 0,
+    "scope": "Public struct has no PC, wave or SIMD identifier. Cycles exclude stall; operations may overlap. This cannot identify exclusive shader/source/event cost."
+  },
+  "realtime_comparison": {
+    "records": 11912,
+    "ordered_reference_clock_values_equal": true,
+    "shader_clock_equal_records": 0,
+    "shader_clock_delta_min": -47316,
+    "shader_clock_delta_max": -68,
+    "distinct_shader_clock_deltas": 209,
+    "rt_frequency_records": [],
+    "scope": "Published gfx11 idle/stall correction changes decoded shader clocks. Earlier decoder clock-alignment observation remains historical and is not reusable for this result. No reference-clock frequency or exact UI/SPM/event identity established."
+  },
+  "occupancy_comparison": [
+    {
+      "prior_encoded_cu": 8,
+      "current_encoded_cu": 128,
+      "current_shader_array": 1,
+      "current_wgp": 0,
+      "simd": 1,
+      "start": true,
+      "prior_time": 24794,
+      "current_time": 24290,
+      "addr": 4295079936
+    },
+    {
+      "prior_encoded_cu": 8,
+      "current_encoded_cu": 128,
+      "current_shader_array": 1,
+      "current_wgp": 0,
+      "simd": 1,
+      "start": false,
+      "prior_time": 27132,
+      "current_time": 26608,
+      "addr": 4295079936
+    },
+    {
+      "prior_encoded_cu": 9,
+      "current_encoded_cu": 129,
+      "current_shader_array": 1,
+      "current_wgp": 1,
+      "simd": 3,
+      "start": true,
+      "prior_time": 32200,
+      "current_time": 31632,
+      "addr": 4296867840
+    },
+    {
+      "prior_encoded_cu": 10,
+      "current_encoded_cu": 130,
+      "current_shader_array": 1,
+      "current_wgp": 2,
+      "simd": 1,
+      "start": true,
+      "prior_time": 32202,
+      "current_time": 31634,
+      "addr": 4296867840
+    },
+    {
+      "prior_encoded_cu": 0,
+      "current_encoded_cu": 0,
+      "current_shader_array": 0,
+      "current_wgp": 0,
+      "simd": 0,
+      "start": true,
+      "prior_time": 32204,
+      "current_time": 31636,
+      "addr": 4296867840
+    },
+    {
+      "prior_encoded_cu": 0,
+      "current_encoded_cu": 0,
+      "current_shader_array": 0,
+      "current_wgp": 0,
+      "simd": 0,
+      "start": false,
+      "prior_time": 142177,
+      "current_time": 130585,
+      "addr": 4296867840
+    },
+    {
+      "prior_encoded_cu": 9,
+      "current_encoded_cu": 129,
+      "current_shader_array": 1,
+      "current_wgp": 1,
+      "simd": 3,
+      "start": false,
+      "prior_time": 4116947,
+      "current_time": 4105355,
+      "addr": 4296867840
+    },
+    {
+      "prior_encoded_cu": 10,
+      "current_encoded_cu": 130,
+      "current_shader_array": 1,
+      "current_wgp": 2,
+      "simd": 1,
+      "start": false,
+      "prior_time": 4243782,
+      "current_time": 4232190,
+      "addr": 4296867840
+    },
+    {
+      "prior_encoded_cu": 1,
+      "current_encoded_cu": 1,
+      "current_shader_array": 0,
+      "current_wgp": 1,
+      "simd": 2,
+      "start": true,
+      "prior_time": 6841722,
+      "current_time": 6819218,
+      "addr": 4295079936
+    },
+    {
+      "prior_encoded_cu": 1,
+      "current_encoded_cu": 1,
+      "current_shader_array": 0,
+      "current_wgp": 1,
+      "simd": 2,
+      "start": false,
+      "prior_time": 6842990,
+      "current_time": 6820466,
+      "addr": 4295079936
+    },
+    {
+      "prior_encoded_cu": 2,
+      "current_encoded_cu": 2,
+      "current_shader_array": 0,
+      "current_wgp": 2,
+      "simd": 0,
+      "start": true,
+      "prior_time": 6845007,
+      "current_time": 6822435,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 8,
+      "current_encoded_cu": 128,
+      "current_shader_array": 1,
+      "current_wgp": 0,
+      "simd": 2,
+      "start": true,
+      "prior_time": 6845009,
+      "current_time": 6822437,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 9,
+      "current_encoded_cu": 129,
+      "current_shader_array": 1,
+      "current_wgp": 1,
+      "simd": 0,
+      "start": true,
+      "prior_time": 6845011,
+      "current_time": 6822439,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 10,
+      "current_encoded_cu": 130,
+      "current_shader_array": 1,
+      "current_wgp": 2,
+      "simd": 2,
+      "start": true,
+      "prior_time": 6845013,
+      "current_time": 6822441,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 0,
+      "current_encoded_cu": 0,
+      "current_shader_array": 0,
+      "current_wgp": 0,
+      "simd": 1,
+      "start": true,
+      "prior_time": 6845015,
+      "current_time": 6822443,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 1,
+      "current_encoded_cu": 1,
+      "current_shader_array": 0,
+      "current_wgp": 1,
+      "simd": 3,
+      "start": true,
+      "prior_time": 6845017,
+      "current_time": 6822445,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 9,
+      "current_encoded_cu": 129,
+      "current_shader_array": 1,
+      "current_wgp": 1,
+      "simd": 0,
+      "start": false,
+      "prior_time": 6942218,
+      "current_time": 6919630,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 1,
+      "current_encoded_cu": 1,
+      "current_shader_array": 0,
+      "current_wgp": 1,
+      "simd": 3,
+      "start": false,
+      "prior_time": 6943024,
+      "current_time": 6920436,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 0,
+      "current_encoded_cu": 0,
+      "current_shader_array": 0,
+      "current_wgp": 0,
+      "simd": 1,
+      "start": false,
+      "prior_time": 7795214,
+      "current_time": 7772626,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 8,
+      "current_encoded_cu": 128,
+      "current_shader_array": 1,
+      "current_wgp": 0,
+      "simd": 2,
+      "start": false,
+      "prior_time": 7795220,
+      "current_time": 7772632,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 2,
+      "current_encoded_cu": 2,
+      "current_shader_array": 0,
+      "current_wgp": 2,
+      "simd": 0,
+      "start": false,
+      "prior_time": 7795268,
+      "current_time": 7772680,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 10,
+      "current_encoded_cu": 130,
+      "current_shader_array": 1,
+      "current_wgp": 2,
+      "simd": 2,
+      "start": false,
+      "prior_time": 7795273,
+      "current_time": 7772685,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 2,
+      "current_encoded_cu": 2,
+      "current_shader_array": 0,
+      "current_wgp": 2,
+      "simd": 1,
+      "start": true,
+      "prior_time": 8412090,
+      "current_time": 8367698,
+      "addr": 4295079936
+    },
+    {
+      "prior_encoded_cu": 2,
+      "current_encoded_cu": 2,
+      "current_shader_array": 0,
+      "current_wgp": 2,
+      "simd": 1,
+      "start": false,
+      "prior_time": 8413364,
+      "current_time": 8368952,
+      "addr": 4295079936
+    },
+    {
+      "prior_encoded_cu": 8,
+      "current_encoded_cu": 128,
+      "current_shader_array": 1,
+      "current_wgp": 0,
+      "simd": 3,
+      "start": true,
+      "prior_time": 8415365,
+      "current_time": 8370905,
+      "addr": 4296867840
+    },
+    {
+      "prior_encoded_cu": 9,
+      "current_encoded_cu": 129,
+      "current_shader_array": 1,
+      "current_wgp": 1,
+      "simd": 1,
+      "start": true,
+      "prior_time": 8415367,
+      "current_time": 8370907,
+      "addr": 4296867840
+    },
+    {
+      "prior_encoded_cu": 10,
+      "current_encoded_cu": 130,
+      "current_shader_array": 1,
+      "current_wgp": 2,
+      "simd": 3,
+      "start": true,
+      "prior_time": 8415369,
+      "current_time": 8370909,
+      "addr": 4296867840
+    },
+    {
+      "prior_encoded_cu": 10,
+      "current_encoded_cu": 130,
+      "current_shader_array": 1,
+      "current_wgp": 2,
+      "simd": 3,
+      "start": false,
+      "prior_time": 8458509,
+      "current_time": 8414033,
+      "addr": 4296867840
+    },
+    {
+      "prior_encoded_cu": 8,
+      "current_encoded_cu": 128,
+      "current_shader_array": 1,
+      "current_wgp": 0,
+      "simd": 3,
+      "start": false,
+      "prior_time": 12371455,
+      "current_time": 12326979,
+      "addr": 4296867840
+    },
+    {
+      "prior_encoded_cu": 9,
+      "current_encoded_cu": 129,
+      "current_shader_array": 1,
+      "current_wgp": 1,
+      "simd": 1,
+      "start": false,
+      "prior_time": 12492330,
+      "current_time": 12447854,
+      "addr": 4296867840
+    },
+    {
+      "prior_encoded_cu": 0,
+      "current_encoded_cu": 0,
+      "current_shader_array": 0,
+      "current_wgp": 0,
+      "simd": 0,
+      "start": true,
+      "prior_time": 12911339,
+      "current_time": 12866331,
+      "addr": 4295079936
+    },
+    {
+      "prior_encoded_cu": 0,
+      "current_encoded_cu": 0,
+      "current_shader_array": 0,
+      "current_wgp": 0,
+      "simd": 0,
+      "start": false,
+      "prior_time": 12911848,
+      "current_time": 12866800,
+      "addr": 4295079936
+    },
+    {
+      "prior_encoded_cu": 1,
+      "current_encoded_cu": 1,
+      "current_shader_array": 0,
+      "current_wgp": 1,
+      "simd": 2,
+      "start": true,
+      "prior_time": 12913918,
+      "current_time": 12868818,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 2,
+      "current_encoded_cu": 2,
+      "current_shader_array": 0,
+      "current_wgp": 2,
+      "simd": 0,
+      "start": true,
+      "prior_time": 12913920,
+      "current_time": 12868820,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 8,
+      "current_encoded_cu": 128,
+      "current_shader_array": 1,
+      "current_wgp": 0,
+      "simd": 2,
+      "start": true,
+      "prior_time": 12913922,
+      "current_time": 12868822,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 9,
+      "current_encoded_cu": 129,
+      "current_shader_array": 1,
+      "current_wgp": 1,
+      "simd": 0,
+      "start": true,
+      "prior_time": 12913924,
+      "current_time": 12868824,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 10,
+      "current_encoded_cu": 130,
+      "current_shader_array": 1,
+      "current_wgp": 2,
+      "simd": 2,
+      "start": true,
+      "prior_time": 12913926,
+      "current_time": 12868826,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 0,
+      "current_encoded_cu": 0,
+      "current_shader_array": 0,
+      "current_wgp": 0,
+      "simd": 1,
+      "start": true,
+      "prior_time": 12913928,
+      "current_time": 12868828,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 8,
+      "current_encoded_cu": 128,
+      "current_shader_array": 1,
+      "current_wgp": 0,
+      "simd": 2,
+      "start": false,
+      "prior_time": 13010071,
+      "current_time": 12964955,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 0,
+      "current_encoded_cu": 0,
+      "current_shader_array": 0,
+      "current_wgp": 0,
+      "simd": 1,
+      "start": false,
+      "prior_time": 13010078,
+      "current_time": 12964962,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 9,
+      "current_encoded_cu": 129,
+      "current_shader_array": 1,
+      "current_wgp": 1,
+      "simd": 0,
+      "start": false,
+      "prior_time": 13828727,
+      "current_time": 13783611,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 1,
+      "current_encoded_cu": 1,
+      "current_shader_array": 0,
+      "current_wgp": 1,
+      "simd": 2,
+      "start": false,
+      "prior_time": 13828730,
+      "current_time": 13783614,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 2,
+      "current_encoded_cu": 2,
+      "current_shader_array": 0,
+      "current_wgp": 2,
+      "simd": 0,
+      "start": false,
+      "prior_time": 13853148,
+      "current_time": 13808032,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 10,
+      "current_encoded_cu": 130,
+      "current_shader_array": 1,
+      "current_wgp": 2,
+      "simd": 2,
+      "start": false,
+      "prior_time": 13854876,
+      "current_time": 13809760,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 1,
+      "current_encoded_cu": 1,
+      "current_shader_array": 0,
+      "current_wgp": 1,
+      "simd": 3,
+      "start": true,
+      "prior_time": 14142923,
+      "current_time": 14097275,
+      "addr": 4295079936
+    },
+    {
+      "prior_encoded_cu": 1,
+      "current_encoded_cu": 1,
+      "current_shader_array": 0,
+      "current_wgp": 1,
+      "simd": 3,
+      "start": false,
+      "prior_time": 14143465,
+      "current_time": 14097797,
+      "addr": 4295079936
+    },
+    {
+      "prior_encoded_cu": 2,
+      "current_encoded_cu": 2,
+      "current_shader_array": 0,
+      "current_wgp": 2,
+      "simd": 1,
+      "start": true,
+      "prior_time": 14145603,
+      "current_time": 14099887,
+      "addr": 4296867840
+    },
+    {
+      "prior_encoded_cu": 8,
+      "current_encoded_cu": 128,
+      "current_shader_array": 1,
+      "current_wgp": 0,
+      "simd": 3,
+      "start": true,
+      "prior_time": 14145605,
+      "current_time": 14099889,
+      "addr": 4296867840
+    },
+    {
+      "prior_encoded_cu": 9,
+      "current_encoded_cu": 129,
+      "current_shader_array": 1,
+      "current_wgp": 1,
+      "simd": 1,
+      "start": true,
+      "prior_time": 14145607,
+      "current_time": 14099891,
+      "addr": 4296867840
+    },
+    {
+      "prior_encoded_cu": 9,
+      "current_encoded_cu": 129,
+      "current_shader_array": 1,
+      "current_wgp": 1,
+      "simd": 1,
+      "start": false,
+      "prior_time": 14189588,
+      "current_time": 14143856,
+      "addr": 4296867840
+    },
+    {
+      "prior_encoded_cu": 2,
+      "current_encoded_cu": 2,
+      "current_shader_array": 0,
+      "current_wgp": 2,
+      "simd": 1,
+      "start": false,
+      "prior_time": 18168752,
+      "current_time": 18123020,
+      "addr": 4296867840
+    },
+    {
+      "prior_encoded_cu": 8,
+      "current_encoded_cu": 128,
+      "current_shader_array": 1,
+      "current_wgp": 0,
+      "simd": 3,
+      "start": false,
+      "prior_time": 18208747,
+      "current_time": 18163015,
+      "addr": 4296867840
+    },
+    {
+      "prior_encoded_cu": 10,
+      "current_encoded_cu": 130,
+      "current_shader_array": 1,
+      "current_wgp": 2,
+      "simd": 3,
+      "start": true,
+      "prior_time": 18673005,
+      "current_time": 18626741,
+      "addr": 4295079936
+    },
+    {
+      "prior_encoded_cu": 10,
+      "current_encoded_cu": 130,
+      "current_shader_array": 1,
+      "current_wgp": 2,
+      "simd": 3,
+      "start": false,
+      "prior_time": 18673554,
+      "current_time": 18627270,
+      "addr": 4295079936
+    },
+    {
+      "prior_encoded_cu": 0,
+      "current_encoded_cu": 0,
+      "current_shader_array": 0,
+      "current_wgp": 0,
+      "simd": 2,
+      "start": true,
+      "prior_time": 18675669,
+      "current_time": 18629333,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 1,
+      "current_encoded_cu": 1,
+      "current_shader_array": 0,
+      "current_wgp": 1,
+      "simd": 0,
+      "start": true,
+      "prior_time": 18675671,
+      "current_time": 18629335,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 2,
+      "current_encoded_cu": 2,
+      "current_shader_array": 0,
+      "current_wgp": 2,
+      "simd": 2,
+      "start": true,
+      "prior_time": 18675673,
+      "current_time": 18629337,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 8,
+      "current_encoded_cu": 128,
+      "current_shader_array": 1,
+      "current_wgp": 0,
+      "simd": 0,
+      "start": true,
+      "prior_time": 18675675,
+      "current_time": 18629339,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 9,
+      "current_encoded_cu": 129,
+      "current_shader_array": 1,
+      "current_wgp": 1,
+      "simd": 2,
+      "start": true,
+      "prior_time": 18675677,
+      "current_time": 18629341,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 10,
+      "current_encoded_cu": 130,
+      "current_shader_array": 1,
+      "current_wgp": 2,
+      "simd": 0,
+      "start": true,
+      "prior_time": 18675679,
+      "current_time": 18629343,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 2,
+      "current_encoded_cu": 2,
+      "current_shader_array": 0,
+      "current_wgp": 2,
+      "simd": 2,
+      "start": false,
+      "prior_time": 18808724,
+      "current_time": 18762172,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 10,
+      "current_encoded_cu": 130,
+      "current_shader_array": 1,
+      "current_wgp": 2,
+      "simd": 0,
+      "start": false,
+      "prior_time": 18810299,
+      "current_time": 18763747,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 0,
+      "current_encoded_cu": 0,
+      "current_shader_array": 0,
+      "current_wgp": 0,
+      "simd": 2,
+      "start": false,
+      "prior_time": 19726602,
+      "current_time": 19679798,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 8,
+      "current_encoded_cu": 128,
+      "current_shader_array": 1,
+      "current_wgp": 0,
+      "simd": 0,
+      "start": false,
+      "prior_time": 19726602,
+      "current_time": 19679798,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 1,
+      "current_encoded_cu": 1,
+      "current_shader_array": 0,
+      "current_wgp": 1,
+      "simd": 0,
+      "start": false,
+      "prior_time": 19749233,
+      "current_time": 19702429,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 9,
+      "current_encoded_cu": 129,
+      "current_shader_array": 1,
+      "current_wgp": 1,
+      "simd": 2,
+      "start": false,
+      "prior_time": 19752993,
+      "current_time": 19706189,
+      "addr": 4295819264
+    },
+    {
+      "prior_encoded_cu": 0,
+      "current_encoded_cu": 0,
+      "current_shader_array": 0,
+      "current_wgp": 0,
+      "simd": 3,
+      "start": true,
+      "prior_time": 19762183,
+      "current_time": 19715331,
+      "addr": 4297129984
+    },
+    {
+      "prior_encoded_cu": 1,
+      "current_encoded_cu": 1,
+      "current_shader_array": 0,
+      "current_wgp": 1,
+      "simd": 1,
+      "start": true,
+      "prior_time": 19762185,
+      "current_time": 19715333,
+      "addr": 4297129984
+    },
+    {
+      "prior_encoded_cu": 2,
+      "current_encoded_cu": 2,
+      "current_shader_array": 0,
+      "current_wgp": 2,
+      "simd": 3,
+      "start": true,
+      "prior_time": 19762187,
+      "current_time": 19715335,
+      "addr": 4297129984
+    },
+    {
+      "prior_encoded_cu": 2,
+      "current_encoded_cu": 2,
+      "current_shader_array": 0,
+      "current_wgp": 2,
+      "simd": 3,
+      "start": false,
+      "prior_time": 20088264,
+      "current_time": 20041396,
+      "addr": 4297129984
+    },
+    {
+      "prior_encoded_cu": 1,
+      "current_encoded_cu": 1,
+      "current_shader_array": 0,
+      "current_wgp": 1,
+      "simd": 1,
+      "start": false,
+      "prior_time": 20998287,
+      "current_time": 20951419,
+      "addr": 4297129984
+    },
+    {
+      "prior_encoded_cu": 0,
+      "current_encoded_cu": 0,
+      "current_shader_array": 0,
+      "current_wgp": 0,
+      "simd": 3,
+      "start": false,
+      "prior_time": 20998288,
+      "current_time": 20951420,
+      "addr": 4297129984
+    }
+  ],
+  "record_counts": {
+    "0": 0,
+    "3": 2,
+    "1": 72,
+    "7": 11912,
+    "9": 2663
+  },
+  "scope": "Actual full-array observations on unchanged trace/source. Absence of INFO does not establish complete stitching/source coverage: auxiliary ISA remains unbound with 16 zero PCs. Detailed target is still WGP0/SIMD0. New other-SIMD records are anonymous selected-WGP issue observations; no dominant instruction cost, supported hot-lane capture control, optimization or full qualification."
+}

@@ -1,0 +1,104 @@
+{
+  "decoder_revision": "df604c2e6bc46bef23932d984b0b19b7d859bbe4",
+  "release": {
+    "path": "out/native-sqtt-code-end/decoder016-release.json",
+    "bytes": 14817,
+    "sha256": "e382231a7c72a4878a499dd7417b2de877fdb2505b7571a8fe338e4727a21a8d"
+  },
+  "tag": {
+    "path": "out/native-sqtt-code-end/decoder016-tag.json",
+    "bytes": 350,
+    "sha256": "33c089f75f08a1aefbbecc0963a8cf45687d49252ab0e928842e10fbfbd1d0ef"
+  },
+  "files": [
+    {
+      "path": "out/native-sqtt-code-end/decoder016-api.h",
+      "bytes": 6771,
+      "sha256": "ea7a70337f83c2a0a8dfcd23b9c9b51827cdfd685211a75e6dbb10d0d4396de2",
+      "repository": "ROCm/rocprof-trace-decoder",
+      "revision": "df604c2e6bc46bef23932d984b0b19b7d859bbe4",
+      "repository_path": "include/rocprof_trace_decoder.h",
+      "git_blob": "ebb2195e803308b365748127c559cbf01c4d5f54"
+    },
+    {
+      "path": "out/native-sqtt-code-end/decoder016-types.h",
+      "bytes": 11864,
+      "sha256": "b4564f8a190d23d8fcfd10dd35266ffebf295c89b029097a47e68bcbc3df876c",
+      "repository": "ROCm/rocprof-trace-decoder",
+      "revision": "df604c2e6bc46bef23932d984b0b19b7d859bbe4",
+      "repository_path": "include/trace_decoder_types.h",
+      "git_blob": "a6bfce513b175b5f0f771e599dd218d344af608a"
+    },
+    {
+      "path": "out/native-sqtt-code-end/decoder016-LICENSE",
+      "bytes": 13571,
+      "sha256": "1aab3e68504fecc5d6ff5e14664f81405e791826a886ecdac7da9e0e2ba9bdf8",
+      "repository": "ROCm/rocprof-trace-decoder",
+      "revision": "df604c2e6bc46bef23932d984b0b19b7d859bbe4",
+      "repository_path": "LICENSE",
+      "git_blob": "a9d3b6c512994a09dca202915e47d2751716a3db"
+    },
+    {
+      "path": "out/native-sqtt-code-end/decoder016-README.md",
+      "bytes": 2234,
+      "sha256": "034e2d470b06fbf2e6f0f611654d2586dbae44c296f12d401c61f9728df25b91",
+      "repository": "ROCm/rocprof-trace-decoder",
+      "revision": "df604c2e6bc46bef23932d984b0b19b7d859bbe4",
+      "repository_path": "README.md",
+      "git_blob": "86511a1867dccc1c69352df9afa6901b8021900d"
+    }
+  ],
+  "release_asset": {
+    "path": "out/native-sqtt-code-end/rocprof-trace-decoder-manylinux-2.28-0.1.6-Linux.tar.gz",
+    "bytes": 88697,
+    "sha256": "57a49c74db7dcd29433888ef5d408ca8e22223f2680c566855e4c3c68da7b36d",
+    "url": "https://github.com/ROCm/rocprof-trace-decoder/releases/download/0.1.6/rocprof-trace-decoder-manylinux-2.28-0.1.6-Linux.tar.gz",
+    "official_release_digest": "sha256:57a49c74db7dcd29433888ef5d408ca8e22223f2680c566855e4c3c68da7b36d"
+  },
+  "members": [
+    {
+      "path": "rocprof-trace-decoder-manylinux-2.28-0.1.6-Linux/opt",
+      "bytes": 0,
+      "directory": true
+    },
+    {
+      "path": "rocprof-trace-decoder-manylinux-2.28-0.1.6-Linux/opt/rocm",
+      "bytes": 0,
+      "directory": true
+    },
+    {
+      "path": "rocprof-trace-decoder-manylinux-2.28-0.1.6-Linux/opt/rocm/lib",
+      "bytes": 0,
+      "directory": true
+    },
+    {
+      "path": "rocprof-trace-decoder-manylinux-2.28-0.1.6-Linux/opt/rocm/lib/librocprof-trace-decoder.so",
+      "bytes": 199760,
+      "directory": false
+    }
+  ],
+  "extracted_library": {
+    "path": "bin/linux-gcc/qualification-tools/rocprof-trace-decoder-0.1.6/librocprof-trace-decoder.so",
+    "archive_member": "rocprof-trace-decoder-manylinux-2.28-0.1.6-Linux/opt/rocm/lib/librocprof-trace-decoder.so",
+    "bytes": 199760,
+    "sha256": "3f58eeb657b3bf7fd12e0e9ef512c73d95780fe5c2ce89101ca1ace97410c053"
+  },
+  "elf_dynamic": {
+    "path": "out/native-sqtt-code-end/decoder016-elf-dynamic.txt",
+    "bytes": 5411,
+    "sha256": "e81687dde25ccf1b50a35ac43019f519a4a0dedb32ca2ae33a9d551a77f6eed4"
+  },
+  "elf_exports": {
+    "path": "out/native-sqtt-code-end/decoder016-elf-exports.txt",
+    "bytes": 14888,
+    "sha256": "8465f1a27d0ecc647e65622cdbfd05c8097142be1e24ec1b7fe11f0399aae674"
+  },
+  "host_glibc": "glibc 2.39",
+  "input_seals": {
+    "out/native-sqtt-code-end/prepare_decoder_016.py": {
+      "bytes": 4383,
+      "sha256": "5405f8b7f8f785e5f8d0405ed96175130f37fb8fc2d290924f7b636f3aa6b0cc"
+    }
+  },
+  "scope": "Verified official package, pinned public headers/legal terms, member-only extraction and ELF dynamic metadata inspection. No decoder execution, system install, binary disassembly or GPU work."
+}

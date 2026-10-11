@@ -1,0 +1,8 @@
+{
+  "initial_source": {
+    "bytes": 3309,
+    "sha256": "c9bce22fa0e18beeda9f80bba0e3b2df04e0711efcf458b3fb42e965e730aa85"
+  },
+  "actual_failure": "The preserved isa2-run.json is an immutable Git recovery, not a local payload; initial preparation incorrectly treated every recovery path as local. Eighteen source files restored; no native launch.",
+  "correction": "Resume only exact existing restores; resolve both immutable Git blobs and local protected payloads, checking full bytes."
+}
