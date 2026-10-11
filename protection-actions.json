@@ -1,0 +1,24 @@
+{
+  "protection": {
+    "kind": "diagnostic",
+    "revision": "21e55cea162684d7a9f679132704b771286519ff",
+    "scope": "Preserve all exact completed native trial/input/product versions and push useful source-only tools before restoration; no device/qualification or cleanup.",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "argv": [
+      "python3",
+      "out/native-narrow-fma-trial/protect_trial.py"
+    ],
+    "frozen_inputs": [
+      "out/native-narrow-fma-trial/protect_trial.py",
+      "out/native-narrow-fma-trial/native-disposition-reviewed.json",
+      "out/native-narrow-fma-trial/protection-source-review.json",
+      "out/native-narrow-fma-trial/execution-bindings.json",
+      "out/native-narrow-fma-trial/native-retention-comparison.json"
+    ],
+    "expected_exit": 0
+  }
+}

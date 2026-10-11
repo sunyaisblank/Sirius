@@ -1,0 +1,52 @@
+{
+  "issue": 95,
+  "source_revision": "21e55cea162684d7a9f679132704b771286519ff",
+  "baseline_revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
+  "mode": "native-default",
+  "prerequisite": "separate original baseline default timestamps, enabled logical FMA32 true; complete original module/input/provider/terminal joins before first candidate native module invocation",
+  "original_control_keys": [
+    "stages",
+    "schwarzschild",
+    "endpoints",
+    "curved",
+    "budgets",
+    "sampler",
+    "coupled",
+    "erasure",
+    "timestamps"
+  ],
+  "additive_control": "mixed",
+  "capacity": 24,
+  "allocation_limit_bytes": 8388608,
+  "coupled_rows": 12,
+  "projection_budget": 24,
+  "repeats_per_slot": 3,
+  "complete_readbacks": 32,
+  "ordered_markers": 51,
+  "case_seconds": 90,
+  "mixed_seconds": 180,
+  "rss_bytes": 4294967296,
+  "bridge_seconds": 300,
+  "sequence": [
+    "a1",
+    "b1",
+    "b2",
+    "a2"
+  ],
+  "comparison_count": 1,
+  "checks": 46,
+  "change_selected_modules": [
+    "transport",
+    "endpoint"
+  ],
+  "unchanged_selected_modules": [
+    "camera",
+    "dense",
+    "initialize",
+    "ray_camera",
+    "dopri_phase"
+  ],
+  "all7_programs_unchanged": true,
+  "no_pooling_or_retries": true,
+  "scope": "Frozen finite engineering trial; full native scientific qualification and frame/release admission remain pending."
+}

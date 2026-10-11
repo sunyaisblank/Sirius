@@ -1,0 +1,71 @@
+{
+  "pass": true,
+  "reviewer": "command_owner_review",
+  "clearance": "Create final immutable candidate bindings, verify preflight, run ten controls once; run one frozen ABBA only after every science/reader/terminal control passes.",
+  "source_revision": "21e55cea162684d7a9f679132704b771286519ff",
+  "baseline_revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
+  "helpers": {
+    "run_native.py": {
+      "bytes": 9165,
+      "sha256": "8b4c7cd0a520e11b5e99862d11e57b1dbf81c595334cfb732e034623ce58d3bd"
+    },
+    "run_native_sequence.py": {
+      "bytes": 6621,
+      "sha256": "45e733544a1f0decf23063a4970769d5516e78f5fd868e72c7abd41f54a67e75"
+    },
+    "native_contracts.py": {
+      "bytes": 14105,
+      "sha256": "3f5e92f427298cc2142ddf2313e2148252db8b9f596596c617ad900621b48018"
+    },
+    "prepare_native_bindings.py": {
+      "bytes": 6666,
+      "sha256": "b0fdddc91e2f16789b7ddc8e2aa3fe8b62f569e442aaf0c44c83f2a904ca0c5b"
+    },
+    "run_terminal_audit.py": {
+      "bytes": 7068,
+      "sha256": "b834f9b75f3f2940c1d8ebcabceee170a05236790b6f4733f0d05fae5df619cc"
+    },
+    "check_native_reader.py": {
+      "bytes": 2619,
+      "sha256": "4dc5d8493a12b9b2cc4f17e138543e1729d87636a6523a8b5ba9b255333d57de"
+    },
+    "run_native_control.ps1": {
+      "bytes": 11396,
+      "sha256": "4394988ece0fdc1cea47681a8aab9bd5e3d4e108f0ad63eb8c678b9219daa760"
+    },
+    "emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    "baseline-terminal-audit.ps1": {
+      "bytes": 3871,
+      "sha256": "316e0f90b346369fd5125130477ba0fbfb15d5013e20ec8613976d3aba50fff0"
+    },
+    "compare_native.py": {
+      "bytes": 4310,
+      "sha256": "7e13981d4fb3e566c5e5ae404946a899530096d0d3c6f7b09c664fc5f8a5f686"
+    }
+  },
+  "strict_nonrender_ci_jobs_pass": 3,
+  "full_qualification_jobs_skipped": 4,
+  "official_exports_verified": 2,
+  "payloads_per_export": 40,
+  "full_readonly_pe_payload_joins": 126,
+  "arrays": 42,
+  "original_arrays_exact": 40,
+  "new_modules_reviewed_exact": 2,
+  "canonical_inputs_verified": 20,
+  "consumed_backend_render_inputs_verified": 40,
+  "source_differences": [],
+  "baseline_inputs_current_exact": 736,
+  "fresh_baseline_logical_fma_and_terminal_accepted": true,
+  "negative_reader_controls_rejected": 13,
+  "native_gate_sha256": "fa80c417241f24a34823f45a1498749f24c8540223ab37339711376f7e99b962",
+  "original_comparator_checks": 46,
+  "case_seconds": 90,
+  "mixed_seconds": 180,
+  "rss_bytes": 4294967296,
+  "bridge_seconds": 300,
+  "stop_on_first_failure": true,
+  "scope": "Actual product/source/input/provider/controller prerequisite clearance only; retains visibility limitations. Candidate numerical benefit/frame/full scientific/release qualification unclaimed."
+}

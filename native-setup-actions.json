@@ -1,0 +1,128 @@
+{
+  "baseline-pe-bindings": {
+    "revision": "21e55cea162684d7a9f679132704b771286519ff",
+    "limits": {
+      "seconds": 120,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "command",
+    "frozen_inputs": [
+      "out/native-narrow-fma-trial/source.json",
+      "out/native-narrow-fma-trial/baseline-arrays.json",
+      "out/native-narrow-fma-trial/build-and-arrays.json",
+      "out/native-narrow-fma-trial/provider-current.json",
+      "out/native-narrow-fma-trial/retention-gate-frozen.json",
+      "out/native-narrow-fma-trial/candidate-native-preregistration.json",
+      "out/native-narrow-fma-trial/candidate-native-preregistration.txt",
+      "out/native-narrow-fma-trial/issue-readback.json",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+      "out/native-narrow-fma-trial/bind_pe.py"
+    ],
+    "scope": "Complete actual official baseline native PE products and40/42 arrays bind through3 real readonly consumers plus20 input checks. No native execution/benefit/qualification.",
+    "argv": [
+      "python3",
+      "out/native-narrow-fma-trial/bind_pe.py",
+      "baseline"
+    ]
+  },
+  "baseline-execution-bindings": {
+    "revision": "21e55cea162684d7a9f679132704b771286519ff",
+    "limits": {
+      "seconds": 120,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "command",
+    "frozen_inputs": [
+      "out/native-narrow-fma-trial/source.json",
+      "out/native-narrow-fma-trial/baseline-arrays.json",
+      "out/native-narrow-fma-trial/build-and-arrays.json",
+      "out/native-narrow-fma-trial/provider-current.json",
+      "out/native-narrow-fma-trial/retention-gate-frozen.json",
+      "out/native-narrow-fma-trial/candidate-native-preregistration.json",
+      "out/native-narrow-fma-trial/candidate-native-preregistration.txt",
+      "out/native-narrow-fma-trial/issue-readback.json",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+      "out/native-narrow-fma-trial/prepare_native_bindings.py",
+      "out/native-narrow-fma-trial/native_contracts.py",
+      "out/native-narrow-fma-trial/run_native.py",
+      "out/native-narrow-fma-trial/run_native_sequence.py",
+      "out/native-narrow-fma-trial/run_terminal_audit.py",
+      "out/native-narrow-fma-trial/run_native_control.ps1",
+      "out/native-narrow-fma-trial/baseline-terminal-audit.ps1",
+      "out/native-narrow-fma-trial/emergency_native_cleanup.ps1"
+    ],
+    "scope": "Exact reviewed own-commit baseline product/input/provider/controller binding with original46 comparator; no native result/benefit/fullqualification.",
+    "argv": [
+      "python3",
+      "out/native-narrow-fma-trial/prepare_native_bindings.py",
+      "baseline"
+    ]
+  },
+  "candidate-pe-bindings": {
+    "revision": "21e55cea162684d7a9f679132704b771286519ff",
+    "limits": {
+      "seconds": 120,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "command",
+    "frozen_inputs": [
+      "out/native-narrow-fma-trial/source.json",
+      "out/native-narrow-fma-trial/baseline-arrays.json",
+      "out/native-narrow-fma-trial/build-and-arrays.json",
+      "out/native-narrow-fma-trial/provider-current.json",
+      "out/native-narrow-fma-trial/retention-gate-frozen.json",
+      "out/native-narrow-fma-trial/candidate-native-preregistration.json",
+      "out/native-narrow-fma-trial/candidate-native-preregistration.txt",
+      "out/native-narrow-fma-trial/issue-readback.json",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+      "out/native-narrow-fma-trial/bind_pe.py"
+    ],
+    "scope": "Complete actual official candidate native PE products and40/42 arrays bind through3 real readonly consumers plus20 input checks. No native execution/benefit/qualification.",
+    "argv": [
+      "python3",
+      "out/native-narrow-fma-trial/bind_pe.py",
+      "candidate"
+    ]
+  },
+  "candidate-execution-bindings": {
+    "revision": "21e55cea162684d7a9f679132704b771286519ff",
+    "limits": {
+      "seconds": 120,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "command",
+    "frozen_inputs": [
+      "out/native-narrow-fma-trial/source.json",
+      "out/native-narrow-fma-trial/baseline-arrays.json",
+      "out/native-narrow-fma-trial/build-and-arrays.json",
+      "out/native-narrow-fma-trial/provider-current.json",
+      "out/native-narrow-fma-trial/retention-gate-frozen.json",
+      "out/native-narrow-fma-trial/candidate-native-preregistration.json",
+      "out/native-narrow-fma-trial/candidate-native-preregistration.txt",
+      "out/native-narrow-fma-trial/issue-readback.json",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+      "out/native-narrow-fma-trial/prepare_native_bindings.py",
+      "out/native-narrow-fma-trial/native_contracts.py",
+      "out/native-narrow-fma-trial/run_native.py",
+      "out/native-narrow-fma-trial/run_native_sequence.py",
+      "out/native-narrow-fma-trial/run_terminal_audit.py",
+      "out/native-narrow-fma-trial/run_native_control.ps1",
+      "out/native-narrow-fma-trial/baseline-terminal-audit.ps1",
+      "out/native-narrow-fma-trial/emergency_native_cleanup.ps1"
+    ],
+    "scope": "Exact reviewed own-commit candidate product/input/provider/controller binding with original46 comparator; no native result/benefit/fullqualification.",
+    "argv": [
+      "python3",
+      "out/native-narrow-fma-trial/prepare_native_bindings.py",
+      "candidate"
+    ]
+  }
+}

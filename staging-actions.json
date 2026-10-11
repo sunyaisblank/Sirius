@@ -1,0 +1,50 @@
+{
+  "baseline-exports": {
+    "revision": "21e55cea162684d7a9f679132704b771286519ff",
+    "limits": {
+      "seconds": 420,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "command",
+    "frozen_inputs": [
+      "out/native-narrow-fma-trial/source.json",
+      "out/native-narrow-fma-trial/download_exports.py",
+      "out/native-narrow-fma-trial/reconstruct_native.py",
+      "out/native-narrow-fma-trial/baseline-native-export-dispatch.json",
+      "out/native-narrow-fma-trial/candidate-native-export-dispatch.json",
+      "/home/astra/.local/bin/gh"
+    ],
+    "scope": "Exact official baseline Windows/macOS compile/non-render export preservation only; no actual native/scientific/release qualification.",
+    "argv": [
+      "python3",
+      "out/native-narrow-fma-trial/download_exports.py",
+      "baseline"
+    ]
+  },
+  "candidate-exports": {
+    "revision": "21e55cea162684d7a9f679132704b771286519ff",
+    "limits": {
+      "seconds": 420,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "command",
+    "frozen_inputs": [
+      "out/native-narrow-fma-trial/source.json",
+      "out/native-narrow-fma-trial/download_exports.py",
+      "out/native-narrow-fma-trial/reconstruct_native.py",
+      "out/native-narrow-fma-trial/baseline-native-export-dispatch.json",
+      "out/native-narrow-fma-trial/candidate-native-export-dispatch.json",
+      "/home/astra/.local/bin/gh"
+    ],
+    "scope": "Exact official candidate Windows/macOS compile/non-render export preservation only; no actual native/scientific/release qualification.",
+    "argv": [
+      "python3",
+      "out/native-narrow-fma-trial/download_exports.py",
+      "candidate"
+    ]
+  }
+}

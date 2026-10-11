@@ -1,0 +1,28 @@
+{
+  "issue": 95,
+  "source_revision": "21e55cea162684d7a9f679132704b771286519ff",
+  "baseline_revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
+  "original_gate_manifest": "attestations/native-vulkan/bd82e52/homogeneous-opcode-dispatch-rejected/retention-gate-frozen.json",
+  "original_gate_manifest_sha256": "b2315ca5dcec335a44c81191d416f6f098490d6d0f58cc242be7d97a2f93404e",
+  "comparator_reference": "attestations/native-vulkan/bd82e52/homogeneous-opcode-dispatch-rejected/frozen-retention-comparator.py",
+  "comparator_sha256": "7e13981d4fb3e566c5e5ae404946a899530096d0d3c6f7b09c664fc5f8a5f686",
+  "checks": 46,
+  "sequence": [
+    "a1",
+    "b1",
+    "b2",
+    "a2"
+  ],
+  "comparison_count": 1,
+  "legacy_both_direction_aggregate_minimum_improvement_percent": 5,
+  "legacy_each_repeat_whole_call": "strictly improves",
+  "legacy_each_repeat_device_and_host": "does not regress",
+  "modern_aggregates_and_nontransport_families_maximum_regression_percent": 5,
+  "case_seconds": 90,
+  "mixed_additive_seconds": 180,
+  "rss_bytes": 4294967296,
+  "bridge_seconds": 300,
+  "guard_original_endpoint_families": true,
+  "outcome_on_failure": "Restore original source/products; preserve useful candidate source/results in pushed Git before removing finished scratch.",
+  "scope": "Exact original default gate frozen before native execution; no speed/qualification claim."
+}

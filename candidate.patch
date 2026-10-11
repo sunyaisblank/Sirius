@@ -1,0 +1,279 @@
+diff --git a/scripts/build-retained-kernels.py b/scripts/build-retained-kernels.py
+index 096226c..202c48d 100644
+--- a/scripts/build-retained-kernels.py
++++ b/scripts/build-retained-kernels.py
+@@ -19,7 +19,7 @@ WORKGROUP_ROWS = 1
+ WORKGROUP_LANES = 64
+ 
+ 
+-def native_controls(text, fma=False):
++def native_controls(text, fma=False, signed_zero=True):
+     if "OpCapability Float64" in text or "OpTypeFloat 64" in text or "OpTypeInt 64" in text or " Fma " in text:
+         raise ValueError("retained stage introduced wide arithmetic or contraction")
+     if re.search(r"\b(?:FPFastMathMode|FPFastMathDefault|RelaxedPrecision)\b", text):
+@@ -36,14 +36,16 @@ def native_controls(text, fma=False):
+         raise ValueError("retained arithmetic lost subnormal preservation")
+     capabilities = "OpCapability Shader\n               OpCapability RoundingModeRTE"
+     if fma:
+-        capabilities += "\n               OpCapability FMAKHR\n               OpCapability SignedZeroInfNanPreserve"
++        capabilities += "\n               OpCapability FMAKHR"
++    if fma and signed_zero:
++        capabilities += "\n               OpCapability SignedZeroInfNanPreserve"
+     text = text.replace("OpCapability Shader", capabilities, 1)
+     if fma:
+         end = list(re.finditer(r"^.*OpCapability .*?$", text, re.M))[-1].end()
+         text = text[:end] + '\n               OpExtension "SPV_KHR_fma"' + text[end:]
+     local_size = re.search(r"^.*OpExecutionMode " + re.escape(entry) + r" LocalSize.*$", text, re.M)[0]
+     modes = "\n               OpExecutionMode " + entry + " RoundingModeRTE 32"
+-    if fma:
++    if fma and signed_zero:
+         modes += "\n               OpExecutionMode " + entry + " SignedZeroInfNanPreserve 32"
+     return text.replace(local_size, local_size + modes, 1)
+ 
+@@ -263,8 +265,8 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
+         if source.stem == "retained_dopri_phase":
+             definitions.append("-DSIRIUS_RETAINED_COOPERATIVE_DOPRI_INPUTS=1")
+     if fma:
+-        if not fp64 or portable or source.stem not in ("retained_transport", "retained_endpoint"):
+-            raise ValueError("FMA32 is qualified only for native-wide retained Transport and Endpoint")
++        if portable or source.stem not in ("retained_transport", "retained_endpoint"):
++            raise ValueError("FMA32 belongs only to native retained Transport and Endpoint")
+         definitions.append("-DSIRIUS_RETAINED_FMA32=1")
+     if portable:
+         definitions.append("-DSIRIUS_RETAINED_PORTABLE=1")
+@@ -341,7 +343,7 @@ def compile_shader(source, destination, compiler, assembler, disassembler, valid
+         data = destination.read_bytes()
+         assembly.unlink()
+         return struct.unpack("<" + str(len(data) // 4) + "I", data)
+-    text = native_controls(text, fma=fma)
++    text = native_controls(text, fma=fma, signed_zero=fp64)
+     assembly.write_text(text)
+     subprocess.run([assembler, "--target-env", "spv1.5", str(assembly), "-o", str(destination)],
+                    check=True)
+@@ -456,6 +458,19 @@ def main():
+                 shutil.copyfile(args.output.parent / (stem + "_fp64.spv"), destination)
+                 lines.append(f"inline constexpr auto& k{kind}FmaShader = k{kind}Fp64Shader;")
+             print(kind + " optional FMA32:", "validated" if fma_available else "integer fallback", flush=True)
++            destination = args.output.parent / (stem + "_narrow_fma.spv")
++            lines.append(f"inline constexpr bool k{kind}NarrowFmaAvailable = {'true' if fma_available else 'false'};")
++            if fma_available:
++                code = compile_shader(source / (stem + ".slang"), destination,
++                    args.compiler, args.assembler, args.disassembler, args.validator,
++                    program["registers"], terms, len(program["layer_offsets"])-1,
++                    program.get("prefix_instructions", 0), fma=True,
++                    transport_specialized=transport_specialized, endpoint_specialized=endpoint_specialized)
++                array("k" + kind + "NarrowFmaShader", code)
++            else:
++                shutil.copyfile(args.output.parent / (stem + ".spv"), destination)
++                lines.append(f"inline constexpr auto& k{kind}NarrowFmaShader = k{kind}Shader;")
++            print(kind + " optional narrow FMA32:", "validated" if fma_available else "split fallback", flush=True)
+         words = ((512 if kind == "Camera" else 576) + 4 * program["registers"] if kind in ("Camera", "RayCamera")
+                  else {"Transport":2404, "Endpoint":769, "Dense":204, "Initialize":204, "DopriPhase":1004}[kind] + 5 * program["registers"])
+         lines.append(f"inline constexpr std::size_t k{kind}RowWords = {words};")
+diff --git a/scripts/verify-operating-model.py b/scripts/verify-operating-model.py
+index a568ecc..8e305f6 100755
+--- a/scripts/verify-operating-model.py
++++ b/scripts/verify-operating-model.py
+@@ -453,7 +453,7 @@ REQUIRED_ACCEPTANCE_EVIDENCE = {
+         "gtest:RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr",
+         "gtest:RetainedComputeAdmission.ArithmeticRefusalPrecedesKernelLoading",
+         "gtest:VulkanBackend.Fma32DeviceAdmissionRequiresAdvertisedFeatureAndEveryFloatControl",
+-        "gtest:RetainedComputeAdmission.FmaSelectsOnlyNativeWideProductsAndPreservesAllocation",
++        "gtest:RetainedComputeAdmission.FmaSelectsAdmittedNativeProductsAndPreservesAllocation",
+         "gtest:RetainedComputeAdmission.SoftwareRendererPreparationPreservesPhysicalAccounting",
+         "gtest:RetainedComputeTest.SoftwareRendererPreparationPreservesBuffersAndPhysicalFeedback",
+         "gtest:RenderSessionProbe.BackendAutoResolvesByDeviceRegistryAndCapabilities",
+@@ -498,7 +498,7 @@ REQUIRED_ATTESTATION_PROFILES = {
+ REQUIRED_EXTERNAL_DOMAINS = set().union(*REQUIRED_ATTESTATION_PROFILES.values())
+ INTERNAL_ACCEPTANCE_PROFILES = {"compile", "cpu", "vulkan"}
+ REQUIRED_SECTION_POLICY_DIGESTS = {
+-    "acceptance_criteria": "4dac673606406762f36e72f046a7ddfd75f9836334bffe97d9852e2d73fd07ba",
++    "acceptance_criteria": "9911d53934126c74110eb0690c3c1207b862366cf1ad4e8466d15926e439ad14",
+     "required_dimensions": "155eb58c17545a5e0a817ca93e390fd7c7c698e413ba48a84dbd3daf49dd83c0",
+     "capability_contracts": "4a32b1a16171759ce66d99f1c4370975424b87d3f36d6574f840efb8360a9bda",
+ }
+diff --git a/src/sirius/backend/CMakeLists.txt b/src/sirius/backend/CMakeLists.txt
+index 883fd9d..df4d62f 100644
+--- a/src/sirius/backend/CMakeLists.txt
++++ b/src/sirius/backend/CMakeLists.txt
+@@ -91,8 +91,10 @@ if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS AND SIRIUS_SPIRV_OP
+                    "${retained_build}/retained_camera_fp64.spv"
+                    "${retained_build}/retained_transport_fp64.spv"
+                    "${retained_build}/retained_transport_fma.spv"
++                   "${retained_build}/retained_transport_narrow_fma.spv"
+                    "${retained_build}/retained_endpoint_fp64.spv"
+                    "${retained_build}/retained_endpoint_fma.spv"
++                   "${retained_build}/retained_endpoint_narrow_fma.spv"
+                    "${retained_build}/retained_dense_fp64.spv"
+                    "${retained_build}/retained_initialize_fp64.spv"
+                    "${retained_build}/retained_ray_camera_fp64.spv"
+diff --git a/src/sirius/backend/retained_compute.cpp b/src/sirius/backend/retained_compute.cpp
+index 7664b4d..d85b9ec 100644
+--- a/src/sirius/backend/retained_compute.cpp
++++ b/src/sirius/backend/retained_compute.cpp
+@@ -150,25 +150,31 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(
+         result->camera_, KernelStage::kCamera,
+         shader(kCameraShader, kCameraFp64Shader, kCameraPortableShader, kCameraPortableFp64Shader));
+     if (!status) return std::unexpected(status.error());
+-    const bool fma = fp64_products && !portable && device.Info().fma_fp32_enabled &&
+-                     device.Info().preserves_fp32_signed_zero_inf_nan;
++    const bool native_fma = !portable && device.Info().fma_fp32_enabled &&
++                            device.Info().preserves_fp32_signed_zero_inf_nan;
++    const bool fma = fp64_products && native_fma;
++    const bool narrow_fma = !fp64_products && native_fma;
+     // The normal-lattice transform needs RTE32 but no denormal preservation.
+     // Adapters without RTE32 retain the pure-integer portable modules.
+     const bool normal_sum = portable && device.Info().rounds_fp32_to_nearest;
+     const std::span<const std::uint32_t> transport =
+         normal_sum ? std::span(kTransportPortableNormalSumShader)
+-                   : (fma && kTransportFmaAvailable
+-                          ? std::span(kTransportFmaShader)
+-                          : shader(kTransportShader, kTransportFp64Shader, kTransportPortableShader,
+-                                   kTransportPortableFp64Shader));
++                   : (narrow_fma && kTransportNarrowFmaAvailable
++                          ? std::span(kTransportNarrowFmaShader)
++                          : (fma && kTransportFmaAvailable
++                                 ? std::span(kTransportFmaShader)
++                                 : shader(kTransportShader, kTransportFp64Shader,
++                                          kTransportPortableShader, kTransportPortableFp64Shader)));
+     status = create(result->transport_, KernelStage::kTransport, transport);
+     if (!status) return std::unexpected(status.error());
+     const std::span<const std::uint32_t> endpoint =
+         normal_sum ? std::span(kEndpointPortableNormalSumShader)
+-                   : (fma && kEndpointFmaAvailable
+-                          ? std::span(kEndpointFmaShader)
+-                          : shader(kEndpointShader, kEndpointFp64Shader, kEndpointPortableShader,
+-                                   kEndpointPortableFp64Shader));
++                   : (narrow_fma && kEndpointNarrowFmaAvailable
++                          ? std::span(kEndpointNarrowFmaShader)
++                          : (fma && kEndpointFmaAvailable
++                                 ? std::span(kEndpointFmaShader)
++                                 : shader(kEndpointShader, kEndpointFp64Shader,
++                                          kEndpointPortableShader, kEndpointPortableFp64Shader)));
+     status = create(result->endpoint_, KernelStage::kEndpoint, endpoint);
+     if (!status) return std::unexpected(status.error());
+     status = create(
+diff --git a/src/sirius/kernels/retained_pair.slang b/src/sirius/kernels/retained_pair.slang
+index b587573..3b87b20 100644
+--- a/src/sirius/kernels/retained_pair.slang
++++ b/src/sirius/kernels/retained_pair.slang
+@@ -74,6 +74,21 @@ void RetainedProduct32(RPScalar a,RPScalar b,out RPScalar hi,out RPScalar lo){
+  hi=RPFromBits(product.valid!=0u?product.high:0x7f800000u);
+  lo=RPFromBits(product.valid!=0u?product.low:0x7f800000u);
+ #else
++#ifdef SIRIUS_RETAINED_FMA32
++ // Only nonzero exact residuals on the bounded normal lattice substitute for
++ // the default split product. Zero signs and all other inputs retain its body.
++ uint am=RPBits(a)&0x7fffffffu,bm=RPBits(b)&0x7fffffffu;
++ if(am>=0x2b800000u&&am<=0x5d800000u&&bm>=0x2b800000u&&bm<=0x5d800000u) {
++  RPScalar high=OrderedMultiply32(a,b);
++  RPScalar negativeHigh=RPScalarNegate(high);
++  RPScalar residual=spirv_asm {
++   OpFmaKHR $$float %v $a $b $negativeHigh;
++   OpDecorate %v NoContraction;
++   OpCopyObject $$float result %v;
++  };
++  if((RPBits(residual)&0x7fffffffu)!=0u) {hi=high;lo=residual;return;}
++ }
++#endif
+  RPScalar ah,al,bh,bl;Split32(a,ah,al);Split32(b,bh,bl);hi=OrderedMultiply32(a,b);
+  RPScalar e1=OrderedSubtract32(hi,OrderedMultiply32(ah,bh));
+  RPScalar e2=OrderedSubtract32(e1,OrderedMultiply32(al,bh));
+diff --git a/tests/backend/retained_compute_test.cpp b/tests/backend/retained_compute_test.cpp
+index 714e07e..2680e4a 100644
+--- a/tests/backend/retained_compute_test.cpp
++++ b/tests/backend/retained_compute_test.cpp
+@@ -374,7 +374,7 @@ void ExpectPhysicalStatsEqual(
+ #endif
+ 
+ #ifdef SIRIUS_HAS_RETAINED_COMPUTE
+-TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideProductsAndPreservesAllocation) {
++TEST(RetainedComputeAdmission, FmaSelectsAdmittedNativeProductsAndPreservesAllocation) {
+     using namespace sirius::backend::retained_program;
+     for (unsigned mask = 0; mask < 16; ++mask) {
+         for (const bool wide : {false, true}) {
+@@ -420,21 +420,27 @@ TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideProductsAndPreservesAlloc
+                 stages[2] = std::span(kEndpointPortableNormalSumShader);
+                 stages[6] = std::span(kDopriPhasePortableNormalSumShader);
+             }
+-            const bool eligible = wide && mask == 15u;
++            const bool eligible = mask == 15u;
++            const bool transport_fma = wide ? kTransportFmaAvailable : kTransportNarrowFmaAvailable;
++            const bool endpoint_fma = wide ? kEndpointFmaAvailable : kEndpointNarrowFmaAvailable;
++            const std::span<const std::uint32_t> transport =
++                wide ? std::span<const std::uint32_t>(kTransportFmaShader)
++                     : std::span<const std::uint32_t>(kTransportNarrowFmaShader);
++            const std::span<const std::uint32_t> endpoint =
++                wide ? std::span<const std::uint32_t>(kEndpointFmaShader)
++                     : std::span<const std::uint32_t>(kEndpointNarrowFmaShader);
+             for (std::size_t stage = 0; stage < RetainedCompute::kStageCount; ++stage) {
+                 // The baseline excludes FMA and independently checks native,
+                 // pure-integer fallback and RTE32-only Transport/Endpoint/DP selection.
+                 EXPECT_EQ(control.loaded_codes[stage],
+                           (std::vector<std::uint32_t>(stages[stage].begin(), stages[stage].end())));
+-                if (stage == 1 && eligible && kTransportFmaAvailable) {
++                if (stage == 1 && eligible && transport_fma) {
+                     EXPECT_EQ(candidate.loaded_codes[stage],
+-                              (std::vector<std::uint32_t>(kTransportFmaShader.begin(),
+-                                                          kTransportFmaShader.end())));
++                              (std::vector<std::uint32_t>(transport.begin(), transport.end())));
+                     EXPECT_NE(candidate.loaded_codes[stage], control.loaded_codes[stage]);
+-                } else if (stage == 2 && eligible && kEndpointFmaAvailable) {
++                } else if (stage == 2 && eligible && endpoint_fma) {
+                     EXPECT_EQ(candidate.loaded_codes[stage],
+-                              (std::vector<std::uint32_t>(kEndpointFmaShader.begin(),
+-                                                          kEndpointFmaShader.end())));
++                              (std::vector<std::uint32_t>(endpoint.begin(), endpoint.end())));
+                     EXPECT_NE(candidate.loaded_codes[stage], control.loaded_codes[stage]);
+                 } else {
+                     EXPECT_EQ(candidate.loaded_codes[stage], control.loaded_codes[stage]);
+@@ -460,6 +466,23 @@ TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideProductsAndPreservesAlloc
+         EXPECT_FALSE(RetainedCompute::Create(refused, 2, true));
+         EXPECT_EQ(refused.loads, 0U);
+         EXPECT_TRUE(refused.buffers.empty());
++        // Default FMA needs neither Float64 support nor its rounding mode.
++        auto narrow = RetainedCompute::Create(refused, 2, false);
++        ASSERT_TRUE(narrow);
++        ASSERT_EQ(refused.loaded_codes.size(), RetainedCompute::kStageCount);
++        const std::span<const std::uint32_t> transport =
++            kTransportNarrowFmaAvailable ? std::span<const std::uint32_t>(kTransportNarrowFmaShader)
++                                         : std::span<const std::uint32_t>(kTransportShader);
++        const std::span<const std::uint32_t> endpoint =
++            kEndpointNarrowFmaAvailable ? std::span<const std::uint32_t>(kEndpointNarrowFmaShader)
++                                        : std::span<const std::uint32_t>(kEndpointShader);
++        EXPECT_EQ(refused.loaded_codes[1],
++                  (std::vector<std::uint32_t>(transport.begin(), transport.end())));
++        EXPECT_EQ(refused.loaded_codes[2],
++                  (std::vector<std::uint32_t>(endpoint.begin(), endpoint.end())));
++        const auto required = RetainedCompute::RequiredAllocationBytes(refused, 2);
++        ASSERT_TRUE(required);
++        EXPECT_EQ(refused.BufferAllocationBytes(), *required);
+     }
+ }
+ #endif
+diff --git a/tests/labels/CTestLabels.cmake b/tests/labels/CTestLabels.cmake
+index 864903b..f25d063 100644
+--- a/tests/labels/CTestLabels.cmake
++++ b/tests/labels/CTestLabels.cmake
+@@ -1008,7 +1008,7 @@ set_tests_properties(
+ 
+ set_tests_properties(
+     RetainedComputeAdmission.ArithmeticRefusalPrecedesKernelLoading
+-    RetainedComputeAdmission.FmaSelectsOnlyNativeWideProductsAndPreservesAllocation
++    RetainedComputeAdmission.FmaSelectsAdmittedNativeProductsAndPreservesAllocation
+     RetainedComputeAdmission.CameraCancellationPrecedesNumericalRefusal
+     RetainedComputeAdmission.SoftwareRendererPreparationPreservesPhysicalAccounting
+     PROPERTIES LABELS "Mandatory;Correctness"
+diff --git a/tests/operating_model.json b/tests/operating_model.json
+index c6a3a7e..96102de 100644
+--- a/tests/operating_model.json
++++ b/tests/operating_model.json
+@@ -445,7 +445,7 @@
+         {"kind": "ctest", "name": "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice"},
+         {"kind": "gtest", "name": "RetainedComputeAdmission.ArithmeticRefusalPrecedesKernelLoading"},
+         {"kind": "gtest", "name": "VulkanBackend.Fma32DeviceAdmissionRequiresAdvertisedFeatureAndEveryFloatControl"},
+-        {"kind": "gtest", "name": "RetainedComputeAdmission.FmaSelectsOnlyNativeWideProductsAndPreservesAllocation"},
++        {"kind": "gtest", "name": "RetainedComputeAdmission.FmaSelectsAdmittedNativeProductsAndPreservesAllocation"},
+         {"kind": "gtest", "name": "RetainedComputeAdmission.SoftwareRendererPreparationPreservesPhysicalAccounting"},
+         {"kind": "gtest", "name": "RetainedComputeTest.SoftwareRendererPreparationPreservesBuffersAndPhysicalFeedback"},
+         {"kind": "gtest", "name": "RenderSessionProbe.BackendAutoResolvesByDeviceRegistryAndCapabilities"},

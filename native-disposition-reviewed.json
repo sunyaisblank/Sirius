@@ -1,0 +1,62 @@
+{
+  "source_revision": "21e55cea162684d7a9f679132704b771286519ff",
+  "baseline_revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
+  "reviewer": "/root/retained_latency_review",
+  "accepted": true,
+  "batch_terminal": true,
+  "reject_candidate": true,
+  "comparison_sha256": "2ae0b133dfd539c01d593669b3af23e440fff862844a51d8a6172417aa539920",
+  "frozen_comparator_sha256": "7e13981d4fb3e566c5e5ae404946a899530096d0d3c6f7b09c664fc5f8a5f686",
+  "independently_recomputed_original_checks": 46,
+  "failed_checks": 25,
+  "failed_forward_reverse": [
+    4,
+    21
+  ],
+  "aggregate_improvement_percent": {
+    "legacy_forward": {
+      "device": 2.799602751853658,
+      "host_completion": 3.585417983684036,
+      "complete_call": 3.099302011848193
+    },
+    "legacy_reverse": {
+      "device": -2.655378979572287,
+      "host_completion": -5.046636338221466,
+      "complete_call": -5.675172086103997
+    },
+    "modern_forward": {
+      "device": 1.4546573520361261,
+      "host_completion": 3.362825275353698,
+      "complete_call": 3.9764246996848884
+    },
+    "modern_reverse": {
+      "device": -8.241843366069723,
+      "host_completion": -12.663990663913726,
+      "complete_call": -14.28599530510275
+    }
+  },
+  "controls_passed": 10,
+  "matched_passed": 4,
+  "same_provider_complete_readbacks_per_matched_slot": 32,
+  "ordered_available_markers_per_matched_slot": 51,
+  "observed_modules": 7,
+  "intended_module_transitions": [
+    "transport",
+    "endpoint"
+  ],
+  "frozen_execution_inputs_exact": 905,
+  "native_PE_logical_joins": {
+    "baseline": 120,
+    "candidate": 126
+  },
+  "native_PE_complete_recorded_occurrences": {
+    "baseline": 162,
+    "candidate": 168
+  },
+  "limitations": [
+    "Finite original native benefit gate fails. No numerical failure, exclusive arithmetic/JIT cause or confidence claim.",
+    "RSS is sampled; terminal visibility is bounded with hidden Windows fields.",
+    "No frame rerun, usable rendering, complete scientific estate or release qualification."
+  ],
+  "reviewer_performed_writes_or_execution": false
+}

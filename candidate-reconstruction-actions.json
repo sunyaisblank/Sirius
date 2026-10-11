@@ -1,0 +1,44 @@
+{
+  "windows": {
+    "revision": "21e55cea162684d7a9f679132704b771286519ff",
+    "limits": {
+      "seconds": 120,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "command",
+    "frozen_inputs": [
+      "out/native-narrow-fma-trial/source.json",
+      "out/native-narrow-fma-trial/reconstruct_native.py"
+    ],
+    "scope": "Canonical own-commit candidate windows source/product/input reconstruction only; no native runtime or scientific qualification.",
+    "argv": [
+      "python3",
+      "out/native-narrow-fma-trial/reconstruct_native.py",
+      "windows",
+      "candidate"
+    ]
+  },
+  "macos": {
+    "revision": "21e55cea162684d7a9f679132704b771286519ff",
+    "limits": {
+      "seconds": 120,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "command",
+    "frozen_inputs": [
+      "out/native-narrow-fma-trial/source.json",
+      "out/native-narrow-fma-trial/reconstruct_native.py"
+    ],
+    "scope": "Canonical own-commit candidate macos source/product/input reconstruction only; no native runtime or scientific qualification.",
+    "argv": [
+      "python3",
+      "out/native-narrow-fma-trial/reconstruct_native.py",
+      "macos",
+      "candidate"
+    ]
+  }
+}

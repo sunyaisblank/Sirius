@@ -1,0 +1,76 @@
+{
+  "configure": {
+    "revision": "21e55cea162684d7a9f679132704b771286519ff",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "command",
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/usr/bin/spirv-opt",
+      "/usr/bin/cmake",
+      "/usr/bin/ninja",
+      "/usr/bin/x86_64-linux-gnu-g++-14",
+      "/usr/bin/x86_64-linux-gnu-gcc-14",
+      "out/native-narrow-fma-trial/source.json",
+      "out/native-narrow-fma-trial/independent-source-stream-review.json",
+      "out/native-narrow-fma-trial/baseline-products.json",
+      "out/native-narrow-fma-trial/baseline-arrays.json",
+      "out/native-narrow-fma-trial/baseline-retained_kernels.h"
+    ],
+    "scope": "Strict linux-gcc qualification-mode source configuration only; no scientific/native/release qualification.",
+    "argv": [
+      "cmake",
+      "--preset",
+      "linux-gcc",
+      "-DSIRIUS_ALIGNMENT_MODE=qualification"
+    ]
+  },
+  "build": {
+    "revision": "21e55cea162684d7a9f679132704b771286519ff",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "kind": "command",
+    "frozen_inputs": [
+      "/opt/slang/bin/slangc",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/usr/bin/spirv-opt",
+      "/usr/bin/cmake",
+      "/usr/bin/ninja",
+      "/usr/bin/x86_64-linux-gnu-g++-14",
+      "/usr/bin/x86_64-linux-gnu-gcc-14",
+      "out/native-narrow-fma-trial/source.json",
+      "out/native-narrow-fma-trial/independent-source-stream-review.json",
+      "out/native-narrow-fma-trial/baseline-products.json",
+      "out/native-narrow-fma-trial/baseline-arrays.json",
+      "out/native-narrow-fma-trial/baseline-retained_kernels.h"
+    ],
+    "scope": "Strict existing linux-gcc integrated source/product build and non-promoting governance; no full scientific/native/release qualification.",
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "linux-gcc",
+      "--target",
+      "SiriusAlignmentGate",
+      "SiriusSourceGovernance",
+      "sirius",
+      "sirius_app_tests",
+      "sirius_render_tests",
+      "sirius_backend_tests",
+      "-j2"
+    ]
+  }
+}
