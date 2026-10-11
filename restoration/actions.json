@@ -1,0 +1,98 @@
+{
+  "configure": {
+    "revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
+    "kind": "build",
+    "scope": "Issue94 rejected normal multiply restored to exact7f production source. Strict finite source/build/admission check only; no current Vulkan/frame/science/fullqualification invocation.",
+    "limits": {
+      "seconds": 600,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "argv": [
+      "cmake",
+      "--preset",
+      "linux-gcc",
+      "-DSIRIUS_ALIGNMENT_MODE=qualification"
+    ]
+  },
+  "build": {
+    "revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
+    "kind": "build",
+    "scope": "Issue94 rejected normal multiply restored to exact7f production source. Strict finite source/build/admission check only; no current Vulkan/frame/science/fullqualification invocation.",
+    "limits": {
+      "seconds": 600,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "linux-gcc",
+      "--target",
+      "SiriusAlignmentGate",
+      "SiriusSourceGovernance",
+      "sirius",
+      "sirius_app_tests",
+      "sirius_render_tests",
+      "sirius_backend_tests",
+      "-j2"
+    ]
+  },
+  "admission": {
+    "revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
+    "kind": "test",
+    "scope": "Issue94 rejected normal multiply restored to exact7f production source. Strict finite source/build/admission check only; no current Vulkan/frame/science/fullqualification invocation.",
+    "limits": {
+      "seconds": 120,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "argv": [
+      "bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "--gtest_filter=RetainedComputeAdmission.ArithmeticRefusalPrecedesKernelLoading:RetainedComputeAdmission.FmaSelectsOnlyNativeWideProductsAndPreservesAllocation"
+    ],
+    "frozen_inputs": [
+      "bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+      "bin/linux-gcc/CMakeCache.txt",
+      "bin/linux-gcc/tests/backend/sirius_backend_tests[1]_tests.cmake",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable_normal_sum.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_fma.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_fma.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable_fp64.spv",
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable_normal_sum.spv"
+    ]
+  }
+}
