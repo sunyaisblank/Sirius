@@ -126,11 +126,11 @@ def prepare():
     header = ROOT / 'bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h'
     assert seal(header) == review['production_header']
     volatile.append(copy_exact(header, ARCHIVE / 'volatile-products' / header.relative_to(ROOT / 'bin/linux-gcc')))
-    for name in ['generated/sirius/alignment_receipt.json', 'src/sirius/app/resources/alignment_receipt.json', 'CMakeCache.txt']:
+    for name in ['generated/sirius/alignment_receipt.json', 'src/sirius/app/resources/model/alignment_receipt.json', 'CMakeCache.txt']:
         path = ROOT / 'bin/linux-gcc' / name
         volatile.append(copy_exact(path, ARCHIVE / 'volatile-products' / name))
     assert seal(ROOT / 'bin/linux-gcc/generated/sirius/alignment_receipt.json') == seal(WORK / 'generated-alignment-receipt.json')
-    assert seal(ROOT / 'bin/linux-gcc/src/sirius/app/resources/alignment_receipt.json') == seal(WORK / 'staged-app-alignment-receipt.json')
+    assert seal(ROOT / 'bin/linux-gcc/src/sirius/app/resources/model/alignment_receipt.json') == seal(WORK / 'staged-app-alignment-receipt.json')
     assert seal(ROOT / 'bin/linux-gcc/CMakeCache.txt') == seal(WORK / 'final-CMakeCache.txt')
     write_new(WORK / 'executed-input-recovery.json', {'accepted': True, 'source_revision': HEAD,
               'input_records': recovery, 'volatile_records': volatile, 'canonical_bundles_retained': True,
