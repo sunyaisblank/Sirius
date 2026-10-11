@@ -1,0 +1,171 @@
+{
+  "verify-windows": {
+    "revision": "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+    "kind": "command",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/verify-attestation.py",
+      "/home/astra/.project/Sirius/attestations/native-build/9fbd0e8/windows-build/windows-build.json",
+      "--source-root",
+      "."
+    ],
+    "scope": "Verify the complete original source-bound native build-only record, all artifact/gate/input/JUnit/inventory bindings and explicit runtime_ready:false. No scientific or runtime execution.",
+    "frozen_inputs": [
+      "out/native-build-domain-admission/source.json",
+      "out/native-build-domain-admission/run_admission_owned.py"
+    ]
+  },
+  "verify-macos": {
+    "revision": "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+    "kind": "command",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/verify-attestation.py",
+      "/home/astra/.project/Sirius/attestations/native-build/9fbd0e8/macos-build/macos-build.json",
+      "--source-root",
+      "."
+    ],
+    "scope": "Verify the complete original source-bound native build-only record, all artifact/gate/input/JUnit/inventory bindings and explicit runtime_ready:false. No scientific or runtime execution.",
+    "frozen_inputs": [
+      "out/native-build-domain-admission/source.json",
+      "out/native-build-domain-admission/run_admission_owned.py"
+    ]
+  },
+  "configure": {
+    "revision": "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+    "kind": "command",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "argv": [
+      "cmake",
+      "--preset",
+      "linux-gcc",
+      "-DSIRIUS_ALIGNMENT_MODE=qualification",
+      "-DSIRIUS_ATTESTATION_ROOT=/home/astra/.project/Sirius/attestations/native-build/9fbd0e8"
+    ],
+    "scope": "Configure existing strict qualification preset with exactly two verified build-only domains. The original six missing domains/readiness:false/release requirements remain explicit.",
+    "frozen_inputs": [
+      "out/native-build-domain-admission/source.json",
+      "out/native-build-domain-admission/run_admission_owned.py"
+    ]
+  },
+  "build": {
+    "revision": "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+    "kind": "command",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "argv": [
+      "cmake",
+      "--build",
+      "--preset",
+      "linux-gcc",
+      "--target",
+      "SiriusAlignmentGate",
+      "SiriusSourceGovernance",
+      "sirius",
+      "sirius_base_tests",
+      "sirius_core_tests",
+      "sirius_oracle_tests",
+      "sirius_backend_tests",
+      "sirius_app_tests",
+      "sirius_render_tests",
+      "-j2"
+    ],
+    "scope": "Existing explicit full strict product/test topology build with current partial alignment receipt; no Mandatory/runtime/frame test invocation or release promotion.",
+    "frozen_inputs": [
+      "out/native-build-domain-admission/source.json",
+      "out/native-build-domain-admission/run_admission_owned.py"
+    ]
+  },
+  "check-alignment": {
+    "revision": "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+    "kind": "command",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/verify-alignment.py",
+      "--mode",
+      "qualification",
+      "--source-revision",
+      "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+      "--source-tree-clean",
+      "true",
+      "--source-root",
+      ".",
+      "--operating-model",
+      "tests/operating_model.json",
+      "--attestation-root",
+      "/home/astra/.project/Sirius/attestations/native-build/9fbd0e8",
+      "--output",
+      "bin/linux-gcc/generated/sirius/alignment_receipt.json",
+      "--check"
+    ],
+    "scope": "Revalidate the exact generated partial qualification receipt and original complete artifact/model/source joins.",
+    "frozen_inputs": [
+      "out/native-build-domain-admission/source.json",
+      "out/native-build-domain-admission/run_admission_owned.py"
+    ]
+  },
+  "reject-incomplete-release": {
+    "revision": "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+    "kind": "command",
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 1,
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/verify-alignment.py",
+      "--mode",
+      "release",
+      "--source-revision",
+      "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+      "--source-tree-clean",
+      "true",
+      "--source-root",
+      ".",
+      "--operating-model",
+      "tests/operating_model.json",
+      "--attestation-root",
+      "/home/astra/.project/Sirius/attestations/native-build/9fbd0e8",
+      "--output",
+      "out/native-build-domain-admission/rejected-release-receipt.json"
+    ],
+    "scope": "Expected original release refusal on the same two actual native-build records. Require exact six-missing-domain reason and no output receipt; this is a negative consumer check, not a release attempt or changed release configuration.",
+    "frozen_inputs": [
+      "out/native-build-domain-admission/source.json",
+      "out/native-build-domain-admission/run_admission_owned.py"
+    ]
+  }
+}

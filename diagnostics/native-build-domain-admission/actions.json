@@ -1,0 +1,27 @@
+{
+  "exports": {
+    "revision": "9fbd0e8b0d549a13476d066f2877dcd2cf9a94d9",
+    "kind": "command",
+    "limits": {
+      "seconds": 420,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "expected_exit": 0,
+    "scope": "Two exact official9fbd Windows/macOS native-build-non-render-authority bundles. Preserve API digest/size,40 payloads/platform, saved owners/source/input seals. No native runtime, full Mandatory, frame or release qualification.",
+    "argv": [
+      "python3",
+      "-B",
+      "out/native-build-domain-admission/download_exports.py",
+      "candidate"
+    ],
+    "frozen_inputs": [
+      "out/native-build-domain-admission/source.json",
+      "out/native-build-domain-admission/ci-run.json",
+      "out/native-build-domain-admission/workflow-dispatch-request.json",
+      "out/native-build-domain-admission/workflow-dispatch-response.json",
+      "out/native-build-domain-admission/candidate-native-export-dispatch.json",
+      "out/native-build-domain-admission/download_exports.py"
+    ]
+  }
+}
