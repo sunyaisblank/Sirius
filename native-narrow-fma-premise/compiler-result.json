@@ -1,0 +1,98 @@
+{
+  "pass": true,
+  "production_adopted": false,
+  "source_revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
+  "device_workloads": 0,
+  "commands": 20,
+  "whole_input_count": 81,
+  "inputs_unchanged": true,
+  "wall_seconds": 2.238806959008798,
+  "stages": [
+    {
+      "kind": "Transport",
+      "registers": 459,
+      "roots": 40,
+      "general_nodes": 2587,
+      "special_nodes": 557,
+      "general_layers": 117,
+      "special_layers": 42,
+      "specialized_frame": [
+        13096,
+        2871,
+        42
+      ],
+      "original_program_words_exact": true,
+      "baseline_module_exact": true,
+      "outputs": {
+        "baseline": {
+          "module": {
+            "path": "/home/astra/.project/Sirius/out/native-narrow-fma-premise/baseline-retained_transport.spv",
+            "bytes": 85364,
+            "sha256": "b52e6373f6b30aac6c7fe877f6e07f3c47c7ac9eafa1671840eacd19960d7cb1"
+          },
+          "assembly": {
+            "path": "/home/astra/.project/Sirius/out/native-narrow-fma-premise/baseline-retained_transport.spvasm",
+            "bytes": 246554,
+            "sha256": "cb9003c48a19654f734f653a92e9adec9d67f44006fe4300ad574028c75ba413"
+          }
+        },
+        "candidate": {
+          "module": {
+            "path": "/home/astra/.project/Sirius/out/native-narrow-fma-premise/candidate-retained_transport.spv",
+            "bytes": 87172,
+            "sha256": "f2755145d65fbc77cac634370a3a65143dada8d1665a6f1e3a99c689c4d00970"
+          },
+          "assembly": {
+            "path": "/home/astra/.project/Sirius/out/native-narrow-fma-premise/candidate-retained_transport.spvasm",
+            "bytes": 251890,
+            "sha256": "6f573c3aba20f486d822215a40f6f937a4a613c2d73cba47afe4a0f65d2f7fb4"
+          }
+        }
+      }
+    },
+    {
+      "kind": "Endpoint",
+      "registers": 612,
+      "roots": 100,
+      "general_nodes": 2205,
+      "special_nodes": 1943,
+      "general_layers": 111,
+      "special_layers": 84,
+      "specialized_frame": [
+        11240,
+        9903,
+        84,
+        202
+      ],
+      "original_program_words_exact": true,
+      "baseline_module_exact": true,
+      "outputs": {
+        "baseline": {
+          "module": {
+            "path": "/home/astra/.project/Sirius/out/native-narrow-fma-premise/baseline-retained_endpoint.spv",
+            "bytes": 99300,
+            "sha256": "785d94c53839693af8a0c752b8d7f0f1bd44789df17f3ab4eef79d3684faa559"
+          },
+          "assembly": {
+            "path": "/home/astra/.project/Sirius/out/native-narrow-fma-premise/baseline-retained_endpoint.spvasm",
+            "bytes": 288928,
+            "sha256": "d4d16c8d3385f7b7f9b64a52a34594c8b3144e9606c1f1bb57061c9106951043"
+          }
+        },
+        "candidate": {
+          "module": {
+            "path": "/home/astra/.project/Sirius/out/native-narrow-fma-premise/candidate-retained_endpoint.spv",
+            "bytes": 101108,
+            "sha256": "62b275566fa06b27872b7046da6ef721c383b2bb49087d6018965052241af611"
+          },
+          "assembly": {
+            "path": "/home/astra/.project/Sirius/out/native-narrow-fma-premise/candidate-retained_endpoint.spvasm",
+            "bytes": 294262,
+            "sha256": "6ae4567b708433136b20de981ff6f76561437d73ba37131534bde7a90c403837"
+          }
+        }
+      }
+    }
+  ],
+  "scope": "Two ordinary O0 SPIR-V1.5 native default controls reproduce exact current modules; two guarded FMA private candidates assemble and validate under Vulkan1.2. No device/control/benefit verdict."
+}

@@ -1,0 +1,49 @@
+{
+  "pass": true,
+  "direct_compiler_inputs_verified": 81,
+  "stages": [
+    {
+      "kind": "Transport",
+      "module": {
+        "path": "/home/astra/.project/Sirius/out/native-narrow-fma-premise/candidate-retained_transport.spv",
+        "bytes": 87172,
+        "sha256": "f2755145d65fbc77cac634370a3a65143dada8d1665a6f1e3a99c689c4d00970"
+      },
+      "functions": 70,
+      "only_changed_functions": [
+        "RetainedProduct32",
+        "RetainedProduct32_0"
+      ],
+      "complete_original_fallbacks_exact_after_id_normalization": 2,
+      "other_functions_exact_after_global_and_local_id_normalization": 68,
+      "baseline_execution_modes_entry_and_abi_exact": true,
+      "global_workgroup_private_declarations_exact": true,
+      "required_fma_capability_extension_only": true,
+      "fma_sites": 2,
+      "float64_and_relaxed_modes_absent": true,
+      "whole_body_cfg_dominance_and_fallback_requires_independent_review": true
+    },
+    {
+      "kind": "Endpoint",
+      "module": {
+        "path": "/home/astra/.project/Sirius/out/native-narrow-fma-premise/candidate-retained_endpoint.spv",
+        "bytes": 101108,
+        "sha256": "62b275566fa06b27872b7046da6ef721c383b2bb49087d6018965052241af611"
+      },
+      "functions": 78,
+      "only_changed_functions": [
+        "RetainedProduct32",
+        "RetainedProduct32_0"
+      ],
+      "complete_original_fallbacks_exact_after_id_normalization": 2,
+      "other_functions_exact_after_global_and_local_id_normalization": 76,
+      "baseline_execution_modes_entry_and_abi_exact": true,
+      "global_workgroup_private_declarations_exact": true,
+      "required_fma_capability_extension_only": true,
+      "fma_sites": 2,
+      "float64_and_relaxed_modes_absent": true,
+      "whole_body_cfg_dominance_and_fallback_requires_independent_review": true
+    }
+  ],
+  "scope": "Structural exact module facts; guard operands/CFG reviewed independently. No packed output/device timing/rendering or qualification verdict."
+}

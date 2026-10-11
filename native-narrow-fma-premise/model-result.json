@@ -1,0 +1,73 @@
+{
+  "pass": true,
+  "source_revision": "b81e061fa081cdaed37eca3add950bd254bf296d",
+  "device_workloads": 0,
+  "inputs": [
+    {
+      "path": "out/native-narrow-fma-premise/model.py",
+      "bytes": 7155,
+      "sha256": "3ba7bf836c90858a1f505d22238ed1e009d35c6f8f490a19eb5a71fe9f2648a4"
+    },
+    {
+      "path": "tests/support/portable_binary32/reference.py",
+      "bytes": 13166,
+      "sha256": "6b6474bf66c86713980cba81f0cee1b290f54c8f42700ca9353aa108cf0c185e"
+    },
+    {
+      "path": "bin/linux-gcc/tests/backend/portable_binary32_reference.bin",
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    {
+      "path": "src/sirius/kernels/retained_pair.slang",
+      "bytes": 18139,
+      "sha256": "395dd782f3309b22f0fb481a2bf2a898489e700043c248c0fad2e53dd2fbe304"
+    }
+  ],
+  "inputs_unchanged": true,
+  "existing_residual_records": 53524,
+  "targeted_records": 3840,
+  "routes": {
+    "outside-guard-fallback": 39665,
+    "caller-refused": 1121,
+    "zero-residual-fallback": 2780,
+    "guarded-nonzero": 13798
+  },
+  "families": {
+    "existing-independent-residual-corpus": 52767,
+    "guard-split-carry-tie-edges": 3476
+  },
+  "counterexamples": [
+    {
+      "a": "00800001",
+      "b": "3f000001",
+      "category": "underflow",
+      "original": [
+        "00400001",
+        "80000001"
+      ],
+      "blanket_fma": [
+        "00400001",
+        "00000000"
+      ],
+      "route": "outside-guard-fallback"
+    },
+    {
+      "a": "3f7fffff",
+      "b": "40000000",
+      "category": "zero-residual-sign",
+      "original": [
+        "3fffffff",
+        "80000000"
+      ],
+      "blanket_fma": [
+        "3fffffff",
+        "00000000"
+      ],
+      "route": "zero-residual-fallback"
+    }
+  ],
+  "wall_seconds": 8.165421527024591,
+  "contract": "Guarded nonzero output words equal exact ordered original default; all other admitted inputs execute identical original fallback. Original five-min-subnormal enclosure retained.",
+  "limitations": "Finite Fraction model, not exhaustive or machine-checked equivalence; no actual compilation, shader selection/device execution, physical cost, rendering or qualification."
+}
