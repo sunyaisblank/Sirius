@@ -1,0 +1,20 @@
+{
+  "source_revision": "6be3132b7023f9d6497ab8f67dc779cf8eb4a80c",
+  "trace_sha256": "ee233c821d2e9692b800e17095ba71447e909f80f62180bcd66ac0dceccf05a9",
+  "reviewer": "retained_latency_review independent read-only pinned source and saved-trace inspection",
+  "findings": [
+    "Gfx11 SPM raw 64-bit timestamp is REFCLK timestamp count. Sampling interval4096 is separately GPU shader cycles.",
+    "PAL and RDP preserve chronological raw timestamps without conversion. Sample index times4096 is not a timestamp.",
+    "AsicInfo reports2.799GHz shader clock and100MHz GPU timestamp clock; ClockCalibration connects CPU/GPU counters at trace finish, without an established SQTT event-relative origin/conversion.",
+    "No complete offline SPM to SQTT/Vulkan event mapping established. Use actual RGP event Start/End and explicitly selected counter-region endpoints; numeric overlap alone does not establish pipeline/source/exclusive ownership."
+  ],
+  "references": [
+    "https://github.com/GPUOpen-Drivers/pal/blob/c5e800072a32f68b6ccc4422936d96167c6e0728/src/core/hw/gfxip/gfx9/gfx9PerfExperiment.cpp#L1524-L1540",
+    "https://github.com/GPUOpen-Drivers/pal/blob/c5e800072a32f68b6ccc4422936d96167c6e0728/inc/core/palPerfExperiment.h#L210-L216",
+    "https://github.com/GPUOpen-Drivers/pal/blob/c5e800072a32f68b6ccc4422936d96167c6e0728/src/gpuUtil/gpaSessionPerfSample.cpp#L559-L575",
+    "https://github.com/GPUOpen-Drivers/pal/blob/c5e800072a32f68b6ccc4422936d96167c6e0728/src/gpuUtil/clockCalibTraceSource.cpp#L35-L86",
+    "https://gpuopen.com/manuals/rgp_manual/events_windows/",
+    "https://gpuopen.com/manuals/rgp_manual/zoom_controls/"
+  ],
+  "scope": "Independent source reasoning and recorded metadata interpretation; no machine-checked proof, packaged binary formula/filter attestation, complete hardware inventory, ordinary performance benefit or full qualification."
+}
