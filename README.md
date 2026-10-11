@@ -83,15 +83,17 @@ Normal presets use `SIRIUS_ALIGNMENT_MODE=development`: they compile and test
 the system while reporting every absent external domain as pending, but their
 artifacts are deliberately inadmissible as external evidence. Hardware, native
 runtime, viewer, and native CI producers reconfigure the exact clean revision in
-`qualification` mode. Qualification enforces the complete release-equivalent
-build/product policy, the zero-skip Mandatory gate, executable-volume resource
-locking, and candidate hashing while allowing external domains to remain
-pending; it cannot package or report top-level readiness. Each record includes
-the copied qualification executable, alignment receipt, product/test gate,
-gate-generated JUnit and log, and an independently rerun JUnit/inventory pair.
-The verifier cross-checks their byte hashes and exact test identities before the
-record can become release input. A distributable package is available only from
-`release` mode. That mode requires
+`qualification` mode. Qualification retains the release-equivalent build/product
+policy, executable-volume resource locking, and candidate hashing while allowing
+external domains to remain pending; it cannot package or report top-level
+readiness. Runtime records require the complete zero-skip Mandatory gate and an
+independently rerun JUnit/inventory pair. The Windows and macOS native build
+domains instead use the fixed non-render authority gate and explicitly report
+`runtime_ready: false`; they establish build compatibility. Each record includes
+the copied qualification executable, alignment receipt, applicable product/test
+gate, and gate-generated JUnit and log. The verifier checks their byte hashes and
+exact test identities before the record can become release input. A distributable
+package is available only from `release` mode. That mode requires
 a clean Git revision plus verified evidence for the physical Radeon, WSL2/Dozen,
 native Windows build and Vulkan, native macOS build and MoltenVK, native viewer
 input, and exact IMAX domain. Configure generates one deterministic receipt;
