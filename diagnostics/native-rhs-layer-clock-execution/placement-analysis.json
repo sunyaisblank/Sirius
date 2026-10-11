@@ -1,0 +1,981 @@
+{
+  "source_revision": "24a8e145d1da5dca75a4fa26ec8e639020eecf37",
+  "stages": {
+    "Transport": {
+      "module": {
+        "bytes": 87928,
+        "sha256": "e3a1589d852a4254312bb0e9e4b0343ab6aea32855c02c4f0f93b9fe1e18e5a3"
+      },
+      "result": {
+        "bytes": 43961,
+        "sha256": "665313ff9b13684d45b9a7df95fc6f1123b568dd6dabfffb708882818bf91700"
+      },
+      "bridge": {
+        "bytes": 9397,
+        "sha256": "deb1a848aa0302dca8bc09f2bfa48d83a487c9c639f9c8b92091910733b044af"
+      },
+      "owner": {
+        "bytes": 3228,
+        "sha256": "35fdba9ca00fc1c45b40319572489545ce433e604c10d80dfdd6283749eb4018"
+      },
+      "query_payloads": {
+        "transport.info0": {
+          "bytes": 72,
+          "sha256": "aaef16c31a32b3b5a99f0bd2ce89c0d9e5bdb11b2a2ae88f11367bf29469faca"
+        },
+        "transport.info1": {
+          "bytes": 2825392,
+          "sha256": "7f35565ec674897a96d161c2adb7b882deff6a94ff2424512466728d899bf120"
+        },
+        "transport.info2": {
+          "bytes": 2703429,
+          "sha256": "8a82474c2aa67c39db3ed2abb7e574b0a224c21b16add4e9cd9db5e49f058c60"
+        }
+      },
+      "uncaptured_queries": [],
+      "statistics": {
+        "shader_stage_mask": 32,
+        "used_vgprs": 56,
+        "used_sgprs": 106,
+        "lds_bytes_per_workgroup_limit": 65536,
+        "lds_usage_bytes": 9728,
+        "scratch_usage_bytes": 0,
+        "physical_vgprs": 1024,
+        "physical_sgprs": 2048,
+        "available_vgprs": 256,
+        "available_sgprs": 106,
+        "workgroup_x": 64,
+        "workgroup_y": 1,
+        "workgroup_z": 1
+      },
+      "printed_instruction_bytes": 237116,
+      "ELF_text_bytes": 237568,
+      "unprinted_ELF_tail_bytes": 452,
+      "all_printed_instruction_bytes_match_ELF_prefix": true,
+      "clock_sites": [
+        {
+          "line": 7030,
+          "text_offset": 33312,
+          "instruction": "s_sendmsg_rtn_b64 s[6:7], sendmsg(MSG_RTN_GET_REALTIME)",
+          "context": [
+            {
+              "line": 7018,
+              "text": "\ts_buffer_load_b32 s89, s[40:43], s10    ;  f4201654 14000000"
+            },
+            {
+              "line": 7019,
+              "text": "\ts_and_saveexec_b64 s[4:5], s[0:1]       ;  be842100"
+            },
+            {
+              "line": 7020,
+              "text": "\ts_cbranch_execz _L8254                  ;  bfa50016"
+            },
+            {
+              "line": 7021,
+              "text": "\ts_add_i32 s6, s88, s91                  ;  81065b58"
+            },
+            {
+              "line": 7022,
+              "text": "\tv_mov_b32_e32 v2, s9                    ;  7e040209"
+            },
+            {
+              "line": 7023,
+              "text": "\ts_mul_i32 s6, s6, 10                    ;  96068a06"
+            },
+            {
+              "line": 7024,
+              "text": "\ts_waitcnt lgkmcnt(0)                    ;  bf89fc07"
+            },
+            {
+              "line": 7025,
+              "text": "\tv_mov_b32_e32 v3, s89                   ;  7e060259"
+            },
+            {
+              "line": 7026,
+              "text": "\ts_add_i32 s6, s34, s6                   ;  81060622"
+            },
+            {
+              "line": 7027,
+              "text": "\ts_delay_alu instid0(SALU_CYCLE_1) | instskip(NEXT) | instid1(SALU_CYCLE_1) ;  bf870499"
+            },
+            {
+              "line": 7028,
+              "text": "\ts_lshl_b32 s6, s6, 2                    ;  84068206"
+            },
+            {
+              "line": 7029,
+              "text": "\tv_mov_b32_e32 v7, s6                    ;  7e0e0206"
+            },
+            {
+              "line": 7030,
+              "text": "\ts_sendmsg_rtn_b64 s[6:7], sendmsg(MSG_RTN_GET_REALTIME) ;  be864d83"
+            },
+            {
+              "line": 7031,
+              "text": "\ts_waitcnt lgkmcnt(0)                    ;  bf89fc07"
+            },
+            {
+              "line": 7032,
+              "text": "\tv_mov_b32_e32 v5, s6                    ;  7e0a0206"
+            },
+            {
+              "line": 7033,
+              "text": "\tv_mov_b32_e32 v6, s7                    ;  7e0c0207"
+            },
+            {
+              "line": 7034,
+              "text": "\tbuffer_load_b32 v4, v7, s[48:51], 0 offen offset:152 ;  e0500098 804c0407"
+            },
+            {
+              "line": 7035,
+              "text": "\ts_waitcnt vmcnt(0)                      ;  bf8903f7"
+            },
+            {
+              "line": 7036,
+              "text": "\tv_or_b32_e32 v4, 1, v4                  ;  38080881"
+            },
+            {
+              "line": 7037,
+              "text": "\ts_clause 0x1                            ;  bf850001"
+            },
+            {
+              "line": 7038,
+              "text": "\tbuffer_store_b64 v[5:6], v7, s[48:51], 0 offen offset:160 ;  e06c00a0 804c0507"
+            },
+            {
+              "line": 7039,
+              "text": "\tbuffer_store_b96 v[2:4], v7, s[48:51], 0 offen offset:144 ;  e0700090 804c0207"
+            },
+            {
+              "line": 7040,
+              "text": "_L8254:"
+            },
+            {
+              "line": 7041,
+              "text": "\ts_or_b64 exec, exec, s[4:5]             ;  8cfe047e"
+            },
+            {
+              "line": 7042,
+              "text": "\ts_cmp_eq_u32 s9, s8                     ;  bf060809"
+            },
+            {
+              "line": 7043,
+              "text": "\ts_cselect_b64 s[4:5], -1, 0             ;  988480c1"
+            },
+            {
+              "line": 7044,
+              "text": "\ts_waitcnt lgkmcnt(0)                    ;  bf89fc07"
+            },
+            {
+              "line": 7045,
+              "text": "\ts_cmp_gt_u32 s89, s9                    ;  bf080959"
+            },
+            {
+              "line": 7046,
+              "text": "\ts_cselect_b64 s[6:7], -1, 0             ;  988680c1"
+            },
+            {
+              "line": 7047,
+              "text": "\ts_delay_alu instid0(SALU_CYCLE_1)       ;  bf870009"
+            },
+            {
+              "line": 7048,
+              "text": "\ts_and_b64 s[4:5], s[4:5], s[6:7]        ;  8b840604"
+            }
+          ]
+        },
+        {
+          "line": 21506,
+          "text_offset": 106540,
+          "instruction": "s_sendmsg_rtn_b64 s[6:7], sendmsg(MSG_RTN_GET_REALTIME)",
+          "context": [
+            {
+              "line": 21494,
+              "text": "_L1a004:"
+            },
+            {
+              "line": 21495,
+              "text": "\ts_and_saveexec_b64 s[4:5], s[0:1]       ;  be842100"
+            },
+            {
+              "line": 21496,
+              "text": "\ts_cbranch_execz _L1a060                 ;  bfa50015"
+            },
+            {
+              "line": 21497,
+              "text": "_L1a00c:"
+            },
+            {
+              "line": 21498,
+              "text": "\ts_add_i32 s6, s88, s91                  ;  81065b58"
+            },
+            {
+              "line": 21499,
+              "text": "\ts_delay_alu instid0(SALU_CYCLE_1) | instskip(NEXT) | instid1(SALU_CYCLE_1) ;  bf870499"
+            },
+            {
+              "line": 21500,
+              "text": "\ts_mul_i32 s6, s6, 10                    ;  96068a06"
+            },
+            {
+              "line": 21501,
+              "text": "\ts_add_i32 s6, s34, s6                   ;  81060622"
+            },
+            {
+              "line": 21502,
+              "text": "\ts_delay_alu instid0(SALU_CYCLE_1)       ;  bf870009"
+            },
+            {
+              "line": 21503,
+              "text": "\ts_lshl_b32 s6, s6, 2                    ;  84068206"
+            },
+            {
+              "line": 21504,
+              "text": "\ts_waitcnt vmcnt(1)                      ;  bf8907f7"
+            },
+            {
+              "line": 21505,
+              "text": "\tv_mov_b32_e32 v4, s6                    ;  7e080206"
+            },
+            {
+              "line": 21506,
+              "text": "\ts_sendmsg_rtn_b64 s[6:7], sendmsg(MSG_RTN_GET_REALTIME) ;  be864d83"
+            },
+            {
+              "line": 21507,
+              "text": "\ts_waitcnt lgkmcnt(0)                    ;  bf89fc07"
+            },
+            {
+              "line": 21508,
+              "text": "\tv_mov_b32_e32 v2, s6                    ;  7e040206"
+            },
+            {
+              "line": 21509,
+              "text": "\tv_mov_b32_e32 v3, s7                    ;  7e060207"
+            },
+            {
+              "line": 21510,
+              "text": "\tbuffer_load_b32 v5, v4, s[48:51], 0 offen offset:152 ;  e0500098 804c0504"
+            },
+            {
+              "line": 21511,
+              "text": "\ts_waitcnt vmcnt(0)                      ;  bf8903f7"
+            },
+            {
+              "line": 21512,
+              "text": "\tv_or_b32_e32 v5, 2, v5                  ;  380a0a82"
+            },
+            {
+              "line": 21513,
+              "text": "\ts_clause 0x1                            ;  bf850001"
+            },
+            {
+              "line": 21514,
+              "text": "\tbuffer_store_b64 v[2:3], v4, s[48:51], 0 offen offset:168 ;  e06c00a8 804c0204"
+            },
+            {
+              "line": 21515,
+              "text": "\tbuffer_store_b32 v5, v4, s[48:51], 0 offen offset:152 ;  e0680098 804c0504"
+            },
+            {
+              "line": 21516,
+              "text": "_L1a060:"
+            },
+            {
+              "line": 21517,
+              "text": "\ts_or_b64 exec, exec, s[4:5]             ;  8cfe047e"
+            },
+            {
+              "line": 21518,
+              "text": "\ts_waitcnt vmcnt(0) lgkmcnt(0)           ;  bf890007"
+            },
+            {
+              "line": 21519,
+              "text": "\ts_waitcnt_vscnt null, 0x0               ;  bc7c0000"
+            },
+            {
+              "line": 21520,
+              "text": "\ts_and_saveexec_b64 s[4:5], s[0:1]       ;  be842100"
+            },
+            {
+              "line": 21521,
+              "text": "\ts_cbranch_execz _L1a0c4                 ;  bfa50014"
+            },
+            {
+              "line": 21522,
+              "text": "\ts_add_i32 s6, s88, s91                  ;  81065b58"
+            },
+            {
+              "line": 21523,
+              "text": "\ts_delay_alu instid0(SALU_CYCLE_1) | instskip(NEXT) | instid1(SALU_CYCLE_1) ;  bf870499"
+            },
+            {
+              "line": 21524,
+              "text": "\ts_mul_i32 s6, s6, 10                    ;  96068a06"
+            }
+          ]
+        },
+        {
+          "line": 21529,
+          "text_offset": 106640,
+          "instruction": "s_sendmsg_rtn_b64 s[6:7], sendmsg(MSG_RTN_GET_REALTIME)",
+          "context": [
+            {
+              "line": 21517,
+              "text": "\ts_or_b64 exec, exec, s[4:5]             ;  8cfe047e"
+            },
+            {
+              "line": 21518,
+              "text": "\ts_waitcnt vmcnt(0) lgkmcnt(0)           ;  bf890007"
+            },
+            {
+              "line": 21519,
+              "text": "\ts_waitcnt_vscnt null, 0x0               ;  bc7c0000"
+            },
+            {
+              "line": 21520,
+              "text": "\ts_and_saveexec_b64 s[4:5], s[0:1]       ;  be842100"
+            },
+            {
+              "line": 21521,
+              "text": "\ts_cbranch_execz _L1a0c4                 ;  bfa50014"
+            },
+            {
+              "line": 21522,
+              "text": "\ts_add_i32 s6, s88, s91                  ;  81065b58"
+            },
+            {
+              "line": 21523,
+              "text": "\ts_delay_alu instid0(SALU_CYCLE_1) | instskip(NEXT) | instid1(SALU_CYCLE_1) ;  bf870499"
+            },
+            {
+              "line": 21524,
+              "text": "\ts_mul_i32 s6, s6, 10                    ;  96068a06"
+            },
+            {
+              "line": 21525,
+              "text": "\ts_add_i32 s6, s34, s6                   ;  81060622"
+            },
+            {
+              "line": 21526,
+              "text": "\ts_delay_alu instid0(SALU_CYCLE_1) | instskip(NEXT) | instid1(SALU_CYCLE_1) ;  bf870499"
+            },
+            {
+              "line": 21527,
+              "text": "\ts_lshl_b32 s6, s6, 2                    ;  84068206"
+            },
+            {
+              "line": 21528,
+              "text": "\tv_mov_b32_e32 v4, s6                    ;  7e080206"
+            },
+            {
+              "line": 21529,
+              "text": "\ts_sendmsg_rtn_b64 s[6:7], sendmsg(MSG_RTN_GET_REALTIME) ;  be864d83"
+            },
+            {
+              "line": 21530,
+              "text": "\ts_waitcnt lgkmcnt(0)                    ;  bf89fc07"
+            },
+            {
+              "line": 21531,
+              "text": "\tv_mov_b32_e32 v2, s6                    ;  7e040206"
+            },
+            {
+              "line": 21532,
+              "text": "\tv_mov_b32_e32 v3, s7                    ;  7e060207"
+            },
+            {
+              "line": 21533,
+              "text": "\tbuffer_load_b32 v5, v4, s[48:51], 0 offen offset:152 ;  e0500098 804c0504"
+            },
+            {
+              "line": 21534,
+              "text": "\ts_waitcnt vmcnt(0)                      ;  bf8903f7"
+            },
+            {
+              "line": 21535,
+              "text": "\tv_or_b32_e32 v5, 4, v5                  ;  380a0a84"
+            },
+            {
+              "line": 21536,
+              "text": "\ts_clause 0x1                            ;  bf850001"
+            },
+            {
+              "line": 21537,
+              "text": "\tbuffer_store_b64 v[2:3], v4, s[48:51], 0 offen offset:176 ;  e06c00b0 804c0204"
+            },
+            {
+              "line": 21538,
+              "text": "\tbuffer_store_b32 v5, v4, s[48:51], 0 offen offset:152 ;  e0680098 804c0504"
+            },
+            {
+              "line": 21539,
+              "text": "_L1a0c4:"
+            },
+            {
+              "line": 21540,
+              "text": "\ts_or_b64 exec, exec, s[4:5]             ;  8cfe047e"
+            },
+            {
+              "line": 21541,
+              "text": "\tds_load_b32 v2, v17 offset:9180         ;  d8d823dc 02000011"
+            },
+            {
+              "line": 21542,
+              "text": "\ts_waitcnt lgkmcnt(0)                    ;  bf89fc07"
+            },
+            {
+              "line": 21543,
+              "text": "\tv_cmp_eq_u32_e32 vcc_lo, 0, v2          ;  7c940480"
+            },
+            {
+              "line": 21544,
+              "text": "\ts_waitcnt_depctr depctr_va_vcc(0)       ;  bf88ff9d"
+            },
+            {
+              "line": 21545,
+              "text": "\ts_cbranch_vccnz _L819c                  ;  bfa4b82f"
+            },
+            {
+              "line": 21546,
+              "text": "\ts_mov_b64 s[4:5], -1                    ;  be8401c1"
+            },
+            {
+              "line": 21547,
+              "text": "\ts_mov_b64 s[6:7], 0                     ;  be860180"
+            }
+          ]
+        },
+        {
+          "line": 22171,
+          "text_offset": 109716,
+          "instruction": "s_sendmsg_rtn_b64 s[6:7], sendmsg(MSG_RTN_GET_REALTIME)",
+          "context": [
+            {
+              "line": 22159,
+              "text": "\ts_waitcnt lgkmcnt(1)                    ;  bf89fc17"
+            },
+            {
+              "line": 22160,
+              "text": "\tbuffer_store_b128 v[2:5], v7, s[44:47], 0 offen ;  e0740000 804b0207"
+            },
+            {
+              "line": 22161,
+              "text": "\ts_waitcnt lgkmcnt(0)                    ;  bf89fc07"
+            },
+            {
+              "line": 22162,
+              "text": "\tbuffer_store_b32 v6, v7, s[44:47], 0 offen offset:16 ;  e0680010 804b0607"
+            },
+            {
+              "line": 22163,
+              "text": "_L1ac6c:"
+            },
+            {
+              "line": 22164,
+              "text": "\ts_or_b64 exec, exec, s[4:5]             ;  8cfe047e"
+            },
+            {
+              "line": 22165,
+              "text": "\ts_waitcnt_vscnt null, 0x0               ;  bc7c0000"
+            },
+            {
+              "line": 22166,
+              "text": "\tbuffer_gl1_inv                          ;  e0b00000 00000000"
+            },
+            {
+              "line": 22167,
+              "text": "\tbuffer_gl0_inv                          ;  e0ac0000 00000000"
+            },
+            {
+              "line": 22168,
+              "text": "\ts_and_saveexec_b64 s[4:5], s[0:1]       ;  be842100"
+            },
+            {
+              "line": 22169,
+              "text": "\ts_cbranch_execz _L1ace8                 ;  bfa50017"
+            },
+            {
+              "line": 22170,
+              "text": "\ts_mul_i32 s8, s33, 0x2022               ;  9608ff21 00002022"
+            },
+            {
+              "line": 22171,
+              "text": "\ts_sendmsg_rtn_b64 s[6:7], sendmsg(MSG_RTN_GET_REALTIME) ;  be864d83"
+            },
+            {
+              "line": 22172,
+              "text": "\ts_lshl2_add_u32 s8, s93, s8             ;  8788085d"
+            },
+            {
+              "line": 22173,
+              "text": "\ts_waitcnt lgkmcnt(0)                    ;  bf89fc07"
+            },
+            {
+              "line": 22174,
+              "text": "\ts_lshl_b32 s8, s8, 2                    ;  84088208"
+            },
+            {
+              "line": 22175,
+              "text": "\tv_mov_b32_e32 v2, s6                    ;  7e040206"
+            },
+            {
+              "line": 22176,
+              "text": "\ts_mul_i32 s6, s33, 0x8088               ;  9606ff21 00008088"
+            },
+            {
+              "line": 22177,
+              "text": "\tv_mov_b32_e32 v4, s8                    ;  7e080208"
+            },
+            {
+              "line": 22178,
+              "text": "\tv_mov_b32_e32 v3, s7                    ;  7e060207"
+            },
+            {
+              "line": 22179,
+              "text": "\tv_mov_b32_e32 v5, s6                    ;  7e0a0206"
+            },
+            {
+              "line": 22180,
+              "text": "\ts_lshl_b32 s6, s93, 1                   ;  8406815d"
+            },
+            {
+              "line": 22181,
+              "text": "\tv_mov_b32_e32 v15, s33                  ;  7e1e0221"
+            },
+            {
+              "line": 22182,
+              "text": "\ts_lshl_b32 s6, 4, s6                    ;  84060684"
+            },
+            {
+              "line": 22183,
+              "text": "\tbuffer_store_b64 v[2:3], v4, s[48:51], 0 offen offset:32 ;  e06c0020 804c0204"
+            },
+            {
+              "line": 22184,
+              "text": "\tbuffer_load_b32 v2, v5, s[48:51], 0 offen offset:8 ;  e0500008 804c0205"
+            },
+            {
+              "line": 22185,
+              "text": "\ts_waitcnt vmcnt(0)                      ;  bf8903f7"
+            },
+            {
+              "line": 22186,
+              "text": "\tv_or_b32_e32 v16, s6, v2                ;  38200406"
+            },
+            {
+              "line": 22187,
+              "text": "\tbuffer_store_b96 v[14:16], v5, s[48:51], 0 offen ;  e0700000 804c0e05"
+            },
+            {
+              "line": 22188,
+              "text": "_L1ace8:"
+            },
+            {
+              "line": 22189,
+              "text": "\ts_or_b64 exec, exec, s[4:5]             ;  8cfe047e"
+            }
+          ]
+        },
+        {
+          "line": 33158,
+          "text_offset": 165212,
+          "instruction": "s_sendmsg_rtn_b64 s[4:5], sendmsg(MSG_RTN_GET_REALTIME)",
+          "context": [
+            {
+              "line": 33146,
+              "text": "\tds_store_b32 v20, v29 offset:9200       ;  d83423f0 00001d14"
+            },
+            {
+              "line": 33147,
+              "text": "\ts_or_b64 exec, exec, s[38:39]           ;  8cfe267e"
+            },
+            {
+              "line": 33148,
+              "text": "\tv_or_b32_e32 v2, s93, v0                ;  3804005d"
+            },
+            {
+              "line": 33149,
+              "text": "\ts_mov_b64 s[2:3], exec                  ;  be82017e"
+            },
+            {
+              "line": 33150,
+              "text": "\ts_waitcnt_depctr depctr_sa_sdst(0)      ;  bf88ff9e"
+            },
+            {
+              "line": 33151,
+              "text": "\ts_waitcnt lgkmcnt(0)                    ;  bf89fc07"
+            },
+            {
+              "line": 33152,
+              "text": "\ts_delay_alu instid0(VALU_DEP_1)         ;  bf870001"
+            },
+            {
+              "line": 33153,
+              "text": "\tv_cmpx_eq_u32_e32 0, v2                 ;  7d940480"
+            },
+            {
+              "line": 33154,
+              "text": "\ts_cbranch_execz _L28590                 ;  bfa50011"
+            },
+            {
+              "line": 33155,
+              "text": "\ts_mul_i32 s4, s33, 0x8088               ;  9604ff21 00008088"
+            },
+            {
+              "line": 33156,
+              "text": "\tv_mov_b32_e32 v15, s33                  ;  7e1e0221"
+            },
+            {
+              "line": 33157,
+              "text": "\tv_mov_b32_e32 v4, s4                    ;  7e080204"
+            },
+            {
+              "line": 33158,
+              "text": "\ts_sendmsg_rtn_b64 s[4:5], sendmsg(MSG_RTN_GET_REALTIME) ;  be844d83"
+            },
+            {
+              "line": 33159,
+              "text": "\ts_waitcnt lgkmcnt(0)                    ;  bf89fc07"
+            },
+            {
+              "line": 33160,
+              "text": "\tv_mov_b32_e32 v2, s4                    ;  7e040204"
+            },
+            {
+              "line": 33161,
+              "text": "\tv_mov_b32_e32 v3, s5                    ;  7e060205"
+            },
+            {
+              "line": 33162,
+              "text": "\tbuffer_load_b32 v5, v4, s[48:51], 0 offen offset:8 ;  e0500008 804c0504"
+            },
+            {
+              "line": 33163,
+              "text": "\ts_waitcnt vmcnt(0)                      ;  bf8903f7"
+            },
+            {
+              "line": 33164,
+              "text": "\tv_or_b32_e32 v16, 1, v5                 ;  38200a81"
+            },
+            {
+              "line": 33165,
+              "text": "\ts_clause 0x1                            ;  bf850001"
+            },
+            {
+              "line": 33166,
+              "text": "\tbuffer_store_b64 v[2:3], v4, s[48:51], 0 offen offset:16 ;  e06c0010 804c0204"
+            },
+            {
+              "line": 33167,
+              "text": "\tbuffer_store_b96 v[14:16], v4, s[48:51], 0 offen ;  e0700000 804c0e04"
+            },
+            {
+              "line": 33168,
+              "text": "_L28590:"
+            },
+            {
+              "line": 33169,
+              "text": "\ts_or_b64 exec, exec, s[2:3]             ;  8cfe027e"
+            },
+            {
+              "line": 33170,
+              "text": "\tv_cmp_gt_u32_e64 s2, 40, v0             ;  d44c0002 020200a8"
+            },
+            {
+              "line": 33171,
+              "text": "\ts_and_saveexec_b64 s[24:25], s[2:3]     ;  be982102"
+            },
+            {
+              "line": 33172,
+              "text": "\ts_cbranch_execz _L30d60                 ;  bfa521ef"
+            },
+            {
+              "line": 33173,
+              "text": "\tv_mul_u32_u24_e32 v15, 5, v0            ;  161e0085"
+            },
+            {
+              "line": 33174,
+              "text": "\tv_readlane_b32 s4, v1, 18               ;  d7600004 02012501"
+            },
+            {
+              "line": 33175,
+              "text": "\tv_mov_b32_e32 v2, 0                     ;  7e040280"
+            },
+            {
+              "line": 33176,
+              "text": "\tv_mov_b32_e32 v11, 0                    ;  7e160280"
+            }
+          ]
+        },
+        {
+          "line": 40197,
+          "text_offset": 200072,
+          "instruction": "s_sendmsg_rtn_b64 s[6:7], sendmsg(MSG_RTN_GET_REALTIME)",
+          "context": [
+            {
+              "line": 40185,
+              "text": "\ts_clause 0x1                            ;  bf850001"
+            },
+            {
+              "line": 40186,
+              "text": "\tbuffer_store_b128 v[2:5], v6, s[44:47], 0 offen ;  e0740000 804b0206"
+            },
+            {
+              "line": 40187,
+              "text": "\tbuffer_store_b32 v24, v6, s[44:47], 0 offen offset:16 ;  e0680010 804b1806"
+            },
+            {
+              "line": 40188,
+              "text": "_L30d60:"
+            },
+            {
+              "line": 40189,
+              "text": "\ts_or_b64 exec, exec, s[24:25]           ;  8cfe187e"
+            },
+            {
+              "line": 40190,
+              "text": "\ts_waitcnt lgkmcnt(0)                    ;  bf89fc07"
+            },
+            {
+              "line": 40191,
+              "text": "\ts_waitcnt_vscnt null, 0x0               ;  bc7c0000"
+            },
+            {
+              "line": 40192,
+              "text": "\tbuffer_gl1_inv                          ;  e0b00000 00000000"
+            },
+            {
+              "line": 40193,
+              "text": "\tbuffer_gl0_inv                          ;  e0ac0000 00000000"
+            },
+            {
+              "line": 40194,
+              "text": "\ts_and_saveexec_b64 s[4:5], s[0:1]       ;  be842100"
+            },
+            {
+              "line": 40195,
+              "text": "\ts_cbranch_execz _L30ddc                 ;  bfa50016"
+            },
+            {
+              "line": 40196,
+              "text": "\ts_lshl2_add_u32 s8, s93, s34            ;  8788225d"
+            },
+            {
+              "line": 40197,
+              "text": "\ts_sendmsg_rtn_b64 s[6:7], sendmsg(MSG_RTN_GET_REALTIME) ;  be864d83"
+            },
+            {
+              "line": 40198,
+              "text": "\ts_waitcnt_depctr depctr_sa_sdst(0)      ;  bf88ff9e"
+            },
+            {
+              "line": 40199,
+              "text": "\ts_waitcnt lgkmcnt(0)                    ;  bf89fc07"
+            },
+            {
+              "line": 40200,
+              "text": "\ts_lshl_b32 s8, s8, 2                    ;  84088208"
+            },
+            {
+              "line": 40201,
+              "text": "\tv_mov_b32_e32 v2, s6                    ;  7e040206"
+            },
+            {
+              "line": 40202,
+              "text": "\ts_mul_i32 s6, s33, 0x8088               ;  9606ff21 00008088"
+            },
+            {
+              "line": 40203,
+              "text": "\tv_mov_b32_e32 v4, s8                    ;  7e080208"
+            },
+            {
+              "line": 40204,
+              "text": "\tv_mov_b32_e32 v3, s7                    ;  7e060207"
+            },
+            {
+              "line": 40205,
+              "text": "\tv_mov_b32_e32 v5, s6                    ;  7e0a0206"
+            },
+            {
+              "line": 40206,
+              "text": "\ts_lshl_b32 s6, s93, 1                   ;  8406815d"
+            },
+            {
+              "line": 40207,
+              "text": "\tv_mov_b32_e32 v15, s33                  ;  7e1e0221"
+            },
+            {
+              "line": 40208,
+              "text": "\ts_lshl_b32 s6, 2, s6                    ;  84060682"
+            },
+            {
+              "line": 40209,
+              "text": "\tbuffer_store_b64 v[2:3], v4, s[48:51], 0 offen offset:24 ;  e06c0018 804c0204"
+            },
+            {
+              "line": 40210,
+              "text": "\tbuffer_load_b32 v2, v5, s[48:51], 0 offen offset:8 ;  e0500008 804c0205"
+            },
+            {
+              "line": 40211,
+              "text": "\ts_waitcnt vmcnt(0)                      ;  bf8903f7"
+            },
+            {
+              "line": 40212,
+              "text": "\tv_or_b32_e32 v16, s6, v2                ;  38200406"
+            },
+            {
+              "line": 40213,
+              "text": "\tbuffer_store_b96 v[14:16], v5, s[48:51], 0 offen ;  e0700000 804c0e05"
+            },
+            {
+              "line": 40214,
+              "text": "_L30ddc:"
+            },
+            {
+              "line": 40215,
+              "text": "\ts_or_b64 exec, exec, s[4:5]             ;  8cfe047e"
+            }
+          ]
+        },
+        {
+          "line": 45341,
+          "text_offset": 225864,
+          "instruction": "s_sendmsg_rtn_b64 s[0:1], sendmsg(MSG_RTN_GET_REALTIME)",
+          "context": [
+            {
+              "line": 45329,
+              "text": "\tbuffer_store_b32 v17, v10, s[44:47], 0 offen ;  e0680000 804b110a"
+            },
+            {
+              "line": 45330,
+              "text": "_L37210:"
+            },
+            {
+              "line": 45331,
+              "text": "\ts_or_b64 exec, exec, s[20:21]           ;  8cfe147e"
+            },
+            {
+              "line": 45332,
+              "text": "\ts_waitcnt lgkmcnt(0)                    ;  bf89fc07"
+            },
+            {
+              "line": 45333,
+              "text": "\ts_waitcnt_vscnt null, 0x0               ;  bc7c0000"
+            },
+            {
+              "line": 45334,
+              "text": "\tbuffer_gl1_inv                          ;  e0b00000 00000000"
+            },
+            {
+              "line": 45335,
+              "text": "\tbuffer_gl0_inv                          ;  e0ac0000 00000000"
+            },
+            {
+              "line": 45336,
+              "text": "\ts_and_saveexec_b64 s[2:3], s[0:1]       ;  be822100"
+            },
+            {
+              "line": 45337,
+              "text": "\ts_cbranch_execz _L37284                 ;  bfa50014"
+            },
+            {
+              "line": 45338,
+              "text": "\ts_mul_i32 s0, s33, 0x8088               ;  9600ff21 00008088"
+            },
+            {
+              "line": 45339,
+              "text": "\tv_mov_b32_e32 v2, 0x53434c4b            ;  7e0402ff 53434c4b"
+            },
+            {
+              "line": 45340,
+              "text": "\tv_mov_b32_e32 v7, s0                    ;  7e0e0200"
+            },
+            {
+              "line": 45341,
+              "text": "\ts_sendmsg_rtn_b64 s[0:1], sendmsg(MSG_RTN_GET_REALTIME) ;  be804d83"
+            },
+            {
+              "line": 45342,
+              "text": "\ts_waitcnt lgkmcnt(0)                    ;  bf89fc07"
+            },
+            {
+              "line": 45343,
+              "text": "\tv_mov_b32_e32 v5, s0                    ;  7e0a0200"
+            },
+            {
+              "line": 45344,
+              "text": "\tv_mov_b32_e32 v6, s1                    ;  7e0c0201"
+            },
+            {
+              "line": 45345,
+              "text": "\tbuffer_load_b32 v4, v7, s[48:51], 0 offen offset:8 ;  e0500008 804c0407"
+            },
+            {
+              "line": 45346,
+              "text": "\tv_mov_b32_e32 v3, s33                   ;  7e060221"
+            },
+            {
+              "line": 45347,
+              "text": "\ts_waitcnt vmcnt(0)                      ;  bf8903f7"
+            },
+            {
+              "line": 45348,
+              "text": "\tv_or_b32_e32 v4, 0x8000, v4             ;  380808ff 00008000"
+            },
+            {
+              "line": 45349,
+              "text": "\ts_clause 0x1                            ;  bf850001"
+            },
+            {
+              "line": 45350,
+              "text": "\tbuffer_store_b64 v[5:6], v7, s[48:51], 0 offen offset:136 ;  e06c0088 804c0507"
+            },
+            {
+              "line": 45351,
+              "text": "\tbuffer_store_b96 v[2:4], v7, s[48:51], 0 offen ;  e0700000 804c0207"
+            },
+            {
+              "line": 45352,
+              "text": "_L37284:"
+            },
+            {
+              "line": 45353,
+              "text": "\ts_or_b64 exec, exec, s[2:3]             ;  8cfe027e"
+            },
+            {
+              "line": 45354,
+              "text": "\tv_mov_b32_e32 v2, 0                     ;  7e040280"
+            },
+            {
+              "line": 45355,
+              "text": "\ts_mov_b64 s[0:1], exec                  ;  be80017e"
+            },
+            {
+              "line": 45356,
+              "text": "\tds_load_b32 v2, v2 offset:9180          ;  d8d823dc 02000002"
+            },
+            {
+              "line": 45357,
+              "text": "\ts_waitcnt lgkmcnt(0)                    ;  bf89fc07"
+            },
+            {
+              "line": 45358,
+              "text": "\tv_or_b32_e32 v2, v2, v0                 ;  38040102"
+            },
+            {
+              "line": 45359,
+              "text": "\ts_delay_alu instid0(VALU_DEP_1)         ;  bf870001"
+            }
+          ]
+        }
+      ],
+      "barrier_instruction_count": 0,
+      "native_elapsed_seconds": 15.185047899999999,
+      "native_peak_sampled_rss_bytes": 275976192,
+      "driver_cold_verified": false
+    }
+  },
+  "scope": "Static ordinary generated-code placement only; no dispatch, clock execution/rate/conversion, numerical/scientific/release qualification or ordinary timing benefit. Sidecar observer perturbs intervals."
+}

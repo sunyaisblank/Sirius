@@ -1,0 +1,188 @@
+{
+  "accepted": true,
+  "source_revision": "24a8e145d1da5dca75a4fa26ec8e639020eecf37",
+  "cases": {
+    "device-timestamps": {
+      "original_case": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "native_elapsed_seconds": 118.9239279,
+      "bridge_elapsed_seconds": 114.44515146999038,
+      "peak_sampled_rss_bytes": 608854016,
+      "observations": {
+        "transport_captures": 21,
+        "transport_active_rows": 171,
+        "transport_completed_rows": 162,
+        "transport_reached_layers": 57078,
+        "transport_published_stages": 1134,
+        "endpoint_captures": 29,
+        "endpoint_active_rows": 438,
+        "endpoint_completed_rows": 420
+      },
+      "phase_masks": {
+        "transport": {
+          "65535": 162,
+          "0": 9
+        },
+        "endpoint": {
+          "15": 420,
+          "0": 18
+        }
+      },
+      "complete_row_rhs_distribution": {
+        "general": {
+          "rhs_ticks": {
+            "rows": 18,
+            "median": 1036554.0
+          },
+          "layer_body_ticks": {
+            "rows": 18,
+            "median": 915378.0
+          },
+          "layer_join_ticks": {
+            "rows": 18,
+            "median": 58870.0
+          },
+          "other_inside_rhs_ticks": {
+            "rows": 18,
+            "median": 62374.0
+          },
+          "body_fraction_of_rhs": {
+            "rows": 18,
+            "median": 0.8830491359326992
+          },
+          "join_fraction_of_rhs": {
+            "rows": 18,
+            "median": 0.05678851302570974
+          },
+          "other_fraction_of_rhs": {
+            "rows": 18,
+            "median": 0.06016235104159109
+          }
+        },
+        "schwarzschild": {
+          "rhs_ticks": {
+            "rows": 144,
+            "median": 359514.0
+          },
+          "layer_body_ticks": {
+            "rows": 144,
+            "median": 314590.0
+          },
+          "layer_join_ticks": {
+            "rows": 144,
+            "median": 21274.0
+          },
+          "other_inside_rhs_ticks": {
+            "rows": 144,
+            "median": 23724.0
+          },
+          "body_fraction_of_rhs": {
+            "rows": 144,
+            "median": 0.8749606232531204
+          },
+          "join_fraction_of_rhs": {
+            "rows": 144,
+            "median": 0.05915824502756505
+          },
+          "other_fraction_of_rhs": {
+            "rows": 144,
+            "median": 0.06591653602987296
+          }
+        }
+      },
+      "analysis": {
+        "bytes": 3474251,
+        "sha256": "c2053a038236769418a818c16695ba8d8910881dacdf0420783b5015b5470baa"
+      },
+      "original_timestamp_stream": {
+        "unchanged_full_buffer_digests": 32,
+        "selected_modules": 7,
+        "changed_module": "Exact new diagnostic Transport; six other modules unchanged",
+        "ordered_available_markers": 51,
+        "prior_xml": {
+          "bytes": 57562,
+          "sha256": "890c1119c9981f906daca8d68531dfa86cf7d7d33391a60ea65829314ddd3bdf"
+        }
+      }
+    },
+    "mixed-transport": {
+      "original_case": "RetainedComputeTest.MixedIndependentTransportLayersPreserveWordsAndRefusal",
+      "native_elapsed_seconds": 47.513119599999996,
+      "bridge_elapsed_seconds": 46.99918262500432,
+      "peak_sampled_rss_bytes": 633851904,
+      "observations": {
+        "transport_captures": 4,
+        "transport_active_rows": 60,
+        "transport_completed_rows": 42,
+        "transport_reached_layers": 34412,
+        "transport_published_stages": 294
+      },
+      "phase_masks": {
+        "transport": {
+          "65535": 42,
+          "0": 4,
+          "3": 14
+        }
+      },
+      "complete_row_rhs_distribution": {
+        "general": {
+          "rhs_ticks": {
+            "rows": 42,
+            "median": 1018072.0
+          },
+          "layer_body_ticks": {
+            "rows": 42,
+            "median": 895782.0
+          },
+          "layer_join_ticks": {
+            "rows": 42,
+            "median": 59916.0
+          },
+          "other_inside_rhs_ticks": {
+            "rows": 42,
+            "median": 62444.0
+          },
+          "body_fraction_of_rhs": {
+            "rows": 42,
+            "median": 0.8799454250902868
+          },
+          "join_fraction_of_rhs": {
+            "rows": 42,
+            "median": 0.05837718740450268
+          },
+          "other_fraction_of_rhs": {
+            "rows": 42,
+            "median": 0.06139972054169536
+          }
+        }
+      },
+      "analysis": {
+        "bytes": 2209825,
+        "sha256": "02bb7c7ed72d6bb4f15906875155c82dacb398ecf3267224ad3bd072519c3501"
+      }
+    },
+    "factored-endpoints": {
+      "original_case": "RetainedComputeTest.FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission",
+      "native_elapsed_seconds": 40.3878954,
+      "bridge_elapsed_seconds": 40.24292079999577,
+      "peak_sampled_rss_bytes": 518529024,
+      "observations": {
+        "endpoint_captures": 14,
+        "endpoint_active_rows": 285,
+        "endpoint_completed_rows": 256
+      },
+      "phase_masks": {
+        "endpoint": {
+          "15": 256,
+          "0": 25,
+          "1": 4
+        }
+      },
+      "complete_row_rhs_distribution": {},
+      "analysis": {
+        "bytes": 49038,
+        "sha256": "b5157e68b3c61b8ab4210707e93d2e3dd336a359f2120e091d96c4ef8b76af5b"
+      }
+    }
+  },
+  "scope": "All original test assertions and exact capture validators must pass. Raw inclusive diagnostic ticks only; body/join/other bands include observer and scheduling effects. Median row fractions cannot be added as an exact median partition. No exclusive opcode/barrier cost, calibrated time, ordinary rendering benefit or full scientific/release qualification."
+}

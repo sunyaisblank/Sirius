@@ -1,0 +1,11 @@
+{
+  "accepted": true,
+  "reviewer": "/root/command_owner_review",
+  "reviewed_files": {
+    "compile_layer_observer.py": {
+      "bytes": 11415,
+      "sha256": "d4b780105a0669506980c66d61b438982b8e053d980dcfec83c993823879184e"
+    }
+  },
+  "findings": "Both rejected-v0 gaps closed: WNOWAIT retains owned waitable leader through live-group inspection; surviving members are stopped regardless of leader exit and forced cleanup after normal rc0 rejects; terminal known-handle reap/birth/group observations independently contained. Source readiness only; sampled leader RSS and accessible group closure, no runtime placement/numerical/benefit claim. No reviewer writes or launches."
+}

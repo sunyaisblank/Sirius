@@ -1,0 +1,7 @@
+{
+  "accepted": false,
+  "reviewer": "/root/command_owner_review",
+  "bytes": 8580,
+  "sha256": "3ae3340ec81130b057a6dabacb3692b0e6424256f809388b8d6d01b23aa8d7b7",
+  "findings": "Owned-group termination depended on leader remaining live; surviving descendants after leader exit could remain. Terminal birth observation outside containment could bypass group census and final save. No compiler invoked. Fix group closure independently, contain observations, reject forced cleanup after normal rc0."
+}

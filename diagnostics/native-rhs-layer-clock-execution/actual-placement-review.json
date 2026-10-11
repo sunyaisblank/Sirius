@@ -1,0 +1,18 @@
+{
+  "accepted": true,
+  "reviewer": "/root/retained_latency_review",
+  "analysis_seal": {
+    "bytes": 33558,
+    "sha256": "edcc4a7c0b5ac3f5c1080c7a3acaefb33f0ba7bd5f08d07581192487a2991415"
+  },
+  "cuts": {
+    "0x8220": "layer before validation/body",
+    "0x1a02c": "layer after lane body",
+    "0x1a090": "layer after original join before status refusal",
+    "0x1ac94": "successful RHS publication phase2+2stage",
+    "0x2855c": "phase0",
+    "0x30d88": "input publication phase1+2stage",
+    "0x37248": "phase15 before final refusal"
+  },
+  "scope": "All237116printedISAbytes matchELF237568prefix;452unprintedtail. Between layer1/2 waits includeobservertraffic; no exclusive barriercost/removal or clockrate/ordinarybenefit claim. Native1pipeline0dispatches, pinnedactualproviders, normalcompletion+retirement; cachecoldness unknown."
+}

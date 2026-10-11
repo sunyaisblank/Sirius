@@ -1,0 +1,12 @@
+{
+  "accepted": true,
+  "reviewer": "/root/retained_latency_review",
+  "baseline_revision": "2053ef79c90752d37b0075b8137cfb9b571b6820",
+  "module": {
+    "bytes": 87928,
+    "sha256": "e3a1589d852a4254312bb0e9e4b0343ab6aea32855c02c4f0f93b9fe1e18e5a3"
+  },
+  "assembly_sha256": "b524138b0299a51a522da937220ce3a522ac59489b2cdbe0079e801bc88a78f0",
+  "receipt_sha256": "1fd03a0c3e541d3a0ecf7a9f181a8ef22e96423071b059b243209cc674e92b94",
+  "findings": "Independent structural comparison finds68 unchanged function bodies, including EvaluateOne and arithmetic helpers. Only ComputeMain/EvaluateProgram/ObservePhase changed and ObserveLayer added. Both modules retain9barriers/59NoContraction decorations. Device uint2 clocks, binding2,64x1x1, noInt64/Float64,4phase/3layer call sites and8226stride/117layers match source. All25inputs exact;4tools rc0/no forced cleanup/owned leader+group retired. Driver placement/host charge+capture/original ordered numerical replay pending. No reviewer launches/writes."
+}

@@ -1,0 +1,410 @@
+{
+  "source_revision": "24a8e145d1da5dca75a4fa26ec8e639020eecf37",
+  "build_root": "bin/windows-msvc/native-24a8e14-rhs-layer-clock",
+  "executable_directory": "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release",
+  "gate_sha256": "98fbe4f086c5aa88042cda5262b63521c726db4d53c13cecfe1a6548d286b313",
+  "input_seals": {
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/kernels/coupled_probe_fp64.spv": {
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/kernels/parity_probe.spv": {
+      "bytes": 5562236,
+      "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 5566460,
+      "sha256": "0a040fdc8d6f9486939cc831a17587246e8a32231bc1d72d77557dfd85169702"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/kernels/parity_probe_fp64.spv": {
+      "bytes": 5533624,
+      "sha256": "51bac11f8830a22d95b979ed67681c8282fffed4be515a01838f16b5245ac2ed"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/kernels/trace_fp32comp.spv": {
+      "bytes": 4041528,
+      "sha256": "7fc1e970ce77669e8c3f21214ecd2b999ac4e9f41a475b52cbcba6e651dca1ec"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/kernels/trace.spv": {
+      "bytes": 4038204,
+      "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/kernels/trace_fp64.spv": {
+      "bytes": 3916680,
+      "sha256": "78d6bb1d5653397a12c666c72a03d37948a3de469fa062745e138edb4b63286a"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/kernels/portability/trace.metal": {
+      "bytes": 358272,
+      "sha256": "5888cface9be8c28ef1a49c4db8d780052d7230059eb1048bc6511c86134dbd6"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/kernels/portability/trace.cu": {
+      "bytes": 649633,
+      "sha256": "e1fa755f007585cbe4258d86ca9279a63fa8c88f9be55d4bb17e2e3d88447cb4"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/sirius_app_tests.exe": {
+      "bytes": 8393216,
+      "sha256": "aabae649d05b575a3c58e2e1b7344deec11acd1729c716f777c3623d11e91a42"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/sirius.exe": {
+      "bytes": 7572992,
+      "sha256": "24ab27d946aa11762ecf30e1f7e8531cca9467e7e917ad8b293d343446c0dd4a"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/sirius_render_tests.exe": {
+      "bytes": 8856576,
+      "sha256": "f513ccec66ad519b7abf76bf4dea0612a026e42ca52a81b88e41721fb2a04f33"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/kernels/coupled_probe_fp64.spv": {
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/kernels/parity_probe.spv": {
+      "bytes": 5562236,
+      "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 5566460,
+      "sha256": "0a040fdc8d6f9486939cc831a17587246e8a32231bc1d72d77557dfd85169702"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 5533624,
+      "sha256": "51bac11f8830a22d95b979ed67681c8282fffed4be515a01838f16b5245ac2ed"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/kernels/trace_fp32comp.spv": {
+      "bytes": 4041528,
+      "sha256": "7fc1e970ce77669e8c3f21214ecd2b999ac4e9f41a475b52cbcba6e651dca1ec"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/kernels/trace.spv": {
+      "bytes": 4038204,
+      "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/kernels/trace_fp64.spv": {
+      "bytes": 3916680,
+      "sha256": "78d6bb1d5653397a12c666c72a03d37948a3de469fa062745e138edb4b63286a"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/assets/Starfield.png": {
+      "bytes": 29984397,
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/model/operating_model.json": {
+      "bytes": 129868,
+      "sha256": "01c99fa5cd9b8b5f7d8a754cf278a4df20dba60279ea1316e66d6d5a0524aa7e"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/model/alignment_receipt.json": {
+      "bytes": 1240,
+      "sha256": "7301086285809100fa557c08c478ba8c468812e37c7d5b3f92026baa64f3f53a"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/shaders/RDSD003A.frag": {
+      "bytes": 1167,
+      "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/shaders/RDSD003A.vert": {
+      "bytes": 198,
+      "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/kernels/portability/trace.metal": {
+      "bytes": 358272,
+      "sha256": "5888cface9be8c28ef1a49c4db8d780052d7230059eb1048bc6511c86134dbd6"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/kernels/portability/trace.cu": {
+      "bytes": 649633,
+      "sha256": "e1fa755f007585cbe4258d86ca9279a63fa8c88f9be55d4bb17e2e3d88447cb4"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/tests/backend/retained_camera/program_fixture.h": {
+      "bytes": 421866,
+      "sha256": "014897a87643202168eff89b3da0fabbcf68c5442a7d4dec451f15553704b7d4"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/src/sirius/app/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/Release/sirius_base_tests.exe": {
+      "bytes": 583680,
+      "sha256": "a025e10a142618299a340568ac2dd6b753afd20f109a1d2558c1dea03489ef67"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/sirius_backend_tests.exe": {
+      "bytes": 10918912,
+      "sha256": "4a22397c3fd61a5ba919b9b7d57f855f629ab7c3ef82bf8ff480c9ea7adb4f4f"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/retained_camera/program_fixture.h": {
+      "bytes": 421866,
+      "sha256": "014897a87643202168eff89b3da0fabbcf68c5442a7d4dec451f15553704b7d4"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/kernels/coupled_probe_fp64.spv": {
+      "bytes": 2288152,
+      "sha256": "a4aa318366815760506c674c32ffa4108fb6c741b99a9745c3671fe6029b127d"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/kernels/parity_probe.spv": {
+      "bytes": 5562236,
+      "sha256": "19991852c2bf8025aaa30b4cb3029e7bb980425d74de515efc4879df95eb0891"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 5566460,
+      "sha256": "0a040fdc8d6f9486939cc831a17587246e8a32231bc1d72d77557dfd85169702"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 5533624,
+      "sha256": "51bac11f8830a22d95b979ed67681c8282fffed4be515a01838f16b5245ac2ed"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/kernels/trace_fp32comp.spv": {
+      "bytes": 4041528,
+      "sha256": "7fc1e970ce77669e8c3f21214ecd2b999ac4e9f41a475b52cbcba6e651dca1ec"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/kernels/trace.spv": {
+      "bytes": 4038204,
+      "sha256": "51fb1f425ef17c352f823654e5bcdc796da5052791c3e04111dfd9fdb6716a49"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/kernels/trace_fp64.spv": {
+      "bytes": 3916680,
+      "sha256": "78d6bb1d5653397a12c666c72a03d37948a3de469fa062745e138edb4b63286a"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/kernels/portability/trace.metal": {
+      "bytes": 358272,
+      "sha256": "5888cface9be8c28ef1a49c4db8d780052d7230059eb1048bc6511c86134dbd6"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/kernels/portability/trace.cu": {
+      "bytes": 649633,
+      "sha256": "e1fa755f007585cbe4258d86ca9279a63fa8c88f9be55d4bb17e2e3d88447cb4"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/tests/backend/retained_camera/program_fixture.h": {
+      "bytes": 421866,
+      "sha256": "014897a87643202168eff89b3da0fabbcf68c5442a7d4dec451f15553704b7d4"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/backend/Release/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/core/Release/sirius_core_tests.exe": {
+      "bytes": 2473472,
+      "sha256": "d80d7390239d986ba8bf04a65ee63564ff204489d5258a3042f01dc50d2cf4d3"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/tests/oracle/Release/sirius_oracle_tests.exe": {
+      "bytes": 838656,
+      "sha256": "568eb893be4bb11994875ca5fe8d9dc607c8a0040accb63d408ae85ca5d37874"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/generated/sirius/native_build_gate.json": {
+      "bytes": 10013,
+      "sha256": "98fbe4f086c5aa88042cda5262b63521c726db4d53c13cecfe1a6548d286b313"
+    },
+    "bin/windows-msvc/native-24a8e14-rhs-layer-clock/generated/sirius/alignment_receipt.json": {
+      "bytes": 1240,
+      "sha256": "7301086285809100fa557c08c478ba8c468812e37c7d5b3f92026baa64f3f53a"
+    },
+    "src/sirius/backend/vulkan/vulkan_device.cpp": {
+      "bytes": 57281,
+      "sha256": "5f2e65a74d0e82f1d268016dcbabd78a8607a1d1d39ddc9a17bf3637431764a1"
+    },
+    "tests/backend/retained_compute_test.cpp": {
+      "bytes": 334798,
+      "sha256": "e81e808d9ca1d7083030a5e26b7f39d9433e11cf4bdded4bf60cb6f70373baa9"
+    },
+    "tests/backend/shader_clock_observer.h": {
+      "bytes": 649630,
+      "sha256": "906283621b38dbad1fe843e461714ab1a6f1c74c55727263ad3998684295947d"
+    },
+    "out/native-rhs-layer-clock-admission/host-source-review.json": {
+      "bytes": 748,
+      "sha256": "aa3eb5664d21555f61ed2cbbb568ffe335fb488b8032a69990837b83f0ef2ab6"
+    },
+    "out/native-rhs-layer-clock-admission/prepare_native_stage.py": {
+      "bytes": 6613,
+      "sha256": "9942f81019175142fcbaf8ee14613024c34c5a82c721273562267ad3fc1de881"
+    },
+    "out/native-rhs-layer-clock-admission/phase/retained_transport.spv": {
+      "bytes": 87928,
+      "sha256": "e3a1589d852a4254312bb0e9e4b0343ab6aea32855c02c4f0f93b9fe1e18e5a3"
+    },
+    "out/native-rhs-layer-clock-admission/compiled-review.json": {
+      "bytes": 1003,
+      "sha256": "cf6448924e07d4d093211facfc0f70753d2acec2be89da9c647557f8dc14df40"
+    },
+    "out/native-rhs-layer-clock-admission/compiler.json": {
+      "bytes": 10533,
+      "sha256": "1fd03a0c3e541d3a0ecf7a9f181a8ef22e96423071b059b243209cc674e92b94"
+    },
+    "out/native-rhs-layer-clock-admission/preparation.json": {
+      "bytes": 3949,
+      "sha256": "6d458cbe5caaa515c760562116d81fa5b8746d12c46bfb85563c4a639fe28a6a"
+    }
+  },
+  "providers": [
+    {
+      "name": "vulkan-1.dll",
+      "path": "C:\\Windows\\System32\\vulkan-1.dll",
+      "bytes": 1719408,
+      "sha256": "45ee2efc5c6d3986da8181775610f308122c752e55e703340d9733bbbc4b9f1a",
+      "linux_path": "/mnt/c/Windows/System32/vulkan-1.dll"
+    },
+    {
+      "name": "amdvlk64.dll",
+      "path": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\amdvlk.inf_amd64_914ba89eaaafdf60\\amdvlk64.dll",
+      "bytes": 103213064,
+      "sha256": "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650",
+      "linux_path": "/mnt/c/WINDOWS/System32/DriverStore/FileRepository/amdvlk.inf_amd64_914ba89eaaafdf60/amdvlk64.dll"
+    }
+  ],
+  "exact_observer_modules": {
+    "retained_transport.spv": {
+      "bytes": 87928,
+      "sha256": "e3a1589d852a4254312bb0e9e4b0343ab6aea32855c02c4f0f93b9fe1e18e5a3",
+      "exact_bytes_present_in_executable": true
+    },
+    "retained_endpoint.spv": {
+      "bytes": 100604,
+      "sha256": "1c4687976bb4efb00d2c33c55a9690d0128591ab22188903894e47217959576d",
+      "exact_bytes_present_in_executable": true
+    }
+  },
+  "cases": {
+    "device-timestamps": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+    "mixed-transport": "RetainedComputeTest.MixedIndependentTransportLayersPreserveWordsAndRefusal",
+    "factored-endpoints": "RetainedComputeTest.FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission"
+  },
+  "purpose": "Original numerical/ordered-stream/refusal/recovery controls with uncalibrated native-default shader-clock phase/layer sidecars and exact input snapshots; original inputs/modes/assertions/8MiB/governors intact. Existing 320s/4GiB native tool guard, 400s bridge. No full science/release or ordinary-benefit claim."
+}
